@@ -13,6 +13,10 @@ group "com.autonomouslogic.everef"
 sourceCompatibility = JavaVersion.VERSION_17
 targetCompatibility = JavaVersion.VERSION_17
 
+ext {
+	mainClassName = "com.autonomouslogic.everef.Main"
+}
+
 repositories {
 	mavenCentral()
 }
@@ -21,6 +25,9 @@ dependencies {
 	annotationProcessor "com.google.dagger:dagger-compiler:2.14.1"
 	implementation "com.google.dagger:dagger:2.14.1"
 	implementation "com.google.guava:guava:30.1.1-jre"
+	implementation "org.apache.logging.log4j:log4j-core:2.19.0"
+	implementation "org.apache.logging.log4j:log4j-slf4j2-impl:2.19.0"
+	implementation "io.reactivex.rxjava3:rxjava:3.1.4"
 
 	testAnnotationProcessor "com.google.dagger:dagger-compiler:2.14.1"
 	testImplementation "com.google.dagger:dagger:2.14.1"
@@ -31,10 +38,6 @@ dependencies {
 java {
 	withJavadocJar()
 	withSourcesJar()
-}
-
-application {
-	mainClass = "com.autonomouslogic.everef.App"
 }
 
 test {
@@ -68,4 +71,16 @@ spotless {
 	groovyGradle {
 		indentWithTabs()
 	}
+}
+
+application {
+	mainClass = mainClassName
+}
+
+task placeholder(type: JavaExec) {
+	group "application"
+	args "placeholder"
+
+	classpath = sourceSets.main.runtimeClasspath
+	mainClass = mainClassName
 }

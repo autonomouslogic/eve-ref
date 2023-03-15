@@ -1,0 +1,24 @@
+{
+	"configuration": {
+		"name": "Log",
+		"status": "info",
+		"appenders": {
+			"Console": {
+				"name": "LogToConsole",
+				"PatternLayout": {
+					"pattern": "%d{ISO8601} [%p] (%t) %c{1}: %m%n"
+				}
+			}
+		},
+		"loggers": {
+			"root": {
+				"level": "info",
+				"AppenderRef": [
+					{
+						"ref": "LogToConsole"
+					}
+				]
+			}
+		}
+	}
+}
