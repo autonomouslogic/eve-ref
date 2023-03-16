@@ -1,5 +1,6 @@
 package com.autonomouslogic.everef.cli;
 
+import com.autonomouslogic.everef.cli.decorator.HealthcheckDecorator;
 import io.reactivex.rxjava3.core.Completable;
 import java.time.Duration;
 import java.time.Instant;
@@ -15,9 +16,12 @@ public class CommandRunner {
 	protected Provider<PlaceholderCli> placeholderCliProvider;
 
 	@Inject
+	protected HealthcheckDecorator healthcheckDecorator;
+
+	@Inject
 	protected CommandRunner() {}
 
-	public Completable runCommands(String[] args) {
+	public Completable runCommand(String[] args) {
 		if (args.length == 0) {
 			throw new IllegalArgumentException("No command specified");
 		}
@@ -30,7 +34,7 @@ public class CommandRunner {
 
 	private Completable runCommand(Command command) {
 		return Completable.defer(() -> {
-			var name = command.getClass().getSimpleName();
+			var name = command.getName();
 			log.info(String.format("Executing command: %s", name));
 			var start = Instant.now();
 			return command.run().andThen(Completable.fromAction(() -> {
@@ -47,5 +51,10 @@ public class CommandRunner {
 			default:
 				throw new IllegalArgumentException("Unknown command: " + name);
 		}
+	}
+
+	private Command decorateCommand(Command command) {
+		command = healthcheckDecorator.decorate(command);
+		return command;
 	}
 }

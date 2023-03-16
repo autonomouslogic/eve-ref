@@ -14,7 +14,7 @@ public class Main {
 	protected Main() {}
 
 	public void start(String[] args) {
-		commandRunner.runCommands(args).blockingAwait();
+		commandRunner.runCommand(args).blockingAwait();
 	}
 
 	public static void main(String[] args) {
