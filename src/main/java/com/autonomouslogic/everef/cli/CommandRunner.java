@@ -1,9 +1,12 @@
 package com.autonomouslogic.everef.cli;
 
 import com.autonomouslogic.everef.cli.decorator.HealthcheckDecorator;
+import com.autonomouslogic.everef.cli.decorator.SlackDecorator;
 import io.reactivex.rxjava3.core.Completable;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.HashMap;
+import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import javax.inject.Singleton;
@@ -19,6 +22,9 @@ public class CommandRunner {
 	protected HealthcheckDecorator healthcheckDecorator;
 
 	@Inject
+	protected SlackDecorator slackDecorator;
+
+	@Inject
 	protected CommandRunner() {}
 
 	public Completable runCommand(String[] args) {
@@ -29,6 +35,7 @@ public class CommandRunner {
 			throw new IllegalArgumentException("More than one command specified");
 		}
 		var command = createCommand(args[0]);
+		command = decorateCommand(command);
 		return runCommand(command);
 	}
 
@@ -55,6 +62,7 @@ public class CommandRunner {
 
 	private Command decorateCommand(Command command) {
 		command = healthcheckDecorator.decorate(command);
+		command = slackDecorator.decorate(command);
 		return command;
 	}
 }
