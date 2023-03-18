@@ -1,5 +1,8 @@
 package com.autonomouslogic.everef.config;
 
+import java.time.Duration;
+import software.amazon.awssdk.regions.Region;
+
 public class Configs {
 	/**
 	 * An external URL to ping once one a command has finished running.
@@ -118,4 +121,43 @@ public class Configs {
 			.defaultValue("info")
 			.type(String.class)
 			.build();
+
+	/**
+	 * The domain for the data site.
+	 */
+	public static final Config<String> DATA_DOMAIN = Config.<String>builder()
+			.name("DATA_DOMAIN")
+			.defaultValue("data.everef.net")
+			.type(String.class)
+			.build();
+
+	/**
+	 * The S3 bucket name for the data site.
+	 */
+	public static final Config<String> DATA_S3_BUCKET =
+			Config.<String>builder().name("DATA_S3_BUCKET").type(String.class).build();
+
+	/**
+	 * The cache time to use for data index pages.
+	 */
+	public static final Config<Duration> DATA_INDEX_CACHE_TIME = Config.<Duration>builder()
+			.name("DATA_INDEX_CACHE_TIME")
+			.defaultValue(Duration.ofMinutes(1))
+			.type(Duration.class)
+			.build();
+
+	/**
+	 * The AWS region for the data site.
+	 */
+	public static final Config<String> DATA_S3_REGION = Config.<String>builder()
+			.name("DATA_S3_REGION")
+			.defaultValue(Region.US_EAST_1.id())
+			.type(String.class)
+			.build();
+
+	/**
+	 * Endpoint override for the data site S3 client.
+	 */
+	public static final Config<String> DATA_S3_ENDPOINT =
+			Config.<String>builder().name("DATA_S3_ENDPOINT").type(String.class).build();
 }

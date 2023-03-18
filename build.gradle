@@ -30,6 +30,15 @@ dependencies {
 	implementation "org.apache.logging.log4j:log4j-layout-template-json:2.20.0"
 	implementation "org.apache.logging.log4j:log4j-slf4j2-impl:2.20.0"
 	implementation "io.reactivex.rxjava3:rxjava:3.1.4"
+	implementation "com.autonomouslogic.commons:commons-java:1.6.1"
+	implementation "de.neuland-bfi:pug4j:2.0.6"
+	implementation "software.amazon.awssdk:s3:2.20.17"
+	implementation "com.fasterxml.jackson.core:jackson-annotations:2.13.4"
+	implementation "com.fasterxml.jackson.core:jackson-core:2.13.4"
+	implementation "com.fasterxml.jackson.core:jackson-databind:2.13.4.2"
+	implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.4"
+	implementation "org.apache.commons:commons-pool2:2.4.2"
+	implementation "org.apache.commons:commons-compress:1.21"
 
 	testAnnotationProcessor "com.google.dagger:dagger-compiler:2.14.1"
 	testImplementation "com.google.dagger:dagger:2.14.1"
@@ -87,6 +96,14 @@ application {
 task placeholder(type: JavaExec) {
 	group "application"
 	args "placeholder"
+
+	classpath = sourceSets.main.runtimeClasspath
+	mainClass = mainClassName
+}
+
+task dataIndex(type: JavaExec) {
+	group "application"
+	args "data-index"
 
 	classpath = sourceSets.main.runtimeClasspath
 	mainClass = mainClassName
