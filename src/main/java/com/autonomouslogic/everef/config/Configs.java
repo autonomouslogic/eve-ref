@@ -146,6 +146,15 @@ public class Configs {
 			.build();
 
 	/**
+	 * Number of index pages to build and upload concurrently.
+	 */
+	public static final Config<Integer> DATA_INDEX_CONCURRENCY = Config.<Integer>builder()
+			.name("DATA_INDEX_CONCURRENCY")
+			.defaultValue(50)
+			.type(Integer.class)
+			.build();
+
+	/**
 	 * The AWS region for the data site.
 	 * If not supplied, normal AWS SDK defaults will be used.
 	 */

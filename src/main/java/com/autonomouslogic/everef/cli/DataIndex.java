@@ -56,6 +56,7 @@ public class DataIndex implements Command {
 	private final String dataBucket = Configs.DATA_S3_BUCKET.getRequired();
 	private final String dataDomain = Configs.DATA_DOMAIN.getRequired();
 	private final Duration indexCacheTime = Configs.DATA_INDEX_CACHE_TIME.getRequired();
+	private final int indexConcurrency = Configs.DATA_INDEX_CONCURRENCY.getRequired();
 
 	@Inject
 	protected DataIndex() {}
@@ -77,7 +78,7 @@ public class DataIndex implements Command {
 							return createIndexPage(listing);
 						},
 						false,
-						50)
+						indexConcurrency)
 				.andThen(Completable.fromAction(() -> log.info(String.format("Uploaded %s index pages", dirs.size()))));
 	}
 
