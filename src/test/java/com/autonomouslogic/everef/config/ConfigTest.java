@@ -7,9 +7,11 @@ import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.junitpioneer.jupiter.SetEnvironmentVariable;
 
 public class ConfigTest {
 	@Test
+	@SetEnvironmentVariable(key = "TEST_ENV_VAR_STRING", value = "test-value")
 	void shouldGetStringValues() {
 		var config = Config.<String>builder()
 				.name("TEST_ENV_VAR_STRING")
@@ -20,6 +22,7 @@ public class ConfigTest {
 	}
 
 	@Test
+	@SetEnvironmentVariable(key = "TEST_ENV_VAR_INTEGER", value = "12345")
 	void shouldGetIntegerValues() {
 		var config = Config.<Integer>builder()
 				.name("TEST_ENV_VAR_INTEGER")
@@ -31,6 +34,8 @@ public class ConfigTest {
 
 	@ParameterizedTest
 	@ValueSource(booleans = {true, false})
+	@SetEnvironmentVariable(key = "TEST_ENV_VAR_BOOL_TRUE", value = "true")
+	@SetEnvironmentVariable(key = "TEST_ENV_VAR_BOOL_FALSE", value = "false")
 	void shouldGetIntegerValues(boolean val) {
 		var config = Config.<Boolean>builder()
 				.name("TEST_ENV_VAR_BOOL_" + (val ? "TRUE" : "FALSE"))
