@@ -1,6 +1,5 @@
 package com.autonomouslogic.everef.util;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.InputStream;
 import java.net.URL;
 import java.time.Duration;
@@ -13,13 +12,6 @@ import software.amazon.awssdk.services.s3.model.PutObjectRequest;
  */
 @Singleton
 public class S3Util {
-	public static final Duration ULTRA_SHORT_CACHE = Duration.ofMinutes(1);
-	public static final Duration SHORT_CACHE = Duration.ofMinutes(5);
-	public static final Duration LONG_CACHE = Duration.ofDays(1);
-
-	@Inject
-	protected ObjectMapper objectMapper;
-
 	@Inject
 	protected S3Util() {}
 

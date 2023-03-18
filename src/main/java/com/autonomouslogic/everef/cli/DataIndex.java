@@ -3,6 +3,7 @@ package com.autonomouslogic.everef.cli;
 import com.autonomouslogic.commons.rxjava3.Rx3Util;
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.pug.PugHelper;
+import com.autonomouslogic.everef.s3.S3Adapter;
 import com.autonomouslogic.everef.util.S3Util;
 import com.google.common.collect.Ordering;
 import io.reactivex.rxjava3.core.Completable;
@@ -33,7 +34,9 @@ import lombok.extern.log4j.Log4j2;
 import org.jetbrains.annotations.NotNull;
 import software.amazon.awssdk.core.async.AsyncRequestBody;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
+import software.amazon.awssdk.services.s3.model.ListObjectsV2Request;
 import software.amazon.awssdk.services.s3.model.ObjectCannedACL;
+import software.amazon.awssdk.services.s3.model.S3Object;
 
 /**
  * Builds index pages for <code>data.everef.net</code>.
@@ -52,6 +55,9 @@ public class DataIndex implements Command {
 
 	@Inject
 	protected PugHelper pugHelper;
+
+	@Inject
+	protected S3Adapter s3Adapter;
 
 	private final String dataBucket = Configs.DATA_S3_BUCKET.getRequired();
 	private final String dataDomain = Configs.DATA_DOMAIN.getRequired();
@@ -124,12 +130,10 @@ public class DataIndex implements Command {
 	private Flowable<ObjectListing> listBucketContents() {
 		return Flowable.defer(() -> {
 					log.info("Listing contents");
-					software.amazon.awssdk.services.s3.model.ListObjectsV2Request request =
-							software.amazon.awssdk.services.s3.model.ListObjectsV2Request.builder()
-									.bucket(dataBucket)
-									.build();
-					return Flowable.fromPublisher(s3.listObjectsV2Paginator(request))
-							.observeOn(Schedulers.computation())
+					ListObjectsV2Request request =
+							ListObjectsV2Request.builder().bucket(dataBucket).build();
+					return s3Adapter
+							.listObjects(request, s3)
 							.flatMap(response -> Flowable.fromIterable(response.contents()))
 							.filter(obj -> !(obj.key().endsWith("index.html")))
 							.filter(obj -> obj.size() != null
@@ -139,7 +143,7 @@ public class DataIndex implements Command {
 				.doOnComplete(() -> log.info("Listing complete"));
 	}
 
-	private ObjectListing createObjectListing(software.amazon.awssdk.services.s3.model.S3Object obj) {
+	private ObjectListing createObjectListing(S3Object obj) {
 		String prefix = obj.key();
 		String dir = new File("/" + prefix).getParent().substring(1);
 		String basename = new File(prefix).getName();

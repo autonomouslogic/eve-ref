@@ -7,6 +7,7 @@ import java.net.URI;
 import java.util.Optional;
 import javax.inject.Named;
 import javax.inject.Singleton;
+import lombok.Setter;
 import lombok.SneakyThrows;
 import software.amazon.awssdk.auth.credentials.AwsCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
@@ -14,12 +15,18 @@ import software.amazon.awssdk.services.s3.S3AsyncClient;
 
 @Module
 public class S3Module {
+	@Setter
+	S3AsyncClient dataClient;
+
 	@Provides
 	@Named("data")
 	@Singleton
 	@SneakyThrows
 	public S3AsyncClient dataClient(
 			@Named("data") AwsCredentialsProvider credentialsProvider, @Named("data") Optional<Region> region) {
+		if (dataClient != null) {
+			return dataClient;
+		}
 		var client = S3AsyncClient.builder().credentialsProvider(credentialsProvider);
 		region.ifPresent(client::region);
 		var endpoint = Configs.DATA_S3_ENDPOINT_URL.get();

@@ -6,6 +6,7 @@ import dagger.Provides;
 import java.util.Optional;
 import javax.inject.Named;
 import javax.inject.Singleton;
+import lombok.Setter;
 import software.amazon.awssdk.auth.credentials.AwsCredentialsProvider;
 import software.amazon.awssdk.auth.credentials.AwsCredentialsProviderChain;
 import software.amazon.awssdk.auth.credentials.ProfileCredentialsProvider;
@@ -17,10 +18,16 @@ import software.amazon.awssdk.regions.Region;
 @Module
 @Singleton
 public class AwsModule {
+	@Setter
+	AwsCredentialsProvider dataCredentialsProvider;
+
 	@Provides
 	@Singleton
 	@Named("data")
 	public AwsCredentialsProvider awsCredentialsProvider() {
+		if (dataCredentialsProvider != null) {
+			return dataCredentialsProvider;
+		}
 		// @todo support env vars
 		// @todo support instance profile
 		// @todo support custom profile
