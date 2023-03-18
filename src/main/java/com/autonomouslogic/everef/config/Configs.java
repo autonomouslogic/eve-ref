@@ -78,4 +78,44 @@ public class Configs {
 			.defaultValue("EVE Ref")
 			.type(String.class)
 			.build();
+
+	/**
+	 * The base URL used for accessing the ESI.
+	 */
+	public static final Config<String> ESI_BASE_URL = Config.<String>builder()
+			.name("ESI_DOMAIN")
+			.defaultValue("https://esi.evetech.net")
+			.type(String.class)
+			.build();
+
+	/**
+	 * The base path used when accessing the ESI.
+	 * This will be the version.
+	 */
+	public static final Config<String> ESI_BASE_PATH = Config.<String>builder()
+			.name("ESI_BASE_PATH")
+			.defaultValue("/latest")
+			.type(String.class)
+			.build();
+
+	/**
+	 * The datasource to request from the ESI.
+	 */
+	public static final Config<String> ESI_DATASOURCE = Config.<String>builder()
+			.name("ESI_DATASOURCE")
+			.defaultValue("tranquility")
+			.type(String.class)
+			.build();
+
+	/**
+	 * Log4j2 log level to use.
+	 * Can be any of: TRACE, DEBUG, INFO, WARN, ERROR, FATAL, or OFF.
+	 * @see <a href="https://logging.apache.org/log4j/2.x/manual/architecture.html">Apache Logging Architecture</a>
+	 */
+	// Note that this isn't set anywhere in code, but is loaded in via log4j2.properties.
+	public static final Config<String> LOG_LEVEL = Config.<String>builder()
+			.name("LOG_LEVEL")
+			.defaultValue("info")
+			.type(String.class)
+			.build();
 }
