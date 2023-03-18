@@ -21,7 +21,7 @@ public class Main {
 		try {
 			MainComponent.create().createMain().start(args);
 		} catch (Throwable e) {
-			log.error("Root error, exiting", e);
+			log.fatal("Root error, exiting", e);
 			System.exit(1);
 		}
 		System.exit(0);
