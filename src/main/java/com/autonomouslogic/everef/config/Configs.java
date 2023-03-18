@@ -1,7 +1,6 @@
 package com.autonomouslogic.everef.config;
 
 import java.time.Duration;
-import software.amazon.awssdk.regions.Region;
 
 public class Configs {
 	/**
@@ -148,16 +147,16 @@ public class Configs {
 
 	/**
 	 * The AWS region for the data site.
+	 * If not supplied, normal AWS SDK defaults will be used.
 	 */
-	public static final Config<String> DATA_S3_REGION = Config.<String>builder()
-			.name("DATA_S3_REGION")
-			.defaultValue(Region.US_EAST_1.id())
-			.type(String.class)
-			.build();
+	public static final Config<String> DATA_AWS_REGION =
+			Config.<String>builder().name("DATA_AWS_REGION").type(String.class).build();
 
 	/**
 	 * Endpoint override for the data site S3 client.
 	 */
-	public static final Config<String> DATA_S3_ENDPOINT =
-			Config.<String>builder().name("DATA_S3_ENDPOINT").type(String.class).build();
+	public static final Config<String> DATA_S3_ENDPOINT_URL = Config.<String>builder()
+			.name("DATA_S3_ENDPOINT_URL")
+			.type(String.class)
+			.build();
 }

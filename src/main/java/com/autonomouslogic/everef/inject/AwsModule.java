@@ -3,6 +3,7 @@ package com.autonomouslogic.everef.inject;
 import com.autonomouslogic.everef.config.Configs;
 import dagger.Module;
 import dagger.Provides;
+import java.util.Optional;
 import javax.inject.Named;
 import javax.inject.Singleton;
 import software.amazon.awssdk.auth.credentials.AwsCredentialsProvider;
@@ -31,7 +32,7 @@ public class AwsModule {
 	@Provides
 	@Singleton
 	@Named("data")
-	public Region dataRegion() {
-		return Region.of(Configs.DATA_S3_REGION.getRequired());
+	public Optional<Region> dataRegion() {
+		return Configs.DATA_AWS_REGION.get().map(Region::of);
 	}
 }
