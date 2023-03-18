@@ -1,6 +1,8 @@
 # EVE Ref
 [EVE Ref](https://everef.net/) is a reference site for the game [EVE Online](https://www.eveonline.com/).
 
+_This repo does not contain the full source code for the site. Everything is currently being migrated over to Github._
+
 ## External Links
 * [Patreon](https://www.patreon.com/everef)
 * [Discord](https://discord.gg/fZYPAxFyXG)
