@@ -19,3 +19,8 @@ EVE Ref itself and the code contained within this repo is licensed under the [MI
 EVE Online is owned by [CCP hf.](https://www.ccpgames.com/):
 * [Third-Party Developer License Agreement](https://developers.eveonline.com/license-agreement)
 * [End-user License Agreement](https://community.eveonline.com/support/policies/eve-eula-en/)
+
+## Status
+| Type    | Status                                                                                                                                                  |
+|---------|---------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Codecov | [![codecov](https://codecov.io/gh/autonomouslogic/eve-ref/branch/main/graph/badge.svg?token=7IPHFXdwWM)](https://codecov.io/gh/autonomouslogic/eve-ref) |
