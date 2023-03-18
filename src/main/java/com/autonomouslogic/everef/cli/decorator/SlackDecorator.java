@@ -22,7 +22,7 @@ public class SlackDecorator {
 	@Inject
 	protected SlackDecorator() {
 		url = Configs.SLACK_WEBHOOK_URL.get();
-		if (url.isEmpty()) {
+		if (url.isPresent()) {
 			channel = Configs.SLACK_WEBHOOK_CHANNEL.getRequired();
 			username = Configs.SLACK_WEBHOOK_USERNAME.getRequired();
 		}
