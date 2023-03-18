@@ -1,0 +1,93 @@
+plugins {
+	id "java"
+	id "idea"
+	id "application"
+	id "jacoco"
+	id "org.danilopianini.git-sensitive-semantic-versioning-gradle-plugin" version "0.3.24"
+	id "io.freefair.lombok" version "6.6"
+	id "com.diffplug.spotless" version "6.12.0"
+}
+
+group "com.autonomouslogic.everef"
+
+sourceCompatibility = JavaVersion.VERSION_17
+targetCompatibility = JavaVersion.VERSION_17
+
+ext {
+	mainClassName = "com.autonomouslogic.everef.Main"
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	annotationProcessor "com.google.dagger:dagger-compiler:2.14.1"
+	implementation "com.google.dagger:dagger:2.14.1"
+	implementation "com.google.guava:guava:31.1-jre"
+	implementation "org.apache.logging.log4j:log4j-api:2.20.0"
+	implementation "org.apache.logging.log4j:log4j-core:2.20.0"
+	implementation "org.apache.logging.log4j:log4j-layout-template-json:2.20.0"
+	implementation "org.apache.logging.log4j:log4j-slf4j2-impl:2.20.0"
+	implementation "io.reactivex.rxjava3:rxjava:3.1.4"
+
+	testAnnotationProcessor "com.google.dagger:dagger-compiler:2.14.1"
+	testImplementation "com.google.dagger:dagger:2.14.1"
+	testImplementation "org.junit.jupiter:junit-jupiter:5.9.1"
+	testImplementation "org.junit.jupiter:junit-jupiter-params:5.9.1"
+}
+
+java {
+	withJavadocJar()
+	withSourcesJar()
+}
+
+test {
+	useJUnitPlatform()
+
+	testLogging {
+		events = [ "FAILED", "PASSED", "SKIPPED" ]
+		showExceptions = true
+		exceptionFormat = "FULL"
+		showExceptions = true
+		showCauses = true
+		showStackTraces = true
+	}
+
+	environment "TEST_ENV_VAR_STRING", "test-value"
+	environment "TEST_ENV_VAR_INTEGER", "12345"
+	environment "TEST_ENV_VAR_BOOL_TRUE", "true"
+	environment "TEST_ENV_VAR_BOOL_FALSE", "false"
+}
+
+jacocoTestReport {
+	executionData(test)
+	reports {
+		xml.enabled true
+		html.enabled true
+	}
+}
+
+spotless {
+	java {
+		target "src/**/*.java"
+		palantirJavaFormat()
+		indentWithTabs()
+	}
+
+	groovyGradle {
+		indentWithTabs()
+	}
+}
+
+application {
+	mainClass = mainClassName
+}
+
+task placeholder(type: JavaExec) {
+	group "application"
+	args "placeholder"
+
+	classpath = sourceSets.main.runtimeClasspath
+	mainClass = mainClassName
+}
