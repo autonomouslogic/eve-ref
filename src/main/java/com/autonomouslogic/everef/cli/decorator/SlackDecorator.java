@@ -52,7 +52,12 @@ public class SlackDecorator {
 				var start = Instant.now();
 				return delegate.run()
 						.doOnError(e -> {
-							reportFailure(delegate.getName(), Duration.between(start, Instant.now()), e);
+							try {
+								reportFailure(delegate.getName(), Duration.between(start, Instant.now()), e);
+							}
+							finally {
+								throw e;
+							}
 						})
 						.andThen(Completable.fromAction(() -> {
 							reportSuccess(delegate.getName(), Duration.between(start, Instant.now()));

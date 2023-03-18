@@ -60,8 +60,13 @@ public class HealthcheckDecorator {
 				ping(startUrl);
 				return delegate.run()
 						.doOnError(e -> {
-							ping(logUrl, Optional.of(e.getMessage()));
-							ping(failUrl);
+							try {
+								ping(logUrl, Optional.of(e.getMessage()));
+								ping(failUrl);
+							}
+							finally {
+								throw e;
+							}
 						})
 						.andThen(Completable.fromAction(() -> {
 							ping(finishUrl);
