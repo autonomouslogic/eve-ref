@@ -63,8 +63,7 @@ public class HealthcheckDecorator {
 							try {
 								ping(logUrl, Optional.of(e.getMessage()));
 								ping(failUrl);
-							}
-							finally {
+							} finally {
 								throw e;
 							}
 						})

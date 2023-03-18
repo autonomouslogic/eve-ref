@@ -54,8 +54,7 @@ public class SlackDecorator {
 						.doOnError(e -> {
 							try {
 								reportFailure(delegate.getName(), Duration.between(start, Instant.now()), e);
-							}
-							finally {
+							} finally {
 								throw e;
 							}
 						})
