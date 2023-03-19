@@ -4,7 +4,7 @@ import com.autonomouslogic.everef.Main;
 import dagger.Component;
 import javax.inject.Singleton;
 
-@Component(modules = {})
+@Component(modules = {JacksonModule.class, AwsModule.class, S3Module.class})
 @Singleton
 public interface MainComponent {
 	void inject(Main main);

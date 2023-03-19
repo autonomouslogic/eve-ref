@@ -1,0 +1,67 @@
+
+extends layout
+
+block content
+	.container
+		.row
+			.col-12
+				h1
+					a(href="/")= domain
+					for url, part in directoryParts
+						="/"
+						a(href=url + "/")= part
+		.row.mb-3
+			.col-12
+				p
+					| For information about what all of this is, see
+					= " "
+					a(href="https://everef.net/data") EVE Ref Data
+					| .
+				p
+					div= "Directories: " + format.integer(common.size())
+					div= "Files: " + format.integer(objects.size())
+					div= "Total size: " + format.fileSize(totalSize)
+		.row.mb-3
+			.col-12
+				pre
+					table.table.table-sm
+						thead
+							th File
+							th.text-right Size
+							th.text-right Size (bytes)
+							th.text-right Last modified
+						tbody
+							//- Directories
+							for dir in common
+								tr(class="data-dir")
+									td
+										a.url(href="/" + dir.getPrefix() + "/")= dir.getBasename()
+										= "/"
+									td= " "
+									td= " "
+									td= " "
+									td= " "
+							//- Files
+							for file in objects
+								tr(class="data-file")
+									td
+										a(class="data-file-url", href= "/" + file.getPrefix())= file.getBasename()
+									td(class="data-file-size-formatted").text-right= format.fileSize(file.getSize())
+									td(class="data-file-size-bytes").text-right= format.integer(file.getSize())
+									td(class="data-file-last-modified").text-right= file.getLastModified()
+		.row.mt-3
+			.col-12
+				h2 Copyright
+				p.
+					EVE Ref is the property of Autonomous Logic. All rights reserved.
+				p.
+					EVE Online and the EVE logo are the registered trademarks of CCP hf. All rights are reserved
+					worldwide. All other trademarks are the property of their respective owners. EVE Online, the
+					EVE logo, EVE and all associated logos and designs are the intellectual property of CCP hf.
+					All artwork, screenshots, characters, vehicles, storylines, world facts or other
+					recognizable features of the intellectual property relating to these trademarks are likewise
+					the intellectual property of CCP hf. CCP hf. has granted permission to EVE Ref to use EVE
+					Online and all associated logos and designs for promotional and information purposes on its
+					website but does not endorse, and is not in any way affiliated with, EVE Ref. CCP is in no
+					way responsible for the content on or functioning of this website, nor can it be liable for
+					any damage arising from the use of this website.

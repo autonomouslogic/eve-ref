@@ -17,6 +17,9 @@ public class CommandRunner {
 	protected Provider<PlaceholderCli> placeholderCliProvider;
 
 	@Inject
+	protected Provider<DataIndex> dataIndexProvider;
+
+	@Inject
 	protected HealthcheckDecorator healthcheckDecorator;
 
 	@Inject
@@ -53,6 +56,8 @@ public class CommandRunner {
 		switch (name) {
 			case "placeholder":
 				return placeholderCliProvider.get();
+			case "data-index":
+				return dataIndexProvider.get();
 			default:
 				throw new IllegalArgumentException("Unknown command: " + name);
 		}

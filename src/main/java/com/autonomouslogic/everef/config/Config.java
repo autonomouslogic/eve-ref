@@ -1,5 +1,7 @@
 package com.autonomouslogic.everef.config;
 
+import java.net.URI;
+import java.time.Duration;
 import java.util.Optional;
 import java.util.function.Supplier;
 import lombok.Builder;
@@ -29,23 +31,34 @@ public class Config<T> {
 		if (value == null || value.isEmpty()) {
 			return Optional.empty();
 		}
-		if (type == String.class) {
-			return Optional.of(type.cast(value));
-		}
-		if (type == Integer.class) {
-			return Optional.of(type.cast(Integer.parseInt(value)));
-		}
-		if (type == Long.class) {
-			return Optional.of(type.cast(Long.parseLong(value)));
-		}
-		if (type == Float.class) {
-			return Optional.of(type.cast(Float.parseFloat(value)));
-		}
-		if (type == Double.class) {
-			return Optional.of(type.cast(Double.parseDouble(value)));
-		}
-		if (type == Boolean.class) {
-			return Optional.of(type.cast(Boolean.parseBoolean(value)));
+		try {
+			if (type == String.class) {
+				return Optional.of(type.cast(value));
+			}
+			if (type == Integer.class) {
+				return Optional.of(type.cast(Integer.parseInt(value)));
+			}
+			if (type == Long.class) {
+				return Optional.of(type.cast(Long.parseLong(value)));
+			}
+			if (type == Float.class) {
+				return Optional.of(type.cast(Float.parseFloat(value)));
+			}
+			if (type == Double.class) {
+				return Optional.of(type.cast(Double.parseDouble(value)));
+			}
+			if (type == Boolean.class) {
+				return Optional.of(type.cast(Boolean.parseBoolean(value)));
+			}
+			if (type == Duration.class) {
+				return Optional.of(type.cast(Duration.parse(value)));
+			}
+			if (type == URI.class) {
+				return Optional.of(type.cast(new URI(value)));
+			}
+		} catch (Exception e) {
+			throw new IllegalArgumentException(
+					String.format("Unable to parse %s value '%s' as type %s", name, value, type));
 		}
 		throw new IllegalArgumentException(String.format("Unsupported type %s for %s", type, name));
 	}
