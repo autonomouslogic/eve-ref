@@ -16,7 +16,6 @@ import software.amazon.awssdk.regions.Region;
  * DI for AWS.
  */
 @Module
-@Singleton
 public class AwsModule {
 	@Setter
 	AwsCredentialsProvider dataCredentialsProvider;

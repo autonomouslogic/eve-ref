@@ -15,7 +15,6 @@ import javax.inject.Singleton;
  *
  */
 @Module
-@Singleton
 public class JacksonModule {
 	@Provides
 	@Singleton
