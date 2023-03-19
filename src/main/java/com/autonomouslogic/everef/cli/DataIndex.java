@@ -12,6 +12,7 @@ import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.net.URI;
 import java.net.URL;
 import java.time.Duration;
 import java.time.Instant;
@@ -59,7 +60,7 @@ public class DataIndex implements Command {
 	@Inject
 	protected S3Adapter s3Adapter;
 
-	private final String dataBucket = Configs.DATA_S3_BUCKET.getRequired();
+	private final URI dataPath = Configs.DATA_PATH.getRequired();
 	private final String dataDomain = Configs.DATA_DOMAIN.getRequired();
 	private final Duration indexCacheTime = Configs.DATA_INDEX_CACHE_TIME.getRequired();
 	private final int indexConcurrency = Configs.DATA_INDEX_CONCURRENCY.getRequired();
@@ -69,6 +70,9 @@ public class DataIndex implements Command {
 
 	@Override
 	public Completable run() {
+		if (!dataPath.getScheme().equals("s3")) {
+			throw new IllegalArgumentException("Data path must be an S3 path");
+		}
 		return listAndIndex().flatMapCompletable(dirs -> {
 			resolveDirectories(dirs);
 			return createAndUploadIndexPages(dirs);
@@ -130,8 +134,13 @@ public class DataIndex implements Command {
 	private Flowable<ObjectListing> listBucketContents() {
 		return Flowable.defer(() -> {
 					log.info("Listing contents");
-					ListObjectsV2Request request =
-							ListObjectsV2Request.builder().bucket(dataBucket).build();
+					// @todo S3 URL parser.
+					var bucket = dataPath.getHost();
+					var path = dataPath.getPath();
+					ListObjectsV2Request request = ListObjectsV2Request.builder()
+							.bucket(bucket)
+							.prefix(path)
+							.build();
 					return s3Adapter
 							.listObjects(request, s3)
 							.flatMap(response -> Flowable.fromIterable(response.contents()))
@@ -176,7 +185,7 @@ public class DataIndex implements Command {
 			// Upload index page.
 			var target = new URL(String.format(
 					"s3://%s/%sindex.html",
-					dataBucket, listing.getPrefix().equals("") ? "" : listing.getPrefix() + "/"));
+					dataPath.getHost(), listing.getPrefix().equals("") ? "" : listing.getPrefix() + "/"));
 			log.debug(String.format("Uploading index page: %s", target));
 			var putObjectRequest = s3Util
 					.putObjectRequest(new ByteArrayInputStream(rendered), rendered.length, target, "text/html")

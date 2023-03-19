@@ -1,5 +1,6 @@
 package com.autonomouslogic.everef.config;
 
+import java.net.URI;
 import java.time.Duration;
 
 public class Configs {
@@ -131,10 +132,10 @@ public class Configs {
 			.build();
 
 	/**
-	 * The S3 bucket name for the data site.
+	 * The location to store data for the data site.
 	 */
-	public static final Config<String> DATA_S3_BUCKET =
-			Config.<String>builder().name("DATA_S3_BUCKET").type(String.class).build();
+	public static final Config<URI> DATA_PATH =
+			Config.<URI>builder().name("DATA_PATH").type(URI.class).build();
 
 	/**
 	 * The cache time to use for data index pages.

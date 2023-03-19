@@ -12,6 +12,7 @@ import com.autonomouslogic.everef.inject.S3Module;
 import com.autonomouslogic.everef.s3.S3Adapter;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
 import io.reactivex.rxjava3.core.Flowable;
+import java.time.Instant;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -54,24 +55,35 @@ public class DataIndexTest {
 				.inject(this);
 	}
 
-	@SetEnvironmentVariable(key = "DATA_S3_BUCKET", value = "data-bucket")
+	@SetEnvironmentVariable(key = "DATA_PATH", value = "s3://data-bucket/path")
 	@Test
 	void shouldGenerateIndexPages() {
 		var files = List.of(
-				"index.html",
-				"data.zip",
-				"dir/",
-				"dir/index.html",
-				"dir/more-data.zip",
-				"dir2/",
-				"dir2/more-data2.zip");
+				"path/",
+				"path/index.html",
+				"path/data.zip",
+				"path/dir/",
+				"path/dir/index.html",
+				"path/dir/more-data.zip",
+				"path/dir2/",
+				"path/dir2/more-data2.zip");
 		when(s3Adapter.listObjects(any(ListObjectsV2Request.class), eq(dataClient)))
 				.thenReturn(Flowable.fromIterable(List.of(ListObjectsV2Response.builder()
 						.contents(files.stream()
-								.map(f -> S3Object.builder().key(f).build())
+								.map(f -> S3Object.builder()
+										.key(f)
+										.size(f.endsWith("/") ? 0L : 1L)
+										.lastModified(Instant.now())
+										.build())
 								.collect(Collectors.toList()))
 						.build())));
 		dataIndex.run().blockingAwait();
+		// Assert initial list.
+		var listCaptor = ArgumentCaptor.forClass(ListObjectsV2Request.class);
+		verify(s3Adapter).listObjects(listCaptor.capture(), eq(dataClient));
+		assertEquals("data-bucket", listCaptor.getValue().bucket());
+		assertEquals("path/", listCaptor.getValue().prefix());
+		// Assert puts.
 		var putCaptor = ArgumentCaptor.forClass(PutObjectRequest.class);
 		verify(dataClient, times(3)).putObject(putCaptor.capture(), any(AsyncRequestBody.class));
 		var puts =

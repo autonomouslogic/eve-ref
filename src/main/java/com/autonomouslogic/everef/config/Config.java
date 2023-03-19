@@ -1,5 +1,6 @@
 package com.autonomouslogic.everef.config;
 
+import java.net.URI;
 import java.time.Duration;
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -51,6 +52,9 @@ public class Config<T> {
 			}
 			if (type == Duration.class) {
 				return Optional.of(type.cast(Duration.parse(value)));
+			}
+			if (type == URI.class) {
+				return Optional.of(type.cast(new URI(value)));
 			}
 		} catch (Exception e) {
 			throw new IllegalArgumentException(
