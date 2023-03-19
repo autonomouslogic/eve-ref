@@ -15,10 +15,12 @@ import com.autonomouslogic.everef.test.DaggerTestComponent;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Single;
 import java.time.Instant;
+import java.util.HashMap;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import javax.inject.Inject;
+import org.jsoup.Jsoup;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,6 +30,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import software.amazon.awssdk.auth.credentials.AwsCredentialsProvider;
 import software.amazon.awssdk.core.async.AsyncRequestBody;
+import software.amazon.awssdk.core.internal.async.ByteArrayAsyncRequestBody;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 import software.amazon.awssdk.services.s3.model.ListObjectsV2Request;
 import software.amazon.awssdk.services.s3.model.ListObjectsV2Response;
@@ -81,8 +84,18 @@ public class DataIndexTest {
 								.collect(Collectors.toList()))
 						.build())));
 		// Rig puts.
+		var pages = new HashMap<String, String>();
 		when(s3Adapter.putObject(any(PutObjectRequest.class), any(AsyncRequestBody.class), any(S3AsyncClient.class)))
-				.thenReturn(Single.just(PutObjectResponse.builder().build()));
+				.thenAnswer(invocation -> {
+					var request = invocation.getArgument(0, PutObjectRequest.class);
+					var key = request.key();
+					var body = invocation.getArgument(1, ByteArrayAsyncRequestBody.class);
+					var bytes = ByteArrayAsyncRequestBody.class.getDeclaredField("bytes");
+					bytes.setAccessible(true);
+					var html = new String((byte[]) bytes.get(body));
+					pages.put(key, html);
+					return Single.just(PutObjectResponse.builder().build());
+				});
 		// Run.
 		dataIndex.run().blockingAwait();
 		// Assert initial list.
@@ -92,7 +105,8 @@ public class DataIndexTest {
 		assertEquals("", listCaptor.getValue().prefix());
 		// Assert puts.
 		var putCaptor = ArgumentCaptor.forClass(PutObjectRequest.class);
-		verify(s3Adapter, atLeastOnce()).putObject(putCaptor.capture(), any(AsyncRequestBody.class), eq(dataClient));
+		var bodyCaptor = ArgumentCaptor.forClass(AsyncRequestBody.class);
+		verify(s3Adapter, atLeastOnce()).putObject(putCaptor.capture(), bodyCaptor.capture(), eq(dataClient));
 		var puts =
 				putCaptor.getAllValues().stream().collect(Collectors.toMap(PutObjectRequest::key, Function.identity()));
 		System.out.println(puts.keySet());
@@ -100,6 +114,13 @@ public class DataIndexTest {
 		assertTrue(puts.containsKey("dir/index.html"));
 		assertTrue(puts.containsKey("dir2/index.html"));
 		assertEquals(3, puts.size());
-		// Parse main index pages.
+		// Parse main index page.
+		var mainLinks = Jsoup.parse(pages.get("index.html")).select("a.url");
+		assertEquals("/dir/", mainLinks.get(0).attr("href"));
+		assertEquals("/dir2/", mainLinks.get(1).attr("href"));
+		// Parse dir index page.
+		var dirLinks = Jsoup.parse(pages.get("dir/index.html")).select("a.data-file-url");
+		System.out.println(pages.get("dir/index.html"));
+		assertEquals("/dir/more-data.zip", dirLinks.get(0).attr("href"));
 	}
 }

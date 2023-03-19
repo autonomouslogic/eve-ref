@@ -133,6 +133,9 @@ public class DataIndex implements Command {
 					// @todo S3 URL parser.
 					var bucket = dataPath.getHost();
 					var path = dataPath.getPath().substring(1);
+					if (!path.equals("")) {
+						throw new RuntimeException("Data index must be run at the root of the bucket");
+					}
 					ListObjectsV2Request request = ListObjectsV2Request.builder()
 							.bucket(bucket)
 							.prefix(path)
