@@ -1,6 +1,5 @@
 package com.autonomouslogic.everef.cli;
 
-import com.autonomouslogic.commons.rxjava3.Rx3Util;
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.pug.PugHelper;
 import com.autonomouslogic.everef.s3.S3Adapter;
@@ -9,11 +8,9 @@ import com.google.common.collect.Ordering;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Single;
-import io.reactivex.rxjava3.schedulers.Schedulers;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.net.URI;
-import java.net.URL;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.HashMap;
@@ -22,7 +19,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringJoiner;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 import javax.inject.Inject;
@@ -136,7 +132,7 @@ public class DataIndex implements Command {
 					log.info("Listing contents");
 					// @todo S3 URL parser.
 					var bucket = dataPath.getHost();
-					var path = dataPath.getPath();
+					var path = dataPath.getPath().substring(1);
 					ListObjectsV2Request request = ListObjectsV2Request.builder()
 							.bucket(bucket)
 							.prefix(path)
@@ -183,7 +179,7 @@ public class DataIndex implements Command {
 					.objects(sortedObjects)
 					.build());
 			// Upload index page.
-			var target = new URL(String.format(
+			var target = new URI(String.format(
 					"s3://%s/%sindex.html",
 					dataPath.getHost(), listing.getPrefix().equals("") ? "" : listing.getPrefix() + "/"));
 			log.debug(String.format("Uploading index page: %s", target));
@@ -193,11 +189,9 @@ public class DataIndex implements Command {
 					.acl(ObjectCannedACL.PUBLIC_READ)
 					.cacheControl(s3Util.cacheControl(indexCacheTime))
 					.build();
-			return Rx3Util.toSingle(s3.putObject(putObjectRequest, AsyncRequestBody.fromBytes(rendered)))
-					.ignoreElement()
-					.timeout(5, TimeUnit.SECONDS)
-					.retry(3)
-					.observeOn(Schedulers.computation());
+			return s3Adapter
+					.putObject(putObjectRequest, AsyncRequestBody.fromBytes(rendered), s3)
+					.ignoreElement();
 		});
 	}
 
@@ -214,7 +208,7 @@ public class DataIndex implements Command {
 				"totalSize",
 				listing.objects.stream().mapToLong(o -> o.getSize()).sum());
 		// Render template.
-		byte[] rendered = pugHelper.renderTemplate("data/index.jade", model);
+		byte[] rendered = pugHelper.renderTemplate("data/index.pug", model);
 
 		return rendered;
 	}

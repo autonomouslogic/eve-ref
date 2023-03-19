@@ -64,6 +64,8 @@ test {
 		showCauses = true
 		showStackTraces = true
 	}
+
+	environment "LOG_LEVEL", "debug"
 }
 
 jacocoTestReport {
