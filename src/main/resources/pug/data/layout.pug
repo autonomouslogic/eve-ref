@@ -1,0 +1,46 @@
+doctype html
+html(lang="en")
+	head
+		//- Google Tag Manager
+		script.
+			(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+			new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+			j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+			'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+			})(window,document,'script','dataLayer','GTM-WZ4HW9Q');
+		
+		title
+			block title
+				= pageTitle
+		
+		meta(charset="utf-8")
+		meta(name="viewport", content="width=device-width, initial-scale=1.0, shrink-to-fit=no")
+		//- Page title meta.
+		meta(property="og:title", content=pageTitle + " - " + pageTitle)
+		meta(property="twitter:title", content=pageTitle + " - " + pageTitle)
+		//- OpenGraph page description.
+		if pageDescription
+			meta(name="description", content=pageDescription)
+			meta(property="og:description", content=pageDescription)
+			meta(property="twitter:description", content=pageDescription)
+
+		//- CSS.
+		link(href="https://use.fontawesome.com/releases/v5.0.4/css/all.css", rel="stylesheet", crossorigin="anonymous")
+		link(href="https://fonts.googleapis.com/css?family=Source+Sans+Pro", rel="stylesheet", crossorigin="anonymous")
+		link(href="https://fonts.googleapis.com/css?family=Source+Code+Pro", rel="stylesheet", crossorigin="anonymous")
+		link(rel="stylesheet", href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css", integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm", crossorigin="anonymous")
+
+		style.
+			body {
+				font-family: "Source Sans Pro";
+			}
+			pre {
+				font-family: "Source Code Pro";
+			}
+
+	body
+		//- Google Tag Manager (noscript)
+		noscript
+			iframe(src="https://www.googletagmanager.com/ns.html?id=GTM-WZ4HW9Q" height="0" width="0" style="display:none;visibility:hidden")
+
+		block content

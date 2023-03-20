@@ -1,5 +1,8 @@
 package com.autonomouslogic.everef.config;
 
+import java.net.URI;
+import java.time.Duration;
+
 public class Configs {
 	/**
 	 * An external URL to ping once one a command has finished running.
@@ -116,6 +119,54 @@ public class Configs {
 	public static final Config<String> LOG_LEVEL = Config.<String>builder()
 			.name("LOG_LEVEL")
 			.defaultValue("info")
+			.type(String.class)
+			.build();
+
+	/**
+	 * The domain for the data site.
+	 */
+	public static final Config<String> DATA_DOMAIN = Config.<String>builder()
+			.name("DATA_DOMAIN")
+			.defaultValue("data.everef.net")
+			.type(String.class)
+			.build();
+
+	/**
+	 * The location to store data for the data site.
+	 */
+	public static final Config<URI> DATA_PATH =
+			Config.<URI>builder().name("DATA_PATH").type(URI.class).build();
+
+	/**
+	 * The cache time to use for data index pages.
+	 */
+	public static final Config<Duration> DATA_INDEX_CACHE_TIME = Config.<Duration>builder()
+			.name("DATA_INDEX_CACHE_TIME")
+			.defaultValue(Duration.ofMinutes(1))
+			.type(Duration.class)
+			.build();
+
+	/**
+	 * Number of index pages to build and upload concurrently.
+	 */
+	public static final Config<Integer> DATA_INDEX_CONCURRENCY = Config.<Integer>builder()
+			.name("DATA_INDEX_CONCURRENCY")
+			.defaultValue(50)
+			.type(Integer.class)
+			.build();
+
+	/**
+	 * The AWS region for the data site.
+	 * If not supplied, normal AWS SDK defaults will be used.
+	 */
+	public static final Config<String> DATA_AWS_REGION =
+			Config.<String>builder().name("DATA_AWS_REGION").type(String.class).build();
+
+	/**
+	 * Endpoint override for the data site S3 client.
+	 */
+	public static final Config<String> DATA_S3_ENDPOINT_URL = Config.<String>builder()
+			.name("DATA_S3_ENDPOINT_URL")
 			.type(String.class)
 			.build();
 }
