@@ -21,15 +21,4 @@ public class UrlParser {
 				throw new RuntimeException("Unknown protocol: " + url.getScheme());
 		}
 	}
-
-	private String leftTrim(String s, String c) {
-		while (s.startsWith(c)) {
-			s = s.substring(1);
-		}
-		return s;
-	}
-
-	private String normaliseSlashes(String s) {
-		return s.replaceAll("/+", "/");
-	}
 }

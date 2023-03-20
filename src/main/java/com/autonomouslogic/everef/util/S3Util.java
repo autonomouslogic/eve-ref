@@ -1,7 +1,6 @@
 package com.autonomouslogic.everef.util;
 
-import java.io.InputStream;
-import java.net.URI;
+import com.autonomouslogic.everef.url.S3Url;
 import java.time.Duration;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -15,13 +14,10 @@ public class S3Util {
 	@Inject
 	protected S3Util() {}
 
-	public PutObjectRequest putObjectRequest(InputStream in, long len, URI s3Uri, String contentType) {
-		// @todo create URL parser util.
-		var bucket = s3Uri.getHost();
-		var key = s3Uri.getPath().substring(1);
+	public PutObjectRequest putObjectRequest(long len, S3Url url, String contentType) {
 		return PutObjectRequest.builder()
-				.bucket(bucket)
-				.key(key)
+				.bucket(url.getBucket())
+				.key(url.getPath())
 				.contentLength(len)
 				.contentType(contentType)
 				.build();

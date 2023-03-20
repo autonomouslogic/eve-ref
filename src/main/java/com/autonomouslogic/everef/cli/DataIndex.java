@@ -3,14 +3,14 @@ package com.autonomouslogic.everef.cli;
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.pug.PugHelper;
 import com.autonomouslogic.everef.s3.S3Adapter;
+import com.autonomouslogic.everef.url.S3Url;
+import com.autonomouslogic.everef.url.UrlParser;
 import com.autonomouslogic.everef.util.S3Util;
 import com.google.common.collect.Ordering;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Single;
-import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.net.URI;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.HashMap;
@@ -56,7 +56,10 @@ public class DataIndex implements Command {
 	@Inject
 	protected S3Adapter s3Adapter;
 
-	private final URI dataPath = Configs.DATA_PATH.getRequired();
+	@Inject
+	protected UrlParser urlParser;
+
+	private S3Url dataUrl;
 	private final String dataDomain = Configs.DATA_DOMAIN.getRequired();
 	private final Duration indexCacheTime = Configs.DATA_INDEX_CACHE_TIME.getRequired();
 	private final int indexConcurrency = Configs.DATA_INDEX_CONCURRENCY.getRequired();
@@ -64,11 +67,17 @@ public class DataIndex implements Command {
 	@Inject
 	protected DataIndex() {}
 
-	@Override
-	public Completable run() {
-		if (!dataPath.getScheme().equals("s3")) {
+	@Inject
+	protected void init() {
+		var dataPathUrl = urlParser.parse(Configs.DATA_PATH.getRequired());
+		if (!dataPathUrl.getProtocol().equals("s3")) {
 			throw new IllegalArgumentException("Data path must be an S3 path");
 		}
+		dataUrl = (S3Url) dataPathUrl;
+	}
+
+	@Override
+	public Completable run() {
 		return listAndIndex().flatMapCompletable(dirs -> {
 			resolveDirectories(dirs);
 			return createAndUploadIndexPages(dirs);
@@ -130,15 +139,12 @@ public class DataIndex implements Command {
 	private Flowable<ObjectListing> listBucketContents() {
 		return Flowable.defer(() -> {
 					log.info("Listing contents");
-					// @todo S3 URL parser.
-					var bucket = dataPath.getHost();
-					var path = dataPath.getPath().substring(1);
-					if (!path.equals("")) {
+					if (!dataUrl.getPath().equals("")) {
 						throw new RuntimeException("Data index must be run at the root of the bucket");
 					}
 					ListObjectsV2Request request = ListObjectsV2Request.builder()
-							.bucket(bucket)
-							.prefix(path)
+							.bucket(dataUrl.getBucket())
+							.prefix(dataUrl.getPath())
 							.build();
 					return s3Adapter
 							.listObjects(request, s3)
@@ -182,13 +188,12 @@ public class DataIndex implements Command {
 					.objects(sortedObjects)
 					.build());
 			// Upload index page.
-			var target = new URI(String.format(
-					"s3://%s/%sindex.html",
-					dataPath.getHost(), listing.getPrefix().equals("") ? "" : listing.getPrefix() + "/"));
+			var target = S3Url.builder()
+					.bucket(dataUrl.getBucket())
+					.path((listing.getPrefix().equals("") ? "" : listing.getPrefix() + "/") + "index.html")
+					.build();
 			log.debug(String.format("Uploading index page: %s", target));
-			var putObjectRequest = s3Util
-					.putObjectRequest(new ByteArrayInputStream(rendered), rendered.length, target, "text/html")
-					.toBuilder()
+			var putObjectRequest = s3Util.putObjectRequest(rendered.length, target, "text/html").toBuilder()
 					.acl(ObjectCannedACL.PUBLIC_READ)
 					.cacheControl(s3Util.cacheControl(indexCacheTime))
 					.build();
