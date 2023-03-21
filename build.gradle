@@ -32,7 +32,7 @@ dependencies {
 	implementation "io.reactivex.rxjava3:rxjava:3.1.6"
 	implementation "com.autonomouslogic.commons:commons-java:1.6.1"
 	implementation "de.neuland-bfi:pug4j:2.0.6"
-	implementation "software.amazon.awssdk:s3:2.20.27"
+	implementation "software.amazon.awssdk:s3:2.20.28"
 	implementation "com.fasterxml.jackson.core:jackson-annotations:2.14.2"
 	implementation "com.fasterxml.jackson.core:jackson-core:2.14.2"
 	implementation "com.fasterxml.jackson.core:jackson-databind:2.14.2"
