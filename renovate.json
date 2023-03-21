@@ -1,14 +1,6 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "enabled": true,
   "extends": [
-    "config:base",
-    "group:allNonMajor",
-    "group:recommended"
-  ],
-  "reviewers": [
-    "kennethjor"
-  ],
-  "prConcurrentLimit": 0,
-  "prHourlyLimit": 0
+    "github>autonomouslogic/renovate-config"
+  ]
 }
