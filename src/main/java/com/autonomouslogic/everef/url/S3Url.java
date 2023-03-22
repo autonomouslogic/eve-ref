@@ -4,6 +4,9 @@ import java.net.URI;
 import lombok.Builder;
 import lombok.Value;
 
+/**
+ * URL for S3 data sources.
+ */
 @Value
 @Builder(toBuilder = true)
 public class S3Url implements DataUrl {
