@@ -39,6 +39,7 @@ dependencies {
 	implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.14.2"
 	implementation "org.apache.commons:commons-pool2:2.11.1"
 	implementation "org.apache.commons:commons-compress:1.22"
+	implementation "com.h2database:h2-mvstore:2.1.214"
 
 	testAnnotationProcessor "com.google.dagger:dagger-compiler:2.45"
 	testImplementation "com.google.dagger:dagger:2.45"
