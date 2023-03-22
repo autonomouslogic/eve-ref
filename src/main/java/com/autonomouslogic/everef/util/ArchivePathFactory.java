@@ -1,64 +1,106 @@
 package com.autonomouslogic.everef.util;
 
-import com.google.common.base.Strings;
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import lombok.Builder;
 import lombok.NonNull;
-import lombok.Setter;
 
 /**
  * Builds URLs for archived data.
  */
-@Setter
+@Builder
 public class ArchivePathFactory {
-	private static final DateTimeFormatter YEAR_PATTERN = DateTimeFormatter.ofPattern("yyyy");
-	private static final DateTimeFormatter DATE_PATTERN = DateTimeFormatter.ofPattern("yyyy-MM");
-	private static final DateTimeFormatter TIMESTAMP_PATTERN = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss");
+	public static final DateTimeFormatter YEAR_PATTERN = DateTimeFormatter.ofPattern("yyyy");
+	public static final DateTimeFormatter DATE_PATTERN = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+	public static final DateTimeFormatter TIMESTAMP_PATTERN = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss");
+
+	public static final ArchivePathFactory MARKET_ORDERS = ArchivePathFactory.builder()
+			.folder("market-orders")
+			.filename("market-orders")
+			.suffix(".v3.csv.bz2")
+			.build();
+
+	public static final ArchivePathFactory PUBLIC_CONTRACTS = ArchivePathFactory.builder()
+			.folder("public-contracts")
+			.filename("public-contracts")
+			.suffix(".v2.tar.bz2")
+			.build();
+
+	public static final ArchivePathFactory KILLMAILS = ArchivePathFactory.builder()
+			.folder("killmails")
+			.filename("killmails")
+			.historyFolder(false)
+			.dateFolder(false)
+			.fileDateTimeFormatter(DATE_PATTERN)
+			.suffix(".tar.bz2")
+			.build();
+
+	public static final ArchivePathFactory MARKET_HISTORY = ArchivePathFactory.builder()
+			.folder("market-history")
+			.filename("market-history")
+			.historyFolder(false)
+			.dateFolder(false)
+			.fileDateTimeFormatter(DATE_PATTERN)
+			.suffix(".csv.bz2")
+			.build();
 
 	@NonNull
-	private String folder;
+	String folder;
 
 	@NonNull
-	private String filename;
+	String filename;
 
 	@NonNull
-	private String suffix;
+	String suffix;
 
-	private boolean yearFolder = false;
-	private boolean dateFolder = false;
+	@lombok.Builder.Default
+	boolean historyFolder = true;
+
+	@lombok.Builder.Default
+	boolean yearFolder = true;
+
+	@lombok.Builder.Default
+	boolean dateFolder = true;
+
+	@lombok.Builder.Default
+	DateTimeFormatter fileDateTimeFormatter = TIMESTAMP_PATTERN;
 
 	public String createLatestPath() {
-		validate();
 		return join(List.of(folder, filename + "-latest" + suffix));
 	}
 
-	public String createArchivePath(Instant time) {
-		validate();
+	public String createArchivePath(LocalDate date) {
+		return createArchivePath(date.atStartOfDay(ZoneOffset.UTC));
 	}
 
-	private void validate() {
-		if (Strings.isNullOrEmpty(folder)) {
-			throw new IllegalArgumentException("Folder must be set");
-		}
-		if (Strings.isNullOrEmpty(filename)) {
-			throw new IllegalArgumentException("Filename must be set");
-		}
-		if (Strings.isNullOrEmpty(suffix)) {
-			throw new IllegalArgumentException("Suffix must be set");
-		}
+	public String createArchivePath(Instant time) {
+		return createArchivePath(time.atZone(ZoneOffset.UTC));
+	}
+
+	public String createArchivePath(ZonedDateTime time) {
+		time = time.withZoneSameInstant(ZoneOffset.UTC);
+		return join(List.of(
+						Optional.of(folder),
+						Optional.ofNullable(historyFolder ? "history" : null),
+						Optional.ofNullable(yearFolder ? YEAR_PATTERN.format(time) : null),
+						Optional.ofNullable(dateFolder ? DATE_PATTERN.format(time) : null),
+						Optional.of(filename + "-" + fileDateTimeFormatter.format(time) + suffix))
+				.stream()
+				.flatMap(Optional::stream));
 	}
 
 	private String join(List<String> parts) {
-		return String.join("/", parts);
+		return join(parts.stream());
 	}
 
-	public static ArchivePathFactory marketOrders() {
-		return new ArchivePathFactory()
-				.setFolder("market-orders")
-				.setFilename("market-orders")
-				.setYearFolder(true)
-				.setDateFolder(true)
-				.setSuffix(".v3.csv.bz2");
+	private String join(Stream<String> stream) {
+		return stream.collect(Collectors.joining("/"));
 	}
 }
