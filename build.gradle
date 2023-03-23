@@ -6,6 +6,7 @@ plugins {
 	id "org.danilopianini.git-sensitive-semantic-versioning-gradle-plugin" version "1.1.4"
 	id "io.freefair.lombok" version "8.0.0"
 	id "com.diffplug.spotless" version "6.17.0"
+	id "org.openapi.generator" version "5.4.0"
 }
 
 group "com.autonomouslogic.everef"
@@ -54,6 +55,24 @@ java {
 	withJavadocJar()
 	withSourcesJar()
 }
+
+def openApiRootDir = "$buildDir/generated/openapi"
+openApiGenerate {
+	generatorName = "java"
+	inputSpec = "$rootDir/lib/MinervaAPI.yaml"
+	outputDir = openApiRootDir
+	apiPackage = "com.autonomouslogic.minerva.openapi"
+	invokerPackage = "com.autonomouslogic.minerva.openapi.invoker"
+	modelPackage = "com.autonomouslogic.minerva.openapi.model"
+	configOptions = [
+			dateLibrary: "java8",
+			library: "retrofit2",
+			useRxJava3: "true",
+			useGzipFeature: "true"
+	]
+}
+sourceSets.main.java.srcDirs += ["$openApiRootDir/src/main/java"]
+tasks.compileJava.dependsOn tasks.openApiGenerate
 
 test {
 	useJUnitPlatform()
