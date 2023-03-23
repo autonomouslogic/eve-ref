@@ -169,4 +169,30 @@ public class Configs {
 			.name("DATA_S3_ENDPOINT_URL")
 			.type(String.class)
 			.build();
+
+	/**
+	 * User agent string to provide to the ESI.
+	 */
+	public static final Config<String> ESI_USER_AGENT = Config.<String>builder()
+			.name("ESI_USER_AGENT")
+			.type(String.class)
+			.build();
+
+	/**
+	 * Directory for HTTP caching.
+	 */
+	public static final Config<String> HTTP_CACHE_DIR = Config.<String>builder()
+			.name("HTTP_CACHE_DIR")
+			.type(String.class)
+			.defaultValue(System.getProperty("java.io.tmpdir") + "/eve-ref-http-cache")
+			.build();
+
+	/**
+	 * Maximum size of the HTTP disk cache in megabytes.
+	 */
+	public static final Config<Long> HTTP_CACHE_SIZE_MB = Config.<Long>builder()
+			.name("HTTP_CACHE_SIZE_MB")
+			.type(Long.class)
+			.defaultValue(512L)
+			.build();
 }

@@ -1,5 +1,8 @@
 package com.autonomouslogic.everef.cli.marketorders;
 
+import com.autonomouslogic.everef.esi.UniverseEsi;
+import com.autonomouslogic.everef.openapi.esi.apis.UniverseApi;
+import com.autonomouslogic.everef.scrape.ScrapeFetcher;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -21,15 +24,10 @@ import java.util.stream.Collectors;
 @Slf4j
 public class MarketOrderFetcher {
 	@Inject
+	protected UniverseEsi universeEsi;
+	
+	@Inject
 	protected ScrapeFetcher scrapeFetcher;
-	@Inject
-	protected UniverseDao universeDao;
-	@Inject
-	protected MarketDataDao marketDataDao;
-	@Inject
-	protected EveRefDataUtil eveRefDataUtil;
-	@Inject
-	protected LocationPopulator locationPopulator;
 
 	@Setter
 	private MVMap<Long, JsonNode> marketOrdersStore;
@@ -39,6 +37,11 @@ public class MarketOrderFetcher {
 	}
 
 	public Completable fetchMarketOrders() {
+		universeEsi.getAllRegions()
+
+
+
+
 		return Observable.defer(() -> Observable.fromIterable(getAllMarketRegions()))
 			.toFlowable(BackpressureStrategy.BUFFER)
 			.flatMap(region -> fetchMarketOrders(region).toFlowable(), 3)
@@ -46,6 +49,9 @@ public class MarketOrderFetcher {
 	}
 
 	private List<Region> getAllMarketRegions() {
+		universeApi.getUniverseRegionsRegionId()
+
+
 		List<Region> regions = universeDao.getAllRegions()
 			.collect(Collectors.toList());
 		return regions;

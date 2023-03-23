@@ -41,6 +41,7 @@ dependencies {
 	implementation "org.apache.commons:commons-pool2:2.11.1"
 	implementation "org.apache.commons:commons-compress:1.22"
 	implementation "com.h2database:h2-mvstore:2.1.214"
+	implementation "com.squareup.okhttp3:okhttp:4.10.0"
 
 	testAnnotationProcessor "com.google.dagger:dagger-compiler:2.45"
 	testImplementation "com.google.dagger:dagger:2.45"
@@ -56,25 +57,18 @@ java {
 	withSourcesJar()
 }
 
-def esiOpenApiPackage = "${group}.openapi.esi"
+def esiOpenApiPackage = ""
 openApiGenerate {
-	generatorName = "java"
+	generatorName = "kotlin"
 	inputSpec = "$rootDir/lib/esi-latest.json"
-	apiPackage = "${esiOpenApiPackage}.api"
-	invokerPackage = "${esiOpenApiPackage}.invoker"
-	modelPackage = "${esiOpenApiPackage}.model"
-	modelNamePrefix = "Esi"
+	packageName = "${group}.openapi.esi"
 	configOptions = [
-		dateLibrary: "java8",
-		library: "native",
-		asyncNative: "true",
+		library: "jvm-okhttp4",
 		serializationLibrary: "jackson",
-		booleanGetterPrefix: "is",
-		bigDecimalAsString: "true",
-		useGzipFeature: "true"
+		dateLibrary: "java8"
 	]
 }
-sourceSets.main.java.srcDirs += ["build/generate-resources/main/src/main/java"]
+sourceSets.main.java.srcDirs += ["build/generate-resources/main/src/main/kotlin"]
 
 test {
 	useJUnitPlatform()
