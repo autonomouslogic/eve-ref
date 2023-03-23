@@ -1,18 +1,26 @@
 package com.autonomouslogic.everef.inject;
 
 import com.autonomouslogic.everef.config.Configs;
+import com.autonomouslogic.everef.esi.EsiLimitExceededInterceptor;
+import com.autonomouslogic.everef.esi.EsiRateLimitInterceptor;
+import com.autonomouslogic.everef.esi.EsiUserAgentInterceptor;
+import com.autonomouslogic.everef.openapi.esi.infrastructure.ApiClient;
 import dagger.Module;
 import dagger.Provides;
 import okhttp3.Cache;
+import okhttp3.OkHttpClient;
 
+import javax.inject.Named;
 import javax.inject.Singleton;
 import java.io.File;
+import java.time.Duration;
 
 @Module
 public class OkHttpModule {
 	@Provides
 	@Singleton
 	public Cache cache() {
+		// @todo add metrics for cache hits/misses
 		var cacheDir = new File(Configs.HTTP_CACHE_DIR.getRequired());
 		if (!cacheDir.exists()) {
 			if (!cacheDir.mkdirs()) {
@@ -30,5 +38,22 @@ public class OkHttpModule {
 			throw new RuntimeException("HTTP cache size must be at least 1 MB");
 		}
 		return new Cache(cacheDir, maxSize * 1024 * 1024);
+	}
+
+	@Provides
+	@Singleton
+	@Named("esi")
+	public OkHttpClient esiHttpClient(EsiUserAgentInterceptor userAgentInterceptor, EsiRateLimitInterceptor rateLimitInterceptor, EsiLimitExceededInterceptor limitExceededInterceptor) {
+		return ApiClient.getBuilder()
+			.addInterceptor(userAgentInterceptor)
+			.addInterceptor(limitExceededInterceptor)
+			.addInterceptor(rateLimitInterceptor)
+			.retryOnConnectionFailure(true)
+			.followRedirects(true)
+			.followSslRedirects(true)
+			.connectTimeout(Duration.ofSeconds(5))
+			.readTimeout(Duration.ofSeconds(5))
+			.writeTimeout(Duration.ofSeconds(5))
+			.build();
 	}
 }

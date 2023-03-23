@@ -179,6 +179,15 @@ public class Configs {
 			.build();
 
 	/**
+	 * Rate limit to apply for ESI requests.
+	 */
+	public static final Config<Integer> ESI_RATE_LIMIT_PER_S = Config.<Integer>builder()
+			.name("ESI_RATE_LIMIT_PER_S")
+			.defaultValue(100)
+			.type(Integer.class)
+			.build();
+
+	/**
 	 * Directory for HTTP caching.
 	 */
 	public static final Config<String> HTTP_CACHE_DIR = Config.<String>builder()

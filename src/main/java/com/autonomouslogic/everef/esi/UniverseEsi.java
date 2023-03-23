@@ -24,14 +24,18 @@ public class UniverseEsi {
 	}
 
 	public Flowable<Integer> getRegionIds() {
-		return Flowable.defer(() -> Flowable.fromIterable(universeApi.getUniverseRegions(null, null)))
+		return Flowable.defer(() -> {
+				log.trace("Fetching region ids");
+				return Flowable.fromIterable(universeApi.getUniverseRegions(null, null));
+			})
 			.compose(Rx.offloadFlowable());
 	}
 
 	public Maybe<GetUniverseRegionsRegionIdOk> getRegion(int regionId) {
 		return Maybe.defer(() -> {
-				var r = universeApi.getUniverseRegionsRegionId(regionId, null, null, null, null);
-				return Maybe.fromOptional(Optional.ofNullable(r));
+				log.trace(String.format("Fetching region %s", regionId));
+				var region = universeApi.getUniverseRegionsRegionId(regionId, null, null, null, null);
+				return Maybe.fromOptional(Optional.ofNullable(region));
 			})
 			.compose(Rx.offloadMaybe());
 	}
