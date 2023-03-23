@@ -6,6 +6,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.functions.BiConsumer;
+import io.reactivex.rxjava3.functions.BiFunction;
 import io.reactivex.rxjava3.functions.Supplier;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
@@ -68,12 +70,18 @@ public class EsiHelper {
 	 * @return
 	 */
 	public Flowable<JsonNode> fetchPagesOfJsonArrays(EsiUrl url) {
-		return fetchPages(url).map(this::decode)
-			.flatMap(node -> {
+		return fetchPagesOfJsonArrays(url, (a, b) -> a);
+	}
+
+	public Flowable<JsonNode> fetchPagesOfJsonArrays(EsiUrl url, BiFunction<JsonNode, Response, JsonNode> augmenter) {
+		return fetchPages(url)
+			.flatMap(response -> {
+				var node = decode(response);
 				if (!node.isArray()) {
 					return Flowable.error(new RuntimeException(String.format("Expected array, got %s", node.getNodeType())));
 				}
-				return Flowable.fromIterable(node);
+				return Flowable.fromIterable(node)
+					.map(entry -> augmenter.apply(entry, response));
 			});
 	}
 

@@ -32,6 +32,8 @@ public class MarketOrderFetcher {
 	protected UniverseEsi universeEsi;
 	@Inject
 	protected EsiHelper esiHelper;
+	@Inject
+	protected OkHttpHelper okHttpHelper;
 
 	@Setter
 	private MVMap<Long, JsonNode> marketOrdersStore;
@@ -51,12 +53,16 @@ public class MarketOrderFetcher {
 		return Flowable.defer(() -> {
 			log.info(String.format("Fetching market orders from %s", region.getName()));
 			var esiUrl = EsiUrl.builder().urlPath(String.format("/markets/%s/orders?order_type=all", region.getRegionId())).build();
-			return esiHelper.fetchPagesOfJsonArrays(esiUrl)
+			return esiHelper.fetchPagesOfJsonArrays(esiUrl, (entry, response) -> {
+					var lastModified = okHttpHelper.getLastModified(response);
+					var obj = (ObjectNode) entry;
+					lastModified.ifPresent(date -> obj.put("http_last_modified", date.toInstant().toString()));
+					return obj;
+				})
 				.map(entry -> {
 					count.incrementAndGet();
 					var obj = (ObjectNode) entry;
 					obj.put("region_id", region.getRegionId());
-					//obj.set("http_last_modified", lastModified); // @todo figure out how to get this in here cleanly.
 					//locationPopulator.populateStation(obj, "location_id"); // @todo fix this
 					return obj;
 				});

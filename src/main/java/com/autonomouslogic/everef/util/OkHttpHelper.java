@@ -8,6 +8,10 @@ import okhttp3.Response;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import java.time.Instant;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 
 @Singleton
 @Log4j2
@@ -33,5 +37,14 @@ public class OkHttpHelper {
 
 	private Request getRequest(String url) {
 		return new Request.Builder().get().url(url).build();
+	}
+
+	public Optional<ZonedDateTime> getLastModified(Response response) {
+		var lastModifiedHeader = response.header("Last-Modified");
+		if (lastModifiedHeader == null) {
+			return Optional.empty();
+		}
+		var lastModified = ZonedDateTime.parse(lastModifiedHeader, DateTimeFormatter.RFC_1123_DATE_TIME);
+		return Optional.of(lastModified);
 	}
 }
