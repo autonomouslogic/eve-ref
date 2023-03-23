@@ -6,7 +6,7 @@ plugins {
 	id "org.danilopianini.git-sensitive-semantic-versioning-gradle-plugin" version "1.1.4"
 	id "io.freefair.lombok" version "8.0.0"
 	id "com.diffplug.spotless" version "6.17.0"
-	id "org.openapi.generator" version "5.4.0"
+	id "org.openapi.generator" version "6.3.0"
 }
 
 group "com.autonomouslogic.everef"
@@ -56,23 +56,25 @@ java {
 	withSourcesJar()
 }
 
-def openApiRootDir = "$buildDir/generated/openapi"
+def esiOpenApiPackage = "${group}.openapi.esi"
 openApiGenerate {
 	generatorName = "java"
-	inputSpec = "$rootDir/lib/MinervaAPI.yaml"
-	outputDir = openApiRootDir
-	apiPackage = "com.autonomouslogic.minerva.openapi"
-	invokerPackage = "com.autonomouslogic.minerva.openapi.invoker"
-	modelPackage = "com.autonomouslogic.minerva.openapi.model"
+	inputSpec = "$rootDir/lib/esi-latest.json"
+	apiPackage = "${esiOpenApiPackage}.api"
+	invokerPackage = "${esiOpenApiPackage}.invoker"
+	modelPackage = "${esiOpenApiPackage}.model"
+	modelNamePrefix = "Esi"
 	configOptions = [
-			dateLibrary: "java8",
-			library: "retrofit2",
-			useRxJava3: "true",
-			useGzipFeature: "true"
+		dateLibrary: "java8",
+		library: "native",
+		asyncNative: "true",
+		serializationLibrary: "jackson",
+		booleanGetterPrefix: "is",
+		bigDecimalAsString: "true",
+		useGzipFeature: "true"
 	]
 }
-sourceSets.main.java.srcDirs += ["$openApiRootDir/src/main/java"]
-tasks.compileJava.dependsOn tasks.openApiGenerate
+sourceSets.main.java.srcDirs += ["build/generate-resources/main/src/main/java"]
 
 test {
 	useJUnitPlatform()
