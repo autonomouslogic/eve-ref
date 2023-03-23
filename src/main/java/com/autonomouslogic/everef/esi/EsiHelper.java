@@ -3,28 +3,16 @@ package com.autonomouslogic.everef.esi;
 import com.autonomouslogic.everef.util.OkHttpHelper;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Single;
-import io.reactivex.rxjava3.functions.BiConsumer;
 import io.reactivex.rxjava3.functions.BiFunction;
-import io.reactivex.rxjava3.functions.Supplier;
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Singleton;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import okhttp3.OkHttpClient;
 import okhttp3.Response;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.inject.Singleton;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.concurrent.CompletableFuture;
-
-import static java.util.concurrent.CompletableFuture.allOf;
-import static java.util.concurrent.CompletableFuture.completedFuture;
 
 @Singleton
 @Log4j2
@@ -34,8 +22,10 @@ public class EsiHelper {
 	@Inject
 	@Named("esi")
 	protected OkHttpClient esiHttpClient;
+
 	@Inject
 	protected OkHttpHelper okHttpHelper;
+
 	@Inject
 	protected ObjectMapper objectMapper;
 
@@ -57,10 +47,7 @@ public class EsiHelper {
 				return Flowable.just(first);
 			}
 			return Flowable.concatArray(
-				Flowable.just(first),
-				Flowable.range(2, pagesInt)
-					.flatMapSingle(page -> fetch(url), false, 1)
-			);
+					Flowable.just(first), Flowable.range(2, pagesInt).flatMapSingle(page -> fetch(url), false, 1));
 		});
 	}
 
@@ -74,15 +61,14 @@ public class EsiHelper {
 	}
 
 	public Flowable<JsonNode> fetchPagesOfJsonArrays(EsiUrl url, BiFunction<JsonNode, Response, JsonNode> augmenter) {
-		return fetchPages(url)
-			.flatMap(response -> {
-				var node = decode(response);
-				if (!node.isArray()) {
-					return Flowable.error(new RuntimeException(String.format("Expected array, got %s", node.getNodeType())));
-				}
-				return Flowable.fromIterable(node)
-					.map(entry -> augmenter.apply(entry, response));
-			});
+		return fetchPages(url).flatMap(response -> {
+			var node = decode(response);
+			if (!node.isArray()) {
+				return Flowable.error(
+						new RuntimeException(String.format("Expected array, got %s", node.getNodeType())));
+			}
+			return Flowable.fromIterable(node).map(entry -> augmenter.apply(entry, response));
+		});
 	}
 
 	@SneakyThrows

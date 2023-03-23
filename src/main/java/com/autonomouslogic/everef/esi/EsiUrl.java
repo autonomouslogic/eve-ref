@@ -1,13 +1,9 @@
 package com.autonomouslogic.everef.esi;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.Objects;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
-
-import java.net.URL;
-import java.util.Objects;
 
 /**
  * Utility class for dealing with URLs on the API without the Swagger client.
@@ -19,12 +15,15 @@ public class EsiUrl {
 
 	@NonNull
 	String urlPath;
+
 	@NonNull
 	@lombok.Builder.Default
 	String datasource = "tranquility";
+
 	@NonNull
 	@lombok.Builder.Default
 	String language = "en";
+
 	Integer page;
 
 	public String toString() {
@@ -35,8 +34,7 @@ public class EsiUrl {
 		Objects.requireNonNull(datasource);
 		if (!urlPath.contains("?")) {
 			sb.append("?");
-		}
-		else {
+		} else {
 			sb.append("&");
 		}
 		sb.append("datasource=").append(datasource);

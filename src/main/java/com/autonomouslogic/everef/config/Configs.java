@@ -173,10 +173,8 @@ public class Configs {
 	/**
 	 * User agent string to provide to the ESI.
 	 */
-	public static final Config<String> ESI_USER_AGENT = Config.<String>builder()
-			.name("ESI_USER_AGENT")
-			.type(String.class)
-			.build();
+	public static final Config<String> ESI_USER_AGENT =
+			Config.<String>builder().name("ESI_USER_AGENT").type(String.class).build();
 
 	/**
 	 * Rate limit to apply for ESI requests.

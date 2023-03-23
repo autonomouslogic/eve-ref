@@ -4,17 +4,14 @@ import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.esi.EsiLimitExceededInterceptor;
 import com.autonomouslogic.everef.esi.EsiRateLimitInterceptor;
 import com.autonomouslogic.everef.esi.EsiUserAgentInterceptor;
-import com.autonomouslogic.everef.openapi.esi.infrastructure.ApiClient;
 import dagger.Module;
 import dagger.Provides;
-import okhttp3.Cache;
-import okhttp3.ConnectionSpec;
-import okhttp3.OkHttpClient;
-
-import javax.inject.Named;
-import javax.inject.Singleton;
 import java.io.File;
 import java.time.Duration;
+import javax.inject.Named;
+import javax.inject.Singleton;
+import okhttp3.Cache;
+import okhttp3.OkHttpClient;
 
 @Module
 public class OkHttpModule {
@@ -44,17 +41,20 @@ public class OkHttpModule {
 	@Provides
 	@Singleton
 	@Named("esi")
-	public OkHttpClient esiHttpClient(EsiUserAgentInterceptor userAgentInterceptor, EsiRateLimitInterceptor rateLimitInterceptor, EsiLimitExceededInterceptor limitExceededInterceptor) {
+	public OkHttpClient esiHttpClient(
+			EsiUserAgentInterceptor userAgentInterceptor,
+			EsiRateLimitInterceptor rateLimitInterceptor,
+			EsiLimitExceededInterceptor limitExceededInterceptor) {
 		return new OkHttpClient.Builder()
-			.addInterceptor(userAgentInterceptor)
-			.addInterceptor(limitExceededInterceptor)
-			.addInterceptor(rateLimitInterceptor)
-			.retryOnConnectionFailure(true)
-			.followRedirects(true)
-			.followSslRedirects(true)
-			.connectTimeout(Duration.ofSeconds(5))
-			.readTimeout(Duration.ofSeconds(5))
-			.writeTimeout(Duration.ofSeconds(5))
-			.build();
+				.addInterceptor(userAgentInterceptor)
+				.addInterceptor(limitExceededInterceptor)
+				.addInterceptor(rateLimitInterceptor)
+				.retryOnConnectionFailure(true)
+				.followRedirects(true)
+				.followSslRedirects(true)
+				.connectTimeout(Duration.ofSeconds(5))
+				.readTimeout(Duration.ofSeconds(5))
+				.writeTimeout(Duration.ofSeconds(5))
+				.build();
 	}
 }

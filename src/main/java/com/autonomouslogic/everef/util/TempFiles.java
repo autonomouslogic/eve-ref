@@ -1,18 +1,15 @@
 package com.autonomouslogic.everef.util;
 
-import lombok.SneakyThrows;
-
-import javax.inject.Inject;
-import javax.inject.Singleton;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import javax.inject.Inject;
+import javax.inject.Singleton;
+import lombok.SneakyThrows;
 
 @Singleton
 public class TempFiles {
 	@Inject
-	protected TempFiles() {
-
-	}
+	protected TempFiles() {}
 
 	@SneakyThrows
 	public Path tempFile(String prefix, String suffix) {

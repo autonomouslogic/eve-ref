@@ -4,12 +4,10 @@ import com.autonomouslogic.commons.rxjava3.Rx3Util;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.schedulers.Schedulers;
-
 import java.io.File;
 import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-
 import lombok.extern.log4j.Log4j2;
 import software.amazon.awssdk.core.async.AsyncRequestBody;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
@@ -49,7 +47,10 @@ public class S3Adapter {
 
 	public Single<PutObjectResponse> putObject(PutObjectRequest req, File file, S3AsyncClient client) {
 		return putObject(req, AsyncRequestBody.fromFile(file), client)
-			.onErrorResumeNext(e -> Single.error(new RuntimeException(
-				String.format("Error putting object from file %s to s3://%s/%s", file.getAbsolutePath(), req.bucket(), req.key()), e)));
+				.onErrorResumeNext(e -> Single.error(new RuntimeException(
+						String.format(
+								"Error putting object from file %s to s3://%s/%s",
+								file.getAbsolutePath(), req.bucket(), req.key()),
+						e)));
 	}
 }

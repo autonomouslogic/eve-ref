@@ -1,13 +1,12 @@
 package com.autonomouslogic.everef.mvstore;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.nio.ByteBuffer;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import lombok.SneakyThrows;
 import org.h2.mvstore.WriteBuffer;
 import org.h2.mvstore.type.ObjectDataType;
-
-import javax.inject.Inject;
-import javax.inject.Singleton;
-import java.nio.ByteBuffer;
 
 @Singleton
 public class JsonNodeDataType extends ObjectDataType {
@@ -15,8 +14,7 @@ public class JsonNodeDataType extends ObjectDataType {
 	protected ObjectMapper objectMapper;
 
 	@Inject
-	protected JsonNodeDataType() {
-	}
+	protected JsonNodeDataType() {}
 
 	@Override
 	@SneakyThrows

@@ -4,7 +4,6 @@ import com.autonomouslogic.everef.url.S3Url;
 import java.time.Duration;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-
 import software.amazon.awssdk.services.s3.model.ObjectCannedACL;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
@@ -26,8 +25,7 @@ public class S3Util {
 	}
 
 	public PutObjectRequest putPublicObjectRequest(long len, S3Url url, String contentType) {
-		return putObjectRequest(len, url, contentType)
-				.toBuilder()
+		return putObjectRequest(len, url, contentType).toBuilder()
 				.acl(ObjectCannedACL.PUBLIC_READ)
 				.build();
 	}

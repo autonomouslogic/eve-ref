@@ -1,21 +1,18 @@
 package com.autonomouslogic.everef.esi;
 
-import com.autonomouslogic.everef.config.Configs;
-import com.google.common.util.concurrent.RateLimiter;
+import java.io.IOException;
+import java.time.Duration;
+import java.time.Instant;
+import java.util.Optional;
+import java.util.concurrent.atomic.AtomicBoolean;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import okhttp3.Interceptor;
 import okhttp3.Response;
 import org.jetbrains.annotations.NotNull;
-
-import javax.inject.Inject;
-import javax.inject.Singleton;
-import java.io.IOException;
-import java.time.Duration;
-import java.time.Instant;
-import java.util.Optional;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Handles global stop if 420 responses are received.
@@ -43,7 +40,8 @@ public class EsiLimitExceededInterceptor implements Interceptor {
 			if (response.code() == 420 || response.body().string().contains(ESI_420_TEXT)) {
 				// @todo there's a race condition here on concurrent requests
 				globalStop.set(true);
-				var resetTime = parseResetTime(Optional.ofNullable(response.header(RESET_TIME_HEADER)).orElse("10"));
+				var resetTime = parseResetTime(
+						Optional.ofNullable(response.header(RESET_TIME_HEADER)).orElse("10"));
 				log.warn(String.format("ESI 420, waiting for %s", resetTime));
 				Thread.sleep(resetTime.plusSeconds(1).toMillis());
 				globalStop.set(false);

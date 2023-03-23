@@ -1,5 +1,7 @@
 package com.autonomouslogic.everef.cli.marketorders;
 
+import static com.autonomouslogic.everef.util.ArchivePathFactory.MARKET_ORDERS;
+
 import com.autonomouslogic.everef.cli.Command;
 import com.autonomouslogic.everef.cli.DataIndex;
 import com.autonomouslogic.everef.config.Configs;
@@ -13,20 +15,17 @@ import com.autonomouslogic.everef.util.TempFiles;
 import com.fasterxml.jackson.databind.JsonNode;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Single;
+import java.io.File;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Provider;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import org.h2.mvstore.MVMap;
 import org.h2.mvstore.type.ObjectDataType;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.inject.Provider;
-import java.io.File;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
-
-import static com.autonomouslogic.everef.util.ArchivePathFactory.MARKET_ORDERS;
 
 /**
  * Scraps all public market orders and uploads them.
@@ -36,22 +35,31 @@ public class ScrapeMarketOrders implements Command {
 	@Inject
 	@Named("data")
 	protected S3AsyncClient s3Client;
+
 	@Inject
 	protected S3Adapter s3Adapter;
+
 	@Inject
 	protected S3Util s3Util;
+
 	@Inject
 	protected Provider<DataIndex> dataIndexProvider;
+
 	@Inject
 	protected JsonNodeDataType jsonNodeDataType;
+
 	@Inject
 	protected MarketOrderFetcher marketOrderFetcher;
+
 	@Inject
 	protected MarketOrdersWriter marketOrdersWriter;
+
 	@Inject
 	protected MVStoreUtil mvStoreUtil;
+
 	@Inject
 	protected UrlParser urlParser;
+
 	@Inject
 	protected TempFiles tempFiles;
 
@@ -60,8 +68,7 @@ public class ScrapeMarketOrders implements Command {
 	private ZonedDateTime scrapeTime;
 
 	@Inject
-	protected ScrapeMarketOrders() {
-	}
+	protected ScrapeMarketOrders() {}
 
 	@Inject
 	protected void init() {
@@ -79,23 +86,23 @@ public class ScrapeMarketOrders implements Command {
 	@Override
 	public Completable run() {
 		return Completable.concatArray(
-			Completable.fromAction(() -> {
-				scrapeTime = ZonedDateTime.now(ZoneOffset.UTC);
-				initMvStore();
-			}),
-			fetchOrders(),
-			writeOrders().flatMapCompletable(this::uploadFile),
-			dataIndexProvider.get().run()
-		);
+				Completable.fromAction(() -> {
+					scrapeTime = ZonedDateTime.now(ZoneOffset.UTC);
+					initMvStore();
+				}),
+				fetchOrders(),
+				writeOrders().flatMapCompletable(this::uploadFile),
+				dataIndexProvider.get().run());
 	}
 
 	@SneakyThrows
 	private void initMvStore() {
 		var mvStore = mvStoreUtil.createTempStore("market-orders");
-		marketOrdersStore = mvStore.openMap("market-orders", new MVMap.Builder<Long, JsonNode>()
-			.keyType(new ObjectDataType())
-			.valueType(jsonNodeDataType)
-		);
+		marketOrdersStore = mvStore.openMap(
+				"market-orders",
+				new MVMap.Builder<Long, JsonNode>()
+						.keyType(new ObjectDataType())
+						.valueType(jsonNodeDataType));
 		marketOrderFetcher.setMarketOrdersStore(marketOrdersStore);
 		marketOrdersWriter.setMarketOrdersStore(marketOrdersStore);
 	}
@@ -118,21 +125,20 @@ public class ScrapeMarketOrders implements Command {
 		return Completable.defer(() -> {
 			log.debug(String.format("Uploading completed file from %s", outputFile));
 			var latestPath = S3Url.builder()
-				.bucket(dataUrl.getBucket())
-				.path(dataUrl.getPath() + MARKET_ORDERS.createLatestPath())
-				.build();
+					.bucket(dataUrl.getBucket())
+					.path(dataUrl.getPath() + MARKET_ORDERS.createLatestPath())
+					.build();
 			var archivePath = S3Url.builder()
-				.bucket(dataUrl.getBucket())
-				.path(dataUrl.getPath() + MARKET_ORDERS.createArchivePath(scrapeTime))
-				.build();
+					.bucket(dataUrl.getBucket())
+					.path(dataUrl.getPath() + MARKET_ORDERS.createArchivePath(scrapeTime))
+					.build();
 			var latestPut = s3Util.putPublicObjectRequest(outputFile.length(), latestPath, "application/x-bzip2");
 			var archivePut = s3Util.putPublicObjectRequest(outputFile.length(), archivePath, "application/x-bzip2");
 			log.debug(String.format("Uploading latest file to %s", latestPath));
 			log.debug(String.format("Uploading archive file to %s", archivePath));
 			return Completable.mergeArray(
-				s3Adapter.putObject(latestPut, outputFile, s3Client).ignoreElement(),
-				s3Adapter.putObject(archivePut, outputFile, s3Client).ignoreElement()
-			);
+					s3Adapter.putObject(latestPut, outputFile, s3Client).ignoreElement(),
+					s3Adapter.putObject(archivePut, outputFile, s3Client).ignoreElement());
 		});
 	}
 }

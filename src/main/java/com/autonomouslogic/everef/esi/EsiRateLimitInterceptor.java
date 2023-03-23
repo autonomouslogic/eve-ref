@@ -2,16 +2,15 @@ package com.autonomouslogic.everef.esi;
 
 import com.autonomouslogic.everef.config.Configs;
 import com.google.common.util.concurrent.RateLimiter;
+import java.io.IOException;
+import java.time.Duration;
+import java.time.Instant;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import lombok.extern.log4j.Log4j2;
 import okhttp3.Interceptor;
 import okhttp3.Response;
 import org.jetbrains.annotations.NotNull;
-
-import javax.inject.Inject;
-import javax.inject.Singleton;
-import java.io.IOException;
-import java.time.Duration;
-import java.time.Instant;
 
 /**
  * Global rate limiter for ESI requests.

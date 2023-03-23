@@ -15,5 +15,6 @@ public interface TestComponent {
 	void inject(DataIndexTest test);
 
 	void inject(UrlParserTest test);
+
 	void inject(ScrapeFetcherTest test);
 }
