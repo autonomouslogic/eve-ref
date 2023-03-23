@@ -1,5 +1,7 @@
 package com.autonomouslogic.everef.cli.marketorders;
 
+import com.autonomouslogic.everef.util.Rx;
+import com.autonomouslogic.everef.util.TempFiles;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Ordering;
@@ -16,15 +18,17 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
-import java.nio.file.Files;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import com.autonomouslogic.everef.util.JsonNodeCsvWriter;
 
 @Slf4j
 public class MarketOrdersWriter {
+	@Inject
+	protected TempFiles tempFiles;
+
 	@Setter
 	private MVMap<Long, JsonNode> marketOrdersStore;
 
@@ -36,11 +40,10 @@ public class MarketOrdersWriter {
 		return prepareSortedIds()
 			.flatMap(ids -> Single.fromCallable(() -> {
 				log.info(String.format("Preparing to write %s market orders.", marketOrdersStore.size()));
-				Instant start = Instant.now();
-				File csv = Files.createTempFile(getClass().getSimpleName() + "_", ".csv").toFile();
-				csv.deleteOnExit();
-				Iterable<JsonNode> iterable = Iterables.transform(ids, id -> marketOrdersStore.get(id));
-				new JsonNodeCsvBuilder()
+				var start = Instant.now();
+				var csv = tempFiles.tempFile("market-orders", ".csv").toFile();
+				var iterable = Iterables.transform(ids, id -> marketOrdersStore.get(id));
+				new JsonNodeCsvWriter()
 					.setOut(csv)
 					.writeAll(iterable);
 				File compressed = new File(csv.getPath() + ".bz2");
@@ -52,22 +55,17 @@ public class MarketOrdersWriter {
 				log.info(String.format("Market orders written in %s", time));
 				return compressed;
 			})
-				.subscribeOn(Schedulers.io())
-				.observeOn(Schedulers.computation())
+				.compose(Rx.offloadSingle())
 		);
-	}
-
-	private Ordering<Long> ordering(String field) {
-		return Ordering.natural().onResultOf(id -> marketOrdersStore.get(id).get(field).asLong());
 	}
 
 	private Single<List<Long>> prepareSortedIds() {
 		return Single.fromCallable(() -> {
 			log.debug(String.format("Preparing sorted IDs."));
-			Instant start = Instant.now();
+			var start = Instant.now();
 
-			List<Long> ids = new ArrayList<>(marketOrdersStore.keyList());
-			ids.sort(Ordering.compound(Arrays.asList(
+			var ids = new ArrayList<>(marketOrdersStore.keyList());
+			ids.sort(Ordering.compound(List.of(
 				ordering("region_id"),
 				ordering("type_id"),
 				ordering("is_buy_order"),
@@ -75,11 +73,14 @@ public class MarketOrdersWriter {
 				ordering("order_id")
 			)));
 
-			Duration time = Duration.between(start, Instant.now());
+			var time = Duration.between(start, Instant.now());
 			log.info(String.format("Sorted IDs prepared in %s", time));
 			return ids;
 		})
-			.subscribeOn(Schedulers.io())
-			.observeOn(Schedulers.computation());
+			.compose(Rx.offloadSingle());
+	}
+
+	private Ordering<Long> ordering(String field) {
+		return Ordering.natural().onResultOf(id -> marketOrdersStore.get(id).get(field).asLong());
 	}
 }

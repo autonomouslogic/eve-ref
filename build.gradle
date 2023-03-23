@@ -44,6 +44,7 @@ dependencies {
 	implementation "org.apache.commons:commons-compress:1.22"
 	implementation "com.h2database:h2-mvstore:2.1.214"
 	implementation "com.squareup.okhttp3:okhttp:4.10.0"
+	implementation "org.apache.commons:commons-csv:1.10.0"
 
 	testAnnotationProcessor "com.google.dagger:dagger-compiler:2.45"
 	testImplementation "com.google.dagger:dagger:2.45"
@@ -128,6 +129,14 @@ task placeholder(type: JavaExec) {
 task dataIndex(type: JavaExec) {
 	group "application"
 	args "data-index"
+
+	classpath = sourceSets.main.runtimeClasspath
+	mainClass = mainClassName
+}
+
+task scrapeMarketOrders(type: JavaExec) {
+	group "application"
+	args "scrape-market-orders"
 
 	classpath = sourceSets.main.runtimeClasspath
 	mainClass = mainClassName
