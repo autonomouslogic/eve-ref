@@ -1,5 +1,6 @@
 plugins {
 	id "java"
+	id "org.jetbrains.kotlin.jvm" version "1.8.10"
 	id "idea"
 	id "application"
 	id "jacoco"
@@ -38,6 +39,7 @@ dependencies {
 	implementation "com.fasterxml.jackson.core:jackson-core:2.14.2"
 	implementation "com.fasterxml.jackson.core:jackson-databind:2.14.2"
 	implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.14.2"
+	implementation "com.fasterxml.jackson.module:jackson-module-kotlin:2.14.2"
 	implementation "org.apache.commons:commons-pool2:2.11.1"
 	implementation "org.apache.commons:commons-compress:1.22"
 	implementation "com.h2database:h2-mvstore:2.1.214"
@@ -69,6 +71,9 @@ openApiGenerate {
 	]
 }
 sourceSets.main.java.srcDirs += ["build/generate-resources/main/src/main/kotlin"]
+compileKotlin.dependsOn(tasks.openApiGenerate)
+compileJava.dependsOn(tasks.openApiGenerate)
+sourcesJar.dependsOn(tasks.openApiGenerate)
 
 test {
 	useJUnitPlatform()

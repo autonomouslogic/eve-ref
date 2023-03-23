@@ -28,7 +28,7 @@ public class OkHttpHelper {
 
 	public Single<Response> execute(Request request, OkHttpClient client) {
 		return Single.fromCallable(() -> {
-				log.trace(String.format("Requesting %s %s", request.method(), request.url());
+				log.trace(String.format("Requesting %s %s", request.method(), request.url()));
 				return client.newCall(request).execute();
 			})
 			.compose(Rx.offloadSingle())

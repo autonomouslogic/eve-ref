@@ -8,6 +8,7 @@ import com.autonomouslogic.everef.openapi.esi.infrastructure.ApiClient;
 import dagger.Module;
 import dagger.Provides;
 import okhttp3.Cache;
+import okhttp3.ConnectionSpec;
 import okhttp3.OkHttpClient;
 
 import javax.inject.Named;
@@ -44,7 +45,7 @@ public class OkHttpModule {
 	@Singleton
 	@Named("esi")
 	public OkHttpClient esiHttpClient(EsiUserAgentInterceptor userAgentInterceptor, EsiRateLimitInterceptor rateLimitInterceptor, EsiLimitExceededInterceptor limitExceededInterceptor) {
-		return ApiClient.getBuilder()
+		return new OkHttpClient.Builder()
 			.addInterceptor(userAgentInterceptor)
 			.addInterceptor(limitExceededInterceptor)
 			.addInterceptor(rateLimitInterceptor)
