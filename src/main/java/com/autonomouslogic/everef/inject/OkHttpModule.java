@@ -48,7 +48,7 @@ public class OkHttpModule {
 		return new OkHttpClient.Builder()
 				.addInterceptor(userAgentInterceptor)
 				// .addInterceptor(limitExceededInterceptor) // @todo
-				// .addInterceptor(rateLimitInterceptor) // @todo
+				.addInterceptor(rateLimitInterceptor) // @todo
 				.retryOnConnectionFailure(true)
 				.followRedirects(true)
 				.followSslRedirects(true)
