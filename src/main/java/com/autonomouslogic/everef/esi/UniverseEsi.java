@@ -1,5 +1,6 @@
 package com.autonomouslogic.everef.esi;
 
+import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.openapi.esi.apis.UniverseApi;
 import com.autonomouslogic.everef.openapi.esi.models.GetUniverseRegionsRegionIdOk;
 import com.autonomouslogic.everef.util.Rx;
@@ -16,13 +17,17 @@ public class UniverseEsi {
 	@Inject
 	protected UniverseApi universeApi;
 
+	private final String datasource = Configs.ESI_DATASOURCE.getRequired();
+
 	@Inject
 	protected UniverseEsi() {}
 
 	public Flowable<Integer> getRegionIds() {
 		return Flowable.defer(() -> {
 					log.trace("Fetching region ids");
-					return Flowable.fromIterable(universeApi.getUniverseRegions(null, null));
+					var d = UniverseApi.Datasource_getUniverseRegions.valueOf(datasource);
+					var regions = universeApi.getUniverseRegions(d, null);
+					return Flowable.fromIterable(regions);
 				})
 				.compose(Rx.offloadFlowable());
 	}
@@ -30,7 +35,9 @@ public class UniverseEsi {
 	public Maybe<GetUniverseRegionsRegionIdOk> getRegion(int regionId) {
 		return Maybe.defer(() -> {
 					log.trace(String.format("Fetching region %s", regionId));
-					var region = universeApi.getUniverseRegionsRegionId(regionId, null, null, null, null);
+					var d = UniverseApi.Datasource_getUniverseRegionsRegionId.valueOf(
+							Configs.ESI_DATASOURCE.getRequired());
+					var region = universeApi.getUniverseRegionsRegionId(regionId, null, d, null, null);
 					return Maybe.fromOptional(Optional.ofNullable(region));
 				})
 				.compose(Rx.offloadMaybe());

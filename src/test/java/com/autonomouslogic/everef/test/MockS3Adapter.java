@@ -2,6 +2,7 @@ package com.autonomouslogic.everef.test;
 
 import com.autonomouslogic.everef.s3.S3Adapter;
 import com.google.common.base.Strings;
+import com.google.common.hash.Hashing;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Single;
 import java.io.File;
@@ -17,6 +18,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import lombok.Value;
 import org.apache.commons.io.IOUtils;
+import org.junit.jupiter.api.Assertions;
 import software.amazon.awssdk.core.async.AsyncRequestBody;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 import software.amazon.awssdk.services.s3.model.ListObjectsV2Request;
@@ -139,5 +141,14 @@ public class MockS3Adapter extends S3Adapter {
 				.filter(entry -> entry.getBucket().equals(bucket))
 				.map(entry -> entry.getKey())
 				.collect(Collectors.toList());
+	}
+
+	public void assertSameContent(String bucket, String key1, String key2, S3AsyncClient client) {
+		var bytes1 = data.get(new Entry(bucket, key1, client));
+		var bytes2 = data.get(new Entry(bucket, key2, client));
+		Assertions.assertEquals(bytes1.length, bytes2.length);
+		var hash1 = Hashing.murmur3_128().hashBytes(bytes1);
+		var hash2 = Hashing.murmur3_128().hashBytes(bytes2);
+		Assertions.assertEquals(hash1, hash2);
 	}
 }

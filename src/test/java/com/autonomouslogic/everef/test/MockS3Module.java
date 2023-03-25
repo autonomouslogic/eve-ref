@@ -16,8 +16,14 @@ import software.amazon.awssdk.services.s3.S3AsyncClient;
 public class MockS3Module {
 	@Provides
 	@Singleton
-	public S3Adapter s3Adapter() {
+	public MockS3Adapter mockS3Adapter() {
 		return new MockS3Adapter();
+	}
+
+	@Provides
+	@Singleton
+	public S3Adapter s3Adapter(MockS3Adapter mock) {
+		return mock;
 	}
 
 	@Provides

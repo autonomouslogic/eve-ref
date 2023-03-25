@@ -1,5 +1,6 @@
 package com.autonomouslogic.everef.inject;
 
+import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.openapi.esi.apis.UniverseApi;
 import dagger.Module;
 import dagger.Provides;
@@ -12,6 +13,6 @@ public class EsiModule {
 	@Provides
 	@Singleton
 	public UniverseApi universeApi(@Named("esi") OkHttpClient httpClient) {
-		return new UniverseApi(null, httpClient);
+		return new UniverseApi(Configs.ESI_BASE_PATH.getRequired(), httpClient);
 	}
 }

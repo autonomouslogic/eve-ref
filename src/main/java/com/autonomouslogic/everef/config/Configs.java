@@ -83,21 +83,12 @@ public class Configs {
 			.build();
 
 	/**
-	 * The base URL used for accessing the ESI.
-	 */
-	public static final Config<String> ESI_BASE_URL = Config.<String>builder()
-			.name("ESI_DOMAIN")
-			.defaultValue("https://esi.evetech.net")
-			.type(String.class)
-			.build();
-
-	/**
 	 * The base path used when accessing the ESI.
 	 * This will be the version.
 	 */
 	public static final Config<String> ESI_BASE_PATH = Config.<String>builder()
 			.name("ESI_BASE_PATH")
-			.defaultValue("/latest")
+			.defaultValue("https://esi.evetech.net/latest")
 			.type(String.class)
 			.build();
 

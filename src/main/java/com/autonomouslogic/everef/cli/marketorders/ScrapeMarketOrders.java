@@ -21,6 +21,7 @@ import java.time.ZonedDateTime;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
+import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import org.h2.mvstore.MVMap;
@@ -65,6 +66,8 @@ public class ScrapeMarketOrders implements Command {
 
 	private S3Url dataUrl;
 	private MVMap<Long, JsonNode> marketOrdersStore;
+
+	@Setter
 	private ZonedDateTime scrapeTime;
 
 	@Inject
@@ -87,7 +90,9 @@ public class ScrapeMarketOrders implements Command {
 	public Completable run() {
 		return Completable.concatArray(
 				Completable.fromAction(() -> {
-					scrapeTime = ZonedDateTime.now(ZoneOffset.UTC);
+					if (scrapeTime == null) {
+						scrapeTime = ZonedDateTime.now(ZoneOffset.UTC);
+					}
 					initMvStore();
 				}),
 				fetchOrders(),

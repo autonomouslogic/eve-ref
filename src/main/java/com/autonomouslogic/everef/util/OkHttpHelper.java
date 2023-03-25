@@ -31,7 +31,7 @@ public class OkHttpHelper {
 				})
 				.compose(Rx.offloadSingle())
 				.onErrorResumeNext(e -> Single.error(new RuntimeException(
-						String.format("Error requesting %s %s", request.method(), request.url()))));
+						String.format("Error requesting %s %s", request.method(), request.url()), e)));
 	}
 
 	private Request getRequest(String url) {
