@@ -11,6 +11,9 @@ import java.util.stream.Collectors;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.SneakyThrows;
+import okhttp3.MediaType;
+import okhttp3.Response;
+import okhttp3.mock.MockInterceptor;
 import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream;
 import org.apache.commons.csv.CSVFormat;
 
@@ -18,6 +21,9 @@ import org.apache.commons.csv.CSVFormat;
 public class TestDataUtil {
 	@Inject
 	ObjectMapper objectMapper;
+
+	@Inject
+	MockInterceptor http;
 
 	@Inject
 	protected TestDataUtil() {}
@@ -37,5 +43,13 @@ public class TestDataUtil {
 		var map = typeFactory.constructMapType(LinkedHashMap.class, String.class, String.class);
 		var list = typeFactory.constructCollectionType(List.class, map);
 		return objectMapper.readValue(in, list);
+	}
+
+	public Response.Builder mockResponse(String url, String body) {
+		return mockResponse(url, body.getBytes());
+	}
+
+	public Response.Builder mockResponse(String url, byte[] body) {
+		return http.addRule().get(url).anyTimes().respond(body, MediaType.get("application/json"));
 	}
 }

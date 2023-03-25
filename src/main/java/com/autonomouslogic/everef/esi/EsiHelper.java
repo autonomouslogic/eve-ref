@@ -47,7 +47,10 @@ public class EsiHelper {
 				return Flowable.just(first);
 			}
 			return Flowable.concatArray(
-					Flowable.just(first), Flowable.range(2, pagesInt).flatMapSingle(page -> fetch(url), false, 1));
+					Flowable.just(first),
+					Flowable.range(2, pagesInt - 1)
+							.flatMapSingle(
+									page -> fetch(url.toBuilder().page(page).build()), false, 1));
 		});
 	}
 

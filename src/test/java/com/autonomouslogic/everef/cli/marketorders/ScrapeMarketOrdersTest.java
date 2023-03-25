@@ -10,6 +10,7 @@ import com.autonomouslogic.everef.cli.MockDataIndexModule;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.test.MockS3Adapter;
 import com.autonomouslogic.everef.test.TestDataUtil;
+import com.google.common.collect.Ordering;
 import java.io.InputStream;
 import java.time.ZonedDateTime;
 import java.util.List;
@@ -18,7 +19,6 @@ import java.util.stream.Collectors;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.SneakyThrows;
-import okhttp3.MediaType;
 import okhttp3.Response;
 import okhttp3.mock.MockInterceptor;
 import org.apache.commons.io.IOUtils;
@@ -62,11 +62,12 @@ public class ScrapeMarketOrdersTest {
 				.build()
 				.inject(this);
 		// Regions.
-		mockResponse("https://esi.evetech.net/latest/universe/regions/?datasource=tranquility", "[10000001,10000002]");
-		mockResponse(
+		testDataUtil.mockResponse(
+				"https://esi.evetech.net/latest/universe/regions/?datasource=tranquility", "[10000001,10000002]");
+		testDataUtil.mockResponse(
 				"https://esi.evetech.net/latest/universe/regions/10000001/?datasource=tranquility",
 				"{\"region_id\":10000001,\"name\":\"Derelik\",\"constellations\":[]}");
-		mockResponse(
+		testDataUtil.mockResponse(
 				"https://esi.evetech.net/latest/universe/regions/10000002/?datasource=tranquility",
 				"{\"region_id\":10000002,\"name\":\"The Forge\",\"constellations\":[]}");
 		// Market orders.
@@ -76,9 +77,19 @@ public class ScrapeMarketOrdersTest {
 				1,
 				2);
 		mockRegionOrders(
+				"https://esi.evetech.net/latest/markets/10000001/orders?order_type=all&datasource=tranquility&language=en&page=2",
+				10000001,
+				2,
+				2);
+		mockRegionOrders(
 				"https://esi.evetech.net/latest/markets/10000002/orders?order_type=all&datasource=tranquility&language=en",
 				10000002,
 				1,
+				2);
+		mockRegionOrders(
+				"https://esi.evetech.net/latest/markets/10000002/orders?order_type=all&datasource=tranquility&language=en&page=2",
+				10000002,
+				2,
 				2);
 	}
 
@@ -100,7 +111,15 @@ public class ScrapeMarketOrdersTest {
 		var records = testDataUtil.readMapsFromBz2Csv(content).stream()
 				.map(Map::toString)
 				.collect(Collectors.joining("\n"));
-		var expected = ListUtil.concat(loadRegionOrderMaps(10000001, 1), loadRegionOrderMaps(10000002, 1)).stream()
+		var expected = ListUtil.concat(
+						loadRegionOrderMaps(10000001, 1),
+						loadRegionOrderMaps(10000001, 2),
+						loadRegionOrderMaps(10000002, 1),
+						loadRegionOrderMaps(10000002, 2))
+				.stream()
+				.sorted(Ordering.compound(List.of(
+						Ordering.natural().onResultOf(m -> m.get("region_id")),
+						Ordering.natural().onResultOf(m -> m.get("type_id")))))
 				.map(Map::toString)
 				.collect(Collectors.joining("\n"));
 		assertEquals(expected, records);
@@ -110,18 +129,10 @@ public class ScrapeMarketOrdersTest {
 		verify(dataIndex).run();
 	}
 
-	private Response.Builder mockResponse(String url, String body) {
-		return mockResponse(url, body.getBytes());
-	}
-
-	private Response.Builder mockResponse(String url, byte[] body) {
-		return http.addRule().get(url).anyTimes().respond(body, MediaType.get("application/json"));
-	}
-
 	@SneakyThrows
 	private Response.Builder mockRegionOrders(String url, int regionId, int page, int pages) {
 		var bytes = IOUtils.toByteArray(loadRegionOrders(regionId, page));
-		return mockResponse(url, bytes).header("X-Pages", Integer.toString(pages));
+		return testDataUtil.mockResponse(url, bytes).header("X-Pages", Integer.toString(pages));
 	}
 
 	@SneakyThrows
