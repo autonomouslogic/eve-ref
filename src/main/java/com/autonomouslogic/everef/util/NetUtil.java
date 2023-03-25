@@ -1,8 +1,7 @@
 package com.autonomouslogic.everef.util;
 
-import lombok.SneakyThrows;
-
 import java.net.ServerSocket;
+import lombok.SneakyThrows;
 
 public class NetUtil {
 	@SneakyThrows

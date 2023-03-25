@@ -1,7 +1,6 @@
 package com.autonomouslogic.everef.cli.marketorders;
 
 import com.autonomouslogic.everef.inject.AwsModule;
-import com.autonomouslogic.everef.inject.S3Module;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,9 +22,9 @@ public class ScrapeMarketOrdersTest {
 	@BeforeEach
 	void before() {
 		DaggerTestComponent.builder()
-			.awsModule(new AwsModule().setDataCredentialsProvider(dataCredentialsProvider))
-			.build()
-			.inject(this);
+				.awsModule(new AwsModule().setDataCredentialsProvider(dataCredentialsProvider))
+				.build()
+				.inject(this);
 	}
 
 	@Test

@@ -53,14 +53,6 @@ dependencies {
 	testImplementation "org.junit-pioneer:junit-pioneer:2.0.0"
 	testImplementation "org.mockito:mockito-junit-jupiter:5.2.0"
 	testImplementation "org.jsoup:jsoup:1.15.4"
-	testImplementation "org.gaul:s3proxy:2.0.0"
-	testImplementation("com.google.code.gson:gson") {
-		version {
-			strictly "2.8.9" // required for org.gaul:s3proxy:2.0.0
-		}
-	}
-
-	//testImplementation "com.adobe.testing:s3mock-junit5:2.11.0"
 }
 
 java {
