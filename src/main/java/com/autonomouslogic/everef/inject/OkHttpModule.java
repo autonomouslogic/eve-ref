@@ -4,6 +4,7 @@ import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.esi.EsiLimitExceededInterceptor;
 import com.autonomouslogic.everef.esi.EsiRateLimitInterceptor;
 import com.autonomouslogic.everef.esi.EsiUserAgentInterceptor;
+import com.autonomouslogic.everef.esi.LoggingInterceptor;
 import dagger.Module;
 import dagger.Provides;
 import java.io.File;
@@ -55,11 +56,13 @@ public class OkHttpModule {
 			Cache cache,
 			EsiUserAgentInterceptor userAgentInterceptor,
 			EsiRateLimitInterceptor rateLimitInterceptor,
-			EsiLimitExceededInterceptor limitExceededInterceptor) {
+			EsiLimitExceededInterceptor limitExceededInterceptor,
+			LoggingInterceptor loggingInterceptor) {
 		var builder = new OkHttpClient.Builder()
 				.addInterceptor(userAgentInterceptor)
 				// .addInterceptor(limitExceededInterceptor) // @todo
 				.addInterceptor(rateLimitInterceptor) // @todo
+				.addInterceptor(loggingInterceptor) // @todo
 				.retryOnConnectionFailure(true)
 				.followRedirects(true)
 				.followSslRedirects(true)

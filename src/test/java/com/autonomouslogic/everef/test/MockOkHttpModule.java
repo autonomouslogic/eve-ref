@@ -3,6 +3,7 @@ package com.autonomouslogic.everef.test;
 import com.autonomouslogic.everef.esi.EsiLimitExceededInterceptor;
 import com.autonomouslogic.everef.esi.EsiRateLimitInterceptor;
 import com.autonomouslogic.everef.esi.EsiUserAgentInterceptor;
+import com.autonomouslogic.everef.esi.LoggingInterceptor;
 import com.autonomouslogic.everef.inject.OkHttpModule;
 import dagger.Module;
 import dagger.Provides;
@@ -21,9 +22,11 @@ public class MockOkHttpModule {
 			EsiUserAgentInterceptor userAgentInterceptor,
 			EsiRateLimitInterceptor rateLimitInterceptor,
 			EsiLimitExceededInterceptor limitExceededInterceptor,
+			LoggingInterceptor loggingInterceptor,
 			MockInterceptor mockInterceptor) {
 		return new OkHttpModule()
-				.esiHttpClient(null, userAgentInterceptor, rateLimitInterceptor, limitExceededInterceptor)
+				.esiHttpClient(
+						null, userAgentInterceptor, rateLimitInterceptor, limitExceededInterceptor, loggingInterceptor)
 				.newBuilder()
 				.addInterceptor(mockInterceptor)
 				.addInterceptor(chain -> {

@@ -1,0 +1,27 @@
+package com.autonomouslogic.everef.esi;
+
+import java.io.IOException;
+import javax.inject.Inject;
+import javax.inject.Singleton;
+import lombok.extern.log4j.Log4j2;
+import okhttp3.Interceptor;
+import okhttp3.Response;
+import org.jetbrains.annotations.NotNull;
+
+/**
+ * Trace logs calls
+ */
+@Singleton
+@Log4j2
+public class LoggingInterceptor implements Interceptor {
+	@Inject
+	protected LoggingInterceptor() {}
+
+	@NotNull
+	@Override
+	public Response intercept(@NotNull Interceptor.Chain chain) throws IOException {
+		var req = chain.request();
+		log.trace("{} {}", req.method(), req.url());
+		return chain.proceed(chain.request());
+	}
+}
