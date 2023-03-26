@@ -54,7 +54,7 @@ public class MarketOrdersWriter {
 
 	private Single<List<Long>> prepareSortedIds() {
 		return Single.fromCallable(() -> {
-					log.debug(String.format("Preparing sorted IDs."));
+					log.debug("Preparing sorted IDs.");
 					var start = Instant.now();
 
 					var ids = new ArrayList<>(marketOrdersStore.keyList());

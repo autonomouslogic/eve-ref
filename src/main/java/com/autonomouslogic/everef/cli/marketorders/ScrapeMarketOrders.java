@@ -81,7 +81,7 @@ public class ScrapeMarketOrders implements Command {
 		}
 		dataUrl = (S3Url) dataPathUrl;
 		if (!dataUrl.getPath().equals("")) {
-			throw new RuntimeException("Data index must be run at the root of the bucket");
+			throw new IllegalArgumentException("Data index must be run at the root of the bucket");
 		}
 	}
 
