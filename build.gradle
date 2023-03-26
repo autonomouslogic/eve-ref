@@ -17,6 +17,10 @@ targetCompatibility = JavaVersion.VERSION_17
 
 ext {
 	mainClassName = "com.autonomouslogic.everef.Main"
+	envProperties = new Properties()
+	if (file("local.env").exists()) {
+		file("local.env").withInputStream { envProperties.load(it) }
+	}
 }
 
 repositories {
@@ -130,7 +134,7 @@ task placeholder(type: JavaExec) {
 task dataIndex(type: JavaExec) {
 	group "application"
 	args "data-index"
-
+	environment envProperties
 	classpath = sourceSets.main.runtimeClasspath
 	mainClass = mainClassName
 }
@@ -138,7 +142,7 @@ task dataIndex(type: JavaExec) {
 task scrapeMarketOrders(type: JavaExec) {
 	group "application"
 	args "scrape-market-orders"
-
+	environment envProperties
 	classpath = sourceSets.main.runtimeClasspath
 	mainClass = mainClassName
 }

@@ -162,6 +162,28 @@ public class Configs {
 			.build();
 
 	/**
+	 * Profile for the data S3 client.
+	 */
+	public static final Config<String> DATA_AWS_PROFILE =
+			Config.<String>builder().name("DATA_AWS_PROFILE").type(String.class).build();
+
+	/**
+	 * Access key for the data S3 client.
+	 */
+	public static final Config<String> DATA_AWS_ACCESS_KEY_ID = Config.<String>builder()
+			.name("DATA_AWS_ACCESS_KEY_ID")
+			.type(String.class)
+			.build();
+
+	/**
+	 * Secret key for the data S3 client.
+	 */
+	public static final Config<String> DATA_AWS_SECRET_ACCESS_KEY = Config.<String>builder()
+			.name("DATA_AWS_SECRET_ACCESS_KEY")
+			.type(String.class)
+			.build();
+
+	/**
 	 * User agent string to provide to the ESI.
 	 */
 	public static final Config<String> ESI_USER_AGENT =

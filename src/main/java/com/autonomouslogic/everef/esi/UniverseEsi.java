@@ -3,6 +3,7 @@ package com.autonomouslogic.everef.esi;
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.openapi.esi.apis.UniverseApi;
 import com.autonomouslogic.everef.openapi.esi.models.GetUniverseRegionsRegionIdOk;
+import com.autonomouslogic.everef.openapi.esi.models.GetUniverseStationsStationIdOk;
 import com.autonomouslogic.everef.util.Rx;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Maybe;
@@ -35,9 +36,8 @@ public class UniverseEsi {
 	public Maybe<GetUniverseRegionsRegionIdOk> getRegion(int regionId) {
 		return Maybe.defer(() -> {
 					log.trace(String.format("Fetching region %s", regionId));
-					var d = UniverseApi.Datasource_getUniverseRegionsRegionId.valueOf(
-							Configs.ESI_DATASOURCE.getRequired());
-					var region = universeApi.getUniverseRegionsRegionId(regionId, null, d, null, null);
+					var source = UniverseApi.Datasource_getUniverseRegionsRegionId.valueOf(datasource);
+					var region = universeApi.getUniverseRegionsRegionId(regionId, null, source, null, null);
 					return Maybe.fromOptional(Optional.ofNullable(region));
 				})
 				.compose(Rx.offloadMaybe());
@@ -45,5 +45,14 @@ public class UniverseEsi {
 
 	public Flowable<GetUniverseRegionsRegionIdOk> getAllRegions() {
 		return getRegionIds().flatMapMaybe(regionId -> getRegion(regionId));
+	}
+
+	public Maybe<GetUniverseStationsStationIdOk> getNpcStation(int stationId) {
+		return Maybe.defer(() -> {
+					var source = UniverseApi.Datasource_getUniverseStationsStationId.valueOf(datasource);
+					var station = universeApi.getUniverseStationsStationId(stationId, source, null);
+					return Maybe.fromOptional(Optional.ofNullable(station));
+				})
+				.compose(Rx.offloadMaybe());
 	}
 }

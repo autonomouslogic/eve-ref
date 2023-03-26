@@ -5,11 +5,13 @@ import java.time.Duration;
 import java.util.Optional;
 import java.util.function.Supplier;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NonNull;
 
 @Builder
 public class Config<T> {
 	@NonNull
+	@Getter
 	String name;
 
 	@NonNull

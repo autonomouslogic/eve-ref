@@ -1,11 +1,13 @@
 package com.autonomouslogic.everef.s3;
 
 import com.autonomouslogic.commons.rxjava3.Rx3Util;
+import com.autonomouslogic.everef.url.S3Url;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import java.io.File;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.extern.log4j.Log4j2;
@@ -23,10 +25,18 @@ public class S3Adapter {
 	protected S3Adapter() {}
 
 	public Flowable<ListObjectsV2Response> listObjects(ListObjectsV2Request req, S3AsyncClient client) {
+		var s3Url =
+				S3Url.builder().bucket(req.bucket()).path(req.prefix()).build().toString();
+		var count = new AtomicInteger();
 		return Flowable.fromPublisher(client.listObjectsV2Paginator(req))
 				.observeOn(Schedulers.computation())
 				.onErrorResumeNext(e -> Flowable.error(new RuntimeException(
-						String.format("Error listing bucket %s at prefix %s", req.bucket(), req.prefix()), e)));
+						String.format("Error listing bucket %s at prefix %s", req.bucket(), req.prefix()), e)))
+				.doOnNext(response -> {
+					var n = response.contents().size();
+					var total = count.addAndGet(n);
+					log.debug(String.format("Listing %s: %s / %s objects", s3Url, n, total));
+				});
 	}
 
 	public Single<PutObjectResponse> putObject(PutObjectRequest req, AsyncRequestBody body, S3AsyncClient client) {

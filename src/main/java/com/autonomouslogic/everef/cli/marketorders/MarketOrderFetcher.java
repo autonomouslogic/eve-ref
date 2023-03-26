@@ -4,6 +4,7 @@ import com.autonomouslogic.everef.esi.EsiHelper;
 import com.autonomouslogic.everef.esi.EsiUrl;
 import com.autonomouslogic.everef.esi.UniverseEsi;
 import com.autonomouslogic.everef.openapi.esi.models.GetUniverseRegionsRegionIdOk;
+import com.autonomouslogic.everef.util.JsonUtil;
 import com.autonomouslogic.everef.util.OkHttpHelper;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -37,6 +38,7 @@ public class MarketOrderFetcher {
 		return universeEsi
 				.getAllRegions()
 				.flatMap(region -> fetchMarketOrders(region), false, 1)
+				.doOnNext(this::validateOrder)
 				.flatMapCompletable(this::saveMarketOrder);
 	}
 
@@ -72,5 +74,20 @@ public class MarketOrderFetcher {
 			long id = order.get("order_id").asLong();
 			marketOrdersStore.put(id, order);
 		});
+	}
+
+	private void validateOrder(ObjectNode order) {
+		if (JsonUtil.isNullOrEmpty(order.get("region_id"))) {
+			throw new IllegalStateException("region_id is null");
+		}
+		if (JsonUtil.isNullOrEmpty(order.get("constellation_id"))) {
+			throw new IllegalStateException("constellation_id is null");
+		}
+		if (JsonUtil.isNullOrEmpty(order.get("system_id"))) {
+			throw new IllegalStateException("system_id is null");
+		}
+		if (JsonUtil.isNullOrEmpty(order.get("station_id"))) {
+			throw new IllegalStateException("station_id is null");
+		}
 	}
 }
