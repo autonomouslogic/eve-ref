@@ -23,7 +23,7 @@ public class MockOkHttpModule {
 			EsiLimitExceededInterceptor limitExceededInterceptor,
 			MockInterceptor mockInterceptor) {
 		return new OkHttpModule()
-				.esiHttpClient(userAgentInterceptor, rateLimitInterceptor, limitExceededInterceptor)
+				.esiHttpClient(null, userAgentInterceptor, rateLimitInterceptor, limitExceededInterceptor)
 				.newBuilder()
 				.addInterceptor(mockInterceptor)
 				.addInterceptor(chain -> {

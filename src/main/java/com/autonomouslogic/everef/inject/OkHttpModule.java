@@ -56,8 +56,7 @@ public class OkHttpModule {
 			EsiUserAgentInterceptor userAgentInterceptor,
 			EsiRateLimitInterceptor rateLimitInterceptor,
 			EsiLimitExceededInterceptor limitExceededInterceptor) {
-		return new OkHttpClient.Builder()
-				.cache(cache)
+		var builder = new OkHttpClient.Builder()
 				.addInterceptor(userAgentInterceptor)
 				// .addInterceptor(limitExceededInterceptor) // @todo
 				.addInterceptor(rateLimitInterceptor) // @todo
@@ -66,7 +65,10 @@ public class OkHttpModule {
 				.followSslRedirects(true)
 				.connectTimeout(Duration.ofSeconds(5))
 				.readTimeout(Duration.ofSeconds(20))
-				.writeTimeout(Duration.ofSeconds(5))
-				.build();
+				.writeTimeout(Duration.ofSeconds(5));
+		if (cache != null) {
+			builder.cache(cache);
+		}
+		return builder.build();
 	}
 }

@@ -2,8 +2,10 @@ package com.autonomouslogic.everef.esi;
 
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.openapi.esi.apis.UniverseApi;
+import com.autonomouslogic.everef.openapi.esi.models.GetUniverseConstellationsConstellationIdOk;
 import com.autonomouslogic.everef.openapi.esi.models.GetUniverseRegionsRegionIdOk;
 import com.autonomouslogic.everef.openapi.esi.models.GetUniverseStationsStationIdOk;
+import com.autonomouslogic.everef.openapi.esi.models.GetUniverseSystemsSystemIdOk;
 import com.autonomouslogic.everef.util.Rx;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Maybe;
@@ -49,9 +51,36 @@ public class UniverseEsi {
 
 	public Maybe<GetUniverseStationsStationIdOk> getNpcStation(int stationId) {
 		return Maybe.defer(() -> {
+					// All NPC stations will have an ID below 100 million.
+					if (stationId > 100_000_000) {
+						log.trace(String.format("Ignoring request for non-NPC station %s", stationId));
+						return Maybe.empty();
+					}
+					log.trace(String.format("Fetching station %s", stationId));
 					var source = UniverseApi.Datasource_getUniverseStationsStationId.valueOf(datasource);
 					var station = universeApi.getUniverseStationsStationId(stationId, source, null);
 					return Maybe.fromOptional(Optional.ofNullable(station));
+				})
+				.compose(Rx.offloadMaybe());
+	}
+
+	public Maybe<GetUniverseSystemsSystemIdOk> getSystem(int systemId) {
+		return Maybe.defer(() -> {
+					log.trace(String.format("Fetching system %s", systemId));
+					var source = UniverseApi.Datasource_getUniverseSystemsSystemId.valueOf(datasource);
+					var system = universeApi.getUniverseSystemsSystemId(systemId, null, source, null, null);
+					return Maybe.fromOptional(Optional.ofNullable(system));
+				})
+				.compose(Rx.offloadMaybe());
+	}
+
+	public Maybe<GetUniverseConstellationsConstellationIdOk> getConstellation(int constellationId) {
+		return Maybe.defer(() -> {
+					log.trace(String.format("Fetching constellation %s", constellationId));
+					var source = UniverseApi.Datasource_getUniverseConstellationsConstellationId.valueOf(datasource);
+					var constellation = universeApi.getUniverseConstellationsConstellationId(
+							constellationId, null, source, null, null);
+					return Maybe.fromOptional(Optional.ofNullable(constellation));
 				})
 				.compose(Rx.offloadMaybe());
 	}
