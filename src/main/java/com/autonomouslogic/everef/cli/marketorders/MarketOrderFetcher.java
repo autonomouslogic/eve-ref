@@ -38,7 +38,7 @@ public class MarketOrderFetcher {
 		return universeEsi
 				.getAllRegions()
 				.flatMap(region -> fetchMarketOrders(region), false, 1)
-				.doOnNext(this::validateOrder)
+				.doOnNext(this::verifyOrderLocation)
 				.flatMapCompletable(this::saveMarketOrder);
 	}
 
@@ -58,7 +58,10 @@ public class MarketOrderFetcher {
 								return obj;
 							})
 							.map(entry -> {
-								count.incrementAndGet();
+								var n = count.incrementAndGet();
+								if (n % 10_000 == 0) {
+									log.debug(String.format("Fetched %d market orders from %s", n, region.getName()));
+								}
 								var obj = (ObjectNode) entry;
 								obj.put("region_id", region.getRegionId());
 								// locationPopulator.populateStation(obj, "location_id"); // @todo fix this
@@ -76,18 +79,18 @@ public class MarketOrderFetcher {
 		});
 	}
 
-	private void validateOrder(ObjectNode order) {
+	private void verifyOrderLocation(ObjectNode order) {
 		if (JsonUtil.isNullOrEmpty(order.get("region_id"))) {
-			throw new IllegalStateException("region_id is null");
+			throw new IllegalStateException("region_id is null: " + order);
 		}
 		if (JsonUtil.isNullOrEmpty(order.get("constellation_id"))) {
-			throw new IllegalStateException("constellation_id is null");
+			throw new IllegalStateException("constellation_id is null: " + order);
 		}
 		if (JsonUtil.isNullOrEmpty(order.get("system_id"))) {
-			throw new IllegalStateException("system_id is null");
+			throw new IllegalStateException("system_id is null: " + order);
 		}
 		if (JsonUtil.isNullOrEmpty(order.get("station_id"))) {
-			throw new IllegalStateException("station_id is null");
+			throw new IllegalStateException("station_id is null: " + order);
 		}
 	}
 }
