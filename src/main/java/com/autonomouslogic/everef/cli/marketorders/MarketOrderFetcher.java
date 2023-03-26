@@ -2,6 +2,7 @@ package com.autonomouslogic.everef.cli.marketorders;
 
 import com.autonomouslogic.everef.esi.EsiHelper;
 import com.autonomouslogic.everef.esi.EsiUrl;
+import com.autonomouslogic.everef.esi.LocationPopulator;
 import com.autonomouslogic.everef.esi.UniverseEsi;
 import com.autonomouslogic.everef.openapi.esi.models.GetUniverseRegionsRegionIdOk;
 import com.autonomouslogic.everef.util.JsonUtil;
@@ -28,6 +29,9 @@ public class MarketOrderFetcher {
 	@Inject
 	protected OkHttpHelper okHttpHelper;
 
+	@Inject
+	protected LocationPopulator locationPopulator;
+
 	@Setter
 	private MVMap<Long, JsonNode> marketOrdersStore;
 
@@ -38,6 +42,8 @@ public class MarketOrderFetcher {
 		return universeEsi
 				.getAllRegions()
 				.flatMap(region -> fetchMarketOrders(region), false, 1)
+				.flatMap(order ->
+						locationPopulator.populate(order, "location_id").andThen(Flowable.just(order)))
 				.doOnNext(this::verifyOrderLocation)
 				.flatMapCompletable(this::saveMarketOrder);
 	}
@@ -64,7 +70,6 @@ public class MarketOrderFetcher {
 								}
 								var obj = (ObjectNode) entry;
 								obj.put("region_id", region.getRegionId());
-								// locationPopulator.populateStation(obj, "location_id"); // @todo fix this
 								return obj;
 							});
 				})

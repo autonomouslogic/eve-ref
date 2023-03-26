@@ -5,6 +5,7 @@ import com.autonomouslogic.everef.cli.MockDataIndexModule;
 import com.autonomouslogic.everef.cli.marketorders.ScrapeMarketOrdersTest;
 import com.autonomouslogic.everef.esi.EsiHelperTest;
 import com.autonomouslogic.everef.esi.LocationPopulatorTest;
+import com.autonomouslogic.everef.esi.MockLocationPopulatorModule;
 import com.autonomouslogic.everef.inject.AwsModule;
 import com.autonomouslogic.everef.inject.EsiModule;
 import com.autonomouslogic.everef.inject.JacksonModule;
@@ -19,7 +20,8 @@ import javax.inject.Singleton;
 			EsiModule.class,
 			MockS3Module.class,
 			MockOkHttpModule.class,
-			MockDataIndexModule.class
+			MockDataIndexModule.class,
+			MockLocationPopulatorModule.class
 		})
 @Singleton
 public interface TestComponent {

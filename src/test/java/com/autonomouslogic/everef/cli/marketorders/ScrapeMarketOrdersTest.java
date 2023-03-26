@@ -1,12 +1,16 @@
 package com.autonomouslogic.everef.cli.marketorders;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import com.autonomouslogic.commons.ListUtil;
 import com.autonomouslogic.commons.ResourceUtil;
 import com.autonomouslogic.everef.cli.DataIndex;
 import com.autonomouslogic.everef.cli.MockDataIndexModule;
+import com.autonomouslogic.everef.esi.LocationPopulator;
+import com.autonomouslogic.everef.esi.MockLocationPopulatorModule;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.test.MockS3Adapter;
 import com.autonomouslogic.everef.test.TestDataUtil;
@@ -26,6 +30,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junitpioneer.jupiter.SetEnvironmentVariable;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 
@@ -54,11 +59,15 @@ public class ScrapeMarketOrdersTest {
 	@Inject
 	TestDataUtil testDataUtil;
 
+	@Mock
+	LocationPopulator locationPopulator;
+
 	@BeforeEach
 	@SneakyThrows
 	void before() {
 		DaggerTestComponent.builder()
 				.mockDataIndexModule(new MockDataIndexModule().setDefaultMock(true))
+				.mockLocationPopulatorModule(new MockLocationPopulatorModule().setLocationPopulator(locationPopulator))
 				.build()
 				.inject(this);
 		// Regions.
@@ -91,6 +100,8 @@ public class ScrapeMarketOrdersTest {
 				10000002,
 				2,
 				2);
+		// Locations.
+		when(locationPopulator.populate(any(), any())).thenAnswer(MockLocationPopulatorModule.mockPopulate());
 	}
 
 	@Test
@@ -120,6 +131,8 @@ public class ScrapeMarketOrdersTest {
 				.sorted(Ordering.compound(List.of(
 						Ordering.natural().onResultOf(m -> m.get("region_id")),
 						Ordering.natural().onResultOf(m -> m.get("type_id")))))
+				.peek(record -> record.put("constellation_id", "999"))
+				.peek(record -> record.put("station_id", "999"))
 				.map(Map::toString)
 				.collect(Collectors.joining("\n"));
 		assertEquals(expected, records);
