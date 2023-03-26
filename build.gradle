@@ -1,11 +1,13 @@
 plugins {
 	id "java"
+	id "org.jetbrains.kotlin.jvm" version "1.8.10"
 	id "idea"
 	id "application"
 	id "jacoco"
 	id "org.danilopianini.git-sensitive-semantic-versioning-gradle-plugin" version "1.1.4"
 	id "io.freefair.lombok" version "8.0.0"
 	id "com.diffplug.spotless" version "6.17.0"
+	id "org.openapi.generator" version "6.3.0"
 }
 
 group "com.autonomouslogic.everef"
@@ -15,6 +17,10 @@ targetCompatibility = JavaVersion.VERSION_17
 
 ext {
 	mainClassName = "com.autonomouslogic.everef.Main"
+	envProperties = new Properties()
+	if (file("local.env").exists()) {
+		file("local.env").withInputStream { envProperties.load(it) }
+	}
 }
 
 repositories {
@@ -37,8 +43,12 @@ dependencies {
 	implementation "com.fasterxml.jackson.core:jackson-core:2.14.2"
 	implementation "com.fasterxml.jackson.core:jackson-databind:2.14.2"
 	implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.14.2"
+	implementation "com.fasterxml.jackson.module:jackson-module-kotlin:2.15.0-rc1"
 	implementation "org.apache.commons:commons-pool2:2.11.1"
 	implementation "org.apache.commons:commons-compress:1.22"
+	implementation "com.h2database:h2-mvstore:2.1.214"
+	implementation "com.squareup.okhttp3:okhttp:4.10.0"
+	implementation "org.apache.commons:commons-csv:1.10.0"
 
 	testAnnotationProcessor "com.google.dagger:dagger-compiler:2.45"
 	testImplementation "com.google.dagger:dagger:2.45"
@@ -47,12 +57,29 @@ dependencies {
 	testImplementation "org.junit-pioneer:junit-pioneer:2.0.0"
 	testImplementation "org.mockito:mockito-junit-jupiter:5.2.0"
 	testImplementation "org.jsoup:jsoup:1.15.4"
+	testImplementation "com.github.gmazzo:okhttp-mock:1.5.0"
 }
 
 java {
 	withJavadocJar()
 	withSourcesJar()
 }
+
+def esiOpenApiPackage = ""
+openApiGenerate {
+	generatorName = "kotlin"
+	inputSpec = "$rootDir/lib/esi-latest.json"
+	packageName = "${group}.openapi.esi"
+	configOptions = [
+		library: "jvm-okhttp4",
+		serializationLibrary: "jackson",
+		dateLibrary: "java8"
+	]
+}
+sourceSets.main.java.srcDirs += ["build/generate-resources/main/src/main/kotlin"]
+compileKotlin.dependsOn(tasks.openApiGenerate)
+compileJava.dependsOn(tasks.openApiGenerate)
+sourcesJar.dependsOn(tasks.openApiGenerate)
 
 test {
 	useJUnitPlatform()
@@ -107,7 +134,15 @@ task placeholder(type: JavaExec) {
 task dataIndex(type: JavaExec) {
 	group "application"
 	args "data-index"
+	environment envProperties
+	classpath = sourceSets.main.runtimeClasspath
+	mainClass = mainClassName
+}
 
+task scrapeMarketOrders(type: JavaExec) {
+	group "application"
+	args "scrape-market-orders"
+	environment envProperties
 	classpath = sourceSets.main.runtimeClasspath
 	mainClass = mainClassName
 }

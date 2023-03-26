@@ -83,21 +83,12 @@ public class Configs {
 			.build();
 
 	/**
-	 * The base URL used for accessing the ESI.
-	 */
-	public static final Config<String> ESI_BASE_URL = Config.<String>builder()
-			.name("ESI_DOMAIN")
-			.defaultValue("https://esi.evetech.net")
-			.type(String.class)
-			.build();
-
-	/**
 	 * The base path used when accessing the ESI.
 	 * This will be the version.
 	 */
 	public static final Config<String> ESI_BASE_PATH = Config.<String>builder()
 			.name("ESI_BASE_PATH")
-			.defaultValue("/latest")
+			.defaultValue("https://esi.evetech.net/latest")
 			.type(String.class)
 			.build();
 
@@ -168,5 +159,60 @@ public class Configs {
 	public static final Config<String> DATA_S3_ENDPOINT_URL = Config.<String>builder()
 			.name("DATA_S3_ENDPOINT_URL")
 			.type(String.class)
+			.build();
+
+	/**
+	 * Profile for the data S3 client.
+	 */
+	public static final Config<String> DATA_AWS_PROFILE =
+			Config.<String>builder().name("DATA_AWS_PROFILE").type(String.class).build();
+
+	/**
+	 * Access key for the data S3 client.
+	 */
+	public static final Config<String> DATA_AWS_ACCESS_KEY_ID = Config.<String>builder()
+			.name("DATA_AWS_ACCESS_KEY_ID")
+			.type(String.class)
+			.build();
+
+	/**
+	 * Secret key for the data S3 client.
+	 */
+	public static final Config<String> DATA_AWS_SECRET_ACCESS_KEY = Config.<String>builder()
+			.name("DATA_AWS_SECRET_ACCESS_KEY")
+			.type(String.class)
+			.build();
+
+	/**
+	 * User agent string to provide to the ESI.
+	 */
+	public static final Config<String> ESI_USER_AGENT =
+			Config.<String>builder().name("ESI_USER_AGENT").type(String.class).build();
+
+	/**
+	 * Rate limit to apply for ESI requests.
+	 */
+	public static final Config<Integer> ESI_RATE_LIMIT_PER_S = Config.<Integer>builder()
+			.name("ESI_RATE_LIMIT_PER_S")
+			.defaultValue(100)
+			.type(Integer.class)
+			.build();
+
+	/**
+	 * Directory for HTTP caching.
+	 */
+	public static final Config<String> HTTP_CACHE_DIR = Config.<String>builder()
+			.name("HTTP_CACHE_DIR")
+			.type(String.class)
+			.defaultValue(System.getProperty("java.io.tmpdir") + "/eve-ref-http-cache")
+			.build();
+
+	/**
+	 * Maximum size of the HTTP disk cache in megabytes.
+	 */
+	public static final Config<Long> HTTP_CACHE_SIZE_MB = Config.<Long>builder()
+			.name("HTTP_CACHE_SIZE_MB")
+			.type(Long.class)
+			.defaultValue(512L)
 			.build();
 }

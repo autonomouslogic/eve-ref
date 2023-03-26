@@ -2,6 +2,7 @@ package com.autonomouslogic.everef.cli;
 
 import com.autonomouslogic.everef.cli.decorator.HealthcheckDecorator;
 import com.autonomouslogic.everef.cli.decorator.SlackDecorator;
+import com.autonomouslogic.everef.cli.marketorders.ScrapeMarketOrders;
 import io.reactivex.rxjava3.core.Completable;
 import java.time.Duration;
 import java.time.Instant;
@@ -18,6 +19,9 @@ public class CommandRunner {
 
 	@Inject
 	protected Provider<DataIndex> dataIndexProvider;
+
+	@Inject
+	protected Provider<ScrapeMarketOrders> scrapeMarketOrdersProvider;
 
 	@Inject
 	protected HealthcheckDecorator healthcheckDecorator;
@@ -58,6 +62,8 @@ public class CommandRunner {
 				return placeholderCliProvider.get();
 			case "data-index":
 				return dataIndexProvider.get();
+			case "scrape-market-orders":
+				return scrapeMarketOrdersProvider.get();
 			default:
 				throw new IllegalArgumentException("Unknown command: " + name);
 		}
