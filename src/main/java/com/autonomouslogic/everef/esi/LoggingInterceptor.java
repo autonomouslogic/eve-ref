@@ -22,6 +22,12 @@ public class LoggingInterceptor implements Interceptor {
 	public Response intercept(@NotNull Interceptor.Chain chain) throws IOException {
 		var req = chain.request();
 		log.trace("{} {}", req.method(), req.url());
-		return chain.proceed(chain.request());
+		var response = chain.proceed(chain.request());
+		var cached = response.cacheResponse() != null;
+		var code = response.code();
+		var time = response.receivedResponseAtMillis() - response.sentRequestAtMillis();
+		var bytes = response.body().contentLength();
+		log.trace("{} {} -> {} ({} bytes) - cached:{} - {}ms", req.method(), req.url(), code, bytes, cached, time);
+		return response;
 	}
 }
