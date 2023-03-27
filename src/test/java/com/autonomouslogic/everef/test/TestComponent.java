@@ -4,6 +4,7 @@ import com.autonomouslogic.everef.cli.DataIndexTest;
 import com.autonomouslogic.everef.cli.MockDataIndexModule;
 import com.autonomouslogic.everef.cli.marketorders.ScrapeMarketOrdersTest;
 import com.autonomouslogic.everef.esi.EsiHelperTest;
+import com.autonomouslogic.everef.esi.EsiRateLimitInterceptorTest;
 import com.autonomouslogic.everef.esi.LocationPopulatorTest;
 import com.autonomouslogic.everef.esi.MockLocationPopulatorModule;
 import com.autonomouslogic.everef.inject.AwsModule;
@@ -34,4 +35,6 @@ public interface TestComponent {
 	void inject(EsiHelperTest test);
 
 	void inject(LocationPopulatorTest test);
+
+	void inject(EsiRateLimitInterceptorTest test);
 }
