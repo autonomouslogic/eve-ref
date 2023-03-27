@@ -50,7 +50,7 @@ public class TestDataUtil {
 	}
 
 	public Response.Builder mockResponse(String url) {
-		return http.addRule().get(url).anyTimes().respond(200);
+		return http.addRule().get(url).anyTimes().respond(204);
 	}
 
 	public Response.Builder mockResponse(String url, byte[] body) {
