@@ -49,6 +49,10 @@ public class TestDataUtil {
 		return mockResponse(url, body.getBytes());
 	}
 
+	public Response.Builder mockResponse(String url) {
+		return http.addRule().get(url).anyTimes().respond(200);
+	}
+
 	public Response.Builder mockResponse(String url, byte[] body) {
 		return http.addRule().get(url).anyTimes().respond(body, MediaType.get("application/json"));
 	}
