@@ -96,8 +96,10 @@ public class ScrapeMarketOrders implements Command {
 					initMvStore();
 				}),
 				fetchOrders(),
-				writeOrders().flatMapCompletable(this::uploadFile),
-				dataIndexProvider.get().run());
+				writeOrders()
+					.flatMapCompletable(this::uploadFile)
+//				dataIndexProvider.get().run()
+		);
 	}
 
 	@SneakyThrows

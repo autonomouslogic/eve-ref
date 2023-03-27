@@ -41,7 +41,8 @@ public class MarketOrdersWriter {
 					var iterable = Iterables.transform(ids, id -> marketOrdersStore.get(id));
 					new JsonNodeCsvWriter().setOut(csv).writeAll(iterable);
 					File compressed = new File(csv.getPath() + ".bz2");
-					compressed.deleteOnExit();
+					//compressed.deleteOnExit();
+					log.info(String.format("Compressing orders to %s", compressed.getPath()));
 					OutputStream out = new BZip2CompressorOutputStream(new FileOutputStream(compressed));
 					IOUtils.copy(new FileInputStream(csv), out);
 					out.close();

@@ -1,23 +1,34 @@
 package com.autonomouslogic.everef.esi;
 
+import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.util.OkHttpHelper;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import io.reactivex.rxjava3.core.Flowable;
+import io.reactivex.rxjava3.core.Scheduler;
 import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.functions.BiFunction;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
+
+import io.reactivex.rxjava3.schedulers.Schedulers;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import okhttp3.OkHttpClient;
 import okhttp3.Response;
 
+import java.util.concurrent.Executors;
+import java.util.concurrent.ForkJoinPool;
+
 @Singleton
 @Log4j2
 public class EsiHelper {
 	private static final String PAGES_HEADER = "X-Pages";
+	private static final Scheduler ESI_SCHEDULER = Schedulers.from(Executors.newFixedThreadPool(Configs.ESI_HTTP_THREADS.getRequired(), new ThreadFactoryBuilder()
+		.setNameFormat("esi-http-%d")
+	.build()));
 
 	@Inject
 	@Named("esi")
@@ -33,7 +44,7 @@ public class EsiHelper {
 	protected EsiHelper() {}
 
 	public Single<Response> fetch(EsiUrl url) {
-		return okHttpHelper.get(url.toString(), esiHttpClient);
+		return okHttpHelper.get(url.toString(), esiHttpClient, ESI_SCHEDULER);
 	}
 
 	public Flowable<Response> fetchPages(EsiUrl url) {
@@ -50,7 +61,7 @@ public class EsiHelper {
 					Flowable.just(first),
 					Flowable.range(2, pagesInt - 1)
 							.flatMapSingle(
-									page -> fetch(url.toBuilder().page(page).build()), false, 1));
+									page -> fetch(url.toBuilder().page(page).build()), false, 16));
 		});
 	}
 

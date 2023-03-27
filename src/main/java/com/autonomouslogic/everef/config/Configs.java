@@ -199,6 +199,15 @@ public class Configs {
 			.build();
 
 	/**
+	 * Number of threads for ESI requests.
+	 */
+	public static final Config<Integer> ESI_HTTP_THREADS = Config.<Integer>builder()
+			.name("ESI_HTTP_THREADS")
+			.defaultValue(16)
+			.type(Integer.class)
+			.build();
+
+	/**
 	 * Directory for HTTP caching.
 	 */
 	public static final Config<String> HTTP_CACHE_DIR = Config.<String>builder()

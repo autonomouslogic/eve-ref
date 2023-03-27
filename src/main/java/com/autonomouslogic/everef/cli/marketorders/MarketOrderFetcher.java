@@ -41,7 +41,7 @@ public class MarketOrderFetcher {
 	public Completable fetchMarketOrders() {
 		return universeEsi
 				.getAllRegions()
-				.flatMap(region -> fetchMarketOrders(region), false, 1)
+				.flatMap(region -> fetchMarketOrders(region), false, 4)
 				.flatMap(order ->
 						locationPopulator.populate(order, "location_id").andThen(Flowable.just(order)))
 				.doOnNext(this::verifyOrderLocation)
