@@ -4,9 +4,9 @@ import com.autonomouslogic.everef.cli.DataIndexTest;
 import com.autonomouslogic.everef.cli.MockDataIndexModule;
 import com.autonomouslogic.everef.cli.marketorders.ScrapeMarketOrdersTest;
 import com.autonomouslogic.everef.esi.EsiHelperTest;
+import com.autonomouslogic.everef.esi.EsiRateLimitInterceptorTest;
 import com.autonomouslogic.everef.esi.LocationPopulatorTest;
 import com.autonomouslogic.everef.esi.MockLocationPopulatorModule;
-import com.autonomouslogic.everef.esi.RateLimitInterceptorTest;
 import com.autonomouslogic.everef.inject.AwsModule;
 import com.autonomouslogic.everef.inject.EsiModule;
 import com.autonomouslogic.everef.inject.JacksonModule;
@@ -36,5 +36,5 @@ public interface TestComponent {
 
 	void inject(LocationPopulatorTest test);
 
-	void inject(RateLimitInterceptorTest test);
+	void inject(EsiRateLimitInterceptorTest test);
 }

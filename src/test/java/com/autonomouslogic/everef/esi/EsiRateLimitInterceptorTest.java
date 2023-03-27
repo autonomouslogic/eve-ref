@@ -18,7 +18,7 @@ import org.junitpioneer.jupiter.SetEnvironmentVariable;
 @SetEnvironmentVariable(key = "ESI_USER_AGENT", value = "user-agent")
 @SetEnvironmentVariable(key = "ESI_RATE_LIMIT_PER_S", value = "5")
 @Log4j2
-public class RateLimitInterceptorTest {
+public class EsiRateLimitInterceptorTest {
 	@Inject
 	TestDataUtil testDataUtil;
 
