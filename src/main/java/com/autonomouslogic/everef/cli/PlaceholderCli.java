@@ -12,7 +12,6 @@ public class PlaceholderCli implements Command {
 	@Override
 	public Completable run() {
 		return Completable.fromAction(() -> {
-			System.out.println("Tst ============================");
 			log.info("Placeholder command");
 		});
 	}
