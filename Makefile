@@ -1,6 +1,8 @@
 .PHONY: dist test clean docker
 EVE_REF_VERSION = $(shell ./gradlew properties | grep version | cut -d' ' -f 2)
-DOCKER_TAG = autonomouslogic/eve-ref:$(EVE_REF_VERSION)
+DOCKER_TAG_BASE = autonomouslogic/eve-ref
+DOCKER_TAG = $(DOCKER_TAG_BASE):$(EVE_REF_VERSION)
+DOCKER_TAG_LATEST = $(DOCKER_TAG_BASE):latest
 
 dist:
 	./gradlew distTar
@@ -12,6 +14,7 @@ docker: dist
 	docker build \
 		-f docker/Dockerfile \
 		--tag $(DOCKER_TAG) \
+		--tag $(DOCKER_TAG_LATEST) \
 		--build-arg "EVE_REF_VERSION=$(EVE_REF_VERSION)" \
 		.
 

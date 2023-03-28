@@ -15,7 +15,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class CommandRunner {
 	@Inject
-	protected Provider<PlaceholderCli> placeholderCliProvider;
+	protected Provider<Placeholder> placeholderProvider;
 
 	@Inject
 	protected Provider<DataIndex> dataIndexProvider;
@@ -59,7 +59,7 @@ public class CommandRunner {
 	private Command createCommand(String name) {
 		switch (name) {
 			case "placeholder":
-				return placeholderCliProvider.get();
+				return placeholderProvider.get();
 			case "data-index":
 				return dataIndexProvider.get();
 			case "scrape-market-orders":
