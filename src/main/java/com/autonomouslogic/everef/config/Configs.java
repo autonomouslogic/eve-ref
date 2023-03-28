@@ -199,6 +199,15 @@ public class Configs {
 			.build();
 
 	/**
+	 * Number of threads for ESI requests.
+	 */
+	public static final Config<Integer> ESI_HTTP_THREADS = Config.<Integer>builder()
+			.name("ESI_HTTP_THREADS")
+			.defaultValue(16)
+			.type(Integer.class)
+			.build();
+
+	/**
 	 * Directory for HTTP caching.
 	 */
 	public static final Config<String> HTTP_CACHE_DIR = Config.<String>builder()
@@ -214,5 +223,14 @@ public class Configs {
 			.name("HTTP_CACHE_SIZE_MB")
 			.type(Long.class)
 			.defaultValue(512L)
+			.build();
+
+	/**
+	 * The cache size to use for MVStores.
+	 */
+	public static final Config<Integer> MVSTORE_CACHE_SIZE_MB = Config.<Integer>builder()
+			.name("MVSTORE_CACHE_SIZE_MB")
+			.type(Integer.class)
+			.defaultValue(128)
 			.build();
 }

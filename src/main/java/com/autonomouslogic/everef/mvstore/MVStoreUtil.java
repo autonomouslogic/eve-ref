@@ -1,5 +1,6 @@
 package com.autonomouslogic.everef.mvstore;
 
+import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.util.TempFiles;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -13,6 +14,8 @@ public class MVStoreUtil {
 	@Inject
 	protected TempFiles tempFiles;
 
+	private final int cacheSize = Configs.MVSTORE_CACHE_SIZE_MB.getRequired();
+
 	@Inject
 	protected MVStoreUtil() {}
 
@@ -24,13 +27,13 @@ public class MVStoreUtil {
 	 */
 	@SneakyThrows
 	public MVStore createTempStore(String name) {
-		log.debug("Creating temporary MVStore");
+		log.debug(String.format("Creating temporary MVStore with %s MiB cache", cacheSize));
 		var file = tempFiles.tempFile(name, ".mvstore").toFile();
 		log.debug("MVStore opened at " + file.getAbsolutePath());
 		var builder = new MVStore.Builder()
 				.fileName(file.getAbsolutePath())
 				.autoCompactFillRate(0)
-				.cacheSize(64);
+				.cacheSize(cacheSize);
 		var store = builder.open();
 		store.setVersionsToKeep(0);
 		return store;

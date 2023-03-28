@@ -139,8 +139,8 @@ public class ScrapeMarketOrders implements Command {
 					.build();
 			var latestPut = s3Util.putPublicObjectRequest(outputFile.length(), latestPath, "application/x-bzip2");
 			var archivePut = s3Util.putPublicObjectRequest(outputFile.length(), archivePath, "application/x-bzip2");
-			log.debug(String.format("Uploading latest file to %s", latestPath));
-			log.debug(String.format("Uploading archive file to %s", archivePath));
+			log.info(String.format("Uploading latest file to %s", latestPath));
+			log.info(String.format("Uploading archive file to %s", archivePath));
 			return Completable.mergeArray(
 					s3Adapter.putObject(latestPut, outputFile, s3Client).ignoreElement(),
 					s3Adapter.putObject(archivePut, outputFile, s3Client).ignoreElement());

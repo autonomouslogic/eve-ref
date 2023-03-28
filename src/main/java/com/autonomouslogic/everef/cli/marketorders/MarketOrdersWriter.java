@@ -1,5 +1,6 @@
 package com.autonomouslogic.everef.cli.marketorders;
 
+import com.autonomouslogic.everef.util.CompressUtil;
 import com.autonomouslogic.everef.util.JsonNodeCsvWriter;
 import com.autonomouslogic.everef.util.Rx;
 import com.autonomouslogic.everef.util.TempFiles;
@@ -8,9 +9,6 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Ordering;
 import io.reactivex.rxjava3.core.Single;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -18,8 +16,6 @@ import java.util.List;
 import javax.inject.Inject;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.compress.compressors.bzip2.BZip2CompressorOutputStream;
-import org.apache.commons.io.IOUtils;
 import org.h2.mvstore.MVMap;
 
 @Slf4j
@@ -40,12 +36,9 @@ public class MarketOrdersWriter {
 					var csv = tempFiles.tempFile("market-orders", ".csv").toFile();
 					var iterable = Iterables.transform(ids, id -> marketOrdersStore.get(id));
 					new JsonNodeCsvWriter().setOut(csv).writeAll(iterable);
-					File compressed = new File(csv.getPath() + ".bz2");
+					var compressed = CompressUtil.compressBzip2(csv);
 					compressed.deleteOnExit();
-					OutputStream out = new BZip2CompressorOutputStream(new FileOutputStream(compressed));
-					IOUtils.copy(new FileInputStream(csv), out);
-					out.close();
-					Duration time = Duration.between(start, Instant.now());
+					var time = Duration.between(start, Instant.now());
 					log.info(String.format("Market orders written in %s", time));
 					return compressed;
 				})
