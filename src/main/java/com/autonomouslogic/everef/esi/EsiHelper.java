@@ -9,26 +9,28 @@ import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Scheduler;
 import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.functions.BiFunction;
+import io.reactivex.rxjava3.schedulers.Schedulers;
+import java.util.concurrent.Executors;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
-
-import io.reactivex.rxjava3.schedulers.Schedulers;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import okhttp3.OkHttpClient;
 import okhttp3.Response;
 
-import java.util.concurrent.Executors;
-import java.util.concurrent.ForkJoinPool;
-
 @Singleton
 @Log4j2
 public class EsiHelper {
 	private static final String PAGES_HEADER = "X-Pages";
-	private static final Scheduler ESI_SCHEDULER = Schedulers.from(Executors.newFixedThreadPool(Configs.ESI_HTTP_THREADS.getRequired(), new ThreadFactoryBuilder()
-		.setNameFormat("esi-http-%d")
-	.build()));
+	private static final Scheduler ESI_SCHEDULER;
+
+	static {
+		var threads = Configs.ESI_HTTP_THREADS.getRequired();
+		var factory = new ThreadFactoryBuilder().setNameFormat("esi-http-%d").build();
+		log.debug(String.format("Using %d threads for ESI HTTP requests", threads));
+		ESI_SCHEDULER = Schedulers.from(Executors.newFixedThreadPool(threads, factory));
+	}
 
 	@Inject
 	@Named("esi")
@@ -61,7 +63,7 @@ public class EsiHelper {
 					Flowable.just(first),
 					Flowable.range(2, pagesInt - 1)
 							.flatMapSingle(
-									page -> fetch(url.toBuilder().page(page).build()), false, 16));
+									page -> fetch(url.toBuilder().page(page).build()), false, 4));
 		});
 	}
 

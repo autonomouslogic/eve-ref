@@ -2,17 +2,17 @@ package com.autonomouslogic.everef.util;
 
 import io.reactivex.rxjava3.core.Scheduler;
 import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-
-import io.reactivex.rxjava3.schedulers.Schedulers;
 import lombok.extern.log4j.Log4j2;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 
 @Singleton
 @Log4j2
@@ -28,10 +28,13 @@ public class OkHttpHelper {
 		return Single.defer(() -> {
 			var request = getRequest(url);
 			return execute(request, client, scheduler)
-				.retry(10, e -> {
-					log.warn(String.format("Retrying request: %s %s - %s %s", request.method(), request.url(), e.getClass().getSimpleName(), e.getMessage()));
-					return true;
-				});
+					.retry(10, e -> {
+						var msg = ExceptionUtils.getMessage(e);
+						log.warn(String.format("Retrying request: %s %s - %s", request.method(), request.url(), msg));
+						return true;
+					})
+					.onErrorResumeNext(
+							e -> Single.error(new RuntimeException(String.format("Error during GET %s", url), e)));
 		});
 	}
 

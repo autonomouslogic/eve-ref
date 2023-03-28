@@ -34,8 +34,8 @@ public class S3Adapter {
 						String.format("Error listing bucket %s at prefix %s", req.bucket(), req.prefix()), e)))
 				.doOnNext(response -> {
 					var n = response.contents().size();
-					var total = count.addAndGet(n);
-					log.debug(String.format("Listing %s: %s / %s objects", s3Url, n, total));
+					var total = count.getAndAdd(n);
+					log.debug(String.format("Listing %s: %s+%s objects", s3Url, total, n));
 				});
 	}
 
