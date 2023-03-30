@@ -57,7 +57,8 @@ dependencies {
 	testImplementation "org.junit-pioneer:junit-pioneer:2.0.0"
 	testImplementation "org.mockito:mockito-junit-jupiter:5.2.0"
 	testImplementation "org.jsoup:jsoup:1.15.4"
-	testImplementation "com.github.gmazzo:okhttp-mock:1.5.0"
+	testImplementation "com.squareup.okhttp3:mockwebserver:4.10.0"
+	testImplementation "com.github.gmazzo:okhttp-mock:1.5.0" // @todo replace with mockwebserver
 }
 
 java {
@@ -136,7 +137,7 @@ application {
 task placeholder(type: JavaExec) {
 	group "application"
 	args "placeholder"
-
+	environment envProperties
 	classpath = sourceSets.main.runtimeClasspath
 	mainClass = mainClassName
 }

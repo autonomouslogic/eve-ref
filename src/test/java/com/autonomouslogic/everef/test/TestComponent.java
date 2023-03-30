@@ -2,6 +2,7 @@ package com.autonomouslogic.everef.test;
 
 import com.autonomouslogic.everef.cli.DataIndexTest;
 import com.autonomouslogic.everef.cli.MockDataIndexModule;
+import com.autonomouslogic.everef.cli.decorator.HealthcheckDecoratorTest;
 import com.autonomouslogic.everef.cli.marketorders.ScrapeMarketOrdersTest;
 import com.autonomouslogic.everef.esi.EsiHelperTest;
 import com.autonomouslogic.everef.esi.EsiLimitExceededInterceptorTest;
@@ -29,15 +30,17 @@ import javax.inject.Singleton;
 public interface TestComponent {
 	void inject(DataIndexTest test);
 
-	void inject(UrlParserTest test);
-
-	void inject(ScrapeMarketOrdersTest test);
-
 	void inject(EsiHelperTest test);
-
-	void inject(LocationPopulatorTest test);
 
 	void inject(EsiLimitExceededInterceptorTest test);
 
 	void inject(EsiRateLimitInterceptorTest test);
+
+	void inject(HealthcheckDecoratorTest test);
+
+	void inject(LocationPopulatorTest test);
+
+	void inject(ScrapeMarketOrdersTest test);
+
+	void inject(UrlParserTest test);
 }

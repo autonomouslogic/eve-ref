@@ -3,7 +3,8 @@ package com.autonomouslogic.everef.test;
 import com.autonomouslogic.everef.esi.EsiLimitExceededInterceptor;
 import com.autonomouslogic.everef.esi.EsiRateLimitInterceptor;
 import com.autonomouslogic.everef.esi.EsiUserAgentInterceptor;
-import com.autonomouslogic.everef.esi.LoggingInterceptor;
+import com.autonomouslogic.everef.http.LoggingInterceptor;
+import com.autonomouslogic.everef.http.UserAgentInterceptor;
 import com.autonomouslogic.everef.inject.OkHttpModule;
 import dagger.Module;
 import dagger.Provides;
@@ -34,6 +35,12 @@ public class MockOkHttpModule {
 							"Blocking outgoing request to %s", chain.request().url()));
 				})
 				.build();
+	}
+
+	@Provides
+	@Singleton
+	public OkHttpClient okHttpClient(UserAgentInterceptor userAgentInterceptor, LoggingInterceptor loggingInterceptor) {
+		return new OkHttpModule().mainHttpClient(null, userAgentInterceptor, loggingInterceptor);
 	}
 
 	@Provides
