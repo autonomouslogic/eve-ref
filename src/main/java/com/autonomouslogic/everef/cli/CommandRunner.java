@@ -6,6 +6,7 @@ import com.autonomouslogic.everef.cli.marketorders.ScrapeMarketOrders;
 import io.reactivex.rxjava3.core.Completable;
 import java.time.Duration;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import javax.inject.Singleton;
@@ -51,7 +52,7 @@ public class CommandRunner {
 			var start = Instant.now();
 			return command.run().andThen(Completable.fromAction(() -> {
 				var time = Duration.between(start, Instant.now());
-				log.info(String.format("Command %s completed in %s", name, time));
+				log.info(String.format("Command %s completed in %s", name, time.truncatedTo(ChronoUnit.MILLIS)));
 			}));
 		});
 	}

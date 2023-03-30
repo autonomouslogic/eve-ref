@@ -1,6 +1,6 @@
 #!/bin/bash
 
-/eve-ref/bin/eve-ref $1
+/eve-ref/bin/eve-ref "$1"
 ex=$?
 
 if [ -f /tmp/hs_err_pid*.log ]; then

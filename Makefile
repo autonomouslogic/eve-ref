@@ -1,4 +1,4 @@
-.PHONY: dist test clean docker
+.PHONY: dist test format clean docker
 EVE_REF_VERSION = $(shell ./gradlew properties | grep version | cut -d' ' -f 2)
 DOCKER_TAG_BASE = autonomouslogic/eve-ref
 DOCKER_TAG = $(DOCKER_TAG_BASE):$(EVE_REF_VERSION)
@@ -9,6 +9,9 @@ dist:
 
 test:
 	./gradlew test
+
+format:
+	./gradlew spotlessApply
 
 docker: dist
 	docker build \
