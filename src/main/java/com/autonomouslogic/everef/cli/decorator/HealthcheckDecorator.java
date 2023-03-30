@@ -10,11 +10,13 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.jetbrains.annotations.NotNull;
 
 @Singleton
 @Log4j2
@@ -51,23 +53,11 @@ public class HealthcheckDecorator {
 	}
 
 	private Completable ping(@NonNull Optional<String> url, @NonNull Optional<String> body) {
+		if (url.isEmpty()) {
+			return Completable.complete();
+		}
 		return Completable.fromAction(() -> {
-					if (url.isEmpty()) {
-						return;
-					}
-					var call = okHttpClient.newCall(new Request.Builder()
-							.post(RequestBody.create(body.orElse("").getBytes(StandardCharsets.UTF_8)))
-							.url(url.get())
-							.build());
-					try (var response = call.execute()) {
-						var code = response.code();
-						var msg = String.format("Healthcheck \"%s\" response: %d", url.get(), code);
-						if (code < 200 || code >= 300) {
-							log.warn(msg);
-						} else {
-							log.debug(msg);
-						}
-					}
+					executeCall(url.get(), body);
 				})
 				.retry(2, e -> {
 					log.warn(String.format("Healthcheck \"%s\" retrying: %s", url.get(), ExceptionUtils.getMessage(e)));
@@ -78,6 +68,23 @@ public class HealthcheckDecorator {
 					return Completable.complete();
 				})
 				.compose(Rx.offloadCompletable());
+	}
+
+	@SneakyThrows
+	private void executeCall(@NotNull String url, @NotNull Optional<String> body) {
+		var call = okHttpClient.newCall(new Request.Builder()
+				.post(RequestBody.create(body.orElse("").getBytes(StandardCharsets.UTF_8)))
+				.url(url)
+				.build());
+		try (var response = call.execute()) {
+			var code = response.code();
+			var msg = String.format("Healthcheck \"%s\" response: %d", url, code);
+			if (code < 200 || code >= 300) {
+				log.warn(msg);
+			} else {
+				log.debug(msg);
+			}
+		}
 	}
 
 	@RequiredArgsConstructor
