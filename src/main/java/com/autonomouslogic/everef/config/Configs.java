@@ -208,6 +208,15 @@ public class Configs {
 			.build();
 
 	/**
+	 * User agent string to provide to anything other than the ESI.
+	 */
+	public static final Config<String> HTTP_USER_AGENT = Config.<String>builder()
+			.name("HTTP_USER_AGENT")
+			.type(String.class)
+			.defaultValue("everef.net")
+			.build();
+
+	/**
 	 * Directory for HTTP caching.
 	 */
 	public static final Config<String> HTTP_CACHE_DIR = Config.<String>builder()

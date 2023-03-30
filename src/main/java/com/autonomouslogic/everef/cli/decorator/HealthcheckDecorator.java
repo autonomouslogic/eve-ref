@@ -2,17 +2,26 @@ package com.autonomouslogic.everef.cli.decorator;
 
 import com.autonomouslogic.everef.cli.Command;
 import com.autonomouslogic.everef.config.Configs;
+import com.autonomouslogic.everef.util.Rx;
 import io.reactivex.rxjava3.core.Completable;
+import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 
 @Singleton
 @Log4j2
 public class HealthcheckDecorator {
+	@Inject
+	protected OkHttpClient okHttpClient;
+
 	private final Optional<String> finishUrl;
 	private final Optional<String> startUrl;
 	private final Optional<String> failUrl;
@@ -37,18 +46,38 @@ public class HealthcheckDecorator {
 		return finishUrl.isPresent() || startUrl.isPresent() || failUrl.isPresent() || logUrl.isPresent();
 	}
 
-	private void ping(@NonNull Optional<String> url) {
-		ping(url, Optional.empty());
+	private Completable ping(@NonNull Optional<String> url) {
+		return ping(url, Optional.empty());
 	}
 
-	private void ping(@NonNull Optional<String> url, @NonNull Optional<String> body) {
-		if (url.isPresent()) {
-			if (body.isEmpty()) {
-				log.info("POST " + url.get());
-			} else {
-				log.info("POST " + url.get() + " - with body: " + body.get());
-			}
-		}
+	private Completable ping(@NonNull Optional<String> url, @NonNull Optional<String> body) {
+		return Completable.fromAction(() -> {
+					if (url.isEmpty()) {
+						return;
+					}
+					var call = okHttpClient.newCall(new Request.Builder()
+							.post(RequestBody.create(body.orElse("").getBytes(StandardCharsets.UTF_8)))
+							.url(url.get())
+							.build());
+					try (var response = call.execute()) {
+						var code = response.code();
+						var msg = String.format("Healthcheck \"%s\" response: %d", url.get(), code);
+						if (code < 200 || code >= 300) {
+							log.warn(msg);
+						} else {
+							log.debug(msg);
+						}
+					}
+				})
+				.retry(2, e -> {
+					log.warn(String.format("Healthcheck \"%s\" retrying: %s", url.get(), ExceptionUtils.getMessage(e)));
+					return true;
+				})
+				.onErrorResumeNext(e -> {
+					log.warn(String.format("Healthcheck \"%s\" failed", url.get()), e);
+					return Completable.complete();
+				})
+				.compose(Rx.offloadCompletable());
 	}
 
 	@RequiredArgsConstructor
@@ -56,21 +85,10 @@ public class HealthcheckDecorator {
 		private final Command delegate;
 
 		public Completable run() {
-			return Completable.defer(() -> {
-				ping(startUrl);
-				return delegate.run()
-						.doOnError(e -> {
-							try {
-								ping(logUrl, Optional.of(e.getMessage()));
-								ping(failUrl);
-							} finally {
-								throw e;
-							}
-						})
-						.andThen(Completable.fromAction(() -> {
-							ping(finishUrl);
-						}));
-			});
+			return Completable.concatArray(ping(startUrl), delegate.run(), ping(finishUrl))
+					.onErrorResumeNext(e -> Completable.concatArray(
+									ping(logUrl, Optional.of(ExceptionUtils.getMessage(e))), ping(failUrl))
+							.andThen(Completable.error(e)));
 		}
 
 		public String getName() {
