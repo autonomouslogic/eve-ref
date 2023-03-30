@@ -3,7 +3,7 @@
 /eve-ref/bin/eve-ref "$1"
 ex=$?
 
-if [ -f /tmp/hs_err_pid*.log ]; then
+if compgen -G "/tmp/hs_err_pid*.log" > /dev/null; then
     cat /tmp/hs_err_pid*.log
 fi
 
