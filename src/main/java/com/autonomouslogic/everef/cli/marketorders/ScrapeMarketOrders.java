@@ -25,6 +25,7 @@ import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import org.h2.mvstore.MVMap;
+import org.h2.mvstore.MVStore;
 import org.h2.mvstore.type.ObjectDataType;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 
@@ -65,6 +66,7 @@ public class ScrapeMarketOrders implements Command {
 	protected TempFiles tempFiles;
 
 	private S3Url dataUrl;
+	private MVStore mvStore;
 	private MVMap<Long, JsonNode> marketOrdersStore;
 
 	@Setter
@@ -89,27 +91,42 @@ public class ScrapeMarketOrders implements Command {
 	@Override
 	public Completable run() {
 		return Completable.concatArray(
-				Completable.fromAction(() -> {
-					if (scrapeTime == null) {
-						scrapeTime = ZonedDateTime.now(ZoneOffset.UTC);
-					}
-					initMvStore();
-				}),
+				initScrapeTime(),
+				initMvStore(),
 				fetchOrders(),
 				writeOrders().flatMapCompletable(this::uploadFile),
-				dataIndexProvider.get().run());
+				dataIndexProvider.get().run())
+			.doFinally(this::closeMvStore);
 	}
 
-	@SneakyThrows
-	private void initMvStore() {
-		var mvStore = mvStoreUtil.createTempStore("market-orders");
-		marketOrdersStore = mvStore.openMap(
+	private Completable initScrapeTime() {
+		return Completable.fromAction(() -> {
+			if (scrapeTime == null) {
+				scrapeTime = ZonedDateTime.now(ZoneOffset.UTC);
+			}
+		});
+	}
+
+	private Completable initMvStore() {
+		return Completable.fromAction(() -> {
+			mvStore = mvStoreUtil.createTempStore("market-orders");
+			marketOrdersStore = mvStore.openMap(
 				"market-orders",
 				new MVMap.Builder<Long, JsonNode>()
-						.keyType(new ObjectDataType())
-						.valueType(jsonNodeDataType));
-		marketOrderFetcher.setMarketOrdersStore(marketOrdersStore);
-		marketOrdersWriter.setMarketOrdersStore(marketOrdersStore);
+					.keyType(new ObjectDataType())
+					.valueType(jsonNodeDataType));
+			marketOrderFetcher.setMarketOrdersStore(marketOrdersStore);
+			marketOrdersWriter.setMarketOrdersStore(marketOrdersStore);
+		});
+	}
+
+	private void closeMvStore() {
+		try {
+			mvStore.close();
+		}
+		catch (Exception e) {
+			log.debug("Failed closing MVStore, ignoring");
+		}
 	}
 
 	private Completable fetchOrders() {
