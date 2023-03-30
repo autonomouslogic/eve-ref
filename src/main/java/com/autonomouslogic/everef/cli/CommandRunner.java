@@ -6,6 +6,7 @@ import com.autonomouslogic.everef.cli.marketorders.ScrapeMarketOrders;
 import io.reactivex.rxjava3.core.Completable;
 import java.time.Duration;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import javax.inject.Singleton;
@@ -15,7 +16,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class CommandRunner {
 	@Inject
-	protected Provider<PlaceholderCli> placeholderCliProvider;
+	protected Provider<Placeholder> placeholderProvider;
 
 	@Inject
 	protected Provider<DataIndex> dataIndexProvider;
@@ -51,7 +52,7 @@ public class CommandRunner {
 			var start = Instant.now();
 			return command.run().andThen(Completable.fromAction(() -> {
 				var time = Duration.between(start, Instant.now());
-				log.info(String.format("Command %s completed in %s", name, time));
+				log.info(String.format("Command %s completed in %s", name, time.truncatedTo(ChronoUnit.MILLIS)));
 			}));
 		});
 	}
@@ -59,7 +60,7 @@ public class CommandRunner {
 	private Command createCommand(String name) {
 		switch (name) {
 			case "placeholder":
-				return placeholderCliProvider.get();
+				return placeholderProvider.get();
 			case "data-index":
 				return dataIndexProvider.get();
 			case "scrape-market-orders":
