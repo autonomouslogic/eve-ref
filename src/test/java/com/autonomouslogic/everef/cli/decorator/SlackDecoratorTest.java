@@ -1,8 +1,16 @@
 package com.autonomouslogic.everef.cli.decorator;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import com.autonomouslogic.everef.cli.Command;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
 import io.reactivex.rxjava3.core.Completable;
+import java.util.concurrent.TimeUnit;
+import javax.inject.Inject;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import okhttp3.mockwebserver.MockResponse;
@@ -16,15 +24,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junitpioneer.jupiter.SetEnvironmentVariable;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import javax.inject.Inject;
-import java.util.concurrent.TimeUnit;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @Log4j2
@@ -88,8 +87,8 @@ public class SlackDecoratorTest {
 	void shouldReportFailure() {
 		when(testCommand.run()).thenReturn(Completable.error(new RuntimeException("test error message")));
 		var error = assertThrows(
-			RuntimeException.class,
-			() -> slackDecorator.decorate(testCommand).run().blockingAwait());
+				RuntimeException.class,
+				() -> slackDecorator.decorate(testCommand).run().blockingAwait());
 		assertEquals("test error message", error.getMessage());
 		verify(testCommand).run();
 		var request = server.takeRequest();

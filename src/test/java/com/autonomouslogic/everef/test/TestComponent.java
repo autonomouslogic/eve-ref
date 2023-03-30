@@ -42,6 +42,7 @@ public interface TestComponent {
 	void inject(LocationPopulatorTest test);
 
 	void inject(ScrapeMarketOrdersTest test);
+
 	void inject(SlackDecoratorTest test);
 
 	void inject(UrlParserTest test);
