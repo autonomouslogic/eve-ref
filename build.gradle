@@ -127,7 +127,7 @@ application {
 task placeholder(type: JavaExec) {
 	group "application"
 	args "placeholder"
-
+	environment envProperties
 	classpath = sourceSets.main.runtimeClasspath
 	mainClass = mainClassName
 }
