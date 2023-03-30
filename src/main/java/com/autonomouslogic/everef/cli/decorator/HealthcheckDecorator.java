@@ -41,7 +41,7 @@ public class HealthcheckDecorator {
 		if (!enabled()) {
 			return command;
 		}
-		return new HealthCheckCommand(command);
+		return new HealthcheckCommand(command);
 	}
 
 	private boolean enabled() {
@@ -88,7 +88,7 @@ public class HealthcheckDecorator {
 	}
 
 	@RequiredArgsConstructor
-	private class HealthCheckCommand implements Command {
+	private class HealthcheckCommand implements Command {
 		private final Command delegate;
 
 		public Completable run() {
