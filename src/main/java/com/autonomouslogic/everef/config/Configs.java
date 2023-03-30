@@ -5,6 +5,15 @@ import java.time.Duration;
 
 public class Configs {
 	/**
+	 * The version of EVE Ref.
+	 */
+	public static final Config<String> EVE_REF_VERSION = Config.<String>builder()
+			.name("EVE_REF_VERSION")
+			.type(String.class)
+			.defaultValue("dev")
+			.build();
+
+	/**
 	 * An external URL to ping once one a command has finished running.
 	 * If left empty, no ping will be sent.
 	 * While this was originally designed to work with <a href="https://healthchecks.io/">healthchecks.io</a>,

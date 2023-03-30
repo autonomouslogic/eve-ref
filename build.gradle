@@ -82,6 +82,7 @@ sourceSets.main.java.srcDirs += ["build/generate-resources/main/src/main/kotlin"
 compileKotlin.dependsOn(tasks.openApiGenerate)
 compileJava.dependsOn(tasks.openApiGenerate)
 sourcesJar.dependsOn(tasks.openApiGenerate)
+delombok.dependsOn(tasks.openApiGenerate)
 
 test {
 	useJUnitPlatform()
@@ -121,14 +122,23 @@ spotless {
 	}
 }
 
+gitSemVer {
+	buildMetadataSeparator.set("-")
+}
+
 application {
 	mainClass = mainClassName
+	applicationDefaultJvmArgs = [
+		"-XX:+PrintCommandLineFlags",
+		"-XX:MinHeapSize=" + 10 * 1024 * 1024,
+		"-XX:MaxRAMPercentage=80.0"
+	]
 }
 
 task placeholder(type: JavaExec) {
 	group "application"
 	args "placeholder"
-
+	environment envProperties
 	classpath = sourceSets.main.runtimeClasspath
 	mainClass = mainClassName
 }
