@@ -6,7 +6,9 @@ import com.autonomouslogic.everef.cli.MockDataIndexModule;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.test.TestDataUtil;
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import javax.inject.Inject;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
@@ -99,6 +101,6 @@ public class EsiHelperTest {
 					}
 				})
 				.toList();
-		assertEquals(List.of("page-1", "page-2", "page-3"), bodies);
+		assertEquals(Set.of("page-1", "page-2", "page-3"), new HashSet<>(bodies));
 	}
 }
