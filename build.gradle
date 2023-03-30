@@ -49,6 +49,7 @@ dependencies {
 	implementation "com.h2database:h2-mvstore:2.1.214"
 	implementation "com.squareup.okhttp3:okhttp:4.10.0"
 	implementation "org.apache.commons:commons-csv:1.10.0"
+	implementation "net.gpedro.integrations.slack:slack-webhook:1.4.0"
 
 	testAnnotationProcessor "com.google.dagger:dagger-compiler:2.45"
 	testImplementation "com.google.dagger:dagger:2.45"

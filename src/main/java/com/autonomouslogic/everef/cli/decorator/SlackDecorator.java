@@ -11,6 +11,9 @@ import javax.inject.Singleton;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import net.gpedro.integrations.slack.SlackAttachment;
+import net.gpedro.integrations.slack.SlackMessage;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 
 @Singleton
 @Log4j2
@@ -35,12 +38,47 @@ public class SlackDecorator {
 		return new SlackCommand(command);
 	}
 
-	private void reportSuccess(@NonNull String commandName, Duration runtime) {
+	private Completable reportSuccess(@NonNull String commandName, Duration runtime) {
 		log.info("SLACK SUCCESS");
 	}
 
-	private void reportFailure(@NonNull String commandName, Duration runtime, Throwable error) {
+	private Completable reportFailure(@NonNull String commandName, Duration runtime, Throwable error) {
 		log.info("SLACK FAILURE");
+	}
+
+	private SlackMessage createMessage() {
+		return new SlackMessage()
+			.setUsername(username)
+			.setChannel(channel);
+	}
+
+	private SlackMessage successMessage(String text, String title, String message) {
+		SlackMessage msg = createMessage();
+		if (message == null) message = "";
+		msg.setText(text);
+		msg.addAttachments(new SlackAttachment()
+			.setColor("good")
+			.setTitle(title)
+			.setText(message)
+			.setFallback(message)
+		);
+		return msg;
+	}
+
+	private SlackMessage errorMessage(String text, String title, String message, Throwable e) {
+		SlackMessage msg = createMessage();
+		if (message == null) message = "";
+		if (e != null) {
+			message += "\n" + ExceptionUtils.getMessage(e);
+		}
+		msg.setText(text);
+		msg.addAttachments(new SlackAttachment()
+			.setColor("danger")
+			.setTitle(title)
+			.setText(message)
+			.setFallback(message)
+		);
+		return msg;
 	}
 
 	@RequiredArgsConstructor
