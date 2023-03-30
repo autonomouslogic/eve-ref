@@ -114,17 +114,13 @@ public class SlackDecorator {
 		public Completable run() {
 			return Completable.defer(() -> {
 				var start = Instant.now();
-				return delegate.run()
-						.doOnError(e -> {
-							try {
-								reportFailure(delegate.getName(), Duration.between(start, Instant.now()), e);
-							} finally {
-								throw e;
-							}
-						})
-						.andThen(Completable.fromAction(() -> {
-							reportSuccess(delegate.getName(), Duration.between(start, Instant.now()));
-						}));
+				return Completable.concatArray(
+								delegate.run(),
+								reportSuccess(delegate.getName(), Duration.between(start, Instant.now())))
+						.onErrorResumeNext(e -> {
+							return reportFailure(delegate.getName(), Duration.between(start, Instant.now()), e)
+									.andThen(Completable.error(e));
+						});
 			});
 		}
 
