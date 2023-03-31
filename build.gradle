@@ -158,3 +158,11 @@ task scrapeMarketOrders(type: JavaExec) {
 	classpath = sourceSets.main.runtimeClasspath
 	mainClass = mainClassName
 }
+
+task scrapePublicContracts(type: JavaExec) {
+	group "application"
+	args "scrape-public-contracts"
+	environment envProperties
+	classpath = sourceSets.main.runtimeClasspath
+	mainClass = mainClassName
+}

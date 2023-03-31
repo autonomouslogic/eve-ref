@@ -1,32 +1,35 @@
 package com.autonomouslogic.everef.cli.publiccontracts;
 
-import com.autonomouslogic.evemarket.dao.UniverseDao;
-import com.autonomouslogic.evemarket.model.Region;
-import com.autonomouslogic.evemarket.scrape.EsiUrl;
-import com.autonomouslogic.evemarket.scrape.LocationPopulator;
-import com.autonomouslogic.evemarket.scrape.ScrapeFetcher;
-import com.autonomouslogic.evemarket.util.EveRefDataUtil;
-import com.autonomouslogic.evemarket.util.RxUtil;
+import com.autonomouslogic.everef.esi.EsiHelper;
+import com.autonomouslogic.everef.esi.EsiUrl;
+import com.autonomouslogic.everef.esi.LocationPopulator;
+import com.autonomouslogic.everef.esi.UniverseEsi;
+import com.autonomouslogic.everef.openapi.esi.models.GetUniverseRegionsRegionIdOk;
+import com.autonomouslogic.everef.util.OkHttpHelper;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import io.prometheus.client.Counter;
-import io.reactivex.rxjava3.core.BackpressureStrategy;
 import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Observable;
+import lombok.Getter;
+import lombok.NonNull;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import okhttp3.OkHttpClient;
 import org.h2.mvstore.MVMap;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
-import static com.autonomouslogic.evemarket.util.MetricsService.METRICS_NAMESPACE;
 
 /**
  * Fetches all the public contracts for all the regions.
@@ -34,147 +37,93 @@ import static com.autonomouslogic.evemarket.util.MetricsService.METRICS_NAMESPAC
 @Slf4j
 public class ContractFetcher {
 	@Inject
-	protected UniverseDao universeDao;
-	@Inject
-	protected ScrapeFetcher scrapeFetcher;
-	@Inject
-	protected EveRefDataUtil eveRefDataUtil;
-	@Inject
 	protected ObjectMapper objectMapper;
 	@Inject
 	protected LocationPopulator locationPopulator;
+	@Inject
+	protected UniverseEsi universeEsi;
+	@Inject
+	@Getter
+	protected ContractAbyssalFetcher contractAbyssalFetcher;
+	@Inject
+	protected EsiHelper esiHelper;
+	@Inject
+	protected OkHttpHelper okHttpHelper;
+	@Inject
+	@Named("esi")
+	protected OkHttpClient okHttpClient;
 
 	@Setter
+	@NonNull
 	private MVMap<Long, JsonNode> contractsStore;
 	@Setter
+	@NonNull
 	private MVMap<Long, JsonNode> itemsStore;
 	@Setter
+	@NonNull
 	private MVMap<Long, JsonNode> bidsStore;
-	@Setter
-	private ContractAbyssalFetcher abyssalFetcher;
 
-	private Set<Long> contractsWithItems;
-
-	private Counter esiContracts = Counter.build()
-		.name("esi_contracts_total")
-		.help("Number of contracts fetched from the ESI.")
-		.labelNames("contract_type")
-		.namespace(METRICS_NAMESPACE)
-		.register();
-
-	private Counter esiContractsNew = Counter.build()
-		.name("esi_contracts_new_total")
-		.labelNames("contract_type")
-		.help("Number of fetched contracts which were not already known.")
-		.namespace(METRICS_NAMESPACE)
-		.register();
-
-	private Counter esiContractsCached = Counter.build()
-		.name("esi_contracts_cached_total")
-		.labelNames("contract_type")
-		.help("Number of fetched contracts which were already known.")
-		.namespace(METRICS_NAMESPACE)
-		.register();
-
-	private Counter esiBids = Counter.build()
-		.name("esi_bids_total")
-		.help("Number of total bids fetched from the ESI.")
-		.namespace(METRICS_NAMESPACE)
-		.register();
-
-	private Counter esiItems = Counter.build()
-		.name("esi_items_total")
-		.help("Number of total items fetched from the ESI.")
-		.namespace(METRICS_NAMESPACE)
-		.register();
+	private final Set<Long> contractsWithItems = Collections.newSetFromMap(new ConcurrentHashMap<>());
 
 	@Inject
 	protected ContractFetcher() {
 	}
 
-	public Observable<Long> fetch() {
-		return Completable.complete()
-			.andThen(buildItemIndex())
-			.andThen(fetchRegions())
-			.toFlowable(BackpressureStrategy.BUFFER)
-			.flatMap(region -> fetchContractsForRegion(region).toFlowable(BackpressureStrategy.BUFFER), 3)
-			.toObservable();
+	public Flowable<Long> fetchPublicContracts() {
+		return buildKnownItemIndex()
+			.andThen(universeEsi.getAllRegions()
+				.flatMap(region -> fetchContractsForRegion(region), 3));
 	}
 
-	private Observable<Region> fetchRegions() {
-		return Observable.fromIterable(() -> universeDao.getAllRegions().iterator());
-	}
-
-	private Observable<Long> fetchContractsForRegion(Region region) {
-		log.info(String.format("Fetching public contracts for %s.", region.getName().get("en")));
-		EsiUrl esiUrl = new EsiUrl(String.format("/contracts/public/%s",
-			region.getRegionId()
-		));
-		return RxUtil.toSingle(scrapeFetcher.fetchAllPages(esiUrl))
-			.flatMapObservable(responses -> Observable.fromIterable(responses))
-			.flatMap(response -> {
-				List<Long> contractIds = new ArrayList<>();
-				List<ObjectNode> entries = new ArrayList<>();
-				JsonNode page = scrapeFetcher.decode(response);
-				JsonNode lastModified = eveRefDataUtil.lastModified(response);
-				if (page.isNull()) {
-					return Observable.empty();
-				}
-				if (page.has("error")) {
-					log.error(String.format("Region %s reported %s", region.getRegionId(), page.get("error").toString()));
-					return Observable.empty();
-				}
-				for (JsonNode contract : page) {
-					ObjectNode contractObject = (ObjectNode) contract;
-					long contractId = contract.get("contract_id").asLong();
-					String type = contractObject.get("type").textValue();
-					logContractMetrics(contractId, type);
-					contractIds.add(contractId);
-					contractObject.put("region_id", region.getRegionId());
-					populateStation(contractObject);
-					contractObject.set("http_last_modified", lastModified);
-					contractsStore.put(contractId, contract);
-					entries.add(contractObject);
-				}
-				return Observable.fromIterable(entries)
-					.flatMapCompletable(this::resolveItemsAndBids)
-					.andThen(Observable.fromIterable(contractIds));
+	private Flowable<Long> fetchContractsForRegion(GetUniverseRegionsRegionIdOk region) {
+		var count = new AtomicInteger();
+		return Flowable.defer(() -> {
+				log.info(String.format("Fetching public from %s", region.getName()));
+				var esiUrl = EsiUrl.builder()
+					.urlPath(String.format("/contracts/public/%s", region.getRegionId()))
+					.build();
+				return esiHelper
+					.fetchPagesOfJsonArrays(esiUrl, (entry, response) -> {
+						var lastModified = okHttpHelper.getLastModified(response);
+						var obj = (ObjectNode) entry;
+						lastModified.ifPresent(date -> obj.put(
+							"http_last_modified", date.toInstant().toString()));
+						return obj;
+					})
+					.flatMap(entry -> {
+						var obj = (ObjectNode) entry;
+						var contractId = obj.get("contract_id").asLong();
+						obj.put("region_id", region.getRegionId());
+						return
+							locationPopulator.populate(obj, "start_location_id")
+								.andThen(Completable.fromAction(() ->
+									contractsStore.put(contractId, obj)))
+								.andThen(resolveItemsAndBids(obj))
+								.andThen(Flowable.just(contractId));
+					}, 32)
+					.doOnNext(ignore -> {
+						var n = count.incrementAndGet();
+						if (n % 1_000 == 0) {
+							log.debug(String.format("Fetched %d public contracts from %s", n, region.getName()));
+						}
+					});
 			})
-			.doOnComplete(() -> log.info(String.format("Contract fetch complete for %s.", region.getName().get("en"))));
-	}
-
-	private void logContractMetrics(long contractId, String contractType) {
-		esiContracts
-			.labels(contractType)
-			.inc();
-		if (contractsStore.containsKey(contractId)) {
-			esiContractsCached
-				.labels(contractType)
-				.inc();
-		}
-		else {
-			esiContractsNew
-				.labels(contractType)
-				.inc();
-		}
-	}
-
-	private void populateStation(ObjectNode contract) {
-		locationPopulator.populateStation(contract, "start_location_id");
+			.doOnComplete(() ->
+				log.info(String.format("Fetched %d public contracts from %s", count.get(), region.getName())));
 	}
 
 	private Completable resolveItemsAndBids(ObjectNode contract) {
 		return Completable.defer(() -> {
-			long contractId = contract.get("contract_id").longValue();
-			String type = contract.get("type").textValue();
-			Completable completable = Completable.complete();
+			var contractId = contract.get("contract_id").longValue();
+			var type = contract.get("type").textValue();
+			var tasks = new ArrayList<Completable>();
 			if (("item_exchange".endsWith(type) || "auction".equals(type))) {
-				completable = completable.andThen(fetchContractItems(contractId));
+				tasks.add(fetchContractItems(contractId));
 			}
 			if ("auction".equals(type)) {
-				completable = completable.andThen(fetchContractBids(contractId));
+				tasks.add(fetchContractBids(contractId));
 			}
-			return completable;
+			return tasks.isEmpty() ? Completable.complete() : Completable.merge(tasks);
 		});
 	}
 
@@ -183,15 +132,13 @@ public class ContractFetcher {
 			if (contractsWithItems.contains(contractId)) {
 				return Completable.complete();
 			}
-			Observable<ObjectNode> observable = fetchContractSub("items", "record_id", itemsStore, contractId)
-				.doOnNext(o -> esiItems.inc());
-			return abyssalFetcher.apply(contractId, observable);
+			var observable = fetchContractSub("items", "record_id", itemsStore, contractId);
+			return contractAbyssalFetcher.apply(contractId, observable);
 		});
 	}
 
 	private Completable fetchContractBids(long contractId) {
 		return fetchContractSub("bids", "bid_id", bidsStore, contractId)
-			.doOnNext(o -> esiBids.inc())
 			.ignoreElements();
 	}
 
@@ -228,12 +175,15 @@ public class ContractFetcher {
 			}));
 	}
 
-	private Completable buildItemIndex() {
+	/**
+	 * Builds a list of contracts where the items are already known.
+	 * This is used to avoid fetching items for contracts where we already have them.
+	 */
+	private Completable buildKnownItemIndex() {
 		return Completable.fromAction(() -> {
-			log.info("Building item contract index.");
-			contractsWithItems = new HashSet<>();
+			log.debug("Building item contract index.");
 			itemsStore.values().forEach(item -> contractsWithItems.add(item.get("contract_id").asLong()));
-			log.info(String.format("Built list of %s known contracts with items.", contractsWithItems.size()));
+			log.debug(String.format("Built list of %s known contracts with items.", contractsWithItems.size()));
 		});
 	}
 }

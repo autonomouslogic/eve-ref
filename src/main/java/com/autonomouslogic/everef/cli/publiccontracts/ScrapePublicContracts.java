@@ -9,41 +9,35 @@ import com.autonomouslogic.everef.mvstore.MVStoreUtil;
 import com.autonomouslogic.everef.s3.S3Adapter;
 import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.url.UrlParser;
-import com.autonomouslogic.everef.util.ArchivePathFactory;
+import com.autonomouslogic.everef.util.CompressUtil;
+import com.autonomouslogic.everef.util.Rx;
 import com.autonomouslogic.everef.util.S3Util;
+import com.autonomouslogic.everef.util.TempFiles;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.reactivex.rxjava3.core.Completable;
-import io.reactivex.rxjava3.core.Observable;
-import io.reactivex.rxjava3.schedulers.Schedulers;
+import io.reactivex.rxjava3.core.Single;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
-import lombok.extern.slf4j.Slf4j;
 import org.h2.mvstore.MVMap;
 import org.h2.mvstore.MVStore;
 import org.h2.mvstore.type.ObjectDataType;
-import org.intellij.lang.annotations.JdkConstants;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
 import java.io.File;
-import java.nio.file.Files;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Collections;
 import java.util.Set;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.TimeUnit;
 
-import static com.autonomouslogic.everef.util.ArchivePathFactory.MARKET_ORDERS;
 import static com.autonomouslogic.everef.util.ArchivePathFactory.PUBLIC_CONTRACTS;
 
 /**
@@ -62,8 +56,6 @@ public class ScrapePublicContracts implements Command {
 	@Inject
 	protected JsonNodeDataType jsonNodeDataType;
 	@Inject
-	protected Provider<ContractAbyssalFetcher> contractAbyssalFetcherProvider;
-	@Inject
 	protected UrlParser urlParser;
 	@Inject
 	protected MVStoreUtil mvStoreUtil;
@@ -74,6 +66,8 @@ public class ScrapePublicContracts implements Command {
 	@Inject
 	@Named("data")
 	protected S3AsyncClient s3Client;
+	@Inject
+	protected TempFiles tempFiles;
 
 	@Setter
 	private ZonedDateTime scrapeTime;
@@ -89,8 +83,7 @@ public class ScrapePublicContracts implements Command {
 	private MVMap<String, JsonNode> dogmaEffectsStore;
 
 	private ContractsScrapeMeta contractsScrapeMeta;
-	private Set<Long> seenContractIds;
-	private File outputFile;
+	private final Set<Long> seenContractIds = Collections.newSetFromMap(new ConcurrentHashMap<>());
 
 	@Inject
 	protected ScrapePublicContracts() {
@@ -112,12 +105,11 @@ public class ScrapePublicContracts implements Command {
 		return Completable.concatArray(
 				initScrapeTime(),
 				initMvStore(),
-				Completable.fromAction(this::reset),
+				initMeta(),
 				loadLatestContracts(),
 				fetchAndStoreContracts(),
 				deleteOldContracts(),
-				buildFile(),
-				uploadFile(),
+				buildFile().flatMapCompletable(this::uploadFile),
 				dataIndexProvider.get().run()
 		)
 			.doFinally(this::closeMvStore);
@@ -128,6 +120,7 @@ public class ScrapePublicContracts implements Command {
 			if (scrapeTime == null) {
 				scrapeTime = ZonedDateTime.now(ZoneOffset.UTC);
 			}
+			contractsScrapeMeta.setScrapeStart(scrapeTime.toInstant());
 		});
 	}
 
@@ -178,17 +171,12 @@ public class ScrapePublicContracts implements Command {
 	}
 
 	@SneakyThrows
-	private void reset() {
-		contractsScrapeMeta = new ContractsScrapeMeta()
-			.setServer("tranquility")
-			.setSource("everef.net")
-			.setScrapeStart(scrapeTime.truncatedTo(ChronoUnit.SECONDS).toInstant());
-		seenContractIds = Collections.newSetFromMap(new ConcurrentHashMap<>());
-		if (outputFile != null && outputFile.exists()) {
-			outputFile.delete();
-		}
-		outputFile = Files.createTempFile(getClass().getSimpleName(), ".tar.bz2").toFile();
-		outputFile.deleteOnExit();
+	private Completable initMeta() {
+		return Completable.fromAction(() -> {
+			contractsScrapeMeta = new ContractsScrapeMeta()
+				.setDatasource(Configs.ESI_DATASOURCE.getRequired())
+				.setScrapeStart(scrapeTime.truncatedTo(ChronoUnit.SECONDS).toInstant());
+		});
 	}
 
 	/**
@@ -196,6 +184,7 @@ public class ScrapePublicContracts implements Command {
 	 */
 	private Completable loadLatestContracts() {
 		return Completable.defer(() -> {
+			log.warn("TODO loadLatestContracts");
 			return Completable.complete(); // @todo
 		});
 	}
@@ -205,24 +194,26 @@ public class ScrapePublicContracts implements Command {
 	 */
 	private Completable fetchAndStoreContracts() {
 		return Completable.defer(() -> {
+			log.debug("Fetching contracts");
+			var start = Instant.now();
 			ContractFetcher contractFetcher = contractFetcherProvider.get()
 				.setContractsStore(contractsStore)
 				.setItemsStore(itemsStore)
 				.setBidsStore(bidsStore);
-			contractFetcher.setAbyssalFetcher(contractAbyssalFetcherProvider.get()
+			contractFetcher.getContractAbyssalFetcher()
 				.setDynamicItemsStore(dynamicItemsStore)
 				.setNonDynamicItemsStore(nonDynamicItemsStore)
 				.setDogmaAttributesStore(dogmaAttributesStore)
-				.setDogmaEffectsStore(dogmaEffectsStore)
-			);
-			return contractFetcher.fetch()
+				.setDogmaEffectsStore(dogmaEffectsStore);
+
+			return contractFetcher.fetchPublicContracts()
 				.doOnNext(contractId -> {
 					seenContractIds.add(contractId);
 				})
 				.doOnComplete(() -> {
 					contractsScrapeMeta.setScrapeEnd(Instant.now().truncatedTo(ChronoUnit.SECONDS));
 					mvStore.commit();
-					log.info(String.format("Fetched %s contracts", seenContractIds.size()));
+					log.info(String.format("Fetched %s contracts in ", seenContractIds.size(), Duration.between(start, Instant.now()).truncatedTo(ChronoUnit.MILLIS)));
 				})
 				.ignoreElements();
 		});
@@ -234,10 +225,11 @@ public class ScrapePublicContracts implements Command {
 	 */
 	private Completable deleteOldContracts() {
 		return Completable.fromAction(() -> {
+			log.debug("Deleting old contracts");
 			int removed = new MVMapRemover<>(contractsStore)
 				.removeIf((contractId, contract) -> !seenContractIds.contains(contractId))
 				.getEntriesRemoved();
-			log.info(String.format("Deleted %s old contracts", removed));
+			log.debug(String.format("Deleted %s old contracts", removed));
 			deleteContractSub("items", itemsStore);
 			deleteContractSub("bids", bidsStore);
 			deleteContractSub("dynamic items", dynamicItemsStore);
@@ -254,16 +246,19 @@ public class ScrapePublicContracts implements Command {
 				return !seenContractIds.contains(contractId);
 			})
 			.getEntriesRemoved();
-		log.info(String.format("Deleted %s old contract %s", removed, name));
+		log.debug(String.format("Deleted %s old contract %s", removed, name));
 	}
 
 	/**
 	 * Builds the output file.
 	 */
-	private Completable buildFile() {
-		return Completable.fromAction(() -> {
-			log.info(String.format("Writing output file: %s", outputFile));
-			ContractsFileBuilder fileBuilder = contractsFileBuilderProvider.get();
+	private Single<File> buildFile() {
+		return Single.fromCallable(() -> {
+			log.info("Building final file");
+			var start = Instant.now();
+			var outputFile = tempFiles.tempFile(getClass().getSimpleName(), ".tar.bz2").toFile();
+			log.debug(String.format("Writing output file: %s", outputFile));
+			var fileBuilder = contractsFileBuilderProvider.get();
 			fileBuilder.open(outputFile);
 			fileBuilder.writeMeta(contractsScrapeMeta);
 			fileBuilder.writeContracts(contractsStore.values());
@@ -273,17 +268,18 @@ public class ScrapePublicContracts implements Command {
 			fileBuilder.writeDogmaAttributes(dogmaAttributesStore.values());
 			fileBuilder.writeDogmaEffects(dogmaEffectsStore.values());
 			fileBuilder.close();
-			log.info("Output file finished");
+			var compressed = CompressUtil.compressBzip2(outputFile);
+			log.info(String.format("Final file built in %s", Duration.between(start, Instant.now()).truncatedTo(ChronoUnit.MILLIS)));
+			return compressed;
 		})
-			.subscribeOn(Schedulers.io())
-			.observeOn(Schedulers.computation());
+			.compose(Rx.offloadSingle());
 	}
 
 	/**
 	 * Uploads the final file to S3.
 	 * @return
 	 */
-	private Completable uploadFile() {
+	private Completable uploadFile(File outputFile) {
 		return Completable.defer(() -> {
 				var latestPath = S3Url.builder()
 					.bucket(dataUrl.getBucket())

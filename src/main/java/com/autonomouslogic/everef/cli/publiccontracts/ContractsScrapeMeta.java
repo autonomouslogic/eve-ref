@@ -8,9 +8,7 @@ import java.time.Instant;
 @Data
 public class ContractsScrapeMeta {
 	@JsonProperty
-	private String server;
-	@JsonProperty
-	private String source;
+	private String datasource;
 	@JsonProperty(value = "scrape_start")
 	private Instant scrapeStart;
 	@JsonProperty(value = "scrape_end")
