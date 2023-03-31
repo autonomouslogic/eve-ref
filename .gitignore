@@ -1,4 +1,7 @@
 .gradle/
-build/
 .idea/
+build/
 local.env
+node_modules/
+package-lock.json
+package.json

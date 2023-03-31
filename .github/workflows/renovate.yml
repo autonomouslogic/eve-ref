@@ -1,0 +1,13 @@
+name: "Renovate"
+
+on: [ push ]
+
+jobs:
+  Validate:
+    name: Validate Renovate config
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Validate
+        uses: rinchsan/renovate-config-validator@v0.0.12
