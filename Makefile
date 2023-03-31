@@ -26,3 +26,7 @@ clean:
 
 version:
 	echo $(EVE_REF_VERSION)
+
+renovate-validate:
+	npm install renovate
+	node node_modules/renovate/dist/config-validator.js

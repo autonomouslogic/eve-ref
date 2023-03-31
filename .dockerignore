@@ -3,4 +3,5 @@
 docs/
 gradle/
 lib/
+node_modules/
 src/

@@ -6,11 +6,13 @@
   "packageRules": [
     {
       "matchPackageNames": ["ubuntu"],
-      "allowedVersions": "=20.04"
+      "allowedVersions": "=20.04",
+      "versioning": "docker"
     },
     {
       "matchPackageNames": ["eclipse-temurin"],
-      "allowedVersions": "=17-jre-focal"
+      "allowedVersions": "=17-jre-focal",
+      "versioning": "docker"
     }
   ]
 }
