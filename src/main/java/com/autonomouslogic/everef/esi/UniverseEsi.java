@@ -6,6 +6,7 @@ import com.autonomouslogic.everef.openapi.esi.models.GetUniverseConstellationsCo
 import com.autonomouslogic.everef.openapi.esi.models.GetUniverseRegionsRegionIdOk;
 import com.autonomouslogic.everef.openapi.esi.models.GetUniverseStationsStationIdOk;
 import com.autonomouslogic.everef.openapi.esi.models.GetUniverseSystemsSystemIdOk;
+import com.autonomouslogic.everef.openapi.esi.models.GetUniverseTypesTypeIdOk;
 import com.autonomouslogic.everef.util.Rx;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Maybe;
@@ -30,6 +31,8 @@ public class UniverseEsi {
 	private final Map<Integer, Optional<GetUniverseStationsStationIdOk>> stations = new ConcurrentHashMap<>();
 	private final Map<Integer, Optional<GetUniverseSystemsSystemIdOk>> systems = new ConcurrentHashMap<>();
 	private final Map<Integer, Optional<GetUniverseConstellationsConstellationIdOk>> constellations =
+			new ConcurrentHashMap<>();
+	private final Map<Integer, Optional<GetUniverseTypesTypeIdOk>> types =
 			new ConcurrentHashMap<>();
 
 	@Inject
@@ -114,6 +117,22 @@ public class UniverseEsi {
 							constellationId, null, source, null, null);
 					var optional = Optional.ofNullable(constellation);
 					constellations.put(constellationId, optional);
+					return Maybe.fromOptional(optional);
+				})
+				.compose(Rx.offloadMaybe());
+	}
+
+	public Maybe<GetUniverseTypesTypeIdOk> getType(int typeId) {
+		if (types.containsKey(typeId)) {
+			return Maybe.fromOptional(types.get(typeId));
+		}
+		return Maybe.defer(() -> {
+					log.trace(String.format("Fetching type %s", typeId));
+					var source = UniverseApi.Datasource_getUniverseTypesTypeId.valueOf(datasource);
+					var type = universeApi.getUniverseTypesTypeId(
+						typeId, null, source, null, null);
+					var optional = Optional.ofNullable(type);
+					types.put(typeId, optional);
 					return Maybe.fromOptional(optional);
 				})
 				.compose(Rx.offloadMaybe());

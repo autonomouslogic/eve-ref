@@ -142,37 +142,29 @@ public class ContractFetcher {
 			.ignoreElements();
 	}
 
-	private Observable<ObjectNode> fetchContractSub(String sub, String primaryKey, Map<Long, JsonNode> mapStore, long contractId) {
-		EsiUrl esiUrl = new EsiUrl(String.format("/contracts/public/%s/%s", sub, contractId));
-		return RxUtil.toSingle(scrapeFetcher.fetchAllPages(esiUrl))
-			.flatMapObservable(responses -> Observable.fromIterable(responses))
-			.flatMap(response -> Observable.defer(() -> {
-				//if (response.getStatusCode() == 404 || response.getStatusCode() == 403) {
-				if (response.code() != 200) {
-					log.info(String.format("Public contract %s returned %s for contract %s", sub, response.code(), contractId));
-					return Observable.empty();
-				}
-				JsonNode lastModified = eveRefDataUtil.lastModified(response);
-				JsonNode pageNode = scrapeFetcher.decode(response);
-				if (pageNode == null || pageNode.isNull() || !pageNode.isArray() || !(pageNode instanceof ArrayNode)) {
-					log.info(String.format("Public contract %s did not return array for contract %s: ", sub, contractId, pageNode));
-					return Observable.empty();
-				}
-				ArrayNode page = (ArrayNode) pageNode;
-				if (page.isNull() || page.size() == 0) {
-					return Observable.empty();
-				}
-				List<ObjectNode> entries = new ArrayList<>();
-				for (JsonNode entry : page) {
-					ObjectNode entryObj = (ObjectNode) entry;
-					entries.add(entryObj);
-					entryObj.put("contract_id", contractId);
-					entryObj.set("http_last_modified", lastModified);
-					long id = entry.get(primaryKey).asLong();
-					mapStore.put(id, entryObj);
-				}
-				return Observable.fromIterable(entries);
-			}));
+	private Flowable<ObjectNode> fetchContractSub(String sub, String primaryKey, Map<Long, JsonNode> mapStore, long contractId) {
+		var esiUrl = EsiUrl.builder()
+			.urlPath(String.format("/contracts/public/%s/%s", sub, contractId))
+			.build();
+		return esiHelper
+			.fetchPagesOfJsonArrays(esiUrl, (entry, response) -> {
+				var lastModified = okHttpHelper.getLastModified(response);
+				var obj = (ObjectNode) entry;
+				lastModified.ifPresent(date -> obj.put(
+					"http_last_modified", date.toInstant().toString()));
+				return obj;
+			})
+			.switchIfEmpty(Flowable.defer(() -> {
+				log.info(String.format("Public contract %s did not return anything for contract %s", sub, contractId));
+				return Flowable.empty();
+			}))
+			.map(entry -> {
+				var obj = (ObjectNode) entry;
+				obj.put("contract_id", contractId);
+				long id = entry.get(primaryKey).asLong();
+				mapStore.put(id, obj);
+				return obj;
+			});
 	}
 
 	/**
