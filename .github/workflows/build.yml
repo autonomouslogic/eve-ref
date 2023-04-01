@@ -26,3 +26,6 @@ jobs:
         with:
           verbose: true
           token: ${{ secrets.CODECOV_TOKEN }}
+
+      - name: Docker build
+        run: make docker
