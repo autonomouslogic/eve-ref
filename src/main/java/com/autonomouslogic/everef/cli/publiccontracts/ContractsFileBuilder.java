@@ -77,6 +77,12 @@ public class ContractsFileBuilder {
 	}
 
 	@SneakyThrows
+	public void writeNonDynamicItems(Collection<JsonNode> nonDynamicItems) {
+		log.debug(String.format("Writing %s nonDynamicItems", nonDynamicItems.size()));
+		writeEntries(nonDynamicItems, "contract_non_dynamic_items.csv");
+	}
+
+	@SneakyThrows
 	public void writeDogmaAttributes(Collection<JsonNode> dogmaAttributes) {
 		log.debug(String.format("Writing %s dogmaAttributes", dogmaAttributes.size()));
 		writeEntries(dogmaAttributes, "contract_dynamic_items_dogma_attributes.csv");

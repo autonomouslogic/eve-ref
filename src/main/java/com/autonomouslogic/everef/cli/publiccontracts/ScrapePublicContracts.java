@@ -46,8 +46,6 @@ import static com.autonomouslogic.everef.util.ArchivePathFactory.PUBLIC_CONTRACT
 @Log4j2
 public class ScrapePublicContracts implements Command {
 	@Inject
-	protected ObjectMapper objectMapper;
-	@Inject
 	protected Provider<ContractFetcher> contractFetcherProvider;
 	@Inject
 	protected Provider<ContractsFileBuilder> contractsFileBuilderProvider;
@@ -265,6 +263,7 @@ public class ScrapePublicContracts implements Command {
 			fileBuilder.writeItems(itemsStore.values());
 			fileBuilder.writeBids(bidsStore.values());
 			fileBuilder.writeDynamicItems(dynamicItemsStore.values());
+			fileBuilder.writeNonDynamicItems(nonDynamicItemsStore.values());
 			fileBuilder.writeDogmaAttributes(dogmaAttributesStore.values());
 			fileBuilder.writeDogmaEffects(dogmaEffectsStore.values());
 			fileBuilder.close();

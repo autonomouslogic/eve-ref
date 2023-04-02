@@ -32,7 +32,7 @@ public class UniverseEsi {
 	private final Map<Integer, Optional<GetUniverseSystemsSystemIdOk>> systems = new ConcurrentHashMap<>();
 	private final Map<Integer, Optional<GetUniverseConstellationsConstellationIdOk>> constellations =
 			new ConcurrentHashMap<>();
-	private final Map<Integer, Optional<GetUniverseTypesTypeIdOk>> types =
+	private final Map<Long, Optional<GetUniverseTypesTypeIdOk>> types =
 			new ConcurrentHashMap<>();
 
 	@Inject
@@ -122,7 +122,7 @@ public class UniverseEsi {
 				.compose(Rx.offloadMaybe());
 	}
 
-	public Maybe<GetUniverseTypesTypeIdOk> getType(int typeId) {
+	public Maybe<GetUniverseTypesTypeIdOk> getType(long typeId) {
 		if (types.containsKey(typeId)) {
 			return Maybe.fromOptional(types.get(typeId));
 		}

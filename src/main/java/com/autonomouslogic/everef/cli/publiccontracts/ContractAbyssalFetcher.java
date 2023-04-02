@@ -8,6 +8,7 @@ import com.autonomouslogic.evemarket.util.EveRefDataUtil;
 import com.autonomouslogic.evemarket.util.RxUtil;
 import com.autonomouslogic.everef.esi.EsiHelper;
 import com.autonomouslogic.everef.esi.EsiUrl;
+import com.autonomouslogic.everef.esi.UniverseEsi;
 import com.autonomouslogic.everef.util.OkHttpHelper;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -18,6 +19,7 @@ import io.reactivex.rxjava3.core.BackpressureStrategy;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.core.Single;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 import lombok.extern.slf4j.Slf4j;
@@ -42,6 +44,8 @@ public class ContractAbyssalFetcher {
 	protected EsiHelper esiHelper;
 	@Inject
 	protected OkHttpHelper okHttpHelper;
+	@Inject
+	protected UniverseEsi universeEsi;
 
 	@Setter
 	private MVMap<Long, JsonNode> dynamicItemsStore;
@@ -58,8 +62,10 @@ public class ContractAbyssalFetcher {
 
 	public Completable apply(long contractId, Flowable<ObjectNode> in) {
 		return in
-			.filter(item -> isPotentialAbyssalItem(item))
 			.filter(item -> isItemNotSeen(item))
+			.flatMap(item -> isPotentialAbyssalItem(item).flatMapPublisher(isAbyssal -> {
+				return isAbyssal ? Flowable.just(item) : Flowable.empty();
+			}))
 			.flatMapCompletable(item -> {
 				long itemId = item.get("item_id").longValue();
 				long typeId = item.get("type_id").longValue();
@@ -67,29 +73,31 @@ public class ContractAbyssalFetcher {
 			}, false, 1);
 	}
 
-	public boolean isPotentialAbyssalItem(ObjectNode item) {
-		if (isNullOrEmpty(item, "item_id")) {
-			return false;
-		}
-		if (isNullOrEmpty(item, "type_id")) {
-			return false;
-		}
-		if (isFalse(item, "is_included")) {
-			return false;
-		}
-		if (isGreaterThan(item, "quantity", 1)) {
-			return false;
-		}
-		long typeId = item.get("type_id").asLong();
-		InventoryType type = inventoryTypeDao.getInventoryType(typeId);
-		if (type == null) {
-			return false;
-		}
-		Long metaGroupId = type.getMetaGroupId();
-		if (metaGroupId == null) {
-			return false;
-		}
-		return metaGroupId == 15;
+	public Single<Boolean> isPotentialAbyssalItem(ObjectNode item) {
+		return Single.defer(() -> {
+
+			if (isNullOrEmpty(item, "item_id")) {
+				return Single.just(false);
+			}
+			if (isNullOrEmpty(item, "type_id")) {
+				return Single.just(false);
+			}
+			if (isFalse(item, "is_included")) {
+				return Single.just(false);
+			}
+			if (isGreaterThan(item, "quantity", 1)) {
+				return Single.just(false);
+			}
+			long typeId = item.get("type_id").asLong();
+			return universeEsi.getType(typeId).isEmpty().map(empty -> !empty);
+
+			// @todo This doesn't exist in the ESI, so will need the SDE conversion first.
+			//Long metaGroupId = type.getMetaGroupId();
+			//if (metaGroupId == null) {
+			//	return false;
+			//}
+			//return metaGroupId == 15;
+		});
 	}
 
 	private boolean isNullOrEmpty(ObjectNode node, String field) {
