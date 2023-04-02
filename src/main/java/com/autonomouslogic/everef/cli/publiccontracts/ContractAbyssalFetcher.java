@@ -4,6 +4,7 @@ import com.autonomouslogic.everef.esi.EsiHelper;
 import com.autonomouslogic.everef.esi.EsiUrl;
 import com.autonomouslogic.everef.esi.MetaGroupScraper;
 import com.autonomouslogic.everef.esi.UniverseEsi;
+import com.autonomouslogic.everef.util.JsonUtil;
 import com.autonomouslogic.everef.util.OkHttpHelper;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -73,16 +74,16 @@ public class ContractAbyssalFetcher {
 
 	public Single<Boolean> isPotentialAbyssalItem(ObjectNode item) {
 		return Single.defer(() -> {
-			if (isNullOrEmpty(item, "item_id")) {
+			if (JsonUtil.isNull(item.get("item_id"))) {
 				return Single.just(false);
 			}
-			if (isNullOrEmpty(item, "type_id")) {
+			if (JsonUtil.isNullOrEmpty(item.get("type_id"))) {
 				return Single.just(false);
 			}
-			if (isFalse(item, "is_included")) {
+			if (!JsonUtil.toBoolean(item.get("is_included"))) {
 				return Single.just(false);
 			}
-			if (isGreaterThan(item, "quantity", 1)) {
+			if (JsonUtil.compareLongs(item.get("quantity"), 1) > 0) {
 				return Single.just(false);
 			}
 			return verifyMetaGroup(item).flatMap(b -> {
@@ -106,51 +107,6 @@ public class ContractAbyssalFetcher {
 				.filter(id -> id == typeId)
 				.isEmpty()
 				.map(empty -> !empty);
-	}
-
-	private boolean isNullOrEmpty(ObjectNode node, String field) {
-		if (!node.has(field)) {
-			return true;
-		}
-		JsonNode val = node.get(field);
-		if (val == null || val.isNull()) {
-			return true;
-		}
-		String txt = val.asText();
-		return txt == null || txt.equals("");
-	}
-
-	private boolean isTrue(ObjectNode node, String field) {
-		if (!node.has(field)) {
-			return false;
-		}
-		JsonNode val = node.get(field);
-		if (val == null || val.isNull()) {
-			return false;
-		}
-		return val.asBoolean();
-	}
-
-	private boolean isFalse(ObjectNode node, String field) {
-		if (!node.has(field)) {
-			return false;
-		}
-		JsonNode val = node.get(field);
-		if (val == null || val.isNull()) {
-			return false;
-		}
-		return !val.asBoolean();
-	}
-
-	private boolean isGreaterThan(ObjectNode node, String field, int bound) {
-		if (!node.has(field)) {
-			return false;
-		}
-		JsonNode val = node.get(field);
-		if (val == null || val.isNull()) {
-			return false;
-		}
-		return val.asInt() > bound;
 	}
 
 	private boolean isItemNotSeen(ObjectNode item) {
