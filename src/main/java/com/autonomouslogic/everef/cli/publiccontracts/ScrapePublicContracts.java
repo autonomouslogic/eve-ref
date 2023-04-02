@@ -123,7 +123,7 @@ public class ScrapePublicContracts implements Command {
 			if (scrapeTime == null) {
 				scrapeTime = ZonedDateTime.now(ZoneOffset.UTC);
 			}
-			contractsScrapeMeta.setScrapeStart(scrapeTime.toInstant());
+			contractsScrapeMeta = new ContractsScrapeMeta().setScrapeStart(scrapeTime.toInstant());
 		});
 	}
 
