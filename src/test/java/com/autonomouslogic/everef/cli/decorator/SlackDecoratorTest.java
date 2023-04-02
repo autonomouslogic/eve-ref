@@ -9,6 +9,7 @@ import static org.mockito.Mockito.when;
 
 import com.autonomouslogic.everef.cli.Command;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
+import com.autonomouslogic.everef.test.TestDataUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.reactivex.rxjava3.core.Completable;
@@ -48,6 +49,9 @@ public class SlackDecoratorTest {
 	@Inject
 	ObjectMapper objectMapper;
 
+	@Inject
+	TestDataUtil testDataUtil;
+
 	MockWebServer server;
 
 	@BeforeEach
@@ -76,7 +80,7 @@ public class SlackDecoratorTest {
 	void shouldCallDelegateWhenDisabled() {
 		slackDecorator.decorate(testCommand).run().blockingAwait();
 		verify(testCommand).run();
-		noMoreRequests();
+		testDataUtil.assertNoMoreRequests(server);
 	}
 
 	@Test
@@ -86,7 +90,7 @@ public class SlackDecoratorTest {
 		slackDecorator.decorate(testCommand).run().blockingAwait();
 		verify(testCommand).run();
 		var request = server.takeRequest();
-		var body = assertRequest(request, "/webhook?key=val");
+		var body = testDataUtil.assertRequest(request, "/webhook?key=val");
 		var payload = decodePayload(body);
 		log.info("Payload: " + payload);
 		assertEquals("#channel-name", payload.get("channel").asText());
@@ -96,7 +100,7 @@ public class SlackDecoratorTest {
 		assertEquals(1, attachments.size());
 		assertTrue(attachments.get(0).get("fallback").asText().startsWith("command-name completed in PT"));
 		assertTrue(attachments.get(0).get("text").asText().startsWith("command-name completed in PT"));
-		noMoreRequests();
+		testDataUtil.assertNoMoreRequests(server);
 	}
 
 	@Test
@@ -110,7 +114,7 @@ public class SlackDecoratorTest {
 		assertEquals("test error message", error.getMessage());
 		verify(testCommand).run();
 		var request = server.takeRequest();
-		var body = assertRequest(request, "/webhook?key=val");
+		var body = testDataUtil.assertRequest(request, "/webhook?key=val");
 		var payload = decodePayload(body);
 		log.info("Payload: " + payload);
 		assertEquals("#channel-name", payload.get("channel").asText());
@@ -120,18 +124,7 @@ public class SlackDecoratorTest {
 		assertEquals(1, attachments.size());
 		assertTrue(attachments.get(0).get("fallback").asText().startsWith("command-name failed after PT"));
 		assertTrue(attachments.get(0).get("text").asText().startsWith("command-name failed after PT"));
-		noMoreRequests();
-	}
-
-	private static byte[] assertRequest(RecordedRequest request, String path) {
-		assertEquals(path, request.getPath());
-		assertEquals("POST", request.getMethod());
-		return request.getBody().readByteArray();
-	}
-
-	@SneakyThrows
-	private void noMoreRequests() {
-		assertNull(server.takeRequest(1, TimeUnit.MILLISECONDS));
+		testDataUtil.assertNoMoreRequests(server);
 	}
 
 	@SneakyThrows

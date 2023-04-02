@@ -8,6 +8,7 @@ import static org.mockito.Mockito.when;
 
 import com.autonomouslogic.everef.cli.Command;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
+import com.autonomouslogic.everef.test.TestDataUtil;
 import io.reactivex.rxjava3.core.Completable;
 import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
@@ -37,6 +38,9 @@ public class HealthcheckDecoratorTest {
 	@Inject
 	HealthcheckDecorator healthcheckDecorator;
 
+	@Inject
+	TestDataUtil testDataUtil;
+
 	MockWebServer server;
 
 	@BeforeEach
@@ -64,7 +68,7 @@ public class HealthcheckDecoratorTest {
 	void shouldCallDelegateWhenDisabled() {
 		healthcheckDecorator.decorate(testCommand).run().blockingAwait();
 		verify(testCommand).run();
-		noMoreRequests();
+		testDataUtil.assertNoMoreRequests(server);
 	}
 
 	@Test
@@ -74,8 +78,8 @@ public class HealthcheckDecoratorTest {
 		healthcheckDecorator.decorate(testCommand).run().blockingAwait();
 		verify(testCommand).run();
 		var request = server.takeRequest();
-		assertRequest(request, "/finish?key=val");
-		noMoreRequests();
+		testDataUtil.assertRequest(request, "/finish?key=val");
+		testDataUtil.assertNoMoreRequests(server);
 	}
 
 	@Test
@@ -85,8 +89,8 @@ public class HealthcheckDecoratorTest {
 		healthcheckDecorator.decorate(testCommand).run().blockingAwait();
 		verify(testCommand).run();
 		var request = server.takeRequest();
-		assertRequest(request, "/start?key=val");
-		noMoreRequests();
+		testDataUtil.assertRequest(request, "/start?key=val");
+		testDataUtil.assertNoMoreRequests(server);
 	}
 
 	@Test
@@ -100,8 +104,8 @@ public class HealthcheckDecoratorTest {
 		assertEquals("test error message", error.getMessage());
 		verify(testCommand).run();
 		var request = server.takeRequest();
-		assertRequest(request, "/fail?key=val");
-		noMoreRequests();
+		testDataUtil.assertRequest(request, "/fail?key=val");
+		testDataUtil.assertNoMoreRequests(server);
 	}
 
 	@Test
@@ -115,8 +119,8 @@ public class HealthcheckDecoratorTest {
 		assertEquals("test error message", error.getMessage());
 		verify(testCommand).run();
 		var request = server.takeRequest();
-		assertRequest(request, "/log?key=val", "RuntimeException: test error message");
-		noMoreRequests();
+		testDataUtil.assertRequest(request, "/log?key=val", "RuntimeException: test error message");
+		testDataUtil.assertNoMoreRequests(server);
 	}
 
 	@Test
@@ -129,10 +133,10 @@ public class HealthcheckDecoratorTest {
 		healthcheckDecorator.decorate(testCommand).run().blockingAwait();
 		verify(testCommand).run();
 		var start = server.takeRequest();
-		assertRequest(start, "/start?key=val");
+		testDataUtil.assertRequest(start, "/start?key=val");
 		var finish = server.takeRequest();
-		assertRequest(finish, "/finish?key=val");
-		noMoreRequests();
+		testDataUtil.assertRequest(finish, "/finish?key=val");
+		testDataUtil.assertNoMoreRequests(server);
 	}
 
 	@Test
@@ -149,31 +153,11 @@ public class HealthcheckDecoratorTest {
 		assertEquals("test error message", error.getMessage());
 		verify(testCommand).run();
 		var start = server.takeRequest();
-		assertRequest(start, "/start?key=val");
+		testDataUtil.assertRequest(start, "/start?key=val");
 		var log = server.takeRequest();
-		assertRequest(log, "/log?key=val", "RuntimeException: test error message");
+		testDataUtil.assertRequest(log, "/log?key=val", "RuntimeException: test error message");
 		var fail = server.takeRequest();
-		assertRequest(fail, "/fail?key=val");
-		noMoreRequests();
-	}
-
-	private static void assertRequest(RecordedRequest request, String path) {
-		assertRequest(request, path, null);
-	}
-
-	private static void assertRequest(RecordedRequest request, String path, String body) {
-		assertEquals(path, request.getPath());
-		assertEquals("POST", request.getMethod());
-		if (body == null) {
-			assertEquals(0, request.getBodySize());
-		} else {
-			assertEquals(body, request.getBody().readUtf8());
-		}
-		assertEquals("everef.net", request.getHeader("user-agent"));
-	}
-
-	@SneakyThrows
-	private void noMoreRequests() {
-		assertNull(server.takeRequest(1, TimeUnit.MILLISECONDS));
+		testDataUtil.assertRequest(fail, "/fail?key=val");
+		testDataUtil.assertNoMoreRequests(server);
 	}
 }

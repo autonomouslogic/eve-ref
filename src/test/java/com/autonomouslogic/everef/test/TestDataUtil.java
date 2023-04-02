@@ -7,23 +7,23 @@ import java.io.InputStreamReader;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.SneakyThrows;
-import okhttp3.MediaType;
-import okhttp3.Response;
-import okhttp3.mock.MockInterceptor;
+import okhttp3.mockwebserver.MockWebServer;
+import okhttp3.mockwebserver.RecordedRequest;
 import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream;
 import org.apache.commons.csv.CSVFormat;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 @Singleton
 public class TestDataUtil {
 	@Inject
 	ObjectMapper objectMapper;
-
-	@Inject
-	MockInterceptor http;
 
 	@Inject
 	protected TestDataUtil() {}
@@ -45,15 +45,28 @@ public class TestDataUtil {
 		return objectMapper.readValue(in, list);
 	}
 
-	public Response.Builder mockResponse(String url, String body) {
-		return mockResponse(url, body.getBytes());
+	public byte[] assertRequest(RecordedRequest request, String path) {
+		return assertRequest(request, path, null);
 	}
 
-	public Response.Builder mockResponse(String url) {
-		return http.addRule().get(url).anyTimes().respond(204);
+	public byte[] assertRequest(RecordedRequest request, String path, String body) {
+		assertEquals(path, request.getPath());
+		assertEquals("POST", request.getMethod());
+		var bodyString = request.getBody().readByteArray();
+		if (body == null) {
+			assertEquals(0, request.getBodySize());
+		} else {
+			assertEquals(body, bodyString);
+		}
+		return bodyString;
 	}
 
-	public Response.Builder mockResponse(String url, byte[] body) {
-		return http.addRule().get(url).anyTimes().respond(body, MediaType.get("application/json"));
+	public void assertUserAgent(RecordedRequest request) {
+		assertEquals("everef.net", request.getHeader("User-Agent"));
+	}
+
+	@SneakyThrows
+	public void assertNoMoreRequests(MockWebServer server) {
+		assertNull(server.takeRequest(1, TimeUnit.MILLISECONDS));
 	}
 }
