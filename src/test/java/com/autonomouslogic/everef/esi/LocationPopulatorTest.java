@@ -28,7 +28,7 @@ import org.junitpioneer.jupiter.SetEnvironmentVariable;
 @SetEnvironmentVariable(key = "ESI_USER_AGENT", value = "user-agent")
 @SetEnvironmentVariable(key = "ESI_BASE_PATH", value = "http://localhost:" + LocationPopulatorTest.PORT)
 public class LocationPopulatorTest {
-	private static final int PORT = 20730;
+	static final int PORT = 20730;
 
 	@Inject
 	LocationPopulator locationPopulator;
