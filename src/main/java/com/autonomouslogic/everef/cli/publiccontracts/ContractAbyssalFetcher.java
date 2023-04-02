@@ -2,6 +2,7 @@ package com.autonomouslogic.everef.cli.publiccontracts;
 
 import com.autonomouslogic.everef.esi.EsiHelper;
 import com.autonomouslogic.everef.esi.EsiUrl;
+import com.autonomouslogic.everef.esi.MetaGroupScraper;
 import com.autonomouslogic.everef.esi.UniverseEsi;
 import com.autonomouslogic.everef.util.OkHttpHelper;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -23,6 +24,8 @@ import org.h2.mvstore.MVMap;
  */
 @Log4j2
 public class ContractAbyssalFetcher {
+	private static final int ABYSSAL_META_GROUP = 15;
+
 	@Inject
 	protected ObjectMapper objectMapper;
 
@@ -34,6 +37,9 @@ public class ContractAbyssalFetcher {
 
 	@Inject
 	protected UniverseEsi universeEsi;
+
+	@Inject
+	protected MetaGroupScraper metaGroupScraper;
 
 	@Setter
 	private MVMap<Long, JsonNode> dynamicItemsStore;
@@ -79,16 +85,27 @@ public class ContractAbyssalFetcher {
 			if (isGreaterThan(item, "quantity", 1)) {
 				return Single.just(false);
 			}
-			var typeId = item.get("type_id").asInt();
-			return universeEsi.getType(typeId).isEmpty().map(empty -> !empty);
-
-			// @todo This doesn't exist in the ESI, so will need the SDE conversion first.
-			// Long metaGroupId = type.getMetaGroupId();
-			// if (metaGroupId == null) {
-			//	return false;
-			// }
-			// return metaGroupId == 15;
+			return verifyMetaGroup(item).flatMap(b -> {
+				if (!b) {
+					return Single.just(b);
+				}
+				return verifyType(item);
+			});
 		});
+	}
+
+	private Single<Boolean> verifyType(ObjectNode item) {
+		var typeId = item.get("type_id").asInt();
+		return universeEsi.getType(typeId).isEmpty().map(empty -> !empty);
+	}
+
+	private Single<Boolean> verifyMetaGroup(ObjectNode item) {
+		var typeId = item.get("type_id").asInt();
+		return metaGroupScraper
+				.scrapeTypeIds(ABYSSAL_META_GROUP)
+				.filter(id -> id == typeId)
+				.isEmpty()
+				.map(empty -> !empty);
 	}
 
 	private boolean isNullOrEmpty(ObjectNode node, String field) {

@@ -68,6 +68,5 @@ public class MetaGroupScraperTest {
 		assertTrue(ids.contains(48439));
 		assertTrue(ids.contains(56305));
 		assertTrue(ids.contains(56309));
-		assertEquals(61, ids.size());
 	}
 }

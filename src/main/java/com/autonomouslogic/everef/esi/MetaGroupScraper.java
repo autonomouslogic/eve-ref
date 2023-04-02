@@ -45,6 +45,7 @@ public class MetaGroupScraper {
 			return loadHtml(metaGroupId)
 					.map(html -> {
 						var ids = parseHtml(html);
+						log.debug(String.format("Scraped %s types from meta group %s", ids.size(), metaGroupId));
 						typeIds = ids;
 						return ids;
 					})
@@ -55,6 +56,7 @@ public class MetaGroupScraper {
 
 	private Single<String> loadHtml(int metaGroupId) {
 		var url = eveRefBasePath + "/meta-groups/" + metaGroupId;
+		log.debug(String.format("Scraping types from meta group %s: %s", metaGroupId, url));
 		return okHttpHelper.get(url, okHttpClient).map(response -> {
 			if (response.code() != 200) {
 				throw new RuntimeException("Scrape failed: " + response.code());
