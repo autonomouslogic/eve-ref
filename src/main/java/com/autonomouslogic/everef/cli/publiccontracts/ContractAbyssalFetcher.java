@@ -79,7 +79,7 @@ public class ContractAbyssalFetcher {
 			if (isGreaterThan(item, "quantity", 1)) {
 				return Single.just(false);
 			}
-			long typeId = item.get("type_id").asLong();
+			var typeId = item.get("type_id").asInt();
 			return universeEsi.getType(typeId).isEmpty().map(empty -> !empty);
 
 			// @todo This doesn't exist in the ESI, so will need the SDE conversion first.
