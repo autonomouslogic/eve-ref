@@ -67,7 +67,6 @@ java {
 	withSourcesJar()
 }
 
-def esiOpenApiPackage = ""
 openApiGenerate {
 	generatorName = "kotlin"
 	inputSpec = "$rootDir/lib/esi-latest.json"
