@@ -5,13 +5,6 @@ import com.autonomouslogic.everef.util.TempFiles;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import lombok.SneakyThrows;
-import lombok.extern.log4j.Log4j2;
-import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
-import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
-import org.apache.commons.io.IOUtils;
-
-import javax.inject.Inject;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -19,6 +12,12 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.Collection;
+import javax.inject.Inject;
+import lombok.SneakyThrows;
+import lombok.extern.log4j.Log4j2;
+import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
+import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
+import org.apache.commons.io.IOUtils;
 
 /**
  * Builds the public contract distribution files.
@@ -36,8 +35,7 @@ public class ContractsFileBuilder {
 
 	@Inject
 	protected ContractsFileBuilder(ObjectMapper objectMapper) {
-		this.objectMapper = objectMapper.copy()
-			.disable(SerializationFeature.CLOSE_CLOSEABLE);
+		this.objectMapper = objectMapper.copy().disable(SerializationFeature.CLOSE_CLOSEABLE);
 	}
 
 	@SneakyThrows
@@ -96,10 +94,9 @@ public class ContractsFileBuilder {
 
 	@SneakyThrows
 	private void writeEntries(Iterable<JsonNode> entries, String filename) {
-		var file = tempFiles.tempFile(getClass().getSimpleName(), "-" + filename).toFile();
-		new JsonNodeCsvWriter()
-			.setOut(file)
-			.writeAll(entries);
+		var file =
+				tempFiles.tempFile(getClass().getSimpleName(), "-" + filename).toFile();
+		new JsonNodeCsvWriter().setOut(file).writeAll(entries);
 		writeEntry(filename, file.length(), new FileInputStream(file));
 	}
 

@@ -8,28 +8,23 @@ import com.autonomouslogic.everef.openapi.esi.models.GetUniverseRegionsRegionIdO
 import com.autonomouslogic.everef.util.OkHttpHelper;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Flowable;
-import io.reactivex.rxjava3.core.Observable;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
+import javax.inject.Inject;
+import javax.inject.Named;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
 import org.h2.mvstore.MVMap;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicInteger;
-
 
 /**
  * Fetches all the public contracts for all the regions.
@@ -38,17 +33,23 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class ContractFetcher {
 	@Inject
 	protected ObjectMapper objectMapper;
+
 	@Inject
 	protected LocationPopulator locationPopulator;
+
 	@Inject
 	protected UniverseEsi universeEsi;
+
 	@Inject
 	@Getter
 	protected ContractAbyssalFetcher contractAbyssalFetcher;
+
 	@Inject
 	protected EsiHelper esiHelper;
+
 	@Inject
 	protected OkHttpHelper okHttpHelper;
+
 	@Inject
 	@Named("esi")
 	protected OkHttpClient okHttpClient;
@@ -56,9 +57,11 @@ public class ContractFetcher {
 	@Setter
 	@NonNull
 	private MVMap<Long, JsonNode> contractsStore;
+
 	@Setter
 	@NonNull
 	private MVMap<Long, JsonNode> itemsStore;
+
 	@Setter
 	@NonNull
 	private MVMap<Long, JsonNode> bidsStore;
@@ -66,50 +69,51 @@ public class ContractFetcher {
 	private final Set<Long> contractsWithItems = Collections.newSetFromMap(new ConcurrentHashMap<>());
 
 	@Inject
-	protected ContractFetcher() {
-	}
+	protected ContractFetcher() {}
 
 	public Flowable<Long> fetchPublicContracts() {
 		return buildKnownItemIndex()
-			.andThen(universeEsi.getAllRegions()
-				.flatMap(region -> fetchContractsForRegion(region), 3));
+				.andThen(universeEsi.getAllRegions().flatMap(region -> fetchContractsForRegion(region), 3));
 	}
 
 	private Flowable<Long> fetchContractsForRegion(GetUniverseRegionsRegionIdOk region) {
 		var count = new AtomicInteger();
 		return Flowable.defer(() -> {
-				log.info(String.format("Fetching public from %s", region.getName()));
-				var esiUrl = EsiUrl.builder()
-					.urlPath(String.format("/contracts/public/%s", region.getRegionId()))
-					.build();
-				return esiHelper
-					.fetchPagesOfJsonArrays(esiUrl, (entry, response) -> {
-						var lastModified = okHttpHelper.getLastModified(response);
-						var obj = (ObjectNode) entry;
-						lastModified.ifPresent(date -> obj.put(
-							"http_last_modified", date.toInstant().toString()));
-						return obj;
-					})
-					.flatMap(entry -> {
-						var obj = (ObjectNode) entry;
-						var contractId = obj.get("contract_id").asLong();
-						obj.put("region_id", region.getRegionId());
-						return
-							locationPopulator.populate(obj, "start_location_id")
-								.andThen(Completable.fromAction(() ->
-									contractsStore.put(contractId, obj)))
-								.andThen(resolveItemsAndBids(obj))
-								.andThen(Flowable.just(contractId));
-					}, 32)
-					.doOnNext(ignore -> {
-						var n = count.incrementAndGet();
-						if (n % 1_000 == 0) {
-							log.debug(String.format("Fetched %d public contracts from %s", n, region.getName()));
-						}
-					});
-			})
-			.doOnComplete(() ->
-				log.info(String.format("Fetched %d public contracts from %s", count.get(), region.getName())));
+					log.info(String.format("Fetching public from %s", region.getName()));
+					var esiUrl = EsiUrl.builder()
+							.urlPath(String.format("/contracts/public/%s", region.getRegionId()))
+							.build();
+					return esiHelper
+							.fetchPagesOfJsonArrays(esiUrl, (entry, response) -> {
+								var lastModified = okHttpHelper.getLastModified(response);
+								var obj = (ObjectNode) entry;
+								lastModified.ifPresent(date -> obj.put(
+										"http_last_modified", date.toInstant().toString()));
+								return obj;
+							})
+							.flatMap(
+									entry -> {
+										var obj = (ObjectNode) entry;
+										var contractId = obj.get("contract_id").asLong();
+										obj.put("region_id", region.getRegionId());
+										return locationPopulator
+												.populate(obj, "start_location_id")
+												.andThen(Completable.fromAction(
+														() -> contractsStore.put(contractId, obj)))
+												.andThen(resolveItemsAndBids(obj))
+												.andThen(Flowable.just(contractId));
+									},
+									32)
+							.doOnNext(ignore -> {
+								var n = count.incrementAndGet();
+								if (n % 1_000 == 0) {
+									log.debug(
+											String.format("Fetched %d public contracts from %s", n, region.getName()));
+								}
+							});
+				})
+				.doOnComplete(() ->
+						log.info(String.format("Fetched %d public contracts from %s", count.get(), region.getName())));
 	}
 
 	private Completable resolveItemsAndBids(ObjectNode contract) {
@@ -138,33 +142,34 @@ public class ContractFetcher {
 	}
 
 	private Completable fetchContractBids(long contractId) {
-		return fetchContractSub("bids", "bid_id", bidsStore, contractId)
-			.ignoreElements();
+		return fetchContractSub("bids", "bid_id", bidsStore, contractId).ignoreElements();
 	}
 
-	private Flowable<ObjectNode> fetchContractSub(String sub, String primaryKey, Map<Long, JsonNode> mapStore, long contractId) {
+	private Flowable<ObjectNode> fetchContractSub(
+			String sub, String primaryKey, Map<Long, JsonNode> mapStore, long contractId) {
 		var esiUrl = EsiUrl.builder()
-			.urlPath(String.format("/contracts/public/%s/%s", sub, contractId))
-			.build();
+				.urlPath(String.format("/contracts/public/%s/%s", sub, contractId))
+				.build();
 		return esiHelper
-			.fetchPagesOfJsonArrays(esiUrl, (entry, response) -> {
-				var lastModified = okHttpHelper.getLastModified(response);
-				var obj = (ObjectNode) entry;
-				lastModified.ifPresent(date -> obj.put(
-					"http_last_modified", date.toInstant().toString()));
-				return obj;
-			})
-			.switchIfEmpty(Flowable.defer(() -> {
-				log.info(String.format("Public contract %s did not return anything for contract %s", sub, contractId));
-				return Flowable.empty();
-			}))
-			.map(entry -> {
-				var obj = (ObjectNode) entry;
-				obj.put("contract_id", contractId);
-				long id = entry.get(primaryKey).asLong();
-				mapStore.put(id, obj);
-				return obj;
-			});
+				.fetchPagesOfJsonArrays(esiUrl, (entry, response) -> {
+					var lastModified = okHttpHelper.getLastModified(response);
+					var obj = (ObjectNode) entry;
+					lastModified.ifPresent(date ->
+							obj.put("http_last_modified", date.toInstant().toString()));
+					return obj;
+				})
+				.switchIfEmpty(Flowable.defer(() -> {
+					log.info(String.format(
+							"Public contract %s did not return anything for contract %s", sub, contractId));
+					return Flowable.empty();
+				}))
+				.map(entry -> {
+					var obj = (ObjectNode) entry;
+					obj.put("contract_id", contractId);
+					long id = entry.get(primaryKey).asLong();
+					mapStore.put(id, obj);
+					return obj;
+				});
 	}
 
 	/**
@@ -174,7 +179,10 @@ public class ContractFetcher {
 	private Completable buildKnownItemIndex() {
 		return Completable.fromAction(() -> {
 			log.debug("Building item contract index.");
-			itemsStore.values().forEach(item -> contractsWithItems.add(item.get("contract_id").asLong()));
+			itemsStore
+					.values()
+					.forEach(item ->
+							contractsWithItems.add(item.get("contract_id").asLong()));
 			log.debug(String.format("Built list of %s known contracts with items.", contractsWithItems.size()));
 		});
 	}

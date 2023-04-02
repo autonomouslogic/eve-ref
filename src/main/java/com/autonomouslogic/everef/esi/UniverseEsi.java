@@ -32,8 +32,7 @@ public class UniverseEsi {
 	private final Map<Integer, Optional<GetUniverseSystemsSystemIdOk>> systems = new ConcurrentHashMap<>();
 	private final Map<Integer, Optional<GetUniverseConstellationsConstellationIdOk>> constellations =
 			new ConcurrentHashMap<>();
-	private final Map<Long, Optional<GetUniverseTypesTypeIdOk>> types =
-			new ConcurrentHashMap<>();
+	private final Map<Long, Optional<GetUniverseTypesTypeIdOk>> types = new ConcurrentHashMap<>();
 
 	@Inject
 	protected UniverseEsi() {}
@@ -129,8 +128,7 @@ public class UniverseEsi {
 		return Maybe.defer(() -> {
 					log.trace(String.format("Fetching type %s", typeId));
 					var source = UniverseApi.Datasource_getUniverseTypesTypeId.valueOf(datasource);
-					var type = universeApi.getUniverseTypesTypeId(
-						typeId, null, source, null, null);
+					var type = universeApi.getUniverseTypesTypeId((int) typeId, null, source, null, null);
 					var optional = Optional.ofNullable(type);
 					types.put(typeId, optional);
 					return Maybe.fromOptional(optional);

@@ -91,12 +91,12 @@ public class ScrapeMarketOrders implements Command {
 	@Override
 	public Completable run() {
 		return Completable.concatArray(
-				initScrapeTime(),
-				initMvStore(),
-				fetchOrders(),
-				writeOrders().flatMapCompletable(this::uploadFile),
-				dataIndexProvider.get().run())
-			.doFinally(this::closeMvStore);
+						initScrapeTime(),
+						initMvStore(),
+						fetchOrders(),
+						writeOrders().flatMapCompletable(this::uploadFile),
+						dataIndexProvider.get().run())
+				.doFinally(this::closeMvStore);
 	}
 
 	private Completable initScrapeTime() {
@@ -111,10 +111,10 @@ public class ScrapeMarketOrders implements Command {
 		return Completable.fromAction(() -> {
 			mvStore = mvStoreUtil.createTempStore("market-orders");
 			marketOrdersStore = mvStore.openMap(
-				"market-orders",
-				new MVMap.Builder<Long, JsonNode>()
-					.keyType(new ObjectDataType())
-					.valueType(jsonNodeDataType));
+					"market-orders",
+					new MVMap.Builder<Long, JsonNode>()
+							.keyType(new ObjectDataType())
+							.valueType(jsonNodeDataType));
 			marketOrderFetcher.setMarketOrdersStore(marketOrdersStore);
 			marketOrdersWriter.setMarketOrdersStore(marketOrdersStore);
 		});
@@ -123,8 +123,7 @@ public class ScrapeMarketOrders implements Command {
 	private void closeMvStore() {
 		try {
 			mvStore.close();
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			log.debug("Failed closing MVStore, ignoring");
 		}
 	}

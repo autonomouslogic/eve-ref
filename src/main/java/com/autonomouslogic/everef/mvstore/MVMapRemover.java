@@ -1,13 +1,12 @@
 package com.autonomouslogic.everef.mvstore;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import org.h2.mvstore.MVMap;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiPredicate;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import org.h2.mvstore.MVMap;
 
 /**
  * Conditionally removed entries from an MVMap.
@@ -17,6 +16,7 @@ import java.util.function.BiPredicate;
 @RequiredArgsConstructor
 public class MVMapRemover<K, V> {
 	private final MVMap<K, V> map;
+
 	@Getter
 	private int entriesRemoved;
 
