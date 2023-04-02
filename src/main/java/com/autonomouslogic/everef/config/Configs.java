@@ -251,4 +251,13 @@ public class Configs {
 			.type(Integer.class)
 			.defaultValue(128)
 			.build();
+
+	/**
+	 * Base path for requests to the main EVE Ref website.
+	 */
+	public static final Config<String> EVE_REF_BASE_PATH = Config.<String>builder()
+			.name("EVE_REF_BASE_PATH")
+			.type(String.class)
+			.defaultValue("https://everef.net")
+			.build();
 }

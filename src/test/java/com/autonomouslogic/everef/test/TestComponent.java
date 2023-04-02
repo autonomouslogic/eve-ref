@@ -9,6 +9,7 @@ import com.autonomouslogic.everef.esi.EsiHelperTest;
 import com.autonomouslogic.everef.esi.EsiLimitExceededInterceptorTest;
 import com.autonomouslogic.everef.esi.EsiRateLimitInterceptorTest;
 import com.autonomouslogic.everef.esi.LocationPopulatorTest;
+import com.autonomouslogic.everef.esi.MetaGroupScraperTest;
 import com.autonomouslogic.everef.esi.MockLocationPopulatorModule;
 import com.autonomouslogic.everef.inject.AwsModule;
 import com.autonomouslogic.everef.inject.EsiModule;
@@ -40,6 +41,8 @@ public interface TestComponent {
 	void inject(HealthcheckDecoratorTest test);
 
 	void inject(LocationPopulatorTest test);
+
+	void inject(MetaGroupScraperTest test);
 
 	void inject(ScrapeMarketOrdersTest test);
 
