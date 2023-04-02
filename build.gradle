@@ -95,7 +95,7 @@ test {
 		showStackTraces = true
 	}
 
-	environment "LOG_LEVEL", "debug"
+	environment "LOG_LEVEL", "trace"
 
 	// https://junit-pioneer.org/docs/environment-variables/#warnings-for-reflective-access
 	jvmArgs("--add-opens", "java.base/java.util=ALL-UNNAMED", "--add-opens", "java.base/java.lang=ALL-UNNAMED")

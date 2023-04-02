@@ -1,7 +1,6 @@
 package com.autonomouslogic.everef.cli.decorator;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -10,13 +9,11 @@ import com.autonomouslogic.everef.cli.Command;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.test.TestDataUtil;
 import io.reactivex.rxjava3.core.Completable;
-import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
-import okhttp3.mockwebserver.RecordedRequest;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -78,7 +75,7 @@ public class HealthcheckDecoratorTest {
 		healthcheckDecorator.decorate(testCommand).run().blockingAwait();
 		verify(testCommand).run();
 		var request = server.takeRequest();
-		testDataUtil.assertRequest(request, "/finish?key=val");
+		testDataUtil.assertRequest(request, "POST", "/finish?key=val", null);
 		testDataUtil.assertNoMoreRequests(server);
 	}
 
@@ -89,7 +86,7 @@ public class HealthcheckDecoratorTest {
 		healthcheckDecorator.decorate(testCommand).run().blockingAwait();
 		verify(testCommand).run();
 		var request = server.takeRequest();
-		testDataUtil.assertRequest(request, "/start?key=val");
+		testDataUtil.assertRequest(request, "POST", "/start?key=val", null);
 		testDataUtil.assertNoMoreRequests(server);
 	}
 
@@ -104,7 +101,7 @@ public class HealthcheckDecoratorTest {
 		assertEquals("test error message", error.getMessage());
 		verify(testCommand).run();
 		var request = server.takeRequest();
-		testDataUtil.assertRequest(request, "/fail?key=val");
+		testDataUtil.assertRequest(request, "POST", "/fail?key=val", null);
 		testDataUtil.assertNoMoreRequests(server);
 	}
 
@@ -133,9 +130,9 @@ public class HealthcheckDecoratorTest {
 		healthcheckDecorator.decorate(testCommand).run().blockingAwait();
 		verify(testCommand).run();
 		var start = server.takeRequest();
-		testDataUtil.assertRequest(start, "/start?key=val");
+		testDataUtil.assertRequest(start, "POST", "/start?key=val", null);
 		var finish = server.takeRequest();
-		testDataUtil.assertRequest(finish, "/finish?key=val");
+		testDataUtil.assertRequest(finish, "POST", "/finish?key=val", null);
 		testDataUtil.assertNoMoreRequests(server);
 	}
 
@@ -153,11 +150,11 @@ public class HealthcheckDecoratorTest {
 		assertEquals("test error message", error.getMessage());
 		verify(testCommand).run();
 		var start = server.takeRequest();
-		testDataUtil.assertRequest(start, "/start?key=val");
+		testDataUtil.assertRequest(start, "POST", "/start?key=val", null);
 		var log = server.takeRequest();
 		testDataUtil.assertRequest(log, "/log?key=val", "RuntimeException: test error message");
 		var fail = server.takeRequest();
-		testDataUtil.assertRequest(fail, "/fail?key=val");
+		testDataUtil.assertRequest(fail, "POST", "/fail?key=val", null);
 		testDataUtil.assertNoMoreRequests(server);
 	}
 }

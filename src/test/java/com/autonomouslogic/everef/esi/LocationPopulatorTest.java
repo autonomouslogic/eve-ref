@@ -21,6 +21,7 @@ import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 import org.jetbrains.annotations.NotNull;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junitpioneer.jupiter.SetEnvironmentVariable;
@@ -85,20 +86,30 @@ public class LocationPopulatorTest {
 			@Override
 			public MockResponse dispatch(@NotNull RecordedRequest recordedRequest) throws InterruptedException {
 				return switch (recordedRequest.getPath()) {
-					case "/latest/universe/regions/100/?datasource=tranquility" ->
-						new MockResponse().setResponseCode(200).setBody(region);
-					case "/universe/constellations/200/?datasource=tranquility" ->
-						new MockResponse().setResponseCode(200).setBody(constellation);
-					case "/latest/universe/systems/300/?datasource=tranquility" ->
-						new MockResponse().setResponseCode(200).setBody(system);
-					case "/latest/universe/stations/400/?datasource=tranquility" ->
-						new MockResponse().setResponseCode(200).setBody(station);
+					case "/universe/regions/100/?datasource=tranquility" -> new MockResponse()
+							.setResponseCode(200)
+							.setBody(region);
+					case "/universe/constellations/200/?datasource=tranquility" -> new MockResponse()
+							.setResponseCode(200)
+							.setBody(constellation);
+					case "/universe/systems/300/?datasource=tranquility" -> new MockResponse()
+							.setResponseCode(200)
+							.setBody(system);
+					case "/universe/stations/400/?datasource=tranquility" -> new MockResponse()
+							.setResponseCode(200)
+							.setBody(station);
 					default -> new MockResponse().setResponseCode(404);
 				};
 			}
 		});
 
 		server.start(PORT);
+	}
+
+	@AfterEach
+	@SneakyThrows
+	void after() {
+		server.close();
 	}
 
 	private ObjectNode baseRecord() {
