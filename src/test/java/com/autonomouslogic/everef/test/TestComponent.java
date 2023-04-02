@@ -5,6 +5,7 @@ import com.autonomouslogic.everef.cli.MockDataIndexModule;
 import com.autonomouslogic.everef.cli.decorator.HealthcheckDecoratorTest;
 import com.autonomouslogic.everef.cli.decorator.SlackDecoratorTest;
 import com.autonomouslogic.everef.cli.marketorders.ScrapeMarketOrdersTest;
+import com.autonomouslogic.everef.cli.publiccontracts.ScrapePublicContractsTest;
 import com.autonomouslogic.everef.esi.EsiHelperTest;
 import com.autonomouslogic.everef.esi.EsiLimitExceededInterceptorTest;
 import com.autonomouslogic.everef.esi.EsiRateLimitInterceptorTest;
@@ -45,6 +46,8 @@ public interface TestComponent {
 	void inject(MetaGroupScraperTest test);
 
 	void inject(ScrapeMarketOrdersTest test);
+
+	void inject(ScrapePublicContractsTest test);
 
 	void inject(SlackDecoratorTest test);
 
