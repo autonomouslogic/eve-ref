@@ -5,14 +5,20 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.test.TestDataUtil;
+import java.time.Duration;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.inject.Inject;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
-import okhttp3.ResponseBody;
-import okhttp3.mock.MediaTypes;
-import okhttp3.mock.MockInterceptor;
+import okhttp3.mockwebserver.Dispatcher;
+import okhttp3.mockwebserver.MockResponse;
+import okhttp3.mockwebserver.MockWebServer;
+import okhttp3.mockwebserver.RecordedRequest;
+import org.jetbrains.annotations.NotNull;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -20,43 +26,60 @@ import org.junitpioneer.jupiter.SetEnvironmentVariable;
 
 @SetEnvironmentVariable(key = "ESI_USER_AGENT", value = "user-agent")
 @SetEnvironmentVariable(key = "ESI_RATE_LIMIT_PER_S", value = "10")
+@SetEnvironmentVariable(key = "ESI_BASE_PATH", value = "http://localhost:" + EsiLimitExceededInterceptorTest.PORT)
 @Log4j2
 public class EsiLimitExceededInterceptorTest {
+	static final int PORT = 20730;
+
 	@Inject
 	TestDataUtil testDataUtil;
 
 	@Inject
 	EsiHelper esiHelper;
 
-	@Inject
-	MockInterceptor http;
+	MockWebServer server;
+
+	volatile boolean isLimited;
+	String limitBody;
+	int limitStatus;
+	Instant limitResetTime;
 
 	@BeforeEach
 	@SneakyThrows
 	void before() {
 		DaggerTestComponent.builder().build().inject(this);
-		testDataUtil.mockResponse("https://esi.evetech.net/latest/page?datasource=tranquility&language=en");
-		http.addRule()
-				.get("https://esi.evetech.net/latest/420-code?datasource=tranquility&language=en")
-				.times(1)
-				.respond(420)
-				.header(EsiLimitExceededInterceptor.RESET_TIME_HEADER, "5");
-		http.addRule()
-				.get("https://esi.evetech.net/latest/420-code?datasource=tranquility&language=en")
-				.anyTimes()
-				.respond(204)
-				.header(EsiLimitExceededInterceptor.RESET_TIME_HEADER, "5");
-		http.addRule()
-				.get("https://esi.evetech.net/latest/420-text?datasource=tranquility&language=en")
-				.times(1)
-				.respond(204)
-				.header(EsiLimitExceededInterceptor.RESET_TIME_HEADER, "5")
-				.body(ResponseBody.create(EsiLimitExceededInterceptor.ESI_420_TEXT, MediaTypes.MEDIATYPE_TEXT));
-		http.addRule()
-				.get("https://esi.evetech.net/latest/420-text?datasource=tranquility&language=en")
-				.anyTimes()
-				.respond(204)
-				.header(EsiLimitExceededInterceptor.RESET_TIME_HEADER, "5");
+		isLimited = false;
+		server = new MockWebServer();
+		server.setDispatcher(new Dispatcher() {
+			@NotNull
+			@Override
+			public MockResponse dispatch(@NotNull RecordedRequest recordedRequest) throws InterruptedException {
+				if (isLimited) {
+					var response = new MockResponse().setResponseCode(limitStatus);
+					if (limitBody != null) {
+						response.setBody(limitBody);
+					}
+					if (limitResetTime != null) {
+						response.setHeader(
+								EsiLimitExceededInterceptor.RESET_TIME_HEADER,
+								Duration.between(Instant.now(), limitResetTime)
+										.truncatedTo(ChronoUnit.SECONDS)
+										.toSeconds());
+					}
+					return response;
+				}
+				return new MockResponse().setResponseCode(200);
+			}
+		});
+		server.start(PORT);
+
+		// testDataUtil.mockResponse("https://esi.evetech.net/latest/page?datasource=tranquility&language=en");
+	}
+
+	@AfterEach
+	@SneakyThrows
+	void after() {
+		server.close();
 	}
 
 	@ParameterizedTest
@@ -69,9 +92,13 @@ public class EsiLimitExceededInterceptorTest {
 		for (int i = 0; i < 4; i++) {
 			var thread = new Thread(() -> {
 				while (true) {
-					var response = esiHelper
-							.fetch(EsiUrl.builder().urlPath("/page").build())
-							.blockingGet();
+					try {
+						esiHelper
+								.fetch(EsiUrl.builder().urlPath("/page").build())
+								.blockingGet();
+					} catch (Exception e) {
+						log.warn("Fail", e);
+					}
 					count.incrementAndGet();
 				}
 			});
@@ -85,20 +112,26 @@ public class EsiLimitExceededInterceptorTest {
 		assertNotEquals(0, count.get());
 		// Execute 420 request, which should initiate a global stop.
 		log.info("Returning 420");
+		limitResetTime = Instant.now().plusSeconds(5);
+		switch (type) {
+			case "code":
+				limitStatus = 420;
+				limitBody = null;
+				break;
+			case "text":
+				limitStatus = 200;
+				limitBody = EsiLimitExceededInterceptor.ESI_420_TEXT;
+				break;
+		}
+		isLimited = true;
 		log.info("Count (2): " + count.get());
-		new Thread(() -> {
-					esiHelper
-							.fetch(EsiUrl.builder().urlPath("/420-" + type).build())
-							.blockingGet();
-				})
-				.start();
-		log.info("Count (3): " + count.get());
 		Thread.sleep(1500);
 		count.set(0);
+		log.info("Count (3): " + count.get());
+		Thread.sleep(3500);
 		log.info("Count (4): " + count.get());
-		Thread.sleep(2500);
-		log.info("Count (5): " + count.get());
 		assertEquals(0, count.get());
+		isLimited = false;
 		// Ensure requests are running again.
 		log.info("Resuming");
 		Thread.sleep(5000);
