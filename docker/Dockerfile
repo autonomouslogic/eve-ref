@@ -1,4 +1,4 @@
-FROM ubuntu:20.04 as build
+FROM ubuntu:22.04 as build
 ARG EVE_REF_VERSION
 COPY build/distributions/eve-ref-${EVE_REF_VERSION}.tar /eve-ref.tar
 RUN tar -xf /eve-ref.tar
