@@ -3,9 +3,8 @@ package com.autonomouslogic.everef;
 import com.autonomouslogic.everef.cli.CommandRunner;
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.inject.MainComponent;
-import javax.inject.Inject;
-
 import io.reactivex.rxjava3.plugins.RxJavaPlugins;
+import javax.inject.Inject;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
