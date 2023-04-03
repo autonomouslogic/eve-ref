@@ -10,12 +10,11 @@ import dagger.Module;
 import dagger.Provides;
 import javax.inject.Named;
 import javax.inject.Singleton;
+import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
-import okhttp3.mock.Behavior;
-import okhttp3.mock.MockInterceptor;
 
 @Module
-public class MockOkHttpModule {
+public class TestOkHttpModule {
 	@Provides
 	@Singleton
 	@Named("esi")
@@ -23,29 +22,35 @@ public class MockOkHttpModule {
 			EsiUserAgentInterceptor userAgentInterceptor,
 			EsiRateLimitInterceptor rateLimitInterceptor,
 			EsiLimitExceededInterceptor limitExceededInterceptor,
-			LoggingInterceptor loggingInterceptor,
-			MockInterceptor mockInterceptor) {
+			LoggingInterceptor loggingInterceptor) {
 		return new OkHttpModule()
 				.esiHttpClient(
 						null, userAgentInterceptor, rateLimitInterceptor, limitExceededInterceptor, loggingInterceptor)
 				.newBuilder()
-				.addInterceptor(mockInterceptor)
-				.addInterceptor(chain -> {
-					throw new RuntimeException(String.format(
-							"Blocking outgoing request to %s", chain.request().url()));
-				})
+				// .addInterceptor(mockInterceptor)
+				.addInterceptor(new NonLocalhostBlockingInterceptor())
 				.build();
 	}
 
 	@Provides
 	@Singleton
 	public OkHttpClient okHttpClient(UserAgentInterceptor userAgentInterceptor, LoggingInterceptor loggingInterceptor) {
-		return new OkHttpModule().mainHttpClient(null, userAgentInterceptor, loggingInterceptor);
+		return new OkHttpModule()
+				.mainHttpClient(null, userAgentInterceptor, loggingInterceptor)
+				.newBuilder()
+				.addInterceptor(new NonLocalhostBlockingInterceptor())
+				.build();
 	}
 
-	@Provides
-	@Singleton
-	public MockInterceptor mockInterceptor() {
-		return new MockInterceptor(Behavior.UNORDERED);
+	private class NonLocalhostBlockingInterceptor implements Interceptor {
+		@Override
+		public okhttp3.Response intercept(Chain chain) throws java.io.IOException {
+			var server = chain.request().url().host();
+			if (!server.equals("localhost")) {
+				throw new RuntimeException(String.format(
+						"Blocking outgoing request to %s", chain.request().url()));
+			}
+			return chain.proceed(chain.request());
+		}
 	}
 }

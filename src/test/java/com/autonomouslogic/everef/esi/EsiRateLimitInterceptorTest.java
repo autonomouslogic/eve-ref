@@ -11,19 +11,30 @@ import java.util.concurrent.atomic.AtomicInteger;
 import javax.inject.Inject;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
+import okhttp3.mockwebserver.Dispatcher;
+import okhttp3.mockwebserver.MockResponse;
+import okhttp3.mockwebserver.MockWebServer;
+import okhttp3.mockwebserver.RecordedRequest;
+import org.jetbrains.annotations.NotNull;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junitpioneer.jupiter.SetEnvironmentVariable;
 
 @SetEnvironmentVariable(key = "ESI_USER_AGENT", value = "user-agent")
 @SetEnvironmentVariable(key = "ESI_RATE_LIMIT_PER_S", value = "5")
+@SetEnvironmentVariable(key = "ESI_BASE_PATH", value = "http://localhost:" + EsiRateLimitInterceptorTest.PORT)
 @Log4j2
 public class EsiRateLimitInterceptorTest {
+	static final int PORT = 20730;
+
 	@Inject
 	TestDataUtil testDataUtil;
 
 	@Inject
 	EsiHelper esiHelper;
+
+	MockWebServer server;
 
 	final Duration duration = Duration.ofSeconds(5);
 
@@ -31,7 +42,23 @@ public class EsiRateLimitInterceptorTest {
 	@SneakyThrows
 	void before() {
 		DaggerTestComponent.builder().build().inject(this);
-		testDataUtil.mockResponse("https://esi.evetech.net/latest/page?datasource=tranquility&language=en");
+		server = new MockWebServer();
+		server.setDispatcher(new Dispatcher() {
+			@NotNull
+			@Override
+			public MockResponse dispatch(@NotNull RecordedRequest recordedRequest) throws InterruptedException {
+				return new MockResponse().setResponseCode(200);
+			}
+		});
+		server.start(PORT);
+
+		// testDataUtil.mockResponse("https://esi.evetech.net/latest/page?datasource=tranquility&language=en");
+	}
+
+	@AfterEach
+	@SneakyThrows
+	void after() {
+		server.close();
 	}
 
 	@Test
