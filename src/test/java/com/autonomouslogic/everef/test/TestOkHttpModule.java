@@ -12,8 +12,6 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
-import okhttp3.mock.Behavior;
-import okhttp3.mock.MockInterceptor;
 
 @Module
 public class TestOkHttpModule {
@@ -42,13 +40,6 @@ public class TestOkHttpModule {
 				.newBuilder()
 				.addInterceptor(new NonLocalhostBlockingInterceptor())
 				.build();
-	}
-
-	@Provides
-	@Singleton
-	@Deprecated
-	public MockInterceptor mockInterceptor() {
-		return new MockInterceptor(Behavior.UNORDERED);
 	}
 
 	private class NonLocalhostBlockingInterceptor implements Interceptor {

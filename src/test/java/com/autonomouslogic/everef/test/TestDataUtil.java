@@ -16,9 +16,6 @@ import java.util.stream.Collectors;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.SneakyThrows;
-import okhttp3.MediaType;
-import okhttp3.Response;
-import okhttp3.mock.MockInterceptor;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream;
@@ -28,10 +25,6 @@ import org.apache.commons.csv.CSVFormat;
 public class TestDataUtil {
 	@Inject
 	ObjectMapper objectMapper;
-
-	@Inject
-	@Deprecated
-	MockInterceptor http;
 
 	@Inject
 	protected TestDataUtil() {}
@@ -79,20 +72,5 @@ public class TestDataUtil {
 	@SneakyThrows
 	public void assertNoMoreRequests(MockWebServer server) {
 		assertNull(server.takeRequest(1, TimeUnit.MILLISECONDS));
-	}
-
-	@Deprecated
-	public Response.Builder mockResponse(String url, String body) {
-		return mockResponse(url, body.getBytes());
-	}
-
-	@Deprecated
-	public Response.Builder mockResponse(String url) {
-		return http.addRule().get(url).anyTimes().respond(204);
-	}
-
-	@Deprecated
-	public Response.Builder mockResponse(String url, byte[] body) {
-		return http.addRule().get(url).anyTimes().respond(body, MediaType.get("application/json"));
 	}
 }
