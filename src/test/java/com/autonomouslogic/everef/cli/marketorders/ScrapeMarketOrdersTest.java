@@ -81,27 +81,26 @@ public class ScrapeMarketOrdersTest {
 			@NotNull
 			@Override
 			public MockResponse dispatch(@NotNull RecordedRequest recordedRequest) throws InterruptedException {
-				switch (recordedRequest.getPath()) {
-					case "/universe/regions/?datasource=tranquility":
-						return new MockResponse().setResponseCode(200).setBody("[10000001,10000002]");
-					case "/universe/regions/10000001/?datasource=tranquility":
-						return new MockResponse()
-								.setResponseCode(200)
-								.setBody("{\"region_id\":10000001,\"name\":\"Derelik\",\"constellations\":[]}");
-					case "/universe/regions/10000002/?datasource=tranquility":
-						return new MockResponse()
-								.setResponseCode(200)
-								.setBody("{\"region_id\":10000002,\"name\":\"The Forge\",\"constellations\":[]}");
-					case "/markets/10000001/orders?order_type=all&datasource=tranquility&language=en":
-						return mockRegionOrders(10000001, 1, 2);
-					case "/markets/10000001/orders?order_type=all&datasource=tranquility&language=en&page=2":
-						return mockRegionOrders(10000001, 2, 2);
-					case "/markets/10000002/orders?order_type=all&datasource=tranquility&language=en":
-						return mockRegionOrders(10000002, 1, 2);
-					case "/markets/10000002/orders?order_type=all&datasource=tranquility&language=en&page=2":
-						return mockRegionOrders(10000002, 2, 2);
-				}
-				return new MockResponse().setResponseCode(404);
+				return switch (recordedRequest.getPath()) {
+					case "/universe/regions/?datasource=tranquility" -> new MockResponse()
+							.setResponseCode(200)
+							.setBody("[10000001,10000002]");
+					case "/universe/regions/10000001/?datasource=tranquility" -> new MockResponse()
+							.setResponseCode(200)
+							.setBody("{\"region_id\":10000001,\"name\":\"Derelik\",\"constellations\":[]}");
+					case "/universe/regions/10000002/?datasource=tranquility" -> new MockResponse()
+							.setResponseCode(200)
+							.setBody("{\"region_id\":10000002,\"name\":\"The Forge\",\"constellations\":[]}");
+					case "/markets/10000001/orders?order_type=all&datasource=tranquility&language=en" -> mockRegionOrders(
+							10000001, 1, 2);
+					case "/markets/10000001/orders?order_type=all&datasource=tranquility&language=en&page=2" -> mockRegionOrders(
+							10000001, 2, 2);
+					case "/markets/10000002/orders?order_type=all&datasource=tranquility&language=en" -> mockRegionOrders(
+							10000002, 1, 2);
+					case "/markets/10000002/orders?order_type=all&datasource=tranquility&language=en&page=2" -> mockRegionOrders(
+							10000002, 2, 2);
+					default -> new MockResponse().setResponseCode(404);
+				};
 			}
 		});
 		server.start(PORT);
