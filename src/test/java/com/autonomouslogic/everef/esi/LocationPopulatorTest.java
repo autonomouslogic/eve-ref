@@ -16,12 +16,21 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.util.List;
 import javax.inject.Inject;
 import lombok.SneakyThrows;
+import okhttp3.mockwebserver.Dispatcher;
+import okhttp3.mockwebserver.MockResponse;
+import okhttp3.mockwebserver.MockWebServer;
+import okhttp3.mockwebserver.RecordedRequest;
+import org.jetbrains.annotations.NotNull;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junitpioneer.jupiter.SetEnvironmentVariable;
 
 @SetEnvironmentVariable(key = "ESI_USER_AGENT", value = "user-agent")
+@SetEnvironmentVariable(key = "ESI_BASE_PATH", value = "http://localhost:" + LocationPopulatorTest.PORT)
 public class LocationPopulatorTest {
+	static final int PORT = 20730;
+
 	@Inject
 	LocationPopulator locationPopulator;
 
@@ -31,14 +40,23 @@ public class LocationPopulatorTest {
 	@Inject
 	ObjectMapper objectMapper;
 
+	MockWebServer server;
+	String region;
+	String constellation;
+	String system;
+	String station;
+
 	@BeforeEach
 	@SneakyThrows
 	void before() {
 		DaggerTestComponent.builder().build().inject(this);
-		var region = objectMapper.writeValueAsString(new GetUniverseRegionsRegionIdOk(List.of(), "Region", 100, ""));
-		var constellation = objectMapper.writeValueAsString(new GetUniverseConstellationsConstellationIdOk(
+
+		server = new MockWebServer();
+
+		region = objectMapper.writeValueAsString(new GetUniverseRegionsRegionIdOk(List.of(), "Region", 100, ""));
+		constellation = objectMapper.writeValueAsString(new GetUniverseConstellationsConstellationIdOk(
 				200, "Constellation", new GetUniverseConstellationsConstellationIdPosition(0, 0, 0), 100, List.of()));
-		var system = objectMapper.writeValueAsString(new GetUniverseSystemsSystemIdOk(
+		system = objectMapper.writeValueAsString(new GetUniverseSystemsSystemIdOk(
 				200,
 				"System",
 				new GetUniverseSystemsSystemIdPosition(0, 0, 0),
@@ -49,7 +67,7 @@ public class LocationPopulatorTest {
 				0,
 				List.of(),
 				List.of()));
-		var station = objectMapper.writeValueAsString(new GetUniverseStationsStationIdOk(
+		station = objectMapper.writeValueAsString(new GetUniverseStationsStationIdOk(
 				0,
 				"Station",
 				0,
@@ -63,14 +81,35 @@ public class LocationPopulatorTest {
 				null,
 				null));
 
-		testDataUtil.mockResponse(
-				"https://esi.evetech.net/latest/universe/regions/100/?datasource=tranquility", region);
-		testDataUtil.mockResponse(
-				"https://esi.evetech.net/latest/universe/constellations/200/?datasource=tranquility", constellation);
-		testDataUtil.mockResponse(
-				"https://esi.evetech.net/latest/universe/systems/300/?datasource=tranquility", system);
-		testDataUtil.mockResponse(
-				"https://esi.evetech.net/latest/universe/stations/400/?datasource=tranquility", station);
+		server.setDispatcher(new Dispatcher() {
+			@NotNull
+			@Override
+			public MockResponse dispatch(@NotNull RecordedRequest recordedRequest) throws InterruptedException {
+				return switch (recordedRequest.getPath()) {
+					case "/universe/regions/100/?datasource=tranquility" -> new MockResponse()
+							.setResponseCode(200)
+							.setBody(region);
+					case "/universe/constellations/200/?datasource=tranquility" -> new MockResponse()
+							.setResponseCode(200)
+							.setBody(constellation);
+					case "/universe/systems/300/?datasource=tranquility" -> new MockResponse()
+							.setResponseCode(200)
+							.setBody(system);
+					case "/universe/stations/400/?datasource=tranquility" -> new MockResponse()
+							.setResponseCode(200)
+							.setBody(station);
+					default -> new MockResponse().setResponseCode(404);
+				};
+			}
+		});
+
+		server.start(PORT);
+	}
+
+	@AfterEach
+	@SneakyThrows
+	void after() {
+		server.close();
 	}
 
 	private ObjectNode baseRecord() {

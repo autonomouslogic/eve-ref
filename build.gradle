@@ -1,13 +1,13 @@
 plugins {
 	id "java"
-	id "org.jetbrains.kotlin.jvm" version "1.8.10"
+	id "org.jetbrains.kotlin.jvm" version "1.8.20"
 	id "idea"
 	id "application"
 	id "jacoco"
-	id "org.danilopianini.git-sensitive-semantic-versioning-gradle-plugin" version "1.1.4"
-	id "io.freefair.lombok" version "8.0.0"
+	id "org.danilopianini.git-sensitive-semantic-versioning-gradle-plugin" version "1.1.5"
+	id "io.freefair.lombok" version "8.0.1"
 	id "com.diffplug.spotless" version "6.17.0"
-	id "org.openapi.generator" version "6.3.0"
+	id "org.openapi.generator" version "6.5.0"
 }
 
 group "com.autonomouslogic.everef"
@@ -38,14 +38,14 @@ dependencies {
 	implementation "io.reactivex.rxjava3:rxjava:3.1.6"
 	implementation "com.autonomouslogic.commons:commons-java:1.6.1"
 	implementation "de.neuland-bfi:pug4j:2.0.6"
-	implementation "software.amazon.awssdk:s3:2.20.28"
+	implementation "software.amazon.awssdk:s3:2.20.37"
 	implementation "com.fasterxml.jackson.core:jackson-annotations:2.14.2"
 	implementation "com.fasterxml.jackson.core:jackson-core:2.14.2"
 	implementation "com.fasterxml.jackson.core:jackson-databind:2.14.2"
 	implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.14.2"
-	implementation "com.fasterxml.jackson.module:jackson-module-kotlin:2.15.0-rc1"
+	implementation "com.fasterxml.jackson.module:jackson-module-kotlin:2.15.0-rc2"
 	implementation "org.apache.commons:commons-pool2:2.11.1"
-	implementation "org.apache.commons:commons-compress:1.22"
+	implementation "org.apache.commons:commons-compress:1.23.0"
 	implementation "com.h2database:h2-mvstore:2.1.214"
 	implementation "com.squareup.okhttp3:okhttp:4.10.0"
 	implementation "org.apache.commons:commons-csv:1.10.0"
@@ -59,7 +59,6 @@ dependencies {
 	testImplementation "org.junit-pioneer:junit-pioneer:2.0.0"
 	testImplementation "org.mockito:mockito-junit-jupiter:5.2.0"
 	testImplementation "com.squareup.okhttp3:mockwebserver:4.10.0"
-	testImplementation "com.github.gmazzo:okhttp-mock:1.5.0" // @todo replace with mockwebserver
 }
 
 java {
@@ -67,7 +66,6 @@ java {
 	withSourcesJar()
 }
 
-def esiOpenApiPackage = ""
 openApiGenerate {
 	generatorName = "kotlin"
 	inputSpec = "$rootDir/lib/esi-latest.json"
@@ -96,7 +94,7 @@ test {
 		showStackTraces = true
 	}
 
-	environment "LOG_LEVEL", "debug"
+	environment "LOG_LEVEL", "trace"
 
 	// https://junit-pioneer.org/docs/environment-variables/#warnings-for-reflective-access
 	jvmArgs("--add-opens", "java.base/java.util=ALL-UNNAMED", "--add-opens", "java.base/java.lang=ALL-UNNAMED")

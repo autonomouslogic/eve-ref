@@ -1,19 +1,23 @@
 package com.autonomouslogic.everef.test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.reactivex.rxjava3.functions.Consumer;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.SneakyThrows;
-import okhttp3.MediaType;
-import okhttp3.Response;
-import okhttp3.mock.MockInterceptor;
+import okhttp3.mockwebserver.MockWebServer;
+import okhttp3.mockwebserver.RecordedRequest;
 import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream;
 import org.apache.commons.csv.CSVFormat;
 
@@ -21,9 +25,6 @@ import org.apache.commons.csv.CSVFormat;
 public class TestDataUtil {
 	@Inject
 	ObjectMapper objectMapper;
-
-	@Inject
-	MockInterceptor http;
 
 	@Inject
 	protected TestDataUtil() {}
@@ -45,15 +46,31 @@ public class TestDataUtil {
 		return objectMapper.readValue(in, list);
 	}
 
-	public Response.Builder mockResponse(String url, String body) {
-		return mockResponse(url, body.getBytes());
+	public void assertRequest(RecordedRequest request, String path) {
+		assertRequest(request, "GET", path, null);
 	}
 
-	public Response.Builder mockResponse(String url) {
-		return http.addRule().get(url).anyTimes().respond(204);
+	public void assertRequest(RecordedRequest request, String path, String expected) {
+		assertRequest(request, "POST", path, body -> assertEquals(expected, body));
 	}
 
-	public Response.Builder mockResponse(String url, byte[] body) {
-		return http.addRule().get(url).anyTimes().respond(body, MediaType.get("application/json"));
+	@SneakyThrows
+	public void assertRequest(RecordedRequest request, String method, String path, Consumer<String> bodyTester) {
+		assertEquals(path, request.getPath());
+		assertEquals(method, request.getMethod());
+		if (bodyTester == null) {
+			assertEquals(0, request.getBodySize());
+		} else {
+			bodyTester.accept(request.getBody().readUtf8());
+		}
+	}
+
+	public void assertUserAgent(RecordedRequest request) {
+		assertEquals("everef.net", request.getHeader("User-Agent"));
+	}
+
+	@SneakyThrows
+	public void assertNoMoreRequests(MockWebServer server) {
+		assertNull(server.takeRequest(1, TimeUnit.MILLISECONDS));
 	}
 }

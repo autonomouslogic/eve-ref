@@ -1,5 +1,6 @@
 package com.autonomouslogic.everef.esi;
 
+import com.autonomouslogic.everef.config.Configs;
 import java.util.Objects;
 import lombok.Builder;
 import lombok.NonNull;
@@ -11,8 +12,6 @@ import lombok.Value;
 @Value
 @Builder(toBuilder = true)
 public class EsiUrl {
-	private static final String BASE_URL = "https://esi.evetech.net/latest";
-
 	@NonNull
 	String urlPath;
 
@@ -28,7 +27,7 @@ public class EsiUrl {
 
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append(BASE_URL);
+		sb.append(Configs.ESI_BASE_PATH.getRequired());
 		Objects.requireNonNull(urlPath);
 		sb.append(urlPath);
 		Objects.requireNonNull(datasource);

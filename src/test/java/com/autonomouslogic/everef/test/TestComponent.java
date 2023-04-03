@@ -25,7 +25,7 @@ import javax.inject.Singleton;
 			AwsModule.class,
 			EsiModule.class,
 			MockS3Module.class,
-			MockOkHttpModule.class,
+			TestOkHttpModule.class,
 			MockDataIndexModule.class,
 			MockLocationPopulatorModule.class
 		})

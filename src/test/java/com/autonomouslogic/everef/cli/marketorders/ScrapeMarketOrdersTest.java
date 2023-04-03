@@ -23,9 +23,13 @@ import java.util.stream.Collectors;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.SneakyThrows;
-import okhttp3.Response;
-import okhttp3.mock.MockInterceptor;
+import okhttp3.mockwebserver.Dispatcher;
+import okhttp3.mockwebserver.MockResponse;
+import okhttp3.mockwebserver.MockWebServer;
+import okhttp3.mockwebserver.RecordedRequest;
 import org.apache.commons.io.IOUtils;
+import org.jetbrains.annotations.NotNull;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -37,14 +41,14 @@ import software.amazon.awssdk.services.s3.S3AsyncClient;
 @ExtendWith(MockitoExtension.class)
 @SetEnvironmentVariable(key = "DATA_PATH", value = "s3://" + ScrapeMarketOrdersTest.BUCKET_NAME + "/")
 @SetEnvironmentVariable(key = "ESI_USER_AGENT", value = "user-agent")
+@SetEnvironmentVariable(key = "ESI_BASE_PATH", value = "http://localhost:" + ScrapeMarketOrdersTest.PORT)
 public class ScrapeMarketOrdersTest {
+	static final int PORT = 20730;
+
 	static final String BUCKET_NAME = "data-bucket";
 
 	@Inject
 	ScrapeMarketOrders scrapeMarketOrders;
-
-	@Inject
-	MockInterceptor http;
 
 	@Inject
 	MockS3Adapter mockS3Adapter;
@@ -62,6 +66,8 @@ public class ScrapeMarketOrdersTest {
 	@Mock
 	LocationPopulator locationPopulator;
 
+	MockWebServer server;
+
 	@BeforeEach
 	@SneakyThrows
 	void before() {
@@ -70,38 +76,44 @@ public class ScrapeMarketOrdersTest {
 				.mockLocationPopulatorModule(new MockLocationPopulatorModule().setLocationPopulator(locationPopulator))
 				.build()
 				.inject(this);
-		// Regions.
-		testDataUtil.mockResponse(
-				"https://esi.evetech.net/latest/universe/regions/?datasource=tranquility", "[10000001,10000002]");
-		testDataUtil.mockResponse(
-				"https://esi.evetech.net/latest/universe/regions/10000001/?datasource=tranquility",
-				"{\"region_id\":10000001,\"name\":\"Derelik\",\"constellations\":[]}");
-		testDataUtil.mockResponse(
-				"https://esi.evetech.net/latest/universe/regions/10000002/?datasource=tranquility",
-				"{\"region_id\":10000002,\"name\":\"The Forge\",\"constellations\":[]}");
-		// Market orders.
-		mockRegionOrders(
-				"https://esi.evetech.net/latest/markets/10000001/orders?order_type=all&datasource=tranquility&language=en",
-				10000001,
-				1,
-				2);
-		mockRegionOrders(
-				"https://esi.evetech.net/latest/markets/10000001/orders?order_type=all&datasource=tranquility&language=en&page=2",
-				10000001,
-				2,
-				2);
-		mockRegionOrders(
-				"https://esi.evetech.net/latest/markets/10000002/orders?order_type=all&datasource=tranquility&language=en",
-				10000002,
-				1,
-				2);
-		mockRegionOrders(
-				"https://esi.evetech.net/latest/markets/10000002/orders?order_type=all&datasource=tranquility&language=en&page=2",
-				10000002,
-				2,
-				2);
+		server = new MockWebServer();
+		server.setDispatcher(new Dispatcher() {
+			@NotNull
+			@Override
+			public MockResponse dispatch(@NotNull RecordedRequest recordedRequest) throws InterruptedException {
+				switch (recordedRequest.getPath()) {
+					case "/universe/regions/?datasource=tranquility":
+						return new MockResponse().setResponseCode(200).setBody("[10000001,10000002]");
+					case "/universe/regions/10000001/?datasource=tranquility":
+						return new MockResponse()
+								.setResponseCode(200)
+								.setBody("{\"region_id\":10000001,\"name\":\"Derelik\",\"constellations\":[]}");
+					case "/universe/regions/10000002/?datasource=tranquility":
+						return new MockResponse()
+								.setResponseCode(200)
+								.setBody("{\"region_id\":10000002,\"name\":\"The Forge\",\"constellations\":[]}");
+					case "/markets/10000001/orders?order_type=all&datasource=tranquility&language=en":
+						return mockRegionOrders(10000001, 1, 2);
+					case "/markets/10000001/orders?order_type=all&datasource=tranquility&language=en&page=2":
+						return mockRegionOrders(10000001, 2, 2);
+					case "/markets/10000002/orders?order_type=all&datasource=tranquility&language=en":
+						return mockRegionOrders(10000002, 1, 2);
+					case "/markets/10000002/orders?order_type=all&datasource=tranquility&language=en&page=2":
+						return mockRegionOrders(10000002, 2, 2);
+				}
+				return new MockResponse().setResponseCode(404);
+			}
+		});
+		server.start(PORT);
+
 		// Locations.
 		when(locationPopulator.populate(any(), any())).thenAnswer(MockLocationPopulatorModule.mockPopulate());
+	}
+
+	@AfterEach
+	@SneakyThrows
+	void after() {
+		server.close();
 	}
 
 	@Test
@@ -143,9 +155,12 @@ public class ScrapeMarketOrdersTest {
 	}
 
 	@SneakyThrows
-	private Response.Builder mockRegionOrders(String url, int regionId, int page, int pages) {
+	private MockResponse mockRegionOrders(int regionId, int page, int pages) {
 		var bytes = IOUtils.toByteArray(loadRegionOrders(regionId, page));
-		return testDataUtil.mockResponse(url, bytes).header("X-Pages", Integer.toString(pages));
+		return new MockResponse()
+				.setResponseCode(200)
+				.setBody(new String(bytes))
+				.addHeader("X-Pages", Integer.toString(pages));
 	}
 
 	@SneakyThrows
