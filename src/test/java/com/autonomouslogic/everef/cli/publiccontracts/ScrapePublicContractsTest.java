@@ -17,7 +17,9 @@ import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.test.MockS3Adapter;
 import com.autonomouslogic.everef.test.TestDataUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.Ordering;
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
@@ -132,6 +134,39 @@ public class ScrapePublicContractsTest {
 				.sorted(Ordering.natural().onResultOf(m -> m.get("contract_id")))
 				.toList());
 		assertEquals(contracts, concat(records.get("contracts.csv")));
+
+		var bids = concat(ListUtil.concat(loadContractBidsMap(190319637), loadContractBidsMap(190442405)).stream()
+				.sorted(Ordering.natural().onResultOf(m -> m.get("bid_id")))
+				.toList());
+		assertEquals(bids, concat(records.get("contract_bids.csv")));
+
+		var items = concat(ListUtil.concat(
+						loadContractItemsMap(189863474),
+						loadContractItemsMap(190123693),
+						loadContractItemsMap(190123973),
+						loadContractItemsMap(190124106),
+						loadContractItemsMap(190160355),
+						loadContractItemsMap(190319637),
+						loadContractItemsMap(190442405),
+						loadContractItemsMap(190753200))
+				.stream()
+				.sorted(Ordering.natural().onResultOf(m -> m.get("record_id")))
+				.toList());
+		assertEquals(items, concat(records.get("contract_items.csv")));
+
+		var dynamicItems = concat(ListUtil.concat(
+						loadDynamicItemsMap(47804, 1027826381003L, 190124106),
+						loadDynamicItemsMap(49734, 1040731418725L, 190160355))
+				.stream()
+				.sorted(Ordering.natural().onResultOf(m -> m.get("item_id")))
+				.toList());
+		assertEquals(dynamicItems, concat(records.get("contract_dynamic_items.csv")));
+
+		// @todo contract_non_dynamic_items.csv
+
+		// @todo contract_dynamic_items_dogma_attributes.csv
+
+		// @todo contract_dynamic_items_dogma_effects.csv
 
 		//			.stream()
 		//			.map(Map::toString)
@@ -261,6 +296,48 @@ public class ScrapePublicContractsTest {
 					m.put("http_last_modified", lastModifiedInstant.toString());
 					m.computeIfAbsent("buyout", k -> "");
 					m.computeIfAbsent("collateral", k -> "");
+					return m;
+				})
+				.toList();
+	}
+
+	private List<Map<String, String>> loadContractBidsMap(int contractId) {
+		return testDataUtil.readMapsFromJson(loadContractBids(contractId)).stream()
+				.map(m -> {
+					m.put("contract_id", String.valueOf(contractId));
+					m.put("http_last_modified", lastModifiedInstant.toString());
+					return m;
+				})
+				.toList();
+	}
+
+	private List<Map<String, String>> loadContractItemsMap(int contractId) {
+		return testDataUtil.readMapsFromJson(loadContractItems(contractId)).stream()
+				.map(m -> {
+					m.put("contract_id", String.valueOf(contractId));
+					m.put("http_last_modified", lastModifiedInstant.toString());
+					m.computeIfAbsent("is_blueprint_copy", k -> "");
+					m.computeIfAbsent("material_efficiency", k -> "");
+					m.computeIfAbsent("time_efficiency", k -> "");
+					m.computeIfAbsent("runs", k -> "");
+					m.computeIfAbsent("item_id", k -> "");
+					return m;
+				})
+				.toList();
+	}
+
+	@SneakyThrows
+	private List<Map<String, String>> loadDynamicItemsMap(int typeId, long itemId, int contractId) {
+		var json = objectMapper.readTree(loadDynamicItems(typeId, itemId));
+		((ObjectNode) json).remove("dogma_attributes");
+		((ObjectNode) json).remove("dogma_effects");
+		var bytes =
+				objectMapper.writeValueAsBytes(objectMapper.createArrayNode().add(json));
+		return testDataUtil.readMapsFromJson(new ByteArrayInputStream(bytes)).stream()
+				.map(m -> {
+					m.put("item_id", String.valueOf(itemId));
+					m.put("contract_id", String.valueOf(contractId));
+					m.put("http_last_modified", lastModifiedInstant.toString());
 					return m;
 				})
 				.toList();
