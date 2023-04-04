@@ -9,7 +9,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
@@ -53,7 +52,8 @@ public class JsonNodeCsvWriter {
 		}
 	}
 
-	private void writeEntry(@NotNull CSVPrinter printer, @NotNull List<String> headers, @NonNull ObjectNode obj) throws IOException {
+	private void writeEntry(@NotNull CSVPrinter printer, @NotNull List<String> headers, @NonNull ObjectNode obj)
+			throws IOException {
 		var record = new ArrayList<String>(headers.size());
 		for (String header : headers) {
 			if (obj.has(header)) {

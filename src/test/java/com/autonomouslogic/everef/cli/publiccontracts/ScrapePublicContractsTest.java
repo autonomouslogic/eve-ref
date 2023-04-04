@@ -17,7 +17,7 @@ import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.test.MockS3Adapter;
 import com.autonomouslogic.everef.test.TestDataUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
+import com.google.common.collect.Ordering;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
@@ -29,8 +29,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import javax.inject.Inject;
 import javax.inject.Named;
-
-import com.google.common.collect.Ordering;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import okhttp3.mockwebserver.Dispatcher;
@@ -126,19 +124,18 @@ public class ScrapePublicContractsTest {
 		var records = testDataUtil.readFileMapsFromBz2TarCsv(content);
 
 		var contracts = concat(ListUtil.concat(
-			loadRegionContractMaps(10000001, 1),
-			loadRegionContractMaps(10000001, 2),
-			loadRegionContractMaps(10000002, 1),
-			loadRegionContractMaps(10000002, 2))
-			.stream().sorted(Ordering.natural().onResultOf(m -> m.get("contract_id"))).toList()
-		);
+						loadRegionContractMaps(10000001, 1),
+						loadRegionContractMaps(10000001, 2),
+						loadRegionContractMaps(10000002, 1),
+						loadRegionContractMaps(10000002, 2))
+				.stream()
+				.sorted(Ordering.natural().onResultOf(m -> m.get("contract_id")))
+				.toList());
 		assertEquals(contracts, concat(records.get("contracts.csv")));
 
-
-
-//			.stream()
-//			.map(Map::toString)
-//			.collect(Collectors.joining("\n"));
+		//			.stream()
+		//			.map(Map::toString)
+		//			.collect(Collectors.joining("\n"));
 		//		var expected = ListUtil.concat(
 		//				loadRegionOrderMaps(10000001, 1),
 		//				loadRegionOrderMaps(10000001, 2),
@@ -178,7 +175,7 @@ public class ScrapePublicContractsTest {
 						return metaGroup15();
 				}
 				var page = Optional.ofNullable(request.getRequestUrl().queryParameter("page"))
-					.map(Integer::parseInt)
+						.map(Integer::parseInt)
 						.orElse(1);
 				if (path.startsWith("/contracts/public/items/")) {
 					var contractId = Long.parseLong(segments.get(3));
@@ -233,12 +230,14 @@ public class ScrapePublicContractsTest {
 
 	@SneakyThrows
 	private InputStream loadRegionContracts(long regionId, int page) {
-		return ResourceUtil.loadContextual(ScrapePublicContractsTest.class, String.format("/contracts-%s-%s.json", regionId, page));
+		return ResourceUtil.loadContextual(
+				ScrapePublicContractsTest.class, String.format("/contracts-%s-%s.json", regionId, page));
 	}
 
 	@SneakyThrows
 	private InputStream loadContractItems(long contractId) {
-		return ResourceUtil.loadContextual(ScrapePublicContractsTest.class, String.format("/items-%s.json", contractId));
+		return ResourceUtil.loadContextual(
+				ScrapePublicContractsTest.class, String.format("/items-%s.json", contractId));
 	}
 
 	@SneakyThrows
@@ -248,32 +247,33 @@ public class ScrapePublicContractsTest {
 
 	@SneakyThrows
 	private InputStream loadDynamicItems(long typeId, long itemId) {
-		return ResourceUtil.loadContextual(ScrapePublicContractsTest.class, String.format("/dynamic-items-%s-%s.json", typeId, itemId));
+		return ResourceUtil.loadContextual(
+				ScrapePublicContractsTest.class, String.format("/dynamic-items-%s-%s.json", typeId, itemId));
 	}
 
 	private List<Map<String, String>> loadRegionContractMaps(int regionId, int page) {
 		return testDataUtil.readMapsFromJson(loadRegionContracts(regionId, page)).stream()
-			.map(m -> {
-				m.put("region_id", String.valueOf(regionId));
-				m.put("constellation_id", String.valueOf(999));
-				m.put("system_id", String.valueOf(999));
-				m.put("station_id", String.valueOf(999));
-				m.put("http_last_modified", lastModifiedInstant.toString());
-				m.computeIfAbsent("buyout", k -> "");
-				m.computeIfAbsent("collateral", k -> "");
-				return m;
-			})
-			.toList();
+				.map(m -> {
+					m.put("region_id", String.valueOf(regionId));
+					m.put("constellation_id", String.valueOf(999));
+					m.put("system_id", String.valueOf(999));
+					m.put("station_id", String.valueOf(999));
+					m.put("http_last_modified", lastModifiedInstant.toString());
+					m.computeIfAbsent("buyout", k -> "");
+					m.computeIfAbsent("collateral", k -> "");
+					return m;
+				})
+				.toList();
 	}
 
 	private String concat(List<Map<String, String>> maps) {
 		return maps.stream()
-			.map(m -> {
-				var newMap = new LinkedHashMap<String, String>();
-				m.keySet().stream().sorted().forEach(k -> newMap.put(k, m.get(k)));
-				return newMap;
-			})
-			.map(Map::toString)
-			.collect(Collectors.joining("\n"));
+				.map(m -> {
+					var newMap = new LinkedHashMap<String, String>();
+					m.keySet().stream().sorted().forEach(k -> newMap.put(k, m.get(k)));
+					return newMap;
+				})
+				.map(Map::toString)
+				.collect(Collectors.joining("\n"));
 	}
 }

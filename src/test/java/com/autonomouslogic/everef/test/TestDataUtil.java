@@ -9,7 +9,6 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringReader;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,7 +19,6 @@ import javax.inject.Singleton;
 import lombok.SneakyThrows;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
-import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
 import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream;
 import org.apache.commons.csv.CSVFormat;
@@ -57,9 +55,16 @@ public class TestDataUtil {
 		if (csv.startsWith("{") || csv.trim().isEmpty()) {
 			return List.of();
 		}
-		var records = CSVFormat.RFC4180.builder().setHeader().setSkipHeaderRecord(true).build().parse(new StringReader(csv)).stream()
-			.map(r -> r.toMap())
-			.collect(Collectors.toList());
+		var records =
+				CSVFormat.RFC4180
+						.builder()
+						.setHeader()
+						.setSkipHeaderRecord(true)
+						.build()
+						.parse(new StringReader(csv))
+						.stream()
+						.map(r -> r.toMap())
+						.collect(Collectors.toList());
 		return records;
 	}
 
