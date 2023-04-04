@@ -272,7 +272,7 @@ public class ScrapePublicContracts implements Command {
 					log.info("Building final file");
 					var start = Instant.now();
 					var outputFile = tempFiles
-							.tempFile(getClass().getSimpleName(), ".tar.bz2")
+							.tempFile(getClass().getSimpleName(), ".tar")
 							.toFile();
 					log.debug(String.format("Writing output file: %s", outputFile));
 					var fileBuilder = contractsFileBuilderProvider.get();

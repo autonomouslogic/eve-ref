@@ -1,0 +1,44 @@
+[
+  {
+    "is_included": true,
+    "item_id": 1029857579430,
+    "quantity": 1,
+    "record_id": 4039134751,
+    "type_id": 19722
+  },
+  {
+    "is_included": true,
+    "item_id": 1032203003199,
+    "quantity": 1,
+    "record_id": 4039134752,
+    "type_id": 31768
+  },
+  {
+    "is_included": true,
+    "item_id": 1032203003233,
+    "quantity": 37319,
+    "record_id": 4039134753,
+    "type_id": 17889
+  },
+  {
+    "is_included": true,
+    "item_id": 1032203003246,
+    "quantity": 1,
+    "record_id": 4039134754,
+    "type_id": 31762
+  },
+  {
+    "is_included": true,
+    "item_id": 1032203003251,
+    "quantity": 1,
+    "record_id": 4039134755,
+    "type_id": 31726
+  },
+  {
+    "is_included": true,
+    "item_id": 1032203015127,
+    "quantity": 2000,
+    "record_id": 4039134756,
+    "type_id": 16275
+  }
+]

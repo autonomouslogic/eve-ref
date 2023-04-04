@@ -1,0 +1,34 @@
+[
+  {
+    "buyout": 669000000,
+    "contract_id": 190319637,
+    "date_expired": "2023-04-05T06:38:10Z",
+    "date_issued": "2023-03-20T00:00:00Z",
+    "days_to_complete": 0,
+    "end_location_id": 60012550,
+    "issuer_corporation_id": 1000044,
+    "issuer_id": 2118836807,
+    "price": 400000000,
+    "reward": 0,
+    "start_location_id": 60012550,
+    "title": "",
+    "type": "auction",
+    "volume": 0.22000000000000006
+  },
+  {
+    "buyout": 0,
+    "contract_id": 190442405,
+    "date_expired": "2023-04-09T06:38:10Z",
+    "date_issued": "2023-03-24T00:00:00Z",
+    "days_to_complete": 0,
+    "end_location_id": 60013867,
+    "issuer_corporation_id": 98599056,
+    "issuer_id": 1330528756,
+    "price": 1000000,
+    "reward": 0,
+    "start_location_id": 60013867,
+    "title": "29 frozen corpses",
+    "type": "auction",
+    "volume": 58
+  }
+]

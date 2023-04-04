@@ -58,10 +58,10 @@ public class ContractAbyssalFetcher {
 	protected ContractAbyssalFetcher() {}
 
 	public Completable apply(long contractId, Flowable<ObjectNode> in) {
-		return in.filter(item -> isItemNotSeen(item))
-				.flatMap(item -> isPotentialAbyssalItem(item).flatMapPublisher(isAbyssal -> {
+		return in.flatMap(item -> isPotentialAbyssalItem(item).flatMapPublisher(isAbyssal -> {
 					return isAbyssal ? Flowable.just(item) : Flowable.empty();
 				}))
+				.filter(item -> isItemNotSeen(item))
 				.flatMapCompletable(
 						item -> {
 							long itemId = item.get("item_id").longValue();

@@ -83,8 +83,9 @@ sourcesJar.dependsOn(tasks.openApiGenerate)
 delombok.dependsOn(tasks.openApiGenerate)
 
 test {
-	useJUnitPlatform()
+	environment "LOG_LEVEL", "debug"
 
+	useJUnitPlatform()
 	testLogging {
 		events = [ "FAILED", "PASSED", "SKIPPED" ]
 		showExceptions = true
@@ -93,9 +94,6 @@ test {
 		showCauses = true
 		showStackTraces = true
 	}
-
-	environment "LOG_LEVEL", "trace"
-
 	// https://junit-pioneer.org/docs/environment-variables/#warnings-for-reflective-access
 	jvmArgs("--add-opens", "java.base/java.util=ALL-UNNAMED", "--add-opens", "java.base/java.lang=ALL-UNNAMED")
 }

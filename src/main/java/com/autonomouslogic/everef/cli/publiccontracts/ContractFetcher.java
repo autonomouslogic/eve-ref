@@ -79,7 +79,7 @@ public class ContractFetcher {
 	private Flowable<Long> fetchContractsForRegion(GetUniverseRegionsRegionIdOk region) {
 		var count = new AtomicInteger();
 		return Flowable.defer(() -> {
-					log.info(String.format("Fetching public from %s", region.getName()));
+					log.info(String.format("Fetching public contracts from %s", region.getName()));
 					var esiUrl = EsiUrl.builder()
 							.urlPath(String.format("/contracts/public/%s", region.getRegionId()))
 							.build();

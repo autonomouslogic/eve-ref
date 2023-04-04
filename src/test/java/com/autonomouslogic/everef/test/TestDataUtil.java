@@ -8,6 +8,8 @@ import io.reactivex.rxjava3.functions.Consumer;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.StringReader;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,8 +20,11 @@ import javax.inject.Singleton;
 import lombok.SneakyThrows;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
+import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
+import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
 import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream;
 import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.io.IOUtils;
 
 @Singleton
 public class TestDataUtil {
@@ -29,13 +34,56 @@ public class TestDataUtil {
 	@Inject
 	protected TestDataUtil() {}
 
+	/**
+	 * Reads a bz2 file and decodes the CSV data into a list of maps.
+	 * @param bytes
+	 * @return
+	 */
 	@SneakyThrows
 	public List<Map<String, String>> readMapsFromBz2Csv(byte[] bytes) {
-		var reader = new InputStreamReader(new BZip2CompressorInputStream(new ByteArrayInputStream(bytes)));
-		var records = CSVFormat.RFC4180.builder().setHeader().setSkipHeaderRecord(true).build().parse(reader).stream()
-				.map(r -> r.toMap())
-				.collect(Collectors.toList());
+		try (var in = new BZip2CompressorInputStream(new ByteArrayInputStream(bytes))) {
+			return readMapsFromCsv(in);
+		}
+	}
+
+	/**
+	 * Reads a CSV file and decodes the data into a list of maps.
+	 * @param in
+	 * @return
+	 */
+	@SneakyThrows
+	public List<Map<String, String>> readMapsFromCsv(InputStream in) {
+		var csv = IOUtils.toString(new InputStreamReader(in));
+		if (csv.startsWith("{") || csv.trim().isEmpty()) {
+			return List.of();
+		}
+		var records = CSVFormat.RFC4180.builder().setHeader().setSkipHeaderRecord(true).build().parse(new StringReader(csv)).stream()
+			.map(r -> r.toMap())
+			.collect(Collectors.toList());
 		return records;
+	}
+
+	/**
+	 * Reads a tar.bz2 file and decodes the CSV data for each file into a list of maps.
+	 * @param bytes
+	 * @return
+	 */
+	@SneakyThrows
+	public Map<String, List<Map<String, String>>> readFileMapsFromBz2TarCsv(byte[] bytes) {
+		Map<String, List<Map<String, String>>> result = new LinkedHashMap<>();
+		try (var tar = new TarArchiveInputStream(new BZip2CompressorInputStream(new ByteArrayInputStream(bytes)))) {
+			var entry = tar.getNextTarEntry();
+			while (entry != null) {
+				if (entry.isDirectory()) {
+					continue;
+				}
+				var file = entry.getName();
+				var maps = readMapsFromCsv(tar);
+				result.put(file, maps);
+				entry = tar.getNextTarEntry();
+			}
+		}
+		return result;
 	}
 
 	@SneakyThrows
