@@ -26,6 +26,8 @@ import org.apache.commons.io.IOUtils;
 
 @Singleton
 public class TestDataUtil {
+	public static final int TEST_PORT = 30150;
+
 	@Inject
 	ObjectMapper objectMapper;
 

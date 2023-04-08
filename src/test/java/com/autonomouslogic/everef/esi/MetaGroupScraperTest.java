@@ -9,6 +9,8 @@ import com.autonomouslogic.commons.ResourceUtil;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
 import java.nio.charset.StandardCharsets;
 import javax.inject.Inject;
+
+import com.autonomouslogic.everef.test.TestDataUtil;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import okhttp3.mockwebserver.MockResponse;
@@ -26,8 +28,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @Log4j2
 @Timeout(5)
 public class MetaGroupScraperTest {
-	private static final int PORT = 30150;
-
 	@Inject
 	MetaGroupScraper metaGroupScraper;
 
@@ -39,7 +39,7 @@ public class MetaGroupScraperTest {
 		DaggerTestComponent.builder().build().inject(this);
 
 		server = new MockWebServer();
-		server.start(PORT);
+		server.start(TestDataUtil.TEST_PORT);
 		var html = IOUtils.toString(
 				ResourceUtil.loadContextual(getClass(), "/meta-groups-15.html"), StandardCharsets.UTF_8);
 		server.enqueue(new MockResponse().setResponseCode(200).setBody(html));
@@ -52,7 +52,7 @@ public class MetaGroupScraperTest {
 	}
 
 	@Test
-	@SetEnvironmentVariable(key = "EVE_REF_BASE_PATH", value = "http://localhost:" + PORT)
+	@SetEnvironmentVariable(key = "EVE_REF_BASE_PATH", value = "http://localhost:" + TestDataUtil.TEST_PORT)
 	@SneakyThrows
 	void shouldScrapeTypeIdsFromMetaGroups() {
 		var ids = metaGroupScraper.scrapeTypeIds(15).toList().blockingGet();

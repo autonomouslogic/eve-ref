@@ -41,10 +41,8 @@ import software.amazon.awssdk.services.s3.S3AsyncClient;
 @ExtendWith(MockitoExtension.class)
 @SetEnvironmentVariable(key = "DATA_PATH", value = "s3://" + ScrapeMarketOrdersTest.BUCKET_NAME + "/")
 @SetEnvironmentVariable(key = "ESI_USER_AGENT", value = "user-agent")
-@SetEnvironmentVariable(key = "ESI_BASE_PATH", value = "http://localhost:" + ScrapeMarketOrdersTest.PORT)
+@SetEnvironmentVariable(key = "ESI_BASE_PATH", value = "http://localhost:" + TestDataUtil.TEST_PORT)
 public class ScrapeMarketOrdersTest {
-	static final int PORT = 20730;
-
 	static final String BUCKET_NAME = "data-bucket";
 
 	@Inject
@@ -103,7 +101,7 @@ public class ScrapeMarketOrdersTest {
 				};
 			}
 		});
-		server.start(PORT);
+		server.start(TestDataUtil.TEST_PORT);
 
 		// Locations.
 		when(locationPopulator.populate(any(), any())).thenAnswer(MockLocationPopulatorModule.mockPopulate());

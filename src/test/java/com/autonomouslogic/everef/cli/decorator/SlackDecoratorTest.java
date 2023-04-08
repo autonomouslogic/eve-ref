@@ -35,8 +35,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @SetEnvironmentVariable(key = "SLACK_WEBHOOK_CHANNEL", value = "#channel-name")
 @SetEnvironmentVariable(key = "SLACK_WEBHOOK_USERNAME", value = "Slack User")
 public class SlackDecoratorTest {
-	private static final int PORT = 30150;
-
 	@Mock
 	Command testCommand;
 
@@ -57,7 +55,7 @@ public class SlackDecoratorTest {
 		DaggerTestComponent.builder().build().inject(this);
 
 		server = new MockWebServer();
-		server.start(PORT);
+		server.start(TestDataUtil.TEST_PORT);
 		for (int i = 0; i < 2; i++) {
 			server.enqueue(new MockResponse().setResponseCode(204));
 		}
@@ -82,7 +80,7 @@ public class SlackDecoratorTest {
 
 	@Test
 	@SneakyThrows
-	@SetEnvironmentVariable(key = "SLACK_WEBHOOK_URL", value = "http://localhost:" + PORT + "/webhook?key=val")
+	@SetEnvironmentVariable(key = "SLACK_WEBHOOK_URL", value = "http://localhost:" + TestDataUtil.TEST_PORT + "/webhook?key=val")
 	void shouldReportSuccess() {
 		slackDecorator.decorate(testCommand).run().blockingAwait();
 		verify(testCommand).run();
@@ -103,7 +101,7 @@ public class SlackDecoratorTest {
 
 	@Test
 	@SneakyThrows
-	@SetEnvironmentVariable(key = "SLACK_WEBHOOK_URL", value = "http://localhost:" + PORT + "/webhook?key=val")
+	@SetEnvironmentVariable(key = "SLACK_WEBHOOK_URL", value = "http://localhost:" + TestDataUtil.TEST_PORT + "/webhook?key=val")
 	void shouldReportFailure() {
 		when(testCommand.run()).thenReturn(Completable.error(new RuntimeException("test error message")));
 		var error = assertThrows(
