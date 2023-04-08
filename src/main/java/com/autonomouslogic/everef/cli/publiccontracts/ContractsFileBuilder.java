@@ -12,6 +12,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.Collection;
+import java.util.function.Function;
 import javax.inject.Inject;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
@@ -24,6 +25,32 @@ import org.apache.commons.io.IOUtils;
  */
 @Log4j2
 public class ContractsFileBuilder {
+	public static final String META_JSON = "meta.json";
+	public static final String CONTRACTS_CSV = "contracts.csv";
+	public static final String ITEMS_CSV = "contract_items.csv";
+	public static final String BIDS_CSV = "contract_bids.csv";
+	public static final String DYNAMIC_ITEMS_CSV = "contract_dynamic_items.csv";
+	public static final String NON_DYNAMIC_ITEMS_CSV = "contract_non_dynamic_items.csv";
+	public static final String DOGMA_ATTRIBUTES_CSV = "contract_dynamic_items_dogma_attributes.csv";
+	public static final String DOGMA_EFFECTS_CSV = "contract_dynamic_items_dogma_effects.csv";
+
+	public static final Function<JsonNode, Long> CONTRACT_ID =
+			node -> node.get("contract_id").asLong();
+	public static final Function<JsonNode, Long> ITEM_ID =
+			node -> node.get("record_id").asLong();
+	public static final Function<JsonNode, Long> BID_ID =
+			node -> node.get("bid_id").asLong();
+	public static final Function<JsonNode, Long> DYNAMIC_ITEM_ID =
+			node -> node.get("item_id").asLong();
+	public static final Function<JsonNode, Long> NON_DYNAMIC_ITEM_ID =
+			node -> node.get("item_id").asLong();
+	public static final Function<JsonNode, String> DOGMA_ATTRIBUTE_ID =
+			node -> Long.toHexString(node.get("item_id").asLong()) + "-"
+					+ Long.toHexString(node.get("attribute_id").asLong());
+	public static final Function<JsonNode, String> DOGMA_EFFECT_ID =
+			node -> Long.toHexString(node.get("item_id").asLong()) + "-"
+					+ Long.toHexString(node.get("effect_id").asLong());
+
 	@Inject
 	protected TempFiles tempFiles;
 
@@ -47,49 +74,49 @@ public class ContractsFileBuilder {
 	@SneakyThrows
 	public void writeMeta(ContractsScrapeMeta meta) {
 		log.debug("Writing meta");
-		writeEntry("meta.json", objectMapper.writeValueAsBytes(meta));
+		writeEntry(META_JSON, objectMapper.writeValueAsBytes(meta));
 	}
 
 	@SneakyThrows
 	public void writeContracts(Collection<JsonNode> contracts) {
 		log.debug(String.format("Writing %s contracts", contracts.size()));
-		writeEntries(contracts, "contracts.csv");
+		writeEntries(contracts, CONTRACTS_CSV);
 	}
 
 	@SneakyThrows
 	public void writeItems(Collection<JsonNode> items) {
 		log.debug(String.format("Writing %s items", items.size()));
-		writeEntries(items, "contract_items.csv");
+		writeEntries(items, ITEMS_CSV);
 	}
 
 	@SneakyThrows
 	public void writeBids(Collection<JsonNode> bids) {
 		log.debug(String.format("Writing %s bids", bids.size()));
-		writeEntries(bids, "contract_bids.csv");
+		writeEntries(bids, BIDS_CSV);
 	}
 
 	@SneakyThrows
 	public void writeDynamicItems(Collection<JsonNode> dynamicItems) {
 		log.debug(String.format("Writing %s dynamicItems", dynamicItems.size()));
-		writeEntries(dynamicItems, "contract_dynamic_items.csv");
+		writeEntries(dynamicItems, DYNAMIC_ITEMS_CSV);
 	}
 
 	@SneakyThrows
 	public void writeNonDynamicItems(Collection<JsonNode> nonDynamicItems) {
 		log.debug(String.format("Writing %s nonDynamicItems", nonDynamicItems.size()));
-		writeEntries(nonDynamicItems, "contract_non_dynamic_items.csv");
+		writeEntries(nonDynamicItems, NON_DYNAMIC_ITEMS_CSV);
 	}
 
 	@SneakyThrows
 	public void writeDogmaAttributes(Collection<JsonNode> dogmaAttributes) {
 		log.debug(String.format("Writing %s dogmaAttributes", dogmaAttributes.size()));
-		writeEntries(dogmaAttributes, "contract_dynamic_items_dogma_attributes.csv");
+		writeEntries(dogmaAttributes, DOGMA_ATTRIBUTES_CSV);
 	}
 
 	@SneakyThrows
 	public void writeDogmaEffects(Collection<JsonNode> dogmaEffects) {
 		log.debug(String.format("Writing %s dogmaEffects", dogmaEffects.size()));
-		writeEntries(dogmaEffects, "contract_dynamic_items_dogma_effects.csv");
+		writeEntries(dogmaEffects, DOGMA_EFFECTS_CSV);
 	}
 
 	@SneakyThrows

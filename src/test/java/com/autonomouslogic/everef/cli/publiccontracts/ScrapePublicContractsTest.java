@@ -24,10 +24,13 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -109,6 +112,7 @@ public class ScrapePublicContractsTest {
 	}
 
 	@Test
+	@SneakyThrows
 	void shouldScrapePublicContracts() {
 		scrapePublicContracts
 				.setScrapeTime(ZonedDateTime.parse("2020-02-03T04:05:06.89Z"))
@@ -151,6 +155,40 @@ public class ScrapePublicContractsTest {
 
 		// Assert the two files are the same.
 		mockS3Adapter.assertSameContent(BUCKET_NAME, archiveFile, latestFile, dataClient);
+
+		// Verify calls.
+		var requests = new ArrayList<RecordedRequest>();
+		RecordedRequest request;
+		while ((request = server.takeRequest(1, TimeUnit.MILLISECONDS)) != null) {
+			requests.add(request);
+		}
+		var requestPaths = requests.stream().map(RecordedRequest::getPath).sorted().distinct().toList();
+		assertEquals(List.of(
+			"/contracts/public/10000001?datasource=tranquility&language=en",
+			"/contracts/public/10000001?datasource=tranquility&language=en&page=2",
+			"/contracts/public/10000002?datasource=tranquility&language=en",
+			"/contracts/public/10000002?datasource=tranquility&language=en&page=2",
+			"/contracts/public/bids/190319637?datasource=tranquility&language=en",
+			"/contracts/public/bids/190442405?datasource=tranquility&language=en",
+			"/contracts/public/items/189863474?datasource=tranquility&language=en",
+			"/contracts/public/items/190123693?datasource=tranquility&language=en",
+			"/contracts/public/items/190123973?datasource=tranquility&language=en",
+			"/contracts/public/items/190124106?datasource=tranquility&language=en",
+			"/contracts/public/items/190160355?datasource=tranquility&language=en",
+			"/contracts/public/items/190319637?datasource=tranquility&language=en",
+			"/contracts/public/items/190442405?datasource=tranquility&language=en",
+			"/contracts/public/items/190753200?datasource=tranquility&language=en",
+			"/dogma/dynamic/items/47804/1027826381003/?datasource=tranquility&language=en",
+			"/dogma/dynamic/items/47804/9900000000000/?datasource=tranquility&language=en",
+			"/dogma/dynamic/items/49734/1040731418725/?datasource=tranquility&language=en",
+			"/meta-groups/15",
+			"/universe/regions/10000001/?datasource=tranquility",
+			"/universe/regions/10000002/?datasource=tranquility",
+			"/universe/regions/?datasource=tranquility",
+			"/universe/types/47804/?datasource=tranquility",
+			"/universe/types/49734/?datasource=tranquility"
+		), requestPaths);
+
 		// Data index.
 		verify(dataIndex).run();
 	}

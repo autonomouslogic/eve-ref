@@ -287,6 +287,7 @@ public class ScrapePublicContracts implements Command {
 					fileBuilder.writeDogmaEffects(dogmaEffectsStore.values());
 					fileBuilder.close();
 					var compressed = CompressUtil.compressBzip2(outputFile);
+					compressed.deleteOnExit();
 					log.info(String.format(
 							"Final file built in %s",
 							Duration.between(start, Instant.now()).truncatedTo(ChronoUnit.MILLIS)));

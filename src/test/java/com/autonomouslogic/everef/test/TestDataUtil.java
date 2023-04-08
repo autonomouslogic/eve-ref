@@ -41,6 +41,7 @@ public class TestDataUtil {
 	 */
 	@SneakyThrows
 	public List<Map<String, String>> readMapsFromBz2Csv(byte[] bytes) {
+		// @todo maybe replace with JsonNodeCsvReader
 		try (var in = new BZip2CompressorInputStream(new ByteArrayInputStream(bytes))) {
 			return readMapsFromCsv(in);
 		}
@@ -53,6 +54,7 @@ public class TestDataUtil {
 	 */
 	@SneakyThrows
 	public List<Map<String, String>> readMapsFromCsv(InputStream in) {
+		// @todo maybe replace with JsonNodeCsvReader
 		var csv = IOUtils.toString(new InputStreamReader(in));
 		if (csv.startsWith("{") || csv.trim().isEmpty()) {
 			return List.of();
@@ -77,6 +79,7 @@ public class TestDataUtil {
 	 */
 	@SneakyThrows
 	public Map<String, List<Map<String, String>>> readFileMapsFromBz2TarCsv(byte[] bytes) {
+		// @todo maybe replace with JsonNodeCsvReader
 		Map<String, List<Map<String, String>>> result = new LinkedHashMap<>();
 		try (var tar = new TarArchiveInputStream(new BZip2CompressorInputStream(new ByteArrayInputStream(bytes)))) {
 			var entry = tar.getNextTarEntry();
@@ -95,6 +98,7 @@ public class TestDataUtil {
 
 	@SneakyThrows
 	public List<Map<String, String>> readMapsFromJson(InputStream in) {
+		// @todo maybe replace with JsonNodeCsvReader
 		var typeFactory = objectMapper.getTypeFactory();
 		var map = typeFactory.constructMapType(LinkedHashMap.class, String.class, String.class);
 		var list = typeFactory.constructCollectionType(List.class, map);

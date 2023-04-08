@@ -17,6 +17,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Function;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.Getter;
@@ -98,8 +99,8 @@ public class ContractFetcher {
 										obj.put("region_id", region.getRegionId());
 										return locationPopulator
 												.populate(obj, "start_location_id")
-												.andThen(Completable.fromAction(
-														() -> contractsStore.put(contractId, obj)))
+												.andThen(Completable.fromAction(() -> contractsStore.put(
+														ContractsFileBuilder.CONTRACT_ID.apply(obj), obj)))
 												.andThen(resolveItemsAndBids(obj))
 												.andThen(Flowable.just(contractId));
 									},
@@ -136,17 +137,18 @@ public class ContractFetcher {
 			if (contractsWithItems.contains(contractId)) {
 				return Completable.complete();
 			}
-			var observable = fetchContractSub("items", "record_id", itemsStore, contractId);
+			var observable = fetchContractSub("items", ContractsFileBuilder.ITEM_ID, itemsStore, contractId);
 			return contractAbyssalFetcher.apply(contractId, observable);
 		});
 	}
 
 	private Completable fetchContractBids(long contractId) {
-		return fetchContractSub("bids", "bid_id", bidsStore, contractId).ignoreElements();
+		return fetchContractSub("bids", ContractsFileBuilder.BID_ID, bidsStore, contractId)
+				.ignoreElements();
 	}
 
 	private Flowable<ObjectNode> fetchContractSub(
-			String sub, String primaryKey, Map<Long, JsonNode> mapStore, long contractId) {
+			String sub, Function<JsonNode, Long> idExtractor, Map<Long, JsonNode> mapStore, long contractId) {
 		var esiUrl = EsiUrl.builder()
 				.urlPath(String.format("/contracts/public/%s/%s", sub, contractId))
 				.build();
@@ -166,8 +168,7 @@ public class ContractFetcher {
 				.map(entry -> {
 					var obj = (ObjectNode) entry;
 					obj.put("contract_id", contractId);
-					long id = entry.get(primaryKey).asLong();
-					mapStore.put(id, obj);
+					mapStore.put(idExtractor.apply(obj), obj);
 					return obj;
 				});
 	}

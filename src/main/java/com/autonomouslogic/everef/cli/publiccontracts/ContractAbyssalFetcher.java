@@ -110,11 +110,12 @@ public class ContractAbyssalFetcher {
 	}
 
 	private boolean isItemNotSeen(ObjectNode item) {
-		long itemId = item.get("item_id").longValue();
-		if (dynamicItemsStore.containsKey(itemId)) {
+		long dynamicId = ContractsFileBuilder.DYNAMIC_ITEM_ID.apply(item);
+		if (dynamicItemsStore.containsKey(dynamicId)) {
 			return false;
 		}
-		if (nonDynamicItemsStore.containsKey(itemId)) { // @todo these need to be stored in the CSV to be loaded later.
+		long nonDynamicId = ContractsFileBuilder.NON_DYNAMIC_ITEM_ID.apply(item);
+		if (nonDynamicItemsStore.containsKey(nonDynamicId)) {
 			return false;
 		}
 		return true;
@@ -129,13 +130,13 @@ public class ContractAbyssalFetcher {
 				.flatMapCompletable(response -> Completable.fromAction(() -> {
 					int statusCode = response.code();
 					if (statusCode == 520) {
+						var nonDynamicItem = objectMapper
+								.createObjectNode()
+								.put("item_id", itemId)
+								.put("type_id", typeId)
+								.put("contract_id", contractId);
 						nonDynamicItemsStore.put(
-								itemId,
-								objectMapper
-										.createObjectNode()
-										.put("item_id", itemId)
-										.put("type_id", typeId)
-										.put("contract_id", contractId));
+								ContractsFileBuilder.NON_DYNAMIC_ITEM_ID.apply(nonDynamicItem), nonDynamicItem);
 						return;
 					}
 					if (statusCode == 200) {
@@ -161,7 +162,7 @@ public class ContractAbyssalFetcher {
 		var dogmaEffects = (ArrayNode) dynamicItem.get("dogma_effects");
 		dynamicItem.remove("dogma_attributes");
 		dynamicItem.remove("dogma_effects");
-		dynamicItemsStore.put(itemId, dynamicItem);
+		dynamicItemsStore.put(ContractsFileBuilder.DYNAMIC_ITEM_ID.apply(dynamicItem), dynamicItem);
 
 		// Save sub values.
 		for (var dogmaAttribute : dogmaAttributes) {
@@ -176,17 +177,13 @@ public class ContractAbyssalFetcher {
 		dogmaAttribute.put("contract_id", contractId);
 		dogmaAttribute.put("item_id", itemId);
 		dogmaAttribute.put("http_last_modified", lastModified.toString());
-		var attributeId = dogmaAttribute.get("attribute_id").longValue();
-		var id = String.format("%s-%s", Long.toHexString(itemId), Long.toHexString(attributeId));
-		dogmaAttributesStore.put(id, dogmaAttribute);
+		dogmaAttributesStore.put(ContractsFileBuilder.DOGMA_ATTRIBUTE_ID.apply(dogmaAttribute), dogmaAttribute);
 	}
 
 	private void saveDogmaEffect(long contractId, long itemId, ObjectNode dogmaEffect, Instant lastModified) {
 		dogmaEffect.put("contract_id", contractId);
 		dogmaEffect.put("item_id", itemId);
 		dogmaEffect.put("http_last_modified", lastModified.toString());
-		var effectId = dogmaEffect.get("effect_id").longValue();
-		var id = String.format("%s-%s", Long.toHexString(itemId), Long.toHexString(effectId));
-		dogmaEffectsStore.put(id, dogmaEffect);
+		dogmaEffectsStore.put(ContractsFileBuilder.DOGMA_EFFECT_ID.apply(dogmaEffect), dogmaEffect);
 	}
 }
