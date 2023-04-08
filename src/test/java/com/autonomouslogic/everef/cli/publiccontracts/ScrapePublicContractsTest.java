@@ -18,6 +18,7 @@ import com.autonomouslogic.everef.test.MockS3Adapter;
 import com.autonomouslogic.everef.test.TestDataUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.google.common.base.Strings;
 import com.google.common.collect.Ordering;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -140,7 +141,7 @@ public class ScrapePublicContractsTest {
 				.toList());
 		assertEquals(bids, concat(records.get("contract_bids.csv")));
 
-		var items = concat(ListUtil.concat(
+		var items = ListUtil.concat(
 						loadContractItemsMap(189863474),
 						loadContractItemsMap(190123693),
 						loadContractItemsMap(190123973),
@@ -151,18 +152,30 @@ public class ScrapePublicContractsTest {
 						loadContractItemsMap(190753200))
 				.stream()
 				.sorted(Ordering.natural().onResultOf(m -> m.get("record_id")))
-				.toList());
-		assertEquals(items, concat(records.get("contract_items.csv")));
+				.toList();
+		assertEquals(concat(items), concat(records.get("contract_items.csv")));
 
-		var dynamicItems = concat(ListUtil.concat(
+		var dynamicItems = ListUtil.concat(
 						loadDynamicItemsMap(47804, 1027826381003L, 190124106),
 						loadDynamicItemsMap(49734, 1040731418725L, 190160355))
 				.stream()
 				.sorted(Ordering.natural().onResultOf(m -> m.get("item_id")))
-				.toList());
-		assertEquals(dynamicItems, concat(records.get("contract_dynamic_items.csv")));
+				.toList();
+		assertEquals(concat(dynamicItems), concat(records.get("contract_dynamic_items.csv")));
 
-		// @todo contract_non_dynamic_items.csv
+		var dynamicItemsIds = dynamicItems.stream()
+				.map(m -> m.get("item_id"))
+				.toList();
+		var nonDynamicItems = items.stream()
+			.filter(m -> !Strings.isNullOrEmpty(m.get("item_id")))
+				.filter(m -> !dynamicItemsIds.contains(m.get("item_id")))
+			.map(m -> Map.of(
+				"item_id", m.get("item_id"),
+				"contract_id", m.get("contract_id")
+			))
+			.filter(m -> !dynamicItemsIds.contains(m.get("item_id")))
+				.toList();
+		assertEquals(concat(nonDynamicItems), concat(records.get("contract_non_dynamic_items.csv")));
 
 		// @todo contract_dynamic_items_dogma_attributes.csv
 
