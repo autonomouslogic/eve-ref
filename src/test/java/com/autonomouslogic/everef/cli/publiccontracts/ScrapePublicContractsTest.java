@@ -202,16 +202,35 @@ public class ScrapePublicContractsTest {
 
 	private void assertNonDynamicItems(List<Map<String, String>> records) {
 		assertEquals(
-				concat(List.of(Map.of("contract_id", "190124106", "item_id", "9900000000000", "type_id", "47804"))),
+				concat(List.of(Map.ofEntries(
+						Map.entry("contract_id", "190124106"),
+						Map.entry("item_id", "9900000000000"),
+						Map.entry("type_id", "47804")))),
 				concat(records));
 	}
 
 	private void assertDogmaAttributes(List<Map<String, String>> records) {
-		assertEquals("", concat(records));
+		var dogmaAttributes = ListUtil.concat(
+						loadDogmaAttributesMap(47804, 1027826381003L, 190124106),
+						loadDogmaAttributesMap(49734, 1040731418725L, 190160355))
+				.stream()
+				.sorted(Ordering.natural()
+						.onResultOf(m -> Long.toHexString(Long.parseLong(m.get("item_id"))) + "-"
+								+ Long.toHexString(Long.parseLong(m.get("attribute_id")))))
+				.toList();
+		assertEquals(concat(dogmaAttributes), concat(records));
 	}
 
 	private void assertDogmaEffects(List<Map<String, String>> records) {
-		assertEquals("", concat(records));
+		var dogmaEffects = ListUtil.concat(
+						loadDogmaEffectsMap(47804, 1027826381003L, 190124106),
+						loadDogmaEffectsMap(49734, 1040731418725L, 190160355))
+				.stream()
+				.sorted(Ordering.natural()
+						.onResultOf(m -> Long.toHexString(Long.parseLong(m.get("item_id"))) + "-"
+								+ Long.toHexString(Long.parseLong(m.get("effect_id")))))
+				.toList();
+		assertEquals(concat(dogmaEffects), concat(records));
 	}
 
 	class TestDispatcher extends Dispatcher {
@@ -359,6 +378,36 @@ public class ScrapePublicContractsTest {
 		((ObjectNode) json).remove("dogma_effects");
 		var bytes =
 				objectMapper.writeValueAsBytes(objectMapper.createArrayNode().add(json));
+		return testDataUtil.readMapsFromJson(new ByteArrayInputStream(bytes)).stream()
+				.map(m -> {
+					m.put("item_id", String.valueOf(itemId));
+					m.put("contract_id", String.valueOf(contractId));
+					m.put("http_last_modified", lastModifiedInstant.toString());
+					return m;
+				})
+				.toList();
+	}
+
+	@SneakyThrows
+	private List<Map<String, String>> loadDogmaAttributesMap(int typeId, long itemId, int contractId) {
+		var json = objectMapper.readTree(loadDynamicItems(typeId, itemId));
+		var attrs = json.get("dogma_attributes");
+		var bytes = objectMapper.writeValueAsBytes(attrs);
+		return testDataUtil.readMapsFromJson(new ByteArrayInputStream(bytes)).stream()
+				.map(m -> {
+					m.put("item_id", String.valueOf(itemId));
+					m.put("contract_id", String.valueOf(contractId));
+					m.put("http_last_modified", lastModifiedInstant.toString());
+					return m;
+				})
+				.toList();
+	}
+
+	@SneakyThrows
+	private List<Map<String, String>> loadDogmaEffectsMap(int typeId, long itemId, int contractId) {
+		var json = objectMapper.readTree(loadDynamicItems(typeId, itemId));
+		var effects = json.get("dogma_effects");
+		var bytes = objectMapper.writeValueAsBytes(effects);
 		return testDataUtil.readMapsFromJson(new ByteArrayInputStream(bytes)).stream()
 				.map(m -> {
 					m.put("item_id", String.valueOf(itemId));

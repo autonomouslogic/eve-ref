@@ -177,7 +177,7 @@ public class ContractAbyssalFetcher {
 		dogmaAttribute.put("item_id", itemId);
 		dogmaAttribute.put("http_last_modified", lastModified.toString());
 		var attributeId = dogmaAttribute.get("attribute_id").longValue();
-		var id = String.format("%s-%s", itemId, attributeId);
+		var id = String.format("%s-%s", Long.toHexString(itemId), Long.toHexString(attributeId));
 		dogmaAttributesStore.put(id, dogmaAttribute);
 	}
 
@@ -186,7 +186,7 @@ public class ContractAbyssalFetcher {
 		dogmaEffect.put("item_id", itemId);
 		dogmaEffect.put("http_last_modified", lastModified.toString());
 		var effectId = dogmaEffect.get("effect_id").longValue();
-		var id = String.format("%s-%s", itemId, effectId);
+		var id = String.format("%s-%s", Long.toHexString(itemId), Long.toHexString(effectId));
 		dogmaEffectsStore.put(id, dogmaEffect);
 	}
 }
