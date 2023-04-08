@@ -123,51 +123,13 @@ public class ScrapePublicContractsTest {
 				.orElseThrow();
 		// Assert records.
 		var records = testDataUtil.readFileMapsFromBz2TarCsv(content);
-
-		var contracts = concat(ListUtil.concat(
-						loadRegionContractMaps(10000001, 1),
-						loadRegionContractMaps(10000001, 2),
-						loadRegionContractMaps(10000002, 1),
-						loadRegionContractMaps(10000002, 2))
-				.stream()
-				.sorted(Ordering.natural().onResultOf(m -> m.get("contract_id")))
-				.toList());
-		assertEquals(contracts, concat(records.get("contracts.csv")));
-
-		var bids = concat(ListUtil.concat(loadContractBidsMap(190319637), loadContractBidsMap(190442405)).stream()
-				.sorted(Ordering.natural().onResultOf(m -> m.get("bid_id")))
-				.toList());
-		assertEquals(bids, concat(records.get("contract_bids.csv")));
-
-		var items = ListUtil.concat(
-						loadContractItemsMap(189863474),
-						loadContractItemsMap(190123693),
-						loadContractItemsMap(190123973),
-						loadContractItemsMap(190124106),
-						loadContractItemsMap(190160355),
-						loadContractItemsMap(190319637),
-						loadContractItemsMap(190442405),
-						loadContractItemsMap(190753200))
-				.stream()
-				.sorted(Ordering.natural().onResultOf(m -> m.get("record_id")))
-				.toList();
-		assertEquals(concat(items), concat(records.get("contract_items.csv")));
-
-		var dynamicItems = ListUtil.concat(
-						loadDynamicItemsMap(47804, 1027826381003L, 190124106),
-						loadDynamicItemsMap(49734, 1040731418725L, 190160355))
-				.stream()
-				.sorted(Ordering.natural().onResultOf(m -> m.get("item_id")))
-				.toList();
-		assertEquals(concat(dynamicItems), concat(records.get("contract_dynamic_items.csv")));
-
-		assertEquals(
-				concat(List.of(Map.of("contract_id", "190124106", "item_id", "9900000000000", "type_id", "47804"))),
-				concat(records.get("contract_non_dynamic_items.csv")));
-
-		// @todo contract_dynamic_items_dogma_attributes.csv
-
-		// @todo contract_dynamic_items_dogma_effects.csv
+		assertContracts(records.get("contracts.csv"));
+		assertBids(records.get("contract_bids.csv"));
+		assertItems(records.get("contract_items.csv"));
+		assertDynamicItems(records.get("contract_dynamic_items.csv"));
+		assertNonDynamicItems(records.get("contract_non_dynamic_items.csv"));
+		assertDogmaAttributes(records.get("contract_dynamic_items_dogma_attributes.csv"));
+		assertDogmaEffects(records.get("contract_dynamic_items_dogma_effects.csv"));
 
 		//			.stream()
 		//			.map(Map::toString)
@@ -186,10 +148,70 @@ public class ScrapePublicContractsTest {
 		//			.map(Map::toString)
 		//			.collect(Collectors.joining("\n"));
 		//		assertEquals(expected, records);
+
 		// Assert the two files are the same.
 		mockS3Adapter.assertSameContent(BUCKET_NAME, archiveFile, latestFile, dataClient);
 		// Data index.
 		verify(dataIndex).run();
+	}
+
+	private void assertContracts(List<Map<String, String>> records) {
+		var contracts = concat(ListUtil.concat(
+						loadRegionContractMaps(10000001, 1),
+						loadRegionContractMaps(10000001, 2),
+						loadRegionContractMaps(10000002, 1),
+						loadRegionContractMaps(10000002, 2))
+				.stream()
+				.sorted(Ordering.natural().onResultOf(m -> m.get("contract_id")))
+				.toList());
+		assertEquals(contracts, concat(records));
+	}
+
+	private void assertBids(List<Map<String, String>> records) {
+		var bids = concat(ListUtil.concat(loadContractBidsMap(190319637), loadContractBidsMap(190442405)).stream()
+				.sorted(Ordering.natural().onResultOf(m -> m.get("bid_id")))
+				.toList());
+		assertEquals(bids, concat(records));
+	}
+
+	private void assertItems(List<Map<String, String>> records) {
+		var items = ListUtil.concat(
+						loadContractItemsMap(189863474),
+						loadContractItemsMap(190123693),
+						loadContractItemsMap(190123973),
+						loadContractItemsMap(190124106),
+						loadContractItemsMap(190160355),
+						loadContractItemsMap(190319637),
+						loadContractItemsMap(190442405),
+						loadContractItemsMap(190753200))
+				.stream()
+				.sorted(Ordering.natural().onResultOf(m -> m.get("record_id")))
+				.toList();
+		assertEquals(concat(items), concat(records));
+	}
+
+	private void assertDynamicItems(List<Map<String, String>> records) {
+		var dynamicItems = ListUtil.concat(
+						loadDynamicItemsMap(47804, 1027826381003L, 190124106),
+						loadDynamicItemsMap(49734, 1040731418725L, 190160355))
+				.stream()
+				.sorted(Ordering.natural().onResultOf(m -> m.get("item_id")))
+				.toList();
+		assertEquals(concat(dynamicItems), concat(records));
+	}
+
+	private void assertNonDynamicItems(List<Map<String, String>> records) {
+		assertEquals(
+				concat(List.of(Map.of("contract_id", "190124106", "item_id", "9900000000000", "type_id", "47804"))),
+				concat(records));
+	}
+
+	private void assertDogmaAttributes(List<Map<String, String>> records) {
+		assertEquals("", concat(records));
+	}
+
+	private void assertDogmaEffects(List<Map<String, String>> records) {
+		assertEquals("", concat(records));
 	}
 
 	class TestDispatcher extends Dispatcher {
