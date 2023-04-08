@@ -5,5 +5,12 @@
     "quantity": 1,
     "record_id": 4023694409,
     "type_id": 47804
+  },
+  {
+    "is_included": true,
+    "item_id": 9900000000000,
+    "quantity": 1,
+    "record_id": 9900000000,
+    "type_id": 47804
   }
 ]

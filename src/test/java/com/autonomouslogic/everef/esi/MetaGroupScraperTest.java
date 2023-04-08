@@ -7,10 +7,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.autonomouslogic.commons.ResourceUtil;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
+import com.autonomouslogic.everef.test.TestDataUtil;
 import java.nio.charset.StandardCharsets;
 import javax.inject.Inject;
-
-import com.autonomouslogic.everef.test.TestDataUtil;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import okhttp3.mockwebserver.MockResponse;

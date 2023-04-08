@@ -68,7 +68,9 @@ public class HealthcheckDecoratorTest {
 
 	@Test
 	@SneakyThrows
-	@SetEnvironmentVariable(key = "HEALTH_CHECK_URL", value = "http://localhost:" + TestDataUtil.TEST_PORT + "/finish?key=val")
+	@SetEnvironmentVariable(
+			key = "HEALTH_CHECK_URL",
+			value = "http://localhost:" + TestDataUtil.TEST_PORT + "/finish?key=val")
 	void shouldCallFinishUrl() {
 		healthcheckDecorator.decorate(testCommand).run().blockingAwait();
 		verify(testCommand).run();
@@ -79,7 +81,9 @@ public class HealthcheckDecoratorTest {
 
 	@Test
 	@SneakyThrows
-	@SetEnvironmentVariable(key = "HEALTH_CHECK_START_URL", value = "http://localhost:" + TestDataUtil.TEST_PORT + "/start?key=val")
+	@SetEnvironmentVariable(
+			key = "HEALTH_CHECK_START_URL",
+			value = "http://localhost:" + TestDataUtil.TEST_PORT + "/start?key=val")
 	void shouldCallStartUrl() {
 		healthcheckDecorator.decorate(testCommand).run().blockingAwait();
 		verify(testCommand).run();
@@ -90,7 +94,9 @@ public class HealthcheckDecoratorTest {
 
 	@Test
 	@SneakyThrows
-	@SetEnvironmentVariable(key = "HEALTH_CHECK_FAIL_URL", value = "http://localhost:" + TestDataUtil.TEST_PORT + "/fail?key=val")
+	@SetEnvironmentVariable(
+			key = "HEALTH_CHECK_FAIL_URL",
+			value = "http://localhost:" + TestDataUtil.TEST_PORT + "/fail?key=val")
 	void shouldCallFailUrlOnError() {
 		when(testCommand.run()).thenReturn(Completable.error(new RuntimeException("test error message")));
 		var error = assertThrows(
@@ -105,7 +111,9 @@ public class HealthcheckDecoratorTest {
 
 	@Test
 	@SneakyThrows
-	@SetEnvironmentVariable(key = "HEALTH_CHECK_LOG_URL", value = "http://localhost:" + TestDataUtil.TEST_PORT + "/log?key=val")
+	@SetEnvironmentVariable(
+			key = "HEALTH_CHECK_LOG_URL",
+			value = "http://localhost:" + TestDataUtil.TEST_PORT + "/log?key=val")
 	void shouldCallLogUrlOnError() {
 		when(testCommand.run()).thenReturn(Completable.error(new RuntimeException("test error message")));
 		var error = assertThrows(
@@ -120,10 +128,18 @@ public class HealthcheckDecoratorTest {
 
 	@Test
 	@SneakyThrows
-	@SetEnvironmentVariable(key = "HEALTH_CHECK_URL", value = "http://localhost:" + TestDataUtil.TEST_PORT + "/finish?key=val")
-	@SetEnvironmentVariable(key = "HEALTH_CHECK_START_URL", value = "http://localhost:" + TestDataUtil.TEST_PORT + "/start?key=val")
-	@SetEnvironmentVariable(key = "HEALTH_CHECK_FAIL_URL", value = "http://localhost:" + TestDataUtil.TEST_PORT + "/fail?key=val")
-	@SetEnvironmentVariable(key = "HEALTH_CHECK_LOG_URL", value = "http://localhost:" + TestDataUtil.TEST_PORT + "/log?key=val")
+	@SetEnvironmentVariable(
+			key = "HEALTH_CHECK_URL",
+			value = "http://localhost:" + TestDataUtil.TEST_PORT + "/finish?key=val")
+	@SetEnvironmentVariable(
+			key = "HEALTH_CHECK_START_URL",
+			value = "http://localhost:" + TestDataUtil.TEST_PORT + "/start?key=val")
+	@SetEnvironmentVariable(
+			key = "HEALTH_CHECK_FAIL_URL",
+			value = "http://localhost:" + TestDataUtil.TEST_PORT + "/fail?key=val")
+	@SetEnvironmentVariable(
+			key = "HEALTH_CHECK_LOG_URL",
+			value = "http://localhost:" + TestDataUtil.TEST_PORT + "/log?key=val")
 	void shouldCallSequenceOnSuccess() {
 		healthcheckDecorator.decorate(testCommand).run().blockingAwait();
 		verify(testCommand).run();
@@ -136,10 +152,18 @@ public class HealthcheckDecoratorTest {
 
 	@Test
 	@SneakyThrows
-	@SetEnvironmentVariable(key = "HEALTH_CHECK_URL", value = "http://localhost:" + TestDataUtil.TEST_PORT + "/finish?key=val")
-	@SetEnvironmentVariable(key = "HEALTH_CHECK_START_URL", value = "http://localhost:" + TestDataUtil.TEST_PORT + "/start?key=val")
-	@SetEnvironmentVariable(key = "HEALTH_CHECK_FAIL_URL", value = "http://localhost:" + TestDataUtil.TEST_PORT + "/fail?key=val")
-	@SetEnvironmentVariable(key = "HEALTH_CHECK_LOG_URL", value = "http://localhost:" + TestDataUtil.TEST_PORT + "/log?key=val")
+	@SetEnvironmentVariable(
+			key = "HEALTH_CHECK_URL",
+			value = "http://localhost:" + TestDataUtil.TEST_PORT + "/finish?key=val")
+	@SetEnvironmentVariable(
+			key = "HEALTH_CHECK_START_URL",
+			value = "http://localhost:" + TestDataUtil.TEST_PORT + "/start?key=val")
+	@SetEnvironmentVariable(
+			key = "HEALTH_CHECK_FAIL_URL",
+			value = "http://localhost:" + TestDataUtil.TEST_PORT + "/fail?key=val")
+	@SetEnvironmentVariable(
+			key = "HEALTH_CHECK_LOG_URL",
+			value = "http://localhost:" + TestDataUtil.TEST_PORT + "/log?key=val")
 	void shouldCallSequenceOnError() {
 		when(testCommand.run()).thenReturn(Completable.error(new RuntimeException("test error message")));
 		var error = assertThrows(

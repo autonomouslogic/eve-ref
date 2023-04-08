@@ -18,7 +18,6 @@ import com.autonomouslogic.everef.test.MockS3Adapter;
 import com.autonomouslogic.everef.test.TestDataUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.google.common.base.Strings;
 import com.google.common.collect.Ordering;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -162,19 +161,9 @@ public class ScrapePublicContractsTest {
 				.toList();
 		assertEquals(concat(dynamicItems), concat(records.get("contract_dynamic_items.csv")));
 
-		var dynamicItemsIds = dynamicItems.stream()
-				.map(m -> m.get("item_id"))
-				.toList();
-		var nonDynamicItems = items.stream()
-			.filter(m -> !Strings.isNullOrEmpty(m.get("item_id")))
-				.filter(m -> !dynamicItemsIds.contains(m.get("item_id")))
-			.map(m -> Map.of(
-				"item_id", m.get("item_id"),
-				"contract_id", m.get("contract_id")
-			))
-			.filter(m -> !dynamicItemsIds.contains(m.get("item_id")))
-				.toList();
-		assertEquals(concat(nonDynamicItems), concat(records.get("contract_non_dynamic_items.csv")));
+		assertEquals(
+				concat(List.of(Map.of("contract_id", "190124106", "item_id", "9900000000000", "type_id", "47804"))),
+				concat(records.get("contract_non_dynamic_items.csv")));
 
 		// @todo contract_dynamic_items_dogma_attributes.csv
 
@@ -242,6 +231,9 @@ public class ScrapePublicContractsTest {
 				if (path.startsWith("/dogma/dynamic/items/")) {
 					var typeId = Long.parseLong(segments.get(3));
 					var itemId = Long.parseLong(segments.get(4));
+					if (itemId == 9900000000000L) {
+						return new MockResponse().setResponseCode(520);
+					}
 					return mockResponse(loadDynamicItems(typeId, itemId));
 				}
 				log.error(String.format("Unaccounted for URL: %s", path));

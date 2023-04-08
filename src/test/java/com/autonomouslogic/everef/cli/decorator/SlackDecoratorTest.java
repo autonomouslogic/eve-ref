@@ -80,7 +80,9 @@ public class SlackDecoratorTest {
 
 	@Test
 	@SneakyThrows
-	@SetEnvironmentVariable(key = "SLACK_WEBHOOK_URL", value = "http://localhost:" + TestDataUtil.TEST_PORT + "/webhook?key=val")
+	@SetEnvironmentVariable(
+			key = "SLACK_WEBHOOK_URL",
+			value = "http://localhost:" + TestDataUtil.TEST_PORT + "/webhook?key=val")
 	void shouldReportSuccess() {
 		slackDecorator.decorate(testCommand).run().blockingAwait();
 		verify(testCommand).run();
@@ -101,7 +103,9 @@ public class SlackDecoratorTest {
 
 	@Test
 	@SneakyThrows
-	@SetEnvironmentVariable(key = "SLACK_WEBHOOK_URL", value = "http://localhost:" + TestDataUtil.TEST_PORT + "/webhook?key=val")
+	@SetEnvironmentVariable(
+			key = "SLACK_WEBHOOK_URL",
+			value = "http://localhost:" + TestDataUtil.TEST_PORT + "/webhook?key=val")
 	void shouldReportFailure() {
 		when(testCommand.run()).thenReturn(Completable.error(new RuntimeException("test error message")));
 		var error = assertThrows(
