@@ -140,10 +140,11 @@ public class Configs {
 	/**
 	 * The base URL used for fetching data from the data site.
 	 */
-	public static final Config<URI> DATA_BASE_URL =
-			Config.<URI>builder().name("DATA_BASE_URL").type(URI.class)
-				.defaultValue(URI.create("https://data.everef.net"))
-				.build();
+	public static final Config<URI> DATA_BASE_URL = Config.<URI>builder()
+			.name("DATA_BASE_URL")
+			.type(URI.class)
+			.defaultValue(URI.create("https://data.everef.net"))
+			.build();
 
 	/**
 	 * The cache time to use for data index pages.

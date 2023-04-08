@@ -22,7 +22,6 @@ import com.google.common.collect.Ordering;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
-import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.time.ZonedDateTime;
@@ -31,7 +30,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import javax.inject.Inject;
@@ -42,6 +40,7 @@ import okhttp3.mockwebserver.Dispatcher;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
+import okio.Buffer;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
 import org.apache.commons.compress.compressors.bzip2.BZip2CompressorOutputStream;
@@ -53,18 +52,18 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junitpioneer.jupiter.SetEnvironmentVariable;
 import org.mockito.Mock;
-import org.mockito.MockedConstruction;
 import org.mockito.junit.jupiter.MockitoExtension;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 
 /**
  * Special cases for testing:
  * <ul>
- *     <li>Item ID 9900000000000 is returned as a valid Abyssal item, but the ESI returns a 520. Should be stored in the non-dynamic items list.</li>
- *     <li>Contract ID 1000 exists in the latest file, but should not be included in the final output. Records exist for this in all the other files as well.</li>
- *     <li>Non-dynamic item xxxx is in the latest file, and should not be fetched from the ESI again</li>
- *     <li>Contract ID xxxx (item exchange) in the latest file with items, items should not be fetched again</li>
- *     <li>Contract ID xxxx (auction) in the latest file with bids and items, items should not be fetched again, but bids should</li>
+ *     <li>Contract ID 1000 exists in the latest file with corresponding records in all the other files. None of them should be included in the final output.</li>
+ *     <li>Item ID 2000 is returned as a valid Abyssal item, but the ESI returns a 520. Should be stored in the non-dynamic items list.</li>
+ *     <li>Non-dynamic item 3000 is in the latest file, and should not be fetched from the ESI again.</li>
+ *     <li>Contract ID 4000 (item exchange) in the latest file with items, items should not be fetched again.</li>
+ *     <li>Contract ID 5000 (auction) in the latest file with bids and items, items should not be fetched again, but bids should.</li>
+ *     <li>Item ID 6000 has dogma in the latest file, so should not be fetched again.</li>
  * </ul>
  */
 @ExtendWith(MockitoExtension.class)
@@ -180,33 +179,40 @@ public class ScrapePublicContractsTest {
 		while ((request = server.takeRequest(1, TimeUnit.MILLISECONDS)) != null) {
 			requests.add(request);
 		}
-		var requestPaths = requests.stream().map(RecordedRequest::getPath).sorted().distinct().toList();
-		assertEquals(List.of(
-			"/contracts/public/10000001?datasource=tranquility&language=en",
-			"/contracts/public/10000001?datasource=tranquility&language=en&page=2",
-			"/contracts/public/10000002?datasource=tranquility&language=en",
-			"/contracts/public/10000002?datasource=tranquility&language=en&page=2",
-			"/contracts/public/bids/190319637?datasource=tranquility&language=en",
-			"/contracts/public/bids/190442405?datasource=tranquility&language=en",
-			"/contracts/public/items/189863474?datasource=tranquility&language=en",
-			"/contracts/public/items/190123693?datasource=tranquility&language=en",
-			"/contracts/public/items/190123973?datasource=tranquility&language=en",
-			"/contracts/public/items/190124106?datasource=tranquility&language=en",
-			"/contracts/public/items/190160355?datasource=tranquility&language=en",
-			"/contracts/public/items/190319637?datasource=tranquility&language=en",
-			"/contracts/public/items/190442405?datasource=tranquility&language=en",
-			"/contracts/public/items/190753200?datasource=tranquility&language=en",
-			"/dogma/dynamic/items/47804/1027826381003/?datasource=tranquility&language=en",
-			"/dogma/dynamic/items/47804/9900000000000/?datasource=tranquility&language=en",
-			"/dogma/dynamic/items/49734/1040731418725/?datasource=tranquility&language=en",
-			"/meta-groups/15",
-			"/public-contracts/public-contracts-latest.v2.tar.bz2",
-			"/universe/regions/10000001/?datasource=tranquility",
-			"/universe/regions/10000002/?datasource=tranquility",
-			"/universe/regions/?datasource=tranquility",
-			"/universe/types/47804/?datasource=tranquility",
-			"/universe/types/49734/?datasource=tranquility"
-		), requestPaths);
+		var requestPaths = requests.stream()
+				.map(RecordedRequest::getPath)
+				.sorted()
+				.distinct()
+				.toList(); // @todo remove distinct()
+		assertEquals(
+				List.of(
+						"/contracts/public/10000001?datasource=tranquility&language=en",
+						"/contracts/public/10000001?datasource=tranquility&language=en&page=2",
+						"/contracts/public/10000002?datasource=tranquility&language=en",
+						"/contracts/public/10000002?datasource=tranquility&language=en&page=2",
+						"/contracts/public/bids/190319637?datasource=tranquility&language=en",
+						"/contracts/public/bids/190442405?datasource=tranquility&language=en",
+						"/contracts/public/bids/5000?datasource=tranquility&language=en",
+						"/contracts/public/items/189863474?datasource=tranquility&language=en",
+						"/contracts/public/items/190123693?datasource=tranquility&language=en",
+						"/contracts/public/items/190123973?datasource=tranquility&language=en",
+						"/contracts/public/items/190124106?datasource=tranquility&language=en",
+						"/contracts/public/items/190160355?datasource=tranquility&language=en",
+						"/contracts/public/items/190319637?datasource=tranquility&language=en",
+						"/contracts/public/items/190442405?datasource=tranquility&language=en",
+						"/contracts/public/items/190753200?datasource=tranquility&language=en",
+						"/contracts/public/items/3000?datasource=tranquility&language=en",
+						"/dogma/dynamic/items/47804/1027826381003/?datasource=tranquility&language=en",
+						"/dogma/dynamic/items/47804/2000/?datasource=tranquility&language=en",
+						"/dogma/dynamic/items/49734/1040731418725/?datasource=tranquility&language=en",
+						"/meta-groups/15",
+						"/public-contracts/public-contracts-latest.v2.tar.bz2",
+						"/universe/regions/10000001/?datasource=tranquility",
+						"/universe/regions/10000002/?datasource=tranquility",
+						"/universe/regions/?datasource=tranquility",
+						"/universe/types/47804/?datasource=tranquility",
+						"/universe/types/49734/?datasource=tranquility"),
+				requestPaths);
 
 		// Data index.
 		verify(dataIndex).run();
@@ -219,15 +225,20 @@ public class ScrapePublicContractsTest {
 						loadRegionContractMaps(10000002, 1),
 						loadRegionContractMaps(10000002, 2))
 				.stream()
-				.sorted(Ordering.natural().onResultOf(m -> m.get("contract_id")))
+				.sorted(Ordering.natural().onResultOf(m -> Long.parseLong(m.get("contract_id"))))
 				.toList());
 		assertEquals(contracts, concat(records));
 	}
 
 	private void assertBids(List<Map<String, String>> records) {
-		var bids = concat(ListUtil.concat(loadContractBidsMap(190319637), loadContractBidsMap(190442405)).stream()
-				.sorted(Ordering.natural().onResultOf(m -> m.get("bid_id")))
-				.toList());
+		var bids =
+				concat(ListUtil.concat(
+								loadContractBidsMap(190319637),
+								loadContractBidsMap(190442405),
+								loadContractBidsMap(5000))
+						.stream()
+						.sorted(Ordering.natural().onResultOf(m -> Long.parseLong(m.get("bid_id"))))
+						.toList());
 		assertEquals(bids, concat(records));
 	}
 
@@ -240,9 +251,12 @@ public class ScrapePublicContractsTest {
 						loadContractItemsMap(190160355),
 						loadContractItemsMap(190319637),
 						loadContractItemsMap(190442405),
-						loadContractItemsMap(190753200))
+						loadContractItemsMap(190753200),
+						loadContractItemsMap(3000),
+						loadContractItemsMap(4000),
+						loadContractItemsMap(5000))
 				.stream()
-				.sorted(Ordering.natural().onResultOf(m -> m.get("record_id")))
+				.sorted(Ordering.natural().onResultOf(m -> Long.parseLong(m.get("record_id"))))
 				.toList();
 		assertEquals(concat(items), concat(records));
 	}
@@ -259,10 +273,15 @@ public class ScrapePublicContractsTest {
 
 	private void assertNonDynamicItems(List<Map<String, String>> records) {
 		assertEquals(
-				concat(List.of(Map.ofEntries(
-						Map.entry("contract_id", "190124106"),
-						Map.entry("item_id", "9900000000000"),
-						Map.entry("type_id", "47804")))),
+				concat(List.of(
+						Map.ofEntries(
+								Map.entry("contract_id", "190124106"),
+								Map.entry("item_id", "2000"),
+								Map.entry("type_id", "47804")),
+						Map.ofEntries(
+								Map.entry("contract_id", "3000"),
+								Map.entry("item_id", "3000"),
+								Map.entry("type_id", "47804")))),
 				concat(records));
 	}
 
@@ -331,7 +350,7 @@ public class ScrapePublicContractsTest {
 				if (path.startsWith("/dogma/dynamic/items/")) {
 					var typeId = Long.parseLong(segments.get(3));
 					var itemId = Long.parseLong(segments.get(4));
-					if (itemId == 9900000000000L) {
+					if (itemId == 2000L) {
 						return new MockResponse().setResponseCode(520);
 					}
 					return mockResponse(loadDynamicItems(typeId, itemId));
@@ -493,7 +512,6 @@ public class ScrapePublicContractsTest {
 		var bytes = new ByteArrayOutputStream();
 		var tar = new TarArchiveOutputStream(new BZip2CompressorOutputStream(bytes));
 		tar.putArchiveEntry(new TarArchiveEntry(""));
-		tar.write("test".getBytes());
 		writeLatestEntry(tar, "contract_bids.csv");
 		writeLatestEntry(tar, "contract_dynamic_items.csv");
 		writeLatestEntry(tar, "contract_dynamic_items_dogma_attributes.csv");
@@ -503,14 +521,19 @@ public class ScrapePublicContractsTest {
 		writeLatestEntry(tar, "contracts.csv");
 		writeLatestEntry(tar, "meta.json");
 		tar.close();
-		return new MockResponse().setResponseCode(200).setBody(new String(bytes.toByteArray()));
+		return new MockResponse().setResponseCode(200).setBody(new Buffer().write(bytes.toByteArray()));
 	}
 
 	@SneakyThrows
 	private void writeLatestEntry(TarArchiveOutputStream tar, String file) {
-		tar.putArchiveEntry(new TarArchiveEntry(file));
-		var in = ResourceUtil.loadContextual(ScrapePublicContractsTest.class, "/latest/" + file);
-		IOUtils.copy(in, tar);
+		var entry = new TarArchiveEntry(file);
+		byte[] bytes;
+		try (var in = ResourceUtil.loadContextual(ScrapePublicContractsTest.class, "/latest/" + file)) {
+			bytes = IOUtils.toByteArray(in);
+		}
+		entry.setSize(bytes.length);
+		tar.putArchiveEntry(entry);
+		tar.write(bytes);
 		tar.closeArchiveEntry();
 	}
 }

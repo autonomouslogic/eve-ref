@@ -1,6 +1,5 @@
 package com.autonomouslogic.everef.cli.publiccontracts;
 
-import static com.autonomouslogic.everef.config.Configs.DATA_BASE_URL;
 import static com.autonomouslogic.everef.util.ArchivePathFactory.PUBLIC_CONTRACTS;
 
 import com.autonomouslogic.everef.cli.Command;
@@ -207,28 +206,41 @@ public class ScrapePublicContracts implements Command {
 	 */
 	private Completable loadLatestContracts() {
 		return Completable.defer(() -> {
-			var baseUrl = Configs.DATA_BASE_URL.getRequired();
-			var url = baseUrl + "/public-contracts/public-contracts-latest.v2.tar.bz2";
-			return okHttpHelper.get(url, okHttpClient)
-					.flatMapCompletable(response -> {
+					var baseUrl = Configs.DATA_BASE_URL.getRequired();
+					var url = baseUrl + "/public-contracts/public-contracts-latest.v2.tar.bz2";
+					return okHttpHelper.get(url, okHttpClient).flatMapCompletable(response -> {
 						if (response.code() != 200) {
 							log.warn("Failed loading latest contracts: HTTP {}, ignoring", response.code());
 							return Completable.complete();
 						}
-						var file = tempFiles.tempFile("public-contracts-latest", ".tar.bz2").toFile();
-						try (var in = response.body().byteStream(); var out = new FileOutputStream(file)) {
+						var file = tempFiles
+								.tempFile("public-contracts-latest", ".tar.bz2")
+								.toFile();
+						try (var in = response.body().byteStream();
+								var out = new FileOutputStream(file)) {
 							IOUtils.copy(in, out);
 						}
-						return contractsFileLoaderProvider.get().loadFile(file)
-							.doOnSuccess(meta -> {
-								log.debug("Loaded latest contracts from scrape starting: {}", meta.getScrapeStart());
-							}).ignoreElement();
+						return contractsFileLoaderProvider
+								.get()
+								.setContractsStore(contractsStore)
+								.setItemsStore(itemsStore)
+								.setBidsStore(bidsStore)
+								.setDynamicItemsStore(dynamicItemsStore)
+								.setNonDynamicItemsStore(nonDynamicItemsStore)
+								.setDogmaAttributesStore(dogmaAttributesStore)
+								.setDogmaEffectsStore(dogmaEffectsStore)
+								.loadFile(file)
+								.doOnSuccess(meta -> {
+									log.debug(
+											"Loaded latest contracts from scrape starting: {}", meta.getScrapeStart());
+								})
+								.ignoreElement();
 					});
-		})
-			.onErrorResumeNext(e -> {
-				log.warn("Failed reading latest contracts, ignoring", e);
-				return Completable.complete();
-			});
+				})
+				.onErrorResumeNext(e -> {
+					log.warn("Failed reading latest contracts, ignoring", e);
+					return Completable.complete();
+				});
 	}
 
 	/**
