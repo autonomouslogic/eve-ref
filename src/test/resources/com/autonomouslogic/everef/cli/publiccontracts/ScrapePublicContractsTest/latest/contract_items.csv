@@ -1,4 +1,4 @@
 is_included,quantity,record_id,type_id,http_last_modified,contract_id,is_blueprint_copy,item_id,material_efficiency,runs,time_efficiency
 true,1,1000,20185,2023-04-03T03:47:30Z,1000,,,,,
 true,2567534,4000,42,2023-04-03T03:47:30Z,4000,,,,,
-true,2567534,5000,20185,2023-04-03T03:47:30Z,5000,,,,,
+true,2567534,5000,42,2023-04-03T03:47:30Z,5000,,,,,

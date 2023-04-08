@@ -76,7 +76,7 @@
     "reward": 0,
     "start_location_id": 60003760,
     "title": "",
-    "type": "item_exchange",
+    "type": "auction",
     "volume": 0.01
   }
 ]

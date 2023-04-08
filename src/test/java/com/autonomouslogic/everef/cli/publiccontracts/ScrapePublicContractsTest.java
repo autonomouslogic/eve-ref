@@ -1,6 +1,7 @@
 package com.autonomouslogic.everef.cli.publiccontracts;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -41,8 +42,11 @@ import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 import okio.Buffer;
+import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
+import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
 import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
+import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream;
 import org.apache.commons.compress.compressors.bzip2.BZip2CompressorOutputStream;
 import org.apache.commons.io.IOUtils;
 import org.jetbrains.annotations.NotNull;
@@ -143,7 +147,7 @@ public class ScrapePublicContractsTest {
 				.orElseThrow();
 		// Assert records.
 		var records = testDataUtil.readFileMapsFromBz2TarCsv(content);
-		// @todo assert meta
+		assertMeta(content);
 		assertContracts(records.get("contracts.csv"));
 		assertBids(records.get("contract_bids.csv"));
 		assertItems(records.get("contract_items.csv"));
@@ -216,6 +220,24 @@ public class ScrapePublicContractsTest {
 
 		// Data index.
 		verify(dataIndex).run();
+	}
+
+	@SneakyThrows
+	private void assertMeta(byte[] content) {
+		ObjectNode meta = null;
+		try (var tar = new TarArchiveInputStream(new BZip2CompressorInputStream(new ByteArrayInputStream(content)))) {
+			ArchiveEntry entry;
+			while ((entry = tar.getNextEntry()) != null) {
+				if (!entry.getName().equals("meta.json")) {
+					continue;
+				}
+				meta = (ObjectNode) objectMapper.readTree(tar);
+				break;
+			}
+		}
+		assertEquals("tranquility", meta.get("datasource").asText());
+		assertEquals("2020-02-03T04:05:06Z", meta.get("scrape_start").asText());
+		assertNotNull(Instant.parse(meta.get("scrape_end").asText()));
 	}
 
 	private void assertContracts(List<Map<String, String>> records) {
