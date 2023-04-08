@@ -34,7 +34,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @Timeout(5)
 @SetEnvironmentVariable(key = "SLACK_WEBHOOK_CHANNEL", value = "#channel-name")
 @SetEnvironmentVariable(key = "SLACK_WEBHOOK_USERNAME", value = "Slack User")
-public class SlackDecoratorTest {
+class SlackDecoratorTest {
 	@Mock
 	Command testCommand;
 

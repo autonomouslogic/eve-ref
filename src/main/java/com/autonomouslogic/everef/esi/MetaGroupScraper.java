@@ -61,7 +61,7 @@ public class MetaGroupScraper {
 			if (response.code() != 200) {
 				throw new RuntimeException("Scrape failed: " + response.code());
 			}
-			var body = Optional.ofNullable(response.body())
+			return Optional.ofNullable(response.body())
 					.map(b -> {
 						try {
 							return b.string();
@@ -71,7 +71,6 @@ public class MetaGroupScraper {
 					})
 					.filter(b -> b.length() > 0)
 					.orElseThrow();
-			return body;
 		});
 	}
 

@@ -271,7 +271,7 @@ public class ScrapePublicContracts implements Command {
 						contractsScrapeMeta.setScrapeEnd(Instant.now().truncatedTo(ChronoUnit.SECONDS));
 						mvStore.commit();
 						log.info(String.format(
-								"Fetched %s contracts in ",
+								"Fetched %s contracts in %s",
 								seenContractIds.size(),
 								Duration.between(start, Instant.now()).truncatedTo(ChronoUnit.MILLIS)));
 					})

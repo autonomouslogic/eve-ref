@@ -54,16 +54,16 @@ public class JsonNodeCsvWriter {
 
 	private void writeEntry(@NotNull CSVPrinter printer, @NotNull List<String> headers, @NonNull ObjectNode obj)
 			throws IOException {
-		var record = new ArrayList<String>(headers.size());
+		var rec = new ArrayList<String>(headers.size());
 		for (String header : headers) {
 			if (obj.has(header)) {
 				var val = valueToString(obj.get(header));
-				record.add(val);
+				rec.add(val);
 			} else {
-				record.add("");
+				rec.add("");
 			}
 		}
-		printer.printRecord(record);
+		printer.printRecord(rec);
 	}
 
 	private String valueToString(@NonNull JsonNode value) {

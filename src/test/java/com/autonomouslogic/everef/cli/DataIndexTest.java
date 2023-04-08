@@ -20,7 +20,7 @@ import software.amazon.awssdk.services.s3.S3AsyncClient;
 
 @ExtendWith(MockitoExtension.class)
 @Log4j2
-public class DataIndexTest {
+class DataIndexTest {
 	static final String BUCKET_NAME = "data-bucket";
 
 	@Inject
