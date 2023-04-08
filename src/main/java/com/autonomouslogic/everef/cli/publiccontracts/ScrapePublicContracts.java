@@ -1,5 +1,6 @@
 package com.autonomouslogic.everef.cli.publiccontracts;
 
+import static com.autonomouslogic.everef.config.Configs.DATA_BASE_URL;
 import static com.autonomouslogic.everef.util.ArchivePathFactory.PUBLIC_CONTRACTS;
 
 import com.autonomouslogic.everef.cli.Command;
@@ -12,6 +13,7 @@ import com.autonomouslogic.everef.s3.S3Adapter;
 import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.url.UrlParser;
 import com.autonomouslogic.everef.util.CompressUtil;
+import com.autonomouslogic.everef.util.OkHttpHelper;
 import com.autonomouslogic.everef.util.Rx;
 import com.autonomouslogic.everef.util.S3Util;
 import com.autonomouslogic.everef.util.TempFiles;
@@ -19,6 +21,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Single;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.ZoneOffset;
@@ -33,6 +36,8 @@ import javax.inject.Provider;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
+import okhttp3.OkHttpClient;
+import org.apache.commons.io.IOUtils;
 import org.h2.mvstore.MVMap;
 import org.h2.mvstore.MVStore;
 import org.h2.mvstore.type.ObjectDataType;
@@ -48,6 +53,9 @@ public class ScrapePublicContracts implements Command {
 
 	@Inject
 	protected Provider<ContractsFileBuilder> contractsFileBuilderProvider;
+
+	@Inject
+	protected Provider<ContractsFileLoader> contractsFileLoaderProvider;
 
 	@Inject
 	protected Provider<DataIndex> dataIndexProvider;
@@ -70,6 +78,12 @@ public class ScrapePublicContracts implements Command {
 	@Inject
 	@Named("data")
 	protected S3AsyncClient s3Client;
+
+	@Inject
+	protected OkHttpClient okHttpClient;
+
+	@Inject
+	protected OkHttpHelper okHttpHelper;
 
 	@Inject
 	protected TempFiles tempFiles;
@@ -193,9 +207,28 @@ public class ScrapePublicContracts implements Command {
 	 */
 	private Completable loadLatestContracts() {
 		return Completable.defer(() -> {
-			log.warn("TODO loadLatestContracts");
-			return Completable.complete(); // @todo
-		});
+			var baseUrl = Configs.DATA_BASE_URL.getRequired();
+			var url = baseUrl + "/public-contracts/public-contracts-latest.v2.tar.bz2";
+			return okHttpHelper.get(url, okHttpClient)
+					.flatMapCompletable(response -> {
+						if (response.code() != 200) {
+							log.warn("Failed loading latest contracts: HTTP {}, ignoring", response.code());
+							return Completable.complete();
+						}
+						var file = tempFiles.tempFile("public-contracts-latest", ".tar.bz2").toFile();
+						try (var in = response.body().byteStream(); var out = new FileOutputStream(file)) {
+							IOUtils.copy(in, out);
+						}
+						return contractsFileLoaderProvider.get().loadFile(file)
+							.doOnSuccess(meta -> {
+								log.debug("Loaded latest contracts from scrape starting: {}", meta.getScrapeStart());
+							}).ignoreElement();
+					});
+		})
+			.onErrorResumeNext(e -> {
+				log.warn("Failed reading latest contracts, ignoring", e);
+				return Completable.complete();
+			});
 	}
 
 	/**

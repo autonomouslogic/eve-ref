@@ -20,7 +20,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.Ordering;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.time.ZonedDateTime;
@@ -40,6 +42,9 @@ import okhttp3.mockwebserver.Dispatcher;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
+import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
+import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
+import org.apache.commons.compress.compressors.bzip2.BZip2CompressorOutputStream;
 import org.apache.commons.io.IOUtils;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.AfterEach;
@@ -48,13 +53,25 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junitpioneer.jupiter.SetEnvironmentVariable;
 import org.mockito.Mock;
+import org.mockito.MockedConstruction;
 import org.mockito.junit.jupiter.MockitoExtension;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 
+/**
+ * Special cases for testing:
+ * <ul>
+ *     <li>Item ID 9900000000000 is returned as a valid Abyssal item, but the ESI returns a 520. Should be stored in the non-dynamic items list.</li>
+ *     <li>Contract ID 1000 exists in the latest file, but should not be included in the final output. Records exist for this in all the other files as well.</li>
+ *     <li>Non-dynamic item xxxx is in the latest file, and should not be fetched from the ESI again</li>
+ *     <li>Contract ID xxxx (item exchange) in the latest file with items, items should not be fetched again</li>
+ *     <li>Contract ID xxxx (auction) in the latest file with bids and items, items should not be fetched again, but bids should</li>
+ * </ul>
+ */
 @ExtendWith(MockitoExtension.class)
 @Log4j2
 // @Timeout(5)
 @SetEnvironmentVariable(key = "DATA_PATH", value = "s3://" + ScrapePublicContractsTest.BUCKET_NAME + "/")
+@SetEnvironmentVariable(key = "DATA_BASE_URL", value = "http://localhost:" + TestDataUtil.TEST_PORT)
 @SetEnvironmentVariable(key = "ESI_USER_AGENT", value = "user-agent")
 @SetEnvironmentVariable(key = "ESI_BASE_PATH", value = "http://localhost:" + TestDataUtil.TEST_PORT)
 @SetEnvironmentVariable(key = "EVE_REF_BASE_PATH", value = "http://localhost:" + TestDataUtil.TEST_PORT)
@@ -127,6 +144,7 @@ public class ScrapePublicContractsTest {
 				.orElseThrow();
 		// Assert records.
 		var records = testDataUtil.readFileMapsFromBz2TarCsv(content);
+		// @todo assert meta
 		assertContracts(records.get("contracts.csv"));
 		assertBids(records.get("contract_bids.csv"));
 		assertItems(records.get("contract_items.csv"));
@@ -156,7 +174,7 @@ public class ScrapePublicContractsTest {
 		// Assert the two files are the same.
 		mockS3Adapter.assertSameContent(BUCKET_NAME, archiveFile, latestFile, dataClient);
 
-		// Verify calls.
+		// Verify requests.
 		var requests = new ArrayList<RecordedRequest>();
 		RecordedRequest request;
 		while ((request = server.takeRequest(1, TimeUnit.MILLISECONDS)) != null) {
@@ -182,6 +200,7 @@ public class ScrapePublicContractsTest {
 			"/dogma/dynamic/items/47804/9900000000000/?datasource=tranquility&language=en",
 			"/dogma/dynamic/items/49734/1040731418725/?datasource=tranquility&language=en",
 			"/meta-groups/15",
+			"/public-contracts/public-contracts-latest.v2.tar.bz2",
 			"/universe/regions/10000001/?datasource=tranquility",
 			"/universe/regions/10000002/?datasource=tranquility",
 			"/universe/regions/?datasource=tranquility",
@@ -288,6 +307,8 @@ public class ScrapePublicContractsTest {
 						return mockResponse("{\"region_id\":10000002,\"name\":\"The Forge\",\"constellations\":[]}");
 					case "/meta-groups/15":
 						return metaGroup15();
+					case "/public-contracts/public-contracts-latest.v2.tar.bz2":
+						return mockLatestFile();
 				}
 				var page = Optional.ofNullable(request.getRequestUrl().queryParameter("page"))
 						.map(Integer::parseInt)
@@ -465,5 +486,31 @@ public class ScrapePublicContractsTest {
 				})
 				.map(Map::toString)
 				.collect(Collectors.joining("\n"));
+	}
+
+	@SneakyThrows
+	private MockResponse mockLatestFile() {
+		var bytes = new ByteArrayOutputStream();
+		var tar = new TarArchiveOutputStream(new BZip2CompressorOutputStream(bytes));
+		tar.putArchiveEntry(new TarArchiveEntry(""));
+		tar.write("test".getBytes());
+		writeLatestEntry(tar, "contract_bids.csv");
+		writeLatestEntry(tar, "contract_dynamic_items.csv");
+		writeLatestEntry(tar, "contract_dynamic_items_dogma_attributes.csv");
+		writeLatestEntry(tar, "contract_dynamic_items_dogma_effects.csv");
+		writeLatestEntry(tar, "contract_items.csv");
+		writeLatestEntry(tar, "contract_non_dynamic_items.csv");
+		writeLatestEntry(tar, "contracts.csv");
+		writeLatestEntry(tar, "meta.json");
+		tar.close();
+		return new MockResponse().setResponseCode(200).setBody(new String(bytes.toByteArray()));
+	}
+
+	@SneakyThrows
+	private void writeLatestEntry(TarArchiveOutputStream tar, String file) {
+		tar.putArchiveEntry(new TarArchiveEntry(file));
+		var in = ResourceUtil.loadContextual(ScrapePublicContractsTest.class, "/latest/" + file);
+		IOUtils.copy(in, tar);
+		tar.closeArchiveEntry();
 	}
 }

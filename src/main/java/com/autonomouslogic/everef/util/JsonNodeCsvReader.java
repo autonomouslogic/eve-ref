@@ -25,6 +25,9 @@ public class JsonNodeCsvReader {
 	@NonNull
 	private CSVFormat csvFormat = CSVFormat.RFC4180;
 
+	@Inject
+	protected JsonNodeCsvReader() {}
+
 	@SneakyThrows
 	public Stream<JsonNode> readAll(InputStream in) {
 		return CSVFormat.RFC4180
