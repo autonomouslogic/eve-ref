@@ -45,9 +45,6 @@ public class ScrapeMarketOrders implements Command {
 	protected S3Util s3Util;
 
 	@Inject
-	protected Provider<DataIndex> dataIndexProvider;
-
-	@Inject
 	protected JsonNodeDataType jsonNodeDataType;
 
 	@Inject
@@ -94,8 +91,7 @@ public class ScrapeMarketOrders implements Command {
 						initScrapeTime(),
 						initMvStore(),
 						fetchOrders(),
-						writeOrders().flatMapCompletable(this::uploadFile),
-						dataIndexProvider.get().run())
+						writeOrders().flatMapCompletable(this::uploadFile))
 				.doFinally(this::closeMvStore);
 	}
 

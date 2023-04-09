@@ -57,9 +57,6 @@ public class ScrapePublicContracts implements Command {
 	protected Provider<ContractsFileLoader> contractsFileLoaderProvider;
 
 	@Inject
-	protected Provider<DataIndex> dataIndexProvider;
-
-	@Inject
 	protected JsonNodeDataType jsonNodeDataType;
 
 	@Inject
@@ -126,8 +123,7 @@ public class ScrapePublicContracts implements Command {
 						loadLatestContracts(),
 						fetchAndStoreContracts(),
 						deleteOldContracts(),
-						buildFile().flatMapCompletable(this::uploadFile),
-						dataIndexProvider.get().run())
+						buildFile().flatMapCompletable(this::uploadFile))
 				.doFinally(this::closeMvStore);
 	}
 
