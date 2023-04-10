@@ -4,6 +4,9 @@ import java.net.URI;
 import java.time.Duration;
 
 public class Configs {
+	private static final Duration DEFAULT_ARCHIVE_MAX_AGE = Duration.ofDays(30);
+	private static final Duration DEFAULT_LATEST_MAX_AGE = Duration.ofMinutes(2);
+
 	/**
 	 * The version of EVE Ref.
 	 */
@@ -140,9 +143,27 @@ public class Configs {
 	/**
 	 * The cache time to use for data index pages.
 	 */
-	public static final Config<Duration> DATA_INDEX_CACHE_TIME = Config.<Duration>builder()
-			.name("DATA_INDEX_CACHE_TIME")
-			.defaultValue(Duration.ofMinutes(1))
+	public static final Config<Duration> DATA_INDEX_CACHE_CONTROL_MAX_AGE = Config.<Duration>builder()
+			.name("DATA_INDEX_CACHE_CONTROL_MAX_AGE")
+			.defaultValue(Duration.ofMinutes(2))
+			.type(Duration.class)
+			.build();
+
+	/**
+	 * The cache time to use for market order archive files.
+	 */
+	public static final Config<Duration> MARKET_ORDERS_ARCHIVE_CACHE_CONTROL_MAX_AGE = Config.<Duration>builder()
+			.name("MARKET_ORDERS_ARCHIVE_CACHE_CONTROL_MAX_AGE")
+			.defaultValue(DEFAULT_ARCHIVE_MAX_AGE)
+			.type(Duration.class)
+			.build();
+
+	/**
+	 * The cache time to use for latest market order files.
+	 */
+	public static final Config<Duration> MARKET_ORDERS_LATEST_CACHE_CONTROL_MAX_AGE = Config.<Duration>builder()
+			.name("MARKET_ORDERS_LATEST_CACHE_CONTROL_MAX_AGE")
+			.defaultValue(DEFAULT_LATEST_MAX_AGE)
 			.type(Duration.class)
 			.build();
 

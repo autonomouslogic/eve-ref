@@ -32,7 +32,6 @@ import org.jetbrains.annotations.NotNull;
 import software.amazon.awssdk.core.async.AsyncRequestBody;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 import software.amazon.awssdk.services.s3.model.ListObjectsV2Request;
-import software.amazon.awssdk.services.s3.model.ObjectCannedACL;
 import software.amazon.awssdk.services.s3.model.S3Object;
 
 /**
@@ -61,7 +60,7 @@ public class DataIndex implements Command {
 
 	private S3Url dataUrl;
 	private final String dataDomain = Configs.DATA_DOMAIN.getRequired();
-	private final Duration indexCacheTime = Configs.DATA_INDEX_CACHE_TIME.getRequired();
+	private final Duration indexCacheTime = Configs.DATA_INDEX_CACHE_CONTROL_MAX_AGE.getRequired();
 	private final int indexConcurrency = Configs.DATA_INDEX_CONCURRENCY.getRequired();
 
 	@Inject
@@ -193,10 +192,7 @@ public class DataIndex implements Command {
 					.path((listing.getPrefix().equals("") ? "" : listing.getPrefix() + "/") + "index.html")
 					.build();
 			log.debug(String.format("Uploading index page: %s", target));
-			var putObjectRequest = s3Util.putObjectRequest(rendered.length, target, "text/html").toBuilder()
-					.acl(ObjectCannedACL.PUBLIC_READ)
-					.cacheControl(s3Util.cacheControl(indexCacheTime))
-					.build();
+			var putObjectRequest = s3Util.putPublicObjectRequest(rendered.length, target, "text/html", indexCacheTime);
 			return s3Adapter
 					.putObject(putObjectRequest, AsyncRequestBody.fromBytes(rendered), s3)
 					.ignoreElement();

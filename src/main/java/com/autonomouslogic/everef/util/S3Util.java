@@ -24,6 +24,12 @@ public class S3Util {
 				.build();
 	}
 
+	public PutObjectRequest putPublicObjectRequest(long len, S3Url url, String contentType, Duration maxAge) {
+		return putPublicObjectRequest(len, url, contentType).toBuilder()
+				.cacheControl(cacheControl(maxAge))
+				.build();
+	}
+
 	public PutObjectRequest putPublicObjectRequest(long len, S3Url url, String contentType) {
 		return putObjectRequest(len, url, contentType).toBuilder()
 				.acl(ObjectCannedACL.PUBLIC_READ)
