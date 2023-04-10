@@ -5,7 +5,7 @@ import java.time.Duration;
 
 public class Configs {
 	private static final Duration DEFAULT_ARCHIVE_MAX_AGE = Duration.ofDays(30);
-	private static final Duration DEFAULT_LATEST_MAX_AGE = Duration.ofDays(2);
+	private static final Duration DEFAULT_LATEST_MAX_AGE = Duration.ofMinutes(2);
 
 	/**
 	 * The version of EVE Ref.
