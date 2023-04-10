@@ -3,7 +3,6 @@ package com.autonomouslogic.everef.cli.publiccontracts;
 import static com.autonomouslogic.everef.util.ArchivePathFactory.PUBLIC_CONTRACTS;
 
 import com.autonomouslogic.everef.cli.Command;
-import com.autonomouslogic.everef.cli.DataIndex;
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.mvstore.JsonNodeDataType;
 import com.autonomouslogic.everef.mvstore.MVMapRemover;

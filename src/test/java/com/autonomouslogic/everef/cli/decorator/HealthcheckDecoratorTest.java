@@ -26,7 +26,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 @Log4j2
 @Timeout(5)
-class HealthcheckDecoratorTest {
+public class HealthcheckDecoratorTest {
 	@Mock
 	Command testCommand;
 

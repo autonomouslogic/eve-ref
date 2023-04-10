@@ -2,13 +2,10 @@ package com.autonomouslogic.everef.cli.marketorders;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.autonomouslogic.commons.ListUtil;
 import com.autonomouslogic.commons.ResourceUtil;
-import com.autonomouslogic.everef.cli.DataIndex;
-import com.autonomouslogic.everef.cli.MockDataIndexModule;
 import com.autonomouslogic.everef.esi.LocationPopulator;
 import com.autonomouslogic.everef.esi.MockLocationPopulatorModule;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
@@ -42,7 +39,7 @@ import software.amazon.awssdk.services.s3.S3AsyncClient;
 @SetEnvironmentVariable(key = "DATA_PATH", value = "s3://" + ScrapeMarketOrdersTest.BUCKET_NAME + "/")
 @SetEnvironmentVariable(key = "ESI_USER_AGENT", value = "user-agent")
 @SetEnvironmentVariable(key = "ESI_BASE_PATH", value = "http://localhost:" + TestDataUtil.TEST_PORT)
-class ScrapeMarketOrdersTest {
+public class ScrapeMarketOrdersTest {
 	static final String BUCKET_NAME = "data-bucket";
 
 	@Inject
@@ -56,9 +53,6 @@ class ScrapeMarketOrdersTest {
 	S3AsyncClient dataClient;
 
 	@Inject
-	DataIndex dataIndex;
-
-	@Inject
 	TestDataUtil testDataUtil;
 
 	@Mock
@@ -70,7 +64,6 @@ class ScrapeMarketOrdersTest {
 	@SneakyThrows
 	void before() {
 		DaggerTestComponent.builder()
-				.mockDataIndexModule(new MockDataIndexModule().setDefaultMock(true))
 				.mockLocationPopulatorModule(new MockLocationPopulatorModule().setLocationPopulator(locationPopulator))
 				.build()
 				.inject(this);
@@ -147,8 +140,6 @@ class ScrapeMarketOrdersTest {
 		assertEquals(expected, records);
 		// Assert the two files are the same.
 		mockS3Adapter.assertSameContent(BUCKET_NAME, archiveFile, latestFile, dataClient);
-		// Data index.
-		verify(dataIndex).run();
 	}
 
 	@SneakyThrows

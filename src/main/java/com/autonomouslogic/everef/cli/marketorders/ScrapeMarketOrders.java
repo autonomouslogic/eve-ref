@@ -3,7 +3,6 @@ package com.autonomouslogic.everef.cli.marketorders;
 import static com.autonomouslogic.everef.util.ArchivePathFactory.MARKET_ORDERS;
 
 import com.autonomouslogic.everef.cli.Command;
-import com.autonomouslogic.everef.cli.DataIndex;
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.mvstore.JsonNodeDataType;
 import com.autonomouslogic.everef.mvstore.MVStoreUtil;
@@ -20,7 +19,6 @@ import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.inject.Provider;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;

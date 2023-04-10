@@ -3,13 +3,10 @@ package com.autonomouslogic.everef.cli.publiccontracts;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.autonomouslogic.commons.ListUtil;
 import com.autonomouslogic.commons.ResourceUtil;
-import com.autonomouslogic.everef.cli.DataIndex;
-import com.autonomouslogic.everef.cli.MockDataIndexModule;
 import com.autonomouslogic.everef.esi.LocationPopulator;
 import com.autonomouslogic.everef.esi.MetaGroupScraperTest;
 import com.autonomouslogic.everef.esi.MockLocationPopulatorModule;
@@ -62,12 +59,16 @@ import software.amazon.awssdk.services.s3.S3AsyncClient;
 /**
  * Special cases for testing:
  * <ul>
- *     <li>Contract ID 1000 exists in the latest file with corresponding records in all the other files. None of them should be included in the final output.</li>
- *     <li>Item ID 2000 is returned as a valid Abyssal item, but the ESI returns a 520. Should be stored in the non-dynamic items list.</li>
+ *     <li>Contract ID 1000 exists in the latest file with corresponding records in all the other files, but not in the
+ *         returned contracts. None of them should be included in the final output.</li>
+ *     <li>Item ID 2000 is returned as a valid Abyssal item, but the ESI returns a 520. Should be stored in the
+ *         non-dynamic items list.</li>
  *     <li>Non-dynamic item 3000 is in the latest file, and should not be fetched from the ESI again.</li>
- *     <li>Contract ID 4000 (item exchange) in the latest file with items, items should not be fetched again.</li>
- *     <li>Contract ID 5000 (auction) in the latest file with bids and items, items should not be fetched again, but bids should.</li>
- *     <li>Item ID 6000 has dogma in the latest file, so should not be fetched again.</li>
+ *     <li>Contract ID 4000 (item exchange) is in the latest file with items, items should not be fetched again.</li>
+ *     <li>Contract ID 5000 (auction) is in the latest file with bids and items, items should not be fetched again, but
+ *         bids should. This contract also contains one bid in the latest file, but two bids in the ESI.</li>
+ *     <li>Item ID 6000 has dogma in the latest file, so should not be fetched again. Item 6000 is deliberately
+ *         missing from the latest items in order to check if existing dynamic items are skipped properly.</li>
  * </ul>
  */
 @ExtendWith(MockitoExtension.class)
@@ -78,7 +79,7 @@ import software.amazon.awssdk.services.s3.S3AsyncClient;
 @SetEnvironmentVariable(key = "ESI_USER_AGENT", value = "user-agent")
 @SetEnvironmentVariable(key = "ESI_BASE_PATH", value = "http://localhost:" + TestDataUtil.TEST_PORT)
 @SetEnvironmentVariable(key = "EVE_REF_BASE_PATH", value = "http://localhost:" + TestDataUtil.TEST_PORT)
-class ScrapePublicContractsTest {
+public class ScrapePublicContractsTest {
 	static final String BUCKET_NAME = "data-bucket";
 
 	@Inject
@@ -93,9 +94,6 @@ class ScrapePublicContractsTest {
 
 	@Inject
 	TestDataUtil testDataUtil;
-
-	@Inject
-	DataIndex dataIndex;
 
 	@Inject
 	ObjectMapper objectMapper;
@@ -114,7 +112,6 @@ class ScrapePublicContractsTest {
 	@SneakyThrows
 	void before() {
 		DaggerTestComponent.builder()
-				.mockDataIndexModule(new MockDataIndexModule().setDefaultMock(true))
 				.mockLocationPopulatorModule(new MockLocationPopulatorModule().setLocationPopulator(locationPopulator))
 				.build()
 				.inject(this);
@@ -206,6 +203,7 @@ class ScrapePublicContractsTest {
 						"/contracts/public/items/190442405?datasource=tranquility&language=en",
 						"/contracts/public/items/190753200?datasource=tranquility&language=en",
 						"/contracts/public/items/3000?datasource=tranquility&language=en",
+						"/contracts/public/items/6000?datasource=tranquility&language=en",
 						"/dogma/dynamic/items/47804/1027826381003/?datasource=tranquility&language=en",
 						"/dogma/dynamic/items/47804/2000/?datasource=tranquility&language=en",
 						"/dogma/dynamic/items/49734/1040731418725/?datasource=tranquility&language=en",
@@ -217,9 +215,6 @@ class ScrapePublicContractsTest {
 						"/universe/types/47804/?datasource=tranquility",
 						"/universe/types/49734/?datasource=tranquility"),
 				requestPaths);
-
-		// Data index.
-		verify(dataIndex).run();
 	}
 
 	@SneakyThrows
@@ -276,7 +271,8 @@ class ScrapePublicContractsTest {
 						loadContractItemsMap(190753200),
 						loadContractItemsMap(3000),
 						loadContractItemsMap(4000),
-						loadContractItemsMap(5000))
+						loadContractItemsMap(5000),
+						loadContractItemsMap(6000))
 				.stream()
 				.sorted(Ordering.natural().onResultOf(m -> Long.parseLong(m.get("record_id"))))
 				.toList();
@@ -286,9 +282,10 @@ class ScrapePublicContractsTest {
 	private void assertDynamicItems(List<Map<String, String>> records) {
 		var dynamicItems = ListUtil.concat(
 						loadDynamicItemsMap(47804, 1027826381003L, 190124106),
-						loadDynamicItemsMap(49734, 1040731418725L, 190160355))
+						loadDynamicItemsMap(49734, 1040731418725L, 190160355),
+						loadDynamicItemsMap(47801, 6000L, 6000))
 				.stream()
-				.sorted(Ordering.natural().onResultOf(m -> m.get("item_id")))
+				.sorted(Ordering.natural().onResultOf(m -> Long.parseLong(m.get("item_id"))))
 				.toList();
 		assertEquals(concat(dynamicItems), concat(records));
 	}
@@ -310,7 +307,8 @@ class ScrapePublicContractsTest {
 	private void assertDogmaAttributes(List<Map<String, String>> records) {
 		var dogmaAttributes = ListUtil.concat(
 						loadDogmaAttributesMap(47804, 1027826381003L, 190124106),
-						loadDogmaAttributesMap(49734, 1040731418725L, 190160355))
+						loadDogmaAttributesMap(49734, 1040731418725L, 190160355),
+						loadDogmaAttributesMap(47801, 6000L, 6000))
 				.stream()
 				.sorted(Ordering.natural()
 						.onResultOf(m -> Long.toHexString(Long.parseLong(m.get("item_id"))) + "-"
@@ -322,7 +320,8 @@ class ScrapePublicContractsTest {
 	private void assertDogmaEffects(List<Map<String, String>> records) {
 		var dogmaEffects = ListUtil.concat(
 						loadDogmaEffectsMap(47804, 1027826381003L, 190124106),
-						loadDogmaEffectsMap(49734, 1040731418725L, 190160355))
+						loadDogmaEffectsMap(49734, 1040731418725L, 190160355),
+						loadDogmaEffectsMap(47801, 6000L, 6000))
 				.stream()
 				.sorted(Ordering.natural()
 						.onResultOf(m -> Long.toHexString(Long.parseLong(m.get("item_id"))) + "-"
