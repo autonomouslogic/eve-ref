@@ -15,6 +15,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Single;
 import java.io.File;
+import java.time.Duration;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import javax.inject.Inject;
@@ -66,6 +67,9 @@ public class ScrapeMarketOrders implements Command {
 
 	@Setter
 	private ZonedDateTime scrapeTime;
+
+	private final Duration latestCacheTime = Configs.MARKET_ORDERS_LATEST_CACHE_CONTROL_MAX_AGE.getRequired();
+	private final Duration archiveCacheTime = Configs.MARKET_ORDERS_ARCHIVE_CACHE_CONTROL_MAX_AGE.getRequired();
 
 	@Inject
 	protected ScrapeMarketOrders() {}
@@ -147,8 +151,10 @@ public class ScrapeMarketOrders implements Command {
 					.bucket(dataUrl.getBucket())
 					.path(dataUrl.getPath() + MARKET_ORDERS.createArchivePath(scrapeTime))
 					.build();
-			var latestPut = s3Util.putPublicObjectRequest(outputFile.length(), latestPath, "application/x-bzip2");
-			var archivePut = s3Util.putPublicObjectRequest(outputFile.length(), archivePath, "application/x-bzip2");
+			var latestPut = s3Util.putPublicObjectRequest(
+					outputFile.length(), latestPath, "application/x-bzip2", latestCacheTime);
+			var archivePut = s3Util.putPublicObjectRequest(
+					outputFile.length(), archivePath, "application/x-bzip2", archiveCacheTime);
 			log.info(String.format("Uploading latest file to %s", latestPath));
 			log.info(String.format("Uploading archive file to %s", archivePath));
 			return Completable.mergeArray(
