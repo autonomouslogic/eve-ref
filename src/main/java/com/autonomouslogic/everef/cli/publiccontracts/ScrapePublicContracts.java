@@ -19,7 +19,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Single;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.ZoneOffset;
@@ -35,7 +34,6 @@ import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import okhttp3.OkHttpClient;
-import org.apache.commons.io.IOUtils;
 import org.h2.mvstore.MVMap;
 import org.h2.mvstore.MVStore;
 import org.h2.mvstore.type.ObjectDataType;
@@ -203,17 +201,13 @@ public class ScrapePublicContracts implements Command {
 		return Completable.defer(() -> {
 					var baseUrl = Configs.DATA_BASE_URL.getRequired();
 					var url = baseUrl + "/public-contracts/public-contracts-latest.v2.tar.bz2";
-					return okHttpHelper.get(url, okHttpClient).flatMapCompletable(response -> {
+					var file = tempFiles
+							.tempFile("public-contracts-latest", ".tar.bz2")
+							.toFile();
+					return okHttpHelper.download(url, file, okHttpClient).flatMapCompletable(response -> {
 						if (response.code() != 200) {
 							log.warn("Failed loading latest contracts: HTTP {}, ignoring", response.code());
 							return Completable.complete();
-						}
-						var file = tempFiles
-								.tempFile("public-contracts-latest", ".tar.bz2")
-								.toFile();
-						try (var in = response.body().byteStream();
-								var out = new FileOutputStream(file)) {
-							IOUtils.copy(in, out);
 						}
 						return contractsFileLoaderProvider
 								.get()
