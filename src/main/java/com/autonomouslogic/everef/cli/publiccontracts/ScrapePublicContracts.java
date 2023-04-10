@@ -84,6 +84,9 @@ public class ScrapePublicContracts implements Command {
 	@Setter
 	private ZonedDateTime scrapeTime;
 
+	private final Duration latestCacheTime = Configs.PUBLIC_CONTRACTS_LATEST_CACHE_CONTROL_MAX_AGE.getRequired();
+	private final Duration archiveCacheTime = Configs.PUBLIC_CONTRACTS_ARCHIVE_CACHE_CONTROL_MAX_AGE.getRequired();
+
 	private S3Url dataUrl;
 	private MVStore mvStore;
 	private MVMap<Long, JsonNode> contractsStore;
@@ -120,7 +123,7 @@ public class ScrapePublicContracts implements Command {
 						loadLatestContracts(),
 						fetchAndStoreContracts(),
 						deleteOldContracts(),
-						buildFile().flatMapCompletable(this::uploadFile))
+						buildFile().flatMapCompletable(this::uploadFiles))
 				.doFinally(this::closeMvStore);
 	}
 
@@ -334,7 +337,7 @@ public class ScrapePublicContracts implements Command {
 	 * Uploads the final file to S3.
 	 * @return
 	 */
-	private Completable uploadFile(File outputFile) {
+	private Completable uploadFiles(File outputFile) {
 		return Completable.defer(() -> {
 			var latestPath = S3Url.builder()
 					.bucket(dataUrl.getBucket())
@@ -344,8 +347,10 @@ public class ScrapePublicContracts implements Command {
 					.bucket(dataUrl.getBucket())
 					.path(dataUrl.getPath() + PUBLIC_CONTRACTS.createArchivePath(scrapeTime))
 					.build();
-			var latestPut = s3Util.putPublicObjectRequest(outputFile.length(), latestPath, "application/x-bzip2");
-			var archivePut = s3Util.putPublicObjectRequest(outputFile.length(), archivePath, "application/x-bzip2");
+			var latestPut = s3Util.putPublicObjectRequest(
+					outputFile.length(), latestPath, "application/x-bzip2", latestCacheTime);
+			var archivePut = s3Util.putPublicObjectRequest(
+					outputFile.length(), archivePath, "application/x-bzip2", archiveCacheTime);
 			log.info(String.format("Uploading latest file to %s", latestPath));
 			log.info(String.format("Uploading archive file to %s", archivePath));
 			return Completable.mergeArray(

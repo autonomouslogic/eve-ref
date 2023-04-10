@@ -177,6 +177,24 @@ public class Configs {
 			.build();
 
 	/**
+	 * The cache time to use for public contracts archive files.
+	 */
+	public static final Config<Duration> PUBLIC_CONTRACTS_ARCHIVE_CACHE_CONTROL_MAX_AGE = Config.<Duration>builder()
+			.name("PUBLIC_CONTRACTS_ARCHIVE_CACHE_CONTROL_MAX_AGE")
+			.defaultValue(DEFAULT_ARCHIVE_MAX_AGE)
+			.type(Duration.class)
+			.build();
+
+	/**
+	 * The cache time to use for latest public contracts files.
+	 */
+	public static final Config<Duration> PUBLIC_CONTRACTS_LATEST_CACHE_CONTROL_MAX_AGE = Config.<Duration>builder()
+			.name("PUBLIC_CONTRACTS_LATEST_CACHE_CONTROL_MAX_AGE")
+			.defaultValue(DEFAULT_LATEST_MAX_AGE)
+			.type(Duration.class)
+			.build();
+
+	/**
 	 * Number of index pages to build and upload concurrently.
 	 */
 	public static final Config<Integer> DATA_INDEX_CONCURRENCY = Config.<Integer>builder()
