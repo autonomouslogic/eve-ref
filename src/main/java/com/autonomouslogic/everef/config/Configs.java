@@ -212,7 +212,7 @@ public class Configs {
 	 */
 	public static final Config<Integer> ESI_RATE_LIMIT_PER_S = Config.<Integer>builder()
 			.name("ESI_RATE_LIMIT_PER_S")
-			.defaultValue(100)
+			.defaultValue(50)
 			.type(Integer.class)
 			.build();
 
@@ -221,7 +221,7 @@ public class Configs {
 	 */
 	public static final Config<Integer> ESI_HTTP_THREADS = Config.<Integer>builder()
 			.name("ESI_HTTP_THREADS")
-			.defaultValue(16)
+			.defaultValue(Runtime.getRuntime().availableProcessors() * 2)
 			.type(Integer.class)
 			.build();
 
