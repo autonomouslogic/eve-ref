@@ -1,5 +1,6 @@
 package com.autonomouslogic.everef.cli.publiccontracts;
 
+import com.autonomouslogic.everef.util.FormatUtil;
 import com.autonomouslogic.everef.util.JsonNodeCsvWriter;
 import com.autonomouslogic.everef.util.TempFiles;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -45,11 +46,11 @@ public class ContractsFileBuilder {
 	public static final Function<JsonNode, Long> NON_DYNAMIC_ITEM_ID =
 			node -> node.get("item_id").asLong();
 	public static final Function<JsonNode, String> DOGMA_ATTRIBUTE_ID =
-			node -> Long.toHexString(node.get("item_id").asLong()) + "-"
-					+ Long.toHexString(node.get("attribute_id").asLong());
+			node -> FormatUtil.toHexString(node.get("item_id").asLong()) + "-"
+					+ FormatUtil.toHexString(node.get("attribute_id").asLong());
 	public static final Function<JsonNode, String> DOGMA_EFFECT_ID =
-			node -> Long.toHexString(node.get("item_id").asLong()) + "-"
-					+ Long.toHexString(node.get("effect_id").asLong());
+			node -> FormatUtil.toHexString(node.get("item_id").asLong()) + "-"
+					+ FormatUtil.toHexString(node.get("effect_id").asLong());
 
 	@Inject
 	protected TempFiles tempFiles;

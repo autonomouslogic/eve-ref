@@ -223,8 +223,14 @@ public class ScrapePublicContracts implements Command {
 								.setDogmaEffectsStore(dogmaEffectsStore)
 								.loadFile(file)
 								.doOnSuccess(meta -> {
+									var age = Duration.between(meta.getScrapeStart(), Instant.now());
+									if (age.compareTo(Duration.ofHours(1)) > 0) {
+										log.warn("Downloaded latest contracts is old: {}", age);
+									}
 									log.debug(
-											"Loaded latest contracts from scrape starting: {}", meta.getScrapeStart());
+											"Loaded latest contracts from scrape starting: {} - age: {}",
+											meta.getScrapeStart(),
+											age);
 								})
 								.ignoreElement();
 					});
@@ -242,7 +248,7 @@ public class ScrapePublicContracts implements Command {
 		return Completable.defer(() -> {
 			log.debug("Fetching contracts");
 			var start = Instant.now();
-			ContractFetcher contractFetcher = contractFetcherProvider
+			var contractFetcher = contractFetcherProvider
 					.get()
 					.setContractsStore(contractsStore)
 					.setItemsStore(itemsStore)
@@ -292,7 +298,7 @@ public class ScrapePublicContracts implements Command {
 	}
 
 	private <K> void deleteContractSub(String name, MVMap<K, JsonNode> map) {
-		int removed = new MVMapRemover<>(map)
+		var removed = new MVMapRemover<>(map)
 				.removeIf((id, contract) -> {
 					long contractId = contract.get("contract_id").asLong();
 					return !seenContractIds.contains(contractId);
