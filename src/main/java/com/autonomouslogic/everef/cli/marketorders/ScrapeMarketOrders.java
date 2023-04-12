@@ -10,7 +10,6 @@ import com.autonomouslogic.everef.s3.S3Adapter;
 import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.url.UrlParser;
 import com.autonomouslogic.everef.util.S3Util;
-import com.autonomouslogic.everef.util.TempFiles;
 import com.fasterxml.jackson.databind.JsonNode;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Single;
@@ -57,9 +56,6 @@ public class ScrapeMarketOrders implements Command {
 
 	@Inject
 	protected UrlParser urlParser;
-
-	@Inject
-	protected TempFiles tempFiles;
 
 	private S3Url dataUrl;
 	private MVStore mvStore;

@@ -28,46 +28,86 @@ public class UniverseEsi {
 
 	private List<Integer> regionIds;
 	private final Map<Integer, Optional<GetUniverseRegionsRegionIdOk>> regions = new ConcurrentHashMap<>();
-	private final Map<Integer, Optional<GetUniverseStationsStationIdOk>> stations = new ConcurrentHashMap<>();
-	private final Map<Integer, Optional<GetUniverseSystemsSystemIdOk>> systems = new ConcurrentHashMap<>();
 	private final Map<Integer, Optional<GetUniverseConstellationsConstellationIdOk>> constellations =
 			new ConcurrentHashMap<>();
+	private final Map<Integer, Optional<GetUniverseSystemsSystemIdOk>> systems = new ConcurrentHashMap<>();
+	private final Map<Integer, Optional<GetUniverseStationsStationIdOk>> stations = new ConcurrentHashMap<>();
 	private final Map<Integer, Optional<GetUniverseTypesTypeIdOk>> types = new ConcurrentHashMap<>();
 
 	@Inject
 	protected UniverseEsi() {}
 
 	public Flowable<Integer> getRegionIds() {
-		if (regionIds != null) {
-			return Flowable.fromIterable(regionIds);
-		}
 		return Flowable.defer(() -> {
-					log.trace("Fetching region ids");
-					var d = UniverseApi.Datasource_getUniverseRegions.valueOf(datasource);
-					var regions = universeApi.getUniverseRegions(d, null);
-					regionIds = regions;
-					return Flowable.fromIterable(regions);
-				})
-				.compose(Rx.offloadFlowable());
+			if (regionIds != null) {
+				return Flowable.fromIterable(regionIds);
+			}
+			return Flowable.defer(() -> {
+						log.trace("Fetching region ids");
+						var d = UniverseApi.Datasource_getUniverseRegions.valueOf(datasource);
+						var regions = universeApi.getUniverseRegions(d, null);
+						regionIds = regions;
+						return Flowable.fromIterable(regions);
+					})
+					.compose(Rx.offloadFlowable(EsiHelper.ESI_SCHEDULER));
+		});
 	}
 
 	public Maybe<GetUniverseRegionsRegionIdOk> getRegion(int regionId) {
-		if (regions.containsKey(regionId)) {
-			return Maybe.fromOptional(regions.get(regionId));
-		}
 		return Maybe.defer(() -> {
-					log.trace(String.format("Fetching region %s", regionId));
-					var source = UniverseApi.Datasource_getUniverseRegionsRegionId.valueOf(datasource);
-					var region = universeApi.getUniverseRegionsRegionId(regionId, null, source, null, null);
-					var optional = Optional.ofNullable(region);
-					regions.put(regionId, optional);
-					return Maybe.fromOptional(optional);
-				})
-				.compose(Rx.offloadMaybe());
+			if (regions.containsKey(regionId)) {
+				return Maybe.fromOptional(regions.get(regionId));
+			}
+			return Maybe.defer(() -> {
+						log.trace(String.format("Fetching region %s", regionId));
+						var source = UniverseApi.Datasource_getUniverseRegionsRegionId.valueOf(datasource);
+						var region = universeApi.getUniverseRegionsRegionId(regionId, null, source, null, null);
+						var optional = Optional.ofNullable(region);
+						regions.put(regionId, optional);
+						return Maybe.fromOptional(optional);
+					})
+					.compose(Rx.offloadMaybe(EsiHelper.ESI_SCHEDULER));
+		});
 	}
 
 	public Flowable<GetUniverseRegionsRegionIdOk> getAllRegions() {
 		return getRegionIds().flatMapMaybe(regionId -> getRegion(regionId));
+	}
+
+	public Maybe<GetUniverseConstellationsConstellationIdOk> getConstellation(int constellationId) {
+		return Maybe.defer(() -> {
+			if (constellations.containsKey(constellationId)) {
+				return Maybe.fromOptional(constellations.get(constellationId));
+			}
+			return Maybe.defer(() -> {
+						log.trace(String.format("Fetching constellation %s", constellationId));
+						var source =
+								UniverseApi.Datasource_getUniverseConstellationsConstellationId.valueOf(datasource);
+						var constellation = universeApi.getUniverseConstellationsConstellationId(
+								constellationId, null, source, null, null);
+						var optional = Optional.ofNullable(constellation);
+						constellations.put(constellationId, optional);
+						return Maybe.fromOptional(optional);
+					})
+					.compose(Rx.offloadMaybe(EsiHelper.ESI_SCHEDULER));
+		});
+	}
+
+	public Maybe<GetUniverseSystemsSystemIdOk> getSystem(int systemId) {
+		return Maybe.defer(() -> {
+			if (systems.containsKey(systemId)) {
+				return Maybe.fromOptional(systems.get(systemId));
+			}
+			return Maybe.defer(() -> {
+						log.trace(String.format("Fetching system %s", systemId));
+						var source = UniverseApi.Datasource_getUniverseSystemsSystemId.valueOf(datasource);
+						var system = universeApi.getUniverseSystemsSystemId(systemId, null, source, null, null);
+						var optional = Optional.ofNullable(system);
+						systems.put(systemId, optional);
+						return Maybe.fromOptional(optional);
+					})
+					.compose(Rx.offloadMaybe(EsiHelper.ESI_SCHEDULER));
+		});
 	}
 
 	public Maybe<GetUniverseStationsStationIdOk> getNpcStation(int stationId) {
@@ -76,63 +116,36 @@ public class UniverseEsi {
 			log.trace(String.format("Ignoring request for non-NPC station %s", stationId));
 			return Maybe.empty();
 		}
-		if (stations.containsKey(stationId)) {
-			return Maybe.fromOptional(stations.get(stationId));
-		}
 		return Maybe.defer(() -> {
-					log.trace(String.format("Fetching station %s", stationId));
-					var source = UniverseApi.Datasource_getUniverseStationsStationId.valueOf(datasource);
-					var station = universeApi.getUniverseStationsStationId(stationId, source, null);
-					var optional = Optional.ofNullable(station);
-					stations.put(stationId, optional);
-					return Maybe.fromOptional(optional);
-				})
-				.compose(Rx.offloadMaybe());
-	}
-
-	public Maybe<GetUniverseSystemsSystemIdOk> getSystem(int systemId) {
-		if (systems.containsKey(systemId)) {
-			return Maybe.fromOptional(systems.get(systemId));
-		}
-		return Maybe.defer(() -> {
-					log.trace(String.format("Fetching system %s", systemId));
-					var source = UniverseApi.Datasource_getUniverseSystemsSystemId.valueOf(datasource);
-					var system = universeApi.getUniverseSystemsSystemId(systemId, null, source, null, null);
-					var optional = Optional.ofNullable(system);
-					systems.put(systemId, optional);
-					return Maybe.fromOptional(optional);
-				})
-				.compose(Rx.offloadMaybe());
-	}
-
-	public Maybe<GetUniverseConstellationsConstellationIdOk> getConstellation(int constellationId) {
-		if (constellations.containsKey(constellationId)) {
-			return Maybe.fromOptional(constellations.get(constellationId));
-		}
-		return Maybe.defer(() -> {
-					log.trace(String.format("Fetching constellation %s", constellationId));
-					var source = UniverseApi.Datasource_getUniverseConstellationsConstellationId.valueOf(datasource);
-					var constellation = universeApi.getUniverseConstellationsConstellationId(
-							constellationId, null, source, null, null);
-					var optional = Optional.ofNullable(constellation);
-					constellations.put(constellationId, optional);
-					return Maybe.fromOptional(optional);
-				})
-				.compose(Rx.offloadMaybe());
+			if (stations.containsKey(stationId)) {
+				return Maybe.fromOptional(stations.get(stationId));
+			}
+			return Maybe.defer(() -> {
+						log.trace(String.format("Fetching station %s", stationId));
+						var source = UniverseApi.Datasource_getUniverseStationsStationId.valueOf(datasource);
+						var station = universeApi.getUniverseStationsStationId(stationId, source, null);
+						var optional = Optional.ofNullable(station);
+						stations.put(stationId, optional);
+						return Maybe.fromOptional(optional);
+					})
+					.compose(Rx.offloadMaybe(EsiHelper.ESI_SCHEDULER));
+		});
 	}
 
 	public Maybe<GetUniverseTypesTypeIdOk> getType(int typeId) {
-		if (types.containsKey(typeId)) {
-			return Maybe.fromOptional(types.get(typeId));
-		}
 		return Maybe.defer(() -> {
-					log.trace(String.format("Fetching type %s", typeId));
-					var source = UniverseApi.Datasource_getUniverseTypesTypeId.valueOf(datasource);
-					var type = universeApi.getUniverseTypesTypeId(typeId, null, source, null, null);
-					var optional = Optional.ofNullable(type);
-					types.put(typeId, optional);
-					return Maybe.fromOptional(optional);
-				})
-				.compose(Rx.offloadMaybe());
+			if (types.containsKey(typeId)) {
+				return Maybe.fromOptional(types.get(typeId));
+			}
+			return Maybe.defer(() -> {
+						log.trace(String.format("Fetching type %s", typeId));
+						var source = UniverseApi.Datasource_getUniverseTypesTypeId.valueOf(datasource);
+						var type = universeApi.getUniverseTypesTypeId(typeId, null, source, null, null);
+						var optional = Optional.ofNullable(type);
+						types.put(typeId, optional);
+						return Maybe.fromOptional(optional);
+					})
+					.compose(Rx.offloadMaybe(EsiHelper.ESI_SCHEDULER));
+		});
 	}
 }

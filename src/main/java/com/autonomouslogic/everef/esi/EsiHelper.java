@@ -23,7 +23,7 @@ import okhttp3.Response;
 @Log4j2
 public class EsiHelper {
 	private static final String PAGES_HEADER = "X-Pages";
-	private static final Scheduler ESI_SCHEDULER;
+	public static final Scheduler ESI_SCHEDULER;
 
 	static {
 		var threads = Configs.ESI_HTTP_THREADS.getRequired();
