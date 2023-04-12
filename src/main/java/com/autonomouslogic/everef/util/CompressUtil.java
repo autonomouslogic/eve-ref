@@ -13,8 +13,8 @@ public class CompressUtil {
 	@SneakyThrows
 	public static File compressBzip2(File file) {
 		var compressed = new File(file.getPath() + ".bz2");
-		int blockSize = BZip2CompressorOutputStream.chooseBlockSize(file.length());
-		log.info(String.format("Compressing %s to %s", file.getPath(), compressed.getPath()));
+		int blockSize = Math.min(BZip2CompressorOutputStream.chooseBlockSize(file.length()), 7);
+		log.info("Compressing {} to {} - blockSize: {}", file.getPath(), compressed.getPath(), blockSize);
 		try (var out = new BZip2CompressorOutputStream(new FileOutputStream(compressed), blockSize)) {
 			IOUtils.copy(new FileInputStream(file), out);
 		}

@@ -16,6 +16,7 @@ import javax.inject.Inject;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.h2.mvstore.MVMap;
 
 @Slf4j
@@ -74,7 +75,15 @@ public class MarketOrderFetcher {
 							});
 				})
 				.doOnComplete(() ->
-						log.info(String.format("Fetched %d market orders from %s", count.get(), region.getName())));
+						log.info(String.format("Fetched %d market orders from %s", count.get(), region.getName())))
+				.retry(2, e -> {
+					log.warn("Retrying region {}: {}", region.getName(), ExceptionUtils.getMessage(e));
+					return true;
+				})
+				.onErrorResumeNext(e -> {
+					return Flowable.error(new RuntimeException(
+							String.format("Failed fetching market orders from %s", region.getName()), e));
+				});
 	}
 
 	private Completable saveMarketOrder(ObjectNode order) {

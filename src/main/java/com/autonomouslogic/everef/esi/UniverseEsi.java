@@ -10,6 +10,7 @@ import com.autonomouslogic.everef.openapi.esi.models.GetUniverseTypesTypeIdOk;
 import com.autonomouslogic.everef.util.Rx;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Maybe;
+import io.reactivex.rxjava3.functions.Supplier;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -17,6 +18,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.extern.log4j.Log4j2;
+import org.jetbrains.annotations.NotNull;
 
 @Singleton
 @Log4j2
@@ -54,19 +56,9 @@ public class UniverseEsi {
 	}
 
 	public Maybe<GetUniverseRegionsRegionIdOk> getRegion(int regionId) {
-		return Maybe.defer(() -> {
-			if (regions.containsKey(regionId)) {
-				return Maybe.fromOptional(regions.get(regionId));
-			}
-			return Maybe.defer(() -> {
-						log.trace(String.format("Fetching region %s", regionId));
-						var source = UniverseApi.Datasource_getUniverseRegionsRegionId.valueOf(datasource);
-						var region = universeApi.getUniverseRegionsRegionId(regionId, null, source, null, null);
-						var optional = Optional.ofNullable(region);
-						regions.put(regionId, optional);
-						return Maybe.fromOptional(optional);
-					})
-					.compose(Rx.offloadMaybe(EsiHelper.ESI_SCHEDULER));
+		return getFromCacheOrFetch("region", GetUniverseRegionsRegionIdOk.class, regions, regionId, () -> {
+			var source = UniverseApi.Datasource_getUniverseRegionsRegionId.valueOf(datasource);
+			return universeApi.getUniverseRegionsRegionId(regionId, null, source, null, null);
 		});
 	}
 
@@ -75,38 +67,22 @@ public class UniverseEsi {
 	}
 
 	public Maybe<GetUniverseConstellationsConstellationIdOk> getConstellation(int constellationId) {
-		return Maybe.defer(() -> {
-			if (constellations.containsKey(constellationId)) {
-				return Maybe.fromOptional(constellations.get(constellationId));
-			}
-			return Maybe.defer(() -> {
-						log.trace(String.format("Fetching constellation %s", constellationId));
-						var source =
-								UniverseApi.Datasource_getUniverseConstellationsConstellationId.valueOf(datasource);
-						var constellation = universeApi.getUniverseConstellationsConstellationId(
-								constellationId, null, source, null, null);
-						var optional = Optional.ofNullable(constellation);
-						constellations.put(constellationId, optional);
-						return Maybe.fromOptional(optional);
-					})
-					.compose(Rx.offloadMaybe(EsiHelper.ESI_SCHEDULER));
-		});
+		return getFromCacheOrFetch(
+				"constellation",
+				GetUniverseConstellationsConstellationIdOk.class,
+				constellations,
+				constellationId,
+				() -> {
+					var source = UniverseApi.Datasource_getUniverseConstellationsConstellationId.valueOf(datasource);
+					return universeApi.getUniverseConstellationsConstellationId(
+							constellationId, null, source, null, null);
+				});
 	}
 
 	public Maybe<GetUniverseSystemsSystemIdOk> getSystem(int systemId) {
-		return Maybe.defer(() -> {
-			if (systems.containsKey(systemId)) {
-				return Maybe.fromOptional(systems.get(systemId));
-			}
-			return Maybe.defer(() -> {
-						log.trace(String.format("Fetching system %s", systemId));
-						var source = UniverseApi.Datasource_getUniverseSystemsSystemId.valueOf(datasource);
-						var system = universeApi.getUniverseSystemsSystemId(systemId, null, source, null, null);
-						var optional = Optional.ofNullable(system);
-						systems.put(systemId, optional);
-						return Maybe.fromOptional(optional);
-					})
-					.compose(Rx.offloadMaybe(EsiHelper.ESI_SCHEDULER));
+		return getFromCacheOrFetch("system", GetUniverseSystemsSystemIdOk.class, systems, systemId, () -> {
+			var source = UniverseApi.Datasource_getUniverseSystemsSystemId.valueOf(datasource);
+			return universeApi.getUniverseSystemsSystemId(systemId, null, source, null, null);
 		});
 	}
 
@@ -116,33 +92,31 @@ public class UniverseEsi {
 			log.trace(String.format("Ignoring request for non-NPC station %s", stationId));
 			return Maybe.empty();
 		}
-		return Maybe.defer(() -> {
-			if (stations.containsKey(stationId)) {
-				return Maybe.fromOptional(stations.get(stationId));
-			}
-			return Maybe.defer(() -> {
-						log.trace(String.format("Fetching station %s", stationId));
-						var source = UniverseApi.Datasource_getUniverseStationsStationId.valueOf(datasource);
-						var station = universeApi.getUniverseStationsStationId(stationId, source, null);
-						var optional = Optional.ofNullable(station);
-						stations.put(stationId, optional);
-						return Maybe.fromOptional(optional);
-					})
-					.compose(Rx.offloadMaybe(EsiHelper.ESI_SCHEDULER));
+		return getFromCacheOrFetch("station", GetUniverseStationsStationIdOk.class, stations, stationId, () -> {
+			var source = UniverseApi.Datasource_getUniverseStationsStationId.valueOf(datasource);
+			return universeApi.getUniverseStationsStationId(stationId, source, null);
 		});
 	}
 
 	public Maybe<GetUniverseTypesTypeIdOk> getType(int typeId) {
+		return getFromCacheOrFetch("type", GetUniverseTypesTypeIdOk.class, types, typeId, () -> {
+			var source = UniverseApi.Datasource_getUniverseTypesTypeId.valueOf(datasource);
+			return universeApi.getUniverseTypesTypeId(typeId, null, source, null, null);
+		});
+	}
+
+	@NotNull
+	private <T> Maybe<T> getFromCacheOrFetch(
+			String name, Class<T> type, Map<Integer, Optional<T>> cache, int id, Supplier<T> fetcher) {
 		return Maybe.defer(() -> {
-			if (types.containsKey(typeId)) {
-				return Maybe.fromOptional(types.get(typeId));
+			if (cache.containsKey(id)) {
+				return Maybe.fromOptional(cache.get(id));
 			}
 			return Maybe.defer(() -> {
-						log.trace(String.format("Fetching type %s", typeId));
-						var source = UniverseApi.Datasource_getUniverseTypesTypeId.valueOf(datasource);
-						var type = universeApi.getUniverseTypesTypeId(typeId, null, source, null, null);
-						var optional = Optional.ofNullable(type);
-						types.put(typeId, optional);
+						log.trace("Fetching {} {}", name, id);
+						var obj = fetcher.get();
+						var optional = Optional.ofNullable(obj);
+						cache.put(id, optional);
 						return Maybe.fromOptional(optional);
 					})
 					.compose(Rx.offloadMaybe(EsiHelper.ESI_SCHEDULER));
