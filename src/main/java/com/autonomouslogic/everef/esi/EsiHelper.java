@@ -28,7 +28,7 @@ public class EsiHelper {
 	static {
 		var threads = Configs.ESI_HTTP_THREADS.getRequired();
 		var factory = new ThreadFactoryBuilder().setNameFormat("esi-http-%d").build();
-		log.debug(String.format("Using %d threads for ESI HTTP requests", threads));
+		log.debug("Using {} threads for ESI HTTP requests", threads);
 		ESI_SCHEDULER = Schedulers.from(Executors.newFixedThreadPool(threads, factory));
 	}
 
