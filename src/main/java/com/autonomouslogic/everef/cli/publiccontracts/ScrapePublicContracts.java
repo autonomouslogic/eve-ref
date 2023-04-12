@@ -4,7 +4,6 @@ import static com.autonomouslogic.everef.util.ArchivePathFactory.PUBLIC_CONTRACT
 
 import com.autonomouslogic.everef.cli.Command;
 import com.autonomouslogic.everef.config.Configs;
-import com.autonomouslogic.everef.mvstore.JsonNodeDataType;
 import com.autonomouslogic.everef.mvstore.MVMapRemover;
 import com.autonomouslogic.everef.mvstore.MVStoreUtil;
 import com.autonomouslogic.everef.s3.S3Adapter;
@@ -36,7 +35,6 @@ import lombok.extern.log4j.Log4j2;
 import okhttp3.OkHttpClient;
 import org.h2.mvstore.MVMap;
 import org.h2.mvstore.MVStore;
-import org.h2.mvstore.type.ObjectDataType;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 
 /**
@@ -52,9 +50,6 @@ public class ScrapePublicContracts implements Command {
 
 	@Inject
 	protected Provider<ContractsFileLoader> contractsFileLoaderProvider;
-
-	@Inject
-	protected JsonNodeDataType jsonNodeDataType;
 
 	@Inject
 	protected UrlParser urlParser;
@@ -84,8 +79,8 @@ public class ScrapePublicContracts implements Command {
 	@Setter
 	private ZonedDateTime scrapeTime;
 
-	private final Duration latestCacheTime = Configs.PUBLIC_CONTRACTS_LATEST_CACHE_CONTROL_MAX_AGE.getRequired();
-	private final Duration archiveCacheTime = Configs.PUBLIC_CONTRACTS_ARCHIVE_CACHE_CONTROL_MAX_AGE.getRequired();
+	private final Duration latestCacheTime = Configs.DATA_LATEST_CACHE_CONTROL_MAX_AGE.getRequired();
+	private final Duration archiveCacheTime = Configs.DATA_ARCHIVE_CACHE_CONTROL_MAX_AGE.getRequired();
 
 	private S3Url dataUrl;
 	private MVStore mvStore;
@@ -141,41 +136,13 @@ public class ScrapePublicContracts implements Command {
 			log.info("Opening MVStore");
 			mvStore = mvStoreUtil.createTempStore("public-contracts");
 			log.debug("MVStore opened at {}", mvStore.getFileStore().getFileName());
-			contractsStore = mvStore.openMap(
-					"contracts",
-					new MVMap.Builder<Long, JsonNode>()
-							.keyType(new ObjectDataType())
-							.valueType(jsonNodeDataType));
-			itemsStore = mvStore.openMap(
-					"items",
-					new MVMap.Builder<Long, JsonNode>()
-							.keyType(new ObjectDataType())
-							.valueType(jsonNodeDataType));
-			bidsStore = mvStore.openMap(
-					"bids",
-					new MVMap.Builder<Long, JsonNode>()
-							.keyType(new ObjectDataType())
-							.valueType(jsonNodeDataType));
-			dynamicItemsStore = mvStore.openMap(
-					"dynamic_items",
-					new MVMap.Builder<Long, JsonNode>()
-							.keyType(new ObjectDataType())
-							.valueType(jsonNodeDataType));
-			nonDynamicItemsStore = mvStore.openMap(
-					"non_dynamic_items",
-					new MVMap.Builder<Long, JsonNode>()
-							.keyType(new ObjectDataType())
-							.valueType(jsonNodeDataType));
-			dogmaAttributesStore = mvStore.openMap(
-					"dogma_attributes",
-					new MVMap.Builder<String, JsonNode>()
-							.keyType(new ObjectDataType())
-							.valueType(jsonNodeDataType));
-			dogmaEffectsStore = mvStore.openMap(
-					"dogma_effects",
-					new MVMap.Builder<String, JsonNode>()
-							.keyType(new ObjectDataType())
-							.valueType(jsonNodeDataType));
+			contractsStore = mvStoreUtil.openJsonMap(mvStore, "contracts", Long.class);
+			itemsStore = mvStoreUtil.openJsonMap(mvStore, "items", Long.class);
+			bidsStore = mvStoreUtil.openJsonMap(mvStore, "bids", Long.class);
+			dynamicItemsStore = mvStoreUtil.openJsonMap(mvStore, "dynamic_items", Long.class);
+			nonDynamicItemsStore = mvStoreUtil.openJsonMap(mvStore, "non_dynamic_items", Long.class);
+			dogmaAttributesStore = mvStoreUtil.openJsonMap(mvStore, "dogma_attributes", String.class);
+			dogmaEffectsStore = mvStoreUtil.openJsonMap(mvStore, "dogma_effects", String.class);
 			log.debug("MVStore initialised");
 		});
 	}
@@ -254,8 +221,8 @@ public class ScrapePublicContracts implements Command {
 					.setContractsStore(contractsStore)
 					.setItemsStore(itemsStore)
 					.setBidsStore(bidsStore);
-			contractFetcher
-					.getContractAbyssalFetcher()
+			var abyssalFetcher = contractFetcher.getContractAbyssalFetcher();
+			abyssalFetcher
 					.setDynamicItemsStore(dynamicItemsStore)
 					.setNonDynamicItemsStore(nonDynamicItemsStore)
 					.setDogmaAttributesStore(dogmaAttributesStore)

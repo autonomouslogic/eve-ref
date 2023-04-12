@@ -128,7 +128,7 @@ public class ContractFetcher {
 			var contractId = contract.get("contract_id").longValue();
 			var type = contract.get("type").textValue();
 			var tasks = new ArrayList<Completable>();
-			if (("item_exchange".endsWith(type) || "auction".equals(type))) {
+			if (("item_exchange".equals(type) || "auction".equals(type))) {
 				tasks.add(fetchContractItems(contractId));
 			}
 			if ("auction".equals(type)) {
@@ -143,8 +143,8 @@ public class ContractFetcher {
 			if (contractsWithItems.contains(contractId)) {
 				return Completable.complete();
 			}
-			var observable = fetchContractSub("items", ContractsFileBuilder.ITEM_ID, itemsStore, contractId);
-			return contractAbyssalFetcher.apply(contractId, observable);
+			var subs = fetchContractSub("items", ContractsFileBuilder.ITEM_ID, itemsStore, contractId);
+			return contractAbyssalFetcher.apply(contractId, subs);
 		});
 	}
 
