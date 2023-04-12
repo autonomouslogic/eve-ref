@@ -46,7 +46,8 @@ public class MarketOrderFetcher {
 				.flatMap(order ->
 						locationPopulator.populate(order, "location_id").andThen(Flowable.just(order)))
 				.doOnNext(this::verifyOrderLocation)
-				.flatMapCompletable(this::saveMarketOrder);
+				.flatMapCompletable(this::saveMarketOrder)
+				.onErrorResumeNext(e -> Completable.error(new RuntimeException("Failed fetching market orders", e)));
 	}
 
 	public Flowable<ObjectNode> fetchMarketOrders(@NonNull GetUniverseRegionsRegionIdOk region) {

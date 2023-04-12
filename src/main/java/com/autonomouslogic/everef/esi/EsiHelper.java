@@ -79,9 +79,13 @@ public class EsiHelper {
 	public Flowable<JsonNode> fetchPagesOfJsonArrays(EsiUrl url, BiFunction<JsonNode, Response, JsonNode> augmenter) {
 		return fetchPages(url).flatMap(response -> {
 			var node = decode(response);
+			if (node.isMissingNode()) {
+				log.warn("Empty response from {}", url);
+				return Flowable.empty();
+			}
 			if (!node.isArray()) {
 				return Flowable.error(
-						new RuntimeException(String.format("Expected array, got %s", node.getNodeType())));
+						new RuntimeException(String.format("Expected array, got %s - %s", node.getNodeType(), url)));
 			}
 			return Flowable.fromIterable(node).map(entry -> augmenter.apply(entry, response));
 		});

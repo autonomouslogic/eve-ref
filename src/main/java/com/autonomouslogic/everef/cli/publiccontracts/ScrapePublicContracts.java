@@ -138,7 +138,7 @@ public class ScrapePublicContracts implements Command {
 
 	private Completable initMvStore() {
 		return Completable.fromAction(() -> {
-			log.debug("Opening MVStore");
+			log.info("Opening MVStore");
 			mvStore = mvStoreUtil.createTempStore("public-contracts");
 			log.debug("MVStore opened at {}", mvStore.getFileStore().getFileName());
 			contractsStore = mvStore.openMap(
@@ -202,8 +202,9 @@ public class ScrapePublicContracts implements Command {
 	 */
 	private Completable loadLatestContracts() {
 		return Completable.defer(() -> {
+					log.info("Loading latest contracts");
 					var baseUrl = Configs.DATA_BASE_URL.getRequired();
-					var url = baseUrl + "/public-contracts/public-contracts-latest.v2.tar.bz2";
+					var url = baseUrl + "/" + PUBLIC_CONTRACTS.createLatestPath();
 					var file = tempFiles
 							.tempFile("public-contracts-latest", ".tar.bz2")
 							.toFile();
@@ -227,7 +228,7 @@ public class ScrapePublicContracts implements Command {
 									if (age.compareTo(Duration.ofHours(1)) > 0) {
 										log.warn("Downloaded latest contracts is old: {}", age);
 									}
-									log.debug(
+									log.info(
 											"Loaded latest contracts from scrape starting: {} - age: {}",
 											meta.getScrapeStart(),
 											age);
@@ -246,7 +247,7 @@ public class ScrapePublicContracts implements Command {
 	 */
 	private Completable fetchAndStoreContracts() {
 		return Completable.defer(() -> {
-			log.debug("Fetching contracts");
+			log.info("Fetching contracts");
 			var start = Instant.now();
 			var contractFetcher = contractFetcherProvider
 					.get()
@@ -283,7 +284,7 @@ public class ScrapePublicContracts implements Command {
 	 */
 	private Completable deleteOldContracts() {
 		return Completable.fromAction(() -> {
-			log.debug("Deleting old contracts");
+			log.info("Deleting old contracts");
 			int removed = new MVMapRemover<>(contractsStore)
 					.removeIf((contractId, contract) -> !seenContractIds.contains(contractId))
 					.getEntriesRemoved();

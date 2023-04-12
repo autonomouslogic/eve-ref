@@ -54,7 +54,7 @@ public class LocationPopulator {
 				return Completable.complete();
 			}
 			return universeEsi
-					.getNpcStation(stationId.asInt())
+					.getNpcStation(stationId.asLong())
 					.flatMapCompletable(station -> Completable.fromAction(() -> {
 						record.put("system_id", station.getSystemId());
 					}));

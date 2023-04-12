@@ -86,15 +86,16 @@ public class UniverseEsi {
 		});
 	}
 
-	public Maybe<GetUniverseStationsStationIdOk> getNpcStation(int stationId) {
+	public Maybe<GetUniverseStationsStationIdOk> getNpcStation(long stationId) {
 		// All NPC stations will have an ID below 100 million.
 		if (stationId > 100_000_000) {
 			log.trace(String.format("Ignoring request for non-NPC station %s", stationId));
 			return Maybe.empty();
 		}
-		return getFromCacheOrFetch("station", GetUniverseStationsStationIdOk.class, stations, stationId, () -> {
+		var intId = (int) stationId;
+		return getFromCacheOrFetch("station", GetUniverseStationsStationIdOk.class, stations, intId, () -> {
 			var source = UniverseApi.Datasource_getUniverseStationsStationId.valueOf(datasource);
-			return universeApi.getUniverseStationsStationId(stationId, source, null);
+			return universeApi.getUniverseStationsStationId(intId, source, null);
 		});
 	}
 
@@ -109,17 +110,19 @@ public class UniverseEsi {
 	private <T> Maybe<T> getFromCacheOrFetch(
 			String name, Class<T> type, Map<Integer, Optional<T>> cache, int id, Supplier<T> fetcher) {
 		return Maybe.defer(() -> {
-			if (cache.containsKey(id)) {
-				return Maybe.fromOptional(cache.get(id));
-			}
-			return Maybe.defer(() -> {
-						log.trace("Fetching {} {}", name, id);
-						var obj = fetcher.get();
-						var optional = Optional.ofNullable(obj);
-						cache.put(id, optional);
-						return Maybe.fromOptional(optional);
-					})
-					.compose(Rx.offloadMaybe(EsiHelper.ESI_SCHEDULER));
-		});
+					if (cache.containsKey(id)) {
+						return Maybe.fromOptional(cache.get(id));
+					}
+					return Maybe.defer(() -> {
+								log.trace("Fetching {} {}", name, id);
+								var obj = fetcher.get();
+								var optional = Optional.ofNullable(obj);
+								cache.put(id, optional);
+								return Maybe.fromOptional(optional);
+							})
+							.compose(Rx.offloadMaybe(EsiHelper.ESI_SCHEDULER));
+				})
+				.onErrorResumeNext(
+						e -> Maybe.error(new RuntimeException(String.format("Failed fetching %s %s", name, id), e)));
 	}
 }

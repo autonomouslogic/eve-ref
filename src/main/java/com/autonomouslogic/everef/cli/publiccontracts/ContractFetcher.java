@@ -25,6 +25,7 @@ import lombok.NonNull;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.h2.mvstore.MVMap;
 
 /**
@@ -113,8 +114,13 @@ public class ContractFetcher {
 								}
 							});
 				})
+				.retry(2, e -> {
+					log.warn("Retrying public contracts for {}: {}", region.getName(), ExceptionUtils.getMessage(e));
+					return true;
+				})
 				.doOnComplete(() ->
-						log.info(String.format("Fetched %d public contracts from %s", count.get(), region.getName())));
+						log.info(String.format("Fetched %d public contracts from %s", count.get(), region.getName())))
+				.onErrorResumeNext(e -> Flowable.error(new RuntimeException("Failed fetching public contracts", e)));
 	}
 
 	private Completable resolveItemsAndBids(ObjectNode contract) {
