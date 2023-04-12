@@ -93,12 +93,11 @@ public class Configs {
 
 	/**
 	 * The base path used when accessing the ESI.
-	 * This will be the version.
 	 */
-	public static final Config<String> ESI_BASE_PATH = Config.<String>builder()
-			.name("ESI_BASE_PATH")
-			.defaultValue("https://esi.evetech.net/latest")
-			.type(String.class)
+	public static final Config<URI> ESI_BASE_URL = Config.<URI>builder()
+			.name("ESI_BASE_URL")
+			.defaultValue(URI.create("https://esi.evetech.net/latest"))
+			.type(URI.class)
 			.build();
 
 	/**
@@ -282,9 +281,9 @@ public class Configs {
 	/**
 	 * Base path for requests to the main EVE Ref website.
 	 */
-	public static final Config<String> EVE_REF_BASE_PATH = Config.<String>builder()
-			.name("EVE_REF_BASE_PATH")
-			.type(String.class)
-			.defaultValue("https://everef.net")
+	public static final Config<URI> EVE_REF_BASE_URL = Config.<URI>builder()
+			.name("EVE_REF_BASE_URL")
+			.type(URI.class)
+			.defaultValue(URI.create("https://everef.net"))
 			.build();
 }

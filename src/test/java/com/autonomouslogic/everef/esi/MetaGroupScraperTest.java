@@ -51,7 +51,7 @@ public class MetaGroupScraperTest {
 	}
 
 	@Test
-	@SetEnvironmentVariable(key = "EVE_REF_BASE_PATH", value = "http://localhost:" + TestDataUtil.TEST_PORT)
+	@SetEnvironmentVariable(key = "EVE_REF_BASE_URL", value = "http://localhost:" + TestDataUtil.TEST_PORT)
 	@SneakyThrows
 	void shouldScrapeTypeIdsFromMetaGroups() {
 		var ids = metaGroupScraper.scrapeTypeIds(15).toList().blockingGet();

@@ -7,6 +7,7 @@ import com.autonomouslogic.everef.util.Rx;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Single;
 import java.io.IOException;
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 import javax.inject.Inject;
@@ -31,7 +32,7 @@ public class MetaGroupScraper {
 	@Inject
 	protected OkHttpHelper okHttpHelper;
 
-	private final String eveRefBasePath = Configs.EVE_REF_BASE_PATH.getRequired();
+	private final URI eveRefBaseUrl = Configs.EVE_REF_BASE_URL.getRequired();
 	private List<Integer> typeIds;
 
 	@Inject
@@ -55,7 +56,7 @@ public class MetaGroupScraper {
 	}
 
 	private Single<String> loadHtml(int metaGroupId) {
-		var url = eveRefBasePath + "/meta-groups/" + metaGroupId;
+		var url = eveRefBaseUrl + "/meta-groups/" + metaGroupId;
 		log.debug(String.format("Scraping types from meta group %s: %s", metaGroupId, url));
 		return okHttpHelper.get(url, okHttpClient).map(response -> {
 			if (response.code() != 200) {
