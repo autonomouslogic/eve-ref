@@ -14,8 +14,10 @@ import com.autonomouslogic.everef.openapi.esi.models.GetUniverseTypesTypeIdOk;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.test.MockS3Adapter;
 import com.autonomouslogic.everef.test.TestDataUtil;
+import com.autonomouslogic.everef.util.FormatUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.google.common.base.Function;
 import com.google.common.collect.Ordering;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -152,24 +154,6 @@ public class ScrapePublicContractsTest {
 		assertNonDynamicItems(records.get("contract_non_dynamic_items.csv"));
 		assertDogmaAttributes(records.get("contract_dynamic_items_dogma_attributes.csv"));
 		assertDogmaEffects(records.get("contract_dynamic_items_dogma_effects.csv"));
-
-		//			.stream()
-		//			.map(Map::toString)
-		//			.collect(Collectors.joining("\n"));
-		//		var expected = ListUtil.concat(
-		//				loadRegionOrderMaps(10000001, 1),
-		//				loadRegionOrderMaps(10000001, 2),
-		//				loadRegionOrderMaps(10000002, 1),
-		//				loadRegionOrderMaps(10000002, 2))
-		//			.stream()
-		//			.sorted(Ordering.compound(List.of(
-		//				Ordering.natural().onResultOf(m -> m.get("region_id")),
-		//				Ordering.natural().onResultOf(m -> m.get("type_id")))))
-		//			.peek(record -> record.put("constellation_id", "999"))
-		//			.peek(record -> record.put("station_id", "999"))
-		//			.map(Map::toString)
-		//			.collect(Collectors.joining("\n"));
-		//		assertEquals(expected, records);
 
 		// Assert the two files are the same.
 		mockS3Adapter.assertSameContent(BUCKET_NAME, archiveFile, latestFile, dataClient);
@@ -310,9 +294,9 @@ public class ScrapePublicContractsTest {
 						loadDogmaAttributesMap(49734, 1040731418725L, 190160355),
 						loadDogmaAttributesMap(47801, 6000L, 6000))
 				.stream()
-				.sorted(Ordering.natural()
-						.onResultOf(m -> Long.toHexString(Long.parseLong(m.get("item_id"))) + "-"
-								+ Long.toHexString(Long.parseLong(m.get("attribute_id")))))
+				.sorted(Ordering.natural().onResultOf((Function<Map<String, String>, String>)
+						m -> FormatUtil.toHexString(Long.parseLong(m.get("item_id"))) + "-"
+								+ FormatUtil.toHexString(Long.parseLong(m.get("attribute_id")))))
 				.toList();
 		assertEquals(concat(dogmaAttributes), concat(records));
 	}
@@ -323,9 +307,9 @@ public class ScrapePublicContractsTest {
 						loadDogmaEffectsMap(49734, 1040731418725L, 190160355),
 						loadDogmaEffectsMap(47801, 6000L, 6000))
 				.stream()
-				.sorted(Ordering.natural()
-						.onResultOf(m -> Long.toHexString(Long.parseLong(m.get("item_id"))) + "-"
-								+ Long.toHexString(Long.parseLong(m.get("effect_id")))))
+				.sorted(Ordering.natural().onResultOf((Function<Map<String, String>, String>)
+						m -> FormatUtil.toHexString(Long.parseLong(m.get("item_id"))) + "-"
+								+ FormatUtil.toHexString(Long.parseLong(m.get("effect_id")))))
 				.toList();
 		assertEquals(concat(dogmaEffects), concat(records));
 	}
