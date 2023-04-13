@@ -27,6 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.h2.mvstore.MVMap;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Fetches all the public contracts for all the regions.
@@ -82,30 +83,8 @@ public class ContractFetcher {
 		var count = new AtomicInteger();
 		return Flowable.defer(() -> {
 					log.info(String.format("Fetching public contracts from %s", region.getName()));
-					var esiUrl = EsiUrl.builder()
-							.urlPath(String.format("/contracts/public/%s", region.getRegionId()))
-							.build();
-					return esiHelper
-							.fetchPagesOfJsonArrays(esiUrl, (entry, response) -> {
-								var lastModified = okHttpHelper.getLastModified(response);
-								var obj = (ObjectNode) entry;
-								lastModified.ifPresent(date -> obj.put(
-										"http_last_modified", date.toInstant().toString()));
-								return obj;
-							})
-							.flatMap(
-									entry -> {
-										var obj = (ObjectNode) entry;
-										var contractId = obj.get("contract_id").asLong();
-										obj.put("region_id", region.getRegionId());
-										return locationPopulator
-												.populate(obj, "start_location_id")
-												.andThen(Completable.fromAction(() -> contractsStore.put(
-														ContractsFileBuilder.CONTRACT_ID.apply(obj), obj)))
-												.andThen(resolveItemsAndBids(obj))
-												.andThen(Flowable.just(contractId));
-									},
-									32)
+					return fetchContractsFromEsi(region)
+							.flatMap(contract -> populateLocation(region, contract), 32)
 							.doOnNext(ignore -> {
 								var n = count.incrementAndGet();
 								if (n % 1_000 == 0) {
@@ -121,6 +100,30 @@ public class ContractFetcher {
 				.doOnComplete(() ->
 						log.info(String.format("Fetched %d public contracts from %s", count.get(), region.getName())))
 				.onErrorResumeNext(e -> Flowable.error(new RuntimeException("Failed fetching public contracts", e)));
+	}
+
+	private Flowable<ObjectNode> fetchContractsFromEsi(GetUniverseRegionsRegionIdOk region) {
+		return Flowable.defer(() -> {
+			var esiUrl = EsiUrl.builder()
+					.urlPath(String.format("/contracts/public/%s", region.getRegionId()))
+					.build();
+			return esiHelper
+					.fetchPagesOfJsonArrays(esiUrl, esiHelper::populateLastModified)
+					.map(obj -> (ObjectNode) obj);
+		});
+	}
+
+	@NotNull
+	private Flowable<Long> populateLocation(GetUniverseRegionsRegionIdOk region, ObjectNode entry) {
+		var obj = entry;
+		var contractId = obj.get("contract_id").asLong();
+		obj.put("region_id", region.getRegionId());
+		return locationPopulator
+				.populate(obj, "start_location_id")
+				.andThen(Completable.fromAction(
+						() -> contractsStore.put(ContractsFileBuilder.CONTRACT_ID.apply(obj), obj)))
+				.andThen(resolveItemsAndBids(obj))
+				.andThen(Flowable.just(contractId));
 	}
 
 	private Completable resolveItemsAndBids(ObjectNode contract) {
@@ -159,13 +162,7 @@ public class ContractFetcher {
 				.urlPath(String.format("/contracts/public/%s/%s", sub, contractId))
 				.build();
 		return esiHelper
-				.fetchPagesOfJsonArrays(esiUrl, (entry, response) -> {
-					var lastModified = okHttpHelper.getLastModified(response);
-					var obj = (ObjectNode) entry;
-					lastModified.ifPresent(date ->
-							obj.put("http_last_modified", date.toInstant().toString()));
-					return obj;
-				})
+				.fetchPagesOfJsonArrays(esiUrl, esiHelper::populateLastModified)
 				.switchIfEmpty(Flowable.defer(() -> {
 					log.info(String.format(
 							"Public contract %s did not return anything for contract %s", sub, contractId));

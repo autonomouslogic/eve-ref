@@ -1,10 +1,16 @@
 package com.autonomouslogic.everef.cli.publiccontracts;
 
+import static com.autonomouslogic.everef.util.ArchivePathFactory.PUBLIC_CONTRACTS;
+
+import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.util.JsonNodeCsvReader;
+import com.autonomouslogic.everef.util.OkHttpHelper;
 import com.autonomouslogic.everef.util.Rx;
+import com.autonomouslogic.everef.util.TempFiles;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.reactivex.rxjava3.core.Maybe;
 import io.reactivex.rxjava3.core.Single;
 import java.io.File;
 import java.io.FileInputStream;
@@ -15,6 +21,7 @@ import lombok.NonNull;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
+import okhttp3.OkHttpClient;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
 import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream;
@@ -30,6 +37,15 @@ public class ContractsFileLoader {
 
 	@Inject
 	protected ObjectMapper objectMapper;
+
+	@Inject
+	protected TempFiles tempFiles;
+
+	@Inject
+	protected OkHttpClient okHttpClient;
+
+	@Inject
+	protected OkHttpHelper okHttpHelper;
 
 	@Setter
 	@NonNull
@@ -61,6 +77,35 @@ public class ContractsFileLoader {
 
 	@Inject
 	protected ContractsFileLoader() {}
+
+	public Maybe<ContractsScrapeMeta> downloadAndLoad() {
+		return downloadLatestFile().flatMapSingle(this::loadFile);
+	}
+
+	/**
+	 * Downloads the latest contracts file from the EVE Ref data site.
+	 */
+	public Maybe<File> downloadLatestFile() {
+		return Maybe.defer(() -> {
+					log.info("Downloading latest contracts");
+					var baseUrl = Configs.DATA_BASE_URL.getRequired();
+					var url = baseUrl + "/" + PUBLIC_CONTRACTS.createLatestPath();
+					var file = tempFiles
+							.tempFile("public-contracts-latest", ".tar.bz2")
+							.toFile();
+					return okHttpHelper.download(url, file, okHttpClient).flatMapMaybe(response -> {
+						if (response.code() != 200) {
+							log.warn("Failed loading latest contracts: HTTP {}, ignoring", response.code());
+							return Maybe.empty();
+						}
+						return Maybe.just(file);
+					});
+				})
+				.onErrorResumeNext(e -> {
+					log.warn("Failed reading latest contracts, ignoring", e);
+					return Maybe.empty();
+				});
+	}
 
 	public Single<ContractsScrapeMeta> loadFile(@NonNull File file) {
 		return Single.fromCallable(() -> {

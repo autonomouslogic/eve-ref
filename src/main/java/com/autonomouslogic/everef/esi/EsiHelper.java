@@ -4,6 +4,7 @@ import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.util.OkHttpHelper;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Scheduler;
@@ -97,5 +98,20 @@ public class EsiHelper {
 			throw new RuntimeException(String.format("Cannot decode non-200 response: %s", response.code()));
 		}
 		return objectMapper.readTree(response.peekBody(Long.MAX_VALUE).byteStream());
+	}
+
+	/**
+	 * Populates the JSON entry with the Last-Modified header from the response.
+	 * The timestamp stored is ISO-8601.
+	 * @param entry
+	 * @param response
+	 * @return
+	 */
+	public JsonNode populateLastModified(JsonNode entry, Response response) {
+		var lastModified = okHttpHelper.getLastModified(response);
+		var obj = (ObjectNode) entry;
+		lastModified.ifPresent(
+				date -> obj.put("http_last_modified", date.toInstant().toString()));
+		return obj;
 	}
 }

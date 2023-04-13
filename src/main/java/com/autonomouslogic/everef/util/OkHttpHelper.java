@@ -34,7 +34,7 @@ public class OkHttpHelper {
 		return get(url, client, scheduler, 2, true);
 	}
 
-	public Single<Response> get(
+	private Single<Response> get(
 			@NonNull String url,
 			@NonNull OkHttpClient client,
 			@NonNull Scheduler scheduler,

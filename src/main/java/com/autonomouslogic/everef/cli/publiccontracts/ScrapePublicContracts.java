@@ -9,9 +9,7 @@ import com.autonomouslogic.everef.mvstore.MVStoreUtil;
 import com.autonomouslogic.everef.s3.S3Adapter;
 import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.url.UrlParser;
-import com.autonomouslogic.everef.util.CompressUtil;
 import com.autonomouslogic.everef.util.OkHttpHelper;
-import com.autonomouslogic.everef.util.Rx;
 import com.autonomouslogic.everef.util.S3Util;
 import com.autonomouslogic.everef.util.TempFiles;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -168,45 +166,28 @@ public class ScrapePublicContracts implements Command {
 	 * Loads the latest contract scrape file and imports it into the MVStore.
 	 */
 	private Completable loadLatestContracts() {
-		return Completable.defer(() -> {
-					log.info("Loading latest contracts");
-					var baseUrl = Configs.DATA_BASE_URL.getRequired();
-					var url = baseUrl + "/" + PUBLIC_CONTRACTS.createLatestPath();
-					var file = tempFiles
-							.tempFile("public-contracts-latest", ".tar.bz2")
-							.toFile();
-					return okHttpHelper.download(url, file, okHttpClient).flatMapCompletable(response -> {
-						if (response.code() != 200) {
-							log.warn("Failed loading latest contracts: HTTP {}, ignoring", response.code());
-							return Completable.complete();
-						}
-						return contractsFileLoaderProvider
-								.get()
-								.setContractsStore(contractsStore)
-								.setItemsStore(itemsStore)
-								.setBidsStore(bidsStore)
-								.setDynamicItemsStore(dynamicItemsStore)
-								.setNonDynamicItemsStore(nonDynamicItemsStore)
-								.setDogmaAttributesStore(dogmaAttributesStore)
-								.setDogmaEffectsStore(dogmaEffectsStore)
-								.loadFile(file)
-								.doOnSuccess(meta -> {
-									var age = Duration.between(meta.getScrapeStart(), Instant.now());
-									if (age.compareTo(Duration.ofHours(1)) > 0) {
-										log.warn("Downloaded latest contracts is old: {}", age);
-									}
-									log.info(
-											"Loaded latest contracts from scrape starting: {} - age: {}",
-											meta.getScrapeStart(),
-											age);
-								})
-								.ignoreElement();
-					});
+		return Completable.defer(() -> contractsFileLoaderProvider
+				.get()
+				.setContractsStore(contractsStore)
+				.setItemsStore(itemsStore)
+				.setBidsStore(bidsStore)
+				.setDynamicItemsStore(dynamicItemsStore)
+				.setNonDynamicItemsStore(nonDynamicItemsStore)
+				.setDogmaAttributesStore(dogmaAttributesStore)
+				.setDogmaEffectsStore(dogmaEffectsStore)
+				.downloadAndLoad()
+				.doOnSuccess(meta -> {
+					var age = Duration.between(meta.getScrapeStart(), Instant.now());
+					if (age.compareTo(Duration.ofHours(1)) > 0) {
+						log.warn("Downloaded latest contracts is old: {}", age);
+					}
+					log.info("Loaded latest contracts from scrape starting: {} - age: {}", meta.getScrapeStart(), age);
 				})
+				.ignoreElement()
 				.onErrorResumeNext(e -> {
 					log.warn("Failed reading latest contracts, ignoring", e);
 					return Completable.complete();
-				});
+				}));
 	}
 
 	/**
@@ -279,32 +260,17 @@ public class ScrapePublicContracts implements Command {
 	 * Builds the output file.
 	 */
 	private Single<File> buildFile() {
-		return Single.fromCallable(() -> {
-					log.info("Building final file");
-					var start = Instant.now();
-					var outputFile = tempFiles
-							.tempFile(getClass().getSimpleName(), ".tar")
-							.toFile();
-					log.debug(String.format("Writing output file: %s", outputFile));
-					var fileBuilder = contractsFileBuilderProvider.get();
-					fileBuilder.open(outputFile);
-					fileBuilder.writeMeta(contractsScrapeMeta);
-					fileBuilder.writeContracts(contractsStore.values());
-					fileBuilder.writeItems(itemsStore.values());
-					fileBuilder.writeBids(bidsStore.values());
-					fileBuilder.writeDynamicItems(dynamicItemsStore.values());
-					fileBuilder.writeNonDynamicItems(nonDynamicItemsStore.values());
-					fileBuilder.writeDogmaAttributes(dogmaAttributesStore.values());
-					fileBuilder.writeDogmaEffects(dogmaEffectsStore.values());
-					fileBuilder.close();
-					var compressed = CompressUtil.compressBzip2(outputFile);
-					compressed.deleteOnExit();
-					log.info(String.format(
-							"Final file built in %s",
-							Duration.between(start, Instant.now()).truncatedTo(ChronoUnit.MILLIS)));
-					return compressed;
-				})
-				.compose(Rx.offloadSingle());
+		return Single.defer(() -> contractsFileBuilderProvider
+				.get()
+				.setContractsScrapeMeta(contractsScrapeMeta)
+				.setContractsStore(contractsStore)
+				.setItemsStore(itemsStore)
+				.setBidsStore(bidsStore)
+				.setDynamicItemsStore(dynamicItemsStore)
+				.setNonDynamicItemsStore(nonDynamicItemsStore)
+				.setDogmaAttributesStore(dogmaAttributesStore)
+				.setDogmaEffectsStore(dogmaEffectsStore)
+				.buildFile());
 	}
 
 	/**

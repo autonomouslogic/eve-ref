@@ -58,13 +58,7 @@ public class MarketOrderFetcher {
 							.urlPath(String.format("/markets/%s/orders?order_type=all", region.getRegionId()))
 							.build();
 					return esiHelper
-							.fetchPagesOfJsonArrays(esiUrl, (entry, response) -> {
-								var lastModified = okHttpHelper.getLastModified(response);
-								var obj = (ObjectNode) entry;
-								lastModified.ifPresent(date -> obj.put(
-										"http_last_modified", date.toInstant().toString()));
-								return obj;
-							})
+							.fetchPagesOfJsonArrays(esiUrl, esiHelper::populateLastModified)
 							.map(entry -> {
 								var n = count.incrementAndGet();
 								if (n % 10_000 == 0) {
