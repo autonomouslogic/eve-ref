@@ -27,7 +27,7 @@ public class EsiUrl {
 
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append(Configs.ESI_BASE_PATH.getRequired());
+		sb.append(Configs.ESI_BASE_URL.getRequired());
 		Objects.requireNonNull(urlPath);
 		sb.append(urlPath);
 		Objects.requireNonNull(datasource);

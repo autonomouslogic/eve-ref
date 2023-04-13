@@ -4,6 +4,7 @@ import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.util.OkHttpHelper;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Scheduler;
@@ -23,12 +24,12 @@ import okhttp3.Response;
 @Log4j2
 public class EsiHelper {
 	private static final String PAGES_HEADER = "X-Pages";
-	private static final Scheduler ESI_SCHEDULER;
+	public static final Scheduler ESI_SCHEDULER;
 
 	static {
 		var threads = Configs.ESI_HTTP_THREADS.getRequired();
 		var factory = new ThreadFactoryBuilder().setNameFormat("esi-http-%d").build();
-		log.debug(String.format("Using %d threads for ESI HTTP requests", threads));
+		log.debug("Using {} threads for ESI HTTP requests", threads);
 		ESI_SCHEDULER = Schedulers.from(Executors.newFixedThreadPool(threads, factory));
 	}
 
@@ -79,9 +80,13 @@ public class EsiHelper {
 	public Flowable<JsonNode> fetchPagesOfJsonArrays(EsiUrl url, BiFunction<JsonNode, Response, JsonNode> augmenter) {
 		return fetchPages(url).flatMap(response -> {
 			var node = decode(response);
+			if (node.isMissingNode()) {
+				log.warn("Empty response from {}", url);
+				return Flowable.empty();
+			}
 			if (!node.isArray()) {
 				return Flowable.error(
-						new RuntimeException(String.format("Expected array, got %s", node.getNodeType())));
+						new RuntimeException(String.format("Expected array, got %s - %s", node.getNodeType(), url)));
 			}
 			return Flowable.fromIterable(node).map(entry -> augmenter.apply(entry, response));
 		});
@@ -93,5 +98,20 @@ public class EsiHelper {
 			throw new RuntimeException(String.format("Cannot decode non-200 response: %s", response.code()));
 		}
 		return objectMapper.readTree(response.peekBody(Long.MAX_VALUE).byteStream());
+	}
+
+	/**
+	 * Populates the JSON entry with the Last-Modified header from the response.
+	 * The timestamp stored is ISO-8601.
+	 * @param entry
+	 * @param response
+	 * @return
+	 */
+	public JsonNode populateLastModified(JsonNode entry, Response response) {
+		var lastModified = okHttpHelper.getLastModified(response);
+		var obj = (ObjectNode) entry;
+		lastModified.ifPresent(
+				date -> obj.put("http_last_modified", date.toInstant().toString()));
+		return obj;
 	}
 }

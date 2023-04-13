@@ -19,10 +19,8 @@ import org.junit.jupiter.api.Test;
 import org.junitpioneer.jupiter.SetEnvironmentVariable;
 
 @SetEnvironmentVariable(key = "ESI_USER_AGENT", value = "user-agent")
-@SetEnvironmentVariable(key = "ESI_BASE_PATH", value = "http://localhost:" + EsiHelperTest.PORT)
+@SetEnvironmentVariable(key = "ESI_BASE_URL", value = "http://localhost:" + TestDataUtil.TEST_PORT)
 public class EsiHelperTest {
-	static final int PORT = 20730;
-
 	@Inject
 	TestDataUtil testDataUtil;
 
@@ -39,7 +37,7 @@ public class EsiHelperTest {
 				.build()
 				.inject(this);
 		server = new MockWebServer();
-		server.start(PORT);
+		server.start(TestDataUtil.TEST_PORT);
 	}
 
 	@AfterEach

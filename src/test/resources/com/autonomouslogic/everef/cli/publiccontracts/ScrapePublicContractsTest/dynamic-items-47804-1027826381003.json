@@ -1,0 +1,81 @@
+{
+  "created_by": 203457312,
+  "dogma_attributes": [
+    {
+      "attribute_id": 4,
+      "value": 0
+    },
+    {
+      "attribute_id": 72,
+      "value": 1246.9200111865998
+    },
+    {
+      "attribute_id": 9,
+      "value": 40
+    },
+    {
+      "attribute_id": 277,
+      "value": 1
+    },
+    {
+      "attribute_id": 983,
+      "value": 4.591999875307083
+    },
+    {
+      "attribute_id": 1692,
+      "value": 4
+    },
+    {
+      "attribute_id": 30,
+      "value": 26.77479977250099
+    },
+    {
+      "attribute_id": 161,
+      "value": 10
+    },
+    {
+      "attribute_id": 162,
+      "value": 1
+    },
+    {
+      "attribute_id": 422,
+      "value": 1
+    },
+    {
+      "attribute_id": 38,
+      "value": 0
+    },
+    {
+      "attribute_id": 50,
+      "value": 27.120799686908722
+    },
+    {
+      "attribute_id": 182,
+      "value": 3425
+    },
+    {
+      "attribute_id": 633,
+      "value": 8
+    }
+  ],
+  "dogma_effects": [
+    {
+      "effect_id": 13,
+      "is_default": false
+    },
+    {
+      "effect_id": 16,
+      "is_default": false
+    },
+    {
+      "effect_id": 21,
+      "is_default": false
+    },
+    {
+      "effect_id": 2029,
+      "is_default": false
+    }
+  ],
+  "mutator_type_id": 47801,
+  "source_type_id": 31928
+}

@@ -26,8 +26,8 @@ public class LoggingInterceptor implements Interceptor {
 		var cached = response.cacheResponse() != null;
 		var code = response.code();
 		var time = response.receivedResponseAtMillis() - response.sentRequestAtMillis();
-		var bytes = response.body().contentLength();
-		log.trace("{} {} -> {} ({} bytes) - cached:{} - {}ms", req.method(), req.url(), code, bytes, cached, time);
+		var cacheOrTime = cached ? "cached" : time + " ms";
+		log.trace("{} {} -> {} - {}", req.method(), req.url(), code, cacheOrTime);
 		return response;
 	}
 }

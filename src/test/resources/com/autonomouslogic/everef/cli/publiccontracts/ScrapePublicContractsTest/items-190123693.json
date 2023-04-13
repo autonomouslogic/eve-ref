@@ -1,0 +1,13 @@
+[
+  {
+    "is_blueprint_copy": true,
+    "is_included": true,
+    "item_id": 1041200274935,
+    "material_efficiency": 10,
+    "quantity": 1,
+    "record_id": 4023681577,
+    "runs": 10,
+    "time_efficiency": 20,
+    "type_id": 688
+  }
+]

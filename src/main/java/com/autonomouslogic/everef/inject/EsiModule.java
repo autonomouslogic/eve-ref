@@ -13,6 +13,6 @@ public class EsiModule {
 	@Provides
 	@Singleton
 	public UniverseApi universeApi(@Named("esi") OkHttpClient httpClient) {
-		return new UniverseApi(Configs.ESI_BASE_PATH.getRequired(), httpClient);
+		return new UniverseApi(Configs.ESI_BASE_URL.getRequired().toString(), httpClient);
 	}
 }

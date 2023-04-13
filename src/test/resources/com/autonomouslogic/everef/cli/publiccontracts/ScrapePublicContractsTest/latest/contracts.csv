@@ -1,0 +1,4 @@
+collateral,contract_id,date_expired,date_issued,days_to_complete,end_location_id,issuer_corporation_id,issuer_id,price,reward,start_location_id,title,type,volume,http_last_modified,region_id,constellation_id,system_id,station_id,buyout
+0,1000,2023-04-03T11:05:11Z,2023-03-06T11:05:11Z,0,60003760,98122973,95944658,0,4600000,60003760,"WTB Charon 4,60 Billion",item_exchange,0,2023-04-03T03:47:30Z,10000001,999,999,999,
+0,4000,2023-04-11T06:17:31Z,2023-03-14T06:17:31Z,0,60003760,1833195841,1676388808,210000000,0,60003760,,item_exchange,0.01,2023-04-03T03:47:30Z,10000002,999,999,999,
+0,5000,2023-04-11T06:17:31Z,2023-03-14T06:17:31Z,0,60003760,1833195841,1676388808,210000000,0,60003760,,auction,0.01,2023-04-03T03:47:30Z,10000002,999,999,999,

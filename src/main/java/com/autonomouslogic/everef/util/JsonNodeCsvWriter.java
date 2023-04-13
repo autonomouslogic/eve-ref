@@ -3,16 +3,19 @@ package com.autonomouslogic.everef.util;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.io.File;
+import java.io.IOException;
+import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.List;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Utility class for taking a list of JsonNode objects and converting them into a CSV file.
@@ -38,31 +41,48 @@ public class JsonNodeCsvWriter {
 
 	@SneakyThrows
 	private void writeAll(
-			@NonNull CSVPrinter printer, @NonNull Iterable<JsonNode> entries, @NonNull Iterable<String> headers) {
+			@NonNull CSVPrinter printer, @NonNull Iterable<JsonNode> entries, @NonNull List<String> headers) {
 		var record = new ArrayList<String>();
 		for (var entry : entries) {
 			if (entry instanceof ObjectNode) {
 				var obj = (ObjectNode) entry;
 				record.clear();
-				for (String header : headers) {
-					if (obj.has(header)) {
-						record.add(obj.get(header).asText());
-					} else {
-						record.add("");
-					}
-				}
-				printer.printRecord(record);
+				writeEntry(printer, headers, obj);
 			}
 		}
 	}
 
-	private Set<String> getHeaders(@NonNull Iterable<JsonNode> entries) {
+	private void writeEntry(@NotNull CSVPrinter printer, @NotNull List<String> headers, @NonNull ObjectNode obj)
+			throws IOException {
+		var rec = new ArrayList<String>(headers.size());
+		for (String header : headers) {
+			if (obj.has(header)) {
+				var val = valueToString(obj.get(header));
+				rec.add(val);
+			} else {
+				rec.add("");
+			}
+		}
+		printer.printRecord(rec);
+	}
+
+	private String valueToString(@NonNull JsonNode value) {
+		if (value.isNumber()) {
+			var number = value.numberValue();
+			if (number instanceof BigDecimal) {
+				return ((BigDecimal) number).toPlainString();
+			}
+		}
+		return value.asText();
+	}
+
+	private List<String> getHeaders(@NonNull Iterable<JsonNode> entries) {
 		var headers = new LinkedHashSet<String>();
 		for (var entry : entries) {
 			if (entry instanceof ObjectNode) {
 				entry.fieldNames().forEachRemaining(headers::add);
 			}
 		}
-		return headers;
+		return new ArrayList<>(headers);
 	}
 }

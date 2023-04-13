@@ -16,6 +16,7 @@ import javax.inject.Inject;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.h2.mvstore.MVMap;
 
 @Slf4j
@@ -45,7 +46,8 @@ public class MarketOrderFetcher {
 				.flatMap(order ->
 						locationPopulator.populate(order, "location_id").andThen(Flowable.just(order)))
 				.doOnNext(this::verifyOrderLocation)
-				.flatMapCompletable(this::saveMarketOrder);
+				.flatMapCompletable(this::saveMarketOrder)
+				.onErrorResumeNext(e -> Completable.error(new RuntimeException("Failed fetching market orders", e)));
 	}
 
 	public Flowable<ObjectNode> fetchMarketOrders(@NonNull GetUniverseRegionsRegionIdOk region) {
@@ -56,13 +58,7 @@ public class MarketOrderFetcher {
 							.urlPath(String.format("/markets/%s/orders?order_type=all", region.getRegionId()))
 							.build();
 					return esiHelper
-							.fetchPagesOfJsonArrays(esiUrl, (entry, response) -> {
-								var lastModified = okHttpHelper.getLastModified(response);
-								var obj = (ObjectNode) entry;
-								lastModified.ifPresent(date -> obj.put(
-										"http_last_modified", date.toInstant().toString()));
-								return obj;
-							})
+							.fetchPagesOfJsonArrays(esiUrl, esiHelper::populateLastModified)
 							.map(entry -> {
 								var n = count.incrementAndGet();
 								if (n % 10_000 == 0) {
@@ -74,7 +70,15 @@ public class MarketOrderFetcher {
 							});
 				})
 				.doOnComplete(() ->
-						log.info(String.format("Fetched %d market orders from %s", count.get(), region.getName())));
+						log.info(String.format("Fetched %d market orders from %s", count.get(), region.getName())))
+				.retry(2, e -> {
+					log.warn("Retrying region {}: {}", region.getName(), ExceptionUtils.getMessage(e));
+					return true;
+				})
+				.onErrorResumeNext(e -> {
+					return Flowable.error(new RuntimeException(
+							String.format("Failed fetching market orders from %s", region.getName()), e));
+				});
 	}
 
 	private Completable saveMarketOrder(ObjectNode order) {

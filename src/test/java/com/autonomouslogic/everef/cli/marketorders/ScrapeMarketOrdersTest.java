@@ -2,13 +2,10 @@ package com.autonomouslogic.everef.cli.marketorders;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.autonomouslogic.commons.ListUtil;
 import com.autonomouslogic.commons.ResourceUtil;
-import com.autonomouslogic.everef.cli.DataIndex;
-import com.autonomouslogic.everef.cli.MockDataIndexModule;
 import com.autonomouslogic.everef.esi.LocationPopulator;
 import com.autonomouslogic.everef.esi.MockLocationPopulatorModule;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
@@ -41,10 +38,8 @@ import software.amazon.awssdk.services.s3.S3AsyncClient;
 @ExtendWith(MockitoExtension.class)
 @SetEnvironmentVariable(key = "DATA_PATH", value = "s3://" + ScrapeMarketOrdersTest.BUCKET_NAME + "/")
 @SetEnvironmentVariable(key = "ESI_USER_AGENT", value = "user-agent")
-@SetEnvironmentVariable(key = "ESI_BASE_PATH", value = "http://localhost:" + ScrapeMarketOrdersTest.PORT)
+@SetEnvironmentVariable(key = "ESI_BASE_URL", value = "http://localhost:" + TestDataUtil.TEST_PORT)
 public class ScrapeMarketOrdersTest {
-	static final int PORT = 20730;
-
 	static final String BUCKET_NAME = "data-bucket";
 
 	@Inject
@@ -58,9 +53,6 @@ public class ScrapeMarketOrdersTest {
 	S3AsyncClient dataClient;
 
 	@Inject
-	DataIndex dataIndex;
-
-	@Inject
 	TestDataUtil testDataUtil;
 
 	@Mock
@@ -72,7 +64,6 @@ public class ScrapeMarketOrdersTest {
 	@SneakyThrows
 	void before() {
 		DaggerTestComponent.builder()
-				.mockDataIndexModule(new MockDataIndexModule().setDefaultMock(true))
 				.mockLocationPopulatorModule(new MockLocationPopulatorModule().setLocationPopulator(locationPopulator))
 				.build()
 				.inject(this);
@@ -81,30 +72,29 @@ public class ScrapeMarketOrdersTest {
 			@NotNull
 			@Override
 			public MockResponse dispatch(@NotNull RecordedRequest recordedRequest) throws InterruptedException {
-				switch (recordedRequest.getPath()) {
-					case "/universe/regions/?datasource=tranquility":
-						return new MockResponse().setResponseCode(200).setBody("[10000001,10000002]");
-					case "/universe/regions/10000001/?datasource=tranquility":
-						return new MockResponse()
-								.setResponseCode(200)
-								.setBody("{\"region_id\":10000001,\"name\":\"Derelik\",\"constellations\":[]}");
-					case "/universe/regions/10000002/?datasource=tranquility":
-						return new MockResponse()
-								.setResponseCode(200)
-								.setBody("{\"region_id\":10000002,\"name\":\"The Forge\",\"constellations\":[]}");
-					case "/markets/10000001/orders?order_type=all&datasource=tranquility&language=en":
-						return mockRegionOrders(10000001, 1, 2);
-					case "/markets/10000001/orders?order_type=all&datasource=tranquility&language=en&page=2":
-						return mockRegionOrders(10000001, 2, 2);
-					case "/markets/10000002/orders?order_type=all&datasource=tranquility&language=en":
-						return mockRegionOrders(10000002, 1, 2);
-					case "/markets/10000002/orders?order_type=all&datasource=tranquility&language=en&page=2":
-						return mockRegionOrders(10000002, 2, 2);
-				}
-				return new MockResponse().setResponseCode(404);
+				return switch (recordedRequest.getPath()) {
+					case "/universe/regions/?datasource=tranquility" -> new MockResponse()
+							.setResponseCode(200)
+							.setBody("[10000001,10000002]");
+					case "/universe/regions/10000001/?datasource=tranquility" -> new MockResponse()
+							.setResponseCode(200)
+							.setBody("{\"region_id\":10000001,\"name\":\"Derelik\",\"constellations\":[]}");
+					case "/universe/regions/10000002/?datasource=tranquility" -> new MockResponse()
+							.setResponseCode(200)
+							.setBody("{\"region_id\":10000002,\"name\":\"The Forge\",\"constellations\":[]}");
+					case "/markets/10000001/orders?order_type=all&datasource=tranquility&language=en" -> mockRegionOrders(
+							10000001, 1, 2);
+					case "/markets/10000001/orders?order_type=all&datasource=tranquility&language=en&page=2" -> mockRegionOrders(
+							10000001, 2, 2);
+					case "/markets/10000002/orders?order_type=all&datasource=tranquility&language=en" -> mockRegionOrders(
+							10000002, 1, 2);
+					case "/markets/10000002/orders?order_type=all&datasource=tranquility&language=en&page=2" -> mockRegionOrders(
+							10000002, 2, 2);
+					default -> new MockResponse().setResponseCode(404);
+				};
 			}
 		});
-		server.start(PORT);
+		server.start(TestDataUtil.TEST_PORT);
 
 		// Locations.
 		when(locationPopulator.populate(any(), any())).thenAnswer(MockLocationPopulatorModule.mockPopulate());
@@ -150,8 +140,6 @@ public class ScrapeMarketOrdersTest {
 		assertEquals(expected, records);
 		// Assert the two files are the same.
 		mockS3Adapter.assertSameContent(BUCKET_NAME, archiveFile, latestFile, dataClient);
-		// Data index.
-		verify(dataIndex).run();
 	}
 
 	@SneakyThrows

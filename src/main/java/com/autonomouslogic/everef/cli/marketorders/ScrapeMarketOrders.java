@@ -3,7 +3,6 @@ package com.autonomouslogic.everef.cli.marketorders;
 import static com.autonomouslogic.everef.util.ArchivePathFactory.MARKET_ORDERS;
 
 import com.autonomouslogic.everef.cli.Command;
-import com.autonomouslogic.everef.cli.DataIndex;
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.mvstore.JsonNodeDataType;
 import com.autonomouslogic.everef.mvstore.MVStoreUtil;
@@ -11,7 +10,6 @@ import com.autonomouslogic.everef.s3.S3Adapter;
 import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.url.UrlParser;
 import com.autonomouslogic.everef.util.S3Util;
-import com.autonomouslogic.everef.util.TempFiles;
 import com.fasterxml.jackson.databind.JsonNode;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Single;
@@ -21,12 +19,11 @@ import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.inject.Provider;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import org.h2.mvstore.MVMap;
-import org.h2.mvstore.type.ObjectDataType;
+import org.h2.mvstore.MVStore;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 
 /**
@@ -45,9 +42,6 @@ public class ScrapeMarketOrders implements Command {
 	protected S3Util s3Util;
 
 	@Inject
-	protected Provider<DataIndex> dataIndexProvider;
-
-	@Inject
 	protected JsonNodeDataType jsonNodeDataType;
 
 	@Inject
@@ -62,17 +56,15 @@ public class ScrapeMarketOrders implements Command {
 	@Inject
 	protected UrlParser urlParser;
 
-	@Inject
-	protected TempFiles tempFiles;
-
 	private S3Url dataUrl;
+	private MVStore mvStore;
 	private MVMap<Long, JsonNode> marketOrdersStore;
 
 	@Setter
 	private ZonedDateTime scrapeTime;
 
-	private final Duration latestCacheTime = Configs.MARKET_ORDERS_LATEST_CACHE_CONTROL_MAX_AGE.getRequired();
-	private final Duration archiveCacheTime = Configs.MARKET_ORDERS_ARCHIVE_CACHE_CONTROL_MAX_AGE.getRequired();
+	private final Duration latestCacheTime = Configs.DATA_LATEST_CACHE_CONTROL_MAX_AGE.getRequired();
+	private final Duration archiveCacheTime = Configs.DATA_ARCHIVE_CACHE_CONTROL_MAX_AGE.getRequired();
 
 	@Inject
 	protected ScrapeMarketOrders() {}
@@ -93,27 +85,36 @@ public class ScrapeMarketOrders implements Command {
 	@Override
 	public Completable run() {
 		return Completable.concatArray(
-				Completable.fromAction(() -> {
-					if (scrapeTime == null) {
-						scrapeTime = ZonedDateTime.now(ZoneOffset.UTC);
-					}
-					initMvStore();
-				}),
-				fetchOrders(),
-				writeOrders().flatMapCompletable(this::uploadFile),
-				dataIndexProvider.get().run());
+						initScrapeTime(),
+						initMvStore(),
+						fetchOrders(),
+						writeOrders().flatMapCompletable(this::uploadFile))
+				.doFinally(this::closeMvStore);
 	}
 
-	@SneakyThrows
-	private void initMvStore() {
-		var mvStore = mvStoreUtil.createTempStore("market-orders");
-		marketOrdersStore = mvStore.openMap(
-				"market-orders",
-				new MVMap.Builder<Long, JsonNode>()
-						.keyType(new ObjectDataType())
-						.valueType(jsonNodeDataType));
-		marketOrderFetcher.setMarketOrdersStore(marketOrdersStore);
-		marketOrdersWriter.setMarketOrdersStore(marketOrdersStore);
+	private Completable initScrapeTime() {
+		return Completable.fromAction(() -> {
+			if (scrapeTime == null) {
+				scrapeTime = ZonedDateTime.now(ZoneOffset.UTC);
+			}
+		});
+	}
+
+	private Completable initMvStore() {
+		return Completable.fromAction(() -> {
+			mvStore = mvStoreUtil.createTempStore("market-orders");
+			marketOrdersStore = mvStoreUtil.openJsonMap(mvStore, "market-orders", Long.class);
+			marketOrderFetcher.setMarketOrdersStore(marketOrdersStore);
+			marketOrdersWriter.setMarketOrdersStore(marketOrdersStore);
+		});
+	}
+
+	private void closeMvStore() {
+		try {
+			mvStore.close();
+		} catch (Exception e) {
+			log.debug("Failed closing MVStore, ignoring");
+		}
 	}
 
 	private Completable fetchOrders() {

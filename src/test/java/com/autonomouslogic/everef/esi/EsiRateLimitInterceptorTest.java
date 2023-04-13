@@ -23,11 +23,9 @@ import org.junitpioneer.jupiter.SetEnvironmentVariable;
 
 @SetEnvironmentVariable(key = "ESI_USER_AGENT", value = "user-agent")
 @SetEnvironmentVariable(key = "ESI_RATE_LIMIT_PER_S", value = "5")
-@SetEnvironmentVariable(key = "ESI_BASE_PATH", value = "http://localhost:" + EsiRateLimitInterceptorTest.PORT)
+@SetEnvironmentVariable(key = "ESI_BASE_URL", value = "http://localhost:" + TestDataUtil.TEST_PORT)
 @Log4j2
 public class EsiRateLimitInterceptorTest {
-	static final int PORT = 20730;
-
 	@Inject
 	TestDataUtil testDataUtil;
 
@@ -50,7 +48,7 @@ public class EsiRateLimitInterceptorTest {
 				return new MockResponse().setResponseCode(200);
 			}
 		});
-		server.start(PORT);
+		server.start(TestDataUtil.TEST_PORT);
 
 		// testDataUtil.mockResponse("https://esi.evetech.net/latest/page?datasource=tranquility&language=en");
 	}

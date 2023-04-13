@@ -4,9 +4,6 @@ import java.net.URI;
 import java.time.Duration;
 
 public class Configs {
-	private static final Duration DEFAULT_ARCHIVE_MAX_AGE = Duration.ofDays(30);
-	private static final Duration DEFAULT_LATEST_MAX_AGE = Duration.ofMinutes(2);
-
 	/**
 	 * The version of EVE Ref.
 	 */
@@ -96,12 +93,11 @@ public class Configs {
 
 	/**
 	 * The base path used when accessing the ESI.
-	 * This will be the version.
 	 */
-	public static final Config<String> ESI_BASE_PATH = Config.<String>builder()
-			.name("ESI_BASE_PATH")
-			.defaultValue("https://esi.evetech.net/latest")
-			.type(String.class)
+	public static final Config<URI> ESI_BASE_URL = Config.<URI>builder()
+			.name("ESI_BASE_URL")
+			.defaultValue(URI.create("https://esi.evetech.net/latest"))
+			.type(URI.class)
 			.build();
 
 	/**
@@ -141,6 +137,15 @@ public class Configs {
 			Config.<URI>builder().name("DATA_PATH").type(URI.class).build();
 
 	/**
+	 * The base URL used for fetching data from the data site.
+	 */
+	public static final Config<URI> DATA_BASE_URL = Config.<URI>builder()
+			.name("DATA_BASE_URL")
+			.type(URI.class)
+			.defaultValue(URI.create("https://data.everef.net"))
+			.build();
+
+	/**
 	 * The cache time to use for data index pages.
 	 */
 	public static final Config<Duration> DATA_INDEX_CACHE_CONTROL_MAX_AGE = Config.<Duration>builder()
@@ -150,20 +155,20 @@ public class Configs {
 			.build();
 
 	/**
-	 * The cache time to use for market order archive files.
+	 * The cache time to use for archive files.
 	 */
-	public static final Config<Duration> MARKET_ORDERS_ARCHIVE_CACHE_CONTROL_MAX_AGE = Config.<Duration>builder()
-			.name("MARKET_ORDERS_ARCHIVE_CACHE_CONTROL_MAX_AGE")
-			.defaultValue(DEFAULT_ARCHIVE_MAX_AGE)
+	public static final Config<Duration> DATA_ARCHIVE_CACHE_CONTROL_MAX_AGE = Config.<Duration>builder()
+			.name("DATA_ARCHIVE_CACHE_CONTROL_MAX_AGE")
+			.defaultValue(Duration.ofDays(30))
 			.type(Duration.class)
 			.build();
 
 	/**
-	 * The cache time to use for latest market order files.
+	 * The cache time to use for latest files.
 	 */
-	public static final Config<Duration> MARKET_ORDERS_LATEST_CACHE_CONTROL_MAX_AGE = Config.<Duration>builder()
-			.name("MARKET_ORDERS_LATEST_CACHE_CONTROL_MAX_AGE")
-			.defaultValue(DEFAULT_LATEST_MAX_AGE)
+	public static final Config<Duration> DATA_LATEST_CACHE_CONTROL_MAX_AGE = Config.<Duration>builder()
+			.name("DATA_LATEST_CACHE_CONTROL_MAX_AGE")
+			.defaultValue(Duration.ofMinutes(2))
 			.type(Duration.class)
 			.build();
 
@@ -224,7 +229,7 @@ public class Configs {
 	 */
 	public static final Config<Integer> ESI_RATE_LIMIT_PER_S = Config.<Integer>builder()
 			.name("ESI_RATE_LIMIT_PER_S")
-			.defaultValue(100)
+			.defaultValue(50)
 			.type(Integer.class)
 			.build();
 
@@ -233,7 +238,7 @@ public class Configs {
 	 */
 	public static final Config<Integer> ESI_HTTP_THREADS = Config.<Integer>builder()
 			.name("ESI_HTTP_THREADS")
-			.defaultValue(16)
+			.defaultValue(Runtime.getRuntime().availableProcessors() * 2)
 			.type(Integer.class)
 			.build();
 
@@ -271,5 +276,14 @@ public class Configs {
 			.name("MVSTORE_CACHE_SIZE_MB")
 			.type(Integer.class)
 			.defaultValue(128)
+			.build();
+
+	/**
+	 * Base path for requests to the main EVE Ref website.
+	 */
+	public static final Config<URI> EVE_REF_BASE_URL = Config.<URI>builder()
+			.name("EVE_REF_BASE_URL")
+			.type(URI.class)
+			.defaultValue(URI.create("https://everef.net"))
 			.build();
 }
