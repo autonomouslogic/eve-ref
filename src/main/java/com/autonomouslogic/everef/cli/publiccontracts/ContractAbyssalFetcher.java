@@ -115,10 +115,7 @@ public class ContractAbyssalFetcher {
 			return false;
 		}
 		long nonDynamicId = ContractsFileBuilder.NON_DYNAMIC_ITEM_ID.apply(item);
-		if (nonDynamicItemsStore.containsKey(nonDynamicId)) {
-			return false;
-		}
-		return true;
+		return !nonDynamicItemsStore.containsKey(nonDynamicId);
 	}
 
 	private Completable resolveDynamicItem(long contractId, long typeId, long itemId) {

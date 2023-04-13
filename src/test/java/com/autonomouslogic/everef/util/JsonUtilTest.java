@@ -10,7 +10,7 @@ import com.fasterxml.jackson.databind.node.NullNode;
 import com.fasterxml.jackson.databind.node.TextNode;
 import org.junit.jupiter.api.Test;
 
-public class JsonUtilTest {
+class JsonUtilTest {
 	@Test
 	void shouldCheckNulls() {
 		assertTrue(JsonUtil.isNull(NullNode.getInstance()));
