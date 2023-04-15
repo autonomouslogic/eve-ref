@@ -6,6 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.reactivex.rxjava3.functions.Consumer;
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringReader;
@@ -14,6 +16,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.SneakyThrows;
@@ -131,5 +135,18 @@ public class TestDataUtil {
 	@SneakyThrows
 	public void assertNoMoreRequests(MockWebServer server) {
 		assertNull(server.takeRequest(1, TimeUnit.MILLISECONDS));
+	}
+
+	@SneakyThrows
+	public File createZipFile(Map<String, byte[]> entries) {
+		var file = File.createTempFile("eve-ref-test-", ".zip");
+		try (var out = new ZipOutputStream(new FileOutputStream(file))) {
+			for (var entry : entries.entrySet()) {
+				out.putNextEntry(new ZipEntry(entry.getKey()));
+				out.write(entry.getValue());
+				out.closeEntry();
+			}
+		}
+		return file;
 	}
 }

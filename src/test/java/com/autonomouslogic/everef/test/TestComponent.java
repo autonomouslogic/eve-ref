@@ -6,7 +6,7 @@ import com.autonomouslogic.everef.cli.decorator.HealthcheckDecoratorTest;
 import com.autonomouslogic.everef.cli.decorator.SlackDecoratorTest;
 import com.autonomouslogic.everef.cli.marketorders.ScrapeMarketOrdersTest;
 import com.autonomouslogic.everef.cli.publiccontracts.ScrapePublicContractsTest;
-import com.autonomouslogic.everef.cli.refdata.FieldRenamerTest;
+import com.autonomouslogic.everef.refdata.FieldRenamerTest;
 import com.autonomouslogic.everef.esi.EsiHelperTest;
 import com.autonomouslogic.everef.esi.EsiLimitExceededInterceptorTest;
 import com.autonomouslogic.everef.esi.EsiRateLimitInterceptorTest;
@@ -17,6 +17,7 @@ import com.autonomouslogic.everef.inject.AwsModule;
 import com.autonomouslogic.everef.inject.EsiModule;
 import com.autonomouslogic.everef.inject.JacksonModule;
 import com.autonomouslogic.everef.url.UrlParserTest;
+import com.autonomouslogic.everef.refdata.sde.SdeLoaderTest;
 import dagger.Component;
 import javax.inject.Singleton;
 
@@ -51,6 +52,8 @@ public interface TestComponent {
 	void inject(ScrapeMarketOrdersTest test);
 
 	void inject(ScrapePublicContractsTest test);
+
+	void inject(SdeLoaderTest test);
 
 	void inject(SlackDecoratorTest test);
 
