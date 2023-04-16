@@ -5,9 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 import com.autonomouslogic.commons.ResourceUtil;
 import com.autonomouslogic.everef.refdata.esi.EsiLoader;
-import com.autonomouslogic.everef.refdata.esi.EsiLoaderTest;
 import com.autonomouslogic.everef.refdata.sde.SdeLoader;
-import com.autonomouslogic.everef.refdata.sde.SdeLoaderTest;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.reactivex.rxjava3.functions.Consumer;
