@@ -182,17 +182,17 @@ public class TestDataUtil {
 
 	@SneakyThrows
 	public File createTestSde() {
-		return createZipFile(Map.ofEntries(createEntry(SdeLoaderTest.class, SdeLoader.SDE_TYPES_PATH)));
+		return createZipFile(Map.ofEntries(createEntry("/refdata/", SdeLoader.SDE_TYPES_PATH)));
 	}
 
 	@SneakyThrows
 	public File createTestEsiDump() {
 		return createTarXzFile(
-				Map.ofEntries(createEntry(EsiLoaderTest.class, EsiLoader.ESI_TYPES_BASE_PATH + ".en-us.yaml")));
+				Map.ofEntries(createEntry("/refdata/esi", EsiLoader.ESI_TYPES_BASE_PATH + ".en-us.yaml")));
 	}
 
 	@SneakyThrows
-	private Map.Entry<String, byte[]> createEntry(Class<?> context, String path) {
-		return Map.entry(path, IOUtils.toByteArray(ResourceUtil.loadContextual(context, "/" + path)));
+	private Map.Entry<String, byte[]> createEntry(String base, String path) {
+		return Map.entry(path, IOUtils.toByteArray(ResourceUtil.loadResource(base + "/" + path)));
 	}
 }
