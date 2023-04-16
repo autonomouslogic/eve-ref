@@ -20,6 +20,7 @@ The ref data build is currently in development: https://github.com/autonomouslog
 The paths in the file can take one of two forms:
 
 1. A condensed form where for instance all type information is containes in a `types.json` with an object keyed by type ID.
+    * It's unclear how sub-objects, like dogma attributes for a type, would be stored.
 2. A sparse form which is exactly like the API, where for instance each type has its own separate `<type_id>.json` file and `types.json` would be an array of type IDs.
 
 ## Data structure
