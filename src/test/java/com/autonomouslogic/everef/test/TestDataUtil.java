@@ -193,6 +193,6 @@ public class TestDataUtil {
 
 	@SneakyThrows
 	private Map.Entry<String, byte[]> createEntry(Class<?> context, String path) {
-		return Map.entry(path, IOUtils.toByteArray(ResourceUtil.loadContextual(EsiLoaderTest.class, "/" + path)));
+		return Map.entry(path, IOUtils.toByteArray(ResourceUtil.loadContextual(context, "/" + path)));
 	}
 }
