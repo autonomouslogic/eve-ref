@@ -47,6 +47,7 @@ dependencies {
 	implementation "com.fasterxml.jackson.module:jackson-module-kotlin:2.15.0-rc2"
 	implementation "org.apache.commons:commons-pool2:2.11.1"
 	implementation "org.apache.commons:commons-compress:1.23.0"
+	implementation "org.tukaani:xz:1.9"
 	implementation "com.h2database:h2-mvstore:2.1.214"
 	implementation "com.squareup.okhttp3:okhttp:4.10.0"
 	implementation "org.apache.commons:commons-csv:1.10.0"

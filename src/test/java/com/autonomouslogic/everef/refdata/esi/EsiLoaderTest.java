@@ -1,4 +1,4 @@
-package com.autonomouslogic.everef.refdata.sde;
+package com.autonomouslogic.everef.refdata.esi;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -16,9 +16,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 @Log4j2
-public class SdeLoaderTest {
+public class EsiLoaderTest {
 	@Inject
-	SdeLoader sdeLoader;
+	EsiLoader esiLoader;
 
 	@Inject
 	ObjectMapper objectMapper;
@@ -35,17 +35,17 @@ public class SdeLoaderTest {
 	@SneakyThrows
 	void before() {
 		DaggerTestComponent.builder().build().inject(this);
-		var mvstore = mvStoreUtil.createTempStore(SdeLoaderTest.class.getSimpleName());
+		var mvstore = mvStoreUtil.createTempStore(EsiLoaderTest.class.getSimpleName());
 		typeStore = mvStoreUtil.openJsonMap(mvstore, "types", Long.class);
-		sdeLoader.setTypeStore(typeStore);
+		esiLoader.setTypeStore(typeStore);
 	}
 
 	@Test
 	@SneakyThrows
-	void testLoadSde() {
-		sdeLoader.load(testDataUtil.createTestSde()).blockingAwait();
+	void testLoadEsi() {
+		esiLoader.load(testDataUtil.createTestEsiDump()).blockingAwait();
 		assertEquals(1, typeStore.size());
-		var expectedType = objectMapper.readTree(ResourceUtil.loadContextual(SdeLoaderTest.class, "/type-645.json"));
+		var expectedType = objectMapper.readTree(ResourceUtil.loadContextual(EsiLoaderTest.class, "/type-645.json"));
 		testDataUtil.assertJsonEquals(expectedType, typeStore.get(645L));
 	}
 }

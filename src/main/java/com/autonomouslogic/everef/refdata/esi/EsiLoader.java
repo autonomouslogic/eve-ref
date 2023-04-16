@@ -1,6 +1,5 @@
-package com.autonomouslogic.everef.refdata.sde;
+package com.autonomouslogic.everef.refdata.esi;
 
-import com.autonomouslogic.everef.refdata.FieldRenamer;
 import com.autonomouslogic.everef.util.CompressUtil;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -19,11 +18,11 @@ import lombok.extern.log4j.Log4j2;
 import org.h2.mvstore.MVMap;
 
 /**
- * Loads entries from the SDE dumps and prepares them for Ref Data.
+ * Loads entries from the ESI dumps and prepares them for Ref Data.
  */
 @Log4j2
-public class SdeLoader {
-	public static final String SDE_TYPES_PATH = "sde/fsd/typeIDs.yaml";
+public class EsiLoader {
+	public static final String ESI_TYPES_BASE_PATH = "data/tranquility/universe/types";
 
 	@Inject
 	@Named("yaml")
@@ -32,23 +31,20 @@ public class SdeLoader {
 	@Inject
 	protected ObjectMapper objectMapper;
 
-	@Inject
-	protected FieldRenamer fieldRenamer;
-
 	@Setter
 	@NonNull
 	private MVMap<Long, JsonNode> typeStore;
 
 	@Inject
-	protected SdeLoader() {}
+	protected EsiLoader() {}
 
 	public Completable load(@NonNull File file) {
 		return CompressUtil.loadArchive(file).flatMapCompletable(pair -> {
 			switch (pair.getLeft().getName()) {
-				case SDE_TYPES_PATH:
+				case ESI_TYPES_BASE_PATH + ".en-us.yaml":
 					return readValues(pair.getRight(), typeStore, "type_id");
 				default:
-					log.warn("Unknown SDE entry: {}", pair.getLeft().getName());
+					log.warn("Unknown ESI entry: {}", pair.getLeft().getName());
 					break;
 			}
 			return Completable.complete();
@@ -61,7 +57,7 @@ public class SdeLoader {
 					var container = (ObjectNode) yamlMapper.readTree(new ByteArrayInputStream(bytes));
 					container.fields().forEachRemaining(entry -> {
 						var id = Long.parseLong(entry.getKey());
-						var node = fieldRenamer.fieldRenameFromSde(entry.getValue());
+						var node = entry.getValue();
 						((ObjectNode) node).put(idField, id);
 						store.put(id, node);
 					});

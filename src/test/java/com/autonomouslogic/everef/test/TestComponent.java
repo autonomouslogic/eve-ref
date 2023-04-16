@@ -16,6 +16,7 @@ import com.autonomouslogic.everef.inject.AwsModule;
 import com.autonomouslogic.everef.inject.EsiModule;
 import com.autonomouslogic.everef.inject.JacksonModule;
 import com.autonomouslogic.everef.refdata.FieldRenamerTest;
+import com.autonomouslogic.everef.refdata.esi.EsiLoaderTest;
 import com.autonomouslogic.everef.refdata.sde.SdeLoaderTest;
 import com.autonomouslogic.everef.url.UrlParserTest;
 import dagger.Component;
@@ -36,6 +37,8 @@ public interface TestComponent {
 	void inject(DataIndexTest test);
 
 	void inject(EsiHelperTest test);
+
+	void inject(EsiLoaderTest test);
 
 	void inject(EsiLimitExceededInterceptorTest test);
 

@@ -11,8 +11,10 @@ import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.ArchiveInputStream;
+import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
 import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream;
 import org.apache.commons.compress.compressors.bzip2.BZip2CompressorOutputStream;
+import org.apache.commons.compress.compressors.xz.XZCompressorInputStream;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -36,6 +38,10 @@ public class CompressUtil {
 		if (name.endsWith(".zip")) {
 			log.trace("Opening zip file: {}", file.getPath());
 			return new ZipArchiveInputStream(in);
+		}
+		if (name.endsWith(".tar.xz")) {
+			log.trace("Opening tar-xz file: {}", file.getPath());
+			return new TarArchiveInputStream(new XZCompressorInputStream(in));
 		}
 		throw new IllegalArgumentException("Unknown file type: " + name);
 	}
