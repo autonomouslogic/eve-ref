@@ -1,13 +1,12 @@
 package com.autonomouslogic.everef.util;
 
+import io.reactivex.rxjava3.core.Emitter;
+import io.reactivex.rxjava3.core.Flowable;
+import io.reactivex.rxjava3.functions.BiConsumer;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-
-import io.reactivex.rxjava3.core.Emitter;
-import io.reactivex.rxjava3.core.Flowable;
-import io.reactivex.rxjava3.functions.BiConsumer;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.compress.archivers.ArchiveEntry;
@@ -43,20 +42,19 @@ public class CompressUtil {
 
 	public static Flowable<Pair<ArchiveEntry, byte[]>> loadArchive(File file) {
 		return Flowable.generate(
-				() -> CompressUtil.uncompressArchive(file),
-				(BiConsumer<ArchiveInputStream, Emitter<Pair<ArchiveEntry, byte[]>>>) (stream, emitter) -> {
-					var entry = stream.getNextEntry();
-					if (entry == null) {
-						log.trace("Finished reading: {}", file.getPath());
-						emitter.onComplete();
-					} else {
-						log.trace("Reading entry {}#{}", file.getPath(), entry.getName());
-						var bytes = IOUtils.toByteArray(stream);
-						emitter.onNext(Pair.of(entry, bytes));
-					}
-				},
-				stream -> stream.close()
-			)
-			.compose(Rx.offloadFlowable());
+						() -> CompressUtil.uncompressArchive(file),
+						(BiConsumer<ArchiveInputStream, Emitter<Pair<ArchiveEntry, byte[]>>>) (stream, emitter) -> {
+							var entry = stream.getNextEntry();
+							if (entry == null) {
+								log.trace("Finished reading: {}", file.getPath());
+								emitter.onComplete();
+							} else {
+								log.trace("Reading entry {}#{}", file.getPath(), entry.getName());
+								var bytes = IOUtils.toByteArray(stream);
+								emitter.onNext(Pair.of(entry, bytes));
+							}
+						},
+						stream -> stream.close())
+				.compose(Rx.offloadFlowable());
 	}
 }

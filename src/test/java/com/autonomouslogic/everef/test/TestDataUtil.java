@@ -3,6 +3,10 @@ package com.autonomouslogic.everef.test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
+import com.autonomouslogic.commons.ResourceUtil;
+import com.autonomouslogic.everef.refdata.sde.SdeLoader;
+import com.autonomouslogic.everef.refdata.sde.SdeLoaderTest;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.reactivex.rxjava3.functions.Consumer;
 import java.io.ByteArrayInputStream;
@@ -148,5 +152,18 @@ public class TestDataUtil {
 			}
 		}
 		return file;
+	}
+
+	@SneakyThrows
+	public File createTestSde() {
+		return createZipFile(Map.ofEntries(Map.entry(
+				SdeLoader.SDE_TYPES_PATH,
+				IOUtils.toByteArray(
+						ResourceUtil.loadContextual(SdeLoaderTest.class, "/" + SdeLoader.SDE_TYPES_PATH)))));
+	}
+
+	@SneakyThrows
+	public void assertJsonEquals(JsonNode expected, JsonNode actual) {
+		assertEquals(objectMapper.writeValueAsString(expected), objectMapper.writeValueAsString(actual));
 	}
 }

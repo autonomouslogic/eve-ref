@@ -11,10 +11,9 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import dagger.Module;
 import dagger.Provides;
-import org.yaml.snakeyaml.LoaderOptions;
-
 import javax.inject.Named;
 import javax.inject.Singleton;
+import org.yaml.snakeyaml.LoaderOptions;
 
 /**
  *
