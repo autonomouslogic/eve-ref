@@ -15,6 +15,9 @@ import com.autonomouslogic.everef.esi.MockLocationPopulatorModule;
 import com.autonomouslogic.everef.inject.AwsModule;
 import com.autonomouslogic.everef.inject.EsiModule;
 import com.autonomouslogic.everef.inject.JacksonModule;
+import com.autonomouslogic.everef.refdata.FieldRenamerTest;
+import com.autonomouslogic.everef.refdata.esi.EsiLoaderTest;
+import com.autonomouslogic.everef.refdata.sde.SdeLoaderTest;
 import com.autonomouslogic.everef.url.UrlParserTest;
 import dagger.Component;
 import javax.inject.Singleton;
@@ -35,6 +38,8 @@ public interface TestComponent {
 
 	void inject(EsiHelperTest test);
 
+	void inject(EsiLoaderTest test);
+
 	void inject(EsiLimitExceededInterceptorTest test);
 
 	void inject(EsiRateLimitInterceptorTest test);
@@ -45,9 +50,13 @@ public interface TestComponent {
 
 	void inject(MetaGroupScraperTest test);
 
+	void inject(FieldRenamerTest test);
+
 	void inject(ScrapeMarketOrdersTest test);
 
 	void inject(ScrapePublicContractsTest test);
+
+	void inject(SdeLoaderTest test);
 
 	void inject(SlackDecoratorTest test);
 

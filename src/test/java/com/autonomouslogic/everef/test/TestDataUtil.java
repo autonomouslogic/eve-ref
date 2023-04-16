@@ -3,9 +3,15 @@ package com.autonomouslogic.everef.test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
+import com.autonomouslogic.commons.ResourceUtil;
+import com.autonomouslogic.everef.refdata.esi.EsiLoader;
+import com.autonomouslogic.everef.refdata.sde.SdeLoader;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.reactivex.rxjava3.functions.Consumer;
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringReader;
@@ -14,13 +20,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.SneakyThrows;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
+import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
+import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
 import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream;
+import org.apache.commons.compress.compressors.xz.XZCompressorOutputStream;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.io.IOUtils;
 
@@ -131,5 +142,55 @@ public class TestDataUtil {
 	@SneakyThrows
 	public void assertNoMoreRequests(MockWebServer server) {
 		assertNull(server.takeRequest(1, TimeUnit.MILLISECONDS));
+	}
+
+	@SneakyThrows
+	public File createZipFile(Map<String, byte[]> entries) {
+		var file = File.createTempFile(TestDataUtil.class.getSimpleName() + "-", ".zip");
+		try (var out = new ZipOutputStream(new FileOutputStream(file))) {
+			for (var entry : entries.entrySet()) {
+				out.putNextEntry(new ZipEntry(entry.getKey()));
+				out.write(entry.getValue());
+				out.closeEntry();
+			}
+		}
+		return file;
+	}
+
+	@SneakyThrows
+	public File createTarXzFile(Map<String, byte[]> entries) {
+		var file = File.createTempFile(TestDataUtil.class.getSimpleName() + "-", ".tar.xz");
+		try (var out = new TarArchiveOutputStream(new XZCompressorOutputStream(new FileOutputStream(file)))) {
+			for (var entry : entries.entrySet()) {
+				var bytes = entry.getValue();
+				var archiveEntry = new TarArchiveEntry(entry.getKey());
+				archiveEntry.setSize(bytes.length);
+				out.putArchiveEntry(archiveEntry);
+				out.write(bytes);
+				out.closeArchiveEntry();
+			}
+		}
+		return file;
+	}
+
+	@SneakyThrows
+	public void assertJsonEquals(JsonNode expected, JsonNode actual) {
+		assertEquals(objectMapper.writeValueAsString(expected), objectMapper.writeValueAsString(actual));
+	}
+
+	@SneakyThrows
+	public File createTestSde() {
+		return createZipFile(Map.ofEntries(createEntry("/refdata/", SdeLoader.SDE_TYPES_PATH)));
+	}
+
+	@SneakyThrows
+	public File createTestEsiDump() {
+		return createTarXzFile(
+				Map.ofEntries(createEntry("/refdata/esi", EsiLoader.ESI_TYPES_BASE_PATH + ".en-us.yaml")));
+	}
+
+	@SneakyThrows
+	private Map.Entry<String, byte[]> createEntry(String base, String path) {
+		return Map.entry(path, IOUtils.toByteArray(ResourceUtil.loadResource(base + "/" + path)));
 	}
 }
