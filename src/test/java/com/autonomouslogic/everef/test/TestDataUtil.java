@@ -174,7 +174,7 @@ public class TestDataUtil {
 	}
 
 	@SneakyThrows
-	public void assertJsonEquals(JsonNode expected, JsonNode actual) {
+	public void assertJsonStrictEquals(JsonNode expected, JsonNode actual) {
 		assertEquals(objectMapper.writeValueAsString(expected), objectMapper.writeValueAsString(actual));
 	}
 

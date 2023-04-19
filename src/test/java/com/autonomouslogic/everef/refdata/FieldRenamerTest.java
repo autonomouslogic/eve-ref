@@ -47,7 +47,7 @@ public class FieldRenamerTest {
 				"var": 1,
 				"another_var": 2
 			}""";
-		testDataUtil.assertJsonEquals(
+		testDataUtil.assertJsonStrictEquals(
 				objectMapper.readTree(expected), fieldRenamer.fieldRenameFromSde(objectMapper.readTree(input)));
 	}
 
@@ -74,7 +74,7 @@ public class FieldRenamerTest {
 					"another_var": 4
 				}
 			}""";
-		testDataUtil.assertJsonEquals(
+		testDataUtil.assertJsonStrictEquals(
 				objectMapper.readTree(expected), fieldRenamer.fieldRenameFromSde(objectMapper.readTree(input)));
 	}
 
@@ -97,7 +97,7 @@ public class FieldRenamerTest {
 				"var": 3,
 				"another_var": 4
 			}]""";
-		testDataUtil.assertJsonEquals(
+		testDataUtil.assertJsonStrictEquals(
 				objectMapper.readTree(expected), fieldRenamer.fieldRenameFromSde(objectMapper.readTree(input)));
 	}
 }

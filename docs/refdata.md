@@ -28,3 +28,7 @@ The paths in the file can take one of two forms:
 Field names will be `snake_case`, since that's how the ESI does it and all other data on EVE Ref Data comes from there.
 It makes sense to continue that format.
 The JSON layout will be structured in a way mostly inspired by the ESI, though that may not always be possible.
+
+## Caveats
+
+* Prefer keyed objects over arrays - the final object merger should be kept as simple as possible. Since it's not possible to merge arrays in a predictable while ensure data deduplication, keyed objects are preferred.

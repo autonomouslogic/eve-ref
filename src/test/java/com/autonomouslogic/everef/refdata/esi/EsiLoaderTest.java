@@ -46,6 +46,6 @@ public class EsiLoaderTest {
 		esiLoader.load(testDataUtil.createTestEsiDump()).blockingAwait();
 		assertEquals(1, typeStore.size());
 		var expectedType = objectMapper.readTree(ResourceUtil.loadContextual(EsiLoaderTest.class, "/type-645.json"));
-		testDataUtil.assertJsonEquals(expectedType, typeStore.get(645L));
+		testDataUtil.assertJsonStrictEquals(expectedType, typeStore.get(645L));
 	}
 }
