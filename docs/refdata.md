@@ -38,6 +38,18 @@ For other third-party developers, the REST API will be freely available to consu
 * Field names will be `snake_case`, since that's how the ESI does it and all other data on EVE Ref Data comes from there.\
   It makes sense to continue that format.
 * The JSON layout will be structured in a way mostly inspired by the ESI, though that may not always be possible.
-* Prefer keyed objects over arrays - the final object merger should be kept as simple as possible.\
+* Prefer keyed objects to arrays - the final object merger should be kept as simple as possible.\
   Since it's not possible to merge arrays in a predictable while preventing data duplication, keyed objects are preferred.
 * Names and descriptions will use a language map like the SDE, rather than multiple files like the ESI.
+
+## Corrections (TBD)
+
+It would be possible to maintain a series of corrections and additions to the data.
+For instance, there are Dogma attributes which have no categories and these could be added.
+There are also cases where Dogma values are stored "incorrectly". For instance, sometimes the number 10% is stored as `10.0` and other times as `0.1`,
+even though the unit for the attribute is "percentage".
+These could be corrected.
+
+* Pro: The data is more accurate, consistent, and useful.
+* Con: The data isn't a direct copy of the SDE or ESI.
+
