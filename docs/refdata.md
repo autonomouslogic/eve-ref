@@ -23,75 +23,76 @@ For other third-party developers, the REST API will be freely available to consu
 
 ## Data sources
 
-| Data                            | SDE   | ESI             | Hoboleaks         |
-|---------------------------------|-------|-----------------|-------------------|
-| Accounting Entry Types (?)      |       |                 | Yes               |
-| Agent                           | Yes   |                 |                   |
-| Agent in space (?)              | Yes   |                 |                   |
-| Agent Types (?)                 |       |                 | Yes               |
-| Ancestors                       | Yes   | Yes             |                   |
-| Asteroid belts                  | Yes   | Yes             |                   |
-| Bloodlines                      | Yes   | Yes             |                   |
-| Blueprints                      | Yes   |                 |                   |
-| Blueprint materials             | Yes   |                 |                   |
-| Categories                      |       | Yes             |                   |
-| Certificates                    | Yes   |                 |                   |
-| Character attributes            | Yes   |                 |                   |
-| Clone States (?)                |       |                 | Yes               |
-| Compressible Types (?)          |       |                 | Yes               |
-| Constellations                  | Yes   | Yes             |                   |
-| Contraband types (?)            | Yes   |                 |                   |
-| Control tower resources (?)     | Yes   |                 |                   |
-| Corportation activities (?)     | Yes   |                 |                   |
-| Dbuffs (?)                      |       |                 | Yes               |
-| Dogma attributes categories     | Yes   |                 |                   |
-| Dogma attributes                | Yes   | Yes             | Localised names   |
-| Dogma effects                   | Yes   | Yes             |                   |
-| Dogma units                     |       |                 | Unit names        |
-| Dynamic Attributes (?)          |       |                 | Yes               |
-| Factions                        | Yes   | Yes             |                   |
-| Graphics                        | Yes   | Yes             |                   |
-| Graphic Material Sets (?)       |       |                 | Yes               |
-| Icons                           | Yes   |                 |                   |
-| Industry Activities (?)         |       |                 | Yes               |
-| Industry Assembly Lines (?)     |       |                 | Yes               |
-| Industry Installation Types (?) |       |                 | Yes               |
-| Industry Modifier Sources (?)   |       |                 | Yes               |
-| Industry Target Filters (?)     |       |                 | Yes               |
-| Inventory flags (?)             | Yes   |                 |                   |
-| Inventory groups                | Yes   | Yes             |                   |
-| Inventory items (?)             | Yes   |                 |                   |
-| Inventory names (?)             | Yes   |                 |                   |
-| Inventory positions (?)         | Yes   |                 |                   |
-| Inventory types                 | Yes   | Yes             | Repackaged volume |
-| Inventory unique names          | Yes   |                 |                   |
-| Landmarks                       | Yes   |                 |                   |
-| Languages                       | Yes   | Yes, indirectly | Yes               |
-| Loyalty offers                  |       | Yes             |                   |
-| Market groups                   | Yes   | Yes             |                   |
-| Meta groups                     | Yes   |                 |                   |
-| Moons                           | Yes   | Yes             |                   |
-| NPC corporation divisions       | Yes   |                 |                   |
-| NPC corporation                 | Yes   |                 |                   |
-| Opportunity groups              |       | Yes             |                   |
-| Opportunity tasks               |       | Yes             |                   |
-| Planetary schematics            | Yes   | Yes - no index  |                   |
-| Planets                         | Yes   | Yes             |                   |
-| Races                           | Yes   | Yes             |                   |
-| Regions                         | Yes   | Yes             |                   |
-| Research agents                 | Yes   |                 |                   |
-| Skins                           | Yes   |                 | Yes               |
-| Skin licenses                   | Yes   |                 |                   |
-| Skin materials                  | Yes   |                 | Yes               |
-| Skin material names             |       |                 | Yes               |
-| Stargate                        |       | Yes             |                   |
-| Stars                           |       | Yes             |                   |
-| Stations                        | Yes   | Yes             |                   |
-| Station operation               | Yes   |                 |                   |
-| Station services                | Yes   |                 |                   |
-| Systems                         | Yes   | Yes             |                   |
-| Tournament rule sets            | Yes   |                 |                   |
-| Universes                       | Yes   |                 |                   |
+| Data                            | SDE | ESI             | Hoboleaks         |
+|---------------------------------|-----|-----------------|-------------------|
+| Accounting Entry Types (?)      |     |                 | Yes               |
+| Agent                           | Yes |                 |                   |
+| Agent in space (?)              | Yes |                 |                   |
+| Agent Types (?)                 |     |                 | Yes               |
+| Ancestors                       | Yes | Yes             |                   |
+| Asteroid belts                  | Yes | Yes             |                   |
+| Bloodlines                      | Yes | Yes             |                   |
+| Blueprints                      | Yes |                 |                   |
+| Blueprint materials             | Yes |                 |                   |
+| Categories                      |     | Yes             |                   |
+| Certificates                    | Yes |                 |                   |
+| Character attributes            | Yes |                 |                   |
+| Clone States (?)                |     |                 | Yes               |
+| Compressible Types (?)          |     |                 | Yes               |
+| Constellations                  | Yes | Yes             |                   |
+| Contraband types (?)            | Yes |                 |                   |
+| Control tower resources (?)     | Yes |                 |                   |
+| Corportation activities (?)     | Yes |                 |                   |
+| Dbuffs (?)                      |     |                 | Yes               |
+| Dogma attributes categories     | Yes |                 |                   |
+| Dogma attributes                | Yes | Yes             | Localised names   |
+| Dogma effects                   | Yes | Yes             |                   |
+| Dogma expressions               |     |                 |                   |
+| Dogma units                     |     |                 | Unit names        |
+| Dynamic Attributes (?)          |     |                 | Yes               |
+| Factions                        | Yes | Yes             |                   |
+| Graphics                        | Yes | Yes             |                   |
+| Graphic Material Sets (?)       |     |                 | Yes               |
+| Icons                           | Yes |                 |                   |
+| Industry Activities (?)         |     |                 | Yes               |
+| Industry Assembly Lines (?)     |     |                 | Yes               |
+| Industry Installation Types (?) |     |                 | Yes               |
+| Industry Modifier Sources (?)   |     |                 | Yes               |
+| Industry Target Filters (?)     |     |                 | Yes               |
+| Inventory flags (?)             | Yes |                 |                   |
+| Inventory groups                | Yes | Yes             |                   |
+| Inventory items (?)             | Yes |                 |                   |
+| Inventory names (?)             | Yes |                 |                   |
+| Inventory positions (?)         | Yes |                 |                   |
+| Inventory types                 | Yes | Yes             | Repackaged volume |
+| Inventory unique names          | Yes |                 |                   |
+| Landmarks                       | Yes |                 |                   |
+| Languages                       | Yes | Yes, indirectly | Yes               |
+| Loyalty offers                  |     | Yes             |                   |
+| Market groups                   | Yes | Yes             |                   |
+| Meta groups                     | Yes |                 |                   |
+| Moons                           | Yes | Yes             |                   |
+| NPC corporation divisions       | Yes |                 |                   |
+| NPC corporation                 | Yes |                 |                   |
+| Opportunity groups              |     | Yes             |                   |
+| Opportunity tasks               |     | Yes             |                   |
+| Planetary schematics            | Yes | Yes - no index  |                   |
+| Planets                         | Yes | Yes             |                   |
+| Races                           | Yes | Yes             |                   |
+| Regions                         | Yes | Yes             |                   |
+| Research agents                 | Yes |                 |                   |
+| Skins                           | Yes |                 | Yes               |
+| Skin licenses                   | Yes |                 |                   |
+| Skin materials                  | Yes |                 | Yes               |
+| Skin material names             |     |                 | Yes               |
+| Stargate                        |     | Yes             |                   |
+| Stars                           |     | Yes             |                   |
+| Stations                        | Yes | Yes             |                   |
+| Station operation               | Yes |                 |                   |
+| Station services                | Yes |                 |                   |
+| Systems                         | Yes | Yes             |                   |
+| Tournament rule sets            | Yes |                 |                   |
+| Universes                       | Yes |                 |                   |
 
 ## Data structure
 
