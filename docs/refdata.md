@@ -38,7 +38,7 @@ For other third-party developers, the REST API will be freely available to consu
 | Character attributes            | `fsd/characterAttributes.yaml`       |                 |                   |
 | Clone States (?)                |                                      |                 | Yes               |
 | Compressible Types (?)          |                                      |                 | Yes               |
-| Constellations                  | `fsd/.yaml`                          | Yes             |                   |
+| Constellations                  | `fsd/universe`                       | Yes             |                   |
 | Contraband types (?)            | `fsd/contrabandTypes.yaml`           |                 |                   |
 | Control tower resources (?)     | `fsd/controlTowerResources.yaml`     |                 |                   |
 | Corporatation activities (?)    | `fsd/corporationActivities.yaml`     |                 |                   |
