@@ -6,6 +6,7 @@ import com.autonomouslogic.everef.refdata.RefDataMerger;
 import com.autonomouslogic.everef.refdata.esi.EsiLoader;
 import com.autonomouslogic.everef.refdata.sde.SdeLoader;
 import com.autonomouslogic.everef.util.CompressUtil;
+import com.autonomouslogic.everef.util.OkHttpHelper;
 import com.autonomouslogic.everef.util.Rx;
 import com.autonomouslogic.everef.util.TempFiles;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -20,6 +21,7 @@ import javax.inject.Provider;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
+import okhttp3.OkHttpClient;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
 import org.apache.commons.io.IOUtils;
@@ -28,6 +30,12 @@ import org.h2.mvstore.MVStore;
 
 @Log4j2
 public class BuildRefData implements Command {
+	@Inject
+	protected OkHttpClient okHttpClient;
+
+	@Inject
+	protected OkHttpHelper okHttpHelper;
+
 	@Inject
 	protected MVStoreUtil mvStoreUtil;
 
@@ -91,16 +99,34 @@ public class BuildRefData implements Command {
 	}
 
 	private Single<File> downloadLatestSde() {
-		return Single.error(new UnsupportedOperationException("Not implemented yet"));
+		return Single.defer(() -> {
+			var url = "https://data.everef.net/ccp/sde/sde-20230315-TRANQUILITY.zip"; // @todo
+			var file = tempFiles.tempFile("sde", ".zip").toFile();
+			return okHttpHelper.download(url, file, okHttpClient).flatMap(response -> {
+				if (response.code() != 200) {
+					return Single.error(new RuntimeException("Failed downloading ESI"));
+				}
+				return Single.just(file);
+			});
+		});
 	}
 
 	private Single<File> downloadLatestEsi() {
-		return Single.error(new UnsupportedOperationException("Not implemented yet"));
+		return Single.defer(() -> {
+			var url = "https://data.everef.net/esi-scrape/eve-ref-esi-scrape-latest.tar.xz"; // @todo
+			var file = tempFiles.tempFile("esi", ".tar.xz").toFile();
+			return okHttpHelper.download(url, file, okHttpClient).flatMap(response -> {
+				if (response.code() != 200) {
+					return Single.error(new RuntimeException("Failed downloading ESI"));
+				}
+				return Single.just(file);
+			});
+		});
 	}
 
 	private Single<File> buildOutputFile() {
 		return Single.fromCallable(() -> {
-					var file = File.createTempFile("ref-data", ".tar");
+					var file = File.createTempFile("ref-data-", ".tar");
 					log.info("Writing ref data to {}", file);
 					try (var tar = new TarArchiveOutputStream(new FileOutputStream(file))) {
 						writeEntries("types", typeStores.getRefStore(), tar);
@@ -115,7 +141,7 @@ public class BuildRefData implements Command {
 
 	@SneakyThrows
 	private void writeEntries(String name, MVMap<Long, JsonNode> store, TarArchiveOutputStream tar) {
-		var file = tempFiles.tempFile("ref-data-" + name, ".json").toFile();
+		var file = tempFiles.tempFile("ref-data" + name, ".json").toFile();
 		try (var generator = objectMapper.createGenerator(new FileOutputStream(file))) {
 			generator.writeStartObject();
 			for (var entry : store.entrySet()) {

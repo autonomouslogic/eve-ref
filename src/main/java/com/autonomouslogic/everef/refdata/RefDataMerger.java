@@ -1,9 +1,11 @@
 package com.autonomouslogic.everef.refdata;
 
 import com.autonomouslogic.everef.cli.refdata.StoreSet;
+import com.fasterxml.jackson.databind.JsonNode;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import java.util.LinkedHashSet;
+import java.util.Optional;
 import javax.inject.Inject;
 import lombok.NonNull;
 import lombok.Setter;
@@ -43,7 +45,12 @@ public class RefDataMerger {
 						try {
 							var sde = sdeStore.get(id);
 							var esi = esiStore.get(id);
-							var ref = objectMerger.merge(sde, esi);
+							JsonNode ref;
+							if (sde != null && esi != null) {
+								ref = objectMerger.merge(sde, esi);
+							} else {
+								ref = Optional.ofNullable(sde).orElse(esi);
+							}
 							refStore.put(id, ref);
 						} catch (Exception e) {
 							throw new IllegalStateException(String.format("Failed merging %s [%d]", name, id), e);
