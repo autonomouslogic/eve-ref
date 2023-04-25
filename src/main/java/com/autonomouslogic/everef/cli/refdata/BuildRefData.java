@@ -47,9 +47,7 @@ public class BuildRefData implements Command {
 	protected Provider<RefDataMerger> refDataMergerProvider;
 
 	private MVStore mvStore;
-	private MVMap<Long, JsonNode> typesSdeStore;
-	private MVMap<Long, JsonNode> typesEsiStore;
-	private MVMap<Long, JsonNode> typesRefStore;
+	private StoreSet typeStores;
 
 	@Inject
 	protected BuildRefData() {}
@@ -69,12 +67,10 @@ public class BuildRefData implements Command {
 	private Completable initMvStore() {
 		return Completable.fromAction(() -> {
 			mvStore = mvStoreUtil.createTempStore("ref-data");
-			typesSdeStore = mvStoreUtil.openJsonMap(mvStore, "types-sde", Long.class);
-			typesEsiStore = mvStoreUtil.openJsonMap(mvStore, "types-esi", Long.class);
-			typesRefStore = mvStoreUtil.openJsonMap(mvStore, "types-ref", Long.class);
+			typeStores = openStoreSet("types");
 
-			sdeLoader.setTypeStore(typesSdeStore);
-			esiLoader.setTypeStore(typesEsiStore);
+			sdeLoader.setTypeStore(typeStores.getSdeStore());
+			esiLoader.setTypeStore(typeStores.getEsiStore());
 		});
 	}
 
@@ -83,9 +79,7 @@ public class BuildRefData implements Command {
 			return refDataMergerProvider
 					.get()
 					.setName("types")
-					.setSdeStore(typesSdeStore)
-					.setEsiStore(typesEsiStore)
-					.setRefStore(typesRefStore)
+					.setStores(typeStores)
 					.merge();
 		});
 	}
@@ -109,7 +103,7 @@ public class BuildRefData implements Command {
 					var file = File.createTempFile("ref-data", ".tar");
 					log.info("Writing ref data to {}", file);
 					try (var tar = new TarArchiveOutputStream(new FileOutputStream(file))) {
-						writeEntries("types", typesRefStore, tar);
+						writeEntries("types", typeStores.getRefStore(), tar);
 					}
 					log.debug(String.format("Wrote %.0f MiB to %s", (double) file.length() / 1024.0 / 1024.0, file));
 					var compressed = CompressUtil.compressXz(file);
@@ -142,5 +136,12 @@ public class BuildRefData implements Command {
 
 	private Completable uploadFile(@NonNull File file) {
 		return Completable.error(new UnsupportedOperationException("Not implemented yet"));
+	}
+
+	private StoreSet openStoreSet(String name) {
+		return new StoreSet(
+				mvStoreUtil.openJsonMap(mvStore, name + "-sde", Long.class),
+				mvStoreUtil.openJsonMap(mvStore, name + "-esi", Long.class),
+				mvStoreUtil.openJsonMap(mvStore, name + "-ref", Long.class));
 	}
 }
