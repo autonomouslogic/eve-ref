@@ -174,7 +174,8 @@ public class TestDataUtil {
 
 	@SneakyThrows
 	public void assertJsonStrictEquals(JsonNode expected, JsonNode actual) {
-		assertEquals(objectMapper.writeValueAsString(expected), objectMapper.writeValueAsString(actual));
+		var prettyWriter = objectMapper.writerWithDefaultPrettyPrinter();
+		assertEquals(prettyWriter.writeValueAsString(expected), prettyWriter.writeValueAsString(actual));
 	}
 
 	@SneakyThrows
