@@ -40,25 +40,33 @@ public class SdeLoader {
 	protected SdeLoader() {}
 
 	public Completable load(@NonNull File file) {
-		return CompressUtil.loadArchive(file).flatMapCompletable(pair -> {
-			SimpleStoreLoader storeLoader = null;
-			Function<ObjectNode, ObjectNode> transformer = null;
-			switch (pair.getLeft().getName()) {
-				case SDE_TYPES_PATH:
-					storeLoader =
-							simpleLoaderProvider.get().setIdFieldName("type_id").setOutput(typeStore);
-					transformer = sdeTypeTransformerProvider.get();
-					break;
-				default:
-					log.warn("Unknown SDE entry: {}", pair.getLeft().getName());
-					return Completable.complete();
-			}
-			if (transformer == null) {
-				storeLoader.setTransformer(fieldRenamer);
-			} else {
-				storeLoader.setTransformer(FunctionUtil.concat(fieldRenamer, transformer));
-			}
-			return storeLoader.readValues(pair.getRight());
-		});
+		return CompressUtil.loadArchive(file)
+				.flatMapCompletable(
+						pair -> {
+							SimpleStoreLoader storeLoader = null;
+							Function<ObjectNode, ObjectNode> transformer = null;
+							switch (pair.getLeft().getName()) {
+								case SDE_TYPES_PATH:
+									storeLoader = simpleLoaderProvider
+											.get()
+											.setIdFieldName("type_id")
+											.setOutput(typeStore);
+									transformer = sdeTypeTransformerProvider.get();
+									break;
+								default:
+									log.warn(
+											"Unknown SDE entry: {}",
+											pair.getLeft().getName());
+									return Completable.complete();
+							}
+							if (transformer == null) {
+								storeLoader.setTransformer(fieldRenamer);
+							} else {
+								storeLoader.setTransformer(FunctionUtil.concat(fieldRenamer, transformer));
+							}
+							return storeLoader.readValues(pair.getRight());
+						},
+						false,
+						1);
 	}
 }

@@ -1,7 +1,8 @@
 {
   "capacity": 750,
   "description": {
-    "en": "The Dominix is one of the old warhorses dating back to the Gallente-Caldari War. While no longer regarded as the king of the hill, it is by no means obsolete. Its formidable hulk and powerful drone arsenal means that anyone not in the largest and latest battleships will regret ever locking horns with it."
+    "en": "The Dominix is one of the old warhorses dating back to the Gallente-Caldari War. While no longer regarded as the king of the hill, it is by no means obsolete. Its formidable hulk and powerful drone arsenal means that anyone not in the largest and latest battleships will regret ever locking horns with it.",
+    "fr": "Le Dominix est un vétéran du front, qui déjà s'illustrait à l'époque de la guerre Gallente-Caldari. S'il n'est plus considéré comme le parangon des champs de bataille, ce cuirassé est loin d’être obsolète. Doté d'une coque massive et d'un puissant arsenal de drones, le Dominix est un adversaire redoutable, capable de pulvériser tous les vaisseaux de l'amas, à l'exception des cuirassés de pointe les plus modernes."
   },
   "dogma_attributes":
   {
@@ -499,7 +500,8 @@
   "market_group_id": 81,
   "mass": 100250000,
   "name": {
-    "en": "Dominix"
+    "en": "Dominix",
+    "fr": "Dominix"
   },
   "packaged_volume": 50000,
   "portion_size": 1,

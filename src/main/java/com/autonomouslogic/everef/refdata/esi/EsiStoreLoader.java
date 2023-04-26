@@ -2,11 +2,11 @@ package com.autonomouslogic.everef.refdata.esi;
 
 import com.autonomouslogic.everef.refdata.SimpleStoreLoader;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.functions.BiFunction;
 import javax.inject.Inject;
 import lombok.NonNull;
 import lombok.Setter;
+import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -26,13 +26,12 @@ public class EsiStoreLoader extends SimpleStoreLoader {
 	protected EsiStoreLoader() {}
 
 	@Override
-	protected Completable readValue(long id, ObjectNode json) {
-		return Completable.defer(() -> {
-			var transformed = json;
-			if (esiTransformer != null) {
-				transformed = esiTransformer.apply(transformed, language);
-			}
-			return super.readValue(id, transformed);
-		});
+	@SneakyThrows
+	protected ObjectNode readValue(long id, ObjectNode json) {
+		var transformed = json;
+		if (esiTransformer != null) {
+			transformed = esiTransformer.apply(transformed, language);
+		}
+		return super.readValue(id, transformed);
 	}
 }

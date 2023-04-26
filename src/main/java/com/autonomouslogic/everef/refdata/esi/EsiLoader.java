@@ -33,29 +33,35 @@ public class EsiLoader {
 	protected EsiLoader() {}
 
 	public Completable load(@NonNull File file) {
-		return CompressUtil.loadArchive(file).flatMapCompletable(pair -> {
-			var fileType = getFileType(pair.getLeft().getName());
-			var language = getLanguage(pair.getLeft().getName());
-			EsiStoreLoader storeLoader = null;
-			if (fileType == null) {
-				log.warn("Unknown ESI entry: {}", pair.getLeft().getName());
-				return Completable.complete();
-			}
-			switch (fileType) {
-				case "types":
-					storeLoader = esiStoreLoaderProvider.get().setEsiTransformer(esiTypeTransformerProvider.get());
-					storeLoader.setIdFieldName("type_id").setOutput(typeStore);
-					break;
-				default:
-					log.warn(
-							"Unknown ESI entry type {}: {}",
-							fileType,
-							pair.getLeft().getName());
-					return Completable.complete();
-			}
-			storeLoader.setLanguage(language);
-			return storeLoader.readValues(pair.getRight());
-		});
+		return CompressUtil.loadArchive(file)
+				.flatMapCompletable(
+						pair -> {
+							var fileType = getFileType(pair.getLeft().getName());
+							var language = getLanguage(pair.getLeft().getName());
+							EsiStoreLoader storeLoader = null;
+							if (fileType == null) {
+								log.warn("Unknown ESI entry: {}", pair.getLeft().getName());
+								return Completable.complete();
+							}
+							switch (fileType) {
+								case "types":
+									storeLoader = esiStoreLoaderProvider
+											.get()
+											.setEsiTransformer(esiTypeTransformerProvider.get());
+									storeLoader.setIdFieldName("type_id").setOutput(typeStore);
+									break;
+								default:
+									log.warn(
+											"Unknown ESI entry type {}: {}",
+											fileType,
+											pair.getLeft().getName());
+									return Completable.complete();
+							}
+							storeLoader.setLanguage(language);
+							return storeLoader.readValues(pair.getRight());
+						},
+						false,
+						1);
 	}
 
 	protected String getFileType(String filename) {

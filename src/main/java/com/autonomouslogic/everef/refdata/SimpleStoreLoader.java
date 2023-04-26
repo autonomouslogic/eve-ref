@@ -25,6 +25,9 @@ public class SimpleStoreLoader {
 	@Named("yaml")
 	protected ObjectMapper yamlMapper;
 
+	@Inject
+	protected ObjectMerger objectMerger;
+
 	@Setter
 	@NonNull
 	private MVMap<Long, JsonNode> output;
@@ -47,21 +50,26 @@ public class SimpleStoreLoader {
 					return Flowable.fromIterable(() -> container.fields()).flatMapCompletable(entry -> {
 						var id = Long.parseLong(entry.getKey());
 						var json = (ObjectNode) entry.getValue();
-						return readValue(id, json);
+						json = readValue(id, json);
+						if (output.containsKey(id)) {
+							var existing = (ObjectNode) output.get(id);
+							json = (ObjectNode) objectMerger.merge(existing, json);
+						}
+						output.put(id, json);
+						return Completable.complete();
 					});
 				})
 				.subscribeOn(Schedulers.computation());
 	}
 
-	protected Completable readValue(long id, ObjectNode json) {
-		return Completable.fromAction(() -> {
-			var transformed = json;
-			if (transformer != null) {
-				transformed = transformer.apply(json);
-			}
-			handleIdField(transformed, id);
-			output.put(id, transformed);
-		});
+	@SneakyThrows
+	protected ObjectNode readValue(long id, ObjectNode json) {
+		var transformed = json;
+		if (transformer != null) {
+			transformed = transformer.apply(json);
+		}
+		handleIdField(transformed, id);
+		return transformed;
 	}
 
 	protected void handleIdField(ObjectNode json, long id) {

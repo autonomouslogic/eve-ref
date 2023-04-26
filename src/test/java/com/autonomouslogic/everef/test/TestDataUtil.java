@@ -184,8 +184,9 @@ public class TestDataUtil {
 
 	@SneakyThrows
 	public File createTestEsiDump() {
-		return createTarXzFile(
-				Map.ofEntries(createEntry("/refdata/esi", "data/tranquility/universe/types.en-us.yaml")));
+		return createTarXzFile(Map.ofEntries(
+				createEntry("/refdata/esi", "data/tranquility/universe/types.en-us.yaml"),
+				createEntry("/refdata/esi", "data/tranquility/universe/types.fr.yaml")));
 	}
 
 	@SneakyThrows
