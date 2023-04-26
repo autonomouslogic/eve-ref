@@ -42,18 +42,16 @@ public class EsiLoader {
 				case "types":
 					storeLoader = esiStoreLoaderProvider.get();
 					storeLoader.setIdFieldName("type_id").setOutput(typeStore);
+					break;
 				default:
 					log.warn(
 							"Unknown ESI entry type {}: {}",
 							fileType,
 							pair.getLeft().getName());
-					break;
+					return Completable.complete();
 			}
-			if (storeLoader != null) {
-				storeLoader.setLanguage(language);
-				return storeLoader.readValues(pair.getRight());
-			}
-			return Completable.complete();
+			storeLoader.setLanguage(language);
+			return storeLoader.readValues(pair.getRight());
 		});
 	}
 

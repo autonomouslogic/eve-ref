@@ -3,8 +3,11 @@ package com.autonomouslogic.everef.refdata.sde;
 import com.autonomouslogic.everef.refdata.FieldRenamer;
 import com.autonomouslogic.everef.refdata.SimpleStoreLoader;
 import com.autonomouslogic.everef.util.CompressUtil;
+import com.autonomouslogic.everef.util.FunctionUtil;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.functions.Function;
 import java.io.File;
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -26,6 +29,9 @@ public class SdeLoader {
 	@Inject
 	protected Provider<SimpleStoreLoader> simpleLoaderProvider;
 
+	@Inject
+	protected Provider<SdeTypeTransformer> sdeTypeTransformerProvider;
+
 	@Setter
 	@NonNull
 	private MVMap<Long, JsonNode> typeStore;
@@ -35,19 +41,24 @@ public class SdeLoader {
 
 	public Completable load(@NonNull File file) {
 		return CompressUtil.loadArchive(file).flatMapCompletable(pair -> {
+			SimpleStoreLoader storeLoader = null;
+			Function<ObjectNode, ObjectNode> transformer = null;
 			switch (pair.getLeft().getName()) {
 				case SDE_TYPES_PATH:
-					return simpleLoaderProvider
-							.get()
-							.setIdFieldName("type_id")
-							.setOutput(typeStore)
-							.setTransformer(fieldRenamer::fieldRenameObjectFromSde)
-							.readValues(pair.getRight());
+					storeLoader =
+							simpleLoaderProvider.get().setIdFieldName("type_id").setOutput(typeStore);
+					transformer = sdeTypeTransformerProvider.get();
+					break;
 				default:
 					log.warn("Unknown SDE entry: {}", pair.getLeft().getName());
-					break;
+					return Completable.complete();
 			}
-			return Completable.complete();
+			if (transformer == null) {
+				storeLoader.setTransformer(fieldRenamer);
+			} else {
+				storeLoader.setTransformer(FunctionUtil.concat(fieldRenamer, transformer));
+			}
+			return storeLoader.readValues(pair.getRight());
 		});
 	}
 }
