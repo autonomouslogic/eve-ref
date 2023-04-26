@@ -22,6 +22,9 @@ public class EsiLoader {
 	@Inject
 	protected Provider<EsiStoreLoader> esiStoreLoaderProvider;
 
+	@Inject
+	protected Provider<EsiTypeTransformer> esiTypeTransformerProvider;
+
 	@Setter
 	@NonNull
 	private MVMap<Long, JsonNode> typeStore;
@@ -40,7 +43,7 @@ public class EsiLoader {
 			}
 			switch (fileType) {
 				case "types":
-					storeLoader = esiStoreLoaderProvider.get();
+					storeLoader = esiStoreLoaderProvider.get().setEsiTransformer(esiTypeTransformerProvider.get());
 					storeLoader.setIdFieldName("type_id").setOutput(typeStore);
 					break;
 				default:
