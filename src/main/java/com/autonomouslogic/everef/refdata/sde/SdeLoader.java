@@ -1,7 +1,7 @@
 package com.autonomouslogic.everef.refdata.sde;
 
 import com.autonomouslogic.everef.refdata.FieldRenamer;
-import com.autonomouslogic.everef.refdata.SimpleLoader;
+import com.autonomouslogic.everef.refdata.SimpleStoreLoader;
 import com.autonomouslogic.everef.util.CompressUtil;
 import com.fasterxml.jackson.databind.JsonNode;
 import io.reactivex.rxjava3.core.Completable;
@@ -24,7 +24,7 @@ public class SdeLoader {
 	protected FieldRenamer fieldRenamer;
 
 	@Inject
-	protected Provider<SimpleLoader> simpleLoaderProvider;
+	protected Provider<SimpleStoreLoader> simpleLoaderProvider;
 
 	@Setter
 	@NonNull
@@ -41,7 +41,7 @@ public class SdeLoader {
 							.get()
 							.setIdFieldName("type_id")
 							.setOutput(typeStore)
-							.setTransformer(fieldRenamer::fieldRenameFromSde)
+							.setTransformer(fieldRenamer::fieldRenameObjectFromSde)
 							.readValues(pair.getRight());
 				default:
 					log.warn("Unknown SDE entry: {}", pair.getLeft().getName());

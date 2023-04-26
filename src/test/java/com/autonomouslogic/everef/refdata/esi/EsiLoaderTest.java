@@ -14,6 +14,8 @@ import lombok.extern.log4j.Log4j2;
 import org.h2.mvstore.MVMap;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvFileSource;
 
 @Log4j2
 public class EsiLoaderTest {
@@ -47,5 +49,12 @@ public class EsiLoaderTest {
 		assertEquals(1, typeStore.size());
 		var expectedType = objectMapper.readTree(ResourceUtil.loadContextual(EsiLoaderTest.class, "/type-645.json"));
 		testDataUtil.assertJsonStrictEquals(expectedType, typeStore.get(645L));
+	}
+
+	@ParameterizedTest
+	@CsvFileSource(resources = "/com/autonomouslogic/everef/refdata/esi/EsiLoaderTest/filenames.csv")
+	void shouldParseFileNames(String filename, String fileType, String language) {
+		assertEquals(fileType, esiLoader.getFileType(filename));
+		assertEquals(language, esiLoader.getLanguage(filename));
 	}
 }

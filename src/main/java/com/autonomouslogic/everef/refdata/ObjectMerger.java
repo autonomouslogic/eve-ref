@@ -67,7 +67,7 @@ public class ObjectMerger {
 			if (node.isObject()) {
 				objs[i] = (ObjectNode) node;
 			} else {
-				throw new IllegalArgumentException("Arg " + i + " is not an object");
+				throw new IllegalArgumentException("Arg " + i + " is not an object: " + node.getNodeType());
 			}
 		}
 		return objs;

@@ -1,10 +1,10 @@
 package com.autonomouslogic.everef.refdata.esi;
 
-import com.autonomouslogic.everef.refdata.SimpleLoader;
 import com.autonomouslogic.everef.util.CompressUtil;
 import com.fasterxml.jackson.databind.JsonNode;
 import io.reactivex.rxjava3.core.Completable;
 import java.io.File;
+import java.util.regex.Pattern;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import lombok.NonNull;
@@ -17,10 +17,10 @@ import org.h2.mvstore.MVMap;
  */
 @Log4j2
 public class EsiLoader {
-	public static final String ESI_TYPES_BASE_PATH = "data/tranquility/universe/types";
+	private static final Pattern FILE_PATTERN = Pattern.compile(".*?([^\\.\\/]+)\\.([^\\.]+)\\.yaml");
 
 	@Inject
-	protected Provider<SimpleLoader> simpleLoaderProvider;
+	protected Provider<EsiStoreLoader> esiStoreLoaderProvider;
 
 	@Setter
 	@NonNull
@@ -31,18 +31,49 @@ public class EsiLoader {
 
 	public Completable load(@NonNull File file) {
 		return CompressUtil.loadArchive(file).flatMapCompletable(pair -> {
-			switch (pair.getLeft().getName()) {
-				case ESI_TYPES_BASE_PATH + ".en-us.yaml":
-					return simpleLoaderProvider
-							.get()
-							.setIdFieldName("type_id")
-							.setOutput(typeStore)
-							.readValues(pair.getRight());
+			var fileType = getFileType(pair.getLeft().getName());
+			var language = getLanguage(pair.getLeft().getName());
+			EsiStoreLoader storeLoader = null;
+			if (fileType == null) {
+				log.warn("Unknown ESI entry: {}", pair.getLeft().getName());
+				return Completable.complete();
+			}
+			switch (fileType) {
+				case "types":
+					storeLoader = esiStoreLoaderProvider.get();
+					storeLoader.setIdFieldName("type_id").setOutput(typeStore);
 				default:
-					log.warn("Unknown ESI entry: {}", pair.getLeft().getName());
+					log.warn(
+							"Unknown ESI entry type {}: {}",
+							fileType,
+							pair.getLeft().getName());
 					break;
+			}
+			if (storeLoader != null) {
+				storeLoader.setLanguage(language);
+				return storeLoader.readValues(pair.getRight());
 			}
 			return Completable.complete();
 		});
+	}
+
+	protected String getFileType(String filename) {
+		var matcher = FILE_PATTERN.matcher(filename);
+		if (!matcher.matches()) {
+			return null;
+		}
+		return matcher.group(1);
+	}
+
+	protected String getLanguage(String filename) {
+		var matcher = FILE_PATTERN.matcher(filename);
+		if (!matcher.matches()) {
+			return null;
+		}
+		var lang = matcher.group(2);
+		if (lang.equals("en-us")) {
+			return "en";
+		}
+		return lang;
 	}
 }

@@ -24,6 +24,7 @@ import lombok.extern.log4j.Log4j2;
 import okhttp3.OkHttpClient;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.h2.mvstore.MVMap;
 import org.h2.mvstore.MVStore;
@@ -160,8 +161,21 @@ public class BuildRefData implements Command {
 		file.delete();
 	}
 
-	private Completable uploadFile(@NonNull File file) {
-		return Completable.error(new UnsupportedOperationException("Not implemented yet"));
+	private Completable uploadFile(@NonNull File compressed) {
+		return Completable.defer(() -> {
+			var dir = new File("/tmp/ref-data");
+			dir.mkdirs();
+			return CompressUtil.loadArchive(compressed).flatMapCompletable(pair -> {
+				var entry = pair.getKey();
+				var bytes = pair.getValue();
+				var file = new File(dir, entry.getName());
+				log.debug("Extracting: " + file);
+				var json = objectMapper.readTree(bytes);
+				var pretty = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsBytes(json);
+				FileUtils.writeByteArrayToFile(file, pretty);
+				return Completable.complete();
+			});
+		});
 	}
 
 	private StoreSet openStoreSet(String name) {

@@ -20,7 +20,7 @@ import org.h2.mvstore.MVMap;
  * Reads big objects from a YAML file, transforms and converts them and stores them in the target map.
  */
 @Log4j2
-public class SimpleLoader {
+public class SimpleStoreLoader {
 	@Inject
 	@Named("yaml")
 	protected ObjectMapper yamlMapper;
@@ -31,32 +31,42 @@ public class SimpleLoader {
 
 	@Setter
 	@NonNull
-	private Function<JsonNode, JsonNode> transformer;
+	private Function<ObjectNode, ObjectNode> transformer;
 
 	@Setter
 	@NonNull
 	private String idFieldName;
 
 	@Inject
-	protected SimpleLoader() {}
+	protected SimpleStoreLoader() {}
 
 	@SneakyThrows
 	public Completable readValues(@NonNull byte[] bytes) {
 		return Completable.defer(() -> {
 					var container = (ObjectNode) yamlMapper.readTree(new ByteArrayInputStream(bytes));
-					return Flowable.fromIterable(() -> container.fields())
-							.flatMapCompletable(entry -> Completable.fromAction(() -> {
-								var id = Long.parseLong(entry.getKey());
-								var json = entry.getValue();
-								if (transformer != null) {
-									json = transformer.apply(json);
-								}
-								if (idFieldName != null) {
-									((ObjectNode) json).put(idFieldName, id);
-								}
-								output.put(id, json);
-							}));
+					return Flowable.fromIterable(() -> container.fields()).flatMapCompletable(entry -> {
+						var id = Long.parseLong(entry.getKey());
+						var json = (ObjectNode) entry.getValue();
+						return readValue(id, json);
+					});
 				})
 				.subscribeOn(Schedulers.computation());
+	}
+
+	protected Completable readValue(long id, ObjectNode json) {
+		return Completable.fromAction(() -> {
+			var transformed = json;
+			if (transformer != null) {
+				transformed = transformer.apply(json);
+			}
+			handleIdField(transformed, id);
+			output.put(id, transformed);
+		});
+	}
+
+	protected void handleIdField(ObjectNode json, long id) {
+		if (idFieldName != null) {
+			json.put(idFieldName, id);
+		}
 	}
 }

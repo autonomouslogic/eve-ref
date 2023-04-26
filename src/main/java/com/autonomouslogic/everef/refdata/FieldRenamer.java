@@ -57,4 +57,8 @@ public class FieldRenamer {
 			return node;
 		}
 	}
+
+	public ObjectNode fieldRenameObjectFromSde(ObjectNode node) {
+		return (ObjectNode) fieldRenameFromSde(node);
+	}
 }

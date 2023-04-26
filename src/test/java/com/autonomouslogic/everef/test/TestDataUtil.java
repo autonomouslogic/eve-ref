@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 import com.autonomouslogic.commons.ResourceUtil;
-import com.autonomouslogic.everef.refdata.esi.EsiLoader;
 import com.autonomouslogic.everef.refdata.sde.SdeLoader;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -186,7 +185,7 @@ public class TestDataUtil {
 	@SneakyThrows
 	public File createTestEsiDump() {
 		return createTarXzFile(
-				Map.ofEntries(createEntry("/refdata/esi", EsiLoader.ESI_TYPES_BASE_PATH + ".en-us.yaml")));
+				Map.ofEntries(createEntry("/refdata/esi", "data/tranquility/universe/types.en-us.yaml")));
 	}
 
 	@SneakyThrows
