@@ -1,6 +1,8 @@
 {
   "capacity": 750,
-  "description": "The Dominix is one of the old warhorses dating back to the Gallente-Caldari War. While no longer regarded as the king of the hill, it is by no means obsolete. Its formidable hulk and powerful drone arsenal means that anyone not in the largest and latest battleships will regret ever locking horns with it.",
+  "description": {
+    "en": "The Dominix is one of the old warhorses dating back to the Gallente-Caldari War. While no longer regarded as the king of the hill, it is by no means obsolete. Its formidable hulk and powerful drone arsenal means that anyone not in the largest and latest battleships will regret ever locking horns with it."
+  },
   "dogma_attributes":
   {
     "3":
@@ -496,7 +498,9 @@
   "group_id": 27,
   "market_group_id": 81,
   "mass": 100250000,
-  "name": "Dominix",
+  "name": {
+    "en": "Dominix"
+  },
   "packaged_volume": 50000,
   "portion_size": 1,
   "published": true,

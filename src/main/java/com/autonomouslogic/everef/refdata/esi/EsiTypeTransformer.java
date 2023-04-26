@@ -20,6 +20,8 @@ public class EsiTypeTransformer implements BiFunction<ObjectNode, String, Object
 	public ObjectNode apply(ObjectNode json, String language) throws Throwable {
 		transformUtil.arrayToObject(json, "dogma_attributes", "attribute_id");
 		transformUtil.arrayToObject(json, "dogma_effects", "effect_id");
+		transformUtil.setPath(json, json.get("name"), "name", language);
+		transformUtil.setPath(json, json.get("description"), "description", language);
 		return json;
 	}
 }

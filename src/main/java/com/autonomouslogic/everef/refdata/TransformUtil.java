@@ -33,4 +33,20 @@ public class TransformUtil {
 		}
 		root.set(field, obj);
 	}
+
+	public void setPath(ObjectNode root, JsonNode value, String... path) {
+		var step = path[0];
+		if (path.length == 1) {
+			root.set(step, value);
+		} else {
+			JsonNode stepNode = root.get(step);
+			if (stepNode == null || !stepNode.isObject()) {
+				stepNode = objectMapper.createObjectNode();
+				root.set(step, stepNode);
+			}
+			String[] subPath = new String[path.length - 1];
+			System.arraycopy(path, 1, subPath, 0, path.length - 1);
+			setPath((ObjectNode) stepNode, value, subPath);
+		}
+	}
 }
