@@ -94,15 +94,6 @@ public class BuildRefDataTest {
 		var files = testDataUtil.readFilesFromXzTar(content);
 		assertEquals(Set.of("types.json"), files.keySet());
 		assertTypes(files.get("types.json"));
-
-		//		assertMeta(content);
-		//		assertContracts(records.get("contracts.csv"));
-		//		assertBids(records.get("contract_bids.csv"));
-		//		assertItems(records.get("contract_items.csv"));
-		//		assertDynamicItems(records.get("contract_dynamic_items.csv"));
-		//		assertNonDynamicItems(records.get("contract_non_dynamic_items.csv"));
-		//		assertDogmaAttributes(records.get("contract_dynamic_items_dogma_attributes.csv"));
-		//		assertDogmaEffects(records.get("contract_dynamic_items_dogma_effects.csv"));
 	}
 
 	@SneakyThrows
