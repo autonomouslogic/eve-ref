@@ -30,6 +30,7 @@ import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
 import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
 import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream;
+import org.apache.commons.compress.compressors.xz.XZCompressorInputStream;
 import org.apache.commons.compress.compressors.xz.XZCompressorOutputStream;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.io.IOUtils;
@@ -100,6 +101,24 @@ public class TestDataUtil {
 				var file = entry.getName();
 				var maps = readMapsFromCsv(tar);
 				result.put(file, maps);
+				entry = tar.getNextTarEntry();
+			}
+		}
+		return result;
+	}
+
+	@SneakyThrows
+	public Map<String, byte[]> readFilesFromXzTar(byte[] bytes) {
+		Map<String, byte[]> result = new LinkedHashMap<>();
+		try (var tar = new TarArchiveInputStream(new XZCompressorInputStream(new ByteArrayInputStream(bytes)))) {
+			var entry = tar.getNextTarEntry();
+			while (entry != null) {
+				if (entry.isDirectory()) {
+					continue;
+				}
+				var file = entry.getName();
+				var data = IOUtils.toByteArray(tar);
+				result.put(file, data);
 				entry = tar.getNextTarEntry();
 			}
 		}

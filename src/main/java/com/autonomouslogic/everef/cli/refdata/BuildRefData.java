@@ -1,13 +1,22 @@
 package com.autonomouslogic.everef.cli.refdata;
 
+import static com.autonomouslogic.everef.util.ArchivePathFactory.ESI;
+import static com.autonomouslogic.everef.util.ArchivePathFactory.REFERENCE_DATA;
+import static com.autonomouslogic.everef.util.ArchivePathFactory.SDE;
+
 import com.autonomouslogic.everef.cli.Command;
+import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.mvstore.MVStoreUtil;
 import com.autonomouslogic.everef.refdata.RefDataMerger;
 import com.autonomouslogic.everef.refdata.esi.EsiLoader;
 import com.autonomouslogic.everef.refdata.sde.SdeLoader;
+import com.autonomouslogic.everef.s3.S3Adapter;
+import com.autonomouslogic.everef.url.S3Url;
+import com.autonomouslogic.everef.url.UrlParser;
 import com.autonomouslogic.everef.util.CompressUtil;
 import com.autonomouslogic.everef.util.OkHttpHelper;
 import com.autonomouslogic.everef.util.Rx;
+import com.autonomouslogic.everef.util.S3Util;
 import com.autonomouslogic.everef.util.TempFiles;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -16,18 +25,24 @@ import io.reactivex.rxjava3.core.Single;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.net.URI;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.ZonedDateTime;
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.inject.Provider;
 import lombok.NonNull;
+import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import okhttp3.OkHttpClient;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.h2.mvstore.MVMap;
 import org.h2.mvstore.MVStore;
+import software.amazon.awssdk.services.s3.S3AsyncClient;
 
 @Log4j2
 public class BuildRefData implements Command {
@@ -36,6 +51,19 @@ public class BuildRefData implements Command {
 
 	@Inject
 	protected OkHttpHelper okHttpHelper;
+
+	@Inject
+	protected UrlParser urlParser;
+
+	@Inject
+	protected S3Adapter s3Adapter;
+
+	@Inject
+	protected S3Util s3Util;
+
+	@Inject
+	@Named("data")
+	protected S3AsyncClient s3Client;
 
 	@Inject
 	protected MVStoreUtil mvStoreUtil;
@@ -55,11 +83,33 @@ public class BuildRefData implements Command {
 	@Inject
 	protected Provider<RefDataMerger> refDataMergerProvider;
 
+	@Setter
+	@NonNull
+	private ZonedDateTime buildTime = ZonedDateTime.now();
+
+	private final Duration latestCacheTime = Configs.DATA_LATEST_CACHE_CONTROL_MAX_AGE.getRequired();
+	private final Duration archiveCacheTime = Configs.DATA_ARCHIVE_CACHE_CONTROL_MAX_AGE.getRequired();
+
+	private S3Url dataUrl;
+	private URI dataBaseUrl;
 	private MVStore mvStore;
 	private StoreSet typeStores;
 
 	@Inject
 	protected BuildRefData() {}
+
+	@Inject
+	protected void init() {
+		var dataPathUrl = urlParser.parse(Configs.DATA_PATH.getRequired());
+		if (!dataPathUrl.getProtocol().equals("s3")) {
+			throw new IllegalArgumentException("Data path must be an S3 path");
+		}
+		dataUrl = (S3Url) dataPathUrl;
+		if (!dataUrl.getPath().equals("")) {
+			throw new IllegalArgumentException("Data index must be run at the root of the bucket");
+		}
+		dataBaseUrl = Configs.DATA_BASE_URL.getRequired();
+	}
 
 	@Override
 	public Completable run() {
@@ -69,7 +119,7 @@ public class BuildRefData implements Command {
 						downloadLatestSde().flatMapCompletable(sdeLoader::load),
 						downloadLatestEsi().flatMapCompletable(esiLoader::load)),
 				mergeDatasets(),
-				buildOutputFile().flatMapCompletable(this::uploadFile),
+				buildOutputFile().flatMapCompletable(this::uploadFiles),
 				closeMvStore());
 	}
 
@@ -101,11 +151,12 @@ public class BuildRefData implements Command {
 
 	private Single<File> downloadLatestSde() {
 		return Single.defer(() -> {
-			var url = "https://data.everef.net/ccp/sde/sde-20230315-TRANQUILITY.zip"; // @todo
+			var url = dataBaseUrl + "/" + SDE.createArchivePath(LocalDate.parse("2023-03-15")); // @todo
+			//			var url = dataBaseUrl.resolve("ccp/sde/sde-20230315-TRANQUILITY.zip"); // @todo
 			var file = tempFiles.tempFile("sde", ".zip").toFile();
 			return okHttpHelper.download(url, file, okHttpClient).flatMap(response -> {
 				if (response.code() != 200) {
-					return Single.error(new RuntimeException("Failed downloading ESI"));
+					return Single.error(new RuntimeException("Failed downloading ESI: " + response.code()));
 				}
 				return Single.just(file);
 			});
@@ -114,7 +165,7 @@ public class BuildRefData implements Command {
 
 	private Single<File> downloadLatestEsi() {
 		return Single.defer(() -> {
-			var url = "https://data.everef.net/esi-scrape/eve-ref-esi-scrape-latest.tar.xz"; // @todo
+			var url = dataBaseUrl + "/" + ESI.createLatestPath();
 			var file = tempFiles.tempFile("esi", ".tar.xz").toFile();
 			return okHttpHelper.download(url, file, okHttpClient).flatMap(response -> {
 				if (response.code() != 200) {
@@ -161,20 +212,29 @@ public class BuildRefData implements Command {
 		file.delete();
 	}
 
-	private Completable uploadFile(@NonNull File compressed) {
+	/**
+	 * Uploads the final file to S3.
+	 * @return
+	 */
+	private Completable uploadFiles(File outputFile) {
 		return Completable.defer(() -> {
-			var dir = new File("/tmp/ref-data");
-			dir.mkdirs();
-			return CompressUtil.loadArchive(compressed).flatMapCompletable(pair -> {
-				var entry = pair.getKey();
-				var bytes = pair.getValue();
-				var file = new File(dir, entry.getName());
-				log.debug("Extracting: " + file);
-				var json = objectMapper.readTree(bytes);
-				var pretty = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsBytes(json);
-				FileUtils.writeByteArrayToFile(file, pretty);
-				return Completable.complete();
-			});
+			var latestPath = S3Url.builder()
+					.bucket(dataUrl.getBucket())
+					.path(dataUrl.getPath() + REFERENCE_DATA.createLatestPath())
+					.build();
+			var archivePath = S3Url.builder()
+					.bucket(dataUrl.getBucket())
+					.path(dataUrl.getPath() + REFERENCE_DATA.createArchivePath(buildTime))
+					.build();
+			var latestPut = s3Util.putPublicObjectRequest(
+					outputFile.length(), latestPath, "application/x-bzip2", latestCacheTime);
+			var archivePut = s3Util.putPublicObjectRequest(
+					outputFile.length(), archivePath, "application/x-bzip2", archiveCacheTime);
+			log.info(String.format("Uploading latest file to %s", latestPath));
+			log.info(String.format("Uploading archive file to %s", archivePath));
+			return Completable.mergeArray(
+					s3Adapter.putObject(latestPut, outputFile, s3Client).ignoreElement(),
+					s3Adapter.putObject(archivePut, outputFile, s3Client).ignoreElement());
 		});
 	}
 
