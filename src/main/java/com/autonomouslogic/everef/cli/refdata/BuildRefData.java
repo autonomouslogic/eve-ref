@@ -185,7 +185,7 @@ public class BuildRefData implements Command {
 					}
 					log.debug(String.format("Wrote %.0f MiB to %s", (double) file.length() / 1024.0 / 1024.0, file));
 					var compressed = CompressUtil.compressXz(file);
-					file.delete();
+					compressed.deleteOnExit();
 					return compressed;
 				})
 				.compose(Rx.offloadSingle());
