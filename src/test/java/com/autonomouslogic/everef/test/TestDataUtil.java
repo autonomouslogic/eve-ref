@@ -24,8 +24,10 @@ import java.util.zip.ZipOutputStream;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.SneakyThrows;
+import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
+import okio.Buffer;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
 import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
@@ -132,6 +134,13 @@ public class TestDataUtil {
 		var map = typeFactory.constructMapType(LinkedHashMap.class, String.class, String.class);
 		var list = typeFactory.constructCollectionType(List.class, map);
 		return objectMapper.readValue(in, list);
+	}
+
+	@SneakyThrows
+	public MockResponse mockResponse(InputStream in) {
+		try (in) {
+			return new MockResponse().setResponseCode(200).setBody(new Buffer().write(IOUtils.toByteArray(in)));
+		}
 	}
 
 	public void assertRequest(RecordedRequest request, String path) {

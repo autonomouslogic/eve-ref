@@ -13,6 +13,7 @@ import com.autonomouslogic.everef.esi.EsiRateLimitInterceptorTest;
 import com.autonomouslogic.everef.esi.LocationPopulatorTest;
 import com.autonomouslogic.everef.esi.MetaGroupScraperTest;
 import com.autonomouslogic.everef.esi.MockLocationPopulatorModule;
+import com.autonomouslogic.everef.http.DataCrawlerTest;
 import com.autonomouslogic.everef.inject.AwsModule;
 import com.autonomouslogic.everef.inject.EsiModule;
 import com.autonomouslogic.everef.inject.JacksonModule;
@@ -37,6 +38,8 @@ import javax.inject.Singleton;
 @Singleton
 public interface TestComponent {
 	void inject(BuildRefDataTest test);
+
+	void inject(DataCrawlerTest test);
 
 	void inject(DataIndexTest test);
 
