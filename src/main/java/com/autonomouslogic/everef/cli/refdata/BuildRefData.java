@@ -198,7 +198,7 @@ public class BuildRefData implements Command {
 						writeMeta(tar);
 						writeEntries("types", typeStores.getRefStore(), tar);
 					}
-					log.debug(String.format("Wrote %.0f MiB to %s", (double) file.length() / 1024.0 / 1024.0, file));
+					log.debug(String.format("Wrote %.0f MiB to %s", file.length() / 1024.0 / 1024.0, file));
 					var compressed = CompressUtil.compressXz(file);
 					compressed.deleteOnExit();
 					return compressed;
