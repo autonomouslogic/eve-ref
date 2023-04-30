@@ -1,7 +1,7 @@
 package com.autonomouslogic.everef.url;
 
 import java.net.URI;
-import org.jetbrains.annotations.NotNull;
+import lombok.NonNull;
 
 /**
  * Generic interface for URLs for data sources.
@@ -18,7 +18,7 @@ public interface DataUrl extends Comparable<DataUrl> {
 	}
 
 	@Override
-	default int compareTo(@NotNull DataUrl dataUrl) {
+	default int compareTo(@NonNull DataUrl dataUrl) {
 		return toUri().compareTo(dataUrl.toUri());
 	}
 }
