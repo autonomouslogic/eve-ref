@@ -15,6 +15,9 @@ import org.h2.mvstore.MVMap;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
+
 @Log4j2
 public class SdeLoaderTest {
 	@Inject
@@ -46,6 +49,7 @@ public class SdeLoaderTest {
 		sdeLoader.load(testDataUtil.createTestSde()).blockingAwait();
 		assertEquals(1, typeStore.size());
 		var expectedType = objectMapper.readTree(ResourceUtil.loadContextual(SdeLoaderTest.class, "/type-645.json"));
-		testDataUtil.assertJsonStrictEquals(expectedType, typeStore.get(645L));
+		var actual = typeStore.get(645L);
+		testDataUtil.assertJsonStrictEquals(expectedType, actual);
 	}
 }

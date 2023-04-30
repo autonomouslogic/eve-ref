@@ -125,14 +125,14 @@ public class BuildRefDataTest {
 		expected.set(
 				"645", objectMapper.readTree(ResourceUtil.loadContextual(BuildRefDataTest.class, "/type-645.json")));
 		var supplied = objectMapper.readTree(json);
-		testDataUtil.assertJsonStrictEquals(expected, supplied);
+		assertEquals(expected, supplied);
 	}
 
 	@SneakyThrows
 	private void assertMeta(@NonNull byte[] json) {
 		var expected = objectMapper.createObjectNode().put("build_time", "2022-01-05T04:05:06.890Z");
 		var supplied = objectMapper.readTree(json);
-		testDataUtil.assertJsonStrictEquals(expected, supplied);
+		assertEquals(expected, supplied);
 	}
 
 	class TestDispatcher extends Dispatcher {
