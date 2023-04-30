@@ -22,6 +22,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Single;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -193,6 +194,7 @@ public class BuildRefData implements Command {
 					var file = File.createTempFile("ref-data-", ".tar");
 					log.info("Writing ref data to {}", file);
 					try (var tar = new TarArchiveOutputStream(new FileOutputStream(file))) {
+						writeMeta(tar);
 						writeEntries("types", typeStores.getRefStore(), tar);
 					}
 					log.debug(String.format("Wrote %.0f MiB to %s", (double) file.length() / 1024.0 / 1024.0, file));
@@ -201,6 +203,19 @@ public class BuildRefData implements Command {
 					return compressed;
 				})
 				.compose(Rx.offloadSingle());
+	}
+
+	@SneakyThrows
+	private void writeMeta(TarArchiveOutputStream tar) {
+		var meta =
+				objectMapper.writeValueAsBytes(objectMapper.createObjectNode().put("build_time", buildTime.toString()));
+		var archiveEntry = new TarArchiveEntry("meta.json");
+		archiveEntry.setSize(meta.length);
+		tar.putArchiveEntry(archiveEntry);
+		try (var in = new ByteArrayInputStream(meta)) {
+			IOUtils.copy(in, tar);
+		}
+		tar.closeArchiveEntry();
 	}
 
 	@SneakyThrows

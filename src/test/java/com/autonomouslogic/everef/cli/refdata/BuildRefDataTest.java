@@ -21,6 +21,7 @@ import java.time.ZonedDateTime;
 import java.util.Set;
 import javax.inject.Inject;
 import javax.inject.Named;
+import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import okhttp3.mockwebserver.Dispatcher;
@@ -113,15 +114,23 @@ public class BuildRefDataTest {
 
 		// Assert records.
 		var files = testDataUtil.readFilesFromXzTar(content);
-		assertEquals(Set.of("types.json"), files.keySet());
+		assertEquals(Set.of("meta.json", "types.json"), files.keySet());
+		assertMeta(files.get("meta.json"));
 		assertTypes(files.get("types.json"));
 	}
 
 	@SneakyThrows
-	private void assertTypes(byte[] json) {
+	private void assertTypes(@NonNull byte[] json) {
 		var expected = objectMapper.createObjectNode();
 		expected.set(
 				"645", objectMapper.readTree(ResourceUtil.loadContextual(BuildRefDataTest.class, "/type-645.json")));
+		var supplied = objectMapper.readTree(json);
+		testDataUtil.assertJsonStrictEquals(expected, supplied);
+	}
+
+	@SneakyThrows
+	private void assertMeta(@NonNull byte[] json) {
+		var expected = objectMapper.createObjectNode().put("build_time", "2022-01-05T04:05:06.890Z");
 		var supplied = objectMapper.readTree(json);
 		testDataUtil.assertJsonStrictEquals(expected, supplied);
 	}
