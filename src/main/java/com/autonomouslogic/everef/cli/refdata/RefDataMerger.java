@@ -1,6 +1,5 @@
-package com.autonomouslogic.everef.refdata;
+package com.autonomouslogic.everef.cli.refdata;
 
-import com.autonomouslogic.everef.cli.refdata.StoreSet;
 import com.fasterxml.jackson.databind.JsonNode;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.schedulers.Schedulers;

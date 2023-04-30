@@ -1,7 +1,7 @@
-package com.autonomouslogic.everef.refdata.sde;
+package com.autonomouslogic.everef.cli.refdata.sde;
 
-import com.autonomouslogic.everef.refdata.SimpleTransformer;
-import com.autonomouslogic.everef.refdata.TransformUtil;
+import com.autonomouslogic.everef.cli.refdata.SimpleTransformer;
+import com.autonomouslogic.everef.cli.refdata.TransformUtil;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import javax.inject.Inject;
 import javax.inject.Singleton;

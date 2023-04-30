@@ -1,6 +1,6 @@
-package com.autonomouslogic.everef.refdata.esi;
+package com.autonomouslogic.everef.cli.refdata.esi;
 
-import com.autonomouslogic.everef.refdata.SimpleStoreLoader;
+import com.autonomouslogic.everef.cli.refdata.SimpleStoreLoader;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import javax.inject.Inject;
 import lombok.NonNull;

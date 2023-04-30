@@ -1,4 +1,4 @@
-package com.autonomouslogic.everef.refdata;
+package com.autonomouslogic.everef.cli.refdata;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

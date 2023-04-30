@@ -1,9 +1,9 @@
-package com.autonomouslogic.everef.refdata.sde;
+package com.autonomouslogic.everef.cli.refdata.sde;
 
-import com.autonomouslogic.everef.refdata.FieldRenamer;
-import com.autonomouslogic.everef.refdata.SimpleStoreLoader;
-import com.autonomouslogic.everef.refdata.SimpleTransformer;
-import com.autonomouslogic.everef.refdata.TransformUtil;
+import com.autonomouslogic.everef.cli.refdata.FieldRenamer;
+import com.autonomouslogic.everef.cli.refdata.SimpleStoreLoader;
+import com.autonomouslogic.everef.cli.refdata.SimpleTransformer;
+import com.autonomouslogic.everef.cli.refdata.TransformUtil;
 import com.autonomouslogic.everef.util.CompressUtil;
 import com.fasterxml.jackson.databind.JsonNode;
 import io.reactivex.rxjava3.core.Completable;

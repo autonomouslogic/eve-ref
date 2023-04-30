@@ -4,12 +4,11 @@ import static com.autonomouslogic.everef.util.ArchivePathFactory.ESI;
 import static com.autonomouslogic.everef.util.ArchivePathFactory.REFERENCE_DATA;
 
 import com.autonomouslogic.everef.cli.Command;
+import com.autonomouslogic.everef.cli.refdata.esi.EsiLoader;
+import com.autonomouslogic.everef.cli.refdata.sde.SdeLoader;
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.http.DataCrawler;
 import com.autonomouslogic.everef.mvstore.MVStoreUtil;
-import com.autonomouslogic.everef.refdata.RefDataMerger;
-import com.autonomouslogic.everef.refdata.esi.EsiLoader;
-import com.autonomouslogic.everef.refdata.sde.SdeLoader;
 import com.autonomouslogic.everef.s3.S3Adapter;
 import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.url.UrlParser;

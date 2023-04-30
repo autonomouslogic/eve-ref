@@ -1,4 +1,4 @@
-package com.autonomouslogic.everef.refdata.esi;
+package com.autonomouslogic.everef.cli.refdata.esi;
 
 import com.autonomouslogic.everef.util.CompressUtil;
 import com.fasterxml.jackson.databind.JsonNode;

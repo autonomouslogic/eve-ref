@@ -1,4 +1,4 @@
-package com.autonomouslogic.everef.refdata;
+package com.autonomouslogic.everef.cli.refdata;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
 

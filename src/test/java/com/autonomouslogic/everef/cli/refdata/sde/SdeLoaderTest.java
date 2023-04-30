@@ -1,4 +1,4 @@
-package com.autonomouslogic.everef.refdata.esi;
+package com.autonomouslogic.everef.cli.refdata.sde;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -14,13 +14,11 @@ import lombok.extern.log4j.Log4j2;
 import org.h2.mvstore.MVMap;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvFileSource;
 
 @Log4j2
-public class EsiLoaderTest {
+public class SdeLoaderTest {
 	@Inject
-	EsiLoader esiLoader;
+	SdeLoader sdeLoader;
 
 	@Inject
 	ObjectMapper objectMapper;
@@ -37,24 +35,18 @@ public class EsiLoaderTest {
 	@SneakyThrows
 	void before() {
 		DaggerTestComponent.builder().build().inject(this);
-		var mvstore = mvStoreUtil.createTempStore(EsiLoaderTest.class.getSimpleName());
+		var mvstore = mvStoreUtil.createTempStore(SdeLoaderTest.class.getSimpleName());
 		typeStore = mvStoreUtil.openJsonMap(mvstore, "types", Long.class);
-		esiLoader.setTypeStore(typeStore);
+		sdeLoader.setTypeStore(typeStore);
 	}
 
 	@Test
 	@SneakyThrows
-	void testLoadEsi() {
-		esiLoader.load(testDataUtil.createTestEsiDump()).blockingAwait();
+	void testLoadSde() {
+		sdeLoader.load(testDataUtil.createTestSde()).blockingAwait();
 		assertEquals(1, typeStore.size());
-		var expectedType = objectMapper.readTree(ResourceUtil.loadContextual(EsiLoaderTest.class, "/type-645.json"));
-		testDataUtil.assertJsonStrictEquals(expectedType, typeStore.get(645L));
-	}
-
-	@ParameterizedTest
-	@CsvFileSource(resources = "/com/autonomouslogic/everef/refdata/esi/EsiLoaderTest/filenames.csv")
-	void shouldParseFileNames(String filename, String fileType, String language) {
-		assertEquals(fileType, esiLoader.getFileType(filename));
-		assertEquals(language, esiLoader.getLanguage(filename));
+		var expectedType = objectMapper.readTree(ResourceUtil.loadContextual(SdeLoaderTest.class, "/type-645.json"));
+		var actual = typeStore.get(645L);
+		testDataUtil.assertJsonStrictEquals(expectedType, actual);
 	}
 }

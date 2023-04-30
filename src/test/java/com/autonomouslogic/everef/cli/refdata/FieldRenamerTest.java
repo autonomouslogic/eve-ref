@@ -1,4 +1,4 @@
-package com.autonomouslogic.everef.refdata;
+package com.autonomouslogic.everef.cli.refdata;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -29,7 +29,7 @@ public class FieldRenamerTest {
 	}
 
 	@ParameterizedTest
-	@CsvFileSource(resources = "/com/autonomouslogic/everef/refdata/ObjectMergerTest/sde-renames.csv")
+	@CsvFileSource(resources = "/com/autonomouslogic/everef/cli/refdata/ObjectMergerTest/sde-renames.csv")
 	void shouldRenameFieldsFromSdeToRefData(String input, String expected) {
 		assertEquals(expected, fieldRenamer.fieldRenameFromSde(input));
 	}
