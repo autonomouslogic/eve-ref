@@ -76,4 +76,23 @@ public class DataCrawlerTest {
 		testDataUtil.assertRequest(server.takeRequest(), "/");
 		testDataUtil.assertNoMoreRequests(server);
 	}
+
+	@Test
+	@SneakyThrows
+	void shouldCrawlDataSiteWithDeepPrefix() {
+		var urls = dataCrawler
+				.setPrefix("/esi-scrape/eve-ref-esi-scrape-")
+				.crawl()
+				.toList()
+				.blockingGet();
+		assertNotNull(urls);
+		assertEquals(
+				List.of(urlParser.parse(
+						"http://localhost:" + TestDataUtil.TEST_PORT + "/esi-scrape/eve-ref-esi-scrape-latest.tar.xz")),
+				urls);
+
+		testDataUtil.assertRequest(server.takeRequest(), "/");
+		testDataUtil.assertRequest(server.takeRequest(), "/esi-scrape/");
+		testDataUtil.assertNoMoreRequests(server);
+	}
 }

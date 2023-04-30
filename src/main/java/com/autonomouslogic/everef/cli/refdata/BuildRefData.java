@@ -2,10 +2,10 @@ package com.autonomouslogic.everef.cli.refdata;
 
 import static com.autonomouslogic.everef.util.ArchivePathFactory.ESI;
 import static com.autonomouslogic.everef.util.ArchivePathFactory.REFERENCE_DATA;
-import static com.autonomouslogic.everef.util.ArchivePathFactory.SDE;
 
 import com.autonomouslogic.everef.cli.Command;
 import com.autonomouslogic.everef.config.Configs;
+import com.autonomouslogic.everef.http.DataCrawler;
 import com.autonomouslogic.everef.mvstore.MVStoreUtil;
 import com.autonomouslogic.everef.refdata.RefDataMerger;
 import com.autonomouslogic.everef.refdata.esi.EsiLoader;
@@ -27,7 +27,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.net.URI;
 import java.time.Duration;
-import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -82,6 +81,9 @@ public class BuildRefData implements Command {
 
 	@Inject
 	protected Provider<RefDataMerger> refDataMergerProvider;
+
+	@Inject
+	protected Provider<DataCrawler> dataCrawlerProvider;
 
 	@Setter
 	@NonNull
@@ -150,17 +152,27 @@ public class BuildRefData implements Command {
 	}
 
 	private Single<File> downloadLatestSde() {
-		return Single.defer(() -> {
-			var url = dataBaseUrl + "/" + SDE.createArchivePath(LocalDate.parse("2023-03-15")); // @todo
-			//			var url = dataBaseUrl.resolve("ccp/sde/sde-20230315-TRANQUILITY.zip"); // @todo
-			var file = tempFiles.tempFile("sde", ".zip").toFile();
-			return okHttpHelper.download(url, file, okHttpClient).flatMap(response -> {
-				if (response.code() != 200) {
-					return Single.error(new RuntimeException("Failed downloading ESI: " + response.code()));
-				}
-				return Single.just(file);
-			});
-		});
+		return dataCrawlerProvider
+				.get()
+				.setPrefix("/ccp/sde")
+				.crawl()
+				.filter(url -> url.toString().endsWith("-TRANQUILITY.zip"))
+				.sorted()
+				.lastElement()
+				.switchIfEmpty(Single.error(new RuntimeException("No SDE found")))
+				.flatMap(url -> {
+					log.info("Using SDE at: {}", url);
+					var file = tempFiles.tempFile("sde", ".zip").toFile();
+					return okHttpHelper
+							.download(url.toString(), file, okHttpClient)
+							.flatMap(response -> {
+								if (response.code() != 200) {
+									return Single.error(
+											new RuntimeException("Failed downloading ESI: " + response.code()));
+								}
+								return Single.just(file);
+							});
+				});
 	}
 
 	private Single<File> downloadLatestEsi() {

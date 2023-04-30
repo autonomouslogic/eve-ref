@@ -61,10 +61,6 @@ public class DataCrawler {
 					})
 					.flatMapPublisher(html -> Flowable.fromIterable(parseEntries(html, url)))
 					.filter(this::filterPrefix)
-					.filter(entry -> {
-						log.info(entry);
-						return true;
-					})
 					.flatMap(entry -> {
 						if (entry.file) {
 							return Flowable.just(entry.url);
@@ -111,7 +107,7 @@ public class DataCrawler {
 			throw new RuntimeException("Invalid path, this shouldn't happen: " + path);
 		}
 		var cut = path.substring(base.length());
-		return cut.startsWith(prefix);
+		return cut.startsWith(prefix) || prefix.startsWith(cut);
 	}
 
 	@Value

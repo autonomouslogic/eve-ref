@@ -14,6 +14,7 @@ import com.autonomouslogic.everef.esi.LocationPopulatorTest;
 import com.autonomouslogic.everef.esi.MetaGroupScraperTest;
 import com.autonomouslogic.everef.esi.MockLocationPopulatorModule;
 import com.autonomouslogic.everef.http.DataCrawlerTest;
+import com.autonomouslogic.everef.http.MockDataCrawlerModule;
 import com.autonomouslogic.everef.inject.AwsModule;
 import com.autonomouslogic.everef.inject.EsiModule;
 import com.autonomouslogic.everef.inject.JacksonModule;
@@ -33,7 +34,8 @@ import javax.inject.Singleton;
 			MockS3Module.class,
 			TestOkHttpModule.class,
 			MockDataIndexModule.class,
-			MockLocationPopulatorModule.class
+			MockLocationPopulatorModule.class,
+			MockDataCrawlerModule.class
 		})
 @Singleton
 public interface TestComponent {

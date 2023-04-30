@@ -1,13 +1,21 @@
 package com.autonomouslogic.everef.cli.refdata;
 
+import static com.autonomouslogic.everef.test.TestDataUtil.TEST_PORT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import com.autonomouslogic.commons.ResourceUtil;
+import com.autonomouslogic.everef.http.DataCrawler;
+import com.autonomouslogic.everef.http.MockDataCrawlerModule;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.test.MockS3Adapter;
 import com.autonomouslogic.everef.test.TestDataUtil;
+import com.autonomouslogic.everef.url.UrlParser;
 import com.autonomouslogic.everef.util.TempFiles;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.reactivex.rxjava3.core.Flowable;
 import java.io.FileInputStream;
 import java.time.ZonedDateTime;
 import java.util.Set;
@@ -33,7 +41,7 @@ import software.amazon.awssdk.services.s3.S3AsyncClient;
 @ExtendWith(MockitoExtension.class)
 @Log4j2
 @SetEnvironmentVariable(key = "DATA_PATH", value = "s3://" + BuildRefDataTest.BUCKET_NAME + "/")
-@SetEnvironmentVariable(key = "DATA_BASE_URL", value = "http://localhost:" + TestDataUtil.TEST_PORT)
+@SetEnvironmentVariable(key = "DATA_BASE_URL", value = "http://localhost:" + TEST_PORT)
 public class BuildRefDataTest {
 	static final String BUCKET_NAME = "data-bucket";
 
@@ -51,6 +59,9 @@ public class BuildRefDataTest {
 	ObjectMapper objectMapper;
 
 	@Inject
+	UrlParser urlParser;
+
+	@Inject
 	TempFiles tempFiles;
 
 	MockWebServer server;
@@ -61,11 +72,21 @@ public class BuildRefDataTest {
 	@BeforeEach
 	@SneakyThrows
 	void before() {
-		DaggerTestComponent.builder().build().inject(this);
+		var dataCrawler = mock(DataCrawler.class);
+
+		DaggerTestComponent.builder()
+				.mockDataCrawlerModule(new MockDataCrawlerModule().setDataCrawler(dataCrawler))
+				.build()
+				.inject(this);
+
+		when(dataCrawler.crawl())
+				.thenReturn(Flowable.just(
+						urlParser.parse("http://localhost:" + TEST_PORT + "/ccp/sde/sde-20230315-TRANQUILITY.zip")));
+		when(dataCrawler.setPrefix(any())).thenReturn(dataCrawler);
 
 		server = new MockWebServer();
 		server.setDispatcher(new TestDispatcher());
-		server.start(TestDataUtil.TEST_PORT);
+		server.start(TEST_PORT);
 	}
 
 	@AfterEach
