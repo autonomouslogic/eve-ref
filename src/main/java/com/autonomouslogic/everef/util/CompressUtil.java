@@ -15,6 +15,7 @@ import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
 import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream;
 import org.apache.commons.compress.compressors.bzip2.BZip2CompressorOutputStream;
 import org.apache.commons.compress.compressors.xz.XZCompressorInputStream;
+import org.apache.commons.compress.compressors.xz.XZCompressorOutputStream;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -26,6 +27,16 @@ public class CompressUtil {
 		int blockSize = Math.min(BZip2CompressorOutputStream.chooseBlockSize(file.length()), 7);
 		log.trace("Compressing {} to {} - blockSize: {}", file.getPath(), compressed.getPath(), blockSize);
 		try (var out = new BZip2CompressorOutputStream(new FileOutputStream(compressed), blockSize)) {
+			IOUtils.copy(new FileInputStream(file), out);
+		}
+		return compressed;
+	}
+
+	@SneakyThrows
+	public static File compressXz(File file) {
+		var compressed = new File(file.getPath() + ".xz");
+		log.trace("Compressing {} to {}", file.getPath(), compressed.getPath());
+		try (var out = new XZCompressorOutputStream(new FileOutputStream(compressed))) {
 			IOUtils.copy(new FileInputStream(file), out);
 		}
 		return compressed;

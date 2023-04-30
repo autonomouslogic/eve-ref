@@ -65,22 +65,26 @@ public class OkHttpHelper {
 
 	public Single<Response> download(
 			@NonNull String url, @NonNull File file, @NonNull OkHttpClient client, @NonNull Scheduler scheduler) {
-		return get(url, client, scheduler, 0, false)
-				.flatMap(response -> Single.fromCallable(() -> {
-					var lastModified = getLastModified(response);
-					if (response.code() != 200) {
-						return response;
-					}
-					try (var in = response.body().byteStream();
-							var out = new FileOutputStream(file)) {
-						IOUtils.copy(in, out);
-					}
-					if (lastModified.isPresent()) {
-						Files.setLastModifiedTime(
-								file.toPath(), FileTime.from(lastModified.get().toInstant()));
-					}
-					return response;
-				}))
+		return Single.defer(() -> {
+					log.debug("Downloading {} to {}", url, file);
+					return get(url, client, scheduler, 0, false)
+							.flatMap(response -> Single.fromCallable(() -> {
+								var lastModified = getLastModified(response);
+								if (response.code() != 200) {
+									return response;
+								}
+								try (var in = response.body().byteStream();
+										var out = new FileOutputStream(file)) {
+									IOUtils.copy(in, out);
+								}
+								if (lastModified.isPresent()) {
+									Files.setLastModifiedTime(
+											file.toPath(),
+											FileTime.from(lastModified.get().toInstant()));
+								}
+								return response;
+							}));
+				})
 				.observeOn(Schedulers.computation());
 	}
 

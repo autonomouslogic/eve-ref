@@ -4,8 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 import com.autonomouslogic.commons.ResourceUtil;
-import com.autonomouslogic.everef.refdata.esi.EsiLoader;
-import com.autonomouslogic.everef.refdata.sde.SdeLoader;
+import com.autonomouslogic.everef.cli.refdata.sde.SdeLoader;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.reactivex.rxjava3.functions.Consumer;
@@ -25,12 +24,15 @@ import java.util.zip.ZipOutputStream;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.SneakyThrows;
+import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
+import okio.Buffer;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
 import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
 import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream;
+import org.apache.commons.compress.compressors.xz.XZCompressorInputStream;
 import org.apache.commons.compress.compressors.xz.XZCompressorOutputStream;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.io.IOUtils;
@@ -108,12 +110,37 @@ public class TestDataUtil {
 	}
 
 	@SneakyThrows
+	public Map<String, byte[]> readFilesFromXzTar(byte[] bytes) {
+		Map<String, byte[]> result = new LinkedHashMap<>();
+		try (var tar = new TarArchiveInputStream(new XZCompressorInputStream(new ByteArrayInputStream(bytes)))) {
+			var entry = tar.getNextTarEntry();
+			while (entry != null) {
+				if (entry.isDirectory()) {
+					continue;
+				}
+				var file = entry.getName();
+				var data = IOUtils.toByteArray(tar);
+				result.put(file, data);
+				entry = tar.getNextTarEntry();
+			}
+		}
+		return result;
+	}
+
+	@SneakyThrows
 	public List<Map<String, String>> readMapsFromJson(InputStream in) {
 		// @todo maybe replace with JsonNodeCsvReader
 		var typeFactory = objectMapper.getTypeFactory();
 		var map = typeFactory.constructMapType(LinkedHashMap.class, String.class, String.class);
 		var list = typeFactory.constructCollectionType(List.class, map);
 		return objectMapper.readValue(in, list);
+	}
+
+	@SneakyThrows
+	public MockResponse mockResponse(InputStream in) {
+		try (in) {
+			return new MockResponse().setResponseCode(200).setBody(new Buffer().write(IOUtils.toByteArray(in)));
+		}
 	}
 
 	public void assertRequest(RecordedRequest request, String path) {
@@ -174,8 +201,9 @@ public class TestDataUtil {
 	}
 
 	@SneakyThrows
-	public void assertJsonEquals(JsonNode expected, JsonNode actual) {
-		assertEquals(objectMapper.writeValueAsString(expected), objectMapper.writeValueAsString(actual));
+	public void assertJsonStrictEquals(JsonNode expected, JsonNode actual) {
+		var prettyWriter = objectMapper.writerWithDefaultPrettyPrinter();
+		assertEquals(prettyWriter.writeValueAsString(expected), prettyWriter.writeValueAsString(actual));
 	}
 
 	@SneakyThrows
@@ -185,8 +213,9 @@ public class TestDataUtil {
 
 	@SneakyThrows
 	public File createTestEsiDump() {
-		return createTarXzFile(
-				Map.ofEntries(createEntry("/refdata/esi", EsiLoader.ESI_TYPES_BASE_PATH + ".en-us.yaml")));
+		return createTarXzFile(Map.ofEntries(
+				createEntry("/refdata/esi", "data/tranquility/universe/types.en-us.yaml"),
+				createEntry("/refdata/esi", "data/tranquility/universe/types.fr.yaml")));
 	}
 
 	@SneakyThrows

@@ -75,9 +75,9 @@
   "sof_faction_name": "gallentebase",
   "sound_id": 20072,
   "traits": {
-    "misc_bonuses": [],
-    "role_bonuses": [
-      {
+    "misc_bonuses": {},
+    "role_bonuses": {
+      "3": {
         "bonus": 5,
         "bonus_text": {
           "de": "zusätzlicher Bonus auf HP der <a href=showinfo:3394>Verstärkten Schottwand</a>",
@@ -91,7 +91,7 @@
         "importance": 3,
         "unit_id": 105
       },
-      {
+      "2": {
         "bonus": 50,
         "bonus_text": {
           "de": "Bonus auf die HP der <a href=showinfo:3394>Panzerplatte</a>",
@@ -105,7 +105,7 @@
         "importance": 2,
         "unit_id": 105
       },
-      {
+      "1": {
         "bonus": 100,
         "bonus_text": {
           "de": "Bonus auf die HP der <a href=showinfo:3425>Schilderweiterung</a>",
@@ -119,10 +119,10 @@
         "importance": 1,
         "unit_id": 105
       }
-    ],
+    },
     "types": {
-      "3336": [
-        {
+      "3336": {
+        "2": {
           "bonus": 7.5,
           "bonus_text": {
             "de": "Bonus auf die optimale Reichweite und Nachführungsgeschwindigkeit von <a href=showinfo:3436>Drohnen</a>",
@@ -136,7 +136,7 @@
           "importance": 2,
           "unit_id": 105
         },
-        {
+        "1": {
           "bonus": 10,
           "bonus_text": {
             "de": "Bonus auf die HP und den Schaden von <a href=showinfo:3436>Drohnen</a>",
@@ -150,7 +150,7 @@
           "importance": 1,
           "unit_id": 105
         }
-      ]
+      }
     }
   },
   "volume": 454500,

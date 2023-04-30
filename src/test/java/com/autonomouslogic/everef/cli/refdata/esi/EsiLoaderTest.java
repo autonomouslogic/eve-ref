@@ -1,4 +1,4 @@
-package com.autonomouslogic.everef.refdata.esi;
+package com.autonomouslogic.everef.cli.refdata.esi;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -14,6 +14,8 @@ import lombok.extern.log4j.Log4j2;
 import org.h2.mvstore.MVMap;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvFileSource;
 
 @Log4j2
 public class EsiLoaderTest {
@@ -46,6 +48,13 @@ public class EsiLoaderTest {
 		esiLoader.load(testDataUtil.createTestEsiDump()).blockingAwait();
 		assertEquals(1, typeStore.size());
 		var expectedType = objectMapper.readTree(ResourceUtil.loadContextual(EsiLoaderTest.class, "/type-645.json"));
-		testDataUtil.assertJsonEquals(expectedType, typeStore.get(645L));
+		testDataUtil.assertJsonStrictEquals(expectedType, typeStore.get(645L));
+	}
+
+	@ParameterizedTest
+	@CsvFileSource(resources = "/com/autonomouslogic/everef/cli/refdata/esi/EsiLoaderTest/filenames.csv")
+	void shouldParseFileNames(String filename, String fileType, String language) {
+		assertEquals(fileType, esiLoader.getFileType(filename));
+		assertEquals(language, esiLoader.getLanguage(filename));
 	}
 }

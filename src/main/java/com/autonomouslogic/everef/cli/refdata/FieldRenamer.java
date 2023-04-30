@@ -1,4 +1,4 @@
-package com.autonomouslogic.everef.refdata;
+package com.autonomouslogic.everef.cli.refdata;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -12,7 +12,7 @@ import javax.inject.Singleton;
  * Utility for merging and renaming of JSON objects in the Ref Data build.
  */
 @Singleton
-public class FieldRenamer {
+public class FieldRenamer implements SimpleTransformer {
 	@Inject
 	protected ObjectMapper objectMapper;
 
@@ -56,5 +56,10 @@ public class FieldRenamer {
 		} else {
 			return node;
 		}
+	}
+
+	@Override
+	public ObjectNode transformJson(ObjectNode json) throws Throwable {
+		return (ObjectNode) fieldRenameFromSde(json);
 	}
 }

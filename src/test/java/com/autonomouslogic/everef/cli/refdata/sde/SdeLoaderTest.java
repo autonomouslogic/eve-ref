@@ -1,4 +1,4 @@
-package com.autonomouslogic.everef.refdata.sde;
+package com.autonomouslogic.everef.cli.refdata.sde;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -46,6 +46,7 @@ public class SdeLoaderTest {
 		sdeLoader.load(testDataUtil.createTestSde()).blockingAwait();
 		assertEquals(1, typeStore.size());
 		var expectedType = objectMapper.readTree(ResourceUtil.loadContextual(SdeLoaderTest.class, "/type-645.json"));
-		testDataUtil.assertJsonEquals(expectedType, typeStore.get(645L));
+		var actual = typeStore.get(645L);
+		testDataUtil.assertJsonStrictEquals(expectedType, actual);
 	}
 }

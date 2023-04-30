@@ -1,0 +1,215 @@
+"645":
+  capacity: 750
+  description: "Le Dominix est un vétéran du front, qui déjà s'illustrait à l'époque\
+    \ de la guerre Gallente-Caldari. S'il n'est plus considéré comme le parangon des\
+    \ champs de bataille, ce cuirassé est loin d’être obsolète. Doté d'une coque massive\
+    \ et d'un puissant arsenal de drones, le Dominix est un adversaire redoutable,\
+    \ capable de pulvériser tous les vaisseaux de l'amas, à l'exception des cuirassé\
+    s de pointe les plus modernes."
+  dogma_attributes:
+    - attribute_id: 3
+      value: 0
+    - attribute_id: 4
+      value: 100250000
+    - attribute_id: 9
+      value: 9350
+    - attribute_id: 1547
+      value: 3
+    - attribute_id: 12
+      value: 7
+    - attribute_id: 13
+      value: 5
+    - attribute_id: 14
+      value: 6
+    - attribute_id: 15
+      value: 0
+    - attribute_id: 18
+      value: 0
+    - attribute_id: 19
+      value: 1
+    - attribute_id: 21
+      value: 0
+    - attribute_id: 37
+      value: 109
+    - attribute_id: 38
+      value: 750
+    - attribute_id: 552
+      value: 465
+    - attribute_id: 48
+      value: 600
+    - attribute_id: 561
+      value: 10
+    - attribute_id: 564
+      value: 117
+    - attribute_id: 55
+      value: 1100000
+    - attribute_id: 2113
+      value: 1
+    - attribute_id: 11
+      value: 10000
+    - attribute_id: 70
+      value: 0.1254
+    - attribute_id: 524
+      value: 0.75
+    - attribute_id: 76
+      value: 84000
+    - attribute_id: 525
+      value: 1
+    - attribute_id: 600
+      value: 3
+    - attribute_id: 101
+      value: 0
+    - attribute_id: 102
+      value: 6
+    - attribute_id: 1132
+      value: 400
+    - attribute_id: 109
+      value: 0.67
+    - attribute_id: 110
+      value: 0.67
+    - attribute_id: 111
+      value: 0.67
+    - attribute_id: 1137
+      value: 3
+    - attribute_id: 1555
+      value: 500
+    - attribute_id: 633
+      value: 0
+    - attribute_id: 124
+      value: 16777215
+    - attribute_id: 129
+      value: 1000
+    - attribute_id: 1154
+      value: 3
+    - attribute_id: 136
+      value: 1
+    - attribute_id: 661
+      value: 1000
+    - attribute_id: 662
+      value: 0.5
+    - attribute_id: 153
+      value: 0.000000138
+    - attribute_id: 1178
+      value: 100
+    - attribute_id: 1179
+      value: 0.01
+    - attribute_id: 161
+      value: 454500
+    - attribute_id: 162
+      value: 250
+    - attribute_id: 113
+      value: 0.67
+    - attribute_id: 1196
+      value: 0.01
+    - attribute_id: 1198
+      value: 0.01
+    - attribute_id: 1199
+      value: 100
+    - attribute_id: 1200
+      value: 100
+    - attribute_id: 182
+      value: 3336
+    - attribute_id: 188
+      value: 0
+    - attribute_id: 192
+      value: 7
+    - attribute_id: 3266
+      value: 50
+    - attribute_id: 3267
+      value: 100
+    - attribute_id: 3268
+      value: 0.05
+    - attribute_id: 1224
+      value: 0.5
+    - attribute_id: 208
+      value: 0
+    - attribute_id: 209
+      value: 0
+    - attribute_id: 210
+      value: 22
+    - attribute_id: 211
+      value: 0
+    - attribute_id: 217
+      value: 395
+    - attribute_id: 1768
+      value: 11331
+    - attribute_id: 1259
+      value: 0.76
+    - attribute_id: 1261
+      value: 0.71
+    - attribute_id: 1262
+      value: 0.79
+    - attribute_id: 246
+      value: 395
+    - attribute_id: 1271
+      value: 125
+    - attribute_id: 1281
+      value: 1
+    - attribute_id: 263
+      value: 7920
+    - attribute_id: 264
+      value: 0
+    - attribute_id: 265
+      value: 8800
+    - attribute_id: 267
+      value: 0.5
+    - attribute_id: 268
+      value: 0.9
+    - attribute_id: 269
+      value: 0.65
+    - attribute_id: 270
+      value: 0.65
+    - attribute_id: 271
+      value: 1
+    - attribute_id: 272
+      value: 0.5
+    - attribute_id: 273
+      value: 0.6
+    - attribute_id: 274
+      value: 0.8
+    - attribute_id: 277
+      value: 1
+    - attribute_id: 283
+      value: 375
+    - attribute_id: 49
+      value: 0
+    - attribute_id: 2115
+      value: 1
+    - attribute_id: 422
+      value: 1
+    - attribute_id: 3020
+      value: 1
+    - attribute_id: 79
+      value: 8250
+    - attribute_id: 479
+      value: 2500000
+    - attribute_id: 482
+      value: 6000
+    - attribute_id: 484
+      value: 0.75
+    - attribute_id: 500
+      value: 7.5
+    - attribute_id: 2045
+      value: 1
+  dogma_effects:
+    - effect_id: 2186
+      is_default: false
+    - effect_id: 2187
+      is_default: false
+    - effect_id: 5427
+      is_default: false
+    - effect_id: 5428
+      is_default: false
+    - effect_id: 8377
+      is_default: false
+  graphic_id: 318
+  group_id: 27
+  market_group_id: 81
+  mass: 100250000
+  name: "Dominix"
+  packaged_volume: 50000
+  portion_size: 1
+  published: true
+  radius: 250
+  type_id: 645
+  volume: 454500

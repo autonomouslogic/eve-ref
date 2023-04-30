@@ -15,6 +15,9 @@ public class UrlParser {
 
 	public DataUrl parse(URI url) {
 		switch (url.getScheme()) {
+			case "http":
+			case "https":
+				return HttpUrl.parse(url);
 			case "s3":
 				return S3Url.parse(url);
 			default:

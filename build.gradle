@@ -165,3 +165,11 @@ task scrapePublicContracts(type: JavaExec) {
 	classpath = sourceSets.main.runtimeClasspath
 	mainClass = mainClassName
 }
+
+task buildRefData(type: JavaExec) {
+	group "application"
+	args "build-ref-data"
+	environment envProperties
+	classpath = sourceSets.main.runtimeClasspath
+	mainClass = mainClassName
+}
