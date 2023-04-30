@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import java.util.ArrayList;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.extern.log4j.Log4j2;
@@ -48,5 +49,28 @@ public class TransformUtil {
 			System.arraycopy(path, 1, subPath, 0, path.length - 1);
 			setPath((ObjectNode) stepNode, value, subPath);
 		}
+	}
+
+	public static SimpleTransformer concat(SimpleTransformer... transformers) {
+		if (transformers.length == 0) {
+			throw new NullPointerException();
+		}
+		return (v) -> {
+			for (var f : transformers) {
+				v = f.transformJson(v);
+			}
+			return v;
+		};
+	}
+
+	public ObjectNode orderKeys(ObjectNode json) {
+		var fields = new ArrayList<String>(json.size());
+		json.fieldNames().forEachRemaining(fields::add);
+		fields.sort(String::compareTo);
+		var newJson = objectMapper.createObjectNode();
+		for (var field : fields) {
+			newJson.set(field, json.get(field));
+		}
+		return newJson;
 	}
 }

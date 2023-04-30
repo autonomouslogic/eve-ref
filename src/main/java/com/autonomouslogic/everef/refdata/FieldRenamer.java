@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.base.CaseFormat;
-import io.reactivex.rxjava3.functions.Function;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -13,7 +12,7 @@ import javax.inject.Singleton;
  * Utility for merging and renaming of JSON objects in the Ref Data build.
  */
 @Singleton
-public class FieldRenamer implements Function<ObjectNode, ObjectNode> {
+public class FieldRenamer implements SimpleTransformer {
 	@Inject
 	protected ObjectMapper objectMapper;
 
@@ -60,7 +59,7 @@ public class FieldRenamer implements Function<ObjectNode, ObjectNode> {
 	}
 
 	@Override
-	public ObjectNode apply(ObjectNode json) throws Throwable {
+	public ObjectNode transformJson(ObjectNode json) throws Throwable {
 		return (ObjectNode) fieldRenameFromSde(json);
 	}
 }

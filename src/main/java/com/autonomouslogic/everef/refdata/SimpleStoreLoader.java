@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Flowable;
-import io.reactivex.rxjava3.functions.Function;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import java.io.ByteArrayInputStream;
 import javax.inject.Inject;
@@ -34,7 +33,11 @@ public class SimpleStoreLoader {
 
 	@Setter
 	@NonNull
-	private Function<ObjectNode, ObjectNode> transformer;
+	private SimpleTransformer transformer;
+
+	@Setter
+	@NonNull
+	private SimpleTransformer postMergeTransformer;
 
 	@Setter
 	@NonNull
@@ -54,6 +57,9 @@ public class SimpleStoreLoader {
 						if (output.containsKey(id)) {
 							var existing = (ObjectNode) output.get(id);
 							json = (ObjectNode) objectMerger.merge(existing, json);
+							if (postMergeTransformer != null) {
+								json = postMergeTransformer.transformJson(json);
+							}
 						}
 						output.put(id, json);
 						return Completable.complete();
@@ -66,7 +72,7 @@ public class SimpleStoreLoader {
 	protected ObjectNode readValue(long id, ObjectNode json) {
 		var transformed = json;
 		if (transformer != null) {
-			transformed = transformer.apply(json);
+			transformed = transformer.transformJson(json);
 		}
 		handleIdField(transformed, id);
 		return transformed;

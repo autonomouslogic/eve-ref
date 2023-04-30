@@ -1,15 +1,15 @@
 package com.autonomouslogic.everef.refdata.sde;
 
+import com.autonomouslogic.everef.refdata.SimpleTransformer;
 import com.autonomouslogic.everef.refdata.TransformUtil;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import io.reactivex.rxjava3.functions.Function;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 @Singleton
-public class SdeTypeTransformer implements Function<ObjectNode, ObjectNode> {
+public class SdeTypeTransformer implements SimpleTransformer {
 	@Inject
 	protected TransformUtil transformUtil;
 
@@ -17,7 +17,7 @@ public class SdeTypeTransformer implements Function<ObjectNode, ObjectNode> {
 	protected SdeTypeTransformer() {}
 
 	@Override
-	public ObjectNode apply(ObjectNode json) throws Throwable {
+	public ObjectNode transformJson(ObjectNode json) throws Throwable {
 		if (json.has("traits")) {
 			var traits = (ObjectNode) json.get("traits");
 			transformUtil.arrayToObject(traits, "misc_bonuses", "importance");

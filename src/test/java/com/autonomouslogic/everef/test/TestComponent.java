@@ -20,6 +20,7 @@ import com.autonomouslogic.everef.inject.EsiModule;
 import com.autonomouslogic.everef.inject.JacksonModule;
 import com.autonomouslogic.everef.refdata.FieldRenamerTest;
 import com.autonomouslogic.everef.refdata.ObjectMergerTest;
+import com.autonomouslogic.everef.refdata.TransformUtilTest;
 import com.autonomouslogic.everef.refdata.esi.EsiLoaderTest;
 import com.autonomouslogic.everef.refdata.sde.SdeLoaderTest;
 import com.autonomouslogic.everef.url.UrlParserTest;
@@ -70,6 +71,8 @@ public interface TestComponent {
 	void inject(SdeLoaderTest test);
 
 	void inject(SlackDecoratorTest test);
+
+	void inject(TransformUtilTest test);
 
 	void inject(UrlParserTest test);
 }

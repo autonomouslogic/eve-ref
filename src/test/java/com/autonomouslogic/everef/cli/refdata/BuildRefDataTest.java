@@ -2,6 +2,7 @@ package com.autonomouslogic.everef.cli.refdata;
 
 import static com.autonomouslogic.everef.test.TestDataUtil.TEST_PORT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -126,6 +127,9 @@ public class BuildRefDataTest {
 				"645", objectMapper.readTree(ResourceUtil.loadContextual(BuildRefDataTest.class, "/type-645.json")));
 		var supplied = objectMapper.readTree(json);
 		assertEquals(expected, supplied);
+
+		// Check the encoded JSON contains full numbers. This comes from type 645 Dominix.
+		assertTrue(new String(json).contains("\"base_price\":153900000"));
 	}
 
 	@SneakyThrows

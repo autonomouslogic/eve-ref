@@ -25,6 +25,9 @@ public class EsiLoader {
 	@Inject
 	protected Provider<EsiTypeTransformer> esiTypeTransformerProvider;
 
+	@Inject
+	protected Provider<EsiFieldOrderTransformer> esiFieldOrderTransformerProvider;
+
 	@Setter
 	@NonNull
 	private MVMap<Long, JsonNode> typeStore;
@@ -57,6 +60,7 @@ public class EsiLoader {
 											pair.getLeft().getName());
 									return Completable.complete();
 							}
+							storeLoader.setPostMergeTransformer(esiFieldOrderTransformerProvider.get());
 							storeLoader.setLanguage(language);
 							return storeLoader.readValues(pair.getRight());
 						},
