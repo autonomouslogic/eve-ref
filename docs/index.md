@@ -1,6 +1,6 @@
 # EVE Ref Docs
 
-* [Logging](logging.md)
+* [Commands](commands/index.md)
+* [Contributing](contributing/index.md)
+* [Datasets](datasets/index.md)
 * [Docker](docker.md)
-* [Contributing](contributing.md)
-* [ESI Code Generation](esi-code-generation.md)
