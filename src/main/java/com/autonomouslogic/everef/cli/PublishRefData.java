@@ -1,6 +1,5 @@
 package com.autonomouslogic.everef.cli;
 
-import static com.autonomouslogic.everef.util.ArchivePathFactory.MARKET_ORDERS;
 import static com.autonomouslogic.everef.util.ArchivePathFactory.REFERENCE_DATA;
 
 import com.autonomouslogic.everef.config.Configs;
@@ -14,7 +13,6 @@ import com.autonomouslogic.everef.util.S3Util;
 import com.autonomouslogic.everef.util.TempFiles;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.google.common.hash.Hashing;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Single;
@@ -86,7 +84,9 @@ public class PublishRefData implements Command {
 	@SneakyThrows
 	@Override
 	public Completable run() {
-		return downloadLatestReferenceData().flatMapPublisher(this::parseFile).flatMapCompletable(this::uploadFile);
+		return downloadLatestReferenceData()
+				.flatMapPublisher(this::parseFile)
+				.flatMapCompletable(this::uploadFile, false, 32);
 	}
 
 	private Single<File> downloadLatestReferenceData() {
@@ -134,28 +134,17 @@ public class PublishRefData implements Command {
 
 	private Completable uploadFile(ReferenceEntry entry) {
 		return Completable.defer(() -> {
-			log.trace("Uploading {} - {} bytes", entry, entry.getContent().length);
+			log.debug("Uploading {} - {} bytes", entry, entry.getContent().length);
 			var latestPath = S3Url.builder()
 					.bucket(refDataUrl.getBucket())
-					.path(refDataUrl.getPath() + entry.getPath())
+					.path(entry.getPath())
 					.build();
 			var latestPut = s3Util
 					.putPublicObjectRequest(entry.getContent().length, latestPath, "application/json", cacheTime)
 					.toBuilder()
-					.contentMD5(Hashing.md5().hashBytes(entry.getContent()));
-			return s3Adapter.putObject(latestPut, entry.getContent(), s3Client).ignoreElement();
-
-			log.debug(String.format("Uploading completed file from %s", outputFile));
-			var archivePath = S3Url.builder()
-					.bucket(refDataUrl.getBucket())
-					.path(refDataUrl.getPath() + MARKET_ORDERS.createArchivePath(scrapeTime))
+					// .contentMD5(entry.getMd5b64())
 					.build();
-			var archivePut = s3Util.putPublicObjectRequest(
-					outputFile.length(), archivePath, "application/x-bzip2", archiveCacheTime);
-			log.info(String.format("Uploading latest file to %s", latestPath));
-			log.info(String.format("Uploading archive file to %s", archivePath));
-			return Completable.mergeArray(
-					s3Adapter.putObject(archivePut, outputFile, s3Client).ignoreElement());
+			return s3Adapter.putObject(latestPut, entry.getContent(), s3Client).ignoreElement();
 		});
 	}
 
@@ -173,7 +162,7 @@ public class PublishRefData implements Command {
 
 		@NonNull
 		@ToString.Exclude
-		String md5Hex;
+		String md5b64;
 	}
 
 	private String subPath(@NonNull String type, @NonNull Long id) {
@@ -181,14 +170,14 @@ public class PublishRefData implements Command {
 	}
 
 	private String subPath(String type) {
-		return refDataUrl.getPath() + "/" + type;
+		return refDataUrl.getPath() + type;
 	}
 
 	private ReferenceEntry createEntry(String type, Long id, byte[] content) {
-		return new ReferenceEntry(type, id, subPath(type, id), content, HashUtil.md5Hex(content));
+		return new ReferenceEntry(type, id, subPath(type, id), content, HashUtil.md5b64(content));
 	}
 
 	private ReferenceEntry createEntry(String type, byte[] content) {
-		return new ReferenceEntry(type, null, subPath(type), content, HashUtil.md5Hex(content));
+		return new ReferenceEntry(type, null, subPath(type), content, HashUtil.md5b64(content));
 	}
 }
