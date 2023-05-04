@@ -29,6 +29,7 @@ import java.net.URI;
 import java.time.Duration;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
@@ -88,7 +89,7 @@ public class BuildRefData implements Command {
 
 	@Setter
 	@NonNull
-	private ZonedDateTime buildTime = ZonedDateTime.now(ZoneOffset.UTC);
+	private ZonedDateTime buildTime = ZonedDateTime.now(ZoneOffset.UTC).truncatedTo(ChronoUnit.SECONDS);
 
 	private final Duration latestCacheTime = Configs.DATA_LATEST_CACHE_CONTROL_MAX_AGE.getRequired();
 	private final Duration archiveCacheTime = Configs.DATA_ARCHIVE_CACHE_CONTROL_MAX_AGE.getRequired();

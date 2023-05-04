@@ -20,6 +20,7 @@ import java.io.File;
 import java.net.URI;
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicInteger;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.NonNull;
@@ -36,6 +37,8 @@ import software.amazon.awssdk.services.s3.S3AsyncClient;
  */
 @Log4j2
 public class PublishRefData implements Command {
+	private static final int UPLOAD_CONCURRENCY = 32;
+
 	@Inject
 	@Named("refdata")
 	protected S3AsyncClient s3Client;
@@ -63,6 +66,7 @@ public class PublishRefData implements Command {
 
 	private S3Url refDataUrl;
 	private URI dataBaseUrl = Configs.DATA_BASE_URL.getRequired();
+	private AtomicInteger uploadCounter = new AtomicInteger();
 
 	private final Duration cacheTime = Configs.REFERENCE_DATA_CACHE_CONTROL_MAX_AGE.getRequired();
 
@@ -86,7 +90,7 @@ public class PublishRefData implements Command {
 	public Completable run() {
 		return downloadLatestReferenceData()
 				.flatMapPublisher(this::parseFile)
-				.flatMapCompletable(this::uploadFile, false, 32);
+				.flatMapCompletable(this::uploadFile, false, UPLOAD_CONCURRENCY);
 	}
 
 	private Single<File> downloadLatestReferenceData() {
@@ -134,7 +138,7 @@ public class PublishRefData implements Command {
 
 	private Completable uploadFile(ReferenceEntry entry) {
 		return Completable.defer(() -> {
-			log.debug("Uploading {} - {} bytes", entry, entry.getContent().length);
+			log.trace("Uploading {} - {} bytes", entry, entry.getContent().length);
 			var latestPath = S3Url.builder()
 					.bucket(refDataUrl.getBucket())
 					.path(entry.getPath())
@@ -142,9 +146,17 @@ public class PublishRefData implements Command {
 			var latestPut = s3Util
 					.putPublicObjectRequest(entry.getContent().length, latestPath, "application/json", cacheTime)
 					.toBuilder()
-					// .contentMD5(entry.getMd5b64())
+					.contentMD5(entry.getMd5b64())
 					.build();
-			return s3Adapter.putObject(latestPut, entry.getContent(), s3Client).ignoreElement();
+			return s3Adapter
+					.putObject(latestPut, entry.getContent(), s3Client)
+					.ignoreElement()
+					.andThen(Completable.fromAction(() -> {
+						var uploads = uploadCounter.incrementAndGet();
+						if (uploads % 10000 == 0) {
+							log.info("Uploaded {} files", uploads);
+						}
+					}));
 		});
 	}
 
