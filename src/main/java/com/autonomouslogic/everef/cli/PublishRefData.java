@@ -129,6 +129,7 @@ public class PublishRefData implements Command {
 					})
 					.doOnComplete(() -> log.debug("Finished parsing {}", filename));
 			var indexEntry = Flowable.defer(() -> {
+				index.sort(Long::compareTo);
 				log.debug("Creating {} index with {} entries", type, index.size());
 				return Flowable.just(createEntry(type, objectMapper.writeValueAsBytes(index)));
 			});
