@@ -33,6 +33,9 @@ public class CommandRunner {
 	protected Provider<BuildRefData> buildRefDataProvider;
 
 	@Inject
+	protected Provider<PublishRefData> publishRefDataProvider;
+
+	@Inject
 	protected HealthcheckDecorator healthcheckDecorator;
 
 	@Inject
@@ -77,6 +80,8 @@ public class CommandRunner {
 				return scrapePublicContractsProvider.get();
 			case "build-ref-data":
 				return buildRefDataProvider.get();
+			case "publish-ref-data":
+				return publishRefDataProvider.get();
 			default:
 				throw new IllegalArgumentException("Unknown command: " + name);
 		}

@@ -279,6 +279,62 @@ public class Configs {
 			.build();
 
 	/**
+	 * The cache time to use for reference data files.
+	 */
+	public static final Config<Duration> REFERENCE_DATA_CACHE_CONTROL_MAX_AGE = Config.<Duration>builder()
+			.name("REFERENCE_DATA_CACHE_CONTROL_MAX_AGE")
+			.defaultValue(Duration.ofMinutes(2))
+			.type(Duration.class)
+			.build();
+
+	/**
+	 * The location to store data for the reference data API site.
+	 */
+	public static final Config<URI> REFERENCE_DATA_PATH =
+			Config.<URI>builder().name("REFERENCE_DATA_PATH").type(URI.class).build();
+
+	/**
+	 * Endpoint override for the reference data S3 client.
+	 */
+	public static final Config<String> REFERENCE_DATA_S3_ENDPOINT_URL = Config.<String>builder()
+			.name("REFERENCE_DATA_S3_ENDPOINT_URL")
+			.type(String.class)
+			.build();
+
+	/**
+	 * Profile for the reference data S3 client.
+	 */
+	public static final Config<String> REFERENCE_DATA_AWS_PROFILE = Config.<String>builder()
+			.name("REFERENCE_DATA_AWS_PROFILE")
+			.type(String.class)
+			.build();
+
+	/**
+	 * Access key for the reference data S3 client.
+	 */
+	public static final Config<String> REFERENCE_DATA_AWS_ACCESS_KEY_ID = Config.<String>builder()
+			.name("REFERENCE_DATA_AWS_ACCESS_KEY_ID")
+			.type(String.class)
+			.build();
+
+	/**
+	 * Secret key for the reference data S3 client.
+	 */
+	public static final Config<String> REFERENCE_DATA_AWS_SECRET_ACCESS_KEY = Config.<String>builder()
+			.name("REFERENCE_DATA_AWS_SECRET_ACCESS_KEY")
+			.type(String.class)
+			.build();
+
+	/**
+	 * The AWS region for the reference data site.
+	 * If not supplied, normal AWS SDK defaults will be used.
+	 */
+	public static final Config<String> REFERENCE_DATA_AWS_REGION = Config.<String>builder()
+			.name("REFERENCE_DATA_AWS_REGION")
+			.type(String.class)
+			.build();
+
+	/**
 	 * Base path for requests to the main EVE Ref website.
 	 */
 	public static final Config<URI> EVE_REF_BASE_URL = Config.<URI>builder()
