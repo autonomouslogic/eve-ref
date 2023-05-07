@@ -20,17 +20,26 @@ import java.io.File;
 import java.net.URI;
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import javax.inject.Inject;
 import javax.inject.Named;
+import lombok.Builder;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.ToString;
 import lombok.Value;
 import lombok.extern.log4j.Log4j2;
 import okhttp3.OkHttpClient;
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.StringUtils;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
+import software.amazon.awssdk.services.s3.model.ListObjectsV2Request;
+import software.amazon.awssdk.services.s3.model.S3Object;
 
 /**
  * Publishes the reference data.
@@ -88,9 +97,44 @@ public class PublishRefData implements Command {
 	@SneakyThrows
 	@Override
 	public Completable run() {
-		return downloadLatestReferenceData()
-				.flatMapPublisher(this::parseFile)
-				.flatMapCompletable(this::uploadFile, false, UPLOAD_CONCURRENCY);
+		var skipped = new AtomicInteger();
+		return listBucketContents()
+				.flatMapCompletable(existing -> {
+					return downloadLatestReferenceData()
+							.flatMapPublisher(this::parseFile)
+							.filter(entry -> {
+								if (existing.containsKey(entry.getMd5Hex())) {
+									skipped.incrementAndGet();
+									existing.remove(entry.getMd5Hex());
+									return false;
+								}
+								return true;
+							})
+							.flatMapCompletable(this::uploadFile, false, UPLOAD_CONCURRENCY);
+				})
+				.doOnComplete(() -> log.info("Skipped {} entries", skipped.get()));
+	}
+
+	private Single<Map<String, ObjectListing>> listBucketContents() {
+		return Flowable.defer(() -> {
+					log.info("Listing existing contents");
+					ListObjectsV2Request request = ListObjectsV2Request.builder()
+							.bucket(refDataUrl.getBucket())
+							.prefix(refDataUrl.getPath())
+							.build();
+					return s3Adapter
+							.listObjects(request, s3Client)
+							.flatMap(response -> Flowable.fromIterable(response.contents()))
+							.filter(obj -> !(obj.key().endsWith("index.html")))
+							.filter(obj -> obj.size() != null
+									&& obj.size() > 0) // S3 doesn't list directories, but Backblaze does.
+							.map(obj -> createObjectListing(obj));
+				})
+				.toList()
+				.map(objects -> {
+					log.info("Listed {} objects", objects.size());
+					return objects.stream().collect(Collectors.toMap(ObjectListing::getMd5Hex, Function.identity()));
+				});
 	}
 
 	private Single<File> downloadLatestReferenceData() {
@@ -147,7 +191,7 @@ public class PublishRefData implements Command {
 			var latestPut = s3Util
 					.putPublicObjectRequest(entry.getContent().length, latestPath, "application/json", cacheTime)
 					.toBuilder()
-					.contentMD5(entry.getMd5b64())
+					.contentMD5(entry.getMd5B64())
 					.build();
 			return s3Adapter
 					.putObject(latestPut, entry.getContent(), s3Client)
@@ -174,8 +218,10 @@ public class PublishRefData implements Command {
 		byte[] content;
 
 		@NonNull
-		@ToString.Exclude
-		String md5b64;
+		String md5B64;
+
+		@NonNull
+		String md5Hex;
 	}
 
 	private String subPath(@NonNull String type, @NonNull Long id) {
@@ -187,10 +233,28 @@ public class PublishRefData implements Command {
 	}
 
 	private ReferenceEntry createEntry(String type, Long id, byte[] content) {
-		return new ReferenceEntry(type, id, subPath(type, id), content, HashUtil.md5b64(content));
+		var md5 = HashUtil.md5(content);
+		return new ReferenceEntry(
+				type, id, subPath(type, id), content, Base64.encodeBase64String(md5), Hex.encodeHexString(md5));
 	}
 
 	private ReferenceEntry createEntry(String type, byte[] content) {
-		return new ReferenceEntry(type, null, subPath(type), content, HashUtil.md5b64(content));
+		var md5 = HashUtil.md5(content);
+		return new ReferenceEntry(
+				type, null, subPath(type), content, Base64.encodeBase64String(md5), Hex.encodeHexString(md5));
+	}
+
+	private ObjectListing createObjectListing(S3Object obj) {
+		return ObjectListing.builder()
+				.path(obj.key())
+				.md5Hex(StringUtils.remove(obj.eTag(), '"'))
+				.build();
+	}
+
+	@Value
+	@Builder
+	public static class ObjectListing {
+		String path;
+		String md5Hex;
 	}
 }
