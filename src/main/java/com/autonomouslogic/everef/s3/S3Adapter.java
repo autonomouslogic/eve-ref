@@ -13,6 +13,8 @@ import javax.inject.Singleton;
 import lombok.extern.log4j.Log4j2;
 import software.amazon.awssdk.core.async.AsyncRequestBody;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
+import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
+import software.amazon.awssdk.services.s3.model.DeleteObjectResponse;
 import software.amazon.awssdk.services.s3.model.ListObjectsV2Request;
 import software.amazon.awssdk.services.s3.model.ListObjectsV2Response;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
@@ -62,5 +64,17 @@ public class S3Adapter {
 								"Error putting object from file %s to s3://%s/%s",
 								file.getAbsolutePath(), req.bucket(), req.key()),
 						e)));
+	}
+
+	public Single<DeleteObjectResponse> deleteObject(DeleteObjectRequest req, S3AsyncClient client) {
+		return Rx3Util.toSingle(client.deleteObject(req))
+				.timeout(120, TimeUnit.SECONDS)
+				.retry(3, e -> {
+					log.warn(String.format("Retrying delete to %s", req.key()), e);
+					return true;
+				})
+				.observeOn(Schedulers.computation())
+				.onErrorResumeNext(e -> Single.error(new RuntimeException(
+						String.format("Error deleting object to s3://%s/%s", req.bucket(), req.key()), e)));
 	}
 }

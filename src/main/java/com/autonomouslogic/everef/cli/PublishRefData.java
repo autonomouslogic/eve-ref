@@ -20,7 +20,9 @@ import java.io.File;
 import java.net.URI;
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -98,21 +100,15 @@ public class PublishRefData implements Command {
 	@Override
 	public Completable run() {
 		var skipped = new AtomicInteger();
-		return listBucketContents()
-				.flatMapCompletable(existing -> {
-					return downloadLatestReferenceData()
-							.flatMapPublisher(this::parseFile)
-							.filter(entry -> {
-								if (existing.containsKey(entry.getMd5Hex())) {
-									skipped.incrementAndGet();
-									existing.remove(entry.getMd5Hex());
-									return false;
-								}
-								return true;
-							})
-							.flatMapCompletable(this::uploadFile, false, UPLOAD_CONCURRENCY);
-				})
-				.doOnComplete(() -> log.info("Skipped {} entries", skipped.get()));
+		return listBucketContents().flatMapCompletable(existing -> {
+			return downloadLatestReferenceData()
+					.flatMapPublisher(this::parseFile)
+					//						.take(1000) // @todo
+					.filter(entry -> filterExisting(skipped, existing, entry))
+					.flatMapCompletable(this::uploadFile, false, UPLOAD_CONCURRENCY)
+					.doOnComplete(() -> log.info("Skipped {} entries", skipped.get()))
+					.andThen(deleteRemaining(new ArrayList<>(existing.keySet())));
+		});
 	}
 
 	private Single<Map<String, ObjectListing>> listBucketContents() {
@@ -130,10 +126,11 @@ public class PublishRefData implements Command {
 									&& obj.size() > 0) // S3 doesn't list directories, but Backblaze does.
 							.map(obj -> createObjectListing(obj));
 				})
+				//			.take(1000) // @todo
 				.toList()
 				.map(objects -> {
 					log.info("Listed {} objects", objects.size());
-					return objects.stream().collect(Collectors.toMap(ObjectListing::getMd5Hex, Function.identity()));
+					return objects.stream().collect(Collectors.toMap(ObjectListing::getPath, Function.identity()));
 				});
 	}
 
@@ -256,5 +253,34 @@ public class PublishRefData implements Command {
 	public static class ObjectListing {
 		String path;
 		String md5Hex;
+	}
+
+	private boolean filterExisting(AtomicInteger skipped, Map<String, ObjectListing> existing, ReferenceEntry entry) {
+		var existingHash = Optional.ofNullable(existing.get(entry.getPath())).map(e -> e.getMd5Hex());
+		existing.remove(entry.getPath());
+		if (existingHash.isPresent() && existingHash.get().equals(entry.getMd5Hex())) {
+			skipped.incrementAndGet();
+			return false;
+		}
+		return true;
+	}
+
+	public Completable deleteRemaining(List<String> paths) {
+		return Completable.defer(() -> {
+					log.info("Deleting {} entries", paths.size());
+					return Flowable.fromIterable(paths)
+							.flatMapCompletable(
+									entry -> {
+										var delete = s3Util.deleteObjectRequest(refDataUrl.toBuilder()
+												.path(entry)
+												.build());
+										return s3Adapter
+												.deleteObject(delete, s3Client)
+												.ignoreElement();
+									},
+									false,
+									UPLOAD_CONCURRENCY);
+				})
+				.doOnComplete(() -> log.info("Deleted {} entries", paths.size()));
 	}
 }
