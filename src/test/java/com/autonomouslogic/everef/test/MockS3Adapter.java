@@ -1,6 +1,7 @@
 package com.autonomouslogic.everef.test;
 
 import com.autonomouslogic.everef.s3.S3Adapter;
+import com.autonomouslogic.everef.util.HashUtil;
 import com.google.common.base.Strings;
 import com.google.common.hash.Hashing;
 import io.reactivex.rxjava3.core.Flowable;
@@ -17,10 +18,13 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import lombok.Value;
+import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.Assertions;
 import software.amazon.awssdk.core.async.AsyncRequestBody;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
+import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
+import software.amazon.awssdk.services.s3.model.DeleteObjectResponse;
 import software.amazon.awssdk.services.s3.model.ListObjectsV2Request;
 import software.amazon.awssdk.services.s3.model.ListObjectsV2Response;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
@@ -39,6 +43,7 @@ import software.amazon.awssdk.services.s3.model.S3Object;
 public class MockS3Adapter extends S3Adapter {
 	private final Map<Entry, byte[]> data = new ConcurrentHashMap<>();
 	private final Set<Entry> putKeys = Collections.synchronizedSet(new LinkedHashSet<>());
+	private final Set<Entry> deleteKeys = Collections.synchronizedSet(new LinkedHashSet<>());
 
 	@Value
 	private class Entry {
@@ -77,6 +82,7 @@ public class MockS3Adapter extends S3Adapter {
 								.lastModified(Instant.now())
 								.key(entry.getKey().getKey())
 								.size((long) entry.getValue().length)
+								.eTag(Hex.encodeHexString(HashUtil.md5(entry.getValue())))
 								.build())
 						.collect(Collectors.toList()));
 				return response.build();
@@ -135,8 +141,25 @@ public class MockS3Adapter extends S3Adapter {
 		}
 	}
 
+	@Override
+	public Single<DeleteObjectResponse> deleteObject(DeleteObjectRequest req, S3AsyncClient client) {
+		return Single.defer(() -> {
+			var entry = new Entry(req.bucket(), req.key(), client);
+			deleteKeys.add(entry);
+			return Single.just(DeleteObjectResponse.builder().build());
+		});
+	}
+
 	public List<String> getAllPutKeys(String bucket, S3AsyncClient client) {
 		return putKeys.stream()
+				.filter(entry -> entry.getClient() == client)
+				.filter(entry -> entry.getBucket().equals(bucket))
+				.map(entry -> entry.getKey())
+				.collect(Collectors.toList());
+	}
+
+	public List<String> getAllDeleteKeys(String bucket, S3AsyncClient client) {
+		return deleteKeys.stream()
 				.filter(entry -> entry.getClient() == client)
 				.filter(entry -> entry.getBucket().equals(bucket))
 				.map(entry -> entry.getKey())

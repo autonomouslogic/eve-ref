@@ -123,8 +123,7 @@ public class BuildRefDataTest {
 	@SneakyThrows
 	private void assertTypes(@NonNull byte[] json) {
 		var expected = objectMapper.createObjectNode();
-		expected.set(
-				"645", objectMapper.readTree(ResourceUtil.loadContextual(BuildRefDataTest.class, "/type-645.json")));
+		expected.set("645", objectMapper.readTree(ResourceUtil.loadResource("/refdata/refdata/type-645.json")));
 		var supplied = objectMapper.readTree(json);
 		assertEquals(expected, supplied);
 

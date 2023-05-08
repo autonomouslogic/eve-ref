@@ -33,4 +33,12 @@ public class MockS3Module {
 	public S3AsyncClient dataClient() {
 		return mock(S3AsyncClient.class);
 	}
+
+	@Provides
+	@Named("refdata")
+	@Singleton
+	@SneakyThrows
+	public S3AsyncClient refDataClient() {
+		return mock(S3AsyncClient.class);
+	}
 }

@@ -2,6 +2,7 @@ package com.autonomouslogic.everef.test;
 
 import com.autonomouslogic.everef.cli.DataIndexTest;
 import com.autonomouslogic.everef.cli.MockDataIndexModule;
+import com.autonomouslogic.everef.cli.PublishRefDataTest;
 import com.autonomouslogic.everef.cli.decorator.HealthcheckDecoratorTest;
 import com.autonomouslogic.everef.cli.decorator.SlackDecoratorTest;
 import com.autonomouslogic.everef.cli.marketorders.ScrapeMarketOrdersTest;
@@ -61,6 +62,8 @@ public interface TestComponent {
 	void inject(MetaGroupScraperTest test);
 
 	void inject(ObjectMergerTest test);
+
+	void inject(PublishRefDataTest test);
 
 	void inject(FieldRenamerTest test);
 

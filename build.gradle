@@ -53,6 +53,7 @@ dependencies {
 	implementation "org.apache.commons:commons-csv:1.10.0"
 	implementation "net.gpedro.integrations.slack:slack-webhook:1.4.0"
 	implementation "org.jsoup:jsoup:1.16.1"
+	implementation "commons-codec:commons-codec:1.15"
 
 	testAnnotationProcessor "com.google.dagger:dagger-compiler:2.46"
 	testImplementation "com.google.dagger:dagger:2.46"
@@ -169,6 +170,14 @@ task scrapePublicContracts(type: JavaExec) {
 task buildRefData(type: JavaExec) {
 	group "application"
 	args "build-ref-data"
+	environment envProperties
+	classpath = sourceSets.main.runtimeClasspath
+	mainClass = mainClassName
+}
+
+task publishRefData(type: JavaExec) {
+	group "application"
+	args "publish-ref-data"
 	environment envProperties
 	classpath = sourceSets.main.runtimeClasspath
 	mainClass = mainClassName
