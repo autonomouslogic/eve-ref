@@ -103,11 +103,12 @@ public class PublishRefData implements Command {
 		return listBucketContents().flatMapCompletable(existing -> {
 			return downloadLatestReferenceData()
 					.flatMapPublisher(this::parseFile)
-					//						.take(1000) // @todo
 					.filter(entry -> filterExisting(skipped, existing, entry))
+					.toList()
+					.flatMapPublisher(l -> Flowable.fromIterable(l))
 					.flatMapCompletable(this::uploadFile, false, UPLOAD_CONCURRENCY)
 					.doOnComplete(() -> log.info("Skipped {} entries", skipped.get()))
-					.andThen(deleteRemaining(new ArrayList<>(existing.keySet())));
+					.andThen(Completable.defer(() -> deleteRemaining(new ArrayList<>(existing.keySet()))));
 		});
 	}
 
@@ -126,7 +127,6 @@ public class PublishRefData implements Command {
 									&& obj.size() > 0) // S3 doesn't list directories, but Backblaze does.
 							.map(obj -> createObjectListing(obj));
 				})
-				//			.take(1000) // @todo
 				.toList()
 				.map(objects -> {
 					log.info("Listed {} objects", objects.size());
@@ -256,7 +256,8 @@ public class PublishRefData implements Command {
 	}
 
 	private boolean filterExisting(AtomicInteger skipped, Map<String, ObjectListing> existing, ReferenceEntry entry) {
-		var existingHash = Optional.ofNullable(existing.get(entry.getPath())).map(e -> e.getMd5Hex());
+		var existingHash =
+				Optional.ofNullable(existing.get(entry.getPath())).flatMap(e -> Optional.ofNullable(e.getMd5Hex()));
 		existing.remove(entry.getPath());
 		if (existingHash.isPresent() && existingHash.get().equals(entry.getMd5Hex())) {
 			skipped.incrementAndGet();
@@ -265,10 +266,10 @@ public class PublishRefData implements Command {
 		return true;
 	}
 
-	public Completable deleteRemaining(List<String> paths) {
+	public Completable deleteRemaining(List<String> remaining) {
 		return Completable.defer(() -> {
-					log.info("Deleting {} entries", paths.size());
-					return Flowable.fromIterable(paths)
+					log.info("Deleting {} entries", remaining.size());
+					return Flowable.fromIterable(remaining)
 							.flatMapCompletable(
 									entry -> {
 										var delete = s3Util.deleteObjectRequest(refDataUrl.toBuilder()
@@ -281,6 +282,6 @@ public class PublishRefData implements Command {
 									false,
 									UPLOAD_CONCURRENCY);
 				})
-				.doOnComplete(() -> log.info("Deleted {} entries", paths.size()));
+				.doOnComplete(() -> log.info("Deleted {} entries", remaining.size()));
 	}
 }

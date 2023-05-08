@@ -10,10 +10,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.reactivex.rxjava3.functions.Consumer;
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringReader;
+import java.time.Instant;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -143,6 +145,11 @@ public class TestDataUtil {
 		}
 	}
 
+	@SneakyThrows
+	public MockResponse mockResponse(File in) {
+		return mockResponse(new FileInputStream(in));
+	}
+
 	public void assertRequest(RecordedRequest request, String path) {
 		assertRequest(request, "GET", path, null);
 	}
@@ -219,7 +226,30 @@ public class TestDataUtil {
 	}
 
 	@SneakyThrows
+	public File createTestRefdata() {
+		return createTarXzFile(Map.ofEntries(
+				Map.entry(
+						"meta.json",
+						objectMapper.writeValueAsBytes(objectMapper
+								.createObjectNode()
+								.put(
+										"build_time",
+										Instant.parse("2000-01-02T03:04:05Z").toString())
+								.set("645", loadJsonResource("/refdata/refdata/type-645.json")))),
+				Map.entry(
+						"types.json",
+						objectMapper.writeValueAsBytes(objectMapper
+								.createObjectNode()
+								.set("645", loadJsonResource("/refdata/refdata/type-645.json"))))));
+	}
+
+	@SneakyThrows
 	private Map.Entry<String, byte[]> createEntry(String base, String path) {
 		return Map.entry(path, IOUtils.toByteArray(ResourceUtil.loadResource(base + "/" + path)));
+	}
+
+	@SneakyThrows
+	public JsonNode loadJsonResource(String path) {
+		return objectMapper.readTree(ResourceUtil.loadResource(path));
 	}
 }
