@@ -48,13 +48,11 @@ public class S3Module {
 	}
 
 	private static S3AsyncClient createClient(
-			AwsCredentialsProvider credentialsProvider,
-			Optional<Region> region,
-			Config<String> referenceDataS3EndpointUrl)
+			AwsCredentialsProvider credentialsProvider, Optional<Region> region, Config<String> endpointUrl)
 			throws URISyntaxException {
 		var client = S3AsyncClient.builder().credentialsProvider(credentialsProvider);
 		region.ifPresent(client::region);
-		var endpoint = referenceDataS3EndpointUrl.get();
+		var endpoint = endpointUrl.get();
 		if (endpoint.isPresent()) {
 			client.endpointOverride(new URI(endpoint.get()));
 		}
