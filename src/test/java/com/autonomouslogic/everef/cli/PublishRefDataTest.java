@@ -6,8 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.test.MockS3Adapter;
 import com.autonomouslogic.everef.test.TestDataUtil;
-import com.autonomouslogic.everef.url.UrlParser;
-import com.autonomouslogic.everef.util.TempFiles;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.HashSet;
 import java.util.List;
@@ -44,12 +42,6 @@ public class PublishRefDataTest {
 
 	@Inject
 	ObjectMapper objectMapper;
-
-	@Inject
-	UrlParser urlParser;
-
-	@Inject
-	TempFiles tempFiles;
 
 	MockWebServer server;
 

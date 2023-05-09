@@ -10,6 +10,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
 import software.amazon.awssdk.core.async.AsyncRequestBody;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
@@ -26,7 +27,22 @@ public class S3Adapter {
 	@Inject
 	protected S3Adapter() {}
 
-	public Flowable<ListObjectsV2Response> listObjects(ListObjectsV2Request req, S3AsyncClient client) {
+	public Flowable<ListedS3Object> listObjects(@NonNull S3Url url, @NonNull S3AsyncClient client) {
+		return Flowable.defer(() -> {
+			ListObjectsV2Request request = ListObjectsV2Request.builder()
+					.bucket(url.getBucket())
+					.prefix(url.getPath())
+					.build();
+			return listObjects(request, client)
+					.flatMap(response -> Flowable.fromIterable(response.contents()))
+					.filter(obj ->
+							obj.size() != null && obj.size() > 0) // S3 doesn't list directories, but Backblaze does.
+					.map(obj -> ListedS3Object.create(obj, url.getBucket()));
+		});
+	}
+
+	private Flowable<ListObjectsV2Response> listObjects(
+			@NonNull ListObjectsV2Request req, @NonNull S3AsyncClient client) {
 		var s3Url =
 				S3Url.builder().bucket(req.bucket()).path(req.prefix()).build().toString();
 		var count = new AtomicInteger();
@@ -41,7 +57,8 @@ public class S3Adapter {
 				});
 	}
 
-	public Single<PutObjectResponse> putObject(PutObjectRequest req, AsyncRequestBody body, S3AsyncClient client) {
+	public Single<PutObjectResponse> putObject(
+			@NonNull PutObjectRequest req, @NonNull AsyncRequestBody body, @NonNull S3AsyncClient client) {
 		return Rx3Util.toSingle(client.putObject(req, body))
 				.timeout(120, TimeUnit.SECONDS)
 				.retry(3, e -> {
@@ -53,11 +70,13 @@ public class S3Adapter {
 						String.format("Error putting object to s3://%s/%s", req.bucket(), req.key()), e)));
 	}
 
-	public Single<PutObjectResponse> putObject(PutObjectRequest req, byte[] bytes, S3AsyncClient client) {
+	public Single<PutObjectResponse> putObject(
+			@NonNull PutObjectRequest req, @NonNull byte[] bytes, @NonNull S3AsyncClient client) {
 		return putObject(req, AsyncRequestBody.fromBytes(bytes), client);
 	}
 
-	public Single<PutObjectResponse> putObject(PutObjectRequest req, File file, S3AsyncClient client) {
+	public Single<PutObjectResponse> putObject(
+			@NonNull PutObjectRequest req, @NonNull File file, @NonNull S3AsyncClient client) {
 		return putObject(req, AsyncRequestBody.fromFile(file), client)
 				.onErrorResumeNext(e -> Single.error(new RuntimeException(
 						String.format(
@@ -66,7 +85,7 @@ public class S3Adapter {
 						e)));
 	}
 
-	public Single<DeleteObjectResponse> deleteObject(DeleteObjectRequest req, S3AsyncClient client) {
+	public Single<DeleteObjectResponse> deleteObject(@NonNull DeleteObjectRequest req, @NonNull S3AsyncClient client) {
 		return Rx3Util.toSingle(client.deleteObject(req))
 				.timeout(120, TimeUnit.SECONDS)
 				.retry(3, e -> {

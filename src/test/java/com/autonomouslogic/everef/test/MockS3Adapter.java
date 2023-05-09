@@ -1,6 +1,8 @@
 package com.autonomouslogic.everef.test;
 
+import com.autonomouslogic.everef.s3.ListedS3Object;
 import com.autonomouslogic.everef.s3.S3Adapter;
+import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.util.HashUtil;
 import com.google.common.base.Strings;
 import com.google.common.hash.Hashing;
@@ -25,8 +27,6 @@ import software.amazon.awssdk.core.async.AsyncRequestBody;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.DeleteObjectResponse;
-import software.amazon.awssdk.services.s3.model.ListObjectsV2Request;
-import software.amazon.awssdk.services.s3.model.ListObjectsV2Response;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectResponse;
 import software.amazon.awssdk.services.s3.model.S3Object;
@@ -67,26 +67,23 @@ public class MockS3Adapter extends S3Adapter {
 	}
 
 	@Override
-	public Flowable<ListObjectsV2Response> listObjects(ListObjectsV2Request req, S3AsyncClient client) {
+	public Flowable<ListedS3Object> listObjects(S3Url url, S3AsyncClient client) {
 		return Flowable.defer(() -> {
 			var stream = data.entrySet().stream()
 					.filter(entry -> entry.getKey().getClient() == client)
-					.filter(entry -> entry.getKey().getBucket().equals(req.bucket()));
-			if (!Strings.isNullOrEmpty(req.prefix())) {
-				stream = stream.filter(entry -> entry.getKey().getKey().startsWith(req.prefix()));
+					.filter(entry -> entry.getKey().getBucket().equals(url.getBucket()));
+			if (!Strings.isNullOrEmpty(url.getPath())) {
+				stream = stream.filter(entry -> entry.getKey().getKey().startsWith(url.getPath()));
 			}
-			return Flowable.fromStream(stream).buffer(2).map(entries -> {
-				var response = ListObjectsV2Response.builder();
-				response.contents(entries.stream()
-						.map(entry -> S3Object.builder()
-								.lastModified(Instant.now())
-								.key(entry.getKey().getKey())
-								.size((long) entry.getValue().length)
-								.eTag(Hex.encodeHexString(HashUtil.md5(entry.getValue())))
-								.build())
-						.collect(Collectors.toList()));
-				return response.build();
-			});
+			return Flowable.fromStream(stream)
+					.map(entry -> ListedS3Object.create(
+							S3Object.builder()
+									.key(entry.getKey().getKey())
+									.size((long) entry.getValue().length)
+									.eTag("\"" + Hex.encodeHexString(HashUtil.md5(entry.getValue())) + "\"")
+									.lastModified(Instant.now())
+									.build(),
+							entry.getKey().getBucket()));
 		});
 	}
 
