@@ -1,0 +1,6 @@
+http://host.com/,host.com,"/"
+https://host.com/,host.com,"/"
+http://host.com/path,host.com,"/path"
+https://host.com/path,host.com,"/path"
+http://host.com/path/to/file,host.com,"/path/to/file"
+https://host.com/path/to/file,host.com,"/path/to/file"

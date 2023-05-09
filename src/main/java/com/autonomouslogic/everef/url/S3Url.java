@@ -9,9 +9,14 @@ import lombok.Value;
  */
 @Value
 @Builder(toBuilder = true)
-public class S3Url implements DataUrl {
+public class S3Url implements DataUrl<S3Url> {
 	String bucket;
 	String path;
+
+	@Override
+	public S3Url resolve(String path) {
+		return null;
+	}
 
 	public String toString() {
 		return String.format("s3://%s/%s", bucket, path);

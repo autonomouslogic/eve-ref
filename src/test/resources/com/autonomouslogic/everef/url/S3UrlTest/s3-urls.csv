@@ -1,0 +1,3 @@
+s3://bucket/,bucket,""
+s3://bucket/key,bucket,key
+s3://bucket/key/file,bucket,key/file

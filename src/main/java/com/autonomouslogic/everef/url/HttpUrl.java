@@ -9,8 +9,13 @@ import lombok.Value;
  */
 @Value
 @Builder(toBuilder = true)
-public class HttpUrl implements DataUrl {
+public class HttpUrl implements DataUrl<HttpUrl> {
 	URI uri;
+
+	@Override
+	public HttpUrl resolve(String path) {
+		return null;
+	}
 
 	public String toString() {
 		return uri.toString();
@@ -18,6 +23,10 @@ public class HttpUrl implements DataUrl {
 
 	public String getProtocol() {
 		return "http";
+	}
+
+	public String getHost() {
+		return uri.getHost();
 	}
 
 	@Override
