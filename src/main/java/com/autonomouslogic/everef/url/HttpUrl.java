@@ -14,7 +14,7 @@ public class HttpUrl implements DataUrl<HttpUrl> {
 
 	@Override
 	public HttpUrl resolve(String path) {
-		return null;
+		return parse(uri.resolve(path));
 	}
 
 	public String toString() {

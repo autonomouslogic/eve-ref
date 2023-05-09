@@ -14,4 +14,11 @@ public class FileUrlTest {
 		assertEquals("file", url.getProtocol());
 		assertEquals(path, url.getPath());
 	}
+
+	@ParameterizedTest
+	@CsvFileSource(resources = "/com/autonomouslogic/everef/url/FileUrlTest/file-resolve.csv")
+	void shouldResolveUrls(String base, String resolve, String expected) {
+		var url = FileUrl.parse(URI.create(base)).resolve(resolve);
+		assertEquals(expected, url.toString());
+	}
 }

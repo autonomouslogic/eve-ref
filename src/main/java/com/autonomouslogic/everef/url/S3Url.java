@@ -15,7 +15,7 @@ public class S3Url implements DataUrl<S3Url> {
 
 	@Override
 	public S3Url resolve(String path) {
-		return null;
+		return parse(toUri().resolve(path));
 	}
 
 	public String toString() {

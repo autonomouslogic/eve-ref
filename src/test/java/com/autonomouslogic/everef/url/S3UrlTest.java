@@ -22,4 +22,11 @@ public class S3UrlTest {
 		var obj = S3Url.builder().bucket(bucket).path(key).build();
 		assertEquals(uri, obj.toString());
 	}
+
+	@ParameterizedTest
+	@CsvFileSource(resources = "/com/autonomouslogic/everef/url/S3UrlTest/s3-resolve.csv")
+	void shouldResolveUrls(String base, String resolve, String expected) {
+		var url = S3Url.parse(URI.create(base)).resolve(resolve);
+		assertEquals(expected, url.toString());
+	}
 }

@@ -15,4 +15,11 @@ public class HttpUrlTest {
 		assertEquals(host, url.getHost());
 		assertEquals(path, url.getPath());
 	}
+
+	@ParameterizedTest
+	@CsvFileSource(resources = "/com/autonomouslogic/everef/url/HttpUrlTest/http-resolve.csv")
+	void shouldResolveUrls(String base, String resolve, String expected) {
+		var url = HttpUrl.parse(URI.create(base)).resolve(resolve);
+		assertEquals(expected, url.toString());
+	}
 }

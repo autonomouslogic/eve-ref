@@ -14,7 +14,7 @@ public class FileUrl implements DataUrl<FileUrl> {
 
 	@Override
 	public FileUrl resolve(String path) {
-		return null;
+		return parse(toUri().resolve(path));
 	}
 
 	public String toString() {

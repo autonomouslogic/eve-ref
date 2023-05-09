@@ -1,0 +1,3 @@
+http://host.com/,path,http://host.com/path
+http://host.com/path,to/somewhere,http://host.com/to/somewhere
+http://host.com/path/,to/somewhere,http://host.com/path/to/somewhere
