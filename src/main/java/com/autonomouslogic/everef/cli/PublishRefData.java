@@ -86,14 +86,7 @@ public class PublishRefData implements Command {
 
 	@Inject
 	protected void init() {
-		var refDataPathUrl = urlParser.parse(Configs.REFERENCE_DATA_PATH.getRequired());
-		if (!refDataPathUrl.getProtocol().equals("s3")) {
-			throw new IllegalArgumentException("Reference data path must be an S3 path");
-		}
-		refDataUrl = (S3Url) refDataPathUrl;
-		if (!refDataUrl.getPath().equals("")) {
-			throw new IllegalArgumentException("Reference data path must be run at the root of the bucket");
-		}
+		refDataUrl = (S3Url) urlParser.parse(Configs.REFERENCE_DATA_PATH.getRequired());
 	}
 
 	@SneakyThrows

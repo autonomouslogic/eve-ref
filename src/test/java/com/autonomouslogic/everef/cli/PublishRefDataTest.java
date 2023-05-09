@@ -27,7 +27,7 @@ import software.amazon.awssdk.services.s3.S3AsyncClient;
 
 @ExtendWith(MockitoExtension.class)
 @Log4j2
-@SetEnvironmentVariable(key = "REFERENCE_DATA_PATH", value = "s3://" + PublishRefDataTest.BUCKET_NAME + "/")
+@SetEnvironmentVariable(key = "REFERENCE_DATA_PATH", value = "s3://" + PublishRefDataTest.BUCKET_NAME + "/base/")
 @SetEnvironmentVariable(key = "DATA_BASE_URL", value = "http://localhost:" + TEST_PORT)
 public class PublishRefDataTest {
 	static final String BUCKET_NAME = "ref-data-bucket";
@@ -66,9 +66,11 @@ public class PublishRefDataTest {
 		server.start(TEST_PORT);
 
 		mockS3Adapter.putTestObject(BUCKET_NAME, "index.html", "test", s3);
-		mockS3Adapter.putTestObject(BUCKET_NAME, "types", "[645]", s3); // Matches
-		mockS3Adapter.putTestObject(BUCKET_NAME, "types/645", "test", s3);
-		mockS3Adapter.putTestObject(BUCKET_NAME, "types/999999999", "test", s3);
+		mockS3Adapter.putTestObject(BUCKET_NAME, "extra", "test", s3); // Not deleted, outside base path.
+		mockS3Adapter.putTestObject(BUCKET_NAME, "base/index.html", "test", s3);
+		mockS3Adapter.putTestObject(BUCKET_NAME, "base/types", "[645]", s3); // Not uploaded, content matches.
+		mockS3Adapter.putTestObject(BUCKET_NAME, "base/types/645", "test", s3);
+		mockS3Adapter.putTestObject(BUCKET_NAME, "base/types/999999999", "test", s3);
 	}
 
 	@AfterEach
@@ -83,12 +85,12 @@ public class PublishRefDataTest {
 
 		var putKeys = mockS3Adapter.getAllPutKeys(BUCKET_NAME, s3);
 		// `/types` isn't uploaded because it already matches.
-		assertEquals(Set.of("meta", "types/645"), new HashSet<>(putKeys));
+		assertEquals(Set.of("base/meta", "base/types/645"), new HashSet<>(putKeys));
 
 		assertTypes();
 
 		var deleteKeys = mockS3Adapter.getAllDeleteKeys(BUCKET_NAME, s3);
-		assertEquals(List.of("types/999999999"), deleteKeys);
+		assertEquals(List.of("base/types/999999999"), deleteKeys);
 	}
 
 	@SneakyThrows
@@ -97,7 +99,7 @@ public class PublishRefDataTest {
 
 		var expectedIndex = objectMapper.createArrayNode().add(645);
 		var actualIndex = objectMapper.readTree(
-				mockS3Adapter.getTestObject(BUCKET_NAME, "types", s3).orElseThrow());
+				mockS3Adapter.getTestObject(BUCKET_NAME, "base/types", s3).orElseThrow());
 		assertEquals(expectedIndex.toString(), actualIndex.toString());
 	}
 
@@ -105,7 +107,7 @@ public class PublishRefDataTest {
 	private void assertType(long id) {
 		var expected = testDataUtil.loadJsonResource("/refdata/refdata/type-" + id + ".json");
 		var actual = objectMapper.readTree(
-				mockS3Adapter.getTestObject(BUCKET_NAME, "types/" + id, s3).orElseThrow());
+				mockS3Adapter.getTestObject(BUCKET_NAME, "base/types/" + id, s3).orElseThrow());
 		assertEquals(expected, actual);
 	}
 }

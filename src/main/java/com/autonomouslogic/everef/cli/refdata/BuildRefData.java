@@ -104,14 +104,7 @@ public class BuildRefData implements Command {
 
 	@Inject
 	protected void init() {
-		var dataPathUrl = urlParser.parse(Configs.DATA_PATH.getRequired());
-		if (!dataPathUrl.getProtocol().equals("s3")) {
-			throw new IllegalArgumentException("Data path must be an S3 path");
-		}
-		dataUrl = (S3Url) dataPathUrl;
-		if (!dataUrl.getPath().equals("")) {
-			throw new IllegalArgumentException("Data index must be run at the root of the bucket");
-		}
+		dataUrl = (S3Url) urlParser.parse(Configs.DATA_PATH.getRequired());
 		dataBaseUrl = Configs.DATA_BASE_URL.getRequired();
 	}
 
@@ -246,14 +239,8 @@ public class BuildRefData implements Command {
 	 */
 	private Completable uploadFiles(File outputFile) {
 		return Completable.defer(() -> {
-			var latestPath = S3Url.builder()
-					.bucket(dataUrl.getBucket())
-					.path(dataUrl.getPath() + REFERENCE_DATA.createLatestPath())
-					.build();
-			var archivePath = S3Url.builder()
-					.bucket(dataUrl.getBucket())
-					.path(dataUrl.getPath() + REFERENCE_DATA.createArchivePath(buildTime))
-					.build();
+			var latestPath = dataUrl.resolve(REFERENCE_DATA.createLatestPath());
+			var archivePath = dataUrl.resolve(REFERENCE_DATA.createArchivePath(buildTime));
 			var latestPut = s3Util.putPublicObjectRequest(
 					outputFile.length(), latestPath, "application/x-bzip2", latestCacheTime);
 			var archivePut = s3Util.putPublicObjectRequest(
