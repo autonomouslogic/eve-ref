@@ -7,12 +7,15 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.util.zip.GZIPInputStream;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.compress.archivers.ArchiveEntry;
 import org.apache.commons.compress.archivers.ArchiveInputStream;
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
 import org.apache.commons.compress.archivers.zip.ZipArchiveInputStream;
+import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream;
 import org.apache.commons.compress.compressors.bzip2.BZip2CompressorOutputStream;
 import org.apache.commons.compress.compressors.xz.XZCompressorInputStream;
 import org.apache.commons.compress.compressors.xz.XZCompressorOutputStream;
@@ -73,5 +76,20 @@ public class CompressUtil {
 						},
 						stream -> stream.close())
 				.compose(Rx.offloadFlowable());
+	}
+
+	@SneakyThrows
+	public static InputStream uncompress(File file) {
+		var in = new BufferedInputStream(new FileInputStream(file));
+		var name = file.getName();
+		if (name.endsWith(".gz")) {
+			log.trace("Opening gzip file: {}", file.getPath());
+			return new GZIPInputStream(in);
+		}
+		if (name.endsWith(".bz2")) {
+			log.trace("Opening bz2 file: {}", file.getPath());
+			return new BZip2CompressorInputStream(in);
+		}
+		throw new IllegalArgumentException("Unknown file type: " + name);
 	}
 }

@@ -43,6 +43,7 @@ dependencies {
 	implementation "com.fasterxml.jackson.core:jackson-core:2.15.0"
 	implementation "com.fasterxml.jackson.core:jackson-databind:2.15.0"
 	implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.15.0"
+	implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-csv:2.15.0"
 	implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.0"
 	implementation "com.fasterxml.jackson.module:jackson-module-kotlin:2.15.0"
 	implementation "org.apache.commons:commons-pool2:2.11.1"
@@ -178,6 +179,14 @@ task buildRefData(type: JavaExec) {
 task publishRefData(type: JavaExec) {
 	group "application"
 	args "publish-ref-data"
+	environment envProperties
+	classpath = sourceSets.main.runtimeClasspath
+	mainClass = mainClassName
+}
+
+task scrapeMarketHistory(type: JavaExec) {
+	group "application"
+	args "scrape-market-history"
 	environment envProperties
 	classpath = sourceSets.main.runtimeClasspath
 	mainClass = mainClassName

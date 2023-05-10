@@ -13,10 +13,12 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.Builder;
 import lombok.NonNull;
+import lombok.Value;
 
 /**
  * Builds URLs for archived data.
  */
+@Value
 @Builder
 public class ArchivePathFactory {
 	public static final DateTimeFormatter YEAR_PATTERN = DateTimeFormatter.ofPattern("yyyy");
@@ -119,6 +121,9 @@ public class ArchivePathFactory {
 	}
 
 	public Instant parseArchiveTime(String path) {
+		if (path.startsWith("/")) {
+			path = path.substring(1);
+		}
 		try {
 			var parsed = createFormatter().parse(path);
 			if (parsed.isSupported(ChronoField.HOUR_OF_DAY)) {

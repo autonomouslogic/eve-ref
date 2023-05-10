@@ -2,6 +2,7 @@ package com.autonomouslogic.everef.cli;
 
 import com.autonomouslogic.everef.cli.decorator.HealthcheckDecorator;
 import com.autonomouslogic.everef.cli.decorator.SlackDecorator;
+import com.autonomouslogic.everef.cli.markethistory.ScrapeMarketHistory;
 import com.autonomouslogic.everef.cli.marketorders.ScrapeMarketOrders;
 import com.autonomouslogic.everef.cli.publiccontracts.ScrapePublicContracts;
 import com.autonomouslogic.everef.cli.refdata.BuildRefData;
@@ -34,6 +35,9 @@ public class CommandRunner {
 
 	@Inject
 	protected Provider<PublishRefData> publishRefDataProvider;
+
+	@Inject
+	protected Provider<ScrapeMarketHistory> scrapeMarketHistoryProvider;
 
 	@Inject
 	protected HealthcheckDecorator healthcheckDecorator;
@@ -82,6 +86,8 @@ public class CommandRunner {
 				return buildRefDataProvider.get();
 			case "publish-ref-data":
 				return publishRefDataProvider.get();
+			case "scrape-market-history":
+				return scrapeMarketHistoryProvider.get();
 			default:
 				throw new IllegalArgumentException("Unknown command: " + name);
 		}

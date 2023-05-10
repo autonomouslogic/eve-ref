@@ -77,6 +77,7 @@ public class ArchivePathFactoryTest {
 		assertEquals(expectedTimePath, factory.createArchivePath(timestamp));
 
 		assertEquals(timestamp, factory.parseArchiveTime(expectedTimePath));
+		assertEquals(timestamp, factory.parseArchiveTime("/" + expectedTimePath));
 		assertNull(factory.parseArchiveTime(expectedLatestPath));
 	}
 
