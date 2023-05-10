@@ -9,12 +9,14 @@ public class UrlParser {
 	@Inject
 	protected UrlParser() {}
 
-	public DataUrl parse(String url) {
+	public DataUrl<?> parse(String url) {
 		return parse(URI.create(url));
 	}
 
-	public DataUrl parse(URI url) {
+	public DataUrl<?> parse(URI url) {
 		switch (url.getScheme()) {
+			case "file":
+				return FileUrl.parse(url);
 			case "http":
 			case "https":
 				return HttpUrl.parse(url);

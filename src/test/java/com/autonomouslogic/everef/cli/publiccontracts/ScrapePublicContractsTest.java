@@ -75,7 +75,7 @@ import software.amazon.awssdk.services.s3.S3AsyncClient;
  */
 @ExtendWith(MockitoExtension.class)
 @Log4j2
-@SetEnvironmentVariable(key = "DATA_PATH", value = "s3://" + ScrapePublicContractsTest.BUCKET_NAME + "/")
+@SetEnvironmentVariable(key = "DATA_PATH", value = "s3://" + ScrapePublicContractsTest.BUCKET_NAME + "/base/")
 @SetEnvironmentVariable(key = "DATA_BASE_URL", value = "http://localhost:" + TestDataUtil.TEST_PORT)
 @SetEnvironmentVariable(key = "ESI_USER_AGENT", value = "user-agent")
 @SetEnvironmentVariable(key = "ESI_BASE_URL", value = "http://localhost:" + TestDataUtil.TEST_PORT)
@@ -138,8 +138,9 @@ public class ScrapePublicContractsTest {
 				.blockingAwait();
 
 		// Get saved file.
-		var archiveFile = "public-contracts/history/2020/2020-02-03/public-contracts-2020-02-03_04-05-06.v2.tar.bz2";
-		var latestFile = "public-contracts/public-contracts-latest.v2.tar.bz2";
+		var archiveFile =
+				"base/public-contracts/history/2020/2020-02-03/public-contracts-2020-02-03_04-05-06.v2.tar.bz2";
+		var latestFile = "base/public-contracts/public-contracts-latest.v2.tar.bz2";
 		var content = mockS3Adapter
 				.getTestObject(BUCKET_NAME, archiveFile, dataClient)
 				.orElseThrow();

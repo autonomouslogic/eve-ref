@@ -71,14 +71,7 @@ public class ScrapeMarketOrders implements Command {
 
 	@Inject
 	protected void init() {
-		var dataPathUrl = urlParser.parse(Configs.DATA_PATH.getRequired());
-		if (!dataPathUrl.getProtocol().equals("s3")) {
-			throw new IllegalArgumentException("Data path must be an S3 path");
-		}
-		dataUrl = (S3Url) dataPathUrl;
-		if (!dataUrl.getPath().equals("")) {
-			throw new IllegalArgumentException("Data index must be run at the root of the bucket");
-		}
+		dataUrl = (S3Url) urlParser.parse(Configs.DATA_PATH.getRequired());
 	}
 
 	@SneakyThrows
@@ -134,14 +127,8 @@ public class ScrapeMarketOrders implements Command {
 	private Completable uploadFile(File outputFile) {
 		return Completable.defer(() -> {
 			log.debug(String.format("Uploading completed file from %s", outputFile));
-			var latestPath = S3Url.builder()
-					.bucket(dataUrl.getBucket())
-					.path(dataUrl.getPath() + MARKET_ORDERS.createLatestPath())
-					.build();
-			var archivePath = S3Url.builder()
-					.bucket(dataUrl.getBucket())
-					.path(dataUrl.getPath() + MARKET_ORDERS.createArchivePath(scrapeTime))
-					.build();
+			var latestPath = dataUrl.resolve(MARKET_ORDERS.createLatestPath());
+			var archivePath = dataUrl.resolve(MARKET_ORDERS.createArchivePath(scrapeTime));
 			var latestPut = s3Util.putPublicObjectRequest(
 					outputFile.length(), latestPath, "application/x-bzip2", latestCacheTime);
 			var archivePut = s3Util.putPublicObjectRequest(

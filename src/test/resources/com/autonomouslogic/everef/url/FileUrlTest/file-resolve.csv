@@ -1,0 +1,3 @@
+file:///path/,path,file:///path/path
+file:///path/dir,to/somewhere,file:///path/to/somewhere
+file:///path/dir/,to/somewhere,file:///path/dir/to/somewhere

@@ -21,6 +21,15 @@ public class UrlParserTest {
 	}
 
 	@Test
+	void shouldParseFileUrls() {
+		var url = urlParser.parse("file:///path/to/some/file");
+		assertSame(FileUrl.class, url.getClass());
+		var fileUrl = (FileUrl) url;
+		assertEquals("/path/to/some/file", fileUrl.getPath());
+		assertEquals(URI.create("file:///path/to/some/file"), fileUrl.toUri());
+	}
+
+	@Test
 	void shouldParseS3Urls() {
 		var url = urlParser.parse("s3://bucket/key");
 		assertSame(S3Url.class, url.getClass());

@@ -3,6 +3,7 @@ package com.autonomouslogic.everef.cli;
 import static com.autonomouslogic.everef.util.ArchivePathFactory.REFERENCE_DATA;
 
 import com.autonomouslogic.everef.config.Configs;
+import com.autonomouslogic.everef.s3.ListedS3Object;
 import com.autonomouslogic.everef.s3.S3Adapter;
 import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.url.UrlParser;
@@ -28,7 +29,6 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import javax.inject.Inject;
 import javax.inject.Named;
-import lombok.Builder;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.ToString;
@@ -38,10 +38,7 @@ import okhttp3.OkHttpClient;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang3.StringUtils;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
-import software.amazon.awssdk.services.s3.model.ListObjectsV2Request;
-import software.amazon.awssdk.services.s3.model.S3Object;
 
 /**
  * Publishes the reference data.
@@ -86,14 +83,7 @@ public class PublishRefData implements Command {
 
 	@Inject
 	protected void init() {
-		var refDataPathUrl = urlParser.parse(Configs.REFERENCE_DATA_PATH.getRequired());
-		if (!refDataPathUrl.getProtocol().equals("s3")) {
-			throw new IllegalArgumentException("Reference data path must be an S3 path");
-		}
-		refDataUrl = (S3Url) refDataPathUrl;
-		if (!refDataUrl.getPath().equals("")) {
-			throw new IllegalArgumentException("Reference data path must be run at the root of the bucket");
-		}
+		refDataUrl = (S3Url) urlParser.parse(Configs.REFERENCE_DATA_PATH.getRequired());
 	}
 
 	@SneakyThrows
@@ -112,25 +102,18 @@ public class PublishRefData implements Command {
 		});
 	}
 
-	private Single<Map<String, ObjectListing>> listBucketContents() {
+	private Single<Map<String, ListedS3Object>> listBucketContents() {
 		return Flowable.defer(() -> {
 					log.info("Listing existing contents");
-					ListObjectsV2Request request = ListObjectsV2Request.builder()
-							.bucket(refDataUrl.getBucket())
-							.prefix(refDataUrl.getPath())
-							.build();
 					return s3Adapter
-							.listObjects(request, s3Client)
-							.flatMap(response -> Flowable.fromIterable(response.contents()))
-							.filter(obj -> !(obj.key().endsWith("index.html")))
-							.filter(obj -> obj.size() != null
-									&& obj.size() > 0) // S3 doesn't list directories, but Backblaze does.
-							.map(obj -> createObjectListing(obj));
+							.listObjects(refDataUrl, s3Client)
+							.filter(obj -> !(obj.getUrl().getPath().endsWith("index.html")));
 				})
 				.toList()
 				.map(objects -> {
 					log.info("Listed {} objects", objects.size());
-					return objects.stream().collect(Collectors.toMap(ObjectListing::getPath, Function.identity()));
+					return objects.stream()
+							.collect(Collectors.toMap(o -> o.getUrl().getPath(), Function.identity()));
 				});
 	}
 
@@ -147,7 +130,7 @@ public class PublishRefData implements Command {
 		});
 	}
 
-	private Flowable<ReferenceEntry> parseFile(File file) {
+	private Flowable<ReferenceEntry> parseFile(@NonNull File file) {
 		return CompressUtil.loadArchive(file).flatMap(pair -> {
 			var filename = pair.getKey().getName();
 			var type = FilenameUtils.getBaseName(filename);
@@ -178,7 +161,7 @@ public class PublishRefData implements Command {
 		});
 	}
 
-	private Completable uploadFile(ReferenceEntry entry) {
+	private Completable uploadFile(@NonNull ReferenceEntry entry) {
 		return Completable.defer(() -> {
 			log.trace("Uploading {} - {} bytes", entry, entry.getContent().length);
 			var latestPath = S3Url.builder()
@@ -205,6 +188,7 @@ public class PublishRefData implements Command {
 	@Value
 	private static class ReferenceEntry {
 		String type;
+
 		Long id;
 
 		@NonNull
@@ -225,37 +209,26 @@ public class PublishRefData implements Command {
 		return subPath(type + "/" + id);
 	}
 
-	private String subPath(String type) {
+	private String subPath(@NonNull String type) {
 		return refDataUrl.getPath() + type;
 	}
 
-	private ReferenceEntry createEntry(String type, Long id, byte[] content) {
+	private ReferenceEntry createEntry(@NonNull String type, @NonNull Long id, @NonNull byte[] content) {
 		var md5 = HashUtil.md5(content);
 		return new ReferenceEntry(
 				type, id, subPath(type, id), content, Base64.encodeBase64String(md5), Hex.encodeHexString(md5));
 	}
 
-	private ReferenceEntry createEntry(String type, byte[] content) {
+	private ReferenceEntry createEntry(@NonNull String type, @NonNull byte[] content) {
 		var md5 = HashUtil.md5(content);
 		return new ReferenceEntry(
 				type, null, subPath(type), content, Base64.encodeBase64String(md5), Hex.encodeHexString(md5));
 	}
 
-	private ObjectListing createObjectListing(S3Object obj) {
-		return ObjectListing.builder()
-				.path(obj.key())
-				.md5Hex(StringUtils.remove(obj.eTag(), '"'))
-				.build();
-	}
-
-	@Value
-	@Builder
-	public static class ObjectListing {
-		String path;
-		String md5Hex;
-	}
-
-	private boolean filterExisting(AtomicInteger skipped, Map<String, ObjectListing> existing, ReferenceEntry entry) {
+	private boolean filterExisting(
+			@NonNull AtomicInteger skipped,
+			@NonNull Map<String, ListedS3Object> existing,
+			@NonNull ReferenceEntry entry) {
 		var existingHash =
 				Optional.ofNullable(existing.get(entry.getPath())).flatMap(e -> Optional.ofNullable(e.getMd5Hex()));
 		existing.remove(entry.getPath());
@@ -266,7 +239,7 @@ public class PublishRefData implements Command {
 		return true;
 	}
 
-	public Completable deleteRemaining(List<String> remaining) {
+	public Completable deleteRemaining(@NonNull List<String> remaining) {
 		return Completable.defer(() -> {
 					log.info("Deleting {} entries", remaining.size());
 					return Flowable.fromIterable(remaining)

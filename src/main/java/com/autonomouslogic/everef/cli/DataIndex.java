@@ -2,6 +2,7 @@ package com.autonomouslogic.everef.cli;
 
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.pug.PugHelper;
+import com.autonomouslogic.everef.s3.ListedS3Object;
 import com.autonomouslogic.everef.s3.S3Adapter;
 import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.url.UrlParser;
@@ -12,7 +13,6 @@ import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Single;
 import java.io.File;
 import java.time.Duration;
-import java.time.Instant;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -23,16 +23,14 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.inject.Provider;
 import lombok.Builder;
+import lombok.NonNull;
 import lombok.Singular;
 import lombok.Value;
 import lombok.extern.log4j.Log4j2;
 import org.jetbrains.annotations.NotNull;
 import software.amazon.awssdk.core.async.AsyncRequestBody;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
-import software.amazon.awssdk.services.s3.model.ListObjectsV2Request;
-import software.amazon.awssdk.services.s3.model.S3Object;
 
 /**
  * Builds index pages for <code>data.everef.net</code>.
@@ -45,9 +43,6 @@ public class DataIndex implements Command {
 
 	@Inject
 	protected S3Util s3Util;
-
-	@Inject
-	protected Provider<DataIndex> dataIndexProvider;
 
 	@Inject
 	protected PugHelper pugHelper;
@@ -83,7 +78,7 @@ public class DataIndex implements Command {
 		});
 	}
 
-	private Completable createAndUploadIndexPages(Map<String, Listing.Builder> dirs) {
+	private Completable createAndUploadIndexPages(@NonNull Map<String, Listing.Builder> dirs) {
 		return Flowable.fromIterable(dirs.entrySet())
 				.flatMapCompletable(
 						entry -> {
@@ -100,7 +95,7 @@ public class DataIndex implements Command {
 	 * Iterates over all the directories and adds them to their parent directories.
 	 * @param dirs
 	 */
-	private void resolveDirectories(Map<String, Listing.Builder> dirs) {
+	private void resolveDirectories(@NonNull Map<String, Listing.Builder> dirs) {
 		var changesMade = new AtomicBoolean();
 		do {
 			changesMade.set(false);
@@ -141,37 +136,28 @@ public class DataIndex implements Command {
 					if (!dataUrl.getPath().equals("")) {
 						throw new RuntimeException("Data index must be run at the root of the bucket");
 					}
-					ListObjectsV2Request request = ListObjectsV2Request.builder()
-							.bucket(dataUrl.getBucket())
-							.prefix(dataUrl.getPath())
-							.build();
 					return s3Adapter
-							.listObjects(request, s3)
-							.flatMap(response -> Flowable.fromIterable(response.contents()))
-							.filter(obj -> !(obj.key().endsWith("index.html")))
-							.filter(obj -> obj.size() != null
-									&& obj.size() > 0) // S3 doesn't list directories, but Backblaze does.
+							.listObjects(dataUrl, s3)
+							.filter(obj -> !(obj.getUrl().getPath().endsWith("index.html")))
 							.map(obj -> createObjectListing(obj));
 				})
 				.doOnComplete(() -> log.info("Listing complete"));
 	}
 
-	private ObjectListing createObjectListing(S3Object obj) {
-		String prefix = obj.key();
-		String dir = new File("/" + prefix).getParent().substring(1);
-		String basename = new File(prefix).getName();
-		long size = obj.size();
-		Instant lastModified = Instant.ofEpochMilli(obj.lastModified().toEpochMilli());
+	private ObjectListing createObjectListing(@NonNull ListedS3Object listedObject) {
+		var obj = listedObject.getS3Object();
+		String key = obj.key();
+		String dir = new File("/" + key).getParent().substring(1);
+		String basename = new File(key).getName();
 		return ObjectListing.builder()
-				.prefix(prefix)
+				.listedObject(listedObject)
 				.basename(basename)
 				.dir(dir)
-				.size(size)
-				.lastModified(lastModified)
+				.prefix(key)
 				.build();
 	}
 
-	private Completable createIndexPage(Listing listing) {
+	private Completable createIndexPage(@NonNull Listing listing) {
 		return Completable.defer(() -> {
 			var sortedCommons = listing.getCommon().stream()
 					.sorted(Ordering.natural().onResultOf(CommonListing::getBasename))
@@ -199,7 +185,7 @@ public class DataIndex implements Command {
 		});
 	}
 
-	private byte[] renderIndexPage(Listing listing) {
+	private byte[] renderIndexPage(@NonNull Listing listing) {
 		var directoryParts = splitDirectoryPath(listing.getPrefix());
 		// Prepare model.
 		Map<String, Object> model = new HashMap<>();
@@ -210,7 +196,9 @@ public class DataIndex implements Command {
 		model.put("directoryParts", directoryParts);
 		model.put(
 				"totalSize",
-				listing.objects.stream().mapToLong(o -> o.getSize()).sum());
+				listing.objects.stream()
+						.mapToLong(o -> o.getListedObject().getSize())
+						.sum());
 		// Render template.
 		byte[] rendered = pugHelper.renderTemplate("data/index.pug", model);
 
@@ -232,21 +220,30 @@ public class DataIndex implements Command {
 	@Value
 	@Builder
 	public static class CommonListing {
+		@NonNull
 		String prefix;
+
+		@NonNull
 		String basename;
 	}
 
 	@Value
 	@Builder
 	public static class ObjectListing {
-		String prefix;
+		@NonNull
+		ListedS3Object listedObject;
+
+		@NonNull
 		String basename;
+
+		@NonNull
 		String dir;
-		long size;
-		Instant lastModified;
+
+		@NonNull
+		String prefix;
 	}
 
-	private Map<String, String> splitDirectoryPath(String path) {
+	private Map<String, String> splitDirectoryPath(@NonNull String path) {
 		Map<String, String> paths = new LinkedHashMap<>();
 		String[] parts = path.split("\\/");
 		for (int i = 0; i < parts.length; i++) {

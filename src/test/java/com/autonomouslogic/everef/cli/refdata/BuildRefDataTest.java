@@ -42,7 +42,7 @@ import software.amazon.awssdk.services.s3.S3AsyncClient;
 
 @ExtendWith(MockitoExtension.class)
 @Log4j2
-@SetEnvironmentVariable(key = "DATA_PATH", value = "s3://" + BuildRefDataTest.BUCKET_NAME + "/")
+@SetEnvironmentVariable(key = "DATA_PATH", value = "s3://" + BuildRefDataTest.BUCKET_NAME + "/base/")
 @SetEnvironmentVariable(key = "DATA_BASE_URL", value = "http://localhost:" + TEST_PORT)
 public class BuildRefDataTest {
 	static final String BUCKET_NAME = "data-bucket";
@@ -105,8 +105,8 @@ public class BuildRefDataTest {
 				.blockingAwait();
 
 		// Get saved file.
-		var archiveFile = "reference-data/history/2022/reference-data-2022-01-05.tar.xz";
-		var latestFile = "reference-data/reference-data-latest.tar.xz";
+		var archiveFile = "base/reference-data/history/2022/reference-data-2022-01-05.tar.xz";
+		var latestFile = "base/reference-data/reference-data-latest.tar.xz";
 		var content = mockS3Adapter
 				.getTestObject(BUCKET_NAME, archiveFile, dataClient)
 				.orElseThrow();
