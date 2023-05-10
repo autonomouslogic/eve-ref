@@ -1,6 +1,7 @@
 package com.autonomouslogic.everef.util;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -12,7 +13,7 @@ public class ArchivePathFactoryTest {
 		var factory = ArchivePathFactory.REFERENCE_DATA;
 		testExpectedPaths(
 				factory,
-				Instant.parse("2022-01-05T04:45:02Z"),
+				Instant.parse("2022-01-05T00:00:00Z"),
 				"reference-data/history/2022/reference-data-2022-01-05.tar.xz",
 				"reference-data/reference-data-latest.tar.xz");
 	}
@@ -74,6 +75,9 @@ public class ArchivePathFactoryTest {
 			ArchivePathFactory factory, Instant timestamp, String expectedTimePath, String expectedLatestPath) {
 		assertEquals(expectedLatestPath, factory.createLatestPath());
 		assertEquals(expectedTimePath, factory.createArchivePath(timestamp));
+
+		assertEquals(timestamp, factory.parseArchiveTime(expectedTimePath));
+		assertNull(factory.parseArchiveTime(expectedLatestPath));
 	}
 
 	private static void testExpectedPaths(ArchivePathFactory factory, LocalDate datestamp, String expectedTimePath) {
