@@ -102,7 +102,11 @@ public class MarketHistoryLoader {
 		return Flowable.defer(() -> {
 					log.trace("Reading market history file: {}", file);
 					var in = CompressUtil.uncompress(file);
-					var schema = csvMapper.schemaFor(MarketHistoryEntry.class).withHeader();
+					var schema = csvMapper
+							.schemaFor(MarketHistoryEntry.class)
+							.withHeader()
+							.withStrictHeaders(true)
+							.withColumnReordering(true);
 					MappingIterator<MarketHistoryEntry> iterator = csvMapper
 							.readerFor(MarketHistoryEntry.class)
 							.with(schema)
