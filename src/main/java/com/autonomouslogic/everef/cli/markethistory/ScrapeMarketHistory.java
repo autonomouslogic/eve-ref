@@ -2,18 +2,17 @@ package com.autonomouslogic.everef.cli.markethistory;
 
 import com.autonomouslogic.everef.cli.Command;
 import com.autonomouslogic.everef.config.Configs;
-import com.autonomouslogic.everef.http.DataCrawler;
 import com.autonomouslogic.everef.mvstore.JsonNodeDataType;
 import com.autonomouslogic.everef.mvstore.MVStoreUtil;
 import com.autonomouslogic.everef.s3.S3Adapter;
 import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.url.UrlParser;
-import com.autonomouslogic.everef.util.ArchivePathFactory;
 import com.autonomouslogic.everef.util.S3Util;
 import com.fasterxml.jackson.databind.JsonNode;
 import io.reactivex.rxjava3.core.Completable;
-import io.reactivex.rxjava3.core.Flowable;
 import java.time.Duration;
+import java.time.LocalDate;
+import java.time.ZoneOffset;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
@@ -49,10 +48,7 @@ public class ScrapeMarketHistory implements Command {
 	protected UrlParser urlParser;
 
 	@Inject
-	protected Provider<DataCrawler> dataCrawlerProvider;
-
-	@Inject
-	protected MarketHistoryLoader marketHistoryLoader;
+	protected Provider<MarketHistoryLoader> marketHistoryLoaderProvider;
 
 	private S3Url dataUrl;
 	private MVStore mvStore;
@@ -72,11 +68,7 @@ public class ScrapeMarketHistory implements Command {
 	@SneakyThrows
 	@Override
 	public Completable run() {
-		return Completable.concatArray(
-						initMvStore(), resolveRegionTypePair().toList().flatMapCompletable(pairs -> {
-							return Completable.complete();
-						}))
-				.doFinally(this::closeMvStore);
+		return Completable.concatArray(initMvStore(), loadMarketHistory()).doFinally(this::closeMvStore);
 	}
 
 	private Completable initMvStore() {
@@ -94,22 +86,34 @@ public class ScrapeMarketHistory implements Command {
 		}
 	}
 
-	private Flowable<RegionTypePair> resolveRegionTypePair() {
-		return Flowable.defer(() -> {
-			return dataCrawlerProvider
+	private Completable loadMarketHistory() {
+		return Completable.defer(() -> {
+			return marketHistoryLoaderProvider
 					.get()
-					.setPrefix("/" + ArchivePathFactory.MARKET_HISTORY.getFolder() + "/")
-					.crawl()
-					.flatMap(url -> {
-						var time = ArchivePathFactory.MARKET_HISTORY.parseArchiveTime(url.getPath());
-						if (time == null) {
-							return Flowable.empty();
-						}
-						log.info(time);
-						return Flowable.empty();
-					});
+					.setMinDate(LocalDate.now(ZoneOffset.UTC).minusDays(365))
+					.load()
+					.take(10)
+					.doOnNext(p -> log.info(p))
+					.ignoreElements();
 		});
 	}
+
+	//	private Flowable<RegionTypePair> resolveRegionTypePair() {
+	//		return Flowable.defer(() -> {
+	//			return dataCrawlerProvider
+	//					.get()
+	//					.setPrefix("/" + ArchivePathFactory.MARKET_HISTORY.getFolder() + "/")
+	//					.crawl()
+	//					.flatMap(url -> {
+	//						var time = ArchivePathFactory.MARKET_HISTORY.parseArchiveTime(url.getPath());
+	//						if (time == null) {
+	//							return Flowable.empty();
+	//						}
+	//						log.info(time);
+	//						return Flowable.empty();
+	//					});
+	//		});
+	//	}
 
 	@Value
 	private static class RegionTypePair {
