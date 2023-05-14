@@ -23,9 +23,12 @@ import lombok.extern.log4j.Log4j2;
 import okhttp3.OkHttpClient;
 import org.apache.commons.lang3.tuple.Pair;
 
+/**
+ * Loads market history from the data site.
+ */
 @Log4j2
-public class MarketHistoryLoader {
-	private static final int DOWNLOAD_CONCURRENCY = 1;
+class MarketHistoryLoader {
+	private static final int DOWNLOAD_CONCURRENCY = 32;
 
 	@Inject
 	protected DataCrawler dataCrawler;

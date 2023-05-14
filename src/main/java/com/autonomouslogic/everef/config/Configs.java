@@ -219,6 +219,33 @@ public class Configs {
 			.build();
 
 	/**
+	 * Concurrency for the market history scrape.
+	 */
+	public static final Config<Integer> ESI_MARKET_HISTORY_CONCURRENCY = Config.<Integer>builder()
+			.name("ESI_MARKET_HISTORY_CONCURRENCY")
+			.type(Integer.class)
+			.defaultValue(4)
+			.build();
+
+	/**
+	 * The amount of time to wait for once the special rate limit for market history has been exceeded.
+	 */
+	public static final Config<Duration> ESI_MARKET_HISTORY_RATE_LIMIT_WAIT_TIME = Config.<Duration>builder()
+			.name("ESI_MARKET_HISTORY_RATE_LIMIT_WAIT_TIME")
+			.type(Duration.class)
+			.defaultValue(Duration.ofMinutes(1).plusSeconds(10))
+			.build();
+
+	/**
+	 * The number of times to tre once the special rate limit for market history has been exceeded.
+	 */
+	public static final Config<Integer> ESI_MARKET_HISTORY_RATE_LIMIT_TRIES = Config.<Integer>builder()
+			.name("ESI_MARKET_HISTORY_RATE_LIMIT_TRIES")
+			.type(Integer.class)
+			.defaultValue(3)
+			.build();
+
+	/**
 	 * User agent string to provide to the ESI.
 	 */
 	public static final Config<String> ESI_USER_AGENT =

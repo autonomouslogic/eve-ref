@@ -1,8 +1,8 @@
 package com.autonomouslogic.everef.test;
 
-import com.autonomouslogic.everef.esi.EsiLimitExceededInterceptor;
-import com.autonomouslogic.everef.esi.EsiRateLimitInterceptor;
-import com.autonomouslogic.everef.esi.EsiUserAgentInterceptor;
+import com.autonomouslogic.everef.http.EsiLimitExceededInterceptor;
+import com.autonomouslogic.everef.http.EsiRateLimitInterceptor;
+import com.autonomouslogic.everef.http.EsiUserAgentInterceptor;
 import com.autonomouslogic.everef.http.LoggingInterceptor;
 import com.autonomouslogic.everef.http.UserAgentInterceptor;
 import com.autonomouslogic.everef.inject.OkHttpModule;

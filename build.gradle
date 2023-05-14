@@ -188,6 +188,7 @@ task scrapeMarketHistory(type: JavaExec) {
 	group "application"
 	args "scrape-market-history"
 	environment envProperties
+	environment "ESI_RATE_LIMIT_PER_S", "5"
 	classpath = sourceSets.main.runtimeClasspath
 	mainClass = mainClassName
 }

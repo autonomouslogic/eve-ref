@@ -4,22 +4,25 @@ import com.autonomouslogic.everef.cli.Command;
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.mvstore.JsonNodeDataType;
 import com.autonomouslogic.everef.mvstore.MVStoreUtil;
+import com.autonomouslogic.everef.mvstore.StoreMapSet;
 import com.autonomouslogic.everef.s3.S3Adapter;
 import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.url.UrlParser;
 import com.autonomouslogic.everef.util.S3Util;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.Flowable;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
+import java.util.Map;
+import java.util.TreeMap;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
 import lombok.SneakyThrows;
-import lombok.Value;
 import lombok.extern.log4j.Log4j2;
-import org.h2.mvstore.MVMap;
 import org.h2.mvstore.MVStore;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 
@@ -42,20 +45,40 @@ public class ScrapeMarketHistory implements Command {
 	protected JsonNodeDataType jsonNodeDataType;
 
 	@Inject
+	protected Provider<StoreMapSet> storeMapSetProvider;
+
+	@Inject
 	protected MVStoreUtil mvStoreUtil;
 
 	@Inject
 	protected UrlParser urlParser;
 
 	@Inject
+	protected ObjectMapper objectMapper;
+
+	@Inject
+	protected MarketHistoryFetcher marketHistoryFetcher;
+
+	@Inject
 	protected Provider<MarketHistoryLoader> marketHistoryLoaderProvider;
 
+	@Inject
+	protected Provider<CompoundRegionTypeSource> compoundRegionTypeSourceProvider;
+
+	@Inject
+	protected Provider<HistoryRegionTypeSource> historyRegionTypeSourceProvider;
+
+	//	private LocalDate minDate = LocalDate.now(ZoneOffset.UTC).minusDays(402);
+	private LocalDate minDate = LocalDate.now(ZoneOffset.UTC).minusDays(197);
 	private S3Url dataUrl;
 	private MVStore mvStore;
-	private MVMap<Long, JsonNode> marketOrdersStore;
+	private StoreMapSet mapSet;
+	private Map<LocalDate, Integer> historyEntries;
+	private CompoundRegionTypeSource regionTypeSource;
 
 	private final Duration latestCacheTime = Configs.DATA_LATEST_CACHE_CONTROL_MAX_AGE.getRequired();
 	private final Duration archiveCacheTime = Configs.DATA_ARCHIVE_CACHE_CONTROL_MAX_AGE.getRequired();
+	private final int esiConcurrency = Configs.ESI_MARKET_HISTORY_CONCURRENCY.getRequired();
 
 	@Inject
 	protected ScrapeMarketHistory() {}
@@ -68,13 +91,36 @@ public class ScrapeMarketHistory implements Command {
 	@SneakyThrows
 	@Override
 	public Completable run() {
-		return Completable.concatArray(initMvStore(), loadMarketHistory()).doFinally(this::closeMvStore);
+		return Completable.concatArray(
+						initSources(),
+						initMvStore(),
+						loadMarketHistory(),
+						loadPairs()
+								.flatMapCompletable(
+										pair -> fetchMarketHistory(pair)
+												.flatMapCompletable(entry -> saveMarketHistory(entry)),
+										false,
+										esiConcurrency))
+				.doFinally(this::closeMvStore);
+	}
+
+	private Completable initSources() {
+		return Completable.fromAction(() -> {
+			regionTypeSource = compoundRegionTypeSourceProvider.get();
+			regionTypeSource.addSource(historyRegionTypeSourceProvider.get());
+		});
 	}
 
 	private Completable initMvStore() {
 		return Completable.fromAction(() -> {
 			mvStore = mvStoreUtil.createTempStore("market-history");
-			marketOrdersStore = mvStoreUtil.openJsonMap(mvStore, "market-orders", Long.class);
+			mapSet = storeMapSetProvider.get().setMvStore(mvStore);
+			var date = minDate;
+			var today = LocalDate.now(ZoneOffset.UTC);
+			while (!date.isAfter(today)) {
+				mapSet.getOrCreateMap(date.toString());
+				date = date.plusDays(1);
+			}
 		});
 	}
 
@@ -90,34 +136,48 @@ public class ScrapeMarketHistory implements Command {
 		return Completable.defer(() -> {
 			return marketHistoryLoaderProvider
 					.get()
-					.setMinDate(LocalDate.now(ZoneOffset.UTC).minusDays(365))
+					.setMinDate(minDate)
 					.load()
-					.take(10)
-					.doOnNext(p -> log.info(p))
-					.ignoreElements();
+					.doOnNext(p -> {
+						var entry = p.getRight();
+						var id = RegionTypePair.fromHistory(entry).toString();
+						var json = objectMapper.valueToTree(entry);
+						mapSet.put(p.getLeft().toString(), id, json);
+						regionTypeSource.addHistory(entry);
+					})
+					.ignoreElements()
+					.andThen(Completable.fromAction(() -> {
+						historyEntries = new TreeMap<>();
+						mapSet.forEachMap((date, map) -> {
+							historyEntries.put(LocalDate.parse(date), map.size());
+						});
+					}));
 		});
 	}
 
-	//	private Flowable<RegionTypePair> resolveRegionTypePair() {
-	//		return Flowable.defer(() -> {
-	//			return dataCrawlerProvider
-	//					.get()
-	//					.setPrefix("/" + ArchivePathFactory.MARKET_HISTORY.getFolder() + "/")
-	//					.crawl()
-	//					.flatMap(url -> {
-	//						var time = ArchivePathFactory.MARKET_HISTORY.parseArchiveTime(url.getPath());
-	//						if (time == null) {
-	//							return Flowable.empty();
-	//						}
-	//						log.info(time);
-	//						return Flowable.empty();
-	//					});
-	//		});
-	//	}
+	private Flowable<RegionTypePair> loadPairs() {
+		return Flowable.defer(() -> {
+			return regionTypeSource.sourcePairs().toList().flatMapPublisher(pairs -> {
+				log.info("Sourced {} pairs", pairs.size());
+				return Flowable.fromIterable(pairs);
+			});
+		});
+	}
 
-	@Value
-	private static class RegionTypePair {
-		long regionId;
-		long typeId;
+	private Flowable<JsonNode> fetchMarketHistory(RegionTypePair pair) {
+		return Flowable.defer(() -> {
+			log.trace("Fetching market history for {}", pair);
+			return marketHistoryFetcher.fetchMarketHistory(pair);
+		});
+	}
+
+	private Completable saveMarketHistory(JsonNode entry) {
+		return Completable.defer(() -> {
+			var pair = RegionTypePair.fromHistory(entry);
+			var date = LocalDate.parse(entry.get("date").asText());
+			var id = pair.toString();
+			mapSet.put(date.toString(), id, entry);
+			return Completable.complete();
+		});
 	}
 }

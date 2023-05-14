@@ -3,6 +3,7 @@ package com.autonomouslogic.everef.esi;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
+import com.autonomouslogic.everef.http.EsiLimitExceededInterceptor;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.test.TestDataUtil;
 import java.time.Duration;

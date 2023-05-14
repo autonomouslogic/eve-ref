@@ -80,15 +80,7 @@ public class EsiHelper {
 	public Flowable<JsonNode> fetchPagesOfJsonArrays(EsiUrl url, BiFunction<JsonNode, Response, JsonNode> augmenter) {
 		return fetchPages(url).flatMap(response -> {
 			var node = decode(response);
-			if (node.isMissingNode()) {
-				log.warn("Empty response from {}", url);
-				return Flowable.empty();
-			}
-			if (!node.isArray()) {
-				return Flowable.error(
-						new RuntimeException(String.format("Expected array, got %s - %s", node.getNodeType(), url)));
-			}
-			return Flowable.fromIterable(node).map(entry -> augmenter.apply(entry, response));
+			return decodeArrayNode(url, node).map(entry -> augmenter.apply(entry, response));
 		});
 	}
 
@@ -98,6 +90,18 @@ public class EsiHelper {
 			throw new RuntimeException(String.format("Cannot decode non-200 response: %s", response.code()));
 		}
 		return objectMapper.readTree(response.peekBody(Long.MAX_VALUE).byteStream());
+	}
+
+	public Flowable<JsonNode> decodeArrayNode(EsiUrl url, JsonNode node) {
+		if (node.isMissingNode()) {
+			log.warn("Empty response from {}", url);
+			return Flowable.empty();
+		}
+		if (!node.isArray()) {
+			return Flowable.error(
+					new RuntimeException(String.format("Expected array, got %s - %s", node.getNodeType(), url)));
+		}
+		return Flowable.fromIterable(node);
 	}
 
 	/**

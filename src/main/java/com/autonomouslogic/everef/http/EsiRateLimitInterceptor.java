@@ -1,4 +1,4 @@
-package com.autonomouslogic.everef.esi;
+package com.autonomouslogic.everef.http;
 
 import com.autonomouslogic.everef.config.Configs;
 import com.google.common.util.concurrent.RateLimiter;
