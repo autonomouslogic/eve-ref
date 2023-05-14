@@ -77,7 +77,10 @@ public class ScrapeMarketHistory implements Command {
 	private final int esiConcurrency = Configs.ESI_MARKET_HISTORY_CONCURRENCY.getRequired();
 
 	@Setter
-	private LocalDate minDate = LocalDate.now(ZoneOffset.UTC).minus(Configs.ESI_MARKET_HISTORY_LOOKBACK.getRequired());
+	private LocalDate today = LocalDate.now(ZoneOffset.UTC);
+
+	@Setter
+	private LocalDate minDate = today.minusDays(1).minus(Configs.ESI_MARKET_HISTORY_LOOKBACK.getRequired());
 
 	private S3Url dataUrl;
 	private MVStore mvStore;

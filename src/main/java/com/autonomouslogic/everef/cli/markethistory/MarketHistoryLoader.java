@@ -2,6 +2,7 @@ package com.autonomouslogic.everef.cli.markethistory;
 
 import static java.time.ZoneOffset.UTC;
 
+import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.http.DataCrawler;
 import com.autonomouslogic.everef.model.MarketHistoryEntry;
 import com.autonomouslogic.everef.url.DataUrl;
@@ -16,12 +17,14 @@ import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Single;
 import java.io.File;
+import java.net.URI;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import javax.inject.Inject;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 import okhttp3.OkHttpClient;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
 /**
@@ -46,6 +49,8 @@ class MarketHistoryLoader {
 	@Inject
 	protected CsvMapper csvMapper;
 
+	private final URI dataBaseUrl = Configs.DATA_BASE_URL.getRequired();
+
 	@Setter
 	private LocalDate minDate;
 
@@ -54,7 +59,7 @@ class MarketHistoryLoader {
 
 	@Inject
 	protected void init() {
-		dataCrawler.setPrefix("/" + ArchivePathFactory.MARKET_HISTORY.getFolder() + "/");
+		dataCrawler.setPrefix(ArchivePathFactory.MARKET_HISTORY.getFolder() + "/");
 	}
 
 	public Flowable<Pair<LocalDate, JsonNode>> load() {
@@ -63,24 +68,35 @@ class MarketHistoryLoader {
 		if (minDate != null) {
 			f = f.filter(p -> !p.getLeft().isBefore(minDate));
 		}
-		return f.flatMap(
-				p -> {
-					return downloadFile(p.getRight()).flatMapPublisher(file -> {
-						file.deleteOnExit();
-						return parseFile(file)
-								.map(entry -> {
-									return Pair.of(p.getLeft(), entry);
-								})
-								.doFinally(() -> file.delete());
-					});
-				},
-				false,
-				DOWNLOAD_CONCURRENCY);
+		return f.toList()
+				.flatMapPublisher(l -> {
+					return Flowable.fromIterable(l);
+				})
+				.switchIfEmpty(Flowable.error(new RuntimeException("No market history files found.")))
+				.flatMap(
+						p -> {
+							return downloadFile(p.getRight()).flatMapPublisher(file -> {
+								file.deleteOnExit();
+								return parseFile(file)
+										.map(entry -> {
+											return Pair.of(p.getLeft(), entry);
+										})
+										.doFinally(() -> file.delete());
+							});
+						},
+						false,
+						DOWNLOAD_CONCURRENCY)
+				.switchIfEmpty(Flowable.error(new RuntimeException("No market data found in history files.")));
 	}
 
 	private Flowable<Pair<LocalDate, DataUrl>> crawlFiles() {
 		return dataCrawler.crawl().flatMap(url -> {
-			var time = ArchivePathFactory.MARKET_HISTORY.parseArchiveTime(url.getPath());
+			var path = url.getPath();
+			var prefix = dataBaseUrl.getPath();
+			if (path.startsWith(prefix)) {
+				path = StringUtils.removeStart(path, prefix);
+			}
+			var time = ArchivePathFactory.MARKET_HISTORY.parseArchiveTime(path);
 			if (time == null) {
 				return Flowable.empty();
 			}

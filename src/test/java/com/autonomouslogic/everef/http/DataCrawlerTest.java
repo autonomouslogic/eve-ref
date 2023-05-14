@@ -17,7 +17,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 import org.junitpioneer.jupiter.SetEnvironmentVariable;
 
-@SetEnvironmentVariable(key = "DATA_BASE_URL", value = "http://localhost:" + TestDataUtil.TEST_PORT)
+@SetEnvironmentVariable(key = "DATA_BASE_URL", value = "http://localhost:" + TestDataUtil.TEST_PORT + "/data/")
 @Timeout(10)
 public class DataCrawlerTest {
 	@Inject
@@ -53,16 +53,15 @@ public class DataCrawlerTest {
 	@SneakyThrows
 	void shouldCrawlDataSite() {
 		var urls = dataCrawler.crawl().toList().blockingGet();
-		assertNotNull(urls);
 		assertEquals(
 				List.of(
-						urlParser.parse("http://localhost:" + TestDataUtil.TEST_PORT + "/test.zip"),
+						urlParser.parse("http://localhost:" + TestDataUtil.TEST_PORT + "/data/test.zip"),
 						urlParser.parse("http://localhost:" + TestDataUtil.TEST_PORT
-								+ "/esi-scrape/eve-ref-esi-scrape-latest.tar.xz")),
+								+ "/data/esi-scrape/eve-ref-esi-scrape-latest.tar.xz")),
 				urls);
 
-		testDataUtil.assertRequest(server.takeRequest(), "/");
-		testDataUtil.assertRequest(server.takeRequest(), "/esi-scrape/");
+		testDataUtil.assertRequest(server.takeRequest(), "/data/");
+		testDataUtil.assertRequest(server.takeRequest(), "/data/esi-scrape/");
 		testDataUtil.assertNoMoreRequests(server);
 	}
 
@@ -71,9 +70,9 @@ public class DataCrawlerTest {
 	void shouldCrawlDataSiteWithPrefix() {
 		var urls = dataCrawler.setPrefix("/test").crawl().toList().blockingGet();
 		assertNotNull(urls);
-		assertEquals(List.of(urlParser.parse("http://localhost:" + TestDataUtil.TEST_PORT + "/test.zip")), urls);
+		assertEquals(List.of(urlParser.parse("http://localhost:" + TestDataUtil.TEST_PORT + "/data/test.zip")), urls);
 
-		testDataUtil.assertRequest(server.takeRequest(), "/");
+		testDataUtil.assertRequest(server.takeRequest(), "/data/");
 		testDataUtil.assertNoMoreRequests(server);
 	}
 
@@ -87,12 +86,12 @@ public class DataCrawlerTest {
 				.blockingGet();
 		assertNotNull(urls);
 		assertEquals(
-				List.of(urlParser.parse(
-						"http://localhost:" + TestDataUtil.TEST_PORT + "/esi-scrape/eve-ref-esi-scrape-latest.tar.xz")),
+				List.of(urlParser.parse("http://localhost:" + TestDataUtil.TEST_PORT
+						+ "/data/esi-scrape/eve-ref-esi-scrape-latest.tar.xz")),
 				urls);
 
-		testDataUtil.assertRequest(server.takeRequest(), "/");
-		testDataUtil.assertRequest(server.takeRequest(), "/esi-scrape/");
+		testDataUtil.assertRequest(server.takeRequest(), "/data/");
+		testDataUtil.assertRequest(server.takeRequest(), "/data/esi-scrape/");
 		testDataUtil.assertNoMoreRequests(server);
 	}
 }
