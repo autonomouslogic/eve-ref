@@ -11,6 +11,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.extern.log4j.Log4j2;
 import okhttp3.OkHttpClient;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 
 @Log4j2
 public class MarketHistoryFetcher {
@@ -50,7 +51,11 @@ public class MarketHistoryFetcher {
 					})
 					.doOnNext(node -> ((ObjectNode) node)
 							.put("region_id", pair.getRegionId())
-							.put("type_id", pair.getTypeId()));
+							.put("type_id", pair.getTypeId()))
+					.retry(3, e -> {
+						log.warn("Retrying {} due to {}", esiUrl, ExceptionUtils.getRootCauseMessage(e));
+						return true;
+					});
 		});
 	}
 }

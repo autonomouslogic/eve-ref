@@ -159,6 +159,7 @@ public class ScrapeMarketHistory implements Command {
 
 	private Flowable<RegionTypePair> loadPairs() {
 		return Flowable.defer(() -> {
+			log.info("Sourcing pairs");
 			return regionTypeSource.sourcePairs().toList().flatMapPublisher(pairs -> {
 				log.info("Sourced {} pairs", pairs.size());
 				return Flowable.fromIterable(pairs);
