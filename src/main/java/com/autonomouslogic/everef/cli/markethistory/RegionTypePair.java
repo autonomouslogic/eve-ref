@@ -6,8 +6,8 @@ import lombok.Value;
 
 @Value
 class RegionTypePair {
-	long regionId;
-	long typeId;
+	int regionId;
+	int typeId;
 
 	public static RegionTypePair fromHistory(MarketHistoryEntry entry) {
 		return new RegionTypePair(entry.getRegionId(), entry.getTypeId());
@@ -15,6 +15,6 @@ class RegionTypePair {
 
 	public static RegionTypePair fromHistory(JsonNode entry) {
 		return new RegionTypePair(
-				entry.get("region_id").asLong(), entry.get("type_id").asLong());
+				entry.get("region_id").asInt(), entry.get("type_id").asInt());
 	}
 }

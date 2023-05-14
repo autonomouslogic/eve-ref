@@ -66,10 +66,12 @@ public class ScrapeMarketHistory implements Command {
 	protected Provider<CompoundRegionTypeSource> compoundRegionTypeSourceProvider;
 
 	@Inject
+	protected Provider<ActiveOrdersRegionTypeSource> activeOrdersRegionTypeSourceProvider;
+
+	@Inject
 	protected Provider<HistoryRegionTypeSource> historyRegionTypeSourceProvider;
 
-	//	private LocalDate minDate = LocalDate.now(ZoneOffset.UTC).minusDays(402);
-	private LocalDate minDate = LocalDate.now(ZoneOffset.UTC).minusDays(197);
+	private LocalDate minDate = LocalDate.now(ZoneOffset.UTC).minus(Configs.ESI_MARKET_HISTORY_LOOKBACK.getRequired());
 	private S3Url dataUrl;
 	private MVStore mvStore;
 	private StoreMapSet mapSet;
@@ -107,6 +109,7 @@ public class ScrapeMarketHistory implements Command {
 	private Completable initSources() {
 		return Completable.fromAction(() -> {
 			regionTypeSource = compoundRegionTypeSourceProvider.get();
+			regionTypeSource.addSource(activeOrdersRegionTypeSourceProvider.get());
 			regionTypeSource.addSource(historyRegionTypeSourceProvider.get());
 		});
 	}
@@ -141,8 +144,7 @@ public class ScrapeMarketHistory implements Command {
 					.doOnNext(p -> {
 						var entry = p.getRight();
 						var id = RegionTypePair.fromHistory(entry).toString();
-						var json = objectMapper.valueToTree(entry);
-						mapSet.put(p.getLeft().toString(), id, json);
+						mapSet.put(p.getLeft().toString(), id, entry);
 						regionTypeSource.addHistory(entry);
 					})
 					.ignoreElements()

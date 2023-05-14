@@ -34,10 +34,10 @@ public class MarketHistoryEntry {
 	long volume;
 
 	@JsonProperty
-	long regionId;
+	int regionId;
 
 	@JsonProperty
-	long typeId;
+	int typeId;
 
 	@JsonProperty
 	Instant httpLastModified;

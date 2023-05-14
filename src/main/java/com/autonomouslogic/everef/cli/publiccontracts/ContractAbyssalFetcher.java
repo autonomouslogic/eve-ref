@@ -137,7 +137,7 @@ public class ContractAbyssalFetcher {
 						return;
 					}
 					if (statusCode == 200) {
-						var dynamicItem = (ObjectNode) esiHelper.decode(response);
+						var dynamicItem = (ObjectNode) esiHelper.decodeResponse(response);
 						var lastModified = okHttpHelper
 								.getLastModified(response)
 								.map(ZonedDateTime::toInstant)

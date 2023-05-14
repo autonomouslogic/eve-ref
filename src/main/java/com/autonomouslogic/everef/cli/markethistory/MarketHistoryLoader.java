@@ -10,6 +10,7 @@ import com.autonomouslogic.everef.util.CompressUtil;
 import com.autonomouslogic.everef.util.OkHttpHelper;
 import com.autonomouslogic.everef.util.Rx;
 import com.autonomouslogic.everef.util.TempFiles;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.MappingIterator;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import io.reactivex.rxjava3.core.Flowable;
@@ -56,7 +57,7 @@ class MarketHistoryLoader {
 		dataCrawler.setPrefix("/" + ArchivePathFactory.MARKET_HISTORY.getFolder() + "/");
 	}
 
-	public Flowable<Pair<LocalDate, MarketHistoryEntry>> load() {
+	public Flowable<Pair<LocalDate, JsonNode>> load() {
 		log.info("Loading market history - minDate: {}", minDate);
 		var f = crawlFiles();
 		if (minDate != null) {
@@ -65,9 +66,12 @@ class MarketHistoryLoader {
 		return f.flatMap(
 				p -> {
 					return downloadFile(p.getRight()).flatMapPublisher(file -> {
-						return parseFile(file).map(entry -> {
-							return Pair.of(p.getLeft(), entry);
-						});
+						file.deleteOnExit();
+						return parseFile(file)
+								.map(entry -> {
+									return Pair.of(p.getLeft(), entry);
+								})
+								.doFinally(() -> file.delete());
 					});
 				},
 				false,
@@ -101,7 +105,7 @@ class MarketHistoryLoader {
 		});
 	}
 
-	private Flowable<MarketHistoryEntry> parseFile(File file) {
+	private Flowable<JsonNode> parseFile(File file) {
 		return Flowable.defer(() -> {
 					log.trace("Reading market history file: {}", file);
 					var in = CompressUtil.uncompress(file);
@@ -110,11 +114,9 @@ class MarketHistoryLoader {
 							.withHeader()
 							.withStrictHeaders(true)
 							.withColumnReordering(true);
-					MappingIterator<MarketHistoryEntry> iterator = csvMapper
-							.readerFor(MarketHistoryEntry.class)
-							.with(schema)
-							.readValues(in);
-					var list = new ArrayList<MarketHistoryEntry>();
+					MappingIterator<JsonNode> iterator =
+							csvMapper.readerFor(JsonNode.class).with(schema).readValues(in);
+					var list = new ArrayList<JsonNode>();
 					iterator.forEachRemaining(list::add);
 					iterator.close();
 					log.trace("Read {} entries from: {}", list.size(), file);

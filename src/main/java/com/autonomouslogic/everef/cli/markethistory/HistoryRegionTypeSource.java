@@ -1,6 +1,6 @@
 package com.autonomouslogic.everef.cli.markethistory;
 
-import com.autonomouslogic.everef.model.MarketHistoryEntry;
+import com.fasterxml.jackson.databind.JsonNode;
 import io.reactivex.rxjava3.core.Flowable;
 import java.util.Collections;
 import java.util.List;
@@ -10,7 +10,7 @@ import javax.inject.Inject;
 import lombok.extern.log4j.Log4j2;
 
 /**
- * Proviedes region-type pairs based on previously observed pairs.
+ * Provides region-type pairs based on previously observed pairs.
  */
 @Log4j2
 class HistoryRegionTypeSource implements RegionTypeSource {
@@ -20,7 +20,7 @@ class HistoryRegionTypeSource implements RegionTypeSource {
 	protected HistoryRegionTypeSource() {}
 
 	@Override
-	public void addHistory(MarketHistoryEntry entry) {
+	public void addHistory(JsonNode entry) {
 		pairs.add(RegionTypePair.fromHistory(entry));
 	}
 

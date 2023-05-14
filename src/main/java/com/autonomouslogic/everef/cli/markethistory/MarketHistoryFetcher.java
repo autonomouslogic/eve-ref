@@ -42,7 +42,7 @@ public class MarketHistoryFetcher {
 						if (statusCode == 404) {
 							return Flowable.<ObjectNode>empty();
 						} else if (statusCode == 200) {
-							return esiHelper.decodeArrayNode(esiUrl, esiHelper.decode(response));
+							return esiHelper.decodeArrayNode(esiUrl, esiHelper.decodeResponse(response));
 						} else {
 							return Flowable.<ObjectNode>error(new RuntimeException(
 									String.format("Unknown status code %s for URL %s", statusCode, esiUrl)));

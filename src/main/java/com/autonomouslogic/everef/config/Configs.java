@@ -2,6 +2,7 @@ package com.autonomouslogic.everef.config;
 
 import java.net.URI;
 import java.time.Duration;
+import java.time.Period;
 
 public class Configs {
 	/**
@@ -225,6 +226,15 @@ public class Configs {
 			.name("ESI_MARKET_HISTORY_CONCURRENCY")
 			.type(Integer.class)
 			.defaultValue(4)
+			.build();
+
+	/**
+	 * Amount of time to look back when fetching market history.
+	 */
+	public static final Config<Period> ESI_MARKET_HISTORY_LOOKBACK = Config.<Period>builder()
+			.name("ESI_MARKET_HISTORY_LOOKBACK")
+			.type(Period.class)
+			.defaultValue(Period.ofDays(450))
 			.build();
 
 	/**
