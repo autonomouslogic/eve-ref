@@ -1,5 +1,7 @@
 package com.autonomouslogic.everef.cli.markethistory;
 
+import static com.autonomouslogic.everef.util.ArchivePathFactory.MARKET_HISTORY;
+
 import com.autonomouslogic.everef.cli.Command;
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.mvstore.JsonNodeDataType;
@@ -8,7 +10,9 @@ import com.autonomouslogic.everef.mvstore.StoreMapSet;
 import com.autonomouslogic.everef.s3.S3Adapter;
 import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.url.UrlParser;
+import com.autonomouslogic.everef.util.Rx;
 import com.autonomouslogic.everef.util.S3Util;
+import com.autonomouslogic.everef.util.TempFiles;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.reactivex.rxjava3.core.Completable;
@@ -58,6 +62,9 @@ public class ScrapeMarketHistory implements Command {
 	protected ObjectMapper objectMapper;
 
 	@Inject
+	protected TempFiles tempFiles;
+
+	@Inject
 	protected MarketHistoryFetcher marketHistoryFetcher;
 
 	@Inject
@@ -71,6 +78,9 @@ public class ScrapeMarketHistory implements Command {
 
 	@Inject
 	protected Provider<HistoryRegionTypeSource> historyRegionTypeSourceProvider;
+
+	@Inject
+	protected Provider<MarketHistoryFileBuilder> marketHistoryFileBuilderProvider;
 
 	private final Duration latestCacheTime = Configs.DATA_LATEST_CACHE_CONTROL_MAX_AGE.getRequired();
 	private final Duration archiveCacheTime = Configs.DATA_ARCHIVE_CACHE_CONTROL_MAX_AGE.getRequired();
@@ -108,7 +118,8 @@ public class ScrapeMarketHistory implements Command {
 										pair -> fetchMarketHistory(pair)
 												.flatMapCompletable(entry -> saveMarketHistory(entry)),
 										false,
-										esiConcurrency))
+										esiConcurrency),
+						uploadArchives())
 				.doFinally(this::closeMvStore);
 	}
 
@@ -125,7 +136,6 @@ public class ScrapeMarketHistory implements Command {
 			mvStore = mvStoreUtil.createTempStore("market-history");
 			mapSet = storeMapSetProvider.get().setMvStore(mvStore);
 			var date = minDate;
-			var today = LocalDate.now(ZoneOffset.UTC);
 			while (!date.isAfter(today)) {
 				mapSet.getOrCreateMap(date.toString());
 				date = date.plusDays(1);
@@ -185,8 +195,37 @@ public class ScrapeMarketHistory implements Command {
 			var pair = RegionTypePair.fromHistory(entry);
 			var date = LocalDate.parse(entry.get("date").asText());
 			var id = pair.toString();
+			if (!mapSet.hasMap(date.toString())) {
+				return Completable.error(new RuntimeException(String.format("No map for date %s", date)));
+			}
 			mapSet.put(date.toString(), id, entry);
 			return Completable.complete();
 		});
+	}
+
+	private Completable uploadArchives() {
+		return Completable.defer(() -> {
+			log.info("Uploading archives");
+			return Flowable.fromIterable(mapSet.getMapNames())
+					.flatMapCompletable(date -> uploadArchive(LocalDate.parse(date)));
+		});
+	}
+
+	private Completable uploadArchive(LocalDate date) {
+		return Completable.defer(() -> {
+					var existingCount = historyEntries.get(date);
+					var entries = mapSet.getOrCreateMap(date.toString());
+					if (existingCount == entries.size()) {
+						log.debug(String.format("Skipping upload for %s, no new entries", date));
+						return Completable.complete();
+					}
+					log.info(String.format("Writing archive for %s", date));
+					var archive = marketHistoryFileBuilderProvider.get().writeEntries(entries.values());
+					var archivePath = dataUrl.resolve(MARKET_HISTORY.createArchivePath(date));
+					var archivePut = s3Util.putPublicObjectRequest(
+							archive.length(), archivePath, "application/x-bzip2", archiveCacheTime);
+					return s3Adapter.putObject(archivePut, archive, s3Client).ignoreElement();
+				})
+				.compose(Rx.offloadCompletable());
 	}
 }

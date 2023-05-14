@@ -3,6 +3,7 @@ package com.autonomouslogic.everef.mvstore;
 import com.fasterxml.jackson.databind.JsonNode;
 import io.reactivex.rxjava3.functions.BiConsumer;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import javax.inject.Inject;
 import lombok.NonNull;
@@ -25,6 +26,14 @@ public class StoreMapSet {
 
 	@Inject
 	protected StoreMapSet() {}
+
+	public boolean hasMap(String name) {
+		return maps.containsKey(name);
+	}
+
+	public Set<String> getMapNames() {
+		return maps.keySet();
+	}
 
 	public void put(String map, String key, JsonNode value) {
 		getOrCreateMap(map).put(key, value);

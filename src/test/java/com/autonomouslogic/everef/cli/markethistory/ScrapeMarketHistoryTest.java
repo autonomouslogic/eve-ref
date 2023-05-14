@@ -1,5 +1,6 @@
 package com.autonomouslogic.everef.cli.markethistory;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import com.autonomouslogic.commons.ResourceUtil;
@@ -7,10 +8,12 @@ import com.autonomouslogic.everef.openapi.esi.models.GetUniverseTypesTypeIdOk;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.test.MockS3Adapter;
 import com.autonomouslogic.everef.test.TestDataUtil;
+import com.autonomouslogic.everef.util.ArchivePathFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.List;
@@ -23,6 +26,7 @@ import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 import okio.Buffer;
+import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream;
 import org.apache.commons.compress.compressors.bzip2.BZip2CompressorOutputStream;
 import org.apache.commons.io.IOUtils;
 import org.jetbrains.annotations.NotNull;
@@ -39,6 +43,9 @@ import software.amazon.awssdk.services.s3.S3AsyncClient;
  *     <li><code>2023-01-01</code> and <code>2023-01-02</code> exist in the downloaded history.</li>
  *     <li><code>2023-01-01</code> will return from the ESI exactly what's in the file, so data for that date shouldn't be uploaded</li>
  *     <li><code>2023-01-02</code> and <code>2023-01-03</code> will have updated entries from the ESI. Only these two dates will be updated.</li>
+ *     <li><code>2023-01-03</code> doesn't exist in the previous history, it will be new.</li>
+ *     <li>Pair <code>(10000001, 999)</code> exists in <code>2023-01-02</code>, but isn't returned by the ESI (404). It should remain in the dataset.</li>
+ *     <li>Pair <code>(10000001, 21)</code> exists in <code>2023-01-02</code>, but is updated by the ESI. The new dataset should reflect.</li>
  * </ul>
  */
 @ExtendWith(MockitoExtension.class)
@@ -98,6 +105,19 @@ public class ScrapeMarketHistoryTest {
 				.setToday(LocalDate.parse("2023-01-03"))
 				.run()
 				.blockingAwait();
+
+		assertEquals(
+				List.of(
+						"data/" + ArchivePathFactory.MARKET_HISTORY.createArchivePath(LocalDate.parse("2023-01-02")),
+						"data/" + ArchivePathFactory.MARKET_HISTORY.createArchivePath(LocalDate.parse("2023-01-03"))),
+				mockS3Adapter.getAllPutKeys(BUCKET_NAME, dataClient).stream()
+						.sorted()
+						.toList());
+
+		assertEquals(
+				loadExpectedArchive(LocalDate.parse("2023-01-02")), loadUploadedArchive(LocalDate.parse("2023-01-02")));
+		assertEquals(
+				loadExpectedArchive(LocalDate.parse("2023-01-03")), loadUploadedArchive(LocalDate.parse("2023-01-03")));
 	}
 
 	class TestDispatcher extends Dispatcher {
@@ -162,13 +182,16 @@ public class ScrapeMarketHistoryTest {
 	private MockResponse mockResponse(InputStream in) {
 		try (in) {
 			var body = IOUtils.toByteArray(in);
-			return mockResponse(body);
+			return mockResponse(body).addHeader("last-modified", lastModified);
 		}
 	}
 
 	@SneakyThrows
 	private MockResponse mockHistoricalDate(LocalDate date) {
-		var file = ResourceUtil.loadContextual(ScrapeMarketHistoryTest.class, "/" + date.toString() + ".csv");
+		if (date.equals(LocalDate.parse("2023-01-03"))) {
+			return new MockResponse().setResponseCode(404);
+		}
+		var file = ResourceUtil.loadContextual(ScrapeMarketHistoryTest.class, "/data-" + date.toString() + ".csv");
 		var compressed = new ByteArrayOutputStream();
 		try (var out = new BZip2CompressorOutputStream(compressed)) {
 			IOUtils.copy(file, out);
@@ -178,7 +201,29 @@ public class ScrapeMarketHistoryTest {
 
 	@SneakyThrows
 	private MockResponse mockHistory(String regionId, String typeId) {
+		if (regionId.equals("10000001") && typeId.equals("999")) {
+			return new MockResponse().setResponseCode(404);
+		}
 		return mockResponse(ResourceUtil.loadContextual(
 				ScrapeMarketHistoryTest.class, String.format("/%s-%s.json", regionId, typeId)));
+	}
+
+	@SneakyThrows
+	private String loadExpectedArchive(LocalDate date) {
+		return IOUtils.toString(
+						ResourceUtil.loadContextual(
+								ScrapeMarketHistoryTest.class, "/expected-" + date.toString() + ".csv"),
+						StandardCharsets.UTF_8)
+				.replaceAll("\r\n", "\n");
+	}
+
+	@SneakyThrows
+	private String loadUploadedArchive(LocalDate date) {
+		var bytes = mockS3Adapter
+				.getTestObject(
+						BUCKET_NAME, "data/" + ArchivePathFactory.MARKET_HISTORY.createArchivePath(date), dataClient)
+				.orElseThrow(() -> new RuntimeException(date.toString()));
+		return IOUtils.toString(new BZip2CompressorInputStream(new ByteArrayInputStream(bytes)), StandardCharsets.UTF_8)
+				.replaceAll("\r\n", "\n");
 	}
 }
