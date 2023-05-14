@@ -1,6 +1,7 @@
 package com.autonomouslogic.everef.test;
 
 import com.autonomouslogic.everef.http.EsiLimitExceededInterceptor;
+import com.autonomouslogic.everef.http.EsiMarketHistoryRateLimitExceededInterceptor;
 import com.autonomouslogic.everef.http.EsiRateLimitInterceptor;
 import com.autonomouslogic.everef.http.EsiUserAgentInterceptor;
 import com.autonomouslogic.everef.http.LoggingInterceptor;
@@ -27,8 +28,19 @@ public class TestOkHttpModule {
 				.esiHttpClient(
 						null, userAgentInterceptor, rateLimitInterceptor, limitExceededInterceptor, loggingInterceptor)
 				.newBuilder()
-				// .addInterceptor(mockInterceptor)
 				.addInterceptor(new NonLocalhostBlockingInterceptor())
+				.build();
+	}
+
+	@Provides
+	@Singleton
+	@Named("esi-market-history")
+	public OkHttpClient esiMarketHistoryHttpClient(
+			@Named("esi") OkHttpClient esiClient,
+			EsiMarketHistoryRateLimitExceededInterceptor esiMarketHistoryRateLimitExceededInterceptor) {
+		return esiClient
+				.newBuilder()
+				.addNetworkInterceptor(esiMarketHistoryRateLimitExceededInterceptor)
 				.build();
 	}
 

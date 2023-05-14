@@ -5,6 +5,7 @@ import com.autonomouslogic.everef.cli.MockDataIndexModule;
 import com.autonomouslogic.everef.cli.PublishRefDataTest;
 import com.autonomouslogic.everef.cli.decorator.HealthcheckDecoratorTest;
 import com.autonomouslogic.everef.cli.decorator.SlackDecoratorTest;
+import com.autonomouslogic.everef.cli.markethistory.ScrapeMarketHistoryTest;
 import com.autonomouslogic.everef.cli.marketorders.ScrapeMarketOrdersTest;
 import com.autonomouslogic.everef.cli.publiccontracts.ScrapePublicContractsTest;
 import com.autonomouslogic.everef.cli.refdata.BuildRefDataTest;
@@ -69,6 +70,8 @@ public interface TestComponent {
 	void inject(PublishRefDataTest test);
 
 	void inject(FieldRenamerTest test);
+
+	void inject(ScrapeMarketHistoryTest test);
 
 	void inject(ScrapeMarketOrdersTest test);
 

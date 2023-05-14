@@ -21,6 +21,7 @@ import java.util.TreeMap;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
+import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import org.h2.mvstore.MVStore;
@@ -71,16 +72,18 @@ public class ScrapeMarketHistory implements Command {
 	@Inject
 	protected Provider<HistoryRegionTypeSource> historyRegionTypeSourceProvider;
 
+	private final Duration latestCacheTime = Configs.DATA_LATEST_CACHE_CONTROL_MAX_AGE.getRequired();
+	private final Duration archiveCacheTime = Configs.DATA_ARCHIVE_CACHE_CONTROL_MAX_AGE.getRequired();
+	private final int esiConcurrency = Configs.ESI_MARKET_HISTORY_CONCURRENCY.getRequired();
+
+	@Setter
 	private LocalDate minDate = LocalDate.now(ZoneOffset.UTC).minus(Configs.ESI_MARKET_HISTORY_LOOKBACK.getRequired());
+
 	private S3Url dataUrl;
 	private MVStore mvStore;
 	private StoreMapSet mapSet;
 	private Map<LocalDate, Integer> historyEntries;
 	private CompoundRegionTypeSource regionTypeSource;
-
-	private final Duration latestCacheTime = Configs.DATA_LATEST_CACHE_CONTROL_MAX_AGE.getRequired();
-	private final Duration archiveCacheTime = Configs.DATA_ARCHIVE_CACHE_CONTROL_MAX_AGE.getRequired();
-	private final int esiConcurrency = Configs.ESI_MARKET_HISTORY_CONCURRENCY.getRequired();
 
 	@Inject
 	protected ScrapeMarketHistory() {}
