@@ -94,10 +94,6 @@ public class DataCrawler {
 		}
 		var sub = base.resolve(url);
 		return sub;
-		//		if (url.startsWith("/")) {
-		//			return dataBaseUrl + url;
-		//		}
-		//		return base.toString() + url;
 	}
 
 	private boolean filterPrefix(Entry entry) {
@@ -105,14 +101,6 @@ public class DataCrawler {
 		if (prefix.isEmpty()) {
 			return true;
 		}
-		//		var base = dataBaseUrl.toString();
-		//		var path = entry.getUrl().toString();
-		//		if (!path.startsWith(base)) {
-		//			throw new RuntimeException("Invalid path, this shouldn't happen: " + path);
-		//		}
-		//		var cut = path.substring(base.length());
-		//		return cut.startsWith(prefix) || prefix.startsWith(cut);
-
 		var path = entry.getUrl().getPath();
 		return path.startsWith(prefix) || prefix.startsWith(path);
 	}
@@ -125,7 +113,11 @@ public class DataCrawler {
 			if (prefix.startsWith("/")) {
 				prefix = prefix.substring(1);
 			}
-			return dataBaseUrl.resolve(prefix).getPath();
+			var resolved = dataBaseUrl.resolve(prefix).getPath();
+			if (!resolved.startsWith("/")) {
+				resolved = "/" + resolved;
+			}
+			return resolved;
 		}
 	}
 

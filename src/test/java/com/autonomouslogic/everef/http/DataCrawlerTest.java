@@ -94,4 +94,39 @@ public class DataCrawlerTest {
 		testDataUtil.assertRequest(server.takeRequest(), "/data/esi-scrape/");
 		testDataUtil.assertNoMoreRequests(server);
 	}
+
+	@Test
+	@SneakyThrows
+	@SetEnvironmentVariable(key = "DATA_BASE_URL", value = "http://localhost:" + TestDataUtil.TEST_PORT)
+	void shouldCrawlDataSiteWithoutBase() {
+		var urls = dataCrawler.crawl().toList().blockingGet();
+		assertEquals(
+				List.of(
+						urlParser.parse("http://localhost:" + TestDataUtil.TEST_PORT + "/data/test.zip"),
+						urlParser.parse("http://localhost:" + TestDataUtil.TEST_PORT
+								+ "/data/esi-scrape/eve-ref-esi-scrape-latest.tar.xz")),
+				urls);
+
+		testDataUtil.assertRequest(server.takeRequest(), "/");
+		testDataUtil.assertRequest(server.takeRequest(), "/data/esi-scrape/");
+		testDataUtil.assertNoMoreRequests(server);
+	}
+
+	@Test
+	@SneakyThrows
+	@SetEnvironmentVariable(key = "DATA_BASE_URL", value = "http://localhost:" + TestDataUtil.TEST_PORT)
+	void shouldCrawlDataSiteWithoutBaseAndWithPrefix() {
+		var urls = dataCrawler.setPrefix("/data/").crawl().toList().blockingGet();
+
+		assertEquals(
+				List.of(
+						urlParser.parse("http://localhost:" + TestDataUtil.TEST_PORT + "/data/test.zip"),
+						urlParser.parse("http://localhost:" + TestDataUtil.TEST_PORT
+								+ "/data/esi-scrape/eve-ref-esi-scrape-latest.tar.xz")),
+				urls);
+
+		testDataUtil.assertRequest(server.takeRequest(), "/");
+		testDataUtil.assertRequest(server.takeRequest(), "/data/esi-scrape/");
+		testDataUtil.assertNoMoreRequests(server);
+	}
 }
