@@ -4,17 +4,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import com.autonomouslogic.commons.ResourceUtil;
-import com.autonomouslogic.everef.openapi.esi.models.GetUniverseTypesTypeIdOk;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.test.MockS3Adapter;
 import com.autonomouslogic.everef.test.TestDataUtil;
 import com.autonomouslogic.everef.util.ArchivePathFactory;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.time.Instant;
 import java.time.LocalDate;
 import java.util.List;
 import javax.inject.Inject;
@@ -68,16 +65,7 @@ public class ScrapeMarketHistoryTest {
 	@Inject
 	MockS3Adapter mockS3Adapter;
 
-	@Inject
-	TestDataUtil testDataUtil;
-
-	@Inject
-	ObjectMapper objectMapper;
-
 	final String lastModified = "Mon, 03 Apr 2023 03:47:30 GMT";
-	final Instant lastModifiedInstant = Instant.parse("2023-04-03T03:47:30Z");
-	final GetUniverseTypesTypeIdOk type = new GetUniverseTypesTypeIdOk(
-			"", 0, "", true, 0, 0.0f, List.of(), List.of(), 0, 0, 0, 0.0f, 0.0f, 0, 0.0f, 0.0f);
 
 	MockWebServer server;
 
@@ -109,7 +97,8 @@ public class ScrapeMarketHistoryTest {
 		assertEquals(
 				List.of(
 						"data/" + ArchivePathFactory.MARKET_HISTORY.createArchivePath(LocalDate.parse("2023-01-02")),
-						"data/" + ArchivePathFactory.MARKET_HISTORY.createArchivePath(LocalDate.parse("2023-01-03"))),
+						"data/" + ArchivePathFactory.MARKET_HISTORY.createArchivePath(LocalDate.parse("2023-01-03")),
+						"data/market-history/pairs.json"),
 				mockS3Adapter.getAllPutKeys(BUCKET_NAME, dataClient).stream()
 						.sorted()
 						.toList());
@@ -118,6 +107,11 @@ public class ScrapeMarketHistoryTest {
 				loadExpectedArchive(LocalDate.parse("2023-01-02")), loadUploadedArchive(LocalDate.parse("2023-01-02")));
 		assertEquals(
 				loadExpectedArchive(LocalDate.parse("2023-01-03")), loadUploadedArchive(LocalDate.parse("2023-01-03")));
+
+		var totalPairs = new String(mockS3Adapter
+				.getTestObject(BUCKET_NAME, "data/market-history/pairs.json", dataClient)
+				.orElseThrow());
+		assertEquals("{\"2023-01-01\":4,\"2023-01-02\":5,\"2023-01-03\":4}", totalPairs);
 	}
 
 	class TestDispatcher extends Dispatcher {

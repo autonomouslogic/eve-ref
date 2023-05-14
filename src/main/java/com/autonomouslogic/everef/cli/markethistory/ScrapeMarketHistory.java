@@ -17,6 +17,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Flowable;
+import java.io.FileOutputStream;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
@@ -119,7 +120,8 @@ public class ScrapeMarketHistory implements Command {
 												.flatMapCompletable(entry -> saveMarketHistory(entry)),
 										false,
 										esiConcurrency),
-						uploadArchives())
+						uploadArchives(),
+						uploadTotalPairs())
 				.doFinally(this::closeMvStore);
 	}
 
@@ -219,12 +221,30 @@ public class ScrapeMarketHistory implements Command {
 						log.debug(String.format("Skipping upload for %s, no new entries", date));
 						return Completable.complete();
 					}
+					historyEntries.put(date, entries.size());
 					log.info(String.format("Writing archive for %s", date));
 					var archive = marketHistoryFileBuilderProvider.get().writeEntries(entries.values());
 					var archivePath = dataUrl.resolve(MARKET_HISTORY.createArchivePath(date));
 					var archivePut = s3Util.putPublicObjectRequest(
 							archive.length(), archivePath, "application/x-bzip2", archiveCacheTime);
 					return s3Adapter.putObject(archivePut, archive, s3Client).ignoreElement();
+				})
+				.compose(Rx.offloadCompletable());
+	}
+
+	private Completable uploadTotalPairs() {
+		return Completable.defer(() -> {
+					var file =
+							tempFiles.tempFile("market-history-pairs", ".json").toFile();
+					file.deleteOnExit();
+					try (var out = new FileOutputStream(file)) {
+						objectMapper.writeValue(out, historyEntries);
+					}
+					var archivePath =
+							dataUrl.resolve(MARKET_HISTORY.getFolder() + "/").resolve("pairs.json");
+					var archivePut = s3Util.putPublicObjectRequest(
+							file.length(), archivePath, "application/json", latestCacheTime);
+					return s3Adapter.putObject(archivePut, file, s3Client).ignoreElement();
 				})
 				.compose(Rx.offloadCompletable());
 	}
