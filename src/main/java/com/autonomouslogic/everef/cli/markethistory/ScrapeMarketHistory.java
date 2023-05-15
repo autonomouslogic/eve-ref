@@ -184,6 +184,7 @@ public class ScrapeMarketHistory implements Command {
 			return regionTypeSource.sourcePairs().toList().flatMapPublisher(pairs -> {
 				log.info("Sourced {} pairs", pairs.size());
 				progressReporter = new ProgressReporter(getName(), pairs.size(), Duration.ofMinutes(1));
+				progressReporter.start();
 				return Flowable.fromIterable(pairs);
 			});
 		});

@@ -57,9 +57,10 @@ public class ProgressReporter {
 		var rate = getRate();
 		var remainingTime = getRemainingTime();
 		log.info(String.format(
-				"%s: %.1f completed (%.1f%%) in %s @ %.1f/s - est. %s remaining",
+				"%s: %.1f/%.1f completed (%.1f%%) in %s @ %.1f/s - est. %s remaining",
 				name,
 				completed,
+				totalWork,
 				percent,
 				runtime.truncatedTo(ChronoUnit.SECONDS),
 				rate,
