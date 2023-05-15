@@ -225,7 +225,7 @@ public class Configs {
 	public static final Config<Integer> ESI_MARKET_HISTORY_CONCURRENCY = Config.<Integer>builder()
 			.name("ESI_MARKET_HISTORY_CONCURRENCY")
 			.type(Integer.class)
-			.defaultValue(4)
+			.defaultValue(8)
 			.build();
 
 	/**
