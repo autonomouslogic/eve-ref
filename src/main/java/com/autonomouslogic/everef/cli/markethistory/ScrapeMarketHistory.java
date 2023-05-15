@@ -10,6 +10,7 @@ import com.autonomouslogic.everef.mvstore.StoreMapSet;
 import com.autonomouslogic.everef.s3.S3Adapter;
 import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.url.UrlParser;
+import com.autonomouslogic.everef.util.ProgressReporter;
 import com.autonomouslogic.everef.util.Rx;
 import com.autonomouslogic.everef.util.S3Util;
 import com.autonomouslogic.everef.util.TempFiles;
@@ -99,6 +100,8 @@ public class ScrapeMarketHistory implements Command {
 	private Map<LocalDate, Integer> historyEntries;
 	private CompoundRegionTypeSource regionTypeSource;
 
+	private ProgressReporter progressReporter;
+
 	@Inject
 	protected ScrapeMarketHistory() {}
 
@@ -180,6 +183,7 @@ public class ScrapeMarketHistory implements Command {
 			log.info("Sourcing pairs");
 			return regionTypeSource.sourcePairs().toList().flatMapPublisher(pairs -> {
 				log.info("Sourced {} pairs", pairs.size());
+				progressReporter = new ProgressReporter(getName(), pairs.size(), Duration.ofMinutes(1));
 				return Flowable.fromIterable(pairs);
 			});
 		});
@@ -188,7 +192,7 @@ public class ScrapeMarketHistory implements Command {
 	private Flowable<JsonNode> fetchMarketHistory(RegionTypePair pair) {
 		return Flowable.defer(() -> {
 			log.trace("Fetching market history for {}", pair);
-			return marketHistoryFetcher.fetchMarketHistory(pair);
+			return marketHistoryFetcher.fetchMarketHistory(pair).doFinally(() -> progressReporter.increment());
 		});
 	}
 
