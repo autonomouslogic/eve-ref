@@ -192,7 +192,7 @@ public class ScrapeMarketHistory implements Command {
 
 	private Flowable<JsonNode> fetchMarketHistory(RegionTypePair pair) {
 		return Flowable.defer(() -> {
-			log.trace("Fetching market history for {}", pair);
+			log.debug("Fetching market history for {}", pair);
 			return marketHistoryFetcher.fetchMarketHistory(pair).doFinally(() -> progressReporter.increment());
 		});
 	}
