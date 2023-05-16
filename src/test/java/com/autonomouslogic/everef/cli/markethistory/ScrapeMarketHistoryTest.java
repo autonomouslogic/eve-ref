@@ -98,7 +98,7 @@ public class ScrapeMarketHistoryTest {
 				List.of(
 						"data/" + ArchivePathFactory.MARKET_HISTORY.createArchivePath(LocalDate.parse("2023-01-02")),
 						"data/" + ArchivePathFactory.MARKET_HISTORY.createArchivePath(LocalDate.parse("2023-01-03")),
-						"data/market-history/pairs.json"),
+						"data/market-history/totals.json"),
 				mockS3Adapter.getAllPutKeys(BUCKET_NAME, dataClient).stream()
 						.sorted()
 						.toList());
