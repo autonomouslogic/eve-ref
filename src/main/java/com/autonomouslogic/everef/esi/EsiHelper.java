@@ -1,6 +1,9 @@
 package com.autonomouslogic.everef.esi;
 
 import com.autonomouslogic.everef.config.Configs;
+import com.autonomouslogic.everef.openapi.esi.infrastructure.ApiResponse;
+import com.autonomouslogic.everef.openapi.esi.infrastructure.ResponseType;
+import com.autonomouslogic.everef.openapi.esi.infrastructure.Success;
 import com.autonomouslogic.everef.util.OkHttpHelper;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -10,7 +13,10 @@ import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Scheduler;
 import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.functions.BiFunction;
+import io.reactivex.rxjava3.functions.Function;
 import io.reactivex.rxjava3.schedulers.Schedulers;
+import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.Executors;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -68,6 +74,24 @@ public class EsiHelper {
 		});
 	}
 
+	public <T> Flowable<T> fetchPages(Function<Integer, ApiResponse<List<T>>> fetcher) {
+		return Flowable.defer(() -> Flowable.just(fetcher.apply(1))).flatMap(first -> {
+			var pages = Optional.ofNullable(first.getHeaders().get("X-Pages")).stream()
+					.flatMap(List::stream)
+					.mapToInt(Integer::valueOf)
+					.findFirst()
+					.orElse(1);
+			var firstResult = decodeResponse(first);
+			if (pages == 1) {
+				return Flowable.fromIterable(firstResult);
+			}
+			return Flowable.concatArray(
+					Flowable.fromIterable(firstResult),
+					Flowable.range(2, pages - 1)
+							.flatMap(page -> Flowable.fromIterable(decodeResponse(fetcher.apply(page))), false, 4));
+		});
+	}
+
 	/**
 	 * Fetches multiple pages of a URL, decoding each page as a JSON array, and returning the objects in a stream.
 	 * @param url
@@ -79,25 +103,37 @@ public class EsiHelper {
 
 	public Flowable<JsonNode> fetchPagesOfJsonArrays(EsiUrl url, BiFunction<JsonNode, Response, JsonNode> augmenter) {
 		return fetchPages(url).flatMap(response -> {
-			var node = decode(response);
-			if (node.isMissingNode()) {
-				log.warn("Empty response from {}", url);
-				return Flowable.empty();
-			}
-			if (!node.isArray()) {
-				return Flowable.error(
-						new RuntimeException(String.format("Expected array, got %s - %s", node.getNodeType(), url)));
-			}
-			return Flowable.fromIterable(node).map(entry -> augmenter.apply(entry, response));
+			var node = decodeResponse(response);
+			return decodeArrayNode(url, node).map(entry -> augmenter.apply(entry, response));
 		});
 	}
 
 	@SneakyThrows
-	public JsonNode decode(Response response) {
+	public JsonNode decodeResponse(Response response) {
 		if (response.code() != 200) {
 			throw new RuntimeException(String.format("Cannot decode non-200 response: %s", response.code()));
 		}
 		return objectMapper.readTree(response.peekBody(Long.MAX_VALUE).byteStream());
+	}
+
+	public Flowable<JsonNode> decodeArrayNode(EsiUrl url, JsonNode node) {
+		if (node.isMissingNode()) {
+			log.warn("Empty response from {}", url);
+			return Flowable.empty();
+		}
+		if (!node.isArray()) {
+			return Flowable.error(
+					new RuntimeException(String.format("Expected array, got %s - %s", node.getNodeType(), url)));
+		}
+		return Flowable.fromIterable(node);
+	}
+
+	private <T> T decodeResponse(ApiResponse<T> response) {
+		if (response.getResponseType() != ResponseType.Success) {
+			throw new RuntimeException(
+					String.format("Unexpected response type: %s - %s", response.getResponseType(), response));
+		}
+		return ((Success<T>) response).getData();
 	}
 
 	/**

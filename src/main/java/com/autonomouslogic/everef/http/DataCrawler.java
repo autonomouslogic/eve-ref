@@ -4,6 +4,7 @@ import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.url.DataUrl;
 import com.autonomouslogic.everef.url.UrlParser;
 import com.autonomouslogic.everef.util.OkHttpHelper;
+import com.google.common.base.Strings;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Maybe;
 import java.net.URI;
@@ -33,7 +34,7 @@ public class DataCrawler {
 	private final URI dataBaseUrl = Configs.DATA_BASE_URL.getRequired();
 
 	@Setter
-	private String prefix = "";
+	private String prefix = null;
 
 	@Inject
 	protected DataCrawler() {}
@@ -75,39 +76,49 @@ public class DataCrawler {
 		var dirs = doc.select("tr.data-dir a").stream().map(e -> e.attr("href")).toList();
 		var files =
 				doc.select("tr.data-file a").stream().map(e -> e.attr("href")).toList();
-		dirs = prependBase(dirs, baseUrl);
-		files = prependBase(files, baseUrl);
+		var dirUrls = prependBase(dirs, baseUrl);
+		var fileUrls = prependBase(files, baseUrl);
 		return Stream.concat(
-						dirs.stream().map(url -> new Entry(false, urlParser.parse(url))),
-						files.stream().map(url -> new Entry(true, urlParser.parse(url))))
+						dirUrls.stream().map(url -> new Entry(false, url)),
+						fileUrls.stream().map(url -> new Entry(true, url)))
 				.toList();
 	}
 
-	private List<String> prependBase(List<String> urls, DataUrl base) {
+	private List<DataUrl> prependBase(List<String> urls, DataUrl base) {
 		return urls.stream().map(url -> prependBase(url, base)).toList();
 	}
 
-	private String prependBase(String url, DataUrl base) {
+	private DataUrl prependBase(String url, DataUrl base) {
 		if (url.contains("://")) {
-			return url;
+			return urlParser.parse(url);
 		}
-		if (url.startsWith("/")) {
-			return dataBaseUrl + url;
-		}
-		return base.toString() + url;
+		var sub = base.resolve(url);
+		return sub;
 	}
 
 	private boolean filterPrefix(Entry entry) {
+		var prefix = getPrefix();
 		if (prefix.isEmpty()) {
 			return true;
 		}
-		var base = dataBaseUrl.toString();
-		var path = entry.getUrl().toString();
-		if (!path.startsWith(base)) {
-			throw new RuntimeException("Invalid path, this shouldn't happen: " + path);
+		var path = entry.getUrl().getPath();
+		return path.startsWith(prefix) || prefix.startsWith(path);
+	}
+
+	private String getPrefix() {
+		var prefix = this.prefix;
+		if (Strings.isNullOrEmpty(prefix)) {
+			return dataBaseUrl.getPath();
+		} else {
+			if (prefix.startsWith("/")) {
+				prefix = prefix.substring(1);
+			}
+			var resolved = dataBaseUrl.resolve(prefix).getPath();
+			if (!resolved.startsWith("/")) {
+				resolved = "/" + resolved;
+			}
+			return resolved;
 		}
-		var cut = path.substring(base.length());
-		return cut.startsWith(prefix) || prefix.startsWith(cut);
 	}
 
 	@Value

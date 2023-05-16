@@ -1,4 +1,4 @@
-package com.autonomouslogic.everef.esi;
+package com.autonomouslogic.everef.http;
 
 import java.io.IOException;
 import java.time.Duration;

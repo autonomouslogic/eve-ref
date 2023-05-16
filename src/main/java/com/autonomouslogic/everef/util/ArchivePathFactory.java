@@ -5,16 +5,20 @@ import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.format.DateTimeParseException;
+import java.time.temporal.ChronoField;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.Builder;
 import lombok.NonNull;
+import lombok.Value;
 
 /**
  * Builds URLs for archived data.
  */
+@Value
 @Builder
 public class ArchivePathFactory {
 	public static final DateTimeFormatter YEAR_PATTERN = DateTimeFormatter.ofPattern("yyyy");
@@ -113,14 +117,42 @@ public class ArchivePathFactory {
 
 	public String createArchivePath(ZonedDateTime time) {
 		time = time.withZoneSameInstant(ZoneOffset.UTC);
-		return join(List.of(
-						Optional.of(folder),
-						Optional.ofNullable(historyFolder ? "history" : null),
-						Optional.ofNullable(yearFolder ? YEAR_PATTERN.format(time) : null),
-						Optional.ofNullable(dateFolder ? DATE_PATTERN.format(time) : null),
-						Optional.of(filename + "-" + fileDateTimeFormatter.format(time) + suffix))
-				.stream()
-				.flatMap(Optional::stream));
+		return createFormatter().format(time);
+	}
+
+	public Instant parseArchiveTime(String path) {
+		if (path.startsWith("/")) {
+			path = path.substring(1);
+		}
+		try {
+			var parsed = createFormatter().parse(path);
+			if (parsed.isSupported(ChronoField.HOUR_OF_DAY)) {
+				return Instant.from(parsed);
+			}
+			return LocalDate.from(parsed).atStartOfDay(ZoneOffset.UTC).toInstant();
+		} catch (DateTimeParseException e) {
+			return null;
+		}
+	}
+
+	private DateTimeFormatter createFormatter() {
+		var builder = new DateTimeFormatterBuilder();
+		builder.appendLiteral(folder);
+		if (historyFolder) {
+			builder.appendLiteral("/history");
+		}
+		if (yearFolder) {
+			builder.appendLiteral("/").append(YEAR_PATTERN);
+		}
+		if (dateFolder) {
+			builder.appendLiteral("/").append(DATE_PATTERN);
+		}
+		builder.appendLiteral("/")
+				.appendLiteral(filename)
+				.appendLiteral("-")
+				.append(fileDateTimeFormatter)
+				.appendLiteral(suffix);
+		return builder.toFormatter().withZone(ZoneOffset.UTC);
 	}
 
 	private String join(List<String> parts) {

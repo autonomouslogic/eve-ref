@@ -5,6 +5,7 @@ import com.autonomouslogic.everef.cli.MockDataIndexModule;
 import com.autonomouslogic.everef.cli.PublishRefDataTest;
 import com.autonomouslogic.everef.cli.decorator.HealthcheckDecoratorTest;
 import com.autonomouslogic.everef.cli.decorator.SlackDecoratorTest;
+import com.autonomouslogic.everef.cli.markethistory.ScrapeMarketHistoryTest;
 import com.autonomouslogic.everef.cli.marketorders.ScrapeMarketOrdersTest;
 import com.autonomouslogic.everef.cli.publiccontracts.ScrapePublicContractsTest;
 import com.autonomouslogic.everef.cli.refdata.BuildRefDataTest;
@@ -24,6 +25,7 @@ import com.autonomouslogic.everef.http.MockDataCrawlerModule;
 import com.autonomouslogic.everef.inject.AwsModule;
 import com.autonomouslogic.everef.inject.EsiModule;
 import com.autonomouslogic.everef.inject.JacksonModule;
+import com.autonomouslogic.everef.model.MarketHistoryEntryTest;
 import com.autonomouslogic.everef.url.UrlParserTest;
 import dagger.Component;
 import javax.inject.Singleton;
@@ -59,6 +61,8 @@ public interface TestComponent {
 
 	void inject(LocationPopulatorTest test);
 
+	void inject(MarketHistoryEntryTest test);
+
 	void inject(MetaGroupScraperTest test);
 
 	void inject(ObjectMergerTest test);
@@ -66,6 +70,8 @@ public interface TestComponent {
 	void inject(PublishRefDataTest test);
 
 	void inject(FieldRenamerTest test);
+
+	void inject(ScrapeMarketHistoryTest test);
 
 	void inject(ScrapeMarketOrdersTest test);
 

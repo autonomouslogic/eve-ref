@@ -2,6 +2,7 @@ package com.autonomouslogic.everef.config;
 
 import java.net.URI;
 import java.time.Duration;
+import java.time.Period;
 
 public class Configs {
 	/**
@@ -216,6 +217,42 @@ public class Configs {
 	public static final Config<String> DATA_AWS_SECRET_ACCESS_KEY = Config.<String>builder()
 			.name("DATA_AWS_SECRET_ACCESS_KEY")
 			.type(String.class)
+			.build();
+
+	/**
+	 * Concurrency for the market history scrape.
+	 */
+	public static final Config<Integer> ESI_MARKET_HISTORY_CONCURRENCY = Config.<Integer>builder()
+			.name("ESI_MARKET_HISTORY_CONCURRENCY")
+			.type(Integer.class)
+			.defaultValue(8)
+			.build();
+
+	/**
+	 * Amount of time to look back when fetching market history.
+	 */
+	public static final Config<Period> ESI_MARKET_HISTORY_LOOKBACK = Config.<Period>builder()
+			.name("ESI_MARKET_HISTORY_LOOKBACK")
+			.type(Period.class)
+			.defaultValue(Period.ofDays(450))
+			.build();
+
+	/**
+	 * The amount of time to wait for once the special rate limit for market history has been exceeded.
+	 */
+	public static final Config<Duration> ESI_MARKET_HISTORY_RATE_LIMIT_WAIT_TIME = Config.<Duration>builder()
+			.name("ESI_MARKET_HISTORY_RATE_LIMIT_WAIT_TIME")
+			.type(Duration.class)
+			.defaultValue(Duration.ofMinutes(1).plusSeconds(10))
+			.build();
+
+	/**
+	 * The number of times to tre once the special rate limit for market history has been exceeded.
+	 */
+	public static final Config<Integer> ESI_MARKET_HISTORY_RATE_LIMIT_TRIES = Config.<Integer>builder()
+			.name("ESI_MARKET_HISTORY_RATE_LIMIT_TRIES")
+			.type(Integer.class)
+			.defaultValue(3)
 			.build();
 
 	/**

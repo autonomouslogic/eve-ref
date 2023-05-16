@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import dagger.Module;
@@ -24,6 +25,12 @@ public class JacksonModule {
 	@Singleton
 	public ObjectMapper objectMapper() {
 		return configure(new ObjectMapper());
+	}
+
+	@Provides
+	@Singleton
+	public CsvMapper csvMapper() {
+		return (CsvMapper) configure(new CsvMapper());
 	}
 
 	@Provides

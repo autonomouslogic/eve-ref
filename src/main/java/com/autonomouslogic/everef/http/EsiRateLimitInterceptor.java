@@ -1,4 +1,4 @@
-package com.autonomouslogic.everef.esi;
+package com.autonomouslogic.everef.http;
 
 import com.autonomouslogic.everef.config.Configs;
 import com.google.common.util.concurrent.RateLimiter;
@@ -38,7 +38,8 @@ public class EsiRateLimitInterceptor implements Interceptor {
 			logRateLimit();
 			rateLimiter.acquire();
 		}
-		return chain.proceed(chain.request());
+		var response = chain.proceed(chain.request());
+		return response;
 	}
 
 	private void logRateLimit() {

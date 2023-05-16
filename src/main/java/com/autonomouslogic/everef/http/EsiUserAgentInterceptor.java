@@ -1,7 +1,6 @@
-package com.autonomouslogic.everef.esi;
+package com.autonomouslogic.everef.http;
 
 import com.autonomouslogic.everef.config.Configs;
-import com.autonomouslogic.everef.http.UserAgentInterceptor;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.extern.log4j.Log4j2;
