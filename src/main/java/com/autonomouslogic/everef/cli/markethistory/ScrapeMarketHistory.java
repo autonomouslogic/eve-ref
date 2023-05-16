@@ -19,12 +19,14 @@ import com.autonomouslogic.everef.util.TempFiles;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.CompletableSource;
 import io.reactivex.rxjava3.core.Flowable;
 import java.io.FileOutputStream;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import javax.inject.Inject;
@@ -34,6 +36,7 @@ import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import org.h2.mvstore.MVStore;
+import org.jetbrains.annotations.NotNull;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 
 /**
@@ -89,6 +92,7 @@ public class ScrapeMarketHistory implements Command {
 
 	private final Duration latestCacheTime = Configs.DATA_LATEST_CACHE_CONTROL_MAX_AGE.getRequired();
 	private final int esiConcurrency = Configs.ESI_MARKET_HISTORY_CONCURRENCY.getRequired();
+	private final int chunkSize = Configs.ESI_MARKET_HISTORY_CHUNK_SIZE.getRequired();
 
 	@Setter
 	private LocalDate today = LocalDate.now(ZoneOffset.UTC);
@@ -119,15 +123,23 @@ public class ScrapeMarketHistory implements Command {
 						initSources(),
 						initMvStore(),
 						loadMarketHistory(),
-						loadPairs()
-								.flatMapCompletable(
-										pair -> fetchMarketHistory(pair)
-												.flatMapCompletable(entry -> saveMarketHistory(entry)),
-										false,
-										esiConcurrency),
-						uploadArchives(),
-						uploadTotalPairs())
+						loadPairs().buffer(chunkSize).flatMapCompletable(this::processChunk, false, 1))
 				.doFinally(this::closeMvStore);
+	}
+
+	@NotNull
+	private CompletableSource processChunk(List<RegionTypePair> chunk) {
+		return Completable.defer(() -> {
+			log.info("Processing chunk of {} pairs", chunk.size());
+			return Completable.concatArray(
+					Flowable.fromIterable(chunk)
+							.flatMapCompletable(
+									pair -> fetchMarketHistory(pair).flatMapCompletable(this::saveMarketHistory),
+									false,
+									esiConcurrency),
+					uploadArchives(),
+					uploadTotalPairs());
+		});
 	}
 
 	private Completable initSources() {

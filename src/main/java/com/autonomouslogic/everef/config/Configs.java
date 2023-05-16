@@ -220,6 +220,15 @@ public class Configs {
 			.build();
 
 	/**
+	 * Chunk size for the market history scrape.
+	 */
+	public static final Config<Integer> ESI_MARKET_HISTORY_CHUNK_SIZE = Config.<Integer>builder()
+			.name("ESI_MARKET_HISTORY_CHUNK_SIZE")
+			.type(Integer.class)
+			.defaultValue(Integer.MAX_VALUE)
+			.build();
+
+	/**
 	 * Concurrency for the market history scrape.
 	 */
 	public static final Config<Integer> ESI_MARKET_HISTORY_CONCURRENCY = Config.<Integer>builder()
