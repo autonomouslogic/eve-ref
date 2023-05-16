@@ -196,7 +196,6 @@ public class ScrapeMarketHistory implements Command {
 		return Flowable.defer(() -> {
 			log.info("Sourcing pairs");
 			return regionTypeSource.sourcePairs().toList().flatMapPublisher(pairs -> {
-				Collections.shuffle(pairs);
 				log.info("Sourced {} pairs", pairs.size());
 				progressReporter = new ProgressReporter(getName(), pairs.size(), Duration.ofMinutes(1));
 				progressReporter.start();
