@@ -250,7 +250,7 @@ public class ScrapeMarketHistory implements Command {
 						objectMapper.writeValue(out, historyEntries);
 					}
 					var archivePath =
-							dataUrl.resolve(MARKET_HISTORY.getFolder() + "/").resolve("pairs.json");
+							dataUrl.resolve(MARKET_HISTORY.getFolder() + "/").resolve("totals.json");
 					var archivePut = s3Util.putPublicObjectRequest(
 							file.length(), archivePath, "application/json", latestCacheTime);
 					log.info("Uploading total pairs file");

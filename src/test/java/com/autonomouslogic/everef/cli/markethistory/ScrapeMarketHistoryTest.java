@@ -109,7 +109,7 @@ public class ScrapeMarketHistoryTest {
 				loadExpectedArchive(LocalDate.parse("2023-01-03")), loadUploadedArchive(LocalDate.parse("2023-01-03")));
 
 		var totalPairs = new String(mockS3Adapter
-				.getTestObject(BUCKET_NAME, "data/market-history/pairs.json", dataClient)
+				.getTestObject(BUCKET_NAME, "data/market-history/totals.json", dataClient)
 				.orElseThrow());
 		assertEquals("{\"2023-01-01\":4,\"2023-01-02\":5,\"2023-01-03\":4}", totalPairs);
 	}
