@@ -4,8 +4,8 @@ import com.autonomouslogic.everef.esi.MarketEsi;
 import com.autonomouslogic.everef.model.MarketHistoryEntry;
 import com.autonomouslogic.everef.model.RegionTypePair;
 import io.reactivex.rxjava3.core.Flowable;
+import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import javax.inject.Inject;
@@ -30,7 +30,7 @@ class ActiveOrdersRegionTypeSource implements RegionTypeSource {
 	}
 
 	@Override
-	public Flowable<RegionTypePair> sourcePairs(List<RegionTypePair> currentPairs) {
+	public Flowable<RegionTypePair> sourcePairs(Collection<RegionTypePair> currentPairs) {
 		return Flowable.fromIterable(regions).flatMap(regionId -> marketEsi
 				.getActiveMarketOrderTypes(regionId)
 				.map(typeId -> new RegionTypePair(regionId, typeId)));

@@ -6,7 +6,7 @@ import com.autonomouslogic.everef.model.RegionTypePair;
 import com.autonomouslogic.everef.util.MarketCapCalc;
 import com.google.common.collect.Ordering;
 import io.reactivex.rxjava3.core.Flowable;
-import java.util.List;
+import java.util.Collection;
 import javax.inject.Inject;
 import lombok.extern.log4j.Log4j2;
 
@@ -30,10 +30,11 @@ class HistoryRegionTypeSource implements RegionTypeSource {
 	}
 
 	@Override
-	public Flowable<RegionTypePair> sourcePairs(List<RegionTypePair> currentPairs) {
+	public Flowable<RegionTypePair> sourcePairs(Collection<RegionTypePair> currentPairs) {
 		var sortedCaps = marketCapCalc.getRegionTypeMarketCaps().stream()
 				.sorted(ORDERING)
 				.toList();
+		sortedCaps.stream().limit(20).forEach(cap -> log.trace("Top cap: {}", cap));
 		var pairs = sortedCaps.stream()
 				.map(cap -> new RegionTypePair(cap.getRegionId(), cap.getTypeId()))
 				.toList();
