@@ -22,6 +22,7 @@ import java.io.FileOutputStream;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
+import java.util.Collections;
 import java.util.Map;
 import java.util.TreeMap;
 import javax.inject.Inject;
@@ -182,6 +183,7 @@ public class ScrapeMarketHistory implements Command {
 		return Flowable.defer(() -> {
 			log.info("Sourcing pairs");
 			return regionTypeSource.sourcePairs().toList().flatMapPublisher(pairs -> {
+				Collections.shuffle(pairs);
 				log.info("Sourced {} pairs", pairs.size());
 				progressReporter = new ProgressReporter(getName(), pairs.size(), Duration.ofMinutes(1));
 				progressReporter.start();
@@ -227,11 +229,12 @@ public class ScrapeMarketHistory implements Command {
 						return Completable.complete();
 					}
 					historyEntries.put(date, entries.size());
-					log.info(String.format("Writing archive for %s", date));
+					log.debug(String.format("Writing archive for %s", date));
 					var archive = marketHistoryFileBuilderProvider.get().writeEntries(entries.values());
 					var archivePath = dataUrl.resolve(MARKET_HISTORY.createArchivePath(date));
 					var archivePut = s3Util.putPublicObjectRequest(
 							archive.length(), archivePath, "application/x-bzip2", archiveCacheTime);
+					log.info(String.format("Uploading archive for %s", date));
 					return s3Adapter.putObject(archivePut, archive, s3Client).ignoreElement();
 				})
 				.compose(Rx.offloadCompletable());
@@ -239,6 +242,7 @@ public class ScrapeMarketHistory implements Command {
 
 	private Completable uploadTotalPairs() {
 		return Completable.defer(() -> {
+					log.debug("Building total pairs file");
 					var file =
 							tempFiles.tempFile("market-history-pairs", ".json").toFile();
 					file.deleteOnExit();
@@ -249,6 +253,7 @@ public class ScrapeMarketHistory implements Command {
 							dataUrl.resolve(MARKET_HISTORY.getFolder() + "/").resolve("pairs.json");
 					var archivePut = s3Util.putPublicObjectRequest(
 							file.length(), archivePath, "application/json", latestCacheTime);
+					log.info("Uploading total pairs file");
 					return s3Adapter.putObject(archivePut, file, s3Client).ignoreElement();
 				})
 				.compose(Rx.offloadCompletable());

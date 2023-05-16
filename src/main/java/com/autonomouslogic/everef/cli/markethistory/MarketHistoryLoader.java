@@ -20,6 +20,7 @@ import java.io.File;
 import java.net.URI;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicInteger;
 import javax.inject.Inject;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
@@ -64,6 +65,7 @@ class MarketHistoryLoader {
 
 	public Flowable<Pair<LocalDate, JsonNode>> load() {
 		log.info("Loading market history - minDate: {}", minDate);
+		var totalEntries = new AtomicInteger();
 		var f = crawlFiles();
 		if (minDate != null) {
 			f = f.filter(p -> !p.getLeft().isBefore(minDate));
@@ -79,6 +81,7 @@ class MarketHistoryLoader {
 								file.deleteOnExit();
 								return parseFile(file)
 										.map(entry -> {
+											totalEntries.incrementAndGet();
 											return Pair.of(p.getLeft(), entry);
 										})
 										.doFinally(() -> file.delete());
@@ -86,6 +89,7 @@ class MarketHistoryLoader {
 						},
 						false,
 						DOWNLOAD_CONCURRENCY)
+				.doOnComplete(() -> log.info("Loaded {} market history entries", totalEntries.get()))
 				.switchIfEmpty(Flowable.error(new RuntimeException("No market data found in history files.")));
 	}
 
