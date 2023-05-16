@@ -1,11 +1,10 @@
-package com.autonomouslogic.everef.cli.markethistory;
+package com.autonomouslogic.everef.model;
 
-import com.autonomouslogic.everef.model.MarketHistoryEntry;
 import com.fasterxml.jackson.databind.JsonNode;
 import lombok.Value;
 
 @Value
-class RegionTypePair {
+public class RegionTypePair {
 	int regionId;
 	int typeId;
 

@@ -4,6 +4,8 @@ import static com.autonomouslogic.everef.util.ArchivePathFactory.MARKET_HISTORY;
 
 import com.autonomouslogic.everef.cli.Command;
 import com.autonomouslogic.everef.config.Configs;
+import com.autonomouslogic.everef.model.MarketHistoryEntry;
+import com.autonomouslogic.everef.model.RegionTypePair;
 import com.autonomouslogic.everef.mvstore.JsonNodeDataType;
 import com.autonomouslogic.everef.mvstore.MVStoreUtil;
 import com.autonomouslogic.everef.mvstore.StoreMapSet;
@@ -17,12 +19,13 @@ import com.autonomouslogic.everef.util.TempFiles;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.CompletableSource;
 import io.reactivex.rxjava3.core.Flowable;
 import java.io.FileOutputStream;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
-import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import javax.inject.Inject;
@@ -32,6 +35,7 @@ import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import org.h2.mvstore.MVStore;
+import org.jetbrains.annotations.NotNull;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 
 /**
@@ -86,8 +90,8 @@ public class ScrapeMarketHistory implements Command {
 	protected Provider<MarketHistoryFileBuilder> marketHistoryFileBuilderProvider;
 
 	private final Duration latestCacheTime = Configs.DATA_LATEST_CACHE_CONTROL_MAX_AGE.getRequired();
-	private final Duration archiveCacheTime = Configs.DATA_ARCHIVE_CACHE_CONTROL_MAX_AGE.getRequired();
 	private final int esiConcurrency = Configs.ESI_MARKET_HISTORY_CONCURRENCY.getRequired();
+	private final int chunkSize = Configs.ESI_MARKET_HISTORY_CHUNK_SIZE.getRequired();
 
 	@Setter
 	private LocalDate today = LocalDate.now(ZoneOffset.UTC);
@@ -118,22 +122,30 @@ public class ScrapeMarketHistory implements Command {
 						initSources(),
 						initMvStore(),
 						loadMarketHistory(),
-						loadPairs()
-								.flatMapCompletable(
-										pair -> fetchMarketHistory(pair)
-												.flatMapCompletable(entry -> saveMarketHistory(entry)),
-										false,
-										esiConcurrency),
-						uploadArchives(),
-						uploadTotalPairs())
+						loadPairs().buffer(chunkSize).flatMapCompletable(this::processChunk, false, 1))
 				.doFinally(this::closeMvStore);
+	}
+
+	@NotNull
+	private CompletableSource processChunk(List<RegionTypePair> chunk) {
+		return Completable.defer(() -> {
+			log.info("Processing chunk of {} pairs", chunk.size());
+			return Completable.concatArray(
+					Flowable.fromIterable(chunk)
+							.flatMapCompletable(
+									pair -> fetchMarketHistory(pair).flatMapCompletable(this::saveMarketHistory),
+									false,
+									esiConcurrency),
+					uploadArchives(),
+					uploadTotalPairs());
+		});
 	}
 
 	private Completable initSources() {
 		return Completable.fromAction(() -> {
 			regionTypeSource = compoundRegionTypeSourceProvider.get();
-			regionTypeSource.addSource(activeOrdersRegionTypeSourceProvider.get());
 			regionTypeSource.addSource(historyRegionTypeSourceProvider.get());
+			regionTypeSource.addSource(activeOrdersRegionTypeSourceProvider.get());
 		});
 	}
 
@@ -167,7 +179,7 @@ public class ScrapeMarketHistory implements Command {
 						var entry = p.getRight();
 						var id = RegionTypePair.fromHistory(entry).toString();
 						mapSet.put(p.getLeft().toString(), id, entry);
-						regionTypeSource.addHistory(entry);
+						regionTypeSource.addHistory(objectMapper.treeToValue(entry, MarketHistoryEntry.class));
 					})
 					.ignoreElements()
 					.andThen(Completable.fromAction(() -> {
@@ -183,7 +195,6 @@ public class ScrapeMarketHistory implements Command {
 		return Flowable.defer(() -> {
 			log.info("Sourcing pairs");
 			return regionTypeSource.sourcePairs().toList().flatMapPublisher(pairs -> {
-				Collections.shuffle(pairs);
 				log.info("Sourced {} pairs", pairs.size());
 				progressReporter = new ProgressReporter(getName(), pairs.size(), Duration.ofMinutes(1));
 				progressReporter.start();
@@ -233,7 +244,7 @@ public class ScrapeMarketHistory implements Command {
 					var archive = marketHistoryFileBuilderProvider.get().writeEntries(entries.values());
 					var archivePath = dataUrl.resolve(MARKET_HISTORY.createArchivePath(date));
 					var archivePut = s3Util.putPublicObjectRequest(
-							archive.length(), archivePath, "application/x-bzip2", archiveCacheTime);
+							archive.length(), archivePath, "application/x-bzip2", latestCacheTime);
 					log.info(String.format("Uploading archive for %s", date));
 					return s3Adapter.putObject(archivePut, archive, s3Client).ignoreElement();
 				})

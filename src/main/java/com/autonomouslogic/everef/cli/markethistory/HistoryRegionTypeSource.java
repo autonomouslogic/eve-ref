@@ -1,11 +1,12 @@
 package com.autonomouslogic.everef.cli.markethistory;
 
-import com.fasterxml.jackson.databind.JsonNode;
+import com.autonomouslogic.everef.model.MarketHistoryEntry;
+import com.autonomouslogic.everef.model.RegionTypeMarketCap;
+import com.autonomouslogic.everef.model.RegionTypePair;
+import com.autonomouslogic.everef.util.MarketCapCalc;
+import com.google.common.collect.Ordering;
 import io.reactivex.rxjava3.core.Flowable;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Collection;
 import javax.inject.Inject;
 import lombok.extern.log4j.Log4j2;
 
@@ -14,18 +15,29 @@ import lombok.extern.log4j.Log4j2;
  */
 @Log4j2
 class HistoryRegionTypeSource implements RegionTypeSource {
-	private final Set<RegionTypePair> pairs = Collections.newSetFromMap(new ConcurrentHashMap<>());
+	private static final Ordering<RegionTypeMarketCap> ORDERING =
+			Ordering.natural().onResultOf(RegionTypeMarketCap::getCap).reverse();
+
+	@Inject
+	protected MarketCapCalc marketCapCalc;
 
 	@Inject
 	protected HistoryRegionTypeSource() {}
 
 	@Override
-	public void addHistory(JsonNode entry) {
-		pairs.add(RegionTypePair.fromHistory(entry));
+	public void addHistory(MarketHistoryEntry entry) {
+		marketCapCalc.add(entry);
 	}
 
 	@Override
-	public Flowable<RegionTypePair> sourcePairs(List<RegionTypePair> currentPairs) {
+	public Flowable<RegionTypePair> sourcePairs(Collection<RegionTypePair> currentPairs) {
+		var sortedCaps = marketCapCalc.getRegionTypeMarketCaps().stream()
+				.sorted(ORDERING)
+				.toList();
+		sortedCaps.stream().limit(20).forEach(cap -> log.trace("Top cap: {}", cap));
+		var pairs = sortedCaps.stream()
+				.map(cap -> new RegionTypePair(cap.getRegionId(), cap.getTypeId()))
+				.toList();
 		return Flowable.fromIterable(pairs);
 	}
 }
