@@ -1,7 +1,8 @@
 package com.autonomouslogic.everef.cli.markethistory;
 
 import com.autonomouslogic.everef.esi.MarketEsi;
-import com.fasterxml.jackson.databind.JsonNode;
+import com.autonomouslogic.everef.model.MarketHistoryEntry;
+import com.autonomouslogic.everef.model.RegionTypePair;
 import io.reactivex.rxjava3.core.Flowable;
 import java.util.Collections;
 import java.util.List;
@@ -24,7 +25,7 @@ class ActiveOrdersRegionTypeSource implements RegionTypeSource {
 	protected ActiveOrdersRegionTypeSource() {}
 
 	@Override
-	public void addHistory(JsonNode entry) {
+	public void addHistory(MarketHistoryEntry entry) {
 		regions.add(RegionTypePair.fromHistory(entry).getRegionId());
 	}
 

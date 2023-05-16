@@ -4,6 +4,8 @@ import static com.autonomouslogic.everef.util.ArchivePathFactory.MARKET_HISTORY;
 
 import com.autonomouslogic.everef.cli.Command;
 import com.autonomouslogic.everef.config.Configs;
+import com.autonomouslogic.everef.model.MarketHistoryEntry;
+import com.autonomouslogic.everef.model.RegionTypePair;
 import com.autonomouslogic.everef.mvstore.JsonNodeDataType;
 import com.autonomouslogic.everef.mvstore.MVStoreUtil;
 import com.autonomouslogic.everef.mvstore.StoreMapSet;
@@ -86,7 +88,6 @@ public class ScrapeMarketHistory implements Command {
 	protected Provider<MarketHistoryFileBuilder> marketHistoryFileBuilderProvider;
 
 	private final Duration latestCacheTime = Configs.DATA_LATEST_CACHE_CONTROL_MAX_AGE.getRequired();
-	private final Duration archiveCacheTime = Configs.DATA_ARCHIVE_CACHE_CONTROL_MAX_AGE.getRequired();
 	private final int esiConcurrency = Configs.ESI_MARKET_HISTORY_CONCURRENCY.getRequired();
 
 	@Setter
@@ -132,8 +133,8 @@ public class ScrapeMarketHistory implements Command {
 	private Completable initSources() {
 		return Completable.fromAction(() -> {
 			regionTypeSource = compoundRegionTypeSourceProvider.get();
-			regionTypeSource.addSource(activeOrdersRegionTypeSourceProvider.get());
 			regionTypeSource.addSource(historyRegionTypeSourceProvider.get());
+			regionTypeSource.addSource(activeOrdersRegionTypeSourceProvider.get());
 		});
 	}
 
@@ -167,7 +168,7 @@ public class ScrapeMarketHistory implements Command {
 						var entry = p.getRight();
 						var id = RegionTypePair.fromHistory(entry).toString();
 						mapSet.put(p.getLeft().toString(), id, entry);
-						regionTypeSource.addHistory(entry);
+						regionTypeSource.addHistory(objectMapper.treeToValue(entry, MarketHistoryEntry.class));
 					})
 					.ignoreElements()
 					.andThen(Completable.fromAction(() -> {
@@ -233,7 +234,7 @@ public class ScrapeMarketHistory implements Command {
 					var archive = marketHistoryFileBuilderProvider.get().writeEntries(entries.values());
 					var archivePath = dataUrl.resolve(MARKET_HISTORY.createArchivePath(date));
 					var archivePut = s3Util.putPublicObjectRequest(
-							archive.length(), archivePath, "application/x-bzip2", archiveCacheTime);
+							archive.length(), archivePath, "application/x-bzip2", latestCacheTime);
 					log.info(String.format("Uploading archive for %s", date));
 					return s3Adapter.putObject(archivePut, archive, s3Client).ignoreElement();
 				})

@@ -1,7 +1,8 @@
 package com.autonomouslogic.everef.cli.markethistory;
 
 import com.autonomouslogic.commons.ListUtil;
-import com.fasterxml.jackson.databind.JsonNode;
+import com.autonomouslogic.everef.model.MarketHistoryEntry;
+import com.autonomouslogic.everef.model.RegionTypePair;
 import io.reactivex.rxjava3.core.Flowable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -57,7 +58,7 @@ class CompoundRegionTypeSource implements RegionTypeSource {
 	}
 
 	@Override
-	public void addHistory(JsonNode entry) {
+	public void addHistory(MarketHistoryEntry entry) {
 		for (RegionTypeSource source : sources) {
 			source.addHistory(entry);
 		}

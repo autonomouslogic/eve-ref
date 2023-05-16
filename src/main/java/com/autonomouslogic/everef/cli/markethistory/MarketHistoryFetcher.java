@@ -2,6 +2,7 @@ package com.autonomouslogic.everef.cli.markethistory;
 
 import com.autonomouslogic.everef.esi.EsiHelper;
 import com.autonomouslogic.everef.esi.EsiUrl;
+import com.autonomouslogic.everef.model.RegionTypePair;
 import com.autonomouslogic.everef.util.OkHttpHelper;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
