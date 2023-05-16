@@ -40,6 +40,10 @@ public class MarketHistoryFetcher {
 					.fetch(esiUrl)
 					.flatMapPublisher(response -> {
 						int statusCode = response.code();
+						if (statusCode == 400) {
+							log.warn("Ignoring {} received for {}", statusCode, esiUrl);
+							return Flowable.<ObjectNode>empty();
+						}
 						if (statusCode == 404) {
 							return Flowable.<ObjectNode>empty();
 						} else if (statusCode == 200) {
