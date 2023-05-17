@@ -55,6 +55,7 @@ dependencies {
 	implementation "net.gpedro.integrations.slack:slack-webhook:1.4.0"
 	implementation "org.jsoup:jsoup:1.16.1"
 	implementation "commons-codec:commons-codec:1.15"
+	implementation "io.dropwizard.metrics:metrics-core:4.2.18"
 
 	testAnnotationProcessor "com.google.dagger:dagger-compiler:2.46"
 	testImplementation "com.google.dagger:dagger:2.46"

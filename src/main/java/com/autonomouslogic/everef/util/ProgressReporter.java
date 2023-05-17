@@ -1,5 +1,6 @@
 package com.autonomouslogic.everef.util;
 
+import com.codahale.metrics.Meter;
 import com.google.common.util.concurrent.AtomicDouble;
 import java.time.Duration;
 import java.time.Instant;
@@ -13,6 +14,8 @@ import lombok.extern.log4j.Log4j2;
 @RequiredArgsConstructor
 @Log4j2
 public class ProgressReporter {
+	private static final double METER_SCALE = 1000.0;
+
 	@NonNull
 	@Getter
 	private final String name;
@@ -31,6 +34,8 @@ public class ProgressReporter {
 
 	private final AtomicDouble completedWork = new AtomicDouble();
 
+	private final Meter meter = new Meter();
+
 	public void start() {
 		startTime = Instant.now();
 	}
@@ -42,6 +47,7 @@ public class ProgressReporter {
 	public void increment(double work) {
 		Objects.requireNonNull(startTime, "start() must be called before increment()");
 		completedWork.addAndGet(work);
+		meter.mark((long) (work * METER_SCALE));
 		report();
 	}
 
@@ -55,15 +61,17 @@ public class ProgressReporter {
 		var completed = getCompletedWork();
 		var percent = getCompletedRatio() * 100.0;
 		var rate = getRate();
+		var recentRate = getOneMinuteRate();
 		var remainingTime = getRemainingTime();
 		log.info(String.format(
-				"%s: %.1f/%.1f completed (%.1f%%) in %s @ %.1f/s - est. %s remaining",
+				"%s: %.1f/%.1f completed (%.1f%%) in %s @ %.1f/s (1min: %.1f/s) - est. %s remaining",
 				name,
 				completed,
 				totalWork,
 				percent,
 				runtime.truncatedTo(ChronoUnit.SECONDS),
 				rate,
+				recentRate,
 				remainingTime.truncatedTo(ChronoUnit.SECONDS)));
 	}
 
@@ -81,6 +89,10 @@ public class ProgressReporter {
 
 	public double getRate() {
 		return getCompletedWork() / getRuntime().toMillis() * 1000.0;
+	}
+
+	public double getOneMinuteRate() {
+		return meter.getOneMinuteRate() / METER_SCALE;
 	}
 
 	public Duration getRemainingTime() {
