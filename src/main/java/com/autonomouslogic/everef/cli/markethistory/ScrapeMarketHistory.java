@@ -231,7 +231,7 @@ public class ScrapeMarketHistory implements Command {
 		return Completable.defer(() -> {
 			log.info("Uploading archives");
 			return Flowable.fromIterable(mapSet.getMapNames())
-					.flatMapCompletable(date -> uploadArchive(LocalDate.parse(date)));
+					.flatMapCompletable(date -> uploadArchive(LocalDate.parse(date)), false, 8);
 		});
 	}
 
