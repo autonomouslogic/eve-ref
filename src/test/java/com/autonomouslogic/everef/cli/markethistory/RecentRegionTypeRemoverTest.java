@@ -46,6 +46,6 @@ public class RecentRegionTypeRemoverTest {
 				.build());
 		var result = source.sourcePairs(List.of()).toList().blockingGet();
 		Collections.sort(result, Ordering.natural().onResultOf(RegionTypePair::getRegionId));
-		assertEquals(List.of(new RegionTypePair(100, 10), new RegionTypePair(300, 30)), result);
+		assertEquals(List.of(new RegionTypePair(200, 20), new RegionTypePair(400, 40)), result);
 	}
 }

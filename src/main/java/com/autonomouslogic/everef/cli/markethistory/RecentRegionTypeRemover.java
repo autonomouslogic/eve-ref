@@ -27,7 +27,7 @@ public class RecentRegionTypeRemover implements RegionTypeSource {
 	@Override
 	public void addHistory(MarketHistoryEntry entry) {
 		var lastModified = entry.getHttpLastModified();
-		if (lastModified == null || lastModified.isBefore(cutoffTime)) {
+		if (lastModified != null && !lastModified.isBefore(cutoffTime)) {
 			pairs.add(RegionTypePair.fromHistory(entry));
 		}
 	}
