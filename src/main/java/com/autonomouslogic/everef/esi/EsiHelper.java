@@ -75,21 +75,26 @@ public class EsiHelper {
 	}
 
 	public <T> Flowable<T> fetchPages(Function<Integer, ApiResponse<List<T>>> fetcher) {
-		return Flowable.defer(() -> Flowable.just(fetcher.apply(1))).flatMap(first -> {
-			var pages = Optional.ofNullable(first.getHeaders().get("X-Pages")).stream()
-					.flatMap(List::stream)
-					.mapToInt(Integer::valueOf)
-					.findFirst()
-					.orElse(1);
-			var firstResult = decodeResponse(first);
-			if (pages == 1) {
-				return Flowable.fromIterable(firstResult);
-			}
-			return Flowable.concatArray(
-					Flowable.fromIterable(firstResult),
-					Flowable.range(2, pages - 1)
-							.flatMap(page -> Flowable.fromIterable(decodeResponse(fetcher.apply(page))), false, 4));
-		});
+		return Flowable.defer(() -> Flowable.just(fetcher.apply(1)))
+				.flatMap(first -> {
+					var pages = Optional.ofNullable(first.getHeaders().get("X-Pages")).stream()
+							.flatMap(List::stream)
+							.mapToInt(Integer::valueOf)
+							.findFirst()
+							.orElse(1);
+					var firstResult = decodeResponse(first);
+					if (pages == 1) {
+						return Flowable.fromIterable(firstResult);
+					}
+					return Flowable.concatArray(
+							Flowable.fromIterable(firstResult),
+							Flowable.range(2, pages - 1)
+									.flatMap(
+											page -> Flowable.fromIterable(decodeResponse(fetcher.apply(page))),
+											false,
+											4));
+				})
+				.retry(2);
 	}
 
 	/**
