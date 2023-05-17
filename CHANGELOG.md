@@ -1,5 +1,12 @@
 EVE Ref Changelog
 
+## [2.1.0](https://github.com/autonomouslogic/eve-ref/compare/2.0.0...2.1.0) (2023-05-17)
+
+
+### Features
+
+* Skip recently downloaded market history pairs ([#131](https://github.com/autonomouslogic/eve-ref/issues/131)) ([3b329ec](https://github.com/autonomouslogic/eve-ref/commit/3b329ecefd2077efa8a7259ff00975ed2f29e149))
+
 ## [2.0.0](https://github.com/autonomouslogic/eve-ref/compare/1.0.0...2.0.0) (2023-05-16)
 
 
