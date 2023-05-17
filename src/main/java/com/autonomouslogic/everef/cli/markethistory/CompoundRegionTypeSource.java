@@ -44,12 +44,16 @@ class CompoundRegionTypeSource implements RegionTypeSource {
 				final var sourcePairs = new LinkedHashSet<>(sourcePairsList);
 				var finalPairs = new LinkedHashSet<RegionTypePair>();
 				finalPairs.addAll(currentPairs);
-				finalPairs.addAll(sourcePairs);
+				if (source.isAdditive()) {
+					finalPairs.addAll(sourcePairs);
+				} else {
+					finalPairs.removeAll(sourcePairs);
+				}
 				var previousRegions = countRegions(currentPairs);
 				var currentRegions = countRegions(finalPairs);
 				var newRegions = currentRegions - previousRegions;
 				log.debug(
-						"{} returned {} pairs, adding +{} new pairs, new total: {}, +{} new regions",
+						"{} returned {} pairs, adding {} new pairs, new total: {}, {} new regions",
 						source.getClass().getSimpleName(),
 						sourcePairs.size(),
 						finalPairs.size() - currentPairs.size(),
