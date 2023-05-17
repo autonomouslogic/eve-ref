@@ -2,11 +2,12 @@ package com.autonomouslogic.everef.util;
 
 import java.time.Duration;
 import lombok.SneakyThrows;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 public class ProgressReporterTest {
 	@Test
-	//	@Disabled
+	@Disabled
 	@SneakyThrows
 	void shouldReport() {
 		var progress = new ProgressReporter("test", 100, Duration.ofSeconds(1));

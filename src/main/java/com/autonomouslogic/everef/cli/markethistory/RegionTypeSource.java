@@ -12,4 +12,8 @@ interface RegionTypeSource {
 	default void addHistory(MarketHistoryEntry entry) {}
 
 	Flowable<RegionTypePair> sourcePairs(Collection<RegionTypePair> currentPairs);
+
+	default boolean isAdditive() {
+		return true;
+	}
 }

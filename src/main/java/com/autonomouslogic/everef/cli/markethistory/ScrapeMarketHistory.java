@@ -87,6 +87,9 @@ public class ScrapeMarketHistory implements Command {
 	protected Provider<HistoryRegionTypeSource> historyRegionTypeSourceProvider;
 
 	@Inject
+	protected Provider<RecentRegionTypeRemover> recentRegionTypeRemoverProvider;
+
+	@Inject
 	protected Provider<MarketHistoryFileBuilder> marketHistoryFileBuilderProvider;
 
 	private final Duration latestCacheTime = Configs.DATA_LATEST_CACHE_CONTROL_MAX_AGE.getRequired();
@@ -144,8 +147,9 @@ public class ScrapeMarketHistory implements Command {
 	private Completable initSources() {
 		return Completable.fromAction(() -> {
 			regionTypeSource = compoundRegionTypeSourceProvider.get();
-			regionTypeSource.addSource(historyRegionTypeSourceProvider.get());
+			regionTypeSource.addSource(historyRegionTypeSourceProvider.get()); // must be first.
 			regionTypeSource.addSource(activeOrdersRegionTypeSourceProvider.get());
+			regionTypeSource.addSource(recentRegionTypeRemoverProvider.get()); // must be last.
 		});
 	}
 
