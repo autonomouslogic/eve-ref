@@ -1,6 +1,7 @@
 package com.autonomouslogic.everef.http;
 
 import java.io.IOException;
+import java.util.Optional;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.extern.log4j.Log4j2;
@@ -22,12 +23,19 @@ public class LoggingInterceptor implements Interceptor {
 	public Response intercept(@NotNull Interceptor.Chain chain) throws IOException {
 		var req = chain.request();
 		log.trace("{} {}", req.method(), req.url());
-		var response = chain.proceed(chain.request());
-		var cached = response.cacheResponse() != null;
-		var code = response.code();
-		var time = response.receivedResponseAtMillis() - response.sentRequestAtMillis();
+		final var response = chain.proceed(chain.request());
+		final var networkResponse = response.networkResponse();
+		final var cacheResponse = response.cacheResponse();
+		var cached = cacheResponse != null && networkResponse == null;
+		var code = Optional.ofNullable(networkResponse)
+				.or(() -> Optional.ofNullable(response))
+				.map(Response::code)
+				.orElse(-1);
+		var time = Optional.ofNullable(networkResponse)
+				.map(r -> r.receivedResponseAtMillis() - r.sentRequestAtMillis())
+				.orElse(-1L);
 		var cacheOrTime = cached ? "cached" : time + " ms";
-		log.trace("{} {} -> {} - {}", req.method(), req.url(), code, cacheOrTime);
+		log.trace("{} {} -> {} [{}]", req.method(), req.url(), code, cacheOrTime);
 		return response;
 	}
 }
