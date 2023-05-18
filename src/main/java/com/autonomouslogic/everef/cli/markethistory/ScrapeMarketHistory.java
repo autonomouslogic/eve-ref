@@ -244,7 +244,7 @@ public class ScrapeMarketHistory implements Command {
 						return Completable.complete();
 					}
 					historyEntries.put(date, entries.size());
-					log.debug(String.format("Writing archive for %s", date));
+					log.debug("Writing archive for {} - {} entries", date, entries.size());
 					var archive = marketHistoryFileBuilderProvider.get().writeEntries(entries.values());
 					var archivePath = dataUrl.resolve(MARKET_HISTORY.createArchivePath(date));
 					var archivePut = s3Util.putPublicObjectRequest(
