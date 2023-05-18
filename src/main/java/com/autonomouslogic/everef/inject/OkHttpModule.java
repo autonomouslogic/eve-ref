@@ -64,16 +64,8 @@ public class OkHttpModule {
 				.addInterceptor(userAgentInterceptor)
 				.addInterceptor(limitExceededInterceptor)
 				.addInterceptor(loggingInterceptor)
-				.addNetworkInterceptor(rateLimitInterceptor)
-				.retryOnConnectionFailure(true)
-				.followRedirects(true)
-				.followSslRedirects(true)
-				.connectTimeout(Duration.ofSeconds(5))
-				.readTimeout(Duration.ofSeconds(20))
-				.writeTimeout(Duration.ofSeconds(5));
-		if (cache != null) {
-			builder.cache(cache);
-		}
+				.addNetworkInterceptor(rateLimitInterceptor);
+		builder = configure(builder, cache);
 		return builder.build();
 	}
 
@@ -89,18 +81,19 @@ public class OkHttpModule {
 	@Singleton
 	public OkHttpClient mainHttpClient(
 			Cache cache, UserAgentInterceptor userAgentInterceptor, LoggingInterceptor loggingInterceptor) {
-		var builder = new OkHttpClient.Builder()
-				.addInterceptor(userAgentInterceptor)
-				.addInterceptor(loggingInterceptor)
-				.retryOnConnectionFailure(true)
+		var builder =
+				new OkHttpClient.Builder().addInterceptor(userAgentInterceptor).addInterceptor(loggingInterceptor);
+		builder = configure(builder, cache);
+		return builder.build();
+	}
+
+	private OkHttpClient.Builder configure(OkHttpClient.Builder builder, Cache cache) {
+		return builder.retryOnConnectionFailure(true)
 				.followRedirects(true)
 				.followSslRedirects(true)
 				.connectTimeout(Duration.ofSeconds(5))
 				.readTimeout(Duration.ofSeconds(20))
-				.writeTimeout(Duration.ofSeconds(5));
-		if (cache != null) {
-			builder.cache(cache);
-		}
-		return builder.build();
+				.writeTimeout(Duration.ofSeconds(5))
+				.cache(cache);
 	}
 }
