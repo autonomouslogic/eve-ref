@@ -7,6 +7,7 @@ import com.autonomouslogic.everef.model.RegionTypePair;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.util.LastCutoff;
 import com.google.common.collect.Ordering;
+import java.time.Duration;
 import java.util.Collections;
 import java.util.List;
 import javax.inject.Inject;
@@ -27,7 +28,7 @@ public class RecentRegionTypeRemoverTest {
 
 	@Test
 	void shouldRemoveItemsSinceLastCutoff() {
-		var cutoff = lastCutoff.getEsiRefresh();
+		var cutoff = lastCutoff.getEsiRefresh().minus(Duration.ofDays(1));
 		source.addHistory(MarketHistoryEntry.builder().regionId(100).typeId(10).build());
 		source.addHistory(MarketHistoryEntry.builder()
 				.regionId(200)
