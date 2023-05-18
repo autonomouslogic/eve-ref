@@ -1,5 +1,31 @@
 EVE Ref Changelog
 
+## [2.1.1](https://github.com/autonomouslogic/eve-ref/compare/2.1.0...2.1.1) (2023-05-18)
+
+
+### Bug Fixes
+
+* Added a 1-minute rate to the progress reporter. ([4496fbf](https://github.com/autonomouslogic/eve-ref/commit/4496fbfc240e41262f8f44dfc1941953cfe3c14f))
+* Better HTTP logging. ([d92b58b](https://github.com/autonomouslogic/eve-ref/commit/d92b58bcc041f9955803b18ad0c30c014c22125f))
+* Earlier cut-off for resumed markety history scrapes. ([90c19e4](https://github.com/autonomouslogic/eve-ref/commit/90c19e40c749bd92fc334097b1de123ed10a1b1e))
+* Limit concurent market history uploads to S3. ([6e7a3cb](https://github.com/autonomouslogic/eve-ref/commit/6e7a3cb02471527b5ebcc494c4140d1fb2b06096))
+* Retries for wrapped page fetches on the ESI. ([23bdf9a](https://github.com/autonomouslogic/eve-ref/commit/23bdf9a16a72a2ca6281fad5058c86262da67c0a))
+
+
+### Documentation
+
+* Remvoed duplicate changelog entry. ([8e98c1d](https://github.com/autonomouslogic/eve-ref/commit/8e98c1dd6690fc2dc4c1b742dc2a183f316afda4))
+
+
+### Tests
+
+* Fixed RecentRegionTypeRemoverTest. ([a8e413d](https://github.com/autonomouslogic/eve-ref/commit/a8e413d4e7022df84be99e13294f2d8b6b4878f8))
+
+
+### Code Refactoring
+
+* OkHttp client builder. ([c81fbac](https://github.com/autonomouslogic/eve-ref/commit/c81fbacfb6c6b35eea08417cfa5f137d4e94a132))
+
 ## [2.1.0](https://github.com/autonomouslogic/eve-ref/compare/2.0.0...2.1.0) (2023-05-17)
 
 
