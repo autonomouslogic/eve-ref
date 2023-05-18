@@ -4,6 +4,7 @@ import com.autonomouslogic.everef.model.MarketHistoryEntry;
 import com.autonomouslogic.everef.model.RegionTypePair;
 import com.autonomouslogic.everef.util.LastCutoff;
 import io.reactivex.rxjava3.core.Flowable;
+import java.time.Duration;
 import java.time.Instant;
 import java.util.Collection;
 import java.util.Collections;
@@ -20,7 +21,10 @@ public class RecentRegionTypeRemover implements RegionTypeSource {
 
 	@Inject
 	protected RecentRegionTypeRemover(LastCutoff lastCutoff) {
-		cutoffTime = lastCutoff.getEsiRefresh();
+		// The Expires header will be around the cut-off time. A cut-off on the 17th cannot contain data for the 17th.
+		// Therefore, we need to subtract a day from the cut-off time to get a realistic picture of what was already
+		// fetched.
+		cutoffTime = lastCutoff.getEsiRefresh().minus(Duration.ofDays(1));
 		log.debug("Removing entries after {}", cutoffTime);
 	}
 
