@@ -2,6 +2,8 @@ package com.autonomouslogic.everef.mvstore;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import io.reactivex.rxjava3.functions.BiConsumer;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -45,7 +47,9 @@ public class StoreMapSet {
 
 	@SneakyThrows
 	public void forEachMap(BiConsumer<String, Map<String, JsonNode>> consumer) {
-		for (String key : maps.keySet()) {
+		var keys = new ArrayList<>(maps.keySet());
+		Collections.sort(keys);
+		for (String key : keys) {
 			consumer.accept(key, maps.get(key));
 		}
 	}
