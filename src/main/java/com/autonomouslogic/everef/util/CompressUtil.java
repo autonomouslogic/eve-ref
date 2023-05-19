@@ -4,10 +4,13 @@ import io.reactivex.rxjava3.core.Emitter;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.functions.BiConsumer;
 import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.zip.GZIPInputStream;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
@@ -91,5 +94,16 @@ public class CompressUtil {
 			return new BZip2CompressorInputStream(in);
 		}
 		throw new IllegalArgumentException("Unknown file type: " + name);
+	}
+
+	@SneakyThrows
+	public static int lineCount(File file) {
+		try (var reader = new BufferedReader(new InputStreamReader(uncompress(file), StandardCharsets.UTF_8))) {
+			int lines = 0;
+			while ((reader.readLine()) != null) {
+				lines++;
+			}
+			return lines;
+		}
 	}
 }
