@@ -75,7 +75,7 @@ class MarketHistoryLoader {
 				.switchIfEmpty(Flowable.error(new RuntimeException("No market history files found.")))
 				.flatMap(
 						p -> {
-							return downloadFile(p.getRight()).flatMapPublisher(file -> {
+							return downloadFile(p.getRight(), p.getLeft()).flatMapPublisher(file -> {
 								file.deleteOnExit();
 								return parseFile(file, p.getLeft())
 										.map(entry -> {
