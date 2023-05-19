@@ -265,7 +265,10 @@ public class ScrapeMarketHistory implements Command {
 					return s3Adapter
 							.putObject(archivePut, archive, s3Client)
 							.ignoreElement()
-							.andThen(Completable.fromAction(() -> archive.delete()));
+							.andThen(Completable.fromAction(() -> {
+								log.debug("Uploaded archive for {}", date);
+								archive.delete();
+							}));
 				})
 				.compose(Rx.offloadCompletable());
 	}
