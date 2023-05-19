@@ -122,6 +122,9 @@ public class ScrapeMarketHistoryTest {
 				var path = request.getRequestUrl().encodedPath();
 				var typeId = request.getRequestUrl().queryParameter("type_id");
 				var segments = request.getRequestUrl().pathSegments();
+				if (path.equals("/data/market-history/totals.json")) {
+					return mockResponse("{\"2023-01-01\":4,\"2023-01-02\":3,\"2023-01-03\":4}");
+				}
 				if (path.equals("/data/")) {
 					return mockResponse(ResourceUtil.loadContextual(ScrapeMarketHistoryTest.class, "/data.html"));
 				}
