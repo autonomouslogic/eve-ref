@@ -105,7 +105,7 @@ public class ScrapeMarketHistory implements Command {
 	private S3Url dataUrl;
 	private MVStore mvStore;
 	private StoreMapSet mapSet;
-	private Map<LocalDate, Integer> historyEntries;
+	private Map<LocalDate, Integer> totals;
 	private CompoundRegionTypeSource regionTypeSource;
 
 	private ProgressReporter progressReporter;
@@ -175,9 +175,8 @@ public class ScrapeMarketHistory implements Command {
 
 	private Completable loadMarketHistory() {
 		return Completable.defer(() -> {
-			return marketHistoryLoaderProvider
-					.get()
-					.setMinDate(minDate)
+			final var loader = marketHistoryLoaderProvider.get();
+			return loader.setMinDate(minDate)
 					.load()
 					.doOnNext(p -> {
 						var entry = p.getRight();
@@ -187,9 +186,17 @@ public class ScrapeMarketHistory implements Command {
 					})
 					.ignoreElements()
 					.andThen(Completable.fromAction(() -> {
-						historyEntries = new TreeMap<>();
-						mapSet.forEachMap((date, map) -> {
-							historyEntries.put(LocalDate.parse(date), map.size());
+						totals = new TreeMap<>();
+						mapSet.forEachMap((dateString, map) -> {
+							var date = LocalDate.parse(dateString);
+							totals.put(date, map.size());
+							log.debug("Loaded entries for {}: {}", date, map.size());
+							var fileEntries = loader.getFileTotals().get(date);
+							if (fileEntries != null && fileEntries != map.size()) {
+								throw new IllegalStateException(String.format(
+										"File loaded for %s contained %s entries, but %s were loaded",
+										date, fileEntries, map.size()));
+							}
 						});
 					}));
 		});
@@ -237,13 +244,13 @@ public class ScrapeMarketHistory implements Command {
 
 	private Completable uploadArchive(LocalDate date) {
 		return Completable.defer(() -> {
-					var existingCount = historyEntries.get(date);
+					var existingCount = totals.get(date);
 					var entries = mapSet.getOrCreateMap(date.toString());
 					if (existingCount == entries.size()) {
 						log.debug(String.format("Skipping upload for %s, no new entries", date));
 						return Completable.complete();
 					}
-					historyEntries.put(date, entries.size());
+					totals.put(date, entries.size());
 					log.debug("Writing archive for {} - {} entries", date, entries.size());
 					var archive = marketHistoryFileBuilderProvider.get().writeEntries(entries.values());
 					var archivePath = dataUrl.resolve(MARKET_HISTORY.createArchivePath(date));
@@ -262,7 +269,7 @@ public class ScrapeMarketHistory implements Command {
 							tempFiles.tempFile("market-history-pairs", ".json").toFile();
 					file.deleteOnExit();
 					try (var out = new FileOutputStream(file)) {
-						objectMapper.writeValue(out, historyEntries);
+						objectMapper.writeValue(out, totals);
 					}
 					var archivePath =
 							dataUrl.resolve(MARKET_HISTORY.getFolder() + "/").resolve("totals.json");

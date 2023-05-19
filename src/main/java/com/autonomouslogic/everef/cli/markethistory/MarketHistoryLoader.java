@@ -21,8 +21,11 @@ import java.io.File;
 import java.net.URI;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.inject.Inject;
+import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 import okhttp3.OkHttpClient;
@@ -55,6 +58,9 @@ class MarketHistoryLoader {
 
 	@Setter
 	private LocalDate minDate;
+
+	@Getter
+	private final Map<LocalDate, Integer> fileTotals = new TreeMap<>();
 
 	@Inject
 	protected MarketHistoryLoader() {}
@@ -137,7 +143,10 @@ class MarketHistoryLoader {
 					var list = new ArrayList<JsonNode>();
 					iterator.forEachRemaining(list::add);
 					iterator.close();
-					log.trace("Read {} entries for {} from: {}", list.size(), date, file);
+					log.trace("Read {} entries for {} from {}", list.size(), date, file);
+					synchronized (fileTotals) {
+						fileTotals.put(date, list.size());
+					}
 					return Flowable.fromIterable(list);
 				})
 				.compose(Rx.offloadFlowable());
