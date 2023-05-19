@@ -34,11 +34,11 @@ public class MarketHistoryFileBuilder {
 		values.sort(ENTRY_ORDERING);
 		// Write to file.
 		var csv = tempFiles.tempFile("market-history", ".csv").toFile();
-		csv.deleteOnExit();
 		new JsonNodeCsvWriter().setOut(csv).writeAll(values);
 		// Compress.
 		var compressed = CompressUtil.compressBzip2(csv);
 		compressed.deleteOnExit();
+		csv.delete();
 
 		verifyLineCount(compressed, entries.size() + 1);
 

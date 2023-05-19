@@ -262,7 +262,10 @@ public class ScrapeMarketHistory implements Command {
 					var archivePut = s3Util.putPublicObjectRequest(
 							archive.length(), archivePath, "application/x-bzip2", latestCacheTime);
 					log.info(String.format("Uploading archive for %s", date));
-					return s3Adapter.putObject(archivePut, archive, s3Client).ignoreElement();
+					return s3Adapter
+							.putObject(archivePut, archive, s3Client)
+							.ignoreElement()
+							.andThen(Completable.fromAction(() -> archive.delete()));
 				})
 				.compose(Rx.offloadCompletable());
 	}
@@ -272,7 +275,6 @@ public class ScrapeMarketHistory implements Command {
 					log.debug("Building total pairs file");
 					var file =
 							tempFiles.tempFile("market-history-pairs", ".json").toFile();
-					file.deleteOnExit();
 					try (var out = new FileOutputStream(file)) {
 						objectMapper.writeValue(out, totals);
 					}
@@ -281,7 +283,10 @@ public class ScrapeMarketHistory implements Command {
 					var archivePut = s3Util.putPublicObjectRequest(
 							file.length(), archivePath, "application/json", latestCacheTime);
 					log.info("Uploading total pairs file");
-					return s3Adapter.putObject(archivePut, file, s3Client).ignoreElement();
+					return s3Adapter
+							.putObject(archivePut, file, s3Client)
+							.ignoreElement()
+							.andThen(Completable.fromAction(() -> file.delete()));
 				})
 				.compose(Rx.offloadCompletable());
 	}
