@@ -12,6 +12,7 @@ import com.autonomouslogic.everef.mvstore.StoreMapSet;
 import com.autonomouslogic.everef.s3.S3Adapter;
 import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.url.UrlParser;
+import com.autonomouslogic.everef.util.OkHttpHelper;
 import com.autonomouslogic.everef.util.ProgressReporter;
 import com.autonomouslogic.everef.util.Rx;
 import com.autonomouslogic.everef.util.S3Util;
@@ -22,6 +23,7 @@ import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.CompletableSource;
 import io.reactivex.rxjava3.core.Flowable;
 import java.io.FileOutputStream;
+import java.net.URI;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
@@ -34,6 +36,7 @@ import javax.inject.Provider;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
+import okhttp3.OkHttpClient;
 import org.h2.mvstore.MVStore;
 import org.jetbrains.annotations.NotNull;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
@@ -72,6 +75,12 @@ public class ScrapeMarketHistory implements Command {
 	protected TempFiles tempFiles;
 
 	@Inject
+	protected OkHttpClient okHttpClient;
+
+	@Inject
+	protected OkHttpHelper okHttpHelper;
+
+	@Inject
 	protected MarketHistoryFetcher marketHistoryFetcher;
 
 	@Inject
@@ -95,6 +104,8 @@ public class ScrapeMarketHistory implements Command {
 	private final Duration latestCacheTime = Configs.DATA_LATEST_CACHE_CONTROL_MAX_AGE.getRequired();
 	private final int esiConcurrency = Configs.ESI_MARKET_HISTORY_CONCURRENCY.getRequired();
 	private final int chunkSize = Configs.ESI_MARKET_HISTORY_CHUNK_SIZE.getRequired();
+
+	private final URI dataBaseUrl = Configs.DATA_BASE_URL.getRequired();
 
 	@Setter
 	private LocalDate today = LocalDate.now(ZoneOffset.UTC);
@@ -124,6 +135,7 @@ public class ScrapeMarketHistory implements Command {
 		return Completable.concatArray(
 						initSources(),
 						initMvStore(),
+						downloadTotalPairs(),
 						loadMarketHistory(),
 						loadPairs().buffer(chunkSize).flatMapCompletable(this::processChunk, false, 1))
 				.doFinally(this::closeMvStore);
@@ -186,11 +198,20 @@ public class ScrapeMarketHistory implements Command {
 					})
 					.ignoreElements()
 					.andThen(Completable.fromAction(() -> {
-						totals = new TreeMap<>();
 						mapSet.forEachMap((dateString, map) -> {
 							var date = LocalDate.parse(dateString);
-							totals.put(date, map.size());
+							var entries = map.size();
+							var currentEntries = totals.get(date);
 							log.debug("Loaded entries for {}: {}", date, map.size());
+							if (currentEntries == null && entries < currentEntries) {
+								log.warn(
+										"Entries loaded for {}: {} is less than the current total {} ({})",
+										date,
+										entries,
+										currentEntries,
+										entries - currentEntries);
+							}
+							totals.put(date, map.size());
 							var fileEntries = loader.getFileTotals().get(date);
 							if (fileEntries != null && fileEntries != map.size()) {
 								throw new IllegalStateException(String.format(
@@ -292,5 +313,30 @@ public class ScrapeMarketHistory implements Command {
 							.andThen(Completable.fromAction(() -> file.delete()));
 				})
 				.compose(Rx.offloadCompletable());
+	}
+
+	private Completable downloadTotalPairs() {
+		return Completable.defer(() -> {
+			log.info("Downloading total pairs file");
+			var url = dataBaseUrl.resolve(MARKET_HISTORY.getFolder() + "/").resolve("totals.json");
+			var file = tempFiles.tempFile("market-history-pairs", ".json").toFile();
+			return okHttpHelper.download(url.toString(), file, okHttpClient).flatMapCompletable(response -> {
+				log.trace("Pairs file downloaded");
+				if (response.code() == 404) {
+					log.warn("Totla pairs file not found");
+					totals = new TreeMap<>();
+					return Completable.complete();
+				}
+				if (response.code() != 200) {
+					return Completable.error(new RuntimeException("Failed downlaoding pairs file"));
+				}
+				var type =
+						objectMapper.getTypeFactory().constructMapType(TreeMap.class, LocalDate.class, Integer.class);
+				totals = objectMapper.readValue(file, type);
+				log.info("Pairs file loaded");
+				file.delete();
+				return Completable.complete();
+			});
+		});
 	}
 }
