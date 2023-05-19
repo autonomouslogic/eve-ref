@@ -250,6 +250,11 @@ public class ScrapeMarketHistory implements Command {
 						log.debug(String.format("Skipping upload for %s, no new entries", date));
 						return Completable.complete();
 					}
+					if (entries.size() < existingCount) {
+						return Completable.error(new IllegalStateException(String.format(
+								"Entries for %s have shrunk from %s to %s (%s)",
+								date, existingCount, entries.size(), entries.size() - existingCount)));
+					}
 					totals.put(date, entries.size());
 					log.debug("Writing archive for {} - {} entries", date, entries.size());
 					var archive = marketHistoryFileBuilderProvider.get().writeEntries(entries.values());
