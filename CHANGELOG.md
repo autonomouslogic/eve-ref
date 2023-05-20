@@ -1,5 +1,12 @@
 EVE Ref Changelog
 
+## [2.1.2](https://github.com/autonomouslogic/eve-ref/compare/2.1.1...2.1.2) (2023-05-20)
+
+
+### Bug Fixes
+
+* Double-checking market history scrapes ([#135](https://github.com/autonomouslogic/eve-ref/issues/135)) ([a767213](https://github.com/autonomouslogic/eve-ref/commit/a7672139a8ba40d6db19b02975643bab00cab506))
+
 ## [2.1.1](https://github.com/autonomouslogic/eve-ref/compare/2.1.0...2.1.1) (2023-05-18)
 
 
