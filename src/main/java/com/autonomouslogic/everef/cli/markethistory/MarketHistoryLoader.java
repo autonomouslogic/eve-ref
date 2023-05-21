@@ -37,8 +37,6 @@ import org.apache.commons.lang3.tuple.Pair;
  */
 @Log4j2
 class MarketHistoryLoader {
-	private static final int DOWNLOAD_CONCURRENCY = 32;
-
 	@Inject
 	protected DataCrawler dataCrawler;
 
@@ -55,6 +53,8 @@ class MarketHistoryLoader {
 	protected CsvMapper csvMapper;
 
 	private final URI dataBaseUrl = Configs.DATA_BASE_URL.getRequired();
+
+	private final int downloadConcurrency = Configs.MARKET_HISTORY_LOAD_CONCURRENCY.getRequired();
 
 	@Setter
 	private LocalDate minDate;
@@ -92,7 +92,7 @@ class MarketHistoryLoader {
 							});
 						},
 						false,
-						DOWNLOAD_CONCURRENCY)
+						downloadConcurrency)
 				.doOnComplete(() -> log.info("Loaded {} market history entries", totalEntries.get()))
 				.switchIfEmpty(Flowable.error(new RuntimeException("No market data found in history files.")));
 	}
