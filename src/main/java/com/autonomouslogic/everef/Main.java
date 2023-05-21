@@ -21,7 +21,10 @@ public class Main {
 
 	public static void main(String[] args) {
 		log.info(String.format("EVE Ref version %s", Configs.EVE_REF_VERSION.getRequired()));
-		RxJavaPlugins.setErrorHandler(e -> log.error("RxJava error", e));
+		RxJavaPlugins.setErrorHandler(e -> {
+			log.fatal("RxJava error", e);
+			System.exit(1);
+		});
 		try {
 			MainComponent.create().createMain().start(args);
 		} catch (Throwable e) {
