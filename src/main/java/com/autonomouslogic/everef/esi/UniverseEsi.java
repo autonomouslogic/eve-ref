@@ -18,6 +18,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.extern.log4j.Log4j2;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.jetbrains.annotations.NotNull;
 
 @Singleton
@@ -121,7 +122,7 @@ public class UniverseEsi {
 								return Maybe.fromOptional(optional);
 							})
 							.retry(2, e -> {
-								log.warn("Retrying {} {}", name, id);
+								log.warn("Retrying {} {}: {}", name, id, ExceptionUtils.getRootCauseMessage(e));
 								return true;
 							})
 							.compose(Rx.offloadMaybe(EsiHelper.ESI_SCHEDULER));
