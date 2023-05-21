@@ -104,6 +104,7 @@ public class ScrapeMarketHistory implements Command {
 	private final Duration latestCacheTime = Configs.DATA_LATEST_CACHE_CONTROL_MAX_AGE.getRequired();
 	private final int esiConcurrency = Configs.ESI_MARKET_HISTORY_CONCURRENCY.getRequired();
 	private final int chunkSize = Configs.ESI_MARKET_HISTORY_CHUNK_SIZE.getRequired();
+	private final int saveConcurrency = Configs.MARKET_HISTORY_SAVE_CONCURRENCY.getRequired();
 
 	private final URI dataBaseUrl = Configs.DATA_BASE_URL.getRequired();
 
@@ -259,7 +260,7 @@ public class ScrapeMarketHistory implements Command {
 		return Completable.defer(() -> {
 			log.info("Uploading archives");
 			return Flowable.fromIterable(mapSet.getMapNames())
-					.flatMapCompletable(date -> uploadArchive(LocalDate.parse(date)), false, 8);
+					.flatMapCompletable(date -> uploadArchive(LocalDate.parse(date)), false, saveConcurrency);
 		});
 	}
 
