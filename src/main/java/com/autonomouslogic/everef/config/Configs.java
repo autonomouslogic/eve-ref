@@ -321,7 +321,7 @@ public class Configs {
 	public static final Config<Integer> MARKET_HISTORY_LOAD_CONCURRENCY = Config.<Integer>builder()
 			.name("MARKET_HISTORY_LOAD_CONCURRENCY")
 			.type(Integer.class)
-			.defaultValue(Integer.MAX_VALUE)
+			.defaultValue(8)
 			.build();
 
 	/**
