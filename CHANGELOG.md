@@ -1,5 +1,12 @@
 EVE Ref Changelog
 
+## [2.2.1](https://github.com/autonomouslogic/eve-ref/compare/2.2.0...2.2.1) (2023-05-21)
+
+
+### Bug Fixes
+
+* Fixed NullPointerException in ScrapeMarketHistory ([#141](https://github.com/autonomouslogic/eve-ref/issues/141)) ([46ac490](https://github.com/autonomouslogic/eve-ref/commit/46ac49036159f3be4a8c533181e1d376e0159e32))
+
 ## [2.2.0](https://github.com/autonomouslogic/eve-ref/compare/2.1.3...2.2.0) (2023-05-21)
 
 
