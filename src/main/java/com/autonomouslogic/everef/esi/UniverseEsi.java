@@ -120,6 +120,10 @@ public class UniverseEsi {
 								cache.put(id, optional);
 								return Maybe.fromOptional(optional);
 							})
+							.retry(2, e -> {
+								log.warn("Retrying {} {}", name, id);
+								return true;
+							})
 							.compose(Rx.offloadMaybe(EsiHelper.ESI_SCHEDULER));
 				})
 				.onErrorResumeNext(
