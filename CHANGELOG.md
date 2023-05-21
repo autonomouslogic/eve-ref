@@ -1,5 +1,17 @@
 EVE Ref Changelog
 
+## [2.2.0](https://github.com/autonomouslogic/eve-ref/compare/2.1.3...2.2.0) (2023-05-21)
+
+
+### Features
+
+* Configurable market history concurrencies ([#140](https://github.com/autonomouslogic/eve-ref/issues/140)) ([9d659d4](https://github.com/autonomouslogic/eve-ref/commit/9d659d4d325f9c86889a20337ca7ae4eee0f3c48))
+
+
+### Bug Fixes
+
+* Exit on uncaught RxJava exceptions ([#139](https://github.com/autonomouslogic/eve-ref/issues/139)) ([a05a3ac](https://github.com/autonomouslogic/eve-ref/commit/a05a3ac17b47f59d616d755f2adc39e9f3c6db14))
+
 ## [2.1.3](https://github.com/autonomouslogic/eve-ref/compare/2.1.2...2.1.3) (2023-05-21)
 
 
