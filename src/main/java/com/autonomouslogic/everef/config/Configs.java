@@ -316,6 +316,15 @@ public class Configs {
 			.build();
 
 	/**
+	 * Number of concurrent downloads when loading market history.
+	 */
+	public static final Config<Integer> MARKET_HISTORY_LOAD_CONCURRENCY = Config.<Integer>builder()
+			.name("MARKET_HISTORY_LOAD_CONCURRENCY")
+			.type(Integer.class)
+			.defaultValue(Integer.MAX_VALUE)
+			.build();
+
+	/**
 	 * The cache size to use for MVStores.
 	 */
 	public static final Config<Integer> MVSTORE_CACHE_SIZE_MB = Config.<Integer>builder()
