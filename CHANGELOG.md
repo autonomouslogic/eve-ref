@@ -1,5 +1,13 @@
 EVE Ref Changelog
 
+## [2.1.3](https://github.com/autonomouslogic/eve-ref/compare/2.1.2...2.1.3) (2023-05-21)
+
+
+### Bug Fixes
+
+* Data index on Docker. ([#137](https://github.com/autonomouslogic/eve-ref/issues/137)) ([ae4b3f5](https://github.com/autonomouslogic/eve-ref/commit/ae4b3f512380a96306c0660fef8fff1418a3fcb6))
+* Retry UniverseEsi calls ([#138](https://github.com/autonomouslogic/eve-ref/issues/138)) ([0376254](https://github.com/autonomouslogic/eve-ref/commit/03762547cbf3738bb1b207f402698303799cbf43))
+
 ## [2.1.2](https://github.com/autonomouslogic/eve-ref/compare/2.1.1...2.1.2) (2023-05-20)
 
 
