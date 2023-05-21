@@ -204,7 +204,7 @@ public class ScrapeMarketHistory implements Command {
 							var entries = map.size();
 							var currentEntries = totals.get(date);
 							log.debug("Loaded entries for {}: {}", date, map.size());
-							if (currentEntries == null && entries < currentEntries) {
+							if (currentEntries != null && entries < currentEntries) {
 								log.warn(
 										"Entries loaded for {}: {} is less than the current total {} ({})",
 										date,

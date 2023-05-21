@@ -90,7 +90,7 @@ public class ScrapeMarketHistoryTest {
 	void shouldScrapeMarketHistory() {
 		scrapeMarketHistory
 				.setMinDate(LocalDate.parse("2023-01-01"))
-				.setToday(LocalDate.parse("2023-01-03"))
+				.setToday(LocalDate.parse("2023-01-04"))
 				.run()
 				.blockingAwait();
 
@@ -111,7 +111,7 @@ public class ScrapeMarketHistoryTest {
 		var totalPairs = new String(mockS3Adapter
 				.getTestObject(BUCKET_NAME, "data/market-history/totals.json", dataClient)
 				.orElseThrow());
-		assertEquals("{\"2023-01-01\":4,\"2023-01-02\":5,\"2023-01-03\":4}", totalPairs);
+		assertEquals("{\"2023-01-01\":4,\"2023-01-02\":5,\"2023-01-03\":4,\"2023-01-04\":0}", totalPairs);
 	}
 
 	class TestDispatcher extends Dispatcher {
