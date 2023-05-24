@@ -8,6 +8,7 @@ plugins {
 	id "io.freefair.lombok" version "8.0.1"
 	id "com.diffplug.spotless" version "6.18.0"
 	id "org.openapi.generator" version "6.5.0"
+	id "io.swagger.core.v3.swagger-gradle-plugin" version "2.2.4"
 }
 
 group "com.autonomouslogic.everef"
@@ -56,6 +57,9 @@ dependencies {
 	implementation "org.jsoup:jsoup:1.16.1"
 	implementation "commons-codec:commons-codec:1.15"
 	implementation "io.dropwizard.metrics:metrics-core:4.2.18"
+	implementation "com.autonomouslogic.customspecfilter:custom-spec-filter:1.0.12"
+	implementation "io.swagger.core.v3:swagger-core:2.2.4"
+	implementation "javax.ws.rs:javax.ws.rs-api:2.0"
 
 	testAnnotationProcessor "com.google.dagger:dagger-compiler:2.46"
 	testImplementation "com.google.dagger:dagger:2.46"
@@ -69,6 +73,16 @@ dependencies {
 java {
 	withJavadocJar()
 	withSourcesJar()
+}
+
+resolve {
+	filterClass = "com.autonomouslogic.customspecfilter.CustomSpecFilter"
+	outputFormat = "YAML"
+	prettyPrint = "true"
+	classpath = sourceSets.main.runtimeClasspath
+	resourcePackages = ["com.autonomouslogic.everef.refdata"]
+	outputDir = file("spec")
+	outputFileName = "reference-data"
 }
 
 openApiGenerate {
@@ -191,6 +205,14 @@ task scrapeMarketHistory(type: JavaExec) {
 	environment envProperties
 	environment "ESI_RATE_LIMIT_PER_S", "5"
 	environment "ESI_MARKET_HISTORY_CHUNK_SIZE", "10000"
+	classpath = sourceSets.main.runtimeClasspath
+	mainClass = mainClassName
+}
+
+task verifyRefDataModels(type: JavaExec) {
+	group "application"
+	args "verify-ref-data-models"
+	environment envProperties
 	classpath = sourceSets.main.runtimeClasspath
 	mainClass = mainClassName
 }
