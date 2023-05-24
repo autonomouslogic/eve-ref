@@ -94,6 +94,9 @@ components:
           additionalProperties:
             $ref: '#/components/schemas/DogmaTypeEffect'
           description: A map of dogma attributes. The key is the attribute ID
+        faction_id:
+          type: integer
+          format: int32
         graphic_id:
           type: integer
           format: int32
