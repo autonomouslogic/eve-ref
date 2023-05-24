@@ -58,7 +58,8 @@ dependencies {
 	implementation "commons-codec:commons-codec:1.15"
 	implementation "io.dropwizard.metrics:metrics-core:4.2.18"
 	implementation "com.autonomouslogic.customspecfilter:custom-spec-filter:1.0.12"
-	implementation "io.swagger.core.v3:swagger-core:2.2.4"
+	implementation "io.swagger.core.v3:swagger-core:2.2.10"
+	implementation "io.swagger.core.v3:swagger-jaxrs2:2.2.10"
 	implementation "javax.ws.rs:javax.ws.rs-api:2.0"
 
 	testAnnotationProcessor "com.google.dagger:dagger-compiler:2.46"
@@ -75,7 +76,7 @@ java {
 	withSourcesJar()
 }
 
-resolve {
+task refDataSpec(type: io.swagger.v3.plugins.gradle.tasks.ResolveTask) {
 	filterClass = "com.autonomouslogic.customspecfilter.CustomSpecFilter"
 	outputFormat = "YAML"
 	prettyPrint = "true"
@@ -83,6 +84,9 @@ resolve {
 	resourcePackages = ["com.autonomouslogic.everef.refdata"]
 	outputDir = file("spec")
 	outputFileName = "reference-data"
+
+	classpath = sourceSets.main.runtimeClasspath
+	buildClasspath = classpath
 }
 
 openApiGenerate {

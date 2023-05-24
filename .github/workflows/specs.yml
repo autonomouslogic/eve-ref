@@ -1,7 +1,7 @@
-name: Spotless
+name: specs
 on: [ push ]
 jobs:
-  Spotless:
+  Check:
     timeout-minutes: 30
     runs-on: ubuntu-latest
     steps:
@@ -15,7 +15,8 @@ jobs:
           java-version: 17
           cache: gradle
 
-      - name: Spotless
+      - name: Check generated specs
         run: |
-          echo "Run 'make format' to auto-format"
-          make lint
+          echo "Run 'make specs' to generate specs"
+          make specs
+          if [[ `git status --porcelain` ]]; then echo "The specs have changed:"; git diff exit 1; fi
