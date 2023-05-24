@@ -18,5 +18,5 @@ public class DogmaTypeEffect {
 	int effectId;
 
 	@JsonProperty
-	boolean isDefault;
+	Boolean isDefault;
 }

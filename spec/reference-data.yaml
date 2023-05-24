@@ -69,8 +69,6 @@ components:
           format: int32
         is_default:
           type: boolean
-        default:
-          type: boolean
       description: A specific value for a dogma effect.
     InventoryType:
       type: object
