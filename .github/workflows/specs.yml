@@ -1,4 +1,4 @@
-name: specs
+name: Specs
 on: [ push ]
 jobs:
   Check:
@@ -18,5 +18,6 @@ jobs:
       - name: Check generated specs
         run: |
           echo "Run 'make specs' to generate specs"
+          echo Remember to update the spec version
           make specs
-          if [[ `git status --porcelain` ]]; then echo "The specs have changed:"; git diff exit 1; fi
+          if [[ `git status --porcelain` ]]; then echo "The specs have changed:"; git diff; exit 1; fi
