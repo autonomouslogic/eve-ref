@@ -13,6 +13,7 @@ import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Single;
 import java.io.File;
 import java.time.Duration;
+import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -150,7 +151,9 @@ public class DataIndex implements Command {
 		String dir = new File("/" + key).getParent().substring(1);
 		String basename = new File(key).getName();
 		return ObjectListing.builder()
-				.listedObject(listedObject)
+				.listedObject(listedObject.toBuilder()
+						.lastModified(listedObject.getLastModified().truncatedTo(ChronoUnit.SECONDS))
+						.build())
 				.basename(basename)
 				.dir(dir)
 				.prefix(key)
