@@ -48,7 +48,7 @@ public class DataIndexTest {
 	void shouldGenerateIndexPages() {
 		var mockS3 = (MockS3Adapter) s3Adapter;
 		// Rig listing.
-		var lastModified = Instant.parse("2000-01-01T00:00:00Z");
+		var lastModified = Instant.parse("2000-01-01T00:00:00.100Z");
 		var files = List.of("index.html", "data.zip", "dir/index.html", "dir/more-data.zip", "dir2/more-data2.zip");
 		for (String file : files) {
 			var content = file.endsWith("/") ? "" : "content " + file;
