@@ -13,6 +13,12 @@ test:
 format:
 	./gradlew spotlessApply
 
+lint:
+	./gradlew spotlessCheck
+
+specs:
+	./gradlew refDataSpec
+
 docker: dist
 	docker build \
 		-f docker/Dockerfile \
