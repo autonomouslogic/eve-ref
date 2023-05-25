@@ -13,6 +13,7 @@ import lombok.extern.jackson.Jacksonized;
 @Builder
 @Jacksonized
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
+@Schema
 public class TraitBonus {
 	@JsonProperty
 	double bonus;
