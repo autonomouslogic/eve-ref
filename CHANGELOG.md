@@ -1,5 +1,12 @@
 EVE Ref Changelog
 
+## [2.3.0](https://github.com/autonomouslogic/eve-ref/compare/2.2.1...2.3.0) (2023-05-25)
+
+
+### Features
+
+* Basic reference data OpenAPI spec and model verifier ([#142](https://github.com/autonomouslogic/eve-ref/issues/142)) ([215351a](https://github.com/autonomouslogic/eve-ref/commit/215351a0f23b3c4453068752719c6a4519849dff))
+
 ## [2.2.1](https://github.com/autonomouslogic/eve-ref/compare/2.2.0...2.2.1) (2023-05-21)
 
 
