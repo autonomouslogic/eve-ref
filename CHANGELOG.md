@@ -1,5 +1,12 @@
 EVE Ref Changelog
 
+## [2.3.1](https://github.com/autonomouslogic/eve-ref/compare/2.3.0...2.3.1) (2023-05-25)
+
+
+### Bug Fixes
+
+* Fixed data index size and last-modified ([#144](https://github.com/autonomouslogic/eve-ref/issues/144)) ([3d07a3d](https://github.com/autonomouslogic/eve-ref/commit/3d07a3da3254ffb9a8acb021ca6746dc9eaf6390))
+
 ## [2.3.0](https://github.com/autonomouslogic/eve-ref/compare/2.2.1...2.3.0) (2023-05-25)
 
 
