@@ -5,11 +5,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import com.autonomouslogic.everef.s3.S3Adapter;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.test.MockS3Adapter;
+import java.time.Instant;
 import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.SneakyThrows;
+import lombok.Value;
 import lombok.extern.log4j.Log4j2;
+import org.apache.commons.lang3.tuple.Pair;
 import org.jsoup.Jsoup;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -45,35 +48,79 @@ public class DataIndexTest {
 	void shouldGenerateIndexPages() {
 		var mockS3 = (MockS3Adapter) s3Adapter;
 		// Rig listing.
-		var files = List.of(
-				// "index.html",
-				"data.zip",
-				// "dir/", // @todo
-				// "dir/index.html",
-				"dir/more-data.zip",
-				// "dir2/", // @todo
-				"dir2/more-data2.zip");
+		var lastModified = Instant.parse("2000-01-01T00:00:00Z");
+		var files = List.of("index.html", "data.zip", "dir/index.html", "dir/more-data.zip", "dir2/more-data2.zip");
 		for (String file : files) {
-			mockS3.putTestObject(BUCKET_NAME, file, "test", s3Data);
+			var content = file.endsWith("/") ? "" : "content " + file;
+			mockS3.putTestObject(BUCKET_NAME, file, content, s3Data, lastModified);
+			lastModified = lastModified.plusSeconds(1);
 		}
 		// Run.
 		dataIndex.run().blockingAwait();
-		// Parse main index page.
-		var mainPage = mockS3.getTestObject(BUCKET_NAME, "index.html", s3Data)
-				.map(String::new)
-				.orElseThrow();
-		var mainLinks = Jsoup.parse(mainPage).select("a.url");
-		assertEquals("/dir/", mainLinks.get(0).attr("href"));
-		assertEquals("/dir2/", mainLinks.get(1).attr("href"));
-		// Parse dir index page.
-		var dirPage = mockS3.getTestObject(BUCKET_NAME, "dir/index.html", s3Data)
-				.map(String::new)
-				.orElseThrow();
-		var dirLinks = Jsoup.parse(dirPage).select("a.data-file-url");
-		assertEquals("/dir/more-data.zip", dirLinks.get(0).attr("href"));
-		// Assert correct files.
+
+		verifyMainIndex();
+		verifyDir1Index();
+		verifyDir2Index();
+
+		// Assert correct uploaded files.
 		assertEquals(
 				List.of("dir/index.html", "dir2/index.html", "index.html"),
 				mockS3.getAllPutKeys(BUCKET_NAME, s3Data).stream().sorted().toList());
+	}
+
+	private void verifyMainIndex() {
+		var html = getPageContent("index.html");
+		assertEquals(List.of(Pair.of("/dir/", "dir"), Pair.of("/dir2/", "dir2")), getDirLinks(html));
+		assertEquals(
+				List.of(new FileLink("/data.zip", "data.zip", "16 bytes", "16", "2000-01-01T00:00:01Z")),
+				getFileLinks(html));
+	}
+
+	private void verifyDir1Index() {
+		var html = getPageContent("dir/index.html");
+		assertEquals(List.of(), getDirLinks(html));
+		assertEquals(
+				List.of(new FileLink("/dir/more-data.zip", "more-data.zip", "25 bytes", "25", "2000-01-01T00:00:03Z")),
+				getFileLinks(html));
+	}
+
+	private void verifyDir2Index() {
+		var html = getPageContent("dir2/index.html");
+		assertEquals(List.of(), getDirLinks(html));
+		assertEquals(
+				List.of(new FileLink(
+						"/dir2/more-data2.zip", "more-data2.zip", "27 bytes", "27", "2000-01-01T00:00:04Z")),
+				getFileLinks(html));
+	}
+
+	private String getPageContent(String path) {
+		var mockS3 = (MockS3Adapter) s3Adapter;
+		return mockS3.getTestObject(BUCKET_NAME, path, s3Data).map(String::new).orElseThrow();
+	}
+
+	private List<Pair<String, String>> getDirLinks(String html) {
+		var mainLinks = Jsoup.parse(html).select("tr.data-dir a.url");
+		return mainLinks.stream().map(e -> Pair.of(e.attr("href"), e.text())).toList();
+	}
+
+	private List<FileLink> getFileLinks(String html) {
+		var rows = Jsoup.parse(html).select("tr.data-file");
+		return rows.stream()
+				.map(e -> new FileLink(
+						e.select("a.data-file-url").attr("href"),
+						e.select("a.data-file-url").text(),
+						e.select("td.data-file-size-formatted").text(),
+						e.select("td.data-file-size-bytes").text(),
+						e.select("td.data-file-last-modified").text()))
+				.toList();
+	}
+
+	@Value
+	private static class FileLink {
+		String url;
+		String name;
+		String sizeFormatted;
+		String sizeBytes;
+		String lastModified;
 	}
 }
