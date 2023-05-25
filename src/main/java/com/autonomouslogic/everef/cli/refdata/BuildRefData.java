@@ -98,6 +98,7 @@ public class BuildRefData implements Command {
 	private URI dataBaseUrl;
 	private MVStore mvStore;
 	private StoreSet typeStores;
+	private StoreSet dogmaAttributesStores;
 
 	@Inject
 	protected BuildRefData() {}
@@ -124,20 +125,27 @@ public class BuildRefData implements Command {
 		return Completable.fromAction(() -> {
 			mvStore = mvStoreUtil.createTempStore("ref-data");
 			typeStores = openStoreSet("types");
+			dogmaAttributesStores = openStoreSet("dogma-attributes");
 
 			sdeLoader.setTypeStore(typeStores.getSdeStore());
 			esiLoader.setTypeStore(typeStores.getEsiStore());
+			sdeLoader.setDogmaAttributesStore(dogmaAttributesStores.getSdeStore());
+			esiLoader.setDogmaAttributesStore(dogmaAttributesStores.getEsiStore());
 		});
 	}
 
 	private Completable mergeDatasets() {
-		return Completable.defer(() -> {
-			return refDataMergerProvider
-					.get()
-					.setName("types")
-					.setStores(typeStores)
-					.merge();
-		});
+		return Completable.mergeArray(
+				refDataMergerProvider
+						.get()
+						.setName("types")
+						.setStores(typeStores)
+						.merge(),
+				refDataMergerProvider
+						.get()
+						.setName("dogma-attributes")
+						.setStores(dogmaAttributesStores)
+						.merge());
 	}
 
 	private Completable closeMvStore() {

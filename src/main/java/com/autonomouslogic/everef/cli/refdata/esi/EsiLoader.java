@@ -32,6 +32,10 @@ public class EsiLoader {
 	@NonNull
 	private MVMap<Long, JsonNode> typeStore;
 
+	@Setter
+	@NonNull
+	private MVMap<Long, JsonNode> dogmaAttributesStore;
+
 	@Inject
 	protected EsiLoader() {}
 

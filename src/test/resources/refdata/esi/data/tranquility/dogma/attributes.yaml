@@ -1,0 +1,10 @@
+"1615":
+  attribute_id: 1615
+  default_value: 0
+  description: "The minimum required sovereignty index level"
+  display_name: "Required Development Index Level (Strategic)"
+  high_is_good: true
+  name: "devIndexSovereignty"
+  published: true
+  stackable: true
+  unit_id: 140

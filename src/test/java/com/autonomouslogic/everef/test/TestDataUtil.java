@@ -215,14 +215,17 @@ public class TestDataUtil {
 
 	@SneakyThrows
 	public File createTestSde() {
-		return createZipFile(Map.ofEntries(createEntry("/refdata/", SdeLoader.SDE_TYPES_PATH)));
+		return createZipFile(Map.ofEntries(
+				createEntry("/refdata/", SdeLoader.SDE_TYPES_PATH),
+				createEntry("/refdata/", SdeLoader.SDE_DOGMA_ATTRIBUTES_PATH)));
 	}
 
 	@SneakyThrows
 	public File createTestEsiDump() {
 		return createTarXzFile(Map.ofEntries(
 				createEntry("/refdata/esi", "data/tranquility/universe/types.en-us.yaml"),
-				createEntry("/refdata/esi", "data/tranquility/universe/types.fr.yaml")));
+				createEntry("/refdata/esi", "data/tranquility/universe/types.fr.yaml"),
+				createEntry("/refdata/esi", "data/tranquility/dogma/attributes.yaml")));
 	}
 
 	@SneakyThrows

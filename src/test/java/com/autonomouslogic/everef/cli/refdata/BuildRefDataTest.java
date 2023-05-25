@@ -118,6 +118,7 @@ public class BuildRefDataTest {
 		assertEquals(Set.of("meta.json", "types.json"), files.keySet());
 		assertMeta(files.get("meta.json"));
 		assertTypes(files.get("types.json"));
+		assertDogmaAttributes(files.get("dogma-attributes.json"));
 	}
 
 	@SneakyThrows
@@ -129,6 +130,18 @@ public class BuildRefDataTest {
 
 		// Check the encoded JSON contains full numbers. This comes from type 645 Dominix.
 		assertTrue(new String(json).contains("\"base_price\":153900000"));
+	}
+
+	@SneakyThrows
+	private void assertDogmaAttributes(@NonNull byte[] json) {
+		var expected = objectMapper.createObjectNode();
+		expected.set(
+				"1615", objectMapper.readTree(ResourceUtil.loadResource("/refdata/refdata/dogma-attribute-1615.json")));
+		var supplied = objectMapper.readTree(json);
+		assertEquals(expected, supplied);
+
+		// Check the encoded JSON contains full numbers. This comes from type 645 Dominix.
+		// assertTrue(new String(json).contains("\"base_price\":153900000"));
 	}
 
 	@SneakyThrows

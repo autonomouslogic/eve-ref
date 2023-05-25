@@ -44,11 +44,11 @@ For other third-party developers, the REST API will be freely available to consu
 | Corporatation activities (?)    | `fsd/corporationActivities.yaml`        |                                 |                          |
 | Dbuffs (?)                      |                                         |                                 | Yes                      |
 | Dogma attributes categories     | `fsd/dogmaAttributeCategories.yaml`     |                                 |                          |
-| Dogma attributes                | `fsd/dogmaAttributes.yaml`              | Yes                             | Localised names          |
-| Dogma effects                   | `fsd/dogmaEffects.yaml`                 | Yes                             |                          |
+| Dogma attributes                | `fsd/dogmaAttributes.yaml`              | `dogma/attributes.yaml`         | Localised names          |
+| Dogma effects                   | `fsd/dogmaEffects.yaml`                 | `dogma/effects.yaml`            |                          |
 | Dogma expressions               |                                         |                                 |                          |
-| Dogma type attributes           | `fsd/typeDogma.yaml`                    |                                 |                          |
-| Dogma type effects              | `fsd/typeDogma.yaml`                    |                                 |                          |
+| Dogma type attributes           | `fsd/typeDogma.yaml`                    | `universe/types.yaml`           |                          |
+| Dogma type effects              | `fsd/typeDogma.yaml`                    | `universe/types.yaml`           |                          |
 | Dogma units                     |                                         |                                 | `dogmaunits.json`        |
 | Dynamic Attributes (?)          |                                         |                                 | Yes                      |
 | Factions                        | `fsd/factions.yaml`                     | Yes                             |                          |

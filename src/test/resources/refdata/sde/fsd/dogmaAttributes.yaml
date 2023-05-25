@@ -1,0 +1,19 @@
+1615:
+  attributeID: 1615
+  dataType: 4
+  defaultValue: 0.0
+  description: The minimum required sovereignty index level
+  displayNameID:
+    de: Erforderlicher Entwicklungsindexlevel (Strategisch)
+    en: Required Development Index Level (Strategic)
+    es: Nivel de índice de desarrollo necesario (estratégico)
+    fr: Niveau d'index de développement requis (stratégique)
+    ja: 必要な開発インデックスレベル（戦略）
+    ko: 개발 지수 요구 레벨 (전략)
+    ru: Требуемый индекс развития (стратегический)
+    zh: 发展指数需求（战略）
+  highIsGood: true
+  name: devIndexSovereignty
+  published: true
+  stackable: true
+  unitID: 140
