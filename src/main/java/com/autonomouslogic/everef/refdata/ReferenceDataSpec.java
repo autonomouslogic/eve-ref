@@ -50,6 +50,7 @@ public interface ReferenceDataSpec {
 			useReturnTypeSchema = true,
 			content = @Content(mediaType = "application/json"))
 	InventoryType getType(@PathParam("type_id") int typeId);
+
 	@GET
 	@Path("/dogma_attributes")
 	@Operation(description = "Get all dogma attribute IDs.")

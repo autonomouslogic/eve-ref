@@ -135,8 +135,7 @@ public class BuildRefDataTest {
 	@SneakyThrows
 	private void assertDogmaAttributes(@NonNull byte[] json) {
 		var expected = objectMapper.createObjectNode();
-		expected.set(
-				"9", objectMapper.readTree(ResourceUtil.loadResource("/refdata/refdata/dogma-attribute-9.json")));
+		expected.set("9", objectMapper.readTree(ResourceUtil.loadResource("/refdata/refdata/dogma-attribute-9.json")));
 		var supplied = objectMapper.readTree(json);
 		assertEquals(expected, supplied);
 	}
