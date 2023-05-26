@@ -25,7 +25,6 @@ These resources are used by `BuildRefDataTest` for full end-to-end testing.
 Additionally, in the contextual resource folders for `EsiLoaderTest` and `SdeLoaderTest`, there exists samples
 for the intermediate expected output of these loaders.
 
-Next add to `PublishRefData` and `PublishRefDataTest`, as well as running `VerifyRefDataModels` to ensure models exist.
 
 ## Adding more resources
 
@@ -36,3 +35,10 @@ Input samples should come directly from the [ESI scrape](https://data.everef.net
 or [SDE dump](https://data.everef.net/ccp/sde/).
 
 Output samples should be constructed by hand.
+
+Add to `PublishRefData` and `PublishRefDataTest`, as well as running `VerifyRefDataModels` to ensure models exist.
+
+Extract all unique keys from a bunch of JSON objects:
+```shell
+cat dogma-attributes.json | jq '.[] | keys | .[]' | sort -u
+```
