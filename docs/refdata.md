@@ -9,8 +9,8 @@ The full OpenAPI spec is [available here](https://github.com/autonomouslogic/eve
 Some example paths:
 * https://ref-data.everef.net/types
 * https://ref-data.everef.net/types/645
-* https://ref-data.everef.net/dogma-attributes
-* https://ref-data.everef.net/dogma-attributes/37
+* https://ref-data.everef.net/dogma_attributes
+* https://ref-data.everef.net/dogma_attributes/37
 
 ## Motivation
 Two primary datasets are available for third-party developers of EVE Online: the SDE and ESI.
