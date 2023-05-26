@@ -139,9 +139,6 @@ public class BuildRefDataTest {
 				"1615", objectMapper.readTree(ResourceUtil.loadResource("/refdata/refdata/dogma-attribute-1615.json")));
 		var supplied = objectMapper.readTree(json);
 		assertEquals(expected, supplied);
-
-		// Check the encoded JSON contains full numbers. This comes from type 645 Dominix.
-		// assertTrue(new String(json).contains("\"base_price\":153900000"));
 	}
 
 	@SneakyThrows
