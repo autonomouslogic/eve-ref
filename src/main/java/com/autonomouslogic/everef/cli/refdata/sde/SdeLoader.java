@@ -21,6 +21,7 @@ import org.h2.mvstore.MVMap;
 @Log4j2
 public class SdeLoader {
 	public static final String SDE_TYPES_PATH = "sde/fsd/typeIDs.yaml";
+	public static final String SDE_DOGMA_ATTRIBUTES_PATH = "sde/fsd/dogmaAttributes.yaml";
 
 	@Inject
 	protected FieldRenamer fieldRenamer;
@@ -31,9 +32,16 @@ public class SdeLoader {
 	@Inject
 	protected Provider<SdeTypeTransformer> sdeTypeTransformerProvider;
 
+	@Inject
+	protected Provider<SdeDogmaAttributesTransformer> sdeDogmaAttributesTransformerProvider;
+
 	@Setter
 	@NonNull
 	private MVMap<Long, JsonNode> typeStore;
+
+	@Setter
+	@NonNull
+	private MVMap<Long, JsonNode> dogmaAttributesStore;
 
 	@Inject
 	protected SdeLoader() {}
@@ -51,6 +59,13 @@ public class SdeLoader {
 											.setIdFieldName("type_id")
 											.setOutput(typeStore);
 									transformer = sdeTypeTransformerProvider.get();
+									break;
+								case SDE_DOGMA_ATTRIBUTES_PATH:
+									storeLoader = simpleLoaderProvider
+											.get()
+											.setIdFieldName("attribute_id")
+											.setOutput(dogmaAttributesStore);
+									transformer = sdeDogmaAttributesTransformerProvider.get();
 									break;
 								default:
 									log.warn(

@@ -1,0 +1,11 @@
+"9":
+  attribute_id: 9
+  default_value: 0
+  description: "The maximum hitpoints of an object."
+  display_name: "Structure Hitpoints"
+  high_is_good: true
+  icon_id: 67
+  name: "hp"
+  published: true
+  stackable: true
+  unit_id: 113

@@ -1,6 +1,7 @@
 package com.autonomouslogic.everef.cli;
 
 import com.autonomouslogic.everef.model.ReferenceEntry;
+import com.autonomouslogic.everef.refdata.DogmaAttribute;
 import com.autonomouslogic.everef.refdata.InventoryType;
 import com.autonomouslogic.everef.util.OkHttpHelper;
 import com.autonomouslogic.everef.util.RefDataUtil;
@@ -61,6 +62,9 @@ public class VerifyRefDataModels implements Command {
 					case "types":
 						verifyTypes(entry);
 						break;
+					case "dogma-attributes":
+						verifyDogmaAttributes(entry);
+						break;
 					default:
 						throw new IllegalStateException("Unknown type: " + entry.getType());
 				}
@@ -77,6 +81,15 @@ public class VerifyRefDataModels implements Command {
 			objectMapper.readValue(entry.getContent(), listOfInts);
 		} else {
 			objectMapper.readValue(entry.getContent(), InventoryType.class);
+		}
+	}
+
+	@SneakyThrows
+	private void verifyDogmaAttributes(@NonNull ReferenceEntry entry) {
+		if (entry.getId() == null) {
+			objectMapper.readValue(entry.getContent(), listOfInts);
+		} else {
+			objectMapper.readValue(entry.getContent(), DogmaAttribute.class);
 		}
 	}
 }
