@@ -61,7 +61,7 @@ public interface ReferenceDataSpec {
 	List<Integer> getAllDogmaAttributes();
 
 	@GET
-	@Path("/dogma_attribtes/{attribute_id}")
+	@Path("/dogma_attributes/{attribute_id}")
 	@Operation
 	@ApiResponse(
 			responseCode = "200",

@@ -14,7 +14,23 @@ servers:
 - url: https://ref-data.everef.net
   variables: {}
 paths:
-  /dogma_attribtes/{attribute_id}:
+  /dogma_attributes:
+    get:
+      tags:
+      - refdata
+      description: Get all dogma attribute IDs.
+      operationId: getAllDogmaAttributes
+      responses:
+        "200":
+          description: Dogma attribute IDs.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: integer
+                  format: int32
+  /dogma_attributes/{attribute_id}:
     get:
       tags:
       - refdata
@@ -33,22 +49,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/DogmaAttribute'
-  /dogma_attributes:
-    get:
-      tags:
-      - refdata
-      description: Get all dogma attribute IDs.
-      operationId: getAllDogmaAttributes
-      responses:
-        "200":
-          description: Dogma attribute IDs.
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: integer
-                  format: int32
   /types:
     get:
       tags:
