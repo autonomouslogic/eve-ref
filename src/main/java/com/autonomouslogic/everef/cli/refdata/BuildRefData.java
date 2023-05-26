@@ -136,16 +136,16 @@ public class BuildRefData implements Command {
 
 	private Completable mergeDatasets() {
 		return Completable.defer(() -> Completable.mergeArray(
-			refDataMergerProvider
-				.get()
-				.setName("types")
-				.setStores(typeStores)
-				.merge(),
-			refDataMergerProvider
-				.get()
-				.setName("dogma-attributes")
-				.setStores(dogmaAttributesStores)
-				.merge()));
+				refDataMergerProvider
+						.get()
+						.setName("types")
+						.setStores(typeStores)
+						.merge(),
+				refDataMergerProvider
+						.get()
+						.setName("dogma-attributes")
+						.setStores(dogmaAttributesStores)
+						.merge()));
 	}
 
 	private Completable closeMvStore() {

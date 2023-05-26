@@ -63,7 +63,7 @@ public class EsiLoader {
 								case "dogma-attributes":
 									storeLoader = esiStoreLoaderProvider
 											.get()
-										.setEsiTransformer(esiDogmaAttributesTransformerProvider.get());
+											.setEsiTransformer(esiDogmaAttributesTransformerProvider.get());
 									storeLoader.setIdFieldName("attribute_id").setOutput(dogmaAttributesStore);
 									break;
 								default:

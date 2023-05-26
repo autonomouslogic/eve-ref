@@ -237,9 +237,7 @@ public class TestDataUtil {
 								.createObjectNode()
 								.put(
 										"build_time",
-										Instant.parse("2000-01-02T03:04:05Z").toString())
-							//	.set("645", loadJsonResource("/refdata/refdata/type-645.json"))
-						)),
+										Instant.parse("2000-01-02T03:04:05Z").toString()))),
 				Map.entry(
 						"types.json",
 						objectMapper.writeValueAsBytes(objectMapper
