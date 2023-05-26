@@ -1,0 +1,17 @@
+types:
+  filename: types
+  esi:
+    languageAttributes:
+      - display_name
+      - description
+    arrayToObject:
+      dogma_attributes: attribute_id
+      dogma_effects: effect_id
+
+dogmaAttributes:
+  filename: dogma-attributes
+  esi:
+    languageAttributes:
+      - display_name
+      - description
+  sde:

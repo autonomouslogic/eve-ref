@@ -14,6 +14,7 @@ import java.io.File;
 import java.net.URI;
 import java.util.ArrayList;
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.inject.Singleton;
 import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
@@ -36,6 +37,10 @@ public class RefDataUtil {
 
 	@Inject
 	protected ObjectMapper objectMapper;
+
+	@Inject
+	@Named("yaml")
+	protected ObjectMapper yamlMapper;
 
 	@Inject
 	protected UrlParser urlParser;
