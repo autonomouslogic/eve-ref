@@ -32,6 +32,9 @@ public class SdeLoader {
 	@Inject
 	protected Provider<SdeTypeTransformer> sdeTypeTransformerProvider;
 
+	@Inject
+	protected Provider<SdeDogmaAttributesTransformer> sdeDogmaAttributesTransformerProvider;
+
 	@Setter
 	@NonNull
 	private MVMap<Long, JsonNode> typeStore;
@@ -56,6 +59,13 @@ public class SdeLoader {
 											.setIdFieldName("type_id")
 											.setOutput(typeStore);
 									transformer = sdeTypeTransformerProvider.get();
+									break;
+								case SDE_DOGMA_ATTRIBUTES_PATH:
+									storeLoader = simpleLoaderProvider
+											.get()
+											.setIdFieldName("attribute_id")
+											.setOutput(dogmaAttributesStore);
+									transformer = sdeDogmaAttributesTransformerProvider.get();
 									break;
 								default:
 									log.warn(

@@ -41,6 +41,7 @@ public class SdeLoaderTest {
 		typeStore = mvStoreUtil.openJsonMap(mvstore, "types", Long.class);
 		dogmaAttributeStore = mvStoreUtil.openJsonMap(mvstore, "dogma-attributes", Long.class);
 		sdeLoader.setTypeStore(typeStore);
+		sdeLoader.setDogmaAttributesStore(dogmaAttributeStore);
 	}
 
 	@Test

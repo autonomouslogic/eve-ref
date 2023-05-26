@@ -115,7 +115,7 @@ public class BuildRefDataTest {
 
 		// Assert records.
 		var files = testDataUtil.readFilesFromXzTar(content);
-		assertEquals(Set.of("meta.json", "types.json"), files.keySet());
+		assertEquals(Set.of("meta.json", "types.json", "dogma-attributes.json"), files.keySet());
 		assertMeta(files.get("meta.json"));
 		assertTypes(files.get("types.json"));
 		assertDogmaAttributes(files.get("dogma-attributes.json"));

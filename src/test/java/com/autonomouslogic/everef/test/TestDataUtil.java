@@ -238,12 +238,18 @@ public class TestDataUtil {
 								.put(
 										"build_time",
 										Instant.parse("2000-01-02T03:04:05Z").toString())
-								.set("645", loadJsonResource("/refdata/refdata/type-645.json")))),
+							//	.set("645", loadJsonResource("/refdata/refdata/type-645.json"))
+						)),
 				Map.entry(
 						"types.json",
 						objectMapper.writeValueAsBytes(objectMapper
 								.createObjectNode()
-								.set("645", loadJsonResource("/refdata/refdata/type-645.json"))))));
+								.set("645", loadJsonResource("/refdata/refdata/type-645.json")))),
+				Map.entry(
+						"dogma-attributes.json",
+						objectMapper.writeValueAsBytes(objectMapper
+								.createObjectNode()
+								.set("1615", loadJsonResource("/refdata/refdata/dogma-attribute-1615.json"))))));
 	}
 
 	@SneakyThrows
