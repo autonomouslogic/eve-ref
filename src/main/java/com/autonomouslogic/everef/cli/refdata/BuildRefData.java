@@ -198,7 +198,7 @@ public class BuildRefData implements Command {
 					try (var tar = new TarArchiveOutputStream(new FileOutputStream(file))) {
 						writeMeta(tar);
 						writeEntries("types", typeStores.getRefStore(), tar);
-						writeEntries("dogma-attributes", dogmaAttributesStores.getRefStore(), tar);
+						writeEntries("dogma_attributes", dogmaAttributesStores.getRefStore(), tar);
 					}
 					log.debug(String.format("Wrote %.0f MiB to %s", file.length() / 1024.0 / 1024.0, file));
 					var compressed = CompressUtil.compressXz(file);

@@ -14,6 +14,41 @@ servers:
 - url: https://ref-data.everef.net
   variables: {}
 paths:
+  /dogma_attribtes/{attribute_id}:
+    get:
+      tags:
+      - refdata
+      operationId: getDogmaAttribute
+      parameters:
+      - name: attribute_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: The dogma attribute.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DogmaAttribute'
+  /dogma_attributes:
+    get:
+      tags:
+      - refdata
+      description: Get all dogma attribute IDs.
+      operationId: getAllDogmaAttributes
+      responses:
+        "200":
+          description: Dogma attribute IDs.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: integer
+                  format: int32
   /types:
     get:
       tags:
@@ -44,13 +79,66 @@ paths:
           format: int32
       responses:
         "200":
-          description: Types.
+          description: The types.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/InventoryType'
 components:
   schemas:
+    DogmaAttribute:
+      type: object
+      properties:
+        attribute_id:
+          type: integer
+          format: int32
+        category_id:
+          type: integer
+          format: int32
+        charge_recharge_time_id:
+          type: integer
+          format: int32
+        data_type:
+          type: integer
+          format: int32
+        default_value:
+          type: number
+          format: double
+        description:
+          type: object
+          additionalProperties:
+            type: string
+        display_name:
+          type: object
+          additionalProperties:
+            type: string
+        display_when_zero:
+          type: boolean
+        high_is_good:
+          type: boolean
+        icon_id:
+          type: integer
+          format: int32
+        max_attribute_id:
+          type: integer
+          format: int32
+        name:
+          type: string
+        published:
+          type: boolean
+        stackable:
+          type: boolean
+        tooltip_description_id:
+          type: object
+          additionalProperties:
+            type: string
+        tooltip_title_id:
+          type: object
+          additionalProperties:
+            type: string
+        unit_id:
+          type: integer
+          format: int32
     DogmaTypeAttribute:
       type: object
       properties:

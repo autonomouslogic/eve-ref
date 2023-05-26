@@ -19,6 +19,8 @@ public class SdeDogmaAttributesTransformer implements SimpleTransformer {
 	@Override
 	public ObjectNode transformJson(ObjectNode json) throws Throwable {
 		transformUtil.renameField(json, "display_name_id", "display_name");
+		transformUtil.renameField(json, "tooltip_title_id", "tooltip_title");
+		transformUtil.renameField(json, "tooltip_description_id", "tooltip_description");
 		transformUtil.setPath(json, json.get("description"), "description", "en");
 		return json;
 	}

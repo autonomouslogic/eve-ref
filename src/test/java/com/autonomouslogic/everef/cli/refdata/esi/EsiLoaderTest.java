@@ -54,8 +54,8 @@ public class EsiLoaderTest {
 		var expectedType = objectMapper.readTree(ResourceUtil.loadContextual(EsiLoaderTest.class, "/type-645.json"));
 		testDataUtil.assertJsonStrictEquals(expectedType, typeStore.get(645L));
 		var expectedDogmaAttribute =
-				objectMapper.readTree(ResourceUtil.loadContextual(EsiLoaderTest.class, "/dogma-attribute-1615.json"));
-		testDataUtil.assertJsonStrictEquals(expectedDogmaAttribute, dogmaAttributesStore.get(1615L));
+				objectMapper.readTree(ResourceUtil.loadContextual(EsiLoaderTest.class, "/dogma-attribute-9.json"));
+		testDataUtil.assertJsonStrictEquals(expectedDogmaAttribute, dogmaAttributesStore.get(9L));
 	}
 
 	@ParameterizedTest

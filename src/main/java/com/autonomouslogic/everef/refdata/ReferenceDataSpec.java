@@ -46,8 +46,27 @@ public interface ReferenceDataSpec {
 	@Operation
 	@ApiResponse(
 			responseCode = "200",
-			description = "Types.",
+			description = "The types.",
 			useReturnTypeSchema = true,
 			content = @Content(mediaType = "application/json"))
 	InventoryType getType(@PathParam("type_id") int typeId);
+	@GET
+	@Path("/dogma_attributes")
+	@Operation(description = "Get all dogma attribute IDs.")
+	@ApiResponse(
+			responseCode = "200",
+			description = "Dogma attribute IDs.",
+			useReturnTypeSchema = true,
+			content = @Content(mediaType = "application/json"))
+	List<Integer> getAllDogmaAttributes();
+
+	@GET
+	@Path("/dogma_attribtes/{attribute_id}")
+	@Operation
+	@ApiResponse(
+			responseCode = "200",
+			description = "The dogma attribute.",
+			useReturnTypeSchema = true,
+			content = @Content(mediaType = "application/json"))
+	DogmaAttribute getDogmaAttribute(@PathParam("attribute_id") int attributeId);
 }

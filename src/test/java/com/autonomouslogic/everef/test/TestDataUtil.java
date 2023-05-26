@@ -244,10 +244,10 @@ public class TestDataUtil {
 								.createObjectNode()
 								.set("645", loadJsonResource("/refdata/refdata/type-645.json")))),
 				Map.entry(
-						"dogma-attributes.json",
+						"dogma_attributes.json",
 						objectMapper.writeValueAsBytes(objectMapper
 								.createObjectNode()
-								.set("1615", loadJsonResource("/refdata/refdata/dogma-attribute-1615.json"))))));
+								.set("9", loadJsonResource("/refdata/refdata/dogma-attribute-9.json"))))));
 	}
 
 	@SneakyThrows

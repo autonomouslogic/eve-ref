@@ -55,7 +55,7 @@ public class SdeLoaderTest {
 
 		assertEquals(1, dogmaAttributeStore.size());
 		var expectedDogmaAttribute =
-				objectMapper.readTree(ResourceUtil.loadContextual(SdeLoaderTest.class, "/dogma-attribute-1615.json"));
-		testDataUtil.assertJsonStrictEquals(expectedDogmaAttribute, dogmaAttributeStore.get(1615L));
+				objectMapper.readTree(ResourceUtil.loadContextual(SdeLoaderTest.class, "/dogma-attribute-9.json"));
+		testDataUtil.assertJsonStrictEquals(expectedDogmaAttribute, dogmaAttributeStore.get(9L));
 	}
 }
