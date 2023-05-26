@@ -17,7 +17,7 @@ import org.h2.mvstore.MVMap;
  */
 @Log4j2
 public class EsiLoader {
-	private static final Pattern FILE_PATTERN = Pattern.compile(".*?([^\\.\\/]+)\\.([^\\.]+)\\.yaml");
+	private static final Pattern FILE_PATTERN = Pattern.compile(".*?([^\\.\\/]+\\/[^\\.\\/]+)(?:\\.([^\\.]+))?\\.yaml");
 
 	@Inject
 	protected Provider<EsiStoreLoader> esiStoreLoaderProvider;
@@ -26,11 +26,18 @@ public class EsiLoader {
 	protected Provider<EsiTypeTransformer> esiTypeTransformerProvider;
 
 	@Inject
+	protected Provider<EsiDogmaAttributesTransformer> esiDogmaAttributesTransformerProvider;
+
+	@Inject
 	protected Provider<EsiFieldOrderTransformer> esiFieldOrderTransformerProvider;
 
 	@Setter
 	@NonNull
 	private MVMap<Long, JsonNode> typeStore;
+
+	@Setter
+	@NonNull
+	private MVMap<Long, JsonNode> dogmaAttributesStore;
 
 	@Inject
 	protected EsiLoader() {}
@@ -53,6 +60,12 @@ public class EsiLoader {
 											.setEsiTransformer(esiTypeTransformerProvider.get());
 									storeLoader.setIdFieldName("type_id").setOutput(typeStore);
 									break;
+								case "dogma-attributes":
+									storeLoader = esiStoreLoaderProvider
+											.get()
+											.setEsiTransformer(esiDogmaAttributesTransformerProvider.get());
+									storeLoader.setIdFieldName("attribute_id").setOutput(dogmaAttributesStore);
+									break;
 								default:
 									log.warn(
 											"Unknown ESI entry type {}: {}",
@@ -73,7 +86,19 @@ public class EsiLoader {
 		if (!matcher.matches()) {
 			return null;
 		}
-		return matcher.group(1);
+		var match = matcher.group(1);
+		var mapped = mapFileType(match);
+		return mapped;
+	}
+
+	private String mapFileType(String type) {
+		if (type.startsWith("universe/")) {
+			return type.split("/")[1];
+		}
+		if (type.startsWith("dogma/")) {
+			return type.replace('/', '-');
+		}
+		return type;
 	}
 
 	protected String getLanguage(String filename) {
@@ -82,6 +107,9 @@ public class EsiLoader {
 			return null;
 		}
 		var lang = matcher.group(2);
+		if (lang == null) {
+			lang = "en";
+		}
 		if (lang.equals("en-us")) {
 			return "en";
 		}

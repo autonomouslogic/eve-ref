@@ -33,13 +33,17 @@ public class EsiLoaderTest {
 
 	MVMap<Long, JsonNode> typeStore;
 
+	MVMap<Long, JsonNode> dogmaAttributesStore;
+
 	@BeforeEach
 	@SneakyThrows
 	void before() {
 		DaggerTestComponent.builder().build().inject(this);
 		var mvstore = mvStoreUtil.createTempStore(EsiLoaderTest.class.getSimpleName());
 		typeStore = mvStoreUtil.openJsonMap(mvstore, "types", Long.class);
+		dogmaAttributesStore = mvStoreUtil.openJsonMap(mvstore, "dogma-attributes", Long.class);
 		esiLoader.setTypeStore(typeStore);
+		esiLoader.setDogmaAttributesStore(dogmaAttributesStore);
 	}
 
 	@Test
@@ -49,6 +53,9 @@ public class EsiLoaderTest {
 		assertEquals(1, typeStore.size());
 		var expectedType = objectMapper.readTree(ResourceUtil.loadContextual(EsiLoaderTest.class, "/type-645.json"));
 		testDataUtil.assertJsonStrictEquals(expectedType, typeStore.get(645L));
+		var expectedDogmaAttribute =
+				objectMapper.readTree(ResourceUtil.loadContextual(EsiLoaderTest.class, "/dogma-attribute-9.json"));
+		testDataUtil.assertJsonStrictEquals(expectedDogmaAttribute, dogmaAttributesStore.get(9L));
 	}
 
 	@ParameterizedTest

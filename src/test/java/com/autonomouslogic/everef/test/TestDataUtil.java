@@ -215,14 +215,17 @@ public class TestDataUtil {
 
 	@SneakyThrows
 	public File createTestSde() {
-		return createZipFile(Map.ofEntries(createEntry("/refdata/", SdeLoader.SDE_TYPES_PATH)));
+		return createZipFile(Map.ofEntries(
+				createEntry("/refdata/", SdeLoader.SDE_TYPES_PATH),
+				createEntry("/refdata/", SdeLoader.SDE_DOGMA_ATTRIBUTES_PATH)));
 	}
 
 	@SneakyThrows
 	public File createTestEsiDump() {
 		return createTarXzFile(Map.ofEntries(
 				createEntry("/refdata/esi", "data/tranquility/universe/types.en-us.yaml"),
-				createEntry("/refdata/esi", "data/tranquility/universe/types.fr.yaml")));
+				createEntry("/refdata/esi", "data/tranquility/universe/types.fr.yaml"),
+				createEntry("/refdata/esi", "data/tranquility/dogma/attributes.yaml")));
 	}
 
 	@SneakyThrows
@@ -234,13 +237,17 @@ public class TestDataUtil {
 								.createObjectNode()
 								.put(
 										"build_time",
-										Instant.parse("2000-01-02T03:04:05Z").toString())
-								.set("645", loadJsonResource("/refdata/refdata/type-645.json")))),
+										Instant.parse("2000-01-02T03:04:05Z").toString()))),
 				Map.entry(
 						"types.json",
 						objectMapper.writeValueAsBytes(objectMapper
 								.createObjectNode()
-								.set("645", loadJsonResource("/refdata/refdata/type-645.json"))))));
+								.set("645", loadJsonResource("/refdata/refdata/type-645.json")))),
+				Map.entry(
+						"dogma_attributes.json",
+						objectMapper.writeValueAsBytes(objectMapper
+								.createObjectNode()
+								.set("9", loadJsonResource("/refdata/refdata/dogma-attribute-9.json"))))));
 	}
 
 	@SneakyThrows
