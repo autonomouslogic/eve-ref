@@ -42,3 +42,6 @@ Extract all unique keys from a bunch of JSON objects:
 ```shell
 cat dogma-attributes.json | jq '.[] | keys | .[]' | sort -u
 ```
+
+Previous works:
+* https://github.com/autonomouslogic/eve-ref/pull/145
