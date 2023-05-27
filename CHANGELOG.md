@@ -1,5 +1,12 @@
 EVE Ref Changelog
 
+## [2.4.0](https://github.com/autonomouslogic/eve-ref/compare/2.3.1...2.4.0) (2023-05-27)
+
+
+### Features
+
+* Dogma attributes reference data ([#145](https://github.com/autonomouslogic/eve-ref/issues/145)) ([a7da982](https://github.com/autonomouslogic/eve-ref/commit/a7da9822aab5c76190ef6f97a2a59402ec652bab))
+
 ## [2.3.1](https://github.com/autonomouslogic/eve-ref/compare/2.3.0...2.3.1) (2023-05-25)
 
 
