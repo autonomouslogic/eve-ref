@@ -17,7 +17,7 @@ public class SdeTypeTransformer implements SimpleTransformer {
 	protected SdeTypeTransformer() {}
 
 	@Override
-	public ObjectNode transformJson(ObjectNode json) throws Throwable {
+	public ObjectNode transformJson(ObjectNode json, String language) throws Throwable {
 		if (json.has("traits")) {
 			var traits = (ObjectNode) json.get("traits");
 			transformUtil.arrayToObject(traits, "misc_bonuses", "importance");

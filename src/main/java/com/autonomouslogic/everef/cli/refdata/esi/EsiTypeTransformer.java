@@ -1,5 +1,6 @@
 package com.autonomouslogic.everef.cli.refdata.esi;
 
+import com.autonomouslogic.everef.cli.refdata.SimpleTransformer;
 import com.autonomouslogic.everef.cli.refdata.TransformUtil;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import javax.inject.Inject;
@@ -8,7 +9,7 @@ import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 @Singleton
-public class EsiTypeTransformer implements EsiTransformer {
+public class EsiTypeTransformer implements SimpleTransformer {
 	@Inject
 	protected TransformUtil transformUtil;
 
@@ -16,7 +17,7 @@ public class EsiTypeTransformer implements EsiTransformer {
 	protected EsiTypeTransformer() {}
 
 	@Override
-	public ObjectNode transformEsi(ObjectNode json, String language) throws Throwable {
+	public ObjectNode transformJson(ObjectNode json, String language) throws Throwable {
 		transformUtil.arrayToObject(json, "dogma_attributes", "attribute_id");
 		transformUtil.arrayToObject(json, "dogma_effects", "effect_id");
 		transformUtil.setPath(json, json.get("name"), "name", language);

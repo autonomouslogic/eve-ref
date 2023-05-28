@@ -1,5 +1,6 @@
 package com.autonomouslogic.everef.cli.refdata.esi;
 
+import com.autonomouslogic.everef.cli.refdata.SimpleStoreLoader;
 import com.autonomouslogic.everef.cli.refdata.StoreHandler;
 import com.autonomouslogic.everef.util.CompressUtil;
 import com.autonomouslogic.everef.util.RefDataUtil;
@@ -23,7 +24,7 @@ public class EsiLoader {
 	protected RefDataUtil refDataUtil;
 
 	@Inject
-	protected Provider<EsiStoreLoader> esiStoreLoaderProvider;
+	protected Provider<SimpleStoreLoader> simpleStoreLoaderProvider;
 
 	@Inject
 	protected Provider<EsiTypeTransformer> esiTypeTransformerProvider;
@@ -54,16 +55,16 @@ public class EsiLoader {
 							if (config == null) {
 								return Completable.complete();
 							}
-							var storeLoader = esiStoreLoaderProvider.get();
+							var storeLoader = simpleStoreLoaderProvider.get();
 							storeLoader
 									.setIdFieldName(config.getIdField())
 									.setOutput(storeHandler.getEsiStore(config.getId()));
 							switch (config.getId()) {
 								case "types":
-									storeLoader.setEsiTransformer(esiTypeTransformerProvider.get());
+									storeLoader.setTransformer(esiTypeTransformerProvider.get());
 									break;
 								case "dogmaAttributes":
-									storeLoader.setEsiTransformer(esiDogmaAttributesTransformerProvider.get());
+									storeLoader.setTransformer(esiDogmaAttributesTransformerProvider.get());
 									break;
 							}
 							storeLoader.setPostMergeTransformer(esiFieldOrderTransformerProvider.get());
