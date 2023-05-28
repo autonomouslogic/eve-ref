@@ -3,9 +3,9 @@ package com.autonomouslogic.everef.cli.refdata.sde;
 import com.autonomouslogic.everef.cli.refdata.FieldRenamer;
 import com.autonomouslogic.everef.cli.refdata.SimpleStoreLoader;
 import com.autonomouslogic.everef.cli.refdata.SimpleTransformer;
+import com.autonomouslogic.everef.cli.refdata.StoreHandler;
 import com.autonomouslogic.everef.cli.refdata.TransformUtil;
 import com.autonomouslogic.everef.util.CompressUtil;
-import com.fasterxml.jackson.databind.JsonNode;
 import io.reactivex.rxjava3.core.Completable;
 import java.io.File;
 import javax.inject.Inject;
@@ -13,7 +13,6 @@ import javax.inject.Provider;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
-import org.h2.mvstore.MVMap;
 
 /**
  * Loads entries from the SDE dumps and prepares them for Ref Data.
@@ -37,11 +36,7 @@ public class SdeLoader {
 
 	@Setter
 	@NonNull
-	private MVMap<Long, JsonNode> typeStore;
-
-	@Setter
-	@NonNull
-	private MVMap<Long, JsonNode> dogmaAttributesStore;
+	private StoreHandler storeHandler;
 
 	@Inject
 	protected SdeLoader() {}
@@ -57,14 +52,14 @@ public class SdeLoader {
 									storeLoader = simpleLoaderProvider
 											.get()
 											.setIdFieldName("type_id")
-											.setOutput(typeStore);
+											.setOutput(storeHandler.getSdeStore("types"));
 									transformer = sdeTypeTransformerProvider.get();
 									break;
 								case SDE_DOGMA_ATTRIBUTES_PATH:
 									storeLoader = simpleLoaderProvider
 											.get()
 											.setIdFieldName("attribute_id")
-											.setOutput(dogmaAttributesStore);
+											.setOutput(storeHandler.getSdeStore("dogma-attributes"));
 									transformer = sdeDogmaAttributesTransformerProvider.get();
 									break;
 								default:

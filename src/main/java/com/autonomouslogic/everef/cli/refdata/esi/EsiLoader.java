@@ -1,7 +1,7 @@
 package com.autonomouslogic.everef.cli.refdata.esi;
 
+import com.autonomouslogic.everef.cli.refdata.StoreHandler;
 import com.autonomouslogic.everef.util.CompressUtil;
-import com.fasterxml.jackson.databind.JsonNode;
 import io.reactivex.rxjava3.core.Completable;
 import java.io.File;
 import java.util.regex.Pattern;
@@ -10,7 +10,6 @@ import javax.inject.Provider;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
-import org.h2.mvstore.MVMap;
 
 /**
  * Loads entries from the ESI dumps and prepares them for Ref Data.
@@ -33,11 +32,7 @@ public class EsiLoader {
 
 	@Setter
 	@NonNull
-	private MVMap<Long, JsonNode> typeStore;
-
-	@Setter
-	@NonNull
-	private MVMap<Long, JsonNode> dogmaAttributesStore;
+	private StoreHandler storeHandler;
 
 	@Inject
 	protected EsiLoader() {}
@@ -58,13 +53,15 @@ public class EsiLoader {
 									storeLoader = esiStoreLoaderProvider
 											.get()
 											.setEsiTransformer(esiTypeTransformerProvider.get());
-									storeLoader.setIdFieldName("type_id").setOutput(typeStore);
+									storeLoader.setIdFieldName("type_id").setOutput(storeHandler.getEsiStore("types"));
 									break;
 								case "dogma-attributes":
 									storeLoader = esiStoreLoaderProvider
 											.get()
 											.setEsiTransformer(esiDogmaAttributesTransformerProvider.get());
-									storeLoader.setIdFieldName("attribute_id").setOutput(dogmaAttributesStore);
+									storeLoader
+											.setIdFieldName("attribute_id")
+											.setOutput(storeHandler.getEsiStore("dogma-attributes"));
 									break;
 								default:
 									log.warn(

@@ -14,6 +14,7 @@ import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.url.UrlParser;
 import com.autonomouslogic.everef.util.CompressUtil;
 import com.autonomouslogic.everef.util.OkHttpHelper;
+import com.autonomouslogic.everef.util.RefDataUtil;
 import com.autonomouslogic.everef.util.Rx;
 import com.autonomouslogic.everef.util.S3Util;
 import com.autonomouslogic.everef.util.TempFiles;
@@ -82,6 +83,9 @@ public class BuildRefData implements Command {
 	protected EsiLoader esiLoader;
 
 	@Inject
+	protected RefDataUtil refDataUtil;
+
+	@Inject
 	protected Provider<RefDataMerger> refDataMergerProvider;
 
 	@Inject
@@ -94,11 +98,10 @@ public class BuildRefData implements Command {
 	private final Duration latestCacheTime = Configs.DATA_LATEST_CACHE_CONTROL_MAX_AGE.getRequired();
 	private final Duration archiveCacheTime = Configs.DATA_ARCHIVE_CACHE_CONTROL_MAX_AGE.getRequired();
 
+	private StoreHandler storeHandler;
 	private S3Url dataUrl;
 	private URI dataBaseUrl;
 	private MVStore mvStore;
-	private StoreSet typeStores;
-	private StoreSet dogmaAttributesStores;
 
 	@Inject
 	protected BuildRefData() {}
@@ -124,13 +127,9 @@ public class BuildRefData implements Command {
 	private Completable initMvStore() {
 		return Completable.fromAction(() -> {
 			mvStore = mvStoreUtil.createTempStore("ref-data");
-			typeStores = openStoreSet("types");
-			dogmaAttributesStores = openStoreSet("dogma-attributes");
-
-			sdeLoader.setTypeStore(typeStores.getSdeStore());
-			esiLoader.setTypeStore(typeStores.getEsiStore());
-			sdeLoader.setDogmaAttributesStore(dogmaAttributesStores.getSdeStore());
-			esiLoader.setDogmaAttributesStore(dogmaAttributesStores.getEsiStore());
+			storeHandler = new StoreHandler(mvStoreUtil, mvStore);
+			sdeLoader.setStoreHandler(storeHandler);
+			esiLoader.setStoreHandler(storeHandler);
 		});
 	}
 
@@ -139,12 +138,12 @@ public class BuildRefData implements Command {
 				refDataMergerProvider
 						.get()
 						.setName("types")
-						.setStores(typeStores)
+						.setStoreHandler(storeHandler)
 						.merge(),
 				refDataMergerProvider
 						.get()
 						.setName("dogma-attributes")
-						.setStores(dogmaAttributesStores)
+						.setStoreHandler(storeHandler)
 						.merge()));
 	}
 
@@ -197,8 +196,8 @@ public class BuildRefData implements Command {
 					log.info("Writing ref data to {}", file);
 					try (var tar = new TarArchiveOutputStream(new FileOutputStream(file))) {
 						writeMeta(tar);
-						writeEntries("types", typeStores.getRefStore(), tar);
-						writeEntries("dogma_attributes", dogmaAttributesStores.getRefStore(), tar);
+						writeEntries("types", storeHandler.getRefStore("types"), tar);
+						writeEntries("dogma_attributes", storeHandler.getRefStore("dogma-attributes"), tar);
 					}
 					log.debug(String.format("Wrote %.0f MiB to %s", file.length() / 1024.0 / 1024.0, file));
 					var compressed = CompressUtil.compressXz(file);
@@ -260,12 +259,5 @@ public class BuildRefData implements Command {
 					s3Adapter.putObject(latestPut, outputFile, s3Client).ignoreElement(),
 					s3Adapter.putObject(archivePut, outputFile, s3Client).ignoreElement());
 		});
-	}
-
-	private StoreSet openStoreSet(String name) {
-		return new StoreSet(
-				mvStoreUtil.openJsonMap(mvStore, name + "-sde", Long.class),
-				mvStoreUtil.openJsonMap(mvStore, name + "-esi", Long.class),
-				mvStoreUtil.openJsonMap(mvStore, name + "-ref", Long.class));
 	}
 }
