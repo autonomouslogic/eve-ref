@@ -15,6 +15,9 @@ public class RefTypeConfig {
 	String file;
 
 	@JsonProperty
+	Map<String, String> renames;
+
+	@JsonProperty
 	List<String> languageAttributes;
 
 	@JsonProperty

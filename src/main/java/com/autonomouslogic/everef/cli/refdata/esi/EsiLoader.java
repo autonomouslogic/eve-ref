@@ -2,6 +2,7 @@ package com.autonomouslogic.everef.cli.refdata.esi;
 
 import com.autonomouslogic.everef.cli.refdata.SimpleStoreLoader;
 import com.autonomouslogic.everef.cli.refdata.StoreHandler;
+import com.autonomouslogic.everef.cli.refdata.TransformerBuilder;
 import com.autonomouslogic.everef.util.CompressUtil;
 import com.autonomouslogic.everef.util.RefDataUtil;
 import io.reactivex.rxjava3.core.Completable;
@@ -24,13 +25,10 @@ public class EsiLoader {
 	protected RefDataUtil refDataUtil;
 
 	@Inject
+	protected TransformerBuilder transformerBuilder;
+
+	@Inject
 	protected Provider<SimpleStoreLoader> simpleStoreLoaderProvider;
-
-	@Inject
-	protected Provider<EsiTypeTransformer> esiTypeTransformerProvider;
-
-	@Inject
-	protected Provider<EsiDogmaAttributesTransformer> esiDogmaAttributesTransformerProvider;
 
 	@Inject
 	protected Provider<EsiFieldOrderTransformer> esiFieldOrderTransformerProvider;
@@ -59,14 +57,8 @@ public class EsiLoader {
 							storeLoader
 									.setIdFieldName(config.getIdField())
 									.setOutput(storeHandler.getEsiStore(config.getId()));
-							switch (config.getId()) {
-								case "types":
-									storeLoader.setTransformer(esiTypeTransformerProvider.get());
-									break;
-								case "dogmaAttributes":
-									storeLoader.setTransformer(esiDogmaAttributesTransformerProvider.get());
-									break;
-							}
+							var transformer = transformerBuilder.buildTransformer(config.getEsi());
+							storeLoader.setTransformer(transformer);
 							storeLoader.setPostMergeTransformer(esiFieldOrderTransformerProvider.get());
 							storeLoader.setLanguage(language);
 							return storeLoader.readValues(pair.getRight());

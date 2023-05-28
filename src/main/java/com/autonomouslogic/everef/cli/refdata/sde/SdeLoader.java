@@ -2,9 +2,9 @@ package com.autonomouslogic.everef.cli.refdata.sde;
 
 import com.autonomouslogic.everef.cli.refdata.FieldRenamer;
 import com.autonomouslogic.everef.cli.refdata.SimpleStoreLoader;
-import com.autonomouslogic.everef.cli.refdata.SimpleTransformer;
 import com.autonomouslogic.everef.cli.refdata.StoreHandler;
 import com.autonomouslogic.everef.cli.refdata.TransformUtil;
+import com.autonomouslogic.everef.cli.refdata.TransformerBuilder;
 import com.autonomouslogic.everef.util.CompressUtil;
 import com.autonomouslogic.everef.util.RefDataUtil;
 import io.reactivex.rxjava3.core.Completable;
@@ -30,13 +30,13 @@ public class SdeLoader {
 	protected RefDataUtil refDataUtil;
 
 	@Inject
+	protected TransformerBuilder transformerBuilder;
+
+	@Inject
 	protected Provider<SimpleStoreLoader> simpleLoaderProvider;
 
 	@Inject
 	protected Provider<SdeTypeTransformer> sdeTypeTransformerProvider;
-
-	@Inject
-	protected Provider<SdeDogmaAttributesTransformer> sdeDogmaAttributesTransformerProvider;
 
 	@Setter
 	@NonNull
@@ -49,29 +49,22 @@ public class SdeLoader {
 		return CompressUtil.loadArchive(file)
 				.flatMapCompletable(
 						pair -> {
-							SimpleTransformer transformer = null;
 							var config = refDataUtil.getSdeConfigForFilename(
 									pair.getLeft().getName());
 							if (config == null) {
 								return Completable.complete();
 							}
+							var transformer = transformerBuilder.buildTransformer(config.getSde());
 							var storeLoader = simpleLoaderProvider
 									.get()
 									.setIdFieldName(config.getIdField())
 									.setOutput(storeHandler.getSdeStore(config.getId()));
 							switch (config.getId()) {
 								case "types":
-									transformer = sdeTypeTransformerProvider.get();
-									break;
-								case "dogmaAttributes":
-									transformer = sdeDogmaAttributesTransformerProvider.get();
+									transformer = TransformUtil.concat(fieldRenamer, sdeTypeTransformerProvider.get());
 									break;
 							}
-							if (transformer == null) {
-								storeLoader.setTransformer(fieldRenamer);
-							} else {
-								storeLoader.setTransformer(TransformUtil.concat(fieldRenamer, transformer));
-							}
+							storeLoader.setTransformer(TransformUtil.concat(fieldRenamer, transformer));
 							return storeLoader.readValues(pair.getRight());
 						},
 						false,

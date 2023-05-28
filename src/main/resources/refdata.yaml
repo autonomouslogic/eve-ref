@@ -6,7 +6,7 @@ types:
   esi:
     file: universe/types
     languageAttributes:
-      - display_name
+      - name
       - description
     arrayToObjects:
       dogma_attributes: attribute_id

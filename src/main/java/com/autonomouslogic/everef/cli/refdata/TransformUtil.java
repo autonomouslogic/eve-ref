@@ -61,7 +61,7 @@ public class TransformUtil {
 
 	public static SimpleTransformer concat(SimpleTransformer... transformers) {
 		if (transformers.length == 0) {
-			throw new NullPointerException();
+			return (json, language) -> json;
 		}
 		return (v, language) -> {
 			for (var f : transformers) {
