@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 import com.autonomouslogic.commons.ResourceUtil;
-import com.autonomouslogic.everef.model.refdata.RefDataConfig;
 import com.autonomouslogic.everef.util.RefDataUtil;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -222,7 +221,7 @@ public class TestDataUtil {
 	@SuppressWarnings("unchecked")
 	public File createTestSde() {
 		var entries = new ArrayList<Map.Entry<String, byte[]>>();
-		for (RefDataConfig config : refDataUtil.loadReferenceDataConfig()) {
+		for (var config : refDataUtil.loadReferenceDataConfig()) {
 			entries.add(createEntry("/refdata/", config.getSde().getFile()));
 		}
 		return createZipFile(Map.ofEntries(entries.toArray(new Map.Entry[0])));
@@ -231,13 +230,13 @@ public class TestDataUtil {
 	@SneakyThrows
 	public File createTestEsiDump() {
 		var entries = new ArrayList<Map.Entry<String, byte[]>>();
-		for (RefDataConfig config : refDataUtil.loadReferenceDataConfig()) {
+		for (var config : refDataUtil.loadReferenceDataConfig()) {
 			var file = config.getEsi().getFile();
 			var languages = config.getTest().getLanguages();
 			if (languages == null) {
 				entries.add(createEntry("/refdata/esi", String.format("data/tranquility/%s.yaml", file)));
 			} else {
-				for (String language : languages) {
+				for (var language : languages) {
 					entries.add(
 							createEntry("/refdata/esi", String.format("data/tranquility/%s.%s.yaml", file, language)));
 				}
@@ -247,25 +246,24 @@ public class TestDataUtil {
 	}
 
 	@SneakyThrows
+	@SuppressWarnings("unchecked")
 	public File createTestRefdata() {
-		return createTarXzFile(Map.ofEntries(
-				Map.entry(
-						"meta.json",
-						objectMapper.writeValueAsBytes(objectMapper
-								.createObjectNode()
-								.put(
-										"build_time",
-										Instant.parse("2000-01-02T03:04:05Z").toString()))),
-				Map.entry(
-						"types.json",
-						objectMapper.writeValueAsBytes(objectMapper
-								.createObjectNode()
-								.set("645", loadJsonResource("/refdata/refdata/type-645.json")))),
-				Map.entry(
-						"dogma_attributes.json",
-						objectMapper.writeValueAsBytes(objectMapper
-								.createObjectNode()
-								.set("9", loadJsonResource("/refdata/refdata/dogma-attribute-9.json"))))));
+		var entries = new ArrayList<Map.Entry<String, byte[]>>();
+		entries.add(Map.entry(
+				"meta.json",
+				objectMapper.writeValueAsBytes(objectMapper
+						.createObjectNode()
+						.put("build_time", Instant.parse("2000-01-02T03:04:05Z").toString()))));
+		for (var config : refDataUtil.loadReferenceDataConfig()) {
+			var testConfig = config.getTest();
+			var json = objectMapper.createObjectNode();
+			for (var id : testConfig.getIds()) {
+				var resourceFile = String.format("/refdata/refdata/%s-%s.json", testConfig.getFilePrefix(), id);
+				json.set(id.toString(), loadJsonResource(resourceFile));
+			}
+			entries.add(Map.entry(config.getOutputFile() + ".json", objectMapper.writeValueAsBytes(json)));
+		}
+		return createTarXzFile(Map.ofEntries(entries.toArray(new Map.Entry[0])));
 	}
 
 	@SneakyThrows

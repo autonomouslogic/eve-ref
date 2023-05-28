@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.autonomouslogic.commons.ResourceUtil;
 import com.autonomouslogic.everef.cli.refdata.StoreHandler;
-import com.autonomouslogic.everef.model.refdata.RefDataConfig;
 import com.autonomouslogic.everef.mvstore.MVStoreUtil;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.test.TestDataUtil;
@@ -51,7 +50,7 @@ public class EsiLoaderTest {
 	void testLoadEsi() {
 		esiLoader.load(testDataUtil.createTestEsiDump()).blockingAwait();
 
-		for (RefDataConfig config : refDataUtil.loadReferenceDataConfig()) {
+		for (var config : refDataUtil.loadReferenceDataConfig()) {
 			var testConfig = config.getTest();
 			var store = storeHandler.getEsiStore(config.getId());
 			for (var id : testConfig.getIds()) {

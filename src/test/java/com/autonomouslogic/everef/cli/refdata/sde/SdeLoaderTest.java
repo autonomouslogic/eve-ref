@@ -2,7 +2,6 @@ package com.autonomouslogic.everef.cli.refdata.sde;
 
 import com.autonomouslogic.commons.ResourceUtil;
 import com.autonomouslogic.everef.cli.refdata.StoreHandler;
-import com.autonomouslogic.everef.model.refdata.RefDataConfig;
 import com.autonomouslogic.everef.mvstore.MVStoreUtil;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.test.TestDataUtil;
@@ -47,7 +46,7 @@ public class SdeLoaderTest {
 	void testLoadSde() {
 		sdeLoader.load(testDataUtil.createTestSde()).blockingAwait();
 
-		for (RefDataConfig config : refDataUtil.loadReferenceDataConfig()) {
+		for (var config : refDataUtil.loadReferenceDataConfig()) {
 			var testConfig = config.getTest();
 			var store = storeHandler.getSdeStore(config.getId());
 			for (var id : testConfig.getIds()) {
