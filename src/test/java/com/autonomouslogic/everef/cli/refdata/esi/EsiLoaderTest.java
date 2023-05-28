@@ -50,6 +50,7 @@ public class EsiLoaderTest {
 	@SneakyThrows
 	void testLoadEsi() {
 		esiLoader.load(testDataUtil.createTestEsiDump()).blockingAwait();
+
 		for (RefDataConfig config : refDataUtil.loadReferenceDataConfig()) {
 			var testConfig = config.getTest();
 			var store = storeHandler.getEsiStore(config.getId());

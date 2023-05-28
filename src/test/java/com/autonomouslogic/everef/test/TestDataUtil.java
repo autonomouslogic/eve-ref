@@ -4,7 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 import com.autonomouslogic.commons.ResourceUtil;
-import com.autonomouslogic.everef.cli.refdata.sde.SdeLoader;
+import com.autonomouslogic.everef.model.refdata.RefDataConfig;
+import com.autonomouslogic.everef.util.RefDataUtil;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.reactivex.rxjava3.functions.Consumer;
@@ -16,6 +17,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,6 +47,9 @@ public class TestDataUtil {
 
 	@Inject
 	ObjectMapper objectMapper;
+
+	@Inject
+	RefDataUtil refDataUtil;
 
 	@Inject
 	protected TestDataUtil() {}
@@ -214,18 +219,31 @@ public class TestDataUtil {
 	}
 
 	@SneakyThrows
+	@SuppressWarnings("unchecked")
 	public File createTestSde() {
-		return createZipFile(Map.ofEntries(
-				createEntry("/refdata/", SdeLoader.SDE_TYPES_PATH),
-				createEntry("/refdata/", SdeLoader.SDE_DOGMA_ATTRIBUTES_PATH)));
+		var entries = new ArrayList<Map.Entry<String, byte[]>>();
+		for (RefDataConfig config : refDataUtil.loadReferenceDataConfig()) {
+			entries.add(createEntry("/refdata/", config.getSde().getFile()));
+		}
+		return createZipFile(Map.ofEntries(entries.toArray(new Map.Entry[0])));
 	}
 
 	@SneakyThrows
 	public File createTestEsiDump() {
-		return createTarXzFile(Map.ofEntries(
-				createEntry("/refdata/esi", "data/tranquility/universe/types.en-us.yaml"),
-				createEntry("/refdata/esi", "data/tranquility/universe/types.fr.yaml"),
-				createEntry("/refdata/esi", "data/tranquility/dogma/attributes.yaml")));
+		var entries = new ArrayList<Map.Entry<String, byte[]>>();
+		for (RefDataConfig config : refDataUtil.loadReferenceDataConfig()) {
+			var file = config.getEsi().getFile();
+			var languages = config.getTest().getLanguages();
+			if (languages == null) {
+				entries.add(createEntry("/refdata/esi", String.format("data/tranquility/%s.yaml", file)));
+			} else {
+				for (String language : languages) {
+					entries.add(
+							createEntry("/refdata/esi", String.format("data/tranquility/%s.%s.yaml", file, language)));
+				}
+			}
+		}
+		return createTarXzFile(Map.ofEntries(entries.toArray(new Map.Entry[0])));
 	}
 
 	@SneakyThrows

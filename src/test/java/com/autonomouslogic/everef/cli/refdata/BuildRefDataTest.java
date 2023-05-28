@@ -16,7 +16,6 @@ import com.autonomouslogic.everef.test.MockS3Adapter;
 import com.autonomouslogic.everef.test.TestDataUtil;
 import com.autonomouslogic.everef.url.UrlParser;
 import com.autonomouslogic.everef.util.RefDataUtil;
-import com.autonomouslogic.everef.util.TempFiles;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.reactivex.rxjava3.core.Flowable;
 import java.io.FileInputStream;
@@ -64,9 +63,6 @@ public class BuildRefDataTest {
 
 	@Inject
 	UrlParser urlParser;
-
-	@Inject
-	TempFiles tempFiles;
 
 	@Inject
 	RefDataUtil refDataUtil;

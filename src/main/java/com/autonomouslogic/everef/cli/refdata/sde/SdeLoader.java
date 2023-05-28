@@ -20,9 +20,6 @@ import lombok.extern.log4j.Log4j2;
  */
 @Log4j2
 public class SdeLoader {
-	public static final String SDE_TYPES_PATH = "sde/fsd/typeIDs.yaml";
-	public static final String SDE_DOGMA_ATTRIBUTES_PATH = "sde/fsd/dogmaAttributes.yaml";
-
 	@Inject
 	protected FieldRenamer fieldRenamer;
 

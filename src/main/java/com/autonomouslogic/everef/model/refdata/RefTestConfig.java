@@ -15,4 +15,7 @@ public class RefTestConfig {
 
 	@JsonProperty
 	List<Long> ids;
+
+	@JsonProperty
+	List<String> languages;
 }

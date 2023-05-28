@@ -15,6 +15,9 @@ types:
     filePrefix: type
     ids:
       - 645
+    languages:
+      - en-us
+      - fr
 
 dogmaAttributes:
   idField: attribute_id
