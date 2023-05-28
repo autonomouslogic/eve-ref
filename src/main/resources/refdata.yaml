@@ -12,7 +12,7 @@ types:
       dogma_attributes: attribute_id
       dogma_effects: effect_id
   test:
-    filename: type
+    filePrefix: type
     ids:
       - 645
 
@@ -33,6 +33,6 @@ dogmaAttributes:
       - display_name
       - description
   test:
-    filename: dogma-attribute
+    filePrefix: dogma-attribute
     ids:
       - 9

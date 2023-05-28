@@ -11,7 +11,7 @@ import lombok.extern.jackson.Jacksonized;
 @Jacksonized
 public class RefTestConfig {
 	@JsonProperty
-	String filename;
+	String filePrefix;
 
 	@JsonProperty
 	List<Long> ids;

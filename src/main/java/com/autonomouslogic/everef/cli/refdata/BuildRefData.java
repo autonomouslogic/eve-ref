@@ -8,6 +8,7 @@ import com.autonomouslogic.everef.cli.refdata.esi.EsiLoader;
 import com.autonomouslogic.everef.cli.refdata.sde.SdeLoader;
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.http.DataCrawler;
+import com.autonomouslogic.everef.model.refdata.RefDataConfig;
 import com.autonomouslogic.everef.mvstore.MVStoreUtil;
 import com.autonomouslogic.everef.s3.S3Adapter;
 import com.autonomouslogic.everef.url.S3Url;
@@ -192,8 +193,9 @@ public class BuildRefData implements Command {
 					log.info("Writing ref data to {}", file);
 					try (var tar = new TarArchiveOutputStream(new FileOutputStream(file))) {
 						writeMeta(tar);
-						writeEntries("types", storeHandler.getRefStore("types"), tar);
-						writeEntries("dogma_attributes", storeHandler.getRefStore("dogmaAttributes"), tar);
+						for (RefDataConfig config : refDataUtil.loadReferenceDataConfig()) {
+							writeEntries(config.getOutputFile(), storeHandler.getRefStore(config.getId()), tar);
+						}
 					}
 					log.debug(String.format("Wrote %.0f MiB to %s", file.length() / 1024.0 / 1024.0, file));
 					var compressed = CompressUtil.compressXz(file);

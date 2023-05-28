@@ -16,6 +16,9 @@ public class RefDataConfig {
 	String idField;
 
 	@JsonProperty
+	String outputFile;
+
+	@JsonProperty
 	String model;
 
 	@JsonProperty
@@ -23,4 +26,7 @@ public class RefDataConfig {
 
 	@JsonProperty
 	RefTypeConfig esi;
+
+	@JsonProperty
+	RefTestConfig test;
 }

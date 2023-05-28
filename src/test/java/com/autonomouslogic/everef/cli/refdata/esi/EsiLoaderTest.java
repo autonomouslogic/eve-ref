@@ -4,9 +4,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.autonomouslogic.commons.ResourceUtil;
 import com.autonomouslogic.everef.cli.refdata.StoreHandler;
+import com.autonomouslogic.everef.model.refdata.RefDataConfig;
 import com.autonomouslogic.everef.mvstore.MVStoreUtil;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.test.TestDataUtil;
+import com.autonomouslogic.everef.util.RefDataUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import javax.inject.Inject;
 import lombok.SneakyThrows;
@@ -30,6 +32,9 @@ public class EsiLoaderTest {
 	@Inject
 	MVStoreUtil mvStoreUtil;
 
+	@Inject
+	RefDataUtil refDataUtil;
+
 	StoreHandler storeHandler;
 
 	@BeforeEach
@@ -44,18 +49,16 @@ public class EsiLoaderTest {
 	@Test
 	@SneakyThrows
 	void testLoadEsi() {
-		var typeStore = storeHandler.getEsiStore("types");
-		var dogmaAttributesStore = storeHandler.getEsiStore("dogmaAttributes");
 		esiLoader.load(testDataUtil.createTestEsiDump()).blockingAwait();
-
-		assertEquals(1, typeStore.size());
-		var expectedType = objectMapper.readTree(ResourceUtil.loadContextual(EsiLoaderTest.class, "/type-645.json"));
-		testDataUtil.assertJsonStrictEquals(expectedType, typeStore.get(645L));
-
-		assertEquals(1, dogmaAttributesStore.size());
-		var expectedDogmaAttribute =
-				objectMapper.readTree(ResourceUtil.loadContextual(EsiLoaderTest.class, "/dogma-attribute-9.json"));
-		testDataUtil.assertJsonStrictEquals(expectedDogmaAttribute, dogmaAttributesStore.get(9L));
+		for (RefDataConfig config : refDataUtil.loadReferenceDataConfig()) {
+			var testConfig = config.getTest();
+			var store = storeHandler.getEsiStore(config.getId());
+			for (var id : testConfig.getIds()) {
+				var expectedType = objectMapper.readTree(ResourceUtil.loadContextual(
+						EsiLoaderTest.class, "/" + testConfig.getFilePrefix() + "-" + id + ".json"));
+				testDataUtil.assertJsonStrictEquals(expectedType, store.get(id));
+			}
+		}
 	}
 
 	@ParameterizedTest

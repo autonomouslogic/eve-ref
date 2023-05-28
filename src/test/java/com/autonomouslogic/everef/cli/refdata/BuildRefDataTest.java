@@ -10,16 +10,18 @@ import static org.mockito.Mockito.when;
 import com.autonomouslogic.commons.ResourceUtil;
 import com.autonomouslogic.everef.http.DataCrawler;
 import com.autonomouslogic.everef.http.MockDataCrawlerModule;
+import com.autonomouslogic.everef.model.refdata.RefDataConfig;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.test.MockS3Adapter;
 import com.autonomouslogic.everef.test.TestDataUtil;
 import com.autonomouslogic.everef.url.UrlParser;
+import com.autonomouslogic.everef.util.RefDataUtil;
 import com.autonomouslogic.everef.util.TempFiles;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.reactivex.rxjava3.core.Flowable;
 import java.io.FileInputStream;
 import java.time.ZonedDateTime;
-import java.util.Set;
+import java.util.LinkedHashSet;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.NonNull;
@@ -65,6 +67,9 @@ public class BuildRefDataTest {
 
 	@Inject
 	TempFiles tempFiles;
+
+	@Inject
+	RefDataUtil refDataUtil;
 
 	MockWebServer server;
 
@@ -115,29 +120,35 @@ public class BuildRefDataTest {
 
 		// Assert records.
 		var files = testDataUtil.readFilesFromXzTar(content);
-		assertEquals(Set.of("meta.json", "types.json", "dogma_attributes.json"), files.keySet());
+		var expectedFilenames = new LinkedHashSet<>();
+		expectedFilenames.add("meta.json");
+		for (RefDataConfig config : refDataUtil.loadReferenceDataConfig()) {
+			expectedFilenames.add(config.getOutputFile() + ".json");
+		}
+		assertEquals(expectedFilenames, files.keySet());
 		assertMeta(files.get("meta.json"));
-		assertTypes(files.get("types.json"));
-		assertDogmaAttributes(files.get("dogma_attributes.json"));
+		for (var config : refDataUtil.loadReferenceDataConfig()) {
+			assertOutput(config, files.get(config.getOutputFile() + ".json"));
+		}
 	}
 
 	@SneakyThrows
-	private void assertTypes(@NonNull byte[] json) {
+	private void assertOutput(@NonNull RefDataConfig config, @NonNull byte[] json) {
+		var testConfig = config.getTest();
 		var expected = objectMapper.createObjectNode();
-		expected.set("645", objectMapper.readTree(ResourceUtil.loadResource("/refdata/refdata/type-645.json")));
+		for (Long id : testConfig.getIds()) {
+			expected.set(
+					id.toString(),
+					objectMapper.readTree(ResourceUtil.loadResource(
+							"/refdata/refdata/" + testConfig.getFilePrefix() + "-" + id + ".json")));
+		}
 		var supplied = objectMapper.readTree(json);
 		assertEquals(expected, supplied);
 
-		// Check the encoded JSON contains full numbers. This comes from type 645 Dominix.
-		assertTrue(new String(json).contains("\"base_price\":153900000"));
-	}
-
-	@SneakyThrows
-	private void assertDogmaAttributes(@NonNull byte[] json) {
-		var expected = objectMapper.createObjectNode();
-		expected.set("9", objectMapper.readTree(ResourceUtil.loadResource("/refdata/refdata/dogma-attribute-9.json")));
-		var supplied = objectMapper.readTree(json);
-		assertEquals(expected, supplied);
+		if (config.getId().equals("types")) {
+			// Check the encoded JSON contains full numbers. This comes from type 645 Dominix.
+			assertTrue(new String(json).contains("\"base_price\":153900000"));
+		}
 	}
 
 	@SneakyThrows

@@ -1,12 +1,12 @@
 package com.autonomouslogic.everef.cli.refdata.sde;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import com.autonomouslogic.commons.ResourceUtil;
 import com.autonomouslogic.everef.cli.refdata.StoreHandler;
+import com.autonomouslogic.everef.model.refdata.RefDataConfig;
 import com.autonomouslogic.everef.mvstore.MVStoreUtil;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.test.TestDataUtil;
+import com.autonomouslogic.everef.util.RefDataUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import javax.inject.Inject;
 import lombok.SneakyThrows;
@@ -28,6 +28,9 @@ public class SdeLoaderTest {
 	@Inject
 	MVStoreUtil mvStoreUtil;
 
+	@Inject
+	RefDataUtil refDataUtil;
+
 	StoreHandler storeHandler;
 
 	@BeforeEach
@@ -43,16 +46,15 @@ public class SdeLoaderTest {
 	@SneakyThrows
 	void testLoadSde() {
 		sdeLoader.load(testDataUtil.createTestSde()).blockingAwait();
-		var typeStore = storeHandler.getSdeStore("types");
-		var dogmaAttributesStore = storeHandler.getSdeStore("dogmaAttributes");
 
-		assertEquals(1, typeStore.size());
-		var expectedType = objectMapper.readTree(ResourceUtil.loadContextual(SdeLoaderTest.class, "/type-645.json"));
-		testDataUtil.assertJsonStrictEquals(expectedType, typeStore.get(645L));
-
-		assertEquals(1, dogmaAttributesStore.size());
-		var expectedDogmaAttribute =
-				objectMapper.readTree(ResourceUtil.loadContextual(SdeLoaderTest.class, "/dogma-attribute-9.json"));
-		testDataUtil.assertJsonStrictEquals(expectedDogmaAttribute, dogmaAttributesStore.get(9L));
+		for (RefDataConfig config : refDataUtil.loadReferenceDataConfig()) {
+			var testConfig = config.getTest();
+			var store = storeHandler.getSdeStore(config.getId());
+			for (var id : testConfig.getIds()) {
+				var expectedType = objectMapper.readTree(ResourceUtil.loadContextual(
+						SdeLoaderTest.class, "/" + testConfig.getFilePrefix() + "-" + id + ".json"));
+				testDataUtil.assertJsonStrictEquals(expectedType, store.get(id));
+			}
+		}
 	}
 }

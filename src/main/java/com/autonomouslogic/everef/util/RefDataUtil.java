@@ -12,6 +12,7 @@ import com.autonomouslogic.everef.url.UrlParser;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.google.common.base.CaseFormat;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Single;
 import java.io.File;
@@ -138,8 +139,10 @@ public class RefDataUtil {
 		try (var in = ResourceUtil.loadResource("/refdata.yaml")) {
 			Map<String, RefDataConfig> map = yamlMapper.readValue(in, type);
 			return map.entrySet().stream()
-					.map(entry ->
-							entry.getValue().toBuilder().id(entry.getKey()).build())
+					.map(entry -> entry.getValue().toBuilder()
+							.id(entry.getKey())
+							.outputFile(CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, entry.getKey()))
+							.build())
 					.toList();
 		}
 	}
