@@ -2,6 +2,7 @@ package com.autonomouslogic.everef.cli.refdata.esi;
 
 import com.autonomouslogic.everef.cli.refdata.StoreHandler;
 import com.autonomouslogic.everef.util.CompressUtil;
+import com.autonomouslogic.everef.util.RefDataUtil;
 import io.reactivex.rxjava3.core.Completable;
 import java.io.File;
 import java.util.regex.Pattern;
@@ -17,6 +18,9 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class EsiLoader {
 	private static final Pattern FILE_PATTERN = Pattern.compile(".*?([^\\.\\/]+\\/[^\\.\\/]+)(?:\\.([^\\.]+))?\\.yaml");
+
+	@Inject
+	protected RefDataUtil refDataUtil;
 
 	@Inject
 	protected Provider<EsiStoreLoader> esiStoreLoaderProvider;
@@ -42,33 +46,25 @@ public class EsiLoader {
 				.flatMapCompletable(
 						pair -> {
 							var fileType = getFileType(pair.getLeft().getName());
-							var language = getLanguage(pair.getLeft().getName());
-							EsiStoreLoader storeLoader = null;
 							if (fileType == null) {
-								log.warn("Unknown ESI entry: {}", pair.getLeft().getName());
 								return Completable.complete();
 							}
-							switch (fileType) {
+							var language = getLanguage(pair.getLeft().getName());
+							var config = refDataUtil.getEsiConfigForFilename(fileType);
+							if (config == null) {
+								return Completable.complete();
+							}
+							var storeLoader = esiStoreLoaderProvider.get();
+							storeLoader
+									.setIdFieldName(config.getIdField())
+									.setOutput(storeHandler.getEsiStore(config.getId()));
+							switch (config.getId()) {
 								case "types":
-									storeLoader = esiStoreLoaderProvider
-											.get()
-											.setEsiTransformer(esiTypeTransformerProvider.get());
-									storeLoader.setIdFieldName("type_id").setOutput(storeHandler.getEsiStore("types"));
+									storeLoader.setEsiTransformer(esiTypeTransformerProvider.get());
 									break;
-								case "dogma-attributes":
-									storeLoader = esiStoreLoaderProvider
-											.get()
-											.setEsiTransformer(esiDogmaAttributesTransformerProvider.get());
-									storeLoader
-											.setIdFieldName("attribute_id")
-											.setOutput(storeHandler.getEsiStore("dogma-attributes"));
+								case "dogmaAttributes":
+									storeLoader.setEsiTransformer(esiDogmaAttributesTransformerProvider.get());
 									break;
-								default:
-									log.warn(
-											"Unknown ESI entry type {}: {}",
-											fileType,
-											pair.getLeft().getName());
-									return Completable.complete();
 							}
 							storeLoader.setPostMergeTransformer(esiFieldOrderTransformerProvider.get());
 							storeLoader.setLanguage(language);
@@ -84,18 +80,7 @@ public class EsiLoader {
 			return null;
 		}
 		var match = matcher.group(1);
-		var mapped = mapFileType(match);
-		return mapped;
-	}
-
-	private String mapFileType(String type) {
-		if (type.startsWith("universe/")) {
-			return type.split("/")[1];
-		}
-		if (type.startsWith("dogma/")) {
-			return type.replace('/', '-');
-		}
-		return type;
+		return match;
 	}
 
 	protected String getLanguage(String filename) {

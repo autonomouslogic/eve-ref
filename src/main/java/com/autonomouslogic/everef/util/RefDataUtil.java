@@ -6,6 +6,7 @@ import com.autonomouslogic.commons.ResourceUtil;
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.model.ReferenceEntry;
 import com.autonomouslogic.everef.model.refdata.RefDataConfig;
+import com.autonomouslogic.everef.model.refdata.RefTypeConfig;
 import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.url.UrlParser;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
@@ -133,12 +135,31 @@ public class RefDataUtil {
 	private List<RefDataConfig> loadReferenceDataConfigInternal() {
 		var mapper = yamlMapper.copy().enable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 		var type = mapper.getTypeFactory().constructMapType(LinkedHashMap.class, String.class, RefDataConfig.class);
-		try (var in = ResourceUtil.loadResource("/refdata/refdata.yaml")) {
+		try (var in = ResourceUtil.loadResource("/refdata.yaml")) {
 			Map<String, RefDataConfig> map = yamlMapper.readValue(in, type);
 			return map.entrySet().stream()
 					.map(entry ->
 							entry.getValue().toBuilder().id(entry.getKey()).build())
 					.toList();
 		}
+	}
+
+	public RefDataConfig getSdeConfigForFilename(@NonNull String filename) {
+		return getConfigForFilename(filename, RefDataConfig::getSde);
+	}
+
+	public RefDataConfig getEsiConfigForFilename(@NonNull String filename) {
+		return getConfigForFilename(filename, RefDataConfig::getEsi);
+	}
+
+	public RefDataConfig getConfigForFilename(
+			@NonNull String filename, @NonNull Function<RefDataConfig, RefTypeConfig> typeConfigProvider) {
+		for (RefDataConfig config : loadReferenceDataConfig()) {
+			var type = typeConfigProvider.apply(config);
+			if (type.getFile().equals(filename)) {
+				return config;
+			}
+		}
+		return null;
 	}
 }

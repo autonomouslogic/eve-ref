@@ -45,7 +45,7 @@ public class EsiLoaderTest {
 	@SneakyThrows
 	void testLoadEsi() {
 		var typeStore = storeHandler.getEsiStore("types");
-		var dogmaAttributesStore = storeHandler.getEsiStore("dogma-attributes");
+		var dogmaAttributesStore = storeHandler.getEsiStore("dogmaAttributes");
 		esiLoader.load(testDataUtil.createTestEsiDump()).blockingAwait();
 
 		assertEquals(1, typeStore.size());

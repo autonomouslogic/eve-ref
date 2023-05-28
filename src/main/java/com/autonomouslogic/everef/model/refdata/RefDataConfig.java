@@ -13,6 +13,9 @@ public class RefDataConfig {
 	String id;
 
 	@JsonProperty
+	String idField;
+
+	@JsonProperty
 	String model;
 
 	@JsonProperty

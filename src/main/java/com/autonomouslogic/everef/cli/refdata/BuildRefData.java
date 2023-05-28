@@ -134,17 +134,13 @@ public class BuildRefData implements Command {
 	}
 
 	private Completable mergeDatasets() {
-		return Completable.defer(() -> Completable.mergeArray(
-				refDataMergerProvider
+		return Completable.defer(() -> Completable.merge(refDataUtil.loadReferenceDataConfig().stream()
+				.map(config -> refDataMergerProvider
 						.get()
-						.setName("types")
+						.setName(config.getId())
 						.setStoreHandler(storeHandler)
-						.merge(),
-				refDataMergerProvider
-						.get()
-						.setName("dogma-attributes")
-						.setStoreHandler(storeHandler)
-						.merge()));
+						.merge())
+				.toList()));
 	}
 
 	private Completable closeMvStore() {
@@ -197,7 +193,7 @@ public class BuildRefData implements Command {
 					try (var tar = new TarArchiveOutputStream(new FileOutputStream(file))) {
 						writeMeta(tar);
 						writeEntries("types", storeHandler.getRefStore("types"), tar);
-						writeEntries("dogma_attributes", storeHandler.getRefStore("dogma-attributes"), tar);
+						writeEntries("dogma_attributes", storeHandler.getRefStore("dogmaAttributes"), tar);
 					}
 					log.debug(String.format("Wrote %.0f MiB to %s", file.length() / 1024.0 / 1024.0, file));
 					var compressed = CompressUtil.compressXz(file);

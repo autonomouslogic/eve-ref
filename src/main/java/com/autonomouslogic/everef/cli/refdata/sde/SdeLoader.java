@@ -6,6 +6,7 @@ import com.autonomouslogic.everef.cli.refdata.SimpleTransformer;
 import com.autonomouslogic.everef.cli.refdata.StoreHandler;
 import com.autonomouslogic.everef.cli.refdata.TransformUtil;
 import com.autonomouslogic.everef.util.CompressUtil;
+import com.autonomouslogic.everef.util.RefDataUtil;
 import io.reactivex.rxjava3.core.Completable;
 import java.io.File;
 import javax.inject.Inject;
@@ -24,6 +25,9 @@ public class SdeLoader {
 
 	@Inject
 	protected FieldRenamer fieldRenamer;
+
+	@Inject
+	protected RefDataUtil refDataUtil;
 
 	@Inject
 	protected Provider<SimpleStoreLoader> simpleLoaderProvider;
@@ -45,28 +49,23 @@ public class SdeLoader {
 		return CompressUtil.loadArchive(file)
 				.flatMapCompletable(
 						pair -> {
-							SimpleStoreLoader storeLoader = null;
 							SimpleTransformer transformer = null;
-							switch (pair.getLeft().getName()) {
-								case SDE_TYPES_PATH:
-									storeLoader = simpleLoaderProvider
-											.get()
-											.setIdFieldName("type_id")
-											.setOutput(storeHandler.getSdeStore("types"));
+							var config = refDataUtil.getSdeConfigForFilename(
+									pair.getLeft().getName());
+							if (config == null) {
+								return Completable.complete();
+							}
+							var storeLoader = simpleLoaderProvider
+									.get()
+									.setIdFieldName(config.getIdField())
+									.setOutput(storeHandler.getSdeStore(config.getId()));
+							switch (config.getId()) {
+								case "types":
 									transformer = sdeTypeTransformerProvider.get();
 									break;
-								case SDE_DOGMA_ATTRIBUTES_PATH:
-									storeLoader = simpleLoaderProvider
-											.get()
-											.setIdFieldName("attribute_id")
-											.setOutput(storeHandler.getSdeStore("dogma-attributes"));
+								case "dogmaAttributes":
 									transformer = sdeDogmaAttributesTransformerProvider.get();
 									break;
-								default:
-									log.warn(
-											"Unknown SDE entry: {}",
-											pair.getLeft().getName());
-									return Completable.complete();
 							}
 							if (transformer == null) {
 								storeLoader.setTransformer(fieldRenamer);

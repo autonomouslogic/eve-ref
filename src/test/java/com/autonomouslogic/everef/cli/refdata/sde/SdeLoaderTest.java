@@ -44,7 +44,7 @@ public class SdeLoaderTest {
 	void testLoadSde() {
 		sdeLoader.load(testDataUtil.createTestSde()).blockingAwait();
 		var typeStore = storeHandler.getSdeStore("types");
-		var dogmaAttributesStore = storeHandler.getSdeStore("dogma-attributes");
+		var dogmaAttributesStore = storeHandler.getSdeStore("dogmaAttributes");
 
 		assertEquals(1, typeStore.size());
 		var expectedType = objectMapper.readTree(ResourceUtil.loadContextual(SdeLoaderTest.class, "/type-645.json"));
