@@ -2,21 +2,27 @@ package com.autonomouslogic.everef.util;
 
 import static com.autonomouslogic.everef.util.ArchivePathFactory.REFERENCE_DATA;
 
+import com.autonomouslogic.commons.ResourceUtil;
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.model.ReferenceEntry;
+import com.autonomouslogic.everef.model.refdata.RefDataConfig;
 import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.url.UrlParser;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Single;
 import java.io.File;
-import java.net.URI;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 import lombok.NonNull;
+import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import okhttp3.OkHttpClient;
 import org.apache.commons.codec.binary.Base64;
@@ -45,20 +51,14 @@ public class RefDataUtil {
 	@Inject
 	protected UrlParser urlParser;
 
-	private S3Url refDataUrl;
-
-	private final URI dataBaseUrl = Configs.DATA_BASE_URL.getRequired();
+	private List<RefDataConfig> cachedConfigs;
 
 	@Inject
 	protected RefDataUtil() {}
 
-	@Inject
-	protected void init() {
-		refDataUrl = (S3Url) urlParser.parse(Configs.REFERENCE_DATA_PATH.getRequired());
-	}
-
 	public Single<File> downloadLatestReferenceData() {
 		return Single.defer(() -> {
+			var dataBaseUrl = Configs.DATA_BASE_URL.getRequired();
 			var url = dataBaseUrl + "/" + REFERENCE_DATA.createLatestPath();
 			var file = tempFiles.tempFile("refdata", ".tar.xz").toFile();
 			return okHttpHelper.download(url, file, okHttpClient).flatMap(response -> {
@@ -118,6 +118,27 @@ public class RefDataUtil {
 	}
 
 	private String subPath(@NonNull String type) {
+		var refDataUrl = (S3Url) urlParser.parse(Configs.REFERENCE_DATA_PATH.getRequired());
 		return refDataUrl.getPath() + type;
+	}
+
+	public List<RefDataConfig> loadReferenceDataConfig() {
+		if (cachedConfigs == null) {
+			cachedConfigs = loadReferenceDataConfigInternal();
+		}
+		return cachedConfigs;
+	}
+
+	@SneakyThrows
+	private List<RefDataConfig> loadReferenceDataConfigInternal() {
+		var mapper = yamlMapper.copy().enable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+		var type = mapper.getTypeFactory().constructMapType(LinkedHashMap.class, String.class, RefDataConfig.class);
+		try (var in = ResourceUtil.loadResource("/refdata/refdata.yaml")) {
+			Map<String, RefDataConfig> map = yamlMapper.readValue(in, type);
+			return map.entrySet().stream()
+					.map(entry ->
+							entry.getValue().toBuilder().id(entry.getKey()).build())
+					.toList();
+		}
 	}
 }
