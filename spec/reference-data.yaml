@@ -14,6 +14,41 @@ servers:
 - url: https://ref-data.everef.net
   variables: {}
 paths:
+  /categories:
+    get:
+      tags:
+      - refdata
+      description: Get all category IDs.
+      operationId: getAllCategories
+      responses:
+        "200":
+          description: Category IDs.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: integer
+                  format: int32
+  /categories/{category_id}:
+    get:
+      tags:
+      - refdata
+      operationId: getCategory
+      parameters:
+      - name: category_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: The category.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InventoryCategory'
   /dogma_attributes:
     get:
       tags:
@@ -193,6 +228,19 @@ components:
         is_default:
           type: boolean
       description: A specific value for a dogma effect.
+    InventoryCategory:
+      type: object
+      properties:
+        category_id:
+          type: integer
+          format: int64
+        name:
+          type: object
+          additionalProperties:
+            type: string
+        published:
+          type: boolean
+      description: An inventory category
     InventoryGroup:
       type: object
       properties:
