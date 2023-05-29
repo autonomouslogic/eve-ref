@@ -128,11 +128,11 @@ components:
           type: boolean
         stackable:
           type: boolean
-        tooltip_description_id:
+        tooltip_description:
           type: object
           additionalProperties:
             type: string
-        tooltip_title_id:
+        tooltip_title:
           type: object
           additionalProperties:
             type: string
