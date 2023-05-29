@@ -11,7 +11,7 @@
         "additionalProperties": {
           "enumPropertyNaming": "original",
           "modelPropertyNaming": "original",
-          "paramNaming": "original",
+          "paramNaming": "original"
         }
       }
     }
