@@ -34,6 +34,28 @@ groups:
     languages:
       - en-us
 
+marketGroups:
+  idField: market_group_id
+  model: MarketGroup
+  sde:
+    file: sde/fsd/marketGroups.yaml
+    renames:
+      name_id: name
+      description_id: description
+  esi:
+    file: markets/groups
+    languageAttributes:
+      - name
+      - description
+    removes:
+      - types
+  test:
+    filePrefix: market-group
+    ids:
+      - 1376
+    languages:
+      - en-us
+
 types:
   idField: type_id
   model: InventoryType

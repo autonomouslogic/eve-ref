@@ -119,6 +119,41 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/InventoryGroup'
+  /market_groups:
+    get:
+      tags:
+      - refdata
+      description: Get all market group IDs.
+      operationId: getAllMarketGroups
+      responses:
+        "200":
+          description: Market group IDs.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: integer
+                  format: int32
+  /market_groups/{market_group_id}:
+    get:
+      tags:
+      - refdata
+      operationId: getMarketGroup
+      parameters:
+      - name: market_group_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: The market group.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MarketGroup'
   /types:
     get:
       tags:
@@ -240,6 +275,9 @@ components:
             type: string
         published:
           type: boolean
+        icon_id:
+          type: integer
+          format: int64
       description: An inventory category
     InventoryGroup:
       type: object
@@ -378,6 +416,29 @@ components:
         icon_id:
           type: integer
           format: int32
+    MarketGroup:
+      type: object
+      properties:
+        market_group_id:
+          type: integer
+          format: int64
+        parent_group_id:
+          type: integer
+          format: int64
+        name:
+          type: object
+          additionalProperties:
+            type: string
+        description:
+          type: object
+          additionalProperties:
+            type: string
+        icon_id:
+          type: integer
+          format: int64
+        has_types:
+          type: boolean
+      description: A market group
     TraitBonus:
       type: object
       properties:
