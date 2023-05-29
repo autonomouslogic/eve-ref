@@ -3,6 +3,7 @@
 Builds and uploads the main [reference data](../refdata.md) file.
 
 * The main coordination is handled by the `BuildRefData` CLI command.
+* Configurations for how sources should be processed can be found in `refdata.yaml`.
 * Data loaded from the SDE is handled by the `SdeLoader`.
 * Data loaded from the ESI is handled by the `EsiLoader`.
 * These classes construct specific loaders based on the type they're loading (types, groups, dogma, etc.)

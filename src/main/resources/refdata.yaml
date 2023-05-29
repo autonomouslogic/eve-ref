@@ -39,3 +39,21 @@ dogmaAttributes:
     filePrefix: dogma-attribute
     ids:
       - 9
+
+inventoryGroups:
+  idField: group_id
+  model: InventoryGroup
+  sde:
+    file: sde/fsd/groupIDs.yaml
+  esi:
+    file: universe/groups
+    languageAttributes:
+      - name
+    removes:
+      - types
+  test:
+    filePrefix: group
+    ids:
+      - 1185
+    languages:
+      - en-us
