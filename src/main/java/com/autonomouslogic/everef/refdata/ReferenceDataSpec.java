@@ -35,20 +35,20 @@ public interface ReferenceDataSpec {
 	@Path("/groups")
 	@Operation(description = "Get all type IDs.")
 	@ApiResponse(
-		responseCode = "200",
-		description = "Group IDs.",
-		useReturnTypeSchema = true,
-		content = @Content(mediaType = "application/json"))
+			responseCode = "200",
+			description = "Group IDs.",
+			useReturnTypeSchema = true,
+			content = @Content(mediaType = "application/json"))
 	List<Integer> getAllGroups();
 
 	@GET
 	@Path("/groups/{group_id}")
 	@Operation
 	@ApiResponse(
-		responseCode = "200",
-		description = "The group.",
-		useReturnTypeSchema = true,
-		content = @Content(mediaType = "application/json"))
+			responseCode = "200",
+			description = "The group.",
+			useReturnTypeSchema = true,
+			content = @Content(mediaType = "application/json"))
 	InventoryGroup getGroup(@PathParam("group_id") int groupId);
 
 	@GET
