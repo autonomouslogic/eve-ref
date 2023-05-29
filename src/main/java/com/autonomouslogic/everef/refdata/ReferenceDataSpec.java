@@ -72,6 +72,26 @@ public interface ReferenceDataSpec {
 	InventoryGroup getGroup(@PathParam("group_id") int groupId);
 
 	@GET
+	@Path("/market_groups")
+	@Operation(description = "Get all market group IDs.")
+	@ApiResponse(
+			responseCode = "200",
+			description = "Market group IDs.",
+			useReturnTypeSchema = true,
+			content = @Content(mediaType = "application/json"))
+	List<Integer> getAllMarketGroups();
+
+	@GET
+	@Path("/market_groups/{market_group_id}")
+	@Operation
+	@ApiResponse(
+			responseCode = "200",
+			description = "The market group.",
+			useReturnTypeSchema = true,
+			content = @Content(mediaType = "application/json"))
+	MarketGroup getMarketGroup(@PathParam("market_group_id") int marketGroupId);
+
+	@GET
 	@Path("/types")
 	@Operation(description = "Get all type IDs.")
 	@ApiResponse(

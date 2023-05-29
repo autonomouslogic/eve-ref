@@ -13,17 +13,23 @@ import lombok.extern.jackson.Jacksonized;
 @Builder
 @Jacksonized
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@Schema(description = "An inventory category")
-public class InventoryCategory {
+@Schema(description = "A market group")
+public class MarketGroup {
 	@JsonProperty
-	Long categoryId;
+	Long marketGroupId;
+
+	@JsonProperty
+	Long parentGroupId;
 
 	@JsonProperty
 	Map<String, String> name;
 
 	@JsonProperty
-	Boolean published;
+	Map<String, String> description;
 
 	@JsonProperty
 	Long iconId;
+
+	@JsonProperty
+	Boolean hasTypes;
 }
