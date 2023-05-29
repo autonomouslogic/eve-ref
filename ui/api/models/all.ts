@@ -1,6 +1,0 @@
-export * from '../models/DogmaAttribute'
-export * from '../models/DogmaTypeAttribute'
-export * from '../models/DogmaTypeEffect'
-export * from '../models/InventoryType'
-export * from '../models/InventoryTypeTraits'
-export * from '../models/TraitBonus'
