@@ -1,0 +1,41 @@
+types:
+  idField: type_id
+  model: InventoryType
+  sde:
+    file: sde/fsd/typeIDs.yaml
+  esi:
+    file: universe/types
+    languageAttributes:
+      - name
+      - description
+    arrayToObjects:
+      dogma_attributes: attribute_id
+      dogma_effects: effect_id
+  test:
+    filePrefix: type
+    ids:
+      - 645
+    languages:
+      - en-us
+      - fr
+
+dogmaAttributes:
+  idField: attribute_id
+  model: DogmaAttribute
+  sde:
+    file: sde/fsd/dogmaAttributes.yaml
+    renames:
+      display_name_id: display_name
+      tooltip_title_id: tooltip_title
+      tooltip_description_id: tooltip_description
+    languageAttributes:
+      - description
+  esi:
+    file: dogma/attributes
+    languageAttributes:
+      - display_name
+      - description
+  test:
+    filePrefix: dogma-attribute
+    ids:
+      - 9

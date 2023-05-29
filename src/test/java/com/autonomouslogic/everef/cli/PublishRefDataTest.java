@@ -6,10 +6,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.test.MockS3Adapter;
 import com.autonomouslogic.everef.test.TestDataUtil;
+import com.autonomouslogic.everef.util.RefDataUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.SneakyThrows;
@@ -43,6 +43,9 @@ public class PublishRefDataTest {
 	@Inject
 	ObjectMapper objectMapper;
 
+	@Inject
+	RefDataUtil refDataUtil;
+
 	MockWebServer server;
 
 	@Inject
@@ -72,57 +75,41 @@ public class PublishRefDataTest {
 	}
 
 	@Test
+	@SneakyThrows
 	void shouldBuildRefData() {
 		publishRefData.run().blockingAwait();
 
 		var putKeys = mockS3Adapter.getAllPutKeys(BUCKET_NAME, s3);
-		// `/types` isn't uploaded because it already matches.
-		assertEquals(
-				Set.of("base/meta", "base/types/645", "base/dogma_attributes", "base/dogma_attributes/9"),
-				new HashSet<>(putKeys));
 
-		assertTypes();
-		assertDogmaAttributes();
+		var expectedKeys = new HashSet<String>();
+		expectedKeys.add("base/meta");
+		for (var config : refDataUtil.loadReferenceDataConfig()) {
+			var testConfig = config.getTest();
+			expectedKeys.add("base/" + config.getOutputFile());
+
+			var expectedIndex = objectMapper.valueToTree(testConfig.getIds());
+			var actualIndex = objectMapper.readTree(mockS3Adapter
+					.getTestObject(BUCKET_NAME, "base/" + config.getOutputFile(), s3)
+					.orElseThrow());
+			assertEquals(expectedIndex.toString(), actualIndex.toString());
+
+			for (var id : testConfig.getIds()) {
+				expectedKeys.add("base/" + config.getOutputFile() + "/" + id);
+
+				var expectedItem = testDataUtil.loadJsonResource(
+						String.format("/refdata/refdata/%s-%s.json", testConfig.getFilePrefix(), id));
+				var actualItem = objectMapper.readTree(mockS3Adapter
+						.getTestObject(BUCKET_NAME, String.format("base/%s/%s", config.getOutputFile(), id), s3)
+						.orElseThrow());
+				assertEquals(expectedItem, actualItem);
+			}
+		}
+
+		// `/types` isn't uploaded because it already matches.
+		expectedKeys.remove("base/types");
+		assertEquals(expectedKeys, new HashSet<>(putKeys));
 
 		var deleteKeys = mockS3Adapter.getAllDeleteKeys(BUCKET_NAME, s3);
 		assertEquals(List.of("base/types/999999999"), deleteKeys);
-	}
-
-	@SneakyThrows
-	private void assertTypes() {
-		assertType(645);
-
-		var expectedIndex = objectMapper.createArrayNode().add(645);
-		var actualIndex = objectMapper.readTree(
-				mockS3Adapter.getTestObject(BUCKET_NAME, "base/types", s3).orElseThrow());
-		assertEquals(expectedIndex.toString(), actualIndex.toString());
-	}
-
-	@SneakyThrows
-	private void assertType(long id) {
-		var expected = testDataUtil.loadJsonResource("/refdata/refdata/type-" + id + ".json");
-		var actual = objectMapper.readTree(
-				mockS3Adapter.getTestObject(BUCKET_NAME, "base/types/" + id, s3).orElseThrow());
-		assertEquals(expected, actual);
-	}
-
-	@SneakyThrows
-	private void assertDogmaAttributes() {
-		assertDogmaAttribute(9);
-
-		var expectedIndex = objectMapper.createArrayNode().add(9);
-		var actualIndex = objectMapper.readTree(mockS3Adapter
-				.getTestObject(BUCKET_NAME, "base/dogma_attributes", s3)
-				.orElseThrow());
-		assertEquals(expectedIndex.toString(), actualIndex.toString());
-	}
-
-	@SneakyThrows
-	private void assertDogmaAttribute(long id) {
-		var expected = testDataUtil.loadJsonResource("/refdata/refdata/dogma-attribute-" + id + ".json");
-		var actual = objectMapper.readTree(mockS3Adapter
-				.getTestObject(BUCKET_NAME, "base/dogma_attributes/" + id, s3)
-				.orElseThrow());
-		assertEquals(expected, actual);
 	}
 }

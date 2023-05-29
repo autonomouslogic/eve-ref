@@ -19,7 +19,7 @@ public class EsiFieldOrderTransformer implements SimpleTransformer {
 	protected EsiFieldOrderTransformer() {}
 
 	@Override
-	public ObjectNode transformJson(ObjectNode json) throws Throwable {
+	public ObjectNode transformJson(ObjectNode json, String language) throws Throwable {
 		orderNodes(json, "name");
 		orderNodes(json, "description");
 		return json;
