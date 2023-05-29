@@ -35,20 +35,20 @@ public interface ReferenceDataSpec {
 	@Path("/categories")
 	@Operation(description = "Get all category IDs.")
 	@ApiResponse(
-		responseCode = "200",
-		description = "Category IDs.",
-		useReturnTypeSchema = true,
-		content = @Content(mediaType = "application/json"))
+			responseCode = "200",
+			description = "Category IDs.",
+			useReturnTypeSchema = true,
+			content = @Content(mediaType = "application/json"))
 	List<Integer> getAllCategories();
 
 	@GET
 	@Path("/categories/{category_id}")
 	@Operation
 	@ApiResponse(
-		responseCode = "200",
-		description = "The category.",
-		useReturnTypeSchema = true,
-		content = @Content(mediaType = "application/json"))
+			responseCode = "200",
+			description = "The category.",
+			useReturnTypeSchema = true,
+			content = @Content(mediaType = "application/json"))
 	InventoryCategory getCategory(@PathParam("category_id") int categoryId);
 
 	@GET
