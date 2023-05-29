@@ -14,14 +14,18 @@ import com.autonomouslogic.everef.util.TempFiles;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.MappingIterator;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
+import com.google.common.collect.Ordering;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Single;
 import java.io.File;
 import java.net.URI;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.inject.Inject;
+import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 import okhttp3.OkHttpClient;
@@ -33,8 +37,6 @@ import org.apache.commons.lang3.tuple.Pair;
  */
 @Log4j2
 class MarketHistoryLoader {
-	private static final int DOWNLOAD_CONCURRENCY = 32;
-
 	@Inject
 	protected DataCrawler dataCrawler;
 
@@ -52,8 +54,13 @@ class MarketHistoryLoader {
 
 	private final URI dataBaseUrl = Configs.DATA_BASE_URL.getRequired();
 
+	private final int downloadConcurrency = Configs.MARKET_HISTORY_LOAD_CONCURRENCY.getRequired();
+
 	@Setter
 	private LocalDate minDate;
+
+	@Getter
+	private final Map<LocalDate, Integer> fileTotals = new TreeMap<>();
 
 	@Inject
 	protected MarketHistoryLoader() {}
@@ -70,16 +77,13 @@ class MarketHistoryLoader {
 		if (minDate != null) {
 			f = f.filter(p -> !p.getLeft().isBefore(minDate));
 		}
-		return f.toList()
-				.flatMapPublisher(l -> {
-					return Flowable.fromIterable(l);
-				})
+		return f.sorted(Ordering.natural().onResultOf(Pair::getLeft))
 				.switchIfEmpty(Flowable.error(new RuntimeException("No market history files found.")))
 				.flatMap(
 						p -> {
-							return downloadFile(p.getRight()).flatMapPublisher(file -> {
+							return downloadFile(p.getRight(), p.getLeft()).flatMapPublisher(file -> {
 								file.deleteOnExit();
-								return parseFile(file)
+								return parseFile(file, p.getLeft())
 										.map(entry -> {
 											totalEntries.incrementAndGet();
 											return Pair.of(p.getLeft(), entry);
@@ -88,7 +92,7 @@ class MarketHistoryLoader {
 							});
 						},
 						false,
-						DOWNLOAD_CONCURRENCY)
+						downloadConcurrency)
 				.doOnComplete(() -> log.info("Loaded {} market history entries", totalEntries.get()))
 				.switchIfEmpty(Flowable.error(new RuntimeException("No market data found in history files.")));
 	}
@@ -109,9 +113,9 @@ class MarketHistoryLoader {
 		});
 	}
 
-	private Single<File> downloadFile(DataUrl url) {
+	private Single<File> downloadFile(DataUrl url, LocalDate date) {
 		return Single.defer(() -> {
-			log.debug("Downloading market history file: {}", url);
+			log.debug("Downloading market history file for {}: {}", date, url);
 			var file = tempFiles
 					.tempFile("market-history", ArchivePathFactory.MARKET_HISTORY.getSuffix())
 					.toFile();
@@ -125,9 +129,9 @@ class MarketHistoryLoader {
 		});
 	}
 
-	private Flowable<JsonNode> parseFile(File file) {
+	private Flowable<JsonNode> parseFile(File file, LocalDate date) {
 		return Flowable.defer(() -> {
-					log.trace("Reading market history file: {}", file);
+					log.trace("Reading market history file for {}: {}", date, file);
 					var in = CompressUtil.uncompress(file);
 					var schema = csvMapper
 							.schemaFor(MarketHistoryEntry.class)
@@ -139,7 +143,10 @@ class MarketHistoryLoader {
 					var list = new ArrayList<JsonNode>();
 					iterator.forEachRemaining(list::add);
 					iterator.close();
-					log.trace("Read {} entries from: {}", list.size(), file);
+					log.trace("Read {} entries for {} from {}", list.size(), date, file);
+					synchronized (fileTotals) {
+						fileTotals.put(date, list.size());
+					}
 					return Flowable.fromIterable(list);
 				})
 				.compose(Rx.offloadFlowable());

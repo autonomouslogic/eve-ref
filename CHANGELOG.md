@@ -1,5 +1,60 @@
 EVE Ref Changelog
 
+## [2.4.0](https://github.com/autonomouslogic/eve-ref/compare/2.3.1...2.4.0) (2023-05-27)
+
+
+### Features
+
+* Dogma attributes reference data ([#145](https://github.com/autonomouslogic/eve-ref/issues/145)) ([a7da982](https://github.com/autonomouslogic/eve-ref/commit/a7da9822aab5c76190ef6f97a2a59402ec652bab))
+
+## [2.3.1](https://github.com/autonomouslogic/eve-ref/compare/2.3.0...2.3.1) (2023-05-25)
+
+
+### Bug Fixes
+
+* Fixed data index size and last-modified ([#144](https://github.com/autonomouslogic/eve-ref/issues/144)) ([3d07a3d](https://github.com/autonomouslogic/eve-ref/commit/3d07a3da3254ffb9a8acb021ca6746dc9eaf6390))
+
+## [2.3.0](https://github.com/autonomouslogic/eve-ref/compare/2.2.1...2.3.0) (2023-05-25)
+
+
+### Features
+
+* Basic reference data OpenAPI spec and model verifier ([#142](https://github.com/autonomouslogic/eve-ref/issues/142)) ([215351a](https://github.com/autonomouslogic/eve-ref/commit/215351a0f23b3c4453068752719c6a4519849dff))
+
+## [2.2.1](https://github.com/autonomouslogic/eve-ref/compare/2.2.0...2.2.1) (2023-05-21)
+
+
+### Bug Fixes
+
+* Fixed NullPointerException in ScrapeMarketHistory ([#141](https://github.com/autonomouslogic/eve-ref/issues/141)) ([46ac490](https://github.com/autonomouslogic/eve-ref/commit/46ac49036159f3be4a8c533181e1d376e0159e32))
+
+## [2.2.0](https://github.com/autonomouslogic/eve-ref/compare/2.1.3...2.2.0) (2023-05-21)
+
+
+### Features
+
+* Configurable market history concurrencies ([#140](https://github.com/autonomouslogic/eve-ref/issues/140)) ([9d659d4](https://github.com/autonomouslogic/eve-ref/commit/9d659d4d325f9c86889a20337ca7ae4eee0f3c48))
+
+
+### Bug Fixes
+
+* Exit on uncaught RxJava exceptions ([#139](https://github.com/autonomouslogic/eve-ref/issues/139)) ([a05a3ac](https://github.com/autonomouslogic/eve-ref/commit/a05a3ac17b47f59d616d755f2adc39e9f3c6db14))
+
+## [2.1.3](https://github.com/autonomouslogic/eve-ref/compare/2.1.2...2.1.3) (2023-05-21)
+
+
+### Bug Fixes
+
+* Data index on Docker. ([#137](https://github.com/autonomouslogic/eve-ref/issues/137)) ([ae4b3f5](https://github.com/autonomouslogic/eve-ref/commit/ae4b3f512380a96306c0660fef8fff1418a3fcb6))
+* Retry UniverseEsi calls ([#138](https://github.com/autonomouslogic/eve-ref/issues/138)) ([0376254](https://github.com/autonomouslogic/eve-ref/commit/03762547cbf3738bb1b207f402698303799cbf43))
+
+## [2.1.2](https://github.com/autonomouslogic/eve-ref/compare/2.1.1...2.1.2) (2023-05-20)
+
+
+### Bug Fixes
+
+* Double-checking market history scrapes ([#135](https://github.com/autonomouslogic/eve-ref/issues/135)) ([a767213](https://github.com/autonomouslogic/eve-ref/commit/a7672139a8ba40d6db19b02975643bab00cab506))
+
 ## [2.1.1](https://github.com/autonomouslogic/eve-ref/compare/2.1.0...2.1.1) (2023-05-18)
 
 

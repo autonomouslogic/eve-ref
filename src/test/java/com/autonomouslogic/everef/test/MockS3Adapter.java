@@ -19,6 +19,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
+import lombok.EqualsAndHashCode;
 import lombok.Value;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.io.IOUtils;
@@ -50,20 +51,31 @@ public class MockS3Adapter extends S3Adapter {
 		String bucket;
 		String key;
 		S3AsyncClient client;
+
+		@EqualsAndHashCode.Exclude
+		Instant lastModified;
 	}
 
 	protected MockS3Adapter() {}
 
 	public void putTestObject(String bucket, String key, String content, S3AsyncClient client) {
-		putTestObject(bucket, key, content.getBytes(), client);
+		putTestObject(bucket, key, content, client, Instant.now());
+	}
+
+	public void putTestObject(String bucket, String key, String content, S3AsyncClient client, Instant lastModified) {
+		putTestObject(bucket, key, content.getBytes(), client, lastModified);
 	}
 
 	public void putTestObject(String bucket, String key, byte[] bytes, S3AsyncClient client) {
-		data.put(new Entry(bucket, key, client), bytes);
+		putTestObject(bucket, key, bytes, client, Instant.now());
+	}
+
+	public void putTestObject(String bucket, String key, byte[] bytes, S3AsyncClient client, Instant lastModified) {
+		data.put(new Entry(bucket, key, client, lastModified), bytes);
 	}
 
 	public Optional<byte[]> getTestObject(String bucket, String key, S3AsyncClient client) {
-		return Optional.ofNullable(data.get(new Entry(bucket, key, client)));
+		return Optional.ofNullable(data.get(new Entry(bucket, key, client, null)));
 	}
 
 	@Override
@@ -81,7 +93,7 @@ public class MockS3Adapter extends S3Adapter {
 									.key(entry.getKey().getKey())
 									.size((long) entry.getValue().length)
 									.eTag("\"" + Hex.encodeHexString(HashUtil.md5(entry.getValue())) + "\"")
-									.lastModified(Instant.now())
+									.lastModified(entry.getKey().getLastModified())
 									.build(),
 							entry.getKey().getBucket()));
 		});
@@ -90,7 +102,7 @@ public class MockS3Adapter extends S3Adapter {
 	@Override
 	public Single<PutObjectResponse> putObject(PutObjectRequest req, byte[] bytes, S3AsyncClient client) {
 		return Single.defer(() -> {
-			var entry = new Entry(req.bucket(), req.key(), client);
+			var entry = new Entry(req.bucket(), req.key(), client, Instant.now());
 			data.put(entry, bytes);
 			putKeys.add(entry);
 			putDirectory(req.bucket(), req.key(), client);
@@ -134,14 +146,14 @@ public class MockS3Adapter extends S3Adapter {
 		var dir = "";
 		for (var i = 0; i < parts.length - 1; i++) {
 			dir += parts[i] + "/";
-			data.put(new Entry(bucket, dir, client), new byte[0]);
+			data.put(new Entry(bucket, dir, client, null), new byte[0]);
 		}
 	}
 
 	@Override
 	public Single<DeleteObjectResponse> deleteObject(DeleteObjectRequest req, S3AsyncClient client) {
 		return Single.defer(() -> {
-			var entry = new Entry(req.bucket(), req.key(), client);
+			var entry = new Entry(req.bucket(), req.key(), client, null);
 			deleteKeys.add(entry);
 			return Single.just(DeleteObjectResponse.builder().build());
 		});
@@ -164,8 +176,8 @@ public class MockS3Adapter extends S3Adapter {
 	}
 
 	public void assertSameContent(String bucket, String key1, String key2, S3AsyncClient client) {
-		var bytes1 = data.get(new Entry(bucket, key1, client));
-		var bytes2 = data.get(new Entry(bucket, key2, client));
+		var bytes1 = data.get(new Entry(bucket, key1, client, null));
+		var bytes2 = data.get(new Entry(bucket, key2, client, null));
 		Assertions.assertEquals(bytes1.length, bytes2.length);
 		var hash1 = Hashing.murmur3_128().hashBytes(bytes1);
 		var hash2 = Hashing.murmur3_128().hashBytes(bytes2);

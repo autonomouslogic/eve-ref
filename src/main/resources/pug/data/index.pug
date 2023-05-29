@@ -46,9 +46,9 @@ block content
 								tr(class="data-file")
 									td
 										a(class="data-file-url", href= "/" + file.getPrefix())= file.getBasename()
-									td(class="data-file-size-formatted").text-right= format.fileSize(file.getSize())
-									td(class="data-file-size-bytes").text-right= format.integer(file.getSize())
-									td(class="data-file-last-modified").text-right= file.getLastModified()
+									td(class="data-file-size-formatted").text-right= format.fileSize(file.getListedObject().getSize())
+									td(class="data-file-size-bytes").text-right= format.integer(file.getListedObject().getSize())
+									td(class="data-file-last-modified").text-right= file.getListedObject().getLastModified()
 		.row.mt-3
 			.col-12
 				h2 Copyright

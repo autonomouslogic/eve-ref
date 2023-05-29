@@ -13,6 +13,12 @@ test:
 format:
 	./gradlew spotlessApply
 
+lint:
+	./gradlew spotlessCheck
+
+specs:
+	./gradlew refDataSpec
+
 docker: dist
 	docker build \
 		-f docker/Dockerfile \
@@ -20,6 +26,9 @@ docker: dist
 		--tag $(DOCKER_TAG_LATEST) \
 		--build-arg "EVE_REF_VERSION=$(EVE_REF_VERSION)" \
 		.
+
+docker-data-index: docker
+	docker run -it --env-file local.env autonomouslogic/eve-ref:latest data-index
 
 clean:
 	./gradlew clean

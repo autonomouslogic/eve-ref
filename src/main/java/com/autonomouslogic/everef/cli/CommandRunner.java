@@ -40,6 +40,9 @@ public class CommandRunner {
 	protected Provider<ScrapeMarketHistory> scrapeMarketHistoryProvider;
 
 	@Inject
+	protected Provider<VerifyRefDataModels> verifyRefDataModelsProvider;
+
+	@Inject
 	protected HealthcheckDecorator healthcheckDecorator;
 
 	@Inject
@@ -88,6 +91,8 @@ public class CommandRunner {
 				return publishRefDataProvider.get();
 			case "scrape-market-history":
 				return scrapeMarketHistoryProvider.get();
+			case "verify-ref-data-models":
+				return verifyRefDataModelsProvider.get();
 			default:
 				throw new IllegalArgumentException("Unknown command: " + name);
 		}

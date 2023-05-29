@@ -3,6 +3,15 @@
 The reference data build is currently in development: https://github.com/autonomouslogic/eve-ref/milestone/3.
 Any files [data.everef.net/ref-data](https://data.everef.net/ref-data) are not final and the format may change at any time.
 
+## Spec
+The full OpenAPI spec is [available here](https://github.com/autonomouslogic/eve-ref/blob/main/spec/reference-data.yaml).
+
+Some example paths:
+* https://ref-data.everef.net/types
+* https://ref-data.everef.net/types/645
+* https://ref-data.everef.net/dogma_attributes
+* https://ref-data.everef.net/dogma_attributes/37
+
 ## Motivation
 Two primary datasets are available for third-party developers of EVE Online: the SDE and ESI.
 While comprehensive, these two are not equal.
@@ -44,11 +53,11 @@ For other third-party developers, the REST API will be freely available to consu
 | Corporatation activities (?)    | `fsd/corporationActivities.yaml`        |                                 |                          |
 | Dbuffs (?)                      |                                         |                                 | Yes                      |
 | Dogma attributes categories     | `fsd/dogmaAttributeCategories.yaml`     |                                 |                          |
-| Dogma attributes                | `fsd/dogmaAttributes.yaml`              | Yes                             | Localised names          |
-| Dogma effects                   | `fsd/dogmaEffects.yaml`                 | Yes                             |                          |
+| Dogma attributes                | `fsd/dogmaAttributes.yaml`              | `dogma/attributes.yaml`         | Localised names          |
+| Dogma effects                   | `fsd/dogmaEffects.yaml`                 | `dogma/effects.yaml`            |                          |
 | Dogma expressions               |                                         |                                 |                          |
-| Dogma type attributes           | `fsd/typeDogma.yaml`                    |                                 |                          |
-| Dogma type effects              | `fsd/typeDogma.yaml`                    |                                 |                          |
+| Dogma type attributes           | `fsd/typeDogma.yaml`                    | `universe/types.yaml`           |                          |
+| Dogma type effects              | `fsd/typeDogma.yaml`                    | `universe/types.yaml`           |                          |
 | Dogma units                     |                                         |                                 | `dogmaunits.json`        |
 | Dynamic Attributes (?)          |                                         |                                 | Yes                      |
 | Factions                        | `fsd/factions.yaml`                     | Yes                             |                          |

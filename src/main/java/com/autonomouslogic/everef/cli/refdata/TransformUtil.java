@@ -51,6 +51,14 @@ public class TransformUtil {
 		}
 	}
 
+	public void renameField(ObjectNode root, String from, String to) {
+		if (!root.has(from)) {
+			return;
+		}
+		root.set(to, root.get(from));
+		root.remove(from);
+	}
+
 	public static SimpleTransformer concat(SimpleTransformer... transformers) {
 		if (transformers.length == 0) {
 			throw new NullPointerException();
