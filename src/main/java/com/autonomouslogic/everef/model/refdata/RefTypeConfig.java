@@ -22,4 +22,7 @@ public class RefTypeConfig {
 
 	@JsonProperty
 	Map<String, String> arrayToObjects;
+
+	@JsonProperty
+	List<String> removes;
 }

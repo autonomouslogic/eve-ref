@@ -1,3 +1,21 @@
+groups:
+  idField: group_id
+  model: InventoryGroup
+  sde:
+    file: sde/fsd/groupIDs.yaml
+  esi:
+    file: universe/groups
+    languageAttributes:
+      - name
+    removes:
+      - types
+  test:
+    filePrefix: group
+    ids:
+      - 1185
+    languages:
+      - en-us
+
 types:
   idField: type_id
   model: InventoryType

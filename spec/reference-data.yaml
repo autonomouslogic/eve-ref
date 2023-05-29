@@ -49,6 +49,41 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/DogmaAttribute'
+  /groups:
+    get:
+      tags:
+      - refdata
+      description: Get all type IDs.
+      operationId: getAllGroups
+      responses:
+        "200":
+          description: Group IDs.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: integer
+                  format: int32
+  /groups/{group_id}:
+    get:
+      tags:
+      - refdata
+      operationId: getGroup
+      parameters:
+      - name: group_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: The group.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InventoryGroup'
   /types:
     get:
       tags:
@@ -79,7 +114,7 @@ paths:
           format: int32
       responses:
         "200":
-          description: The types.
+          description: The type.
           content:
             application/json:
               schema:
@@ -158,6 +193,33 @@ components:
         is_default:
           type: boolean
       description: A specific value for a dogma effect.
+    InventoryGroup:
+      type: object
+      properties:
+        category_id:
+          type: integer
+          format: int64
+        group_id:
+          type: integer
+          format: int64
+        icon_id:
+          type: integer
+          format: int64
+        name:
+          type: object
+          additionalProperties:
+            type: string
+        anchorable:
+          type: boolean
+        anchored:
+          type: boolean
+        fittable_non_singleton:
+          type: boolean
+        published:
+          type: boolean
+        use_base_price:
+          type: boolean
+      description: An inventory group
     InventoryType:
       type: object
       properties:
