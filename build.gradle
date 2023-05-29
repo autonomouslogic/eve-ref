@@ -31,7 +31,7 @@ repositories {
 dependencies {
 	annotationProcessor "com.google.dagger:dagger-compiler:2.46"
 	implementation "com.google.dagger:dagger:2.46"
-	implementation "com.google.guava:guava:31.1-jre"
+	implementation "com.google.guava:guava:32.0.0-jre"
 	implementation "org.apache.logging.log4j:log4j-api:2.20.0"
 	implementation "org.apache.logging.log4j:log4j-core:2.20.0"
 	implementation "org.apache.logging.log4j:log4j-layout-template-json:2.20.0"
