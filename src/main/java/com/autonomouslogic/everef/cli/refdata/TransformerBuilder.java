@@ -3,6 +3,7 @@ package com.autonomouslogic.everef.cli.refdata;
 import com.autonomouslogic.everef.model.refdata.RefTypeConfig;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
