@@ -88,7 +88,7 @@ paths:
     get:
       tags:
       - refdata
-      description: Get all group IDs.
+      description: Get all type IDs.
       operationId: getAllGroups
       responses:
         "200":

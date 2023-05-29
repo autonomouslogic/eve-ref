@@ -1,3 +1,39 @@
+categories:
+  idField: category_id
+  model: InventoryCategory
+  sde:
+    file: sde/fsd/categoryIDs.yaml
+  esi:
+    file: universe/categories
+    languageAttributes:
+      - name
+    removes:
+      - groups
+  test:
+    filePrefix: category
+    ids:
+      - 6
+    languages:
+      - en-us
+
+groups:
+  idField: group_id
+  model: InventoryGroup
+  sde:
+    file: sde/fsd/groupIDs.yaml
+  esi:
+    file: universe/groups
+    languageAttributes:
+      - name
+    removes:
+      - types
+  test:
+    filePrefix: group
+    ids:
+      - 1185
+    languages:
+      - en-us
+
 types:
   idField: type_id
   model: InventoryType
@@ -39,39 +75,3 @@ dogmaAttributes:
     filePrefix: dogma-attribute
     ids:
       - 9
-
-categories:
-  idField: category_id
-  model: InventoryCategory
-  sde:
-    file: sde/fsd/categoryIDs.yaml
-  esi:
-    file: universe/categories
-    languageAttributes:
-      - name
-    removes:
-      - groups
-  test:
-    filePrefix: category
-    ids:
-      - 6
-    languages:
-      - en-us
-
-groups:
-  idField: group_id
-  model: InventoryGroup
-  sde:
-    file: sde/fsd/groupIDs.yaml
-  esi:
-    file: universe/groups
-    languageAttributes:
-      - name
-    removes:
-      - types
-  test:
-    filePrefix: group
-    ids:
-      - 1185
-    languages:
-      - en-us
