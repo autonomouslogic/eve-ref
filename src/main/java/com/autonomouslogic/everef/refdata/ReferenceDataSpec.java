@@ -32,8 +32,28 @@ import javax.ws.rs.PathParam;
 @Tag(name = "refdata")
 public interface ReferenceDataSpec {
 	@GET
+	@Path("/categories")
+	@Operation(description = "Get all category IDs.")
+	@ApiResponse(
+		responseCode = "200",
+		description = "Category IDs.",
+		useReturnTypeSchema = true,
+		content = @Content(mediaType = "application/json"))
+	List<Integer> getAllCategories();
+
+	@GET
+	@Path("/categories/{category_id}")
+	@Operation
+	@ApiResponse(
+		responseCode = "200",
+		description = "The category.",
+		useReturnTypeSchema = true,
+		content = @Content(mediaType = "application/json"))
+	InventoryCategory getCategory(@PathParam("category_id") int categoryId);
+
+	@GET
 	@Path("/groups")
-	@Operation(description = "Get all type IDs.")
+	@Operation(description = "Get all group IDs.")
 	@ApiResponse(
 		responseCode = "200",
 		description = "Group IDs.",
