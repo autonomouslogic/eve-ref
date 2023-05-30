@@ -184,47 +184,52 @@ public class ContractsFileLoader {
 	@SneakyThrows
 	public void loadContracts(@NonNull InputStream in) {
 		log.debug("Reading contracts");
-		loadEntries(in, contractsStore, ContractsFileBuilder.CONTRACT_ID);
+		loadEntries("contracts", in, contractsStore, ContractsFileBuilder.CONTRACT_ID);
 	}
 
 	@SneakyThrows
 	public void loadItems(@NonNull InputStream in) {
 		log.debug("Reading items");
-		loadEntries(in, itemsStore, ContractsFileBuilder.ITEM_ID);
+		loadEntries("items", in, itemsStore, ContractsFileBuilder.ITEM_ID);
 	}
 
 	@SneakyThrows
 	public void loadBids(@NonNull InputStream in) {
 		log.debug("Reading bids");
-		loadEntries(in, bidsStore, ContractsFileBuilder.BID_ID);
+		loadEntries("bids", in, bidsStore, ContractsFileBuilder.BID_ID);
 	}
 
 	@SneakyThrows
 	public void loadDynamicItems(@NonNull InputStream in) {
 		log.debug("Reading dynamic items");
-		loadEntries(in, dynamicItemsStore, ContractsFileBuilder.DYNAMIC_ITEM_ID);
+		loadEntries("dynamic items", in, dynamicItemsStore, ContractsFileBuilder.DYNAMIC_ITEM_ID);
 	}
 
 	@SneakyThrows
 	public void loadNonDynamicItems(@NonNull InputStream in) {
 		log.debug("Reading non-dynamic items");
-		loadEntries(in, nonDynamicItemsStore, ContractsFileBuilder.NON_DYNAMIC_ITEM_ID);
+		loadEntries("non-dynamic items", in, nonDynamicItemsStore, ContractsFileBuilder.NON_DYNAMIC_ITEM_ID);
 	}
 
 	@SneakyThrows
 	public void loadDogmaAttributes(@NonNull InputStream in) {
-		log.debug("Reading dogma atributes");
-		loadEntries(in, dogmaAttributesStore, ContractsFileBuilder.DOGMA_ATTRIBUTE_ID);
+		log.debug("Reading dogma attributes");
+		loadEntries("dogma attributes", in, dogmaAttributesStore, ContractsFileBuilder.DOGMA_ATTRIBUTE_ID);
 	}
 
 	@SneakyThrows
 	public void loadDogmaEffects(@NonNull InputStream in) {
 		log.debug("Reading dogma effects");
-		loadEntries(in, dogmaEffectsStore, ContractsFileBuilder.DOGMA_EFFECT_ID);
+		loadEntries("dogma effects", in, dogmaEffectsStore, ContractsFileBuilder.DOGMA_EFFECT_ID);
 	}
 
-	private <K> void loadEntries(
+	private <K> void loadEntries(@NonNull String name,
 			@NonNull InputStream in, @NonNull MVMap<K, JsonNode> store, @NonNull Function<JsonNode, K> idExtractor) {
-		jsonNodeCsvReader.readAll(in).forEach(entry -> store.put(idExtractor.apply(entry), entry));
+		try {
+			jsonNodeCsvReader.readAll(in).forEach(entry -> store.put(idExtractor.apply(entry), entry));
+		}
+		catch (Exception e) {
+			log.warn("Failed loading {}, ignoring", name, e);
+		}
 	}
 }
