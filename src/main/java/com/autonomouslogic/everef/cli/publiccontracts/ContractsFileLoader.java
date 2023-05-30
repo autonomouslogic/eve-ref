@@ -223,12 +223,14 @@ public class ContractsFileLoader {
 		loadEntries("dogma effects", in, dogmaEffectsStore, ContractsFileBuilder.DOGMA_EFFECT_ID);
 	}
 
-	private <K> void loadEntries(@NonNull String name,
-			@NonNull InputStream in, @NonNull MVMap<K, JsonNode> store, @NonNull Function<JsonNode, K> idExtractor) {
+	private <K> void loadEntries(
+			@NonNull String name,
+			@NonNull InputStream in,
+			@NonNull MVMap<K, JsonNode> store,
+			@NonNull Function<JsonNode, K> idExtractor) {
 		try {
 			jsonNodeCsvReader.readAll(in).forEach(entry -> store.put(idExtractor.apply(entry), entry));
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			log.warn("Failed loading {}, ignoring", name, e);
 		}
 	}
