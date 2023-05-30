@@ -234,15 +234,14 @@ public class ScrapePublicContractsTest {
 	}
 
 	private void assertBids(List<Map<String, String>> records) {
-		var bids =
-				concat(ListUtil.concat(
-								loadContractBidsMap(190319637),
-								loadContractBidsMap(190442405),
-								loadContractBidsMap(5000),
-								loadContractBidsMap(7000))
-						.stream()
-						.sorted(Ordering.natural().onResultOf(m -> Long.parseLong(m.get("bid_id"))))
-						.toList());
+		var bids = concat(ListUtil.concat(
+						loadContractBidsMap(190319637),
+						loadContractBidsMap(190442405),
+						loadContractBidsMap(5000),
+						loadContractBidsMap(7000))
+				.stream()
+				.sorted(Ordering.natural().onResultOf(m -> Long.parseLong(m.get("bid_id"))))
+				.toList());
 		assertEquals(bids, concat(records));
 	}
 
