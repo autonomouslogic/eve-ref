@@ -1,5 +1,13 @@
 EVE Ref Changelog
 
+## [2.5.1](https://github.com/autonomouslogic/eve-ref/compare/2.5.0...2.5.1) (2023-05-30)
+
+
+### Bug Fixes
+
+* Catch individual contract loading errors ([#153](https://github.com/autonomouslogic/eve-ref/issues/153)) ([d44ae06](https://github.com/autonomouslogic/eve-ref/commit/d44ae061d46b352eb503c65d274f7507f25f5f4d))
+* Handle public contract bids 404s (and other 404s) ([#154](https://github.com/autonomouslogic/eve-ref/issues/154)) ([3f814bb](https://github.com/autonomouslogic/eve-ref/commit/3f814bbe674b95c4f2a61644cbdf8f05c080e1c9))
+
 ## [2.5.0](https://github.com/autonomouslogic/eve-ref/compare/2.4.0...2.5.0) (2023-05-30)
 
 
