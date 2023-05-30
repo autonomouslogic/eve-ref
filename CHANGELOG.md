@@ -1,5 +1,25 @@
 EVE Ref Changelog
 
+## [2.5.0](https://github.com/autonomouslogic/eve-ref/compare/2.4.0...2.5.0) (2023-05-30)
+
+
+### Features
+
+* Inventory categories reference data ([#150](https://github.com/autonomouslogic/eve-ref/issues/150)) ([c257e5a](https://github.com/autonomouslogic/eve-ref/commit/c257e5a522cbdfcbc653ff8bb151e37a7f5dd897))
+* Inventory groups reference data ([#149](https://github.com/autonomouslogic/eve-ref/issues/149)) ([64d0f62](https://github.com/autonomouslogic/eve-ref/commit/64d0f629031c0583e2080849f2c01050673d1437))
+* Market group reference data ([#151](https://github.com/autonomouslogic/eve-ref/issues/151)) ([9846254](https://github.com/autonomouslogic/eve-ref/commit/9846254440c1f89efbe20d56a614d7b20de61965))
+
+
+### Bug Fixes
+
+* **deps:** update dependency com.google.guava:guava to v32 ([#147](https://github.com/autonomouslogic/eve-ref/issues/147)) ([dac7002](https://github.com/autonomouslogic/eve-ref/commit/dac7002b0a5abbe50bd9e9d5e7a32b55b91e820d))
+* Retry with delay on scrape public contracts ([#152](https://github.com/autonomouslogic/eve-ref/issues/152)) ([322edd9](https://github.com/autonomouslogic/eve-ref/commit/322edd96bfa7c6badae49140e619addc2d8968fc))
+
+
+### Code Refactoring
+
+* Refactor reference data flow ([#148](https://github.com/autonomouslogic/eve-ref/issues/148)) ([1629cb0](https://github.com/autonomouslogic/eve-ref/commit/1629cb0ed4e662f194902981793abd6df6cb386d))
+
 ## [2.4.0](https://github.com/autonomouslogic/eve-ref/compare/2.3.1...2.4.0) (2023-05-27)
 
 
