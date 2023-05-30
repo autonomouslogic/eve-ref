@@ -8,6 +8,7 @@ import com.autonomouslogic.everef.openapi.esi.infrastructure.Success;
 import com.autonomouslogic.everef.util.OkHttpHelper;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.NullNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import io.reactivex.rxjava3.core.Flowable;
@@ -117,6 +118,9 @@ public class EsiHelper {
 
 	@SneakyThrows
 	public JsonNode decodeResponse(Response response) {
+		if (response.code() == 404) {
+			return NullNode.getInstance();
+		}
 		if (response.code() != 200) {
 			throw new RuntimeException(String.format("Cannot decode non-200 response: %s", response.code()));
 		}
@@ -124,7 +128,7 @@ public class EsiHelper {
 	}
 
 	public Flowable<JsonNode> decodeArrayNode(EsiUrl url, JsonNode node) {
-		if (node.isMissingNode()) {
+		if (node == null || node.isNull() || node.isMissingNode()) {
 			log.warn("Empty response from {}", url);
 			return Flowable.empty();
 		}
