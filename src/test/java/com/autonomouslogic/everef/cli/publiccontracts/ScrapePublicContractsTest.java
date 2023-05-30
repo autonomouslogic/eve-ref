@@ -71,6 +71,7 @@ import software.amazon.awssdk.services.s3.S3AsyncClient;
  *         bids should. This contract also contains one bid in the latest file, but two bids in the ESI.</li>
  *     <li>Item ID 6000 has dogma in the latest file, so should not be fetched again. Item 6000 is deliberately
  *         missing from the latest items in order to check if existing dynamic items are skipped properly.</li>
+ *     <li>Contract ID 7000 has previous items and bids, but bids request return a 404. Old data should be used.</li>
  * </ul>
  */
 @ExtendWith(MockitoExtension.class)
@@ -178,6 +179,7 @@ public class ScrapePublicContractsTest {
 						"/contracts/public/bids/190319637?datasource=tranquility&language=en",
 						"/contracts/public/bids/190442405?datasource=tranquility&language=en",
 						"/contracts/public/bids/5000?datasource=tranquility&language=en",
+						"/contracts/public/bids/7000?datasource=tranquility&language=en",
 						"/contracts/public/items/189863474?datasource=tranquility&language=en",
 						"/contracts/public/items/190123693?datasource=tranquility&language=en",
 						"/contracts/public/items/190123973?datasource=tranquility&language=en",
@@ -236,7 +238,8 @@ public class ScrapePublicContractsTest {
 				concat(ListUtil.concat(
 								loadContractBidsMap(190319637),
 								loadContractBidsMap(190442405),
-								loadContractBidsMap(5000))
+								loadContractBidsMap(5000),
+								loadContractBidsMap(7000))
 						.stream()
 						.sorted(Ordering.natural().onResultOf(m -> Long.parseLong(m.get("bid_id"))))
 						.toList());
@@ -256,7 +259,8 @@ public class ScrapePublicContractsTest {
 						loadContractItemsMap(3000),
 						loadContractItemsMap(4000),
 						loadContractItemsMap(5000),
-						loadContractItemsMap(6000))
+						loadContractItemsMap(6000),
+						loadContractItemsMap(7000))
 				.stream()
 				.sorted(Ordering.natural().onResultOf(m -> Long.parseLong(m.get("record_id"))))
 				.toList();
@@ -343,6 +347,9 @@ public class ScrapePublicContractsTest {
 				}
 				if (path.startsWith("/contracts/public/bids/")) {
 					var contractId = Long.parseLong(segments.get(3));
+					if (contractId == 7000) {
+						return new MockResponse().setResponseCode(404);
+					}
 					return mockResponse(loadContractBids(contractId));
 				}
 				if (path.startsWith("/contracts/public/")) {
