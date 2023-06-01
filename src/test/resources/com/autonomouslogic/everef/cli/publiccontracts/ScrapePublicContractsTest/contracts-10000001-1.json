@@ -46,5 +46,21 @@
     "title": "WTB Charon 4,60 Billion",
     "type": "item_exchange",
     "volume": 0
+  },
+  {
+    "collateral": 0,
+    "contract_id": 7000,
+    "date_expired": "2023-04-11T06:17:31Z",
+    "date_issued": "2023-03-14T06:17:31Z",
+    "days_to_complete": 0,
+    "end_location_id": 60003760,
+    "issuer_corporation_id": 1833195841,
+    "issuer_id": 1676388808,
+    "price": 100,
+    "reward": 0,
+    "start_location_id": 60003760,
+    "title": null,
+    "type": "auction",
+    "volume": 0.01
   }
 ]

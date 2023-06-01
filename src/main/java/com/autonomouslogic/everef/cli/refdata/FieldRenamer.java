@@ -59,7 +59,7 @@ public class FieldRenamer implements SimpleTransformer {
 	}
 
 	@Override
-	public ObjectNode transformJson(ObjectNode json) throws Throwable {
+	public ObjectNode transformJson(ObjectNode json, String language) throws Throwable {
 		return (ObjectNode) fieldRenameFromSde(json);
 	}
 }

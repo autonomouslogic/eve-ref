@@ -1,5 +1,6 @@
 package com.autonomouslogic.everef.esi;
 
+import com.autonomouslogic.commons.rxjava3.Rx3Util;
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.openapi.esi.infrastructure.ApiResponse;
 import com.autonomouslogic.everef.openapi.esi.infrastructure.ResponseType;
@@ -7,6 +8,7 @@ import com.autonomouslogic.everef.openapi.esi.infrastructure.Success;
 import com.autonomouslogic.everef.util.OkHttpHelper;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.NullNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import io.reactivex.rxjava3.core.Flowable;
@@ -15,6 +17,7 @@ import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.functions.BiFunction;
 import io.reactivex.rxjava3.functions.Function;
 import io.reactivex.rxjava3.schedulers.Schedulers;
+import java.time.Duration;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.Executors;
@@ -94,7 +97,7 @@ public class EsiHelper {
 											false,
 											4));
 				})
-				.retry(2);
+				.compose(Rx3Util.retryWithDelayFlowable(2, Duration.ofSeconds(1)));
 	}
 
 	/**
@@ -115,6 +118,9 @@ public class EsiHelper {
 
 	@SneakyThrows
 	public JsonNode decodeResponse(Response response) {
+		if (response.code() == 404) {
+			return NullNode.getInstance();
+		}
 		if (response.code() != 200) {
 			throw new RuntimeException(String.format("Cannot decode non-200 response: %s", response.code()));
 		}
@@ -122,7 +128,7 @@ public class EsiHelper {
 	}
 
 	public Flowable<JsonNode> decodeArrayNode(EsiUrl url, JsonNode node) {
-		if (node.isMissingNode()) {
+		if (node == null || node.isNull() || node.isMissingNode()) {
 			log.warn("Empty response from {}", url);
 			return Flowable.empty();
 		}

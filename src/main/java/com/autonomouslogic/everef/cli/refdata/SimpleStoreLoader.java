@@ -43,6 +43,10 @@ public class SimpleStoreLoader {
 	@NonNull
 	private String idFieldName;
 
+	@Setter
+	@NonNull
+	private String language = "en";
+
 	@Inject
 	protected SimpleStoreLoader() {}
 
@@ -58,7 +62,7 @@ public class SimpleStoreLoader {
 							var existing = (ObjectNode) output.get(id);
 							json = (ObjectNode) objectMerger.merge(existing, json);
 							if (postMergeTransformer != null) {
-								json = postMergeTransformer.transformJson(json);
+								json = postMergeTransformer.transformJson(json, language);
 							}
 						}
 						output.put(id, json);
@@ -72,7 +76,7 @@ public class SimpleStoreLoader {
 	protected ObjectNode readValue(long id, ObjectNode json) {
 		var transformed = json;
 		if (transformer != null) {
-			transformed = transformer.transformJson(json);
+			transformed = transformer.transformJson(json, language);
 		}
 		handleIdField(transformed, id);
 		return transformed;

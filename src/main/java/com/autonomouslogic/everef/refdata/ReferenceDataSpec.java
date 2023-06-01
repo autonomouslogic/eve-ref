@@ -32,6 +32,66 @@ import javax.ws.rs.PathParam;
 @Tag(name = "refdata")
 public interface ReferenceDataSpec {
 	@GET
+	@Path("/categories")
+	@Operation(description = "Get all category IDs.")
+	@ApiResponse(
+			responseCode = "200",
+			description = "Category IDs.",
+			useReturnTypeSchema = true,
+			content = @Content(mediaType = "application/json"))
+	List<Integer> getAllCategories();
+
+	@GET
+	@Path("/categories/{category_id}")
+	@Operation
+	@ApiResponse(
+			responseCode = "200",
+			description = "The category.",
+			useReturnTypeSchema = true,
+			content = @Content(mediaType = "application/json"))
+	InventoryCategory getCategory(@PathParam("category_id") int categoryId);
+
+	@GET
+	@Path("/groups")
+	@Operation(description = "Get all type IDs.")
+	@ApiResponse(
+			responseCode = "200",
+			description = "Group IDs.",
+			useReturnTypeSchema = true,
+			content = @Content(mediaType = "application/json"))
+	List<Integer> getAllGroups();
+
+	@GET
+	@Path("/groups/{group_id}")
+	@Operation
+	@ApiResponse(
+			responseCode = "200",
+			description = "The group.",
+			useReturnTypeSchema = true,
+			content = @Content(mediaType = "application/json"))
+	InventoryGroup getGroup(@PathParam("group_id") int groupId);
+
+	@GET
+	@Path("/market_groups")
+	@Operation(description = "Get all market group IDs.")
+	@ApiResponse(
+			responseCode = "200",
+			description = "Market group IDs.",
+			useReturnTypeSchema = true,
+			content = @Content(mediaType = "application/json"))
+	List<Integer> getAllMarketGroups();
+
+	@GET
+	@Path("/market_groups/{market_group_id}")
+	@Operation
+	@ApiResponse(
+			responseCode = "200",
+			description = "The market group.",
+			useReturnTypeSchema = true,
+			content = @Content(mediaType = "application/json"))
+	MarketGroup getMarketGroup(@PathParam("market_group_id") int marketGroupId);
+
+	@GET
 	@Path("/types")
 	@Operation(description = "Get all type IDs.")
 	@ApiResponse(
@@ -46,7 +106,7 @@ public interface ReferenceDataSpec {
 	@Operation
 	@ApiResponse(
 			responseCode = "200",
-			description = "The types.",
+			description = "The type.",
 			useReturnTypeSchema = true,
 			content = @Content(mediaType = "application/json"))
 	InventoryType getType(@PathParam("type_id") int typeId);

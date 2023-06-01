@@ -21,16 +21,16 @@ public class RefDataMerger {
 
 	@Setter
 	@NonNull
-	private StoreSet stores;
+	private StoreHandler storeHandler;
 
 	@Inject
 	protected RefDataMerger() {}
 
 	public Completable merge() {
 		return Completable.fromAction(() -> {
-					var sdeStore = stores.getSdeStore();
-					var esiStore = stores.getEsiStore();
-					var refStore = stores.getRefStore();
+					var sdeStore = storeHandler.getSdeStore(name);
+					var esiStore = storeHandler.getEsiStore(name);
+					var refStore = storeHandler.getRefStore(name);
 					var ids = new LinkedHashSet<Long>();
 					ids.addAll(sdeStore.keySet());
 					ids.addAll(esiStore.keySet());

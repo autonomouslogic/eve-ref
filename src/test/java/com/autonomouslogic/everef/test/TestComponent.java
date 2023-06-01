@@ -28,6 +28,7 @@ import com.autonomouslogic.everef.inject.EsiModule;
 import com.autonomouslogic.everef.inject.JacksonModule;
 import com.autonomouslogic.everef.model.MarketHistoryEntryTest;
 import com.autonomouslogic.everef.url.UrlParserTest;
+import com.autonomouslogic.everef.util.RefDataUtilTest;
 import dagger.Component;
 import javax.inject.Singleton;
 
@@ -73,6 +74,8 @@ public interface TestComponent {
 	void inject(FieldRenamerTest test);
 
 	void inject(RecentRegionTypeRemoverTest test);
+
+	void inject(RefDataUtilTest test);
 
 	void inject(ScrapeMarketHistoryTest test);
 

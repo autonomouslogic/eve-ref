@@ -1,0 +1,9 @@
+"1185":
+  category_id: 11
+  group_id: 1185
+  name: "FW Gallente Federation Battlecruiser"
+  published: true
+  types:
+    - 32973
+    - 71478
+    - 73565

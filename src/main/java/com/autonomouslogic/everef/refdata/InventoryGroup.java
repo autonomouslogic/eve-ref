@@ -13,56 +13,32 @@ import lombok.extern.jackson.Jacksonized;
 @Builder
 @Jacksonized
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@Schema
-public class DogmaAttribute {
+@Schema(description = "An inventory group")
+public class InventoryGroup {
 	@JsonProperty
-	Integer attributeId;
+	Long categoryId;
 
 	@JsonProperty
-	Integer categoryId;
+	Long groupId;
 
 	@JsonProperty
-	Integer chargeRechargeTimeId;
+	Long iconId;
 
 	@JsonProperty
-	Integer dataType;
+	Map<String, String> name;
 
 	@JsonProperty
-	Double defaultValue;
+	Boolean anchorable;
 
 	@JsonProperty
-	Map<String, String> description;
+	Boolean anchored;
 
 	@JsonProperty
-	Map<String, String> displayName;
-
-	@JsonProperty
-	Boolean displayWhenZero;
-
-	@JsonProperty
-	Boolean highIsGood;
-
-	@JsonProperty
-	Integer iconId;
-
-	@JsonProperty
-	Integer maxAttributeId;
-
-	@JsonProperty
-	String name;
+	Boolean fittableNonSingleton;
 
 	@JsonProperty
 	Boolean published;
 
 	@JsonProperty
-	Boolean stackable;
-
-	@JsonProperty
-	Map<String, String> tooltipDescription;
-
-	@JsonProperty
-	Map<String, String> tooltipTitle;
-
-	@JsonProperty
-	Integer unitId;
+	Boolean useBasePrice;
 }

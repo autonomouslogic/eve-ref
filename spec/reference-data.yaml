@@ -14,6 +14,41 @@ servers:
 - url: https://ref-data.everef.net
   variables: {}
 paths:
+  /categories:
+    get:
+      tags:
+      - refdata
+      description: Get all category IDs.
+      operationId: getAllCategories
+      responses:
+        "200":
+          description: Category IDs.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: integer
+                  format: int32
+  /categories/{category_id}:
+    get:
+      tags:
+      - refdata
+      operationId: getCategory
+      parameters:
+      - name: category_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: The category.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InventoryCategory'
   /dogma_attributes:
     get:
       tags:
@@ -49,6 +84,76 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/DogmaAttribute'
+  /groups:
+    get:
+      tags:
+      - refdata
+      description: Get all type IDs.
+      operationId: getAllGroups
+      responses:
+        "200":
+          description: Group IDs.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: integer
+                  format: int32
+  /groups/{group_id}:
+    get:
+      tags:
+      - refdata
+      operationId: getGroup
+      parameters:
+      - name: group_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: The group.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InventoryGroup'
+  /market_groups:
+    get:
+      tags:
+      - refdata
+      description: Get all market group IDs.
+      operationId: getAllMarketGroups
+      responses:
+        "200":
+          description: Market group IDs.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: integer
+                  format: int32
+  /market_groups/{market_group_id}:
+    get:
+      tags:
+      - refdata
+      operationId: getMarketGroup
+      parameters:
+      - name: market_group_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: The market group.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MarketGroup'
   /types:
     get:
       tags:
@@ -79,7 +184,7 @@ paths:
           format: int32
       responses:
         "200":
-          description: The types.
+          description: The type.
           content:
             application/json:
               schema:
@@ -128,11 +233,11 @@ components:
           type: boolean
         stackable:
           type: boolean
-        tooltip_description_id:
+        tooltip_description:
           type: object
           additionalProperties:
             type: string
-        tooltip_title_id:
+        tooltip_title:
           type: object
           additionalProperties:
             type: string
@@ -158,6 +263,49 @@ components:
         is_default:
           type: boolean
       description: A specific value for a dogma effect.
+    InventoryCategory:
+      type: object
+      properties:
+        category_id:
+          type: integer
+          format: int64
+        name:
+          type: object
+          additionalProperties:
+            type: string
+        published:
+          type: boolean
+        icon_id:
+          type: integer
+          format: int64
+      description: An inventory category
+    InventoryGroup:
+      type: object
+      properties:
+        category_id:
+          type: integer
+          format: int64
+        group_id:
+          type: integer
+          format: int64
+        icon_id:
+          type: integer
+          format: int64
+        name:
+          type: object
+          additionalProperties:
+            type: string
+        anchorable:
+          type: boolean
+        anchored:
+          type: boolean
+        fittable_non_singleton:
+          type: boolean
+        published:
+          type: boolean
+        use_base_price:
+          type: boolean
+      description: An inventory group
     InventoryType:
       type: object
       properties:
@@ -268,6 +416,29 @@ components:
         icon_id:
           type: integer
           format: int32
+    MarketGroup:
+      type: object
+      properties:
+        market_group_id:
+          type: integer
+          format: int64
+        parent_group_id:
+          type: integer
+          format: int64
+        name:
+          type: object
+          additionalProperties:
+            type: string
+        description:
+          type: object
+          additionalProperties:
+            type: string
+        icon_id:
+          type: integer
+          format: int64
+        has_types:
+          type: boolean
+      description: A market group
     TraitBonus:
       type: object
       properties:

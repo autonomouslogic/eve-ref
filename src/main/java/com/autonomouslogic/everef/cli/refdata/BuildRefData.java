@@ -8,12 +8,14 @@ import com.autonomouslogic.everef.cli.refdata.esi.EsiLoader;
 import com.autonomouslogic.everef.cli.refdata.sde.SdeLoader;
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.http.DataCrawler;
+import com.autonomouslogic.everef.model.refdata.RefDataConfig;
 import com.autonomouslogic.everef.mvstore.MVStoreUtil;
 import com.autonomouslogic.everef.s3.S3Adapter;
 import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.url.UrlParser;
 import com.autonomouslogic.everef.util.CompressUtil;
 import com.autonomouslogic.everef.util.OkHttpHelper;
+import com.autonomouslogic.everef.util.RefDataUtil;
 import com.autonomouslogic.everef.util.Rx;
 import com.autonomouslogic.everef.util.S3Util;
 import com.autonomouslogic.everef.util.TempFiles;
@@ -82,6 +84,9 @@ public class BuildRefData implements Command {
 	protected EsiLoader esiLoader;
 
 	@Inject
+	protected RefDataUtil refDataUtil;
+
+	@Inject
 	protected Provider<RefDataMerger> refDataMergerProvider;
 
 	@Inject
@@ -94,11 +99,10 @@ public class BuildRefData implements Command {
 	private final Duration latestCacheTime = Configs.DATA_LATEST_CACHE_CONTROL_MAX_AGE.getRequired();
 	private final Duration archiveCacheTime = Configs.DATA_ARCHIVE_CACHE_CONTROL_MAX_AGE.getRequired();
 
+	private StoreHandler storeHandler;
 	private S3Url dataUrl;
 	private URI dataBaseUrl;
 	private MVStore mvStore;
-	private StoreSet typeStores;
-	private StoreSet dogmaAttributesStores;
 
 	@Inject
 	protected BuildRefData() {}
@@ -124,28 +128,20 @@ public class BuildRefData implements Command {
 	private Completable initMvStore() {
 		return Completable.fromAction(() -> {
 			mvStore = mvStoreUtil.createTempStore("ref-data");
-			typeStores = openStoreSet("types");
-			dogmaAttributesStores = openStoreSet("dogma-attributes");
-
-			sdeLoader.setTypeStore(typeStores.getSdeStore());
-			esiLoader.setTypeStore(typeStores.getEsiStore());
-			sdeLoader.setDogmaAttributesStore(dogmaAttributesStores.getSdeStore());
-			esiLoader.setDogmaAttributesStore(dogmaAttributesStores.getEsiStore());
+			storeHandler = new StoreHandler(mvStoreUtil, mvStore);
+			sdeLoader.setStoreHandler(storeHandler);
+			esiLoader.setStoreHandler(storeHandler);
 		});
 	}
 
 	private Completable mergeDatasets() {
-		return Completable.defer(() -> Completable.mergeArray(
-				refDataMergerProvider
+		return Completable.defer(() -> Completable.merge(refDataUtil.loadReferenceDataConfig().stream()
+				.map(config -> refDataMergerProvider
 						.get()
-						.setName("types")
-						.setStores(typeStores)
-						.merge(),
-				refDataMergerProvider
-						.get()
-						.setName("dogma-attributes")
-						.setStores(dogmaAttributesStores)
-						.merge()));
+						.setName(config.getId())
+						.setStoreHandler(storeHandler)
+						.merge())
+				.toList()));
 	}
 
 	private Completable closeMvStore() {
@@ -197,8 +193,9 @@ public class BuildRefData implements Command {
 					log.info("Writing ref data to {}", file);
 					try (var tar = new TarArchiveOutputStream(new FileOutputStream(file))) {
 						writeMeta(tar);
-						writeEntries("types", typeStores.getRefStore(), tar);
-						writeEntries("dogma_attributes", dogmaAttributesStores.getRefStore(), tar);
+						for (RefDataConfig config : refDataUtil.loadReferenceDataConfig()) {
+							writeEntries(config.getOutputFile(), storeHandler.getRefStore(config.getId()), tar);
+						}
 					}
 					log.debug(String.format("Wrote %.0f MiB to %s", file.length() / 1024.0 / 1024.0, file));
 					var compressed = CompressUtil.compressXz(file);
@@ -260,12 +257,5 @@ public class BuildRefData implements Command {
 					s3Adapter.putObject(latestPut, outputFile, s3Client).ignoreElement(),
 					s3Adapter.putObject(archivePut, outputFile, s3Client).ignoreElement());
 		});
-	}
-
-	private StoreSet openStoreSet(String name) {
-		return new StoreSet(
-				mvStoreUtil.openJsonMap(mvStore, name + "-sde", Long.class),
-				mvStoreUtil.openJsonMap(mvStore, name + "-esi", Long.class),
-				mvStoreUtil.openJsonMap(mvStore, name + "-ref", Long.class));
 	}
 }

@@ -1,0 +1,99 @@
+categories:
+  idField: category_id
+  model: InventoryCategory
+  sde:
+    file: sde/fsd/categoryIDs.yaml
+  esi:
+    file: universe/categories
+    languageAttributes:
+      - name
+    removes:
+      - groups
+  test:
+    filePrefix: category
+    ids:
+      - 6
+    languages:
+      - en-us
+
+groups:
+  idField: group_id
+  model: InventoryGroup
+  sde:
+    file: sde/fsd/groupIDs.yaml
+  esi:
+    file: universe/groups
+    languageAttributes:
+      - name
+    removes:
+      - types
+  test:
+    filePrefix: group
+    ids:
+      - 1185
+    languages:
+      - en-us
+
+marketGroups:
+  idField: market_group_id
+  model: MarketGroup
+  sde:
+    file: sde/fsd/marketGroups.yaml
+    renames:
+      name_id: name
+      description_id: description
+  esi:
+    file: markets/groups
+    languageAttributes:
+      - name
+      - description
+    removes:
+      - types
+  test:
+    filePrefix: market-group
+    ids:
+      - 1376
+    languages:
+      - en-us
+
+types:
+  idField: type_id
+  model: InventoryType
+  sde:
+    file: sde/fsd/typeIDs.yaml
+  esi:
+    file: universe/types
+    languageAttributes:
+      - name
+      - description
+    arrayToObjects:
+      dogma_attributes: attribute_id
+      dogma_effects: effect_id
+  test:
+    filePrefix: type
+    ids:
+      - 645
+    languages:
+      - en-us
+      - fr
+
+dogmaAttributes:
+  idField: attribute_id
+  model: DogmaAttribute
+  sde:
+    file: sde/fsd/dogmaAttributes.yaml
+    renames:
+      display_name_id: display_name
+      tooltip_title_id: tooltip_title
+      tooltip_description_id: tooltip_description
+    languageAttributes:
+      - description
+  esi:
+    file: dogma/attributes
+    languageAttributes:
+      - display_name
+      - description
+  test:
+    filePrefix: dogma-attribute
+    ids:
+      - 9

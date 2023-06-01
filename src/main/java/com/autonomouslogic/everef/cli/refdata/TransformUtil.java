@@ -61,11 +61,11 @@ public class TransformUtil {
 
 	public static SimpleTransformer concat(SimpleTransformer... transformers) {
 		if (transformers.length == 0) {
-			throw new NullPointerException();
+			return (json, language) -> json;
 		}
-		return (v) -> {
+		return (v, language) -> {
 			for (var f : transformers) {
-				v = f.transformJson(v);
+				v = f.transformJson(v, language);
 			}
 			return v;
 		};
@@ -80,5 +80,9 @@ public class TransformUtil {
 			newJson.set(field, json.get(field));
 		}
 		return newJson;
+	}
+
+	public void remove(ObjectNode root, String attr) {
+		root.remove(attr);
 	}
 }
