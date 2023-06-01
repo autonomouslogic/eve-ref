@@ -1,28 +1,27 @@
 export default defineI18nConfig(() => ({
-    legacy: false,
     locale: 'en',
     fallbackLocale: 'en',
     messages: {
         de: {
-            lang: 'Deutsch',
+            languageName: 'Deutsch',
         },
         en: {
-            lang: 'English',
+            languageName: 'English',
         },
         es: {
-            lang: 'Español',
+            languageName: 'Español',
         },
         fr: {
-            lang: 'Français',
+            languageName: 'Français',
         },
         ja: {
-            lang: '日本語',
+            languageName: '日本語',
         },
         ru: {
-            lang: 'Русский',
+            languageName: 'Русский',
         },
         zh: {
-            lang: '中文',
+            languageName: '中文',
         },
     }
 }))

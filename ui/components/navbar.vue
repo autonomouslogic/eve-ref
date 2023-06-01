@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const {locale, availableLocales, messages} = useI18n();
+const {locale, availableLocales } = useI18n();
 
 const selectedLocale = ref(locale);
 </script>
@@ -13,8 +13,8 @@ const selectedLocale = ref(locale);
           :key="availableLocale"
           :value="availableLocale"
           :selected="availableLocale === locale"
-      >{{ messages[availableLocale].lang }}
-      </option>
+          v-t="{path: 'languageName', locale: availableLocale}"
+      ></option>
     </select>
   </div>
   <hr>
