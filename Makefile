@@ -27,6 +27,9 @@ specs:
 dev-ui: specs
 	cd ui ; npm run dev
 
+dev-build: specs
+	cd ui ; npm run build
+
 docker: dist
 	docker build \
 		-f docker/Dockerfile \
