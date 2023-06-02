@@ -1,0 +1,19 @@
+{
+  "name": "nuxt-app",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "npm run generate-api && nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare",
+    "generate-api": "openapi-generator-cli generate"
+  },
+  "devDependencies": {
+    "@nuxtjs/i18n": "8.0.0-beta.12",
+    "@openapitools/openapi-generator-cli": "2.6.0",
+    "@types/node": "18.16.16",
+    "nuxt": "3.5.2"
+  }
+}
