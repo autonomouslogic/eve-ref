@@ -4,20 +4,28 @@ DOCKER_TAG_BASE = autonomouslogic/eve-ref
 DOCKER_TAG = $(DOCKER_TAG_BASE):$(EVE_REF_VERSION)
 DOCKER_TAG_LATEST = $(DOCKER_TAG_BASE):latest
 
+init: init-ui
+
+init-ui:
+	cd ui ; npm install
+
 dist:
 	./gradlew distTar
 
 test:
 	./gradlew test
 
-format:
-	./gradlew spotlessApply
-
 lint:
 	./gradlew spotlessCheck
 
+format:
+	./gradlew spotlessApply
+
 specs:
 	./gradlew refDataSpec
+
+dev-ui: specs
+	cd ui ; npm run dev
 
 docker: dist
 	docker build \
