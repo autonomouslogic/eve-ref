@@ -1,5 +1,12 @@
 EVE Ref Changelog
 
+## [2.6.0](https://github.com/autonomouslogic/eve-ref/compare/2.5.1...2.6.0) (2023-06-02)
+
+
+### Features
+
+* Basic inventory type pages ([#155](https://github.com/autonomouslogic/eve-ref/issues/155)) ([0dcef91](https://github.com/autonomouslogic/eve-ref/commit/0dcef91b04f1c6904d163caf605619b44bfa9948))
+
 ## [2.5.1](https://github.com/autonomouslogic/eve-ref/compare/2.5.0...2.5.1) (2023-05-30)
 
 
