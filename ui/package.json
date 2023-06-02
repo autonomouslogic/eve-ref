@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "nuxt build",
+    "build": "npm run generate-api && nuxt build",
     "dev": "npm run generate-api && nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
