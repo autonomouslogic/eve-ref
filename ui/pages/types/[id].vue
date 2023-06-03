@@ -12,7 +12,7 @@
 <script setup lang="ts">
   // import {InventoryType} from "~/api";
 
-  const { locale } = useI18n();
+  // const { locale } = useI18n();
 
   const route = useRoute();
   const id = route.params.id;
