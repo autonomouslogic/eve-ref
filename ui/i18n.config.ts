@@ -1,4 +1,5 @@
 export default defineI18nConfig(() => ({
+    locales: ['de', 'en', 'es', 'fr', 'ja', 'ru', 'zh'],
     locale: 'en',
     fallbackLocale: 'en',
     messages: {
