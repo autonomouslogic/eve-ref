@@ -1,6 +1,5 @@
 <script setup lang="ts">
 // const {locale, availableLocales } = useI18n();
-
 // const selectedLocale = ref(locale);
 </script>
 
