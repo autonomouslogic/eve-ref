@@ -1,7 +1,4 @@
-import type { I18nOptions } from 'vue-i18n'
-
 export default defineI18nConfig(() => ({
-    locales: ['de', 'en', 'es', 'fr', 'ja', 'ru', 'zh'],
     locale: 'en',
     fallbackLocale: 'en',
     messages: {
@@ -27,4 +24,4 @@ export default defineI18nConfig(() => ({
             languageName: '中文',
         },
     }
-} as I18nOptions))
+}))
