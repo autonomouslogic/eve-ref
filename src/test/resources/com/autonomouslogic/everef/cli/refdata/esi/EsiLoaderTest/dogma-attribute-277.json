@@ -1,0 +1,13 @@
+{
+  "attribute_id" : 277,
+  "default_value" : 0,
+  "description" : {
+    "en" : "Required skill level for skill 1"
+  },
+  "display_name" : {
+    "en" : ""
+  },
+  "high_is_good" : true,
+  "name" : "requiredSkill1Level",
+  "stackable" : true
+}

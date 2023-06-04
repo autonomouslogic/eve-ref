@@ -9,3 +9,129 @@
   published: true
   stackable: true
   unit_id: 113
+
+"182":
+  attribute_id: 182
+  default_value: 0
+  description: "The type ID of the skill that is required."
+  display_name: "Primary Skill required"
+  high_is_good: true
+  name: "requiredSkill1"
+  published: true
+  stackable: true
+  unit_id: 116
+
+"277":
+  attribute_id: 277
+  default_value: 0
+  description: "Required skill level for skill 1"
+  display_name: ""
+  high_is_good: true
+  name: "requiredSkill1Level"
+  stackable: true
+
+"183":
+  attribute_id: 183
+  default_value: 0
+  description: "The type ID of the skill that is required."
+  display_name: "Secondary Skill required"
+  high_is_good: true
+  name: "requiredSkill2"
+  published: true
+  stackable: true
+  unit_id: 116
+
+"278":
+  attribute_id: 278
+  default_value: 0
+  description: "Required skill level for skill 2"
+  display_name: ""
+  high_is_good: true
+  name: "requiredSkill2Level"
+  stackable: true
+
+"184":
+  attribute_id: 184
+  default_value: 0
+  description: "The type ID of the skill that is required."
+  display_name: "Tertiary Skill required"
+  high_is_good: true
+  name: "requiredSkill3"
+  published: true
+  stackable: true
+  unit_id: 116
+
+"279":
+  attribute_id: 279
+  default_value: 0
+  description: "Required skill level for skill 3"
+  display_name: ""
+  high_is_good: true
+  name: "requiredSkill3Level"
+  stackable: true
+
+"1285":
+  attribute_id: 1285
+  default_value: 0
+  description: "The type ID of the skill that is required."
+  display_name: "Quaternary Skill required"
+  high_is_good: true
+  icon_id: 0
+  name: "requiredSkill4"
+  published: true
+  stackable: true
+  unit_id: 116
+
+"1286":
+  attribute_id: 1286
+  default_value: 0
+  description: "Required skill level for skill 4"
+  display_name: "Level 5 required"
+  high_is_good: true
+  icon_id: 0
+  name: "requiredSkill4Level"
+  stackable: true
+
+"1289":
+  attribute_id: 1289
+  default_value: 0
+  description: "The type ID of the skill that is required."
+  display_name: "Quinary Skill required"
+  high_is_good: true
+  icon_id: 0
+  name: "requiredSkill5"
+  published: true
+  stackable: true
+  unit_id: 116
+
+"1287":
+  attribute_id: 1287
+  default_value: 0
+  description: "Required skill level for skill 5"
+  display_name: ""
+  high_is_good: true
+  icon_id: 0
+  name: "requiredSkill5Level"
+  stackable: true
+
+"1290":
+  attribute_id: 1290
+  default_value: 0
+  description: "The type ID of the skill that is required."
+  display_name: "Senary Skill required"
+  high_is_good: true
+  icon_id: 0
+  name: "requiredSkill6"
+  published: true
+  stackable: true
+  unit_id: 116
+
+"1288":
+  attribute_id: 1288
+  default_value: 0
+  description: "Required skill level for skill 6"
+  display_name: ""
+  high_is_good: true
+  icon_id: 0
+  name: "requiredSkill6Level"
+  stackable: true

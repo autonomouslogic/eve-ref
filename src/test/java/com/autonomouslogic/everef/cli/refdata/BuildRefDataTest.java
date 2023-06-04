@@ -129,21 +129,19 @@ public class BuildRefDataTest {
 	}
 
 	@SneakyThrows
-	private void assertOutput(@NonNull RefDataConfig config, @NonNull byte[] json) {
+	private void assertOutput(@NonNull RefDataConfig config, @NonNull byte[] jsonBytes) {
+		var json = objectMapper.readTree(jsonBytes);
 		var testConfig = config.getTest();
-		var expected = objectMapper.createObjectNode();
 		for (Long id : testConfig.getIds()) {
-			expected.set(
-					id.toString(),
-					objectMapper.readTree(ResourceUtil.loadResource(
-							"/refdata/refdata/" + testConfig.getFilePrefix() + "-" + id + ".json")));
+			var expected = objectMapper.readTree(ResourceUtil.loadResource(
+				"/refdata/refdata/" + testConfig.getFilePrefix() + "-" + id + ".json"));
+			var supplied = json.get(id.toString());
+			testDataUtil.assertJsonStrictEquals(expected, supplied);
 		}
-		var supplied = objectMapper.readTree(json);
-		assertEquals(expected, supplied);
 
 		if (config.getId().equals("types")) {
 			// Check the encoded JSON contains full numbers. This comes from type 645 Dominix.
-			assertTrue(new String(json).contains("\"base_price\":153900000"));
+			assertTrue(new String(jsonBytes).contains("\"base_price\":153900000"));
 		}
 	}
 

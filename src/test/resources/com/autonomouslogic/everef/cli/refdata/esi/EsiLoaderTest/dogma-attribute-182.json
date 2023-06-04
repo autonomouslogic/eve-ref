@@ -1,0 +1,15 @@
+{
+  "attribute_id" : 182,
+  "default_value" : 0,
+  "description" : {
+    "en" : "The type ID of the skill that is required."
+  },
+  "display_name" : {
+    "en" : "Primary Skill required"
+  },
+  "high_is_good" : true,
+  "name" : "requiredSkill1",
+  "published" : true,
+  "stackable" : true,
+  "unit_id" : 116
+}

@@ -42,3 +42,210 @@
     ru: Запас прочности корпуса
     zh: 结构值
   unitID: 113
+
+182:
+  attributeID: 182
+  categoryID: 8
+  dataType: 11
+  defaultValue: 0.0
+  description: The type ID of the skill that is required.
+  displayNameID:
+    de: Primärer Skill benötigt
+    en: Primary Skill required
+    es: Habilidad principal necesaria
+    fr: Compétence principale requise
+    ja: 第一必須スキル
+    ko: 1차 스킬 필요
+    ru: Требуемый первичный навык
+    zh: 主技能需求
+  highIsGood: true
+  name: requiredSkill1
+  published: true
+  stackable: true
+  unitID: 116
+
+277:
+  attributeID: 277
+  categoryID: 8
+  dataType: 4
+  defaultValue: 0.0
+  description: Required skill level for skill 1
+  highIsGood: true
+  name: requiredSkill1Level
+  published: false
+  stackable: true
+
+183:
+  attributeID: 183
+  categoryID: 8
+  dataType: 11
+  defaultValue: 0.0
+  description: The type ID of the skill that is required.
+  displayNameID:
+    de: Sekundärer Skill benötigt
+    en: Secondary Skill required
+    es: Habilidad secundaria necesaria
+    fr: Compétence secondaire requise
+    ja: 第二必須スキル
+    ko: 2차 스킬 필요
+    ru: Требуемый вторичный навык
+    zh: 副技能需求
+  highIsGood: true
+  name: requiredSkill2
+  published: true
+  stackable: true
+  unitID: 116
+
+278:
+  attributeID: 278
+  categoryID: 8
+  dataType: 4
+  defaultValue: 0.0
+  description: Required skill level for skill 2
+  highIsGood: true
+  name: requiredSkill2Level
+  published: false
+  stackable: true
+
+184:
+  attributeID: 184
+  categoryID: 8
+  dataType: 11
+  defaultValue: 0.0
+  description: The type ID of the skill that is required.
+  displayNameID:
+    de: Tertiärer Skill benötigt
+    en: Tertiary Skill required
+    es: Habilidad terciaria necesaria
+    fr: Compétence tertiaire requise
+    ja: 第三必須スキル
+    ko: 3차 스킬 필요
+    ru: Требуемый третичный навык
+    zh: 三级技能需求
+  highIsGood: true
+  name: requiredSkill3
+  published: true
+  stackable: true
+  unitID: 116
+
+279:
+  attributeID: 279
+  categoryID: 8
+  dataType: 4
+  defaultValue: 0.0
+  description: Required skill level for skill 3
+  highIsGood: true
+  name: requiredSkill3Level
+  published: false
+  stackable: true
+
+1285:
+  attributeID: 1285
+  categoryID: 8
+  dataType: 11
+  defaultValue: 0.0
+  description: The type ID of the skill that is required.
+  displayNameID:
+    de: Quaternary-Skill benötigt
+    en: Quaternary Skill required
+    es: Habilidad cuaternaria necesaria
+    fr: Compétence quaternaire requise
+    ja: 第四必須スキル
+    ko: 4차 스킬 필요
+    ru: Требуемый четвертичный навык
+    zh: 四级技能需求
+  highIsGood: true
+  iconID: 0
+  name: requiredSkill4
+  published: true
+  stackable: true
+  unitID: 116
+
+1286:
+  attributeID: 1286
+  categoryID: 8
+  dataType: 4
+  defaultValue: 0.0
+  description: Required skill level for skill 4
+  displayNameID:
+    de: Benötigter Skill 5 Level
+    en: Level 5 required
+    es: Nivel 5 necesario
+    fr: compNiv5Requise
+    ja: 第五必須スキルレベル
+    ko: 레벨 5 요구
+    ru: Необходимые навыки 5 уровня
+    zh: 所需技能等级
+  highIsGood: true
+  iconID: 0
+  name: requiredSkill4Level
+  published: false
+  stackable: true
+
+1289:
+  attributeID: 1289
+  categoryID: 8
+  dataType: 11
+  defaultValue: 0.0
+  description: The type ID of the skill that is required.
+  displayNameID:
+    de: Quinary-Skill benötigt
+    en: Quinary Skill required
+    es: Habilidad quinaria necesaria
+    fr: Compétence quinaire requise
+    ja: 第五必須スキル
+    ko: 5차 스킬 필요
+    ru: Требуемый пятеричный навык
+    zh: 五级技能需求
+  highIsGood: true
+  iconID: 0
+  name: requiredSkill5
+  published: true
+  stackable: true
+  unitID: 116
+
+1287:
+  attributeID: 1287
+  categoryID: 8
+  dataType: 4
+  defaultValue: 0.0
+  description: Required skill level for skill 5
+  highIsGood: true
+  iconID: 0
+  name: requiredSkill5Level
+  published: false
+  stackable: true
+
+1290:
+  attributeID: 1290
+  categoryID: 8
+  dataType: 11
+  defaultValue: 0.0
+  description: The type ID of the skill that is required.
+  displayNameID:
+    de: Senary-Skill benötigt
+    en: Senary Skill required
+    es: Habilidad senaria necesaria
+    fr: Compétence sénaire requise
+    ja: 第六必須スキル
+    ko: 6차 스킬 필요
+    ru: Требуемый шестеричный навык
+    zh: 六级技能需求
+  highIsGood: true
+  iconID: 0
+  name: requiredSkill6
+  published: true
+  stackable: true
+  unitID: 116
+  
+1288:
+  attributeID: 1288
+  categoryID: 8
+  dataType: 4
+  defaultValue: 0.0
+  description: Required skill level for skill 6
+  highIsGood: true
+  iconID: 0
+  name: requiredSkill6Level
+  published: false
+  stackable: true
