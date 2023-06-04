@@ -11,9 +11,10 @@
     "generate-api": "openapi-generator-cli generate"
   },
   "devDependencies": {
-    "@nuxtjs/i18n": "8.0.0-beta.12",
+    "@nuxtjs/i18n": "8.0.0-beta.10",
     "@openapitools/openapi-generator-cli": "2.6.0",
     "@types/node": "18.16.16",
-    "nuxt": "3.5.2"
+    "nuxt": "3.5.2",
+    "@nuxt/types": "2.16.3"
   }
 }
