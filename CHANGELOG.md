@@ -1,5 +1,22 @@
 EVE Ref Changelog
 
+## [2.6.1](https://github.com/autonomouslogic/eve-ref/compare/2.6.0...2.6.1) (2023-06-04)
+
+
+### Bug Fixes
+
+* Revert @nuxtjs/i18n to fix Cloudflare Page deploy ([#157](https://github.com/autonomouslogic/eve-ref/issues/157)) ([426f537](https://github.com/autonomouslogic/eve-ref/commit/426f537b8f7c31dfa8c2143723025d4d02bf76fb))
+
+
+### Continuous Integration
+
+* Node build on CI ([#156](https://github.com/autonomouslogic/eve-ref/issues/156)) ([bdfae3c](https://github.com/autonomouslogic/eve-ref/commit/bdfae3c04652b3779b94bffebde03753ccef7b5d))
+
+
+### Build System
+
+* Generate API on UI build. ([1f867ea](https://github.com/autonomouslogic/eve-ref/commit/1f867ea02ef39b70e4ee39c799297d13c8a00bf0))
+
 ## [2.6.0](https://github.com/autonomouslogic/eve-ref/compare/2.5.1...2.6.0) (2023-06-02)
 
 
