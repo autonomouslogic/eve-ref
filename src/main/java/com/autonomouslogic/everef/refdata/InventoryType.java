@@ -98,4 +98,8 @@ public class InventoryType {
 
 	@JsonProperty
 	BigDecimal volume;
+
+	@JsonProperty("is_skill")
+	@Schema(defaultValue = "false", description = "Whether this type is a skill or not. This is added by EVE Ref.")
+	boolean skill;
 }
