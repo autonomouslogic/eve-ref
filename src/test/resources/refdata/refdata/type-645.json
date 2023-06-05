@@ -511,5 +511,8 @@
       "is_default" : false
     }
   },
-  "packaged_volume" : 50000
+  "packaged_volume" : 50000,
+  "required_skills" : {
+    "3336" : 1
+  }
 }

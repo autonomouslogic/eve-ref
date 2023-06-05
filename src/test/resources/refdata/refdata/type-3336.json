@@ -102,5 +102,9 @@
   "mass" : 0,
   "packaged_volume" : 0.01,
   "radius" : 1,
-  "is_skill" : true
+  "is_skill" : true,
+  "required_skills" : {
+    "3327" : 4,
+    "33097" : 3
+  }
 }
