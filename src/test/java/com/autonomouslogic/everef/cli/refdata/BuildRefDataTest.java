@@ -133,8 +133,8 @@ public class BuildRefDataTest {
 		var json = objectMapper.readTree(jsonBytes);
 		var testConfig = config.getTest();
 		for (Long id : testConfig.getIds()) {
-			var expected = objectMapper.readTree(ResourceUtil.loadResource(
-				"/refdata/refdata/" + testConfig.getFilePrefix() + "-" + id + ".json"));
+			var expected = objectMapper.readTree(
+					ResourceUtil.loadResource("/refdata/refdata/" + testConfig.getFilePrefix() + "-" + id + ".json"));
 			var supplied = json.get(id.toString());
 			testDataUtil.assertJsonStrictEquals(expected, supplied);
 		}

@@ -13,3 +13,18 @@
     zh: 势力战争盖伦特联邦战列舰
   published: true
   useBasePrice: false
+257:
+  anchorable: false
+  anchored: false
+  categoryID: 16
+  fittableNonSingleton: false
+  name:
+    de: Raumschiff-Kommando
+    en: Spaceship Command
+    es: Manejo de naves espaciales
+    fr: Pilotage de vaisseau
+    ja: 宇宙船操作
+    ru: Допуски к управлению кораблями
+    zh: 飞船操控学
+  published: true
+  useBasePrice: true

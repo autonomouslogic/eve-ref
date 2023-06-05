@@ -5,6 +5,7 @@ import static com.autonomouslogic.everef.util.ArchivePathFactory.REFERENCE_DATA;
 
 import com.autonomouslogic.everef.cli.Command;
 import com.autonomouslogic.everef.cli.refdata.esi.EsiLoader;
+import com.autonomouslogic.everef.cli.refdata.post.SkillCreator;
 import com.autonomouslogic.everef.cli.refdata.sde.SdeLoader;
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.http.DataCrawler;
@@ -92,6 +93,9 @@ public class BuildRefData implements Command {
 	@Inject
 	protected Provider<DataCrawler> dataCrawlerProvider;
 
+	@Inject
+	protected Provider<SkillCreator> skillCreatorProvider;
+
 	@Setter
 	@NonNull
 	private ZonedDateTime buildTime = ZonedDateTime.now(ZoneOffset.UTC).truncatedTo(ChronoUnit.SECONDS);
@@ -121,6 +125,7 @@ public class BuildRefData implements Command {
 						downloadLatestSde().flatMapCompletable(sdeLoader::load),
 						downloadLatestEsi().flatMapCompletable(esiLoader::load)),
 				mergeDatasets(),
+				postDatasets(),
 				buildOutputFile().flatMapCompletable(this::uploadFiles),
 				closeMvStore());
 	}
@@ -142,6 +147,11 @@ public class BuildRefData implements Command {
 						.setStoreHandler(storeHandler)
 						.merge())
 				.toList()));
+	}
+
+	private Completable postDatasets() {
+		return Completable.defer(
+				() -> skillCreatorProvider.get().setStoreHandler(storeHandler).create());
 	}
 
 	private Completable closeMvStore() {
