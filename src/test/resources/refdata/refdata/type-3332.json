@@ -1,0 +1,101 @@
+{
+  "base_price" : 1000000,
+  "description" : {
+    "de" : "Fertigkeit, Kreuzer der Gallente zu bedienen.",
+    "en" : "Skill at operating Gallente cruisers.",
+    "es" : "Habilidad en el manejo de cruceros gallentes.",
+    "fr" : "Compétence liée au pilotage des croiseurs gallente.",
+    "ja" : "ガレンテ巡洋艦を操作するためのスキル。",
+    "ru" : "Освоив этот навык, пилот получит допуск к выполнению полётов на крейсерах производства Галлентской Федерации.",
+    "zh" : "操作盖伦特巡洋舰的技能。"
+  },
+  "group_id" : 257,
+  "icon_id" : 33,
+  "market_group_id" : 377,
+  "name" : {
+    "de" : "Gallente Cruiser",
+    "en" : "Gallente Cruiser",
+    "es" : "Crucero gallente",
+    "fr" : "Croiseur gallente",
+    "ja" : "ガレンテ巡洋艦",
+    "ru" : "Галлентские крейсеры",
+    "zh" : "盖伦特巡洋舰操作"
+  },
+  "portion_size" : 1,
+  "published" : true,
+  "race_id" : 8,
+  "volume" : 0.01,
+  "type_id" : 3332,
+  "capacity" : 0,
+  "dogma_attributes" : {
+    "161" : {
+      "attribute_id" : 161,
+      "value" : 0.01
+    },
+    "162" : {
+      "attribute_id" : 162,
+      "value" : 1
+    },
+    "4" : {
+      "attribute_id" : 4,
+      "value" : 0
+    },
+    "278" : {
+      "attribute_id" : 278,
+      "value" : 3
+    },
+    "38" : {
+      "attribute_id" : 38,
+      "value" : 0
+    },
+    "275" : {
+      "attribute_id" : 275,
+      "value" : 5
+    },
+    "180" : {
+      "attribute_id" : 180,
+      "value" : 167
+    },
+    "277" : {
+      "attribute_id" : 277,
+      "value" : 2
+    },
+    "182" : {
+      "attribute_id" : 182,
+      "value" : 3327
+    },
+    "183" : {
+      "attribute_id" : 183,
+      "value" : 33093
+    },
+    "280" : {
+      "attribute_id" : 280,
+      "value" : 0
+    },
+    "181" : {
+      "attribute_id" : 181,
+      "value" : 168
+    }
+  },
+  "dogma_effects" : {
+    "132" : {
+      "effect_id" : 132,
+      "is_default" : true
+    },
+    "517" : {
+      "effect_id" : 517,
+      "is_default" : false
+    },
+    "928" : {
+      "effect_id" : 928,
+      "is_default" : false
+    },
+    "6044" : {
+      "effect_id" : 6044,
+      "is_default" : false
+    }
+  },
+  "mass" : 0,
+  "packaged_volume" : 0.01,
+  "radius" : 1
+}

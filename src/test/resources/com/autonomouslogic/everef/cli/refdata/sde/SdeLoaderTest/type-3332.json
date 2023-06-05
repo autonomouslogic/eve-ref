@@ -1,0 +1,29 @@
+{
+  "base_price" : 1000000,
+  "description" : {
+    "de" : "Fertigkeit, Kreuzer der Gallente zu bedienen.",
+    "en" : "Skill at operating Gallente cruisers.",
+    "es" : "Habilidad en el manejo de cruceros gallentes.",
+    "fr" : "Compétence liée au pilotage des croiseurs gallente.",
+    "ja" : "ガレンテ巡洋艦を操作するためのスキル。",
+    "ru" : "Освоив этот навык, пилот получит допуск к выполнению полётов на крейсерах производства Галлентской Федерации.",
+    "zh" : "操作盖伦特巡洋舰的技能。"
+  },
+  "group_id" : 257,
+  "icon_id" : 33,
+  "market_group_id" : 377,
+  "name" : {
+    "de" : "Gallente Cruiser",
+    "en" : "Gallente Cruiser",
+    "es" : "Crucero gallente",
+    "fr" : "Croiseur gallente",
+    "ja" : "ガレンテ巡洋艦",
+    "ru" : "Галлентские крейсеры",
+    "zh" : "盖伦特巡洋舰操作"
+  },
+  "portion_size" : 1,
+  "published" : true,
+  "race_id" : 8,
+  "volume" : 0.01,
+  "type_id" : 3332
+}

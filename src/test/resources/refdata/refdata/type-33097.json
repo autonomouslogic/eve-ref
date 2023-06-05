@@ -1,0 +1,105 @@
+{
+  "base_price" : 2500000,
+  "description" : {
+    "de" : "Skill zur Bedienung von Gallente-Schlachtkreuzern.",
+    "en" : "Skill at operating Gallente battlecruisers.",
+    "es" : "Habilidad en el manejo de cruceros de combate gallentes.",
+    "fr" : "Compétence liée au pilotage des croiseurs de bataille gallente. Formation impossible sur les comptes d'évaluation.",
+    "ja" : "ガレンテ巡洋戦艦を操作するスキル。",
+    "ru" : "Освоив этот навык, пилот получит допуск к выполнению полётов на линейных крейсерах производства Галлентской Федерации.",
+    "zh" : "操作盖伦特战列巡洋舰的技能。"
+  },
+  "group_id" : 257,
+  "icon_id" : 33,
+  "market_group_id" : 377,
+  "name" : {
+    "de" : "Gallente Battlecruiser",
+    "en" : "Gallente Battlecruiser",
+    "es" : "Crucero de combate gallente",
+    "fr" : "Croiseur de bataille gallente",
+    "ja" : "ガレンテ巡洋戦艦",
+    "ru" : "Галлентские линейные крейсеры",
+    "zh" : "盖伦特战列巡洋舰操作"
+  },
+  "portion_size" : 1,
+  "published" : true,
+  "race_id" : 8,
+  "volume" : 0.01,
+  "type_id" : 33097,
+  "capacity" : 0,
+  "dogma_attributes" : {
+    "161" : {
+      "attribute_id" : 161,
+      "value" : 0.01
+    },
+    "162" : {
+      "attribute_id" : 162,
+      "value" : 1
+    },
+    "4" : {
+      "attribute_id" : 4,
+      "value" : 0
+    },
+    "278" : {
+      "attribute_id" : 278,
+      "value" : 3
+    },
+    "38" : {
+      "attribute_id" : 38,
+      "value" : 0
+    },
+    "1047" : {
+      "attribute_id" : 1047,
+      "value" : 0
+    },
+    "275" : {
+      "attribute_id" : 275,
+      "value" : 6
+    },
+    "180" : {
+      "attribute_id" : 180,
+      "value" : 167
+    },
+    "277" : {
+      "attribute_id" : 277,
+      "value" : 3
+    },
+    "182" : {
+      "attribute_id" : 182,
+      "value" : 3327
+    },
+    "183" : {
+      "attribute_id" : 183,
+      "value" : 3332
+    },
+    "280" : {
+      "attribute_id" : 280,
+      "value" : 0
+    },
+    "181" : {
+      "attribute_id" : 181,
+      "value" : 168
+    }
+  },
+  "dogma_effects" : {
+    "132" : {
+      "effect_id" : 132,
+      "is_default" : true
+    },
+    "5288" : {
+      "effect_id" : 5288,
+      "is_default" : false
+    },
+    "5289" : {
+      "effect_id" : 5289,
+      "is_default" : false
+    },
+    "11062" : {
+      "effect_id" : 11062,
+      "is_default" : false
+    }
+  },
+  "mass" : 0,
+  "packaged_volume" : 0.01,
+  "radius" : 1
+}

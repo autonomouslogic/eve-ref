@@ -1,0 +1,29 @@
+{
+  "base_price" : 7500000,
+  "description" : {
+    "de" : "Skill zur Bedienung von Gallente-Schlachtschiffen.",
+    "en" : "Skill at operating Gallente battleships.",
+    "es" : "Habilidad en el manejo de acorazados gallentes.",
+    "fr" : "Compétence liée au pilotage des cuirassés gallente.",
+    "ja" : "ガレンテ戦艦を操作するスキル。",
+    "ru" : "Освоив этот навык, пилот получит допуск к выполнению полётов на линкорах производства Галлентской Федерации.",
+    "zh" : "操作盖伦特战列舰的技能。"
+  },
+  "group_id" : 257,
+  "icon_id" : 33,
+  "market_group_id" : 377,
+  "name" : {
+    "de" : "Gallente Battleship",
+    "en" : "Gallente Battleship",
+    "es" : "Acorazado gallente",
+    "fr" : "Cuirassé gallente",
+    "ja" : "ガレンテ戦艦",
+    "ru" : "Галлентские линкоры",
+    "zh" : "盖伦特战列舰操作"
+  },
+  "portion_size" : 1,
+  "published" : true,
+  "race_id" : 8,
+  "volume" : 0.01,
+  "type_id" : 3336
+}
