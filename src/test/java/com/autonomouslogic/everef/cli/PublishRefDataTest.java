@@ -87,7 +87,8 @@ public class PublishRefDataTest {
 			var testConfig = config.getTest();
 			expectedKeys.add("base/" + config.getOutputFile());
 
-			var expectedIndex = objectMapper.valueToTree(testConfig.getIds());
+			var expectedIndex = objectMapper.valueToTree(
+					testConfig.getIds().stream().sorted().toList());
 			var actualIndex = objectMapper.readTree(mockS3Adapter
 					.getTestObject(BUCKET_NAME, "base/" + config.getOutputFile(), s3)
 					.orElseThrow());
