@@ -169,9 +169,12 @@ public class SkillCreator {
 		var skillTimeConstantId = skillTimeConstantDogma.getAttributeId();
 		var mult = (int)
 				helper.getDogmaFromType(type, skillTimeConstantId).orElseThrow().getValue();
+
+		// The default value is 1, but all skills which don't specify this attribute can be trained on alpha.
+		// Therefore, we default to a 0.
 		var canNotBeTrainedOnTrial = helper.getDogmaFromType(type, canNotBeTrainedOnTrialDogma.getAttributeId())
 						.map(v -> (int) v.getValue())
-						.orElseGet(() -> (int) (double) canNotBeTrainedOnTrialDogma.getDefaultValue())
+						.orElse(0)
 				== 1L;
 
 		var skill = Skill.builder()
