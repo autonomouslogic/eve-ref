@@ -516,6 +516,13 @@ components:
           format: int32
         can_not_be_trained_on_trial:
           type: boolean
+        required_skills:
+          type: object
+          additionalProperties:
+            type: integer
+            description: The other skills required for this skill.
+            format: int32
+          description: The other skills required for this skill.
       description: Details about skill types. These are created by EVE Ref.
     TraitBonus:
       type: object

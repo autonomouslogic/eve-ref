@@ -5,5 +5,8 @@
   "primary_character_attribute_id" : 3,
   "secondary_character_attribute_id" : 5,
   "training_time_multiplier" : 2,
-  "can_not_be_trained_on_trial" : false
+  "can_not_be_trained_on_trial" : false,
+  "required_skills" : {
+    "3328" : 3
+  }
 }

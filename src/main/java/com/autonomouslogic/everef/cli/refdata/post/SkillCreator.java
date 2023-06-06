@@ -86,7 +86,7 @@ public class SkillCreator {
 
 				if (isSkill) {
 					try {
-						createSkill(typeId, type);
+						createSkill(typeId, type, requiredSkills);
 					} catch (Exception e) {
 						throw new RuntimeException("Failed creating skill for type " + typeId, e);
 					}
@@ -126,11 +126,11 @@ public class SkillCreator {
 				.toList();
 	}
 
-	private ObjectNode createRequiredSkills(
+	private Map<Long, Integer> createRequiredSkills(
 			@NotNull InventoryType type,
 			@NotNull List<Pair<Long, Long>> requiredSkillsDogma,
 			@NotNull StoreDataHelper helper) {
-		var requiredSkills = new LinkedHashMap<Long, Long>();
+		var requiredSkills = new LinkedHashMap<Long, Integer>();
 		for (Pair<Long, Long> dogmaPair : requiredSkillsDogma) {
 			var skill = helper.getDogmaFromType(type, dogmaPair.getLeft());
 			var level = helper.getDogmaFromType(type, dogmaPair.getRight());
@@ -138,13 +138,13 @@ public class SkillCreator {
 				continue;
 			}
 			var skillId = (long) skill.get().getValue();
-			var skillLevel = (long) level.get().getValue();
+			var skillLevel = (int) level.get().getValue();
 			requiredSkills.put(skillId, skillLevel);
 		}
-		return requiredSkills.isEmpty() ? null : objectMapper.valueToTree(requiredSkills);
+		return requiredSkills.isEmpty() ? null : requiredSkills;
 	}
 
-	private void createSkill(long typeId, InventoryType type) {
+	private void createSkill(long typeId, @NonNull InventoryType type, Map<Long, Integer> requiredSkills) {
 		var primaryAttributeTypeDogma = helper.getDogmaFromType(type, primaryAttributeDogma.getAttributeId());
 		var secondaryAttributeTypeDogma = helper.getDogmaFromType(type, secondaryAttributeDogma.getAttributeId());
 		if (primaryAttributeTypeDogma.isEmpty() || secondaryAttributeTypeDogma.isEmpty()) {
@@ -184,7 +184,8 @@ public class SkillCreator {
 				.primaryCharacterAttributeId(primaryCharacterAttributeId)
 				.secondaryCharacterAttributeId(secondaryCharacterAttributeId)
 				.trainingTimeMultiplier(mult)
-				.canNotBeTrainedOnTrial(canNotBeTrainedOnTrial);
+				.canNotBeTrainedOnTrial(canNotBeTrainedOnTrial)
+				.requiredSkills(requiredSkills);
 		log.trace("Created skill: {}", skill.build());
 		skills.put(typeId, objectMapper.valueToTree(skill.build()));
 	}

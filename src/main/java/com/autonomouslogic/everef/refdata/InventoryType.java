@@ -107,5 +107,5 @@ public class InventoryType {
 	@Schema(
 			description =
 					"The skills required for this type. The key is the skill type ID and the value is the level. This is added by EVE Ref and derived from dogma attributes.")
-	Map<String, Integer> requiredSkills;
+	Map<Long, Integer> requiredSkills;
 }
