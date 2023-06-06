@@ -18,17 +18,19 @@ public class Skill {
 	long typeId;
 
 	@JsonProperty
+	@Schema(description = "The dogma attribute ID of the primary training attribute.")
 	long primaryDogmaAttributeId;
 
 	@JsonProperty
+	@Schema(description = "The dogma attribute ID of the secondary training attribute.")
 	long secondaryDogmaAttributeId;
 
-	;
-
 	@JsonProperty
+	@Schema(description = "The character attribute ID of the primary training attribute.")
 	long primaryCharacterAttributeId;
 
 	@JsonProperty
+	@Schema(description = "The character attribute ID of the secondary training attribute.")
 	long secondaryCharacterAttributeId;
 
 	@JsonProperty
