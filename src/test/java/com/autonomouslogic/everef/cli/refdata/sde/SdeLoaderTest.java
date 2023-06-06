@@ -45,8 +45,10 @@ public class SdeLoaderTest {
 	@SneakyThrows
 	void testLoadSde() {
 		sdeLoader.load(testDataUtil.createTestSde()).blockingAwait();
-
 		for (var config : refDataUtil.loadReferenceDataConfig()) {
+			if (config.getSde() == null) {
+				continue;
+			}
 			var testConfig = config.getTest();
 			var store = storeHandler.getSdeStore(config.getId());
 			for (var id : testConfig.getIds()) {

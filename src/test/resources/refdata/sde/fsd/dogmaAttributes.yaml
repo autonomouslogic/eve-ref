@@ -237,7 +237,7 @@
   published: true
   stackable: true
   unitID: 116
-  
+
 1288:
   attributeID: 1288
   categoryID: 8
@@ -247,5 +247,195 @@
   highIsGood: true
   iconID: 0
   name: requiredSkill6Level
+  published: false
+  stackable: true
+
+180:
+  attributeID: 180
+  categoryID: 7
+  dataType: 10
+  defaultValue: 0.0
+  description: Only refers to another dogma attribute.
+  displayNameID:
+    de: Primäres Attribut
+    en: Primary attribute
+    es: Atributo principal
+    fr: Attribut principal
+    ja: 第1次属性
+    ko: 1차 특성
+    ru: Первичная характеристика
+    zh: 主属性
+  highIsGood: true
+  name: primaryAttribute
+  published: true
+  stackable: true
+  unitID: 119
+
+181:
+  attributeID: 181
+  categoryID: 7
+  dataType: 10
+  defaultValue: 0.0
+  description: Only refers to another dogma attribute.
+  displayNameID:
+    de: Sekundäres Attribut
+    en: Secondary attribute
+    es: Atributo secundario
+    fr: Attribut secondaire
+    ja: 第2次属性
+    ko: 2차 특성
+    ru: Вторичная характеристика
+    zh: 副属性
+  highIsGood: true
+  name: secondaryAttribute
+  published: true
+  stackable: true
+  unitID: 119
+
+275:
+  attributeID: 275
+  categoryID: 7
+  dataType: 5
+  defaultValue: 0.0
+  description: This attribute is a multiplier to the number of skill points required
+    to train. Skill points required to train a skill = 250 * skillTimeConstant * sqrt(32)^(skillLevel
+    - 1)
+  displayNameID:
+    de: Trainingszeit-Multiplikator
+    en: Training time multiplier
+    es: Multiplicador de tiempo de desarrollo
+    fr: Multiplicateur du temps de formation
+    ja: トレーニング時間乗数
+    ko: 훈련시간 배수
+    ru: Множитель
+    zh: 训练时间倍增系数
+  highIsGood: true
+  iconID: 1392
+  name: skillTimeConstant
+  published: true
+  stackable: true
+  unitID: 104
+
+164:
+  attributeID: 164
+  categoryID: 7
+  dataType: 4
+  defaultValue: 0.0
+  description: The charisma of a character.
+  displayNameID:
+    de: Ausstrahlung
+    en: Charisma
+    es: Carisma
+    fr: Charisme
+    ja: カリスマ
+    ko: 카리스마
+    ru: «Харизма»
+    zh: 魅力
+  highIsGood: true
+  iconID: 1378
+  name: charisma
+  published: true
+  stackable: true
+  unitID: 120
+
+165:
+  attributeID: 165
+  categoryID: 7
+  dataType: 4
+  defaultValue: 0.0
+  description: The intelligence of a character.
+  displayNameID:
+    de: Intelligenz
+    en: Intelligence
+    es: Inteligencia
+    fr: Intelligence
+    ja: 知性
+    ko: 지능
+    ru: «Интеллект»
+    zh: 智力
+  highIsGood: true
+  iconID: 1380
+  name: intelligence
+  published: true
+  stackable: true
+  unitID: 120
+
+166:
+  attributeID: 166
+  categoryID: 7
+  dataType: 4
+  defaultValue: 0.0
+  description: The memory of a character.
+  displayNameID:
+    de: Gedächtnis
+    en: Memory
+    es: Memoria
+    fr: Mémoire
+    ja: 記憶力
+    ko: 기억력
+    ru: «Память»
+    zh: 记忆
+  highIsGood: true
+  iconID: 1381
+  name: memory
+  published: true
+  stackable: true
+  unitID: 120
+
+167:
+  attributeID: 167
+  categoryID: 9
+  dataType: 4
+  defaultValue: 0.0
+  description: The perception of a character.
+  displayNameID:
+    de: Auffassungsgabe
+    en: Perception
+    es: Percepción
+    fr: Perception
+    ja: 知覚
+    ko: 지각력
+    ru: «Восприятие»
+    zh: 感知
+  highIsGood: true
+  iconID: 1382
+  name: perception
+  published: true
+  stackable: true
+  unitID: 120
+
+168:
+  attributeID: 168
+  categoryID: 7
+  dataType: 4
+  defaultValue: 0.0
+  description: The willpower of a character.
+  displayNameID:
+    de: Willenskraft
+    en: Willpower
+    es: Voluntad
+    fr: Volonté
+    ja: 精神力
+    ko: 정신력
+    ru: «Сила воли»
+    zh: 毅力
+  highIsGood: true
+  iconID: 1379
+  name: willpower
+  published: true
+  stackable: true
+  unitID: 120
+
+1047:
+  attributeID: 1047
+  categoryID: 9
+  dataType: 3
+  defaultValue: 1.0
+  description: If set to 1 then this skill can not be trained on accounts that are
+    marked as Alpha Clone. Any other value (although you should probably use 0) will
+    result in all accounts being able to train this skill.
+  highIsGood: true
+  iconID: 0
+  name: canNotBeTrainedOnTrial
   published: false
   stackable: true

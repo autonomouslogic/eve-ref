@@ -130,4 +130,24 @@ public interface ReferenceDataSpec {
 			useReturnTypeSchema = true,
 			content = @Content(mediaType = "application/json"))
 	DogmaAttribute getDogmaAttribute(@PathParam("attribute_id") int attributeId);
+
+	@GET
+	@Path("/skills")
+	@Operation(description = "Get all dogma attribute IDs.")
+	@ApiResponse(
+			responseCode = "200",
+			description = "Skill type IDs.",
+			useReturnTypeSchema = true,
+			content = @Content(mediaType = "application/json"))
+	List<Integer> getAllSkills();
+
+	@GET
+	@Path("/skills/{skill_type_id}")
+	@Operation
+	@ApiResponse(
+			responseCode = "200",
+			description = "The skill.",
+			useReturnTypeSchema = true,
+			content = @Content(mediaType = "application/json"))
+	Skill getSkill(@PathParam("skill_type_id") int skillTypeId);
 }

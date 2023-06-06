@@ -135,3 +135,111 @@
   icon_id: 0
   name: "requiredSkill6Level"
   stackable: true
+
+"180":
+  attribute_id: 180
+  default_value: 0
+  description: "Only refers to another dogma attribute."
+  display_name: "Primary attribute"
+  high_is_good: true
+  name: "primaryAttribute"
+  published: true
+  stackable: true
+  unit_id: 119
+
+"181":
+  attribute_id: 181
+  default_value: 0
+  description: "Only refers to another dogma attribute."
+  display_name: "Secondary attribute"
+  high_is_good: true
+  name: "secondaryAttribute"
+  published: true
+  stackable: true
+  unit_id: 119
+
+"275":
+  attribute_id: 275
+  default_value: 0
+  description: "This attribute is a multiplier to the number of skill points required\
+    \ to train. Skill points required to train a skill = 250 * skillTimeConstant *\
+    \ sqrt(32)^(skillLevel - 1)"
+  display_name: "Training time multiplier"
+  high_is_good: true
+  icon_id: 1392
+  name: "skillTimeConstant"
+  published: true
+  stackable: true
+  unit_id: 104
+
+"164":
+  attribute_id: 164
+  default_value: 0
+  description: "The charisma of a character."
+  display_name: "Charisma"
+  high_is_good: true
+  icon_id: 1378
+  name: "charisma"
+  published: true
+  stackable: true
+  unit_id: 120
+
+"165":
+  attribute_id: 165
+  default_value: 0
+  description: "The intelligence of a character."
+  display_name: "Intelligence"
+  high_is_good: true
+  icon_id: 1380
+  name: "intelligence"
+  published: true
+  stackable: true
+  unit_id: 120
+
+"166":
+  attribute_id: 166
+  default_value: 0
+  description: "The memory of a character."
+  display_name: "Memory"
+  high_is_good: true
+  icon_id: 1381
+  name: "memory"
+  published: true
+  stackable: true
+  unit_id: 120
+
+"167":
+  attribute_id: 167
+  default_value: 0
+  description: "The perception of a character."
+  display_name: "Perception"
+  high_is_good: true
+  icon_id: 1382
+  name: "perception"
+  published: true
+  stackable: true
+  unit_id: 120
+
+"168":
+  attribute_id: 168
+  default_value: 0
+  description: "The willpower of a character."
+  display_name: "Willpower"
+  high_is_good: true
+  icon_id: 1379
+  name: "willpower"
+  published: true
+  stackable: true
+  unit_id: 120
+
+"1047":
+  attribute_id: 1047
+  default_value: 1
+  description: "If set to 1 then this skill can not be trained on accounts that are\
+    \ marked as Alpha Clone. Any other value (although you should probably use 0)\
+    \ will result in all accounts being able to train this skill."
+  display_name: ""
+  high_is_good: true
+  icon_id: 0
+  name: "canNotBeTrainedOnTrial"
+  stackable: true

@@ -1,0 +1,9 @@
+{
+  "type_id" : 33097,
+  "primary_dogma_attribute_id" : 167,
+  "secondary_dogma_attribute_id" : 168,
+  "primary_character_attribute_id" : 3,
+  "secondary_character_attribute_id" : 5,
+  "training_time_multiplier" : 6,
+  "can_not_be_trained_on_trial" : false
+}
