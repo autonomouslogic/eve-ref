@@ -85,41 +85,11 @@ public class SkillCreator {
 				}
 
 				if (isSkill) {
-					var primaryAttributeDogmaId =
-							(long) helper.getDogmaFromType(type, primaryAttributeDogma.getAttributeId())
-									.orElseThrow()
-									.getValue();
-					var secondaryAttributeDogmaId =
-							(long) helper.getDogmaFromType(type, secondaryAttributeDogma.getAttributeId())
-									.orElseThrow()
-									.getValue();
-					var primaryAttributeDogma = objectMapper.convertValue(
-							dogmaAttributes.get(primaryAttributeDogmaId), DogmaAttribute.class);
-					var secondaryAttributeDogma = objectMapper.convertValue(
-							dogmaAttributes.get(secondaryAttributeDogmaId), DogmaAttribute.class);
-					var primaryCharacterAttributeId = ATTRIBUTE_ID_MAP.get(primaryAttributeDogma.getName());
-					var secondaryCharacterAttributeId = ATTRIBUTE_ID_MAP.get(secondaryAttributeDogma.getName());
-
-					var skillTimeConstantId = skillTimeConstantDogma.getAttributeId();
-					var mult = (int) helper.getDogmaFromType(type, skillTimeConstantId)
-							.orElseThrow()
-							.getValue();
-					var canNotBeTrainedOnTrial = helper.getDogmaFromType(
-											type, canNotBeTrainedOnTrialDogma.getAttributeId())
-									.map(v -> (int) v.getValue())
-									.orElseGet(() -> (int) (double) canNotBeTrainedOnTrialDogma.getDefaultValue())
-							== 1L;
-
-					var skill = Skill.builder()
-							.typeId(typeId)
-							.primaryDogmaAttributeId(primaryAttributeDogmaId)
-							.secondaryDogmaAttributeId(secondaryAttributeDogmaId)
-							.primaryCharacterAttributeId(primaryCharacterAttributeId)
-							.secondaryCharacterAttributeId(secondaryCharacterAttributeId)
-							.trainingTimeMultiplier(mult)
-							.canNotBeTrainedOnTrial(canNotBeTrainedOnTrial);
-					log.trace("Created skill: {}", skill.build());
-					skills.put(typeId, objectMapper.valueToTree(skill.build()));
+					try {
+						createSkill(typeId, type);
+					} catch (Exception e) {
+						throw new RuntimeException("Failed creating skill for type " + typeId, e);
+					}
 				}
 			}
 		});
@@ -172,5 +142,47 @@ public class SkillCreator {
 			requiredSkills.put(skillId, skillLevel);
 		}
 		return requiredSkills.isEmpty() ? null : objectMapper.valueToTree(requiredSkills);
+	}
+
+	private void createSkill(long typeId, InventoryType type) {
+		var primaryAttributeTypeDogma = helper.getDogmaFromType(type, primaryAttributeDogma.getAttributeId());
+		var secondaryAttributeTypeDogma = helper.getDogmaFromType(type, secondaryAttributeDogma.getAttributeId());
+		if (primaryAttributeTypeDogma.isEmpty() || secondaryAttributeTypeDogma.isEmpty()) {
+			log.warn(
+					"Not creating skill for {} [{}], either primary or secondary attribute dogma is missing.",
+					type.getName().get("en"),
+					typeId);
+			return;
+		}
+
+		var primaryAttributeDogmaId = (long) primaryAttributeTypeDogma.get().getValue();
+		var secondaryAttributeDogmaId = (long) secondaryAttributeTypeDogma.get().getValue();
+
+		var primaryAttributeDogma =
+				objectMapper.convertValue(dogmaAttributes.get(primaryAttributeDogmaId), DogmaAttribute.class);
+		var secondaryAttributeDogma =
+				objectMapper.convertValue(dogmaAttributes.get(secondaryAttributeDogmaId), DogmaAttribute.class);
+
+		var primaryCharacterAttributeId = ATTRIBUTE_ID_MAP.get(primaryAttributeDogma.getName());
+		var secondaryCharacterAttributeId = ATTRIBUTE_ID_MAP.get(secondaryAttributeDogma.getName());
+
+		var skillTimeConstantId = skillTimeConstantDogma.getAttributeId();
+		var mult = (int)
+				helper.getDogmaFromType(type, skillTimeConstantId).orElseThrow().getValue();
+		var canNotBeTrainedOnTrial = helper.getDogmaFromType(type, canNotBeTrainedOnTrialDogma.getAttributeId())
+						.map(v -> (int) v.getValue())
+						.orElseGet(() -> (int) (double) canNotBeTrainedOnTrialDogma.getDefaultValue())
+				== 1L;
+
+		var skill = Skill.builder()
+				.typeId(typeId)
+				.primaryDogmaAttributeId(primaryAttributeDogmaId)
+				.secondaryDogmaAttributeId(secondaryAttributeDogmaId)
+				.primaryCharacterAttributeId(primaryCharacterAttributeId)
+				.secondaryCharacterAttributeId(secondaryCharacterAttributeId)
+				.trainingTimeMultiplier(mult)
+				.canNotBeTrainedOnTrial(canNotBeTrainedOnTrial);
+		log.trace("Created skill: {}", skill.build());
+		skills.put(typeId, objectMapper.valueToTree(skill.build()));
 	}
 }
