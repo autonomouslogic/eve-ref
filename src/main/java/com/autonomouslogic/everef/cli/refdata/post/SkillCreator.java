@@ -2,6 +2,8 @@ package com.autonomouslogic.everef.cli.refdata.post;
 
 import com.autonomouslogic.everef.cli.refdata.StoreDataHelper;
 import com.autonomouslogic.everef.cli.refdata.StoreHandler;
+import com.autonomouslogic.everef.refdata.DogmaAttribute;
+import com.autonomouslogic.everef.refdata.InventoryType;
 import com.autonomouslogic.everef.refdata.Skill;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -38,10 +40,10 @@ public class SkillCreator {
 	private MVMap<Long, JsonNode> types;
 	private MVMap<Long, JsonNode> skills;
 	private MVMap<Long, JsonNode> dogmaAttributes;
-	private ObjectNode primaryAttributeDogma;
-	private ObjectNode secondaryAttributeDogma;
-	private ObjectNode skillTimeConstantDogma;
-	private ObjectNode canNotBeTrainedOnTrialDogma;
+	private DogmaAttribute primaryAttributeDogma;
+	private DogmaAttribute secondaryAttributeDogma;
+	private DogmaAttribute skillTimeConstantDogma;
+	private DogmaAttribute canNotBeTrainedOnTrialDogma;
 
 	@Inject
 	protected SkillCreator() {}
@@ -49,7 +51,7 @@ public class SkillCreator {
 	public Completable create() {
 		return Completable.fromAction(() -> {
 			log.info("Creating skills");
-			helper = new StoreDataHelper(storeHandler);
+			helper = new StoreDataHelper(storeHandler, objectMapper);
 			types = storeHandler.getRefStore("types");
 			skills = storeHandler.getRefStore("skills");
 			dogmaAttributes = storeHandler.getRefStore("dogmaAttributes");
@@ -66,56 +68,46 @@ public class SkillCreator {
 
 			for (long typeId : types.keySet()) {
 				var save = false;
-				var type = (ObjectNode) types.get(typeId);
-				var isSkill = isSkill(typeId, type, helper);
+				var typeJson = (ObjectNode) types.get(typeId);
+				var type = objectMapper.convertValue(typeJson, InventoryType.class);
+				var isSkill = isSkill(typeId, helper);
 				if (isSkill) {
-					type.put("is_skill", true);
+					typeJson.put("is_skill", true);
 					save = true;
 				}
 				var requiredSkills = createRequiredSkills(type, requiredSkillDogma, helper);
 				if (requiredSkills != null) {
-					type.put("required_skills", objectMapper.valueToTree(requiredSkills));
+					typeJson.put("required_skills", objectMapper.valueToTree(requiredSkills));
 					save = true;
 				}
 				if (save) {
-					types.put(typeId, type);
+					types.put(typeId, typeJson);
 				}
 
 				if (isSkill) {
-					var primaryAttributeId =
-							primaryAttributeDogma.get("attribute_id").asLong();
-					var secondaryAttributeId =
-							secondaryAttributeDogma.get("attribute_id").asLong();
-					var primaryAttributeDogmaId = helper.getDogmaFromType(type, primaryAttributeId)
-							.orElseThrow()
-							.get("value")
-							.asLong();
-					var secondaryAttributeDogmaId = helper.getDogmaFromType(type, secondaryAttributeId)
-							.orElseThrow()
-							.get("value")
-							.asLong();
-					var primaryAttributeDogma = dogmaAttributes.get(primaryAttributeDogmaId);
-					var secondaryAttributeDogma = dogmaAttributes.get(secondaryAttributeDogmaId);
-					var primaryCharacterAttributeId = ATTRIBUTE_ID_MAP.get(
-							primaryAttributeDogma.get("name").asText());
-					var secondaryCharacterAttributeId = ATTRIBUTE_ID_MAP.get(
-							secondaryAttributeDogma.get("name").asText());
+					var primaryAttributeDogmaId =
+							(long) helper.getDogmaFromType(type, primaryAttributeDogma.getAttributeId())
+									.orElseThrow()
+									.getValue();
+					var secondaryAttributeDogmaId =
+							(long) helper.getDogmaFromType(type, secondaryAttributeDogma.getAttributeId())
+									.orElseThrow()
+									.getValue();
+					var primaryAttributeDogma = objectMapper.convertValue(
+							dogmaAttributes.get(primaryAttributeDogmaId), DogmaAttribute.class);
+					var secondaryAttributeDogma = objectMapper.convertValue(
+							dogmaAttributes.get(secondaryAttributeDogmaId), DogmaAttribute.class);
+					var primaryCharacterAttributeId = ATTRIBUTE_ID_MAP.get(primaryAttributeDogma.getName());
+					var secondaryCharacterAttributeId = ATTRIBUTE_ID_MAP.get(secondaryAttributeDogma.getName());
 
-					var skillTimeConstantId =
-							skillTimeConstantDogma.get("attribute_id").asLong();
-					var mult = helper.getDogmaFromType(type, skillTimeConstantId)
+					var skillTimeConstantId = skillTimeConstantDogma.getAttributeId();
+					var mult = (int) helper.getDogmaFromType(type, skillTimeConstantId)
 							.orElseThrow()
-							.get("value")
-							.asInt();
+							.getValue();
 					var canNotBeTrainedOnTrial = helper.getDogmaFromType(
-											type,
-											canNotBeTrainedOnTrialDogma
-													.get("attribute_id")
-													.asLong())
-									.map(v -> v.get("value").asLong())
-									.orElseGet(() -> canNotBeTrainedOnTrialDogma
-											.get("default_value")
-											.asLong())
+											type, canNotBeTrainedOnTrialDogma.getAttributeId())
+									.map(v -> (int) v.getValue())
+									.orElseGet(() -> (int) (double) canNotBeTrainedOnTrialDogma.getDefaultValue())
 							== 1L;
 
 					var skill = Skill.builder()
@@ -127,13 +119,13 @@ public class SkillCreator {
 							.trainingTimeMultiplier(mult)
 							.canNotBeTrainedOnTrial(canNotBeTrainedOnTrial);
 					log.trace("Created skill: {}", skill.build());
-					storeHandler.getRefStore("skills").put(typeId, objectMapper.valueToTree(skill.build()));
+					skills.put(typeId, objectMapper.valueToTree(skill.build()));
 				}
 			}
 		});
 	}
 
-	private boolean isSkill(long typeId, @NonNull ObjectNode type, @NonNull StoreDataHelper helper) {
+	private boolean isSkill(long typeId, @NonNull StoreDataHelper helper) {
 		var categoryId = helper.getCategoryForType(typeId);
 		if (categoryId.isEmpty()) {
 			return false;
@@ -155,9 +147,8 @@ public class SkillCreator {
 						if (req.isEmpty() || level.isEmpty()) {
 							return Optional.empty();
 						}
-						return Optional.of(Pair.of(
-								req.get().get("attribute_id").asLong(),
-								level.get().get("attribute_id").asLong()));
+						return Optional.of(Pair.of((long) req.get().getAttributeId(), (long)
+								level.get().getAttributeId()));
 					}
 				})
 				.takeWhile(Optional::isPresent)
@@ -166,7 +157,7 @@ public class SkillCreator {
 	}
 
 	private ObjectNode createRequiredSkills(
-			@NotNull ObjectNode type,
+			@NotNull InventoryType type,
 			@NotNull List<Pair<Long, Long>> requiredSkillsDogma,
 			@NotNull StoreDataHelper helper) {
 		var requiredSkills = new LinkedHashMap<Long, Long>();
@@ -176,8 +167,8 @@ public class SkillCreator {
 			if (skill.isEmpty() || level.isEmpty()) {
 				continue;
 			}
-			var skillId = skill.get().get("value").asLong();
-			var skillLevel = level.get().get("value").asLong();
+			var skillId = (long) skill.get().getValue();
+			var skillLevel = (long) level.get().getValue();
 			requiredSkills.put(skillId, skillLevel);
 		}
 		return requiredSkills.isEmpty() ? null : objectMapper.valueToTree(requiredSkills);
