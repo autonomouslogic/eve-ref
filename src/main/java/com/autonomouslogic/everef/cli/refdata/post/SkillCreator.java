@@ -66,9 +66,10 @@ public class SkillCreator {
 
 			var requiredSkillDogma = getRequiredSkillDogmas(helper);
 
-			for (long typeId : types.keySet()) {
+			for (var entry : types.entrySet()) {
+				long typeId = entry.getKey();
 				var save = false;
-				var typeJson = (ObjectNode) types.get(typeId);
+				var typeJson = (ObjectNode) entry.getValue();
 				var type = objectMapper.convertValue(typeJson, InventoryType.class);
 				var isSkill = isSkill(typeId, helper);
 				if (isSkill) {
@@ -100,11 +101,7 @@ public class SkillCreator {
 		if (categoryId.isEmpty()) {
 			return false;
 		}
-		var isSkill = categoryId.get() == SKILL_CATEGORY_ID;
-		if (!isSkill) {
-			return false;
-		}
-		return true;
+		return categoryId.get() == SKILL_CATEGORY_ID;
 	}
 
 	private List<Pair<Long, Long>> getRequiredSkillDogmas(@NonNull StoreDataHelper helper) {
@@ -145,9 +142,9 @@ public class SkillCreator {
 	}
 
 	private void createSkill(long typeId, @NonNull InventoryType type, Map<Long, Integer> requiredSkills) {
-		var primaryAttributeTypeDogma = helper.getDogmaFromType(type, primaryAttributeDogma.getAttributeId());
-		var secondaryAttributeTypeDogma = helper.getDogmaFromType(type, secondaryAttributeDogma.getAttributeId());
-		if (primaryAttributeTypeDogma.isEmpty() || secondaryAttributeTypeDogma.isEmpty()) {
+		var primaryTypeDogma = helper.getDogmaFromType(type, primaryAttributeDogma.getAttributeId());
+		var secondaryTypeDogma = helper.getDogmaFromType(type, secondaryAttributeDogma.getAttributeId());
+		if (primaryTypeDogma.isEmpty() || secondaryTypeDogma.isEmpty()) {
 			log.warn(
 					"Not creating skill for {} [{}], either primary or secondary attribute dogma is missing.",
 					type.getName().get("en"),
@@ -155,16 +152,14 @@ public class SkillCreator {
 			return;
 		}
 
-		var primaryAttributeDogmaId = (long) primaryAttributeTypeDogma.get().getValue();
-		var secondaryAttributeDogmaId = (long) secondaryAttributeTypeDogma.get().getValue();
+		var primaryDogmaId = (long) primaryTypeDogma.get().getValue();
+		var secondaryDogmaId = (long) secondaryTypeDogma.get().getValue();
 
-		var primaryAttributeDogma =
-				objectMapper.convertValue(dogmaAttributes.get(primaryAttributeDogmaId), DogmaAttribute.class);
-		var secondaryAttributeDogma =
-				objectMapper.convertValue(dogmaAttributes.get(secondaryAttributeDogmaId), DogmaAttribute.class);
+		var primaryDogma = objectMapper.convertValue(dogmaAttributes.get(primaryDogmaId), DogmaAttribute.class);
+		var secondaryDogma = objectMapper.convertValue(dogmaAttributes.get(secondaryDogmaId), DogmaAttribute.class);
 
-		var primaryCharacterAttributeId = ATTRIBUTE_ID_MAP.get(primaryAttributeDogma.getName());
-		var secondaryCharacterAttributeId = ATTRIBUTE_ID_MAP.get(secondaryAttributeDogma.getName());
+		var primaryCharacterAttributeId = ATTRIBUTE_ID_MAP.get(primaryDogma.getName());
+		var secondaryCharacterAttributeId = ATTRIBUTE_ID_MAP.get(secondaryDogma.getName());
 
 		var skillTimeConstantId = skillTimeConstantDogma.getAttributeId();
 		var mult = (int)
@@ -179,8 +174,8 @@ public class SkillCreator {
 
 		var skill = Skill.builder()
 				.typeId(typeId)
-				.primaryDogmaAttributeId(primaryAttributeDogmaId)
-				.secondaryDogmaAttributeId(secondaryAttributeDogmaId)
+				.primaryDogmaAttributeId(primaryDogmaId)
+				.secondaryDogmaAttributeId(secondaryDogmaId)
 				.primaryCharacterAttributeId(primaryCharacterAttributeId)
 				.secondaryCharacterAttributeId(secondaryCharacterAttributeId)
 				.trainingTimeMultiplier(mult)
