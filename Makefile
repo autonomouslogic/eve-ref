@@ -1,4 +1,4 @@
-.PHONY: dist test format clean docker
+.PHONY: dist test format clean docker docs
 EVE_REF_VERSION = $(shell ./gradlew properties | grep version | cut -d' ' -f 2)
 DOCKER_TAG_BASE = autonomouslogic/eve-ref
 DOCKER_TAG = $(DOCKER_TAG_BASE):$(EVE_REF_VERSION)
@@ -50,3 +50,6 @@ version:
 renovate-validate:
 	npm install renovate
 	node node_modules/renovate/dist/config-validator.js
+
+dev-docs:
+	cd docs ; npm run dev

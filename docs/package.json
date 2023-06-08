@@ -1,0 +1,15 @@
+{
+  "name": "eve-ref-docs",
+  "private": true,
+  "description": "EVE Ref Documentation",
+  "main": "index.js",
+  "repository": "https://github.com/autonomouslogic/eve-ref/",
+  "scripts": {
+    "dev": "NODE_OPTIONS=--openssl-legacy-provider vuepress dev src",
+    "build": "NODE_OPTIONS=--openssl-legacy-provider vuepress build src"
+  },
+  "license": "MIT-0",
+  "devDependencies": {
+    "vuepress": "1.9.9"
+  }
+}

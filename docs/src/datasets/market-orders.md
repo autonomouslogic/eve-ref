@@ -1,6 +1,6 @@
 # Market Order Snapshots
 
-[These files](https://data.everef.net/market-orders/) contain full snapshots of the market orders in all regions.
+[data.everef.net/market-orders/](https://data.everef.net/market-orders/) contain full snapshots of the market orders in all regions.
 The scrape runs twice per hour at 15 and 45 minutes past the hour.
 The archives are single compressed CSV files and should be relatively easy to insert into a database.
 
