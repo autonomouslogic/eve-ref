@@ -1,5 +1,17 @@
 EVE Ref Changelog
 
+## [2.7.0](https://github.com/autonomouslogic/eve-ref/compare/2.6.2...2.7.0) (2023-06-08)
+
+
+### Features
+
+* Skills reference data ([#162](https://github.com/autonomouslogic/eve-ref/issues/162)) ([1594b98](https://github.com/autonomouslogic/eve-ref/commit/1594b9839afdcbd84c1f4832941a7a32db5fef1e))
+
+
+### Documentation
+
+* Documentation site ([#164](https://github.com/autonomouslogic/eve-ref/issues/164)) ([a856117](https://github.com/autonomouslogic/eve-ref/commit/a85611733b24d1e96fc919c74834c5261d315bcd))
+
 ## [2.6.2](https://github.com/autonomouslogic/eve-ref/compare/2.6.1...2.6.2) (2023-06-06)
 
 
