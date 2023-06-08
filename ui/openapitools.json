@@ -9,9 +9,6 @@
         "inputSpec": "../spec/reference-data.yaml",
         "output": "./refdata-openapi",
         "additionalProperties": {
-          "enumPropertyNaming": "original",
-          "modelPropertyNaming": "original",
-          "paramNaming": "original"
         }
       }
     }

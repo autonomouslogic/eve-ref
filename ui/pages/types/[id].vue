@@ -1,11 +1,11 @@
 <template>
   <div>
     <h2>id: {{ $route.params.id }}</h2>
-    <img :src="`https://images.evetech.net/types/${inventoryType.type_id}/icon`" alt="">
+    <img :src="`https://images.evetech.net/types/${inventoryType.typeId}/icon`" alt="">
 
     <p>Name: {{ inventoryType.name[locale] }}</p>
     <p>Description: {{ inventoryType.description[locale] }}</p>
-    <p>Price: {{ inventoryType.base_price }}</p>
+    <p>Price: {{ inventoryType.basePrice }}</p>
   </div>
 </template>
 
