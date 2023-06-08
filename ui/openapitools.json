@@ -5,9 +5,9 @@
     "version": "6.6.0",
     "generators": {
       "typescript": {
-        "generatorName": "typescript",
+        "generatorName": "typescript-fetch",
         "inputSpec": "../spec/reference-data.yaml",
-        "output": "./api",
+        "output": "./refdata-openapi",
         "additionalProperties": {
           "enumPropertyNaming": "original",
           "modelPropertyNaming": "original",

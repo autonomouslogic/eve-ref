@@ -10,10 +10,9 @@
 </template>
 
 <script setup lang="ts">
-  import {InventoryType} from "~/api";
+import {getInventoryType} from "~/refdata";
 
   const { locale } = useI18n();
-
   const route = useRoute();
   const id = route.params.id;
 
@@ -21,8 +20,7 @@
     console.error('id is null');
   }
 
-  const response = await useFetch(`https://ref-data.everef.net/types/${id}`);
-  const inventoryType: InventoryType = response.data as InventoryType;
+  const inventoryType = await getInventoryType(parseInt(id));
 </script>
 
 <style scoped>
