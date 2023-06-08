@@ -31,6 +31,7 @@ groups:
     filePrefix: group
     ids:
       - 1185
+      - 257
     languages:
       - en-us
 
@@ -73,6 +74,12 @@ types:
     filePrefix: type
     ids:
       - 645
+      - 3336
+      - 3327
+      - 33097
+      - 3332
+      - 33093
+      - 3328
     languages:
       - en-us
       - fr
@@ -97,3 +104,36 @@ dogmaAttributes:
     filePrefix: dogma-attribute
     ids:
       - 9
+      - 182
+      - 277
+      - 183
+      - 278
+      - 184
+      - 279
+      - 1285
+      - 1286
+      - 1289
+      - 1287
+      - 1290
+      - 1288
+      - 180
+      - 181
+      - 275
+      - 164
+      - 165
+      - 166
+      - 167
+      - 168
+      - 1047
+
+skills:
+  model: Skill
+  test:
+    filePrefix: skill
+    ids:
+      - 3327
+      - 3328
+      - 3332
+      - 3336
+      - 33093
+      - 33097

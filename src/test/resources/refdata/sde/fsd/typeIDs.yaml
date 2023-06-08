@@ -164,3 +164,169 @@
             importance: 1
             unitID: 105
   volume: 454500.0
+
+3336:
+  basePrice: 7500000.0
+  description:
+    de: Skill zur Bedienung von Gallente-Schlachtschiffen.
+    en: Skill at operating Gallente battleships.
+    es: Habilidad en el manejo de acorazados gallentes.
+    fr: Compétence liée au pilotage des cuirassés gallente.
+    ja: ガレンテ戦艦を操作するスキル。
+    ru: Освоив этот навык, пилот получит допуск к выполнению полётов на линкорах
+      производства Галлентской Федерации.
+    zh: 操作盖伦特战列舰的技能。
+  groupID: 257
+  iconID: 33
+  marketGroupID: 377
+  name:
+    de: Gallente Battleship
+    en: Gallente Battleship
+    es: Acorazado gallente
+    fr: Cuirassé gallente
+    ja: ガレンテ戦艦
+    ru: Галлентские линкоры
+    zh: 盖伦特战列舰操作
+  portionSize: 1
+  published: true
+  raceID: 8
+  volume: 0.01
+
+3327:
+  basePrice: 30000.0
+  description:
+    de: "Die grundsätzliche Fertigkeit, ein Raumschiff zu bedienen.\r\n\r\n2%
+            Bonus auf die Wendigkeit eines Schiffes je Skillstufe."
+    en: The basic operation of spaceships. 2% improved ship agility for all ships
+      per skill level.
+    es: Operación básica de naves espaciales. +2 % de bonificación a la agilidad
+      de todas las naves por nivel de habilidad.
+    fr: Pilotage de base des vaisseaux. Augmente de 2 % par niveau de compétence
+      la maniabilité de tous les vaisseaux.
+    ja: 宇宙船の基本操作スキル。スキルレベル上昇ごとに全ての船の機動性が2%上昇。
+    ru: 'Базовые навыки управления кораблями. За каждую степень освоения навыка:
+            на 2% повышается маневренность всех кораблей.'
+    zh: 操控舰船的基本技能。每升一级，所有飞船的灵活性提升2%。
+  groupID: 257
+  iconID: 33
+  marketGroupID: 377
+  name:
+    de: Spaceship Command
+    en: Spaceship Command
+    es: Manejo de naves espaciales
+    fr: Pilotage de vaisseau
+    ja: 宇宙船操作
+    ru: Допуски к управлению кораблями
+    zh: 飞船操控学
+  portionSize: 1
+  published: true
+  volume: 0.01
+
+33097:
+  basePrice: 2500000.0
+  description:
+    de: Skill zur Bedienung von Gallente-Schlachtkreuzern.
+    en: Skill at operating Gallente battlecruisers.
+    es: Habilidad en el manejo de cruceros de combate gallentes.
+    fr: Compétence liée au pilotage des croiseurs de bataille gallente. Formation
+      impossible sur les comptes d'évaluation.
+    ja: ガレンテ巡洋戦艦を操作するスキル。
+    ru: Освоив этот навык, пилот получит допуск к выполнению полётов на линейных
+      крейсерах производства Галлентской Федерации.
+    zh: 操作盖伦特战列巡洋舰的技能。
+  groupID: 257
+  iconID: 33
+  marketGroupID: 377
+  name:
+    de: Gallente Battlecruiser
+    en: Gallente Battlecruiser
+    es: Crucero de combate gallente
+    fr: Croiseur de bataille gallente
+    ja: ガレンテ巡洋戦艦
+    ru: Галлентские линейные крейсеры
+    zh: 盖伦特战列巡洋舰操作
+  portionSize: 1
+  published: true
+  raceID: 8
+  volume: 0.01
+
+3332:
+  basePrice: 1000000.0
+  description:
+    de: Fertigkeit, Kreuzer der Gallente zu bedienen.
+    en: Skill at operating Gallente cruisers.
+    es: Habilidad en el manejo de cruceros gallentes.
+    fr: Compétence liée au pilotage des croiseurs gallente.
+    ja: ガレンテ巡洋艦を操作するためのスキル。
+    ru: Освоив этот навык, пилот получит допуск к выполнению полётов на крейсерах
+      производства Галлентской Федерации.
+    zh: 操作盖伦特巡洋舰的技能。
+  groupID: 257
+  iconID: 33
+  marketGroupID: 377
+  name:
+    de: Gallente Cruiser
+    en: Gallente Cruiser
+    es: Crucero gallente
+    fr: Croiseur gallente
+    ja: ガレンテ巡洋艦
+    ru: Галлентские крейсеры
+    zh: 盖伦特巡洋舰操作
+  portionSize: 1
+  published: true
+  raceID: 8
+  volume: 0.01
+
+33093:
+  basePrice: 100000.0
+  description:
+    de: Fertigkeit, Zerstörer der Gallente zu bedienen.
+    en: Skill at operating Gallente destroyers.
+    es: Habilidad en el manejo de destructores gallentes.
+    fr: Compétence liée au pilotage des destroyers gallente.
+    ja: ガレンテ駆逐艦を操作するためのスキル。
+    ru: Освоив этот навык, пилот получит допуск к выполнению полётов на эсминцах
+      производства Галлентской Федерации.
+    zh: 操作盖伦特驱逐舰的技能。
+  groupID: 257
+  iconID: 33
+  marketGroupID: 377
+  name:
+    de: Gallente Destroyer
+    en: Gallente Destroyer
+    es: Destructor gallente
+    fr: Destroyer gallente
+    ja: ガレンテ駆逐艦
+    ru: Галлентские эсминцы
+    zh: 盖伦特驱逐舰操作
+  portionSize: 1
+  published: true
+  raceID: 8
+  volume: 0.01
+
+3328:
+  basePrice: 50000.0
+  description:
+    de: Fertigkeit, Fregatten der Gallente zu bedienen.
+    en: Skill at operating Gallente frigates.
+    es: Habilidad en el manejo de fragatas gallentes.
+    fr: Compétence liée au pilotage des frégates gallente.
+    ja: ガレンテフリゲートを操作するためのスキル。
+    ru: Освоив этот навык, пилот получит допуск к выполнению полётов на фрегатах
+      производства Галлентской Федерации.
+    zh: 操作盖伦特护卫舰的技能。
+  groupID: 257
+  iconID: 33
+  marketGroupID: 377
+  name:
+    de: Gallente Frigate
+    en: Gallente Frigate
+    es: Fragata gallente
+    fr: Frégate gallente
+    ja: ガレンテフリゲート
+    ru: Галлентские фрегаты
+    zh: 盖伦特护卫舰操作
+  portionSize: 1
+  published: true
+  raceID: 8
+  volume: 0.01

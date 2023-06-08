@@ -159,6 +159,9 @@ public class RefDataUtil {
 			@NonNull String filename, @NonNull Function<RefDataConfig, RefTypeConfig> typeConfigProvider) {
 		for (RefDataConfig config : loadReferenceDataConfig()) {
 			var type = typeConfigProvider.apply(config);
+			if (type == null) {
+				return null;
+			}
 			if (type.getFile().equals(filename)) {
 				return config;
 			}

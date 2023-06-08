@@ -98,4 +98,14 @@ public class InventoryType {
 
 	@JsonProperty
 	BigDecimal volume;
+
+	@JsonProperty("is_skill")
+	@Schema(defaultValue = "false", description = "Whether this type is a skill or not. This is added by EVE Ref.")
+	boolean skill;
+
+	@JsonProperty
+	@Schema(
+			description =
+					"The skills required for this type. The key is the skill type ID and the value is the level. This is added by EVE Ref and derived from dogma attributes.")
+	Map<Long, Integer> requiredSkills;
 }

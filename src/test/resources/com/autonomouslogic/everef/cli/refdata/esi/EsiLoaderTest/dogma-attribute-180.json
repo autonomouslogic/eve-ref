@@ -1,0 +1,15 @@
+{
+  "attribute_id" : 180,
+  "default_value" : 0,
+  "description" : {
+    "en" : "Only refers to another dogma attribute."
+  },
+  "display_name" : {
+    "en" : "Primary attribute"
+  },
+  "high_is_good" : true,
+  "name" : "primaryAttribute",
+  "published" : true,
+  "stackable" : true,
+  "unit_id" : 119
+}

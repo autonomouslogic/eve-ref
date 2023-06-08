@@ -222,6 +222,9 @@ public class TestDataUtil {
 	public File createTestSde() {
 		var entries = new ArrayList<Map.Entry<String, byte[]>>();
 		for (var config : refDataUtil.loadReferenceDataConfig()) {
+			if (config.getSde() == null) {
+				continue;
+			}
 			entries.add(createEntry("/refdata/", config.getSde().getFile()));
 		}
 		return createZipFile(Map.ofEntries(entries.toArray(new Map.Entry[0])));
@@ -231,6 +234,9 @@ public class TestDataUtil {
 	public File createTestEsiDump() {
 		var entries = new ArrayList<Map.Entry<String, byte[]>>();
 		for (var config : refDataUtil.loadReferenceDataConfig()) {
+			if (config.getEsi() == null) {
+				continue;
+			}
 			var file = config.getEsi().getFile();
 			var languages = config.getTest().getLanguages();
 			if (languages == null) {

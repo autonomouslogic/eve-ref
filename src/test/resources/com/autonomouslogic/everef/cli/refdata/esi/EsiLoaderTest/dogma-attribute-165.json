@@ -1,0 +1,16 @@
+{
+  "attribute_id" : 165,
+  "default_value" : 0,
+  "description" : {
+    "en" : "The intelligence of a character."
+  },
+  "display_name" : {
+    "en" : "Intelligence"
+  },
+  "high_is_good" : true,
+  "icon_id" : 1380,
+  "name" : "intelligence",
+  "published" : true,
+  "stackable" : true,
+  "unit_id" : 120
+}

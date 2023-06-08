@@ -1,0 +1,29 @@
+{
+  "base_price" : 50000,
+  "description" : {
+    "de" : "Fertigkeit, Fregatten der Gallente zu bedienen.",
+    "en" : "Skill at operating Gallente frigates.",
+    "es" : "Habilidad en el manejo de fragatas gallentes.",
+    "fr" : "Compétence liée au pilotage des frégates gallente.",
+    "ja" : "ガレンテフリゲートを操作するためのスキル。",
+    "ru" : "Освоив этот навык, пилот получит допуск к выполнению полётов на фрегатах производства Галлентской Федерации.",
+    "zh" : "操作盖伦特护卫舰的技能。"
+  },
+  "group_id" : 257,
+  "icon_id" : 33,
+  "market_group_id" : 377,
+  "name" : {
+    "de" : "Gallente Frigate",
+    "en" : "Gallente Frigate",
+    "es" : "Fragata gallente",
+    "fr" : "Frégate gallente",
+    "ja" : "ガレンテフリゲート",
+    "ru" : "Галлентские фрегаты",
+    "zh" : "盖伦特护卫舰操作"
+  },
+  "portion_size" : 1,
+  "published" : true,
+  "race_id" : 8,
+  "volume" : 0.01,
+  "type_id" : 3328
+}

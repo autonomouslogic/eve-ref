@@ -154,6 +154,41 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/MarketGroup'
+  /skills:
+    get:
+      tags:
+      - refdata
+      description: Get all dogma attribute IDs.
+      operationId: getAllSkills
+      responses:
+        "200":
+          description: Skill type IDs.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: integer
+                  format: int32
+  /skills/{skill_type_id}:
+    get:
+      tags:
+      - refdata
+      operationId: getSkill
+      parameters:
+      - name: skill_type_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: The skill.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Skill'
   /types:
     get:
       tags:
@@ -395,6 +430,21 @@ components:
           format: int32
         volume:
           type: number
+        required_skills:
+          type: object
+          additionalProperties:
+            type: integer
+            description: The skills required for this type. The key is the skill type
+              ID and the value is the level. This is added by EVE Ref and derived
+              from dogma attributes.
+            format: int32
+          description: The skills required for this type. The key is the skill type
+            ID and the value is the level. This is added by EVE Ref and derived from
+            dogma attributes.
+        is_skill:
+          type: boolean
+          description: Whether this type is a skill or not. This is added by EVE Ref.
+          default: false
       description: An inventory type
     InventoryTypeTraits:
       type: object
@@ -439,6 +489,41 @@ components:
         has_types:
           type: boolean
       description: A market group
+    Skill:
+      type: object
+      properties:
+        type_id:
+          type: integer
+          format: int64
+        primary_dogma_attribute_id:
+          type: integer
+          description: The dogma attribute ID of the primary training attribute.
+          format: int64
+        secondary_dogma_attribute_id:
+          type: integer
+          description: The dogma attribute ID of the secondary training attribute.
+          format: int64
+        primary_character_attribute_id:
+          type: integer
+          description: The character attribute ID of the primary training attribute.
+          format: int64
+        secondary_character_attribute_id:
+          type: integer
+          description: The character attribute ID of the secondary training attribute.
+          format: int64
+        training_time_multiplier:
+          type: integer
+          format: int32
+        can_not_be_trained_on_trial:
+          type: boolean
+        required_skills:
+          type: object
+          additionalProperties:
+            type: integer
+            description: The other skills required for this skill.
+            format: int32
+          description: The other skills required for this skill.
+      description: Details about skill types. These are created by EVE Ref.
     TraitBonus:
       type: object
       properties:

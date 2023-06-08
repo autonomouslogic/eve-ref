@@ -211,3 +211,290 @@
   radius: 250
   type_id: 645
   volume: 454500
+
+"3336":
+  capacity: 0
+  description: "Skill at operating Gallente battleships."
+  dogma_attributes:
+    - attribute_id: 161
+      value: 0.01
+    - attribute_id: 162
+      value: 1
+    - attribute_id: 4
+      value: 0
+    - attribute_id: 278
+      value: 3
+    - attribute_id: 38
+      value: 0
+    - attribute_id: 1047
+      value: 0
+    - attribute_id: 275
+      value: 8
+    - attribute_id: 180
+      value: 167
+    - attribute_id: 277
+      value: 4
+    - attribute_id: 182
+      value: 3327
+    - attribute_id: 183
+      value: 33097
+    - attribute_id: 280
+      value: 0
+    - attribute_id: 181
+      value: 168
+  dogma_effects:
+    - effect_id: 132
+      is_default: true
+    - effect_id: 611
+      is_default: false
+    - effect_id: 682
+      is_default: false
+    - effect_id: 11418
+      is_default: false
+  group_id: 257
+  icon_id: 33
+  market_group_id: 377
+  mass: 0
+  name: "Gallente Battleship"
+  packaged_volume: 0.01
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 3336
+  volume: 0.01
+
+"3327":
+  capacity: 0
+  description: "The basic operation of spaceships. 2% improved ship agility for all\
+    \ ships per skill level."
+  dogma_attributes:
+    - attribute_id: 193
+      value: 1
+    - attribute_id: 162
+      value: 1
+    - attribute_id: 4
+      value: 0
+    - attribute_id: 38
+      value: 0
+    - attribute_id: 161
+      value: 0.01
+    - attribute_id: 275
+      value: 1
+    - attribute_id: 180
+      value: 167
+    - attribute_id: 181
+      value: 168
+    - attribute_id: 151
+      value: -2
+    - attribute_id: 280
+      value: 0
+  dogma_effects:
+    - effect_id: 132
+      is_default: true
+    - effect_id: 232
+      is_default: false
+    - effect_id: 395
+      is_default: false
+  group_id: 257
+  icon_id: 33
+  market_group_id: 377
+  mass: 0
+  name: "Spaceship Command"
+  packaged_volume: 0.01
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 3327
+  volume: 0.01
+
+"33097":
+  capacity: 0
+  description: "Skill at operating Gallente battlecruisers."
+  dogma_attributes:
+    - attribute_id: 161
+      value: 0.01
+    - attribute_id: 162
+      value: 1
+    - attribute_id: 4
+      value: 0
+    - attribute_id: 278
+      value: 3
+    - attribute_id: 38
+      value: 0
+    - attribute_id: 1047
+      value: 0
+    - attribute_id: 275
+      value: 6
+    - attribute_id: 180
+      value: 167
+    - attribute_id: 277
+      value: 3
+    - attribute_id: 182
+      value: 3327
+    - attribute_id: 183
+      value: 3332
+    - attribute_id: 280
+      value: 0
+    - attribute_id: 181
+      value: 168
+  dogma_effects:
+    - effect_id: 132
+      is_default: true
+    - effect_id: 5288
+      is_default: false
+    - effect_id: 5289
+      is_default: false
+    - effect_id: 11062
+      is_default: false
+  group_id: 257
+  icon_id: 33
+  market_group_id: 377
+  mass: 0
+  name: "Gallente Battlecruiser"
+  packaged_volume: 0.01
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 33097
+  volume: 0.01
+
+"3332":
+  capacity: 0
+  description: "Skill at operating Gallente cruisers."
+  dogma_attributes:
+    - attribute_id: 161
+      value: 0.01
+    - attribute_id: 162
+      value: 1
+    - attribute_id: 4
+      value: 0
+    - attribute_id: 278
+      value: 3
+    - attribute_id: 38
+      value: 0
+    - attribute_id: 275
+      value: 5
+    - attribute_id: 180
+      value: 167
+    - attribute_id: 277
+      value: 2
+    - attribute_id: 182
+      value: 3327
+    - attribute_id: 183
+      value: 33093
+    - attribute_id: 280
+      value: 0
+    - attribute_id: 181
+      value: 168
+  dogma_effects:
+    - effect_id: 132
+      is_default: true
+    - effect_id: 517
+      is_default: false
+    - effect_id: 928
+      is_default: false
+    - effect_id: 6044
+      is_default: false
+  group_id: 257
+  icon_id: 33
+  market_group_id: 377
+  mass: 0
+  name: "Gallente Cruiser"
+  packaged_volume: 0.01
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 3332
+  volume: 0.01
+
+"33093":
+  capacity: 0
+  description: "Skill at operating Gallente destroyers."
+  dogma_attributes:
+    - attribute_id: 161
+      value: 0.01
+    - attribute_id: 162
+      value: 1
+    - attribute_id: 4
+      value: 0
+    - attribute_id: 38
+      value: 0
+    - attribute_id: 275
+      value: 2
+    - attribute_id: 180
+      value: 167
+    - attribute_id: 181
+      value: 168
+    - attribute_id: 182
+      value: 3328
+    - attribute_id: 1047
+      value: 0
+    - attribute_id: 280
+      value: 0
+    - attribute_id: 277
+      value: 3
+  dogma_effects:
+    - effect_id: 132
+      is_default: true
+    - effect_id: 5280
+      is_default: false
+    - effect_id: 5281
+      is_default: false
+    - effect_id: 11451
+      is_default: false
+  group_id: 257
+  icon_id: 33
+  market_group_id: 377
+  mass: 0
+  name: "Gallente Destroyer"
+  packaged_volume: 0.01
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 33093
+  volume: 0.01
+
+"3328":
+  capacity: 0
+  description: "Skill at operating Gallente frigates."
+  dogma_attributes:
+    - attribute_id: 161
+      value: 0.01
+    - attribute_id: 162
+      value: 1
+    - attribute_id: 4
+      value: 0
+    - attribute_id: 38
+      value: 0
+    - attribute_id: 275
+      value: 2
+    - attribute_id: 180
+      value: 167
+    - attribute_id: 181
+      value: 168
+    - attribute_id: 182
+      value: 3327
+    - attribute_id: 280
+      value: 0
+    - attribute_id: 277
+      value: 1
+  dogma_effects:
+    - effect_id: 132
+      is_default: true
+    - effect_id: 468
+      is_default: false
+    - effect_id: 751
+      is_default: false
+    - effect_id: 4600
+      is_default: false
+  group_id: 257
+  icon_id: 33
+  market_group_id: 377
+  mass: 0
+  name: "Gallente Frigate"
+  packaged_volume: 0.01
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 3328
+  volume: 0.01

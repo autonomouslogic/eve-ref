@@ -63,7 +63,8 @@ public class PublishRefDataTest {
 		mockS3Adapter.putTestObject(BUCKET_NAME, "index.html", "test", s3);
 		mockS3Adapter.putTestObject(BUCKET_NAME, "extra", "test", s3); // Not deleted, outside base path.
 		mockS3Adapter.putTestObject(BUCKET_NAME, "base/index.html", "test", s3);
-		mockS3Adapter.putTestObject(BUCKET_NAME, "base/types", "[645]", s3); // Not uploaded, content matches.
+		mockS3Adapter.putTestObject(
+				BUCKET_NAME, "base/types", expectedTypeIndex(), s3); // Not uploaded, content matches.
 		mockS3Adapter.putTestObject(BUCKET_NAME, "base/types/645", "test", s3);
 		mockS3Adapter.putTestObject(BUCKET_NAME, "base/types/999999999", "test", s3);
 	}
@@ -87,7 +88,8 @@ public class PublishRefDataTest {
 			var testConfig = config.getTest();
 			expectedKeys.add("base/" + config.getOutputFile());
 
-			var expectedIndex = objectMapper.valueToTree(testConfig.getIds());
+			var expectedIndex = objectMapper.valueToTree(
+					testConfig.getIds().stream().sorted().toList());
 			var actualIndex = objectMapper.readTree(mockS3Adapter
 					.getTestObject(BUCKET_NAME, "base/" + config.getOutputFile(), s3)
 					.orElseThrow());
@@ -111,5 +113,16 @@ public class PublishRefDataTest {
 
 		var deleteKeys = mockS3Adapter.getAllDeleteKeys(BUCKET_NAME, s3);
 		assertEquals(List.of("base/types/999999999"), deleteKeys);
+	}
+
+	@SneakyThrows
+	private String expectedTypeIndex() {
+		var types = refDataUtil.loadReferenceDataConfig().stream()
+				.filter(config -> config.getOutputFile().equals("types"))
+				.findFirst()
+				.orElseThrow();
+		var ids = types.getTest().getIds().stream().sorted().toList();
+		var json = objectMapper.writeValueAsString(ids);
+		return json;
 	}
 }

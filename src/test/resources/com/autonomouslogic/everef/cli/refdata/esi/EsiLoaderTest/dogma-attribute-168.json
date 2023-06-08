@@ -1,0 +1,16 @@
+{
+  "attribute_id" : 168,
+  "default_value" : 0,
+  "description" : {
+    "en" : "The willpower of a character."
+  },
+  "display_name" : {
+    "en" : "Willpower"
+  },
+  "high_is_good" : true,
+  "icon_id" : 1379,
+  "name" : "willpower",
+  "published" : true,
+  "stackable" : true,
+  "unit_id" : 120
+}
