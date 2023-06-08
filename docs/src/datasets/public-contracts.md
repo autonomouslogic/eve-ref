@@ -1,6 +1,7 @@
 # Public Contract Snapshots
 
-[These files](https://data.everef.net/public-contracts/) contain full snapshots of all the publicly available contracts.
+[data.everef.net/public-contracts/](https://data.everef.net/public-contracts/) contain full snapshots of all the publicly
+available contracts.
 Additionally, any dynamic (mutated Abyssal) items have their dogma attributes and effects fetched and included as well.
 This scrape runs twice per hour at 0 and 30 minutes past the hour.
 

@@ -38,21 +38,46 @@ module.exports = {
         link: 'https://github.com/autonomouslogic/eve-ref/'
       },
       {
+        text: 'Patreon',
+        link: 'https://www.patreon.com/everef'
+      },
+      {
         text: 'EVE Ref',
         link: 'https://everef.net'
       }
     ],
-    sidebar: {
-      '/': [
+    sidebar: [
+        "/",
         {
-          title: 'Guide',
+          title: "Datasets",
           collapsable: false,
           children: [
-            '',
+            'datasets/',
+            'datasets/market-orders',
+            'datasets/public-contracts',
+            'datasets/reference-data'
+          ]
+        },
+        {
+          title: "Commands",
+          collapsable: false,
+          children: [
+            'commands/docker.md',
+            'commands/field-replication.md',
+            'commands/build-ref-data.md',
+            'commands/scrape-market-orders.md',
+            'commands/scrape-public-contracts.md'
+          ]
+        },
+        {
+          title: "Development",
+          collapsable: false,
+          children: [
+            'development/esi-code-generation.md',
+            'development/logging.md'
           ]
         }
-      ],
-    }
+    ]
   },
 
   /**

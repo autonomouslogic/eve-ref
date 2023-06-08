@@ -1,3 +1,0 @@
-# EVE Ref
-
-Main page.
