@@ -22,6 +22,9 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 @Log4j2
 public class SlackDecorator {
 	private Optional<String> url;
+	private boolean reportSuccess;
+	private boolean reportFailure;
+	private boolean reportStacktrace;
 	private String channel;
 	private String username;
 
@@ -31,6 +34,9 @@ public class SlackDecorator {
 		if (url.isPresent()) {
 			channel = Configs.SLACK_WEBHOOK_CHANNEL.getRequired();
 			username = Configs.SLACK_WEBHOOK_USERNAME.getRequired();
+			reportSuccess = Configs.SLACK_REPORT_SUCCESS.getRequired();
+			reportFailure = Configs.SLACK_REPORT_FAILURE.getRequired();
+			reportStacktrace = Configs.SLACK_REPORT_FULL_STACKTRACE.getRequired();
 		}
 	}
 
@@ -62,48 +68,42 @@ public class SlackDecorator {
 	}
 
 	private Completable reportSuccess(@NonNull String commandName, Duration runtime) {
+		if (!reportSuccess) {
+			return Completable.complete();
+		}
 		return report(successMessage(
-				String.format("%s completed", commandName),
-				commandName,
 				String.format("%s completed in %s", commandName, runtime.truncatedTo(ChronoUnit.MILLIS))));
 	}
 
 	private Completable reportFailure(@NonNull String commandName, Duration runtime, Throwable error) {
+		if (!reportFailure) {
+			return Completable.complete();
+		}
 		return report(errorMessage(
-				String.format("%s failed", commandName),
-				commandName,
-				String.format("%s failed after %s", commandName, runtime.truncatedTo(ChronoUnit.MILLIS)),
-				error));
+				String.format("%s failed after %s", commandName, runtime.truncatedTo(ChronoUnit.MILLIS)), error));
 	}
 
 	private SlackMessage createMessage() {
 		return new SlackMessage().setUsername(username).setChannel(channel);
 	}
 
-	private SlackMessage successMessage(String text, String title, String message) {
+	private SlackMessage successMessage(@NonNull String message) {
 		SlackMessage msg = createMessage();
-		if (message == null) message = "";
-		msg.setText(text);
-		msg.addAttachments(new SlackAttachment()
-				.setColor("good")
-				.setTitle(title)
-				.setText(message)
-				.setFallback(message));
+		msg.setText(":large_green_circle: " + message);
 		return msg;
 	}
 
-	private SlackMessage errorMessage(String text, String title, String message, Throwable e) {
-		SlackMessage msg = createMessage();
-		if (message == null) message = "";
-		if (e != null) {
-			message += "\n" + ExceptionUtils.getMessage(e);
-		}
-		msg.setText(text);
-		msg.addAttachments(new SlackAttachment()
+	private SlackMessage errorMessage(@NonNull String message, Throwable e) {
+		var msg = createMessage();
+		msg.setText(":large_red_square: " + message);
+		var errorAttachment = new SlackAttachment()
 				.setColor("danger")
-				.setTitle(title)
-				.setText(message)
-				.setFallback(message));
+				.setText(ExceptionUtils.getRootCauseMessage(e))
+				.setFallback("");
+		if (reportStacktrace) {
+			errorAttachment.setText(ExceptionUtils.getStackTrace(e));
+		}
+		msg.addAttachments(errorAttachment);
 		return msg;
 	}
 

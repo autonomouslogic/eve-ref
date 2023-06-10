@@ -93,6 +93,33 @@ public class Configs {
 			.build();
 
 	/**
+	 * Whether command successes should be reported to Slack.
+	 */
+	public static final Config<Boolean> SLACK_REPORT_SUCCESS = Config.<Boolean>builder()
+			.name("SLACK_REPORT_SUCCESS")
+			.defaultValue(true)
+			.type(Boolean.class)
+			.build();
+
+	/**
+	 * Whether command failures should be reported to Slack.
+	 */
+	public static final Config<Boolean> SLACK_REPORT_FAILURE = Config.<Boolean>builder()
+			.name("SLACK_REPORT_FAILURE")
+			.defaultValue(true)
+			.type(Boolean.class)
+			.build();
+
+	/**
+	 * Whether full stack traces should be reported to Slack.
+	 */
+	public static final Config<Boolean> SLACK_REPORT_FULL_STACKTRACE = Config.<Boolean>builder()
+			.name("SLACK_REPORT_FULL_STACKTRACE")
+			.defaultValue(false)
+			.type(Boolean.class)
+			.build();
+
+	/**
 	 * The base path used when accessing the ESI.
 	 */
 	public static final Config<URI> ESI_BASE_URL = Config.<URI>builder()
