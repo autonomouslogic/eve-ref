@@ -141,7 +141,7 @@ public class BuildRefDataTest {
 
 		if (config.getId().equals("types")) {
 			// Check the encoded JSON contains full numbers. This comes from type 645 Dominix.
-			assertTrue(new String(jsonBytes).contains("\"base_price\":153900000"));
+			assertTrue(new String(jsonBytes).contains("\"base_price\" : 153900000"));
 		}
 	}
 

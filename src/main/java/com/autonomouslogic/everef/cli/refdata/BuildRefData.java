@@ -231,7 +231,8 @@ public class BuildRefData implements Command {
 	@SneakyThrows
 	private void writeEntries(String name, MVMap<Long, JsonNode> store, TarArchiveOutputStream tar) {
 		var file = tempFiles.tempFile("ref-data" + name, ".json").toFile();
-		try (var generator = objectMapper.createGenerator(new FileOutputStream(file))) {
+		var printer = objectMapper.writerWithDefaultPrettyPrinter();
+		try (var generator = printer.createGenerator(new FileOutputStream(file))) {
 			generator.writeStartObject();
 			for (var entry : store.entrySet()) {
 				generator.writeFieldName(entry.getKey().toString());
