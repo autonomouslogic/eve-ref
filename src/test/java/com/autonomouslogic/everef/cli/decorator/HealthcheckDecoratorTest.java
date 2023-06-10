@@ -2,6 +2,7 @@ package com.autonomouslogic.everef.cli.decorator;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -122,7 +123,12 @@ public class HealthcheckDecoratorTest {
 		assertEquals("test error message", error.getMessage());
 		verify(testCommand).run();
 		var request = server.takeRequest();
-		testDataUtil.assertRequest(request, "/log?key=val", "RuntimeException: test error message");
+		testDataUtil.assertRequest(
+				request,
+				"POST",
+				"/log?key=val",
+				s -> assertTrue(s.startsWith("java.lang.RuntimeException: test error message\n"
+						+ "\tat com.autonomouslogic.everef.cli.decorator.HealthcheckDecoratorTest")));
 		testDataUtil.assertNoMoreRequests(server);
 	}
 
@@ -174,7 +180,8 @@ public class HealthcheckDecoratorTest {
 		var start = server.takeRequest();
 		testDataUtil.assertRequest(start, "POST", "/start?key=val", null);
 		var log = server.takeRequest();
-		testDataUtil.assertRequest(log, "/log?key=val", "RuntimeException: test error message");
+		testDataUtil.assertRequest(
+				log, "POST", "/log?key=val", body -> assertTrue(body.contains("RuntimeException: test error message")));
 		var fail = server.takeRequest();
 		testDataUtil.assertRequest(fail, "POST", "/fail?key=val", null);
 		testDataUtil.assertNoMoreRequests(server);

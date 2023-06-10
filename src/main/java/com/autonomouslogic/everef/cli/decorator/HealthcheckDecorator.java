@@ -94,7 +94,7 @@ public class HealthcheckDecorator {
 		public Completable run() {
 			return Completable.concatArray(ping(startUrl), delegate.run(), ping(finishUrl))
 					.onErrorResumeNext(e -> Completable.concatArray(
-									ping(logUrl, Optional.of(ExceptionUtils.getMessage(e))), ping(failUrl))
+									ping(logUrl, Optional.of(ExceptionUtils.getStackTrace(e))), ping(failUrl))
 							.andThen(Completable.error(e)));
 		}
 
