@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2>id: {{ $route.params.id }}</h2>
+    <h2>id: {{ $route.params.typeId }}</h2>
     <img :src="`https://images.evetech.net/types/${inventoryType.typeId}/icon`" alt="">
 
     <p>Name: {{ inventoryType.name[locale] }}</p>
@@ -10,17 +10,17 @@
 </template>
 
 <script setup lang="ts">
-import {getInventoryType} from "~/refdata";
+import refdataApi from "~/refdata";
 
   const { locale } = useI18n();
   const route = useRoute();
-  const id = route.params.id;
+  const typeId = route.params.typeId;
 
-  if (!id) {
-    console.error('id is null');
+  if (!typeId) {
+    console.error('typeId is null');
   }
 
-  const inventoryType = await getInventoryType(parseInt(id));
+  const inventoryType = await refdataApi.getType({typeId});
 </script>
 
 <style scoped>
