@@ -498,3 +498,145 @@
   radius: 1
   type_id: 3328
   volume: 0.01
+
+"52225":
+  capacity: 0
+  description: "This bioadaptive mutaplasmid tool is designed to interface with and\
+    \ alter devices that mitigate the impact of critical system damage. As such this\
+    \ mutaplasmid could be used to mutate the performance characteristics of standard\
+    \ damage control modules.\r\n\r\nTriglavian bioadaptive technology makes extensive\
+    \ use of engineered colonies of extremophilic bacteria, that are used to grow,\
+    \ harvest and adapt various resources found in Abyssal Deadspace. Artificial colonizing\
+    \ plasmids integrated into specialist tools used for direct adaptation of technology\
+    \ can be found in Triglavian caches in various stages of development. These mutaplasmids\
+    \ can be used to alter the characteristics of a wide variety of equipment types,\
+    \ depending on the strain and the bioadaptive tool with which they are integrated.\r\
+    \n\r\nThe mutaplasmid colony integrated into this bioadaptive tool appears to\
+    \ be mature and reproducing at a healthy rate. The mutational benefits and risks\
+    \ of using this mutaplasmid are within relatively balanced bounds."
+  group_id: 1964
+  icon_id: 24131
+  market_group_id: 2533
+  mass: 1
+  name: "Gravid Damage Control Mutaplasmid"
+  packaged_volume: 1
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 52225
+  volume: 1
+
+"52227":
+  capacity: 0
+  description: "Utilizes a combination of containment field emitters and redundancy\
+    \ systems to mitigate the impact of critical system damage. \r\n\r\nGrants a bonus\
+    \ to resistance for shield, armor and hull.\r\n\r\nOnly one Damage Control can\
+    \ be fit at a given time."
+  dogma_attributes:
+    - attribute_id: 161
+      value: 5
+    - attribute_id: 162
+      value: 1
+    - attribute_id: 4
+      value: 0
+    - attribute_id: 38
+      value: 0
+    - attribute_id: 1544
+      value: 1
+    - attribute_id: 277
+      value: 4
+    - attribute_id: 182
+      value: 3394
+  dogma_effects:
+    - effect_id: 11
+      is_default: false
+    - effect_id: 16
+      is_default: false
+    - effect_id: 2302
+      is_default: false
+  group_id: 60
+  icon_id: 77
+  mass: 0
+  name: "Abyssal Damage Control"
+  packaged_volume: 5
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 52227
+  volume: 5
+
+"2048":
+  capacity: 0
+  description: "Utilizes a combination of containment field emitters and redundancy\
+    \ systems to mitigate the impact of critical system damage. \r\n\r\nGrants a bonus\
+    \ to resistance for shield, armor and hull.\r\n\r\nOnly one Damage Control can\
+    \ be fit at a given time."
+  dogma_attributes:
+    - attribute_id: 4
+      value: 5000
+    - attribute_id: 1544
+      value: 1
+    - attribute_id: 9
+      value: 40
+    - attribute_id: 267
+      value: 0.85
+    - attribute_id: 268
+      value: 0.85
+    - attribute_id: 269
+      value: 0.85
+    - attribute_id: 270
+      value: 0.85
+    - attribute_id: 271
+      value: 0.875
+    - attribute_id: 272
+      value: 0.875
+    - attribute_id: 273
+      value: 0.875
+    - attribute_id: 274
+      value: 0.875
+    - attribute_id: 277
+      value: 4
+    - attribute_id: 1692
+      value: 0
+    - attribute_id: 30
+      value: 1
+    - attribute_id: 161
+      value: 5
+    - attribute_id: 162
+      value: 1
+    - attribute_id: 422
+      value: 2
+    - attribute_id: 50
+      value: 30
+    - attribute_id: 182
+      value: 3394
+    - attribute_id: 974
+      value: 0.6
+    - attribute_id: 975
+      value: 0.6
+    - attribute_id: 976
+      value: 0.6
+    - attribute_id: 977
+      value: 0.6
+    - attribute_id: 38
+      value: 0
+    - attribute_id: 633
+      value: 5
+  dogma_effects:
+    - effect_id: 11
+      is_default: false
+    - effect_id: 16
+      is_default: false
+    - effect_id: 2302
+      is_default: false
+  group_id: 60
+  icon_id: 77
+  market_group_id: 615
+  mass: 5000
+  name: "Damage Control II"
+  packaged_volume: 5
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 2048
+  volume: 5

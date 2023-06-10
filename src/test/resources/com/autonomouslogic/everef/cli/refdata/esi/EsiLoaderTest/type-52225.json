@@ -1,0 +1,19 @@
+{
+  "capacity" : 0,
+  "description" : {
+    "en" : "This bioadaptive mutaplasmid tool is designed to interface with and alter devices that mitigate the impact of critical system damage. As such this mutaplasmid could be used to mutate the performance characteristics of standard damage control modules.\r\n\r\nTriglavian bioadaptive technology makes extensive use of engineered colonies of extremophilic bacteria, that are used to grow, harvest and adapt various resources found in Abyssal Deadspace. Artificial colonizing plasmids integrated into specialist tools used for direct adaptation of technology can be found in Triglavian caches in various stages of development. These mutaplasmids can be used to alter the characteristics of a wide variety of equipment types, depending on the strain and the bioadaptive tool with which they are integrated.\r\n\r\nThe mutaplasmid colony integrated into this bioadaptive tool appears to be mature and reproducing at a healthy rate. The mutational benefits and risks of using this mutaplasmid are within relatively balanced bounds."
+  },
+  "group_id" : 1964,
+  "icon_id" : 24131,
+  "market_group_id" : 2533,
+  "mass" : 1,
+  "name" : {
+    "en" : "Gravid Damage Control Mutaplasmid"
+  },
+  "packaged_volume" : 1,
+  "portion_size" : 1,
+  "published" : true,
+  "radius" : 1,
+  "type_id" : 52225,
+  "volume" : 1
+}

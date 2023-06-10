@@ -5,6 +5,7 @@ import static com.autonomouslogic.everef.util.ArchivePathFactory.REFERENCE_DATA;
 
 import com.autonomouslogic.everef.cli.Command;
 import com.autonomouslogic.everef.cli.refdata.esi.EsiLoader;
+import com.autonomouslogic.everef.cli.refdata.post.MutiplasmidDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.SkillCreator;
 import com.autonomouslogic.everef.cli.refdata.sde.SdeLoader;
 import com.autonomouslogic.everef.config.Configs;
@@ -96,6 +97,9 @@ public class BuildRefData implements Command {
 	@Inject
 	protected Provider<SkillCreator> skillCreatorProvider;
 
+	@Inject
+	protected Provider<MutiplasmidDecorator> mutiplasmidDecoratorProvider;
+
 	@Setter
 	@NonNull
 	private ZonedDateTime buildTime = ZonedDateTime.now(ZoneOffset.UTC).truncatedTo(ChronoUnit.SECONDS);
@@ -150,8 +154,10 @@ public class BuildRefData implements Command {
 	}
 
 	private Completable postDatasets() {
-		return Completable.defer(
-				() -> skillCreatorProvider.get().setStoreHandler(storeHandler).create());
+		return Completable.defer(() -> Completable.concatArray(
+			skillCreatorProvider.get().setStoreHandler(storeHandler).create(),
+			mutiplasmidDecoratorProvider.get().setStoreHandler(storeHandler).create()
+		));
 	}
 
 	private Completable closeMvStore() {
