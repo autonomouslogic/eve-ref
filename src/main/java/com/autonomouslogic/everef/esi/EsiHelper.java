@@ -118,7 +118,7 @@ public class EsiHelper {
 
 	@SneakyThrows
 	public JsonNode decodeResponse(Response response) {
-		if (response.code() == 404) {
+		if (response.code() == 204 || response.code() == 404) {
 			return NullNode.getInstance();
 		}
 		if (response.code() != 200) {
