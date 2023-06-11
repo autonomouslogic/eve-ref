@@ -27,16 +27,13 @@ module.exports = {
    * ref：https://v1.vuepress.vuejs.org/theme/default-theme-config.html
    */
   themeConfig: {
-    repo: '',
+    repo: 'autonomouslogic/eve-ref',
     editLinks: false,
-    docsDir: '',
-    editLinkText: '',
-    lastUpdated: false,
+    docsDir: 'docs/src',
+    docsBranch: 'main',
+    editLinks: true,
+    lastUpdated: true,
     nav: [
-      {
-        text: 'Github',
-        link: 'https://github.com/autonomouslogic/eve-ref/'
-      },
       {
         text: 'Patreon',
         link: 'https://www.patreon.com/everef'
