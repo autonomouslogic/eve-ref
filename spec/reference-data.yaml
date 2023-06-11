@@ -445,6 +445,11 @@ components:
           type: boolean
           description: Whether this type is a skill or not. This is added by EVE Ref.
           default: false
+        is_mutaplasmid:
+          type: boolean
+          description: Whether this type is a mutaplasmid or not. This is added by
+            EVE Ref.
+          default: false
       description: An inventory type
     InventoryTypeTraits:
       type: object

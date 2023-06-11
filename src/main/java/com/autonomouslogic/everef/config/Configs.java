@@ -437,8 +437,8 @@ public class Configs {
 	/**
 	 * URL for the Hoboleaks <code>dynamicitemattributes.json</code> file.
 	 */
-	public static final Config<URI> HOBOLEAKS_DYNAMIC_ATTRIBUTES = Config.<URI>builder()
-			.name("HOBOLEAKS_DYNAMIC_ATTRIBUTES")
+	public static final Config<URI> HOBOLEAKS_DYNAMIC_ATTRIBUTES_URL = Config.<URI>builder()
+			.name("HOBOLEAKS_DYNAMIC_ATTRIBUTES_URL")
 			.type(URI.class)
 			.defaultValue(URI.create("https://sde.hoboleaks.space/tq/dynamicitemattributes.json"))
 			.build();

@@ -108,4 +108,10 @@ public class InventoryType {
 			description =
 					"The skills required for this type. The key is the skill type ID and the value is the level. This is added by EVE Ref and derived from dogma attributes.")
 	Map<Long, Integer> requiredSkills;
+
+	@JsonProperty("is_mutaplasmid")
+	@Schema(
+			defaultValue = "false",
+			description = "Whether this type is a mutaplasmid or not. This is added by EVE Ref.")
+	boolean mutaplasmid;
 }
