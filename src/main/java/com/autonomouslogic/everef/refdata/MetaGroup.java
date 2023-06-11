@@ -26,4 +26,7 @@ public class MetaGroup {
 
 	@JsonProperty
 	Map<String, String> name;
+
+	@JsonProperty
+	Map<String, String> description;
 }

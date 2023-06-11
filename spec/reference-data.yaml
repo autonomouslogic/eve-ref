@@ -602,6 +602,10 @@ components:
           type: object
           additionalProperties:
             type: string
+        description:
+          type: object
+          additionalProperties:
+            type: string
       description: A meta group
     Mutaplasmid:
       type: object

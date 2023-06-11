@@ -136,6 +136,7 @@ metaGroups:
     file: sde/fsd/metaGroups.yaml
     renames:
       name_id: name
+      description_id: description
   test:
     filePrefix: meta-group
     ids:
