@@ -133,7 +133,7 @@ public interface ReferenceDataSpec {
 
 	@GET
 	@Path("/skills")
-	@Operation(description = "Get all dogma attribute IDs.")
+	@Operation(description = "Get all skill type IDs.")
 	@ApiResponse(
 			responseCode = "200",
 			description = "Skill type IDs.",
@@ -150,4 +150,24 @@ public interface ReferenceDataSpec {
 			useReturnTypeSchema = true,
 			content = @Content(mediaType = "application/json"))
 	Skill getSkill(@PathParam("skill_type_id") int skillTypeId);
+
+	@GET
+	@Path("/mutaplasmids")
+	@Operation(description = "Get all mutaplasmid IDs.")
+	@ApiResponse(
+			responseCode = "200",
+			description = "Mutaplasmid type IDs.",
+			useReturnTypeSchema = true,
+			content = @Content(mediaType = "application/json"))
+	List<Integer> getAllMutaplasmids();
+
+	@GET
+	@Path("/mutaplasmids/{mutaplasmid_type_id}")
+	@Operation
+	@ApiResponse(
+			responseCode = "200",
+			description = "The mutaplasmid.",
+			useReturnTypeSchema = true,
+			content = @Content(mediaType = "application/json"))
+	Mutaplasmid getMutaplasmid(@PathParam("mutaplasmid_type_id") int mutaplasmidTypeId);
 }

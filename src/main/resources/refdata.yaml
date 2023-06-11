@@ -80,6 +80,9 @@ types:
       - 3332
       - 33093
       - 3328
+      - 52225
+      - 52227
+      - 2048
     languages:
       - en-us
       - fr
@@ -137,3 +140,10 @@ skills:
       - 3336
       - 33093
       - 33097
+
+mutaplasmids:
+  model: Mutaplasmid
+  test:
+    filePrefix: mutaplasmid
+    ids:
+      - 52225

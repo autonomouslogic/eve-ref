@@ -1,0 +1,155 @@
+{
+  "description" : {
+    "de" : "Verwendet eine Kombination aus Dämpfungsfeldemittern und Redundanzystemen um die Auswirkungen von kritischen Systemschäden zu verhindern. \n\n\n\nVerleiht einen Bonus auf die Widerstandsfähigkeit von Schild, Panzerung und Schiffsstruktur.\n\n\n\nEs kann immer nur ein Schadenskontroll-System zu einem festgelegten Zeitpunkt eingebaut werden.",
+    "en" : "Utilizes a combination of containment field emitters and redundancy systems to mitigate the impact of critical system damage. \r\n\r\nGrants a bonus to resistance for shield, armor and hull.\r\n\r\nOnly one Damage Control can be fit at a given time.",
+    "es" : "Usa una combinación de emisores de campo de contención y sistemas redundantes para mitigar el impacto de daños críticos al sistema. \n\n\n\nOtorga una bonificación de resistencia de escudo, blindaje y casco.\n\n\n\nSolo se puede equipar un control de daños a la vez.",
+    "fr" : "Ce module combine des émetteurs de champ de confinement et des systèmes de redondance voués à mitiger l'impact dévastateur de dégâts critiques sur le système. \n\n\n\nOffre un bonus de résistance aux boucliers, au blindage et à la coque.\n\n\n\nUn seul régulateur de dégâts peut être équipé à la fois.",
+    "ja" : "格納型電界エミッターと冗長システムを組み合わせることにより、システムが深刻なダメージを受けた場合の影響を軽減する。シールド、アーマー、船体レジスタンスが向上する。ダメージコントロールは一度に一つしか装備できない。",
+    "ru" : "Использует технологию локальных защитных полей и принципы многократного резервирования для уменьшения последствий серьезных повреждений бортовых систем. \n\n\n\nПовышает сопротивляемость силовых полей, брони и корпуса корабля всем видам поражающего действия.\n\n\n\nДопускается одновременное использование лишь одного модуля боевой живучести (Damage Control).",
+    "zh" : "将围场发射器和冗余系统结合使用，减轻由严重系统性损坏造成的影响。 \n\n\n\n提高护盾、装甲和结构的抗性。\n\n\n\n只能同时装配一个损伤控制。"
+  },
+  "group_id" : 60,
+  "icon_id" : 77,
+  "market_group_id" : 615,
+  "mass" : 5000,
+  "meta_group_id" : 2,
+  "name" : {
+    "de" : "Damage Control II",
+    "en" : "Damage Control II",
+    "es" : "Control de daños II",
+    "fr" : "Contrôle des dégâts II",
+    "ja" : "ダメージ制御II",
+    "ru" : "Damage Control II",
+    "zh" : "损伤控制 II"
+  },
+  "portion_size" : 1,
+  "published" : true,
+  "variation_parent_type_id" : 2046,
+  "volume" : 5,
+  "type_id" : 2048,
+  "capacity" : 0,
+  "dogma_attributes" : {
+    "4" : {
+      "attribute_id" : 4,
+      "value" : 5000
+    },
+    "1544" : {
+      "attribute_id" : 1544,
+      "value" : 1
+    },
+    "9" : {
+      "attribute_id" : 9,
+      "value" : 40
+    },
+    "267" : {
+      "attribute_id" : 267,
+      "value" : 0.85
+    },
+    "268" : {
+      "attribute_id" : 268,
+      "value" : 0.85
+    },
+    "269" : {
+      "attribute_id" : 269,
+      "value" : 0.85
+    },
+    "270" : {
+      "attribute_id" : 270,
+      "value" : 0.85
+    },
+    "271" : {
+      "attribute_id" : 271,
+      "value" : 0.875
+    },
+    "272" : {
+      "attribute_id" : 272,
+      "value" : 0.875
+    },
+    "273" : {
+      "attribute_id" : 273,
+      "value" : 0.875
+    },
+    "274" : {
+      "attribute_id" : 274,
+      "value" : 0.875
+    },
+    "277" : {
+      "attribute_id" : 277,
+      "value" : 4
+    },
+    "1692" : {
+      "attribute_id" : 1692,
+      "value" : 0
+    },
+    "30" : {
+      "attribute_id" : 30,
+      "value" : 1
+    },
+    "161" : {
+      "attribute_id" : 161,
+      "value" : 5
+    },
+    "162" : {
+      "attribute_id" : 162,
+      "value" : 1
+    },
+    "422" : {
+      "attribute_id" : 422,
+      "value" : 2
+    },
+    "50" : {
+      "attribute_id" : 50,
+      "value" : 30
+    },
+    "182" : {
+      "attribute_id" : 182,
+      "value" : 3394
+    },
+    "974" : {
+      "attribute_id" : 974,
+      "value" : 0.6
+    },
+    "975" : {
+      "attribute_id" : 975,
+      "value" : 0.6
+    },
+    "976" : {
+      "attribute_id" : 976,
+      "value" : 0.6
+    },
+    "977" : {
+      "attribute_id" : 977,
+      "value" : 0.6
+    },
+    "38" : {
+      "attribute_id" : 38,
+      "value" : 0
+    },
+    "633" : {
+      "attribute_id" : 633,
+      "value" : 5
+    }
+  },
+  "dogma_effects" : {
+    "11" : {
+      "effect_id" : 11,
+      "is_default" : false
+    },
+    "16" : {
+      "effect_id" : 16,
+      "is_default" : false
+    },
+    "2302" : {
+      "effect_id" : 2302,
+      "is_default" : false
+    }
+  },
+  "packaged_volume" : 5,
+  "radius" : 1,
+  "required_skills" : {
+    "3394" : 4
+  },
+  "applicable_mutaplasmid_type_ids": [
+    52225
+  ]
+}

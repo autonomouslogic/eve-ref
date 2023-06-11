@@ -45,6 +45,9 @@ import software.amazon.awssdk.services.s3.S3AsyncClient;
 @Log4j2
 @SetEnvironmentVariable(key = "DATA_PATH", value = "s3://" + BuildRefDataTest.BUCKET_NAME + "/base/")
 @SetEnvironmentVariable(key = "DATA_BASE_URL", value = "http://localhost:" + TEST_PORT)
+@SetEnvironmentVariable(
+		key = "HOBOLEAKS_DYNAMIC_ATTRIBUTES_URL",
+		value = "http://localhost:" + TEST_PORT + "/hoboleaks/dynamicitemattributes.json")
 public class BuildRefDataTest {
 	static final String BUCKET_NAME = "data-bucket";
 
@@ -170,6 +173,12 @@ public class BuildRefDataTest {
 						return new MockResponse()
 								.setResponseCode(200)
 								.setBody(new Buffer().write(IOUtils.toByteArray(new FileInputStream(esi))));
+					case "/hoboleaks/dynamicitemattributes.json":
+						return new MockResponse()
+								.setResponseCode(200)
+								.setBody(new Buffer()
+										.write(IOUtils.toByteArray(ResourceUtil.loadResource(
+												"/refdata/hoboleaks/dynamicitemattributes.json"))));
 				}
 				return new MockResponse().setResponseCode(404);
 			} catch (Exception e) {

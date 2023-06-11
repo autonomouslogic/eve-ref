@@ -5,7 +5,7 @@ title: Reference Data
 
 The reference data build is currently in development.
 <https://github.com/autonomouslogic/eve-ref/milestone/3>.
-Any files [data.everef.net/ref-data](https://data.everef.net/ref-data) are not final and the format may change at any time.
+Any files <https://data.everef.net/reference-data/> are not final and the format may change at any time.
 
 ## Spec
 The full OpenAPI spec is [available on Github](https://github.com/autonomouslogic/eve-ref/blob/main/spec/reference-data.yaml).
@@ -23,6 +23,8 @@ Some example paths:
 * <https://ref-data.everef.net/dogma_attributes/37>
 * <https://ref-data.everef.net/skills>
 * <https://ref-data.everef.net/skills/3336>
+* <https://ref-data.everef.net/mutaplasmids>
+* <https://ref-data.everef.net/mutaplasmids/52225>
 
 ## Motivation
 Two primary datasets are available for third-party developers of EVE Online: the SDE and ESI.

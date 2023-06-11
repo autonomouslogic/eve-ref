@@ -108,4 +108,27 @@ public class InventoryType {
 			description =
 					"The skills required for this type. The key is the skill type ID and the value is the level. This is added by EVE Ref and derived from dogma attributes.")
 	Map<Long, Integer> requiredSkills;
+
+	@JsonProperty("is_mutaplasmid")
+	@Schema(
+			defaultValue = "false",
+			description = "Whether this type is a mutaplasmid or not. This is added by EVE Ref.")
+	boolean mutaplasmid;
+
+	@JsonProperty
+	@Schema(
+			description =
+					"Which mutaplasmids can be applied to this type to create a dynamic item. This is added by EVE Ref.")
+	List<Long> applicableMutaplasmidTypeIds;
+
+	@JsonProperty
+	@Schema(description = "Which mutaplasmids can used to create this dynamic item. This is added by EVE Ref.")
+	List<Long> creatingMutaplasmidTypeIds;
+
+	@JsonProperty("is_dynamic_item")
+	@Schema(
+			defaultValue = "false",
+			description =
+					"Whether this type is a dynamic item created by a mutaplasmid or not. This is added by EVE Ref.")
+	boolean dynamicItem;
 }
