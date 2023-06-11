@@ -441,6 +441,26 @@ components:
           description: The skills required for this type. The key is the skill type
             ID and the value is the level. This is added by EVE Ref and derived from
             dogma attributes.
+        applicable_mutaplasmid_type_ids:
+          type: array
+          description: Which mutaplasmids can be applied to this type to create a
+            dynamic item. This is added by EVE Ref.
+          items:
+            type: integer
+            description: Which mutaplasmids can be applied to this type to create
+              a dynamic item. This is added by EVE Ref.
+            format: int64
+          default: false
+        creating_mutaplasmid_type_ids:
+          type: array
+          description: Which mutaplasmids can used to create this dynamic item. This
+            is added by EVE Ref.
+          items:
+            type: integer
+            description: Which mutaplasmids can used to create this dynamic item.
+              This is added by EVE Ref.
+            format: int64
+          default: false
         is_skill:
           type: boolean
           description: Whether this type is a skill or not. This is added by EVE Ref.

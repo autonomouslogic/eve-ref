@@ -74,5 +74,8 @@
   "radius" : 1,
   "required_skills" : {
     "3394" : 4
-  }
+  },
+  "creating_mutaplasmid_type_ids": [
+    52225
+  ]
 }

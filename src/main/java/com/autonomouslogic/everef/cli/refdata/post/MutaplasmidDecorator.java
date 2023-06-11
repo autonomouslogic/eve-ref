@@ -49,7 +49,14 @@ public class MutaplasmidDecorator {
 			return hoboleaksHelper.fetchDynamicAttributes().flatMapCompletable(dynamicAttributes -> {
 				for (var entry : dynamicAttributes.entrySet()) {
 					var mutaplasmidTypeId = entry.getKey();
+					var dynamics = entry.getValue();
 					setIsMutaplasmid(mutaplasmidTypeId);
+					for (var mapping : dynamics.getInputOutputMapping()) {
+						addCreatingMutaplasmid(mapping.getResultingType(), mutaplasmidTypeId);
+						for (var applicableType : mapping.getApplicableTypes()) {
+							addApplicableMutaplasmid(applicableType, mutaplasmidTypeId);
+						}
+					}
 				}
 				return Completable.complete();
 			});
@@ -63,6 +70,28 @@ public class MutaplasmidDecorator {
 			return;
 		}
 		type.put("is_mutaplasmid", true);
+		types.put(typeId, type);
+	}
+
+	private void addApplicableMutaplasmid(long typeId, long mutaplasmidTypeId) {
+		var type = (ObjectNode) types.get(typeId);
+		if (type == null) {
+			log.warn("Could not set type {} as being mutable by mutaplasmid, not found", typeId);
+			return;
+		}
+		var array = type.withArray("applicable_mutaplasmid_type_ids");
+		array.add(mutaplasmidTypeId);
+		types.put(typeId, type);
+	}
+
+	private void addCreatingMutaplasmid(long typeId, long mutaplasmidTypeId) {
+		var type = (ObjectNode) types.get(typeId);
+		if (type == null) {
+			log.warn("Could not set type {} as being created by mutaplasmid, not found", typeId);
+			return;
+		}
+		var array = type.withArray("creating_mutaplasmid_type_ids");
+		array.add(mutaplasmidTypeId);
 		types.put(typeId, type);
 	}
 }

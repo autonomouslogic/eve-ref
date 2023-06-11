@@ -114,4 +114,17 @@ public class InventoryType {
 			defaultValue = "false",
 			description = "Whether this type is a mutaplasmid or not. This is added by EVE Ref.")
 	boolean mutaplasmid;
+
+	@JsonProperty
+	@Schema(
+			defaultValue = "false",
+			description =
+					"Which mutaplasmids can be applied to this type to create a dynamic item. This is added by EVE Ref.")
+	List<Long> applicableMutaplasmidTypeIds;
+
+	@JsonProperty
+	@Schema(
+			defaultValue = "false",
+			description = "Which mutaplasmids can used to create this dynamic item. This is added by EVE Ref.")
+	List<Long> creatingMutaplasmidTypeIds;
 }
