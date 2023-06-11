@@ -53,6 +53,7 @@ public class MutaplasmidDecorator {
 					setIsMutaplasmid(mutaplasmidTypeId);
 					for (var mapping : dynamics.getInputOutputMapping()) {
 						addCreatingMutaplasmid(mapping.getResultingType(), mutaplasmidTypeId);
+						setIsDynamicItem(mapping.getResultingType());
 						for (var applicableType : mapping.getApplicableTypes()) {
 							addApplicableMutaplasmid(applicableType, mutaplasmidTypeId);
 						}
@@ -92,6 +93,16 @@ public class MutaplasmidDecorator {
 		}
 		var array = type.withArray("creating_mutaplasmid_type_ids");
 		array.add(mutaplasmidTypeId);
+		types.put(typeId, type);
+	}
+
+	private void setIsDynamicItem(long typeId) {
+		var type = (ObjectNode) types.get(typeId);
+		if (type == null) {
+			log.warn("Could not set type {} as dynamic item, not found", typeId);
+			return;
+		}
+		type.put("is_dynamic_item", true);
 		types.put(typeId, type);
 	}
 }

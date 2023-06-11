@@ -470,6 +470,11 @@ components:
           description: Whether this type is a mutaplasmid or not. This is added by
             EVE Ref.
           default: false
+        is_dynamic_item:
+          type: boolean
+          description: Whether this type is a dynamic item created by a mutaplasmid
+            or not. This is added by EVE Ref.
+          default: false
       description: An inventory type
     InventoryTypeTraits:
       type: object
