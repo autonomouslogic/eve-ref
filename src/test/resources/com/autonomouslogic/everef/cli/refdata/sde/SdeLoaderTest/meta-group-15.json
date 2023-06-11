@@ -1,0 +1,15 @@
+{
+  "icon_id" : 24152,
+  "icon_suffix" : "abyssal",
+  "name" : {
+    "de" : "Abgrund",
+    "en" : "Abyssal",
+    "es" : "Abisal",
+    "fr" : "Abîme",
+    "ja" : "アビサル",
+    "ko" : "어비설",
+    "ru" : "Бездна",
+    "zh" : "深渊"
+  },
+  "meta_group_id" : 15
+}

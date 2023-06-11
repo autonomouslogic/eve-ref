@@ -1,0 +1,15 @@
+{
+  "icon_id" : 24150,
+  "icon_suffix" : "t2",
+  "name" : {
+    "de" : "Tech II",
+    "en" : "Tech II",
+    "es" : "T2",
+    "fr" : "Tech II",
+    "ja" : "T2",
+    "ko" : "테크 II",
+    "ru" : "Tech II",
+    "zh" : "二级科技"
+  },
+  "meta_group_id" : 2
+}
