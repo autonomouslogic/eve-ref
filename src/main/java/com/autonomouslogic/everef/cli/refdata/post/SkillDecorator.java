@@ -181,7 +181,7 @@ public class SkillDecorator {
 				.trainingTimeMultiplier(mult)
 				.canNotBeTrainedOnTrial(canNotBeTrainedOnTrial)
 				.requiredSkills(requiredSkills);
-		log.trace("Created skill: {}", skill.build());
+		log.trace("Created skill: {}", typeId);
 		skills.put(typeId, objectMapper.valueToTree(skill.build()));
 	}
 }

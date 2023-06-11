@@ -137,6 +137,7 @@ public class MutaplasmidDecorator {
 				.typeMappings(typeMappings)
 				.dogmaModifications(dogmaModifications)
 				.build();
+		log.trace("Created mutaplasmid: {}", mutaplasmidTypeId);
 		mutaplasmids.put(mutaplasmidTypeId, objectMapper.valueToTree(mutaplasmid));
 	}
 }
