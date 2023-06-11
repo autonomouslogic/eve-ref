@@ -92,6 +92,26 @@ public interface ReferenceDataSpec {
 	MarketGroup getMarketGroup(@PathParam("market_group_id") int marketGroupId);
 
 	@GET
+	@Path("/meta_groups")
+	@Operation(description = "Get all meta group IDs.")
+	@ApiResponse(
+			responseCode = "200",
+			description = "Meta group IDs.",
+			useReturnTypeSchema = true,
+			content = @Content(mediaType = "application/json"))
+	List<Integer> getAllMetaGroups();
+
+	@GET
+	@Path("/meta_groups/{meta_group_id}")
+	@Operation
+	@ApiResponse(
+			responseCode = "200",
+			description = "The meta group.",
+			useReturnTypeSchema = true,
+			content = @Content(mediaType = "application/json"))
+	MetaGroup getMetaGroup(@PathParam("meta_group_id") int metaGroupId);
+
+	@GET
 	@Path("/types")
 	@Operation(description = "Get all type IDs.")
 	@ApiResponse(

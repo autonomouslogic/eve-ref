@@ -1,0 +1,34 @@
+1:
+  nameID:
+    de: Tech I
+    en: Tech I
+    es: T1
+    fr: Tech I
+    ja: T1
+    ko: 테크 I
+    ru: Tech I
+    zh: 一级科技
+2:
+  iconID: 24150
+  iconSuffix: t2
+  nameID:
+    de: Tech II
+    en: Tech II
+    es: T2
+    fr: Tech II
+    ja: T2
+    ko: 테크 II
+    ru: Tech II
+    zh: 二级科技
+15:
+  iconID: 24152
+  iconSuffix: abyssal
+  nameID:
+    de: Abgrund
+    en: Abyssal
+    es: Abisal
+    fr: Abîme
+    ja: アビサル
+    ko: 어비설
+    ru: Бездна
+    zh: 深渊

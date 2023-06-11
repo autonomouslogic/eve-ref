@@ -129,6 +129,20 @@ dogmaAttributes:
       - 168
       - 1047
 
+metaGroups:
+  idField: meta_group_id
+  model: MetaGroup
+  sde:
+    file: sde/fsd/metaGroups.yaml
+    renames:
+      name_id: name
+  test:
+    filePrefix: meta-group
+    ids:
+      - 1
+      - 2
+      - 15
+
 skills:
   model: Skill
   test:

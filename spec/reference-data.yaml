@@ -154,6 +154,41 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/MarketGroup'
+  /meta_groups:
+    get:
+      tags:
+      - refdata
+      description: Get all meta group IDs.
+      operationId: getAllMetaGroups
+      responses:
+        "200":
+          description: Meta group IDs.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: integer
+                  format: int32
+  /meta_groups/{meta_group_id}:
+    get:
+      tags:
+      - refdata
+      operationId: getMetaGroup
+      parameters:
+      - name: meta_group_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: The meta group.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MetaGroup'
   /mutaplasmids:
     get:
       tags:
@@ -552,6 +587,22 @@ components:
         has_types:
           type: boolean
       description: A market group
+    MetaGroup:
+      type: object
+      properties:
+        meta_group_id:
+          type: integer
+          format: int64
+        icon_id:
+          type: integer
+          format: int64
+        icon_suffix:
+          type: string
+        name:
+          type: object
+          additionalProperties:
+            type: string
+      description: A meta group
     Mutaplasmid:
       type: object
       properties:
