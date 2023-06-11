@@ -140,3 +140,10 @@ skills:
       - 3336
       - 33093
       - 33097
+
+mutaplasmids:
+  model: Mutaplasmid
+  test:
+    filePrefix: mutaplasmid
+    ids:
+      - 52225

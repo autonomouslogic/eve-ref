@@ -130,7 +130,8 @@ public class InventoryType {
 
 	@JsonProperty("is_dynamic_item")
 	@Schema(
-		defaultValue = "false",
-		description = "Whether this type is a dynamic item created by a mutaplasmid or not. This is added by EVE Ref.")
+			defaultValue = "false",
+			description =
+					"Whether this type is a dynamic item created by a mutaplasmid or not. This is added by EVE Ref.")
 	boolean dynamicItem;
 }

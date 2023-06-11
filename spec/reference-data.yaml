@@ -154,11 +154,46 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/MarketGroup'
+  /mutaplasmids:
+    get:
+      tags:
+      - refdata
+      description: Get all mutaplasmid IDs.
+      operationId: getAllMutaplasmids
+      responses:
+        "200":
+          description: Mutaplasmid type IDs.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: integer
+                  format: int32
+  /mutaplasmids/{mutaplasmid_type_id}:
+    get:
+      tags:
+      - refdata
+      operationId: getMutaplasmid
+      parameters:
+      - name: mutaplasmid_type_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: The mutaplasmid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Mutaplasmid'
   /skills:
     get:
       tags:
       - refdata
-      description: Get all dogma attribute IDs.
+      description: Get all skill type IDs.
       operationId: getAllSkills
       responses:
         "200":
@@ -519,6 +554,48 @@ components:
         has_types:
           type: boolean
       description: A market group
+    Mutaplasmid:
+      type: object
+      properties:
+        type_id:
+          type: integer
+          format: int64
+        type_mappings:
+          type: array
+          items:
+            $ref: '#/components/schemas/MutaplasmidTypeMapping'
+        dogma_modifications:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/MutaplasmidDogmaModifications'
+          description: Which dogma attributes are modified by this mutaplasmid and
+            by how much.
+      description: Details about a mutaplasmid. These are created by EVE Ref and derived
+        from Hoboleaks.
+    MutaplasmidDogmaModifications:
+      type: object
+      properties:
+        min:
+          type: number
+          format: double
+        max:
+          type: number
+          format: double
+      description: Details about how much a dogma attribute can be modified by a mutaplasmid.
+        These are created by EVE Ref and derived from Hoboleaks.
+    MutaplasmidTypeMapping:
+      type: object
+      properties:
+        resulting_type_id:
+          type: integer
+          format: int64
+        applicable_type_ids:
+          type: array
+          items:
+            type: integer
+            format: int64
+      description: Details about which types a mutaplasmid can be applied to to create
+        another type. These are created by EVE Ref and derived from Hoboleaks.
     Skill:
       type: object
       properties:
