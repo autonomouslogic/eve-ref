@@ -1,5 +1,24 @@
 EVE Ref Changelog
 
+## [2.8.0](https://github.com/autonomouslogic/eve-ref/compare/2.7.0...2.8.0) (2023-06-11)
+
+
+### Features
+
+* Full stack traces to Slack and Healthchecks, along with better Slack configs ([#166](https://github.com/autonomouslogic/eve-ref/issues/166)) ([8e88b28](https://github.com/autonomouslogic/eve-ref/commit/8e88b286620151578ad40506ced598763f3a45e4))
+
+
+### Bug Fixes
+
+* Handling 204 No Content from the ESI ([#168](https://github.com/autonomouslogic/eve-ref/issues/168)) ([c465a44](https://github.com/autonomouslogic/eve-ref/commit/c465a443f4085e0444697c0eae59e0c27d686669))
+* Pretty-print reference data ([#169](https://github.com/autonomouslogic/eve-ref/issues/169)) ([ef1794c](https://github.com/autonomouslogic/eve-ref/commit/ef1794c55c6743631fcc9efb82a8b24807407090))
+* Use OpenAPI-generated client properly ([#165](https://github.com/autonomouslogic/eve-ref/issues/165)) ([367723d](https://github.com/autonomouslogic/eve-ref/commit/367723d5f3ac39d3d560a55d0fc626db5df9a814))
+
+
+### Documentation
+
+* Updated dataset documentation ([#167](https://github.com/autonomouslogic/eve-ref/issues/167)) ([5572ce4](https://github.com/autonomouslogic/eve-ref/commit/5572ce4af5a2a01889832e852aee44e13d2be3cf))
+
 ## [2.7.0](https://github.com/autonomouslogic/eve-ref/compare/2.6.2...2.7.0) (2023-06-08)
 
 
