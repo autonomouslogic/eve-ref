@@ -117,15 +117,12 @@ public class InventoryType {
 
 	@JsonProperty
 	@Schema(
-			defaultValue = "false",
 			description =
 					"Which mutaplasmids can be applied to this type to create a dynamic item. This is added by EVE Ref.")
 	List<Long> applicableMutaplasmidTypeIds;
 
 	@JsonProperty
-	@Schema(
-			defaultValue = "false",
-			description = "Which mutaplasmids can used to create this dynamic item. This is added by EVE Ref.")
+	@Schema(description = "Which mutaplasmids can used to create this dynamic item. This is added by EVE Ref.")
 	List<Long> creatingMutaplasmidTypeIds;
 
 	@JsonProperty("is_dynamic_item")

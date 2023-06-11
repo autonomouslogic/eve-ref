@@ -485,7 +485,6 @@ components:
             description: Which mutaplasmids can be applied to this type to create
               a dynamic item. This is added by EVE Ref.
             format: int64
-          default: false
         creating_mutaplasmid_type_ids:
           type: array
           description: Which mutaplasmids can used to create this dynamic item. This
@@ -495,7 +494,6 @@ components:
             description: Which mutaplasmids can used to create this dynamic item.
               This is added by EVE Ref.
             format: int64
-          default: false
         is_skill:
           type: boolean
           description: Whether this type is a skill or not. This is added by EVE Ref.
