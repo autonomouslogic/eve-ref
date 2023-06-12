@@ -16,7 +16,7 @@ const inventoryType: InventoryType = await refdataApi.getType({typeId});
 
 <template>
   <div>
-    <h2>id: {{ $route.params.typeId }}</h2>
+    <h2>id: {{ route.params.typeId }}</h2>
     <img :src="`https://images.evetech.net/types/${inventoryType.typeId}/icon`" alt="">
 
     <p>Name: {{ inventoryType.name[locale] }}</p>
