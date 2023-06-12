@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import refdataApi from "~/refdata";
-import Currency from "~/components/helpers/currency.vue";
+import Currency from "~/components/helpers/Currency.vue";
 import {InventoryType} from "~/refdata-openapi";
+import Traits from "~/components/types/Traits.vue";
 
 const {locale} = useI18n();
 const route = useRoute();
@@ -24,5 +25,6 @@ const inventoryType: InventoryType = await refdataApi.getType({typeId});
     <p>Price:
       <currency :price="inventoryType.basePrice"></currency>
     </p>
+    <Traits :traits="inventoryType.traits"></Traits>
   </div>
 </template>
