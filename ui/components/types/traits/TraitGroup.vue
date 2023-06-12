@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import {TraitBonus, TraitBonusFromJSON} from "~/refdata-openapi";
+import LinkParser from "~/components/helpers/LinkParser.vue";
 
 const {locale} = useI18n();
 
@@ -17,7 +18,7 @@ const hasBonuses: boolean = bonuses !== undefined && Object.keys(bonuses).length
     <h3>{{ title }}</h3>
     <ul>
       <li v-for="trait in bonuses">
-        {{ trait.bonus }} {{ trait.unitId }} {{ trait.bonusText[locale] }}
+        {{ trait.bonus }} {{ trait.unitId }} <LinkParser :content="trait.bonusText[locale]"/>
       </li>
     </ul>
   </div>
