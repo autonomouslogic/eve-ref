@@ -2,7 +2,7 @@
 import refdataApi from "~/refdata";
 import Currency from "~/components/helpers/Currency.vue";
 import {InventoryType} from "~/refdata-openapi";
-import Traits from "~/components/types/Traits.vue";
+import Traits from "~/components/types/traits/Traits.vue";
 
 const {locale} = useI18n();
 const route = useRoute();
