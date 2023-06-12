@@ -1,0 +1,135 @@
+{
+  "capacity" : 0,
+  "description" : {
+    "en" : "Utilizes a combination of containment field emitters and redundancy systems to mitigate the impact of critical system damage. \r\n\r\nGrants a bonus to resistance for shield, armor and hull.\r\n\r\nOnly one Damage Control can be fit at a given time."
+  },
+  "dogma_attributes" : {
+    "4" : {
+      "attribute_id" : 4,
+      "value" : 5000
+    },
+    "1544" : {
+      "attribute_id" : 1544,
+      "value" : 1
+    },
+    "9" : {
+      "attribute_id" : 9,
+      "value" : 40
+    },
+    "267" : {
+      "attribute_id" : 267,
+      "value" : 0.9
+    },
+    "268" : {
+      "attribute_id" : 268,
+      "value" : 0.9
+    },
+    "269" : {
+      "attribute_id" : 269,
+      "value" : 0.9
+    },
+    "270" : {
+      "attribute_id" : 270,
+      "value" : 0.9
+    },
+    "271" : {
+      "attribute_id" : 271,
+      "value" : 0.925
+    },
+    "272" : {
+      "attribute_id" : 272,
+      "value" : 0.925
+    },
+    "273" : {
+      "attribute_id" : 273,
+      "value" : 0.925
+    },
+    "274" : {
+      "attribute_id" : 274,
+      "value" : 0.925
+    },
+    "277" : {
+      "attribute_id" : 277,
+      "value" : 1
+    },
+    "1692" : {
+      "attribute_id" : 1692,
+      "value" : 0
+    },
+    "30" : {
+      "attribute_id" : 30,
+      "value" : 1
+    },
+    "161" : {
+      "attribute_id" : 161,
+      "value" : 5
+    },
+    "162" : {
+      "attribute_id" : 162,
+      "value" : 1
+    },
+    "422" : {
+      "attribute_id" : 422,
+      "value" : 1
+    },
+    "50" : {
+      "attribute_id" : 50,
+      "value" : 25
+    },
+    "182" : {
+      "attribute_id" : 182,
+      "value" : 3394
+    },
+    "974" : {
+      "attribute_id" : 974,
+      "value" : 0.7
+    },
+    "975" : {
+      "attribute_id" : 975,
+      "value" : 0.7
+    },
+    "976" : {
+      "attribute_id" : 976,
+      "value" : 0.7
+    },
+    "977" : {
+      "attribute_id" : 977,
+      "value" : 0.7
+    },
+    "38" : {
+      "attribute_id" : 38,
+      "value" : 0
+    },
+    "633" : {
+      "attribute_id" : 633,
+      "value" : 0
+    }
+  },
+  "dogma_effects" : {
+    "11" : {
+      "effect_id" : 11,
+      "is_default" : false
+    },
+    "16" : {
+      "effect_id" : 16,
+      "is_default" : false
+    },
+    "2302" : {
+      "effect_id" : 2302,
+      "is_default" : false
+    }
+  },
+  "group_id" : 60,
+  "icon_id" : 77,
+  "market_group_id" : 615,
+  "mass" : 5000,
+  "name" : {
+    "en" : "Damage Control I"
+  },
+  "packaged_volume" : 5,
+  "portion_size" : 1,
+  "published" : true,
+  "radius" : 1,
+  "type_id" : 2046,
+  "volume" : 5
+}

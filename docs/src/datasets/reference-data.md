@@ -19,6 +19,8 @@ Some example paths:
 * <https://ref-data.everef.net/groups/18>
 * <https://ref-data.everef.net/market_groups>
 * <https://ref-data.everef.net/market_groups/1857>
+* <https://ref-data.everef.net/meta_groups>
+* <https://ref-data.everef.net/meta_group/6>
 * <https://ref-data.everef.net/dogma_attributes>
 * <https://ref-data.everef.net/dogma_attributes/37>
 * <https://ref-data.everef.net/skills>
