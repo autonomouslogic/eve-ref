@@ -1,5 +1,19 @@
 EVE Ref Changelog
 
+## [2.9.0](https://github.com/autonomouslogic/eve-ref/compare/2.8.0...2.9.0) (2023-06-12)
+
+
+### Features
+
+* Meta groups reference data ([#179](https://github.com/autonomouslogic/eve-ref/issues/179)) ([2d7d620](https://github.com/autonomouslogic/eve-ref/commit/2d7d62045f02417a900906868ed33940366933a7))
+* Mutaplasmid reference data ([#171](https://github.com/autonomouslogic/eve-ref/issues/171)) ([59c25ae](https://github.com/autonomouslogic/eve-ref/commit/59c25aebd64192c2ec7981f9ed608b8ab0c89f3e))
+* Variations in reference data ([#180](https://github.com/autonomouslogic/eve-ref/issues/180)) ([732f74c](https://github.com/autonomouslogic/eve-ref/commit/732f74c0a2389c9ade56c5ee056373edf78b53c9))
+
+
+### Documentation
+
+* Style tweaks ([#174](https://github.com/autonomouslogic/eve-ref/issues/174)) ([fcfc407](https://github.com/autonomouslogic/eve-ref/commit/fcfc4075b045ed4d99a58b196e3ef50f5c8b8d42))
+
 ## [2.8.0](https://github.com/autonomouslogic/eve-ref/compare/2.7.0...2.8.0) (2023-06-11)
 
 
