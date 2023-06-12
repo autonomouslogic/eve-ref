@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import refdataApi from "~/refdata";
 import {InventoryTypeTraits} from "~/refdata-openapi";
+import TypeLink from "~/components/helpers/TypeLink.vue";
 
 const {traits} = defineProps<{
   traits: InventoryTypeTraits | undefined
@@ -12,21 +13,19 @@ const typeBonuses = traits?.types;
 const roleBonuses = traits?.roleBonuses;
 const miscBonuses = traits?.miscBonuses;
 
-for (const typeId in typeBonuses) {
-  const type = await refdataApi.getType({typeId});
-  console.log(type.name);
-}
-
 </script>
 
 <template>
   <div>
     <h3>Type Bonuses</h3>
-    <ul>
-      <li v-for="(trait, index) in typeBonuses" :key="index">
-        {{ index }}
-      </li>
-    </ul>
+    <div v-for="(traits, index) in typeBonuses" :key="index">
+      <TypeLink :type-id="index" /> bonuses per level:
+      <ul>
+        <li v-for="trait in traits">
+          {{ trait.bonus }} {{ trait.unitId }} {{ trait.bonus_text[locale] }}
+        </li>
+      </ul>
+    </div>
 
     <h3>Role Bonuses</h3>
     <ul>

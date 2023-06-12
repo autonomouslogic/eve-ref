@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1>Index Page</h1>
-    <TypeLink type-id="642"></TypeLink>
+    <TypeLink type-id="645"></TypeLink>
   </div>
 </template>
 
