@@ -78,5 +78,10 @@
   "creating_mutaplasmid_type_ids": [
     52225
   ],
-  "is_dynamic_item" : true
+  "is_dynamic_item" : true,
+  "type_variations" : {
+    "1" : [ 2046 ],
+    "2" : [ 2048 ],
+    "15" : [ 52227 ]
+  }
 }
