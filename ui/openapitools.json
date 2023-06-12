@@ -7,9 +7,7 @@
       "typescript": {
         "generatorName": "typescript-fetch",
         "inputSpec": "../spec/reference-data.yaml",
-        "output": "./refdata-openapi",
-        "additionalProperties": {
-        }
+        "output": "./refdata-openapi"
       }
     }
   }

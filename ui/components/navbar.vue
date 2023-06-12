@@ -18,7 +18,3 @@ const selectedLocale = ref(locale);
   </div>
   <hr>
 </template>
-
-<style scoped>
-
-</style>
