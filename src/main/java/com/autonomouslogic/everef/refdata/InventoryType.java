@@ -18,6 +18,9 @@ import lombok.extern.jackson.Jacksonized;
 @Schema(description = "An inventory type")
 public class InventoryType {
 	@JsonProperty
+	long typeId;
+
+	@JsonProperty
 	BigDecimal basePrice;
 
 	@JsonProperty
@@ -91,10 +94,7 @@ public class InventoryType {
 	InventoryTypeTraits traits;
 
 	@JsonProperty
-	int typeId;
-
-	@JsonProperty
-	Integer variationParentTypeId;
+	Long variationParentTypeId;
 
 	@JsonProperty
 	BigDecimal volume;
@@ -105,8 +105,8 @@ public class InventoryType {
 
 	@JsonProperty
 	@Schema(
-			description =
-					"The skills required for this type. The key is the skill type ID and the value is the level. This is added by EVE Ref and derived from dogma attributes.")
+			description = "The skills required for this type. The key is the skill type ID and the value is the level. "
+					+ "This is added by EVE Ref and derived from dogma attributes.")
 	Map<Long, Integer> requiredSkills;
 
 	@JsonProperty("is_mutaplasmid")
@@ -131,4 +131,11 @@ public class InventoryType {
 			description =
 					"Whether this type is a dynamic item created by a mutaplasmid or not. This is added by EVE Ref.")
 	boolean dynamicItem;
+
+	@JsonProperty
+	@Schema(
+			description =
+					"The variations for this type. The key is the meta group and the value is a list of type IDs. "
+							+ "This is added by EVE Ref.")
+	Map<Long, List<Long>> typeVariations;
 }

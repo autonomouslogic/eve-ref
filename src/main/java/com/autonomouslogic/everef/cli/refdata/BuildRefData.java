@@ -7,6 +7,7 @@ import com.autonomouslogic.everef.cli.Command;
 import com.autonomouslogic.everef.cli.refdata.esi.EsiLoader;
 import com.autonomouslogic.everef.cli.refdata.post.MutaplasmidDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.SkillDecorator;
+import com.autonomouslogic.everef.cli.refdata.post.VariationsDecorator;
 import com.autonomouslogic.everef.cli.refdata.sde.SdeLoader;
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.http.DataCrawler;
@@ -100,6 +101,9 @@ public class BuildRefData implements Command {
 	@Inject
 	protected Provider<MutaplasmidDecorator> mutiplasmidDecoratorProvider;
 
+	@Inject
+	protected Provider<VariationsDecorator> variationsDecoratorProvider;
+
 	@Setter
 	@NonNull
 	private ZonedDateTime buildTime = ZonedDateTime.now(ZoneOffset.UTC).truncatedTo(ChronoUnit.SECONDS);
@@ -156,7 +160,8 @@ public class BuildRefData implements Command {
 	private Completable postDatasets() {
 		return Completable.defer(() -> Completable.concatArray(
 				skillDecoratorProvider.get().setStoreHandler(storeHandler).create(),
-				mutiplasmidDecoratorProvider.get().setStoreHandler(storeHandler).create()));
+				mutiplasmidDecoratorProvider.get().setStoreHandler(storeHandler).create(),
+				variationsDecoratorProvider.get().setStoreHandler(storeHandler).create()));
 	}
 
 	private Completable closeMvStore() {

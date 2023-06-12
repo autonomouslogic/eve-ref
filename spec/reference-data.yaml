@@ -414,6 +414,9 @@ components:
     InventoryType:
       type: object
       properties:
+        type_id:
+          type: integer
+          format: int64
         base_price:
           type: number
         capacity:
@@ -492,12 +495,9 @@ components:
           format: int32
         traits:
           $ref: '#/components/schemas/InventoryTypeTraits'
-        type_id:
-          type: integer
-          format: int32
         variation_parent_type_id:
           type: integer
-          format: int32
+          format: int64
         volume:
           type: number
         required_skills:
@@ -529,6 +529,19 @@ components:
             description: Which mutaplasmids can used to create this dynamic item.
               This is added by EVE Ref.
             format: int64
+        type_variations:
+          type: object
+          additionalProperties:
+            type: array
+            description: The variations for this type. The key is the meta group and
+              the value is a list of type IDs. This is added by EVE Ref.
+            items:
+              type: integer
+              description: The variations for this type. The key is the meta group
+                and the value is a list of type IDs. This is added by EVE Ref.
+              format: int64
+          description: The variations for this type. The key is the meta group and
+            the value is a list of type IDs. This is added by EVE Ref.
         is_skill:
           type: boolean
           description: Whether this type is a skill or not. This is added by EVE Ref.

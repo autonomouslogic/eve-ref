@@ -5,28 +5,27 @@
     "es" : "Usa una combinación de emisores de campo de contención y sistemas redundantes para mitigar el impacto de daños críticos al sistema. \n\n\n\nOtorga una bonificación de resistencia de escudo, blindaje y casco.\n\n\n\nSolo se puede equipar un control de daños a la vez.",
     "fr" : "Ce module combine des émetteurs de champ de confinement et des systèmes de redondance voués à mitiger l'impact dévastateur de dégâts critiques sur le système. \n\n\n\nOffre un bonus de résistance aux boucliers, au blindage et à la coque.\n\n\n\nUn seul régulateur de dégâts peut être équipé à la fois.",
     "ja" : "格納型電界エミッターと冗長システムを組み合わせることにより、システムが深刻なダメージを受けた場合の影響を軽減する。シールド、アーマー、船体レジスタンスが向上する。ダメージコントロールは一度に一つしか装備できない。",
-    "ru" : "Использует технологию локальных защитных полей и принципы многократного резервирования для уменьшения последствий серьезных повреждений бортовых систем. \n\n\n\nПовышает сопротивляемость силовых полей, брони и корпуса корабля всем видам поражающего действия.\n\n\n\nДопускается одновременное использование лишь одного модуля боевой живучести (Damage Control).",
+    "ru" : "Использует технологию локальных защитных полей и принципы многократного резервирования для уменьшения последствий серьезных повреждений бортовых систем. \n\n\n\nПовышает сопротивляемость силовых полей, брони и корпуса корабля всем видам ущерба.\n\n\n\nДопускается одновременное использование лишь одного модуля боевой живучести (Damage Control).",
     "zh" : "将围场发射器和冗余系统结合使用，减轻由严重系统性损坏造成的影响。 \n\n\n\n提高护盾、装甲和结构的抗性。\n\n\n\n只能同时装配一个损伤控制。"
   },
   "group_id" : 60,
   "icon_id" : 77,
   "market_group_id" : 615,
   "mass" : 5000,
-  "meta_group_id" : 2,
+  "meta_group_id" : 1,
   "name" : {
-    "de" : "Damage Control II",
-    "en" : "Damage Control II",
-    "es" : "Control de daños II",
-    "fr" : "Contrôle des dégâts II",
-    "ja" : "ダメージ制御II",
-    "ru" : "Damage Control II",
-    "zh" : "损伤控制 II"
+    "de" : "Damage Control I",
+    "en" : "Damage Control I",
+    "es" : "Control de daños I",
+    "fr" : "Contrôle des dégâts I",
+    "ja" : "ダメージ制御I",
+    "ru" : "Damage Control I",
+    "zh" : "损伤控制 I"
   },
   "portion_size" : 1,
   "published" : true,
-  "variation_parent_type_id" : 2046,
   "volume" : 5,
-  "type_id" : 2048,
+  "type_id" : 2046,
   "capacity" : 0,
   "dogma_attributes" : {
     "4" : {
@@ -43,39 +42,39 @@
     },
     "267" : {
       "attribute_id" : 267,
-      "value" : 0.85
+      "value" : 0.9
     },
     "268" : {
       "attribute_id" : 268,
-      "value" : 0.85
+      "value" : 0.9
     },
     "269" : {
       "attribute_id" : 269,
-      "value" : 0.85
+      "value" : 0.9
     },
     "270" : {
       "attribute_id" : 270,
-      "value" : 0.85
+      "value" : 0.9
     },
     "271" : {
       "attribute_id" : 271,
-      "value" : 0.875
+      "value" : 0.925
     },
     "272" : {
       "attribute_id" : 272,
-      "value" : 0.875
+      "value" : 0.925
     },
     "273" : {
       "attribute_id" : 273,
-      "value" : 0.875
+      "value" : 0.925
     },
     "274" : {
       "attribute_id" : 274,
-      "value" : 0.875
+      "value" : 0.925
     },
     "277" : {
       "attribute_id" : 277,
-      "value" : 4
+      "value" : 1
     },
     "1692" : {
       "attribute_id" : 1692,
@@ -95,11 +94,11 @@
     },
     "422" : {
       "attribute_id" : 422,
-      "value" : 2
+      "value" : 1
     },
     "50" : {
       "attribute_id" : 50,
-      "value" : 30
+      "value" : 25
     },
     "182" : {
       "attribute_id" : 182,
@@ -107,19 +106,19 @@
     },
     "974" : {
       "attribute_id" : 974,
-      "value" : 0.6
+      "value" : 0.7
     },
     "975" : {
       "attribute_id" : 975,
-      "value" : 0.6
+      "value" : 0.7
     },
     "976" : {
       "attribute_id" : 976,
-      "value" : 0.6
+      "value" : 0.7
     },
     "977" : {
       "attribute_id" : 977,
-      "value" : 0.6
+      "value" : 0.7
     },
     "38" : {
       "attribute_id" : 38,
@@ -127,7 +126,7 @@
     },
     "633" : {
       "attribute_id" : 633,
-      "value" : 5
+      "value" : 0
     }
   },
   "dogma_effects" : {
@@ -147,11 +146,8 @@
   "packaged_volume" : 5,
   "radius" : 1,
   "required_skills" : {
-    "3394" : 4
+    "3394" : 1
   },
-  "applicable_mutaplasmid_type_ids": [
-    52225
-  ],
   "type_variations" : {
     "1" : [ 2046 ],
     "2" : [ 2048 ],
