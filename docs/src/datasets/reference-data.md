@@ -48,78 +48,83 @@ For other third-party developers, the REST API will be freely available to consu
 
 ## Data sources
 
-| Data                            | SDE                                     | ESI                             | Hoboleaks                    |
-|---------------------------------|-----------------------------------------|---------------------------------|------------------------------|
-| Accounting Entry Types (?)      |                                         |                                 | Yes                          |
-| Agent                           | `fsd/agents.yaml`                       |                                 |                              |
-| Agent in space (?)              | `fsd/agentsInSpace.yaml`                |                                 |                              |
-| Agent Types (?)                 |                                         |                                 | Yes                          |
-| Ancestors                       | `fsd/ancestries.yaml`                   | Yes                             |                              |
-| Asteroid belts                  | `fsd/universe`                          | Yes                             |                              |
-| Bloodlines                      | `fsd/bloodlines.yaml`                   | Yes                             |                              |
-| Blueprints                      | `fsd/blueprints.yaml`                   |                                 |                              |
-| Blueprint materials             | `fsd/typeMaterials.yaml`                |                                 |                              |
-| Certificates                    | `fsd/certificates.yaml`                 |                                 |                              |
-| Character attributes            | `fsd/characterAttributes.yaml`          |                                 |                              |
-| Clone States (?)                |                                         |                                 | Yes                          |
-| Compressible Types (?)          |                                         |                                 | Yes                          |
-| Constellations                  | `fsd/universe`                          | Yes                             |                              |
-| Contraband types (?)            | `fsd/contrabandTypes.yaml`              |                                 |                              |
-| Control tower resources (?)     | `fsd/controlTowerResources.yaml`        |                                 |                              |
-| Corporatation activities (?)    | `fsd/corporationActivities.yaml`        |                                 |                              |
-| Dbuffs (?)                      |                                         |                                 | Yes                          |
-| Dogma attributes categories     | `fsd/dogmaAttributeCategories.yaml`     |                                 |                              |
-| Dogma attributes                | `fsd/dogmaAttributes.yaml`              | `dogma/attributes.yaml`         | Localised names              |
-| Dogma effects                   | `fsd/dogmaEffects.yaml`                 | `dogma/effects.yaml`            |                              |
-| Dogma expressions               |                                         |                                 |                              |
-| Dogma type attributes           | `fsd/typeDogma.yaml`                    | `universe/types.yaml`           |                              |
-| Dogma type effects              | `fsd/typeDogma.yaml`                    | `universe/types.yaml`           |                              |
-| Dogma units                     |                                         |                                 | `dogmaunits.json`            |
-| Dynamic Attributes              |                                         |                                 | `dynamicitemattributes.json` |
-| Factions                        | `fsd/factions.yaml`                     | Yes                             |                              |
-| Graphics                        | `fsd/graphicIDs.yaml`                   | Yes                             |                              |
-| Graphic Material Sets (?)       |                                         |                                 | Yes                          |
-| Icons                           | `fsd/iconIDs.yaml`                      |                                 |                              |
-| Industry Activities (?)         |                                         |                                 | Yes                          |
-| Industry Assembly Lines (?)     |                                         |                                 | Yes                          |
-| Industry Installation Types (?) |                                         |                                 | Yes                          |
-| Industry Modifier Sources (?)   |                                         |                                 | Yes                          |
-| Industry Target Filters (?)     |                                         |                                 | Yes                          |
-| Inventory categories            | `fsd/categoryIDs.yaml`                  | Yes                             |                              |
-| Inventory flags (?)             | `bsd/invFlags.yaml`                     |                                 |                              |
-| Inventory groups                | `bsd/groupIDs.yaml`                     | Yes                             |                              |
-| Inventory items (?)             | `bsd/invItems.yaml`                     |                                 |                              |
-| Inventory names (?)             | `bsd/invNames.yaml`                     |                                 |                              |
-| Inventory positions (?)         | `bsd/invPositions.yaml`                 |                                 |                              |
-| Inventory types                 | `fsd/typeIDs.yaml` - masteries, traits  | `universe/types.*.yaml` - dogma | `repackagedvolumes.json`     |
-| Inventory unique names          | `bsd/invUniqueNames.yaml`               |                                 |                              |
-| Landmarks                       | `fsd/landmarks/landmarks.staticdata`    |                                 |                              |
-| Languages                       | `fsd/translationLanguages.yaml`         | Yes, indirectly                 | Yes                          |
-| Loyalty offers                  |                                         | Yes                             |                              |
-| Market groups                   | `fsd/marketGroups.yaml`                 | Yes                             |                              |
-| Meta groups                     | `fsd/metaGroups.yaml`                   |                                 |                              |
-| Moons                           | `fsd/universe`                          | Yes                             |                              |
-| NPC corporation divisions       | `fsd/npcCorporationDivisions.yaml`      |                                 |                              |
-| NPC corporation                 | `fsd/npcCorporations.yaml`              |                                 |                              |
-| Opportunity groups              |                                         | Yes                             |                              |
-| Opportunity tasks               |                                         | Yes                             |                              |
-| Planetary schematics            | `fsd/planetSchematics.yaml`             | Yes - no index                  |                              |
-| Planets                         | `fsd/universe`                          | Yes                             |                              |
-| Races                           | `fsd/races.yaml`                        | Yes                             |                              |
-| Regions                         | `fsd/universe`                          | Yes                             |                              |
-| Research agents                 | `fsd/researchAgents.yaml`               |                                 |                              |
-| Skin licenses                   | `fsd/skinLicenses.yaml`                 |                                 |                              |
-| Skin materials                  | `fsd/skinMaterials.yaml`                |                                 | Yes                          |
-| Skin material names             |                                         |                                 | Yes                          |
-| Skins                           | `fsd/skins.yaml`                        |                                 | Yes                          |
-| Stargate                        | `fsd/universe`                          | Yes                             |                              |
-| Stars                           | `fsd/universe`                          | Yes                             |                              |
-| Stations                        | `bsd/staStations.yaml`                  | Yes                             |                              |
-| Station operation               | `fsd/stationOperations.yaml`            |                                 |                              |
-| Station services                | `fsd/stationServices.yaml`              |                                 |                              |
-| Systems                         | `fsd/universe`                          | Yes                             |                              |
-| Tournament rule sets            | `fsd/tournamentRuleSets.yaml`           |                                 |                              |
-| Universes                       | `fsd/universe`                          |                                 |                              |
+| Data                            | Reference data      | SDE                                    | ESI                            | Hoboleaks                         |
+|---------------------------------|---------------------|----------------------------------------|--------------------------------|-----------------------------------|
+| Accounting Entry Types (?)      |                     |                                        |                                | `accountingentrytypes.json`       |
+| Agent                           |                     | `fsd/agents.yaml`                      |                                |                                   |
+| Agent in space (?)              |                     | `fsd/agentsInSpace.yaml`               |                                |                                   |
+| Agent Types (?)                 |                     |                                        |                                | `agenttypes.json`                 |
+| Ancestors                       |                     | `fsd/ancestries.yaml`                  | `universe/ancestries.yaml`     |                                   |
+| Asteroid belts                  |                     | `fsd/universe`                         | `universe/asteroid_belts.yaml` |                                   |
+| Bloodlines                      |                     | `fsd/bloodlines.yaml`                  | `universe/bloodlines.yaml`     |                                   |
+| Blueprints                      |                     | `fsd/blueprints.yaml`                  |                                |                                   |
+| Blueprint materials             |                     | `fsd/typeMaterials.yaml`               |                                |                                   |
+| Certificates                    |                     | `fsd/certificates.yaml`                |                                |                                   |
+| Character attributes            |                     | `fsd/characterAttributes.yaml`         |                                |                                   |
+| Clone States (?)                |                     |                                        |                                | `clonestates.json`                |
+| Compressible Types (?)          |                     |                                        |                                | `compressibletypes.json`          |
+| Constellations                  |                     | `fsd/universe`                         | `universe/constellations.yaml` |                                   |
+| Contraband types (?)            |                     | `fsd/contrabandTypes.yaml`             |                                |                                   |
+| Control tower resources (?)     |                     | `fsd/controlTowerResources.yaml`       |                                |                                   |
+| Corporatation activities (?)    |                     | `fsd/corporationActivities.yaml`       |                                |                                   |
+| Dbuffs (?)                      |                     |                                        |                                | `dbuffs.json`                     |
+| Dogma attributes categories     |                     | `fsd/dogmaAttributeCategories.yaml`    |                                |                                   |
+| Dogma attributes                | `/dogma_attributes` | `fsd/dogmaAttributes.yaml`             | `dogma/attributes.yaml`        | `localization_dgmattributes.json` |
+| Dogma effects                   |                     | `fsd/dogmaEffects.yaml`                | `dogma/effects.yaml`           |                                   |
+| Dogma expressions               |                     |                                        |                                |                                   |
+| Dogma type attributes           | `/types`            | `fsd/typeDogma.yaml`                   | `universe/types.yaml`          |                                   |
+| Dogma type effects              |                     | `fsd/typeDogma.yaml`                   | `universe/types.yaml`          |                                   |
+| Dogma units                     |                     |                                        |                                | `dogmaunits.json`                 |
+| Dynamic Attributes              | `/mutaplasmids`     |                                        |                                | `dynamicitemattributes.json`      |
+| Factions                        |                     | `fsd/factions.yaml`                    | `universe/factions.yaml`       |                                   |
+| Graphics                        |                     | `fsd/graphicIDs.yaml`                  | `universe/graphics.yaml`       |                                   |
+| Graphic Material Sets (?)       |                     |                                        |                                | `graphicmaterialsets.json`        |
+| Icons                           |                     | `fsd/iconIDs.yaml`                     |                                |                                   |
+| Industry Activities (?)         |                     |                                        |                                | `industryactivities.json`         |
+| Industry Assembly Lines (?)     |                     |                                        |                                | `industryassemblylines.json`      |
+| Industry Installation Types (?) |                     |                                        |                                | `industryinstallationtypes.json`  |
+| Industry Modifier Sources (?)   |                     |                                        |                                | `industrymodifiersources.json`    |
+| Industry Target Filters (?)     |                     |                                        |                                | `industrytargetfilters.json`      |
+| Inventory categories            | `/categories`       | `fsd/categoryIDs.yaml`                 | `universe/categories.yaml`     |                                   |
+| Inventory flags (?)             |                     | `bsd/invFlags.yaml`                    |                                |                                   |
+| Inventory groups                | `/groups`           | `bsd/groupIDs.yaml`                    | `universe/groups.yaml`         |                                   |
+| Inventory items (?)             |                     | `bsd/invItems.yaml`                    |                                |                                   |
+| Inventory names (?)             |                     | `bsd/invNames.yaml`                    |                                |                                   |
+| Inventory positions (?)         |                     | `bsd/invPositions.yaml`                |                                |                                   |
+| Inventory types                 | `/types`            | `fsd/typeIDs.yaml` - masteries, traits | `universe/types.yaml`          | Adds `repackagedvolumes.json`     |
+| Inventory type traits           | `/types`            |                                        | `universe/types.yaml`          |                                   |
+| Inventory type masteries        | `/types`            |                                        | `universe/types.yaml`          |                                   |
+| Inventory unique names          |                     | `bsd/invUniqueNames.yaml`              |                                |                                   |
+| Landmarks                       |                     | `fsd/landmarks/landmarks.staticdata`   |                                |                                   |
+| Languages                       |                     | `fsd/translationLanguages.yaml`        | _Yes, indirectly_              | `localization_languages.json`     |
+| Loyalty offers                  |                     |                                        | Yes                            |                                   |
+| Market groups                   | `/market_groups`    | `fsd/marketGroups.yaml`                | `market/groups.yaml`           |                                   |
+| Meta groups                     | `/meta_groups`      | `fsd/metaGroups.yaml`                  |                                |                                   |
+| Moons                           |                     | `fsd/universe`                         | `universe/moons.yaml           |                                   |
+| NPC corporation divisions       |                     | `fsd/npcCorporationDivisions.yaml`     |                                |                                   |
+| NPC corporation                 |                     | `fsd/npcCorporations.yaml`             |                                |                                   |
+| Opportunity groups              |                     |                                        | `opportunities/groups.yaml`    |                                   |
+| Opportunity tasks               |                     |                                        | `opportunities/tasks.yaml`     |                                   |
+| Planetary schematics            |                     | `fsd/planetSchematics.yaml`            | `universe/schematics.yaml`     |                                   |
+| Planets                         |                     | `fsd/universe`                         | `universe/planets.yaml`        |                                   |
+| Races                           |                     | `fsd/races.yaml`                       | `universe/races.yaml`          |                                   |
+| Regions                         |                     | `fsd/universe`                         | `universe/regions.yaml`        |                                   |
+| Research agents                 |                     | `fsd/researchAgents.yaml`              |                                |                                   |
+| Skills                          | `/skills `          | _types and dogma_                      | _types and dogma_              |                                   |
+| Skin licenses                   |                     | `fsd/skinLicenses.yaml`                |                                |                                   |
+| Skin materials                  |                     | `fsd/skinMaterials.yaml`               |                                | `skinmaterials.json`              |
+| Skin material names             |                     |                                        |                                | `skinmaterialnames.json`          |
+| Skins                           |                     | `fsd/skins.yaml`                       |                                | `skins.json`                      |
+| Stargate                        |                     | `fsd/universe`                         | `universe/stargates.yaml`      |                                   |
+| Stars                           |                     | `fsd/universe`                         | `universe/stars.yaml`          |                                   |
+| Stations                        |                     | `bsd/staStations.yaml`                 | `universe/stations.yaml`       |                                   |
+| Station operation               |                     | `fsd/stationOperations.yaml`           |                                |                                   |
+| Station services                |                     | `fsd/stationServices.yaml`             |                                |                                   |
+| Systems                         |                     | `fsd/universe`                         | `universe/systems.yaml`        |                                   |
+| Tournament rule sets            |                     | `fsd/tournamentRuleSets.yaml`          |                                |                                   |
+| Universes                       |                     | `fsd/universe`                         |                                |                                   |
+
+* _The ESI filenames refer to the names in the ESI dump, minus the language suffix._
 
 ## Data structure
 
