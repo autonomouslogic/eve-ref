@@ -1,0 +1,40 @@
+<script setup lang="ts">
+import {TraitBonus, TraitBonusFromJSON} from "~/refdata-openapi";
+import TypeLink from "~/components/helpers/TypeLink.vue";
+import TraitGroup from "~/components/types/traits/TraitGroup.vue";
+
+const {bonuses} = defineProps<{
+  bonuses: { [key: string]: { [key: string]: TraitBonus; }; } | undefined;
+}>();
+
+// TODO calling TraitBonusFromJSON is required because the generated API code doesn't do it.
+const formattedBonuses: { [key: string]: { [key: string]: TraitBonus } } = {};
+
+if (bonuses) {
+  Object.keys(bonuses).forEach(typeId => {
+    const typeBonuses = bonuses[typeId];
+    const formattedTypeBonuses: { [key: string]: TraitBonus } = {};
+
+    Object.keys(typeBonuses).forEach(level => {
+      formattedTypeBonuses[level] = TraitBonusFromJSON(typeBonuses[level]);
+    });
+
+    formattedBonuses[typeId] = formattedTypeBonuses;
+  });
+}
+</script>
+
+<template>
+  <h3>Type Bonuses</h3>
+  <div v-for="(formattedBonus, index) of formattedBonuses">
+    <h4>
+      <TypeLink :type-id="index"/> bonuses per level
+      <TraitGroup title="" :bonuses="formattedBonus"/>
+    </h4>
+  </div>
+
+</template>
+
+<style scoped>
+
+</style>

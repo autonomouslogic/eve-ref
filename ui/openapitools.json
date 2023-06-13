@@ -9,6 +9,9 @@
         "inputSpec": "../spec/reference-data.yaml",
         "output": "./refdata-openapi",
         "additionalProperties": {
+          "enumPropertyNaming": "PascalCase",
+          "modelPropertyNaming": "camelCase",
+          "paramNaming": "camelCase"
         }
       }
     }

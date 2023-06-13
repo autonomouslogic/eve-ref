@@ -1,6 +1,10 @@
 <template>
   <div>
     <h1>Index Page</h1>
-    <a href="/types/642">Apocalypse</a>
+    <TypeLink type-id="645"></TypeLink>
   </div>
 </template>
+
+<script setup lang="ts">
+import TypeLink from "~/components/helpers/TypeLink.vue";
+</script>
