@@ -67,20 +67,24 @@ public class SlackDecorator {
 				.compose(Rx.offloadCompletable());
 	}
 
-	private Completable reportSuccess(@NonNull String commandName, Duration runtime) {
+	private Completable reportSuccess(@NonNull String commandName, @NonNull Instant start) {
 		if (!reportSuccess) {
 			return Completable.complete();
 		}
-		return report(successMessage(
-				String.format("%s completed in %s", commandName, runtime.truncatedTo(ChronoUnit.MILLIS))));
+		return report(successMessage(String.format(
+				"%s completed in %s",
+				commandName, Duration.between(start, Instant.now()).truncatedTo(ChronoUnit.MILLIS))));
 	}
 
-	private Completable reportFailure(@NonNull String commandName, Duration runtime, Throwable error) {
+	private Completable reportFailure(@NonNull String commandName, @NonNull Instant start, Throwable error) {
 		if (!reportFailure) {
 			return Completable.complete();
 		}
 		return report(errorMessage(
-				String.format("%s failed after %s", commandName, runtime.truncatedTo(ChronoUnit.MILLIS)), error));
+				String.format(
+						"%s failed after %s",
+						commandName, Duration.between(start, Instant.now()).truncatedTo(ChronoUnit.MILLIS)),
+				error));
 	}
 
 	private SlackMessage createMessage() {
@@ -114,12 +118,9 @@ public class SlackDecorator {
 		public Completable run() {
 			return Completable.defer(() -> {
 				var start = Instant.now();
-				return Completable.concatArray(
-								delegate.run(),
-								reportSuccess(delegate.getName(), Duration.between(start, Instant.now())))
+				return Completable.concatArray(delegate.run(), reportSuccess(delegate.getName(), start))
 						.onErrorResumeNext(e -> {
-							return reportFailure(delegate.getName(), Duration.between(start, Instant.now()), e)
-									.andThen(Completable.error(e));
+							return reportFailure(delegate.getName(), start, e).andThen(Completable.error(e));
 						});
 			});
 		}
