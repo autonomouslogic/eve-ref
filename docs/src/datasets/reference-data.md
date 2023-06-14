@@ -57,12 +57,12 @@ For other third-party developers, the REST API will be freely available to consu
 | Ancestors                       |                     | `fsd/ancestries.yaml`                  | `universe/ancestries.yaml`     |                                   |
 | Asteroid belts                  |                     | `fsd/universe`                         | `universe/asteroid_belts.yaml` |                                   |
 | Bloodlines                      |                     | `fsd/bloodlines.yaml`                  | `universe/bloodlines.yaml`     |                                   |
-| Blueprints                      |                     | `fsd/blueprints.yaml`                  |                                |                                   |
-| Blueprint materials             |                     | `fsd/typeMaterials.yaml`               |                                |                                   |
+| Blueprints                      |                     | `fsd/blueprints.yaml`                  |                                | `blueprints.json`                 |
+| Blueprint materials             |                     | `fsd/typeMaterials.yaml`               |                                | `blueprints.json`                 |
 | Certificates                    |                     | `fsd/certificates.yaml`                |                                |                                   |
 | Character attributes            |                     | `fsd/characterAttributes.yaml`         |                                |                                   |
 | Clone States (?)                |                     |                                        |                                | `clonestates.json`                |
-| Compressible Types (?)          |                     |                                        |                                | `compressibletypes.json`          |
+| Compressible Types              |                     |                                        |                                | `compressibletypes.json`          |
 | Constellations                  |                     | `fsd/universe`                         | `universe/constellations.yaml` |                                   |
 | Contraband types (?)            |                     | `fsd/contrabandTypes.yaml`             |                                |                                   |
 | Control tower resources (?)     |                     | `fsd/controlTowerResources.yaml`       |                                |                                   |
@@ -100,7 +100,7 @@ For other third-party developers, the REST API will be freely available to consu
 | Loyalty offers                  |                     |                                        | Yes                            |                                   |
 | Market groups                   | `/market_groups`    | `fsd/marketGroups.yaml`                | `market/groups.yaml`           |                                   |
 | Meta groups                     | `/meta_groups`      | `fsd/metaGroups.yaml`                  |                                |                                   |
-| Moons                           |                     | `fsd/universe`                         | `universe/moons.yaml           |                                   |
+| Moons                           |                     | `fsd/universe`                         | `universe/moons.yaml`          |                                   |
 | NPC corporation divisions       |                     | `fsd/npcCorporationDivisions.yaml`     |                                |                                   |
 | NPC corporation                 |                     | `fsd/npcCorporations.yaml`             |                                |                                   |
 | Opportunity groups              |                     |                                        | `opportunities/groups.yaml`    |                                   |
