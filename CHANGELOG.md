@@ -1,5 +1,17 @@
 EVE Ref Changelog
 
+## [2.10.0](https://github.com/autonomouslogic/eve-ref/compare/2.9.0...2.10.0) (2023-06-14)
+
+
+### Features
+
+* Basic type pages ([#184](https://github.com/autonomouslogic/eve-ref/issues/184)) ([f5c23bd](https://github.com/autonomouslogic/eve-ref/commit/f5c23bd8addf6fc2cc2ca644b980da8f86933d79))
+
+
+### Documentation
+
+* More detail on the reference data sources ([#183](https://github.com/autonomouslogic/eve-ref/issues/183)) ([0559814](https://github.com/autonomouslogic/eve-ref/commit/0559814b9af3463ed554182a1e8c2fb1d74cc2be))
+
 ## [2.9.0](https://github.com/autonomouslogic/eve-ref/compare/2.8.0...2.9.0) (2023-06-12)
 
 
