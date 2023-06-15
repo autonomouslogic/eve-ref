@@ -15,6 +15,7 @@ These pages outline the datasets available for download at [data.everef.net](htt
 | `faction-warfare-stats/`                     |                                                  |
 | `faction-warfare-systems/`                   |                                                  |
 | `faction-warfare-wars/`                      |                                                  |
+| `hoboleaks-sde/`                             | [Hoboelaks SDE](hoboleaks-sde.md)                |
 | `incursions/`                                |                                                  |
 | `industry-facilities/`                       |                                                  |
 | `industry-systems/`                          |                                                  |
