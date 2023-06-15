@@ -1,5 +1,17 @@
 EVE Ref Changelog
 
+## [2.10.1](https://github.com/autonomouslogic/eve-ref/compare/2.10.0...2.10.1) (2023-06-15)
+
+
+### Bug Fixes
+
+* Fixed Slack runtime reporting ([#204](https://github.com/autonomouslogic/eve-ref/issues/204)) ([1ed9615](https://github.com/autonomouslogic/eve-ref/commit/1ed9615eae292e2f67fcee2b061547dbd570d6ff))
+
+
+### Documentation
+
+* Hoboleans blueprints reference data ([8c1bfcb](https://github.com/autonomouslogic/eve-ref/commit/8c1bfcb1adfd79cd69ac050b998ccb68fb115569))
+
 ## [2.10.0](https://github.com/autonomouslogic/eve-ref/compare/2.9.0...2.10.0) (2023-06-14)
 
 
