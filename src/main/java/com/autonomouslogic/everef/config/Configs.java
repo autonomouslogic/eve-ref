@@ -318,8 +318,8 @@ public class Configs {
 	/**
 	 * The base URL used for fetching SDE complements from Hoboleaks.
 	 */
-	public static final Config<URI> HOBOSDE_DATA_BASE_URL = Config.<URI>builder()
-			.name("DATA_BASE_URL")
+	public static final Config<URI> HOBOLEAKS_SDE_DATA_BASE_URL = Config.<URI>builder()
+			.name("HOBOLEAKS_SDE_DATA_BASE_URL")
 			.type(URI.class)
 			.defaultValue(URI.create("https://sde.hoboleaks.space/tq/"))
 			.build();

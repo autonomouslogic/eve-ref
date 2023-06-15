@@ -20,6 +20,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Arrays;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.extern.log4j.Log4j2;
@@ -28,7 +29,6 @@ import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.tuple.Pair;
-import org.h2.mvstore.MVStore;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 
 /**
@@ -64,28 +64,56 @@ public class ScrapeHoboleaks implements Command {
 	private final Duration latestCacheTime = Configs.DATA_LATEST_CACHE_CONTROL_MAX_AGE.getRequired();
 	private final Duration archiveCacheTime = Configs.DATA_ARCHIVE_CACHE_CONTROL_MAX_AGE.getRequired();
 
-	private S3Url dataUrl;
+	private S3Url dataPath;
+	private HttpUrl dataUrl;
 	private HttpUrl hoboUrl;
-	private MVStore mvStore;
 
 	@Inject
 	protected ScrapeHoboleaks() {}
 
 	@Inject
 	protected void init() {
-		dataUrl = (S3Url) urlParser.parse(Configs.DATA_PATH.getRequired());
-		hoboUrl = (HttpUrl) urlParser.parse(Configs.HOBOSDE_DATA_BASE_URL.getRequired());
+		dataPath = (S3Url) urlParser.parse(Configs.DATA_PATH.getRequired());
+		dataUrl = (HttpUrl) urlParser.parse(Configs.DATA_BASE_URL.getRequired());
+		hoboUrl = (HttpUrl) urlParser.parse(Configs.HOBOLEAKS_SDE_DATA_BASE_URL.getRequired());
 	}
 
 	public Completable run() {
-		return loadMeta().flatMap(this::loadFiles).flatMapCompletable(this::uploadFiles);
+		return loadMeta().flatMapCompletable(currentMeta -> {
+			return loadArchiveMeta().flatMapCompletable(archiveMeta -> {
+				if (Arrays.equals(currentMeta, archiveMeta)) {
+					log.info("No update needed.");
+					return Completable.complete();
+				}
+				return buildArchive(currentMeta).flatMapCompletable(this::uploadFiles);
+			});
+		});
 	}
 
 	private Single<byte[]> loadMeta() {
 		return download(hoboUrl.resolve("meta.json"));
 	}
 
-	private Single<File> loadFiles(byte[] metaBytes) {
+	private Single<byte[]> loadArchiveMeta() {
+		return Single.defer(() -> {
+			var file = tempFiles.tempFile("hoboleaks", ".tar.xz").toFile();
+			var url = dataUrl.resolve(HOBOLEAKS.createLatestPath()).toString();
+			return okHttpHelper.download(url, file, okHttpClient).flatMap(response -> {
+				if (response.code() == 404) {
+					return Single.just(new byte[0]);
+				}
+				if (response.code() != 200) {
+					return Single.error(new RuntimeException("Failed to download " + url + ": " + response.code()));
+				}
+				return CompressUtil.loadArchive(file)
+						.filter(entry -> entry.getLeft().getName().equals("meta.json"))
+						.map(Pair::getRight)
+						.first(new byte[0]);
+			});
+		});
+	}
+
+	private Single<File> buildArchive(byte[] metaBytes) {
 		return Single.defer(() -> {
 			var meta = objectMapper.readTree(metaBytes);
 			var archive = tempFiles.tempFile("hoboleaks-scrape", ".tar").toFile();
@@ -140,8 +168,8 @@ public class ScrapeHoboleaks implements Command {
 	 */
 	private Completable uploadFiles(File outputFile) {
 		return Completable.defer(() -> {
-			var latestPath = dataUrl.resolve(HOBOLEAKS.createLatestPath());
-			var archivePath = dataUrl.resolve(HOBOLEAKS.createArchivePath(Instant.now()));
+			var latestPath = dataPath.resolve(HOBOLEAKS.createLatestPath());
+			var archivePath = dataPath.resolve(HOBOLEAKS.createArchivePath(Instant.now()));
 			var latestPut = s3Util.putPublicObjectRequest(outputFile.length(), latestPath, latestCacheTime);
 			var archivePut = s3Util.putPublicObjectRequest(outputFile.length(), archivePath, archiveCacheTime);
 			log.info(String.format("Uploading latest file to %s", latestPath));
