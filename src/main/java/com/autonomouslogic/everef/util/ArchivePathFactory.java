@@ -82,6 +82,14 @@ public class ArchivePathFactory {
 			.suffix(".tar.xz")
 			.build();
 
+	public static final ArchivePathFactory HOBOLEAKS = ArchivePathFactory.builder()
+			.folder("hoboleaks-sde")
+			.filename("hoboleaks-sde")
+			.dateFolder(false)
+			.fileDateTimeFormatter(DATE_PATTERN)
+			.suffix(".tar.xz")
+			.build();
+
 	@NonNull
 	String folder;
 
