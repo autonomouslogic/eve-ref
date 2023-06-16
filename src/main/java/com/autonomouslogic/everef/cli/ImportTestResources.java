@@ -139,7 +139,7 @@ public class ImportTestResources implements Command {
 					.run()
 					.andThen(Completable.defer(() -> {
 						var storeHandler = buildRefData.getStoreHandler();
-						return Completable.mergeArray(
+						return Completable.concatArray(
 								exportEsiResources(storeHandler),
 								exportSdeResources(storeHandler),
 								exportRefdataResources(storeHandler));
@@ -161,7 +161,7 @@ public class ImportTestResources implements Command {
 	}
 
 	private Completable exportRefdataResources(@NonNull StoreHandler storeHandler) {
-		return exportResources(TEST_RESOURCES + "/refdata/refdata", storeHandler::getSdeStore);
+		return exportResources(TEST_RESOURCES + "/refdata/refdata", storeHandler::getRefStore);
 	}
 
 	private Completable exportResources(
