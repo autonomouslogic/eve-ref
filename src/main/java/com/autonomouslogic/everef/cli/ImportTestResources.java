@@ -1,10 +1,13 @@
 package com.autonomouslogic.everef.cli;
 
 import com.autonomouslogic.everef.cli.refdata.BuildRefData;
+import com.autonomouslogic.everef.cli.refdata.StoreHandler;
 import com.autonomouslogic.everef.cli.refdata.esi.EsiLoader;
+import com.autonomouslogic.everef.model.refdata.RefDataConfig;
 import com.autonomouslogic.everef.url.UrlParser;
 import com.autonomouslogic.everef.util.CompressUtil;
 import com.autonomouslogic.everef.util.DataUtil;
+import com.autonomouslogic.everef.util.MockScrapeBuilder;
 import com.autonomouslogic.everef.util.RefDataUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -12,6 +15,7 @@ import io.reactivex.rxjava3.core.Completable;
 import java.io.File;
 import javax.inject.Inject;
 import javax.inject.Named;
+import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -48,15 +52,20 @@ public class ImportTestResources implements Command {
 	protected BuildRefData buildRefData;
 
 	@Inject
+	protected MockScrapeBuilder mockScrapeBuilder;
+
+	@Inject
 	protected ImportTestResources() {}
 
 	public Completable run() {
 		if (!new File(TEST_RESOURCES).exists()) {
 			throw new RuntimeException("Test resources directory does not exist");
 		}
-		return Completable.mergeArray(
-				//			dataUtil.downloadLatestSde().flatMapCompletable(this::loadSdeResources),
-				dataUtil.downloadLatestEsi().flatMapCompletable(this::loadEsiResources));
+		return Completable.concatArray(
+				//			Completable.mergeArray(
+				//				dataUtil.downloadLatestSde().flatMapCompletable(this::loadSdeResources),
+				//				dataUtil.downloadLatestEsi().flatMapCompletable(this::loadEsiResources)),
+				buildRefData());
 	}
 
 	private Completable loadSdeResources(File file) {
@@ -112,6 +121,39 @@ public class ImportTestResources implements Command {
 			log.info("Writing {}", outputFile);
 			yamlMapper.writeValue(outputFile, newContent);
 			return Completable.complete();
+		});
+	}
+
+	private Completable buildRefData() {
+		return Completable.defer(() -> {
+			mockScrapeBuilder.setBasePath(TEST_RESOURCES);
+			var sdeFile = mockScrapeBuilder.createTestSde();
+			var esiFile = mockScrapeBuilder.createTestEsiDump();
+			return buildRefData
+					.setSdeFile(sdeFile)
+					.setEsiFile(esiFile)
+					.setStopAtUpload(true)
+					.run()
+					.andThen(Completable.defer(() -> exportResources(buildRefData.getStoreHandler())))
+					.andThen(buildRefData.closeMvStore());
+		});
+	}
+
+	private Completable exportResources(@NonNull StoreHandler storeHandler) {
+		return Completable.fromAction(() -> {
+			var prettyPrinter = objectMapper.writerWithDefaultPrettyPrinter();
+			for (RefDataConfig config : refDataUtil.loadReferenceDataConfig()) {
+				var store = storeHandler.getEsiStore(config.getId());
+				for (var id : config.getTest().getIds()) {
+					var filename = "src/test/resources/com/autonomouslogic/everef/cli/refdata/esi/EsiLoaderTest/"
+							+ config.getTest().getFilePrefix() + "-" + id + ".json";
+					var json = store.get(id);
+					if (json == null) {
+						continue;
+					}
+					prettyPrinter.writeValue(new File(filename), json);
+				}
+			}
 		});
 	}
 }

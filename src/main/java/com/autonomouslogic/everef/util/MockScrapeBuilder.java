@@ -3,7 +3,9 @@ package com.autonomouslogic.everef.util;
 import com.autonomouslogic.commons.ResourceUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Map;
@@ -11,6 +13,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import lombok.Setter;
 import lombok.SneakyThrows;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
@@ -28,6 +31,9 @@ public class MockScrapeBuilder {
 	@Inject
 	protected DataUtil dataUtil;
 
+	@Setter
+	private String basePath;
+
 	@Inject
 	protected MockScrapeBuilder() {}
 
@@ -39,7 +45,7 @@ public class MockScrapeBuilder {
 			if (config.getSde() == null) {
 				continue;
 			}
-			entries.add(createEntry("/refdata/", config.getSde().getFile()));
+			entries.add(createEntry("/refdata", config.getSde().getFile()));
 		}
 		return createZipFile(Map.ofEntries(entries.toArray(new Map.Entry[0])));
 	}
@@ -88,7 +94,16 @@ public class MockScrapeBuilder {
 
 	@SneakyThrows
 	private Map.Entry<String, byte[]> createEntry(String base, String path) {
-		return Map.entry(path, IOUtils.toByteArray(ResourceUtil.loadResource(base + "/" + path)));
+		InputStream in;
+		if (basePath == null) {
+			in = ResourceUtil.loadResource(base + "/" + path);
+		} else {
+			var file = new File(basePath, base + "/" + path);
+			in = new FileInputStream(file);
+		}
+		try (in) {
+			return Map.entry(path, IOUtils.toByteArray(in));
+		}
 	}
 
 	@SneakyThrows

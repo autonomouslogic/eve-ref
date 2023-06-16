@@ -36,6 +36,7 @@ import java.time.temporal.ChronoUnit;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.SneakyThrows;
@@ -106,10 +107,21 @@ public class BuildRefData implements Command {
 	@NonNull
 	private ZonedDateTime buildTime = ZonedDateTime.now(ZoneOffset.UTC).truncatedTo(ChronoUnit.SECONDS);
 
+	@Setter
+	private File sdeFile;
+
+	@Setter
+	private File esiFile;
+
+	@Setter
+	private boolean stopAtUpload = false;
+
 	private final Duration latestCacheTime = Configs.DATA_LATEST_CACHE_CONTROL_MAX_AGE.getRequired();
 	private final Duration archiveCacheTime = Configs.DATA_ARCHIVE_CACHE_CONTROL_MAX_AGE.getRequired();
 
+	@Getter
 	private StoreHandler storeHandler;
+
 	private S3Url dataUrl;
 	private MVStore mvStore;
 
@@ -126,12 +138,17 @@ public class BuildRefData implements Command {
 		return Completable.concatArray(
 				initMvStore(),
 				Completable.mergeArray(
-						dataUtil.downloadLatestSde().flatMapCompletable(sdeLoader::load),
-						dataUtil.downloadLatestEsi().flatMapCompletable(esiLoader::load)),
+						latestSde().flatMapCompletable(sdeLoader::load),
+						latestEsi().flatMapCompletable(esiLoader::load)),
 				mergeDatasets(),
 				postDatasets(),
-				buildOutputFile().flatMapCompletable(this::uploadFiles),
-				closeMvStore());
+				Completable.defer(() -> {
+					if (stopAtUpload) {
+						return Completable.complete();
+					}
+					return Completable.concatArray(
+							buildOutputFile().flatMapCompletable(this::uploadFiles), closeMvStore());
+				}));
 	}
 
 	private Completable initMvStore() {
@@ -160,7 +177,7 @@ public class BuildRefData implements Command {
 				variationsDecoratorProvider.get().setStoreHandler(storeHandler).create()));
 	}
 
-	private Completable closeMvStore() {
+	public Completable closeMvStore() {
 		return Completable.fromAction(() -> {
 			mvStore.close();
 		});
@@ -235,5 +252,13 @@ public class BuildRefData implements Command {
 					s3Adapter.putObject(latestPut, outputFile, s3Client).ignoreElement(),
 					s3Adapter.putObject(archivePut, outputFile, s3Client).ignoreElement());
 		});
+	}
+
+	private Single<File> latestEsi() {
+		return esiFile != null ? Single.just(esiFile) : dataUtil.downloadLatestEsi();
+	}
+
+	private Single<File> latestSde() {
+		return sdeFile != null ? Single.just(sdeFile) : dataUtil.downloadLatestSde();
 	}
 }
