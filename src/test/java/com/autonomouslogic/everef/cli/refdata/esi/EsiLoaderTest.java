@@ -7,6 +7,7 @@ import com.autonomouslogic.everef.cli.refdata.StoreHandler;
 import com.autonomouslogic.everef.mvstore.MVStoreUtil;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.test.TestDataUtil;
+import com.autonomouslogic.everef.util.MockScrapeBuilder;
 import com.autonomouslogic.everef.util.RefDataUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import javax.inject.Inject;
@@ -34,6 +35,9 @@ public class EsiLoaderTest {
 	@Inject
 	RefDataUtil refDataUtil;
 
+	@Inject
+	MockScrapeBuilder mockScrapeBuilder;
+
 	StoreHandler storeHandler;
 
 	@BeforeEach
@@ -48,7 +52,7 @@ public class EsiLoaderTest {
 	@Test
 	@SneakyThrows
 	void testLoadEsi() {
-		esiLoader.load(testDataUtil.createTestEsiDump()).blockingAwait();
+		esiLoader.load(mockScrapeBuilder.createTestEsiDump()).blockingAwait();
 		for (var config : refDataUtil.loadReferenceDataConfig()) {
 			if (config.getEsi() == null) {
 				continue;

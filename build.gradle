@@ -228,3 +228,11 @@ task scrapeHoboleaks(type: JavaExec) {
 	classpath = sourceSets.main.runtimeClasspath
 	mainClass = mainClassName
 }
+
+task importTestResources(type: JavaExec) {
+	group "application"
+	args "import-test-resources"
+	environment envProperties
+	classpath = sourceSets.main.runtimeClasspath
+	mainClass = mainClassName
+}

@@ -1,6 +1,5 @@
 package com.autonomouslogic.everef.cli.refdata;
 
-import static com.autonomouslogic.everef.util.ArchivePathFactory.ESI;
 import static com.autonomouslogic.everef.util.ArchivePathFactory.REFERENCE_DATA;
 
 import com.autonomouslogic.everef.cli.Command;
@@ -10,13 +9,13 @@ import com.autonomouslogic.everef.cli.refdata.post.SkillDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.VariationsDecorator;
 import com.autonomouslogic.everef.cli.refdata.sde.SdeLoader;
 import com.autonomouslogic.everef.config.Configs;
-import com.autonomouslogic.everef.http.DataCrawler;
 import com.autonomouslogic.everef.model.refdata.RefDataConfig;
 import com.autonomouslogic.everef.mvstore.MVStoreUtil;
 import com.autonomouslogic.everef.s3.S3Adapter;
 import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.url.UrlParser;
 import com.autonomouslogic.everef.util.CompressUtil;
+import com.autonomouslogic.everef.util.DataUtil;
 import com.autonomouslogic.everef.util.OkHttpHelper;
 import com.autonomouslogic.everef.util.RefDataUtil;
 import com.autonomouslogic.everef.util.Rx;
@@ -30,7 +29,6 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.net.URI;
 import java.time.Duration;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
@@ -90,10 +88,10 @@ public class BuildRefData implements Command {
 	protected RefDataUtil refDataUtil;
 
 	@Inject
-	protected Provider<RefDataMerger> refDataMergerProvider;
+	protected DataUtil dataUtil;
 
 	@Inject
-	protected Provider<DataCrawler> dataCrawlerProvider;
+	protected Provider<RefDataMerger> refDataMergerProvider;
 
 	@Inject
 	protected Provider<SkillDecorator> skillDecoratorProvider;
@@ -113,7 +111,6 @@ public class BuildRefData implements Command {
 
 	private StoreHandler storeHandler;
 	private S3Url dataUrl;
-	private URI dataBaseUrl;
 	private MVStore mvStore;
 
 	@Inject
@@ -122,7 +119,6 @@ public class BuildRefData implements Command {
 	@Inject
 	protected void init() {
 		dataUrl = (S3Url) urlParser.parse(Configs.DATA_PATH.getRequired());
-		dataBaseUrl = Configs.DATA_BASE_URL.getRequired();
 	}
 
 	@Override
@@ -130,8 +126,8 @@ public class BuildRefData implements Command {
 		return Completable.concatArray(
 				initMvStore(),
 				Completable.mergeArray(
-						downloadLatestSde().flatMapCompletable(sdeLoader::load),
-						downloadLatestEsi().flatMapCompletable(esiLoader::load)),
+						dataUtil.downloadLatestSde().flatMapCompletable(sdeLoader::load),
+						dataUtil.downloadLatestEsi().flatMapCompletable(esiLoader::load)),
 				mergeDatasets(),
 				postDatasets(),
 				buildOutputFile().flatMapCompletable(this::uploadFiles),
@@ -167,43 +163,6 @@ public class BuildRefData implements Command {
 	private Completable closeMvStore() {
 		return Completable.fromAction(() -> {
 			mvStore.close();
-		});
-	}
-
-	private Single<File> downloadLatestSde() {
-		return dataCrawlerProvider
-				.get()
-				.setPrefix("/ccp/sde")
-				.crawl()
-				.filter(url -> url.toString().endsWith("-TRANQUILITY.zip"))
-				.sorted()
-				.lastElement()
-				.switchIfEmpty(Single.error(new RuntimeException("No SDE found")))
-				.flatMap(url -> {
-					log.info("Using SDE at: {}", url);
-					var file = tempFiles.tempFile("sde", ".zip").toFile();
-					return okHttpHelper
-							.download(url.toString(), file, okHttpClient)
-							.flatMap(response -> {
-								if (response.code() != 200) {
-									return Single.error(
-											new RuntimeException("Failed downloading ESI: " + response.code()));
-								}
-								return Single.just(file);
-							});
-				});
-	}
-
-	private Single<File> downloadLatestEsi() {
-		return Single.defer(() -> {
-			var url = dataBaseUrl + "/" + ESI.createLatestPath();
-			var file = tempFiles.tempFile("esi", ".tar.xz").toFile();
-			return okHttpHelper.download(url, file, okHttpClient).flatMap(response -> {
-				if (response.code() != 200) {
-					return Single.error(new RuntimeException("Failed downloading ESI"));
-				}
-				return Single.just(file);
-			});
 		});
 	}
 
