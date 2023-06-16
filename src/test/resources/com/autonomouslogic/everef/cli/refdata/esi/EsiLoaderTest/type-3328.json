@@ -1,7 +1,8 @@
 {
   "capacity" : 0,
   "description" : {
-    "en" : "Skill at operating Gallente frigates."
+    "en" : "Skill at operating Gallente frigates.",
+    "fr" : "Compétence liée au pilotage des frégates gallente."
   },
   "dogma_attributes" : {
     "161" : {
@@ -68,7 +69,8 @@
   "market_group_id" : 377,
   "mass" : 0,
   "name" : {
-    "en" : "Gallente Frigate"
+    "en" : "Gallente Frigate",
+    "fr" : "Frégate gallente"
   },
   "packaged_volume" : 0.01,
   "portion_size" : 1,
