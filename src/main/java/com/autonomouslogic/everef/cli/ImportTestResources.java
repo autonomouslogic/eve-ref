@@ -65,9 +65,9 @@ public class ImportTestResources implements Command {
 			throw new RuntimeException("Test resources directory does not exist");
 		}
 		return Completable.concatArray(
-				//			Completable.mergeArray(
-				//				dataUtil.downloadLatestSde().flatMapCompletable(this::loadSdeResources),
-				//				dataUtil.downloadLatestEsi().flatMapCompletable(this::loadEsiResources)),
+				Completable.mergeArray(
+						dataUtil.downloadLatestSde().flatMapCompletable(this::loadSdeResources),
+						dataUtil.downloadLatestEsi().flatMapCompletable(this::loadEsiResources)),
 				buildRefData());
 	}
 
