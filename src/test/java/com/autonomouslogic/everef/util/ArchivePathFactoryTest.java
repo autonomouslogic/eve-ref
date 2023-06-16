@@ -71,6 +71,16 @@ public class ArchivePathFactoryTest {
 				"esi-scrape/eve-ref-esi-scrape-latest.tar.xz");
 	}
 
+	@Test
+	void shouldGenerateHoboleaksSdeNames() {
+		var factory = ArchivePathFactory.HOBOLEAKS;
+		testExpectedPaths(
+				factory,
+				Instant.parse("2023-03-15T00:00:00Z"),
+				"hoboleaks-sde/history/2023/hoboleaks-sde-2023-03-15.tar.xz",
+				"hoboleaks-sde/hoboleaks-sde-latest.tar.xz");
+	}
+
 	private static void testExpectedPaths(
 			ArchivePathFactory factory, Instant timestamp, String expectedTimePath, String expectedLatestPath) {
 		assertEquals(expectedLatestPath, factory.createLatestPath());

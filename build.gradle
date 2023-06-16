@@ -220,3 +220,11 @@ task verifyRefDataModels(type: JavaExec) {
 	classpath = sourceSets.main.runtimeClasspath
 	mainClass = mainClassName
 }
+
+task scrapeHoboleaks(type: JavaExec) {
+	group "application"
+	args "scrape-hoboleaks"
+	environment envProperties
+	classpath = sourceSets.main.runtimeClasspath
+	mainClass = mainClassName
+}

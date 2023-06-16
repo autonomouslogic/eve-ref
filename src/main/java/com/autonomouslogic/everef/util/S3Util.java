@@ -16,24 +16,29 @@ public class S3Util {
 	@Inject
 	protected S3Util() {}
 
-	public PutObjectRequest putObjectRequest(long len, S3Url url, String contentType) {
+	public PutObjectRequest putObjectRequest(long len, S3Url url) {
 		return PutObjectRequest.builder()
 				.bucket(url.getBucket())
 				.key(url.getPath())
 				.contentLength(len)
-				.contentType(contentType)
 				.build();
 	}
 
-	public PutObjectRequest putPublicObjectRequest(long len, S3Url url, String contentType, Duration maxAge) {
-		return putPublicObjectRequest(len, url, contentType).toBuilder()
+	public PutObjectRequest putPublicObjectRequest(long len, S3Url url) {
+		return putObjectRequest(len, url).toBuilder()
+				.acl(ObjectCannedACL.PUBLIC_READ)
+				.build();
+	}
+
+	public PutObjectRequest putPublicObjectRequest(long len, S3Url url, Duration maxAge) {
+		return putPublicObjectRequest(len, url).toBuilder()
 				.cacheControl(cacheControl(maxAge))
 				.build();
 	}
 
-	public PutObjectRequest putPublicObjectRequest(long len, S3Url url, String contentType) {
-		return putObjectRequest(len, url, contentType).toBuilder()
-				.acl(ObjectCannedACL.PUBLIC_READ)
+	public PutObjectRequest putPublicObjectRequest(long len, S3Url url, String contentType, Duration maxAge) {
+		return putPublicObjectRequest(len, url, maxAge).toBuilder()
+				.contentType(contentType)
 				.build();
 	}
 

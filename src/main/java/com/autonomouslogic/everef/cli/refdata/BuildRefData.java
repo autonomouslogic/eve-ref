@@ -268,10 +268,8 @@ public class BuildRefData implements Command {
 		return Completable.defer(() -> {
 			var latestPath = dataUrl.resolve(REFERENCE_DATA.createLatestPath());
 			var archivePath = dataUrl.resolve(REFERENCE_DATA.createArchivePath(buildTime));
-			var latestPut = s3Util.putPublicObjectRequest(
-					outputFile.length(), latestPath, "application/x-bzip2", latestCacheTime);
-			var archivePut = s3Util.putPublicObjectRequest(
-					outputFile.length(), archivePath, "application/x-bzip2", archiveCacheTime);
+			var latestPut = s3Util.putPublicObjectRequest(outputFile.length(), latestPath, latestCacheTime);
+			var archivePut = s3Util.putPublicObjectRequest(outputFile.length(), archivePath, archiveCacheTime);
 			log.info(String.format("Uploading latest file to %s", latestPath));
 			log.info(String.format("Uploading archive file to %s", archivePath));
 			return Completable.mergeArray(

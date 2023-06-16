@@ -316,6 +316,15 @@ public class Configs {
 			.build();
 
 	/**
+	 * The base URL used for fetching SDE complements from Hoboleaks.
+	 */
+	public static final Config<URI> HOBOLEAKS_SDE_DATA_BASE_URL = Config.<URI>builder()
+			.name("HOBOLEAKS_SDE_DATA_BASE_URL")
+			.type(URI.class)
+			.defaultValue(URI.create("https://sde.hoboleaks.space/tq/"))
+			.build();
+
+	/**
 	 * User agent string to provide to anything other than the ESI.
 	 */
 	public static final Config<String> HTTP_USER_AGENT = Config.<String>builder()
