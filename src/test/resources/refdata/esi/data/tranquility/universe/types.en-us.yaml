@@ -1,3 +1,4 @@
+---
 "645":
   capacity: 750
   description: "The Dominix is one of the old warhorses dating back to the Gallente-Caldari\
@@ -5,201 +6,201 @@
     \ Its formidable hulk and powerful drone arsenal means that anyone not in the\
     \ largest and latest battleships will regret ever locking horns with it."
   dogma_attributes:
-    - attribute_id: 3
-      value: 0
-    - attribute_id: 4
-      value: 100250000
-    - attribute_id: 9
-      value: 9350
-    - attribute_id: 1547
-      value: 3
-    - attribute_id: 12
-      value: 7
-    - attribute_id: 13
-      value: 5
-    - attribute_id: 14
-      value: 6
-    - attribute_id: 15
-      value: 0
-    - attribute_id: 18
-      value: 0
-    - attribute_id: 19
-      value: 1
-    - attribute_id: 21
-      value: 0
-    - attribute_id: 37
-      value: 109
-    - attribute_id: 38
-      value: 750
-    - attribute_id: 552
-      value: 465
-    - attribute_id: 48
-      value: 600
-    - attribute_id: 561
-      value: 10
-    - attribute_id: 564
-      value: 117
-    - attribute_id: 55
-      value: 1100000
-    - attribute_id: 2113
-      value: 1
-    - attribute_id: 11
-      value: 10000
-    - attribute_id: 70
-      value: 0.1254
-    - attribute_id: 524
-      value: 0.75
-    - attribute_id: 76
-      value: 84000
-    - attribute_id: 525
-      value: 1
-    - attribute_id: 600
-      value: 3
-    - attribute_id: 101
-      value: 0
-    - attribute_id: 102
-      value: 6
-    - attribute_id: 1132
-      value: 400
-    - attribute_id: 109
-      value: 0.67
-    - attribute_id: 110
-      value: 0.67
-    - attribute_id: 111
-      value: 0.67
-    - attribute_id: 1137
-      value: 3
-    - attribute_id: 1555
-      value: 500
-    - attribute_id: 633
-      value: 0
-    - attribute_id: 124
-      value: 16777215
-    - attribute_id: 129
-      value: 1000
-    - attribute_id: 1154
-      value: 3
-    - attribute_id: 136
-      value: 1
-    - attribute_id: 661
-      value: 1000
-    - attribute_id: 662
-      value: 0.5
-    - attribute_id: 153
-      value: 0.000000138
-    - attribute_id: 1178
-      value: 100
-    - attribute_id: 1179
-      value: 0.01
-    - attribute_id: 161
-      value: 454500
-    - attribute_id: 162
-      value: 250
-    - attribute_id: 113
-      value: 0.67
-    - attribute_id: 1196
-      value: 0.01
-    - attribute_id: 1198
-      value: 0.01
-    - attribute_id: 1199
-      value: 100
-    - attribute_id: 1200
-      value: 100
-    - attribute_id: 182
-      value: 3336
-    - attribute_id: 188
-      value: 0
-    - attribute_id: 192
-      value: 7
-    - attribute_id: 3266
-      value: 50
-    - attribute_id: 3267
-      value: 100
-    - attribute_id: 3268
-      value: 0.05
-    - attribute_id: 1224
-      value: 0.5
-    - attribute_id: 208
-      value: 0
-    - attribute_id: 209
-      value: 0
-    - attribute_id: 210
-      value: 22
-    - attribute_id: 211
-      value: 0
-    - attribute_id: 217
-      value: 395
-    - attribute_id: 1768
-      value: 11331
-    - attribute_id: 1259
-      value: 0.76
-    - attribute_id: 1261
-      value: 0.71
-    - attribute_id: 1262
-      value: 0.79
-    - attribute_id: 246
-      value: 395
-    - attribute_id: 1271
-      value: 125
-    - attribute_id: 1281
-      value: 1
-    - attribute_id: 263
-      value: 7920
-    - attribute_id: 264
-      value: 0
-    - attribute_id: 265
-      value: 8800
-    - attribute_id: 267
-      value: 0.5
-    - attribute_id: 268
-      value: 0.9
-    - attribute_id: 269
-      value: 0.65
-    - attribute_id: 270
-      value: 0.65
-    - attribute_id: 271
-      value: 1
-    - attribute_id: 272
-      value: 0.5
-    - attribute_id: 273
-      value: 0.6
-    - attribute_id: 274
-      value: 0.8
-    - attribute_id: 277
-      value: 1
-    - attribute_id: 283
-      value: 375
-    - attribute_id: 49
-      value: 0
-    - attribute_id: 2115
-      value: 1
-    - attribute_id: 422
-      value: 1
-    - attribute_id: 3020
-      value: 1
-    - attribute_id: 79
-      value: 8250
-    - attribute_id: 479
-      value: 2500000
-    - attribute_id: 482
-      value: 6000
-    - attribute_id: 484
-      value: 0.75
-    - attribute_id: 500
-      value: 7.5
-    - attribute_id: 2045
-      value: 1
+  - attribute_id: 3
+    value: 0
+  - attribute_id: 4
+    value: 100250000
+  - attribute_id: 9
+    value: 9350
+  - attribute_id: 1547
+    value: 3
+  - attribute_id: 12
+    value: 7
+  - attribute_id: 13
+    value: 5
+  - attribute_id: 14
+    value: 6
+  - attribute_id: 15
+    value: 0
+  - attribute_id: 18
+    value: 0
+  - attribute_id: 19
+    value: 1
+  - attribute_id: 21
+    value: 0
+  - attribute_id: 37
+    value: 109
+  - attribute_id: 38
+    value: 750
+  - attribute_id: 552
+    value: 465
+  - attribute_id: 48
+    value: 600
+  - attribute_id: 561
+    value: 10
+  - attribute_id: 564
+    value: 117
+  - attribute_id: 55
+    value: 1100000
+  - attribute_id: 2113
+    value: 1
+  - attribute_id: 11
+    value: 10000
+  - attribute_id: 70
+    value: 0.1254
+  - attribute_id: 524
+    value: 0.75
+  - attribute_id: 76
+    value: 84000
+  - attribute_id: 525
+    value: 1
+  - attribute_id: 600
+    value: 3
+  - attribute_id: 101
+    value: 0
+  - attribute_id: 102
+    value: 6
+  - attribute_id: 1132
+    value: 400
+  - attribute_id: 109
+    value: 0.67
+  - attribute_id: 110
+    value: 0.67
+  - attribute_id: 111
+    value: 0.67
+  - attribute_id: 1137
+    value: 3
+  - attribute_id: 1555
+    value: 500
+  - attribute_id: 633
+    value: 0
+  - attribute_id: 124
+    value: 16777215
+  - attribute_id: 129
+    value: 1000
+  - attribute_id: 1154
+    value: 3
+  - attribute_id: 136
+    value: 1
+  - attribute_id: 661
+    value: 1000
+  - attribute_id: 662
+    value: 0.5
+  - attribute_id: 153
+    value: 0.000000138
+  - attribute_id: 1178
+    value: 100
+  - attribute_id: 1179
+    value: 0.01
+  - attribute_id: 161
+    value: 454500
+  - attribute_id: 162
+    value: 250
+  - attribute_id: 113
+    value: 0.67
+  - attribute_id: 1196
+    value: 0.01
+  - attribute_id: 1198
+    value: 0.01
+  - attribute_id: 1199
+    value: 100
+  - attribute_id: 1200
+    value: 100
+  - attribute_id: 182
+    value: 3336
+  - attribute_id: 188
+    value: 0
+  - attribute_id: 192
+    value: 7
+  - attribute_id: 3266
+    value: 50
+  - attribute_id: 3267
+    value: 100
+  - attribute_id: 3268
+    value: 0.05
+  - attribute_id: 1224
+    value: 0.5
+  - attribute_id: 208
+    value: 0
+  - attribute_id: 209
+    value: 0
+  - attribute_id: 210
+    value: 22
+  - attribute_id: 211
+    value: 0
+  - attribute_id: 217
+    value: 395
+  - attribute_id: 1768
+    value: 11331
+  - attribute_id: 1259
+    value: 0.76
+  - attribute_id: 1261
+    value: 0.71
+  - attribute_id: 1262
+    value: 0.79
+  - attribute_id: 246
+    value: 395
+  - attribute_id: 1271
+    value: 125
+  - attribute_id: 1281
+    value: 1
+  - attribute_id: 263
+    value: 7920
+  - attribute_id: 264
+    value: 0
+  - attribute_id: 265
+    value: 8800
+  - attribute_id: 267
+    value: 0.5
+  - attribute_id: 268
+    value: 0.9
+  - attribute_id: 269
+    value: 0.65
+  - attribute_id: 270
+    value: 0.65
+  - attribute_id: 271
+    value: 1
+  - attribute_id: 272
+    value: 0.5
+  - attribute_id: 273
+    value: 0.6
+  - attribute_id: 274
+    value: 0.8
+  - attribute_id: 277
+    value: 1
+  - attribute_id: 283
+    value: 375
+  - attribute_id: 49
+    value: 0
+  - attribute_id: 2115
+    value: 1
+  - attribute_id: 422
+    value: 1
+  - attribute_id: 3020
+    value: 1
+  - attribute_id: 79
+    value: 8250
+  - attribute_id: 479
+    value: 2500000
+  - attribute_id: 482
+    value: 6000
+  - attribute_id: 484
+    value: 0.75
+  - attribute_id: 500
+    value: 7.5
+  - attribute_id: 2045
+    value: 1
   dogma_effects:
-    - effect_id: 2186
-      is_default: false
-    - effect_id: 2187
-      is_default: false
-    - effect_id: 5427
-      is_default: false
-    - effect_id: 5428
-      is_default: false
-    - effect_id: 8377
-      is_default: false
+  - effect_id: 2186
+    is_default: false
+  - effect_id: 2187
+    is_default: false
+  - effect_id: 5427
+    is_default: false
+  - effect_id: 5428
+    is_default: false
+  - effect_id: 8377
+    is_default: false
   graphic_id: 318
   group_id: 27
   market_group_id: 81
@@ -211,46 +212,45 @@
   radius: 250
   type_id: 645
   volume: 454500
-
 "3336":
   capacity: 0
   description: "Skill at operating Gallente battleships."
   dogma_attributes:
-    - attribute_id: 161
-      value: 0.01
-    - attribute_id: 162
-      value: 1
-    - attribute_id: 4
-      value: 0
-    - attribute_id: 278
-      value: 3
-    - attribute_id: 38
-      value: 0
-    - attribute_id: 1047
-      value: 0
-    - attribute_id: 275
-      value: 8
-    - attribute_id: 180
-      value: 167
-    - attribute_id: 277
-      value: 4
-    - attribute_id: 182
-      value: 3327
-    - attribute_id: 183
-      value: 33097
-    - attribute_id: 280
-      value: 0
-    - attribute_id: 181
-      value: 168
+  - attribute_id: 161
+    value: 0.01
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 4
+    value: 0
+  - attribute_id: 278
+    value: 3
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 1047
+    value: 0
+  - attribute_id: 275
+    value: 8
+  - attribute_id: 180
+    value: 167
+  - attribute_id: 277
+    value: 4
+  - attribute_id: 182
+    value: 3327
+  - attribute_id: 183
+    value: 33097
+  - attribute_id: 280
+    value: 0
+  - attribute_id: 181
+    value: 168
   dogma_effects:
-    - effect_id: 132
-      is_default: true
-    - effect_id: 611
-      is_default: false
-    - effect_id: 682
-      is_default: false
-    - effect_id: 11418
-      is_default: false
+  - effect_id: 132
+    is_default: true
+  - effect_id: 611
+    is_default: false
+  - effect_id: 682
+    is_default: false
+  - effect_id: 11418
+    is_default: false
   group_id: 257
   icon_id: 33
   market_group_id: 377
@@ -262,39 +262,38 @@
   radius: 1
   type_id: 3336
   volume: 0.01
-
 "3327":
   capacity: 0
   description: "The basic operation of spaceships. 2% improved ship agility for all\
     \ ships per skill level."
   dogma_attributes:
-    - attribute_id: 193
-      value: 1
-    - attribute_id: 162
-      value: 1
-    - attribute_id: 4
-      value: 0
-    - attribute_id: 38
-      value: 0
-    - attribute_id: 161
-      value: 0.01
-    - attribute_id: 275
-      value: 1
-    - attribute_id: 180
-      value: 167
-    - attribute_id: 181
-      value: 168
-    - attribute_id: 151
-      value: -2
-    - attribute_id: 280
-      value: 0
+  - attribute_id: 193
+    value: 1
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 4
+    value: 0
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 161
+    value: 0.01
+  - attribute_id: 275
+    value: 1
+  - attribute_id: 180
+    value: 167
+  - attribute_id: 181
+    value: 168
+  - attribute_id: 151
+    value: -2
+  - attribute_id: 280
+    value: 0
   dogma_effects:
-    - effect_id: 132
-      is_default: true
-    - effect_id: 232
-      is_default: false
-    - effect_id: 395
-      is_default: false
+  - effect_id: 132
+    is_default: true
+  - effect_id: 232
+    is_default: false
+  - effect_id: 395
+    is_default: false
   group_id: 257
   icon_id: 33
   market_group_id: 377
@@ -306,46 +305,45 @@
   radius: 1
   type_id: 3327
   volume: 0.01
-
 "33097":
   capacity: 0
   description: "Skill at operating Gallente battlecruisers."
   dogma_attributes:
-    - attribute_id: 161
-      value: 0.01
-    - attribute_id: 162
-      value: 1
-    - attribute_id: 4
-      value: 0
-    - attribute_id: 278
-      value: 3
-    - attribute_id: 38
-      value: 0
-    - attribute_id: 1047
-      value: 0
-    - attribute_id: 275
-      value: 6
-    - attribute_id: 180
-      value: 167
-    - attribute_id: 277
-      value: 3
-    - attribute_id: 182
-      value: 3327
-    - attribute_id: 183
-      value: 3332
-    - attribute_id: 280
-      value: 0
-    - attribute_id: 181
-      value: 168
+  - attribute_id: 161
+    value: 0.01
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 4
+    value: 0
+  - attribute_id: 278
+    value: 3
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 1047
+    value: 0
+  - attribute_id: 275
+    value: 6
+  - attribute_id: 180
+    value: 167
+  - attribute_id: 277
+    value: 3
+  - attribute_id: 182
+    value: 3327
+  - attribute_id: 183
+    value: 3332
+  - attribute_id: 280
+    value: 0
+  - attribute_id: 181
+    value: 168
   dogma_effects:
-    - effect_id: 132
-      is_default: true
-    - effect_id: 5288
-      is_default: false
-    - effect_id: 5289
-      is_default: false
-    - effect_id: 11062
-      is_default: false
+  - effect_id: 132
+    is_default: true
+  - effect_id: 5288
+    is_default: false
+  - effect_id: 5289
+    is_default: false
+  - effect_id: 11062
+    is_default: false
   group_id: 257
   icon_id: 33
   market_group_id: 377
@@ -357,44 +355,43 @@
   radius: 1
   type_id: 33097
   volume: 0.01
-
 "3332":
   capacity: 0
   description: "Skill at operating Gallente cruisers."
   dogma_attributes:
-    - attribute_id: 161
-      value: 0.01
-    - attribute_id: 162
-      value: 1
-    - attribute_id: 4
-      value: 0
-    - attribute_id: 278
-      value: 3
-    - attribute_id: 38
-      value: 0
-    - attribute_id: 275
-      value: 5
-    - attribute_id: 180
-      value: 167
-    - attribute_id: 277
-      value: 2
-    - attribute_id: 182
-      value: 3327
-    - attribute_id: 183
-      value: 33093
-    - attribute_id: 280
-      value: 0
-    - attribute_id: 181
-      value: 168
+  - attribute_id: 161
+    value: 0.01
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 4
+    value: 0
+  - attribute_id: 278
+    value: 3
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 275
+    value: 5
+  - attribute_id: 180
+    value: 167
+  - attribute_id: 277
+    value: 2
+  - attribute_id: 182
+    value: 3327
+  - attribute_id: 183
+    value: 33093
+  - attribute_id: 280
+    value: 0
+  - attribute_id: 181
+    value: 168
   dogma_effects:
-    - effect_id: 132
-      is_default: true
-    - effect_id: 517
-      is_default: false
-    - effect_id: 928
-      is_default: false
-    - effect_id: 6044
-      is_default: false
+  - effect_id: 132
+    is_default: true
+  - effect_id: 517
+    is_default: false
+  - effect_id: 928
+    is_default: false
+  - effect_id: 6044
+    is_default: false
   group_id: 257
   icon_id: 33
   market_group_id: 377
@@ -406,42 +403,41 @@
   radius: 1
   type_id: 3332
   volume: 0.01
-
 "33093":
   capacity: 0
   description: "Skill at operating Gallente destroyers."
   dogma_attributes:
-    - attribute_id: 161
-      value: 0.01
-    - attribute_id: 162
-      value: 1
-    - attribute_id: 4
-      value: 0
-    - attribute_id: 38
-      value: 0
-    - attribute_id: 275
-      value: 2
-    - attribute_id: 180
-      value: 167
-    - attribute_id: 181
-      value: 168
-    - attribute_id: 182
-      value: 3328
-    - attribute_id: 1047
-      value: 0
-    - attribute_id: 280
-      value: 0
-    - attribute_id: 277
-      value: 3
+  - attribute_id: 161
+    value: 0.01
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 4
+    value: 0
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 275
+    value: 2
+  - attribute_id: 180
+    value: 167
+  - attribute_id: 181
+    value: 168
+  - attribute_id: 182
+    value: 3328
+  - attribute_id: 1047
+    value: 0
+  - attribute_id: 280
+    value: 0
+  - attribute_id: 277
+    value: 3
   dogma_effects:
-    - effect_id: 132
-      is_default: true
-    - effect_id: 5280
-      is_default: false
-    - effect_id: 5281
-      is_default: false
-    - effect_id: 11451
-      is_default: false
+  - effect_id: 132
+    is_default: true
+  - effect_id: 5280
+    is_default: false
+  - effect_id: 5281
+    is_default: false
+  - effect_id: 11451
+    is_default: false
   group_id: 257
   icon_id: 33
   market_group_id: 377
@@ -453,40 +449,39 @@
   radius: 1
   type_id: 33093
   volume: 0.01
-
 "3328":
   capacity: 0
   description: "Skill at operating Gallente frigates."
   dogma_attributes:
-    - attribute_id: 161
-      value: 0.01
-    - attribute_id: 162
-      value: 1
-    - attribute_id: 4
-      value: 0
-    - attribute_id: 38
-      value: 0
-    - attribute_id: 275
-      value: 2
-    - attribute_id: 180
-      value: 167
-    - attribute_id: 181
-      value: 168
-    - attribute_id: 182
-      value: 3327
-    - attribute_id: 280
-      value: 0
-    - attribute_id: 277
-      value: 1
+  - attribute_id: 161
+    value: 0.01
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 4
+    value: 0
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 275
+    value: 2
+  - attribute_id: 180
+    value: 167
+  - attribute_id: 181
+    value: 168
+  - attribute_id: 182
+    value: 3327
+  - attribute_id: 280
+    value: 0
+  - attribute_id: 277
+    value: 1
   dogma_effects:
-    - effect_id: 132
-      is_default: true
-    - effect_id: 468
-      is_default: false
-    - effect_id: 751
-      is_default: false
-    - effect_id: 4600
-      is_default: false
+  - effect_id: 132
+    is_default: true
+  - effect_id: 468
+    is_default: false
+  - effect_id: 751
+    is_default: false
+  - effect_id: 4600
+    is_default: false
   group_id: 257
   icon_id: 33
   market_group_id: 377
@@ -498,7 +493,6 @@
   radius: 1
   type_id: 3328
   volume: 0.01
-
 "52225":
   capacity: 0
   description: "This bioadaptive mutaplasmid tool is designed to interface with and\
@@ -525,7 +519,6 @@
   radius: 1
   type_id: 52225
   volume: 1
-
 "52227":
   capacity: 0
   description: "Utilizes a combination of containment field emitters and redundancy\
@@ -533,27 +526,27 @@
     \ to resistance for shield, armor and hull.\r\n\r\nOnly one Damage Control can\
     \ be fit at a given time."
   dogma_attributes:
-    - attribute_id: 161
-      value: 5
-    - attribute_id: 162
-      value: 1
-    - attribute_id: 4
-      value: 0
-    - attribute_id: 38
-      value: 0
-    - attribute_id: 1544
-      value: 1
-    - attribute_id: 277
-      value: 4
-    - attribute_id: 182
-      value: 3394
+  - attribute_id: 161
+    value: 5
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 4
+    value: 0
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 1544
+    value: 1
+  - attribute_id: 277
+    value: 4
+  - attribute_id: 182
+    value: 3394
   dogma_effects:
-    - effect_id: 11
-      is_default: false
-    - effect_id: 16
-      is_default: false
-    - effect_id: 2302
-      is_default: false
+  - effect_id: 11
+    is_default: false
+  - effect_id: 16
+    is_default: false
+  - effect_id: 2302
+    is_default: false
   group_id: 60
   icon_id: 77
   mass: 0
@@ -564,83 +557,6 @@
   radius: 1
   type_id: 52227
   volume: 5
-
-"2048":
-  capacity: 0
-  description: "Utilizes a combination of containment field emitters and redundancy\
-    \ systems to mitigate the impact of critical system damage. \r\n\r\nGrants a bonus\
-    \ to resistance for shield, armor and hull.\r\n\r\nOnly one Damage Control can\
-    \ be fit at a given time."
-  dogma_attributes:
-    - attribute_id: 4
-      value: 5000
-    - attribute_id: 1544
-      value: 1
-    - attribute_id: 9
-      value: 40
-    - attribute_id: 267
-      value: 0.85
-    - attribute_id: 268
-      value: 0.85
-    - attribute_id: 269
-      value: 0.85
-    - attribute_id: 270
-      value: 0.85
-    - attribute_id: 271
-      value: 0.875
-    - attribute_id: 272
-      value: 0.875
-    - attribute_id: 273
-      value: 0.875
-    - attribute_id: 274
-      value: 0.875
-    - attribute_id: 277
-      value: 4
-    - attribute_id: 1692
-      value: 0
-    - attribute_id: 30
-      value: 1
-    - attribute_id: 161
-      value: 5
-    - attribute_id: 162
-      value: 1
-    - attribute_id: 422
-      value: 2
-    - attribute_id: 50
-      value: 30
-    - attribute_id: 182
-      value: 3394
-    - attribute_id: 974
-      value: 0.6
-    - attribute_id: 975
-      value: 0.6
-    - attribute_id: 976
-      value: 0.6
-    - attribute_id: 977
-      value: 0.6
-    - attribute_id: 38
-      value: 0
-    - attribute_id: 633
-      value: 5
-  dogma_effects:
-    - effect_id: 11
-      is_default: false
-    - effect_id: 16
-      is_default: false
-    - effect_id: 2302
-      is_default: false
-  group_id: 60
-  icon_id: 77
-  market_group_id: 615
-  mass: 5000
-  name: "Damage Control II"
-  packaged_volume: 5
-  portion_size: 1
-  published: true
-  radius: 1
-  type_id: 2048
-  volume: 5
-
 "2046":
   capacity: 0
   description: "Utilizes a combination of containment field emitters and redundancy\
@@ -648,63 +564,63 @@
     \ to resistance for shield, armor and hull.\r\n\r\nOnly one Damage Control can\
     \ be fit at a given time."
   dogma_attributes:
-    - attribute_id: 4
-      value: 5000
-    - attribute_id: 1544
-      value: 1
-    - attribute_id: 9
-      value: 40
-    - attribute_id: 267
-      value: 0.9
-    - attribute_id: 268
-      value: 0.9
-    - attribute_id: 269
-      value: 0.9
-    - attribute_id: 270
-      value: 0.9
-    - attribute_id: 271
-      value: 0.925
-    - attribute_id: 272
-      value: 0.925
-    - attribute_id: 273
-      value: 0.925
-    - attribute_id: 274
-      value: 0.925
-    - attribute_id: 277
-      value: 1
-    - attribute_id: 1692
-      value: 0
-    - attribute_id: 30
-      value: 1
-    - attribute_id: 161
-      value: 5
-    - attribute_id: 162
-      value: 1
-    - attribute_id: 422
-      value: 1
-    - attribute_id: 50
-      value: 25
-    - attribute_id: 182
-      value: 3394
-    - attribute_id: 974
-      value: 0.7
-    - attribute_id: 975
-      value: 0.7
-    - attribute_id: 976
-      value: 0.7
-    - attribute_id: 977
-      value: 0.7
-    - attribute_id: 38
-      value: 0
-    - attribute_id: 633
-      value: 0
+  - attribute_id: 4
+    value: 5000
+  - attribute_id: 1544
+    value: 1
+  - attribute_id: 9
+    value: 40
+  - attribute_id: 267
+    value: 0.9
+  - attribute_id: 268
+    value: 0.9
+  - attribute_id: 269
+    value: 0.9
+  - attribute_id: 270
+    value: 0.9
+  - attribute_id: 271
+    value: 0.925
+  - attribute_id: 272
+    value: 0.925
+  - attribute_id: 273
+    value: 0.925
+  - attribute_id: 274
+    value: 0.925
+  - attribute_id: 277
+    value: 1
+  - attribute_id: 1692
+    value: 0
+  - attribute_id: 30
+    value: 1
+  - attribute_id: 161
+    value: 5
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 422
+    value: 1
+  - attribute_id: 50
+    value: 25
+  - attribute_id: 182
+    value: 3394
+  - attribute_id: 974
+    value: 0.7
+  - attribute_id: 975
+    value: 0.7
+  - attribute_id: 976
+    value: 0.7
+  - attribute_id: 977
+    value: 0.7
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 633
+    value: 0
   dogma_effects:
-    - effect_id: 11
-      is_default: false
-    - effect_id: 16
-      is_default: false
-    - effect_id: 2302
-      is_default: false
+  - effect_id: 11
+    is_default: false
+  - effect_id: 16
+    is_default: false
+  - effect_id: 2302
+    is_default: false
   group_id: 60
   icon_id: 77
   market_group_id: 615
@@ -715,4 +631,79 @@
   published: true
   radius: 1
   type_id: 2046
+  volume: 5
+"2048":
+  capacity: 0
+  description: "Utilizes a combination of containment field emitters and redundancy\
+    \ systems to mitigate the impact of critical system damage. \r\n\r\nGrants a bonus\
+    \ to resistance for shield, armor and hull.\r\n\r\nOnly one Damage Control can\
+    \ be fit at a given time."
+  dogma_attributes:
+  - attribute_id: 4
+    value: 5000
+  - attribute_id: 1544
+    value: 1
+  - attribute_id: 9
+    value: 40
+  - attribute_id: 267
+    value: 0.85
+  - attribute_id: 268
+    value: 0.85
+  - attribute_id: 269
+    value: 0.85
+  - attribute_id: 270
+    value: 0.85
+  - attribute_id: 271
+    value: 0.875
+  - attribute_id: 272
+    value: 0.875
+  - attribute_id: 273
+    value: 0.875
+  - attribute_id: 274
+    value: 0.875
+  - attribute_id: 277
+    value: 4
+  - attribute_id: 1692
+    value: 0
+  - attribute_id: 30
+    value: 1
+  - attribute_id: 161
+    value: 5
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 422
+    value: 2
+  - attribute_id: 50
+    value: 30
+  - attribute_id: 182
+    value: 3394
+  - attribute_id: 974
+    value: 0.6
+  - attribute_id: 975
+    value: 0.6
+  - attribute_id: 976
+    value: 0.6
+  - attribute_id: 977
+    value: 0.6
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 633
+    value: 5
+  dogma_effects:
+  - effect_id: 11
+    is_default: false
+  - effect_id: 16
+    is_default: false
+  - effect_id: 2302
+    is_default: false
+  group_id: 60
+  icon_id: 77
+  market_group_id: 615
+  mass: 5000
+  name: "Damage Control II"
+  packaged_volume: 5
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 2048
   volume: 5

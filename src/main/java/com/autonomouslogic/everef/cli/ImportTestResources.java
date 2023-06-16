@@ -1,6 +1,7 @@
 package com.autonomouslogic.everef.cli;
 
 import com.autonomouslogic.everef.cli.refdata.BuildRefData;
+import com.autonomouslogic.everef.cli.refdata.esi.EsiLoader;
 import com.autonomouslogic.everef.url.UrlParser;
 import com.autonomouslogic.everef.util.CompressUtil;
 import com.autonomouslogic.everef.util.DataUtil;
@@ -41,6 +42,9 @@ public class ImportTestResources implements Command {
 	protected DataUtil dataUtil;
 
 	@Inject
+	protected EsiLoader esiLoader;
+
+	@Inject
 	protected BuildRefData buildRefData;
 
 	@Inject
@@ -50,7 +54,9 @@ public class ImportTestResources implements Command {
 		if (!new File(TEST_RESOURCES).exists()) {
 			throw new RuntimeException("Test resources directory does not exist");
 		}
-		return dataUtil.downloadLatestSde().flatMapCompletable(this::loadSdeResources);
+		return Completable.mergeArray(
+				//			dataUtil.downloadLatestSde().flatMapCompletable(this::loadSdeResources),
+				dataUtil.downloadLatestEsi().flatMapCompletable(this::loadEsiResources));
 	}
 
 	private Completable loadSdeResources(File file) {
@@ -67,6 +73,42 @@ public class ImportTestResources implements Command {
 				newContent.put(stringId, content.get(stringId));
 			}
 			var outputFile = new File(REFDATA_RESOURCES + "/" + entry.getName());
+			log.info("Writing {}", outputFile);
+			yamlMapper.writeValue(outputFile, newContent);
+			return Completable.complete();
+		});
+	}
+
+	private Completable loadEsiResources(File file) {
+		return CompressUtil.loadArchive(file).flatMapCompletable(pair -> {
+			var entry = pair.getLeft();
+			var fileType = esiLoader.resolveFileType(entry.getName());
+			if (fileType == null) {
+				return Completable.complete();
+			}
+			var config = fileType.getRefTypeConfig();
+			if (config.getEsi() == null) {
+				return Completable.complete();
+			}
+			var includedLanguages = config.getTest().getLanguages();
+			if (includedLanguages != null) {
+				if (fileType.getLanguage().equals("en")) {
+					if (!includedLanguages.contains("en-us")) {
+						return Completable.complete();
+					}
+				} else if (!includedLanguages.contains(fileType.getLanguage())) {
+					return Completable.complete();
+				}
+			}
+			var content = (ObjectNode) yamlMapper.readTree(pair.getRight());
+			var newContent = yamlMapper.createObjectNode();
+			for (Long id : config.getTest().getIds()) {
+				var stringId = id.toString();
+				newContent.put(stringId, content.get(stringId));
+			}
+			var fileName = entry.getName();
+			fileName = fileName.replace("eve-ref-esi-scrape", "esi");
+			var outputFile = new File(REFDATA_RESOURCES + "/" + fileName);
 			log.info("Writing {}", outputFile);
 			yamlMapper.writeValue(outputFile, newContent);
 			return Completable.complete();
