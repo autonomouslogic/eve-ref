@@ -9,14 +9,17 @@ import com.autonomouslogic.everef.util.CompressUtil;
 import com.autonomouslogic.everef.util.DataUtil;
 import com.autonomouslogic.everef.util.MockScrapeBuilder;
 import com.autonomouslogic.everef.util.RefDataUtil;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.reactivex.rxjava3.core.Completable;
 import java.io.File;
+import java.util.function.Function;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
+import org.h2.mvstore.MVMap;
 
 /**
  * Loads the resources configured in <code>refdata.yaml</code> and imports those resources fro the SDE and ESI.
@@ -134,19 +137,41 @@ public class ImportTestResources implements Command {
 					.setEsiFile(esiFile)
 					.setStopAtUpload(true)
 					.run()
-					.andThen(Completable.defer(() -> exportResources(buildRefData.getStoreHandler())))
+					.andThen(Completable.defer(() -> {
+						var storeHandler = buildRefData.getStoreHandler();
+						return Completable.mergeArray(
+								exportEsiResources(storeHandler),
+								exportSdeResources(storeHandler),
+								exportRefdataResources(storeHandler));
+					}))
 					.andThen(buildRefData.closeMvStore());
 		});
 	}
 
-	private Completable exportResources(@NonNull StoreHandler storeHandler) {
+	private Completable exportEsiResources(@NonNull StoreHandler storeHandler) {
+		return exportResources(
+				TEST_RESOURCES + "/com/autonomouslogic/everef/cli/refdata/esi/EsiLoaderTest",
+				storeHandler::getEsiStore);
+	}
+
+	private Completable exportSdeResources(@NonNull StoreHandler storeHandler) {
+		return exportResources(
+				TEST_RESOURCES + "/com/autonomouslogic/everef/cli/refdata/sde/SdeLoaderTest",
+				storeHandler::getSdeStore);
+	}
+
+	private Completable exportRefdataResources(@NonNull StoreHandler storeHandler) {
+		return exportResources(TEST_RESOURCES + "/refdata/refdata", storeHandler::getSdeStore);
+	}
+
+	private Completable exportResources(
+			@NonNull String path, @NonNull Function<String, MVMap<Long, JsonNode>> storeProvider) {
 		return Completable.fromAction(() -> {
 			var prettyPrinter = objectMapper.writerWithDefaultPrettyPrinter();
 			for (RefDataConfig config : refDataUtil.loadReferenceDataConfig()) {
-				var store = storeHandler.getEsiStore(config.getId());
+				var store = storeProvider.apply(config.getId());
 				for (var id : config.getTest().getIds()) {
-					var filename = "src/test/resources/com/autonomouslogic/everef/cli/refdata/esi/EsiLoaderTest/"
-							+ config.getTest().getFilePrefix() + "-" + id + ".json";
+					var filename = path + "/" + config.getTest().getFilePrefix() + "-" + id + ".json";
 					var json = store.get(id);
 					if (json == null) {
 						continue;
