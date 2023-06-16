@@ -1,10 +1,12 @@
 package com.autonomouslogic.everef.cli.refdata;
 
 import static com.autonomouslogic.everef.util.ArchivePathFactory.ESI;
+import static com.autonomouslogic.everef.util.ArchivePathFactory.HOBOLEAKS;
 import static com.autonomouslogic.everef.util.ArchivePathFactory.REFERENCE_DATA;
 
 import com.autonomouslogic.everef.cli.Command;
 import com.autonomouslogic.everef.cli.refdata.esi.EsiLoader;
+import com.autonomouslogic.everef.cli.refdata.hoboleaks.HoboleaksLoader;
 import com.autonomouslogic.everef.cli.refdata.post.MutaplasmidDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.SkillDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.VariationsDecorator;
@@ -87,6 +89,9 @@ public class BuildRefData implements Command {
 	protected EsiLoader esiLoader;
 
 	@Inject
+	protected HoboleaksLoader hoboleaksLoader;
+
+	@Inject
 	protected RefDataUtil refDataUtil;
 
 	@Inject
@@ -131,7 +136,8 @@ public class BuildRefData implements Command {
 				initMvStore(),
 				Completable.mergeArray(
 						downloadLatestSde().flatMapCompletable(sdeLoader::load),
-						downloadLatestEsi().flatMapCompletable(esiLoader::load)),
+						downloadLatestEsi().flatMapCompletable(esiLoader::load),
+						downloadLatestHoboleaks().flatMapCompletable(hoboleaksLoader::load)),
 				mergeDatasets(),
 				postDatasets(),
 				buildOutputFile().flatMapCompletable(this::uploadFiles),
@@ -201,6 +207,19 @@ public class BuildRefData implements Command {
 			return okHttpHelper.download(url, file, okHttpClient).flatMap(response -> {
 				if (response.code() != 200) {
 					return Single.error(new RuntimeException("Failed downloading ESI"));
+				}
+				return Single.just(file);
+			});
+		});
+	}
+
+	private Single<File> downloadLatestHoboleaks() {
+		return Single.defer(() -> {
+			var url = dataBaseUrl + "/" + HOBOLEAKS.createLatestPath();
+			var file = tempFiles.tempFile("hoboleaks", ".tar.xz").toFile();
+			return okHttpHelper.download(url, file, okHttpClient).flatMap(response -> {
+				if (response.code() != 200) {
+					return Single.error(new RuntimeException("Failed downloading Hoboleaks"));
 				}
 				return Single.just(file);
 			});

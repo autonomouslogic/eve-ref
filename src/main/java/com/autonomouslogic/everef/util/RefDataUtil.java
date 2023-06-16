@@ -155,12 +155,16 @@ public class RefDataUtil {
 		return getConfigForFilename(filename, RefDataConfig::getEsi);
 	}
 
+	public RefDataConfig getHoboleaksConfigForFilename(@NonNull String filename) {
+		return getConfigForFilename(filename, RefDataConfig::getHoboleaks);
+	}
+
 	public RefDataConfig getConfigForFilename(
 			@NonNull String filename, @NonNull Function<RefDataConfig, RefTypeConfig> typeConfigProvider) {
 		for (RefDataConfig config : loadReferenceDataConfig()) {
 			var type = typeConfigProvider.apply(config);
 			if (type == null) {
-				return null;
+				continue;
 			}
 			if (type.getFile().equals(filename)) {
 				return config;
