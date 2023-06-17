@@ -132,9 +132,11 @@ public class ImportTestResources implements Command {
 			mockScrapeBuilder.setBasePath(TEST_RESOURCES);
 			var sdeFile = mockScrapeBuilder.createTestSde();
 			var esiFile = mockScrapeBuilder.createTestEsiDump();
+			var hoboleaksFile = mockScrapeBuilder.createTestHoboleaksSde();
 			return buildRefData
 					.setSdeFile(sdeFile)
 					.setEsiFile(esiFile)
+					.setHoboleaksFile(hoboleaksFile)
 					.setStopAtUpload(true)
 					.run()
 					.andThen(Completable.defer(() -> {
@@ -142,6 +144,7 @@ public class ImportTestResources implements Command {
 						return Completable.concatArray(
 								exportEsiResources(storeHandler),
 								exportSdeResources(storeHandler),
+								exportHoboleaksResources(storeHandler),
 								exportRefdataResources(storeHandler));
 					}))
 					.andThen(buildRefData.closeMvStore());
@@ -158,6 +161,12 @@ public class ImportTestResources implements Command {
 		return exportResources(
 				TEST_RESOURCES + "/com/autonomouslogic/everef/cli/refdata/sde/SdeLoaderTest",
 				storeHandler::getSdeStore);
+	}
+
+	private Completable exportHoboleaksResources(@NonNull StoreHandler storeHandler) {
+		return exportResources(
+				TEST_RESOURCES + "/com/autonomouslogic/everef/cli/refdata/hoboleaks/HoboleaksLoaderTest",
+				storeHandler::getHoboleaksStore);
 	}
 
 	private Completable exportRefdataResources(@NonNull StoreHandler storeHandler) {
