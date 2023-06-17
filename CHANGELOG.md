@@ -1,5 +1,12 @@
 EVE Ref Changelog
 
+## [2.11.0](https://github.com/autonomouslogic/eve-ref/compare/2.10.1...2.11.0) (2023-06-17)
+
+
+### Features
+
+* Hoboleaks SDE Scrape ([#206](https://github.com/autonomouslogic/eve-ref/issues/206)) ([5e36218](https://github.com/autonomouslogic/eve-ref/commit/5e36218b077cab65e65ea40c527b8abc3e9b9518))
+
 ## [2.10.1](https://github.com/autonomouslogic/eve-ref/compare/2.10.0...2.10.1) (2023-06-15)
 
 
