@@ -627,8 +627,8 @@ components:
           type: integer
           format: int64
         type_mappings:
-          type: array
-          items:
+          type: object
+          additionalProperties:
             $ref: '#/components/schemas/MutaplasmidTypeMapping'
         dogma_modifications:
           type: object

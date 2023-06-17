@@ -47,7 +47,7 @@ public class MutaplasmidDecorator {
 			for (Map.Entry<Long, JsonNode> entry : mutaplasmids.entrySet()) {
 				var mutaplasmid = objectMapper.convertValue(entry.getValue(), Mutaplasmid.class);
 				setIsMutaplasmid(mutaplasmid.getTypeId());
-				for (var mapping : mutaplasmid.getTypeMappings()) {
+				for (var mapping : mutaplasmid.getTypeMappings().values()) {
 					addCreatingMutaplasmid(mapping.getResultingTypeId(), mutaplasmid.getTypeId());
 					setIsDynamicItem(mapping.getResultingTypeId());
 					for (var applicableType : mapping.getApplicableTypeIds()) {

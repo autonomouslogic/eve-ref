@@ -20,12 +20,12 @@ public class HoboleaksMutaplasmidTransformer implements SimpleTransformer {
 	@Override
 	public ObjectNode transformJson(ObjectNode json, String language) throws Throwable {
 		var mappings = (ArrayNode) json.get("type_mappings");
-		// var newMappings = json.putObject("type_mappings");
+		var newMappings = json.putObject("type_mappings");
 		for (var mappingNode : mappings) {
 			var mappingObj = (ObjectNode) mappingNode;
 			transformUtil.renameField(mappingObj, "resulting_type", "resulting_type_id");
 			transformUtil.renameField(mappingObj, "applicable_types", "applicable_type_ids");
-			// newMappings.put(mappingObj.get("resulting_type_id").asText(), mappingObj);
+			newMappings.put(mappingObj.get("resulting_type_id").asText(), mappingObj);
 		}
 		return json;
 	}
