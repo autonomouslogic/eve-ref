@@ -2,6 +2,7 @@ package com.autonomouslogic.everef.cli.refdata.hoboleaks;
 
 import com.autonomouslogic.everef.cli.refdata.SimpleTransformer;
 import com.autonomouslogic.everef.cli.refdata.TransformUtil;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -18,9 +19,14 @@ public class HoboleaksMutiplasmidTransformer implements SimpleTransformer {
 
 	@Override
 	public ObjectNode transformJson(ObjectNode json, String language) throws Throwable {
-		var mappings = (ObjectNode) json.get("type_mappings");
-		transformUtil.renameField(mappings, "resulting_type", "resulting_type_id");
-		transformUtil.renameField(mappings, "applicable_types", "applicable_type_ids");
+		var mappings = (ArrayNode) json.get("type_mappings");
+		// var newMappings = json.putObject("type_mappings");
+		for (var mappingNode : mappings) {
+			var mappingObj = (ObjectNode) mappingNode;
+			transformUtil.renameField(mappingObj, "resulting_type", "resulting_type_id");
+			transformUtil.renameField(mappingObj, "applicable_types", "applicable_type_ids");
+			// newMappings.put(mappingObj.get("resulting_type_id").asText(), mappingObj);
+		}
 		return json;
 	}
 }

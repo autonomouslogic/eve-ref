@@ -60,7 +60,7 @@ public class HoboleaksLoader {
 							switch (config.getId()) {
 								case "mutaplasmids":
 									transformer = TransformUtil.concat(
-											fieldRenamer, hoboleaksMutiplasmidTransformerProvider.get());
+											transformer, hoboleaksMutiplasmidTransformerProvider.get());
 									break;
 							}
 							storeLoader.setTransformer(TransformUtil.concat(fieldRenamer, transformer));
