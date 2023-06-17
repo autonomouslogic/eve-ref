@@ -33,7 +33,7 @@ public class HoboleaksLoader {
 	protected Provider<SimpleStoreLoader> simpleLoaderProvider;
 
 	@Inject
-	protected Provider<HoboleaksMutiplasmidTransformer> hoboleaksMutiplasmidTransformerProvider;
+	protected Provider<HoboleaksMutaplasmidTransformer> hoboleaksMutiplasmidTransformerProvider;
 
 	@Setter
 	@NonNull

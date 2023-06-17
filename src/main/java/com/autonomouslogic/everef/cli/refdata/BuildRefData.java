@@ -150,6 +150,7 @@ public class BuildRefData implements Command {
 			storeHandler = new StoreHandler(mvStoreUtil, mvStore);
 			sdeLoader.setStoreHandler(storeHandler);
 			esiLoader.setStoreHandler(storeHandler);
+			hoboleaksLoader.setStoreHandler(storeHandler);
 		});
 	}
 

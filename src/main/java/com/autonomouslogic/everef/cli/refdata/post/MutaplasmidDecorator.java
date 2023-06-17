@@ -6,13 +6,13 @@ import com.autonomouslogic.everef.model.hoboleaks.DynamicAttributes;
 import com.autonomouslogic.everef.refdata.Mutaplasmid;
 import com.autonomouslogic.everef.refdata.MutaplasmidDogmaModifications;
 import com.autonomouslogic.everef.refdata.MutaplasmidTypeMapping;
-import com.autonomouslogic.everef.util.HoboleaksHelper;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.reactivex.rxjava3.core.Completable;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.Map;
 import javax.inject.Inject;
 import lombok.NonNull;
 import lombok.Setter;
@@ -29,13 +29,8 @@ import org.h2.mvstore.MVMap;
  */
 @Log4j2
 public class MutaplasmidDecorator {
-	private static final int MUTAPLASMID_GROUP_ID = 1964;
-
 	@Inject
 	protected ObjectMapper objectMapper;
-
-	@Inject
-	protected HoboleaksHelper hoboleaksHelper;
 
 	@Setter
 	@NonNull
@@ -49,27 +44,22 @@ public class MutaplasmidDecorator {
 	protected MutaplasmidDecorator() {}
 
 	public Completable create() {
-		return Completable.defer(() -> {
-			log.info("Creating mutaplasmids");
+		return Completable.fromAction(() -> {
+			log.info("Decorating mutaplasmids");
 			types = storeHandler.getRefStore("types");
 			mutaplasmids = storeHandler.getRefStore("mutaplasmids");
 			helper = new StoreDataHelper(storeHandler, objectMapper);
-			return hoboleaksHelper.fetchDynamicAttributes().flatMapCompletable(dynamicAttributes -> {
-				for (var entry : dynamicAttributes.entrySet()) {
-					var mutaplasmidTypeId = entry.getKey();
-					var dynamics = entry.getValue();
-					setIsMutaplasmid(mutaplasmidTypeId);
-					for (var mapping : dynamics.getInputOutputMapping()) {
-						addCreatingMutaplasmid(mapping.getResultingType(), mutaplasmidTypeId);
-						setIsDynamicItem(mapping.getResultingType());
-						for (var applicableType : mapping.getApplicableTypes()) {
-							addApplicableMutaplasmid(applicableType, mutaplasmidTypeId);
-						}
+			for (Map.Entry<Long, JsonNode> entry : mutaplasmids.entrySet()) {
+				var mutaplasmid = objectMapper.convertValue(entry.getValue(), Mutaplasmid.class);
+				setIsMutaplasmid(mutaplasmid.getTypeId());
+				for (var mapping : mutaplasmid.getTypeMappings()) {
+					addCreatingMutaplasmid(mapping.getResultingTypeId(), mutaplasmid.getTypeId());
+					setIsDynamicItem(mapping.getResultingTypeId());
+					for (var applicableType : mapping.getApplicableTypeIds()) {
+						addApplicableMutaplasmid(applicableType, mutaplasmid.getTypeId());
 					}
-					createMutaplasmid(mutaplasmidTypeId, dynamics);
 				}
-				return Completable.complete();
-			});
+			}
 		});
 	}
 

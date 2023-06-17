@@ -10,12 +10,12 @@ import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 @Singleton
-public class HoboleaksMutiplasmidTransformer implements SimpleTransformer {
+public class HoboleaksMutaplasmidTransformer implements SimpleTransformer {
 	@Inject
 	protected TransformUtil transformUtil;
 
 	@Inject
-	protected HoboleaksMutiplasmidTransformer() {}
+	protected HoboleaksMutaplasmidTransformer() {}
 
 	@Override
 	public ObjectNode transformJson(ObjectNode json, String language) throws Throwable {
