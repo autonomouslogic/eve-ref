@@ -74,7 +74,7 @@ public class VariationsDecorator {
 	private void resolveDynamicVariations(@NonNull Map<Long, Map<Integer, Set<Long>>> variations) {
 		for (var json : mutaplasmids.values()) {
 			var mutaplasmid = objectMapper.convertValue(json, Mutaplasmid.class);
-			for (var typeMapping : mutaplasmid.getTypeMappings()) {
+			for (var typeMapping : mutaplasmid.getTypeMappings().values()) {
 				var resultingTypeId = typeMapping.getResultingTypeId();
 				for (var applicableTypeId : typeMapping.getApplicableTypeIds()) {
 					var applicableType = objectMapper.convertValue(types.get(applicableTypeId), InventoryType.class);

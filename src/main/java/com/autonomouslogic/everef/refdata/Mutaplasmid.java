@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.util.List;
 import java.util.Map;
 import lombok.Builder;
 import lombok.Value;
@@ -22,7 +21,7 @@ public class Mutaplasmid {
 	long typeId;
 
 	@JsonProperty
-	List<MutaplasmidTypeMapping> typeMappings;
+	Map<Long, MutaplasmidTypeMapping> typeMappings;
 
 	@JsonProperty
 	@Schema(description = "Which dogma attributes are modified by this mutaplasmid and by how much.")

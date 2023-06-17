@@ -1,8 +1,10 @@
 {
-  "type_mappings" : [ {
-    "resulting_type_id" : 52227,
-    "applicable_type_ids" : [ 2048 ]
-  } ],
+  "type_mappings" : {
+    "52227" : {
+      "resulting_type_id" : 52227,
+      "applicable_type_ids" : [ 2048 ]
+    }
+  },
   "dogma_modifications" : {
     "976" : {
       "max" : 1.100000023841858,
