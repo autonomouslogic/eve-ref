@@ -713,3 +713,227 @@
   radius: 1
   type_id: 2048
   volume: 5
+"45623":
+  capacity: 0
+  description: "Composé d'un nombre incalculable de nanomachines améliorant le flux\
+    \ d'énergie issu du cœur du réacteur antimatière d'un vaisseau, ce sous-systè\
+    me principal permet au pilote d'augmenter le réseau d'alimentation et la charge\
+    \ de capaciteur de son vaisseau. Au début, les concepteurs des vaisseaux Tech\_\
+    III ne parvenaient pas à mettre au point un vaisseau modulaire capable d'utiliser\
+    \ des améliorations d'ingénierie en cas de besoin. Cela était particulièrement\
+    \ vrai au moment d'augmenter le réseau d'alimentation et la taille du capaciteur\
+    \ d'un vaisseau sans utiliser de batterie. En fin de compte, l'approvisionnement\
+    \ en nanomachines en polymères à base de fullerène apporta la solution qui n'existait\
+    \ jusque-là qu'en théorie."
+  dogma_attributes:
+  - attribute_id: 1376
+    value: 3
+  - attribute_id: 161
+    value: 40
+  - attribute_id: 482
+    value: 50
+  - attribute_id: 1380
+    value: 29986
+  - attribute_id: 1366
+    value: 125
+  - attribute_id: 422
+    value: 3
+  - attribute_id: 9
+    value: 40
+  - attribute_id: 1431
+    value: 5
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 1509
+    value: -3
+  - attribute_id: 277
+    value: 1
+  - attribute_id: 182
+    value: 30539
+  - attribute_id: 633
+    value: 1
+  - attribute_id: 313
+    value: 20
+  - attribute_id: 4
+    value: 1200000
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 1374
+    value: 0
+  - attribute_id: 1375
+    value: 1
+  dogma_effects:
+  - effect_id: 490
+    is_default: false
+  - effect_id: 3772
+    is_default: false
+  - effect_id: 3774
+    is_default: false
+  - effect_id: 3811
+    is_default: false
+  - effect_id: 4159
+    is_default: false
+  - effect_id: 6930
+    is_default: false
+  graphic_id: 21511
+  group_id: 958
+  icon_id: 3636
+  market_group_id: 1122
+  mass: 1200000
+  name: "Legion Nucléus – Réacteur à antimatière augmenté"
+  packaged_volume: 40
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 45623
+  volume: 40
+"45622":
+  capacity: 0
+  description: "Ce sous-système utilise un champ de dispersion nano-électromécanique\
+    \ visant à renforcer les systèmes de détection d'un vaisseau. Fabriqué à partir\
+    \ d'un système complexe de sous-couches neurovisuelles, d'unités réactives automatisé\
+    es et de milliards de circuits moléculaires avancés, ce sous-système garantit\
+    \ une protection améliorée contre les CME hostiles ainsi qu'une portée des capteurs\
+    \ et une vitesse d'acquisition des cibles accrues."
+  dogma_attributes:
+  - attribute_id: 1376
+    value: 2
+  - attribute_id: 161
+    value: 40
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 1380
+    value: 29986
+  - attribute_id: 1366
+    value: 125
+  - attribute_id: 422
+    value: 3
+  - attribute_id: 2681
+    value: 15
+  - attribute_id: 9
+    value: 40
+  - attribute_id: 235
+    value: 1
+  - attribute_id: 1509
+    value: 5
+  - attribute_id: 277
+    value: 1
+  - attribute_id: 182
+    value: 30539
+  - attribute_id: 1431
+    value: 15
+  - attribute_id: 633
+    value: 1
+  - attribute_id: 4
+    value: 1200000
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 1374
+    value: 0
+  - attribute_id: 1375
+    value: 2
+  dogma_effects:
+  - effect_id: 3772
+    is_default: false
+  - effect_id: 3774
+    is_default: false
+  - effect_id: 3900
+    is_default: false
+  - effect_id: 4269
+    is_default: false
+  - effect_id: 4343
+    is_default: false
+  - effect_id: 6934
+    is_default: false
+  graphic_id: 21510
+  group_id: 958
+  icon_id: 3636
+  market_group_id: 1122
+  mass: 1200000
+  name: "Legion Nucléus – Séquenceur de dissolution"
+  packaged_volume: 40
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 45622
+  volume: 40
+"45624":
+  capacity: 0
+  description: "Au cours des premiers conflits qui les ont opposés, les ingénieurs\
+    \ amarr ont remarqué une caractéristique intéressante de la technologie des drones\
+    \ sleeper\_: la capacité des drones à transférer l'énergie entre eux sans équipement\
+    \ particulier. Cette technologie semblait innée à tous les drones, et si les ingé\
+    nieurs ne sont pas parvenus à reproduire ce système dans les vaisseaux spatiaux\
+    \ modernes, ils ont néanmoins réussi à l'adapter aux modèles modulaires Tech\_\
+    III. Ce complexe parasite d'énergie inverse la technologie de transfert d'énergie\
+    \ sleeper, en transposant sa vocation symbiotique en fonction vampirique, grâ\
+    ce à l'amplification des capacités d'absorption des neutraliseurs d'énergie et\
+    \ des nosferatu énergétiques."
+  dogma_attributes:
+  - attribute_id: 1376
+    value: 2
+  - attribute_id: 161
+    value: 40
+  - attribute_id: 482
+    value: 50
+  - attribute_id: 1380
+    value: 29986
+  - attribute_id: 1366
+    value: 125
+  - attribute_id: 422
+    value: 3
+  - attribute_id: 2665
+    value: -50
+  - attribute_id: 9
+    value: 40
+  - attribute_id: 1509
+    value: 10
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 4
+    value: 1200000
+  - attribute_id: 277
+    value: 1
+  - attribute_id: 182
+    value: 30539
+  - attribute_id: 1431
+    value: -5
+  - attribute_id: 633
+    value: 1
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 2681
+    value: 10
+  - attribute_id: 1374
+    value: 0
+  - attribute_id: 1375
+    value: 2
+  dogma_effects:
+  - effect_id: 3772
+    is_default: false
+  - effect_id: 3774
+    is_default: false
+  - effect_id: 3811
+    is_default: false
+  - effect_id: 4152
+    is_default: false
+  - effect_id: 4216
+    is_default: false
+  - effect_id: 4217
+    is_default: false
+  - effect_id: 6894
+    is_default: false
+  - effect_id: 6935
+    is_default: false
+  graphic_id: 21509
+  group_id: 958
+  icon_id: 3636
+  market_group_id: 1122
+  mass: 1200000
+  name: "Legion Nucléus – Complexe énergétique parasite"
+  packaged_volume: 40
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 45624
+  volume: 40

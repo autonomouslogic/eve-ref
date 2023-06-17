@@ -1,0 +1,255 @@
+{
+  "description" : {
+    "de" : "Während einer der ersten Konflikte mit ihnen bemerkten Amarr-Ingenieure eine bemerkenswerte Eigenheit der Sleeper-Drohnentechnologie: Die Möglichkeit, Energie untereinander ohne spezielle Ausrüstung zu übertragen. Diese Technologie schien jeder Drohne in gewisser Weise eigen zu sein und obwohl die Ingenieure dieses System nicht für moderne Raumschiffe reproduzieren konnten, waren sie zumindest in der Lage, sie für modulare Geräte von Typ Tech III zu adaptieren. Der parasitäre Energiekomplex stellt die Erfindung der Sleeper jedoch auf den Kopf, denn er verwandelt den Energieübertrag von einer symbiotischen Funktion zu einer vampirischen indem er Energieneutralisierer und Energie-Nosferatus verstärkt.",
+    "en" : "During some of the first conflicts with them, Amarr engineers noticed a remarkable feature in Sleeper drone technology: the ability of drones to transfer power between one another without the need for specialized equipment. This technology seemed to be innate to every drone in some capacity, and while the engineers could not reproduce this system in modern space vessels, they were able to adapt the technology into modular Tech III designs. The energy parasitic complex turns the Sleeper tech on its head, changing the energy transfer from a symbiotic function to a vampiric one by providing a boost to energy neutralizer and energy nosferatu equipment.",
+    "es" : "Durante algunos de los primeros conflictos con ellos, los ingenieros amarrianos se percataron de una característica notable en la tecnología de drones sleepers: la capacidad de los drones para transmitirse potencia entre ellos sin necesidad de ningún equipamiento especializado. Esta tecnología parecía inherente a todos los drones y, aunque los ingenieros no podían reproducir este sistema en naves espaciales modernas, lograron adaptar la tecnología a los diseños de tecnología modular T3. El complejo parasitario de energía da la vuelta a la tecnología de los sleepers, lo que cambia la transferencia de energía de una función simbiótica a una función vampírica, brindando una mejora al neutralizador energético y nosferatu de energía.",
+    "fr" : "Au cours des premiers conflits qui les ont opposés, les ingénieurs amarr ont remarqué une caractéristique intéressante de la technologie des drones sleeper : la capacité des drones à transférer l'énergie entre eux sans équipement particulier. Cette technologie semblait innée à tous les drones, et si les ingénieurs ne sont pas parvenus à reproduire ce système dans les vaisseaux spatiaux modernes, ils ont néanmoins réussi à l'adapter aux modèles modulaires Tech III. Ce complexe parasite d'énergie inverse la technologie de transfert d'énergie sleeper, en transposant sa vocation symbiotique en fonction vampirique, grâce à l'amplification des capacités d'absorption des neutraliseurs d'énergie et des nosferatu énergétiques.",
+    "ja" : "スリーパードローンとの抗争の初期段階において、特殊な装置を用いることなくドローン間で動力を転送し合うという驚異の技術にアマーのエンジニア達は注目していた。この技術はあらゆるドローンにある程度備わっているようだった。技術者たちはこの技術を現行の宇宙船で再現することはできなかったものの、T3のモジュール設計に応用することに成功した。このエネルギー吸収複合体はスリーパー技術を逆利用したものであり、エネルギーニュートラライザーとエネルギーノスフェラトゥ装備を強化したことで、共生のためのエネルギー転送はエネルギー吸引に姿を変えている。",
+    "ru" : "В ходе первых столкновений с дронами Спящих амаррские инженеры отметили одну из их особенностей: способность ретранслировать энергию друг другу без использования специализированного оборудования. Эта возможность была в той или иной мере доступна всем дронам; инженерам не удалось воспроизвести её в современных кораблях, но соответствующий аппаратный комплекс был, тем не менее, адаптирован для сменных подсистем кораблей третьей техкатегории. Паразитический комплекс ставит технологии Спящих с ног на голову: вместо обеспечения энергетического «симбиоза» он повышает эффективность устройств паразитной подзарядки и дистанционных нейтрализаторов заряда.",
+    "zh" : "早在最初对冬眠者无人机的几次研究中，艾玛工程师就注意到了它们身上的一项非凡的技术：它们能够在没有专门设备帮助的情况下相互之间传输能量。这种技术似乎在所有的无人机上都存在，只有量上的区别。尽管工程技术人员没法在现在的普通舰船上重新构造这个系统，但是他们却想出办法将其整合进模块化的三级科技舰船中。能量寄取复合体完全改变了冬眠者的科技，它通过提升能量中和设备和能量吸取设备的效果，使能量传输方式由共生转变成吸血。"
+  },
+  "graphic_id" : 21509,
+  "group_id" : 958,
+  "icon_id" : 3636,
+  "market_group_id" : 1122,
+  "mass" : 1200000,
+  "meta_group_id" : 14,
+  "name" : {
+    "de" : "Legion Core - Energy Parasitic Complex",
+    "en" : "Legion Core - Energy Parasitic Complex",
+    "es" : "Núcleo de la Legión: complejo parasitario de energía",
+    "fr" : "Legion Nucléus – Complexe énergétique parasite",
+    "ja" : "レギオンコア - エネルギーパラスティック複合施設",
+    "ru" : "Legion Core - Energy Parasitic Complex",
+    "zh" : "圣卒核心 - 能量寄取集成体"
+  },
+  "portion_size" : 1,
+  "published" : true,
+  "race_id" : 4,
+  "sof_faction_name" : "amarrbase",
+  "traits" : {
+    "misc_bonuses" : { },
+    "role_bonuses" : {
+      "2" : {
+        "bonus_text" : {
+          "de" : "<b><u>Zusätzliche Basiswerte</b></u>",
+          "en" : "<b><u>Additional Base Stats</b></u>",
+          "es" : "<b><u>Estadísticas básicas adicionales</b></u>",
+          "fr" : "<b><u>Stats de base supplémentaires</b></u>",
+          "ja" : "<b><u>追加ベース統計</b></u>",
+          "ru" : "<b><u>Кроме того:</b></u>",
+          "zh" : "<b><u>附加基础数值</b></u>"
+        },
+        "importance" : 2
+      },
+      "3" : {
+        "bonus_text" : {
+          "de" : "+2 Mid Slots, +2 Low Slots",
+          "en" : "+2 Mid Slots, +2 Low Slots",
+          "es" : "+2 ranuras intermedias, +2 ranuras inferiores",
+          "fr" : "+2 Emplacements intermédiaires, +2 Emplacements inférieurs",
+          "ja" : "ミッドスロット+2、ロースロット+2",
+          "ru" : "+2 разъёма средней мощности, +2 разъёма малой мощности",
+          "zh" : "中槽+2，低槽+2"
+        },
+        "importance" : 3
+      },
+      "4" : {
+        "bonus_text" : {
+          "de" : "+50 GJ Energiespeicherkapazität",
+          "en" : "+50GJ Capacitor Capacity",
+          "es" : "+50 GJ de capacidad del condensador",
+          "fr" : "Charge de capaciteur +50 GJ",
+          "ja" : "キャパシタ容量+50GJ",
+          "ru" : "+50 ГДж ёмкости накопителя",
+          "zh" : "电容器电容量+50GJ"
+        },
+        "importance" : 4
+      },
+      "1" : {
+        "bonus" : 50,
+        "bonus_text" : {
+          "de" : "Reduktion des CPU- und Strombedarfs von <a href=showinfo:3423>Energie-Nosferatu-</a> und <a href=showinfo:3423>Energieneutralisierer-</a>Modulen",
+          "en" : "reduction in the PWG and CPU requirements for <a href=showinfo:3423>Energy Nosferatu</a> and <a href=showinfo:3423>Energy Neutralizer</a> modules",
+          "es" : "de reducción de los requisitos de SP y CPU para los módulos de <a href=showinfo:3423>nosferatu de energía</a> y <a href=showinfo:3423>neutralizador energético</a>.",
+          "fr" : "de réduction des prérequis du PWG et du CPU des modules <a href=showinfo:3423>Nosferatu à énergie</a> et <a href=showinfo:3423>neutraliseur d'énergie</a>",
+          "ja" : "<a href=showinfo:3423>エネルギーノスフェラトゥ</a>と<a href=showinfo:3423>エネルギーニュートラライザー</a>モジュールの必要PWGとCPUが減少",
+          "ru" : "снижается потребность <a href=showinfo:3423>дистанционных нейтрализаторов заряда</a> и <a href=showinfo:3423>устройств паразитной подзарядки накопителя</a> в мощностях ЦПУ и реактора",
+          "zh" : "<a href=showinfo:3423>掠能器</a>和<a href=showinfo:3423>能量中和器</a>能量栅格和CPU需求降低"
+        },
+        "importance" : 1,
+        "unit_id" : 105
+      }
+    },
+    "types" : {
+      "30539" : {
+        "3" : {
+          "bonus" : 5,
+          "bonus_text" : {
+            "de" : "Verringerung des Modulschadens durch Überhitzung",
+            "en" : "reduction in module damage from overheating",
+            "es" : "de reducción del daño del módulo por sobrecalentamiento.",
+            "fr" : "de réduction de la détérioration du module suite à la surchauffe",
+            "ja" : "オーバーヒート時のモジュールダメージを軽減",
+            "ru" : "уменьшается объём повреждений модулей, получаемых ими при перегрузке",
+            "zh" : "装备过载损伤降低"
+          },
+          "importance" : 3,
+          "unit_id" : 105
+        },
+        "1" : {
+          "bonus" : 10,
+          "bonus_text" : {
+            "de" : "Bonus auf die Transfermenge von <a href=showinfo:3423>Nosferatu-</a> und <a href=showinfo:3423>Energieneutralisierer</a>-Modulen",
+            "en" : "bonus to <a href=showinfo:3423>Energy Nosferatu</a> and <a href=showinfo:3423>Energy Neutralizer</a> drain amount",
+            "es" : "de bonificación a la cantidad drenada por el <a href=showinfo:3423>nosferatu de energía</a> y el <a href=showinfo:3423>neutralizador energético</a>.",
+            "fr" : "de bonus au volume d'énergie drainée par les <a href=showinfo:3423>Nosferatu à énergie</a> et les <a href=showinfo:3423>neutraliseurs d'énergie</a>",
+            "ja" : "<a href=showinfo:3423>エネルギーノスフェラトゥ</a>と<a href=showinfo:3423>エネルギーニュートラライザー</a>の吸収量が増加",
+            "ru" : "увеличивается пропускная способность <a href=showinfo:3423>устройств паразитной подзарядки накопителя</a> и <a href=showinfo:3423>дистанционных нейтрализаторов заряда</a>",
+            "zh" : "<a href=showinfo:3423>掠能器</a>和<a href=showinfo:3423>能量中和器</a>吸取量加成"
+          },
+          "importance" : 1,
+          "unit_id" : 105
+        },
+        "2" : {
+          "bonus" : 10,
+          "bonus_text" : {
+            "de" : "Bonus auf den Nutzen der Überhitzung von <a href=showinfo:3423>Energie-Nosferatu-</a> und <a href=showinfo:3423>Energieneutralisierer-</a>Modulen",
+            "en" : "bonus to the benefits of overheating <a href=showinfo:3423>Energy Nosferatu</a> and <a href=showinfo:3423>Energy Neutralizer</a> modules",
+            "es" : "de bonificación a los beneficios de sobrecalentar los módulos de <a href=showinfo:3423>nosferatu de energía</a> y <a href=showinfo:3423>neutralizador energético</a>.",
+            "fr" : "de bonus aux avantages de la surchauffe des modules <a href=showinfo:3423>Nosferatu à énergie</a> et les <a href=showinfo:3423>neutraliseurs d'énergie</a>",
+            "ja" : "オーバーヒートした<a href=showinfo:3423>エネルギーノスフェラトゥ</a>と<a href=showinfo:3423>エネルギーニュートラライザー</a>の恩恵にボーナス",
+            "ru" : "усиливается влияние перегрузки на параметры <a href=showinfo:3423>дистанционных нейтрализаторов заряда</a> и <a href=showinfo:3423>устройств паразитной подзарядки накопителя</a>",
+            "zh" : "<a href=showinfo:3423>掠能器</a>和<a href=showinfo:3423>能量中和器</a>过载效果加成"
+          },
+          "importance" : 2,
+          "unit_id" : 105
+        }
+      }
+    }
+  },
+  "variation_parent_type_id" : 45623,
+  "volume" : 40,
+  "type_id" : 45624,
+  "capacity" : 0,
+  "dogma_attributes" : {
+    "1376" : {
+      "attribute_id" : 1376,
+      "value" : 2
+    },
+    "161" : {
+      "attribute_id" : 161,
+      "value" : 40
+    },
+    "482" : {
+      "attribute_id" : 482,
+      "value" : 50
+    },
+    "1380" : {
+      "attribute_id" : 1380,
+      "value" : 29986
+    },
+    "1366" : {
+      "attribute_id" : 1366,
+      "value" : 125
+    },
+    "422" : {
+      "attribute_id" : 422,
+      "value" : 3
+    },
+    "2665" : {
+      "attribute_id" : 2665,
+      "value" : -50
+    },
+    "9" : {
+      "attribute_id" : 9,
+      "value" : 40
+    },
+    "1509" : {
+      "attribute_id" : 1509,
+      "value" : 10
+    },
+    "162" : {
+      "attribute_id" : 162,
+      "value" : 1
+    },
+    "4" : {
+      "attribute_id" : 4,
+      "value" : 1200000
+    },
+    "277" : {
+      "attribute_id" : 277,
+      "value" : 1
+    },
+    "182" : {
+      "attribute_id" : 182,
+      "value" : 30539
+    },
+    "1431" : {
+      "attribute_id" : 1431,
+      "value" : -5
+    },
+    "633" : {
+      "attribute_id" : 633,
+      "value" : 1
+    },
+    "38" : {
+      "attribute_id" : 38,
+      "value" : 0
+    },
+    "2681" : {
+      "attribute_id" : 2681,
+      "value" : 10
+    },
+    "1374" : {
+      "attribute_id" : 1374,
+      "value" : 0
+    },
+    "1375" : {
+      "attribute_id" : 1375,
+      "value" : 2
+    }
+  },
+  "dogma_effects" : {
+    "3772" : {
+      "effect_id" : 3772,
+      "is_default" : false
+    },
+    "3774" : {
+      "effect_id" : 3774,
+      "is_default" : false
+    },
+    "3811" : {
+      "effect_id" : 3811,
+      "is_default" : false
+    },
+    "4152" : {
+      "effect_id" : 4152,
+      "is_default" : false
+    },
+    "4216" : {
+      "effect_id" : 4216,
+      "is_default" : false
+    },
+    "4217" : {
+      "effect_id" : 4217,
+      "is_default" : false
+    },
+    "6894" : {
+      "effect_id" : 6894,
+      "is_default" : false
+    },
+    "6935" : {
+      "effect_id" : 6935,
+      "is_default" : false
+    }
+  },
+  "packaged_volume" : 40,
+  "radius" : 1,
+  "required_skills" : {
+    "30539" : 1
+  },
+  "type_variations" : {
+    "14" : [ 45622, 45623, 45624 ]
+  }
+}
