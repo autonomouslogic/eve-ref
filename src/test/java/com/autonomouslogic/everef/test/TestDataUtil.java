@@ -3,7 +3,6 @@ package com.autonomouslogic.everef.test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-import com.autonomouslogic.commons.ResourceUtil;
 import com.autonomouslogic.everef.util.RefDataUtil;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -11,19 +10,14 @@ import io.reactivex.rxjava3.functions.Consumer;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringReader;
-import java.time.Instant;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.SneakyThrows;
@@ -31,12 +25,9 @@ import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 import okio.Buffer;
-import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
-import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
 import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream;
 import org.apache.commons.compress.compressors.xz.XZCompressorInputStream;
-import org.apache.commons.compress.compressors.xz.XZCompressorOutputStream;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.io.IOUtils;
 
@@ -183,115 +174,8 @@ public class TestDataUtil {
 	}
 
 	@SneakyThrows
-	public File createZipFile(Map<String, byte[]> entries) {
-		var file = File.createTempFile(TestDataUtil.class.getSimpleName() + "-", ".zip");
-		try (var out = new ZipOutputStream(new FileOutputStream(file))) {
-			for (var entry : entries.entrySet()) {
-				out.putNextEntry(new ZipEntry(entry.getKey()));
-				out.write(entry.getValue());
-				out.closeEntry();
-			}
-		}
-		return file;
-	}
-
-	@SneakyThrows
-	public File createTarXzFile(Map<String, byte[]> entries) {
-		var file = File.createTempFile(TestDataUtil.class.getSimpleName() + "-", ".tar.xz");
-		try (var out = new TarArchiveOutputStream(new XZCompressorOutputStream(new FileOutputStream(file)))) {
-			for (var entry : entries.entrySet()) {
-				var bytes = entry.getValue();
-				var archiveEntry = new TarArchiveEntry(entry.getKey());
-				archiveEntry.setSize(bytes.length);
-				out.putArchiveEntry(archiveEntry);
-				out.write(bytes);
-				out.closeArchiveEntry();
-			}
-		}
-		return file;
-	}
-
-	@SneakyThrows
 	public void assertJsonStrictEquals(JsonNode expected, JsonNode actual) {
 		var prettyWriter = objectMapper.writerWithDefaultPrettyPrinter();
 		assertEquals(prettyWriter.writeValueAsString(expected), prettyWriter.writeValueAsString(actual));
-	}
-
-	@SneakyThrows
-	@SuppressWarnings("unchecked")
-	public File createTestSde() {
-		var entries = new ArrayList<Map.Entry<String, byte[]>>();
-		for (var config : refDataUtil.loadReferenceDataConfig()) {
-			if (config.getSde() == null) {
-				continue;
-			}
-			entries.add(createEntry("/refdata/", config.getSde().getFile()));
-		}
-		return createZipFile(Map.ofEntries(entries.toArray(new Map.Entry[0])));
-	}
-
-	@SneakyThrows
-	public File createTestEsiDump() {
-		var entries = new ArrayList<Map.Entry<String, byte[]>>();
-		for (var config : refDataUtil.loadReferenceDataConfig()) {
-			if (config.getEsi() == null) {
-				continue;
-			}
-			var file = config.getEsi().getFile();
-			var languages = config.getTest().getLanguages();
-			if (languages == null) {
-				entries.add(createEntry("/refdata/esi", String.format("data/tranquility/%s.yaml", file)));
-			} else {
-				for (var language : languages) {
-					entries.add(
-							createEntry("/refdata/esi", String.format("data/tranquility/%s.%s.yaml", file, language)));
-				}
-			}
-		}
-		return createTarXzFile(Map.ofEntries(entries.toArray(new Map.Entry[0])));
-	}
-
-	@SneakyThrows
-	@SuppressWarnings("unchecked")
-	public File createTestHoboleaksSde() {
-		var entries = new ArrayList<Map.Entry<String, byte[]>>();
-		for (var config : refDataUtil.loadReferenceDataConfig()) {
-			if (config.getHoboleaks() == null) {
-				continue;
-			}
-			entries.add(createEntry("/refdata/hoboleaks/", config.getHoboleaks().getFile()));
-		}
-		return createTarXzFile(Map.ofEntries(entries.toArray(new Map.Entry[0])));
-	}
-
-	@SneakyThrows
-	@SuppressWarnings("unchecked")
-	public File createTestRefdata() {
-		var entries = new ArrayList<Map.Entry<String, byte[]>>();
-		entries.add(Map.entry(
-				"meta.json",
-				objectMapper.writeValueAsBytes(objectMapper
-						.createObjectNode()
-						.put("build_time", Instant.parse("2000-01-02T03:04:05Z").toString()))));
-		for (var config : refDataUtil.loadReferenceDataConfig()) {
-			var testConfig = config.getTest();
-			var json = objectMapper.createObjectNode();
-			for (var id : testConfig.getIds()) {
-				var resourceFile = String.format("/refdata/refdata/%s-%s.json", testConfig.getFilePrefix(), id);
-				json.set(id.toString(), loadJsonResource(resourceFile));
-			}
-			entries.add(Map.entry(config.getOutputFile() + ".json", objectMapper.writeValueAsBytes(json)));
-		}
-		return createTarXzFile(Map.ofEntries(entries.toArray(new Map.Entry[0])));
-	}
-
-	@SneakyThrows
-	private Map.Entry<String, byte[]> createEntry(String base, String path) {
-		return Map.entry(path, IOUtils.toByteArray(ResourceUtil.loadResource(base + "/" + path)));
-	}
-
-	@SneakyThrows
-	public JsonNode loadJsonResource(String path) {
-		return objectMapper.readTree(ResourceUtil.loadResource(path));
 	}
 }

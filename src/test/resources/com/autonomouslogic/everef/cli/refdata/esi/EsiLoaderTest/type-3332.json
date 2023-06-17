@@ -1,7 +1,8 @@
 {
   "capacity" : 0,
   "description" : {
-    "en" : "Skill at operating Gallente cruisers."
+    "en" : "Skill at operating Gallente cruisers.",
+    "fr" : "Compétence liée au pilotage des croiseurs gallente."
   },
   "dogma_attributes" : {
     "161" : {
@@ -76,7 +77,8 @@
   "market_group_id" : 377,
   "mass" : 0,
   "name" : {
-    "en" : "Gallente Cruiser"
+    "en" : "Gallente Cruiser",
+    "fr" : "Croiseur gallente"
   },
   "packaged_volume" : 0.01,
   "portion_size" : 1,

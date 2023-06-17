@@ -15,6 +15,7 @@ import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.test.MockS3Adapter;
 import com.autonomouslogic.everef.test.TestDataUtil;
 import com.autonomouslogic.everef.url.UrlParser;
+import com.autonomouslogic.everef.util.MockScrapeBuilder;
 import com.autonomouslogic.everef.util.RefDataUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.reactivex.rxjava3.core.Flowable;
@@ -69,6 +70,9 @@ public class BuildRefDataTest {
 
 	@Inject
 	RefDataUtil refDataUtil;
+
+	@Inject
+	MockScrapeBuilder mockScrapeBuilder;
 
 	MockWebServer server;
 
@@ -164,17 +168,17 @@ public class BuildRefDataTest {
 				log.info("Path: {}", path);
 				switch (path) {
 					case "/ccp/sde/sde-20230315-TRANQUILITY.zip":
-						var sde = testDataUtil.createTestSde();
+						var sde = mockScrapeBuilder.createTestSde();
 						return new MockResponse()
 								.setResponseCode(200)
 								.setBody(new Buffer().write(IOUtils.toByteArray(new FileInputStream(sde))));
 					case "/esi-scrape/eve-ref-esi-scrape-latest.tar.xz":
-						var esi = testDataUtil.createTestEsiDump();
+						var esi = mockScrapeBuilder.createTestEsiDump();
 						return new MockResponse()
 								.setResponseCode(200)
 								.setBody(new Buffer().write(IOUtils.toByteArray(new FileInputStream(esi))));
 					case "/hoboleaks-sde/hoboleaks-sde-latest.tar.xz":
-						var hobo = testDataUtil.createTestHoboleaksSde();
+						var hobo = mockScrapeBuilder.createTestHoboleaksSde();
 						return new MockResponse()
 								.setResponseCode(200)
 								.setBody(new Buffer().write(IOUtils.toByteArray(new FileInputStream(hobo))));

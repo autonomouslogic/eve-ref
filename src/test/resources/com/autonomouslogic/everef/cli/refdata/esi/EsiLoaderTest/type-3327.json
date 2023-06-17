@@ -1,7 +1,8 @@
 {
   "capacity" : 0,
   "description" : {
-    "en" : "The basic operation of spaceships. 2% improved ship agility for all ships per skill level."
+    "en" : "The basic operation of spaceships. 2% improved ship agility for all ships per skill level.",
+    "fr" : "Pilotage de base des vaisseaux. Augmente de 2 % par niveau de compétence la maniabilité de tous les vaisseaux."
   },
   "dogma_attributes" : {
     "193" : {
@@ -64,7 +65,8 @@
   "market_group_id" : 377,
   "mass" : 0,
   "name" : {
-    "en" : "Spaceship Command"
+    "en" : "Spaceship Command",
+    "fr" : "Pilotage de vaisseau"
   },
   "packaged_volume" : 0.01,
   "portion_size" : 1,

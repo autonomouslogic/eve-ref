@@ -3,6 +3,7 @@ package com.autonomouslogic.everef.cli.refdata.esi;
 import com.autonomouslogic.everef.cli.refdata.SimpleStoreLoader;
 import com.autonomouslogic.everef.cli.refdata.StoreHandler;
 import com.autonomouslogic.everef.cli.refdata.TransformerBuilder;
+import com.autonomouslogic.everef.model.refdata.RefDataConfig;
 import com.autonomouslogic.everef.util.CompressUtil;
 import com.autonomouslogic.everef.util.RefDataUtil;
 import io.reactivex.rxjava3.core.Completable;
@@ -10,8 +11,10 @@ import java.io.File;
 import java.util.regex.Pattern;
 import javax.inject.Inject;
 import javax.inject.Provider;
+import lombok.Builder;
 import lombok.NonNull;
 import lombok.Setter;
+import lombok.Value;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -44,15 +47,11 @@ public class EsiLoader {
 		return CompressUtil.loadArchive(file)
 				.flatMapCompletable(
 						pair -> {
-							var fileType = getFileType(pair.getLeft().getName());
+							var fileType = resolveFileType(pair.getLeft().getName());
 							if (fileType == null) {
 								return Completable.complete();
 							}
-							var language = getLanguage(pair.getLeft().getName());
-							var config = refDataUtil.getEsiConfigForFilename(fileType);
-							if (config == null) {
-								return Completable.complete();
-							}
+							var config = fileType.getRefTypeConfig();
 							var storeLoader = simpleStoreLoaderProvider.get();
 							storeLoader
 									.setIdFieldName(config.getIdField())
@@ -60,14 +59,31 @@ public class EsiLoader {
 							var transformer = transformerBuilder.buildTransformer(config.getEsi());
 							storeLoader.setTransformer(transformer);
 							storeLoader.setPostMergeTransformer(esiFieldOrderTransformerProvider.get());
-							storeLoader.setLanguage(language);
+							storeLoader.setLanguage(fileType.getLanguage());
 							return storeLoader.readValues(pair.getRight());
 						},
 						false,
 						1);
 	}
 
-	protected String getFileType(String filename) {
+	public EsiFileType resolveFileType(String filename) {
+		var fileType = getFileType(filename);
+		if (fileType == null) {
+			return null;
+		}
+		var language = getLanguage(filename);
+		var config = refDataUtil.getEsiConfigForFilename(fileType);
+		if (config == null) {
+			return null;
+		}
+		return EsiFileType.builder()
+				.fileType(fileType)
+				.language(language)
+				.refTypeConfig(config)
+				.build();
+	}
+
+	public String getFileType(String filename) {
 		var matcher = FILE_PATTERN.matcher(filename);
 		if (!matcher.matches()) {
 			return null;
@@ -76,7 +92,7 @@ public class EsiLoader {
 		return match;
 	}
 
-	protected String getLanguage(String filename) {
+	public String getLanguage(String filename) {
 		var matcher = FILE_PATTERN.matcher(filename);
 		if (!matcher.matches()) {
 			return null;
@@ -89,5 +105,13 @@ public class EsiLoader {
 			return "en";
 		}
 		return lang;
+	}
+
+	@Value
+	@Builder
+	public static class EsiFileType {
+		String fileType;
+		String language;
+		RefDataConfig refTypeConfig;
 	}
 }

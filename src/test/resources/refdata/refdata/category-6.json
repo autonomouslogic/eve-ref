@@ -1,14 +1,13 @@
 {
-  "name":
-  {
-    "de": "Schiff",
-    "en": "Ship",
-    "es": "Nave",
-    "fr": "Vaisseau",
-    "ja": "艦船",
-    "ru": "Корабль",
-    "zh": "舰船"
+  "name" : {
+    "de" : "Schiff",
+    "en" : "Ship",
+    "es" : "Nave",
+    "fr" : "Vaisseau",
+    "ja" : "艦船",
+    "ru" : "Корабль",
+    "zh" : "舰船"
   },
-  "published": true,
-  "category_id": 6
+  "published" : true,
+  "category_id" : 6
 }

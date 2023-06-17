@@ -1,7 +1,8 @@
 {
   "capacity" : 0,
   "description" : {
-    "en" : "Skill at operating Gallente destroyers."
+    "en" : "Skill at operating Gallente destroyers.",
+    "fr" : "Compétence liée au pilotage des destroyers gallente."
   },
   "dogma_attributes" : {
     "161" : {
@@ -72,7 +73,8 @@
   "market_group_id" : 377,
   "mass" : 0,
   "name" : {
-    "en" : "Gallente Destroyer"
+    "en" : "Gallente Destroyer",
+    "fr" : "Destroyer gallente"
   },
   "packaged_volume" : 0.01,
   "portion_size" : 1,

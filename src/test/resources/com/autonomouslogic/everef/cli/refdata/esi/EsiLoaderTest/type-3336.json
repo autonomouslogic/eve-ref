@@ -1,7 +1,8 @@
 {
   "capacity" : 0,
   "description" : {
-    "en" : "Skill at operating Gallente battleships."
+    "en" : "Skill at operating Gallente battleships.",
+    "fr" : "Compétence liée au pilotage des cuirassés gallente."
   },
   "dogma_attributes" : {
     "161" : {
@@ -80,7 +81,8 @@
   "market_group_id" : 377,
   "mass" : 0,
   "name" : {
-    "en" : "Gallente Battleship"
+    "en" : "Gallente Battleship",
+    "fr" : "Cuirassé gallente"
   },
   "packaged_volume" : 0.01,
   "portion_size" : 1,

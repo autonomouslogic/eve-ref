@@ -5,6 +5,7 @@ import com.autonomouslogic.everef.cli.refdata.StoreHandler;
 import com.autonomouslogic.everef.mvstore.MVStoreUtil;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.test.TestDataUtil;
+import com.autonomouslogic.everef.util.MockScrapeBuilder;
 import com.autonomouslogic.everef.util.RefDataUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import javax.inject.Inject;
@@ -30,6 +31,9 @@ public class HoboleaksLoaderTest {
 	@Inject
 	RefDataUtil refDataUtil;
 
+	@Inject
+	MockScrapeBuilder mockScrapeBuilder;
+
 	StoreHandler storeHandler;
 
 	@BeforeEach
@@ -44,7 +48,7 @@ public class HoboleaksLoaderTest {
 	@Test
 	@SneakyThrows
 	void testLoadHoboleaks() {
-		hoboleaksLoader.load(testDataUtil.createTestHoboleaksSde()).blockingAwait();
+		hoboleaksLoader.load(mockScrapeBuilder.createTestHoboleaksSde()).blockingAwait();
 		for (var config : refDataUtil.loadReferenceDataConfig()) {
 			if (config.getHoboleaks() == null) {
 				continue;

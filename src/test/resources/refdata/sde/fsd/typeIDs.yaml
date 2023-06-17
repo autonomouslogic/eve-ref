@@ -1,572 +1,557 @@
-645:
-  basePrice: 153900000.0
-  capacity: 750.0
+---
+"645":
+  basePrice: 153900000
+  capacity: 750
   description:
-    de: Die Dominix ist eines der alten Schlachtrösser, die noch aus der Zeit
-      des Kriegs zwischen Gallente und Caldari stammen. Sie wird zwar nicht
-      mehr als eines der besten Schlachtschiffe angesehen, aber das heißt nicht,
-      dass sie überflüssig wäre. Mit ihrem robusten Rumpf und dem starken Drohnenarsenal
-      können sich nur die neuesten und größten Schlachtschiffe mit ihr messen.
-    en: The Dominix is one of the old warhorses dating back to the Gallente-Caldari
-      War. While no longer regarded as the king of the hill, it is by no means
-      obsolete. Its formidable hulk and powerful drone arsenal means that anyone
-      not in the largest and latest battleships will regret ever locking horns
-      with it.
-    es: La Dominix es una de las veteranas que se remonta a la guerra Gallente-Caldari.
-      Aunque ya no es lo que era, eso no quiere decir que se haya quedado obsoleta.
-      Gracias a su formidable casco y a su potente arsenal de drones, cualquiera
-      que no esté en el acorazado más grande y moderno lamentará haberse cruzado
-      con ella.
-    fr: Le Dominix est un vétéran du front, qui déjà s'illustrait à l'époque de
-      la guerre Gallente-Caldari. S'il n'est plus considéré comme le parangon
-      des champs de bataille, ce cuirassé est loin d’être obsolète. Doté d'une
-      coque massive et d'un puissant arsenal de drones, le Dominix est un adversaire
-      redoutable, capable de pulvériser tous les vaisseaux de l'amas, à l'exception
-      des cuirassés de pointe les plus modernes.
-    ja: ドミニックスは、ガレンテ-カルダリ戦争時代からある、古い軍艦の一つだ。もはや戦場の王者とは呼べないが、決して役立たずの骨董品ではない。頑丈な船体と強力なドローン運用システムを備えており、最新最大の戦艦に乗っているのでもないかぎり、うかつに手を出せば後悔することになるだろう。
-    ru: «Доминикс» — заслуженный ветеран космоса, находящийся в строю со времен
-      галлентско-калдарской войны. Этот корабль уже не считается передовым,
-      но его ни в коей мере нельзя назвать устаревшим. Обломав зубы о прочную
-      «шкуру» этого увальня и пострадав от роя выпущенных им дронов, о принятом
-      решении пожалеет любой капитан, ввязавшийся с ним в схватку — разве что
-      кроме пилотов самых крупных и современных линкоров.
-    zh: 多米尼克斯级战列舰是久经沙场的老将，其服役期可以追溯到盖伦特-加达里战争时期。尽管现在它不再是战场上的王者，但也绝对没有过时。它拥有强大的舰体和威猛的无人机武器，如果你没有最大最新型的战列舰的话，最好就不要在它面前卖弄风骚。
+    de: "Die Dominix ist eines der alten Schlachtrösser, die noch aus der Zeit des\
+      \ Kriegs zwischen Gallente und Caldari stammen. Sie wird zwar nicht mehr als\
+      \ eines der besten Schlachtschiffe angesehen, aber das heißt nicht, dass sie\
+      \ überflüssig wäre. Mit ihrem robusten Rumpf und dem starken Drohnenarsenal\
+      \ können sich nur die neuesten und größten Schlachtschiffe mit ihr messen."
+    en: "The Dominix is one of the old warhorses dating back to the Gallente-Caldari\
+      \ War. While no longer regarded as the king of the hill, it is by no means obsolete.\
+      \ Its formidable hulk and powerful drone arsenal means that anyone not in the\
+      \ largest and latest battleships will regret ever locking horns with it."
+    es: "La Dominix es una de las veteranas que se remonta a la guerra Gallente-Caldari.\
+      \ Aunque ya no es lo que era, eso no quiere decir que se haya quedado obsoleta.\
+      \ Gracias a su formidable casco y a su potente arsenal de drones, cualquiera\
+      \ que no esté en el acorazado más grande y moderno lamentará haberse cruzado\
+      \ con ella."
+    fr: "Le Dominix est un vétéran du front, qui déjà s'illustrait à l'époque de la\
+      \ guerre Gallente-Caldari. S'il n'est plus considéré comme le parangon des champs\
+      \ de bataille, ce cuirassé est loin d’être obsolète. Doté d'une coque massive\
+      \ et d'un puissant arsenal de drones, le Dominix est un adversaire redoutable,\
+      \ capable de pulvériser tous les vaisseaux de l'amas, à l'exception des cuirassé\
+      s de pointe les plus modernes."
+    ja: "ドミニックスは、ガレンテ-カルダリ戦争時代からある、古い軍艦の一つだ。もはや戦場の王者とは呼べないが、決して役立たずの骨董品ではない。頑丈な船体と\
+      強力なドローン運用システムを備えており、最新最大の戦艦に乗っているのでもないかぎり、うかつに手を出せば後悔することになるだろう。"
+    ru: "«Доминикс» — заслуженный ветеран космоса, находящийся в строю со времен г\
+      аллентско-калдарской войны. Этот корабль уже не считается передовым, но его\
+      \ ни в коей мере нельзя назвать устаревшим. Обломав зубы о прочную «шкуру» э\
+      того увальня и пострадав от роя выпущенных им дронов, о принятом решении пож\
+      алеет любой капитан, ввязавшийся с ним в схватку — разве что кроме пилотов с\
+      амых крупных и современных линкоров."
+    zh: "多米尼克斯级战列舰是久经沙场的老将，其服役期可以追溯到盖伦特-加达里战争时期。尽管现在它不再是战场上的王者，但也绝对没有过时。它拥有强大的舰体和威\
+      猛的无人机武器，如果你没有最大最新型的战列舰的话，最好就不要在它面前卖弄风骚。"
   factionID: 500004
   graphicID: 318
   groupID: 27
   marketGroupID: 81
-  mass: 100250000.0
+  mass: 100250000
   masteries:
-    0:
-      - 96
-      - 99
-      - 133
-      - 138
-      - 140
-      - 89
-    1:
-      - 96
-      - 99
-      - 133
-      - 138
-      - 140
-      - 89
-    2:
-      - 96
-      - 99
-      - 133
-      - 138
-      - 140
-      - 89
-    3:
-      - 96
-      - 99
-      - 133
-      - 138
-      - 140
-      - 89
-    4:
-      - 96
-      - 99
-      - 133
-      - 138
-      - 140
-      - 117
-      - 89
+    "0":
+    - 96
+    - 99
+    - 133
+    - 138
+    - 140
+    - 89
+    "1":
+    - 96
+    - 99
+    - 133
+    - 138
+    - 140
+    - 89
+    "2":
+    - 96
+    - 99
+    - 133
+    - 138
+    - 140
+    - 89
+    "3":
+    - 96
+    - 99
+    - 133
+    - 138
+    - 140
+    - 89
+    "4":
+    - 96
+    - 99
+    - 133
+    - 138
+    - 140
+    - 117
+    - 89
   metaGroupID: 1
   name:
-    de: Dominix
-    en: Dominix
-    es: Dominix
-    fr: Dominix
-    ja: ドミニックス
-    ru: Dominix
-    zh: 多米尼克斯级
+    de: "Dominix"
+    en: "Dominix"
+    es: "Dominix"
+    fr: "Dominix"
+    ja: "ドミニックス"
+    ru: "Dominix"
+    zh: "多米尼克斯级"
   portionSize: 1
   published: true
   raceID: 8
-  radius: 250.0
-  sofFactionName: gallentebase
+  radius: 250
+  sofFactionName: "gallentebase"
   soundID: 20072
   traits:
     miscBonuses: []
     roleBonuses:
-      -   bonus: 5.0
-          bonusText:
-            de: zusätzlicher Bonus auf HP der <a href=showinfo:3394>Verstärkten
-              Schottwand</a>
-            en: additional bonus to <a href=showinfo:3394>Reinforced Bulkhead</a>
-              hitpoints
-            es: de bonificación adicional a los puntos de vida del <a href=showinfo:3394>mamparo
-              reforzado</a>.
-            fr: de bonus supplémentaire aux points de vie de la <a href=showinfo:3394>cloison
-              renforcée</a>
-            ja: <a href=showinfo:3394>強化隔壁</a>HPがさらに増加
-            ru: дополнительный бонус к прочности <a href=showinfo:3394>укреплённой
-              переборки</a>
-            zh: <a href=showinfo:3394>强化舱隔壁</a>结构值加成
-          importance: 3
-          unitID: 105
-      -   bonus: 50.0
-          bonusText:
-            de: Bonus auf die HP der <a href=showinfo:3394>Panzerplatte</a>
-            en: bonus to <a href=showinfo:3394>Armor Plate</a> hitpoints
-            es: de bonificación a los puntos de vida de las <a href=showinfo:3394>placas
-              de blindaje</a>.
-            fr: de bonus aux points de vie du <a href=showinfo:3394>revêtement
-              de blindage</a>
-            ja: <a href=showinfo:3394>アーマープレート</a>HPが増加
-            ru: бонус к прочности <a href=showinfo:3394>бронеплиты</a>
-            zh: <a href=showinfo:3394>装甲附甲板</a>装甲值加成
-          importance: 2
-          unitID: 105
-      -   bonus: 100.0
-          bonusText:
-            de: Bonus auf die HP der <a href=showinfo:3425>Schilderweiterung</a>
-            en: bonus to <a href=showinfo:3425>Shield Extender</a> hitpoints
-            es: de bonificación a los puntos de vida del <a href=showinfo:3425>extensor
-              de escudo</a>.
-            fr: de bonus aux points de vie de l'<a href=showinfo:3425>extenseur
-              de bouclier</a>
-            ja: <a href=showinfo:3425>シールドエクステンダー</a>HPが増加
-            ru: бонус к прочности <a href=showinfo:3425>расширителя щитов</a>
-            zh: <a href=showinfo:3425>护盾扩展装置</a>护盾值加成
-          importance: 1
-          unitID: 105
+    - bonus: 5
+      bonusText:
+        de: "zusätzlicher Bonus auf HP der <a href=showinfo:3394>Verstärkten Schottwand</a>"
+        en: "additional bonus to <a href=showinfo:3394>Reinforced Bulkhead</a> hitpoints"
+        es: "de bonificación adicional a los puntos de vida del <a href=showinfo:3394>mamparo\
+          \ reforzado</a>."
+        fr: "de bonus supplémentaire aux points de vie de la <a href=showinfo:3394>cloison\
+          \ renforcée</a>"
+        ja: "<a href=showinfo:3394>強化隔壁</a>HPがさらに増加"
+        ru: "дополнительный бонус к\_прочности <a href=showinfo:3394>укреплённой п\
+          ереборки</a>"
+        zh: "<a href=showinfo:3394>强化舱隔壁</a>结构值加成"
+      importance: 3
+      unitID: 105
+    - bonus: 50
+      bonusText:
+        de: "Bonus auf die HP der <a href=showinfo:3394>Panzerplatte</a>"
+        en: "bonus to <a href=showinfo:3394>Armor Plate</a> hitpoints"
+        es: "de bonificación a los puntos de vida de las <a href=showinfo:3394>placas\
+          \ de blindaje</a>."
+        fr: "de bonus aux points de vie du <a href=showinfo:3394>revêtement de blindage</a>"
+        ja: "<a href=showinfo:3394>アーマープレート</a>HPが増加"
+        ru: "бонус к\_прочности <a href=showinfo:3394>бронеплиты</a>"
+        zh: "<a href=showinfo:3394>装甲附甲板</a>装甲值加成"
+      importance: 2
+      unitID: 105
+    - bonus: 100
+      bonusText:
+        de: "Bonus auf die HP der <a href=showinfo:3425>Schilderweiterung</a>"
+        en: "bonus to <a href=showinfo:3425>Shield Extender</a> hitpoints"
+        es: "de bonificación a los puntos de vida del <a href=showinfo:3425>extensor\
+          \ de escudo</a>."
+        fr: "de bonus aux points de vie de l'<a href=showinfo:3425>extenseur de bouclier</a>"
+        ja: "<a href=showinfo:3425>シールドエクステンダー</a>HPが増加"
+        ru: "бонус к\_прочности <a href=showinfo:3425>расширителя щитов</a>"
+        zh: "<a href=showinfo:3425>护盾扩展装置</a>护盾值加成"
+      importance: 1
+      unitID: 105
     types:
-      3336:
-        -   bonus: 7.5
-            bonusText:
-              de: Bonus auf die optimale Reichweite und Nachführungsgeschwindigkeit
-                von <a href=showinfo:3436>Drohnen</a>
-              en: bonus to <a href=showinfo:3436>Drone</a> optimal range and
-                tracking speed
-              es: de bonificación a la velocidad de rastreo y el alcance óptimo
-                de los <a href=showinfo:3436>drones</a>.
-              fr: de bonus à la portée optimale et à la vitesse de poursuite
-                du <a href=showinfo:3436>drone</a>
-              ja: <a href=showinfo:3436>ドローン</a>の最適射程距離と追跡速度が増加
-              ru: повышается скорость наводки на цель бортового оружия <a href=showinfo:3436>дронов</a>,
-                увеличивается оптимальная дальность его действия
-              zh: <a href="showinfo:3436">无人机</a>最佳射程和跟踪速度加成
-            importance: 2
-            unitID: 105
-        -   bonus: 10.0
-            bonusText:
-              de: Bonus auf die HP und den Schaden von <a href=showinfo:3436>Drohnen</a>
-              en: bonus to <a href=showinfo:3436>Drone</a> hitpoints and damage
-              es: de bonificación a los puntos de vida y el daño de los <a href=showinfo:3436>drones</a>.
-              fr: de bonus aux dégâts et aux PV des <a href=showinfo:3436>drones</a>
-              ja: <a href=showinfo:3436>ドローン</a>のヒットポイントとダメージが増加
-              ru: увеличивается урон бортового оружия <a href=showinfo:3436>дронов</a>;
-                увеличивается запас их прочности
-              zh: <a href="showinfo:3436">无人机</a>伤害和HP加成
-            importance: 1
-            unitID: 105
-  volume: 454500.0
-
-3336:
-  basePrice: 7500000.0
+      "3336":
+      - bonus: 7.5
+        bonusText:
+          de: "Bonus auf die optimale Reichweite und Nachführungsgeschwindigkeit von\
+            \ <a href=showinfo:3436>Drohnen</a>"
+          en: "bonus to <a href=showinfo:3436>Drone</a> optimal range and tracking\
+            \ speed"
+          es: "de bonificación a la velocidad de rastreo y el alcance óptimo de los\
+            \ <a href=showinfo:3436>drones</a>."
+          fr: "de bonus à la portée optimale et à la vitesse de poursuite du <a href=showinfo:3436>drone</a>"
+          ja: "<a href=showinfo:3436>ドローン</a>の最適射程距離と追跡速度が増加"
+          ru: "повышается скорость наводки на цель бортового оружия <a href=showinfo:3436>д\
+            ронов</a>, увеличивается оптимальная дальность его действия"
+          zh: "<a href=\"showinfo:3436\">无人机</a>最佳射程和跟踪速度加成"
+        importance: 2
+        unitID: 105
+      - bonus: 10
+        bonusText:
+          de: "Bonus auf die HP und den Schaden von <a href=showinfo:3436>Drohnen</a>"
+          en: "bonus to <a href=showinfo:3436>Drone</a> hitpoints and damage"
+          es: "de bonificación a los puntos de vida y el daño de los <a href=showinfo:3436>drones</a>."
+          fr: "de bonus aux dégâts et aux PV des <a href=showinfo:3436>drones</a>"
+          ja: "<a href=showinfo:3436>ドローン</a>のヒットポイントとダメージが増加"
+          ru: "увеличивается урон бортового оружия <a href=showinfo:3436>дронов</a>;\
+            \ увеличивается запас их прочности"
+          zh: "<a href=\"showinfo:3436\">无人机</a>伤害和HP加成"
+        importance: 1
+        unitID: 105
+  volume: 454500
+"3336":
+  basePrice: 7500000
   description:
-    de: Skill zur Bedienung von Gallente-Schlachtschiffen.
-    en: Skill at operating Gallente battleships.
-    es: Habilidad en el manejo de acorazados gallentes.
-    fr: Compétence liée au pilotage des cuirassés gallente.
-    ja: ガレンテ戦艦を操作するスキル。
-    ru: Освоив этот навык, пилот получит допуск к выполнению полётов на линкорах
-      производства Галлентской Федерации.
-    zh: 操作盖伦特战列舰的技能。
+    de: "Skill zur Bedienung von Gallente-Schlachtschiffen."
+    en: "Skill at operating Gallente battleships."
+    es: "Habilidad en el manejo de acorazados gallentes."
+    fr: "Compétence liée au pilotage des cuirassés gallente."
+    ja: "ガレンテ戦艦を操作するスキル。"
+    ru: "Освоив этот навык, пилот получит допуск к выполнению полётов на линкорах\
+      \ производства Галлентской Федерации."
+    zh: "操作盖伦特战列舰的技能。"
   groupID: 257
   iconID: 33
   marketGroupID: 377
   name:
-    de: Gallente Battleship
-    en: Gallente Battleship
-    es: Acorazado gallente
-    fr: Cuirassé gallente
-    ja: ガレンテ戦艦
-    ru: Галлентские линкоры
-    zh: 盖伦特战列舰操作
+    de: "Gallente Battleship"
+    en: "Gallente Battleship"
+    es: "Acorazado gallente"
+    fr: "Cuirassé gallente"
+    ja: "ガレンテ戦艦"
+    ru: "Галлентские линкоры"
+    zh: "盖伦特战列舰操作"
   portionSize: 1
   published: true
   raceID: 8
   volume: 0.01
-
-3327:
-  basePrice: 30000.0
+"3327":
+  basePrice: 30000
   description:
-    de: "Die grundsätzliche Fertigkeit, ein Raumschiff zu bedienen.\r\n\r\n2%
-            Bonus auf die Wendigkeit eines Schiffes je Skillstufe."
-    en: The basic operation of spaceships. 2% improved ship agility for all ships
-      per skill level.
-    es: Operación básica de naves espaciales. +2 % de bonificación a la agilidad
-      de todas las naves por nivel de habilidad.
-    fr: Pilotage de base des vaisseaux. Augmente de 2 % par niveau de compétence
-      la maniabilité de tous les vaisseaux.
-    ja: 宇宙船の基本操作スキル。スキルレベル上昇ごとに全ての船の機動性が2%上昇。
-    ru: 'Базовые навыки управления кораблями. За каждую степень освоения навыка:
-            на 2% повышается маневренность всех кораблей.'
-    zh: 操控舰船的基本技能。每升一级，所有飞船的灵活性提升2%。
+    de: "Die grundsätzliche Fertigkeit, ein Raumschiff zu bedienen.\r\n\r\n2% Bonus\
+      \ auf die Wendigkeit eines Schiffes je Skillstufe."
+    en: "The basic operation of spaceships. 2% improved ship agility for all ships\
+      \ per skill level."
+    es: "Operación básica de naves espaciales. +2\_% de bonificación a la agilidad\
+      \ de todas las naves por nivel de habilidad."
+    fr: "Pilotage de base des vaisseaux. Augmente de 2\_%\_par niveau de compétence\
+      \ la maniabilité de tous les vaisseaux."
+    ja: "宇宙船の基本操作スキル。スキルレベル上昇ごとに全ての船の機動性が2%上昇。"
+    ru: "Базовые навыки управления кораблями. За каждую степень освоения навыка: н\
+      а 2% повышается маневренность всех кораблей."
+    zh: "操控舰船的基本技能。每升一级，所有飞船的灵活性提升2%。"
   groupID: 257
   iconID: 33
   marketGroupID: 377
   name:
-    de: Spaceship Command
-    en: Spaceship Command
-    es: Manejo de naves espaciales
-    fr: Pilotage de vaisseau
-    ja: 宇宙船操作
-    ru: Допуски к управлению кораблями
-    zh: 飞船操控学
+    de: "Spaceship Command"
+    en: "Spaceship Command"
+    es: "Manejo de naves espaciales"
+    fr: "Pilotage de vaisseau"
+    ja: "宇宙船操作"
+    ru: "Допуски к управлению кораблями"
+    zh: "飞船操控学"
   portionSize: 1
   published: true
   volume: 0.01
-
-33097:
-  basePrice: 2500000.0
+"33097":
+  basePrice: 2500000
   description:
-    de: Skill zur Bedienung von Gallente-Schlachtkreuzern.
-    en: Skill at operating Gallente battlecruisers.
-    es: Habilidad en el manejo de cruceros de combate gallentes.
-    fr: Compétence liée au pilotage des croiseurs de bataille gallente. Formation
-      impossible sur les comptes d'évaluation.
-    ja: ガレンテ巡洋戦艦を操作するスキル。
-    ru: Освоив этот навык, пилот получит допуск к выполнению полётов на линейных
-      крейсерах производства Галлентской Федерации.
-    zh: 操作盖伦特战列巡洋舰的技能。
+    de: "Skill zur Bedienung von Gallente-Schlachtkreuzern."
+    en: "Skill at operating Gallente battlecruisers."
+    es: "Habilidad en el manejo de cruceros de combate gallentes."
+    fr: "Compétence liée au pilotage des croiseurs de bataille gallente. Formation\
+      \ impossible sur les comptes d'évaluation."
+    ja: "ガレンテ巡洋戦艦を操作するスキル。"
+    ru: "Освоив этот навык, пилот получит допуск к выполнению полётов на линейных\
+      \ крейсерах производства Галлентской Федерации."
+    zh: "操作盖伦特战列巡洋舰的技能。"
   groupID: 257
   iconID: 33
   marketGroupID: 377
   name:
-    de: Gallente Battlecruiser
-    en: Gallente Battlecruiser
-    es: Crucero de combate gallente
-    fr: Croiseur de bataille gallente
-    ja: ガレンテ巡洋戦艦
-    ru: Галлентские линейные крейсеры
-    zh: 盖伦特战列巡洋舰操作
-  portionSize: 1
-  published: true
-  raceID: 8
-  volume: 0.01
-
-3332:
-  basePrice: 1000000.0
-  description:
-    de: Fertigkeit, Kreuzer der Gallente zu bedienen.
-    en: Skill at operating Gallente cruisers.
-    es: Habilidad en el manejo de cruceros gallentes.
-    fr: Compétence liée au pilotage des croiseurs gallente.
-    ja: ガレンテ巡洋艦を操作するためのスキル。
-    ru: Освоив этот навык, пилот получит допуск к выполнению полётов на крейсерах
-      производства Галлентской Федерации.
-    zh: 操作盖伦特巡洋舰的技能。
-  groupID: 257
-  iconID: 33
-  marketGroupID: 377
-  name:
-    de: Gallente Cruiser
-    en: Gallente Cruiser
-    es: Crucero gallente
-    fr: Croiseur gallente
-    ja: ガレンテ巡洋艦
-    ru: Галлентские крейсеры
-    zh: 盖伦特巡洋舰操作
+    de: "Gallente Battlecruiser"
+    en: "Gallente Battlecruiser"
+    es: "Crucero de combate gallente"
+    fr: "Croiseur de bataille gallente"
+    ja: "ガレンテ巡洋戦艦"
+    ru: "Галлентские линейные крейсеры"
+    zh: "盖伦特战列巡洋舰操作"
   portionSize: 1
   published: true
   raceID: 8
   volume: 0.01
-
-33093:
-  basePrice: 100000.0
+"3332":
+  basePrice: 1000000
   description:
-    de: Fertigkeit, Zerstörer der Gallente zu bedienen.
-    en: Skill at operating Gallente destroyers.
-    es: Habilidad en el manejo de destructores gallentes.
-    fr: Compétence liée au pilotage des destroyers gallente.
-    ja: ガレンテ駆逐艦を操作するためのスキル。
-    ru: Освоив этот навык, пилот получит допуск к выполнению полётов на эсминцах
-      производства Галлентской Федерации.
-    zh: 操作盖伦特驱逐舰的技能。
+    de: "Fertigkeit, Kreuzer der Gallente zu bedienen."
+    en: "Skill at operating Gallente cruisers."
+    es: "Habilidad en el manejo de cruceros gallentes."
+    fr: "Compétence liée au pilotage des croiseurs gallente."
+    ja: "ガレンテ巡洋艦を操作するためのスキル。"
+    ru: "Освоив этот навык, пилот получит допуск к выполнению полётов на крейсерах\
+      \ производства Галлентской Федерации."
+    zh: "操作盖伦特巡洋舰的技能。"
   groupID: 257
   iconID: 33
   marketGroupID: 377
   name:
-    de: Gallente Destroyer
-    en: Gallente Destroyer
-    es: Destructor gallente
-    fr: Destroyer gallente
-    ja: ガレンテ駆逐艦
-    ru: Галлентские эсминцы
-    zh: 盖伦特驱逐舰操作
+    de: "Gallente Cruiser"
+    en: "Gallente Cruiser"
+    es: "Crucero gallente"
+    fr: "Croiseur gallente"
+    ja: "ガレンテ巡洋艦"
+    ru: "Галлентские крейсеры"
+    zh: "盖伦特巡洋舰操作"
   portionSize: 1
   published: true
   raceID: 8
   volume: 0.01
-
-3328:
-  basePrice: 50000.0
+"33093":
+  basePrice: 100000
   description:
-    de: Fertigkeit, Fregatten der Gallente zu bedienen.
-    en: Skill at operating Gallente frigates.
-    es: Habilidad en el manejo de fragatas gallentes.
-    fr: Compétence liée au pilotage des frégates gallente.
-    ja: ガレンテフリゲートを操作するためのスキル。
-    ru: Освоив этот навык, пилот получит допуск к выполнению полётов на фрегатах
-      производства Галлентской Федерации.
-    zh: 操作盖伦特护卫舰的技能。
+    de: "Fertigkeit, Zerstörer der Gallente zu bedienen."
+    en: "Skill at operating Gallente destroyers."
+    es: "Habilidad en el manejo de destructores gallentes."
+    fr: "Compétence liée au pilotage des destroyers gallente."
+    ja: "ガレンテ駆逐艦を操作するためのスキル。"
+    ru: "Освоив этот навык, пилот получит допуск к выполнению полётов на эсминцах\
+      \ производства Галлентской Федерации."
+    zh: "操作盖伦特驱逐舰的技能。"
   groupID: 257
   iconID: 33
   marketGroupID: 377
   name:
-    de: Gallente Frigate
-    en: Gallente Frigate
-    es: Fragata gallente
-    fr: Frégate gallente
-    ja: ガレンテフリゲート
-    ru: Галлентские фрегаты
-    zh: 盖伦特护卫舰操作
+    de: "Gallente Destroyer"
+    en: "Gallente Destroyer"
+    es: "Destructor gallente"
+    fr: "Destroyer gallente"
+    ja: "ガレンテ駆逐艦"
+    ru: "Галлентские эсминцы"
+    zh: "盖伦特驱逐舰操作"
   portionSize: 1
   published: true
   raceID: 8
   volume: 0.01
-
-52225:
-  basePrice: 1000.0
+"3328":
+  basePrice: 50000
   description:
-    de: Dieses bioadaptive Mutaplasmidwerkzeug wurde dazu entwickelt, um sich
-      mit Geräten zu verbinden, die die Auswirkungen kritischer Systemschäden
-      abschwächen, und um diese zu modifizieren. Dementsprechend könnte dieses
-      Mutaplasmid dazu verwendet werden, die Leistungseigenschaften von Standard-Schadenskontrollmodulen
-      zu verändern. Bioadaptive Triglavia-Technologie macht in großem Maße Gebrauch
-      von angelegten Kolonien extremophiler Bakterien, die für den Anbau, den
-      Abbau und die Anpassung verschiedener Ressourcen aus der Raumverwerfung
-      des Abgrunds genutzt werden. In Triglavia-Speichern können künstlich kolonisierte
-      Plasmide verschiedener Entwicklungsstufen gefunden werden, die in Spezialistenwerkzeugen
-      für die direkte Anpassung von Technologie implementiert sind. Diese Mutaplasmide
-      können verwendet werden, um die Eigenschaften einer Vielzahl von Ausrüstungsarten
-      zu verändern. Dabei sind der Stamm und das bioadaptive Werkzeug, in das
-      sie eingebracht sind, entscheidend. Die Mutaplasmidkolonie, die in dieses
-      bioadaptive Werkzeug implementiert wurde, scheint reif zu sein und sich
-      mit einer soliden Rate zu reproduzieren. Der Mutationsnutzen und die Risiken
-      der Verwendung dieses Mutaplasmids halten sich mehr oder weniger in Grenzen.
-    en: "This bioadaptive mutaplasmid tool is designed to interface with and alter
-            devices that mitigate the impact of critical system damage. As such this
-            mutaplasmid could be used to mutate the performance characteristics of
-            standard damage control modules.\r\n\r\nTriglavian bioadaptive technology
-            makes extensive use of engineered colonies of extremophilic bacteria,
-            that are used to grow, harvest and adapt various resources found in Abyssal
-            Deadspace. Artificial colonizing plasmids integrated into specialist tools
-            used for direct adaptation of technology can be found in Triglavian caches
-            in various stages of development. These mutaplasmids can be used to alter
-            the characteristics of a wide variety of equipment types, depending on
-            the strain and the bioadaptive tool with which they are integrated.\r\n\r\nThe
-            mutaplasmid colony integrated into this bioadaptive tool appears to be
-            mature and reproducing at a healthy rate. The mutational benefits and
-            risks of using this mutaplasmid are within relatively balanced bounds."
-    es: 'Esta herramienta mutaplásmida bioadaptativa está diseñada para alterar
-            e interactuar con dispositivos que mitigan el impacto de los daños críticos
-            del sistema. Por tanto, este mutaplásmido se puede usar para mutar las
-            características de rendimiento de los módulos de control de daños estándar.
-
-
-            La tecnología bioadaptativa triglaviana hace un extenso uso de colonias
-            industriales de bacterias extremófilas que se usan para cultivar, cosechar
-            y adaptar varios recursos hallados en el espacio muerto abisal. En los
-            depósitos triglavianos hay plásmidos colonizadores artificiales integrados
-            en herramientas especializadas en la adaptación directa de la tecnología
-            en varias fases de desarrollo. Estos mutaplásmidos pueden emplearse para
-            alterar las características de una amplia variedad de tipos de aparatos,
-            según la cepa y la herramienta bioadaptativa en la que se integran.
-
-
-            La colonia mutaplásmida integrada en esta herramienta bioadaptativa parece
-            madura y se reproduce a un ritmo saludable. Los beneficios de la mutación
-            y los riesgos de usar este mutaplásmido están relativamente equilibrados.'
-    fr: Cet outil de mutaplasmide bioadaptatif a été conçu pour se synchroniser
-      avec les appareils qui atténuent l'impact des dégâts système critiques,
-      mais aussi pour les modifier. Ainsi, ce mutaplasmide pourrait servir à
-      muter les caractéristiques de performance des modules de contrôle des
-      dégâts d'attaque standard. La technologie bioadaptative triglavian utilise
-      massivement les colonies de bactéries extrêmophiles spécialement conçues
-      qui savent se développer, s'adapter et absorber les différentes ressources
-      qu'offre l'abîme Deadspace. Les plasmides colonisateurs artificiels qui
-      ont été intégrés aux outils des spécialistes et qui permettent une adaptation
-      technologique directe se trouvent dans des caches triglavian et sont à
-      différents stades de leur développement. Ces mutaplasmides peuvent servir
-      à modifier les caractéristiques d'une large variété de types d'équipement,
-      en fonction de la souche et de l'outil bioadaptatif qui les a intégrés.
-      La colonie mutaplasmide intégrée à cet outil bioadaptatif semble être
-      arrivée à maturité et se reproduit à un rythme correct. Les bénéfices
-      et les risques de mutation lorsqu'on utilise ce mutaplasmide sont relativement
-      équilibrés.
-    ja: "この生物学的適応性のある変異プラスミドツールは、重要なシステム損傷の影響を緩和するデバイスとのインターフェースおよび変更のために設計された。つまり、この変異プラスミドは、標準的なダメージ制御モジュールの性能特性を変異させるために使用することができる。\r\n\nトリグラビアンの生物適応技術は、極限環境バクテリアの培養コロニーを広範囲に利用している。このバクテリアはアビサルデッドスペースで発見されたもので、様々な資源を成長、収穫、適応させるために使用されている。技術の直接取得に使用される専門ツールに統合された人工コロニー形成プラスミドは、発達の様々な段階にあるトリグラビアンのキャッシュで見つけることができる。これらの変異プラスミドは、統合されたバクテリア株や生物適応ツールに応じて、様々な種類の機器の特性を変化させるために使用することができる。\r\n\nこの生物適応ツールに統合された変異プラスミドツールのコロニーは成熟し、健康的な速度で繁殖しているように見える。この変異プラスミドツールを使用することによる突然変異の利点とリスクは、比較的バランスのとれた範囲内にある。"
-    ru: Этот биоадаптивный мутаплазмидный инструмент разработан для взаимодействия
-      с устройствами, смягчающими результат критического повреждения систем.
-      Таким образом, он позволяет изменять рабочие характеристики большинства
-      обычных модулей боевой живучести, установленных на кораблях соответствующего
-      размера. В биоадаптивных технологиях Триглава широко используются программируемые
-      колонии экстремофильных бактерий. Они позволяют выращивать, добывать и
-      адаптировать различные ресурсы, встречающиеся в Мёртвой бездне. Искусственные
-      колонии плазмидов на разных этапах развития, помещённые внутрь специализированных
-      инструментов, предназначены для прямой адаптации техники и встречаются
-      в тайниках Триглава. Эти мутаплазмиды, в зависимости от их штамма и инструмента
-      для биоадаптации, в который они помещены, можно использовать для изменения
-      характеристик различных типов оборудования. Колония мутаплазмидов, помещённых
-      в этот инструмент для биоадаптации, оказалась зрелой, а темпы её воспроизводства —
-      умеренными. Возможная польза и риски, возникающие в результате использования
-      данного мутаплазмида, достаточно сбалансированы.
-    zh: '这个生化适应性突变质体工具被设计用来连接和改变可以减轻对系统的破坏性伤害的设备。因此，这个质体可以使大多数尺寸合适的标准型损伤控制的性能特征发生突变。
-
-
-
-
-            三神裔生化适应科技广泛应用了极端微生物细菌种群，这种细菌种群生长于并可适应深渊空间中发现的各种资源。将人工种群质体植入用以快速适应技术的专用工具这一做法在三神裔的各个发展阶段都有出现。这些突变质体可以用来改变多种设备类型的特性，效果根据植入的生化适应工具不同而有所差别。
-
-
-
-
-            植入这个生化适应工具的突变质体种群看上去已经成熟，正以一种健康的方式进行自我繁殖。使用这种突变质体带来的益处和危险性处于一种微妙的相对平衡。'
+    de: "Fertigkeit, Fregatten der Gallente zu bedienen."
+    en: "Skill at operating Gallente frigates."
+    es: "Habilidad en el manejo de fragatas gallentes."
+    fr: "Compétence liée au pilotage des frégates gallente."
+    ja: "ガレンテフリゲートを操作するためのスキル。"
+    ru: "Освоив этот навык, пилот получит допуск к выполнению полётов на фрегатах\
+      \ производства Галлентской Федерации."
+    zh: "操作盖伦特护卫舰的技能。"
+  groupID: 257
+  iconID: 33
+  marketGroupID: 377
+  name:
+    de: "Gallente Frigate"
+    en: "Gallente Frigate"
+    es: "Fragata gallente"
+    fr: "Frégate gallente"
+    ja: "ガレンテフリゲート"
+    ru: "Галлентские фрегаты"
+    zh: "盖伦特护卫舰操作"
+  portionSize: 1
+  published: true
+  raceID: 8
+  volume: 0.01
+"52225":
+  basePrice: 1000
+  description:
+    de: "Dieses bioadaptive Mutaplasmidwerkzeug wurde dazu entwickelt, um sich mit\
+      \ Geräten zu verbinden, die die Auswirkungen kritischer Systemschäden abschwä\
+      chen, und um diese zu modifizieren. Dementsprechend könnte dieses Mutaplasmid\
+      \ dazu verwendet werden, die Leistungseigenschaften von Standard-Schadenskontrollmodulen\
+      \ zu verändern. Bioadaptive Triglavia-Technologie macht in großem Maße Gebrauch\
+      \ von angelegten Kolonien extremophiler Bakterien, die für den Anbau, den Abbau\
+      \ und die Anpassung verschiedener Ressourcen aus der Raumverwerfung des Abgrunds\
+      \ genutzt werden. In Triglavia-Speichern können künstlich kolonisierte Plasmide\
+      \ verschiedener Entwicklungsstufen gefunden werden, die in Spezialistenwerkzeugen\
+      \ für die direkte Anpassung von Technologie implementiert sind. Diese Mutaplasmide\
+      \ können verwendet werden, um die Eigenschaften einer Vielzahl von Ausrüstungsarten\
+      \ zu verändern. Dabei sind der Stamm und das bioadaptive Werkzeug, in das sie\
+      \ eingebracht sind, entscheidend. Die Mutaplasmidkolonie, die in dieses bioadaptive\
+      \ Werkzeug implementiert wurde, scheint reif zu sein und sich mit einer soliden\
+      \ Rate zu reproduzieren. Der Mutationsnutzen und die Risiken der Verwendung\
+      \ dieses Mutaplasmids halten sich mehr oder weniger in Grenzen."
+    en: "This bioadaptive mutaplasmid tool is designed to interface with and alter\
+      \ devices that mitigate the impact of critical system damage. As such this mutaplasmid\
+      \ could be used to mutate the performance characteristics of standard damage\
+      \ control modules.\r\n\r\nTriglavian bioadaptive technology makes extensive\
+      \ use of engineered colonies of extremophilic bacteria, that are used to grow,\
+      \ harvest and adapt various resources found in Abyssal Deadspace. Artificial\
+      \ colonizing plasmids integrated into specialist tools used for direct adaptation\
+      \ of technology can be found in Triglavian caches in various stages of development.\
+      \ These mutaplasmids can be used to alter the characteristics of a wide variety\
+      \ of equipment types, depending on the strain and the bioadaptive tool with\
+      \ which they are integrated.\r\n\r\nThe mutaplasmid colony integrated into this\
+      \ bioadaptive tool appears to be mature and reproducing at a healthy rate. The\
+      \ mutational benefits and risks of using this mutaplasmid are within relatively\
+      \ balanced bounds."
+    es: "Esta herramienta mutaplásmida bioadaptativa está diseñada para alterar e\
+      \ interactuar con dispositivos que mitigan el impacto de los daños críticos\
+      \ del sistema. Por tanto, este mutaplásmido se puede usar para mutar las caracterí\
+      sticas de rendimiento de los módulos de control de daños estándar.\n\nLa tecnologí\
+      a bioadaptativa triglaviana hace un extenso uso de colonias industriales de\
+      \ bacterias extremófilas que se usan para cultivar, cosechar y adaptar varios\
+      \ recursos hallados en el espacio muerto abisal. En los depósitos triglavianos\
+      \ hay plásmidos colonizadores artificiales integrados en herramientas especializadas\
+      \ en la adaptación directa de la tecnología en varias fases de desarrollo. Estos\
+      \ mutaplásmidos pueden emplearse para alterar las características de una amplia\
+      \ variedad de tipos de aparatos, según la cepa y la herramienta bioadaptativa\
+      \ en la que se integran.\n\nLa colonia mutaplásmida integrada en esta herramienta\
+      \ bioadaptativa parece madura y se reproduce a un ritmo saludable. Los beneficios\
+      \ de la mutación y los riesgos de usar este mutaplásmido están relativamente\
+      \ equilibrados."
+    fr: "Cet outil de mutaplasmide bioadaptatif a été conçu pour se synchroniser avec\
+      \ les appareils qui atténuent l'impact des dégâts système critiques, mais aussi\
+      \ pour les modifier. Ainsi, ce mutaplasmide pourrait servir à muter les caracté\
+      ristiques de performance des modules de contrôle des dégâts d'attaque standard.\
+      \ La technologie bioadaptative triglavian utilise massivement les colonies de\
+      \ bactéries extrêmophiles spécialement conçues qui savent se développer, s'adapter\
+      \ et absorber les différentes ressources qu'offre l'abîme Deadspace. Les plasmides\
+      \ colonisateurs artificiels qui ont été intégrés aux outils des spécialistes\
+      \ et qui permettent une adaptation technologique directe se trouvent dans des\
+      \ caches triglavian et sont à différents stades de leur développement. Ces mutaplasmides\
+      \ peuvent servir à modifier les caractéristiques d'une large variété de types\
+      \ d'équipement, en fonction de la souche et de l'outil bioadaptatif qui les\
+      \ a intégrés. La colonie mutaplasmide intégrée à cet outil bioadaptatif semble\
+      \ être arrivée à maturité et se reproduit à un rythme correct. Les bénéfices\
+      \ et les risques de mutation lorsqu'on utilise ce mutaplasmide sont relativement\
+      \ équilibrés."
+    ja: "この生物学的適応性のある変異プラスミドツールは、重要なシステム損傷の影響を緩和するデバイスとのインターフェースおよび変更のために設計された。つまり\
+      、この変異プラスミドは、標準的なダメージ制御モジュールの性能特性を変異させるために使用することができる。\r\n\nトリグラビアンの生物適応技術は、極限\
+      環境バクテリアの培養コロニーを広範囲に利用している。このバクテリアはアビサルデッドスペースで発見されたもので、様々な資源を成長、収穫、適応させるために使\
+      用されている。技術の直接取得に使用される専門ツールに統合された人工コロニー形成プラスミドは、発達の様々な段階にあるトリグラビアンのキャッシュで見つけるこ\
+      とができる。これらの変異プラスミドは、統合されたバクテリア株や生物適応ツールに応じて、様々な種類の機器の特性を変化させるために使用することができる。\r\
+      \n\nこの生物適応ツールに統合された変異プラスミドツールのコロニーは成熟し、健康的な速度で繁殖しているように見える。この変異プラスミドツールを使用する\
+      ことによる突然変異の利点とリスクは、比較的バランスのとれた範囲内にある。"
+    ru: "Этот биоадаптивный мутаплазмидный инструмент разработан для взаимодействи\
+      я с устройствами, смягчающими результат критического повреждения систем. Так\
+      им образом, он позволяет изменять рабочие характеристики большинства обычных\
+      \ модулей боевой живучести, установленных на кораблях соответствующего разме\
+      ра. В биоадаптивных технологиях Триглава широко используются программируемые\
+      \ колонии экстремофильных бактерий. Они позволяют выращивать, добывать и ада\
+      птировать различные ресурсы, встречающиеся в Мёртвой бездне. Искусственные к\
+      олонии плазмидов на разных этапах развития, помещённые внутрь специализирова\
+      нных инструментов, предназначены для прямой адаптации техники и встречаются\
+      \ в тайниках Триглава. Эти мутаплазмиды, в зависимости от их штамма и инстру\
+      мента для биоадаптации, в который они помещены, можно использовать для измен\
+      ения характеристик различных типов оборудования. Колония мутаплазмидов, поме\
+      щённых в этот инструмент для биоадаптации, оказалась зрелой, а темпы её восп\
+      роизводства\_— умеренными. Возможная польза и риски, возникающие в результат\
+      е использования данного мутаплазмида, достаточно сбалансированы."
+    zh: "这个生化适应性突变质体工具被设计用来连接和改变可以减轻对系统的破坏性伤害的设备。因此，这个质体可以使大多数尺寸合适的标准型损伤控制的性能特征发生突\
+      变。\n\n\n\n三神裔生化适应科技广泛应用了极端微生物细菌种群，这种细菌种群生长于并可适应深渊空间中发现的各种资源。将人工种群质体植入用以快速适应技\
+      术的专用工具这一做法在三神裔的各个发展阶段都有出现。这些突变质体可以用来改变多种设备类型的特性，效果根据植入的生化适应工具不同而有所差别。\n\n\n\n\
+      植入这个生化适应工具的突变质体种群看上去已经成熟，正以一种健康的方式进行自我繁殖。使用这种突变质体带来的益处和危险性处于一种微妙的相对平衡。"
   groupID: 1964
   iconID: 24131
   marketGroupID: 2533
-  mass: 1.0
+  mass: 1
   name:
-    de: Gravid Damage Control Mutaplasmid
-    en: Gravid Damage Control Mutaplasmid
-    es: Mutaplásmido grávido de control de daños
-    fr: Mutaplasmide de contrôle des dégâts d'assaut inquiétant
-    ja: 胎動ダメージ制御変異プラスミド
-    ru: Gravid Damage Control Mutaplasmid
-    zh: 怀璧的损伤控制突变质体
+    de: "Gravid Damage Control Mutaplasmid"
+    en: "Gravid Damage Control Mutaplasmid"
+    es: "Mutaplásmido grávido de control de daños"
+    fr: "Mutaplasmide de contrôle des dégâts d'assaut inquiétant"
+    ja: "胎動ダメージ制御変異プラスミド"
+    ru: "Gravid Damage Control Mutaplasmid"
+    zh: "怀璧的损伤控制突变质体"
   portionSize: 1
   published: true
-  volume: 1.0
-
-52227:
+  volume: 1
+"52227":
   description:
-    de: Verwendet eine Kombination aus Dämpfungsfeldemittern und Redundanzsystemen,
-      um die Auswirkungen von kritischen Systemschäden zu verhindern. Verleiht
-      einen Bonus auf die Widerstandsfähigkeit von Schild, Panzerung und Rumpf.
-      Es kann zeitgleich immer nur ein Schadenskontroll-System ausgerüstet werden.
-    en: "Utilizes a combination of containment field emitters and redundancy systems
-            to mitigate the impact of critical system damage. \r\n\r\nGrants a bonus
-            to resistance for shield, armor and hull.\r\n\r\nOnly one Damage Control
-            can be fit at a given time."
-    es: "Usa una combinación de emisores de campo de contención y sistemas redundantes
-            para mitigar el impacto de daños críticos al sistema. \n\nOtorga una bonificación
-            de resistencia de escudo, blindaje y casco.\n\nSolo se puede equipar un
-            control de daños a la vez."
-    fr: Des émetteurs de champ de confinement et des systèmes redondants permettent
-      d'atténuer l'impact des dégâts critiques infligés aux systèmes. Donne
-      un bonus de résistance aux boucliers, au blindage et à la coque. Un seul
-      contrôle des dégâts peut être installé à la fois.
-    ja: "コンテインメントフィールドエミッターと冗長システムを組み合わせて使用することで、システムへの致命的なダメージの衝撃を回避する。\r\n\nシールド、アーマー、船体の耐性が増大する。\r\n\n複数のダメージ制御を同時に装備することはできない。"
-    ru: Эффективное сочетание излучателей сдерживающего поля и резервных блоков
-      позволяет смягчить результат критического повреждения систем. Даёт бонус
-      к сопротивлению щитов, брони и корпуса. Одновременно можно установить
-      только один модуль боевой живучести.
-    zh: "将围场发射器和冗余系统结合使用，减轻由严重系统性损坏造成的影响。 \n\n\n\n提高护盾、装甲和结构的抗性。\n\n\n\n只能同时装配一个损伤控制。"
+    de: "Verwendet eine Kombination aus Dämpfungsfeldemittern und Redundanzsystemen,\
+      \ um die Auswirkungen von kritischen Systemschäden zu verhindern. Verleiht einen\
+      \ Bonus auf die Widerstandsfähigkeit von Schild, Panzerung und Rumpf. Es kann\
+      \ zeitgleich immer nur ein Schadenskontroll-System ausgerüstet werden."
+    en: "Utilizes a combination of containment field emitters and redundancy systems\
+      \ to mitigate the impact of critical system damage. \r\n\r\nGrants a bonus to\
+      \ resistance for shield, armor and hull.\r\n\r\nOnly one Damage Control can\
+      \ be fit at a given time."
+    es: "Usa una combinación de emisores de campo de contención y sistemas redundantes\
+      \ para mitigar el impacto de daños críticos al sistema. \n\nOtorga una bonificació\
+      n de resistencia de escudo, blindaje y casco.\n\nSolo se puede equipar un control\
+      \ de daños a la vez."
+    fr: "Des émetteurs de champ de confinement et des systèmes redondants permettent\
+      \ d'atténuer l'impact des dégâts critiques infligés aux systèmes. Donne un bonus\
+      \ de résistance aux boucliers, au blindage et à la coque. Un seul contrôle des\
+      \ dégâts peut être installé à la fois."
+    ja: "コンテインメントフィールドエミッターと冗長システムを組み合わせて使用することで、システムへの致命的なダメージの衝撃を回避する。\r\n\nシールド\
+      、アーマー、船体の耐性が増大する。\r\n\n複数のダメージ制御を同時に装備することはできない。"
+    ru: "Эффективное сочетание излучателей сдерживающего поля и резервных блоков п\
+      озволяет смягчить результат критического повреждения систем. Даёт бонус к со\
+      противлению щитов, брони и корпуса. Одновременно можно установить только оди\
+      н модуль боевой живучести."
+    zh: "将围场发射器和冗余系统结合使用，减轻由严重系统性损坏造成的影响。 \n\n\n\n提高护盾、装甲和结构的抗性。\n\n\n\n只能同时装配一个损伤\
+      控制。"
   groupID: 60
   iconID: 77
   metaGroupID: 15
   name:
-    de: Abyssal Damage Control
-    en: Abyssal Damage Control
-    es: Control de daños abisal
-    fr: Contrôle des dégâts abyssaux
-    ja: アビサル・ダメージ制御
-    ru: Abyssal Damage Control
-    zh: 深渊损伤控制
+    de: "Abyssal Damage Control"
+    en: "Abyssal Damage Control"
+    es: "Control de daños abisal"
+    fr: "Contrôle des dégâts abyssaux"
+    ja: "アビサル・ダメージ制御"
+    ru: "Abyssal Damage Control"
+    zh: "深渊损伤控制"
   portionSize: 1
   published: true
-  volume: 5.0
-
-2048:
+  volume: 5
+"2046":
   description:
-    de: "Verwendet eine Kombination aus Dämpfungsfeldemittern und Redundanzystemen
-            um die Auswirkungen von kritischen Systemschäden zu verhindern. \n\n\n\nVerleiht
-            einen Bonus auf die Widerstandsfähigkeit von Schild, Panzerung und Schiffsstruktur.\n\n\n\nEs
-            kann immer nur ein Schadenskontroll-System zu einem festgelegten Zeitpunkt
-            eingebaut werden."
-    en: "Utilizes a combination of containment field emitters and redundancy systems
-            to mitigate the impact of critical system damage. \r\n\r\nGrants a bonus
-            to resistance for shield, armor and hull.\r\n\r\nOnly one Damage Control
-            can be fit at a given time."
-    es: "Usa una combinación de emisores de campo de contención y sistemas redundantes
-            para mitigar el impacto de daños críticos al sistema. \n\n\n\nOtorga una
-            bonificación de resistencia de escudo, blindaje y casco.\n\n\n\nSolo se
-            puede equipar un control de daños a la vez."
-    fr: "Ce module combine des émetteurs de champ de confinement et des systèmes
-            de redondance voués à mitiger l'impact dévastateur de dégâts critiques
-            sur le système. \n\n\n\nOffre un bonus de résistance aux boucliers, au
-            blindage et à la coque.\n\n\n\nUn seul régulateur de dégâts peut être
-            équipé à la fois."
-    ja: 格納型電界エミッターと冗長システムを組み合わせることにより、システムが深刻なダメージを受けた場合の影響を軽減する。シールド、アーマー、船体レジスタンスが向上する。ダメージコントロールは一度に一つしか装備できない。
-    ru: "Использует технологию локальных защитных полей и принципы многократного
-            резервирования для уменьшения последствий серьезных повреждений бортовых
-            систем. \n\n\n\nПовышает сопротивляемость силовых полей, брони и корпуса
-            корабля всем видам поражающего действия.\n\n\n\nДопускается одновременное
-            использование лишь одного модуля боевой живучести (Damage Control)."
-    zh: "将围场发射器和冗余系统结合使用，减轻由严重系统性损坏造成的影响。 \n\n\n\n提高护盾、装甲和结构的抗性。\n\n\n\n只能同时装配一个损伤控制。"
+    de: "Verwendet eine Kombination aus Dämpfungsfeldemittern und Redundanzystemen\
+      \ um die Auswirkungen von kritischen Systemschäden zu verhindern. \n\n\n\nVerleiht\
+      \ einen Bonus auf die Widerstandsfähigkeit von Schild, Panzerung und Schiffsstruktur.\n\
+      \n\n\nEs kann immer nur ein Schadenskontroll-System zu einem festgelegten Zeitpunkt\
+      \ eingebaut werden."
+    en: "Utilizes a combination of containment field emitters and redundancy systems\
+      \ to mitigate the impact of critical system damage. \r\n\r\nGrants a bonus to\
+      \ resistance for shield, armor and hull.\r\n\r\nOnly one Damage Control can\
+      \ be fit at a given time."
+    es: "Usa una combinación de emisores de campo de contención y sistemas redundantes\
+      \ para mitigar el impacto de daños críticos al sistema. \n\n\n\nOtorga una bonificació\
+      n de resistencia de escudo, blindaje y casco.\n\n\n\nSolo se puede equipar un\
+      \ control de daños a la vez."
+    fr: "Ce module combine des émetteurs de champ de confinement et des systèmes de\
+      \ redondance voués à mitiger l'impact dévastateur de dégâts critiques sur le\
+      \ système. \n\n\n\nOffre un bonus de résistance aux boucliers, au blindage et\
+      \ à la coque.\n\n\n\nUn seul régulateur de dégâts peut être équipé à la fois."
+    ja: "格納型電界エミッターと冗長システムを組み合わせることにより、システムが深刻なダメージを受けた場合の影響を軽減する。シールド、アーマー、船体レジスタ\
+      ンスが向上する。ダメージコントロールは一度に一つしか装備できない。"
+    ru: "Использует технологию локальных защитных полей и принципы многократного р\
+      езервирования для уменьшения последствий серьезных повреждений бортовых сист\
+      ем. \n\n\n\nПовышает сопротивляемость силовых полей, брони и корпуса корабля\
+      \ всем видам ущерба.\n\n\n\nДопускается одновременное использование лишь одн\
+      ого модуля боевой живучести (Damage Control)."
+    zh: "将围场发射器和冗余系统结合使用，减轻由严重系统性损坏造成的影响。 \n\n\n\n提高护盾、装甲和结构的抗性。\n\n\n\n只能同时装配一个损伤\
+      控制。"
   groupID: 60
   iconID: 77
   marketGroupID: 615
-  mass: 5000.0
+  mass: 5000
+  metaGroupID: 1
+  name:
+    de: "Damage Control I"
+    en: "Damage Control I"
+    es: "Control de daños\_I"
+    fr: "Contrôle des dégâts I"
+    ja: "ダメージ制御I"
+    ru: "Damage Control I"
+    zh: "损伤控制 I"
+  portionSize: 1
+  published: true
+  volume: 5
+"2048":
+  description:
+    de: "Verwendet eine Kombination aus Dämpfungsfeldemittern und Redundanzystemen\
+      \ um die Auswirkungen von kritischen Systemschäden zu verhindern. \n\n\n\nVerleiht\
+      \ einen Bonus auf die Widerstandsfähigkeit von Schild, Panzerung und Schiffsstruktur.\n\
+      \n\n\nEs kann immer nur ein Schadenskontroll-System zu einem festgelegten Zeitpunkt\
+      \ eingebaut werden."
+    en: "Utilizes a combination of containment field emitters and redundancy systems\
+      \ to mitigate the impact of critical system damage. \r\n\r\nGrants a bonus to\
+      \ resistance for shield, armor and hull.\r\n\r\nOnly one Damage Control can\
+      \ be fit at a given time."
+    es: "Usa una combinación de emisores de campo de contención y sistemas redundantes\
+      \ para mitigar el impacto de daños críticos al sistema. \n\n\n\nOtorga una bonificació\
+      n de resistencia de escudo, blindaje y casco.\n\n\n\nSolo se puede equipar un\
+      \ control de daños a la vez."
+    fr: "Ce module combine des émetteurs de champ de confinement et des systèmes de\
+      \ redondance voués à mitiger l'impact dévastateur de dégâts critiques sur le\
+      \ système. \n\n\n\nOffre un bonus de résistance aux boucliers, au blindage et\
+      \ à la coque.\n\n\n\nUn seul régulateur de dégâts peut être équipé à la fois."
+    ja: "格納型電界エミッターと冗長システムを組み合わせることにより、システムが深刻なダメージを受けた場合の影響を軽減する。シールド、アーマー、船体レジスタ\
+      ンスが向上する。ダメージコントロールは一度に一つしか装備できない。"
+    ru: "Использует технологию локальных защитных полей и принципы многократного р\
+      езервирования для уменьшения последствий серьезных повреждений бортовых сист\
+      ем. \n\n\n\nПовышает сопротивляемость силовых полей, брони и корпуса корабля\
+      \ всем видам поражающего действия.\n\n\n\nДопускается одновременное использо\
+      вание лишь одного модуля боевой живучести (Damage Control)."
+    zh: "将围场发射器和冗余系统结合使用，减轻由严重系统性损坏造成的影响。 \n\n\n\n提高护盾、装甲和结构的抗性。\n\n\n\n只能同时装配一个损伤\
+      控制。"
+  groupID: 60
+  iconID: 77
+  marketGroupID: 615
+  mass: 5000
   metaGroupID: 2
   name:
-    de: Damage Control II
-    en: Damage Control II
-    es: Control de daños II
-    fr: Contrôle des dégâts II
-    ja: ダメージ制御II
-    ru: Damage Control II
-    zh: 损伤控制 II
+    de: "Damage Control II"
+    en: "Damage Control II"
+    es: "Control de daños\_II"
+    fr: "Contrôle des dégâts II"
+    ja: "ダメージ制御II"
+    ru: "Damage Control II"
+    zh: "损伤控制 II"
   portionSize: 1
   published: true
   variationParentTypeID: 2046
-  volume: 5.0
-
-2046:
-  description:
-    de: "Verwendet eine Kombination aus Dämpfungsfeldemittern und Redundanzystemen
-            um die Auswirkungen von kritischen Systemschäden zu verhindern. \n\n\n\nVerleiht
-            einen Bonus auf die Widerstandsfähigkeit von Schild, Panzerung und Schiffsstruktur.\n\n\n\nEs
-            kann immer nur ein Schadenskontroll-System zu einem festgelegten Zeitpunkt
-            eingebaut werden."
-    en: "Utilizes a combination of containment field emitters and redundancy systems
-            to mitigate the impact of critical system damage. \r\n\r\nGrants a bonus
-            to resistance for shield, armor and hull.\r\n\r\nOnly one Damage Control
-            can be fit at a given time."
-    es: "Usa una combinación de emisores de campo de contención y sistemas redundantes
-            para mitigar el impacto de daños críticos al sistema. \n\n\n\nOtorga una
-            bonificación de resistencia de escudo, blindaje y casco.\n\n\n\nSolo se
-            puede equipar un control de daños a la vez."
-    fr: "Ce module combine des émetteurs de champ de confinement et des systèmes
-            de redondance voués à mitiger l'impact dévastateur de dégâts critiques
-            sur le système. \n\n\n\nOffre un bonus de résistance aux boucliers, au
-            blindage et à la coque.\n\n\n\nUn seul régulateur de dégâts peut être
-            équipé à la fois."
-    ja: 格納型電界エミッターと冗長システムを組み合わせることにより、システムが深刻なダメージを受けた場合の影響を軽減する。シールド、アーマー、船体レジスタンスが向上する。ダメージコントロールは一度に一つしか装備できない。
-    ru: "Использует технологию локальных защитных полей и принципы многократного
-            резервирования для уменьшения последствий серьезных повреждений бортовых
-            систем. \n\n\n\nПовышает сопротивляемость силовых полей, брони и корпуса
-            корабля всем видам ущерба.\n\n\n\nДопускается одновременное использование
-            лишь одного модуля боевой живучести (Damage Control)."
-    zh: "将围场发射器和冗余系统结合使用，减轻由严重系统性损坏造成的影响。 \n\n\n\n提高护盾、装甲和结构的抗性。\n\n\n\n只能同时装配一个损伤控制。"
-  groupID: 60
-  iconID: 77
-  marketGroupID: 615
-  mass: 5000.0
-  metaGroupID: 1
-  name:
-    de: Damage Control I
-    en: Damage Control I
-    es: Control de daños I
-    fr: Contrôle des dégâts I
-    ja: ダメージ制御I
-    ru: Damage Control I
-    zh: 损伤控制 I
-  portionSize: 1
-  published: true
-  volume: 5.0
+  volume: 5

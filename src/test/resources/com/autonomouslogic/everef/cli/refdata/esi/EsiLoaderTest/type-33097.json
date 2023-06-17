@@ -1,7 +1,8 @@
 {
   "capacity" : 0,
   "description" : {
-    "en" : "Skill at operating Gallente battlecruisers."
+    "en" : "Skill at operating Gallente battlecruisers.",
+    "fr" : "Compétence liée au pilotage des croiseurs de bataille gallente. Formation impossible sur les comptes d'évaluation."
   },
   "dogma_attributes" : {
     "161" : {
@@ -80,7 +81,8 @@
   "market_group_id" : 377,
   "mass" : 0,
   "name" : {
-    "en" : "Gallente Battlecruiser"
+    "en" : "Gallente Battlecruiser",
+    "fr" : "Croiseur de bataille gallente"
   },
   "packaged_volume" : 0.01,
   "portion_size" : 1,

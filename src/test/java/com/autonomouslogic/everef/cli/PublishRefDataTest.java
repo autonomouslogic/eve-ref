@@ -6,6 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.test.MockS3Adapter;
 import com.autonomouslogic.everef.test.TestDataUtil;
+import com.autonomouslogic.everef.util.DataUtil;
+import com.autonomouslogic.everef.util.MockScrapeBuilder;
 import com.autonomouslogic.everef.util.RefDataUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.HashSet;
@@ -38,6 +40,12 @@ public class PublishRefDataTest {
 	MockS3Adapter mockS3Adapter;
 
 	@Inject
+	DataUtil dataUtil;
+
+	@Inject
+	MockScrapeBuilder mockScrapeBuilder;
+
+	@Inject
 	TestDataUtil testDataUtil;
 
 	@Inject
@@ -57,7 +65,7 @@ public class PublishRefDataTest {
 		DaggerTestComponent.builder().build().inject(this);
 
 		server = new MockWebServer();
-		server.enqueue(testDataUtil.mockResponse(testDataUtil.createTestRefdata()));
+		server.enqueue(testDataUtil.mockResponse(mockScrapeBuilder.createTestRefdata()));
 		server.start(TEST_PORT);
 
 		mockS3Adapter.putTestObject(BUCKET_NAME, "index.html", "test", s3);
@@ -98,7 +106,7 @@ public class PublishRefDataTest {
 			for (var id : testConfig.getIds()) {
 				expectedKeys.add("base/" + config.getOutputFile() + "/" + id);
 
-				var expectedItem = testDataUtil.loadJsonResource(
+				var expectedItem = dataUtil.loadJsonResource(
 						String.format("/refdata/refdata/%s-%s.json", testConfig.getFilePrefix(), id));
 				var actualItem = objectMapper.readTree(mockS3Adapter
 						.getTestObject(BUCKET_NAME, String.format("base/%s/%s", config.getOutputFile(), id), s3)

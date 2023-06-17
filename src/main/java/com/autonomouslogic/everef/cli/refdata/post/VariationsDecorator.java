@@ -78,6 +78,9 @@ public class VariationsDecorator {
 				var resultingTypeId = typeMapping.getResultingTypeId();
 				for (var applicableTypeId : typeMapping.getApplicableTypeIds()) {
 					var applicableType = objectMapper.convertValue(types.get(applicableTypeId), InventoryType.class);
+					if (applicableType == null) {
+						continue;
+					}
 					var parentType = applicableType.getVariationParentTypeId() == null
 							? applicableType
 							: objectMapper.convertValue(

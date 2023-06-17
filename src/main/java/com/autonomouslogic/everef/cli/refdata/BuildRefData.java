@@ -1,7 +1,5 @@
 package com.autonomouslogic.everef.cli.refdata;
 
-import static com.autonomouslogic.everef.util.ArchivePathFactory.ESI;
-import static com.autonomouslogic.everef.util.ArchivePathFactory.HOBOLEAKS;
 import static com.autonomouslogic.everef.util.ArchivePathFactory.REFERENCE_DATA;
 
 import com.autonomouslogic.everef.cli.Command;
@@ -12,13 +10,13 @@ import com.autonomouslogic.everef.cli.refdata.post.SkillDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.VariationsDecorator;
 import com.autonomouslogic.everef.cli.refdata.sde.SdeLoader;
 import com.autonomouslogic.everef.config.Configs;
-import com.autonomouslogic.everef.http.DataCrawler;
 import com.autonomouslogic.everef.model.refdata.RefDataConfig;
 import com.autonomouslogic.everef.mvstore.MVStoreUtil;
 import com.autonomouslogic.everef.s3.S3Adapter;
 import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.url.UrlParser;
 import com.autonomouslogic.everef.util.CompressUtil;
+import com.autonomouslogic.everef.util.DataUtil;
 import com.autonomouslogic.everef.util.OkHttpHelper;
 import com.autonomouslogic.everef.util.RefDataUtil;
 import com.autonomouslogic.everef.util.Rx;
@@ -32,7 +30,6 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.net.URI;
 import java.time.Duration;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
@@ -40,6 +37,7 @@ import java.time.temporal.ChronoUnit;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.SneakyThrows;
@@ -95,10 +93,10 @@ public class BuildRefData implements Command {
 	protected RefDataUtil refDataUtil;
 
 	@Inject
-	protected Provider<RefDataMerger> refDataMergerProvider;
+	protected DataUtil dataUtil;
 
 	@Inject
-	protected Provider<DataCrawler> dataCrawlerProvider;
+	protected Provider<RefDataMerger> refDataMergerProvider;
 
 	@Inject
 	protected Provider<SkillDecorator> skillDecoratorProvider;
@@ -113,12 +111,25 @@ public class BuildRefData implements Command {
 	@NonNull
 	private ZonedDateTime buildTime = ZonedDateTime.now(ZoneOffset.UTC).truncatedTo(ChronoUnit.SECONDS);
 
+	@Setter
+	private File sdeFile;
+
+	@Setter
+	private File esiFile;
+
+	@Setter
+	private File hoboleaksFile;
+
+	@Setter
+	private boolean stopAtUpload = false;
+
 	private final Duration latestCacheTime = Configs.DATA_LATEST_CACHE_CONTROL_MAX_AGE.getRequired();
 	private final Duration archiveCacheTime = Configs.DATA_ARCHIVE_CACHE_CONTROL_MAX_AGE.getRequired();
 
+	@Getter
 	private StoreHandler storeHandler;
+
 	private S3Url dataUrl;
-	private URI dataBaseUrl;
 	private MVStore mvStore;
 
 	@Inject
@@ -127,7 +138,6 @@ public class BuildRefData implements Command {
 	@Inject
 	protected void init() {
 		dataUrl = (S3Url) urlParser.parse(Configs.DATA_PATH.getRequired());
-		dataBaseUrl = Configs.DATA_BASE_URL.getRequired();
 	}
 
 	@Override
@@ -135,13 +145,18 @@ public class BuildRefData implements Command {
 		return Completable.concatArray(
 				initMvStore(),
 				Completable.mergeArray(
-						downloadLatestSde().flatMapCompletable(sdeLoader::load),
-						downloadLatestEsi().flatMapCompletable(esiLoader::load),
-						downloadLatestHoboleaks().flatMapCompletable(hoboleaksLoader::load)),
+						latestSde().flatMapCompletable(sdeLoader::load),
+						latestEsi().flatMapCompletable(esiLoader::load),
+						latestHoboleaks().flatMapCompletable(hoboleaksLoader::load)),
 				mergeDatasets(),
 				postDatasets(),
-				buildOutputFile().flatMapCompletable(this::uploadFiles),
-				closeMvStore());
+				Completable.defer(() -> {
+					if (stopAtUpload) {
+						return Completable.complete();
+					}
+					return Completable.concatArray(
+							buildOutputFile().flatMapCompletable(this::uploadFiles), closeMvStore());
+				}));
 	}
 
 	private Completable initMvStore() {
@@ -171,59 +186,9 @@ public class BuildRefData implements Command {
 				variationsDecoratorProvider.get().setStoreHandler(storeHandler).create()));
 	}
 
-	private Completable closeMvStore() {
+	public Completable closeMvStore() {
 		return Completable.fromAction(() -> {
 			mvStore.close();
-		});
-	}
-
-	private Single<File> downloadLatestSde() {
-		return dataCrawlerProvider
-				.get()
-				.setPrefix("/ccp/sde")
-				.crawl()
-				.filter(url -> url.toString().endsWith("-TRANQUILITY.zip"))
-				.sorted()
-				.lastElement()
-				.switchIfEmpty(Single.error(new RuntimeException("No SDE found")))
-				.flatMap(url -> {
-					log.info("Using SDE at: {}", url);
-					var file = tempFiles.tempFile("sde", ".zip").toFile();
-					return okHttpHelper
-							.download(url.toString(), file, okHttpClient)
-							.flatMap(response -> {
-								if (response.code() != 200) {
-									return Single.error(
-											new RuntimeException("Failed downloading ESI: " + response.code()));
-								}
-								return Single.just(file);
-							});
-				});
-	}
-
-	private Single<File> downloadLatestEsi() {
-		return Single.defer(() -> {
-			var url = dataBaseUrl + "/" + ESI.createLatestPath();
-			var file = tempFiles.tempFile("esi", ".tar.xz").toFile();
-			return okHttpHelper.download(url, file, okHttpClient).flatMap(response -> {
-				if (response.code() != 200) {
-					return Single.error(new RuntimeException("Failed downloading ESI"));
-				}
-				return Single.just(file);
-			});
-		});
-	}
-
-	private Single<File> downloadLatestHoboleaks() {
-		return Single.defer(() -> {
-			var url = dataBaseUrl + "/" + HOBOLEAKS.createLatestPath();
-			var file = tempFiles.tempFile("hoboleaks", ".tar.xz").toFile();
-			return okHttpHelper.download(url, file, okHttpClient).flatMap(response -> {
-				if (response.code() != 200) {
-					return Single.error(new RuntimeException("Failed downloading Hoboleaks"));
-				}
-				return Single.just(file);
-			});
 		});
 	}
 
@@ -296,5 +261,17 @@ public class BuildRefData implements Command {
 					s3Adapter.putObject(latestPut, outputFile, s3Client).ignoreElement(),
 					s3Adapter.putObject(archivePut, outputFile, s3Client).ignoreElement());
 		});
+	}
+
+	private Single<File> latestEsi() {
+		return esiFile != null ? Single.just(esiFile) : dataUtil.downloadLatestEsi();
+	}
+
+	private Single<File> latestSde() {
+		return sdeFile != null ? Single.just(sdeFile) : dataUtil.downloadLatestSde();
+	}
+
+	private Single<File> latestHoboleaks() {
+		return hoboleaksFile != null ? Single.just(hoboleaksFile) : dataUtil.downloadLatestHoboleaks();
 	}
 }
