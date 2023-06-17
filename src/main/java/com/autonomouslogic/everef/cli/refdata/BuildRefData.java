@@ -4,6 +4,7 @@ import static com.autonomouslogic.everef.util.ArchivePathFactory.REFERENCE_DATA;
 
 import com.autonomouslogic.everef.cli.Command;
 import com.autonomouslogic.everef.cli.refdata.esi.EsiLoader;
+import com.autonomouslogic.everef.cli.refdata.hoboleaks.HoboleaksLoader;
 import com.autonomouslogic.everef.cli.refdata.post.MutaplasmidDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.SkillDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.VariationsDecorator;
@@ -86,6 +87,9 @@ public class BuildRefData implements Command {
 	protected EsiLoader esiLoader;
 
 	@Inject
+	protected HoboleaksLoader hoboleaksLoader;
+
+	@Inject
 	protected RefDataUtil refDataUtil;
 
 	@Inject
@@ -114,6 +118,9 @@ public class BuildRefData implements Command {
 	private File esiFile;
 
 	@Setter
+	private File hoboleaksFile;
+
+	@Setter
 	private boolean stopAtUpload = false;
 
 	private final Duration latestCacheTime = Configs.DATA_LATEST_CACHE_CONTROL_MAX_AGE.getRequired();
@@ -139,7 +146,8 @@ public class BuildRefData implements Command {
 				initMvStore(),
 				Completable.mergeArray(
 						latestSde().flatMapCompletable(sdeLoader::load),
-						latestEsi().flatMapCompletable(esiLoader::load)),
+						latestEsi().flatMapCompletable(esiLoader::load),
+						latestHoboleaks().flatMapCompletable(hoboleaksLoader::load)),
 				mergeDatasets(),
 				postDatasets(),
 				Completable.defer(() -> {
@@ -157,6 +165,7 @@ public class BuildRefData implements Command {
 			storeHandler = new StoreHandler(mvStoreUtil, mvStore);
 			sdeLoader.setStoreHandler(storeHandler);
 			esiLoader.setStoreHandler(storeHandler);
+			hoboleaksLoader.setStoreHandler(storeHandler);
 		});
 	}
 
@@ -260,5 +269,9 @@ public class BuildRefData implements Command {
 
 	private Single<File> latestSde() {
 		return sdeFile != null ? Single.just(sdeFile) : dataUtil.downloadLatestSde();
+	}
+
+	private Single<File> latestHoboleaks() {
+		return hoboleaksFile != null ? Single.just(hoboleaksFile) : dataUtil.downloadLatestHoboleaks();
 	}
 }

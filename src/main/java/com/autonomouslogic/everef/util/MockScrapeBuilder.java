@@ -73,6 +73,19 @@ public class MockScrapeBuilder {
 
 	@SneakyThrows
 	@SuppressWarnings("unchecked")
+	public File createTestHoboleaksSde() {
+		var entries = new ArrayList<Map.Entry<String, byte[]>>();
+		for (var config : refDataUtil.loadReferenceDataConfig()) {
+			if (config.getHoboleaks() == null) {
+				continue;
+			}
+			entries.add(createEntry("/refdata/hoboleaks/", config.getHoboleaks().getFile()));
+		}
+		return createTarXzFile(Map.ofEntries(entries.toArray(new Map.Entry[0])));
+	}
+
+	@SneakyThrows
+	@SuppressWarnings("unchecked")
 	public File createTestRefdata() {
 		var entries = new ArrayList<Map.Entry<String, byte[]>>();
 		entries.add(Map.entry(

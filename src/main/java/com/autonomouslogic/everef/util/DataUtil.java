@@ -1,6 +1,7 @@
 package com.autonomouslogic.everef.util;
 
 import static com.autonomouslogic.everef.util.ArchivePathFactory.ESI;
+import static com.autonomouslogic.everef.util.ArchivePathFactory.HOBOLEAKS;
 
 import com.autonomouslogic.commons.ResourceUtil;
 import com.autonomouslogic.everef.config.Configs;
@@ -76,6 +77,19 @@ public class DataUtil {
 			return okHttpHelper.download(url, file, okHttpClient).flatMap(response -> {
 				if (response.code() != 200) {
 					return Single.error(new RuntimeException("Failed downloading ESI"));
+				}
+				return Single.just(file);
+			});
+		});
+	}
+
+	public Single<File> downloadLatestHoboleaks() {
+		return Single.defer(() -> {
+			var url = dataBaseUrl + "/" + HOBOLEAKS.createLatestPath();
+			var file = tempFiles.tempFile("hoboleaks", ".tar.xz").toFile();
+			return okHttpHelper.download(url, file, okHttpClient).flatMap(response -> {
+				if (response.code() != 200) {
+					return Single.error(new RuntimeException("Failed downloading Hoboleaks"));
 				}
 				return Single.just(file);
 			});

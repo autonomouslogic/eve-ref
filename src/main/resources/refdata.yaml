@@ -145,6 +145,19 @@ metaGroups:
       - 2
       - 15
 
+mutaplasmids:
+  idField: type_id
+  model: Mutaplasmid
+  hoboleaks:
+    file: dynamicitemattributes.json
+    renames:
+      input_output_mapping: type_mappings
+      attribute_i_ds: dogma_modifications
+  test:
+    filePrefix: mutaplasmid
+    ids:
+      - 52225
+
 skills:
   model: Skill
   test:
@@ -156,10 +169,3 @@ skills:
       - 3336
       - 33093
       - 33097
-
-mutaplasmids:
-  model: Mutaplasmid
-  test:
-    filePrefix: mutaplasmid
-    ids:
-      - 52225

@@ -177,6 +177,11 @@ public class BuildRefDataTest {
 						return new MockResponse()
 								.setResponseCode(200)
 								.setBody(new Buffer().write(IOUtils.toByteArray(new FileInputStream(esi))));
+					case "/hoboleaks-sde/hoboleaks-sde-latest.tar.xz":
+						var hobo = mockScrapeBuilder.createTestHoboleaksSde();
+						return new MockResponse()
+								.setResponseCode(200)
+								.setBody(new Buffer().write(IOUtils.toByteArray(new FileInputStream(hobo))));
 					case "/hoboleaks/dynamicitemattributes.json":
 						return new MockResponse()
 								.setResponseCode(200)

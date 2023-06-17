@@ -7,6 +7,7 @@ import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.NonNull;
@@ -25,7 +26,14 @@ public class SimpleStoreLoader {
 	protected ObjectMapper yamlMapper;
 
 	@Inject
+	protected ObjectMapper objectMapper;
+
+	@Inject
 	protected ObjectMerger objectMerger;
+
+	@Setter
+	@NonNull
+	private String format = "yaml";
 
 	@Setter
 	@NonNull
@@ -53,7 +61,7 @@ public class SimpleStoreLoader {
 	@SneakyThrows
 	public Completable readValues(@NonNull byte[] bytes) {
 		return Completable.defer(() -> {
-					var container = (ObjectNode) yamlMapper.readTree(new ByteArrayInputStream(bytes));
+					ObjectNode container = readContainer(bytes);
 					return Flowable.fromIterable(() -> container.fields()).flatMapCompletable(entry -> {
 						var id = Long.parseLong(entry.getKey());
 						var json = (ObjectNode) entry.getValue();
@@ -70,6 +78,19 @@ public class SimpleStoreLoader {
 					});
 				})
 				.subscribeOn(Schedulers.computation());
+	}
+
+	private ObjectNode readContainer(@NonNull byte[] bytes) throws IOException {
+		ObjectMapper mapper;
+		if (format.equals("yaml")) {
+			mapper = yamlMapper;
+		} else if (format.equals("json")) {
+			mapper = objectMapper;
+		} else {
+			throw new RuntimeException(format);
+		}
+		var container = (ObjectNode) mapper.readTree(new ByteArrayInputStream(bytes));
+		return container;
 	}
 
 	@SneakyThrows

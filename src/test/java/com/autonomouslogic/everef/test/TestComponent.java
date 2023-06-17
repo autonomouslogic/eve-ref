@@ -14,6 +14,7 @@ import com.autonomouslogic.everef.cli.refdata.FieldRenamerTest;
 import com.autonomouslogic.everef.cli.refdata.ObjectMergerTest;
 import com.autonomouslogic.everef.cli.refdata.TransformUtilTest;
 import com.autonomouslogic.everef.cli.refdata.esi.EsiLoaderTest;
+import com.autonomouslogic.everef.cli.refdata.hoboleaks.HoboleaksLoaderTest;
 import com.autonomouslogic.everef.cli.refdata.sde.SdeLoaderTest;
 import com.autonomouslogic.everef.esi.EsiHelperTest;
 import com.autonomouslogic.everef.esi.EsiLimitExceededInterceptorTest;
@@ -60,6 +61,8 @@ public interface TestComponent {
 	void inject(EsiRateLimitInterceptorTest test);
 
 	void inject(HealthcheckDecoratorTest test);
+
+	void inject(HoboleaksLoaderTest test);
 
 	void inject(LocationPopulatorTest test);
 
