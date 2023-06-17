@@ -28,5 +28,8 @@ public class RefDataConfig {
 	RefTypeConfig esi;
 
 	@JsonProperty
+	RefTypeConfig hoboleaks;
+
+	@JsonProperty
 	RefTestConfig test;
 }

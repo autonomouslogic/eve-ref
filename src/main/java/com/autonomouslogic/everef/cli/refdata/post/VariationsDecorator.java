@@ -45,9 +45,6 @@ public class VariationsDecorator {
 			log.info("Populates variations");
 			types = storeHandler.getRefStore("types");
 			mutaplasmids = storeHandler.getRefStore("mutaplasmids");
-			if (mutaplasmids.isEmpty()) {
-				throw new RuntimeException("Out of order");
-			}
 			// tech 1 ID -> meta group ID -> list of type IDs
 			var variations = new HashMap<Long, Map<Integer, Set<Long>>>();
 			resolveTypeVariations(variations);
