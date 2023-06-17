@@ -75,9 +75,7 @@
   "required_skills" : {
     "3394" : 4
   },
-  "creating_mutaplasmid_type_ids": [
-    52225
-  ],
+  "creating_mutaplasmid_type_ids" : [ 52225 ],
   "is_dynamic_item" : true,
   "type_variations" : {
     "1" : [ 2046 ],

@@ -1,158 +1,122 @@
 {
-  "base_price": 153900000,
-  "capacity": 750,
-  "description": {
-    "de": "Die Dominix ist eines der alten Schlachtrösser, die noch aus der Zeit des Kriegs zwischen Gallente und Caldari stammen. Sie wird zwar nicht mehr als eines der besten Schlachtschiffe angesehen, aber das heißt nicht, dass sie überflüssig wäre. Mit ihrem robusten Rumpf und dem starken Drohnenarsenal können sich nur die neuesten und größten Schlachtschiffe mit ihr messen.",
-    "en": "The Dominix is one of the old warhorses dating back to the Gallente-Caldari War. While no longer regarded as the king of the hill, it is by no means obsolete. Its formidable hulk and powerful drone arsenal means that anyone not in the largest and latest battleships will regret ever locking horns with it.",
-    "es": "La Dominix es una de las veteranas que se remonta a la guerra Gallente-Caldari. Aunque ya no es lo que era, eso no quiere decir que se haya quedado obsoleta. Gracias a su formidable casco y a su potente arsenal de drones, cualquiera que no esté en el acorazado más grande y moderno lamentará haberse cruzado con ella.",
-    "fr": "Le Dominix est un vétéran du front, qui déjà s'illustrait à l'époque de la guerre Gallente-Caldari. S'il n'est plus considéré comme le parangon des champs de bataille, ce cuirassé est loin d’être obsolète. Doté d'une coque massive et d'un puissant arsenal de drones, le Dominix est un adversaire redoutable, capable de pulvériser tous les vaisseaux de l'amas, à l'exception des cuirassés de pointe les plus modernes.",
-    "ja": "ドミニックスは、ガレンテ-カルダリ戦争時代からある、古い軍艦の一つだ。もはや戦場の王者とは呼べないが、決して役立たずの骨董品ではない。頑丈な船体と強力なドローン運用システムを備えており、最新最大の戦艦に乗っているのでもないかぎり、うかつに手を出せば後悔することになるだろう。",
-    "ru": "«Доминикс» — заслуженный ветеран космоса, находящийся в строю со времен галлентско-калдарской войны. Этот корабль уже не считается передовым, но его ни в коей мере нельзя назвать устаревшим. Обломав зубы о прочную «шкуру» этого увальня и пострадав от роя выпущенных им дронов, о принятом решении пожалеет любой капитан, ввязавшийся с ним в схватку — разве что кроме пилотов самых крупных и современных линкоров.",
-    "zh": "多米尼克斯级战列舰是久经沙场的老将，其服役期可以追溯到盖伦特-加达里战争时期。尽管现在它不再是战场上的王者，但也绝对没有过时。它拥有强大的舰体和威猛的无人机武器，如果你没有最大最新型的战列舰的话，最好就不要在它面前卖弄风骚。"
+  "base_price" : 153900000,
+  "capacity" : 750,
+  "description" : {
+    "de" : "Die Dominix ist eines der alten Schlachtrösser, die noch aus der Zeit des Kriegs zwischen Gallente und Caldari stammen. Sie wird zwar nicht mehr als eines der besten Schlachtschiffe angesehen, aber das heißt nicht, dass sie überflüssig wäre. Mit ihrem robusten Rumpf und dem starken Drohnenarsenal können sich nur die neuesten und größten Schlachtschiffe mit ihr messen.",
+    "en" : "The Dominix is one of the old warhorses dating back to the Gallente-Caldari War. While no longer regarded as the king of the hill, it is by no means obsolete. Its formidable hulk and powerful drone arsenal means that anyone not in the largest and latest battleships will regret ever locking horns with it.",
+    "es" : "La Dominix es una de las veteranas que se remonta a la guerra Gallente-Caldari. Aunque ya no es lo que era, eso no quiere decir que se haya quedado obsoleta. Gracias a su formidable casco y a su potente arsenal de drones, cualquiera que no esté en el acorazado más grande y moderno lamentará haberse cruzado con ella.",
+    "fr" : "Le Dominix est un vétéran du front, qui déjà s'illustrait à l'époque de la guerre Gallente-Caldari. S'il n'est plus considéré comme le parangon des champs de bataille, ce cuirassé est loin d’être obsolète. Doté d'une coque massive et d'un puissant arsenal de drones, le Dominix est un adversaire redoutable, capable de pulvériser tous les vaisseaux de l'amas, à l'exception des cuirassés de pointe les plus modernes.",
+    "ja" : "ドミニックスは、ガレンテ-カルダリ戦争時代からある、古い軍艦の一つだ。もはや戦場の王者とは呼べないが、決して役立たずの骨董品ではない。頑丈な船体と強力なドローン運用システムを備えており、最新最大の戦艦に乗っているのでもないかぎり、うかつに手を出せば後悔することになるだろう。",
+    "ru" : "«Доминикс» — заслуженный ветеран космоса, находящийся в строю со времен галлентско-калдарской войны. Этот корабль уже не считается передовым, но его ни в коей мере нельзя назвать устаревшим. Обломав зубы о прочную «шкуру» этого увальня и пострадав от роя выпущенных им дронов, о принятом решении пожалеет любой капитан, ввязавшийся с ним в схватку — разве что кроме пилотов самых крупных и современных линкоров.",
+    "zh" : "多米尼克斯级战列舰是久经沙场的老将，其服役期可以追溯到盖伦特-加达里战争时期。尽管现在它不再是战场上的王者，但也绝对没有过时。它拥有强大的舰体和威猛的无人机武器，如果你没有最大最新型的战列舰的话，最好就不要在它面前卖弄风骚。"
   },
-  "faction_id": 500004,
-  "graphic_id": 318,
-  "group_id": 27,
-  "market_group_id": 81,
-  "mass": 100250000,
-  "masteries": {
-    "0": [
-      96,
-      99,
-      133,
-      138,
-      140,
-      89
-    ],
-    "1": [
-      96,
-      99,
-      133,
-      138,
-      140,
-      89
-    ],
-    "2": [
-      96,
-      99,
-      133,
-      138,
-      140,
-      89
-    ],
-    "3": [
-      96,
-      99,
-      133,
-      138,
-      140,
-      89
-    ],
-    "4": [
-      96,
-      99,
-      133,
-      138,
-      140,
-      117,
-      89
-    ]
+  "faction_id" : 500004,
+  "graphic_id" : 318,
+  "group_id" : 27,
+  "market_group_id" : 81,
+  "mass" : 100250000,
+  "masteries" : {
+    "0" : [ 96, 99, 133, 138, 140, 89 ],
+    "1" : [ 96, 99, 133, 138, 140, 89 ],
+    "2" : [ 96, 99, 133, 138, 140, 89 ],
+    "3" : [ 96, 99, 133, 138, 140, 89 ],
+    "4" : [ 96, 99, 133, 138, 140, 117, 89 ]
   },
-  "meta_group_id": 1,
-  "name": {
-    "de": "Dominix",
-    "en": "Dominix",
-    "es": "Dominix",
-    "fr": "Dominix",
-    "ja": "ドミニックス",
-    "ru": "Dominix",
-    "zh": "多米尼克斯级"
+  "meta_group_id" : 1,
+  "name" : {
+    "de" : "Dominix",
+    "en" : "Dominix",
+    "es" : "Dominix",
+    "fr" : "Dominix",
+    "ja" : "ドミニックス",
+    "ru" : "Dominix",
+    "zh" : "多米尼克斯级"
   },
-  "portion_size": 1,
-  "published": true,
-  "race_id": 8,
-  "radius": 250,
-  "sof_faction_name": "gallentebase",
-  "sound_id": 20072,
-  "traits": {
-    "misc_bonuses": {},
-    "role_bonuses": {
-      "3": {
-        "bonus": 5,
-        "bonus_text": {
-          "de": "zusätzlicher Bonus auf HP der <a href=showinfo:3394>Verstärkten Schottwand</a>",
-          "en": "additional bonus to <a href=showinfo:3394>Reinforced Bulkhead</a> hitpoints",
-          "es": "de bonificación adicional a los puntos de vida del <a href=showinfo:3394>mamparo reforzado</a>.",
-          "fr": "de bonus supplémentaire aux points de vie de la <a href=showinfo:3394>cloison renforcée</a>",
-          "ja": "<a href=showinfo:3394>強化隔壁</a>HPがさらに増加",
-          "ru": "дополнительный бонус к прочности <a href=showinfo:3394>укреплённой переборки</a>",
-          "zh": "<a href=showinfo:3394>强化舱隔壁</a>结构值加成"
+  "portion_size" : 1,
+  "published" : true,
+  "race_id" : 8,
+  "radius" : 250,
+  "sof_faction_name" : "gallentebase",
+  "sound_id" : 20072,
+  "traits" : {
+    "misc_bonuses" : { },
+    "role_bonuses" : {
+      "3" : {
+        "bonus" : 5,
+        "bonus_text" : {
+          "de" : "zusätzlicher Bonus auf HP der <a href=showinfo:3394>Verstärkten Schottwand</a>",
+          "en" : "additional bonus to <a href=showinfo:3394>Reinforced Bulkhead</a> hitpoints",
+          "es" : "de bonificación adicional a los puntos de vida del <a href=showinfo:3394>mamparo reforzado</a>.",
+          "fr" : "de bonus supplémentaire aux points de vie de la <a href=showinfo:3394>cloison renforcée</a>",
+          "ja" : "<a href=showinfo:3394>強化隔壁</a>HPがさらに増加",
+          "ru" : "дополнительный бонус к прочности <a href=showinfo:3394>укреплённой переборки</a>",
+          "zh" : "<a href=showinfo:3394>强化舱隔壁</a>结构值加成"
         },
-        "importance": 3,
-        "unit_id": 105
+        "importance" : 3,
+        "unit_id" : 105
       },
-      "2": {
-        "bonus": 50,
-        "bonus_text": {
-          "de": "Bonus auf die HP der <a href=showinfo:3394>Panzerplatte</a>",
-          "en": "bonus to <a href=showinfo:3394>Armor Plate</a> hitpoints",
-          "es": "de bonificación a los puntos de vida de las <a href=showinfo:3394>placas de blindaje</a>.",
-          "fr": "de bonus aux points de vie du <a href=showinfo:3394>revêtement de blindage</a>",
-          "ja": "<a href=showinfo:3394>アーマープレート</a>HPが増加",
-          "ru": "бонус к прочности <a href=showinfo:3394>бронеплиты</a>",
-          "zh": "<a href=showinfo:3394>装甲附甲板</a>装甲值加成"
+      "2" : {
+        "bonus" : 50,
+        "bonus_text" : {
+          "de" : "Bonus auf die HP der <a href=showinfo:3394>Panzerplatte</a>",
+          "en" : "bonus to <a href=showinfo:3394>Armor Plate</a> hitpoints",
+          "es" : "de bonificación a los puntos de vida de las <a href=showinfo:3394>placas de blindaje</a>.",
+          "fr" : "de bonus aux points de vie du <a href=showinfo:3394>revêtement de blindage</a>",
+          "ja" : "<a href=showinfo:3394>アーマープレート</a>HPが増加",
+          "ru" : "бонус к прочности <a href=showinfo:3394>бронеплиты</a>",
+          "zh" : "<a href=showinfo:3394>装甲附甲板</a>装甲值加成"
         },
-        "importance": 2,
-        "unit_id": 105
+        "importance" : 2,
+        "unit_id" : 105
       },
-      "1": {
-        "bonus": 100,
-        "bonus_text": {
-          "de": "Bonus auf die HP der <a href=showinfo:3425>Schilderweiterung</a>",
-          "en": "bonus to <a href=showinfo:3425>Shield Extender</a> hitpoints",
-          "es": "de bonificación a los puntos de vida del <a href=showinfo:3425>extensor de escudo</a>.",
-          "fr": "de bonus aux points de vie de l'<a href=showinfo:3425>extenseur de bouclier</a>",
-          "ja": "<a href=showinfo:3425>シールドエクステンダー</a>HPが増加",
-          "ru": "бонус к прочности <a href=showinfo:3425>расширителя щитов</a>",
-          "zh": "<a href=showinfo:3425>护盾扩展装置</a>护盾值加成"
+      "1" : {
+        "bonus" : 100,
+        "bonus_text" : {
+          "de" : "Bonus auf die HP der <a href=showinfo:3425>Schilderweiterung</a>",
+          "en" : "bonus to <a href=showinfo:3425>Shield Extender</a> hitpoints",
+          "es" : "de bonificación a los puntos de vida del <a href=showinfo:3425>extensor de escudo</a>.",
+          "fr" : "de bonus aux points de vie de l'<a href=showinfo:3425>extenseur de bouclier</a>",
+          "ja" : "<a href=showinfo:3425>シールドエクステンダー</a>HPが増加",
+          "ru" : "бонус к прочности <a href=showinfo:3425>расширителя щитов</a>",
+          "zh" : "<a href=showinfo:3425>护盾扩展装置</a>护盾值加成"
         },
-        "importance": 1,
-        "unit_id": 105
+        "importance" : 1,
+        "unit_id" : 105
       }
     },
-    "types": {
-      "3336": {
-        "2": {
-          "bonus": 7.5,
-          "bonus_text": {
-            "de": "Bonus auf die optimale Reichweite und Nachführungsgeschwindigkeit von <a href=showinfo:3436>Drohnen</a>",
-            "en": "bonus to <a href=showinfo:3436>Drone</a> optimal range and tracking speed",
-            "es": "de bonificación a la velocidad de rastreo y el alcance óptimo de los <a href=showinfo:3436>drones</a>.",
-            "fr": "de bonus à la portée optimale et à la vitesse de poursuite du <a href=showinfo:3436>drone</a>",
-            "ja": "<a href=showinfo:3436>ドローン</a>の最適射程距離と追跡速度が増加",
-            "ru": "повышается скорость наводки на цель бортового оружия <a href=showinfo:3436>дронов</a>, увеличивается оптимальная дальность его действия",
-            "zh": "<a href=\"showinfo:3436\">无人机</a>最佳射程和跟踪速度加成"
+    "types" : {
+      "3336" : {
+        "2" : {
+          "bonus" : 7.5,
+          "bonus_text" : {
+            "de" : "Bonus auf die optimale Reichweite und Nachführungsgeschwindigkeit von <a href=showinfo:3436>Drohnen</a>",
+            "en" : "bonus to <a href=showinfo:3436>Drone</a> optimal range and tracking speed",
+            "es" : "de bonificación a la velocidad de rastreo y el alcance óptimo de los <a href=showinfo:3436>drones</a>.",
+            "fr" : "de bonus à la portée optimale et à la vitesse de poursuite du <a href=showinfo:3436>drone</a>",
+            "ja" : "<a href=showinfo:3436>ドローン</a>の最適射程距離と追跡速度が増加",
+            "ru" : "повышается скорость наводки на цель бортового оружия <a href=showinfo:3436>дронов</a>, увеличивается оптимальная дальность его действия",
+            "zh" : "<a href=\"showinfo:3436\">无人机</a>最佳射程和跟踪速度加成"
           },
-          "importance": 2,
-          "unit_id": 105
+          "importance" : 2,
+          "unit_id" : 105
         },
-        "1": {
-          "bonus": 10,
-          "bonus_text": {
-            "de": "Bonus auf die HP und den Schaden von <a href=showinfo:3436>Drohnen</a>",
-            "en": "bonus to <a href=showinfo:3436>Drone</a> hitpoints and damage",
-            "es": "de bonificación a los puntos de vida y el daño de los <a href=showinfo:3436>drones</a>.",
-            "fr": "de bonus aux dégâts et aux PV des <a href=showinfo:3436>drones</a>",
-            "ja": "<a href=showinfo:3436>ドローン</a>のヒットポイントとダメージが増加",
-            "ru": "увеличивается урон бортового оружия <a href=showinfo:3436>дронов</a>; увеличивается запас их прочности",
-            "zh": "<a href=\"showinfo:3436\">无人机</a>伤害和HP加成"
+        "1" : {
+          "bonus" : 10,
+          "bonus_text" : {
+            "de" : "Bonus auf die HP und den Schaden von <a href=showinfo:3436>Drohnen</a>",
+            "en" : "bonus to <a href=showinfo:3436>Drone</a> hitpoints and damage",
+            "es" : "de bonificación a los puntos de vida y el daño de los <a href=showinfo:3436>drones</a>.",
+            "fr" : "de bonus aux dégâts et aux PV des <a href=showinfo:3436>drones</a>",
+            "ja" : "<a href=showinfo:3436>ドローン</a>のヒットポイントとダメージが増加",
+            "ru" : "увеличивается урон бортового оружия <a href=showinfo:3436>дронов</a>; увеличивается запас их прочности",
+            "zh" : "<a href=\"showinfo:3436\">无人机</a>伤害和HP加成"
           },
-          "importance": 1,
-          "unit_id": 105
+          "importance" : 1,
+          "unit_id" : 105
         }
       }
     }
   },
-  "volume": 454500,
-  "type_id":645
+  "volume" : 454500,
+  "type_id" : 645
 }
