@@ -2,16 +2,11 @@ package com.autonomouslogic.everef.cli.refdata.post;
 
 import com.autonomouslogic.everef.cli.refdata.StoreDataHelper;
 import com.autonomouslogic.everef.cli.refdata.StoreHandler;
-import com.autonomouslogic.everef.model.hoboleaks.DynamicAttributes;
 import com.autonomouslogic.everef.refdata.Mutaplasmid;
-import com.autonomouslogic.everef.refdata.MutaplasmidDogmaModifications;
-import com.autonomouslogic.everef.refdata.MutaplasmidTypeMapping;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.reactivex.rxjava3.core.Completable;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import javax.inject.Inject;
 import lombok.NonNull;
@@ -103,31 +98,5 @@ public class MutaplasmidDecorator {
 		}
 		type.put("is_dynamic_item", true);
 		types.put(typeId, type);
-	}
-
-	private void createMutaplasmid(long mutaplasmidTypeId, @NonNull DynamicAttributes dynamics) {
-		var typeMappings = new ArrayList<MutaplasmidTypeMapping>();
-		var dogmaModifications = new LinkedHashMap<Long, MutaplasmidDogmaModifications>();
-		for (var mapping : dynamics.getInputOutputMapping()) {
-			typeMappings.add(MutaplasmidTypeMapping.builder()
-					.resultingTypeId(mapping.getResultingType())
-					.applicableTypeIds(mapping.getApplicableTypes())
-					.build());
-		}
-		for (var entry : dynamics.getAttributeIds().entrySet()) {
-			dogmaModifications.put(
-					entry.getKey(),
-					MutaplasmidDogmaModifications.builder()
-							.min(entry.getValue().getMin())
-							.max(entry.getValue().getMax())
-							.build());
-		}
-		var mutaplasmid = Mutaplasmid.builder()
-				.typeId(mutaplasmidTypeId)
-				.typeMappings(typeMappings)
-				.dogmaModifications(dogmaModifications)
-				.build();
-		log.trace("Created mutaplasmid: {}", mutaplasmidTypeId);
-		mutaplasmids.put(mutaplasmidTypeId, objectMapper.valueToTree(mutaplasmid));
 	}
 }
