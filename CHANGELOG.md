@@ -1,5 +1,23 @@
 EVE Ref Changelog
 
+## [2.11.1](https://github.com/autonomouslogic/eve-ref/compare/2.11.0...2.11.1) (2023-06-18)
+
+
+### Bug Fixes
+
+* Converted Mutaplasmid type mappings to an object. ([#212](https://github.com/autonomouslogic/eve-ref/issues/212)) ([7963e54](https://github.com/autonomouslogic/eve-ref/commit/7963e54192ae624da1e8b757a033c7963aaa9550))
+* Tech 3 variations no longer show as tech 1 ([#213](https://github.com/autonomouslogic/eve-ref/issues/213)) ([88ca14b](https://github.com/autonomouslogic/eve-ref/commit/88ca14b596d74f1ceab4063a0c8b623c42f8ed56))
+
+
+### Code Refactoring
+
+* Hoboleaks are part of the main reference data toolchain ([#210](https://github.com/autonomouslogic/eve-ref/issues/210)) ([c8901d1](https://github.com/autonomouslogic/eve-ref/commit/c8901d1ce8df8fdfbbb80901d6d31a0ad02671f4))
+
+
+### Tests
+
+* Command for importing resources for reference data tests ([#211](https://github.com/autonomouslogic/eve-ref/issues/211)) ([55c88a0](https://github.com/autonomouslogic/eve-ref/commit/55c88a00b8a7720cd2e932c8e18143c880f05120))
+
 ## [2.11.0](https://github.com/autonomouslogic/eve-ref/compare/2.10.1...2.11.0) (2023-06-17)
 
 
