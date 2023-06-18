@@ -94,9 +94,13 @@ types:
       - en-us
       - fr
 
-reprocessing:
+typeMaterials:
   outputStore: types
   sde:
+    renames:
+      materials: type_materials
+    arrayToObjects:
+      type_materials: material_type_id
     file: sde/fsd/typeMaterials.yaml
   test:
     filePrefix: type
