@@ -5,6 +5,7 @@ import com.autonomouslogic.everef.cli.refdata.SimpleStoreLoader;
 import com.autonomouslogic.everef.cli.refdata.StoreHandler;
 import com.autonomouslogic.everef.cli.refdata.TransformUtil;
 import com.autonomouslogic.everef.cli.refdata.TransformerBuilder;
+import com.autonomouslogic.everef.cli.refdata.transformer.BlueprintTransformer;
 import com.autonomouslogic.everef.util.CompressUtil;
 import com.autonomouslogic.everef.util.RefDataUtil;
 import io.reactivex.rxjava3.core.Completable;
@@ -35,6 +36,9 @@ public class HoboleaksLoader {
 	@Inject
 	protected Provider<HoboleaksMutaplasmidTransformer> hoboleaksMutiplasmidTransformerProvider;
 
+	@Inject
+	protected Provider<BlueprintTransformer> blueprintTransformerProvider;
+
 	@Setter
 	@NonNull
 	private StoreHandler storeHandler;
@@ -61,6 +65,9 @@ public class HoboleaksLoader {
 								case "mutaplasmids":
 									transformer = TransformUtil.concat(
 											transformer, hoboleaksMutiplasmidTransformerProvider.get());
+									break;
+								case "blueprints":
+									transformer = TransformUtil.concat(transformer, blueprintTransformerProvider.get());
 									break;
 							}
 							storeLoader.setTransformer(TransformUtil.concat(fieldRenamer, transformer));

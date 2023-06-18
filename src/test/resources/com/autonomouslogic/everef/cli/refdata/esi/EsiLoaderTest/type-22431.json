@@ -1,0 +1,46 @@
+{
+  "capacity" : 0,
+  "description" : {
+    "en" : "",
+    "fr" : ""
+  },
+  "dogma_attributes" : {
+    "161" : {
+      "attribute_id" : 161,
+      "value" : 0.01
+    },
+    "162" : {
+      "attribute_id" : 162,
+      "value" : 1
+    },
+    "1955" : {
+      "attribute_id" : 1955,
+      "value" : 1200
+    },
+    "4" : {
+      "attribute_id" : 4,
+      "value" : 0
+    },
+    "422" : {
+      "attribute_id" : 422,
+      "value" : 2
+    },
+    "38" : {
+      "attribute_id" : 38,
+      "value" : 0
+    }
+  },
+  "graphic_id" : 3350,
+  "group_id" : 107,
+  "mass" : 0,
+  "name" : {
+    "en" : "Sin Blueprint",
+    "fr" : "Plan de construction Sin"
+  },
+  "packaged_volume" : 0.01,
+  "portion_size" : 1,
+  "published" : true,
+  "radius" : 1,
+  "type_id" : 22431,
+  "volume" : 0.01
+}

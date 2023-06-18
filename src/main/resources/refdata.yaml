@@ -87,6 +87,9 @@ types:
       - 45623
       - 45622
       - 45624
+      - 22430
+      - 999
+      - 22431
     languages:
       - en-us
       - fr
@@ -187,3 +190,16 @@ units:
     ids:
       - 1
       - 2
+
+blueprints:
+  idField: blueprint_type_id
+  model: Blueprint
+  sde:
+    file: sde/fsd/blueprints.yaml
+  hoboleaks:
+    file: blueprints.json
+  test:
+    filePrefix: blueprint
+    ids:
+      - 999
+      - 22431
