@@ -140,15 +140,12 @@ public class InventoryType {
 	Map<Long, List<Long>> typeVariations;
 
 	@JsonProperty("is_blueprint")
-	@Schema(
-		defaultValue = "false",
-		description = "Whether this type is a blueprint or not. This is added by EVE Ref.")
+	@Schema(defaultValue = "false", description = "Whether this type is a blueprint or not. This is added by EVE Ref.")
 	boolean blueprint;
 
 	@JsonProperty
 	@Schema(
-		description =
-			"The blueprints creating this type. The key is the blueprint type ID. "
-				+ "This is added by EVE Ref.")
+			description = "The blueprints creating this type. The key is the blueprint type ID. "
+					+ "This is added by EVE Ref.")
 	Map<Long, CreatingBlueprint> creatingBlueprints;
 }

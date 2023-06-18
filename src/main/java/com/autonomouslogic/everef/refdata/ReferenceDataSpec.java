@@ -190,4 +190,44 @@ public interface ReferenceDataSpec {
 			useReturnTypeSchema = true,
 			content = @Content(mediaType = "application/json"))
 	Mutaplasmid getMutaplasmid(@PathParam("mutaplasmid_type_id") int mutaplasmidTypeId);
+
+	@GET
+	@Path("/units")
+	@Operation(description = "Get all unit IDs.")
+	@ApiResponse(
+			responseCode = "200",
+			description = "Unit type IDs.",
+			useReturnTypeSchema = true,
+			content = @Content(mediaType = "application/json"))
+	List<Integer> getAllUnits();
+
+	@GET
+	@Path("/units/{units_id}")
+	@Operation
+	@ApiResponse(
+			responseCode = "200",
+			description = "The unit.",
+			useReturnTypeSchema = true,
+			content = @Content(mediaType = "application/json"))
+	Unit getUnit(@PathParam("units_id") int unitId);
+
+	@GET
+	@Path("/blueprints")
+	@Operation(description = "Get all blueprint IDs.")
+	@ApiResponse(
+			responseCode = "200",
+			description = "Blueprint type IDs.",
+			useReturnTypeSchema = true,
+			content = @Content(mediaType = "application/json"))
+	List<Long> getAllBlueprints();
+
+	@GET
+	@Path("/blueprints/{blueprint_type_id}")
+	@Operation
+	@ApiResponse(
+			responseCode = "200",
+			description = "The blueprint.",
+			useReturnTypeSchema = true,
+			content = @Content(mediaType = "application/json"))
+	Blueprint getBlueprint(@PathParam("blueprint_type_id") int blueprintTypeId);
 }

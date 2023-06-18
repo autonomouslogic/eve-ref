@@ -14,6 +14,41 @@ servers:
 - url: https://ref-data.everef.net
   variables: {}
 paths:
+  /blueprints:
+    get:
+      tags:
+      - refdata
+      description: Get all blueprint IDs.
+      operationId: getAllBlueprints
+      responses:
+        "200":
+          description: Blueprint type IDs.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: integer
+                  format: int32
+  /blueprints/{blueprint_type_id}:
+    get:
+      tags:
+      - refdata
+      operationId: getBlueprint
+      parameters:
+      - name: blueprint_type_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: The blueprint.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Blueprint'
   /categories:
     get:
       tags:
@@ -294,8 +329,97 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/InventoryType'
+  /units:
+    get:
+      tags:
+      - refdata
+      description: Get all unit IDs.
+      operationId: getAllUnits
+      responses:
+        "200":
+          description: Unit type IDs.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: integer
+                  format: int32
+  /units/{units_id}:
+    get:
+      tags:
+      - refdata
+      operationId: getUnit
+      parameters:
+      - name: units_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: The unit.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unit'
 components:
   schemas:
+    Blueprint:
+      type: object
+      properties:
+        blueprint_type_id:
+          type: integer
+          format: int64
+        activities:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/BlueprintActivity'
+        max_production_limit:
+          type: integer
+          format: int32
+    BlueprintActivity:
+      type: object
+      properties:
+        time:
+          type: integer
+          format: int64
+        materials:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/BlueprintMaterial'
+        products:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/BlueprintMaterial'
+        required_skills:
+          type: object
+          additionalProperties:
+            type: integer
+            format: int32
+    BlueprintMaterial:
+      type: object
+      properties:
+        type_id:
+          type: integer
+          format: int64
+        quantity:
+          type: integer
+          format: int64
+        probability:
+          type: number
+          format: double
+    CreatingBlueprint:
+      type: object
+      properties:
+        blueprint_type_id:
+          type: integer
+          format: int64
+        blueprint_activity:
+          type: string
+      description: The blueprints creating this type. The key is the blueprint type
+        ID. This is added by EVE Ref.
     DogmaAttribute:
       type: object
       properties:
@@ -542,6 +666,12 @@ components:
               format: int64
           description: The variations for this type. The key is the meta group and
             the value is a list of type IDs. This is added by EVE Ref.
+        creating_blueprints:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/CreatingBlueprint'
+          description: The blueprints creating this type. The key is the blueprint
+            type ID. This is added by EVE Ref.
         is_skill:
           type: boolean
           description: Whether this type is a skill or not. This is added by EVE Ref.
@@ -555,6 +685,11 @@ components:
           type: boolean
           description: Whether this type is a dynamic item created by a mutaplasmid
             or not. This is added by EVE Ref.
+          default: false
+        is_blueprint:
+          type: boolean
+          description: Whether this type is a blueprint or not. This is added by EVE
+            Ref.
           default: false
       description: An inventory type
     InventoryTypeTraits:
@@ -647,6 +782,8 @@ components:
         max:
           type: number
           format: double
+        high_is_good:
+          type: boolean
       description: Details about how much a dogma attribute can be modified by a mutaplasmid.
         These are created by EVE Ref and derived from Hoboleaks.
     MutaplasmidTypeMapping:
@@ -717,3 +854,19 @@ components:
         unit_id:
           type: integer
           format: int32
+    Unit:
+      type: object
+      properties:
+        unit_id:
+          type: integer
+          format: int32
+        display_name:
+          type: string
+        name:
+          type: object
+          additionalProperties:
+            type: string
+        description:
+          type: object
+          additionalProperties:
+            type: string

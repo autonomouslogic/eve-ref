@@ -188,7 +188,7 @@ public class BuildRefData implements Command {
 				skillDecoratorProvider.get().setStoreHandler(storeHandler).create(),
 				mutiplasmidDecoratorProvider.get().setStoreHandler(storeHandler).create(),
 				variationsDecoratorProvider.get().setStoreHandler(storeHandler).create(),
-			blueprintDecoratorProvider.get().setStoreHandler(storeHandler).create()));
+				blueprintDecoratorProvider.get().setStoreHandler(storeHandler).create()));
 	}
 
 	public Completable closeMvStore() {
