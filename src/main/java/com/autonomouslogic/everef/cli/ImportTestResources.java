@@ -67,8 +67,8 @@ public class ImportTestResources implements Command {
 		}
 		return Completable.concatArray(
 				Completable.mergeArray(
-//						dataUtil.downloadLatestSde().flatMapCompletable(this::loadSdeResources),
-//						dataUtil.downloadLatestEsi().flatMapCompletable(this::loadEsiResources),
+						dataUtil.downloadLatestSde().flatMapCompletable(this::loadSdeResources),
+						dataUtil.downloadLatestEsi().flatMapCompletable(this::loadEsiResources),
 						dataUtil.downloadLatestHoboleaks().flatMapCompletable(this::loadHoboleaksResources)),
 				buildRefData());
 	}
@@ -95,6 +95,7 @@ public class ImportTestResources implements Command {
 
 	private Completable loadHoboleaksResources(File file) {
 		return CompressUtil.loadArchive(file).flatMapCompletable(pair -> {
+			var prettyPrinter = objectMapper.writerWithDefaultPrettyPrinter();
 			var entry = pair.getLeft();
 			var config = refDataUtil.getHoboleaksConfigForFilename(entry.getName());
 			if (config == null || config.getHoboleaks() == null) {
@@ -108,7 +109,7 @@ public class ImportTestResources implements Command {
 			}
 			var outputFile = new File(HOBOLEAKS_RESOURCES + "/" + entry.getName());
 			log.info("Writing {}", outputFile);
-			objectMapper.writeValue(outputFile, newContent);
+			prettyPrinter.writeValue(outputFile, newContent);
 			return Completable.complete();
 		});
 	}
@@ -142,7 +143,7 @@ public class ImportTestResources implements Command {
 			}
 			var fileName = entry.getName();
 			fileName = fileName.replace("eve-ref-esi-scrape", "esi");
-			var outputFile = new File(HOBOLEAKS_RESOURCES + "/" + fileName);
+			var outputFile = new File(REFDATA_RESOURCES + "/" + fileName);
 			log.info("Writing {}", outputFile);
 			yamlMapper.writeValue(outputFile, newContent);
 			return Completable.complete();
