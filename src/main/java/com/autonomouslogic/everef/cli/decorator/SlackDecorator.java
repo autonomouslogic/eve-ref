@@ -68,12 +68,14 @@ public class SlackDecorator {
 	}
 
 	private Completable reportSuccess(@NonNull String commandName, @NonNull Instant start) {
-		if (!reportSuccess) {
-			return Completable.complete();
-		}
-		return report(successMessage(String.format(
-				"%s completed in %s",
-				commandName, Duration.between(start, Instant.now()).truncatedTo(ChronoUnit.MILLIS))));
+		return Completable.defer(() -> {
+			if (!reportSuccess) {
+				return Completable.complete();
+			}
+			return report(successMessage(String.format(
+					"%s completed in %s",
+					commandName, Duration.between(start, Instant.now()).truncatedTo(ChronoUnit.MILLIS))));
+		});
 	}
 
 	private Completable reportFailure(@NonNull String commandName, @NonNull Instant start, Throwable error) {
