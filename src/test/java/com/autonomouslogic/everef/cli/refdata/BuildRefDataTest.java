@@ -21,6 +21,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.reactivex.rxjava3.core.Flowable;
 import java.io.FileInputStream;
 import java.time.ZonedDateTime;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -130,8 +132,13 @@ public class BuildRefDataTest {
 		}
 		assertEquals(expectedFilenames, files.keySet());
 		assertMeta(files.get("meta.json"));
+		var examined = new HashSet<String>();
 		for (var config : refDataUtil.loadReferenceDataConfig()) {
+			if (examined.contains(config.getOutputFile())) {
+				continue;
+			}
 			assertOutput(config, files.get(config.getOutputFile() + ".json"));
+			examined.add(config.getOutputFile());
 		}
 	}
 
@@ -143,6 +150,7 @@ public class BuildRefDataTest {
 			var expected = objectMapper.readTree(
 					ResourceUtil.loadResource("/refdata/refdata/" + testConfig.getFilePrefix() + "-" + id + ".json"));
 			var actual = json.get(id.toString());
+			log.info("Asserting {} {}", config.getId(), id);
 			testDataUtil.assertJsonStrictEquals(expected, actual);
 		}
 
