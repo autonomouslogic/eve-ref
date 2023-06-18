@@ -160,6 +160,7 @@ mutaplasmids:
     filePrefix: mutaplasmid
     ids:
       - 52225
+      - 52228
 
 skills:
   model: Skill

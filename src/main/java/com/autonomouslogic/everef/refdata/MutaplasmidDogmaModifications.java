@@ -23,4 +23,7 @@ public class MutaplasmidDogmaModifications {
 
 	@JsonProperty
 	double max;
+
+	@JsonProperty
+	boolean highIsGood;
 }
