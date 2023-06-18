@@ -39,10 +39,13 @@ public class ObjectMerger {
 	}
 
 	private ObjectNode mergeObjects(ObjectNode... objects) {
-		var merged = objectMapper.createObjectNode();
+		if (objects.length == 1) {
+			return objects[0];
+		}
 		var fields = Stream.of(objects)
 				.flatMap(o -> Streams.stream(o.fields()))
 				.collect(Collectors.groupingBy(e -> e.getKey(), LinkedHashMap::new, Collectors.toList()));
+		var merged = objectMapper.createObjectNode();
 		fields.forEach((key, entries) -> {
 			var nodes = entries.stream().map(e -> e.getValue()).toArray(JsonNode[]::new);
 			var mergedEntry = merge(nodes);
@@ -51,9 +54,12 @@ public class ObjectMerger {
 		return merged;
 	}
 
-	private ArrayNode mergeArrays(ArrayNode... objs) {
+	private ArrayNode mergeArrays(ArrayNode... arrays) {
+		if (arrays.length == 1) {
+			return arrays[0];
+		}
 		var merged = objectMapper.createArrayNode();
-		for (var obj : objs) {
+		for (var obj : arrays) {
 			merged.addAll(obj);
 		}
 		return merged;

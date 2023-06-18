@@ -48,7 +48,6 @@ public class SimpleStoreLoader {
 	private SimpleTransformer postMergeTransformer;
 
 	@Setter
-	@NonNull
 	private String idFieldName;
 
 	@Setter

@@ -113,7 +113,7 @@ This table show the available data and where to get it.
 | Planets                         |                     | `fsd/universe`                         | `universe/planets.yaml`        |                                   |
 | Races                           |                     | `fsd/races.yaml`                       | `universe/races.yaml`          |                                   |
 | Regions                         |                     | `fsd/universe`                         | `universe/regions.yaml`        |                                   |
-| Reprocessing                    |                     | `fsd/typeMaterials.yaml`               |                                |                                   |
+| Reprocessing                    | `/types`            | `fsd/typeMaterials.yaml`               |                                |                                   |
 | Research agents                 |                     | `fsd/researchAgents.yaml`              |                                |                                   |
 | Skills                          | `/skills `          | _types and dogma_                      | _types and dogma_              |                                   |
 | Skin licenses                   |                     | `fsd/skinLicenses.yaml`                |                                |                                   |

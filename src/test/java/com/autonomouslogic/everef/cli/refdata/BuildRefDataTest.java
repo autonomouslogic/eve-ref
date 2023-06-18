@@ -131,6 +131,9 @@ public class BuildRefDataTest {
 		assertEquals(expectedFilenames, files.keySet());
 		assertMeta(files.get("meta.json"));
 		for (var config : refDataUtil.loadReferenceDataConfig()) {
+			if (!config.isDedicatedOutput()) {
+				continue;
+			}
 			assertOutput(config, files.get(config.getOutputFile() + ".json"));
 		}
 	}
@@ -142,8 +145,9 @@ public class BuildRefDataTest {
 		for (Long id : testConfig.getIds()) {
 			var expected = objectMapper.readTree(
 					ResourceUtil.loadResource("/refdata/refdata/" + testConfig.getFilePrefix() + "-" + id + ".json"));
-			var supplied = json.get(id.toString());
-			testDataUtil.assertJsonStrictEquals(expected, supplied);
+			var actual = json.get(id.toString());
+			log.info("Asserting {} {}", config.getId(), id);
+			testDataUtil.assertJsonStrictEquals(expected, actual);
 		}
 
 		if (config.getId().equals("types")) {

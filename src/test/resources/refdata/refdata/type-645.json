@@ -512,6 +512,36 @@
     }
   },
   "packaged_volume" : 50000,
+  "type_materials" : {
+    "34" : {
+      "material_type_id" : 34,
+      "quantity" : 8000000
+    },
+    "35" : {
+      "material_type_id" : 35,
+      "quantity" : 2581444
+    },
+    "36" : {
+      "material_type_id" : 36,
+      "quantity" : 600000
+    },
+    "37" : {
+      "material_type_id" : 37,
+      "quantity" : 161433
+    },
+    "38" : {
+      "material_type_id" : 38,
+      "quantity" : 12000
+    },
+    "39" : {
+      "material_type_id" : 39,
+      "quantity" : 6000
+    },
+    "40" : {
+      "material_type_id" : 40,
+      "quantity" : 3000
+    }
+  },
   "required_skills" : {
     "3336" : 1
   },

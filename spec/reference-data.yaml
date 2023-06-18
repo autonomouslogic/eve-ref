@@ -672,6 +672,10 @@ components:
             $ref: '#/components/schemas/CreatingBlueprint'
           description: The blueprints creating this type. The key is the blueprint
             type ID. This is added by EVE Ref.
+        type_materials:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/TypeMaterial'
         is_skill:
           type: boolean
           description: Whether this type is a skill or not. This is added by EVE Ref.
@@ -854,6 +858,15 @@ components:
         unit_id:
           type: integer
           format: int32
+    TypeMaterial:
+      type: object
+      properties:
+        material_type_id:
+          type: integer
+          format: int64
+        quantity:
+          type: integer
+          format: int64
     Unit:
       type: object
       properties:

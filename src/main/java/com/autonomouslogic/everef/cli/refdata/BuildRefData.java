@@ -178,6 +178,7 @@ public class BuildRefData implements Command {
 				.map(config -> refDataMergerProvider
 						.get()
 						.setName(config.getId())
+						.setOutputStoreName(config.getOutputStore())
 						.setStoreHandler(storeHandler)
 						.merge())
 				.toList()));

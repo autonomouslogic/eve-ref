@@ -148,4 +148,7 @@ public class InventoryType {
 			description = "The blueprints creating this type. The key is the blueprint type ID. "
 					+ "This is added by EVE Ref.")
 	Map<Long, CreatingBlueprint> creatingBlueprints;
+
+	@JsonProperty
+	Map<Long, TypeMaterial> typeMaterials;
 }

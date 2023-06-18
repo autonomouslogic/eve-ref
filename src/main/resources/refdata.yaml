@@ -94,6 +94,20 @@ types:
       - en-us
       - fr
 
+typeMaterials:
+  outputStore: types
+  dedicatedOutput: false
+  sde:
+    renames:
+      materials: type_materials
+    arrayToObjects:
+      type_materials: material_type_id
+    file: sde/fsd/typeMaterials.yaml
+  test:
+    filePrefix: type
+    ids:
+      - 645
+
 dogmaAttributes:
   idField: attribute_id
   model: DogmaAttribute
