@@ -79,14 +79,16 @@ public class SlackDecorator {
 	}
 
 	private Completable reportFailure(@NonNull String commandName, @NonNull Instant start, Throwable error) {
-		if (!reportFailure) {
-			return Completable.complete();
-		}
-		return report(errorMessage(
-				String.format(
-						"%s failed after %s",
-						commandName, Duration.between(start, Instant.now()).truncatedTo(ChronoUnit.MILLIS)),
-				error));
+		return Completable.defer(() -> {
+			if (!reportFailure) {
+				return Completable.complete();
+			}
+			return report(errorMessage(
+					String.format(
+							"%s failed after %s",
+							commandName, Duration.between(start, Instant.now()).truncatedTo(ChronoUnit.MILLIS)),
+					error));
+		});
 	}
 
 	private SlackMessage createMessage() {
