@@ -142,9 +142,15 @@ public class RefDataUtil {
 			return map.entrySet().stream()
 					.map(entry -> {
 						var config = entry.getValue();
+						var id = entry.getKey();
 						var outputFile = Optional.ofNullable(config.getOutputFile())
 								.orElse(CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, entry.getKey()));
-						var builder = config.toBuilder().id(entry.getKey()).outputFile(outputFile);
+						var outputStore =
+								Optional.ofNullable(config.getOutputStore()).orElse(id);
+						var builder = config.toBuilder()
+								.id(id)
+								.outputStore(outputStore)
+								.outputFile(outputFile);
 						return builder.build();
 					})
 					.toList();

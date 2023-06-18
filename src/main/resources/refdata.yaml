@@ -95,7 +95,7 @@ types:
       - fr
 
 reprocessing:
-  outputFile: types
+  outputStore: types
   sde:
     file: sde/fsd/typeMaterials.yaml
   test:

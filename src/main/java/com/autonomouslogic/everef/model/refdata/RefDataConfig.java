@@ -16,6 +16,9 @@ public class RefDataConfig {
 	String idField;
 
 	@JsonProperty
+	String outputStore;
+
+	@JsonProperty
 	String outputFile;
 
 	@JsonProperty

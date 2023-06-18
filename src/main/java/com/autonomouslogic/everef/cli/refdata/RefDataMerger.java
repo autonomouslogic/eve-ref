@@ -20,6 +20,10 @@ public class RefDataMerger {
 
 	@Setter
 	@NonNull
+	private String outputStoreName;
+
+	@Setter
+	@NonNull
 	private StoreHandler storeHandler;
 
 	@Inject
@@ -30,7 +34,6 @@ public class RefDataMerger {
 					var sdeStore = storeHandler.getSdeStore(name);
 					var esiStore = storeHandler.getEsiStore(name);
 					var hoboleaksStore = storeHandler.getHoboleaksStore(name);
-					var refStore = storeHandler.getRefStore(name);
 					var ids = new LinkedHashSet<Long>();
 					ids.addAll(sdeStore.keySet());
 					ids.addAll(esiStore.keySet());
@@ -52,13 +55,15 @@ public class RefDataMerger {
 		var sdeStore = storeHandler.getSdeStore(name);
 		var esiStore = storeHandler.getEsiStore(name);
 		var hoboleaksStore = storeHandler.getHoboleaksStore(name);
-		var refStore = storeHandler.getRefStore(name);
+		var refStore = storeHandler.getRefStore(outputStoreName);
 		try {
 			var sde = sdeStore.get(id);
 			var esi = esiStore.get(id);
 			var hobo = hoboleaksStore.get(id);
 			var ref = merge(sde, esi, hobo);
-			refStore.put(id, ref);
+			var existing = refStore.get(id);
+			var merged = existing == null ? ref : objectMerger.merge(existing, ref);
+			refStore.put(id, merged);
 		} catch (Exception e) {
 			throw new IllegalStateException(String.format("Failed merging %s [%d]", name, id), e);
 		}
