@@ -13,9 +13,6 @@ public class RefDataConfig {
 	String id;
 
 	@JsonProperty
-	String store;
-
-	@JsonProperty
 	String idField;
 
 	@JsonProperty

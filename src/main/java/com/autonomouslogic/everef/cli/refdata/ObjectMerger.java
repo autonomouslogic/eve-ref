@@ -39,6 +39,9 @@ public class ObjectMerger {
 	}
 
 	private ObjectNode mergeObjects(ObjectNode... objects) {
+		if (objects.length == 1) {
+			return objects[0];
+		}
 		var merged = objectMapper.createObjectNode();
 		var fields = Stream.of(objects)
 				.flatMap(o -> Streams.stream(o.fields()))
