@@ -190,3 +190,16 @@ units:
     ids:
       - 1
       - 2
+
+blueprints:
+  idField: blueprint_type_id
+  model: Blueprint
+  sde:
+    file: sde/fsd/blueprints.yaml
+  hoboleaks:
+    file: blueprints.json
+  test:
+    filePrefix: blueprint
+    ids:
+      - 999
+      - 22431

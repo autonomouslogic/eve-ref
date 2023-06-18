@@ -29,6 +29,8 @@ Some example paths:
 * <https://ref-data.everef.net/mutaplasmids/52225>
 * <https://ref-data.everef.net/units>
 * <https://ref-data.everef.net/units/1>
+* <https://ref-data.everef.net/blueprints>
+* <https://ref-data.everef.net/blueprints/999>
 
 ## Motivation
 Two primary datasets are available for third-party developers of EVE Online: the SDE and ESI.
