@@ -38,11 +38,12 @@ public class RefDataMerger {
 			ids.addAll(esiStore.keySet());
 			ids.addAll(hoboleaksStore.keySet());
 			log.info(
-					"Merging {} {} from SDE ({}) and ESI ({}) datasets",
+					"Merging {} {} from SDE ({}), ESI ({}), and Hoboleaks ({}) datasets",
 					ids.size(),
 					name,
 					sdeStore.size(),
-					esiStore.size());
+					esiStore.size(),
+					hoboleaksStore.size());
 			for (long id : ids) {
 				mergeAndStore(id);
 			}
