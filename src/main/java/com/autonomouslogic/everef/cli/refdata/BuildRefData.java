@@ -5,6 +5,7 @@ import static com.autonomouslogic.everef.util.ArchivePathFactory.REFERENCE_DATA;
 import com.autonomouslogic.everef.cli.Command;
 import com.autonomouslogic.everef.cli.refdata.esi.EsiLoader;
 import com.autonomouslogic.everef.cli.refdata.hoboleaks.HoboleaksLoader;
+import com.autonomouslogic.everef.cli.refdata.post.BlueprintDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.MutaplasmidDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.SkillDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.VariationsDecorator;
@@ -107,6 +108,9 @@ public class BuildRefData implements Command {
 	@Inject
 	protected Provider<VariationsDecorator> variationsDecoratorProvider;
 
+	@Inject
+	protected Provider<BlueprintDecorator> blueprintDecoratorProvider;
+
 	@Setter
 	@NonNull
 	private ZonedDateTime buildTime = ZonedDateTime.now(ZoneOffset.UTC).truncatedTo(ChronoUnit.SECONDS);
@@ -183,7 +187,8 @@ public class BuildRefData implements Command {
 		return Completable.defer(() -> Completable.concatArray(
 				skillDecoratorProvider.get().setStoreHandler(storeHandler).create(),
 				mutiplasmidDecoratorProvider.get().setStoreHandler(storeHandler).create(),
-				variationsDecoratorProvider.get().setStoreHandler(storeHandler).create()));
+				variationsDecoratorProvider.get().setStoreHandler(storeHandler).create(),
+			blueprintDecoratorProvider.get().setStoreHandler(storeHandler).create()));
 	}
 
 	public Completable closeMvStore() {

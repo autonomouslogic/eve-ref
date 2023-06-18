@@ -49,5 +49,10 @@
   },
   "mass" : 0,
   "packaged_volume" : 0.01,
-  "radius" : 1
+  "radius" : 1,
+  "creating_blueprints" : [ {
+    "blueprint_type_id" : 22431,
+    "blueprint_activity" : "invention"
+  } ],
+  "is_blueprint" : true
 }
