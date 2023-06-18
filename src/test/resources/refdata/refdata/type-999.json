@@ -1,0 +1,50 @@
+{
+  "base_price" : 1660000000,
+  "graphic_id" : 318,
+  "group_id" : 107,
+  "market_group_id" : 281,
+  "name" : {
+    "de" : "Dominix Blueprint",
+    "en" : "Dominix Blueprint",
+    "es" : "Plano de Dominix",
+    "fr" : "Plan de construction Dominix",
+    "ja" : "ドミニックスブループリント",
+    "ru" : "Dominix Blueprint",
+    "zh" : "多米尼克斯级蓝图"
+  },
+  "portion_size" : 1,
+  "published" : true,
+  "sof_faction_name" : "gallentebase",
+  "volume" : 0.01,
+  "type_id" : 999,
+  "capacity" : 0,
+  "description" : {
+    "en" : "",
+    "fr" : ""
+  },
+  "dogma_attributes" : {
+    "161" : {
+      "attribute_id" : 161,
+      "value" : 0.01
+    },
+    "162" : {
+      "attribute_id" : 162,
+      "value" : 1
+    },
+    "1955" : {
+      "attribute_id" : 1955,
+      "value" : 60
+    },
+    "4" : {
+      "attribute_id" : 4,
+      "value" : 0
+    },
+    "38" : {
+      "attribute_id" : 38,
+      "value" : 0
+    }
+  },
+  "mass" : 0,
+  "packaged_volume" : 0.01,
+  "radius" : 1
+}

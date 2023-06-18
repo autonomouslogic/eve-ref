@@ -1,0 +1,19 @@
+{
+  "graphic_id" : 3350,
+  "group_id" : 107,
+  "meta_group_id" : 2,
+  "name" : {
+    "de" : "Sin Blueprint",
+    "en" : "Sin Blueprint",
+    "es" : "Plano de la Sin",
+    "fr" : "Plan de construction Sin",
+    "ja" : "シンブループリント",
+    "ru" : "Sin Blueprint",
+    "zh" : "罪恶级蓝图"
+  },
+  "portion_size" : 1,
+  "published" : true,
+  "sof_faction_name" : "creodron",
+  "volume" : 0.01,
+  "type_id" : 22431
+}

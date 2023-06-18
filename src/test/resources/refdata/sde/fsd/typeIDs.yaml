@@ -997,3 +997,362 @@
         unitID: 105
   variationParentTypeID: 45623
   volume: 40
+"22430":
+  basePrice: 623500000
+  capacity: 800
+  description:
+    de: "Black Ops-Schlachtschiffe wurden für die Unterwanderung und Spionage hinter\
+      \ den feindlichen Linien entworfen. Mit ihrem Sprungantrieb und einem Portalgenerator\
+      \ können sie eine besondere Art von Sprungportal erschaffen, das nur von Covert\
+      \ Ops-Schiffen benutzt werden kann. Auf diese Art können sie heimlich Spionage-\
+      \ und Aufklärungstruppen in feindliches Gebiet einschleusen. Für derartige Geheimaktionen\
+      \ gibt es keine besseren Schiffe.\n\nEntwickler: CreoDron\n\nAls größter Entwickler\
+      \ und Hersteller von Drohnen im Weltraum hat CreoDron ein großes Interesse an\
+      \ Drohnen-Trägerschiffen. Ohne viel von ihrer Verteidigungsfähigkeit einzubü\
+      ßen, kann sich die Sin ihren Weg durch überraschend starke Gegner bahnen, vorausgesetzt\
+      \ natürlich, dass der Pilot die neusten CreoDron-Kampfdrohnen einsetzt."
+    en: "Black Ops battleships are designed for infiltration and espionage behind\
+      \ enemy lines. With the use of a jump drive and portal generator, they are capable\
+      \ of making a special type of jump portal usable only by covert ops vessels.\
+      \ This enables them to stealthily plant reconnaissance and espionage forces\
+      \ in enemy territory. For the final word in clandestine maneuvers, look no further.\r\
+      \n\r\nDeveloper: CreoDron\r\n\r\nAs the largest drone developer and manufacturer\
+      \ in space, CreoDron has a vested interest in drone carriers. While sacrificing\
+      \ relatively little in the way of defensive capability, the Sin can chew its\
+      \ way through surprisingly strong opponents - provided, of course, that the\
+      \ pilot uses top-of-the-line CreoDron drones."
+    es: "Los acorazados de operaciones secretas están diseñados para la infiltració\
+      n y el espionaje tras las líneas enemigas. Con un motor de salto y un generador\
+      \ de portales, son capaces de hacer un tipo especial de portal de salto que\
+      \ solo pueden usar las naves de operaciones encubiertas. Esto les permite plantar\
+      \ sigilosamente fuerzas de reconocimiento y espionaje en territorio enemigo.\
+      \ Si buscas lo último en maniobras clandestinas, lo has encontrado.\n\nDesarrollo:\
+      \ CreoDron.\n\nCreoDron, el mayor desarrollador y fabricante de drones del espacio,\
+      \ tiene un gran interés en los portadrones. Sacrificando relativamente poco\
+      \ en cuanto a la capacidad defensiva, la Sin puede hacer trizas a oponentes\
+      \ sorprendentemente fuertes (por supuesto, siempre y cuando el piloto use drones\
+      \ de CreoDron de última generación)."
+    fr: "Les cuirassés des forces clandestines sont conçus pour les missions d'infiltration\
+      \ et d'espionnage derrière les lignes ennemies. Équipés d'un propulseur interstellaire\
+      \ et d'un générateur de portail, ils sont capables de créer un portail interstellaire\
+      \ furtif, voué à envoyer des vaisseaux des opérations secrètes en mission de\
+      \ reconnaissance et d'espionnage derrière les lignes ennemies. Ces vaisseaux\
+      \ incarnent sans aucun doute l'atout maître des manœuvres clandestines.\n\n\
+      Constructeur : CreoDron\n\nPlus grand concepteur et fabricant de drones de tout\
+      \ l'espace, CreoDron investit tout logiquement dans les vaisseaux porte-drones.\
+      \ Tout en sacrifiant relativement peu de choses à ses capacités défensives,\
+      \ le Sin se fraye habilement un chemin parmi ses adversaires... à condition,\
+      \ bien entendu, que le pilote utilise des drones CreoDron ultra-perfectionné\
+      s."
+    ja: "秘密工作艦は敵陣への潜入偵察用として設計されている。ジャンプドライブとポータルジェネレーターを使って、隠密行動艦だけが通過できる特別なジャンプポー\
+      タルを生成する機能を持つ。これにより、偵察隊や諜報隊は密かに敵のテリトリーに潜り込むことができる。潜入作戦用の艦船なら、これにしない手はない。開発元：\
+      \ クレオドロン　宇宙空間最大のドローン開発製造社としてクレオドロンはドローン艦載機母艦における確固たる地位を築き上げている。防御力は多少犠牲にされては\
+      いるが、シンはどんな強い敵にも立ち向かえる。ただし、クレオドロン社の最上位機種のドローンを使用すればだが。"
+    ru: "Разработка тяжёлых диверсионных кораблей велась из расчёта на их проникно\
+      вение в тыл противника с последующим шпионажем. Используя гипердвигатель мал\
+      ой дальности и генератор гиперпорталов, они создают особый тип гиперпортала\
+      \ с нулевой эмиссией, пользоваться которым могут исключительно диверсионные\
+      \ корабли. Это позволяет незаметно и эффективно перемещать разведывательные\
+      \ силы по владениям противника. При исполнении диверсионных операций они нез\
+      аменимы.\n\nРазработчик: корпорация «КреоДрон»\n\nБудучи крупнейшим разработ\
+      чиком и производителем дронов, корпорация «КреоДрон» напрямую заинтересована\
+      \ в кораблях-носителях дронов. Ставка на кажущихся сильными оппонентов «Сина\
+      » может оказаться ошибочной: для победы ему не потребуется жертвовать защитн\
+      ыми возможностями... при условии, что его пилот пользуется первоклассными др\
+      онами производства «КреоДрон»."
+    zh: "首席发明家：月G神\n\n黑隐特勤战列舰的作用是渗透进敌人后方实施侦查活动。通过使用跳跃引擎以及跳跃通道发生器，它们能够生成一条只让隐形特勤舰只通\
+      过的跳跃通道。这使得它们能够隐秘地在敌后进行侦查和间谍任务。你要是想找执行秘密任务的行家，那就非它莫属了。\n\n开发商：西顿工业\n\n作为太空中最大\
+      的无人机开发商和制造商，西顿工业在无人机航母方面有着先天优势。虽然罪恶级指挥舰在防御能力上稍弱，但它依然能撂倒强悍的对手，当然前提是飞行员使用了最先进的\
+      西顿工业无人机。"
+  factionID: 500004
+  graphicID: 3350
+  groupID: 898
+  marketGroupID: 1078
+  mass: 141700000
+  masteries:
+    "0":
+    - 96
+    - 99
+    - 69
+    - 108
+    - 138
+    - 140
+    - 145
+    - 150
+    - 89
+    - 133
+    "1":
+    - 96
+    - 99
+    - 69
+    - 108
+    - 138
+    - 140
+    - 145
+    - 150
+    - 89
+    - 133
+    "2":
+    - 96
+    - 99
+    - 69
+    - 108
+    - 138
+    - 140
+    - 145
+    - 150
+    - 89
+    - 133
+    "3":
+    - 96
+    - 99
+    - 69
+    - 108
+    - 138
+    - 140
+    - 145
+    - 150
+    - 89
+    - 133
+    "4":
+    - 96
+    - 99
+    - 69
+    - 108
+    - 138
+    - 140
+    - 145
+    - 117
+    - 150
+    - 89
+    - 133
+  metaGroupID: 2
+  name:
+    de: "Sin"
+    en: "Sin"
+    es: "Sin"
+    fr: "Sin"
+    ja: "シン"
+    ru: "Sin"
+    zh: "罪恶级"
+  portionSize: 1
+  published: true
+  raceID: 8
+  radius: 250
+  sofFactionName: "creodron"
+  soundID: 20072
+  traits:
+    miscBonuses: []
+    roleBonuses:
+    - bonusText:
+        de: "Es können <a href=showinfo:28646>getarnte Anziehungsfeld-Generatoren</a>\
+          \ und <a href=showinfo:28652>getarnte Sprungtor-Generatoren</a> eingebaut\
+          \ werden"
+        en: "Can fit <a href=showinfo:28646>Covert Cynosural Field Generator</a> and\
+          \ <a href=showinfo:28652>Covert Jump Portal Generator</a>"
+        es: "Es posible equipar un <a href=showinfo:28646>generador de campo cinosural\
+          \ encubierto</a> y un <a href=showinfo:28652>generador de portales de salto\
+          \ encubierto</a>."
+        fr: "Peut équiper un <a href=showinfo:28646>générateur de champ cynosural\
+          \ furtif</a> et un <a href=showinfo:28652>générateur de portail hyperspatial\
+          \ furtif</a>"
+        ja: "<a href=showinfo:28646>潜伏用サイノシュラルフィールドジェネレータ</a>と<a href=showinfo:28652>潜\
+          伏用ジャンプポータルジェネレータ</a>を装備できる"
+        ru: "Корабли этого типа могут оснащаться <a href=showinfo:28646>приводными\
+          \ маяками скрытого действия</a> и <a href=showinfo:28652>генераторами ги\
+          перпорталов с нулевой эмиссией</a>"
+        zh: "可以装备<a href=\"showinfo:28646\">隐秘诱导力场发生器</a>和<a href=\"showinfo:28652\"\
+          >隐秘跳跃通道发生器</a>。"
+      importance: 1
+    - bonusText:
+        de: "Keine Verzögerung bei der Zielaufschaltung nach der Deaktivierung von\
+          \ <a href=showinfo:11579>Tarnmodulen</a>"
+        en: "No targeting delay after <a href=showinfo:11579>Cloaking Device</a> deactivation"
+        es: "No hay demora en la adquisición de objetivos tras la desactivación del\
+          \ <a href=showinfo:11579>dispositivo de camuflaje</a>."
+        fr: "Aucun délai de ciblage après la désactivation des <a href=showinfo:11579>dispositifs\
+          \ de camouflage</a>"
+        ja: "<a href=showinfo:11579>遮蔽装置</a>を停止した後のターゲット遅延なし"
+        ru: "На кораблях этого типа устранена задержка включения систем захвата це\
+          лей, вызываемая отключением <a href=showinfo:11579>систем маскировки</a>"
+        zh: "重新启动<a href=\"showinfo:11579\">隐形装置</a>后不遭受锁定延时副作用"
+      importance: 2
+    - bonusText:
+        de: "Die Verzögerung bei Reaktivierung von <a href=showinfo:11579>Tarnmodulen</a>\
+          \ wird auf 5 Sekunden reduziert."
+        en: "<a href=showinfo:11579>Cloak</a> reactivation delay reduced to 5 seconds"
+        es: "Reducción de la demora de reactivación del <a href=showinfo:11579>camuflaje</a>\
+          \ a 5\_segundos."
+        fr: "Délai de réactivation du <a href=showinfo:11579>camouflage</a> réduit\
+          \ à 5 secondes"
+        ja: "<a href=showinfo:11579>遮蔽装置</a>の再起動遅延が5秒に短縮"
+        ru: "Задержка повторного включения <a href=showinfo:11579>систем маскировк\
+          и</a> сокращена до 5 секунд"
+        zh: "<a href=\"showinfo:11579\">隐形装置</a>重启延时降到5秒"
+      importance: 3
+    - bonus: 5
+      bonusText:
+        de: "zusätzlicher Bonus auf HP der <a href=showinfo:3394>Verstärkten Schottwand</a>"
+        en: "additional bonus to <a href=showinfo:3394>Reinforced Bulkhead</a> hitpoints"
+        es: "de bonificación adicional a los puntos de vida del <a href=showinfo:3394>mamparo\
+          \ reforzado</a>."
+        fr: "de bonus supplémentaire aux points de vie de la <a href=showinfo:3394>cloison\
+          \ renforcée</a>"
+        ja: "<a href=showinfo:3394>強化隔壁</a>HPがさらに増加"
+        ru: "дополнительный бонус к\_прочности <a href=showinfo:3394>укреплённой п\
+          ереборки</a>"
+        zh: "<a href=showinfo:3394>强化舱隔壁</a>结构值加成"
+      importance: 9
+      unitID: 105
+    - bonus: 50
+      bonusText:
+        de: "Reduktion der Dauer von <a href=showinfo:21096>Anziehungsfeldgeneratoren</a>"
+        en: "reduction in <a href=showinfo:21096>Cynosural Field Generator</a> duration"
+        es: "de reducción de la duración del <a href=showinfo:21096>generador de campo\
+          \ cinosural</a>."
+        fr: "reduction in <a href=showinfo:21096>Cynosural Field Generator</a> duration"
+        ja: "<a href=showinfo:21096>サイノシュラルフィールドジェネレーター</a>の持続時間が減少"
+        ru: "reduction in <a href=showinfo:21096>Cynosural Field Generator</a> duration"
+        zh: "<a href=showinfo:21096>诱导力场发生器</a>运转时间减少"
+      importance: 5
+      unitID: 105
+    - bonus: 50
+      bonusText:
+        de: "Bonus auf die HP der <a href=showinfo:3394>Panzerplatte</a>"
+        en: "bonus to <a href=showinfo:3394>Armor Plate</a> hitpoints"
+        es: "de bonificación a los puntos de vida de las <a href=showinfo:3394>placas\
+          \ de blindaje</a>."
+        fr: "de bonus aux points de vie du <a href=showinfo:3394>revêtement de blindage</a>"
+        ja: "<a href=showinfo:3394>アーマープレート</a>HPが増加"
+        ru: "бонус к\_прочности <a href=showinfo:3394>бронеплиты</a>"
+        zh: "<a href=showinfo:3394>装甲附甲板</a>装甲值加成"
+      importance: 8
+      unitID: 105
+    - bonus: 75
+      bonusText:
+        de: "Reduktion der effektiv zurückgelegten Distanz für die Sprungerschöpfung"
+        en: "reduction to effective distance traveled for jump fatigue"
+        es: "de reducción de la distancia efectiva hasta sufrir fatiga de salto."
+        fr: "de réduction de la distance effectuée pour l'épuisement de saut"
+        ja: "ジャンプによる疲弊が飛行距離に及ぼす影響を低減"
+        ru: "медленнее накапливается усталость от гиперпереходов"
+        zh: "减少跳跃距离对产生跳跃疲劳的影响"
+      importance: 4
+      unitID: 105
+    - bonus: 100
+      bonusText:
+        de: "Bonus auf die HP der <a href=showinfo:3425>Schilderweiterung</a>"
+        en: "bonus to <a href=showinfo:3425>Shield Extender</a> hitpoints"
+        es: "de bonificación a los puntos de vida del <a href=showinfo:3425>extensor\
+          \ de escudo</a>."
+        fr: "de bonus aux points de vie de l'<a href=showinfo:3425>extenseur de bouclier</a>"
+        ja: "<a href=showinfo:3425>シールドエクステンダー</a>HPが増加"
+        ru: "бонус к\_прочности <a href=showinfo:3425>расширителя щитов</a>"
+        zh: "<a href=showinfo:3425>护盾扩展装置</a>护盾值加成"
+      importance: 7
+      unitID: 105
+    - bonus: 650
+      bonusText:
+        de: "Bonus auf die maximale Geschwindigkeit des Schiffs beim Einsatz von <a\
+          \ href=showinfo:11579>Tarnvorrichtungen</a>"
+        en: "bonus to ship max velocity when using <a href=showinfo:11579>Cloaking\
+          \ Devices</a>"
+        es: "de bonificación a la velocidad máxima de la nave al utilizar <a href=showinfo:11579>dispositivos\
+          \ de camuflaje</a>."
+        fr: "de bonus à la vitesse maximale d'un vaisseau lorsqu'équipé d'un <a href=showinfo:11579>dispositif\
+          \ de camouflage</a> actif"
+        ja: "<a href=showinfo:11579>遮蔽装置</a>使用時の艦船の最高速度が上昇"
+        ru: "бонус к максимальной скорости хода при использовании <a href=showinfo:11579>у\
+          стройств маскировки</a>"
+        zh: "使用<a href=showinfo:11579>隐形装置</a>时舰船的最大速度加成"
+      importance: 6
+      unitID: 105
+    types:
+      "3336":
+      - bonus: 10
+        bonusText:
+          de: "Bonus auf den Schaden von <a href=showinfo:3307>großen Hybridgeschü\
+            tztürmen</a>"
+          en: "bonus to <a href=showinfo:3307>Large Hybrid Turret</a> damage"
+          es: "de bonificación al daño de la <a href=showinfo:3307>torreta híbrida\
+            \ grande</a>."
+          fr: "de bonus aux dégâts des <a href=showinfo:3307>grandes tourelles hybrides</a>"
+          ja: "<a href=showinfo:3307>大型ハイブリッドタレット</a>のダメージが増加"
+          ru: "увеличивается урон боеприпасов <a href=showinfo:3307>больших гибрид\
+            ных орудий</a>"
+          zh: "<a href=\"showinfo:3307\">大型混合炮台</a>伤害加成"
+        importance: 1
+        unitID: 105
+      - bonus: 10
+        bonusText:
+          de: "Bonus auf die HP und den Schaden von <a href=showinfo:3436>Drohnen</a>"
+          en: "bonus to <a href=showinfo:3436>Drone</a> hitpoints and damage"
+          es: "de bonificación a los puntos de vida y el daño de los <a href=showinfo:3436>drones</a>."
+          fr: "de bonus aux dégâts et aux PV des <a href=showinfo:3436>drones</a>"
+          ja: "<a href=showinfo:3436>ドローン</a>のヒットポイントとダメージが増加"
+          ru: "увеличивается урон бортового оружия <a href=showinfo:3436>дронов</a>;\
+            \ увеличивается запас их прочности"
+          zh: "<a href=\"showinfo:3436\">无人机</a>伤害和HP加成"
+        importance: 2
+        unitID: 105
+      "28656":
+      - bonus: 7.5
+        bonusText:
+          de: "Bonus auf die Nachführung und optimale Reichweite von <a href=showinfo:3436>Drohnen</a>"
+          en: "bonus to <a href=showinfo:3436>Drone</a> tracking and optimal range"
+          es: "de bonificación al alcance óptimo y al rastreo de los <a href=showinfo:3436>drones</a>."
+          fr: "bonus à la poursuite et portée optimale des <a href=showinfo:3436>drones</a>"
+          ja: "<a href=showinfo:3436>ドローン</a>のトラッキング能力および最適射程距離が増加"
+          ru: "бонус к скорости наведения и оптимальной дальности <a href=showinfo:3436>д\
+            ронов</a>"
+          zh: "<a href=showinfo:3436>无人机</a>跟踪速度和最佳射程加成"
+        importance: 2
+        unitID: 105
+      - bonus: 10
+        bonusText:
+          de: "Bonus auf die Transfermenge von <a href=showinfo:3439>Versorgungsdrohnen</a>"
+          en: "bonus to <a href=showinfo:3439>Logistic Drone</a> transfer amount"
+          es: "de bonificación a la cantidad de transferencia de los <a href=showinfo:3439>drones\
+            \ logísticos</a>."
+          fr: "de bonus à la capacité de transport des <a href=showinfo:3439>drones\
+            \ logistiques</a>"
+          ja: "<a href=showinfo:3439>支援専門ドローン</a>転送量にボーナス"
+          ru: "бонус к производительности <a href=showinfo:3439>дронов снабжения</a>"
+          zh: "<a href=showinfo:3439>后勤无人机</a>维修量加成"
+        importance: 1
+        unitID: 105
+  variationParentTypeID: 645
+  volume: 454500
+"999":
+  basePrice: 1660000000
+  graphicID: 318
+  groupID: 107
+  marketGroupID: 281
+  name:
+    de: "Dominix Blueprint"
+    en: "Dominix Blueprint"
+    es: "Plano de Dominix"
+    fr: "Plan de construction Dominix"
+    ja: "ドミニックスブループリント"
+    ru: "Dominix Blueprint"
+    zh: "多米尼克斯级蓝图"
+  portionSize: 1
+  published: true
+  sofFactionName: "gallentebase"
+  volume: 0.01
+"22431":
+  graphicID: 3350
+  groupID: 107
+  metaGroupID: 2
+  name:
+    de: "Sin Blueprint"
+    en: "Sin Blueprint"
+    es: "Plano de la Sin"
+    fr: "Plan de construction Sin"
+    ja: "シンブループリント"
+    ru: "Sin Blueprint"
+    zh: "罪恶级蓝图"
+  portionSize: 1
+  published: true
+  sofFactionName: "creodron"
+  volume: 0.01

@@ -514,5 +514,9 @@
   "packaged_volume" : 50000,
   "required_skills" : {
     "3336" : 1
+  },
+  "type_variations" : {
+    "1" : [ 645 ],
+    "2" : [ 22430 ]
   }
 }
