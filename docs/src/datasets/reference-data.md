@@ -3,11 +3,19 @@ title: Reference Data
 ---
 # Reference Data
 
-The reference data build is currently in development.
-<https://github.com/autonomouslogic/eve-ref/milestone/3>.
-Any files <https://data.everef.net/reference-data/> are not final and the format may change at any time.
+The Reference Data set is a collection of data from the EVE Online SDE, ESI, and Hoboleaks data.
+It aims to be a single source, combing all the available data into one.
+It does this by taking the latest [SDE](https://developers.eveonline.com/resource/resources),
+[ESI scrape](https://data.everef.net/esi-scrape/), and [Hoboleaks export](https://sde.hoboleaks.space/) and merging them
+into one common format.
 
-## Spec
+The Reference Data is available as a REST API with full OpenAPI spec and as a [full download](https://data.everef.net/reference-data/).
+
+## Development
+The reference data is currently in development.
+While changes should be minimal, they may occur at any time. 
+
+## REST API
 The full OpenAPI spec is [available on Github](https://github.com/autonomouslogic/eve-ref/blob/main/spec/reference-data.yaml).
 
 Some example paths:
@@ -38,19 +46,12 @@ While comprehensive, these two are not equal.
 There is data in the SDE which isn't in the ESI, and vice-versa.
 Additionally, Hoboleaks provides data extracted from the EVE Online client files.
 
-[EVE Ref](https://everef.net/) was originally built on taking all three sources and combining them into one,
+EVE Ref was originally built on taking all three sources and combining them into one,
 making it as comprehensive as possible.
 The Reference Data set is an attempt at publishing this data for other developers to consume.
 
-Once built, the dataset will be available in two ways:
-
-* As a static download from [data.everef.net](https://data.everef.net)
-* As a REST API
-
-The REST API will be used for EVE Ref itself, as part of the [Nuxt rebuild](https://github.com/autonomouslogic/eve-ref/milestone/2).
-For other third-party developers, the REST API will be freely available to consume.
-
 ## Data sources
+This table show the available data and where to get it. 
 
 | Data                            | Reference data      | SDE                                    | ESI                            | Hoboleaks                         |
 |---------------------------------|---------------------|----------------------------------------|--------------------------------|-----------------------------------|
@@ -61,8 +62,7 @@ For other third-party developers, the REST API will be freely available to consu
 | Ancestors                       |                     | `fsd/ancestries.yaml`                  | `universe/ancestries.yaml`     |                                   |
 | Asteroid belts                  |                     | `fsd/universe`                         | `universe/asteroid_belts.yaml` |                                   |
 | Bloodlines                      |                     | `fsd/bloodlines.yaml`                  | `universe/bloodlines.yaml`     |                                   |
-| Blueprints                      |                     | `fsd/blueprints.yaml`                  |                                | `blueprints.json`                 |
-| Blueprint materials             |                     | `fsd/typeMaterials.yaml`               |                                | `blueprints.json`                 |
+| Blueprints                      | `/blueprints`       | `fsd/blueprints.yaml`                  |                                | `blueprints.json`                 |
 | Certificates                    |                     | `fsd/certificates.yaml`                |                                |                                   |
 | Character attributes            |                     | `fsd/characterAttributes.yaml`         |                                |                                   |
 | Clone States (?)                |                     |                                        |                                | `clonestates.json`                |
@@ -113,6 +113,7 @@ For other third-party developers, the REST API will be freely available to consu
 | Planets                         |                     | `fsd/universe`                         | `universe/planets.yaml`        |                                   |
 | Races                           |                     | `fsd/races.yaml`                       | `universe/races.yaml`          |                                   |
 | Regions                         |                     | `fsd/universe`                         | `universe/regions.yaml`        |                                   |
+| Reprocessing                    |                     | `fsd/typeMaterials.yaml`               |                                |                                   |
 | Research agents                 |                     | `fsd/researchAgents.yaml`              |                                |                                   |
 | Skills                          | `/skills `          | _types and dogma_                      | _types and dogma_              |                                   |
 | Skin licenses                   |                     | `fsd/skinLicenses.yaml`                |                                |                                   |
@@ -128,7 +129,7 @@ For other third-party developers, the REST API will be freely available to consu
 | Tournament rule sets            |                     | `fsd/tournamentRuleSets.yaml`          |                                |                                   |
 | Universes                       |                     | `fsd/universe`                         |                                |                                   |
 
-* _The ESI filenames refer to the names in the ESI dump, minus the language suffix._
+* _The ESI filenames refer to the names in the ESI scrape, minus the language suffix._
 
 ## Data structure
 
