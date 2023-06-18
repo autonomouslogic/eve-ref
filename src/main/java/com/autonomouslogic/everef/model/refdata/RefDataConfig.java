@@ -19,6 +19,10 @@ public class RefDataConfig {
 	String outputStore;
 
 	@JsonProperty
+	@lombok.Builder.Default
+	boolean dedicatedOutput = true;
+
+	@JsonProperty
 	String outputFile;
 
 	@JsonProperty
