@@ -1,6 +1,7 @@
 package com.autonomouslogic.everef.cli;
 
 import com.autonomouslogic.everef.cli.refdata.BuildRefData;
+import com.autonomouslogic.everef.cli.refdata.ObjectMerger;
 import com.autonomouslogic.everef.cli.refdata.StoreHandler;
 import com.autonomouslogic.everef.cli.refdata.esi.EsiLoader;
 import com.autonomouslogic.everef.model.refdata.RefDataConfig;
@@ -14,6 +15,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.reactivex.rxjava3.core.Completable;
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Function;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -57,6 +60,9 @@ public class ImportTestResources implements Command {
 
 	@Inject
 	protected MockScrapeBuilder mockScrapeBuilder;
+
+	@Inject
+	protected ObjectMerger objectMerger;
 
 	@Inject
 	protected ImportTestResources() {}
@@ -200,6 +206,7 @@ public class ImportTestResources implements Command {
 			@NonNull String path, @NonNull Function<String, MVMap<Long, JsonNode>> storeProvider) {
 		return Completable.fromAction(() -> {
 			var prettyPrinter = objectMapper.writerWithDefaultPrettyPrinter();
+			Map<String, JsonNode> fileNodes = new HashMap<>();
 			for (RefDataConfig config : refDataUtil.loadReferenceDataConfig()) {
 				var store = storeProvider.apply(config.getId());
 				for (var id : config.getTest().getIds()) {
@@ -208,8 +215,13 @@ public class ImportTestResources implements Command {
 					if (json == null) {
 						continue;
 					}
-					prettyPrinter.writeValue(new File(filename), json);
+					var existing = fileNodes.get(filename);
+					json = existing == null ? json : objectMerger.merge(existing, json);
+					fileNodes.put(filename, json);
 				}
+			}
+			for (var entry : fileNodes.entrySet()) {
+				prettyPrinter.writeValue(new File(entry.getKey()), entry.getValue());
 			}
 		});
 	}
