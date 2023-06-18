@@ -50,8 +50,8 @@ public class BlueprintDecorator {
 			types = storeHandler.getRefStore("types");
 			blueprints = storeHandler.getRefStore("blueprints");
 			for (var blueprintsEntry : blueprints.entrySet()) {
-				long typeId = blueprintsEntry.getKey();
-				setIsBlueprint(typeId);
+				long blueprintTypeId = blueprintsEntry.getKey();
+				setIsBlueprint(blueprintTypeId);
 				var blueprintJson = (ObjectNode) blueprintsEntry.getValue();
 				var blueprint = objectMapper.convertValue(blueprintJson, Blueprint.class);
 				for (var activitiesEntry : blueprint.getActivities().entrySet()) {
@@ -59,7 +59,7 @@ public class BlueprintDecorator {
 						.map(Map::values)
 						.orElse(List.of());
 					for (var product : products) {
-						addProducedBy(typeId, product.getTypeId(), activitiesEntry.getKey());
+						addProducedBy(blueprintTypeId, product.getTypeId(), activitiesEntry.getKey());
 					}
 				}
 			}
@@ -76,15 +76,15 @@ public class BlueprintDecorator {
 		types.put(typeId, type);
 	}
 
-	private void addProducedBy(long typeId, long productTypeId, String activity) {
+	private void addProducedBy(long blueprintTypeId, long productTypeId, String activity) {
 		var productType = (ObjectNode) types.get(productTypeId);
 		if (productType == null) {
-			log.warn("Could not set type {} as being created by blueprint, not found", typeId);
+			log.warn("Could not set type {} as being created by blueprint, not found", blueprintTypeId);
 			return;
 		}
-		var array = productType.withArray("creating_blueprints");
-		array.add(objectMapper.createObjectNode()
-			.put("blueprint_type_id", productTypeId)
+		var obj = productType.withObject("/creating_blueprints");
+		obj.put(Long.toString(blueprintTypeId), objectMapper.createObjectNode()
+			.put("blueprint_type_id", blueprintTypeId)
 			.put("blueprint_activity", activity)
 		);
 		types.put(productTypeId, productType);

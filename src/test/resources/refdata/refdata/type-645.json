@@ -519,8 +519,10 @@
     "1" : [ 645 ],
     "2" : [ 22430 ]
   },
-  "creating_blueprints" : [ {
-    "blueprint_type_id" : 645,
-    "blueprint_activity" : "manufacturing"
-  } ]
+  "creating_blueprints" : {
+    "999" : {
+      "blueprint_type_id" : 999,
+      "blueprint_activity" : "manufacturing"
+    }
+  }
 }
