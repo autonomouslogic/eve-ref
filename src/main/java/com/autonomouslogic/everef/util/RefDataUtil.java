@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -139,10 +140,14 @@ public class RefDataUtil {
 		try (var in = ResourceUtil.loadResource("/refdata.yaml")) {
 			Map<String, RefDataConfig> map = yamlMapper.readValue(in, type);
 			return map.entrySet().stream()
-					.map(entry -> entry.getValue().toBuilder()
-							.id(entry.getKey())
-							.outputFile(CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, entry.getKey()))
-							.build())
+					.map(entry -> {
+						var config = entry.getValue();
+						var builder = config.toBuilder()
+								.id(entry.getKey())
+								.store(Optional.ofNullable(config.getStore()).orElse(entry.getKey()))
+								.outputFile(CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, entry.getKey()));
+							return builder.build();
+					})
 					.toList();
 		}
 	}

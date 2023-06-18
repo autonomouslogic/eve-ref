@@ -94,6 +94,15 @@ types:
       - en-us
       - fr
 
+reprocessing:
+  store: types
+  sde:
+    file: sde/fsd/typeMaterials.yaml
+  test:
+    filePrefix: type
+    ids:
+      - 645
+
 dogmaAttributes:
   idField: attribute_id
   model: DogmaAttribute
