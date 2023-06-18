@@ -29,7 +29,7 @@ paths:
                 type: array
                 items:
                   type: integer
-                  format: int32
+                  format: int64
   /blueprints/{blueprint_type_id}:
     get:
       tags:
