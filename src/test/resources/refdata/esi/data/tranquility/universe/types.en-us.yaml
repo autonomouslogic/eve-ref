@@ -707,3 +707,224 @@
   radius: 1
   type_id: 2048
   volume: 5
+"45623":
+  capacity: 0
+  description: "Comprised of countless nanomachines that enhance the energy flow from\
+    \ a ship's antimatter reactor, this core subsystem offers a pilot the option of\
+    \ increasing the power grid and capacitor capacity of their vessel. Designers\
+    \ of Tech III vessels were initially hampered by the problem of how to design\
+    \ a modular ship that could swap out basic engineering upgrades on a per-need\
+    \ basis. This proved particularly true when it came to reinforcing a vessel's\
+    \ power grid and capacitor banks without the use of batteries. In the end, the\
+    \ provision of nanomachines constructed from fullerene-based polymers allowed\
+    \ for solutions that had only existed in theory up until that point."
+  dogma_attributes:
+  - attribute_id: 1376
+    value: 3
+  - attribute_id: 161
+    value: 40
+  - attribute_id: 482
+    value: 50
+  - attribute_id: 1380
+    value: 29986
+  - attribute_id: 1366
+    value: 125
+  - attribute_id: 422
+    value: 3
+  - attribute_id: 9
+    value: 40
+  - attribute_id: 1431
+    value: 5
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 1509
+    value: -3
+  - attribute_id: 277
+    value: 1
+  - attribute_id: 182
+    value: 30539
+  - attribute_id: 633
+    value: 1
+  - attribute_id: 313
+    value: 20
+  - attribute_id: 4
+    value: 1200000
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 1374
+    value: 0
+  - attribute_id: 1375
+    value: 1
+  dogma_effects:
+  - effect_id: 490
+    is_default: false
+  - effect_id: 3772
+    is_default: false
+  - effect_id: 3774
+    is_default: false
+  - effect_id: 3811
+    is_default: false
+  - effect_id: 4159
+    is_default: false
+  - effect_id: 6930
+    is_default: false
+  graphic_id: 21511
+  group_id: 958
+  icon_id: 3636
+  market_group_id: 1122
+  mass: 1200000
+  name: "Legion Core - Augmented Antimatter Reactor"
+  packaged_volume: 40
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 45623
+  volume: 40
+"45622":
+  capacity: 0
+  description: "This subsystem employs a nano-electromechanical dispersion field to\
+    \ strengthen a vessel's sensor systems. Made from a complex system of neurovisual\
+    \ interlays, automated trigger response units, and billions of advanced molecular-level\
+    \ circuits, the subsystem offers improved protection against hostile ECM as well\
+    \ as improved sensor range and target acquisition speed."
+  dogma_attributes:
+  - attribute_id: 1376
+    value: 2
+  - attribute_id: 161
+    value: 40
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 1380
+    value: 29986
+  - attribute_id: 1366
+    value: 125
+  - attribute_id: 422
+    value: 3
+  - attribute_id: 2681
+    value: 15
+  - attribute_id: 9
+    value: 40
+  - attribute_id: 235
+    value: 1
+  - attribute_id: 1509
+    value: 5
+  - attribute_id: 277
+    value: 1
+  - attribute_id: 182
+    value: 30539
+  - attribute_id: 1431
+    value: 15
+  - attribute_id: 633
+    value: 1
+  - attribute_id: 4
+    value: 1200000
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 1374
+    value: 0
+  - attribute_id: 1375
+    value: 2
+  dogma_effects:
+  - effect_id: 3772
+    is_default: false
+  - effect_id: 3774
+    is_default: false
+  - effect_id: 3900
+    is_default: false
+  - effect_id: 4269
+    is_default: false
+  - effect_id: 4343
+    is_default: false
+  - effect_id: 6934
+    is_default: false
+  graphic_id: 21510
+  group_id: 958
+  icon_id: 3636
+  market_group_id: 1122
+  mass: 1200000
+  name: "Legion Core - Dissolution Sequencer"
+  packaged_volume: 40
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 45622
+  volume: 40
+"45624":
+  capacity: 0
+  description: "During some of the first conflicts with them, Amarr engineers noticed\
+    \ a remarkable feature in Sleeper drone technology: the ability of drones to transfer\
+    \ power between one another without the need for specialized equipment. This technology\
+    \ seemed to be innate to every drone in some capacity, and while the engineers\
+    \ could not reproduce this system in modern space vessels, they were able to adapt\
+    \ the technology into modular Tech III designs. The energy parasitic complex turns\
+    \ the Sleeper tech on its head, changing the energy transfer from a symbiotic\
+    \ function to a vampiric one by providing a boost to energy neutralizer and energy\
+    \ nosferatu equipment."
+  dogma_attributes:
+  - attribute_id: 1376
+    value: 2
+  - attribute_id: 161
+    value: 40
+  - attribute_id: 482
+    value: 50
+  - attribute_id: 1380
+    value: 29986
+  - attribute_id: 1366
+    value: 125
+  - attribute_id: 422
+    value: 3
+  - attribute_id: 2665
+    value: -50
+  - attribute_id: 9
+    value: 40
+  - attribute_id: 1509
+    value: 10
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 4
+    value: 1200000
+  - attribute_id: 277
+    value: 1
+  - attribute_id: 182
+    value: 30539
+  - attribute_id: 1431
+    value: -5
+  - attribute_id: 633
+    value: 1
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 2681
+    value: 10
+  - attribute_id: 1374
+    value: 0
+  - attribute_id: 1375
+    value: 2
+  dogma_effects:
+  - effect_id: 3772
+    is_default: false
+  - effect_id: 3774
+    is_default: false
+  - effect_id: 3811
+    is_default: false
+  - effect_id: 4152
+    is_default: false
+  - effect_id: 4216
+    is_default: false
+  - effect_id: 4217
+    is_default: false
+  - effect_id: 6894
+    is_default: false
+  - effect_id: 6935
+    is_default: false
+  graphic_id: 21509
+  group_id: 958
+  icon_id: 3636
+  market_group_id: 1122
+  mass: 1200000
+  name: "Legion Core - Energy Parasitic Complex"
+  packaged_volume: 40
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 45624
+  volume: 40

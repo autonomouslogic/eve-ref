@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.reactivex.rxjava3.core.Completable;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -61,7 +62,8 @@ public class VariationsDecorator {
 			if (parentTypeId == null) {
 				continue;
 			}
-			addMetaGroupVariation(parentTypeId, parentTypeId, TECH_1_META_GROUP, variations);
+			var parentMetaGroupId = getTypeMetaGroup(parentTypeId);
+			addMetaGroupVariation(parentTypeId, parentTypeId, parentMetaGroupId, variations);
 
 			var metaGroupId = type.getMetaGroupId();
 			if (metaGroupId == null) {
@@ -85,8 +87,9 @@ public class VariationsDecorator {
 							? applicableType
 							: objectMapper.convertValue(
 									types.get(applicableType.getVariationParentTypeId()), InventoryType.class);
+					var parentMetaGroupId = getTypeMetaGroup(parentType.getTypeId());
 					addMetaGroupVariation(
-							parentType.getTypeId(), parentType.getTypeId(), TECH_1_META_GROUP, variations);
+							parentType.getTypeId(), parentType.getTypeId(), parentMetaGroupId, variations);
 					addMetaGroupVariation(parentType.getTypeId(), resultingTypeId, ABYSSAL_META_GROUP, variations);
 				}
 			}
@@ -119,5 +122,12 @@ public class VariationsDecorator {
 		}
 		type.put("type_variations", typeVariationsJson);
 		types.put(typeId, type);
+	}
+
+	private Integer getTypeMetaGroup(long typeId) {
+		return Optional.ofNullable(types.get(typeId))
+				.flatMap(type -> Optional.ofNullable(type.get("meta_group_id")))
+				.map(JsonNode::asInt)
+				.orElse(TECH_1_META_GROUP);
 	}
 }

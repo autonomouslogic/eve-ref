@@ -555,3 +555,445 @@
   published: true
   variationParentTypeID: 2046
   volume: 5
+"45623":
+  description:
+    de: "Dieses Kern-Subsystem besteht aus unzähligen Nanomaschinen, die den Energiefluss\
+      \ des Antimateriereaktors eines Schiffes verbessern, und bietet einem Piloten\
+      \ somit die Möglichkeit, die Kapazität von Stromnetz und Energiespeicher seines\
+      \ Schiffes zu verbessern. Designer von Tech-III-Schiffen hatten von Anfang an\
+      \ Probleme damit, ein modulares Schiff zu entwerfen, dessen grundlegende Ingenieursupgrades\
+      \ nach Bedarf ausgetauscht werden können. Besonders in Hinblick auf die Leistungserhö\
+      hung von Stromnetz und Energiespeicher des Schiffes ohne den Einsatz von Batterien\
+      \ traten Schwierigkeiten auf. Letztendlich konnten durch die Nutzung von Polymeren\
+      \ auf Fullerenbasis Lösungen umgesetzt werden, die es bis zu diesem Zeitpunkt\
+      \ nur in der Theorie gegeben hatte."
+    en: "Comprised of countless nanomachines that enhance the energy flow from a ship's\
+      \ antimatter reactor, this core subsystem offers a pilot the option of increasing\
+      \ the power grid and capacitor capacity of their vessel. Designers of Tech III\
+      \ vessels were initially hampered by the problem of how to design a modular\
+      \ ship that could swap out basic engineering upgrades on a per-need basis. This\
+      \ proved particularly true when it came to reinforcing a vessel's power grid\
+      \ and capacitor banks without the use of batteries. In the end, the provision\
+      \ of nanomachines constructed from fullerene-based polymers allowed for solutions\
+      \ that had only existed in theory up until that point."
+    es: "Compuesto por infinidad de nanomáquinas que mejoran el flujo de energía desde\
+      \ el reactor de antimateria de una nave, este subsistema del núcleo brinda al\
+      \ piloto la posibilidad de aumentar el sistema de potencia y la capacidad del\
+      \ condensador de su nave. Al principio, los diseñadores de naves\_T3 tuvieron\
+      \ que dilucidar cómo diseñar una nave modular que integrase mejoras básicas\
+      \ de ingeniería en función de las necesidades. De hecho, esto es lo que pasó\
+      \ al intentar reforzar el sistema de potencia y los bancos de condensadores\
+      \ de una nave sin emplear baterías. Al final, el uso de nanomáquinas construidas\
+      \ a partir de polímeros basados en fullereno ha dado lugar a soluciones que\
+      \ hasta entonces solo existían en la teoría."
+    fr: "Composé d'un nombre incalculable de nanomachines améliorant le flux d'énergie\
+      \ issu du cœur du réacteur antimatière d'un vaisseau, ce sous-système principal\
+      \ permet au pilote d'augmenter le réseau d'alimentation et la charge de capaciteur\
+      \ de son vaisseau. Au début, les concepteurs des vaisseaux Tech\_III ne parvenaient\
+      \ pas à mettre au point un vaisseau modulaire capable d'utiliser des améliorations\
+      \ d'ingénierie en cas de besoin. Cela était particulièrement vrai au moment\
+      \ d'augmenter le réseau d'alimentation et la taille du capaciteur d'un vaisseau\
+      \ sans utiliser de batterie. En fin de compte, l'approvisionnement en nanomachines\
+      \ en polymères à base de fullerène apporta la solution qui n'existait jusque-là\
+      \ qu'en théorie."
+    ja: "艦船のアンチマターリアクターのエネルギー流量を強化する無数のナノマシンで構成される本コア・サブシステムを使うことで、パイロットは自身の船のパワーグ\
+      リッドとキャパシタ容量を増大可能である。T3艦船の設計者達は当初、基礎的な工学アップグレードを逐次入れ替えできるモジュール型船舶の設計という難問に悩まさ\
+      れていた。特に問題だったのは、バッテリーを使用しない船体のパワーグリッドとキャパシタバンクの補強方法であった。しかしこの課題は当時はあくまで仮説としての\
+      み存在していたフラーレン・ベースのポリマー素材から作られたナノマシンの供給によって解決する。"
+    ru: "Эта центральная подсистема, состоящая из бесчисленных наномашин, повышающ\
+      их эффективность передачи энергии из антиматерийного реактора, позволяет пил\
+      оту повысить мощность реактора и ёмкость накопителя корабля. При создании мо\
+      дульного дизайна, позволяющего по мере необходимости менять комплектацию клю\
+      чевых бортовых систем и пакетов их расширения, разработчики этих кораблей вс\
+      третились с определёнными затруднениями. С особенной яркостью они проявились\
+      \ в вопросе повышения эффективности реактора и увеличения ёмкости накопителя\
+      \ энергии без использования дополнительных батарей. В конце концов появление\
+      \ наномашин на основе фуллеренных полимеров позволило применить решения, до\
+      \ той поры бывшие исключительно теоретическими."
+    zh: "由于这个核心子系统中包含的无数纳米机器人能增加舰船反物质反应堆输出的能量，因此舰船的能量栅格和电容器电容量便能得到增强。如何能够设计出一种模块化的\
+      舰船，使其能够按照需求对工程升级模块进行自由的替换，这个问题在最初一直困扰着三级科技舰船的工程师们。特别是当不使用电池的时候，舰船的能量栅格和电容器组必\
+      定会被加强。最后，由富勒烯聚合物建造的纳米机器的出现让这个问题得到了解决，在那之前这还只存在于理论研究的领域。"
+  graphicID: 21511
+  groupID: 958
+  iconID: 3636
+  marketGroupID: 1122
+  mass: 1200000
+  metaGroupID: 14
+  name:
+    de: "Legion Core - Augmented Antimatter Reactor"
+    en: "Legion Core - Augmented Antimatter Reactor"
+    es: "Núcleo de la Legion: reactor antimateria aumentado"
+    fr: "Legion Nucléus – Réacteur à antimatière augmenté"
+    ja: "レギオン・コア - オーグメンテッド・アンチマターリアクター"
+    ru: "Legion Core - Augmented Antimatter Reactor"
+    zh: "圣卒核心 - 增强反物质反应堆"
+  portionSize: 1
+  published: true
+  raceID: 4
+  sofFactionName: "amarrbase"
+  traits:
+    miscBonuses: []
+    roleBonuses:
+    - bonusText:
+        de: "<b><u>Zusätzliche Basiswerte</b></u>"
+        en: "<b><u>Additional Base Stats</b></u>"
+        es: "<b><u>Estadísticas básicas adicionales</b></u>"
+        fr: "<b><u>Stats de base supplémentaires</b></u>"
+        ja: "<b><u>追加ベース統計</b></u>"
+        ru: "<b><u>Кроме того:</b></u>"
+        zh: "<b><u>附加基础数值</b></u>"
+      importance: 2
+    - bonusText:
+        de: "+1 Mid Slot, +3 Low Slots"
+        en: "+1 Mid Slot, +3 Low Slots"
+        es: "+1 ranura intermedia, +3 ranuras inferiores"
+        fr: "+1 Emplacement intermédiaire, +3 Emplacements inférieurs"
+        ja: "ミッドスロット+1、ロースロット+3"
+        ru: "+1 разъём средней мощности, +3 разъёма малой мощности"
+        zh: "中槽+1，低槽+3"
+      importance: 3
+    - bonusText:
+        de: "+50 GJ Energiespeicherkapazität"
+        en: "+50GJ Capacitor Capacity"
+        es: "+50\_GJ de capacidad del condensador"
+        fr: "Charge de capaciteur +50 GJ"
+        ja: "キャパシタ容量+50GJ"
+        ru: "+50 ГДж ёмкости накопителя"
+        zh: "电容器电容量+50GJ"
+      importance: 4
+    - bonus: 20
+      bonusText:
+        de: "Bonus auf die Stromleistung des Schiffes"
+        en: "bonus to ship power output"
+        es: "de bonificación a la potencia de salida de la nave."
+        fr: "de bonus à la puissance du réseau d'alimentation du vaisseau"
+        ja: "艦船のパワー出力が上昇"
+        ru: "повышается мощность реактора корабля"
+        zh: "舰船能量栅格输出加成"
+      importance: 1
+      unitID: 105
+    types:
+      "30539":
+      - bonus: 3
+        bonusText:
+          de: "Bonus auf die Resistenz gegen Energiekriegsführung"
+          en: "bonus to energy warfare resistance"
+          es: "de bonificación a la resistencia a la guerra de energía."
+          fr: "de bonus à la résistance aux énergies de guerre"
+          ja: "エネルギー戦耐性が増加"
+          ru: "увеличивается сопротивляемость вражескому воздействию на накопитель\
+            \ энергии"
+          zh: "能量战抗性加成"
+        importance: 2
+        unitID: 105
+      - bonus: 5
+        bonusText:
+          de: "Bonus auf die Energiespeicherkapazität"
+          en: "bonus to capacitor capacity"
+          es: "de bonificación a la capacidad del condensador"
+          fr: "de bonus à la charge de capaciteur"
+          ja: "キャパシタ容量が増加"
+          ru: "увеличивается ёмкость накопителя энергии"
+          zh: "电容器电容器量加成"
+        importance: 1
+        unitID: 105
+  volume: 40
+"45622":
+  description:
+    de: "Dieses Subsystem nutzt ein nano-elektromechanisches Zerstreuungsfeld und\
+      \ verbessert dadurch die Sensorsysteme eines Schiffes. Das Subsystem besteht\
+      \ aus einem komplexen System von neurovisuellen Schnittstellen, Steuerimpuls-Automatik\
+      \ sowie Milliarden von fortschrittlichen, molekülgroßen Schaltkreisen und bietet\
+      \ damit sowohl besseren Schutz gegen ECM von Gegnern als auch erhöhte Sensorreichweite\
+      \ und Zielerfassung."
+    en: "This subsystem employs a nano-electromechanical dispersion field to strengthen\
+      \ a vessel's sensor systems. Made from a complex system of neurovisual interlays,\
+      \ automated trigger response units, and billions of advanced molecular-level\
+      \ circuits, the subsystem offers improved protection against hostile ECM as\
+      \ well as improved sensor range and target acquisition speed."
+    es: "Este subsistema emplea un campo de dispersión nanoelectromecánico para fortalecer\
+      \ los sistemas de sensores de la nave. Fabricado a partir de un sistema complejo\
+      \ de interconexiones neurovisuales, unidades de respuesta de disparo automatizadas\
+      \ y miles de millones de circuitos avanzados a nivel molecular, el subsistema\
+      \ ofrece una protección mejorada frente a las contramedidas electrónicas hostiles,\
+      \ además de una velocidad de adquisición de objetivos y un alcance de sensor\
+      \ mejorados."
+    fr: "Ce sous-système utilise un champ de dispersion nano-électromécanique visant\
+      \ à renforcer les systèmes de détection d'un vaisseau. Fabriqué à partir d'un\
+      \ système complexe de sous-couches neurovisuelles, d'unités réactives automatisé\
+      es et de milliards de circuits moléculaires avancés, ce sous-système garantit\
+      \ une protection améliorée contre les CME hostiles ainsi qu'une portée des capteurs\
+      \ et une vitesse d'acquisition des cibles accrues."
+    ja: "このサブシステムは、艦のセンサーシステムを強化するために、ナノエレクトロメカニカル拡散フィールドを採用している。このサブシステムは、神経視覚インタ\
+      ーレイの複雑なシステム、自動化されたトリガー応答ユニット、数十億の高度な分子レベルの回路の複雑なシステムから作られており、敵対的なECMからの保護を向上\
+      させ、センサーの範囲と目標の取得速度を向上させる。"
+    ru: "Наночастотное электромеханическое поле рассеяния, используемое в этой под\
+      системе, повышает эффективность корабельных систем захвата целей. Подсистема\
+      \ состоит из миллиардов высокотехнологичных молекулярных схем, нейровизуальн\
+      ых сетей и автоматических блоков реагирования на условие, усиливающих защиту\
+      \ корабля от помех, наводимых на системы захвата целей, а также повышающих д\
+      альность и скорость действия этих систем."
+    zh: "这个子系统使用纳米机电分散场来加强舰船的感应系统。由神经视觉层、自动触发响应单元和数十亿个先进的分子级电路构成的一个复杂系统组成，提升感应器范围、\
+      目标锁定速度和针对敌对ECM的防护能力。"
+  graphicID: 21510
+  groupID: 958
+  iconID: 3636
+  marketGroupID: 1122
+  mass: 1200000
+  metaGroupID: 14
+  name:
+    de: "Legion Core - Dissolution Sequencer"
+    en: "Legion Core - Dissolution Sequencer"
+    es: "Núcleo de la Legion: secuenciador de disolución"
+    fr: "Legion Nucléus – Séquenceur de dissolution"
+    ja: "レギオン・コア - ディソリューション・シーケンサー"
+    ru: "Legion Core - Dissolution Sequencer"
+    zh: "圣卒核心 - 散解程控装置"
+  portionSize: 1
+  published: true
+  raceID: 4
+  sofFactionName: "amarrbase"
+  traits:
+    miscBonuses: []
+    roleBonuses:
+    - bonusText:
+        de: "<b><u>Zusätzliche Basiswerte</b></u>"
+        en: "<b><u>Additional Base Stats</b></u>"
+        es: "<b><u>Estadísticas básicas adicionales</b></u>"
+        fr: "<b><u>Stats de base supplémentaires</b></u>"
+        ja: "<b><u>追加ベース統計</b></u>"
+        ru: "<b><u>Кроме того:</b></u>"
+        zh: "<b><u>附加基础数值</b></u>"
+      importance: 1
+    - bonusText:
+        de: "+2 Mid Slots, +2 Low Slots"
+        en: "+2 Mid Slots, +2 Low Slots"
+        es: "+2\_ranuras intermedias, +2\_ranuras inferiores"
+        fr: "+2 Emplacements intermédiaires, +2 Emplacements inférieurs"
+        ja: "ミッドスロット+2、ロースロット+2"
+        ru: "+2 разъёма средней мощности, +2 разъёма малой мощности"
+        zh: "中槽+2，低槽+2"
+      importance: 2
+    - bonusText:
+        de: "+1 max. aufgeschaltetes Ziel"
+        en: "+1 max locked target"
+        es: "+1 objetivo fijado máximo"
+        fr: "+1 Cible verrouillée max"
+        ja: "最大ロックターゲット数+1"
+        ru: "+1 к максимуму захваченных целей"
+        zh: "目标锁定数上限+1"
+      importance: 3
+    types:
+      "30539":
+      - bonus: 5
+        bonusText:
+          de: "Bonus auf die maximale Zielerfassungsreichweite"
+          en: "bonus to max targeting range"
+          es: "de bonificación a la distancia-objetivo máxima."
+          fr: "de bonus à la portée maximale du système de ciblage"
+          ja: "最大ターゲット範囲が拡大"
+          ru: "увеличивается максимальная дальность захвата целей"
+          zh: "最大锁定距离加成"
+        importance: 2
+        unitID: 105
+      - bonus: 15
+        bonusText:
+          de: "Bonus auf die Sensorstärke des Schiffs"
+          en: "bonus to ship sensor strength"
+          es: "de bonificación a la intensidad de los sensores de la nave."
+          fr: "de bonus à la puissance de détection du vaisseau"
+          ja: "艦船のセンサー強度が増加"
+          ru: "повышается эффективность системы захвата целей"
+          zh: "舰船感应强度加成"
+        importance: 1
+        unitID: 105
+      - bonus: 15
+        bonusText:
+          de: "Bonus auf die Scanauflösung"
+          en: "bonus to scan resolution"
+          es: "de bonificación a la resolución de escaneo."
+          fr: "de bonus à la résolution du balayage"
+          ja: "スキャン分解能にボーナス"
+          ru: "увеличивается разрешающая способность системы захвата целей"
+          zh: "扫描分辨率加成"
+        importance: 3
+        unitID: 105
+  variationParentTypeID: 45623
+  volume: 40
+"45624":
+  description:
+    de: "Während einer der ersten Konflikte mit ihnen bemerkten Amarr-Ingenieure eine\
+      \ bemerkenswerte Eigenheit der Sleeper-Drohnentechnologie: Die Möglichkeit,\
+      \ Energie untereinander ohne spezielle Ausrüstung zu übertragen. Diese Technologie\
+      \ schien jeder Drohne in gewisser Weise eigen zu sein und obwohl die Ingenieure\
+      \ dieses System nicht für moderne Raumschiffe reproduzieren konnten, waren sie\
+      \ zumindest in der Lage, sie für modulare Geräte von Typ Tech III zu adaptieren.\
+      \ Der parasitäre Energiekomplex stellt die Erfindung der Sleeper jedoch auf\
+      \ den Kopf, denn er verwandelt den Energieübertrag von einer symbiotischen Funktion\
+      \ zu einer vampirischen indem er Energieneutralisierer und Energie-Nosferatus\
+      \ verstärkt."
+    en: "During some of the first conflicts with them, Amarr engineers noticed a remarkable\
+      \ feature in Sleeper drone technology: the ability of drones to transfer power\
+      \ between one another without the need for specialized equipment. This technology\
+      \ seemed to be innate to every drone in some capacity, and while the engineers\
+      \ could not reproduce this system in modern space vessels, they were able to\
+      \ adapt the technology into modular Tech III designs. The energy parasitic complex\
+      \ turns the Sleeper tech on its head, changing the energy transfer from a symbiotic\
+      \ function to a vampiric one by providing a boost to energy neutralizer and\
+      \ energy nosferatu equipment."
+    es: "Durante algunos de los primeros conflictos con ellos, los ingenieros amarrianos\
+      \ se percataron de una característica notable en la tecnología de drones sleepers:\
+      \ la capacidad de los drones para transmitirse potencia entre ellos sin necesidad\
+      \ de ningún equipamiento especializado. Esta tecnología parecía inherente a\
+      \ todos los drones y, aunque los ingenieros no podían reproducir este sistema\
+      \ en naves espaciales modernas, lograron adaptar la tecnología a los diseños\
+      \ de tecnología modular\_T3. El complejo parasitario de energía da la vuelta\
+      \ a la tecnología de los sleepers, lo que cambia la transferencia de energí\
+      a de una función simbiótica a una función vampírica, brindando una mejora al\
+      \ neutralizador energético y nosferatu de energía."
+    fr: "Au cours des premiers conflits qui les ont opposés, les ingénieurs amarr\
+      \ ont remarqué une caractéristique intéressante de la technologie des drones\
+      \ sleeper\_: la capacité des drones à transférer l'énergie entre eux sans é\
+      quipement particulier. Cette technologie semblait innée à tous les drones, et\
+      \ si les ingénieurs ne sont pas parvenus à reproduire ce système dans les vaisseaux\
+      \ spatiaux modernes, ils ont néanmoins réussi à l'adapter aux modèles modulaires\
+      \ Tech\_III. Ce complexe parasite d'énergie inverse la technologie de transfert\
+      \ d'énergie sleeper, en transposant sa vocation symbiotique en fonction vampirique,\
+      \ grâce à l'amplification des capacités d'absorption des neutraliseurs d'énergie\
+      \ et des nosferatu énergétiques."
+    ja: "スリーパードローンとの抗争の初期段階において、特殊な装置を用いることなくドローン間で動力を転送し合うという驚異の技術にアマーのエンジニア達は注目し\
+      ていた。この技術はあらゆるドローンにある程度備わっているようだった。技術者たちはこの技術を現行の宇宙船で再現することはできなかったものの、T3のモジュー\
+      ル設計に応用することに成功した。このエネルギー吸収複合体はスリーパー技術を逆利用したものであり、エネルギーニュートラライザーとエネルギーノスフェラトゥ装\
+      備を強化したことで、共生のためのエネルギー転送はエネルギー吸引に姿を変えている。"
+    ru: "В ходе первых столкновений с дронами Спящих амаррские инженеры отметили о\
+      дну из их особенностей: способность ретранслировать энергию друг другу без и\
+      спользования специализированного оборудования. Эта возможность была в той ил\
+      и иной мере доступна всем дронам; инженерам не удалось воспроизвести её в со\
+      временных кораблях, но соответствующий аппаратный комплекс был, тем не менее\
+      , адаптирован для сменных подсистем кораблей третьей техкатегории. Паразитич\
+      еский комплекс ставит технологии Спящих с ног на голову: вместо обеспечения\
+      \ энергетического «симбиоза» он повышает эффективность устройств паразитной\
+      \ подзарядки и дистанционных нейтрализаторов заряда."
+    zh: "早在最初对冬眠者无人机的几次研究中，艾玛工程师就注意到了它们身上的一项非凡的技术：它们能够在没有专门设备帮助的情况下相互之间传输能量。这种技术似乎\
+      在所有的无人机上都存在，只有量上的区别。尽管工程技术人员没法在现在的普通舰船上重新构造这个系统，但是他们却想出办法将其整合进模块化的三级科技舰船中。能量\
+      寄取复合体完全改变了冬眠者的科技，它通过提升能量中和设备和能量吸取设备的效果，使能量传输方式由共生转变成吸血。"
+  graphicID: 21509
+  groupID: 958
+  iconID: 3636
+  marketGroupID: 1122
+  mass: 1200000
+  metaGroupID: 14
+  name:
+    de: "Legion Core - Energy Parasitic Complex"
+    en: "Legion Core - Energy Parasitic Complex"
+    es: "Núcleo de la Legión: complejo parasitario de energía"
+    fr: "Legion Nucléus – Complexe énergétique parasite"
+    ja: "レギオンコア - エネルギーパラスティック複合施設"
+    ru: "Legion Core - Energy Parasitic Complex"
+    zh: "圣卒核心 - 能量寄取集成体"
+  portionSize: 1
+  published: true
+  raceID: 4
+  sofFactionName: "amarrbase"
+  traits:
+    miscBonuses: []
+    roleBonuses:
+    - bonusText:
+        de: "<b><u>Zusätzliche Basiswerte</b></u>"
+        en: "<b><u>Additional Base Stats</b></u>"
+        es: "<b><u>Estadísticas básicas adicionales</b></u>"
+        fr: "<b><u>Stats de base supplémentaires</b></u>"
+        ja: "<b><u>追加ベース統計</b></u>"
+        ru: "<b><u>Кроме того:</b></u>"
+        zh: "<b><u>附加基础数值</b></u>"
+      importance: 2
+    - bonusText:
+        de: "+2 Mid Slots, +2 Low Slots"
+        en: "+2 Mid Slots, +2 Low Slots"
+        es: "+2\_ranuras intermedias, +2\_ranuras inferiores"
+        fr: "+2 Emplacements intermédiaires, +2 Emplacements inférieurs"
+        ja: "ミッドスロット+2、ロースロット+2"
+        ru: "+2 разъёма средней мощности, +2 разъёма малой мощности"
+        zh: "中槽+2，低槽+2"
+      importance: 3
+    - bonusText:
+        de: "+50 GJ Energiespeicherkapazität"
+        en: "+50GJ Capacitor Capacity"
+        es: "+50\_GJ de capacidad del condensador"
+        fr: "Charge de capaciteur +50 GJ"
+        ja: "キャパシタ容量+50GJ"
+        ru: "+50 ГДж ёмкости накопителя"
+        zh: "电容器电容量+50GJ"
+      importance: 4
+    - bonus: 50
+      bonusText:
+        de: "Reduktion des CPU- und Strombedarfs von <a href=showinfo:3423>Energie-Nosferatu-</a>\
+          \ und <a href=showinfo:3423>Energieneutralisierer-</a>Modulen"
+        en: "reduction in the PWG and CPU requirements for <a href=showinfo:3423>Energy\
+          \ Nosferatu</a> and <a href=showinfo:3423>Energy Neutralizer</a> modules"
+        es: "de reducción de los requisitos de SP y CPU para los módulos de <a href=showinfo:3423>nosferatu\
+          \ de energía</a> y <a href=showinfo:3423>neutralizador energético</a>."
+        fr: "de réduction des prérequis du PWG et du CPU des modules <a href=showinfo:3423>Nosferatu\
+          \ à énergie</a> et <a href=showinfo:3423>neutraliseur d'énergie</a>"
+        ja: "<a href=showinfo:3423>エネルギーノスフェラトゥ</a>と<a href=showinfo:3423>エネルギーニュー\
+          トラライザー</a>モジュールの必要PWGとCPUが減少"
+        ru: "снижается потребность <a href=showinfo:3423>дистанционных нейтрализат\
+          оров заряда</a> и <a href=showinfo:3423>устройств паразитной подзарядки\
+          \ накопителя</a> в мощностях ЦПУ и реактора"
+        zh: "<a href=showinfo:3423>掠能器</a>和<a href=showinfo:3423>能量中和器</a>能量栅格和CPU需\
+          求降低"
+      importance: 1
+      unitID: 105
+    types:
+      "30539":
+      - bonus: 5
+        bonusText:
+          de: "Verringerung des Modulschadens durch Überhitzung"
+          en: "reduction in module damage from overheating"
+          es: "de reducción del daño del módulo por sobrecalentamiento."
+          fr: "de réduction de la détérioration du module suite à la surchauffe"
+          ja: "オーバーヒート時のモジュールダメージを軽減"
+          ru: "уменьшается объём повреждений модулей, получаемых ими при перегрузк\
+            е"
+          zh: "装备过载损伤降低"
+        importance: 3
+        unitID: 105
+      - bonus: 10
+        bonusText:
+          de: "Bonus auf die Transfermenge von <a href=showinfo:3423>Nosferatu-</a>\
+            \ und <a href=showinfo:3423>Energieneutralisierer</a>-Modulen"
+          en: "bonus to <a href=showinfo:3423>Energy Nosferatu</a> and <a href=showinfo:3423>Energy\
+            \ Neutralizer</a> drain amount"
+          es: "de bonificación a la cantidad drenada por el <a href=showinfo:3423>nosferatu\
+            \ de energía</a> y el <a href=showinfo:3423>neutralizador energético</a>."
+          fr: "de bonus au volume d'énergie drainée par les <a href=showinfo:3423>Nosferatu\
+            \ à énergie</a> et les <a href=showinfo:3423>neutraliseurs d'énergie</a>"
+          ja: "<a href=showinfo:3423>エネルギーノスフェラトゥ</a>と<a href=showinfo:3423>エネルギーニ\
+            ュートラライザー</a>の吸収量が増加"
+          ru: "увеличивается пропускная способность <a href=showinfo:3423>устройст\
+            в паразитной подзарядки накопителя</a> и <a href=showinfo:3423>дистанц\
+            ионных нейтрализаторов заряда</a>"
+          zh: "<a href=showinfo:3423>掠能器</a>和<a href=showinfo:3423>能量中和器</a>吸取量加成"
+        importance: 1
+        unitID: 105
+      - bonus: 10
+        bonusText:
+          de: "Bonus auf den Nutzen der Überhitzung von <a href=showinfo:3423>Energie-Nosferatu-</a>\
+            \ und <a href=showinfo:3423>Energieneutralisierer-</a>Modulen"
+          en: "bonus to the benefits of overheating <a href=showinfo:3423>Energy Nosferatu</a>\
+            \ and <a href=showinfo:3423>Energy Neutralizer</a> modules"
+          es: "de bonificación a los beneficios de sobrecalentar los módulos de <a\
+            \ href=showinfo:3423>nosferatu de energía</a> y <a href=showinfo:3423>neutralizador\
+            \ energético</a>."
+          fr: "de bonus aux avantages de la surchauffe des modules <a href=showinfo:3423>Nosferatu\
+            \ à énergie</a> et les <a href=showinfo:3423>neutraliseurs d'énergie</a>"
+          ja: "オーバーヒートした<a href=showinfo:3423>エネルギーノスフェラトゥ</a>と<a href=showinfo:3423>エ\
+            ネルギーニュートラライザー</a>の恩恵にボーナス"
+          ru: "усиливается влияние перегрузки на параметры <a href=showinfo:3423>д\
+            истанционных нейтрализаторов заряда</a> и <a href=showinfo:3423>устрой\
+            ств паразитной подзарядки накопителя</a>"
+          zh: "<a href=showinfo:3423>掠能器</a>和<a href=showinfo:3423>能量中和器</a>过载效果加成"
+        importance: 2
+        unitID: 105
+  variationParentTypeID: 45623
+  volume: 40
