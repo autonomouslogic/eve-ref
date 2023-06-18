@@ -148,6 +148,7 @@
   "required_skills" : {
     "3394" : 1
   },
+  "applicable_mutaplasmid_type_ids" : [ 52225 ],
   "type_variations" : {
     "1" : [ 2046 ],
     "2" : [ 2048 ],

@@ -172,3 +172,17 @@ skills:
       - 3336
       - 33093
       - 33097
+
+units:
+  idField: unit_id
+  model: Unit
+  hoboleaks:
+    file: dogmaunits.json
+    languageAttributes:
+      - name
+      - description
+  test:
+    filePrefix: unit
+    ids:
+      - 1
+      - 2

@@ -31,6 +31,7 @@ import org.h2.mvstore.MVMap;
 public class ImportTestResources implements Command {
 	private static final String TEST_RESOURCES = "src/test/resources";
 	private static final String REFDATA_RESOURCES = TEST_RESOURCES + "/refdata/";
+	private static final String HOBOLEAKS_RESOURCES = REFDATA_RESOURCES + "/hoboleaks/";
 
 	@Inject
 	protected UrlParser urlParser;
@@ -67,7 +68,8 @@ public class ImportTestResources implements Command {
 		return Completable.concatArray(
 				Completable.mergeArray(
 						dataUtil.downloadLatestSde().flatMapCompletable(this::loadSdeResources),
-						dataUtil.downloadLatestEsi().flatMapCompletable(this::loadEsiResources)),
+						dataUtil.downloadLatestEsi().flatMapCompletable(this::loadEsiResources),
+						dataUtil.downloadLatestHoboleaks().flatMapCompletable(this::loadHoboleaksResources)),
 				buildRefData());
 	}
 
@@ -87,6 +89,27 @@ public class ImportTestResources implements Command {
 			var outputFile = new File(REFDATA_RESOURCES + "/" + entry.getName());
 			log.info("Writing {}", outputFile);
 			yamlMapper.writeValue(outputFile, newContent);
+			return Completable.complete();
+		});
+	}
+
+	private Completable loadHoboleaksResources(File file) {
+		return CompressUtil.loadArchive(file).flatMapCompletable(pair -> {
+			var prettyPrinter = objectMapper.writerWithDefaultPrettyPrinter();
+			var entry = pair.getLeft();
+			var config = refDataUtil.getHoboleaksConfigForFilename(entry.getName());
+			if (config == null || config.getHoboleaks() == null) {
+				return Completable.complete();
+			}
+			var content = (ObjectNode) objectMapper.readTree(pair.getRight());
+			var newContent = objectMapper.createObjectNode();
+			for (Long id : config.getTest().getIds()) {
+				var stringId = id.toString();
+				newContent.put(stringId, content.get(stringId));
+			}
+			var outputFile = new File(HOBOLEAKS_RESOURCES + "/" + entry.getName());
+			log.info("Writing {}", outputFile);
+			prettyPrinter.writeValue(outputFile, newContent);
 			return Completable.complete();
 		});
 	}
