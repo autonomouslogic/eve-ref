@@ -1,5 +1,20 @@
 EVE Ref Changelog
 
+## [2.12.0](https://github.com/autonomouslogic/eve-ref/compare/2.11.1...2.12.0) (2023-06-19)
+
+
+### Features
+
+* Blueprints on reference data ([#217](https://github.com/autonomouslogic/eve-ref/issues/217)) ([e741672](https://github.com/autonomouslogic/eve-ref/commit/e741672e6441df329a539de3750e5b21e06f0eea))
+* Type reprocessing reference data ([#219](https://github.com/autonomouslogic/eve-ref/issues/219)) ([073f5b1](https://github.com/autonomouslogic/eve-ref/commit/073f5b1c6d07f6885e2d2565cadcb78c82b5b216))
+* Units on reference data ([#215](https://github.com/autonomouslogic/eve-ref/issues/215)) ([2e4243c](https://github.com/autonomouslogic/eve-ref/commit/2e4243c01f8cbc199b51c59473a4ec48c26772dd))
+
+
+### Bug Fixes
+
+* High is good on dynamic attribute range model ([#216](https://github.com/autonomouslogic/eve-ref/issues/216)) ([13a1269](https://github.com/autonomouslogic/eve-ref/commit/13a12696f0ce33cf009cf007feb3811cc765e9f7))
+* Slack duration reporting ([#214](https://github.com/autonomouslogic/eve-ref/issues/214)) ([71c617c](https://github.com/autonomouslogic/eve-ref/commit/71c617c15bb0b3d8aab17f7bd4e241b60817b724))
+
 ## [2.11.1](https://github.com/autonomouslogic/eve-ref/compare/2.11.0...2.11.1) (2023-06-18)
 
 
