@@ -24,7 +24,7 @@ import org.h2.mvstore.MVMap;
 import org.jetbrains.annotations.NotNull;
 
 @Log4j2
-public class SkillDecorator {
+public class SkillDecorator implements PostDecorator {
 	private static final int SKILL_CATEGORY_ID = 16;
 	private static final Map<String, Integer> ATTRIBUTE_ID_MAP =
 			Map.of("intelligence", 1, "charisma", 2, "perception", 3, "memory", 4, "willpower", 5);

@@ -507,14 +507,19 @@ components:
         icon_id:
           type: integer
           format: int64
+        group_ids:
+          type: array
+          items:
+            type: integer
+            format: int32
       description: An inventory category
     InventoryGroup:
       type: object
       properties:
-        category_id:
+        group_id:
           type: integer
           format: int64
-        group_id:
+        category_id:
           type: integer
           format: int64
         icon_id:
@@ -534,6 +539,11 @@ components:
           type: boolean
         use_base_price:
           type: boolean
+        type_ids:
+          type: array
+          items:
+            type: integer
+            format: int64
       description: An inventory group
     InventoryType:
       type: object
