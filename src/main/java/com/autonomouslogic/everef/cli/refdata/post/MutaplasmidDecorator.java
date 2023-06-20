@@ -23,7 +23,7 @@ import org.h2.mvstore.MVMap;
  *
  */
 @Log4j2
-public class MutaplasmidDecorator {
+public class MutaplasmidDecorator implements PostDecorator {
 	@Inject
 	protected ObjectMapper objectMapper;
 

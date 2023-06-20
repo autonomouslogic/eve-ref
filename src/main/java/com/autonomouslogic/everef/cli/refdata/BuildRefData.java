@@ -6,8 +6,10 @@ import com.autonomouslogic.everef.cli.Command;
 import com.autonomouslogic.everef.cli.refdata.esi.EsiLoader;
 import com.autonomouslogic.everef.cli.refdata.hoboleaks.HoboleaksLoader;
 import com.autonomouslogic.everef.cli.refdata.post.BlueprintDecorator;
+import com.autonomouslogic.everef.cli.refdata.post.GroupsDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.MutaplasmidDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.SkillDecorator;
+import com.autonomouslogic.everef.cli.refdata.post.TypesDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.VariationsDecorator;
 import com.autonomouslogic.everef.cli.refdata.sde.SdeLoader;
 import com.autonomouslogic.everef.config.Configs;
@@ -35,6 +37,7 @@ import java.time.Duration;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
@@ -100,16 +103,22 @@ public class BuildRefData implements Command {
 	protected Provider<RefDataMerger> refDataMergerProvider;
 
 	@Inject
-	protected Provider<SkillDecorator> skillDecoratorProvider;
+	protected SkillDecorator skillDecorator;
 
 	@Inject
-	protected Provider<MutaplasmidDecorator> mutiplasmidDecoratorProvider;
+	protected MutaplasmidDecorator mutaplasmidDecorator;
 
 	@Inject
-	protected Provider<VariationsDecorator> variationsDecoratorProvider;
+	protected VariationsDecorator variationsDecorator;
 
 	@Inject
-	protected Provider<BlueprintDecorator> blueprintDecoratorProvider;
+	protected BlueprintDecorator blueprintDecorator;
+
+	@Inject
+	protected GroupsDecorator groupsDecorator;
+
+	@Inject
+	protected TypesDecorator typesDecorator;
 
 	@Setter
 	@NonNull
@@ -170,6 +179,13 @@ public class BuildRefData implements Command {
 			sdeLoader.setStoreHandler(storeHandler);
 			esiLoader.setStoreHandler(storeHandler);
 			hoboleaksLoader.setStoreHandler(storeHandler);
+
+			skillDecorator.setStoreHandler(storeHandler);
+			mutaplasmidDecorator.setStoreHandler(storeHandler);
+			variationsDecorator.setStoreHandler(storeHandler);
+			blueprintDecorator.setStoreHandler(storeHandler);
+			groupsDecorator.setStoreHandler(storeHandler);
+			typesDecorator.setStoreHandler(storeHandler);
 		});
 	}
 
@@ -185,11 +201,17 @@ public class BuildRefData implements Command {
 	}
 
 	private Completable postDatasets() {
-		return Completable.defer(() -> Completable.concatArray(
-				skillDecoratorProvider.get().setStoreHandler(storeHandler).create(),
-				mutiplasmidDecoratorProvider.get().setStoreHandler(storeHandler).create(),
-				variationsDecoratorProvider.get().setStoreHandler(storeHandler).create(),
-				blueprintDecoratorProvider.get().setStoreHandler(storeHandler).create()));
+		return Completable.concatArray(List.of(
+						skillDecorator,
+						mutaplasmidDecorator,
+						variationsDecorator,
+						blueprintDecorator,
+						groupsDecorator,
+						typesDecorator)
+				.stream()
+				.map(e -> e.create())
+				.toList()
+				.toArray(new Completable[0]));
 	}
 
 	public Completable closeMvStore() {

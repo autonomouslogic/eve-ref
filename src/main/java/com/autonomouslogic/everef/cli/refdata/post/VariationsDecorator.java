@@ -24,7 +24,7 @@ import org.h2.mvstore.MVMap;
  *
  */
 @Log4j2
-public class VariationsDecorator {
+public class VariationsDecorator implements PostDecorator {
 	private static final int TECH_1_META_GROUP = 1;
 	private static final int ABYSSAL_META_GROUP = 15;
 

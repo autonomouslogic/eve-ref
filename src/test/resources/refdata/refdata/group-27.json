@@ -1,0 +1,19 @@
+{
+  "anchorable" : false,
+  "anchored" : false,
+  "category_id" : 6,
+  "fittable_non_singleton" : false,
+  "name" : {
+    "de" : "Schlachtschiff",
+    "en" : "Battleship",
+    "es" : "Acorazado",
+    "fr" : "Cuirassé",
+    "ja" : "戦艦",
+    "ru" : "Линкор",
+    "zh" : "战列舰"
+  },
+  "published" : true,
+  "use_base_price" : false,
+  "group_id" : 27,
+  "type_ids" : [ 645 ]
+}

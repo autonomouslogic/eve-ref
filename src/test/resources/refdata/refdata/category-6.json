@@ -9,5 +9,6 @@
     "zh" : "舰船"
   },
   "published" : true,
-  "category_id" : 6
+  "category_id" : 6,
+  "group_ids" : [ 27 ]
 }
