@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {TraitBonus, TraitBonusFromJSON} from "~/refdata-openapi";
+import {TraitBonus} from "~/refdata-openapi";
 import LinkParser from "~/components/helpers/LinkParser.vue";
 
 const {locale} = useI18n();
