@@ -3,8 +3,8 @@ import refdataApi from "~/refdata";
 import Currency from "~/components/helpers/Currency.vue";
 import {InventoryGroup, InventoryType} from "~/refdata-openapi";
 import Traits from "~/components/types/traits/Traits.vue";
-import TypeCategory from "~/components/types/TypeCategory.vue";
-import TypeGroup from "~/components/types/TypeGroup.vue";
+import CategoryLink from "~/components/types/CategoryLink.vue";
+import GroupLink from "~/components/types/GroupLink.vue";
 
 const {locale} = useI18n();
 const route = useRoute();
@@ -22,8 +22,8 @@ const inventoryGroup: InventoryGroup = await refdataApi.getGroup({groupId: inven
   <div>
     <h1>{{ inventoryType.name[locale] }}</h1>
     <p>
-      <TypeCategory :categoryId="inventoryGroup.categoryId"></TypeCategory> &gt;
-      <TypeGroup :groupId="inventoryType.groupId"></TypeGroup>
+      <CategoryLink :categoryId="inventoryGroup.categoryId"></CategoryLink> &gt;
+      <GroupLink :groupId="inventoryType.groupId"></GroupLink>
     </p>
     <img :src="`https://images.evetech.net/types/${inventoryType.typeId}/icon`" alt="">
 

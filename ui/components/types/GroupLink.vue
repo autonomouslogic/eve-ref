@@ -12,5 +12,10 @@ const group: InventoryGroup = await refdataApi.getGroup({groupId});
 </script>
 
 <template>
-  <a href="/groups/{{ group.groupId }}">{{ group.name[locale] }}</a>
+  <NuxtLink
+    v-if="group"
+    class="underline hover:underline-offset-4 font-bold text-blue-500 hover:text-blue-700"
+    :to="`/groups/${groupId}`">
+    {{ group.name[locale] }}
+  </NuxtLink>
 </template>
