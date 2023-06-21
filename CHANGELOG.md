@@ -1,5 +1,12 @@
 EVE Ref Changelog
 
+## [2.13.0](https://github.com/autonomouslogic/eve-ref/compare/2.12.0...2.13.0) (2023-06-21)
+
+
+### Features
+
+* Simple inventory category and group pages ([#221](https://github.com/autonomouslogic/eve-ref/issues/221)) ([413eb9b](https://github.com/autonomouslogic/eve-ref/commit/413eb9b0bc7d8b9f986f334db19369cad7b42395))
+
 ## [2.12.0](https://github.com/autonomouslogic/eve-ref/compare/2.11.1...2.12.0) (2023-06-19)
 
 
