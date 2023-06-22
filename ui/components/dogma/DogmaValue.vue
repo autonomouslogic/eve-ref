@@ -13,6 +13,9 @@ const attribute = await refdataApi.getDogmaAttribute({attributeId});
 </script>
 
 <template>
-  <UnitValue v-if="attribute.unitId" :value="value" :unit-id="attribute.unitId" />
-  <span v-else>{{ value }}</span>
+  <template v-if="attribute">
+    <UnitValue v-if="attribute.unitId" :value="value" :unit-id="attribute.unitId" />
+    <span v-else>{{ value }}</span>
+  </template>
+  <span v-else>Unknown dogma attribute {{attributeId}}</span>
 </template>

@@ -12,5 +12,8 @@ const unit = await refdataApi.getUnit({unitId});
 </script>
 
 <template>
-  {{ value }} {{ unit.displayName }}
+  <template v-if="unit">
+    {{ value }} {{ unit.displayName }}
+  </template>
+  <span v-else>Unknown unit ID {{unitId}}</span>
 </template>
