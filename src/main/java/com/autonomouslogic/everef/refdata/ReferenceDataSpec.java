@@ -202,14 +202,14 @@ public interface ReferenceDataSpec {
 	List<Integer> getAllUnits();
 
 	@GET
-	@Path("/units/{units_id}")
+	@Path("/units/{unit_id}")
 	@Operation
 	@ApiResponse(
 			responseCode = "200",
 			description = "The unit.",
 			useReturnTypeSchema = true,
 			content = @Content(mediaType = "application/json"))
-	Unit getUnit(@PathParam("units_id") int unitId);
+	Unit getUnit(@PathParam("unit_id") int unitId);
 
 	@GET
 	@Path("/blueprints")
