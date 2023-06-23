@@ -33,5 +33,12 @@ const inventoryGroup: InventoryGroup = await refdataApi.getGroup({groupId: inven
       <currency :price="inventoryType.basePrice"></currency>
     </p>
     <Traits :traits="inventoryType.traits"></Traits>
+
+    <h2>Dogma values</h2>
+    <ul>
+      <li v-for="attributeValue in inventoryType.dogmaAttributes">
+        <DogmaAttributeValue :value="attributeValue.value" :attribute-id="attributeValue.attributeId" />
+      </li>
+    </ul>
   </div>
 </template>
