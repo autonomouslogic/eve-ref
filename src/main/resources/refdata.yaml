@@ -118,6 +118,7 @@ typeMaterials:
 
 typeDogma:
   outputStore: types
+  dedicatedOutput: false
   sde:
     file: sde/fsd/typeDogma.yaml
     arrayToObjects:
