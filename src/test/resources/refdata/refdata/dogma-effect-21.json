@@ -17,12 +17,6 @@
     "modified_attribute_id" : 263,
     "modifying_attribute_id" : 72,
     "operator" : 2
-  }, {
-    "domain" : "shipID",
-    "func" : "ItemModifier",
-    "modified_attribute_id" : 263,
-    "modifying_attribute_id" : 72,
-    "operator" : 2
   } ],
   "description" : {
     "en" : ""
