@@ -1,0 +1,16 @@
+{
+  "description" : {
+    "en" : ""
+  },
+  "discharge_attribute_id" : 6,
+  "display_name" : {
+    "en" : ""
+  },
+  "duration_attribute_id" : 73,
+  "effect_category" : 2,
+  "effect_id" : 6184,
+  "falloff_attribute_id" : 2044,
+  "is_assistance" : true,
+  "name" : "shipModuleRemoteCapacitorTransmitter",
+  "range_attribute_id" : 54
+}

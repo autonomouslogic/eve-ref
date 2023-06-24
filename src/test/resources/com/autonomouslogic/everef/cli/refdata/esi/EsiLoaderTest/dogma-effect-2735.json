@@ -1,0 +1,20 @@
+{
+  "description" : {
+    "en" : "Automatically generated effect"
+  },
+  "display_name" : {
+    "en" : "Armor Hitpoint Penalty"
+  },
+  "effect_category" : 0,
+  "effect_id" : 2735,
+  "icon_id" : 1383,
+  "modifiers" : [ {
+    "domain" : "shipID",
+    "func" : "ItemModifier",
+    "modified_attribute_id" : 265,
+    "modifying_attribute_id" : 1141,
+    "operator" : 6
+  } ],
+  "name" : "boosterArmorHpPenalty",
+  "published" : true
+}

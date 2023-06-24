@@ -1,0 +1,23 @@
+{
+  "description" : {
+    "en" : "Attempts to prevent the target from warping."
+  },
+  "discharge_attribute_id" : 6,
+  "display_name" : {
+    "en" : "Warp Scramble"
+  },
+  "duration_attribute_id" : 505,
+  "effect_category" : 2,
+  "effect_id" : 563,
+  "is_offensive" : true,
+  "modifiers" : [ {
+    "domain" : "targetID",
+    "func" : "ItemModifier",
+    "modified_attribute_id" : 104,
+    "modifying_attribute_id" : 105,
+    "operator" : 2
+  } ],
+  "name" : "warpScrambleForEntity",
+  "published" : true,
+  "range_attribute_id" : 103
+}

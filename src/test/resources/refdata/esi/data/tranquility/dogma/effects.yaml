@@ -50,3 +50,132 @@
   name: "projectileFired"
   range_attribute_id: 54
   tracking_speed_attribute_id: 160
+"47":
+  description: ""
+  discharge_attribute_id: 6
+  display_name: ""
+  duration_attribute_id: 73
+  effect_category: 2
+  effect_id: 47
+  name: "cargoScan"
+  range_attribute_id: 126
+"157":
+  description: ""
+  display_name: ""
+  effect_category: 0
+  effect_id: 157
+  icon_id: 0
+  modifiers:
+  - domain: "shipID"
+    func: "LocationRequiredSkillModifier"
+    modified_attribute_id: 64
+    modifying_attribute_id: 292
+    operator: 6
+  name: "largeHybridTurretDamageMultiplierBonusPostPercentDamageMultiplierLocationShipModulesRequiringLargeHybridTurret"
+"563":
+  description: "Attempts to prevent the target from warping."
+  discharge_attribute_id: 6
+  display_name: "Warp Scramble"
+  duration_attribute_id: 505
+  effect_category: 2
+  effect_id: 563
+  is_offensive: true
+  modifiers:
+  - domain: "targetID"
+    func: "ItemModifier"
+    modified_attribute_id: 104
+    modifying_attribute_id: 105
+    operator: 2
+  name: "warpScrambleForEntity"
+  published: true
+  range_attribute_id: 103
+"1878":
+  description: ""
+  display_name: ""
+  duration_attribute_id: 943
+  effect_category: 2
+  effect_id: 1878
+  falloff_attribute_id: 950
+  is_offensive: true
+  modifiers:
+  - domain: "targetID"
+    func: "ItemModifier"
+    modified_attribute_id: 76
+    modifying_attribute_id: 237
+    operator: 4
+  - domain: "targetID"
+    func: "ItemModifier"
+    modified_attribute_id: 79
+    modifying_attribute_id: 242
+    operator: 4
+  - domain: "targetID"
+    func: "ItemModifier"
+    modified_attribute_id: 192
+    modifying_attribute_id: 235
+    operator: 2
+  - domain: "targetID"
+    func: "ItemModifier"
+    modified_attribute_id: 564
+    modifying_attribute_id: 565
+    operator: 0
+  name: "entitySensorDampen"
+  range_attribute_id: 938
+  range_chance: true
+"2735":
+  description: "Automatically generated effect"
+  display_name: "Armor Hitpoint Penalty"
+  effect_category: 0
+  effect_id: 2735
+  icon_id: 1383
+  modifiers:
+  - domain: "shipID"
+    func: "ItemModifier"
+    modified_attribute_id: 265
+    modifying_attribute_id: 1141
+    operator: 6
+  name: "boosterArmorHpPenalty"
+  published: true
+"5928":
+  description: ""
+  discharge_attribute_id: 6
+  display_name: "Warp Scramble"
+  duration_attribute_id: 505
+  effect_category: 2
+  effect_id: 5928
+  is_offensive: true
+  modifiers:
+  - domain: "targetID"
+    func: "ItemModifier"
+    modified_attribute_id: 104
+    modifying_attribute_id: 105
+    operator: 2
+  - domain: "targetID"
+    func: "LocationRequiredSkillModifier"
+    modified_attribute_id: 1349
+    modifying_attribute_id: 1350
+    operator: 2
+  - domain: "target"
+    effect_id: 6441
+    func: "EffectStopper"
+  - domain: "target"
+    effect_id: 6442
+    func: "EffectStopper"
+  - domain: "targetID"
+    func: "LocationRequiredSkillModifier"
+    modified_attribute_id: 1349
+    modifying_attribute_id: 1350
+    operator: 2
+  name: "warpScrambleTargetMWDBlockActivationForEntity"
+  published: true
+  range_attribute_id: 103
+"6184":
+  description: ""
+  discharge_attribute_id: 6
+  display_name: ""
+  duration_attribute_id: 73
+  effect_category: 2
+  effect_id: 6184
+  falloff_attribute_id: 2044
+  is_assistance: true
+  name: "shipModuleRemoteCapacitorTransmitter"
+  range_attribute_id: 54

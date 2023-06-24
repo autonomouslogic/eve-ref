@@ -1,0 +1,19 @@
+{
+  "description" : {
+    "en" : ""
+  },
+  "display_name" : {
+    "en" : ""
+  },
+  "effect_category" : 0,
+  "effect_id" : 157,
+  "icon_id" : 0,
+  "modifiers" : [ {
+    "domain" : "shipID",
+    "func" : "LocationRequiredSkillModifier",
+    "modified_attribute_id" : 64,
+    "modifying_attribute_id" : 292,
+    "operator" : 6
+  } ],
+  "name" : "largeHybridTurretDamageMultiplierBonusPostPercentDamageMultiplierLocationShipModulesRequiringLargeHybridTurret"
+}

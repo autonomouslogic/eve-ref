@@ -1,0 +1,46 @@
+{
+  "disallow_auto_repeat" : false,
+  "discharge_attribute_id" : 6,
+  "distribution" : 1,
+  "duration_attribute_id" : 505,
+  "effect_category" : 2,
+  "effect_id" : 563,
+  "effect_name" : "warpScrambleForEntity",
+  "electronic_chance" : false,
+  "guid" : "effects.WarpScramble",
+  "is_assistance" : false,
+  "is_offensive" : true,
+  "is_warp_safe" : false,
+  "npc_usage_chance_attribute_id" : 504,
+  "propulsion_chance" : false,
+  "published" : true,
+  "range_attribute_id" : 103,
+  "range_chance" : false,
+  "description" : {
+    "de" : "Versucht, das Ziel vom Warpen abzuhalten.",
+    "en" : "Attempts to prevent the target from warping.",
+    "es" : "Intenta impedir que el objetivo warpee.",
+    "fr" : "Essaie d'empêcher la cible de warper.",
+    "ja" : "ターゲットのワープ阻止を試みる。",
+    "ko" : "타겟의 워프를 막기 위한 시도입니다.",
+    "ru" : "Attempts to prevent the target from warping.",
+    "zh" : "阻止目标进行跃迁。"
+  },
+  "display_name" : {
+    "de" : "Warp Scramble",
+    "en" : "Warp Scramble",
+    "es" : "Distorsión de warp",
+    "fr" : "Inhibition de warp",
+    "ja" : "ワープスクランブル",
+    "ko" : "워프 스크램블",
+    "ru" : "Warp Scramble",
+    "zh" : "跃迁干扰"
+  },
+  "modifiers" : [ {
+    "domain" : "targetID",
+    "func" : "ItemModifier",
+    "modified_attribute_id" : 104,
+    "modifying_attribute_id" : 105,
+    "operator" : 2
+  } ]
+}

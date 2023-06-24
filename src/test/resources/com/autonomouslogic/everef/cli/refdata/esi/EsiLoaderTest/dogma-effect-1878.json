@@ -1,0 +1,41 @@
+{
+  "description" : {
+    "en" : ""
+  },
+  "display_name" : {
+    "en" : ""
+  },
+  "duration_attribute_id" : 943,
+  "effect_category" : 2,
+  "effect_id" : 1878,
+  "falloff_attribute_id" : 950,
+  "is_offensive" : true,
+  "modifiers" : [ {
+    "domain" : "targetID",
+    "func" : "ItemModifier",
+    "modified_attribute_id" : 76,
+    "modifying_attribute_id" : 237,
+    "operator" : 4
+  }, {
+    "domain" : "targetID",
+    "func" : "ItemModifier",
+    "modified_attribute_id" : 79,
+    "modifying_attribute_id" : 242,
+    "operator" : 4
+  }, {
+    "domain" : "targetID",
+    "func" : "ItemModifier",
+    "modified_attribute_id" : 192,
+    "modifying_attribute_id" : 235,
+    "operator" : 2
+  }, {
+    "domain" : "targetID",
+    "func" : "ItemModifier",
+    "modified_attribute_id" : 564,
+    "modifying_attribute_id" : 565,
+    "operator" : 0
+  } ],
+  "name" : "entitySensorDampen",
+  "range_attribute_id" : 938,
+  "range_chance" : true
+}
