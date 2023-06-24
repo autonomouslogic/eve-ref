@@ -1,5 +1,17 @@
 EVE Ref Changelog
 
+## [2.14.0](https://github.com/autonomouslogic/eve-ref/compare/2.13.0...2.14.0) (2023-06-24)
+
+
+### Features
+
+* Dogma attribute types, values, and units on types ([#223](https://github.com/autonomouslogic/eve-ref/issues/223)) ([2e7d154](https://github.com/autonomouslogic/eve-ref/commit/2e7d154d0421939cbe829f3be3b489a055f098f8))
+
+
+### Documentation
+
+* New Hoboleaks SDE files ([4eb7846](https://github.com/autonomouslogic/eve-ref/commit/4eb784626daff2c0f3434aadc4fc28f1c9d5c851))
+
 ## [2.13.0](https://github.com/autonomouslogic/eve-ref/compare/2.12.0...2.13.0) (2023-06-21)
 
 
