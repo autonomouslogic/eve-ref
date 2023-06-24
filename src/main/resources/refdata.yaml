@@ -100,11 +100,17 @@ typeMaterials:
   outputStore: types
   dedicatedOutput: false
   sde:
+    file: sde/fsd/typeMaterials.yaml
     renames:
       materials: type_materials
     arrayToObjects:
       type_materials: material_type_id
-    file: sde/fsd/typeMaterials.yaml
+  hoboleaks:
+    file: typematerials.json
+    renames:
+      materials: type_materials
+    arrayToObjects:
+      type_materials: material_type_id
   test:
     filePrefix: type
     ids:
