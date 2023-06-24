@@ -1,0 +1,52 @@
+---
+"4":
+  description: ""
+  discharge_attribute_id: 6
+  display_name: ""
+  duration_attribute_id: 73
+  effect_category: 1
+  effect_id: 4
+  is_warp_safe: true
+  name: "shieldBoosting"
+"11":
+  description: "Requires a low power slot"
+  display_name: "Low power"
+  effect_category: 0
+  effect_id: 11
+  icon_id: 295
+  name: "loPower"
+  published: true
+"18":
+  description: ""
+  discharge_attribute_id: 6
+  display_name: ""
+  duration_attribute_id: 73
+  effect_category: 2
+  effect_id: 18
+  is_assistance: true
+  name: "shieldTransfer"
+  range_attribute_id: 87
+"21":
+  description: ""
+  display_name: ""
+  effect_category: 4
+  effect_id: 21
+  modifiers:
+  - domain: "shipID"
+    func: "ItemModifier"
+    modified_attribute_id: 263
+    modifying_attribute_id: 72
+    operator: 2
+  name: "shieldCapacityBonusOnline"
+"34":
+  description: ""
+  discharge_attribute_id: 6
+  display_name: ""
+  duration_attribute_id: 51
+  effect_category: 2
+  effect_id: 34
+  falloff_attribute_id: 158
+  is_offensive: true
+  name: "projectileFired"
+  range_attribute_id: 54
+  tracking_speed_attribute_id: 160

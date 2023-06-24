@@ -1,0 +1,17 @@
+{
+  "description" : {
+    "en" : ""
+  },
+  "discharge_attribute_id" : 6,
+  "display_name" : {
+    "en" : ""
+  },
+  "duration_attribute_id" : 51,
+  "effect_category" : 2,
+  "effect_id" : 34,
+  "falloff_attribute_id" : 158,
+  "is_offensive" : true,
+  "name" : "projectileFired",
+  "range_attribute_id" : 54,
+  "tracking_speed_attribute_id" : 160
+}

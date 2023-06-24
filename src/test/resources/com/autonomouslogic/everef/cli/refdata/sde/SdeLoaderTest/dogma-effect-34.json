@@ -1,0 +1,20 @@
+{
+  "disallow_auto_repeat" : false,
+  "discharge_attribute_id" : 6,
+  "distribution" : 2,
+  "duration_attribute_id" : 51,
+  "effect_category" : 2,
+  "effect_id" : 34,
+  "effect_name" : "projectileFired",
+  "electronic_chance" : false,
+  "falloff_attribute_id" : 158,
+  "guid" : "effects.ProjectileFired",
+  "is_assistance" : false,
+  "is_offensive" : true,
+  "is_warp_safe" : false,
+  "propulsion_chance" : false,
+  "published" : false,
+  "range_attribute_id" : 54,
+  "range_chance" : false,
+  "tracking_speed_attribute_id" : 160
+}

@@ -31,6 +31,8 @@ Some example paths:
 * <https://ref-data.everef.net/meta_group/6>
 * <https://ref-data.everef.net/dogma_attributes>
 * <https://ref-data.everef.net/dogma_attributes/37>
+* <https://ref-data.everef.net/dogma_effects>
+* <https://ref-data.everef.net/dogma_effects/11>
 * <https://ref-data.everef.net/skills>
 * <https://ref-data.everef.net/skills/3336>
 * <https://ref-data.everef.net/mutaplasmids>
@@ -74,7 +76,7 @@ This table show the available data and where to get it.
 | Dbuffs                        |                     |                                        |                                 | `dbuffs.json`                       |
 | Dogma attributes categories   |                     | `fsd/dogmaAttributeCategories.yaml`    |                                 |                                     |
 | Dogma attributes              | `/dogma_attributes` | `fsd/dogmaAttributes.yaml`             | `dogma/attributes.yaml`         | `localization_dgmattributes.json`   |
-| Dogma effects                 |                     | `fsd/dogmaEffects.yaml`                | `dogma/effects.yaml`            |                                     |
+| Dogma effects                 | `/dogma_effects`    | `fsd/dogmaEffects.yaml`                | `dogma/effects.yaml`            |                                     |
 | Dogma expressions             |                     |                                        |                                 |                                     |
 | Dogma type attributes         | `/types`            | `fsd/typeDogma.yaml`                   | `universe/types.yaml`           |                                     |
 | Dogma type effects            |                     | `fsd/typeDogma.yaml`                   | `universe/types.yaml`           |                                     |

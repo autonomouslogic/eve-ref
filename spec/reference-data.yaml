@@ -119,6 +119,41 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/DogmaAttribute'
+  /dogma_effects:
+    get:
+      tags:
+      - refdata
+      description: Get all dogma effect IDs.
+      operationId: getAllDogmaEffects
+      responses:
+        "200":
+          description: Dogma effect IDs.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: integer
+                  format: int32
+  /dogma_effects/{effect_id}:
+    get:
+      tags:
+      - refdata
+      operationId: getDogmaEffect
+      parameters:
+      - name: effect_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: The dogma effect.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DogmaEffect'
   /groups:
     get:
       tags:
@@ -473,6 +508,70 @@ components:
         unit_id:
           type: integer
           format: int32
+    DogmaEffect:
+      type: object
+      properties:
+        effect_id:
+          type: integer
+          format: int32
+        name:
+          type: string
+        display_name:
+          type: object
+          additionalProperties:
+            type: string
+        description:
+          type: object
+          additionalProperties:
+            type: string
+        disallow_auto_repeat:
+          type: boolean
+        effect_category:
+          type: integer
+          format: int32
+        effect_name:
+          type: string
+        electronic_chance:
+          type: boolean
+        guid:
+          type: string
+        discharge_attribute_id:
+          type: integer
+          format: int32
+        duration_attribute_id:
+          type: integer
+          format: int32
+        falloff_attribute_id:
+          type: integer
+          format: int32
+        range_attribute_id:
+          type: integer
+          format: int32
+        tracking_speed_attribute_id:
+          type: integer
+          format: int32
+        distribution:
+          type: integer
+          format: int32
+        icon_id:
+          type: integer
+          format: int32
+        is_assistance:
+          type: boolean
+        is_offensive:
+          type: boolean
+        is_warp_safe:
+          type: boolean
+        propulsion_chance:
+          type: boolean
+        published:
+          type: boolean
+        range_chance:
+          type: boolean
+        modifiers:
+          type: array
+          items:
+            $ref: '#/components/schemas/ModifierInfo'
     DogmaTypeAttribute:
       type: object
       properties:
@@ -769,6 +868,25 @@ components:
           additionalProperties:
             type: string
       description: A meta group
+    ModifierInfo:
+      type: object
+      properties:
+        domain:
+          type: string
+        func:
+          type: string
+        group_id:
+          type: integer
+          format: int32
+        modified_attribute_id:
+          type: integer
+          format: int32
+        modifying_attribute_id:
+          type: integer
+          format: int32
+        operator:
+          type: integer
+          format: int32
     Mutaplasmid:
       type: object
       properties:

@@ -39,6 +39,9 @@ public class SdeLoader {
 	@Inject
 	protected Provider<BlueprintTransformer> blueprintTransformerProvider;
 
+	@Inject
+	protected Provider<SdeDogmaEffectTransformer> sdDogmaEffectTransformerProvider;
+
 	@Setter
 	@NonNull
 	private StoreHandler storeHandler;
@@ -66,6 +69,10 @@ public class SdeLoader {
 									break;
 								case "blueprints":
 									transformer = TransformUtil.concat(transformer, blueprintTransformerProvider.get());
+									break;
+								case "dogmaEffects":
+									transformer =
+											TransformUtil.concat(transformer, sdDogmaEffectTransformerProvider.get());
 									break;
 							}
 							storeLoader.setTransformer(TransformUtil.concat(fieldRenamer, transformer));
