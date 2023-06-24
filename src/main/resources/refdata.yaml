@@ -74,6 +74,7 @@ types:
   test:
     filePrefix: type
     ids:
+      - 189
       - 645
       - 3336
       - 3327
@@ -107,6 +108,19 @@ typeMaterials:
   test:
     filePrefix: type
     ids:
+      - 645
+
+typeDogma:
+  outputStore: types
+  sde:
+    file: sde/fsd/typeDogma.yaml
+    arrayToObjects:
+      dogma_attributes: attribute_id
+      dogma_effects: effect_id
+  test:
+    filePrefix: type
+    ids:
+      - 189
       - 645
 
 dogmaAttributes:

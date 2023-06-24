@@ -1,4 +1,65 @@
 ---
+"189":
+  capacity: 0
+  description: "Munition de projectile intermédiaire. Cette munition très apprécié\
+    e des pilotes minmatar est incendiaire et dispose d'un grand pouvoir de pénétration.\
+    \ Faites bien attention en la manipulant si vous ne voulez pas vous réveiller\
+    \ avec une oreille supplémentaire au beau milieu du front.\n\nAugmente de 20 %\
+    \ la vitesse de poursuite."
+  dogma_attributes:
+  - attribute_id: 128
+    value: 2
+  - attribute_id: 161
+    value: 0.0125
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 612
+    value: 0
+  - attribute_id: 613
+    value: 0
+  - attribute_id: 422
+    value: 1
+  - attribute_id: 137
+    value: 55
+  - attribute_id: 779
+    value: 1
+  - attribute_id: 114
+    value: 0
+  - attribute_id: 116
+    value: 6
+  - attribute_id: 117
+    value: 4
+  - attribute_id: 118
+    value: 6
+  - attribute_id: 120
+    value: 1
+  - attribute_id: 244
+    value: 1.2
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 124
+    value: 4612441
+  - attribute_id: 4
+    value: 1
+  dogma_effects:
+  - effect_id: 596
+    is_default: false
+  - effect_id: 600
+    is_default: false
+  - effect_id: 1173
+    is_default: false
+  graphic_id: 1293
+  group_id: 83
+  icon_id: 1293
+  market_group_id: 112
+  mass: 1
+  name: "Uranium appauvri M"
+  packaged_volume: 0.0125
+  portion_size: 100
+  published: true
+  radius: 1
+  type_id: 189
+  volume: 0.0125
 "645":
   capacity: 750
   description: "Le Dominix est un vétéran du front, qui déjà s'illustrait à l'époque\
