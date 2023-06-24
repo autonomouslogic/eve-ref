@@ -56,7 +56,19 @@ public class DogmaEffect {
 	Integer rangeAttributeId;
 
 	@JsonProperty
+	Integer npcUsageChanceAttributeId;
+
+	@JsonProperty
 	Integer trackingSpeedAttributeId;
+
+	@JsonProperty
+	Integer npcActivationChanceAttributeId;
+
+	@JsonProperty
+	Integer fittingUsageChanceAttributeId;
+
+	@JsonProperty
+	Integer resistanceAttributeId;
 
 	@JsonProperty
 	Integer distribution;
@@ -81,6 +93,9 @@ public class DogmaEffect {
 
 	@JsonProperty
 	Boolean rangeChance;
+
+	@JsonProperty
+	String sfxName;
 
 	@JsonProperty
 	List<ModifierInfo> modifiers;

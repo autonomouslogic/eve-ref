@@ -194,6 +194,13 @@ dogmaEffects:
       - 18
       - 21
       - 34
+      - 47
+      - 157
+      - 563
+      - 1878
+      - 2735
+      - 5928
+      - 6184
 
 metaGroups:
   idField: meta_group_id

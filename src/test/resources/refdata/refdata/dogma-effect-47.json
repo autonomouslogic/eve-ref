@@ -1,0 +1,25 @@
+{
+  "disallow_auto_repeat" : false,
+  "discharge_attribute_id" : 6,
+  "duration_attribute_id" : 73,
+  "effect_category" : 2,
+  "effect_id" : 47,
+  "effect_name" : "cargoScan",
+  "electronic_chance" : false,
+  "guid" : "effects.CargoScan",
+  "is_assistance" : false,
+  "is_offensive" : false,
+  "is_warp_safe" : false,
+  "propulsion_chance" : false,
+  "published" : false,
+  "range_attribute_id" : 126,
+  "range_chance" : false,
+  "sfx_name" : "None",
+  "description" : {
+    "en" : ""
+  },
+  "display_name" : {
+    "en" : ""
+  },
+  "name" : "cargoScan"
+}

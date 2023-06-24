@@ -1,0 +1,14 @@
+{
+  "description" : {
+    "en" : ""
+  },
+  "discharge_attribute_id" : 6,
+  "display_name" : {
+    "en" : ""
+  },
+  "duration_attribute_id" : 73,
+  "effect_category" : 2,
+  "effect_id" : 47,
+  "name" : "cargoScan",
+  "range_attribute_id" : 126
+}

@@ -30,5 +30,11 @@ public class ModifierInfo {
 	Integer modifyingAttributeId;
 
 	@JsonProperty
+	Integer skillTypeId;
+
+	@JsonProperty
+	Integer effectId;
+
+	@JsonProperty
 	Integer operator;
 }

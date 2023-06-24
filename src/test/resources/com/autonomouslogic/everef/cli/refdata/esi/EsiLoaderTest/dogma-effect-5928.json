@@ -1,0 +1,43 @@
+{
+  "description" : {
+    "en" : ""
+  },
+  "discharge_attribute_id" : 6,
+  "display_name" : {
+    "en" : "Warp Scramble"
+  },
+  "duration_attribute_id" : 505,
+  "effect_category" : 2,
+  "effect_id" : 5928,
+  "is_offensive" : true,
+  "modifiers" : [ {
+    "domain" : "targetID",
+    "func" : "ItemModifier",
+    "modified_attribute_id" : 104,
+    "modifying_attribute_id" : 105,
+    "operator" : 2
+  }, {
+    "domain" : "targetID",
+    "func" : "LocationRequiredSkillModifier",
+    "modified_attribute_id" : 1349,
+    "modifying_attribute_id" : 1350,
+    "operator" : 2
+  }, {
+    "domain" : "target",
+    "effect_id" : 6441,
+    "func" : "EffectStopper"
+  }, {
+    "domain" : "target",
+    "effect_id" : 6442,
+    "func" : "EffectStopper"
+  }, {
+    "domain" : "targetID",
+    "func" : "LocationRequiredSkillModifier",
+    "modified_attribute_id" : 1349,
+    "modifying_attribute_id" : 1350,
+    "operator" : 2
+  } ],
+  "name" : "warpScrambleTargetMWDBlockActivationForEntity",
+  "published" : true,
+  "range_attribute_id" : 103
+}
