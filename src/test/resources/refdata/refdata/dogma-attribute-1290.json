@@ -1,0 +1,25 @@
+{
+  "attribute_id" : 1290,
+  "category_id" : 8,
+  "data_type" : 11,
+  "default_value" : 0,
+  "description" : {
+    "en" : "The type ID of the skill that is required."
+  },
+  "high_is_good" : true,
+  "icon_id" : 0,
+  "name" : "requiredSkill6",
+  "published" : true,
+  "stackable" : true,
+  "unit_id" : 116,
+  "display_name" : {
+    "de" : "Senary-Skill benötigt",
+    "en" : "Senary Skill required",
+    "es" : "Habilidad senaria necesaria",
+    "fr" : "Compétence sénaire requise",
+    "ja" : "第六必須スキル",
+    "ko" : "6차 스킬 필요",
+    "ru" : "Требуемый шестеричный навык",
+    "zh" : "六级技能需求"
+  }
+}

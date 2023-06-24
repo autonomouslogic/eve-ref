@@ -14,6 +14,76 @@ servers:
 - url: https://ref-data.everef.net
   variables: {}
 paths:
+  /blueprints:
+    get:
+      tags:
+      - refdata
+      description: Get all blueprint IDs.
+      operationId: getAllBlueprints
+      responses:
+        "200":
+          description: Blueprint type IDs.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: integer
+                  format: int64
+  /blueprints/{blueprint_type_id}:
+    get:
+      tags:
+      - refdata
+      operationId: getBlueprint
+      parameters:
+      - name: blueprint_type_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: The blueprint.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Blueprint'
+  /categories:
+    get:
+      tags:
+      - refdata
+      description: Get all category IDs.
+      operationId: getAllCategories
+      responses:
+        "200":
+          description: Category IDs.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: integer
+                  format: int32
+  /categories/{category_id}:
+    get:
+      tags:
+      - refdata
+      operationId: getCategory
+      parameters:
+      - name: category_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: The category.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InventoryCategory'
   /dogma_attributes:
     get:
       tags:
@@ -49,6 +119,181 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/DogmaAttribute'
+  /groups:
+    get:
+      tags:
+      - refdata
+      description: Get all type IDs.
+      operationId: getAllGroups
+      responses:
+        "200":
+          description: Group IDs.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: integer
+                  format: int32
+  /groups/{group_id}:
+    get:
+      tags:
+      - refdata
+      operationId: getGroup
+      parameters:
+      - name: group_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: The group.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InventoryGroup'
+  /market_groups:
+    get:
+      tags:
+      - refdata
+      description: Get all market group IDs.
+      operationId: getAllMarketGroups
+      responses:
+        "200":
+          description: Market group IDs.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: integer
+                  format: int32
+  /market_groups/{market_group_id}:
+    get:
+      tags:
+      - refdata
+      operationId: getMarketGroup
+      parameters:
+      - name: market_group_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: The market group.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MarketGroup'
+  /meta_groups:
+    get:
+      tags:
+      - refdata
+      description: Get all meta group IDs.
+      operationId: getAllMetaGroups
+      responses:
+        "200":
+          description: Meta group IDs.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: integer
+                  format: int32
+  /meta_groups/{meta_group_id}:
+    get:
+      tags:
+      - refdata
+      operationId: getMetaGroup
+      parameters:
+      - name: meta_group_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: The meta group.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MetaGroup'
+  /mutaplasmids:
+    get:
+      tags:
+      - refdata
+      description: Get all mutaplasmid IDs.
+      operationId: getAllMutaplasmids
+      responses:
+        "200":
+          description: Mutaplasmid type IDs.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: integer
+                  format: int32
+  /mutaplasmids/{mutaplasmid_type_id}:
+    get:
+      tags:
+      - refdata
+      operationId: getMutaplasmid
+      parameters:
+      - name: mutaplasmid_type_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: The mutaplasmid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Mutaplasmid'
+  /skills:
+    get:
+      tags:
+      - refdata
+      description: Get all skill type IDs.
+      operationId: getAllSkills
+      responses:
+        "200":
+          description: Skill type IDs.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: integer
+                  format: int32
+  /skills/{skill_type_id}:
+    get:
+      tags:
+      - refdata
+      operationId: getSkill
+      parameters:
+      - name: skill_type_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: The skill.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Skill'
   /types:
     get:
       tags:
@@ -79,13 +324,102 @@ paths:
           format: int32
       responses:
         "200":
-          description: The types.
+          description: The type.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/InventoryType'
+  /units:
+    get:
+      tags:
+      - refdata
+      description: Get all unit IDs.
+      operationId: getAllUnits
+      responses:
+        "200":
+          description: Unit type IDs.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: integer
+                  format: int32
+  /units/{units_id}:
+    get:
+      tags:
+      - refdata
+      operationId: getUnit
+      parameters:
+      - name: units_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        "200":
+          description: The unit.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Unit'
 components:
   schemas:
+    Blueprint:
+      type: object
+      properties:
+        blueprint_type_id:
+          type: integer
+          format: int64
+        activities:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/BlueprintActivity'
+        max_production_limit:
+          type: integer
+          format: int32
+    BlueprintActivity:
+      type: object
+      properties:
+        time:
+          type: integer
+          format: int64
+        materials:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/BlueprintMaterial'
+        products:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/BlueprintMaterial'
+        required_skills:
+          type: object
+          additionalProperties:
+            type: integer
+            format: int32
+    BlueprintMaterial:
+      type: object
+      properties:
+        type_id:
+          type: integer
+          format: int64
+        quantity:
+          type: integer
+          format: int64
+        probability:
+          type: number
+          format: double
+    CreatingBlueprint:
+      type: object
+      properties:
+        blueprint_type_id:
+          type: integer
+          format: int64
+        blueprint_activity:
+          type: string
+      description: The blueprints creating this type. The key is the blueprint type
+        ID. This is added by EVE Ref.
     DogmaAttribute:
       type: object
       properties:
@@ -128,11 +462,11 @@ components:
           type: boolean
         stackable:
           type: boolean
-        tooltip_description_id:
+        tooltip_description:
           type: object
           additionalProperties:
             type: string
-        tooltip_title_id:
+        tooltip_title:
           type: object
           additionalProperties:
             type: string
@@ -158,9 +492,65 @@ components:
         is_default:
           type: boolean
       description: A specific value for a dogma effect.
+    InventoryCategory:
+      type: object
+      properties:
+        category_id:
+          type: integer
+          format: int64
+        name:
+          type: object
+          additionalProperties:
+            type: string
+        published:
+          type: boolean
+        icon_id:
+          type: integer
+          format: int64
+        group_ids:
+          type: array
+          items:
+            type: integer
+            format: int32
+      description: An inventory category
+    InventoryGroup:
+      type: object
+      properties:
+        group_id:
+          type: integer
+          format: int64
+        category_id:
+          type: integer
+          format: int64
+        icon_id:
+          type: integer
+          format: int64
+        name:
+          type: object
+          additionalProperties:
+            type: string
+        anchorable:
+          type: boolean
+        anchored:
+          type: boolean
+        fittable_non_singleton:
+          type: boolean
+        published:
+          type: boolean
+        use_base_price:
+          type: boolean
+        type_ids:
+          type: array
+          items:
+            type: integer
+            format: int64
+      description: An inventory group
     InventoryType:
       type: object
       properties:
+        type_id:
+          type: integer
+          format: int64
         base_price:
           type: number
         capacity:
@@ -239,14 +629,82 @@ components:
           format: int32
         traits:
           $ref: '#/components/schemas/InventoryTypeTraits'
-        type_id:
-          type: integer
-          format: int32
         variation_parent_type_id:
           type: integer
-          format: int32
+          format: int64
         volume:
           type: number
+        required_skills:
+          type: object
+          additionalProperties:
+            type: integer
+            description: The skills required for this type. The key is the skill type
+              ID and the value is the level. This is added by EVE Ref and derived
+              from dogma attributes.
+            format: int32
+          description: The skills required for this type. The key is the skill type
+            ID and the value is the level. This is added by EVE Ref and derived from
+            dogma attributes.
+        applicable_mutaplasmid_type_ids:
+          type: array
+          description: Which mutaplasmids can be applied to this type to create a
+            dynamic item. This is added by EVE Ref.
+          items:
+            type: integer
+            description: Which mutaplasmids can be applied to this type to create
+              a dynamic item. This is added by EVE Ref.
+            format: int64
+        creating_mutaplasmid_type_ids:
+          type: array
+          description: Which mutaplasmids can used to create this dynamic item. This
+            is added by EVE Ref.
+          items:
+            type: integer
+            description: Which mutaplasmids can used to create this dynamic item.
+              This is added by EVE Ref.
+            format: int64
+        type_variations:
+          type: object
+          additionalProperties:
+            type: array
+            description: The variations for this type. The key is the meta group and
+              the value is a list of type IDs. This is added by EVE Ref.
+            items:
+              type: integer
+              description: The variations for this type. The key is the meta group
+                and the value is a list of type IDs. This is added by EVE Ref.
+              format: int64
+          description: The variations for this type. The key is the meta group and
+            the value is a list of type IDs. This is added by EVE Ref.
+        creating_blueprints:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/CreatingBlueprint'
+          description: The blueprints creating this type. The key is the blueprint
+            type ID. This is added by EVE Ref.
+        type_materials:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/TypeMaterial'
+        is_skill:
+          type: boolean
+          description: Whether this type is a skill or not. This is added by EVE Ref.
+          default: false
+        is_mutaplasmid:
+          type: boolean
+          description: Whether this type is a mutaplasmid or not. This is added by
+            EVE Ref.
+          default: false
+        is_dynamic_item:
+          type: boolean
+          description: Whether this type is a dynamic item created by a mutaplasmid
+            or not. This is added by EVE Ref.
+          default: false
+        is_blueprint:
+          type: boolean
+          description: Whether this type is a blueprint or not. This is added by EVE
+            Ref.
+          default: false
       description: An inventory type
     InventoryTypeTraits:
       type: object
@@ -268,6 +726,128 @@ components:
         icon_id:
           type: integer
           format: int32
+    MarketGroup:
+      type: object
+      properties:
+        market_group_id:
+          type: integer
+          format: int64
+        parent_group_id:
+          type: integer
+          format: int64
+        name:
+          type: object
+          additionalProperties:
+            type: string
+        description:
+          type: object
+          additionalProperties:
+            type: string
+        icon_id:
+          type: integer
+          format: int64
+        has_types:
+          type: boolean
+      description: A market group
+    MetaGroup:
+      type: object
+      properties:
+        meta_group_id:
+          type: integer
+          format: int64
+        icon_id:
+          type: integer
+          format: int64
+        icon_suffix:
+          type: string
+        name:
+          type: object
+          additionalProperties:
+            type: string
+        description:
+          type: object
+          additionalProperties:
+            type: string
+      description: A meta group
+    Mutaplasmid:
+      type: object
+      properties:
+        type_id:
+          type: integer
+          format: int64
+        type_mappings:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/MutaplasmidTypeMapping'
+        dogma_modifications:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/MutaplasmidDogmaModifications'
+          description: Which dogma attributes are modified by this mutaplasmid and
+            by how much.
+      description: Details about a mutaplasmid. These are created by EVE Ref and derived
+        from Hoboleaks.
+    MutaplasmidDogmaModifications:
+      type: object
+      properties:
+        min:
+          type: number
+          format: double
+        max:
+          type: number
+          format: double
+        high_is_good:
+          type: boolean
+      description: Details about how much a dogma attribute can be modified by a mutaplasmid.
+        These are created by EVE Ref and derived from Hoboleaks.
+    MutaplasmidTypeMapping:
+      type: object
+      properties:
+        resulting_type_id:
+          type: integer
+          format: int64
+        applicable_type_ids:
+          type: array
+          items:
+            type: integer
+            format: int64
+      description: Details about which types a mutaplasmid can be applied to to create
+        another type. These are created by EVE Ref and derived from Hoboleaks.
+    Skill:
+      type: object
+      properties:
+        type_id:
+          type: integer
+          format: int64
+        primary_dogma_attribute_id:
+          type: integer
+          description: The dogma attribute ID of the primary training attribute.
+          format: int64
+        secondary_dogma_attribute_id:
+          type: integer
+          description: The dogma attribute ID of the secondary training attribute.
+          format: int64
+        primary_character_attribute_id:
+          type: integer
+          description: The character attribute ID of the primary training attribute.
+          format: int64
+        secondary_character_attribute_id:
+          type: integer
+          description: The character attribute ID of the secondary training attribute.
+          format: int64
+        training_time_multiplier:
+          type: integer
+          format: int32
+        can_not_be_trained_on_trial:
+          type: boolean
+        required_skills:
+          type: object
+          additionalProperties:
+            type: integer
+            description: The other skills required for this skill.
+            format: int32
+          description: The other skills required for this skill.
+      description: Details about skill types. These are created by EVE Ref.
     TraitBonus:
       type: object
       properties:
@@ -288,3 +868,28 @@ components:
         unit_id:
           type: integer
           format: int32
+    TypeMaterial:
+      type: object
+      properties:
+        material_type_id:
+          type: integer
+          format: int64
+        quantity:
+          type: integer
+          format: int64
+    Unit:
+      type: object
+      properties:
+        unit_id:
+          type: integer
+          format: int32
+        display_name:
+          type: string
+        name:
+          type: object
+          additionalProperties:
+            type: string
+        description:
+          type: object
+          additionalProperties:
+            type: string

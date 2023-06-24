@@ -1,3 +1,4 @@
+---
 "645":
   capacity: 750
   description: "The Dominix is one of the old warhorses dating back to the Gallente-Caldari\
@@ -5,201 +6,201 @@
     \ Its formidable hulk and powerful drone arsenal means that anyone not in the\
     \ largest and latest battleships will regret ever locking horns with it."
   dogma_attributes:
-    - attribute_id: 3
-      value: 0
-    - attribute_id: 4
-      value: 100250000
-    - attribute_id: 9
-      value: 9350
-    - attribute_id: 1547
-      value: 3
-    - attribute_id: 12
-      value: 7
-    - attribute_id: 13
-      value: 5
-    - attribute_id: 14
-      value: 6
-    - attribute_id: 15
-      value: 0
-    - attribute_id: 18
-      value: 0
-    - attribute_id: 19
-      value: 1
-    - attribute_id: 21
-      value: 0
-    - attribute_id: 37
-      value: 109
-    - attribute_id: 38
-      value: 750
-    - attribute_id: 552
-      value: 465
-    - attribute_id: 48
-      value: 600
-    - attribute_id: 561
-      value: 10
-    - attribute_id: 564
-      value: 117
-    - attribute_id: 55
-      value: 1100000
-    - attribute_id: 2113
-      value: 1
-    - attribute_id: 11
-      value: 10000
-    - attribute_id: 70
-      value: 0.1254
-    - attribute_id: 524
-      value: 0.75
-    - attribute_id: 76
-      value: 84000
-    - attribute_id: 525
-      value: 1
-    - attribute_id: 600
-      value: 3
-    - attribute_id: 101
-      value: 0
-    - attribute_id: 102
-      value: 6
-    - attribute_id: 1132
-      value: 400
-    - attribute_id: 109
-      value: 0.67
-    - attribute_id: 110
-      value: 0.67
-    - attribute_id: 111
-      value: 0.67
-    - attribute_id: 1137
-      value: 3
-    - attribute_id: 1555
-      value: 500
-    - attribute_id: 633
-      value: 0
-    - attribute_id: 124
-      value: 16777215
-    - attribute_id: 129
-      value: 1000
-    - attribute_id: 1154
-      value: 3
-    - attribute_id: 136
-      value: 1
-    - attribute_id: 661
-      value: 1000
-    - attribute_id: 662
-      value: 0.5
-    - attribute_id: 153
-      value: 0.000000138
-    - attribute_id: 1178
-      value: 100
-    - attribute_id: 1179
-      value: 0.01
-    - attribute_id: 161
-      value: 454500
-    - attribute_id: 162
-      value: 250
-    - attribute_id: 113
-      value: 0.67
-    - attribute_id: 1196
-      value: 0.01
-    - attribute_id: 1198
-      value: 0.01
-    - attribute_id: 1199
-      value: 100
-    - attribute_id: 1200
-      value: 100
-    - attribute_id: 182
-      value: 3336
-    - attribute_id: 188
-      value: 0
-    - attribute_id: 192
-      value: 7
-    - attribute_id: 3266
-      value: 50
-    - attribute_id: 3267
-      value: 100
-    - attribute_id: 3268
-      value: 0.05
-    - attribute_id: 1224
-      value: 0.5
-    - attribute_id: 208
-      value: 0
-    - attribute_id: 209
-      value: 0
-    - attribute_id: 210
-      value: 22
-    - attribute_id: 211
-      value: 0
-    - attribute_id: 217
-      value: 395
-    - attribute_id: 1768
-      value: 11331
-    - attribute_id: 1259
-      value: 0.76
-    - attribute_id: 1261
-      value: 0.71
-    - attribute_id: 1262
-      value: 0.79
-    - attribute_id: 246
-      value: 395
-    - attribute_id: 1271
-      value: 125
-    - attribute_id: 1281
-      value: 1
-    - attribute_id: 263
-      value: 7920
-    - attribute_id: 264
-      value: 0
-    - attribute_id: 265
-      value: 8800
-    - attribute_id: 267
-      value: 0.5
-    - attribute_id: 268
-      value: 0.9
-    - attribute_id: 269
-      value: 0.65
-    - attribute_id: 270
-      value: 0.65
-    - attribute_id: 271
-      value: 1
-    - attribute_id: 272
-      value: 0.5
-    - attribute_id: 273
-      value: 0.6
-    - attribute_id: 274
-      value: 0.8
-    - attribute_id: 277
-      value: 1
-    - attribute_id: 283
-      value: 375
-    - attribute_id: 49
-      value: 0
-    - attribute_id: 2115
-      value: 1
-    - attribute_id: 422
-      value: 1
-    - attribute_id: 3020
-      value: 1
-    - attribute_id: 79
-      value: 8250
-    - attribute_id: 479
-      value: 2500000
-    - attribute_id: 482
-      value: 6000
-    - attribute_id: 484
-      value: 0.75
-    - attribute_id: 500
-      value: 7.5
-    - attribute_id: 2045
-      value: 1
+  - attribute_id: 3
+    value: 0
+  - attribute_id: 4
+    value: 100250000
+  - attribute_id: 9
+    value: 9350
+  - attribute_id: 1547
+    value: 3
+  - attribute_id: 12
+    value: 7
+  - attribute_id: 13
+    value: 5
+  - attribute_id: 14
+    value: 6
+  - attribute_id: 15
+    value: 0
+  - attribute_id: 18
+    value: 0
+  - attribute_id: 19
+    value: 1
+  - attribute_id: 21
+    value: 0
+  - attribute_id: 37
+    value: 109
+  - attribute_id: 38
+    value: 750
+  - attribute_id: 552
+    value: 465
+  - attribute_id: 48
+    value: 600
+  - attribute_id: 561
+    value: 10
+  - attribute_id: 564
+    value: 117
+  - attribute_id: 55
+    value: 1100000
+  - attribute_id: 2113
+    value: 1
+  - attribute_id: 11
+    value: 10000
+  - attribute_id: 70
+    value: 0.1254
+  - attribute_id: 524
+    value: 0.75
+  - attribute_id: 76
+    value: 84000
+  - attribute_id: 525
+    value: 1
+  - attribute_id: 600
+    value: 3
+  - attribute_id: 101
+    value: 0
+  - attribute_id: 102
+    value: 6
+  - attribute_id: 1132
+    value: 400
+  - attribute_id: 109
+    value: 0.67
+  - attribute_id: 110
+    value: 0.67
+  - attribute_id: 111
+    value: 0.67
+  - attribute_id: 1137
+    value: 3
+  - attribute_id: 1555
+    value: 500
+  - attribute_id: 633
+    value: 0
+  - attribute_id: 124
+    value: 16777215
+  - attribute_id: 129
+    value: 1000
+  - attribute_id: 1154
+    value: 3
+  - attribute_id: 136
+    value: 1
+  - attribute_id: 661
+    value: 1000
+  - attribute_id: 662
+    value: 0.5
+  - attribute_id: 153
+    value: 0.000000138
+  - attribute_id: 1178
+    value: 100
+  - attribute_id: 1179
+    value: 0.01
+  - attribute_id: 161
+    value: 454500
+  - attribute_id: 162
+    value: 250
+  - attribute_id: 113
+    value: 0.67
+  - attribute_id: 1196
+    value: 0.01
+  - attribute_id: 1198
+    value: 0.01
+  - attribute_id: 1199
+    value: 100
+  - attribute_id: 1200
+    value: 100
+  - attribute_id: 182
+    value: 3336
+  - attribute_id: 188
+    value: 0
+  - attribute_id: 192
+    value: 7
+  - attribute_id: 3266
+    value: 50
+  - attribute_id: 3267
+    value: 100
+  - attribute_id: 3268
+    value: 0.05
+  - attribute_id: 1224
+    value: 0.5
+  - attribute_id: 208
+    value: 0
+  - attribute_id: 209
+    value: 0
+  - attribute_id: 210
+    value: 22
+  - attribute_id: 211
+    value: 0
+  - attribute_id: 217
+    value: 395
+  - attribute_id: 1768
+    value: 11331
+  - attribute_id: 1259
+    value: 0.76
+  - attribute_id: 1261
+    value: 0.71
+  - attribute_id: 1262
+    value: 0.79
+  - attribute_id: 246
+    value: 395
+  - attribute_id: 1271
+    value: 125
+  - attribute_id: 1281
+    value: 1
+  - attribute_id: 263
+    value: 7920
+  - attribute_id: 264
+    value: 0
+  - attribute_id: 265
+    value: 8800
+  - attribute_id: 267
+    value: 0.5
+  - attribute_id: 268
+    value: 0.9
+  - attribute_id: 269
+    value: 0.65
+  - attribute_id: 270
+    value: 0.65
+  - attribute_id: 271
+    value: 1
+  - attribute_id: 272
+    value: 0.5
+  - attribute_id: 273
+    value: 0.6
+  - attribute_id: 274
+    value: 0.8
+  - attribute_id: 277
+    value: 1
+  - attribute_id: 283
+    value: 375
+  - attribute_id: 49
+    value: 0
+  - attribute_id: 2115
+    value: 1
+  - attribute_id: 422
+    value: 1
+  - attribute_id: 3020
+    value: 1
+  - attribute_id: 79
+    value: 8250
+  - attribute_id: 479
+    value: 2500000
+  - attribute_id: 482
+    value: 6000
+  - attribute_id: 484
+    value: 0.75
+  - attribute_id: 500
+    value: 7.5
+  - attribute_id: 2045
+    value: 1
   dogma_effects:
-    - effect_id: 2186
-      is_default: false
-    - effect_id: 2187
-      is_default: false
-    - effect_id: 5427
-      is_default: false
-    - effect_id: 5428
-      is_default: false
-    - effect_id: 8377
-      is_default: false
+  - effect_id: 2186
+    is_default: false
+  - effect_id: 2187
+    is_default: false
+  - effect_id: 5427
+    is_default: false
+  - effect_id: 5428
+    is_default: false
+  - effect_id: 8377
+    is_default: false
   graphic_id: 318
   group_id: 27
   market_group_id: 81
@@ -211,3 +212,1049 @@
   radius: 250
   type_id: 645
   volume: 454500
+"3336":
+  capacity: 0
+  description: "Skill at operating Gallente battleships."
+  dogma_attributes:
+  - attribute_id: 161
+    value: 0.01
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 4
+    value: 0
+  - attribute_id: 278
+    value: 3
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 1047
+    value: 0
+  - attribute_id: 275
+    value: 8
+  - attribute_id: 180
+    value: 167
+  - attribute_id: 277
+    value: 4
+  - attribute_id: 182
+    value: 3327
+  - attribute_id: 183
+    value: 33097
+  - attribute_id: 280
+    value: 0
+  - attribute_id: 181
+    value: 168
+  dogma_effects:
+  - effect_id: 132
+    is_default: true
+  - effect_id: 611
+    is_default: false
+  - effect_id: 682
+    is_default: false
+  - effect_id: 11418
+    is_default: false
+  group_id: 257
+  icon_id: 33
+  market_group_id: 377
+  mass: 0
+  name: "Gallente Battleship"
+  packaged_volume: 0.01
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 3336
+  volume: 0.01
+"3327":
+  capacity: 0
+  description: "The basic operation of spaceships. 2% improved ship agility for all\
+    \ ships per skill level."
+  dogma_attributes:
+  - attribute_id: 193
+    value: 1
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 4
+    value: 0
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 161
+    value: 0.01
+  - attribute_id: 275
+    value: 1
+  - attribute_id: 180
+    value: 167
+  - attribute_id: 181
+    value: 168
+  - attribute_id: 151
+    value: -2
+  - attribute_id: 280
+    value: 0
+  dogma_effects:
+  - effect_id: 132
+    is_default: true
+  - effect_id: 232
+    is_default: false
+  - effect_id: 395
+    is_default: false
+  group_id: 257
+  icon_id: 33
+  market_group_id: 377
+  mass: 0
+  name: "Spaceship Command"
+  packaged_volume: 0.01
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 3327
+  volume: 0.01
+"33097":
+  capacity: 0
+  description: "Skill at operating Gallente battlecruisers."
+  dogma_attributes:
+  - attribute_id: 161
+    value: 0.01
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 4
+    value: 0
+  - attribute_id: 278
+    value: 3
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 1047
+    value: 0
+  - attribute_id: 275
+    value: 6
+  - attribute_id: 180
+    value: 167
+  - attribute_id: 277
+    value: 3
+  - attribute_id: 182
+    value: 3327
+  - attribute_id: 183
+    value: 3332
+  - attribute_id: 280
+    value: 0
+  - attribute_id: 181
+    value: 168
+  dogma_effects:
+  - effect_id: 132
+    is_default: true
+  - effect_id: 5288
+    is_default: false
+  - effect_id: 5289
+    is_default: false
+  - effect_id: 11062
+    is_default: false
+  group_id: 257
+  icon_id: 33
+  market_group_id: 377
+  mass: 0
+  name: "Gallente Battlecruiser"
+  packaged_volume: 0.01
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 33097
+  volume: 0.01
+"3332":
+  capacity: 0
+  description: "Skill at operating Gallente cruisers."
+  dogma_attributes:
+  - attribute_id: 161
+    value: 0.01
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 4
+    value: 0
+  - attribute_id: 278
+    value: 3
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 275
+    value: 5
+  - attribute_id: 180
+    value: 167
+  - attribute_id: 277
+    value: 2
+  - attribute_id: 182
+    value: 3327
+  - attribute_id: 183
+    value: 33093
+  - attribute_id: 280
+    value: 0
+  - attribute_id: 181
+    value: 168
+  dogma_effects:
+  - effect_id: 132
+    is_default: true
+  - effect_id: 517
+    is_default: false
+  - effect_id: 928
+    is_default: false
+  - effect_id: 6044
+    is_default: false
+  group_id: 257
+  icon_id: 33
+  market_group_id: 377
+  mass: 0
+  name: "Gallente Cruiser"
+  packaged_volume: 0.01
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 3332
+  volume: 0.01
+"33093":
+  capacity: 0
+  description: "Skill at operating Gallente destroyers."
+  dogma_attributes:
+  - attribute_id: 161
+    value: 0.01
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 4
+    value: 0
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 275
+    value: 2
+  - attribute_id: 180
+    value: 167
+  - attribute_id: 181
+    value: 168
+  - attribute_id: 182
+    value: 3328
+  - attribute_id: 1047
+    value: 0
+  - attribute_id: 280
+    value: 0
+  - attribute_id: 277
+    value: 3
+  dogma_effects:
+  - effect_id: 132
+    is_default: true
+  - effect_id: 5280
+    is_default: false
+  - effect_id: 5281
+    is_default: false
+  - effect_id: 11451
+    is_default: false
+  group_id: 257
+  icon_id: 33
+  market_group_id: 377
+  mass: 0
+  name: "Gallente Destroyer"
+  packaged_volume: 0.01
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 33093
+  volume: 0.01
+"3328":
+  capacity: 0
+  description: "Skill at operating Gallente frigates."
+  dogma_attributes:
+  - attribute_id: 161
+    value: 0.01
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 4
+    value: 0
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 275
+    value: 2
+  - attribute_id: 180
+    value: 167
+  - attribute_id: 181
+    value: 168
+  - attribute_id: 182
+    value: 3327
+  - attribute_id: 280
+    value: 0
+  - attribute_id: 277
+    value: 1
+  dogma_effects:
+  - effect_id: 132
+    is_default: true
+  - effect_id: 468
+    is_default: false
+  - effect_id: 751
+    is_default: false
+  - effect_id: 4600
+    is_default: false
+  group_id: 257
+  icon_id: 33
+  market_group_id: 377
+  mass: 0
+  name: "Gallente Frigate"
+  packaged_volume: 0.01
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 3328
+  volume: 0.01
+"52225":
+  capacity: 0
+  description: "This bioadaptive mutaplasmid tool is designed to interface with and\
+    \ alter devices that mitigate the impact of critical system damage. As such this\
+    \ mutaplasmid could be used to mutate the performance characteristics of standard\
+    \ damage control modules.\r\n\r\nTriglavian bioadaptive technology makes extensive\
+    \ use of engineered colonies of extremophilic bacteria, that are used to grow,\
+    \ harvest and adapt various resources found in Abyssal Deadspace. Artificial colonizing\
+    \ plasmids integrated into specialist tools used for direct adaptation of technology\
+    \ can be found in Triglavian caches in various stages of development. These mutaplasmids\
+    \ can be used to alter the characteristics of a wide variety of equipment types,\
+    \ depending on the strain and the bioadaptive tool with which they are integrated.\r\
+    \n\r\nThe mutaplasmid colony integrated into this bioadaptive tool appears to\
+    \ be mature and reproducing at a healthy rate. The mutational benefits and risks\
+    \ of using this mutaplasmid are within relatively balanced bounds."
+  group_id: 1964
+  icon_id: 24131
+  market_group_id: 2533
+  mass: 1
+  name: "Gravid Damage Control Mutaplasmid"
+  packaged_volume: 1
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 52225
+  volume: 1
+"52227":
+  capacity: 0
+  description: "Utilizes a combination of containment field emitters and redundancy\
+    \ systems to mitigate the impact of critical system damage. \r\n\r\nGrants a bonus\
+    \ to resistance for shield, armor and hull.\r\n\r\nOnly one Damage Control can\
+    \ be fit at a given time."
+  dogma_attributes:
+  - attribute_id: 161
+    value: 5
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 4
+    value: 0
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 1544
+    value: 1
+  - attribute_id: 277
+    value: 4
+  - attribute_id: 182
+    value: 3394
+  dogma_effects:
+  - effect_id: 11
+    is_default: false
+  - effect_id: 16
+    is_default: false
+  - effect_id: 2302
+    is_default: false
+  group_id: 60
+  icon_id: 77
+  mass: 0
+  name: "Abyssal Damage Control"
+  packaged_volume: 5
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 52227
+  volume: 5
+"2046":
+  capacity: 0
+  description: "Utilizes a combination of containment field emitters and redundancy\
+    \ systems to mitigate the impact of critical system damage. \r\n\r\nGrants a bonus\
+    \ to resistance for shield, armor and hull.\r\n\r\nOnly one Damage Control can\
+    \ be fit at a given time."
+  dogma_attributes:
+  - attribute_id: 4
+    value: 5000
+  - attribute_id: 1544
+    value: 1
+  - attribute_id: 9
+    value: 40
+  - attribute_id: 267
+    value: 0.9
+  - attribute_id: 268
+    value: 0.9
+  - attribute_id: 269
+    value: 0.9
+  - attribute_id: 270
+    value: 0.9
+  - attribute_id: 271
+    value: 0.925
+  - attribute_id: 272
+    value: 0.925
+  - attribute_id: 273
+    value: 0.925
+  - attribute_id: 274
+    value: 0.925
+  - attribute_id: 277
+    value: 1
+  - attribute_id: 1692
+    value: 0
+  - attribute_id: 30
+    value: 1
+  - attribute_id: 161
+    value: 5
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 422
+    value: 1
+  - attribute_id: 50
+    value: 25
+  - attribute_id: 182
+    value: 3394
+  - attribute_id: 974
+    value: 0.7
+  - attribute_id: 975
+    value: 0.7
+  - attribute_id: 976
+    value: 0.7
+  - attribute_id: 977
+    value: 0.7
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 633
+    value: 0
+  dogma_effects:
+  - effect_id: 11
+    is_default: false
+  - effect_id: 16
+    is_default: false
+  - effect_id: 2302
+    is_default: false
+  group_id: 60
+  icon_id: 77
+  market_group_id: 615
+  mass: 5000
+  name: "Damage Control I"
+  packaged_volume: 5
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 2046
+  volume: 5
+"2048":
+  capacity: 0
+  description: "Utilizes a combination of containment field emitters and redundancy\
+    \ systems to mitigate the impact of critical system damage. \r\n\r\nGrants a bonus\
+    \ to resistance for shield, armor and hull.\r\n\r\nOnly one Damage Control can\
+    \ be fit at a given time."
+  dogma_attributes:
+  - attribute_id: 4
+    value: 5000
+  - attribute_id: 1544
+    value: 1
+  - attribute_id: 9
+    value: 40
+  - attribute_id: 267
+    value: 0.85
+  - attribute_id: 268
+    value: 0.85
+  - attribute_id: 269
+    value: 0.85
+  - attribute_id: 270
+    value: 0.85
+  - attribute_id: 271
+    value: 0.875
+  - attribute_id: 272
+    value: 0.875
+  - attribute_id: 273
+    value: 0.875
+  - attribute_id: 274
+    value: 0.875
+  - attribute_id: 277
+    value: 4
+  - attribute_id: 1692
+    value: 0
+  - attribute_id: 30
+    value: 1
+  - attribute_id: 161
+    value: 5
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 422
+    value: 2
+  - attribute_id: 50
+    value: 30
+  - attribute_id: 182
+    value: 3394
+  - attribute_id: 974
+    value: 0.6
+  - attribute_id: 975
+    value: 0.6
+  - attribute_id: 976
+    value: 0.6
+  - attribute_id: 977
+    value: 0.6
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 633
+    value: 5
+  dogma_effects:
+  - effect_id: 11
+    is_default: false
+  - effect_id: 16
+    is_default: false
+  - effect_id: 2302
+    is_default: false
+  group_id: 60
+  icon_id: 77
+  market_group_id: 615
+  mass: 5000
+  name: "Damage Control II"
+  packaged_volume: 5
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 2048
+  volume: 5
+"45623":
+  capacity: 0
+  description: "Comprised of countless nanomachines that enhance the energy flow from\
+    \ a ship's antimatter reactor, this core subsystem offers a pilot the option of\
+    \ increasing the power grid and capacitor capacity of their vessel. Designers\
+    \ of Tech III vessels were initially hampered by the problem of how to design\
+    \ a modular ship that could swap out basic engineering upgrades on a per-need\
+    \ basis. This proved particularly true when it came to reinforcing a vessel's\
+    \ power grid and capacitor banks without the use of batteries. In the end, the\
+    \ provision of nanomachines constructed from fullerene-based polymers allowed\
+    \ for solutions that had only existed in theory up until that point."
+  dogma_attributes:
+  - attribute_id: 1376
+    value: 3
+  - attribute_id: 161
+    value: 40
+  - attribute_id: 482
+    value: 50
+  - attribute_id: 1380
+    value: 29986
+  - attribute_id: 1366
+    value: 125
+  - attribute_id: 422
+    value: 3
+  - attribute_id: 9
+    value: 40
+  - attribute_id: 1431
+    value: 5
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 1509
+    value: -3
+  - attribute_id: 277
+    value: 1
+  - attribute_id: 182
+    value: 30539
+  - attribute_id: 633
+    value: 1
+  - attribute_id: 313
+    value: 20
+  - attribute_id: 4
+    value: 1200000
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 1374
+    value: 0
+  - attribute_id: 1375
+    value: 1
+  dogma_effects:
+  - effect_id: 490
+    is_default: false
+  - effect_id: 3772
+    is_default: false
+  - effect_id: 3774
+    is_default: false
+  - effect_id: 3811
+    is_default: false
+  - effect_id: 4159
+    is_default: false
+  - effect_id: 6930
+    is_default: false
+  graphic_id: 21511
+  group_id: 958
+  icon_id: 3636
+  market_group_id: 1122
+  mass: 1200000
+  name: "Legion Core - Augmented Antimatter Reactor"
+  packaged_volume: 40
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 45623
+  volume: 40
+"45622":
+  capacity: 0
+  description: "This subsystem employs a nano-electromechanical dispersion field to\
+    \ strengthen a vessel's sensor systems. Made from a complex system of neurovisual\
+    \ interlays, automated trigger response units, and billions of advanced molecular-level\
+    \ circuits, the subsystem offers improved protection against hostile ECM as well\
+    \ as improved sensor range and target acquisition speed."
+  dogma_attributes:
+  - attribute_id: 1376
+    value: 2
+  - attribute_id: 161
+    value: 40
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 1380
+    value: 29986
+  - attribute_id: 1366
+    value: 125
+  - attribute_id: 422
+    value: 3
+  - attribute_id: 2681
+    value: 15
+  - attribute_id: 9
+    value: 40
+  - attribute_id: 235
+    value: 1
+  - attribute_id: 1509
+    value: 5
+  - attribute_id: 277
+    value: 1
+  - attribute_id: 182
+    value: 30539
+  - attribute_id: 1431
+    value: 15
+  - attribute_id: 633
+    value: 1
+  - attribute_id: 4
+    value: 1200000
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 1374
+    value: 0
+  - attribute_id: 1375
+    value: 2
+  dogma_effects:
+  - effect_id: 3772
+    is_default: false
+  - effect_id: 3774
+    is_default: false
+  - effect_id: 3900
+    is_default: false
+  - effect_id: 4269
+    is_default: false
+  - effect_id: 4343
+    is_default: false
+  - effect_id: 6934
+    is_default: false
+  graphic_id: 21510
+  group_id: 958
+  icon_id: 3636
+  market_group_id: 1122
+  mass: 1200000
+  name: "Legion Core - Dissolution Sequencer"
+  packaged_volume: 40
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 45622
+  volume: 40
+"45624":
+  capacity: 0
+  description: "During some of the first conflicts with them, Amarr engineers noticed\
+    \ a remarkable feature in Sleeper drone technology: the ability of drones to transfer\
+    \ power between one another without the need for specialized equipment. This technology\
+    \ seemed to be innate to every drone in some capacity, and while the engineers\
+    \ could not reproduce this system in modern space vessels, they were able to adapt\
+    \ the technology into modular Tech III designs. The energy parasitic complex turns\
+    \ the Sleeper tech on its head, changing the energy transfer from a symbiotic\
+    \ function to a vampiric one by providing a boost to energy neutralizer and energy\
+    \ nosferatu equipment."
+  dogma_attributes:
+  - attribute_id: 1376
+    value: 2
+  - attribute_id: 161
+    value: 40
+  - attribute_id: 482
+    value: 50
+  - attribute_id: 1380
+    value: 29986
+  - attribute_id: 1366
+    value: 125
+  - attribute_id: 422
+    value: 3
+  - attribute_id: 2665
+    value: -50
+  - attribute_id: 9
+    value: 40
+  - attribute_id: 1509
+    value: 10
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 4
+    value: 1200000
+  - attribute_id: 277
+    value: 1
+  - attribute_id: 182
+    value: 30539
+  - attribute_id: 1431
+    value: -5
+  - attribute_id: 633
+    value: 1
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 2681
+    value: 10
+  - attribute_id: 1374
+    value: 0
+  - attribute_id: 1375
+    value: 2
+  dogma_effects:
+  - effect_id: 3772
+    is_default: false
+  - effect_id: 3774
+    is_default: false
+  - effect_id: 3811
+    is_default: false
+  - effect_id: 4152
+    is_default: false
+  - effect_id: 4216
+    is_default: false
+  - effect_id: 4217
+    is_default: false
+  - effect_id: 6894
+    is_default: false
+  - effect_id: 6935
+    is_default: false
+  graphic_id: 21509
+  group_id: 958
+  icon_id: 3636
+  market_group_id: 1122
+  mass: 1200000
+  name: "Legion Core - Energy Parasitic Complex"
+  packaged_volume: 40
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 45624
+  volume: 40
+"22430":
+  capacity: 800
+  description: "Black Ops battleships are designed for infiltration and espionage\
+    \ behind enemy lines. With the use of a jump drive and portal generator, they\
+    \ are capable of making a special type of jump portal usable only by covert ops\
+    \ vessels. This enables them to stealthily plant reconnaissance and espionage\
+    \ forces in enemy territory. For the final word in clandestine maneuvers, look\
+    \ no further.\r\n\r\nDeveloper: CreoDron\r\n\r\nAs the largest drone developer\
+    \ and manufacturer in space, CreoDron has a vested interest in drone carriers.\
+    \ While sacrificing relatively little in the way of defensive capability, the\
+    \ Sin can chew its way through surprisingly strong opponents - provided, of course,\
+    \ that the pilot uses top-of-the-line CreoDron drones."
+  dogma_attributes:
+  - attribute_id: 3
+    value: 0
+  - attribute_id: 4
+    value: 141700000
+  - attribute_id: 9
+    value: 5312
+  - attribute_id: 1034
+    value: 5000
+  - attribute_id: 11
+    value: 8800
+  - attribute_id: 12
+    value: 6
+  - attribute_id: 13
+    value: 6
+  - attribute_id: 14
+    value: 7
+  - attribute_id: 15
+    value: 0
+  - attribute_id: 18
+    value: 0
+  - attribute_id: 19
+    value: 1
+  - attribute_id: 21
+    value: 0
+  - attribute_id: 37
+    value: 117
+  - attribute_id: 38
+    value: 800
+  - attribute_id: 552
+    value: 378
+  - attribute_id: 48
+    value: 600
+  - attribute_id: 561
+    value: 10
+  - attribute_id: 564
+    value: 185
+  - attribute_id: 55
+    value: 1087500
+  - attribute_id: 3131
+    value: 1000
+  - attribute_id: 3133
+    value: 30
+  - attribute_id: 2113
+    value: 1
+  - attribute_id: 66
+    value: -50
+  - attribute_id: 1035
+    value: 0
+  - attribute_id: 70
+    value: 0.0513
+  - attribute_id: 524
+    value: 0.75
+  - attribute_id: 76
+    value: 72800
+  - attribute_id: 79
+    value: 8250
+  - attribute_id: 600
+    value: 3.5
+  - attribute_id: 101
+    value: 0
+  - attribute_id: 102
+    value: 4
+  - attribute_id: 1132
+    value: 400
+  - attribute_id: 109
+    value: 0.67
+  - attribute_id: 110
+    value: 0.67
+  - attribute_id: 111
+    value: 0.67
+  - attribute_id: 1137
+    value: 2
+  - attribute_id: 1555
+    value: 1000
+  - attribute_id: 633
+    value: 5
+  - attribute_id: 124
+    value: 16777215
+  - attribute_id: 129
+    value: 1000
+  - attribute_id: 1154
+    value: 2
+  - attribute_id: 136
+    value: 1
+  - attribute_id: 661
+    value: 1000
+  - attribute_id: 662
+    value: 0.5
+  - attribute_id: 153
+    value: 0.000000138
+  - attribute_id: 1178
+    value: 100
+  - attribute_id: 1179
+    value: 0.01
+  - attribute_id: 161
+    value: 454500
+  - attribute_id: 162
+    value: 250
+  - attribute_id: 113
+    value: 0.67
+  - attribute_id: 1196
+    value: 0.01
+  - attribute_id: 1198
+    value: 0.01
+  - attribute_id: 1199
+    value: 100
+  - attribute_id: 1200
+    value: 100
+  - attribute_id: 182
+    value: 3336
+  - attribute_id: 183
+    value: 28656
+  - attribute_id: 188
+    value: 0
+  - attribute_id: 192
+    value: 7
+  - attribute_id: 3266
+    value: 50
+  - attribute_id: 3267
+    value: 100
+  - attribute_id: 3268
+    value: 0.05
+  - attribute_id: 1224
+    value: 0.5
+  - attribute_id: 208
+    value: 0
+  - attribute_id: 209
+    value: 0
+  - attribute_id: 210
+    value: 22
+  - attribute_id: 211
+    value: 0
+  - attribute_id: 217
+    value: 395
+  - attribute_id: 1253
+    value: 5
+  - attribute_id: 1768
+    value: 11406
+  - attribute_id: 1257
+    value: 10
+  - attribute_id: 1258
+    value: 7.5
+  - attribute_id: 1259
+    value: 0.79
+  - attribute_id: 1261
+    value: 0.76
+  - attribute_id: 1262
+    value: 0.76
+  - attribute_id: 3317
+    value: 342
+  - attribute_id: 246
+    value: 395
+  - attribute_id: 1271
+    value: 125
+  - attribute_id: 3320
+    value: 1
+  - attribute_id: 2298
+    value: 6.5
+  - attribute_id: 1281
+    value: 1
+  - attribute_id: 263
+    value: 4375
+  - attribute_id: 264
+    value: 0
+  - attribute_id: 265
+    value: 4968
+  - attribute_id: 267
+    value: 0.5
+  - attribute_id: 268
+    value: 0.9
+  - attribute_id: 269
+    value: 0.4
+  - attribute_id: 270
+    value: 0.53
+  - attribute_id: 271
+    value: 1
+  - attribute_id: 272
+    value: 0.5
+  - attribute_id: 273
+    value: 0.36
+  - attribute_id: 274
+    value: 0.65
+  - attribute_id: 277
+    value: 5
+  - attribute_id: 278
+    value: 1
+  - attribute_id: 283
+    value: 400
+  - attribute_id: 49
+    value: 0
+  - attribute_id: 310
+    value: -99
+  - attribute_id: 861
+    value: 1
+  - attribute_id: 866
+    value: 17887
+  - attribute_id: 867
+    value: 4
+  - attribute_id: 868
+    value: 700
+  - attribute_id: 869
+    value: 300000
+  - attribute_id: 1547
+    value: 3
+  - attribute_id: 898
+    value: 0.95
+  - attribute_id: 2115
+    value: 1
+  - attribute_id: 525
+    value: 1
+  - attribute_id: 422
+    value: 2
+  - attribute_id: 1971
+    value: 0.25
+  - attribute_id: 1972
+    value: 0.25
+  - attribute_id: 1549
+    value: 2150
+  - attribute_id: 3020
+    value: 1
+  - attribute_id: 3322
+    value: 1
+  - attribute_id: 479
+    value: 3125000
+  - attribute_id: 482
+    value: 5000
+  - attribute_id: 484
+    value: 0.75
+  - attribute_id: 1001
+    value: 0.000000135
+  - attribute_id: 500
+    value: 10
+  - attribute_id: 2045
+    value: 1
+  dogma_effects:
+  - effect_id: 550
+    is_default: false
+  - effect_id: 2008
+    is_default: false
+  - effect_id: 2186
+    is_default: false
+  - effect_id: 2187
+    is_default: false
+  - effect_id: 2252
+    is_default: false
+  - effect_id: 2253
+    is_default: false
+  - effect_id: 8151
+    is_default: false
+  - effect_id: 8153
+    is_default: false
+  - effect_id: 8154
+    is_default: false
+  - effect_id: 8377
+    is_default: false
+  graphic_id: 3350
+  group_id: 898
+  market_group_id: 1078
+  mass: 141700000
+  name: "Sin"
+  packaged_volume: 50000
+  portion_size: 1
+  published: true
+  radius: 250
+  type_id: 22430
+  volume: 454500
+"999":
+  capacity: 0
+  description: ""
+  dogma_attributes:
+  - attribute_id: 161
+    value: 0.01
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 1955
+    value: 60
+  - attribute_id: 4
+    value: 0
+  - attribute_id: 38
+    value: 0
+  graphic_id: 318
+  group_id: 107
+  market_group_id: 281
+  mass: 0
+  name: "Dominix Blueprint"
+  packaged_volume: 0.01
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 999
+  volume: 0.01
+"22431":
+  capacity: 0
+  description: ""
+  dogma_attributes:
+  - attribute_id: 161
+    value: 0.01
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 1955
+    value: 1200
+  - attribute_id: 4
+    value: 0
+  - attribute_id: 422
+    value: 2
+  - attribute_id: 38
+    value: 0
+  graphic_id: 3350
+  group_id: 107
+  mass: 0
+  name: "Sin Blueprint"
+  packaged_volume: 0.01
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 22431
+  volume: 0.01

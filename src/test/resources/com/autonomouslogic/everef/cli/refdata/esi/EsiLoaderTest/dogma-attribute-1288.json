@@ -1,0 +1,14 @@
+{
+  "attribute_id" : 1288,
+  "default_value" : 0,
+  "description" : {
+    "en" : "Required skill level for skill 6"
+  },
+  "display_name" : {
+    "en" : ""
+  },
+  "high_is_good" : true,
+  "icon_id" : 0,
+  "name" : "requiredSkill6Level",
+  "stackable" : true
+}

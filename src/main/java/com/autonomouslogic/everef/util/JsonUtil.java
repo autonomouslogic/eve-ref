@@ -2,6 +2,9 @@ package com.autonomouslogic.everef.util;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.LongNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.google.common.collect.Streams;
+import lombok.NonNull;
 
 public class JsonUtil {
 	public static boolean isNull(JsonNode node) {
@@ -36,5 +39,12 @@ public class JsonUtil {
 		} else {
 			return Long.compare(a.asLong(), b.asLong());
 		}
+	}
+
+	public static boolean objectHasValue(@NonNull ObjectNode obj, @NonNull String val) {
+		return Streams.stream(obj.fields())
+				.map(entry -> entry.getValue())
+				.filter(v -> !v.isNull())
+				.anyMatch(v -> v.asText().equals(val));
 	}
 }

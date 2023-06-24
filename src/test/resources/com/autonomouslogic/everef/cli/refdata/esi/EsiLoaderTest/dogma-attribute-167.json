@@ -1,0 +1,16 @@
+{
+  "attribute_id" : 167,
+  "default_value" : 0,
+  "description" : {
+    "en" : "The perception of a character."
+  },
+  "display_name" : {
+    "en" : "Perception"
+  },
+  "high_is_good" : true,
+  "icon_id" : 1382,
+  "name" : "perception",
+  "published" : true,
+  "stackable" : true,
+  "unit_id" : 120
+}

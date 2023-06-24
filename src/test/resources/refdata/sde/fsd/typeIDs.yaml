@@ -1,166 +1,1358 @@
-645:
-  basePrice: 153900000.0
-  capacity: 750.0
+---
+"645":
+  basePrice: 153900000
+  capacity: 750
   description:
-    de: Die Dominix ist eines der alten Schlachtrösser, die noch aus der Zeit
-      des Kriegs zwischen Gallente und Caldari stammen. Sie wird zwar nicht
-      mehr als eines der besten Schlachtschiffe angesehen, aber das heißt nicht,
-      dass sie überflüssig wäre. Mit ihrem robusten Rumpf und dem starken Drohnenarsenal
-      können sich nur die neuesten und größten Schlachtschiffe mit ihr messen.
-    en: The Dominix is one of the old warhorses dating back to the Gallente-Caldari
-      War. While no longer regarded as the king of the hill, it is by no means
-      obsolete. Its formidable hulk and powerful drone arsenal means that anyone
-      not in the largest and latest battleships will regret ever locking horns
-      with it.
-    es: La Dominix es una de las veteranas que se remonta a la guerra Gallente-Caldari.
-      Aunque ya no es lo que era, eso no quiere decir que se haya quedado obsoleta.
-      Gracias a su formidable casco y a su potente arsenal de drones, cualquiera
-      que no esté en el acorazado más grande y moderno lamentará haberse cruzado
-      con ella.
-    fr: Le Dominix est un vétéran du front, qui déjà s'illustrait à l'époque de
-      la guerre Gallente-Caldari. S'il n'est plus considéré comme le parangon
-      des champs de bataille, ce cuirassé est loin d’être obsolète. Doté d'une
-      coque massive et d'un puissant arsenal de drones, le Dominix est un adversaire
-      redoutable, capable de pulvériser tous les vaisseaux de l'amas, à l'exception
-      des cuirassés de pointe les plus modernes.
-    ja: ドミニックスは、ガレンテ-カルダリ戦争時代からある、古い軍艦の一つだ。もはや戦場の王者とは呼べないが、決して役立たずの骨董品ではない。頑丈な船体と強力なドローン運用システムを備えており、最新最大の戦艦に乗っているのでもないかぎり、うかつに手を出せば後悔することになるだろう。
-    ru: «Доминикс» — заслуженный ветеран космоса, находящийся в строю со времен
-      галлентско-калдарской войны. Этот корабль уже не считается передовым,
-      но его ни в коей мере нельзя назвать устаревшим. Обломав зубы о прочную
-      «шкуру» этого увальня и пострадав от роя выпущенных им дронов, о принятом
-      решении пожалеет любой капитан, ввязавшийся с ним в схватку — разве что
-      кроме пилотов самых крупных и современных линкоров.
-    zh: 多米尼克斯级战列舰是久经沙场的老将，其服役期可以追溯到盖伦特-加达里战争时期。尽管现在它不再是战场上的王者，但也绝对没有过时。它拥有强大的舰体和威猛的无人机武器，如果你没有最大最新型的战列舰的话，最好就不要在它面前卖弄风骚。
+    de: "Die Dominix ist eines der alten Schlachtrösser, die noch aus der Zeit des\
+      \ Kriegs zwischen Gallente und Caldari stammen. Sie wird zwar nicht mehr als\
+      \ eines der besten Schlachtschiffe angesehen, aber das heißt nicht, dass sie\
+      \ überflüssig wäre. Mit ihrem robusten Rumpf und dem starken Drohnenarsenal\
+      \ können sich nur die neuesten und größten Schlachtschiffe mit ihr messen."
+    en: "The Dominix is one of the old warhorses dating back to the Gallente-Caldari\
+      \ War. While no longer regarded as the king of the hill, it is by no means obsolete.\
+      \ Its formidable hulk and powerful drone arsenal means that anyone not in the\
+      \ largest and latest battleships will regret ever locking horns with it."
+    es: "La Dominix es una de las veteranas que se remonta a la guerra Gallente-Caldari.\
+      \ Aunque ya no es lo que era, eso no quiere decir que se haya quedado obsoleta.\
+      \ Gracias a su formidable casco y a su potente arsenal de drones, cualquiera\
+      \ que no esté en el acorazado más grande y moderno lamentará haberse cruzado\
+      \ con ella."
+    fr: "Le Dominix est un vétéran du front, qui déjà s'illustrait à l'époque de la\
+      \ guerre Gallente-Caldari. S'il n'est plus considéré comme le parangon des champs\
+      \ de bataille, ce cuirassé est loin d’être obsolète. Doté d'une coque massive\
+      \ et d'un puissant arsenal de drones, le Dominix est un adversaire redoutable,\
+      \ capable de pulvériser tous les vaisseaux de l'amas, à l'exception des cuirassé\
+      s de pointe les plus modernes."
+    ja: "ドミニックスは、ガレンテ-カルダリ戦争時代からある、古い軍艦の一つだ。もはや戦場の王者とは呼べないが、決して役立たずの骨董品ではない。頑丈な船体と\
+      強力なドローン運用システムを備えており、最新最大の戦艦に乗っているのでもないかぎり、うかつに手を出せば後悔することになるだろう。"
+    ru: "«Доминикс» — заслуженный ветеран космоса, находящийся в строю со времен г\
+      аллентско-калдарской войны. Этот корабль уже не считается передовым, но его\
+      \ ни в коей мере нельзя назвать устаревшим. Обломав зубы о прочную «шкуру» э\
+      того увальня и пострадав от роя выпущенных им дронов, о принятом решении пож\
+      алеет любой капитан, ввязавшийся с ним в схватку — разве что кроме пилотов с\
+      амых крупных и современных линкоров."
+    zh: "多米尼克斯级战列舰是久经沙场的老将，其服役期可以追溯到盖伦特-加达里战争时期。尽管现在它不再是战场上的王者，但也绝对没有过时。它拥有强大的舰体和威\
+      猛的无人机武器，如果你没有最大最新型的战列舰的话，最好就不要在它面前卖弄风骚。"
   factionID: 500004
   graphicID: 318
   groupID: 27
   marketGroupID: 81
-  mass: 100250000.0
+  mass: 100250000
   masteries:
-    0:
-      - 96
-      - 99
-      - 133
-      - 138
-      - 140
-      - 89
-    1:
-      - 96
-      - 99
-      - 133
-      - 138
-      - 140
-      - 89
-    2:
-      - 96
-      - 99
-      - 133
-      - 138
-      - 140
-      - 89
-    3:
-      - 96
-      - 99
-      - 133
-      - 138
-      - 140
-      - 89
-    4:
-      - 96
-      - 99
-      - 133
-      - 138
-      - 140
-      - 117
-      - 89
+    "0":
+    - 96
+    - 99
+    - 133
+    - 138
+    - 140
+    - 89
+    "1":
+    - 96
+    - 99
+    - 133
+    - 138
+    - 140
+    - 89
+    "2":
+    - 96
+    - 99
+    - 133
+    - 138
+    - 140
+    - 89
+    "3":
+    - 96
+    - 99
+    - 133
+    - 138
+    - 140
+    - 89
+    "4":
+    - 96
+    - 99
+    - 133
+    - 138
+    - 140
+    - 117
+    - 89
   metaGroupID: 1
   name:
-    de: Dominix
-    en: Dominix
-    es: Dominix
-    fr: Dominix
-    ja: ドミニックス
-    ru: Dominix
-    zh: 多米尼克斯级
+    de: "Dominix"
+    en: "Dominix"
+    es: "Dominix"
+    fr: "Dominix"
+    ja: "ドミニックス"
+    ru: "Dominix"
+    zh: "多米尼克斯级"
   portionSize: 1
   published: true
   raceID: 8
-  radius: 250.0
-  sofFactionName: gallentebase
+  radius: 250
+  sofFactionName: "gallentebase"
   soundID: 20072
   traits:
     miscBonuses: []
     roleBonuses:
-      -   bonus: 5.0
-          bonusText:
-            de: zusätzlicher Bonus auf HP der <a href=showinfo:3394>Verstärkten
-              Schottwand</a>
-            en: additional bonus to <a href=showinfo:3394>Reinforced Bulkhead</a>
-              hitpoints
-            es: de bonificación adicional a los puntos de vida del <a href=showinfo:3394>mamparo
-              reforzado</a>.
-            fr: de bonus supplémentaire aux points de vie de la <a href=showinfo:3394>cloison
-              renforcée</a>
-            ja: <a href=showinfo:3394>強化隔壁</a>HPがさらに増加
-            ru: дополнительный бонус к прочности <a href=showinfo:3394>укреплённой
-              переборки</a>
-            zh: <a href=showinfo:3394>强化舱隔壁</a>结构值加成
-          importance: 3
-          unitID: 105
-      -   bonus: 50.0
-          bonusText:
-            de: Bonus auf die HP der <a href=showinfo:3394>Panzerplatte</a>
-            en: bonus to <a href=showinfo:3394>Armor Plate</a> hitpoints
-            es: de bonificación a los puntos de vida de las <a href=showinfo:3394>placas
-              de blindaje</a>.
-            fr: de bonus aux points de vie du <a href=showinfo:3394>revêtement
-              de blindage</a>
-            ja: <a href=showinfo:3394>アーマープレート</a>HPが増加
-            ru: бонус к прочности <a href=showinfo:3394>бронеплиты</a>
-            zh: <a href=showinfo:3394>装甲附甲板</a>装甲值加成
-          importance: 2
-          unitID: 105
-      -   bonus: 100.0
-          bonusText:
-            de: Bonus auf die HP der <a href=showinfo:3425>Schilderweiterung</a>
-            en: bonus to <a href=showinfo:3425>Shield Extender</a> hitpoints
-            es: de bonificación a los puntos de vida del <a href=showinfo:3425>extensor
-              de escudo</a>.
-            fr: de bonus aux points de vie de l'<a href=showinfo:3425>extenseur
-              de bouclier</a>
-            ja: <a href=showinfo:3425>シールドエクステンダー</a>HPが増加
-            ru: бонус к прочности <a href=showinfo:3425>расширителя щитов</a>
-            zh: <a href=showinfo:3425>护盾扩展装置</a>护盾值加成
-          importance: 1
-          unitID: 105
+    - bonus: 5
+      bonusText:
+        de: "zusätzlicher Bonus auf HP der <a href=showinfo:3394>Verstärkten Schottwand</a>"
+        en: "additional bonus to <a href=showinfo:3394>Reinforced Bulkhead</a> hitpoints"
+        es: "de bonificación adicional a los puntos de vida del <a href=showinfo:3394>mamparo\
+          \ reforzado</a>."
+        fr: "de bonus supplémentaire aux points de vie de la <a href=showinfo:3394>cloison\
+          \ renforcée</a>"
+        ja: "<a href=showinfo:3394>強化隔壁</a>HPがさらに増加"
+        ru: "дополнительный бонус к\_прочности <a href=showinfo:3394>укреплённой п\
+          ереборки</a>"
+        zh: "<a href=showinfo:3394>强化舱隔壁</a>结构值加成"
+      importance: 3
+      unitID: 105
+    - bonus: 50
+      bonusText:
+        de: "Bonus auf die HP der <a href=showinfo:3394>Panzerplatte</a>"
+        en: "bonus to <a href=showinfo:3394>Armor Plate</a> hitpoints"
+        es: "de bonificación a los puntos de vida de las <a href=showinfo:3394>placas\
+          \ de blindaje</a>."
+        fr: "de bonus aux points de vie du <a href=showinfo:3394>revêtement de blindage</a>"
+        ja: "<a href=showinfo:3394>アーマープレート</a>HPが増加"
+        ru: "бонус к\_прочности <a href=showinfo:3394>бронеплиты</a>"
+        zh: "<a href=showinfo:3394>装甲附甲板</a>装甲值加成"
+      importance: 2
+      unitID: 105
+    - bonus: 100
+      bonusText:
+        de: "Bonus auf die HP der <a href=showinfo:3425>Schilderweiterung</a>"
+        en: "bonus to <a href=showinfo:3425>Shield Extender</a> hitpoints"
+        es: "de bonificación a los puntos de vida del <a href=showinfo:3425>extensor\
+          \ de escudo</a>."
+        fr: "de bonus aux points de vie de l'<a href=showinfo:3425>extenseur de bouclier</a>"
+        ja: "<a href=showinfo:3425>シールドエクステンダー</a>HPが増加"
+        ru: "бонус к\_прочности <a href=showinfo:3425>расширителя щитов</a>"
+        zh: "<a href=showinfo:3425>护盾扩展装置</a>护盾值加成"
+      importance: 1
+      unitID: 105
     types:
-      3336:
-        -   bonus: 7.5
-            bonusText:
-              de: Bonus auf die optimale Reichweite und Nachführungsgeschwindigkeit
-                von <a href=showinfo:3436>Drohnen</a>
-              en: bonus to <a href=showinfo:3436>Drone</a> optimal range and
-                tracking speed
-              es: de bonificación a la velocidad de rastreo y el alcance óptimo
-                de los <a href=showinfo:3436>drones</a>.
-              fr: de bonus à la portée optimale et à la vitesse de poursuite
-                du <a href=showinfo:3436>drone</a>
-              ja: <a href=showinfo:3436>ドローン</a>の最適射程距離と追跡速度が増加
-              ru: повышается скорость наводки на цель бортового оружия <a href=showinfo:3436>дронов</a>,
-                увеличивается оптимальная дальность его действия
-              zh: <a href="showinfo:3436">无人机</a>最佳射程和跟踪速度加成
-            importance: 2
-            unitID: 105
-        -   bonus: 10.0
-            bonusText:
-              de: Bonus auf die HP und den Schaden von <a href=showinfo:3436>Drohnen</a>
-              en: bonus to <a href=showinfo:3436>Drone</a> hitpoints and damage
-              es: de bonificación a los puntos de vida y el daño de los <a href=showinfo:3436>drones</a>.
-              fr: de bonus aux dégâts et aux PV des <a href=showinfo:3436>drones</a>
-              ja: <a href=showinfo:3436>ドローン</a>のヒットポイントとダメージが増加
-              ru: увеличивается урон бортового оружия <a href=showinfo:3436>дронов</a>;
-                увеличивается запас их прочности
-              zh: <a href="showinfo:3436">无人机</a>伤害和HP加成
-            importance: 1
-            unitID: 105
-  volume: 454500.0
+      "3336":
+      - bonus: 7.5
+        bonusText:
+          de: "Bonus auf die optimale Reichweite und Nachführungsgeschwindigkeit von\
+            \ <a href=showinfo:3436>Drohnen</a>"
+          en: "bonus to <a href=showinfo:3436>Drone</a> optimal range and tracking\
+            \ speed"
+          es: "de bonificación a la velocidad de rastreo y el alcance óptimo de los\
+            \ <a href=showinfo:3436>drones</a>."
+          fr: "de bonus à la portée optimale et à la vitesse de poursuite du <a href=showinfo:3436>drone</a>"
+          ja: "<a href=showinfo:3436>ドローン</a>の最適射程距離と追跡速度が増加"
+          ru: "повышается скорость наводки на цель бортового оружия <a href=showinfo:3436>д\
+            ронов</a>, увеличивается оптимальная дальность его действия"
+          zh: "<a href=\"showinfo:3436\">无人机</a>最佳射程和跟踪速度加成"
+        importance: 2
+        unitID: 105
+      - bonus: 10
+        bonusText:
+          de: "Bonus auf die HP und den Schaden von <a href=showinfo:3436>Drohnen</a>"
+          en: "bonus to <a href=showinfo:3436>Drone</a> hitpoints and damage"
+          es: "de bonificación a los puntos de vida y el daño de los <a href=showinfo:3436>drones</a>."
+          fr: "de bonus aux dégâts et aux PV des <a href=showinfo:3436>drones</a>"
+          ja: "<a href=showinfo:3436>ドローン</a>のヒットポイントとダメージが増加"
+          ru: "увеличивается урон бортового оружия <a href=showinfo:3436>дронов</a>;\
+            \ увеличивается запас их прочности"
+          zh: "<a href=\"showinfo:3436\">无人机</a>伤害和HP加成"
+        importance: 1
+        unitID: 105
+  volume: 454500
+"3336":
+  basePrice: 7500000
+  description:
+    de: "Skill zur Bedienung von Gallente-Schlachtschiffen."
+    en: "Skill at operating Gallente battleships."
+    es: "Habilidad en el manejo de acorazados gallentes."
+    fr: "Compétence liée au pilotage des cuirassés gallente."
+    ja: "ガレンテ戦艦を操作するスキル。"
+    ru: "Освоив этот навык, пилот получит допуск к выполнению полётов на линкорах\
+      \ производства Галлентской Федерации."
+    zh: "操作盖伦特战列舰的技能。"
+  groupID: 257
+  iconID: 33
+  marketGroupID: 377
+  name:
+    de: "Gallente Battleship"
+    en: "Gallente Battleship"
+    es: "Acorazado gallente"
+    fr: "Cuirassé gallente"
+    ja: "ガレンテ戦艦"
+    ru: "Галлентские линкоры"
+    zh: "盖伦特战列舰操作"
+  portionSize: 1
+  published: true
+  raceID: 8
+  volume: 0.01
+"3327":
+  basePrice: 30000
+  description:
+    de: "Die grundsätzliche Fertigkeit, ein Raumschiff zu bedienen.\r\n\r\n2% Bonus\
+      \ auf die Wendigkeit eines Schiffes je Skillstufe."
+    en: "The basic operation of spaceships. 2% improved ship agility for all ships\
+      \ per skill level."
+    es: "Operación básica de naves espaciales. +2\_% de bonificación a la agilidad\
+      \ de todas las naves por nivel de habilidad."
+    fr: "Pilotage de base des vaisseaux. Augmente de 2\_%\_par niveau de compétence\
+      \ la maniabilité de tous les vaisseaux."
+    ja: "宇宙船の基本操作スキル。スキルレベル上昇ごとに全ての船の機動性が2%上昇。"
+    ru: "Базовые навыки управления кораблями. За каждую степень освоения навыка: н\
+      а 2% повышается маневренность всех кораблей."
+    zh: "操控舰船的基本技能。每升一级，所有飞船的灵活性提升2%。"
+  groupID: 257
+  iconID: 33
+  marketGroupID: 377
+  name:
+    de: "Spaceship Command"
+    en: "Spaceship Command"
+    es: "Manejo de naves espaciales"
+    fr: "Pilotage de vaisseau"
+    ja: "宇宙船操作"
+    ru: "Допуски к управлению кораблями"
+    zh: "飞船操控学"
+  portionSize: 1
+  published: true
+  volume: 0.01
+"33097":
+  basePrice: 2500000
+  description:
+    de: "Skill zur Bedienung von Gallente-Schlachtkreuzern."
+    en: "Skill at operating Gallente battlecruisers."
+    es: "Habilidad en el manejo de cruceros de combate gallentes."
+    fr: "Compétence liée au pilotage des croiseurs de bataille gallente. Formation\
+      \ impossible sur les comptes d'évaluation."
+    ja: "ガレンテ巡洋戦艦を操作するスキル。"
+    ru: "Освоив этот навык, пилот получит допуск к выполнению полётов на линейных\
+      \ крейсерах производства Галлентской Федерации."
+    zh: "操作盖伦特战列巡洋舰的技能。"
+  groupID: 257
+  iconID: 33
+  marketGroupID: 377
+  name:
+    de: "Gallente Battlecruiser"
+    en: "Gallente Battlecruiser"
+    es: "Crucero de combate gallente"
+    fr: "Croiseur de bataille gallente"
+    ja: "ガレンテ巡洋戦艦"
+    ru: "Галлентские линейные крейсеры"
+    zh: "盖伦特战列巡洋舰操作"
+  portionSize: 1
+  published: true
+  raceID: 8
+  volume: 0.01
+"3332":
+  basePrice: 1000000
+  description:
+    de: "Fertigkeit, Kreuzer der Gallente zu bedienen."
+    en: "Skill at operating Gallente cruisers."
+    es: "Habilidad en el manejo de cruceros gallentes."
+    fr: "Compétence liée au pilotage des croiseurs gallente."
+    ja: "ガレンテ巡洋艦を操作するためのスキル。"
+    ru: "Освоив этот навык, пилот получит допуск к выполнению полётов на крейсерах\
+      \ производства Галлентской Федерации."
+    zh: "操作盖伦特巡洋舰的技能。"
+  groupID: 257
+  iconID: 33
+  marketGroupID: 377
+  name:
+    de: "Gallente Cruiser"
+    en: "Gallente Cruiser"
+    es: "Crucero gallente"
+    fr: "Croiseur gallente"
+    ja: "ガレンテ巡洋艦"
+    ru: "Галлентские крейсеры"
+    zh: "盖伦特巡洋舰操作"
+  portionSize: 1
+  published: true
+  raceID: 8
+  volume: 0.01
+"33093":
+  basePrice: 100000
+  description:
+    de: "Fertigkeit, Zerstörer der Gallente zu bedienen."
+    en: "Skill at operating Gallente destroyers."
+    es: "Habilidad en el manejo de destructores gallentes."
+    fr: "Compétence liée au pilotage des destroyers gallente."
+    ja: "ガレンテ駆逐艦を操作するためのスキル。"
+    ru: "Освоив этот навык, пилот получит допуск к выполнению полётов на эсминцах\
+      \ производства Галлентской Федерации."
+    zh: "操作盖伦特驱逐舰的技能。"
+  groupID: 257
+  iconID: 33
+  marketGroupID: 377
+  name:
+    de: "Gallente Destroyer"
+    en: "Gallente Destroyer"
+    es: "Destructor gallente"
+    fr: "Destroyer gallente"
+    ja: "ガレンテ駆逐艦"
+    ru: "Галлентские эсминцы"
+    zh: "盖伦特驱逐舰操作"
+  portionSize: 1
+  published: true
+  raceID: 8
+  volume: 0.01
+"3328":
+  basePrice: 50000
+  description:
+    de: "Fertigkeit, Fregatten der Gallente zu bedienen."
+    en: "Skill at operating Gallente frigates."
+    es: "Habilidad en el manejo de fragatas gallentes."
+    fr: "Compétence liée au pilotage des frégates gallente."
+    ja: "ガレンテフリゲートを操作するためのスキル。"
+    ru: "Освоив этот навык, пилот получит допуск к выполнению полётов на фрегатах\
+      \ производства Галлентской Федерации."
+    zh: "操作盖伦特护卫舰的技能。"
+  groupID: 257
+  iconID: 33
+  marketGroupID: 377
+  name:
+    de: "Gallente Frigate"
+    en: "Gallente Frigate"
+    es: "Fragata gallente"
+    fr: "Frégate gallente"
+    ja: "ガレンテフリゲート"
+    ru: "Галлентские фрегаты"
+    zh: "盖伦特护卫舰操作"
+  portionSize: 1
+  published: true
+  raceID: 8
+  volume: 0.01
+"52225":
+  basePrice: 1000
+  description:
+    de: "Dieses bioadaptive Mutaplasmidwerkzeug wurde dazu entwickelt, um sich mit\
+      \ Geräten zu verbinden, die die Auswirkungen kritischer Systemschäden abschwä\
+      chen, und um diese zu modifizieren. Dementsprechend könnte dieses Mutaplasmid\
+      \ dazu verwendet werden, die Leistungseigenschaften von Standard-Schadenskontrollmodulen\
+      \ zu verändern. Bioadaptive Triglavia-Technologie macht in großem Maße Gebrauch\
+      \ von angelegten Kolonien extremophiler Bakterien, die für den Anbau, den Abbau\
+      \ und die Anpassung verschiedener Ressourcen aus der Raumverwerfung des Abgrunds\
+      \ genutzt werden. In Triglavia-Speichern können künstlich kolonisierte Plasmide\
+      \ verschiedener Entwicklungsstufen gefunden werden, die in Spezialistenwerkzeugen\
+      \ für die direkte Anpassung von Technologie implementiert sind. Diese Mutaplasmide\
+      \ können verwendet werden, um die Eigenschaften einer Vielzahl von Ausrüstungsarten\
+      \ zu verändern. Dabei sind der Stamm und das bioadaptive Werkzeug, in das sie\
+      \ eingebracht sind, entscheidend. Die Mutaplasmidkolonie, die in dieses bioadaptive\
+      \ Werkzeug implementiert wurde, scheint reif zu sein und sich mit einer soliden\
+      \ Rate zu reproduzieren. Der Mutationsnutzen und die Risiken der Verwendung\
+      \ dieses Mutaplasmids halten sich mehr oder weniger in Grenzen."
+    en: "This bioadaptive mutaplasmid tool is designed to interface with and alter\
+      \ devices that mitigate the impact of critical system damage. As such this mutaplasmid\
+      \ could be used to mutate the performance characteristics of standard damage\
+      \ control modules.\r\n\r\nTriglavian bioadaptive technology makes extensive\
+      \ use of engineered colonies of extremophilic bacteria, that are used to grow,\
+      \ harvest and adapt various resources found in Abyssal Deadspace. Artificial\
+      \ colonizing plasmids integrated into specialist tools used for direct adaptation\
+      \ of technology can be found in Triglavian caches in various stages of development.\
+      \ These mutaplasmids can be used to alter the characteristics of a wide variety\
+      \ of equipment types, depending on the strain and the bioadaptive tool with\
+      \ which they are integrated.\r\n\r\nThe mutaplasmid colony integrated into this\
+      \ bioadaptive tool appears to be mature and reproducing at a healthy rate. The\
+      \ mutational benefits and risks of using this mutaplasmid are within relatively\
+      \ balanced bounds."
+    es: "Esta herramienta mutaplásmida bioadaptativa está diseñada para alterar e\
+      \ interactuar con dispositivos que mitigan el impacto de los daños críticos\
+      \ del sistema. Por tanto, este mutaplásmido se puede usar para mutar las caracterí\
+      sticas de rendimiento de los módulos de control de daños estándar.\n\nLa tecnologí\
+      a bioadaptativa triglaviana hace un extenso uso de colonias industriales de\
+      \ bacterias extremófilas que se usan para cultivar, cosechar y adaptar varios\
+      \ recursos hallados en el espacio muerto abisal. En los depósitos triglavianos\
+      \ hay plásmidos colonizadores artificiales integrados en herramientas especializadas\
+      \ en la adaptación directa de la tecnología en varias fases de desarrollo. Estos\
+      \ mutaplásmidos pueden emplearse para alterar las características de una amplia\
+      \ variedad de tipos de aparatos, según la cepa y la herramienta bioadaptativa\
+      \ en la que se integran.\n\nLa colonia mutaplásmida integrada en esta herramienta\
+      \ bioadaptativa parece madura y se reproduce a un ritmo saludable. Los beneficios\
+      \ de la mutación y los riesgos de usar este mutaplásmido están relativamente\
+      \ equilibrados."
+    fr: "Cet outil de mutaplasmide bioadaptatif a été conçu pour se synchroniser avec\
+      \ les appareils qui atténuent l'impact des dégâts système critiques, mais aussi\
+      \ pour les modifier. Ainsi, ce mutaplasmide pourrait servir à muter les caracté\
+      ristiques de performance des modules de contrôle des dégâts d'attaque standard.\
+      \ La technologie bioadaptative triglavian utilise massivement les colonies de\
+      \ bactéries extrêmophiles spécialement conçues qui savent se développer, s'adapter\
+      \ et absorber les différentes ressources qu'offre l'abîme Deadspace. Les plasmides\
+      \ colonisateurs artificiels qui ont été intégrés aux outils des spécialistes\
+      \ et qui permettent une adaptation technologique directe se trouvent dans des\
+      \ caches triglavian et sont à différents stades de leur développement. Ces mutaplasmides\
+      \ peuvent servir à modifier les caractéristiques d'une large variété de types\
+      \ d'équipement, en fonction de la souche et de l'outil bioadaptatif qui les\
+      \ a intégrés. La colonie mutaplasmide intégrée à cet outil bioadaptatif semble\
+      \ être arrivée à maturité et se reproduit à un rythme correct. Les bénéfices\
+      \ et les risques de mutation lorsqu'on utilise ce mutaplasmide sont relativement\
+      \ équilibrés."
+    ja: "この生物学的適応性のある変異プラスミドツールは、重要なシステム損傷の影響を緩和するデバイスとのインターフェースおよび変更のために設計された。つまり\
+      、この変異プラスミドは、標準的なダメージ制御モジュールの性能特性を変異させるために使用することができる。\r\n\nトリグラビアンの生物適応技術は、極限\
+      環境バクテリアの培養コロニーを広範囲に利用している。このバクテリアはアビサルデッドスペースで発見されたもので、様々な資源を成長、収穫、適応させるために使\
+      用されている。技術の直接取得に使用される専門ツールに統合された人工コロニー形成プラスミドは、発達の様々な段階にあるトリグラビアンのキャッシュで見つけるこ\
+      とができる。これらの変異プラスミドは、統合されたバクテリア株や生物適応ツールに応じて、様々な種類の機器の特性を変化させるために使用することができる。\r\
+      \n\nこの生物適応ツールに統合された変異プラスミドツールのコロニーは成熟し、健康的な速度で繁殖しているように見える。この変異プラスミドツールを使用する\
+      ことによる突然変異の利点とリスクは、比較的バランスのとれた範囲内にある。"
+    ru: "Этот биоадаптивный мутаплазмидный инструмент разработан для взаимодействи\
+      я с устройствами, смягчающими результат критического повреждения систем. Так\
+      им образом, он позволяет изменять рабочие характеристики большинства обычных\
+      \ модулей боевой живучести, установленных на кораблях соответствующего разме\
+      ра. В биоадаптивных технологиях Триглава широко используются программируемые\
+      \ колонии экстремофильных бактерий. Они позволяют выращивать, добывать и ада\
+      птировать различные ресурсы, встречающиеся в Мёртвой бездне. Искусственные к\
+      олонии плазмидов на разных этапах развития, помещённые внутрь специализирова\
+      нных инструментов, предназначены для прямой адаптации техники и встречаются\
+      \ в тайниках Триглава. Эти мутаплазмиды, в зависимости от их штамма и инстру\
+      мента для биоадаптации, в который они помещены, можно использовать для измен\
+      ения характеристик различных типов оборудования. Колония мутаплазмидов, поме\
+      щённых в этот инструмент для биоадаптации, оказалась зрелой, а темпы её восп\
+      роизводства\_— умеренными. Возможная польза и риски, возникающие в результат\
+      е использования данного мутаплазмида, достаточно сбалансированы."
+    zh: "这个生化适应性突变质体工具被设计用来连接和改变可以减轻对系统的破坏性伤害的设备。因此，这个质体可以使大多数尺寸合适的标准型损伤控制的性能特征发生突\
+      变。\n\n\n\n三神裔生化适应科技广泛应用了极端微生物细菌种群，这种细菌种群生长于并可适应深渊空间中发现的各种资源。将人工种群质体植入用以快速适应技\
+      术的专用工具这一做法在三神裔的各个发展阶段都有出现。这些突变质体可以用来改变多种设备类型的特性，效果根据植入的生化适应工具不同而有所差别。\n\n\n\n\
+      植入这个生化适应工具的突变质体种群看上去已经成熟，正以一种健康的方式进行自我繁殖。使用这种突变质体带来的益处和危险性处于一种微妙的相对平衡。"
+  groupID: 1964
+  iconID: 24131
+  marketGroupID: 2533
+  mass: 1
+  name:
+    de: "Gravid Damage Control Mutaplasmid"
+    en: "Gravid Damage Control Mutaplasmid"
+    es: "Mutaplásmido grávido de control de daños"
+    fr: "Mutaplasmide de contrôle des dégâts d'assaut inquiétant"
+    ja: "胎動ダメージ制御変異プラスミド"
+    ru: "Gravid Damage Control Mutaplasmid"
+    zh: "怀璧的损伤控制突变质体"
+  portionSize: 1
+  published: true
+  volume: 1
+"52227":
+  description:
+    de: "Verwendet eine Kombination aus Dämpfungsfeldemittern und Redundanzsystemen,\
+      \ um die Auswirkungen von kritischen Systemschäden zu verhindern. Verleiht einen\
+      \ Bonus auf die Widerstandsfähigkeit von Schild, Panzerung und Rumpf. Es kann\
+      \ zeitgleich immer nur ein Schadenskontroll-System ausgerüstet werden."
+    en: "Utilizes a combination of containment field emitters and redundancy systems\
+      \ to mitigate the impact of critical system damage. \r\n\r\nGrants a bonus to\
+      \ resistance for shield, armor and hull.\r\n\r\nOnly one Damage Control can\
+      \ be fit at a given time."
+    es: "Usa una combinación de emisores de campo de contención y sistemas redundantes\
+      \ para mitigar el impacto de daños críticos al sistema. \n\nOtorga una bonificació\
+      n de resistencia de escudo, blindaje y casco.\n\nSolo se puede equipar un control\
+      \ de daños a la vez."
+    fr: "Des émetteurs de champ de confinement et des systèmes redondants permettent\
+      \ d'atténuer l'impact des dégâts critiques infligés aux systèmes. Donne un bonus\
+      \ de résistance aux boucliers, au blindage et à la coque. Un seul contrôle des\
+      \ dégâts peut être installé à la fois."
+    ja: "コンテインメントフィールドエミッターと冗長システムを組み合わせて使用することで、システムへの致命的なダメージの衝撃を回避する。\r\n\nシールド\
+      、アーマー、船体の耐性が増大する。\r\n\n複数のダメージ制御を同時に装備することはできない。"
+    ru: "Эффективное сочетание излучателей сдерживающего поля и резервных блоков п\
+      озволяет смягчить результат критического повреждения систем. Даёт бонус к со\
+      противлению щитов, брони и корпуса. Одновременно можно установить только оди\
+      н модуль боевой живучести."
+    zh: "将围场发射器和冗余系统结合使用，减轻由严重系统性损坏造成的影响。 \n\n\n\n提高护盾、装甲和结构的抗性。\n\n\n\n只能同时装配一个损伤\
+      控制。"
+  groupID: 60
+  iconID: 77
+  metaGroupID: 15
+  name:
+    de: "Abyssal Damage Control"
+    en: "Abyssal Damage Control"
+    es: "Control de daños abisal"
+    fr: "Contrôle des dégâts abyssaux"
+    ja: "アビサル・ダメージ制御"
+    ru: "Abyssal Damage Control"
+    zh: "深渊损伤控制"
+  portionSize: 1
+  published: true
+  volume: 5
+"2046":
+  description:
+    de: "Verwendet eine Kombination aus Dämpfungsfeldemittern und Redundanzystemen\
+      \ um die Auswirkungen von kritischen Systemschäden zu verhindern. \n\n\n\nVerleiht\
+      \ einen Bonus auf die Widerstandsfähigkeit von Schild, Panzerung und Schiffsstruktur.\n\
+      \n\n\nEs kann immer nur ein Schadenskontroll-System zu einem festgelegten Zeitpunkt\
+      \ eingebaut werden."
+    en: "Utilizes a combination of containment field emitters and redundancy systems\
+      \ to mitigate the impact of critical system damage. \r\n\r\nGrants a bonus to\
+      \ resistance for shield, armor and hull.\r\n\r\nOnly one Damage Control can\
+      \ be fit at a given time."
+    es: "Usa una combinación de emisores de campo de contención y sistemas redundantes\
+      \ para mitigar el impacto de daños críticos al sistema. \n\n\n\nOtorga una bonificació\
+      n de resistencia de escudo, blindaje y casco.\n\n\n\nSolo se puede equipar un\
+      \ control de daños a la vez."
+    fr: "Ce module combine des émetteurs de champ de confinement et des systèmes de\
+      \ redondance voués à mitiger l'impact dévastateur de dégâts critiques sur le\
+      \ système. \n\n\n\nOffre un bonus de résistance aux boucliers, au blindage et\
+      \ à la coque.\n\n\n\nUn seul régulateur de dégâts peut être équipé à la fois."
+    ja: "格納型電界エミッターと冗長システムを組み合わせることにより、システムが深刻なダメージを受けた場合の影響を軽減する。シールド、アーマー、船体レジスタ\
+      ンスが向上する。ダメージコントロールは一度に一つしか装備できない。"
+    ru: "Использует технологию локальных защитных полей и принципы многократного р\
+      езервирования для уменьшения последствий серьезных повреждений бортовых сист\
+      ем. \n\n\n\nПовышает сопротивляемость силовых полей, брони и корпуса корабля\
+      \ всем видам ущерба.\n\n\n\nДопускается одновременное использование лишь одн\
+      ого модуля боевой живучести (Damage Control)."
+    zh: "将围场发射器和冗余系统结合使用，减轻由严重系统性损坏造成的影响。 \n\n\n\n提高护盾、装甲和结构的抗性。\n\n\n\n只能同时装配一个损伤\
+      控制。"
+  groupID: 60
+  iconID: 77
+  marketGroupID: 615
+  mass: 5000
+  metaGroupID: 1
+  name:
+    de: "Damage Control I"
+    en: "Damage Control I"
+    es: "Control de daños\_I"
+    fr: "Contrôle des dégâts I"
+    ja: "ダメージ制御I"
+    ru: "Damage Control I"
+    zh: "损伤控制 I"
+  portionSize: 1
+  published: true
+  volume: 5
+"2048":
+  description:
+    de: "Verwendet eine Kombination aus Dämpfungsfeldemittern und Redundanzystemen\
+      \ um die Auswirkungen von kritischen Systemschäden zu verhindern. \n\n\n\nVerleiht\
+      \ einen Bonus auf die Widerstandsfähigkeit von Schild, Panzerung und Schiffsstruktur.\n\
+      \n\n\nEs kann immer nur ein Schadenskontroll-System zu einem festgelegten Zeitpunkt\
+      \ eingebaut werden."
+    en: "Utilizes a combination of containment field emitters and redundancy systems\
+      \ to mitigate the impact of critical system damage. \r\n\r\nGrants a bonus to\
+      \ resistance for shield, armor and hull.\r\n\r\nOnly one Damage Control can\
+      \ be fit at a given time."
+    es: "Usa una combinación de emisores de campo de contención y sistemas redundantes\
+      \ para mitigar el impacto de daños críticos al sistema. \n\n\n\nOtorga una bonificació\
+      n de resistencia de escudo, blindaje y casco.\n\n\n\nSolo se puede equipar un\
+      \ control de daños a la vez."
+    fr: "Ce module combine des émetteurs de champ de confinement et des systèmes de\
+      \ redondance voués à mitiger l'impact dévastateur de dégâts critiques sur le\
+      \ système. \n\n\n\nOffre un bonus de résistance aux boucliers, au blindage et\
+      \ à la coque.\n\n\n\nUn seul régulateur de dégâts peut être équipé à la fois."
+    ja: "格納型電界エミッターと冗長システムを組み合わせることにより、システムが深刻なダメージを受けた場合の影響を軽減する。シールド、アーマー、船体レジスタ\
+      ンスが向上する。ダメージコントロールは一度に一つしか装備できない。"
+    ru: "Использует технологию локальных защитных полей и принципы многократного р\
+      езервирования для уменьшения последствий серьезных повреждений бортовых сист\
+      ем. \n\n\n\nПовышает сопротивляемость силовых полей, брони и корпуса корабля\
+      \ всем видам поражающего действия.\n\n\n\nДопускается одновременное использо\
+      вание лишь одного модуля боевой живучести (Damage Control)."
+    zh: "将围场发射器和冗余系统结合使用，减轻由严重系统性损坏造成的影响。 \n\n\n\n提高护盾、装甲和结构的抗性。\n\n\n\n只能同时装配一个损伤\
+      控制。"
+  groupID: 60
+  iconID: 77
+  marketGroupID: 615
+  mass: 5000
+  metaGroupID: 2
+  name:
+    de: "Damage Control II"
+    en: "Damage Control II"
+    es: "Control de daños\_II"
+    fr: "Contrôle des dégâts II"
+    ja: "ダメージ制御II"
+    ru: "Damage Control II"
+    zh: "损伤控制 II"
+  portionSize: 1
+  published: true
+  variationParentTypeID: 2046
+  volume: 5
+"45623":
+  description:
+    de: "Dieses Kern-Subsystem besteht aus unzähligen Nanomaschinen, die den Energiefluss\
+      \ des Antimateriereaktors eines Schiffes verbessern, und bietet einem Piloten\
+      \ somit die Möglichkeit, die Kapazität von Stromnetz und Energiespeicher seines\
+      \ Schiffes zu verbessern. Designer von Tech-III-Schiffen hatten von Anfang an\
+      \ Probleme damit, ein modulares Schiff zu entwerfen, dessen grundlegende Ingenieursupgrades\
+      \ nach Bedarf ausgetauscht werden können. Besonders in Hinblick auf die Leistungserhö\
+      hung von Stromnetz und Energiespeicher des Schiffes ohne den Einsatz von Batterien\
+      \ traten Schwierigkeiten auf. Letztendlich konnten durch die Nutzung von Polymeren\
+      \ auf Fullerenbasis Lösungen umgesetzt werden, die es bis zu diesem Zeitpunkt\
+      \ nur in der Theorie gegeben hatte."
+    en: "Comprised of countless nanomachines that enhance the energy flow from a ship's\
+      \ antimatter reactor, this core subsystem offers a pilot the option of increasing\
+      \ the power grid and capacitor capacity of their vessel. Designers of Tech III\
+      \ vessels were initially hampered by the problem of how to design a modular\
+      \ ship that could swap out basic engineering upgrades on a per-need basis. This\
+      \ proved particularly true when it came to reinforcing a vessel's power grid\
+      \ and capacitor banks without the use of batteries. In the end, the provision\
+      \ of nanomachines constructed from fullerene-based polymers allowed for solutions\
+      \ that had only existed in theory up until that point."
+    es: "Compuesto por infinidad de nanomáquinas que mejoran el flujo de energía desde\
+      \ el reactor de antimateria de una nave, este subsistema del núcleo brinda al\
+      \ piloto la posibilidad de aumentar el sistema de potencia y la capacidad del\
+      \ condensador de su nave. Al principio, los diseñadores de naves\_T3 tuvieron\
+      \ que dilucidar cómo diseñar una nave modular que integrase mejoras básicas\
+      \ de ingeniería en función de las necesidades. De hecho, esto es lo que pasó\
+      \ al intentar reforzar el sistema de potencia y los bancos de condensadores\
+      \ de una nave sin emplear baterías. Al final, el uso de nanomáquinas construidas\
+      \ a partir de polímeros basados en fullereno ha dado lugar a soluciones que\
+      \ hasta entonces solo existían en la teoría."
+    fr: "Composé d'un nombre incalculable de nanomachines améliorant le flux d'énergie\
+      \ issu du cœur du réacteur antimatière d'un vaisseau, ce sous-système principal\
+      \ permet au pilote d'augmenter le réseau d'alimentation et la charge de capaciteur\
+      \ de son vaisseau. Au début, les concepteurs des vaisseaux Tech\_III ne parvenaient\
+      \ pas à mettre au point un vaisseau modulaire capable d'utiliser des améliorations\
+      \ d'ingénierie en cas de besoin. Cela était particulièrement vrai au moment\
+      \ d'augmenter le réseau d'alimentation et la taille du capaciteur d'un vaisseau\
+      \ sans utiliser de batterie. En fin de compte, l'approvisionnement en nanomachines\
+      \ en polymères à base de fullerène apporta la solution qui n'existait jusque-là\
+      \ qu'en théorie."
+    ja: "艦船のアンチマターリアクターのエネルギー流量を強化する無数のナノマシンで構成される本コア・サブシステムを使うことで、パイロットは自身の船のパワーグ\
+      リッドとキャパシタ容量を増大可能である。T3艦船の設計者達は当初、基礎的な工学アップグレードを逐次入れ替えできるモジュール型船舶の設計という難問に悩まさ\
+      れていた。特に問題だったのは、バッテリーを使用しない船体のパワーグリッドとキャパシタバンクの補強方法であった。しかしこの課題は当時はあくまで仮説としての\
+      み存在していたフラーレン・ベースのポリマー素材から作られたナノマシンの供給によって解決する。"
+    ru: "Эта центральная подсистема, состоящая из бесчисленных наномашин, повышающ\
+      их эффективность передачи энергии из антиматерийного реактора, позволяет пил\
+      оту повысить мощность реактора и ёмкость накопителя корабля. При создании мо\
+      дульного дизайна, позволяющего по мере необходимости менять комплектацию клю\
+      чевых бортовых систем и пакетов их расширения, разработчики этих кораблей вс\
+      третились с определёнными затруднениями. С особенной яркостью они проявились\
+      \ в вопросе повышения эффективности реактора и увеличения ёмкости накопителя\
+      \ энергии без использования дополнительных батарей. В конце концов появление\
+      \ наномашин на основе фуллеренных полимеров позволило применить решения, до\
+      \ той поры бывшие исключительно теоретическими."
+    zh: "由于这个核心子系统中包含的无数纳米机器人能增加舰船反物质反应堆输出的能量，因此舰船的能量栅格和电容器电容量便能得到增强。如何能够设计出一种模块化的\
+      舰船，使其能够按照需求对工程升级模块进行自由的替换，这个问题在最初一直困扰着三级科技舰船的工程师们。特别是当不使用电池的时候，舰船的能量栅格和电容器组必\
+      定会被加强。最后，由富勒烯聚合物建造的纳米机器的出现让这个问题得到了解决，在那之前这还只存在于理论研究的领域。"
+  graphicID: 21511
+  groupID: 958
+  iconID: 3636
+  marketGroupID: 1122
+  mass: 1200000
+  metaGroupID: 14
+  name:
+    de: "Legion Core - Augmented Antimatter Reactor"
+    en: "Legion Core - Augmented Antimatter Reactor"
+    es: "Núcleo de la Legion: reactor antimateria aumentado"
+    fr: "Legion Nucléus – Réacteur à antimatière augmenté"
+    ja: "レギオン・コア - オーグメンテッド・アンチマターリアクター"
+    ru: "Legion Core - Augmented Antimatter Reactor"
+    zh: "圣卒核心 - 增强反物质反应堆"
+  portionSize: 1
+  published: true
+  raceID: 4
+  sofFactionName: "amarrbase"
+  traits:
+    miscBonuses: []
+    roleBonuses:
+    - bonusText:
+        de: "<b><u>Zusätzliche Basiswerte</b></u>"
+        en: "<b><u>Additional Base Stats</b></u>"
+        es: "<b><u>Estadísticas básicas adicionales</b></u>"
+        fr: "<b><u>Stats de base supplémentaires</b></u>"
+        ja: "<b><u>追加ベース統計</b></u>"
+        ru: "<b><u>Кроме того:</b></u>"
+        zh: "<b><u>附加基础数值</b></u>"
+      importance: 2
+    - bonusText:
+        de: "+1 Mid Slot, +3 Low Slots"
+        en: "+1 Mid Slot, +3 Low Slots"
+        es: "+1 ranura intermedia, +3 ranuras inferiores"
+        fr: "+1 Emplacement intermédiaire, +3 Emplacements inférieurs"
+        ja: "ミッドスロット+1、ロースロット+3"
+        ru: "+1 разъём средней мощности, +3 разъёма малой мощности"
+        zh: "中槽+1，低槽+3"
+      importance: 3
+    - bonusText:
+        de: "+50 GJ Energiespeicherkapazität"
+        en: "+50GJ Capacitor Capacity"
+        es: "+50\_GJ de capacidad del condensador"
+        fr: "Charge de capaciteur +50 GJ"
+        ja: "キャパシタ容量+50GJ"
+        ru: "+50 ГДж ёмкости накопителя"
+        zh: "电容器电容量+50GJ"
+      importance: 4
+    - bonus: 20
+      bonusText:
+        de: "Bonus auf die Stromleistung des Schiffes"
+        en: "bonus to ship power output"
+        es: "de bonificación a la potencia de salida de la nave."
+        fr: "de bonus à la puissance du réseau d'alimentation du vaisseau"
+        ja: "艦船のパワー出力が上昇"
+        ru: "повышается мощность реактора корабля"
+        zh: "舰船能量栅格输出加成"
+      importance: 1
+      unitID: 105
+    types:
+      "30539":
+      - bonus: 3
+        bonusText:
+          de: "Bonus auf die Resistenz gegen Energiekriegsführung"
+          en: "bonus to energy warfare resistance"
+          es: "de bonificación a la resistencia a la guerra de energía."
+          fr: "de bonus à la résistance aux énergies de guerre"
+          ja: "エネルギー戦耐性が増加"
+          ru: "увеличивается сопротивляемость вражескому воздействию на накопитель\
+            \ энергии"
+          zh: "能量战抗性加成"
+        importance: 2
+        unitID: 105
+      - bonus: 5
+        bonusText:
+          de: "Bonus auf die Energiespeicherkapazität"
+          en: "bonus to capacitor capacity"
+          es: "de bonificación a la capacidad del condensador"
+          fr: "de bonus à la charge de capaciteur"
+          ja: "キャパシタ容量が増加"
+          ru: "увеличивается ёмкость накопителя энергии"
+          zh: "电容器电容器量加成"
+        importance: 1
+        unitID: 105
+  volume: 40
+"45622":
+  description:
+    de: "Dieses Subsystem nutzt ein nano-elektromechanisches Zerstreuungsfeld und\
+      \ verbessert dadurch die Sensorsysteme eines Schiffes. Das Subsystem besteht\
+      \ aus einem komplexen System von neurovisuellen Schnittstellen, Steuerimpuls-Automatik\
+      \ sowie Milliarden von fortschrittlichen, molekülgroßen Schaltkreisen und bietet\
+      \ damit sowohl besseren Schutz gegen ECM von Gegnern als auch erhöhte Sensorreichweite\
+      \ und Zielerfassung."
+    en: "This subsystem employs a nano-electromechanical dispersion field to strengthen\
+      \ a vessel's sensor systems. Made from a complex system of neurovisual interlays,\
+      \ automated trigger response units, and billions of advanced molecular-level\
+      \ circuits, the subsystem offers improved protection against hostile ECM as\
+      \ well as improved sensor range and target acquisition speed."
+    es: "Este subsistema emplea un campo de dispersión nanoelectromecánico para fortalecer\
+      \ los sistemas de sensores de la nave. Fabricado a partir de un sistema complejo\
+      \ de interconexiones neurovisuales, unidades de respuesta de disparo automatizadas\
+      \ y miles de millones de circuitos avanzados a nivel molecular, el subsistema\
+      \ ofrece una protección mejorada frente a las contramedidas electrónicas hostiles,\
+      \ además de una velocidad de adquisición de objetivos y un alcance de sensor\
+      \ mejorados."
+    fr: "Ce sous-système utilise un champ de dispersion nano-électromécanique visant\
+      \ à renforcer les systèmes de détection d'un vaisseau. Fabriqué à partir d'un\
+      \ système complexe de sous-couches neurovisuelles, d'unités réactives automatisé\
+      es et de milliards de circuits moléculaires avancés, ce sous-système garantit\
+      \ une protection améliorée contre les CME hostiles ainsi qu'une portée des capteurs\
+      \ et une vitesse d'acquisition des cibles accrues."
+    ja: "このサブシステムは、艦のセンサーシステムを強化するために、ナノエレクトロメカニカル拡散フィールドを採用している。このサブシステムは、神経視覚インタ\
+      ーレイの複雑なシステム、自動化されたトリガー応答ユニット、数十億の高度な分子レベルの回路の複雑なシステムから作られており、敵対的なECMからの保護を向上\
+      させ、センサーの範囲と目標の取得速度を向上させる。"
+    ru: "Наночастотное электромеханическое поле рассеяния, используемое в этой под\
+      системе, повышает эффективность корабельных систем захвата целей. Подсистема\
+      \ состоит из миллиардов высокотехнологичных молекулярных схем, нейровизуальн\
+      ых сетей и автоматических блоков реагирования на условие, усиливающих защиту\
+      \ корабля от помех, наводимых на системы захвата целей, а также повышающих д\
+      альность и скорость действия этих систем."
+    zh: "这个子系统使用纳米机电分散场来加强舰船的感应系统。由神经视觉层、自动触发响应单元和数十亿个先进的分子级电路构成的一个复杂系统组成，提升感应器范围、\
+      目标锁定速度和针对敌对ECM的防护能力。"
+  graphicID: 21510
+  groupID: 958
+  iconID: 3636
+  marketGroupID: 1122
+  mass: 1200000
+  metaGroupID: 14
+  name:
+    de: "Legion Core - Dissolution Sequencer"
+    en: "Legion Core - Dissolution Sequencer"
+    es: "Núcleo de la Legion: secuenciador de disolución"
+    fr: "Legion Nucléus – Séquenceur de dissolution"
+    ja: "レギオン・コア - ディソリューション・シーケンサー"
+    ru: "Legion Core - Dissolution Sequencer"
+    zh: "圣卒核心 - 散解程控装置"
+  portionSize: 1
+  published: true
+  raceID: 4
+  sofFactionName: "amarrbase"
+  traits:
+    miscBonuses: []
+    roleBonuses:
+    - bonusText:
+        de: "<b><u>Zusätzliche Basiswerte</b></u>"
+        en: "<b><u>Additional Base Stats</b></u>"
+        es: "<b><u>Estadísticas básicas adicionales</b></u>"
+        fr: "<b><u>Stats de base supplémentaires</b></u>"
+        ja: "<b><u>追加ベース統計</b></u>"
+        ru: "<b><u>Кроме того:</b></u>"
+        zh: "<b><u>附加基础数值</b></u>"
+      importance: 1
+    - bonusText:
+        de: "+2 Mid Slots, +2 Low Slots"
+        en: "+2 Mid Slots, +2 Low Slots"
+        es: "+2\_ranuras intermedias, +2\_ranuras inferiores"
+        fr: "+2 Emplacements intermédiaires, +2 Emplacements inférieurs"
+        ja: "ミッドスロット+2、ロースロット+2"
+        ru: "+2 разъёма средней мощности, +2 разъёма малой мощности"
+        zh: "中槽+2，低槽+2"
+      importance: 2
+    - bonusText:
+        de: "+1 max. aufgeschaltetes Ziel"
+        en: "+1 max locked target"
+        es: "+1 objetivo fijado máximo"
+        fr: "+1 Cible verrouillée max"
+        ja: "最大ロックターゲット数+1"
+        ru: "+1 к максимуму захваченных целей"
+        zh: "目标锁定数上限+1"
+      importance: 3
+    types:
+      "30539":
+      - bonus: 5
+        bonusText:
+          de: "Bonus auf die maximale Zielerfassungsreichweite"
+          en: "bonus to max targeting range"
+          es: "de bonificación a la distancia-objetivo máxima."
+          fr: "de bonus à la portée maximale du système de ciblage"
+          ja: "最大ターゲット範囲が拡大"
+          ru: "увеличивается максимальная дальность захвата целей"
+          zh: "最大锁定距离加成"
+        importance: 2
+        unitID: 105
+      - bonus: 15
+        bonusText:
+          de: "Bonus auf die Sensorstärke des Schiffs"
+          en: "bonus to ship sensor strength"
+          es: "de bonificación a la intensidad de los sensores de la nave."
+          fr: "de bonus à la puissance de détection du vaisseau"
+          ja: "艦船のセンサー強度が増加"
+          ru: "повышается эффективность системы захвата целей"
+          zh: "舰船感应强度加成"
+        importance: 1
+        unitID: 105
+      - bonus: 15
+        bonusText:
+          de: "Bonus auf die Scanauflösung"
+          en: "bonus to scan resolution"
+          es: "de bonificación a la resolución de escaneo."
+          fr: "de bonus à la résolution du balayage"
+          ja: "スキャン分解能にボーナス"
+          ru: "увеличивается разрешающая способность системы захвата целей"
+          zh: "扫描分辨率加成"
+        importance: 3
+        unitID: 105
+  variationParentTypeID: 45623
+  volume: 40
+"45624":
+  description:
+    de: "Während einer der ersten Konflikte mit ihnen bemerkten Amarr-Ingenieure eine\
+      \ bemerkenswerte Eigenheit der Sleeper-Drohnentechnologie: Die Möglichkeit,\
+      \ Energie untereinander ohne spezielle Ausrüstung zu übertragen. Diese Technologie\
+      \ schien jeder Drohne in gewisser Weise eigen zu sein und obwohl die Ingenieure\
+      \ dieses System nicht für moderne Raumschiffe reproduzieren konnten, waren sie\
+      \ zumindest in der Lage, sie für modulare Geräte von Typ Tech III zu adaptieren.\
+      \ Der parasitäre Energiekomplex stellt die Erfindung der Sleeper jedoch auf\
+      \ den Kopf, denn er verwandelt den Energieübertrag von einer symbiotischen Funktion\
+      \ zu einer vampirischen indem er Energieneutralisierer und Energie-Nosferatus\
+      \ verstärkt."
+    en: "During some of the first conflicts with them, Amarr engineers noticed a remarkable\
+      \ feature in Sleeper drone technology: the ability of drones to transfer power\
+      \ between one another without the need for specialized equipment. This technology\
+      \ seemed to be innate to every drone in some capacity, and while the engineers\
+      \ could not reproduce this system in modern space vessels, they were able to\
+      \ adapt the technology into modular Tech III designs. The energy parasitic complex\
+      \ turns the Sleeper tech on its head, changing the energy transfer from a symbiotic\
+      \ function to a vampiric one by providing a boost to energy neutralizer and\
+      \ energy nosferatu equipment."
+    es: "Durante algunos de los primeros conflictos con ellos, los ingenieros amarrianos\
+      \ se percataron de una característica notable en la tecnología de drones sleepers:\
+      \ la capacidad de los drones para transmitirse potencia entre ellos sin necesidad\
+      \ de ningún equipamiento especializado. Esta tecnología parecía inherente a\
+      \ todos los drones y, aunque los ingenieros no podían reproducir este sistema\
+      \ en naves espaciales modernas, lograron adaptar la tecnología a los diseños\
+      \ de tecnología modular\_T3. El complejo parasitario de energía da la vuelta\
+      \ a la tecnología de los sleepers, lo que cambia la transferencia de energí\
+      a de una función simbiótica a una función vampírica, brindando una mejora al\
+      \ neutralizador energético y nosferatu de energía."
+    fr: "Au cours des premiers conflits qui les ont opposés, les ingénieurs amarr\
+      \ ont remarqué une caractéristique intéressante de la technologie des drones\
+      \ sleeper\_: la capacité des drones à transférer l'énergie entre eux sans é\
+      quipement particulier. Cette technologie semblait innée à tous les drones, et\
+      \ si les ingénieurs ne sont pas parvenus à reproduire ce système dans les vaisseaux\
+      \ spatiaux modernes, ils ont néanmoins réussi à l'adapter aux modèles modulaires\
+      \ Tech\_III. Ce complexe parasite d'énergie inverse la technologie de transfert\
+      \ d'énergie sleeper, en transposant sa vocation symbiotique en fonction vampirique,\
+      \ grâce à l'amplification des capacités d'absorption des neutraliseurs d'énergie\
+      \ et des nosferatu énergétiques."
+    ja: "スリーパードローンとの抗争の初期段階において、特殊な装置を用いることなくドローン間で動力を転送し合うという驚異の技術にアマーのエンジニア達は注目し\
+      ていた。この技術はあらゆるドローンにある程度備わっているようだった。技術者たちはこの技術を現行の宇宙船で再現することはできなかったものの、T3のモジュー\
+      ル設計に応用することに成功した。このエネルギー吸収複合体はスリーパー技術を逆利用したものであり、エネルギーニュートラライザーとエネルギーノスフェラトゥ装\
+      備を強化したことで、共生のためのエネルギー転送はエネルギー吸引に姿を変えている。"
+    ru: "В ходе первых столкновений с дронами Спящих амаррские инженеры отметили о\
+      дну из их особенностей: способность ретранслировать энергию друг другу без и\
+      спользования специализированного оборудования. Эта возможность была в той ил\
+      и иной мере доступна всем дронам; инженерам не удалось воспроизвести её в со\
+      временных кораблях, но соответствующий аппаратный комплекс был, тем не менее\
+      , адаптирован для сменных подсистем кораблей третьей техкатегории. Паразитич\
+      еский комплекс ставит технологии Спящих с ног на голову: вместо обеспечения\
+      \ энергетического «симбиоза» он повышает эффективность устройств паразитной\
+      \ подзарядки и дистанционных нейтрализаторов заряда."
+    zh: "早在最初对冬眠者无人机的几次研究中，艾玛工程师就注意到了它们身上的一项非凡的技术：它们能够在没有专门设备帮助的情况下相互之间传输能量。这种技术似乎\
+      在所有的无人机上都存在，只有量上的区别。尽管工程技术人员没法在现在的普通舰船上重新构造这个系统，但是他们却想出办法将其整合进模块化的三级科技舰船中。能量\
+      寄取复合体完全改变了冬眠者的科技，它通过提升能量中和设备和能量吸取设备的效果，使能量传输方式由共生转变成吸血。"
+  graphicID: 21509
+  groupID: 958
+  iconID: 3636
+  marketGroupID: 1122
+  mass: 1200000
+  metaGroupID: 14
+  name:
+    de: "Legion Core - Energy Parasitic Complex"
+    en: "Legion Core - Energy Parasitic Complex"
+    es: "Núcleo de la Legión: complejo parasitario de energía"
+    fr: "Legion Nucléus – Complexe énergétique parasite"
+    ja: "レギオンコア - エネルギーパラスティック複合施設"
+    ru: "Legion Core - Energy Parasitic Complex"
+    zh: "圣卒核心 - 能量寄取集成体"
+  portionSize: 1
+  published: true
+  raceID: 4
+  sofFactionName: "amarrbase"
+  traits:
+    miscBonuses: []
+    roleBonuses:
+    - bonusText:
+        de: "<b><u>Zusätzliche Basiswerte</b></u>"
+        en: "<b><u>Additional Base Stats</b></u>"
+        es: "<b><u>Estadísticas básicas adicionales</b></u>"
+        fr: "<b><u>Stats de base supplémentaires</b></u>"
+        ja: "<b><u>追加ベース統計</b></u>"
+        ru: "<b><u>Кроме того:</b></u>"
+        zh: "<b><u>附加基础数值</b></u>"
+      importance: 2
+    - bonusText:
+        de: "+2 Mid Slots, +2 Low Slots"
+        en: "+2 Mid Slots, +2 Low Slots"
+        es: "+2\_ranuras intermedias, +2\_ranuras inferiores"
+        fr: "+2 Emplacements intermédiaires, +2 Emplacements inférieurs"
+        ja: "ミッドスロット+2、ロースロット+2"
+        ru: "+2 разъёма средней мощности, +2 разъёма малой мощности"
+        zh: "中槽+2，低槽+2"
+      importance: 3
+    - bonusText:
+        de: "+50 GJ Energiespeicherkapazität"
+        en: "+50GJ Capacitor Capacity"
+        es: "+50\_GJ de capacidad del condensador"
+        fr: "Charge de capaciteur +50 GJ"
+        ja: "キャパシタ容量+50GJ"
+        ru: "+50 ГДж ёмкости накопителя"
+        zh: "电容器电容量+50GJ"
+      importance: 4
+    - bonus: 50
+      bonusText:
+        de: "Reduktion des CPU- und Strombedarfs von <a href=showinfo:3423>Energie-Nosferatu-</a>\
+          \ und <a href=showinfo:3423>Energieneutralisierer-</a>Modulen"
+        en: "reduction in the PWG and CPU requirements for <a href=showinfo:3423>Energy\
+          \ Nosferatu</a> and <a href=showinfo:3423>Energy Neutralizer</a> modules"
+        es: "de reducción de los requisitos de SP y CPU para los módulos de <a href=showinfo:3423>nosferatu\
+          \ de energía</a> y <a href=showinfo:3423>neutralizador energético</a>."
+        fr: "de réduction des prérequis du PWG et du CPU des modules <a href=showinfo:3423>Nosferatu\
+          \ à énergie</a> et <a href=showinfo:3423>neutraliseur d'énergie</a>"
+        ja: "<a href=showinfo:3423>エネルギーノスフェラトゥ</a>と<a href=showinfo:3423>エネルギーニュー\
+          トラライザー</a>モジュールの必要PWGとCPUが減少"
+        ru: "снижается потребность <a href=showinfo:3423>дистанционных нейтрализат\
+          оров заряда</a> и <a href=showinfo:3423>устройств паразитной подзарядки\
+          \ накопителя</a> в мощностях ЦПУ и реактора"
+        zh: "<a href=showinfo:3423>掠能器</a>和<a href=showinfo:3423>能量中和器</a>能量栅格和CPU需\
+          求降低"
+      importance: 1
+      unitID: 105
+    types:
+      "30539":
+      - bonus: 5
+        bonusText:
+          de: "Verringerung des Modulschadens durch Überhitzung"
+          en: "reduction in module damage from overheating"
+          es: "de reducción del daño del módulo por sobrecalentamiento."
+          fr: "de réduction de la détérioration du module suite à la surchauffe"
+          ja: "オーバーヒート時のモジュールダメージを軽減"
+          ru: "уменьшается объём повреждений модулей, получаемых ими при перегрузк\
+            е"
+          zh: "装备过载损伤降低"
+        importance: 3
+        unitID: 105
+      - bonus: 10
+        bonusText:
+          de: "Bonus auf die Transfermenge von <a href=showinfo:3423>Nosferatu-</a>\
+            \ und <a href=showinfo:3423>Energieneutralisierer</a>-Modulen"
+          en: "bonus to <a href=showinfo:3423>Energy Nosferatu</a> and <a href=showinfo:3423>Energy\
+            \ Neutralizer</a> drain amount"
+          es: "de bonificación a la cantidad drenada por el <a href=showinfo:3423>nosferatu\
+            \ de energía</a> y el <a href=showinfo:3423>neutralizador energético</a>."
+          fr: "de bonus au volume d'énergie drainée par les <a href=showinfo:3423>Nosferatu\
+            \ à énergie</a> et les <a href=showinfo:3423>neutraliseurs d'énergie</a>"
+          ja: "<a href=showinfo:3423>エネルギーノスフェラトゥ</a>と<a href=showinfo:3423>エネルギーニ\
+            ュートラライザー</a>の吸収量が増加"
+          ru: "увеличивается пропускная способность <a href=showinfo:3423>устройст\
+            в паразитной подзарядки накопителя</a> и <a href=showinfo:3423>дистанц\
+            ионных нейтрализаторов заряда</a>"
+          zh: "<a href=showinfo:3423>掠能器</a>和<a href=showinfo:3423>能量中和器</a>吸取量加成"
+        importance: 1
+        unitID: 105
+      - bonus: 10
+        bonusText:
+          de: "Bonus auf den Nutzen der Überhitzung von <a href=showinfo:3423>Energie-Nosferatu-</a>\
+            \ und <a href=showinfo:3423>Energieneutralisierer-</a>Modulen"
+          en: "bonus to the benefits of overheating <a href=showinfo:3423>Energy Nosferatu</a>\
+            \ and <a href=showinfo:3423>Energy Neutralizer</a> modules"
+          es: "de bonificación a los beneficios de sobrecalentar los módulos de <a\
+            \ href=showinfo:3423>nosferatu de energía</a> y <a href=showinfo:3423>neutralizador\
+            \ energético</a>."
+          fr: "de bonus aux avantages de la surchauffe des modules <a href=showinfo:3423>Nosferatu\
+            \ à énergie</a> et les <a href=showinfo:3423>neutraliseurs d'énergie</a>"
+          ja: "オーバーヒートした<a href=showinfo:3423>エネルギーノスフェラトゥ</a>と<a href=showinfo:3423>エ\
+            ネルギーニュートラライザー</a>の恩恵にボーナス"
+          ru: "усиливается влияние перегрузки на параметры <a href=showinfo:3423>д\
+            истанционных нейтрализаторов заряда</a> и <a href=showinfo:3423>устрой\
+            ств паразитной подзарядки накопителя</a>"
+          zh: "<a href=showinfo:3423>掠能器</a>和<a href=showinfo:3423>能量中和器</a>过载效果加成"
+        importance: 2
+        unitID: 105
+  variationParentTypeID: 45623
+  volume: 40
+"22430":
+  basePrice: 623500000
+  capacity: 800
+  description:
+    de: "Black Ops-Schlachtschiffe wurden für die Unterwanderung und Spionage hinter\
+      \ den feindlichen Linien entworfen. Mit ihrem Sprungantrieb und einem Portalgenerator\
+      \ können sie eine besondere Art von Sprungportal erschaffen, das nur von Covert\
+      \ Ops-Schiffen benutzt werden kann. Auf diese Art können sie heimlich Spionage-\
+      \ und Aufklärungstruppen in feindliches Gebiet einschleusen. Für derartige Geheimaktionen\
+      \ gibt es keine besseren Schiffe.\n\nEntwickler: CreoDron\n\nAls größter Entwickler\
+      \ und Hersteller von Drohnen im Weltraum hat CreoDron ein großes Interesse an\
+      \ Drohnen-Trägerschiffen. Ohne viel von ihrer Verteidigungsfähigkeit einzubü\
+      ßen, kann sich die Sin ihren Weg durch überraschend starke Gegner bahnen, vorausgesetzt\
+      \ natürlich, dass der Pilot die neusten CreoDron-Kampfdrohnen einsetzt."
+    en: "Black Ops battleships are designed for infiltration and espionage behind\
+      \ enemy lines. With the use of a jump drive and portal generator, they are capable\
+      \ of making a special type of jump portal usable only by covert ops vessels.\
+      \ This enables them to stealthily plant reconnaissance and espionage forces\
+      \ in enemy territory. For the final word in clandestine maneuvers, look no further.\r\
+      \n\r\nDeveloper: CreoDron\r\n\r\nAs the largest drone developer and manufacturer\
+      \ in space, CreoDron has a vested interest in drone carriers. While sacrificing\
+      \ relatively little in the way of defensive capability, the Sin can chew its\
+      \ way through surprisingly strong opponents - provided, of course, that the\
+      \ pilot uses top-of-the-line CreoDron drones."
+    es: "Los acorazados de operaciones secretas están diseñados para la infiltració\
+      n y el espionaje tras las líneas enemigas. Con un motor de salto y un generador\
+      \ de portales, son capaces de hacer un tipo especial de portal de salto que\
+      \ solo pueden usar las naves de operaciones encubiertas. Esto les permite plantar\
+      \ sigilosamente fuerzas de reconocimiento y espionaje en territorio enemigo.\
+      \ Si buscas lo último en maniobras clandestinas, lo has encontrado.\n\nDesarrollo:\
+      \ CreoDron.\n\nCreoDron, el mayor desarrollador y fabricante de drones del espacio,\
+      \ tiene un gran interés en los portadrones. Sacrificando relativamente poco\
+      \ en cuanto a la capacidad defensiva, la Sin puede hacer trizas a oponentes\
+      \ sorprendentemente fuertes (por supuesto, siempre y cuando el piloto use drones\
+      \ de CreoDron de última generación)."
+    fr: "Les cuirassés des forces clandestines sont conçus pour les missions d'infiltration\
+      \ et d'espionnage derrière les lignes ennemies. Équipés d'un propulseur interstellaire\
+      \ et d'un générateur de portail, ils sont capables de créer un portail interstellaire\
+      \ furtif, voué à envoyer des vaisseaux des opérations secrètes en mission de\
+      \ reconnaissance et d'espionnage derrière les lignes ennemies. Ces vaisseaux\
+      \ incarnent sans aucun doute l'atout maître des manœuvres clandestines.\n\n\
+      Constructeur : CreoDron\n\nPlus grand concepteur et fabricant de drones de tout\
+      \ l'espace, CreoDron investit tout logiquement dans les vaisseaux porte-drones.\
+      \ Tout en sacrifiant relativement peu de choses à ses capacités défensives,\
+      \ le Sin se fraye habilement un chemin parmi ses adversaires... à condition,\
+      \ bien entendu, que le pilote utilise des drones CreoDron ultra-perfectionné\
+      s."
+    ja: "秘密工作艦は敵陣への潜入偵察用として設計されている。ジャンプドライブとポータルジェネレーターを使って、隠密行動艦だけが通過できる特別なジャンプポー\
+      タルを生成する機能を持つ。これにより、偵察隊や諜報隊は密かに敵のテリトリーに潜り込むことができる。潜入作戦用の艦船なら、これにしない手はない。開発元：\
+      \ クレオドロン　宇宙空間最大のドローン開発製造社としてクレオドロンはドローン艦載機母艦における確固たる地位を築き上げている。防御力は多少犠牲にされては\
+      いるが、シンはどんな強い敵にも立ち向かえる。ただし、クレオドロン社の最上位機種のドローンを使用すればだが。"
+    ru: "Разработка тяжёлых диверсионных кораблей велась из расчёта на их проникно\
+      вение в тыл противника с последующим шпионажем. Используя гипердвигатель мал\
+      ой дальности и генератор гиперпорталов, они создают особый тип гиперпортала\
+      \ с нулевой эмиссией, пользоваться которым могут исключительно диверсионные\
+      \ корабли. Это позволяет незаметно и эффективно перемещать разведывательные\
+      \ силы по владениям противника. При исполнении диверсионных операций они нез\
+      аменимы.\n\nРазработчик: корпорация «КреоДрон»\n\nБудучи крупнейшим разработ\
+      чиком и производителем дронов, корпорация «КреоДрон» напрямую заинтересована\
+      \ в кораблях-носителях дронов. Ставка на кажущихся сильными оппонентов «Сина\
+      » может оказаться ошибочной: для победы ему не потребуется жертвовать защитн\
+      ыми возможностями... при условии, что его пилот пользуется первоклассными др\
+      онами производства «КреоДрон»."
+    zh: "首席发明家：月G神\n\n黑隐特勤战列舰的作用是渗透进敌人后方实施侦查活动。通过使用跳跃引擎以及跳跃通道发生器，它们能够生成一条只让隐形特勤舰只通\
+      过的跳跃通道。这使得它们能够隐秘地在敌后进行侦查和间谍任务。你要是想找执行秘密任务的行家，那就非它莫属了。\n\n开发商：西顿工业\n\n作为太空中最大\
+      的无人机开发商和制造商，西顿工业在无人机航母方面有着先天优势。虽然罪恶级指挥舰在防御能力上稍弱，但它依然能撂倒强悍的对手，当然前提是飞行员使用了最先进的\
+      西顿工业无人机。"
+  factionID: 500004
+  graphicID: 3350
+  groupID: 898
+  marketGroupID: 1078
+  mass: 141700000
+  masteries:
+    "0":
+    - 96
+    - 99
+    - 69
+    - 108
+    - 138
+    - 140
+    - 145
+    - 150
+    - 89
+    - 133
+    "1":
+    - 96
+    - 99
+    - 69
+    - 108
+    - 138
+    - 140
+    - 145
+    - 150
+    - 89
+    - 133
+    "2":
+    - 96
+    - 99
+    - 69
+    - 108
+    - 138
+    - 140
+    - 145
+    - 150
+    - 89
+    - 133
+    "3":
+    - 96
+    - 99
+    - 69
+    - 108
+    - 138
+    - 140
+    - 145
+    - 150
+    - 89
+    - 133
+    "4":
+    - 96
+    - 99
+    - 69
+    - 108
+    - 138
+    - 140
+    - 145
+    - 117
+    - 150
+    - 89
+    - 133
+  metaGroupID: 2
+  name:
+    de: "Sin"
+    en: "Sin"
+    es: "Sin"
+    fr: "Sin"
+    ja: "シン"
+    ru: "Sin"
+    zh: "罪恶级"
+  portionSize: 1
+  published: true
+  raceID: 8
+  radius: 250
+  sofFactionName: "creodron"
+  soundID: 20072
+  traits:
+    miscBonuses: []
+    roleBonuses:
+    - bonusText:
+        de: "Es können <a href=showinfo:28646>getarnte Anziehungsfeld-Generatoren</a>\
+          \ und <a href=showinfo:28652>getarnte Sprungtor-Generatoren</a> eingebaut\
+          \ werden"
+        en: "Can fit <a href=showinfo:28646>Covert Cynosural Field Generator</a> and\
+          \ <a href=showinfo:28652>Covert Jump Portal Generator</a>"
+        es: "Es posible equipar un <a href=showinfo:28646>generador de campo cinosural\
+          \ encubierto</a> y un <a href=showinfo:28652>generador de portales de salto\
+          \ encubierto</a>."
+        fr: "Peut équiper un <a href=showinfo:28646>générateur de champ cynosural\
+          \ furtif</a> et un <a href=showinfo:28652>générateur de portail hyperspatial\
+          \ furtif</a>"
+        ja: "<a href=showinfo:28646>潜伏用サイノシュラルフィールドジェネレータ</a>と<a href=showinfo:28652>潜\
+          伏用ジャンプポータルジェネレータ</a>を装備できる"
+        ru: "Корабли этого типа могут оснащаться <a href=showinfo:28646>приводными\
+          \ маяками скрытого действия</a> и <a href=showinfo:28652>генераторами ги\
+          перпорталов с нулевой эмиссией</a>"
+        zh: "可以装备<a href=\"showinfo:28646\">隐秘诱导力场发生器</a>和<a href=\"showinfo:28652\"\
+          >隐秘跳跃通道发生器</a>。"
+      importance: 1
+    - bonusText:
+        de: "Keine Verzögerung bei der Zielaufschaltung nach der Deaktivierung von\
+          \ <a href=showinfo:11579>Tarnmodulen</a>"
+        en: "No targeting delay after <a href=showinfo:11579>Cloaking Device</a> deactivation"
+        es: "No hay demora en la adquisición de objetivos tras la desactivación del\
+          \ <a href=showinfo:11579>dispositivo de camuflaje</a>."
+        fr: "Aucun délai de ciblage après la désactivation des <a href=showinfo:11579>dispositifs\
+          \ de camouflage</a>"
+        ja: "<a href=showinfo:11579>遮蔽装置</a>を停止した後のターゲット遅延なし"
+        ru: "На кораблях этого типа устранена задержка включения систем захвата це\
+          лей, вызываемая отключением <a href=showinfo:11579>систем маскировки</a>"
+        zh: "重新启动<a href=\"showinfo:11579\">隐形装置</a>后不遭受锁定延时副作用"
+      importance: 2
+    - bonusText:
+        de: "Die Verzögerung bei Reaktivierung von <a href=showinfo:11579>Tarnmodulen</a>\
+          \ wird auf 5 Sekunden reduziert."
+        en: "<a href=showinfo:11579>Cloak</a> reactivation delay reduced to 5 seconds"
+        es: "Reducción de la demora de reactivación del <a href=showinfo:11579>camuflaje</a>\
+          \ a 5\_segundos."
+        fr: "Délai de réactivation du <a href=showinfo:11579>camouflage</a> réduit\
+          \ à 5 secondes"
+        ja: "<a href=showinfo:11579>遮蔽装置</a>の再起動遅延が5秒に短縮"
+        ru: "Задержка повторного включения <a href=showinfo:11579>систем маскировк\
+          и</a> сокращена до 5 секунд"
+        zh: "<a href=\"showinfo:11579\">隐形装置</a>重启延时降到5秒"
+      importance: 3
+    - bonus: 5
+      bonusText:
+        de: "zusätzlicher Bonus auf HP der <a href=showinfo:3394>Verstärkten Schottwand</a>"
+        en: "additional bonus to <a href=showinfo:3394>Reinforced Bulkhead</a> hitpoints"
+        es: "de bonificación adicional a los puntos de vida del <a href=showinfo:3394>mamparo\
+          \ reforzado</a>."
+        fr: "de bonus supplémentaire aux points de vie de la <a href=showinfo:3394>cloison\
+          \ renforcée</a>"
+        ja: "<a href=showinfo:3394>強化隔壁</a>HPがさらに増加"
+        ru: "дополнительный бонус к\_прочности <a href=showinfo:3394>укреплённой п\
+          ереборки</a>"
+        zh: "<a href=showinfo:3394>强化舱隔壁</a>结构值加成"
+      importance: 9
+      unitID: 105
+    - bonus: 50
+      bonusText:
+        de: "Reduktion der Dauer von <a href=showinfo:21096>Anziehungsfeldgeneratoren</a>"
+        en: "reduction in <a href=showinfo:21096>Cynosural Field Generator</a> duration"
+        es: "de reducción de la duración del <a href=showinfo:21096>generador de campo\
+          \ cinosural</a>."
+        fr: "reduction in <a href=showinfo:21096>Cynosural Field Generator</a> duration"
+        ja: "<a href=showinfo:21096>サイノシュラルフィールドジェネレーター</a>の持続時間が減少"
+        ru: "reduction in <a href=showinfo:21096>Cynosural Field Generator</a> duration"
+        zh: "<a href=showinfo:21096>诱导力场发生器</a>运转时间减少"
+      importance: 5
+      unitID: 105
+    - bonus: 50
+      bonusText:
+        de: "Bonus auf die HP der <a href=showinfo:3394>Panzerplatte</a>"
+        en: "bonus to <a href=showinfo:3394>Armor Plate</a> hitpoints"
+        es: "de bonificación a los puntos de vida de las <a href=showinfo:3394>placas\
+          \ de blindaje</a>."
+        fr: "de bonus aux points de vie du <a href=showinfo:3394>revêtement de blindage</a>"
+        ja: "<a href=showinfo:3394>アーマープレート</a>HPが増加"
+        ru: "бонус к\_прочности <a href=showinfo:3394>бронеплиты</a>"
+        zh: "<a href=showinfo:3394>装甲附甲板</a>装甲值加成"
+      importance: 8
+      unitID: 105
+    - bonus: 75
+      bonusText:
+        de: "Reduktion der effektiv zurückgelegten Distanz für die Sprungerschöpfung"
+        en: "reduction to effective distance traveled for jump fatigue"
+        es: "de reducción de la distancia efectiva hasta sufrir fatiga de salto."
+        fr: "de réduction de la distance effectuée pour l'épuisement de saut"
+        ja: "ジャンプによる疲弊が飛行距離に及ぼす影響を低減"
+        ru: "медленнее накапливается усталость от гиперпереходов"
+        zh: "减少跳跃距离对产生跳跃疲劳的影响"
+      importance: 4
+      unitID: 105
+    - bonus: 100
+      bonusText:
+        de: "Bonus auf die HP der <a href=showinfo:3425>Schilderweiterung</a>"
+        en: "bonus to <a href=showinfo:3425>Shield Extender</a> hitpoints"
+        es: "de bonificación a los puntos de vida del <a href=showinfo:3425>extensor\
+          \ de escudo</a>."
+        fr: "de bonus aux points de vie de l'<a href=showinfo:3425>extenseur de bouclier</a>"
+        ja: "<a href=showinfo:3425>シールドエクステンダー</a>HPが増加"
+        ru: "бонус к\_прочности <a href=showinfo:3425>расширителя щитов</a>"
+        zh: "<a href=showinfo:3425>护盾扩展装置</a>护盾值加成"
+      importance: 7
+      unitID: 105
+    - bonus: 650
+      bonusText:
+        de: "Bonus auf die maximale Geschwindigkeit des Schiffs beim Einsatz von <a\
+          \ href=showinfo:11579>Tarnvorrichtungen</a>"
+        en: "bonus to ship max velocity when using <a href=showinfo:11579>Cloaking\
+          \ Devices</a>"
+        es: "de bonificación a la velocidad máxima de la nave al utilizar <a href=showinfo:11579>dispositivos\
+          \ de camuflaje</a>."
+        fr: "de bonus à la vitesse maximale d'un vaisseau lorsqu'équipé d'un <a href=showinfo:11579>dispositif\
+          \ de camouflage</a> actif"
+        ja: "<a href=showinfo:11579>遮蔽装置</a>使用時の艦船の最高速度が上昇"
+        ru: "бонус к максимальной скорости хода при использовании <a href=showinfo:11579>у\
+          стройств маскировки</a>"
+        zh: "使用<a href=showinfo:11579>隐形装置</a>时舰船的最大速度加成"
+      importance: 6
+      unitID: 105
+    types:
+      "3336":
+      - bonus: 10
+        bonusText:
+          de: "Bonus auf den Schaden von <a href=showinfo:3307>großen Hybridgeschü\
+            tztürmen</a>"
+          en: "bonus to <a href=showinfo:3307>Large Hybrid Turret</a> damage"
+          es: "de bonificación al daño de la <a href=showinfo:3307>torreta híbrida\
+            \ grande</a>."
+          fr: "de bonus aux dégâts des <a href=showinfo:3307>grandes tourelles hybrides</a>"
+          ja: "<a href=showinfo:3307>大型ハイブリッドタレット</a>のダメージが増加"
+          ru: "увеличивается урон боеприпасов <a href=showinfo:3307>больших гибрид\
+            ных орудий</a>"
+          zh: "<a href=\"showinfo:3307\">大型混合炮台</a>伤害加成"
+        importance: 1
+        unitID: 105
+      - bonus: 10
+        bonusText:
+          de: "Bonus auf die HP und den Schaden von <a href=showinfo:3436>Drohnen</a>"
+          en: "bonus to <a href=showinfo:3436>Drone</a> hitpoints and damage"
+          es: "de bonificación a los puntos de vida y el daño de los <a href=showinfo:3436>drones</a>."
+          fr: "de bonus aux dégâts et aux PV des <a href=showinfo:3436>drones</a>"
+          ja: "<a href=showinfo:3436>ドローン</a>のヒットポイントとダメージが増加"
+          ru: "увеличивается урон бортового оружия <a href=showinfo:3436>дронов</a>;\
+            \ увеличивается запас их прочности"
+          zh: "<a href=\"showinfo:3436\">无人机</a>伤害和HP加成"
+        importance: 2
+        unitID: 105
+      "28656":
+      - bonus: 7.5
+        bonusText:
+          de: "Bonus auf die Nachführung und optimale Reichweite von <a href=showinfo:3436>Drohnen</a>"
+          en: "bonus to <a href=showinfo:3436>Drone</a> tracking and optimal range"
+          es: "de bonificación al alcance óptimo y al rastreo de los <a href=showinfo:3436>drones</a>."
+          fr: "bonus à la poursuite et portée optimale des <a href=showinfo:3436>drones</a>"
+          ja: "<a href=showinfo:3436>ドローン</a>のトラッキング能力および最適射程距離が増加"
+          ru: "бонус к скорости наведения и оптимальной дальности <a href=showinfo:3436>д\
+            ронов</a>"
+          zh: "<a href=showinfo:3436>无人机</a>跟踪速度和最佳射程加成"
+        importance: 2
+        unitID: 105
+      - bonus: 10
+        bonusText:
+          de: "Bonus auf die Transfermenge von <a href=showinfo:3439>Versorgungsdrohnen</a>"
+          en: "bonus to <a href=showinfo:3439>Logistic Drone</a> transfer amount"
+          es: "de bonificación a la cantidad de transferencia de los <a href=showinfo:3439>drones\
+            \ logísticos</a>."
+          fr: "de bonus à la capacité de transport des <a href=showinfo:3439>drones\
+            \ logistiques</a>"
+          ja: "<a href=showinfo:3439>支援専門ドローン</a>転送量にボーナス"
+          ru: "бонус к производительности <a href=showinfo:3439>дронов снабжения</a>"
+          zh: "<a href=showinfo:3439>后勤无人机</a>维修量加成"
+        importance: 1
+        unitID: 105
+  variationParentTypeID: 645
+  volume: 454500
+"999":
+  basePrice: 1660000000
+  graphicID: 318
+  groupID: 107
+  marketGroupID: 281
+  name:
+    de: "Dominix Blueprint"
+    en: "Dominix Blueprint"
+    es: "Plano de Dominix"
+    fr: "Plan de construction Dominix"
+    ja: "ドミニックスブループリント"
+    ru: "Dominix Blueprint"
+    zh: "多米尼克斯级蓝图"
+  portionSize: 1
+  published: true
+  sofFactionName: "gallentebase"
+  volume: 0.01
+"22431":
+  graphicID: 3350
+  groupID: 107
+  metaGroupID: 2
+  name:
+    de: "Sin Blueprint"
+    en: "Sin Blueprint"
+    es: "Plano de la Sin"
+    fr: "Plan de construction Sin"
+    ja: "シンブループリント"
+    ru: "Sin Blueprint"
+    zh: "罪恶级蓝图"
+  portionSize: 1
+  published: true
+  sofFactionName: "creodron"
+  volume: 0.01

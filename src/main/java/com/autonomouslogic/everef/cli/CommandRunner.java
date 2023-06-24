@@ -43,6 +43,12 @@ public class CommandRunner {
 	protected Provider<VerifyRefDataModels> verifyRefDataModelsProvider;
 
 	@Inject
+	protected Provider<ScrapeHoboleaks> scrapeHoboleaksProvider;
+
+	@Inject
+	protected Provider<ImportTestResources> importTestResourcesProvider;
+
+	@Inject
 	protected HealthcheckDecorator healthcheckDecorator;
 
 	@Inject
@@ -93,6 +99,10 @@ public class CommandRunner {
 				return scrapeMarketHistoryProvider.get();
 			case "verify-ref-data-models":
 				return verifyRefDataModelsProvider.get();
+			case "scrape-hoboleaks":
+				return scrapeHoboleaksProvider.get();
+			case "import-test-resources":
+				return importTestResourcesProvider.get();
 			default:
 				throw new IllegalArgumentException("Unknown command: " + name);
 		}

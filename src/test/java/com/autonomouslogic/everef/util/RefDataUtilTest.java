@@ -20,8 +20,11 @@ public class RefDataUtilTest {
 
 	@Test
 	void shouldLoadReferenceDataConfig() {
-		var configs = refDataUtil.loadReferenceDataConfig();
-		assertEquals("types", configs.get(0).getId());
-		assertEquals("InventoryType", configs.get(0).getModel());
+		var config = refDataUtil.loadReferenceDataConfig().stream()
+				.filter(c -> c.getId().equals("types"))
+				.findFirst()
+				.orElseThrow();
+		assertEquals("types", config.getId());
+		assertEquals("InventoryType", config.getModel());
 	}
 }

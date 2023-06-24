@@ -1,0 +1,81 @@
+{
+  "capacity" : 0,
+  "description" : {
+    "en" : "Skill at operating Gallente frigates.",
+    "fr" : "Compétence liée au pilotage des frégates gallente."
+  },
+  "dogma_attributes" : {
+    "161" : {
+      "attribute_id" : 161,
+      "value" : 0.01
+    },
+    "162" : {
+      "attribute_id" : 162,
+      "value" : 1
+    },
+    "4" : {
+      "attribute_id" : 4,
+      "value" : 0
+    },
+    "38" : {
+      "attribute_id" : 38,
+      "value" : 0
+    },
+    "275" : {
+      "attribute_id" : 275,
+      "value" : 2
+    },
+    "180" : {
+      "attribute_id" : 180,
+      "value" : 167
+    },
+    "181" : {
+      "attribute_id" : 181,
+      "value" : 168
+    },
+    "182" : {
+      "attribute_id" : 182,
+      "value" : 3327
+    },
+    "280" : {
+      "attribute_id" : 280,
+      "value" : 0
+    },
+    "277" : {
+      "attribute_id" : 277,
+      "value" : 1
+    }
+  },
+  "dogma_effects" : {
+    "132" : {
+      "effect_id" : 132,
+      "is_default" : true
+    },
+    "468" : {
+      "effect_id" : 468,
+      "is_default" : false
+    },
+    "751" : {
+      "effect_id" : 751,
+      "is_default" : false
+    },
+    "4600" : {
+      "effect_id" : 4600,
+      "is_default" : false
+    }
+  },
+  "group_id" : 257,
+  "icon_id" : 33,
+  "market_group_id" : 377,
+  "mass" : 0,
+  "name" : {
+    "en" : "Gallente Frigate",
+    "fr" : "Frégate gallente"
+  },
+  "packaged_volume" : 0.01,
+  "portion_size" : 1,
+  "published" : true,
+  "radius" : 1,
+  "type_id" : 3328,
+  "volume" : 0.01
+}

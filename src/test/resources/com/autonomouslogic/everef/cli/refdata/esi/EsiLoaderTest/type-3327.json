@@ -1,0 +1,77 @@
+{
+  "capacity" : 0,
+  "description" : {
+    "en" : "The basic operation of spaceships. 2% improved ship agility for all ships per skill level.",
+    "fr" : "Pilotage de base des vaisseaux. Augmente de 2 % par niveau de compétence la maniabilité de tous les vaisseaux."
+  },
+  "dogma_attributes" : {
+    "193" : {
+      "attribute_id" : 193,
+      "value" : 1
+    },
+    "162" : {
+      "attribute_id" : 162,
+      "value" : 1
+    },
+    "4" : {
+      "attribute_id" : 4,
+      "value" : 0
+    },
+    "38" : {
+      "attribute_id" : 38,
+      "value" : 0
+    },
+    "161" : {
+      "attribute_id" : 161,
+      "value" : 0.01
+    },
+    "275" : {
+      "attribute_id" : 275,
+      "value" : 1
+    },
+    "180" : {
+      "attribute_id" : 180,
+      "value" : 167
+    },
+    "181" : {
+      "attribute_id" : 181,
+      "value" : 168
+    },
+    "151" : {
+      "attribute_id" : 151,
+      "value" : -2
+    },
+    "280" : {
+      "attribute_id" : 280,
+      "value" : 0
+    }
+  },
+  "dogma_effects" : {
+    "132" : {
+      "effect_id" : 132,
+      "is_default" : true
+    },
+    "232" : {
+      "effect_id" : 232,
+      "is_default" : false
+    },
+    "395" : {
+      "effect_id" : 395,
+      "is_default" : false
+    }
+  },
+  "group_id" : 257,
+  "icon_id" : 33,
+  "market_group_id" : 377,
+  "mass" : 0,
+  "name" : {
+    "en" : "Spaceship Command",
+    "fr" : "Pilotage de vaisseau"
+  },
+  "packaged_volume" : 0.01,
+  "portion_size" : 1,
+  "published" : true,
+  "radius" : 1,
+  "type_id" : 3327,
+  "volume" : 0.01
+}

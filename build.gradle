@@ -6,9 +6,9 @@ plugins {
 	id "jacoco"
 	id "org.danilopianini.git-sensitive-semantic-versioning-gradle-plugin" version "1.1.9"
 	id "io.freefair.lombok" version "8.0.1"
-	id "com.diffplug.spotless" version "6.18.0"
-	id "org.openapi.generator" version "6.5.0"
-	id "io.swagger.core.v3.swagger-gradle-plugin" version "2.2.4"
+	id "com.diffplug.spotless" version "6.19.0"
+	id "org.openapi.generator" version "6.6.0"
+	id "io.swagger.core.v3.swagger-gradle-plugin" version "2.2.11"
 }
 
 group "com.autonomouslogic.everef"
@@ -29,24 +29,24 @@ repositories {
 }
 
 dependencies {
-	annotationProcessor "com.google.dagger:dagger-compiler:2.46"
-	implementation "com.google.dagger:dagger:2.46"
-	implementation "com.google.guava:guava:31.1-jre"
+	annotationProcessor "com.google.dagger:dagger-compiler:2.46.1"
+	implementation "com.google.dagger:dagger:2.46.1"
+	implementation "com.google.guava:guava:32.0.0-jre"
 	implementation "org.apache.logging.log4j:log4j-api:2.20.0"
 	implementation "org.apache.logging.log4j:log4j-core:2.20.0"
 	implementation "org.apache.logging.log4j:log4j-layout-template-json:2.20.0"
 	implementation "org.apache.logging.log4j:log4j-slf4j2-impl:2.20.0"
 	implementation "io.reactivex.rxjava3:rxjava:3.1.6"
-	implementation "com.autonomouslogic.commons:commons-java:1.6.2"
+	implementation "com.autonomouslogic.commons:commons-java:1.7.0"
 	implementation "de.neuland-bfi:pug4j:2.0.6"
-	implementation "software.amazon.awssdk:s3:2.20.56"
-	implementation "com.fasterxml.jackson.core:jackson-annotations:2.15.0"
-	implementation "com.fasterxml.jackson.core:jackson-core:2.15.0"
-	implementation "com.fasterxml.jackson.core:jackson-databind:2.15.0"
-	implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.15.0"
-	implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-csv:2.15.0"
-	implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.0"
-	implementation "com.fasterxml.jackson.module:jackson-module-kotlin:2.15.0"
+	implementation "software.amazon.awssdk:s3:2.20.78"
+	implementation "com.fasterxml.jackson.core:jackson-annotations:2.15.2"
+	implementation "com.fasterxml.jackson.core:jackson-core:2.15.2"
+	implementation "com.fasterxml.jackson.core:jackson-databind:2.15.2"
+	implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.15.2"
+	implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-csv:2.15.2"
+	implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.15.2"
+	implementation "com.fasterxml.jackson.module:jackson-module-kotlin:2.15.2"
 	implementation "org.apache.commons:commons-pool2:2.11.1"
 	implementation "org.apache.commons:commons-compress:1.23.0"
 	implementation "org.tukaani:xz:1.9"
@@ -56,14 +56,14 @@ dependencies {
 	implementation "net.gpedro.integrations.slack:slack-webhook:1.4.0"
 	implementation "org.jsoup:jsoup:1.16.1"
 	implementation "commons-codec:commons-codec:1.15"
-	implementation "io.dropwizard.metrics:metrics-core:4.2.18"
-	implementation "com.autonomouslogic.customspecfilter:custom-spec-filter:1.0.12"
-	implementation "io.swagger.core.v3:swagger-core:2.2.10"
-	implementation "io.swagger.core.v3:swagger-jaxrs2:2.2.10"
-	implementation "javax.ws.rs:javax.ws.rs-api:2.0"
+	implementation "io.dropwizard.metrics:metrics-core:4.2.19"
+	implementation "com.autonomouslogic.customspecfilter:custom-spec-filter:1.1.4"
+	implementation "io.swagger.core.v3:swagger-core:2.2.11"
+	implementation "io.swagger.core.v3:swagger-jaxrs2:2.2.11"
+	implementation "javax.ws.rs:javax.ws.rs-api:2.1.1"
 
-	testAnnotationProcessor "com.google.dagger:dagger-compiler:2.46"
-	testImplementation "com.google.dagger:dagger:2.46"
+	testAnnotationProcessor "com.google.dagger:dagger-compiler:2.46.1"
+	testImplementation "com.google.dagger:dagger:2.46.1"
 	testImplementation "org.junit.jupiter:junit-jupiter:5.9.3"
 	testImplementation "org.junit.jupiter:junit-jupiter-params:5.9.3"
 	testImplementation "org.junit-pioneer:junit-pioneer:2.0.1"
@@ -216,6 +216,22 @@ task scrapeMarketHistory(type: JavaExec) {
 task verifyRefDataModels(type: JavaExec) {
 	group "application"
 	args "verify-ref-data-models"
+	environment envProperties
+	classpath = sourceSets.main.runtimeClasspath
+	mainClass = mainClassName
+}
+
+task scrapeHoboleaks(type: JavaExec) {
+	group "application"
+	args "scrape-hoboleaks"
+	environment envProperties
+	classpath = sourceSets.main.runtimeClasspath
+	mainClass = mainClassName
+}
+
+task importTestResources(type: JavaExec) {
+	group "application"
+	args "import-test-resources"
 	environment envProperties
 	classpath = sourceSets.main.runtimeClasspath
 	mainClass = mainClassName

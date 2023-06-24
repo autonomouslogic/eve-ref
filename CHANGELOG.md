@@ -1,5 +1,187 @@
 EVE Ref Changelog
 
+## [2.13.0](https://github.com/autonomouslogic/eve-ref/compare/2.12.0...2.13.0) (2023-06-21)
+
+
+### Features
+
+* Simple inventory category and group pages ([#221](https://github.com/autonomouslogic/eve-ref/issues/221)) ([413eb9b](https://github.com/autonomouslogic/eve-ref/commit/413eb9b0bc7d8b9f986f334db19369cad7b42395))
+
+## [2.12.0](https://github.com/autonomouslogic/eve-ref/compare/2.11.1...2.12.0) (2023-06-19)
+
+
+### Features
+
+* Blueprints on reference data ([#217](https://github.com/autonomouslogic/eve-ref/issues/217)) ([e741672](https://github.com/autonomouslogic/eve-ref/commit/e741672e6441df329a539de3750e5b21e06f0eea))
+* Type reprocessing reference data ([#219](https://github.com/autonomouslogic/eve-ref/issues/219)) ([073f5b1](https://github.com/autonomouslogic/eve-ref/commit/073f5b1c6d07f6885e2d2565cadcb78c82b5b216))
+* Units on reference data ([#215](https://github.com/autonomouslogic/eve-ref/issues/215)) ([2e4243c](https://github.com/autonomouslogic/eve-ref/commit/2e4243c01f8cbc199b51c59473a4ec48c26772dd))
+
+
+### Bug Fixes
+
+* High is good on dynamic attribute range model ([#216](https://github.com/autonomouslogic/eve-ref/issues/216)) ([13a1269](https://github.com/autonomouslogic/eve-ref/commit/13a12696f0ce33cf009cf007feb3811cc765e9f7))
+* Slack duration reporting ([#214](https://github.com/autonomouslogic/eve-ref/issues/214)) ([71c617c](https://github.com/autonomouslogic/eve-ref/commit/71c617c15bb0b3d8aab17f7bd4e241b60817b724))
+
+## [2.11.1](https://github.com/autonomouslogic/eve-ref/compare/2.11.0...2.11.1) (2023-06-18)
+
+
+### Bug Fixes
+
+* Converted Mutaplasmid type mappings to an object. ([#212](https://github.com/autonomouslogic/eve-ref/issues/212)) ([7963e54](https://github.com/autonomouslogic/eve-ref/commit/7963e54192ae624da1e8b757a033c7963aaa9550))
+* Tech 3 variations no longer show as tech 1 ([#213](https://github.com/autonomouslogic/eve-ref/issues/213)) ([88ca14b](https://github.com/autonomouslogic/eve-ref/commit/88ca14b596d74f1ceab4063a0c8b623c42f8ed56))
+
+
+### Code Refactoring
+
+* Hoboleaks are part of the main reference data toolchain ([#210](https://github.com/autonomouslogic/eve-ref/issues/210)) ([c8901d1](https://github.com/autonomouslogic/eve-ref/commit/c8901d1ce8df8fdfbbb80901d6d31a0ad02671f4))
+
+
+### Tests
+
+* Command for importing resources for reference data tests ([#211](https://github.com/autonomouslogic/eve-ref/issues/211)) ([55c88a0](https://github.com/autonomouslogic/eve-ref/commit/55c88a00b8a7720cd2e932c8e18143c880f05120))
+
+## [2.11.0](https://github.com/autonomouslogic/eve-ref/compare/2.10.1...2.11.0) (2023-06-17)
+
+
+### Features
+
+* Hoboleaks SDE Scrape ([#206](https://github.com/autonomouslogic/eve-ref/issues/206)) ([5e36218](https://github.com/autonomouslogic/eve-ref/commit/5e36218b077cab65e65ea40c527b8abc3e9b9518))
+
+## [2.10.1](https://github.com/autonomouslogic/eve-ref/compare/2.10.0...2.10.1) (2023-06-15)
+
+
+### Bug Fixes
+
+* Fixed Slack runtime reporting ([#204](https://github.com/autonomouslogic/eve-ref/issues/204)) ([1ed9615](https://github.com/autonomouslogic/eve-ref/commit/1ed9615eae292e2f67fcee2b061547dbd570d6ff))
+
+
+### Documentation
+
+* Hoboleans blueprints reference data ([8c1bfcb](https://github.com/autonomouslogic/eve-ref/commit/8c1bfcb1adfd79cd69ac050b998ccb68fb115569))
+
+## [2.10.0](https://github.com/autonomouslogic/eve-ref/compare/2.9.0...2.10.0) (2023-06-14)
+
+
+### Features
+
+* Basic type pages ([#184](https://github.com/autonomouslogic/eve-ref/issues/184)) ([f5c23bd](https://github.com/autonomouslogic/eve-ref/commit/f5c23bd8addf6fc2cc2ca644b980da8f86933d79))
+
+
+### Documentation
+
+* More detail on the reference data sources ([#183](https://github.com/autonomouslogic/eve-ref/issues/183)) ([0559814](https://github.com/autonomouslogic/eve-ref/commit/0559814b9af3463ed554182a1e8c2fb1d74cc2be))
+
+## [2.9.0](https://github.com/autonomouslogic/eve-ref/compare/2.8.0...2.9.0) (2023-06-12)
+
+
+### Features
+
+* Meta groups reference data ([#179](https://github.com/autonomouslogic/eve-ref/issues/179)) ([2d7d620](https://github.com/autonomouslogic/eve-ref/commit/2d7d62045f02417a900906868ed33940366933a7))
+* Mutaplasmid reference data ([#171](https://github.com/autonomouslogic/eve-ref/issues/171)) ([59c25ae](https://github.com/autonomouslogic/eve-ref/commit/59c25aebd64192c2ec7981f9ed608b8ab0c89f3e))
+* Variations in reference data ([#180](https://github.com/autonomouslogic/eve-ref/issues/180)) ([732f74c](https://github.com/autonomouslogic/eve-ref/commit/732f74c0a2389c9ade56c5ee056373edf78b53c9))
+
+
+### Documentation
+
+* Style tweaks ([#174](https://github.com/autonomouslogic/eve-ref/issues/174)) ([fcfc407](https://github.com/autonomouslogic/eve-ref/commit/fcfc4075b045ed4d99a58b196e3ef50f5c8b8d42))
+
+## [2.8.0](https://github.com/autonomouslogic/eve-ref/compare/2.7.0...2.8.0) (2023-06-11)
+
+
+### Features
+
+* Full stack traces to Slack and Healthchecks, along with better Slack configs ([#166](https://github.com/autonomouslogic/eve-ref/issues/166)) ([8e88b28](https://github.com/autonomouslogic/eve-ref/commit/8e88b286620151578ad40506ced598763f3a45e4))
+
+
+### Bug Fixes
+
+* Handling 204 No Content from the ESI ([#168](https://github.com/autonomouslogic/eve-ref/issues/168)) ([c465a44](https://github.com/autonomouslogic/eve-ref/commit/c465a443f4085e0444697c0eae59e0c27d686669))
+* Pretty-print reference data ([#169](https://github.com/autonomouslogic/eve-ref/issues/169)) ([ef1794c](https://github.com/autonomouslogic/eve-ref/commit/ef1794c55c6743631fcc9efb82a8b24807407090))
+* Use OpenAPI-generated client properly ([#165](https://github.com/autonomouslogic/eve-ref/issues/165)) ([367723d](https://github.com/autonomouslogic/eve-ref/commit/367723d5f3ac39d3d560a55d0fc626db5df9a814))
+
+
+### Documentation
+
+* Updated dataset documentation ([#167](https://github.com/autonomouslogic/eve-ref/issues/167)) ([5572ce4](https://github.com/autonomouslogic/eve-ref/commit/5572ce4af5a2a01889832e852aee44e13d2be3cf))
+
+## [2.7.0](https://github.com/autonomouslogic/eve-ref/compare/2.6.2...2.7.0) (2023-06-08)
+
+
+### Features
+
+* Skills reference data ([#162](https://github.com/autonomouslogic/eve-ref/issues/162)) ([1594b98](https://github.com/autonomouslogic/eve-ref/commit/1594b9839afdcbd84c1f4832941a7a32db5fef1e))
+
+
+### Documentation
+
+* Documentation site ([#164](https://github.com/autonomouslogic/eve-ref/issues/164)) ([a856117](https://github.com/autonomouslogic/eve-ref/commit/a85611733b24d1e96fc919c74834c5261d315bcd))
+
+## [2.6.2](https://github.com/autonomouslogic/eve-ref/compare/2.6.1...2.6.2) (2023-06-06)
+
+
+### Dependency Updates
+
+* **deps:** update all non-major dependencies ([#161](https://github.com/autonomouslogic/eve-ref/issues/161)) ([c4ebb97](https://github.com/autonomouslogic/eve-ref/commit/c4ebb97c1b0a3962747d1e5abdc874e39e114a1d))
+
+## [2.6.1](https://github.com/autonomouslogic/eve-ref/compare/2.6.0...2.6.1) (2023-06-04)
+
+
+### Bug Fixes
+
+* Revert @nuxtjs/i18n to fix Cloudflare Page deploy ([#157](https://github.com/autonomouslogic/eve-ref/issues/157)) ([426f537](https://github.com/autonomouslogic/eve-ref/commit/426f537b8f7c31dfa8c2143723025d4d02bf76fb))
+
+
+### Continuous Integration
+
+* Node build on CI ([#156](https://github.com/autonomouslogic/eve-ref/issues/156)) ([bdfae3c](https://github.com/autonomouslogic/eve-ref/commit/bdfae3c04652b3779b94bffebde03753ccef7b5d))
+
+
+### Build System
+
+* Generate API on UI build. ([1f867ea](https://github.com/autonomouslogic/eve-ref/commit/1f867ea02ef39b70e4ee39c799297d13c8a00bf0))
+
+## [2.6.0](https://github.com/autonomouslogic/eve-ref/compare/2.5.1...2.6.0) (2023-06-02)
+
+
+### Features
+
+* Basic inventory type pages ([#155](https://github.com/autonomouslogic/eve-ref/issues/155)) ([0dcef91](https://github.com/autonomouslogic/eve-ref/commit/0dcef91b04f1c6904d163caf605619b44bfa9948))
+
+## [2.5.1](https://github.com/autonomouslogic/eve-ref/compare/2.5.0...2.5.1) (2023-05-30)
+
+
+### Bug Fixes
+
+* Catch individual contract loading errors ([#153](https://github.com/autonomouslogic/eve-ref/issues/153)) ([d44ae06](https://github.com/autonomouslogic/eve-ref/commit/d44ae061d46b352eb503c65d274f7507f25f5f4d))
+* Handle public contract bids 404s (and other 404s) ([#154](https://github.com/autonomouslogic/eve-ref/issues/154)) ([3f814bb](https://github.com/autonomouslogic/eve-ref/commit/3f814bbe674b95c4f2a61644cbdf8f05c080e1c9))
+
+## [2.5.0](https://github.com/autonomouslogic/eve-ref/compare/2.4.0...2.5.0) (2023-05-30)
+
+
+### Features
+
+* Inventory categories reference data ([#150](https://github.com/autonomouslogic/eve-ref/issues/150)) ([c257e5a](https://github.com/autonomouslogic/eve-ref/commit/c257e5a522cbdfcbc653ff8bb151e37a7f5dd897))
+* Inventory groups reference data ([#149](https://github.com/autonomouslogic/eve-ref/issues/149)) ([64d0f62](https://github.com/autonomouslogic/eve-ref/commit/64d0f629031c0583e2080849f2c01050673d1437))
+* Market group reference data ([#151](https://github.com/autonomouslogic/eve-ref/issues/151)) ([9846254](https://github.com/autonomouslogic/eve-ref/commit/9846254440c1f89efbe20d56a614d7b20de61965))
+
+
+### Bug Fixes
+
+* **deps:** update dependency com.google.guava:guava to v32 ([#147](https://github.com/autonomouslogic/eve-ref/issues/147)) ([dac7002](https://github.com/autonomouslogic/eve-ref/commit/dac7002b0a5abbe50bd9e9d5e7a32b55b91e820d))
+* Retry with delay on scrape public contracts ([#152](https://github.com/autonomouslogic/eve-ref/issues/152)) ([322edd9](https://github.com/autonomouslogic/eve-ref/commit/322edd96bfa7c6badae49140e619addc2d8968fc))
+
+
+### Code Refactoring
+
+* Refactor reference data flow ([#148](https://github.com/autonomouslogic/eve-ref/issues/148)) ([1629cb0](https://github.com/autonomouslogic/eve-ref/commit/1629cb0ed4e662f194902981793abd6df6cb386d))
+
+## [2.4.0](https://github.com/autonomouslogic/eve-ref/compare/2.3.1...2.4.0) (2023-05-27)
+
+
+### Features
+
+* Dogma attributes reference data ([#145](https://github.com/autonomouslogic/eve-ref/issues/145)) ([a7da982](https://github.com/autonomouslogic/eve-ref/commit/a7da9822aab5c76190ef6f97a2a59402ec652bab))
+
 ## [2.3.1](https://github.com/autonomouslogic/eve-ref/compare/2.3.0...2.3.1) (2023-05-25)
 
 

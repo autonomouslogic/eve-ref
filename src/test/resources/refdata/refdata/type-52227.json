@@ -1,0 +1,85 @@
+{
+  "description" : {
+    "de" : "Verwendet eine Kombination aus Dämpfungsfeldemittern und Redundanzsystemen, um die Auswirkungen von kritischen Systemschäden zu verhindern. Verleiht einen Bonus auf die Widerstandsfähigkeit von Schild, Panzerung und Rumpf. Es kann zeitgleich immer nur ein Schadenskontroll-System ausgerüstet werden.",
+    "en" : "Utilizes a combination of containment field emitters and redundancy systems to mitigate the impact of critical system damage. \r\n\r\nGrants a bonus to resistance for shield, armor and hull.\r\n\r\nOnly one Damage Control can be fit at a given time.",
+    "es" : "Usa una combinación de emisores de campo de contención y sistemas redundantes para mitigar el impacto de daños críticos al sistema. \n\nOtorga una bonificación de resistencia de escudo, blindaje y casco.\n\nSolo se puede equipar un control de daños a la vez.",
+    "fr" : "Des émetteurs de champ de confinement et des systèmes redondants permettent d'atténuer l'impact des dégâts critiques infligés aux systèmes. Donne un bonus de résistance aux boucliers, au blindage et à la coque. Un seul contrôle des dégâts peut être installé à la fois.",
+    "ja" : "コンテインメントフィールドエミッターと冗長システムを組み合わせて使用することで、システムへの致命的なダメージの衝撃を回避する。\r\n\nシールド、アーマー、船体の耐性が増大する。\r\n\n複数のダメージ制御を同時に装備することはできない。",
+    "ru" : "Эффективное сочетание излучателей сдерживающего поля и резервных блоков позволяет смягчить результат критического повреждения систем. Даёт бонус к сопротивлению щитов, брони и корпуса. Одновременно можно установить только один модуль боевой живучести.",
+    "zh" : "将围场发射器和冗余系统结合使用，减轻由严重系统性损坏造成的影响。 \n\n\n\n提高护盾、装甲和结构的抗性。\n\n\n\n只能同时装配一个损伤控制。"
+  },
+  "group_id" : 60,
+  "icon_id" : 77,
+  "meta_group_id" : 15,
+  "name" : {
+    "de" : "Abyssal Damage Control",
+    "en" : "Abyssal Damage Control",
+    "es" : "Control de daños abisal",
+    "fr" : "Contrôle des dégâts abyssaux",
+    "ja" : "アビサル・ダメージ制御",
+    "ru" : "Abyssal Damage Control",
+    "zh" : "深渊损伤控制"
+  },
+  "portion_size" : 1,
+  "published" : true,
+  "volume" : 5,
+  "type_id" : 52227,
+  "capacity" : 0,
+  "dogma_attributes" : {
+    "161" : {
+      "attribute_id" : 161,
+      "value" : 5
+    },
+    "162" : {
+      "attribute_id" : 162,
+      "value" : 1
+    },
+    "4" : {
+      "attribute_id" : 4,
+      "value" : 0
+    },
+    "38" : {
+      "attribute_id" : 38,
+      "value" : 0
+    },
+    "1544" : {
+      "attribute_id" : 1544,
+      "value" : 1
+    },
+    "277" : {
+      "attribute_id" : 277,
+      "value" : 4
+    },
+    "182" : {
+      "attribute_id" : 182,
+      "value" : 3394
+    }
+  },
+  "dogma_effects" : {
+    "11" : {
+      "effect_id" : 11,
+      "is_default" : false
+    },
+    "16" : {
+      "effect_id" : 16,
+      "is_default" : false
+    },
+    "2302" : {
+      "effect_id" : 2302,
+      "is_default" : false
+    }
+  },
+  "mass" : 0,
+  "packaged_volume" : 5,
+  "radius" : 1,
+  "required_skills" : {
+    "3394" : 4
+  },
+  "creating_mutaplasmid_type_ids" : [ 52225 ],
+  "is_dynamic_item" : true,
+  "type_variations" : {
+    "1" : [ 2046 ],
+    "2" : [ 2048 ],
+    "15" : [ 52227 ]
+  }
+}

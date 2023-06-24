@@ -58,10 +58,10 @@ public class DogmaAttribute {
 	Boolean stackable;
 
 	@JsonProperty
-	Map<String, String> tooltipDescriptionId;
+	Map<String, String> tooltipDescription;
 
 	@JsonProperty
-	Map<String, String> tooltipTitleId;
+	Map<String, String> tooltipTitle;
 
 	@JsonProperty
 	Integer unitId;

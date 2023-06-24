@@ -1,0 +1,122 @@
+{
+  "capacity" : 0,
+  "description" : {
+    "en" : "Comprised of countless nanomachines that enhance the energy flow from a ship's antimatter reactor, this core subsystem offers a pilot the option of increasing the power grid and capacitor capacity of their vessel. Designers of Tech III vessels were initially hampered by the problem of how to design a modular ship that could swap out basic engineering upgrades on a per-need basis. This proved particularly true when it came to reinforcing a vessel's power grid and capacitor banks without the use of batteries. In the end, the provision of nanomachines constructed from fullerene-based polymers allowed for solutions that had only existed in theory up until that point.",
+    "fr" : "Composé d'un nombre incalculable de nanomachines améliorant le flux d'énergie issu du cœur du réacteur antimatière d'un vaisseau, ce sous-système principal permet au pilote d'augmenter le réseau d'alimentation et la charge de capaciteur de son vaisseau. Au début, les concepteurs des vaisseaux Tech III ne parvenaient pas à mettre au point un vaisseau modulaire capable d'utiliser des améliorations d'ingénierie en cas de besoin. Cela était particulièrement vrai au moment d'augmenter le réseau d'alimentation et la taille du capaciteur d'un vaisseau sans utiliser de batterie. En fin de compte, l'approvisionnement en nanomachines en polymères à base de fullerène apporta la solution qui n'existait jusque-là qu'en théorie."
+  },
+  "dogma_attributes" : {
+    "1376" : {
+      "attribute_id" : 1376,
+      "value" : 3
+    },
+    "161" : {
+      "attribute_id" : 161,
+      "value" : 40
+    },
+    "482" : {
+      "attribute_id" : 482,
+      "value" : 50
+    },
+    "1380" : {
+      "attribute_id" : 1380,
+      "value" : 29986
+    },
+    "1366" : {
+      "attribute_id" : 1366,
+      "value" : 125
+    },
+    "422" : {
+      "attribute_id" : 422,
+      "value" : 3
+    },
+    "9" : {
+      "attribute_id" : 9,
+      "value" : 40
+    },
+    "1431" : {
+      "attribute_id" : 1431,
+      "value" : 5
+    },
+    "162" : {
+      "attribute_id" : 162,
+      "value" : 1
+    },
+    "1509" : {
+      "attribute_id" : 1509,
+      "value" : -3
+    },
+    "277" : {
+      "attribute_id" : 277,
+      "value" : 1
+    },
+    "182" : {
+      "attribute_id" : 182,
+      "value" : 30539
+    },
+    "633" : {
+      "attribute_id" : 633,
+      "value" : 1
+    },
+    "313" : {
+      "attribute_id" : 313,
+      "value" : 20
+    },
+    "4" : {
+      "attribute_id" : 4,
+      "value" : 1200000
+    },
+    "38" : {
+      "attribute_id" : 38,
+      "value" : 0
+    },
+    "1374" : {
+      "attribute_id" : 1374,
+      "value" : 0
+    },
+    "1375" : {
+      "attribute_id" : 1375,
+      "value" : 1
+    }
+  },
+  "dogma_effects" : {
+    "490" : {
+      "effect_id" : 490,
+      "is_default" : false
+    },
+    "3772" : {
+      "effect_id" : 3772,
+      "is_default" : false
+    },
+    "3774" : {
+      "effect_id" : 3774,
+      "is_default" : false
+    },
+    "3811" : {
+      "effect_id" : 3811,
+      "is_default" : false
+    },
+    "4159" : {
+      "effect_id" : 4159,
+      "is_default" : false
+    },
+    "6930" : {
+      "effect_id" : 6930,
+      "is_default" : false
+    }
+  },
+  "graphic_id" : 21511,
+  "group_id" : 958,
+  "icon_id" : 3636,
+  "market_group_id" : 1122,
+  "mass" : 1200000,
+  "name" : {
+    "en" : "Legion Core - Augmented Antimatter Reactor",
+    "fr" : "Legion Nucléus – Réacteur à antimatière augmenté"
+  },
+  "packaged_volume" : 40,
+  "portion_size" : 1,
+  "published" : true,
+  "radius" : 1,
+  "type_id" : 45623,
+  "volume" : 40
+}

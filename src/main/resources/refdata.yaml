@@ -1,3 +1,63 @@
+categories:
+  idField: category_id
+  model: InventoryCategory
+  sde:
+    file: sde/fsd/categoryIDs.yaml
+  esi:
+    file: universe/categories
+    languageAttributes:
+      - name
+    removes:
+      - groups
+  test:
+    filePrefix: category
+    ids:
+      - 6
+    languages:
+      - en-us
+
+groups:
+  idField: group_id
+  model: InventoryGroup
+  sde:
+    file: sde/fsd/groupIDs.yaml
+  esi:
+    file: universe/groups
+    languageAttributes:
+      - name
+    removes:
+      - types
+  test:
+    filePrefix: group
+    ids:
+      - 27
+      - 257
+      - 1185
+    languages:
+      - en-us
+
+marketGroups:
+  idField: market_group_id
+  model: MarketGroup
+  sde:
+    file: sde/fsd/marketGroups.yaml
+    renames:
+      name_id: name
+      description_id: description
+  esi:
+    file: markets/groups
+    languageAttributes:
+      - name
+      - description
+    removes:
+      - types
+  test:
+    filePrefix: market-group
+    ids:
+      - 1376
+    languages:
+      - en-us
+
 types:
   idField: type_id
   model: InventoryType
@@ -15,9 +75,39 @@ types:
     filePrefix: type
     ids:
       - 645
+      - 3336
+      - 3327
+      - 33097
+      - 3332
+      - 33093
+      - 3328
+      - 52225
+      - 52227
+      - 2046
+      - 2048
+      - 45623
+      - 45622
+      - 45624
+      - 22430
+      - 999
+      - 22431
     languages:
       - en-us
       - fr
+
+typeMaterials:
+  outputStore: types
+  dedicatedOutput: false
+  sde:
+    renames:
+      materials: type_materials
+    arrayToObjects:
+      type_materials: material_type_id
+    file: sde/fsd/typeMaterials.yaml
+  test:
+    filePrefix: type
+    ids:
+      - 645
 
 dogmaAttributes:
   idField: attribute_id
@@ -39,3 +129,92 @@ dogmaAttributes:
     filePrefix: dogma-attribute
     ids:
       - 9
+      - 182
+      - 277
+      - 183
+      - 278
+      - 184
+      - 279
+      - 1285
+      - 1286
+      - 1289
+      - 1287
+      - 1290
+      - 1288
+      - 180
+      - 181
+      - 275
+      - 164
+      - 165
+      - 166
+      - 167
+      - 168
+      - 1047
+
+metaGroups:
+  idField: meta_group_id
+  model: MetaGroup
+  sde:
+    file: sde/fsd/metaGroups.yaml
+    renames:
+      name_id: name
+      description_id: description
+  test:
+    filePrefix: meta-group
+    ids:
+      - 1
+      - 2
+      - 15
+
+mutaplasmids:
+  idField: type_id
+  model: Mutaplasmid
+  hoboleaks:
+    file: dynamicitemattributes.json
+    renames:
+      input_output_mapping: type_mappings
+      attribute_i_ds: dogma_modifications
+  test:
+    filePrefix: mutaplasmid
+    ids:
+      - 52225
+      - 52228
+
+skills:
+  model: Skill
+  test:
+    filePrefix: skill
+    ids:
+      - 3327
+      - 3328
+      - 3332
+      - 3336
+      - 33093
+      - 33097
+
+units:
+  idField: unit_id
+  model: Unit
+  hoboleaks:
+    file: dogmaunits.json
+    languageAttributes:
+      - name
+      - description
+  test:
+    filePrefix: unit
+    ids:
+      - 1
+      - 2
+
+blueprints:
+  idField: blueprint_type_id
+  model: Blueprint
+  sde:
+    file: sde/fsd/blueprints.yaml
+  hoboleaks:
+    file: blueprints.json
+  test:
+    filePrefix: blueprint
+    ids:
+      - 999
+      - 22431

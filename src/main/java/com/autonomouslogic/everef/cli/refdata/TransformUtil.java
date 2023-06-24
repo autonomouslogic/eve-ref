@@ -81,4 +81,8 @@ public class TransformUtil {
 		}
 		return newJson;
 	}
+
+	public void remove(ObjectNode root, String attr) {
+		root.remove(attr);
+	}
 }

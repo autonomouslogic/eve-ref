@@ -23,6 +23,10 @@ public class StoreHandler {
 		return getStore(name, "esi");
 	}
 
+	public MVMap<Long, JsonNode> getHoboleaksStore(String name) {
+		return getStore(name, "hoboleaks");
+	}
+
 	public MVMap<Long, JsonNode> getRefStore(String name) {
 		return getStore(name, "ref");
 	}

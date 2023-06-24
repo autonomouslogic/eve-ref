@@ -1,0 +1,13 @@
+{
+  "attribute_id" : 277,
+  "category_id" : 8,
+  "data_type" : 4,
+  "default_value" : 0,
+  "description" : {
+    "en" : "Required skill level for skill 1"
+  },
+  "high_is_good" : true,
+  "name" : "requiredSkill1Level",
+  "published" : false,
+  "stackable" : true
+}

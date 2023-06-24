@@ -16,6 +16,13 @@ public class RefDataConfig {
 	String idField;
 
 	@JsonProperty
+	String outputStore;
+
+	@JsonProperty
+	@lombok.Builder.Default
+	boolean dedicatedOutput = true;
+
+	@JsonProperty
 	String outputFile;
 
 	@JsonProperty
@@ -26,6 +33,9 @@ public class RefDataConfig {
 
 	@JsonProperty
 	RefTypeConfig esi;
+
+	@JsonProperty
+	RefTypeConfig hoboleaks;
 
 	@JsonProperty
 	RefTestConfig test;

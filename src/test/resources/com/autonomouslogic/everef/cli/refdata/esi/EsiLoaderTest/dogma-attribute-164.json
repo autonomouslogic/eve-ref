@@ -1,0 +1,16 @@
+{
+  "attribute_id" : 164,
+  "default_value" : 0,
+  "description" : {
+    "en" : "The charisma of a character."
+  },
+  "display_name" : {
+    "en" : "Charisma"
+  },
+  "high_is_good" : true,
+  "icon_id" : 1378,
+  "name" : "charisma",
+  "published" : true,
+  "stackable" : true,
+  "unit_id" : 120
+}

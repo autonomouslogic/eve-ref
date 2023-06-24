@@ -15,6 +15,7 @@ import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.test.MockS3Adapter;
 import com.autonomouslogic.everef.test.TestDataUtil;
 import com.autonomouslogic.everef.url.UrlParser;
+import com.autonomouslogic.everef.util.MockScrapeBuilder;
 import com.autonomouslogic.everef.util.RefDataUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.reactivex.rxjava3.core.Flowable;
@@ -45,6 +46,9 @@ import software.amazon.awssdk.services.s3.S3AsyncClient;
 @Log4j2
 @SetEnvironmentVariable(key = "DATA_PATH", value = "s3://" + BuildRefDataTest.BUCKET_NAME + "/base/")
 @SetEnvironmentVariable(key = "DATA_BASE_URL", value = "http://localhost:" + TEST_PORT)
+@SetEnvironmentVariable(
+		key = "HOBOLEAKS_DYNAMIC_ATTRIBUTES_URL",
+		value = "http://localhost:" + TEST_PORT + "/hoboleaks/dynamicitemattributes.json")
 public class BuildRefDataTest {
 	static final String BUCKET_NAME = "data-bucket";
 
@@ -66,6 +70,9 @@ public class BuildRefDataTest {
 
 	@Inject
 	RefDataUtil refDataUtil;
+
+	@Inject
+	MockScrapeBuilder mockScrapeBuilder;
 
 	MockWebServer server;
 
@@ -124,26 +131,28 @@ public class BuildRefDataTest {
 		assertEquals(expectedFilenames, files.keySet());
 		assertMeta(files.get("meta.json"));
 		for (var config : refDataUtil.loadReferenceDataConfig()) {
+			if (!config.isDedicatedOutput()) {
+				continue;
+			}
 			assertOutput(config, files.get(config.getOutputFile() + ".json"));
 		}
 	}
 
 	@SneakyThrows
-	private void assertOutput(@NonNull RefDataConfig config, @NonNull byte[] json) {
+	private void assertOutput(@NonNull RefDataConfig config, @NonNull byte[] jsonBytes) {
+		var json = objectMapper.readTree(jsonBytes);
 		var testConfig = config.getTest();
-		var expected = objectMapper.createObjectNode();
 		for (Long id : testConfig.getIds()) {
-			expected.set(
-					id.toString(),
-					objectMapper.readTree(ResourceUtil.loadResource(
-							"/refdata/refdata/" + testConfig.getFilePrefix() + "-" + id + ".json")));
+			var expected = objectMapper.readTree(
+					ResourceUtil.loadResource("/refdata/refdata/" + testConfig.getFilePrefix() + "-" + id + ".json"));
+			var actual = json.get(id.toString());
+			log.info("Asserting {} {}", config.getId(), id);
+			testDataUtil.assertJsonStrictEquals(expected, actual);
 		}
-		var supplied = objectMapper.readTree(json);
-		assertEquals(expected, supplied);
 
 		if (config.getId().equals("types")) {
 			// Check the encoded JSON contains full numbers. This comes from type 645 Dominix.
-			assertTrue(new String(json).contains("\"base_price\":153900000"));
+			assertTrue(new String(jsonBytes).contains("\"base_price\" : 153900000"));
 		}
 	}
 
@@ -163,15 +172,26 @@ public class BuildRefDataTest {
 				log.info("Path: {}", path);
 				switch (path) {
 					case "/ccp/sde/sde-20230315-TRANQUILITY.zip":
-						var sde = testDataUtil.createTestSde();
+						var sde = mockScrapeBuilder.createTestSde();
 						return new MockResponse()
 								.setResponseCode(200)
 								.setBody(new Buffer().write(IOUtils.toByteArray(new FileInputStream(sde))));
 					case "/esi-scrape/eve-ref-esi-scrape-latest.tar.xz":
-						var esi = testDataUtil.createTestEsiDump();
+						var esi = mockScrapeBuilder.createTestEsiDump();
 						return new MockResponse()
 								.setResponseCode(200)
 								.setBody(new Buffer().write(IOUtils.toByteArray(new FileInputStream(esi))));
+					case "/hoboleaks-sde/hoboleaks-sde-latest.tar.xz":
+						var hobo = mockScrapeBuilder.createTestHoboleaksSde();
+						return new MockResponse()
+								.setResponseCode(200)
+								.setBody(new Buffer().write(IOUtils.toByteArray(new FileInputStream(hobo))));
+					case "/hoboleaks/dynamicitemattributes.json":
+						return new MockResponse()
+								.setResponseCode(200)
+								.setBody(new Buffer()
+										.write(IOUtils.toByteArray(ResourceUtil.loadResource(
+												"/refdata/hoboleaks/dynamicitemattributes.json"))));
 				}
 				return new MockResponse().setResponseCode(404);
 			} catch (Exception e) {

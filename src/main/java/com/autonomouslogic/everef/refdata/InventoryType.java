@@ -18,6 +18,9 @@ import lombok.extern.jackson.Jacksonized;
 @Schema(description = "An inventory type")
 public class InventoryType {
 	@JsonProperty
+	long typeId;
+
+	@JsonProperty
 	BigDecimal basePrice;
 
 	@JsonProperty
@@ -91,11 +94,61 @@ public class InventoryType {
 	InventoryTypeTraits traits;
 
 	@JsonProperty
-	int typeId;
-
-	@JsonProperty
-	Integer variationParentTypeId;
+	Long variationParentTypeId;
 
 	@JsonProperty
 	BigDecimal volume;
+
+	@JsonProperty("is_skill")
+	@Schema(defaultValue = "false", description = "Whether this type is a skill or not. This is added by EVE Ref.")
+	boolean skill;
+
+	@JsonProperty
+	@Schema(
+			description = "The skills required for this type. The key is the skill type ID and the value is the level. "
+					+ "This is added by EVE Ref and derived from dogma attributes.")
+	Map<Long, Integer> requiredSkills;
+
+	@JsonProperty("is_mutaplasmid")
+	@Schema(
+			defaultValue = "false",
+			description = "Whether this type is a mutaplasmid or not. This is added by EVE Ref.")
+	boolean mutaplasmid;
+
+	@JsonProperty
+	@Schema(
+			description =
+					"Which mutaplasmids can be applied to this type to create a dynamic item. This is added by EVE Ref.")
+	List<Long> applicableMutaplasmidTypeIds;
+
+	@JsonProperty
+	@Schema(description = "Which mutaplasmids can used to create this dynamic item. This is added by EVE Ref.")
+	List<Long> creatingMutaplasmidTypeIds;
+
+	@JsonProperty("is_dynamic_item")
+	@Schema(
+			defaultValue = "false",
+			description =
+					"Whether this type is a dynamic item created by a mutaplasmid or not. This is added by EVE Ref.")
+	boolean dynamicItem;
+
+	@JsonProperty
+	@Schema(
+			description =
+					"The variations for this type. The key is the meta group and the value is a list of type IDs. "
+							+ "This is added by EVE Ref.")
+	Map<Long, List<Long>> typeVariations;
+
+	@JsonProperty("is_blueprint")
+	@Schema(defaultValue = "false", description = "Whether this type is a blueprint or not. This is added by EVE Ref.")
+	boolean blueprint;
+
+	@JsonProperty
+	@Schema(
+			description = "The blueprints creating this type. The key is the blueprint type ID. "
+					+ "This is added by EVE Ref.")
+	Map<Long, CreatingBlueprint> creatingBlueprints;
+
+	@JsonProperty
+	Map<Long, TypeMaterial> typeMaterials;
 }

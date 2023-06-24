@@ -1,0 +1,10 @@
+{
+  "display_name" : "kg",
+  "description" : {
+    "en" : "Kilogram"
+  },
+  "name" : {
+    "en" : "Mass"
+  },
+  "unit_id" : 2
+}

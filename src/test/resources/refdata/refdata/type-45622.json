@@ -1,0 +1,229 @@
+{
+  "description" : {
+    "de" : "Dieses Subsystem nutzt ein nano-elektromechanisches Zerstreuungsfeld und verbessert dadurch die Sensorsysteme eines Schiffes. Das Subsystem besteht aus einem komplexen System von neurovisuellen Schnittstellen, Steuerimpuls-Automatik sowie Milliarden von fortschrittlichen, molekülgroßen Schaltkreisen und bietet damit sowohl besseren Schutz gegen ECM von Gegnern als auch erhöhte Sensorreichweite und Zielerfassung.",
+    "en" : "This subsystem employs a nano-electromechanical dispersion field to strengthen a vessel's sensor systems. Made from a complex system of neurovisual interlays, automated trigger response units, and billions of advanced molecular-level circuits, the subsystem offers improved protection against hostile ECM as well as improved sensor range and target acquisition speed.",
+    "es" : "Este subsistema emplea un campo de dispersión nanoelectromecánico para fortalecer los sistemas de sensores de la nave. Fabricado a partir de un sistema complejo de interconexiones neurovisuales, unidades de respuesta de disparo automatizadas y miles de millones de circuitos avanzados a nivel molecular, el subsistema ofrece una protección mejorada frente a las contramedidas electrónicas hostiles, además de una velocidad de adquisición de objetivos y un alcance de sensor mejorados.",
+    "fr" : "Ce sous-système utilise un champ de dispersion nano-électromécanique visant à renforcer les systèmes de détection d'un vaisseau. Fabriqué à partir d'un système complexe de sous-couches neurovisuelles, d'unités réactives automatisées et de milliards de circuits moléculaires avancés, ce sous-système garantit une protection améliorée contre les CME hostiles ainsi qu'une portée des capteurs et une vitesse d'acquisition des cibles accrues.",
+    "ja" : "このサブシステムは、艦のセンサーシステムを強化するために、ナノエレクトロメカニカル拡散フィールドを採用している。このサブシステムは、神経視覚インターレイの複雑なシステム、自動化されたトリガー応答ユニット、数十億の高度な分子レベルの回路の複雑なシステムから作られており、敵対的なECMからの保護を向上させ、センサーの範囲と目標の取得速度を向上させる。",
+    "ru" : "Наночастотное электромеханическое поле рассеяния, используемое в этой подсистеме, повышает эффективность корабельных систем захвата целей. Подсистема состоит из миллиардов высокотехнологичных молекулярных схем, нейровизуальных сетей и автоматических блоков реагирования на условие, усиливающих защиту корабля от помех, наводимых на системы захвата целей, а также повышающих дальность и скорость действия этих систем.",
+    "zh" : "这个子系统使用纳米机电分散场来加强舰船的感应系统。由神经视觉层、自动触发响应单元和数十亿个先进的分子级电路构成的一个复杂系统组成，提升感应器范围、目标锁定速度和针对敌对ECM的防护能力。"
+  },
+  "graphic_id" : 21510,
+  "group_id" : 958,
+  "icon_id" : 3636,
+  "market_group_id" : 1122,
+  "mass" : 1200000,
+  "meta_group_id" : 14,
+  "name" : {
+    "de" : "Legion Core - Dissolution Sequencer",
+    "en" : "Legion Core - Dissolution Sequencer",
+    "es" : "Núcleo de la Legion: secuenciador de disolución",
+    "fr" : "Legion Nucléus – Séquenceur de dissolution",
+    "ja" : "レギオン・コア - ディソリューション・シーケンサー",
+    "ru" : "Legion Core - Dissolution Sequencer",
+    "zh" : "圣卒核心 - 散解程控装置"
+  },
+  "portion_size" : 1,
+  "published" : true,
+  "race_id" : 4,
+  "sof_faction_name" : "amarrbase",
+  "traits" : {
+    "misc_bonuses" : { },
+    "role_bonuses" : {
+      "1" : {
+        "bonus_text" : {
+          "de" : "<b><u>Zusätzliche Basiswerte</b></u>",
+          "en" : "<b><u>Additional Base Stats</b></u>",
+          "es" : "<b><u>Estadísticas básicas adicionales</b></u>",
+          "fr" : "<b><u>Stats de base supplémentaires</b></u>",
+          "ja" : "<b><u>追加ベース統計</b></u>",
+          "ru" : "<b><u>Кроме того:</b></u>",
+          "zh" : "<b><u>附加基础数值</b></u>"
+        },
+        "importance" : 1
+      },
+      "2" : {
+        "bonus_text" : {
+          "de" : "+2 Mid Slots, +2 Low Slots",
+          "en" : "+2 Mid Slots, +2 Low Slots",
+          "es" : "+2 ranuras intermedias, +2 ranuras inferiores",
+          "fr" : "+2 Emplacements intermédiaires, +2 Emplacements inférieurs",
+          "ja" : "ミッドスロット+2、ロースロット+2",
+          "ru" : "+2 разъёма средней мощности, +2 разъёма малой мощности",
+          "zh" : "中槽+2，低槽+2"
+        },
+        "importance" : 2
+      },
+      "3" : {
+        "bonus_text" : {
+          "de" : "+1 max. aufgeschaltetes Ziel",
+          "en" : "+1 max locked target",
+          "es" : "+1 objetivo fijado máximo",
+          "fr" : "+1 Cible verrouillée max",
+          "ja" : "最大ロックターゲット数+1",
+          "ru" : "+1 к максимуму захваченных целей",
+          "zh" : "目标锁定数上限+1"
+        },
+        "importance" : 3
+      }
+    },
+    "types" : {
+      "30539" : {
+        "2" : {
+          "bonus" : 5,
+          "bonus_text" : {
+            "de" : "Bonus auf die maximale Zielerfassungsreichweite",
+            "en" : "bonus to max targeting range",
+            "es" : "de bonificación a la distancia-objetivo máxima.",
+            "fr" : "de bonus à la portée maximale du système de ciblage",
+            "ja" : "最大ターゲット範囲が拡大",
+            "ru" : "увеличивается максимальная дальность захвата целей",
+            "zh" : "最大锁定距离加成"
+          },
+          "importance" : 2,
+          "unit_id" : 105
+        },
+        "1" : {
+          "bonus" : 15,
+          "bonus_text" : {
+            "de" : "Bonus auf die Sensorstärke des Schiffs",
+            "en" : "bonus to ship sensor strength",
+            "es" : "de bonificación a la intensidad de los sensores de la nave.",
+            "fr" : "de bonus à la puissance de détection du vaisseau",
+            "ja" : "艦船のセンサー強度が増加",
+            "ru" : "повышается эффективность системы захвата целей",
+            "zh" : "舰船感应强度加成"
+          },
+          "importance" : 1,
+          "unit_id" : 105
+        },
+        "3" : {
+          "bonus" : 15,
+          "bonus_text" : {
+            "de" : "Bonus auf die Scanauflösung",
+            "en" : "bonus to scan resolution",
+            "es" : "de bonificación a la resolución de escaneo.",
+            "fr" : "de bonus à la résolution du balayage",
+            "ja" : "スキャン分解能にボーナス",
+            "ru" : "увеличивается разрешающая способность системы захвата целей",
+            "zh" : "扫描分辨率加成"
+          },
+          "importance" : 3,
+          "unit_id" : 105
+        }
+      }
+    }
+  },
+  "variation_parent_type_id" : 45623,
+  "volume" : 40,
+  "type_id" : 45622,
+  "capacity" : 0,
+  "dogma_attributes" : {
+    "1376" : {
+      "attribute_id" : 1376,
+      "value" : 2
+    },
+    "161" : {
+      "attribute_id" : 161,
+      "value" : 40
+    },
+    "162" : {
+      "attribute_id" : 162,
+      "value" : 1
+    },
+    "1380" : {
+      "attribute_id" : 1380,
+      "value" : 29986
+    },
+    "1366" : {
+      "attribute_id" : 1366,
+      "value" : 125
+    },
+    "422" : {
+      "attribute_id" : 422,
+      "value" : 3
+    },
+    "2681" : {
+      "attribute_id" : 2681,
+      "value" : 15
+    },
+    "9" : {
+      "attribute_id" : 9,
+      "value" : 40
+    },
+    "235" : {
+      "attribute_id" : 235,
+      "value" : 1
+    },
+    "1509" : {
+      "attribute_id" : 1509,
+      "value" : 5
+    },
+    "277" : {
+      "attribute_id" : 277,
+      "value" : 1
+    },
+    "182" : {
+      "attribute_id" : 182,
+      "value" : 30539
+    },
+    "1431" : {
+      "attribute_id" : 1431,
+      "value" : 15
+    },
+    "633" : {
+      "attribute_id" : 633,
+      "value" : 1
+    },
+    "4" : {
+      "attribute_id" : 4,
+      "value" : 1200000
+    },
+    "38" : {
+      "attribute_id" : 38,
+      "value" : 0
+    },
+    "1374" : {
+      "attribute_id" : 1374,
+      "value" : 0
+    },
+    "1375" : {
+      "attribute_id" : 1375,
+      "value" : 2
+    }
+  },
+  "dogma_effects" : {
+    "3772" : {
+      "effect_id" : 3772,
+      "is_default" : false
+    },
+    "3774" : {
+      "effect_id" : 3774,
+      "is_default" : false
+    },
+    "3900" : {
+      "effect_id" : 3900,
+      "is_default" : false
+    },
+    "4269" : {
+      "effect_id" : 4269,
+      "is_default" : false
+    },
+    "4343" : {
+      "effect_id" : 4343,
+      "is_default" : false
+    },
+    "6934" : {
+      "effect_id" : 6934,
+      "is_default" : false
+    }
+  },
+  "packaged_volume" : 40,
+  "radius" : 1,
+  "required_skills" : {
+    "30539" : 1
+  },
+  "type_variations" : {
+    "14" : [ 45622, 45623, 45624 ]
+  }
+}

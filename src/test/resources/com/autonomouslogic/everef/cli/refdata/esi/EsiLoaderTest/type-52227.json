@@ -1,0 +1,64 @@
+{
+  "capacity" : 0,
+  "description" : {
+    "en" : "Utilizes a combination of containment field emitters and redundancy systems to mitigate the impact of critical system damage. \r\n\r\nGrants a bonus to resistance for shield, armor and hull.\r\n\r\nOnly one Damage Control can be fit at a given time.",
+    "fr" : "Des émetteurs de champ de confinement et des systèmes redondants permettent d'atténuer l'impact des dégâts critiques infligés aux systèmes. Donne un bonus de résistance aux boucliers, au blindage et à la coque. Un seul contrôle des dégâts peut être installé à la fois."
+  },
+  "dogma_attributes" : {
+    "161" : {
+      "attribute_id" : 161,
+      "value" : 5
+    },
+    "162" : {
+      "attribute_id" : 162,
+      "value" : 1
+    },
+    "4" : {
+      "attribute_id" : 4,
+      "value" : 0
+    },
+    "38" : {
+      "attribute_id" : 38,
+      "value" : 0
+    },
+    "1544" : {
+      "attribute_id" : 1544,
+      "value" : 1
+    },
+    "277" : {
+      "attribute_id" : 277,
+      "value" : 4
+    },
+    "182" : {
+      "attribute_id" : 182,
+      "value" : 3394
+    }
+  },
+  "dogma_effects" : {
+    "11" : {
+      "effect_id" : 11,
+      "is_default" : false
+    },
+    "16" : {
+      "effect_id" : 16,
+      "is_default" : false
+    },
+    "2302" : {
+      "effect_id" : 2302,
+      "is_default" : false
+    }
+  },
+  "group_id" : 60,
+  "icon_id" : 77,
+  "mass" : 0,
+  "name" : {
+    "en" : "Abyssal Damage Control",
+    "fr" : "Contrôle des dégâts abyssaux"
+  },
+  "packaged_volume" : 5,
+  "portion_size" : 1,
+  "published" : true,
+  "radius" : 1,
+  "type_id" : 52227,
+  "volume" : 5
+}
