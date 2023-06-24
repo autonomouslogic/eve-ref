@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.Streams;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.inject.Inject;
@@ -58,11 +59,13 @@ public class ObjectMerger {
 		if (arrays.length == 1) {
 			return arrays[0];
 		}
-		var merged = objectMapper.createArrayNode();
-		for (var obj : arrays) {
-			merged.addAll(obj);
+		var merged = new LinkedHashSet<JsonNode>();
+		for (var array : arrays) {
+			for (JsonNode node : array) {
+				merged.add(node);
+			}
 		}
-		return merged;
+		return objectMapper.valueToTree(merged);
 	}
 
 	private ObjectNode[] castToObjects(JsonNode[] nodes) {

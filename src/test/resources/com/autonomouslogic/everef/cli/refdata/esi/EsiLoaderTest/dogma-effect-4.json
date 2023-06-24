@@ -1,0 +1,14 @@
+{
+  "description" : {
+    "en" : ""
+  },
+  "discharge_attribute_id" : 6,
+  "display_name" : {
+    "en" : ""
+  },
+  "duration_attribute_id" : 73,
+  "effect_category" : 1,
+  "effect_id" : 4,
+  "is_warp_safe" : true,
+  "name" : "shieldBoosting"
+}

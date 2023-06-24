@@ -1,0 +1,13 @@
+{
+  "description" : {
+    "en" : "Requires a low power slot"
+  },
+  "display_name" : {
+    "en" : "Low power"
+  },
+  "effect_category" : 0,
+  "effect_id" : 11,
+  "icon_id" : 295,
+  "name" : "loPower",
+  "published" : true
+}

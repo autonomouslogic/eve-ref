@@ -157,6 +157,29 @@ dogmaAttributes:
       - 168
       - 1047
 
+dogmaEffects:
+  idField: effect_id
+  model: DogmaEffect
+  sde:
+    file: sde/fsd/dogmaEffects.yaml
+    renames:
+      description_id: description
+      display_name_id: display_name
+      modifier_info: modifiers
+  esi:
+    file: dogma/effects
+    languageAttributes:
+      - display_name
+      - description
+  test:
+    filePrefix: dogma-effect
+    ids:
+      - 4
+      - 11
+      - 18
+      - 21
+      - 34
+
 metaGroups:
   idField: meta_group_id
   model: MetaGroup

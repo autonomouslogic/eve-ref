@@ -152,6 +152,26 @@ public interface ReferenceDataSpec {
 	DogmaAttribute getDogmaAttribute(@PathParam("attribute_id") int attributeId);
 
 	@GET
+	@Path("/dogma_effects")
+	@Operation(description = "Get all dogma effect IDs.")
+	@ApiResponse(
+			responseCode = "200",
+			description = "Dogma effect IDs.",
+			useReturnTypeSchema = true,
+			content = @Content(mediaType = "application/json"))
+	List<Integer> getAllDogmaEffects();
+
+	@GET
+	@Path("/dogma_effects/{effect_id}")
+	@Operation
+	@ApiResponse(
+			responseCode = "200",
+			description = "The dogma effect.",
+			useReturnTypeSchema = true,
+			content = @Content(mediaType = "application/json"))
+	DogmaEffect getDogmaEffect(@PathParam("effect_id") int effectId);
+
+	@GET
 	@Path("/skills")
 	@Operation(description = "Get all skill type IDs.")
 	@ApiResponse(

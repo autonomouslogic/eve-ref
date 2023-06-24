@@ -1,0 +1,103 @@
+---
+"4":
+  disallowAutoRepeat: false
+  dischargeAttributeID: 6
+  durationAttributeID: 73
+  effectCategory: 1
+  effectID: 4
+  effectName: "shieldBoosting"
+  electronicChance: false
+  guid: "effects.ShieldBoosting"
+  isAssistance: false
+  isOffensive: false
+  isWarpSafe: true
+  propulsionChance: false
+  published: false
+  rangeChance: false
+"11":
+  descriptionID:
+    de: "Benötigt einen Low Power Slot"
+    en: "Requires a low power slot"
+    es: "Requiere una ranura de potencia inferior."
+    fr: "Nécessite un emplacement basse puissance"
+    ja: "ローパワースロットが必要"
+    ko: "로우 슬롯 전용 모듈"
+    ru: "Требуется разъём малой мощности"
+    zh: "需要低能量槽"
+  disallowAutoRepeat: false
+  displayNameID:
+    de: "Low power"
+    en: "Low power"
+    es: "Baja potencia"
+    fr: "Basse puissance"
+    ja: "ローパワー"
+    ko: "로우 슬롯"
+    ru: "Разъёмы малой мощности"
+    zh: "低能量"
+  effectCategory: 0
+  effectID: 11
+  effectName: "loPower"
+  electronicChance: false
+  guid: ""
+  iconID: 295
+  isAssistance: false
+  isOffensive: false
+  isWarpSafe: false
+  propulsionChance: false
+  published: true
+  rangeChance: false
+"18":
+  disallowAutoRepeat: false
+  dischargeAttributeID: 6
+  distribution: 1
+  durationAttributeID: 73
+  effectCategory: 2
+  effectID: 18
+  effectName: "shieldTransfer"
+  electronicChance: false
+  guid: "effects.ShieldTransfer"
+  isAssistance: true
+  isOffensive: false
+  isWarpSafe: false
+  propulsionChance: false
+  published: false
+  rangeAttributeID: 87
+  rangeChance: false
+"21":
+  disallowAutoRepeat: false
+  effectCategory: 4
+  effectID: 21
+  effectName: "shieldCapacityBonusOnline"
+  electronicChance: false
+  guid: ""
+  isAssistance: false
+  isOffensive: false
+  isWarpSafe: false
+  modifierInfo:
+  - domain: "shipID"
+    func: "ItemModifier"
+    modifiedAttributeID: 263
+    modifyingAttributeID: 72
+    operation: 2
+  propulsionChance: false
+  published: false
+  rangeChance: false
+"34":
+  disallowAutoRepeat: false
+  dischargeAttributeID: 6
+  distribution: 2
+  durationAttributeID: 51
+  effectCategory: 2
+  effectID: 34
+  effectName: "projectileFired"
+  electronicChance: false
+  falloffAttributeID: 158
+  guid: "effects.ProjectileFired"
+  isAssistance: false
+  isOffensive: true
+  isWarpSafe: false
+  propulsionChance: false
+  published: false
+  rangeAttributeID: 54
+  rangeChance: false
+  trackingSpeedAttributeID: 160
