@@ -380,13 +380,13 @@ paths:
                 items:
                   type: integer
                   format: int32
-  /units/{units_id}:
+  /units/{unit_id}:
     get:
       tags:
       - refdata
       operationId: getUnit
       parameters:
-      - name: units_id
+      - name: unit_id
         in: path
         required: true
         schema:
