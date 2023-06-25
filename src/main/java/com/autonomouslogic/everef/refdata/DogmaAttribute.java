@@ -16,10 +16,10 @@ import lombok.extern.jackson.Jacksonized;
 @Schema
 public class DogmaAttribute {
 	@JsonProperty
-	Integer attributeId;
+	Long attributeId;
 
 	@JsonProperty
-	Integer categoryId;
+	Long categoryId;
 
 	@JsonProperty
 	Integer chargeRechargeTimeId;
@@ -46,7 +46,7 @@ public class DogmaAttribute {
 	Integer iconId;
 
 	@JsonProperty
-	Integer maxAttributeId;
+	Long maxAttributeId;
 
 	@JsonProperty
 	String name;
@@ -64,5 +64,5 @@ public class DogmaAttribute {
 	Map<String, String> tooltipTitle;
 
 	@JsonProperty
-	Integer unitId;
+	Long unitId;
 }

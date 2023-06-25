@@ -16,18 +16,18 @@ import lombok.extern.jackson.Jacksonized;
 @Schema
 public class TraitBonus {
 	@JsonProperty
-	double bonus;
+	Double bonus;
 
 	@JsonProperty
 	@Schema(description = "The key is the language code.")
 	Map<String, String> bonusText;
 
 	@JsonProperty
-	int importance;
+	Integer importance;
 
 	@JsonProperty
 	Boolean isPositive;
 
 	@JsonProperty
-	int unitId;
+	Long unitId;
 }

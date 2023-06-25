@@ -16,7 +16,7 @@ import lombok.extern.jackson.Jacksonized;
 @Schema
 public class Unit {
 	@JsonProperty
-	Integer unitId;
+	Long unitId;
 
 	@JsonProperty
 	String displayName;

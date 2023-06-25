@@ -20,7 +20,7 @@ import lombok.extern.jackson.Jacksonized;
 				+ "These are created by EVE Ref and derived from Hoboleaks.")
 public class MutaplasmidTypeMapping {
 	@JsonProperty
-	long resultingTypeId;
+	Long resultingTypeId;
 
 	@JsonProperty
 	List<Long> applicableTypeIds;

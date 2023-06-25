@@ -18,7 +18,7 @@ import lombok.extern.jackson.Jacksonized;
 @Schema(description = "An inventory type")
 public class InventoryType {
 	@JsonProperty
-	long typeId;
+	Long typeId;
 
 	@JsonProperty
 	BigDecimal basePrice;
@@ -39,19 +39,19 @@ public class InventoryType {
 	Map<String, DogmaTypeEffect> dogmaEffects;
 
 	@JsonProperty
-	Integer factionId;
+	Long factionId;
 
 	@JsonProperty
-	Integer graphicId;
+	Long graphicId;
 
 	@JsonProperty
-	Integer groupId;
+	Long groupId;
 
 	@JsonProperty
-	Integer iconId;
+	Long iconId;
 
 	@JsonProperty
-	Integer marketGroupId;
+	Long marketGroupId;
 
 	@JsonProperty
 	BigDecimal mass;
@@ -60,7 +60,7 @@ public class InventoryType {
 	Map<String, List<Integer>> masteries;
 
 	@JsonProperty
-	Integer metaGroupId;
+	Long metaGroupId;
 
 	@JsonProperty
 	@Schema(description = "The key is the language code.")
@@ -76,7 +76,7 @@ public class InventoryType {
 	Boolean published;
 
 	@JsonProperty
-	Integer raceId;
+	Long raceId;
 
 	@JsonProperty
 	Double radius;
@@ -85,10 +85,10 @@ public class InventoryType {
 	String sofFactionName;
 
 	@JsonProperty
-	Integer sofMaterialSetId;
+	Long sofMaterialSetId;
 
 	@JsonProperty
-	Integer soundId;
+	Long soundId;
 
 	@JsonProperty
 	InventoryTypeTraits traits;
@@ -101,7 +101,7 @@ public class InventoryType {
 
 	@JsonProperty("is_skill")
 	@Schema(defaultValue = "false", description = "Whether this type is a skill or not. This is added by EVE Ref.")
-	boolean skill;
+	Boolean skill;
 
 	@JsonProperty
 	@Schema(
@@ -113,7 +113,7 @@ public class InventoryType {
 	@Schema(
 			defaultValue = "false",
 			description = "Whether this type is a mutaplasmid or not. This is added by EVE Ref.")
-	boolean mutaplasmid;
+	Boolean mutaplasmid;
 
 	@JsonProperty
 	@Schema(
@@ -145,9 +145,9 @@ public class InventoryType {
 
 	@JsonProperty
 	@Schema(
-			description = "The blueprints creating this type. The key is the blueprint type ID. "
+			description = "The blueprints producing this type. The key is the blueprint type ID. "
 					+ "This is added by EVE Ref.")
-	Map<Long, CreatingBlueprint> creatingBlueprints;
+	Map<Long, ProducingBlueprint> producedByBlueprints;
 
 	@JsonProperty
 	Map<Long, TypeMaterial> typeMaterials;

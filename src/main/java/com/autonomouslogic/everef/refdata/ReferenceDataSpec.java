@@ -49,7 +49,7 @@ public interface ReferenceDataSpec {
 			description = "The category.",
 			useReturnTypeSchema = true,
 			content = @Content(mediaType = "application/json"))
-	InventoryCategory getCategory(@PathParam("category_id") int categoryId);
+	InventoryCategory getCategory(@PathParam("category_id") long categoryId);
 
 	@GET
 	@Path("/groups")
@@ -69,7 +69,7 @@ public interface ReferenceDataSpec {
 			description = "The group.",
 			useReturnTypeSchema = true,
 			content = @Content(mediaType = "application/json"))
-	InventoryGroup getGroup(@PathParam("group_id") int groupId);
+	InventoryGroup getGroup(@PathParam("group_id") long groupId);
 
 	@GET
 	@Path("/market_groups")
@@ -99,7 +99,7 @@ public interface ReferenceDataSpec {
 			description = "The market group.",
 			useReturnTypeSchema = true,
 			content = @Content(mediaType = "application/json"))
-	MarketGroup getMarketGroup(@PathParam("market_group_id") int marketGroupId);
+	MarketGroup getMarketGroup(@PathParam("market_group_id") long marketGroupId);
 
 	@GET
 	@Path("/meta_groups")
@@ -119,7 +119,7 @@ public interface ReferenceDataSpec {
 			description = "The meta group.",
 			useReturnTypeSchema = true,
 			content = @Content(mediaType = "application/json"))
-	MetaGroup getMetaGroup(@PathParam("meta_group_id") int metaGroupId);
+	MetaGroup getMetaGroup(@PathParam("meta_group_id") long metaGroupId);
 
 	@GET
 	@Path("/types")
@@ -139,7 +139,7 @@ public interface ReferenceDataSpec {
 			description = "The type.",
 			useReturnTypeSchema = true,
 			content = @Content(mediaType = "application/json"))
-	InventoryType getType(@PathParam("type_id") int typeId);
+	InventoryType getType(@PathParam("type_id") long typeId);
 
 	@GET
 	@Path("/dogma_attributes")
@@ -159,7 +159,7 @@ public interface ReferenceDataSpec {
 			description = "The dogma attribute.",
 			useReturnTypeSchema = true,
 			content = @Content(mediaType = "application/json"))
-	DogmaAttribute getDogmaAttribute(@PathParam("attribute_id") int attributeId);
+	DogmaAttribute getDogmaAttribute(@PathParam("attribute_id") long attributeId);
 
 	@GET
 	@Path("/dogma_effects")
@@ -179,7 +179,7 @@ public interface ReferenceDataSpec {
 			description = "The dogma effect.",
 			useReturnTypeSchema = true,
 			content = @Content(mediaType = "application/json"))
-	DogmaEffect getDogmaEffect(@PathParam("effect_id") int effectId);
+	DogmaEffect getDogmaEffect(@PathParam("effect_id") long effectId);
 
 	@GET
 	@Path("/skills")
@@ -199,7 +199,7 @@ public interface ReferenceDataSpec {
 			description = "The skill.",
 			useReturnTypeSchema = true,
 			content = @Content(mediaType = "application/json"))
-	Skill getSkill(@PathParam("skill_type_id") int skillTypeId);
+	Skill getSkill(@PathParam("skill_type_id") long skillTypeId);
 
 	@GET
 	@Path("/mutaplasmids")
@@ -219,7 +219,7 @@ public interface ReferenceDataSpec {
 			description = "The mutaplasmid.",
 			useReturnTypeSchema = true,
 			content = @Content(mediaType = "application/json"))
-	Mutaplasmid getMutaplasmid(@PathParam("mutaplasmid_type_id") int mutaplasmidTypeId);
+	Mutaplasmid getMutaplasmid(@PathParam("mutaplasmid_type_id") long mutaplasmidTypeId);
 
 	@GET
 	@Path("/units")
@@ -239,7 +239,7 @@ public interface ReferenceDataSpec {
 			description = "The unit.",
 			useReturnTypeSchema = true,
 			content = @Content(mediaType = "application/json"))
-	Unit getUnit(@PathParam("unit_id") int unitId);
+	Unit getUnit(@PathParam("unit_id") long unitId);
 
 	@GET
 	@Path("/blueprints")
@@ -259,5 +259,5 @@ public interface ReferenceDataSpec {
 			description = "The blueprint.",
 			useReturnTypeSchema = true,
 			content = @Content(mediaType = "application/json"))
-	Blueprint getBlueprint(@PathParam("blueprint_type_id") int blueprintTypeId);
+	Blueprint getBlueprint(@PathParam("blueprint_type_id") long blueprintTypeId);
 }

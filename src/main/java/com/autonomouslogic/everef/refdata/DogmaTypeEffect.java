@@ -15,7 +15,7 @@ import lombok.extern.jackson.Jacksonized;
 @Schema(description = "A specific value for a dogma effect.")
 public class DogmaTypeEffect {
 	@JsonProperty
-	int effectId;
+	Long effectId;
 
 	@JsonProperty
 	Boolean isDefault;

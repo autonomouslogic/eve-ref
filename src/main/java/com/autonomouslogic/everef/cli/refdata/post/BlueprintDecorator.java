@@ -72,7 +72,7 @@ public class BlueprintDecorator implements PostDecorator {
 			log.warn("Could not set type {} as being created by blueprint, not found", blueprintTypeId);
 			return;
 		}
-		var obj = productType.withObject("/creating_blueprints");
+		var obj = productType.withObject("/produced_by_blueprints");
 		obj.put(
 				Long.toString(blueprintTypeId),
 				objectMapper

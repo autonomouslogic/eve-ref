@@ -18,7 +18,7 @@ import lombok.extern.jackson.Jacksonized;
 @Schema(description = "Details about a mutaplasmid. These are created by EVE Ref and derived from Hoboleaks.")
 public class Mutaplasmid {
 	@JsonProperty
-	long typeId;
+	Long typeId;
 
 	@JsonProperty
 	Map<Long, MutaplasmidTypeMapping> typeMappings;
