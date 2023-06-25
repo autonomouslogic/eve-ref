@@ -7,6 +7,7 @@ import com.autonomouslogic.everef.cli.refdata.esi.EsiLoader;
 import com.autonomouslogic.everef.cli.refdata.hoboleaks.HoboleaksLoader;
 import com.autonomouslogic.everef.cli.refdata.post.BlueprintDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.GroupsDecorator;
+import com.autonomouslogic.everef.cli.refdata.post.MarketGroupsDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.MutaplasmidDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.SkillDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.TypesDecorator;
@@ -120,6 +121,9 @@ public class BuildRefData implements Command {
 	@Inject
 	protected TypesDecorator typesDecorator;
 
+	@Inject
+	protected MarketGroupsDecorator marketGroupsDecorator;
+
 	@Setter
 	@NonNull
 	private ZonedDateTime buildTime = ZonedDateTime.now(ZoneOffset.UTC).truncatedTo(ChronoUnit.SECONDS);
@@ -186,6 +190,7 @@ public class BuildRefData implements Command {
 			blueprintDecorator.setStoreHandler(storeHandler);
 			groupsDecorator.setStoreHandler(storeHandler);
 			typesDecorator.setStoreHandler(storeHandler);
+			marketGroupsDecorator.setStoreHandler(storeHandler);
 		});
 	}
 
@@ -207,7 +212,8 @@ public class BuildRefData implements Command {
 						variationsDecorator,
 						blueprintDecorator,
 						groupsDecorator,
-						typesDecorator)
+						typesDecorator,
+						marketGroupsDecorator)
 				.stream()
 				.map(e -> e.create())
 				.toList()
