@@ -1,5 +1,19 @@
 EVE Ref Changelog
 
+## [2.15.0](https://github.com/autonomouslogic/eve-ref/compare/2.14.0...2.15.0) (2023-06-25)
+
+
+### Features
+
+* Dogma effect types reference ([#227](https://github.com/autonomouslogic/eve-ref/issues/227)) ([336b2c8](https://github.com/autonomouslogic/eve-ref/commit/336b2c80ca1f6b02631868eb65027a3ce64c4cf9))
+* Dogma type attributes and type effects from SDE ([#226](https://github.com/autonomouslogic/eve-ref/issues/226)) ([199ec11](https://github.com/autonomouslogic/eve-ref/commit/199ec11e57e0c57f858f78dabfd974b1730d687b))
+* Type materials from Hoboleaks ([#225](https://github.com/autonomouslogic/eve-ref/issues/225)) ([69a1b23](https://github.com/autonomouslogic/eve-ref/commit/69a1b23f8c658fef6a52a055938cc5bdcdd5f98f))
+
+
+### Bug Fixes
+
+* Added more properties to dogma effects ([#228](https://github.com/autonomouslogic/eve-ref/issues/228)) ([bb6df43](https://github.com/autonomouslogic/eve-ref/commit/bb6df43360c6829931030ac212c44ea56b542602))
+
 ## [2.14.0](https://github.com/autonomouslogic/eve-ref/compare/2.13.0...2.14.0) (2023-06-24)
 
 
