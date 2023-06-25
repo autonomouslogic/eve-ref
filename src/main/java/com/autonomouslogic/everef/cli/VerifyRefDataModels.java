@@ -59,6 +59,9 @@ public class VerifyRefDataModels implements Command {
 				if (entry.getType().equals("meta")) {
 					return;
 				}
+				if (entry.getType().equals("market_groups/root")) {
+					return;
+				}
 				var config = refDataUtil.loadReferenceDataConfig().stream()
 						.filter(c -> c.getOutputFile().equals(entry.getType()))
 						.findFirst()

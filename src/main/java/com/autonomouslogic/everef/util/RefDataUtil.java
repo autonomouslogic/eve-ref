@@ -101,7 +101,19 @@ public class RefDataUtil {
 				log.debug("Creating {} index with {} entries", type, index.size());
 				return Flowable.just(createEntry(type, objectMapper.writeValueAsBytes(index)));
 			});
-			return Flowable.concat(fileEntries, indexEntry);
+			var marketGroupRootIndex = !filename.equals("market_groups.json")
+					? Flowable.<ReferenceEntry>empty()
+					: Flowable.fromIterable(() -> json.fields())
+							.map(e -> e.getValue())
+							.filter(e -> e.get("parent_group_id") == null)
+							.map(e -> e.get("market_group_id").asLong())
+							.sorted()
+							.toList()
+							.flatMapPublisher(ind -> {
+								return Flowable.just(
+										createEntry("market_groups/root", objectMapper.writeValueAsBytes(ind)));
+							});
+			return Flowable.concat(fileEntries, indexEntry, marketGroupRootIndex);
 		});
 	}
 

@@ -205,6 +205,22 @@ paths:
                 items:
                   type: integer
                   format: int32
+  /market_groups/root:
+    get:
+      tags:
+      - refdata
+      description: Get all root market group IDs.
+      operationId: getRootMarketGroups
+      responses:
+        "200":
+          description: Root market group IDs.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: integer
+                  format: int32
   /market_groups/{market_group_id}:
     get:
       tags:
@@ -622,8 +638,10 @@ components:
           format: int64
         group_ids:
           type: array
+          description: The group IDs in this category. This is added by EVE Ref.
           items:
             type: integer
+            description: The group IDs in this category. This is added by EVE Ref.
             format: int32
       description: An inventory category
     InventoryGroup:
@@ -654,8 +672,10 @@ components:
           type: boolean
         type_ids:
           type: array
+          description: The type IDs in this group. This is added by EVE Ref.
           items:
             type: integer
+            description: The type IDs in this group. This is added by EVE Ref.
             format: int64
       description: An inventory group
     InventoryType:
@@ -861,6 +881,22 @@ components:
           format: int64
         has_types:
           type: boolean
+        child_market_group_ids:
+          type: array
+          description: The market group IDs which are direct children of this group.
+            This is added by EVE Ref.
+          items:
+            type: integer
+            description: The market group IDs which are direct children of this group.
+              This is added by EVE Ref.
+            format: int64
+        type_ids:
+          type: array
+          description: The type IDs in this market group. This is added by EVE Ref.
+          items:
+            type: integer
+            description: The type IDs in this market group. This is added by EVE Ref.
+            format: int64
       description: A market group
     MetaGroup:
       type: object
