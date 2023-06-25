@@ -9,6 +9,7 @@ import com.autonomouslogic.everef.cli.refdata.post.BlueprintDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.GroupsDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.MarketGroupsDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.MutaplasmidDecorator;
+import com.autonomouslogic.everef.cli.refdata.post.OreVariationsDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.SkillDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.TypesDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.VariationsDecorator;
@@ -124,6 +125,9 @@ public class BuildRefData implements Command {
 	@Inject
 	protected MarketGroupsDecorator marketGroupsDecorator;
 
+	@Inject
+	protected OreVariationsDecorator oreVariationsDecorator;
+
 	@Setter
 	@NonNull
 	private ZonedDateTime buildTime = ZonedDateTime.now(ZoneOffset.UTC).truncatedTo(ChronoUnit.SECONDS);
@@ -191,6 +195,7 @@ public class BuildRefData implements Command {
 			groupsDecorator.setStoreHandler(storeHandler);
 			typesDecorator.setStoreHandler(storeHandler);
 			marketGroupsDecorator.setStoreHandler(storeHandler);
+			oreVariationsDecorator.setStoreHandler(storeHandler);
 		});
 	}
 
@@ -213,7 +218,8 @@ public class BuildRefData implements Command {
 						blueprintDecorator,
 						groupsDecorator,
 						typesDecorator,
-						marketGroupsDecorator)
+						marketGroupsDecorator,
+						oreVariationsDecorator)
 				.stream()
 				.map(e -> e.create())
 				.toList()

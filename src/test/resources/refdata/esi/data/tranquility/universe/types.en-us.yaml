@@ -1318,3 +1318,127 @@
   radius: 1
   type_id: 22431
   volume: 0.01
+"1230":
+  capacity: 0
+  description: "Veldspar is the most common ore type in the central regions of known\
+    \ universe. It is still in constant demand as it holds a large portion of the\
+    \ much-used <a href=showinfo:34>Tritanium</a> mineral.\r\n\r\nAvailable primarily\
+    \ in high security status star systems."
+  dogma_attributes:
+  - attribute_id: 161
+    value: 0.1
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 2115
+    value: 0
+  - attribute_id: 4
+    value: 4000
+  - attribute_id: 182
+    value: 3386
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 2699
+    value: 1
+  - attribute_id: 277
+    value: 1
+  - attribute_id: 790
+    value: 60377
+  - attribute_id: 2711
+    value: 1230
+  - attribute_id: 1980
+    value: 0.5
+  group_id: 462
+  icon_id: 232
+  market_group_id: 518
+  mass: 4000
+  name: "Veldspar"
+  packaged_volume: 0.1
+  portion_size: 100
+  published: true
+  radius: 1
+  type_id: 1230
+  volume: 0.1
+"17470":
+  capacity: 0
+  description: "Clusters of veldspar with 5% higher yield, called concentrated veldspar,\
+    \ are sometimes found in areas where normal veldspar is already in abundance.\r\
+    \n\r\nVeldspar is the most common ore type in the central regions of known universe.\
+    \ It is still in constant demand as it holds a large portion of the much-used\
+    \ <a href=showinfo:34>Tritanium</a> mineral.\r\n\r\nAvailable primarily in high\
+    \ security status star systems."
+  dogma_attributes:
+  - attribute_id: 161
+    value: 0.1
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 2115
+    value: 0
+  - attribute_id: 4
+    value: 4000
+  - attribute_id: 182
+    value: 3386
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 2699
+    value: 2
+  - attribute_id: 277
+    value: 1
+  - attribute_id: 790
+    value: 60377
+  - attribute_id: 2711
+    value: 1230
+  - attribute_id: 1980
+    value: 0.5
+  group_id: 462
+  icon_id: 232
+  market_group_id: 518
+  mass: 4000
+  name: "Concentrated Veldspar"
+  packaged_volume: 0.1
+  portion_size: 100
+  published: true
+  radius: 1
+  type_id: 17470
+  volume: 0.1
+"17471":
+  capacity: 0
+  description: "In asteroids above average size, the intense pressure can weld normal\
+    \ veldspar into what is known as dense veldspar, increasing the yield by 10%.\
+    \ \r\n\r\nVeldspar is the most common ore type in the central regions of known\
+    \ universe. It is still in constant demand as it holds a large portion of the\
+    \ much-used <a href=showinfo:34>Tritanium</a> mineral.\r\n\r\nAvailable primarily\
+    \ in high security status star systems."
+  dogma_attributes:
+  - attribute_id: 161
+    value: 0.1
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 2115
+    value: 0
+  - attribute_id: 4
+    value: 4000
+  - attribute_id: 182
+    value: 3386
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 2699
+    value: 3
+  - attribute_id: 277
+    value: 1
+  - attribute_id: 790
+    value: 60377
+  - attribute_id: 2711
+    value: 1230
+  - attribute_id: 1980
+    value: 0.5
+  group_id: 462
+  icon_id: 232
+  market_group_id: 518
+  mass: 4000
+  name: "Dense Veldspar"
+  packaged_volume: 0.1
+  portion_size: 100
+  published: true
+  radius: 1
+  type_id: 17471
+  volume: 0.1
