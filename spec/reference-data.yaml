@@ -799,6 +799,24 @@ components:
               format: int64
           description: The variations for this type. The key is the meta group and
             the value is a list of type IDs. This is added by EVE Ref.
+        ore_variations:
+          type: object
+          additionalProperties:
+            type: array
+            description: The variations for this ore type. The key is the asteroid
+              meta level and the value is a list of type IDs. This is added by EVE
+              Ref.
+            items:
+              type: integer
+              description: The variations for this ore type. The key is the asteroid
+                meta level and the value is a list of type IDs. This is added by EVE
+                Ref.
+              format: int64
+          description: The variations for this ore type. The key is the asteroid meta
+            level and the value is a list of type IDs. This is added by EVE Ref.
+        is_ore:
+          type: boolean
+          description: Whether this is an ore or not. This is added by EVE Ref.
         produced_by_blueprints:
           type: object
           additionalProperties:

@@ -130,7 +130,7 @@ public class InventoryType {
 			defaultValue = "false",
 			description =
 					"Whether this type is a dynamic item created by a mutaplasmid or not. This is added by EVE Ref.")
-	boolean dynamicItem;
+	Boolean dynamicItem;
 
 	@JsonProperty
 	@Schema(
@@ -139,9 +139,20 @@ public class InventoryType {
 							+ "This is added by EVE Ref.")
 	Map<Long, List<Long>> typeVariations;
 
+	@JsonProperty
+	@Schema(
+			description =
+					"The variations for this ore type. The key is the asteroid meta level and the value is a list of type IDs. "
+							+ "This is added by EVE Ref.")
+	Map<Long, List<Long>> oreVariations;
+
+	@JsonProperty
+	@Schema(description = "Whether this is an ore or not. This is added by EVE Ref.")
+	Boolean isOre;
+
 	@JsonProperty("is_blueprint")
 	@Schema(defaultValue = "false", description = "Whether this type is a blueprint or not. This is added by EVE Ref.")
-	boolean blueprint;
+	Boolean blueprint;
 
 	@JsonProperty
 	@Schema(

@@ -95,6 +95,9 @@ types:
       - 22430
       - 999
       - 22431
+      - 1230
+      - 17470
+      - 17471
     languages:
       - en-us
       - fr
@@ -174,6 +177,8 @@ dogmaAttributes:
       - 167
       - 168
       - 1047
+      - 2699
+      - 2711
 
 dogmaEffects:
   idField: effect_id
