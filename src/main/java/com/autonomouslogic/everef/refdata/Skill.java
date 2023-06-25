@@ -18,29 +18,29 @@ import lombok.extern.jackson.Jacksonized;
 @Schema(description = "Details about skill types. These are created by EVE Ref.")
 public class Skill {
 	@JsonProperty
-	long typeId;
+	Long typeId;
 
 	@JsonProperty
 	@Schema(description = "The dogma attribute ID of the primary training attribute.")
-	long primaryDogmaAttributeId;
+	Long primaryDogmaAttributeId;
 
 	@JsonProperty
 	@Schema(description = "The dogma attribute ID of the secondary training attribute.")
-	long secondaryDogmaAttributeId;
+	Long secondaryDogmaAttributeId;
 
 	@JsonProperty
 	@Schema(description = "The character attribute ID of the primary training attribute.")
-	long primaryCharacterAttributeId;
+	Long primaryCharacterAttributeId;
 
 	@JsonProperty
 	@Schema(description = "The character attribute ID of the secondary training attribute.")
-	long secondaryCharacterAttributeId;
+	Long secondaryCharacterAttributeId;
 
 	@JsonProperty
-	int trainingTimeMultiplier;
+	Integer trainingTimeMultiplier;
 
 	@JsonProperty
-	boolean canNotBeTrainedOnTrial;
+	Boolean canNotBeTrainedOnTrial;
 
 	@JsonProperty
 	@Schema(description = "The other skills required for this skill.")

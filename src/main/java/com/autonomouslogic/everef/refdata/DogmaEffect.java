@@ -17,7 +17,7 @@ import lombok.extern.jackson.Jacksonized;
 @Schema
 public class DogmaEffect {
 	@JsonProperty
-	Integer effectId;
+	Long effectId;
 
 	@JsonProperty
 	String name;
@@ -44,37 +44,37 @@ public class DogmaEffect {
 	String guid;
 
 	@JsonProperty
-	Integer dischargeAttributeId;
+	Long dischargeAttributeId;
 
 	@JsonProperty
-	Integer durationAttributeId;
+	Long durationAttributeId;
 
 	@JsonProperty
-	Integer falloffAttributeId;
+	Long falloffAttributeId;
 
 	@JsonProperty
-	Integer rangeAttributeId;
+	Long rangeAttributeId;
 
 	@JsonProperty
-	Integer npcUsageChanceAttributeId;
+	Long npcUsageChanceAttributeId;
 
 	@JsonProperty
-	Integer trackingSpeedAttributeId;
+	Long trackingSpeedAttributeId;
 
 	@JsonProperty
-	Integer npcActivationChanceAttributeId;
+	Long npcActivationChanceAttributeId;
 
 	@JsonProperty
-	Integer fittingUsageChanceAttributeId;
+	Long fittingUsageChanceAttributeId;
 
 	@JsonProperty
-	Integer resistanceAttributeId;
+	Long resistanceAttributeId;
 
 	@JsonProperty
 	Integer distribution;
 
 	@JsonProperty
-	Integer iconId;
+	Long iconId;
 
 	@JsonProperty
 	Boolean isAssistance;

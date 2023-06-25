@@ -25,5 +25,5 @@ public class InventoryTypeTraits {
 	Map<String, Map<String, TraitBonus>> types;
 
 	@JsonProperty
-	Integer iconId;
+	Long iconId;
 }

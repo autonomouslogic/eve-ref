@@ -15,8 +15,8 @@ import lombok.extern.jackson.Jacksonized;
 @Schema(description = "A specific value for a dogma attribute")
 public class DogmaTypeAttribute {
 	@JsonProperty
-	int attributeId;
+	Long attributeId;
 
 	@JsonProperty
-	double value;
+	Double value;
 }

@@ -32,7 +32,7 @@ public class TypesDecorator implements PostDecorator {
 			var groups = storeHandler.getRefStore("groups");
 			for (var typeJson : types.values()) {
 				var type = objectMapper.convertValue(typeJson, InventoryType.class);
-				var groupId = (long) type.getGroupId();
+				var groupId = type.getGroupId();
 				var groupJson = groups.get(groupId);
 				if (groupJson == null) {
 					continue;

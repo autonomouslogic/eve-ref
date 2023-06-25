@@ -24,16 +24,16 @@ public class ModifierInfo {
 	Integer groupId;
 
 	@JsonProperty
-	Integer modifiedAttributeId;
+	Long modifiedAttributeId;
 
 	@JsonProperty
-	Integer modifyingAttributeId;
+	Long modifyingAttributeId;
 
 	@JsonProperty
-	Integer skillTypeId;
+	Long skillTypeId;
 
 	@JsonProperty
-	Integer effectId;
+	Long effectId;
 
 	@JsonProperty
 	Integer operator;

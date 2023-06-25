@@ -41,7 +41,7 @@ paths:
         required: true
         schema:
           type: integer
-          format: int32
+          format: int64
       responses:
         "200":
           description: The blueprint.
@@ -76,7 +76,7 @@ paths:
         required: true
         schema:
           type: integer
-          format: int32
+          format: int64
       responses:
         "200":
           description: The category.
@@ -111,7 +111,7 @@ paths:
         required: true
         schema:
           type: integer
-          format: int32
+          format: int64
       responses:
         "200":
           description: The dogma attribute.
@@ -146,7 +146,7 @@ paths:
         required: true
         schema:
           type: integer
-          format: int32
+          format: int64
       responses:
         "200":
           description: The dogma effect.
@@ -181,7 +181,7 @@ paths:
         required: true
         schema:
           type: integer
-          format: int32
+          format: int64
       responses:
         "200":
           description: The group.
@@ -232,7 +232,7 @@ paths:
         required: true
         schema:
           type: integer
-          format: int32
+          format: int64
       responses:
         "200":
           description: The market group.
@@ -267,7 +267,7 @@ paths:
         required: true
         schema:
           type: integer
-          format: int32
+          format: int64
       responses:
         "200":
           description: The meta group.
@@ -302,7 +302,7 @@ paths:
         required: true
         schema:
           type: integer
-          format: int32
+          format: int64
       responses:
         "200":
           description: The mutaplasmid.
@@ -337,7 +337,7 @@ paths:
         required: true
         schema:
           type: integer
-          format: int32
+          format: int64
       responses:
         "200":
           description: The skill.
@@ -372,7 +372,7 @@ paths:
         required: true
         schema:
           type: integer
-          format: int32
+          format: int64
       responses:
         "200":
           description: The type.
@@ -407,7 +407,7 @@ paths:
         required: true
         schema:
           type: integer
-          format: int32
+          format: int64
       responses:
         "200":
           description: The unit.
@@ -461,25 +461,15 @@ components:
         probability:
           type: number
           format: double
-    CreatingBlueprint:
-      type: object
-      properties:
-        blueprint_type_id:
-          type: integer
-          format: int64
-        blueprint_activity:
-          type: string
-      description: The blueprints creating this type. The key is the blueprint type
-        ID. This is added by EVE Ref.
     DogmaAttribute:
       type: object
       properties:
         attribute_id:
           type: integer
-          format: int32
+          format: int64
         category_id:
           type: integer
-          format: int32
+          format: int64
         charge_recharge_time_id:
           type: integer
           format: int32
@@ -506,7 +496,7 @@ components:
           format: int32
         max_attribute_id:
           type: integer
-          format: int32
+          format: int64
         name:
           type: string
         published:
@@ -523,13 +513,13 @@ components:
             type: string
         unit_id:
           type: integer
-          format: int32
+          format: int64
     DogmaEffect:
       type: object
       properties:
         effect_id:
           type: integer
-          format: int32
+          format: int64
         name:
           type: string
         display_name:
@@ -553,37 +543,37 @@ components:
           type: string
         discharge_attribute_id:
           type: integer
-          format: int32
+          format: int64
         duration_attribute_id:
           type: integer
-          format: int32
+          format: int64
         falloff_attribute_id:
           type: integer
-          format: int32
+          format: int64
         range_attribute_id:
           type: integer
-          format: int32
+          format: int64
         npc_usage_chance_attribute_id:
           type: integer
-          format: int32
+          format: int64
         tracking_speed_attribute_id:
           type: integer
-          format: int32
+          format: int64
         npc_activation_chance_attribute_id:
           type: integer
-          format: int32
+          format: int64
         fitting_usage_chance_attribute_id:
           type: integer
-          format: int32
+          format: int64
         resistance_attribute_id:
           type: integer
-          format: int32
+          format: int64
         distribution:
           type: integer
           format: int32
         icon_id:
           type: integer
-          format: int32
+          format: int64
         is_assistance:
           type: boolean
         is_offensive:
@@ -607,7 +597,7 @@ components:
       properties:
         attribute_id:
           type: integer
-          format: int32
+          format: int64
         value:
           type: number
           format: double
@@ -617,7 +607,7 @@ components:
       properties:
         effect_id:
           type: integer
-          format: int32
+          format: int64
         is_default:
           type: boolean
       description: A specific value for a dogma effect.
@@ -642,7 +632,7 @@ components:
           items:
             type: integer
             description: The group IDs in this category. This is added by EVE Ref.
-            format: int32
+            format: int64
       description: An inventory category
     InventoryGroup:
       type: object
@@ -707,19 +697,19 @@ components:
           description: A map of dogma attributes. The key is the attribute ID
         faction_id:
           type: integer
-          format: int32
+          format: int64
         graphic_id:
           type: integer
-          format: int32
+          format: int64
         group_id:
           type: integer
-          format: int32
+          format: int64
         icon_id:
           type: integer
-          format: int32
+          format: int64
         market_group_id:
           type: integer
-          format: int32
+          format: int64
         mass:
           type: number
         masteries:
@@ -731,7 +721,7 @@ components:
               format: int32
         meta_group_id:
           type: integer
-          format: int32
+          format: int64
         name:
           type: object
           additionalProperties:
@@ -748,7 +738,7 @@ components:
           type: boolean
         race_id:
           type: integer
-          format: int32
+          format: int64
         radius:
           type: number
           format: double
@@ -756,10 +746,10 @@ components:
           type: string
         sof_material_set_id:
           type: integer
-          format: int32
+          format: int64
         sound_id:
           type: integer
-          format: int32
+          format: int64
         traits:
           $ref: '#/components/schemas/InventoryTypeTraits'
         variation_parent_type_id:
@@ -809,11 +799,11 @@ components:
               format: int64
           description: The variations for this type. The key is the meta group and
             the value is a list of type IDs. This is added by EVE Ref.
-        creating_blueprints:
+        produced_by_blueprints:
           type: object
           additionalProperties:
-            $ref: '#/components/schemas/CreatingBlueprint'
-          description: The blueprints creating this type. The key is the blueprint
+            $ref: '#/components/schemas/ProducingBlueprint'
+          description: The blueprints producing this type. The key is the blueprint
             type ID. This is added by EVE Ref.
         type_materials:
           type: object
@@ -858,7 +848,7 @@ components:
               $ref: '#/components/schemas/TraitBonus'
         icon_id:
           type: integer
-          format: int32
+          format: int64
     MarketGroup:
       type: object
       properties:
@@ -930,16 +920,16 @@ components:
           format: int32
         modified_attribute_id:
           type: integer
-          format: int32
+          format: int64
         modifying_attribute_id:
           type: integer
-          format: int32
+          format: int64
         skill_type_id:
           type: integer
-          format: int32
+          format: int64
         effect_id:
           type: integer
-          format: int32
+          format: int64
         operator:
           type: integer
           format: int32
@@ -987,6 +977,16 @@ components:
             format: int64
       description: Details about which types a mutaplasmid can be applied to to create
         another type. These are created by EVE Ref and derived from Hoboleaks.
+    ProducingBlueprint:
+      type: object
+      properties:
+        blueprint_type_id:
+          type: integer
+          format: int64
+        blueprint_activity:
+          type: string
+      description: The blueprints producing this type. The key is the blueprint type
+        ID. This is added by EVE Ref.
     Skill:
       type: object
       properties:
@@ -1041,7 +1041,7 @@ components:
           type: boolean
         unit_id:
           type: integer
-          format: int32
+          format: int64
     TypeMaterial:
       type: object
       properties:
@@ -1056,7 +1056,7 @@ components:
       properties:
         unit_id:
           type: integer
-          format: int32
+          format: int64
         display_name:
           type: string
         name:

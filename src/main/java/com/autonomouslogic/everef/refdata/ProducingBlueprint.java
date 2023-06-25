@@ -13,7 +13,7 @@ import lombok.extern.jackson.Jacksonized;
 @Jacksonized
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @Schema
-public class CreatingBlueprint {
+public class ProducingBlueprint {
 	@JsonProperty
 	Long blueprintTypeId;
 

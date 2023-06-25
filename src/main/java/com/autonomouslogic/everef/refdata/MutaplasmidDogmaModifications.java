@@ -19,11 +19,11 @@ import lombok.extern.jackson.Jacksonized;
 				+ "These are created by EVE Ref and derived from Hoboleaks.")
 public class MutaplasmidDogmaModifications {
 	@JsonProperty
-	double min;
+	Double min;
 
 	@JsonProperty
-	double max;
+	Double max;
 
 	@JsonProperty
-	boolean highIsGood;
+	Boolean highIsGood;
 }

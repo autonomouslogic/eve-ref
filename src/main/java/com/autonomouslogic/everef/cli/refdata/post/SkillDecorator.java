@@ -26,8 +26,8 @@ import org.jetbrains.annotations.NotNull;
 @Log4j2
 public class SkillDecorator implements PostDecorator {
 	private static final int SKILL_CATEGORY_ID = 16;
-	private static final Map<String, Integer> ATTRIBUTE_ID_MAP =
-			Map.of("intelligence", 1, "charisma", 2, "perception", 3, "memory", 4, "willpower", 5);
+	private static final Map<String, Long> ATTRIBUTE_ID_MAP =
+			Map.of("intelligence", 1L, "charisma", 2L, "perception", 3L, "memory", 4L, "willpower", 5L);
 
 	@Inject
 	protected ObjectMapper objectMapper;
@@ -114,8 +114,8 @@ public class SkillDecorator implements PostDecorator {
 						if (req.isEmpty() || level.isEmpty()) {
 							return Optional.empty();
 						}
-						return Optional.of(Pair.of((long) req.get().getAttributeId(), (long)
-								level.get().getAttributeId()));
+						return Optional.of(
+								Pair.of(req.get().getAttributeId(), level.get().getAttributeId()));
 					}
 				})
 				.takeWhile(Optional::isPresent)
@@ -134,8 +134,8 @@ public class SkillDecorator implements PostDecorator {
 			if (skill.isEmpty() || level.isEmpty()) {
 				continue;
 			}
-			var skillId = (long) skill.get().getValue();
-			var skillLevel = (int) level.get().getValue();
+			var skillId = skill.get().getValue().longValue();
+			var skillLevel = level.get().getValue().intValue();
 			requiredSkills.put(skillId, skillLevel);
 		}
 		return requiredSkills.isEmpty() ? null : requiredSkills;
@@ -152,8 +152,8 @@ public class SkillDecorator implements PostDecorator {
 			return;
 		}
 
-		var primaryDogmaId = (long) primaryTypeDogma.get().getValue();
-		var secondaryDogmaId = (long) secondaryTypeDogma.get().getValue();
+		var primaryDogmaId = primaryTypeDogma.get().getValue().longValue();
+		var secondaryDogmaId = secondaryTypeDogma.get().getValue().longValue();
 
 		var primaryDogma = objectMapper.convertValue(dogmaAttributes.get(primaryDogmaId), DogmaAttribute.class);
 		var secondaryDogma = objectMapper.convertValue(dogmaAttributes.get(secondaryDogmaId), DogmaAttribute.class);
@@ -162,13 +162,15 @@ public class SkillDecorator implements PostDecorator {
 		var secondaryCharacterAttributeId = ATTRIBUTE_ID_MAP.get(secondaryDogma.getName());
 
 		var skillTimeConstantId = skillTimeConstantDogma.getAttributeId();
-		var mult = (int)
-				helper.getDogmaFromType(type, skillTimeConstantId).orElseThrow().getValue();
+		var mult = helper.getDogmaFromType(type, skillTimeConstantId)
+				.orElseThrow()
+				.getValue()
+				.intValue();
 
 		// The default value is 1, but all skills which don't specify this attribute can be trained on alpha.
 		// Therefore, we default to a 0.
 		var canNotBeTrainedOnTrial = helper.getDogmaFromType(type, canNotBeTrainedOnTrialDogma.getAttributeId())
-						.map(v -> (int) v.getValue())
+						.map(v -> v.getValue().intValue())
 						.orElse(0)
 				== 1L;
 

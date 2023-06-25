@@ -30,5 +30,5 @@ public class InventoryCategory {
 
 	@JsonProperty
 	@Schema(description = "The group IDs in this category. This is added by EVE Ref.")
-	List<Integer> groupIds;
+	List<Long> groupIds;
 }

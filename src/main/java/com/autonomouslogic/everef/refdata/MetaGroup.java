@@ -16,10 +16,10 @@ import lombok.extern.jackson.Jacksonized;
 @Schema(description = "A meta group")
 public class MetaGroup {
 	@JsonProperty
-	long metaGroupId;
+	Long metaGroupId;
 
 	@JsonProperty
-	long iconId;
+	Long iconId;
 
 	@JsonProperty
 	String iconSuffix;

@@ -67,13 +67,13 @@ public class MarketGroupsDecorator implements PostDecorator {
 				if (groupId == null) {
 					continue;
 				}
-				var groupJson = groups.get((long) groupId);
+				var groupJson = groups.get(groupId);
 				if (groupJson == null) {
 					log.warn("Unable to reference type {} on market group {}, market group not found", typeId, groupId);
 					continue;
 				}
 				((ArrayNode) groupJson.withArray("type_ids")).add(typeId);
-				groups.put((long) groupId, groupJson);
+				groups.put(groupId, groupJson);
 			}
 		});
 	}

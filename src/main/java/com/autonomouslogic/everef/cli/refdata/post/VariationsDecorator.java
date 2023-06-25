@@ -47,14 +47,14 @@ public class VariationsDecorator implements PostDecorator {
 			types = storeHandler.getRefStore("types");
 			mutaplasmids = storeHandler.getRefStore("mutaplasmids");
 			// tech 1 ID -> meta group ID -> list of type IDs
-			var variations = new HashMap<Long, Map<Integer, Set<Long>>>();
+			var variations = new HashMap<Long, Map<Long, Set<Long>>>();
 			resolveTypeVariations(variations);
 			resolveDynamicVariations(variations);
 			populateVariations(variations);
 		});
 	}
 
-	private void resolveTypeVariations(@NonNull Map<Long, Map<Integer, Set<Long>>> variations) {
+	private void resolveTypeVariations(@NonNull Map<Long, Map<Long, Set<Long>>> variations) {
 		for (var typeJson : types.values()) {
 			var type = objectMapper.convertValue(typeJson, InventoryType.class);
 
@@ -73,7 +73,7 @@ public class VariationsDecorator implements PostDecorator {
 		}
 	}
 
-	private void resolveDynamicVariations(@NonNull Map<Long, Map<Integer, Set<Long>>> variations) {
+	private void resolveDynamicVariations(@NonNull Map<Long, Map<Long, Set<Long>>> variations) {
 		for (var json : mutaplasmids.values()) {
 			var mutaplasmid = objectMapper.convertValue(json, Mutaplasmid.class);
 			for (var typeMapping : mutaplasmid.getTypeMappings().values()) {
@@ -97,13 +97,13 @@ public class VariationsDecorator implements PostDecorator {
 	}
 
 	private static void addMetaGroupVariation(
-			long parentTypeId, long typeId, int metaGroupId, Map<Long, Map<Integer, Set<Long>>> variations) {
+			long parentTypeId, long typeId, long metaGroupId, Map<Long, Map<Long, Set<Long>>> variations) {
 		var typeVariations = variations.computeIfAbsent(parentTypeId, k -> new TreeMap<>());
 		var metaGroupVariations = typeVariations.computeIfAbsent(metaGroupId, k -> new TreeSet<>());
 		metaGroupVariations.add(typeId);
 	}
 
-	private void populateVariations(@NonNull Map<Long, Map<Integer, Set<Long>>> variations) {
+	private void populateVariations(@NonNull Map<Long, Map<Long, Set<Long>>> variations) {
 		variations.forEach((parentTypeId, typeVariations) -> {
 			var typeVariationsJson = objectMapper.valueToTree(typeVariations);
 			populateTypeVariations(parentTypeId, typeVariationsJson);
