@@ -1,4 +1,25 @@
 ---
+"4":
+  description: "Capsuleer spaceships of all sizes and roles, including advanced and\
+    \ faction variants of many hull types"
+  market_group_id: 4
+  name: "Ships"
+  types: []
+"7":
+  description: "The foundations of any respectable fighting force."
+  market_group_id: 7
+  name: "Standard Battleships"
+  parent_group_id: 1376
+  types: []
+"81":
+  description: "Gallente battleship designs."
+  market_group_id: 81
+  name: "Gallente"
+  parent_group_id: 7
+  types:
+  - 641
+  - 24690
+  - 645
 "1376":
   description: "Large-sized spaceships with enough offensive and defensive capabilities\
     \ to tackle all but the biggest problems"

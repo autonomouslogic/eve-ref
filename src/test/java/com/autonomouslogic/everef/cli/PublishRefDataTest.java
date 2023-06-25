@@ -92,6 +92,7 @@ public class PublishRefDataTest {
 
 		var expectedKeys = new HashSet<String>();
 		expectedKeys.add("base/meta");
+		expectedKeys.add("base/market_groups/root");
 		for (var config : refDataUtil.loadReferenceDataConfig()) {
 			var testConfig = config.getTest();
 			expectedKeys.add("base/" + config.getOutputFile());
@@ -117,7 +118,9 @@ public class PublishRefDataTest {
 
 		// `/types` isn't uploaded because it already matches.
 		expectedKeys.remove("base/types");
-		assertEquals(expectedKeys, new HashSet<>(putKeys));
+		assertEquals(
+				expectedKeys.stream().sorted().toList(),
+				putKeys.stream().sorted().toList());
 
 		var deleteKeys = mockS3Adapter.getAllDeleteKeys(BUCKET_NAME, s3);
 		assertEquals(List.of("base/types/999999999"), deleteKeys);

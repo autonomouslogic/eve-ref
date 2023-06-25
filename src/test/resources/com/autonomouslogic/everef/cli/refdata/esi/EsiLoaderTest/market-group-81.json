@@ -1,0 +1,10 @@
+{
+  "description" : {
+    "en" : "Gallente battleship designs."
+  },
+  "market_group_id" : 81,
+  "name" : {
+    "en" : "Gallente"
+  },
+  "parent_group_id" : 7
+}

@@ -54,6 +54,9 @@ marketGroups:
   test:
     filePrefix: market-group
     ids:
+      - 4
+      - 7
+      - 81
       - 1376
     languages:
       - en-us

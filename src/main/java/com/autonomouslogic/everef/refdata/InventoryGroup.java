@@ -44,5 +44,6 @@ public class InventoryGroup {
 	Boolean useBasePrice;
 
 	@JsonProperty
+	@Schema(description = "The type IDs in this group. This is added by EVE Ref.")
 	List<Long> typeIds;
 }

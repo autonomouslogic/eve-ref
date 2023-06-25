@@ -82,6 +82,16 @@ public interface ReferenceDataSpec {
 	List<Integer> getAllMarketGroups();
 
 	@GET
+	@Path("/market_groups/root")
+	@Operation(description = "Get all root market group IDs.")
+	@ApiResponse(
+			responseCode = "200",
+			description = "Root market group IDs.",
+			useReturnTypeSchema = true,
+			content = @Content(mediaType = "application/json"))
+	List<Integer> getRootMarketGroups();
+
+	@GET
 	@Path("/market_groups/{market_group_id}")
 	@Operation
 	@ApiResponse(
