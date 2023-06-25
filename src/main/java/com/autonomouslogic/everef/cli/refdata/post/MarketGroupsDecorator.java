@@ -40,6 +40,9 @@ public class MarketGroupsDecorator implements PostDecorator {
 				var group = objectMapper.convertValue(groupJson, MarketGroup.class);
 				var groupId = group.getMarketGroupId();
 				var parentId = group.getParentGroupId();
+				if (parentId == null) {
+					continue;
+				}
 				var parentJson = groups.get(parentId);
 				if (parentJson == null) {
 					log.warn("Unable to reference market group {} on parent {}, parent not found", groupId, parentId);
