@@ -1,5 +1,18 @@
 EVE Ref Changelog
 
+## [2.16.0](https://github.com/autonomouslogic/eve-ref/compare/2.15.0...2.16.0) (2023-06-26)
+
+
+### Features
+
+* Child and root market groups on reference data ([#231](https://github.com/autonomouslogic/eve-ref/issues/231)) ([6db0879](https://github.com/autonomouslogic/eve-ref/commit/6db0879c181e1810de67984b99c749b95b19b40a))
+* Ore variations ([#235](https://github.com/autonomouslogic/eve-ref/issues/235)) ([c9f1c18](https://github.com/autonomouslogic/eve-ref/commit/c9f1c18cea21304d97f4ce82f2945572a07db132))
+
+
+### Code Refactoring
+
+* Changed IDs to longs and renamed creating_blueprints to produced_by_blueprints ([#234](https://github.com/autonomouslogic/eve-ref/issues/234)) ([120810a](https://github.com/autonomouslogic/eve-ref/commit/120810a08d70c3c3d1212ce241c6984a1f6fac4b))
+
 ## [2.15.0](https://github.com/autonomouslogic/eve-ref/compare/2.14.0...2.15.0) (2023-06-25)
 
 
