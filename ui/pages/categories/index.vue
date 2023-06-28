@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import refdataApi from "~/refdata";
-import CategoryLink from "~/components/types/CategoryLink.vue";
+import CategoryLink from "~/components/helpers/CategoryLink.vue";
 
 const {locale} = useI18n();
 

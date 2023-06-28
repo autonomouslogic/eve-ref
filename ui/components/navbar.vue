@@ -20,6 +20,11 @@ const selectedLocale = ref(locale);
       to="/categories">
       Categories
     </NuxtLink>
+    <NuxtLink
+      class="underline hover:underline-offset-4 font-bold text-blue-500 hover:text-blue-700"
+      to="/market-groups">
+      Market Groups
+    </NuxtLink>
   </div>
   <hr>
 </template>
