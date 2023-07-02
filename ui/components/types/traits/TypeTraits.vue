@@ -27,10 +27,8 @@ if (bonuses) {
 <template>
   <h3>Type Bonuses</h3>
   <div v-for="(formattedBonus, index) of formattedBonuses">
-    <h4>
-      <TypeLink :type-id="index"/> bonuses per level
-      <TraitGroup title="" :bonuses="formattedBonus"/>
-    </h4>
+    <TypeLink :type-id="index"/> bonuses per level
+    <TraitGroup title="" :bonuses="formattedBonus"/>
   </div>
 
 </template>
