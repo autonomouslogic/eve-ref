@@ -14,7 +14,6 @@ const marketGroup: MarketGroup = await refdataApi.getMarketGroup({marketGroupId}
 <template>
   <NuxtLink
     v-if="marketGroup"
-    class="underline hover:underline-offset-4 font-bold text-blue-500 hover:text-blue-700"
     :to="`/market-groups/${marketGroupId}`">
     {{ marketGroup.name[locale] }}
   </NuxtLink>
