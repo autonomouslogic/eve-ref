@@ -8,7 +8,8 @@
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
-    "generate-api": "openapi-generator-cli generate"
+    "generate-api": "openapi-generator-cli generate",
+    "lint": "eslint --ext .js,.vue ."
   },
   "devDependencies": {
     "@nuxt/types": "2.16.3",

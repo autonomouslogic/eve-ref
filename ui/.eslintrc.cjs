@@ -1,4 +1,5 @@
 module.exports = {
+	"ignorePatterns": ["dist/**/*"],
 	"env": {
 		"browser": true,
 		"es2021": true
@@ -6,7 +7,7 @@ module.exports = {
 	"extends": [
 		"eslint:recommended",
 		"plugin:@typescript-eslint/recommended",
-		"plugin:vue/vue3-essential"
+		"plugin:vue/vue3-recommended"
 	],
 	"overrides": [
 		{

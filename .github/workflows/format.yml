@@ -15,7 +15,12 @@ jobs:
           java-version: 17
           cache: gradle
 
-      - name: Spotless
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Lint
         run: |
           echo "Run 'make format' to auto-format"
           make lint
