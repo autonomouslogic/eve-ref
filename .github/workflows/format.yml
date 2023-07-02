@@ -1,7 +1,7 @@
 name: Format
 on: [ push ]
 jobs:
-  Spotless:
+  Format:
     timeout-minutes: 30
     runs-on: ubuntu-latest
     steps:
