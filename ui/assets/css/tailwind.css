@@ -1,3 +1,27 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+a {
+    @apply underline hover:underline-offset-4 font-bold text-blue-500 hover:text-blue-700;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    @apply font-bold mt-3;
+}
+
+h1 {
+    @apply text-4xl;
+}
+
+h2 {
+    @apply text-3xl;
+}
+
+h3 {
+    @apply text-2xl;
+}
+
+ul {
+    @apply list-disc list-inside;
+}
