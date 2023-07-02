@@ -15,10 +15,8 @@ const selectedLocale = ref(locale);
           v-t="{path: 'languageName', locale: availableLocale}"
       ></option>
     </select>
-    <NuxtLink
-      to="/categories">
-      Categories
-    </NuxtLink>
+    <NuxtLink to="/categories">Categories</NuxtLink>
+    <NuxtLink to="/market-groups">Market Groups</NuxtLink>
   </div>
   <hr>
 </template>

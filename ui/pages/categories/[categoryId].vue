@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import refdataApi from "~/refdata";
-import GroupLink from "~/components/types/GroupLink.vue";
+import GroupLink from "~/components/helpers/GroupLink.vue";
 
 const route = useRoute();
 const {locale} = useI18n();

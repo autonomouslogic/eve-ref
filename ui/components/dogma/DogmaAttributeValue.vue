@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import refdataApi from "~/refdata";
-import UnitValue from "~/components/dogma/UnitValue.vue";
 
 const {value, attributeId} = defineProps<{
   value: string | number | undefined,

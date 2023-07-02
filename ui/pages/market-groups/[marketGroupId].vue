@@ -1,0 +1,32 @@
+<script setup lang="ts">
+import refdataApi from "~/refdata";
+import {MarketGroup} from "~/refdata-openapi";
+import TypeLink from "~/components/helpers/TypeLink.vue";
+import MarketGroupLink from "~/components/helpers/MarketGroupLink.vue";
+import MarketGroupBreadcrumbs from "~/components/helpers/MarketGroupBreadcrumbs.vue";
+
+const route = useRoute();
+const {locale} = useI18n();
+
+const marketGroupId = route.params.marketGroupId;
+const marketGroup: MarketGroup = await refdataApi.getMarketGroup({marketGroupId});
+</script>
+
+<template>
+  <div>
+    <h1>{{ marketGroup.name[locale] }}</h1>
+    <p v-if="marketGroup.parentGroupId">
+      <MarketGroupBreadcrumbs :market-group-id="marketGroup.parentGroupId"></MarketGroupBreadcrumbs>
+    </p>
+    <ul>
+      <li v-for="marketGroupId in marketGroup.childMarketGroupIds">
+        <MarketGroupLink :marketGroupId="marketGroupId"></MarketGroupLink>
+      </li>
+    </ul>
+    <ul>
+      <li v-for="typeId in marketGroup.typeIds">
+        <TypeLink :typeId="typeId"></TypeLink>
+      </li>
+    </ul>
+  </div>
+</template>

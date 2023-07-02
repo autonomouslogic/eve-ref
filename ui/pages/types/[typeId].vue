@@ -3,8 +3,9 @@ import refdataApi from "~/refdata";
 import Currency from "~/components/helpers/Currency.vue";
 import {InventoryGroup, InventoryType} from "~/refdata-openapi";
 import Traits from "~/components/types/traits/Traits.vue";
-import CategoryLink from "~/components/types/CategoryLink.vue";
-import GroupLink from "~/components/types/GroupLink.vue";
+import CategoryLink from "~/components/helpers/CategoryLink.vue";
+import GroupLink from "~/components/helpers/GroupLink.vue";
+import MarketGroupBreadcrumbs from "~/components/helpers/MarketGroupBreadcrumbs.vue";
 
 const {locale} = useI18n();
 const route = useRoute();
@@ -24,6 +25,9 @@ const inventoryGroup: InventoryGroup = await refdataApi.getGroup({groupId: inven
     <p>
       <CategoryLink :categoryId="inventoryGroup.categoryId"></CategoryLink> &gt;
       <GroupLink :groupId="inventoryType.groupId"></GroupLink>
+    </p>
+    <p v-if="inventoryType.marketGroupId">
+      <MarketGroupBreadcrumbs :market-group-id="inventoryType.marketGroupId"></MarketGroupBreadcrumbs>
     </p>
     <img :src="`https://images.evetech.net/types/${inventoryType.typeId}/icon`" alt="">
 
