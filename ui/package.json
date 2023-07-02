@@ -16,6 +16,10 @@
     "@nuxtjs/tailwindcss": "6.7.0",
     "@openapitools/openapi-generator-cli": "2.6.0",
     "@types/node": "18.16.16",
+    "@typescript-eslint/eslint-plugin": "5.60.1",
+    "@typescript-eslint/parser": "5.60.1",
+    "eslint": "8.44.0",
+    "eslint-plugin-vue": "9.15.1",
     "nuxt": "3.5.2"
   }
 }
