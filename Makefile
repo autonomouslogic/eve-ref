@@ -21,6 +21,7 @@ lint:
 
 format:
 	./gradlew spotlessApply
+	cd ui ; npm run format
 
 specs:
 	./gradlew refDataSpec
