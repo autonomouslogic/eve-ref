@@ -7,7 +7,7 @@ const {locale} = useI18n();
 
 const groupId = route.params.groupId;
 var group = await refdataApi.getGroup({groupId});
-var typeIds = group.typeIds
+var typeIds = group.typeIds;
 </script>
 
 <template>

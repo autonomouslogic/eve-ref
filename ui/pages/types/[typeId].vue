@@ -12,7 +12,7 @@ const route = useRoute();
 const typeId = route.params.typeId;
 
 if (!typeId) {
-  console.error('typeId is null');
+	console.error("typeId is null");
 }
 
 const inventoryType: InventoryType = await refdataApi.getType({typeId});

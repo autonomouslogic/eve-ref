@@ -11,16 +11,16 @@ const props = defineProps<{
 const formattedBonuses: { [key: string]: { [key: string]: TraitBonus } } = {};
 
 if (props.bonuses) {
-  Object.keys(props.bonuses).forEach(typeId => {
-    const typeBonuses = props.bonuses[typeId];
-    const formattedTypeBonuses: { [key: string]: TraitBonus } = {};
+	Object.keys(props.bonuses).forEach(typeId => {
+		const typeBonuses = props.bonuses[typeId];
+		const formattedTypeBonuses: { [key: string]: TraitBonus } = {};
 
-    Object.keys(typeBonuses).forEach(level => {
-      formattedTypeBonuses[level] = TraitBonusFromJSON(typeBonuses[level]);
-    });
+		Object.keys(typeBonuses).forEach(level => {
+			formattedTypeBonuses[level] = TraitBonusFromJSON(typeBonuses[level]);
+		});
 
-    formattedBonuses[typeId] = formattedTypeBonuses;
-  });
+		formattedBonuses[typeId] = formattedTypeBonuses;
+	});
 }
 </script>
 

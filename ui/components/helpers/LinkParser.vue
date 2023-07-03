@@ -9,14 +9,14 @@ const splitByATags = props.content.split(/(<a.*?<\/a>)/g);
 
 const result = [];
 splitByATags.forEach(item => {
-  if (item.startsWith('<a')) {
-    const match = item.match(/<a.*?(\d+)[^\d]/);
-    if (match) {
-      result.push(parseInt(match[1])); // Number from the tag
-    }
-  } else {
-    result.push(item);
-  }
+	if (item.startsWith("<a")) {
+		const match = item.match(/<a.*?(\d+)[^\d]/);
+		if (match) {
+			result.push(parseInt(match[1])); // Number from the tag
+		}
+	} else {
+		result.push(item);
+	}
 });
 
 </script>

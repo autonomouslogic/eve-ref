@@ -15,9 +15,9 @@ let currentGroupId = props.marketGroupId;
 let marketGroup: MarketGroup = await refdataApi.getMarketGroup({marketGroupId: currentGroupId});
 marketGroupIds.unshift(currentGroupId);
 while (marketGroup && marketGroup.parentGroupId) {
-  currentGroupId = marketGroup.parentGroupId;
-  marketGroup = await refdataApi.getMarketGroup({marketGroupId: currentGroupId});
-  marketGroupIds.unshift(currentGroupId);
+	currentGroupId = marketGroup.parentGroupId;
+	marketGroup = await refdataApi.getMarketGroup({marketGroupId: currentGroupId});
+	marketGroupIds.unshift(currentGroupId);
 }
 </script>
 
