@@ -17,9 +17,11 @@ test:
 
 lint:
 	./gradlew spotlessCheck
+	cd ui ; npm run lint
 
 format:
 	./gradlew spotlessApply
+	cd ui ; npm run format
 
 specs:
 	./gradlew refDataSpec

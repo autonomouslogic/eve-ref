@@ -1,7 +1,7 @@
-name: Spotless
+name: Format
 on: [ push ]
 jobs:
-  Spotless:
+  Format:
     timeout-minutes: 30
     runs-on: ubuntu-latest
     steps:
@@ -15,7 +15,17 @@ jobs:
           java-version: 17
           cache: gradle
 
-      - name: Spotless
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: UI dependencies
+        run: |
+          cd ui
+          npm install
+
+      - name: Lint
         run: |
           echo "Run 'make format' to auto-format"
           make lint

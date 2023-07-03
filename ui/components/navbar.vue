@@ -4,19 +4,19 @@ const selectedLocale = ref(locale);
 </script>
 
 <template>
-  <div>
-    Language:
-    <select name="locale" id="locale" v-model="selectedLocale">
-      <option
-          v-for="availableLocale in availableLocales"
-          :key="availableLocale"
-          :value="availableLocale"
-          :selected="availableLocale === locale"
-          v-t="{path: 'languageName', locale: availableLocale}"
-      ></option>
-    </select>
-    <NuxtLink to="/categories">Categories</NuxtLink>
-    <NuxtLink to="/market-groups">Market Groups</NuxtLink>
-  </div>
-  <hr>
+	<div>
+		Language:
+		<select name="locale" id="locale" v-model="selectedLocale">
+			<option
+				v-for="availableLocale in availableLocales"
+				:key="availableLocale"
+				:value="availableLocale"
+				:selected="availableLocale === locale"
+				v-t="{path: 'languageName', locale: availableLocale}"
+			></option>
+		</select>
+		<NuxtLink to="/categories">Categories</NuxtLink>
+		<NuxtLink to="/market-groups">Market Groups</NuxtLink>
+	</div>
+	<hr>
 </template>

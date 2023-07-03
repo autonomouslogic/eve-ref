@@ -4,17 +4,17 @@ import {InventoryType} from "~/refdata-openapi";
 
 const {locale} = useI18n();
 
-const {typeId} = defineProps<{
-  typeId: number | string | undefined
+const props = defineProps<{
+	typeId: number | string | undefined
 }>();
 
-const type: InventoryType | undefined = typeId ? await refdataApi.getType({typeId}) : undefined;
+const type: InventoryType | undefined = props.typeId ? await refdataApi.getType({typeId: props.typeId}) : undefined;
 </script>
 
 <template>
-  <NuxtLink
-      v-if="type"
-      :to="`/types/${typeId}`">
-    {{ type.name[locale] }}
-  </NuxtLink>
+	<NuxtLink
+		v-if="type"
+		:to="`/types/${props.typeId}`">
+		{{ type.name[locale] }}
+	</NuxtLink>
 </template>

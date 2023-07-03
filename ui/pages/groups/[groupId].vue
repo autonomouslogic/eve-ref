@@ -7,17 +7,17 @@ const {locale} = useI18n();
 
 const groupId = route.params.groupId;
 var group = await refdataApi.getGroup({groupId});
-var typeIds = group.typeIds
+var typeIds = group.typeIds;
 </script>
 
 <template>
-  <div>
-    <h1>{{ group.name[locale] }}</h1>
-    <p>Types:</p>
-    <ul>
-      <li v-for="typeId in typeIds">
-        <TypeLink :typeId="typeId"></TypeLink>
-      </li>
-    </ul>
-  </div>
+	<div>
+		<h1>{{ group.name[locale] }}</h1>
+		<p>Types:</p>
+		<ul>
+			<li v-for="typeId in typeIds" :key="typeId">
+				<TypeLink :typeId="typeId"></TypeLink>
+			</li>
+		</ul>
+	</div>
 </template>

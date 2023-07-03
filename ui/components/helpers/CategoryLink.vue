@@ -2,19 +2,20 @@
 import refdataApi from "~/refdata";
 import {InventoryCategory} from "~/refdata-openapi";
 
-const {categoryId} = defineProps<{
-  categoryId: number | undefined
+const props = defineProps<{
+	categoryId: number | undefined
 }>();
 
 const {locale} = useI18n();
 
-const category: InventoryCategory = await refdataApi.getCategory({categoryId});
+const category: InventoryCategory = await refdataApi.getCategory({categoryId: props.categoryId});
 </script>
 
 <template>
-  <NuxtLink
-    v-if="category"
-    :to="`/categories/${categoryId}`">
-    {{ category.name[locale] }}
-  </NuxtLink>
+	<NuxtLink
+		v-if="category"
+		:to="`/categories/${props.categoryId}`">
+		{{ category.name[locale] }}
+	</NuxtLink>
+	<span v-else>(Unknown category ID {{props.categoryId}})</span>
 </template>

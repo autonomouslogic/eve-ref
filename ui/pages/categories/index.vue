@@ -8,12 +8,12 @@ const categoryIds: number[] = await refdataApi.getAllCategories();
 </script>
 
 <template>
-  <div>
-    <h1>Categories</h1>
-    <ul>
-      <li v-for="categoryId in categoryIds">
-        <CategoryLink :categoryId="categoryId"></CategoryLink>
-      </li>
-    </ul>
-  </div>
+	<div>
+		<h1>Categories</h1>
+		<ul>
+			<li v-for="categoryId in categoryIds" :key="categoryId">
+				<CategoryLink :categoryId="categoryId"></CategoryLink>
+			</li>
+		</ul>
+	</div>
 </template>

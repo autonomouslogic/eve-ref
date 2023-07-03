@@ -2,19 +2,20 @@
 import refdataApi from "~/refdata";
 import {InventoryGroup} from "~/refdata-openapi";
 
-const {groupId} = defineProps<{
-  groupId: number | undefined
+const props = defineProps<{
+	groupId: number | undefined
 }>();
 
 const {locale} = useI18n();
 
-const group: InventoryGroup = await refdataApi.getGroup({groupId});
+const group: InventoryGroup = await refdataApi.getGroup({groupId: props.groupId});
 </script>
 
 <template>
-  <NuxtLink
-    v-if="group"
-    :to="`/groups/${groupId}`">
-    {{ group.name[locale] }}
-  </NuxtLink>
+	<NuxtLink
+		v-if="group"
+		:to="`/groups/${props.groupId}`">
+		{{ group.name[locale] }}
+	</NuxtLink>
+	<span v-else>(Unknown group ID {{props.groupId}})</span>
 </template>
