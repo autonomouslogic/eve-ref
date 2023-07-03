@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import refdataApi from "~/refdata";
-import Currency from "~/components/helpers/Currency.vue";
 import {InventoryGroup, InventoryType} from "~/refdata-openapi";
-import Traits from "~/components/types/traits/Traits.vue";
+import TraitsContainer from "~/components/types/traits/TraitsContainer.vue";
 import CategoryLink from "~/components/helpers/CategoryLink.vue";
 import GroupLink from "~/components/helpers/GroupLink.vue";
 import MarketGroupBreadcrumbs from "~/components/helpers/MarketGroupBreadcrumbs.vue";
+import FormattedCurrency from "~/components/helpers/FormattedCurrency.vue";
 
 const {locale} = useI18n();
 const route = useRoute();
@@ -34,13 +34,13 @@ const inventoryGroup: InventoryGroup = await refdataApi.getGroup({groupId: inven
     <p>Type ID: {{ route.params.typeId }}</p>
     <p>Description: {{ inventoryType.description[locale] }}</p>
     <p>Price:
-      <currency :price="inventoryType.basePrice"></currency>
+      <FormattedCurrency :price="inventoryType.basePrice"></FormattedCurrency>
     </p>
-    <Traits :traits="inventoryType.traits"></Traits>
+    <TraitsContainer :traits="inventoryType.traits"></TraitsContainer>
 
     <h2>Dogma values</h2>
     <ul>
-      <li v-for="attributeValue in inventoryType.dogmaAttributes">
+      <li v-for="(attributeValue, i) in inventoryType.dogmaAttributes" :key="i">
         <DogmaAttributeValue :value="attributeValue.value" :attribute-id="attributeValue.attributeId" />
       </li>
     </ul>

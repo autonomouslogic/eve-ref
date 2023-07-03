@@ -7,17 +7,18 @@ const {locale} = useI18n();
 
 const categoryId = route.params.categoryId;
 var category = await refdataApi.getCategory({categoryId});
-var groupIds = category.groupIds
+var groupIds = category?.groupIds
 </script>
 
 <template>
-  <div>
+  <div v-if="category">
     <h1>{{ category.name[locale] }}</h1>
     <p>Groups:</p>
     <ul>
-      <li v-for="groupId in groupIds">
+      <li v-for="groupId in groupIds" :key="groupId">
         <GroupLink :groupId="groupId"></GroupLink>
       </li>
     </ul>
   </div>
+  <div v-else>(Unknown category ID {{ categoryId }})</div>
 </template>

@@ -3,25 +3,17 @@ import {InventoryTypeTraits} from "~/refdata-openapi";
 import TraitGroup from "~/components/types/traits/TraitGroup.vue";
 import TypeTraits from "~/components/types/traits/TypeTraits.vue";
 
-const {traits} = defineProps<{
+const props = defineProps<{
   traits: InventoryTypeTraits | undefined
 }>();
 
 const {locale} = useI18n();
-
-const typeBonuses = traits?.types;
-const roleBonuses = traits?.roleBonuses;
-const miscBonuses = traits?.miscBonuses;
 </script>
 
 <template>
   <div>
-    <TypeTraits :bonuses="typeBonuses"/>
-    <TraitGroup title="Role Bonuses" :bonuses="roleBonuses"/>
-    <TraitGroup title="Misc Bonuses" :bonuses="miscBonuses"/>
+    <TypeTraits :bonuses="props.traits?.types"/>
+    <TraitGroup title="Role Bonuses" :bonuses="props.traits?.roleBonuses"/>
+    <TraitGroup title="Misc Bonuses" :bonuses="props.traits?.miscBonuses"/>
   </div>
 </template>
-
-<style scoped>
-
-</style>

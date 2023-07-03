@@ -11,7 +11,7 @@ const marketGroupIds: number[] = await refdataApi.getRootMarketGroups();
   <div>
     <h1>Market Groups</h1>
     <ul>
-      <li v-for="marketGroupId in marketGroupIds">
+      <li v-for="marketGroupId in marketGroupIds" :key="marketGroupId">
         <MarketGroupLink :marketGroupId="marketGroupId"></MarketGroupLink>
       </li>
     </ul>

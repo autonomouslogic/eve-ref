@@ -2,19 +2,19 @@
 import refdataApi from "~/refdata";
 import {MarketGroup} from "~/refdata-openapi";
 
-const {marketGroupId} = defineProps<{
+const props = defineProps<{
   marketGroupId: number | undefined
 }>();
 
 const {locale} = useI18n();
 
-const marketGroup: MarketGroup = await refdataApi.getMarketGroup({marketGroupId});
+const marketGroup: MarketGroup = await refdataApi.getMarketGroup({marketGroupId: props.marketGroupId});
 </script>
 
 <template>
   <NuxtLink
     v-if="marketGroup"
-    :to="`/market-groups/${marketGroupId}`">
+    :to="`/market-groups/${props.marketGroupId}`">
     {{ marketGroup.name[locale] }}
   </NuxtLink>
 </template>

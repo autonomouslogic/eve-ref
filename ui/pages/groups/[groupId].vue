@@ -15,7 +15,7 @@ var typeIds = group.typeIds
     <h1>{{ group.name[locale] }}</h1>
     <p>Types:</p>
     <ul>
-      <li v-for="typeId in typeIds">
+      <li v-for="typeId in typeIds" :key="typeId">
         <TypeLink :typeId="typeId"></TypeLink>
       </li>
     </ul>
