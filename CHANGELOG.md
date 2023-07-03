@@ -1,5 +1,18 @@
 EVE Ref Changelog
 
+## [2.17.0](https://github.com/autonomouslogic/eve-ref/compare/2.16.0...2.17.0) (2023-07-03)
+
+
+### Features
+
+* Market group UI ([#236](https://github.com/autonomouslogic/eve-ref/issues/236)) ([0c375fd](https://github.com/autonomouslogic/eve-ref/commit/0c375fd6c21eef861135d97da9c89218c20d94be))
+* Super simple Tailwind theming ([#237](https://github.com/autonomouslogic/eve-ref/issues/237)) ([f9ca2b4](https://github.com/autonomouslogic/eve-ref/commit/f9ca2b481837d604a8775afd1265f887e93b643c))
+
+
+### Dependency Updates
+
+* **deps:** update all non-major dependencies ([#239](https://github.com/autonomouslogic/eve-ref/issues/239)) ([afb5aac](https://github.com/autonomouslogic/eve-ref/commit/afb5aac88ba69565b73985c5a77801588f51f1d2))
+
 ## [2.16.0](https://github.com/autonomouslogic/eve-ref/compare/2.15.0...2.16.0) (2023-06-26)
 
 
