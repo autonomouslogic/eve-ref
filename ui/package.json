@@ -13,15 +13,15 @@
     "format": "eslint --fix --ext .js,.vue ."
   },
   "devDependencies": {
-    "@nuxt/types": "2.16.3",
+    "@nuxt/types": "2.17.0",
     "@nuxtjs/i18n": "8.0.0-beta.10",
-    "@nuxtjs/tailwindcss": "6.7.0",
+    "@nuxtjs/tailwindcss": "6.8.0",
     "@openapitools/openapi-generator-cli": "2.6.0",
-    "@types/node": "18.16.16",
+    "@types/node": "18.16.19",
     "@typescript-eslint/eslint-plugin": "5.60.1",
     "@typescript-eslint/parser": "5.60.1",
     "eslint": "8.44.0",
     "eslint-plugin-vue": "9.15.1",
-    "nuxt": "3.5.2"
+    "nuxt": "3.6.1"
   }
 }
