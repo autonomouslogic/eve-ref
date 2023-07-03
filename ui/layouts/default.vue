@@ -1,9 +1,9 @@
 <template>
-  <NuxtLoadingIndicator />
-  <div class="container">
-    <navbar />
-    <slot />
-  </div>
+	<NuxtLoadingIndicator />
+	<div class="container">
+		<navbar />
+		<slot />
+	</div>
 </template>
 
 <style>

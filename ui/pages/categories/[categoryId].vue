@@ -11,14 +11,14 @@ var groupIds = category?.groupIds;
 </script>
 
 <template>
-  <div v-if="category">
-    <h1>{{ category.name[locale] }}</h1>
-    <p>Groups:</p>
-    <ul>
-      <li v-for="groupId in groupIds" :key="groupId">
-        <GroupLink :groupId="groupId"></GroupLink>
-      </li>
-    </ul>
-  </div>
-  <div v-else>(Unknown category ID {{ categoryId }})</div>
+	<div v-if="category">
+		<h1>{{ category.name[locale] }}</h1>
+		<p>Groups:</p>
+		<ul>
+			<li v-for="groupId in groupIds" :key="groupId">
+				<GroupLink :groupId="groupId"></GroupLink>
+			</li>
+		</ul>
+	</div>
+	<div v-else>(Unknown category ID {{ categoryId }})</div>
 </template>

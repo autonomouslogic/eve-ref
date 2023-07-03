@@ -4,7 +4,7 @@ import TypeLink from "~/components/helpers/TypeLink.vue";
 import TraitGroup from "~/components/types/traits/TraitGroup.vue";
 
 const props = defineProps<{
-  bonuses: { [key: string]: { [key: string]: TraitBonus; }; } | undefined;
+	bonuses: { [key: string]: { [key: string]: TraitBonus; }; } | undefined;
 }>();
 
 // TODO calling TraitBonusFromJSON is required because the generated API code doesn't do it.
@@ -25,11 +25,11 @@ if (props.bonuses) {
 </script>
 
 <template>
-  <h3>Type Bonuses</h3>
-  <div v-for="(formattedBonus, typeId) of formattedBonuses" :key="typeId">
-    <TypeLink :type-id="typeId" /> bonuses per level
-    <TraitGroup title="" :bonuses="formattedBonus" />
-  </div>
+	<h3>Type Bonuses</h3>
+	<div v-for="(formattedBonus, typeId) of formattedBonuses" :key="typeId">
+		<TypeLink :type-id="typeId" /> bonuses per level
+		<TraitGroup title="" :bonuses="formattedBonus" />
+	</div>
 
 </template>
 

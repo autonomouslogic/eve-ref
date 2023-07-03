@@ -8,12 +8,12 @@ const marketGroupIds: number[] = await refdataApi.getRootMarketGroups();
 </script>
 
 <template>
-  <div>
-    <h1>Market Groups</h1>
-    <ul>
-      <li v-for="marketGroupId in marketGroupIds" :key="marketGroupId">
-        <MarketGroupLink :marketGroupId="marketGroupId"></MarketGroupLink>
-      </li>
-    </ul>
-  </div>
+	<div>
+		<h1>Market Groups</h1>
+		<ul>
+			<li v-for="marketGroupId in marketGroupIds" :key="marketGroupId">
+				<MarketGroupLink :marketGroupId="marketGroupId"></MarketGroupLink>
+			</li>
+		</ul>
+	</div>
 </template>

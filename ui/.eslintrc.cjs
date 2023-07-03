@@ -40,6 +40,10 @@ module.exports = {
 			"error",
 			"tab"
 		],
+		"vue/script-indent": [
+			"error",
+			"tab"
+		],
 		"linebreak-style": [
 			"error",
 			"unix"

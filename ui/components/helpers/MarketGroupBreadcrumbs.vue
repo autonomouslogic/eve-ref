@@ -4,7 +4,7 @@ import {MarketGroup} from "~/refdata-openapi";
 import MarketGroupLink from "~/components/helpers/MarketGroupLink.vue";
 
 const props = defineProps<{
-  marketGroupId: number | undefined
+	marketGroupId: number | undefined
 }>();
 
 const {locale} = useI18n();
@@ -22,7 +22,7 @@ while (marketGroup && marketGroup.parentGroupId) {
 </script>
 
 <template>
-  <template v-for="(marketGroupId, i) in marketGroupIds" :key="i">
-    <MarketGroupLink :market-group-id="marketGroupId"></MarketGroupLink><template v-if="i < marketGroupIds.length - 1"> &gt; </template>
-  </template>
+	<template v-for="(marketGroupId, i) in marketGroupIds" :key="i">
+		<MarketGroupLink :market-group-id="marketGroupId"></MarketGroupLink><template v-if="i < marketGroupIds.length - 1"> &gt; </template>
+	</template>
 </template>

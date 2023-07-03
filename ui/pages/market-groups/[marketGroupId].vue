@@ -13,20 +13,20 @@ const marketGroup: MarketGroup = await refdataApi.getMarketGroup({marketGroupId}
 </script>
 
 <template>
-  <div>
-    <h1>{{ marketGroup.name[locale] }}</h1>
-    <p v-if="marketGroup.parentGroupId">
-      <MarketGroupBreadcrumbs :market-group-id="marketGroup.parentGroupId"></MarketGroupBreadcrumbs>
-    </p>
-    <ul>
-      <li v-for="marketGroupId in marketGroup.childMarketGroupIds" :key="marketGroupId">
-        <MarketGroupLink :marketGroupId="marketGroupId"></MarketGroupLink>
-      </li>
-    </ul>
-    <ul>
-      <li v-for="typeId in marketGroup.typeIds" :key="typeId">
-        <TypeLink :typeId="typeId"></TypeLink>
-      </li>
-    </ul>
-  </div>
+	<div>
+		<h1>{{ marketGroup.name[locale] }}</h1>
+		<p v-if="marketGroup.parentGroupId">
+			<MarketGroupBreadcrumbs :market-group-id="marketGroup.parentGroupId"></MarketGroupBreadcrumbs>
+		</p>
+		<ul>
+			<li v-for="marketGroupId in marketGroup.childMarketGroupIds" :key="marketGroupId">
+				<MarketGroupLink :marketGroupId="marketGroupId"></MarketGroupLink>
+			</li>
+		</ul>
+		<ul>
+			<li v-for="typeId in marketGroup.typeIds" :key="typeId">
+				<TypeLink :typeId="typeId"></TypeLink>
+			</li>
+		</ul>
+	</div>
 </template>
