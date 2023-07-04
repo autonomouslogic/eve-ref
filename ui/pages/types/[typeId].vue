@@ -6,6 +6,10 @@ import CategoryLink from "~/components/helpers/CategoryLink.vue";
 import GroupLink from "~/components/helpers/GroupLink.vue";
 import MarketGroupBreadcrumbs from "~/components/helpers/MarketGroupBreadcrumbs.vue";
 import FormattedCurrency from "~/components/helpers/FormattedCurrency.vue";
+import CardWrapper from "~/components/cards/CardWrapper.vue";
+import TraitsCard from "~/components/cards/TraitsCard.vue";
+import BasicsCard from "~/components/cards/BasicsCard.vue";
+import DogmaCard from "~/components/cards/DogmaCard.vue";
 
 const {locale} = useI18n();
 const route = useRoute();
@@ -20,29 +24,22 @@ const inventoryGroup: InventoryGroup = await refdataApi.getGroup({groupId: inven
 </script>
 
 <template>
-	<div>
-		<h1>{{ inventoryType.name[locale] }}</h1>
-		<p>
-			<CategoryLink :categoryId="inventoryGroup.categoryId"></CategoryLink> &gt;
-			<GroupLink :groupId="inventoryType.groupId"></GroupLink>
-		</p>
-		<p v-if="inventoryType.marketGroupId">
-			<MarketGroupBreadcrumbs :market-group-id="inventoryType.marketGroupId"></MarketGroupBreadcrumbs>
-		</p>
-		<img :src="`https://images.evetech.net/types/${inventoryType.typeId}/icon`" alt="">
+	<h1>{{ inventoryType.name[locale] }}</h1>
+	<p>
+		<CategoryLink :categoryId="inventoryGroup.categoryId"></CategoryLink> &gt;
+		<GroupLink :groupId="inventoryType.groupId"></GroupLink>
+	</p>
+	<p v-if="inventoryType.marketGroupId">
+		<MarketGroupBreadcrumbs :market-group-id="inventoryType.marketGroupId"></MarketGroupBreadcrumbs>
+	</p>
+	<img :src="`https://images.evetech.net/types/${inventoryType.typeId}/icon`" alt="">
 
-		<p>Type ID: {{ route.params.typeId }}</p>
-		<p>Description: {{ inventoryType.description[locale] }}</p>
-		<p>Price:
-			<FormattedCurrency :price="inventoryType.basePrice"></FormattedCurrency>
-		</p>
-		<TraitsContainer :traits="inventoryType.traits"></TraitsContainer>
+	<CardsContainer>
+		<BasicsCard :inventory-type="inventoryType" />
+		<TraitsCard :inventory-type="inventoryType" />
+		<DogmaCard :inventory-type="inventoryType" />
+	</CardsContainer>
 
-		<h2>Dogma values</h2>
-		<ul>
-			<li v-for="(attributeValue, i) in inventoryType.dogmaAttributes" :key="i">
-				<DogmaAttributeValue :value="attributeValue.value" :attribute-id="attributeValue.attributeId" />
-			</li>
-		</ul>
-	</div>
+	<h2>Description</h2>
+	<p>{{ inventoryType.description[locale] }}</p>
 </template>
