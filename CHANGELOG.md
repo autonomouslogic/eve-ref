@@ -1,5 +1,12 @@
 EVE Ref Changelog
 
+## [2.17.1](https://github.com/autonomouslogic/eve-ref/compare/2.17.0...2.17.1) (2023-07-04)
+
+
+### Bug Fixes
+
+* UI code lint and style ([#238](https://github.com/autonomouslogic/eve-ref/issues/238)) ([3eb3c58](https://github.com/autonomouslogic/eve-ref/commit/3eb3c586bfde04e0c072f54ed6d629de0af2de61))
+
 ## [2.17.0](https://github.com/autonomouslogic/eve-ref/compare/2.16.0...2.17.0) (2023-07-03)
 
 
