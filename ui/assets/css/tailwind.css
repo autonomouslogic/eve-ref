@@ -7,7 +7,7 @@ a {
 }
 
 h1, h2, h3, h4, h5, h6 {
-    @apply font-bold mt-3;
+    @apply font-bold my-1.5;
 }
 
 h1 {
@@ -20,8 +20,4 @@ h2 {
 
 h3 {
     @apply text-2xl;
-}
-
-ul {
-    @apply list-disc list-inside;
 }
