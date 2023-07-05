@@ -1,15 +1,13 @@
 <script setup lang="ts">
 import refdataApi from "~/refdata";
-import {InventoryGroup, InventoryType} from "~/refdata-openapi";
-import TraitsContainer from "~/components/types/traits/TraitsContainer.vue";
+import {DogmaTypeAttribute, InventoryGroup, InventoryType} from "~/refdata-openapi";
 import CategoryLink from "~/components/helpers/CategoryLink.vue";
 import GroupLink from "~/components/helpers/GroupLink.vue";
 import MarketGroupBreadcrumbs from "~/components/helpers/MarketGroupBreadcrumbs.vue";
-import FormattedCurrency from "~/components/helpers/FormattedCurrency.vue";
-import CardWrapper from "~/components/cards/CardWrapper.vue";
 import TraitsCard from "~/components/cards/TraitsCard.vue";
 import BasicsCard from "~/components/cards/BasicsCard.vue";
 import DogmaCard from "~/components/cards/DogmaCard.vue";
+import typeCards from "~/conf/typeCards";
 
 const {locale} = useI18n();
 const route = useRoute();
@@ -21,9 +19,27 @@ if (!typeId) {
 
 const inventoryType: InventoryType = await refdataApi.getType({typeId});
 const inventoryGroup: InventoryGroup = await refdataApi.getGroup({groupId: inventoryType.groupId});
+
+
+// Load all dogma attribute names for this type.
+const attributeNames = {};
+if (inventoryType.dogmaAttributes) {
+	var promises = [];
+	for (const attrId in inventoryType.dogmaAttributes) {
+		promises.push((async () => {
+			var attr = await refdataApi.getDogmaAttribute({attributeId: parseInt(attrId)});
+			attributeNames[attr.name] = attrId;
+		})());
+	}
+	await Promise.all(promises);
+}
+
+
+
 </script>
 
 <template>
+	<code>{{JSON.stringify(attributeNames, null, 2)}}</code>
 	<h1>{{ inventoryType.name[locale] }}</h1>
 	<p>
 		<CategoryLink :categoryId="inventoryGroup.categoryId"></CategoryLink> &gt;
