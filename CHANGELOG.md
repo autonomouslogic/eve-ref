@@ -1,5 +1,12 @@
 EVE Ref Changelog
 
+## [2.18.0](https://github.com/autonomouslogic/eve-ref/compare/2.17.1...2.18.0) (2023-07-06)
+
+
+### Features
+
+* Basic reusable cards ([#240](https://github.com/autonomouslogic/eve-ref/issues/240)) ([85c58c3](https://github.com/autonomouslogic/eve-ref/commit/85c58c37beb9857644f3405f2057d5d378a037af))
+
 ## [2.17.1](https://github.com/autonomouslogic/eve-ref/compare/2.17.0...2.17.1) (2023-07-04)
 
 
