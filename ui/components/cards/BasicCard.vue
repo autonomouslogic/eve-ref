@@ -5,6 +5,7 @@ import FormattedCurrency from "~/components/helpers/FormattedCurrency.vue";
 import DogmaListItems from "~/components/cards/DogmaListItems.vue";
 
 const props = defineProps<{
+	title: string,
 	inventoryType: InventoryType,
 	dogmaAttributes: DogmaAttribute[]
 }>();

@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import refdataApi from "~/refdata";
-import {DogmaTypeAttribute, InventoryGroup, InventoryType} from "~/refdata-openapi";
+import {InventoryGroup, InventoryType} from "~/refdata-openapi";
 import CategoryLink from "~/components/helpers/CategoryLink.vue";
 import GroupLink from "~/components/helpers/GroupLink.vue";
 import MarketGroupBreadcrumbs from "~/components/helpers/MarketGroupBreadcrumbs.vue";
 import TraitsCard from "~/components/cards/TraitsCard.vue";
-import BasicsCard from "~/components/cards/BasicsCard.vue";
-import DogmaCard from "~/components/cards/DogmaCard.vue";
 import typeCards from "~/conf/typeCards";
+import DefaultCard from "~/components/cards/DefaultCard.vue";
+import BasicCard from "~/components/cards/BasicCard.vue";
 
 const {locale} = useI18n();
 const route = useRoute();
@@ -53,8 +53,7 @@ for (const cardName in typeCards) {
 if (Object.keys(dogmaAttributes).length > 0) {
 	cardAttributes.other = Object.values(dogmaAttributes);
 }
-
-
+console.log(cardAttributes);
 </script>
 
 <template>
@@ -68,9 +67,19 @@ if (Object.keys(dogmaAttributes).length > 0) {
 	</p>
 	<img :src="`https://images.evetech.net/types/${inventoryType.typeId}/icon`" alt="">
 
+	<TraitsCard :inventory-type="inventoryType" />
 	<CardsContainer>
-		<BasicsCard :inventory-type="inventoryType" :dogma-attributes="cardAttributes['basics']" />
-		<!--		<TraitsCard :inventory-type="inventoryType" />-->
+		<template v-for="(attributes, cardId) in cardAttributes" :key="cardId">
+			<BasicCard v-if="typeCards[cardId].component == 'basic'"
+				:title="typeCards[cardId].name[locale]"
+				:inventory-type="inventoryType"
+				:dogma-attributes="attributes" />
+			<DefaultCard v-else
+				:title="typeCards[cardId].name[locale]"
+				:inventory-type="inventoryType"
+				:dogma-attributes="attributes" />
+		</template>
+		<!--		<BasicsCard :inventory-type="inventoryType" :dogma-attributes="cardAttributes['basics']" />-->
 		<!--		<DogmaCard :inventory-type="inventoryType" />-->
 	</CardsContainer>
 
