@@ -1,5 +1,5 @@
 <template>
-	<div class="flex grid-cols-2 gap-2 justify-left my-1.5">
+	<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-x-4">
 		<slot />
 	</div>
 </template>
