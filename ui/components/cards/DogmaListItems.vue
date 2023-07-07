@@ -2,7 +2,6 @@
 import {DogmaAttribute, InventoryType} from "~/refdata-openapi";
 import CardWrapper from "~/components/cards/CardWrapper.vue";
 import FormattedCurrency from "~/components/helpers/FormattedCurrency.vue";
-import DogmaListItems from "~/components/cards/DogmaListItems.vue";
 
 const props = defineProps<{
 	inventoryType: InventoryType,
@@ -11,11 +10,10 @@ const props = defineProps<{
 </script>
 
 <template>
-	<template v-if="dogmaAttributes && dogmaAttributes.length > 0">
-		<CardWrapper title="Dogma">
-			<ul class="list-disc list-inside">
-				<DogmaListItems inventory-type="inventoryType" dogma-attributes="dogmaAttributes" />
-			</ul>
-		</CardWrapper>
-	</template>
+	<li v-for="attribute in dogmaAttributes" :key="attribute.attributeId">
+		<DogmaAttributeValue v-if="inventoryType.dogmaAttributes[attribute.attributeId]"
+			:value="inventoryType.dogmaAttributes[attribute.attributeId].value"
+			:attribute-id="attribute.attributeId" />
+		<span v-else>No value for attribute {{attribute.attributeId}}</span>
+	</li>
 </template>

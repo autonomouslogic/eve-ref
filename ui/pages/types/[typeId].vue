@@ -20,26 +20,44 @@ if (!typeId) {
 const inventoryType: InventoryType = await refdataApi.getType({typeId});
 const inventoryGroup: InventoryGroup = await refdataApi.getGroup({groupId: inventoryType.groupId});
 
-
 // Load all dogma attribute names for this type.
-const attributeNames = {};
+const dogmaAttributes = {};
 if (inventoryType.dogmaAttributes) {
 	var promises = [];
 	for (const attrId in inventoryType.dogmaAttributes) {
 		promises.push((async () => {
 			var attr = await refdataApi.getDogmaAttribute({attributeId: parseInt(attrId)});
-			attributeNames[attr.name] = attrId;
+			dogmaAttributes[attr.name] = attr;
 		})());
 	}
 	await Promise.all(promises);
 }
 
+// For each card, extract the attributes needed for each card.
+const cardAttributes = {};
+for (const cardName in typeCards) {
+	const cardConfig = typeCards[cardName];
+	cardAttributes[cardName] = [];
+	if (cardConfig.dogmaAttributes === undefined) {
+		continue;
+	}
+	for (const attrName of cardConfig.dogmaAttributes) {
+		if (dogmaAttributes[attrName]) {
+			cardAttributes[cardName].push(dogmaAttributes[attrName]);
+			delete dogmaAttributes[attrName];
+		}
+	}
+}
+
+// Map the remaining attributes into the "other" card.
+if (Object.keys(dogmaAttributes).length > 0) {
+	cardAttributes.other = Object.values(dogmaAttributes);
+}
 
 
 </script>
 
 <template>
-	<code>{{JSON.stringify(attributeNames, null, 2)}}</code>
 	<h1>{{ inventoryType.name[locale] }}</h1>
 	<p>
 		<CategoryLink :categoryId="inventoryGroup.categoryId"></CategoryLink> &gt;
@@ -51,9 +69,9 @@ if (inventoryType.dogmaAttributes) {
 	<img :src="`https://images.evetech.net/types/${inventoryType.typeId}/icon`" alt="">
 
 	<CardsContainer>
-		<BasicsCard :inventory-type="inventoryType" />
-		<TraitsCard :inventory-type="inventoryType" />
-		<DogmaCard :inventory-type="inventoryType" />
+		<BasicsCard :inventory-type="inventoryType" :dogma-attributes="cardAttributes['basics']" />
+		<!--		<TraitsCard :inventory-type="inventoryType" />-->
+		<!--		<DogmaCard :inventory-type="inventoryType" />-->
 	</CardsContainer>
 
 	<h2>Description</h2>

@@ -37,5 +37,8 @@ export default {
 			"disallowInEmpireSpace",
 			"isCapitalSize"
 		]
+	},
+	"other": {
+		"name": {"en": "Other"},
 	}
 };

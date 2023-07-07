@@ -1,10 +1,12 @@
 <script setup lang="ts">
-import {InventoryType} from "~/refdata-openapi";
+import {DogmaAttribute, InventoryType} from "~/refdata-openapi";
 import CardWrapper from "~/components/cards/CardWrapper.vue";
 import FormattedCurrency from "~/components/helpers/FormattedCurrency.vue";
+import DogmaListItems from "~/components/cards/DogmaListItems.vue";
 
 const props = defineProps<{
-	inventoryType: InventoryType
+	inventoryType: InventoryType,
+	dogmaAttributes: DogmaAttribute[]
 }>();
 </script>
 
@@ -30,6 +32,7 @@ const props = defineProps<{
 			<li v-if="inventoryType.sofMaterialSetId">Sof material set ID: {{ inventoryType.sofMaterialSetId }}</li>
 			<li v-if="inventoryType.soundId">Sound ID: {{ inventoryType.soundId }}</li>
 			<li v-if="inventoryType.volume">Volume: {{ inventoryType.volume }}</li>
+			<DogmaListItems :inventory-type="inventoryType" :dogma-attributes="dogmaAttributes" />
 		</ul>
 	</CardWrapper>
 </template>
