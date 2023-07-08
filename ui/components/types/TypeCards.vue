@@ -6,6 +6,8 @@ import typeCardsConfig from "~/conf/typeCardsConfig";
 import DefaultCard from "~/components/cards/DefaultCard.vue";
 import BasicCard from "~/components/cards/BasicCard.vue";
 
+const {locale} = useI18n();
+
 const props = defineProps<{
 	inventoryType: InventoryType
 }>();
