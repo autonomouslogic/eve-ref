@@ -1,15 +1,10 @@
 <script setup lang="ts">
 import refdataApi from "~/refdata";
 import {InventoryGroup, InventoryType} from "~/refdata-openapi";
-import TraitsContainer from "~/components/types/traits/TraitsContainer.vue";
 import CategoryLink from "~/components/helpers/CategoryLink.vue";
 import GroupLink from "~/components/helpers/GroupLink.vue";
 import MarketGroupBreadcrumbs from "~/components/helpers/MarketGroupBreadcrumbs.vue";
-import FormattedCurrency from "~/components/helpers/FormattedCurrency.vue";
-import CardWrapper from "~/components/cards/CardWrapper.vue";
-import TraitsCard from "~/components/cards/TraitsCard.vue";
-import BasicsCard from "~/components/cards/BasicsCard.vue";
-import DogmaCard from "~/components/cards/DogmaCard.vue";
+import TypeCards from "~/components/types/TypeCards.vue";
 
 const {locale} = useI18n();
 const route = useRoute();
@@ -21,6 +16,7 @@ if (!typeId) {
 
 const inventoryType: InventoryType = await refdataApi.getType({typeId});
 const inventoryGroup: InventoryGroup = await refdataApi.getGroup({groupId: inventoryType.groupId});
+
 </script>
 
 <template>
@@ -34,11 +30,7 @@ const inventoryGroup: InventoryGroup = await refdataApi.getGroup({groupId: inven
 	</p>
 	<img :src="`https://images.evetech.net/types/${inventoryType.typeId}/icon`" alt="">
 
-	<CardsContainer>
-		<BasicsCard :inventory-type="inventoryType" />
-		<TraitsCard :inventory-type="inventoryType" />
-		<DogmaCard :inventory-type="inventoryType" />
-	</CardsContainer>
+	<TypeCards :inventory-type="inventoryType" />
 
 	<h2>Description</h2>
 	<p>{{ inventoryType.description[locale] }}</p>
