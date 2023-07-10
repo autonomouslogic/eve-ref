@@ -5,6 +5,7 @@ import TraitsCard from "~/components/cards/TraitsCard.vue";
 import typeCardsConfig from "~/conf/typeCardsConfig";
 import DefaultCard from "~/components/cards/DefaultCard.vue";
 import BasicCard from "~/components/cards/BasicCard.vue";
+import DefensesCard from "~/components/cards/DefensesCard.vue";
 
 const {locale} = useI18n();
 
@@ -49,9 +50,13 @@ if (Object.keys(dogmaAttributes).length > 0) {
 
 <template>
 	<TraitsCard :inventory-type="inventoryType" />
+	<DefensesCard :title="typeCardsConfig.defenses.name[locale]"
+		:inventory-type="inventoryType"
+		:dogma-attributes="cardAttributes.defenses" />
 	<CardsContainer>
 		<template v-for="(attributes, cardId) in cardAttributes" :key="cardId">
-			<BasicCard v-if="typeCardsConfig[cardId].component == 'basic'"
+			<template v-if="typeCardsConfig[cardId].component == 'defenses'"></template>
+			<BasicCard v-else-if="typeCardsConfig[cardId].component == 'basic'"
 				:title="typeCardsConfig[cardId].name[locale]"
 				:inventory-type="inventoryType"
 				:dogma-attributes="attributes" />
@@ -60,7 +65,5 @@ if (Object.keys(dogmaAttributes).length > 0) {
 				:inventory-type="inventoryType"
 				:dogma-attributes="attributes" />
 		</template>
-		<!--		<BasicsCard :inventory-type="inventoryType" :dogma-attributes="cardAttributes['basics']" />-->
-		<!--		<DogmaCard :inventory-type="inventoryType" />-->
 	</CardsContainer>
 </template>
