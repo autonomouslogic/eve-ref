@@ -1,5 +1,13 @@
 EVE Ref Changelog
 
+## [2.19.0](https://github.com/autonomouslogic/eve-ref/compare/2.18.0...2.19.0) (2023-07-11)
+
+
+### Features
+
+* Group dogma cards ([#241](https://github.com/autonomouslogic/eve-ref/issues/241)) ([629f3a9](https://github.com/autonomouslogic/eve-ref/commit/629f3a91bf093202314276deaa90216812cd2557))
+* Simple defense card ([#243](https://github.com/autonomouslogic/eve-ref/issues/243)) ([aa23596](https://github.com/autonomouslogic/eve-ref/commit/aa2359613ebc4a864daca78cd2f885c3c40b1459))
+
 ## [2.18.0](https://github.com/autonomouslogic/eve-ref/compare/2.17.1...2.18.0) (2023-07-06)
 
 
