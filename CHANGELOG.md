@@ -1,5 +1,12 @@
 EVE Ref Changelog
 
+## [2.19.1](https://github.com/autonomouslogic/eve-ref/compare/2.19.0...2.19.1) (2023-07-12)
+
+
+### Dependency Updates
+
+* **deps:** update typescript-eslint monorepo to v6 (major) ([#244](https://github.com/autonomouslogic/eve-ref/issues/244)) ([23cd737](https://github.com/autonomouslogic/eve-ref/commit/23cd737fe35f2eea571f75f083bce3486002ea8b))
+
 ## [2.19.0](https://github.com/autonomouslogic/eve-ref/compare/2.18.0...2.19.0) (2023-07-11)
 
 
