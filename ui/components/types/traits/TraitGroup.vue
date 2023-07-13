@@ -19,7 +19,10 @@ const hasBonuses: boolean = props.bonuses !== undefined && Object.keys(props.bon
 		<h3>{{ props.title }}</h3>
 		<ul>
 			<li v-for="(trait, i) in props.bonuses" :key="i">
-				<UnitValue :value="trait.bonus" :unit-id="trait.unitId" /> <LinkParser :content="trait.bonusText[locale]"/>
+				<template v-if="trait.bonus !== undefined && trait.unitId !== undefined">
+					<UnitValue :value="trait.bonus" :unit-id="trait.unitId" />&nbsp;
+				</template>
+				<LinkParser :content="trait.bonusText[locale]"/>
 			</li>
 		</ul>
 	</div>
