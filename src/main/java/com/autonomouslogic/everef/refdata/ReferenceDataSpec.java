@@ -260,4 +260,24 @@ public interface ReferenceDataSpec {
 			useReturnTypeSchema = true,
 			content = @Content(mediaType = "application/json"))
 	Blueprint getBlueprint(@PathParam("blueprint_type_id") long blueprintTypeId);
+
+	@GET
+	@Path("/icons")
+	@Operation(description = "Get all icon IDs.")
+	@ApiResponse(
+			responseCode = "200",
+			description = "Icon IDs.",
+			useReturnTypeSchema = true,
+			content = @Content(mediaType = "application/json"))
+	List<Integer> getAllIcons();
+
+	@GET
+	@Path("/icons/{icon_id}")
+	@Operation
+	@ApiResponse(
+			responseCode = "200",
+			description = "The icon.",
+			useReturnTypeSchema = true,
+			content = @Content(mediaType = "application/json"))
+	Icon getIcon(@PathParam("icon_id") long iconId);
 }

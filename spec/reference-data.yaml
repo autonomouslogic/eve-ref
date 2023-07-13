@@ -189,6 +189,41 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/InventoryGroup'
+  /icons:
+    get:
+      tags:
+      - refdata
+      description: Get all icon IDs.
+      operationId: getAllIcons
+      responses:
+        "200":
+          description: Icon IDs.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: integer
+                  format: int32
+  /icons/{icon_id}:
+    get:
+      tags:
+      - refdata
+      operationId: getIcon
+      parameters:
+      - name: icon_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: The icon.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Icon'
   /market_groups:
     get:
       tags:
@@ -611,6 +646,16 @@ components:
         is_default:
           type: boolean
       description: A specific value for a dogma effect.
+    Icon:
+      type: object
+      properties:
+        icon_id:
+          type: integer
+          format: int64
+        description:
+          type: string
+        icon_file:
+          type: string
     InventoryCategory:
       type: object
       properties:

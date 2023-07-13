@@ -277,3 +277,14 @@ blueprints:
     ids:
       - 999
       - 22431
+
+icons:
+  idField: icon_id
+  model: Icon
+  sde:
+    file: sde/fsd/iconIDs.yaml
+  test:
+    filePrefix: icon
+    ids:
+      - 0
+      - 78
