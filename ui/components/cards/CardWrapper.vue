@@ -5,7 +5,7 @@ const props = defineProps<{
 </script>
 
 <template>
-	<div class="border-2 border-gray-400 p-3 bg-blue-100 rounded-lg my-4">
+	<div class="block border-2 border-gray-400 p-3 bg-blue-100 rounded-lg my-4">
 		<h2 v-if="props.title">{{ props.title }}</h2>
 		<slot />
 	</div>

@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import refdataApi from "~/refdata";
+import {DogmaAttribute} from "~/refdata-openapi";
+import AttributeTypeIcon from "~/components/icons/AttributeTypeIcon.vue";
 
 const props = defineProps<{
 	value: string | number | undefined,
@@ -8,11 +10,12 @@ const props = defineProps<{
 
 const {locale} = useI18n();
 
-const attribute = await refdataApi.getDogmaAttribute({attributeId: props.attributeId});
+const attribute: DogmaAttribute = await refdataApi.getDogmaAttribute({attributeId: props.attributeId});
 </script>
 
 <template>
 	<template v-if="attribute">
+		<AttributeTypeIcon :dogma-attribute="attribute" />
 		<template v-if="attribute.displayName && attribute.displayName[locale]">{{ attribute.displayName[locale] }}</template>
 		<template v-else>{{attribute.name}}</template>
 	</template>

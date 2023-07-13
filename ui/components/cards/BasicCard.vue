@@ -13,7 +13,7 @@ const props = defineProps<{
 
 <template>
 	<CardWrapper title="Basics">
-		<ul class="list-disc list-inside">
+		<ul>
 			<li v-if="inventoryType.typeId">Type ID: {{ inventoryType.typeId }}</li>
 			<li v-if="inventoryType.basePrice">Base price: <FormattedCurrency :price="inventoryType.basePrice" /></li>
 			<li v-if="inventoryType.capacity">Capacity: {{ inventoryType.capacity }}</li>

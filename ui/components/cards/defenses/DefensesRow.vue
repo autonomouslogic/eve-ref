@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import {DogmaAttribute, InventoryType} from "~/refdata-openapi";
 import {getAttributeByName, getTypeAttributeByName} from "~/lib/dogmaUtils";
+import AttributeTypeIcon from "~/components/icons/AttributeTypeIcon.vue";
 
 const {locale} = useI18n();
 
@@ -37,17 +38,17 @@ const explosiveResonance = getTypeAttributeByName(props.explosiveResonanceAttrNa
 
 <template>
 	<template v-if="hp">
-		<span>{{ hpAttr!.displayName[locale] }}</span>
+		<span><AttributeTypeIcon :dogma-attribute="hpAttr" />{{ hpAttr!.displayName[locale] }}</span>
 		<span>{{ hp!.value }} HP</span>
 		<span>uniformity:</span>
 		<span>{{ (1-uniformity!.value) * 100 }}%</span>
-		<span>EM:</span>
+		<span><AttributeTypeIcon :dogma-attribute="emResonanceAttr" />EM:</span>
 		<span>{{ Math.round((1-emResonance?.value) * 100) }}%</span>
-		<span>thermal:</span>
+		<span><AttributeTypeIcon :dogma-attribute="thermalResonanceAttr" />thermal:</span>
 		<span>{{ Math.round((1-thermalResonance?.value) * 100) }}%</span>
-		<span>kinetic:</span>
+		<span><AttributeTypeIcon :dogma-attribute="kineticResonanceAttr" />kinetic:</span>
 		<span>{{ Math.round((1-kineticResonance?.value) * 100) }}%</span>
-		<span>explosive:</span>
+		<span><AttributeTypeIcon :dogma-attribute="explosiveResonanceAttr" />explosive:</span>
 		<span>{{ Math.round((1-explosiveResonance?.value) * 100) }}%</span>
 	</template>
 </template>
