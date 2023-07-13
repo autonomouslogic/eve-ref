@@ -33,25 +33,19 @@ export default {
 	"basic":
 		{
 			"name": {"en": "basic"},
+			"component": "basic",
 			"dogmaAttributes":
 				[
-					"everef_typeId",
-					"everef_published",
 					"techLevel",
 					"metaLevel",
 					"metaLevelOld",
-					"everef_volume",
 					"volume",
-					"everef_repackagedVolume",
-					"everef_mass",
 					"mass",
-					"everef_radius",
 					"radius",
 					"nondestructible",
 					"disallowInHighSec",
 					"disallowInEmpireSpace",
 					"isCapitalSize",
-					"everef_basePrice"
 				]
 		},
 	"offenses":
@@ -149,7 +143,6 @@ export default {
 			"name": {"en": "cargo"},
 			"dogmaAttributes":
 				[
-					"everef_capacity",
 					"fleetHangarCapacity",
 					"specialOreHoldCapacity",
 					"specialPlanetaryCommoditiesHoldCapacity",
@@ -370,8 +363,6 @@ export default {
 					"boosterMaxCharAgeHours",
 					"boosterness",
 					"followsJumpClones",
-					"everef_alphaAcceleratedSkillpoints",
-					"everef_omegaAcceleratedSkillpoints",
 					"intelligenceBonus",
 					"perceptionBonus",
 					"charismaBonus",
@@ -472,8 +463,7 @@ export default {
 			"component": "reprocessing",
 			"dogmaAttributes":
 				[
-					"reprocessingSkillType",
-					"everef_portionSize"
+					"reprocessingSkillType"
 				]
 		},
 	"planetSchematic":

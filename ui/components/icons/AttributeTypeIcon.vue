@@ -19,8 +19,12 @@ if (icon) {
 </script>
 
 <template>
-	<span v-if="iconUrl">
-		<img :src="iconUrl" width="25" height="25">
-	</span>
+	<img v-if="iconUrl" :src="iconUrl" width="25" height="25" />
 	<template v-else>&nbsp;</template>
 </template>
+
+<style scoped>
+img {
+  display: inline-block;
+}
+</style>

@@ -13,7 +13,7 @@ const props = defineProps<{
 <template>
 	<template v-if="dogmaAttributes && dogmaAttributes.length > 0">
 		<CardWrapper :title="title">
-			<ul class="list-disc list-inside">
+			<ul>
 				<DogmaListItems :inventory-type="inventoryType" :dogma-attributes="dogmaAttributes" />
 			</ul>
 		</CardWrapper>
