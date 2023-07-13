@@ -2,8 +2,8 @@
 import refdataApi from "~/refdata";
 
 const props = defineProps<{
-	value: string | number | undefined,
-	unitId: number | undefined
+	value: string | number,
+	unitId: number
 }>();
 
 const {locale} = useI18n();
