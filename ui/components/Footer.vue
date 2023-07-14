@@ -27,11 +27,11 @@ const selectedLocale = ref(locale);
 					<h2 class="uppercase text-lg">Participate</h2>
 					<ul>
 						<li><a href="https://discord.gg/fZYPAxFyXG">
-							<font-awesome-icon icon="fa-brands fa-discord" />
+							<span><font-awesome-icon icon="fa-brands fa-discord" /></span>
 							Discord
 						</a></li>
 						<li><a href="https://github.com/autonomouslogic/eve-ref/">
-							<font-awesome-icon icon="fa-brands fa-github" />
+							<span><font-awesome-icon icon="fa-brands fa-github" /></span>
 							Github
 						</a></li>
 					</ul>
@@ -42,8 +42,8 @@ const selectedLocale = ref(locale);
 						<li><a href="https://www.eveonline.com/signup?invc=b28d194d-7181-4bf0-8e3f-72cebbc7ca7d">Play EVE Online</a></li>
 						<li><a href="https://store.markeedragon.com/affiliate.php?id=933">Markeedragon</a></li>
 						<li><a href="https://patreon.com/everef">
-							<font-awesome-icon icon="fa-brands fa-patreon" />
-							Patron
+							<span><font-awesome-icon icon="fa-brands fa-patreon" /></span>
+							Patreon
 						</a></li>
 					</ul>
 				</div>
