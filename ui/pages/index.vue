@@ -3,8 +3,6 @@ import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 </script>
 
 <template>
-	<font-awesome-icon icon="fa-solid fa-user-secret" />
-
 	<div class="mt-4 grid grid-cols-3 gap-4">
 
 		<div class="border-2 p-4">
