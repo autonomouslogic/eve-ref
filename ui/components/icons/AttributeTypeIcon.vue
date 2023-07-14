@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import refdataApi from "~/refdata";
-import {DogmaAttribute, Icon, InventoryCategory} from "~/refdata-openapi";
+import {DogmaAttribute, Icon} from "~/refdata-openapi";
 
 const ownImageServer = "https://everef.net/img";
 
