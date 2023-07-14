@@ -1,5 +1,18 @@
 EVE Ref Changelog
 
+## [2.20.0](https://github.com/autonomouslogic/eve-ref/compare/2.19.1...2.20.0) (2023-07-14)
+
+
+### Features
+
+* Icons reference data ([#246](https://github.com/autonomouslogic/eve-ref/issues/246)) ([2432bf4](https://github.com/autonomouslogic/eve-ref/commit/2432bf451b8a4b69e9d60bc3f7e8c83f41f5898f))
+* UI icons ([#247](https://github.com/autonomouslogic/eve-ref/issues/247)) ([75e3135](https://github.com/autonomouslogic/eve-ref/commit/75e313551008e98875d4970dce58c973a28fcf84))
+
+
+### Bug Fixes
+
+* Non-bonus role bonuses ([#245](https://github.com/autonomouslogic/eve-ref/issues/245)) ([308987b](https://github.com/autonomouslogic/eve-ref/commit/308987ba5ab6e3b7eb1794ccc6fd4879471e32e4))
+
 ## [2.19.1](https://github.com/autonomouslogic/eve-ref/compare/2.19.0...2.19.1) (2023-07-12)
 
 
