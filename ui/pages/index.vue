@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import TypeLink from "~/components/helpers/TypeLink.vue";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 </script>
 

@@ -1,9 +1,6 @@
 <script setup lang="ts">
 import {DogmaAttribute, InventoryType} from "~/refdata-openapi";
 import CardWrapper from "~/components/cards/CardWrapper.vue";
-import FormattedCurrency from "~/components/helpers/FormattedCurrency.vue";
-import DogmaListItems from "~/components/cards/DogmaListItems.vue";
-import {getAttributeByName, getTypeAttributeByName, hasDogmaAttributeValue} from "~/lib/dogmaUtils";
 import DefensesRow from "~/components/cards/defenses/DefensesRow.vue";
 
 const {locale} = useI18n();
