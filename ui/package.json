@@ -10,9 +10,11 @@
     "postinstall": "nuxt prepare",
     "generate-api": "openapi-generator-cli generate",
     "lint": "eslint --ext .js,.vue .",
-    "format": "eslint --fix --ext .js,.vue ."
+    "format": "eslint --fix --ext .js,.vue .",
+    "test": "vitest"
   },
   "devDependencies": {
+    "@nuxt/test-utils": "3.6.2",
     "@nuxt/types": "2.17.0",
     "@nuxtjs/i18n": "8.0.0-beta.10",
     "@nuxtjs/tailwindcss": "6.8.0",
@@ -22,6 +24,7 @@
     "@typescript-eslint/parser": "6.0.0",
     "eslint": "8.44.0",
     "eslint-plugin-vue": "9.15.1",
-    "nuxt": "3.6.1"
+    "nuxt": "3.6.1",
+    "vitest": "0.32.4"
   }
 }
