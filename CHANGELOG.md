@@ -1,5 +1,17 @@
 EVE Ref Changelog
 
+## [2.21.0](https://github.com/autonomouslogic/eve-ref/compare/2.20.0...2.21.0) (2023-07-15)
+
+
+### Features
+
+* Index page, footer ([#248](https://github.com/autonomouslogic/eve-ref/issues/248)) ([b59cd88](https://github.com/autonomouslogic/eve-ref/commit/b59cd889ec458d3a5f6a8c70782315d34087d1bb))
+
+
+### Bug Fixes
+
+* Footer icon fixes ([#249](https://github.com/autonomouslogic/eve-ref/issues/249)) ([9f1c9a6](https://github.com/autonomouslogic/eve-ref/commit/9f1c9a6c9725d6ee7afdcd5b60d96999ebbd4f1f))
+
 ## [2.20.0](https://github.com/autonomouslogic/eve-ref/compare/2.19.1...2.20.0) (2023-07-14)
 
 
