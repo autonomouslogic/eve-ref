@@ -6,6 +6,7 @@ import typeCardsConfig from "~/conf/typeCardsConfig";
 import DefaultCard from "~/components/cards/DefaultCard.vue";
 import BasicCard from "~/components/cards/BasicCard.vue";
 import DefensesCard from "~/components/cards/DefensesCard.vue";
+import ReprocessingCard from "~/components/cards/ReprocessingCard.vue";
 
 const {locale} = useI18n();
 
@@ -57,6 +58,10 @@ if (Object.keys(dogmaAttributes).length > 0) {
 		<template v-for="(attributes, cardId) in cardAttributes" :key="cardId">
 			<template v-if="typeCardsConfig[cardId].component == 'defenses'"></template>
 			<BasicCard v-else-if="typeCardsConfig[cardId].component == 'basic'"
+				:title="typeCardsConfig[cardId].name[locale]"
+				:inventory-type="inventoryType"
+				:dogma-attributes="attributes" />
+			<ReprocessingCard v-else-if="typeCardsConfig[cardId].component == 'reprocessing'"
 				:title="typeCardsConfig[cardId].name[locale]"
 				:inventory-type="inventoryType"
 				:dogma-attributes="attributes" />
