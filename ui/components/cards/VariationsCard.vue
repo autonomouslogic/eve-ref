@@ -30,7 +30,6 @@ if (props.inventoryType.typeVariations) {
 <template>
 	<template v-if="inventoryType.typeVariations && metaGroups">
 		<CardWrapper :title="title">
-			{{locale}}
 			<template v-for="(variations, metaGroupId) in inventoryType.typeVariations" :key="metaGroupId">
 				<h3 class="text-base">{{ metaGroups[metaGroupId].name[locale] }}</h3>
 				<ul>
