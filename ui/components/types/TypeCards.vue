@@ -7,6 +7,7 @@ import DefaultCard from "~/components/cards/DefaultCard.vue";
 import BasicCard from "~/components/cards/BasicCard.vue";
 import DefensesCard from "~/components/cards/DefensesCard.vue";
 import ReprocessingCard from "~/components/cards/ReprocessingCard.vue";
+import VariationsCard from "~/components/cards/VariationsCard.vue";
 
 const {locale} = useI18n();
 
@@ -62,6 +63,10 @@ if (Object.keys(dogmaAttributes).length > 0) {
 				:inventory-type="inventoryType"
 				:dogma-attributes="attributes" />
 			<ReprocessingCard v-else-if="typeCardsConfig[cardId].component == 'reprocessing'"
+				:title="typeCardsConfig[cardId].name[locale]"
+				:inventory-type="inventoryType"
+				:dogma-attributes="attributes" />
+			<VariationsCard v-else-if="typeCardsConfig[cardId].component == 'variations'"
 				:title="typeCardsConfig[cardId].name[locale]"
 				:inventory-type="inventoryType"
 				:dogma-attributes="attributes" />
