@@ -9,7 +9,7 @@ const props = defineProps<{
 }>();
 
 const result = typeLinkService.parse(props.content);
-console.log(result);
+
 </script>
 
 <template>
