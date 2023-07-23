@@ -9,11 +9,12 @@ const props = defineProps<{
 }>();
 
 const result = typeLinkService.parse(props.content);
+console.log(result);
 </script>
 
 <template>
-	<span v-for="(item, i) in result" :key="i">
+	<template v-for="(item, i) in result" :key="i">
 		<TypeLink :type-id="item" v-if="typeof item === 'number'"/>
-		<span v-else>{{ item }}</span>
-	</span>
+		<template v-else>{{ item }}</template>
+	</template>
 </template>
