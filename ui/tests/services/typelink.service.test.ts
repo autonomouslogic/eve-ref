@@ -12,10 +12,10 @@ describe('TypeLinkService', () => {
     });
 
     it.each([
-        ['Input <a href=showinfo:5//11396>Mercoxit</a> string'],
-        ['Input <url href=showinfo:5//11396>Mercoxit</url> string'],
+        ['Interstellar Shipcaster in <a=showinfo:5//30002974>Mehatoor</a>.'],
+        ['Interstellar Shipcaster in <url=showinfo:5//30002974>Mehatoor</url>.'],
     ])('should ignore multi-part IDs', (input: string) => {
-        const expected = ['Input ', 'Mercoxit', ' string'];
+        const expected = ['Interstellar Shipcaster in ', 'Mehatoor', '.'];
         const actual = new TypeLinkService().parse(input);
         expect(actual).toEqual(expected);
     });
