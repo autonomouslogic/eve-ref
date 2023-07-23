@@ -16,7 +16,7 @@ jobs:
           cache: gradle
 
       - name: Test
-        run: ./gradlew test --stacktrace
+        run: make test-java
 
       - name: Code Coverage
         run: ./gradlew jacocoTestReport --stacktrace

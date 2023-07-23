@@ -12,8 +12,13 @@ init-ui:
 dist:
 	./gradlew distTar
 
-test:
+test-java:
 	./gradlew test
+
+test-ui:
+	cd ui ; npm run test
+
+test: test-java test-ui
 
 lint:
 	./gradlew spotlessCheck
@@ -29,7 +34,7 @@ specs:
 dev-ui: specs
 	cd ui ; npm run dev
 
-build-ui:
+build-ui: specs test-ui
 	cd ui ; npm run build
 
 docker: dist
