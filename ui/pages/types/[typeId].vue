@@ -5,6 +5,7 @@ import CategoryLink from "~/components/helpers/CategoryLink.vue";
 import GroupLink from "~/components/helpers/GroupLink.vue";
 import MarketGroupBreadcrumbs from "~/components/helpers/MarketGroupBreadcrumbs.vue";
 import TypeCards from "~/components/types/TypeCards.vue";
+import LinkParser from "~/components/helpers/LinkParser.vue";
 
 const {locale} = useI18n();
 const route = useRoute();
@@ -33,5 +34,5 @@ const inventoryGroup: InventoryGroup = await refdataApi.getGroup({groupId: inven
 	<TypeCards :inventory-type="inventoryType" />
 
 	<h2>Description</h2>
-	<p>{{ inventoryType.description[locale] }}</p>
+	<p><LinkParser :content="inventoryType.description[locale]"/></p>
 </template>
