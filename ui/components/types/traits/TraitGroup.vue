@@ -11,7 +11,6 @@ const props = defineProps<{
 }>();
 
 const hasBonuses: boolean = props.bonuses !== undefined && Object.keys(props.bonuses).length > 0;
-
 </script>
 
 <template>

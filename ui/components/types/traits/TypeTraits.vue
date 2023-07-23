@@ -30,7 +30,6 @@ if (props.bonuses) {
 		<TypeLink :type-id="typeId" /> bonuses per level
 		<TraitGroup title="" :bonuses="formattedBonus" />
 	</div>
-
 </template>
 
 <style scoped>

@@ -10,26 +10,31 @@ init-ui:
 	cd ui ; npm install
 
 dist:
-	./gradlew distTar
+	./gradlew distTar --stacktrace
 
-test:
-	./gradlew test
+test-java:
+	./gradlew test --stacktrace
+
+test-ui:
+	cd ui ; npm run test
+
+test: test-java test-ui
 
 lint:
-	./gradlew spotlessCheck
+	./gradlew spotlessCheck --stacktrace
 	cd ui ; npm run lint
 
 format:
-	./gradlew spotlessApply
+	./gradlew spotlessApply --stacktrace
 	cd ui ; npm run format
 
 specs:
-	./gradlew refDataSpec
+	./gradlew refDataSpec --stacktrace
 
 dev-ui: specs
 	cd ui ; npm run dev
 
-build-ui:
+build-ui: specs test-ui
 	cd ui ; npm run build
 
 docker: dist
@@ -44,7 +49,7 @@ docker-data-index: docker
 	docker run -it --env-file local.env autonomouslogic/eve-ref:latest data-index
 
 clean:
-	./gradlew clean
+	./gradlew clean --stacktrace
 
 version:
 	echo $(EVE_REF_VERSION)

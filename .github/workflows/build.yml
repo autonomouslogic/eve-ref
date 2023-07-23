@@ -16,7 +16,7 @@ jobs:
           cache: gradle
 
       - name: Test
-        run: ./gradlew test --stacktrace
+        run: make test-java
 
       - name: Code Coverage
         run: ./gradlew jacocoTestReport --stacktrace
@@ -40,6 +40,13 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 18
+
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: temurin
+          java-version: 17
+          cache: gradle
 
       - name: Init
         run: make init-ui
