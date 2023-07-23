@@ -1,6 +1,4 @@
-<script setup lang="ts">
-import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
-</script>
+<script setup lang="ts"></script>
 
 <template>
 	<div class="mt-4 grid grid-cols-3 gap-4">
