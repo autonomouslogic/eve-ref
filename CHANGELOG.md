@@ -1,5 +1,14 @@
 EVE Ref Changelog
 
+## [2.22.0](https://github.com/autonomouslogic/eve-ref/compare/2.21.0...2.22.0) (2023-07-24)
+
+
+### Features
+
+* Moved type link parsing to a separate service ([#250](https://github.com/autonomouslogic/eve-ref/issues/250)) ([c1ca7e3](https://github.com/autonomouslogic/eve-ref/commit/c1ca7e3e4d507358dfa4964171e09593587e6321))
+* Reprocessing UI card ([#252](https://github.com/autonomouslogic/eve-ref/issues/252)) ([a33b6c3](https://github.com/autonomouslogic/eve-ref/commit/a33b6c35d2a440f674af9d3582f7471d85bfe1d8))
+* Variations UI card ([#251](https://github.com/autonomouslogic/eve-ref/issues/251)) ([1bb107e](https://github.com/autonomouslogic/eve-ref/commit/1bb107e04b14de7857e872cac4bc4c06d93398da))
+
 ## [2.21.0](https://github.com/autonomouslogic/eve-ref/compare/2.20.0...2.21.0) (2023-07-15)
 
 
