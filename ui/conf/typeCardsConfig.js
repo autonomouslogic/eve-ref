@@ -129,7 +129,8 @@ export default {
 		},
 	"skill":
 		{
-			"name": {"en": "skill"},
+			"name": {"en": "skills"},
+			"component": "skills",
 			"dogmaAttributes":
 				[
 					"primaryAttribute",
