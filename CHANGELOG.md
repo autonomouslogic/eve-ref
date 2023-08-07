@@ -1,5 +1,12 @@
 EVE Ref Changelog
 
+## [2.23.0](https://github.com/autonomouslogic/eve-ref/compare/2.22.0...2.23.0) (2023-08-07)
+
+
+### Features
+
+* Required skills UI ([#253](https://github.com/autonomouslogic/eve-ref/issues/253)) ([cdad3cc](https://github.com/autonomouslogic/eve-ref/commit/cdad3cc95c762cd9bb27ba6bdfcdc6c39c726160))
+
 ## [2.22.0](https://github.com/autonomouslogic/eve-ref/compare/2.21.0...2.22.0) (2023-07-24)
 
 
