@@ -9,8 +9,13 @@ const props = defineProps<{
 
 const {locale} = useI18n();
 
+const ignoreSuffixUnits = [
+	"Level"
+];
+
 const unit = await refdataApi.getUnit({unitId: props.unitId});
-const spacer = unit.displayName?.length > 1 ? " " : "";
+const spacer = unit?.displayName?.length > 1 ? " " : "";
+const displayUnit = unit?.displayName && !ignoreSuffixUnits.includes(unit?.displayName);
 </script>
 
 <template>
@@ -18,7 +23,7 @@ const spacer = unit.displayName?.length > 1 ? " " : "";
 		<AttibuteId v-if="unit.displayName == 'attributeID'"
 			:unit="unit"
 			:value="value" />
-		<template v-else>{{ props.value }}{{ spacer }}{{ unit.displayName }}</template>
+		<template v-else>{{ props.value }}<template v-if="displayUnit">{{ spacer }}{{ unit.displayName }}</template></template>
 	</template>
 	<span v-else>{{ props.value }} (Unknown unit ID {{props.unitId}})</span>
 </template>
