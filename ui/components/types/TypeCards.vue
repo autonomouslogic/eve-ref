@@ -9,6 +9,7 @@ import DefensesCard from "~/components/cards/DefensesCard.vue";
 import ReprocessingCard from "~/components/cards/ReprocessingCard.vue";
 import VariationsCard from "~/components/cards/VariationsCard.vue";
 import RequiredSkillsCard from "~/components/cards/requiredSkills/RequiredSkillsCard.vue";
+import TypeCardSelector from "~/components/types/TypeCardSelector.vue";
 
 const {locale} = useI18n();
 
@@ -58,27 +59,12 @@ if (Object.keys(dogmaAttributes).length > 0) {
 		:dogma-attributes="cardAttributes.defenses" />
 	<CardsContainer>
 		<template v-for="(attributes, cardId) in cardAttributes" :key="cardId">
-			<template v-if="typeCardsConfig[cardId].component == 'defenses'"></template>
-			<BasicCard v-else-if="typeCardsConfig[cardId].component == 'basic'"
+			<TypeCardSelector
+				:component="typeCardsConfig[cardId].component"
 				:title="typeCardsConfig[cardId].name[locale]"
 				:inventory-type="inventoryType"
-				:dogma-attributes="attributes" />
-			<ReprocessingCard v-else-if="typeCardsConfig[cardId].component == 'reprocessing'"
-				:title="typeCardsConfig[cardId].name[locale]"
-				:inventory-type="inventoryType"
-				:dogma-attributes="attributes" />
-			<VariationsCard v-else-if="typeCardsConfig[cardId].component == 'variations'"
-				:title="typeCardsConfig[cardId].name[locale]"
-				:inventory-type="inventoryType"
-				:dogma-attributes="attributes" />
-			<RequiredSkillsCard v-else-if="typeCardsConfig[cardId].component == 'requiredSkills'"
-				:title="typeCardsConfig[cardId].name[locale]"
-				:inventory-type="inventoryType"
-				:dogma-attributes="attributes" />
-			<DefaultCard v-else
-				:title="typeCardsConfig[cardId].name[locale]"
-				:inventory-type="inventoryType"
-				:dogma-attributes="attributes" />
+				:dogma-attributes="attributes"
+			/>
 		</template>
 	</CardsContainer>
 </template>
