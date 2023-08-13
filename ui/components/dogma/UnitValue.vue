@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import refdataApi from "~/refdata";
+import AttibuteId from "~/components/dogma/units/AttibuteId.vue";
 
 const props = defineProps<{
 	value: string | number,
@@ -14,7 +15,10 @@ const spacer = unit.displayName?.length > 1 ? " " : "";
 
 <template>
 	<template v-if="unit">
-		{{ props.value }}{{ spacer }}{{ unit.displayName }}
+		<AttibuteId v-if="unit.displayName == 'attributeID'"
+			:unit="unit"
+			:value="value" />
+		<template v-else>{{ props.value }}{{ spacer }}{{ unit.displayName }}</template>
 	</template>
-	<span v-else>(Unknown unit ID {{props.unitId}})</span>
+	<span v-else>{{ props.value }} (Unknown unit ID {{props.unitId}})</span>
 </template>
