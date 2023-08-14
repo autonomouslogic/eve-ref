@@ -1,5 +1,7 @@
 <script setup lang="ts">
 
+import FormattedNumber from "~/components/helpers/FormattedNumber.vue";
+
 const props = defineProps<{
 	price: number | undefined
 }>();
@@ -7,6 +9,4 @@ const props = defineProps<{
 const formattedPrice = computed(() => props.price ? new Intl.NumberFormat("en-US").format(props.price) : "?");
 </script>
 
-<template>
-	{{ formattedPrice }} ISK
-</template>
+<template><FormattedNumber :number="price" /> ISK</template>

@@ -4,8 +4,7 @@ import UnitValue from "~/components/dogma/UnitValue.vue";
 import {DogmaAttribute, Unit} from "~/refdata-openapi";
 
 const props = defineProps<{
-	value: string | number | undefined,
-	unit: Unit
+	value: string | number | undefined
 }>();
 
 const {locale} = useI18n();
