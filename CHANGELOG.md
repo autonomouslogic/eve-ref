@@ -1,5 +1,12 @@
 EVE Ref Changelog
 
+## [2.24.0](https://github.com/autonomouslogic/eve-ref/compare/2.23.0...2.24.0) (2023-08-14)
+
+
+### Features
+
+* Added warning for unknown component types ([#254](https://github.com/autonomouslogic/eve-ref/issues/254)) ([05df3bb](https://github.com/autonomouslogic/eve-ref/commit/05df3bbbfb0d2848905c96d08c0ebb87674d99d2))
+
 ## [2.23.0](https://github.com/autonomouslogic/eve-ref/compare/2.22.0...2.23.0) (2023-08-07)
 
 
