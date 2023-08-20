@@ -21,6 +21,7 @@ const noDecimalUnitIds = [
 ];
 const twoDecimalUnitIds = [
 	133, // ISK
+	161, // m3
 ];
 
 const spacer = computed(() => props.unit?.displayName?.length > 0 ? " " : "");
