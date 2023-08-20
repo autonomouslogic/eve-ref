@@ -35,7 +35,6 @@ const decimals = computed(() => {
 	return 0;
 });
 const formatNumber = computed(() => noDecimalUnitIds.includes(props.unit?.unitId) || twoDecimalUnitIds.includes(props.unit?.unitId));
-
 </script>
 
 <template>
@@ -43,5 +42,10 @@ const formatNumber = computed(() => noDecimalUnitIds.includes(props.unit?.unitId
 		<FormattedNumber :number="value" :decimals="decimals" />
 	</template>
 	<template v-else>{{ value }}</template>
-	<template v-if="displayUnit">{{ spacer }}{{ unit.displayName }}</template>
+	<template v-if="displayUnit">
+		{{spacer}}
+		<template v-if="unit.displayName == 'm2'">m<sup>2</sup></template>
+		<template v-if="unit.displayName == 'm3'">m<sup>3</sup></template>
+		<template v-else>{{unit.displayName}}</template>
+	</template>
 </template>

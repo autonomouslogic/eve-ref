@@ -5,6 +5,7 @@ import DogmaListItems from "~/components/cards/DogmaListItems.vue";
 import FormattedNumber from "~/components/helpers/FormattedNumber.vue";
 import MarketGroupLink from "~/components/helpers/MarketGroupLink.vue";
 import UnitValue from "~/components/dogma/UnitValue.vue";
+import GroupLink from "~/components/helpers/GroupLink.vue";
 
 const props = defineProps<{
 	title: string,
@@ -21,7 +22,7 @@ const props = defineProps<{
 			<li v-if="inventoryType.capacity">Capacity: <UnitValue unit-id="9" :value="inventoryType.capacity" /></li>
 			<li v-if="inventoryType.factionId">Faction ID: {{ inventoryType.factionId }}</li>
 			<li v-if="inventoryType.graphicId">Graphic ID: {{ inventoryType.graphicId }}</li>
-			<li v-if="inventoryType.groupId">Group ID: {{ inventoryType.groupId }}</li>
+			<li v-if="inventoryType.groupId">Group ID: <GroupLink :group-id="inventoryType.groupId"/> [{{ inventoryType.groupId }}]</li>
 			<li v-if="inventoryType.iconId">Icon ID: {{ inventoryType.iconId }}</li>
 			<li v-if="inventoryType.marketGroupId">Market group ID: <MarketGroupLink :market-group-id="inventoryType.marketGroupId"/> [{{ inventoryType.marketGroupId }}]</li>
 			<li v-if="inventoryType.mass">Mass: <UnitValue unit-id="2" :value="inventoryType.mass" /></li>
