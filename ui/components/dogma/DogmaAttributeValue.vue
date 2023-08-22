@@ -2,6 +2,7 @@
 import refdataApi from "~/refdata";
 import {DogmaAttribute} from "~/refdata-openapi";
 import AttributeTypeIcon from "~/components/icons/AttributeTypeIcon.vue";
+import DogmaAttributeLink from "~/components/helpers/DogmaAttributeLink.vue";
 
 const props = defineProps<{
 	value: string | number | undefined,
@@ -15,10 +16,9 @@ const attribute: DogmaAttribute = await refdataApi.getDogmaAttribute({attributeI
 
 <template>
 	<template v-if="attribute">
-		<AttributeTypeIcon :dogma-attribute="attribute" />
-		<template v-if="attribute.displayName && attribute.displayName[locale]">{{ attribute.displayName[locale] }}</template>
-		<template v-else>{{attribute.name}}</template>
+		<AttributeTypeIcon :dogma-attribute="attribute" :size="25" />
+		<DogmaAttributeLink :attribute-id="props.attributeId" />
 	</template>
-	<span v-else>Unknown attribute</span>
-	[{{ props.attributeId }}]: <DogmaValue :value="props.value" :attribute-id="props.attributeId" />
+	<span v-else>Unknown attribute {{ attributeId }}</span>:
+	<DogmaValue :value="props.value" :attribute-id="props.attributeId" />
 </template>
