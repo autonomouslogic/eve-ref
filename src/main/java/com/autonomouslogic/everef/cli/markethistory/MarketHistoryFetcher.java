@@ -1,5 +1,6 @@
 package com.autonomouslogic.everef.cli.markethistory;
 
+import com.autonomouslogic.commons.rxjava3.Rx3Util;
 import com.autonomouslogic.everef.esi.EsiHelper;
 import com.autonomouslogic.everef.esi.EsiUrl;
 import com.autonomouslogic.everef.model.RegionTypePair;
@@ -8,6 +9,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.reactivex.rxjava3.core.Flowable;
+import java.time.Duration;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.extern.log4j.Log4j2;
@@ -59,10 +61,10 @@ public class MarketHistoryFetcher {
 					.doOnNext(node -> ((ObjectNode) node)
 							.put("region_id", pair.getRegionId())
 							.put("type_id", pair.getTypeId()))
-					.retry(3, e -> {
+					.compose(Rx3Util.retryWithDelayFlowable(2, Duration.ofSeconds(10), e -> {
 						log.warn("Retrying {} due to {}", esiUrl, ExceptionUtils.getRootCauseMessage(e));
 						return true;
-					});
+					}));
 		});
 	}
 }
