@@ -15,13 +15,12 @@ const ignoreSuffixUnitIds = [
 	140 // Level
 ];
 const noDecimalUnitIds = [
-	9, // m3
 	2, // kg
 	1, // m
 ];
 const twoDecimalUnitIds = [
+	9, // m3
 	133, // ISK
-	161, // m3
 ];
 
 const spacer = computed(() => props.unit?.displayName?.length > 0 ? " " : "");
@@ -48,5 +47,6 @@ const formatNumber = computed(() => noDecimalUnitIds.includes(props.unit?.unitId
 		<template v-if="unit.displayName == 'm2'">m<sup>2</sup></template>
 		<template v-if="unit.displayName == 'm3'">m<sup>3</sup></template>
 		<template v-else>{{unit.displayName}}</template>
+		<span class="border-2 border-red-700">[{{unit.unitId}}] {{decimals}}</span>
 	</template>
 </template>
