@@ -12,11 +12,12 @@ const props = defineProps<{
 const {locale} = useI18n();
 
 const ignoreSuffixUnitIds = [
-	140 // Level
+	140, // Level
 ];
 const noDecimalUnitIds = [
-	2, // kg
 	1, // m
+	2, // kg
+	140, // Level
 ];
 const twoDecimalUnitIds = [
 	9, // m3
@@ -41,12 +42,11 @@ const formatNumber = computed(() => noDecimalUnitIds.includes(props.unit?.unitId
 	<template v-if="formatNumber">
 		<FormattedNumber :number="value" :decimals="decimals" />
 	</template>
-	<template v-else>{{ value }}</template>
+	<span class="border-2 border-red-700" v-else>{{ value }}</span>
 	<template v-if="displayUnit">
 		{{spacer}}
 		<template v-if="unit.displayName == 'm2'">m<sup>2</sup></template>
 		<template v-if="unit.displayName == 'm3'">m<sup>3</sup></template>
 		<template v-else>{{unit.displayName}}</template>
-		<span class="border-2 border-red-700">[{{unit.unitId}}] {{decimals}}</span>
 	</template>
 </template>

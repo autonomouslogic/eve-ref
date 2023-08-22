@@ -6,7 +6,7 @@ const props = defineProps<{
 }>();
 
 const realDecimals = computed(() => props.decimals ?? 0);
-const formattedNumber = computed(() => props.number
+const formattedNumber = computed(() => typeof props.number === "number"
 	? new Intl.NumberFormat("en-US", {
 		minimumFractionDigits: realDecimals.value,
 		maximumFractionDigits: realDecimals.value
