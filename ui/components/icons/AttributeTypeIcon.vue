@@ -5,9 +5,11 @@ import {DogmaAttribute, Icon} from "~/refdata-openapi";
 const ownImageServer = "https://everef.net/img";
 
 const props = defineProps<{
-	dogmaAttribute: DogmaAttribute
+	dogmaAttribute: DogmaAttribute,
+	size: Number
 }>();
 
+const realSize = props.size || 25;
 const iconId = props.dogmaAttribute.iconId || 0;
 const icon: Icon = await refdataApi.getIcon({iconId});
 let iconUrl = "";
@@ -19,7 +21,7 @@ if (icon) {
 </script>
 
 <template>
-	<img v-if="iconUrl" :src="iconUrl" width="25" height="25" />
+	<img v-if="iconUrl" :src="iconUrl" :width="realSize" :height="realSize" />
 	<template v-else>&nbsp;</template>
 </template>
 
