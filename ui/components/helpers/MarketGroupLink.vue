@@ -8,12 +8,16 @@ const props = defineProps<{
 
 const {locale} = useI18n();
 
+if (props.marketGroupId === undefined) {
+  throw new Error("marketGroupId is required");
+}
+
 const marketGroup: MarketGroup = await refdataApi.getMarketGroup({marketGroupId: props.marketGroupId});
 </script>
 
 <template>
 	<NuxtLink
-		v-if="marketGroup"
+		v-if="marketGroup && marketGroup.name"
 		:to="`/market-groups/${props.marketGroupId}`">
 		{{ marketGroup.name[locale] }}
 	</NuxtLink>

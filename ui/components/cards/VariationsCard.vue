@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import {DogmaAttribute, InventoryType} from "~/refdata-openapi";
+import {DogmaAttribute, InventoryType, MetaGroup} from "~/refdata-openapi";
 import CardWrapper from "~/components/cards/CardWrapper.vue";
-import DogmaListItems from "~/components/cards/DogmaListItems.vue";
 import refdataApi from "~/refdata";
 import TypeLink from "~/components/helpers/TypeLink.vue";
 
@@ -13,13 +12,12 @@ const props = defineProps<{
 	dogmaAttributes: DogmaAttribute[]
 }>();
 
-const metaGroups = {};
+const metaGroups: {[key: string]: MetaGroup } = {};
 if (props.inventoryType.typeVariations) {
-	var promises = [];
+  const promises = [];
 	for (const metaGroupId of Object.keys(props.inventoryType.typeVariations)) {
 		promises.push((async () => {
-			var group = await refdataApi.getMetaGroup({metaGroupId: parseInt(metaGroupId)});
-			metaGroups[metaGroupId] = group;
+      metaGroups[metaGroupId] = await refdataApi.getMetaGroup({metaGroupId: parseInt(metaGroupId)});
 		})());
 	}
 	await Promise.all(promises);

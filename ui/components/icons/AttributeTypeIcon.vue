@@ -6,7 +6,7 @@ const ownImageServer = "https://everef.net/img";
 
 const props = defineProps<{
 	dogmaAttribute: DogmaAttribute,
-	size: Number
+	size?: number
 }>();
 
 const realSize = props.size || 25;

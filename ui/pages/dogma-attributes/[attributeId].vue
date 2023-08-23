@@ -1,25 +1,24 @@
 <script setup lang="ts">
 import refdataApi from "~/refdata";
-import GroupLink from "~/components/helpers/GroupLink.vue";
-import TypeLink from "~/components/helpers/TypeLink.vue";
 import CardWrapper from "~/components/cards/CardWrapper.vue";
 import AttributeTypeIcon from "~/components/icons/AttributeTypeIcon.vue";
 
 const route = useRoute();
 const {locale} = useI18n();
 
-const attributeId = parseInt(route.params.attributeId);
-var attribute = await refdataApi.getDogmaAttribute({attributeId});
-var unit = attribute.unitId ? await refdataApi.getUnit({unitId: attribute.unitId}) : null;
+const attributeId = parseInt(route.params.attributeId[0] ?? route.params.attributeId);
+const attribute = await refdataApi.getDogmaAttribute({attributeId});
+const unit = attribute.unitId ? await refdataApi.getUnit({unitId: attribute.unitId}) : null;
 </script>
 
 <template>
 	<div v-if="!attribute">Unknown dogma attribute ID {{ attributeId }}</div>
 	<div v-else>
-		<h1>
+		<h1 v-if="attribute.displayName">
 			<AttributeTypeIcon :dogma-attribute="attribute" :size="50" />
-			{{ attribute.displayName[locale] }}</h1>
-		<p>{{ attribute.description[locale] }}</p>
+			{{ attribute.displayName[locale] }}
+    </h1>
+		<p v-if="attribute.description">{{ attribute.description[locale] }}</p>
 		<CardsContainer>
 			<CardWrapper title="Dogma attribute">
 				<ul>
@@ -38,10 +37,10 @@ var unit = attribute.unitId ? await refdataApi.getUnit({unitId: attribute.unitId
 			<CardWrapper v-if="unit" title="Unit">
 				<ul>
 					<li>Unit ID: {{ unit.unitId }}</li>
-					<li>Name: {{ unit.name[locale] }}</li>
-					<li v-if="unit.description">Description: {{ unit.description[locale] }}</li>
-					<li>Display name: {{ unit.displayName }}</li>
-				</ul>
+          <li v-if="unit.name">Name: {{ unit.name[locale] }}</li>
+          <li v-if="unit.description">Description: {{ unit.description[locale] }}</li>
+          <li>Display name: {{ unit.displayName }}</li>
+        </ul>
 			</CardWrapper>
 		</CardsContainer>
 	</div>

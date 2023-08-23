@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import refdataApi from "~/refdata";
+import {Unit} from "~/refdata-openapi";
 
 const props = defineProps<{
 	value: string | number,
@@ -8,8 +9,11 @@ const props = defineProps<{
 
 const {locale} = useI18n();
 
-const unit = await refdataApi.getUnit({unitId: props.unitId});
-const spacer = unit.displayName?.length > 1 ? " " : "";
+const unit: Unit = await refdataApi.getUnit({unitId: props.unitId});
+
+const displayName = unit.displayName ? unit.displayName : '';
+
+const spacer = displayName.length > 1 ? " " : "";
 </script>
 
 <template>

@@ -7,11 +7,13 @@ const props = defineProps<{
 	marketGroupId: number | undefined
 }>();
 
-const {locale} = useI18n();
-
-const marketGroupIds = [];
-// eslint-disable-next-line vue/no-setup-props-destructure
+const marketGroupIds: number[] = [];
 let currentGroupId = props.marketGroupId;
+
+if (currentGroupId === undefined) {
+  throw new Error("marketGroupId is required");
+}
+
 let marketGroup: MarketGroup = await refdataApi.getMarketGroup({marketGroupId: currentGroupId});
 marketGroupIds.unshift(currentGroupId);
 while (marketGroup && marketGroup.parentGroupId) {

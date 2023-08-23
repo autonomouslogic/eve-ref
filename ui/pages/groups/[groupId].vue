@@ -5,14 +5,15 @@ import TypeLink from "~/components/helpers/TypeLink.vue";
 const route = useRoute();
 const {locale} = useI18n();
 
-const groupId = route.params.groupId;
-var group = await refdataApi.getGroup({groupId});
-var typeIds = group.typeIds;
+const groupId: number = Array.isArray(route.params.groupId) ? parseInt(route.params.groupId[0]) : parseInt(route.params.groupId);
+
+const group = await refdataApi.getGroup({groupId});
+const typeIds = group.typeIds;
 </script>
 
 <template>
 	<div>
-		<h1>{{ group.name[locale] }}</h1>
+		<h1 v-if="group.name">{{ group.name[locale] }}</h1>
 		<p>Types:</p>
 		<ul>
 			<li v-for="typeId in typeIds" :key="typeId">

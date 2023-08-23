@@ -8,13 +8,13 @@ import MarketGroupBreadcrumbs from "~/components/helpers/MarketGroupBreadcrumbs.
 const route = useRoute();
 const {locale} = useI18n();
 
-const marketGroupId = route.params.marketGroupId;
+const marketGroupId: number = parseInt(route.params.marketGroupId[0] ?? route.params.marketGroupId);
 const marketGroup: MarketGroup = await refdataApi.getMarketGroup({marketGroupId});
 </script>
 
 <template>
 	<div>
-		<h1>{{ marketGroup.name[locale] }}</h1>
+		<h1 v-if="marketGroup.name">{{ marketGroup.name[locale] }}</h1>
 		<p v-if="marketGroup.parentGroupId">
 			<MarketGroupBreadcrumbs :market-group-id="marketGroup.parentGroupId"></MarketGroupBreadcrumbs>
 		</p>

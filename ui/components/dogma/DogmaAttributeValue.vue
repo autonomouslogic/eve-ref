@@ -9,7 +9,9 @@ const props = defineProps<{
 	attributeId: number | undefined
 }>();
 
-const {locale} = useI18n();
+if (props.attributeId === undefined) {
+  throw new Error("attributeId is required");
+}
 
 const attribute: DogmaAttribute = await refdataApi.getDogmaAttribute({attributeId: props.attributeId});
 </script>
@@ -17,7 +19,7 @@ const attribute: DogmaAttribute = await refdataApi.getDogmaAttribute({attributeI
 <template>
 	<template v-if="attribute">
 		<AttributeTypeIcon :dogma-attribute="attribute" :size="25" />
-		<DogmaAttributeLink :attribute-id="props.attributeId" />
+		<DogmaAttributeLink v-if="props.attributeId" :attribute-id="props.attributeId" />
 	</template>
 	<span v-else>Unknown attribute {{ attributeId }}</span>:
 	<DogmaValue :value="props.value" :attribute-id="props.attributeId" />

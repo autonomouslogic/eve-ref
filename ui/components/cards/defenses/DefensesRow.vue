@@ -38,17 +38,17 @@ const explosiveResonance = getTypeAttributeByName(props.explosiveResonanceAttrNa
 
 <template>
 	<template v-if="hp">
-		<span><AttributeTypeIcon :dogma-attribute="hpAttr" />{{ hpAttr!.displayName[locale] }}</span>
+		<span v-if="hpAttr?.displayName"><AttributeTypeIcon :dogma-attribute="hpAttr" />{{ hpAttr.displayName[locale] }}</span>
 		<span>{{ hp!.value }} HP</span>
 		<span>uniformity:</span>
-		<span>{{ (1-uniformity!.value) * 100 }}%</span>
-		<span><AttributeTypeIcon :dogma-attribute="emResonanceAttr" />EM:</span>
+		<span v-if="uniformity">{{ (1 - uniformity.value) * 100 }}%</span>
+		<span v-if="emResonanceAttr"><AttributeTypeIcon :dogma-attribute="emResonanceAttr" />EM:</span>
 		<span>{{ Math.round((1-emResonance?.value) * 100) }}%</span>
-		<span><AttributeTypeIcon :dogma-attribute="thermalResonanceAttr" />thermal:</span>
+		<span v-if="thermalResonanceAttr"><AttributeTypeIcon :dogma-attribute="thermalResonanceAttr" />thermal:</span>
 		<span>{{ Math.round((1-thermalResonance?.value) * 100) }}%</span>
-		<span><AttributeTypeIcon :dogma-attribute="kineticResonanceAttr" />kinetic:</span>
+		<span v-if="kineticResonanceAttr"><AttributeTypeIcon :dogma-attribute="kineticResonanceAttr" />kinetic:</span>
 		<span>{{ Math.round((1-kineticResonance?.value) * 100) }}%</span>
-		<span><AttributeTypeIcon :dogma-attribute="explosiveResonanceAttr" />explosive:</span>
+		<span v-if="explosiveResonanceAttr"><AttributeTypeIcon :dogma-attribute="explosiveResonanceAttr" />explosive:</span>
 		<span>{{ Math.round((1-explosiveResonance?.value) * 100) }}%</span>
 	</template>
 </template>
