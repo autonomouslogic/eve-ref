@@ -1,5 +1,17 @@
 EVE Ref Changelog
 
+## [2.25.0](https://github.com/autonomouslogic/eve-ref/compare/2.24.0...2.25.0) (2023-08-23)
+
+
+### Features
+
+* Added dogma attribute pages ([#257](https://github.com/autonomouslogic/eve-ref/issues/257)) ([75f42a2](https://github.com/autonomouslogic/eve-ref/commit/75f42a207f48200e5f95bc403098ec08f4ef5e7f))
+
+
+### Bug Fixes
+
+* Tweaked retries, mainly for market history ([#256](https://github.com/autonomouslogic/eve-ref/issues/256)) ([be3b310](https://github.com/autonomouslogic/eve-ref/commit/be3b310deb05e83aa297c9f8dcf5ee867849fb5e))
+
 ## [2.24.0](https://github.com/autonomouslogic/eve-ref/compare/2.23.0...2.24.0) (2023-08-14)
 
 
