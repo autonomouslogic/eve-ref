@@ -5,11 +5,11 @@ import AttributeTypeIcon from "~/components/icons/AttributeTypeIcon.vue";
 import DogmaAttributeLink from "~/components/helpers/DogmaAttributeLink.vue";
 
 const props = defineProps<{
-	value: string | number | undefined,
+	value: number,
 	attribute: DogmaAttribute | number,
 }>();
 
-const dogmaAttribute = typeof props.attribute === "number" ?
+const dogmaAttribute: DogmaAttribute = typeof props.attribute === "number" ?
 	await refdataApi.getDogmaAttribute({attributeId: props.attribute}) :
 	props.attribute;
 </script>
@@ -19,5 +19,5 @@ const dogmaAttribute = typeof props.attribute === "number" ?
 		<AttributeTypeIcon :dogma-attribute="dogmaAttribute" :size="25" />
 		<DogmaAttributeLink v-if="dogmaAttribute.attributeId" :attribute="dogmaAttribute.attributeId" />
 	</template>
-	<DogmaValue :value="value" :attribute="attribute" />
+	<DogmaValue :value="value" :attribute="dogmaAttribute" />
 </template>

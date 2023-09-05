@@ -1,4 +1,4 @@
-import {DogmaAttribute, InventoryType, DogmaTypeAttribute} from "~/refdata-openapi";
+import {DogmaAttribute, DogmaTypeAttribute, InventoryType} from "~/refdata-openapi";
 
 export function hasDogmaAttributeValue(name: string, type: InventoryType, attributes: DogmaAttribute[]): boolean {
     if (!type.dogmaAttributes) {

@@ -6,12 +6,17 @@ const props = defineProps<{
 	dogmaAttributes: DogmaAttribute[]
 }>();
 
-function value(attributeId: number | undefined) {
+function value(attributeId: number | undefined): number {
 	if (!props.inventoryType.dogmaAttributes || !attributeId) {
-		return undefined;
+		throw new Error(`No dogma attributes for inventory type ${props.inventoryType.typeId}`);
 	}
 
-	return props.inventoryType.dogmaAttributes[attributeId].value;
+  const attributeValue: number | undefined = props.inventoryType.dogmaAttributes[attributeId].value;
+  if (attributeValue === undefined) {
+    throw new Error(`No value for attribute ${attributeId} on inventory type ${props.inventoryType.typeId}`);
+  }
+
+  return attributeValue;
 }
 </script>
 

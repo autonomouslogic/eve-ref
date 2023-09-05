@@ -2,7 +2,6 @@
 import refdataApi from "~/refdata";
 import AttibuteId from "~/components/dogma/units/AttibuteId.vue";
 import Sizeclass from "~/components/dogma/units/Sizeclass.vue";
-import FormattedNumber from "~/components/helpers/FormattedNumber.vue";
 import DefaultUnit from "~/components/dogma/units/DefaultUnit.vue";
 import AbsolutePercent from "~/components/dogma/units/AbsolutePercent.vue";
 
@@ -10,8 +9,6 @@ const props = defineProps<{
 	value: number,
 	unitId: number
 }>();
-
-const {locale} = useI18n();
 
 const unit = await refdataApi.getUnit({unitId: props.unitId});
 </script>
