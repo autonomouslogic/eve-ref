@@ -1,5 +1,31 @@
 EVE Ref Changelog
 
+## [2.25.2](https://github.com/autonomouslogic/eve-ref/compare/2.25.1...2.25.2) (2023-09-04)
+
+
+### Bug Fixes
+
+* **deps:** update font awesome to v6.4.2 ([#260](https://github.com/autonomouslogic/eve-ref/issues/260)) ([75c78b6](https://github.com/autonomouslogic/eve-ref/commit/75c78b65c051a30282acabd4cd656eca282d6bce))
+
+## [2.25.1](https://github.com/autonomouslogic/eve-ref/compare/2.25.0...2.25.1) (2023-09-02)
+
+
+### Bug Fixes
+
+* More retries on fetch contracts ([#259](https://github.com/autonomouslogic/eve-ref/issues/259)) ([6c76374](https://github.com/autonomouslogic/eve-ref/commit/6c763740570fbad0085049d5efa0f525d200085e))
+
+## [2.25.0](https://github.com/autonomouslogic/eve-ref/compare/2.24.0...2.25.0) (2023-08-23)
+
+
+### Features
+
+* Added dogma attribute pages ([#257](https://github.com/autonomouslogic/eve-ref/issues/257)) ([75f42a2](https://github.com/autonomouslogic/eve-ref/commit/75f42a207f48200e5f95bc403098ec08f4ef5e7f))
+
+
+### Bug Fixes
+
+* Tweaked retries, mainly for market history ([#256](https://github.com/autonomouslogic/eve-ref/issues/256)) ([be3b310](https://github.com/autonomouslogic/eve-ref/commit/be3b310deb05e83aa297c9f8dcf5ee867849fb5e))
+
 ## [2.24.0](https://github.com/autonomouslogic/eve-ref/compare/2.23.0...2.24.0) (2023-08-14)
 
 
