@@ -1,4 +1,4 @@
-export default {
+const cards: {[key: string]: any} = {
 	"defenses":
 		{
 			"name": {"en": "defenses"},
@@ -539,3 +539,5 @@ export default {
 			"alwaysShow": true
 		}
 };
+
+export default cards;

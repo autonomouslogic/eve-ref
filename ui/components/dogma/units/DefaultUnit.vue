@@ -1,15 +1,11 @@
 <script setup lang="ts">
-import refdataApi from "~/refdata";
-import UnitValue from "~/components/dogma/UnitValue.vue";
-import {DogmaAttribute, Unit} from "~/refdata-openapi";
+import {Unit} from "~/refdata-openapi";
 import FormattedNumber from "~/components/helpers/FormattedNumber.vue";
 
 const props = defineProps<{
-	value: string | number | undefined,
-	unit: Unit | undefined
+	value: number,
+	unit: Unit
 }>();
-
-const {locale} = useI18n();
 
 const ignoreSuffixUnitIds = [
 	140, // Level
@@ -24,18 +20,41 @@ const twoDecimalUnitIds = [
 	133, // ISK
 ];
 
-const spacer = computed(() => props.unit?.displayName?.length > 0 ? " " : "");
-const displayUnit = computed(() => props.unit?.displayName && !ignoreSuffixUnitIds.includes(props.unit?.unitId));
+const displayName = computed(() => props.unit.displayName);
+const unitId = computed(() => props.unit.unitId);
+
+const spacer = computed(() => {
+	if (displayName.value) {
+		return displayName.value.length > 0 ? " " : "";
+	}
+	return "";
+});
+
+const displayUnit = computed(() => {
+	if (unitId.value === undefined) {
+		return false;
+	}
+	return props.unit?.displayName && !ignoreSuffixUnitIds.includes(unitId.value);
+});
+
 const decimals = computed(() => {
-	if (noDecimalUnitIds.includes(props.unit?.unitId)) {
+	if (unitId.value === undefined) {
 		return 0;
 	}
-	if (twoDecimalUnitIds.includes(props.unit?.unitId)) {
+	if (noDecimalUnitIds.includes(unitId.value)) {
+		return 0;
+	}
+	if (twoDecimalUnitIds.includes(unitId.value)) {
 		return 2;
 	}
 	return 0;
 });
-const formatNumber = computed(() => noDecimalUnitIds.includes(props.unit?.unitId) || twoDecimalUnitIds.includes(props.unit?.unitId));
+const formatNumber = computed(() => {
+	if (unitId.value === undefined) {
+		return 0;
+	}
+	return noDecimalUnitIds.includes(unitId.value) || twoDecimalUnitIds.includes(unitId.value);
+});
 </script>
 
 <template>

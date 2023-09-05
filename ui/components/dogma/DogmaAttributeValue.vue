@@ -5,20 +5,19 @@ import AttributeTypeIcon from "~/components/icons/AttributeTypeIcon.vue";
 import DogmaAttributeLink from "~/components/helpers/DogmaAttributeLink.vue";
 
 const props = defineProps<{
-	value: string | number | undefined,
-	attributeId: number | undefined
+	value: number,
+	attribute: DogmaAttribute | number,
 }>();
 
-const {locale} = useI18n();
-
-const attribute: DogmaAttribute = await refdataApi.getDogmaAttribute({attributeId: props.attributeId});
+const dogmaAttribute: DogmaAttribute = typeof props.attribute === "number" ?
+	await refdataApi.getDogmaAttribute({attributeId: props.attribute}) :
+	props.attribute;
 </script>
 
 <template>
-	<template v-if="attribute">
-		<AttributeTypeIcon :dogma-attribute="attribute" :size="25" />
-		<DogmaAttributeLink :attribute-id="props.attributeId" />
+	<template v-if="dogmaAttribute">
+		<AttributeTypeIcon :dogma-attribute="dogmaAttribute" :size="25" />
+		<DogmaAttributeLink v-if="dogmaAttribute.attributeId" :attribute="dogmaAttribute.attributeId" />
 	</template>
-	<span v-else>Unknown attribute {{ attributeId }}</span>:
-	<DogmaValue :value="value" :attribute="attribute" />
+	<DogmaValue :value="value" :attribute="dogmaAttribute" />
 </template>

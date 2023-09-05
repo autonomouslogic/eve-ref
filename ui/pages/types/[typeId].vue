@@ -9,19 +9,22 @@ import LinkParser from "~/components/helpers/LinkParser.vue";
 
 const {locale} = useI18n();
 const route = useRoute();
-const typeId = route.params.typeId;
+const typeId: number = Array.isArray(route.params.typeId) ? parseInt(route.params.typeId[0]) : parseInt(route.params.typeId);
 
 if (!typeId) {
 	console.error("typeId is null");
 }
 
 const inventoryType: InventoryType = await refdataApi.getType({typeId});
+if (typeof inventoryType.groupId !== "number") {
+	throw new Error(`Inventory type ${typeId} has no group ID`);
+}
 const inventoryGroup: InventoryGroup = await refdataApi.getGroup({groupId: inventoryType.groupId});
 
 </script>
 
 <template>
-	<h1>{{ inventoryType.name[locale] }}</h1>
+	<h1 v-if="inventoryType.name">{{ inventoryType.name[locale] }}</h1>
 	<p>
 		<CategoryLink :categoryId="inventoryGroup.categoryId"></CategoryLink> &gt;
 		<GroupLink :groupId="inventoryType.groupId"></GroupLink>
@@ -34,5 +37,5 @@ const inventoryGroup: InventoryGroup = await refdataApi.getGroup({groupId: inven
 	<TypeCards :inventory-type="inventoryType" />
 
 	<h2>Description</h2>
-	<p><LinkParser :content="inventoryType.description[locale]"/></p>
+	<p v-if="inventoryType.description"><LinkParser :content="inventoryType.description[locale]"/></p>
 </template>

@@ -21,7 +21,7 @@ const hasBonuses: boolean = props.bonuses !== undefined && Object.keys(props.bon
 				<template v-if="trait.bonus !== undefined && trait.unitId !== undefined">
 					<UnitValue :value="trait.bonus" :unit-id="trait.unitId" />&nbsp;
 				</template>
-				<LinkParser :content="trait.bonusText[locale]"/>
+				<LinkParser v-if="trait.bonusText" :content="trait.bonusText[locale]"/>
 			</li>
 		</ul>
 	</div>
