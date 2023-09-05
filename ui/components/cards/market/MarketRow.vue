@@ -39,11 +39,11 @@ const buyPrice = buyOrders.filter(e => e.locationId == station.stationId)
 	<tr>
 		<td>{{ system.name }}</td>
 		<td>
-			<UnitValue v-if="sellPrice" unit-id="133" :value="sellPrice" />
+			<UnitValue v-if="sellPrice" :unit-id="133" :value="sellPrice" />
 			<template v-else>None</template>
 		</td>
 		<td>
-			<UnitValue v-if="sellPrice" unit-id="133" :value="buyPrice" />
+			<UnitValue v-if="sellPrice" :unit-id="133" :value="buyPrice" />
 			<template v-else>None</template>
 		</td>
 	</tr>
