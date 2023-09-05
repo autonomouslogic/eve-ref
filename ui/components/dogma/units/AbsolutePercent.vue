@@ -2,9 +2,8 @@
 import FormattedNumber from "~/components/helpers/FormattedNumber.vue";
 
 const props = defineProps<{
-	value: string | number | undefined
+	value: number
 }>();
-
 </script>
 
 <template>

@@ -13,14 +13,12 @@ export default class TypeLinkService {
                     return component.replace(/<[^>]*>/g, '');
                 }
 
-                const match: RegExpMatchArray = component.match(/<(?:a|url).*?(\d+)[^\d]/);
+                const match = component.match(/<(?:a|url).*?(\d+)[^\d]/);
                 if (match && match.length > 1) {
                     return parseInt(match[1]);
                 }
             }
-            else {
-                return component;
-            }
+            return component;
         });
     }
 }

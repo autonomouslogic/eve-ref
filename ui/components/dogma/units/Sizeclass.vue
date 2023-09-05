@@ -1,11 +1,8 @@
 <script setup lang="ts">
 
 const props = defineProps<{
-	value: number | undefined
+	value: number
 }>();
-
-const {locale} = useI18n();
-
 </script>
 
 <template>
