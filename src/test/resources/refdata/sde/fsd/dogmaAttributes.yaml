@@ -442,3 +442,14 @@
   published: false
   stackable: false
   unitID: 116
+"162":
+  attributeID: 162
+  categoryID: 9
+  dataType: 9
+  defaultValue: 0
+  description: "Radius of an object in meters"
+  highIsGood: true
+  iconID: 1390
+  name: "radius"
+  published: false
+  stackable: true

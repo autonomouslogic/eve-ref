@@ -39,10 +39,12 @@ const cards: {[key: string]: any} = {
 					"techLevel",
 					"metaLevel",
 					"metaLevelOld",
+					"capacity",
 					"volume",
 					"mass",
 					"radius",
 					"nondestructible",
+					"cargoScanResistance",
 					"disallowInHighSec",
 					"disallowInEmpireSpace",
 					"isCapitalSize",
@@ -129,8 +131,7 @@ const cards: {[key: string]: any} = {
 		},
 	"skill":
 		{
-			"name": {"en": "skills"},
-			"component": "skills",
+			"name": {"en": "skill"},
 			"dogmaAttributes":
 				[
 					"primaryAttribute",
@@ -169,6 +170,7 @@ const cards: {[key: string]: any} = {
 					"medSlots",
 					"lowSlots",
 					"rigSlots",
+					"upgradeSlotsLeft",
 					"rigSize",
 					"upgradeCapacity",
 					"serviceSlots",

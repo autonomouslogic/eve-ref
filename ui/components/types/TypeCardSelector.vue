@@ -12,7 +12,7 @@ import RequiredSkillsCard from "~/components/cards/requiredSkills/RequiredSkills
 
 const props = defineProps<{
 	inventoryType: InventoryType,
-	component: string,
+	component: string | undefined,
 	title: string,
 	dogmaAttributes: DogmaAttribute[]
 }>();

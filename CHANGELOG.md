@@ -1,5 +1,19 @@
 EVE Ref Changelog
 
+## [2.25.2](https://github.com/autonomouslogic/eve-ref/compare/2.25.1...2.25.2) (2023-09-04)
+
+
+### Bug Fixes
+
+* **deps:** update font awesome to v6.4.2 ([#260](https://github.com/autonomouslogic/eve-ref/issues/260)) ([75c78b6](https://github.com/autonomouslogic/eve-ref/commit/75c78b65c051a30282acabd4cd656eca282d6bce))
+
+## [2.25.1](https://github.com/autonomouslogic/eve-ref/compare/2.25.0...2.25.1) (2023-09-02)
+
+
+### Bug Fixes
+
+* More retries on fetch contracts ([#259](https://github.com/autonomouslogic/eve-ref/issues/259)) ([6c76374](https://github.com/autonomouslogic/eve-ref/commit/6c763740570fbad0085049d5efa0f525d200085e))
+
 ## [2.25.0](https://github.com/autonomouslogic/eve-ref/compare/2.24.0...2.25.0) (2023-08-23)
 
 

@@ -19,5 +19,5 @@ const dogmaAttribute = typeof props.attribute === "number" ?
 		<AttributeTypeIcon :dogma-attribute="dogmaAttribute" :size="25" />
 		<DogmaAttributeLink v-if="dogmaAttribute.attributeId" :attribute="dogmaAttribute.attributeId" />
 	</template>
-	<DogmaValue :value="props.value" :attribute-id="dogmaAttribute.attributeId" />
+	<DogmaValue :value="value" :attribute="attribute" />
 </template>
