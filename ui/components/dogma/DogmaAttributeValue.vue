@@ -6,21 +6,18 @@ import DogmaAttributeLink from "~/components/helpers/DogmaAttributeLink.vue";
 
 const props = defineProps<{
 	value: string | number | undefined,
-	attributeId: number | undefined
+	attribute: DogmaAttribute | number,
 }>();
 
-if (props.attributeId === undefined) {
-  throw new Error("attributeId is required");
-}
-
-const attribute: DogmaAttribute = await refdataApi.getDogmaAttribute({attributeId: props.attributeId});
+const dogmaAttribute = typeof props.attribute === 'number' ?
+    await refdataApi.getDogmaAttribute({attributeId: props.attribute}) :
+    props.attribute;
 </script>
 
 <template>
-	<template v-if="attribute">
-		<AttributeTypeIcon :dogma-attribute="attribute" :size="25" />
-		<DogmaAttributeLink v-if="props.attributeId" :attribute-id="props.attributeId" />
+	<template v-if="dogmaAttribute">
+		<AttributeTypeIcon :dogma-attribute="dogmaAttribute" :size="25" />
+		<DogmaAttributeLink v-if="dogmaAttribute.attributeId" :attribute="dogmaAttribute.attributeId" />
 	</template>
-	<span v-else>Unknown attribute {{ attributeId }}</span>:
-	<DogmaValue :value="props.value" :attribute-id="props.attributeId" />
+	<DogmaValue :value="props.value" :attribute-id="dogmaAttribute.attributeId" />
 </template>

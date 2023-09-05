@@ -8,7 +8,7 @@ import MarketGroupBreadcrumbs from "~/components/helpers/MarketGroupBreadcrumbs.
 const route = useRoute();
 const {locale} = useI18n();
 
-const marketGroupId: number = parseInt(route.params.marketGroupId[0] ?? route.params.marketGroupId);
+const marketGroupId: number = Array.isArray(route.params.marketGroupId) ? parseInt(route.params.marketGroupId[0]) : parseInt(route.params.marketGroupId);
 const marketGroup: MarketGroup = await refdataApi.getMarketGroup({marketGroupId});
 </script>
 

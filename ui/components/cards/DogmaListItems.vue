@@ -5,13 +5,20 @@ const props = defineProps<{
 	inventoryType: InventoryType,
 	dogmaAttributes: DogmaAttribute[]
 }>();
+
+function value(attributeId: number | undefined) {
+  if (!props.inventoryType.dogmaAttributes || !attributeId) {
+    return undefined;
+  }
+
+  return props.inventoryType.dogmaAttributes[attributeId].value
+}
 </script>
 
 <template>
 	<li v-for="attribute in dogmaAttributes" :key="attribute.attributeId">
-		<DogmaAttributeValue v-if="inventoryType.dogmaAttributes[attribute.attributeId]"
-			:value="inventoryType.dogmaAttributes[attribute.attributeId].value"
-			:attribute-id="attribute.attributeId" />
-		<span v-else>No value for attribute {{attribute.attributeId}}</span>
+		<DogmaAttributeValue
+			:value="value(attribute.attributeId)"
+			:attribute="attribute" />
 	</li>
 </template>

@@ -20,11 +20,11 @@ const props = defineProps<{
 		<CardWrapper :title="title">
 			<div class="grid grid-cols-3">
 				<RequiredSkillsRow
-					v-for="(level, skillTypeId) in inventoryType.requiredSkills"
-					:key="skillTypeId"
-					:skill-type-id="parseInt(skillTypeId)"
+					v-for="(level, requiredSkillTypeId) in inventoryType.requiredSkills"
+					:key="requiredSkillTypeId"
+					:skill-type-id="parseInt(`${requiredSkillTypeId}`)"
 					:level=level
-					indent="0"
+					:indent="0"
 				/>
 			</div>
 		</CardWrapper>

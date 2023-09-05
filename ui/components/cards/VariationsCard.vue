@@ -23,13 +23,20 @@ if (props.inventoryType.typeVariations) {
 	await Promise.all(promises);
 }
 
+function metaGroupName(metaGroupId: string | number) {
+  const group = metaGroups[metaGroupId];
+  const name = group.name;
+  if (name) {
+    return name[locale.value] || '';
+  }
+}
 </script>
 
 <template>
 	<template v-if="inventoryType.typeVariations && metaGroups">
 		<CardWrapper :title="title">
 			<template v-for="(variations, metaGroupId) in inventoryType.typeVariations" :key="metaGroupId">
-				<h3 class="text-base">{{ metaGroups[metaGroupId].name[locale] }}</h3>
+				<h3 class="text-base">{{ metaGroupName(metaGroupId) }}</h3>
 				<ul>
 					<li v-for="typeId in variations" :key="typeId">
 						<TypeLink :type-id="typeId" />

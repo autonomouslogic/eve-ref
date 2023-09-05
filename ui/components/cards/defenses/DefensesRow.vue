@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {DogmaAttribute, InventoryType} from "~/refdata-openapi";
+import {DogmaAttribute, DogmaTypeAttribute, InventoryType} from "~/refdata-openapi";
 import {getAttributeByName, getTypeAttributeByName} from "~/lib/dogmaUtils";
 import AttributeTypeIcon from "~/components/icons/AttributeTypeIcon.vue";
 
@@ -34,21 +34,28 @@ const kineticResonance = getTypeAttributeByName(props.kineticResonanceAttrName, 
 const explosiveResonanceAttr = getAttributeByName(props.explosiveResonanceAttrName, props.dogmaAttributes);
 const explosiveResonance = getTypeAttributeByName(props.explosiveResonanceAttrName, props.inventoryType, props.dogmaAttributes);
 
+function attributeValueCalc(dogmaTypeAttribute: DogmaTypeAttribute | undefined, round: boolean = false): number | undefined {
+  if (!dogmaTypeAttribute || !dogmaTypeAttribute.value) {
+    return undefined;
+  }
+  const value = (1 - dogmaTypeAttribute.value) * 100;
+  return round ? Math.round(value) : value;
+}
 </script>
 
 <template>
 	<template v-if="hp">
 		<span v-if="hpAttr?.displayName"><AttributeTypeIcon :dogma-attribute="hpAttr" />{{ hpAttr.displayName[locale] }}</span>
-		<span>{{ hp!.value }} HP</span>
+		<span>{{ hp.value }} HP</span>
 		<span>uniformity:</span>
-		<span v-if="uniformity">{{ (1 - uniformity.value) * 100 }}%</span>
+		<span>{{ attributeValueCalc(uniformity) }}%</span>
 		<span v-if="emResonanceAttr"><AttributeTypeIcon :dogma-attribute="emResonanceAttr" />EM:</span>
-		<span>{{ Math.round((1-emResonance?.value) * 100) }}%</span>
+		<span>{{ attributeValueCalc(emResonance, true) }}%</span>
 		<span v-if="thermalResonanceAttr"><AttributeTypeIcon :dogma-attribute="thermalResonanceAttr" />thermal:</span>
-		<span>{{ Math.round((1-thermalResonance?.value) * 100) }}%</span>
+		<span>{{ attributeValueCalc(thermalResonance, true) }}%</span>
 		<span v-if="kineticResonanceAttr"><AttributeTypeIcon :dogma-attribute="kineticResonanceAttr" />kinetic:</span>
-		<span>{{ Math.round((1-kineticResonance?.value) * 100) }}%</span>
+		<span>{{ attributeValueCalc(kineticResonance, true) }}%</span>
 		<span v-if="explosiveResonanceAttr"><AttributeTypeIcon :dogma-attribute="explosiveResonanceAttr" />explosive:</span>
-		<span>{{ Math.round((1-explosiveResonance?.value) * 100) }}%</span>
+		<span>{{ attributeValueCalc(explosiveResonance, true) }}%</span>
 	</template>
 </template>

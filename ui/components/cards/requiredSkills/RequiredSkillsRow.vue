@@ -1,24 +1,21 @@
 <script setup lang="ts">
-import {DogmaAttribute, InventoryType, Skill} from "~/refdata-openapi";
-import CardWrapper from "~/components/cards/CardWrapper.vue";
-import DogmaListItems from "~/components/cards/DogmaListItems.vue";
 import refdataApi from "~/refdata";
 import TypeLink from "~/components/helpers/TypeLink.vue";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
-
-const {locale} = useI18n();
 
 const props = defineProps<{
 	skillTypeId: number,
 	level: number,
 	indent: number
 }>();
+
 const inventoryType = await refdataApi.getType({typeId: props.skillTypeId});
 const skill = await refdataApi.getSkill({skillTypeId: props.skillTypeId});
+const requiredSkills = skill.requiredSkills;
 </script>
 
 <template>
-	<div :class="'skill-' + indent">
+	<div :class="`skill-${indent}`">
 		<template v-if="!inventoryType">
 			Unknown skill [{{skillTypeId}}]
 		</template>
@@ -35,13 +32,13 @@ const skill = await refdataApi.getSkill({skillTypeId: props.skillTypeId});
 		</span>
 	</div>
 
-	<template v-if="skill.requiredSkills">
+	<template v-if="requiredSkills">
 		<RequiredSkillsRow
-			v-for="(level, skillTypeId) in skill.requiredSkills"
-			:key="skillTypeId"
-			:skill-type-id="parseInt(skillTypeId)"
+			v-for="(level, requiredSkillTypeId) in requiredSkills"
+			:key="requiredSkillTypeId"
+			:skill-type-id="parseInt(`${requiredSkillTypeId}`)"
 			:level=level
-			:indent="1 + 1 * indent"
+			:indent="indent + 1"
 		/>
 	</template>
 </template>
