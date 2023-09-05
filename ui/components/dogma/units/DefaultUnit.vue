@@ -42,7 +42,7 @@ const formatNumber = computed(() => noDecimalUnitIds.includes(props.unit?.unitId
 	<template v-if="formatNumber">
 		<FormattedNumber :number="value" :decimals="decimals" />
 	</template>
-	<span class="border-2 border-red-700" v-else>{{ value }}</span>
+	<template v-else>{{ value }}</template>
 	<template v-if="displayUnit">
 		{{spacer}}
 		<template v-if="unit.displayName == 'm2'">m<sup>2</sup></template>
