@@ -13,11 +13,8 @@ const props = defineProps<{
 }>();
 
 const station = await universeApi.getUniverseStationsStationId({ stationId: props.stationId });
-console.log(station);
 const system = await universeApi.getUniverseSystemsSystemId({systemId: station.systemId});
-console.log(system);
 const constellation = await universeApi.getUniverseConstellationsConstellationId({constellationId: system.constellationId});
-console.log(constellation);
 
 async function getOrders(orderType: GetMarketsRegionIdOrdersOrderTypeEnum) {
 	return marketApi.getMarketsRegionIdOrders({
@@ -40,22 +37,18 @@ const buyPrice = buyOrders.filter(e => e.locationId == station.stationId)
 	.map(e => e.price)
 	.sort((a, b) => -(a - b))
 	[0];
-
-console.log(sellPrice);
-console.log(buyPrice);
-
 </script>
 
 <template>
-  <tr>
-    <td>{{ system.name }}</td>
-    <td>
-      <UnitValue v-if="sellPrice" unit-id="133" :value="sellPrice" />
-      <template v-else>None</template>
-    </td>
-    <td>
-      <UnitValue v-if="sellPrice" unit-id="133" :value="buyPrice" />
-      <template v-else>None</template>
-    </td>
-  </tr>
+	<tr>
+		<td>{{ system.name }}</td>
+		<td>
+			<UnitValue v-if="sellPrice" unit-id="133" :value="sellPrice" />
+			<template v-else>None</template>
+		</td>
+		<td>
+			<UnitValue v-if="sellPrice" unit-id="133" :value="buyPrice" />
+			<template v-else>None</template>
+		</td>
+	</tr>
 </template>
