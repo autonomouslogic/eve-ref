@@ -10,8 +10,6 @@ const props = defineProps<{
 	unitId: number
 }>();
 
-const {locale} = useI18n();
-
 const unit = await refdataApi.getUnit({unitId: props.unitId});
 </script>
 

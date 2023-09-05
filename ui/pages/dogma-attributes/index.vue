@@ -2,8 +2,6 @@
 import refdataApi from "~/refdata";
 import DogmaAttributeLink from "~/components/helpers/DogmaAttributeLink.vue";
 
-const {locale} = useI18n();
-
 const attributeIds: number[] = await refdataApi.getAllDogmaAttributes();
 </script>
 
@@ -12,7 +10,7 @@ const attributeIds: number[] = await refdataApi.getAllDogmaAttributes();
 		<h1>Dogma attributes</h1>
 		<ul>
 			<li v-for="attributeId in attributeIds" :key="attributeId">
-				<DogmaAttributeLink :attribute-id="attributeId"></DogmaAttributeLink>
+				<DogmaAttributeLink :attribute="attributeId"></DogmaAttributeLink>
 			</li>
 		</ul>
 	</div>

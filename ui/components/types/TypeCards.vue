@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import refdataApi from "~/refdata";
-import {InventoryType} from "~/refdata-openapi";
+import {DogmaTypeAttribute, InventoryType} from "~/refdata-openapi";
 import TraitsCard from "~/components/cards/TraitsCard.vue";
 import typeCardsConfig from "~/conf/typeCardsConfig";
 import DefensesCard from "~/components/cards/DefensesCard.vue";
@@ -13,20 +13,22 @@ const props = defineProps<{
 }>();
 
 // Load all dogma attribute names for this type.
-const dogmaAttributes = {};
+const dogmaAttributes: { [key: string]: DogmaTypeAttribute } = {};
 if (props.inventoryType.dogmaAttributes) {
-	var promises = [];
+	const promises = [];
 	for (const attrId in props.inventoryType.dogmaAttributes) {
 		promises.push((async () => {
-			var attr = await refdataApi.getDogmaAttribute({attributeId: parseInt(attrId)});
-			dogmaAttributes[attr.name] = attr;
+			const attr = await refdataApi.getDogmaAttribute({attributeId: parseInt(attrId)});
+			if (attr && attr.name) {
+				dogmaAttributes[attr.name] = attr;
+			}
 		})());
 	}
 	await Promise.all(promises);
 }
 
 // For each card, extract the attributes needed for each card.
-const cardAttributes = {};
+const cardAttributes: {[key: string]: DogmaTypeAttribute[] } = {};
 for (const cardName in typeCardsConfig) {
 	const cardConfig = typeCardsConfig[cardName];
 	cardAttributes[cardName] = [];
@@ -48,10 +50,10 @@ if (Object.keys(dogmaAttributes).length > 0) {
 </script>
 
 <template>
-	<TraitsCard :inventory-type="inventoryType" />
+	<TraitsCard :inventory-type="inventoryType"/>
 	<DefensesCard :title="typeCardsConfig.defenses.name[locale]"
 		:inventory-type="inventoryType"
-		:dogma-attributes="cardAttributes.defenses" />
+		:dogma-attributes="cardAttributes.defenses"/>
 	<CardsContainer>
 		<template v-for="(attributes, cardId) in cardAttributes" :key="cardId">
 			<TypeCardSelector

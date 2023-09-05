@@ -8,12 +8,16 @@ const props = defineProps<{
 
 const {locale} = useI18n();
 
+if (props.categoryId === undefined) {
+	throw new Error("categoryId is required");
+}
+
 const category: InventoryCategory = await refdataApi.getCategory({categoryId: props.categoryId});
 </script>
 
 <template>
 	<NuxtLink
-		v-if="category"
+		v-if="category && category.name"
 		:to="`/categories/${props.categoryId}`">
 		{{ category.name[locale] }}
 	</NuxtLink>

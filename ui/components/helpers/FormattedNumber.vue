@@ -1,8 +1,7 @@
 <script setup lang="ts">
-
 const props = defineProps<{
 	number: number | undefined,
-	decimals: number | undefined
+	decimals?: number | undefined
 }>();
 
 const realDecimals = computed(() => props.decimals ?? 0);
