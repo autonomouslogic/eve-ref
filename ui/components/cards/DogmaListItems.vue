@@ -11,12 +11,12 @@ function value(attributeId: number | undefined): number {
 		throw new Error(`No dogma attributes for inventory type ${props.inventoryType.typeId}`);
 	}
 
-  const attributeValue: number | undefined = props.inventoryType.dogmaAttributes[attributeId].value;
-  if (attributeValue === undefined) {
-    throw new Error(`No value for attribute ${attributeId} on inventory type ${props.inventoryType.typeId}`);
-  }
+	const attributeValue: number | undefined = props.inventoryType.dogmaAttributes[attributeId].value;
+	if (attributeValue === undefined) {
+		throw new Error(`No value for attribute ${attributeId} on inventory type ${props.inventoryType.typeId}`);
+	}
 
-  return attributeValue;
+	return attributeValue;
 }
 </script>
 

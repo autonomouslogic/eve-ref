@@ -24,23 +24,23 @@ const displayName = computed(() => props.unit.displayName);
 const unitId = computed(() => props.unit.unitId);
 
 const spacer = computed(() => {
-  if (displayName.value) {
-    return displayName.value.length > 0 ? " " : "";
-  }
-  return "";
+	if (displayName.value) {
+		return displayName.value.length > 0 ? " " : "";
+	}
+	return "";
 });
 
 const displayUnit = computed(() => {
-  if (unitId.value === undefined) {
-    return false;
-  }
-  return props.unit?.displayName && !ignoreSuffixUnitIds.includes(unitId.value);
+	if (unitId.value === undefined) {
+		return false;
+	}
+	return props.unit?.displayName && !ignoreSuffixUnitIds.includes(unitId.value);
 });
 
 const decimals = computed(() => {
-  if (unitId.value === undefined) {
-    return 0;
-  }
+	if (unitId.value === undefined) {
+		return 0;
+	}
 	if (noDecimalUnitIds.includes(unitId.value)) {
 		return 0;
 	}
@@ -50,10 +50,10 @@ const decimals = computed(() => {
 	return 0;
 });
 const formatNumber = computed(() => {
-  if (unitId.value === undefined) {
-    return 0;
-  }
-  return noDecimalUnitIds.includes(unitId.value) || twoDecimalUnitIds.includes(unitId.value);
+	if (unitId.value === undefined) {
+		return 0;
+	}
+	return noDecimalUnitIds.includes(unitId.value) || twoDecimalUnitIds.includes(unitId.value);
 });
 </script>
 
