@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import refdataApi from "~/refdata";
-import CategoryLink from "~/components/helpers/CategoryLink.vue";
 import DogmaAttributeLink from "~/components/helpers/DogmaAttributeLink.vue";
 
 const {locale} = useI18n();

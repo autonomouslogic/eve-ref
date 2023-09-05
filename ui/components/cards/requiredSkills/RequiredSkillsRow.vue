@@ -1,7 +1,4 @@
 <script setup lang="ts">
-import {DogmaAttribute, InventoryType, Skill} from "~/refdata-openapi";
-import CardWrapper from "~/components/cards/CardWrapper.vue";
-import DogmaListItems from "~/components/cards/DogmaListItems.vue";
 import refdataApi from "~/refdata";
 import TypeLink from "~/components/helpers/TypeLink.vue";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";

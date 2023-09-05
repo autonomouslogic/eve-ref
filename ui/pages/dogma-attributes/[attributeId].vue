@@ -1,7 +1,5 @@
 <script setup lang="ts">
 import refdataApi from "~/refdata";
-import GroupLink from "~/components/helpers/GroupLink.vue";
-import TypeLink from "~/components/helpers/TypeLink.vue";
 import CardWrapper from "~/components/cards/CardWrapper.vue";
 import AttributeTypeIcon from "~/components/icons/AttributeTypeIcon.vue";
 

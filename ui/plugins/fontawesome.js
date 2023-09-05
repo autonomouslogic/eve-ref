@@ -1,6 +1,6 @@
-import { library, config } from "@fortawesome/fontawesome-svg-core";
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import { faPatreon, faGithub, faDiscord } from "@fortawesome/free-brands-svg-icons";
+import {config, library} from "@fortawesome/fontawesome-svg-core";
+import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
+import {faDiscord, faGithub, faPatreon} from "@fortawesome/free-brands-svg-icons";
 import {faSquare as farSquare} from "@fortawesome/free-regular-svg-icons";
 import {faSquare as fasSquare} from "@fortawesome/free-solid-svg-icons";
 

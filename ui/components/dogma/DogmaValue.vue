@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import refdataApi from "~/refdata";
 import UnitValue from "~/components/dogma/UnitValue.vue";
 import {DogmaAttribute} from "~/refdata-openapi";
 

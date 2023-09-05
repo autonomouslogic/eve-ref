@@ -1,11 +1,7 @@
 <script setup lang="ts">
-import refdataApi from "~/refdata";
 import {DogmaAttribute, InventoryType} from "~/refdata-openapi";
-import TraitsCard from "~/components/cards/TraitsCard.vue";
-import typeCardsConfig from "~/conf/typeCardsConfig";
 import DefaultCard from "~/components/cards/DefaultCard.vue";
 import BasicCard from "~/components/cards/BasicCard.vue";
-import DefensesCard from "~/components/cards/DefensesCard.vue";
 import ReprocessingCard from "~/components/cards/ReprocessingCard.vue";
 import VariationsCard from "~/components/cards/VariationsCard.vue";
 import RequiredSkillsCard from "~/components/cards/requiredSkills/RequiredSkillsCard.vue";
