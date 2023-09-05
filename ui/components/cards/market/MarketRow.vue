@@ -5,6 +5,7 @@ import TypeLink from "~/components/helpers/TypeLink.vue";
 import FormattedNumber from "~/components/helpers/FormattedNumber.vue";
 import {marketApi, universeApi} from "~/esi";
 import {GetMarketsRegionIdOrdersDatasourceEnum, GetMarketsRegionIdOrdersOrderTypeEnum} from "~/esi-openapi";
+import UnitValue from "~/components/dogma/UnitValue.vue";
 
 const props = defineProps<{
 	typeId: number,
@@ -46,5 +47,15 @@ console.log(buyPrice);
 </script>
 
 <template>
-	<div>{{ system.name }} - {{ sellPrice }} - {{ buyPrice }}</div>
+  <tr>
+    <td>{{ system.name }}</td>
+    <td>
+      <UnitValue v-if="sellPrice" unit-id="133" :value="sellPrice" />
+      <template v-else>None</template>
+    </td>
+    <td>
+      <UnitValue v-if="sellPrice" unit-id="133" :value="buyPrice" />
+      <template v-else>None</template>
+    </td>
+  </tr>
 </template>

@@ -27,7 +27,16 @@ const stationIds = [
 <template>
 	<template v-if="inventoryType.marketGroupId">
 		<CardWrapper :title="title">
-			<MarketRow v-for="stationId in stationIds" v-key="stationId" :type-id="inventoryType.typeId" :station-id="stationId" />
+      <table>
+        <thead>
+          <th>System</th>
+          <th>Sell</th>
+          <th>Buy</th>
+        </thead>
+        <tbody>
+          <MarketRow v-for="stationId in stationIds" v-key="stationId" :type-id="inventoryType.typeId" :station-id="stationId" />
+        </tbody>
+      </table>
 		</CardWrapper>
 	</template>
 </template>
