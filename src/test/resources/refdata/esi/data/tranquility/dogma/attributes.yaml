@@ -240,3 +240,12 @@
   display_name: ""
   name: "oreBasicType"
   unit_id: 116
+"162":
+  attribute_id: 162
+  default_value: 0
+  description: "Radius of an object in meters"
+  display_name: ""
+  high_is_good: true
+  icon_id: 1390
+  name: "radius"
+  stackable: true

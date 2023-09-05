@@ -39,10 +39,12 @@ export default {
 					"techLevel",
 					"metaLevel",
 					"metaLevelOld",
+					"capacity",
 					"volume",
 					"mass",
 					"radius",
 					"nondestructible",
+					"cargoScanResistance",
 					"disallowInHighSec",
 					"disallowInEmpireSpace",
 					"isCapitalSize",
@@ -129,8 +131,7 @@ export default {
 		},
 	"skill":
 		{
-			"name": {"en": "skills"},
-			"component": "skills",
+			"name": {"en": "skill"},
 			"dogmaAttributes":
 				[
 					"primaryAttribute",
@@ -169,6 +170,7 @@ export default {
 					"medSlots",
 					"lowSlots",
 					"rigSlots",
+					"upgradeSlotsLeft",
 					"rigSize",
 					"upgradeCapacity",
 					"serviceSlots",

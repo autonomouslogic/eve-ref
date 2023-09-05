@@ -20,5 +20,5 @@ const attribute: DogmaAttribute = await refdataApi.getDogmaAttribute({attributeI
 		<DogmaAttributeLink :attribute-id="props.attributeId" />
 	</template>
 	<span v-else>Unknown attribute {{ attributeId }}</span>:
-	<DogmaValue :value="props.value" :attribute-id="props.attributeId" />
+	<DogmaValue :value="value" :attribute="attribute" />
 </template>

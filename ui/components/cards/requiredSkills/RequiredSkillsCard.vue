@@ -24,7 +24,7 @@ const props = defineProps<{
 					:key="skillTypeId"
 					:skill-type-id="parseInt(skillTypeId)"
 					:level=level
-					indent="0"
+					:indent="0"
 				/>
 			</div>
 		</CardWrapper>

@@ -7,7 +7,7 @@ const props = defineProps<{
 	title: string,
 	inventoryType: InventoryType,
 	dogmaAttributes: DogmaAttribute[],
-	component: string
+	component: string | undefined
 }>();
 </script>
 
