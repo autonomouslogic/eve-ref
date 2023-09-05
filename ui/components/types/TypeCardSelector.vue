@@ -9,6 +9,7 @@ import DefensesCard from "~/components/cards/DefensesCard.vue";
 import ReprocessingCard from "~/components/cards/ReprocessingCard.vue";
 import VariationsCard from "~/components/cards/VariationsCard.vue";
 import RequiredSkillsCard from "~/components/cards/requiredSkills/RequiredSkillsCard.vue";
+import MarketCard from "~/components/cards/market/MarketCard.vue";
 
 const props = defineProps<{
 	inventoryType: InventoryType,
@@ -33,6 +34,10 @@ const props = defineProps<{
 		:inventory-type="inventoryType"
 		:dogma-attributes="dogmaAttributes" />
 	<RequiredSkillsCard v-else-if="component == 'requiredSkills'"
+		:title="title"
+		:inventory-type="inventoryType"
+		:dogma-attributes="dogmaAttributes" />
+	<MarketCard v-else-if="component == 'market'"
 		:title="title"
 		:inventory-type="inventoryType"
 		:dogma-attributes="dogmaAttributes" />
