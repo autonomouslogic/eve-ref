@@ -12,9 +12,9 @@ const formattedBonuses: { [key: string]: { [key: string]: TraitBonus } } = {};
 
 if (props.bonuses) {
 	Object.keys(props.bonuses).forEach(typeId => {
-    if (!props.bonuses) {
-      throw new Error("props.bonuses is undefined");
-    }
+		if (!props.bonuses) {
+			throw new Error("props.bonuses is undefined");
+		}
 
 		const typeBonuses = props.bonuses[typeId];
 		const formattedTypeBonuses: { [key: string]: TraitBonus } = {};

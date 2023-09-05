@@ -9,9 +9,9 @@ const props = defineProps<{
 	attribute: DogmaAttribute | number,
 }>();
 
-const dogmaAttribute = typeof props.attribute === 'number' ?
-    await refdataApi.getDogmaAttribute({attributeId: props.attribute}) :
-    props.attribute;
+const dogmaAttribute = typeof props.attribute === "number" ?
+	await refdataApi.getDogmaAttribute({attributeId: props.attribute}) :
+	props.attribute;
 </script>
 
 <template>

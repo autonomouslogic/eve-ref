@@ -9,7 +9,7 @@ const props = defineProps<{
 const {locale} = useI18n();
 
 if (props.categoryId === undefined) {
-  throw new Error("categoryId is required");
+	throw new Error("categoryId is required");
 }
 
 const category: InventoryCategory = await refdataApi.getCategory({categoryId: props.categoryId});

@@ -7,11 +7,11 @@ const props = defineProps<{
 }>();
 
 function value(attributeId: number | undefined) {
-  if (!props.inventoryType.dogmaAttributes || !attributeId) {
-    return undefined;
-  }
+	if (!props.inventoryType.dogmaAttributes || !attributeId) {
+		return undefined;
+	}
 
-  return props.inventoryType.dogmaAttributes[attributeId].value
+	return props.inventoryType.dogmaAttributes[attributeId].value;
 }
 </script>
 

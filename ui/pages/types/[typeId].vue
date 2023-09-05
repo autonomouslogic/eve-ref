@@ -16,8 +16,8 @@ if (!typeId) {
 }
 
 const inventoryType: InventoryType = await refdataApi.getType({typeId});
-if (typeof inventoryType.groupId !== 'number') {
-  throw new Error(`Inventory type ${typeId} has no group ID`);
+if (typeof inventoryType.groupId !== "number") {
+	throw new Error(`Inventory type ${typeId} has no group ID`);
 }
 const inventoryGroup: InventoryGroup = await refdataApi.getGroup({groupId: inventoryType.groupId});
 

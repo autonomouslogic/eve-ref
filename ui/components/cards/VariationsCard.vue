@@ -14,21 +14,21 @@ const props = defineProps<{
 
 const metaGroups: {[key: string]: MetaGroup } = {};
 if (props.inventoryType.typeVariations) {
-  const promises = [];
+	const promises = [];
 	for (const metaGroupId of Object.keys(props.inventoryType.typeVariations)) {
 		promises.push((async () => {
-      metaGroups[metaGroupId] = await refdataApi.getMetaGroup({metaGroupId: parseInt(metaGroupId)});
+			metaGroups[metaGroupId] = await refdataApi.getMetaGroup({metaGroupId: parseInt(metaGroupId)});
 		})());
 	}
 	await Promise.all(promises);
 }
 
 function metaGroupName(metaGroupId: string | number) {
-  const group = metaGroups[metaGroupId];
-  const name = group.name;
-  if (name) {
-    return name[locale.value] || '';
-  }
+	const group = metaGroups[metaGroupId];
+	const name = group.name;
+	if (name) {
+		return name[locale.value] || "";
+	}
 }
 </script>
 

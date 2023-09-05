@@ -9,7 +9,7 @@ const props = defineProps<{
 const {locale} = useI18n();
 
 if (props.groupId === undefined) {
-  throw new Error("groupId is required");
+	throw new Error("groupId is required");
 }
 
 const group: InventoryGroup = await refdataApi.getGroup({groupId: props.groupId});

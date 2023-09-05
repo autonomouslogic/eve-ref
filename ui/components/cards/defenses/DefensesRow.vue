@@ -35,11 +35,11 @@ const explosiveResonanceAttr = getAttributeByName(props.explosiveResonanceAttrNa
 const explosiveResonance = getTypeAttributeByName(props.explosiveResonanceAttrName, props.inventoryType, props.dogmaAttributes);
 
 function attributeValueCalc(dogmaTypeAttribute: DogmaTypeAttribute | undefined, round: boolean = false): number | undefined {
-  if (!dogmaTypeAttribute || !dogmaTypeAttribute.value) {
-    return undefined;
-  }
-  const value = (1 - dogmaTypeAttribute.value) * 100;
-  return round ? Math.round(value) : value;
+	if (!dogmaTypeAttribute || !dogmaTypeAttribute.value) {
+		return undefined;
+	}
+	const value = (1 - dogmaTypeAttribute.value) * 100;
+	return round ? Math.round(value) : value;
 }
 </script>
 

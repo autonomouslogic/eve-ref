@@ -8,18 +8,18 @@ const props = defineProps<{
 }>();
 
 const marketGroupIds: number[] = [];
-let currentGroupId = props.marketGroupId;
+let currentGroupId = ref(props.marketGroupId);
 
-if (currentGroupId === undefined) {
-  throw new Error("marketGroupId is required");
+if (currentGroupId.value === undefined) {
+	throw new Error("marketGroupId is required");
 }
 
-let marketGroup: MarketGroup = await refdataApi.getMarketGroup({marketGroupId: currentGroupId});
-marketGroupIds.unshift(currentGroupId);
+let marketGroup: MarketGroup = await refdataApi.getMarketGroup({marketGroupId: currentGroupId.value});
+marketGroupIds.unshift(currentGroupId.value);
 while (marketGroup && marketGroup.parentGroupId) {
-	currentGroupId = marketGroup.parentGroupId;
-	marketGroup = await refdataApi.getMarketGroup({marketGroupId: currentGroupId});
-	marketGroupIds.unshift(currentGroupId);
+	currentGroupId.value = marketGroup.parentGroupId;
+	marketGroup = await refdataApi.getMarketGroup({marketGroupId: currentGroupId.value});
+	marketGroupIds.unshift(currentGroupId.value);
 }
 </script>
 

@@ -17,7 +17,7 @@ const unit = attribute.unitId ? await refdataApi.getUnit({unitId: attribute.unit
 		<h1 v-if="attribute.displayName">
 			<AttributeTypeIcon :dogma-attribute="attribute" :size="50" />
 			{{ attribute.displayName[locale] }}
-    </h1>
+		</h1>
 		<p v-if="attribute.description">{{ attribute.description[locale] }}</p>
 		<CardsContainer>
 			<CardWrapper title="Dogma attribute">
@@ -37,10 +37,10 @@ const unit = attribute.unitId ? await refdataApi.getUnit({unitId: attribute.unit
 			<CardWrapper v-if="unit" title="Unit">
 				<ul>
 					<li>Unit ID: {{ unit.unitId }}</li>
-          <li v-if="unit.name">Name: {{ unit.name[locale] }}</li>
-          <li v-if="unit.description">Description: {{ unit.description[locale] }}</li>
-          <li>Display name: {{ unit.displayName }}</li>
-        </ul>
+					<li v-if="unit.name">Name: {{ unit.name[locale] }}</li>
+					<li v-if="unit.description">Description: {{ unit.description[locale] }}</li>
+					<li>Display name: {{ unit.displayName }}</li>
+				</ul>
 			</CardWrapper>
 		</CardsContainer>
 	</div>

@@ -9,7 +9,7 @@ const props = defineProps<{
 const {locale} = useI18n();
 
 if (props.marketGroupId === undefined) {
-  throw new Error("marketGroupId is required");
+	throw new Error("marketGroupId is required");
 }
 
 const marketGroup: MarketGroup = await refdataApi.getMarketGroup({marketGroupId: props.marketGroupId});

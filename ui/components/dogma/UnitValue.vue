@@ -11,7 +11,7 @@ const {locale} = useI18n();
 
 const unit: Unit = await refdataApi.getUnit({unitId: props.unitId});
 
-const displayName = unit.displayName ? unit.displayName : '';
+const displayName = unit.displayName ? unit.displayName : "";
 
 const spacer = displayName.length > 1 ? " " : "";
 </script>

@@ -8,7 +8,7 @@ const props = defineProps<{
 }>();
 
 if (props.attributeId === undefined) {
-  throw new Error("attributeId is required");
+	throw new Error("attributeId is required");
 }
 
 const attribute = await refdataApi.getDogmaAttribute({attributeId: props.attributeId});
