@@ -24,7 +24,7 @@ public class MarketEsi {
 
 	public Flowable<Integer> getActiveMarketOrderTypes(int regionId) {
 		return Flowable.defer(() -> {
-					var source = MarketApi.Datasource_getMarketsRegionIdTypes.valueOf(datasource);
+					var source = MarketApi.DatasourceGetMarketsRegionIdTypes.valueOf(datasource);
 					return esiHelper.fetchPages(
 							page -> marketApi.getMarketsRegionIdTypesWithHttpInfo(regionId, source, null, page));
 				})

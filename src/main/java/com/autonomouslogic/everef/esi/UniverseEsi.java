@@ -47,7 +47,7 @@ public class UniverseEsi {
 			}
 			return Flowable.defer(() -> {
 						log.trace("Fetching region ids");
-						var d = UniverseApi.Datasource_getUniverseRegions.valueOf(datasource);
+						var d = UniverseApi.DatasourceGetUniverseRegions.valueOf(datasource);
 						var regions = universeApi.getUniverseRegions(d, null);
 						regionIds = regions;
 						return Flowable.fromIterable(regions);
@@ -58,7 +58,7 @@ public class UniverseEsi {
 
 	public Maybe<GetUniverseRegionsRegionIdOk> getRegion(int regionId) {
 		return getFromCacheOrFetch("region", GetUniverseRegionsRegionIdOk.class, regions, regionId, () -> {
-			var source = UniverseApi.Datasource_getUniverseRegionsRegionId.valueOf(datasource);
+			var source = UniverseApi.DatasourceGetUniverseRegionsRegionId.valueOf(datasource);
 			return universeApi.getUniverseRegionsRegionId(regionId, null, source, null, null);
 		});
 	}
@@ -74,7 +74,7 @@ public class UniverseEsi {
 				constellations,
 				constellationId,
 				() -> {
-					var source = UniverseApi.Datasource_getUniverseConstellationsConstellationId.valueOf(datasource);
+					var source = UniverseApi.DatasourceGetUniverseConstellationsConstellationId.valueOf(datasource);
 					return universeApi.getUniverseConstellationsConstellationId(
 							constellationId, null, source, null, null);
 				});
@@ -82,7 +82,7 @@ public class UniverseEsi {
 
 	public Maybe<GetUniverseSystemsSystemIdOk> getSystem(int systemId) {
 		return getFromCacheOrFetch("system", GetUniverseSystemsSystemIdOk.class, systems, systemId, () -> {
-			var source = UniverseApi.Datasource_getUniverseSystemsSystemId.valueOf(datasource);
+			var source = UniverseApi.DatasourceGetUniverseSystemsSystemId.valueOf(datasource);
 			return universeApi.getUniverseSystemsSystemId(systemId, null, source, null, null);
 		});
 	}
@@ -95,14 +95,14 @@ public class UniverseEsi {
 		}
 		var intId = (int) stationId;
 		return getFromCacheOrFetch("station", GetUniverseStationsStationIdOk.class, stations, intId, () -> {
-			var source = UniverseApi.Datasource_getUniverseStationsStationId.valueOf(datasource);
+			var source = UniverseApi.DatasourceGetUniverseStationsStationId.valueOf(datasource);
 			return universeApi.getUniverseStationsStationId(intId, source, null);
 		});
 	}
 
 	public Maybe<GetUniverseTypesTypeIdOk> getType(int typeId) {
 		return getFromCacheOrFetch("type", GetUniverseTypesTypeIdOk.class, types, typeId, () -> {
-			var source = UniverseApi.Datasource_getUniverseTypesTypeId.valueOf(datasource);
+			var source = UniverseApi.DatasourceGetUniverseTypesTypeId.valueOf(datasource);
 			return universeApi.getUniverseTypesTypeId(typeId, null, source, null, null);
 		});
 	}
