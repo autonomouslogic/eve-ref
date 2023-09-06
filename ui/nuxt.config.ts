@@ -1,6 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-    //ssr: false,
+    ssr: false,
     modules: [
         '@nuxtjs/i18n',
         '@nuxtjs/tailwindcss',
@@ -37,5 +37,8 @@ export default defineNuxtConfig({
     },
     css: [
         '@fortawesome/fontawesome-svg-core/styles.css'
-    ]
+    ],
+    typescript: {
+        typeCheck: true,
+    }
 })

@@ -1,9 +1,6 @@
 <script setup lang="ts">
-import {DogmaAttribute, InventoryType, Skill} from "~/refdata-openapi";
+import {DogmaAttribute, InventoryType} from "~/refdata-openapi";
 import CardWrapper from "~/components/cards/CardWrapper.vue";
-import DogmaListItems from "~/components/cards/DogmaListItems.vue";
-import refdataApi from "~/refdata";
-import TypeLink from "~/components/helpers/TypeLink.vue";
 import RequiredSkillsRow from "~/components/cards/requiredSkills/RequiredSkillsRow.vue";
 
 const {locale} = useI18n();
@@ -20,11 +17,11 @@ const props = defineProps<{
 		<CardWrapper :title="title">
 			<div class="grid grid-cols-3">
 				<RequiredSkillsRow
-					v-for="(level, skillTypeId) in inventoryType.requiredSkills"
-					:key="skillTypeId"
-					:skill-type-id="parseInt(skillTypeId)"
+					v-for="(level, requiredSkillTypeId) in inventoryType.requiredSkills"
+					:key="requiredSkillTypeId"
+					:skill-type-id="parseInt(`${requiredSkillTypeId}`)"
 					:level=level
-					indent="0"
+					:indent="0"
 				/>
 			</div>
 		</CardWrapper>

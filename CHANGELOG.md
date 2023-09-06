@@ -1,5 +1,36 @@
 EVE Ref Changelog
 
+## [2.26.0](https://github.com/autonomouslogic/eve-ref/compare/2.25.2...2.26.0) (2023-09-06)
+
+
+### Features
+
+* Unit tweaks ([#255](https://github.com/autonomouslogic/eve-ref/issues/255)) ([c1cd594](https://github.com/autonomouslogic/eve-ref/commit/c1cd59491fc39015c5eae7f929eb0e83e1ce4ed3))
+
+
+### Bug Fixes
+
+* Typescript error fixing ([#262](https://github.com/autonomouslogic/eve-ref/issues/262)) ([6474fcd](https://github.com/autonomouslogic/eve-ref/commit/6474fcdb01ccb26cf0aee05e6447ecc4a8c1afb4))
+
+
+### Dependency Updates
+
+* **deps:** update actions/checkout action to v4 ([#261](https://github.com/autonomouslogic/eve-ref/issues/261)) ([bc5eeb2](https://github.com/autonomouslogic/eve-ref/commit/bc5eeb2274f6ad3310cab78d11905f9fc710552c))
+
+## [2.25.2](https://github.com/autonomouslogic/eve-ref/compare/2.25.1...2.25.2) (2023-09-04)
+
+
+### Bug Fixes
+
+* **deps:** update font awesome to v6.4.2 ([#260](https://github.com/autonomouslogic/eve-ref/issues/260)) ([75c78b6](https://github.com/autonomouslogic/eve-ref/commit/75c78b65c051a30282acabd4cd656eca282d6bce))
+
+## [2.25.1](https://github.com/autonomouslogic/eve-ref/compare/2.25.0...2.25.1) (2023-09-02)
+
+
+### Bug Fixes
+
+* More retries on fetch contracts ([#259](https://github.com/autonomouslogic/eve-ref/issues/259)) ([6c76374](https://github.com/autonomouslogic/eve-ref/commit/6c763740570fbad0085049d5efa0f525d200085e))
+
 ## [2.25.0](https://github.com/autonomouslogic/eve-ref/compare/2.24.0...2.25.0) (2023-08-23)
 
 

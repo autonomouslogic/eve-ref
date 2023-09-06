@@ -179,6 +179,7 @@ dogmaAttributes:
       - 1047
       - 2699
       - 2711
+      - 162
 
 dogmaEffects:
   idField: effect_id
