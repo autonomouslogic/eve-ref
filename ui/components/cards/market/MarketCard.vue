@@ -17,7 +17,13 @@ const stationIds = [
 	60005686, // Hek VIII - Moon 12 - Boundless Creation Factory
 	60001804, // Maila VI - Moon 1 - Zainou Biotech Production
 ];
-
+const typeId = computed(() => {
+	const t = props.inventoryType.typeId;
+	if (!t) {
+		throw new Error("typeId is required");
+	}
+	return t;
+});
 </script>
 
 <template>
@@ -25,12 +31,12 @@ const stationIds = [
 		<CardWrapper :title="title">
 			<table>
 				<thead>
-					<th>System</th>
+					<th>Hub</th>
 					<th>Sell</th>
 					<th>Buy</th>
 				</thead>
 				<tbody>
-					<MarketRow v-for="stationId in stationIds" :key="stationId" :type-id="inventoryType.typeId" :station-id="stationId" />
+					<MarketRow v-for="stationId in stationIds" :key="stationId" :type-id="typeId" :station-id="stationId" />
 				</tbody>
 			</table>
 		</CardWrapper>
