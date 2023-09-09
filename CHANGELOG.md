@@ -1,5 +1,12 @@
 EVE Ref Changelog
 
+## [2.26.1](https://github.com/autonomouslogic/eve-ref/compare/2.26.0...2.26.1) (2023-09-07)
+
+
+### Dependency Updates
+
+* **deps:** update plugin org.openapi.generator to v7 ([#258](https://github.com/autonomouslogic/eve-ref/issues/258)) ([9cca273](https://github.com/autonomouslogic/eve-ref/commit/9cca27383081a196535020071840206a78bee969))
+
 ## [2.26.0](https://github.com/autonomouslogic/eve-ref/compare/2.25.2...2.26.0) (2023-09-06)
 
 
