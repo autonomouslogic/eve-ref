@@ -16,13 +16,13 @@ public class HashUtil {
 	}
 
 	@SneakyThrows
-	public static byte[] sha1(File file) {
-		return Hashing.sha1()
+	public static byte[] sha256(File file) {
+		return Hashing.sha256()
 				.hashBytes(IOUtils.toByteArray(new FileInputStream(file)))
 				.asBytes();
 	}
 
-	public static String sha1Hex(File file) {
-		return Hex.encodeHexString(sha1(file));
+	public static String sha256Hex(File file) {
+		return Hex.encodeHexString(sha256(file));
 	}
 }

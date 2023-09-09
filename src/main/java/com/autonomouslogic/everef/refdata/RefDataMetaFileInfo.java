@@ -15,5 +15,5 @@ import lombok.extern.jackson.Jacksonized;
 @Schema
 public class RefDataMetaFileInfo {
 	@JsonProperty
-	String sha1;
+	String sha256;
 }

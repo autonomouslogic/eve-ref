@@ -200,13 +200,13 @@ public class BuildRefData implements Command {
 		currentRefDataMeta = RefDataMeta.builder()
 				.buildTime(buildTime.toInstant())
 				.sde(RefDataMetaFileInfo.builder()
-						.sha1(HashUtil.sha1Hex(sdeFile))
+						.sha256(HashUtil.sha256Hex(sdeFile))
 						.build())
 				.esi(RefDataMetaFileInfo.builder()
-						.sha1(HashUtil.sha1Hex(esiFile))
+						.sha256(HashUtil.sha256Hex(esiFile))
 						.build())
 				.hoboleaks(RefDataMetaFileInfo.builder()
-						.sha1(HashUtil.sha1Hex(hoboleaksFile))
+						.sha256(HashUtil.sha256Hex(hoboleaksFile))
 						.build())
 				.build();
 	}

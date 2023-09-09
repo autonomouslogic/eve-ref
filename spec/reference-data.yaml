@@ -1080,7 +1080,7 @@ components:
     RefDataMetaFileInfo:
       type: object
       properties:
-        sha1:
+        sha256:
           type: string
     Skill:
       type: object
