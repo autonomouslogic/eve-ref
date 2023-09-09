@@ -1,5 +1,13 @@
 EVE Ref Changelog
 
+## [2.26.2](https://github.com/autonomouslogic/eve-ref/compare/2.26.1...2.26.2) (2023-09-09)
+
+
+### Bug Fixes
+
+* Fixed Font Awesome imports. ([3ae98e4](https://github.com/autonomouslogic/eve-ref/commit/3ae98e41ac78659b9116fae9292a31c33ad2c5d6))
+* Minor rendering fixes. ([77083b2](https://github.com/autonomouslogic/eve-ref/commit/77083b25d2e3957feaad2865de7439b62dfb6d02))
+
 ## [2.26.1](https://github.com/autonomouslogic/eve-ref/compare/2.26.0...2.26.1) (2023-09-07)
 
 
