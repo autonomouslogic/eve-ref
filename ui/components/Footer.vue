@@ -9,10 +9,10 @@ const selectedLocale = ref(locale);
 <template>
 	<div class="border-t-2 border-neutral-400">
 		<div class="flex py-4 justify-around">
-			<a href="https://everef.net/" class="flex items-center">
+			<NuxtLink href="/" class="flex items-center">
 				<img src="~/assets/logo.png" class="h-20 mr-3 rounded-full" alt="EVE Ref Logo" />
 				<span class="self-center text-2xl font-semibold whitespace-nowrap text-black">EVE Ref</span>
-			</a>
+			</NuxtLink>
 			<div class="grid grid-cols-3 gap-x-8">
 				<div>
 					<h2 class="uppercase text-lg">EVE Ref</h2>
