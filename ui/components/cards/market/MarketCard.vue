@@ -31,9 +31,11 @@ const typeId = computed(() => {
 		<CardWrapper :title="title">
 			<table>
 				<thead>
-					<th>Hub</th>
-					<th>Sell</th>
-					<th>Buy</th>
+					<tr>
+						<th>Hub</th>
+						<th>Sell</th>
+						<th>Buy</th>
+					</tr>
 				</thead>
 				<tbody>
 					<MarketRow v-for="stationId in stationIds" :key="stationId" :type-id="typeId" :station-id="stationId" />
