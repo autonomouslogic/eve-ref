@@ -22,4 +22,7 @@ public class Icon {
 
 	@JsonProperty
 	String iconFile;
+
+	@JsonProperty
+	boolean obsolete;
 }

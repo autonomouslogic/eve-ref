@@ -656,6 +656,8 @@ components:
           type: string
         icon_file:
           type: string
+        obsolete:
+          type: boolean
     InventoryCategory:
       type: object
       properties:
