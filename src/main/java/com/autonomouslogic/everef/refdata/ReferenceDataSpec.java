@@ -32,6 +32,16 @@ import javax.ws.rs.PathParam;
 @Tag(name = "refdata")
 public interface ReferenceDataSpec {
 	@GET
+	@Path("/meta")
+	@Operation(description = "Get metadata about the API.")
+	@ApiResponse(
+			responseCode = "200",
+			description = "The metadata.",
+			useReturnTypeSchema = true,
+			content = @Content(mediaType = "application/json"))
+	RefDataMeta getMeta();
+
+	@GET
 	@Path("/categories")
 	@Operation(description = "Get all category IDs.")
 	@ApiResponse(

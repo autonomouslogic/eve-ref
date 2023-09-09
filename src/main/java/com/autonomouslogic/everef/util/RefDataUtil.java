@@ -67,7 +67,7 @@ public class RefDataUtil {
 			var file = tempFiles.tempFile("refdata", ".tar.xz").toFile();
 			return okHttpHelper.download(url, file, okHttpClient).flatMap(response -> {
 				if (response.code() != 200) {
-					return Single.error(new RuntimeException("Failed downloading ESI"));
+					return Single.error(new RuntimeException("Failed downloading reference data"));
 				}
 				return Single.just(file);
 			});

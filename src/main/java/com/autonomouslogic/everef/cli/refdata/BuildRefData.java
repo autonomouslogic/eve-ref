@@ -18,11 +18,14 @@ import com.autonomouslogic.everef.cli.refdata.sde.SdeLoader;
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.model.refdata.RefDataConfig;
 import com.autonomouslogic.everef.mvstore.MVStoreUtil;
+import com.autonomouslogic.everef.refdata.RefDataMeta;
+import com.autonomouslogic.everef.refdata.RefDataMetaFileInfo;
 import com.autonomouslogic.everef.s3.S3Adapter;
 import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.url.UrlParser;
 import com.autonomouslogic.everef.util.CompressUtil;
 import com.autonomouslogic.everef.util.DataUtil;
+import com.autonomouslogic.everef.util.HashUtil;
 import com.autonomouslogic.everef.util.OkHttpHelper;
 import com.autonomouslogic.everef.util.RefDataUtil;
 import com.autonomouslogic.everef.util.Rx;
@@ -137,6 +140,11 @@ public class BuildRefData implements Command {
 	private ZonedDateTime buildTime = ZonedDateTime.now(ZoneOffset.UTC).truncatedTo(ChronoUnit.SECONDS);
 
 	@Setter
+	private File latestRefDataFile;
+
+	private RefDataMeta latestRefDataMeta;
+
+	@Setter
 	private File sdeFile;
 
 	@Setter
@@ -144,6 +152,8 @@ public class BuildRefData implements Command {
 
 	@Setter
 	private File hoboleaksFile;
+
+	private RefDataMeta currentRefDataMeta;
 
 	@Setter
 	private boolean stopAtUpload = false;
@@ -167,12 +177,50 @@ public class BuildRefData implements Command {
 
 	@Override
 	public Completable run() {
+		return Completable.concatArray(initMvStore(), latestFiles().andThen(Completable.defer(() -> {
+			if (processingNeeded()) {
+				return processData();
+			}
+			log.info("No need to build new reference data, skipping.");
+			return Completable.complete();
+		})));
+	}
+
+	private Completable latestFiles() {
+		return Completable.mergeArray(
+						latestRefDataMeta().ignoreElement(),
+						latestSde().ignoreElement(),
+						latestEsi().ignoreElement(),
+						latestHoboleaks().ignoreElement())
+				.andThen(Completable.fromAction(this::generateRefDataMeta));
+	}
+
+	@SneakyThrows
+	private void generateRefDataMeta() {
+		currentRefDataMeta = RefDataMeta.builder()
+				.buildTime(buildTime.toInstant())
+				.sde(RefDataMetaFileInfo.builder()
+						.sha1(HashUtil.sha1Hex(sdeFile))
+						.build())
+				.esi(RefDataMetaFileInfo.builder()
+						.sha1(HashUtil.sha1Hex(esiFile))
+						.build())
+				.hoboleaks(RefDataMetaFileInfo.builder()
+						.sha1(HashUtil.sha1Hex(hoboleaksFile))
+						.build())
+				.build();
+	}
+
+	private boolean processingNeeded() {
+		return !currentRefDataMeta.getSde().equals(latestRefDataMeta.getSde())
+				|| !currentRefDataMeta.getEsi().equals(latestRefDataMeta.getEsi())
+				|| !currentRefDataMeta.getHoboleaks().equals(latestRefDataMeta.getHoboleaks());
+	}
+
+	private Completable processData() {
 		return Completable.concatArray(
-				initMvStore(),
 				Completable.mergeArray(
-						latestSde().flatMapCompletable(sdeLoader::load),
-						latestEsi().flatMapCompletable(esiLoader::load),
-						latestHoboleaks().flatMapCompletable(hoboleaksLoader::load)),
+						sdeLoader.load(sdeFile), esiLoader.load(esiFile), hoboleaksLoader.load(hoboleaksFile)),
 				mergeDatasets(),
 				postDatasets(),
 				Completable.defer(() -> {
@@ -258,8 +306,7 @@ public class BuildRefData implements Command {
 
 	@SneakyThrows
 	private void writeMeta(TarArchiveOutputStream tar) {
-		var meta =
-				objectMapper.writeValueAsBytes(objectMapper.createObjectNode().put("build_time", buildTime.toString()));
+		var meta = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsBytes(currentRefDataMeta);
 		var archiveEntry = new TarArchiveEntry("meta.json");
 		archiveEntry.setSize(meta.length);
 		tar.putArchiveEntry(archiveEntry);
@@ -277,7 +324,7 @@ public class BuildRefData implements Command {
 			generator.writeStartObject();
 			for (var entry : store.entrySet()) {
 				generator.writeFieldName(entry.getKey().toString());
-				objectMapper.writeValue(generator, entry.getValue());
+				printer.writeValue(generator, entry.getValue());
 			}
 			generator.writeEndObject();
 		}
@@ -310,14 +357,42 @@ public class BuildRefData implements Command {
 	}
 
 	private Single<File> latestEsi() {
-		return esiFile != null ? Single.just(esiFile) : dataUtil.downloadLatestEsi();
+		return esiFile != null
+				? Single.just(esiFile)
+				: dataUtil.downloadLatestEsi().doOnSuccess(file -> {
+					esiFile = file;
+				});
 	}
 
 	private Single<File> latestSde() {
-		return sdeFile != null ? Single.just(sdeFile) : dataUtil.downloadLatestSde();
+		return sdeFile != null
+				? Single.just(sdeFile)
+				: dataUtil.downloadLatestSde().doOnSuccess(file -> {
+					sdeFile = file;
+				});
 	}
 
 	private Single<File> latestHoboleaks() {
-		return hoboleaksFile != null ? Single.just(hoboleaksFile) : dataUtil.downloadLatestHoboleaks();
+		return hoboleaksFile != null
+				? Single.just(hoboleaksFile)
+				: dataUtil.downloadLatestHoboleaks().doOnSuccess(file -> {
+					hoboleaksFile = file;
+				});
+	}
+
+	private Single<File> latestRefData() {
+		return latestRefDataFile != null
+				? Single.just(latestRefDataFile)
+				: refDataUtil.downloadLatestReferenceData().doOnSuccess(file -> {
+					latestRefDataFile = file;
+				});
+	}
+
+	private Single<RefDataMeta> latestRefDataMeta() {
+		return latestRefData().flatMap(file -> CompressUtil.loadArchive(file)
+				.filter(e -> e.getKey().getName().equals("meta.json"))
+				.map(e -> objectMapper.readValue(e.getValue(), RefDataMeta.class))
+				.first(RefDataMeta.builder().build())
+				.doOnSuccess(meta -> latestRefDataMeta = meta));
 	}
 }

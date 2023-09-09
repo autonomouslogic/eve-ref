@@ -1,6 +1,7 @@
 package com.autonomouslogic.everef.util;
 
 import com.autonomouslogic.commons.ResourceUtil;
+import com.autonomouslogic.everef.refdata.RefDataMeta;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.FileInputStream;
@@ -84,15 +85,17 @@ public class MockScrapeBuilder {
 		return createTarXzFile(Map.ofEntries(entries.toArray(new Map.Entry[0])));
 	}
 
-	@SneakyThrows
 	@SuppressWarnings("unchecked")
 	public File createTestRefdata() {
+		return createTestRefdata(RefDataMeta.builder()
+				.buildTime(Instant.parse("2000-01-02T03:04:05Z"))
+				.build());
+	}
+
+	@SneakyThrows
+	public File createTestRefdata(RefDataMeta meta) {
 		var entries = new ArrayList<Map.Entry<String, byte[]>>();
-		entries.add(Map.entry(
-				"meta.json",
-				objectMapper.writeValueAsBytes(objectMapper
-						.createObjectNode()
-						.put("build_time", Instant.parse("2000-01-02T03:04:05Z").toString()))));
+		entries.add(Map.entry("meta.json", objectMapper.writeValueAsBytes(meta)));
 		for (var config : refDataUtil.loadReferenceDataConfig()) {
 			var testConfig = config.getTest();
 			var json = objectMapper.createObjectNode();
