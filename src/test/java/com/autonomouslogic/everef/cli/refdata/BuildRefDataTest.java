@@ -2,6 +2,7 @@ package com.autonomouslogic.everef.cli.refdata;
 
 import static com.autonomouslogic.everef.test.TestDataUtil.TEST_PORT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
@@ -11,14 +12,18 @@ import com.autonomouslogic.commons.ResourceUtil;
 import com.autonomouslogic.everef.http.DataCrawler;
 import com.autonomouslogic.everef.http.MockDataCrawlerModule;
 import com.autonomouslogic.everef.model.refdata.RefDataConfig;
+import com.autonomouslogic.everef.refdata.RefDataMeta;
+import com.autonomouslogic.everef.refdata.RefDataMetaFileInfo;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.test.MockS3Adapter;
 import com.autonomouslogic.everef.test.TestDataUtil;
 import com.autonomouslogic.everef.url.UrlParser;
+import com.autonomouslogic.everef.util.HashUtil;
 import com.autonomouslogic.everef.util.MockScrapeBuilder;
 import com.autonomouslogic.everef.util.RefDataUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.reactivex.rxjava3.core.Flowable;
+import java.io.File;
 import java.io.FileInputStream;
 import java.time.ZonedDateTime;
 import java.util.LinkedHashSet;
@@ -76,6 +81,13 @@ public class BuildRefDataTest {
 
 	MockWebServer server;
 
+	ZonedDateTime buildTime = ZonedDateTime.parse("2022-01-05T04:05:06.89Z");
+	File sdeFile;
+	File esiFile;
+	File refDataFile;
+	File hoboleaksFile;
+	RefDataMeta refDataMeta;
+
 	@Inject
 	protected BuildRefData buildRefData;
 
@@ -93,6 +105,23 @@ public class BuildRefDataTest {
 				.thenReturn(Flowable.just(
 						urlParser.parse("http://localhost:" + TEST_PORT + "/ccp/sde/sde-20230315-TRANQUILITY.zip")));
 		when(dataCrawler.setPrefix(any())).thenReturn(dataCrawler);
+
+		sdeFile = mockScrapeBuilder.createTestSde();
+		esiFile = mockScrapeBuilder.createTestEsiDump();
+		refDataFile = mockScrapeBuilder.createTestRefdata();
+		hoboleaksFile = mockScrapeBuilder.createTestHoboleaksSde();
+		refDataMeta = RefDataMeta.builder()
+				.buildTime(buildTime.toInstant())
+				.sde(RefDataMetaFileInfo.builder()
+						.sha256(HashUtil.sha256Hex(sdeFile))
+						.build())
+				.esi(RefDataMetaFileInfo.builder()
+						.sha256(HashUtil.sha256Hex(esiFile))
+						.build())
+				.hoboleaks(RefDataMetaFileInfo.builder()
+						.sha256(HashUtil.sha256Hex(hoboleaksFile))
+						.build())
+				.build();
 
 		server = new MockWebServer();
 		server.setDispatcher(new TestDispatcher());
@@ -138,6 +167,15 @@ public class BuildRefDataTest {
 		}
 	}
 
+	@Test
+	void shouldNotBuildRefDataIfHashesMatch() {
+		refDataFile = mockScrapeBuilder.createTestRefdata(refDataMeta);
+		buildRefData.setBuildTime(buildTime).run().blockingAwait();
+		var archiveFile = "base/reference-data/history/2022/reference-data-2022-01-05.tar.xz";
+		var obj = mockS3Adapter.getTestObject(BUCKET_NAME, archiveFile, dataClient);
+		assertFalse(obj.isPresent());
+	}
+
 	@SneakyThrows
 	private void assertOutput(@NonNull RefDataConfig config, @NonNull byte[] jsonBytes) {
 		var json = objectMapper.readTree(jsonBytes);
@@ -158,9 +196,8 @@ public class BuildRefDataTest {
 
 	@SneakyThrows
 	private void assertMeta(@NonNull byte[] json) {
-		var expected = objectMapper.createObjectNode().put("build_time", "2022-01-05T04:05:06.890Z");
-		var supplied = objectMapper.readTree(json);
-		assertEquals(expected, supplied);
+		var supplied = objectMapper.readValue(json, RefDataMeta.class);
+		assertEquals(refDataMeta, supplied);
 	}
 
 	class TestDispatcher extends Dispatcher {
@@ -172,20 +209,21 @@ public class BuildRefDataTest {
 				log.info("Path: {}", path);
 				switch (path) {
 					case "/ccp/sde/sde-20230315-TRANQUILITY.zip":
-						var sde = mockScrapeBuilder.createTestSde();
 						return new MockResponse()
 								.setResponseCode(200)
-								.setBody(new Buffer().write(IOUtils.toByteArray(new FileInputStream(sde))));
+								.setBody(new Buffer().write(IOUtils.toByteArray(new FileInputStream(sdeFile))));
 					case "/esi-scrape/eve-ref-esi-scrape-latest.tar.xz":
-						var esi = mockScrapeBuilder.createTestEsiDump();
 						return new MockResponse()
 								.setResponseCode(200)
-								.setBody(new Buffer().write(IOUtils.toByteArray(new FileInputStream(esi))));
+								.setBody(new Buffer().write(IOUtils.toByteArray(new FileInputStream(esiFile))));
+					case "/reference-data/reference-data-latest.tar.xz":
+						return new MockResponse()
+								.setResponseCode(200)
+								.setBody(new Buffer().write(IOUtils.toByteArray(new FileInputStream(refDataFile))));
 					case "/hoboleaks-sde/hoboleaks-sde-latest.tar.xz":
-						var hobo = mockScrapeBuilder.createTestHoboleaksSde();
 						return new MockResponse()
 								.setResponseCode(200)
-								.setBody(new Buffer().write(IOUtils.toByteArray(new FileInputStream(hobo))));
+								.setBody(new Buffer().write(IOUtils.toByteArray(new FileInputStream(hoboleaksFile))));
 					case "/hoboleaks/dynamicitemattributes.json":
 						return new MockResponse()
 								.setResponseCode(200)

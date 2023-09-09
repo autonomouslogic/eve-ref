@@ -275,6 +275,19 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/MarketGroup'
+  /meta:
+    get:
+      tags:
+      - refdata
+      description: Get metadata about the API.
+      operationId: getMeta
+      responses:
+        "200":
+          description: The metadata.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RefDataMeta'
   /meta_groups:
     get:
       tags:
@@ -1052,6 +1065,23 @@ components:
           type: string
       description: The blueprints producing this type. The key is the blueprint type
         ID. This is added by EVE Ref.
+    RefDataMeta:
+      type: object
+      properties:
+        build_time:
+          type: string
+          format: date-time
+        esi:
+          $ref: '#/components/schemas/RefDataMetaFileInfo'
+        sde:
+          $ref: '#/components/schemas/RefDataMetaFileInfo'
+        hoboleaks:
+          $ref: '#/components/schemas/RefDataMetaFileInfo'
+    RefDataMetaFileInfo:
+      type: object
+      properties:
+        sha256:
+          type: string
     Skill:
       type: object
       properties:
