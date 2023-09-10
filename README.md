@@ -8,6 +8,8 @@ The new site is available at [dev.everef.net](https://dev.everef.net/).
 Contributions are welcome, [Discord](https://discord.gg/fZYPAxFyXG) is open, and any support on
 [Patreon](https://www.patreon.com/everef) is greatly appreciated.
 
+Further documentation is available at [docs.everef.net](https://docs.everef.net/).
+
 ## License
 EVE Ref itself and the code contained within this repo is licensed under the [MIT-0 license](https://spdx.org/licenses/MIT-0.html).
 
