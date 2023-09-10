@@ -181,7 +181,7 @@ public class BuildRefData implements Command {
 			if (processingNeeded()) {
 				return processData();
 			}
-			log.info("No need to build new reference data, skipping.");
+			log.info("No update needed");
 			return Completable.complete();
 		})));
 	}

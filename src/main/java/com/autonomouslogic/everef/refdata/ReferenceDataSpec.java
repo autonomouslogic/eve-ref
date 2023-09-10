@@ -24,13 +24,15 @@ import javax.ws.rs.PathParam;
 										name = "CCP",
 										url = "https://github.com/autonomouslogic/eve-ref/blob/main/LICENSE-CCP"),
 						version = "dev"),
-		servers = @Server(url = "https://ref-data.everef.net"),
+		servers = @Server(url = ReferenceDataSpec.BASE_URL),
 		externalDocs =
 				@ExternalDocumentation(
 						description = "Reference data",
 						url = "https://github.com/autonomouslogic/eve-ref/blob/main/docs/refdata.md"))
 @Tag(name = "refdata")
 public interface ReferenceDataSpec {
+	public static final String BASE_URL = "https://ref-data.everef.net";
+
 	@GET
 	@Path("/meta")
 	@Operation(description = "Get metadata about the API.")

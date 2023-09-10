@@ -61,6 +61,8 @@ dependencies {
 	implementation "io.swagger.core.v3:swagger-core:2.2.14"
 	implementation "io.swagger.core.v3:swagger-jaxrs2:2.2.14"
 	implementation "javax.ws.rs:javax.ws.rs-api:2.1.1"
+	implementation "javax.annotation:javax.annotation-api:1.3.2"
+	implementation "org.openapitools:jackson-databind-nullable:0.2.6"
 
 	testAnnotationProcessor "com.google.dagger:dagger-compiler:2.46.1"
 	testImplementation "com.google.dagger:dagger:2.46.1"
@@ -88,6 +90,57 @@ task refDataSpec(type: io.swagger.v3.plugins.gradle.tasks.ResolveTask) {
 	classpath = sourceSets.main.runtimeClasspath
 	buildClasspath = classpath
 }
+
+task referenceDataClientGenerate(type: org.openapitools.generator.gradle.plugin.tasks.GenerateTask) {
+	group = "openapi tools"
+	generatorName = "java"
+	library = "native"
+	inputSpec = "$rootDir/spec/reference-data.yaml"
+	outputDir = "$buildDir/generated/openapi/refdata"
+	apiPackage = "com.autonomouslogic.everef.openapi.refdata.apis"
+	invokerPackage = "com.autonomouslogic.everef.openapi.refdata.invoker"
+	configOptions = [
+			serializationLibrary: "jackson",
+			dateLibrary: "java8",
+			asyncNative: "true"
+	]
+	additionalProperties = [
+			supportUrlQuery: "false"
+	]
+	schemaMappings = [
+			"Blueprint": "com.autonomouslogic.everef.refdata.Blueprint",
+			"BlueprintActivity": "com.autonomouslogic.everef.refdata.BlueprintActivity",
+			"BlueprintMaterial": "com.autonomouslogic.everef.refdata.BlueprintMaterial",
+			"DogmaAttribute": "com.autonomouslogic.everef.refdata.DogmaAttribute",
+			"DogmaEffect": "com.autonomouslogic.everef.refdata.DogmaEffect",
+			"DogmaTypeAttribute": "com.autonomouslogic.everef.refdata.DogmaTypeAttribute",
+			"DogmaTypeEffect": "com.autonomouslogic.everef.refdata.DogmaTypeEffect",
+			"Icon": "com.autonomouslogic.everef.refdata.Icon",
+			"InventoryCategory": "com.autonomouslogic.everef.refdata.InventoryCategory",
+			"InventoryGroup": "com.autonomouslogic.everef.refdata.InventoryGroup",
+			"InventoryType": "com.autonomouslogic.everef.refdata.InventoryType",
+			"InventoryTypeTraits": "com.autonomouslogic.everef.refdata.InventoryTypeTraits",
+			"MarketGroup": "com.autonomouslogic.everef.refdata.MarketGroup",
+			"MetaGroup": "com.autonomouslogic.everef.refdata.MetaGroup",
+			"ModifierInfo": "com.autonomouslogic.everef.refdata.ModifierInfo",
+			"Mutaplasmid": "com.autonomouslogic.everef.refdata.Mutaplasmid",
+			"MutaplasmidDogmaModifications": "com.autonomouslogic.everef.refdata.MutaplasmidDogmaModifications",
+			"MutaplasmidTypeMapping": "com.autonomouslogic.everef.refdata.MutaplasmidTypeMapping",
+			"ProducingBlueprint": "com.autonomouslogic.everef.refdata.ProducingBlueprint",
+			"RefDataMeta": "com.autonomouslogic.everef.refdata.RefDataMeta",
+			"RefDataMetaFileInfo": "com.autonomouslogic.everef.refdata.RefDataMetaFileInfo",
+			"Skill": "com.autonomouslogic.everef.refdata.Skill",
+			"TraitBonus": "com.autonomouslogic.everef.refdata.TraitBonus",
+			"TypeMaterial": "com.autonomouslogic.everef.refdata.TypeMaterial",
+			"Unit": "com.autonomouslogic.everef.refdata.Unit"
+	]
+	logToStderr = true
+}
+sourceSets.main.java.srcDirs += ["$buildDir/generated/openapi/refdata/src/main/java"]
+compileKotlin.dependsOn(tasks.referenceDataClientGenerate)
+compileJava.dependsOn(tasks.referenceDataClientGenerate)
+sourcesJar.dependsOn(tasks.referenceDataClientGenerate)
+delombok.dependsOn(tasks.referenceDataClientGenerate)
 
 openApiGenerate {
 	generatorName = "kotlin"

@@ -7,6 +7,7 @@ import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.model.ReferenceEntry;
 import com.autonomouslogic.everef.model.refdata.RefDataConfig;
 import com.autonomouslogic.everef.model.refdata.RefTypeConfig;
+import com.autonomouslogic.everef.refdata.RefDataMeta;
 import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.url.UrlParser;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -72,6 +73,13 @@ public class RefDataUtil {
 				return Single.just(file);
 			});
 		});
+	}
+
+	public Single<RefDataMeta> getMetaFromRefDataFile(File file) {
+		return CompressUtil.loadArchive(file)
+				.filter(e -> e.getKey().getName().equals("meta.json"))
+				.map(e -> objectMapper.readValue(e.getRight(), RefDataMeta.class))
+				.firstOrError();
 	}
 
 	public Flowable<ReferenceEntry> parseReferenceDataArchive(@NonNull File file) {

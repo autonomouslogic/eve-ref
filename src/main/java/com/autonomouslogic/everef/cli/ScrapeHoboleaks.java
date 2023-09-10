@@ -82,7 +82,7 @@ public class ScrapeHoboleaks implements Command {
 		return loadMeta().flatMapCompletable(currentMeta -> {
 			return loadArchiveMeta().flatMapCompletable(archiveMeta -> {
 				if (Arrays.equals(currentMeta, archiveMeta)) {
-					log.info("No update needed.");
+					log.info("No update needed");
 					return Completable.complete();
 				}
 				return buildArchive(currentMeta).flatMapCompletable(this::uploadFiles);
