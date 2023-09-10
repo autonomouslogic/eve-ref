@@ -1,19 +1,12 @@
 # EVE Ref
 [EVE Ref](https://everef.net/) is a reference site for the game [EVE Online](https://www.eveonline.com/).
 
-_This repo does not contain the full source code for the site. Everything is currently being migrated over to Github._
+The site is currently being rewritten form the ground-up.
+This repo contains the source code for the new site.
+The new site is available at [dev.everef.net](https://dev.everef.net/).
 
-## External Links
-* [Patreon](https://www.patreon.com/everef)
-* [Discord](https://discord.gg/fZYPAxFyXG)
-* [Reddit](reddit.com/r/everef)
-
-## Versioning
-EVE Ref follows [semantic versioning](https://semver.org/).
-
-## Code Style
-EVE Ref follows Palantir with tabs.
-Automatic code formatting can be done by running `./gradlew spotlessApply`.
+Contributions are welcome, [Discord](https://discord.gg/fZYPAxFyXG) is open, and any support on
+[Patreon](https://www.patreon.com/everef) is greatly appreciated.
 
 ## License
 EVE Ref itself and the code contained within this repo is licensed under the [MIT-0 license](https://spdx.org/licenses/MIT-0.html).
