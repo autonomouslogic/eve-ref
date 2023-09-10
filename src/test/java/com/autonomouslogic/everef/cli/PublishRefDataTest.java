@@ -3,6 +3,8 @@ package com.autonomouslogic.everef.cli;
 import static com.autonomouslogic.everef.test.TestDataUtil.TEST_PORT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import com.autonomouslogic.everef.refdata.RefDataMeta;
+import com.autonomouslogic.everef.refdata.RefDataMetaFileInfo;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.test.MockS3Adapter;
 import com.autonomouslogic.everef.test.TestDataUtil;
@@ -10,13 +12,22 @@ import com.autonomouslogic.everef.util.DataUtil;
 import com.autonomouslogic.everef.util.MockScrapeBuilder;
 import com.autonomouslogic.everef.util.RefDataUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.File;
+import java.io.FileInputStream;
+import java.time.Instant;
 import java.util.HashSet;
 import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
+import okhttp3.mockwebserver.Dispatcher;
+import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
+import okhttp3.mockwebserver.RecordedRequest;
+import okio.Buffer;
+import org.apache.commons.io.IOUtils;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -60,13 +71,16 @@ public class PublishRefDataTest {
 	@Inject
 	protected PublishRefData publishRefData;
 
+	RefDataMeta meta;
+	File refDataFile;
+
 	@BeforeEach
 	@SneakyThrows
 	void before() {
 		DaggerTestComponent.builder().build().inject(this);
 
 		server = new MockWebServer();
-		server.enqueue(testDataUtil.mockResponse(mockScrapeBuilder.createTestRefdata()));
+		server.setDispatcher(new TestDispatcher());
 		server.start(TEST_PORT);
 
 		mockS3Adapter.putTestObject(BUCKET_NAME, "index.html", "test", s3);
@@ -76,6 +90,15 @@ public class PublishRefDataTest {
 				BUCKET_NAME, "base/types", expectedTypeIndex(), s3); // Not uploaded, content matches.
 		mockS3Adapter.putTestObject(BUCKET_NAME, "base/types/645", "test", s3);
 		mockS3Adapter.putTestObject(BUCKET_NAME, "base/types/999999999", "test", s3);
+
+		meta = RefDataMeta.builder()
+				.buildTime(Instant.parse("2021-01-01T00:00:00Z"))
+				.sde(RefDataMetaFileInfo.builder().sha256("abc").build())
+				.esi(RefDataMetaFileInfo.builder().sha256("def").build())
+				.hoboleaks(RefDataMetaFileInfo.builder().sha256("ghi").build())
+				.build();
+
+		refDataFile = mockScrapeBuilder.createTestRefdata();
 	}
 
 	@AfterEach
@@ -127,6 +150,18 @@ public class PublishRefDataTest {
 		assertEquals(List.of("base/types/999999999"), deleteKeys);
 	}
 
+	@Test
+	@SneakyThrows
+	void shouldNotPublishRefDataIfThereNoUpdate() {
+		refDataFile = mockScrapeBuilder.createTestRefdata(meta);
+		publishRefData.run().blockingAwait();
+
+		var putKeys = mockS3Adapter.getAllPutKeys(BUCKET_NAME, s3);
+		var deleteKeys = mockS3Adapter.getAllDeleteKeys(BUCKET_NAME, s3);
+		assertEquals(List.of(), putKeys);
+		assertEquals(List.of(), deleteKeys);
+	}
+
 	@SneakyThrows
 	private String expectedTypeIndex() {
 		var types = refDataUtil.loadReferenceDataConfig().stream()
@@ -136,5 +171,30 @@ public class PublishRefDataTest {
 		var ids = types.getTest().getIds().stream().sorted().toList();
 		var json = objectMapper.writeValueAsString(ids);
 		return json;
+	}
+
+	class TestDispatcher extends Dispatcher {
+		@NotNull
+		@Override
+		public MockResponse dispatch(@NotNull RecordedRequest request) throws InterruptedException {
+			try {
+				var path = request.getRequestUrl().encodedPath();
+				log.info("Path: {}", path);
+				switch (path) {
+					case "/reference-data/reference-data-latest.tar.xz":
+						return new MockResponse()
+								.setResponseCode(200)
+								.setBody(new Buffer().write(IOUtils.toByteArray(new FileInputStream(refDataFile))));
+					case "/meta":
+						return new MockResponse()
+								.setResponseCode(200)
+								.setBody(new Buffer().write(objectMapper.writeValueAsBytes(meta)));
+				}
+				return new MockResponse().setResponseCode(404);
+			} catch (Exception e) {
+				log.error("Error in dispatcher", e);
+				return new MockResponse().setResponseCode(500);
+			}
+		}
 	}
 }
