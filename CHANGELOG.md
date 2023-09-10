@@ -1,5 +1,25 @@
 EVE Ref Changelog
 
+## [2.27.0](https://github.com/autonomouslogic/eve-ref/compare/2.26.2...2.27.0) (2023-09-10)
+
+
+### Features
+
+* Conditional reference data builds ([#264](https://github.com/autonomouslogic/eve-ref/issues/264)) ([35b2075](https://github.com/autonomouslogic/eve-ref/commit/35b2075eb2c7e5bd4e939bd2463c67a5b1bd7005))
+* Conditional reference data publish ([#265](https://github.com/autonomouslogic/eve-ref/issues/265)) ([0311439](https://github.com/autonomouslogic/eve-ref/commit/0311439fa346eba76f3b38a3b3d854bf78765bb3))
+* Market prices ([#263](https://github.com/autonomouslogic/eve-ref/issues/263)) ([9dc005b](https://github.com/autonomouslogic/eve-ref/commit/9dc005bc56119a617144f9a7c369d39f0115f8b6))
+
+
+### Bug Fixes
+
+* Updated Icon model. ([bb8af08](https://github.com/autonomouslogic/eve-ref/commit/bb8af087e3553f6a13ca34839569741ccff839cb))
+
+
+### Documentation
+
+* Readme. ([758d73b](https://github.com/autonomouslogic/eve-ref/commit/758d73b1aa6494b0125c682a64ecc20f883a7e6c))
+* Readme. ([b7eafdc](https://github.com/autonomouslogic/eve-ref/commit/b7eafdccf4a04f2d560a1164e828b8a9864f62f1))
+
 ## [2.26.2](https://github.com/autonomouslogic/eve-ref/compare/2.26.1...2.26.2) (2023-09-09)
 
 
