@@ -1,5 +1,6 @@
 package com.autonomouslogic.everef.config;
 
+import com.autonomouslogic.everef.refdata.ReferenceDataSpec;
 import java.net.URI;
 import java.time.Duration;
 import java.time.Period;
@@ -450,5 +451,14 @@ public class Configs {
 			.name("HOBOLEAKS_DYNAMIC_ATTRIBUTES_URL")
 			.type(URI.class)
 			.defaultValue(URI.create("https://sde.hoboleaks.space/tq/dynamicitemattributes.json"))
+			.build();
+
+	/**
+	 * Base path for requests to the main EVE Ref website.
+	 */
+	public static final Config<URI> REF_DATA_BASE_URL = Config.<URI>builder()
+			.name("REF_DATA_BASE_URL")
+			.type(URI.class)
+			.defaultValue(URI.create(ReferenceDataSpec.BASE_URL))
 			.build();
 }

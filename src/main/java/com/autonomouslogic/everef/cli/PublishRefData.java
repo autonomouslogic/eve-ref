@@ -1,7 +1,10 @@
 package com.autonomouslogic.everef.cli;
 
+import com.autonomouslogic.commons.rxjava3.Rx3Util;
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.model.ReferenceEntry;
+import com.autonomouslogic.everef.openapi.refdata.apis.RefdataApi;
+import com.autonomouslogic.everef.refdata.RefDataMeta;
 import com.autonomouslogic.everef.s3.ListedS3Object;
 import com.autonomouslogic.everef.s3.S3Adapter;
 import com.autonomouslogic.everef.url.S3Url;
@@ -14,6 +17,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Single;
+import java.io.File;
 import java.net.URI;
 import java.time.Duration;
 import java.util.ArrayList;
@@ -66,9 +70,16 @@ public class PublishRefData implements Command {
 	@Inject
 	protected RefDataUtil refDataUtil;
 
+	@Inject
+	protected RefdataApi refdataApi;
+
 	private S3Url refDataUrl;
 	private URI dataBaseUrl = Configs.DATA_BASE_URL.getRequired();
 	private AtomicInteger uploadCounter = new AtomicInteger();
+
+	private File refDataFile;
+	private RefDataMeta latestMeta;
+	private RefDataMeta currentMeta;
 
 	private final Duration cacheTime = Configs.REFERENCE_DATA_CACHE_CONTROL_MAX_AGE.getRequired();
 
@@ -84,17 +95,46 @@ public class PublishRefData implements Command {
 	@Override
 	public Completable run() {
 		var skipped = new AtomicInteger();
-		return listBucketContents().flatMapCompletable(existing -> {
-			return refDataUtil
-					.downloadLatestReferenceData()
-					.flatMapPublisher(file -> refDataUtil.parseReferenceDataArchive(file))
-					.filter(entry -> filterExisting(skipped, existing, entry))
-					.toList()
-					.flatMapPublisher(l -> Flowable.fromIterable(l))
-					.flatMapCompletable(this::uploadFile, false, UPLOAD_CONCURRENCY)
-					.doOnComplete(() -> log.info("Skipped {} entries", skipped.get()))
-					.andThen(Completable.defer(() -> deleteRemaining(new ArrayList<>(existing.keySet()))));
-		});
+		return Completable.mergeArray(loadLatestFile(), loadCurrentMeta()).andThen(Completable.defer(() -> {
+			if (!shouldUpdate()) {
+				log.info("No update needed");
+				return Completable.complete();
+			}
+			return listBucketContents().flatMapCompletable(existing -> {
+				return refDataUtil
+						.parseReferenceDataArchive(refDataFile)
+						.filter(entry -> filterExisting(skipped, existing, entry))
+						.toList()
+						.flatMapPublisher(l -> Flowable.fromIterable(l))
+						.flatMapCompletable(this::uploadFile, false, UPLOAD_CONCURRENCY)
+						.doOnComplete(() -> log.info("Skipped {} entries", skipped.get()))
+						.andThen(Completable.defer(() -> deleteRemaining(new ArrayList<>(existing.keySet()))));
+			});
+		}));
+	}
+
+	private Completable loadLatestFile() {
+		return refDataUtil
+				.downloadLatestReferenceData()
+				.flatMap(file -> {
+					refDataFile = file;
+					return refDataUtil.getMetaFromRefDataFile(file).doOnSuccess(meta -> latestMeta = meta);
+				})
+				.ignoreElement();
+	}
+
+	@SneakyThrows
+	private Completable loadCurrentMeta() {
+		return Rx3Util.toMaybe(refdataApi.getMeta())
+				.doOnSuccess(meta -> currentMeta = meta)
+				.ignoreElement();
+	}
+
+	private boolean shouldUpdate() {
+		if (latestMeta == null || currentMeta == null) {
+			return true;
+		}
+		return !currentMeta.equals(latestMeta);
 	}
 
 	private Single<Map<String, ListedS3Object>> listBucketContents() {

@@ -29,6 +29,7 @@ import software.amazon.awssdk.services.s3.S3AsyncClient;
 @Log4j2
 @SetEnvironmentVariable(key = "REFERENCE_DATA_PATH", value = "s3://" + PublishRefDataTest.BUCKET_NAME + "/base/")
 @SetEnvironmentVariable(key = "DATA_BASE_URL", value = "http://localhost:" + TEST_PORT)
+@SetEnvironmentVariable(key = "REF_DATA_BASE_URL", value = "http://localhost:" + TEST_PORT)
 public class PublishRefDataTest {
 	static final String BUCKET_NAME = "ref-data-bucket";
 

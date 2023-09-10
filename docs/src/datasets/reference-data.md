@@ -4,7 +4,7 @@ title: Reference Data
 # Reference Data
 
 The Reference Data set is a collection of data from the EVE Online SDE, ESI, and Hoboleaks data.
-It aims to be a single source, combing all the available data into one.
+It aims to be a single source, combining all the available data into one.
 It does this by taking the latest [SDE](https://developers.eveonline.com/resource/resources),
 [ESI scrape](https://data.everef.net/esi-scrape/), and [Hoboleaks export](https://sde.hoboleaks.space/) and merging them
 into one common format.
@@ -142,11 +142,11 @@ This table show the available data and where to get it.
 
 * Field names will be `snake_case`, since that's how the ESI does it and all other data on EVE Ref Data comes from there.\
   It makes sense to continue that format.
+* URLs will be `snake_case`, because that's how the ESI does it.
 * The JSON layout will be structured in a way mostly inspired by the ESI, though that may not always be possible.
 * Prefer keyed objects to arrays - the final object merger should be kept as simple as possible.\
-  Since it's not possible to merge arrays in a predictable while preventing data duplication, keyed objects are preferred.
-* Names and descriptions will use a language map like the SDE, rather than multiple files like the ESI.
-* URLs will be `snake_case`, because that's how the ESI does it.
+  Since it's not possible to merge arrays in a predictable way while preventing data duplication, keyed objects are preferred.
+* Names and descriptions will use a language map like the SDE, rather than multiple endpoints/files like the ESI.
 
 ## Corrections (TBD)
 

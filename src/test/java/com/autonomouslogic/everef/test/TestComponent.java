@@ -27,6 +27,7 @@ import com.autonomouslogic.everef.http.MockDataCrawlerModule;
 import com.autonomouslogic.everef.inject.AwsModule;
 import com.autonomouslogic.everef.inject.EsiModule;
 import com.autonomouslogic.everef.inject.JacksonModule;
+import com.autonomouslogic.everef.inject.RefDataApiModule;
 import com.autonomouslogic.everef.model.MarketHistoryEntryTest;
 import com.autonomouslogic.everef.url.UrlParserTest;
 import com.autonomouslogic.everef.util.RefDataUtilTest;
@@ -42,7 +43,8 @@ import javax.inject.Singleton;
 			TestOkHttpModule.class,
 			MockDataIndexModule.class,
 			MockLocationPopulatorModule.class,
-			MockDataCrawlerModule.class
+			MockDataCrawlerModule.class,
+			RefDataApiModule.class
 		})
 @Singleton
 public interface TestComponent {
