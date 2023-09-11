@@ -18,6 +18,7 @@ EVE Online is owned by [CCP hf.](https://www.ccpgames.com/):
 * [End-user License Agreement](https://community.eveonline.com/support/policies/eve-eula-en/)
 
 ## Status
+
 | Type         | Status                                                                                                                                                                                                                                                                                                                                                                                        |
 |--------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Code Climate | [![Maintainability](https://api.codeclimate.com/v1/badges/6434b94d68f18eb4afde/maintainability)](https://codeclimate.com/github/autonomouslogic/eve-ref/maintainability)                                                                                                                                                                                                                      |
