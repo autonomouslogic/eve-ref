@@ -1,5 +1,28 @@
 EVE Ref Changelog
 
+## [2.27.1](https://github.com/autonomouslogic/eve-ref/compare/2.27.0...2.27.1) (2023-09-16)
+
+
+### Bug Fixes
+
+* **deps:** Update MVStore to 2.2.222 ([#270](https://github.com/autonomouslogic/eve-ref/issues/270)) ([fcf3b63](https://github.com/autonomouslogic/eve-ref/commit/fcf3b63e1454f7e365083d9c63b5ba39164d7636))
+
+
+### Dependency Updates
+
+* **deps:** update ubuntu docker tag to v22 ([#267](https://github.com/autonomouslogic/eve-ref/issues/267)) ([f74a9cf](https://github.com/autonomouslogic/eve-ref/commit/f74a9cf701ffded7e1d6a6d23b6f3e1a7c2afe9b))
+
+
+### Miscellaneous Chores
+
+* Extra logging ([#268](https://github.com/autonomouslogic/eve-ref/issues/268)) ([ef099e6](https://github.com/autonomouslogic/eve-ref/commit/ef099e62a60e6f43cee4ee6ec11ba213ff63b707))
+
+
+### Continuous Integration
+
+* Test ([8c9871a](https://github.com/autonomouslogic/eve-ref/commit/8c9871a237aa29a94831235cab6545446dd4ac82))
+* Test ([e086329](https://github.com/autonomouslogic/eve-ref/commit/e086329cc4fd6f8543cf565e81901f57aac29aed))
+
 ## [2.27.0](https://github.com/autonomouslogic/eve-ref/compare/2.26.2...2.27.0) (2023-09-10)
 
 
