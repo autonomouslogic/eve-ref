@@ -19,7 +19,7 @@ import lombok.Value;
  * Builds URLs for archived data.
  */
 @Value
-@Builder
+@Builder(toBuilder = true)
 public class ArchivePathFactory {
 	public static final DateTimeFormatter YEAR_PATTERN = DateTimeFormatter.ofPattern("yyyy");
 	public static final DateTimeFormatter DATE_PATTERN = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -88,6 +88,13 @@ public class ArchivePathFactory {
 			.dateFolder(false)
 			.fileDateTimeFormatter(DATE_PATTERN)
 			.suffix(".tar.xz")
+			.build();
+
+	public static final ArchivePathFactory FUZZWORK_ORDERSET = ArchivePathFactory.builder()
+			.folder("fuzzwork/ordersets")
+			.historyFolder(false)
+			.filename("fuzzwork-orderset-")
+			.suffix(".csv.gz")
 			.build();
 
 	@NonNull

@@ -461,4 +461,13 @@ public class Configs {
 			.type(URI.class)
 			.defaultValue(URI.create(ReferenceDataSpec.BASE_URL))
 			.build();
+
+	/**
+	 * Base path for fuzzwork.co.uk
+	 */
+	public static final Config<URI> FUZZWORK_BASE_URL = Config.<URI>builder()
+			.name("FUZZWORK_BASE_URL")
+			.type(URI.class)
+			.defaultValue(URI.create("https://market.fuzzwork.co.uk/"))
+			.build();
 }

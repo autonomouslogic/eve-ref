@@ -10,19 +10,20 @@ See [Downloading Datasets](downloading-datasets.md) for instructions on how to d
 | `ccp/iec/`                                   | Image Export Collection archive                  |
 | `ccp/mer/`                                   | Monthly Economic Report archive                  |
 | `ccp/sde/`                                   | Static Data Export archive                       |
-| `esi-scrape/`                                |                                                  |
+| `esi-scrape/`                                | ESI scrape archive                               |
 | `faction-warfare-leaderboards/`              |                                                  |
 | `faction-warfare-leaderboards-characters/`   |                                                  |
 | `faction-warfare-leaderboards-corporations/` |                                                  |
 | `faction-warfare-stats/`                     |                                                  |
 | `faction-warfare-systems/`                   |                                                  |
 | `faction-warfare-wars/`                      |                                                  |
+| `fuzzwork/ordersets/`                        | [Fuzzworks Ordersets](fuzzwork-ordersets.md)     |
 | `hoboleaks-sde/`                             | [Hoboelaks SDE](hoboleaks-sde.md)                |
 | `incursions/`                                |                                                  |
 | `industry-facilities/`                       |                                                  |
 | `industry-systems/`                          |                                                  |
 | `insurance-prices/`                          |                                                  |
-| `killmails/`                                 |                                                  |
+| `killmails/`                                 | Killmail archive from zkillboard.com             |
 | `market-history/`                            |                                                  |
 | `market-orders/`                             | [Market Order Snapshots](market-orders.md)       |
 | `public-contracts/`                          | [Public Contract Snapshots](public-contracts.md) |
