@@ -59,7 +59,7 @@ public class BlueprintDecorator implements PostDecorator {
 	private void setIsBlueprint(long typeId) {
 		var type = (ObjectNode) types.get(typeId);
 		if (type == null) {
-			log.warn("Could not set type {} as blueprint, not found", typeId);
+			log.warn("Could not set type {} as being a blueprint, type not found", typeId);
 			return;
 		}
 		type.put("is_blueprint", true);

@@ -11,6 +11,7 @@ import com.autonomouslogic.everef.cli.refdata.post.MarketGroupsDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.MissingDogmaUnitsDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.MutaplasmidDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.OreVariationsDecorator;
+import com.autonomouslogic.everef.cli.refdata.post.PostDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.SkillDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.TypesDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.VariationsDecorator;
@@ -40,6 +41,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.time.Duration;
+import java.time.Instant;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
@@ -260,11 +262,12 @@ public class BuildRefData implements Command {
 						.setOutputStoreName(config.getOutputStore())
 						.setStoreHandler(storeHandler)
 						.merge())
-				.toList()));
+				.toList()))
+			.andThen(Completable.fromAction(() -> log.debug("Finished merging datasets")));
 	}
 
 	private Completable postDatasets() {
-		return Completable.concatArray(List.of(
+		return Completable.concat(List.of(
 						skillDecorator,
 						mutaplasmidDecorator,
 						variationsDecorator,
@@ -275,9 +278,21 @@ public class BuildRefData implements Command {
 						oreVariationsDecorator,
 						missingDogmaUnitsDecorator)
 				.stream()
-				.map(e -> e.create())
-				.toList()
-				.toArray(new Completable[0]));
+				.map(this::runPostDecorator)
+				.toList());
+	}
+
+	private Completable runPostDecorator(PostDecorator decorator) {
+		return Completable.defer(() ->{
+			var name = decorator.getClass().getSimpleName();
+			log.info("Starting post {}", name);
+			var start = Instant.now();
+			return decorator.create()
+				.andThen(Completable.fromAction(() -> {
+					var duration = Duration.between(start, Instant.now()).truncatedTo(ChronoUnit.MILLIS);
+					log.debug("Finished post {} in {}", name, duration);
+				}));
+		});
 	}
 
 	public Completable closeMvStore() {
