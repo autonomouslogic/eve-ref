@@ -256,14 +256,14 @@ public class BuildRefData implements Command {
 
 	private Completable mergeDatasets() {
 		return Completable.defer(() -> Completable.merge(refDataUtil.loadReferenceDataConfig().stream()
-				.map(config -> refDataMergerProvider
-						.get()
-						.setName(config.getId())
-						.setOutputStoreName(config.getOutputStore())
-						.setStoreHandler(storeHandler)
-						.merge())
-				.toList()))
-			.andThen(Completable.fromAction(() -> log.debug("Finished merging datasets")));
+						.map(config -> refDataMergerProvider
+								.get()
+								.setName(config.getId())
+								.setOutputStoreName(config.getOutputStore())
+								.setStoreHandler(storeHandler)
+								.merge())
+						.toList()))
+				.andThen(Completable.fromAction(() -> log.debug("Finished merging datasets")));
 	}
 
 	private Completable postDatasets() {
@@ -283,15 +283,14 @@ public class BuildRefData implements Command {
 	}
 
 	private Completable runPostDecorator(PostDecorator decorator) {
-		return Completable.defer(() ->{
+		return Completable.defer(() -> {
 			var name = decorator.getClass().getSimpleName();
 			log.info("Starting post {}", name);
 			var start = Instant.now();
-			return decorator.create()
-				.andThen(Completable.fromAction(() -> {
-					var duration = Duration.between(start, Instant.now()).truncatedTo(ChronoUnit.MILLIS);
-					log.debug("Finished post {} in {}", name, duration);
-				}));
+			return decorator.create().andThen(Completable.fromAction(() -> {
+				var duration = Duration.between(start, Instant.now()).truncatedTo(ChronoUnit.MILLIS);
+				log.debug("Finished post {} in {}", name, duration);
+			}));
 		});
 	}
 
