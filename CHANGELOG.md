@@ -1,5 +1,12 @@
 EVE Ref Changelog
 
+## [2.27.2](https://github.com/autonomouslogic/eve-ref/compare/2.27.1...2.27.2) (2023-09-16)
+
+
+### Bug Fixes
+
+* Don't output raw Slack data ([#271](https://github.com/autonomouslogic/eve-ref/issues/271)) ([d8be5bd](https://github.com/autonomouslogic/eve-ref/commit/d8be5bdbe3cb4840a29d5c1435cd53055144de81))
+
 ## [2.27.1](https://github.com/autonomouslogic/eve-ref/compare/2.27.0...2.27.1) (2023-09-16)
 
 
