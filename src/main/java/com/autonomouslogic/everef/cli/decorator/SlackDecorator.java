@@ -50,10 +50,10 @@ public class SlackDecorator {
 	private Completable report(@NonNull SlackMessage message) {
 		return Completable.fromAction(() -> {
 					if (url.isEmpty()) {
+						log.trace("Slack disabled, not reporting");
 						return;
 					}
-					log.debug(String.format("Slack message: %s", url.get()));
-					log.trace(String.format("Raw Slack message: %s", message));
+					log.trace("Sending Slack message");
 					new SlackApi(url.get()).call(message);
 				})
 				.retry(2, e -> {
