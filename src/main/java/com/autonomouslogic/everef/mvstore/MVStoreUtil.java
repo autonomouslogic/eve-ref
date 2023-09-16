@@ -34,9 +34,9 @@ public class MVStoreUtil {
 	 */
 	@SneakyThrows
 	public MVStore createTempStore(String name) {
-		log.debug(String.format("Creating temporary MVStore with %s MiB cache", cacheSize));
+		log.debug("Creating temporary MVStore '{}' with {} MiB cache", name, cacheSize);
 		var file = tempFiles.tempFile(name, ".mvstore").toFile();
-		log.debug("MVStore opened at " + file.getAbsolutePath());
+		log.debug("MVStore '{}' opened at {}", name, file.getAbsolutePath());
 		var builder = new MVStore.Builder()
 				.fileName(file.getAbsolutePath())
 				.autoCompactFillRate(0)

@@ -47,6 +47,7 @@ public class RefDataMerger {
 			for (long id : ids) {
 				mergeAndStore(id);
 			}
+			log.debug("Finished merging {}", name);
 		});
 	}
 

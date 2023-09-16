@@ -43,7 +43,7 @@ public class VariationsDecorator implements PostDecorator {
 
 	public Completable create() {
 		return Completable.fromAction(() -> {
-			log.info("Populates variations");
+			log.info("Populating variations");
 			types = storeHandler.getRefStore("types");
 			mutaplasmids = storeHandler.getRefStore("mutaplasmids");
 			// tech 1 ID -> meta group ID -> list of type IDs
