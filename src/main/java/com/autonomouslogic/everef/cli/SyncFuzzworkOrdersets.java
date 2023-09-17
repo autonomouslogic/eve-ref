@@ -37,10 +37,10 @@ import org.jsoup.Jsoup;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 
 /**
- * Syncs market data from Fuzzwork.
+ * Syncs ordersets from Fuzzwork.
  */
 @Log4j2
-public class SyncFuzzworkMarketOrders implements Command {
+public class SyncFuzzworkOrdersets implements Command {
 	private static final int CONCURRENCY = 4;
 	private static final Pattern ORDERSET_PATTERN = Pattern.compile("\\/orderbooks\\/orderset-([0-9]+).csv.gz");
 
@@ -74,7 +74,7 @@ public class SyncFuzzworkMarketOrders implements Command {
 	private final Duration archiveCacheTime = Configs.DATA_ARCHIVE_CACHE_CONTROL_MAX_AGE.getRequired();
 
 	@Inject
-	protected SyncFuzzworkMarketOrders() {}
+	protected SyncFuzzworkOrdersets() {}
 
 	@Inject
 	protected void init() {

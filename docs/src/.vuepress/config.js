@@ -67,7 +67,7 @@ module.exports = {
             'commands/build-ref-data.md',
             'commands/scrape-market-orders.md',
             'commands/scrape-public-contracts.md',
-            'commands/sync-fuzzwork-market-orders.md'
+            'commands/sync-fuzzwork-ordersets.md'
           ]
         },
         {

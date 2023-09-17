@@ -266,9 +266,9 @@ task scrapeMarketHistory(type: JavaExec) {
 	mainClass = mainClassName
 }
 
-task syncFuzzworkMarketOrders(type: JavaExec) {
+task syncFuzzworkOrdersets(type: JavaExec) {
 	group "application"
-	args "sync-fuzzwork-market-orders"
+	args "sync-fuzzwork-ordersets"
 	environment envProperties
 	classpath = sourceSets.main.runtimeClasspath
 	mainClass = mainClassName
