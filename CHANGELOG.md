@@ -1,5 +1,17 @@
 EVE Ref Changelog
 
+## [2.28.0](https://github.com/autonomouslogic/eve-ref/compare/2.27.2...2.28.0) (2023-09-17)
+
+
+### Features
+
+* Fuzzwork orderset sync ([#273](https://github.com/autonomouslogic/eve-ref/issues/273)) ([f6fd72d](https://github.com/autonomouslogic/eve-ref/commit/f6fd72d95e6636db0e0bc59d3989995fa0baae8f))
+
+
+### Documentation
+
+* Wget instructions ([#272](https://github.com/autonomouslogic/eve-ref/issues/272)) ([17f4664](https://github.com/autonomouslogic/eve-ref/commit/17f46649c14d78a24a4d0fcdfb756803feea4c88))
+
 ## [2.27.2](https://github.com/autonomouslogic/eve-ref/compare/2.27.1...2.27.2) (2023-09-16)
 
 
