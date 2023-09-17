@@ -1,6 +1,3 @@
----
-title: Build Ref Data
----
 # Build Ref Data
 
 Builds and uploads the main [reference data](../datasets/refdata.md) file.
