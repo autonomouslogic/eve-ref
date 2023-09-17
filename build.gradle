@@ -266,6 +266,14 @@ task scrapeMarketHistory(type: JavaExec) {
 	mainClass = mainClassName
 }
 
+task syncFuzzworkOrdersets(type: JavaExec) {
+	group "application"
+	args "sync-fuzzwork-ordersets"
+	environment envProperties
+	classpath = sourceSets.main.runtimeClasspath
+	mainClass = mainClassName
+}
+
 task verifyRefDataModels(type: JavaExec) {
 	group "application"
 	args "verify-ref-data-models"

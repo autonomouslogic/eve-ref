@@ -51,6 +51,7 @@ module.exports = {
           children: [
             'datasets/',
             'datasets/downloading-datasets',
+            'datasets/fuzzwork-ordersets',
             'datasets/hoboleaks-sde',
             'datasets/market-orders',
             'datasets/public-contracts',
@@ -65,7 +66,8 @@ module.exports = {
             'commands/field-replication.md',
             'commands/build-ref-data.md',
             'commands/scrape-market-orders.md',
-            'commands/scrape-public-contracts.md'
+            'commands/scrape-public-contracts.md',
+            'commands/sync-fuzzwork-ordersets.md'
           ]
         },
         {

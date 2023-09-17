@@ -40,6 +40,9 @@ public class CommandRunner {
 	protected Provider<ScrapeMarketHistory> scrapeMarketHistoryProvider;
 
 	@Inject
+	protected Provider<SyncFuzzworkOrdersets> syncFuzzworkOrdersetsProvider;
+
+	@Inject
 	protected Provider<VerifyRefDataModels> verifyRefDataModelsProvider;
 
 	@Inject
@@ -97,6 +100,8 @@ public class CommandRunner {
 				return publishRefDataProvider.get();
 			case "scrape-market-history":
 				return scrapeMarketHistoryProvider.get();
+			case "sync-fuzzwork-ordersets":
+				return syncFuzzworkOrdersetsProvider.get();
 			case "verify-ref-data-models":
 				return verifyRefDataModelsProvider.get();
 			case "scrape-hoboleaks":

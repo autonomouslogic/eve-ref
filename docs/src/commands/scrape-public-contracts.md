@@ -1,6 +1,6 @@
 # Scrape Public Contracts
 
-Produced the [public contracts dataset](../datasets/public-contracts.md).
+Produces the [public contracts dataset](../datasets/public-contracts.md).
 
 ## Usage
 

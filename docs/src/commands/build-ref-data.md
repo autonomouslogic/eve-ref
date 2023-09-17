@@ -29,7 +29,6 @@ These resources are used by `BuildRefDataTest` for full end-to-end testing.
 Additionally, in the contextual resource folders for `EsiLoaderTest` and `SdeLoaderTest`, there exists samples
 for the intermediate expected output of these loaders.
 
-
 ## Adding more resources
 
 To add more resources, they need to be set up in the ESI and SDE loaders.
