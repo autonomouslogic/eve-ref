@@ -50,6 +50,7 @@ module.exports = {
           collapsable: false,
           children: [
             'datasets/',
+            'datasets/downloading-datasets',
             'datasets/hoboleaks-sde',
             'datasets/market-orders',
             'datasets/public-contracts',

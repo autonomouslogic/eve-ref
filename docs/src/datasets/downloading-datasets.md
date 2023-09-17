@@ -1,8 +1,9 @@
 # Downloading Datasets
 
 To download all the data, you can use [`wget`](https://linux.die.net/man/1/wget).
+The only real problem with `wget` is that it does not support multiple concurrent downloads.
 
-For instance, to download the [market orders](market-orders.md) for a particular year dataset, you can use the following command:
+For instance, to download the [market orders](market-orders.md) for a particular year, you can use the following command:
 
 ```bash
 wget -r -np -nc -nv --domains=data.everef.net -R index.html https://data.everef.net/market-orders/history/2023/
@@ -14,9 +15,7 @@ wget -r -np -nc -nv --domains=data.everef.net -R index.html https://data.everef.
 * `-nv` prevents printing of the download progress.
 * `--domains=data.everef.net` restricts the download to the `data.everef.net` domain.
 * `-R index.html` prevents downloading of the `index.html` files.
-* _Do not use_ `-N` to enforce timestamp checking. The current host doesn't handle the `Last-Modified` header properly.
-
-The only problem with `wget` is that it does not support multiple concurrent downloads.
+* _Do not use_ `-N` to enforce timestamp checking. The current host doesn't handle the `Last-Modified` header properly and this will result in all the files being redownloaded on every run.
 
 ## Wget on Docker
 
