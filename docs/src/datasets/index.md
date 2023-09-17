@@ -2,6 +2,8 @@
 
 These pages outline the datasets available for download at [data.everef.net](https://data.everef.net/).
 
+See [Downloading Datasets](downloading-datasets.md) for instructions on how to download the datasets in full or in part.
+
 | Path                                         | Dataset                                          |
 |----------------------------------------------|--------------------------------------------------|
 | `ccp/ccp_quant/`                             | Market data published by CCP Quant               |
