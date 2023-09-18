@@ -29,6 +29,7 @@ import com.autonomouslogic.everef.inject.EsiModule;
 import com.autonomouslogic.everef.inject.JacksonModule;
 import com.autonomouslogic.everef.inject.RefDataApiModule;
 import com.autonomouslogic.everef.model.MarketHistoryEntryTest;
+import com.autonomouslogic.everef.mvstore.MVStoreTest;
 import com.autonomouslogic.everef.url.UrlParserTest;
 import com.autonomouslogic.everef.util.RefDataUtilTest;
 import dagger.Component;
@@ -71,6 +72,8 @@ public interface TestComponent {
 	void inject(MarketHistoryEntryTest test);
 
 	void inject(MetaGroupScraperTest test);
+
+	void inject(MVStoreTest test);
 
 	void inject(ObjectMergerTest test);
 
