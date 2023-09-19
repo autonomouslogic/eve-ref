@@ -46,6 +46,7 @@ import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
@@ -58,7 +59,6 @@ import okhttp3.OkHttpClient;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
 import org.apache.commons.io.IOUtils;
-import org.h2.mvstore.MVMap;
 import org.h2.mvstore.MVStore;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 
@@ -331,7 +331,7 @@ public class BuildRefData implements Command {
 	}
 
 	@SneakyThrows
-	private void writeEntries(String name, MVMap<Long, JsonNode> store, TarArchiveOutputStream tar) {
+	private void writeEntries(String name, Map<Long, JsonNode> store, TarArchiveOutputStream tar) {
 		var file = tempFiles.tempFile("ref-data" + name, ".json").toFile();
 		var printer = objectMapper.writerWithDefaultPrettyPrinter();
 		try (var generator = printer.createGenerator(new FileOutputStream(file))) {

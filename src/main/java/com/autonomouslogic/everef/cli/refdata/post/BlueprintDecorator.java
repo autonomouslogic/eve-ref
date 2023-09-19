@@ -14,7 +14,6 @@ import javax.inject.Inject;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
-import org.h2.mvstore.MVMap;
 
 @Log4j2
 public class BlueprintDecorator implements PostDecorator {
@@ -26,8 +25,8 @@ public class BlueprintDecorator implements PostDecorator {
 	private StoreHandler storeHandler;
 
 	private StoreDataHelper helper;
-	private MVMap<Long, JsonNode> types;
-	private MVMap<Long, JsonNode> blueprints;
+	private Map<Long, JsonNode> types;
+	private Map<Long, JsonNode> blueprints;
 
 	@Inject
 	protected BlueprintDecorator() {}

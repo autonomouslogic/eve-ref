@@ -12,7 +12,6 @@ import lombok.NonNull;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
-import org.h2.mvstore.MVMap;
 import org.h2.mvstore.MVStore;
 
 @Log4j2
@@ -24,7 +23,7 @@ public class StoreMapSet {
 	@Setter
 	private MVStore mvStore;
 
-	private final Map<String, MVMap<String, JsonNode>> maps = new ConcurrentHashMap<>();
+	private final Map<String, Map<String, JsonNode>> maps = new ConcurrentHashMap<>();
 
 	@Inject
 	protected StoreMapSet() {}
@@ -41,7 +40,7 @@ public class StoreMapSet {
 		getOrCreateMap(map).put(key, value);
 	}
 
-	public MVMap<String, JsonNode> getOrCreateMap(String name) {
+	public Map<String, JsonNode> getOrCreateMap(String name) {
 		return maps.computeIfAbsent(name, ignore -> mvStoreUtil.openJsonMap(mvStore, name, String.class));
 	}
 

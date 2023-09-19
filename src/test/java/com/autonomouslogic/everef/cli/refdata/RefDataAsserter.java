@@ -12,7 +12,6 @@ import java.util.Map;
 import java.util.function.Function;
 import javax.inject.Inject;
 import lombok.SneakyThrows;
-import org.h2.mvstore.MVMap;
 
 public class RefDataAsserter {
 	@Inject
@@ -34,7 +33,7 @@ public class RefDataAsserter {
 	public void assertTestOutput(
 			Class<?> testClass,
 			Function<RefDataConfig, RefTypeConfig> typeConfigProvider,
-			Function<String, MVMap<Long, JsonNode>> storeProvider) {
+			Function<String, Map<Long, JsonNode>> storeProvider) {
 		Map<String, Map<Long, JsonNode>> actualFileValues = new LinkedHashMap<>();
 		for (var config : refDataUtil.loadReferenceDataConfig()) {
 			if (typeConfigProvider.apply(config) == null) {

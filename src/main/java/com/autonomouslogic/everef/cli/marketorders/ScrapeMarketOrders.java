@@ -17,12 +17,12 @@ import java.io.File;
 import java.time.Duration;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
+import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
-import org.h2.mvstore.MVMap;
 import org.h2.mvstore.MVStore;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 
@@ -58,7 +58,7 @@ public class ScrapeMarketOrders implements Command {
 
 	private S3Url dataUrl;
 	private MVStore mvStore;
-	private MVMap<Long, JsonNode> marketOrdersStore;
+	private Map<Long, JsonNode> marketOrdersStore;
 
 	@Setter
 	private ZonedDateTime scrapeTime;

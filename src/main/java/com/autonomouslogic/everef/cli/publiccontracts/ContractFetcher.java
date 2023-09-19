@@ -28,7 +28,6 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.h2.mvstore.MVMap;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -61,15 +60,15 @@ public class ContractFetcher {
 
 	@Setter
 	@NonNull
-	private MVMap<Long, JsonNode> contractsStore;
+	private Map<Long, JsonNode> contractsStore;
 
 	@Setter
 	@NonNull
-	private MVMap<Long, JsonNode> itemsStore;
+	private Map<Long, JsonNode> itemsStore;
 
 	@Setter
 	@NonNull
-	private MVMap<Long, JsonNode> bidsStore;
+	private Map<Long, JsonNode> bidsStore;
 
 	private final Set<Long> contractsWithItems = Collections.newSetFromMap(new ConcurrentHashMap<>());
 

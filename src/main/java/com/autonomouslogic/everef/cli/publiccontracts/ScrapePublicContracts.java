@@ -4,8 +4,8 @@ import static com.autonomouslogic.everef.util.ArchivePathFactory.PUBLIC_CONTRACT
 
 import com.autonomouslogic.everef.cli.Command;
 import com.autonomouslogic.everef.config.Configs;
-import com.autonomouslogic.everef.mvstore.MVMapRemover;
 import com.autonomouslogic.everef.mvstore.MVStoreUtil;
+import com.autonomouslogic.everef.mvstore.MapRemover;
 import com.autonomouslogic.everef.s3.S3Adapter;
 import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.url.UrlParser;
@@ -22,6 +22,7 @@ import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Collections;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import javax.inject.Inject;
@@ -31,7 +32,6 @@ import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import okhttp3.OkHttpClient;
-import org.h2.mvstore.MVMap;
 import org.h2.mvstore.MVStore;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 
@@ -82,13 +82,13 @@ public class ScrapePublicContracts implements Command {
 
 	private S3Url dataUrl;
 	private MVStore mvStore;
-	private MVMap<Long, JsonNode> contractsStore;
-	private MVMap<Long, JsonNode> itemsStore;
-	private MVMap<Long, JsonNode> bidsStore;
-	private MVMap<Long, JsonNode> dynamicItemsStore;
-	private MVMap<Long, JsonNode> nonDynamicItemsStore;
-	private MVMap<String, JsonNode> dogmaAttributesStore;
-	private MVMap<String, JsonNode> dogmaEffectsStore;
+	private Map<Long, JsonNode> contractsStore;
+	private Map<Long, JsonNode> itemsStore;
+	private Map<Long, JsonNode> bidsStore;
+	private Map<Long, JsonNode> dynamicItemsStore;
+	private Map<Long, JsonNode> nonDynamicItemsStore;
+	private Map<String, JsonNode> dogmaAttributesStore;
+	private Map<String, JsonNode> dogmaEffectsStore;
 
 	private ContractsScrapeMeta contractsScrapeMeta;
 	private final Set<Long> seenContractIds = Collections.newSetFromMap(new ConcurrentHashMap<>());
@@ -226,7 +226,7 @@ public class ScrapePublicContracts implements Command {
 	private Completable deleteOldContracts() {
 		return Completable.fromAction(() -> {
 			log.info("Deleting old contracts");
-			int removed = new MVMapRemover<>(contractsStore)
+			int removed = new MapRemover<>(contractsStore)
 					.removeIf((contractId, contract) -> !seenContractIds.contains(contractId))
 					.getEntriesRemoved();
 			log.debug(String.format("Deleted %s old contracts", removed));
@@ -239,8 +239,8 @@ public class ScrapePublicContracts implements Command {
 		});
 	}
 
-	private <K> void deleteContractSub(String name, MVMap<K, JsonNode> map) {
-		var removed = new MVMapRemover<>(map)
+	private <K> void deleteContractSub(String name, Map<K, JsonNode> map) {
+		var removed = new MapRemover<>(map)
 				.removeIf((id, contract) -> {
 					long contractId = contract.get("contract_id").asLong();
 					return !seenContractIds.contains(contractId);

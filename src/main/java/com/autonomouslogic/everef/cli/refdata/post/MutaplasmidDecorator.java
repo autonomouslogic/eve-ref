@@ -12,7 +12,6 @@ import javax.inject.Inject;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
-import org.h2.mvstore.MVMap;
 
 /**
  * <ul>
@@ -32,8 +31,8 @@ public class MutaplasmidDecorator implements PostDecorator {
 	private StoreHandler storeHandler;
 
 	private StoreDataHelper helper;
-	private MVMap<Long, JsonNode> types;
-	private MVMap<Long, JsonNode> mutaplasmids;
+	private Map<Long, JsonNode> types;
+	private Map<Long, JsonNode> mutaplasmids;
 
 	@Inject
 	protected MutaplasmidDecorator() {}

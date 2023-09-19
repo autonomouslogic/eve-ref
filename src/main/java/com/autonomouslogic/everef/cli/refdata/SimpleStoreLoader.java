@@ -8,13 +8,13 @@ import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
-import org.h2.mvstore.MVMap;
 
 /**
  * Reads big objects from a YAML file, transforms and converts them and stores them in the target map.
@@ -37,7 +37,7 @@ public class SimpleStoreLoader {
 
 	@Setter
 	@NonNull
-	private MVMap<Long, JsonNode> output;
+	private Map<Long, JsonNode> output;
 
 	@Setter
 	@NonNull

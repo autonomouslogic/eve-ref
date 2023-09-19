@@ -15,10 +15,10 @@ import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Single;
 import java.time.Instant;
 import java.time.ZonedDateTime;
+import java.util.Map;
 import javax.inject.Inject;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
-import org.h2.mvstore.MVMap;
 
 /**
  * Fetches Abyssal traits for items.
@@ -43,16 +43,16 @@ public class ContractAbyssalFetcher {
 	protected MetaGroupScraper metaGroupScraper;
 
 	@Setter
-	private MVMap<Long, JsonNode> dynamicItemsStore;
+	private Map<Long, JsonNode> dynamicItemsStore;
 
 	@Setter
-	private MVMap<Long, JsonNode> nonDynamicItemsStore;
+	private Map<Long, JsonNode> nonDynamicItemsStore;
 
 	@Setter
-	private MVMap<String, JsonNode> dogmaEffectsStore;
+	private Map<String, JsonNode> dogmaEffectsStore;
 
 	@Setter
-	private MVMap<String, JsonNode> dogmaAttributesStore;
+	private Map<String, JsonNode> dogmaAttributesStore;
 
 	@Inject
 	protected ContractAbyssalFetcher() {}

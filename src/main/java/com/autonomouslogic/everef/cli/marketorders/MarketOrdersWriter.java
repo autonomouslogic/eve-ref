@@ -13,10 +13,10 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import javax.inject.Inject;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.h2.mvstore.MVMap;
 
 @Slf4j
 public class MarketOrdersWriter {
@@ -24,7 +24,7 @@ public class MarketOrdersWriter {
 	protected TempFiles tempFiles;
 
 	@Setter
-	private MVMap<Long, JsonNode> marketOrdersStore;
+	private Map<Long, JsonNode> marketOrdersStore;
 
 	@Inject
 	protected MarketOrdersWriter() {}
@@ -50,7 +50,7 @@ public class MarketOrdersWriter {
 					log.debug("Preparing sorted IDs.");
 					var start = Instant.now();
 
-					var ids = new ArrayList<>(marketOrdersStore.keyList());
+					var ids = new ArrayList<>(marketOrdersStore.keySet());
 					ids.sort(Ordering.compound(List.of(
 							ordering("region_id"),
 							ordering("type_id"),
