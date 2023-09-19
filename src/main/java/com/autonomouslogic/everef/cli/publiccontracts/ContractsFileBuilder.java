@@ -19,6 +19,7 @@ import java.time.Duration;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Collection;
+import java.util.Map;
 import java.util.function.Function;
 import javax.inject.Inject;
 import lombok.NonNull;
@@ -28,7 +29,6 @@ import lombok.extern.log4j.Log4j2;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
 import org.apache.commons.io.IOUtils;
-import org.h2.mvstore.MVMap;
 
 /**
  * Builds the public contract distribution files.
@@ -74,31 +74,31 @@ public class ContractsFileBuilder {
 
 	@Setter
 	@NonNull
-	private MVMap<Long, JsonNode> contractsStore;
+	private Map<Long, JsonNode> contractsStore;
 
 	@Setter
 	@NonNull
-	private MVMap<Long, JsonNode> itemsStore;
+	private Map<Long, JsonNode> itemsStore;
 
 	@Setter
 	@NonNull
-	private MVMap<Long, JsonNode> bidsStore;
+	private Map<Long, JsonNode> bidsStore;
 
 	@Setter
 	@NonNull
-	private MVMap<Long, JsonNode> dynamicItemsStore;
+	private Map<Long, JsonNode> dynamicItemsStore;
 
 	@Setter
 	@NonNull
-	private MVMap<Long, JsonNode> nonDynamicItemsStore;
+	private Map<Long, JsonNode> nonDynamicItemsStore;
 
 	@Setter
 	@NonNull
-	private MVMap<String, JsonNode> dogmaEffectsStore;
+	private Map<String, JsonNode> dogmaEffectsStore;
 
 	@Setter
 	@NonNull
-	private MVMap<String, JsonNode> dogmaAttributesStore;
+	private Map<String, JsonNode> dogmaAttributesStore;
 
 	private TarArchiveOutputStream tar;
 

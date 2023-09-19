@@ -20,7 +20,6 @@ import lombok.NonNull;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.tuple.Pair;
-import org.h2.mvstore.MVMap;
 import org.jetbrains.annotations.NotNull;
 
 @Log4j2
@@ -37,9 +36,9 @@ public class SkillDecorator implements PostDecorator {
 	private StoreHandler storeHandler;
 
 	private StoreDataHelper helper;
-	private MVMap<Long, JsonNode> types;
-	private MVMap<Long, JsonNode> skills;
-	private MVMap<Long, JsonNode> dogmaAttributes;
+	private Map<Long, JsonNode> types;
+	private Map<Long, JsonNode> skills;
+	private Map<Long, JsonNode> dogmaAttributes;
 	private DogmaAttribute primaryAttributeDogma;
 	private DogmaAttribute secondaryAttributeDogma;
 	private DogmaAttribute skillTimeConstantDogma;

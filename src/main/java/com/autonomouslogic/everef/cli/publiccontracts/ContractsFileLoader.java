@@ -15,6 +15,7 @@ import io.reactivex.rxjava3.core.Single;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.util.Map;
 import java.util.function.Function;
 import javax.inject.Inject;
 import lombok.NonNull;
@@ -25,7 +26,6 @@ import okhttp3.OkHttpClient;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
 import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream;
-import org.h2.mvstore.MVMap;
 
 /**
  * Loads a public contracts archive.
@@ -49,31 +49,31 @@ public class ContractsFileLoader {
 
 	@Setter
 	@NonNull
-	private MVMap<Long, JsonNode> contractsStore;
+	private Map<Long, JsonNode> contractsStore;
 
 	@Setter
 	@NonNull
-	private MVMap<Long, JsonNode> itemsStore;
+	private Map<Long, JsonNode> itemsStore;
 
 	@Setter
 	@NonNull
-	private MVMap<Long, JsonNode> bidsStore;
+	private Map<Long, JsonNode> bidsStore;
 
 	@Setter
 	@NonNull
-	private MVMap<Long, JsonNode> dynamicItemsStore;
+	private Map<Long, JsonNode> dynamicItemsStore;
 
 	@Setter
 	@NonNull
-	private MVMap<Long, JsonNode> nonDynamicItemsStore;
+	private Map<Long, JsonNode> nonDynamicItemsStore;
 
 	@Setter
 	@NonNull
-	private MVMap<String, JsonNode> dogmaEffectsStore;
+	private Map<String, JsonNode> dogmaEffectsStore;
 
 	@Setter
 	@NonNull
-	private MVMap<String, JsonNode> dogmaAttributesStore;
+	private Map<String, JsonNode> dogmaAttributesStore;
 
 	@Inject
 	protected ContractsFileLoader() {}
@@ -226,7 +226,7 @@ public class ContractsFileLoader {
 	private <K> void loadEntries(
 			@NonNull String name,
 			@NonNull InputStream in,
-			@NonNull MVMap<K, JsonNode> store,
+			@NonNull Map<K, JsonNode> store,
 			@NonNull Function<JsonNode, K> idExtractor) {
 		try {
 			jsonNodeCsvReader.readAll(in).forEach(entry -> store.put(idExtractor.apply(entry), entry));

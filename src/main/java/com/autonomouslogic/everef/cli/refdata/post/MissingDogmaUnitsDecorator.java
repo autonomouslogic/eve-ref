@@ -13,7 +13,6 @@ import javax.inject.Inject;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
-import org.h2.mvstore.MVMap;
 
 /**
  * There are some dogma attribute which do not have a unit referenced on them.
@@ -33,7 +32,7 @@ public class MissingDogmaUnitsDecorator implements PostDecorator {
 	private StoreHandler storeHandler;
 
 	private StoreDataHelper helper;
-	private MVMap<Long, JsonNode> dogmaAttributes;
+	private Map<Long, JsonNode> dogmaAttributes;
 
 	@Inject
 	protected MissingDogmaUnitsDecorator() {}

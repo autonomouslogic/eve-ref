@@ -22,7 +22,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
-import org.h2.mvstore.MVMap;
 
 /**
  * Loads the resources configured in <code>refdata.yaml</code> and imports those resources fro the SDE and ESI.
@@ -203,7 +202,7 @@ public class ImportTestResources implements Command {
 	}
 
 	private Completable exportResources(
-			@NonNull String path, @NonNull Function<String, MVMap<Long, JsonNode>> storeProvider) {
+			@NonNull String path, @NonNull Function<String, Map<Long, JsonNode>> storeProvider) {
 		return Completable.fromAction(() -> {
 			var prettyPrinter = objectMapper.writerWithDefaultPrettyPrinter();
 			Map<String, JsonNode> fileNodes = new HashMap<>();

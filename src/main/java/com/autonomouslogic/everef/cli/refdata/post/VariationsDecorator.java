@@ -17,7 +17,6 @@ import javax.inject.Inject;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
-import org.h2.mvstore.MVMap;
 
 /**
  * Populates variations on types.
@@ -35,8 +34,8 @@ public class VariationsDecorator implements PostDecorator {
 	@NonNull
 	private StoreHandler storeHandler;
 
-	private MVMap<Long, JsonNode> types;
-	private MVMap<Long, JsonNode> mutaplasmids;
+	private Map<Long, JsonNode> types;
+	private Map<Long, JsonNode> mutaplasmids;
 
 	@Inject
 	protected VariationsDecorator() {}

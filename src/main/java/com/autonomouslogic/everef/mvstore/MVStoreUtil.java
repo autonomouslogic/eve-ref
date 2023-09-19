@@ -3,6 +3,8 @@ package com.autonomouslogic.everef.mvstore;
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.util.TempFiles;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.NonNull;
@@ -10,7 +12,6 @@ import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import org.h2.mvstore.MVMap;
 import org.h2.mvstore.MVStore;
-import org.h2.mvstore.type.ObjectDataType;
 
 @Singleton
 @Log4j2
@@ -19,7 +20,7 @@ public class MVStoreUtil {
 	protected TempFiles tempFiles;
 
 	@Inject
-	protected JsonNodeDataType jsonNodeDataType;
+	protected ObjectMapper objectMapper;
 
 	private final int cacheSize = Configs.MVSTORE_CACHE_SIZE_MB.getRequired();
 
@@ -47,10 +48,8 @@ public class MVStoreUtil {
 		return store;
 	}
 
-	public <T> MVMap<T, JsonNode> openJsonMap(
-			@NonNull MVStore mvStore, @NonNull String name, @NonNull Class<T> keyType) {
-		return mvStore.openMap(
-				name,
-				new MVMap.Builder<T, JsonNode>().keyType(new ObjectDataType()).valueType(jsonNodeDataType));
+	public <K> Map<K, JsonNode> openJsonMap(@NonNull MVStore mvStore, @NonNull String name, @NonNull Class<K> keyType) {
+		MVMap<K, byte[]> map = mvStore.openMap(name);
+		return new JsonNodeMap<K>(map, objectMapper);
 	}
 }

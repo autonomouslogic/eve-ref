@@ -13,13 +13,13 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Flowable;
 import java.time.Duration;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.inject.Inject;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.h2.mvstore.MVMap;
 
 @Slf4j
 public class MarketOrderFetcher {
@@ -36,7 +36,7 @@ public class MarketOrderFetcher {
 	protected LocationPopulator locationPopulator;
 
 	@Setter
-	private MVMap<Long, JsonNode> marketOrdersStore;
+	private Map<Long, JsonNode> marketOrdersStore;
 
 	@Inject
 	protected MarketOrderFetcher() {}
