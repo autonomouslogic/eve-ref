@@ -2,17 +2,18 @@ package com.autonomouslogic.everef.mvstore;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.util.Collection;
+import java.util.AbstractMap;
+import java.util.AbstractSet;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.h2.mvstore.MVMap;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 @RequiredArgsConstructor
-public class JsonNodeMap<K> implements Map<K, JsonNode> {
+public class JsonNodeMap<K> extends AbstractMap<K, JsonNode> {
 	private final MVMap<K, byte[]> delegate;
 
 	private final ObjectMapper objectMapper;
@@ -38,11 +39,12 @@ public class JsonNodeMap<K> implements Map<K, JsonNode> {
 	}
 
 	@Override
+	@SneakyThrows
 	public JsonNode get(Object o) {
-		throw new UnsupportedOperationException();
+		var bytes = delegate.get(o);
+		return bytes == null ? null : objectMapper.readTree(bytes);
 	}
 
-	@Nullable
 	@Override
 	@SneakyThrows
 	public JsonNode put(K key, JsonNode jsonNode) {
@@ -52,8 +54,10 @@ public class JsonNodeMap<K> implements Map<K, JsonNode> {
 	}
 
 	@Override
+	@SneakyThrows
 	public JsonNode remove(Object o) {
-		throw new UnsupportedOperationException();
+		var bytes = delegate.remove(o);
+		return bytes == null ? null : objectMapper.readTree(bytes);
 	}
 
 	@Override
@@ -70,21 +74,33 @@ public class JsonNodeMap<K> implements Map<K, JsonNode> {
 		delegate.clear();
 	}
 
-	@NotNull
-	@Override
-	public Set<K> keySet() {
-		return delegate.keySet();
-	}
-
-	@NotNull
-	@Override
-	public Collection<JsonNode> values() {
-		throw new UnsupportedOperationException();
-	}
-
-	@NotNull
 	@Override
 	public Set<Entry<K, JsonNode>> entrySet() {
-		throw new UnsupportedOperationException();
+		return new AbstractSet<>() {
+			@Override
+			public Iterator<Entry<K, JsonNode>> iterator() {
+				return new Iterator<>() {
+					private final Iterator<Entry<K, byte[]>> delegate =
+							JsonNodeMap.this.delegate.entrySet().iterator();
+
+					@Override
+					public boolean hasNext() {
+						return delegate.hasNext();
+					}
+
+					@Override
+					@SneakyThrows
+					public Entry<K, JsonNode> next() {
+						var next = delegate.next();
+						return new SimpleEntry<>(next.getKey(), objectMapper.readTree(next.getValue()));
+					}
+				};
+			}
+
+			@Override
+			public int size() {
+				return delegate.size();
+			}
+		};
 	}
 }
