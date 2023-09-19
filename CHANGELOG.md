@@ -1,5 +1,12 @@
 EVE Ref Changelog
 
+## [2.28.1](https://github.com/autonomouslogic/eve-ref/compare/2.28.0...2.28.1) (2023-09-19)
+
+
+### Bug Fixes
+
+* Concurrent modification exception in MVStore ([#274](https://github.com/autonomouslogic/eve-ref/issues/274)) ([fdd74c5](https://github.com/autonomouslogic/eve-ref/commit/fdd74c571b54f38a91b52d60f4f6c77fd22c611d))
+
 ## [2.28.0](https://github.com/autonomouslogic/eve-ref/compare/2.27.2...2.28.0) (2023-09-17)
 
 
