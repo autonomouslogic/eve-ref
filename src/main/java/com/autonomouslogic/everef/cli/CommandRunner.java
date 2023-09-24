@@ -1,6 +1,7 @@
 package com.autonomouslogic.everef.cli;
 
 import com.autonomouslogic.everef.cli.decorator.HealthcheckDecorator;
+import com.autonomouslogic.everef.cli.decorator.MetricsDecorator;
 import com.autonomouslogic.everef.cli.decorator.SlackDecorator;
 import com.autonomouslogic.everef.cli.markethistory.ScrapeMarketHistory;
 import com.autonomouslogic.everef.cli.marketorders.ScrapeMarketOrders;
@@ -56,6 +57,9 @@ public class CommandRunner {
 
 	@Inject
 	protected SlackDecorator slackDecorator;
+
+	@Inject
+	protected MetricsDecorator metricsDecorator;
 
 	@Inject
 	protected CommandRunner() {}
@@ -114,8 +118,10 @@ public class CommandRunner {
 	}
 
 	private Command decorateCommand(Command command) {
+		command = metricsDecorator.decorate(command);
 		command = healthcheckDecorator.decorate(command);
 		command = slackDecorator.decorate(command);
+		command = metricsDecorator.postDecorate(command);
 		return command;
 	}
 }

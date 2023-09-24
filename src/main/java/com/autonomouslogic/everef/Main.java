@@ -3,7 +3,10 @@ package com.autonomouslogic.everef;
 import com.autonomouslogic.everef.cli.CommandRunner;
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.inject.MainComponent;
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.Tag;
 import io.reactivex.rxjava3.plugins.RxJavaPlugins;
+import java.util.List;
 import javax.inject.Inject;
 import lombok.extern.log4j.Log4j2;
 
@@ -13,10 +16,23 @@ public class Main {
 	protected CommandRunner commandRunner;
 
 	@Inject
+	protected MeterRegistry meterRegistry;
+
+	@Inject
 	protected Main() {}
 
 	public void start(String[] args) {
-		commandRunner.runCommand(args).blockingAwait();
+		try {
+			meterRegistry
+					.config()
+					.commonTags(List.of(
+							Tag.of("version", Configs.EVE_REF_VERSION.getRequired()),
+							Tag.of("application", "eve-ref")));
+			commandRunner.runCommand(args).blockingAwait();
+		} finally {
+			log.debug("Closing metrics");
+			meterRegistry.close();
+		}
 	}
 
 	public static void main(String[] args) {

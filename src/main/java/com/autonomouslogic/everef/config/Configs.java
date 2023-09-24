@@ -470,4 +470,22 @@ public class Configs {
 			.type(URI.class)
 			.defaultValue(URI.create("https://market.fuzzwork.co.uk/"))
 			.build();
+
+	/**
+	 * Whether to enable Prometheus for metrics reporting.
+	 */
+	public static final Config<Boolean> PROMETHEUS_ENABLED = Config.<Boolean>builder()
+			.name("PROMETHEUS_ENABLED")
+			.type(Boolean.class)
+			.defaultValue(false)
+			.build();
+
+	/**
+	 * How much delay to add to allow for Prometheus to scrape metrics.
+	 */
+	public static final Config<Duration> PROMETHEUS_SCRAPE_DELAY = Config.<Duration>builder()
+			.name("PROMETHEUS_SCRAPE_DELAY")
+			.type(Duration.class)
+			.defaultValue(Duration.ZERO)
+			.build();
 }
