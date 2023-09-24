@@ -2,13 +2,11 @@ package com.autonomouslogic.everef.cli.decorator;
 
 import com.autonomouslogic.everef.cli.Command;
 import com.autonomouslogic.everef.config.Configs;
-import com.google.common.base.CaseFormat;
+import com.autonomouslogic.everef.util.MetricNames;
 import io.micrometer.core.instrument.MeterRegistry;
-import io.micrometer.core.instrument.Tag;
 import io.reactivex.rxjava3.core.Completable;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -41,14 +39,7 @@ public class MetricsDecorator {
 			return Completable.defer(() -> {
 				var start = Instant.now();
 				return Completable.concatArray(delegate.run(), Completable.fromAction(() -> {
-					meterRegistry
-							.timer(
-									"eve-ref.command.duration",
-									List.of(Tag.of(
-											"command",
-											CaseFormat.UPPER_CAMEL.to(
-													CaseFormat.LOWER_UNDERSCORE, delegate.getName()))))
-							.record(Duration.between(start, Instant.now()));
+					meterRegistry.timer(MetricNames.COMMAND_RUNTIME).record(Duration.between(start, Instant.now()));
 				}));
 			});
 		}

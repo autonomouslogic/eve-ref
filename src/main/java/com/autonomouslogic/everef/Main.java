@@ -27,7 +27,7 @@ public class Main {
 					.config()
 					.commonTags(List.of(
 							Tag.of("version", Configs.EVE_REF_VERSION.getRequired()),
-							Tag.of("application", "eve-ref")));
+							Tag.of("application", "eve_ref")));
 			commandRunner.runCommand(args).blockingAwait();
 		} finally {
 			log.debug("Closing metrics");
