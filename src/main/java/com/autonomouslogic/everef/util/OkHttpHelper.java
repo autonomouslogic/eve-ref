@@ -1,5 +1,9 @@
 package com.autonomouslogic.everef.util;
 
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.Tag;
+import io.micrometer.core.instrument.Timer;
 import io.reactivex.rxjava3.core.Scheduler;
 import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.schedulers.Schedulers;
@@ -7,8 +11,11 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.nio.file.Files;
 import java.nio.file.attribute.FileTime;
+import java.time.Duration;
+import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Optional;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -19,10 +26,14 @@ import okhttp3.Request;
 import okhttp3.Response;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.jetbrains.annotations.NotNull;
 
 @Singleton
 @Log4j2
 public class OkHttpHelper {
+	@Inject
+	protected MeterRegistry meterRegistry;
+
 	@Inject
 	protected OkHttpHelper() {}
 
@@ -100,11 +111,17 @@ public class OkHttpHelper {
 			@NonNull Request request, @NonNull OkHttpClient client, @NonNull Scheduler scheduler) {
 		return Single.fromCallable(() -> {
 					log.trace(String.format("Requesting %s %s", request.method(), request.url()));
-					return client.newCall(request).execute();
+					var start = Instant.now();
+					var response = client.newCall(request).execute();
+					createTimer(request, response).record(Duration.between(start, Instant.now()));
+					return response;
 				})
 				.subscribeOn(scheduler)
-				.onErrorResumeNext(e -> Single.error(new RuntimeException(
-						String.format("Error requesting %s %s", request.method(), request.url()), e)));
+				.onErrorResumeNext(e -> {
+					createErrorCounter(request, e).increment();
+					return Single.error(new RuntimeException(
+							String.format("Error requesting %s %s", request.method(), request.url()), e));
+				});
 	}
 
 	private Request getRequest(@NonNull String url) {
@@ -118,5 +135,29 @@ public class OkHttpHelper {
 		}
 		var lastModified = ZonedDateTime.parse(lastModifiedHeader, DateTimeFormatter.RFC_1123_DATE_TIME);
 		return Optional.of(lastModified);
+	}
+
+	@NotNull
+	private Timer createTimer(@NotNull Request request, Response response) {
+		return meterRegistry.timer(
+				MetricNames.HTTP_REQUEST_TIME,
+				List.of(
+						Tag.of("host", request.url().host()),
+						Tag.of("method", request.method()),
+						Tag.of("status", Integer.toString(response.code()))));
+	}
+
+	@NotNull
+	private Counter createErrorCounter(@NotNull Request request, Throwable e) {
+		return meterRegistry.counter(
+				MetricNames.HTTP_REQUEST_ERROR_COUNT,
+				List.of(
+						Tag.of("host", request.url().host()),
+						Tag.of("method", request.method()),
+						Tag.of(
+								"exception",
+								Optional.ofNullable(ExceptionUtils.getRootCause(e))
+										.map(root -> root.getClass().getSimpleName())
+										.orElse(""))));
 	}
 }

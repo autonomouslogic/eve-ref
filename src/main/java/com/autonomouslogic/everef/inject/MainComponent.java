@@ -11,7 +11,8 @@ import javax.inject.Singleton;
 			S3Module.class,
 			EsiModule.class,
 			OkHttpModule.class,
-			RefDataApiModule.class
+			RefDataApiModule.class,
+			MicrometerModule.class
 		})
 @Singleton
 public interface MainComponent {

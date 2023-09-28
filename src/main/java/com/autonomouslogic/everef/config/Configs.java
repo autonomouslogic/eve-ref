@@ -470,4 +470,64 @@ public class Configs {
 			.type(URI.class)
 			.defaultValue(URI.create("https://market.fuzzwork.co.uk/"))
 			.build();
+
+	/**
+	 * Whether to enable Prometheus for metrics reporting.
+	 */
+	public static final Config<Boolean> PROMETHEUS_ENABLED = Config.<Boolean>builder()
+			.name("PROMETHEUS_ENABLED")
+			.type(Boolean.class)
+			.defaultValue(false)
+			.build();
+
+	/**
+	 * How much delay to add to allow for Prometheus to scrape metrics.
+	 */
+	public static final Config<Duration> PROMETHEUS_SCRAPE_DELAY = Config.<Duration>builder()
+			.name("PROMETHEUS_SCRAPE_DELAY")
+			.type(Duration.class)
+			.defaultValue(Duration.ZERO)
+			.build();
+
+	/**
+	 * Port to use for the Prometheus endpoint.
+	 */
+	public static final Config<Integer> PROMETHEUS_PORT = Config.<Integer>builder()
+			.name("PROMETHEUS_PORT")
+			.type(Integer.class)
+			.defaultValue(9090)
+			.build();
+
+	/**
+	 * Whether to enable Graphite metrics.
+	 */
+	public static final Config<Boolean> GRAPHITE_ENABLED = Config.<Boolean>builder()
+			.name("GRAPHITE_ENABLED")
+			.type(Boolean.class)
+			.defaultValue(false)
+			.build();
+
+	/**
+	 * The host for Graphite metrics.
+	 */
+	public static final Config<String> GRAPHITE_HOST = Config.<String>builder()
+			.name("GRAPHITE_HOST")
+			.type(String.class)
+			.defaultValue("localhost")
+			.build();
+
+	/**
+	 * The user for Graphite metrics.
+	 */
+	public static final Config<Integer> GRAPHITE_PORT = Config.<Integer>builder()
+			.name("GRAPHITE_PORT")
+			.type(Integer.class)
+			.defaultValue(2013)
+			.build();
+
+	/**
+	 * The step to use for Graphite metrics.
+	 */
+	public static final Config<String> GRAPHITE_STEP =
+			Config.<String>builder().name("GRAPHITE_STEP").type(String.class).build();
 }

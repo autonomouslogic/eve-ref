@@ -3,6 +3,7 @@ package com.autonomouslogic.everef;
 import com.autonomouslogic.everef.cli.CommandRunner;
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.inject.MainComponent;
+import io.micrometer.core.instrument.MeterRegistry;
 import io.reactivex.rxjava3.plugins.RxJavaPlugins;
 import javax.inject.Inject;
 import lombok.extern.log4j.Log4j2;
@@ -13,10 +14,18 @@ public class Main {
 	protected CommandRunner commandRunner;
 
 	@Inject
+	protected MeterRegistry meterRegistry;
+
+	@Inject
 	protected Main() {}
 
 	public void start(String[] args) {
-		commandRunner.runCommand(args).blockingAwait();
+		try {
+			initMetrics();
+			commandRunner.runCommand(args).blockingAwait();
+		} finally {
+			closeMetrics();
+		}
 	}
 
 	public static void main(String[] args) {
@@ -32,5 +41,18 @@ public class Main {
 			System.exit(1);
 		}
 		System.exit(0);
+	}
+
+	private void initMetrics() {
+		// new ClassLoaderMetrics().bindTo(meterRegistry);
+		// new JvmMemoryMetrics().bindTo(meterRegistry);
+		// new JvmGcMetrics().bindTo(meterRegistry);
+		// new ProcessorMetrics().bindTo(meterRegistry);
+		// new JvmThreadMetrics().bindTo(meterRegistry);
+	}
+
+	private void closeMetrics() {
+		log.debug("Closing metrics");
+		meterRegistry.close();
 	}
 }

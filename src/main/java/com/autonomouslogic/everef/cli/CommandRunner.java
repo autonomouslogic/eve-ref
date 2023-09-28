@@ -1,15 +1,20 @@
 package com.autonomouslogic.everef.cli;
 
 import com.autonomouslogic.everef.cli.decorator.HealthcheckDecorator;
+import com.autonomouslogic.everef.cli.decorator.MetricsDecorator;
 import com.autonomouslogic.everef.cli.decorator.SlackDecorator;
 import com.autonomouslogic.everef.cli.markethistory.ScrapeMarketHistory;
 import com.autonomouslogic.everef.cli.marketorders.ScrapeMarketOrders;
 import com.autonomouslogic.everef.cli.publiccontracts.ScrapePublicContracts;
 import com.autonomouslogic.everef.cli.refdata.BuildRefData;
+import com.google.common.base.CaseFormat;
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.Tag;
 import io.reactivex.rxjava3.core.Completable;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import javax.inject.Singleton;
@@ -18,6 +23,9 @@ import lombok.extern.log4j.Log4j2;
 @Singleton
 @Log4j2
 public class CommandRunner {
+	@Inject
+	protected MeterRegistry meterRegistry;
+
 	@Inject
 	protected Provider<Placeholder> placeholderProvider;
 
@@ -58,6 +66,9 @@ public class CommandRunner {
 	protected SlackDecorator slackDecorator;
 
 	@Inject
+	protected MetricsDecorator metricsDecorator;
+
+	@Inject
 	protected CommandRunner() {}
 
 	public Completable runCommand(String[] args) {
@@ -68,8 +79,15 @@ public class CommandRunner {
 			throw new IllegalArgumentException("More than one command specified");
 		}
 		var command = createCommand(args[0]);
+		initMetrics(command);
 		command = decorateCommand(command);
 		return runCommand(command);
+	}
+
+	private void initMetrics(Command command) {
+		var commandName = CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, command.getName());
+		var commandTag = Tag.of("command", commandName);
+		meterRegistry.config().commonTags(List.of(commandTag));
 	}
 
 	private Completable runCommand(Command command) {
@@ -114,8 +132,10 @@ public class CommandRunner {
 	}
 
 	private Command decorateCommand(Command command) {
+		command = metricsDecorator.decorate(command);
 		command = healthcheckDecorator.decorate(command);
 		command = slackDecorator.decorate(command);
+		command = metricsDecorator.postDecorate(command);
 		return command;
 	}
 }

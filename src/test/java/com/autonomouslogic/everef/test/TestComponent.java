@@ -45,7 +45,8 @@ import javax.inject.Singleton;
 			MockDataIndexModule.class,
 			MockLocationPopulatorModule.class,
 			MockDataCrawlerModule.class,
-			RefDataApiModule.class
+			RefDataApiModule.class,
+			TestMicrometerModule.class
 		})
 @Singleton
 public interface TestComponent {
