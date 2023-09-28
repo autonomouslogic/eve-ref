@@ -65,7 +65,7 @@ public class ScrapeMarketHistoryTest {
 	@Inject
 	MockS3Adapter mockS3Adapter;
 
-	final String lastModified = "Mon, 03 Apr 2023 03:47:30 GMT";
+	final String lastModified = "Tue, 03 Jan 2023 13:47:30 GMT";
 
 	MockWebServer server;
 

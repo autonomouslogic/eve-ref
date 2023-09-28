@@ -40,6 +40,10 @@ public class StoreMapSet {
 		getOrCreateMap(map).put(key, value);
 	}
 
+	public JsonNode get(String map, String key) {
+		return getOrCreateMap(map).get(key);
+	}
+
 	public Map<String, JsonNode> getOrCreateMap(String name) {
 		return maps.computeIfAbsent(name, ignore -> mvStoreUtil.openJsonMap(mvStore, name, String.class));
 	}
