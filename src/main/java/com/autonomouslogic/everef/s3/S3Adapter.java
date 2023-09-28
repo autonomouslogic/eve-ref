@@ -2,6 +2,8 @@ package com.autonomouslogic.everef.s3;
 
 import com.autonomouslogic.commons.rxjava3.Rx3Util;
 import com.autonomouslogic.everef.url.S3Url;
+import com.autonomouslogic.everef.util.MetricNames;
+import io.micrometer.core.instrument.MeterRegistry;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.schedulers.Schedulers;
@@ -25,6 +27,9 @@ import software.amazon.awssdk.services.s3.model.PutObjectResponse;
 @Log4j2
 public class S3Adapter {
 	@Inject
+	protected MeterRegistry meterRegistry;
+
+	@Inject
 	protected S3Adapter() {}
 
 	public Flowable<ListedS3Object> listObjects(@NonNull S3Url url, @NonNull S3AsyncClient client) {
@@ -43,6 +48,7 @@ public class S3Adapter {
 
 	private Flowable<ListObjectsV2Response> listObjects(
 			@NonNull ListObjectsV2Request req, @NonNull S3AsyncClient client) {
+		var counter = meterRegistry.counter(MetricNames.S3_LIST_OBJECTS_COUNT);
 		var s3Url =
 				S3Url.builder().bucket(req.bucket()).path(req.prefix()).build().toString();
 		var count = new AtomicInteger();
@@ -54,11 +60,13 @@ public class S3Adapter {
 					var n = response.contents().size();
 					var total = count.getAndAdd(n);
 					log.debug(String.format("Listing %s: %s+%s objects", s3Url, total, n));
-				});
+				})
+				.doOnNext(obj -> counter.increment());
 	}
 
 	public Single<PutObjectResponse> putObject(
 			@NonNull PutObjectRequest req, @NonNull AsyncRequestBody body, @NonNull S3AsyncClient client) {
+		var counter = meterRegistry.counter(MetricNames.S3_PUT_OBJECT_BYTES);
 		return Rx3Util.toSingle(client.putObject(req, body))
 				.timeout(120, TimeUnit.SECONDS)
 				.retry(3, e -> {
@@ -67,7 +75,8 @@ public class S3Adapter {
 				})
 				.observeOn(Schedulers.computation())
 				.onErrorResumeNext(e -> Single.error(new RuntimeException(
-						String.format("Error putting object to s3://%s/%s", req.bucket(), req.key()), e)));
+						String.format("Error putting object to s3://%s/%s", req.bucket(), req.key()), e)))
+				.doOnSuccess(response -> body.contentLength().ifPresent(counter::increment));
 	}
 
 	public Single<PutObjectResponse> putObject(
@@ -86,6 +95,7 @@ public class S3Adapter {
 	}
 
 	public Single<DeleteObjectResponse> deleteObject(@NonNull DeleteObjectRequest req, @NonNull S3AsyncClient client) {
+		var counter = meterRegistry.counter(MetricNames.S3_DELETE_OBJECT);
 		return Rx3Util.toSingle(client.deleteObject(req))
 				.timeout(120, TimeUnit.SECONDS)
 				.retry(3, e -> {
@@ -94,6 +104,7 @@ public class S3Adapter {
 				})
 				.observeOn(Schedulers.computation())
 				.onErrorResumeNext(e -> Single.error(new RuntimeException(
-						String.format("Error deleting object to s3://%s/%s", req.bucket(), req.key()), e)));
+						String.format("Error deleting object to s3://%s/%s", req.bucket(), req.key()), e)))
+				.doOnSuccess(response -> counter.increment());
 	}
 }

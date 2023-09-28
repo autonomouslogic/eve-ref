@@ -137,6 +137,9 @@ public class OkHttpHelper {
 	private Timer createTimer(@NotNull Request request, Response response) {
 		return meterRegistry.timer(
 				MetricNames.HTTP_REQUEST_TIME,
-				List.of(Tag.of("host", request.url().host()), Tag.of("status", Integer.toString(response.code()))));
+				List.of(
+						Tag.of("host", request.url().host()),
+						Tag.of("method", request.method()),
+						Tag.of("status", Integer.toString(response.code()))));
 	}
 }

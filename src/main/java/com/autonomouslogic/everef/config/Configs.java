@@ -488,4 +488,40 @@ public class Configs {
 			.type(Duration.class)
 			.defaultValue(Duration.ZERO)
 			.build();
+
+	/**
+	 * Port to use for the Prometheus endpoint.
+	 */
+	public static final Config<Integer> PROMETHEUS_PORT = Config.<Integer>builder()
+			.name("PROMETHEUS_PORT")
+			.type(Integer.class)
+			.defaultValue(9090)
+			.build();
+
+	/**
+	 * Whether to enable Graphite metrics.
+	 */
+	public static final Config<Boolean> GRAPHITE_ENABLED = Config.<Boolean>builder()
+			.name("GRAPHITE_ENABLED")
+			.type(Boolean.class)
+			.defaultValue(false)
+			.build();
+
+	/**
+	 * The host for Graphite metrics.
+	 */
+	public static final Config<String> GRAPHITE_HOST = Config.<String>builder()
+			.name("GRAPHITE_HOST")
+			.type(String.class)
+			.defaultValue("localhost")
+			.build();
+
+	/**
+	 * The user for Graphite metrics.
+	 */
+	public static final Config<Integer> GRAPHITE_PORT = Config.<Integer>builder()
+			.name("GRAPHITE_PORT")
+			.type(Integer.class)
+			.defaultValue(2003)
+			.build();
 }
