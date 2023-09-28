@@ -4,8 +4,6 @@ import com.autonomouslogic.everef.cli.CommandRunner;
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.inject.MainComponent;
 import io.micrometer.core.instrument.MeterRegistry;
-import io.micrometer.core.instrument.binder.jvm.JvmMemoryMetrics;
-import io.micrometer.core.instrument.binder.system.ProcessorMetrics;
 import io.reactivex.rxjava3.plugins.RxJavaPlugins;
 import javax.inject.Inject;
 import lombok.extern.log4j.Log4j2;
@@ -46,12 +44,11 @@ public class Main {
 	}
 
 	private void initMetrics() {
-		meterRegistry.config();
-		//		new ClassLoaderMetrics().bindTo(meterRegistry);
-		new JvmMemoryMetrics().bindTo(meterRegistry);
-		//		new JvmGcMetrics().bindTo(meterRegistry);
-		new ProcessorMetrics().bindTo(meterRegistry);
-		//		new JvmThreadMetrics().bindTo(meterRegistry);
+		// new ClassLoaderMetrics().bindTo(meterRegistry);
+		// new JvmMemoryMetrics().bindTo(meterRegistry);
+		// new JvmGcMetrics().bindTo(meterRegistry);
+		// new ProcessorMetrics().bindTo(meterRegistry);
+		// new JvmThreadMetrics().bindTo(meterRegistry);
 	}
 
 	private void closeMetrics() {
