@@ -1,5 +1,6 @@
 package com.autonomouslogic.everef.util;
 
+import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Tag;
 import io.micrometer.core.instrument.Timer;
@@ -116,8 +117,11 @@ public class OkHttpHelper {
 					return response;
 				})
 				.subscribeOn(scheduler)
-				.onErrorResumeNext(e -> Single.error(new RuntimeException(
-						String.format("Error requesting %s %s", request.method(), request.url()), e)));
+				.onErrorResumeNext(e -> {
+					createErrorCounter(request, e).increment();
+					return Single.error(new RuntimeException(
+							String.format("Error requesting %s %s", request.method(), request.url()), e));
+				});
 	}
 
 	private Request getRequest(@NonNull String url) {
@@ -141,5 +145,19 @@ public class OkHttpHelper {
 						Tag.of("host", request.url().host()),
 						Tag.of("method", request.method()),
 						Tag.of("status", Integer.toString(response.code()))));
+	}
+
+	@NotNull
+	private Counter createErrorCounter(@NotNull Request request, Throwable e) {
+		return meterRegistry.counter(
+				MetricNames.HTTP_REQUEST_ERROR_COUNT,
+				List.of(
+						Tag.of("host", request.url().host()),
+						Tag.of("method", request.method()),
+						Tag.of(
+								"exception",
+								Optional.ofNullable(ExceptionUtils.getRootCause(e))
+										.map(root -> root.getClass().getSimpleName())
+										.orElse(""))));
 	}
 }

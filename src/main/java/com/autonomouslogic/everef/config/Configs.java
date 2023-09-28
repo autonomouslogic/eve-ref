@@ -522,6 +522,6 @@ public class Configs {
 	public static final Config<Integer> GRAPHITE_PORT = Config.<Integer>builder()
 			.name("GRAPHITE_PORT")
 			.type(Integer.class)
-			.defaultValue(2003)
+			.defaultValue(2013)
 			.build();
 }
