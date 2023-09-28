@@ -95,7 +95,7 @@ public class S3Adapter {
 	}
 
 	public Single<DeleteObjectResponse> deleteObject(@NonNull DeleteObjectRequest req, @NonNull S3AsyncClient client) {
-		var counter = meterRegistry.counter(MetricNames.S3_DELETE_OBJECT);
+		var counter = meterRegistry.counter(MetricNames.S3_DELETE_OBJECT_COUNT);
 		return Rx3Util.toSingle(client.deleteObject(req))
 				.timeout(120, TimeUnit.SECONDS)
 				.retry(3, e -> {

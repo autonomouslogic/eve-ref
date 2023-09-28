@@ -524,4 +524,10 @@ public class Configs {
 			.type(Integer.class)
 			.defaultValue(2013)
 			.build();
+
+	/**
+	 * The atep to use for Graphite metrics.
+	 */
+	public static final Config<String> GRAPHITE_STEP =
+			Config.<String>builder().name("GRAPHITE_STEP").type(String.class).build();
 }

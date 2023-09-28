@@ -30,12 +30,15 @@ public class MicrometerModule {
 		return registry;
 	}
 
+	@SneakyThrows
 	private Optional<GraphiteMeterRegistry> createGraphiteRegistry() {
 		if (!Configs.GRAPHITE_ENABLED.getRequired()) {
 			return Optional.empty();
 		}
 		var host = Configs.GRAPHITE_HOST.getRequired();
 		var port = Configs.GRAPHITE_PORT.getRequired();
+		var step = Configs.GRAPHITE_STEP.get();
+		log.debug("Reporting Graphite metrics to {}:{}", host, port);
 		var registry = new GraphiteMeterRegistry(
 				new GraphiteConfig() {
 					@Override
@@ -50,6 +53,9 @@ public class MicrometerModule {
 
 					@Override
 					public String get(String key) {
+						if ("graphite.step".equals(key)) {
+							return step.orElse(null);
+						}
 						return null;
 					}
 				},
