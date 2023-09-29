@@ -1,0 +1,12 @@
+{
+  "constellations" : [ 20000001, 20000002, 20000003, 20000004, 20000005, 20000006, 20000007, 20000008, 20000009, 20000010, 20000011, 20000012, 20000013, 20000014, 20000015, 20000016 ],
+  "description" : {
+    "en" : "The Derelik region, sovereign seat of the Ammatar Mandate, became the shield to the Amarrian flank in the wake of the Minmatar Rebellion. Derelik witnessed many hostile exchanges between the Amarr and rebel forces as the latter tried to push deeper into the territory of their former masters. Having held their ground, thanks in no small part to the Ammatars' military efforts, the Amarr awarded the Ammatar with their own province. However, this portion of space shared borders with the newly forming Minmatar Republic as well as the Empire, and thus came to be situated in a dark recess surrounded by hostiles. \n\nGiven the lack of safe routes elsewhere, the local economies of this region were dependent on trade with the Amarr as their primary means of survival. The Ammatar persevered over many decades of economic stagnation and limited trade partners, and their determination has in recent decades been rewarded with an increase in economic prosperity. This harsh trail is a point of pride for all who call themselves Ammatar, and it has bolstered their faith in the Amarrian way to no end.",
+    "ja" : "アマターマンデートの統治下にあるディレリックリージョンは、ミンマター反乱勢力の影響力に対してアマーの側面を固める盾の役割を果たしている。ディレリックでは、反乱軍がかつての領主であるアマーの支配地域に対して奥深くまで侵攻を試みた結果、両者の間に多くの対立が生じた。自らの地歩を固める一方、アマターの軍事的努力にも少なからず助けられたアマーは、アマターに自治州を与えた。しかし、この宙域はアマー帝国だけでなく新興のミンマター共和国とも境を接しており、周囲を敵に囲まれていわば袋のネズミ状態にある。他に安全な航路がないため、このリージョンの経済はもっぱらアマーとの交易のおかげで存続している。アマターは停滞した経済と交易対象の少なさに長らく苦しんできたが、粘り強い努力が近年ついに報われ、経済的発展を見せはじめている。アマター人にとって苦難を乗り越えたことは誇りであり、アマーの教えに対する信仰心は高まる一方である。"
+  },
+  "name" : {
+    "en" : "Derelik",
+    "ja" : "ディレリック"
+  },
+  "region_id" : 10000001
+}

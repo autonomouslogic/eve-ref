@@ -289,3 +289,19 @@ icons:
     ids:
       - 0
       - 78
+
+regions:
+  idField: region_id
+  model: Region
+  esi:
+    file: universe/regions
+    languageAttributes:
+      - description
+      - name
+  test:
+    filePrefix: region
+    ids:
+      - 10000001
+    languages:
+      - en-us
+      - ja
