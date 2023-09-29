@@ -284,7 +284,7 @@ public class Configs {
 			.build();
 
 	/**
-	 * The number of times to tre once the special rate limit for market history has been exceeded.
+	 * The number of times to try once the special rate limit for market history has been exceeded.
 	 */
 	public static final Config<Integer> ESI_MARKET_HISTORY_RATE_LIMIT_TRIES = Config.<Integer>builder()
 			.name("ESI_MARKET_HISTORY_RATE_LIMIT_TRIES")
@@ -368,6 +368,15 @@ public class Configs {
 			.name("MARKET_HISTORY_SAVE_CONCURRENCY")
 			.type(Integer.class)
 			.defaultValue(8)
+			.build();
+
+	/**
+	 * The maximum runtime to aim for when examining top traded types.
+	 */
+	public static final Config<Duration> MARKET_HISTORY_TOP_TRADED_MAX_TIME = Config.<Duration>builder()
+			.name("MARKET_HISTORY_TOP_TRADED_MAX_TIME")
+			.type(Duration.class)
+			.defaultValue(Duration.ofHours(2))
 			.build();
 
 	/**
