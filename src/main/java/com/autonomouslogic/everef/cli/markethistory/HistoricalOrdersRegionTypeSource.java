@@ -27,8 +27,6 @@ import javax.inject.Provider;
 import lombok.extern.log4j.Log4j2;
 import okhttp3.OkHttpClient;
 import org.apache.commons.lang3.tuple.Pair;
-import org.apache.commons.rng.simple.JDKRandomBridge;
-import org.apache.commons.rng.simple.RandomSource;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -80,10 +78,7 @@ class HistoricalOrdersRegionTypeSource implements RegionTypeSource {
 				.flatMap(group -> group.sorted(Ordering.natural().onResultOf(DataUrl::getPath))
 						.toList()
 						.flatMapPublisher(list -> {
-							var seed = new int[] {
-								(int) today.toEpochDay(), (int) group.getKey().toEpochDay()
-							};
-							Collections.shuffle(list, new JDKRandomBridge(RandomSource.ISAAC, seed));
+							Collections.shuffle(list);
 							var selected = list.get(0);
 							log.debug(
 									"Saw {} files for {}, selected {}",
