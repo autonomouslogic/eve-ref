@@ -307,6 +307,9 @@ regions:
     filePrefix: region
     ids:
       - 10000001
+      - 11000001
+      - 12000001
+      - 14000001
     languages:
       - en-us
       - ja
