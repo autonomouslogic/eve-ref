@@ -358,6 +358,42 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Mutaplasmid'
+  /regions:
+    get:
+      tags:
+      - refdata
+      description: Get all region IDs.
+      operationId: getAllRegions
+      responses:
+        "200":
+          description: Region IDs.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: integer
+                  format: int32
+  /regions/{region_id}:
+    get:
+      tags:
+      - refdata
+      description: Get a region.
+      operationId: getRegion
+      parameters:
+      - name: region_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: The region.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Region'
   /skills:
     get:
       tags:
@@ -509,6 +545,15 @@ components:
         probability:
           type: number
           format: double
+    Coordinate:
+      type: object
+      properties:
+        x:
+          type: number
+        "y":
+          type: number
+        z:
+          type: number
     DogmaAttribute:
       type: object
       properties:
@@ -1082,6 +1127,47 @@ components:
       properties:
         sha256:
           type: string
+    Region:
+      type: object
+      properties:
+        region_id:
+          type: integer
+          format: int64
+        universe_id:
+          type: string
+        wormhole_class_id:
+          type: integer
+          format: int64
+        nebula_id:
+          type: integer
+          format: int64
+        name_id:
+          type: integer
+          format: int64
+        description_id:
+          type: integer
+          format: int64
+        faction_id:
+          type: integer
+          format: int64
+        name:
+          type: object
+          additionalProperties:
+            type: string
+            description: The key is the language code.
+          description: The key is the language code.
+        description:
+          type: object
+          additionalProperties:
+            type: string
+            description: The key is the language code.
+          description: The key is the language code.
+        center:
+          $ref: '#/components/schemas/Coordinate'
+        max:
+          $ref: '#/components/schemas/Coordinate'
+        min:
+          $ref: '#/components/schemas/Coordinate'
     Skill:
       type: object
       properties:

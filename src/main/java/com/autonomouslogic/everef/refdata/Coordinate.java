@@ -4,11 +4,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.math.BigDecimal;
 import lombok.Builder;
 import lombok.Value;
 import lombok.extern.jackson.Jacksonized;
-
-import java.util.List;
 
 @Value
 @Builder
@@ -17,11 +16,11 @@ import java.util.List;
 @Schema
 public class Coordinate {
 	@JsonProperty
-	Long x;
+	BigDecimal x;
 
 	@JsonProperty
-	Long y;
+	BigDecimal y;
 
 	@JsonProperty
-	Long z;
+	BigDecimal z;
 }

@@ -7,7 +7,6 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.util.ArrayList;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-
 import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
 
@@ -101,9 +100,10 @@ public class TransformUtil {
 		if (list.size() != 3) {
 			throw new IllegalArgumentException("List must have exactly two elements: " + list);
 		}
-		return objectMapper.createObjectNode()
-			.put("x", list.get(0).asLong())
-			.put("y", list.get(1).asLong())
-			.put("z", list.get(2).asLong());
+		var obj = objectMapper.createObjectNode();
+		obj.set("x", list.get(0));
+		obj.set("y", list.get(1));
+		obj.set("z", list.get(2));
+		return obj;
 	}
 }

@@ -470,4 +470,13 @@ public class Configs {
 			.type(URI.class)
 			.defaultValue(URI.create("https://market.fuzzwork.co.uk/"))
 			.build();
+
+	/**
+	 * Whether to force ref data processing.
+	 */
+	public static final Config<Boolean> FORCE_REF_DATA = Config.<Boolean>builder()
+		.name("FORCE_REF_DATA")
+		.defaultValue(false)
+		.type(Boolean.class)
+		.build();
 }
