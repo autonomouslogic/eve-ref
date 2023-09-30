@@ -475,8 +475,8 @@ public class Configs {
 	 * Whether to force ref data processing.
 	 */
 	public static final Config<Boolean> FORCE_REF_DATA = Config.<Boolean>builder()
-		.name("FORCE_REF_DATA")
-		.defaultValue(false)
-		.type(Boolean.class)
-		.build();
+			.name("FORCE_REF_DATA")
+			.defaultValue(false)
+			.type(Boolean.class)
+			.build();
 }
