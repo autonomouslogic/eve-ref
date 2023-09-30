@@ -37,6 +37,11 @@ public class SdeRegionTransformer implements SimpleTransformer {
 			throw new NullPointerException("No universe ID found in " + filename);
 		}
 		json.put("universe_id", universeId);
+
+		transformUtil.listToCoordinate(json, "center");
+		transformUtil.listToCoordinate(json, "min");
+		transformUtil.listToCoordinate(json, "max");
+
 		return json;
 	}
 }

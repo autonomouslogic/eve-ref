@@ -303,6 +303,8 @@ regions:
   sde:
     fileRegex: ^sde\/fsd\/universe\/(?<universeId>[a-zA-Z0-9-]+)\/[a-zA-Z0-9-]+\/region\.staticdata$
     individualFiles: true
+    renames:
+      nebula: nebula_id
   test:
     filePrefix: region
     ids:

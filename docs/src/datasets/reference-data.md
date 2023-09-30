@@ -42,7 +42,7 @@ Some example paths:
 * <https://ref-data.everef.net/blueprints>
 * <https://ref-data.everef.net/blueprints/999>
 * <https://ref-data.everef.net/regions>
-* <https://ref-data.everef.net/regions/12000001>
+* <https://ref-data.everef.net/regions/10000002>
 
 ## Motivation
 Two primary datasets are available for third-party developers of EVE Online: the SDE and ESI.
