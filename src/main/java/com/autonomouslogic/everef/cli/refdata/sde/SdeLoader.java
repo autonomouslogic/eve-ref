@@ -76,7 +76,7 @@ public class SdeLoader {
 									break;
 							}
 							storeLoader.setTransformer(TransformUtil.concat(fieldRenamer, transformer));
-							return storeLoader.readValues(pair.getRight());
+							return storeLoader.readValues(pair.getRight(), config.getSde());
 						},
 						false,
 						1);

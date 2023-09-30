@@ -19,10 +19,14 @@ import lombok.SneakyThrows;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
 import org.apache.commons.compress.compressors.xz.XZCompressorOutputStream;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 
 @Singleton
 public class MockScrapeBuilder {
+	private static final String REFDATA_RESOURCES = "src/test/resources/refdata/";
+
 	@Inject
 	protected ObjectMapper objectMapper;
 
@@ -41,13 +45,11 @@ public class MockScrapeBuilder {
 	@SneakyThrows
 	@SuppressWarnings("unchecked")
 	public File createTestSde() {
+		var prefix = new File(REFDATA_RESOURCES, "sde");
 		var entries = new ArrayList<Map.Entry<String, byte[]>>();
-		for (var config : refDataUtil.loadReferenceDataConfig()) {
-			if (config.getSde() == null) {
-				continue;
-			}
-			entries.add(createEntry("/refdata", config.getSde().getFile()));
-		}
+		FileUtils.listFiles(prefix, null, true).stream()
+				.map(f -> new File(StringUtils.remove(f.getPath(), REFDATA_RESOURCES)))
+				.forEach(f -> entries.add(createEntry("/refdata", f.getPath())));
 		return createZipFile(Map.ofEntries(entries.toArray(new Map.Entry[0])));
 	}
 
