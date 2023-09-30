@@ -1,4 +1,13 @@
 {
+  "center" : [ -77361951922776930, 50878032664301930, -64433101266115400 ],
+  "description_id" : 267685,
+  "faction_id" : 500007,
+  "max" : [ -49173916281705740, 74627511451559840, 102442842021202130 ],
+  "min" : [ -105549987563848110, 27128553877044016, 26423360511028670 ],
+  "name_id" : 267684,
+  "nebula" : 11799,
+  "region_id" : 10000001,
+  "wormhole_class_id" : 7,
   "constellations" : [ 20000001, 20000002, 20000003, 20000004, 20000005, 20000006, 20000007, 20000008, 20000009, 20000010, 20000011, 20000012, 20000013, 20000014, 20000015, 20000016 ],
   "description" : {
     "en" : "The Derelik region, sovereign seat of the Ammatar Mandate, became the shield to the Amarrian flank in the wake of the Minmatar Rebellion. Derelik witnessed many hostile exchanges between the Amarr and rebel forces as the latter tried to push deeper into the territory of their former masters. Having held their ground, thanks in no small part to the Ammatars' military efforts, the Amarr awarded the Ammatar with their own province. However, this portion of space shared borders with the newly forming Minmatar Republic as well as the Empire, and thus came to be situated in a dark recess surrounded by hostiles. \n\nGiven the lack of safe routes elsewhere, the local economies of this region were dependent on trade with the Amarr as their primary means of survival. The Ammatar persevered over many decades of economic stagnation and limited trade partners, and their determination has in recent decades been rewarded with an increase in economic prosperity. This harsh trail is a point of pride for all who call themselves Ammatar, and it has bolstered their faith in the Amarrian way to no end.",
@@ -7,6 +16,5 @@
   "name" : {
     "en" : "Derelik",
     "ja" : "ディレリック"
-  },
-  "region_id" : 10000001
+  }
 }
