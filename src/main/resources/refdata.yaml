@@ -298,6 +298,9 @@ regions:
     languageAttributes:
       - description
       - name
+  sde:
+    fileRegex: ^sde\/fsd\/universe\/(?<universeName>[a-zA-Z0-9-]+)\/(?<regionName>[a-zA-Z0-9-]+)\/region\.staticdata$
+    individualFiles: true
   test:
     filePrefix: region
     ids:
