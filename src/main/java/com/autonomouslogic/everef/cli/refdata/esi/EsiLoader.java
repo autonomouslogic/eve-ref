@@ -60,7 +60,7 @@ public class EsiLoader {
 							storeLoader.setTransformer(transformer);
 							storeLoader.setPostMergeTransformer(esiFieldOrderTransformerProvider.get());
 							storeLoader.setLanguage(fileType.getLanguage());
-							return storeLoader.readValues(pair.getRight());
+							return storeLoader.readValues(pair.getRight(), config.getEsi());
 						},
 						false,
 						1);
