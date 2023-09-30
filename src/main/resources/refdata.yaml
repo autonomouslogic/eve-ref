@@ -298,6 +298,8 @@ regions:
     languageAttributes:
       - description
       - name
+    removes:
+      - constellations
   sde:
     fileRegex: ^sde\/fsd\/universe\/(?<universeId>[a-zA-Z0-9-]+)\/[a-zA-Z0-9-]+\/region\.staticdata$
     individualFiles: true
