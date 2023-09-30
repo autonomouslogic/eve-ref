@@ -7,5 +7,6 @@
   "name_id" : 267684,
   "nebula" : 11799,
   "region_id" : 10000001,
-  "wormhole_class_id" : 7
+  "wormhole_class_id" : 7,
+  "universe_id" : "eve"
 }

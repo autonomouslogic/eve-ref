@@ -299,7 +299,7 @@ regions:
       - description
       - name
   sde:
-    fileRegex: ^sde\/fsd\/universe\/(?<universeName>[a-zA-Z0-9-]+)\/(?<regionName>[a-zA-Z0-9-]+)\/region\.staticdata$
+    fileRegex: ^sde\/fsd\/universe\/(?<universeId>[a-zA-Z0-9-]+)\/[a-zA-Z0-9-]+\/region\.staticdata$
     individualFiles: true
   test:
     filePrefix: region
