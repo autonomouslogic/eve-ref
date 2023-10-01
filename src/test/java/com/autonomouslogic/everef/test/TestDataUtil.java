@@ -13,6 +13,7 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringReader;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -177,5 +178,15 @@ public class TestDataUtil {
 	public void assertJsonStrictEquals(JsonNode expected, JsonNode actual) {
 		var prettyWriter = objectMapper.writerWithDefaultPrettyPrinter();
 		assertEquals(prettyWriter.writeValueAsString(expected), prettyWriter.writeValueAsString(actual));
+	}
+
+	@SneakyThrows
+	public List<RecordedRequest> takeAllRequests(MockWebServer server) {
+		var list = new ArrayList<RecordedRequest>();
+		RecordedRequest r;
+		while ((r = server.takeRequest(1, TimeUnit.MILLISECONDS)) != null) {
+			list.add(r);
+		}
+		return list;
 	}
 }

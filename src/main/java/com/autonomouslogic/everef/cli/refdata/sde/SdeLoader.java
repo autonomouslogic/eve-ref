@@ -40,7 +40,10 @@ public class SdeLoader {
 	protected Provider<BlueprintTransformer> blueprintTransformerProvider;
 
 	@Inject
-	protected Provider<SdeDogmaEffectTransformer> sdDogmaEffectTransformerProvider;
+	protected Provider<SdeDogmaEffectTransformer> sdeDogmaEffectTransformerProvider;
+
+	@Inject
+	protected Provider<SdeRegionTransformer> sdeRegionTransformerProvider;
 
 	@Setter
 	@NonNull
@@ -72,11 +75,19 @@ public class SdeLoader {
 									break;
 								case "dogmaEffects":
 									transformer =
-											TransformUtil.concat(transformer, sdDogmaEffectTransformerProvider.get());
+											TransformUtil.concat(transformer, sdeDogmaEffectTransformerProvider.get());
+									break;
+								case "regions":
+									transformer = TransformUtil.concat(
+											transformer,
+											sdeRegionTransformerProvider
+													.get()
+													.setTypeConfig(config.getSde())
+													.setFilename(pair.getLeft().getName()));
 									break;
 							}
 							storeLoader.setTransformer(TransformUtil.concat(fieldRenamer, transformer));
-							return storeLoader.readValues(pair.getRight());
+							return storeLoader.readValues(pair.getRight(), config.getSde());
 						},
 						false,
 						1);

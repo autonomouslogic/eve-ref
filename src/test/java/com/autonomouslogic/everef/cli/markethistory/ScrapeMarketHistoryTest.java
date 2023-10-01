@@ -1,15 +1,18 @@
 package com.autonomouslogic.everef.cli.markethistory;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import com.autonomouslogic.commons.ResourceUtil;
+import com.autonomouslogic.everef.model.RegionTypePair;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.test.MockS3Adapter;
 import com.autonomouslogic.everef.test.TestDataUtil;
 import com.autonomouslogic.everef.util.ArchivePathFactory;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
@@ -65,6 +68,9 @@ public class ScrapeMarketHistoryTest {
 	@Inject
 	MockS3Adapter mockS3Adapter;
 
+	@Inject
+	TestDataUtil testDataUtil;
+
 	final String lastModified = "Tue, 03 Jan 2023 13:47:30 GMT";
 
 	MockWebServer server;
@@ -112,6 +118,13 @@ public class ScrapeMarketHistoryTest {
 				.getTestObject(BUCKET_NAME, "data/market-history/totals.json", dataClient)
 				.orElseThrow());
 		assertEquals("{\"2023-01-01\":4,\"2023-01-02\":5,\"2023-01-03\":4,\"2023-01-04\":0}", totalPairs);
+
+		var allRequests = testDataUtil.takeAllRequests(server);
+		var requestedPairs = getRequestedMarketHistoryPairs(allRequests);
+		// Present in previous files.
+		assertTrue(requestedPairs.contains(new RegionTypePair(10000001, 999)));
+		// Traded in other regions, added by TopTradedRegionTypeSource.
+		assertTrue(requestedPairs.contains(new RegionTypePair(10000002, 999)));
 	}
 
 	class TestDispatcher extends Dispatcher {
@@ -198,11 +211,17 @@ public class ScrapeMarketHistoryTest {
 
 	@SneakyThrows
 	private MockResponse mockHistory(String regionId, String typeId) {
-		if (regionId.equals("10000001") && typeId.equals("999")) {
+		var notFound = List.of(List.of("10000001", "999"), List.of("10000002", "999"));
+		if (notFound.contains(List.of(regionId, typeId))) {
 			return new MockResponse().setResponseCode(404);
 		}
-		return mockResponse(ResourceUtil.loadContextual(
-				ScrapeMarketHistoryTest.class, String.format("/%s-%s.json", regionId, typeId)));
+		try {
+			return mockResponse(ResourceUtil.loadContextual(
+					ScrapeMarketHistoryTest.class, String.format("/%s-%s.json", regionId, typeId)));
+		} catch (FileNotFoundException e) {
+			log.warn("Unaccounted for market history - region: {}, type: {}", regionId, typeId);
+			return new MockResponse().setResponseCode(404);
+		}
 	}
 
 	@SneakyThrows
@@ -222,5 +241,19 @@ public class ScrapeMarketHistoryTest {
 				.orElseThrow(() -> new RuntimeException(date.toString()));
 		return IOUtils.toString(new BZip2CompressorInputStream(new ByteArrayInputStream(bytes)), StandardCharsets.UTF_8)
 				.replaceAll("\r\n", "\n");
+	}
+
+	@NotNull
+	private List<RegionTypePair> getRequestedMarketHistoryPairs(List<RecordedRequest> allRequests) {
+		return allRequests.stream()
+				.map(r -> r.getRequestUrl())
+				.filter(url -> url.encodedPath().startsWith("/esi/markets/"))
+				.filter(url -> url.encodedPath().endsWith("/history/"))
+				.map(url -> {
+					var region = Integer.parseInt(url.pathSegments().get(2));
+					var type = Integer.parseInt(url.queryParameter("type_id"));
+					return new RegionTypePair(region, type);
+				})
+				.toList();
 	}
 }

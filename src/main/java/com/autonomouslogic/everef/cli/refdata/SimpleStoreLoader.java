@@ -1,10 +1,10 @@
 package com.autonomouslogic.everef.cli.refdata;
 
+import com.autonomouslogic.everef.model.refdata.RefTypeConfig;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.reactivex.rxjava3.core.Completable;
-import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -58,25 +58,36 @@ public class SimpleStoreLoader {
 	protected SimpleStoreLoader() {}
 
 	@SneakyThrows
-	public Completable readValues(@NonNull byte[] bytes) {
-		return Completable.defer(() -> {
-					ObjectNode container = readContainer(bytes);
-					return Flowable.fromIterable(() -> container.fields()).flatMapCompletable(entry -> {
-						var id = Long.parseLong(entry.getKey());
-						var json = (ObjectNode) entry.getValue();
-						json = readValue(id, json);
-						if (output.containsKey(id)) {
-							var existing = (ObjectNode) output.get(id);
-							json = (ObjectNode) objectMerger.merge(existing, json);
-							if (postMergeTransformer != null) {
-								json = postMergeTransformer.transformJson(json, language);
-							}
-						}
-						output.put(id, json);
-						return Completable.complete();
-					});
+	public Completable readValues(@NonNull byte[] bytes, RefTypeConfig refTypeConfig) {
+		return Completable.fromAction(() -> {
+					var container = readContainer(bytes);
+					if (refTypeConfig.isIndividualFiles()) {
+						var transformed = transform(container);
+						var id = transformed.get(idFieldName).asLong();
+						writeEntry(transformed, id);
+					} else {
+						container.fields().forEachRemaining(entry -> {
+							var id = Long.parseLong(entry.getKey());
+							var json = (ObjectNode) entry.getValue();
+							var transformed = transform(json);
+							writeEntry(transformed, id);
+						});
+					}
 				})
 				.subscribeOn(Schedulers.computation());
+	}
+
+	@SneakyThrows
+	private void writeEntry(ObjectNode json, long id) {
+		handleIdField(json, id);
+		if (output.containsKey(id)) {
+			var existing = (ObjectNode) output.get(id);
+			json = (ObjectNode) objectMerger.merge(existing, json);
+			if (postMergeTransformer != null) {
+				json = postMergeTransformer.transformJson(json, language);
+			}
+		}
+		output.put(id, json);
 	}
 
 	private ObjectNode readContainer(@NonNull byte[] bytes) throws IOException {
@@ -93,12 +104,11 @@ public class SimpleStoreLoader {
 	}
 
 	@SneakyThrows
-	protected ObjectNode readValue(long id, ObjectNode json) {
+	private ObjectNode transform(ObjectNode json) {
 		var transformed = json;
 		if (transformer != null) {
 			transformed = transformer.transformJson(json, language);
 		}
-		handleIdField(transformed, id);
 		return transformed;
 	}
 

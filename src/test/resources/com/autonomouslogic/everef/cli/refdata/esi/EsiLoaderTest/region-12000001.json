@@ -1,0 +1,11 @@
+{
+  "name" : {
+    "en" : "ADR01",
+    "ja" : "ADR01"
+  },
+  "region_id" : 12000001,
+  "description" : {
+    "en" : null,
+    "ja" : null
+  }
+}

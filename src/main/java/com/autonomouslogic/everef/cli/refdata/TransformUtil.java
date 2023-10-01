@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.util.ArrayList;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
 
 @Singleton
@@ -84,5 +85,25 @@ public class TransformUtil {
 
 	public void remove(ObjectNode root, String attr) {
 		root.remove(attr);
+	}
+
+	public void listToCoordinate(@NonNull JsonNode obj, @NonNull String field) {
+		if (obj.has(field)) {
+			((ObjectNode) obj).set(field, listToCoordinate(obj.get(field)));
+		}
+	}
+
+	public ObjectNode listToCoordinate(@NonNull JsonNode list) {
+		if (!list.isArray()) {
+			throw new IllegalArgumentException("List must be an array: " + list);
+		}
+		if (list.size() != 3) {
+			throw new IllegalArgumentException("List must have exactly two elements: " + list);
+		}
+		var obj = objectMapper.createObjectNode();
+		obj.set("x", list.get(0));
+		obj.set("y", list.get(1));
+		obj.set("z", list.get(2));
+		return obj;
 	}
 }

@@ -292,4 +292,24 @@ public interface ReferenceDataSpec {
 			useReturnTypeSchema = true,
 			content = @Content(mediaType = "application/json"))
 	Icon getIcon(@PathParam("icon_id") long iconId);
+
+	@GET
+	@Path("/regions")
+	@Operation(description = "Get all region IDs.")
+	@ApiResponse(
+			responseCode = "200",
+			description = "Region IDs.",
+			useReturnTypeSchema = true,
+			content = @Content(mediaType = "application/json"))
+	List<Integer> getAllRegions();
+
+	@GET
+	@Path("/regions/{region_id}")
+	@Operation(description = "Get a region.")
+	@ApiResponse(
+			responseCode = "200",
+			description = "The region.",
+			useReturnTypeSchema = true,
+			content = @Content(mediaType = "application/json"))
+	Region getRegion(@PathParam("region_id") long regionId);
 }
