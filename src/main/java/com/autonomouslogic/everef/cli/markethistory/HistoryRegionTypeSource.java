@@ -12,6 +12,7 @@ import lombok.extern.log4j.Log4j2;
 
 /**
  * Provides region-type pairs based on previously observed pairs.
+ * It provides the region-type pairs in sorted order, so that the most traded pairs are fetched first.
  */
 @Log4j2
 class HistoryRegionTypeSource implements RegionTypeSource {
