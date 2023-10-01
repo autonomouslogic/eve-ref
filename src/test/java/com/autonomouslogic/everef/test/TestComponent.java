@@ -7,6 +7,7 @@ import com.autonomouslogic.everef.cli.decorator.HealthcheckDecoratorTest;
 import com.autonomouslogic.everef.cli.decorator.SlackDecoratorTest;
 import com.autonomouslogic.everef.cli.markethistory.RecentRegionTypeRemoverTest;
 import com.autonomouslogic.everef.cli.markethistory.ScrapeMarketHistoryTest;
+import com.autonomouslogic.everef.cli.markethistory.TopTradedRegionTypeSourceTest;
 import com.autonomouslogic.everef.cli.marketorders.ScrapeMarketOrdersTest;
 import com.autonomouslogic.everef.cli.publiccontracts.ScrapePublicContractsTest;
 import com.autonomouslogic.everef.cli.refdata.BuildRefDataTest;
@@ -94,6 +95,8 @@ public interface TestComponent {
 	void inject(SdeLoaderTest test);
 
 	void inject(SlackDecoratorTest test);
+
+	void inject(TopTradedRegionTypeSourceTest test);
 
 	void inject(TransformUtilTest test);
 
