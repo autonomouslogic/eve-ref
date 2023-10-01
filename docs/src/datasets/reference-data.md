@@ -1,6 +1,3 @@
----
-title: Reference Data
----
 # Reference Data
 
 The Reference Data set is a collection of data from the EVE Online SDE, ESI, and Hoboleaks data.

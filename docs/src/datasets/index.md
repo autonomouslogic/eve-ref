@@ -4,36 +4,36 @@ These pages outline the datasets available for download at [data.everef.net](htt
 
 See [Downloading Datasets](downloading-datasets.md) for instructions on how to download the datasets in full or in part.
 
-| Path                                         | Dataset                                          |
-|----------------------------------------------|--------------------------------------------------|
-| `ccp/ccp_quant/`                             | Market data published by CCP Quant               |
-| `ccp/iec/`                                   | Image Export Collection archive                  |
-| `ccp/mer/`                                   | Monthly Economic Report archive                  |
-| `ccp/sde/`                                   | Static Data Export archive                       |
-| `esi-scrape/`                                | ESI scrape archive                               |
-| `faction-warfare-leaderboards/`              |                                                  |
-| `faction-warfare-leaderboards-characters/`   |                                                  |
-| `faction-warfare-leaderboards-corporations/` |                                                  |
-| `faction-warfare-stats/`                     |                                                  |
-| `faction-warfare-systems/`                   |                                                  |
-| `faction-warfare-wars/`                      |                                                  |
-| `fuzzwork/ordersets/`                        | [Fuzzworks Ordersets](fuzzwork-ordersets.md)     |
-| `hoboleaks-sde/`                             | [Hoboelaks SDE](hoboleaks-sde.md)                |
-| `incursions/`                                |                                                  |
-| `industry-facilities/`                       |                                                  |
-| `industry-systems/`                          |                                                  |
-| `insurance-prices/`                          |                                                  |
-| `killmails/`                                 | Killmail archive from zkillboard.com             |
-| `market-history/`                            |                                                  |
-| `market-orders/`                             | [Market Order Snapshots](market-orders.md)       |
-| `public-contracts/`                          | [Public Contract Snapshots](public-contracts.md) |
-| `reference-data/`                            | [Reference Data](reference-data.md)              |
-| `shadow-war-arc-goals/`                      |                                                  |
-| `sovereignty-campaigns/`                     |                                                  |
-| `sovereignty-map/`                           |                                                  |
-| `sovereignty-structures/`                    |                                                  |
-| `structures/`                                |                                                  |
-| `system-jumps/`                              |                                                  |
-| `system-kills/`                              |                                                  |
-| `wars/`                                      |                                                  |
-| `warzone/`                                   |                                                  |
+| Path                                                                                                               | Dataset                                                                                                         |
+|--------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------|
+| [`ccp/ccp_quant/`](https://data.everef.net/ccp/ccp_quant/)                                                         | Market data [published by CCP Quant](https://www.eveonline.com/news/view/monthly-economic-report-february-2018) |
+| [`ccp/iec/`](https://data.everef.net/ccp/iec/)                                                                     | [Image Export Collection](https://developers.eveonline.com/resource/resources) archive                          |
+| [`ccp/mer/`](https://data.everef.net/ccp/mer/)                                                                     | Monthly Economic Report                                                                                         |
+| [`ccp/sde/`](https://data.everef.net/ccp/sde/)                                                                     | [Static Data Export](https://developers.eveonline.com/resource/resources) archive                               |
+| [`esi-scrape/`](https://data.everef.net/esi-scrape/)                                                               | ESI scrape archive                                                                                              |
+| [`faction-warfare-leaderboards/`](https://data.everef.net/faction-warfare-leaderboards/)                           |                                                                                                                 |
+| [`faction-warfare-leaderboards-characters/`](https://data.everef.net/faction-warfare-leaderboards-characters/)     |                                                                                                                 |
+| [`faction-warfare-leaderboards-corporations/`](https://data.everef.net/faction-warfare-leaderboards-corporations/) |                                                                                                                 |
+| [`faction-warfare-stats/`](https://data.everef.net/faction-warfare-stats/)                                         |                                                                                                                 |
+| [`faction-warfare-systems/`](https://data.everef.net/faction-warfare-systems/)                                     |                                                                                                                 |
+| [`faction-warfare-wars/`](https://data.everef.net/faction-warfare-wars/)                                           |                                                                                                                 |
+| [`fuzzwork/ordersets/`](https://data.everef.net/fuzzwork/ordersets/)                                               | [Fuzzworks Ordersets](fuzzwork-ordersets.md)                                                                    |
+| [`hoboleaks-sde/`](https://data.everef.net/hoboleaks-sde/)                                                         | [Hoboelaks SDE](hoboleaks-sde.md)                                                                               |
+| [`incursions/`](https://data.everef.net/incursions/)                                                               |                                                                                                                 |
+| [`industry-facilities/`](https://data.everef.net/industry-facilities/)                                             |                                                                                                                 |
+| [`industry-systems/`](https://data.everef.net/industry-systems/)                                                   |                                                                                                                 |
+| [`insurance-prices/`](https://data.everef.net/insurance-prices/)                                                   |                                                                                                                 |
+| [`killmails/`](https://data.everef.net/killmails/)                                                                 | Killmail archive from zkillboard.com                                                                            |
+| [`market-history/`](https://data.everef.net/market-history/)                                                       |                                                                                                                 |
+| [`market-orders/`](https://data.everef.net/market-orders/)                                                         | [Market Order Snapshots](market-orders.md)                                                                      |
+| [`public-contracts/`](https://data.everef.net/public-contracts/)                                                   | [Public Contract Snapshots](public-contracts.md)                                                                |
+| [`reference-data/`](https://data.everef.net/reference-data/)                                                       | [Reference Data](reference-data.md)                                                                             |
+| [`shadow-war-arc-goals/`](https://data.everef.net/shadow-war-arc-goals/)                                           |                                                                                                                 |
+| [`sovereignty-campaigns/`](https://data.everef.net/sovereignty-campaigns/)                                         |                                                                                                                 |
+| [`sovereignty-map/`](https://data.everef.net/sovereignty-map/)                                                     |                                                                                                                 |
+| [`sovereignty-structures/`](https://data.everef.net/sovereignty-structures/)                                       |                                                                                                                 |
+| [`structures/`](https://data.everef.net/structures/)                                                               |                                                                                                                 |
+| [`system-jumps/`](https://data.everef.net/system-jumps/)                                                           |                                                                                                                 |
+| [`system-kills/`](https://data.everef.net/system-kills/)                                                           |                                                                                                                 |
+| [`wars/`](https://data.everef.net/wars/)                                                                           |                                                                                                                 |
+| [`warzone/`](https://data.everef.net/warzone/)                                                                     |                                                                                                                 |
