@@ -19,6 +19,7 @@ import com.autonomouslogic.everef.util.S3Util;
 import com.autonomouslogic.everef.util.TempFiles;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.CompletableSource;
 import io.reactivex.rxjava3.core.Flowable;
@@ -152,7 +153,8 @@ public class ScrapeMarketHistory implements Command {
 			return Completable.concatArray(
 					Flowable.fromIterable(chunk)
 							.flatMapCompletable(
-									pair -> fetchMarketHistory(pair).flatMapCompletable(this::saveMarketHistory),
+									pair -> fetchMarketHistory(pair)
+											.flatMapCompletable(entry -> saveMarketHistory((ObjectNode) entry)),
 									false,
 									esiConcurrency),
 					uploadArchives(),
@@ -247,13 +249,24 @@ public class ScrapeMarketHistory implements Command {
 		});
 	}
 
-	private Completable saveMarketHistory(JsonNode entry) {
+	private Completable saveMarketHistory(ObjectNode entry) {
 		return Completable.defer(() -> {
 			var pair = RegionTypePair.fromHistory(entry);
 			var date = LocalDate.parse(entry.get("date").asText());
 			var id = pair.toString();
 			if (!mapSet.hasMap(date.toString())) {
 				return Completable.error(new RuntimeException(String.format("No map for date %s", date)));
+			}
+			var previous = (ObjectNode) mapSet.get(date.toString(), id);
+			if (previous != null) {
+				var entryToText = objectMapper.createObjectNode();
+				entry.fieldNames()
+						.forEachRemaining(
+								name -> entryToText.put(name, entry.get(name).asText()));
+				previous.set("http_last_modified", entryToText.get("http_last_modified"));
+				if (previous.equals(entryToText)) {
+					return Completable.complete();
+				}
 			}
 			mapSet.put(date.toString(), id, entry);
 			return Completable.complete();
