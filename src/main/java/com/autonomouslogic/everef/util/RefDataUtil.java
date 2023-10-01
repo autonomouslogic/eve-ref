@@ -196,7 +196,12 @@ public class RefDataUtil {
 			if (type == null) {
 				continue;
 			}
-			if (type.getFile().equals(filename)) {
+			var file = type.getFile();
+			if (file != null && file.equals(filename)) {
+				return config;
+			}
+			var regex = type.getFileRegex();
+			if (regex != null && regex.matcher(filename).matches()) {
 				return config;
 			}
 		}

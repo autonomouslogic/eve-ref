@@ -1,6 +1,7 @@
 package com.autonomouslogic.everef.cli;
 
 import com.autonomouslogic.everef.cli.refdata.BuildRefData;
+import com.autonomouslogic.everef.cli.refdata.FieldRenamer;
 import com.autonomouslogic.everef.cli.refdata.ObjectMerger;
 import com.autonomouslogic.everef.cli.refdata.StoreHandler;
 import com.autonomouslogic.everef.cli.refdata.esi.EsiLoader;
@@ -15,6 +16,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.reactivex.rxjava3.core.Completable;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
@@ -22,6 +24,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
+import org.apache.commons.io.IOUtils;
 
 /**
  * Loads the resources configured in <code>refdata.yaml</code> and imports those resources fro the SDE and ESI.
@@ -61,6 +64,9 @@ public class ImportTestResources implements Command {
 	protected MockScrapeBuilder mockScrapeBuilder;
 
 	@Inject
+	protected FieldRenamer fieldRenamer;
+
+	@Inject
 	protected ObjectMerger objectMerger;
 
 	@Inject
@@ -86,14 +92,28 @@ public class ImportTestResources implements Command {
 				return Completable.complete();
 			}
 			var content = (ObjectNode) yamlMapper.readTree(pair.getRight());
-			var newContent = yamlMapper.createObjectNode();
-			for (Long id : config.getTest().getIds()) {
-				var stringId = id.toString();
-				newContent.put(stringId, content.get(stringId));
+			byte[] output;
+			if (config.getSde().isIndividualFiles()) {
+				var renamed = fieldRenamer.fieldRenameFromSde(content);
+				var id = renamed.get(config.getIdField()).asLong();
+				if (!config.getTest().getIds().contains(id)) {
+					return Completable.complete();
+				}
+				output = pair.getRight();
+			} else {
+				var newContent = yamlMapper.createObjectNode();
+				for (Long id : config.getTest().getIds()) {
+					var stringId = id.toString();
+					newContent.put(stringId, content.get(stringId));
+				}
+				output = yamlMapper.writeValueAsBytes(newContent);
 			}
 			var outputFile = new File(REFDATA_RESOURCES + "/" + entry.getName());
+			outputFile.getParentFile().mkdirs();
 			log.info("Writing {}", outputFile);
-			yamlMapper.writeValue(outputFile, newContent);
+			try (var out = new FileOutputStream(outputFile)) {
+				IOUtils.write(output, out);
+			}
 			return Completable.complete();
 		});
 	}
@@ -105,6 +125,9 @@ public class ImportTestResources implements Command {
 			var config = refDataUtil.getHoboleaksConfigForFilename(entry.getName());
 			if (config == null || config.getHoboleaks() == null) {
 				return Completable.complete();
+			}
+			if (config.getHoboleaks().isIndividualFiles()) {
+				throw new IllegalArgumentException("Individual files not supported for Hoboleaks.");
 			}
 			var content = (ObjectNode) objectMapper.readTree(pair.getRight());
 			var newContent = objectMapper.createObjectNode();
@@ -129,6 +152,9 @@ public class ImportTestResources implements Command {
 			var config = fileType.getRefTypeConfig();
 			if (config.getEsi() == null) {
 				return Completable.complete();
+			}
+			if (config.getEsi().isIndividualFiles()) {
+				throw new IllegalArgumentException("Individual files not supported for ESI.");
 			}
 			var includedLanguages = config.getTest().getLanguages();
 			if (includedLanguages != null) {

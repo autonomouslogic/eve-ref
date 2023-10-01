@@ -131,6 +131,9 @@ public class PublishRefData implements Command {
 	}
 
 	private boolean shouldUpdate() {
+		if (Configs.FORCE_REF_DATA.getRequired()) {
+			return true;
+		}
 		if (latestMeta == null || currentMeta == null) {
 			return true;
 		}

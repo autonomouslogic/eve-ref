@@ -1,0 +1,3 @@
+ignore:
+  - "src/main/java/com/autonomouslogic/everef/cli/ImportTestResources.java"
+  - "src/main/java/com/autonomouslogic/everef/cli/VerifyRefDataModels.java"
