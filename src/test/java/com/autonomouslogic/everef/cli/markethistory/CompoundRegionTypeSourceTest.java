@@ -14,7 +14,7 @@ public class CompoundRegionTypeSourceTest {
 
 	@BeforeEach
 	void before() {
-		source = new CompoundRegionTypeSource();
+		source = new CompoundRegionTypeSource().setStats(new MarketHistorySourceStats());
 	}
 
 	@Test

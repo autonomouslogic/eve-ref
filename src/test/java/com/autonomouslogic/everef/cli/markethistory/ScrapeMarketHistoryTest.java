@@ -125,6 +125,8 @@ public class ScrapeMarketHistoryTest {
 		assertTrue(requestedPairs.contains(new RegionTypePair(10000001, 999)));
 		// Traded in other regions, added by TopTradedRegionTypeSource.
 		assertTrue(requestedPairs.contains(new RegionTypePair(10000002, 999)));
+		// Reported as active, added by ActiveOrdersRegionTypeSource.
+		assertTrue(requestedPairs.contains(new RegionTypePair(10000001, 1000)));
 		// Present in orders file, added by HistoricalOrdersRegionTypeSource.
 		assertTrue(requestedPairs.contains(new RegionTypePair(10000001, 18)));
 		assertTrue(requestedPairs.contains(new RegionTypePair(11000031, 74216)));
@@ -167,7 +169,7 @@ public class ScrapeMarketHistoryTest {
 					return mockOrderDate(LocalDate.parse("2023-01-01"));
 				}
 				if (path.equals("/esi/markets/10000001/types/")) {
-					return mockResponse("[20,21]");
+					return mockResponse("[20,21,1000]");
 				}
 				if (path.equals("/esi/markets/10000002/types/")) {
 					return mockResponse("[20,21]");
@@ -240,7 +242,8 @@ public class ScrapeMarketHistoryTest {
 				List.of("10000001", "999"),
 				List.of("10000002", "999"),
 				List.of("10000001", "18"),
-				List.of("11000031", "74216"));
+				List.of("11000031", "74216"),
+				List.of("10000001", "1000"));
 
 		if (notFound.contains(List.of(regionId, typeId))) {
 			return new MockResponse().setResponseCode(404);

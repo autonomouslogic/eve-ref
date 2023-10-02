@@ -12,6 +12,8 @@ import io.reactivex.rxjava3.core.Flowable;
 import java.time.Duration;
 import javax.inject.Inject;
 import javax.inject.Named;
+import lombok.NonNull;
+import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 import okhttp3.OkHttpClient;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -30,6 +32,10 @@ public class MarketHistoryFetcher {
 	@Inject
 	@Named("esi-market-history")
 	protected OkHttpClient okHttpClient;
+
+	@Setter
+	@NonNull
+	private MarketHistorySourceStats stats;
 
 	@Inject
 	protected MarketHistoryFetcher() {}
@@ -50,6 +56,7 @@ public class MarketHistoryFetcher {
 						if (statusCode == 404) {
 							return Flowable.<ObjectNode>empty();
 						} else if (statusCode == 200) {
+							stats.hit(pair);
 							return esiHelper
 									.decodeArrayNode(esiUrl, esiHelper.decodeResponse(response))
 									.map(e -> esiHelper.populateLastModified(e, response));
