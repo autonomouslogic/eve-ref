@@ -1,5 +1,13 @@
 EVE Ref Changelog
 
+## [2.30.0](https://github.com/autonomouslogic/eve-ref/compare/2.29.0...2.30.0) (2023-10-02)
+
+
+### Features
+
+* Added stats for market history fetch ([#291](https://github.com/autonomouslogic/eve-ref/issues/291)) ([ee8ac81](https://github.com/autonomouslogic/eve-ref/commit/ee8ac8146204f01eb1c953bb3a37b216c32e0dcf))
+* Source market history from historial market order snapshots ([#278](https://github.com/autonomouslogic/eve-ref/issues/278)) ([00bd308](https://github.com/autonomouslogic/eve-ref/commit/00bd3086298fb96656932ef8d3c206f39e3ff668))
+
 ## [2.29.0](https://github.com/autonomouslogic/eve-ref/compare/2.28.1...2.29.0) (2023-10-01)
 
 
