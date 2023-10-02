@@ -159,6 +159,36 @@ public class ExplorerRegionTypeSourceTest {
 		assertEquals(validPairs.size(), seen.size());
 	}
 
+	@Test
+	void sourcedPairsMustNeverChange() {
+		var expected = Map.of(
+				LocalDate.parse("2023-01-01"),
+						List.of(
+								new RegionTypePair(20009, 10003),
+								new RegionTypePair(20002, 10004),
+								new RegionTypePair(20011, 10007)),
+				LocalDate.parse("2023-02-01"),
+						List.of(
+								new RegionTypePair(20002, 10000),
+								new RegionTypePair(20011, 10001),
+								new RegionTypePair(20015, 10007)),
+				LocalDate.parse("2023-03-01"),
+						List.of(
+								new RegionTypePair(20006, 10001),
+								new RegionTypePair(20004, 10002),
+								new RegionTypePair(20007, 10004)));
+		for (var entry : expected.entrySet()) {
+			var pairs = source.setToday(entry.getKey())
+					.sourcePairs(List.of())
+					.toList()
+					.blockingGet();
+			for (int i = 0; i < 3; i++) {
+				log.info("{} - {}", entry.getKey(), pairs.get(i));
+			}
+			assertTrue(pairs.containsAll(entry.getValue()));
+		}
+	}
+
 	class TestDispatcher extends Dispatcher {
 		@NotNull
 		@Override
