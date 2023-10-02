@@ -8,6 +8,8 @@ import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.List;
 import javax.inject.Inject;
+import lombok.NonNull;
+import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -15,6 +17,10 @@ import lombok.extern.log4j.Log4j2;
  */
 @Log4j2
 class CompoundRegionTypeSource implements RegionTypeSource {
+	@Setter
+	@NonNull
+	private MarketHistorySourceStats stats;
+
 	private final List<RegionTypeSource> sources = new ArrayList<>();
 
 	@Inject
@@ -45,7 +51,11 @@ class CompoundRegionTypeSource implements RegionTypeSource {
 				var finalPairs = new LinkedHashSet<RegionTypePair>();
 				finalPairs.addAll(currentPairs);
 				if (source.isAdditive()) {
-					finalPairs.addAll(sourcePairs);
+					var newPairs = sourcePairs.stream()
+							.filter(p -> !currentPairs.contains(p))
+							.toList();
+					stats.sourceAll(source, newPairs);
+					finalPairs.addAll(newPairs);
 				} else {
 					finalPairs.removeAll(sourcePairs);
 				}

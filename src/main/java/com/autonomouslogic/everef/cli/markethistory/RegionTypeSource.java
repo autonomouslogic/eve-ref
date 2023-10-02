@@ -8,7 +8,7 @@ import java.util.Collection;
 /**
  * A specific source for region-type pairs to be searched for market history.
  */
-interface RegionTypeSource {
+public interface RegionTypeSource {
 	default void addHistory(MarketHistoryEntry entry) {}
 
 	Flowable<RegionTypePair> sourcePairs(Collection<RegionTypePair> currentPairs);

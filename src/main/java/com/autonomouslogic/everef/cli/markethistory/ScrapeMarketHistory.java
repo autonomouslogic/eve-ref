@@ -105,6 +105,8 @@ public class ScrapeMarketHistory implements Command {
 	@Inject
 	protected Provider<MarketHistoryFileBuilder> marketHistoryFileBuilderProvider;
 
+	private MarketHistorySourceStats stats = new MarketHistorySourceStats();
+
 	private final Duration latestCacheTime = Configs.DATA_LATEST_CACHE_CONTROL_MAX_AGE.getRequired();
 	private final int esiConcurrency = Configs.ESI_MARKET_HISTORY_CONCURRENCY.getRequired();
 	private final int chunkSize = Configs.ESI_MARKET_HISTORY_CHUNK_SIZE.getRequired();
@@ -137,12 +139,14 @@ public class ScrapeMarketHistory implements Command {
 	@SneakyThrows
 	@Override
 	public Completable run() {
+		marketHistoryFetcher.setStats(stats);
 		return Completable.concatArray(
 						initSources(),
 						initMvStore(),
 						downloadTotalPairs(),
 						loadMarketHistory(),
-						loadPairs().buffer(chunkSize).flatMapCompletable(this::processChunk, false, 1))
+						loadPairs().buffer(chunkSize).flatMapCompletable(this::processChunk, false, 1),
+						Completable.fromAction(() -> stats.logStats()))
 				.doFinally(this::closeMvStore);
 	}
 
@@ -164,7 +168,7 @@ public class ScrapeMarketHistory implements Command {
 
 	private Completable initSources() {
 		return Completable.fromAction(() -> {
-			regionTypeSource = compoundRegionTypeSourceProvider.get();
+			regionTypeSource = compoundRegionTypeSourceProvider.get().setStats(stats);
 			regionTypeSource.addSource(historyRegionTypeSourceProvider.get()); // must be first.
 			regionTypeSource.addSource(activeOrdersRegionTypeSourceProvider.get());
 			regionTypeSource.addSource(topTradedRegionTypeSourceProvider.get());
