@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.reactivex.rxjava3.functions.Consumer;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -142,8 +143,18 @@ public class TestDataUtil {
 	}
 
 	@SneakyThrows
+	public MockResponse mockResponse(ByteArrayOutputStream out) {
+		return mockResponse(out.toByteArray());
+	}
+
+	@SneakyThrows
 	public MockResponse mockResponse(File in) {
 		return mockResponse(new FileInputStream(in));
+	}
+
+	@SneakyThrows
+	public MockResponse mockResponse(byte[] in) {
+		return mockResponse(new ByteArrayInputStream(in));
 	}
 
 	public void assertRequest(RecordedRequest request, String path) {

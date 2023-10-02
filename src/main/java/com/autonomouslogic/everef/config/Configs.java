@@ -302,6 +302,15 @@ public class Configs {
 			.build();
 
 	/**
+	 * The nubmer of groups to use for market history exploration.
+	 */
+	public static final Config<Integer> ESI_MARKET_HISTORY_EXPLORATION_GROUPS = Config.<Integer>builder()
+			.name("ESI_MARKET_HISTORY_EXPLORATION_GROUPS")
+			.type(Integer.class)
+			.defaultValue(300)
+			.build();
+
+	/**
 	 * User agent string to provide to the ESI.
 	 */
 	public static final Config<String> ESI_USER_AGENT =

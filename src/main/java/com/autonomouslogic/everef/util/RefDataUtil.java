@@ -207,4 +207,19 @@ public class RefDataUtil {
 		}
 		return null;
 	}
+
+	public <T> Flowable<T> loadReferenceDataArchive(@NonNull File file, @NonNull String type, @NonNull Class<T> model) {
+		return CompressUtil.loadArchive(file).flatMap(pair -> {
+			var filename = pair.getKey().getName();
+			if (!filename.endsWith(".json")) {
+				return Flowable.empty();
+			}
+			if (!type.equals(FilenameUtils.getBaseName(filename))) {
+				return Flowable.empty();
+			}
+			var mapType = objectMapper.getTypeFactory().constructMapType(LinkedHashMap.class, String.class, model);
+			Map<String, T> map = objectMapper.readValue(pair.getRight(), mapType);
+			return Flowable.fromIterable(map.values());
+		});
+	}
 }
