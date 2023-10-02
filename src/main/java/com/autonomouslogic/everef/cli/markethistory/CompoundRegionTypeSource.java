@@ -1,8 +1,11 @@
 package com.autonomouslogic.everef.cli.markethistory;
 
+import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.model.MarketHistoryEntry;
 import com.autonomouslogic.everef.model.RegionTypePair;
 import io.reactivex.rxjava3.core.Flowable;
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashSet;
@@ -20,6 +23,8 @@ class CompoundRegionTypeSource implements RegionTypeSource {
 	@Setter
 	@NonNull
 	private MarketHistorySourceStats stats;
+
+	private final int rateLimit = Configs.ESI_RATE_LIMIT_PER_S.getRequired();
 
 	private final List<RegionTypeSource> sources = new ArrayList<>();
 
@@ -62,13 +67,17 @@ class CompoundRegionTypeSource implements RegionTypeSource {
 				var previousRegions = countRegions(currentPairs);
 				var currentRegions = countRegions(finalPairs);
 				var newRegions = currentRegions - previousRegions;
+				var newPairsCount = finalPairs.size() - currentPairs.size();
+				var runtime = Duration.ofMillis((long) (1000.0 * newPairsCount / rateLimit))
+						.truncatedTo(ChronoUnit.SECONDS);
 				log.debug(
-						"{} returned {} pairs, adding {} new pairs, new total: {}, {} new regions",
+						"{} returned {} pairs, adding {} new pairs, new total is {}, {} new regions, est. runtime {}",
 						source.getClass().getSimpleName(),
 						sourcePairs.size(),
-						finalPairs.size() - currentPairs.size(),
+						newPairsCount,
 						finalPairs.size(),
-						newRegions);
+						newRegions,
+						runtime);
 				return Flowable.fromIterable(finalPairs);
 			});
 		});

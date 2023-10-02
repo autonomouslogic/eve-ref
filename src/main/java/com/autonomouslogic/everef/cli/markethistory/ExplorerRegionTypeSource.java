@@ -35,7 +35,6 @@ class ExplorerRegionTypeSource implements RegionTypeSource {
 	protected ObjectMapper objectMapper;
 
 	private final int groups = Configs.ESI_MARKET_HISTORY_EXPLORATION_GROUPS.getRequired();
-	private final int rateLimit = Configs.ESI_RATE_LIMIT_PER_S.getRequired();
 
 	@Setter
 	@NonNull

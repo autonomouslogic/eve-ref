@@ -307,7 +307,7 @@ public class Configs {
 	public static final Config<Integer> ESI_MARKET_HISTORY_EXPLORATION_GROUPS = Config.<Integer>builder()
 			.name("ESI_MARKET_HISTORY_EXPLORATION_GROUPS")
 			.type(Integer.class)
-			.defaultValue(300)
+			.defaultValue(100)
 			.build();
 
 	/**
