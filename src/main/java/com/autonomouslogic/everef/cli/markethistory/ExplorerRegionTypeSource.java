@@ -71,6 +71,7 @@ class ExplorerRegionTypeSource implements RegionTypeSource {
 	private Flowable<Region> loadRegions(File file) {
 		return refDataUtil
 				.loadReferenceDataArchive(file, "regions", Region.class)
+				.filter(region -> region.getUniverseId() != null)
 				.filter(region -> validUniverseIds.contains(region.getUniverseId()));
 	}
 

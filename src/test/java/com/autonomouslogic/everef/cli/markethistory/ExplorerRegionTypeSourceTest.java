@@ -89,8 +89,10 @@ public class ExplorerRegionTypeSourceTest {
 				allRegions.put(region.getRegionId(), region);
 			}
 		}
+		allRegions.put((long) r, Region.builder().regionId((long) r++).build());
 
 		validPairs = allRegions.values().stream()
+				.filter(region -> region.getUniverseId() != null)
 				.filter(region -> List.of("eve", "wormhole").contains(region.getUniverseId()))
 				.flatMap(region -> allTypes.values().stream()
 						.filter(type -> type.getMarketGroupId() != null)
