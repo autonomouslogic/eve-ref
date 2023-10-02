@@ -24,6 +24,8 @@ import java.util.Collections;
 import java.util.HashSet;
 import javax.inject.Inject;
 import javax.inject.Provider;
+import lombok.NonNull;
+import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 import okhttp3.OkHttpClient;
 import org.apache.commons.lang3.tuple.Pair;
@@ -51,6 +53,10 @@ class HistoricalOrdersRegionTypeSource implements RegionTypeSource {
 
 	private Period maxAge = Configs.ESI_MARKET_HISTORY_SNAPSHOT_LOOKBACK.getRequired();
 
+	@Setter
+	@NonNull
+	private LocalDate today;
+
 	@Inject
 	protected HistoricalOrdersRegionTypeSource() {}
 
@@ -61,7 +67,6 @@ class HistoricalOrdersRegionTypeSource implements RegionTypeSource {
 
 	@NotNull
 	private Flowable<DataUrl> getSampleFiles() {
-		var today = LocalDate.now(ZoneOffset.UTC);
 		var minTime = today.atStartOfDay().atZone(ZoneOffset.UTC).minus(maxAge).toInstant();
 		return dataCrawler
 				.get()
