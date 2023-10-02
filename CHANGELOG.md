@@ -1,5 +1,23 @@
 EVE Ref Changelog
 
+## [2.29.0](https://github.com/autonomouslogic/eve-ref/compare/2.28.1...2.29.0) (2023-10-01)
+
+
+### Features
+
+* Regions in reference data ([#284](https://github.com/autonomouslogic/eve-ref/issues/284)) ([786a627](https://github.com/autonomouslogic/eve-ref/commit/786a6278d0f5c71b9d3fd036d8edb973d4c3b523))
+* Source market history from globally top traded types ([#279](https://github.com/autonomouslogic/eve-ref/issues/279)) ([bfeacc1](https://github.com/autonomouslogic/eve-ref/commit/bfeacc1a053fde5dba28ad4dbe57d3d28251c931))
+
+
+### Bug Fixes
+
+* ScrapeMarketHistory should not update last modified timestamps if record wasn't updated ([#277](https://github.com/autonomouslogic/eve-ref/issues/277)) ([e2a9896](https://github.com/autonomouslogic/eve-ref/commit/e2a9896fab36ba6cffac0d7b50fc51cc72298b2f))
+
+
+### Documentation
+
+* Some docs ([#275](https://github.com/autonomouslogic/eve-ref/issues/275)) ([d480bc0](https://github.com/autonomouslogic/eve-ref/commit/d480bc0f085b98bcf947b8beaf61e14a30416deb))
+
 ## [2.28.1](https://github.com/autonomouslogic/eve-ref/compare/2.28.0...2.28.1) (2023-09-19)
 
 
