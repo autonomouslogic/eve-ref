@@ -1,5 +1,12 @@
 EVE Ref Changelog
 
+## [2.31.0](https://github.com/autonomouslogic/eve-ref/compare/2.30.0...2.31.0) (2023-10-02)
+
+
+### Features
+
+* Randomly explore market history ([#292](https://github.com/autonomouslogic/eve-ref/issues/292)) ([6b0d7e0](https://github.com/autonomouslogic/eve-ref/commit/6b0d7e00707a9538c728307e2170d6aec217970a))
+
 ## [2.30.0](https://github.com/autonomouslogic/eve-ref/compare/2.29.0...2.30.0) (2023-10-02)
 
 
