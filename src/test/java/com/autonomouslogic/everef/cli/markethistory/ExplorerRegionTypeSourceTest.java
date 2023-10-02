@@ -32,6 +32,7 @@ import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
 import org.apache.commons.compress.compressors.xz.XZCompressorOutputStream;
 import org.jetbrains.annotations.NotNull;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junitpioneer.jupiter.SetEnvironmentVariable;
@@ -105,6 +106,12 @@ public class ExplorerRegionTypeSourceTest {
 		server = new MockWebServer();
 		server.setDispatcher(new TestDispatcher());
 		server.start(TestDataUtil.TEST_PORT);
+	}
+
+	@AfterEach
+	@SneakyThrows
+	void after() {
+		server.close();
 	}
 
 	@Test
