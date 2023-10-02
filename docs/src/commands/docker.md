@@ -1,6 +1,3 @@
----
-title: Docker
----
 # Docker
 
 EVE Ref can be run locally using

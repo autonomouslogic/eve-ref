@@ -71,7 +71,7 @@ public class HoboleaksLoader {
 									break;
 							}
 							storeLoader.setTransformer(TransformUtil.concat(fieldRenamer, transformer));
-							return storeLoader.readValues(pair.getRight());
+							return storeLoader.readValues(pair.getRight(), config.getHoboleaks());
 						},
 						false,
 						1);

@@ -289,3 +289,29 @@ icons:
     ids:
       - 0
       - 78
+
+regions:
+  idField: region_id
+  model: Region
+  esi:
+    file: universe/regions
+    languageAttributes:
+      - description
+      - name
+    removes:
+      - constellations
+  sde:
+    fileRegex: ^sde\/fsd\/universe\/(?<universeId>[a-zA-Z0-9-]+)\/[a-zA-Z0-9-]+\/region\.staticdata$
+    individualFiles: true
+    renames:
+      nebula: nebula_id
+  test:
+    filePrefix: region
+    ids:
+      - 10000001
+      - 11000001
+      - 12000001
+      - 14000001
+    languages:
+      - en-us
+      - ja

@@ -1,6 +1,3 @@
----
-title: Reference Data
----
 # Reference Data
 
 The Reference Data set is a collection of data from the EVE Online SDE, ESI, and Hoboleaks data.
@@ -41,6 +38,8 @@ Some example paths:
 * <https://ref-data.everef.net/units/1>
 * <https://ref-data.everef.net/blueprints>
 * <https://ref-data.everef.net/blueprints/999>
+* <https://ref-data.everef.net/regions>
+* <https://ref-data.everef.net/regions/10000002>
 
 ## Motivation
 Two primary datasets are available for third-party developers of EVE Online: the SDE and ESI.
@@ -115,7 +114,7 @@ This table show the available data and where to get it.
 | Planetary schematics          |                     | `fsd/planetSchematics.yaml`            | `universe/schematics.yaml`      |                                     |
 | Planets                       |                     | `fsd/universe`                         | `universe/planets.yaml`         |                                     |
 | Races                         |                     | `fsd/races.yaml`                       | `universe/races.yaml`           |                                     |
-| Regions                       |                     | `fsd/universe`                         | `universe/regions.yaml`         |                                     |
+| Regions                       | `/regions`          | `fsd/universe`                         | `universe/regions.yaml`         |                                     |
 | Reprocessing                  | `/types`            | `fsd/typeMaterials.yaml`               |                                 | `typematerials.json`                |
 | Research agents               |                     | `fsd/researchAgents.yaml`              |                                 |                                     |
 | Schools                       |                     |                                        |                                 | `schools.json`                      |

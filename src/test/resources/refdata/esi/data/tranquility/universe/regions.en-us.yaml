@@ -1,0 +1,72 @@
+---
+"10000001":
+  constellations:
+  - 20000001
+  - 20000002
+  - 20000003
+  - 20000004
+  - 20000005
+  - 20000006
+  - 20000007
+  - 20000008
+  - 20000009
+  - 20000010
+  - 20000011
+  - 20000012
+  - 20000013
+  - 20000014
+  - 20000015
+  - 20000016
+  description: "The Derelik region, sovereign seat of the Ammatar Mandate, became\
+    \ the shield to the Amarrian flank in the wake of the Minmatar Rebellion. Derelik\
+    \ witnessed many hostile exchanges between the Amarr and rebel forces as the latter\
+    \ tried to push deeper into the territory of their former masters. Having held\
+    \ their ground, thanks in no small part to the Ammatars' military efforts, the\
+    \ Amarr awarded the Ammatar with their own province. However, this portion of\
+    \ space shared borders with the newly forming Minmatar Republic as well as the\
+    \ Empire, and thus came to be situated in a dark recess surrounded by hostiles.\
+    \ \n\nGiven the lack of safe routes elsewhere, the local economies of this region\
+    \ were dependent on trade with the Amarr as their primary means of survival. The\
+    \ Ammatar persevered over many decades of economic stagnation and limited trade\
+    \ partners, and their determination has in recent decades been rewarded with an\
+    \ increase in economic prosperity. This harsh trail is a point of pride for all\
+    \ who call themselves Ammatar, and it has bolstered their faith in the Amarrian\
+    \ way to no end."
+  name: "Derelik"
+  region_id: 10000001
+"11000001":
+  constellations:
+  - 21000311
+  - 21000312
+  - 21000313
+  - 21000314
+  - 21000315
+  - 21000316
+  - 21000317
+  - 21000318
+  - 21000319
+  - 21000320
+  - 21000321
+  - 21000322
+  - 21000323
+  - 21000325
+  name: "A-R00001"
+  region_id: 11000001
+"12000001":
+  constellations:
+  - 22000001
+  - 22000002
+  - 22000003
+  - 22000004
+  - 22000005
+  name: "ADR01"
+  region_id: 12000001
+"14000001":
+  constellations:
+  - 24000001
+  - 24000002
+  - 24000003
+  - 24000004
+  - 24000005
+  name: "VR-01"
+  region_id: 14000001

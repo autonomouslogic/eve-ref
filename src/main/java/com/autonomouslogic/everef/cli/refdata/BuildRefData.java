@@ -214,6 +214,9 @@ public class BuildRefData implements Command {
 	}
 
 	private boolean processingNeeded() {
+		if (Configs.FORCE_REF_DATA.getRequired()) {
+			return true;
+		}
 		return !currentRefDataMeta.getSde().equals(latestRefDataMeta.getSde())
 				|| !currentRefDataMeta.getEsi().equals(latestRefDataMeta.getEsi())
 				|| !currentRefDataMeta.getHoboleaks().equals(latestRefDataMeta.getHoboleaks());

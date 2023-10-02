@@ -79,7 +79,7 @@ public class CommandRunner {
 			var start = Instant.now();
 			return command.run().andThen(Completable.fromAction(() -> {
 				var time = Duration.between(start, Instant.now());
-				log.info(String.format("Command %s completed in %s", name, time.truncatedTo(ChronoUnit.MILLIS)));
+				log.info(String.format("Command %s completed in %s", name, time.truncatedTo(ChronoUnit.SECONDS)));
 			}));
 		});
 	}
