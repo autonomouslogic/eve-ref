@@ -12,7 +12,7 @@ import javax.inject.Inject;
 import lombok.extern.log4j.Log4j2;
 
 /**
- * Proviedes region-type pairs based on previously observed pairs.
+ * Provides region-type pairs based currently active types in that region as reported by the ESI's active orders endpoint.
  */
 @Log4j2
 class ActiveOrdersRegionTypeSource implements RegionTypeSource {

@@ -18,7 +18,6 @@ import com.google.common.collect.Ordering;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Single;
 import java.io.File;
-import java.net.URI;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Map;
@@ -29,7 +28,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 import okhttp3.OkHttpClient;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
 /**
@@ -51,8 +49,6 @@ class MarketHistoryLoader {
 
 	@Inject
 	protected CsvMapper csvMapper;
-
-	private final URI dataBaseUrl = Configs.DATA_BASE_URL.getRequired();
 
 	private final int downloadConcurrency = Configs.MARKET_HISTORY_LOAD_CONCURRENCY.getRequired();
 
@@ -100,10 +96,6 @@ class MarketHistoryLoader {
 	private Flowable<Pair<LocalDate, DataUrl>> crawlFiles() {
 		return dataCrawler.crawl().flatMap(url -> {
 			var path = url.getPath();
-			var prefix = dataBaseUrl.getPath();
-			if (path.startsWith(prefix)) {
-				path = StringUtils.removeStart(path, prefix);
-			}
 			var time = ArchivePathFactory.MARKET_HISTORY.parseArchiveTime(path);
 			if (time == null) {
 				return Flowable.empty();

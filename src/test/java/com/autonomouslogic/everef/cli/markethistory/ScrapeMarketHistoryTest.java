@@ -127,6 +127,9 @@ public class ScrapeMarketHistoryTest {
 		assertTrue(requestedPairs.contains(new RegionTypePair(10000002, 999)));
 		// Reported as active, added by ActiveOrdersRegionTypeSource.
 		assertTrue(requestedPairs.contains(new RegionTypePair(10000001, 1000)));
+		// Present in orders file, added by HistoricalOrdersRegionTypeSource.
+		assertTrue(requestedPairs.contains(new RegionTypePair(10000001, 18)));
+		assertTrue(requestedPairs.contains(new RegionTypePair(11000031, 74216)));
 	}
 
 	class TestDispatcher extends Dispatcher {
@@ -157,6 +160,14 @@ public class ScrapeMarketHistoryTest {
 				if (path.equals("/data/market-history/2023/market-history-2023-01-02.csv.bz2")) {
 					return mockHistoricalDate(LocalDate.parse("2023-01-02"));
 				}
+				if (path.equals("/data/market-orders/history/2023/2023-01-01/")) {
+					return mockResponse(
+							ResourceUtil.loadContextual(ScrapeMarketHistoryTest.class, "/market-orders.html"));
+				}
+				if (path.equals(
+						"/data/market-orders/history/2023/2023-01-01/market-orders-2023-01-01_00-16-34.v3.csv.bz2")) {
+					return mockOrderDate(LocalDate.parse("2023-01-01"));
+				}
 				if (path.equals("/esi/markets/10000001/types/")) {
 					return mockResponse("[20,21,1000]");
 				}
@@ -167,8 +178,8 @@ public class ScrapeMarketHistoryTest {
 					var regionId = segments.get(2);
 					return mockHistory(regionId, typeId);
 				}
-				fail(String.format("Unaccounted for URL: %s", path));
-				return new MockResponse().setResponseCode(404);
+				log.error(String.format("Unaccounted for URL: %s", path));
+				return new MockResponse().setResponseCode(500);
 			} catch (Exception e) {
 				fail("Error in dispatcher", e);
 				return new MockResponse().setResponseCode(500);
@@ -212,8 +223,28 @@ public class ScrapeMarketHistoryTest {
 	}
 
 	@SneakyThrows
+	private MockResponse mockOrderDate(LocalDate date) {
+		if (!date.equals(LocalDate.parse("2023-01-01"))) {
+			return new MockResponse().setResponseCode(404);
+		}
+		var file = ResourceUtil.loadContextual(
+				ScrapeMarketHistoryTest.class, "/market-orders-" + date.toString() + ".csv");
+		var compressed = new ByteArrayOutputStream();
+		try (var out = new BZip2CompressorOutputStream(compressed)) {
+			IOUtils.copy(file, out);
+		}
+		return mockResponse(new ByteArrayInputStream(compressed.toByteArray()));
+	}
+
+	@SneakyThrows
 	private MockResponse mockHistory(String regionId, String typeId) {
-		var notFound = List.of(List.of("10000001", "999"), List.of("10000002", "999"), List.of("10000001", "1000"));
+		var notFound = List.of(
+				List.of("10000001", "999"),
+				List.of("10000002", "999"),
+				List.of("10000001", "18"),
+				List.of("11000031", "74216"),
+				List.of("10000001", "1000"));
+
 		if (notFound.contains(List.of(regionId, typeId))) {
 			return new MockResponse().setResponseCode(404);
 		}
