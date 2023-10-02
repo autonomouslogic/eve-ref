@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.reactivex.rxjava3.functions.Consumer;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -22,17 +23,22 @@ import java.util.stream.Collectors;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.SneakyThrows;
+import lombok.extern.log4j.Log4j2;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 import okio.Buffer;
+import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
+import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
 import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream;
 import org.apache.commons.compress.compressors.xz.XZCompressorInputStream;
+import org.apache.commons.compress.compressors.xz.XZCompressorOutputStream;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.io.IOUtils;
 
 @Singleton
+@Log4j2
 public class TestDataUtil {
 	public static final int TEST_PORT = 30150;
 
@@ -135,6 +141,26 @@ public class TestDataUtil {
 	}
 
 	@SneakyThrows
+	public byte[] createXzTar(Map<String, byte[]> files) {
+		var compressed = new ByteArrayOutputStream();
+		try (var out = new TarArchiveOutputStream(new XZCompressorOutputStream(compressed))) {
+			try {
+				for (var fileEntry : files.entrySet()) {
+					var tarEntry = new TarArchiveEntry(fileEntry.getKey());
+					tarEntry.setSize(fileEntry.getValue().length);
+					out.putArchiveEntry(tarEntry);
+					out.write(fileEntry.getValue());
+					out.closeArchiveEntry();
+				}
+			} catch (Exception e) {
+				log.error("Error writing", e);
+				throw e;
+			}
+		}
+		return compressed.toByteArray();
+	}
+
+	@SneakyThrows
 	public MockResponse mockResponse(InputStream in) {
 		try (in) {
 			return new MockResponse().setResponseCode(200).setBody(new Buffer().write(IOUtils.toByteArray(in)));
@@ -142,8 +168,18 @@ public class TestDataUtil {
 	}
 
 	@SneakyThrows
+	public MockResponse mockResponse(ByteArrayOutputStream out) {
+		return mockResponse(out.toByteArray());
+	}
+
+	@SneakyThrows
 	public MockResponse mockResponse(File in) {
 		return mockResponse(new FileInputStream(in));
+	}
+
+	@SneakyThrows
+	public MockResponse mockResponse(byte[] in) {
+		return mockResponse(new ByteArrayInputStream(in));
 	}
 
 	public void assertRequest(RecordedRequest request, String path) {

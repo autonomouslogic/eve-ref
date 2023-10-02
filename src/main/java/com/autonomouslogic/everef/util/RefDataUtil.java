@@ -64,9 +64,9 @@ public class RefDataUtil {
 	public Single<File> downloadLatestReferenceData() {
 		return Single.defer(() -> {
 			var dataBaseUrl = Configs.DATA_BASE_URL.getRequired();
-			var url = dataBaseUrl + "/" + REFERENCE_DATA.createLatestPath();
+			var url = dataBaseUrl.resolve(REFERENCE_DATA.createLatestPath());
 			var file = tempFiles.tempFile("refdata", ".tar.xz").toFile();
-			return okHttpHelper.download(url, file, okHttpClient).flatMap(response -> {
+			return okHttpHelper.download(url.toString(), file, okHttpClient).flatMap(response -> {
 				if (response.code() != 200) {
 					return Single.error(new RuntimeException("Failed downloading reference data"));
 				}
@@ -206,5 +206,20 @@ public class RefDataUtil {
 			}
 		}
 		return null;
+	}
+
+	public <T> Flowable<T> loadReferenceDataArchive(@NonNull File file, @NonNull String type, @NonNull Class<T> model) {
+		return CompressUtil.loadArchive(file).flatMap(pair -> {
+			var filename = pair.getKey().getName();
+			if (!filename.endsWith(".json")) {
+				return Flowable.empty();
+			}
+			if (!type.equals(FilenameUtils.getBaseName(filename))) {
+				return Flowable.empty();
+			}
+			var mapType = objectMapper.getTypeFactory().constructMapType(LinkedHashMap.class, String.class, model);
+			Map<String, T> map = objectMapper.readValue(pair.getRight(), mapType);
+			return Flowable.fromIterable(map.values());
+		});
 	}
 }
