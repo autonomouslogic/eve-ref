@@ -6,10 +6,14 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import com.autonomouslogic.commons.ResourceUtil;
 import com.autonomouslogic.everef.model.RegionTypePair;
+import com.autonomouslogic.everef.refdata.InventoryType;
+import com.autonomouslogic.everef.refdata.Region;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.test.MockS3Adapter;
 import com.autonomouslogic.everef.test.TestDataUtil;
 import com.autonomouslogic.everef.util.ArchivePathFactory;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
@@ -17,6 +21,7 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.SneakyThrows;
@@ -54,6 +59,7 @@ import software.amazon.awssdk.services.s3.S3AsyncClient;
 @SetEnvironmentVariable(key = "DATA_BASE_URL", value = "http://localhost:" + TestDataUtil.TEST_PORT + "/data/")
 @SetEnvironmentVariable(key = "ESI_USER_AGENT", value = "user-agent")
 @SetEnvironmentVariable(key = "ESI_BASE_URL", value = "http://localhost:" + TestDataUtil.TEST_PORT + "/esi")
+@SetEnvironmentVariable(key = "ESI_MARKET_HISTORY_EXPLORATION_GROUPS", value = "1")
 // @Timeout(20)
 public class ScrapeMarketHistoryTest {
 	static final String BUCKET_NAME = "data-bucket";
@@ -70,6 +76,9 @@ public class ScrapeMarketHistoryTest {
 
 	@Inject
 	TestDataUtil testDataUtil;
+
+	@Inject
+	ObjectMapper objectMapper;
 
 	final String lastModified = "Tue, 03 Jan 2023 13:47:30 GMT";
 
@@ -130,6 +139,8 @@ public class ScrapeMarketHistoryTest {
 		// Present in orders file, added by HistoricalOrdersRegionTypeSource.
 		assertTrue(requestedPairs.contains(new RegionTypePair(10000001, 18)));
 		assertTrue(requestedPairs.contains(new RegionTypePair(11000031, 74216)));
+		// Present in ref data, added by ExplorerRegionTypeSource.
+		assertTrue(requestedPairs.contains(new RegionTypePair(10000100, 999)));
 	}
 
 	class TestDispatcher extends Dispatcher {
@@ -177,6 +188,10 @@ public class ScrapeMarketHistoryTest {
 				if (path.startsWith("/esi/markets/") && segments.get(3).equals("history")) {
 					var regionId = segments.get(2);
 					return mockHistory(regionId, typeId);
+				}
+				var refdataPath = "/data/" + ArchivePathFactory.REFERENCE_DATA.createLatestPath();
+				if (path.equals(refdataPath)) {
+					return mockRefdata();
 				}
 				log.error(String.format("Unaccounted for URL: %s", path));
 				return new MockResponse().setResponseCode(500);
@@ -243,7 +258,8 @@ public class ScrapeMarketHistoryTest {
 				List.of("10000002", "999"),
 				List.of("10000001", "18"),
 				List.of("11000031", "74216"),
-				List.of("10000001", "1000"));
+				List.of("10000001", "1000"),
+				List.of("10000100", "999"));
 
 		if (notFound.contains(List.of(regionId, typeId))) {
 			return new MockResponse().setResponseCode(404);
@@ -255,6 +271,24 @@ public class ScrapeMarketHistoryTest {
 			log.warn("Unaccounted for market history - region: {}, type: {}", regionId, typeId);
 			return new MockResponse().setResponseCode(404);
 		}
+	}
+
+	private MockResponse mockRefdata() throws JsonProcessingException {
+		return testDataUtil.mockResponse(testDataUtil.createXzTar(Map.of(
+				"regions.json",
+						objectMapper.writeValueAsBytes(Map.of(
+								10000100,
+								Region.builder()
+										.regionId(10000100L)
+										.universeId("eve")
+										.build())),
+				"types.json",
+						objectMapper.writeValueAsBytes(Map.of(
+								999,
+								InventoryType.builder()
+										.typeId(999L)
+										.marketGroupId(1L)
+										.build())))));
 	}
 
 	@SneakyThrows

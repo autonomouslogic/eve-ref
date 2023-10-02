@@ -23,17 +23,22 @@ import java.util.stream.Collectors;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.SneakyThrows;
+import lombok.extern.log4j.Log4j2;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 import okio.Buffer;
+import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
+import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
 import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream;
 import org.apache.commons.compress.compressors.xz.XZCompressorInputStream;
+import org.apache.commons.compress.compressors.xz.XZCompressorOutputStream;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.io.IOUtils;
 
 @Singleton
+@Log4j2
 public class TestDataUtil {
 	public static final int TEST_PORT = 30150;
 
@@ -133,6 +138,26 @@ public class TestDataUtil {
 		var map = typeFactory.constructMapType(LinkedHashMap.class, String.class, String.class);
 		var list = typeFactory.constructCollectionType(List.class, map);
 		return objectMapper.readValue(in, list);
+	}
+
+	@SneakyThrows
+	public byte[] createXzTar(Map<String, byte[]> files) {
+		var compressed = new ByteArrayOutputStream();
+		try (var out = new TarArchiveOutputStream(new XZCompressorOutputStream(compressed))) {
+			try {
+				for (var fileEntry : files.entrySet()) {
+					var tarEntry = new TarArchiveEntry(fileEntry.getKey());
+					tarEntry.setSize(fileEntry.getValue().length);
+					out.putArchiveEntry(tarEntry);
+					out.write(fileEntry.getValue());
+					out.closeArchiveEntry();
+				}
+			} catch (Exception e) {
+				log.error("Error writing", e);
+				throw e;
+			}
+		}
+		return compressed.toByteArray();
 	}
 
 	@SneakyThrows

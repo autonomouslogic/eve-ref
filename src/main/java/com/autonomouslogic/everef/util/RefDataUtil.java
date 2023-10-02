@@ -64,9 +64,9 @@ public class RefDataUtil {
 	public Single<File> downloadLatestReferenceData() {
 		return Single.defer(() -> {
 			var dataBaseUrl = Configs.DATA_BASE_URL.getRequired();
-			var url = dataBaseUrl + "/" + REFERENCE_DATA.createLatestPath();
+			var url = dataBaseUrl.resolve(REFERENCE_DATA.createLatestPath());
 			var file = tempFiles.tempFile("refdata", ".tar.xz").toFile();
-			return okHttpHelper.download(url, file, okHttpClient).flatMap(response -> {
+			return okHttpHelper.download(url.toString(), file, okHttpClient).flatMap(response -> {
 				if (response.code() != 200) {
 					return Single.error(new RuntimeException("Failed downloading reference data"));
 				}

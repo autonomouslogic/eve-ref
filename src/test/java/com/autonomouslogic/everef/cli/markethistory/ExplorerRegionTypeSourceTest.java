@@ -14,7 +14,6 @@ import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.test.TestDataUtil;
 import com.autonomouslogic.everef.util.ArchivePathFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.io.ByteArrayOutputStream;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -28,9 +27,6 @@ import okhttp3.mockwebserver.Dispatcher;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
-import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
-import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
-import org.apache.commons.compress.compressors.xz.XZCompressorOutputStream;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,7 +34,7 @@ import org.junit.jupiter.api.Test;
 import org.junitpioneer.jupiter.SetEnvironmentVariable;
 
 @SetEnvironmentVariable(key = "ESI_MARKET_HISTORY_EXPLORATION_GROUPS", value = "50")
-@SetEnvironmentVariable(key = "DATA_BASE_URL", value = "http://localhost:" + TestDataUtil.TEST_PORT + "/data")
+@SetEnvironmentVariable(key = "DATA_BASE_URL", value = "http://localhost:" + TestDataUtil.TEST_PORT + "/data/")
 @Log4j2
 public class ExplorerRegionTypeSourceTest {
 	@Inject
@@ -57,6 +53,7 @@ public class ExplorerRegionTypeSourceTest {
 	Map<Long, InventoryType> allTypes;
 	Map<Long, Region> allRegions;
 	List<RegionTypePair> validPairs;
+	byte[] refdataBytes;
 
 	@BeforeEach
 	@SneakyThrows
@@ -102,6 +99,10 @@ public class ExplorerRegionTypeSourceTest {
 								type.getTypeId().intValue())))
 				.toList();
 		assertEquals(200 * (2 * 10), validPairs.size());
+
+		refdataBytes = testDataUtil.createXzTar(Map.of(
+				"regions.json", objectMapper.writeValueAsBytes(allRegions),
+				"types.json", objectMapper.writeValueAsBytes(allTypes)));
 
 		server = new MockWebServer();
 		server.setDispatcher(new TestDispatcher());
@@ -164,27 +165,7 @@ public class ExplorerRegionTypeSourceTest {
 				var path = request.getRequestUrl().encodedPath();
 				var refdataPath = "/data/" + ArchivePathFactory.REFERENCE_DATA.createLatestPath();
 				if (path.equals(refdataPath)) {
-					var compressed = new ByteArrayOutputStream();
-					try (var out = new TarArchiveOutputStream(new XZCompressorOutputStream(compressed))) {
-						try {
-							var regionsJson = objectMapper.writeValueAsBytes(allRegions);
-							var typesJson = objectMapper.writeValueAsBytes(allTypes);
-							var regionsEntry = new TarArchiveEntry("regions.json");
-							var typesEntry = new TarArchiveEntry("types.json");
-							regionsEntry.setSize(regionsJson.length);
-							typesEntry.setSize(typesJson.length);
-							out.putArchiveEntry(regionsEntry);
-							out.write(regionsJson);
-							out.closeArchiveEntry();
-							out.putArchiveEntry(typesEntry);
-							out.write(typesJson);
-							out.closeArchiveEntry();
-						} catch (Exception e) {
-							log.error("Error writing", e);
-							throw e;
-						}
-					}
-					return testDataUtil.mockResponse(compressed);
+					return testDataUtil.mockResponse(refdataBytes);
 				}
 				log.error(String.format("Unaccounted for URL: %s", path));
 				return new MockResponse().setResponseCode(500);
