@@ -91,6 +91,9 @@ public class ScrapeMarketHistory implements Command {
 	protected Provider<CompoundRegionTypeSource> compoundRegionTypeSourceProvider;
 
 	@Inject
+	protected Provider<HistoricalOrdersRegionTypeSource> historicalOrdersRegionTypeSourceProvider;
+
+	@Inject
 	protected Provider<ActiveOrdersRegionTypeSource> activeOrdersRegionTypeSourceProvider;
 
 	@Inject
@@ -167,6 +170,8 @@ public class ScrapeMarketHistory implements Command {
 			regionTypeSource = compoundRegionTypeSourceProvider.get();
 			regionTypeSource.addSource(historyRegionTypeSourceProvider.get()); // must be first.
 			regionTypeSource.addSource(activeOrdersRegionTypeSourceProvider.get());
+			regionTypeSource.addSource(
+					historicalOrdersRegionTypeSourceProvider.get().setToday(today));
 			regionTypeSource.addSource(topTradedRegionTypeSourceProvider.get());
 			regionTypeSource.addSource(recentRegionTypeRemoverProvider.get()); // must be last.
 		});

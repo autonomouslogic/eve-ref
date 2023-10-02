@@ -1,5 +1,6 @@
 package com.autonomouslogic.everef.util;
 
+import com.autonomouslogic.everef.config.Configs;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
@@ -14,6 +15,7 @@ import java.util.stream.Stream;
 import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Builds URLs for archived data.
@@ -136,9 +138,9 @@ public class ArchivePathFactory {
 	}
 
 	public Instant parseArchiveTime(String path) {
-		if (path.startsWith("/")) {
-			path = path.substring(1);
-		}
+		var dataBaseUrl = Configs.DATA_BASE_URL.getRequired();
+		path = StringUtils.removeStart(path, dataBaseUrl.getPath());
+		path = StringUtils.removeStart(path, "/");
 		try {
 			var parsed = createFormatter().parse(path);
 			if (parsed.isSupported(ChronoField.HOUR_OF_DAY)) {

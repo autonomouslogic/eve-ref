@@ -275,6 +275,15 @@ public class Configs {
 			.build();
 
 	/**
+	 * Amount of time to look back when fetching market snapshots during history scrape.
+	 */
+	public static final Config<Period> ESI_MARKET_HISTORY_SNAPSHOT_LOOKBACK = Config.<Period>builder()
+			.name("ESI_MARKET_HISTORY_SNAPSHOT_LOOKBACK")
+			.type(Period.class)
+			.defaultValue(Period.ofDays(30))
+			.build();
+
+	/**
 	 * The amount of time to wait for once the special rate limit for market history has been exceeded.
 	 */
 	public static final Config<Duration> ESI_MARKET_HISTORY_RATE_LIMIT_WAIT_TIME = Config.<Duration>builder()
