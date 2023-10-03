@@ -33,7 +33,7 @@ Before these, the following sources were used (2023-10-01):
 ```
 HistoryRegionTypeSource returned 248333 pairs, adding 248333 new pairs, new total: 248333, 75 new regions
 ActiveOrdersRegionTypeSource returned 218219 pairs, adding 33272 new pairs, new total: 281605, 0 new regions
-RecentRegionTypeRemover returned 0 pairs, adding 0 new pairs, new total: 281605, 0 new 
+RecentRegionTypeRemover returned 0 pairs, adding 0 new pairs, new total: 281605, 0 new regions
 ```
 
 And even earlier run (2023-09-26) shows almost the same numbers for `HistoryRegionTypeSource`, meaning that not much successful exploration occurs:
