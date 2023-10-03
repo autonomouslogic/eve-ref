@@ -1,5 +1,24 @@
 EVE Ref Changelog
 
+## [2.32.0](https://github.com/autonomouslogic/eve-ref/compare/2.31.0...2.32.0) (2023-10-03)
+
+
+### Features
+
+* Active orders source examines all regions ([#296](https://github.com/autonomouslogic/eve-ref/issues/296)) ([a69840a](https://github.com/autonomouslogic/eve-ref/commit/a69840a73d9db388eab48329602f349fa068ac43))
+* TopTradedRegionTypeSource doesn't try pairs already provided by other sources ([#305](https://github.com/autonomouslogic/eve-ref/issues/305)) ([c29b370](https://github.com/autonomouslogic/eve-ref/commit/c29b370fb52017b30730737ec664c061523623e6))
+
+
+### Bug Fixes
+
+* Market history stats reported correctly ([#304](https://github.com/autonomouslogic/eve-ref/issues/304)) ([c7df00a](https://github.com/autonomouslogic/eve-ref/commit/c7df00a06cde1450180a48915c1d41235786476e))
+
+
+### Documentation
+
+* Market history ([02d0ceb](https://github.com/autonomouslogic/eve-ref/commit/02d0ceb72935dc61e84c01587786f83040ef038b))
+* Market history ([c047f53](https://github.com/autonomouslogic/eve-ref/commit/c047f53706943be489f086fe4ea8bb761d80012c))
+
 ## [2.31.0](https://github.com/autonomouslogic/eve-ref/compare/2.30.0...2.31.0) (2023-10-02)
 
 
