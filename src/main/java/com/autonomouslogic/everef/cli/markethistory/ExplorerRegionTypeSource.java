@@ -2,16 +2,12 @@ package com.autonomouslogic.everef.cli.markethistory;
 
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.model.RegionTypePair;
-import com.autonomouslogic.everef.refdata.InventoryType;
-import com.autonomouslogic.everef.refdata.Region;
 import com.autonomouslogic.everef.util.RefDataUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.hash.Hashing;
 import io.reactivex.rxjava3.core.Flowable;
-import java.io.File;
 import java.time.LocalDate;
 import java.util.Collection;
-import java.util.List;
 import javax.inject.Inject;
 import lombok.NonNull;
 import lombok.Setter;
@@ -26,8 +22,6 @@ import lombok.extern.log4j.Log4j2;
  */
 @Log4j2
 class ExplorerRegionTypeSource implements RegionTypeSource {
-	private static final List<String> validUniverseIds = List.of("eve", "wormhole");
-
 	@Inject
 	protected RefDataUtil refDataUtil;
 
@@ -45,40 +39,34 @@ class ExplorerRegionTypeSource implements RegionTypeSource {
 
 	@Override
 	public Flowable<RegionTypePair> sourcePairs(Collection<RegionTypePair> currentPairs) {
-		var todaysGroup = today.toEpochDay() % groups;
-		return refDataUtil.downloadLatestReferenceData().flatMapPublisher(file -> {
-			var regions = loadRegions(file).cache();
-			var types = loadTypes(file).cache();
-			return regions.flatMap(region -> types.flatMap(type -> {
-				var hash = hash(type, region);
-				var group = hash % groups;
-				if (group == todaysGroup) {
-					return Flowable.just(new RegionTypePair(
-							region.getRegionId().intValue(), type.getTypeId().intValue()));
-				}
-				return Flowable.empty();
-			}));
+		return refDataUtil.marketRegions().toList().flatMapPublisher(regions -> {
+			return refDataUtil.marketTypes().toList().flatMapPublisher(types -> {
+				log.debug(
+						"Exploring {} regions and {} types for a total space of {}",
+						regions.size(),
+						types.size(),
+						regions.size() * types.size());
+				var todaysGroup = today.toEpochDay() % groups;
+				var pairs = regions.stream()
+						.flatMap(region -> types.stream()
+								.map(type -> new RegionTypePair(
+										region.getRegionId().intValue(),
+										type.getTypeId().intValue())))
+						.filter(pair -> {
+							var hash = hash(pair.getTypeId(), pair.getRegionId());
+							var group = hash % groups;
+							return group == todaysGroup;
+						});
+				return Flowable.fromStream(pairs);
+			});
 		});
 	}
 
-	private Flowable<InventoryType> loadTypes(File file) {
-		return refDataUtil
-				.loadReferenceDataArchive(file, "types", InventoryType.class)
-				.filter(type -> type.getMarketGroupId() != null);
-	}
-
-	private Flowable<Region> loadRegions(File file) {
-		return refDataUtil
-				.loadReferenceDataArchive(file, "regions", Region.class)
-				.filter(region -> region.getUniverseId() != null)
-				.filter(region -> validUniverseIds.contains(region.getUniverseId()));
-	}
-
-	private long hash(InventoryType type, Region region) {
+	private long hash(long typeId, long regionId) {
 		return Math.abs(Hashing.murmur3_128()
 				.newHasher()
-				.putLong(type.getTypeId())
-				.putLong(region.getRegionId())
+				.putLong(typeId)
+				.putLong(regionId)
 				.hash()
 				.padToLong());
 	}
