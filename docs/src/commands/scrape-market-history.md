@@ -29,6 +29,8 @@ Instead, the following "sources" are implemented to try and intelligently explor
 
 ## Additional sources on 2023-10-02
 The run on 2023-10-02 saw the introduction of `HistoricalOrdersRegionTypeSource`, `TopTradedRegionTypeSource`, and `ExplorerRegionTypeSource`.
+This was in release [2.31.0](https://github.com/autonomouslogic/eve-ref/releases/tag/2.31.0).
+
 Before these, the following sources were used (2023-10-01):
 ```
 HistoryRegionTypeSource returned 248333 pairs, adding 248333 new pairs, new total: 248333, 75 new regions
