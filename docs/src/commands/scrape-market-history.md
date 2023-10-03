@@ -26,3 +26,29 @@ Instead, the following "sources" are implemented to try and intelligently explor
 * `HistoricalOrdersRegionTypeSource` looks at [market order snapshots](../datasets/market-orders.md) for the past 30 days. It downloads a random file for each day. This has a similar effect as active types, but looking into the past. 
 * `TopTradedRegionTypeSource` also looks at market history for the past 450 days, but identifies the top market cap types and ensures those types are checked in every region.
 * `ExplorerRegionTypeSource` takes all 1.7 million pairs and groups them into 100 buckets, trying a different bucket each day. This guarantees that we're exploring the entire space at regular intervals.
+
+## Additional sources on 2023-10-02
+The run on 2023-10-02 saw the introduction of `HistoricalOrdersRegionTypeSource`, `TopTradedRegionTypeSource`, and `ExplorerRegionTypeSource`.
+Before these, the following sources were used (2023-10-01):
+```
+HistoryRegionTypeSource returned 248333 pairs, adding 248333 new pairs, new total: 248333, 75 new regions
+ActiveOrdersRegionTypeSource returned 218219 pairs, adding 33272 new pairs, new total: 281605, 0 new regions
+RecentRegionTypeRemover returned 0 pairs, adding 0 new pairs, new total: 281605, 0 new 
+```
+
+And even earlier run (2023-09-26) shows almost the same numbers for `HistoryRegionTypeSource`, meaning that not much successful exploration occurs:
+```
+HistoryRegionTypeSource returned 248551 pairs, adding 248551 new pairs, new total: 248551, 75 new regions
+ActiveOrdersRegionTypeSource returned 218571 pairs, adding 33043 new pairs, new total: 281594, 0 new regions
+RecentRegionTypeRemover returned 0 pairs, adding 0 new pairs, new total: 281594, 0 new regions
+```
+
+The introduction of the additional sources expanded the search space:
+```
+HistoryRegionTypeSource returned 248549 pairs, adding 248549 new pairs, new total is 248549, 75 new regions, est. runtime PT13H48M29S
+ActiveOrdersRegionTypeSource returned 218291 pairs, adding 33015 new pairs, new total is 281564, 0 new regions, est. runtime PT1H50M3S
+HistoricalOrdersRegionTypeSource returned 183595 pairs, adding 4624 new pairs, new total is 286188, 2 new regions, est. runtime PT15M24S
+TopTradedRegionTypeSource returned 36000 pairs, adding 15337 new pairs, new total is 301525, 0 new regions, est. runtime PT51M7S
+ExplorerRegionTypeSource returned 17085 pairs, adding 14077 new pairs, new total is 315602, 25 new regions, est. runtime PT46M55S
+RecentRegionTypeRemover returned 0 pairs, adding 0 new pairs, new total is 315602, 0 new regions, est. runtime PT0S
+```
