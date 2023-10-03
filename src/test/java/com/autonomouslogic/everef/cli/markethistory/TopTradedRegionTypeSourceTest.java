@@ -21,10 +21,6 @@ public class TopTradedRegionTypeSourceTest {
 	@BeforeEach
 	void before() {
 		DaggerTestComponent.builder().build().inject(this);
-	}
-
-	@Test
-	void shouldSourceItems() {
 		for (int i = 0; i < 10; i++) {
 			source.addHistory(MarketHistoryEntry.builder()
 					.regionId(1)
@@ -41,6 +37,10 @@ public class TopTradedRegionTypeSourceTest {
 					.volume(100)
 					.build());
 		}
+	}
+
+	@Test
+	void shouldSourceItems() {
 		var sourced = source.sourcePairs(List.of()).toList().blockingGet();
 		assertEquals(
 				List.of(
@@ -54,6 +54,26 @@ public class TopTradedRegionTypeSourceTest {
 						new RegionTypePair(2, 7),
 						new RegionTypePair(2, 6),
 						new RegionTypePair(2, 5)),
+				sourced);
+	}
+
+	@Test
+	void shouldSourceItemsOutsideCurrentPairs() {
+		var sourced = source.sourcePairs(List.of(new RegionTypePair(1, 9), new RegionTypePair(2, 8)))
+				.toList()
+				.blockingGet();
+		assertEquals(
+				List.of(
+						new RegionTypePair(1, 8),
+						new RegionTypePair(1, 7),
+						new RegionTypePair(1, 6),
+						new RegionTypePair(1, 5),
+						new RegionTypePair(1, 4),
+						new RegionTypePair(2, 9),
+						new RegionTypePair(2, 7),
+						new RegionTypePair(2, 6),
+						new RegionTypePair(2, 5),
+						new RegionTypePair(2, 4)),
 				sourced);
 	}
 }

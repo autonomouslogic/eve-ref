@@ -9,9 +9,9 @@ import com.google.common.collect.Ordering;
 import io.reactivex.rxjava3.core.Flowable;
 import java.math.BigDecimal;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import javax.inject.Inject;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.tuple.Pair;
@@ -38,10 +38,12 @@ class TopTradedRegionTypeSource implements RegionTypeSource {
 		return Flowable.defer(() -> {
 			var regions = getRegions();
 			var typesPerRegion = getDesiredTypesPerRegion(regions.size());
-			var typeCaps = getTypeCaps().limit(typesPerRegion).toList();
+			var typeCaps = getTypeCaps();
 			return Flowable.fromIterable(regions).flatMap(region -> Flowable.fromIterable(typeCaps)
 					.map(Pair::getLeft)
-					.map(typeId -> new RegionTypePair(region, typeId)));
+					.map(typeId -> new RegionTypePair(region, typeId))
+					.filter(pair -> !currentPairs.contains(pair))
+					.take(typesPerRegion));
 		});
 	}
 
@@ -51,7 +53,7 @@ class TopTradedRegionTypeSource implements RegionTypeSource {
 				.collect(Collectors.toSet());
 	}
 
-	private Stream<Pair<Integer, BigDecimal>> getTypeCaps() {
+	private List<Pair<Integer, BigDecimal>> getTypeCaps() {
 		return marketCapCalc.getRegionTypeMarketCaps().stream()
 				.collect(Collectors.groupingBy(
 						RegionTypeMarketCap::getTypeId,
@@ -62,7 +64,8 @@ class TopTradedRegionTypeSource implements RegionTypeSource {
 				.sorted(Ordering.natural()
 						.onResultOf(
 								(com.google.common.base.Function<Pair<Integer, BigDecimal>, BigDecimal>) Pair::getRight)
-						.reversed());
+						.reversed())
+				.toList();
 	}
 
 	private int getDesiredTypesPerRegion(int regionCount) {
