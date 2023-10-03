@@ -102,9 +102,7 @@ public class ExplorerRegionTypeSourceTest {
 				.toList();
 		assertEquals(200 * (2 * 10), validPairs.size());
 
-		refdataBytes = testDataUtil.createXzTar(Map.of(
-				"regions.json", objectMapper.writeValueAsBytes(allRegions),
-				"types.json", objectMapper.writeValueAsBytes(allTypes)));
+		refdataBytes = createRefDataFile();
 
 		server = new MockWebServer();
 		server.setDispatcher(new TestDispatcher());
@@ -160,7 +158,7 @@ public class ExplorerRegionTypeSourceTest {
 	}
 
 	@Test
-	void sourcedPairsMustNeverChange() {
+	void sourcedPairsGroupingsMustNeverChange() {
 		var expected = Map.of(
 				LocalDate.parse("2023-01-01"),
 						List.of(
@@ -189,6 +187,33 @@ public class ExplorerRegionTypeSourceTest {
 		}
 	}
 
+	@Test
+	void shouldNotMovePairsBetweenGroupsWhenNewPairsAreAdded() {
+		var previous = source.sourcePairs(List.of()).toList().blockingGet();
+		// Double the amount of types and regions.
+		var t = 80000;
+		var r = 90000;
+		var tn = allTypes.size();
+		var rn = allRegions.size();
+		for (int i = 0; i < tn; i++) {
+			var type = InventoryType.builder()
+					.typeId((long) t++)
+					.marketGroupId(100L)
+					.build();
+			allTypes.put(type.getTypeId(), type);
+		}
+		for (int i = 0; i < rn; i++) {
+			var region = Region.builder().regionId((long) r++).universeId("eve").build();
+			allRegions.put(region.getRegionId(), region);
+		}
+		refdataBytes = createRefDataFile();
+		var current = source.sourcePairs(List.of()).toList().blockingGet();
+		// Assert the group has new pairs.
+		assertTrue(current.stream().anyMatch(pair -> pair.getTypeId() >= 80000 || pair.getRegionId() >= 90000));
+		// Assert all the previous pairs are still there.
+		assertTrue(current.containsAll(previous));
+	}
+
 	class TestDispatcher extends Dispatcher {
 		@NotNull
 		@Override
@@ -206,5 +231,12 @@ public class ExplorerRegionTypeSourceTest {
 				return new MockResponse().setResponseCode(500);
 			}
 		}
+	}
+
+	@SneakyThrows
+	private byte[] createRefDataFile() {
+		return testDataUtil.createXzTar(Map.of(
+				"regions.json", objectMapper.writeValueAsBytes(allRegions),
+				"types.json", objectMapper.writeValueAsBytes(allTypes)));
 	}
 }
