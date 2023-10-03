@@ -41,6 +41,11 @@ class ExplorerRegionTypeSource implements RegionTypeSource {
 	public Flowable<RegionTypePair> sourcePairs(Collection<RegionTypePair> currentPairs) {
 		return refDataUtil.marketRegions().toList().flatMapPublisher(regions -> {
 			return refDataUtil.marketTypes().toList().flatMapPublisher(types -> {
+				log.debug(
+						"Exploring {} regions and {} types for a total space of {}",
+						regions.size(),
+						types.size(),
+						regions.size() * types.size());
 				var todaysGroup = today.toEpochDay() % groups;
 				var pairs = regions.stream()
 						.flatMap(region -> types.stream()

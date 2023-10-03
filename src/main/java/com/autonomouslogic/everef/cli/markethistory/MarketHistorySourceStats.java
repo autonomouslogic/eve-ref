@@ -49,7 +49,7 @@ public class MarketHistorySourceStats {
 	public void logStats() {
 		getStats()
 				.forEach(s -> log.info(String.format(
-						"Source %s: hit %s of %s pairs - %.0f%%",
+						"Source %s: hit %s of %s pairs - %.1f%%",
 						s.getSource(), s.getHits(), s.getTotal(), 100.0 * s.getHits() / s.getTotal())));
 	}
 
