@@ -60,7 +60,6 @@ import software.amazon.awssdk.services.s3.S3AsyncClient;
 @SetEnvironmentVariable(key = "ESI_USER_AGENT", value = "user-agent")
 @SetEnvironmentVariable(key = "ESI_BASE_URL", value = "http://localhost:" + TestDataUtil.TEST_PORT + "/esi")
 @SetEnvironmentVariable(key = "ESI_MARKET_HISTORY_EXPLORATION_GROUPS", value = "1")
-// @Timeout(20)
 public class ScrapeMarketHistoryTest {
 	static final String BUCKET_NAME = "data-bucket";
 
@@ -129,6 +128,14 @@ public class ScrapeMarketHistoryTest {
 		assertEquals("{\"2023-01-01\":4,\"2023-01-02\":5,\"2023-01-03\":4,\"2023-01-04\":0}", totalPairs);
 
 		var allRequests = testDataUtil.takeAllRequests(server);
+
+		var allPaths =
+				allRequests.stream().map(r -> r.getRequestUrl().encodedPath()).toList();
+		// Requested by ActiveOrdersRegionTypeSource.
+		assertTrue(allPaths.contains("/esi/markets/10000001/types/"));
+		assertTrue(allPaths.contains("/esi/markets/10000002/types/"));
+		assertTrue(allPaths.contains("/esi/markets/10000100/types/"));
+
 		var requestedPairs = getRequestedMarketHistoryPairs(allRequests);
 		// Present in previous files.
 		assertTrue(requestedPairs.contains(new RegionTypePair(10000001, 999)));
@@ -184,6 +191,9 @@ public class ScrapeMarketHistoryTest {
 				}
 				if (path.equals("/esi/markets/10000002/types/")) {
 					return mockResponse("[20,21]");
+				}
+				if (path.equals("/esi/markets/10000100/types/")) {
+					return mockResponse("[]");
 				}
 				if (path.startsWith("/esi/markets/") && segments.get(3).equals("history")) {
 					var regionId = segments.get(2);
@@ -277,6 +287,16 @@ public class ScrapeMarketHistoryTest {
 		return testDataUtil.mockResponse(testDataUtil.createXzTar(Map.of(
 				"regions.json",
 						objectMapper.writeValueAsBytes(Map.of(
+								10000001,
+								Region.builder()
+										.regionId(10000001L)
+										.universeId("eve")
+										.build(),
+								10000002,
+								Region.builder()
+										.regionId(10000002L)
+										.universeId("eve")
+										.build(),
 								10000100,
 								Region.builder()
 										.regionId(10000100L)
