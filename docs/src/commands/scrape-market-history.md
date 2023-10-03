@@ -36,7 +36,7 @@ ActiveOrdersRegionTypeSource returned 218219 pairs, adding 33272 new pairs, new 
 RecentRegionTypeRemover returned 0 pairs, adding 0 new pairs, new total: 281605, 0 new regions
 ```
 
-And even earlier run (2023-09-26) shows almost the same numbers for `HistoryRegionTypeSource`, meaning that not much successful exploration occurs:
+And even earlier run (2023-09-26) shows almost the same numbers for `HistoryRegionTypeSource`, meaning that only a little successful exploration occurs:
 ```
 HistoryRegionTypeSource returned 248551 pairs, adding 248551 new pairs, new total: 248551, 75 new regions
 ActiveOrdersRegionTypeSource returned 218571 pairs, adding 33043 new pairs, new total: 281594, 0 new regions
