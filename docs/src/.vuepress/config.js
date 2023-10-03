@@ -53,9 +53,10 @@ module.exports = {
             'datasets/downloading-datasets',
             'datasets/fuzzwork-ordersets',
             'datasets/hoboleaks-sde',
+            'datasets/market-history',
             'datasets/market-orders',
             'datasets/public-contracts',
-            'datasets/reference-data'
+            'datasets/reference-data',
           ]
         },
         {
@@ -68,7 +69,7 @@ module.exports = {
             'commands/scrape-market-history.md',
             'commands/scrape-market-orders.md',
             'commands/scrape-public-contracts.md',
-            'commands/sync-fuzzwork-ordersets.md'
+            'commands/sync-fuzzwork-ordersets.md',
           ]
         },
         {

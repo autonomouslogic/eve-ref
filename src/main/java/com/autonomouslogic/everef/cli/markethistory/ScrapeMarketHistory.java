@@ -175,7 +175,7 @@ public class ScrapeMarketHistory implements Command {
 	private Completable initSources() {
 		return Completable.fromAction(() -> {
 			regionTypeSource = compoundRegionTypeSourceProvider.get().setStats(stats);
-			regionTypeSource.addSource(historyRegionTypeSourceProvider.get()); // must be first.
+			regionTypeSource.addSource(historyRegionTypeSourceProvider.get()); // should probably be first.
 			regionTypeSource.addSource(activeOrdersRegionTypeSourceProvider.get());
 			regionTypeSource.addSource(
 					historicalOrdersRegionTypeSourceProvider.get().setToday(today));
