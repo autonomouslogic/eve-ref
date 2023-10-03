@@ -262,7 +262,7 @@ public class ScrapeMarketHistoryTest {
 				List.of("10000100", "999"));
 
 		if (notFound.contains(List.of(regionId, typeId))) {
-			return new MockResponse().setResponseCode(404);
+			return new MockResponse().setResponseCode(200).setBody("[]");
 		}
 		try {
 			return mockResponse(ResourceUtil.loadContextual(
