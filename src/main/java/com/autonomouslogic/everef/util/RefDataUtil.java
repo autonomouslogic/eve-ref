@@ -125,23 +125,23 @@ public class RefDataUtil {
 		});
 	}
 
-	private ReferenceEntry createEntry(@NonNull String type, @NonNull Long id, @NonNull byte[] content) {
+	public ReferenceEntry createEntry(@NonNull String type, @NonNull Long id, @NonNull byte[] content) {
 		var md5 = HashUtil.md5(content);
 		return new ReferenceEntry(
 				type, id, subPath(type, id), content, Base64.encodeBase64String(md5), Hex.encodeHexString(md5));
 	}
 
-	private ReferenceEntry createEntry(@NonNull String type, @NonNull byte[] content) {
+	public ReferenceEntry createEntry(@NonNull String type, @NonNull byte[] content) {
 		var md5 = HashUtil.md5(content);
 		return new ReferenceEntry(
 				type, null, subPath(type), content, Base64.encodeBase64String(md5), Hex.encodeHexString(md5));
 	}
 
-	private String subPath(@NonNull String type, @NonNull Long id) {
+	public String subPath(@NonNull String type, @NonNull Long id) {
 		return subPath(type + "/" + id);
 	}
 
-	private String subPath(@NonNull String type) {
+	public String subPath(@NonNull String type) {
 		var refDataUrl = (S3Url) urlParser.parse(Configs.REFERENCE_DATA_PATH.getRequired());
 		return refDataUrl.getPath() + type;
 	}
