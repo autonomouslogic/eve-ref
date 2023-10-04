@@ -2,7 +2,7 @@ package com.autonomouslogic.everef.cli.markethistory;
 
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.model.RegionTypePair;
-import com.autonomouslogic.everef.util.RefDataUtil;
+import com.autonomouslogic.everef.util.RefDataAccess;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.hash.Hashing;
 import io.reactivex.rxjava3.core.Flowable;
@@ -23,7 +23,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 class ExplorerRegionTypeSource implements RegionTypeSource {
 	@Inject
-	protected RefDataUtil refDataUtil;
+	protected RefDataAccess refDataAccess;
 
 	@Inject
 	protected ObjectMapper objectMapper;
@@ -39,8 +39,8 @@ class ExplorerRegionTypeSource implements RegionTypeSource {
 
 	@Override
 	public Flowable<RegionTypePair> sourcePairs(Collection<RegionTypePair> currentPairs) {
-		return refDataUtil.marketRegions().toList().flatMapPublisher(regions -> {
-			return refDataUtil.marketTypes().toList().flatMapPublisher(types -> {
+		return refDataAccess.marketRegions().toList().flatMapPublisher(regions -> {
+			return refDataAccess.marketTypes().toList().flatMapPublisher(types -> {
 				log.debug(
 						"Exploring {} regions and {} types for a total space of {}",
 						regions.size(),

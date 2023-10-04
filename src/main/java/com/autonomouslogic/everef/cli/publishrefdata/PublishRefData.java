@@ -1,6 +1,7 @@
-package com.autonomouslogic.everef.cli;
+package com.autonomouslogic.everef.cli.publishrefdata;
 
 import com.autonomouslogic.commons.rxjava3.Rx3Util;
+import com.autonomouslogic.everef.cli.Command;
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.model.ReferenceEntry;
 import com.autonomouslogic.everef.openapi.refdata.apis.RefdataApi;

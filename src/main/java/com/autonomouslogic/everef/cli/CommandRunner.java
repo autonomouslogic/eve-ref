@@ -5,6 +5,7 @@ import com.autonomouslogic.everef.cli.decorator.SlackDecorator;
 import com.autonomouslogic.everef.cli.markethistory.ScrapeMarketHistory;
 import com.autonomouslogic.everef.cli.marketorders.ScrapeMarketOrders;
 import com.autonomouslogic.everef.cli.publiccontracts.ScrapePublicContracts;
+import com.autonomouslogic.everef.cli.publishrefdata.PublishRefData;
 import com.autonomouslogic.everef.cli.refdata.BuildRefData;
 import io.reactivex.rxjava3.core.Completable;
 import java.time.Duration;

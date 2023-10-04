@@ -1,4 +1,4 @@
-package com.autonomouslogic.everef.cli;
+package com.autonomouslogic.everef.cli.publishrefdata;
 
 import static com.autonomouslogic.everef.test.TestDataUtil.TEST_PORT;
 import static org.junit.jupiter.api.Assertions.assertEquals;

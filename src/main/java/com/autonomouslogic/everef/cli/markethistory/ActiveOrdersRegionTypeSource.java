@@ -2,7 +2,7 @@ package com.autonomouslogic.everef.cli.markethistory;
 
 import com.autonomouslogic.everef.esi.MarketEsi;
 import com.autonomouslogic.everef.model.RegionTypePair;
-import com.autonomouslogic.everef.util.RefDataUtil;
+import com.autonomouslogic.everef.util.RefDataAccess;
 import io.reactivex.rxjava3.core.Flowable;
 import java.util.Collection;
 import javax.inject.Inject;
@@ -17,14 +17,14 @@ class ActiveOrdersRegionTypeSource implements RegionTypeSource {
 	protected MarketEsi marketEsi;
 
 	@Inject
-	protected RefDataUtil refDataUtil;
+	protected RefDataAccess refDataAccess;
 
 	@Inject
 	protected ActiveOrdersRegionTypeSource() {}
 
 	@Override
 	public Flowable<RegionTypePair> sourcePairs(Collection<RegionTypePair> currentPairs) {
-		return refDataUtil.allRegions().flatMap(region -> {
+		return refDataAccess.allRegions().flatMap(region -> {
 			var regionId = region.getRegionId().intValue();
 			return marketEsi.getActiveMarketOrderTypes(regionId).map(typeId -> new RegionTypePair(regionId, typeId));
 		});
