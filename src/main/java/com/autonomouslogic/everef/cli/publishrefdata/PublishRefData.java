@@ -220,12 +220,13 @@ public class PublishRefData implements Command {
 
 	private Completable uploadFiles(Map<String, ListedS3Object> existing) {
 		return Completable.defer(() -> {
+			log.info("Evaluating {} files for upload", fileMap.size());
 			var skipped = new AtomicInteger();
 			return Flowable.fromIterable(fileMap.entrySet())
 					.map(entry -> refDataUtil.createEntryForPath(
 							entry.getKey(), objectMapper.writeValueAsBytes(entry.getValue())))
 					.filter(entry -> filterExisting(skipped, existing, entry))
-					.flatMapCompletable(entry -> uploadFile(entry), false, UPLOAD_CONCURRENCY)
+					.flatMapCompletable(this::uploadFile, false, UPLOAD_CONCURRENCY)
 					.doOnComplete(() -> log.info("Skipped {} entries", skipped.get()))
 					.andThen(Completable.defer(() -> deleteRemaining(new ArrayList<>(existing.keySet()))));
 		});

@@ -7,6 +7,7 @@ import com.autonomouslogic.everef.util.RefDataUtil;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.reactivex.rxjava3.core.Flowable;
+import io.reactivex.rxjava3.core.Maybe;
 import java.util.Map;
 import java.util.Optional;
 import javax.inject.Inject;
@@ -39,24 +40,24 @@ public class TypeBundleRenderer implements RefDataRenderer {
 
 	public Flowable<Pair<String, JsonNode>> render() {
 		return Flowable.defer(() -> {
+			log.info("Creating type bundles");
 			var types = mvStoreUtil.openJsonMap(dataStore, "types", Long.class);
 			var dogma = mvStoreUtil.openJsonMap(dataStore, "dogma_attributes", Long.class);
-			return Flowable.fromIterable(types.keySet()).map(typeId -> {
-				return createBundle(types.get(typeId), dogma);
-			});
+			return Flowable.fromIterable(types.keySet()).flatMapMaybe(typeId -> createBundle(types.get(typeId), dogma));
 		});
 	}
 
-	private Pair<String, JsonNode> createBundle(JsonNode type, Map<Long, JsonNode> dogma) {
+	private Maybe<Pair<String, JsonNode>> createBundle(JsonNode type, Map<Long, JsonNode> dogma) {
 		var parsedType = objectMapper.convertValue(type, InventoryType.class);
 
 		var path = refDataUtil.subPath("types", parsedType.getTypeId()) + "/bundle";
 
 		var bundle = objectMapper.createObjectNode();
 		var types = bundle.putObject("types");
-		var dogmaAttributes = bundle.putObject("dogma_attributes");
+		var dogmaAttributes = objectMapper.createObjectNode();
 
 		types.set(Long.toString(parsedType.getTypeId()), type);
+
 		Optional.ofNullable(parsedType.getDogmaAttributes()).stream()
 				.flatMap(e -> e.values().stream())
 				.map(DogmaTypeAttribute::getAttributeId)
@@ -67,6 +68,15 @@ public class TypeBundleRenderer implements RefDataRenderer {
 					}
 				});
 
-		return Pair.of(path, bundle);
+		var valid = false;
+		if (!dogmaAttributes.isEmpty()) {
+			bundle.set("dogma_attributes", dogmaAttributes);
+			valid = true;
+		}
+
+		if (valid) {
+			return Maybe.just(Pair.of(path, bundle));
+		}
+		return Maybe.empty();
 	}
 }
