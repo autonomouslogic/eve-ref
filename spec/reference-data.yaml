@@ -464,6 +464,25 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/InventoryType'
+  /types/{type_id}/bundle:
+    get:
+      tags:
+      - refdata
+      operationId: getTypeBundle
+      parameters:
+      - name: type_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: The type bundle.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Bundle'
   /units:
     get:
       tags:
@@ -545,6 +564,17 @@ components:
         probability:
           type: number
           format: double
+    Bundle:
+      type: object
+      properties:
+        types:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/InventoryType'
+        dogma_attributes:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/DogmaAttribute'
     Coordinate:
       type: object
       properties:
