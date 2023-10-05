@@ -50,7 +50,7 @@ public class VerifyRefDataModels implements Command {
 				.downloadLatestReferenceData()
 				.flatMapPublisher(file -> refDataUtil.parseReferenceDataArchive(file))
 				.flatMapCompletable(
-						entry -> verify(entry), false, Runtime.getRuntime().availableProcessors());
+					this::verify, false, Runtime.getRuntime().availableProcessors());
 	}
 
 	private Completable verify(@NonNull ReferenceEntry entry) {

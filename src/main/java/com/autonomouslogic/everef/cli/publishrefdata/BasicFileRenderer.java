@@ -16,7 +16,7 @@ import org.h2.mvstore.MVStore;
  * Renders the basic objects in the reference data collections.
  */
 @Log4j2
-public class BasicFileRenderer {
+public class BasicFileRenderer implements RefDataRenderer {
 	@Inject
 	protected ObjectMapper objectMapper;
 

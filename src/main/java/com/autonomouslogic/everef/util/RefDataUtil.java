@@ -137,6 +137,11 @@ public class RefDataUtil {
 				type, null, subPath(type), content, Base64.encodeBase64String(md5), Hex.encodeHexString(md5));
 	}
 
+	public ReferenceEntry createEntryForPath(@NonNull String path, @NonNull byte[] content) {
+		var md5 = HashUtil.md5(content);
+		return new ReferenceEntry(null, null, path, content, Base64.encodeBase64String(md5), Hex.encodeHexString(md5));
+	}
+
 	public String subPath(@NonNull String type, @NonNull Long id) {
 		return subPath(type + "/" + id);
 	}

@@ -37,6 +37,7 @@ import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import okhttp3.OkHttpClient;
+import org.apache.commons.lang3.tuple.Pair;
 import org.h2.mvstore.MVStore;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 
@@ -93,6 +94,7 @@ public class PublishRefData implements Command {
 	private MVStore dataStore;
 	private MVStore fileStore;
 	private Map<String, JsonNode> fileMap;
+	private ReferenceEntry metaEntry;
 
 	private final Duration cacheTime = Configs.REFERENCE_DATA_CACHE_CONTROL_MAX_AGE.getRequired();
 
@@ -182,30 +184,31 @@ public class PublishRefData implements Command {
 		return refDataUtil
 				.parseReferenceDataArchive(refDataFile)
 				.flatMapCompletable(entry -> Completable.fromAction(() -> {
-					mvStoreUtil
-							.openJsonMap(dataStore, entry.getType(), Long.class)
-							.put(entry.getId(), objectMapper.readTree(entry.getContent()));
+					if (entry.getType().equals("meta")) {
+						metaEntry = entry;
+					} else {
+						mvStoreUtil
+								.openJsonMap(dataStore, entry.getType(), Long.class)
+								.put(entry.getId(), objectMapper.readTree(entry.getContent()));
+					}
 				}));
 	}
 
 	private Completable renderFiles() {
-		return Completable.defer(() -> {
-			return Flowable.concatArray(basicFileRendererProvider
-							.get()
-							.setDataStore(dataStore)
-							.render())
-					.flatMapCompletable(entry -> Completable.fromAction(() -> {
-						fileMap.put(entry.getLeft(), entry.getRight());
-					}));
-		});
+		return Completable.defer(() -> Flowable.concatArray(
+						Flowable.just(Pair.of(metaEntry.getPath(), objectMapper.readTree(metaEntry.getContent()))),
+						basicFileRendererProvider.get().setDataStore(dataStore).render())
+				.flatMapCompletable(entry -> Completable.fromAction(() -> {
+					fileMap.put(entry.getLeft(), entry.getRight());
+				})));
 	}
 
 	private Completable uploadFiles(Map<String, ListedS3Object> existing) {
 		return Completable.defer(() -> {
 			var skipped = new AtomicInteger();
 			return Flowable.fromIterable(fileMap.entrySet())
-					.map(entry ->
-							refDataUtil.createEntry(entry.getKey(), objectMapper.writeValueAsBytes(entry.getValue())))
+					.map(entry -> refDataUtil.createEntryForPath(
+							entry.getKey(), objectMapper.writeValueAsBytes(entry.getValue())))
 					.filter(entry -> filterExisting(skipped, existing, entry))
 					.flatMapCompletable(entry -> uploadFile(entry), false, UPLOAD_CONCURRENCY)
 					.doOnComplete(() -> log.info("Skipped {} entries", skipped.get()))

@@ -3,6 +3,8 @@ package com.autonomouslogic.everef.cli.publishrefdata;
 import static com.autonomouslogic.everef.test.TestDataUtil.TEST_PORT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import com.autonomouslogic.everef.model.refdata.RefDataConfig;
+import com.autonomouslogic.everef.model.refdata.RefTestConfig;
 import com.autonomouslogic.everef.refdata.RefDataMeta;
 import com.autonomouslogic.everef.refdata.RefDataMetaFileInfo;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
@@ -14,9 +16,11 @@ import com.autonomouslogic.everef.util.RefDataUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.time.Instant;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.SneakyThrows;
@@ -109,7 +113,7 @@ public class PublishRefDataTest {
 
 	@Test
 	@SneakyThrows
-	void shouldBuildRefData() {
+	void shouldPublishRefData() {
 		publishRefData.run().blockingAwait();
 
 		var putKeys = mockS3Adapter.getAllPutKeys(BUCKET_NAME, s3);
@@ -119,24 +123,9 @@ public class PublishRefDataTest {
 		expectedKeys.add("base/market_groups/root");
 		for (var config : refDataUtil.loadReferenceDataConfig()) {
 			var testConfig = config.getTest();
-			expectedKeys.add("base/" + config.getOutputFile());
-
-			var expectedIndex = objectMapper.valueToTree(
-					testConfig.getIds().stream().sorted().toList());
-			var actualIndex = objectMapper.readTree(mockS3Adapter
-					.getTestObject(BUCKET_NAME, "base/" + config.getOutputFile(), s3)
-					.orElseThrow());
-			assertEquals(expectedIndex.toString(), actualIndex.toString());
-
+			//			assertIndex(config, testConfig, expectedKeys);
 			for (var id : testConfig.getIds()) {
-				expectedKeys.add("base/" + config.getOutputFile() + "/" + id);
-
-				var expectedItem = dataUtil.loadJsonResource(
-						String.format("/refdata/refdata/%s-%s.json", testConfig.getFilePrefix(), id));
-				var actualItem = objectMapper.readTree(mockS3Adapter
-						.getTestObject(BUCKET_NAME, String.format("base/%s/%s", config.getOutputFile(), id), s3)
-						.orElseThrow());
-				assertEquals(expectedItem, actualItem);
+				assertFile(id, config, testConfig, expectedKeys);
 			}
 		}
 
@@ -148,6 +137,30 @@ public class PublishRefDataTest {
 
 		var deleteKeys = mockS3Adapter.getAllDeleteKeys(BUCKET_NAME, s3);
 		assertEquals(List.of("base/types/999999999"), deleteKeys);
+	}
+
+	private void assertIndex(RefDataConfig config, RefTestConfig testConfig, Set<String> expectedKeys)
+			throws IOException {
+		var expectedIndex =
+				objectMapper.valueToTree(testConfig.getIds().stream().sorted().toList());
+		var path = "base/" + config.getOutputFile();
+		expectedKeys.add(path);
+		var actualIndex = objectMapper.readTree(mockS3Adapter
+				.getTestObject(BUCKET_NAME, path, s3)
+				.orElseThrow(() -> new RuntimeException("Missing path: " + path)));
+		assertEquals(expectedIndex.toString(), actualIndex.toString());
+	}
+
+	private void assertFile(Long id, RefDataConfig config, RefTestConfig testConfig, Set<String> expectedKeys)
+			throws IOException {
+		var path = String.format("base/%s/%s", config.getOutputFile(), id);
+		expectedKeys.add(path);
+		var expectedItem =
+				dataUtil.loadJsonResource(String.format("/refdata/refdata/%s-%s.json", testConfig.getFilePrefix(), id));
+		var actualItem = objectMapper.readTree(mockS3Adapter
+				.getTestObject(BUCKET_NAME, path, s3)
+				.orElseThrow(() -> new RuntimeException("Missing path: " + path)));
+		assertEquals(expectedItem, actualItem);
 	}
 
 	@Test
