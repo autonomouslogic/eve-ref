@@ -14,6 +14,9 @@ import lombok.extern.jackson.Jacksonized;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @Schema
 public class Bundle {
-	Map<Long, InventoryType> types;
-	Map<Long, DogmaAttribute> dogmaAttributes;
+	@Schema(description = "A map of types. The key is the type ID.")
+	Map<String, InventoryType> types;
+
+	@Schema(description = "A map of dogma attributes. The key is the attribute ID.")
+	Map<String, DogmaAttribute> dogmaAttributes;
 }
