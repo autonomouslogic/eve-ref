@@ -58,9 +58,6 @@ public class VerifyRefDataModels implements Command {
 				if (entry.getType().equals("meta")) {
 					return;
 				}
-				if (entry.getType().equals("market_groups/root")) {
-					return;
-				}
 				var config = refDataUtil.loadReferenceDataConfig().stream()
 						.filter(c -> c.getOutputFile().equals(entry.getType()))
 						.findFirst()
@@ -75,12 +72,8 @@ public class VerifyRefDataModels implements Command {
 
 	@SneakyThrows
 	private void verifyType(@NonNull ReferenceEntry entry, @NonNull RefDataConfig config) {
-		if (entry.getId() == null) {
-			objectMapper.readValue(entry.getContent(), listOfInts);
-		} else {
-			var modelName = "com.autonomouslogic.everef.refdata." + config.getModel();
-			var modelClass = objectMapper.getTypeFactory().findClass(modelName);
-			Objects.requireNonNull(objectMapper.readValue(entry.getContent(), modelClass));
-		}
+		var modelName = "com.autonomouslogic.everef.refdata." + config.getModel();
+		var modelClass = objectMapper.getTypeFactory().findClass(modelName);
+		Objects.requireNonNull(objectMapper.readValue(entry.getContent(), modelClass));
 	}
 }
