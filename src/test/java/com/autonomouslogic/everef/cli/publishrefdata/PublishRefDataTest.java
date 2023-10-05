@@ -123,7 +123,7 @@ public class PublishRefDataTest {
 		expectedKeys.add("base/market_groups/root");
 		for (var config : refDataUtil.loadReferenceDataConfig()) {
 			var testConfig = config.getTest();
-			//			assertIndex(config, testConfig, expectedKeys);
+			assertIndex(config, testConfig, expectedKeys);
 			for (var id : testConfig.getIds()) {
 				assertFile(id, config, testConfig, expectedKeys);
 			}

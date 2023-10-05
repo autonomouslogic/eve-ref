@@ -88,6 +88,9 @@ public class PublishRefData implements Command {
 	@Inject
 	protected Provider<RootMarketGroupIndexRenderer> rootMarketGroupIndexRendererProvider;
 
+	@Inject
+	protected Provider<IndexRenderer> indexRendererProvider;
+
 	private S3Url refDataUrl;
 	private URI dataBaseUrl = Configs.DATA_BASE_URL.getRequired();
 	private AtomicInteger uploadCounter = new AtomicInteger();
@@ -200,6 +203,7 @@ public class PublishRefData implements Command {
 	private Completable renderFiles() {
 		return Completable.defer(() -> Flowable.concatArray(
 						Flowable.just(Pair.of(metaEntry.getPath(), objectMapper.readTree(metaEntry.getContent()))),
+						indexRendererProvider.get().setDataStore(dataStore).render(),
 						basicFileRendererProvider.get().setDataStore(dataStore).render(),
 						rootMarketGroupIndexRendererProvider
 								.get()

@@ -104,12 +104,7 @@ public class RefDataUtil {
 						return createEntry(type, id, content);
 					})
 					.doOnComplete(() -> log.debug("Finished parsing {}", filename));
-			var indexEntry = Flowable.defer(() -> {
-				index.sort(Long::compareTo);
-				log.debug("Creating {} index with {} entries", type, index.size());
-				return Flowable.just(createEntry(type, objectMapper.writeValueAsBytes(index)));
-			});
-			return Flowable.concat(fileEntries, indexEntry);
+			return fileEntries;
 		});
 	}
 
