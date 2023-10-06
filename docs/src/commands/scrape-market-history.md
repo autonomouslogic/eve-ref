@@ -30,20 +30,24 @@ Instead, the following "sources" are implemented to try and intelligently explor
 The run on 2023-10-02 saw the introduction of `HistoricalOrdersRegionTypeSource`, `TopTradedRegionTypeSource`, and `ExplorerRegionTypeSource`.
 This was in release [2.31.0](https://github.com/autonomouslogic/eve-ref/releases/tag/2.31.0).
 
-Before these, the following sources were used (2023-10-01):
-```
-HistoryRegionTypeSource returned 248333 pairs, adding 248333 new pairs, new total: 248333, 75 new regions
-ActiveOrdersRegionTypeSource returned 218219 pairs, adding 33272 new pairs, new total: 281605, 0 new regions
-RecentRegionTypeRemover returned 0 pairs, adding 0 new pairs, new total: 281605, 0 new regions
-```
-
-An even earlier run (2023-09-26) shows almost the same numbers for `HistoryRegionTypeSource`:
+### 2023-09-26 and 2023-10-01
+On 2023-09-26:
 ```
 HistoryRegionTypeSource returned 248551 pairs, adding 248551 new pairs, new total: 248551, 75 new regions
 ActiveOrdersRegionTypeSource returned 218571 pairs, adding 33043 new pairs, new total: 281594, 0 new regions
 RecentRegionTypeRemover returned 0 pairs, adding 0 new pairs, new total: 281594, 0 new regions
 ```
 
+And 2023-10-01:
+```
+HistoryRegionTypeSource returned 248333 pairs, adding 248333 new pairs, new total: 248333, 75 new regions
+ActiveOrdersRegionTypeSource returned 218219 pairs, adding 33272 new pairs, new total: 281605, 0 new regions
+RecentRegionTypeRemover returned 0 pairs, adding 0 new pairs, new total: 281605, 0 new regions
+```
+
+Both show almost the same numbers for `HistoryRegionTypeSource`:
+
+### 2023-10-02
 The introduction of the additional sources expanded the search space:
 ```
 HistoryRegionTypeSource returned 248549 pairs, adding 248549 new pairs, new total is 248549, 75 new regions, est. runtime PT13H48M29S
@@ -55,6 +59,31 @@ RecentRegionTypeRemover returned 0 pairs, adding 0 new pairs, new total is 31560
 ```
 
 After this run, the history contained 250130 pairs, meaning 1581 new pairs were discovered.
-This is a 0.5% increase, meaning the new sources only had a small impact, with a combined hit rate of 2.4%.
+This is a 0.5% increase, meaning the new sources only had a small impact.
 However, in the interest of collecting all the available data, any impact is good.
 Due to a bug in the new stat reporting added at the end of the run, it's unknown which new sources contributed the most. 
+
+### 2023-10-04
+A few days later with some changes made and the stats fixed running [2.32.0](https://github.com/autonomouslogic/eve-ref/releases/tag/2.32.0):
+
+```
+HistoryRegionTypeSource returned 250344 pairs, adding 250344 new pairs, new total is 250344, 76 new regions, est. runtime PT13H54M28S
+ActiveOrdersRegionTypeSource returned 218787 pairs, adding 33292 new pairs, new total is 283636, 3 new regions, est. runtime PT1H50M58S
+HistoricalOrdersRegionTypeSource returned 183288 pairs, adding 4025 new pairs, new total is 287661, 1 new regions, est. runtime PT13M25S
+TopTradedRegionTypeSource returned 35477 pairs, adding 35477 new pairs, new total is 323138, 0 new regions, est. runtime PT1H58M15S
+ExplorerRegionTypeSource returned 17297 pairs, adding 14061 new pairs, new total is 337199, 22 new regions, est. runtime PT46M52S
+RecentRegionTypeRemover returned 0 pairs, adding 0 new pairs, new total is 337199, 0 new regions, est. runtime PT0S
+```
+
+The number of pairs went up a bit (250130 to 250344) as did the number of regions (75 to 76),
+meaning the history now contains data for one more.
+Active orders now also scans all regions and this time it's returning 3 new ones.
+Stats for the end of the run:
+
+```
+Source HistoryRegionTypeSource: hit 240631 of 250344 pairs - 96.1%
+Source ActiveOrdersRegionTypeSource: hit 286 of 33292 pairs - 0.9%
+Source HistoricalOrdersRegionTypeSource: hit 45 of 4025 pairs - 1.1%
+Source TopTradedRegionTypeSource: hit 1515 of 35477 pairs - 4.3%
+Source ExplorerRegionTypeSource: hit 149 of 14061 pairs - 1.1%
+```
