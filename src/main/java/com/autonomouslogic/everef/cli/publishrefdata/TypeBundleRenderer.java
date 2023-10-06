@@ -1,6 +1,7 @@
 package com.autonomouslogic.everef.cli.publishrefdata;
 
 import com.autonomouslogic.everef.mvstore.MVStoreUtil;
+import com.autonomouslogic.everef.refdata.DogmaAttribute;
 import com.autonomouslogic.everef.refdata.DogmaTypeAttribute;
 import com.autonomouslogic.everef.refdata.InventoryType;
 import com.autonomouslogic.everef.refdata.Skill;
@@ -40,6 +41,7 @@ public class TypeBundleRenderer implements RefDataRenderer {
 	private Map<Long, JsonNode> typesMap;
 	private Map<Long, JsonNode> dogmaMap;
 	private Map<Long, JsonNode> skillsMap;
+	private Map<Long, JsonNode> unitsMap;
 
 	@Inject
 	protected TypeBundleRenderer() {}
@@ -50,6 +52,7 @@ public class TypeBundleRenderer implements RefDataRenderer {
 			typesMap = mvStoreUtil.openJsonMap(dataStore, "types", Long.class);
 			dogmaMap = mvStoreUtil.openJsonMap(dataStore, "dogma_attributes", Long.class);
 			skillsMap = mvStoreUtil.openJsonMap(dataStore, "skills", Long.class);
+			unitsMap = mvStoreUtil.openJsonMap(dataStore, "units", Long.class);
 			return Flowable.fromIterable(typesMap.keySet()).flatMapMaybe(this::createBundle);
 		});
 	}
@@ -62,11 +65,13 @@ public class TypeBundleRenderer implements RefDataRenderer {
 		var typesJson = bundleJson.putObject("types");
 		var attributesJson = objectMapper.createObjectNode();
 		var skillsJson = objectMapper.createObjectNode();
+		var unitsJson = objectMapper.createObjectNode();
 
 		typesJson.set(Long.toString(type.getTypeId()), typeJson);
 		bundleDogmaAttributes(type, attributesJson);
 		bundleVariations(type, typesJson);
 		bundleRequiredSkills(type, skillsJson, typesJson);
+		bundleUnits(unitsJson, attributesJson);
 
 		var valid = false;
 		if (!attributesJson.isEmpty()) {
@@ -75,6 +80,10 @@ public class TypeBundleRenderer implements RefDataRenderer {
 		}
 		if (!skillsJson.isEmpty()) {
 			bundleJson.set("skills", skillsJson);
+			valid = true;
+		}
+		if (!unitsJson.isEmpty()) {
+			bundleJson.set("units", unitsJson);
 			valid = true;
 		}
 
@@ -130,5 +139,20 @@ public class TypeBundleRenderer implements RefDataRenderer {
 				.flatMap(e -> e.keySet().stream())
 				.distinct()
 				.forEach(id -> bundleSkill(id, skillsJson, typesJson));
+	}
+
+	private void bundleUnits(ObjectNode unitsJson, ObjectNode attributesJson) {
+		if (attributesJson.isEmpty()) {
+			return;
+		}
+		attributesJson.fields().forEachRemaining(entry -> {
+			var dogma = objectMapper.convertValue(entry.getValue(), DogmaAttribute.class);
+			var unitId = dogma.getUnitId();
+			var unitJson = unitsMap.get(unitId);
+			if (unitJson == null) {
+				return;
+			}
+			unitsJson.set(Long.toString(unitId), unitJson);
+		});
 	}
 }
