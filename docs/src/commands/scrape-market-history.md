@@ -5,7 +5,7 @@ Produces the [market history dataset](../datasets/market-history.md).
 This job runs daily after downtime and takes about 17 hours to complete.
 This is due mainly to how the ESI market history endpoint is designed where you have to specify both a region and a type,
 forcing the crawler to essentially guess what might be available.
-See [Sources](#sources) below for more how does that.
+See [Sources](#sources) below for how it does that.
 There are roughly 1.7 million valid region-type pairs to try, with the crawler trying about 300k each day.
 The reason this takes so long is that the ESI endpoint is rate-limited to 300 requests per minute (5 per second).
 
