@@ -35,12 +35,16 @@ module.exports = {
     lastUpdated: true,
     nav: [
       {
+        text: 'EVE Ref',
+        link: 'https://everef.net'
+      },
+      {
         text: 'Patreon',
         link: 'https://www.patreon.com/everef'
       },
       {
-        text: 'EVE Ref',
-        link: 'https://everef.net'
+        text: 'Discord',
+        link: 'https://discord.gg/fZYPAxFyXG'
       }
     ],
     sidebar: [
