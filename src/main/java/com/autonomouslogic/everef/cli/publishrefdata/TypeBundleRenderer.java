@@ -137,6 +137,8 @@ public class TypeBundleRenderer implements RefDataRenderer {
 				.ifPresent(typeJson -> typesJson.set(Long.toString(skill.getTypeId()), typeJson));
 		Optional.ofNullable(skill.getRequiredSkills()).stream()
 				.flatMap(e -> e.keySet().stream())
+				.filter(id -> id != skillId)
+				.filter(id -> !skillsJson.has(Long.toString(id)))
 				.distinct()
 				.forEach(id -> bundleSkill(id, skillsJson, typesJson));
 	}
