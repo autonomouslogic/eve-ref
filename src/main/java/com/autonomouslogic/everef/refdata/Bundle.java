@@ -19,4 +19,10 @@ public class Bundle {
 
 	@Schema(description = "A map of dogma attributes. The key is the attribute ID.")
 	Map<String, DogmaAttribute> dogmaAttributes;
+
+	@Schema(description = "A map of skills. The key is the skill ID.")
+	Map<String, Skill> skills;
+
+	@Schema(description = "A map of units. The key is the unit ID.")
+	Map<String, Unit> units;
 }

@@ -577,6 +577,16 @@ components:
           additionalProperties:
             $ref: '#/components/schemas/DogmaAttribute'
           description: A map of dogma attributes. The key is the attribute ID.
+        skills:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/Skill'
+          description: A map of skills. The key is the skill ID.
+        units:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/Unit'
+          description: A map of units. The key is the unit ID.
     Coordinate:
       type: object
       properties:
