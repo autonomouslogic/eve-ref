@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import refdataApi from "~/refdata";
+import refdataApi, {cacheBundle} from "~/refdata";
 import {InventoryGroup, InventoryType} from "~/refdata-openapi";
 import CategoryLink from "~/components/helpers/CategoryLink.vue";
 import GroupLink from "~/components/helpers/GroupLink.vue";
@@ -14,6 +14,7 @@ const typeId: number = Array.isArray(route.params.typeId) ? parseInt(route.param
 if (!typeId) {
 	console.error("typeId is null");
 }
+await cacheBundle(typeId);
 
 const inventoryType: InventoryType = await refdataApi.getType({typeId});
 if (typeof inventoryType.groupId !== "number") {
