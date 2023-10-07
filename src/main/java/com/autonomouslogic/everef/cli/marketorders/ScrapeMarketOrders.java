@@ -4,8 +4,6 @@ import static com.autonomouslogic.everef.util.ArchivePathFactory.MARKET_ORDERS;
 
 import com.autonomouslogic.everef.cli.Command;
 import com.autonomouslogic.everef.config.Configs;
-import com.autonomouslogic.everef.mvstore.JsonNodeDataType;
-import com.autonomouslogic.everef.mvstore.MVStoreUtil;
 import com.autonomouslogic.everef.s3.S3Adapter;
 import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.url.UrlParser;
@@ -17,13 +15,13 @@ import java.io.File;
 import java.time.Duration;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
+import java.util.HashMap;
 import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
-import org.h2.mvstore.MVStore;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 
 /**
@@ -42,22 +40,15 @@ public class ScrapeMarketOrders implements Command {
 	protected S3Util s3Util;
 
 	@Inject
-	protected JsonNodeDataType jsonNodeDataType;
-
-	@Inject
 	protected MarketOrderFetcher marketOrderFetcher;
 
 	@Inject
 	protected MarketOrdersWriter marketOrdersWriter;
 
 	@Inject
-	protected MVStoreUtil mvStoreUtil;
-
-	@Inject
 	protected UrlParser urlParser;
 
 	private S3Url dataUrl;
-	private MVStore mvStore;
 	private Map<Long, JsonNode> marketOrdersStore;
 
 	@Setter
@@ -79,10 +70,9 @@ public class ScrapeMarketOrders implements Command {
 	public Completable run() {
 		return Completable.concatArray(
 						initScrapeTime(),
-						initMvStore(),
+						initStore(),
 						fetchOrders(),
-						writeOrders().flatMapCompletable(this::uploadFile))
-				.doFinally(this::closeMvStore);
+						writeOrders().flatMapCompletable(this::uploadFile));
 	}
 
 	private Completable initScrapeTime() {
@@ -93,21 +83,12 @@ public class ScrapeMarketOrders implements Command {
 		});
 	}
 
-	private Completable initMvStore() {
+	private Completable initStore() {
 		return Completable.fromAction(() -> {
-			mvStore = mvStoreUtil.createTempStore("market-orders");
-			marketOrdersStore = mvStoreUtil.openJsonMap(mvStore, "market-orders", Long.class);
+			marketOrdersStore = new HashMap<>();
 			marketOrderFetcher.setMarketOrdersStore(marketOrdersStore);
 			marketOrdersWriter.setMarketOrdersStore(marketOrdersStore);
 		});
-	}
-
-	private void closeMvStore() {
-		try {
-			mvStore.close();
-		} catch (Exception e) {
-			log.debug("Failed closing MVStore, ignoring");
-		}
 	}
 
 	private Completable fetchOrders() {
