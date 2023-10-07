@@ -1,5 +1,32 @@
 EVE Ref Changelog
 
+## [2.33.0](https://github.com/autonomouslogic/eve-ref/compare/2.32.0...2.33.0) (2023-10-07)
+
+
+### Features
+
+* Cache loaded reference data in the UI ([#318](https://github.com/autonomouslogic/eve-ref/issues/318)) ([73e1d19](https://github.com/autonomouslogic/eve-ref/commit/73e1d19b5e92f8817233934da77471765cbc62c6))
+* Type bundles on the reference data API ([#312](https://github.com/autonomouslogic/eve-ref/issues/312)) ([451c71b](https://github.com/autonomouslogic/eve-ref/commit/451c71b50d1ea13bb9efe08163fdf3ca6e09b9d0))
+* UI loads reference data type bundles ([#313](https://github.com/autonomouslogic/eve-ref/issues/313)) ([038b577](https://github.com/autonomouslogic/eve-ref/commit/038b577d12616791707ed9acf25cf5c754906a3a))
+
+
+### Bug Fixes
+
+* Re-enable SSR ([39dbdc7](https://github.com/autonomouslogic/eve-ref/commit/39dbdc796d59231d5b21c3753359326c256e4501))
+* Removed MVStore from scrape market orders to speed it up ([#319](https://github.com/autonomouslogic/eve-ref/issues/319)) ([e7ac682](https://github.com/autonomouslogic/eve-ref/commit/e7ac6822bad2dfc422a3b56f4be1816bde75a7fe))
+
+
+### Documentation
+
+* Discord link ([#315](https://github.com/autonomouslogic/eve-ref/issues/315)) ([0bd2dde](https://github.com/autonomouslogic/eve-ref/commit/0bd2ddeabdc1cafb4baf3ddcc617fbc38dae4ffa))
+* Scrape market history ([#314](https://github.com/autonomouslogic/eve-ref/issues/314)) ([0fef710](https://github.com/autonomouslogic/eve-ref/commit/0fef710436aef23aea60934e14325b348c21fd09))
+* Scrape market history ([#316](https://github.com/autonomouslogic/eve-ref/issues/316)) ([f898627](https://github.com/autonomouslogic/eve-ref/commit/f898627830f477ebd056b7f9f5d111b081766e9d))
+
+
+### Code Refactoring
+
+* Reference data publish using separate renders per file type ([#311](https://github.com/autonomouslogic/eve-ref/issues/311)) ([b757d43](https://github.com/autonomouslogic/eve-ref/commit/b757d43cd78c47f92e231ec928935f8d785c0f81))
+
 ## [2.32.0](https://github.com/autonomouslogic/eve-ref/compare/2.31.0...2.32.0) (2023-10-03)
 
 
