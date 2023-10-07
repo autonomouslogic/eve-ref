@@ -100,3 +100,15 @@ RecentRegionTypeRemover returned 0 pairs, adding 0 new pairs, new total is 33908
 ```
 
 251934 pairs are now present in the history, adding 3383 and 3 new regions since before the new sources were added.
+
+```
+Source HistoryRegionTypeSource: hit 242656 of 251934 pairs - 96.3%
+Source ActiveOrdersRegionTypeSource: hit 363 of 33809 pairs - 1.1%
+Source HistoricalOrdersRegionTypeSource: hit 43 of 3923 pairs - 1.1%
+Source TopTradedRegionTypeSource: hit 85 of 35499 pairs - 0.2%
+Source ExplorerRegionTypeSource: hit 161 of 13920 pairs - 1.2%
+```
+
+Much less impact from `TopTradedRegionTypeSource` than before, with the others seeing similar hits.
+This is probably because once top-traded has a hit, it goes into the history and will be picked up on the next run.
+At the end of this run, 252484 pairs and 79 regions were in the history, meaning 550 pairs and 1 region were discovered.
