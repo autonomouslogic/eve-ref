@@ -14,9 +14,9 @@ import com.autonomouslogic.everef.util.DataUtil;
 import com.autonomouslogic.everef.util.MockScrapeBuilder;
 import com.autonomouslogic.everef.util.RefDataUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.time.Instant;
 import java.util.HashSet;
 import java.util.List;
@@ -126,6 +126,9 @@ public class PublishRefDataTest {
 			assertIndex(config, testConfig, expectedKeys);
 			for (var id : testConfig.getIds()) {
 				assertFile(id, config, testConfig, expectedKeys);
+				if (config.getId().equals("types")) {
+					assertTypeBundle(id, config, testConfig, expectedKeys);
+				}
 			}
 		}
 
@@ -139,8 +142,8 @@ public class PublishRefDataTest {
 		assertEquals(List.of("base/types/999999999"), deleteKeys);
 	}
 
-	private void assertIndex(RefDataConfig config, RefTestConfig testConfig, Set<String> expectedKeys)
-			throws IOException {
+	@SneakyThrows
+	private void assertIndex(RefDataConfig config, RefTestConfig testConfig, Set<String> expectedKeys) {
 		var expectedIndex =
 				objectMapper.valueToTree(testConfig.getIds().stream().sorted().toList());
 		var path = "base/" + config.getOutputFile();
@@ -151,8 +154,8 @@ public class PublishRefDataTest {
 		assertEquals(expectedIndex.toString(), actualIndex.toString());
 	}
 
-	private void assertFile(Long id, RefDataConfig config, RefTestConfig testConfig, Set<String> expectedKeys)
-			throws IOException {
+	@SneakyThrows
+	private void assertFile(Long id, RefDataConfig config, RefTestConfig testConfig, Set<String> expectedKeys) {
 		var path = String.format("base/%s/%s", config.getOutputFile(), id);
 		expectedKeys.add(path);
 		var expectedItem =
@@ -161,6 +164,69 @@ public class PublishRefDataTest {
 				.getTestObject(BUCKET_NAME, path, s3)
 				.orElseThrow(() -> new RuntimeException("Missing path: " + path)));
 		assertEquals(expectedItem, actualItem);
+	}
+
+	@SneakyThrows
+	private void assertTypeBundle(long id, RefDataConfig config, RefTestConfig testConfig, Set<String> expectedKeys) {
+		// Multiplasmids don't get bundles.
+		if (id == 52225) {
+			return;
+		}
+
+		var path = String.format("base/%s/%s/bundle", config.getOutputFile(), id);
+		expectedKeys.add(path);
+
+		// Only spot-check one complete one.
+		if (id != 645) {
+			return;
+		}
+		var expectedItem = buildTestTypeBundle(
+				List.of(645L, 22430L, 3336L, 3327L, 33097L, 3332L, 33093L, 3328L),
+				List.of(9L, 162L, 182L, 277L),
+				List.of(3336L, 3327L, 33097L, 3332L, 33093L, 3328L),
+				List.of(1L));
+		var actualItem = objectMapper.readTree(mockS3Adapter
+				.getTestObject(BUCKET_NAME, path, s3)
+				.orElseThrow(() -> new RuntimeException("Missing path: " + path)));
+		assertEquals(expectedItem, actualItem);
+	}
+
+	private ObjectNode buildTestTypeBundle(
+			List<Long> typeIds, List<Long> attributeIds, List<Long> skillIds, List<Long> unitIds) {
+		var bundle = objectMapper.createObjectNode();
+		if (typeIds != null) {
+			var container = bundle.putObject("types");
+			for (long id : typeIds) {
+				container.set(
+						Long.toString(id),
+						dataUtil.loadJsonResource(String.format("/refdata/refdata/type-%s.json", id)));
+			}
+		}
+		if (attributeIds != null) {
+			var container = bundle.putObject("dogma_attributes");
+			for (long id : attributeIds) {
+				container.set(
+						Long.toString(id),
+						dataUtil.loadJsonResource(String.format("/refdata/refdata/dogma-attribute-%s.json", id)));
+			}
+		}
+		if (skillIds != null) {
+			var container = bundle.putObject("skills");
+			for (long id : skillIds) {
+				container.set(
+						Long.toString(id),
+						dataUtil.loadJsonResource(String.format("/refdata/refdata/skill-%s.json", id)));
+			}
+		}
+		if (unitIds != null) {
+			var container = bundle.putObject("units");
+			for (long id : unitIds) {
+				container.set(
+						Long.toString(id),
+						dataUtil.loadJsonResource(String.format("/refdata/refdata/unit-%s.json", id)));
+			}
+		}
+		return bundle;
 	}
 
 	@Test
