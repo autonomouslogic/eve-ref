@@ -160,7 +160,7 @@ sourcesJar.dependsOn(tasks.openApiGenerate)
 delombok.dependsOn(tasks.openApiGenerate)
 
 test {
-	environment "LOG_LEVEL", "debug"
+	environment "LOG_LEVEL", "trace"
 	jvmArgs "-client", "-XX:+UseG1GC", "-Xmx8g"
 
 	useJUnitPlatform()

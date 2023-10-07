@@ -2,7 +2,6 @@ package com.autonomouslogic.everef.test;
 
 import com.autonomouslogic.everef.cli.DataIndexTest;
 import com.autonomouslogic.everef.cli.MockDataIndexModule;
-import com.autonomouslogic.everef.cli.PublishRefDataTest;
 import com.autonomouslogic.everef.cli.decorator.HealthcheckDecoratorTest;
 import com.autonomouslogic.everef.cli.decorator.SlackDecoratorTest;
 import com.autonomouslogic.everef.cli.markethistory.ExplorerRegionTypeSourceTest;
@@ -11,6 +10,7 @@ import com.autonomouslogic.everef.cli.markethistory.ScrapeMarketHistoryTest;
 import com.autonomouslogic.everef.cli.markethistory.TopTradedRegionTypeSourceTest;
 import com.autonomouslogic.everef.cli.marketorders.ScrapeMarketOrdersTest;
 import com.autonomouslogic.everef.cli.publiccontracts.ScrapePublicContractsTest;
+import com.autonomouslogic.everef.cli.publishrefdata.PublishRefDataTest;
 import com.autonomouslogic.everef.cli.refdata.BuildRefDataTest;
 import com.autonomouslogic.everef.cli.refdata.FieldRenamerTest;
 import com.autonomouslogic.everef.cli.refdata.ObjectMergerTest;

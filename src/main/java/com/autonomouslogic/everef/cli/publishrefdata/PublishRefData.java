@@ -1,8 +1,10 @@
-package com.autonomouslogic.everef.cli;
+package com.autonomouslogic.everef.cli.publishrefdata;
 
 import com.autonomouslogic.commons.rxjava3.Rx3Util;
+import com.autonomouslogic.everef.cli.Command;
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.model.ReferenceEntry;
+import com.autonomouslogic.everef.mvstore.MVStoreUtil;
 import com.autonomouslogic.everef.openapi.refdata.apis.RefdataApi;
 import com.autonomouslogic.everef.refdata.RefDataMeta;
 import com.autonomouslogic.everef.s3.ListedS3Object;
@@ -13,6 +15,7 @@ import com.autonomouslogic.everef.util.OkHttpHelper;
 import com.autonomouslogic.everef.util.RefDataUtil;
 import com.autonomouslogic.everef.util.S3Util;
 import com.autonomouslogic.everef.util.TempFiles;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Flowable;
@@ -29,10 +32,13 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.inject.Provider;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import okhttp3.OkHttpClient;
+import org.apache.commons.lang3.tuple.Pair;
+import org.h2.mvstore.MVStore;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 
 /**
@@ -73,13 +79,28 @@ public class PublishRefData implements Command {
 	@Inject
 	protected RefdataApi refdataApi;
 
+	@Inject
+	protected MVStoreUtil mvStoreUtil;
+
+	@Inject
+	protected Provider<BasicFileRenderer> basicFileRendererProvider;
+
+	@Inject
+	protected Provider<RootMarketGroupIndexRenderer> rootMarketGroupIndexRendererProvider;
+
+	@Inject
+	protected Provider<IndexRenderer> indexRendererProvider;
+
 	private S3Url refDataUrl;
 	private URI dataBaseUrl = Configs.DATA_BASE_URL.getRequired();
 	private AtomicInteger uploadCounter = new AtomicInteger();
-
 	private File refDataFile;
 	private RefDataMeta latestMeta;
 	private RefDataMeta currentMeta;
+	private MVStore dataStore;
+	private MVStore fileStore;
+	private Map<String, JsonNode> fileMap;
+	private ReferenceEntry metaEntry;
 
 	private final Duration cacheTime = Configs.REFERENCE_DATA_CACHE_CONTROL_MAX_AGE.getRequired();
 
@@ -94,21 +115,14 @@ public class PublishRefData implements Command {
 	@SneakyThrows
 	@Override
 	public Completable run() {
-		var skipped = new AtomicInteger();
 		return Completable.mergeArray(loadLatestFile(), loadCurrentMeta()).andThen(Completable.defer(() -> {
 			if (!shouldUpdate()) {
 				log.info("No update needed");
 				return Completable.complete();
 			}
 			return listBucketContents().flatMapCompletable(existing -> {
-				return refDataUtil
-						.parseReferenceDataArchive(refDataFile)
-						.filter(entry -> filterExisting(skipped, existing, entry))
-						.toList()
-						.flatMapPublisher(l -> Flowable.fromIterable(l))
-						.flatMapCompletable(this::uploadFile, false, UPLOAD_CONCURRENCY)
-						.doOnComplete(() -> log.info("Skipped {} entries", skipped.get()))
-						.andThen(Completable.defer(() -> deleteRemaining(new ArrayList<>(existing.keySet()))));
+				return Completable.concatArray(
+						initMvStore(), loadData(), renderFiles(), uploadFiles(existing), closeMvStore());
 			});
 		}));
 	}
@@ -153,6 +167,64 @@ public class PublishRefData implements Command {
 					return objects.stream()
 							.collect(Collectors.toMap(o -> o.getUrl().getPath(), Function.identity()));
 				});
+	}
+
+	private Completable initMvStore() {
+		return Completable.fromAction(() -> {
+			log.trace("Init MVStore");
+			dataStore = mvStoreUtil.createTempStore("ref-data-data");
+			fileStore = mvStoreUtil.createTempStore("ref-data-files");
+			fileMap = mvStoreUtil.openJsonMap(fileStore, "files", String.class);
+		});
+	}
+
+	public Completable closeMvStore() {
+		return Completable.fromAction(() -> {
+			log.trace("Closing MVStore");
+			dataStore.close();
+			fileStore.close();
+		});
+	}
+
+	private Completable loadData() {
+		return refDataUtil
+				.parseReferenceDataArchive(refDataFile)
+				.flatMapCompletable(entry -> Completable.fromAction(() -> {
+					if (entry.getType().equals("meta")) {
+						metaEntry = entry;
+					} else {
+						mvStoreUtil
+								.openJsonMap(dataStore, entry.getType(), Long.class)
+								.put(entry.getId(), objectMapper.readTree(entry.getContent()));
+					}
+				}));
+	}
+
+	private Completable renderFiles() {
+		return Completable.defer(() -> Flowable.concatArray(
+						Flowable.just(Pair.of(metaEntry.getPath(), objectMapper.readTree(metaEntry.getContent()))),
+						indexRendererProvider.get().setDataStore(dataStore).render(),
+						basicFileRendererProvider.get().setDataStore(dataStore).render(),
+						rootMarketGroupIndexRendererProvider
+								.get()
+								.setDataStore(dataStore)
+								.render())
+				.flatMapCompletable(entry -> Completable.fromAction(() -> {
+					fileMap.put(entry.getLeft(), entry.getRight());
+				})));
+	}
+
+	private Completable uploadFiles(Map<String, ListedS3Object> existing) {
+		return Completable.defer(() -> {
+			var skipped = new AtomicInteger();
+			return Flowable.fromIterable(fileMap.entrySet())
+					.map(entry -> refDataUtil.createEntryForPath(
+							entry.getKey(), objectMapper.writeValueAsBytes(entry.getValue())))
+					.filter(entry -> filterExisting(skipped, existing, entry))
+					.flatMapCompletable(entry -> uploadFile(entry), false, UPLOAD_CONCURRENCY)
+					.doOnComplete(() -> log.info("Skipped {} entries", skipped.get()))
+					.andThen(Completable.defer(() -> deleteRemaining(new ArrayList<>(existing.keySet()))));
+		});
 	}
 
 	private Completable uploadFile(@NonNull ReferenceEntry entry) {

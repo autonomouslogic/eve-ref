@@ -7,9 +7,7 @@ import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.model.ReferenceEntry;
 import com.autonomouslogic.everef.model.refdata.RefDataConfig;
 import com.autonomouslogic.everef.model.refdata.RefTypeConfig;
-import com.autonomouslogic.everef.refdata.InventoryType;
 import com.autonomouslogic.everef.refdata.RefDataMeta;
-import com.autonomouslogic.everef.refdata.Region;
 import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.url.UrlParser;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -106,44 +104,32 @@ public class RefDataUtil {
 						return createEntry(type, id, content);
 					})
 					.doOnComplete(() -> log.debug("Finished parsing {}", filename));
-			var indexEntry = Flowable.defer(() -> {
-				index.sort(Long::compareTo);
-				log.debug("Creating {} index with {} entries", type, index.size());
-				return Flowable.just(createEntry(type, objectMapper.writeValueAsBytes(index)));
-			});
-			var marketGroupRootIndex = !filename.equals("market_groups.json")
-					? Flowable.<ReferenceEntry>empty()
-					: Flowable.fromIterable(() -> json.fields())
-							.map(e -> e.getValue())
-							.filter(e -> e.get("parent_group_id") == null)
-							.map(e -> e.get("market_group_id").asLong())
-							.sorted()
-							.toList()
-							.flatMapPublisher(ind -> {
-								return Flowable.just(
-										createEntry("market_groups/root", objectMapper.writeValueAsBytes(ind)));
-							});
-			return Flowable.concat(fileEntries, indexEntry, marketGroupRootIndex);
+			return fileEntries;
 		});
 	}
 
-	private ReferenceEntry createEntry(@NonNull String type, @NonNull Long id, @NonNull byte[] content) {
+	public ReferenceEntry createEntry(@NonNull String type, @NonNull Long id, @NonNull byte[] content) {
 		var md5 = HashUtil.md5(content);
 		return new ReferenceEntry(
 				type, id, subPath(type, id), content, Base64.encodeBase64String(md5), Hex.encodeHexString(md5));
 	}
 
-	private ReferenceEntry createEntry(@NonNull String type, @NonNull byte[] content) {
+	public ReferenceEntry createEntry(@NonNull String type, @NonNull byte[] content) {
 		var md5 = HashUtil.md5(content);
 		return new ReferenceEntry(
 				type, null, subPath(type), content, Base64.encodeBase64String(md5), Hex.encodeHexString(md5));
 	}
 
-	private String subPath(@NonNull String type, @NonNull Long id) {
+	public ReferenceEntry createEntryForPath(@NonNull String path, @NonNull byte[] content) {
+		var md5 = HashUtil.md5(content);
+		return new ReferenceEntry(null, null, path, content, Base64.encodeBase64String(md5), Hex.encodeHexString(md5));
+	}
+
+	public String subPath(@NonNull String type, @NonNull Long id) {
 		return subPath(type + "/" + id);
 	}
 
-	private String subPath(@NonNull String type) {
+	public String subPath(@NonNull String type) {
 		var refDataUrl = (S3Url) urlParser.parse(Configs.REFERENCE_DATA_PATH.getRequired());
 		return refDataUrl.getPath() + type;
 	}
@@ -208,44 +194,5 @@ public class RefDataUtil {
 			}
 		}
 		return null;
-	}
-
-	public <T> Flowable<T> loadReferenceDataArchive(@NonNull String type, @NonNull Class<T> model) {
-		return downloadLatestReferenceData().flatMapPublisher(file -> {
-			return loadReferenceDataArchive(file, type, model);
-		});
-	}
-
-	public <T> Flowable<T> loadReferenceDataArchive(@NonNull File file, @NonNull String type, @NonNull Class<T> model) {
-		return CompressUtil.loadArchive(file).flatMap(pair -> {
-			var filename = pair.getKey().getName();
-			if (!filename.endsWith(".json")) {
-				return Flowable.empty();
-			}
-			if (!type.equals(FilenameUtils.getBaseName(filename))) {
-				return Flowable.empty();
-			}
-			var mapType = objectMapper.getTypeFactory().constructMapType(LinkedHashMap.class, String.class, model);
-			Map<String, T> map = objectMapper.readValue(pair.getRight(), mapType);
-			return Flowable.fromIterable(map.values());
-		});
-	}
-
-	public Flowable<Region> allRegions() {
-		return loadReferenceDataArchive("regions", Region.class);
-	}
-
-	public Flowable<InventoryType> allTypes() {
-		return loadReferenceDataArchive("types", InventoryType.class);
-	}
-
-	public Flowable<InventoryType> marketTypes() {
-		return allTypes().filter(type -> type.getMarketGroupId() != null);
-	}
-
-	public Flowable<Region> marketRegions() {
-		return allRegions()
-				.filter(region -> region.getUniverseId() != null)
-				.filter(region -> EveConstants.MARKET_UNIVERSE_IDS.contains(region.getUniverseId()));
 	}
 }

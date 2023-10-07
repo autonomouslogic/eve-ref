@@ -49,17 +49,13 @@ public class VerifyRefDataModels implements Command {
 		return refDataUtil
 				.downloadLatestReferenceData()
 				.flatMapPublisher(file -> refDataUtil.parseReferenceDataArchive(file))
-				.flatMapCompletable(
-						entry -> verify(entry), false, Runtime.getRuntime().availableProcessors());
+				.flatMapCompletable(this::verify, false, Runtime.getRuntime().availableProcessors());
 	}
 
 	private Completable verify(@NonNull ReferenceEntry entry) {
 		return Completable.fromAction(() -> {
 			try {
 				if (entry.getType().equals("meta")) {
-					return;
-				}
-				if (entry.getType().equals("market_groups/root")) {
 					return;
 				}
 				var config = refDataUtil.loadReferenceDataConfig().stream()
@@ -76,12 +72,8 @@ public class VerifyRefDataModels implements Command {
 
 	@SneakyThrows
 	private void verifyType(@NonNull ReferenceEntry entry, @NonNull RefDataConfig config) {
-		if (entry.getId() == null) {
-			objectMapper.readValue(entry.getContent(), listOfInts);
-		} else {
-			var modelName = "com.autonomouslogic.everef.refdata." + config.getModel();
-			var modelClass = objectMapper.getTypeFactory().findClass(modelName);
-			Objects.requireNonNull(objectMapper.readValue(entry.getContent(), modelClass));
-		}
+		var modelName = "com.autonomouslogic.everef.refdata." + config.getModel();
+		var modelClass = objectMapper.getTypeFactory().findClass(modelName);
+		Objects.requireNonNull(objectMapper.readValue(entry.getContent(), modelClass));
 	}
 }
