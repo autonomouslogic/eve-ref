@@ -5,7 +5,7 @@ Produces the [market history dataset](../datasets/market-history.md).
 This job runs daily after downtime and takes about 17 hours to complete.
 This is due mainly to how the ESI market history endpoint is designed where you have to specify both a region and a type,
 forcing the crawler to essentially guess what might be available.
-See [Sources](#sources) below for more how does that.
+See [Sources](#sources) below for how it does that.
 There are roughly 1.7 million valid region-type pairs to try, with the crawler trying about 300k each day.
 The reason this takes so long is that the ESI endpoint is rate-limited to 300 requests per minute (5 per second).
 
@@ -87,3 +87,28 @@ Source HistoricalOrdersRegionTypeSource: hit 45 of 4025 pairs - 1.1%
 Source TopTradedRegionTypeSource: hit 1515 of 35477 pairs - 4.3%
 Source ExplorerRegionTypeSource: hit 149 of 14061 pairs - 1.1%
 ```
+
+## 2023-10-06
+
+```
+HistoryRegionTypeSource returned 251934 pairs, adding 251934 new pairs, new total is 251934, 78 new regions, est. runtime PT13H59M46S
+ActiveOrdersRegionTypeSource returned 219465 pairs, adding 33809 new pairs, new total is 285743, 1 new regions, est. runtime PT1H52M41S
+HistoricalOrdersRegionTypeSource returned 183614 pairs, adding 3923 new pairs, new total is 289666, 1 new regions, est. runtime PT13M4S
+TopTradedRegionTypeSource returned 35499 pairs, adding 35499 new pairs, new total is 325165, 0 new regions, est. runtime PT1H58M19S
+ExplorerRegionTypeSource returned 17141 pairs, adding 13920 new pairs, new total is 339085, 22 new regions, est. runtime PT46M24S
+RecentRegionTypeRemover returned 0 pairs, adding 0 new pairs, new total is 339085, 0 new regions, est. runtime PT0S
+```
+
+251934 pairs are now present in the history, adding 3383 and 3 new regions since before the new sources were added.
+
+```
+Source HistoryRegionTypeSource: hit 242656 of 251934 pairs - 96.3%
+Source ActiveOrdersRegionTypeSource: hit 363 of 33809 pairs - 1.1%
+Source HistoricalOrdersRegionTypeSource: hit 43 of 3923 pairs - 1.1%
+Source TopTradedRegionTypeSource: hit 85 of 35499 pairs - 0.2%
+Source ExplorerRegionTypeSource: hit 161 of 13920 pairs - 1.2%
+```
+
+Much less impact from `TopTradedRegionTypeSource` than before, with the others seeing similar hits.
+This is probably because once top-traded has a hit, it goes into the history and will be picked up on the next run.
+At the end of this run, 252484 pairs and 79 regions were in the history, meaning 550 pairs and 1 region were discovered.

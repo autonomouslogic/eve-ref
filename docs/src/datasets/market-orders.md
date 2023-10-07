@@ -6,4 +6,4 @@ The archives are single compressed CSV files and should be relatively easy to in
 
 Produced by the [scrape-market-orders](../commands/scrape-market-orders.md) command.
 
-Fuzzwork has a similar [snapshot archive](https://market.fuzzwork.co.uk/api/), taken at 6 and 36 minutes past the hour.
+Fuzzwork has a similar [snapshot archive](https://market.fuzzwork.co.uk/api/) ([mirror](fuzzwork-ordersets.md)), taken at 6 and 36 minutes past the hour.
