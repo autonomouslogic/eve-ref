@@ -464,6 +464,25 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/InventoryType'
+  /types/{type_id}/bundle:
+    get:
+      tags:
+      - refdata
+      operationId: getTypeBundle
+      parameters:
+      - name: type_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: The type bundle.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Bundle'
   /units:
     get:
       tags:
@@ -545,6 +564,29 @@ components:
         probability:
           type: number
           format: double
+    Bundle:
+      type: object
+      properties:
+        types:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/InventoryType'
+          description: A map of types. The key is the type ID.
+        dogma_attributes:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/DogmaAttribute'
+          description: A map of dogma attributes. The key is the attribute ID.
+        skills:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/Skill'
+          description: A map of skills. The key is the skill ID.
+        units:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/Unit'
+          description: A map of units. The key is the unit ID.
     Coordinate:
       type: object
       properties:
@@ -607,6 +649,7 @@ components:
         unit_id:
           type: integer
           format: int64
+      description: A map of dogma attributes. The key is the attribute ID.
     DogmaEffect:
       type: object
       properties:

@@ -154,6 +154,16 @@ public interface ReferenceDataSpec {
 	InventoryType getType(@PathParam("type_id") long typeId);
 
 	@GET
+	@Path("/types/{type_id}/bundle")
+	@Operation
+	@ApiResponse(
+			responseCode = "200",
+			description = "The type bundle.",
+			useReturnTypeSchema = true,
+			content = @Content(mediaType = "application/json"))
+	Bundle getTypeBundle(@PathParam("type_id") long typeId);
+
+	@GET
 	@Path("/dogma_attributes")
 	@Operation(description = "Get all dogma attribute IDs.")
 	@ApiResponse(
