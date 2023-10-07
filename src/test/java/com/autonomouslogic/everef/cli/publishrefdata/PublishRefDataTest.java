@@ -184,7 +184,8 @@ public class PublishRefDataTest {
 				List.of(645L, 22430L, 3336L, 3327L, 33097L, 3332L, 33093L, 3328L),
 				List.of(9L, 162L, 182L, 277L),
 				List.of(3336L, 3327L, 33097L, 3332L, 33093L, 3328L),
-				List.of(1L));
+				List.of(1L),
+				List.of(67L));
 		var actualItem = objectMapper.readTree(mockS3Adapter
 				.getTestObject(BUCKET_NAME, path, s3)
 				.orElseThrow(() -> new RuntimeException("Missing path: " + path)));
@@ -192,7 +193,7 @@ public class PublishRefDataTest {
 	}
 
 	private ObjectNode buildTestTypeBundle(
-			List<Long> typeIds, List<Long> attributeIds, List<Long> skillIds, List<Long> unitIds) {
+			List<Long> typeIds, List<Long> attributeIds, List<Long> skillIds, List<Long> unitIds, List<Long> iconIds) {
 		var bundle = objectMapper.createObjectNode();
 		if (typeIds != null) {
 			var container = bundle.putObject("types");
@@ -224,6 +225,14 @@ public class PublishRefDataTest {
 				container.set(
 						Long.toString(id),
 						dataUtil.loadJsonResource(String.format("/refdata/refdata/unit-%s.json", id)));
+			}
+		}
+		if (iconIds != null) {
+			var container = bundle.putObject("icons");
+			for (long id : iconIds) {
+				container.set(
+						Long.toString(id),
+						dataUtil.loadJsonResource(String.format("/refdata/refdata/icon-%s.json", id)));
 			}
 		}
 		return bundle;

@@ -42,6 +42,7 @@ public class TypeBundleRenderer implements RefDataRenderer {
 	private Map<Long, JsonNode> dogmaMap;
 	private Map<Long, JsonNode> skillsMap;
 	private Map<Long, JsonNode> unitsMap;
+	private Map<Long, JsonNode> iconsMap;
 
 	@Inject
 	protected TypeBundleRenderer() {}
@@ -53,6 +54,7 @@ public class TypeBundleRenderer implements RefDataRenderer {
 			dogmaMap = mvStoreUtil.openJsonMap(dataStore, "dogma_attributes", Long.class);
 			skillsMap = mvStoreUtil.openJsonMap(dataStore, "skills", Long.class);
 			unitsMap = mvStoreUtil.openJsonMap(dataStore, "units", Long.class);
+			iconsMap = mvStoreUtil.openJsonMap(dataStore, "icons", Long.class);
 			return Flowable.fromIterable(typesMap.keySet()).flatMapMaybe(this::createBundle);
 		});
 	}
@@ -66,12 +68,14 @@ public class TypeBundleRenderer implements RefDataRenderer {
 		var attributesJson = objectMapper.createObjectNode();
 		var skillsJson = objectMapper.createObjectNode();
 		var unitsJson = objectMapper.createObjectNode();
+		var iconsJson = objectMapper.createObjectNode();
 
 		typesJson.set(Long.toString(type.getTypeId()), typeJson);
 		bundleDogmaAttributes(type, attributesJson);
 		bundleVariations(type, typesJson);
 		bundleRequiredSkills(type, skillsJson, typesJson);
 		bundleUnits(unitsJson, attributesJson);
+		bundleIcons(iconsJson, attributesJson);
 
 		var valid = false;
 		if (!attributesJson.isEmpty()) {
@@ -84,6 +88,10 @@ public class TypeBundleRenderer implements RefDataRenderer {
 		}
 		if (!unitsJson.isEmpty()) {
 			bundleJson.set("units", unitsJson);
+			valid = true;
+		}
+		if (!iconsJson.isEmpty()) {
+			bundleJson.set("icons", iconsJson);
 			valid = true;
 		}
 
@@ -155,6 +163,24 @@ public class TypeBundleRenderer implements RefDataRenderer {
 				return;
 			}
 			unitsJson.set(Long.toString(unitId), unitJson);
+		});
+	}
+
+	private void bundleIcons(ObjectNode iconsJson, ObjectNode attributesJson) {
+		if (attributesJson.isEmpty()) {
+			return;
+		}
+		attributesJson.fields().forEachRemaining(entry -> {
+			var dogma = objectMapper.convertValue(entry.getValue(), DogmaAttribute.class);
+			var iconId = dogma.getIconId();
+			if (iconId == null) {
+				return;
+			}
+			var iconJson = iconsMap.get(iconId.longValue());
+			if (iconJson == null) {
+				return;
+			}
+			iconsJson.set(Long.toString(iconId), iconJson);
 		});
 	}
 }

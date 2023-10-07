@@ -2,6 +2,9 @@
 "0":
   description: "Unknown"
   iconFile: "res:/ui/texture/icons/7_64_15.png"
+"67":
+  description: "Module - Structure"
+  iconFile: "res:/ui/texture/icons/2_64_9.png"
 "78":
   description: "Module - ArmorEnhancer"
   iconFile: "res:/ui/texture/icons/1_64_12.png"

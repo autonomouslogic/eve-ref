@@ -288,6 +288,7 @@ icons:
     filePrefix: icon
     ids:
       - 0
+      - 67
       - 78
 
 regions:

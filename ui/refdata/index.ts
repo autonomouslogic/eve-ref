@@ -2,7 +2,7 @@ import {
     Bundle,
     Configuration,
     DogmaAttributeToJSON,
-    FetchAPI,
+    FetchAPI, IconToJSON,
     InventoryTypeToJSON,
     RefdataApi, SkillToJSON, UnitToJSON
 } from "~/refdata-openapi";
@@ -10,33 +10,30 @@ import {
 const cache: { [key: string]: string; } = {};
 
 function cacheBundleObj(bundle: Bundle): void {
-    console.log("Bundle types: ", bundle.types);
     for (let typeId in bundle.types) {
         const type = bundle.types[typeId];
         const path = "/types/" + typeId;
-        console.log("Caching ", path);
         cache[path] = JSON.stringify(InventoryTypeToJSON(type));
     }
-    console.log("Bundle dogmaAttributes: ", bundle.dogmaAttributes);
     for (let attributeId in bundle.dogmaAttributes) {
         const attribute = bundle.dogmaAttributes[attributeId];
         const path = "/dogma_attributes/" + attributeId;
-        console.log("Caching ", path);
         cache[path] = JSON.stringify(DogmaAttributeToJSON(attribute));
     }
-    console.log("Bundle skills: ", bundle.skills);
     for (let skillId in bundle.skills) {
         const skill = bundle.skills[skillId];
         const path = "/skills/" + skillId;
-        console.log("Caching ", path);
         cache[path] = JSON.stringify(SkillToJSON(skill));
     }
-    console.log("Bundle units: ", bundle.units);
     for (let unitId in bundle.units) {
         const unit = bundle.units[unitId];
         const path = "/units/" + unitId;
-        console.log("Caching ", path);
         cache[path] = JSON.stringify(UnitToJSON(unit));
+    }
+    for (let iconId in bundle.icons) {
+        const icon = bundle.icons[iconId];
+        const path = "/icons/" + iconId;
+        cache[path] = JSON.stringify(IconToJSON(icon));
     }
 }
 
@@ -55,7 +52,7 @@ const useFetchFetchApi: FetchAPI = async (input: RequestInfo | URL, init?: Reque
     const path = url.pathname;
     // Check cache.
     if (!url.search && cache[path]) {
-        console.log("Cache hit for ", path);
+        // console.log("Cache hit for ", path);
         return new Response(cache[path] as any);
     }
     // Request.

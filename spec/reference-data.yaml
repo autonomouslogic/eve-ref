@@ -587,6 +587,11 @@ components:
           additionalProperties:
             $ref: '#/components/schemas/Unit'
           description: A map of units. The key is the unit ID.
+        icons:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/Icon'
+          description: A map of icons. The key is the icon ID.
     Coordinate:
       type: object
       properties:
@@ -759,6 +764,7 @@ components:
           type: string
         obsolete:
           type: boolean
+      description: A map of icons. The key is the icon ID.
     InventoryCategory:
       type: object
       properties:
