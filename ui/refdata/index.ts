@@ -56,12 +56,15 @@ const useFetchFetchApi: FetchAPI = async (input: RequestInfo | URL, init?: Reque
         return new Response(cache[path] as any);
     }
     // Request.
-    console.log("Fetching ", path);
+    //console.log("Fetching ", path);
     var response = await useFetch(url.toString());
-    // // Handle bundle.
-    // detectAndCacheBundle(path, response.data.value);
+    var json = JSON.stringify(response.data.value);
+    // Cache value.
+    if (!url.search) {
+        cache[path] = json;
+    }
     // Return as normal.
-    return new Response(JSON.stringify(response.data.value) as any);
+    return new Response(json);
 }
 
 const config = new Configuration({
