@@ -87,3 +87,16 @@ Source HistoricalOrdersRegionTypeSource: hit 45 of 4025 pairs - 1.1%
 Source TopTradedRegionTypeSource: hit 1515 of 35477 pairs - 4.3%
 Source ExplorerRegionTypeSource: hit 149 of 14061 pairs - 1.1%
 ```
+
+## 2023-10-06
+
+```
+HistoryRegionTypeSource returned 251934 pairs, adding 251934 new pairs, new total is 251934, 78 new regions, est. runtime PT13H59M46S
+ActiveOrdersRegionTypeSource returned 219465 pairs, adding 33809 new pairs, new total is 285743, 1 new regions, est. runtime PT1H52M41S
+HistoricalOrdersRegionTypeSource returned 183614 pairs, adding 3923 new pairs, new total is 289666, 1 new regions, est. runtime PT13M4S
+TopTradedRegionTypeSource returned 35499 pairs, adding 35499 new pairs, new total is 325165, 0 new regions, est. runtime PT1H58M19S
+ExplorerRegionTypeSource returned 17141 pairs, adding 13920 new pairs, new total is 339085, 22 new regions, est. runtime PT46M24S
+RecentRegionTypeRemover returned 0 pairs, adding 0 new pairs, new total is 339085, 0 new regions, est. runtime PT0S
+```
+
+251934 pairs are now present in the history, adding 3383 and 3 new regions since before the new sources were added.
