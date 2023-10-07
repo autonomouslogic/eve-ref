@@ -69,10 +69,7 @@ public class ScrapeMarketOrders implements Command {
 	@Override
 	public Completable run() {
 		return Completable.concatArray(
-						initScrapeTime(),
-						initStore(),
-						fetchOrders(),
-						writeOrders().flatMapCompletable(this::uploadFile));
+				initScrapeTime(), initStore(), fetchOrders(), writeOrders().flatMapCompletable(this::uploadFile));
 	}
 
 	private Completable initScrapeTime() {
