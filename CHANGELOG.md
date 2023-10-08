@@ -8,6 +8,7 @@ EVE Ref Changelog
 * Cache loaded reference data in the UI ([#318](https://github.com/autonomouslogic/eve-ref/issues/318)) ([73e1d19](https://github.com/autonomouslogic/eve-ref/commit/73e1d19b5e92f8817233934da77471765cbc62c6))
 * Type bundles on the reference data API ([#312](https://github.com/autonomouslogic/eve-ref/issues/312)) ([451c71b](https://github.com/autonomouslogic/eve-ref/commit/451c71b50d1ea13bb9efe08163fdf3ca6e09b9d0))
 * UI loads reference data type bundles ([#313](https://github.com/autonomouslogic/eve-ref/issues/313)) ([038b577](https://github.com/autonomouslogic/eve-ref/commit/038b577d12616791707ed9acf25cf5c754906a3a))
+* Added icons to type bundles ([55490ca](https://github.com/autonomouslogic/eve-ref/commit/55490ca23f42460baa5e7eb8244e3488c17af3a3))
 
 
 ### Bug Fixes
