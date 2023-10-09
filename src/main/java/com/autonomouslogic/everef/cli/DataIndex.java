@@ -25,10 +25,13 @@ import java.util.stream.Collectors;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NonNull;
+import lombok.Setter;
 import lombok.Singular;
 import lombok.Value;
 import lombok.extern.log4j.Log4j2;
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import software.amazon.awssdk.core.async.AsyncRequestBody;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
@@ -59,6 +62,14 @@ public class DataIndex implements Command {
 	private final Duration indexCacheTime = Configs.DATA_INDEX_CACHE_CONTROL_MAX_AGE.getRequired();
 	private final int indexConcurrency = Configs.DATA_INDEX_CONCURRENCY.getRequired();
 
+	@Setter
+	@Getter
+	private boolean recursive = true;
+
+	@Setter
+	@Getter
+	private String prefix;
+
 	@Inject
 	protected DataIndex() {}
 
@@ -81,6 +92,7 @@ public class DataIndex implements Command {
 
 	private Completable createAndUploadIndexPages(@NonNull Map<String, Listing.Builder> dirs) {
 		return Flowable.fromIterable(dirs.entrySet())
+				.filter(entry -> StringUtils.isEmpty(prefix) || (entry.getKey() + "/").startsWith(prefix))
 				.flatMapCompletable(
 						entry -> {
 							var listing =
@@ -133,16 +145,20 @@ public class DataIndex implements Command {
 
 	private Flowable<ObjectListing> listBucketContents() {
 		return Flowable.defer(() -> {
-					log.info("Listing contents");
+					log.debug("Listing contents");
 					if (!dataUrl.getPath().equals("")) {
 						throw new RuntimeException("Data index must be run at the root of the bucket");
 					}
+					var url = dataUrl;
+					if (!StringUtils.isEmpty(prefix)) {
+						url = url.resolve(prefix);
+					}
 					return s3Adapter
-							.listObjects(dataUrl, s3)
+							.listObjects(url, recursive, s3)
 							.filter(obj -> !(obj.getUrl().getPath().endsWith("index.html")))
 							.map(obj -> createObjectListing(obj));
 				})
-				.doOnComplete(() -> log.info("Listing complete"));
+				.doOnComplete(() -> log.debug("Listing complete"));
 	}
 
 	private ObjectListing createObjectListing(@NonNull ListedS3Object listedObject) {
