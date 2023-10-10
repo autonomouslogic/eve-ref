@@ -21,7 +21,11 @@ public class VirtualDirectory {
 		var parentPath = FilenameUtils.getPath(file.getPath());
 		var name = FilenameUtils.getName(file.getPath());
 		var dir = traverse(parentPath, true);
-		dir.files.put(name, file);
+		if (file.isDirectory()) {
+			dir.dirs.put(name, new Dir(file));
+		} else {
+			dir.files.put(name, file);
+		}
 		return this;
 	}
 

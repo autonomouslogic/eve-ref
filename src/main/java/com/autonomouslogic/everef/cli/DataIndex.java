@@ -162,13 +162,19 @@ public class DataIndex implements Command {
 
 	private Flowable<Pair<String, List<FileEntry>>> listAndIndex() {
 		return listBucketContents().flatMapPublisher(dir -> {
-			return Flowable.fromStream(dir.list(Optional.ofNullable(prefix).orElse(""), recursive))
+			var path = Optional.ofNullable(prefix).orElse("");
+			var indexes = Flowable.fromStream(dir.list(path, recursive))
 					.filter(d -> d.isDirectory())
-					.map(d -> Pair.of(
-							d.getPath(),
-							dir.list(d.getPath(), false)
-									.filter(entry -> entry != d)
-									.toList()));
+					.map(d -> {
+						var contents = dir.list(d.getPath(), false)
+								.filter(entry -> entry != d)
+								.toList();
+						return Pair.of(d.getPath(), contents);
+					});
+			if (!recursive) {
+				indexes = indexes.take(1);
+			}
+			return indexes;
 		});
 	}
 

@@ -93,9 +93,11 @@ public class MockS3Adapter extends S3Adapter {
 			return Flowable.fromStream(stream).map(entry -> {
 				var prefixRelative = StringUtils.removeStart(entry.getKey().getKey(), prefix);
 				if (!recursive && prefixRelative.contains("/")) {
-					var dir = prefixRelative.substring(0, prefixRelative.indexOf("/") + 1);
 					return ListedS3Object.create(
-							CommonPrefix.builder().prefix(dir).build(), url.getBucket());
+							CommonPrefix.builder()
+									.prefix(entry.getKey().getKey() + "/")
+									.build(),
+							url.getBucket());
 				} else {
 					return ListedS3Object.create(
 							S3Object.builder()

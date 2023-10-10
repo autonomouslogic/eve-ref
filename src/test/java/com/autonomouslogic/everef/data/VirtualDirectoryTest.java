@@ -83,12 +83,12 @@ public class VirtualDirectoryTest {
 				StringUtils.join(
 						List.of(
 								FileEntry.directory("path"),
+								FileEntry.directory("path/abc"),
 								FileEntry.directory("path/other"),
 								FileEntry.directory("path/other/more"),
 								FileEntry.file("path/other/more/foo3"),
 								FileEntry.directory("path/to"),
 								FileEntry.file("path/to/foo1"),
-								FileEntry.directory("path/abc"),
 								FileEntry.file("path/foo2")),
 						'\n'),
 				StringUtils.join(dir.list(path, true).toList(), '\n'));
