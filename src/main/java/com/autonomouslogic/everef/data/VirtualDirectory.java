@@ -5,6 +5,7 @@ import java.util.TreeMap;
 import java.util.stream.Stream;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -18,9 +19,9 @@ public class VirtualDirectory {
 	public VirtualDirectory add(@NonNull FileEntry file) {
 		file = clean(file);
 		var parentPath = FilenameUtils.getPath(file.getPath());
-		var basename = FilenameUtils.getBaseName(file.getPath());
+		var name = FilenameUtils.getName(file.getPath());
 		var dir = traverse(parentPath, true);
-		dir.files.put(basename, file);
+		dir.files.put(name, file);
 		return this;
 	}
 
@@ -47,12 +48,12 @@ public class VirtualDirectory {
 	public boolean exists(@NonNull String path) {
 		path = removeSlashes(path);
 		var parentPath = FilenameUtils.getPath(path);
-		var basename = FilenameUtils.getBaseName(path);
+		var name = FilenameUtils.getName(path);
 		var dir = traverse(parentPath, false);
 		if (dir == null) {
 			return false;
 		}
-		return dir.dirs.containsKey(basename) || dir.files.containsKey(basename);
+		return dir.dirs.containsKey(name) || dir.files.containsKey(name);
 	}
 
 	private Dir traverse(@NonNull String path, boolean create) {
@@ -94,19 +95,22 @@ public class VirtualDirectory {
 	}
 
 	private Stream<FileEntry> list(@NonNull Dir dir, boolean recursive) {
-		Stream<FileEntry> dirs;
+		var dirEntries = Stream.of(dir.self);
 		if (recursive) {
-			dirs = dir.dirs.values().stream().flatMap(d -> Stream.concat(Stream.of(d.self), list(d, recursive)));
+			dirEntries = Stream.concat(dirEntries, dir.dirs.values().stream().flatMap(d -> list(d, true)));
 		} else {
-			dirs = dir.dirs.values().stream().map(d -> d.self);
+			dirEntries = Stream.concat(dirEntries, dir.dirs.values().stream().map(d -> d.self));
 		}
 		var files = dir.files.values().stream();
-		return Stream.concat(dirs, files);
+		return Stream.concat(dirEntries, files);
 	}
 
 	@RequiredArgsConstructor
+	@ToString(onlyExplicitlyIncluded = true)
 	private static class Dir {
+		@ToString.Include
 		final FileEntry self;
+
 		final Map<String, Dir> dirs = new TreeMap<>();
 		final Map<String, FileEntry> files = new TreeMap<>();
 	}

@@ -82,6 +82,7 @@ public class VirtualDirectoryTest {
 		assertEquals(
 				StringUtils.join(
 						List.of(
+								FileEntry.directory("path"),
 								FileEntry.directory("path/other"),
 								FileEntry.directory("path/other/more"),
 								FileEntry.file("path/other/more/foo3"),
@@ -105,6 +106,7 @@ public class VirtualDirectoryTest {
 		assertEquals(
 				StringUtils.join(
 						List.of(
+								FileEntry.directory("path"),
 								FileEntry.directory("path/ab"),
 								FileEntry.directory("path/abc"),
 								FileEntry.directory("path/abcd"),
