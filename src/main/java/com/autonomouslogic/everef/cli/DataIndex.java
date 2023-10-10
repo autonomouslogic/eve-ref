@@ -1,6 +1,8 @@
 package com.autonomouslogic.everef.cli;
 
 import com.autonomouslogic.everef.config.Configs;
+import com.autonomouslogic.everef.data.FileEntry;
+import com.autonomouslogic.everef.data.VirtualDirectory;
 import com.autonomouslogic.everef.pug.PugHelper;
 import com.autonomouslogic.everef.s3.ListedS3Object;
 import com.autonomouslogic.everef.s3.S3Adapter;
@@ -19,8 +21,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.StringJoiner;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -31,8 +31,9 @@ import lombok.Setter;
 import lombok.Singular;
 import lombok.Value;
 import lombok.extern.log4j.Log4j2;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.jetbrains.annotations.NotNull;
+import org.apache.commons.lang3.tuple.Pair;
 import software.amazon.awssdk.core.async.AsyncRequestBody;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 
@@ -84,13 +85,33 @@ public class DataIndex implements Command {
 
 	@Override
 	public Completable run() {
-		return listAndIndex().flatMapCompletable(dirs -> {
-			resolveDirectories(dirs);
-			return createAndUploadIndexPages(dirs);
-		});
+		return listAndIndex()
+				.flatMapCompletable(
+						dirIndex -> {
+							//			resolveDirectories(dirs);
+							return createAndUploadIndexPage(dirIndex);
+							// .andThen(Completable.fromAction(() -> log.info(String.format("Uploaded %s index pages",
+							// dirs.size()))));
+						},
+						false,
+						indexConcurrency);
 	}
 
-	private Completable createAndUploadIndexPages(@NonNull Map<String, Listing.Builder> dirs) {
+	//	private Completable createAndUploadIndexPages(@NonNull Map<String, Listing.Builder> dirs) {
+	//		return Flowable.fromIterable(dirs.entrySet())
+	//				.filter(entry -> StringUtils.isEmpty(prefix) || (entry.getKey() + "/").startsWith(prefix))
+	//				.flatMapCompletable(
+	//						entry -> {
+	//							var listing =
+	//									entry.getValue().prefix(entry.getKey()).build();
+	//							return createIndexPage(listing);
+	//						},
+	//						false,
+	//						indexConcurrency)
+	//				.andThen(Completable.fromAction(() -> log.info(String.format("Uploaded %s index pages", dirs.size()))));
+	//	}
+
+	private Completable createAndUploadIndexPage(@NonNull Pair<String, List<FileEntry>> dirIndex) {
 		return Flowable.fromIterable(dirs.entrySet())
 				.filter(entry -> StringUtils.isEmpty(prefix) || (entry.getKey() + "/").startsWith(prefix))
 				.flatMapCompletable(
@@ -100,51 +121,58 @@ public class DataIndex implements Command {
 							return createIndexPage(listing);
 						},
 						false,
-						indexConcurrency)
-				.andThen(Completable.fromAction(() -> log.info(String.format("Uploaded %s index pages", dirs.size()))));
+						indexConcurrency);
 	}
 
-	/**
-	 * Iterates over all the directories and adds them to their parent directories.
-	 * @param dirs
-	 */
-	private void resolveDirectories(@NonNull Map<String, Listing.Builder> dirs) {
-		var changesMade = new AtomicBoolean();
-		do {
-			changesMade.set(false);
-			dirs.forEach((path, listing) -> {
-				if (path.equals("")) {
-					return;
-				}
-				var parentPath = new File("/" + path).getParent().substring(1);
-				var parent = dirs.computeIfAbsent(parentPath, ignore -> {
-					changesMade.set(true);
-					return Listing.builder();
-				});
-				parent.common(CommonListing.builder()
-						.prefix(path)
-						.basename(new File(path).getName())
-						.build());
-			});
-		} while (changesMade.get());
+	//	/**
+	//	 * Iterates over all the directories and adds them to their parent directories.
+	//	 * @param dirs
+	//	 */
+	//	private void resolveDirectories(@NonNull Map<String, Listing.Builder> dirs) {
+	//		var changesMade = new AtomicBoolean();
+	//		do {
+	//			changesMade.set(false);
+	//			dirs.forEach((path, listing) -> {
+	//				if (path.equals("")) {
+	//					return;
+	//				}
+	//				var parentPath = new File("/" + path).getParent().substring(1);
+	//				var parent = dirs.computeIfAbsent(parentPath, ignore -> {
+	//					changesMade.set(true);
+	//					return Listing.builder();
+	//				});
+	//				parent.common(CommonListing.builder()
+	//						.prefix(path)
+	//						.basename(new File(path).getName())
+	//						.build());
+	//			});
+	//		} while (changesMade.get());
+	//	}
+
+	//	@NotNull
+	//	private Single<Map<String, Listing.Builder>> listAndIndex() {
+	//		final Map<String, Listing.Builder> dirs = new ConcurrentHashMap<>();
+	//		return listBucketContents()
+	//				.groupBy(ObjectListing::getDir)
+	//				.flatMapCompletable(group -> {
+	//					var listing = dirs.computeIfAbsent(group.getKey(), ignore -> Listing.builder());
+	//					return group.toList()
+	//							.doOnSuccess(objs -> listing.objects(objs))
+	//							.ignoreElement();
+	//				})
+	//				.andThen(Single.just(dirs));
+	//	}
+
+	private Flowable<Pair<String, List<FileEntry>>> listAndIndex() {
+		return listBucketContents().flatMapPublisher(dir -> {
+			return Flowable.fromStream(dir.list(prefix, recursive))
+					.filter(d -> d.isDirectory())
+					.map(d -> Pair.of(d.getPath(), dir.list(d.getPath(), false).toList()));
+		});
 	}
 
-	@NotNull
-	private Single<Map<String, Listing.Builder>> listAndIndex() {
-		final Map<String, Listing.Builder> dirs = new ConcurrentHashMap<>();
-		return listBucketContents()
-				.groupBy(ObjectListing::getDir)
-				.flatMapCompletable(group -> {
-					var listing = dirs.computeIfAbsent(group.getKey(), ignore -> Listing.builder());
-					return group.toList()
-							.doOnSuccess(objs -> listing.objects(objs))
-							.ignoreElement();
-				})
-				.andThen(Single.just(dirs));
-	}
-
-	private Flowable<ObjectListing> listBucketContents() {
-		return Flowable.defer(() -> {
+	private Single<VirtualDirectory> listBucketContents() {
+		return Single.defer(() -> {
 					log.debug("Listing contents");
 					if (!dataUrl.getPath().equals("")) {
 						throw new RuntimeException("Data index must be run at the root of the bucket");
@@ -153,12 +181,25 @@ public class DataIndex implements Command {
 					if (!StringUtils.isEmpty(prefix)) {
 						url = url.resolve(prefix);
 					}
+					var dir = new VirtualDirectory();
 					return s3Adapter
 							.listObjects(url, recursive, s3)
 							.filter(obj -> !(obj.getUrl().getPath().endsWith("index.html")))
-							.map(obj -> createObjectListing(obj));
+							.doOnNext(obj -> {
+								if (obj.isDirectory()) {
+									dir.add(FileEntry.directory(obj.getUrl().getPath()));
+								} else {
+									dir.add(FileEntry.file(
+											obj.getUrl().getPath(),
+											obj.getSize(),
+											obj.getLastModified(),
+											obj.getMd5Hex()));
+								}
+							})
+							.ignoreElements()
+							.andThen(Single.just(dir));
 				})
-				.doOnComplete(() -> log.debug("Listing complete"));
+				.doAfterSuccess(ignore -> log.debug("Listing complete"));
 	}
 
 	private ObjectListing createObjectListing(@NonNull ListedS3Object listedObject) {
@@ -204,20 +245,36 @@ public class DataIndex implements Command {
 		});
 	}
 
-	private byte[] renderIndexPage(@NonNull Listing listing) {
-		var directoryParts = splitDirectoryPath(listing.getPrefix());
+	private byte[] renderIndexPage(@NonNull String prefix, List<FileEntry> entries) {
+		var directoryParts = splitDirectoryPath(prefix);
 		// Prepare model.
 		Map<String, Object> model = new HashMap<>();
-		model.put("pageTitle", dataDomain + "/" + listing.getPrefix());
-		model.put("common", listing.getCommon());
-		model.put("objects", listing.getObjects());
+		model.put("pageTitle", dataDomain + "/" + prefix);
+		model.put(
+				"common",
+				entries.stream()
+						.filter(e -> e.isDirectory())
+						.map(e -> CommonListing.builder()
+								.prefix(e.getPath() + "/")
+								.basename(FilenameUtils.getBaseName(e.getPath()))
+								.build())
+						.toList());
+		model.put(
+				"objects",
+				entries.stream()
+						.filter(e -> !e.isDirectory())
+						.map(e -> ObjectListing.builder()
+								.prefix(e.getPath() + "/")
+								.basename(FilenameUtils.getBaseName(e.getPath()))
+								.build())
+						.toList());
 		model.put("domain", dataDomain);
 		model.put("directoryParts", directoryParts);
-		model.put(
-				"totalSize",
-				listing.objects.stream()
-						.mapToLong(o -> o.getListedObject().getSize())
-						.sum());
+		//		model.put( // @todo
+		//				"totalSize",
+		//				listing.objects.stream()
+		//						.mapToLong(o -> o.getListedObject().getSize())
+		//						.sum());
 		// Render template.
 		byte[] rendered = pugHelper.renderTemplate("data/index.pug", model);
 

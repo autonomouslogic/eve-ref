@@ -64,7 +64,7 @@ public class VirtualDirectoryTest {
 	@ParameterizedTest
 	@ValueSource(strings = {"/path/to/foo", "path/to/foo"})
 	void shouldHandleSlashesInFilePaths(String path) {
-		dir.add(FileEntry.file(path, 10, "abc"));
+		dir.add(FileEntry.file(path));
 		assertTrue(dir.exists(path));
 		assertTrue(dir.exists(StringUtils.removeStart(path, "/")));
 		assertTrue(dir.exists(StringUtils.removeEnd(path, "/")));
@@ -74,21 +74,21 @@ public class VirtualDirectoryTest {
 	@ParameterizedTest
 	@ValueSource(strings = {"path", "/path", "path/", "/path/"})
 	void shouldListAllEntriesRecursively(String path) {
-		dir.add(FileEntry.file("foo1", 1, "abc"));
-		dir.add(FileEntry.file("path/to/foo1", 1, "abc"));
-		dir.add(FileEntry.file("path/foo2", 2, "abcd"));
-		dir.add(FileEntry.file("path/other/more/foo3", 3, "abc"));
+		dir.add(FileEntry.file("foo1"));
+		dir.add(FileEntry.file("path/to/foo1"));
+		dir.add(FileEntry.file("path/foo2"));
+		dir.add(FileEntry.file("path/other/more/foo3"));
 		dir.add(FileEntry.directory("path/abc/"));
 		assertEquals(
 				StringUtils.join(
 						List.of(
 								FileEntry.directory("path/other"),
 								FileEntry.directory("path/other/more"),
-								FileEntry.file("path/other/more/foo3", 3, "abc"),
+								FileEntry.file("path/other/more/foo3"),
 								FileEntry.directory("path/to"),
-								FileEntry.file("path/to/foo1", 1, "abc"),
+								FileEntry.file("path/to/foo1"),
 								FileEntry.directory("path/abc"),
-								FileEntry.file("path/foo2", 2, "abcd")),
+								FileEntry.file("path/foo2")),
 						'\n'),
 				StringUtils.join(dir.list(path, true).toList(), '\n'));
 	}
@@ -96,20 +96,20 @@ public class VirtualDirectoryTest {
 	@ParameterizedTest
 	@ValueSource(strings = {"path", "/path", "path/", "/path/"})
 	void shouldListDirectoryEntries(String path) {
-		dir.add(FileEntry.file("foo1", 1, "abc"));
-		dir.add(FileEntry.file("path/foo2", 2, "abcd"));
-		dir.add(FileEntry.file("path/foo3", 2, "abcd"));
+		dir.add(FileEntry.file("foo1"));
+		dir.add(FileEntry.file("path/foo2"));
+		dir.add(FileEntry.file("path/foo3"));
 		dir.add(FileEntry.directory("path/abc"));
 		dir.add(FileEntry.directory("path/abcd/"));
-		dir.add(FileEntry.file("path/ab/foo4", 2, "abcd"));
+		dir.add(FileEntry.file("path/ab/foo4"));
 		assertEquals(
 				StringUtils.join(
 						List.of(
 								FileEntry.directory("path/ab"),
 								FileEntry.directory("path/abc"),
 								FileEntry.directory("path/abcd"),
-								FileEntry.file("path/foo2", 2, "abcd"),
-								FileEntry.file("path/foo3", 2, "abcd")),
+								FileEntry.file("path/foo2"),
+								FileEntry.file("path/foo3")),
 						'\n'),
 				StringUtils.join(dir.list(path, false).toList(), '\n'));
 	}

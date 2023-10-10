@@ -7,6 +7,9 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 
+/**
+ * Provides a virtual file listing in memory.
+ */
 @RequiredArgsConstructor
 public class VirtualDirectory {
 	private final Dir root = new Dir(FileEntry.directory(""));
