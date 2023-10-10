@@ -119,7 +119,7 @@ public class DataIndexTest {
 		var html = getPageContent("index.html");
 		assertEquals(List.of(Pair.of("/dir/", "dir"), Pair.of("/dir2/", "dir2")), getDirLinks(html));
 		assertEquals(
-				List.of(new FileLink("/data.zip", "data.zip", "16 bytes", "16", "2000-01-01T00:00:01Z")),
+				List.of(new FileLink("/data.zip", "data.zip", "16 bytes", "16", "2000-01-01 00:00:01 UTC")),
 				getFileLinks(html));
 	}
 
@@ -127,7 +127,8 @@ public class DataIndexTest {
 		var html = getPageContent("dir/index.html");
 		assertEquals(List.of(Pair.of("/dir/sub/", "sub")), getDirLinks(html));
 		assertEquals(
-				List.of(new FileLink("/dir/more-data.zip", "more-data.zip", "25 bytes", "25", "2000-01-01T00:00:03Z")),
+				List.of(new FileLink(
+						"/dir/more-data.zip", "more-data.zip", "25 bytes", "25", "2000-01-01 00:00:03 UTC")),
 				getFileLinks(html));
 	}
 
@@ -136,7 +137,7 @@ public class DataIndexTest {
 		assertEquals(List.of(), getDirLinks(html));
 		assertEquals(
 				List.of(new FileLink(
-						"/dir/sub/sub-data.zip", "sub-data.zip", "28 bytes", "28", "2000-01-01T00:00:04Z")),
+						"/dir/sub/sub-data.zip", "sub-data.zip", "28 bytes", "28", "2000-01-01 00:00:04 UTC")),
 				getFileLinks(html));
 	}
 
@@ -145,7 +146,7 @@ public class DataIndexTest {
 		assertEquals(List.of(), getDirLinks(html));
 		assertEquals(
 				List.of(new FileLink(
-						"/dir2/more-data2.zip", "more-data2.zip", "27 bytes", "27", "2000-01-01T00:00:05Z")),
+						"/dir2/more-data2.zip", "more-data2.zip", "27 bytes", "27", "2000-01-01 00:00:05 UTC")),
 				getFileLinks(html));
 	}
 

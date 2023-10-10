@@ -35,7 +35,7 @@ block content
 							for dir in common
 								tr(class="data-dir")
 									td
-										a.url(href="/" + dir.getPrefix() + "/")= dir.getBasename()
+										a.url(href="/" + dir.getPath() + "/")= helper.basename(dir.getPath())
 										= "/"
 									td= " "
 									td= " "
@@ -45,10 +45,10 @@ block content
 							for file in objects
 								tr(class="data-file")
 									td
-										a(class="data-file-url", href= "/" + file.getPrefix())= file.getBasename()
-									td(class="data-file-size-formatted").text-right= format.fileSize(file.getListedObject().getSize())
-									td(class="data-file-size-bytes").text-right= format.integer(file.getListedObject().getSize())
-									td(class="data-file-last-modified").text-right= file.getListedObject().getLastModified()
+										a(class="data-file-url", href= "/" + file.getPath())= helper.filename(file.getPath())
+									td(class="data-file-size-formatted").text-right= format.fileSize(file.getSize())
+									td(class="data-file-size-bytes").text-right= format.integer(file.getSize())
+									td(class="data-file-last-modified").text-right= time.isoLike(file.getLastModified())
 		.row.mt-3
 			.col-12
 				h2 Copyright

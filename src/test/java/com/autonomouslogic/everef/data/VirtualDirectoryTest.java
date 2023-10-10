@@ -21,7 +21,7 @@ public class VirtualDirectoryTest {
 
 	@Test
 	void shouldSaveFiles() {
-		dir.add(FileEntry.file("foo", 1, "abc"));
+		dir.add(FileEntry.file("foo"));
 		assertTrue(dir.exists("foo"));
 		assertFalse(dir.exists("foo1"));
 	}
@@ -35,7 +35,7 @@ public class VirtualDirectoryTest {
 
 	@Test
 	void shouldSaveFilesInSubdirectories() {
-		dir.add(FileEntry.file("path/to/foo", 1, "abc"));
+		dir.add(FileEntry.file("path/to/foo"));
 		assertTrue(dir.exists("path/to/foo"));
 		assertTrue(dir.exists("path/to"));
 		assertTrue(dir.exists("path"));

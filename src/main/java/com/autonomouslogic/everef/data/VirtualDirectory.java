@@ -3,6 +3,7 @@ package com.autonomouslogic.everef.data;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.stream.Stream;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -14,7 +15,7 @@ import org.apache.commons.lang3.StringUtils;
 public class VirtualDirectory {
 	private final Dir root = new Dir(FileEntry.directory(""));
 
-	public VirtualDirectory add(FileEntry file) {
+	public VirtualDirectory add(@NonNull FileEntry file) {
 		file = clean(file);
 		var parentPath = FilenameUtils.getPath(file.getPath());
 		var basename = FilenameUtils.getBaseName(file.getPath());
@@ -23,7 +24,7 @@ public class VirtualDirectory {
 		return this;
 	}
 
-	private FileEntry clean(FileEntry file) {
+	private FileEntry clean(@NonNull FileEntry file) {
 		if (file.getPath().startsWith("/")) {
 			file = file.toBuilder()
 					.path(StringUtils.removeStart(file.getPath(), "/"))
@@ -37,13 +38,13 @@ public class VirtualDirectory {
 		return file;
 	}
 
-	private String removeSlashes(String path) {
+	private String removeSlashes(@NonNull String path) {
 		path = StringUtils.removeStart(path, "/");
 		path = StringUtils.removeEnd(path, "/");
 		return path;
 	}
 
-	public boolean exists(String path) {
+	public boolean exists(@NonNull String path) {
 		path = removeSlashes(path);
 		var parentPath = FilenameUtils.getPath(path);
 		var basename = FilenameUtils.getBaseName(path);
@@ -54,7 +55,7 @@ public class VirtualDirectory {
 		return dir.dirs.containsKey(basename) || dir.files.containsKey(basename);
 	}
 
-	private Dir traverse(String path, boolean create) {
+	private Dir traverse(@NonNull String path, boolean create) {
 		path = removeSlashes(path);
 		if (path.isEmpty()) {
 			return root;
@@ -84,7 +85,7 @@ public class VirtualDirectory {
 		return list(root, recursive);
 	}
 
-	public Stream<FileEntry> list(String path, boolean recursive) {
+	public Stream<FileEntry> list(@NonNull String path, boolean recursive) {
 		var dir = traverse(path, false);
 		if (dir == null) {
 			return null;
@@ -92,7 +93,7 @@ public class VirtualDirectory {
 		return list(dir, recursive);
 	}
 
-	private Stream<FileEntry> list(Dir dir, boolean recursive) {
+	private Stream<FileEntry> list(@NonNull Dir dir, boolean recursive) {
 		Stream<FileEntry> dirs;
 		if (recursive) {
 			dirs = dir.dirs.values().stream().flatMap(d -> Stream.concat(Stream.of(d.self), list(d, recursive)));
@@ -106,7 +107,7 @@ public class VirtualDirectory {
 	@RequiredArgsConstructor
 	private static class Dir {
 		final FileEntry self;
-		Map<String, Dir> dirs = new TreeMap<>();
-		Map<String, FileEntry> files = new TreeMap<>();
+		final Map<String, Dir> dirs = new TreeMap<>();
+		final Map<String, FileEntry> files = new TreeMap<>();
 	}
 }
