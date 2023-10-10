@@ -151,8 +151,8 @@ public class DataIndex implements Command {
 		// Prepare model.
 		Map<String, Object> model = new HashMap<>();
 		model.put("pageTitle", dataDomain + "/" + prefix);
-		model.put("common", entries.stream().filter(e -> e.isDirectory()).toList());
-		model.put("objects", entries.stream().filter(e -> !e.isDirectory()).toList());
+		model.put("directories", entries.stream().filter(e -> e.isDirectory()).toList());
+		model.put("files", entries.stream().filter(e -> !e.isDirectory()).toList());
 		model.put("domain", dataDomain);
 		model.put("directoryParts", directoryParts);
 		// Render template.
