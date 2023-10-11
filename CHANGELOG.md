@@ -1,5 +1,13 @@
 EVE Ref Changelog
 
+## [2.34.0](https://github.com/autonomouslogic/eve-ref/compare/2.33.0...2.34.0) (2023-10-11)
+
+
+### Features
+
+* Data index supports local updates ([#330](https://github.com/autonomouslogic/eve-ref/issues/330)) ([7367731](https://github.com/autonomouslogic/eve-ref/commit/736773176ce8fabecff4304dcea2105059c9d742))
+* Time tag on data index ([#332](https://github.com/autonomouslogic/eve-ref/issues/332)) ([b90693e](https://github.com/autonomouslogic/eve-ref/commit/b90693ece20e9c3e63ca26e283a1c4fe7fd971c1))
+
 ## [2.33.0](https://github.com/autonomouslogic/eve-ref/compare/2.32.0...2.33.0) (2023-10-07)
 
 
