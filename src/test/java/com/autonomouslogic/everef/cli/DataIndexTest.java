@@ -1,6 +1,7 @@
 package com.autonomouslogic.everef.cli;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.autonomouslogic.everef.pug.TimeUtil;
 import com.autonomouslogic.everef.s3.S3Adapter;
@@ -169,6 +170,7 @@ public class DataIndexTest {
 					var attrTime = Instant.parse(timeTag.attr("datetime"));
 					var textTime = ZonedDateTime.parse(timeTag.text(), TimeUtil.ISO_LIKE);
 					assertEquals(attrTime, textTime.toInstant());
+					assertTrue(timeTag.text().endsWith(" UTC"), timeTag.text());
 					return new FileLink(
 							e.select("a.data-file-url").attr("href"),
 							e.select("a.data-file-url").text(),

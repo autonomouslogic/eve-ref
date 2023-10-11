@@ -13,6 +13,7 @@ import javax.inject.Inject;
  */
 public class TimeUtil {
 	public static final DateTimeFormatter ISO_LIKE = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss z");
+	public static final ZoneId UTC = ZoneId.of("UTC");
 
 	private static final long DAY = Duration.ofDays(1).toMillis();
 	private static final long HOUR = Duration.ofHours(1).toMillis();
@@ -60,10 +61,10 @@ public class TimeUtil {
 	}
 
 	public String isoLike(Instant instant) {
-		return isoLike(instant.atZone(ZoneId.of("UTC")));
+		return isoLike(instant.atZone(UTC));
 	}
 
 	public String isoLike(ZonedDateTime dateTime) {
-		return ISO_LIKE.format(dateTime);
+		return ISO_LIKE.format(dateTime.withZoneSameInstant(UTC));
 	}
 }
