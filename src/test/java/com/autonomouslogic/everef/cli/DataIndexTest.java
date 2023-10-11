@@ -1,11 +1,14 @@
 package com.autonomouslogic.everef.cli;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.autonomouslogic.everef.pug.TimeUtil;
 import com.autonomouslogic.everef.s3.S3Adapter;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.test.MockS3Adapter;
 import java.time.Instant;
+import java.time.ZonedDateTime;
 import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -119,7 +122,7 @@ public class DataIndexTest {
 		var html = getPageContent("index.html");
 		assertEquals(List.of(Pair.of("/dir/", "dir"), Pair.of("/dir2/", "dir2")), getDirLinks(html));
 		assertEquals(
-				List.of(new FileLink("/data.zip", "data.zip", "16 bytes", "16", "2000-01-01 00:00:01 UTC")),
+				List.of(new FileLink("/data.zip", "data.zip", "16 bytes", "16", "2000-01-01T00:00:01Z")),
 				getFileLinks(html));
 	}
 
@@ -127,8 +130,7 @@ public class DataIndexTest {
 		var html = getPageContent("dir/index.html");
 		assertEquals(List.of(Pair.of("/dir/sub/", "sub")), getDirLinks(html));
 		assertEquals(
-				List.of(new FileLink(
-						"/dir/more-data.zip", "more-data.zip", "25 bytes", "25", "2000-01-01 00:00:03 UTC")),
+				List.of(new FileLink("/dir/more-data.zip", "more-data.zip", "25 bytes", "25", "2000-01-01T00:00:03Z")),
 				getFileLinks(html));
 	}
 
@@ -137,7 +139,7 @@ public class DataIndexTest {
 		assertEquals(List.of(), getDirLinks(html));
 		assertEquals(
 				List.of(new FileLink(
-						"/dir/sub/sub-data.zip", "sub-data.zip", "28 bytes", "28", "2000-01-01 00:00:04 UTC")),
+						"/dir/sub/sub-data.zip", "sub-data.zip", "28 bytes", "28", "2000-01-01T00:00:04Z")),
 				getFileLinks(html));
 	}
 
@@ -146,7 +148,7 @@ public class DataIndexTest {
 		assertEquals(List.of(), getDirLinks(html));
 		assertEquals(
 				List.of(new FileLink(
-						"/dir2/more-data2.zip", "more-data2.zip", "27 bytes", "27", "2000-01-01 00:00:05 UTC")),
+						"/dir2/more-data2.zip", "more-data2.zip", "27 bytes", "27", "2000-01-01T00:00:05Z")),
 				getFileLinks(html));
 	}
 
@@ -163,12 +165,19 @@ public class DataIndexTest {
 	private List<FileLink> getFileLinks(String html) {
 		var rows = Jsoup.parse(html).select("tr.data-file");
 		return rows.stream()
-				.map(e -> new FileLink(
-						e.select("a.data-file-url").attr("href"),
-						e.select("a.data-file-url").text(),
-						e.select("td.data-file-size-formatted").text(),
-						e.select("td.data-file-size-bytes").text(),
-						e.select("td.data-file-last-modified").text()))
+				.map(e -> {
+					var timeTag = e.select("td.data-file-last-modified time");
+					var attrTime = Instant.parse(timeTag.attr("datetime"));
+					var textTime = ZonedDateTime.parse(timeTag.text(), TimeUtil.ISO_LIKE);
+					assertEquals(attrTime, textTime.toInstant());
+					assertTrue(timeTag.text().endsWith(" UTC"), timeTag.text());
+					return new FileLink(
+							e.select("a.data-file-url").attr("href"),
+							e.select("a.data-file-url").text(),
+							e.select("td.data-file-size-formatted").text(),
+							e.select("td.data-file-size-bytes").text(),
+							attrTime.toString());
+				})
 				.toList();
 	}
 

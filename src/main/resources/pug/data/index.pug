@@ -48,7 +48,8 @@ block content
 										a(class="data-file-url", href= "/" + file.getPath())= helper.filename(file.getPath())
 									td(class="data-file-size-formatted").text-right= format.fileSize(file.getSize())
 									td(class="data-file-size-bytes").text-right= format.integer(file.getSize())
-									td(class="data-file-last-modified").text-right= time.isoLike(file.getLastModified())
+									td(class="data-file-last-modified").text-right
+										time(datetime=time.iso(file.getLastModified()))= time.isoLike(file.getLastModified())
 		.row.mt-3
 			.col-12
 				h2 Copyright

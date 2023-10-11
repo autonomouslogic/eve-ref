@@ -5,13 +5,15 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import javax.inject.Inject;
 
 /**
  *
  */
 public class TimeUtil {
-	private static final DateTimeFormatter isoLike = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss z");
+	public static final DateTimeFormatter ISO_LIKE = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss z");
+	public static final ZoneId UTC = ZoneId.of("UTC");
 
 	private static final long DAY = Duration.ofDays(1).toMillis();
 	private static final long HOUR = Duration.ofHours(1).toMillis();
@@ -54,11 +56,15 @@ public class TimeUtil {
 		return sb.toString();
 	}
 
+	public String iso(Instant instant) {
+		return instant.truncatedTo(ChronoUnit.SECONDS).toString();
+	}
+
 	public String isoLike(Instant instant) {
-		return isoLike(instant.atZone(ZoneId.of("UTC")));
+		return isoLike(instant.atZone(UTC));
 	}
 
 	public String isoLike(ZonedDateTime dateTime) {
-		return isoLike.format(dateTime);
+		return ISO_LIKE.format(dateTime.withZoneSameInstant(UTC));
 	}
 }
