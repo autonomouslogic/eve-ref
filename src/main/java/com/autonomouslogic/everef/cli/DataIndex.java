@@ -81,10 +81,7 @@ public class DataIndex implements Command {
 		return listAndIndex()
 				.flatMapCompletable(
 						dirIndex -> {
-							//			resolveDirectories(dirs);
 							return createAndUploadIndexPage(dirIndex.getLeft(), dirIndex.getRight());
-							// .andThen(Completable.fromAction(() -> log.info(String.format("Uploaded %s index pages",
-							// dirs.size()))));
 						},
 						false,
 						indexConcurrency);
@@ -117,6 +114,9 @@ public class DataIndex implements Command {
 					var url = dataUrl;
 					if (!StringUtils.isEmpty(prefix)) {
 						url = url.resolve(prefix);
+					}
+					if (!url.toString().endsWith("/")) {
+						url = url.toBuilder().path(url.getPath() + "/").build();
 					}
 					var dir = new VirtualDirectory();
 					return s3Adapter
