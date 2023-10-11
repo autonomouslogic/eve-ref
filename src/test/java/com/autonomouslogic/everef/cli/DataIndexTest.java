@@ -13,6 +13,7 @@ import lombok.SneakyThrows;
 import lombok.Value;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.tuple.Pair;
+import org.jetbrains.annotations.NotNull;
 import org.jsoup.Jsoup;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,6 +24,7 @@ import software.amazon.awssdk.services.s3.S3AsyncClient;
 
 @ExtendWith(MockitoExtension.class)
 @Log4j2
+@SetEnvironmentVariable(key = "DATA_PATH", value = "s3://" + DataIndexTest.BUCKET_NAME + "/")
 public class DataIndexTest {
 	static final String BUCKET_NAME = "data-bucket";
 
@@ -36,51 +38,106 @@ public class DataIndexTest {
 	@Named("data")
 	S3AsyncClient s3Data;
 
+	MockS3Adapter mockS3;
+
 	@BeforeEach
 	@SneakyThrows
 	void before() {
 		DaggerTestComponent.builder().build().inject(this);
-	}
+		mockS3 = (MockS3Adapter) s3Adapter;
 
-	@SetEnvironmentVariable(key = "DATA_PATH", value = "s3://" + BUCKET_NAME + "/")
-	@Test
-	@SneakyThrows
-	void shouldGenerateIndexPages() {
-		var mockS3 = (MockS3Adapter) s3Adapter;
 		// Rig listing.
 		var lastModified = Instant.parse("2000-01-01T00:00:00.100Z");
-		var files = List.of("index.html", "data.zip", "dir/index.html", "dir/more-data.zip", "dir2/more-data2.zip");
+		var files = List.of(
+				"index.html",
+				"data.zip",
+				"dir/index.html",
+				"dir/more-data.zip",
+				"dir/sub/sub-data.zip",
+				"dir2/more-data2.zip");
 		for (String file : files) {
 			var content = file.endsWith("/") ? "" : "content " + file;
 			mockS3.putTestObject(BUCKET_NAME, file, content, s3Data, lastModified);
 			lastModified = lastModified.plusSeconds(1);
 		}
-		// Run.
+	}
+
+	@Test
+	@SneakyThrows
+	void shouldGenerateRecursiveIndexPagesFromRoot() {
 		dataIndex.run().blockingAwait();
 
 		verifyMainIndex();
 		verifyDir1Index();
+		verifyDir1SubIndex();
 		verifyDir2Index();
 
 		// Assert correct uploaded files.
-		assertEquals(
-				List.of("dir/index.html", "dir2/index.html", "index.html"),
-				mockS3.getAllPutKeys(BUCKET_NAME, s3Data).stream().sorted().toList());
+		assertEquals(List.of("dir/index.html", "dir/sub/index.html", "dir2/index.html", "index.html"), getAllPutKeys());
+	}
+
+	@Test
+	@SneakyThrows
+	void shouldGenerateNonRecursiveIndexPageAtRoot() {
+		dataIndex.setRecursive(false).run().blockingAwait();
+
+		verifyMainIndex();
+
+		// Assert correct uploaded files.
+		assertEquals(List.of("index.html"), getAllPutKeys());
+	}
+
+	@Test
+	@SneakyThrows
+	void shouldGenerateRecursiveIndexPagesFromPrefix() {
+		dataIndex.setPrefix("dir/").run().blockingAwait();
+
+		verifyDir1Index();
+		verifyDir1SubIndex();
+
+		// Assert correct uploaded files.
+		assertEquals(List.of("dir/index.html", "dir/sub/index.html"), getAllPutKeys());
+	}
+
+	@Test
+	@SneakyThrows
+	void shouldGenerateNonRecursiveIndexPageAtPrefix() {
+		dataIndex.setPrefix("dir/").setRecursive(false).run().blockingAwait();
+
+		verifyDir1Index();
+
+		// Assert correct uploaded files.
+		assertEquals(List.of("dir/index.html"), getAllPutKeys());
+	}
+
+	@NotNull
+	private List<String> getAllPutKeys() {
+		return mockS3.getAllPutKeys(BUCKET_NAME, s3Data).stream().sorted().toList();
 	}
 
 	private void verifyMainIndex() {
 		var html = getPageContent("index.html");
 		assertEquals(List.of(Pair.of("/dir/", "dir"), Pair.of("/dir2/", "dir2")), getDirLinks(html));
 		assertEquals(
-				List.of(new FileLink("/data.zip", "data.zip", "16 bytes", "16", "2000-01-01T00:00:01Z")),
+				List.of(new FileLink("/data.zip", "data.zip", "16 bytes", "16", "2000-01-01 00:00:01 UTC")),
 				getFileLinks(html));
 	}
 
 	private void verifyDir1Index() {
 		var html = getPageContent("dir/index.html");
+		assertEquals(List.of(Pair.of("/dir/sub/", "sub")), getDirLinks(html));
+		assertEquals(
+				List.of(new FileLink(
+						"/dir/more-data.zip", "more-data.zip", "25 bytes", "25", "2000-01-01 00:00:03 UTC")),
+				getFileLinks(html));
+	}
+
+	private void verifyDir1SubIndex() {
+		var html = getPageContent("dir/sub/index.html");
 		assertEquals(List.of(), getDirLinks(html));
 		assertEquals(
-				List.of(new FileLink("/dir/more-data.zip", "more-data.zip", "25 bytes", "25", "2000-01-01T00:00:03Z")),
+				List.of(new FileLink(
+						"/dir/sub/sub-data.zip", "sub-data.zip", "28 bytes", "28", "2000-01-01 00:00:04 UTC")),
 				getFileLinks(html));
 	}
 
@@ -89,7 +146,7 @@ public class DataIndexTest {
 		assertEquals(List.of(), getDirLinks(html));
 		assertEquals(
 				List.of(new FileLink(
-						"/dir2/more-data2.zip", "more-data2.zip", "27 bytes", "27", "2000-01-01T00:00:04Z")),
+						"/dir2/more-data2.zip", "more-data2.zip", "27 bytes", "27", "2000-01-01 00:00:05 UTC")),
 				getFileLinks(html));
 	}
 

@@ -27,17 +27,25 @@ public class S3Adapter {
 	@Inject
 	protected S3Adapter() {}
 
-	public Flowable<ListedS3Object> listObjects(@NonNull S3Url url, @NonNull S3AsyncClient client) {
+	public Flowable<ListedS3Object> listObjects(@NonNull S3Url url, boolean recursive, @NonNull S3AsyncClient client) {
 		return Flowable.defer(() -> {
-			ListObjectsV2Request request = ListObjectsV2Request.builder()
-					.bucket(url.getBucket())
-					.prefix(url.getPath())
-					.build();
-			return listObjects(request, client)
-					.flatMap(response -> Flowable.fromIterable(response.contents()))
-					.filter(obj ->
-							obj.size() != null && obj.size() > 0) // S3 doesn't list directories, but Backblaze does.
-					.map(obj -> ListedS3Object.create(obj, url.getBucket()));
+			var builder = ListObjectsV2Request.builder().bucket(url.getBucket()).prefix(url.getPath());
+			if (!recursive) {
+				builder = builder.delimiter("/");
+			}
+			return listObjects(builder.build(), client).flatMap(response -> {
+				Flowable<ListedS3Object> commons = response.commonPrefixes() == null
+						? Flowable.empty()
+						: Flowable.fromIterable(response.commonPrefixes())
+								.map(common -> ListedS3Object.create(common, url.getBucket()));
+				Flowable<ListedS3Object> contents = response.contents() == null
+						? Flowable.empty()
+						: Flowable.fromIterable(response.contents())
+								.filter(obj -> obj.size() != null
+										&& obj.size() > 0) // S3 doesn't list directories, but Backblaze does.
+								.map(obj -> ListedS3Object.create(obj, url.getBucket()));
+				return Flowable.concatArray(commons, contents);
+			});
 		});
 	}
 

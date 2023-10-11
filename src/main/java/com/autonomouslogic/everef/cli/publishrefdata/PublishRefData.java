@@ -161,7 +161,7 @@ public class PublishRefData implements Command {
 		return Flowable.defer(() -> {
 					log.info("Listing existing contents");
 					return s3Adapter
-							.listObjects(refDataUrl, s3Client)
+							.listObjects(refDataUrl, true, s3Client)
 							.filter(obj -> !(obj.getUrl().getPath().endsWith("index.html")));
 				})
 				.toList()

@@ -25,6 +25,7 @@ public class PugHelper {
 		var shared = pugFactory.getShared();
 		shared.put("format", new NumberFormats());
 		shared.put("time", new TimeUtil());
+		shared.put("helper", new GenericHelper());
 		var poolConfig = new GenericObjectPoolConfig();
 		poolConfig.setMaxTotal(1024);
 		configPool = new GenericObjectPool<>(pugFactory, poolConfig);

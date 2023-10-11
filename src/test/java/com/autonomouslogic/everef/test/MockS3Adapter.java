@@ -23,9 +23,11 @@ import lombok.EqualsAndHashCode;
 import lombok.Value;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Assertions;
 import software.amazon.awssdk.core.async.AsyncRequestBody;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
+import software.amazon.awssdk.services.s3.model.CommonPrefix;
 import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.DeleteObjectResponse;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
@@ -79,7 +81,7 @@ public class MockS3Adapter extends S3Adapter {
 	}
 
 	@Override
-	public Flowable<ListedS3Object> listObjects(S3Url url, S3AsyncClient client) {
+	public Flowable<ListedS3Object> listObjects(S3Url url, boolean recursive, S3AsyncClient client) {
 		return Flowable.defer(() -> {
 			var stream = data.entrySet().stream()
 					.filter(entry -> entry.getKey().getClient() == client)
@@ -87,15 +89,26 @@ public class MockS3Adapter extends S3Adapter {
 			if (!Strings.isNullOrEmpty(url.getPath())) {
 				stream = stream.filter(entry -> entry.getKey().getKey().startsWith(url.getPath()));
 			}
-			return Flowable.fromStream(stream)
-					.map(entry -> ListedS3Object.create(
+			var prefix = url.getPath();
+			return Flowable.fromStream(stream).map(entry -> {
+				var prefixRelative = StringUtils.removeStart(entry.getKey().getKey(), prefix);
+				if (!recursive && prefixRelative.contains("/")) {
+					return ListedS3Object.create(
+							CommonPrefix.builder()
+									.prefix(entry.getKey().getKey() + "/")
+									.build(),
+							url.getBucket());
+				} else {
+					return ListedS3Object.create(
 							S3Object.builder()
 									.key(entry.getKey().getKey())
 									.size((long) entry.getValue().length)
 									.eTag("\"" + Hex.encodeHexString(HashUtil.md5(entry.getValue())) + "\"")
 									.lastModified(entry.getKey().getLastModified())
 									.build(),
-							entry.getKey().getBucket()));
+							entry.getKey().getBucket());
+				}
+			});
 		});
 	}
 

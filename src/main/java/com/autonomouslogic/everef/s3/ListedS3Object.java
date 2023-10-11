@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
 import org.apache.commons.lang3.StringUtils;
+import software.amazon.awssdk.services.s3.model.CommonPrefix;
 import software.amazon.awssdk.services.s3.model.ListObjectsV2Response;
 import software.amazon.awssdk.services.s3.model.S3Object;
 
@@ -25,6 +26,15 @@ public class ListedS3Object {
 	S3Object s3Object;
 
 	ListObjectsV2Response s3Response;
+
+	boolean directory;
+
+	public static ListedS3Object create(CommonPrefix common, String bucket) {
+		return ListedS3Object.builder()
+				.url(S3Url.builder().bucket(bucket).path(common.prefix()).build())
+				.directory(true)
+				.build();
+	}
 
 	public static ListedS3Object create(S3Object obj, String bucket) {
 		var md5Hex = Optional.ofNullable(obj.eTag())
