@@ -7,6 +7,7 @@ import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.s3.S3Adapter;
 import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.url.UrlParser;
+import com.autonomouslogic.everef.util.DataIndexHelper;
 import com.autonomouslogic.everef.util.S3Util;
 import com.fasterxml.jackson.databind.JsonNode;
 import io.reactivex.rxjava3.core.Completable;
@@ -47,6 +48,9 @@ public class ScrapeMarketOrders implements Command {
 
 	@Inject
 	protected UrlParser urlParser;
+
+	@Inject
+	protected DataIndexHelper dataIndexHelper;
 
 	private S3Url dataUrl;
 	private Map<Long, JsonNode> marketOrdersStore;
@@ -114,8 +118,11 @@ public class ScrapeMarketOrders implements Command {
 			log.info(String.format("Uploading latest file to %s", latestPath));
 			log.info(String.format("Uploading archive file to %s", archivePath));
 			return Completable.mergeArray(
-					s3Adapter.putObject(latestPut, outputFile, s3Client).ignoreElement(),
-					s3Adapter.putObject(archivePut, outputFile, s3Client).ignoreElement());
+							s3Adapter.putObject(latestPut, outputFile, s3Client).ignoreElement(),
+							s3Adapter
+									.putObject(archivePut, outputFile, s3Client)
+									.ignoreElement())
+					.andThen(Completable.defer(() -> dataIndexHelper.updateIndex(latestPath, archivePath)));
 		});
 	}
 }
