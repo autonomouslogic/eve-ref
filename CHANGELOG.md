@@ -1,5 +1,18 @@
 EVE Ref Changelog
 
+## [2.35.0](https://github.com/autonomouslogic/eve-ref/compare/2.34.0...2.35.0) (2023-10-12)
+
+
+### Features
+
+* Commands run their own data index ([#331](https://github.com/autonomouslogic/eve-ref/issues/331)) ([c59f60a](https://github.com/autonomouslogic/eve-ref/commit/c59f60a223b3d01b57ab60e59e2edec73e578d3c))
+* Use src_last_modified_millis header for last-modified timestamps on data index ([#335](https://github.com/autonomouslogic/eve-ref/issues/335)) ([3d67d07](https://github.com/autonomouslogic/eve-ref/commit/3d67d0781ebc0379a04b8fdae5bfb0af1b91c301))
+
+
+### Miscellaneous Chores
+
+* eve-incursions.de scrape ([#334](https://github.com/autonomouslogic/eve-ref/issues/334)) ([a21fb4a](https://github.com/autonomouslogic/eve-ref/commit/a21fb4a202a8fac933d9c8914257f4f9ae782030))
+
 ## [2.34.0](https://github.com/autonomouslogic/eve-ref/compare/2.33.0...2.34.0) (2023-10-11)
 
 
