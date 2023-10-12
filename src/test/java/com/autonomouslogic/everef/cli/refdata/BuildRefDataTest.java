@@ -177,12 +177,11 @@ public class BuildRefDataTest {
 				.updateIndex(
 						S3Url.builder()
 								.bucket("data-bucket")
-								.path("base/market-orders/market-orders-latest.v3.csv.bz2")
+								.path("base/reference-data/reference-data-latest.tar.xz")
 								.build(),
 						S3Url.builder()
 								.bucket("data-bucket")
-								.path(
-										"base/market-orders/history/2020/2020-01-02/market-orders-2020-01-02_03-04-05.v3.csv.bz2")
+								.path("base/reference-data/history/2022/reference-data-2022-01-05.tar.xz")
 								.build());
 	}
 
