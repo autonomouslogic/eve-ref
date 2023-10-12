@@ -296,6 +296,7 @@ public class ScrapeMarketHistory implements Command {
 			log.info("Uploading archives");
 			return Flowable.fromIterable(mapSet.getMapNames())
 					.flatMapMaybe(date -> uploadArchive(LocalDate.parse(date)), false, saveConcurrency)
+					.sorted()
 					.toList()
 					.flatMapCompletable(archives -> dataIndexHelper.updateIndex(archives));
 		});

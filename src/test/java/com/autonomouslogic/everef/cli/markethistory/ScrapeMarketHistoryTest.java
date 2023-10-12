@@ -160,11 +160,11 @@ public class ScrapeMarketHistoryTest {
 				.updateIndex(List.of(
 						S3Url.builder()
 								.bucket("data-bucket")
-								.path("data/market-history/2023/market-history-2023-01-03.csv.bz2")
+								.path("data/market-history/2023/market-history-2023-01-02.csv.bz2")
 								.build(),
 						S3Url.builder()
 								.bucket("data-bucket")
-								.path("data/market-history/2023/market-history-2023-01-02.csv.bz2")
+								.path("data/market-history/2023/market-history-2023-01-03.csv.bz2")
 								.build()));
 	}
 
