@@ -2,6 +2,8 @@ package com.autonomouslogic.everef.cli;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
 import com.autonomouslogic.everef.pug.TimeUtil;
 import com.autonomouslogic.everef.s3.S3Adapter;
@@ -9,7 +11,9 @@ import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.test.MockS3Adapter;
 import java.time.Instant;
 import java.time.ZonedDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.SneakyThrows;
@@ -24,6 +28,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junitpioneer.jupiter.SetEnvironmentVariable;
 import org.mockito.junit.jupiter.MockitoExtension;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
+import software.amazon.awssdk.services.s3.model.HeadObjectRequest;
+import software.amazon.awssdk.services.s3.model.HeadObjectResponse;
 
 @ExtendWith(MockitoExtension.class)
 @Log4j2
@@ -63,6 +69,16 @@ public class DataIndexTest {
 			mockS3.putTestObject(BUCKET_NAME, file, content, s3Data, lastModified);
 			lastModified = lastModified.plusSeconds(1);
 		}
+
+		when(s3Data.headObject(any(HeadObjectRequest.class))).thenAnswer(invocation -> {
+			var req = invocation.getArgument(0, HeadObjectRequest.class);
+			var meta = new HashMap<String, String>();
+			if (req.key().equals("data.zip")) {
+				meta.put("src_last_modified_millis", "931789583000");
+			}
+			return CompletableFuture.completedFuture(
+					HeadObjectResponse.builder().metadata(meta).build());
+		});
 	}
 
 	@Test
@@ -122,7 +138,8 @@ public class DataIndexTest {
 		var html = getPageContent("index.html");
 		assertEquals(List.of(Pair.of("/dir/", "dir"), Pair.of("/dir2/", "dir2")), getDirLinks(html));
 		assertEquals(
-				List.of(new FileLink("/data.zip", "data.zip", "16 bytes", "16", "2000-01-01T00:00:01Z")),
+				// Timestamp overridden by header in metadata.
+				List.of(new FileLink("/data.zip", "data.zip", "16 bytes", "16", "1999-07-12T14:26:23Z")),
 				getFileLinks(html));
 	}
 

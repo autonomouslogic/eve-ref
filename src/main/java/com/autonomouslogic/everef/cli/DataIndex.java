@@ -122,6 +122,7 @@ public class DataIndex implements Command {
 					return s3Adapter
 							.listObjects(url, recursive, s3)
 							.filter(obj -> !(obj.getUrl().getPath().endsWith("index.html")))
+							.compose(s3Adapter.headLastModified(s3))
 							.doOnNext(obj -> {
 								if (obj.isDirectory()) {
 									dir.add(FileEntry.directory(obj.getUrl().getPath()));
