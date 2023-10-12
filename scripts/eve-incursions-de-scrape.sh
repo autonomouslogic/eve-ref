@@ -28,7 +28,7 @@ do
   PAGE=$((PAGE+1))
 done
 
-FINAL="$DIR/eve-incursions-$(date -u +%Y-%m-%d).json"
+FINAL="$DIR/eve-incursions-de-$(date -u +%Y-%m-%d).json"
 echo "Building output file: $FINAL"
 ls -1 $DIR/*.json | xargs -I{} cat {} | \
   jq ".data.spawnLogs.items" | \
