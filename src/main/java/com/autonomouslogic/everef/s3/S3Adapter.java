@@ -3,6 +3,7 @@ package com.autonomouslogic.everef.s3;
 import com.autonomouslogic.commons.rxjava3.Rx3Util;
 import com.autonomouslogic.everef.url.S3Url;
 import io.reactivex.rxjava3.core.Flowable;
+import io.reactivex.rxjava3.core.FlowableTransformer;
 import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import java.io.File;
@@ -103,5 +104,9 @@ public class S3Adapter {
 				.observeOn(Schedulers.computation())
 				.onErrorResumeNext(e -> Single.error(new RuntimeException(
 						String.format("Error deleting object to s3://%s/%s", req.bucket(), req.key()), e)));
+	}
+
+	public FlowableTransformer<ListedS3Object, ListedS3Object> headLastModified(@NonNull S3AsyncClient client) {
+		return new HeadObjectFlowableTransformer(client);
 	}
 }
