@@ -11,7 +11,9 @@ import com.autonomouslogic.everef.refdata.Region;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.test.MockS3Adapter;
 import com.autonomouslogic.everef.test.TestDataUtil;
+import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.util.ArchivePathFactory;
+import com.autonomouslogic.everef.util.DataIndexHelper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.ByteArrayInputStream;
@@ -40,6 +42,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junitpioneer.jupiter.SetEnvironmentVariable;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 
@@ -78,6 +81,9 @@ public class ScrapeMarketHistoryTest {
 
 	@Inject
 	ObjectMapper objectMapper;
+
+	@Inject
+	DataIndexHelper dataIndexHelper;
 
 	final String lastModified = "Tue, 03 Jan 2023 13:47:30 GMT";
 
@@ -148,6 +154,18 @@ public class ScrapeMarketHistoryTest {
 		assertTrue(requestedPairs.contains(new RegionTypePair(11000031, 74216)));
 		// Present in ref data, added by ExplorerRegionTypeSource.
 		assertTrue(requestedPairs.contains(new RegionTypePair(10000100, 999)));
+
+		// Assert data index.
+		Mockito.verify(dataIndexHelper)
+				.updateIndex(List.of(
+						S3Url.builder()
+								.bucket("data-bucket")
+								.path("data/market-history/2023/market-history-2023-01-02.csv.bz2")
+								.build(),
+						S3Url.builder()
+								.bucket("data-bucket")
+								.path("data/market-history/2023/market-history-2023-01-03.csv.bz2")
+								.build()));
 	}
 
 	class TestDispatcher extends Dispatcher {

@@ -25,6 +25,7 @@ import com.autonomouslogic.everef.s3.S3Adapter;
 import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.url.UrlParser;
 import com.autonomouslogic.everef.util.CompressUtil;
+import com.autonomouslogic.everef.util.DataIndexHelper;
 import com.autonomouslogic.everef.util.DataUtil;
 import com.autonomouslogic.everef.util.HashUtil;
 import com.autonomouslogic.everef.util.OkHttpHelper;
@@ -106,6 +107,9 @@ public class BuildRefData implements Command {
 
 	@Inject
 	protected DataUtil dataUtil;
+
+	@Inject
+	protected DataIndexHelper dataIndexHelper;
 
 	@Inject
 	protected Provider<RefDataMerger> refDataMergerProvider;
@@ -368,8 +372,11 @@ public class BuildRefData implements Command {
 			log.info(String.format("Uploading latest file to %s", latestPath));
 			log.info(String.format("Uploading archive file to %s", archivePath));
 			return Completable.mergeArray(
-					s3Adapter.putObject(latestPut, outputFile, s3Client).ignoreElement(),
-					s3Adapter.putObject(archivePut, outputFile, s3Client).ignoreElement());
+							s3Adapter.putObject(latestPut, outputFile, s3Client).ignoreElement(),
+							s3Adapter
+									.putObject(archivePut, outputFile, s3Client)
+									.ignoreElement())
+					.andThen(Completable.defer(() -> dataIndexHelper.updateIndex(latestPath, archivePath)));
 		});
 	}
 

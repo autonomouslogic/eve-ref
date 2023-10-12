@@ -7,6 +7,7 @@ import com.autonomouslogic.everef.http.DataCrawler;
 import com.autonomouslogic.everef.s3.S3Adapter;
 import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.url.UrlParser;
+import com.autonomouslogic.everef.util.DataIndexHelper;
 import com.autonomouslogic.everef.util.OkHttpHelper;
 import com.autonomouslogic.everef.util.S3Util;
 import com.autonomouslogic.everef.util.TempFiles;
@@ -69,6 +70,9 @@ public class SyncFuzzworkOrdersets implements Command {
 	@Inject
 	protected Provider<DataCrawler> dataCrawlerProvider;
 
+	@Inject
+	protected DataIndexHelper dataIndexHelper;
+
 	private S3Url dataPath;
 	private final URI fuzzworkBaseUrl = Configs.FUZZWORK_BASE_URL.getRequired();
 	private final Duration archiveCacheTime = Configs.DATA_ARCHIVE_CACHE_CONTROL_MAX_AGE.getRequired();
@@ -90,7 +94,8 @@ public class SyncFuzzworkOrdersets implements Command {
 								.flatMapCompletable(downloaded ->
 										Completable.concatArray(uploadFile(downloaded), deleteFile(downloaded))),
 						false,
-						CONCURRENCY);
+						CONCURRENCY)
+				.andThen(updateDataIndex());
 	}
 
 	@SneakyThrows
@@ -200,6 +205,14 @@ public class SyncFuzzworkOrdersets implements Command {
 			var archivePut = s3Util.putPublicObjectRequest(fuzz.getFile().length(), archivePath, archiveCacheTime);
 			log.info("Uploading orderset {} from {} to {}", fuzz.getId(), fuzz.getFile(), archivePath);
 			return s3Adapter.putObject(archivePut, fuzz.getFile(), s3Client).ignoreElement();
+		});
+	}
+
+	private Completable updateDataIndex() {
+		return Completable.defer(() -> {
+			var relative = FUZZWORK_ORDERSET.createArchivePath(Instant.now());
+			var url = dataPath.resolve(relative);
+			return dataIndexHelper.updateIndex(url);
 		});
 	}
 

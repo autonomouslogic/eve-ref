@@ -9,6 +9,7 @@ import com.autonomouslogic.everef.mvstore.MapRemover;
 import com.autonomouslogic.everef.s3.S3Adapter;
 import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.url.UrlParser;
+import com.autonomouslogic.everef.util.DataIndexHelper;
 import com.autonomouslogic.everef.util.OkHttpHelper;
 import com.autonomouslogic.everef.util.S3Util;
 import com.autonomouslogic.everef.util.TempFiles;
@@ -73,6 +74,9 @@ public class ScrapePublicContracts implements Command {
 
 	@Inject
 	protected TempFiles tempFiles;
+
+	@Inject
+	protected DataIndexHelper dataIndexHelper;
 
 	@Setter
 	private ZonedDateTime scrapeTime;
@@ -281,8 +285,11 @@ public class ScrapePublicContracts implements Command {
 			log.info(String.format("Uploading latest file to %s", latestPath));
 			log.info(String.format("Uploading archive file to %s", archivePath));
 			return Completable.mergeArray(
-					s3Adapter.putObject(latestPut, outputFile, s3Client).ignoreElement(),
-					s3Adapter.putObject(archivePut, outputFile, s3Client).ignoreElement());
+							s3Adapter.putObject(latestPut, outputFile, s3Client).ignoreElement(),
+							s3Adapter
+									.putObject(archivePut, outputFile, s3Client)
+									.ignoreElement())
+					.andThen(Completable.defer(() -> dataIndexHelper.updateIndex(latestPath, archivePath)));
 		});
 	}
 }
