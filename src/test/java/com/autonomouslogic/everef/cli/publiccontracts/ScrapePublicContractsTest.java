@@ -14,6 +14,8 @@ import com.autonomouslogic.everef.openapi.esi.models.GetUniverseTypesTypeIdOk;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.test.MockS3Adapter;
 import com.autonomouslogic.everef.test.TestDataUtil;
+import com.autonomouslogic.everef.url.S3Url;
+import com.autonomouslogic.everef.util.DataIndexHelper;
 import com.autonomouslogic.everef.util.FormatUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -55,6 +57,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junitpioneer.jupiter.SetEnvironmentVariable;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 
@@ -99,6 +102,9 @@ public class ScrapePublicContractsTest {
 
 	@Inject
 	ObjectMapper objectMapper;
+
+	@Inject
+	DataIndexHelper dataIndexHelper;
 
 	@Mock
 	LocationPopulator locationPopulator;
@@ -201,6 +207,19 @@ public class ScrapePublicContractsTest {
 						"/universe/types/47804/?datasource=tranquility",
 						"/universe/types/49734/?datasource=tranquility"),
 				requestPaths);
+
+		// Assert data index.
+		Mockito.verify(dataIndexHelper)
+				.updateIndex(
+						S3Url.builder()
+								.bucket("data-bucket")
+								.path("base/public-contracts/public-contracts-latest.v2.tar.bz2")
+								.build(),
+						S3Url.builder()
+								.bucket("data-bucket")
+								.path(
+										"base/public-contracts/history/2020/2020-02-03/public-contracts-2020-02-03_04-05-06.v2.tar.bz2")
+								.build());
 	}
 
 	@SneakyThrows

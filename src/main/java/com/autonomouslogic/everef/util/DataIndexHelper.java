@@ -5,6 +5,7 @@ import com.autonomouslogic.everef.url.S3Url;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Flowable;
 import java.util.ArrayList;
+import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import javax.inject.Singleton;
@@ -20,11 +21,15 @@ public class DataIndexHelper {
 	public DataIndexHelper() {}
 
 	public Completable updateIndex(S3Url... urls) {
+		return updateIndex(List.of(urls));
+	}
+
+	public Completable updateIndex(List<S3Url> urls) {
 		return resolvePrefixes(urls).flatMapCompletable(this::updateIndex, false, 1);
 	}
 
-	private Flowable<String> resolvePrefixes(S3Url... url) {
-		return Flowable.fromArray(url)
+	private Flowable<String> resolvePrefixes(List<S3Url> urls) {
+		return Flowable.fromIterable(urls)
 				.map(S3Url::getPath)
 				.flatMap(path -> {
 					var list = new ArrayList<String>();
