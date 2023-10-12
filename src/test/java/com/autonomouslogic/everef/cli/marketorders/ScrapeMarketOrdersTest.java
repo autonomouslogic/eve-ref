@@ -11,6 +11,8 @@ import com.autonomouslogic.everef.esi.MockLocationPopulatorModule;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.test.MockS3Adapter;
 import com.autonomouslogic.everef.test.TestDataUtil;
+import com.autonomouslogic.everef.url.S3Url;
+import com.autonomouslogic.everef.util.DataIndexHelper;
 import com.google.common.collect.Ordering;
 import java.io.InputStream;
 import java.time.ZonedDateTime;
@@ -32,6 +34,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junitpioneer.jupiter.SetEnvironmentVariable;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 
@@ -54,6 +57,9 @@ public class ScrapeMarketOrdersTest {
 
 	@Inject
 	TestDataUtil testDataUtil;
+
+	@Inject
+	DataIndexHelper dataIndexHelper;
 
 	@Mock
 	LocationPopulator locationPopulator;
@@ -140,6 +146,19 @@ public class ScrapeMarketOrdersTest {
 		assertEquals(expected, records);
 		// Assert the two files are the same.
 		mockS3Adapter.assertSameContent(BUCKET_NAME, archiveFile, latestFile, dataClient);
+
+		// Assert data index.
+		Mockito.verify(dataIndexHelper)
+				.updateIndex(
+						S3Url.builder()
+								.bucket("data-bucket")
+								.path("base/market-orders/market-orders-latest.v3.csv.bz2")
+								.build(),
+						S3Url.builder()
+								.bucket("data-bucket")
+								.path(
+										"base/market-orders/history/2020/2020-01-02/market-orders-2020-01-02_03-04-05.v3.csv.bz2")
+								.build());
 	}
 
 	@SneakyThrows

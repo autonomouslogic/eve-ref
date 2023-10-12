@@ -12,6 +12,7 @@ import com.autonomouslogic.everef.mvstore.StoreMapSet;
 import com.autonomouslogic.everef.s3.S3Adapter;
 import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.url.UrlParser;
+import com.autonomouslogic.everef.util.DataIndexHelper;
 import com.autonomouslogic.everef.util.OkHttpHelper;
 import com.autonomouslogic.everef.util.ProgressReporter;
 import com.autonomouslogic.everef.util.Rx;
@@ -23,6 +24,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.CompletableSource;
 import io.reactivex.rxjava3.core.Flowable;
+import io.reactivex.rxjava3.core.Maybe;
 import java.io.FileOutputStream;
 import java.net.URI;
 import java.time.Duration;
@@ -80,6 +82,9 @@ public class ScrapeMarketHistory implements Command {
 
 	@Inject
 	protected OkHttpHelper okHttpHelper;
+
+	@Inject
+	protected DataIndexHelper dataIndexHelper;
 
 	@Inject
 	protected MarketHistoryFetcher marketHistoryFetcher;
@@ -290,20 +295,23 @@ public class ScrapeMarketHistory implements Command {
 		return Completable.defer(() -> {
 			log.info("Uploading archives");
 			return Flowable.fromIterable(mapSet.getMapNames())
-					.flatMapCompletable(date -> uploadArchive(LocalDate.parse(date)), false, saveConcurrency);
+					.flatMapMaybe(date -> uploadArchive(LocalDate.parse(date)), false, saveConcurrency)
+					.sorted()
+					.toList()
+					.flatMapCompletable(archives -> dataIndexHelper.updateIndex(archives));
 		});
 	}
 
-	private Completable uploadArchive(LocalDate date) {
-		return Completable.defer(() -> {
+	private Maybe<S3Url> uploadArchive(LocalDate date) {
+		return Maybe.defer(() -> {
 					var existingCount = totals.get(date);
 					var entries = mapSet.getOrCreateMap(date.toString());
 					if (existingCount == entries.size()) {
 						log.debug(String.format("Skipping upload for %s, no new entries", date));
-						return Completable.complete();
+						return Maybe.empty();
 					}
 					if (entries.size() < existingCount) {
-						return Completable.error(new IllegalStateException(String.format(
+						return Maybe.error(new IllegalStateException(String.format(
 								"Entries for %s have shrunk from %s to %s (%s)",
 								date, existingCount, entries.size(), entries.size() - existingCount)));
 					}
@@ -320,9 +328,10 @@ public class ScrapeMarketHistory implements Command {
 							.andThen(Completable.fromAction(() -> {
 								log.debug("Uploaded archive for {}", date);
 								archive.delete();
-							}));
+							}))
+							.andThen(Maybe.just(archivePath));
 				})
-				.compose(Rx.offloadCompletable());
+				.compose(Rx.offloadMaybe());
 	}
 
 	private Completable uploadTotalPairs() {

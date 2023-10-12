@@ -8,6 +8,7 @@ import com.autonomouslogic.everef.url.HttpUrl;
 import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.url.UrlParser;
 import com.autonomouslogic.everef.util.CompressUtil;
+import com.autonomouslogic.everef.util.DataIndexHelper;
 import com.autonomouslogic.everef.util.OkHttpHelper;
 import com.autonomouslogic.everef.util.S3Util;
 import com.autonomouslogic.everef.util.TempFiles;
@@ -60,6 +61,9 @@ public class ScrapeHoboleaks implements Command {
 
 	@Inject
 	protected TempFiles tempFiles;
+
+	@Inject
+	protected DataIndexHelper dataIndexHelper;
 
 	private final Duration latestCacheTime = Configs.DATA_LATEST_CACHE_CONTROL_MAX_AGE.getRequired();
 	private final Duration archiveCacheTime = Configs.DATA_ARCHIVE_CACHE_CONTROL_MAX_AGE.getRequired();
@@ -175,8 +179,11 @@ public class ScrapeHoboleaks implements Command {
 			log.info(String.format("Uploading latest file to %s", latestPath));
 			log.info(String.format("Uploading archive file to %s", archivePath));
 			return Completable.mergeArray(
-					s3Adapter.putObject(latestPut, outputFile, s3Client).ignoreElement(),
-					s3Adapter.putObject(archivePut, outputFile, s3Client).ignoreElement());
+							s3Adapter.putObject(latestPut, outputFile, s3Client).ignoreElement(),
+							s3Adapter
+									.putObject(archivePut, outputFile, s3Client)
+									.ignoreElement())
+					.andThen(Completable.defer(() -> dataIndexHelper.updateIndex(latestPath, archivePath)));
 		});
 	}
 }

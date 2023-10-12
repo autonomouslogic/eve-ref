@@ -17,7 +17,9 @@ import com.autonomouslogic.everef.refdata.RefDataMetaFileInfo;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.test.MockS3Adapter;
 import com.autonomouslogic.everef.test.TestDataUtil;
+import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.url.UrlParser;
+import com.autonomouslogic.everef.util.DataIndexHelper;
 import com.autonomouslogic.everef.util.HashUtil;
 import com.autonomouslogic.everef.util.MockScrapeBuilder;
 import com.autonomouslogic.everef.util.RefDataUtil;
@@ -44,6 +46,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junitpioneer.jupiter.SetEnvironmentVariable;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 
@@ -78,6 +81,9 @@ public class BuildRefDataTest {
 
 	@Inject
 	MockScrapeBuilder mockScrapeBuilder;
+
+	@Inject
+	DataIndexHelper dataIndexHelper;
 
 	MockWebServer server;
 
@@ -165,6 +171,18 @@ public class BuildRefDataTest {
 			}
 			assertOutput(config, files.get(config.getOutputFile() + ".json"));
 		}
+
+		// Assert data index.
+		Mockito.verify(dataIndexHelper)
+				.updateIndex(
+						S3Url.builder()
+								.bucket("data-bucket")
+								.path("base/reference-data/reference-data-latest.tar.xz")
+								.build(),
+						S3Url.builder()
+								.bucket("data-bucket")
+								.path("base/reference-data/history/2022/reference-data-2022-01-05.tar.xz")
+								.build());
 	}
 
 	@Test
