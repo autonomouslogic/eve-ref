@@ -13,9 +13,11 @@ import java.util.stream.Stream;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.jetbrains.annotations.NotNull;
 import org.reactivestreams.Publisher;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 import software.amazon.awssdk.services.s3.model.HeadObjectRequest;
+import software.amazon.awssdk.services.s3.model.HeadObjectResponse;
 
 /**
  * Heads objects in S3 for the purpose of populated last-modified time from metadata.
@@ -28,29 +30,39 @@ class HeadObjectFlowableTransformer implements FlowableTransformer<ListedS3Objec
 
 	@Override
 	public Publisher<ListedS3Object> apply(@NonNull Flowable<ListedS3Object> upstream) {
-		return upstream.filter(obj -> !obj.isDirectory())
-				.flatMap(
-						obj -> {
-							var req = HeadObjectRequest.builder()
-									.bucket(obj.getUrl().getBucket())
-									.key(obj.getUrl().getPath())
-									.build();
-							return Rx3Util.toMaybe(client.headObject(req))
-									.flatMap(head -> {
-										if (head == null || !head.hasMetadata()) {
-											return Maybe.empty();
-										}
-										var lastModified = getLastModified(obj, head.metadata());
-										return Maybe.just(obj.toBuilder()
-												.lastModified(lastModified.orElse(null))
-												.build());
-									})
-									.switchIfEmpty(Single.just(obj))
-									.toFlowable()
-									.compose(Rx3Util.retryWithDelayFlowable(2, Duration.ofSeconds(5)));
-						},
-						false,
-						32);
+		return upstream.flatMap(
+				obj -> {
+					if (obj.isDirectory()) {
+						return Flowable.just(obj);
+					}
+					return headObject(obj)
+							.toFlowable()
+							.compose(Rx3Util.retryWithDelayFlowable(2, Duration.ofSeconds(5)));
+				},
+				false,
+				32);
+	}
+
+	@NotNull
+	private Single<ListedS3Object> headObject(ListedS3Object obj) {
+		return Single.defer(() -> {
+			var req = HeadObjectRequest.builder()
+					.bucket(obj.getUrl().getBucket())
+					.key(obj.getUrl().getPath())
+					.build();
+			return Rx3Util.toMaybe(client.headObject(req))
+					.flatMap(head -> processResponse(obj, head))
+					.switchIfEmpty(Single.just(obj));
+		});
+	}
+
+	private Maybe<ListedS3Object> processResponse(ListedS3Object obj, HeadObjectResponse head) {
+		if (head == null || !head.hasMetadata()) {
+			return Maybe.empty();
+		}
+		var lastModified = getLastModified(obj, head.metadata());
+		return Maybe.just(
+				obj.toBuilder().lastModified(lastModified.orElse(null)).build());
 	}
 
 	private Optional<Instant> getLastModified(@NonNull ListedS3Object obj, @NonNull Map<String, String> metadata) {
