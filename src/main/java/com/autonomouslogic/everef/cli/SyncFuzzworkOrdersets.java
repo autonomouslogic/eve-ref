@@ -20,6 +20,7 @@ import java.net.URI;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
@@ -210,9 +211,12 @@ public class SyncFuzzworkOrdersets implements Command {
 
 	private Completable updateDataIndex() {
 		return Completable.defer(() -> {
-			var relative = FUZZWORK_ORDERSET.createArchivePath(Instant.now());
-			var url = dataPath.resolve(relative);
-			return dataIndexHelper.updateIndex(url);
+			var urls = List.of(0, 1).stream()
+					.map(i -> Instant.now().minus(Duration.ofDays(i)))
+					.map(FUZZWORK_ORDERSET::createArchivePath)
+					.map(dataPath::resolve)
+					.toList();
+			return dataIndexHelper.updateIndex(urls);
 		});
 	}
 
