@@ -2,7 +2,7 @@ package com.autonomouslogic.everef.esi;
 
 import com.autonomouslogic.everef.cli.publiccontracts.ContractAbyssalFetcher;
 import com.autonomouslogic.everef.config.Configs;
-import com.autonomouslogic.everef.util.OkHttpHelper;
+import com.autonomouslogic.everef.http.OkHttpHelper;
 import com.autonomouslogic.everef.util.Rx;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Single;

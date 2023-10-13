@@ -4,11 +4,11 @@ import static java.time.ZoneOffset.UTC;
 
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.http.DataCrawler;
+import com.autonomouslogic.everef.http.OkHttpHelper;
 import com.autonomouslogic.everef.model.MarketHistoryEntry;
 import com.autonomouslogic.everef.url.DataUrl;
 import com.autonomouslogic.everef.util.ArchivePathFactory;
 import com.autonomouslogic.everef.util.CompressUtil;
-import com.autonomouslogic.everef.util.OkHttpHelper;
 import com.autonomouslogic.everef.util.Rx;
 import com.autonomouslogic.everef.util.TempFiles;
 import com.fasterxml.jackson.databind.JsonNode;

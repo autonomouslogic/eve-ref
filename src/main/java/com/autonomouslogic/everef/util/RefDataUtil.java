@@ -4,6 +4,7 @@ import static com.autonomouslogic.everef.util.ArchivePathFactory.REFERENCE_DATA;
 
 import com.autonomouslogic.commons.ResourceUtil;
 import com.autonomouslogic.everef.config.Configs;
+import com.autonomouslogic.everef.http.OkHttpHelper;
 import com.autonomouslogic.everef.model.ReferenceEntry;
 import com.autonomouslogic.everef.model.refdata.RefDataConfig;
 import com.autonomouslogic.everef.model.refdata.RefTypeConfig;

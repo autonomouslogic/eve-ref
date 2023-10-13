@@ -1,4 +1,4 @@
-package com.autonomouslogic.everef.util;
+package com.autonomouslogic.everef.http;
 
 import io.reactivex.rxjava3.core.Scheduler;
 import io.reactivex.rxjava3.core.Single;

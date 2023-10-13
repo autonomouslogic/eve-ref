@@ -3,8 +3,8 @@ package com.autonomouslogic.everef.cli.publiccontracts;
 import static com.autonomouslogic.everef.util.ArchivePathFactory.PUBLIC_CONTRACTS;
 
 import com.autonomouslogic.everef.config.Configs;
+import com.autonomouslogic.everef.http.OkHttpHelper;
 import com.autonomouslogic.everef.util.JsonNodeCsvReader;
-import com.autonomouslogic.everef.util.OkHttpHelper;
 import com.autonomouslogic.everef.util.Rx;
 import com.autonomouslogic.everef.util.TempFiles;
 import com.fasterxml.jackson.core.JsonParser;

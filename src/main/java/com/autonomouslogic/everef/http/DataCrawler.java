@@ -3,7 +3,6 @@ package com.autonomouslogic.everef.http;
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.url.DataUrl;
 import com.autonomouslogic.everef.url.UrlParser;
-import com.autonomouslogic.everef.util.OkHttpHelper;
 import com.google.common.base.Strings;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Maybe;

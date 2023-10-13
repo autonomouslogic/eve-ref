@@ -1,8 +1,8 @@
 package com.autonomouslogic.everef.cli;
 
+import com.autonomouslogic.everef.http.OkHttpHelper;
 import com.autonomouslogic.everef.model.ReferenceEntry;
 import com.autonomouslogic.everef.model.refdata.RefDataConfig;
-import com.autonomouslogic.everef.util.OkHttpHelper;
 import com.autonomouslogic.everef.util.RefDataUtil;
 import com.autonomouslogic.everef.util.TempFiles;
 import com.fasterxml.jackson.databind.DeserializationFeature;

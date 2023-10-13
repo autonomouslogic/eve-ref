@@ -67,7 +67,7 @@ class HeadObjectFlowableTransformer implements FlowableTransformer<ListedS3Objec
 
 	private Optional<Instant> getLastModified(@NonNull ListedS3Object obj, @NonNull Map<String, String> metadata) {
 		// rclone header
-		var srcLastModifiedMillis = Optional.ofNullable(metadata.get("src_last_modified_millis"))
+		var srcLastModifiedMillis = Optional.ofNullable(metadata.get(S3HeaderNames.SRC_LAST_MODIFIED_MILLIS))
 				.map(Long::parseLong)
 				.map(Instant::ofEpochMilli);
 

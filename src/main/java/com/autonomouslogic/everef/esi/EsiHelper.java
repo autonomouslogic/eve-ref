@@ -2,10 +2,10 @@ package com.autonomouslogic.everef.esi;
 
 import com.autonomouslogic.commons.rxjava3.Rx3Util;
 import com.autonomouslogic.everef.config.Configs;
+import com.autonomouslogic.everef.http.OkHttpHelper;
 import com.autonomouslogic.everef.openapi.esi.infrastructure.ApiResponse;
 import com.autonomouslogic.everef.openapi.esi.infrastructure.ResponseType;
 import com.autonomouslogic.everef.openapi.esi.infrastructure.Success;
-import com.autonomouslogic.everef.util.OkHttpHelper;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.NullNode;

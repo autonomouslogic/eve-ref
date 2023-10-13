@@ -7,11 +7,15 @@ import io.reactivex.rxjava3.core.FlowableTransformer;
 import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import java.io.File;
+import java.nio.file.Files;
+import java.util.HashMap;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.NonNull;
+import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import software.amazon.awssdk.core.async.AsyncRequestBody;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
@@ -86,12 +90,26 @@ public class S3Adapter {
 
 	public Single<PutObjectResponse> putObject(
 			@NonNull PutObjectRequest req, @NonNull File file, @NonNull S3AsyncClient client) {
+		req = populateLastModified(req, file);
+		var bucket = req.bucket();
+		var key = req.key();
 		return putObject(req, AsyncRequestBody.fromFile(file), client)
 				.onErrorResumeNext(e -> Single.error(new RuntimeException(
 						String.format(
-								"Error putting object from file %s to s3://%s/%s",
-								file.getAbsolutePath(), req.bucket(), req.key()),
+								"Error putting object from file %s to s3://%s/%s", file.getAbsolutePath(), bucket, key),
 						e)));
+	}
+
+	@SneakyThrows
+	private PutObjectRequest populateLastModified(@NonNull PutObjectRequest req, @NonNull File file) {
+		var meta = Optional.ofNullable(req.metadata()).map(HashMap::new).orElseGet(HashMap::new);
+		var current = Optional.ofNullable(meta.get(S3HeaderNames.SRC_LAST_MODIFIED_MILLIS));
+		if (current.isPresent()) {
+			return req;
+		}
+		var time = Files.getLastModifiedTime(file.toPath()).toInstant();
+		meta.put(S3HeaderNames.SRC_LAST_MODIFIED_MILLIS, Long.toString(time.toEpochMilli()));
+		return req.toBuilder().metadata(meta).build();
 	}
 
 	public Single<DeleteObjectResponse> deleteObject(@NonNull DeleteObjectRequest req, @NonNull S3AsyncClient client) {

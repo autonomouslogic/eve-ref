@@ -4,12 +4,12 @@ import static com.autonomouslogic.everef.util.ArchivePathFactory.FUZZWORK_ORDERS
 
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.http.DataCrawler;
+import com.autonomouslogic.everef.http.OkHttpHelper;
 import com.autonomouslogic.everef.s3.S3Adapter;
+import com.autonomouslogic.everef.s3.S3Util;
 import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.url.UrlParser;
 import com.autonomouslogic.everef.util.DataIndexHelper;
-import com.autonomouslogic.everef.util.OkHttpHelper;
-import com.autonomouslogic.everef.util.S3Util;
 import com.autonomouslogic.everef.util.TempFiles;
 import com.google.common.collect.Ordering;
 import io.reactivex.rxjava3.core.Completable;

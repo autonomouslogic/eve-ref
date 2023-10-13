@@ -1,24 +1,39 @@
 package com.autonomouslogic.everef.s3;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import com.autonomouslogic.everef.url.S3Url;
+import com.autonomouslogic.everef.util.TempFiles;
 import io.reactivex.rxjava3.core.Flowable;
+import java.nio.file.Files;
+import java.nio.file.attribute.FileTime;
+import java.time.Instant;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 import org.reactivestreams.Subscriber;
+import software.amazon.awssdk.core.async.AsyncRequestBody;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 import software.amazon.awssdk.services.s3.model.CommonPrefix;
 import software.amazon.awssdk.services.s3.model.ListObjectsV2Request;
 import software.amazon.awssdk.services.s3.model.ListObjectsV2Response;
+import software.amazon.awssdk.services.s3.model.PutObjectRequest;
+import software.amazon.awssdk.services.s3.model.PutObjectResponse;
 import software.amazon.awssdk.services.s3.model.S3Object;
 import software.amazon.awssdk.services.s3.paginators.ListObjectsV2Publisher;
 
 public class S3AdapterTest {
+	TempFiles tempFiles = new TempFiles();
+
 	S3Adapter adapter;
+
 	S3AsyncClient client;
 
 	@BeforeEach
@@ -164,7 +179,7 @@ public class S3AdapterTest {
 	}
 
 	private void mockListObjects(List<ListObjectsV2Response> responses) {
-		Mockito.when(client.listObjectsV2Paginator((ListObjectsV2Request) Mockito.any()))
+		when(client.listObjectsV2Paginator((ListObjectsV2Request) Mockito.any()))
 				.thenAnswer(invocation1 -> {
 					var flowable = Flowable.fromIterable(responses);
 					var publisher = Mockito.mock(ListObjectsV2Publisher.class);
@@ -184,5 +199,29 @@ public class S3AdapterTest {
 		Mockito.verify(client).listObjectsV2Paginator(captor.capture());
 		assertEquals(expected, captor.getValue());
 		return captor.getValue();
+	}
+
+	@Test
+	@SneakyThrows
+	void shouldUploadFilesWithCorrectTimestamps() {
+		var lastModified = Instant.ofEpochMilli(822966041000L);
+		when(client.putObject(Mockito.any(PutObjectRequest.class), Mockito.any(AsyncRequestBody.class)))
+				.thenReturn(CompletableFuture.completedFuture(
+						PutObjectResponse.builder().build()));
+		var file = tempFiles.tempFile(S3AdapterTest.class.getSimpleName(), ".test");
+		Files.setLastModifiedTime(file, FileTime.from(lastModified));
+		adapter.putObject(
+						PutObjectRequest.builder()
+								.metadata(Map.of("foo", "bar"))
+								.build(),
+						file.toFile(),
+						client)
+				.blockingGet();
+		var captor = ArgumentCaptor.forClass(PutObjectRequest.class);
+		verify(client).putObject(captor.capture(), Mockito.any(AsyncRequestBody.class));
+		var req = captor.getValue();
+		assertEquals(
+				Long.toString(lastModified.toEpochMilli()), req.metadata().get(S3HeaderNames.SRC_LAST_MODIFIED_MILLIS));
+		assertEquals("bar", req.metadata().get("foo"));
 	}
 }

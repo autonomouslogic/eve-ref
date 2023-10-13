@@ -1,4 +1,4 @@
-package com.autonomouslogic.everef.util;
+package com.autonomouslogic.everef.s3;
 
 import com.autonomouslogic.everef.url.S3Url;
 import java.time.Duration;

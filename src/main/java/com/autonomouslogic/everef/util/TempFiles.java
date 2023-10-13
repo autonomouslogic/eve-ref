@@ -9,7 +9,7 @@ import lombok.SneakyThrows;
 @Singleton
 public class TempFiles {
 	@Inject
-	protected TempFiles() {}
+	public TempFiles() {}
 
 	@SneakyThrows
 	public Path tempFile(String prefix, String suffix) {
