@@ -1,5 +1,17 @@
 EVE Ref Changelog
 
+## [2.35.1](https://github.com/autonomouslogic/eve-ref/compare/2.35.0...2.35.1) (2023-10-13)
+
+
+### Bug Fixes
+
+* Fuzzwork indexes yesterday as well ([#337](https://github.com/autonomouslogic/eve-ref/issues/337)) ([1eed40a](https://github.com/autonomouslogic/eve-ref/commit/1eed40af95a044c28da7682656f71f2dbf628f56))
+
+
+### Miscellaneous Chores
+
+* Script for fixing fuzzwork orderset file timestamps ([#338](https://github.com/autonomouslogic/eve-ref/issues/338)) ([8679b30](https://github.com/autonomouslogic/eve-ref/commit/8679b30a96e5043c7c668ff9bbe531eefedfb38f))
+
 ## [2.35.0](https://github.com/autonomouslogic/eve-ref/compare/2.34.0...2.35.0) (2023-10-12)
 
 
