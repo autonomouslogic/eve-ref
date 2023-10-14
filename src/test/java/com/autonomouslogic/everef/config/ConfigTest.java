@@ -1,9 +1,15 @@
 package com.autonomouslogic.everef.config;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.nio.charset.StandardCharsets;
 import java.util.Optional;
+import lombok.SneakyThrows;
+import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -74,5 +80,50 @@ public class ConfigTest {
 				.build();
 		assertEquals(Optional.of("default-value"), config.get());
 		assertEquals("default-value", config.getRequired());
+	}
+
+	@Test
+	@SneakyThrows
+	@SetEnvironmentVariable(key = "TEST_VAR_FILE", value = "/tmp/test-var-file-78676f75")
+	void shouldLoadVariablesFromFiles() {
+		var file = new File("/tmp/test-var-file-78676f75");
+		assertFalse(file.exists());
+		file.deleteOnExit();
+		FileUtils.write(file, "test-value\n", StandardCharsets.UTF_8);
+
+		var config =
+				Config.<String>builder().name("TEST_VAR").type(String.class).build();
+		assertEquals(Optional.of("test-value"), config.get());
+	}
+
+	@Test
+	@SneakyThrows
+	@SetEnvironmentVariable(key = "TEST_VAR_FILE", value = "/tmp/test-var-file-78676f75")
+	@SetEnvironmentVariable(key = "TEST_VAR", value = "test-values")
+	void shouldErrorIfBothFileAndNonFileArePresent() {
+		var config =
+				Config.<String>builder().name("TEST_VAR").type(String.class).build();
+		var e = assertThrows(IllegalArgumentException.class, config::get);
+		assertEquals("Both TEST_VAR and TEST_VAR_FILE cannot be set at the same time", e.getMessage());
+	}
+
+	@Test
+	@SneakyThrows
+	@SetEnvironmentVariable(key = "TEST_VAR_FILE", value = "/tmp/test-var-file-78676f75")
+	void shouldErrorIfFileNotFound() {
+		var config =
+				Config.<String>builder().name("TEST_VAR").type(String.class).build();
+		var e = assertThrows(FileNotFoundException.class, config::get);
+		assertEquals("/tmp/test-var-file-78676f75", e.getMessage());
+	}
+
+	@Test
+	@SneakyThrows
+	@SetEnvironmentVariable(key = "TEST_VAR", value = "not an integer")
+	void shouldErrorOnFailedTypeCasting() {
+		var config =
+				Config.<Integer>builder().name("TEST_VAR").type(Integer.class).build();
+		var e = assertThrows(IllegalArgumentException.class, config::get);
+		assertEquals("Unable to parse value in TEST_VAR as type class java.lang.Integer", e.getMessage());
 	}
 }
