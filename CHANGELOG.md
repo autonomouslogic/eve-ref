@@ -1,5 +1,12 @@
 EVE Ref Changelog
 
+## [2.36.0](https://github.com/autonomouslogic/eve-ref/compare/2.35.1...2.36.0) (2023-10-16)
+
+
+### Features
+
+* Load config values from files using a _FILE prefix ([#339](https://github.com/autonomouslogic/eve-ref/issues/339)) ([9c3a4dd](https://github.com/autonomouslogic/eve-ref/commit/9c3a4dd7e43393003bf61c5754c4cc88477578c3))
+
 ## [2.35.1](https://github.com/autonomouslogic/eve-ref/compare/2.35.0...2.35.1) (2023-10-13)
 
 
