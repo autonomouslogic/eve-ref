@@ -47,22 +47,18 @@ public class MarketHistoryFetcher {
 					.build();
 			return esiHelper
 					.fetch(esiUrl)
-					.flatMapPublisher(response -> {
+					.toFlowable()
+					.compose(esiHelper.standardErrorHandling(esiUrl))
+					.flatMap(response -> {
 						int statusCode = response.code();
-						if (statusCode == 400) {
-							log.warn("Ignoring {} received for {}", statusCode, esiUrl);
-							return Flowable.<ObjectNode>empty();
-						}
-						if (statusCode == 404) {
-							return Flowable.<ObjectNode>empty();
-						} else if (statusCode == 200) {
+						if (statusCode == 200) {
 							return esiHelper
 									.decodeArrayNode(esiUrl, esiHelper.decodeResponse(response))
 									.map(e -> esiHelper.populateLastModified(e, response))
 									.doOnNext(e -> stats.hit(pair));
 						} else {
-							return Flowable.<ObjectNode>error(new RuntimeException(
-									String.format("Unknown status code %s for URL %s", statusCode, esiUrl)));
+							log.warn("Unknown status code {} for URL {}", statusCode, esiUrl);
+							return Flowable.empty();
 						}
 					})
 					.doOnNext(node -> ((ObjectNode) node)
