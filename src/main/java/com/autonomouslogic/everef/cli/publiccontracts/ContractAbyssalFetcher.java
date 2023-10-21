@@ -124,6 +124,8 @@ public class ContractAbyssalFetcher {
 				.build();
 		return esiHelper
 				.fetch(esiUrl)
+				.toFlowable()
+				.compose(esiHelper.standardErrorHandling(esiUrl))
 				.flatMapCompletable(response -> Completable.fromAction(() -> {
 					int statusCode = response.code();
 					if (statusCode == 520) {
@@ -143,11 +145,14 @@ public class ContractAbyssalFetcher {
 								.map(ZonedDateTime::toInstant)
 								.orElse(null);
 						saveDynamicItem(contractId, itemId, dynamicItem, lastModified);
-						return;
+					} else {
+						log.warn(
+								"Unknown status code seen for contract {} item {} type {}: {}",
+								contractId,
+								itemId,
+								typeId,
+								statusCode);
 					}
-					log.warn(String.format(
-							"Unknown status code seen for contract %s item %s type %s: %s",
-							contractId, itemId, typeId, statusCode));
 				}));
 	}
 

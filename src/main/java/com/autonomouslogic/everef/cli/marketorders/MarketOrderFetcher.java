@@ -73,7 +73,7 @@ public class MarketOrderFetcher {
 				})
 				.doOnComplete(() ->
 						log.info(String.format("Fetched %d market orders from %s", count.get(), region.getName())))
-				.compose(Rx3Util.retryWithDelayFlowable(2, Duration.ofSeconds(1), e -> {
+				.compose(Rx3Util.retryWithDelayFlowable(2, Duration.ofSeconds(2), e -> {
 					log.warn("Retrying region {}: {}", region.getName(), ExceptionUtils.getMessage(e));
 					return true;
 				}))

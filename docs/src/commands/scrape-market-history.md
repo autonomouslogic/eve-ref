@@ -88,7 +88,7 @@ Source TopTradedRegionTypeSource: hit 1515 of 35477 pairs - 4.3%
 Source ExplorerRegionTypeSource: hit 149 of 14061 pairs - 1.1%
 ```
 
-## 2023-10-06
+### 2023-10-06
 
 ```
 HistoryRegionTypeSource returned 251934 pairs, adding 251934 new pairs, new total is 251934, 78 new regions, est. runtime PT13H59M46S

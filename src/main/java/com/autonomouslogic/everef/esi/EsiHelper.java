@@ -55,11 +55,23 @@ public class EsiHelper {
 	@Inject
 	protected EsiHelper() {}
 
+	/**
+	 * Fetches the requested URL.
+	 * This call does NOT include standard error handling.
+	 * @param url
+	 * @return
+	 */
 	public Single<Response> fetch(EsiUrl url) {
 		return okHttpHelper.get(url.toString(), esiHttpClient, ESI_SCHEDULER);
 	}
 
-	public Flowable<Response> fetchPages(EsiUrl url) {
+	/**
+	 * Fetches the requested URL and automatically fetches all subsequent pages indicated by the header.
+	 * This call does NOT include standard error handling.
+	 * @param url
+	 * @return
+	 */
+	protected Flowable<Response> fetchPages(EsiUrl url) {
 		return fetch(url).flatMapPublisher(first -> {
 			var pages = first.header(PAGES_HEADER);
 			if (pages == null || pages.isEmpty()) {
@@ -77,6 +89,12 @@ public class EsiHelper {
 		});
 	}
 
+	/**
+	 * Like {@link #fetchPages(EsiUrl)}, but works on the OpenAPI generated ESI API classes.
+	 * @param fetcher
+	 * @return
+	 * @param <T>
+	 */
 	public <T> Flowable<T> fetchPages(Function<Integer, ApiResponse<List<T>>> fetcher) {
 		return Flowable.defer(() -> Flowable.just(fetcher.apply(1)))
 				.flatMap(first -> {
@@ -109,13 +127,24 @@ public class EsiHelper {
 		return fetchPagesOfJsonArrays(url, (a, b) -> a);
 	}
 
+	/**
+	 * Fetches multiple pages of a URL, decoding each page as a JSON array, and returning the objects in a stream.
+	 * This call includes standard error handling.
+	 * @param url
+	 * @return
+	 */
 	public Flowable<JsonNode> fetchPagesOfJsonArrays(EsiUrl url, BiFunction<JsonNode, Response, JsonNode> augmenter) {
-		return fetchPages(url).flatMap(response -> {
+		return fetchPages(url).compose(standardErrorHandling(url)).flatMap(response -> {
 			var node = decodeResponse(response);
 			return decodeArrayNode(url, node).map(entry -> augmenter.apply(entry, response));
 		});
 	}
 
+	/**
+	 * Decodes a JsonNode from a generic response body.
+	 * @param response
+	 * @return
+	 */
 	@SneakyThrows
 	public JsonNode decodeResponse(Response response) {
 		if (response.code() == 204 || response.code() == 404) {
@@ -127,6 +156,12 @@ public class EsiHelper {
 		return objectMapper.readTree(response.peekBody(Long.MAX_VALUE).byteStream());
 	}
 
+	/**
+	 * Dismantles the elements from an json array.
+	 * @param url
+	 * @param node
+	 * @return
+	 */
 	public Flowable<JsonNode> decodeArrayNode(EsiUrl url, JsonNode node) {
 		if (node == null || node.isNull() || node.isMissingNode()) {
 			log.warn("Empty response from {}", url);
@@ -139,6 +174,12 @@ public class EsiHelper {
 		return Flowable.fromIterable(node);
 	}
 
+	/**
+	 * Extracts a result from an OpenAPI generated ESI API response.
+	 * @param response
+	 * @return
+	 * @param <T>
+	 */
 	private <T> T decodeResponse(ApiResponse<T> response) {
 		if (response.getResponseType() != ResponseType.Success) {
 			throw new RuntimeException(
@@ -160,5 +201,9 @@ public class EsiHelper {
 		lastModified.ifPresent(
 				date -> obj.put("http_last_modified", date.toInstant().toString()));
 		return obj;
+	}
+
+	public StandardErrorTransformer standardErrorHandling(EsiUrl url) {
+		return new StandardErrorTransformer(url);
 	}
 }
