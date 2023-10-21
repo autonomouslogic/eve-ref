@@ -1,5 +1,12 @@
 EVE Ref Changelog
 
+## [2.36.1](https://github.com/autonomouslogic/eve-ref/compare/2.36.0...2.36.1) (2023-10-21)
+
+
+### Bug Fixes
+
+* Standard HTTP status code handling for ESI calls ([#340](https://github.com/autonomouslogic/eve-ref/issues/340)) ([2cee287](https://github.com/autonomouslogic/eve-ref/commit/2cee28712a94cab5261d1556086b7411052862e6))
+
 ## [2.36.0](https://github.com/autonomouslogic/eve-ref/compare/2.35.1...2.36.0) (2023-10-16)
 
 
