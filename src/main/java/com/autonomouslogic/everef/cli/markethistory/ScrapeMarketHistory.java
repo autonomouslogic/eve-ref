@@ -158,7 +158,11 @@ public class ScrapeMarketHistory implements Command {
 						loadMarketHistory(),
 						loadPairs().buffer(chunkSize).flatMapCompletable(this::processChunk, false, 1),
 						Completable.fromAction(() -> stats.logStats()))
-				.doFinally(this::closeMvStore);
+				.doFinally(this::closeMvStore)
+				.retry(1, e -> {
+					log.warn("Error scraping market history, retrying from the beginning", e);
+					return true;
+				});
 	}
 
 	@NotNull
@@ -269,26 +273,27 @@ public class ScrapeMarketHistory implements Command {
 
 	private Completable saveMarketHistory(ObjectNode entry) {
 		return Completable.defer(() -> {
-			var pair = RegionTypePair.fromHistory(entry);
-			var date = LocalDate.parse(entry.get("date").asText());
-			var id = pair.toString();
-			if (!mapSet.hasMap(date.toString())) {
-				return Completable.error(new RuntimeException(String.format("No map for date %s", date)));
-			}
-			var previous = (ObjectNode) mapSet.get(date.toString(), id);
-			if (previous != null) {
-				var entryToText = objectMapper.createObjectNode();
-				entry.fieldNames()
-						.forEachRemaining(
-								name -> entryToText.put(name, entry.get(name).asText()));
-				previous.set("http_last_modified", entryToText.get("http_last_modified"));
-				if (previous.equals(entryToText)) {
+					var pair = RegionTypePair.fromHistory(entry);
+					var date = LocalDate.parse(entry.get("date").asText());
+					var id = pair.toString();
+					if (!mapSet.hasMap(date.toString())) {
+						return Completable.error(new RuntimeException(String.format("No map for date %s", date)));
+					}
+					var previous = (ObjectNode) mapSet.get(date.toString(), id);
+					if (previous != null) {
+						var entryToText = objectMapper.createObjectNode();
+						entry.fieldNames()
+								.forEachRemaining(name ->
+										entryToText.put(name, entry.get(name).asText()));
+						previous.set("http_last_modified", entryToText.get("http_last_modified"));
+						if (previous.equals(entryToText)) {
+							return Completable.complete();
+						}
+					}
+					mapSet.put(date.toString(), id, entry);
 					return Completable.complete();
-				}
-			}
-			mapSet.put(date.toString(), id, entry);
-			return Completable.complete();
-		});
+				})
+				.onErrorResumeNext(e -> Completable.error(new RuntimeException("Failed saving market history", e)));
 	}
 
 	private Completable uploadArchives() {
