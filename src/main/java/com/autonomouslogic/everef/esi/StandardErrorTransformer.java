@@ -22,7 +22,8 @@ public class StandardErrorTransformer implements FlowableTransformer<Response, R
 			}
 			if (status == 204
 					|| status == 404
-					|| (status / 100 == 5 && status != 520)) { // 520 is specially used for dynamic items handling.
+					|| (status / 100 == 5 && status != 520) // 520 is specially used for dynamic items handling.
+			) {
 				log.debug("Ignoring {} response received for {}", status, url);
 				return Flowable.empty();
 			} else if (status / 100 == 4) {
