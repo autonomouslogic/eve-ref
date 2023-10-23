@@ -3,6 +3,7 @@ import {DogmaAttribute, InventoryType} from "~/refdata-openapi";
 import CardWrapper from "~/components/cards/CardWrapper.vue";
 import MarketRow from "~/components/cards/market/MarketRow.vue";
 import MarketLinks from "~/components/cards/market/MarketLinks.vue";
+import {HUB_STATION_IDS} from "~/lib/marketUtils";
 
 const props = defineProps<{
 	title: string,
@@ -10,14 +11,8 @@ const props = defineProps<{
 	dogmaAttributes: DogmaAttribute[]
 }>();
 
-const stationIds = [
-	60003760, // Jita IV - Moon 4 - Caldari Navy Assembly Plant
-	60008494, // Amarr VIII (Oris) - Emperor Family Academy
-	60004588, // Rens VI - Moon 8 - Brutor Tribe Treasury
-	60011866, // Dodixie IX - Moon 20 - Federation Navy Assembly Plant
-	60005686, // Hek VIII - Moon 12 - Boundless Creation Factory
-	60001804, // Maila VI - Moon 1 - Zainou Biotech Production
-];
+const stationIds = HUB_STATION_IDS.values();
+
 const typeId = computed(() => {
 	const t = props.inventoryType.typeId;
 	if (!t) {

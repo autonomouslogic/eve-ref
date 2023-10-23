@@ -2,6 +2,7 @@
 import {marketApi, universeApi} from "~/esi";
 import {GetMarketsRegionIdOrdersDatasourceEnum, GetMarketsRegionIdOrdersOrderTypeEnum} from "~/esi-openapi";
 import UnitValue from "~/components/dogma/UnitValue.vue";
+import {getOrders} from "~/lib/marketUtils";
 
 const props = defineProps<{
 	typeId: number,
@@ -12,17 +13,8 @@ const station = await universeApi.getUniverseStationsStationId({ stationId: prop
 const system = await universeApi.getUniverseSystemsSystemId({systemId: station.systemId});
 const constellation = await universeApi.getUniverseConstellationsConstellationId({constellationId: system.constellationId});
 
-async function getOrders(orderType: GetMarketsRegionIdOrdersOrderTypeEnum) {
-	return marketApi.getMarketsRegionIdOrders({
-		typeId: props.typeId,
-		regionId: constellation.regionId,
-		orderType,
-		datasource: GetMarketsRegionIdOrdersDatasourceEnum.Tranquility
-	});
-}
-
-var sellOrders = await getOrders(GetMarketsRegionIdOrdersOrderTypeEnum.Sell);
-var buyOrders = await getOrders(GetMarketsRegionIdOrdersOrderTypeEnum.Buy);
+var sellOrders = await getOrders(GetMarketsRegionIdOrdersOrderTypeEnum.Sell, props.typeId, constellation.regionId);
+var buyOrders = await getOrders(GetMarketsRegionIdOrdersOrderTypeEnum.Buy, props.typeId, constellation.regionId);
 
 const sellPrice = sellOrders.filter(e => e.locationId == station.stationId)
 	.map(e => e.price)
