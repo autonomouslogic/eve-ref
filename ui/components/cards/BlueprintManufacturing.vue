@@ -29,20 +29,30 @@ if (blueprintType?.typeId) {
 <template>
 	<template v-if="manufacturing">
 		<CardWrapper :title="title">
-			<ul>
-				<li>Manufacturing time: {{ manufacturing.time }}s</li>
-				<li>
-					Products:
-					<div v-for="(product, id) in manufacturing.products" :key="id">
-						{{ product.quantity }}x <TypeLink :type-id="product.typeId" />
-					</div>
-				</li>
-				<li v-if="manufacturing.materials">
-					Ingredients:
-				<li v-for="(material, materialId) in manufacturing.materials" :key="materialId">
-					<TypeLink :type-id="materialId" /> <FormattedNumber :number="material.quantity" />
-				</li>
-			</ul>
+			<table>
+				<tr>
+					<td>Manufacturing time:</td>
+					<td>{{ manufacturing.time }}s</td>
+				</tr>
+				<tr>
+					<td colspan="2">Products</td>
+				</tr>
+				<template v-if="manufacturing.products">
+					<tr v-for="(product, productId) in manufacturing.products" :key="productId">
+						<td><TypeLink :type-id="product.typeId" /></td>
+						<td><FormattedNumber :number="product.quantity" /></td>
+					</tr>
+				</template>
+				<template v-if="manufacturing.materials">
+					<tr>
+						<td colspan="2">Ingredients</td>
+					</tr>
+					<tr v-for="(material, materialId) in manufacturing.materials" :key="materialId">
+						<td><TypeLink :type-id="material.typeId" /></td>
+						<td><FormattedNumber :number="material.quantity" /></td>
+					</tr>
+				</template>
+			</table>
 		</CardWrapper>
 	</template>
 </template>
