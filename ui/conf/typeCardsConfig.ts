@@ -486,29 +486,34 @@ const cards: {[key: string]: any} = {
 					"planetRestriction"
 				]
 		},
+	"typeManufacturing":
+		{
+			"name": {"en": "Manufacturing"},
+			"component": "typeManufacturing"
+		},
 	"blueprintManufacturing":
 		{
-			"name": {"en": "blueprintManufacturing"},
+			"name": {"en": "Manufacturing"},
 			"component": "blueprintManufacturing"
 		},
 	"blueprintInvention":
 		{
-			"name": {"en": "blueprintInvention"},
+			"name": {"en": "Invention"},
 			"component": "blueprintInvention"
 		},
 	"blueprintResearch":
 		{
-			"name": {"en": "blueprintResearch"},
+			"name": {"en": "Research"},
 			"component": "blueprintResearch"
 		},
 	"blueprintCopying":
 		{
-			"name": {"en": "blueprintCopying"},
+			"name": {"en": "Copying"},
 			"component": "blueprintCopying"
 		},
 	"blueprintReaction":
 		{
-			"name": {"en": "blueprintReaction"},
+			"name": {"en": "Reaction"},
 			"component": "blueprintReaction"
 		},
 	"industry":
