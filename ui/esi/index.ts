@@ -1,4 +1,4 @@
-import {Configuration, FetchAPI, MarketApi, UniverseApi} from "~/esi-openapi";
+import {Configuration, FetchAPI, InsuranceApi, MarketApi, UniverseApi} from "~/esi-openapi";
 
 const useFetchFetchApi: FetchAPI = async (input: RequestInfo | URL, init?: RequestInit): Promise<Response> => {
     var url = (input as URL).toString();
@@ -12,3 +12,4 @@ const config = new Configuration({
 
 export const marketApi = new MarketApi(config);
 export const universeApi = new UniverseApi(config);
+export const insuranceApi = new InsuranceApi(config);
