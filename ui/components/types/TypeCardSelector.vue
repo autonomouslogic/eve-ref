@@ -7,6 +7,7 @@ import VariationsCard from "~/components/cards/VariationsCard.vue";
 import RequiredSkillsCard from "~/components/cards/requiredSkills/RequiredSkillsCard.vue";
 import MarketCard from "~/components/cards/market/MarketCard.vue";
 import TypeManufacturing from "~/components/cards/TypeManufacturing.vue";
+import InsuranceCard from "~/components/cards/InsuranceCard.vue";
 
 const props = defineProps<{
 	inventoryType: InventoryType,
@@ -39,6 +40,10 @@ const props = defineProps<{
 		:inventory-type="inventoryType"
 		:dogma-attributes="dogmaAttributes" />
 	<TypeManufacturing v-else-if="component == 'typeManufacturing'"
+		:title="title"
+		:inventory-type="inventoryType"
+		:dogma-attributes="dogmaAttributes" />
+	<InsuranceCard v-else-if="component == 'insurance'"
 		:title="title"
 		:inventory-type="inventoryType"
 		:dogma-attributes="dogmaAttributes" />
