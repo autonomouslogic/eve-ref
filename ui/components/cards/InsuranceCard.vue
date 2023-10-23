@@ -22,8 +22,8 @@ const marketPrice = !!props.inventoryType.typeId ? await getJitaSellPrice(props.
 </script>
 
 <template>
-	<CardWrapper :title="title">
-		<table v-if="prices">
+	<CardWrapper :title="title" v-if="prices">
+		<table>
 			<thead>
 				<tr>
 					<th>Level</th>
