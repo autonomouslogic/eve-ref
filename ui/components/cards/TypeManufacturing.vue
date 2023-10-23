@@ -45,23 +45,34 @@ if (blueprintType?.typeId) {
 <template>
 	<template v-if="blueprintType && blueprint">
 		<CardWrapper :title="title">
-			<ul>
-				<li>Blueprint: <TypeLink :type-id="blueprintType.typeId" /></li>
-				<li v-if="manufacturing">Manufacturing time: {{ manufacturing.time }}s</li>
+			<table>
+				<tr>
+					<td>Blueprint:</td>
+					<td><TypeLink :type-id="blueprintType.typeId" /></td>
+				</tr>
 				<template v-if="manufacturing">
-					<li v-for="(product, id) in manufacturing.products" :key="id">
-						{{ product.quantity }}x <TypeLink :type-id="product.typeId" />
-					</li>
+					<tr v-for="(product, id) in manufacturing.products" :key="id">
+						<td><TypeLink :type-id="product.typeId" /></td>
+						<td><FormattedNumber :number="product.quantity" /></td>
+					</tr>
+					<tr>
+						<td>Manufacturing time:</td>
+						<td>{{ manufacturing.time }}s</td>
+					</tr>
 				</template>
-				<li v-if="copying">Copy time: {{ copying.time }}s</li>
-				<template v-if="invention">
-					<li v-for="(product, id) in invention.products" :key="id">
-						Invention: <TypeLink :type-id="product.typeId" />
-					</li>
-				</template>
-				<li v-if="researchMaterial">Material research: {{ researchMaterial.time }}s</li>
-				<li v-if="researchTime">Time research: {{ researchTime.time }}s</li>
-			</ul>
+				<tr v-if="copying">
+					<td>Copy time:</td>
+					<td>{{ copying.time }}s</td>
+				</tr>
+				<tr v-if="researchMaterial">
+					<td>Material research:</td>
+					<td>{{ researchMaterial.time }}s</td>
+				</tr>
+				<tr v-if="researchTime">
+					<td>Time research:</td>
+					<td>{{ researchTime.time }}s</td>
+				</tr>
+			</table>
 		</CardWrapper>
 	</template>
 </template>
