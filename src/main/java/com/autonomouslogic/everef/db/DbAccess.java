@@ -1,7 +1,6 @@
 package com.autonomouslogic.everef.db;
 
 import com.autonomouslogic.everef.config.Configs;
-import com.autonomouslogic.everef.model.MarketHistoryEntry;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import org.flywaydb.core.Flyway;
@@ -30,7 +29,8 @@ public class DbAccess {
 					var locations = "classpath:com/autonomouslogic/everef/db/migrations";
 					var config = Flyway.configure()
 							.dataSource(url, username, password)
-							.locations(locations);
+							.locations(locations)
+							.cleanDisabled(false);
 					configFlywayTable(config);
 					flywayInstance = config.load();
 				}
@@ -57,13 +57,5 @@ public class DbAccess {
 		var prefix = Configs.DATABASE_TABLE_NAME_PREFIX.getRequired();
 		var defaultTable = conf.getTable();
 		conf.table(prefix + defaultTable);
-	}
-
-	public String getTableName(Class<?> clazz) {
-		var prefix = Configs.DATABASE_TABLE_NAME_PREFIX.getRequired();
-		if (clazz.equals(MarketHistoryEntry.class)) {
-			return prefix + "market_history";
-		}
-		throw new IllegalArgumentException("Unknown class: " + clazz.getName());
 	}
 }

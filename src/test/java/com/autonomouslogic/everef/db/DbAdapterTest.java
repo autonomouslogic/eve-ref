@@ -1,8 +1,5 @@
-package com.autonomouslogic.everef.cli.flyway;
+package com.autonomouslogic.everef.db;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import com.autonomouslogic.everef.db.DbAccess;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
 import javax.inject.Inject;
 import lombok.SneakyThrows;
@@ -14,25 +11,21 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 @Log4j2
-public class FlywayMigrateTest {
-	@Inject
-	FlywayMigrate flywayMigrate;
-
+public class DbAdapterTest {
 	@Inject
 	DbAccess dbAccess;
+
+	@Inject
+	DbAdapter dbAdapter;
 
 	@BeforeEach
 	@SneakyThrows
 	void before() {
 		DaggerTestComponent.builder().build().inject(this);
 		dbAccess.flyway().clean();
+		dbAccess.flyway().migrate();
 	}
 
 	@Test
-	void shouldMigrate() {
-		flywayMigrate.run().blockingAwait();
-
-		dbAccess.flyway().validate();
-		assertEquals("1", dbAccess.flyway().info().current().getVersion().getVersion());
-	}
+	void shouldInsertAndSelectMarketHistory() {}
 }

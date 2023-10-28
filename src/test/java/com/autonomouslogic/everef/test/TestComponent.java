@@ -19,6 +19,7 @@ import com.autonomouslogic.everef.cli.refdata.TransformUtilTest;
 import com.autonomouslogic.everef.cli.refdata.esi.EsiLoaderTest;
 import com.autonomouslogic.everef.cli.refdata.hoboleaks.HoboleaksLoaderTest;
 import com.autonomouslogic.everef.cli.refdata.sde.SdeLoaderTest;
+import com.autonomouslogic.everef.db.DbAdapterTest;
 import com.autonomouslogic.everef.esi.EsiHelperTest;
 import com.autonomouslogic.everef.esi.EsiLimitExceededInterceptorTest;
 import com.autonomouslogic.everef.esi.EsiRateLimitInterceptorTest;
@@ -58,6 +59,8 @@ public interface TestComponent {
 	void inject(DataCrawlerTest test);
 
 	void inject(DataIndexTest test);
+
+	void inject(DbAdapterTest test);
 
 	void inject(EsiHelperTest test);
 
