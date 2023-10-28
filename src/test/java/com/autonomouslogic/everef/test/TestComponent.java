@@ -4,6 +4,7 @@ import com.autonomouslogic.everef.cli.DataIndexTest;
 import com.autonomouslogic.everef.cli.MockDataIndexModule;
 import com.autonomouslogic.everef.cli.decorator.HealthcheckDecoratorTest;
 import com.autonomouslogic.everef.cli.decorator.SlackDecoratorTest;
+import com.autonomouslogic.everef.cli.flyway.FlywayMigrateTest;
 import com.autonomouslogic.everef.cli.markethistory.ExplorerRegionTypeSourceTest;
 import com.autonomouslogic.everef.cli.markethistory.RecentRegionTypeRemoverTest;
 import com.autonomouslogic.everef.cli.markethistory.ScrapeMarketHistoryTest;
@@ -67,6 +68,8 @@ public interface TestComponent {
 	void inject(EsiRateLimitInterceptorTest test);
 
 	void inject(ExplorerRegionTypeSourceTest test);
+
+	void inject(FlywayMigrateTest test);
 
 	void inject(HealthcheckDecoratorTest test);
 
