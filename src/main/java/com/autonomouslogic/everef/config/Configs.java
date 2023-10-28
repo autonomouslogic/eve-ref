@@ -506,4 +506,37 @@ public class Configs {
 			.defaultValue(false)
 			.type(Boolean.class)
 			.build();
+
+	/**
+	 * The JDBC URL for the database.
+	 */
+	public static final Config<String> DATABASE_URL =
+			Config.<String>builder().name("DATABASE_URL").type(String.class).build();
+
+	/**
+	 * The user for the database.
+	 */
+	public static final Config<String> DATABASE_USERNAME = Config.<String>builder()
+			.name("DATABASE_USERNAME")
+			.defaultValue("")
+			.type(String.class)
+			.build();
+
+	/**
+	 * The password for the database.
+	 */
+	public static final Config<String> DATABASE_PASSWORD = Config.<String>builder()
+			.name("DATABASE_PASSWORD")
+			.defaultValue("")
+			.type(String.class)
+			.build();
+
+	/**
+	 * The prefix to use for all tables.
+	 */
+	public static final Config<String> DATABASE_TABLE_NAME_PREFIX = Config.<String>builder()
+			.name("DATABASE_TABLE_NAME_PREFIX")
+			.type(String.class)
+			.defaultValue("")
+			.build();
 }

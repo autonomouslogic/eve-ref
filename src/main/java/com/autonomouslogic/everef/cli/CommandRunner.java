@@ -2,6 +2,8 @@ package com.autonomouslogic.everef.cli;
 
 import com.autonomouslogic.everef.cli.decorator.HealthcheckDecorator;
 import com.autonomouslogic.everef.cli.decorator.SlackDecorator;
+import com.autonomouslogic.everef.cli.flyway.FlywayMigrate;
+import com.autonomouslogic.everef.cli.imports.ImportMarketHistory;
 import com.autonomouslogic.everef.cli.markethistory.ScrapeMarketHistory;
 import com.autonomouslogic.everef.cli.marketorders.ScrapeMarketOrders;
 import com.autonomouslogic.everef.cli.publiccontracts.ScrapePublicContracts;
@@ -51,6 +53,12 @@ public class CommandRunner {
 
 	@Inject
 	protected Provider<ImportTestResources> importTestResourcesProvider;
+
+	@Inject
+	protected Provider<FlywayMigrate> flywayMigrateProvider;
+
+	@Inject
+	protected Provider<ImportMarketHistory> importMarketHistoryProvider;
 
 	@Inject
 	protected HealthcheckDecorator healthcheckDecorator;
@@ -109,6 +117,10 @@ public class CommandRunner {
 				return scrapeHoboleaksProvider.get();
 			case "import-test-resources":
 				return importTestResourcesProvider.get();
+			case "flyway-migrate":
+				return flywayMigrateProvider.get();
+			case "import-market-history":
+				return importMarketHistoryProvider.get();
 			default:
 				throw new IllegalArgumentException("Unknown command: " + name);
 		}

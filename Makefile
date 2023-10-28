@@ -9,10 +9,10 @@ init: init-ui
 init-ui:
 	cd ui ; npm install
 
-dist:
+dist: generate-database
 	./gradlew distTar --stacktrace
 
-test-java:
+test-java: generate-database
 	./gradlew test --stacktrace
 
 test-ui:
@@ -63,3 +63,24 @@ dev-docs:
 
 update-esi-swagger:
 	curl -s https://esi.evetech.net/latest/swagger.json | jq . > spec/esi-swagger.json
+
+generate-database:
+	./gradlew database:compileJava
+	./gradlew database:generateJooq
+
+postgres-start:
+	docker run -d --rm \
+		--name eve-ref-postgres \
+		-p 5432:5432 \
+		-e POSTGRES_DB=everef \
+		-e POSTGRES_USER=everef \
+		-e POSTGRES_PASSWORD=password1 \
+		postgres:15
+
+postgres-stop:
+	docker stop eve-ref-postgres
+
+postgres-migrate-test:
+	make postgres-start
+	./gradlew postgresMigrate
+	make postgres-stop

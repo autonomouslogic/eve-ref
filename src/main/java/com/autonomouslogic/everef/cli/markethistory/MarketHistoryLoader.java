@@ -34,7 +34,7 @@ import org.apache.commons.lang3.tuple.Pair;
  * Loads market history from the data site.
  */
 @Log4j2
-class MarketHistoryLoader {
+public class MarketHistoryLoader {
 	@Inject
 	protected DataCrawler dataCrawler;
 
@@ -107,7 +107,7 @@ class MarketHistoryLoader {
 
 	private Single<File> downloadFile(DataUrl url, LocalDate date) {
 		return Single.defer(() -> {
-			log.debug("Downloading market history file for {}: {}", date, url);
+			log.info("Downloading market history file for {}", date);
 			var file = tempFiles
 					.tempFile("market-history", ArchivePathFactory.MARKET_HISTORY.getSuffix())
 					.toFile();

@@ -1,0 +1,78 @@
+plugins {
+    id "java"
+    id "idea"
+    id "org.danilopianini.git-sensitive-semantic-versioning-gradle-plugin"
+    id "com.diffplug.spotless"
+    id "org.flywaydb.flyway"
+    id "nu.studer.jooq"
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    jooqGenerator "com.h2database:h2:2.2.224"
+    implementation "org.flywaydb:flyway-core:9.22.3"
+    implementation "com.h2database:h2:2.2.224"
+}
+
+flyway {
+	url = "jdbc:h2:file:${buildDir}/database;AUTO_SERVER=TRUE"
+    locations = ["classpath:com/autonomouslogic/everef/db/migrations"]
+}
+
+jooq {
+    // https://github.com/etiennestuder/gradle-jooq-plugin/blob/main/example/configure_jooq_with_flyway/build.gradle
+    configurations {
+        main {
+            generationTool {
+                logging = org.jooq.meta.jaxb.Logging.INFO
+                jdbc {
+                    driver = "org.h2.Driver"
+                    url = flyway.url
+                }
+                generator {
+                    name = "org.jooq.codegen.DefaultGenerator"
+                    database {
+                        name = "org.jooq.meta.h2.H2Database"
+                        inputSchema = "PUBLIC"
+                        includes = ".*"
+                        excludes = "FLYWAY_SCHEMA_HISTORY"
+                    }
+                    generate {
+                        deprecated = true
+                        records = true
+                        immutablePojos = true
+                        fluentSetters = true
+                        indentation = "\\t"
+                        newline = "\\n"
+                    }
+                    target {
+                        packageName = "com.autonomouslogic.everef.db.schema"
+                    }
+                }
+            }
+        }
+    }
+}
+
+tasks.named("generateJooq").configure {
+    dependsOn tasks.named("flywayMigrate")
+
+    // declare Flyway migration scripts as inputs on the jOOQ task
+    inputs.files(fileTree("src/main/java/com/autonomouslogic/everef/db/migrations"))
+            .withPropertyName("migrations")
+            .withPathSensitivity(PathSensitivity.RELATIVE)
+
+    // make jOOQ task participate in incremental builds (and build caching)
+    allInputsDeclared = true
+}
+
+spotless {
+    java {
+        target "src/**/*.java"
+        palantirJavaFormat()
+        indentWithTabs()
+    }
+}
