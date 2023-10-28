@@ -45,8 +45,11 @@ docker: dist
 		--build-arg "EVE_REF_VERSION=$(EVE_REF_VERSION)" \
 		.
 
+docker-placeholder: docker
+	docker run -it --env-file local.env $(DOCKER_TAG) placeholder
+
 docker-data-index: docker
-	docker run -it --env-file local.env autonomouslogic/eve-ref:latest data-index
+	docker run -it --env-file local.env $(DOCKER_TAG) data-index
 
 clean:
 	./gradlew clean --stacktrace
