@@ -28,7 +28,7 @@ format:
 	./gradlew spotlessApply --stacktrace
 	cd ui ; npm run format
 
-specs:
+specs: generate-database
 	./gradlew refDataSpec --stacktrace
 
 dev-ui: specs
