@@ -3,7 +3,9 @@ package com.autonomouslogic.everef.config;
 import com.autonomouslogic.everef.refdata.ReferenceDataSpec;
 import java.net.URI;
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.Period;
+import java.time.ZoneOffset;
 
 public class Configs {
 	/**
@@ -538,5 +540,14 @@ public class Configs {
 			.name("DATABASE_TABLE_NAME_PREFIX")
 			.type(String.class)
 			.defaultValue("")
+			.build();
+
+	/**
+	 * Minimum date to import market history for.
+	 */
+	public static final Config<LocalDate> IMPORT_MARKET_HISTORY_MIN_DATE = Config.<LocalDate>builder()
+			.name("IMPORT_MARKET_HISTORY_MIN_DATE")
+			.type(LocalDate.class)
+			.defaultValue(LocalDate.now(ZoneOffset.UTC).minusDays(365))
 			.build();
 }

@@ -75,7 +75,6 @@ public class MarketHistoryDao extends BaseDao<MarketHistory, MarketHistoryRecord
 							.from(Tables.MARKET_HISTORY)
 							.where(Tables.MARKET_HISTORY.DATE.greaterOrEqual(minDate))
 							.groupBy(Tables.MARKET_HISTORY.DATE);
-					log.info(stmt.getSQL());
 					var dailyPairs = new HashMap<LocalDate, Integer>();
 					stmt.fetch().forEach(r -> dailyPairs.put(r.value1(), r.value2()));
 					return dailyPairs;

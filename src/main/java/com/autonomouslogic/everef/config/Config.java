@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.Period;
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -93,6 +94,9 @@ public class Config<T> {
 			}
 			if (type == Boolean.class) {
 				return type.cast(Boolean.parseBoolean(value));
+			}
+			if (type == LocalDate.class) {
+				return type.cast(LocalDate.parse(value));
 			}
 			if (type == Duration.class) {
 				return type.cast(Duration.parse(value));

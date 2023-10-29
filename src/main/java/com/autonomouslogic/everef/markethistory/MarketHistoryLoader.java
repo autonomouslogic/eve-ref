@@ -1,4 +1,4 @@
-package com.autonomouslogic.everef.cli.markethistory;
+package com.autonomouslogic.everef.markethistory;
 
 import static java.time.ZoneOffset.UTC;
 
@@ -21,6 +21,7 @@ import java.io.File;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.inject.Inject;
@@ -55,6 +56,9 @@ public class MarketHistoryLoader {
 	@Setter
 	private LocalDate minDate;
 
+	@Setter
+	private Set<LocalDate> includedDates;
+
 	@Getter
 	private final Map<LocalDate, Integer> fileTotals = new TreeMap<>();
 
@@ -67,11 +71,14 @@ public class MarketHistoryLoader {
 	}
 
 	public Flowable<Pair<LocalDate, JsonNode>> load() {
-		log.info("Loading market history - minDate: {}", minDate);
+		log.info("Loading market history - minDate: {} - includedDates: {}", minDate, includedDates);
 		var totalEntries = new AtomicInteger();
 		var f = crawlFiles();
 		if (minDate != null) {
 			f = f.filter(p -> !p.getLeft().isBefore(minDate));
+		}
+		if (includedDates != null) {
+			f = f.filter(p -> includedDates.contains(p.getLeft()));
 		}
 		return f.sorted(Ordering.natural().onResultOf(Pair::getLeft))
 				.switchIfEmpty(Flowable.error(new RuntimeException("No market history files found.")))

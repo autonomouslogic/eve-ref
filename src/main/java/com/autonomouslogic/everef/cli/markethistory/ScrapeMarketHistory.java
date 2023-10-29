@@ -5,6 +5,8 @@ import static com.autonomouslogic.everef.util.ArchivePathFactory.MARKET_HISTORY;
 import com.autonomouslogic.everef.cli.Command;
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.http.OkHttpHelper;
+import com.autonomouslogic.everef.markethistory.MarketHistoryLoader;
+import com.autonomouslogic.everef.markethistory.MarketHistoryUtil;
 import com.autonomouslogic.everef.model.MarketHistoryEntry;
 import com.autonomouslogic.everef.model.RegionTypePair;
 import com.autonomouslogic.everef.mvstore.JsonNodeDataType;
@@ -32,7 +34,6 @@ import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
@@ -88,6 +89,9 @@ public class ScrapeMarketHistory implements Command {
 
 	@Inject
 	protected MarketHistoryFetcher marketHistoryFetcher;
+
+	@Inject
+	protected MarketHistoryUtil marketHistoryUtil;
 
 	@Inject
 	protected Provider<MarketHistoryLoader> marketHistoryLoaderProvider;
@@ -361,27 +365,8 @@ public class ScrapeMarketHistory implements Command {
 	}
 
 	private Completable downloadTotalPairs() {
-		return Completable.defer(() -> {
-			log.info("Downloading total pairs file");
-			var url = dataBaseUrl.resolve(MARKET_HISTORY.getFolder() + "/").resolve("totals.json");
-			var file = tempFiles.tempFile("market-history-pairs", ".json").toFile();
-			return okHttpHelper.download(url.toString(), file, okHttpClient).flatMapCompletable(response -> {
-				log.trace("Pairs file downloaded");
-				if (response.code() == 404) {
-					log.warn("Totla pairs file not found");
-					totals = new TreeMap<>();
-					return Completable.complete();
-				}
-				if (response.code() != 200) {
-					return Completable.error(new RuntimeException("Failed downlaoding pairs file"));
-				}
-				var type =
-						objectMapper.getTypeFactory().constructMapType(TreeMap.class, LocalDate.class, Integer.class);
-				totals = objectMapper.readValue(file, type);
-				log.info("Pairs file loaded");
-				file.delete();
-				return Completable.complete();
-			});
-		});
+		return marketHistoryUtil
+				.downloadTotalPairs()
+				.flatMapCompletable(pairs -> Completable.fromAction(() -> totals = pairs));
 	}
 }

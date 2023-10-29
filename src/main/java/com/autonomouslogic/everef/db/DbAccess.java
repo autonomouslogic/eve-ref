@@ -46,6 +46,7 @@ public class DbAccess {
 					contextInstance = DSL.using(url, username, password);
 					var settings = contextInstance.settings();
 					settings.setRenderQuotedNames(RenderQuotedNames.ALWAYS);
+					settings.setRenderSchema(false);
 					settings.setRenderNameStyle(RenderNameStyle.QUOTED);
 				}
 			}
