@@ -2,13 +2,13 @@ package com.autonomouslogic.everef.db;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import com.autonomouslogic.everef.db.schema.Tables;
 import com.autonomouslogic.everef.model.MarketHistoryEntry;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
 import io.reactivex.rxjava3.core.Flowable;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.Map;
 import javax.inject.Inject;
 import lombok.SneakyThrows;
@@ -50,7 +50,6 @@ public class MarketHistoryDaoTest {
 	@Test
 	void shouldInsertAndSelectMarketHistory() {
 		marketHistoryDao.insert(entry).blockingAwait();
-
 		var fetched = marketHistoryDao
 				.fetchByPK(entry.getDate(), entry.getRegionId(), entry.getTypeId())
 				.blockingGet();
@@ -58,12 +57,15 @@ public class MarketHistoryDaoTest {
 	}
 
 	@Test
+	@SneakyThrows
 	void shouldSumPresentDailyPairs() {
-		var expectedDailyPairs = Map.of(
-				LocalDate.parse("2020-01-01"), 10,
-				LocalDate.parse("2020-01-02"), 15,
-				LocalDate.parse("2020-01-03"), 20);
-		var entries = Flowable.fromIterable(expectedDailyPairs.entrySet())
+		var insertedDailyPairs = Map.of(
+				LocalDate.parse("2020-01-01"), 1,
+				LocalDate.parse("2020-01-02"), 2,
+				LocalDate.parse("2020-01-03"), 3,
+				LocalDate.parse("2020-01-04"), 4,
+				LocalDate.parse("2020-01-05"), 5);
+		var entries = Flowable.fromIterable(insertedDailyPairs.entrySet())
 				.flatMap(day -> Flowable.range(0, day.getValue()).map(i -> entry.toBuilder()
 						.date(day.getKey())
 						.regionId(10000000 + i % 5)
@@ -72,15 +74,10 @@ public class MarketHistoryDaoTest {
 				.toList()
 				.blockingGet();
 		marketHistoryDao.insert(entries).blockingAwait();
-
-		var stmt = dbAccess.context().selectCount().from(Tables.MARKET_HISTORY);
-		log.info(stmt.getSQL());
-		var count = stmt.execute();
-		assertEquals(entries.size(), count);
-
-		var fetched = marketHistoryDao
-				.fetchByPK(entry.getDate(), entry.getRegionId(), entry.getTypeId())
-				.blockingGet();
-		assertEquals(entry, fetched);
+		var dailyPairs =
+				marketHistoryDao.fetchDailyPairs(LocalDate.parse("2020-01-02")).blockingGet();
+		var expectedDailyPairs = new HashMap<>(insertedDailyPairs);
+		expectedDailyPairs.remove(LocalDate.parse("2020-01-01"));
+		assertEquals(expectedDailyPairs, dailyPairs);
 	}
 }

@@ -175,7 +175,8 @@ delombok.dependsOn(tasks.openApiGenerate)
 
 test {
 	environment "LOG_LEVEL", "trace"
-	environment "DATABASE_URL", "jdbc:h2:file:${buildDir}/database-test-${System.currentTimeMillis()};AUTO_SERVER=TRUE"
+//	environment "DATABASE_URL", "jdbc:h2:file:${buildDir}/database-test-${System.currentTimeMillis()};AUTO_SERVER=TRUE"
+	environment "DATABASE_URL", "jdbc:h2:file:${buildDir}/database-test;AUTO_SERVER=TRUE"
 	jvmArgs "-client", "-XX:+UseG1GC", "-Xmx8g"
 
 	useJUnitPlatform()

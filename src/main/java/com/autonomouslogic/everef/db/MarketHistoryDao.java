@@ -6,12 +6,18 @@ import com.autonomouslogic.everef.db.schema.tables.records.MarketHistoryRecord;
 import com.autonomouslogic.everef.model.MarketHistoryEntry;
 import com.autonomouslogic.everef.util.Rx;
 import io.reactivex.rxjava3.core.Maybe;
+import io.reactivex.rxjava3.core.Single;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
+import java.util.HashMap;
+import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import lombok.extern.log4j.Log4j2;
+import org.jooq.impl.DSL;
 
 @Singleton
+@Log4j2
 public class MarketHistoryDao extends BaseDao<MarketHistory, MarketHistoryRecord, MarketHistoryEntry> {
 	@Inject
 	protected MarketHistoryDao() {
@@ -57,5 +63,23 @@ public class MarketHistoryDao extends BaseDao<MarketHistory, MarketHistoryRecord
 					return record == null ? Maybe.empty() : Maybe.just(fromRecord(record));
 				})
 				.compose(Rx.offloadMaybe());
+	}
+
+	public Single<Map<LocalDate, Integer>> fetchDailyPairs(LocalDate minDate) {
+		return Single.fromCallable(() -> {
+					var stmt = dbAccess.context()
+							.select(
+									Tables.MARKET_HISTORY.DATE,
+									DSL.countDistinct(Tables.MARKET_HISTORY.REGION_ID, Tables.MARKET_HISTORY.TYPE_ID)
+											.as("pairs"))
+							.from(Tables.MARKET_HISTORY)
+							.where(Tables.MARKET_HISTORY.DATE.greaterOrEqual(minDate))
+							.groupBy(Tables.MARKET_HISTORY.DATE);
+					log.info(stmt.getSQL());
+					var dailyPairs = new HashMap<LocalDate, Integer>();
+					stmt.fetch().forEach(r -> dailyPairs.put(r.value1(), r.value2()));
+					return dailyPairs;
+				})
+				.compose(Rx.offloadSingle());
 	}
 }
