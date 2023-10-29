@@ -20,6 +20,7 @@ import com.autonomouslogic.everef.cli.refdata.esi.EsiLoaderTest;
 import com.autonomouslogic.everef.cli.refdata.hoboleaks.HoboleaksLoaderTest;
 import com.autonomouslogic.everef.cli.refdata.sde.SdeLoaderTest;
 import com.autonomouslogic.everef.db.DbAdapterTest;
+import com.autonomouslogic.everef.db.MarketHistoryDaoTest;
 import com.autonomouslogic.everef.esi.EsiHelperTest;
 import com.autonomouslogic.everef.esi.EsiLimitExceededInterceptorTest;
 import com.autonomouslogic.everef.esi.EsiRateLimitInterceptorTest;
@@ -79,6 +80,8 @@ public interface TestComponent {
 	void inject(HoboleaksLoaderTest test);
 
 	void inject(LocationPopulatorTest test);
+
+	void inject(MarketHistoryDaoTest test);
 
 	void inject(MarketHistoryEntryTest test);
 

@@ -39,12 +39,20 @@ jooq {
                         inputSchema = "PUBLIC"
                         includes = ".*"
                         excludes = "FLYWAY_SCHEMA_HISTORY"
+                        forcedTypes {
+                            forcedType {
+                                includeTypes = "TIMESTAMPWITHTIMEZONE"
+                                userType = "java.time.Instant"
+                            }
+                        }
                     }
                     generate {
-                        deprecated = true
+                        deprecated = false
                         records = true
-                        immutablePojos = true
-                        fluentSetters = true
+                        interfaces = false
+                        immutablePojos = false
+                        daos = false
+                        javaTimeTypes = true
                         indentation = "\\t"
                         newline = "\\n"
                     }

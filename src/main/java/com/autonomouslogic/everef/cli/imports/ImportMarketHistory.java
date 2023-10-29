@@ -3,7 +3,7 @@ package com.autonomouslogic.everef.cli.imports;
 import com.autonomouslogic.everef.cli.Command;
 import com.autonomouslogic.everef.cli.markethistory.MarketHistoryLoader;
 import com.autonomouslogic.everef.db.DbAccess;
-import com.autonomouslogic.everef.db.DbAdapter;
+import com.autonomouslogic.everef.db.MarketHistoryDao;
 import com.autonomouslogic.everef.model.MarketHistoryEntry;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.reactivex.rxjava3.core.Completable;
@@ -17,7 +17,7 @@ public class ImportMarketHistory implements Command {
 	protected DbAccess dbAccess;
 
 	@Inject
-	protected DbAdapter dbAdapter;
+	protected MarketHistoryDao marketHistoryDao;
 
 	@Inject
 	protected MarketHistoryLoader marketHistoryLoader;
@@ -36,6 +36,6 @@ public class ImportMarketHistory implements Command {
 				.load()
 				.map(pair -> objectMapper.convertValue(pair.getValue(), MarketHistoryEntry.class))
 				.buffer(100)
-				.flatMapCompletable(entries -> dbAdapter.insert(entries), false, 1);
+				.flatMapCompletable(entries -> marketHistoryDao.insert(entries), false, 1);
 	}
 }

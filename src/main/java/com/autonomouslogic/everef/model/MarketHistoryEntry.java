@@ -11,15 +11,22 @@ import lombok.Value;
 import lombok.extern.jackson.Jacksonized;
 
 @Value
-@Builder
+@Builder(toBuilder = true)
 @Jacksonized
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class MarketHistoryEntry {
-	@JsonProperty
-	BigDecimal average;
 
 	@JsonProperty
 	LocalDate date;
+
+	@JsonProperty
+	int regionId;
+
+	@JsonProperty
+	int typeId;
+
+	@JsonProperty
+	BigDecimal average;
 
 	@JsonProperty
 	BigDecimal highest;
@@ -28,16 +35,10 @@ public class MarketHistoryEntry {
 	BigDecimal lowest;
 
 	@JsonProperty
-	int orderCount;
-
-	@JsonProperty
 	long volume;
 
 	@JsonProperty
-	int regionId;
-
-	@JsonProperty
-	int typeId;
+	int orderCount;
 
 	@JsonProperty
 	Instant httpLastModified;
