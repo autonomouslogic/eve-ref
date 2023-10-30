@@ -66,6 +66,16 @@ public class ArchivePathFactory {
 			.suffix(".csv.bz2")
 			.build();
 
+	public static final ArchivePathFactory MARKET_HISTORY_YEAR = ArchivePathFactory.builder()
+			.folder("market-history")
+			.filename("market-history")
+			.historyFolder(false)
+			.yearFolder(false)
+			.dateFolder(false)
+			.fileDateTimeFormatter(YEAR_PATTERN)
+			.suffix(".tar.bz2")
+			.build();
+
 	public static final ArchivePathFactory SDE = ArchivePathFactory.builder()
 			.folder("ccp/sde")
 			.filename("sde")
@@ -145,6 +155,13 @@ public class ArchivePathFactory {
 			var parsed = createFormatter().parse(path);
 			if (parsed.isSupported(ChronoField.HOUR_OF_DAY)) {
 				return Instant.from(parsed);
+			}
+			if (parsed.isSupported(ChronoField.YEAR)
+					&& !parsed.isSupported(ChronoField.MONTH_OF_YEAR)
+					&& !parsed.isSupported(ChronoField.DAY_OF_MONTH)) {
+				return LocalDate.of(parsed.get(ChronoField.YEAR), 1, 1)
+						.atStartOfDay(ZoneOffset.UTC)
+						.toInstant();
 			}
 			return LocalDate.from(parsed).atStartOfDay(ZoneOffset.UTC).toInstant();
 		} catch (DateTimeParseException e) {

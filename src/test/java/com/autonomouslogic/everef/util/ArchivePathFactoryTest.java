@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneOffset;
 import org.junit.jupiter.api.Test;
 
 public class ArchivePathFactoryTest {
@@ -52,6 +53,12 @@ public class ArchivePathFactoryTest {
 	}
 
 	@Test
+	void shouldGenerateMarketHistoryYearNames() {
+		var factory = ArchivePathFactory.MARKET_HISTORY_YEAR;
+		testExpectedPaths(factory, LocalDate.parse("2018-01-01"), "market-history/market-history-2018.tar.bz2");
+	}
+
+	@Test
 	void shouldGenerateSdeNames() {
 		var factory = ArchivePathFactory.SDE;
 		testExpectedPaths(
@@ -93,5 +100,10 @@ public class ArchivePathFactoryTest {
 
 	private static void testExpectedPaths(ArchivePathFactory factory, LocalDate datestamp, String expectedTimePath) {
 		assertEquals(expectedTimePath, factory.createArchivePath(datestamp));
+		assertEquals(
+				datestamp,
+				factory.parseArchiveTime(expectedTimePath)
+						.atZone(ZoneOffset.UTC)
+						.toLocalDate());
 	}
 }

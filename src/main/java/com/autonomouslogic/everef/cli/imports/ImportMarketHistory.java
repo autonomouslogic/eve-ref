@@ -20,6 +20,7 @@ import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 public class ImportMarketHistory implements Command {
+
 	@Inject
 	protected DbAccess dbAccess;
 
@@ -43,6 +44,7 @@ public class ImportMarketHistory implements Command {
 
 	@Override
 	public Completable run() {
+		var crawl = marketHistoryUtil.crawlAvailableFiles().toList().blockingGet();
 		return resolveDatesToDownload().flatMapCompletable(includedDates -> {
 			return marketHistoryLoader
 					.setIncludedDates(includedDates)

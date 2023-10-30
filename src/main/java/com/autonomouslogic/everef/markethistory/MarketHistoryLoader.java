@@ -1,9 +1,6 @@
 package com.autonomouslogic.everef.markethistory;
 
-import static java.time.ZoneOffset.UTC;
-
 import com.autonomouslogic.everef.config.Configs;
-import com.autonomouslogic.everef.http.DataCrawler;
 import com.autonomouslogic.everef.http.OkHttpHelper;
 import com.autonomouslogic.everef.model.MarketHistoryEntry;
 import com.autonomouslogic.everef.url.DataUrl;
@@ -37,7 +34,7 @@ import org.apache.commons.lang3.tuple.Pair;
 @Log4j2
 public class MarketHistoryLoader {
 	@Inject
-	protected DataCrawler dataCrawler;
+	protected MarketHistoryUtil marketHistoryUtil;
 
 	@Inject
 	protected OkHttpClient okHttpClient;
@@ -64,11 +61,6 @@ public class MarketHistoryLoader {
 
 	@Inject
 	protected MarketHistoryLoader() {}
-
-	@Inject
-	protected void init() {
-		dataCrawler.setPrefix(ArchivePathFactory.MARKET_HISTORY.getFolder() + "/");
-	}
 
 	public Flowable<Pair<LocalDate, JsonNode>> load() {
 		log.info("Loading market history - minDate: {} - includedDates: {}", minDate, includedDates);
@@ -101,15 +93,10 @@ public class MarketHistoryLoader {
 	}
 
 	private Flowable<Pair<LocalDate, DataUrl>> crawlFiles() {
-		return dataCrawler.crawl().flatMap(url -> {
-			var path = url.getPath();
-			var time = ArchivePathFactory.MARKET_HISTORY.parseArchiveTime(path);
-			if (time == null) {
-				return Flowable.empty();
-			}
-			log.trace("Found market history file: {}", url);
-			return Flowable.just(Pair.of(time.atZone(UTC).toLocalDate(), url));
-		});
+		return marketHistoryUtil
+				.crawlAvailableFiles()
+				.filter(f -> f.isDateFile())
+				.map(f -> Pair.of(f.getDate(), f.getHttpUrl()));
 	}
 
 	private Single<File> downloadFile(DataUrl url, LocalDate date) {
