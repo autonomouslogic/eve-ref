@@ -8,6 +8,12 @@
     "@semantic-release/commit-analyzer",
     "@semantic-release/release-notes-generator",
     [
+      "@semantic-release/exec",
+      {
+        "publishCmd": "./publish.sh ${nextRelease.version}"
+      }
+    ],
+    [
       "@semantic-release/changelog",
       {
         "changelogTitle": "EVE Ref Changelog"
