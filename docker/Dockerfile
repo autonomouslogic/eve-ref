@@ -6,13 +6,11 @@ RUN mkdir /eve-ref
 RUN tar -x --strip-components=1 -f /eve-ref.tar -C /eve-ref
 RUN unzip /eve-ref/lib/eve-ref-${EVE_REF_VERSION}.jar pug/* -d /eve-ref/
 COPY docker/entry.sh /eve-ref/
-RUN chown -R 1000 /eve-ref
 
 FROM eclipse-temurin:17.0.8.1_1-jre-alpine
 ARG EVE_REF_VERSION
 ENV EVE_REF_VERSION=${EVE_REF_VERSION}
 COPY --from=build /eve-ref /eve-ref
 WORKDIR /eve-ref
-USER 1000
 ENTRYPOINT ["./entry.sh"]
 CMD ["placeholder"]
