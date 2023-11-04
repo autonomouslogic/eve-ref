@@ -24,10 +24,7 @@ public class DbAdapter {
 
 	public <R extends UpdatableRecord<R>> Completable insert(Table<R> table, List<R> records) {
 		return Completable.fromAction(() -> {
-					var stmt = dbAccess.context()
-							// .insertInto(DSL.name(prefixTable(table)))
-							.insertInto(table)
-							.columns(table.fields());
+					var stmt = dbAccess.context().insertInto(table).columns(table.fields());
 					for (var record : records) {
 						stmt = stmt.values(record);
 					}

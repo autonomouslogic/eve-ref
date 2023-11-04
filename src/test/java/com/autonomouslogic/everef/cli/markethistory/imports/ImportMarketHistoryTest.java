@@ -1,18 +1,23 @@
 package com.autonomouslogic.everef.cli.markethistory.imports;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import com.autonomouslogic.commons.ResourceUtil;
 import com.autonomouslogic.everef.db.DbAccess;
 import com.autonomouslogic.everef.db.MarketHistoryDao;
+import com.autonomouslogic.everef.db.schema.Tables;
+import com.autonomouslogic.everef.model.MarketHistoryEntry;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.test.TestDataUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.math.BigDecimal;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Map;
 import javax.inject.Inject;
 import lombok.SneakyThrows;
@@ -34,9 +39,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 /**
  * <ul>
- *     <li>2019-01-01 not present in totals.json</li>
- *     <li>2019-01-02 present in totals.json</li>
- *     <li>2019-01-03 present in totals.json</li>
+ *     <li>2018-12-01 present in 2018 year file, present in database, should not be imported</li>
+ *     <li>2018-12-02 present in 2018 year file, not present in database, should be imported</li>
+ *     <li>2019-01-01 not present in totals.json, present in database, should not be imported</li>
+ *     <li>2019-01-02 not present in totals.json, not present in database, should be imported</li>
+ *     <li>2019-01-03 present in totals.json with more pairs than in database, should be imported</li>
+ *     <li>2019-01-04 present in totals.json with same pairs as database, should not be imported</li>
+ *     <li>2019-01-05 present in totals.json, not present in database, should be imported</li>
  * </ul>
  */
 @ExtendWith(MockitoExtension.class)
@@ -44,6 +53,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @SetEnvironmentVariable(key = "DATA_BASE_URL", value = "http://localhost:" + TestDataUtil.TEST_PORT + "/data/")
 @SetEnvironmentVariable(key = "IMPORT_MARKET_HISTORY_MIN_DATE", value = "2018-01-01")
 public class ImportMarketHistoryTest {
+	private static final BigDecimal IMPORTED = new BigDecimal("100.00");
+	private static final BigDecimal NOT_IMPORTED = new BigDecimal("1000.00");
+	private static final int REGION_ID = 10000001;
+
 	@Inject
 	DbAccess dbAccess;
 
@@ -69,6 +82,28 @@ public class ImportMarketHistoryTest {
 
 		dbAccess.flyway().clean();
 		dbAccess.flyway().migrate();
+		dbAccess.context().truncate(Tables.MARKET_HISTORY).execute();
+
+		var entry = MarketHistoryEntry.builder()
+				.typeId(20)
+				.regionId(REGION_ID)
+				.average(NOT_IMPORTED)
+				.lowest(BigDecimal.ZERO)
+				.highest(BigDecimal.ZERO)
+				.orderCount(1)
+				.httpLastModified(Instant.EPOCH)
+				.build();
+
+		marketHistoryDao
+				.insert(List.of(
+						entry.toBuilder().date(LocalDate.parse("2019-01-01")).build(),
+						entry.toBuilder().date(LocalDate.parse("2019-01-03")).build(),
+						entry.toBuilder().date(LocalDate.parse("2019-01-04")).build(),
+						entry.toBuilder()
+								.date(LocalDate.parse("2019-01-04"))
+								.typeId(21)
+								.build()))
+				.blockingAwait();
 	}
 
 	@AfterEach
@@ -81,16 +116,68 @@ public class ImportMarketHistoryTest {
 	@SneakyThrows
 	void shouldImportMarketHistory() {
 		importMarketHistory.run().blockingAwait();
+		assertDailyImports();
+	}
 
-		assertNotNull(marketHistoryDao
-				.fetchByPK(LocalDate.parse("2019-01-01"), 10000001, 20)
-				.blockingGet());
-		assertNotNull(marketHistoryDao
-				.fetchByPK(LocalDate.parse("2019-01-02"), 10000001, 20)
-				.blockingGet());
-		assertNotNull(marketHistoryDao
-				.fetchByPK(LocalDate.parse("2019-01-03"), 10000001, 20)
-				.blockingGet());
+	private void assertDailyImports() {
+		assertEquals(
+				NOT_IMPORTED,
+				marketHistoryDao
+						.fetchByPK(LocalDate.parse("2019-01-01"), REGION_ID, 20)
+						.blockingGet()
+						.getAverage());
+
+		assertEquals(
+				IMPORTED,
+				marketHistoryDao
+						.fetchByPK(LocalDate.parse("2019-01-02"), REGION_ID, 20)
+						.blockingGet()
+						.getAverage());
+		assertEquals(
+				IMPORTED,
+				marketHistoryDao
+						.fetchByPK(LocalDate.parse("2019-01-02"), REGION_ID, 21)
+						.blockingGet()
+						.getAverage());
+
+		assertEquals(
+				NOT_IMPORTED,
+				marketHistoryDao // ignored due to "on duplicate key ignore" clause
+						.fetchByPK(LocalDate.parse("2019-01-03"), REGION_ID, 20)
+						.blockingGet()
+						.getAverage());
+		assertEquals(
+				IMPORTED,
+				marketHistoryDao
+						.fetchByPK(LocalDate.parse("2019-01-03"), REGION_ID, 21)
+						.blockingGet()
+						.getAverage());
+
+		assertEquals(
+				NOT_IMPORTED,
+				marketHistoryDao
+						.fetchByPK(LocalDate.parse("2019-01-04"), REGION_ID, 20)
+						.blockingGet()
+						.getAverage());
+		assertEquals(
+				NOT_IMPORTED,
+				marketHistoryDao
+						.fetchByPK(LocalDate.parse("2019-01-04"), REGION_ID, 21)
+						.blockingGet()
+						.getAverage());
+
+		assertEquals(
+				IMPORTED,
+				marketHistoryDao
+						.fetchByPK(LocalDate.parse("2019-01-05"), REGION_ID, 20)
+						.blockingGet()
+						.getAverage());
+		assertEquals(
+				IMPORTED,
+				marketHistoryDao
+						.fetchByPK(LocalDate.parse("2019-01-05"), REGION_ID, 21)
+						.blockingGet()
+						.getAverage());
 	}
 
 	class TestDispatcher extends Dispatcher {
@@ -104,9 +191,9 @@ public class ImportMarketHistoryTest {
 				}
 				if (path.equals("/data/market-history/totals.json")) {
 					return mockResponse(objectMapper.writeValueAsBytes(Map.of(
-							"2019-01-01", 0,
-							"2019-01-02", 0,
-							"2019-01-03", 0)));
+							"2019-01-03", 2,
+							"2019-01-04", 2,
+							"2019-01-05", 2)));
 				}
 				if (path.equals("/data/market-history/2019/market-history-2019-01-01.csv.bz2")) {
 					return mockHistoricalDate(LocalDate.parse("2019-01-01"));
@@ -116,6 +203,12 @@ public class ImportMarketHistoryTest {
 				}
 				if (path.equals("/data/market-history/2019/market-history-2019-01-03.csv.bz2")) {
 					return mockHistoricalDate(LocalDate.parse("2019-01-03"));
+				}
+				if (path.equals("/data/market-history/2019/market-history-2019-01-04.csv.bz2")) {
+					return mockHistoricalDate(LocalDate.parse("2019-01-04"));
+				}
+				if (path.equals("/data/market-history/2019/market-history-2019-01-05.csv.bz2")) {
+					return mockHistoricalDate(LocalDate.parse("2019-01-05"));
 				}
 				log.error(String.format("Unaccounted for URL: %s", path));
 				return new MockResponse().setResponseCode(500);
