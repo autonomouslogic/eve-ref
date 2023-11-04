@@ -11,10 +11,9 @@ import com.autonomouslogic.everef.model.MarketHistoryEntry;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Ordering;
 import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.Flowable;
 import java.time.LocalDate;
 import javax.inject.Inject;
-
-import io.reactivex.rxjava3.core.Flowable;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
@@ -65,8 +64,11 @@ public class ImportMarketHistory implements Command {
 
 	private Flowable<AvailableMarketHistoryFile> getResolveFilesToDownload() {
 		return fileResolver
-			.setMinDate(minDate)
-			.resolveFilesToDownload()
-			.sorted(Ordering.natural().onResultOf((AvailableMarketHistoryFile f) -> f.getRange().getLeft()).reverse());
+				.setMinDate(minDate)
+				.resolveFilesToDownload()
+				.sorted(Ordering.natural()
+						.onResultOf(
+								(AvailableMarketHistoryFile f) -> f.getRange().getLeft())
+						.reverse());
 	}
 }
