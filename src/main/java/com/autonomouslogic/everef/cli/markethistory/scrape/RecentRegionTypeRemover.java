@@ -14,7 +14,7 @@ import javax.inject.Inject;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-public class RecentRegionTypeRemover implements RegionTypeSource {
+class RecentRegionTypeRemover implements RegionTypeSource {
 	private final Instant cutoffTime;
 
 	private final Set<RegionTypePair> pairs = Collections.newSetFromMap(new ConcurrentHashMap<>());

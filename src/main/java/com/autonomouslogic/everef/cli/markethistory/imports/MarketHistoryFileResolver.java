@@ -14,7 +14,7 @@ import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.tuple.Pair;
 
 @Log4j2
-public class MarketHistoryFileResolver {
+class MarketHistoryFileResolver {
 
 	@Inject
 	protected MarketHistoryUtil marketHistoryUtil;
@@ -77,7 +77,8 @@ public class MarketHistoryFileResolver {
 			}
 			return !presentPairs.containsKey(start);
 		} else if (file.isYearFile() || file.isCcpQuantBackfillFile()) {
-			return !containsRange(file.getRange(), presentPairs.keySet());
+			return true;
+			// return !containsRange(file.getRange(), presentPairs.keySet());
 		}
 		return false;
 	}

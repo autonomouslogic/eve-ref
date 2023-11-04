@@ -19,7 +19,7 @@ import okhttp3.OkHttpClient;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
 @Log4j2
-public class MarketHistoryFetcher {
+class MarketHistoryFetcher {
 	@Inject
 	protected ObjectMapper objectMapper;
 

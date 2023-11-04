@@ -12,7 +12,7 @@ import lombok.Value;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-public class MarketHistorySourceStats {
+class MarketHistorySourceStats {
 	private final Set<String> order = new LinkedHashSet<>();
 	private final Map<String, List<RegionTypePair>> sourced = new ConcurrentHashMap<>();
 	private final Set<RegionTypePair> hits = Collections.newSetFromMap(new ConcurrentHashMap<>());

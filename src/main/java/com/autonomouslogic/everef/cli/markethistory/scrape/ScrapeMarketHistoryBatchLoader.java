@@ -22,7 +22,7 @@ import org.apache.commons.lang3.tuple.Pair;
  * Loads the batch market history needed for the scrape.
  */
 @Log4j2
-public class ScrapeMarketHistoryBatchLoader {
+class ScrapeMarketHistoryBatchLoader {
 	@Inject
 	protected MarketHistoryUtil marketHistoryUtil;
 

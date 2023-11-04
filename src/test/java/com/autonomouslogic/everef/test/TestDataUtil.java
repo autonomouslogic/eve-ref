@@ -32,6 +32,7 @@ import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
 import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
 import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream;
+import org.apache.commons.compress.compressors.bzip2.BZip2CompressorOutputStream;
 import org.apache.commons.compress.compressors.xz.XZCompressorInputStream;
 import org.apache.commons.compress.compressors.xz.XZCompressorOutputStream;
 import org.apache.commons.csv.CSVFormat;
@@ -142,8 +143,28 @@ public class TestDataUtil {
 
 	@SneakyThrows
 	public byte[] createXzTar(Map<String, byte[]> files) {
+		var tar = createTar(files);
 		var compressed = new ByteArrayOutputStream();
-		try (var out = new TarArchiveOutputStream(new XZCompressorOutputStream(compressed))) {
+		try (var out = new XZCompressorOutputStream(compressed)) {
+			IOUtils.write(tar, out);
+		}
+		return compressed.toByteArray();
+	}
+
+	@SneakyThrows
+	public byte[] createBz2Tar(Map<String, byte[]> files) {
+		var tar = createTar(files);
+		var compressed = new ByteArrayOutputStream();
+		try (var out = new BZip2CompressorOutputStream(compressed)) {
+			IOUtils.write(tar, out);
+		}
+		return compressed.toByteArray();
+	}
+
+	@SneakyThrows
+	public byte[] createTar(Map<String, byte[]> files) {
+		var compressed = new ByteArrayOutputStream();
+		try (var out = new TarArchiveOutputStream(compressed)) {
 			try {
 				for (var fileEntry : files.entrySet()) {
 					var tarEntry = new TarArchiveEntry(fileEntry.getKey());

@@ -69,6 +69,9 @@ public class ImportMarketHistoryTest {
 	@Inject
 	MarketHistoryDao marketHistoryDao;
 
+	@Inject
+	TestDataUtil testDataUtil;
+
 	MockWebServer server;
 
 	@BeforeEach
@@ -96,6 +99,7 @@ public class ImportMarketHistoryTest {
 
 		marketHistoryDao
 				.insert(List.of(
+						entry.toBuilder().date(LocalDate.parse("2018-12-01")).build(),
 						entry.toBuilder().date(LocalDate.parse("2019-01-01")).build(),
 						entry.toBuilder().date(LocalDate.parse("2019-01-03")).build(),
 						entry.toBuilder().date(LocalDate.parse("2019-01-04")).build(),
@@ -117,6 +121,7 @@ public class ImportMarketHistoryTest {
 	void shouldImportMarketHistory() {
 		importMarketHistory.run().blockingAwait();
 		assertDailyImports();
+		assertYearlyImports();
 	}
 
 	private void assertDailyImports() {
@@ -180,6 +185,34 @@ public class ImportMarketHistoryTest {
 						.getAverage());
 	}
 
+	private void assertYearlyImports() {
+		assertEquals(
+				NOT_IMPORTED,
+				marketHistoryDao
+						.fetchByPK(LocalDate.parse("2018-12-01"), REGION_ID, 20)
+						.blockingGet()
+						.getAverage());
+		assertEquals(
+				NOT_IMPORTED,
+				marketHistoryDao
+						.fetchByPK(LocalDate.parse("2018-12-01"), REGION_ID, 21)
+						.blockingGet()
+						.getAverage());
+
+		assertEquals(
+				IMPORTED,
+				marketHistoryDao
+						.fetchByPK(LocalDate.parse("2018-12-02"), REGION_ID, 20)
+						.blockingGet()
+						.getAverage());
+		assertEquals(
+				IMPORTED,
+				marketHistoryDao
+						.fetchByPK(LocalDate.parse("2018-12-02"), REGION_ID, 21)
+						.blockingGet()
+						.getAverage());
+	}
+
 	class TestDispatcher extends Dispatcher {
 		@NotNull
 		@Override
@@ -194,6 +227,9 @@ public class ImportMarketHistoryTest {
 							"2019-01-03", 2,
 							"2019-01-04", 2,
 							"2019-01-05", 2)));
+				}
+				if (path.equals("/data/market-history/market-history-2018.tar.bz2")) {
+					return mockHistoricalYear();
 				}
 				if (path.equals("/data/market-history/2019/market-history-2019-01-01.csv.bz2")) {
 					return mockHistoricalDate(LocalDate.parse("2019-01-01"));
@@ -235,11 +271,23 @@ public class ImportMarketHistoryTest {
 
 	@SneakyThrows
 	private MockResponse mockHistoricalDate(LocalDate date) {
-		var file = ResourceUtil.loadContextual(ImportMarketHistoryTest.class, "/data-" + date.toString() + ".csv");
+		var file = ResourceUtil.loadContextual(ImportMarketHistoryTest.class, "/daily-" + date.toString() + ".csv");
 		var compressed = new ByteArrayOutputStream();
 		try (var out = new BZip2CompressorOutputStream(compressed)) {
 			IOUtils.copy(file, out);
 		}
 		return mockResponse(new ByteArrayInputStream(compressed.toByteArray()));
+	}
+
+	@SneakyThrows
+	private MockResponse mockHistoricalYear() {
+		var file1 = IOUtils.toByteArray(
+				ResourceUtil.loadContextual(ImportMarketHistoryTest.class, "/yearly-2018-12-01.csv"));
+		var file2 = IOUtils.toByteArray(
+				ResourceUtil.loadContextual(ImportMarketHistoryTest.class, "/yearly-2018-12-02.csv"));
+		var bytes = testDataUtil.createBz2Tar(Map.of(
+				"2018-12-01.csv", file1,
+				"2018-12-02.csv", file2));
+		return mockResponse(new ByteArrayInputStream(bytes));
 	}
 }
