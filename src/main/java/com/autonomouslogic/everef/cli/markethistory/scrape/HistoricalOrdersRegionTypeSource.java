@@ -1,4 +1,4 @@
-package com.autonomouslogic.everef.cli.markethistory;
+package com.autonomouslogic.everef.cli.markethistory.scrape;
 
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.http.DataCrawler;

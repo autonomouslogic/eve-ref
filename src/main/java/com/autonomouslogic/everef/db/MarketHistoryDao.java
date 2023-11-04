@@ -65,6 +65,11 @@ public class MarketHistoryDao extends BaseDao<MarketHistory, MarketHistoryRecord
 				.compose(Rx.offloadMaybe());
 	}
 
+	/**
+	 * Fetches the daily pairs from the database.
+	 * @param minDate
+	 * @return
+	 */
 	public Single<Map<LocalDate, Integer>> fetchDailyPairs(LocalDate minDate) {
 		return Single.fromCallable(() -> {
 					var stmt = dbAccess.context()

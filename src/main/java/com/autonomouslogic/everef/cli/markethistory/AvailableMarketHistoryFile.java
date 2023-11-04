@@ -1,4 +1,4 @@
-package com.autonomouslogic.everef.markethistory;
+package com.autonomouslogic.everef.cli.markethistory;
 
 import com.autonomouslogic.everef.url.HttpUrl;
 import java.time.LocalDate;

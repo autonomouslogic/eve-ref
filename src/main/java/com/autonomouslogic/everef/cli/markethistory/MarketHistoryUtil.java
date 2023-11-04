@@ -1,4 +1,4 @@
-package com.autonomouslogic.everef.markethistory;
+package com.autonomouslogic.everef.cli.markethistory;
 
 import static com.autonomouslogic.everef.util.ArchivePathFactory.MARKET_HISTORY;
 import static java.time.ZoneOffset.UTC;
@@ -11,7 +11,6 @@ import com.autonomouslogic.everef.url.UrlParser;
 import com.autonomouslogic.everef.util.ArchivePathFactory;
 import com.autonomouslogic.everef.util.TempFiles;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.Ordering;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Single;
 import java.net.URI;
@@ -28,6 +27,9 @@ import org.apache.commons.lang3.tuple.Pair;
 @Singleton
 @Log4j2
 public class MarketHistoryUtil {
+	private static final Pair<LocalDate, LocalDate> marketFile2016Range =
+			Pair.of(LocalDate.parse("2016-08-01"), LocalDate.parse("2016-12-31"));
+
 	@Inject
 	protected TempFiles tempFiles;
 
@@ -46,11 +48,23 @@ public class MarketHistoryUtil {
 	@Inject
 	protected Provider<DataCrawler> dataCrawlerProvider;
 
+	private final AvailableMarketHistoryFile ccpQuantBackfillFile;
 	private final URI dataBaseUrl = Configs.DATA_BASE_URL.getRequired();
 
 	@Inject
-	protected MarketHistoryUtil() {}
+	protected MarketHistoryUtil(UrlParser urlParser) {
+		ccpQuantBackfillFile = AvailableMarketHistoryFile.builder()
+				.ccpQuantBackfillFile(true)
+				.httpUrl((HttpUrl) urlParser.parse(
+						"https://data.everef.net/ccp/ccp_quant/EVEOnline_priceHistory_20031001_20180305.7z"))
+				.range(Pair.of(LocalDate.parse("2003-10-01"), LocalDate.parse("2018-03-05")))
+				.build();
+	}
 
+	/**
+	 * Fetches the total pairs from the data site.
+	 * @return
+	 */
 	public Single<Map<LocalDate, Integer>> downloadTotalPairs() {
 		return Single.defer(() -> {
 			log.info("Downloading total pairs file");
@@ -97,11 +111,15 @@ public class MarketHistoryUtil {
 								.range(Pair.of(date, date))
 								.build();
 					} else if (yearstamp != null) {
-						var year = yearstamp.atZone(UTC).toLocalDate();
+						var year = yearstamp.atZone(UTC).toLocalDate().getYear();
+						// The year file for 2016 is partial.
+						var range = year == 2016
+								? marketFile2016Range
+								: Pair.of(LocalDate.of(year, 1, 1), LocalDate.of(year, 12, 31));
 						file = AvailableMarketHistoryFile.builder()
-								.year(year.getYear())
+								.year(year)
 								.httpUrl((HttpUrl) url)
-								.range(Pair.of(year, year.plusYears(1).minusDays(1)))
+								.range(range)
 								.build();
 					}
 					if (file == null) {
@@ -110,16 +128,6 @@ public class MarketHistoryUtil {
 					log.trace("Found market history file: {}", file);
 					return Flowable.just(file);
 				});
-		return Flowable.concatArray(
-						Flowable.just(AvailableMarketHistoryFile.builder()
-								.ccpQuantBackfillFile(true)
-								.httpUrl(
-										(HttpUrl)
-												urlParser.parse(
-														"https://data.everef.net/ccp/ccp_quant/EVEOnline_priceHistory_20031001_20180305.7z"))
-								.range(Pair.of(LocalDate.parse("2003-10-01"), LocalDate.parse("2018-03-05")))
-								.build()),
-						files)
-				.sorted(Ordering.natural().onResultOf(AvailableMarketHistoryFile::getRange));
+		return Flowable.concatArray(Flowable.just(ccpQuantBackfillFile), files);
 	}
 }

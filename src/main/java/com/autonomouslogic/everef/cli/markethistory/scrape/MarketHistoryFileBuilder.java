@@ -1,4 +1,4 @@
-package com.autonomouslogic.everef.cli.markethistory;
+package com.autonomouslogic.everef.cli.markethistory.scrape;
 
 import com.autonomouslogic.everef.util.CompressUtil;
 import com.autonomouslogic.everef.util.JsonNodeCsvWriter;

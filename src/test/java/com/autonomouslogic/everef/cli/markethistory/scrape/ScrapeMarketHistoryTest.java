@@ -1,4 +1,4 @@
-package com.autonomouslogic.everef.cli.markethistory;
+package com.autonomouslogic.everef.cli.markethistory.scrape;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;

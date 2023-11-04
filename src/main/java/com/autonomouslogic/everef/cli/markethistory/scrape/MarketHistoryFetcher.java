@@ -1,4 +1,4 @@
-package com.autonomouslogic.everef.cli.markethistory;
+package com.autonomouslogic.everef.cli.markethistory.scrape;
 
 import com.autonomouslogic.commons.rxjava3.Rx3Util;
 import com.autonomouslogic.everef.esi.EsiHelper;

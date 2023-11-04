@@ -1,3 +1,5 @@
+import java.time.LocalDate
+
 plugins {
 	id "java"
 	id "org.jetbrains.kotlin.jvm" version "1.8.22"
@@ -319,9 +321,8 @@ task flywayMigrate(type: JavaExec) {
 	group "application"
 	args "flyway-migrate"
 	environment envProperties
-	environment "DATABASE_URL", "jdbc:h2:file:/tmp/everef-data;AUTO_SERVER=true"
-//	environment "DATABASE_URL", "jdbc:postgresql://localhost:5432/everef"
-//	environment "DATABASE_PASSWORD", "password1"
+	environment "DATABASE_URL", "jdbc:h2:file:${buildDir}/everef-data;AUTO_SERVER=true"
+
 	classpath = sourceSets.main.runtimeClasspath
 	mainClass = mainClassName
 }
@@ -330,10 +331,10 @@ task importMarketHistory(type: JavaExec) {
 	group "application"
 	args "import-market-history"
 	environment envProperties
-	environment "LOG_LEVEL", "info"
-	environment "DATABASE_URL", "jdbc:h2:file:/tmp/everef-data;AUTO_SERVER=TRUE"
-//	environment "DATABASE_URL", "jdbc:postgresql://localhost:5432/everef"
-//	environment "DATABASE_PASSWORD", "password1"
+	environment "LOG_LEVEL", "debug"
+	environment "DATABASE_URL", "jdbc:h2:file:${buildDir}/everef-data;AUTO_SERVER=true"
+	environment "IMPORT_MARKET_HISTORY_MIN_DATE", LocalDate.now().minusDays(7).toString();
+
 	classpath = sourceSets.main.runtimeClasspath
 	mainClass = mainClassName
 }
