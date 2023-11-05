@@ -60,7 +60,7 @@ public class ImportMarketHistory implements Command {
 			return resolveFilesToDownload()
 					.filter(f -> f.isDateFile() || f.isYearFile()) // @todo remove
 					.flatMap(availableFile -> loadFile(dailyPairs, availableFile))
-					.flatMapCompletable(this::insertDayEntries, false, insertConcurrency);
+					.flatMapCompletable(dateList -> insertDayEntries(dateList), false, insertConcurrency);
 		});
 	}
 
@@ -75,7 +75,6 @@ public class ImportMarketHistory implements Command {
 		}
 	}
 
-	@NotNull
 	private Completable insertDayEntries(Pair<LocalDate, List<JsonNode>> dateList) {
 		return Completable.defer(() -> {
 			var date = dateList.getLeft();

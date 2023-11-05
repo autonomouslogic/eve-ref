@@ -1,6 +1,7 @@
 package com.autonomouslogic.everef.cli.markethistory.imports;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import com.autonomouslogic.commons.ResourceUtil;
@@ -192,12 +193,10 @@ public class ImportMarketHistoryTest {
 						.fetchByPK(LocalDate.parse("2018-12-01"), REGION_ID, 20)
 						.blockingGet()
 						.getAverage());
-		assertEquals(
-				NOT_IMPORTED,
+		assertNull(
 				marketHistoryDao
 						.fetchByPK(LocalDate.parse("2018-12-01"), REGION_ID, 21)
-						.blockingGet()
-						.getAverage());
+						.blockingGet());
 
 		assertEquals(
 				IMPORTED,
