@@ -1,6 +1,7 @@
 package com.autonomouslogic.everef.cli.flyway;
 
 import com.autonomouslogic.everef.cli.Command;
+import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.db.DbAccess;
 import com.autonomouslogic.everef.util.Rx;
 import io.reactivex.rxjava3.core.Completable;
@@ -25,5 +26,14 @@ public class FlywayMigrate implements Command {
 					dbAccess.flyway().migrate();
 				})
 				.compose(Rx.offloadCompletable());
+	}
+
+	public Completable autoRun() {
+		return Completable.defer(() -> {
+			if (Configs.FLYWAY_AUTO_MIGRATE.getRequired()) {
+				return run();
+			}
+			return Completable.complete();
+		});
 	}
 }

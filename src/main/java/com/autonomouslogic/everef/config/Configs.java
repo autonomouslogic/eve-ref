@@ -579,4 +579,13 @@ public class Configs {
 			.type(Integer.class)
 			.defaultValue(1)
 			.build();
+
+	/**
+	 * Whether import jobs should migrate automatically at the beginning of their run.
+	 */
+	public static final Config<Boolean> FLYWAY_AUTO_MIGRATE = Config.<Boolean>builder()
+			.name("FLYWAY_AUTO_MIGRATE")
+			.type(Boolean.class)
+			.defaultValue(true)
+			.build();
 }
