@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import javax.inject.Inject;
 import lombok.extern.log4j.Log4j2;
@@ -61,10 +62,10 @@ public class MarketHistoryLoader {
 		});
 	}
 
-	public Flowable<Pair<LocalDate, List<JsonNode>>> loadYearFile(DataUrl url) {
+	public Flowable<Pair<LocalDate, List<JsonNode>>> loadYearFile(DataUrl url, Collection<LocalDate> excludedDates) {
 		return downloadFile(url).flatMapPublisher(file -> {
 			file.deleteOnExit();
-			return parseYearFile(file).doFinally(() -> file.delete());
+			return parseYearFile(file, excludedDates).doFinally(() -> file.delete());
 		});
 	}
 
@@ -96,11 +97,14 @@ public class MarketHistoryLoader {
 				.compose(Rx.offloadFlowable());
 	}
 
-	private Flowable<Pair<LocalDate, List<JsonNode>>> parseYearFile(File file) {
+	private Flowable<Pair<LocalDate, List<JsonNode>>> parseYearFile(File file, Collection<LocalDate> excludedDates) {
 		return Flowable.defer(() -> {
 					log.trace("Reading yearly market history file: {}", file);
 					return CompressUtil.loadArchive(file).flatMap(entry -> {
 						var date = LocalDate.parse(entry.getLeft().getName().substring(0, 10));
+						if (excludedDates != null && excludedDates.contains(date)) {
+							return Flowable.empty();
+						}
 						var list = readCsvEntries(new ByteArrayInputStream(entry.getRight()));
 						log.trace(
 								"Read {} entries from {}#{}",

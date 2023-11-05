@@ -5,8 +5,11 @@ import com.autonomouslogic.everef.db.schema.tables.MarketHistory;
 import com.autonomouslogic.everef.db.schema.tables.records.MarketHistoryRecord;
 import com.autonomouslogic.everef.model.MarketHistoryEntry;
 import com.autonomouslogic.everef.util.Rx;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import io.reactivex.rxjava3.core.Maybe;
 import io.reactivex.rxjava3.core.Single;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.util.HashMap;
@@ -19,6 +22,12 @@ import org.jooq.impl.DSL;
 @Singleton
 @Log4j2
 public class MarketHistoryDao extends BaseDao<MarketHistory, MarketHistoryRecord, MarketHistoryEntry> {
+	private final Cache<LocalDate, Map<LocalDate, Integer>> dailyPairsCache = CacheBuilder.newBuilder()
+			.expireAfterWrite(Duration.ofMinutes(1))
+			.initialCapacity(1)
+			.softValues()
+			.build();
+
 	@Inject
 	protected MarketHistoryDao() {
 		super(Tables.MARKET_HISTORY);
@@ -75,19 +84,27 @@ public class MarketHistoryDao extends BaseDao<MarketHistory, MarketHistoryRecord
 	 * @return
 	 */
 	public Single<Map<LocalDate, Integer>> fetchDailyPairs(LocalDate minDate) {
-		return Single.fromCallable(() -> {
-					var stmt = dbAccess.context()
-							.select(
-									Tables.MARKET_HISTORY.DATE,
-									DSL.countDistinct(Tables.MARKET_HISTORY.REGION_ID, Tables.MARKET_HISTORY.TYPE_ID)
-											.as("pairs"))
-							.from(Tables.MARKET_HISTORY)
-							.where(Tables.MARKET_HISTORY.DATE.greaterOrEqual(minDate))
-							.groupBy(Tables.MARKET_HISTORY.DATE);
-					var dailyPairs = new HashMap<LocalDate, Integer>();
-					stmt.fetch().forEach(r -> dailyPairs.put(r.value1(), r.value2()));
-					return dailyPairs;
-				})
-				.compose(Rx.offloadSingle());
+		return Single.defer(() -> {
+			var cached = dailyPairsCache.getIfPresent(minDate);
+			if (cached != null) {
+				return Single.just(cached);
+			}
+			return Single.fromCallable(() -> {
+						var stmt = dbAccess.context()
+								.select(
+										Tables.MARKET_HISTORY.DATE,
+										DSL.countDistinct(
+														Tables.MARKET_HISTORY.REGION_ID, Tables.MARKET_HISTORY.TYPE_ID)
+												.as("pairs"))
+								.from(Tables.MARKET_HISTORY)
+								.where(Tables.MARKET_HISTORY.DATE.greaterOrEqual(minDate))
+								.groupBy(Tables.MARKET_HISTORY.DATE);
+						var dailyPairs = new HashMap<LocalDate, Integer>();
+						stmt.fetch().forEach(r -> dailyPairs.put(r.value1(), r.value2()));
+						return dailyPairs;
+					})
+					.compose(Rx.offloadSingle())
+					.doOnSuccess(dailyPairs -> dailyPairsCache.put(minDate, dailyPairs));
+		});
 	}
 }

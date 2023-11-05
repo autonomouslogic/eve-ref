@@ -48,18 +48,21 @@ public class ImportMarketHistory implements Command {
 
 	@Override
 	public Completable run() {
-		return resolveFilesToDownload()
-				.filter(f -> f.isDateFile() || f.isYearFile()) // @todo remove
-				.flatMap(availableFile -> {
-					if (availableFile.isDateFile()) {
-						return marketHistoryLoader.loadDailyFile(availableFile.getHttpUrl(), availableFile.getDate());
-					} else if (availableFile.isYearFile()) {
-						return marketHistoryLoader.loadYearFile(availableFile.getHttpUrl());
-					} else {
-						return Flowable.error(new RuntimeException("Unknown file type: " + availableFile));
-					}
-				})
-				.flatMapCompletable(this::insertDayEntries, false, insertConcurrency);
+		return marketHistoryDao.fetchDailyPairs(minDate).flatMapCompletable(dailyPairs -> {
+			return resolveFilesToDownload()
+					.filter(f -> f.isDateFile() || f.isYearFile()) // @todo remove
+					.flatMap(availableFile -> {
+						if (availableFile.isDateFile()) {
+							return marketHistoryLoader.loadDailyFile(
+									availableFile.getHttpUrl(), availableFile.getDate());
+						} else if (availableFile.isYearFile()) {
+							return marketHistoryLoader.loadYearFile(availableFile.getHttpUrl(), dailyPairs.keySet());
+						} else {
+							return Flowable.error(new RuntimeException("Unknown file type: " + availableFile));
+						}
+					})
+					.flatMapCompletable(this::insertDayEntries, false, insertConcurrency);
+		});
 	}
 
 	@NotNull
