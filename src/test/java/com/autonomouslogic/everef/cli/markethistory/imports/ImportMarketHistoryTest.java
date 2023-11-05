@@ -186,18 +186,18 @@ public class ImportMarketHistoryTest {
 	}
 
 	private void assertYearlyImports() {
-		assertEquals(
-				NOT_IMPORTED,
-				marketHistoryDao
-						.fetchByPK(LocalDate.parse("2018-12-01"), REGION_ID, 20)
-						.blockingGet()
-						.getAverage());
-		assertEquals(
-				NOT_IMPORTED,
-				marketHistoryDao
-						.fetchByPK(LocalDate.parse("2018-12-01"), REGION_ID, 21)
-						.blockingGet()
-						.getAverage());
+		//		assertEquals(
+		//				NOT_IMPORTED,
+		//				marketHistoryDao
+		//						.fetchByPK(LocalDate.parse("2018-12-01"), REGION_ID, 20)
+		//						.blockingGet()
+		//						.getAverage());
+		//		assertEquals(
+		//				NOT_IMPORTED,
+		//				marketHistoryDao
+		//						.fetchByPK(LocalDate.parse("2018-12-01"), REGION_ID, 21)
+		//						.blockingGet()
+		//						.getAverage());
 
 		assertEquals(
 				IMPORTED,

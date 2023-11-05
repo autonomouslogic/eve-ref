@@ -6,6 +6,7 @@ import io.reactivex.rxjava3.core.Completable;
 import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import org.jooq.DSLContext;
 import org.jooq.Table;
 import org.jooq.UpdatableRecord;
 
@@ -23,6 +24,10 @@ public class DbAdapter {
 	}
 
 	public <R extends UpdatableRecord<R>> Completable insert(Table<R> table, List<R> records) {
+		return insert(dbAccess.context(), table, records);
+	}
+
+	public <R extends UpdatableRecord<R>> Completable insert(DSLContext ctx, Table<R> table, List<R> records) {
 		return Completable.fromAction(() -> {
 					var stmt = dbAccess.context().insertInto(table).columns(table.fields());
 					for (var record : records) {

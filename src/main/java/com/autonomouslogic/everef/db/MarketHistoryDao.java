@@ -34,7 +34,11 @@ public class MarketHistoryDao extends BaseDao<MarketHistory, MarketHistoryRecord
 				pojo.getLowest(),
 				pojo.getVolume(),
 				pojo.getOrderCount(),
-				pojo.getHttpLastModified().atOffset(ZoneOffset.UTC));
+				pojo.getHttpLastModified().atOffset(ZoneOffset.UTC)
+				//			Optional.ofNullable(pojo.getHttpLastModified())
+				//					.map(t -> t.atOffset(ZoneOffset.UTC))
+				//						.orElse(null)
+				);
 	}
 
 	public MarketHistoryEntry fromRecord(MarketHistoryRecord record) {

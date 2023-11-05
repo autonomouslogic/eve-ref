@@ -23,6 +23,7 @@ import javax.inject.Inject;
 import lombok.extern.log4j.Log4j2;
 import okhttp3.OkHttpClient;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -53,14 +54,14 @@ public class MarketHistoryLoader {
 				.withColumnReordering(true);
 	}
 
-	public Flowable<JsonNode> loadDailyFile(DataUrl url) {
+	public Flowable<Pair<LocalDate, List<JsonNode>>> loadDailyFile(DataUrl url, LocalDate date) {
 		return downloadFile(url).flatMapPublisher(file -> {
 			file.deleteOnExit();
-			return parseDailyFile(file, LocalDate.EPOCH).doFinally(() -> file.delete());
+			return parseDailyFile(file, date).doFinally(() -> file.delete());
 		});
 	}
 
-	public Flowable<JsonNode> loadYearFile(DataUrl url) {
+	public Flowable<Pair<LocalDate, List<JsonNode>>> loadYearFile(DataUrl url) {
 		return downloadFile(url).flatMapPublisher(file -> {
 			file.deleteOnExit();
 			return parseYearFile(file).doFinally(() -> file.delete());
@@ -82,30 +83,31 @@ public class MarketHistoryLoader {
 		});
 	}
 
-	private Flowable<JsonNode> parseDailyFile(File file, LocalDate date) {
+	private Flowable<Pair<LocalDate, List<JsonNode>>> parseDailyFile(File file, LocalDate date) {
 		return Flowable.defer(() -> {
-					log.trace("Reading market history file for {}: {}", date, file);
+					log.trace("Reading market history file: {}", file);
 					List<JsonNode> list;
 					try (var in = CompressUtil.uncompress(file)) {
 						list = readCsvEntries(in);
 					}
-					log.trace("Read {} entries for {} from {}", list.size(), date, file);
-					return Flowable.fromIterable(list);
+					log.trace("Read {} entries from {}", list.size(), file);
+					return Flowable.just(Pair.of(date, list));
 				})
 				.compose(Rx.offloadFlowable());
 	}
 
-	private Flowable<JsonNode> parseYearFile(File file) {
+	private Flowable<Pair<LocalDate, List<JsonNode>>> parseYearFile(File file) {
 		return Flowable.defer(() -> {
 					log.trace("Reading yearly market history file: {}", file);
 					return CompressUtil.loadArchive(file).flatMap(entry -> {
+						var date = LocalDate.parse(entry.getLeft().getName().substring(0, 10));
 						var list = readCsvEntries(new ByteArrayInputStream(entry.getRight()));
 						log.trace(
-								"Read {} entries for {}#{}",
+								"Read {} entries from {}#{}",
 								list.size(),
 								file,
 								entry.getLeft().getName());
-						return Flowable.fromIterable(list);
+						return Flowable.just(Pair.of(date, list));
 					});
 				})
 				.compose(Rx.offloadFlowable());

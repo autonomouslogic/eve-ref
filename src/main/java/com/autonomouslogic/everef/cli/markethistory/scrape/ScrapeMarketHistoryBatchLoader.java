@@ -61,7 +61,8 @@ class ScrapeMarketHistoryBatchLoader {
 				.flatMap(
 						p -> {
 							return marketHistoryLoader
-									.loadDailyFile(p.getRight())
+									.loadDailyFile(p.getRight(), p.getLeft())
+									.flatMap(entry -> Flowable.fromIterable(entry.getRight()))
 									.map(entry -> {
 										totalEntries.incrementAndGet();
 										return Pair.of(p.getLeft(), entry);

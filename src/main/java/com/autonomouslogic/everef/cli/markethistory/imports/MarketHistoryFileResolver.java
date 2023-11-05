@@ -101,15 +101,15 @@ class MarketHistoryFileResolver {
 				.sorted()
 				.toList();
 		var ccpBackfill = files.stream().anyMatch(f -> f.isCcpQuantBackfillFile());
-		log.debug("Found {} files to download", files.size());
+		log.info("Found {} files to download", files.size());
 		if (!days.isEmpty()) {
-			log.debug("Day files to be imported: ({}) {}", days.size(), days);
+			log.info("Day files to be imported: ({}) {}", days.size(), days);
 		}
 		if (!years.isEmpty()) {
-			log.debug("Year files to be imported: ({}) {}", years.size(), years);
+			log.info("Year files to be imported: ({}) {}", years.size(), years);
 		}
 		if (ccpBackfill) {
-			log.debug("CCP backfill file to be imported");
+			log.info("CCP backfill file to be imported");
 		}
 	}
 }

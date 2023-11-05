@@ -7,13 +7,17 @@ import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.db.DbAccess;
 import com.autonomouslogic.everef.db.MarketHistoryDao;
 import com.autonomouslogic.everef.model.MarketHistoryEntry;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Ordering;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Flowable;
 import java.time.LocalDate;
+import java.util.List;
 import javax.inject.Inject;
 import lombok.extern.log4j.Log4j2;
+import org.apache.commons.lang3.tuple.Pair;
+import org.jetbrains.annotations.NotNull;
 
 @Log4j2
 public class ImportMarketHistory implements Command {
@@ -48,16 +52,30 @@ public class ImportMarketHistory implements Command {
 				.filter(f -> f.isDateFile() || f.isYearFile()) // @todo remove
 				.flatMap(availableFile -> {
 					if (availableFile.isDateFile()) {
-						return marketHistoryLoader.loadDailyFile(availableFile.getHttpUrl());
+						return marketHistoryLoader.loadDailyFile(availableFile.getHttpUrl(), availableFile.getDate());
 					} else if (availableFile.isYearFile()) {
 						return marketHistoryLoader.loadYearFile(availableFile.getHttpUrl());
 					} else {
 						return Flowable.error(new RuntimeException("Unknown file type: " + availableFile));
 					}
 				})
-				.map(node -> objectMapper.convertValue(node, MarketHistoryEntry.class))
-				.buffer(insertSize)
-				.flatMapCompletable(entries -> marketHistoryDao.insert(entries), false, insertConcurrency);
+				.flatMapCompletable(this::insertDayEntries, false, insertConcurrency);
+	}
+
+	@NotNull
+	private Completable insertDayEntries(Pair<LocalDate, List<JsonNode>> dateList) {
+		return Completable.defer(() -> {
+			var date = dateList.getLeft();
+			var nodes = dateList.getRight();
+			log.info("Inserting {} entries for {}", nodes.size(), date);
+			return Completable.fromPublisher(dbAccess.context().transactionPublisher(trx -> {
+				return Flowable.fromIterable(nodes)
+						.map(node -> objectMapper.convertValue(node, MarketHistoryEntry.class))
+						.buffer(insertSize)
+						.flatMapCompletable(entries -> marketHistoryDao.insert(entries), false, 1)
+						.toFlowable();
+			}));
+		});
 	}
 
 	private Flowable<AvailableMarketHistoryFile> resolveFilesToDownload() {

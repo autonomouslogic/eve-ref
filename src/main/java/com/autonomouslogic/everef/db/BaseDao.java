@@ -4,6 +4,7 @@ import io.reactivex.rxjava3.core.Completable;
 import java.util.List;
 import javax.inject.Inject;
 import lombok.RequiredArgsConstructor;
+import org.jooq.DSLContext;
 import org.jooq.Table;
 import org.jooq.UpdatableRecord;
 
@@ -23,6 +24,14 @@ public abstract class BaseDao<T extends Table<R>, R extends UpdatableRecord<R>, 
 
 	public Completable insert(List<P> pojos) {
 		return dbAdapter.insert(table, toRecords(pojos));
+	}
+
+	public Completable insert(DSLContext ctx, P pojo) {
+		return insert(ctx, List.of(pojo));
+	}
+
+	public Completable insert(DSLContext ctx, List<P> pojos) {
+		return dbAdapter.insert(ctx, table, toRecords(pojos));
 	}
 
 	// @todo jooq can do pojo conversion, but can't add Jackson annotations nor create Jackson-compatible objects.
