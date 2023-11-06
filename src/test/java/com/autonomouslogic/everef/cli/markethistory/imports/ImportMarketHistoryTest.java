@@ -193,10 +193,9 @@ public class ImportMarketHistoryTest {
 						.fetchByPK(LocalDate.parse("2018-12-01"), REGION_ID, 20)
 						.blockingGet()
 						.getAverage());
-		assertNull(
-				marketHistoryDao
-						.fetchByPK(LocalDate.parse("2018-12-01"), REGION_ID, 21)
-						.blockingGet());
+		assertNull(marketHistoryDao
+				.fetchByPK(LocalDate.parse("2018-12-01"), REGION_ID, 21)
+				.blockingGet());
 
 		assertEquals(
 				IMPORTED,

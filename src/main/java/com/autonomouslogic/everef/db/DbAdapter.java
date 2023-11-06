@@ -1,16 +1,17 @@
 package com.autonomouslogic.everef.db;
 
 import com.autonomouslogic.everef.config.Configs;
-import com.autonomouslogic.everef.util.Rx;
 import io.reactivex.rxjava3.core.Completable;
 import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import lombok.extern.log4j.Log4j2;
 import org.jooq.DSLContext;
 import org.jooq.Table;
 import org.jooq.UpdatableRecord;
 
 @Singleton
+@Log4j2
 public class DbAdapter {
 	@Inject
 	protected DbAccess dbAccess;
@@ -29,12 +30,12 @@ public class DbAdapter {
 
 	public <R extends UpdatableRecord<R>> Completable insert(DSLContext ctx, Table<R> table, List<R> records) {
 		return Completable.fromAction(() -> {
-					var stmt = dbAccess.context().insertInto(table).columns(table.fields());
-					for (var record : records) {
-						stmt = stmt.values(record);
-					}
-					stmt.onDuplicateKeyIgnore().execute();
-				})
-				.compose(Rx.offloadCompletable());
+			var stmt = ctx.insertInto(table).columns(table.fields());
+			for (var record : records) {
+				stmt = stmt.values(record);
+			}
+			stmt.onDuplicateKeyIgnore().execute();
+			log.debug("Inserted {} records into {}", records.size(), table.getName());
+		});
 	}
 }

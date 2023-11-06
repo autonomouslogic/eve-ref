@@ -179,7 +179,7 @@ test {
 	environment "LOG_LEVEL", "trace"
 //	environment "DATABASE_URL", "jdbc:h2:file:${buildDir}/db/database-test-${System.currentTimeMillis()};AUTO_SERVER=TRUE"
 	environment "DATABASE_URL", "jdbc:h2:file:${buildDir}/db/database-test;AUTO_SERVER=TRUE"
-	jvmArgs "-client", "-XX:+UseG1GC", "-Xmx8g"
+	jvmArgs "-client", "-XX:+UseG1GC", "-Xmx8g", "-Dorg.jooq.no-logo=true", "-Dorg.jooq.no-tips=true"
 
 	useJUnitPlatform()
 	testLogging {
@@ -223,7 +223,9 @@ application {
 	applicationDefaultJvmArgs = [
 		"-XX:+PrintCommandLineFlags",
 		"-XX:MinHeapSize=" + 10 * 1024 * 1024,
-		"-XX:MaxRAMPercentage=80.0"
+		"-XX:MaxRAMPercentage=80.0",
+		"-Dorg.jooq.no-logo=true",
+		"-Dorg.jooq.no-tips=true"
 	]
 }
 

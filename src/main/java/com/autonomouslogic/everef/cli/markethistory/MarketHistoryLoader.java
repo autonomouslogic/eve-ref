@@ -72,7 +72,7 @@ public class MarketHistoryLoader {
 	private Single<File> downloadFile(DataUrl url) {
 		return Single.defer(() -> {
 			var file = tempFiles
-					.tempFile("market-history", FilenameUtils.getName(url.getPath()))
+					.tempFile("market-history", "-" + FilenameUtils.getName(url.getPath()))
 					.toFile();
 			return okHttpHelper.download(url.toString(), file, okHttpClient).flatMap(response -> {
 				if (response.code() != 200) {
