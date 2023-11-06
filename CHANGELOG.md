@@ -1,5 +1,22 @@
 EVE Ref Changelog
 
+## [2.36.3](https://github.com/autonomouslogic/eve-ref/compare/2.36.2...2.36.3) (2023-11-06)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @fortawesome/vue-fontawesome to v3.0.5 ([#359](https://github.com/autonomouslogic/eve-ref/issues/359)) ([501f1c3](https://github.com/autonomouslogic/eve-ref/commit/501f1c33be6b5b5cf643b09666328d0e8218b4b4))
+
+
+### Build System
+
+* Removed explicit user IDs ([#354](https://github.com/autonomouslogic/eve-ref/issues/354)) ([4207857](https://github.com/autonomouslogic/eve-ref/commit/42078574993df8a74fe740aa872deec02b2f8c50))
+
+
+### Continuous Integration
+
+* Re-added publish script during release. [skip ci] ([e2cde9b](https://github.com/autonomouslogic/eve-ref/commit/e2cde9baceb509cc820f3220bcdda2c6ac845cf1))
+
 ## [2.36.2](https://github.com/autonomouslogic/eve-ref/compare/2.36.1...2.36.2) (2023-11-02)
 
 
