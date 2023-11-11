@@ -1,0 +1,75 @@
+plugins {
+    id "java"
+    id "idea"
+    id "org.danilopianini.git-sensitive-semantic-versioning-gradle-plugin"
+    id "com.diffplug.spotless"
+    id "org.flywaydb.flyway"
+    id "nu.studer.jooq"
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    jooqGenerator "com.h2database:h2:2.2.224"
+    implementation "org.flywaydb:flyway-core:9.22.3"
+    implementation "com.h2database:h2:2.2.224"
+}
+
+flyway {
+	url = "jdbc:h2:file:${buildDir}/db/database-generate;AUTO_SERVER=TRUE"
+    locations = ["classpath:com/autonomouslogic/everef/db/migrations"]
+}
+
+jooq {
+    // https://github.com/etiennestuder/gradle-jooq-plugin/blob/main/example/configure_jooq_with_flyway/build.gradle
+    configurations {
+        main {
+            generationTool {
+                logging = org.jooq.meta.jaxb.Logging.INFO
+                jdbc {
+                    driver = "org.h2.Driver"
+                    url = flyway.url
+                }
+                generator {
+                    name = "org.jooq.codegen.DefaultGenerator"
+                    database {
+                        name = "org.jooq.meta.h2.H2Database"
+                        inputSchema = "PUBLIC"
+                        includes = ".*"
+                        excludes = "FLYWAY_SCHEMA_HISTORY"
+                        forcedTypes {
+                            forcedType {
+                                includeTypes = "TIMESTAMPWITHTIMEZONE"
+                                userType = "java.time.Instant"
+                            }
+                        }
+                    }
+                    generate {
+                        deprecated = false
+                        records = true
+                        interfaces = false
+                        immutablePojos = false
+                        daos = false
+                        javaTimeTypes = true
+                        indentation = "\\t"
+                        newline = "\\n"
+                    }
+                    target {
+                        packageName = "com.autonomouslogic.everef.db.schema"
+                    }
+                }
+            }
+        }
+    }
+}
+generateJooq.dependsOn(flywayMigrate)
+
+spotless {
+    java {
+        target "src/**/*.java"
+        palantirJavaFormat()
+        indentWithTabs()
+    }
+}

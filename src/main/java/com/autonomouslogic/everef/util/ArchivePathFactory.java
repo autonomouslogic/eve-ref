@@ -146,6 +146,13 @@ public class ArchivePathFactory {
 			if (parsed.isSupported(ChronoField.HOUR_OF_DAY)) {
 				return Instant.from(parsed);
 			}
+			if (parsed.isSupported(ChronoField.YEAR)
+					&& !parsed.isSupported(ChronoField.MONTH_OF_YEAR)
+					&& !parsed.isSupported(ChronoField.DAY_OF_MONTH)) {
+				return LocalDate.of(parsed.get(ChronoField.YEAR), 1, 1)
+						.atStartOfDay(ZoneOffset.UTC)
+						.toInstant();
+			}
 			return LocalDate.from(parsed).atStartOfDay(ZoneOffset.UTC).toInstant();
 		} catch (DateTimeParseException e) {
 			return null;

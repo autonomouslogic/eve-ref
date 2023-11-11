@@ -1,3 +1,5 @@
+import java.time.LocalDate
+
 plugins {
 	id "java"
 	id "org.jetbrains.kotlin.jvm" version "1.8.22"
@@ -9,6 +11,8 @@ plugins {
 	id "com.diffplug.spotless" version "6.19.0"
 	id "org.openapi.generator" version "7.0.0"
 	id "io.swagger.core.v3.swagger-gradle-plugin" version "2.2.14"
+	id "org.flywaydb.flyway" version "9.22.3" apply false
+	id "nu.studer.jooq" version "8.2.1" apply false
 }
 
 group "com.autonomouslogic.everef"
@@ -28,8 +32,14 @@ repositories {
 	mavenCentral()
 }
 
+java {
+	withJavadocJar()
+	withSourcesJar()
+}
+
 dependencies {
 	annotationProcessor "com.google.dagger:dagger-compiler:2.46.1"
+	implementation project(":database")
 	implementation "com.google.dagger:dagger:2.46.1"
 	implementation "com.google.guava:guava:32.1.1-jre"
 	implementation "org.apache.logging.log4j:log4j-api:2.20.0"
@@ -71,6 +81,11 @@ dependencies {
 	implementation "org.openapitools:jackson-databind-nullable:0.2.6"
 	implementation "org.apache.commons:commons-rng-simple:1.5"
 
+	implementation "org.jooq:jooq:3.18.7"
+	implementation "org.flywaydb:flyway-core:9.22.3"
+	implementation "com.h2database:h2:2.2.224"
+	implementation "org.postgresql:postgresql:42.6.0"
+
 	testAnnotationProcessor "com.google.dagger:dagger-compiler:2.46.1"
 	testImplementation "com.google.dagger:dagger:2.46.1"
 	testImplementation "org.junit.jupiter:junit-jupiter:5.9.3"
@@ -78,11 +93,6 @@ dependencies {
 	testImplementation "org.junit-pioneer:junit-pioneer:2.0.1"
 	testImplementation "org.mockito:mockito-junit-jupiter:5.4.0"
 	testImplementation "com.squareup.okhttp3:mockwebserver:4.11.0"
-}
-
-java {
-	withJavadocJar()
-	withSourcesJar()
 }
 
 task refDataSpec(type: io.swagger.v3.plugins.gradle.tasks.ResolveTask) {
@@ -167,7 +177,8 @@ delombok.dependsOn(tasks.openApiGenerate)
 
 test {
 	environment "LOG_LEVEL", "trace"
-	jvmArgs "-client", "-XX:+UseG1GC", "-Xmx8g"
+	environment "DATABASE_URL", "jdbc:h2:file:${buildDir}/db/database-test;AUTO_SERVER=TRUE"
+	jvmArgs "-client", "-XX:+UseG1GC", "-Xmx8g", "-Dorg.jooq.no-logo=true", "-Dorg.jooq.no-tips=true"
 
 	useJUnitPlatform()
 	testLogging {
@@ -211,7 +222,9 @@ application {
 	applicationDefaultJvmArgs = [
 		"-XX:+PrintCommandLineFlags",
 		"-XX:MinHeapSize=" + 10 * 1024 * 1024,
-		"-XX:MaxRAMPercentage=80.0"
+		"-XX:MaxRAMPercentage=80.0",
+		"-Dorg.jooq.no-logo=true",
+		"-Dorg.jooq.no-tips=true"
 	]
 }
 
@@ -301,6 +314,28 @@ task importTestResources(type: JavaExec) {
 	group "application"
 	args "import-test-resources"
 	environment envProperties
+	classpath = sourceSets.main.runtimeClasspath
+	mainClass = mainClassName
+}
+
+task flywayMigrate(type: JavaExec) {
+	group "application"
+	args "flyway-migrate"
+	environment envProperties
+	environment "DATABASE_URL", "jdbc:h2:file:${buildDir}/everef-data;AUTO_SERVER=true"
+
+	classpath = sourceSets.main.runtimeClasspath
+	mainClass = mainClassName
+}
+
+task importMarketHistory(type: JavaExec) {
+	group "application"
+	args "import-market-history"
+	environment envProperties
+	environment "LOG_LEVEL", "debug"
+	environment "DATABASE_URL", "jdbc:h2:file:${buildDir}/everef-data;AUTO_SERVER=true"
+	environment "IMPORT_MARKET_HISTORY_MIN_DATE", LocalDate.now().minusDays(7).toString();
+
 	classpath = sourceSets.main.runtimeClasspath
 	mainClass = mainClassName
 }

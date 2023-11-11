@@ -60,6 +60,10 @@ public class CompressUtil {
 			log.trace("Opening tar-xz file: {}", file.getPath());
 			return new TarArchiveInputStream(new XZCompressorInputStream(in));
 		}
+		if (name.endsWith(".tar.bz2")) {
+			log.trace("Opening tar-bz2 file: {}", file.getPath());
+			return new TarArchiveInputStream(new BZip2CompressorInputStream(in));
+		}
 		throw new IllegalArgumentException("Unknown file type: " + name);
 	}
 

@@ -4,10 +4,12 @@ import com.autonomouslogic.everef.cli.DataIndexTest;
 import com.autonomouslogic.everef.cli.MockDataIndexModule;
 import com.autonomouslogic.everef.cli.decorator.HealthcheckDecoratorTest;
 import com.autonomouslogic.everef.cli.decorator.SlackDecoratorTest;
-import com.autonomouslogic.everef.cli.markethistory.ExplorerRegionTypeSourceTest;
-import com.autonomouslogic.everef.cli.markethistory.RecentRegionTypeRemoverTest;
-import com.autonomouslogic.everef.cli.markethistory.ScrapeMarketHistoryTest;
-import com.autonomouslogic.everef.cli.markethistory.TopTradedRegionTypeSourceTest;
+import com.autonomouslogic.everef.cli.flyway.FlywayMigrateTest;
+import com.autonomouslogic.everef.cli.markethistory.imports.ImportMarketHistoryTest;
+import com.autonomouslogic.everef.cli.markethistory.scrape.ExplorerRegionTypeSourceTest;
+import com.autonomouslogic.everef.cli.markethistory.scrape.RecentRegionTypeRemoverTest;
+import com.autonomouslogic.everef.cli.markethistory.scrape.ScrapeMarketHistoryTest;
+import com.autonomouslogic.everef.cli.markethistory.scrape.TopTradedRegionTypeSourceTest;
 import com.autonomouslogic.everef.cli.marketorders.ScrapeMarketOrdersTest;
 import com.autonomouslogic.everef.cli.publiccontracts.ScrapePublicContractsTest;
 import com.autonomouslogic.everef.cli.publishrefdata.PublishRefDataTest;
@@ -18,6 +20,8 @@ import com.autonomouslogic.everef.cli.refdata.TransformUtilTest;
 import com.autonomouslogic.everef.cli.refdata.esi.EsiLoaderTest;
 import com.autonomouslogic.everef.cli.refdata.hoboleaks.HoboleaksLoaderTest;
 import com.autonomouslogic.everef.cli.refdata.sde.SdeLoaderTest;
+import com.autonomouslogic.everef.db.DbAdapterTest;
+import com.autonomouslogic.everef.db.MarketHistoryDaoTest;
 import com.autonomouslogic.everef.esi.EsiHelperTest;
 import com.autonomouslogic.everef.esi.EsiLimitExceededInterceptorTest;
 import com.autonomouslogic.everef.esi.EsiRateLimitInterceptorTest;
@@ -58,6 +62,8 @@ public interface TestComponent {
 
 	void inject(DataIndexTest test);
 
+	void inject(DbAdapterTest test);
+
 	void inject(EsiHelperTest test);
 
 	void inject(EsiLoaderTest test);
@@ -68,11 +74,17 @@ public interface TestComponent {
 
 	void inject(ExplorerRegionTypeSourceTest test);
 
+	void inject(FlywayMigrateTest test);
+
 	void inject(HealthcheckDecoratorTest test);
 
 	void inject(HoboleaksLoaderTest test);
 
+	void inject(ImportMarketHistoryTest test);
+
 	void inject(LocationPopulatorTest test);
+
+	void inject(MarketHistoryDaoTest test);
 
 	void inject(MarketHistoryEntryTest test);
 

@@ -3,6 +3,7 @@ package com.autonomouslogic.everef.config;
 import com.autonomouslogic.everef.refdata.ReferenceDataSpec;
 import java.net.URI;
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.Period;
 
 public class Configs {
@@ -146,6 +147,18 @@ public class Configs {
 	// Note that this isn't set anywhere in code, but is loaded in via log4j2.properties.
 	public static final Config<String> LOG_LEVEL = Config.<String>builder()
 			.name("LOG_LEVEL")
+			.defaultValue("info")
+			.type(String.class)
+			.build();
+
+	/**
+	 * Log4j2 log level to use for jOOQ.
+	 * Similar to {@link Configs#LOG_LEVEL}.
+	 * Set to <code>DEBUG</code> to enable full SQL logging.
+	 */
+	// Note that this isn't set anywhere in code, but is loaded in via log4j2.properties.
+	public static final Config<String> LOG_LEVEL_JOOQ = Config.<String>builder()
+			.name("LOG_LEVEL_JOOQ")
 			.defaultValue("info")
 			.type(String.class)
 			.build();
@@ -505,5 +518,75 @@ public class Configs {
 			.name("FORCE_REF_DATA")
 			.defaultValue(false)
 			.type(Boolean.class)
+			.build();
+
+	/**
+	 * The JDBC URL for the database.
+	 */
+	public static final Config<String> DATABASE_URL =
+			Config.<String>builder().name("DATABASE_URL").type(String.class).build();
+
+	/**
+	 * The user for the database.
+	 */
+	public static final Config<String> DATABASE_USERNAME = Config.<String>builder()
+			.name("DATABASE_USERNAME")
+			.defaultValue("")
+			.type(String.class)
+			.build();
+
+	/**
+	 * The password for the database.
+	 */
+	public static final Config<String> DATABASE_PASSWORD = Config.<String>builder()
+			.name("DATABASE_PASSWORD")
+			.defaultValue("")
+			.type(String.class)
+			.build();
+
+	/**
+	 * The prefix to use for all tables.
+	 */
+	// @todo https://github.com/autonomouslogic/eve-ref/issues/363
+	public static final Config<String> DATABASE_TABLE_NAME_PREFIX = Config.<String>builder()
+			.name("DATABASE_TABLE_NAME_PREFIX")
+			.type(String.class)
+			.defaultValue("")
+			.build();
+
+	/**
+	 * Minimum date to import market history for.
+	 */
+	public static final Config<LocalDate> IMPORT_MARKET_HISTORY_MIN_DATE = Config.<LocalDate>builder()
+			.name("IMPORT_MARKET_HISTORY_MIN_DATE")
+			.type(LocalDate.class)
+			.defaultValue(LocalDate.parse("2003-01-01"))
+			.build();
+
+	/**
+	 * The number of entries to be inserted per query.
+	 */
+	public static final Config<Integer> INSERT_SIZE = Config.<Integer>builder()
+			.name("INSERT_SIZE")
+			.type(Integer.class)
+			.defaultValue(100)
+			.build();
+
+	/**
+	 * The number of insert queries to run concurrently.
+	 */
+	public static final Config<Integer> INSERT_CONCURRENCY = Config.<Integer>builder()
+			.name("INSERT_CONCURRENCY")
+			.type(Integer.class)
+			.defaultValue(1)
+			.build();
+
+	/**
+	 * Whether import jobs should migrate automatically at the beginning of their run.
+	 */
+	public static final Config<Boolean> FLYWAY_AUTO_MIGRATE = Config.<Boolean>builder()
+			.name("FLYWAY_AUTO_MIGRATE")
+			.type(Boolean.class)
+			.defaultValue(true)
 			.build();
 }

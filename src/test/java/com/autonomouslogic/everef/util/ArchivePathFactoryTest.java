@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneOffset;
 import org.junit.jupiter.api.Test;
 
 public class ArchivePathFactoryTest {
@@ -93,5 +94,10 @@ public class ArchivePathFactoryTest {
 
 	private static void testExpectedPaths(ArchivePathFactory factory, LocalDate datestamp, String expectedTimePath) {
 		assertEquals(expectedTimePath, factory.createArchivePath(datestamp));
+		assertEquals(
+				datestamp,
+				factory.parseArchiveTime(expectedTimePath)
+						.atZone(ZoneOffset.UTC)
+						.toLocalDate());
 	}
 }

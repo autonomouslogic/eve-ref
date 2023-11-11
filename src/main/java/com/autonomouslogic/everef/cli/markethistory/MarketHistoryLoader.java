@@ -1,42 +1,42 @@
 package com.autonomouslogic.everef.cli.markethistory;
 
-import static java.time.ZoneOffset.UTC;
-
-import com.autonomouslogic.everef.config.Configs;
-import com.autonomouslogic.everef.http.DataCrawler;
+import com.autonomouslogic.commons.rxjava3.Rx3Util;
 import com.autonomouslogic.everef.http.OkHttpHelper;
 import com.autonomouslogic.everef.model.MarketHistoryEntry;
 import com.autonomouslogic.everef.url.DataUrl;
-import com.autonomouslogic.everef.util.ArchivePathFactory;
 import com.autonomouslogic.everef.util.CompressUtil;
 import com.autonomouslogic.everef.util.Rx;
 import com.autonomouslogic.everef.util.TempFiles;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.MappingIterator;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
-import com.google.common.collect.Ordering;
+import com.fasterxml.jackson.dataformat.csv.CsvParser;
+import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Single;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Map;
-import java.util.TreeMap;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.List;
 import javax.inject.Inject;
-import lombok.Getter;
-import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 import okhttp3.OkHttpClient;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.tuple.Pair;
+import org.jetbrains.annotations.NotNull;
 
 /**
- * Loads market history from the data site.
+ * Loads and parses files from the data site.
  */
 @Log4j2
-class MarketHistoryLoader {
+public class MarketHistoryLoader {
+	protected final CsvMapper csvMapper;
+
 	@Inject
-	protected DataCrawler dataCrawler;
+	protected TempFiles tempFiles;
 
 	@Inject
 	protected OkHttpClient okHttpClient;
@@ -44,103 +44,69 @@ class MarketHistoryLoader {
 	@Inject
 	protected OkHttpHelper okHttpHelper;
 
-	@Inject
-	protected TempFiles tempFiles;
+	private final CsvSchema schema;
 
 	@Inject
-	protected CsvMapper csvMapper;
-
-	private final int downloadConcurrency = Configs.MARKET_HISTORY_LOAD_CONCURRENCY.getRequired();
-
-	@Setter
-	private LocalDate minDate;
-
-	@Getter
-	private final Map<LocalDate, Integer> fileTotals = new TreeMap<>();
-
-	@Inject
-	protected MarketHistoryLoader() {}
-
-	@Inject
-	protected void init() {
-		dataCrawler.setPrefix(ArchivePathFactory.MARKET_HISTORY.getFolder() + "/");
+	protected MarketHistoryLoader(CsvMapper csvMapper) {
+		this.csvMapper = csvMapper.copy().configure(CsvParser.Feature.FAIL_ON_MISSING_HEADER_COLUMNS, false);
+		schema = this.csvMapper
+				.schemaFor(MarketHistoryEntry.class)
+				.withHeader()
+				.withStrictHeaders(true)
+				.withColumnReordering(true);
 	}
 
-	public Flowable<Pair<LocalDate, JsonNode>> load() {
-		log.info("Loading market history - minDate: {}", minDate);
-		var totalEntries = new AtomicInteger();
-		var f = crawlFiles();
-		if (minDate != null) {
-			f = f.filter(p -> !p.getLeft().isBefore(minDate));
-		}
-		return f.sorted(Ordering.natural().onResultOf(Pair::getLeft))
-				.switchIfEmpty(Flowable.error(new RuntimeException("No market history files found.")))
-				.flatMap(
-						p -> {
-							return downloadFile(p.getRight(), p.getLeft()).flatMapPublisher(file -> {
-								file.deleteOnExit();
-								return parseFile(file, p.getLeft())
-										.map(entry -> {
-											totalEntries.incrementAndGet();
-											return Pair.of(p.getLeft(), entry);
-										})
-										.doFinally(() -> file.delete());
-							});
-						},
-						false,
-						downloadConcurrency)
-				.doOnComplete(() -> log.info("Loaded {} market history entries", totalEntries.get()))
-				.switchIfEmpty(Flowable.error(new RuntimeException("No market data found in history files.")));
-	}
-
-	private Flowable<Pair<LocalDate, DataUrl>> crawlFiles() {
-		return dataCrawler.crawl().flatMap(url -> {
-			var path = url.getPath();
-			var time = ArchivePathFactory.MARKET_HISTORY.parseArchiveTime(path);
-			if (time == null) {
-				return Flowable.empty();
-			}
-			log.trace("Found market history file: {}", url);
-			return Flowable.just(Pair.of(time.atZone(UTC).toLocalDate(), url));
+	public Flowable<Pair<LocalDate, List<JsonNode>>> loadDailyFile(DataUrl url, LocalDate date) {
+		return downloadFile(url).flatMapPublisher(file -> {
+			file.deleteOnExit();
+			return parseDailyFile(file, date).doFinally(() -> file.delete());
 		});
 	}
 
-	private Single<File> downloadFile(DataUrl url, LocalDate date) {
+	private Single<File> downloadFile(DataUrl url) {
 		return Single.defer(() -> {
-			log.debug("Downloading market history file for {}: {}", date, url);
 			var file = tempFiles
-					.tempFile("market-history", ArchivePathFactory.MARKET_HISTORY.getSuffix())
+					.tempFile("market-history", "-" + FilenameUtils.getName(url.getPath()))
 					.toFile();
-			return okHttpHelper.download(url.toString(), file, okHttpClient).flatMap(response -> {
-				if (response.code() != 200) {
-					return Single.error(
-							new RuntimeException("Failed to download " + url + " with code " + response.code()));
-				}
-				return Single.just(file);
-			});
+			return okHttpHelper
+					.download(url.toString(), file, okHttpClient)
+					.flatMap(response -> {
+						if (response.code() != 200) {
+							return Single.error(new RuntimeException(
+									"Failed to download " + url + " with code " + response.code()));
+						}
+						return Single.just(file);
+					})
+					.toFlowable()
+					.compose(Rx3Util.retryWithDelayFlowable(2, Duration.ofSeconds(2), e -> {
+						log.warn("Retrying download of download {}: {}", url, e.getMessage());
+						return true;
+					}))
+					.firstElement()
+					.toSingle();
 		});
 	}
 
-	private Flowable<JsonNode> parseFile(File file, LocalDate date) {
+	private Flowable<Pair<LocalDate, List<JsonNode>>> parseDailyFile(File file, LocalDate date) {
 		return Flowable.defer(() -> {
-					log.trace("Reading market history file for {}: {}", date, file);
-					var in = CompressUtil.uncompress(file);
-					var schema = csvMapper
-							.schemaFor(MarketHistoryEntry.class)
-							.withHeader()
-							.withStrictHeaders(true)
-							.withColumnReordering(true);
-					MappingIterator<JsonNode> iterator =
-							csvMapper.readerFor(JsonNode.class).with(schema).readValues(in);
-					var list = new ArrayList<JsonNode>();
-					iterator.forEachRemaining(list::add);
-					iterator.close();
-					log.trace("Read {} entries for {} from {}", list.size(), date, file);
-					synchronized (fileTotals) {
-						fileTotals.put(date, list.size());
+					log.trace("Reading market history file: {}", file);
+					List<JsonNode> list;
+					try (var in = CompressUtil.uncompress(file)) {
+						list = readCsvEntries(in);
 					}
-					return Flowable.fromIterable(list);
+					log.trace("Read {} entries from {}", list.size(), file);
+					return Flowable.just(Pair.of(date, list));
 				})
 				.compose(Rx.offloadFlowable());
+	}
+
+	@NotNull
+	private List<JsonNode> readCsvEntries(InputStream in) throws IOException {
+		MappingIterator<JsonNode> iterator =
+				csvMapper.readerFor(JsonNode.class).with(schema).readValues(in);
+		var list = new ArrayList<JsonNode>();
+		iterator.forEachRemaining(list::add);
+		iterator.close();
+		return list;
 	}
 }
