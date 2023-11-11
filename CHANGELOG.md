@@ -1,5 +1,12 @@
 EVE Ref Changelog
 
+## [2.37.0](https://github.com/autonomouslogic/eve-ref/compare/2.36.3...2.37.0) (2023-11-11)
+
+
+### Features
+
+* Database setup and market history import ([#351](https://github.com/autonomouslogic/eve-ref/issues/351)) ([ee324dc](https://github.com/autonomouslogic/eve-ref/commit/ee324dccf852156e10cc66ccdbc141c70b127834))
+
 ## [2.36.3](https://github.com/autonomouslogic/eve-ref/compare/2.36.2...2.36.3) (2023-11-06)
 
 
