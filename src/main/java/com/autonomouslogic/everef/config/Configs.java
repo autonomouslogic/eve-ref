@@ -565,8 +565,8 @@ public class Configs {
 	/**
 	 * The number of entries to be inserted per query.
 	 */
-	public static final Config<Integer> IMPORT_MARKET_HISTORY_INSERT_SIZE = Config.<Integer>builder()
-			.name("IMPORT_MARKET_HISTORY_INSERT_SIZE")
+	public static final Config<Integer> INSERT_SIZE = Config.<Integer>builder()
+			.name("INSERT_SIZE")
 			.type(Integer.class)
 			.defaultValue(100)
 			.build();
@@ -574,8 +574,8 @@ public class Configs {
 	/**
 	 * The number of insert queries to run concurrently.
 	 */
-	public static final Config<Integer> IMPORT_MARKET_HISTORY_INSERT_CONCURRENCY = Config.<Integer>builder()
-			.name("IMPORT_MARKET_HISTORY_INSERT_CONCURRENCY")
+	public static final Config<Integer> INSERT_CONCURRENCY = Config.<Integer>builder()
+			.name("INSERT_CONCURRENCY")
 			.type(Integer.class)
 			.defaultValue(1)
 			.build();

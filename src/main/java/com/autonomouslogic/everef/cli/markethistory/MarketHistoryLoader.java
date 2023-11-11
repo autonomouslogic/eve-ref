@@ -1,5 +1,6 @@
 package com.autonomouslogic.everef.cli.markethistory;
 
+import com.autonomouslogic.commons.rxjava3.Rx3Util;
 import com.autonomouslogic.everef.http.OkHttpHelper;
 import com.autonomouslogic.everef.model.MarketHistoryEntry;
 import com.autonomouslogic.everef.url.DataUrl;
@@ -9,6 +10,7 @@ import com.autonomouslogic.everef.util.TempFiles;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.MappingIterator;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
+import com.fasterxml.jackson.dataformat.csv.CsvParser;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Single;
@@ -16,6 +18,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -32,8 +35,7 @@ import org.jetbrains.annotations.NotNull;
  */
 @Log4j2
 public class MarketHistoryLoader {
-	@Inject
-	protected CsvMapper csvMapper;
+	protected final CsvMapper csvMapper;
 
 	@Inject
 	protected TempFiles tempFiles;
@@ -48,7 +50,8 @@ public class MarketHistoryLoader {
 
 	@Inject
 	protected MarketHistoryLoader(CsvMapper csvMapper) {
-		schema = csvMapper
+		this.csvMapper = csvMapper.copy().configure(CsvParser.Feature.FAIL_ON_MISSING_HEADER_COLUMNS, false);
+		schema = this.csvMapper
 				.schemaFor(MarketHistoryEntry.class)
 				.withHeader()
 				.withStrictHeaders(true)
@@ -74,13 +77,22 @@ public class MarketHistoryLoader {
 			var file = tempFiles
 					.tempFile("market-history", "-" + FilenameUtils.getName(url.getPath()))
 					.toFile();
-			return okHttpHelper.download(url.toString(), file, okHttpClient).flatMap(response -> {
-				if (response.code() != 200) {
-					return Single.error(
-							new RuntimeException("Failed to download " + url + " with code " + response.code()));
-				}
-				return Single.just(file);
-			});
+			return okHttpHelper
+					.download(url.toString(), file, okHttpClient)
+					.flatMap(response -> {
+						if (response.code() != 200) {
+							return Single.error(new RuntimeException(
+									"Failed to download " + url + " with code " + response.code()));
+						}
+						return Single.just(file);
+					})
+					.toFlowable()
+					.compose(Rx3Util.retryWithDelayFlowable(2, Duration.ofSeconds(2), e -> {
+						log.warn("Retrying download of download {}: {}", url, e.getMessage());
+						return true;
+					}))
+					.firstElement()
+					.toSingle();
 		});
 	}
 

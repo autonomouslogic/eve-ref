@@ -1,6 +1,7 @@
 package com.autonomouslogic.everef.db;
 
-import io.reactivex.rxjava3.core.Completable;
+import com.autonomouslogic.everef.config.Configs;
+import io.reactivex.rxjava3.core.Flowable;
 import java.util.List;
 import javax.inject.Inject;
 import lombok.RequiredArgsConstructor;
@@ -16,22 +17,31 @@ public abstract class BaseDao<T extends Table<R>, R extends UpdatableRecord<R>, 
 	@Inject
 	protected DbAdapter dbAdapter;
 
+	private final int insertSize = Configs.INSERT_SIZE.getRequired();
+
 	protected final Table<R> table;
 
-	public Completable insert(P pojo) {
-		return insert(List.of(pojo));
+	public void insert(P pojo) {
+		insert(dbAccess.context(), pojo);
 	}
 
-	public Completable insert(List<P> pojos) {
-		return dbAdapter.insert(table, toRecords(pojos));
+	public void insert(List<P> pojos) {
+		insert(dbAccess.context(), pojos);
 	}
 
-	public Completable insert(DSLContext ctx, P pojo) {
-		return insert(ctx, List.of(pojo));
+	public void insert(DSLContext ctx, P pojo) {
+		insert(ctx, List.of(pojo));
 	}
 
-	public Completable insert(DSLContext ctx, List<P> pojos) {
-		return dbAdapter.insert(ctx, table, toRecords(pojos));
+	public void insert(DSLContext ctx, List<P> pojos) {
+		ctx.transaction(trx -> {
+			Flowable.fromIterable(pojos)
+					.map(this::toRecord)
+					.buffer(insertSize)
+					.doOnNext(records -> dbAdapter.insert(trx.dsl(), table, records))
+					.ignoreElements()
+					.blockingAwait();
+		});
 	}
 
 	// @todo jooq can do pojo conversion, but can't add Jackson annotations nor create Jackson-compatible objects.

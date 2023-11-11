@@ -21,7 +21,7 @@ public class V1__InitialSetup extends BaseJavaMigration {
 				.column("lowest", SQLDataType.DECIMAL(20, 2).notNull())
 				.column("volume", SQLDataType.BIGINT.notNull())
 				.column("order_count", SQLDataType.INTEGER.notNull())
-				.column("http_last_modified", SQLDataType.INSTANT.notNull())
+				.column("http_last_modified", SQLDataType.INSTANT.nullable(true))
 				.primaryKey("date", "region_id", "type_id")
 				.execute();
 		DSL.using(context.getConnection())

@@ -82,9 +82,6 @@ class ScrapeMarketHistoryBatchLoader {
 	}
 
 	private Flowable<Pair<LocalDate, DataUrl>> crawlFiles() {
-		return marketHistoryUtil
-				.crawlAvailableFiles()
-				.filter(f -> f.isDateFile())
-				.map(f -> Pair.of(f.getDate(), f.getHttpUrl()));
+		return marketHistoryUtil.crawlAvailableFiles().map(f -> Pair.of(f.getLeft(), f.getRight()));
 	}
 }

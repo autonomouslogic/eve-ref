@@ -1,7 +1,6 @@
 package com.autonomouslogic.everef.db;
 
 import com.autonomouslogic.everef.config.Configs;
-import io.reactivex.rxjava3.core.Completable;
 import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -24,18 +23,16 @@ public class DbAdapter {
 		return null; // @todo
 	}
 
-	public <R extends UpdatableRecord<R>> Completable insert(Table<R> table, List<R> records) {
-		return insert(dbAccess.context(), table, records);
+	public <R extends UpdatableRecord<R>> void insert(Table<R> table, List<R> records) {
+		insert(dbAccess.context(), table, records);
 	}
 
-	public <R extends UpdatableRecord<R>> Completable insert(DSLContext ctx, Table<R> table, List<R> records) {
-		return Completable.fromAction(() -> {
-			var stmt = ctx.insertInto(table).columns(table.fields());
-			for (var record : records) {
-				stmt = stmt.values(record);
-			}
-			stmt.onDuplicateKeyIgnore().execute();
-			log.debug("Inserted {} records into {}", records.size(), table.getName());
-		});
+	public <R extends UpdatableRecord<R>> void insert(DSLContext ctx, Table<R> table, List<R> records) {
+		var stmt = ctx.insertInto(table).columns(table.fields());
+		for (var record : records) {
+			stmt = stmt.values(record);
+		}
+		stmt.onDuplicateKeyIgnore().execute();
+		log.debug("Inserted {} records into {}", records.size(), table.getName());
 	}
 }

@@ -66,16 +66,6 @@ public class ArchivePathFactory {
 			.suffix(".csv.bz2")
 			.build();
 
-	public static final ArchivePathFactory MARKET_HISTORY_YEAR = ArchivePathFactory.builder()
-			.folder("market-history")
-			.filename("market-history")
-			.historyFolder(false)
-			.yearFolder(false)
-			.dateFolder(false)
-			.fileDateTimeFormatter(YEAR_PATTERN)
-			.suffix(".tar.bz2")
-			.build();
-
 	public static final ArchivePathFactory SDE = ArchivePathFactory.builder()
 			.folder("ccp/sde")
 			.filename("sde")

@@ -53,12 +53,6 @@ public class ArchivePathFactoryTest {
 	}
 
 	@Test
-	void shouldGenerateMarketHistoryYearNames() {
-		var factory = ArchivePathFactory.MARKET_HISTORY_YEAR;
-		testExpectedPaths(factory, LocalDate.parse("2018-01-01"), "market-history/market-history-2018.tar.bz2");
-	}
-
-	@Test
 	void shouldGenerateSdeNames() {
 		var factory = ArchivePathFactory.SDE;
 		testExpectedPaths(

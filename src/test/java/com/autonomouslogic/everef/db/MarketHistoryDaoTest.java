@@ -49,7 +49,7 @@ public class MarketHistoryDaoTest {
 
 	@Test
 	void shouldInsertAndSelectMarketHistory() {
-		marketHistoryDao.insert(entry).blockingAwait();
+		marketHistoryDao.insert(entry);
 		var fetched = marketHistoryDao
 				.fetchByPK(entry.getDate(), entry.getRegionId(), entry.getTypeId())
 				.blockingGet();
@@ -73,7 +73,7 @@ public class MarketHistoryDaoTest {
 						.build()))
 				.toList()
 				.blockingGet();
-		marketHistoryDao.insert(entries).blockingAwait();
+		marketHistoryDao.insert(entries);
 		var dailyPairs =
 				marketHistoryDao.fetchDailyPairs(LocalDate.parse("2020-01-02")).blockingGet();
 		var expectedDailyPairs = new HashMap<>(insertedDailyPairs);

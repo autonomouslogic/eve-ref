@@ -14,6 +14,7 @@ import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.extern.log4j.Log4j2;
@@ -43,11 +44,9 @@ public class MarketHistoryDao extends BaseDao<MarketHistory, MarketHistoryRecord
 				pojo.getLowest(),
 				pojo.getVolume(),
 				pojo.getOrderCount(),
-				pojo.getHttpLastModified().atOffset(ZoneOffset.UTC)
-				//			Optional.ofNullable(pojo.getHttpLastModified())
-				//					.map(t -> t.atOffset(ZoneOffset.UTC))
-				//						.orElse(null)
-				);
+				Optional.ofNullable(pojo.getHttpLastModified())
+						.map(t -> t.atOffset(ZoneOffset.UTC))
+						.orElse(null));
 	}
 
 	public MarketHistoryEntry fromRecord(MarketHistoryRecord record) {

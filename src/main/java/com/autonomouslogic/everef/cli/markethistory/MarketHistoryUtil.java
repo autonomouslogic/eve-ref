@@ -48,18 +48,10 @@ public class MarketHistoryUtil {
 	@Inject
 	protected Provider<DataCrawler> dataCrawlerProvider;
 
-	private final AvailableMarketHistoryFile ccpQuantBackfillFile;
 	private final URI dataBaseUrl = Configs.DATA_BASE_URL.getRequired();
 
 	@Inject
-	protected MarketHistoryUtil(UrlParser urlParser) {
-		ccpQuantBackfillFile = AvailableMarketHistoryFile.builder()
-				.ccpQuantBackfillFile(true)
-				.httpUrl((HttpUrl) urlParser.parse(
-						"https://data.everef.net/ccp/ccp_quant/EVEOnline_priceHistory_20031001_20180305.7z"))
-				.range(Pair.of(LocalDate.parse("2003-10-01"), LocalDate.parse("2018-03-05")))
-				.build();
-	}
+	protected MarketHistoryUtil() {}
 
 	/**
 	 * Fetches the total pairs from the data site.
@@ -93,41 +85,20 @@ public class MarketHistoryUtil {
 	 * Returns all the files available on the data site.
 	 * @return
 	 */
-	public Flowable<AvailableMarketHistoryFile> crawlAvailableFiles() {
-		var files = dataCrawlerProvider
+	public Flowable<Pair<LocalDate, HttpUrl>> crawlAvailableFiles() {
+		return dataCrawlerProvider
 				.get()
 				.setPrefix(ArchivePathFactory.MARKET_HISTORY.getFolder())
 				.crawl()
 				.flatMap(url -> {
 					var path = url.getPath();
 					var datestamp = ArchivePathFactory.MARKET_HISTORY.parseArchiveTime(path);
-					var yearstamp = ArchivePathFactory.MARKET_HISTORY_YEAR.parseArchiveTime(path);
-					AvailableMarketHistoryFile file = null;
 					if (datestamp != null) {
 						var date = datestamp.atZone(UTC).toLocalDate();
-						file = AvailableMarketHistoryFile.builder()
-								.date(date)
-								.httpUrl((HttpUrl) url)
-								.range(Pair.of(date, date))
-								.build();
-					} else if (yearstamp != null) {
-						var year = yearstamp.atZone(UTC).toLocalDate().getYear();
-						// The year file for 2016 is partial.
-						var range = year == 2016
-								? marketFile2016Range
-								: Pair.of(LocalDate.of(year, 1, 1), LocalDate.of(year, 12, 31));
-						file = AvailableMarketHistoryFile.builder()
-								.year(year)
-								.httpUrl((HttpUrl) url)
-								.range(range)
-								.build();
+						log.trace("Found market history file for {}: {}", datestamp, url);
+						return Flowable.just(Pair.of(date, (HttpUrl) url));
 					}
-					if (file == null) {
-						return Flowable.empty();
-					}
-					log.trace("Found market history file: {}", file);
-					return Flowable.just(file);
+					return Flowable.empty();
 				});
-		return Flowable.concatArray(Flowable.just(ccpQuantBackfillFile), files);
 	}
 }
