@@ -45,6 +45,10 @@ docker: dist
 		--build-arg "EVE_REF_VERSION=$(EVE_REF_VERSION)" \
 		.
 
+docker-push: docker
+	docker push $(DOCKER_TAG)
+	docker push $(DOCKER_TAG_LATEST)
+
 docker-placeholder: docker
 	docker run -it --env-file local.env $(DOCKER_TAG) placeholder
 

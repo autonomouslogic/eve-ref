@@ -1,5 +1,53 @@
 EVE Ref Changelog
 
+## [2.36.3](https://github.com/autonomouslogic/eve-ref/compare/2.36.2...2.36.3) (2023-11-06)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @fortawesome/vue-fontawesome to v3.0.5 ([#359](https://github.com/autonomouslogic/eve-ref/issues/359)) ([501f1c3](https://github.com/autonomouslogic/eve-ref/commit/501f1c33be6b5b5cf643b09666328d0e8218b4b4))
+
+
+### Build System
+
+* Removed explicit user IDs ([#354](https://github.com/autonomouslogic/eve-ref/issues/354)) ([4207857](https://github.com/autonomouslogic/eve-ref/commit/42078574993df8a74fe740aa872deec02b2f8c50))
+
+
+### Continuous Integration
+
+* Re-added publish script during release. [skip ci] ([e2cde9b](https://github.com/autonomouslogic/eve-ref/commit/e2cde9baceb509cc820f3220bcdda2c6ac845cf1))
+
+## [2.36.2](https://github.com/autonomouslogic/eve-ref/compare/2.36.1...2.36.2) (2023-11-02)
+
+
+### Features
+
+* Basic blueprint manufacturing card [skip release] ([#345](https://github.com/autonomouslogic/eve-ref/issues/345)) ([43488dd](https://github.com/autonomouslogic/eve-ref/commit/43488dd233168ad5c7f2033f39fb34c4f4a272db))
+* Insurance card [skip release] ([#343](https://github.com/autonomouslogic/eve-ref/issues/343)) ([8792242](https://github.com/autonomouslogic/eve-ref/commit/8792242a2f4a9f2c918bec22a2eabd7233de2a6a))
+* Manufacturing overview for types [skip release] ([#344](https://github.com/autonomouslogic/eve-ref/issues/344)) ([a377c34](https://github.com/autonomouslogic/eve-ref/commit/a377c3423a27d1ab6d525d5de9f39b150fa25ce7))
+* Market links [skip release] ([#342](https://github.com/autonomouslogic/eve-ref/issues/342)) ([ec8df9c](https://github.com/autonomouslogic/eve-ref/commit/ec8df9c46ae04ea79c9fbda9611b91a95702f69d))
+
+
+### Bug Fixes
+
+* Disabled insurance cards when there's no insurance [skip release] ([#346](https://github.com/autonomouslogic/eve-ref/issues/346)) ([ff2c4a6](https://github.com/autonomouslogic/eve-ref/commit/ff2c4a6516ad9405405729c29a7c8ed1010087f6))
+
+
+### Dependency Updates
+
+* **deps:** update actions/setup-node action to v4 ([#347](https://github.com/autonomouslogic/eve-ref/issues/347)) ([a993bfa](https://github.com/autonomouslogic/eve-ref/commit/a993bfaeac287fc8995c5f591b7b969ff1f1fce8))
+* **deps:** update plugin org.danilopianini.git-sensitive-semantic-versioning-gradle-plugin to v2 ([#349](https://github.com/autonomouslogic/eve-ref/issues/349)) ([edc18ea](https://github.com/autonomouslogic/eve-ref/commit/edc18ea5ffc5cffee3a051bfed3594adce0edce3))
+
+
+### Code Refactoring
+
+* Optimised Docker image size ([#350](https://github.com/autonomouslogic/eve-ref/issues/350)) ([1b06a60](https://github.com/autonomouslogic/eve-ref/commit/1b06a6084403e080961b0bc0ad75ed720a3ed31f))
+
+
+### Continuous Integration
+
+* Removed publish script during release. [skip ci] ([f61c7d4](https://github.com/autonomouslogic/eve-ref/commit/f61c7d40512c1be2c467705104a41b3533e02ffc))
+
 ## [2.36.1](https://github.com/autonomouslogic/eve-ref/compare/2.36.0...2.36.1) (2023-10-21)
 
 
