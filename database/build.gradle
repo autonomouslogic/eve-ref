@@ -18,7 +18,7 @@ dependencies {
 }
 
 flyway {
-	url = "jdbc:h2:file:${buildDir}/database;AUTO_SERVER=TRUE"
+	url = "jdbc:h2:file:${buildDir}/db/database-generate;AUTO_SERVER=TRUE"
     locations = ["classpath:com/autonomouslogic/everef/db/migrations"]
 }
 

@@ -49,7 +49,8 @@ public class ImportMarketHistory implements Command {
 	@Inject
 	protected ImportMarketHistory() {
 		if (Configs.INSERT_CONCURRENCY.getRequired() > 1) {
-			throw new RuntimeException("INSERT_CONCURRENCY > 1 not supported, transactions are not safe");
+			throw new RuntimeException(
+					"INSERT_CONCURRENCY > 1 not supported, transactions are not safe - see https://github.com/autonomouslogic/eve-ref/issues/356");
 		}
 	}
 
@@ -59,11 +60,9 @@ public class ImportMarketHistory implements Command {
 	}
 
 	private Completable runImport() {
-		//		return marketHistoryDao.fetchDailyPairs(minDate).flatMapCompletable(dailyPairs -> {
 		return resolveFilesToDownload()
 				.flatMap(availableFile -> loadFile(availableFile), false, loadConcurrency)
 				.flatMapCompletable(dateList -> insertDayEntries(dateList), false, insertConcurrency);
-		//		});
 	}
 
 	private Flowable<Pair<LocalDate, List<JsonNode>>> loadFile(Pair<LocalDate, HttpUrl> availableFile) {

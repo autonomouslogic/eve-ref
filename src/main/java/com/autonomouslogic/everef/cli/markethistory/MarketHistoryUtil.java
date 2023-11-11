@@ -27,9 +27,6 @@ import org.apache.commons.lang3.tuple.Pair;
 @Singleton
 @Log4j2
 public class MarketHistoryUtil {
-	private static final Pair<LocalDate, LocalDate> marketFile2016Range =
-			Pair.of(LocalDate.parse("2016-08-01"), LocalDate.parse("2016-12-31"));
-
 	@Inject
 	protected TempFiles tempFiles;
 

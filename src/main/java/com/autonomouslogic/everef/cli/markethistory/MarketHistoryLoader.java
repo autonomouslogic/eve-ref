@@ -14,14 +14,12 @@ import com.fasterxml.jackson.dataformat.csv.CsvParser;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Single;
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import javax.inject.Inject;
 import lombok.extern.log4j.Log4j2;
@@ -65,13 +63,6 @@ public class MarketHistoryLoader {
 		});
 	}
 
-	public Flowable<Pair<LocalDate, List<JsonNode>>> loadYearFile(DataUrl url, Collection<LocalDate> excludedDates) {
-		return downloadFile(url).flatMapPublisher(file -> {
-			file.deleteOnExit();
-			return parseYearFile(file, excludedDates).doFinally(() -> file.delete());
-		});
-	}
-
 	private Single<File> downloadFile(DataUrl url) {
 		return Single.defer(() -> {
 			var file = tempFiles
@@ -105,26 +96,6 @@ public class MarketHistoryLoader {
 					}
 					log.trace("Read {} entries from {}", list.size(), file);
 					return Flowable.just(Pair.of(date, list));
-				})
-				.compose(Rx.offloadFlowable());
-	}
-
-	private Flowable<Pair<LocalDate, List<JsonNode>>> parseYearFile(File file, Collection<LocalDate> excludedDates) {
-		return Flowable.defer(() -> {
-					log.trace("Reading yearly market history file: {}", file);
-					return CompressUtil.loadArchive(file).flatMap(entry -> {
-						var date = LocalDate.parse(entry.getLeft().getName().substring(0, 10));
-						if (excludedDates != null && excludedDates.contains(date)) {
-							return Flowable.empty();
-						}
-						var list = readCsvEntries(new ByteArrayInputStream(entry.getRight()));
-						log.trace(
-								"Read {} entries from {}#{}",
-								list.size(),
-								file,
-								entry.getLeft().getName());
-						return Flowable.just(Pair.of(date, list));
-					});
 				})
 				.compose(Rx.offloadFlowable());
 	}

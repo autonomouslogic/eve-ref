@@ -547,6 +547,7 @@ public class Configs {
 	/**
 	 * The prefix to use for all tables.
 	 */
+	// @todo https://github.com/autonomouslogic/eve-ref/issues/363
 	public static final Config<String> DATABASE_TABLE_NAME_PREFIX = Config.<String>builder()
 			.name("DATABASE_TABLE_NAME_PREFIX")
 			.type(String.class)
