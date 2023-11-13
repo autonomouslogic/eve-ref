@@ -4,15 +4,20 @@
 Make sure you run this command against its own logical database to avoid any risk to your production data.
 Follow [this milestone on Github](https://github.com/autonomouslogic/eve-ref/milestone/5) to see what issues are outstanding.*
 
-Imports the [market history dataset](../datasets/market-history.md) into a database.
+Scraping the ESI market history endpoint is a slow process and it's hard to get a complete dataset.
+EVE Ref runs a daily [market history scrape](scrape-market-history.md), which tries to gather as much complete data as possible.
+The scrape job runs in batches with multiple updates throughout the day.
+This import job will only import new data that not already in your database, meaning this import can be scheduled to essentially piggy-back off EVE Ref's scrape job.
+
+The import runs in Docker, so should be easy to run on any operating system.
 
 ## Process
-1. EVE Ref includes a [Flyway](https://flywaydb.org/) setup where it can create and upgrade its own tables. Unless disabled, this is automatically run at the beginning of the job.
-   * **Caution**: it is highly recommended you isolate this job to its own database and user/password pair to avoid conflicts. 
+1. EVE Ref includes a [Flyway](https://flywaydb.org/) setup to create and upgrade its own tables. Unless disabled, this is automatically run at the beginning of the import.
+   * **Caution**: it is highly recommended you isolate the import in its own logical database and user/password to avoid conflicts. 
 2. Your database is queried for the number of unique region-type pairs present for each day. If you omit `IMPORT_MARKET_HISTORY_MIN_DATE`, this means your entire database will be queried every time.
 3. For each day your database doesn't contain any pairs, market history will be downloaded and inserted.
 4. For each day your database contains fewer pairs than what's available, market history with be downloaded and inserted.
-5. Each daily import is executed in a transaction.
+5. Each day is inserted inside a SQL transaction.
 
 ## Basic Usage
 ```shell
@@ -40,17 +45,17 @@ If you want to piggy-back off this scrape, you can schedule this import job to r
 Only days with new data available will be imported.
 
 ### Min Date
-If you wish to import all data since 2003, you can omit `IMPORT_MARKET_HISTORY_MIN_DATE` entirely on the first run.
+You can omit `IMPORT_MARKET_HISTORY_MIN_DATE` entirely on the first run to import all data since 2003.
 For subsequent runs, it's recommended you specify it.
 Otherwise, the import will keep checking your database for data since 2003 when no new updates are available anyway.
 The ESI market history endpoint returns data from 400 or more days ago, so any of those files could be updated at any point.
 On a Linux system, you can set the date to 500 days ago to ensure you're always up-to-date with the latest:
-```
+```shell
 -e "IMPORT_MARKET_HISTORY_MIN_DATE=$(date -u --date="500 days ago" +"%Y-%m-%d")"
 ```
 
 ### Database Table
-If you wish to disable Flyway with `FLYWAY_AUTO_MIGRATE=false`, you can create the table manually.
+You can disable Flyway with `FLYWAY_AUTO_MIGRATE=false`, you can create the table manually.
 
 ```sql
 create table market_history
