@@ -71,6 +71,7 @@ module.exports = {
             'commands/docker.md',
             'commands/field-replication.md',
             'commands/build-ref-data.md',
+            'commands/import-market-history.md',
             'commands/scrape-market-history.md',
             'commands/scrape-market-orders.md',
             'commands/scrape-public-contracts.md',
