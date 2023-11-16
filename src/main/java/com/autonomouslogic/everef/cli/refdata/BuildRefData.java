@@ -170,6 +170,8 @@ public class BuildRefData implements Command {
 	@Getter
 	private StoreHandler storeHandler;
 
+	private List<PostDecorator> allDecorators;
+
 	private S3Url dataUrl;
 	private MVStore mvStore;
 
@@ -179,17 +181,21 @@ public class BuildRefData implements Command {
 	@Inject
 	protected void init() {
 		dataUrl = (S3Url) urlParser.parse(Configs.DATA_PATH.getRequired());
+		allDecorators = List.of(
+				skillDecorator,
+				mutaplasmidDecorator,
+				variationsDecorator,
+				blueprintDecorator,
+				groupsDecorator,
+				typesDecorator,
+				marketGroupsDecorator,
+				oreVariationsDecorator,
+				missingDogmaUnitsDecorator);
 	}
 
 	@Override
 	public Completable run() {
-		return Completable.concatArray(initMvStore(), latestFiles().andThen(Completable.defer(() -> {
-			if (processingNeeded()) {
-				return processData();
-			}
-			log.info("No update needed");
-			return Completable.complete();
-		})));
+		return Completable.concatArray(initMvStore(), latestFiles(), checkAndProcess());
 	}
 
 	private Completable latestFiles() {
@@ -215,6 +221,16 @@ public class BuildRefData implements Command {
 						.sha256(HashUtil.sha256Hex(hoboleaksFile))
 						.build())
 				.build();
+	}
+
+	private Completable checkAndProcess() {
+		return Completable.defer(() -> {
+			if (!processingNeeded()) {
+				log.info("No update needed");
+				return Completable.complete();
+			}
+			return processData();
+		});
 	}
 
 	private boolean processingNeeded() {
@@ -249,6 +265,9 @@ public class BuildRefData implements Command {
 			esiLoader.setStoreHandler(storeHandler);
 			hoboleaksLoader.setStoreHandler(storeHandler);
 
+			for (var decorator : allDecorators) {
+				decorator.setStoreHandler(storeHandler);
+			}
 			skillDecorator.setStoreHandler(storeHandler);
 			mutaplasmidDecorator.setStoreHandler(storeHandler);
 			variationsDecorator.setStoreHandler(storeHandler);

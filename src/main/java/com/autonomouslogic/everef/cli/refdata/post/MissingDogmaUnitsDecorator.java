@@ -1,7 +1,6 @@
 package com.autonomouslogic.everef.cli.refdata.post;
 
 import com.autonomouslogic.everef.cli.refdata.StoreDataHelper;
-import com.autonomouslogic.everef.cli.refdata.StoreHandler;
 import com.autonomouslogic.everef.refdata.DogmaAttribute;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -10,8 +9,6 @@ import io.reactivex.rxjava3.core.Completable;
 import java.util.Map;
 import java.util.Objects;
 import javax.inject.Inject;
-import lombok.NonNull;
-import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -19,17 +16,13 @@ import lombok.extern.log4j.Log4j2;
  * This decorator fixes those units.
  */
 @Log4j2
-public class MissingDogmaUnitsDecorator implements PostDecorator {
+public class MissingDogmaUnitsDecorator extends PostDecorator {
 	private static final Map<Integer, Integer> dogmaUnits = Map.of(
 			// Radius -> meters
 			162, 1);
 
 	@Inject
 	protected ObjectMapper objectMapper;
-
-	@Setter
-	@NonNull
-	private StoreHandler storeHandler;
 
 	private StoreDataHelper helper;
 	private Map<Long, JsonNode> dogmaAttributes;

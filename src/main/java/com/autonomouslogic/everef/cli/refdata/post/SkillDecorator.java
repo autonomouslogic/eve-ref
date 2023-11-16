@@ -1,7 +1,6 @@
 package com.autonomouslogic.everef.cli.refdata.post;
 
 import com.autonomouslogic.everef.cli.refdata.StoreDataHelper;
-import com.autonomouslogic.everef.cli.refdata.StoreHandler;
 import com.autonomouslogic.everef.refdata.DogmaAttribute;
 import com.autonomouslogic.everef.refdata.InventoryType;
 import com.autonomouslogic.everef.refdata.Skill;
@@ -17,23 +16,18 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 import javax.inject.Inject;
 import lombok.NonNull;
-import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 
 @Log4j2
-public class SkillDecorator implements PostDecorator {
+public class SkillDecorator extends PostDecorator {
 	private static final int SKILL_CATEGORY_ID = 16;
 	private static final Map<String, Long> ATTRIBUTE_ID_MAP =
 			Map.of("intelligence", 1L, "charisma", 2L, "perception", 3L, "memory", 4L, "willpower", 5L);
 
 	@Inject
 	protected ObjectMapper objectMapper;
-
-	@Setter
-	@NonNull
-	private StoreHandler storeHandler;
 
 	private StoreDataHelper helper;
 	private Map<Long, JsonNode> types;
