@@ -12,9 +12,12 @@ import org.bouncycastle.crypto.signers.Ed25519ctxSigner;
 /**
  * Wraps signature generation and verification using the Ed25519ctx algorithm.
  *
- * <a href="https://datatracker.ietf.org/doc/html/rfc8032">Edwards-Curve Digital Signature Algorithm (EdDSA) - RFC 8032</a>
- * <a href="https://github.com/bcgit/bc-java/blob/main/core/src/test/java/org/bouncycastle/crypto/test/Ed25519Test.java">Ed25519Test.java</a>
- * <a href="https://cryptologie.net/article/497/eddsa-ed25519-ed25519-ietf-ed25519ph-ed25519ctx-hasheddsa-pureeddsa-wtf/">EdDSA, Ed25519, Ed25519-IETF, Ed25519ph, Ed25519ctx, HashEdDSA, PureEdDSA, WTF?</a>
+ * References:
+ * <li>
+ *     <ul><a href="https://datatracker.ietf.org/doc/html/rfc8032">Edwards-Curve Digital Signature Algorithm (EdDSA) - RFC 8032</a></ul>
+ *     <ul><a href="https://github.com/bcgit/bc-java/blob/main/core/src/test/java/org/bouncycastle/crypto/test/Ed25519Test.java">Ed25519Test.java</a></ul>
+ *     <ul><a href="https://cryptologie.net/article/497/eddsa-ed25519-ed25519-ietf-ed25519ph-ed25519ctx-hasheddsa-pureeddsa-wtf/">EdDSA, Ed25519, Ed25519-IETF, Ed25519ph, Ed25519ctx, HashEdDSA, PureEdDSA, WTF?</a></ul>
+ * </li>
  */
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public class EcSigner {
