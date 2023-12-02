@@ -1,5 +1,22 @@
 EVE Ref Changelog
 
+## [2.37.1](https://github.com/autonomouslogic/eve-ref/compare/2.37.0...2.37.1) (2023-12-01)
+
+
+### Documentation
+
+* Import market history documentation ([#371](https://github.com/autonomouslogic/eve-ref/issues/371)) ([670b310](https://github.com/autonomouslogic/eve-ref/commit/670b31041833356edf5041cc24ae97404d79b785))
+
+
+### Dependency Updates
+
+* **deps:** update actions/setup-java action to v4 [skip ci] ([#379](https://github.com/autonomouslogic/eve-ref/issues/379)) ([cf9657d](https://github.com/autonomouslogic/eve-ref/commit/cf9657dff29541fef025c3202792338026f4b0db))
+
+
+### Miscellaneous Chores
+
+* Flyway mono repo. [skip ci] [skip release] ([ad89181](https://github.com/autonomouslogic/eve-ref/commit/ad8918106b4bdfbf4eb2784c4f3d0512d967ab24))
+
 ## [2.37.0](https://github.com/autonomouslogic/eve-ref/compare/2.36.3...2.37.0) (2023-11-11)
 
 

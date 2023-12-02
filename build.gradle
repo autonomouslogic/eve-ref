@@ -81,6 +81,9 @@ dependencies {
 	implementation "org.openapitools:jackson-databind-nullable:0.2.6"
 	implementation "org.apache.commons:commons-rng-simple:1.5"
 
+	// Not updated since 2021, change to org.bouncycastle:bcprov-jdk18on:1.77 when Kotlin supports JVM 21 or Kotlin is removed.
+	implementation "org.bouncycastle:bcprov-jdk15on:1.70"
+
 	implementation "org.jooq:jooq:3.18.7"
 	implementation "org.flywaydb:flyway-core:9.22.3"
 	implementation "com.h2database:h2:2.2.224"
