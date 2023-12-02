@@ -24,7 +24,7 @@ public class EcKeyGenerator {
 	}
 
 	/**
-	 * Generates a new private key and returns it encoded as base-64.
+	 * Generates a new private key and returns it encoded as base64.
 	 * @return
 	 */
 	public synchronized String generatePrivateKey() {
@@ -34,7 +34,7 @@ public class EcKeyGenerator {
 	}
 
 	/**
-	 * Generates a new public key from the supplied private key and returns it encoded as base-64.
+	 * Generates a new public key from the supplied private key and returns it encoded as base64.
 	 * @return
 	 */
 	public String generatePublicKey(String privateKey) {

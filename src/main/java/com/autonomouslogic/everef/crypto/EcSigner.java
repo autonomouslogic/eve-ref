@@ -2,6 +2,7 @@ package com.autonomouslogic.everef.crypto;
 
 import java.nio.charset.StandardCharsets;
 import javax.inject.Inject;
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.codec.binary.Base64;
 import org.bouncycastle.crypto.params.Ed25519PrivateKeyParameters;
@@ -15,7 +16,7 @@ import org.bouncycastle.crypto.signers.Ed25519ctxSigner;
  * <a href="https://github.com/bcgit/bc-java/blob/main/core/src/test/java/org/bouncycastle/crypto/test/Ed25519Test.java">Ed25519Test.java</a>
  * <a href="https://cryptologie.net/article/497/eddsa-ed25519-ed25519-ietf-ed25519ph-ed25519ctx-hasheddsa-pureeddsa-wtf/">EdDSA, Ed25519, Ed25519-IETF, Ed25519ph, Ed25519ctx, HashEdDSA, PureEdDSA, WTF?</a>
  */
-@RequiredArgsConstructor
+@RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public class EcSigner {
 	/**
 	 * The global context for signatures.
@@ -33,7 +34,7 @@ public class EcSigner {
 
 	/**
 	 * Sign a message using the given private key.
-	 * @param privateKey base-64 encoded private key.
+	 * @param privateKey base64 encoded private key.
 	 * @param message message to sign.
 	 * @return
 	 */
@@ -58,9 +59,9 @@ public class EcSigner {
 
 	/**
 	 * Verify a signature using the given public key.
-	 * @param publicKey base-64 encoded public key.
+	 * @param publicKey base64 encoded public key.
 	 * @param message message to verify.
-	 * @param signature base-64 encoded signature.
+	 * @param signature base64 encoded signature.
 	 * @return
 	 */
 	public boolean verify(String publicKey, String message, String signature) {
