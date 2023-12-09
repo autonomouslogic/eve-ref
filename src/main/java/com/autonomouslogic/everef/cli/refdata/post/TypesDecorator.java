@@ -1,26 +1,19 @@
 package com.autonomouslogic.everef.cli.refdata.post;
 
-import com.autonomouslogic.everef.cli.refdata.StoreHandler;
 import com.autonomouslogic.everef.refdata.InventoryType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import io.reactivex.rxjava3.core.Completable;
 import javax.inject.Inject;
-import lombok.NonNull;
-import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 
 /**
  * References inventory types on inventory groups.
  */
 @Log4j2
-public class TypesDecorator implements PostDecorator {
+public class TypesDecorator extends PostDecorator {
 	@Inject
 	protected ObjectMapper objectMapper;
-
-	@Setter
-	@NonNull
-	private StoreHandler storeHandler;
 
 	@Inject
 	protected TypesDecorator() {}

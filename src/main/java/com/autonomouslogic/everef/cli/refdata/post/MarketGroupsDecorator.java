@@ -1,14 +1,11 @@
 package com.autonomouslogic.everef.cli.refdata.post;
 
-import com.autonomouslogic.everef.cli.refdata.StoreHandler;
 import com.autonomouslogic.everef.refdata.InventoryType;
 import com.autonomouslogic.everef.refdata.MarketGroup;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import io.reactivex.rxjava3.core.Completable;
 import javax.inject.Inject;
-import lombok.NonNull;
-import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 import org.jetbrains.annotations.NotNull;
 
@@ -16,13 +13,9 @@ import org.jetbrains.annotations.NotNull;
  * References market groups and types on other market groups.
  */
 @Log4j2
-public class MarketGroupsDecorator implements PostDecorator {
+public class MarketGroupsDecorator extends PostDecorator {
 	@Inject
 	protected ObjectMapper objectMapper;
-
-	@Setter
-	@NonNull
-	private StoreHandler storeHandler;
 
 	@Inject
 	protected MarketGroupsDecorator() {}
