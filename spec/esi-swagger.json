@@ -35343,7 +35343,7 @@
                 "title": "get_fw_stats_200_ok",
                 "type": "object"
               },
-              "maxItems": 4,
+              "maxItems": 100,
               "title": "get_fw_stats_ok",
               "type": "array"
             }
@@ -35701,7 +35701,7 @@
                 "title": "get_fw_wars_200_ok",
                 "type": "object"
               },
-              "maxItems": 8,
+              "maxItems": 100,
               "title": "get_fw_wars_ok",
               "type": "array"
             }
