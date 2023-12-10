@@ -1,5 +1,23 @@
 EVE Ref Changelog
 
+## [2.37.2](https://github.com/autonomouslogic/eve-ref/compare/2.37.1...2.37.2) (2023-12-10)
+
+
+### Features
+
+* Elliptic-curve signature tooling [skip release] ([#382](https://github.com/autonomouslogic/eve-ref/issues/382)) ([d24aea1](https://github.com/autonomouslogic/eve-ref/commit/d24aea136a08c52574bc552a3f6d438545f81b6f))
+
+
+### Bug Fixes
+
+* Object merges don't merge null or empty-strings ([#390](https://github.com/autonomouslogic/eve-ref/issues/390)) ([933cfdc](https://github.com/autonomouslogic/eve-ref/commit/933cfdcf17129359a2d13b653e087b978e029ddc))
+
+
+### Dependency Updates
+
+* **deps:** Updated ESI Swagger [skip release] ([#385](https://github.com/autonomouslogic/eve-ref/issues/385)) ([4a5ed06](https://github.com/autonomouslogic/eve-ref/commit/4a5ed06bec81dba2c409fe197ce8eca79b0da260))
+* **deps:** Updated to Bouncy Castle for JVM 1.8 [skip release] ([#383](https://github.com/autonomouslogic/eve-ref/issues/383)) ([5b578b4](https://github.com/autonomouslogic/eve-ref/commit/5b578b422e0fb0efdb0f7f7eab4676311ca1cd56))
+
 ## [2.37.1](https://github.com/autonomouslogic/eve-ref/compare/2.37.0...2.37.1) (2023-12-01)
 
 
