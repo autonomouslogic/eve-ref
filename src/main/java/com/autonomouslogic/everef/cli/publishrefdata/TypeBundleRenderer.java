@@ -70,7 +70,7 @@ public class TypeBundleRenderer implements RefDataRenderer {
 		var unitsJson = objectMapper.createObjectNode();
 		var iconsJson = objectMapper.createObjectNode();
 
-		typesJson.set(Long.toString(type.getTypeId()), typeJson);
+		typesJson.set(Long.toString(typeId), typeJson);
 		bundleDogmaAttributes(type, attributesJson);
 		bundleVariations(type, typesJson);
 		bundleRequiredSkills(type, skillsJson, typesJson);
