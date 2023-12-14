@@ -1,5 +1,17 @@
 EVE Ref Changelog
 
+## [2.38.0](https://github.com/autonomouslogic/eve-ref/compare/2.37.2...2.38.0) (2023-12-14)
+
+
+### Features
+
+* Redirect on /data ([#392](https://github.com/autonomouslogic/eve-ref/issues/392)) ([2781cb6](https://github.com/autonomouslogic/eve-ref/commit/2781cb69ba5f1e3b8a232aa0f61922ac571a9e75))
+
+
+### Bug Fixes
+
+* Fixed nullpointer in publish ref data ([#394](https://github.com/autonomouslogic/eve-ref/issues/394)) ([36ee874](https://github.com/autonomouslogic/eve-ref/commit/36ee874421d1367a83c85d834f36f4bd6e687ea6))
+
 ## [2.37.2](https://github.com/autonomouslogic/eve-ref/compare/2.37.1...2.37.2) (2023-12-10)
 
 
