@@ -106,4 +106,23 @@ public class MarketHistoryDao extends BaseDao<MarketHistory, MarketHistoryRecord
 					.doOnSuccess(dailyPairs -> dailyPairsCache.put(minDate, dailyPairs));
 		});
 	}
+
+	/**
+	 * Fetches the latest date in the database.
+	 */
+	public Maybe<LocalDate> fetchLatestDate() {
+		return Maybe.defer(() -> {
+					var stmt = dbAccess.context()
+							.select(DSL.max(Tables.MARKET_HISTORY.DATE))
+							.from(Tables.MARKET_HISTORY);
+					var result = stmt.fetch();
+					if (result.isEmpty()) {
+						return Maybe.empty();
+					} else {
+						return Maybe.fromOptional(
+								Optional.ofNullable(result.get(0).value1()));
+					}
+				})
+				.compose(Rx.offloadMaybe());
+	}
 }
