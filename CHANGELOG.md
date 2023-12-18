@@ -1,5 +1,12 @@
 EVE Ref Changelog
 
+## [2.38.1](https://github.com/autonomouslogic/eve-ref/compare/2.38.0...2.38.1) (2023-12-18)
+
+
+### Bug Fixes
+
+* IMPORT_MARKET_HISTORY_MIN_DATE defaults to the latest date or today, minus 450 days ([#397](https://github.com/autonomouslogic/eve-ref/issues/397)) ([3997a81](https://github.com/autonomouslogic/eve-ref/commit/3997a81dc2dc9b27ea37c6fa1af2aa46a6fec5de))
+
 ## [2.38.0](https://github.com/autonomouslogic/eve-ref/compare/2.37.2...2.38.0) (2023-12-14)
 
 
