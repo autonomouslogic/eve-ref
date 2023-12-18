@@ -91,6 +91,7 @@ public class ImportMarketHistory implements Command {
 
 	private Flowable<Pair<LocalDate, HttpUrl>> resolveFilesToDownload() {
 		return resolveMinDate().flatMapPublisher(resolvedMinDate -> {
+			log.info("Importing market data from {}", resolvedMinDate);
 			return fileResolver
 					.setMinDate(resolvedMinDate)
 					.resolveFilesToDownload()
@@ -101,12 +102,21 @@ public class ImportMarketHistory implements Command {
 	protected Single<LocalDate> resolveMinDate() {
 		return Single.defer(() -> {
 			if (minDate.isPresent()) {
+				log.trace("Using min date from config: {}", minDate.get());
 				return Single.just(minDate.get());
 			} else {
 				return marketHistoryDao
 						.fetchLatestDate()
-						.switchIfEmpty(Single.just(LocalDate.now(ZoneOffset.UTC)))
-						.flatMap(latest -> Single.just(latest.minus(lookback)));
+						.switchIfEmpty(Single.fromCallable(() -> {
+							var date = LocalDate.now(ZoneOffset.UTC);
+							log.trace("No entries found, using min date from today: {}", date);
+							return date;
+						}))
+						.flatMap(latest -> Single.fromCallable(() -> {
+							var date = latest.minus(lookback);
+							log.trace("Last seen date {}, using min date: {}", latest, date);
+							return date;
+						}));
 			}
 		});
 	}
