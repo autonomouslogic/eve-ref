@@ -560,7 +560,6 @@ public class Configs {
 	public static final Config<LocalDate> IMPORT_MARKET_HISTORY_MIN_DATE = Config.<LocalDate>builder()
 			.name("IMPORT_MARKET_HISTORY_MIN_DATE")
 			.type(LocalDate.class)
-			.defaultValue(LocalDate.parse("2003-01-01"))
 			.build();
 
 	/**

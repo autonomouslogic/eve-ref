@@ -18,6 +18,7 @@ import java.io.InputStream;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Map;
 import javax.inject.Inject;
@@ -35,6 +36,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junitpioneer.jupiter.ClearEnvironmentVariable;
 import org.junitpioneer.jupiter.SetEnvironmentVariable;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -54,7 +56,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 @Log4j2
 @SetEnvironmentVariable(key = "DATA_BASE_URL", value = "http://localhost:" + TestDataUtil.TEST_PORT + "/data/")
-@SetEnvironmentVariable(key = "IMPORT_MARKET_HISTORY_MIN_DATE", value = "2018-01-01")
 public class ImportMarketHistoryTest {
 	private static final BigDecimal IMPORTED = new BigDecimal("100.00");
 	private static final BigDecimal NOT_IMPORTED = new BigDecimal("1000.00");
@@ -116,6 +117,7 @@ public class ImportMarketHistoryTest {
 
 	@Test
 	@SneakyThrows
+	@SetEnvironmentVariable(key = "IMPORT_MARKET_HISTORY_MIN_DATE", value = "2018-01-01")
 	void shouldImportMarketHistory() {
 		importMarketHistory.run().blockingAwait();
 		assertDailyImports();
@@ -290,5 +292,30 @@ public class ImportMarketHistoryTest {
 				"2018-12-01.csv", file1,
 				"2018-12-02.csv", file2));
 		return mockResponse(new ByteArrayInputStream(bytes));
+	}
+
+	@Test
+	@SetEnvironmentVariable(key = "IMPORT_MARKET_HISTORY_MIN_DATE", value = "2008-01-01")
+	void shouldUseMinDateIfSupplied() {
+		assertEquals(
+				LocalDate.parse("2008-01-01"),
+				importMarketHistory.resolveMinDate().blockingGet());
+	}
+
+	@Test
+	@ClearEnvironmentVariable(key = "IMPORT_MARKET_HISTORY_MIN_DATE")
+	void shouldDefaultIfNoMinDateSuppliedAndDatabaseIsEmpty() {
+		dbAccess.context().truncate(Tables.MARKET_HISTORY).execute();
+		assertEquals(
+				LocalDate.now(ZoneOffset.UTC).minusDays(450),
+				importMarketHistory.resolveMinDate().blockingGet());
+	}
+
+	@Test
+	@ClearEnvironmentVariable(key = "IMPORT_MARKET_HISTORY_MIN_DATE")
+	void shouldDefaultIfNoMinDateSuppliedAndDatabaseHasData() {
+		assertEquals(
+				LocalDate.parse("2019-01-04").minusDays(450),
+				importMarketHistory.resolveMinDate().blockingGet());
 	}
 }
