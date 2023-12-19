@@ -1,5 +1,13 @@
 EVE Ref Changelog
 
+## [2.38.2](https://github.com/autonomouslogic/eve-ref/compare/2.38.1...2.38.2) (2023-12-19)
+
+
+### Bug Fixes
+
+* **deps:** update dependency com.google.guava:guava to v33 ([#398](https://github.com/autonomouslogic/eve-ref/issues/398)) ([851e928](https://github.com/autonomouslogic/eve-ref/commit/851e9289cf6d51992a504dc74af1d64705a940ac))
+* **deps:** update flyway monorepo to v10 (major) ([#374](https://github.com/autonomouslogic/eve-ref/issues/374)) ([451a0a3](https://github.com/autonomouslogic/eve-ref/commit/451a0a3e010557e6db67185474bc6fe107bfbe3c))
+
 ## [2.38.1](https://github.com/autonomouslogic/eve-ref/compare/2.38.0...2.38.1) (2023-12-18)
 
 
