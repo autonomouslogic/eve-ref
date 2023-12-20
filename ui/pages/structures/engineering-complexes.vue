@@ -73,8 +73,8 @@ const listAttributes = attrNames.map(name => getAttributeByName(name, dogmaAttri
 						<DogmaAttributeLink :attribute="attr" />
 					</td>
 					<td v-for="structure in structures" :key="structure.typeId">
-						<template v-if="structure.dogmaAttributes && structure.dogmaAttributes[attr.attributeId]">
-							<dogma-value :value="structure.dogmaAttributes[attr.attributeId].value" :attribute="attr" />
+						<template v-if="structure.dogmaAttributes && structure.dogmaAttributes[attr.attributeId] && structure.dogmaAttributes[attr.attributeId].value">
+							<dogma-value :value="structure.dogmaAttributes[attr.attributeId].value!" :attribute="attr" />
 						</template>
 					</td>
 				</tr>
