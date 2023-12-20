@@ -4,6 +4,7 @@ import AttibuteId from "~/components/dogma/units/AttibuteId.vue";
 import Sizeclass from "~/components/dogma/units/Sizeclass.vue";
 import DefaultUnit from "~/components/dogma/units/DefaultUnit.vue";
 import AbsolutePercent from "~/components/dogma/units/AbsolutePercent.vue";
+import TypeLink from "~/components/helpers/TypeLink.vue";
 
 const props = defineProps<{
 	value: number,
@@ -19,6 +20,7 @@ const unit = await refdataApi.getUnit({unitId: props.unitId});
 		<AttibuteId v-if="unit.unitId == 119" :value="value" />
 		<Sizeclass v-else-if="unit.unitId == 117" :value="value" />
 		<AbsolutePercent v-else-if="unit.unitId == 127" :value="value" />
+		<TypeLink v-else-if="unit.unitId == 116" :type-id="value" />
 		<DefaultUnit v-else :unit="unit" :value="value" />
 	</template>
 </template>

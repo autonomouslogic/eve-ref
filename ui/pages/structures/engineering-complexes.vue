@@ -40,6 +40,7 @@ const attrNames = [
 	"launcherSlotsLeft",
 	"upgradeCapacity",
 	"cpuOutput",
+	"powerOutput",
 	"capacitorCapacity",
 	"powerGridOutput",
 	"shieldCapacity",
