@@ -50,29 +50,39 @@ const attrNames = [
 	"armorHP",
 	"hp",
 	"maxLockedTargets",
-	"maxTargetRange"
+	"maxTargetRange",
+	"strEngMatBonus",
+	"strEngCostBonus",
+	"strEngTimeBonus",
+	"structureServiceRoleBonus",
+	"structureRequiresDeedType",
+	"pauseShieldRepairDpsThreshold",
+	"pauseArmorRepairDpsThreshold",
+	"pauseHullRepairDpsThreshold"
 ];
+
+
 const listAttributes = attrNames.map(name => getAttributeByName(name, dogmaAttributesArray));
 
 </script>
 
 <template>
 	<h1>Engineering Complexes</h1>
-	<table class="table-auto divide-gray-200">
+	<table class="table-auto auto text-left">
 		<thead>
 			<th></th>
-			<th v-for="structure in structures" :key="structure.typeId">
+			<th v-for="structure in structures" :key="structure.typeId" class="text-right px-6">
 				<h2><type-link :type-id="structure.typeId" /></h2>
 			</th>
 		</thead>
 		<tbody>
 			<template v-for="(attr, index) in listAttributes" :key="index">
-				<tr v-if="attr && attr.attributeId">
-					<td>
+				<tr v-if="attr && attr.attributeId" class="border-b">
+					<td class="px-6">
 						<AttributeTypeIcon :dogma-attribute="attr" :size="25" />
 						<DogmaAttributeLink :attribute="attr" />
 					</td>
-					<td v-for="structure in structures" :key="structure.typeId">
+					<td v-for="structure in structures" :key="structure.typeId" class="text-right px-6">
 						<template v-if="structure.dogmaAttributes && structure.dogmaAttributes[attr.attributeId] && structure.dogmaAttributes[attr.attributeId].value">
 							<dogma-value :value="structure.dogmaAttributes[attr.attributeId].value!" :attribute="attr" />
 						</template>
