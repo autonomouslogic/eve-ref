@@ -22,6 +22,6 @@ const selectedLocale = ref(locale);
 		</span>
 		<span><NuxtLink to="/categories">Categories</NuxtLink></span>
 		<span><NuxtLink to="/market-groups">Market Groups</NuxtLink></span>
-    <NuxtLink to="/structures"><MarketGroupName :market-group-id="477" /></NuxtLink>
+		<NuxtLink to="/structures"><MarketGroupName :market-group-id="477" /></NuxtLink>
 	</div>
 </template>

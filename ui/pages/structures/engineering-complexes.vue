@@ -21,15 +21,6 @@ if (!structureIds) {
 	throw new Error(`Market group ${marketGroupId} has no type IDs`);
 }
 structureIds.sort();
-const structures = await Promise.all(structureIds.map(typeId => refdataApi.getType({typeId})));
-const dogmaAttributes: { [key: string]: DogmaTypeAttribute } = {};
-for (let structure of structures) {
-	const attrs = await loadDogmaAttributesForType(structure);
-	for (let k in attrs) {
-		dogmaAttributes[k] = attrs[k];
-	}
-}
-const dogmaAttributesArray = Object.values(dogmaAttributes);
 
 const attrNames = [
 	"rigSize",
@@ -62,36 +53,11 @@ const attrNames = [
 	"pauseArmorRepairDpsThreshold",
 	"pauseHullRepairDpsThreshold"
 ];
-
-
-const listAttributes = attrNames.map(name => getAttributeByName(name, dogmaAttributesArray));
 </script>
 
 <template>
 	<h1>
-    <MarketGroupName :market-group-id="marketGroupId" />
+		<MarketGroupName :market-group-id="marketGroupId" />
 	</h1>
-	<table class="table-auto auto text-left">
-		<thead>
-			<th></th>
-			<th v-for="structure in structures" :key="structure.typeId" class="text-right px-6">
-				<h2><type-link :type-id="structure.typeId" /></h2>
-			</th>
-		</thead>
-		<tbody>
-			<template v-for="(attr, index) in listAttributes" :key="index">
-				<tr v-if="attr && attr.attributeId" class="border-b">
-					<td class="px-6">
-						<AttributeTypeIcon :dogma-attribute="attr" :size="25" />
-						<DogmaAttributeLink :attribute="attr" />
-					</td>
-					<td v-for="structure in structures" :key="structure.typeId" class="text-right px-6">
-						<template v-if="structure.dogmaAttributes && structure.dogmaAttributes[attr.attributeId] && structure.dogmaAttributes[attr.attributeId].value">
-							<dogma-value :value="structure.dogmaAttributes[attr.attributeId].value!" :attribute="attr" />
-						</template>
-					</td>
-				</tr>
-			</template>
-		</tbody>
-	</table>
+	<CompareComparisonTable :type-ids="structureIds" :dogma-attribute-names="attrNames" />
 </template>
