@@ -10,6 +10,7 @@ import {getAttributeByName, loadDogmaAttributesForType} from "~/lib/dogmaUtils";
 import DogmaAttributeLink from "~/components/helpers/DogmaAttributeLink.vue";
 import AttributeTypeIcon from "~/components/icons/AttributeTypeIcon.vue";
 import TypeLink from "~/components/helpers/TypeLink.vue";
+import MarketGroupName from "~/components/helpers/MarketGroupName.vue";
 
 const {locale} = useI18n();
 
@@ -64,11 +65,12 @@ const attrNames = [
 
 
 const listAttributes = attrNames.map(name => getAttributeByName(name, dogmaAttributesArray));
-
 </script>
 
 <template>
-	<h1>Engineering Complexes</h1>
+	<h1>
+    <MarketGroupName :market-group-id="marketGroupId" />
+	</h1>
 	<table class="table-auto auto text-left">
 		<thead>
 			<th></th>

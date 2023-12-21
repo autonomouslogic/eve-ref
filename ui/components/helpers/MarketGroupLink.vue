@@ -1,24 +1,18 @@
 <script setup lang="ts">
-import refdataApi from "~/refdata";
-import {MarketGroup} from "~/refdata-openapi";
+import MarketGroupName from "~/components/helpers/MarketGroupName.vue";
 
 const props = defineProps<{
 	marketGroupId: number | undefined
 }>();
 
-const {locale} = useI18n();
-
 if (props.marketGroupId === undefined) {
 	throw new Error("marketGroupId is required");
 }
-
-const marketGroup: MarketGroup = await refdataApi.getMarketGroup({marketGroupId: props.marketGroupId});
 </script>
 
 <template>
 	<NuxtLink
-		v-if="marketGroup && marketGroup.name"
 		:to="`/market-groups/${props.marketGroupId}`">
-		{{ marketGroup.name[locale] }}
+		<MarketGroupName :market-group-id="marketGroupId" />
 	</NuxtLink>
 </template>
