@@ -12,23 +12,16 @@ import AttributeTypeIcon from "~/components/icons/AttributeTypeIcon.vue";
 import TypeLink from "~/components/helpers/TypeLink.vue";
 import MarketGroupName from "~/components/helpers/MarketGroupName.vue";
 import {STRUCTURE_COMPARISON_STRUCTURE_NAMES} from "~/lib/structureConstants";
-
-const {locale} = useI18n();
-
-const marketGroupId = 2324;
-const marketGroup = await refdataApi.getMarketGroup({marketGroupId});
-const structureIds = marketGroup.typeIds;
-if (!structureIds) {
-	throw new Error(`Market group ${marketGroupId} has no type IDs`);
-}
-structureIds.sort();
-
-const attrNames = STRUCTURE_COMPARISON_STRUCTURE_NAMES;
 </script>
 
 <template>
 	<h1>
-		<MarketGroupName :market-group-id="marketGroupId" />
+		<MarketGroupName :market-group-id="477" />
 	</h1>
-	<CompareComparisonTable :type-ids="structureIds" :dogma-attribute-names="attrNames" />
+	<ul>
+		<li><NuxtLink to="/structures/engineering-complexes"><MarketGroupName :market-group-id="2324" /></NuxtLink></li>
+		<li><NuxtLink to="/structures/refineries"><MarketGroupName :market-group-id="2327" /></NuxtLink></li>
+		<li><NuxtLink to="/structures/standard-citadels"><MarketGroupName :market-group-id="2201" /></NuxtLink></li>
+		<li><NuxtLink to="/structures/faction-citadels"><MarketGroupName :market-group-id="2200" /></NuxtLink></li>
+	</ul>
 </template>

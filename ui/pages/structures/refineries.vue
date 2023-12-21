@@ -15,13 +15,14 @@ import {STRUCTURE_COMPARISON_STRUCTURE_NAMES} from "~/lib/structureConstants";
 
 const {locale} = useI18n();
 
-const marketGroupId = 2324;
+const marketGroupId = 2327;
 const marketGroup = await refdataApi.getMarketGroup({marketGroupId});
 const structureIds = marketGroup.typeIds;
 if (!structureIds) {
 	throw new Error(`Market group ${marketGroupId} has no type IDs`);
 }
 structureIds.sort();
+
 
 const attrNames = STRUCTURE_COMPARISON_STRUCTURE_NAMES;
 </script>
