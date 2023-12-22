@@ -66,9 +66,9 @@ EVE Ref adds the following columns:
 ### `contract_dynamic_items.csv`
 All the dynamic item entries from [/dogma/dynamic/items/{type_id}/{item_id}/](https://esi.evetech.net/ui/#/operations/Dogma/get_dogma_dynamic_items_type_id_item_id):
 
-* `created_by`x
-* `mutator_type_id`x
-* `source_type_id`x
+* `created_by`
+* `mutator_type_id`
+* `source_type_id`
 
 EVE Ref adds the following columns:
 * `item_id`
