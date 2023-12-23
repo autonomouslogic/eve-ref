@@ -4,6 +4,7 @@ import CardWrapper from "~/components/cards/CardWrapper.vue";
 import TypeLink from "~/components/helpers/TypeLink.vue";
 import FormattedNumber from "~/components/helpers/FormattedNumber.vue";
 import refdataApi from "~/refdata";
+import BlueprintManufacturingLinks from "~/components/cards/BlueprintManufacturingLinks.vue";
 
 const props = defineProps<{
 	title: string,
@@ -73,6 +74,7 @@ if (blueprintType?.typeId) {
 					<td>{{ researchTime.time }}s</td>
 				</tr>
 			</table>
+			<BlueprintManufacturingLinks v-if="blueprint" :blueprint="blueprint" />
 		</CardWrapper>
 	</template>
 </template>
