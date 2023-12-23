@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import {DogmaAttribute, InventoryType} from "~/refdata-openapi";
 import CardWrapper from "~/components/cards/CardWrapper.vue";
-import MarketRow from "~/components/cards/market/MarketRow.vue";
-import MarketLinks from "~/components/cards/market/MarketLinks.vue";
 import {insuranceApi} from "~/esi";
 import UnitValue from "~/components/dogma/UnitValue.vue";
 import FormattedNumber from "~/components/helpers/FormattedNumber.vue";

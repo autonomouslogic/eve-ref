@@ -2,9 +2,12 @@ import {
     Bundle,
     Configuration,
     DogmaAttributeToJSON,
-    FetchAPI, IconToJSON,
+    FetchAPI,
+    IconToJSON,
     InventoryTypeToJSON,
-    RefdataApi, SkillToJSON, UnitToJSON
+    RefdataApi,
+    SkillToJSON,
+    UnitToJSON
 } from "~/refdata-openapi";
 
 const cache: { [key: string]: string; } = {};

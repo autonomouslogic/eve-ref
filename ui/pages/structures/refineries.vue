@@ -1,20 +1,7 @@
 <script setup lang="ts">
-import refdataApi, {cacheBundle} from "~/refdata";
-import {DogmaAttribute, DogmaTypeAttribute, InventoryGroup, InventoryType} from "~/refdata-openapi";
-import CategoryLink from "~/components/helpers/CategoryLink.vue";
-import GroupLink from "~/components/helpers/GroupLink.vue";
-import MarketGroupBreadcrumbs from "~/components/helpers/MarketGroupBreadcrumbs.vue";
-import TypeCards from "~/components/types/TypeCards.vue";
-import LinkParser from "~/components/helpers/LinkParser.vue";
-import {getAttributeByName, loadDogmaAttributesForType} from "~/lib/dogmaUtils";
-import DogmaAttributeLink from "~/components/helpers/DogmaAttributeLink.vue";
-import AttributeTypeIcon from "~/components/icons/AttributeTypeIcon.vue";
-import TypeLink from "~/components/helpers/TypeLink.vue";
+import refdataApi from "~/refdata";
 import MarketGroupName from "~/components/helpers/MarketGroupName.vue";
-import {
-	STRUCTURE_COMPARISON_ENGINEERING_COMPLEX_DOGMA_NAMES,
-	STRUCTURE_COMPARISON_REFINERY_DOGMA_NAMES
-} from "~/lib/structureConstants";
+import {STRUCTURE_COMPARISON_REFINERY_DOGMA_NAMES} from "~/lib/structureConstants";
 
 const {locale} = useI18n();
 

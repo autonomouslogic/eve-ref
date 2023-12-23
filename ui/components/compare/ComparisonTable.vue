@@ -1,11 +1,9 @@
 <script setup lang="ts">
-import {DogmaAttribute, DogmaTypeAttribute, InventoryType, MetaGroup} from "~/refdata-openapi";
-import CardWrapper from "~/components/cards/CardWrapper.vue";
+import {DogmaAttribute, DogmaTypeAttribute, InventoryType} from "~/refdata-openapi";
 import refdataApi, {cacheBundle} from "~/refdata";
 import TypeLink from "~/components/helpers/TypeLink.vue";
 import {getAttributeByName, loadDogmaAttributesForType} from "~/lib/dogmaUtils";
 import DogmaAttributeLink from "~/components/helpers/DogmaAttributeLink.vue";
-import MarketGroupName from "~/components/helpers/MarketGroupName.vue";
 import AttributeTypeIcon from "~/components/icons/AttributeTypeIcon.vue";
 
 const {locale} = useI18n();

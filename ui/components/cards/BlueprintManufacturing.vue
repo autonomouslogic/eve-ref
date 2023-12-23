@@ -4,7 +4,6 @@ import CardWrapper from "~/components/cards/CardWrapper.vue";
 import TypeLink from "~/components/helpers/TypeLink.vue";
 import FormattedNumber from "~/components/helpers/FormattedNumber.vue";
 import refdataApi from "~/refdata";
-import {getJitaSellPrice} from "~/lib/marketUtils";
 
 const props = defineProps<{
 	title: string,

@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import FormattedNumber from "~/components/helpers/FormattedNumber.vue";
 import AbsolutePercent from "~/components/dogma/units/AbsolutePercent.vue";
 
 const props = defineProps<{

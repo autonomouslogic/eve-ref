@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import {DogmaAttribute, InventoryType} from "~/refdata-openapi";
-import CardWrapper from "~/components/cards/CardWrapper.vue";
-import MarketRow from "~/components/cards/market/MarketRow.vue";
+import {InventoryType} from "~/refdata-openapi";
 
 const props = defineProps<{
 	inventoryType: InventoryType,
