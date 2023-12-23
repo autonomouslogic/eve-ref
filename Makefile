@@ -57,6 +57,12 @@ docker-data-index: docker
 
 clean:
 	./gradlew clean --stacktrace
+	rm -R ui/.nuxt || true
+	rm -R ui/.nitro || true
+	rm -R ui/.cache || true
+	rm -R ui/.output || true
+	rm -R ui/.env || true
+	rm -R ui/dist || true
 
 version:
 	echo $(EVE_REF_VERSION)
