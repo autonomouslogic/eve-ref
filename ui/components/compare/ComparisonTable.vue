@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {DogmaAttribute, DogmaTypeAttribute, InventoryType, MetaGroup} from "~/refdata-openapi";
 import CardWrapper from "~/components/cards/CardWrapper.vue";
-import refdataApi from "~/refdata";
+import refdataApi, {cacheBundle} from "~/refdata";
 import TypeLink from "~/components/helpers/TypeLink.vue";
 import {getAttributeByName, loadDogmaAttributesForType} from "~/lib/dogmaUtils";
 import DogmaAttributeLink from "~/components/helpers/DogmaAttributeLink.vue";
@@ -14,8 +14,12 @@ const props = defineProps<{
 	typeIds: number[],
 	dogmaAttributeNames: string[]
 }>();
-
-const types = await Promise.all(props.typeIds.map(typeId => refdataApi.getType({typeId})));
+const types: InventoryType[] = await Promise.all(props.typeIds.map(typeId => {
+	return cacheBundle(typeId).then(() => {
+		return refdataApi.getType({typeId});
+	});
+	return refdataApi.getType({typeId});
+}));
 const dogmaAttributes: { [key: string]: DogmaTypeAttribute } = {};
 for (let type of types) {
 	const attrs = await loadDogmaAttributesForType(type);
@@ -25,6 +29,15 @@ for (let type of types) {
 }
 const dogmaAttributesArray = Object.values(dogmaAttributes);
 const listAttributes = props.dogmaAttributeNames.map(name => getAttributeByName(name, dogmaAttributesArray));
+
+function hasValue(attr: DogmaAttribute, type: InventoryType): boolean {
+	return !!(attr?.attributeId && type?.dogmaAttributes?.[attr.attributeId]?.value);
+}
+
+function getValue(attr: DogmaAttribute, type: InventoryType): number {
+	const val = attr?.attributeId && type?.dogmaAttributes?.[attr.attributeId]?.value;
+	return val == undefined ? -1 : val;
+}
 </script>
 
 <template>
@@ -43,8 +56,8 @@ const listAttributes = props.dogmaAttributeNames.map(name => getAttributeByName(
 						<DogmaAttributeLink :attribute="attr" />
 					</td>
 					<td v-for="type in types" :key="type.typeId" class="text-right px-6">
-						<template v-if="type.dogmaAttributes && type.dogmaAttributes[attr.attributeId] && type.dogmaAttributes[attr.attributeId].value">
-							<dogma-value :value="type.dogmaAttributes[attr.attributeId].value!" :attribute="attr" />
+						<template v-if="hasValue(attr, type)">
+							<dogma-value :value="getValue(attr, type)" :attribute="attr" />
 						</template>
 					</td>
 				</tr>
