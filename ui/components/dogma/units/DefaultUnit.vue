@@ -9,11 +9,17 @@ const props = defineProps<{
 
 const ignoreSuffixUnitIds = [
 	140, // Level
+	141, // hardpoints
 ];
 const noDecimalUnitIds = [
 	1, // m
 	2, // kg
 	140, // Level
+	120, // points
+	106, // tf
+	114, // GJ
+	113, // HP
+	107, // MW
 ];
 const twoDecimalUnitIds = [
 	9, // m3

@@ -6,9 +6,14 @@ import AttributeTypeIcon from "~/components/icons/AttributeTypeIcon.vue";
 const route = useRoute();
 const {locale} = useI18n();
 
-const attributeId = parseInt(route.params.attributeId[0] ?? route.params.attributeId);
+const attributeId = parseInt(Array.isArray(route.params.attributeId) ? route.params.attributeId[0] : route.params.attributeId);
 const attribute = await refdataApi.getDogmaAttribute({attributeId});
 const unit = attribute.unitId ? await refdataApi.getUnit({unitId: attribute.unitId}) : null;
+
+console.log(route.params);
+console.log(attributeId);
+console.log(attribute);
+console.log(unit);
 </script>
 
 <template>

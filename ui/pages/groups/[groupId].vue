@@ -5,7 +5,7 @@ import TypeLink from "~/components/helpers/TypeLink.vue";
 const route = useRoute();
 const {locale} = useI18n();
 
-const groupId: number = Array.isArray(route.params.groupId) ? parseInt(route.params.groupId[0]) : parseInt(route.params.groupId);
+const groupId = parseInt(Array.isArray(route.params.groupId) ? route.params.groupId[0] : route.params.groupId);
 
 const group = await refdataApi.getGroup({groupId});
 const typeIds = group.typeIds;
