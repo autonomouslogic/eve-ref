@@ -11,7 +11,7 @@ import DogmaAttributeLink from "~/components/helpers/DogmaAttributeLink.vue";
 import AttributeTypeIcon from "~/components/icons/AttributeTypeIcon.vue";
 import TypeLink from "~/components/helpers/TypeLink.vue";
 import MarketGroupName from "~/components/helpers/MarketGroupName.vue";
-import {STRUCTURE_COMPARISON_STRUCTURE_NAMES} from "~/lib/structureConstants";
+import {STRUCTURE_COMPARISON_ENGINEERING_COMPLEX_DOGMA_NAMES} from "~/lib/structureConstants";
 
 const {locale} = useI18n();
 
@@ -23,7 +23,7 @@ if (!structureIds) {
 }
 structureIds.sort();
 
-const attrNames = STRUCTURE_COMPARISON_STRUCTURE_NAMES;
+const attrNames = STRUCTURE_COMPARISON_ENGINEERING_COMPLEX_DOGMA_NAMES;
 </script>
 
 <template>

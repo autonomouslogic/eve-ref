@@ -35,8 +35,8 @@ function hasValue(attr: DogmaAttribute, type: InventoryType): boolean {
 }
 
 function getValue(attr: DogmaAttribute, type: InventoryType): number {
-	const val = attr?.attributeId && type?.dogmaAttributes?.[attr.attributeId]?.value;
-	return val == undefined ? -1 : val;
+	const val = attr?.attributeId ? type?.dogmaAttributes?.[attr?.attributeId]?.value : undefined;
+	return val === undefined ? -1 : val;
 }
 </script>
 
