@@ -1,5 +1,20 @@
 EVE Ref Changelog
 
+## [2.39.0](https://github.com/autonomouslogic/eve-ref/compare/2.38.2...2.39.0) (2023-12-23)
+
+
+### Features
+
+* Added Adam4EVE manufacturing link ([#412](https://github.com/autonomouslogic/eve-ref/issues/412)) ([a970a2c](https://github.com/autonomouslogic/eve-ref/commit/a970a2c2e106ce0efdab16926d89a233aca06a6d))
+* Added Fuzzwork manufacturing link ([#406](https://github.com/autonomouslogic/eve-ref/issues/406)) ([7cc37ff](https://github.com/autonomouslogic/eve-ref/commit/7cc37ff84d0be0f0f8231f4095f22583460c07f5))
+* Structures overview ([#400](https://github.com/autonomouslogic/eve-ref/issues/400)) ([b9724a0](https://github.com/autonomouslogic/eve-ref/commit/b9724a0037aea1de71609fcd71a799b7154ca124))
+
+
+### Documentation
+
+* Market orders format ([#403](https://github.com/autonomouslogic/eve-ref/issues/403)) ([22e9260](https://github.com/autonomouslogic/eve-ref/commit/22e9260546a54016f1e5c7b9a302dd6538a330f0))
+* Public contracts format ([#404](https://github.com/autonomouslogic/eve-ref/issues/404)) ([81f1fda](https://github.com/autonomouslogic/eve-ref/commit/81f1fda1c8d0063678fbefead653a4c0bd3960fb))
+
 ## [2.38.2](https://github.com/autonomouslogic/eve-ref/compare/2.38.1...2.38.2) (2023-12-19)
 
 
