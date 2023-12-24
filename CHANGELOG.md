@@ -1,5 +1,12 @@
 EVE Ref Changelog
 
+## [2.39.1](https://github.com/autonomouslogic/eve-ref/compare/2.39.0...2.39.1) (2023-12-24)
+
+
+### Bug Fixes
+
+* Dogma attribute value layout ([6a5d122](https://github.com/autonomouslogic/eve-ref/commit/6a5d1220fe24113823eb514d3c4f8c3b7346427a))
+
 ## [2.39.0](https://github.com/autonomouslogic/eve-ref/compare/2.38.2...2.39.0) (2023-12-23)
 
 
