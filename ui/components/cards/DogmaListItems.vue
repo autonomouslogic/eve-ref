@@ -21,9 +21,9 @@ function value(attributeId: number | undefined): number {
 </script>
 
 <template>
-	<li v-for="attribute in dogmaAttributes" :key="attribute.attributeId">
+	<template v-for="attribute in dogmaAttributes" :key="attribute.attributeId">
 		<DogmaAttributeValue
 			:value="value(attribute.attributeId)"
 			:attribute="attribute" />
-	</li>
+	</template>
 </template>
