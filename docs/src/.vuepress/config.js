@@ -85,6 +85,13 @@ module.exports = {
             'development/esi-code-generation.md',
             'development/logging.md'
           ]
+        },
+        {
+          title: "Meta",
+          collapsable: false,
+          children: [
+            'privacy.md'
+          ]
         }
     ]
   },
