@@ -27,9 +27,4 @@ const dogmaAttribute: DogmaAttribute = typeof props.attribute === "number" ?
 </template>
 
 <style scoped>
-dt {
-}
-dd {
-  @apply border-gray-300 border-b pl-4 font-bold text-right;
-}
 </style>

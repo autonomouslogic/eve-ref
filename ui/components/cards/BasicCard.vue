@@ -16,27 +16,84 @@ const props = defineProps<{
 
 <template>
 	<CardWrapper title="Basics">
-		<ul>
-			<li v-if="inventoryType.typeId">Type ID: {{ inventoryType.typeId }}</li>
-			<li v-if="inventoryType.basePrice">Base price: <UnitValue :unit-id="133" :value="inventoryType.basePrice" /></li>
-			<li v-if="inventoryType.capacity">Capacity: <UnitValue :unit-id="9" :value="inventoryType.capacity" /></li>
-			<li v-if="inventoryType.factionId">Faction ID: {{ inventoryType.factionId }}</li>
-			<li v-if="inventoryType.graphicId">Graphic ID: {{ inventoryType.graphicId }}</li>
-			<li v-if="inventoryType.groupId">Group ID: <GroupLink :group-id="inventoryType.groupId"/> [{{ inventoryType.groupId }}]</li>
-			<li v-if="inventoryType.iconId">Icon ID: {{ inventoryType.iconId }}</li>
-			<li v-if="inventoryType.marketGroupId">Market group ID: <MarketGroupLink :market-group-id="inventoryType.marketGroupId"/> [{{ inventoryType.marketGroupId }}]</li>
-			<li v-if="inventoryType.mass">Mass: <UnitValue :unit-id="2" :value="inventoryType.mass" /></li>
-			<li v-if="inventoryType.metaGroupId">Meta group ID: {{ inventoryType.metaGroupId }}</li>
-			<li v-if="inventoryType.packagedVolume">Packaged volume: <UnitValue :unit-id="9" :value="inventoryType.packagedVolume" /></li>
-			<li v-if="inventoryType.portionSize">Portion size: <FormattedNumber :number="inventoryType.portionSize" /></li>
-			<li v-if="inventoryType.published">Published: {{ inventoryType.published }}</li>
-			<li v-if="inventoryType.raceId">Race ID: {{ inventoryType.raceId }}</li>
-			<li v-if="inventoryType.radius">Radius: <UnitValue :unit-id="1" :value="inventoryType.radius" /></li>
-			<li v-if="inventoryType.sofFactionName">Sof faction name: {{ inventoryType.sofFactionName }}</li>
-			<li v-if="inventoryType.sofMaterialSetId">Sof material set ID: {{ inventoryType.sofMaterialSetId }}</li>
-			<li v-if="inventoryType.soundId">Sound ID: {{ inventoryType.soundId }}</li>
-			<li v-if="inventoryType.volume">Volume: <UnitValue :unit-id="9" :value="inventoryType.volume" /></li>
+		<dl class="attribute-list">
+			<template v-if="inventoryType.typeId">
+				<dt>Type ID:</dt>
+				<dd>{{ inventoryType.typeId }}</dd>
+			</template>
+			<template v-if="inventoryType.basePrice">
+				<dt>Base price:</dt>
+				<dd><UnitValue :unit-id="133" :value="inventoryType.basePrice" /></dd>
+			</template>
+			<template v-if="inventoryType.capacity">
+				<dt>Capacity:</dt>
+				<dd><UnitValue :unit-id="9" :value="inventoryType.capacity" /></dd>
+			</template>
+			<template v-if="inventoryType.factionId">
+				<dt>Faction ID:</dt>
+				<dd>{{ inventoryType.factionId }}</dd>
+			</template>
+			<template v-if="inventoryType.graphicId">
+				<dt>Graphic ID:</dt>
+				<dd>{{ inventoryType.graphicId }}</dd>
+			</template>
+			<template v-if="inventoryType.groupId">
+				<dt>Group ID:</dt>
+				<dd><GroupLink :group-id="inventoryType.groupId"/> [{{ inventoryType.groupId }}]</dd>
+			</template>
+			<template v-if="inventoryType.iconId">
+				<dt>Icon ID:</dt>
+				<dd>{{ inventoryType.iconId }}</dd>
+			</template>
+			<template v-if="inventoryType.marketGroupId">
+				<dt>Market group ID:</dt>
+				<dd><MarketGroupLink :market-group-id="inventoryType.marketGroupId"/> [{{ inventoryType.marketGroupId }}]</dd>
+			</template>
+			<template v-if="inventoryType.mass">
+				<dt>Mass:</dt>
+				<dd><UnitValue :unit-id="2" :value="inventoryType.mass" /></dd>
+			</template>
+			<template v-if="inventoryType.metaGroupId">
+				<dt>Meta group ID:</dt>
+				<dd>{{ inventoryType.metaGroupId }}</dd>
+			</template>
+			<template v-if="inventoryType.packagedVolume">
+				<dt>Packaged volume:</dt>
+				<dd><UnitValue :unit-id="9" :value="inventoryType.packagedVolume" /></dd>
+			</template>
+			<template v-if="inventoryType.portionSize">
+				<dt>Portion size:</dt>
+				<dd><FormattedNumber :number="inventoryType.portionSize" /></dd>
+			</template>
+			<template v-if="inventoryType.published">
+				<dt>Published:</dt>
+				<dd>{{ inventoryType.published }}</dd>
+			</template>
+			<template v-if="inventoryType.raceId">
+				<dt>Race ID:</dt>
+				<dd>{{ inventoryType.raceId }}</dd>
+			</template>
+			<template v-if="inventoryType.radius">
+				<dt>Radius:</dt>
+				<dd><UnitValue :unit-id="1" :value="inventoryType.radius" /></dd>
+			</template>
+			<template v-if="inventoryType.sofFactionName">
+				<dt>Sof faction name:</dt>
+				<dd>{{ inventoryType.sofFactionName }}</dd>
+			</template>
+			<template v-if="inventoryType.sofMaterialSetId">
+				<dt>Sof material set ID:</dt>
+				<dd>{{ inventoryType.sofMaterialSetId }}</dd>
+			</template>
+			<template v-if="inventoryType.soundId">
+				<dt>Sound ID:</dt>
+				<dd>{{ inventoryType.soundId }}</dd>
+			</template>
+			<template v-if="inventoryType.volume">
+				<dt>Volume:</dt>
+				<dd><UnitValue :unit-id="9" :value="inventoryType.volume" /></dd>
+			</template>
 			<DogmaListItems :inventory-type="inventoryType" :dogma-attributes="dogmaAttributes" />
-		</ul>
+		</dl>
 	</CardWrapper>
 </template>
