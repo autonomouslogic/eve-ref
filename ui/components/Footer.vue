@@ -21,7 +21,7 @@ const selectedLocale = ref(locale);
 						<li><NuxtLink to="/status">Status</NuxtLink></li>
 						<li><a href="https://data.everef.net/">Data</a></li>
 						<li><a href="https://docs.everef.net/">Docs</a></li>
-            <li><NuxtLink to="/privacy">Privacy</NuxtLink></li>
+						<li><NuxtLink to="/privacy">Privacy</NuxtLink></li>
 					</ul>
 				</div>
 				<div>
