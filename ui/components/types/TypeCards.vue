@@ -2,7 +2,7 @@
 import {DogmaTypeAttribute, InventoryType} from "~/refdata-openapi";
 import TraitsCard from "~/components/cards/TraitsCard.vue";
 import typeCardsConfig from "~/conf/typeCardsConfig";
-import DefensesCard from "~/components/cards/DefensesCard.vue";
+import DefensesCard from "~/components/cards/defenses/DefensesCard.vue";
 import TypeCardSelector from "~/components/types/TypeCardSelector.vue";
 import {loadDogmaAttributesForType} from "~/lib/dogmaUtils";
 

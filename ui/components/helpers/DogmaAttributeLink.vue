@@ -17,8 +17,10 @@ const dogmaAttribute = typeof props.attribute === "number" ?
 	<NuxtLink
 		v-if="dogmaAttribute"
 		:to="`/dogma-attributes/${dogmaAttribute.attributeId}`">
-		<template v-if="dogmaAttribute.displayName && dogmaAttribute.displayName[locale]">{{ dogmaAttribute.displayName[locale] }}</template>
-		<template v-else>{{dogmaAttribute.name}}</template>
+		<slot>
+			<template v-if="dogmaAttribute.displayName && dogmaAttribute.displayName[locale]">{{ dogmaAttribute.displayName[locale] }}</template>
+			<template v-else>{{dogmaAttribute.name}}</template>
+		</slot>
 	</NuxtLink>
 </template>
 

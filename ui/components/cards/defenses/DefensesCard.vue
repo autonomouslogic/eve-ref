@@ -15,7 +15,7 @@ const props = defineProps<{
 
 <template>
 	<CardWrapper :title="title">
-		<div class="grid grid-cols-12">
+		<div class="grid grid-cols-7">
 			<DefensesRow :inventory-type="inventoryType"
 				:dogma-attributes="dogmaAttributes"
 				hp-attr-name="shieldCapacity"

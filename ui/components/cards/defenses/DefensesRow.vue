@@ -2,6 +2,8 @@
 import {DogmaAttribute, DogmaTypeAttribute, InventoryType} from "~/refdata-openapi";
 import {getAttributeByName, getTypeAttributeByName} from "~/lib/dogmaUtils";
 import AttributeTypeIcon from "~/components/icons/AttributeTypeIcon.vue";
+import DogmaAttributeLink from "~/components/helpers/DogmaAttributeLink.vue";
+import ProgressBar from "~/components/helpers/ProgressBar.vue";
 
 const {locale} = useI18n();
 
@@ -34,6 +36,10 @@ const kineticResonance = getTypeAttributeByName(props.kineticResonanceAttrName, 
 const explosiveResonanceAttr = getAttributeByName(props.explosiveResonanceAttrName, props.dogmaAttributes);
 const explosiveResonance = getTypeAttributeByName(props.explosiveResonanceAttrName, props.inventoryType, props.dogmaAttributes);
 
+function uniformityDisplay(value: number) {
+	return Math.round((1 - value) * 100);
+}
+
 function attributeValueCalc(dogmaTypeAttribute: DogmaTypeAttribute | undefined, round: boolean = false): number | undefined {
 	if (!dogmaTypeAttribute || !dogmaTypeAttribute.value) {
 		return undefined;
@@ -44,18 +50,71 @@ function attributeValueCalc(dogmaTypeAttribute: DogmaTypeAttribute | undefined, 
 </script>
 
 <template>
-	<template v-if="hp">
-		<span v-if="hpAttr?.displayName"><AttributeTypeIcon :dogma-attribute="hpAttr" />{{ hpAttr.displayName[locale] }}</span>
-		<span>{{ hp.value }} HP</span>
-		<span>uniformity:</span>
-		<span>{{ attributeValueCalc(uniformity) }}%</span>
-		<span v-if="emResonanceAttr"><AttributeTypeIcon :dogma-attribute="emResonanceAttr" />EM:</span>
-		<span>{{ attributeValueCalc(emResonance, true) }}%</span>
-		<span v-if="thermalResonanceAttr"><AttributeTypeIcon :dogma-attribute="thermalResonanceAttr" />thermal:</span>
-		<span>{{ attributeValueCalc(thermalResonance, true) }}%</span>
-		<span v-if="kineticResonanceAttr"><AttributeTypeIcon :dogma-attribute="kineticResonanceAttr" />kinetic:</span>
-		<span>{{ attributeValueCalc(kineticResonance, true) }}%</span>
-		<span v-if="explosiveResonanceAttr"><AttributeTypeIcon :dogma-attribute="explosiveResonanceAttr" />explosive:</span>
-		<span>{{ attributeValueCalc(explosiveResonance, true) }}%</span>
-	</template>
+	<div v-if="hpAttr && hp">
+		<DogmaAttributeLink :attribute="hpAttr">
+			<AttributeTypeIcon :dogma-attribute="hpAttr" />
+			<span v-if="hpAttr.displayName">{{ hpAttr.displayName[locale] }}</span>
+		</DogmaAttributeLink>
+	</div>
+	<div v-else />
+
+	<div v-if="hpAttr && hp && hp.value !== undefined" class="text-right">
+		<DogmaValue :attribute="hpAttr" :value="hp.value" />
+	</div>
+	<div v-else />
+
+	<div v-if="uniformityAttr && uniformity && uniformity.value !== undefined" class="text-right w-min">
+		<DogmaAttributeLink :attribute="uniformityAttr">
+			({{ uniformityDisplay(uniformity.value) }}%)
+		</DogmaAttributeLink>
+	</div>
+	<div v-else />
+
+	<div v-if="emResonanceAttr && emResonance && emResonance.value !== undefined" class="progress-box">
+		<DogmaAttributeLink :attribute="emResonanceAttr">
+			<AttributeTypeIcon :dogma-attribute="emResonanceAttr" />
+			<ProgressBar :progress="1 - emResonance.value" color="#007bff">
+				<DogmaValue :attribute="emResonanceAttr" :value="emResonance.value" />
+			</ProgressBar>
+		</DogmaAttributeLink>
+	</div>
+	<div v-else />
+
+	<span v-if="thermalResonanceAttr && thermalResonance && thermalResonance.value !== undefined">
+		<DogmaAttributeLink :attribute="thermalResonanceAttr">
+			<AttributeTypeIcon :dogma-attribute="thermalResonanceAttr" />
+			<ProgressBar :progress="1 - thermalResonance.value" color="#ee5f5b">
+				<DogmaValue :attribute="thermalResonanceAttr" :value="thermalResonance.value" />
+			</ProgressBar>
+		</DogmaAttributeLink>
+	</span>
+	<div v-else />
+
+	<div v-if="kineticResonanceAttr && kineticResonance && kineticResonance.value !== undefined">
+		<DogmaAttributeLink :attribute="kineticResonanceAttr">
+			<AttributeTypeIcon :dogma-attribute="kineticResonanceAttr" />
+			<ProgressBar :progress="1 - kineticResonance.value" color="#7a8288;">
+				<DogmaValue :attribute="kineticResonanceAttr" :value="kineticResonance.value" />
+			</ProgressBar>
+		</DogmaAttributeLink>
+	</div>
+	<div v-else />
+
+	<div v-if="explosiveResonanceAttr && explosiveResonance && explosiveResonance.value !== undefined">
+		<DogmaAttributeLink :attribute="explosiveResonanceAttr">
+			<AttributeTypeIcon :dogma-attribute="explosiveResonanceAttr" />
+			<ProgressBar :progress="1 - explosiveResonance.value" color="#f89406">
+				<DogmaValue :attribute="explosiveResonanceAttr" :value="explosiveResonance.value" />
+			</ProgressBar>
+		</DogmaAttributeLink>
+	</div>
+	<div v-else />
 </template>
+
+<style scoped>
+.progress-box {
+  /* @apply whitespace-nowrap; */
+  display: flex;
+  align-items: center;
+}
+</style>
