@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import {DogmaAttribute, InventoryType} from "~/refdata-openapi";
+import AttributeTypeIcon from "~/components/icons/AttributeTypeIcon.vue";
+import DogmaAttributeLink from "~/components/helpers/DogmaAttributeLink.vue";
+import AttributeListItem from "~/components/attr/AttributeListItem.vue";
 
 const props = defineProps<{
 	inventoryType: InventoryType,
@@ -21,9 +24,13 @@ function value(attributeId: number | undefined): number {
 </script>
 
 <template>
-	<li v-for="attribute in dogmaAttributes" :key="attribute.attributeId">
-		<DogmaAttributeValue
-			:value="value(attribute.attributeId)"
-			:attribute="attribute" />
-	</li>
+	<AttributeListItem v-for="attribute in dogmaAttributes" :key="attribute.attributeId">
+		<template v-slot:key>
+			<template v-if="attribute">
+				<AttributeTypeIcon :dogma-attribute="attribute" :size="25" />
+				<DogmaAttributeLink v-if="attribute.attributeId" :attribute="attribute.attributeId" />:
+			</template>
+		</template>
+		<DogmaValue :value="value(attribute.attributeId)" :attribute="attribute" />
+	</AttributeListItem>
 </template>
