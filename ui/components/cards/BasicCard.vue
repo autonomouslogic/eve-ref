@@ -6,6 +6,8 @@ import FormattedNumber from "~/components/helpers/FormattedNumber.vue";
 import MarketGroupLink from "~/components/helpers/MarketGroupLink.vue";
 import UnitValue from "~/components/dogma/UnitValue.vue";
 import GroupLink from "~/components/helpers/GroupLink.vue";
+import AttributeList from "~/components/attr/AttributeList.vue";
+import AttributeListItem from "~/components/attr/AttributeListItem.vue";
 
 const props = defineProps<{
 	title: string,
@@ -16,84 +18,87 @@ const props = defineProps<{
 
 <template>
 	<CardWrapper title="Basics">
-		<dl class="attribute-list">
-			<template v-if="inventoryType.typeId">
-				<dt>Type ID:</dt>
-				<dd>{{ inventoryType.typeId }}</dd>
-			</template>
-			<template v-if="inventoryType.basePrice">
-				<dt>Base price:</dt>
-				<dd><UnitValue :unit-id="133" :value="inventoryType.basePrice" /></dd>
-			</template>
-			<template v-if="inventoryType.capacity">
-				<dt>Capacity:</dt>
-				<dd><UnitValue :unit-id="9" :value="inventoryType.capacity" /></dd>
-			</template>
-			<template v-if="inventoryType.factionId">
-				<dt>Faction ID:</dt>
-				<dd>{{ inventoryType.factionId }}</dd>
-			</template>
-			<template v-if="inventoryType.graphicId">
-				<dt>Graphic ID:</dt>
-				<dd>{{ inventoryType.graphicId }}</dd>
-			</template>
-			<template v-if="inventoryType.groupId">
-				<dt>Group ID:</dt>
-				<dd><GroupLink :group-id="inventoryType.groupId"/> [{{ inventoryType.groupId }}]</dd>
-			</template>
-			<template v-if="inventoryType.iconId">
-				<dt>Icon ID:</dt>
-				<dd>{{ inventoryType.iconId }}</dd>
-			</template>
-			<template v-if="inventoryType.marketGroupId">
-				<dt>Market group ID:</dt>
-				<dd><MarketGroupLink :market-group-id="inventoryType.marketGroupId"/> [{{ inventoryType.marketGroupId }}]</dd>
-			</template>
-			<template v-if="inventoryType.mass">
-				<dt>Mass:</dt>
-				<dd><UnitValue :unit-id="2" :value="inventoryType.mass" /></dd>
-			</template>
-			<template v-if="inventoryType.metaGroupId">
-				<dt>Meta group ID:</dt>
-				<dd>{{ inventoryType.metaGroupId }}</dd>
-			</template>
-			<template v-if="inventoryType.packagedVolume">
-				<dt>Packaged volume:</dt>
-				<dd><UnitValue :unit-id="9" :value="inventoryType.packagedVolume" /></dd>
-			</template>
-			<template v-if="inventoryType.portionSize">
-				<dt>Portion size:</dt>
-				<dd><FormattedNumber :number="inventoryType.portionSize" /></dd>
-			</template>
-			<template v-if="inventoryType.published">
-				<dt>Published:</dt>
-				<dd>{{ inventoryType.published }}</dd>
-			</template>
-			<template v-if="inventoryType.raceId">
-				<dt>Race ID:</dt>
-				<dd>{{ inventoryType.raceId }}</dd>
-			</template>
-			<template v-if="inventoryType.radius">
-				<dt>Radius:</dt>
-				<dd><UnitValue :unit-id="1" :value="inventoryType.radius" /></dd>
-			</template>
-			<template v-if="inventoryType.sofFactionName">
-				<dt>Sof faction name:</dt>
-				<dd>{{ inventoryType.sofFactionName }}</dd>
-			</template>
-			<template v-if="inventoryType.sofMaterialSetId">
-				<dt>Sof material set ID:</dt>
-				<dd>{{ inventoryType.sofMaterialSetId }}</dd>
-			</template>
-			<template v-if="inventoryType.soundId">
-				<dt>Sound ID:</dt>
-				<dd>{{ inventoryType.soundId }}</dd>
-			</template>
-			<template v-if="inventoryType.volume">
-				<dt>Volume:</dt>
-				<dd><UnitValue :unit-id="9" :value="inventoryType.volume" /></dd>
-			</template>
+
+		<AttributeList>
+			<AttributeListItem v-if="inventoryType.typeId">
+				<template v-slot:key>Type ID:</template>
+				{{ inventoryType.typeId }}
+			</AttributeListItem>
+			<AttributeListItem v-if="inventoryType.basePrice">
+				<template v-slot:key>Base price:</template>
+				<UnitValue :unit-id="133" :value="inventoryType.basePrice" />
+			</AttributeListItem>
+			<AttributeListItem v-if="inventoryType.capacity">
+				<template v-slot:key>Capacity:</template>
+				<UnitValue :unit-id="9" :value="inventoryType.capacity" />
+			</AttributeListItem>
+			<AttributeListItem v-if="inventoryType.factionId">
+				<template v-slot:key>Faction ID:</template>
+				{{ inventoryType.factionId }}
+			</AttributeListItem>
+			<AttributeListItem v-if="inventoryType.graphicId">
+				<template v-slot:key>Graphic ID:</template>
+				{{ inventoryType.graphicId }}
+			</AttributeListItem>
+			<AttributeListItem v-if="inventoryType.groupId">
+				<template v-slot:key>Group ID:</template>
+				<GroupLink :group-id="inventoryType.groupId"/> [{{ inventoryType.groupId }}]
+			</AttributeListItem>
+			<AttributeListItem v-if="inventoryType.iconId">
+				<template v-slot:key>Icon ID:</template>
+				{{ inventoryType.iconId }}
+			</AttributeListItem>
+			<AttributeListItem v-if="inventoryType.marketGroupId">
+				<template v-slot:key>Market group ID:</template>
+				<MarketGroupLink :market-group-id="inventoryType.marketGroupId"/> [{{ inventoryType.marketGroupId }}]
+			</AttributeListItem>
+			<AttributeListItem v-if="inventoryType.mass">
+				<template v-slot:key>Mass:</template>
+				<UnitValue :unit-id="2" :value="inventoryType.mass" />
+			</AttributeListItem>
+			<AttributeListItem v-if="inventoryType.metaGroupId">
+				<template v-slot:key>Meta group ID:</template>
+				{{ inventoryType.metaGroupId }}
+			</AttributeListItem>
+			<AttributeListItem v-if="inventoryType.packagedVolume">
+				<template v-slot:key>Packaged volume:</template>
+				<UnitValue :unit-id="9" :value="inventoryType.packagedVolume" />
+			</AttributeListItem>
+			<AttributeListItem v-if="inventoryType.portionSize">
+				<template v-slot:key>Portion size:</template>
+				<FormattedNumber :number="inventoryType.portionSize" />
+			</AttributeListItem>
+			<AttributeListItem v-if="inventoryType.published">
+				<template v-slot:key>Published:</template>
+				{{ inventoryType.published }}
+			</AttributeListItem>
+			<AttributeListItem v-if="inventoryType.raceId">
+				<template v-slot:key>Race ID:</template>
+				{{ inventoryType.raceId }}
+			</AttributeListItem>
+			<AttributeListItem v-if="inventoryType.radius">
+				<template v-slot:key>Radius:</template>
+				<UnitValue :unit-id="1" :value="inventoryType.radius" />
+			</AttributeListItem>
+			<AttributeListItem v-if="inventoryType.sofFactionName">
+				<template v-slot:key>Sof faction name:</template>
+				{{ inventoryType.sofFactionName }}
+			</AttributeListItem>
+			<AttributeListItem v-if="inventoryType.sofMaterialSetId">
+				<template v-slot:key>Sof material set ID:</template>
+				{{ inventoryType.sofMaterialSetId }}
+			</AttributeListItem>
+			<AttributeListItem v-if="inventoryType.soundId">
+				<template v-slot:key>Sound ID:</template>
+				{{ inventoryType.soundId }}
+			</AttributeListItem>
+			<AttributeListItem v-if="inventoryType.volume">
+				<template v-slot:key>Volume:</template>
+				<UnitValue :unit-id="9" :value="inventoryType.volume" />
+			</AttributeListItem>
+
 			<DogmaListItems :inventory-type="inventoryType" :dogma-attributes="dogmaAttributes" />
-		</dl>
+
+		</AttributeList>
 	</CardWrapper>
 </template>
