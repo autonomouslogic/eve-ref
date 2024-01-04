@@ -70,7 +70,7 @@ function attributeValueCalc(dogmaTypeAttribute: DogmaTypeAttribute | undefined, 
 	</div>
 	<div v-else />
 
-	<div v-if="emResonanceAttr && emResonance && emResonance.value !== undefined" class="progress-box">
+	<div v-if="emResonanceAttr && emResonance && emResonance.value !== undefined">
 		<DogmaAttributeLink :attribute="emResonanceAttr">
 			<AttributeTypeIcon :dogma-attribute="emResonanceAttr" />
 			<ProgressBar :progress="1 - emResonance.value" color="#007bff">
@@ -112,9 +112,4 @@ function attributeValueCalc(dogmaTypeAttribute: DogmaTypeAttribute | undefined, 
 </template>
 
 <style scoped>
-.progress-box {
-  /* @apply whitespace-nowrap; */
-  display: flex;
-  align-items: center;
-}
 </style>

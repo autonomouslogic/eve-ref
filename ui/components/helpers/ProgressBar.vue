@@ -27,6 +27,7 @@ const progressStyle = computed(() => {
   /*flex: 1;*/
   height: 1rem;
   border-radius: .25rem;
+  overflow: hidden;
 }
 .content {
   position:absolute;
