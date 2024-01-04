@@ -12,7 +12,6 @@ externalDocs:
   url: https://github.com/autonomouslogic/eve-ref/blob/main/docs/refdata.md
 servers:
 - url: https://ref-data.everef.net
-  variables: {}
 paths:
   /blueprints:
     get:
