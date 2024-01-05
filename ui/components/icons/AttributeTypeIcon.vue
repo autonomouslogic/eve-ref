@@ -21,7 +21,7 @@ if (icon) {
 </script>
 
 <template>
-	<img v-if="iconUrl" :src="iconUrl" :width="realSize" :height="realSize" :style="`width: ${realSize}px; height: ${realSize}px`" />
+	<img v-if="iconUrl" :src="iconUrl" :width="realSize" :height="realSize" :style="`width:${realSize}px;height:${realSize}px;`" />
 	<template v-else>&nbsp;</template>
 </template>
 
