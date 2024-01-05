@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import refdataApi from "~/refdata";
-import {InventoryGroup} from "~/refdata-openapi";
+import {type InventoryGroup} from "~/refdata-openapi";
 
 const props = defineProps<{
 	groupId: number | undefined

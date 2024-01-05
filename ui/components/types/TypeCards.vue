@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {DogmaTypeAttribute, InventoryType} from "~/refdata-openapi";
+import {type DogmaTypeAttribute, type InventoryType} from "~/refdata-openapi";
 import TraitsCard from "~/components/cards/TraitsCard.vue";
 import typeCardsConfig from "~/conf/typeCardsConfig";
 import DefensesCard from "~/components/cards/DefensesCard.vue";

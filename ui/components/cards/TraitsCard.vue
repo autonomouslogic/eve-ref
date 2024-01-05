@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {InventoryType} from "~/refdata-openapi";
+import {type InventoryType} from "~/refdata-openapi";
 import CardWrapper from "~/components/cards/CardWrapper.vue";
 import TraitsContainer from "~/components/types/traits/TraitsContainer.vue";
 

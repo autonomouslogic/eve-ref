@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import UnitValue from "~/components/dogma/UnitValue.vue";
-import {DogmaAttribute} from "~/refdata-openapi";
+import {type DogmaAttribute} from "~/refdata-openapi";
 
 const props = defineProps<{
 	value: number,

@@ -1,4 +1,4 @@
-import {DogmaAttribute, DogmaTypeAttribute, InventoryType} from "~/refdata-openapi";
+import {type DogmaAttribute, type DogmaTypeAttribute, type InventoryType} from "~/refdata-openapi";
 import refdataApi from "~/refdata";
 
 export async function loadDogmaAttributesForType(type: InventoryType): Promise<{ [key: string]: DogmaAttribute }> {

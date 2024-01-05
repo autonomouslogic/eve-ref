@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {TraitBonus, TraitBonusFromJSON} from "~/refdata-openapi";
+import {type TraitBonus, TraitBonusFromJSON} from "~/refdata-openapi";
 import TypeLink from "~/components/helpers/TypeLink.vue";
 import TraitGroup from "~/components/types/traits/TraitGroup.vue";
 
