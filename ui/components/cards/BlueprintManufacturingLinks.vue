@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {Blueprint} from "~/refdata-openapi";
+import {type Blueprint} from "~/refdata-openapi";
 import ExternalLink from "~/components/helpers/ExternalLink.vue";
 
 const props = defineProps<{

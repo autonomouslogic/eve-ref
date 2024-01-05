@@ -1,8 +1,8 @@
 import {
-    Bundle,
+    type Bundle,
     Configuration,
     DogmaAttributeToJSON,
-    FetchAPI,
+    type FetchAPI,
     IconToJSON,
     InventoryTypeToJSON,
     RefdataApi,

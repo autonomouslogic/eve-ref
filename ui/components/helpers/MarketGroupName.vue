@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import refdataApi from "~/refdata";
-import {MarketGroup} from "~/refdata-openapi";
+import {type MarketGroup} from "~/refdata-openapi";
 
 const props = defineProps<{
 	marketGroupId: number | undefined

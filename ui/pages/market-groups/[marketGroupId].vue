@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import refdataApi from "~/refdata";
-import {MarketGroup} from "~/refdata-openapi";
+import {type MarketGroup} from "~/refdata-openapi";
 import TypeLink from "~/components/helpers/TypeLink.vue";
 import MarketGroupLink from "~/components/helpers/MarketGroupLink.vue";
 import MarketGroupBreadcrumbs from "~/components/helpers/MarketGroupBreadcrumbs.vue";

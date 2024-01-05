@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import refdataApi from "~/refdata";
-import {MarketGroup} from "~/refdata-openapi";
+import {type MarketGroup} from "~/refdata-openapi";
 import MarketGroupLink from "~/components/helpers/MarketGroupLink.vue";
 
 const props = defineProps<{

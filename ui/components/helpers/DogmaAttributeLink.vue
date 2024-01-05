@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import refdataApi from "~/refdata";
-import {DogmaAttribute} from "~/refdata-openapi";
+import {type DogmaAttribute} from "~/refdata-openapi";
 
 const {locale} = useI18n();
 

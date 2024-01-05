@@ -10,6 +10,6 @@
   },
   "license": "MIT-0",
   "devDependencies": {
-    "vuepress": "1.9.9"
+    "vuepress": "1.9.10"
   }
 }

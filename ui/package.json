@@ -14,20 +14,20 @@
     "test": "vitest run"
   },
   "devDependencies": {
-    "@nuxt/test-utils": "3.6.2",
-    "@nuxt/types": "2.17.0",
+    "@nuxt/test-utils": "3.9.0",
+    "@nuxt/types": "2.17.2",
     "@nuxtjs/i18n": "8.0.0-beta.10",
-    "@nuxtjs/tailwindcss": "6.8.0",
-    "@openapitools/openapi-generator-cli": "2.6.0",
-    "@types/node": "18.16.19",
-    "@typescript-eslint/eslint-plugin": "6.0.0",
-    "@typescript-eslint/parser": "6.0.0",
-    "eslint": "8.44.0",
-    "eslint-plugin-vue": "9.15.1",
-    "nuxt": "3.6.1",
-    "typescript": "5.1.6",
-    "vitest": "0.32.4",
-    "vue-tsc": "1.8.8"
+    "@nuxtjs/tailwindcss": "6.10.3",
+    "@openapitools/openapi-generator-cli": "2.7.0",
+    "@types/node": "18.19.4",
+    "@typescript-eslint/eslint-plugin": "6.17.0",
+    "@typescript-eslint/parser": "6.17.0",
+    "eslint": "8.56.0",
+    "eslint-plugin-vue": "9.19.2",
+    "nuxt": "3.9.0",
+    "typescript": "5.3.3",
+    "vitest": "0.34.6",
+    "vue-tsc": "1.8.27"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "6.5.1",

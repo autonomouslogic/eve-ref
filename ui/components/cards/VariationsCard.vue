@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {DogmaAttribute, InventoryType, MetaGroup} from "~/refdata-openapi";
+import {type DogmaAttribute, type InventoryType, type MetaGroup} from "~/refdata-openapi";
 import CardWrapper from "~/components/cards/CardWrapper.vue";
 import refdataApi from "~/refdata";
 import TypeLink from "~/components/helpers/TypeLink.vue";
