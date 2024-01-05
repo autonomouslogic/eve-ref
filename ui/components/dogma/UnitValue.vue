@@ -6,6 +6,7 @@ import DefaultUnit from "~/components/dogma/units/DefaultUnit.vue";
 import AbsolutePercent from "~/components/dogma/units/AbsolutePercent.vue";
 import TypeLink from "~/components/helpers/TypeLink.vue";
 import AbsoluteInveresePercent from "~/components/dogma/units/AbsoluteInveresePercent.vue";
+import Duration from "~/components/dogma/units/Duration.vue";
 
 const props = defineProps<{
 	value: number,
@@ -23,6 +24,7 @@ const unit = await refdataApi.getUnit({unitId: props.unitId});
 		<AbsolutePercent v-else-if="unit.unitId == 127" :value="value" />
 		<AbsoluteInveresePercent v-else-if="unit.unitId == 108" :value="value" />
 		<TypeLink v-else-if="unit.unitId == 116" :type-id="value" />
+		<Duration v-else-if="unit.unitId == 101" :milliseconds="value" />
 		<DefaultUnit v-else :unit="unit" :value="value" />
 	</template>
 </template>

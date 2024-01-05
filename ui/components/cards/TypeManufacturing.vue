@@ -5,6 +5,7 @@ import TypeLink from "~/components/helpers/TypeLink.vue";
 import FormattedNumber from "~/components/helpers/FormattedNumber.vue";
 import refdataApi from "~/refdata";
 import BlueprintManufacturingLinks from "~/components/cards/BlueprintManufacturingLinks.vue";
+import Duration from "~/components/dogma/units/Duration.vue";
 
 const props = defineProps<{
 	title: string,
@@ -49,32 +50,34 @@ if (blueprintType?.typeId) {
 			<table>
 				<tr>
 					<td>Blueprint:</td>
-					<td><TypeLink :type-id="blueprintType.typeId" /></td>
+					<td class="text-right"><TypeLink :type-id="blueprintType.typeId" /></td>
 				</tr>
 				<template v-if="manufacturing">
 					<tr v-for="(product, id) in manufacturing.products" :key="id">
 						<td><TypeLink :type-id="product.typeId" /></td>
-						<td><FormattedNumber :number="product.quantity" /></td>
+						<td class="text-right"><FormattedNumber :number="product.quantity" /></td>
 					</tr>
 					<tr>
 						<td>Manufacturing time:</td>
-						<td>{{ manufacturing.time }}s</td>
+						<td class="text-right"><Duration :milliseconds="manufacturing.time" /></td>
 					</tr>
 				</template>
 				<tr v-if="copying">
 					<td>Copy time:</td>
-					<td>{{ copying.time }}s</td>
+					<td class="text-right"><Duration :milliseconds="copying.time" /></td>
 				</tr>
 				<tr v-if="researchMaterial">
 					<td>Material research:</td>
-					<td>{{ researchMaterial.time }}s</td>
+					<td class="text-right"><Duration :milliseconds="researchMaterial.time" /></td>
 				</tr>
 				<tr v-if="researchTime">
 					<td>Time research:</td>
-					<td>{{ researchTime.time }}s</td>
+					<td class="text-right"><Duration :milliseconds="researchTime.time" /></td>
 				</tr>
 			</table>
-			<BlueprintManufacturingLinks v-if="blueprint" :blueprint="blueprint" />
+			<div class="mt-1">
+				<BlueprintManufacturingLinks v-if="blueprint" :blueprint="blueprint" />
+			</div>
 		</CardWrapper>
 	</template>
 </template>
