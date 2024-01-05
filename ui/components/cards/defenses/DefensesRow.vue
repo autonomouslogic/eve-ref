@@ -2,6 +2,8 @@
 import {type DogmaAttribute, type DogmaTypeAttribute, type InventoryType} from "~/refdata-openapi";
 import {getAttributeByName, getTypeAttributeByName} from "~/lib/dogmaUtils";
 import AttributeTypeIcon from "~/components/icons/AttributeTypeIcon.vue";
+import DogmaAttributeLink from "~/components/helpers/DogmaAttributeLink.vue";
+import DefensesRowResistance from "~/components/cards/defenses/DefensesRowResistance.vue";
 
 const {locale} = useI18n();
 
@@ -34,6 +36,10 @@ const kineticResonance = getTypeAttributeByName(props.kineticResonanceAttrName, 
 const explosiveResonanceAttr = getAttributeByName(props.explosiveResonanceAttrName, props.dogmaAttributes);
 const explosiveResonance = getTypeAttributeByName(props.explosiveResonanceAttrName, props.inventoryType, props.dogmaAttributes);
 
+function uniformityDisplay(value: number) {
+	return Math.round((1 - value) * 100);
+}
+
 function attributeValueCalc(dogmaTypeAttribute: DogmaTypeAttribute | undefined, round: boolean = false): number | undefined {
 	if (!dogmaTypeAttribute || !dogmaTypeAttribute.value) {
 		return undefined;
@@ -44,18 +50,29 @@ function attributeValueCalc(dogmaTypeAttribute: DogmaTypeAttribute | undefined, 
 </script>
 
 <template>
-	<template v-if="hp">
-		<span v-if="hpAttr?.displayName"><AttributeTypeIcon :dogma-attribute="hpAttr" />{{ hpAttr.displayName[locale] }}</span>
-		<span>{{ hp.value }} HP</span>
-		<span>uniformity:</span>
-		<span>{{ attributeValueCalc(uniformity) }}%</span>
-		<span v-if="emResonanceAttr"><AttributeTypeIcon :dogma-attribute="emResonanceAttr" />EM:</span>
-		<span>{{ attributeValueCalc(emResonance, true) }}%</span>
-		<span v-if="thermalResonanceAttr"><AttributeTypeIcon :dogma-attribute="thermalResonanceAttr" />thermal:</span>
-		<span>{{ attributeValueCalc(thermalResonance, true) }}%</span>
-		<span v-if="kineticResonanceAttr"><AttributeTypeIcon :dogma-attribute="kineticResonanceAttr" />kinetic:</span>
-		<span>{{ attributeValueCalc(kineticResonance, true) }}%</span>
-		<span v-if="explosiveResonanceAttr"><AttributeTypeIcon :dogma-attribute="explosiveResonanceAttr" />explosive:</span>
-		<span>{{ attributeValueCalc(explosiveResonance, true) }}%</span>
-	</template>
+	<div v-if="hpAttr && hp">
+		<DogmaAttributeLink :attribute="hpAttr">
+			<AttributeTypeIcon :dogma-attribute="hpAttr" />
+			<span v-if="hpAttr.displayName">{{ hpAttr.displayName[locale] }}</span>
+		</DogmaAttributeLink>
+	</div>
+	<div v-else />
+
+	<div v-if="hpAttr && hp && hp.value !== undefined" class="text-right">
+		<DogmaValue :attribute="hpAttr" :value="hp.value" />
+	</div>
+	<div v-else />
+
+	<div v-if="uniformityAttr && uniformity && uniformity.value !== undefined" class="text-right w-min">
+		<DogmaAttributeLink :attribute="uniformityAttr">
+			({{ uniformityDisplay(uniformity.value) }}%)
+		</DogmaAttributeLink>
+	</div>
+	<div v-else />
+
+	<DefensesRowResistance :resonance-attr="emResonanceAttr" :resonance="emResonance" color="#007bff" />
+	<DefensesRowResistance :resonance-attr="thermalResonanceAttr" :resonance="thermalResonance" color="#ee5f5b" />
+	<DefensesRowResistance :resonance-attr="kineticResonanceAttr" :resonance="kineticResonance" color="#7a8288" />
+	<DefensesRowResistance :resonance-attr="explosiveResonanceAttr" :resonance="explosiveResonance" color="#f89406" />
 </template>
+
