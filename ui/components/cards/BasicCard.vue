@@ -42,7 +42,7 @@ const props = defineProps<{
 			</AttributeListItem>
 			<AttributeListItem v-if="inventoryType.groupId">
 				<template v-slot:key>Group ID:</template>
-				<GroupLink :group-id="inventoryType.groupId"/> [{{ inventoryType.groupId }}]
+				<GroupLink :group-id="inventoryType.groupId"/>
 			</AttributeListItem>
 			<AttributeListItem v-if="inventoryType.iconId">
 				<template v-slot:key>Icon ID:</template>
@@ -50,7 +50,7 @@ const props = defineProps<{
 			</AttributeListItem>
 			<AttributeListItem v-if="inventoryType.marketGroupId">
 				<template v-slot:key>Market group ID:</template>
-				<MarketGroupLink :market-group-id="inventoryType.marketGroupId"/> [{{ inventoryType.marketGroupId }}]
+				<MarketGroupLink :market-group-id="inventoryType.marketGroupId"/>
 			</AttributeListItem>
 			<AttributeListItem v-if="inventoryType.mass">
 				<template v-slot:key>Mass:</template>
