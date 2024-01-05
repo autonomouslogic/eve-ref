@@ -11,7 +11,7 @@ import {
 	ABSOLUTE_PERCENT,
 	ATTRIBUTE_ID,
 	GROUP_ID,
-	INVERSE_ABSOLUTE_PERCENT, MILLISECONDS,
+	INVERSE_ABSOLUTE_PERCENT, MILLISECONDS, SECOND,
 	SIZE_CLASS,
 	TYPE_ID
 } from "~/lib/unitConstants";
@@ -34,6 +34,7 @@ const unit = await refdataApi.getUnit({unitId: props.unitId});
 		<AbsoluteInveresePercent v-else-if="unit.unitId == INVERSE_ABSOLUTE_PERCENT" :value="value" />
 		<GroupLink v-else-if="unit.unitId == GROUP_ID" :group-id="value" />
 		<TypeLink v-else-if="unit.unitId == TYPE_ID" :type-id="value" />
+		<Duration v-else-if="unit.unitId == SECOND" :milliseconds="value * 1000" />
 		<Duration v-else-if="unit.unitId == MILLISECONDS" :milliseconds="value" />
 		<DefaultUnit v-else :unit="unit" :value="value" />
 	</template>

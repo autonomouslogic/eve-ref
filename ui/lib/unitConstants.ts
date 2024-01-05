@@ -1,3 +1,4 @@
+export const SECOND = 3;
 export const MILLISECONDS = 101;
 export const INVERSE_ABSOLUTE_PERCENT = 108;
 export const GROUP_ID = 115;
