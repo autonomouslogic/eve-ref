@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import refdataApi, {cacheBundle} from "~/refdata";
-import {InventoryGroup, InventoryType} from "~/refdata-openapi";
+import {type InventoryGroup, type InventoryType} from "~/refdata-openapi";
 import CategoryLink from "~/components/helpers/CategoryLink.vue";
 import GroupLink from "~/components/helpers/GroupLink.vue";
 import MarketGroupBreadcrumbs from "~/components/helpers/MarketGroupBreadcrumbs.vue";

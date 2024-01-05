@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {InventoryTypeTraits} from "~/refdata-openapi";
+import {type InventoryTypeTraits} from "~/refdata-openapi";
 import TraitGroup from "~/components/types/traits/TraitGroup.vue";
 import TypeTraits from "~/components/types/traits/TypeTraits.vue";
 

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {Blueprint, BlueprintActivity, DogmaAttribute, InventoryType} from "~/refdata-openapi";
+import {type Blueprint, type BlueprintActivity, type DogmaAttribute, type InventoryType} from "~/refdata-openapi";
 import CardWrapper from "~/components/cards/CardWrapper.vue";
 import TypeLink from "~/components/helpers/TypeLink.vue";
 import FormattedNumber from "~/components/helpers/FormattedNumber.vue";

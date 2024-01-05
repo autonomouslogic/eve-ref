@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {TraitBonus} from "~/refdata-openapi";
+import {type TraitBonus} from "~/refdata-openapi";
 import LinkParser from "~/components/helpers/LinkParser.vue";
 import UnitValue from "~/components/dogma/UnitValue.vue";
 

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {DogmaAttribute, InventoryType} from "~/refdata-openapi";
+import {type DogmaAttribute, type InventoryType} from "~/refdata-openapi";
 import AttributeTypeIcon from "~/components/icons/AttributeTypeIcon.vue";
 import DogmaAttributeLink from "~/components/helpers/DogmaAttributeLink.vue";
 import AttributeListItem from "~/components/attr/AttributeListItem.vue";

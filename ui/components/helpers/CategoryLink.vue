@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import refdataApi from "~/refdata";
-import {InventoryCategory} from "~/refdata-openapi";
+import {type InventoryCategory} from "~/refdata-openapi";
 
 const props = defineProps<{
 	categoryId: number | undefined

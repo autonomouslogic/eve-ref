@@ -1,4 +1,4 @@
-import {Configuration, FetchAPI, InsuranceApi, MarketApi, UniverseApi} from "~/esi-openapi";
+import {Configuration, type FetchAPI, InsuranceApi, MarketApi, UniverseApi} from "~/esi-openapi";
 
 const useFetchFetchApi: FetchAPI = async (input: RequestInfo | URL, init?: RequestInit): Promise<Response> => {
     var url = (input as URL).toString();

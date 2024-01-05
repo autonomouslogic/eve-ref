@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {Unit} from "~/refdata-openapi";
+import {type Unit} from "~/refdata-openapi";
 import FormattedNumber from "~/components/helpers/FormattedNumber.vue";
 
 const props = defineProps<{

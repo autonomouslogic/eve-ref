@@ -1,5 +1,19 @@
 EVE Ref Changelog
 
+## [2.39.2](https://github.com/autonomouslogic/eve-ref/compare/2.39.1...2.39.2) (2024-01-01)
+
+
+### Features
+
+* Privacy policies [skip release] ([#413](https://github.com/autonomouslogic/eve-ref/issues/413)) ([059e5ab](https://github.com/autonomouslogic/eve-ref/commit/059e5ab6c96b16696025ff5e91ffd96a8eff4348))
+* Switched attributes to description lists (dl, dt, dd) [skip release] ([#414](https://github.com/autonomouslogic/eve-ref/issues/414)) ([b4da512](https://github.com/autonomouslogic/eve-ref/commit/b4da5121253f61e1cf9569d443ea9f31e5884d0b))
+
+
+### Bug Fixes
+
+* **deps:** update flyway monorepo to v10.4.1 ([#417](https://github.com/autonomouslogic/eve-ref/issues/417)) ([bbfca34](https://github.com/autonomouslogic/eve-ref/commit/bbfca34aef18cc3a5e21d434a3ec0e0734a029a4))
+* **deps:** update font awesome to v6.5.1 ([#418](https://github.com/autonomouslogic/eve-ref/issues/418)) ([81f8cbe](https://github.com/autonomouslogic/eve-ref/commit/81f8cbeded9d2e073737a76040342550308b1f1d))
+
 ## [2.39.1](https://github.com/autonomouslogic/eve-ref/compare/2.39.0...2.39.1) (2023-12-24)
 
 
