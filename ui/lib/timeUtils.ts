@@ -1,24 +1,25 @@
 import {Duration} from "luxon";
 
+export const SECOND = 1000;
+export const MINUTE = 60 * SECOND;
+export const HOUR = 60 * MINUTE;
+export const DAY = 24 * HOUR;
+
 export function formatDuration(milliseconds: number): string {
-    const ms = Math.floor(milliseconds);
-    let format: string[] = [];
-    if (ms % 1000 != 0) {
-        format.unshift("s.SSS 's'");
+    let formatted = Duration.fromMillis(milliseconds).toFormat("d'd' h'h' m'm' s.SSS's'");
+    // Remove extra fractional milliseconds.
+    formatted = formatted.replaceAll(/0+s/g, "s");
+    formatted = formatted.replaceAll(".s", "s");
+    // Remove zero parts.
+    formatted = formatted.replaceAll(/(^| )0[dhms]/g, " ");
+    // Remove extra spaces.
+    formatted = formatted.replaceAll(/ +/g, " ");
+    formatted = formatted.trim();
+    // Fallback to 0s.
+    if (formatted == "") {
+        return "0s";
     }
-    else {
-        format.unshift("s 's'");
-    }
-    if (ms >= 60 * 1000) {
-        format.unshift("m 'm'");
-    }
-    if (ms >= 60 * 60 * 1000) {
-        format.unshift("h 'h'");
-    }
-    if (ms >= 24 * 60 * 60 * 1000) {
-        format.unshift("d 'd'");
-    }
-    return Duration.fromMillis(ms).toFormat(format.join(" "));
+    return formatted;
 }
 
 export function secondsToMilliseconds(seconds: number | undefined): number {
