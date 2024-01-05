@@ -13,21 +13,15 @@ const progressStyle = computed(() => {
 </script>
 
 <template>
-	<span class="bar">
+	<div class="bar relative flex w-full">
 		<div class="progress" :style="progressStyle"></div>
-		<div class="content"><slot /></div>
-	</span>
+		<div class="content place-self-center"><slot /></div>
+	</div>
 </template>
 
 <style scoped>
 .bar {
-  display: flex;
-  position: relative;
   background-color: #272b30;
-  /*flex: 1;*/
-  height: 1rem;
-  border-radius: .25rem;
-  overflow: hidden;
 }
 .content {
   position:absolute;
@@ -35,6 +29,5 @@ const progressStyle = computed(() => {
   left: 50%;
   transform: translate(-50%,-50%);
   color: #f8f9fa;
-  font-weight: 700;
 }
 </style>

@@ -3,7 +3,7 @@ import {type DogmaAttribute, type DogmaTypeAttribute, type InventoryType} from "
 import {getAttributeByName, getTypeAttributeByName} from "~/lib/dogmaUtils";
 import AttributeTypeIcon from "~/components/icons/AttributeTypeIcon.vue";
 import DogmaAttributeLink from "~/components/helpers/DogmaAttributeLink.vue";
-import ProgressBar from "~/components/helpers/ProgressBar.vue";
+import DefensesRowResistance from "~/components/cards/defenses/DefensesRowResistance.vue";
 
 const {locale} = useI18n();
 
@@ -70,46 +70,9 @@ function attributeValueCalc(dogmaTypeAttribute: DogmaTypeAttribute | undefined, 
 	</div>
 	<div v-else />
 
-	<div v-if="emResonanceAttr && emResonance && emResonance.value !== undefined">
-		<DogmaAttributeLink :attribute="emResonanceAttr">
-			<AttributeTypeIcon :dogma-attribute="emResonanceAttr" />
-			<ProgressBar :progress="1 - emResonance.value" color="#007bff">
-				<DogmaValue :attribute="emResonanceAttr" :value="emResonance.value" />
-			</ProgressBar>
-		</DogmaAttributeLink>
-	</div>
-	<div v-else />
-
-	<span v-if="thermalResonanceAttr && thermalResonance && thermalResonance.value !== undefined">
-		<DogmaAttributeLink :attribute="thermalResonanceAttr">
-			<AttributeTypeIcon :dogma-attribute="thermalResonanceAttr" />
-			<ProgressBar :progress="1 - thermalResonance.value" color="#ee5f5b">
-				<DogmaValue :attribute="thermalResonanceAttr" :value="thermalResonance.value" />
-			</ProgressBar>
-		</DogmaAttributeLink>
-	</span>
-	<div v-else />
-
-	<div v-if="kineticResonanceAttr && kineticResonance && kineticResonance.value !== undefined">
-		<DogmaAttributeLink :attribute="kineticResonanceAttr">
-			<AttributeTypeIcon :dogma-attribute="kineticResonanceAttr" />
-			<ProgressBar :progress="1 - kineticResonance.value" color="#7a8288;">
-				<DogmaValue :attribute="kineticResonanceAttr" :value="kineticResonance.value" />
-			</ProgressBar>
-		</DogmaAttributeLink>
-	</div>
-	<div v-else />
-
-	<div v-if="explosiveResonanceAttr && explosiveResonance && explosiveResonance.value !== undefined">
-		<DogmaAttributeLink :attribute="explosiveResonanceAttr">
-			<AttributeTypeIcon :dogma-attribute="explosiveResonanceAttr" />
-			<ProgressBar :progress="1 - explosiveResonance.value" color="#f89406">
-				<DogmaValue :attribute="explosiveResonanceAttr" :value="explosiveResonance.value" />
-			</ProgressBar>
-		</DogmaAttributeLink>
-	</div>
-	<div v-else />
+	<DefensesRowResistance :resonance-attr="emResonanceAttr" :resonance="emResonance" color="#007bff" />
+	<DefensesRowResistance :resonance-attr="thermalResonanceAttr" :resonance="thermalResonance" color="#ee5f5b" />
+	<DefensesRowResistance :resonance-attr="kineticResonanceAttr" :resonance="kineticResonance" color="#7a8288" />
+	<DefensesRowResistance :resonance-attr="explosiveResonanceAttr" :resonance="explosiveResonance" color="#f89406" />
 </template>
 
-<style scoped>
-</style>
