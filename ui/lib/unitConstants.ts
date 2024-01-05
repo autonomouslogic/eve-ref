@@ -5,4 +5,6 @@ export const GROUP_ID = 115;
 export const TYPE_ID = 116;
 export const SIZE_CLASS = 117;
 export const ATTRIBUTE_ID = 119;
+export const TRUE_TIME = 123;
 export const ABSOLUTE_PERCENT = 127;
+export const HOURS = 129;
