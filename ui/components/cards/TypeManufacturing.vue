@@ -6,6 +6,7 @@ import FormattedNumber from "~/components/helpers/FormattedNumber.vue";
 import refdataApi from "~/refdata";
 import BlueprintManufacturingLinks from "~/components/cards/BlueprintManufacturingLinks.vue";
 import Duration from "~/components/dogma/units/Duration.vue";
+import {secondsToMilliseconds} from "~/lib/timeUtils";
 
 const props = defineProps<{
 	title: string,
@@ -59,20 +60,20 @@ if (blueprintType?.typeId) {
 					</tr>
 					<tr>
 						<td>Manufacturing time:</td>
-						<td class="text-right"><Duration :milliseconds="manufacturing.time" /></td>
+						<td class="text-right"><Duration :milliseconds="secondsToMilliseconds(manufacturing.time)" /></td>
 					</tr>
 				</template>
 				<tr v-if="copying">
 					<td>Copy time:</td>
-					<td class="text-right"><Duration :milliseconds="copying.time" /></td>
+					<td class="text-right"><Duration :milliseconds="secondsToMilliseconds(copying.time)" /></td>
 				</tr>
 				<tr v-if="researchMaterial">
 					<td>Material research:</td>
-					<td class="text-right"><Duration :milliseconds="researchMaterial.time" /></td>
+					<td class="text-right"><Duration :milliseconds="secondsToMilliseconds(researchMaterial.time)" /></td>
 				</tr>
 				<tr v-if="researchTime">
 					<td>Time research:</td>
-					<td class="text-right"><Duration :milliseconds="researchTime.time" /></td>
+					<td class="text-right"><Duration :milliseconds="secondsToMilliseconds(researchTime.time)" /></td>
 				</tr>
 			</table>
 			<div class="mt-1">

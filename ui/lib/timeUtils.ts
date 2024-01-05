@@ -20,3 +20,7 @@ export function formatDuration(milliseconds: number): string {
     }
     return Duration.fromMillis(ms).toFormat(format.join(" "));
 }
+
+export function secondsToMilliseconds(seconds: number | undefined): number {
+    return seconds === undefined ? 0 : seconds * 1000;
+}
