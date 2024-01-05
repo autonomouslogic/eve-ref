@@ -1,5 +1,25 @@
 EVE Ref Changelog
 
+## [2.39.3](https://github.com/autonomouslogic/eve-ref/compare/2.39.2...2.39.3) (2024-01-05)
+
+
+### Features
+
+* Added group links on attributes [skip release] ([#422](https://github.com/autonomouslogic/eve-ref/issues/422)) ([ad47b53](https://github.com/autonomouslogic/eve-ref/commit/ad47b53f371a3d26f02674738166d1d14d8718a2))
+* Formatted time and duration [skip release] ([#423](https://github.com/autonomouslogic/eve-ref/issues/423)) ([e8d4aec](https://github.com/autonomouslogic/eve-ref/commit/e8d4aec1d3681dd00a93bd336d54fed025cec68b))
+
+
+### Bug Fixes
+
+* Browser hydration errors ([#425](https://github.com/autonomouslogic/eve-ref/issues/425)) ([c9dc49a](https://github.com/autonomouslogic/eve-ref/commit/c9dc49a8b4c42dff7e2fe1b459a1af8ce2dc397b))
+* Defenses card styling ([#421](https://github.com/autonomouslogic/eve-ref/issues/421)) ([bca7d1d](https://github.com/autonomouslogic/eve-ref/commit/bca7d1db88404c2d2e4cd886bd9dedbaefaee116))
+
+
+### Dependency Updates
+
+* **deps:** update all non-major dependencies ([#416](https://github.com/autonomouslogic/eve-ref/issues/416)) ([73d3dd4](https://github.com/autonomouslogic/eve-ref/commit/73d3dd49783c09613019c2a55955d7e3f4ebe01e))
+* **deps:** Updated @nuxtjs/i18n to 8.0.0 ([#420](https://github.com/autonomouslogic/eve-ref/issues/420)) ([8194bb4](https://github.com/autonomouslogic/eve-ref/commit/8194bb462d7fa9318497c07504cb777741f2eb4d))
+
 ## [2.39.2](https://github.com/autonomouslogic/eve-ref/compare/2.39.1...2.39.2) (2024-01-01)
 
 
