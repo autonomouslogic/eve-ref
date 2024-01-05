@@ -6,15 +6,17 @@ import DefaultUnit from "~/components/dogma/units/DefaultUnit.vue";
 import AbsolutePercent from "~/components/dogma/units/AbsolutePercent.vue";
 import TypeLink from "~/components/helpers/TypeLink.vue";
 import AbsoluteInveresePercent from "~/components/dogma/units/AbsoluteInveresePercent.vue";
+import Duration from "~/components/dogma/units/Duration.vue";
 import {
 	ABSOLUTE_PERCENT,
-	ATTRIBUTE_ID,
-	GROUP_ID,
-	INVERSE_ABSOLUTE_PERCENT,
-	SIZE_CLASS,
+	ATTRIBUTE_ID, DATETIME,
+	GROUP_ID, HOURS,
+	INVERSE_ABSOLUTE_PERCENT, MILLISECONDS, SECOND,
+	SIZE_CLASS, TRUE_TIME,
 	TYPE_ID
 } from "~/lib/unitConstants";
 import GroupLink from "~/components/helpers/GroupLink.vue";
+import Datetime from "~/components/dogma/units/Datetime.vue";
 
 const props = defineProps<{
 	value: number,
@@ -33,6 +35,11 @@ const unit = await refdataApi.getUnit({unitId: props.unitId});
 		<AbsoluteInveresePercent v-else-if="unit.unitId == INVERSE_ABSOLUTE_PERCENT" :value="value" />
 		<GroupLink v-else-if="unit.unitId == GROUP_ID" :group-id="value" />
 		<TypeLink v-else-if="unit.unitId == TYPE_ID" :type-id="value" />
+		<Duration v-else-if="unit.unitId == HOURS" :milliseconds="value * 60 * 60 * 1000" />
+		<Duration v-else-if="unit.unitId == SECOND" :milliseconds="value * 1000" />
+		<Duration v-else-if="unit.unitId == TRUE_TIME" :milliseconds="value * 1000" />
+		<Duration v-else-if="unit.unitId == MILLISECONDS" :milliseconds="value" />
+		<Datetime v-else-if="unit.unitId == DATETIME" :millisecond-epoch="value * 24 * 60 * 60 * 1000" />
 		<DefaultUnit v-else :unit="unit" :value="value" />
 	</template>
 </template>

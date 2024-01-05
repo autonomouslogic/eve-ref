@@ -5,6 +5,8 @@ import TypeLink from "~/components/helpers/TypeLink.vue";
 import FormattedNumber from "~/components/helpers/FormattedNumber.vue";
 import refdataApi from "~/refdata";
 import BlueprintManufacturingLinks from "~/components/cards/BlueprintManufacturingLinks.vue";
+import Duration from "~/components/dogma/units/Duration.vue";
+import {secondsToMilliseconds} from "~/lib/timeUtils";
 
 const props = defineProps<{
 	title: string,
@@ -32,7 +34,7 @@ if (blueprintType?.typeId) {
 			<table>
 				<tr>
 					<td>Manufacturing time:</td>
-					<td>{{ manufacturing.time }}s</td>
+					<td><Duration :milliseconds="secondsToMilliseconds(manufacturing.time)" /></td>
 				</tr>
 				<tr>
 					<td colspan="2">Products</td>
