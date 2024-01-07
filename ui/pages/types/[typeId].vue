@@ -10,10 +10,10 @@ import LinkParser from "~/components/helpers/LinkParser.vue";
 const {locale} = useI18n();
 const route = useRoute();
 const typeId: number = Array.isArray(route.params.typeId) ? parseInt(route.params.typeId[0]) : parseInt(route.params.typeId);
-
 if (!typeId) {
 	console.error("typeId is null");
 }
+
 await cacheBundle(typeId);
 
 const inventoryType: InventoryType = await refdataApi.getType({typeId});
@@ -38,5 +38,7 @@ const inventoryGroup: InventoryGroup = await refdataApi.getGroup({groupId: inven
 	<TypeCards :inventory-type="inventoryType" />
 
 	<h2>Description</h2>
-	<p v-if="inventoryType.description"><LinkParser :content="inventoryType.description[locale]"/></p>
+	<p v-if="inventoryType.description">
+		<LinkParser :content="inventoryType.description[locale]"/>
+	</p>
 </template>

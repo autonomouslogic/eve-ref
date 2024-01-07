@@ -1,12 +1,32 @@
 EVE Ref Changelog
 
+## [2.39.3](https://github.com/autonomouslogic/eve-ref/compare/2.39.2...2.39.3) (2024-01-05)
+
+
+### Features
+
+* Added group links on attributes ([#422](https://github.com/autonomouslogic/eve-ref/issues/422)) ([ad47b53](https://github.com/autonomouslogic/eve-ref/commit/ad47b53f371a3d26f02674738166d1d14d8718a2))
+* Formatted time and duration ([#423](https://github.com/autonomouslogic/eve-ref/issues/423)) ([e8d4aec](https://github.com/autonomouslogic/eve-ref/commit/e8d4aec1d3681dd00a93bd336d54fed025cec68b))
+
+
+### Bug Fixes
+
+* Browser hydration errors ([#425](https://github.com/autonomouslogic/eve-ref/issues/425)) ([c9dc49a](https://github.com/autonomouslogic/eve-ref/commit/c9dc49a8b4c42dff7e2fe1b459a1af8ce2dc397b))
+* Defenses card styling ([#421](https://github.com/autonomouslogic/eve-ref/issues/421)) ([bca7d1d](https://github.com/autonomouslogic/eve-ref/commit/bca7d1db88404c2d2e4cd886bd9dedbaefaee116))
+
+
+### Dependency Updates
+
+* **deps:** update all non-major dependencies ([#416](https://github.com/autonomouslogic/eve-ref/issues/416)) ([73d3dd4](https://github.com/autonomouslogic/eve-ref/commit/73d3dd49783c09613019c2a55955d7e3f4ebe01e))
+* **deps:** Updated @nuxtjs/i18n to 8.0.0 ([#420](https://github.com/autonomouslogic/eve-ref/issues/420)) ([8194bb4](https://github.com/autonomouslogic/eve-ref/commit/8194bb462d7fa9318497c07504cb777741f2eb4d))
+
 ## [2.39.2](https://github.com/autonomouslogic/eve-ref/compare/2.39.1...2.39.2) (2024-01-01)
 
 
 ### Features
 
-* Privacy policies [skip release] ([#413](https://github.com/autonomouslogic/eve-ref/issues/413)) ([059e5ab](https://github.com/autonomouslogic/eve-ref/commit/059e5ab6c96b16696025ff5e91ffd96a8eff4348))
-* Switched attributes to description lists (dl, dt, dd) [skip release] ([#414](https://github.com/autonomouslogic/eve-ref/issues/414)) ([b4da512](https://github.com/autonomouslogic/eve-ref/commit/b4da5121253f61e1cf9569d443ea9f31e5884d0b))
+* Privacy policies ([#413](https://github.com/autonomouslogic/eve-ref/issues/413)) ([059e5ab](https://github.com/autonomouslogic/eve-ref/commit/059e5ab6c96b16696025ff5e91ffd96a8eff4348))
+* Switched attributes to description lists (dl, dt, dd) ([#414](https://github.com/autonomouslogic/eve-ref/issues/414)) ([b4da512](https://github.com/autonomouslogic/eve-ref/commit/b4da5121253f61e1cf9569d443ea9f31e5884d0b))
 
 
 ### Bug Fixes
@@ -68,7 +88,7 @@ EVE Ref Changelog
 
 ### Features
 
-* Elliptic-curve signature tooling [skip release] ([#382](https://github.com/autonomouslogic/eve-ref/issues/382)) ([d24aea1](https://github.com/autonomouslogic/eve-ref/commit/d24aea136a08c52574bc552a3f6d438545f81b6f))
+* Elliptic-curve signature tooling ([#382](https://github.com/autonomouslogic/eve-ref/issues/382)) ([d24aea1](https://github.com/autonomouslogic/eve-ref/commit/d24aea136a08c52574bc552a3f6d438545f81b6f))
 
 
 ### Bug Fixes
@@ -78,8 +98,8 @@ EVE Ref Changelog
 
 ### Dependency Updates
 
-* **deps:** Updated ESI Swagger [skip release] ([#385](https://github.com/autonomouslogic/eve-ref/issues/385)) ([4a5ed06](https://github.com/autonomouslogic/eve-ref/commit/4a5ed06bec81dba2c409fe197ce8eca79b0da260))
-* **deps:** Updated to Bouncy Castle for JVM 1.8 [skip release] ([#383](https://github.com/autonomouslogic/eve-ref/issues/383)) ([5b578b4](https://github.com/autonomouslogic/eve-ref/commit/5b578b422e0fb0efdb0f7f7eab4676311ca1cd56))
+* **deps:** Updated ESI Swagger ([#385](https://github.com/autonomouslogic/eve-ref/issues/385)) ([4a5ed06](https://github.com/autonomouslogic/eve-ref/commit/4a5ed06bec81dba2c409fe197ce8eca79b0da260))
+* **deps:** Updated to Bouncy Castle for JVM 1.8 ([#383](https://github.com/autonomouslogic/eve-ref/issues/383)) ([5b578b4](https://github.com/autonomouslogic/eve-ref/commit/5b578b422e0fb0efdb0f7f7eab4676311ca1cd56))
 
 ## [2.37.1](https://github.com/autonomouslogic/eve-ref/compare/2.37.0...2.37.1) (2023-12-01)
 
@@ -91,12 +111,12 @@ EVE Ref Changelog
 
 ### Dependency Updates
 
-* **deps:** update actions/setup-java action to v4 [skip ci] ([#379](https://github.com/autonomouslogic/eve-ref/issues/379)) ([cf9657d](https://github.com/autonomouslogic/eve-ref/commit/cf9657dff29541fef025c3202792338026f4b0db))
+* **deps:** update actions/setup-java action to v4 ([#379](https://github.com/autonomouslogic/eve-ref/issues/379)) ([cf9657d](https://github.com/autonomouslogic/eve-ref/commit/cf9657dff29541fef025c3202792338026f4b0db))
 
 
 ### Miscellaneous Chores
 
-* Flyway mono repo. [skip ci] [skip release] ([ad89181](https://github.com/autonomouslogic/eve-ref/commit/ad8918106b4bdfbf4eb2784c4f3d0512d967ab24))
+* Flyway mono repo. ([ad89181](https://github.com/autonomouslogic/eve-ref/commit/ad8918106b4bdfbf4eb2784c4f3d0512d967ab24))
 
 ## [2.37.0](https://github.com/autonomouslogic/eve-ref/compare/2.36.3...2.37.0) (2023-11-11)
 
@@ -120,22 +140,22 @@ EVE Ref Changelog
 
 ### Continuous Integration
 
-* Re-added publish script during release. [skip ci] ([e2cde9b](https://github.com/autonomouslogic/eve-ref/commit/e2cde9baceb509cc820f3220bcdda2c6ac845cf1))
+* Re-added publish script during release. ([e2cde9b](https://github.com/autonomouslogic/eve-ref/commit/e2cde9baceb509cc820f3220bcdda2c6ac845cf1))
 
 ## [2.36.2](https://github.com/autonomouslogic/eve-ref/compare/2.36.1...2.36.2) (2023-11-02)
 
 
 ### Features
 
-* Basic blueprint manufacturing card [skip release] ([#345](https://github.com/autonomouslogic/eve-ref/issues/345)) ([43488dd](https://github.com/autonomouslogic/eve-ref/commit/43488dd233168ad5c7f2033f39fb34c4f4a272db))
-* Insurance card [skip release] ([#343](https://github.com/autonomouslogic/eve-ref/issues/343)) ([8792242](https://github.com/autonomouslogic/eve-ref/commit/8792242a2f4a9f2c918bec22a2eabd7233de2a6a))
-* Manufacturing overview for types [skip release] ([#344](https://github.com/autonomouslogic/eve-ref/issues/344)) ([a377c34](https://github.com/autonomouslogic/eve-ref/commit/a377c3423a27d1ab6d525d5de9f39b150fa25ce7))
-* Market links [skip release] ([#342](https://github.com/autonomouslogic/eve-ref/issues/342)) ([ec8df9c](https://github.com/autonomouslogic/eve-ref/commit/ec8df9c46ae04ea79c9fbda9611b91a95702f69d))
+* Basic blueprint manufacturing card ([#345](https://github.com/autonomouslogic/eve-ref/issues/345)) ([43488dd](https://github.com/autonomouslogic/eve-ref/commit/43488dd233168ad5c7f2033f39fb34c4f4a272db))
+* Insurance card ([#343](https://github.com/autonomouslogic/eve-ref/issues/343)) ([8792242](https://github.com/autonomouslogic/eve-ref/commit/8792242a2f4a9f2c918bec22a2eabd7233de2a6a))
+* Manufacturing overview for types ([#344](https://github.com/autonomouslogic/eve-ref/issues/344)) ([a377c34](https://github.com/autonomouslogic/eve-ref/commit/a377c3423a27d1ab6d525d5de9f39b150fa25ce7))
+* Market links ([#342](https://github.com/autonomouslogic/eve-ref/issues/342)) ([ec8df9c](https://github.com/autonomouslogic/eve-ref/commit/ec8df9c46ae04ea79c9fbda9611b91a95702f69d))
 
 
 ### Bug Fixes
 
-* Disabled insurance cards when there's no insurance [skip release] ([#346](https://github.com/autonomouslogic/eve-ref/issues/346)) ([ff2c4a6](https://github.com/autonomouslogic/eve-ref/commit/ff2c4a6516ad9405405729c29a7c8ed1010087f6))
+* Disabled insurance cards when there's no insurance ([#346](https://github.com/autonomouslogic/eve-ref/issues/346)) ([ff2c4a6](https://github.com/autonomouslogic/eve-ref/commit/ff2c4a6516ad9405405729c29a7c8ed1010087f6))
 
 
 ### Dependency Updates
@@ -151,7 +171,7 @@ EVE Ref Changelog
 
 ### Continuous Integration
 
-* Removed publish script during release. [skip ci] ([f61c7d4](https://github.com/autonomouslogic/eve-ref/commit/f61c7d40512c1be2c467705104a41b3533e02ffc))
+* Removed publish script during release. ([f61c7d4](https://github.com/autonomouslogic/eve-ref/commit/f61c7d40512c1be2c467705104a41b3533e02ffc))
 
 ## [2.36.1](https://github.com/autonomouslogic/eve-ref/compare/2.36.0...2.36.1) (2023-10-21)
 

@@ -15,4 +15,6 @@ const formattedNumber = computed(() => typeof props.number === "number"
 
 </script>
 
-<template>{{ formattedNumber }}</template>
+<template>
+	<span>{{ formattedNumber }}</span>
+</template>
