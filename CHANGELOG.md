@@ -1,5 +1,28 @@
 EVE Ref Changelog
 
+## [2.39.4](https://github.com/autonomouslogic/eve-ref/compare/2.39.3...2.39.4) (2024-01-07)
+
+
+### Features
+
+* **ui:** Formatted time and duration ([#423](https://github.com/autonomouslogic/eve-ref/issues/423)) ([9bf0754](https://github.com/autonomouslogic/eve-ref/commit/9bf075462064d831070ce7dc532fb2c2eb9cca83))
+
+
+### Bug Fixes
+
+* **ui:** Recursive skill requirements don't cause the browser to eat up all the memory ([#427](https://github.com/autonomouslogic/eve-ref/issues/427)) ([637c7b0](https://github.com/autonomouslogic/eve-ref/commit/637c7b0f2fc38442e2c867a7dfe0d60066fbaace))
+
+
+### Dependency Updates
+
+* **deps:** update dependency vitest to v1 ([#384](https://github.com/autonomouslogic/eve-ref/issues/384)) ([646aec0](https://github.com/autonomouslogic/eve-ref/commit/646aec05a1566b4f7084627daa8e029c8fdefa18))
+* **deps:** update plugin nu.studer.jooq to v9 ([#415](https://github.com/autonomouslogic/eve-ref/issues/415)) ([90f5f50](https://github.com/autonomouslogic/eve-ref/commit/90f5f50fd77d3d6be03ca9d37add87278ec77434))
+
+
+### Continuous Integration
+
+* **actions:** Require scopes in PR and make UI scope not result in releases ([#426](https://github.com/autonomouslogic/eve-ref/issues/426)) ([be0583f](https://github.com/autonomouslogic/eve-ref/commit/be0583f767d79bc154a0634e393eaacaf2916f8a))
+
 ## [2.39.3](https://github.com/autonomouslogic/eve-ref/compare/2.39.2...2.39.3) (2024-01-05)
 
 
