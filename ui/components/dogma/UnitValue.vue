@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import refdataApi from "~/refdata";
+import { SECOND as SECOND_MS, HOUR as HOUR_MS , DAY as DAY_MS } from "~/lib/timeUtils";
 import AttibuteId from "~/components/dogma/units/AttibuteId.vue";
 import Sizeclass from "~/components/dogma/units/Sizeclass.vue";
 import DefaultUnit from "~/components/dogma/units/DefaultUnit.vue";
@@ -35,11 +36,11 @@ const unit = await refdataApi.getUnit({unitId: props.unitId});
 		<AbsoluteInveresePercent v-else-if="unit.unitId == INVERSE_ABSOLUTE_PERCENT" :value="value" />
 		<GroupLink v-else-if="unit.unitId == GROUP_ID" :group-id="value" />
 		<TypeLink v-else-if="unit.unitId == TYPE_ID" :type-id="value" />
-		<Duration v-else-if="unit.unitId == HOURS" :milliseconds="value * 60 * 60 * 1000" />
-		<Duration v-else-if="unit.unitId == SECOND" :milliseconds="value * 1000" />
-		<Duration v-else-if="unit.unitId == TRUE_TIME" :milliseconds="value * 1000" />
+		<Duration v-else-if="unit.unitId == HOURS" :milliseconds="value * HOUR_MS" />
+		<Duration v-else-if="unit.unitId == SECOND" :milliseconds="value * SECOND_MS" />
+		<Duration v-else-if="unit.unitId == TRUE_TIME" :milliseconds="value * SECOND_MS" />
 		<Duration v-else-if="unit.unitId == MILLISECONDS" :milliseconds="value" />
-		<Datetime v-else-if="unit.unitId == DATETIME" :millisecond-epoch="value * 24 * 60 * 60 * 1000" />
+		<Datetime v-else-if="unit.unitId == DATETIME" :millisecond-epoch="value * DAY_MS" />
 		<DefaultUnit v-else :unit="unit" :value="value" />
 	</template>
 </template>
