@@ -22,6 +22,7 @@ const props = defineProps<{
 					:skill-type-id="parseInt(`${requiredSkillTypeId}`)"
 					:level=level
 					:indent="0"
+					:shown-skills="[]"
 				/>
 			</div>
 		</CardWrapper>
