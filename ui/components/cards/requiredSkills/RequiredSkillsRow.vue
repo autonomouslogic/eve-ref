@@ -6,12 +6,12 @@ import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 const props = defineProps<{
 	skillTypeId: number,
 	level: number,
-	indent: number
+	indent: number,
+	shownSkills: number[]
 }>();
 
 const inventoryType = await refdataApi.getType({typeId: props.skillTypeId});
 const skill = await refdataApi.getSkill({skillTypeId: props.skillTypeId});
-const requiredSkills = skill.requiredSkills;
 </script>
 
 <template>
@@ -32,13 +32,14 @@ const requiredSkills = skill.requiredSkills;
 		</span>
 	</div>
 
-	<template v-if="requiredSkills">
+	<template v-if="skill.requiredSkills && !shownSkills.includes(skillTypeId)">
 		<RequiredSkillsRow
-			v-for="(level, requiredSkillTypeId) in requiredSkills"
+			v-for="(level, requiredSkillTypeId) in skill.requiredSkills"
 			:key="requiredSkillTypeId"
 			:skill-type-id="parseInt(`${requiredSkillTypeId}`)"
 			:level=level
 			:indent="indent + 1"
+			:shown-skills="[... shownSkills, skillTypeId]"
 		/>
 	</template>
 </template>
