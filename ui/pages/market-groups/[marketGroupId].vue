@@ -10,6 +10,9 @@ const {locale} = useI18n();
 
 const marketGroupId: number = Array.isArray(route.params.marketGroupId) ? parseInt(route.params.marketGroupId[0]) : parseInt(route.params.marketGroupId);
 const marketGroup: MarketGroup = await refdataApi.getMarketGroup({marketGroupId});
+useHead({
+	title: marketGroup.name?.[locale.value]
+});
 </script>
 
 <template>

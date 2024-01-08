@@ -10,10 +10,9 @@ const attributeId = parseInt(Array.isArray(route.params.attributeId) ? route.par
 const attribute = await refdataApi.getDogmaAttribute({attributeId});
 const unit = attribute.unitId ? await refdataApi.getUnit({unitId: attribute.unitId}) : null;
 
-console.log(route.params);
-console.log(attributeId);
-console.log(attribute);
-console.log(unit);
+useHead({
+	title: attribute.displayName?.[locale.value]
+});
 </script>
 
 <template>

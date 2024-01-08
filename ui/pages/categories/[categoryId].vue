@@ -7,6 +7,9 @@ const {locale} = useI18n();
 
 const categoryId = parseInt(Array.isArray(route.params.categoryId) ? route.params.categoryId[0] : route.params.categoryId);
 const category = await refdataApi.getCategory({categoryId});
+useHead({
+	title: category.name?.[locale.value]
+});
 const groupIds = category?.groupIds;
 </script>
 

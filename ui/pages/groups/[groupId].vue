@@ -8,6 +8,9 @@ const {locale} = useI18n();
 const groupId = parseInt(Array.isArray(route.params.groupId) ? route.params.groupId[0] : route.params.groupId);
 
 const group = await refdataApi.getGroup({groupId});
+useHead({
+	title: group.name?.[locale.value]
+});
 const typeIds = group.typeIds;
 </script>
 

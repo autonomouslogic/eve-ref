@@ -3,6 +3,9 @@ import refdataApi from "~/refdata";
 import DogmaAttributeLink from "~/components/helpers/DogmaAttributeLink.vue";
 
 const attributeIds: number[] = await refdataApi.getAllDogmaAttributes();
+useHead({
+	title: "Dogma Attributes"
+});
 </script>
 
 <template>
