@@ -19,4 +19,5 @@ jobs:
           scopes: |
             actions
             deps
+            jobs
             ui

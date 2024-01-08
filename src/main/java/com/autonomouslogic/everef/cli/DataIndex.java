@@ -149,11 +149,14 @@ public class DataIndex implements Command {
 
 	private byte[] renderIndexPage(@NonNull String prefix, List<FileEntry> entries) {
 		var directoryParts = splitDirectoryPath(prefix);
+		var files = entries.stream().filter(e -> !e.isDirectory()).toList();
+		var totalSize = files.stream().mapToLong(FileEntry::getSize).sum();
 		// Prepare model.
 		Map<String, Object> model = new HashMap<>();
 		model.put("pageTitle", dataDomain + "/" + prefix);
 		model.put("directories", entries.stream().filter(e -> e.isDirectory()).toList());
-		model.put("files", entries.stream().filter(e -> !e.isDirectory()).toList());
+		model.put("files", files);
+		model.put("totalSize", totalSize);
 		model.put("domain", dataDomain);
 		model.put("directoryParts", directoryParts);
 		// Render template.
