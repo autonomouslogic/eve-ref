@@ -6,10 +6,11 @@ import GroupLink from "~/components/helpers/GroupLink.vue";
 import MarketGroupBreadcrumbs from "~/components/helpers/MarketGroupBreadcrumbs.vue";
 import TypeCards from "~/components/types/TypeCards.vue";
 import LinkParser from "~/components/helpers/LinkParser.vue";
+import {getIntRouteParam} from "~/lib/routeUtils";
 
 const {locale} = useI18n();
 const route = useRoute();
-const typeId: number = Array.isArray(route.params.typeId) ? parseInt(route.params.typeId[0]) : parseInt(route.params.typeId);
+const typeId: number = getIntRouteParam(route, "typeId");
 if (!typeId) {
 	console.error("typeId is null");
 }
