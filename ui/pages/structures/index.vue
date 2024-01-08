@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import MarketGroupName from "~/components/helpers/MarketGroupName.vue";
+useHead({
+	title: "Structures"
+});
 </script>
 
 <template>

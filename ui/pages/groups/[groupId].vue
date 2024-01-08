@@ -9,6 +9,9 @@ const {locale} = useI18n();
 const groupId = getIntRouteParam(route, "groupId");
 
 const group = await refdataApi.getGroup({groupId});
+useHead({
+	title: group.name?.[locale.value]
+});
 const typeIds = group.typeIds;
 </script>
 

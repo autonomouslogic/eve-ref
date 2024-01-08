@@ -11,6 +11,9 @@ const {locale} = useI18n();
 
 const marketGroupId: number = getIntRouteParam(route, "marketGroupId");
 const marketGroup: MarketGroup = await refdataApi.getMarketGroup({marketGroupId});
+useHead({
+	title: marketGroup.name?.[locale.value]
+});
 </script>
 
 <template>

@@ -7,6 +7,9 @@ const {locale} = useI18n();
 
 const marketGroupId = 2324;
 const marketGroup = await refdataApi.getMarketGroup({marketGroupId});
+useHead({
+	title: marketGroup.name?.[locale.value]
+});
 const structureIds = marketGroup.typeIds;
 if (!structureIds) {
 	throw new Error(`Market group ${marketGroupId} has no type IDs`);

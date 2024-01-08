@@ -17,12 +17,17 @@ if (!typeId) {
 
 await cacheBundle(typeId);
 
-const inventoryType: InventoryType = await refdataApi.getType({typeId});
+const inventoryType = await refdataApi.getType({typeId});
+if (inventoryType == undefined) {
+	throw new Error(`Inventory type ${typeId} not found`);
+}
 if (typeof inventoryType.groupId !== "number") {
 	throw new Error(`Inventory type ${typeId} has no group ID`);
 }
+useHead({
+	title: inventoryType.name?.[locale.value]
+});
 const inventoryGroup: InventoryGroup = await refdataApi.getGroup({groupId: inventoryType.groupId});
-
 </script>
 
 <template>

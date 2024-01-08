@@ -8,6 +8,9 @@ const {locale} = useI18n();
 
 const categoryId = getIntRouteParam(route, "categoryId");
 const category = await refdataApi.getCategory({categoryId});
+useHead({
+	title: category.name?.[locale.value]
+});
 const groupIds = category?.groupIds;
 </script>
 
