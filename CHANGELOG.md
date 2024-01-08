@@ -1,5 +1,18 @@
 EVE Ref Changelog
 
+## [2.39.5](https://github.com/autonomouslogic/eve-ref/compare/2.39.4...2.39.5) (2024-01-08)
+
+
+### Features
+
+* **ui:** Added page titles ([#434](https://github.com/autonomouslogic/eve-ref/issues/434)) ([43ff7a8](https://github.com/autonomouslogic/eve-ref/commit/43ff7a80c001ca0d1eb51726eb0e4ba916cb6bd3))
+* **ui:** Redirects for /type and /market ([#429](https://github.com/autonomouslogic/eve-ref/issues/429)) ([66663e4](https://github.com/autonomouslogic/eve-ref/commit/66663e4986ba9f580c374bcde3e9dfbfacc2308d))
+
+
+### Bug Fixes
+
+* **jobs:** Fixed directory overview on DataIndex ([#428](https://github.com/autonomouslogic/eve-ref/issues/428)) ([6405201](https://github.com/autonomouslogic/eve-ref/commit/640520148d881adbf94ad2df3a36755812735117))
+
 ## [2.39.4](https://github.com/autonomouslogic/eve-ref/compare/2.39.3...2.39.4) (2024-01-07)
 
 
