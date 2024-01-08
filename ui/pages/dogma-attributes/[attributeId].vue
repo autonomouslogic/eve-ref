@@ -2,11 +2,12 @@
 import refdataApi from "~/refdata";
 import CardWrapper from "~/components/cards/CardWrapper.vue";
 import AttributeTypeIcon from "~/components/icons/AttributeTypeIcon.vue";
+import {getIntRouteParam} from "~/lib/routeUtils";
 
 const route = useRoute();
 const {locale} = useI18n();
 
-const attributeId = parseInt(Array.isArray(route.params.attributeId) ? route.params.attributeId[0] : route.params.attributeId);
+const attributeId = getIntRouteParam(route, "attributeId");
 const attribute = await refdataApi.getDogmaAttribute({attributeId});
 const unit = attribute.unitId ? await refdataApi.getUnit({unitId: attribute.unitId}) : null;
 
