@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import refdataApi from "~/refdata";
 import GroupLink from "~/components/helpers/GroupLink.vue";
+import {getIntRouteParam} from "~/lib/routeUtils";
 
 const route = useRoute();
 const {locale} = useI18n();
 
-const categoryId = parseInt(Array.isArray(route.params.categoryId) ? route.params.categoryId[0] : route.params.categoryId);
+const categoryId = getIntRouteParam(route, "categoryId");
 const category = await refdataApi.getCategory({categoryId});
 useHead({
 	title: category.name?.[locale.value]

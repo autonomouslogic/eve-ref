@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import refdataApi from "~/refdata";
 import TypeLink from "~/components/helpers/TypeLink.vue";
+import {getIntRouteParam} from "~/lib/routeUtils";
 
 const route = useRoute();
 const {locale} = useI18n();
 
-const groupId = parseInt(Array.isArray(route.params.groupId) ? route.params.groupId[0] : route.params.groupId);
+const groupId = getIntRouteParam(route, "groupId");
 
 const group = await refdataApi.getGroup({groupId});
 useHead({

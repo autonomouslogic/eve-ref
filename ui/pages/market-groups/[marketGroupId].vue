@@ -4,11 +4,12 @@ import {type MarketGroup} from "~/refdata-openapi";
 import TypeLink from "~/components/helpers/TypeLink.vue";
 import MarketGroupLink from "~/components/helpers/MarketGroupLink.vue";
 import MarketGroupBreadcrumbs from "~/components/helpers/MarketGroupBreadcrumbs.vue";
+import {getIntRouteParam} from "~/lib/routeUtils";
 
 const route = useRoute();
 const {locale} = useI18n();
 
-const marketGroupId: number = Array.isArray(route.params.marketGroupId) ? parseInt(route.params.marketGroupId[0]) : parseInt(route.params.marketGroupId);
+const marketGroupId: number = getIntRouteParam(route, "marketGroupId");
 const marketGroup: MarketGroup = await refdataApi.getMarketGroup({marketGroupId});
 useHead({
 	title: marketGroup.name?.[locale.value]
