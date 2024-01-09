@@ -3,9 +3,11 @@
 @tailwind utilities;
 
 :root {
-    --body-background-color: #0a090b;
+    --body-background-color: #08090a;
     --header-background-color: #eff4eb;
-    --accent-orange: #f77e16;
+    --link-color: #f77e16;
+    --card-background-color: #282a30;
+    --header-text-color: white;
 }
 
 body {
@@ -16,12 +18,12 @@ body {
 a {
     /*@apply underline hover:underline-offset-4 font-bold text-blue-500 hover:text-blue-700;*/
     @apply no-underline hover:underline font-bold;
-    color: var(--accent-orange);
+    color: var(--link-color);
 }
 
 h1, h2, h3, h4, h5, h6 {
     @apply font-bold my-1.5;
-    color: white;
+    color: var(--header-text-color);
 }
 
 h1 {
