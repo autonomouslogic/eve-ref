@@ -13,8 +13,7 @@ dt {
 }
 
 dd {
-  @apply border-gray-300 border-b pl-4 text-right;
-  @apply pb-1;
+  @apply border-gray-700 border-b pl-4 pb-1 text-right;
 }
 
 dd:last-child {

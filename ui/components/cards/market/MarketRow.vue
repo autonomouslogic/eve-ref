@@ -3,6 +3,7 @@ import {universeApi} from "~/esi";
 import {GetMarketsRegionIdOrdersOrderTypeEnum} from "~/esi-openapi";
 import UnitValue from "~/components/dogma/UnitValue.vue";
 import {getOrders} from "~/lib/marketUtils";
+import {MONEY} from "~/lib/unitConstants";
 
 const props = defineProps<{
 	typeId: number,
@@ -31,11 +32,11 @@ const buyPrice = buyOrders.filter(e => e.locationId == station.stationId)
 	<tr>
 		<td>{{ system.name }}</td>
 		<td>
-			<UnitValue v-if="sellPrice" :unit-id="133" :value="sellPrice" />
+			<UnitValue v-if="sellPrice" :unit-id="MONEY" :value="sellPrice" />
 			<template v-else>None</template>
 		</td>
 		<td>
-			<UnitValue v-if="sellPrice" :unit-id="133" :value="buyPrice" />
+			<UnitValue v-if="sellPrice" :unit-id="MONEY" :value="buyPrice" />
 			<template v-else>None</template>
 		</td>
 	</tr>

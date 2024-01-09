@@ -14,11 +14,18 @@ const props = defineProps<{
 <template>
 	<template v-if="inventoryType.typeMaterials">
 		<CardWrapper :title="title">
-			<ul>
-				<li v-for="(material, materialId) in inventoryType.typeMaterials" :key="materialId">
-					<TypeLink :type-id="materialId" /> <FormattedNumber :number="material.quantity" />
-				</li>
-			</ul>
+			<table class="table-auto text-left w-full">
+				<tbody>
+					<tr v-for="(material, materialId) in inventoryType.typeMaterials" :key="materialId">
+						<td>
+							<TypeLink :type-id="materialId" />
+						</td>
+						<td class="text-right">
+							<FormattedNumber :number="material.quantity" />
+						</td>
+					</tr>
+				</tbody>
+			</table>
 			<div class="mt-2">Basic reprocessing, not accounting for skills and other bonuses.</div>
 		</CardWrapper>
 	</template>

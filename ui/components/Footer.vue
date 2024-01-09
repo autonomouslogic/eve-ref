@@ -1,14 +1,13 @@
 <script setup lang="ts">
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 
-const {locale, availableLocales } = useI18n();
-const selectedLocale = ref(locale);
+const {locale } = useI18n();
 
 </script>
 
 <template>
-	<div class="border-t-2 border-neutral-400">
-		<div class="flex py-4 justify-around">
+	<div>
+		<div class="footer flex py-4 justify-around">
 			<NuxtLink href="/" class="flex items-center">
 				<img src="~/assets/logo.png" class="h-20 mr-3 rounded-full" alt="EVE Ref Logo" />
 				<span class="self-center text-2xl font-semibold whitespace-nowrap text-black">EVE Ref</span>
@@ -54,7 +53,15 @@ const selectedLocale = ref(locale);
 </template>
 
 <style scoped>
+.footer {
+  background-color: var(--header-background-color);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: black;
+}
+
 a {
-  @apply no-underline;
+  @apply text-gray-600;
 }
 </style>

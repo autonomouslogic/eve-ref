@@ -7,7 +7,7 @@ const selectedLocale = ref(locale);
 </script>
 
 <template>
-	<div class="p-1 space-x-3 border-b-2 border-neutral-400">
+	<div class="header p-1 space-x-3">
 		<span>
 			Language:
 			<select name="locale" id="locale" v-model="selectedLocale">
@@ -25,3 +25,14 @@ const selectedLocale = ref(locale);
 		<NuxtLink to="/structures"><MarketGroupName :market-group-id="477" /></NuxtLink>
 	</div>
 </template>
+
+<style scoped>
+.header {
+  background-color: var(--header-background-color);
+  color: black;
+}
+
+a {
+  color: black;
+}
+</style>

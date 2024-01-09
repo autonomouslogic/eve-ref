@@ -2,12 +2,26 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+    --body-background-color: #0a090b;
+    --header-background-color: #eff4eb;
+    --accent-orange: #f77e16;
+}
+
+body {
+    background-color: var(--body-background-color);
+    @apply text-gray-300;
+}
+
 a {
-    @apply underline hover:underline-offset-4 font-bold text-blue-500 hover:text-blue-700;
+    /*@apply underline hover:underline-offset-4 font-bold text-blue-500 hover:text-blue-700;*/
+    @apply no-underline hover:underline font-bold;
+    color: var(--accent-orange);
 }
 
 h1, h2, h3, h4, h5, h6 {
     @apply font-bold my-1.5;
+    color: white;
 }
 
 h1 {
@@ -21,3 +35,4 @@ h2 {
 h3 {
     @apply text-2xl;
 }
+
