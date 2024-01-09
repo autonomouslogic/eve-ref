@@ -25,7 +25,7 @@ const typeId = computed(() => {
 <template>
 	<template v-if="inventoryType.marketGroupId">
 		<CardWrapper :title="title">
-			<table>
+			<table class="table-auto">
 				<thead>
 					<tr>
 						<th>Hub</th>

@@ -8,6 +8,7 @@ import UnitValue from "~/components/dogma/UnitValue.vue";
 import GroupLink from "~/components/helpers/GroupLink.vue";
 import AttributeList from "~/components/attr/AttributeList.vue";
 import AttributeListItem from "~/components/attr/AttributeListItem.vue";
+import {CUBIC_METER, KILOGRAM, METER, MONEY} from "~/lib/unitConstants";
 
 const props = defineProps<{
 	title: string,
@@ -26,11 +27,11 @@ const props = defineProps<{
 			</AttributeListItem>
 			<AttributeListItem v-if="inventoryType.basePrice">
 				<template v-slot:key>Base price:</template>
-				<UnitValue :unit-id="133" :value="inventoryType.basePrice" />
+				<UnitValue :unit-id="MONEY" :value="inventoryType.basePrice" />
 			</AttributeListItem>
 			<AttributeListItem v-if="inventoryType.capacity">
 				<template v-slot:key>Capacity:</template>
-				<UnitValue :unit-id="9" :value="inventoryType.capacity" />
+				<UnitValue :unit-id="CUBIC_METER" :value="inventoryType.capacity" />
 			</AttributeListItem>
 			<AttributeListItem v-if="inventoryType.factionId">
 				<template v-slot:key>Faction ID:</template>
@@ -54,7 +55,7 @@ const props = defineProps<{
 			</AttributeListItem>
 			<AttributeListItem v-if="inventoryType.mass">
 				<template v-slot:key>Mass:</template>
-				<UnitValue :unit-id="2" :value="inventoryType.mass" />
+				<UnitValue :unit-id="KILOGRAM" :value="inventoryType.mass" />
 			</AttributeListItem>
 			<AttributeListItem v-if="inventoryType.metaGroupId">
 				<template v-slot:key>Meta group ID:</template>
@@ -62,7 +63,7 @@ const props = defineProps<{
 			</AttributeListItem>
 			<AttributeListItem v-if="inventoryType.packagedVolume">
 				<template v-slot:key>Packaged volume:</template>
-				<UnitValue :unit-id="9" :value="inventoryType.packagedVolume" />
+				<UnitValue :unit-id="CUBIC_METER" :value="inventoryType.packagedVolume" />
 			</AttributeListItem>
 			<AttributeListItem v-if="inventoryType.portionSize">
 				<template v-slot:key>Portion size:</template>
@@ -78,7 +79,7 @@ const props = defineProps<{
 			</AttributeListItem>
 			<AttributeListItem v-if="inventoryType.radius">
 				<template v-slot:key>Radius:</template>
-				<UnitValue :unit-id="1" :value="inventoryType.radius" />
+				<UnitValue :unit-id="METER" :value="inventoryType.radius" />
 			</AttributeListItem>
 			<AttributeListItem v-if="inventoryType.sofFactionName">
 				<template v-slot:key>Sof faction name:</template>
@@ -94,7 +95,7 @@ const props = defineProps<{
 			</AttributeListItem>
 			<AttributeListItem v-if="inventoryType.volume">
 				<template v-slot:key>Volume:</template>
-				<UnitValue :unit-id="9" :value="inventoryType.volume" />
+				<UnitValue :unit-id="CUBIC_METER" :value="inventoryType.volume" />
 			</AttributeListItem>
 
 			<DogmaListItems :inventory-type="inventoryType" :dogma-attributes="dogmaAttributes" />

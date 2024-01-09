@@ -39,7 +39,7 @@ function getValue(attr: DogmaAttribute, type: InventoryType): number {
 </script>
 
 <template>
-	<table class="table-auto auto text-left">
+	<table class="table-auto text-left">
 		<thead>
 			<th></th>
 			<th v-for="type in types" :key="type.typeId" class="text-right px-6">
@@ -48,7 +48,7 @@ function getValue(attr: DogmaAttribute, type: InventoryType): number {
 		</thead>
 		<tbody>
 			<template v-for="(attr, index) in listAttributes" :key="index">
-				<tr v-if="attr && attr.attributeId" class="border-b">
+				<tr v-if="attr && attr.attributeId" class="border-b border-gray-700">
 					<td class="px-6">
 						<AttributeTypeIcon :dogma-attribute="attr" :size="25" />
 						<DogmaAttributeLink :attribute="attr" />

@@ -21,13 +21,12 @@ const progressStyle = computed(() => {
 
 <style scoped>
 .bar {
-  background-color: #272b30;
+  background-color: var(--body-background-color);
 }
 .content {
   position:absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%,-50%);
-  color: #f8f9fa;
 }
 </style>
