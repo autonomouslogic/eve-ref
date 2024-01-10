@@ -15,7 +15,8 @@ const props = defineProps<{
 const prices = (await insuranceApi.getInsurancePrices())
 	.filter(e => e.typeId == props.inventoryType.typeId)
 	.pop();
-const marketPrice = !!props.inventoryType.typeId ? await getJitaSellPrice(props.inventoryType.typeId) : undefined;
+const marketPrice = props.inventoryType.typeId === undefined ? undefined :
+	await getJitaSellPrice(props.inventoryType.typeId);
 
 </script>
 

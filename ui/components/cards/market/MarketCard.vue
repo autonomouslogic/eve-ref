@@ -25,19 +25,21 @@ const typeId = computed(() => {
 <template>
 	<template v-if="inventoryType.marketGroupId">
 		<CardWrapper :title="title">
-			<table class="table-auto">
+			<table class="table table-auto w-full">
 				<thead>
 					<tr>
-						<th>Hub</th>
-						<th>Sell</th>
-						<th>Buy</th>
+						<th class="text-left">Hub</th>
+						<th class="text-right">Sell</th>
+						<th class="text-right">Buy</th>
 					</tr>
 				</thead>
 				<tbody>
 					<MarketRow v-for="stationId in stationIds" :key="stationId" :type-id="typeId" :station-id="stationId" />
 				</tbody>
 			</table>
-			<MarketLinks :inventory-type="inventoryType" />
+			<div  class="mt-2">
+				<MarketLinks :inventory-type="inventoryType" />
+			</div>
 		</CardWrapper>
 	</template>
 </template>

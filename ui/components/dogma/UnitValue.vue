@@ -12,12 +12,13 @@ import {
 	ABSOLUTE_PERCENT,
 	ATTRIBUTE_ID, DATETIME,
 	GROUP_ID, HOURS,
-	INVERSE_ABSOLUTE_PERCENT, MILLISECONDS, SECOND,
+	INVERSE_ABSOLUTE_PERCENT, MILLISECONDS, MONEY, SECOND,
 	SIZE_CLASS, TRUE_TIME,
 	TYPE_ID
 } from "~/lib/unitConstants";
 import GroupLink from "~/components/helpers/GroupLink.vue";
 import Datetime from "~/components/dogma/units/Datetime.vue";
+import Money from "~/components/dogma/units/Money.vue";
 
 const props = defineProps<{
 	value: number,
@@ -34,6 +35,7 @@ const unit = await refdataApi.getUnit({unitId: props.unitId});
 		<Sizeclass v-else-if="unit.unitId == SIZE_CLASS" :value="value" />
 		<AbsolutePercent v-else-if="unit.unitId == ABSOLUTE_PERCENT" :value="value" />
 		<AbsoluteInveresePercent v-else-if="unit.unitId == INVERSE_ABSOLUTE_PERCENT" :value="value" />
+		<Money v-else-if="unit.unitId == MONEY" :value="value" />
 		<GroupLink v-else-if="unit.unitId == GROUP_ID" :group-id="value" />
 		<TypeLink v-else-if="unit.unitId == TYPE_ID" :type-id="value" />
 		<Duration v-else-if="unit.unitId == HOURS" :milliseconds="value * HOUR_MS" />
