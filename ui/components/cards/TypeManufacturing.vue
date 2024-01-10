@@ -76,7 +76,7 @@ if (blueprintType?.typeId) {
 					<td class="text-right"><Duration :milliseconds="secondsToMilliseconds(researchTime.time)" /></td>
 				</tr>
 			</table>
-			<div class="mt-1">
+			<div class="mt-2">
 				<BlueprintManufacturingLinks v-if="blueprint" :blueprint="blueprint" />
 			</div>
 		</CardWrapper>

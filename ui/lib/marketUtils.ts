@@ -22,10 +22,10 @@ export async function getOrders(orderType: GetMarketsRegionIdOrdersOrderTypeEnum
 
 export async function getJitaSellPrice(typeId: number) {
     const jitaStation = HUB_STATION_IDS.get("Jita");
-    const sellOrders = await getOrders(GetMarketsRegionIdOrdersOrderTypeEnum.Sell, typeId, THE_FORGE);
-    const sellPrice = sellOrders.filter(e => e.locationId == jitaStation)
+    const sellPrice = (await getOrders(GetMarketsRegionIdOrdersOrderTypeEnum.Sell, typeId, THE_FORGE))
+        .filter(e => e.locationId == jitaStation)
         .map(e => e.price)
         .sort((a, b) => a - b)
-        [0];
+        .pop();
     return sellPrice;
 }
