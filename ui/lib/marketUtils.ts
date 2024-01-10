@@ -26,6 +26,6 @@ export async function getJitaSellPrice(typeId: number) {
         .filter(e => e.locationId == jitaStation)
         .map(e => e.price)
         .sort((a, b) => a - b)
-        .pop();
+        .shift();
     return sellPrice;
 }
