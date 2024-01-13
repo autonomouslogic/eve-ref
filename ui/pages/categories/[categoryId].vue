@@ -17,7 +17,6 @@ const groupIds = category?.groupIds;
 <template>
 	<div v-if="category">
 		<h1 v-if="category.name">{{ category.name[locale] }}</h1>
-		<p>Groups:</p>
 		<ul>
 			<li v-for="groupId in groupIds" :key="groupId">
 				<GroupLink :groupId="groupId"></GroupLink>

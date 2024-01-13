@@ -32,13 +32,16 @@ const inventoryGroup: InventoryGroup = await refdataApi.getGroup({groupId: inven
 
 <template>
 	<h1 v-if="inventoryType.name">{{ inventoryType.name[locale] }}</h1>
-	<p>
-		<CategoryLink :categoryId="inventoryGroup.categoryId"></CategoryLink> &gt;
-		<GroupLink :groupId="inventoryType.groupId"></GroupLink>
-	</p>
-	<p v-if="inventoryType.marketGroupId">
-		<MarketGroupBreadcrumbs :market-group-id="inventoryType.marketGroupId"></MarketGroupBreadcrumbs>
-	</p>
+	<div class="mb-3">
+		<div v-if="inventoryType.marketGroupId">
+			Market group: <MarketGroupBreadcrumbs :market-group-id="inventoryType.marketGroupId" />
+		</div>
+		<div>
+			Inventory group: <CategoryLink :categoryId="inventoryGroup.categoryId"></CategoryLink> &gt;
+			<GroupLink :groupId="inventoryType.groupId"></GroupLink>
+		</div>
+	</div>
+  
 	<img :src="`https://images.evetech.net/types/${inventoryType.typeId}/icon`" alt="">
 
 	<TypeCards :inventory-type="inventoryType" />

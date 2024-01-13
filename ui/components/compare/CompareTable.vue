@@ -6,12 +6,15 @@ import {getAttributeByName, loadDogmaAttributesForType} from "~/lib/dogmaUtils";
 import DogmaAttributeLink from "~/components/helpers/DogmaAttributeLink.vue";
 import AttributeTypeIcon from "~/components/icons/AttributeTypeIcon.vue";
 
-const {locale} = useI18n();
-
-const props = defineProps<{
+export interface Props {
 	typeIds: number[],
-	dogmaAttributeNames: string[]
-}>();
+	dogmaAttributeNames: string[],
+	direction: "vertical" | "horizontal"
+}
+const props = withDefaults(defineProps<Props>(), {
+	direction: "horizontal"
+});
+
 const types: InventoryType[] = await Promise.all(props.typeIds.map(typeId => {
 	return cacheBundle(typeId).then(() => {
 		return refdataApi.getType({typeId});
@@ -26,7 +29,9 @@ for (let type of types) {
 	}
 }
 const dogmaAttributesArray = Object.values(dogmaAttributes);
-const listAttributes = props.dogmaAttributeNames.map(name => getAttributeByName(name, dogmaAttributesArray));
+const listAttributes: DogmaAttribute[] = props.dogmaAttributeNames
+	.map(name => getAttributeByName(name, dogmaAttributesArray))
+	.filter(attr => attr !== undefined) as DogmaAttribute[];
 
 function hasValue(attr: DogmaAttribute, type: InventoryType): boolean {
 	return !!(attr?.attributeId && type?.dogmaAttributes?.[attr.attributeId]?.value);
@@ -40,26 +45,7 @@ function getValue(attr: DogmaAttribute, type: InventoryType): number {
 
 <template>
 	<table class="table-auto text-left">
-		<thead>
-			<th></th>
-			<th v-for="type in types" :key="type.typeId" class="text-right px-6">
-				<h2><type-link :type-id="type.typeId" /></h2>
-			</th>
-		</thead>
-		<tbody>
-			<template v-for="(attr, index) in listAttributes" :key="index">
-				<tr v-if="attr && attr.attributeId" class="border-b border-gray-700">
-					<td class="px-6">
-						<AttributeTypeIcon :dogma-attribute="attr" :size="25" />
-						<DogmaAttributeLink :attribute="attr" />
-					</td>
-					<td v-for="type in types" :key="type.typeId" class="text-right px-6">
-						<template v-if="hasValue(attr, type)">
-							<dogma-value :value="getValue(attr, type)" :attribute="attr" />
-						</template>
-					</td>
-				</tr>
-			</template>
-		</tbody>
+		<CompareTableHorizontal v-if="direction == 'horizontal'" :inventory-types="types" :dogma-attributes="listAttributes" />
+		<CompareTableVertical v-if="direction == 'vertical'" :inventory-types="types" :dogma-attributes="listAttributes" />
 	</table>
 </template>

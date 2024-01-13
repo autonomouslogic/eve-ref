@@ -2,6 +2,7 @@
 import refdataApi from "~/refdata";
 import TypeLink from "~/components/helpers/TypeLink.vue";
 import {getIntRouteParam} from "~/lib/routeUtils";
+import CategoryLink from "~/components/helpers/CategoryLink.vue";
 
 const route = useRoute();
 const {locale} = useI18n();
@@ -18,7 +19,9 @@ const typeIds = group.typeIds;
 <template>
 	<div>
 		<h1 v-if="group.name">{{ group.name[locale] }}</h1>
-		<p>Types:</p>
+		<div class="mb-3">
+			Category: <CategoryLink :category-id="group.categoryId" />
+		</div>
 		<ul>
 			<li v-for="typeId in typeIds" :key="typeId">
 				<TypeLink :typeId="typeId"></TypeLink>
