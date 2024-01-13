@@ -23,5 +23,5 @@ const attrNames = STRUCTURE_COMPARISON_ENGINEERING_COMPLEX_DOGMA_NAMES;
 	<h1>
 		<MarketGroupName :market-group-id="marketGroupId" />
 	</h1>
-	<CompareComparisonTable :type-ids="structureIds" :dogma-attribute-names="attrNames" />
+	<CompareTable :type-ids="structureIds" :dogma-attribute-names="attrNames" />
 </template>
