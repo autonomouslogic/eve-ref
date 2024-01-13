@@ -28,11 +28,9 @@ function getValue(attr: DogmaAttribute, type: InventoryType): number {
 	<thead>
 		<th></th>
 		<template v-for="attr in dogmaAttributes" :key="attr.attributeId">
-			<th v-if="attr && attr.attributeId" class="px-6">
-				<td class="px-6">
-					<AttributeTypeIcon :dogma-attribute="attr" :size="25" />
-					<DogmaAttributeLink :attribute="attr" />
-				</td>
+			<th v-if="attr && attr.attributeId" class="px-6 text-right">
+				<AttributeTypeIcon :dogma-attribute="attr" :size="25" />
+				<DogmaAttributeLink :attribute="attr" />
 			</th>
 		</template>
 	</thead>
