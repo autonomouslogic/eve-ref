@@ -1,5 +1,5 @@
 <template>
-	<NuxtLoadingIndicator />
+	<NuxtLoadingIndicator :height="8" />
 	<div class="flex flex-col h-screen justify-between">
 		<header><navbar /></header>
 		<main class="container mb-auto px-4"><slot/></main>
