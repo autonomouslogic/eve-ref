@@ -1,7 +1,6 @@
 <script setup lang="ts"></script>
 
 <template>
-	<h1>EVE Ref</h1>
 	<div class="mt-4 grid grid-cols-3 gap-4">
 
 		<div class="p-4">
@@ -26,7 +25,5 @@
 </template>
 
 <style scoped>
-h1 {
-  @apply text-9xl;
-}
+h1 {}
 </style>

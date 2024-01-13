@@ -18,8 +18,8 @@ const {locale } = useI18n();
 					<ul>
 						<li><NuxtLink to="/about">About</NuxtLink></li>
 						<li><NuxtLink to="/status">Status</NuxtLink></li>
-						<li><a href="https://data.everef.net/">Data</a></li>
-						<li><a href="https://docs.everef.net/">Docs</a></li>
+						<li><NuxtLink to="https://docs.everef.net/" :external="true">Docs</NuxtLink></li>
+						<li><NuxtLink to="https://docs.everef.net/datasets/" :external="true">Data</NuxtLink></li>
 						<li><NuxtLink to="/privacy">Privacy</NuxtLink></li>
 					</ul>
 				</div>
