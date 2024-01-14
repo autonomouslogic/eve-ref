@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import refdataApi from "~/refdata";
-import { SECOND as SECOND_MS, HOUR as HOUR_MS , DAY as DAY_MS } from "~/lib/timeUtils";
+import {DAY as DAY_MS, HOUR as HOUR_MS, SECOND as SECOND_MS} from "~/lib/timeUtils";
 import AttibuteId from "~/components/dogma/units/AttibuteId.vue";
 import Sizeclass from "~/components/dogma/units/Sizeclass.vue";
 import DefaultUnit from "~/components/dogma/units/DefaultUnit.vue";
@@ -10,10 +10,16 @@ import AbsoluteInveresePercent from "~/components/dogma/units/AbsoluteInveresePe
 import Duration from "~/components/dogma/units/Duration.vue";
 import {
 	ABSOLUTE_PERCENT,
-	ATTRIBUTE_ID, DATETIME,
-	GROUP_ID, HOURS,
-	INVERSE_ABSOLUTE_PERCENT, MILLISECONDS, MONEY, SECOND,
-	SIZE_CLASS, TRUE_TIME,
+	ATTRIBUTE_ID,
+	DATETIME,
+	GROUP_ID,
+	HOURS,
+	INVERSE_ABSOLUTE_PERCENT,
+	MILLISECONDS,
+	MONEY,
+	SECOND,
+	SIZE_CLASS,
+	TRUE_TIME,
 	TYPE_ID
 } from "~/lib/unitConstants";
 import GroupLink from "~/components/helpers/GroupLink.vue";

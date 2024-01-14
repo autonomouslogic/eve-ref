@@ -1,18 +1,19 @@
 <script setup lang="ts">
 import {type DogmaAttribute, type DogmaTypeAttribute, type InventoryType} from "~/refdata-openapi";
 import refdataApi, {cacheBundle} from "~/refdata";
-import TypeLink from "~/components/helpers/TypeLink.vue";
 import {getAttributeByName, loadDogmaAttributesForType} from "~/lib/dogmaUtils";
-import DogmaAttributeLink from "~/components/helpers/DogmaAttributeLink.vue";
-import AttributeTypeIcon from "~/components/icons/AttributeTypeIcon.vue";
 
 export interface Props {
 	typeIds: number[],
 	dogmaAttributeNames: string[],
-	direction: "vertical" | "horizontal"
+	direction?: "vertical" | "horizontal",
+	compactAttributeNames?: boolean,
+	showMetaGroup?: boolean,
 }
 const props = withDefaults(defineProps<Props>(), {
-	direction: "horizontal"
+	direction: "horizontal",
+	compactAttributeNames: false,
+	showMetaGroup: false
 });
 
 const types: InventoryType[] = await Promise.all(props.typeIds.map(typeId => {
@@ -45,7 +46,15 @@ function getValue(attr: DogmaAttribute, type: InventoryType): number {
 
 <template>
 	<table class="table-auto text-left">
-		<CompareTableHorizontal v-if="direction == 'horizontal'" :inventory-types="types" :dogma-attributes="listAttributes" />
-		<CompareTableVertical v-if="direction == 'vertical'" :inventory-types="types" :dogma-attributes="listAttributes" />
+		<CompareTableHorizontal v-if="direction == 'horizontal'"
+			:inventory-types="types"
+			:dogma-attributes="listAttributes"
+			:compact-attribute-names="compactAttributeNames"
+			:show-meta-group="showMetaGroup"  />
+		<CompareTableVertical v-if="direction == 'vertical'"
+			:inventory-types="types"
+			:dogma-attributes="listAttributes"
+			:compact-attribute-names="compactAttributeNames"
+			:show-meta-group="showMetaGroup" />
 	</table>
 </template>

@@ -1,9 +1,5 @@
 <script setup lang="ts">
 
-import {formatDuration} from "~/lib/timeUtils";
-import {DateTime} from "luxon";
-import FormattedNumber from "~/components/helpers/FormattedNumber.vue";
-
 const props = defineProps<{
 	value: number
 }>();

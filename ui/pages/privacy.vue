@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import ExternalLink from "~/components/helpers/ExternalLink.vue";
+
 useHead({
 	title: "Privacy"
 });
