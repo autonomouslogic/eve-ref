@@ -5,7 +5,6 @@ import TypeLink from "~/components/helpers/TypeLink.vue";
 import MarketGroupLink from "~/components/helpers/MarketGroupLink.vue";
 import MarketGroupBreadcrumbs from "~/components/helpers/MarketGroupBreadcrumbs.vue";
 import {getIntRouteParam} from "~/lib/routeUtils";
-import CategoryLink from "~/components/helpers/CategoryLink.vue";
 
 const route = useRoute();
 const {locale} = useI18n();

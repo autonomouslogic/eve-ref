@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import {type DogmaAttribute, type InventoryType, type MetaGroup} from "~/refdata-openapi";
+import {type DogmaAttribute, type InventoryType} from "~/refdata-openapi";
 import CardWrapper from "~/components/cards/CardWrapper.vue";
-import refdataApi from "~/refdata";
-import TypeLink from "~/components/helpers/TypeLink.vue";
+import {getMainDogma} from "~/lib/mainDogmaAttributes";
 
 const {locale} = useI18n();
 
@@ -12,37 +11,27 @@ const props = defineProps<{
 	dogmaAttributes: DogmaAttribute[]
 }>();
 
-const metaGroups: {[key: string]: MetaGroup } = {};
+const variationTypeIds: number[] = [];
 if (props.inventoryType.typeVariations) {
-	const promises = [];
 	for (const metaGroupId of Object.keys(props.inventoryType.typeVariations)) {
-		promises.push((async () => {
-			metaGroups[metaGroupId] = await refdataApi.getMetaGroup({metaGroupId: parseInt(metaGroupId)});
-		})());
+		props.inventoryType.typeVariations[metaGroupId].forEach((typeId) => {
+			variationTypeIds.push(typeId);
+		});
 	}
-	await Promise.all(promises);
 }
 
-function metaGroupName(metaGroupId: string | number) {
-	const group = metaGroups[metaGroupId];
-	const name = group.name;
-	if (name) {
-		return name[locale.value] || "";
-	}
-}
+const dogmaAttributes = await getMainDogma(props.inventoryType);
 </script>
 
 <template>
-	<template v-if="inventoryType.typeVariations && metaGroups">
+	<template v-if="inventoryType.typeVariations">
 		<CardWrapper :title="title">
-			<template v-for="(variations, metaGroupId) in inventoryType.typeVariations" :key="metaGroupId">
-				<h3 class="text-base">{{ metaGroupName(metaGroupId) }}</h3>
-				<ul>
-					<li v-for="typeId in variations" :key="typeId">
-						<TypeLink :type-id="typeId" />
-					</li>
-				</ul>
-			</template>
+			<CompareTable
+				:type-ids="variationTypeIds"
+				:dogma-attribute-names="dogmaAttributes"
+				direction="vertical"
+				:compact-attribute-names="true"
+				:show-meta-group="true"/>
 		</CardWrapper>
 	</template>
 </template>

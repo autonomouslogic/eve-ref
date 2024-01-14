@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import refdataApi, {cacheBundle} from "~/refdata";
-import {type InventoryGroup, type InventoryType} from "~/refdata-openapi";
+import {type InventoryGroup} from "~/refdata-openapi";
 import CategoryLink from "~/components/helpers/CategoryLink.vue";
 import GroupLink from "~/components/helpers/GroupLink.vue";
 import MarketGroupBreadcrumbs from "~/components/helpers/MarketGroupBreadcrumbs.vue";
@@ -41,7 +41,7 @@ const inventoryGroup: InventoryGroup = await refdataApi.getGroup({groupId: inven
 			<GroupLink :groupId="inventoryType.groupId"></GroupLink>
 		</div>
 	</div>
-  
+
 	<img :src="`https://images.evetech.net/types/${inventoryType.typeId}/icon`" alt="">
 
 	<TypeCards :inventory-type="inventoryType" />

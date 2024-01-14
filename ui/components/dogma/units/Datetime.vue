@@ -1,6 +1,5 @@
 <script setup lang="ts">
 
-import {formatDuration} from "~/lib/timeUtils";
 import {DateTime} from "luxon";
 
 const props = defineProps<{

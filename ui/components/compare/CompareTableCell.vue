@@ -1,10 +1,5 @@
 <script setup lang="ts">
-import {type DogmaAttribute, type DogmaTypeAttribute, type InventoryType} from "~/refdata-openapi";
-import refdataApi, {cacheBundle} from "~/refdata";
-import TypeLink from "~/components/helpers/TypeLink.vue";
-import {getAttributeByName, loadDogmaAttributesForType} from "~/lib/dogmaUtils";
-import DogmaAttributeLink from "~/components/helpers/DogmaAttributeLink.vue";
-import AttributeTypeIcon from "~/components/icons/AttributeTypeIcon.vue";
+import {type DogmaAttribute, type InventoryType} from "~/refdata-openapi";
 
 export interface Props {
 	inventoryType: InventoryType,
