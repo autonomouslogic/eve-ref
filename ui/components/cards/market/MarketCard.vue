@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import {type DogmaAttribute, type InventoryType} from "~/refdata-openapi";
 import CardWrapper from "~/components/cards/CardWrapper.vue";
-import MarketRow from "~/components/cards/market/MarketRow.vue";
 import MarketLinks from "~/components/cards/market/MarketLinks.vue";
 import {HUB_STATION_IDS} from "~/lib/marketUtils";
+import MarketRow from "~/components/cards/market/MarketRow.vue";
 
 const props = defineProps<{
 	title: string,
@@ -34,7 +34,9 @@ const typeId = computed(() => {
 					</tr>
 				</thead>
 				<tbody>
-					<MarketRow v-for="stationId in stationIds" :key="stationId" :type-id="typeId" :station-id="stationId" />
+					<ClientOnly>
+						<MarketRow v-for="stationId in stationIds" :key="stationId" :type-id="typeId" :station-id="stationId" />
+					</ClientOnly>
 				</tbody>
 			</table>
 			<div  class="mt-2">
