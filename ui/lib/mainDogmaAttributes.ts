@@ -38,5 +38,5 @@ export async function getGroupDogma(groupId: number | undefined): Promise<string
 }
 
 export async function getMainDogma(type: InventoryType): Promise<string[]> {
-    return await getCategoryDogma(type.groupId) || [];
+    return await getGroupDogma(type.groupId) || [];
 }
