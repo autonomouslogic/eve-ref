@@ -7,12 +7,8 @@ const props = defineProps<{
 }>();
 
 const {locale} = useI18n();
-
-if (props.metaGroupId === undefined) {
-	throw new Error("metaGroupId is required");
-}
-
-const metaGroup: MetaGroup = await refdataApi.getMetaGroup({metaGroupId: props.metaGroupId});
+const metaGroup = props.metaGroupId === undefined ? undefined :
+	await refdataApi.getMetaGroup({metaGroupId: props.metaGroupId});
 </script>
 
 <template>

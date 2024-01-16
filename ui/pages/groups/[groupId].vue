@@ -3,6 +3,7 @@ import refdataApi from "~/refdata";
 import TypeLink from "~/components/helpers/TypeLink.vue";
 import {getIntRouteParam} from "~/lib/routeUtils";
 import CategoryLink from "~/components/helpers/CategoryLink.vue";
+import {getGroupDogma} from "~/lib/mainDogmaAttributes";
 
 const route = useRoute();
 const {locale} = useI18n();
@@ -13,7 +14,8 @@ const group = await refdataApi.getGroup({groupId});
 useHead({
 	title: group.name?.[locale.value]
 });
-const typeIds = group.typeIds;
+const typeIds: number[] = group.typeIds?.filter((typeId) => typeId !== undefined) as number[];
+const attributes = await getGroupDogma(groupId);
 </script>
 
 <template>
@@ -22,10 +24,11 @@ const typeIds = group.typeIds;
 		<div class="mb-3">
 			Category: <CategoryLink :category-id="group.categoryId" />
 		</div>
-		<ul>
-			<li v-for="typeId in typeIds" :key="typeId">
-				<TypeLink :typeId="typeId"></TypeLink>
-			</li>
-		</ul>
+		<CompareTable
+			:type-ids="typeIds"
+			:dogma-attribute-names="attributes || []"
+			direction="vertical"
+			:compact-attribute-names="true"
+			:show-meta-group="true"/>
 	</div>
 </template>
