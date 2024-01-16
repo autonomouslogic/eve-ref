@@ -42,3 +42,15 @@ const props = withDefaults(defineProps<Props>(), {
 		</tr>
 	</tbody>
 </template>
+
+<style scoped>
+th {
+  @apply text-right;
+}
+tr {
+  @apply border-b border-gray-700;
+}
+th, td {
+  @apply px-2;
+}
+</style>
