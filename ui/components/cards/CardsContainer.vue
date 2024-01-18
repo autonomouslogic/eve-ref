@@ -1,5 +1,11 @@
 <template>
-	<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-x-4">
+	<div>
 		<slot />
 	</div>
 </template>
+
+<style scoped>
+div {
+  @apply flex flex-wrap gap-4;
+}
+</style>
