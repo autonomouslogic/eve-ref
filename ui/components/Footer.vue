@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
+import ExternalLink from "~/components/helpers/ExternalLink.vue";
+import {DISCORD_URL, EVE_REFERAL_URL, GITHUB_URL, MARKEE_DRAGON_URL, PATREON_URL} from "~/lib/urls";
 
 const {locale } = useI18n();
 
@@ -14,7 +16,7 @@ const {locale } = useI18n();
 			</NuxtLink>
 			<div class="grid grid-cols-3 gap-x-8">
 				<div>
-					<h2 class="uppercase text-lg">EVE Ref</h2>
+					<h2>EVE Ref</h2>
 					<ul>
 						<li><NuxtLink to="/about">About</NuxtLink></li>
 						<li><NuxtLink to="/status">Status</NuxtLink></li>
@@ -24,27 +26,18 @@ const {locale } = useI18n();
 					</ul>
 				</div>
 				<div>
-					<h2 class="uppercase text-lg">Participate</h2>
+					<h2>Participate</h2>
 					<ul>
-						<li><a href="https://discord.gg/fZYPAxFyXG">
-							<span><font-awesome-icon icon="fa-brands fa-discord" /></span>
-							Discord
-						</a></li>
-						<li><a href="https://github.com/autonomouslogic/eve-ref/">
-							<span><font-awesome-icon icon="fa-brands fa-github" /></span>
-							Github
-						</a></li>
+						<li><ExternalLink :url="DISCORD_URL"><span><font-awesome-icon icon="fa-brands fa-discord" /></span> Discord</ExternalLink></li>
+						<li><ExternalLink :url="GITHUB_URL"><span><font-awesome-icon icon="fa-brands fa-github" /></span> Github</ExternalLink></li>
 					</ul>
 				</div>
 				<div>
-					<h2 class="uppercase text-lg">Support</h2>
+					<h2>Support</h2>
 					<ul>
-						<li><a href="https://www.eveonline.com/signup?invc=b28d194d-7181-4bf0-8e3f-72cebbc7ca7d">Play EVE Online</a></li>
-						<li><a href="https://store.markeedragon.com/affiliate.php?id=933">Markeedragon</a></li>
-						<li><a href="https://patreon.com/everef">
-							<span><font-awesome-icon icon="fa-brands fa-patreon" /></span>
-							Patreon
-						</a></li>
+						<li><ExternalLink :url="EVE_REFERAL_URL">Play EVE Online</ExternalLink></li>
+						<li><ExternalLink :url="MARKEE_DRAGON_URL">Markeedragon</ExternalLink></li>
+						<li><ExternalLink :url="PATREON_URL"><span><font-awesome-icon icon="fa-brands fa-patreon" /></span> Patreon</ExternalLink></li>
 					</ul>
 				</div>
 			</div>
@@ -59,6 +52,10 @@ const {locale } = useI18n();
 
 h1, h2, h3, h4, h5, h6 {
   color: black;
+}
+
+h2 {
+  @apply uppercase text-lg;
 }
 
 a {
