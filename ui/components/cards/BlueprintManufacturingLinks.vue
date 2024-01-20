@@ -14,7 +14,7 @@ const links = {
 </script>
 
 <template>
-	<div v-if="blueprint">
+	<div v-if="blueprint" class="mt-2">
 		View on:
 		<ul>
 			<li v-for="(link, name) in links" :key="name">

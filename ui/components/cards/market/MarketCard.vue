@@ -39,9 +39,7 @@ const typeId = computed(() => {
 					</ClientOnly>
 				</tbody>
 			</table>
-			<div  class="mt-2">
-				<MarketLinks :inventory-type="inventoryType" />
-			</div>
+			<MarketLinks :inventory-type="inventoryType" />
 		</CardWrapper>
 	</template>
 </template>

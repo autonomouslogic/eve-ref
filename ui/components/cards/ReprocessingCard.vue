@@ -26,7 +26,7 @@ const props = defineProps<{
 					</tr>
 				</tbody>
 			</table>
-			<div class="mt-2">Basic reprocessing, not accounting for skills and other bonuses.</div>
+			<div class="mt-2 italic">Basic reprocessing, not accounting for skills and other bonuses.</div>
 		</CardWrapper>
 	</template>
 </template>
