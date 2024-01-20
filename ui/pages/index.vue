@@ -22,6 +22,10 @@
 		</div>
 
 	</div>
+
+	<div class="flex w-full justify-center">
+		<img src="~/assets/PartnerBadge2.webp" class="h-40" alt="EVE Online Partner Logo" />
+	</div>
 </template>
 
 <style scoped>

@@ -14,7 +14,7 @@ const {locale } = useI18n();
 			</NuxtLink>
 			<div class="grid grid-cols-3 gap-x-8">
 				<div>
-					<h2 class="uppercase text-lg">EVE Ref</h2>
+					<h2>EVE Ref</h2>
 					<ul>
 						<li><NuxtLink to="/about">About</NuxtLink></li>
 						<li><NuxtLink to="/status">Status</NuxtLink></li>
@@ -24,7 +24,7 @@ const {locale } = useI18n();
 					</ul>
 				</div>
 				<div>
-					<h2 class="uppercase text-lg">Participate</h2>
+					<h2>Participate</h2>
 					<ul>
 						<li><a href="https://discord.gg/fZYPAxFyXG">
 							<span><font-awesome-icon icon="fa-brands fa-discord" /></span>
@@ -37,7 +37,7 @@ const {locale } = useI18n();
 					</ul>
 				</div>
 				<div>
-					<h2 class="uppercase text-lg">Support</h2>
+					<h2>Support</h2>
 					<ul>
 						<li><a href="https://www.eveonline.com/signup?invc=b28d194d-7181-4bf0-8e3f-72cebbc7ca7d">Play EVE Online</a></li>
 						<li><a href="https://store.markeedragon.com/affiliate.php?id=933">Markeedragon</a></li>
@@ -59,6 +59,10 @@ const {locale } = useI18n();
 
 h1, h2, h3, h4, h5, h6 {
   color: black;
+}
+
+h2 {
+  @apply uppercase text-lg;
 }
 
 a {
