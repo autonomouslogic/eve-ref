@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
+import ExternalLink from "~/components/helpers/ExternalLink.vue";
+import {DISCORD_URL, EVE_REFERAL_URL, GITHUB_URL, MARKEE_DRAGON_URL, PATREON_URL} from "~/lib/urls";
 
 const {locale } = useI18n();
 
@@ -26,25 +28,16 @@ const {locale } = useI18n();
 				<div>
 					<h2>Participate</h2>
 					<ul>
-						<li><a href="https://discord.gg/fZYPAxFyXG">
-							<span><font-awesome-icon icon="fa-brands fa-discord" /></span>
-							Discord
-						</a></li>
-						<li><a href="https://github.com/autonomouslogic/eve-ref/">
-							<span><font-awesome-icon icon="fa-brands fa-github" /></span>
-							Github
-						</a></li>
+						<li><ExternalLink :url="DISCORD_URL"><span><font-awesome-icon icon="fa-brands fa-discord" /></span> Discord</ExternalLink></li>
+						<li><ExternalLink :url="GITHUB_URL"><span><font-awesome-icon icon="fa-brands fa-github" /></span> Github</ExternalLink></li>
 					</ul>
 				</div>
 				<div>
 					<h2>Support</h2>
 					<ul>
-						<li><a href="https://www.eveonline.com/signup?invc=b28d194d-7181-4bf0-8e3f-72cebbc7ca7d">Play EVE Online</a></li>
-						<li><a href="https://store.markeedragon.com/affiliate.php?id=933">Markeedragon</a></li>
-						<li><a href="https://patreon.com/everef">
-							<span><font-awesome-icon icon="fa-brands fa-patreon" /></span>
-							Patreon
-						</a></li>
+						<li><ExternalLink :url="EVE_REFERAL_URL">Play EVE Online</ExternalLink></li>
+						<li><ExternalLink :url="MARKEE_DRAGON_URL">Markeedragon</ExternalLink></li>
+						<li><ExternalLink :url="PATREON_URL"><span><font-awesome-icon icon="fa-brands fa-patreon" /></span> Patreon</ExternalLink></li>
 					</ul>
 				</div>
 			</div>

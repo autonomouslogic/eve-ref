@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import MarketGroupName from "~/components/helpers/MarketGroupName.vue";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
+import ExternalLink from "~/components/helpers/ExternalLink.vue";
+import {PATREON_URL} from "~/lib/urls";
 
 const {locale, availableLocales } = useI18n();
 const selectedLocale = ref(locale);
@@ -18,12 +20,12 @@ const selectedLocale = ref(locale);
 			<span><NuxtLink to="/structures"><MarketGroupName :market-group-id="477" /></NuxtLink></span>
 		</span>
 		<span class="w-full space-x-3 text-right">
-      <span>
-        <a href="https://patreon.com/everef" class="header-patreon">
-							<span><font-awesome-icon icon="fa-brands fa-patreon" /></span>
-							Patreon
-						</a>
-      </span>
+			<span>
+				<ExternalLink :url="PATREON_URL" class="header-patreon">
+					<span><font-awesome-icon icon="fa-brands fa-patreon" /></span>
+					Patreon
+				</ExternalLink>
+			</span>
 			<span>
 				<select name="locale" id="locale" v-model="selectedLocale">
 					<option
