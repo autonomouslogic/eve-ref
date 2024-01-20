@@ -46,7 +46,7 @@ useHead({
 				to support EVE Ref through their affiliate programme. Use the code "everef" to get 3% off.
 			</p>
 			<p>
-				<ExternalLink :url="EVE_REFERAL_URL">Join New Eden</ExternalLink> and get Get 1,000,000 free skill points.
+				<ExternalLink :url="EVE_REFERAL_URL">Join New Eden</ExternalLink> and get get 1,000,000 free skill points.
 			</p>
 			<p>
 				<ExternalLink :url="HETZNER_REFERAL_URL">Use Hetzner</ExternalLink> and €20 free credits.
