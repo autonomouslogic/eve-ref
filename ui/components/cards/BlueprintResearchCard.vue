@@ -1,12 +1,8 @@
 <script setup lang="ts">
-import {type Blueprint, type BlueprintActivity, type DogmaAttribute, type InventoryType} from "~/refdata-openapi";
+import {type DogmaAttribute, type InventoryType} from "~/refdata-openapi";
 import CardWrapper from "~/components/cards/CardWrapper.vue";
-import TypeLink from "~/components/helpers/TypeLink.vue";
-import FormattedNumber from "~/components/helpers/FormattedNumber.vue";
 import refdataApi from "~/refdata";
-import BlueprintManufacturingLinks from "~/components/cards/BlueprintManufacturingLinks.vue";
 import Duration from "~/components/dogma/units/Duration.vue";
-import {secondsToMilliseconds} from "~/lib/timeUtils";
 import {researchTimeForLevel} from "~/lib/blueprintResearchUtil";
 
 const props = defineProps<{

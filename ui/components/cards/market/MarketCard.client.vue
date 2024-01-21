@@ -34,9 +34,7 @@ const typeId = computed(() => {
 					</tr>
 				</thead>
 				<tbody>
-					<ClientOnly>
-						<MarketRow v-for="stationId in stationIds" :key="stationId" :type-id="typeId" :station-id="stationId" />
-					</ClientOnly>
+					<MarketRow v-for="stationId in stationIds" :key="stationId" :type-id="typeId" :station-id="stationId" />
 				</tbody>
 			</table>
 			<MarketLinks :inventory-type="inventoryType" />

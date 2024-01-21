@@ -5,9 +5,7 @@ import BasicCard from "~/components/cards/BasicCard.vue";
 import ReprocessingCard from "~/components/cards/ReprocessingCard.vue";
 import VariationsCard from "~/components/cards/VariationsCard.vue";
 import RequiredSkillsCard from "~/components/cards/requiredSkills/RequiredSkillsCard.vue";
-import MarketCard from "~/components/cards/market/MarketCard.vue";
 import TypeManufacturing from "~/components/cards/TypeManufacturing.vue";
-import InsuranceCard from "~/components/cards/InsuranceCard.vue";
 import BlueprintManufacturing from "~/components/cards/BlueprintManufacturing.vue";
 import BlueprintCopyingCard from "~/components/cards/BlueprintCopyingCard.vue";
 import BlueprintResearchCard from "~/components/cards/BlueprintResearchCard.vue";
@@ -38,7 +36,7 @@ const props = defineProps<{
 		:title="title"
 		:inventory-type="inventoryType"
 		:dogma-attributes="dogmaAttributes" />
-	<MarketCard v-else-if="component == 'market'"
+	<CardsMarketCard v-else-if="component == 'market'"
 		:title="title"
 		:inventory-type="inventoryType"
 		:dogma-attributes="dogmaAttributes" />
@@ -58,7 +56,7 @@ const props = defineProps<{
 		:title="title"
 		:inventory-type="inventoryType"
 		:dogma-attributes="dogmaAttributes" />
-	<InsuranceCard v-else-if="component == 'insurance'"
+	<CardsInsuranceCard v-else-if="component == 'insurance'"
 		:title="title"
 		:inventory-type="inventoryType"
 		:dogma-attributes="dogmaAttributes" />

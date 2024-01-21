@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import refdataApi from "~/refdata";
-import {type MetaGroup} from "~/refdata-openapi";
 
 const props = defineProps<{
 	metaGroupId: number | undefined

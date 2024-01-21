@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import {type DogmaAttribute, type InventoryType} from "~/refdata-openapi";
 import CardWrapper from "~/components/cards/CardWrapper.vue";
-import TypeLink from "~/components/helpers/TypeLink.vue";
 import FormattedNumber from "~/components/helpers/FormattedNumber.vue";
 import refdataApi from "~/refdata";
 import AttributeList from "~/components/attr/AttributeList.vue";

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import refdataApi from "~/refdata";
-import TypeLink from "~/components/helpers/TypeLink.vue";
 import {getIntRouteParam} from "~/lib/routeUtils";
 import CategoryLink from "~/components/helpers/CategoryLink.vue";
 import {getGroupDogma} from "~/lib/mainDogmaAttributes";
