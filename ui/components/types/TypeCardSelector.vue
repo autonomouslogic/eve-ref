@@ -9,6 +9,7 @@ import MarketCard from "~/components/cards/market/MarketCard.vue";
 import TypeManufacturing from "~/components/cards/TypeManufacturing.vue";
 import InsuranceCard from "~/components/cards/InsuranceCard.vue";
 import BlueprintManufacturing from "~/components/cards/BlueprintManufacturing.vue";
+import BlueprintCopyingCard from "~/components/cards/BlueprintCopyingCard.vue";
 import BlueprintResearchCard from "~/components/cards/BlueprintResearchCard.vue";
 
 const props = defineProps<{
@@ -50,6 +51,14 @@ const props = defineProps<{
 		:inventory-type="inventoryType"
 		:dogma-attributes="dogmaAttributes" />
 	<BlueprintResearchCard v-else-if="component == 'blueprintResearch'"
+		:title="title"
+		:inventory-type="inventoryType"
+		:dogma-attributes="dogmaAttributes" />
+	<BlueprintCopyingCard v-else-if="component == 'blueprintCopying'"
+		:title="title"
+		:inventory-type="inventoryType"
+		:dogma-attributes="dogmaAttributes" />
+	<InsuranceCard v-else-if="component == 'insurance'"
 		:title="title"
 		:inventory-type="inventoryType"
 		:dogma-attributes="dogmaAttributes" />
