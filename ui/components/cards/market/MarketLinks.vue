@@ -16,7 +16,7 @@ const links = {
 </script>
 
 <template>
-	<div v-if="inventoryType">
+	<div v-if="inventoryType" class="mt-2">
 		View on:
 		<ul>
 			<li v-for="(link, name) in links" :key="name">
