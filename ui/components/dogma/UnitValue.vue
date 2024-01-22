@@ -10,7 +10,7 @@ import AbsoluteInveresePercent from "~/components/dogma/units/AbsoluteInveresePe
 import Duration from "~/components/dogma/units/Duration.vue";
 import {
 	ABSOLUTE_PERCENT,
-	ATTRIBUTE_ID,
+	ATTRIBUTE_ID, BOOLEAN,
 	DATETIME,
 	GROUP_ID,
 	HOURS,
@@ -25,6 +25,7 @@ import {
 import GroupLink from "~/components/helpers/GroupLink.vue";
 import Datetime from "~/components/dogma/units/Datetime.vue";
 import Money from "~/components/dogma/units/Money.vue";
+import Boolean from "~/components/dogma/units/Boolean.vue";
 
 const props = defineProps<{
 	value: number,
@@ -49,6 +50,7 @@ const unit = await refdataApi.getUnit({unitId: props.unitId});
 		<Duration v-else-if="unit.unitId == TRUE_TIME" :milliseconds="value * SECOND_MS" />
 		<Duration v-else-if="unit.unitId == MILLISECONDS" :milliseconds="value" />
 		<Datetime v-else-if="unit.unitId == DATETIME" :millisecond-epoch="value * DAY_MS" />
+		<Boolean v-else-if="unit.unitId == BOOLEAN" :value="value" />
 		<DefaultUnit v-else :unit="unit" :value="value" />
 	</template>
 </template>
