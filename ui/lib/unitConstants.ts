@@ -12,4 +12,5 @@ export const ATTRIBUTE_ID = 119;
 export const TRUE_TIME = 123;
 export const ABSOLUTE_PERCENT = 127;
 export const HOURS = 129;
+export const BOOLEAN = 137;
 export const DATETIME = 143;

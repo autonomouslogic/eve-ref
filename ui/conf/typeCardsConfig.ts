@@ -358,7 +358,8 @@ const cards: {[key: string]: any} = {
 		},
 	"booster":
 		{
-			"name": {"en": "booster"},
+			"name": {"en": "Booster"},
+			"component": "booster",
 			"dogmaAttributes":
 				[
 					"boosterDuration",
