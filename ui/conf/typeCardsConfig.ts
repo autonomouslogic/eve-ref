@@ -519,7 +519,7 @@ const cards: {[key: string]: any} = {
 		},
 	"industry":
 		{
-			"name": {"en": "industry"},
+			"name": {"en": "Industry"},
 			"component": "industry"
 		},
 	"other":

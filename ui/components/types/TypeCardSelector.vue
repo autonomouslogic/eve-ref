@@ -12,6 +12,7 @@ import BlueprintResearchCard from "~/components/cards/BlueprintResearchCard.vue"
 import BlueprintInventionCard from "~/components/cards/BlueprintInventionCard.vue";
 import TypeInfoCard from "~/components/cards/TypeInfoCard.vue";
 import BoosterCard from "~/components/cards/BoosterCard.vue";
+import IndustryCard from "~/components/cards/IndustryCard.vue";
 
 const props = defineProps<{
 	inventoryType: InventoryType,
@@ -72,6 +73,10 @@ const props = defineProps<{
 		:inventory-type="inventoryType"
 		:dogma-attributes="dogmaAttributes" />
 	<BoosterCard v-else-if="component == 'booster'"
+		:title="title"
+		:inventory-type="inventoryType"
+		:dogma-attributes="dogmaAttributes" />
+	<IndustryCard v-else-if="component == 'industry'"
 		:title="title"
 		:inventory-type="inventoryType"
 		:dogma-attributes="dogmaAttributes" />
