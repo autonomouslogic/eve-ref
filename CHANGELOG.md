@@ -1,5 +1,51 @@
 EVE Ref Changelog
 
+## [2.39.6](https://github.com/autonomouslogic/eve-ref/compare/2.39.5...2.39.6) (2024-01-24)
+
+
+### Features
+
+* **ui:** Added market link to jita.space ([#444](https://github.com/autonomouslogic/eve-ref/issues/444)) ([4657c2e](https://github.com/autonomouslogic/eve-ref/commit/4657c2e7c86079a4562f814ab2adfdf0af3069aa))
+* **ui:** Basic comparison of ship variations ([#439](https://github.com/autonomouslogic/eve-ref/issues/439)) ([dd2b2a8](https://github.com/autonomouslogic/eve-ref/commit/dd2b2a85d543436135475cecfeeb55fa65197fe5))
+* **ui:** Blueprint copying card ([#448](https://github.com/autonomouslogic/eve-ref/issues/448)) ([b53ad26](https://github.com/autonomouslogic/eve-ref/commit/b53ad26139443749b6b4c4b1b480bf5eefd56a49))
+* **ui:** Blueprint research card ([#447](https://github.com/autonomouslogic/eve-ref/issues/447)) ([65b06af](https://github.com/autonomouslogic/eve-ref/commit/65b06af8e16af492aa037f73ca68e327ef1704ec))
+* **ui:** Booster card with injected skillpoints ([#456](https://github.com/autonomouslogic/eve-ref/issues/456)) ([d7ebf07](https://github.com/autonomouslogic/eve-ref/commit/d7ebf071b219137bffdee1d0697ea8199a290443))
+* **ui:** Comparison tables on inventory group pages ([#445](https://github.com/autonomouslogic/eve-ref/issues/445)) ([d7c877a](https://github.com/autonomouslogic/eve-ref/commit/d7c877a58722f1a54f1866e5d08c65166027b863))
+* **ui:** Dark orange layout ([#435](https://github.com/autonomouslogic/eve-ref/issues/435)) ([b9eb0ae](https://github.com/autonomouslogic/eve-ref/commit/b9eb0aef75c5cdc6a2b79513787838d1614beff9))
+* **ui:** Display money in a shortened format ([#436](https://github.com/autonomouslogic/eve-ref/issues/436)) ([b7c0db5](https://github.com/autonomouslogic/eve-ref/commit/b7c0db515239c4f4b392733d8bed6f7c486488ee))
+* **ui:** Industry card with link to Adam4Eve material influence ([#457](https://github.com/autonomouslogic/eve-ref/issues/457)) ([17700fd](https://github.com/autonomouslogic/eve-ref/commit/17700fdc7c086bf8befe01eecdc39f080448cf7d))
+* **ui:** Invention card ([#449](https://github.com/autonomouslogic/eve-ref/issues/449)) ([a58d997](https://github.com/autonomouslogic/eve-ref/commit/a58d9972507ee65fe5b78ce051c6562a19fd7ffa))
+* **ui:** Partner assets, about, generalised link URLs ([#446](https://github.com/autonomouslogic/eve-ref/issues/446)) ([cca2283](https://github.com/autonomouslogic/eve-ref/commit/cca22837fc5242340e46a6909f5efc413a978a83))
+* **ui:** Vertical compare table ([#438](https://github.com/autonomouslogic/eve-ref/issues/438)) ([e7f9ba9](https://github.com/autonomouslogic/eve-ref/commit/e7f9ba91edb9cf5936e4ad717bbc260f1ee60823))
+
+
+### Bug Fixes
+
+* **ui:** Changed footer links ([988275b](https://github.com/autonomouslogic/eve-ref/commit/988275bd0b4887fe0e753ad820e2459deec8aa3d))
+* **ui:** Client cards via inner wrappers ([#450](https://github.com/autonomouslogic/eve-ref/issues/450)) ([1f1f24f](https://github.com/autonomouslogic/eve-ref/commit/1f1f24fee4b4aa6addda720ef48d350a3dcb91df))
+* **ui:** Fixed dev.eveonline.it market link ([3c452de](https://github.com/autonomouslogic/eve-ref/commit/3c452de4a1e057fd43c37e9b40500a0d1cc7af4d))
+* **ui:** Fixed variations comparison after inventory comparison update ([b2b61da](https://github.com/autonomouslogic/eve-ref/commit/b2b61daadde040deaa38c97f51e4367f74eb4ea6))
+* **ui:** Insurance load fixes and fixed Jita market price lookup ([#437](https://github.com/autonomouslogic/eve-ref/issues/437)) ([d8cd8eb](https://github.com/autonomouslogic/eve-ref/commit/d8cd8eb2dd81fcf7a92f98c45adaa78d4955ef38))
+* **ui:** Made the MarketRow component render client-only ([#440](https://github.com/autonomouslogic/eve-ref/issues/440)) ([ecf518f](https://github.com/autonomouslogic/eve-ref/commit/ecf518f66dff24e07cb4c926b6cda4aa9233af9c))
+* **ui:** Proper client-side components ([766a142](https://github.com/autonomouslogic/eve-ref/commit/766a142a7a2680447dd9fff629a1ecd370287646))
+* **ui:** Sorted default dogma attributes by ID before rendering ([#442](https://github.com/autonomouslogic/eve-ref/issues/442)) ([805bced](https://github.com/autonomouslogic/eve-ref/commit/805bcedbcc85e0aa1bce17739bfd2034d8b69aeb))
+* **ui:** Taller loading bar ([bd1a9f3](https://github.com/autonomouslogic/eve-ref/commit/bd1a9f35403de12068e07ac966ea4349395c64b6))
+
+
+### Documentation
+
+* Update market history ([4b9bd32](https://github.com/autonomouslogic/eve-ref/commit/4b9bd323ef927eb8f58c307b98279bb2f012ccd6))
+
+
+### Dependency Updates
+
+* **deps:** update plugin org.danilopianini.git-sensitive-semantic-versioning-gradle-plugin to v3 ([#451](https://github.com/autonomouslogic/eve-ref/issues/451)) ([2f93722](https://github.com/autonomouslogic/eve-ref/commit/2f9372274cc1fb5e91a05efc3c077e6e0542ea53))
+
+
+### Miscellaneous Chores
+
+* Added script for updating zip file times ([2699896](https://github.com/autonomouslogic/eve-ref/commit/269989693dd8f009f98579afb078060efe3c1ded))
+
 ## [2.39.5](https://github.com/autonomouslogic/eve-ref/compare/2.39.4...2.39.5) (2024-01-08)
 
 
