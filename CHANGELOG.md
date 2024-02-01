@@ -1,5 +1,12 @@
 EVE Ref Changelog
 
+## [2.39.7](https://github.com/autonomouslogic/eve-ref/compare/2.39.6...2.39.7) (2024-02-01)
+
+
+### Dependency Updates
+
+* **deps:** update codecov/codecov-action action to v4 ([#462](https://github.com/autonomouslogic/eve-ref/issues/462)) ([38af0ea](https://github.com/autonomouslogic/eve-ref/commit/38af0ea5a5f0e634aaaac4a058e66e951b5053dd))
+
 ## [2.39.6](https://github.com/autonomouslogic/eve-ref/compare/2.39.5...2.39.6) (2024-01-24)
 
 
