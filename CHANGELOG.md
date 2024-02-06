@@ -1,5 +1,12 @@
 EVE Ref Changelog
 
+## [2.39.9](https://github.com/autonomouslogic/eve-ref/compare/2.39.8...2.39.9) (2024-02-06)
+
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([#469](https://github.com/autonomouslogic/eve-ref/issues/469)) ([3705591](https://github.com/autonomouslogic/eve-ref/commit/37055918879b6c708fe80b3a9c7b46d091e27f34))
+
 ## [2.39.8](https://github.com/autonomouslogic/eve-ref/compare/2.39.7...2.39.8) (2024-02-05)
 
 
