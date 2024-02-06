@@ -47,7 +47,7 @@ dependencies {
 	implementation "org.apache.logging.log4j:log4j-layout-template-json:2.22.1"
 	implementation "org.apache.logging.log4j:log4j-slf4j2-impl:2.22.1"
 	implementation "io.reactivex.rxjava3:rxjava:3.1.8"
-	implementation "com.autonomouslogic.commons:commons-java:1.8.2"
+	implementation "com.autonomouslogic.commons:commons-java:1.8.3"
 	implementation("de.neuland-bfi:pug4j:2.2.0") {
 		exclude group: "org.graalvm.js"
 		exclude group: "org.graalvm.sdk"
@@ -55,7 +55,7 @@ dependencies {
 		exclude group: "org.graalvm.tools"
 		exclude group: "com.vladsch.flexmark"
 	}
-	implementation "software.amazon.awssdk:s3:2.23.17"
+	implementation "software.amazon.awssdk:s3:2.23.18"
 	implementation "com.fasterxml.jackson.core:jackson-annotations:2.16.1"
 	implementation "com.fasterxml.jackson.core:jackson-core:2.16.1"
 	implementation "com.fasterxml.jackson.core:jackson-databind:2.16.1"
