@@ -8,6 +8,7 @@ const props = defineProps<{
 
 const links = {
 	"Adam4EVE": "https://www.adam4eve.eu/manu_calc.php?typeID=",
+	"EVE Tycoon": "https://evetycoon.com/industryCalculator/",
 	"Fuzzwork": "https://www.fuzzwork.co.uk/blueprint/?typeid="
 };
 
