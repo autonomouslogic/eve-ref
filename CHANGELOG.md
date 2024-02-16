@@ -1,5 +1,26 @@
 EVE Ref Changelog
 
+## [2.40.0](https://github.com/autonomouslogic/eve-ref/compare/2.39.9...2.40.0) (2024-02-16)
+
+
+### Features
+
+* **jobs:** Added command name to Sentry submissions ([90d6fd0](https://github.com/autonomouslogic/eve-ref/commit/90d6fd088ff79df4d3272f17c99ee84bb0d2cab6))
+* **jobs:** Sentry integration ([#476](https://github.com/autonomouslogic/eve-ref/issues/476)) ([7e9d58c](https://github.com/autonomouslogic/eve-ref/commit/7e9d58cfc09b30222e39b67e5cb550cb2459a119))
+* **ui:** Added link to EVE Cookbook ([#475](https://github.com/autonomouslogic/eve-ref/issues/475)) ([a001ec4](https://github.com/autonomouslogic/eve-ref/commit/a001ec4f4d8b829a98f8c40c8108acff7f0cf2b7))
+* **ui:** Added link to EVE Cookbook ([#475](https://github.com/autonomouslogic/eve-ref/issues/475)) ([cc0c6af](https://github.com/autonomouslogic/eve-ref/commit/cc0c6afe5b5443a3cbcfcc5b0df084c0b657bccd))
+* **ui:** EVE Tycoon manufacturing link ([#473](https://github.com/autonomouslogic/eve-ref/issues/473)) ([56cf96f](https://github.com/autonomouslogic/eve-ref/commit/56cf96fad96d96290c591dc75dbaa98ccdab10be))
+
+
+### Bug Fixes
+
+* **jobs:** Added missing Flyway dependency ([06120cb](https://github.com/autonomouslogic/eve-ref/commit/06120cb247ea29fa3a49be74723cab4db952e5f9))
+
+
+### Miscellaneous Chores
+
+* Merge remote-tracking branch 'refs/remotes/origin/main' ([e128a27](https://github.com/autonomouslogic/eve-ref/commit/e128a27a7709e5e69c42e83bd4ced9975569e94f))
+
 ## [2.39.9](https://github.com/autonomouslogic/eve-ref/compare/2.39.8...2.39.9) (2024-02-06)
 
 
