@@ -11,6 +11,7 @@ import com.autonomouslogic.everef.cli.publiccontracts.ScrapePublicContracts;
 import com.autonomouslogic.everef.cli.publishrefdata.PublishRefData;
 import com.autonomouslogic.everef.cli.refdata.BuildRefData;
 import io.reactivex.rxjava3.core.Completable;
+import io.sentry.Sentry;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -80,9 +81,10 @@ public class CommandRunner {
 		if (args.length > 1) {
 			throw new IllegalArgumentException("More than one command specified");
 		}
-		var command = createCommand(args[0]);
-		command = decorateCommand(command);
-		return runCommand(command);
+		final var command = createCommand(args[0]);
+		Sentry.configureScope(scope -> scope.setContexts("command", command.getName()));
+		var decoratedCommand = decorateCommand(command);
+		return runCommand(decoratedCommand);
 	}
 
 	private Completable runCommand(Command command) {
