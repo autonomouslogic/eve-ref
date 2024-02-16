@@ -588,4 +588,10 @@ public class Configs {
 			.type(Boolean.class)
 			.defaultValue(true)
 			.build();
+
+	/**
+	 * The DSN URL to use for Sentry.
+	 */
+	public static final Config<URI> SENTRY_DSN =
+			Config.<URI>builder().name("SENTRY_DSN").type(URI.class).build();
 }

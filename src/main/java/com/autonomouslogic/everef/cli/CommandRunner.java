@@ -1,6 +1,7 @@
 package com.autonomouslogic.everef.cli;
 
 import com.autonomouslogic.everef.cli.decorator.HealthcheckDecorator;
+import com.autonomouslogic.everef.cli.decorator.SentryDecorator;
 import com.autonomouslogic.everef.cli.decorator.SlackDecorator;
 import com.autonomouslogic.everef.cli.flyway.FlywayMigrate;
 import com.autonomouslogic.everef.cli.markethistory.imports.ImportMarketHistory;
@@ -59,6 +60,9 @@ public class CommandRunner {
 
 	@Inject
 	protected Provider<ImportMarketHistory> importMarketHistoryProvider;
+
+	@Inject
+	protected SentryDecorator sentryDecorator;
 
 	@Inject
 	protected HealthcheckDecorator healthcheckDecorator;
@@ -129,6 +133,7 @@ public class CommandRunner {
 	private Command decorateCommand(Command command) {
 		command = healthcheckDecorator.decorate(command);
 		command = slackDecorator.decorate(command);
+		command = sentryDecorator.decorate(command);
 		return command;
 	}
 }
