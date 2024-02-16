@@ -84,6 +84,7 @@ dependencies {
 
 	implementation "org.jooq:jooq:3.19.3"
 	implementation "org.flywaydb:flyway-core:10.7.1"
+	implementation "org.flywaydb:flyway-database-postgresql:10.7.1"
 	implementation "com.h2database:h2:2.2.224"
 	implementation "org.postgresql:postgresql:42.7.1"
 
@@ -322,8 +323,8 @@ task importTestResources(type: JavaExec) {
 task flywayMigrate(type: JavaExec) {
 	group "application"
 	args "flyway-migrate"
-	environment envProperties
 	environment "DATABASE_URL", "jdbc:h2:file:${buildDir}/everef-data;AUTO_SERVER=true"
+	environment envProperties
 
 	classpath = sourceSets.main.runtimeClasspath
 	mainClass = mainClassName
