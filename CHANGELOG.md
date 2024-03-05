@@ -1,5 +1,13 @@
 EVE Ref Changelog
 
+## [2.40.1](https://github.com/autonomouslogic/eve-ref/compare/2.40.0...2.40.1) (2024-03-05)
+
+
+### Bug Fixes
+
+* **deps:** update flyway monorepo to v10.8.1 ([#479](https://github.com/autonomouslogic/eve-ref/issues/479)) ([e38d1e3](https://github.com/autonomouslogic/eve-ref/commit/e38d1e390dd3a2708dfd1aad3f444246e5f9e1a2))
+* **ui:** Updated privacy pages ([7161bd2](https://github.com/autonomouslogic/eve-ref/commit/7161bd2dc28ebee946d28053c871296ba3ed2325))
+
 ## [2.40.0](https://github.com/autonomouslogic/eve-ref/compare/2.39.9...2.40.0) (2024-02-16)
 
 
