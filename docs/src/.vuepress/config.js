@@ -58,6 +58,7 @@ module.exports = {
             'datasets/fuzzwork-ordersets',
             'datasets/hoboleaks-sde',
             'datasets/incursions',
+            'datasets/killmails',
             'datasets/market-history',
             'datasets/market-orders',
             'datasets/public-contracts',
