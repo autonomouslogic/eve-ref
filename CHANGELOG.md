@@ -1,5 +1,18 @@
 EVE Ref Changelog
 
+## [2.40.2](https://github.com/autonomouslogic/eve-ref/compare/2.40.1...2.40.2) (2024-03-07)
+
+
+### Documentation
+
+* Killmails ([#480](https://github.com/autonomouslogic/eve-ref/issues/480)) ([d5e5b12](https://github.com/autonomouslogic/eve-ref/commit/d5e5b12c295f4e1f2eb35f66eda5ba5b85419c12))
+
+
+### Dependency Updates
+
+* **deps:** update all non-major dependencies ([#478](https://github.com/autonomouslogic/eve-ref/issues/478)) ([98a0eda](https://github.com/autonomouslogic/eve-ref/commit/98a0edae8527dfe32fb6d1ea5eefead0080db3de))
+* **deps:** update typescript-eslint monorepo to v7 (major) ([#474](https://github.com/autonomouslogic/eve-ref/issues/474)) ([8aa5917](https://github.com/autonomouslogic/eve-ref/commit/8aa59178b61b6c2ea4eb4d0d990c82e58d74984b))
+
 ## [2.40.1](https://github.com/autonomouslogic/eve-ref/compare/2.40.0...2.40.1) (2024-03-05)
 
 
