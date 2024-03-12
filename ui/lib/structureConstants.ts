@@ -69,3 +69,16 @@ export const STRUCTURE_COMPARISON_REFINERY_DOGMA_NAMES: string[] = [
 export const STRUCTURE_COMPARISON_CITADELS_DOGMA_NAMES: string[] = [
     ...baseDogmaNames
 ];
+
+export const STRUCTURE_RIGS_COMPARISON_ENGINEERING_DOGMA_NAMES: string[] = [
+    "rigSize",
+    "upgradeCost",
+    "attributeEngRigTimeBonus",
+    "attributeEngRigMatBonus",
+    "attributeEngRigCostBonus",
+    // "structureRigBonus1",
+    // "structureRigBonus2",
+    "hiSecModifier",
+    "lowSecModifier",
+    "nullSecModifier"
+]
