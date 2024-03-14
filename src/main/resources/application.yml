@@ -1,0 +1,6 @@
+micronaut:
+  application:
+    name: eve-ref
+  server:
+    host: 0.0.0.0
+    http-version: HTTP_2_0
