@@ -1,55 +1,56 @@
 package com.autonomouslogic.everef.cli.basiclogin;
 
-import com.autonomouslogic.everef.config.Configs;
+import com.autonomouslogic.everef.esi.EsiAuthHelper;
+import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Produces;
-import io.netty.handler.codec.http.DefaultHttpHeaders;
-import io.netty.handler.codec.http.HttpHeaderNames;
-import io.netty.handler.codec.http.HttpHeaders;
-import io.netty.handler.codec.http.HttpResponseStatus;
-import io.netty.handler.codec.http.QueryStringEncoder;
-import lombok.extern.log4j.Log4j2;
-
+import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
-
-import javax.inject.Inject;
-import java.util.List;
-import java.util.stream.Collectors;
+import javax.ws.rs.QueryParam;
+import lombok.SneakyThrows;
+import lombok.extern.log4j.Log4j2;
 
 @Controller
 @Path("/")
 @Log4j2
 public class BasicLoginController {
-	private static final List<String> scopes = List.of(
-		"esi-markets.structure_markets.v1",
-		"esi-universe.read_structures.v1"
-	);
+	@Inject
+	protected EsiAuthHelper esiAuthHelper;
 
 	@GET
 	@Produces("text/html")
+	@SneakyThrows
 	public String index() {
-		// Prepare EVE login URL.
-		QueryStringEncoder location = new QueryStringEncoder(Configs.EVE_OAUTH_AUTHORIZE_URL.getRequired().toString());
-		location.addParam("response_type", "code");
-		location.addParam("redirect_uri", "http://localhost:" + Configs.MICRONAUT_PORT.getRequired() + "/basic-login-callback");
-		location.addParam("client_id", Configs.EVE_OAUTH_SECRET_KEY.getRequired());
-		location.addParam("scope", scopes.stream().collect(Collectors.joining(" ")));
-		location.addParam("state", "local");
-		// Prepare headers.
-		HttpHeaders headers = new DefaultHttpHeaders();
-		headers.add(HttpHeaderNames.LOCATION, location.toString());
-		// Send redirect.
-		responder.sendStatus(
-			HttpResponseStatus.FOUND,
-			headers
-		);
+		return "<a href=\"/basic-login\">Login</a>";
+	}
+
+	@GET
+	@Path("/basic-login")
+	@SneakyThrows
+	public HttpResponse<String> loginRedirect() {
+		return HttpResponse.redirect(esiAuthHelper.getLoginUri());
 	}
 
 	@GET
 	@Path("/basic-login-callback")
 	@Produces("text/html")
-	public String callback() {
-		return "Hello, world!";
+	public String callback(@QueryParam("code") String code, @QueryParam("state") String state) {
+		var token = esiAuthHelper.getAccessToken(code);
+		return String.format(
+				"""
+				<ul>
+					<li>accessToken: <code>%s</code></li>
+					<li>tokenType: <code>%s</code></li>
+					<li>expiresIn: <code>%s</code></li>
+					<li>refreshToken: <code>%s</code></li>
+					<li>scope: <code>%s</code></li>
+				</ul>
+			""",
+				token.getAccessToken(),
+				token.getTokenType(),
+				token.getExpiresIn(),
+				token.getRefreshToken(),
+				token.getScope());
 	}
 }

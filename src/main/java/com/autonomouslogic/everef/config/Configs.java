@@ -1,15 +1,12 @@
 package com.autonomouslogic.everef.config;
 
 import com.autonomouslogic.everef.refdata.ReferenceDataSpec;
-import lombok.SneakyThrows;
-
 import java.net.URI;
 import java.net.URL;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.Period;
-import java.util.Optional;
-import java.util.function.Supplier;
+import lombok.SneakyThrows;
 
 public class Configs {
 	/**
@@ -604,35 +601,53 @@ public class Configs {
 	 * Port to start HTTP on.
 	 */
 	public static final Config<Integer> MICRONAUT_PORT = Config.<Integer>builder()
-		.name("MICRONAUT_PORT")
-		.defaultValue(8080)
-		.type(Integer.class)
-		.build();
+			.name("MICRONAUT_PORT")
+			.defaultValue(8080)
+			.type(Integer.class)
+			.build();
 
 	/**
 	 * Client ID for OAuth2 against EVE Online.
 	 */
 	public static final Config<String> EVE_OAUTH_CLIENT_ID = Config.<String>builder()
-		.name("EVE_APP_CLIENT_ID")
-		.type(String.class)
-		.build();
+			.name("EVE_OAUTH_CLIENT_ID")
+			.type(String.class)
+			.build();
 
 	/**
 	 * secret key for OAuth2 against EVE Online.
 	 */
 	public static final Config<String> EVE_OAUTH_SECRET_KEY = Config.<String>builder()
-		.name("EVE_OAUTH_SECRET_KEY")
-		.type(String.class)
-		.build();
+			.name("EVE_OAUTH_SECRET_KEY")
+			.type(String.class)
+			.build();
 
 	/**
-	 * secret key for OAuth2 against EVE Online.
+	 * Authorization URL for OAuth2 against EVE Online.
 	 */
-	public static final Config<URL> EVE_OAUTH_AUTHORIZE_URL = Config.<URL>builder()
-		.name("EVE_OAUTH_AUTHORIZE_URL")
-		.defaultValue(url("https://login.eveonline.com/oauth/authorize/"))
-		.type(URL.class)
-		.build();
+	public static final Config<URL> EVE_OAUTH_AUTHORIZATION_URL = Config.<URL>builder()
+			.name("EVE_OAUTH_AUTHORIZATION_URL")
+			.defaultValue(url("https://login.eveonline.com/v2/oauth/authorize"))
+			.type(URL.class)
+			.build();
+
+	/**
+	 * Token URL for OAuth2 against EVE Online.
+	 */
+	public static final Config<URL> EVE_OAUTH_TOKEN_URL = Config.<URL>builder()
+			.name("EVE_OAUTH_TOKEN_URL")
+			.defaultValue(url("https://login.eveonline.com/v2/oauth/token"))
+			.type(URL.class)
+			.build();
+
+	/**
+	 * Token URL for OAuth2 against EVE Online.
+	 */
+	public static final Config<URL> OAUTH_CALLBACK_URL = Config.<URL>builder()
+			.name("OAUTH_CALLBACK_URL")
+			.defaultValue(url("http://localhost:8080/basic-login-callback"))
+			.type(URL.class)
+			.build();
 
 	@SneakyThrows
 	private static URL url(String url) {
