@@ -22,7 +22,10 @@ public class BasicLoginController {
 	@Produces("text/html")
 	@SneakyThrows
 	public String index() {
-		return "<a href=\"/basic-login\">Login</a>";
+		return """
+			<h1>EVE Ref Login</h1>
+			<a href="/basic-login">Login</a>
+			""";
 	}
 
 	@GET
@@ -37,8 +40,12 @@ public class BasicLoginController {
 	@Produces("text/html")
 	public String callback(@QueryParam("code") String code, @QueryParam("state") String state) {
 		var token = esiAuthHelper.getAccessToken(code);
+		var verify = esiAuthHelper.verify(token.getAccessToken());
+
 		return String.format(
 				"""
+				<h1>EVE Ref Login</h1>
+				<h2>OAuth2</h2>
 				<ul>
 					<li>accessToken: <code>%s</code></li>
 					<li>tokenType: <code>%s</code></li>
@@ -46,11 +53,24 @@ public class BasicLoginController {
 					<li>refreshToken: <code>%s</code></li>
 					<li>scope: <code>%s</code></li>
 				</ul>
-			""",
+				<h2>EVE Online</h2>
+				<ul>
+					<li>characterId: <code>%s</code></li>
+					<li>characterName: <code>%s</code></li>
+					<li>characterOwnerHash: <code>%s</code></li>
+					<li>expiresOn: <code>%s</code></li>
+					<li>scopes: <code>%s</code></li>
+				</ul>
+				""",
 				token.getAccessToken(),
 				token.getTokenType(),
 				token.getExpiresIn(),
 				token.getRefreshToken(),
-				token.getScope());
+				token.getScope(),
+				verify.getCharacterId(),
+				verify.getCharacterName(),
+				verify.getCharacterOwnerHash(),
+				verify.getExpiresOn(),
+				verify.getScopes());
 	}
 }
