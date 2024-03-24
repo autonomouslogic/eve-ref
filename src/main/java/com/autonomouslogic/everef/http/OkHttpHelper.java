@@ -96,7 +96,7 @@ public class OkHttpHelper {
 	 * @param scheduler
 	 * @return
 	 */
-	private Single<Response> execute(
+	public Single<Response> execute(
 			@NonNull Request request, @NonNull OkHttpClient client, @NonNull Scheduler scheduler) {
 		return Single.fromCallable(() -> {
 					log.trace(String.format("Requesting %s %s", request.method(), request.url()));
@@ -107,7 +107,7 @@ public class OkHttpHelper {
 						String.format("Error requesting %s %s", request.method(), request.url()), e)));
 	}
 
-	private Request getRequest(@NonNull String url) {
+	public Request getRequest(@NonNull String url) {
 		return new Request.Builder().get().url(url).build();
 	}
 

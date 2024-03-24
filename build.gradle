@@ -13,6 +13,7 @@ plugins {
 	id "io.swagger.core.v3.swagger-gradle-plugin" version "2.2.20"
 	id "org.flywaydb.flyway" version "10.8.1" apply false
 	id "nu.studer.jooq" version "9.0" apply false
+	id "io.micronaut.application" version "4.3.4"
 }
 
 group "com.autonomouslogic.everef"
@@ -26,6 +27,7 @@ ext {
 	if (file("local.env").exists()) {
 		file("local.env").withInputStream { envProperties.load(it) }
 	}
+	micronautVersion = "4.3.5"
 }
 
 repositories {
@@ -56,6 +58,8 @@ dependencies {
 		exclude group: "com.vladsch.flexmark"
 	}
 	implementation "software.amazon.awssdk:s3:2.25.3"
+	implementation "software.amazon.awssdk:dynamodb:2.25.3"
+	implementation "com.autonomouslogic.dynamomapper:dynamo-mapper:2.1.9"
 	implementation "com.fasterxml.jackson.core:jackson-annotations:2.16.1"
 	implementation "com.fasterxml.jackson.core:jackson-core:2.16.1"
 	implementation "com.fasterxml.jackson.core:jackson-databind:2.16.1"
@@ -82,12 +86,19 @@ dependencies {
 	implementation "org.apache.commons:commons-rng-simple:1.5"
 	implementation "org.bouncycastle:bcprov-jdk18on:1.77"
 	implementation "io.sentry:sentry:7.5.0"
+	implementation "com.github.scribejava:scribejava-core:8.3.3"
 
 	implementation "org.jooq:jooq:3.19.5"
 	implementation "org.flywaydb:flyway-core:10.8.1"
 	implementation "org.flywaydb:flyway-database-postgresql:10.9.0"
 	implementation "com.h2database:h2:2.2.224"
 	implementation "org.postgresql:postgresql:42.7.2"
+
+	annotationProcessor "io.micronaut.jaxrs:micronaut-jaxrs-processor"
+	implementation "io.micronaut.platform:micronaut-parent:$micronautVersion"
+	implementation "io.micronaut:micronaut-jackson-databind"
+	implementation "io.micronaut.jaxrs:micronaut-jaxrs-server"
+	implementation "io.micronaut:micronaut-management"
 
 	testAnnotationProcessor "com.google.dagger:dagger-compiler:2.51"
 	testImplementation "com.google.dagger:dagger:2.51"
@@ -220,6 +231,12 @@ gitSemVer {
 	buildMetadataSeparator.set("-")
 }
 
+micronaut {
+	version "$micronautVersion"
+	runtime("netty")
+	testRuntime("junit5")
+}
+
 application {
 	mainClass = mainClassName
 	applicationDefaultJvmArgs = [
@@ -338,6 +355,15 @@ task importMarketHistory(type: JavaExec) {
 	environment "LOG_LEVEL", "debug"
 	environment "DATABASE_URL", "jdbc:h2:file:${buildDir}/everef-data;AUTO_SERVER=true"
 	environment "IMPORT_MARKET_HISTORY_MIN_DATE", LocalDate.now().minusDays(7).toString();
+
+	classpath = sourceSets.main.runtimeClasspath
+	mainClass = mainClassName
+}
+
+task basicLogin(type: JavaExec) {
+	group "application"
+	args "basic-login"
+	environment envProperties
 
 	classpath = sourceSets.main.runtimeClasspath
 	mainClass = mainClassName

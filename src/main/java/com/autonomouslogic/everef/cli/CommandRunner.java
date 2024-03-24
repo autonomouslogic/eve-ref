@@ -1,5 +1,6 @@
 package com.autonomouslogic.everef.cli;
 
+import com.autonomouslogic.everef.cli.basiclogin.BasicLogin;
 import com.autonomouslogic.everef.cli.decorator.HealthcheckDecorator;
 import com.autonomouslogic.everef.cli.decorator.SentryDecorator;
 import com.autonomouslogic.everef.cli.decorator.SlackDecorator;
@@ -61,6 +62,9 @@ public class CommandRunner {
 
 	@Inject
 	protected Provider<ImportMarketHistory> importMarketHistoryProvider;
+
+	@Inject
+	protected Provider<BasicLogin> basicLoginProvider;
 
 	@Inject
 	protected SentryDecorator sentryDecorator;
@@ -127,6 +131,8 @@ public class CommandRunner {
 				return flywayMigrateProvider.get();
 			case "import-market-history":
 				return importMarketHistoryProvider.get();
+			case "basic-login":
+				return basicLoginProvider.get();
 			default:
 				throw new IllegalArgumentException("Unknown command: " + name);
 		}
