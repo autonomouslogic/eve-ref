@@ -174,7 +174,6 @@ sourcesJar.dependsOn(tasks.referenceDataClientGenerate)
 delombok.dependsOn(tasks.referenceDataClientGenerate)
 
 openApiGenerate {
-	group = "openapi tools"
 	generatorName = "kotlin"
 	inputSpec = "$rootDir/lib/esi-latest.json"
 	packageName = "${group}.openapi.esi"
