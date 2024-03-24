@@ -9,6 +9,7 @@ import javax.inject.Singleton;
 			JacksonModule.class,
 			AwsModule.class,
 			S3Module.class,
+			DynamoDBModule.class,
 			EsiModule.class,
 			OkHttpModule.class,
 			RefDataApiModule.class

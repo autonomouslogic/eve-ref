@@ -263,6 +263,39 @@ public class Configs {
 			.build();
 
 	/**
+	 * The AWS region for DynamoDB.
+	 * If not supplied, normal AWS SDK defaults will be used.
+	 */
+	public static final Config<String> DYNAMODB_AWS_REGION = Config.<String>builder()
+			.name("DYNAMODB_AWS_REGION")
+			.type(String.class)
+			.build();
+
+	/**
+	 * Profile for the DynamoDB.
+	 */
+	public static final Config<String> DYNAMODB_AWS_PROFILE = Config.<String>builder()
+			.name("DYNAMODB_AWS_PROFILE")
+			.type(String.class)
+			.build();
+
+	/**
+	 * Access key for DynamoDB..
+	 */
+	public static final Config<String> DYNAMODB_AWS_ACCESS_KEY_ID = Config.<String>builder()
+			.name("DYNAMODB_AWS_ACCESS_KEY_ID")
+			.type(String.class)
+			.build();
+
+	/**
+	 * Secret key for DynamoDB.
+	 */
+	public static final Config<String> DYNAMODB_AWS_SECRET_ACCESS_KEY = Config.<String>builder()
+			.name("DYNAMODB_AWS_SECRET_ACCESS_KEY")
+			.type(String.class)
+			.build();
+
+	/**
 	 * Chunk size for the market history scrape.
 	 */
 	public static final Config<Integer> ESI_MARKET_HISTORY_CHUNK_SIZE = Config.<Integer>builder()

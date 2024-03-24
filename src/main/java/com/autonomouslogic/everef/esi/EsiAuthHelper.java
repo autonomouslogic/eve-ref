@@ -1,7 +1,9 @@
 package com.autonomouslogic.everef.esi;
 
+import com.autonomouslogic.dynamomapper.DynamoAsyncMapper;
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.http.OkHttpHelper;
+import com.autonomouslogic.everef.model.CharacterLogin;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.scribejava.core.builder.ServiceBuilder;
 import com.github.scribejava.core.model.OAuth2AccessToken;
@@ -36,6 +38,9 @@ public class EsiAuthHelper {
 
 	@Inject
 	protected ObjectMapper objectMapper;
+
+	@Inject
+	protected DynamoAsyncMapper dynamoAsyncMapper;
 
 	private final OAuth20Service service;
 
@@ -79,5 +84,10 @@ public class EsiAuthHelper {
 		var verify = objectMapper.readValue(response.body().byteStream(), EsiVerifyResponse.class);
 		response.close();
 		return verify;
+	}
+
+	@SneakyThrows
+	public void putCharacterLogin(CharacterLogin characterLogin) {
+		dynamoAsyncMapper.putItemFromKeyObject(characterLogin).join();
 	}
 }

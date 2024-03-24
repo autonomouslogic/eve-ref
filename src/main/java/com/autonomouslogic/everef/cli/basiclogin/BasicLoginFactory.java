@@ -7,6 +7,9 @@ import io.micronaut.context.annotation.Replaces;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
+/**
+ * Wrapper for providing Dagger object to Micronaut.
+ */
 @Factory
 public class BasicLoginFactory {
 	@Inject

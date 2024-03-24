@@ -1,6 +1,7 @@
 package com.autonomouslogic.everef.cli.basiclogin;
 
 import com.autonomouslogic.everef.esi.EsiAuthHelper;
+import com.autonomouslogic.everef.model.CharacterLogin;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Produces;
@@ -41,6 +42,15 @@ public class BasicLoginController {
 	public String callback(@QueryParam("code") String code, @QueryParam("state") String state) {
 		var token = esiAuthHelper.getAccessToken(code);
 		var verify = esiAuthHelper.verify(token.getAccessToken());
+
+		var characterLogin = CharacterLogin.builder()
+				.characterId(verify.getCharacterId())
+				.characterName(verify.getCharacterName())
+				.characterOwnerHash(verify.getCharacterOwnerHash())
+				.refreshToken(token.getRefreshToken())
+				.scopes(verify.getScopes())
+				.build();
+		esiAuthHelper.putCharacterLogin(characterLogin);
 
 		return String.format(
 				"""

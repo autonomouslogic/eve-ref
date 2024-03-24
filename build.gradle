@@ -58,6 +58,8 @@ dependencies {
 		exclude group: "com.vladsch.flexmark"
 	}
 	implementation "software.amazon.awssdk:s3:2.25.3"
+	implementation "software.amazon.awssdk:dynamodb:2.25.3"
+	implementation "com.autonomouslogic.dynamomapper:dynamo-mapper:2.1.9"
 	implementation "com.fasterxml.jackson.core:jackson-annotations:2.16.1"
 	implementation "com.fasterxml.jackson.core:jackson-core:2.16.1"
 	implementation "com.fasterxml.jackson.core:jackson-databind:2.16.1"
@@ -171,7 +173,8 @@ compileJava.dependsOn(tasks.referenceDataClientGenerate)
 sourcesJar.dependsOn(tasks.referenceDataClientGenerate)
 delombok.dependsOn(tasks.referenceDataClientGenerate)
 
-openApiGenerate {
+task esiClientGenerate(type: org.openapitools.generator.gradle.plugin.tasks.GenerateTask) {
+	group = "openapi tools"
 	generatorName = "kotlin"
 	inputSpec = "$rootDir/lib/esi-latest.json"
 	packageName = "${group}.openapi.esi"
@@ -182,10 +185,10 @@ openApiGenerate {
 	]
 }
 sourceSets.main.java.srcDirs += ["build/generate-resources/main/src/main/kotlin"]
-compileKotlin.dependsOn(tasks.openApiGenerate)
-compileJava.dependsOn(tasks.openApiGenerate)
-sourcesJar.dependsOn(tasks.openApiGenerate)
-delombok.dependsOn(tasks.openApiGenerate)
+compileKotlin.dependsOn(tasks.esiClientGenerate)
+compileJava.dependsOn(tasks.esiClientGenerate)
+sourcesJar.dependsOn(tasks.esiClientGenerate)
+delombok.dependsOn(tasks.esiClientGenerate)
 
 test {
 	environment "LOG_LEVEL", "trace"
