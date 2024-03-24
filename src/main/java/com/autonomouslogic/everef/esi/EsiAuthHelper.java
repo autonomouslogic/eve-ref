@@ -1,5 +1,6 @@
 package com.autonomouslogic.everef.esi;
 
+import com.autonomouslogic.commons.rxjava3.Rx3Util;
 import com.autonomouslogic.dynamomapper.DynamoAsyncMapper;
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.http.OkHttpHelper;
@@ -8,6 +9,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.scribejava.core.builder.ServiceBuilder;
 import com.github.scribejava.core.model.OAuth2AccessToken;
 import com.github.scribejava.core.oauth.OAuth20Service;
+import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import java.net.URI;
 import java.net.URL;
@@ -62,32 +65,40 @@ public class EsiAuthHelper {
 	}
 
 	@SneakyThrows
-	public OAuth2AccessToken getAccessToken(@NonNull String code) {
-		return service.getAccessToken(code);
+	public Single<OAuth2AccessToken> getAccessToken(@NonNull String code) {
+		return Single.fromFuture(service.getAccessTokenAsync(code))
+				.subscribeOn(Schedulers.io())
+				.observeOn(Schedulers.computation());
 	}
 
 	@SneakyThrows
-	public OAuth2AccessToken refreshAccessToken(@NonNull String refreshToken) {
-		return service.refreshAccessToken(refreshToken);
+	public Single<OAuth2AccessToken> refreshAccessToken(@NonNull String refreshToken) {
+		return Single.fromFuture(service.refreshAccessTokenAsync(refreshToken))
+				.subscribeOn(Schedulers.io())
+				.observeOn(Schedulers.computation());
 	}
 
 	@SneakyThrows
-	public EsiVerifyResponse verify(@NonNull String token) {
-		var url = new URL(Configs.ESI_BASE_URL.getRequired().toURL(), "/verify/");
-		var reqeust = okHttpHelper
-				.getRequest(url.toString())
-				.newBuilder()
-				.header("Authorization", "Bearer " + token)
-				.build();
-		var response =
-				okHttpHelper.execute(reqeust, esiHttpClient, Schedulers.io()).blockingGet();
-		var verify = objectMapper.readValue(response.body().byteStream(), EsiVerifyResponse.class);
-		response.close();
-		return verify;
+	public Single<EsiVerifyResponse> verify(@NonNull String token) {
+		return Single.defer(() -> {
+					var url = new URL(Configs.ESI_BASE_URL.getRequired().toURL(), "/verify/");
+					var request = okHttpHelper
+							.getRequest(url.toString())
+							.newBuilder()
+							.header("Authorization", "Bearer " + token)
+							.build();
+					return okHttpHelper.execute(request, esiHttpClient, Schedulers.io());
+				})
+				.map(response -> {
+					var verify = objectMapper.readValue(response.body().byteStream(), EsiVerifyResponse.class);
+					response.close();
+					return verify;
+				});
 	}
 
 	@SneakyThrows
-	public void putCharacterLogin(CharacterLogin characterLogin) {
-		dynamoAsyncMapper.putItemFromKeyObject(characterLogin).join();
+	public Completable putCharacterLogin(CharacterLogin characterLogin) {
+		return Completable.defer(() -> Rx3Util.toSingle(dynamoAsyncMapper.putItemFromKeyObject(characterLogin))
+				.ignoreElement());
 	}
 }

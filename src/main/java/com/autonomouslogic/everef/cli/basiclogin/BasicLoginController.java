@@ -40,8 +40,8 @@ public class BasicLoginController {
 	@Path("/basic-login-callback")
 	@Produces("text/html")
 	public String callback(@QueryParam("code") String code, @QueryParam("state") String state) {
-		var token = esiAuthHelper.getAccessToken(code);
-		var verify = esiAuthHelper.verify(token.getAccessToken());
+		var token = esiAuthHelper.getAccessToken(code).blockingGet();
+		var verify = esiAuthHelper.verify(token.getAccessToken()).blockingGet();
 
 		var characterLogin = CharacterLogin.builder()
 				.characterId(verify.getCharacterId())
@@ -50,7 +50,7 @@ public class BasicLoginController {
 				.refreshToken(token.getRefreshToken())
 				.scopes(verify.getScopes())
 				.build();
-		esiAuthHelper.putCharacterLogin(characterLogin);
+		esiAuthHelper.putCharacterLogin(characterLogin).blockingAwait();
 
 		return String.format(
 				"""
