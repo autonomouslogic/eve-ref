@@ -128,10 +128,12 @@ public class ScrapeStructures implements Command {
 				initLogin(),
 				loadPreviousScrape(),
 				Flowable.concatArray(
-								fetchPublicStructureIds()
-								//							.takeLast(50)
-								)
+								fetchPublicStructureIds(),
+								//							.takeLast(50),
+								fetchMarketStructureIds(),
+								fetchContractStructureIds())
 						.flatMapCompletable(this::fetchStructure, false, 1),
+				clearOldStructures(),
 				populateLocations(),
 				buildOutput().flatMapCompletable(this::uploadFiles));
 	}
@@ -167,7 +169,8 @@ public class ScrapeStructures implements Command {
 	}
 
 	private Completable loadPreviousScrape() {
-		return Completable.complete();
+		return Completable.complete(); // @todo
+		// @todo clear booleans list is_public
 	}
 
 	private Flowable<Long> fetchPublicStructureIds() {
@@ -201,6 +204,14 @@ public class ScrapeStructures implements Command {
 				.subscribeOn(Schedulers.io());
 	}
 
+	private Flowable<Long> fetchMarketStructureIds() {
+		return Flowable.empty(); // @todo
+	}
+
+	private Flowable<Long> fetchContractStructureIds() {
+		return Flowable.empty(); // @todo
+	}
+
 	private Completable fetchStructure(long structureId) {
 		return Completable.defer(() -> {
 			log.trace("Fetching structure {}", structureId);
@@ -229,6 +240,11 @@ public class ScrapeStructures implements Command {
 				return Completable.complete();
 			});
 		});
+	}
+
+	private Completable clearOldStructures() {
+		// @todo remove any structure with a timestamp earlier than 30 days ago.
+		return Completable.complete();
 	}
 
 	private Completable populateLocations() {
