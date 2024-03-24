@@ -173,10 +173,10 @@ compileJava.dependsOn(tasks.referenceDataClientGenerate)
 sourcesJar.dependsOn(tasks.referenceDataClientGenerate)
 delombok.dependsOn(tasks.referenceDataClientGenerate)
 
-task esiClientGenerate(type: org.openapitools.generator.gradle.plugin.tasks.GenerateTask) {
+openApiGenerate {
 	group = "openapi tools"
 	generatorName = "kotlin"
-	inputSpec = "$rootDir/lib/esi-latest.json"
+	inputSpec = "$rootDir/spec/esi-swagger.json"
 	packageName = "${group}.openapi.esi"
 	configOptions = [
 		library: "jvm-okhttp4",
@@ -185,10 +185,10 @@ task esiClientGenerate(type: org.openapitools.generator.gradle.plugin.tasks.Gene
 	]
 }
 sourceSets.main.java.srcDirs += ["build/generate-resources/main/src/main/kotlin"]
-compileKotlin.dependsOn(tasks.esiClientGenerate)
-compileJava.dependsOn(tasks.esiClientGenerate)
-sourcesJar.dependsOn(tasks.esiClientGenerate)
-delombok.dependsOn(tasks.esiClientGenerate)
+compileKotlin.dependsOn(tasks.openApiGenerate)
+compileJava.dependsOn(tasks.openApiGenerate)
+sourcesJar.dependsOn(tasks.openApiGenerate)
+delombok.dependsOn(tasks.openApiGenerate)
 
 test {
 	environment "LOG_LEVEL", "trace"
