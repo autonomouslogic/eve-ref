@@ -176,7 +176,7 @@ delombok.dependsOn(tasks.referenceDataClientGenerate)
 openApiGenerate {
 	group = "openapi tools"
 	generatorName = "kotlin"
-	inputSpec = "$rootDir/spec/esi-swagger.json"
+	inputSpec = "$rootDir/lib/esi-latest.json"
 	packageName = "${group}.openapi.esi"
 	configOptions = [
 		library: "jvm-okhttp4",
