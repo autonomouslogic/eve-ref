@@ -10,11 +10,13 @@ import com.github.scribejava.core.builder.ServiceBuilder;
 import com.github.scribejava.core.model.OAuth2AccessToken;
 import com.github.scribejava.core.oauth.OAuth20Service;
 import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.Maybe;
 import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import java.net.URI;
 import java.net.URL;
 import java.util.List;
+import java.util.Optional;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.NonNull;
@@ -26,7 +28,7 @@ import okhttp3.OkHttpClient;
  */
 public class EsiAuthHelper {
 	private static final List<String> scopes =
-			List.of("esi-markets.structure_markets.v1", "esi-universe.read_structures.v1");
+			List.of("esi-universe.read_structures.v1", "esi-markets.structure_markets.v1");
 	private static final URL callbackUrl = Configs.OAUTH_CALLBACK_URL.getRequired();
 
 	@Inject
@@ -100,5 +102,11 @@ public class EsiAuthHelper {
 	public Completable putCharacterLogin(CharacterLogin characterLogin) {
 		return Completable.defer(() -> Rx3Util.toSingle(dynamoAsyncMapper.putItemFromKeyObject(characterLogin))
 				.ignoreElement());
+	}
+
+	@SneakyThrows
+	public Maybe<CharacterLogin> getCharacterLogin(String ownerHash) {
+		return Rx3Util.toMaybe(dynamoAsyncMapper.getItemFromPrimaryKey(ownerHash, CharacterLogin.class))
+				.flatMap(r -> Maybe.fromOptional(Optional.ofNullable(r.item())));
 	}
 }

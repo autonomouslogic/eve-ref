@@ -368,3 +368,12 @@ task basicLogin(type: JavaExec) {
 	classpath = sourceSets.main.runtimeClasspath
 	mainClass = mainClassName
 }
+
+task scrapeStructures(type: JavaExec) {
+	group "application"
+	args "scrape-structures"
+	environment envProperties
+
+	classpath = sourceSets.main.runtimeClasspath
+	mainClass = mainClassName
+}

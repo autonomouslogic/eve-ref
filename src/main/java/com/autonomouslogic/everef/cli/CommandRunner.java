@@ -67,6 +67,9 @@ public class CommandRunner {
 	protected Provider<BasicLogin> basicLoginProvider;
 
 	@Inject
+	protected Provider<ScrapeStructures> scrapeStructuresProvider;
+
+	@Inject
 	protected SentryDecorator sentryDecorator;
 
 	@Inject
@@ -133,6 +136,8 @@ public class CommandRunner {
 				return importMarketHistoryProvider.get();
 			case "basic-login":
 				return basicLoginProvider.get();
+			case "scrape-structures":
+				return scrapeStructuresProvider.get();
 			default:
 				throw new IllegalArgumentException("Unknown command: " + name);
 		}

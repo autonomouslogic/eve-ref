@@ -10,6 +10,7 @@ import java.nio.file.attribute.FileTime;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
+import java.util.function.Consumer;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.NonNull;
@@ -30,8 +31,21 @@ public class OkHttpHelper {
 		return get(url, client, Schedulers.io());
 	}
 
+	public Single<Response> get(
+			@NonNull String url, @NonNull OkHttpClient client, @NonNull Consumer<Request.Builder> requestConsumer) {
+		return get(url, client, Schedulers.io(), requestConsumer);
+	}
+
 	public Single<Response> get(@NonNull String url, @NonNull OkHttpClient client, @NonNull Scheduler scheduler) {
-		return get(url, client, scheduler, 2, true);
+		return get(url, client, scheduler, 2, true, r -> {});
+	}
+
+	public Single<Response> get(
+			@NonNull String url,
+			@NonNull OkHttpClient client,
+			@NonNull Scheduler scheduler,
+			@NonNull Consumer<Request.Builder> requestConsumer) {
+		return get(url, client, scheduler, 2, true, requestConsumer);
 	}
 
 	private Single<Response> get(
@@ -39,9 +53,10 @@ public class OkHttpHelper {
 			@NonNull OkHttpClient client,
 			@NonNull Scheduler scheduler,
 			int retries,
-			boolean observeOnComputation) {
+			boolean observeOnComputation,
+			@NonNull Consumer<Request.Builder> requestConsumer) {
 		return Single.defer(() -> {
-			var request = getRequest(url);
+			var request = getRequest(url, requestConsumer);
 			var response = execute(request, client, scheduler);
 			if (retries > 0) {
 				response = response.retry(retries, e -> {
@@ -67,7 +82,7 @@ public class OkHttpHelper {
 			@NonNull String url, @NonNull File file, @NonNull OkHttpClient client, @NonNull Scheduler scheduler) {
 		return Single.defer(() -> {
 					log.debug("Downloading {} to {}", url, file);
-					return get(url, client, scheduler, 0, false)
+					return get(url, client, scheduler, 0, false, r -> {})
 							.flatMap(response -> Single.fromCallable(() -> {
 								var lastModified = getLastModified(response);
 								if (response.code() != 200) {
@@ -108,7 +123,13 @@ public class OkHttpHelper {
 	}
 
 	public Request getRequest(@NonNull String url) {
-		return new Request.Builder().get().url(url).build();
+		return getRequest(url, b -> {});
+	}
+
+	public Request getRequest(@NonNull String url, @NonNull Consumer<Request.Builder> requestConsumer) {
+		var builder = new Request.Builder().get().url(url);
+		requestConsumer.accept(builder);
+		return builder.build();
 	}
 
 	public Optional<ZonedDateTime> getLastModified(@NonNull Response response) {
