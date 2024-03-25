@@ -1,6 +1,6 @@
 package com.autonomouslogic.everef.cli.structures;
 
-import static com.autonomouslogic.everef.cli.structures.ScrapeStructures.IS_PUBLIC;
+import static com.autonomouslogic.everef.cli.structures.ScrapeStructures.IS_PUBLIC_STRUCTURE;
 import static com.autonomouslogic.everef.cli.structures.ScrapeStructures.LAST_SEEN_PUBLIC_ID;
 
 import com.autonomouslogic.everef.openapi.esi.apis.UniverseApi;
@@ -49,7 +49,7 @@ public class PublicStructureSource implements StructureSource {
 							.observeOn(Schedulers.computation())
 							.doOnNext(id -> {
 								var node = store.getOrInitStructure(id);
-								node.put(IS_PUBLIC, true);
+								node.put(IS_PUBLIC_STRUCTURE, true);
 								node.put(LAST_SEEN_PUBLIC_ID, lastModified.toString());
 								store.put(node);
 							});

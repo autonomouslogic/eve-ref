@@ -29,7 +29,9 @@ import java.io.File;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.NonNull;
@@ -44,14 +46,14 @@ import software.amazon.awssdk.services.s3.S3AsyncClient;
 @Log4j2
 public class ScrapeStructures implements Command {
 	public static final String STRUCTURE_ID = "structure_id";
-	public static final String IS_PUBLIC = "is_public";
-	public static final String LAST_INFORMATION_UPDATE = "last_information_update";
+	public static final String IS_PUBLIC_STRUCTURE = "is_public_structure";
+	public static final String LAST_STRUCTURE_GET = "last_structure_get";
 	public static final String LAST_SEEN_PUBLIC_ID = "last_seen_public_id";
 
 	public static final List<String> ALL_CUSTOM_PROPERTIES =
-			List.of(STRUCTURE_ID, IS_PUBLIC, LAST_INFORMATION_UPDATE, LAST_SEEN_PUBLIC_ID);
+			List.of(STRUCTURE_ID, IS_PUBLIC_STRUCTURE, LAST_STRUCTURE_GET, LAST_SEEN_PUBLIC_ID);
 
-	public static final List<String> ALL_BOOLEANS = List.of(IS_PUBLIC);
+	public static final List<String> ALL_BOOLEANS = List.of(IS_PUBLIC_STRUCTURE);
 
 	@Inject
 	protected UrlParser urlParser;
@@ -132,12 +134,10 @@ public class ScrapeStructures implements Command {
 						initLogin(),
 						loadPreviousScrape(),
 						Flowable.concatArray(
-										publicStructureSource
-												.getStructures(structureStore)
-												.takeLast(50),
+										publicStructureSource.getStructures(structureStore),
 										fetchMarketStructureIds(),
 										fetchContractStructureIds(),
-								fetchSovereigntyStructureIds())
+										fetchSovereigntyStructureIds())
 								.flatMapCompletable(this::fetchStructure, false, 1),
 						clearOldStructures(),
 						populateLocations(),
@@ -175,8 +175,34 @@ public class ScrapeStructures implements Command {
 	}
 
 	private Completable loadPreviousScrape() {
-		return Completable.complete(); // @todo
-		// @todo clear booleans list is_public
+		return Maybe.defer(() -> {
+					log.info("Downloading latest structures");
+					var baseUrl = Configs.DATA_BASE_URL.getRequired();
+					var url = baseUrl + "/" + STRUCTURES.createLatestPath();
+					var file = tempFiles.tempFile("structures-latest", ".json").toFile();
+					return okHttpHelper.download(url, file, okHttpClient).flatMapMaybe(response -> {
+						if (response.code() != 200) {
+							log.warn("Failed loading latest structures: HTTP {}, ignoring", response.code());
+							return Maybe.empty();
+						}
+						return Maybe.just(file);
+					});
+				})
+				.flatMapCompletable(file -> {
+					var type = objectMapper
+							.getTypeFactory()
+							.constructMapType(LinkedHashMap.class, String.class, ObjectNode.class);
+					Map<String, ObjectNode> map = objectMapper.readValue(file, type);
+					map.forEach((key, value) -> {
+						structureStore.put(value);
+					});
+					structureStore.resetBooleans();
+					return Completable.complete();
+				})
+				.onErrorResumeNext(e -> {
+					log.warn("Failed loading latest structures, ignoring", e);
+					return Completable.complete();
+				});
 	}
 
 	private Flowable<Long> fetchMarketStructureIds() {

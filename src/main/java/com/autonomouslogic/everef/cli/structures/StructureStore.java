@@ -1,7 +1,8 @@
 package com.autonomouslogic.everef.cli.structures;
 
+import static com.autonomouslogic.everef.cli.structures.ScrapeStructures.ALL_BOOLEANS;
 import static com.autonomouslogic.everef.cli.structures.ScrapeStructures.ALL_CUSTOM_PROPERTIES;
-import static com.autonomouslogic.everef.cli.structures.ScrapeStructures.LAST_INFORMATION_UPDATE;
+import static com.autonomouslogic.everef.cli.structures.ScrapeStructures.LAST_STRUCTURE_GET;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -45,7 +46,7 @@ public class StructureStore {
 		for (var prop : ALL_CUSTOM_PROPERTIES) {
 			newNode.set(prop, node.get(prop));
 		}
-		newNode.put(LAST_INFORMATION_UPDATE, timestamp.toString());
+		newNode.put(LAST_STRUCTURE_GET, timestamp.toString());
 		store.put(structureId, newNode);
 	}
 
@@ -54,6 +55,15 @@ public class StructureStore {
 			var ids = new ArrayList<>(store.keySet());
 			ids.sort(Long::compareTo);
 			return Flowable.fromIterable(ids).map(id -> Pair.of(id, (ObjectNode) store.get(id)));
+		});
+	}
+
+	public void resetBooleans() {
+		store.forEach((id, node) -> {
+			for (var prop : ALL_BOOLEANS) {
+				((ObjectNode) node).put(prop, false);
+				store.put(id, node);
+			}
 		});
 	}
 }
