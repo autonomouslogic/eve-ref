@@ -97,13 +97,13 @@ public class ScrapeStructures implements Command {
 	protected LocationPopulator locationPopulator;
 
 	@Inject
-	protected PublicStructureSource publicStructureSource;
-
-	@Inject
 	protected StructureScrapeHelper structureScrapeHelper;
 
 	@Inject
 	protected StructureStore structureStore;
+
+	@Inject
+	protected PublicStructureSource publicStructureSource;
 
 	private final Duration latestCacheTime = Configs.DATA_LATEST_CACHE_CONTROL_MAX_AGE.getRequired();
 	private final Duration archiveCacheTime = Configs.DATA_ARCHIVE_CACHE_CONTROL_MAX_AGE.getRequired();
@@ -136,7 +136,8 @@ public class ScrapeStructures implements Command {
 												.getStructures(structureStore)
 												.takeLast(50),
 										fetchMarketStructureIds(),
-										fetchContractStructureIds())
+										fetchContractStructureIds(),
+								fetchSovereigntyStructureIds())
 								.flatMapCompletable(this::fetchStructure, false, 1),
 						clearOldStructures(),
 						populateLocations(),
@@ -166,7 +167,7 @@ public class ScrapeStructures implements Command {
 								.refreshAccessToken(login.getRefreshToken())
 								.flatMapCompletable(token -> {
 									accessToken = token.getAccessToken();
-									log.debug("Token refreshed: {}", accessToken);
+									log.debug("Token refreshed");
 									return Completable.complete();
 								});
 					});
@@ -183,6 +184,10 @@ public class ScrapeStructures implements Command {
 	}
 
 	private Flowable<Long> fetchContractStructureIds() {
+		return Flowable.empty(); // @todo
+	}
+
+	private Flowable<Long> fetchSovereigntyStructureIds() {
 		return Flowable.empty(); // @todo
 	}
 
@@ -226,7 +231,6 @@ public class ScrapeStructures implements Command {
 
 	private Single<File> buildOutput() {
 		return Single.defer(() -> {
-			log.info("Building output file");
 			var file = new File("/tmp/structures.json");
 			log.info("Writing output file to {}", file);
 			var all = objectMapper.createObjectNode();
