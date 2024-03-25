@@ -87,6 +87,7 @@ dependencies {
 	implementation "org.bouncycastle:bcprov-jdk18on:1.77"
 	implementation "io.sentry:sentry:7.5.0"
 	implementation "com.github.scribejava:scribejava-core:8.3.3"
+	implementation "org.apache.commons:commons-lang3:3.14.0"
 
 	implementation "org.jooq:jooq:3.19.5"
 	implementation "org.flywaydb:flyway-core:10.8.1"

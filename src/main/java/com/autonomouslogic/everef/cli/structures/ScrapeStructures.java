@@ -1,7 +1,8 @@
-package com.autonomouslogic.everef.cli;
+package com.autonomouslogic.everef.cli.structures;
 
 import static com.autonomouslogic.everef.util.ArchivePathFactory.STRUCTURES;
 
+import com.autonomouslogic.everef.cli.Command;
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.esi.EsiAuthHelper;
 import com.autonomouslogic.everef.esi.EsiHelper;
@@ -10,7 +11,6 @@ import com.autonomouslogic.everef.esi.LocationPopulator;
 import com.autonomouslogic.everef.http.OkHttpHelper;
 import com.autonomouslogic.everef.mvstore.MVStoreUtil;
 import com.autonomouslogic.everef.openapi.esi.apis.UniverseApi;
-import com.autonomouslogic.everef.openapi.esi.infrastructure.Success;
 import com.autonomouslogic.everef.s3.S3Adapter;
 import com.autonomouslogic.everef.s3.S3Util;
 import com.autonomouslogic.everef.url.HttpUrl;
@@ -19,25 +19,17 @@ import com.autonomouslogic.everef.url.UrlParser;
 import com.autonomouslogic.everef.util.CompressUtil;
 import com.autonomouslogic.everef.util.DataIndexHelper;
 import com.autonomouslogic.everef.util.TempFiles;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Maybe;
 import io.reactivex.rxjava3.core.Single;
-import io.reactivex.rxjava3.schedulers.Schedulers;
 import java.io.File;
 import java.time.Duration;
 import java.time.Instant;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.NonNull;
@@ -51,13 +43,15 @@ import software.amazon.awssdk.services.s3.S3AsyncClient;
  */
 @Log4j2
 public class ScrapeStructures implements Command {
-	private static final String STRUCTURE_ID = "structure_id";
-	private static final String IS_PUBLIC = "is_public";
-	private static final String LAST_INFORMATION_UPDATE = "last_information_update";
-	private static final String LAST_SEEN_PUBLIC_ID = "last_seen_public_id";
+	public static final String STRUCTURE_ID = "structure_id";
+	public static final String IS_PUBLIC = "is_public";
+	public static final String LAST_INFORMATION_UPDATE = "last_information_update";
+	public static final String LAST_SEEN_PUBLIC_ID = "last_seen_public_id";
 
-	private static final List<String> ALL_CUSTOM_PROPERTIES =
+	public static final List<String> ALL_CUSTOM_PROPERTIES =
 			List.of(STRUCTURE_ID, IS_PUBLIC, LAST_INFORMATION_UPDATE, LAST_SEEN_PUBLIC_ID);
+
+	public static final List<String> ALL_BOOLEANS = List.of(IS_PUBLIC);
 
 	@Inject
 	protected UrlParser urlParser;
@@ -102,16 +96,23 @@ public class ScrapeStructures implements Command {
 	@Inject
 	protected LocationPopulator locationPopulator;
 
+	@Inject
+	protected PublicStructureSource publicStructureSource;
+
+	@Inject
+	protected StructureScrapeHelper structureScrapeHelper;
+
+	@Inject
+	protected StructureStore structureStore;
+
 	private final Duration latestCacheTime = Configs.DATA_LATEST_CACHE_CONTROL_MAX_AGE.getRequired();
 	private final Duration archiveCacheTime = Configs.DATA_ARCHIVE_CACHE_CONTROL_MAX_AGE.getRequired();
 	private final String scrapeOwnerHash = Configs.SCRAPE_CHARACTER_OWNER_HASH.getRequired();
 	private S3Url dataPath;
 	private HttpUrl dataUrl;
 	private String accessToken;
-
 	private MVStore mvStore;
-	private Map<Long, JsonNode> store;
-	private final Instant timestamp = Instant.now().truncatedTo(ChronoUnit.SECONDS);
+	private Instant timestamp;
 
 	@Inject
 	protected ScrapeStructures() {}
@@ -120,22 +121,26 @@ public class ScrapeStructures implements Command {
 	protected void init() {
 		dataPath = (S3Url) urlParser.parse(Configs.DATA_PATH.getRequired());
 		dataUrl = (HttpUrl) urlParser.parse(Configs.DATA_BASE_URL.getRequired());
+		timestamp = Instant.now().truncatedTo(ChronoUnit.SECONDS);
+		publicStructureSource.setTimestamp(timestamp);
 	}
 
 	public Completable run() {
 		return Completable.concatArray(
 				initMvStore(),
-				initLogin(),
-				loadPreviousScrape(),
-				Flowable.concatArray(
-								fetchPublicStructureIds(),
-								//							.takeLast(50),
-								fetchMarketStructureIds(),
-								fetchContractStructureIds())
-						.flatMapCompletable(this::fetchStructure, false, 1),
-				clearOldStructures(),
-				populateLocations(),
-				buildOutput().flatMapCompletable(this::uploadFiles));
+				Completable.defer(() -> Completable.concatArray(
+						initLogin(),
+						loadPreviousScrape(),
+						Flowable.concatArray(
+										publicStructureSource
+												.getStructures(structureStore)
+												.takeLast(50),
+										fetchMarketStructureIds(),
+										fetchContractStructureIds())
+								.flatMapCompletable(this::fetchStructure, false, 1),
+						clearOldStructures(),
+						populateLocations(),
+						buildOutput().flatMapCompletable(this::uploadFiles))));
 	}
 
 	private Completable initMvStore() {
@@ -143,7 +148,7 @@ public class ScrapeStructures implements Command {
 			log.info("Opening MVStore");
 			mvStore = mvStoreUtil.createTempStore("public-contracts");
 			log.debug("MVStore opened at {}", mvStore.getFileStore().getFileName());
-			store = mvStoreUtil.openJsonMap(mvStore, "structures", Long.class);
+			structureStore.setStore(mvStoreUtil.openJsonMap(mvStore, "structures", Long.class));
 			log.debug("MVStore initialised");
 		});
 	}
@@ -173,37 +178,6 @@ public class ScrapeStructures implements Command {
 		// @todo clear booleans list is_public
 	}
 
-	private Flowable<Long> fetchPublicStructureIds() {
-		return Flowable.defer(() -> {
-					var response = universeApi.getUniverseStructuresWithHttpInfo(
-							UniverseApi.DatasourceGetUniverseStructures.tranquility, null, null);
-					if (response.getStatusCode() != 200) {
-						return Flowable.error(new RuntimeException(
-								String.format("Failed to fetch public structure ids: %s", response.getStatusCode())));
-					}
-					var ids = ((Success<Set<Long>>) response).getData();
-					var lastModified = Optional.ofNullable(response.getHeaders().get("last-modified")).stream()
-							.flatMap(l -> l.stream())
-							.findFirst()
-							.map(t -> ZonedDateTime.parse(t, DateTimeFormatter.RFC_1123_DATE_TIME)
-									.toInstant())
-							.orElse(timestamp);
-					log.debug("Fetched {} public structure ids", ids.size());
-					return Flowable.fromIterable(ids)
-							.observeOn(Schedulers.computation())
-							.doOnNext(id -> {
-								var node = (ObjectNode) store.get(id);
-								if (node == null) {
-									node = objectMapper.createObjectNode();
-								}
-								node.put(IS_PUBLIC, true);
-								node.put(LAST_SEEN_PUBLIC_ID, lastModified.toString());
-								store.put(id, node);
-							});
-				})
-				.subscribeOn(Schedulers.io());
-	}
-
 	private Flowable<Long> fetchMarketStructureIds() {
 		return Flowable.empty(); // @todo
 	}
@@ -221,22 +195,13 @@ public class ScrapeStructures implements Command {
 			return esiHelper.fetch(esiUrl, accessToken).flatMapCompletable(response -> {
 				var status = response.code();
 				log.debug("Fetched structure {}: {} response", structureId, status);
-				var json = (ObjectNode) store.get(structureId);
-				json.put(STRUCTURE_ID, structureId);
 				if (status == 200) {
-					var lastModified = Optional.ofNullable(response.header("last-modified"))
-							.map(t -> ZonedDateTime.parse(t, DateTimeFormatter.RFC_1123_DATE_TIME)
-									.toInstant())
-							.orElse(timestamp);
+					var lastModified =
+							structureScrapeHelper.getLastModified(response).orElse(timestamp);
 					var newJson =
 							(ObjectNode) objectMapper.readTree(response.body().bytes());
-					for (var prop : ALL_CUSTOM_PROPERTIES) {
-						newJson.set(prop, json.get(prop));
-					}
-					newJson.put(LAST_INFORMATION_UPDATE, lastModified.toString());
-					json = newJson;
+					structureStore.updateStructure(structureId, newJson, lastModified);
 				}
-				store.put(structureId, json);
 				return Completable.complete();
 			});
 		});
@@ -250,10 +215,10 @@ public class ScrapeStructures implements Command {
 	private Completable populateLocations() {
 		return Completable.defer(() -> {
 			log.info("Populating locations");
-			return Flowable.fromIterable(store.keySet()).flatMapCompletable(id -> {
-				var node = (ObjectNode) store.get(id);
-				return locationPopulator.populate(node).andThen(Completable.fromAction(() -> {
-					store.put(id, node);
+			return structureStore.allStructures().flatMapCompletable(pair -> {
+				var node = pair.getValue();
+				return locationPopulator.populate(pair.getValue()).andThen(Completable.fromAction(() -> {
+					structureStore.put(node);
 				}));
 			});
 		});
@@ -264,14 +229,16 @@ public class ScrapeStructures implements Command {
 			log.info("Building output file");
 			var file = new File("/tmp/structures.json");
 			log.info("Writing output file to {}", file);
-			var ids = new ArrayList<>(store.keySet());
-			ids.sort(Long::compareTo);
 			var all = objectMapper.createObjectNode();
-			for (var id : ids) {
-				all.put(Long.toString(id), store.get(id));
-			}
-			objectMapper.writeValue(file, all);
-			return Single.just(file);
+			return structureStore
+					.allStructures()
+					.flatMapCompletable(pair -> Completable.fromAction(() -> {
+						all.put(Long.toString(pair.getKey()), pair.getValue());
+					}))
+					.andThen(Single.fromCallable(() -> {
+						objectMapper.writeValue(file, all);
+						return file;
+					}));
 		});
 	}
 
