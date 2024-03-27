@@ -682,6 +682,14 @@ public class Configs {
 			.type(URL.class)
 			.build();
 
+	/**
+	 * The character owner hash to use for scrape actions requiring authentication.
+	 */
+	public static final Config<String> SCRAPE_CHARACTER_OWNER_HASH = Config.<String>builder()
+			.name("SCRAPE_CHARACTER_OWNER_HASH")
+			.type(String.class)
+			.build();
+
 	@SneakyThrows
 	private static URL url(String url) {
 		return new URL(url);

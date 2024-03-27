@@ -67,6 +67,9 @@ public class LocationPopulator {
 				return Completable.complete();
 			}
 			var systemId = record.get("system_id");
+			if (systemId == null) {
+				systemId = record.get("solar_system_id");
+			}
 			if (JsonUtil.isNullOrEmpty(systemId)) {
 				return Completable.complete();
 			}
