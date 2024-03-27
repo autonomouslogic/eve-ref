@@ -72,13 +72,13 @@ public class StructureStore {
 	}
 
 	public void updateBoolean(long structureId, @NonNull String prop, boolean val) {
-		var json = (ObjectNode) store.get(structureId);
+		var json = getOrInitStructure(structureId);
 		json.put(prop, val);
 		store.put(structureId, json);
 	}
 
 	public void updateTimestamp(long structureId, @NonNull String prop, @NonNull Instant time) {
-		var json = (ObjectNode) store.get(structureId);
+		var json = getOrInitStructure(structureId);
 		var current = Optional.ofNullable(json.get(prop))
 				.filter(JsonNode::isTextual)
 				.map(JsonNode::asText)
