@@ -17,7 +17,9 @@ import io.reactivex.rxjava3.core.Completable;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.NonNull;
@@ -69,6 +71,7 @@ public class ScrapeStructuresTest {
 	JsonNode previousScrape;
 	Map<Long, Map<String, String>> publicStructures;
 	Map<Long, Map<String, String>> nonPublicStructures;
+	Set<Long> marketStructures;
 	ZonedDateTime time;
 
 	@Inject
@@ -87,6 +90,7 @@ public class ScrapeStructuresTest {
 		previousScrape = null;
 		publicStructures = new HashMap<>();
 		nonPublicStructures = new HashMap<>();
+		marketStructures = new HashSet<>();
 
 		server = new MockWebServer();
 		server.setDispatcher(new TestDispatcher());
@@ -140,6 +144,14 @@ public class ScrapeStructuresTest {
 		runAndVerifyScrape("/single-public-structure-non-public.json");
 	}
 
+	@Test
+	void shouldCheckMarkets() {
+		publicStructures.put(1000000000001L, Map.of("name", "Test Structure 1"));
+		marketStructures.add(1000000000001L);
+		scrapeStructures.run().blockingAwait();
+		runAndVerifyScrape("/single-market-structure.json");
+	}
+
 	@SneakyThrows
 	private void loadPreviousScrape(String file) {
 		previousScrape = objectMapper.readTree(ResourceUtil.loadContextual(getClass(), file));
@@ -172,11 +184,13 @@ public class ScrapeStructuresTest {
 						return new MockResponse().setBody(objectMapper.writeValueAsString(previousScrape));
 					}
 				}
+
 				if (path.equals("/universe/structures/")) {
 					return new MockResponse()
 							.setBody(objectMapper.writeValueAsString(publicStructures.keySet()))
 							.addHeader("Last-Modified", lastModified);
 				}
+
 				if (path.startsWith("/universe/structures/")) {
 					var id = Long.parseLong(segments.get(2));
 					var structure = publicStructures.get(id);
@@ -189,6 +203,15 @@ public class ScrapeStructuresTest {
 						return new MockResponse()
 								.setBody(objectMapper.writeValueAsString(structure))
 								.addHeader("Last-Modified", lastModified);
+					}
+				}
+
+				if (path.startsWith("/markets/structures/")) {
+					var id = Long.parseLong(segments.get(2));
+					if (marketStructures.contains(id)) {
+						return new MockResponse().setBody("[]").addHeader("Last-Modified", lastModified);
+					} else {
+						return new MockResponse().setResponseCode(401);
 					}
 				}
 

@@ -49,11 +49,18 @@ public class ScrapeStructures implements Command {
 	public static final String LAST_STRUCTURE_GET = "last_structure_get";
 	public static final String IS_PUBLIC_STRUCTURE = "is_public_structure";
 	public static final String LAST_SEEN_PUBLIC_STRUCTURE = "last_seen_public_structure";
+	public static final String IS_MARKET_STRUCTURE = "is_market_structure";
+	public static final String LAST_SEEN_MARKET_STRUCTURE = "last_seen_market_structure";
 
-	public static final List<String> ALL_CUSTOM_PROPERTIES =
-			List.of(STRUCTURE_ID, IS_PUBLIC_STRUCTURE, LAST_STRUCTURE_GET, LAST_SEEN_PUBLIC_STRUCTURE);
+	public static final List<String> ALL_CUSTOM_PROPERTIES = List.of(
+			STRUCTURE_ID,
+			IS_PUBLIC_STRUCTURE,
+			LAST_STRUCTURE_GET,
+			LAST_SEEN_PUBLIC_STRUCTURE,
+			IS_MARKET_STRUCTURE,
+			LAST_SEEN_MARKET_STRUCTURE);
 
-	public static final List<String> ALL_BOOLEANS = List.of(IS_PUBLIC_STRUCTURE);
+	public static final List<String> ALL_BOOLEANS = List.of(IS_PUBLIC_STRUCTURE, IS_MARKET_STRUCTURE);
 
 	@Inject
 	protected UrlParser urlParser;
@@ -142,7 +149,8 @@ public class ScrapeStructures implements Command {
 										fetchMarketStructureIds(),
 										fetchContractStructureIds(),
 										fetchSovereigntyStructureIds())
-								.flatMapCompletable(this::fetchStructure, false, 1),
+								.flatMapCompletable(
+										id -> Completable.concatArray(fetchStructure(id), fetchMarket(id)), false, 1),
 						clearOldStructures(),
 						populateLocations(),
 						buildOutput().flatMapCompletable(this::uploadFiles))));
@@ -232,6 +240,28 @@ public class ScrapeStructures implements Command {
 					var newJson =
 							(ObjectNode) objectMapper.readTree(response.body().bytes());
 					structureStore.updateStructure(structureId, newJson, lastModified);
+				}
+				return Completable.complete();
+			});
+		});
+	}
+
+	private Completable fetchMarket(long structureId) {
+		return Completable.defer(() -> {
+			log.trace("Fetching market {}", structureId);
+			var esiUrl = EsiUrl.builder()
+					.urlPath(String.format("/markets/structures/%s/", structureId))
+					.build();
+			return esiHelper.fetch(esiUrl, accessToken).flatMapCompletable(response -> {
+				var status = response.code();
+				log.debug("Fetched market {}: {} response", structureId, status);
+				if (status == 200) {
+					var lastModified =
+							structureScrapeHelper.getLastModified(response).orElse(timestamp);
+					structureStore.updateBoolean(structureId, IS_MARKET_STRUCTURE, true);
+					structureStore.updateTimestamp(structureId, LAST_SEEN_MARKET_STRUCTURE, lastModified);
+				} else {
+					structureStore.updateBoolean(structureId, IS_MARKET_STRUCTURE, false);
 				}
 				return Completable.complete();
 			});

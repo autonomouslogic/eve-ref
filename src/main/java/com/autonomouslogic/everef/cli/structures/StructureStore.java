@@ -11,6 +11,7 @@ import io.reactivex.rxjava3.core.Flowable;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Optional;
 import javax.inject.Inject;
 import lombok.NonNull;
 import lombok.Setter;
@@ -44,7 +45,10 @@ public class StructureStore {
 	public void updateStructure(long structureId, ObjectNode newNode, Instant timestamp) {
 		var node = getOrInitStructure(structureId);
 		for (var prop : ALL_CUSTOM_PROPERTIES) {
-			newNode.set(prop, node.get(prop));
+			var val = node.get(prop);
+			if (val != null) {
+				newNode.set(prop, val);
+			}
 		}
 		newNode.put(LAST_STRUCTURE_GET, timestamp.toString());
 		store.put(structureId, newNode);
@@ -65,5 +69,23 @@ public class StructureStore {
 				store.put(id, node);
 			}
 		});
+	}
+
+	public void updateBoolean(long structureId, @NonNull String prop, boolean val) {
+		var json = (ObjectNode) store.get(structureId);
+		json.put(prop, val);
+		store.put(structureId, json);
+	}
+
+	public void updateTimestamp(long structureId, @NonNull String prop, @NonNull Instant time) {
+		var json = (ObjectNode) store.get(structureId);
+		var current = Optional.ofNullable(json.get(prop))
+				.filter(JsonNode::isTextual)
+				.map(JsonNode::asText)
+				.map(Instant::parse);
+		if (current.isEmpty() || current.get().isBefore(time)) {
+			json.put(prop, time.toString());
+			store.put(structureId, json);
+		}
 	}
 }
