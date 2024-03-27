@@ -149,7 +149,7 @@ public class ScrapeStructures implements Command {
 				loadPreviousScrape(),
 				prepareStructureIds()
 						.flatMapCompletable(
-								id -> Completable.concatArray(fetchStructure(id), fetchMarket(id)), false, 2),
+								id -> Completable.concatArray(fetchStructure(id), fetchMarket(id)), false, 1),
 				clearOldStructures(),
 				populateLocations(),
 				buildOutput().flatMapCompletable(this::uploadFiles));
@@ -250,9 +250,9 @@ public class ScrapeStructures implements Command {
 				if (status == 200) {
 					var lastModified =
 							structureScrapeHelper.getLastModified(response).orElse(timestamp);
-					var newJson =
+					var json =
 							(ObjectNode) objectMapper.readTree(response.body().bytes());
-					structureStore.updateStructure(structureId, newJson, lastModified);
+					structureStore.updateStructure(structureId, json, lastModified);
 				}
 				return Completable.complete();
 			});
@@ -330,15 +330,11 @@ public class ScrapeStructures implements Command {
 			log.info(String.format("Uploading latest file to %s", latestPath));
 			log.info(String.format("Uploading archive file to %s", archivePath));
 			return Completable.mergeArray(
-							s3Adapter.putObject(latestPut, outputFile, s3Client).ignoreElement()
-							//							s3Adapter
-							//									.putObject(archivePut, archiveFile, s3Client)
-							//									.ignoreElement()
-							)
-					.andThen(Completable.defer(() -> dataIndexHelper.updateIndex(
-							latestPath
-							//						archivePath
-							)));
+							s3Adapter.putObject(latestPut, outputFile, s3Client).ignoreElement(),
+							s3Adapter
+									.putObject(archivePut, archiveFile, s3Client)
+									.ignoreElement())
+					.andThen(Completable.defer(() -> dataIndexHelper.updateIndex(latestPath, archivePath)));
 		});
 	}
 }
