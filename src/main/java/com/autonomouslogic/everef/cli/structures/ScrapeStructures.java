@@ -46,12 +46,12 @@ import software.amazon.awssdk.services.s3.S3AsyncClient;
 @Log4j2
 public class ScrapeStructures implements Command {
 	public static final String STRUCTURE_ID = "structure_id";
-	public static final String IS_PUBLIC_STRUCTURE = "is_public_structure";
 	public static final String LAST_STRUCTURE_GET = "last_structure_get";
-	public static final String LAST_SEEN_PUBLIC_ID = "last_seen_public_id";
+	public static final String IS_PUBLIC_STRUCTURE = "is_public_structure";
+	public static final String LAST_SEEN_PUBLIC_STRUCTURE = "last_seen_public_structure";
 
 	public static final List<String> ALL_CUSTOM_PROPERTIES =
-			List.of(STRUCTURE_ID, IS_PUBLIC_STRUCTURE, LAST_STRUCTURE_GET, LAST_SEEN_PUBLIC_ID);
+			List.of(STRUCTURE_ID, IS_PUBLIC_STRUCTURE, LAST_STRUCTURE_GET, LAST_SEEN_PUBLIC_STRUCTURE);
 
 	public static final List<String> ALL_BOOLEANS = List.of(IS_PUBLIC_STRUCTURE);
 
@@ -158,18 +158,13 @@ public class ScrapeStructures implements Command {
 		return Completable.defer(() -> {
 			log.debug("Using login for owner hash: {}", scrapeOwnerHash);
 			return esiAuthHelper
-					.getCharacterLogin(scrapeOwnerHash)
+					.getTokenForOwnerHash(scrapeOwnerHash)
 					.switchIfEmpty((Maybe.defer(() -> Maybe.error(new RuntimeException(
 							String.format("Login not found for owner hash: %s", scrapeOwnerHash))))))
-					.flatMapCompletable(login -> {
-						log.debug("Refreshing token");
-						return esiAuthHelper
-								.refreshAccessToken(login.getRefreshToken())
-								.flatMapCompletable(token -> {
-									accessToken = token.getAccessToken();
-									log.debug("Token refreshed");
-									return Completable.complete();
-								});
+					.flatMapCompletable(token -> {
+						accessToken = token.getAccessToken();
+						log.debug("Token refreshed");
+						return Completable.complete();
 					});
 		});
 	}

@@ -109,4 +109,9 @@ public class EsiAuthHelper {
 		return Rx3Util.toMaybe(dynamoAsyncMapper.getItemFromPrimaryKey(ownerHash, CharacterLogin.class))
 				.flatMap(r -> Maybe.fromOptional(Optional.ofNullable(r.item())));
 	}
+
+	public Maybe<OAuth2AccessToken> getTokenForOwnerHash(String ownerHash) {
+
+		return getCharacterLogin(ownerHash).flatMapSingle(login -> refreshAccessToken(login.getRefreshToken()));
+	}
 }
