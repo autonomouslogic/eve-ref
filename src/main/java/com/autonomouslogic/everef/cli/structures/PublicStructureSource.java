@@ -11,8 +11,8 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 import java.time.Instant;
 import java.util.Set;
 import javax.inject.Inject;
-import lombok.NonNull;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
@@ -27,13 +27,17 @@ public class PublicStructureSource implements StructureSource {
 	protected StructureScrapeHelper structureScrapeHelper;
 
 	@Setter
+	@Accessors(chain = false)
+	private StructureStore structureStore;
+
+	@Setter
 	private Instant timestamp;
 
 	@Inject
 	protected PublicStructureSource() {}
 
 	@Override
-	public Flowable<Long> getStructures(@NonNull StructureStore store) {
+	public Flowable<Long> getStructures() {
 		return Flowable.defer(() -> {
 					var response = universeApi.getUniverseStructuresWithHttpInfo(
 							UniverseApi.DatasourceGetUniverseStructures.tranquility, null, null);
@@ -48,10 +52,10 @@ public class PublicStructureSource implements StructureSource {
 					return Flowable.fromIterable(ids)
 							.observeOn(Schedulers.computation())
 							.doOnNext(id -> {
-								var node = store.getOrInitStructure(id);
+								var node = structureStore.getOrInitStructure(id);
 								node.put(IS_PUBLIC_STRUCTURE, true);
 								node.put(LAST_SEEN_PUBLIC_STRUCTURE, lastModified.toString());
-								store.put(node);
+								structureStore.put(node);
 							});
 				})
 				.subscribeOn(Schedulers.io());

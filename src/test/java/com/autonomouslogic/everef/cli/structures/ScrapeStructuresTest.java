@@ -211,7 +211,7 @@ public class ScrapeStructuresTest {
 					if (marketStructures.contains(id)) {
 						return new MockResponse().setBody("[]").addHeader("Last-Modified", lastModified);
 					} else {
-						return new MockResponse().setResponseCode(401);
+						return new MockResponse().setResponseCode(403);
 					}
 				}
 

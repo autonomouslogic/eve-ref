@@ -38,6 +38,7 @@ import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
 import okhttp3.OkHttpClient;
 import org.h2.mvstore.MVStore;
+import org.jetbrains.annotations.NotNull;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 
 /**
@@ -133,27 +134,25 @@ public class ScrapeStructures implements Command {
 	protected void init() {
 		dataPath = (S3Url) urlParser.parse(Configs.DATA_PATH.getRequired());
 		dataUrl = (HttpUrl) urlParser.parse(Configs.DATA_BASE_URL.getRequired());
+
 		timestamp = Instant.now().truncatedTo(ChronoUnit.SECONDS);
 		publicStructureSource.setTimestamp(timestamp);
+
+		oldStructureSource.setStructureStore(structureStore);
+		publicStructureSource.setStructureStore(structureStore);
 	}
 
 	public Completable run() {
 		return Completable.concatArray(
 				initMvStore(),
-				Completable.defer(() -> Completable.concatArray(
-						initLogin(),
-						loadPreviousScrape(),
-						Flowable.concatArray(
-										oldStructureSource.getStructures(structureStore),
-										publicStructureSource.getStructures(structureStore),
-										fetchMarketStructureIds(),
-										fetchContractStructureIds(),
-										fetchSovereigntyStructureIds())
-								.flatMapCompletable(
-										id -> Completable.concatArray(fetchStructure(id), fetchMarket(id)), false, 1),
-						clearOldStructures(),
-						populateLocations(),
-						buildOutput().flatMapCompletable(this::uploadFiles))));
+				initLogin(),
+				loadPreviousScrape(),
+				prepareStructureIds()
+						.flatMapCompletable(
+								id -> Completable.concatArray(fetchStructure(id), fetchMarket(id)), false, 2),
+				clearOldStructures(),
+				populateLocations(),
+				buildOutput().flatMapCompletable(this::uploadFiles));
 	}
 
 	private Completable initMvStore() {
@@ -211,6 +210,20 @@ public class ScrapeStructures implements Command {
 					log.warn("Failed loading latest structures, ignoring", e);
 					return Completable.complete();
 				});
+	}
+
+	@NotNull
+	private Flowable<Long> prepareStructureIds() {
+		return Flowable.concatArray(
+						oldStructureSource.getStructures(),
+						publicStructureSource.getStructures(),
+						fetchMarketStructureIds(),
+						fetchContractStructureIds(),
+						fetchSovereigntyStructureIds())
+				.distinct()
+				.toList()
+				.doOnSuccess(ids -> log.info("Prepared {} structures", ids.size()))
+				.flatMapPublisher(Flowable::fromIterable);
 	}
 
 	private Flowable<Long> fetchMarketStructureIds() {
