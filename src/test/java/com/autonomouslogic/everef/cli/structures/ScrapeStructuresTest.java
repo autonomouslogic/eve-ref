@@ -10,6 +10,7 @@ import com.autonomouslogic.everef.esi.MockLocationPopulatorModule;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.test.MockS3Adapter;
 import com.autonomouslogic.everef.test.TestDataUtil;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.reactivex.rxjava3.core.Completable;
 import java.time.ZonedDateTime;
@@ -26,6 +27,7 @@ import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 import org.jetbrains.annotations.NotNull;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -64,6 +66,7 @@ public class ScrapeStructuresTest {
 
 	MockWebServer server;
 
+	JsonNode previousScrape;
 	Map<Long, Map<String, String>> publicStructures;
 
 	@Inject
@@ -78,6 +81,7 @@ public class ScrapeStructuresTest {
 				.inject(this);
 		when(locationPopulator.populate(any())).thenReturn(Completable.complete()); // @todo
 
+		previousScrape = null;
 		publicStructures = new HashMap<>();
 
 		server = new MockWebServer();
@@ -85,11 +89,30 @@ public class ScrapeStructuresTest {
 		server.start(TestDataUtil.TEST_PORT);
 	}
 
+	@AfterEach
+	@SneakyThrows
+	void after() {
+		server.close();
+	}
+
 	@Test
 	void shouldScrapePublicStructures() {
 		publicStructures.put(1000000000001L, Map.of("name", "Test Structure 1"));
 		scrapeStructures.run().blockingAwait();
 		runAndVerifyScrape("/single-public-structure.json");
+	}
+
+	@Test
+	void shouldUpdatePublicStructures() {
+		loadPreviousScrape("/single-public-structure.json");
+		publicStructures.put(1000000000001L, Map.of("name", "Test Structure 1 Updated"));
+		scrapeStructures.run().blockingAwait();
+		runAndVerifyScrape("/single-public-structure-updated.json");
+	}
+
+	@SneakyThrows
+	private void loadPreviousScrape(String file) {
+		previousScrape = objectMapper.readTree(ResourceUtil.loadContextual(getClass(), file));
 	}
 
 	@SneakyThrows
@@ -113,7 +136,11 @@ public class ScrapeStructuresTest {
 				var lastModified = DateTimeFormatter.RFC_1123_DATE_TIME.format(TIME);
 
 				if (path.equals("/structures/structures-latest.v2.json")) {
-					return new MockResponse().setResponseCode(404);
+					if (previousScrape == null) {
+						return new MockResponse().setResponseCode(404);
+					} else {
+						return new MockResponse().setBody(objectMapper.writeValueAsString(previousScrape));
+					}
 				}
 				if (path.equals("/universe/structures/")) {
 					return new MockResponse()
