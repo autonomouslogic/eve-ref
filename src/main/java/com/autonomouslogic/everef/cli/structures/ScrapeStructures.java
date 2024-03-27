@@ -105,6 +105,9 @@ public class ScrapeStructures implements Command {
 	protected StructureStore structureStore;
 
 	@Inject
+	protected OldStructureSource oldStructureSource;
+
+	@Inject
 	protected PublicStructureSource publicStructureSource;
 
 	private final Duration latestCacheTime = Configs.DATA_LATEST_CACHE_CONTROL_MAX_AGE.getRequired();
@@ -134,6 +137,7 @@ public class ScrapeStructures implements Command {
 						initLogin(),
 						loadPreviousScrape(),
 						Flowable.concatArray(
+										oldStructureSource.getStructures(structureStore),
 										publicStructureSource.getStructures(structureStore),
 										fetchMarketStructureIds(),
 										fetchContractStructureIds(),
@@ -188,6 +192,7 @@ public class ScrapeStructures implements Command {
 							.getTypeFactory()
 							.constructMapType(LinkedHashMap.class, String.class, ObjectNode.class);
 					Map<String, ObjectNode> map = objectMapper.readValue(file, type);
+					oldStructureSource.setPreviousScrape(map);
 					map.forEach((key, value) -> {
 						structureStore.put(value);
 					});

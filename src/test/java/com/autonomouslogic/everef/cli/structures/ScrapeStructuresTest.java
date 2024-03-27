@@ -12,6 +12,7 @@ import com.autonomouslogic.everef.test.MockS3Adapter;
 import com.autonomouslogic.everef.test.TestDataUtil;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.reactivex.rxjava3.core.Completable;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -46,7 +47,6 @@ import software.amazon.awssdk.services.s3.S3AsyncClient;
 @ExtendWith(MockitoExtension.class)
 public class ScrapeStructuresTest {
 	static final String BUCKET_NAME = "data-bucket";
-	static final ZonedDateTime TIME = ZonedDateTime.parse("2021-01-01T00:00:00Z");
 
 	@Inject
 	ScrapeStructures scrapeStructures;
@@ -68,6 +68,8 @@ public class ScrapeStructuresTest {
 
 	JsonNode previousScrape;
 	Map<Long, Map<String, String>> publicStructures;
+	Map<Long, Map<String, String>> nonPublicStructures;
+	ZonedDateTime time;
 
 	@Inject
 	ScrapeStructuresTest() {}
@@ -81,8 +83,10 @@ public class ScrapeStructuresTest {
 				.inject(this);
 		when(locationPopulator.populate(any())).thenReturn(Completable.complete()); // @todo
 
+		time = ZonedDateTime.parse("2021-01-01T00:00:00Z");
 		previousScrape = null;
 		publicStructures = new HashMap<>();
+		nonPublicStructures = new HashMap<>();
 
 		server = new MockWebServer();
 		server.setDispatcher(new TestDispatcher());
@@ -110,6 +114,32 @@ public class ScrapeStructuresTest {
 		runAndVerifyScrape("/single-public-structure-updated.json");
 	}
 
+	@Test
+	void shouldNotPreserveExtraDataFromPreviousScrapes() {
+		loadPreviousScrape("/single-public-structure.json");
+		((ObjectNode) previousScrape.get("1000000000001")).put("some_key", "some_value");
+		publicStructures.put(1000000000001L, Map.of("name", "Test Structure 1"));
+		scrapeStructures.run().blockingAwait();
+		runAndVerifyScrape("/single-public-structure.json");
+	}
+
+	@Test
+	void shouldRescrapePreviousStructures() {
+		loadPreviousScrape("/single-public-structure.json");
+		nonPublicStructures.put(1000000000001L, Map.of("name", "Test Structure 1 Updated"));
+		time = time.plusDays(1);
+		scrapeStructures.run().blockingAwait();
+		runAndVerifyScrape("/single-public-structure-updated-non-public.json");
+	}
+
+	@Test
+	void shouldPreserveStructures() {
+		loadPreviousScrape("/single-public-structure.json");
+		time = time.plusDays(1);
+		scrapeStructures.run().blockingAwait();
+		runAndVerifyScrape("/single-public-structure-non-public.json");
+	}
+
 	@SneakyThrows
 	private void loadPreviousScrape(String file) {
 		previousScrape = objectMapper.readTree(ResourceUtil.loadContextual(getClass(), file));
@@ -133,7 +163,7 @@ public class ScrapeStructuresTest {
 			try {
 				var path = request.getRequestUrl().encodedPath();
 				var segments = request.getRequestUrl().pathSegments();
-				var lastModified = DateTimeFormatter.RFC_1123_DATE_TIME.format(TIME);
+				var lastModified = DateTimeFormatter.RFC_1123_DATE_TIME.format(time);
 
 				if (path.equals("/structures/structures-latest.v2.json")) {
 					if (previousScrape == null) {
@@ -150,6 +180,9 @@ public class ScrapeStructuresTest {
 				if (path.startsWith("/universe/structures/")) {
 					var id = Long.parseLong(segments.get(2));
 					var structure = publicStructures.get(id);
+					if (structure == null) {
+						structure = nonPublicStructures.get(id);
+					}
 					if (structure == null) {
 						return new MockResponse().setResponseCode(401);
 					} else {
