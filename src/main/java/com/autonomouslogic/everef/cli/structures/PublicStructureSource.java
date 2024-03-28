@@ -5,6 +5,7 @@ import static com.autonomouslogic.everef.cli.structures.ScrapeStructures.LAST_SE
 
 import com.autonomouslogic.everef.openapi.esi.apis.UniverseApi;
 import com.autonomouslogic.everef.openapi.esi.infrastructure.Success;
+import com.autonomouslogic.everef.util.Rx;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
@@ -58,6 +59,6 @@ public class PublicStructureSource implements StructureSource {
 								structureStore.put(node);
 							});
 				})
-				.subscribeOn(Schedulers.io());
+				.compose(Rx.offloadFlowable());
 	}
 }

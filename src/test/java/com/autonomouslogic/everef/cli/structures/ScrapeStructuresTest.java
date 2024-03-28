@@ -1,6 +1,7 @@
 package com.autonomouslogic.everef.cli.structures;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -10,18 +11,25 @@ import com.autonomouslogic.everef.esi.MockLocationPopulatorModule;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.test.MockS3Adapter;
 import com.autonomouslogic.everef.test.TestDataUtil;
+import com.autonomouslogic.everef.util.CompressUtil;
+import com.autonomouslogic.everef.util.JsonNodeCsvWriter;
+import com.autonomouslogic.everef.util.TempFiles;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.reactivex.rxjava3.core.Completable;
+import java.io.FileInputStream;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.inject.Provider;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
@@ -29,11 +37,15 @@ import okhttp3.mockwebserver.Dispatcher;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
+import okio.Buffer;
+import org.apache.commons.io.IOUtils;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.junitpioneer.jupiter.SetEnvironmentVariable;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -66,6 +78,12 @@ public class ScrapeStructuresTest {
 	@Named("data")
 	S3AsyncClient dataClient;
 
+	@Inject
+	Provider<JsonNodeCsvWriter> jsonNodeCsvWriterProvider;
+
+	@Inject
+	TempFiles tempFiles;
+
 	MockWebServer server;
 
 	JsonNode previousScrape;
@@ -73,6 +91,7 @@ public class ScrapeStructuresTest {
 	Map<Long, Map<String, String>> nonPublicStructures;
 	Set<Long> marketStructures;
 	ZonedDateTime time;
+	List<JsonNode> marketOrders;
 
 	@Inject
 	ScrapeStructuresTest() {}
@@ -91,6 +110,7 @@ public class ScrapeStructuresTest {
 		publicStructures = new HashMap<>();
 		nonPublicStructures = new HashMap<>();
 		marketStructures = new HashSet<>();
+		marketOrders = new ArrayList<>();
 
 		server = new MockWebServer();
 		server.setDispatcher(new TestDispatcher());
@@ -151,6 +171,43 @@ public class ScrapeStructuresTest {
 		marketStructures.add(1000000000001L);
 		scrapeStructures.run().blockingAwait();
 		runAndVerifyScrape("/single-market-structure.json");
+	}
+
+	@Test
+	void shouldOnlyTryMarketsForStructureTypesWhereMarketModulesCanBeApplied() {
+		fail();
+	}
+
+	@ParameterizedTest
+	@ValueSource(strings = {"location_id", "station_id"})
+	void shouldScrapeStructuresFromMarketOrders(String prop) {
+		marketOrders.add(objectMapper.createObjectNode().put(prop, 1000000000001L));
+		marketOrders.add(objectMapper.createObjectNode().put(prop, 60000001L));
+		nonPublicStructures.put(1000000000001L, Map.of("name", "Test Structure 1"));
+		nonPublicStructures.put(60000001L, Map.of("name", "Should not be scraped"));
+		marketStructures.add(1000000000001L);
+		scrapeStructures.run().blockingAwait();
+		runAndVerifyScrape("/single-market-structure-non-public.json");
+	}
+
+	@Test
+	void shouldScrapeStructuresFromPublicContracts() {
+		fail();
+	}
+
+	@Test
+	void shouldScrapeSovereigntyStructures() {
+		fail();
+	}
+
+	@Test
+	void shouldRemoveOldStructures() {
+		fail();
+	}
+
+	@Test
+	void shouldExecuteDataIndex() {
+		fail();
 	}
 
 	@SneakyThrows
@@ -214,6 +271,18 @@ public class ScrapeStructuresTest {
 					} else {
 						return new MockResponse().setResponseCode(403);
 					}
+				}
+
+				if (path.startsWith("/market-orders/market-orders-latest.v3.csv.bz2")) {
+					if (marketOrders.isEmpty()) {
+						return new MockResponse().setResponseCode(404);
+					}
+					var file = tempFiles.tempFile("market-orders", ".csv").toFile();
+					jsonNodeCsvWriterProvider.get().setOut(file).writeAll(marketOrders);
+					var archive = CompressUtil.compressBzip2(file);
+					archive.deleteOnExit();
+					return new MockResponse()
+							.setBody(new Buffer().write(IOUtils.toByteArray(new FileInputStream(archive))));
 				}
 
 				log.error(String.format("Unaccounted for URL: %s", path));

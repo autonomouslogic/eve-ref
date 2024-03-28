@@ -118,6 +118,9 @@ public class ScrapeStructures implements Command {
 	@Inject
 	protected PublicStructureSource publicStructureSource;
 
+	@Inject
+	protected MarketOrdersStructureSource marketOrdersStructureSource;
+
 	private final Duration latestCacheTime = Configs.DATA_LATEST_CACHE_CONTROL_MAX_AGE.getRequired();
 	private final Duration archiveCacheTime = Configs.DATA_ARCHIVE_CACHE_CONTROL_MAX_AGE.getRequired();
 	private final String scrapeOwnerHash = Configs.SCRAPE_CHARACTER_OWNER_HASH.getRequired();
@@ -140,6 +143,7 @@ public class ScrapeStructures implements Command {
 
 		oldStructureSource.setStructureStore(structureStore);
 		publicStructureSource.setStructureStore(structureStore);
+		marketOrdersStructureSource.setStructureStore(structureStore);
 	}
 
 	public Completable run() {
@@ -147,10 +151,10 @@ public class ScrapeStructures implements Command {
 				initMvStore(),
 				initLogin(),
 				loadPreviousScrape(),
+				clearOldStructures(),
 				prepareStructureIds()
 						.flatMapCompletable(
 								id -> Completable.concatArray(fetchStructure(id), fetchMarket(id)), false, 1),
-				clearOldStructures(),
 				populateLocations(),
 				buildOutput().flatMapCompletable(this::uploadFiles));
 	}
@@ -217,7 +221,7 @@ public class ScrapeStructures implements Command {
 		return Flowable.concatArray(
 						oldStructureSource.getStructures(),
 						publicStructureSource.getStructures(),
-						fetchMarketStructureIds(),
+						marketOrdersStructureSource.getStructures(),
 						fetchContractStructureIds(),
 						fetchSovereigntyStructureIds())
 				.distinct()

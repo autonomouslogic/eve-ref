@@ -2,14 +2,13 @@ package com.autonomouslogic.everef.util;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.reactivex.rxjava3.core.Flowable;
+import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.stream.Stream;
 import javax.inject.Inject;
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.Setter;
 import lombok.SneakyThrows;
 import org.apache.commons.csv.CSVFormat;
 
@@ -19,11 +18,6 @@ import org.apache.commons.csv.CSVFormat;
 public class JsonNodeCsvReader {
 	@Inject
 	protected ObjectMapper objectMapper;
-
-	@Getter
-	@Setter
-	@NonNull
-	private CSVFormat csvFormat = CSVFormat.RFC4180;
 
 	@Inject
 	protected JsonNodeCsvReader() {}
@@ -42,5 +36,14 @@ public class JsonNodeCsvReader {
 					r.toMap().forEach(json::put);
 					return json;
 				});
+	}
+
+	@SneakyThrows
+	public Flowable<JsonNode> readCompressed(File file) {
+		return Flowable.defer(() -> {
+					var in = CompressUtil.uncompress(file);
+					return Flowable.fromStream(readAll(in)).doFinally(in::close);
+				})
+				.compose(Rx.offloadFlowable());
 	}
 }
