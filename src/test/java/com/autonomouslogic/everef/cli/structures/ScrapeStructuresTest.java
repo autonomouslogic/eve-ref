@@ -101,6 +101,7 @@ public class ScrapeStructuresTest {
 	JsonNode previousScrape;
 	Map<Long, Map<String, Object>> publicStructures;
 	Map<Long, Map<String, Object>> nonPublicStructures;
+	Map<Long, Map<String, Object>> sovereigntyStructures;
 	Set<Long> marketStructures;
 	ZonedDateTime time;
 	List<JsonNode> marketOrders;
@@ -122,6 +123,7 @@ public class ScrapeStructuresTest {
 		previousScrape = null;
 		publicStructures = new HashMap<>();
 		nonPublicStructures = new HashMap<>();
+		sovereigntyStructures = new HashMap<>();
 		marketStructures = new HashSet<>();
 		marketOrders = new ArrayList<>();
 		publicContracts = new ArrayList<>();
@@ -220,7 +222,15 @@ public class ScrapeStructuresTest {
 
 	@Test
 	void shouldScrapeSovereigntyStructures() {
-		fail();
+		sovereigntyStructures.put(
+				1000000000001L,
+				Map.of(
+						"structure_id", 1000000000001L,
+						"structure_type_id", 32226,
+						"alliance_id", 1300000001,
+						"solar_system_id", 300000001));
+		scrapeStructures.run().blockingAwait();
+		verifyScrape("/single-sovereignty-structure.json");
 	}
 
 	@Test
@@ -281,9 +291,9 @@ public class ScrapeStructuresTest {
 					}
 				}
 
-				if (path.equals("/universe/structures/")) {
+				if (path.equals("/sovereignty/structures/")) {
 					return new MockResponse()
-							.setBody(objectMapper.writeValueAsString(publicStructures.keySet()))
+							.setBody(objectMapper.writeValueAsString(sovereigntyStructures.values()))
 							.addHeader("Last-Modified", lastModified);
 				}
 
@@ -303,6 +313,15 @@ public class ScrapeStructuresTest {
 				}
 
 				if (path.startsWith("/markets/structures/")) {
+					var id = Long.parseLong(segments.get(2));
+					if (marketStructures.contains(id)) {
+						return new MockResponse().setBody("[]").addHeader("Last-Modified", lastModified);
+					} else {
+						return new MockResponse().setResponseCode(403);
+					}
+				}
+
+				if (path.equals("GET /sovereignty/structures/")) {
 					var id = Long.parseLong(segments.get(2));
 					if (marketStructures.contains(id)) {
 						return new MockResponse().setBody("[]").addHeader("Last-Modified", lastModified);

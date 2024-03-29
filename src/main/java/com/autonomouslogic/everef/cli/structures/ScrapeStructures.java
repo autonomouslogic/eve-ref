@@ -62,6 +62,8 @@ public class ScrapeStructures implements Command {
 	public static final String LAST_SEEN_PUBLIC_STRUCTURE = "last_seen_public_structure";
 	public static final String IS_MARKET_STRUCTURE = "is_market_structure";
 	public static final String LAST_SEEN_MARKET_STRUCTURE = "last_seen_market_structure";
+	public static final String IS_SOVEREIGNTY_STRUCTURE = "is_sovereignty_structure";
+	public static final String LAST_SEEN_SOVEREIGNTY_STRUCTURE = "last_seen_sovereignty_structure";
 
 	public static final List<String> ALL_CUSTOM_PROPERTIES = List.of(
 			STRUCTURE_ID,
@@ -70,10 +72,12 @@ public class ScrapeStructures implements Command {
 			IS_PUBLIC_STRUCTURE,
 			LAST_SEEN_PUBLIC_STRUCTURE,
 			IS_MARKET_STRUCTURE,
-			LAST_SEEN_MARKET_STRUCTURE);
+			LAST_SEEN_MARKET_STRUCTURE,
+			IS_SOVEREIGNTY_STRUCTURE,
+			LAST_SEEN_SOVEREIGNTY_STRUCTURE);
 
 	public static final List<String> ALL_BOOLEANS =
-			List.of(IS_GETTABLE_STRUCTURE, IS_PUBLIC_STRUCTURE, IS_MARKET_STRUCTURE);
+			List.of(IS_GETTABLE_STRUCTURE, IS_PUBLIC_STRUCTURE, IS_MARKET_STRUCTURE, IS_SOVEREIGNTY_STRUCTURE);
 
 	@Inject
 	protected UrlParser urlParser;
@@ -137,6 +141,9 @@ public class ScrapeStructures implements Command {
 	protected PublicContractsStructureSource publicContractsStructureSource;
 
 	@Inject
+	protected SovereigntyStructureSource sovereigntyStructureSource;
+
+	@Inject
 	protected RefDataUtil refDataUtil;
 
 	@Setter
@@ -167,6 +174,7 @@ public class ScrapeStructures implements Command {
 		publicStructureSource.setStructureStore(structureStore);
 		marketOrdersStructureSource.setStructureStore(structureStore);
 		publicContractsStructureSource.setStructureStore(structureStore);
+		sovereigntyStructureSource.setStructureStore(structureStore);
 	}
 
 	public Completable run() {
@@ -269,28 +277,18 @@ public class ScrapeStructures implements Command {
 						publicStructureSource.getStructures(),
 						marketOrdersStructureSource.getStructures(),
 						publicContractsStructureSource.getStructures(),
-						fetchContractStructureIds(),
-						fetchSovereigntyStructureIds())
+						sovereigntyStructureSource.getStructures())
 				.distinct()
 				.toList()
 				.doOnSuccess(ids -> log.info("Prepared {} structures", ids.size()))
 				.flatMapPublisher(Flowable::fromIterable);
 	}
 
-	private Flowable<Long> fetchMarketStructureIds() {
-		return Flowable.empty(); // @todo
-	}
-
-	private Flowable<Long> fetchContractStructureIds() {
-		return Flowable.empty(); // @todo
-	}
-
-	private Flowable<Long> fetchSovereigntyStructureIds() {
-		return Flowable.empty(); // @todo
-	}
-
 	private Completable fetchStructure(long structureId) {
 		return Completable.defer(() -> {
+			if (isOrWasSovereigntyStructure(structureId)) {
+				return Completable.complete();
+			}
 			log.trace("Fetching structure {}", structureId);
 			var esiUrl = EsiUrl.builder()
 					.urlPath(String.format("/universe/structures/%s/", structureId))
@@ -313,12 +311,23 @@ public class ScrapeStructures implements Command {
 		});
 	}
 
+	private boolean isOrWasSovereigntyStructure(long structureId) {
+		var structure = structureStore.getOrInitStructure(structureId);
+		var is = Optional.ofNullable(structure.get(IS_SOVEREIGNTY_STRUCTURE))
+				.filter(n -> !n.isNull())
+				.map(JsonNode::asBoolean)
+				.orElse(false);
+		if (is) {
+			return true;
+		}
+		var lastSeen = Optional.ofNullable(structure.get(LAST_SEEN_SOVEREIGNTY_STRUCTURE))
+				.filter(n -> !n.isNull());
+		return lastSeen.isPresent();
+	}
+
 	private Completable fetchMarket(long structureId) {
 		return Completable.defer(() -> {
-			var typeId = Optional.ofNullable(structureStore.getOrInitStructure(structureId))
-					.flatMap(n -> Optional.ofNullable(n.get("type_id")))
-					.filter(n -> !n.isNull())
-					.map(JsonNode::asLong);
+			var typeId = getTypeId(structureId);
 			if (typeId.isPresent() && !marketStructureTypeIds.contains(typeId.get())) {
 				structureStore.updateBoolean(structureId, IS_MARKET_STRUCTURE, false);
 				return Completable.complete();
@@ -341,6 +350,14 @@ public class ScrapeStructures implements Command {
 				return Completable.complete();
 			});
 		});
+	}
+
+	@NotNull
+	private Optional<Long> getTypeId(long structureId) {
+		return Optional.ofNullable(structureStore.getOrInitStructure(structureId))
+				.flatMap(n -> Optional.ofNullable(n.get("type_id")))
+				.filter(n -> !n.isNull())
+				.map(JsonNode::asLong);
 	}
 
 	private Completable clearOldStructures() {
