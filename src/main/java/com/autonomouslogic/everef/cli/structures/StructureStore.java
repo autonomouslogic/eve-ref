@@ -37,6 +37,9 @@ public class StructureStore {
 		if (node == null) {
 			node = objectMapper.createObjectNode();
 			node.put(ScrapeStructures.STRUCTURE_ID, structureId);
+			for (var prop : ALL_BOOLEANS) {
+				node.put(prop, false);
+			}
 			store.put(structureId, node);
 		}
 		return node;

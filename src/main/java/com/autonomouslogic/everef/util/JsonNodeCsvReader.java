@@ -3,6 +3,7 @@ package com.autonomouslogic.everef.util;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.reactivex.rxjava3.core.Flowable;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -36,6 +37,11 @@ public class JsonNodeCsvReader {
 					r.toMap().forEach(json::put);
 					return json;
 				});
+	}
+
+	@SneakyThrows
+	public Stream<JsonNode> readAll(byte[] bytes) {
+		return readAll(new ByteArrayInputStream(bytes));
 	}
 
 	@SneakyThrows

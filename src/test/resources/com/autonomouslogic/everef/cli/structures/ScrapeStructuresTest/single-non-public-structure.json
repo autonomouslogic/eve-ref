@@ -2,8 +2,9 @@
   "1000000000001": {
     "name": "Test Structure 1",
     "structure_id": 1000000000001,
+    "is_gettable_structure": true,
     "last_structure_get": "2021-01-01T00:00:00Z",
-    "is_market_structure": true,
-    "last_seen_market_structure": "2021-01-01T00:00:00Z"
+    "is_public_structure": false,
+    "is_market_structure": false
   }
 }

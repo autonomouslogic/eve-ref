@@ -28,6 +28,8 @@ import io.reactivex.rxjava3.core.Single;
 import java.io.File;
 import java.time.Duration;
 import java.time.Instant;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -35,6 +37,7 @@ import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.NonNull;
+import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 import okhttp3.OkHttpClient;
 import org.h2.mvstore.MVStore;
@@ -47,6 +50,7 @@ import software.amazon.awssdk.services.s3.S3AsyncClient;
 @Log4j2
 public class ScrapeStructures implements Command {
 	public static final String STRUCTURE_ID = "structure_id";
+	public static final String IS_GETTABLE_STRUCTURE = "is_gettable_structure";
 	public static final String LAST_STRUCTURE_GET = "last_structure_get";
 	public static final String IS_PUBLIC_STRUCTURE = "is_public_structure";
 	public static final String LAST_SEEN_PUBLIC_STRUCTURE = "last_seen_public_structure";
@@ -55,13 +59,15 @@ public class ScrapeStructures implements Command {
 
 	public static final List<String> ALL_CUSTOM_PROPERTIES = List.of(
 			STRUCTURE_ID,
-			IS_PUBLIC_STRUCTURE,
+			IS_GETTABLE_STRUCTURE,
 			LAST_STRUCTURE_GET,
+			IS_PUBLIC_STRUCTURE,
 			LAST_SEEN_PUBLIC_STRUCTURE,
 			IS_MARKET_STRUCTURE,
 			LAST_SEEN_MARKET_STRUCTURE);
 
-	public static final List<String> ALL_BOOLEANS = List.of(IS_PUBLIC_STRUCTURE, IS_MARKET_STRUCTURE);
+	public static final List<String> ALL_BOOLEANS =
+			List.of(IS_GETTABLE_STRUCTURE, IS_PUBLIC_STRUCTURE, IS_MARKET_STRUCTURE);
 
 	@Inject
 	protected UrlParser urlParser;
@@ -121,6 +127,12 @@ public class ScrapeStructures implements Command {
 	@Inject
 	protected MarketOrdersStructureSource marketOrdersStructureSource;
 
+	@Inject
+	protected PublicContractsStructureSource publicContractsStructureSource;
+
+	@Setter
+	private ZonedDateTime scrapeTime;
+
 	private final Duration latestCacheTime = Configs.DATA_LATEST_CACHE_CONTROL_MAX_AGE.getRequired();
 	private final Duration archiveCacheTime = Configs.DATA_ARCHIVE_CACHE_CONTROL_MAX_AGE.getRequired();
 	private final String scrapeOwnerHash = Configs.SCRAPE_CHARACTER_OWNER_HASH.getRequired();
@@ -144,10 +156,12 @@ public class ScrapeStructures implements Command {
 		oldStructureSource.setStructureStore(structureStore);
 		publicStructureSource.setStructureStore(structureStore);
 		marketOrdersStructureSource.setStructureStore(structureStore);
+		publicContractsStructureSource.setStructureStore(structureStore);
 	}
 
 	public Completable run() {
 		return Completable.concatArray(
+				initScrapeTime(),
 				initMvStore(),
 				initLogin(),
 				loadPreviousScrape(),
@@ -157,6 +171,14 @@ public class ScrapeStructures implements Command {
 								id -> Completable.concatArray(fetchStructure(id), fetchMarket(id)), false, 1),
 				populateLocations(),
 				buildOutput().flatMapCompletable(this::uploadFiles));
+	}
+
+	private Completable initScrapeTime() {
+		return Completable.fromAction(() -> {
+			if (scrapeTime == null) {
+				scrapeTime = ZonedDateTime.now(ZoneOffset.UTC);
+			}
+		});
 	}
 
 	private Completable initMvStore() {
@@ -222,6 +244,7 @@ public class ScrapeStructures implements Command {
 						oldStructureSource.getStructures(),
 						publicStructureSource.getStructures(),
 						marketOrdersStructureSource.getStructures(),
+						publicContractsStructureSource.getStructures(),
 						fetchContractStructureIds(),
 						fetchSovereigntyStructureIds())
 				.distinct()
@@ -257,6 +280,9 @@ public class ScrapeStructures implements Command {
 					var json =
 							(ObjectNode) objectMapper.readTree(response.body().bytes());
 					structureStore.updateStructure(structureId, json, lastModified);
+					structureStore.updateBoolean(structureId, IS_GETTABLE_STRUCTURE, true);
+				} else {
+					structureStore.updateBoolean(structureId, IS_GETTABLE_STRUCTURE, false);
 				}
 				return Completable.complete();
 			});
@@ -328,7 +354,7 @@ public class ScrapeStructures implements Command {
 			log.info("Uploading files");
 			var archiveFile = CompressUtil.compressBzip2(outputFile);
 			var latestPath = dataPath.resolve(STRUCTURES.createLatestPath());
-			var archivePath = dataPath.resolve(STRUCTURES.createArchivePath(Instant.now()));
+			var archivePath = dataPath.resolve(STRUCTURES.createArchivePath(scrapeTime));
 			var latestPut = s3Util.putPublicObjectRequest(outputFile.length(), latestPath, latestCacheTime);
 			var archivePut = s3Util.putPublicObjectRequest(archiveFile.length(), archivePath, archiveCacheTime);
 			log.info(String.format("Uploading latest file to %s", latestPath));

@@ -1,6 +1,7 @@
 package com.autonomouslogic.everef.cli.structures;
 
 import com.autonomouslogic.everef.openapi.esi.apis.UniverseApi;
+import com.autonomouslogic.everef.util.CompressUtil;
 import com.autonomouslogic.everef.util.DataUtil;
 import com.autonomouslogic.everef.util.JsonNodeCsvReader;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -16,7 +17,7 @@ import lombok.experimental.Accessors;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
-public class MarketOrdersStructureSource implements StructureSource {
+public class PublicContractsStructureSource implements StructureSource {
 	@Inject
 	protected UniverseApi universeApi;
 
@@ -40,23 +41,24 @@ public class MarketOrdersStructureSource implements StructureSource {
 	private Instant timestamp;
 
 	@Inject
-	protected MarketOrdersStructureSource() {}
+	protected PublicContractsStructureSource() {}
 
 	@Override
 	public Flowable<Long> getStructures() {
-		return dataUtil.downloadLatestMarketOrders()
+		return dataUtil.downloadLatestPublicContracts()
 				.toMaybe()
 				.onErrorResumeNext(e -> {
-					log.warn("Failed to download market orders, ignoring: {}", e.getMessage());
+					log.warn("Failed to download public contracts, ignoring: {}", e.getMessage());
 					return Maybe.empty();
 				})
 				.flatMapPublisher(file -> {
-					return jsonNodeCsvReaderProvider
-							.get()
-							.readCompressed(file)
+					return CompressUtil.loadArchive(file)
+							.filter(entry -> entry.getKey().getName().equals("contracts.csv"))
+							.flatMap(entry -> Flowable.fromStream(
+									jsonNodeCsvReaderProvider.get().readAll(entry.getValue())))
 							.flatMap(node -> Flowable.just(
-									Optional.ofNullable(node.get("station_id")),
-									Optional.ofNullable(node.get("location_id"))))
+									Optional.ofNullable(node.get("start_location_id")),
+									Optional.ofNullable(node.get("end_location_id"))))
 							.filter(Optional::isPresent)
 							.map(Optional::get)
 							.filter(node -> !node.isNull())
@@ -68,7 +70,7 @@ public class MarketOrdersStructureSource implements StructureSource {
 							})
 							.toList()
 							.flatMapPublisher(ids -> {
-								log.debug("Fetched {} structure ids from market orders", ids.size());
+								log.debug("Fetched {} structure ids from public contracts", ids.size());
 								return Flowable.fromIterable(ids);
 							});
 				});

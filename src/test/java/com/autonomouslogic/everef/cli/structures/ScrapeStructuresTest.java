@@ -6,12 +6,16 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 import com.autonomouslogic.commons.ResourceUtil;
+import com.autonomouslogic.everef.cli.publiccontracts.ContractsFileBuilder;
+import com.autonomouslogic.everef.cli.publiccontracts.ContractsScrapeMeta;
 import com.autonomouslogic.everef.esi.LocationPopulator;
 import com.autonomouslogic.everef.esi.MockLocationPopulatorModule;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.test.MockS3Adapter;
 import com.autonomouslogic.everef.test.TestDataUtil;
+import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.util.CompressUtil;
+import com.autonomouslogic.everef.util.DataIndexHelper;
 import com.autonomouslogic.everef.util.JsonNodeCsvWriter;
 import com.autonomouslogic.everef.util.TempFiles;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -27,6 +31,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
@@ -48,6 +53,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.junitpioneer.jupiter.SetEnvironmentVariable;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 
@@ -84,6 +90,12 @@ public class ScrapeStructuresTest {
 	@Inject
 	TempFiles tempFiles;
 
+	@Inject
+	DataIndexHelper dataIndexHelper;
+
+	@Inject
+	Provider<ContractsFileBuilder> contractsFileBuilderProvider;
+
 	MockWebServer server;
 
 	JsonNode previousScrape;
@@ -92,6 +104,7 @@ public class ScrapeStructuresTest {
 	Set<Long> marketStructures;
 	ZonedDateTime time;
 	List<JsonNode> marketOrders;
+	List<JsonNode> publicContracts;
 
 	@Inject
 	ScrapeStructuresTest() {}
@@ -111,6 +124,7 @@ public class ScrapeStructuresTest {
 		nonPublicStructures = new HashMap<>();
 		marketStructures = new HashSet<>();
 		marketOrders = new ArrayList<>();
+		publicContracts = new ArrayList<>();
 
 		server = new MockWebServer();
 		server.setDispatcher(new TestDispatcher());
@@ -127,7 +141,7 @@ public class ScrapeStructuresTest {
 	void shouldScrapePublicStructures() {
 		publicStructures.put(1000000000001L, Map.of("name", "Test Structure 1"));
 		scrapeStructures.run().blockingAwait();
-		runAndVerifyScrape("/single-public-structure.json");
+		verifyScrape("/single-public-structure.json");
 	}
 
 	@Test
@@ -136,7 +150,7 @@ public class ScrapeStructuresTest {
 		publicStructures.put(1000000000001L, Map.of("name", "Test Structure 1 Updated"));
 		time = time.plusDays(1);
 		scrapeStructures.run().blockingAwait();
-		runAndVerifyScrape("/single-public-structure-updated.json");
+		verifyScrape("/single-public-structure-updated.json");
 	}
 
 	@Test
@@ -145,7 +159,7 @@ public class ScrapeStructuresTest {
 		((ObjectNode) previousScrape.get("1000000000001")).put("some_key", "some_value");
 		publicStructures.put(1000000000001L, Map.of("name", "Test Structure 1"));
 		scrapeStructures.run().blockingAwait();
-		runAndVerifyScrape("/single-public-structure.json");
+		verifyScrape("/single-public-structure.json");
 	}
 
 	@Test
@@ -154,7 +168,7 @@ public class ScrapeStructuresTest {
 		nonPublicStructures.put(1000000000001L, Map.of("name", "Test Structure 1 Updated"));
 		time = time.plusDays(1);
 		scrapeStructures.run().blockingAwait();
-		runAndVerifyScrape("/single-public-structure-updated-non-public.json");
+		verifyScrape("/single-public-structure-updated-non-public.json");
 	}
 
 	@Test
@@ -162,7 +176,7 @@ public class ScrapeStructuresTest {
 		loadPreviousScrape("/single-public-structure.json");
 		time = time.plusDays(1);
 		scrapeStructures.run().blockingAwait();
-		runAndVerifyScrape("/single-public-structure-non-public.json");
+		verifyScrape("/single-public-structure-non-public.json");
 	}
 
 	@Test
@@ -170,7 +184,7 @@ public class ScrapeStructuresTest {
 		publicStructures.put(1000000000001L, Map.of("name", "Test Structure 1"));
 		marketStructures.add(1000000000001L);
 		scrapeStructures.run().blockingAwait();
-		runAndVerifyScrape("/single-market-structure.json");
+		verifyScrape("/single-market-structure.json");
 	}
 
 	@Test
@@ -185,14 +199,20 @@ public class ScrapeStructuresTest {
 		marketOrders.add(objectMapper.createObjectNode().put(prop, 60000001L));
 		nonPublicStructures.put(1000000000001L, Map.of("name", "Test Structure 1"));
 		nonPublicStructures.put(60000001L, Map.of("name", "Should not be scraped"));
-		marketStructures.add(1000000000001L);
 		scrapeStructures.run().blockingAwait();
-		runAndVerifyScrape("/single-market-structure-non-public.json");
+		verifyScrape("/single-non-public-structure.json");
 	}
 
-	@Test
-	void shouldScrapeStructuresFromPublicContracts() {
-		fail();
+	@ParameterizedTest
+	@ValueSource(strings = {"start_location_id", "end_location_id"})
+	void shouldScrapeStructuresFromPublicContracts(String prop) {
+		publicContracts.add(
+				objectMapper.createObjectNode().put(prop, 1000000000001L).put("contract_id", 1));
+		publicContracts.add(objectMapper.createObjectNode().put(prop, 60000001L).put("contract_id", 2));
+		nonPublicStructures.put(1000000000001L, Map.of("name", "Test Structure 1"));
+		nonPublicStructures.put(60000001L, Map.of("name", "Should not be scraped"));
+		scrapeStructures.run().blockingAwait();
+		verifyScrape("/single-non-public-structure.json");
 	}
 
 	@Test
@@ -207,7 +227,22 @@ public class ScrapeStructuresTest {
 
 	@Test
 	void shouldExecuteDataIndex() {
-		fail();
+		publicStructures.put(1000000000001L, Map.of("name", "Test Structure 1"));
+		scrapeStructures
+				.setScrapeTime(ZonedDateTime.parse("2020-01-02T03:04:05Z"))
+				.run()
+				.blockingAwait();
+		Mockito.verify(dataIndexHelper)
+				.updateIndex(
+						S3Url.builder()
+								.bucket("data-bucket")
+								.path("base/structures/structures-latest.v2.json")
+								.build(),
+						S3Url.builder()
+								.bucket("data-bucket")
+								.path(
+										"base/structures/history/2020/2020-01-02/structures-2020-01-02_03-04-05.v2.json.bz2")
+								.build());
 	}
 
 	@SneakyThrows
@@ -216,7 +251,7 @@ public class ScrapeStructuresTest {
 	}
 
 	@SneakyThrows
-	private void runAndVerifyScrape(@NonNull String expectedFile) {
+	private void verifyScrape(@NonNull String expectedFile) {
 		var archiveFile = "base/structures/structures-latest.v2.json";
 		var content = mockS3Adapter
 				.getTestObject(BUCKET_NAME, archiveFile, dataClient)
@@ -273,7 +308,7 @@ public class ScrapeStructuresTest {
 					}
 				}
 
-				if (path.startsWith("/market-orders/market-orders-latest.v3.csv.bz2")) {
+				if (path.equals("/market-orders/market-orders-latest.v3.csv.bz2")) {
 					if (marketOrders.isEmpty()) {
 						return new MockResponse().setResponseCode(404);
 					}
@@ -281,6 +316,28 @@ public class ScrapeStructuresTest {
 					jsonNodeCsvWriterProvider.get().setOut(file).writeAll(marketOrders);
 					var archive = CompressUtil.compressBzip2(file);
 					archive.deleteOnExit();
+					return new MockResponse()
+							.setBody(new Buffer().write(IOUtils.toByteArray(new FileInputStream(archive))));
+				}
+
+				if (path.equals("/public-contracts/public-contracts-latest.v2.tar.bz2")) {
+					if (publicContracts.isEmpty()) {
+						return new MockResponse().setResponseCode(404);
+					}
+					var archive = contractsFileBuilderProvider
+							.get()
+							.setContractsScrapeMeta(new ContractsScrapeMeta())
+							.setContractsStore(publicContracts.stream()
+									.collect(Collectors.toMap(
+											node -> node.get("contract_id").asLong(), node -> node)))
+							.setItemsStore(Map.of())
+							.setBidsStore(Map.of())
+							.setDynamicItemsStore(Map.of())
+							.setNonDynamicItemsStore(Map.of())
+							.setDogmaAttributesStore(Map.of())
+							.setDogmaEffectsStore(Map.of())
+							.buildFile()
+							.blockingGet();
 					return new MockResponse()
 							.setBody(new Buffer().write(IOUtils.toByteArray(new FileInputStream(archive))));
 				}
