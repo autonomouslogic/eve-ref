@@ -291,9 +291,9 @@ public class ScrapeStructuresTest {
 					}
 				}
 
-				if (path.equals("/sovereignty/structures/")) {
+				if (path.equals("/universe/structures/")) {
 					return new MockResponse()
-							.setBody(objectMapper.writeValueAsString(sovereigntyStructures.values()))
+							.setBody(objectMapper.writeValueAsString(publicStructures.keySet()))
 							.addHeader("Last-Modified", lastModified);
 				}
 
@@ -321,13 +321,10 @@ public class ScrapeStructuresTest {
 					}
 				}
 
-				if (path.equals("GET /sovereignty/structures/")) {
-					var id = Long.parseLong(segments.get(2));
-					if (marketStructures.contains(id)) {
-						return new MockResponse().setBody("[]").addHeader("Last-Modified", lastModified);
-					} else {
-						return new MockResponse().setResponseCode(403);
-					}
+				if (path.equals("/sovereignty/structures/")) {
+					return new MockResponse()
+							.setBody(objectMapper.writeValueAsString(sovereigntyStructures.values()))
+							.addHeader("Last-Modified", lastModified);
 				}
 
 				if (path.equals("/market-orders/market-orders-latest.v3.csv.bz2")) {
