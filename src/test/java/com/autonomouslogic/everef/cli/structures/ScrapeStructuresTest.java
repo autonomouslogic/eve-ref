@@ -99,8 +99,8 @@ public class ScrapeStructuresTest {
 	MockWebServer server;
 
 	JsonNode previousScrape;
-	Map<Long, Map<String, String>> publicStructures;
-	Map<Long, Map<String, String>> nonPublicStructures;
+	Map<Long, Map<String, Object>> publicStructures;
+	Map<Long, Map<String, Object>> nonPublicStructures;
 	Set<Long> marketStructures;
 	ZonedDateTime time;
 	List<JsonNode> marketOrders;
@@ -189,7 +189,10 @@ public class ScrapeStructuresTest {
 
 	@Test
 	void shouldOnlyTryMarketsForStructureTypesWhereMarketModulesCanBeApplied() {
-		fail();
+		publicStructures.put(1000000000001L, Map.of("name", "Test Structure 1", "type_id", 1));
+		marketStructures.add(1000000000001L); // Will never be called.
+		scrapeStructures.run().blockingAwait();
+		verifyScrape("/single-non-marketable-structure.json");
 	}
 
 	@ParameterizedTest

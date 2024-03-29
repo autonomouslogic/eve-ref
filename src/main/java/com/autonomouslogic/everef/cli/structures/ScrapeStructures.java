@@ -1,6 +1,9 @@
 package com.autonomouslogic.everef.cli.structures;
 
 import static com.autonomouslogic.everef.util.ArchivePathFactory.STRUCTURES;
+import static com.autonomouslogic.everef.util.EveConstants.CITADELS_MARKET_GROUP_ID;
+import static com.autonomouslogic.everef.util.EveConstants.ENGINEERING_COMPLEXES_MARKET_GROUP_ID;
+import static com.autonomouslogic.everef.util.EveConstants.REFINERIES_MARKET_GROUP_ID;
 
 import com.autonomouslogic.everef.cli.Command;
 import com.autonomouslogic.everef.config.Configs;
@@ -18,7 +21,9 @@ import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.url.UrlParser;
 import com.autonomouslogic.everef.util.CompressUtil;
 import com.autonomouslogic.everef.util.DataIndexHelper;
+import com.autonomouslogic.everef.util.RefDataUtil;
 import com.autonomouslogic.everef.util.TempFiles;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.reactivex.rxjava3.core.Completable;
@@ -34,6 +39,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.NonNull;
@@ -130,6 +136,9 @@ public class ScrapeStructures implements Command {
 	@Inject
 	protected PublicContractsStructureSource publicContractsStructureSource;
 
+	@Inject
+	protected RefDataUtil refDataUtil;
+
 	@Setter
 	private ZonedDateTime scrapeTime;
 
@@ -141,6 +150,7 @@ public class ScrapeStructures implements Command {
 	private String accessToken;
 	private MVStore mvStore;
 	private Instant timestamp;
+	private List<Long> marketStructureTypeIds;
 
 	@Inject
 	protected ScrapeStructures() {}
@@ -164,6 +174,7 @@ public class ScrapeStructures implements Command {
 				initScrapeTime(),
 				initMvStore(),
 				initLogin(),
+				initMarketStructures(),
 				loadPreviousScrape(),
 				clearOldStructures(),
 				prepareStructureIds()
@@ -204,6 +215,19 @@ public class ScrapeStructures implements Command {
 						return Completable.complete();
 					});
 		});
+	}
+
+	private Completable initMarketStructures() {
+		return Flowable.fromArray(
+						CITADELS_MARKET_GROUP_ID, ENGINEERING_COMPLEXES_MARKET_GROUP_ID, REFINERIES_MARKET_GROUP_ID)
+				.flatMap(groupId -> refDataUtil.getAllTypeIdsForMarketGroup(groupId))
+				.toList()
+				.doOnSuccess(ids -> {
+					ids.sort(Long::compareTo);
+					marketStructureTypeIds = ids;
+					log.info("Prepared {} market structure type IDs", ids.size());
+				})
+				.ignoreElement();
 	}
 
 	private Completable loadPreviousScrape() {
@@ -291,6 +315,14 @@ public class ScrapeStructures implements Command {
 
 	private Completable fetchMarket(long structureId) {
 		return Completable.defer(() -> {
+			var typeId = Optional.ofNullable(structureStore.getOrInitStructure(structureId))
+					.flatMap(n -> Optional.ofNullable(n.get("type_id")))
+					.filter(n -> !n.isNull())
+					.map(JsonNode::asLong);
+			if (typeId.isPresent() && !marketStructureTypeIds.contains(typeId.get())) {
+				structureStore.updateBoolean(structureId, IS_MARKET_STRUCTURE, false);
+				return Completable.complete();
+			}
 			log.trace("Fetching market {}", structureId);
 			var esiUrl = EsiUrl.builder()
 					.urlPath(String.format("/markets/structures/%s/", structureId))

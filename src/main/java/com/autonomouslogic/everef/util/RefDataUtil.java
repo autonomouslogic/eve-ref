@@ -3,11 +3,13 @@ package com.autonomouslogic.everef.util;
 import static com.autonomouslogic.everef.util.ArchivePathFactory.REFERENCE_DATA;
 
 import com.autonomouslogic.commons.ResourceUtil;
+import com.autonomouslogic.commons.rxjava3.Rx3Util;
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.http.OkHttpHelper;
 import com.autonomouslogic.everef.model.ReferenceEntry;
 import com.autonomouslogic.everef.model.refdata.RefDataConfig;
 import com.autonomouslogic.everef.model.refdata.RefTypeConfig;
+import com.autonomouslogic.everef.openapi.refdata.apis.RefdataApi;
 import com.autonomouslogic.everef.refdata.RefDataMeta;
 import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.url.UrlParser;
@@ -17,6 +19,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.base.CaseFormat;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -53,6 +56,9 @@ public class RefDataUtil {
 	@Inject
 	@Named("yaml")
 	protected ObjectMapper yamlMapper;
+
+	@Inject
+	protected RefdataApi refdataApi;
 
 	@Inject
 	protected UrlParser urlParser;
@@ -195,5 +201,20 @@ public class RefDataUtil {
 			}
 		}
 		return null;
+	}
+
+	@SneakyThrows
+	public Flowable<Long> getAllTypeIdsForMarketGroup(long marketGroupId) {
+		return Rx3Util.toMaybe(refdataApi.getMarketGroup(marketGroupId))
+				.observeOn(Schedulers.computation())
+				.flatMapPublisher(marketGroup -> {
+					var types = Optional.ofNullable(marketGroup.getTypeIds()).orElse(List.of());
+					var children = Optional.ofNullable(marketGroup.getChildMarketGroupIds())
+							.orElse(List.of());
+					return Flowable.concatArray(
+							Flowable.fromIterable(types),
+							Flowable.fromIterable(children).flatMap(this::getAllTypeIdsForMarketGroup));
+				})
+				.distinct();
 	}
 }
