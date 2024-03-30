@@ -1135,8 +1135,6 @@
     value: 0
   - attribute_id: 217
     value: 395
-  - attribute_id: 1253
-    value: 5
   - attribute_id: 1768
     value: 11406
   - attribute_id: 1257
@@ -1158,7 +1156,7 @@
   - attribute_id: 3320
     value: 1
   - attribute_id: 2298
-    value: 6.5
+    value: 7.5
   - attribute_id: 1281
     value: 1
   - attribute_id: 263
