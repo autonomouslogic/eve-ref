@@ -17,9 +17,7 @@ import lombok.extern.log4j.Log4j2;
 
 /**
  * <ul>
- *     <li>Populates mutaplasmid data for inventory types.</li>
- *     <li>Populates dynamic item data for inventory types.</li>
- *     <li>Creates mutaplasmid entries.</li>
+ *     <li>Cross-references <code>canFitShipType#</code> dogma attributes.</li>
  * </ul>
  *
  */
