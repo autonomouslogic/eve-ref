@@ -2,6 +2,7 @@ package com.autonomouslogic.everef.cli.refdata.post;
 
 import com.autonomouslogic.everef.cli.refdata.StoreDataHelper;
 import com.autonomouslogic.everef.cli.refdata.StoreHandler;
+import com.autonomouslogic.everef.refdata.DogmaAttribute;
 import com.autonomouslogic.everef.refdata.InventoryType;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -46,8 +47,9 @@ public class CanFitDecorator extends PostDecorator {
 			types = storeHandler.getRefStore("types");
 
 			var canFitAttributes = dogmaAttributes.values().stream()
-					.filter(node -> node.get("name").asText().startsWith("canFitShipType"))
-					.map(node -> node.get("attribute_id").asLong())
+					.map(n -> objectMapper.convertValue(n, DogmaAttribute.class))
+					.filter(dogma -> dogma.getName().startsWith("canFitShipType"))
+					.map(dogma -> dogma.getAttributeId())
 					.toList();
 			for (var canFitAttribute : canFitAttributes) {
 				crossReferenceCanFitShipType(canFitAttribute);
