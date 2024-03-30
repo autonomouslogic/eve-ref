@@ -162,4 +162,12 @@ public class InventoryType {
 
 	@JsonProperty
 	Map<Long, TypeMaterial> typeMaterials;
+
+	@JsonProperty
+	@Schema(description = "Types this can be fitted to. This is added by EVE Ref.")
+	List<Long> canFitTypes;
+
+	@JsonProperty
+	@Schema(description = "Types which can be fitted. This is added by EVE Ref.")
+	List<Long> canBeFittedWithTypes;
 }
