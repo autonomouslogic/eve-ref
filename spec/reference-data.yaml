@@ -980,6 +980,16 @@ components:
           type: object
           additionalProperties:
             $ref: '#/components/schemas/TypeMaterial'
+        can_fit_types:
+          type: array
+          items:
+            type: integer
+            format: int64
+        can_be_fitted_with_types:
+          type: array
+          items:
+            type: integer
+            format: int64
         is_skill:
           type: boolean
           description: Whether this type is a skill or not. This is added by EVE Ref.

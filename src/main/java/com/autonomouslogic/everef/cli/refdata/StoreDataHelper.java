@@ -6,6 +6,7 @@ import com.autonomouslogic.everef.refdata.InventoryType;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 
@@ -44,5 +45,17 @@ public class StoreDataHelper {
 			return Optional.empty();
 		}
 		return Optional.ofNullable(attrs.get(Long.toString(attributeId)));
+	}
+
+	public List<InventoryType> getTypesWithDogmaAttribute(long attributeId) {
+		var attributeIdString = Long.toString(attributeId);
+		return storeHandler.getRefStore("types").values().stream()
+				.map(n -> objectMapper.convertValue(n, InventoryType.class))
+				.filter(type -> {
+					return Optional.ofNullable(type.getDogmaAttributes())
+							.map(attrs -> attrs.containsKey(attributeIdString))
+							.orElse(false);
+				})
+				.toList();
 	}
 }

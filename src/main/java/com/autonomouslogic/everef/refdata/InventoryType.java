@@ -162,4 +162,10 @@ public class InventoryType {
 
 	@JsonProperty
 	Map<Long, TypeMaterial> typeMaterials;
+
+	@JsonProperty
+	List<Long> canFitTypes;
+
+	@JsonProperty
+	List<Long> canBeFittedWithTypes;
 }

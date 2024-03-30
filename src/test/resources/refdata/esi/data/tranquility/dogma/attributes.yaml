@@ -249,3 +249,47 @@
   icon_id: 1390
   name: "radius"
   stackable: true
+"1302":
+  attribute_id: 1302
+  default_value: 0
+  description: ""
+  display_name: "Can be fitted to"
+  high_is_good: true
+  icon_id: 1443
+  name: "canFitShipType1"
+  published: true
+  stackable: true
+  unit_id: 116
+"1303":
+  attribute_id: 1303
+  default_value: 0
+  description: ""
+  display_name: "Can be fitted to"
+  high_is_good: true
+  icon_id: 1443
+  name: "canFitShipType2"
+  published: true
+  stackable: true
+  unit_id: 116
+"1304":
+  attribute_id: 1304
+  default_value: 0
+  description: ""
+  display_name: "Can be fitted to"
+  high_is_good: true
+  icon_id: 1443
+  name: "canFitShipType3"
+  published: true
+  stackable: true
+  unit_id: 116
+"1305":
+  attribute_id: 1305
+  default_value: 0
+  description: ""
+  display_name: "Can be fitted to"
+  high_is_good: true
+  icon_id: 1443
+  name: "canFitShipType4"
+  published: true
+  stackable: true
+  unit_id: 116

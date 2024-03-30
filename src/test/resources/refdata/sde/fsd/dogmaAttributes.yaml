@@ -453,3 +453,87 @@
   name: "radius"
   published: false
   stackable: true
+"1302":
+  attributeID: 1302
+  categoryID: 1
+  dataType: 11
+  defaultValue: 0
+  description: ""
+  displayNameID:
+    de: "Kann eingebaut werden in"
+    en: "Can be fitted to"
+    es: "Se puede equipar en"
+    fr: "Peut être équipé sur"
+    ja: "装着可能対象"
+    ko: "피팅 가능한 대상:"
+    ru: "Устанавливается на"
+    zh: "可装配至"
+  highIsGood: true
+  iconID: 1443
+  name: "canFitShipType1"
+  published: true
+  stackable: true
+  unitID: 116
+"1303":
+  attributeID: 1303
+  categoryID: 1
+  dataType: 11
+  defaultValue: 0
+  description: ""
+  displayNameID:
+    de: "Kann eingebaut werden in"
+    en: "Can be fitted to"
+    es: "Se puede equipar en"
+    fr: "Peut être équipé sur"
+    ja: "装着可能対象"
+    ko: "피팅 가능한 대상:"
+    ru: "Устанавливается на"
+    zh: "可装配至"
+  highIsGood: true
+  iconID: 1443
+  name: "canFitShipType2"
+  published: true
+  stackable: true
+  unitID: 116
+"1304":
+  attributeID: 1304
+  categoryID: 1
+  dataType: 11
+  defaultValue: 0
+  description: ""
+  displayNameID:
+    de: "Kann eingebaut werden in"
+    en: "Can be fitted to"
+    es: "Se puede equipar en"
+    fr: "Peut être équipé sur"
+    ja: "装着可能対象"
+    ko: "피팅 가능한 대상:"
+    ru: "Устанавливается на"
+    zh: "可装配至"
+  highIsGood: true
+  iconID: 1443
+  name: "canFitShipType3"
+  published: true
+  stackable: true
+  unitID: 116
+"1305":
+  attributeID: 1305
+  categoryID: 1
+  dataType: 11
+  defaultValue: 0
+  description: ""
+  displayNameID:
+    de: "Kann eingebaut werden in"
+    en: "Can be fitted to"
+    es: "Se puede equipar en"
+    fr: "Peut être équipé sur"
+    ja: "装着可能対象"
+    ko: "피팅 가능한 대상:"
+    ru: "Устанавливается на"
+    zh: "可装配至"
+  highIsGood: true
+  iconID: 1443
+  name: "canFitShipType4"
+  published: true
+  stackable: true
+  unitID: 116
