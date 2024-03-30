@@ -1,5 +1,12 @@
 EVE Ref Changelog
 
+## [2.42.0](https://github.com/autonomouslogic/eve-ref/compare/2.41.0...2.42.0) (2024-03-30)
+
+
+### Features
+
+* Can-fit decorator ([#491](https://github.com/autonomouslogic/eve-ref/issues/491)) ([2845170](https://github.com/autonomouslogic/eve-ref/commit/28451706e7b8668e32db89bc46c9cf522509fc83))
+
 ## [2.41.0](https://github.com/autonomouslogic/eve-ref/compare/2.40.2...2.41.0) (2024-03-24)
 
 
