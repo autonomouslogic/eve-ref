@@ -982,13 +982,17 @@ components:
             $ref: '#/components/schemas/TypeMaterial'
         can_fit_types:
           type: array
+          description: Types this can be fitted to. This is added by EVE Ref.
           items:
             type: integer
+            description: Types this can be fitted to. This is added by EVE Ref.
             format: int64
         can_be_fitted_with_types:
           type: array
+          description: Types which can be fitted. This is added by EVE Ref.
           items:
             type: integer
+            description: Types which can be fitted. This is added by EVE Ref.
             format: int64
         is_skill:
           type: boolean
