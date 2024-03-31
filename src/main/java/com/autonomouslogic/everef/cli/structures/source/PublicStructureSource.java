@@ -1,8 +1,10 @@
-package com.autonomouslogic.everef.cli.structures;
+package com.autonomouslogic.everef.cli.structures.source;
 
 import static com.autonomouslogic.everef.cli.structures.ScrapeStructures.IS_PUBLIC_STRUCTURE;
 import static com.autonomouslogic.everef.cli.structures.ScrapeStructures.LAST_SEEN_PUBLIC_STRUCTURE;
 
+import com.autonomouslogic.everef.cli.structures.StructureScrapeHelper;
+import com.autonomouslogic.everef.cli.structures.StructureStore;
 import com.autonomouslogic.everef.openapi.esi.apis.UniverseApi;
 import com.autonomouslogic.everef.openapi.esi.infrastructure.Success;
 import com.autonomouslogic.everef.util.Rx;

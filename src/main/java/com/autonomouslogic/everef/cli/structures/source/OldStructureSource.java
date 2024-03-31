@@ -1,5 +1,6 @@
-package com.autonomouslogic.everef.cli.structures;
+package com.autonomouslogic.everef.cli.structures.source;
 
+import com.autonomouslogic.everef.cli.structures.StructureStore;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.reactivex.rxjava3.core.Flowable;
 import java.util.Map;

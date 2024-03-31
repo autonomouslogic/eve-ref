@@ -5,6 +5,14 @@ import static com.autonomouslogic.everef.util.EveConstants.STANDARD_MARKET_HUB_I
 
 import com.autonomouslogic.commons.rxjava3.Rx3Util;
 import com.autonomouslogic.everef.cli.Command;
+import com.autonomouslogic.everef.cli.structures.source.Adam4EveBackfillStructureSource;
+import com.autonomouslogic.everef.cli.structures.source.BackfillPublicStructureSource;
+import com.autonomouslogic.everef.cli.structures.source.MarketOrdersStructureSource;
+import com.autonomouslogic.everef.cli.structures.source.OldStructureSource;
+import com.autonomouslogic.everef.cli.structures.source.PublicContractsStructureSource;
+import com.autonomouslogic.everef.cli.structures.source.PublicStructureSource;
+import com.autonomouslogic.everef.cli.structures.source.SirSmashAlotBackfillStructureSource;
+import com.autonomouslogic.everef.cli.structures.source.SovereigntyStructureSource;
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.esi.EsiAuthHelper;
 import com.autonomouslogic.everef.esi.EsiHelper;
@@ -132,6 +140,15 @@ public class ScrapeStructures implements Command {
 	protected OldStructureSource oldStructureSource;
 
 	@Inject
+	protected BackfillPublicStructureSource backfillPublicStructureSource;
+
+	@Inject
+	protected Adam4EveBackfillStructureSource adam4EveBackfillStructureSource;
+
+	@Inject
+	protected SirSmashAlotBackfillStructureSource sirSmashAlotBackfillStructureSource;
+
+	@Inject
 	protected PublicStructureSource publicStructureSource;
 
 	@Inject
@@ -170,6 +187,9 @@ public class ScrapeStructures implements Command {
 		publicStructureSource.setTimestamp(timestamp);
 
 		oldStructureSource.setStructureStore(structureStore);
+		backfillPublicStructureSource.setStructureStore(structureStore);
+		adam4EveBackfillStructureSource.setStructureStore(structureStore);
+		sirSmashAlotBackfillStructureSource.setStructureStore(structureStore);
 		publicStructureSource.setStructureStore(structureStore);
 		marketOrdersStructureSource.setStructureStore(structureStore);
 		publicContractsStructureSource.setStructureStore(structureStore);
@@ -253,6 +273,9 @@ public class ScrapeStructures implements Command {
 	private Flowable<Long> prepareStructureIds() {
 		return Flowable.concatArray(
 						oldStructureSource.getStructures(),
+						backfillPublicStructureSource.getStructures(),
+						adam4EveBackfillStructureSource.getStructures(),
+						sirSmashAlotBackfillStructureSource.getStructures(),
 						publicStructureSource.getStructures(),
 						marketOrdersStructureSource.getStructures(),
 						publicContractsStructureSource.getStructures(),

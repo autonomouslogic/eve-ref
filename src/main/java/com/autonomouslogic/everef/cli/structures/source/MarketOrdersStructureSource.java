@@ -1,5 +1,7 @@
-package com.autonomouslogic.everef.cli.structures;
+package com.autonomouslogic.everef.cli.structures.source;
 
+import com.autonomouslogic.everef.cli.structures.StructureScrapeHelper;
+import com.autonomouslogic.everef.cli.structures.StructureStore;
 import com.autonomouslogic.everef.openapi.esi.apis.UniverseApi;
 import com.autonomouslogic.everef.util.DataUtil;
 import com.autonomouslogic.everef.util.JsonNodeCsvReader;
