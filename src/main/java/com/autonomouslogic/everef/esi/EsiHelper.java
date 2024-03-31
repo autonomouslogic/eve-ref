@@ -80,6 +80,16 @@ public class EsiHelper {
 	}
 
 	/**
+	 * Fetches the requested URL.
+	 * This call does NOT include standard error handling.
+	 * @param url
+	 * @return
+	 */
+	public Single<Response> fetch(EsiUrl url, Single<String> accessToken) {
+		return accessToken.flatMap(token -> fetch(url, token));
+	}
+
+	/**
 	 * Fetches the requested URL and automatically fetches all subsequent pages indicated by the header.
 	 * This call does NOT include standard error handling.
 	 * @param url

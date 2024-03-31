@@ -21,7 +21,6 @@ import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.url.UrlParser;
 import com.autonomouslogic.everef.util.CompressUtil;
 import com.autonomouslogic.everef.util.DataIndexHelper;
-import com.autonomouslogic.everef.util.RefDataUtil;
 import com.autonomouslogic.everef.util.TempFiles;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -145,9 +144,6 @@ public class ScrapeStructures implements Command {
 	protected SovereigntyStructureSource sovereigntyStructureSource;
 
 	@Inject
-	protected RefDataUtil refDataUtil;
-
-	@Inject
 	protected RefdataApi refdataApi;
 
 	@Setter
@@ -158,7 +154,6 @@ public class ScrapeStructures implements Command {
 	private final String scrapeOwnerHash = Configs.SCRAPE_CHARACTER_OWNER_HASH.getRequired();
 	private S3Url dataPath;
 	private HttpUrl dataUrl;
-	private String accessToken;
 	private MVStore mvStore;
 	private Instant timestamp;
 	private List<Long> marketStructureTypeIds;
@@ -185,7 +180,6 @@ public class ScrapeStructures implements Command {
 		return Completable.concatArray(
 				initScrapeTime(),
 				initMvStore(),
-				initLogin(),
 				initMarketStructures(),
 				loadPreviousScrape(),
 				clearOldStructures(),
@@ -211,21 +205,6 @@ public class ScrapeStructures implements Command {
 			log.debug("MVStore opened at {}", mvStore.getFileStore().getFileName());
 			structureStore.setStore(mvStoreUtil.openJsonMap(mvStore, "structures", Long.class));
 			log.debug("MVStore initialised");
-		});
-	}
-
-	private Completable initLogin() {
-		return Completable.defer(() -> {
-			log.debug("Using login for owner hash: {}", scrapeOwnerHash);
-			return esiAuthHelper
-					.getTokenForOwnerHash(scrapeOwnerHash)
-					.switchIfEmpty((Maybe.defer(() -> Maybe.error(new RuntimeException(
-							String.format("Login not found for owner hash: %s", scrapeOwnerHash))))))
-					.flatMapCompletable(token -> {
-						accessToken = token.getAccessToken();
-						log.debug("Token refreshed");
-						return Completable.complete();
-					});
 		});
 	}
 
@@ -293,7 +272,7 @@ public class ScrapeStructures implements Command {
 			var esiUrl = EsiUrl.builder()
 					.urlPath(String.format("/universe/structures/%s/", structureId))
 					.build();
-			return esiHelper.fetch(esiUrl, accessToken).flatMapCompletable(response -> {
+			return esiHelper.fetch(esiUrl, getAccessToken()).flatMapCompletable(response -> {
 				var status = response.code();
 				log.debug("Fetched structure {}: {} response", structureId, status);
 				if (status == 200) {
@@ -336,7 +315,7 @@ public class ScrapeStructures implements Command {
 			var esiUrl = EsiUrl.builder()
 					.urlPath(String.format("/markets/structures/%s/", structureId))
 					.build();
-			return esiHelper.fetch(esiUrl, accessToken).flatMapCompletable(response -> {
+			return esiHelper.fetch(esiUrl, getAccessToken()).flatMapCompletable(response -> {
 				var status = response.code();
 				log.debug("Fetched market {}: {} response", structureId, status);
 				if (status == 200) {
@@ -415,5 +394,14 @@ public class ScrapeStructures implements Command {
 									.ignoreElement())
 					.andThen(Completable.defer(() -> dataIndexHelper.updateIndex(latestPath, archivePath)));
 		});
+	}
+
+	private Single<String> getAccessToken() {
+		return esiAuthHelper
+				.getTokenForOwnerHash(scrapeOwnerHash)
+				.map(token -> token.getAccessToken())
+				.switchIfEmpty((Maybe.defer(() -> Maybe.error(
+						new RuntimeException(String.format("Login not found for owner hash: %s", scrapeOwnerHash))))))
+				.toSingle();
 	}
 }
