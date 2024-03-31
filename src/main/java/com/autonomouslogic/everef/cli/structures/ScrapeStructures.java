@@ -212,7 +212,7 @@ public class ScrapeStructures implements Command {
 										fetchMarket(id),
 										Completable.fromAction(() -> progressReporter.increment())),
 								false,
-								4),
+								1),
 				populateLocations(),
 				buildOutput().flatMapCompletable(this::uploadFiles));
 	}
@@ -292,6 +292,7 @@ public class ScrapeStructures implements Command {
 				.doOnSuccess(ids -> {
 					log.info("Prepared {} structures", ids.size());
 					progressReporter = new ProgressReporter(getName(), ids.size(), Duration.ofMinutes(1));
+					progressReporter.start();
 				})
 				.flatMapPublisher(Flowable::fromIterable);
 	}
