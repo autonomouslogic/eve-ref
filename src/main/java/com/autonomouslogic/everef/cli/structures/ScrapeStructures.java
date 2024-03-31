@@ -1,10 +1,9 @@
 package com.autonomouslogic.everef.cli.structures;
 
 import static com.autonomouslogic.everef.util.ArchivePathFactory.STRUCTURES;
-import static com.autonomouslogic.everef.util.EveConstants.CITADELS_MARKET_GROUP_ID;
-import static com.autonomouslogic.everef.util.EveConstants.ENGINEERING_COMPLEXES_MARKET_GROUP_ID;
-import static com.autonomouslogic.everef.util.EveConstants.REFINERIES_MARKET_GROUP_ID;
+import static com.autonomouslogic.everef.util.EveConstants.STANDARD_MARKET_HUB_I_TYPE_ID;
 
+import com.autonomouslogic.commons.rxjava3.Rx3Util;
 import com.autonomouslogic.everef.cli.Command;
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.esi.EsiAuthHelper;
@@ -14,6 +13,7 @@ import com.autonomouslogic.everef.esi.LocationPopulator;
 import com.autonomouslogic.everef.http.OkHttpHelper;
 import com.autonomouslogic.everef.mvstore.MVStoreUtil;
 import com.autonomouslogic.everef.openapi.esi.apis.UniverseApi;
+import com.autonomouslogic.everef.openapi.refdata.apis.RefdataApi;
 import com.autonomouslogic.everef.s3.S3Adapter;
 import com.autonomouslogic.everef.s3.S3Util;
 import com.autonomouslogic.everef.url.HttpUrl;
@@ -44,6 +44,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.NonNull;
 import lombok.Setter;
+import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import okhttp3.OkHttpClient;
 import org.h2.mvstore.MVStore;
@@ -146,6 +147,9 @@ public class ScrapeStructures implements Command {
 	@Inject
 	protected RefDataUtil refDataUtil;
 
+	@Inject
+	protected RefdataApi refdataApi;
+
 	@Setter
 	private ZonedDateTime scrapeTime;
 
@@ -225,17 +229,13 @@ public class ScrapeStructures implements Command {
 		});
 	}
 
+	@SneakyThrows
 	private Completable initMarketStructures() {
-		return Flowable.fromArray(
-						CITADELS_MARKET_GROUP_ID, ENGINEERING_COMPLEXES_MARKET_GROUP_ID, REFINERIES_MARKET_GROUP_ID)
-				.flatMap(groupId -> refDataUtil.getAllTypeIdsForMarketGroup(groupId))
-				.toList()
-				.doOnSuccess(ids -> {
-					ids.sort(Long::compareTo);
-					marketStructureTypeIds = ids;
-					log.info("Prepared {} market structure type IDs", ids.size());
-				})
-				.ignoreElement();
+		return Rx3Util.toSingle(refdataApi.getType(STANDARD_MARKET_HUB_I_TYPE_ID))
+				.flatMapCompletable(marketHub -> Completable.fromAction(() -> {
+					marketStructureTypeIds = marketHub.getCanFitTypes();
+					log.info("Prepared {} market structure type IDs", marketStructureTypeIds.size());
+				}));
 	}
 
 	private Completable loadPreviousScrape() {

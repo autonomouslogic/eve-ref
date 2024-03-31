@@ -19,7 +19,6 @@ import lombok.extern.log4j.Log4j2;
  * <ul>
  *     <li>Cross-references <code>canFitShipType#</code> dogma attributes.</li>
  * </ul>
- *
  */
 @Log4j2
 public class CanFitDecorator extends PostDecorator {

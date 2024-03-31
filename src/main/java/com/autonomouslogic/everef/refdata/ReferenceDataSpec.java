@@ -31,7 +31,7 @@ import javax.ws.rs.PathParam;
 						url = "https://github.com/autonomouslogic/eve-ref/blob/main/docs/refdata.md"))
 @Tag(name = "refdata")
 public interface ReferenceDataSpec {
-	public static final String BASE_URL = "https://ref-data.everef.net";
+	String BASE_URL = "https://ref-data.everef.net";
 
 	@GET
 	@Path("/meta")

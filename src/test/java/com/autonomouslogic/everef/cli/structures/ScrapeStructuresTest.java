@@ -16,6 +16,7 @@ import com.autonomouslogic.everef.test.TestDataUtil;
 import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.util.CompressUtil;
 import com.autonomouslogic.everef.util.DataIndexHelper;
+import com.autonomouslogic.everef.util.EveConstants;
 import com.autonomouslogic.everef.util.JsonNodeCsvWriter;
 import com.autonomouslogic.everef.util.TempFiles;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -63,6 +64,7 @@ import software.amazon.awssdk.services.s3.S3AsyncClient;
 @SetEnvironmentVariable(key = "EVE_REF_BASE_URL", value = "http://localhost:" + TestDataUtil.TEST_PORT)
 @SetEnvironmentVariable(key = "DATA_PATH", value = "s3://" + ScrapeStructuresTest.BUCKET_NAME + "/base/")
 @SetEnvironmentVariable(key = "DATA_BASE_URL", value = "http://localhost:" + TestDataUtil.TEST_PORT)
+@SetEnvironmentVariable(key = "REF_DATA_BASE_URL", value = "http://localhost:" + TestDataUtil.TEST_PORT)
 @Log4j2
 @ExtendWith(MockitoExtension.class)
 public class ScrapeStructuresTest {
@@ -183,7 +185,8 @@ public class ScrapeStructuresTest {
 
 	@Test
 	void shouldCheckMarkets() {
-		publicStructures.put(1000000000001L, Map.of("name", "Test Structure 1"));
+		publicStructures.put(
+				1000000000001L, Map.of("name", "Test Structure 1", "type_id", EveConstants.KEEPSTAR_TYPE_ID));
 		marketStructures.add(1000000000001L);
 		scrapeStructures.run().blockingAwait();
 		verifyScrape("/single-market-structure.json");
@@ -191,7 +194,8 @@ public class ScrapeStructuresTest {
 
 	@Test
 	void shouldOnlyTryMarketsForStructureTypesWhereMarketModulesCanBeApplied() {
-		publicStructures.put(1000000000001L, Map.of("name", "Test Structure 1", "type_id", 1));
+		publicStructures.put(
+				1000000000001L, Map.of("name", "Test Structure 1", "type_id", EveConstants.ASTRAHUS_HUB_TYPE_ID));
 		marketStructures.add(1000000000001L); // Will never be called.
 		scrapeStructures.run().blockingAwait();
 		verifyScrape("/single-non-marketable-structure.json");
@@ -359,6 +363,12 @@ public class ScrapeStructuresTest {
 							.blockingGet();
 					return new MockResponse()
 							.setBody(new Buffer().write(IOUtils.toByteArray(new FileInputStream(archive))));
+				}
+
+				if (path.equals("/types/35892")) {
+					var obj = objectMapper.createObjectNode();
+					obj.withArray("can_fit_types").add(EveConstants.KEEPSTAR_TYPE_ID);
+					return new MockResponse().setBody(objectMapper.writeValueAsString(obj));
 				}
 
 				log.error(String.format("Unaccounted for URL: %s", path));
