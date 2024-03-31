@@ -39,5 +39,5 @@ Details are available on the [this Githib issue](https://github.com/autonomouslo
 The older structure scrapes only included the `/universe/structures/` endpoint.
 All the scrapes of this endpoint only have also been incorporated into the file above.
 
-Many of these structures are no longer available to be queried and therefore do not have accurate timestamps.
-To show that they were at least once queryable, placeholder timestamps of `1970-01-01T00:00:00Z` were used.
+Many of the backfilled structures are no longer available to be queried and therefore do not have accurate timestamps.
+To show that they were once queryable, placeholder timestamps of `1970-01-01T00:00:00Z` were used.
