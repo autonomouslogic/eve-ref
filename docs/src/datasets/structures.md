@@ -32,7 +32,9 @@ curl -s https://data.everef.net/structures/structures-latest.v2.json | jq '.[] |
 
 ## Backfills
 
-Several backfills were provided by Sir SmashAlot and Ethan02 of Adam4Eve. Thank you.
+Several backfills were provided by [Sir SmashAlot](https://evewho.com/character/178497468)
+and [Ethan02](https://evewho.com/character/1056136399) of [Adam4Eve](https://www.adam4eve.eu/).
+Thank you.
 These have been fully incorporated into the first proper scrape at **TODO**.
 Details are available on the [this Githib issue](https://github.com/autonomouslogic/eve-ref/issues/2).
 
