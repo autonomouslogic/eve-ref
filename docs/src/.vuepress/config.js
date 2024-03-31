@@ -63,6 +63,7 @@ module.exports = {
             'datasets/market-orders',
             'datasets/public-contracts',
             'datasets/reference-data',
+            'datasets/structures',
           ]
         },
         {
