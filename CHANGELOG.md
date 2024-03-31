@@ -1,5 +1,25 @@
 EVE Ref Changelog
 
+## [2.42.0](https://github.com/autonomouslogic/eve-ref/compare/2.41.0...2.42.0) (2024-03-30)
+
+
+### Features
+
+* Can-fit decorator ([#491](https://github.com/autonomouslogic/eve-ref/issues/491)) ([2845170](https://github.com/autonomouslogic/eve-ref/commit/28451706e7b8668e32db89bc46c9cf522509fc83))
+
+## [2.41.0](https://github.com/autonomouslogic/eve-ref/compare/2.40.2...2.41.0) (2024-03-24)
+
+
+### Features
+
+* **jobs:** Simple Eve Online login ([#487](https://github.com/autonomouslogic/eve-ref/issues/487)) ([65425d7](https://github.com/autonomouslogic/eve-ref/commit/65425d765ab3cce729097bbdda14be96f19488a6))
+
+
+### Documentation
+
+* Allow timestamp checking ([#484](https://github.com/autonomouslogic/eve-ref/issues/484)) ([b38a46e](https://github.com/autonomouslogic/eve-ref/commit/b38a46e92c126d5a7f08c955e182293f90961376))
+* rclone support ([#485](https://github.com/autonomouslogic/eve-ref/issues/485)) ([214303f](https://github.com/autonomouslogic/eve-ref/commit/214303fd64ee2a472b64aa0ee5095a101ec5496a))
+
 ## [2.40.2](https://github.com/autonomouslogic/eve-ref/compare/2.40.1...2.40.2) (2024-03-07)
 
 

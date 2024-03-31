@@ -98,6 +98,8 @@ types:
       - 1230
       - 17470
       - 17471
+      - 35892
+      - 35833
     languages:
       - en-us
       - fr
@@ -180,6 +182,10 @@ dogmaAttributes:
       - 2699
       - 2711
       - 162
+      - 1302
+      - 1303
+      - 1304
+      - 1305
 
 dogmaEffects:
   idField: effect_id
