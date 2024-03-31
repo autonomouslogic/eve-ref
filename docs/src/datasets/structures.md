@@ -23,6 +23,13 @@ The objects themselves are verbatim from the structure endpoint, with the follow
 * `is_sovereignty_structure` - true if the _latest_ scrape saw it on the sovereignty ESI endpoint
 * `last_seen_sovereignty_structure` - when the structure was last seen as sovereignty
 
+## Scripting
+
+To get all market structures:
+```shell
+curl -s https://data.everef.net/structures/structures-latest.v2.json | jq '.[] | select(.is_market_structure)'
+```
+
 ## Backfills
 
 Several backfills were provided by Sir SmashAlot and Ethan02 of Adam4Eve. Thank you.
