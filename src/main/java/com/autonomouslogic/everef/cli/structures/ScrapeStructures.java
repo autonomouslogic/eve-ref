@@ -29,6 +29,7 @@ import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.url.UrlParser;
 import com.autonomouslogic.everef.util.CompressUtil;
 import com.autonomouslogic.everef.util.DataIndexHelper;
+import com.autonomouslogic.everef.util.ProgressReporter;
 import com.autonomouslogic.everef.util.TempFiles;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -174,6 +175,7 @@ public class ScrapeStructures implements Command {
 	private MVStore mvStore;
 	private Instant timestamp;
 	private List<Long> marketStructureTypeIds;
+	private ProgressReporter progressReporter;
 
 	@Inject
 	protected ScrapeStructures() {}
@@ -205,7 +207,12 @@ public class ScrapeStructures implements Command {
 				clearOldStructures(),
 				prepareStructureIds()
 						.flatMapCompletable(
-								id -> Completable.concatArray(fetchStructure(id), fetchMarket(id)), false, 1),
+								id -> Completable.concatArray(
+										fetchStructure(id),
+										fetchMarket(id),
+										Completable.fromAction(() -> progressReporter.increment())),
+								false,
+								4),
 				populateLocations(),
 				buildOutput().flatMapCompletable(this::uploadFiles));
 	}
@@ -282,7 +289,10 @@ public class ScrapeStructures implements Command {
 						sovereigntyStructureSource.getStructures())
 				.distinct()
 				.toList()
-				.doOnSuccess(ids -> log.info("Prepared {} structures", ids.size()))
+				.doOnSuccess(ids -> {
+					log.info("Prepared {} structures", ids.size());
+					progressReporter = new ProgressReporter(getName(), ids.size(), Duration.ofMinutes(1));
+				})
 				.flatMapPublisher(Flowable::fromIterable);
 	}
 
