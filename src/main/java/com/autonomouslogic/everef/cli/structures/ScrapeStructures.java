@@ -269,6 +269,7 @@ public class ScrapeStructures implements Command {
 							.getTypeFactory()
 							.constructMapType(LinkedHashMap.class, String.class, ObjectNode.class);
 					Map<String, ObjectNode> map = objectMapper.readValue(file, type);
+					log.info("Loaded {} structures from previous scrape", map.size());
 					map.forEach((key, value) -> {
 						structureStore.put(value);
 					});
