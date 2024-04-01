@@ -233,6 +233,7 @@ public class ScrapeStructuresTest {
 						"structure_type_id", 32226,
 						"alliance_id", 1300000001,
 						"solar_system_id", 300000001));
+		nonPublicStructures.put(1000000000001L, Map.of("name", "Should not scrape"));
 		scrapeStructures.run().blockingAwait();
 		verifyScrape("/single-sovereignty-structure.json");
 	}

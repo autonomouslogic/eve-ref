@@ -327,9 +327,9 @@ public class ScrapeStructures implements Command {
 
 	private Completable fetchStructure(long structureId) {
 		return Completable.defer(() -> {
-			// if (isOrWasSovereigntyStructure(structureId)) {
-			// 	return Completable.complete();
-			// }
+			if (isOrWasSovereigntyStructure(structureId)) {
+				return Completable.complete();
+			}
 			log.trace("Fetching structure {}", structureId);
 			var esiUrl = EsiUrl.builder()
 					.urlPath(String.format("/universe/structures/%s/", structureId))
