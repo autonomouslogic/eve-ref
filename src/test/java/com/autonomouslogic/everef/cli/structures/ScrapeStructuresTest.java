@@ -1,9 +1,8 @@
 package com.autonomouslogic.everef.cli.structures;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.lenient;
 
 import com.autonomouslogic.commons.ResourceUtil;
 import com.autonomouslogic.everef.cli.publiccontracts.ContractsFileBuilder;
@@ -119,9 +118,10 @@ public class ScrapeStructuresTest {
 				.mockLocationPopulatorModule(new MockLocationPopulatorModule().setLocationPopulator(locationPopulator))
 				.build()
 				.inject(this);
-		when(locationPopulator.populate(any())).thenReturn(Completable.complete()); // @todo
+		lenient().when(locationPopulator.populate(any())).thenReturn(Completable.complete()); // @todo
 
-		time = ZonedDateTime.parse("2021-01-01T00:00:00Z");
+		time = ZonedDateTime.parse("2021-01-01T00:00:00.123Z");
+		scrapeStructures.setScrapeTime(time);
 		previousScrape = null;
 		publicStructures = new HashMap<>();
 		nonPublicStructures = new HashMap<>();
@@ -239,7 +239,10 @@ public class ScrapeStructuresTest {
 
 	@Test
 	void shouldRemoveOldStructures() {
-		fail();
+		loadPreviousScrape("/single-old-structure.json");
+		nonPublicStructures.put(1000000000001L, Map.of("name", "Should not scrape"));
+		scrapeStructures.run().blockingAwait();
+		verifyScrape("/no-structures.json");
 	}
 
 	@Test

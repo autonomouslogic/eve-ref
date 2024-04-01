@@ -10,8 +10,10 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.reactivex.rxjava3.core.Flowable;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Predicate;
 import javax.inject.Inject;
 import lombok.NonNull;
 import lombok.Setter;
@@ -59,8 +61,7 @@ public class StructureStore {
 
 	public Flowable<Pair<Long, ObjectNode>> allStructures() {
 		return Flowable.defer(() -> {
-			var ids = new ArrayList<>(store.keySet());
-			ids.sort(Long::compareTo);
+			var ids = getAllIds();
 			return Flowable.fromIterable(ids).map(id -> Pair.of(id, (ObjectNode) store.get(id)));
 		});
 	}
@@ -90,5 +91,24 @@ public class StructureStore {
 			json.put(prop, time.toString());
 			store.put(structureId, json);
 		}
+	}
+
+	public int removeAllIf(@NonNull Predicate<ObjectNode> predicate) {
+		int r = 0;
+		for (long structureId : getAllIds()) {
+			var node = (ObjectNode) store.get(structureId);
+			if (predicate.test(node)) {
+				store.remove(structureId);
+				r++;
+			}
+		}
+		return r;
+	}
+
+	public List<Long> getAllIds() {
+		var ids = new ArrayList<>(store.keySet());
+
+		ids.sort(Long::compareTo);
+		return ids;
 	}
 }

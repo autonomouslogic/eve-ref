@@ -1,8 +1,8 @@
 package com.autonomouslogic.everef.esi;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 import com.github.scribejava.core.model.OAuth2AccessToken;
 import dagger.Module;
@@ -16,7 +16,7 @@ public class MockEsiAuthHelperModule {
 	@Singleton
 	public EsiAuthHelper esiAuthHelper() {
 		var mock = mock(EsiAuthHelper.class);
-		when(mock.getTokenForOwnerHash(any())).thenReturn(Maybe.just(new OAuth2AccessToken("oath2-token")));
+		lenient().when(mock.getTokenForOwnerHash(any())).thenReturn(Maybe.just(new OAuth2AccessToken("oath2-token")));
 		return mock;
 	}
 }

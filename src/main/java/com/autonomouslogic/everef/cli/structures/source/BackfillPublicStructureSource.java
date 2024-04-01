@@ -26,9 +26,6 @@ public class BackfillPublicStructureSource implements StructureSource {
 	@Accessors(chain = false)
 	private StructureStore structureStore;
 
-	@Setter
-	private Instant timestamp;
-
 	@Inject
 	protected BackfillPublicStructureSource() {}
 

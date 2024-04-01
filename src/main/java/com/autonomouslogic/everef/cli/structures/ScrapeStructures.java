@@ -88,6 +88,14 @@ public class ScrapeStructures implements Command {
 	public static final List<String> ALL_BOOLEANS =
 			List.of(IS_GETTABLE_STRUCTURE, IS_PUBLIC_STRUCTURE, IS_MARKET_STRUCTURE, IS_SOVEREIGNTY_STRUCTURE);
 
+	public static final List<String> ALL_TIMESTAMPS = List.of(
+			LAST_STRUCTURE_GET,
+			LAST_SEEN_PUBLIC_STRUCTURE,
+			LAST_SEEN_MARKET_STRUCTURE,
+			LAST_SEEN_SOVEREIGNTY_STRUCTURE);
+
+	private static final Duration STRUCTURE_TIMEOUT = Duration.ofDays(30);
+
 	@Inject
 	protected UrlParser urlParser;
 
@@ -173,7 +181,6 @@ public class ScrapeStructures implements Command {
 	private S3Url dataPath;
 	private HttpUrl dataUrl;
 	private MVStore mvStore;
-	private Instant timestamp;
 	private List<Long> marketStructureTypeIds;
 	private ProgressReporter progressReporter;
 
@@ -184,9 +191,6 @@ public class ScrapeStructures implements Command {
 	protected void init() {
 		dataPath = (S3Url) urlParser.parse(Configs.DATA_PATH.getRequired());
 		dataUrl = (HttpUrl) urlParser.parse(Configs.DATA_BASE_URL.getRequired());
-
-		timestamp = Instant.now().truncatedTo(ChronoUnit.SECONDS);
-		publicStructureSource.setTimestamp(timestamp);
 
 		oldStructureSource.setStructureStore(structureStore);
 		backfillPublicStructureSource.setStructureStore(structureStore);
@@ -220,8 +224,10 @@ public class ScrapeStructures implements Command {
 	private Completable initScrapeTime() {
 		return Completable.fromAction(() -> {
 			if (scrapeTime == null) {
-				scrapeTime = ZonedDateTime.now(ZoneOffset.UTC);
+				scrapeTime = ZonedDateTime.now(ZoneOffset.UTC).truncatedTo(ChronoUnit.SECONDS);
 			}
+			publicStructureSource.setTimestamp(scrapeTime.toInstant());
+			sovereigntyStructureSource.setTimestamp(scrapeTime.toInstant());
 		});
 	}
 
@@ -263,7 +269,6 @@ public class ScrapeStructures implements Command {
 							.getTypeFactory()
 							.constructMapType(LinkedHashMap.class, String.class, ObjectNode.class);
 					Map<String, ObjectNode> map = objectMapper.readValue(file, type);
-					oldStructureSource.setPreviousScrape(map);
 					map.forEach((key, value) -> {
 						structureStore.put(value);
 					});
@@ -276,13 +281,35 @@ public class ScrapeStructures implements Command {
 				});
 	}
 
+	private Completable clearOldStructures() {
+		return Completable.fromAction(() -> {
+			log.debug("Clearing old structures");
+			var removed = structureStore.removeAllIf(structure -> {
+				var latestTimestamp = ALL_TIMESTAMPS.stream()
+						.map(prop -> Optional.ofNullable(structure.get(prop)))
+						.filter(Optional::isPresent)
+						.map(Optional::get)
+						.filter(n -> !n.isNull())
+						.map(JsonNode::asText)
+						.map(Instant::parse)
+						.max(Instant::compareTo);
+				if (latestTimestamp.isEmpty()) {
+					return true;
+				}
+				var age = Duration.between(latestTimestamp.get(), scrapeTime);
+				return age.compareTo(STRUCTURE_TIMEOUT) > 0;
+			});
+			log.info("Removed {} old structures", removed);
+		});
+	}
+
 	@NotNull
 	private Flowable<Long> prepareStructureIds() {
 		return Flowable.concatArray(
 						oldStructureSource.getStructures(),
-						backfillPublicStructureSource.getStructures(),
-						adam4EveBackfillStructureSource.getStructures(),
-						sirSmashAlotBackfillStructureSource.getStructures(),
+						// backfillPublicStructureSource.getStructures(),
+						// adam4EveBackfillStructureSource.getStructures(),
+						// sirSmashAlotBackfillStructureSource.getStructures(),
 						publicStructureSource.getStructures(),
 						marketOrdersStructureSource.getStructures(),
 						publicContractsStructureSource.getStructures(),
@@ -311,7 +338,7 @@ public class ScrapeStructures implements Command {
 				log.debug("Fetched structure {}: {} response", structureId, status);
 				if (status == 200) {
 					var lastModified =
-							structureScrapeHelper.getLastModified(response).orElse(timestamp);
+							structureScrapeHelper.getLastModified(response).orElse(scrapeTime.toInstant());
 					var json =
 							(ObjectNode) objectMapper.readTree(response.body().bytes());
 					structureStore.updateStructure(structureId, json, lastModified);
@@ -354,7 +381,7 @@ public class ScrapeStructures implements Command {
 				log.debug("Fetched market {}: {} response", structureId, status);
 				if (status == 200) {
 					var lastModified =
-							structureScrapeHelper.getLastModified(response).orElse(timestamp);
+							structureScrapeHelper.getLastModified(response).orElse(scrapeTime.toInstant());
 					structureStore.updateBoolean(structureId, IS_MARKET_STRUCTURE, true);
 					structureStore.updateTimestamp(structureId, LAST_SEEN_MARKET_STRUCTURE, lastModified);
 				} else {
@@ -371,11 +398,6 @@ public class ScrapeStructures implements Command {
 				.flatMap(n -> Optional.ofNullable(n.get("type_id")))
 				.filter(n -> !n.isNull())
 				.map(JsonNode::asLong);
-	}
-
-	private Completable clearOldStructures() {
-		// @todo remove any structure with a timestamp earlier than 30 days ago.
-		return Completable.complete();
 	}
 
 	private Completable populateLocations() {

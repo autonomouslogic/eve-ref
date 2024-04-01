@@ -48,9 +48,6 @@ public class Adam4EveBackfillStructureSource implements StructureSource {
 	@Accessors(chain = false)
 	private StructureStore structureStore;
 
-	@Setter
-	private Instant timestamp;
-
 	@Inject
 	protected Adam4EveBackfillStructureSource() {}
 

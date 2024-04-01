@@ -10,7 +10,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Maybe;
-import java.time.Instant;
 import java.util.Optional;
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -38,9 +37,6 @@ public class PublicContractsStructureSource implements StructureSource {
 	@Setter
 	@Accessors(chain = false)
 	private StructureStore structureStore;
-
-	@Setter
-	private Instant timestamp;
 
 	@Inject
 	protected PublicContractsStructureSource() {}

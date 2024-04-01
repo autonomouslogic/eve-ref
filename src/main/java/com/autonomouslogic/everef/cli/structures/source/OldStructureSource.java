@@ -1,9 +1,7 @@
 package com.autonomouslogic.everef.cli.structures.source;
 
 import com.autonomouslogic.everef.cli.structures.StructureStore;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.reactivex.rxjava3.core.Flowable;
-import java.util.Map;
 import javax.inject.Inject;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -18,19 +16,14 @@ public class OldStructureSource implements StructureSource {
 	@Accessors(chain = false)
 	private StructureStore structureStore;
 
-	@Setter
-	private Map<String, ObjectNode> previousScrape;
-
 	@Inject
 	protected OldStructureSource() {}
 
 	@Override
 	public Flowable<Long> getStructures() {
 		return Flowable.defer(() -> {
-			if (previousScrape == null) {
-				return Flowable.empty();
-			}
-			var ids = previousScrape.keySet().stream().map(Long::parseLong).toList();
+			var ids = structureStore.getAllIds();
+			;
 			log.debug("Fetched {} previous structure ids", ids.size());
 			return Flowable.fromIterable(ids);
 		});
