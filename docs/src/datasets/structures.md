@@ -24,7 +24,7 @@ The object values themselves are verbatim from the structure endpoint, with the 
 * `last_seen_sovereignty_structure` - when the structure was last seen as sovereignty
 
 The [latest file](https://data.everef.net/structures/structures-latest.v2.json) is intended to be a list of all _current_ structures.
-Whenever the scrape runs, and structure which hasn't been seen on any of the endpoints for 30 days will be removed.
+Whenever the scrape runs, any structure which hasn't been seen on any of the endpoints for 30 days will be removed.
 To get structures older than this, please refer to older files.
 
 ## Notes
@@ -52,9 +52,8 @@ curl -s https://data.everef.net/structures/structures-latest.v2.json | jq '.[] |
 ```
 
 ### Version 1
+
 The version 1 files are simply a lists of public structure IDs.
 
 ### Other sources
-
 Adam4Eve maintains a list of structures accessible at [adam4eve.eu/structures.php](https://www.adam4eve.eu/structures.php).
-They have a raw list here: [playerStructure_IDs.txt](https://static.adam4eve.eu/IDs/playerStructure_IDs.txt)
