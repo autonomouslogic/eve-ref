@@ -1,5 +1,18 @@
 EVE Ref Changelog
 
+## [2.43.0](https://github.com/autonomouslogic/eve-ref/compare/2.42.0...2.43.0) (2024-04-02)
+
+
+### Features
+
+* **jobs:** Structure scrape ([#488](https://github.com/autonomouslogic/eve-ref/issues/488)) ([a05b74e](https://github.com/autonomouslogic/eve-ref/commit/a05b74e28a0b479bca8b6e348b43eb6c46669d2f))
+
+
+### Bug Fixes
+
+* **deps:** update flyway monorepo to v10.10.0 ([#495](https://github.com/autonomouslogic/eve-ref/issues/495)) ([6be7387](https://github.com/autonomouslogic/eve-ref/commit/6be73874836732e1f0cb37f74406ecc9905dc12c))
+* **jobs:** Remove sovereignty structures from structure scrape ([#496](https://github.com/autonomouslogic/eve-ref/issues/496)) ([80c80e2](https://github.com/autonomouslogic/eve-ref/commit/80c80e2a69af964332a3a4ae8e61289c1c233f78))
+
 ## [2.42.0](https://github.com/autonomouslogic/eve-ref/compare/2.41.0...2.42.0) (2024-03-30)
 
 
