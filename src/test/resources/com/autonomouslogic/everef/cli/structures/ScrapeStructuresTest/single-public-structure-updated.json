@@ -6,7 +6,6 @@
     "is_gettable_structure": true,
     "last_structure_get": "2021-01-02T00:00:00Z",
     "last_seen_public_structure": "2021-01-02T00:00:00Z",
-    "is_market_structure":false,
-    "is_sovereignty_structure": false
+    "is_market_structure":false
   }
 }

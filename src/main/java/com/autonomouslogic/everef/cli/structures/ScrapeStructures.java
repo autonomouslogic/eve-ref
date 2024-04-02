@@ -71,7 +71,11 @@ public class ScrapeStructures implements Command {
 	public static final String LAST_SEEN_PUBLIC_STRUCTURE = "last_seen_public_structure";
 	public static final String IS_MARKET_STRUCTURE = "is_market_structure";
 	public static final String LAST_SEEN_MARKET_STRUCTURE = "last_seen_market_structure";
+
+	@Deprecated
 	public static final String IS_SOVEREIGNTY_STRUCTURE = "is_sovereignty_structure";
+
+	@Deprecated
 	public static final String LAST_SEEN_SOVEREIGNTY_STRUCTURE = "last_seen_sovereignty_structure";
 
 	public static final List<String> ALL_CUSTOM_PROPERTIES = List.of(
@@ -81,18 +85,13 @@ public class ScrapeStructures implements Command {
 			IS_PUBLIC_STRUCTURE,
 			LAST_SEEN_PUBLIC_STRUCTURE,
 			IS_MARKET_STRUCTURE,
-			LAST_SEEN_MARKET_STRUCTURE,
-			IS_SOVEREIGNTY_STRUCTURE,
-			LAST_SEEN_SOVEREIGNTY_STRUCTURE);
+			LAST_SEEN_MARKET_STRUCTURE);
 
 	public static final List<String> ALL_BOOLEANS =
-			List.of(IS_GETTABLE_STRUCTURE, IS_PUBLIC_STRUCTURE, IS_MARKET_STRUCTURE, IS_SOVEREIGNTY_STRUCTURE);
+			List.of(IS_GETTABLE_STRUCTURE, IS_PUBLIC_STRUCTURE, IS_MARKET_STRUCTURE);
 
-	public static final List<String> ALL_TIMESTAMPS = List.of(
-			LAST_STRUCTURE_GET,
-			LAST_SEEN_PUBLIC_STRUCTURE,
-			LAST_SEEN_MARKET_STRUCTURE,
-			LAST_SEEN_SOVEREIGNTY_STRUCTURE);
+	public static final List<String> ALL_TIMESTAMPS =
+			List.of(LAST_STRUCTURE_GET, LAST_SEEN_PUBLIC_STRUCTURE, LAST_SEEN_MARKET_STRUCTURE);
 
 	private static final Duration STRUCTURE_TIMEOUT = Duration.ofDays(30);
 
@@ -313,8 +312,9 @@ public class ScrapeStructures implements Command {
 						// sirSmashAlotBackfillStructureSource.getStructures(),
 						publicStructureSource.getStructures(),
 						marketOrdersStructureSource.getStructures(),
-						publicContractsStructureSource.getStructures(),
-						sovereigntyStructureSource.getStructures())
+						publicContractsStructureSource.getStructures()
+						// sovereigntyStructureSource.getStructures()
+						)
 				.distinct()
 				.toList()
 				.doOnSuccess(ids -> {
