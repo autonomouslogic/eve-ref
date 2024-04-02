@@ -225,7 +225,7 @@ public class ScrapeStructuresTest {
 	}
 
 	@Test
-	void shouldScrapeSovereigntyStructures() {
+	void shouldNotScrapeSovereigntyStructures() {
 		sovereigntyStructures.put(
 				1000000000001L,
 				Map.of(
@@ -235,7 +235,7 @@ public class ScrapeStructuresTest {
 						"solar_system_id", 300000001));
 		nonPublicStructures.put(1000000000001L, Map.of("name", "Should not scrape"));
 		scrapeStructures.run().blockingAwait();
-		verifyScrape("/single-sovereignty-structure.json");
+		verifyScrape("/no-structures.json");
 	}
 
 	@Test

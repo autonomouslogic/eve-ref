@@ -5,7 +5,6 @@
 These are:
 * `/universe/structures/`
 * `/universe/structures/{structure_id}/`
-* `/sovereignty/structures/`
 
 Queries are also made to `/markets/structures/{structure_id}/` to determine if there's a market present at the structure.
 
@@ -20,8 +19,6 @@ The object values themselves are verbatim from the structure endpoint, with the 
 * `last_seen_public_structure` - when the structure was last seen as public
 * `is_market_structure` - true if the _latest_ scrape saw it on the structure market ESI endpoint
 * `last_seen_market_structure` - when the structure was last seen with a market
-* `is_sovereignty_structure` - true if the _latest_ scrape saw it on the sovereignty ESI endpoint
-* `last_seen_sovereignty_structure` - when the structure was last seen as sovereignty
 
 The [latest file](https://data.everef.net/structures/structures-latest.v2.json) is intended to be a list of all _current_ structures.
 Whenever the scrape runs, any structure which hasn't been seen on any of the endpoints for 30 days will be removed.
@@ -43,6 +40,16 @@ All the IDs from the v1 files have been incorporated into the file above.
 
 Many of the backfilled structures are no longer available to be queried and therefore do not have accurate timestamps.
 To show that they were once queryable, placeholder timestamps of `1970-01-01T00:00:00Z` were used.
+
+### Sovereignty structures
+
+Some of the early v2 scrape files contain sovereignty structures, including the following fields:
+* `is_sovereignty_structure` - true if the _latest_ scrape saw it on the sovereignty ESI endpoint
+* `last_seen_sovereignty_structure` - when the structure was last seen as sovereignty
+
+These structures were fetched from the `/sovereignty/structures/` endpoint.
+However, these structures are not queryable at all on the structure information endpoint, so they were removed from the scrape.
+A separate scrape of current sovereignty structures is already maintained.
 
 ### Scripting
 

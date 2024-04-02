@@ -20,6 +20,7 @@ import lombok.experimental.Accessors;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
+@Deprecated
 public class SovereigntyStructureSource implements StructureSource {
 	@Inject
 	protected SovereigntyApi sovereigntyApi;
