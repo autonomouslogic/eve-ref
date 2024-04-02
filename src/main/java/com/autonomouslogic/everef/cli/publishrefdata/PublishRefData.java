@@ -222,12 +222,22 @@ public class PublishRefData implements Command {
 		return Completable.defer(() -> {
 			log.info("Evaluating {} files for upload", fileMap.size());
 			var skipped = new AtomicInteger();
+			var uploaded = new AtomicInteger();
 			return Flowable.fromIterable(fileMap.entrySet())
 					.map(entry -> refDataUtil.createEntryForPath(
 							entry.getKey(), objectMapper.writeValueAsBytes(entry.getValue())))
 					.filter(entry -> filterExisting(skipped, existing, entry))
-					.flatMapCompletable(this::uploadFile, false, UPLOAD_CONCURRENCY)
-					.doOnComplete(() -> log.info("Skipped {} entries", skipped.get()))
+					.flatMapCompletable(
+							entry -> {
+								uploaded.incrementAndGet();
+								return uploadFile(entry);
+							},
+							false,
+							UPLOAD_CONCURRENCY)
+					.doOnComplete(() -> {
+						log.info("Uploaded {} entries", uploaded.get());
+						log.info("Skipped {} entries", skipped.get());
+					})
 					.andThen(Completable.defer(() -> deleteRemaining(new ArrayList<>(existing.keySet()))));
 		});
 	}

@@ -1,0 +1,12 @@
+{
+  "1000000000001": {
+    "structure_id": 1000000000001,
+    "type_id": 32226,
+    "solar_system_id": 300000001,
+    "is_public_structure": false,
+    "is_gettable_structure": false,
+    "is_market_structure": false,
+    "is_sovereignty_structure": true,
+    "last_seen_sovereignty_structure": "2021-01-01T00:00:00Z"
+  }
+}

@@ -11,6 +11,7 @@ import com.autonomouslogic.everef.cli.marketorders.ScrapeMarketOrders;
 import com.autonomouslogic.everef.cli.publiccontracts.ScrapePublicContracts;
 import com.autonomouslogic.everef.cli.publishrefdata.PublishRefData;
 import com.autonomouslogic.everef.cli.refdata.BuildRefData;
+import com.autonomouslogic.everef.cli.structures.ScrapeStructures;
 import io.reactivex.rxjava3.core.Completable;
 import io.sentry.Sentry;
 import java.time.Duration;
@@ -65,6 +66,9 @@ public class CommandRunner {
 
 	@Inject
 	protected Provider<BasicLogin> basicLoginProvider;
+
+	@Inject
+	protected Provider<ScrapeStructures> scrapeStructuresProvider;
 
 	@Inject
 	protected SentryDecorator sentryDecorator;
@@ -133,6 +137,8 @@ public class CommandRunner {
 				return importMarketHistoryProvider.get();
 			case "basic-login":
 				return basicLoginProvider.get();
+			case "scrape-structures":
+				return scrapeStructuresProvider.get();
 			default:
 				throw new IllegalArgumentException("Unknown command: " + name);
 		}

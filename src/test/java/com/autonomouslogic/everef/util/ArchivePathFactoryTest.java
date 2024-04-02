@@ -82,6 +82,16 @@ public class ArchivePathFactoryTest {
 				"hoboleaks-sde/hoboleaks-sde-latest.tar.xz");
 	}
 
+	@Test
+	void shouldGenerateStructuresNames() {
+		var factory = ArchivePathFactory.STRUCTURES;
+		testExpectedPaths(
+				factory,
+				Instant.parse("2023-03-15T01:02:03Z"),
+				"structures/history/2023/2023-03-15/structures-2023-03-15_01-02-03.v2.json.bz2",
+				"structures/structures-latest.v2.json");
+	}
+
 	private static void testExpectedPaths(
 			ArchivePathFactory factory, Instant timestamp, String expectedTimePath, String expectedLatestPath) {
 		assertEquals(expectedLatestPath, factory.createLatestPath());

@@ -9,25 +9,35 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.scribejava.core.builder.ServiceBuilder;
 import com.github.scribejava.core.model.OAuth2AccessToken;
 import com.github.scribejava.core.oauth.OAuth20Service;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.Maybe;
 import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import java.net.URI;
 import java.net.URL;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.NonNull;
 import lombok.SneakyThrows;
+import lombok.extern.log4j.Log4j2;
 import okhttp3.OkHttpClient;
+import org.apache.commons.lang3.tuple.Pair;
 
 /**
  * @link <a href="https://www.pac4j.org/docs/clients/openid-connect.html">pac4j OpenID Connect</a>
  */
+@Log4j2
 public class EsiAuthHelper {
-	private static final List<String> scopes =
-			List.of("esi-markets.structure_markets.v1", "esi-universe.read_structures.v1");
-	private static final URL callbackUrl = Configs.OAUTH_CALLBACK_URL.getRequired();
+	private static final Duration EXPIRATION_BUFFER = Duration.ofMinutes(1);
+	private static final List<String> SCOPES =
+			List.of("esi-universe.read_structures.v1", "esi-markets.structure_markets.v1");
+	private static final URL CALLBACK_URL = Configs.OAUTH_CALLBACK_URL.getRequired();
 
 	@Inject
 	@Named("esi")
@@ -45,6 +55,9 @@ public class EsiAuthHelper {
 	@Inject
 	protected DynamoAsyncMapper dynamoAsyncMapper;
 
+	private final Cache<String, Pair<OAuth2AccessToken, Instant>> tokenCache =
+			CacheBuilder.newBuilder().expireAfterAccess(Duration.ofMinutes(1)).build();
+
 	private final OAuth20Service service;
 
 	@Inject
@@ -54,8 +67,8 @@ public class EsiAuthHelper {
 
 		service = new ServiceBuilder(clientId)
 				.apiSecret(secretKey)
-				.defaultScope(String.join(" ", scopes))
-				.callback(callbackUrl.toString())
+				.defaultScope(String.join(" ", SCOPES))
+				.callback(CALLBACK_URL.toString())
 				.build(new EsiApi20());
 	}
 
@@ -100,5 +113,31 @@ public class EsiAuthHelper {
 	public Completable putCharacterLogin(CharacterLogin characterLogin) {
 		return Completable.defer(() -> Rx3Util.toSingle(dynamoAsyncMapper.putItemFromKeyObject(characterLogin))
 				.ignoreElement());
+	}
+
+	@SneakyThrows
+	public Maybe<CharacterLogin> getCharacterLogin(String ownerHash) {
+		return Rx3Util.toMaybe(dynamoAsyncMapper.getItemFromPrimaryKey(ownerHash, CharacterLogin.class))
+				.flatMap(r -> Maybe.fromOptional(Optional.ofNullable(r.item())));
+	}
+
+	public Maybe<OAuth2AccessToken> getTokenForOwnerHash(String ownerHash) {
+		return Maybe.defer(() -> {
+			var cached = tokenCache.getIfPresent(ownerHash);
+			if (cached != null) {
+				var issued = cached.getRight();
+				var expiresIn = cached.getLeft().getExpiresIn();
+				var expiration = issued.plusSeconds(expiresIn).minus(EXPIRATION_BUFFER);
+				if (Instant.now().isBefore(expiration)) {
+					return Maybe.just(cached.getLeft());
+				}
+			}
+			log.debug("Refreshing token for ownerHash {}", ownerHash);
+			return getCharacterLogin(ownerHash)
+					.flatMapSingle(login -> refreshAccessToken(login.getRefreshToken()))
+					.doOnSuccess(token -> {
+						tokenCache.put(ownerHash, Pair.of(token, Instant.now()));
+					});
+		});
 	}
 }

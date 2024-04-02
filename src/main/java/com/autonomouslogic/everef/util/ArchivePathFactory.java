@@ -10,6 +10,7 @@ import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoField;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.Builder;
@@ -99,6 +100,13 @@ public class ArchivePathFactory {
 			.suffix(".csv.gz")
 			.build();
 
+	public static final ArchivePathFactory STRUCTURES = ArchivePathFactory.builder()
+			.folder("structures")
+			.filename("structures")
+			.suffix(".v2.json.bz2")
+			.latestSuffix(".v2.json")
+			.build();
+
 	@NonNull
 	String folder;
 
@@ -107,6 +115,8 @@ public class ArchivePathFactory {
 
 	@NonNull
 	String suffix;
+
+	String latestSuffix;
 
 	@lombok.Builder.Default
 	boolean historyFolder = true;
@@ -121,7 +131,8 @@ public class ArchivePathFactory {
 	DateTimeFormatter fileDateTimeFormatter = TIMESTAMP_PATTERN;
 
 	public String createLatestPath() {
-		return join(List.of(folder, filename + "-latest" + suffix));
+		return join(List.of(
+				folder, filename + "-latest" + Optional.ofNullable(latestSuffix).orElse(suffix)));
 	}
 
 	public String createArchivePath(LocalDate date) {
@@ -171,11 +182,8 @@ public class ArchivePathFactory {
 		if (dateFolder) {
 			builder.appendLiteral("/").append(DATE_PATTERN);
 		}
-		builder.appendLiteral("/")
-				.appendLiteral(filename)
-				.appendLiteral("-")
-				.append(fileDateTimeFormatter)
-				.appendLiteral(suffix);
+		builder.appendLiteral("/").appendLiteral(filename).appendLiteral("-").append(fileDateTimeFormatter);
+		builder.appendLiteral(suffix);
 		return builder.toFormatter().withZone(ZoneOffset.UTC);
 	}
 
