@@ -203,6 +203,7 @@ public class ScrapeStructures implements Command {
 
 	public Completable run() {
 		return Completable.concatArray(
+				initLogin(),
 				initScrapeTime(),
 				initMvStore(),
 				initMarketStructures(),
@@ -218,6 +219,10 @@ public class ScrapeStructures implements Command {
 								1),
 				populateLocations(),
 				buildOutput().flatMapCompletable(this::uploadFiles));
+	}
+
+	private Completable initLogin() {
+		return getAccessToken().ignoreElement();
 	}
 
 	private Completable initScrapeTime() {
@@ -283,7 +288,7 @@ public class ScrapeStructures implements Command {
 
 	private Completable clearOldStructures() {
 		return Completable.fromAction(() -> {
-			log.debug("Clearing old structures");
+			log.info("Clearing old structures");
 			var removed = structureStore.removeAllIf(structure -> {
 				var latestTimestamp = ALL_TIMESTAMPS.stream()
 						.map(prop -> Optional.ofNullable(structure.get(prop)))

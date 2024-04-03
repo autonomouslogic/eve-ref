@@ -42,6 +42,7 @@ public class PublicStructureSource implements StructureSource {
 	@Override
 	public Flowable<Long> getStructures() {
 		return Flowable.defer(() -> {
+					log.info("Fetching public structure ids");
 					var response = universeApi.getUniverseStructuresWithHttpInfo(
 							UniverseApi.DatasourceGetUniverseStructures.tranquility, null, null);
 					if (response.getStatusCode() != 200) {
@@ -51,7 +52,7 @@ public class PublicStructureSource implements StructureSource {
 					var ids = ((Success<Set<Long>>) response).getData();
 					var lastModified =
 							structureScrapeHelper.getLastModified(response).orElse(timestamp);
-					log.debug("Fetched {} public structure ids", ids.size());
+					log.info("Fetched {} public structure ids", ids.size());
 					return Flowable.fromIterable(ids)
 							.observeOn(Schedulers.computation())
 							.doOnNext(id -> {
