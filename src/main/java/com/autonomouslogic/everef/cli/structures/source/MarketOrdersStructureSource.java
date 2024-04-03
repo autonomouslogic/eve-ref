@@ -5,10 +5,12 @@ import com.autonomouslogic.everef.cli.structures.StructureStore;
 import com.autonomouslogic.everef.openapi.esi.apis.UniverseApi;
 import com.autonomouslogic.everef.util.DataUtil;
 import com.autonomouslogic.everef.util.JsonNodeCsvReader;
+import com.autonomouslogic.everef.util.Rx;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Maybe;
+import java.io.File;
 import java.util.Optional;
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -42,13 +44,21 @@ public class MarketOrdersStructureSource implements StructureSource {
 
 	@Override
 	public Flowable<Long> getStructures() {
-		return dataUtil.downloadLatestMarketOrders()
-				.toMaybe()
-				.onErrorResumeNext(e -> {
-					log.warn("Failed to download market orders, ignoring: {}", e.getMessage());
-					return Maybe.empty();
-				})
-				.flatMapPublisher(file -> {
+		return Flowable.defer(() -> {
+			log.info("Loading structures from market orders");
+			return download().flatMapPublisher(this::process);
+		});
+	}
+
+	private Maybe<File> download() {
+		return dataUtil.downloadLatestMarketOrders().toMaybe().onErrorResumeNext(e -> {
+			log.warn("Failed to download market orders, ignoring: {}", e.getMessage());
+			return Maybe.empty();
+		});
+	}
+
+	private Flowable<Long> process(File file) {
+		return Flowable.defer(() -> {
 					return jsonNodeCsvReaderProvider
 							.get()
 							.readCompressed(file)
@@ -66,9 +76,10 @@ public class MarketOrdersStructureSource implements StructureSource {
 							})
 							.toList()
 							.flatMapPublisher(ids -> {
-								log.debug("Fetched {} structure ids from market orders", ids.size());
+								log.info("Fetched {} structure ids from market orders", ids.size());
 								return Flowable.fromIterable(ids);
 							});
-				});
+				})
+				.compose(Rx.offloadFlowable());
 	}
 }
