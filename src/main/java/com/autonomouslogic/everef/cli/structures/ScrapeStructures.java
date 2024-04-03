@@ -48,6 +48,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.NonNull;
@@ -310,7 +311,11 @@ public class ScrapeStructures implements Command {
 
 	@NotNull
 	private Flowable<Long> prepareStructureIds() {
+		AtomicInteger previousIds = new AtomicInteger();
 		return Flowable.concatArray(
+						Completable.fromAction(() -> previousIds.set(
+										structureStore.getAllIds().size()))
+								.toFlowable(),
 						oldStructureSource.getStructures(),
 						// backfillPublicStructureSource.getStructures(),
 						// adam4EveBackfillStructureSource.getStructures(),
@@ -324,6 +329,8 @@ public class ScrapeStructures implements Command {
 				.toList()
 				.doOnSuccess(ids -> {
 					log.info("Prepared {} structures", ids.size());
+					var newStructures = ids.size() - previousIds.get();
+					log.info("Added {} new structures", newStructures);
 					progressReporter = new ProgressReporter(getName(), ids.size(), Duration.ofMinutes(1));
 					progressReporter.start();
 				})
