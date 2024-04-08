@@ -47,7 +47,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Blueprint'
+                $ref: "#/components/schemas/Blueprint"
   /categories:
     get:
       tags:
@@ -82,7 +82,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InventoryCategory'
+                $ref: "#/components/schemas/InventoryCategory"
   /dogma_attributes:
     get:
       tags:
@@ -117,7 +117,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DogmaAttribute'
+                $ref: "#/components/schemas/DogmaAttribute"
   /dogma_effects:
     get:
       tags:
@@ -152,7 +152,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DogmaEffect'
+                $ref: "#/components/schemas/DogmaEffect"
   /groups:
     get:
       tags:
@@ -187,7 +187,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InventoryGroup'
+                $ref: "#/components/schemas/InventoryGroup"
   /icons:
     get:
       tags:
@@ -222,7 +222,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Icon'
+                $ref: "#/components/schemas/Icon"
   /market_groups:
     get:
       tags:
@@ -273,7 +273,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/MarketGroup'
+                $ref: "#/components/schemas/MarketGroup"
   /meta:
     get:
       tags:
@@ -286,7 +286,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RefDataMeta'
+                $ref: "#/components/schemas/RefDataMeta"
   /meta_groups:
     get:
       tags:
@@ -321,7 +321,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/MetaGroup'
+                $ref: "#/components/schemas/MetaGroup"
   /mutaplasmids:
     get:
       tags:
@@ -356,7 +356,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Mutaplasmid'
+                $ref: "#/components/schemas/Mutaplasmid"
   /regions:
     get:
       tags:
@@ -392,7 +392,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Region'
+                $ref: "#/components/schemas/Region"
   /skills:
     get:
       tags:
@@ -427,7 +427,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Skill'
+                $ref: "#/components/schemas/Skill"
   /types:
     get:
       tags:
@@ -462,7 +462,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InventoryType'
+                $ref: "#/components/schemas/InventoryType"
   /types/{type_id}/bundle:
     get:
       tags:
@@ -481,7 +481,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Bundle'
+                $ref: "#/components/schemas/Bundle"
   /units:
     get:
       tags:
@@ -516,7 +516,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Unit'
+                $ref: "#/components/schemas/Unit"
 components:
   schemas:
     Blueprint:
@@ -528,7 +528,7 @@ components:
         activities:
           type: object
           additionalProperties:
-            $ref: '#/components/schemas/BlueprintActivity'
+            $ref: "#/components/schemas/BlueprintActivity"
         max_production_limit:
           type: integer
           format: int32
@@ -541,11 +541,11 @@ components:
         materials:
           type: object
           additionalProperties:
-            $ref: '#/components/schemas/BlueprintMaterial'
+            $ref: "#/components/schemas/BlueprintMaterial"
         products:
           type: object
           additionalProperties:
-            $ref: '#/components/schemas/BlueprintMaterial'
+            $ref: "#/components/schemas/BlueprintMaterial"
         required_skills:
           type: object
           additionalProperties:
@@ -569,27 +569,27 @@ components:
         types:
           type: object
           additionalProperties:
-            $ref: '#/components/schemas/InventoryType'
+            $ref: "#/components/schemas/InventoryType"
           description: A map of types. The key is the type ID.
         dogma_attributes:
           type: object
           additionalProperties:
-            $ref: '#/components/schemas/DogmaAttribute'
+            $ref: "#/components/schemas/DogmaAttribute"
           description: A map of dogma attributes. The key is the attribute ID.
         skills:
           type: object
           additionalProperties:
-            $ref: '#/components/schemas/Skill'
+            $ref: "#/components/schemas/Skill"
           description: A map of skills. The key is the skill ID.
         units:
           type: object
           additionalProperties:
-            $ref: '#/components/schemas/Unit'
+            $ref: "#/components/schemas/Unit"
           description: A map of units. The key is the unit ID.
         icons:
           type: object
           additionalProperties:
-            $ref: '#/components/schemas/Icon'
+            $ref: "#/components/schemas/Icon"
           description: A map of icons. The key is the icon ID.
     Coordinate:
       type: object
@@ -731,7 +731,7 @@ components:
         modifiers:
           type: array
           items:
-            $ref: '#/components/schemas/ModifierInfo'
+            $ref: "#/components/schemas/ModifierInfo"
     DogmaTypeAttribute:
       type: object
       properties:
@@ -841,12 +841,12 @@ components:
         dogma_attributes:
           type: object
           additionalProperties:
-            $ref: '#/components/schemas/DogmaTypeAttribute'
+            $ref: "#/components/schemas/DogmaTypeAttribute"
           description: A map of dogma attributes. The key is the attribute ID
         dogma_effects:
           type: object
           additionalProperties:
-            $ref: '#/components/schemas/DogmaTypeEffect'
+            $ref: "#/components/schemas/DogmaTypeEffect"
           description: A map of dogma attributes. The key is the attribute ID
         faction_id:
           type: integer
@@ -904,7 +904,7 @@ components:
           type: integer
           format: int64
         traits:
-          $ref: '#/components/schemas/InventoryTypeTraits'
+          $ref: "#/components/schemas/InventoryTypeTraits"
         variation_parent_type_id:
           type: integer
           format: int64
@@ -973,13 +973,13 @@ components:
         produced_by_blueprints:
           type: object
           additionalProperties:
-            $ref: '#/components/schemas/ProducingBlueprint'
+            $ref: "#/components/schemas/ProducingBlueprint"
           description: The blueprints producing this type. The key is the blueprint
             type ID. This is added by EVE Ref.
         type_materials:
           type: object
           additionalProperties:
-            $ref: '#/components/schemas/TypeMaterial'
+            $ref: "#/components/schemas/TypeMaterial"
         can_fit_types:
           type: array
           description: Types this can be fitted to. This is added by EVE Ref.
@@ -1020,17 +1020,17 @@ components:
         misc_bonuses:
           type: object
           additionalProperties:
-            $ref: '#/components/schemas/TraitBonus'
+            $ref: "#/components/schemas/TraitBonus"
         role_bonuses:
           type: object
           additionalProperties:
-            $ref: '#/components/schemas/TraitBonus'
+            $ref: "#/components/schemas/TraitBonus"
         types:
           type: object
           additionalProperties:
             type: object
             additionalProperties:
-              $ref: '#/components/schemas/TraitBonus'
+              $ref: "#/components/schemas/TraitBonus"
         icon_id:
           type: integer
           format: int64
@@ -1127,11 +1127,11 @@ components:
         type_mappings:
           type: object
           additionalProperties:
-            $ref: '#/components/schemas/MutaplasmidTypeMapping'
+            $ref: "#/components/schemas/MutaplasmidTypeMapping"
         dogma_modifications:
           type: object
           additionalProperties:
-            $ref: '#/components/schemas/MutaplasmidDogmaModifications'
+            $ref: "#/components/schemas/MutaplasmidDogmaModifications"
           description: Which dogma attributes are modified by this mutaplasmid and
             by how much.
       description: Details about a mutaplasmid. These are created by EVE Ref and derived
@@ -1179,11 +1179,11 @@ components:
           type: string
           format: date-time
         esi:
-          $ref: '#/components/schemas/RefDataMetaFileInfo'
+          $ref: "#/components/schemas/RefDataMetaFileInfo"
         sde:
-          $ref: '#/components/schemas/RefDataMetaFileInfo'
+          $ref: "#/components/schemas/RefDataMetaFileInfo"
         hoboleaks:
-          $ref: '#/components/schemas/RefDataMetaFileInfo'
+          $ref: "#/components/schemas/RefDataMetaFileInfo"
     RefDataMetaFileInfo:
       type: object
       properties:
@@ -1225,11 +1225,11 @@ components:
             description: The key is the language code.
           description: The key is the language code.
         center:
-          $ref: '#/components/schemas/Coordinate'
+          $ref: "#/components/schemas/Coordinate"
         max:
-          $ref: '#/components/schemas/Coordinate'
+          $ref: "#/components/schemas/Coordinate"
         min:
-          $ref: '#/components/schemas/Coordinate'
+          $ref: "#/components/schemas/Coordinate"
     Skill:
       type: object
       properties:
