@@ -1,5 +1,22 @@
 EVE Ref Changelog
 
+## [2.43.1](https://github.com/autonomouslogic/eve-ref/compare/2.43.0...2.43.1) (2024-04-08)
+
+
+### Documentation
+
+* Reduced recommended rclone concurrency ([64ecaaf](https://github.com/autonomouslogic/eve-ref/commit/64ecaaf2e00a7204fe2ee79cd6c8fa63206bda38))
+
+
+### Dependency Updates
+
+* **deps:** update all non-major dependencies ([#494](https://github.com/autonomouslogic/eve-ref/issues/494)) ([7175a1b](https://github.com/autonomouslogic/eve-ref/commit/7175a1b1bd2d6b06e838cabb563757ece4ca2eed))
+
+
+### Code Refactoring
+
+* Structure refactor ([#497](https://github.com/autonomouslogic/eve-ref/issues/497)) ([bd9784b](https://github.com/autonomouslogic/eve-ref/commit/bd9784bc2fbdac9922c8cb3c3654574c2f1b610a))
+
 ## [2.43.0](https://github.com/autonomouslogic/eve-ref/compare/2.42.0...2.43.0) (2024-04-02)
 
 
