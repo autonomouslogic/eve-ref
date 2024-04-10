@@ -1,7 +1,9 @@
 package com.autonomouslogic.everef.cli.marketorders;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.when;
 
 import com.autonomouslogic.commons.ListUtil;
@@ -13,6 +15,7 @@ import com.autonomouslogic.everef.test.MockS3Adapter;
 import com.autonomouslogic.everef.test.TestDataUtil;
 import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.util.DataIndexHelper;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Ordering;
 import java.io.InputStream;
 import java.time.ZonedDateTime;
@@ -31,6 +34,7 @@ import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Timeout;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junitpioneer.jupiter.SetEnvironmentVariable;
 import org.mockito.Mock;
@@ -39,9 +43,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 
 @ExtendWith(MockitoExtension.class)
+@Timeout(30)
 @SetEnvironmentVariable(key = "DATA_PATH", value = "s3://" + ScrapeMarketOrdersTest.BUCKET_NAME + "/base/")
+@SetEnvironmentVariable(key = "DATA_BASE_URL", value = "http://localhost:" + TestDataUtil.TEST_PORT + "/base")
 @SetEnvironmentVariable(key = "ESI_USER_AGENT", value = "user-agent")
 @SetEnvironmentVariable(key = "ESI_BASE_URL", value = "http://localhost:" + TestDataUtil.TEST_PORT)
+@SetEnvironmentVariable(key = "SCRAPE_CHARACTER_OWNER_HASH", value = "scrape-owner-hash")
 public class ScrapeMarketOrdersTest {
 	static final String BUCKET_NAME = "data-bucket";
 
@@ -60,6 +67,9 @@ public class ScrapeMarketOrdersTest {
 
 	@Inject
 	DataIndexHelper dataIndexHelper;
+
+	@Inject
+	ObjectMapper objectMapper;
 
 	@Mock
 	LocationPopulator locationPopulator;
@@ -96,6 +106,12 @@ public class ScrapeMarketOrdersTest {
 							10000002, 1, 2);
 					case "/markets/10000002/orders?order_type=all&datasource=tranquility&language=en&page=2" -> mockRegionOrders(
 							10000002, 2, 2);
+					case "/base/structures/structures-latest.v2.json" -> mockStructures();
+					case "/markets/structures/1000000000001/?datasource=tranquility&language=en" -> mockStructureOrders(recordedRequest,
+						1000000000001L, 1, 2);
+					case "/markets/structures/1000000000001/?datasource=tranquility&language=en&page=2" -> mockStructureOrders(recordedRequest,
+						1000000000001L, 2, 2);
+					case "/markets/structures/1000000000002/?datasource=tranquility&language=en" -> throw new RuntimeException("Fetch non-market structure");
 					default -> new MockResponse().setResponseCode(404);
 				};
 			}
@@ -171,8 +187,48 @@ public class ScrapeMarketOrdersTest {
 	}
 
 	@SneakyThrows
+	private MockResponse mockStructureOrders(RecordedRequest recordedRequest, long structureId, int page, int pages) {
+		assertNotNull(recordedRequest.getHeaders().get("Authorization"));
+		var bytes = IOUtils.toByteArray(loadStructureOrders(structureId, page));
+		return new MockResponse()
+				.setResponseCode(200)
+				.setBody(new String(bytes))
+				.addHeader("X-Pages", Integer.toString(pages));
+	}
+
+	@SneakyThrows
 	private InputStream loadRegionOrders(int regionId, int page) {
 		return ResourceUtil.loadContextual(getClass(), "/market-orders-" + regionId + "-" + page + ".json");
+	}
+
+	@SneakyThrows
+	private InputStream loadStructureOrders(long structureId, int page) {
+		return ResourceUtil.loadContextual(getClass(), "/structure-orders-" + structureId + "-" + page + ".json");
+	}
+
+	@SneakyThrows
+	private MockResponse mockStructures() {
+		var obj = objectMapper.createObjectNode();
+		obj
+			.put("1000000000001", objectMapper.createObjectNode()
+				.put("structure_id", 1000000000001L)
+				.put("is_market_structure", true)
+				.put("solar_system_id", 1)
+				.put("constellation_id", 1)
+				.put("region_id", 1)
+			);
+		obj
+			.put("1000000000002", objectMapper.createObjectNode()
+				.put("structure_id", 1000000000002L)
+				.put("is_market_structure", true)
+				.put("solar_system_id", 1)
+				.put("constellation_id", 1)
+				.put("region_id", 1)
+			);
+		return new MockResponse()
+			.setResponseCode(200)
+			.setBody(objectMapper.writeValueAsString(obj
+			));
 	}
 
 	@SneakyThrows

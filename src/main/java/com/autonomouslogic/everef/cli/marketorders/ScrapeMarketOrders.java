@@ -4,6 +4,7 @@ import static com.autonomouslogic.everef.util.ArchivePathFactory.MARKET_ORDERS;
 
 import com.autonomouslogic.everef.cli.Command;
 import com.autonomouslogic.everef.config.Configs;
+import com.autonomouslogic.everef.esi.EsiAuthHelper;
 import com.autonomouslogic.everef.s3.S3Adapter;
 import com.autonomouslogic.everef.s3.S3Util;
 import com.autonomouslogic.everef.url.S3Url;
@@ -11,6 +12,7 @@ import com.autonomouslogic.everef.url.UrlParser;
 import com.autonomouslogic.everef.util.DataIndexHelper;
 import com.fasterxml.jackson.databind.JsonNode;
 import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.CompletableSource;
 import io.reactivex.rxjava3.core.Single;
 import java.io.File;
 import java.time.Duration;
@@ -52,6 +54,9 @@ public class ScrapeMarketOrders implements Command {
 	@Inject
 	protected DataIndexHelper dataIndexHelper;
 
+	@Inject
+	protected EsiAuthHelper esiAuthHelper;
+
 	private S3Url dataUrl;
 	private Map<Long, JsonNode> marketOrdersStore;
 
@@ -60,6 +65,7 @@ public class ScrapeMarketOrders implements Command {
 
 	private final Duration latestCacheTime = Configs.DATA_LATEST_CACHE_CONTROL_MAX_AGE.getRequired();
 	private final Duration archiveCacheTime = Configs.DATA_ARCHIVE_CACHE_CONTROL_MAX_AGE.getRequired();
+	private final String  ownerHah = Configs.SCRAPE_CHARACTER_OWNER_HASH.getRequired();
 
 	@Inject
 	protected ScrapeMarketOrders() {}
@@ -73,7 +79,10 @@ public class ScrapeMarketOrders implements Command {
 	@Override
 	public Completable run() {
 		return Completable.concatArray(
-				initScrapeTime(), initStore(), fetchOrders(), writeOrders().flatMapCompletable(this::uploadFile));
+				initScrapeTime(), initStore(),
+			initLogin(),
+			fetchOrders(),
+			writeOrders().flatMapCompletable(this::uploadFile));
 	}
 
 	private Completable initScrapeTime() {
@@ -92,10 +101,14 @@ public class ScrapeMarketOrders implements Command {
 		});
 	}
 
+	private Completable initLogin() {
+		return esiAuthHelper.getTokenForOwnerHash(ownerHah).ignoreElement();
+	}
+
 	private Completable fetchOrders() {
 		return Completable.defer(() -> {
 			log.info("Fetching market orders");
-			return marketOrderFetcher.fetchMarketOrders();
+			return marketOrderFetcher.fetchOrders();
 		});
 	}
 
