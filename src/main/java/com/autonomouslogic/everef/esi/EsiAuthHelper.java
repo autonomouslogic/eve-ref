@@ -143,9 +143,9 @@ public class EsiAuthHelper {
 
 	public Single<String> getTokenStringForOwnerHash(String ownerHash) {
 		return getTokenForOwnerHash(ownerHash)
-			.map(token -> token.getAccessToken())
-			.switchIfEmpty((Maybe.defer(() -> Maybe.error(
-				new RuntimeException(String.format("Login not found for owner hash: %s", ownerHash))))))
-			.toSingle();
+				.map(token -> token.getAccessToken())
+				.switchIfEmpty((Maybe.defer(() -> Maybe.error(
+						new RuntimeException(String.format("Login not found for owner hash: %s", ownerHash))))))
+				.toSingle();
 	}
 }

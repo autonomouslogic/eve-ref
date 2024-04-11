@@ -1,10 +1,8 @@
 package com.autonomouslogic.everef.cli.marketorders;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.when;
 
 import com.autonomouslogic.commons.ListUtil;
@@ -100,21 +98,23 @@ public class ScrapeMarketOrdersTest {
 					case "/universe/regions/10000002/?datasource=tranquility" -> new MockResponse()
 							.setResponseCode(200)
 							.setBody("{\"region_id\":10000002,\"name\":\"The Forge\",\"constellations\":[]}");
-					case "/markets/10000001/orders?order_type=all&datasource=tranquility&language=en" -> mockRegionOrders(recordedRequest,
-							10000001, 1, 2);
-					case "/markets/10000001/orders?order_type=all&datasource=tranquility&language=en&page=2" -> mockRegionOrders(recordedRequest,
-							10000001, 2, 2);
-					case "/markets/10000002/orders?order_type=all&datasource=tranquility&language=en" -> mockRegionOrders(recordedRequest,
-							10000002, 1, 2);
-					case "/markets/10000002/orders?order_type=all&datasource=tranquility&language=en&page=2" -> mockRegionOrders(recordedRequest,
-							10000002, 2, 2);
+					case "/markets/10000001/orders?order_type=all&datasource=tranquility&language=en" -> mockRegionOrders(
+							recordedRequest, 10000001, 1, 2);
+					case "/markets/10000001/orders?order_type=all&datasource=tranquility&language=en&page=2" -> mockRegionOrders(
+							recordedRequest, 10000001, 2, 2);
+					case "/markets/10000002/orders?order_type=all&datasource=tranquility&language=en" -> mockRegionOrders(
+							recordedRequest, 10000002, 1, 2);
+					case "/markets/10000002/orders?order_type=all&datasource=tranquility&language=en&page=2" -> mockRegionOrders(
+							recordedRequest, 10000002, 2, 2);
 					case "/base/structures/structures-latest.v2.json" -> mockStructures();
-					case "/markets/structures/1000000000001/?datasource=tranquility&language=en" -> mockStructureOrders(recordedRequest,
-						1000000000001L, 1, 2);
-					case "/markets/structures/1000000000001/?datasource=tranquility&language=en&page=2" -> mockStructureOrders(recordedRequest,
-						1000000000001L, 2, 2);
-					case "/markets/structures/1000000000002/?datasource=tranquility&language=en" -> throw new RuntimeException("Fetch non-market structure");
-					case "/markets/structures/1000000000003/?datasource=tranquility&language=en" -> new MockResponse().setResponseCode(403);
+					case "/markets/structures/1000000000001/?datasource=tranquility&language=en" -> mockStructureOrders(
+							recordedRequest, 1000000000001L, 1, 2);
+					case "/markets/structures/1000000000001/?datasource=tranquility&language=en&page=2" -> mockStructureOrders(
+							recordedRequest, 1000000000001L, 2, 2);
+					case "/markets/structures/1000000000002/?datasource=tranquility&language=en" -> throw new RuntimeException(
+							"Fetch non-market structure");
+					case "/markets/structures/1000000000003/?datasource=tranquility&language=en" -> new MockResponse()
+							.setResponseCode(403);
 					default -> new MockResponse().setResponseCode(404);
 				};
 			}
@@ -213,34 +213,34 @@ public class ScrapeMarketOrdersTest {
 	@SneakyThrows
 	private MockResponse mockStructures() {
 		var obj = objectMapper.createObjectNode();
-		obj
-			.put("1000000000001", objectMapper.createObjectNode()
-				.put("structure_id", 1000000000001L)
-				.put("is_market_structure", true)
-				.put("solar_system_id", 30000001)
-				.put("constellation_id", 20000001)
-				.put("region_id", 10000010)
-			);
-		obj
-			.put("1000000000002", objectMapper.createObjectNode()
-				.put("structure_id", 1000000000002L)
-				.put("is_market_structure", false)
-				.put("solar_system_id", 30000001)
-				.put("constellation_id", 20000001)
-				.put("region_id", 10000010)
-			);
-		obj
-			.put("1000000000003", objectMapper.createObjectNode()
-				.put("structure_id", 1000000000003L)
-				.put("is_market_structure", true)
-				.put("solar_system_id", 30000001)
-				.put("constellation_id", 20000001)
-				.put("region_id", 10000010)
-			);
-		return new MockResponse()
-			.setResponseCode(200)
-			.setBody(objectMapper.writeValueAsString(obj
-			));
+		obj.put(
+				"1000000000001",
+				objectMapper
+						.createObjectNode()
+						.put("structure_id", 1000000000001L)
+						.put("is_market_structure", true)
+						.put("solar_system_id", 30000001)
+						.put("constellation_id", 20000001)
+						.put("region_id", 10000010));
+		obj.put(
+				"1000000000002",
+				objectMapper
+						.createObjectNode()
+						.put("structure_id", 1000000000002L)
+						.put("is_market_structure", false)
+						.put("solar_system_id", 30000001)
+						.put("constellation_id", 20000001)
+						.put("region_id", 10000010));
+		obj.put(
+				"1000000000003",
+				objectMapper
+						.createObjectNode()
+						.put("structure_id", 1000000000003L)
+						.put("is_market_structure", true)
+						.put("solar_system_id", 30000001)
+						.put("constellation_id", 20000001)
+						.put("region_id", 10000010));
+		return new MockResponse().setResponseCode(200).setBody(objectMapper.writeValueAsString(obj));
 	}
 
 	@SneakyThrows

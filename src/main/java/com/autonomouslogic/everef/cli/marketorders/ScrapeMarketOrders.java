@@ -12,7 +12,6 @@ import com.autonomouslogic.everef.url.UrlParser;
 import com.autonomouslogic.everef.util.DataIndexHelper;
 import com.fasterxml.jackson.databind.JsonNode;
 import io.reactivex.rxjava3.core.Completable;
-import io.reactivex.rxjava3.core.CompletableSource;
 import io.reactivex.rxjava3.core.Single;
 import java.io.File;
 import java.time.Duration;
@@ -65,7 +64,7 @@ public class ScrapeMarketOrders implements Command {
 
 	private final Duration latestCacheTime = Configs.DATA_LATEST_CACHE_CONTROL_MAX_AGE.getRequired();
 	private final Duration archiveCacheTime = Configs.DATA_ARCHIVE_CACHE_CONTROL_MAX_AGE.getRequired();
-	private final String  scrapeOwnerHash = Configs.SCRAPE_CHARACTER_OWNER_HASH.getRequired();
+	private final String scrapeOwnerHash = Configs.SCRAPE_CHARACTER_OWNER_HASH.getRequired();
 
 	@Inject
 	protected ScrapeMarketOrders() {}
@@ -79,10 +78,11 @@ public class ScrapeMarketOrders implements Command {
 	@Override
 	public Completable run() {
 		return Completable.concatArray(
-				initScrapeTime(), initStore(),
-			initLogin(),
-			fetchOrders(),
-			writeOrders().flatMapCompletable(this::uploadFile));
+				initScrapeTime(),
+				initStore(),
+				initLogin(),
+				fetchOrders(),
+				writeOrders().flatMapCompletable(this::uploadFile));
 	}
 
 	private Completable initScrapeTime() {

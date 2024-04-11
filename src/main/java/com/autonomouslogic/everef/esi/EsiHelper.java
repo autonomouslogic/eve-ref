@@ -87,9 +87,10 @@ public class EsiHelper {
 	 * @return
 	 */
 	public Single<Response> fetch(EsiUrl url, Maybe<String> accessToken) {
-		return accessToken.map(Optional::of)
-			.switchIfEmpty(Single.just(Optional.empty()))
-			.flatMap(token -> fetch(url, token));
+		return accessToken
+				.map(Optional::of)
+				.switchIfEmpty(Single.just(Optional.empty()))
+				.flatMap(token -> fetch(url, token));
 	}
 
 	/**
@@ -164,7 +165,8 @@ public class EsiHelper {
 	 * @param url
 	 * @return
 	 */
-	public Flowable<JsonNode> fetchPagesOfJsonArrays(EsiUrl url, BiFunction<JsonNode, Response, JsonNode> augmenter, Maybe<String> accessToken) {
+	public Flowable<JsonNode> fetchPagesOfJsonArrays(
+			EsiUrl url, BiFunction<JsonNode, Response, JsonNode> augmenter, Maybe<String> accessToken) {
 		return fetchPages(url, accessToken).compose(standardErrorHandling(url)).flatMap(response -> {
 			var node = decodeResponse(response);
 			return decodeArrayNode(url, node).map(entry -> augmenter.apply(entry, response));

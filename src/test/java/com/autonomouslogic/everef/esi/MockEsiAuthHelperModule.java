@@ -9,7 +9,6 @@ import dagger.Module;
 import dagger.Provides;
 import io.reactivex.rxjava3.core.Maybe;
 import io.reactivex.rxjava3.core.Single;
-
 import javax.inject.Singleton;
 
 @Module
