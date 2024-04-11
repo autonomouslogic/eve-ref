@@ -34,7 +34,7 @@ public class LocationPopulator {
 
 	private Completable populateStation(ObjectNode record, String stationKey) {
 		return Completable.fromAction(() -> {
-			if (record.has("station_id")) {
+			if (record.has(stationKey)) {
 				return;
 			}
 			var stationId = record.get(stationKey);

@@ -65,7 +65,7 @@ public class ScrapeMarketOrders implements Command {
 
 	private final Duration latestCacheTime = Configs.DATA_LATEST_CACHE_CONTROL_MAX_AGE.getRequired();
 	private final Duration archiveCacheTime = Configs.DATA_ARCHIVE_CACHE_CONTROL_MAX_AGE.getRequired();
-	private final String  ownerHah = Configs.SCRAPE_CHARACTER_OWNER_HASH.getRequired();
+	private final String  scrapeOwnerHash = Configs.SCRAPE_CHARACTER_OWNER_HASH.getRequired();
 
 	@Inject
 	protected ScrapeMarketOrders() {}
@@ -102,7 +102,7 @@ public class ScrapeMarketOrders implements Command {
 	}
 
 	private Completable initLogin() {
-		return esiAuthHelper.getTokenForOwnerHash(ownerHah).ignoreElement();
+		return esiAuthHelper.getTokenStringForOwnerHash(scrapeOwnerHash).ignoreElement();
 	}
 
 	private Completable fetchOrders() {

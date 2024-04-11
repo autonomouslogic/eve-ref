@@ -42,7 +42,7 @@ public class MockLocationPopulatorModule {
 				record.put("system_id", 999);
 			}
 			if (!record.has("station_id")) {
-				record.put("station_id", 999);
+					record.put("station_id", 999);
 			}
 			return Completable.complete();
 		};

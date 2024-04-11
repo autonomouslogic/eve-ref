@@ -2,6 +2,7 @@ package com.autonomouslogic.everef.cli.marketorders;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.when;
@@ -21,6 +22,7 @@ import java.io.InputStream;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -98,13 +100,13 @@ public class ScrapeMarketOrdersTest {
 					case "/universe/regions/10000002/?datasource=tranquility" -> new MockResponse()
 							.setResponseCode(200)
 							.setBody("{\"region_id\":10000002,\"name\":\"The Forge\",\"constellations\":[]}");
-					case "/markets/10000001/orders?order_type=all&datasource=tranquility&language=en" -> mockRegionOrders(
+					case "/markets/10000001/orders?order_type=all&datasource=tranquility&language=en" -> mockRegionOrders(recordedRequest,
 							10000001, 1, 2);
-					case "/markets/10000001/orders?order_type=all&datasource=tranquility&language=en&page=2" -> mockRegionOrders(
+					case "/markets/10000001/orders?order_type=all&datasource=tranquility&language=en&page=2" -> mockRegionOrders(recordedRequest,
 							10000001, 2, 2);
-					case "/markets/10000002/orders?order_type=all&datasource=tranquility&language=en" -> mockRegionOrders(
+					case "/markets/10000002/orders?order_type=all&datasource=tranquility&language=en" -> mockRegionOrders(recordedRequest,
 							10000002, 1, 2);
-					case "/markets/10000002/orders?order_type=all&datasource=tranquility&language=en&page=2" -> mockRegionOrders(
+					case "/markets/10000002/orders?order_type=all&datasource=tranquility&language=en&page=2" -> mockRegionOrders(recordedRequest,
 							10000002, 2, 2);
 					case "/base/structures/structures-latest.v2.json" -> mockStructures();
 					case "/markets/structures/1000000000001/?datasource=tranquility&language=en" -> mockStructureOrders(recordedRequest,
@@ -112,6 +114,7 @@ public class ScrapeMarketOrdersTest {
 					case "/markets/structures/1000000000001/?datasource=tranquility&language=en&page=2" -> mockStructureOrders(recordedRequest,
 						1000000000001L, 2, 2);
 					case "/markets/structures/1000000000002/?datasource=tranquility&language=en" -> throw new RuntimeException("Fetch non-market structure");
+					case "/markets/structures/1000000000003/?datasource=tranquility&language=en" -> new MockResponse().setResponseCode(403);
 					default -> new MockResponse().setResponseCode(404);
 				};
 			}
@@ -144,20 +147,20 @@ public class ScrapeMarketOrdersTest {
 				.orElseThrow();
 		// Assert records.
 		var records = testDataUtil.readMapsFromBz2Csv(content).stream()
-				.map(Map::toString)
+				.map(m -> new TreeMap<>(m).toString())
 				.collect(Collectors.joining("\n"));
 		var expected = ListUtil.concat(
 						loadRegionOrderMaps(10000001, 1),
 						loadRegionOrderMaps(10000001, 2),
 						loadRegionOrderMaps(10000002, 1),
-						loadRegionOrderMaps(10000002, 2))
+						loadRegionOrderMaps(10000002, 2),
+						loadStructureOrderMaps(1000000000001L, 1),
+						loadStructureOrderMaps(1000000000001L, 2))
 				.stream()
 				.sorted(Ordering.compound(List.of(
-						Ordering.natural().onResultOf(m -> m.get("region_id")),
-						Ordering.natural().onResultOf(m -> m.get("type_id")))))
-				.peek(record -> record.put("constellation_id", "999"))
-				.peek(record -> record.put("station_id", "999"))
-				.map(Map::toString)
+						Ordering.natural().onResultOf(m -> Long.parseLong(m.get("region_id"))),
+						Ordering.natural().onResultOf(m -> Long.parseLong(m.get("type_id"))))))
+				.map(m -> new TreeMap<>(m).toString())
 				.collect(Collectors.joining("\n"));
 		assertEquals(expected, records);
 		// Assert the two files are the same.
@@ -178,7 +181,8 @@ public class ScrapeMarketOrdersTest {
 	}
 
 	@SneakyThrows
-	private MockResponse mockRegionOrders(int regionId, int page, int pages) {
+	private MockResponse mockRegionOrders(RecordedRequest recordedRequest, int regionId, int page, int pages) {
+		assertNull(recordedRequest.getHeaders().get("Authorization"));
 		var bytes = IOUtils.toByteArray(loadRegionOrders(regionId, page));
 		return new MockResponse()
 				.setResponseCode(200)
@@ -188,7 +192,7 @@ public class ScrapeMarketOrdersTest {
 
 	@SneakyThrows
 	private MockResponse mockStructureOrders(RecordedRequest recordedRequest, long structureId, int page, int pages) {
-		assertNotNull(recordedRequest.getHeaders().get("Authorization"));
+		assertEquals("Bearer oauth2-token", recordedRequest.getHeaders().get("Authorization"));
 		var bytes = IOUtils.toByteArray(loadStructureOrders(structureId, page));
 		return new MockResponse()
 				.setResponseCode(200)
@@ -213,17 +217,25 @@ public class ScrapeMarketOrdersTest {
 			.put("1000000000001", objectMapper.createObjectNode()
 				.put("structure_id", 1000000000001L)
 				.put("is_market_structure", true)
-				.put("solar_system_id", 1)
-				.put("constellation_id", 1)
-				.put("region_id", 1)
+				.put("solar_system_id", 30000001)
+				.put("constellation_id", 20000001)
+				.put("region_id", 10000010)
 			);
 		obj
 			.put("1000000000002", objectMapper.createObjectNode()
 				.put("structure_id", 1000000000002L)
+				.put("is_market_structure", false)
+				.put("solar_system_id", 30000001)
+				.put("constellation_id", 20000001)
+				.put("region_id", 10000010)
+			);
+		obj
+			.put("1000000000003", objectMapper.createObjectNode()
+				.put("structure_id", 1000000000003L)
 				.put("is_market_structure", true)
-				.put("solar_system_id", 1)
-				.put("constellation_id", 1)
-				.put("region_id", 1)
+				.put("solar_system_id", 30000001)
+				.put("constellation_id", 20000001)
+				.put("region_id", 10000010)
 			);
 		return new MockResponse()
 			.setResponseCode(200)
@@ -236,6 +248,21 @@ public class ScrapeMarketOrdersTest {
 		return testDataUtil.readMapsFromJson(loadRegionOrders(regionId, page)).stream()
 				.map(m -> {
 					m.put("region_id", String.valueOf(regionId));
+					m.put("constellation_id", "999");
+					m.put("station_id", "999");
+					return m;
+				})
+				.toList();
+	}
+
+	@SneakyThrows
+	private List<Map<String, String>> loadStructureOrderMaps(long structureId, int page) {
+		return testDataUtil.readMapsFromJson(loadStructureOrders(structureId, page)).stream()
+				.map(m -> {
+					m.put("region_id", "10000010");
+					m.put("constellation_id", "20000001");
+					m.put("system_id", "30000001");
+					m.put("station_id", "999");
 					return m;
 				})
 				.toList();
