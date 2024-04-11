@@ -18,12 +18,15 @@ import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Maybe;
 import java.time.Duration;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.inject.Inject;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+
+import static com.autonomouslogic.everef.util.EveConstants.NPC_STATION_MAX_ID;
 
 @Slf4j
 public class MarketOrderFetcher {
@@ -53,8 +56,8 @@ public class MarketOrderFetcher {
 	@Inject
 	protected MarketOrderFetcher() {}
 
-	public Completable fetchOrders() {
-		return Flowable.concatArray(fetchMarketOrders(), fetchStructureOrders())
+	public Completable fetchMarketOrders() {
+		return Flowable.concatArray(fetchPublicOrders(), fetchStructureOrders())
 				.flatMap(order ->
 						locationPopulator.populate(order, "location_id").andThen(Flowable.just(order)))
 				.doOnNext(this::verifyOrderLocation)
@@ -62,12 +65,12 @@ public class MarketOrderFetcher {
 				.onErrorResumeNext(e -> Completable.error(new RuntimeException("Failed fetching market orders", e)));
 	}
 
-	private Flowable<ObjectNode> fetchMarketOrders() {
+	private Flowable<ObjectNode> fetchPublicOrders() {
 		return universeEsi
 				.getAllRegions()
 				.flatMap(
 						region -> {
-							return fetchMarketOrders(
+							return fetchOrders(
 											String.format("/markets/%s/orders?order_type=all", region.getRegionId()),
 											region.getName(),
 											false)
@@ -85,22 +88,30 @@ public class MarketOrderFetcher {
 					.filter(s -> s.isMarketStructure())
 					.flatMap(
 							structure -> {
-								return fetchMarketOrders(
+								return fetchOrders(
 												String.format("/markets/structures/%s/", structure.getStructureId()),
 												Long.toString(structure.getStructureId()),
 												true)
 										.map(order -> {
-											return order.put("system_id", structure.getSolarSystemId())
-													.put("constellation_id", structure.getConstellationId())
-													.put("region_id", structure.getRegionId());
+											Optional.ofNullable(structure.getSolarSystemId())
+													.ifPresent(v -> order.put("system_id", v));
+											Optional.ofNullable(structure.getConstellationId())
+													.ifPresent(v -> order.put("constellation_id", v));
+											Optional.ofNullable(structure.getRegionId())
+													.ifPresent(v -> order.put("region_id", v));
+											return order;
 										});
 							},
 							false,
-							4);
+							4)
+					.filter(order -> {
+						long id = order.get("order_id").asLong();
+						return !marketOrdersStore.containsKey(id);
+					});
 		});
 	}
 
-	private Flowable<ObjectNode> fetchMarketOrders(@NonNull String url, @NonNull String locationName, boolean auth) {
+	private Flowable<ObjectNode> fetchOrders(@NonNull String url, @NonNull String locationName, boolean auth) {
 		var count = new AtomicInteger();
 		return Flowable.defer(() -> {
 					log.info(String.format("Fetching market orders from %s", locationName));
@@ -149,6 +160,11 @@ public class MarketOrderFetcher {
 	}
 
 	private void verifyOrderLocation(ObjectNode order) {
+//		var locationId = order.get("location_id").asLong();
+//		if (locationId > NPC_STATION_MAX_ID) {
+//			// The structure JSON can contain structures with accessible markets, but which aren't otherwise gettable.
+//			return;
+//		}
 		if (JsonUtil.isNullOrEmpty(order.get("region_id"))) {
 			throw new IllegalStateException("region_id is null: " + order);
 		}

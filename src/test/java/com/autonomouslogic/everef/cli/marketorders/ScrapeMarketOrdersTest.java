@@ -115,6 +115,8 @@ public class ScrapeMarketOrdersTest {
 							"Fetch non-market structure");
 					case "/markets/structures/1000000000003/?datasource=tranquility&language=en" -> new MockResponse()
 							.setResponseCode(403);
+					case "/markets/structures/1000000000004/?datasource=tranquility&language=en" -> mockStructureOrders(
+						recordedRequest, 1000000000004L, 1, 1);
 					default -> new MockResponse().setResponseCode(404);
 				};
 			}
@@ -155,7 +157,8 @@ public class ScrapeMarketOrdersTest {
 						loadRegionOrderMaps(10000002, 1),
 						loadRegionOrderMaps(10000002, 2),
 						loadStructureOrderMaps(1000000000001L, 1),
-						loadStructureOrderMaps(1000000000001L, 2))
+						loadStructureOrderMaps(1000000000001L, 2),
+						loadStructureOrderMaps(1000000000004L, 1))
 				.stream()
 				.sorted(Ordering.compound(List.of(
 						Ordering.natural().onResultOf(m -> Long.parseLong(m.get("region_id"))),
@@ -240,6 +243,12 @@ public class ScrapeMarketOrdersTest {
 						.put("solar_system_id", 30000001)
 						.put("constellation_id", 20000001)
 						.put("region_id", 10000010));
+		obj.put(
+				"1000000000004",
+				objectMapper
+						.createObjectNode()
+						.put("structure_id", 1000000000004L)
+						.put("is_market_structure", true));
 		return new MockResponse().setResponseCode(200).setBody(objectMapper.writeValueAsString(obj));
 	}
 

@@ -14,6 +14,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import javax.inject.Inject;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -68,5 +69,9 @@ public class MarketOrdersWriter {
 	private Ordering<Long> ordering(String field) {
 		return Ordering.natural()
 				.onResultOf(id -> marketOrdersStore.get(id).get(field).asLong());
+
+//			.onResultOf(id -> Optional.ofNullable(marketOrdersStore.get(id).get(field))
+//
+//			);
 	}
 }

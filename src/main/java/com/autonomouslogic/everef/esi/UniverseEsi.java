@@ -21,6 +21,8 @@ import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.jetbrains.annotations.NotNull;
 
+import static com.autonomouslogic.everef.util.EveConstants.NPC_STATION_MAX_ID;
+
 @Singleton
 @Log4j2
 public class UniverseEsi {
@@ -88,8 +90,7 @@ public class UniverseEsi {
 	}
 
 	public Maybe<GetUniverseStationsStationIdOk> getNpcStation(long stationId) {
-		// All NPC stations will have an ID below 100 million.
-		if (stationId > 100_000_000) {
+		if (stationId > NPC_STATION_MAX_ID) {
 			log.trace(String.format("Ignoring request for non-NPC station %s", stationId));
 			return Maybe.empty();
 		}

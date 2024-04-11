@@ -108,7 +108,7 @@ public class ScrapeMarketOrders implements Command {
 	private Completable fetchOrders() {
 		return Completable.defer(() -> {
 			log.info("Fetching market orders");
-			return marketOrderFetcher.fetchOrders();
+			return marketOrderFetcher.fetchMarketOrders();
 		});
 	}
 
