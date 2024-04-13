@@ -1,5 +1,7 @@
 package com.autonomouslogic.everef.cli.marketorders;
 
+import static com.autonomouslogic.everef.util.EveConstants.NPC_STATION_MAX_ID;
+
 import com.autonomouslogic.commons.rxjava3.Rx3Util;
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.esi.EsiAuthHelper;
@@ -158,11 +160,11 @@ public class MarketOrderFetcher {
 	}
 
 	private void verifyOrderLocation(ObjectNode order) {
-		//		var locationId = order.get("location_id").asLong();
-		//		if (locationId > NPC_STATION_MAX_ID) {
-		//			// The structure JSON can contain structures with accessible markets, but which aren't otherwise gettable.
-		//			return;
-		//		}
+		var locationId = order.get("location_id").asLong();
+		if (locationId > NPC_STATION_MAX_ID) {
+			// The structure JSON can contain structures with accessible markets, but which aren't otherwise gettable.
+			return;
+		}
 		if (JsonUtil.isNullOrEmpty(order.get("region_id"))) {
 			throw new IllegalStateException("region_id is null: " + order);
 		}

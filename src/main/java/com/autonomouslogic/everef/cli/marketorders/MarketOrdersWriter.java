@@ -66,8 +66,10 @@ public class MarketOrdersWriter {
 	}
 
 	private Ordering<Long> ordering(String field) {
-		return Ordering.natural()
-				.onResultOf(id -> marketOrdersStore.get(id).get(field).asLong());
+		return Ordering.natural().nullsLast().onResultOf(id -> {
+			var node = marketOrdersStore.get(id);
+			return node.has(field) ? node.get(field).asLong() : null;
+		});
 
 		//			.onResultOf(id -> Optional.ofNullable(marketOrdersStore.get(id).get(field))
 		//

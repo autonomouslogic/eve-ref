@@ -2,13 +2,12 @@ package com.autonomouslogic.everef.cli.marketorders;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
 
 import com.autonomouslogic.commons.ListUtil;
 import com.autonomouslogic.commons.ResourceUtil;
 import com.autonomouslogic.everef.esi.LocationPopulator;
-import com.autonomouslogic.everef.esi.MockLocationPopulatorModule;
+import com.autonomouslogic.everef.openapi.esi.models.GetUniverseSystemsSystemIdOk;
+import com.autonomouslogic.everef.openapi.esi.models.GetUniverseSystemsSystemIdPosition;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.test.MockS3Adapter;
 import com.autonomouslogic.everef.test.TestDataUtil;
@@ -38,6 +37,7 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.platform.commons.util.StringUtils;
 import org.junitpioneer.jupiter.SetEnvironmentVariable;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -83,18 +83,33 @@ public class ScrapeMarketOrdersTest {
 	@SneakyThrows
 	void before() {
 		DaggerTestComponent.builder()
-				.mockLocationPopulatorModule(new MockLocationPopulatorModule().setLocationPopulator(locationPopulator))
+				// .mockLocationPopulatorModule(new
+				// MockLocationPopulatorModule().setLocationPopulator(locationPopulator))
 				.build()
 				.inject(this);
 		server = new MockWebServer();
 		server.setDispatcher(new Dispatcher() {
 			@NotNull
 			@Override
+			@SneakyThrows
 			public MockResponse dispatch(@NotNull RecordedRequest recordedRequest) throws InterruptedException {
 				return switch (recordedRequest.getPath()) {
 					case "/universe/regions/?datasource=tranquility" -> new MockResponse()
 							.setResponseCode(200)
 							.setBody("[10000001,10000002]");
+					case "/universe/systems/30000001/?datasource=tranquility" -> new MockResponse()
+							.setResponseCode(200)
+							.setBody(objectMapper.writeValueAsString(new GetUniverseSystemsSystemIdOk(
+									20000001,
+									"test",
+									new GetUniverseSystemsSystemIdPosition(0, 0, 0),
+									0,
+									30000001,
+									null,
+									null,
+									null,
+									null,
+									null)));
 					case "/universe/regions/10000001/?datasource=tranquility" -> new MockResponse()
 							.setResponseCode(200)
 							.setBody("{\"region_id\":10000001,\"name\":\"Derelik\",\"constellations\":[]}");
@@ -128,9 +143,6 @@ public class ScrapeMarketOrdersTest {
 			}
 		});
 		server.start(TestDataUtil.TEST_PORT);
-
-		// Locations.
-		when(locationPopulator.populate(any(), any())).thenAnswer(MockLocationPopulatorModule.mockPopulate());
 	}
 
 	@AfterEach
@@ -158,22 +170,25 @@ public class ScrapeMarketOrdersTest {
 				.map(m -> new TreeMap<>(m).toString())
 				.collect(Collectors.joining("\n"));
 		var expected = ListUtil.concat(
-						loadStructureOrderMaps(1000000000004L, 1),
 						loadRegionOrderMaps(10000001, 1),
 						loadRegionOrderMaps(10000001, 2),
 						loadRegionOrderMaps(10000002, 1),
 						loadRegionOrderMaps(10000002, 2),
 						loadStructureOrderMaps(1000000000001L, 1),
-						loadStructureOrderMaps(1000000000001L, 2))
+						loadStructureOrderMaps(1000000000001L, 2),
+						loadStructureOrderMaps(1000000000004L, 1))
 				.stream()
 				.sorted(Ordering.compound(List.of(
 						Ordering.natural()
 								.nullsLast()
-								.onResultOf(
-										m -> m.containsKey("region_id") ? Long.parseLong(m.get("region_id")) : null),
+								.onResultOf(m -> StringUtils.isNotBlank(m.get("region_id"))
+										? Long.parseLong(m.get("region_id"))
+										: null),
 						Ordering.natural()
 								.nullsLast()
-								.onResultOf(m -> m.containsKey("type_id") ? Long.parseLong(m.get("type_id")) : null))))
+								.onResultOf(m -> StringUtils.isNotBlank(m.get("type_id"))
+										? Long.parseLong(m.get("type_id"))
+										: null))))
 				.map(m -> new TreeMap<>(m).toString())
 				.collect(Collectors.joining("\n"));
 		assertEquals(expected, records);
@@ -304,8 +319,7 @@ public class ScrapeMarketOrdersTest {
 		return testDataUtil.readMapsFromJson(loadRegionOrders(regionId, page)).stream()
 				.map(m -> {
 					m.put("region_id", String.valueOf(regionId));
-					m.put("constellation_id", "999");
-					m.put("station_id", "999");
+					m.put("constellation_id", "20000001");
 					return m;
 				})
 				.toList();
@@ -315,10 +329,15 @@ public class ScrapeMarketOrdersTest {
 	private List<Map<String, String>> loadStructureOrderMaps(long structureId, int page) {
 		return testDataUtil.readMapsFromJson(loadStructureOrders(structureId, page)).stream()
 				.map(m -> {
-					//					m.put("region_id", "10000010");
-					//					m.put("constellation_id", "20000001");
-					//					m.put("system_id", "30000001");
-					//					m.put("station_id", "999");
+					if (m.get("location_id").equals("1000000000004")) {
+						m.put("region_id", "");
+						m.put("constellation_id", "");
+						m.put("system_id", "");
+						return m;
+					}
+					m.put("region_id", "10000010");
+					m.put("constellation_id", "20000001");
+					m.put("system_id", "30000001");
 					return m;
 				})
 				.toList();
