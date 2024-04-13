@@ -25,6 +25,7 @@ import java.util.stream.Collectors;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.SneakyThrows;
+import lombok.extern.log4j.Log4j2;
 import okhttp3.mockwebserver.Dispatcher;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
@@ -33,6 +34,7 @@ import org.apache.commons.io.IOUtils;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -49,6 +51,7 @@ import software.amazon.awssdk.services.s3.S3AsyncClient;
 @SetEnvironmentVariable(key = "ESI_USER_AGENT", value = "user-agent")
 @SetEnvironmentVariable(key = "ESI_BASE_URL", value = "http://localhost:" + TestDataUtil.TEST_PORT)
 @SetEnvironmentVariable(key = "SCRAPE_CHARACTER_OWNER_HASH", value = "scrape-owner-hash")
+@Log4j2
 public class ScrapeMarketOrdersTest {
 	static final String BUCKET_NAME = "data-bucket";
 
@@ -116,8 +119,11 @@ public class ScrapeMarketOrdersTest {
 					case "/markets/structures/1000000000003/?datasource=tranquility&language=en" -> new MockResponse()
 							.setResponseCode(403);
 					case "/markets/structures/1000000000004/?datasource=tranquility&language=en" -> mockStructureOrders(
-						recordedRequest, 1000000000004L, 1, 1);
-					default -> new MockResponse().setResponseCode(404);
+							recordedRequest, 1000000000004L, 1, 1);
+					default -> {
+						log.warn("Unaccounted for URL: {}", recordedRequest.getPath());
+						yield new MockResponse().setResponseCode(404);
+					}
 				};
 			}
 		});
@@ -152,17 +158,22 @@ public class ScrapeMarketOrdersTest {
 				.map(m -> new TreeMap<>(m).toString())
 				.collect(Collectors.joining("\n"));
 		var expected = ListUtil.concat(
+						loadStructureOrderMaps(1000000000004L, 1),
 						loadRegionOrderMaps(10000001, 1),
 						loadRegionOrderMaps(10000001, 2),
 						loadRegionOrderMaps(10000002, 1),
 						loadRegionOrderMaps(10000002, 2),
 						loadStructureOrderMaps(1000000000001L, 1),
-						loadStructureOrderMaps(1000000000001L, 2),
-						loadStructureOrderMaps(1000000000004L, 1))
+						loadStructureOrderMaps(1000000000001L, 2))
 				.stream()
 				.sorted(Ordering.compound(List.of(
-						Ordering.natural().onResultOf(m -> Long.parseLong(m.get("region_id"))),
-						Ordering.natural().onResultOf(m -> Long.parseLong(m.get("type_id"))))))
+						Ordering.natural()
+								.nullsLast()
+								.onResultOf(
+										m -> m.containsKey("region_id") ? Long.parseLong(m.get("region_id")) : null),
+						Ordering.natural()
+								.nullsLast()
+								.onResultOf(m -> m.containsKey("type_id") ? Long.parseLong(m.get("type_id")) : null))))
 				.map(m -> new TreeMap<>(m).toString())
 				.collect(Collectors.joining("\n"));
 		assertEquals(expected, records);
@@ -182,6 +193,42 @@ public class ScrapeMarketOrdersTest {
 										"base/market-orders/history/2020/2020-01-02/market-orders-2020-01-02_03-04-05.v3.csv.bz2")
 								.build());
 	}
+
+	@Test
+	@Disabled
+	void _shouldScrapeMarketOrders() {}
+
+	@Test
+	@Disabled
+	void shouldSaveKeysInSpecificOrder() {}
+
+	@Test
+	@Disabled
+	void shouldScrapeMultiplePages() {}
+
+	@Test
+	@Disabled
+	void shouldScrapeStructureOrders() {}
+
+	@Test
+	@Disabled
+	void shouldScrapeMultiplePageStructureOrders() {}
+
+	@Test
+	@Disabled
+	void shouldNotOverwriteExistingMarketOrderWithStructureOrder() {}
+
+	@Test
+	@Disabled
+	void shouldIgnore403ForbiddenOnStructureMarkets() {}
+
+	@Test
+	@Disabled
+	void shouldNotScrapeStructuresWithoutMarkets() {}
+
+	@Test
+	@Disabled
+	void shouldNotFailIfStructureDoesntHaveLocation() {}
 
 	@SneakyThrows
 	private MockResponse mockRegionOrders(RecordedRequest recordedRequest, int regionId, int page, int pages) {
@@ -268,10 +315,10 @@ public class ScrapeMarketOrdersTest {
 	private List<Map<String, String>> loadStructureOrderMaps(long structureId, int page) {
 		return testDataUtil.readMapsFromJson(loadStructureOrders(structureId, page)).stream()
 				.map(m -> {
-					m.put("region_id", "10000010");
-					m.put("constellation_id", "20000001");
-					m.put("system_id", "30000001");
-					m.put("station_id", "999");
+					//					m.put("region_id", "10000010");
+					//					m.put("constellation_id", "20000001");
+					//					m.put("system_id", "30000001");
+					//					m.put("station_id", "999");
 					return m;
 				})
 				.toList();

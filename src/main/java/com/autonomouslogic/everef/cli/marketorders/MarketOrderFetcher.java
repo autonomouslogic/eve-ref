@@ -26,8 +26,6 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
-import static com.autonomouslogic.everef.util.EveConstants.NPC_STATION_MAX_ID;
-
 @Slf4j
 public class MarketOrderFetcher {
 	@Inject
@@ -160,11 +158,11 @@ public class MarketOrderFetcher {
 	}
 
 	private void verifyOrderLocation(ObjectNode order) {
-//		var locationId = order.get("location_id").asLong();
-//		if (locationId > NPC_STATION_MAX_ID) {
-//			// The structure JSON can contain structures with accessible markets, but which aren't otherwise gettable.
-//			return;
-//		}
+		//		var locationId = order.get("location_id").asLong();
+		//		if (locationId > NPC_STATION_MAX_ID) {
+		//			// The structure JSON can contain structures with accessible markets, but which aren't otherwise gettable.
+		//			return;
+		//		}
 		if (JsonUtil.isNullOrEmpty(order.get("region_id"))) {
 			throw new IllegalStateException("region_id is null: " + order);
 		}

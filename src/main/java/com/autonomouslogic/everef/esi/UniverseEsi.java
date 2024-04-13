@@ -1,5 +1,7 @@
 package com.autonomouslogic.everef.esi;
 
+import static com.autonomouslogic.everef.util.EveConstants.NPC_STATION_MAX_ID;
+
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.openapi.esi.apis.UniverseApi;
 import com.autonomouslogic.everef.openapi.esi.models.GetUniverseConstellationsConstellationIdOk;
@@ -20,8 +22,6 @@ import javax.inject.Singleton;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.jetbrains.annotations.NotNull;
-
-import static com.autonomouslogic.everef.util.EveConstants.NPC_STATION_MAX_ID;
 
 @Singleton
 @Log4j2
