@@ -320,6 +320,7 @@ public class ScrapeMarketOrdersTest {
 				.map(m -> {
 					m.put("region_id", String.valueOf(regionId));
 					m.put("constellation_id", "20000001");
+					m.put("station_id", m.get("location_id"));
 					return m;
 				})
 				.toList();
