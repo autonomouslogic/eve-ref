@@ -75,7 +75,11 @@ public class MarketOrderFetcher {
 											region.getName(),
 											false)
 									.map(order -> {
-										return order.put("region_id", region.getRegionId());
+										if (!order.has("station_id")) {
+											order.put("station_id", order.get("location_id"));
+										}
+										order.put("region_id", region.getRegionId());
+										return order;
 									});
 						},
 						false,

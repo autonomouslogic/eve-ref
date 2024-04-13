@@ -330,6 +330,7 @@ public class ScrapeMarketOrdersTest {
 	private List<Map<String, String>> loadStructureOrderMaps(long structureId, int page) {
 		return testDataUtil.readMapsFromJson(loadStructureOrders(structureId, page)).stream()
 				.map(m -> {
+					m.put("station_id", "");
 					if (m.get("location_id").equals("1000000000004")) {
 						m.put("region_id", "");
 						m.put("constellation_id", "");
