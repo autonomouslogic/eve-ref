@@ -213,6 +213,19 @@ public class ScrapeStructuresTest {
 	}
 
 	@ParameterizedTest
+	@ValueSource(strings = {"location_id", "station_id"})
+	void shouldPopulateLocationFromMarketOrders(String prop) {
+		marketOrders.add(objectMapper
+				.createObjectNode()
+				.put(prop, 1000000000001L)
+				.put("region_id", 10000001)
+				.put("system_id", 30000001));
+		nonPublicStructures.put(1000000000001L, Map.of("name", "Test Structure 1"));
+		scrapeStructures.run().blockingAwait();
+		verifyScrape("/single-non-public-structure-with-location.json");
+	}
+
+	@ParameterizedTest
 	@ValueSource(strings = {"start_location_id", "end_location_id"})
 	void shouldScrapeStructuresFromPublicContracts(String prop) {
 		publicContracts.add(
