@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.reactivex.rxjava3.core.Flowable;
 import java.time.Instant;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +28,9 @@ public class StructureStore {
 	@NonNull
 	private Map<Long, JsonNode> store;
 
+	@Setter
+	private ZonedDateTime scrapeTime;
+
 	@Inject
 	protected StructureStore() {}
 
@@ -39,6 +43,7 @@ public class StructureStore {
 		if (node == null) {
 			node = objectMapper.createObjectNode();
 			node.put(ScrapeStructures.STRUCTURE_ID, structureId);
+			node.put("first_seen", scrapeTime.toInstant().toString());
 			for (var prop : ALL_BOOLEANS) {
 				node.put(prop, false);
 			}

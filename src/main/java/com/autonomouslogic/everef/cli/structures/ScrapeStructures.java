@@ -242,6 +242,7 @@ public class ScrapeStructures implements Command {
 			mvStore = mvStoreUtil.createTempStore("public-contracts");
 			log.debug("MVStore opened at {}", mvStore.getFileStore().getFileName());
 			structureStore.setStore(mvStoreUtil.openJsonMap(mvStore, "structures", Long.class));
+			structureStore.setScrapeTime(scrapeTime);
 			log.debug("MVStore initialised");
 		});
 	}
@@ -318,7 +319,7 @@ public class ScrapeStructures implements Command {
 								.toFlowable(),
 						oldStructureSource.getStructures(),
 						// backfillPublicStructureSource.getStructures(),
-						// adam4EveBackfillStructureSource.getStructures(),
+						adam4EveBackfillStructureSource.getStructures(),
 						// sirSmashAlotBackfillStructureSource.getStructures(),
 						publicStructureSource.getStructures(),
 						marketOrdersStructureSource.getStructures(),

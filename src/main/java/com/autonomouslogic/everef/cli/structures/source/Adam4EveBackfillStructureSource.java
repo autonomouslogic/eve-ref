@@ -14,6 +14,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Optional;
 import javax.inject.Inject;
@@ -30,7 +32,7 @@ import org.apache.commons.csv.CSVRecord;
 @Log4j2
 @Deprecated
 public class Adam4EveBackfillStructureSource implements StructureSource {
-	private static final String SOURCE_URL = "https://static.adam4eve.eu/IDs/playerStructure_IDs.csv";
+	private static final String SOURCE_URL = "https://static.adam4eve.eu/IDs/playerStructure_extended.csv";
 
 	@Inject
 	protected OkHttpClient okHttpClient;
@@ -66,11 +68,27 @@ public class Adam4EveBackfillStructureSource implements StructureSource {
 							.filter(s -> !s.isBlank())
 							.map(Long::parseLong)
 							.orElse(null);
-					var solarSystemId = Long.parseLong(record.get("solarSystemID"));
+					var solarSystemId = Optional.ofNullable(record.get("solarSystemID"))
+							.filter(s -> !s.isBlank())
+							.map(Long::parseLong)
+							.orElse(null);
+					var regionId = Optional.ofNullable(record.get("regionID"))
+							.filter(s -> !s.isBlank())
+							.map(Long::parseLong)
+							.orElse(null);
 					var name = record.get("name");
 					var ownerId = Optional.ofNullable(record.get("ownerID"))
 							.filter(s -> !s.isBlank())
 							.map(Long::parseLong)
+							.orElse(null);
+					var firstSeen = Optional.ofNullable(record.get("firstSeen"))
+							.filter(s -> !s.isBlank())
+							.map(LocalDate::parse)
+							.map(d -> d.atStartOfDay(ZoneOffset.UTC).toInstant())
+							.orElse(null);
+					var lastSeen = Optional.ofNullable(record.get("lastSeen"))
+							.filter(s -> !s.isBlank())
+							.map(LocalDate::parse)
 							.orElse(null);
 					var node = structureStore.getOrInitStructure(structureId);
 					if (!node.has("type_id")) {
@@ -79,11 +97,24 @@ public class Adam4EveBackfillStructureSource implements StructureSource {
 					if (!node.has("solar_system_id")) {
 						node.put("solar_system_id", solarSystemId);
 					}
+					if (!node.has("region_id")) {
+						node.put("solar_system_id", regionId);
+					}
 					if (!node.has("name")) {
 						node.put("name", name);
 					}
 					if (!node.has("owner_id")) {
 						node.put("owner_id", ownerId);
+					}
+					if (firstSeen != null) {
+						if (!node.has("first_seen")) {
+							node.put("first_seen", firstSeen.toString());
+						} else {
+							var t = Instant.parse(node.get("first_seen").asText());
+							if (firstSeen.isBefore(t)) {
+								node.put("first_seen", firstSeen.toString());
+							}
+						}
 					}
 					structureStore.put(node);
 					structureStore.updateTimestamp(structureId, LAST_STRUCTURE_GET, Instant.EPOCH);
