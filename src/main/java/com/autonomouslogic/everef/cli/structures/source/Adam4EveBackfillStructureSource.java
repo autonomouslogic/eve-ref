@@ -1,5 +1,6 @@
 package com.autonomouslogic.everef.cli.structures.source;
 
+import static com.autonomouslogic.everef.cli.structures.ScrapeStructures.FIRST_SEEN;
 import static com.autonomouslogic.everef.cli.structures.ScrapeStructures.LAST_SEEN_PUBLIC_STRUCTURE;
 import static com.autonomouslogic.everef.cli.structures.ScrapeStructures.LAST_STRUCTURE_GET;
 
@@ -110,9 +111,9 @@ public class Adam4EveBackfillStructureSource implements StructureSource {
 						if (!node.has("first_seen")) {
 							node.put("first_seen", firstSeen.toString());
 						} else {
-							var t = Instant.parse(node.get("first_seen").asText());
+							var t = Instant.parse(node.get(FIRST_SEEN).asText());
 							if (firstSeen.isBefore(t)) {
-								node.put("first_seen", firstSeen.toString());
+								node.put(FIRST_SEEN, firstSeen.toString());
 							}
 						}
 					}

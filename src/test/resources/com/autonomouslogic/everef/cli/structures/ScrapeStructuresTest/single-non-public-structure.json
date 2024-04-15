@@ -5,6 +5,7 @@
     "is_gettable_structure": true,
     "last_structure_get": "2021-01-01T00:00:00Z",
     "is_public_structure": false,
-    "is_market_structure": false
+    "is_market_structure": false,
+    "first_seen": "2021-01-01T00:00:00.123Z"
   }
 }

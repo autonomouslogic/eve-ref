@@ -23,7 +23,6 @@ public class OldStructureSource implements StructureSource {
 	public Flowable<Long> getStructures() {
 		return Flowable.defer(() -> {
 			var ids = structureStore.getAllIds();
-			;
 			log.debug("Fetched {} previous structure ids", ids.size());
 			return Flowable.fromIterable(ids);
 		});

@@ -1,6 +1,7 @@
 package com.autonomouslogic.everef.cli.structures;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.lenient;
 
@@ -247,6 +248,33 @@ public class ScrapeStructuresTest {
 	}
 
 	@Test
+	void shouldSetFirstSeenOnNewStructures() {
+		publicStructures.put(1000000000001L, Map.of("name", "Test Structure 1"));
+		scrapeStructures.run().blockingAwait();
+		verifyScrape("/single-public-structure.json");
+	}
+
+	@Test
+	void shouldNotPopulateFirstSeenOnExistingStructures() {
+		loadPreviousScrape("/single-public-structure.json");
+		previousScrape.withObject("1000000000001").remove("first_seen");
+		publicStructures.put(1000000000001L, Map.of("name", "Test Structure 1"));
+		scrapeStructures.run().blockingAwait();
+		assertNull(loadScrape().get("1000000000001").get("first_seen"));
+	}
+
+	@Test
+	void shouldNotUpdatePopulateFirstSeenOnExistingStructures() {
+		loadPreviousScrape("/single-public-structure.json");
+		previousScrape.withObject("1000000000001").put("first_seen", "2000-01-01T00:00:00Z");
+		publicStructures.put(1000000000001L, Map.of("name", "Test Structure 1"));
+		scrapeStructures.run().blockingAwait();
+		assertEquals(
+				"2000-01-01T00:00:00Z",
+				loadScrape().get("1000000000001").get("first_seen").textValue());
+	}
+
+	@Test
 	void shouldExecuteDataIndex() {
 		publicStructures.put(1000000000001L, Map.of("name", "Test Structure 1"));
 		scrapeStructures
@@ -272,13 +300,18 @@ public class ScrapeStructuresTest {
 	}
 
 	@SneakyThrows
-	private void verifyScrape(@NonNull String expectedFile) {
+	private ObjectNode loadScrape() {
 		var archiveFile = "base/structures/structures-latest.v2.json";
 		var content = mockS3Adapter
 				.getTestObject(BUCKET_NAME, archiveFile, dataClient)
 				.orElseThrow();
+		return (ObjectNode) objectMapper.readTree(content);
+	}
+
+	@SneakyThrows
+	private void verifyScrape(@NonNull String expectedFile) {
 		var expected = objectMapper.readTree(ResourceUtil.loadContextual(getClass(), expectedFile));
-		var supplied = objectMapper.readTree(content);
+		var supplied = loadScrape();
 		assertEquals(expected, supplied);
 	}
 

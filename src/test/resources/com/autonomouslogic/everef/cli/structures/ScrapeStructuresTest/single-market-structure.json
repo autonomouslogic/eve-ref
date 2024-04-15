@@ -8,6 +8,7 @@
     "last_structure_get": "2021-01-01T00:00:00Z",
     "last_seen_public_structure": "2021-01-01T00:00:00Z",
     "is_market_structure": true,
-    "last_seen_market_structure": "2021-01-01T00:00:00Z"
+    "last_seen_market_structure": "2021-01-01T00:00:00Z",
+    "first_seen": "2021-01-01T00:00:00.123Z"
   }
 }
