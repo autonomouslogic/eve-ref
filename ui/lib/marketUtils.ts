@@ -1,7 +1,7 @@
 import {GetMarketsRegionIdOrdersDatasourceEnum, GetMarketsRegionIdOrdersOrderTypeEnum} from "~/esi-openapi";
 import {marketApi} from "~/esi";
 
-const THE_FORGE = 10000002;
+export const THE_FORGE_REGION_ID = 10000002;
 
 export const HUB_STATION_IDS = new Map<string, number>();
 HUB_STATION_IDS.set("Jita", 60003760); // Jita IV - Moon 4 - Caldari Navy Assembly Plant
@@ -22,7 +22,7 @@ export async function getOrders(orderType: GetMarketsRegionIdOrdersOrderTypeEnum
 
 export async function getJitaSellPrice(typeId: number) {
     const jitaStation = HUB_STATION_IDS.get("Jita");
-    const sellPrice = (await getOrders(GetMarketsRegionIdOrdersOrderTypeEnum.Sell, typeId, THE_FORGE))
+    const sellPrice = (await getOrders(GetMarketsRegionIdOrdersOrderTypeEnum.Sell, typeId, THE_FORGE_REGION_ID))
         .filter(e => e.locationId == jitaStation)
         .map(e => e.price)
         .sort((a, b) => a - b)
