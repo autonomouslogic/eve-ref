@@ -50,6 +50,8 @@ const injectorPoints = [
 <template>
 	<h1>Skill Points</h1>
 	<div>PLEX price: <Money :value="plexPrice" /></div>
+
+	<h2>Accounts</h2>
 	<table class="table-auto w-full my-3">
 		<thead>
 			<th class="text-left">Source</th>
@@ -64,13 +66,6 @@ const injectorPoints = [
 				<td class="text-right">-</td>
 				<td class="text-right"><FormattedNumber :number="alphaSkillPointsPerMonth" /> per month</td>
 				<td class="text-right">-</td>
-			</tr>
-
-			<tr>
-				<td class="text-left"><TypeLink :type-id="DAILY_ALPHA_INJECTOR" /></td>
-				<td class="text-right"><Money :value="alphaInjectorPrice" /></td>
-				<td class="text-right"><FormattedNumber :number="50000" /> per day</td>
-				<td class="text-right"><Money :value="alphaInjectorPrice / 50000" /></td>
 			</tr>
 
 			<tr>
@@ -90,26 +85,32 @@ const injectorPoints = [
 				<td class="text-right"><Money :value="multiPrice / omegaSkillPointsPerMonth" /></td>
 			</tr>
 
-			<tr>
-				<td class="text-left"><TypeLink :type-id="MASTER_AT_ARMS_CEREBRAL_ACCELERATOR" /> (Alpha)</td>
-				<td class="text-right"><Money :value="masterAtArmsPrice" /></td>
-				<td class="text-right"><FormattedNumber :number="10800" /> per day</td>
-				<td class="text-right"><Money :value="masterAtArmsPrice / 10800" /></td>
-			</tr>
+		</tbody>
+	</table>
 
+	<h2>Injectors</h2>
+	<table class="table-auto w-full my-3">
+		<thead>
+			<th class="text-left">Source</th>
+			<th class="text-right">Price</th>
+			<th class="text-right">Skill points</th>
+			<th class="text-right">ISK per SP</th>
+		</thead>
+
+		<tbody>
 			<tr>
-				<td class="text-left"><TypeLink :type-id="MASTER_AT_ARMS_CEREBRAL_ACCELERATOR" /> (Omega)</td>
-				<td class="text-right"><Money :value="masterAtArmsPrice" /></td>
-				<td class="text-right"><FormattedNumber :number="21600" /> per day</td>
-				<td class="text-right"><Money :value="masterAtArmsPrice / 21600" /></td>
+				<td class="text-left"><TypeLink :type-id="DAILY_ALPHA_INJECTOR" /></td>
+				<td class="text-right"><Money :value="alphaInjectorPrice" /></td>
+				<td class="text-right"><FormattedNumber :number="50000" /> per day</td>
+				<td class="text-right"><Money :value="alphaInjectorPrice / 50000" /></td>
 			</tr>
 
 			<template v-for="point, idx in injectorPoints" :key="idx">
 				<tr>
 					<td class="text-left"><TypeLink :type-id="SMALL_SKILL_INJECTOR" /> ({{point.limit}})</td>
 					<td class="text-right"><Money :value="smallInjectorPrice" /></td>
-					<td class="text-right"><FormattedNumber :number="point.points" /></td>
-					<td class="text-right"><Money :value="smallInjectorPrice / point.points" /></td>
+					<td class="text-right"><FormattedNumber :number="point.points / 5" /></td>
+					<td class="text-right"><Money :value="smallInjectorPrice / (point.points / 5)" /></td>
 				</tr>
 				<tr>
 					<td class="text-left"><TypeLink :type-id="LARGE_SKILL_INJECTOR" /> ({{point.limit}})</td>
@@ -118,9 +119,38 @@ const injectorPoints = [
 					<td class="text-right"><Money :value="largeInjectorPrice / point.points" /></td>
 				</tr>
 			</template>
-
 		</tbody>
+
+		<h2>Accelerators</h2>
+		<table class="table-auto w-full my-3">
+			<thead>
+				<th class="text-left">Source</th>
+				<th class="text-right">Price</th>
+				<th class="text-right">Skill points</th>
+				<th class="text-right">ISK per SP</th>
+			</thead>
+
+			<tbody>
+				<tr>
+					<td class="text-left"><TypeLink :type-id="MASTER_AT_ARMS_CEREBRAL_ACCELERATOR" /> (Alpha)</td>
+					<td class="text-right"><Money :value="masterAtArmsPrice" /></td>
+					<td class="text-right"><FormattedNumber :number="10800" /> per day</td>
+					<td class="text-right"><Money :value="masterAtArmsPrice / 10800" /></td>
+				</tr>
+
+				<tr>
+					<td class="text-left"><TypeLink :type-id="MASTER_AT_ARMS_CEREBRAL_ACCELERATOR" /> (Omega)</td>
+					<td class="text-right"><Money :value="masterAtArmsPrice" /></td>
+					<td class="text-right"><FormattedNumber :number="21600" /> per day</td>
+					<td class="text-right"><Money :value="masterAtArmsPrice / 21600" /></td>
+				</tr>
+			</tbody>
+		</table>
+
+		<h2>Implants</h2>
 	</table>
+
+	<h2>Resources</h2>
 	<div>
 		<ul class="list-disc list-inside">
 			<li><ExternalLink url="https://wiki.eveuniversity.org/Skills_and_learning">Skills and learning</ExternalLink> - UniWiki</li>
