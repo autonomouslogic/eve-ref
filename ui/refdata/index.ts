@@ -78,8 +78,15 @@ const refdataApi: RefdataApi = new RefdataApi(config);
 
 export default refdataApi;
 
-export async function cacheBundle(typeId: number): Promise<void> {
+export async function cacheTypeBundle(typeId: number): Promise<void> {
     const bundle = await refdataApi.getTypeBundle({typeId});
+    if (bundle) {
+        cacheBundleObj(bundle);
+    }
+}
+
+export async function cacheGroupBundle(groupId: number): Promise<void> {
+    const bundle = await refdataApi.getGroupBundle({typeId});
     if (bundle) {
         cacheBundleObj(bundle);
     }
