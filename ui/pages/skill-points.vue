@@ -75,7 +75,7 @@ const injectorPoints = [
 					<FormattedNumber :number="omegaSkillPointsPerMonth" /> per month
 					(<FormattedNumber :number="omegaSkillPointsPerMonth - alphaSkillPointsPerMonth" /> more than Alpha)
 				</td>
-				<td class="text-right"><Money :value="5000 * plexPrice / (omegaSkillPointsPerMonth - alphaSkillPointsPerMonth)" /></td>
+				<td class="text-right"><Money :value="500 * plexPrice / (omegaSkillPointsPerMonth - alphaSkillPointsPerMonth)" /></td>
 			</tr>
 
 			<tr>
