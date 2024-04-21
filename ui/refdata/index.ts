@@ -86,7 +86,7 @@ export async function cacheTypeBundle(typeId: number): Promise<void> {
 }
 
 export async function cacheGroupBundle(groupId: number): Promise<void> {
-    const bundle = await refdataApi.getGroupBundle({typeId});
+    const bundle = await refdataApi.getGroupBundle({groupId});
     if (bundle) {
         cacheBundleObj(bundle);
     }
