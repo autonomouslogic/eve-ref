@@ -11,6 +11,9 @@ import {
 import Money from "~/components/dogma/units/Money.vue";
 import FormattedNumber from "~/components/helpers/FormattedNumber.vue";
 import TypeLink from "~/components/helpers/TypeLink.vue";
+import refdataApi, {cacheGroupBundle} from "~/refdata";
+import type {InventoryGroup} from "~/refdata-openapi";
+import {getAttributeByName, loadDogmaAttributesForType} from "~/lib/dogmaUtils";
 
 useHead({
 	title: "Skill Points"
@@ -44,6 +47,27 @@ const injectorPoints = [
 		points: 150_000
 	},
 ];
+
+const accelerators = [];
+await cacheGroupBundle(303);
+const boosterGroup: InventoryGroup = await refdataApi.getGroup({groupId: 303});
+if (boosterGroup.typeIds) {
+	await Promise.all(boosterGroup.typeIds.map(async (typeId) => {
+		const booster = await refdataApi.getType({typeId});
+		if (!booster.published) {
+			return;
+		}
+		const attrs = await loadDogmaAttributesForType(booster);
+		if (!attrs) {
+			return;
+		}
+		const bonus = attrs["intelligenceBonus"];
+		if (!bonus) {
+			return;
+		}
+		console.log(booster.name?.en);
+	}));
+}
 
 </script>
 
