@@ -34,8 +34,8 @@ const largeInjectorPrice = await getJitaSellPrice(LARGE_SKILL_INJECTOR) || 0;
 	<h2>Injectors</h2>
 	<table class="table-auto w-full my-3">
 		<thead>
-			<th class="text-left">Source</th>
-			<th class="text-left">Account restriction</th>
+			<th class="text-left"></th>
+			<th class="text-left">Account Restriction</th>
 			<th class="text-right">Price</th>
 			<th class="text-right">Injected SP</th>
 			<th class="text-right">Max SP/mth</th>
@@ -73,6 +73,9 @@ const largeInjectorPrice = await getJitaSellPrice(LARGE_SKILL_INJECTOR) || 0;
 </template>
 
 <style scoped>
+h2 {
+  @apply mt-6;
+}
 th, tr {
   @apply border-b border-slate-500;
 }

@@ -17,7 +17,12 @@ import FormattedNumber from "~/components/helpers/FormattedNumber.vue";
 import refdata, {cacheTypeBundle} from "~/refdata";
 import {getTypeAttributeByName, loadDogmaAttributesForType} from "~/lib/dogmaUtils";
 import Duration from "~/components/dogma/units/Duration.vue";
-import {DAY, MINUTE} from "~/lib/timeUtils";
+import {DAY} from "~/lib/timeUtils";
+import {
+	calculateAcceleratedSkillpointsAlpha,
+	calculateAcceleratedSkillpointsOmega,
+	calculateBoosterDuration
+} from "~/lib/boosterUtils";
 
 const plexPrice = await getJitaSellPrice(PLEX_TYPE_ID) || 0;
 
@@ -39,44 +44,72 @@ async function getSlot(typeId: number): Promise<number> {
 	return getTypeAttributeByName("boosterness", type, attrs)?.value || 0;
 }
 
-async function initAccelerator(typeId: number, plex: number): Promise<any> {
+class Accelerator {
+	typeId: number = 0;
+	slot: number = 0;
+	bonus: number = 0;
+	duration: number = 0;
+	acceleratedSpOmega: number = 0;
+	acceleratedSpAlpha: number = 0;
+	maximumSpOmega: number = 0;
+	maximumSpAlpha: number = 0;
+	plex: number = 0;
+	isk: number = 0;
+	iskPerSpOmega: number = 0;
+	iskPerSpAlpha: number = 0;
+	note: string = "";
+}
+
+async function initAccelerator(typeId: number, accelerator: Accelerator): Promise<Accelerator> {
 	await cacheTypeBundle(typeId);
+	const type = await refdata.getType({typeId});
+	const attrs = Object.values(await loadDogmaAttributesForType(type));
 	const biology = 5;
-	const bonus = await getBonus(typeId);
-	const isk = (plex > 0 ? plex * plexPrice : await getJitaSellPrice(typeId)) || 0;
-	const duration = await getDuration(typeId);
-	const acceleratedSp = bonus * 1.5 * duration / MINUTE * (1 + 0.2 * biology);
-	const maximumSp = acceleratedSp / duration * 30 * DAY;
-	const iskPerSp = isk / acceleratedSp;
+
 	const slot = await getSlot(typeId);
+	const bonus = getTypeAttributeByName("intelligenceBonus", type, attrs)?.value || 0;
+	const baseDuration = accelerator.duration || getTypeAttributeByName("boosterDuration", type, attrs)?.value || 0;
+	const duration = accelerator.duration || calculateBoosterDuration(baseDuration, 5);
+	const acceleratedSpOmega = calculateAcceleratedSkillpointsOmega(bonus, duration);
+	const acceleratedSpAlpha = calculateAcceleratedSkillpointsAlpha(bonus, duration);
+	const maximumSpOmega = acceleratedSpOmega / duration * 30 * DAY;
+	const maximumSpAlpha = acceleratedSpAlpha / duration * 30 * DAY;
+	const isk = (accelerator.plex > 0 ? accelerator.plex * plexPrice : await getJitaSellPrice(typeId)) || 0;
+	const iskPerSpOmega = isk / acceleratedSpOmega;
+	const iskPerSpAlpha = isk / acceleratedSpAlpha;
+
 	return {
 		typeId,
 		slot,
 		bonus,
 		duration,
-		acceleratedSp,
-		maximumSp,
-		plex,
+		acceleratedSpOmega,
+		acceleratedSpAlpha,
+		maximumSpOmega,
+		maximumSpAlpha,
+		plex: accelerator.plex,
 		isk,
-		iskPerSp
-	};
+		iskPerSpOmega,
+		iskPerSpAlpha,
+		note: accelerator.note,
+	} as Accelerator;
 }
 
 const accelerators = [
-	await initAccelerator(MASTER_AT_ARMS_CEREBRAL_ACCELERATOR, 0),
-	await initAccelerator(PROTOTYPE_CEREBRAL_ACCELERATOR, 0),
-	await initAccelerator(BASIC_BOOST_CEREBRAL_ACCELERATOR, 5),
-	await initAccelerator(STANDARD_BOOST_CEREBRAL_ACCELERATOR, 20),
-	await initAccelerator(ADVANCED_BOOST_CEREBRAL_ACCELERATOR, 45),
-	await initAccelerator(SPECIALIST_BOOST_CEREBRAL_ACCELERATOR, 80),
-	await initAccelerator(EXPERT_BOOST_CEREBRAL_ACCELERATOR, 125),
-	await initAccelerator(GENIUS_BOOST_CEREBRAL_ACCELERATOR, 180),
+	await initAccelerator(MASTER_AT_ARMS_CEREBRAL_ACCELERATOR, new Accelerator()),
+	await initAccelerator(PROTOTYPE_CEREBRAL_ACCELERATOR, { duration: 14 * DAY, note: "New pilots only, from contracts" } as Accelerator),
+	await initAccelerator(BASIC_BOOST_CEREBRAL_ACCELERATOR, { plex: 5 } as Accelerator),
+	await initAccelerator(STANDARD_BOOST_CEREBRAL_ACCELERATOR, { plex: 20 } as Accelerator),
+	await initAccelerator(ADVANCED_BOOST_CEREBRAL_ACCELERATOR, { plex: 45 } as Accelerator),
+	await initAccelerator(SPECIALIST_BOOST_CEREBRAL_ACCELERATOR, { plex: 80 } as Accelerator),
+	await initAccelerator(EXPERT_BOOST_CEREBRAL_ACCELERATOR, { plex: 125 } as Accelerator),
+	await initAccelerator(GENIUS_BOOST_CEREBRAL_ACCELERATOR, { plex: 180 } as Accelerator),
 ];
 </script>
 
 <template>
 	<h2>Accelerators</h2>
-	<i>Assuming Biology V</i>
+	<i>All duration and skill point calculations assume <TypeLink type-id="3405"></TypeLink> V.</i>
 	<table class="table-auto w-full my-3">
 		<thead>
 			<th></th>
@@ -92,7 +125,13 @@ const accelerators = [
 		<tbody>
 			<template v-for="accelerator in accelerators" :key="accelerator.typeId">
 				<tr>
-					<td class="text-left" rowspan="2"><TypeLink :type-id="accelerator.typeId" /></td>
+					<td class="text-left" rowspan="2">
+						<TypeLink :type-id="accelerator.typeId" />
+						<template v-if="accelerator.note">
+							<br/>
+							({{ accelerator.note }})
+						</template>
+					</td>
 					<td class="text-right" rowspan="2">{{ accelerator.slot }}</td>
 					<td class="text-right" rowspan="2">
 						<template v-if="accelerator.plex > 0 || accelerator.isk > 0">
@@ -106,16 +145,26 @@ const accelerators = [
 					</td>
 					<td class="text-right" rowspan="2">+{{accelerator.bonus}} for <Duration :milliseconds="accelerator.duration" /></td>
 					<td class="text-left">Alpha</td>
-					<td class="text-right"><FormattedNumber :number="accelerator.acceleratedSp / 2" /></td>
-					<td class="text-right"><FormattedNumber :number="accelerator.maximumSp / 2" /></td>
-					<td class="text-right"><Money :value="accelerator.iskPerSp * 2" /></td>
+					<td class="text-right"><FormattedNumber :number="accelerator.acceleratedSpAlpha" /></td>
+					<td class="text-right"><FormattedNumber :number="accelerator.maximumSpAlpha" /></td>
+					<td class="text-right">
+						<template v-if="accelerator.iskPerSpAlpha > 0">
+							<Money :value="accelerator.iskPerSpAlpha" />
+						</template>
+						<template v-else>-</template>
+					</td>
 				</tr>
 
 				<tr>
 					<td class="text-left">Omega</td>
-					<td class="text-right"><FormattedNumber :number="accelerator.acceleratedSp" /></td>
-					<td class="text-right"><FormattedNumber :number="accelerator.maximumSp" /></td>
-					<td class="text-right"><Money :value="accelerator.iskPerSp" /></td>
+					<td class="text-right"><FormattedNumber :number="accelerator.acceleratedSpOmega" /></td>
+					<td class="text-right"><FormattedNumber :number="accelerator.maximumSpOmega" /></td>
+					<td class="text-right">
+						<template v-if="accelerator.iskPerSpOmega > 0">
+							<Money :value="accelerator.iskPerSpOmega" />
+						</template>
+						<template v-else>-</template>
+					</td>
 				</tr>
 			</template>
 		</tbody>
@@ -123,6 +172,9 @@ const accelerators = [
 </template>
 
 <style scoped>
+h2 {
+  @apply mt-6;
+}
 th, tr {
   @apply border-b border-slate-500;
 }

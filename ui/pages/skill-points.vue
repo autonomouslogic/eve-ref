@@ -19,6 +19,7 @@ useHead({
 	<div>
 		<ul class="list-disc list-inside">
 			<li><ExternalLink url="https://wiki.eveuniversity.org/Skills_and_learning">Skills and learning</ExternalLink> - UniWiki</li>
+			<li><ExternalLink url="https://www.qsna.eu/eve/pilot-services/omega-cost">Pilot Services Overview</ExternalLink> - Quantum Anomaly</li>
 		</ul>
 	</div>
 </template>
