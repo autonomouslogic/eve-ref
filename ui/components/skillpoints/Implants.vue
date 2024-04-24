@@ -143,7 +143,7 @@ await Promise.all(sets.flatMap(set => {
 }));
 
 // Calculate SP per month.
-const iskPerSpDurations = [7 * DAY, 30 * DAY, 365 * DAY];
+const iskPerSpDurations = [7 * DAY, 14 * DAY, 30 * DAY];
 sets.forEach(set => {
 	set.spPerMonthAlpha = calculateAcceleratedSkillpointsAlpha(set.bonus, 30 * DAY);
 	set.spPerMonthOmega = calculateAcceleratedSkillpointsOmega(set.bonus, 30 * DAY);
