@@ -15,11 +15,15 @@ const multiPrice = await getJitaSellPrice(MULTIPLE_PILOT_TRAINING_CERTIFICATE) |
 
 <template>
 	<h2>Accounts</h2>
+	<p>
+		ISP/SP for Omega is based on the SP gained <i>beyond</i> Alpha.
+		Omega accounts offer a number of other benefits beyond the increased SP gain.
+	</p>
 	<table class="table-auto w-full my-3">
 		<thead>
 			<th class="text-left"></th>
 			<th class="text-left">Account Restriction</th>
-			<th class="text-right">Price</th>
+			<th class="text-right">Price/mth</th>
 			<th class="text-right">SP/mth</th>
 			<th class="text-right">ISK/SP</th>
 		</thead>
@@ -27,7 +31,7 @@ const multiPrice = await getJitaSellPrice(MULTIPLE_PILOT_TRAINING_CERTIFICATE) |
 		<tbody>
 			<tr>
 				<td class="text-left">Alpha account</td>
-				<td class="text-left"></td>
+				<td class="text-left">Up to 5,000,000 SP</td>
 				<td class="text-right"><Money :value="0" /></td>
 				<td class="text-right"><FormattedNumber :number="alphaSkillPointsPerMonth" /></td>
 				<td class="text-right"><Money :value="0" /></td>

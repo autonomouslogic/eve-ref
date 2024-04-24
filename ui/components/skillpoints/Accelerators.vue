@@ -114,7 +114,10 @@ const accelerators = [
 
 <template>
 	<h2>Accelerators</h2>
-	<i>All duration and skill point calculations assume <TypeLink type-id="3405"></TypeLink> V.</i>
+	<p>
+		All duration and skill point calculations assume <TypeLink type-id="3405"></TypeLink> V.
+		Max SP/mth is based on if a new accelerator is installed right after the previous one.
+	</p>
 	<table class="table-auto w-full my-3">
 		<thead>
 			<th></th>

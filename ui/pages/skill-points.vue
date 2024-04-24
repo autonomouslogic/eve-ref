@@ -15,6 +15,8 @@ useHead({
 
 	<SkillpointsAccelerators />
 
+	<SkillpointsImplants />
+
 	<h2>Resources</h2>
 	<div>
 		<ul class="list-disc list-inside">
