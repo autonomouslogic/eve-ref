@@ -31,7 +31,7 @@ import {
 	SOCIAL_ADAPTATION_CHIP_STANDARD,
 } from "~/lib/typeConstants";
 import {DAY} from "~/lib/timeUtils";
-import {calculateAcceleratedSkillpointsAlpha, calculateAcceleratedSkillpointsOmega} from "~/lib/boosterUtils";
+import {calculateAcceleratedSkillpoints} from "~/lib/skillUtils";
 import Duration from "~/components/dogma/units/Duration.vue";
 
 class ImplantSet {
@@ -145,14 +145,14 @@ await Promise.all(sets.flatMap(set => {
 // Calculate SP per month.
 const iskPerSpDurations = [7 * DAY, 14 * DAY, 30 * DAY];
 sets.forEach(set => {
-	set.spPerMonthAlpha = calculateAcceleratedSkillpointsAlpha(set.bonus, 30 * DAY);
-	set.spPerMonthOmega = calculateAcceleratedSkillpointsOmega(set.bonus, 30 * DAY);
+	set.spPerMonthAlpha = calculateAcceleratedSkillpoints(set.bonus, 30 * DAY, false);
+	set.spPerMonthOmega = calculateAcceleratedSkillpoints(set.bonus, 30 * DAY, true);
 
 	set.iskPerSps = iskPerSpDurations.map(d => {
 		return {
 			duration: d,
-			iskPerSpAlpha: set.totalPrice / calculateAcceleratedSkillpointsAlpha(set.bonus, d),
-			iskPerSpOmega: set.totalPrice / calculateAcceleratedSkillpointsOmega(set.bonus, d),
+			iskPerSpAlpha: set.totalPrice / calculateAcceleratedSkillpoints(set.bonus, d, false),
+			iskPerSpOmega: set.totalPrice / calculateAcceleratedSkillpoints(set.bonus, d, true),
 		} as ImplantIskPerSp;
 	});
 });

@@ -4,10 +4,12 @@ import {MULTIPLE_PILOT_TRAINING_CERTIFICATE, PLEX_TYPE_ID} from "~/lib/typeConst
 import Money from "~/components/dogma/units/Money.vue";
 import FormattedNumber from "~/components/helpers/FormattedNumber.vue";
 import TypeLink from "~/components/helpers/TypeLink.vue";
+import {calculateSkillpoints} from "~/lib/skillUtils";
+import {DAY} from "~/lib/timeUtils";
 
 const averageAttribute = 20;
-const omegaSkillPointsPerMonth = 30 * 24 * 60 * (averageAttribute + averageAttribute / 2);
-const alphaSkillPointsPerMonth = omegaSkillPointsPerMonth / 2;
+const omegaSkillPointsPerMonth = calculateSkillpoints(averageAttribute, averageAttribute, 30 * DAY, true);
+const alphaSkillPointsPerMonth = calculateSkillpoints(averageAttribute, averageAttribute, 30 * DAY, false);
 const plexPrice = await getJitaSellPrice(PLEX_TYPE_ID) || 0;
 const multiPrice = await getJitaSellPrice(MULTIPLE_PILOT_TRAINING_CERTIFICATE) || 0;
 
@@ -32,7 +34,7 @@ const mctPrices = [
 <template>
 	<h2>Accounts</h2>
 	<p>
-		SP/mth is based on all attributes set to 20.
+		SP/mth is based on all attributes set to {{ averageAttribute }}.
 	</p>
 	<table class="table-auto w-full my-3">
 		<thead>

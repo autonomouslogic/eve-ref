@@ -7,11 +7,7 @@ import Duration from "~/components/dogma/units/Duration.vue";
 import AttributeList from "~/components/attr/AttributeList.vue";
 import AttributeListItem from "~/components/attr/AttributeListItem.vue";
 import {getTypeAttributeByName} from "~/lib/dogmaUtils";
-import {
-	calculateAcceleratedSkillpointsAlpha,
-	calculateAcceleratedSkillpointsOmega,
-	calculateBoosterDuration
-} from "~/lib/boosterUtils";
+import {calculateAcceleratedSkillpoints, calculateBoosterDuration} from "~/lib/skillUtils";
 
 const props = defineProps<{
 	title: string,
@@ -30,8 +26,8 @@ const skillpoints = computed(() => {
 	}
 	const realDuration = calculateBoosterDuration(duration.value, 5);
 	return [
-		calculateAcceleratedSkillpointsAlpha(bonus.value, realDuration),
-		calculateAcceleratedSkillpointsOmega(bonus.value, realDuration)
+		calculateAcceleratedSkillpoints(bonus.value, realDuration, false),
+		calculateAcceleratedSkillpoints(bonus.value, realDuration, true)
 	];
 });
 

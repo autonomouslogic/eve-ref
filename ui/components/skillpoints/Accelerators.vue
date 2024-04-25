@@ -18,11 +18,7 @@ import refdata, {cacheTypeBundle} from "~/refdata";
 import {getTypeAttributeByName, loadDogmaAttributesForType} from "~/lib/dogmaUtils";
 import Duration from "~/components/dogma/units/Duration.vue";
 import {DAY} from "~/lib/timeUtils";
-import {
-	calculateAcceleratedSkillpointsAlpha,
-	calculateAcceleratedSkillpointsOmega,
-	calculateBoosterDuration
-} from "~/lib/boosterUtils";
+import {calculateAcceleratedSkillpoints, calculateBoosterDuration} from "~/lib/skillUtils";
 
 const plexPrice = await getJitaSellPrice(PLEX_TYPE_ID) || 0;
 
@@ -70,8 +66,8 @@ async function initAccelerator(typeId: number, accelerator: Accelerator): Promis
 	const bonus = getTypeAttributeByName("intelligenceBonus", type, attrs)?.value || 0;
 	const baseDuration = accelerator.duration || getTypeAttributeByName("boosterDuration", type, attrs)?.value || 0;
 	const duration = accelerator.duration || calculateBoosterDuration(baseDuration, biology);
-	const acceleratedSpOmega = calculateAcceleratedSkillpointsOmega(bonus, duration);
-	const acceleratedSpAlpha = calculateAcceleratedSkillpointsAlpha(bonus, duration);
+	const acceleratedSpOmega = calculateAcceleratedSkillpoints(bonus, duration, true);
+	const acceleratedSpAlpha = calculateAcceleratedSkillpoints(bonus, duration, false);
 	const maximumSpOmega = accelerator.maximumSpOmega || acceleratedSpOmega / duration * 30 * DAY;
 	const maximumSpAlpha = accelerator.maximumSpAlpha || acceleratedSpAlpha / duration * 30 * DAY;
 	const isk = (accelerator.plex > 0 ? accelerator.plex * plexPrice : await getJitaSellPrice(typeId)) || 0;
