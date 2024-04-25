@@ -69,7 +69,7 @@ async function initAccelerator(typeId: number, accelerator: Accelerator): Promis
 	const slot = await getSlot(typeId);
 	const bonus = getTypeAttributeByName("intelligenceBonus", type, attrs)?.value || 0;
 	const baseDuration = accelerator.duration || getTypeAttributeByName("boosterDuration", type, attrs)?.value || 0;
-	const duration = accelerator.duration || calculateBoosterDuration(baseDuration, 5);
+	const duration = accelerator.duration || calculateBoosterDuration(baseDuration, biology);
 	const acceleratedSpOmega = calculateAcceleratedSkillpointsOmega(bonus, duration);
 	const acceleratedSpAlpha = calculateAcceleratedSkillpointsAlpha(bonus, duration);
 	const maximumSpOmega = accelerator.maximumSpOmega || acceleratedSpOmega / duration * 30 * DAY;
@@ -144,8 +144,7 @@ const accelerators = [
 					<td class="text-right" rowspan="2">
 						<template v-if="accelerator.plex > 0 || accelerator.isk > 0">
 							<template v-if="accelerator.plex > 0">
-								<FormattedNumber :number="accelerator.plex" /> PLEX
-								<br/>
+								<FormattedNumber :number="accelerator.plex" /> PLEX -
 							</template>
 							<Money :value="accelerator.isk" />
 						</template>

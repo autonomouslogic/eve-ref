@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import ExternalLink from "~/components/helpers/ExternalLink.vue";
+import {EVE_REFERRAL_URL} from "~/lib/urls";
 
 useHead({
 	title: "Skill Points"
@@ -8,6 +9,11 @@ useHead({
 
 <template>
 	<h1>Skill Points</h1>
+
+	<p>
+		This is an overview of the various ways to acquire skill points.
+		New accounts can get 1,000,000 free skill points by using <ExternalLink :url="EVE_REFERRAL_URL">this referral link</ExternalLink>.
+	</p>
 
 	<SkillpointsAccounts />
 

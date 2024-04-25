@@ -165,6 +165,7 @@ sets.forEach(set => {
 		Each set with a breakdown per implant.
 		ISK/SP is calculated for the full set, based on how long the implants are installed for.
 		If you get podded, this will show you how much you end up paying per SP.
+		Since installation is permanent, ISK/SP tends to zero.
 	</p>
 	<table class="table-auto w-full my-3">
 		<thead>

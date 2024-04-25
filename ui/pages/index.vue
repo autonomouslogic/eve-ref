@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import ExternalLink from "~/components/helpers/ExternalLink.vue";
-import {EVE_REFERAL_URL, MARKEE_DRAGON_URL, PATREON_URL} from "~/lib/urls";
+import {EVE_REFERRAL_URL, MARKEE_DRAGON_URL, PATREON_URL} from "~/lib/urls";
 </script>
 
 <template>
@@ -13,7 +13,7 @@ import {EVE_REFERAL_URL, MARKEE_DRAGON_URL, PATREON_URL} from "~/lib/urls";
 
 		<div class="p-4">
 			<h2>New to EVE Online?</h2>
-			<p><ExternalLink :url="EVE_REFERAL_URL">Join New Eden</ExternalLink> and get Get 1,000,000 free skill points.</p>
+			<p><ExternalLink :url="EVE_REFERRAL_URL">Join New Eden</ExternalLink> and get Get 1,000,000 free skill points.</p>
 		</div>
 
 		<div class="p-4">

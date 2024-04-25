@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 import ExternalLink from "~/components/helpers/ExternalLink.vue";
-import {DISCORD_URL, EVE_REFERAL_URL, GITHUB_URL, MARKEE_DRAGON_URL, PATREON_URL} from "~/lib/urls";
+import {DISCORD_URL, EVE_REFERRAL_URL, GITHUB_URL, MARKEE_DRAGON_URL, PATREON_URL} from "~/lib/urls";
 
 const {locale } = useI18n();
 
@@ -35,7 +35,7 @@ const {locale } = useI18n();
 				<div>
 					<h2>Support</h2>
 					<ul>
-						<li><ExternalLink :url="EVE_REFERAL_URL">Play EVE Online</ExternalLink></li>
+						<li><ExternalLink :url="EVE_REFERRAL_URL">Play EVE Online</ExternalLink></li>
 						<li><ExternalLink :url="MARKEE_DRAGON_URL">Markeedragon</ExternalLink></li>
 						<li><ExternalLink :url="PATREON_URL"><span><font-awesome-icon icon="fa-brands fa-patreon" /></span> Patreon</ExternalLink></li>
 					</ul>
