@@ -6,29 +6,13 @@ import FormattedNumber from "~/components/helpers/FormattedNumber.vue";
 import TypeLink from "~/components/helpers/TypeLink.vue";
 import {calculateSkillpoints} from "~/lib/skillUtils";
 import {DAY} from "~/lib/timeUtils";
+import {mctPrices, omegaPrices} from "~/conf/newEdenStore";
 
 const averageAttribute = 20;
 const omegaSkillPointsPerMonth = calculateSkillpoints(averageAttribute, averageAttribute, 30 * DAY, true);
 const alphaSkillPointsPerMonth = calculateSkillpoints(averageAttribute, averageAttribute, 30 * DAY, false);
 const plexPrice = await getJitaSellPrice(PLEX_TYPE_ID) || 0;
 const multiPrice = await getJitaSellPrice(MULTIPLE_PILOT_TRAINING_CERTIFICATE) || 0;
-
-const omegaPrices = [
-	{ months: 1, plex: 500 },
-	{ months: 3, plex: 1200 },
-	{ months: 6, plex: 2100 },
-	{ months: 12, plex: 3600 },
-	{ months: 24, plex: 6600 },
-];
-
-const mctPrices = [
-	{ count: 1, plex: 350 },
-	{ count: 3, plex: 800 },
-	{ count: 6, plex: 1500 },
-	{ count: 12, plex: 2700 },
-	{ count: 24, plex: 4600 },
-];
-
 </script>
 
 <template>
@@ -54,18 +38,18 @@ const mctPrices = [
 				<td class="text-right"><Money :value="0" /></td>
 			</tr>
 
-			<tr v-for="(omegaPrice, idx) in omegaPrices" :key="omegaPrice.months">
-				<td class="text-left">Omega ({{ omegaPrice.months }} month{{ omegaPrice.months > 1 ? "s" : "" }})</td>
+			<tr v-for="(omega, idx) in omegaPrices" :key="omega.months">
+				<td class="text-left">Omega ({{ omega.months }} month{{ omega.months > 1 ? "s" : "" }})</td>
 				<td class="text-left"></td>
 				<td class="text-right">
-					<FormattedNumber :number="omegaPrice.plex" /> PLEX -
-					<Money :value="omegaPrice.plex * plexPrice" />
+					<FormattedNumber :number="omega.plex" /> PLEX -
+					<Money :value="omega.plex * plexPrice" />
 				</td>
 				<td class="text-right" v-if="idx == 0" :rowspan="omegaPrices.length">
 					<FormattedNumber :number="omegaSkillPointsPerMonth" />
 				</td>
 				<td class="text-right">
-					<Money :value="omegaPrice.plex * plexPrice / (omegaPrice.months * omegaSkillPointsPerMonth)" />
+					<Money :value="omega.plex * plexPrice / (omega.months * omegaSkillPointsPerMonth)" />
 				</td>
 			</tr>
 
@@ -77,14 +61,14 @@ const mctPrices = [
 				<td class="text-right"><Money :value="multiPrice / omegaSkillPointsPerMonth" /></td>
 			</tr>
 
-			<tr v-for="mctPrice in mctPrices" :key="mctPrice.count">
-				<td class="text-left">Multiple Character Training ({{ mctPrice.count }}x, NES)</td>
+			<tr v-for="mct in mctPrices" :key="mct.count">
+				<td class="text-left">Multiple Character Training ({{ mct.count }}x, NES)</td>
 				<td class="text-left">Omega</td>
 				<td class="text-right">
-					<FormattedNumber :number="mctPrice.plex" /> PLEX -
-					<Money :value="mctPrice.plex * plexPrice" />
+					<FormattedNumber :number="mct.plex" /> PLEX -
+					<Money :value="mct.plex * plexPrice" />
 				</td>
-				<td class="text-right"><Money :value="mctPrice.plex * plexPrice / (mctPrice.count * omegaSkillPointsPerMonth)" /></td>
+				<td class="text-right"><Money :value="mct.plex * plexPrice / (mct.count * omegaSkillPointsPerMonth)" /></td>
 			</tr>
 		</tbody>
 	</table>

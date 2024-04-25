@@ -4,12 +4,7 @@ import {DAILY_ALPHA_INJECTOR, LARGE_SKILL_INJECTOR, PLEX_TYPE_ID, SMALL_SKILL_IN
 import Money from "~/components/dogma/units/Money.vue";
 import FormattedNumber from "~/components/helpers/FormattedNumber.vue";
 import TypeLink from "~/components/helpers/TypeLink.vue";
-
-const alphaInjectorPrices = [
-	{ count: 1, plex: 25 },
-	{ count: 5, plex: 110 },
-	{ count: 10, plex: 200 },
-];
+import {alphaInjectorPrices} from "~/conf/newEdenStore";
 
 const injectorPoints = [
 	{

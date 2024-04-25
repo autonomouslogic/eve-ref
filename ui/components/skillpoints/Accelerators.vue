@@ -1,15 +1,5 @@
 <script setup lang="ts">
-import {
-	ADVANCED_BOOST_CEREBRAL_ACCELERATOR,
-	BASIC_BOOST_CEREBRAL_ACCELERATOR,
-	EXPERT_BOOST_CEREBRAL_ACCELERATOR,
-	GENIUS_BOOST_CEREBRAL_ACCELERATOR,
-	MASTER_AT_ARMS_CEREBRAL_ACCELERATOR,
-	PLEX_TYPE_ID,
-	PROTOTYPE_CEREBRAL_ACCELERATOR,
-	SPECIALIST_BOOST_CEREBRAL_ACCELERATOR,
-	STANDARD_BOOST_CEREBRAL_ACCELERATOR
-} from "~/lib/typeConstants";
+import {MASTER_AT_ARMS_CEREBRAL_ACCELERATOR, PLEX_TYPE_ID, PROTOTYPE_CEREBRAL_ACCELERATOR} from "~/lib/typeConstants";
 import {getJitaSellPrice} from "~/lib/marketUtils";
 import TypeLink from "~/components/helpers/TypeLink.vue";
 import Money from "~/components/dogma/units/Money.vue";
@@ -19,6 +9,7 @@ import {getTypeAttributeByName, loadDogmaAttributesForType} from "~/lib/dogmaUti
 import Duration from "~/components/dogma/units/Duration.vue";
 import {DAY} from "~/lib/timeUtils";
 import {calculateAcceleratedSkillpoints, calculateBoosterDuration} from "~/lib/skillUtils";
+import {acceleratorPrices} from "~/conf/newEdenStore";
 
 const plexPrice = await getJitaSellPrice(PLEX_TYPE_ID) || 0;
 
@@ -99,13 +90,11 @@ const accelerators = [
 		maximumSpOmega: -1,
 		maximumSpAlpha: -1,
 	} as Accelerator),
-	await initAccelerator(BASIC_BOOST_CEREBRAL_ACCELERATOR, { plex: 5 } as Accelerator),
-	await initAccelerator(STANDARD_BOOST_CEREBRAL_ACCELERATOR, { plex: 20 } as Accelerator),
-	await initAccelerator(ADVANCED_BOOST_CEREBRAL_ACCELERATOR, { plex: 45 } as Accelerator),
-	await initAccelerator(SPECIALIST_BOOST_CEREBRAL_ACCELERATOR, { plex: 80 } as Accelerator),
-	await initAccelerator(EXPERT_BOOST_CEREBRAL_ACCELERATOR, { plex: 125 } as Accelerator),
-	await initAccelerator(GENIUS_BOOST_CEREBRAL_ACCELERATOR, { plex: 180 } as Accelerator),
 ];
+await Promise.all(acceleratorPrices.map(async accelerator => {
+	accelerators.push(await initAccelerator(accelerator.typeId, { plex: accelerator.plex } as Accelerator));
+}));
+accelerators.sort((a, b) => a.acceleratedSpOmega - b.acceleratedSpOmega);
 </script>
 
 <template>
