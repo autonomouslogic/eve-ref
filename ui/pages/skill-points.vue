@@ -17,11 +17,11 @@ useHead({
 
 	<SkillpointsAccounts />
 
-	<SkillpointsPacks />
-
 	<SkillpointsInjectors />
 
 	<SkillpointsAccelerators />
+
+	<SkillpointsPacks />
 
 	<SkillpointsImplants />
 
