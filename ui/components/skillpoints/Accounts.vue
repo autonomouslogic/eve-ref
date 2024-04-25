@@ -77,7 +77,7 @@ const mctPrices = [
 				<td class="text-right"><Money :value="multiPrice / omegaSkillPointsPerMonth" /></td>
 			</tr>
 
-			<tr v-for="(mctPrice, idx) in mctPrices" :key="mctPrice.count">
+			<tr v-for="mctPrice in mctPrices" :key="mctPrice.count">
 				<td class="text-left">Multiple Character Training ({{ mctPrice.count }}x, NES)</td>
 				<td class="text-left">Omega</td>
 				<td class="text-right">

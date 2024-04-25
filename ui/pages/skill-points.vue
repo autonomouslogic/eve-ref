@@ -17,6 +17,8 @@ useHead({
 
 	<SkillpointsAccounts />
 
+	<SkillpointsPacks />
+
 	<SkillpointsInjectors />
 
 	<SkillpointsAccelerators />

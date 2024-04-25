@@ -60,7 +60,7 @@ const plexPrice = await getJitaSellPrice(PLEX_TYPE_ID) || 0;
 			<td class="text-right"><Money :value="alphaInjectorPrice / alphaInjectorSp" /></td>
 		</tr>
 
-		<tr v-for="(injectorPrice, idx) in alphaInjectorPrices" :key="injectorPrice.count">
+		<tr v-for="injectorPrice in alphaInjectorPrices" :key="injectorPrice.count">
 			<td class="text-left"><TypeLink :type-id="DAILY_ALPHA_INJECTOR" /> ({{ injectorPrice.count }}x, NES)</td>
 			<td class="text-right">
 				<FormattedNumber :number="injectorPrice.count * injectorPrice.plex" /> PLEX -
