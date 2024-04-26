@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {type DogmaAttribute, type DogmaTypeAttribute, type InventoryType} from "~/refdata-openapi";
-import refdataApi, {cacheBundle} from "~/refdata";
+import refdataApi, {cacheTypeBundle} from "~/refdata";
 import {getAttributeByName, loadDogmaAttributesForType} from "~/lib/dogmaUtils";
 
 export interface Props {
@@ -17,7 +17,7 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const types: InventoryType[] = await Promise.all(props.typeIds.map(typeId => {
-	return cacheBundle(typeId).then(() => {
+	return cacheTypeBundle(typeId).then(() => {
 		return refdataApi.getType({typeId});
 	});
 	return refdataApi.getType({typeId});
