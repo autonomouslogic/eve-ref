@@ -77,9 +77,9 @@ packs.sort((a, b) => a.price.plex - b.price.plex);
 <template>
 	<h2>Packs</h2>
 	<p>
-		Skill Extractors included the packs are assumed to be sold directly on the market, reducing the final ISK/SP.
-		SKINs, crates, and Expert Systems are not included in the calculations at all.
-		Packs which include Omega time do not show Alpha values.
+		Skill Extractors included in the packs are assumed to be sold directly on the market, reducing the final ISK/SP.
+		SKINs, crates, and expert systems are excluded from the calculations.
+		Packs which include Omega time do not show Alpha values as it's assumed injectors are used within the included time.
 	</p>
 	<table class="table-auto w-full my-3">
 		<thead>
