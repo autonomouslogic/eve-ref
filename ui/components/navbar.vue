@@ -18,6 +18,7 @@ const selectedLocale = ref(locale);
 			<span><NuxtLink to="/categories">Categories</NuxtLink></span>
 			<span><NuxtLink to="/market-groups">Market Groups</NuxtLink></span>
 			<span><NuxtLink to="/structures"><MarketGroupName :market-group-id="477" /></NuxtLink></span>
+			<span><NuxtLink to="/skill-points">Skill Points</NuxtLink></span>
 		</span>
 		<span class="w-full space-x-3 text-right">
 			<span>

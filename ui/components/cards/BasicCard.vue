@@ -3,12 +3,10 @@ import {type DogmaAttribute, type InventoryType} from "~/refdata-openapi";
 import CardWrapper from "~/components/cards/CardWrapper.vue";
 import DogmaListItems from "~/components/cards/DogmaListItems.vue";
 import FormattedNumber from "~/components/helpers/FormattedNumber.vue";
-import MarketGroupLink from "~/components/helpers/MarketGroupLink.vue";
 import UnitValue from "~/components/dogma/UnitValue.vue";
-import GroupLink from "~/components/helpers/GroupLink.vue";
 import AttributeList from "~/components/attr/AttributeList.vue";
 import AttributeListItem from "~/components/attr/AttributeListItem.vue";
-import {CUBIC_METER, KILOGRAM, METER, MONEY} from "~/lib/unitConstants";
+import {CUBIC_METER, KILOGRAM, MONEY} from "~/lib/unitConstants";
 
 const props = defineProps<{
 	title: string,

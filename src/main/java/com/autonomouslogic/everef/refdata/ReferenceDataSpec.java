@@ -84,6 +84,16 @@ public interface ReferenceDataSpec {
 	InventoryGroup getGroup(@PathParam("group_id") long groupId);
 
 	@GET
+	@Path("/groups/{group_id}/bundle")
+	@Operation
+	@ApiResponse(
+			responseCode = "200",
+			description = "The group bundle.",
+			useReturnTypeSchema = true,
+			content = @Content(mediaType = "application/json"))
+	Bundle getGroupBundle(@PathParam("group_id") long groupId);
+
+	@GET
 	@Path("/market_groups")
 	@Operation(description = "Get all market group IDs.")
 	@ApiResponse(
