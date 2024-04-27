@@ -139,13 +139,7 @@ const multiPrice = await getJitaSellPrice(MULTIPLE_PILOT_TRAINING_CERTIFICATE) |
 				</td>
 				<td class="text-right"><Money :value="mct.plex * plexPrice / (mct.count * omegaSkillPointsPerMonth)" /></td>
 			</tr>
-
-
-
-
-
-
-
+      
 			<template v-for="(mct, idx) in mctPrices" :key="mct.count">
 				<tr v-if="idx == 0 || idx == omegaPrices.length - 1">
 					<td class="text-left">Multiple Character Training (x{{ mct.count }}, NES)</td>
