@@ -1,8 +1,5 @@
 <script setup lang="ts">
-import refdataApi from "~/refdata";
-import {
-	STRUCTURE_RIGS_COMPARISON_ENGINEERING_DOGMA_NAMES
-} from "~/lib/structureConstants";
+import {STRUCTURE_RIGS_COMPARISON_ENGINEERING_DOGMA_NAMES} from "~/lib/structureConstants";
 import {getRecursiveMarketGroupTypeIds} from "~/lib/marketGroupUtils";
 
 const {locale} = useI18n();
