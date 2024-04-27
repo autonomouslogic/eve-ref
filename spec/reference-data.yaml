@@ -188,6 +188,25 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/InventoryGroup"
+  /groups/{group_id}/bundle:
+    get:
+      tags:
+      - refdata
+      operationId: getGroupBundle
+      parameters:
+      - name: group_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: The group bundle.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Bundle"
   /icons:
     get:
       tags:

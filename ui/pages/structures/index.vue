@@ -16,4 +16,8 @@ useHead({
 		<li><NuxtLink to="/structures/standard-citadels"><MarketGroupName :market-group-id="2201" /></NuxtLink></li>
 		<li><NuxtLink to="/structures/faction-citadels"><MarketGroupName :market-group-id="2200" /></NuxtLink></li>
 	</ul>
+	<h2>Rigs</h2>
+	<ul>
+		<li><NuxtLink to="/structures/engineering-rigs"><MarketGroupName :market-group-id="2340" /></NuxtLink></li>
+	</ul>
 </template>
