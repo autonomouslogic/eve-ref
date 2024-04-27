@@ -223,13 +223,4 @@ sets.forEach(set => {
 </template>
 
 <style scoped>
-h2 {
-  @apply mt-6;
-}
-th, tr {
-  @apply border-b border-slate-500;
-}
-th, td {
-  @apply px-2;
-}
 </style>

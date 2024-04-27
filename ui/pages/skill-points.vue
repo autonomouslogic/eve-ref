@@ -12,18 +12,23 @@ useHead({
 
 	<p>
 		This is an overview of the various ways to acquire skill points.
-		New accounts can get 1,000,000 free skill points by using <ExternalLink :url="EVE_REFERRAL_URL">this referral link</ExternalLink>.
+		Months are 30 days.
+	</p>
+	<p>
+		New accounts get 1,000,000 free skill points by using <ExternalLink :url="EVE_REFERRAL_URL">this referral link</ExternalLink>.
 	</p>
 
-	<SkillpointsAccounts />
+	<div>
+		<SkillpointsAccounts />
 
-	<SkillpointsInjectors />
+		<SkillpointsInjectors />
 
-	<SkillpointsAccelerators />
+		<SkillpointsAccelerators />
 
-	<SkillpointsPacks />
+		<SkillpointsPacks />
 
-	<SkillpointsImplants />
+		<SkillpointsImplants />
+	</div>
 
 	<h2>Resources</h2>
 	<div>
@@ -35,7 +40,13 @@ useHead({
 </template>
 
 <style scoped>
-th, tr {
+:deep(h2) {
+  @apply mt-6;
+}
+:deep(th), :deep(tr) {
   @apply border-b border-slate-500;
+}
+:deep(th), :deep(td) {
+  @apply px-2 whitespace-nowrap;
 }
 </style>
