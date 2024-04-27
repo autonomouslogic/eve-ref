@@ -31,7 +31,7 @@ import javax.ws.rs.PathParam;
 						url = "https://github.com/autonomouslogic/eve-ref/blob/main/docs/refdata.md"))
 @Tag(name = "refdata")
 public interface ReferenceDataSpec {
-	public static final String BASE_URL = "https://ref-data.everef.net";
+	String BASE_URL = "https://ref-data.everef.net";
 
 	@GET
 	@Path("/meta")
@@ -82,6 +82,16 @@ public interface ReferenceDataSpec {
 			useReturnTypeSchema = true,
 			content = @Content(mediaType = "application/json"))
 	InventoryGroup getGroup(@PathParam("group_id") long groupId);
+
+	@GET
+	@Path("/groups/{group_id}/bundle")
+	@Operation
+	@ApiResponse(
+			responseCode = "200",
+			description = "The group bundle.",
+			useReturnTypeSchema = true,
+			content = @Content(mediaType = "application/json"))
+	Bundle getGroupBundle(@PathParam("group_id") long groupId);
 
 	@GET
 	@Path("/market_groups")

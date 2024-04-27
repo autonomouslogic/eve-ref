@@ -2,9 +2,11 @@ package com.autonomouslogic.everef.config;
 
 import com.autonomouslogic.everef.refdata.ReferenceDataSpec;
 import java.net.URI;
+import java.net.URL;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.Period;
+import lombok.SneakyThrows;
 
 public class Configs {
 	/**
@@ -257,6 +259,39 @@ public class Configs {
 	 */
 	public static final Config<String> DATA_AWS_SECRET_ACCESS_KEY = Config.<String>builder()
 			.name("DATA_AWS_SECRET_ACCESS_KEY")
+			.type(String.class)
+			.build();
+
+	/**
+	 * The AWS region for DynamoDB.
+	 * If not supplied, normal AWS SDK defaults will be used.
+	 */
+	public static final Config<String> DYNAMODB_AWS_REGION = Config.<String>builder()
+			.name("DYNAMODB_AWS_REGION")
+			.type(String.class)
+			.build();
+
+	/**
+	 * Profile for the DynamoDB.
+	 */
+	public static final Config<String> DYNAMODB_AWS_PROFILE = Config.<String>builder()
+			.name("DYNAMODB_AWS_PROFILE")
+			.type(String.class)
+			.build();
+
+	/**
+	 * Access key for DynamoDB..
+	 */
+	public static final Config<String> DYNAMODB_AWS_ACCESS_KEY_ID = Config.<String>builder()
+			.name("DYNAMODB_AWS_ACCESS_KEY_ID")
+			.type(String.class)
+			.build();
+
+	/**
+	 * Secret key for DynamoDB.
+	 */
+	public static final Config<String> DYNAMODB_AWS_SECRET_ACCESS_KEY = Config.<String>builder()
+			.name("DYNAMODB_AWS_SECRET_ACCESS_KEY")
 			.type(String.class)
 			.build();
 
@@ -594,4 +629,69 @@ public class Configs {
 	 */
 	public static final Config<URI> SENTRY_DSN =
 			Config.<URI>builder().name("SENTRY_DSN").type(URI.class).build();
+
+	/**
+	 * Port to start HTTP on.
+	 */
+	public static final Config<Integer> MICRONAUT_PORT = Config.<Integer>builder()
+			.name("MICRONAUT_PORT")
+			.defaultValue(8080)
+			.type(Integer.class)
+			.build();
+
+	/**
+	 * Client ID for OAuth2 against EVE Online.
+	 */
+	public static final Config<String> EVE_OAUTH_CLIENT_ID = Config.<String>builder()
+			.name("EVE_OAUTH_CLIENT_ID")
+			.type(String.class)
+			.build();
+
+	/**
+	 * secret key for OAuth2 against EVE Online.
+	 */
+	public static final Config<String> EVE_OAUTH_SECRET_KEY = Config.<String>builder()
+			.name("EVE_OAUTH_SECRET_KEY")
+			.type(String.class)
+			.build();
+
+	/**
+	 * Authorization URL for OAuth2 against EVE Online.
+	 */
+	public static final Config<URL> EVE_OAUTH_AUTHORIZATION_URL = Config.<URL>builder()
+			.name("EVE_OAUTH_AUTHORIZATION_URL")
+			.defaultValue(url("https://login.eveonline.com/v2/oauth/authorize"))
+			.type(URL.class)
+			.build();
+
+	/**
+	 * Token URL for OAuth2 against EVE Online.
+	 */
+	public static final Config<URL> EVE_OAUTH_TOKEN_URL = Config.<URL>builder()
+			.name("EVE_OAUTH_TOKEN_URL")
+			.defaultValue(url("https://login.eveonline.com/v2/oauth/token"))
+			.type(URL.class)
+			.build();
+
+	/**
+	 * Token URL for OAuth2 against EVE Online.
+	 */
+	public static final Config<URL> OAUTH_CALLBACK_URL = Config.<URL>builder()
+			.name("OAUTH_CALLBACK_URL")
+			.defaultValue(url("http://localhost:8080/basic-login-callback"))
+			.type(URL.class)
+			.build();
+
+	/**
+	 * The character owner hash to use for scrape actions requiring authentication.
+	 */
+	public static final Config<String> SCRAPE_CHARACTER_OWNER_HASH = Config.<String>builder()
+			.name("SCRAPE_CHARACTER_OWNER_HASH")
+			.type(String.class)
+			.build();
+
+	@SneakyThrows
+	private static URL url(String url) {
+		return new URL(url);
+	}
 }

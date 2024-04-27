@@ -6,6 +6,7 @@ import com.autonomouslogic.everef.cli.Command;
 import com.autonomouslogic.everef.cli.refdata.esi.EsiLoader;
 import com.autonomouslogic.everef.cli.refdata.hoboleaks.HoboleaksLoader;
 import com.autonomouslogic.everef.cli.refdata.post.BlueprintDecorator;
+import com.autonomouslogic.everef.cli.refdata.post.CanFitDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.GroupsDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.MarketGroupsDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.MissingDogmaUnitsDecorator;
@@ -141,6 +142,9 @@ public class BuildRefData implements Command {
 	@Inject
 	protected MissingDogmaUnitsDecorator missingDogmaUnitsDecorator;
 
+	@Inject
+	protected CanFitDecorator canFitDecorator;
+
 	@Setter
 	@NonNull
 	private ZonedDateTime buildTime = ZonedDateTime.now(ZoneOffset.UTC).truncatedTo(ChronoUnit.SECONDS);
@@ -190,7 +194,8 @@ public class BuildRefData implements Command {
 				typesDecorator,
 				marketGroupsDecorator,
 				oreVariationsDecorator,
-				missingDogmaUnitsDecorator);
+				missingDogmaUnitsDecorator,
+				canFitDecorator);
 	}
 
 	@Override
@@ -268,15 +273,6 @@ public class BuildRefData implements Command {
 			for (var decorator : allDecorators) {
 				decorator.setStoreHandler(storeHandler);
 			}
-			skillDecorator.setStoreHandler(storeHandler);
-			mutaplasmidDecorator.setStoreHandler(storeHandler);
-			variationsDecorator.setStoreHandler(storeHandler);
-			blueprintDecorator.setStoreHandler(storeHandler);
-			groupsDecorator.setStoreHandler(storeHandler);
-			typesDecorator.setStoreHandler(storeHandler);
-			marketGroupsDecorator.setStoreHandler(storeHandler);
-			oreVariationsDecorator.setStoreHandler(storeHandler);
-			missingDogmaUnitsDecorator.setStoreHandler(storeHandler);
 		});
 	}
 
@@ -293,19 +289,8 @@ public class BuildRefData implements Command {
 	}
 
 	private Completable postDatasets() {
-		return Completable.concat(List.of(
-						skillDecorator,
-						mutaplasmidDecorator,
-						variationsDecorator,
-						blueprintDecorator,
-						groupsDecorator,
-						typesDecorator,
-						marketGroupsDecorator,
-						oreVariationsDecorator,
-						missingDogmaUnitsDecorator)
-				.stream()
-				.map(this::runPostDecorator)
-				.toList());
+		return Completable.concat(
+				allDecorators.stream().map(this::runPostDecorator).toList());
 	}
 
 	private Completable runPostDecorator(PostDecorator decorator) {

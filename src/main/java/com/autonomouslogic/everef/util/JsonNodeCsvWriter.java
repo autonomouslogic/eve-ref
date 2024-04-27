@@ -9,6 +9,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
+import javax.inject.Inject;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
@@ -30,6 +31,9 @@ public class JsonNodeCsvWriter {
 	@Setter
 	@NonNull
 	private File out;
+
+	@Inject
+	public JsonNodeCsvWriter() {}
 
 	@SneakyThrows
 	public void writeAll(@NonNull Iterable<JsonNode> entries) {

@@ -1,9 +1,7 @@
 package com.autonomouslogic.everef.cli.publiccontracts;
 
-import static com.autonomouslogic.everef.util.ArchivePathFactory.PUBLIC_CONTRACTS;
-
-import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.http.OkHttpHelper;
+import com.autonomouslogic.everef.util.DataUtil;
 import com.autonomouslogic.everef.util.JsonNodeCsvReader;
 import com.autonomouslogic.everef.util.Rx;
 import com.autonomouslogic.everef.util.TempFiles;
@@ -47,6 +45,9 @@ public class ContractsFileLoader {
 	@Inject
 	protected OkHttpHelper okHttpHelper;
 
+	@Inject
+	protected DataUtil dataUtil;
+
 	@Setter
 	@NonNull
 	private Map<Long, JsonNode> contractsStore;
@@ -88,18 +89,7 @@ public class ContractsFileLoader {
 	public Maybe<File> downloadLatestFile() {
 		return Maybe.defer(() -> {
 					log.info("Downloading latest contracts");
-					var baseUrl = Configs.DATA_BASE_URL.getRequired();
-					var url = baseUrl + "/" + PUBLIC_CONTRACTS.createLatestPath();
-					var file = tempFiles
-							.tempFile("public-contracts-latest", ".tar.bz2")
-							.toFile();
-					return okHttpHelper.download(url, file, okHttpClient).flatMapMaybe(response -> {
-						if (response.code() != 200) {
-							log.warn("Failed loading latest contracts: HTTP {}, ignoring", response.code());
-							return Maybe.empty();
-						}
-						return Maybe.just(file);
-					});
+					return dataUtil.downloadLatestPublicContracts().toMaybe();
 				})
 				.onErrorResumeNext(e -> {
 					log.warn("Failed reading latest contracts, ignoring", e);

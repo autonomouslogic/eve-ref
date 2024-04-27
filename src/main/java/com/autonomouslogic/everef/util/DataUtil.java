@@ -2,6 +2,8 @@ package com.autonomouslogic.everef.util;
 
 import static com.autonomouslogic.everef.util.ArchivePathFactory.ESI;
 import static com.autonomouslogic.everef.util.ArchivePathFactory.HOBOLEAKS;
+import static com.autonomouslogic.everef.util.ArchivePathFactory.MARKET_ORDERS;
+import static com.autonomouslogic.everef.util.ArchivePathFactory.PUBLIC_CONTRACTS;
 
 import com.autonomouslogic.commons.ResourceUtil;
 import com.autonomouslogic.everef.config.Configs;
@@ -91,6 +93,34 @@ public class DataUtil {
 			return okHttpHelper.download(url, file, okHttpClient).flatMap(response -> {
 				if (response.code() != 200) {
 					return Single.error(new RuntimeException("Failed downloading Hoboleaks"));
+				}
+				return Single.just(file);
+			});
+		});
+	}
+
+	public Single<File> downloadLatestPublicContracts() {
+		return Single.defer(() -> {
+			var baseUrl = Configs.DATA_BASE_URL.getRequired();
+			var url = baseUrl + "/" + PUBLIC_CONTRACTS.createLatestPath();
+			var file = tempFiles.tempFile("public-contracts-latest", ".tar.bz2").toFile();
+			return okHttpHelper.download(url, file, okHttpClient).flatMap(response -> {
+				if (response.code() != 200) {
+					throw new RuntimeException(
+							String.format("Failed loading latest contracts: HTTP %s", response.code()));
+				}
+				return Single.just(file);
+			});
+		});
+	}
+
+	public Single<File> downloadLatestMarketOrders() {
+		return Single.defer(() -> {
+			var url = dataBaseUrl + "/" + MARKET_ORDERS.createLatestPath();
+			var file = tempFiles.tempFile("market-orders-latest", ".v3.csv.bz2").toFile();
+			return okHttpHelper.download(url, file, okHttpClient).flatMap(response -> {
+				if (response.code() != 200) {
+					return Single.error(new RuntimeException("Failed downloading market orders"));
 				}
 				return Single.just(file);
 			});

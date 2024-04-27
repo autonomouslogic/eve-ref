@@ -1,5 +1,68 @@
 EVE Ref Changelog
 
+## [2.44.0](https://github.com/autonomouslogic/eve-ref/compare/2.43.1...2.44.0) (2024-04-26)
+
+
+### Features
+
+* Inventory group bundles ([#509](https://github.com/autonomouslogic/eve-ref/issues/509)) ([7f797f9](https://github.com/autonomouslogic/eve-ref/commit/7f797f9fa553bd62cf95fcbf44e8aad965f6cb82))
+* Skill point price overview ([#508](https://github.com/autonomouslogic/eve-ref/issues/508)) ([9932ac0](https://github.com/autonomouslogic/eve-ref/commit/9932ac0d717e86b7b181e378092491e364fef2a6))
+
+
+### Bug Fixes
+
+* Spelling on skill point overview ([1b7ad92](https://github.com/autonomouslogic/eve-ref/commit/1b7ad924b8c8f7be59f30d66869d8da939544158))
+
+## [2.43.1](https://github.com/autonomouslogic/eve-ref/compare/2.43.0...2.43.1) (2024-04-08)
+
+
+### Documentation
+
+* Reduced recommended rclone concurrency ([64ecaaf](https://github.com/autonomouslogic/eve-ref/commit/64ecaaf2e00a7204fe2ee79cd6c8fa63206bda38))
+
+
+### Dependency Updates
+
+* **deps:** update all non-major dependencies ([#494](https://github.com/autonomouslogic/eve-ref/issues/494)) ([7175a1b](https://github.com/autonomouslogic/eve-ref/commit/7175a1b1bd2d6b06e838cabb563757ece4ca2eed))
+
+
+### Code Refactoring
+
+* Structure refactor ([#497](https://github.com/autonomouslogic/eve-ref/issues/497)) ([bd9784b](https://github.com/autonomouslogic/eve-ref/commit/bd9784bc2fbdac9922c8cb3c3654574c2f1b610a))
+
+## [2.43.0](https://github.com/autonomouslogic/eve-ref/compare/2.42.0...2.43.0) (2024-04-02)
+
+
+### Features
+
+* **jobs:** Structure scrape ([#488](https://github.com/autonomouslogic/eve-ref/issues/488)) ([a05b74e](https://github.com/autonomouslogic/eve-ref/commit/a05b74e28a0b479bca8b6e348b43eb6c46669d2f))
+
+
+### Bug Fixes
+
+* **deps:** update flyway monorepo to v10.10.0 ([#495](https://github.com/autonomouslogic/eve-ref/issues/495)) ([6be7387](https://github.com/autonomouslogic/eve-ref/commit/6be73874836732e1f0cb37f74406ecc9905dc12c))
+* **jobs:** Remove sovereignty structures from structure scrape ([#496](https://github.com/autonomouslogic/eve-ref/issues/496)) ([80c80e2](https://github.com/autonomouslogic/eve-ref/commit/80c80e2a69af964332a3a4ae8e61289c1c233f78))
+
+## [2.42.0](https://github.com/autonomouslogic/eve-ref/compare/2.41.0...2.42.0) (2024-03-30)
+
+
+### Features
+
+* Can-fit decorator ([#491](https://github.com/autonomouslogic/eve-ref/issues/491)) ([2845170](https://github.com/autonomouslogic/eve-ref/commit/28451706e7b8668e32db89bc46c9cf522509fc83))
+
+## [2.41.0](https://github.com/autonomouslogic/eve-ref/compare/2.40.2...2.41.0) (2024-03-24)
+
+
+### Features
+
+* **jobs:** Simple Eve Online login ([#487](https://github.com/autonomouslogic/eve-ref/issues/487)) ([65425d7](https://github.com/autonomouslogic/eve-ref/commit/65425d765ab3cce729097bbdda14be96f19488a6))
+
+
+### Documentation
+
+* Allow timestamp checking ([#484](https://github.com/autonomouslogic/eve-ref/issues/484)) ([b38a46e](https://github.com/autonomouslogic/eve-ref/commit/b38a46e92c126d5a7f08c955e182293f90961376))
+* rclone support ([#485](https://github.com/autonomouslogic/eve-ref/issues/485)) ([214303f](https://github.com/autonomouslogic/eve-ref/commit/214303fd64ee2a472b64aa0ee5095a101ec5496a))
+
 ## [2.40.2](https://github.com/autonomouslogic/eve-ref/compare/2.40.1...2.40.2) (2024-03-07)
 
 
