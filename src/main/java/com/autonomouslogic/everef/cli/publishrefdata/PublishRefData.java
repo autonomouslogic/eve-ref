@@ -94,6 +94,9 @@ public class PublishRefData implements Command {
 	@Inject
 	protected Provider<TypeBundleRenderer> typeBundleRendererProvider;
 
+	@Inject
+	protected Provider<GroupBundleRenderer> groupBundleRendererProvider;
+
 	private S3Url refDataUrl;
 	private URI dataBaseUrl = Configs.DATA_BASE_URL.getRequired();
 	private AtomicInteger uploadCounter = new AtomicInteger();
@@ -212,7 +215,11 @@ public class PublishRefData implements Command {
 								.get()
 								.setDataStore(dataStore)
 								.render(),
-						typeBundleRendererProvider.get().setDataStore(dataStore).render())
+						typeBundleRendererProvider.get().setDataStore(dataStore).render(),
+						groupBundleRendererProvider
+								.get()
+								.setDataStore(dataStore)
+								.render())
 				.flatMapCompletable(entry -> Completable.fromAction(() -> {
 					fileMap.put(entry.getLeft(), entry.getRight());
 				})));

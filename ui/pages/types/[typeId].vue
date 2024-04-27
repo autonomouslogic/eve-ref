@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import refdataApi, {cacheBundle} from "~/refdata";
+import refdataApi, {cacheTypeBundle} from "~/refdata";
 import {type InventoryGroup} from "~/refdata-openapi";
 import CategoryLink from "~/components/helpers/CategoryLink.vue";
 import GroupLink from "~/components/helpers/GroupLink.vue";
@@ -15,7 +15,7 @@ if (!typeId) {
 	console.error("typeId is null");
 }
 
-await cacheBundle(typeId);
+await cacheTypeBundle(typeId);
 
 const inventoryType = await refdataApi.getType({typeId});
 if (inventoryType == undefined) {

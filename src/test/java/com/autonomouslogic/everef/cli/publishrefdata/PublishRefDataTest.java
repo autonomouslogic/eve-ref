@@ -129,6 +129,9 @@ public class PublishRefDataTest {
 				if (config.getId().equals("types")) {
 					assertTypeBundle(id, config, testConfig, expectedKeys);
 				}
+				if (config.getId().equals("groups")) {
+					assertGroupBundle(id, config, testConfig, expectedKeys);
+				}
 			}
 		}
 
@@ -180,7 +183,7 @@ public class PublishRefDataTest {
 		if (id != 645) {
 			return;
 		}
-		var expectedItem = buildTestTypeBundle(
+		var expectedItem = buildTestBundle(
 				List.of(645L, 22430L, 3336L, 3327L, 33097L, 3332L, 33093L, 3328L),
 				List.of(9L, 162L, 182L, 277L),
 				List.of(3336L, 3327L, 33097L, 3332L, 33093L, 3328L),
@@ -192,7 +195,26 @@ public class PublishRefDataTest {
 		assertEquals(expectedItem, actualItem);
 	}
 
-	private ObjectNode buildTestTypeBundle(
+	@SneakyThrows
+	private void assertGroupBundle(long id, RefDataConfig config, RefTestConfig testConfig, Set<String> expectedKeys) {
+		if (id == 1185) {
+			return;
+		}
+		var path = String.format("base/%s/%s/bundle", config.getOutputFile(), id);
+		expectedKeys.add(path);
+
+		// Only spot-check one complete one.
+		if (id != 27) {
+			return;
+		}
+		var expectedItem = buildTestBundle(List.of(645L), List.of(9L, 162L, 182L, 277L), null, List.of(1L), null);
+		var actualItem = objectMapper.readTree(mockS3Adapter
+				.getTestObject(BUCKET_NAME, path, s3)
+				.orElseThrow(() -> new RuntimeException("Missing path: " + path)));
+		assertEquals(expectedItem, actualItem);
+	}
+
+	private ObjectNode buildTestBundle(
 			List<Long> typeIds, List<Long> attributeIds, List<Long> skillIds, List<Long> unitIds, List<Long> iconIds) {
 		var bundle = objectMapper.createObjectNode();
 		if (typeIds != null) {

@@ -10,7 +10,8 @@ import AbsoluteInveresePercent from "~/components/dogma/units/AbsoluteInveresePe
 import Duration from "~/components/dogma/units/Duration.vue";
 import {
 	ABSOLUTE_PERCENT,
-	ATTRIBUTE_ID, BOOLEAN,
+	ATTRIBUTE_ID,
+	BOOLEAN,
 	DATETIME,
 	GROUP_ID,
 	HOURS,

@@ -3,15 +3,11 @@ import {type DogmaAttribute, type InventoryType} from "~/refdata-openapi";
 import CardWrapper from "~/components/cards/CardWrapper.vue";
 import DogmaListItems from "~/components/cards/DogmaListItems.vue";
 import FormattedNumber from "~/components/helpers/FormattedNumber.vue";
-import MarketGroupLink from "~/components/helpers/MarketGroupLink.vue";
-import UnitValue from "~/components/dogma/UnitValue.vue";
-import GroupLink from "~/components/helpers/GroupLink.vue";
+import Duration from "~/components/dogma/units/Duration.vue";
 import AttributeList from "~/components/attr/AttributeList.vue";
 import AttributeListItem from "~/components/attr/AttributeListItem.vue";
-import {CUBIC_METER, KILOGRAM, METER, MONEY} from "~/lib/unitConstants";
-import {DateTime} from "luxon";
-import {getAttributeByName, getTypeAttributeByName} from "~/lib/dogmaUtils";
-import {MINUTE} from "~/lib/timeUtils";
+import {getTypeAttributeByName} from "~/lib/dogmaUtils";
+import {calculateAcceleratedSkillpoints, calculateBoosterDuration} from "~/lib/skillUtils";
 
 const props = defineProps<{
 	title: string,
@@ -28,7 +24,19 @@ const skillpoints = computed(() => {
 	if (bonus?.value === undefined || duration?.value === undefined) {
 		return undefined;
 	}
-	return bonus.value *1.5 * duration.value / MINUTE;
+	const realDuration = calculateBoosterDuration(duration.value, 5);
+	return [
+		calculateAcceleratedSkillpoints(bonus.value, realDuration, false),
+		calculateAcceleratedSkillpoints(bonus.value, realDuration, true)
+	];
+});
+
+const duration = computed(() => {
+	const duration = getTypeAttributeByName(durationAttr, props.inventoryType, props.dogmaAttributes);
+	if (duration?.value === undefined) {
+		return undefined;
+	}
+	return calculateBoosterDuration(duration.value, 5);
 });
 </script>
 
@@ -37,12 +45,16 @@ const skillpoints = computed(() => {
 		<AttributeList>
 			<template v-if="skillpoints !== undefined">
 				<AttributeListItem>
-					<template v-slot:key>Accelerated Skillpoints (alpha):</template>
-					<FormattedNumber :number="skillpoints / 2" />
+					<template v-slot:key>Accelerated Skillpoints (alpha, Biology V):</template>
+					<FormattedNumber :number="skillpoints[0]" />
 				</AttributeListItem>
 				<AttributeListItem>
-					<template v-slot:key>Accelerated Skillpoints (omega):</template>
-					<FormattedNumber :number="skillpoints" />
+					<template v-slot:key>Accelerated Skillpoints (omega, Biology V):</template>
+					<FormattedNumber :number="skillpoints[1]" />
+				</AttributeListItem>
+				<AttributeListItem v-if="duration">
+					<template v-slot:key>Booster Duration (Biology V):</template>
+					<Duration :milliseconds="duration" />
 				</AttributeListItem>
 			</template>
 
