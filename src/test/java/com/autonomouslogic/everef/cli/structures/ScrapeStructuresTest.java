@@ -214,15 +214,21 @@ public class ScrapeStructuresTest {
 
 	@ParameterizedTest
 	@ValueSource(strings = {"location_id", "station_id"})
-	void shouldPopulateLocationFromMarketOrders(String prop) {
+	void shouldPreserveLocationOnHiddenStructuresFromMarketOrders(String prop) {
 		marketOrders.add(objectMapper
 				.createObjectNode()
 				.put(prop, 1000000000001L)
 				.put("region_id", 10000001)
+				.put("constellation_id", 20000001)
 				.put("system_id", 30000001));
-		nonPublicStructures.put(1000000000001L, Map.of("name", "Test Structure 1"));
+		marketOrders.add(objectMapper
+				.createObjectNode()
+				.put(prop, 60000001L)
+				.put("region_id", 10000002)
+				.put("constellation_id", 20000002)
+				.put("system_id", 30000002));
 		scrapeStructures.run().blockingAwait();
-		verifyScrape("/single-non-public-structure-with-location.json");
+		verifyScrape("/single-hidden-structure-with-location.json");
 	}
 
 	@ParameterizedTest
@@ -235,6 +241,42 @@ public class ScrapeStructuresTest {
 		nonPublicStructures.put(60000001L, Map.of("name", "Should not be scraped"));
 		scrapeStructures.run().blockingAwait();
 		verifyScrape("/single-non-public-structure.json");
+	}
+
+	@ParameterizedTest
+	@ValueSource(strings = {"start_location_id", "station_id"})
+	void shouldPreserveLocationOnHiddenStructuresFromPublicContracts(String prop) {
+		publicContracts.add(objectMapper
+				.createObjectNode()
+				.put(prop, 1000000000001L)
+				.put("contract_id", 1)
+				.put("region_id", 10000001)
+				.put("constellation_id", 20000001)
+				.put("system_id", 30000001));
+		publicContracts.add(objectMapper
+				.createObjectNode()
+				.put(prop, 60000001L)
+				.put("contract_id", 2)
+				.put("region_id", 10000002)
+				.put("constellation_id", 20000002)
+				.put("system_id", 30000002));
+		scrapeStructures.run().blockingAwait();
+		verifyScrape("/single-hidden-structure-with-location.json");
+	}
+
+	@Test
+	void shouldNotPreserveEndLocationOnHiddenStructuresFromPublicContracts() {
+		publicContracts.add(objectMapper
+				.createObjectNode()
+				.put("end_location", 1000000000001L)
+				.put("contract_id", 1)
+				.put("region_id", 10000001)
+				.put("constellation_id", 20000001)
+				.put("system_id", 30000001));
+		publicContracts.add(
+				objectMapper.createObjectNode().put("end_location", 60000001L).put("contract_id", 2));
+		scrapeStructures.run().blockingAwait();
+		verifyScrape("/single-non-public-structure.json"); // @todo
 	}
 
 	@Test

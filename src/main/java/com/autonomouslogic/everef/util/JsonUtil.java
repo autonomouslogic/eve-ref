@@ -4,7 +4,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.LongNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.Streams;
+import java.util.Optional;
 import lombok.NonNull;
+import org.apache.commons.lang3.StringUtils;
 
 public class JsonUtil {
 	public static boolean isNull(JsonNode node) {
@@ -46,5 +48,16 @@ public class JsonUtil {
 				.map(entry -> entry.getValue())
 				.filter(v -> !v.isNull())
 				.anyMatch(v -> v.asText().equals(val));
+	}
+
+	public static Optional<String> getNonBlankStringField(@NonNull JsonNode node, @NonNull String field) {
+		return Optional.ofNullable(node.get(field))
+				.filter(n -> !n.isNull())
+				.flatMap(n -> Optional.ofNullable(n.textValue()))
+				.filter(StringUtils::isNotBlank);
+	}
+
+	public static Optional<Long> getNonBlankLongField(@NonNull JsonNode node, @NonNull String field) {
+		return getNonBlankStringField(node, field).map(Long::parseLong);
 	}
 }

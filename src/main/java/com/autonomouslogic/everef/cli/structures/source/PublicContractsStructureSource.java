@@ -6,8 +6,8 @@ import com.autonomouslogic.everef.openapi.esi.apis.UniverseApi;
 import com.autonomouslogic.everef.util.CompressUtil;
 import com.autonomouslogic.everef.util.DataUtil;
 import com.autonomouslogic.everef.util.JsonNodeCsvReader;
+import com.autonomouslogic.everef.util.JsonUtil;
 import com.autonomouslogic.everef.util.Rx;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Maybe;
@@ -59,30 +59,44 @@ public class PublicContractsStructureSource implements StructureSource {
 	}
 
 	private Flowable<Long> process(File file) {
-		return Flowable.defer(() -> {
-					return CompressUtil.loadArchive(file)
-							.filter(entry -> entry.getKey().getName().equals("contracts.csv"))
-							.flatMap(entry -> Flowable.fromStream(
-									jsonNodeCsvReaderProvider.get().readAll(entry.getValue())))
-							.flatMap(node -> Flowable.just(
-									Optional.ofNullable(node.get("start_location_id")),
-									Optional.ofNullable(node.get("end_location_id"))))
-							.filter(Optional::isPresent)
-							.map(Optional::get)
-							.filter(node -> !node.isNull())
-							.map(JsonNode::asLong)
-							.filter(id -> id >= 70_000_000L)
-							.distinct()
-							.doOnNext(id -> {
-								structureStore.getOrInitStructure(id);
-							})
-							.toList()
-							.flatMapPublisher(ids -> {
-								log.info("Fetched {} structure ids from public contracts", ids.size());
-								log.debug("Seen structure IDs: {}", ids);
-								return Flowable.fromIterable(ids);
-							});
-				})
-				.compose(Rx.offloadFlowable());
+		return Flowable.defer(() -> CompressUtil.loadArchive(file)
+						.compose(Rx.offloadFlowable())
+						.filter(entry -> entry.getKey().getName().equals("contracts.csv"))
+						.flatMap(entry -> Flowable.fromStream(
+								jsonNodeCsvReaderProvider.get().readAll(entry.getValue())))
+						.flatMap(contract -> Flowable.concat(
+								Flowable.just(JsonUtil.getNonBlankLongField(contract, "end_location_id"))
+										.filter(Optional::isPresent)
+										.map(Optional::get)
+										.filter(id -> id >= 70_000_000L)
+										.distinct()
+										.flatMap(id -> {
+											structureStore.getOrInitStructure(id);
+											return Flowable.just(id);
+										}),
+								Flowable.just(
+												JsonUtil.getNonBlankLongField(contract, "station_id"),
+												JsonUtil.getNonBlankLongField(contract, "start_location_id"))
+										.filter(Optional::isPresent)
+										.map(Optional::get)
+										.filter(id -> id >= 70_000_000L)
+										.distinct()
+										.flatMap(id -> {
+											var structure = structureStore.getOrInitStructure(id);
+											JsonUtil.getNonBlankLongField(contract, "region_id")
+													.ifPresent(regionId -> structure.put("region_id", regionId));
+											JsonUtil.getNonBlankLongField(contract, "constellation_id")
+													.ifPresent(regionId -> structure.put("constellation_id", regionId));
+											JsonUtil.getNonBlankLongField(contract, "system_id")
+													.ifPresent(regionId -> structure.put("solar_system_id", regionId));
+											structureStore.put(structure);
+											return Flowable.just(id);
+										}))))
+				.toList()
+				.flatMapPublisher(ids -> {
+					log.info("Fetched {} structure ids from public contracts", ids.size());
+					log.debug("Seen structure IDs: {}", ids);
+					return Flowable.fromIterable(ids);
+				});
 	}
 }
