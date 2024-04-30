@@ -162,8 +162,7 @@ public class ScrapeStructuresTest {
 
 	@Test
 	void shouldNotPreserveExtraDataFromPreviousScrapes() {
-		loadPreviousScrape(container(publicStructure()));
-		((ObjectNode) previousScrape.get("1000000000001")).put("some_key", "some_value");
+		loadPreviousScrape(container(publicStructure().put("some_key", "some_value")));
 		publicStructures.put(1000000000001L, Map.of("name", "Test Structure 1"));
 		scrapeStructures.run().blockingAwait();
 		verifyScrape(container(publicStructure()));
@@ -278,7 +277,7 @@ public class ScrapeStructuresTest {
 	void shouldNotPreserveEndLocationOnHiddenStructuresFromPublicContracts() {
 		publicContracts.add(objectMapper
 				.createObjectNode()
-				.put("end_location", 1000000000001L)
+				.put("end_location_id", 1000000000001L)
 				.put("contract_id", 1)
 				.put("region_id", 10000001)
 				.put("constellation_id", 20000001)
@@ -286,7 +285,12 @@ public class ScrapeStructuresTest {
 		publicContracts.add(
 				objectMapper.createObjectNode().put("end_location", 60000001L).put("contract_id", 2));
 		scrapeStructures.run().blockingAwait();
-		verifyScrape(container(nonPublicStructure())); // @todo
+		verifyScrape(container(objectMapper
+				.createObjectNode()
+				.put("structure_id", 1000000000001L)
+				.put("is_gettable_structure", false)
+				.put("is_public_structure", false)
+				.put("is_market_structure", false)));
 	}
 
 	@Test
@@ -329,6 +333,17 @@ public class ScrapeStructuresTest {
 								.path(
 										"base/structures/history/2020/2020-01-02/structures-2020-01-02_03-04-05.v2.json.bz2")
 								.build());
+	}
+
+	@Test
+	void shouldPreserveLocationsOnOldStructures() {
+		var structure = publicStructure()
+				.put("region_id", 10000001)
+				.put("constellation_id", 20000001)
+				.put("system_id", 30000001);
+		loadPreviousScrape(container(structure));
+		scrapeStructures.run().blockingAwait();
+		verifyScrape(container(structure.put("is_gettable_structure", false).put("is_public_structure", false)));
 	}
 
 	@SneakyThrows

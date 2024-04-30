@@ -382,7 +382,8 @@ public class ScrapeStructures implements Command {
 
 	private Completable fetchMarket(long structureId) {
 		return Completable.defer(() -> {
-			var typeId = JsonUtil.getNonBlankLongField(structureStore.getOrInitStructure(structureId), "type_id");
+			var structure = structureStore.getOrInitStructure(structureId);
+			var typeId = JsonUtil.getNonBlankLongField(structure, "type_id");
 			if (typeId.isPresent() && !marketStructureTypeIds.contains(typeId.get())) {
 				structureStore.updateBoolean(structureId, IS_MARKET_STRUCTURE, false);
 				log.trace("Structure {} of type {} cannot have a market", structureId, typeId.get());

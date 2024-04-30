@@ -53,7 +53,7 @@ public class JsonUtil {
 	public static Optional<String> getNonBlankStringField(@NonNull JsonNode node, @NonNull String field) {
 		return Optional.ofNullable(node.get(field))
 				.filter(n -> !n.isNull())
-				.flatMap(n -> Optional.ofNullable(n.textValue()))
+				.flatMap(n -> Optional.ofNullable(n.asText()))
 				.filter(StringUtils::isNotBlank);
 	}
 
