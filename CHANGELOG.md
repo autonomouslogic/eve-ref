@@ -1,5 +1,18 @@
 EVE Ref Changelog
 
+## [2.44.0](https://github.com/autonomouslogic/eve-ref/compare/2.43.1...2.44.0) (2024-04-26)
+
+
+### Features
+
+* Inventory group bundles ([#509](https://github.com/autonomouslogic/eve-ref/issues/509)) ([7f797f9](https://github.com/autonomouslogic/eve-ref/commit/7f797f9fa553bd62cf95fcbf44e8aad965f6cb82))
+* Skill point price overview ([#508](https://github.com/autonomouslogic/eve-ref/issues/508)) ([9932ac0](https://github.com/autonomouslogic/eve-ref/commit/9932ac0d717e86b7b181e378092491e364fef2a6))
+
+
+### Bug Fixes
+
+* Spelling on skill point overview ([1b7ad92](https://github.com/autonomouslogic/eve-ref/commit/1b7ad924b8c8f7be59f30d66869d8da939544158))
+
 ## [2.43.1](https://github.com/autonomouslogic/eve-ref/compare/2.43.0...2.43.1) (2024-04-08)
 
 

@@ -2,14 +2,14 @@ package com.autonomouslogic.everef.cli.structures;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.lenient;
 
-import com.autonomouslogic.commons.ResourceUtil;
 import com.autonomouslogic.everef.cli.publiccontracts.ContractsFileBuilder;
 import com.autonomouslogic.everef.cli.publiccontracts.ContractsScrapeMeta;
 import com.autonomouslogic.everef.esi.LocationPopulator;
-import com.autonomouslogic.everef.esi.MockLocationPopulatorModule;
+import com.autonomouslogic.everef.openapi.esi.models.GetUniverseConstellationsConstellationIdOk;
+import com.autonomouslogic.everef.openapi.esi.models.GetUniverseConstellationsConstellationIdPosition;
+import com.autonomouslogic.everef.openapi.esi.models.GetUniverseSystemsSystemIdOk;
+import com.autonomouslogic.everef.openapi.esi.models.GetUniverseSystemsSystemIdPosition;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.test.MockS3Adapter;
 import com.autonomouslogic.everef.test.TestDataUtil;
@@ -22,7 +22,6 @@ import com.autonomouslogic.everef.util.TempFiles;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import io.reactivex.rxjava3.core.Completable;
 import java.io.FileInputStream;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -31,6 +30,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import javax.inject.Inject;
@@ -115,11 +115,7 @@ public class ScrapeStructuresTest {
 	@BeforeEach
 	@SneakyThrows
 	void before() {
-		DaggerTestComponent.builder()
-				.mockLocationPopulatorModule(new MockLocationPopulatorModule().setLocationPopulator(locationPopulator))
-				.build()
-				.inject(this);
-		lenient().when(locationPopulator.populate(any())).thenReturn(Completable.complete()); // @todo
+		DaggerTestComponent.create().inject(this);
 
 		time = ZonedDateTime.parse("2021-01-01T00:00:00.123Z");
 		scrapeStructures.setScrapeTime(time);
@@ -146,42 +142,48 @@ public class ScrapeStructuresTest {
 	void shouldScrapePublicStructures() {
 		publicStructures.put(1000000000001L, Map.of("name", "Test Structure 1"));
 		scrapeStructures.run().blockingAwait();
-		verifyScrape("/single-public-structure.json");
+		verifyScrape(container(publicStructure()));
 	}
 
 	@Test
 	void shouldUpdatePublicStructures() {
-		loadPreviousScrape("/single-public-structure.json");
+		loadPreviousScrape(container(publicStructure()));
 		publicStructures.put(1000000000001L, Map.of("name", "Test Structure 1 Updated"));
 		time = time.plusDays(1);
 		scrapeStructures.run().blockingAwait();
-		verifyScrape("/single-public-structure-updated.json");
+		verifyScrape(container(publicStructure()
+				.put("name", "Test Structure 1 Updated")
+				.put("last_seen_public_structure", "2021-01-02T00:00:00Z")
+				.put("last_structure_get", "2021-01-02T00:00:00Z")));
 	}
 
 	@Test
 	void shouldNotPreserveExtraDataFromPreviousScrapes() {
-		loadPreviousScrape("/single-public-structure.json");
-		((ObjectNode) previousScrape.get("1000000000001")).put("some_key", "some_value");
+		loadPreviousScrape(container(publicStructure().put("some_key", "some_value")));
 		publicStructures.put(1000000000001L, Map.of("name", "Test Structure 1"));
 		scrapeStructures.run().blockingAwait();
-		verifyScrape("/single-public-structure.json");
+		verifyScrape(container(publicStructure()));
 	}
 
 	@Test
 	void shouldRescrapePreviousStructures() {
-		loadPreviousScrape("/single-public-structure.json");
+		loadPreviousScrape(container(publicStructure()));
 		nonPublicStructures.put(1000000000001L, Map.of("name", "Test Structure 1 Updated"));
 		time = time.plusDays(1);
 		scrapeStructures.run().blockingAwait();
-		verifyScrape("/single-public-structure-updated-non-public.json");
+		verifyScrape(container(publicStructure()
+				.put("name", "Test Structure 1 Updated")
+				.put("is_public_structure", false)
+				.put("last_structure_get", "2021-01-02T00:00:00Z")));
 	}
 
 	@Test
 	void shouldPreserveStructures() {
-		loadPreviousScrape("/single-public-structure.json");
+		loadPreviousScrape(container(publicStructure()));
 		time = time.plusDays(1);
 		scrapeStructures.run().blockingAwait();
-		verifyScrape("/single-public-structure-non-public.json");
+		verifyScrape(
+				container(publicStructure().put("is_public_structure", false).put("is_gettable_structure", false)));
 	}
 
 	@Test
@@ -190,7 +192,10 @@ public class ScrapeStructuresTest {
 				1000000000001L, Map.of("name", "Test Structure 1", "type_id", EveConstants.KEEPSTAR_TYPE_ID));
 		marketStructures.add(1000000000001L);
 		scrapeStructures.run().blockingAwait();
-		verifyScrape("/single-market-structure.json");
+		verifyScrape(container(publicStructure()
+				.put("type_id", EveConstants.KEEPSTAR_TYPE_ID)
+				.put("is_market_structure", true)
+				.put("last_seen_market_structure", "2021-01-01T00:00:00Z")));
 	}
 
 	@Test
@@ -199,7 +204,7 @@ public class ScrapeStructuresTest {
 				1000000000001L, Map.of("name", "Test Structure 1", "type_id", EveConstants.ASTRAHUS_HUB_TYPE_ID));
 		marketStructures.add(1000000000001L); // Will never be called.
 		scrapeStructures.run().blockingAwait();
-		verifyScrape("/single-non-marketable-structure.json");
+		verifyScrape(container(publicStructure().put("type_id", EveConstants.ASTRAHUS_HUB_TYPE_ID)));
 	}
 
 	@ParameterizedTest
@@ -210,7 +215,26 @@ public class ScrapeStructuresTest {
 		nonPublicStructures.put(1000000000001L, Map.of("name", "Test Structure 1"));
 		nonPublicStructures.put(60000001L, Map.of("name", "Should not be scraped"));
 		scrapeStructures.run().blockingAwait();
-		verifyScrape("/single-non-public-structure.json");
+		verifyScrape(container(nonPublicStructure()));
+	}
+
+	@ParameterizedTest
+	@ValueSource(strings = {"location_id", "station_id"})
+	void shouldPreserveLocationOnHiddenStructuresFromMarketOrders(String prop) {
+		marketOrders.add(objectMapper
+				.createObjectNode()
+				.put(prop, 1000000000001L)
+				.put("region_id", 10000001)
+				.put("constellation_id", 20000001)
+				.put("system_id", 30000001));
+		marketOrders.add(objectMapper
+				.createObjectNode()
+				.put(prop, 60000001L)
+				.put("region_id", 10000002)
+				.put("constellation_id", 20000002)
+				.put("system_id", 30000002));
+		scrapeStructures.run().blockingAwait();
+		verifyScrape(container(hiddenStructureWithLocation()));
 	}
 
 	@ParameterizedTest
@@ -222,7 +246,49 @@ public class ScrapeStructuresTest {
 		nonPublicStructures.put(1000000000001L, Map.of("name", "Test Structure 1"));
 		nonPublicStructures.put(60000001L, Map.of("name", "Should not be scraped"));
 		scrapeStructures.run().blockingAwait();
-		verifyScrape("/single-non-public-structure.json");
+		verifyScrape(container(nonPublicStructure()));
+	}
+
+	@ParameterizedTest
+	@ValueSource(strings = {"start_location_id", "station_id"})
+	void shouldPreserveLocationOnHiddenStructuresFromPublicContracts(String prop) {
+		publicContracts.add(objectMapper
+				.createObjectNode()
+				.put(prop, 1000000000001L)
+				.put("contract_id", 1)
+				.put("region_id", 10000001)
+				.put("constellation_id", 20000001)
+				.put("system_id", 30000001));
+		publicContracts.add(objectMapper
+				.createObjectNode()
+				.put(prop, 60000001L)
+				.put("contract_id", 2)
+				.put("region_id", 10000002)
+				.put("constellation_id", 20000002)
+				.put("system_id", 30000002));
+		scrapeStructures.run().blockingAwait();
+		verifyScrape(container(hiddenStructureWithLocation()));
+	}
+
+	@Test
+	void shouldNotPreserveEndLocationOnHiddenStructuresFromPublicContracts() {
+		publicContracts.add(objectMapper
+				.createObjectNode()
+				.put("end_location_id", 1000000000001L)
+				.put("contract_id", 1)
+				.put("region_id", 10000001)
+				.put("constellation_id", 20000001)
+				.put("system_id", 30000001));
+		publicContracts.add(
+				objectMapper.createObjectNode().put("end_location", 60000001L).put("contract_id", 2));
+		scrapeStructures.run().blockingAwait();
+		verifyScrape(container(objectMapper
+				.createObjectNode()
+				.put("structure_id", 1000000000001L)
+				.put("is_gettable_structure", false)
+				.put("is_public_structure", false)
+				.put("is_market_structure", false)
+				.put("first_seen", "2021-01-01T00:00:00.123Z")));
 	}
 
 	@Test
@@ -236,27 +302,48 @@ public class ScrapeStructuresTest {
 						"solar_system_id", 300000001));
 		nonPublicStructures.put(1000000000001L, Map.of("name", "Should not scrape"));
 		scrapeStructures.run().blockingAwait();
-		verifyScrape("/no-structures.json");
+		verifyScrape(noStructures());
 	}
 
 	@Test
 	void shouldRemoveOldStructures() {
-		loadPreviousScrape("/single-old-structure.json");
+		loadPreviousScrape(container(oldStructure()));
 		nonPublicStructures.put(1000000000001L, Map.of("name", "Should not scrape"));
 		scrapeStructures.run().blockingAwait();
-		verifyScrape("/no-structures.json");
+		verifyScrape(noStructures());
+	}
+
+	@Test
+	void shouldPreserveLocationsOnOldStructures() {
+		var structure = publicStructure()
+				.put("region_id", 10000001)
+				.put("constellation_id", 20000001)
+				.put("system_id", 30000001);
+		loadPreviousScrape(container(structure));
+		scrapeStructures.run().blockingAwait();
+		verifyScrape(container(structure.put("is_gettable_structure", false).put("is_public_structure", false)));
+	}
+
+	@Test
+	void shouldPopulateLocations() {
+		publicStructures.put(1000000000001L, Map.of("name", "Test Structure 1", "system_id", 30000001));
+		scrapeStructures.run().blockingAwait();
+		verifyScrape(container(publicStructure()
+				.put("region_id", 10000001)
+				.put("constellation_id", 20000001)
+				.put("system_id", 30000001)));
 	}
 
 	@Test
 	void shouldSetFirstSeenOnNewStructures() {
 		publicStructures.put(1000000000001L, Map.of("name", "Test Structure 1"));
 		scrapeStructures.run().blockingAwait();
-		verifyScrape("/single-public-structure.json");
+		verifyScrape(container(publicStructure()));
 	}
 
 	@Test
 	void shouldNotPopulateFirstSeenOnExistingStructures() {
-		loadPreviousScrape("/single-public-structure.json");
+		loadPreviousScrape(container(publicStructure()));
 		previousScrape.withObject("1000000000001").remove("first_seen");
 		publicStructures.put(1000000000001L, Map.of("name", "Test Structure 1"));
 		scrapeStructures.run().blockingAwait();
@@ -265,7 +352,7 @@ public class ScrapeStructuresTest {
 
 	@Test
 	void shouldNotUpdatePopulateFirstSeenOnExistingStructures() {
-		loadPreviousScrape("/single-public-structure.json");
+		loadPreviousScrape(container(publicStructure()));
 		previousScrape.withObject("1000000000001").put("first_seen", "2000-01-01T00:00:00Z");
 		publicStructures.put(1000000000001L, Map.of("name", "Test Structure 1"));
 		scrapeStructures.run().blockingAwait();
@@ -295,8 +382,8 @@ public class ScrapeStructuresTest {
 	}
 
 	@SneakyThrows
-	private void loadPreviousScrape(String file) {
-		previousScrape = objectMapper.readTree(ResourceUtil.loadContextual(getClass(), file));
+	private void loadPreviousScrape(@NonNull ObjectNode node) {
+		previousScrape = node;
 	}
 
 	@SneakyThrows
@@ -309,8 +396,9 @@ public class ScrapeStructuresTest {
 	}
 
 	@SneakyThrows
-	private void verifyScrape(@NonNull String expectedFile) {
-		var expected = objectMapper.readTree(ResourceUtil.loadContextual(getClass(), expectedFile));
+	private void verifyScrape(@NonNull JsonNode container) {
+		var json = objectMapper.writeValueAsString(container);
+		var expected = objectMapper.readTree(json);
 		var supplied = loadScrape();
 		assertEquals(expected, supplied);
 	}
@@ -408,6 +496,31 @@ public class ScrapeStructuresTest {
 					return new MockResponse().setBody(objectMapper.writeValueAsString(obj));
 				}
 
+				if (path.equals("/universe/systems/30000001/")) {
+					var obj = new GetUniverseSystemsSystemIdOk(
+							20000001,
+							"System",
+							new GetUniverseSystemsSystemIdPosition(0, 0, 0),
+							0,
+							30000001,
+							List.of(),
+							"",
+							0,
+							List.of(),
+							List.of());
+					return new MockResponse().setBody(objectMapper.writeValueAsString(obj));
+				}
+
+				if (path.equals("/universe/constellations/20000001/")) {
+					var obj = new GetUniverseConstellationsConstellationIdOk(
+							20000001,
+							"Constellation",
+							new GetUniverseConstellationsConstellationIdPosition(0, 0, 0),
+							10000001,
+							List.of());
+					return new MockResponse().setBody(objectMapper.writeValueAsString(obj));
+				}
+
 				log.error(String.format("Unaccounted for URL: %s", path));
 				return new MockResponse().setResponseCode(404);
 			} catch (Exception e) {
@@ -415,5 +528,67 @@ public class ScrapeStructuresTest {
 				return new MockResponse().setResponseCode(500);
 			}
 		}
+	}
+
+	private ObjectNode container(ObjectNode... structures) {
+		var container = objectMapper.createObjectNode();
+		for (ObjectNode structure : structures) {
+			var id = Objects.requireNonNull(structure.get("structure_id")).asText();
+			container.set(id, structure);
+		}
+		return container;
+	}
+
+	private ObjectNode noStructures() {
+		return container();
+	}
+
+	private ObjectNode publicStructure() {
+		return objectMapper
+				.createObjectNode()
+				.put("name", "Test Structure 1")
+				.put("structure_id", 1000000000001L)
+				.put("is_public_structure", true)
+				.put("is_gettable_structure", true)
+				.put("last_structure_get", "2021-01-01T00:00:00Z")
+				.put("last_seen_public_structure", "2021-01-01T00:00:00Z")
+				.put("first_seen", "2021-01-01T00:00:00.123Z")
+				.put("is_market_structure", false);
+	}
+
+	private ObjectNode oldStructure() {
+		return publicStructure()
+				.put("last_structure_get", "2020-11-01T00:00:00Z")
+				.put("last_seen_public_structure", "2020-11-01T00:00:00Z")
+				.put("first_seen", "2019-01-01T00:00:00.123Z");
+	}
+
+	private ObjectNode nonPublicStructure() {
+		return objectMapper
+				.createObjectNode()
+				.put("name", "Test Structure 1")
+				.put("structure_id", 1000000000001L)
+				.put("is_public_structure", false)
+				.put("is_gettable_structure", true)
+				.put("last_structure_get", "2021-01-01T00:00:00Z")
+				.put("is_market_structure", false)
+				.put("first_seen", "2021-01-01T00:00:00.123Z");
+	}
+
+	private ObjectNode hiddenStructure() {
+		return objectMapper
+				.createObjectNode()
+				.put("structure_id", 1000000000001L)
+				.put("is_public_structure", false)
+				.put("is_gettable_structure", false)
+				.put("is_market_structure", false)
+				.put("first_seen", "2021-01-01T00:00:00.123Z");
+	}
+
+	private ObjectNode hiddenStructureWithLocation() {
+		return hiddenStructure()
+				.put("region_id", 10000001)
+				.put("constellation_id", 20000001)
+				.put("solar_system_id", 30000001);
 	}
 }
