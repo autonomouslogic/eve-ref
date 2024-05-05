@@ -70,9 +70,5 @@ public class MarketOrdersWriter {
 			var node = marketOrdersStore.get(id);
 			return node.has(field) ? node.get(field).asLong() : null;
 		});
-
-		//			.onResultOf(id -> Optional.ofNullable(marketOrdersStore.get(id).get(field))
-		//
-		//			);
 	}
 }

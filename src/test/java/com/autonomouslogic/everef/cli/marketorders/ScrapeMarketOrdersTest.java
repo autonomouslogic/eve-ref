@@ -82,11 +82,7 @@ public class ScrapeMarketOrdersTest {
 	@BeforeEach
 	@SneakyThrows
 	void before() {
-		DaggerTestComponent.builder()
-				// .mockLocationPopulatorModule(new
-				// MockLocationPopulatorModule().setLocationPopulator(locationPopulator))
-				.build()
-				.inject(this);
+		DaggerTestComponent.create().inject(this);
 		server = new MockWebServer();
 		server.setDispatcher(new Dispatcher() {
 			@NotNull
@@ -136,7 +132,7 @@ public class ScrapeMarketOrdersTest {
 					case "/markets/structures/1000000000004/?datasource=tranquility&language=en" -> mockStructureOrders(
 							recordedRequest, 1000000000004L, 1, 1);
 					default -> {
-						log.warn("Unaccounted for URL: {}", recordedRequest.getPath());
+						log.error("Unaccounted for URL: {}", recordedRequest.getPath());
 						yield new MockResponse().setResponseCode(404);
 					}
 				};
@@ -178,17 +174,7 @@ public class ScrapeMarketOrdersTest {
 						loadStructureOrderMaps(1000000000001L, 2),
 						loadStructureOrderMaps(1000000000004L, 1))
 				.stream()
-				.sorted(Ordering.compound(List.of(
-						Ordering.natural()
-								.nullsLast()
-								.onResultOf(m -> StringUtils.isNotBlank(m.get("region_id"))
-										? Long.parseLong(m.get("region_id"))
-										: null),
-						Ordering.natural()
-								.nullsLast()
-								.onResultOf(m -> StringUtils.isNotBlank(m.get("type_id"))
-										? Long.parseLong(m.get("type_id"))
-										: null))))
+				.sorted(Ordering.compound(List.of(ordering("region_id"), ordering("type_id"))))
 				.map(m -> new TreeMap<>(m).toString())
 				.collect(Collectors.joining("\n"));
 		assertEquals(expected, records);
@@ -329,19 +315,25 @@ public class ScrapeMarketOrdersTest {
 	@SneakyThrows
 	private List<Map<String, String>> loadStructureOrderMaps(long structureId, int page) {
 		return testDataUtil.readMapsFromJson(loadStructureOrders(structureId, page)).stream()
-				.map(m -> {
-					m.put("station_id", "");
-					if (m.get("location_id").equals("1000000000004")) {
-						m.put("region_id", "");
-						m.put("constellation_id", "");
-						m.put("system_id", "");
-						return m;
+				.map(order -> {
+					order.put("station_id", "");
+					if (order.get("location_id").equals("1000000000004")) {
+						order.put("region_id", "");
+						order.put("constellation_id", "");
+						order.put("system_id", "");
+					} else {
+						order.put("region_id", "10000010");
+						order.put("constellation_id", "20000001");
+						order.put("system_id", "30000001");
 					}
-					m.put("region_id", "10000010");
-					m.put("constellation_id", "20000001");
-					m.put("system_id", "30000001");
-					return m;
+					return order;
 				})
 				.toList();
+	}
+
+	private static @NotNull Ordering<Map<String, String>> ordering(String fieldName) {
+		return Ordering.natural()
+				.nullsLast()
+				.onResultOf(m -> StringUtils.isNotBlank(m.get(fieldName)) ? Long.parseLong(m.get(fieldName)) : null);
 	}
 }

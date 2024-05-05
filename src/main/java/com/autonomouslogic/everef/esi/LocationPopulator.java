@@ -7,6 +7,8 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.extern.log4j.Log4j2;
 
+import static com.autonomouslogic.everef.util.EveConstants.NPC_STATION_MAX_ID;
+
 /**
  * Populates location data on scraped data.
  * Resolves locations and populates the system, constellation, and region.
@@ -34,11 +36,11 @@ public class LocationPopulator {
 
 	private Completable populateStation(ObjectNode record, String stationKey) {
 		return Completable.fromAction(() -> {
-			if (record.has(stationKey)) {
+			if (record.has("station_id")) {
 				return;
 			}
 			var stationId = record.get(stationKey);
-			if (!JsonUtil.isNullOrEmpty(stationId)) {
+			if (!JsonUtil.isNullOrEmpty(stationId) && stationId.asLong() < NPC_STATION_MAX_ID) {
 				record.set("station_id", stationId);
 			}
 		});
