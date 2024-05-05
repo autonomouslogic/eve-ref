@@ -1,5 +1,27 @@
 EVE Ref Changelog
 
+## [2.45.0](https://github.com/autonomouslogic/eve-ref/compare/2.44.0...2.45.0) (2024-05-05)
+
+
+### Features
+
+* Added first_seen to structure scrape ([#500](https://github.com/autonomouslogic/eve-ref/issues/500)) ([9fe248b](https://github.com/autonomouslogic/eve-ref/commit/9fe248bc4e86998acd766199e048b8424ae4cf46))
+* Added structure locations from market orders and contracts ([#502](https://github.com/autonomouslogic/eve-ref/issues/502)) ([65aeaaf](https://github.com/autonomouslogic/eve-ref/commit/65aeaaf8d2d04c7b32b67ff2b62ba45df9831b57))
+* Scrape market orders from player structures ([#501](https://github.com/autonomouslogic/eve-ref/issues/501)) ([979c1df](https://github.com/autonomouslogic/eve-ref/commit/979c1dfcb59986974f860ba08bfb6a39d3f9eee6))
+* **ui:** Added attribute breakdown for accounts ([#511](https://github.com/autonomouslogic/eve-ref/issues/511)) ([672e577](https://github.com/autonomouslogic/eve-ref/commit/672e577968fb4ed67b2ab1c6cdf3978569dd4677))
+* **ui:** Structure rig comparison table ([#481](https://github.com/autonomouslogic/eve-ref/issues/481)) ([4f0e4c9](https://github.com/autonomouslogic/eve-ref/commit/4f0e4c984df55c66da63b0319a437dc62d324dcc))
+
+
+### Bug Fixes
+
+* Explicitly added region and constellation to custom properties ([b2267e6](https://github.com/autonomouslogic/eve-ref/commit/b2267e6d717f0de6818d679f6c835efa3b03b2b2))
+* **ui:** Added average attributes with +5 implants to skill points overview ([3263597](https://github.com/autonomouslogic/eve-ref/commit/3263597b4653742735ff627010759db0b3f89b9c))
+
+
+### Documentation
+
+* Update market history stats ([396001b](https://github.com/autonomouslogic/eve-ref/commit/396001b197a2a84f2d8a8ddb8880f569d1d5d372))
+
 ## [2.44.0](https://github.com/autonomouslogic/eve-ref/compare/2.43.1...2.44.0) (2024-04-26)
 
 
