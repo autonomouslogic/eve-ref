@@ -84,7 +84,6 @@ public class MarketOrdersStructureSource implements StructureSource {
 								JsonUtil.getNonBlankLongField(market, "system_id")
 										.ifPresent(regionId -> structure.put("solar_system_id", regionId));
 								structureStore.put(structure);
-								log.info(structure);
 								return (Long) id;
 							})
 							.toList()
