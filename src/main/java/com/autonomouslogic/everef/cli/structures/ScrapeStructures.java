@@ -89,7 +89,9 @@ public class ScrapeStructures implements Command {
 			LAST_SEEN_PUBLIC_STRUCTURE,
 			IS_MARKET_STRUCTURE,
 			LAST_SEEN_MARKET_STRUCTURE,
-			FIRST_SEEN);
+			FIRST_SEEN,
+			"constellation_id",
+			"region_id");
 
 	public static final List<String> ALL_BOOLEANS =
 			List.of(IS_GETTABLE_STRUCTURE, IS_PUBLIC_STRUCTURE, IS_MARKET_STRUCTURE);
