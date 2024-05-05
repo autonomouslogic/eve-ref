@@ -1,12 +1,14 @@
 package com.autonomouslogic.everef.cli.structures.source;
 
+import static com.autonomouslogic.everef.util.EveConstants.NPC_STATION_MAX_ID;
+
 import com.autonomouslogic.everef.cli.structures.StructureScrapeHelper;
 import com.autonomouslogic.everef.cli.structures.StructureStore;
 import com.autonomouslogic.everef.openapi.esi.apis.UniverseApi;
 import com.autonomouslogic.everef.util.DataUtil;
 import com.autonomouslogic.everef.util.JsonNodeCsvReader;
+import com.autonomouslogic.everef.util.JsonUtil;
 import com.autonomouslogic.everef.util.Rx;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Maybe;
@@ -17,6 +19,7 @@ import javax.inject.Provider;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import lombok.extern.log4j.Log4j2;
+import org.apache.commons.lang3.tuple.Pair;
 
 @Log4j2
 public class MarketOrdersStructureSource implements StructureSource {
@@ -63,20 +66,31 @@ public class MarketOrdersStructureSource implements StructureSource {
 							.get()
 							.readCompressed(file)
 							.flatMap(node -> Flowable.just(
-									Optional.ofNullable(node.get("station_id")),
-									Optional.ofNullable(node.get("location_id"))))
-							.filter(Optional::isPresent)
-							.map(Optional::get)
-							.filter(node -> !node.isNull())
-							.map(JsonNode::asLong)
-							.filter(id -> id >= 70_000_000L)
-							.distinct()
-							.doOnNext(id -> {
-								structureStore.getOrInitStructure(id);
+											JsonUtil.getNonBlankLongField(node, "station_id"),
+											JsonUtil.getNonBlankLongField(node, "location_id"))
+									.filter(Optional::isPresent)
+									.map(Optional::get)
+									.filter(id -> id >= NPC_STATION_MAX_ID)
+									.distinct()
+									.map(id -> Pair.of(id, node)))
+							.map(pair -> {
+								var id = pair.getKey();
+								var market = pair.getValue();
+								var structure = structureStore.getOrInitStructure(id);
+								JsonUtil.getNonBlankLongField(market, "region_id")
+										.ifPresent(regionId -> structure.put("region_id", regionId));
+								JsonUtil.getNonBlankLongField(market, "constellation_id")
+										.ifPresent(regionId -> structure.put("constellation_id", regionId));
+								JsonUtil.getNonBlankLongField(market, "system_id")
+										.ifPresent(regionId -> structure.put("solar_system_id", regionId));
+								structureStore.put(structure);
+								return (Long) id;
 							})
 							.toList()
 							.flatMapPublisher(ids -> {
+								assert structureStore != null;
 								log.info("Fetched {} structure ids from market orders", ids.size());
+								log.debug("Seen structure IDs: {}", ids);
 								return Flowable.fromIterable(ids);
 							});
 				})

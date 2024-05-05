@@ -29,6 +29,7 @@ import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.url.UrlParser;
 import com.autonomouslogic.everef.util.CompressUtil;
 import com.autonomouslogic.everef.util.DataIndexHelper;
+import com.autonomouslogic.everef.util.JsonUtil;
 import com.autonomouslogic.everef.util.ProgressReporter;
 import com.autonomouslogic.everef.util.TempFiles;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -242,6 +243,7 @@ public class ScrapeStructures implements Command {
 			mvStore = mvStoreUtil.createTempStore("public-contracts");
 			log.debug("MVStore opened at {}", mvStore.getFileStore().getFileName());
 			structureStore.setStore(mvStoreUtil.openJsonMap(mvStore, "structures", Long.class));
+			// structureStore.setStore(new HashMap<>());
 			log.debug("MVStore initialised");
 		});
 	}
@@ -380,9 +382,11 @@ public class ScrapeStructures implements Command {
 
 	private Completable fetchMarket(long structureId) {
 		return Completable.defer(() -> {
-			var typeId = getTypeId(structureId);
+			var structure = structureStore.getOrInitStructure(structureId);
+			var typeId = JsonUtil.getNonBlankLongField(structure, "type_id");
 			if (typeId.isPresent() && !marketStructureTypeIds.contains(typeId.get())) {
 				structureStore.updateBoolean(structureId, IS_MARKET_STRUCTURE, false);
+				log.trace("Structure {} of type {} cannot have a market", structureId, typeId.get());
 				return Completable.complete();
 			}
 			log.trace("Fetching market {}", structureId);
@@ -405,13 +409,14 @@ public class ScrapeStructures implements Command {
 		});
 	}
 
-	@NotNull
-	private Optional<Long> getTypeId(long structureId) {
-		return Optional.ofNullable(structureStore.getOrInitStructure(structureId))
-				.flatMap(n -> Optional.ofNullable(n.get("type_id")))
-				.filter(n -> !n.isNull())
-				.map(JsonNode::asLong);
-	}
+	//	@NotNull
+	//	private Optional<Long> getTypeId(long structureId) {
+	//		return JsonUtil.getNonBlankLongField(structureStore.getOrInitStructure(structureId), "type_id");
+	//		return Optional.ofNullable(structureStore.getOrInitStructure(structureId))
+	//				.flatMap(n -> Optional.ofNullable(n.get("type_id")))
+	//				.filter(n -> !n.isNull())
+	//				.map(JsonNode::asLong);
+	//	}
 
 	private Completable populateLocations() {
 		return Completable.defer(() -> {
@@ -427,7 +432,7 @@ public class ScrapeStructures implements Command {
 
 	private Single<File> buildOutput() {
 		return Single.defer(() -> {
-			var file = new File("/tmp/structures.json");
+			var file = tempFiles.tempFile("structures", ".json").toFile();
 			log.info("Writing output file to {}", file);
 			var all = objectMapper.createObjectNode();
 			return structureStore
