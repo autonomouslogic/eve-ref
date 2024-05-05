@@ -1,13 +1,14 @@
 package com.autonomouslogic.everef.cli.structures;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.lenient;
 
 import com.autonomouslogic.everef.cli.publiccontracts.ContractsFileBuilder;
 import com.autonomouslogic.everef.cli.publiccontracts.ContractsScrapeMeta;
 import com.autonomouslogic.everef.esi.LocationPopulator;
-import com.autonomouslogic.everef.esi.MockLocationPopulatorModule;
+import com.autonomouslogic.everef.openapi.esi.models.GetUniverseConstellationsConstellationIdOk;
+import com.autonomouslogic.everef.openapi.esi.models.GetUniverseConstellationsConstellationIdPosition;
+import com.autonomouslogic.everef.openapi.esi.models.GetUniverseSystemsSystemIdOk;
+import com.autonomouslogic.everef.openapi.esi.models.GetUniverseSystemsSystemIdPosition;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.test.MockS3Adapter;
 import com.autonomouslogic.everef.test.TestDataUtil;
@@ -20,7 +21,6 @@ import com.autonomouslogic.everef.util.TempFiles;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import io.reactivex.rxjava3.core.Completable;
 import java.io.FileInputStream;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -114,11 +114,7 @@ public class ScrapeStructuresTest {
 	@BeforeEach
 	@SneakyThrows
 	void before() {
-		DaggerTestComponent.builder()
-				.mockLocationPopulatorModule(new MockLocationPopulatorModule().setLocationPopulator(locationPopulator))
-				.build()
-				.inject(this);
-		lenient().when(locationPopulator.populate(any())).thenReturn(Completable.complete()); // @todo
+		DaggerTestComponent.create().inject(this);
 
 		time = ZonedDateTime.parse("2021-01-01T00:00:00.123Z");
 		scrapeStructures.setScrapeTime(time);
@@ -316,6 +312,27 @@ public class ScrapeStructuresTest {
 	}
 
 	@Test
+	void shouldPreserveLocationsOnOldStructures() {
+		var structure = publicStructure()
+				.put("region_id", 10000001)
+				.put("constellation_id", 20000001)
+				.put("system_id", 30000001);
+		loadPreviousScrape(container(structure));
+		scrapeStructures.run().blockingAwait();
+		verifyScrape(container(structure.put("is_gettable_structure", false).put("is_public_structure", false)));
+	}
+
+	@Test
+	void shouldPopulateLocations() {
+		publicStructures.put(1000000000001L, Map.of("name", "Test Structure 1", "system_id", 30000001));
+		scrapeStructures.run().blockingAwait();
+		verifyScrape(container(publicStructure()
+				.put("region_id", 10000001)
+				.put("constellation_id", 20000001)
+				.put("system_id", 30000001)));
+	}
+
+	@Test
 	void shouldExecuteDataIndex() {
 		publicStructures.put(1000000000001L, Map.of("name", "Test Structure 1"));
 		scrapeStructures
@@ -333,17 +350,6 @@ public class ScrapeStructuresTest {
 								.path(
 										"base/structures/history/2020/2020-01-02/structures-2020-01-02_03-04-05.v2.json.bz2")
 								.build());
-	}
-
-	@Test
-	void shouldPreserveLocationsOnOldStructures() {
-		var structure = publicStructure()
-				.put("region_id", 10000001)
-				.put("constellation_id", 20000001)
-				.put("system_id", 30000001);
-		loadPreviousScrape(container(structure));
-		scrapeStructures.run().blockingAwait();
-		verifyScrape(container(structure.put("is_gettable_structure", false).put("is_public_structure", false)));
 	}
 
 	@SneakyThrows
@@ -453,6 +459,31 @@ public class ScrapeStructuresTest {
 				if (path.equals("/types/35892")) {
 					var obj = objectMapper.createObjectNode();
 					obj.withArray("can_fit_types").add(EveConstants.KEEPSTAR_TYPE_ID);
+					return new MockResponse().setBody(objectMapper.writeValueAsString(obj));
+				}
+
+				if (path.equals("/universe/systems/30000001/")) {
+					var obj = new GetUniverseSystemsSystemIdOk(
+							20000001,
+							"System",
+							new GetUniverseSystemsSystemIdPosition(0, 0, 0),
+							0,
+							30000001,
+							List.of(),
+							"",
+							0,
+							List.of(),
+							List.of());
+					return new MockResponse().setBody(objectMapper.writeValueAsString(obj));
+				}
+
+				if (path.equals("/universe/constellations/20000001/")) {
+					var obj = new GetUniverseConstellationsConstellationIdOk(
+							20000001,
+							"Constellation",
+							new GetUniverseConstellationsConstellationIdPosition(0, 0, 0),
+							10000001,
+							List.of());
 					return new MockResponse().setBody(objectMapper.writeValueAsString(obj));
 				}
 
