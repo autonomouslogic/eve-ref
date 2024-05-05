@@ -7,6 +7,13 @@ plugins {
     id "nu.studer.jooq"
 }
 
+java {
+    toolchain {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+}
+
 repositories {
     mavenCentral()
 }

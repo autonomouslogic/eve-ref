@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 import java.time.LocalDate
 
 plugins {
@@ -18,8 +20,18 @@ plugins {
 
 group "com.autonomouslogic.everef"
 
-sourceCompatibility = JavaVersion.VERSION_17
-targetCompatibility = JavaVersion.VERSION_17
+java {
+	toolchain {
+		sourceCompatibility = JavaVersion.VERSION_17
+		targetCompatibility = JavaVersion.VERSION_17
+	}
+}
+
+compileKotlin {
+	compilerOptions {
+		jvmTarget = JvmTarget.JVM_17
+	}
+}
 
 ext {
 	mainClassName = "com.autonomouslogic.everef.Main"
