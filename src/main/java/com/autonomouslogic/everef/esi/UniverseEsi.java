@@ -1,5 +1,7 @@
 package com.autonomouslogic.everef.esi;
 
+import static com.autonomouslogic.everef.util.EveConstants.NPC_STATION_MAX_ID;
+
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.openapi.esi.apis.UniverseApi;
 import com.autonomouslogic.everef.openapi.esi.models.GetUniverseConstellationsConstellationIdOk;
@@ -88,8 +90,7 @@ public class UniverseEsi {
 	}
 
 	public Maybe<GetUniverseStationsStationIdOk> getNpcStation(long stationId) {
-		// All NPC stations will have an ID below 100 million.
-		if (stationId > 100_000_000) {
+		if (stationId > NPC_STATION_MAX_ID) {
 			log.trace(String.format("Ignoring request for non-NPC station %s", stationId));
 			return Maybe.empty();
 		}

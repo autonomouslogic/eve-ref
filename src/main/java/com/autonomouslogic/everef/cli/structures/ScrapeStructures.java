@@ -470,12 +470,7 @@ public class ScrapeStructures implements Command {
 		});
 	}
 
-	private Single<String> getAccessToken() {
-		return esiAuthHelper
-				.getTokenForOwnerHash(scrapeOwnerHash)
-				.map(token -> token.getAccessToken())
-				.switchIfEmpty((Maybe.defer(() -> Maybe.error(
-						new RuntimeException(String.format("Login not found for owner hash: %s", scrapeOwnerHash))))))
-				.toSingle();
+	private Maybe<String> getAccessToken() {
+		return esiAuthHelper.getTokenStringForOwnerHash(scrapeOwnerHash).toMaybe();
 	}
 }
