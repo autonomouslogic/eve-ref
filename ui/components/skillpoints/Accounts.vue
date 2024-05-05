@@ -15,6 +15,11 @@ import {DAY} from "~/lib/timeUtils";
 import {mctPrices, omegaPrices} from "~/conf/newEdenStore";
 
 const alphaSkillPointsPerMonth = calculateSkillpoints(AVERAGE_ATTRIBUTE, AVERAGE_ATTRIBUTE, 30 * DAY, false);
+const alphaSkillPointsWithImplantsPerMonth = calculateSkillpoints(
+	AVERAGE_ATTRIBUTE + MAX_IMPLANT_BONUS,
+	AVERAGE_ATTRIBUTE + MAX_IMPLANT_BONUS,
+	30 * DAY,
+	false);
 const maxAlphaSkillPointsPerMonth = calculateSkillpoints(MAX_PRIMARY_ATTRIBUTE, MAX_SECONDARY_ATTRIBUTE, 30 * DAY, false);
 const maxAlphaSkillPointsWithImplantsPerMonth = calculateSkillpoints(
 	MAX_PRIMARY_ATTRIBUTE + MAX_IMPLANT_BONUS,
@@ -22,6 +27,11 @@ const maxAlphaSkillPointsWithImplantsPerMonth = calculateSkillpoints(
 	30 * DAY,
 	false);
 const omegaSkillPointsPerMonth = calculateSkillpoints(AVERAGE_ATTRIBUTE, AVERAGE_ATTRIBUTE, 30 * DAY, true);
+const omegaSkillPointsWithImplantsPerMonth = calculateSkillpoints(
+	AVERAGE_ATTRIBUTE + MAX_IMPLANT_BONUS,
+	AVERAGE_ATTRIBUTE + MAX_IMPLANT_BONUS,
+	30 * DAY,
+	true);
 const maxOmegaSkillPointsPerMonth = calculateSkillpoints(MAX_PRIMARY_ATTRIBUTE, MAX_SECONDARY_ATTRIBUTE, 30 * DAY, true);
 const maxOmegaSkillPointsWithImplantsPerMonth = calculateSkillpoints(
 	MAX_PRIMARY_ATTRIBUTE + MAX_IMPLANT_BONUS,
@@ -57,13 +67,20 @@ const multiPrice = await getJitaSellPrice(MULTIPLE_PILOT_TRAINING_CERTIFICATE) |
 				<td class="text-right" rowspan="3"><Money :value="0" /></td>
 			</tr>
 			<tr>
-				<td class="text-left">{{ MAX_PRIMARY_ATTRIBUTE }}/{{ MAX_SECONDARY_ATTRIBUTE }}</td>
+				<td class="text-left">
+					{{ MAX_PRIMARY_ATTRIBUTE }}/{{ MAX_SECONDARY_ATTRIBUTE }}
+					<template v-if="alphaSkillPointsWithImplantsPerMonth == maxAlphaSkillPointsPerMonth">
+						or
+						{{ AVERAGE_ATTRIBUTE + MAX_IMPLANT_BONUS }}/{{ AVERAGE_ATTRIBUTE + MAX_IMPLANT_BONUS }}
+						(+{{ MAX_IMPLANT_BONUS }} implants)
+					</template>
+				</td>
 				<td class="text-right"><FormattedNumber :number="maxAlphaSkillPointsPerMonth" /></td>
 			</tr>
 			<tr>
 				<td class="text-left">
-					{{ MAX_PRIMARY_ATTRIBUTE + MAX_IMPLANT_BONUS }}/{{ MAX_SECONDARY_ATTRIBUTE + MAX_IMPLANT_BONUS }},
-					+{{ MAX_IMPLANT_BONUS }} implants
+					{{ MAX_PRIMARY_ATTRIBUTE + MAX_IMPLANT_BONUS }}/{{ MAX_SECONDARY_ATTRIBUTE + MAX_IMPLANT_BONUS }}
+					(+{{ MAX_IMPLANT_BONUS }} implants)
 				</td>
 				<td class="text-right"><FormattedNumber :number="maxAlphaSkillPointsWithImplantsPerMonth" /></td>
 			</tr>
@@ -92,7 +109,14 @@ const multiPrice = await getJitaSellPrice(MULTIPLE_PILOT_TRAINING_CERTIFICATE) |
 						<FormattedNumber :number="omega.plex" /> PLEX -
 						<Money :value="omega.plex * plexPrice" />
 					</td>
-					<td class="text-left" v-if="idx == 0" :rowspan="2">{{ MAX_PRIMARY_ATTRIBUTE }}/{{ MAX_SECONDARY_ATTRIBUTE }}</td>
+					<td class="text-left" v-if="idx == 0" :rowspan="2">
+						{{ MAX_PRIMARY_ATTRIBUTE }}/{{ MAX_SECONDARY_ATTRIBUTE }}
+						<template v-if="omegaSkillPointsWithImplantsPerMonth == maxOmegaSkillPointsPerMonth">
+							or
+							{{ AVERAGE_ATTRIBUTE + MAX_IMPLANT_BONUS }}/{{ AVERAGE_ATTRIBUTE + MAX_IMPLANT_BONUS }}
+							(+{{ MAX_IMPLANT_BONUS }} implants)
+						</template>
+					</td>
 					<td class="text-right" v-if="idx == 0" :rowspan="2">
 						<FormattedNumber :number="maxOmegaSkillPointsPerMonth" />
 					</td>
@@ -111,8 +135,8 @@ const multiPrice = await getJitaSellPrice(MULTIPLE_PILOT_TRAINING_CERTIFICATE) |
 						<Money :value="omega.plex * plexPrice" />
 					</td>
 					<td class="text-left" v-if="idx == 0" :rowspan="2">
-						{{ MAX_PRIMARY_ATTRIBUTE + MAX_IMPLANT_BONUS }}/{{ MAX_SECONDARY_ATTRIBUTE + MAX_IMPLANT_BONUS }},
-						+{{ MAX_IMPLANT_BONUS }} implants
+						{{ MAX_PRIMARY_ATTRIBUTE + MAX_IMPLANT_BONUS }}/{{ MAX_SECONDARY_ATTRIBUTE + MAX_IMPLANT_BONUS }}
+						(+{{ MAX_IMPLANT_BONUS }} implants)
 					</td>
 					<td class="text-right" v-if="idx == 0" :rowspan="2">
 						<FormattedNumber :number="maxOmegaSkillPointsWithImplantsPerMonth" />
@@ -148,7 +172,14 @@ const multiPrice = await getJitaSellPrice(MULTIPLE_PILOT_TRAINING_CERTIFICATE) |
 						<FormattedNumber :number="mct.plex" /> PLEX -
 						<Money :value="mct.plex * plexPrice" />
 					</td>
-					<td class="text-left" v-if="idx == 0" rowspan="2">{{ MAX_PRIMARY_ATTRIBUTE }}/{{ MAX_SECONDARY_ATTRIBUTE }}</td>
+					<td class="text-left" v-if="idx == 0" rowspan="2">
+						{{ MAX_PRIMARY_ATTRIBUTE }}/{{ MAX_SECONDARY_ATTRIBUTE }}
+						<template v-if="omegaSkillPointsWithImplantsPerMonth == maxOmegaSkillPointsPerMonth">
+							or
+							{{ AVERAGE_ATTRIBUTE + MAX_IMPLANT_BONUS }}/{{ AVERAGE_ATTRIBUTE + MAX_IMPLANT_BONUS }}
+							(+{{ MAX_IMPLANT_BONUS }} implants)
+						</template>
+					</td>
 					<td class="text-right" v-if="idx == 0" rowspan="2"><FormattedNumber :number="maxOmegaSkillPointsPerMonth" /></td>
 					<td class="text-right"><Money :value="mct.plex * plexPrice / (mct.count * maxOmegaSkillPointsPerMonth)" /></td>
 				</tr>
@@ -162,8 +193,8 @@ const multiPrice = await getJitaSellPrice(MULTIPLE_PILOT_TRAINING_CERTIFICATE) |
 						<Money :value="mct.plex * plexPrice" />
 					</td>
 					<td class="text-left" v-if="idx == 0" rowspan="2">
-						{{ MAX_PRIMARY_ATTRIBUTE + MAX_IMPLANT_BONUS }}/{{ MAX_SECONDARY_ATTRIBUTE + MAX_IMPLANT_BONUS }},
-						+{{ MAX_IMPLANT_BONUS }} implants
+						{{ MAX_PRIMARY_ATTRIBUTE + MAX_IMPLANT_BONUS }}/{{ MAX_SECONDARY_ATTRIBUTE + MAX_IMPLANT_BONUS }}
+						(+{{ MAX_IMPLANT_BONUS }} implants)
 					</td>
 					<td class="text-right" v-if="idx == 0" rowspan="2"><FormattedNumber :number="maxOmegaSkillPointsWithImplantsPerMonth" /></td>
 					<td class="text-right"><Money :value="mct.plex * plexPrice / (mct.count * maxOmegaSkillPointsWithImplantsPerMonth)" /></td>
