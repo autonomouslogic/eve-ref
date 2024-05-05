@@ -73,6 +73,7 @@ public class ScrapeStructures implements Command {
 	public static final String LAST_SEEN_PUBLIC_STRUCTURE = "last_seen_public_structure";
 	public static final String IS_MARKET_STRUCTURE = "is_market_structure";
 	public static final String LAST_SEEN_MARKET_STRUCTURE = "last_seen_market_structure";
+	public static final String FIRST_SEEN = "first_seen";
 
 	@Deprecated
 	public static final String IS_SOVEREIGNTY_STRUCTURE = "is_sovereignty_structure";
@@ -87,13 +88,14 @@ public class ScrapeStructures implements Command {
 			IS_PUBLIC_STRUCTURE,
 			LAST_SEEN_PUBLIC_STRUCTURE,
 			IS_MARKET_STRUCTURE,
-			LAST_SEEN_MARKET_STRUCTURE);
+			LAST_SEEN_MARKET_STRUCTURE,
+			FIRST_SEEN);
 
 	public static final List<String> ALL_BOOLEANS =
 			List.of(IS_GETTABLE_STRUCTURE, IS_PUBLIC_STRUCTURE, IS_MARKET_STRUCTURE);
 
 	public static final List<String> ALL_TIMESTAMPS =
-			List.of(LAST_STRUCTURE_GET, LAST_SEEN_PUBLIC_STRUCTURE, LAST_SEEN_MARKET_STRUCTURE);
+			List.of(LAST_STRUCTURE_GET, LAST_SEEN_PUBLIC_STRUCTURE, LAST_SEEN_MARKET_STRUCTURE, FIRST_SEEN);
 
 	private static final Duration STRUCTURE_TIMEOUT = Duration.ofDays(30);
 
@@ -243,7 +245,7 @@ public class ScrapeStructures implements Command {
 			mvStore = mvStoreUtil.createTempStore("public-contracts");
 			log.debug("MVStore opened at {}", mvStore.getFileStore().getFileName());
 			structureStore.setStore(mvStoreUtil.openJsonMap(mvStore, "structures", Long.class));
-			// structureStore.setStore(new HashMap<>());
+			structureStore.setScrapeTime(scrapeTime);
 			log.debug("MVStore initialised");
 		});
 	}

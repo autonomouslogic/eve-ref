@@ -1,6 +1,7 @@
 package com.autonomouslogic.everef.cli.structures;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import com.autonomouslogic.everef.cli.publiccontracts.ContractsFileBuilder;
 import com.autonomouslogic.everef.cli.publiccontracts.ContractsScrapeMeta;
@@ -286,7 +287,8 @@ public class ScrapeStructuresTest {
 				.put("structure_id", 1000000000001L)
 				.put("is_gettable_structure", false)
 				.put("is_public_structure", false)
-				.put("is_market_structure", false)));
+				.put("is_market_structure", false)
+				.put("first_seen", "2021-01-01T00:00:00.123Z")));
 	}
 
 	@Test
@@ -333,6 +335,33 @@ public class ScrapeStructuresTest {
 	}
 
 	@Test
+	void shouldSetFirstSeenOnNewStructures() {
+		publicStructures.put(1000000000001L, Map.of("name", "Test Structure 1"));
+		scrapeStructures.run().blockingAwait();
+		verifyScrape(container(publicStructure()));
+	}
+
+	@Test
+	void shouldNotPopulateFirstSeenOnExistingStructures() {
+		loadPreviousScrape(container(publicStructure()));
+		previousScrape.withObject("1000000000001").remove("first_seen");
+		publicStructures.put(1000000000001L, Map.of("name", "Test Structure 1"));
+		scrapeStructures.run().blockingAwait();
+		assertNull(loadScrape().get("1000000000001").get("first_seen"));
+	}
+
+	@Test
+	void shouldNotUpdatePopulateFirstSeenOnExistingStructures() {
+		loadPreviousScrape(container(publicStructure()));
+		previousScrape.withObject("1000000000001").put("first_seen", "2000-01-01T00:00:00Z");
+		publicStructures.put(1000000000001L, Map.of("name", "Test Structure 1"));
+		scrapeStructures.run().blockingAwait();
+		assertEquals(
+				"2000-01-01T00:00:00Z",
+				loadScrape().get("1000000000001").get("first_seen").textValue());
+	}
+
+	@Test
 	void shouldExecuteDataIndex() {
 		publicStructures.put(1000000000001L, Map.of("name", "Test Structure 1"));
 		scrapeStructures
@@ -358,14 +387,19 @@ public class ScrapeStructuresTest {
 	}
 
 	@SneakyThrows
-	private void verifyScrape(@NonNull JsonNode container) {
-		var json = objectMapper.writeValueAsString(container);
-		var expected = objectMapper.readTree(json);
+	private ObjectNode loadScrape() {
 		var archiveFile = "base/structures/structures-latest.v2.json";
 		var content = mockS3Adapter
 				.getTestObject(BUCKET_NAME, archiveFile, dataClient)
 				.orElseThrow();
-		var supplied = objectMapper.readTree(content);
+		return (ObjectNode) objectMapper.readTree(content);
+	}
+
+	@SneakyThrows
+	private void verifyScrape(@NonNull JsonNode container) {
+		var json = objectMapper.writeValueAsString(container);
+		var expected = objectMapper.readTree(json);
+		var supplied = loadScrape();
 		assertEquals(expected, supplied);
 	}
 
@@ -518,13 +552,15 @@ public class ScrapeStructuresTest {
 				.put("is_gettable_structure", true)
 				.put("last_structure_get", "2021-01-01T00:00:00Z")
 				.put("last_seen_public_structure", "2021-01-01T00:00:00Z")
+				.put("first_seen", "2021-01-01T00:00:00.123Z")
 				.put("is_market_structure", false);
 	}
 
 	private ObjectNode oldStructure() {
 		return publicStructure()
 				.put("last_structure_get", "2020-11-01T00:00:00Z")
-				.put("last_seen_public_structure", "2020-11-01T00:00:00Z");
+				.put("last_seen_public_structure", "2020-11-01T00:00:00Z")
+				.put("first_seen", "2019-01-01T00:00:00.123Z");
 	}
 
 	private ObjectNode nonPublicStructure() {
@@ -535,7 +571,8 @@ public class ScrapeStructuresTest {
 				.put("is_public_structure", false)
 				.put("is_gettable_structure", true)
 				.put("last_structure_get", "2021-01-01T00:00:00Z")
-				.put("is_market_structure", false);
+				.put("is_market_structure", false)
+				.put("first_seen", "2021-01-01T00:00:00.123Z");
 	}
 
 	private ObjectNode hiddenStructure() {
@@ -544,7 +581,8 @@ public class ScrapeStructuresTest {
 				.put("structure_id", 1000000000001L)
 				.put("is_public_structure", false)
 				.put("is_gettable_structure", false)
-				.put("is_market_structure", false);
+				.put("is_market_structure", false)
+				.put("first_seen", "2021-01-01T00:00:00.123Z");
 	}
 
 	private ObjectNode hiddenStructureWithLocation() {

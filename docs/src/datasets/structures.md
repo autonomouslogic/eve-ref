@@ -19,6 +19,7 @@ The object values themselves are verbatim from the structure endpoint, with the 
 * `last_seen_public_structure` - when the structure was last seen as public
 * `is_market_structure` - true if the _latest_ scrape saw it on the structure market ESI endpoint
 * `last_seen_market_structure` - when the structure was last seen with a market
+* `first_seen` - when the structure was first seen
 
 The [latest file](https://data.everef.net/structures/structures-latest.v2.json) is intended to be a list of all _current_ structures.
 Whenever the scrape runs, any structure which hasn't been seen on any of the endpoints for 30 days will be removed.

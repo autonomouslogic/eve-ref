@@ -2,13 +2,16 @@ package com.autonomouslogic.everef.cli.structures;
 
 import static com.autonomouslogic.everef.cli.structures.ScrapeStructures.ALL_BOOLEANS;
 import static com.autonomouslogic.everef.cli.structures.ScrapeStructures.ALL_CUSTOM_PROPERTIES;
+import static com.autonomouslogic.everef.cli.structures.ScrapeStructures.FIRST_SEEN;
 import static com.autonomouslogic.everef.cli.structures.ScrapeStructures.LAST_STRUCTURE_GET;
+import static com.autonomouslogic.everef.cli.structures.ScrapeStructures.STRUCTURE_ID;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.reactivex.rxjava3.core.Flowable;
 import java.time.Instant;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -27,18 +30,22 @@ public class StructureStore {
 	@NonNull
 	private Map<Long, JsonNode> store;
 
+	@Setter
+	private ZonedDateTime scrapeTime;
+
 	@Inject
 	protected StructureStore() {}
 
 	public void put(ObjectNode node) {
-		store.put(node.get(ScrapeStructures.STRUCTURE_ID).asLong(), node);
+		store.put(node.get(STRUCTURE_ID).asLong(), node);
 	}
 
 	public ObjectNode getOrInitStructure(long structureId) {
 		var node = (ObjectNode) store.get(structureId);
 		if (node == null) {
 			node = objectMapper.createObjectNode();
-			node.put(ScrapeStructures.STRUCTURE_ID, structureId);
+			node.put(STRUCTURE_ID, structureId);
+			node.put(FIRST_SEEN, scrapeTime.toInstant().toString());
 			for (var prop : ALL_BOOLEANS) {
 				node.put(prop, false);
 			}
