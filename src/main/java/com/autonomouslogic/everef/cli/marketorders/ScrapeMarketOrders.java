@@ -114,6 +114,10 @@ public class ScrapeMarketOrders implements Command {
 
 	private Single<File> writeOrders() {
 		return Single.defer(() -> {
+			marketOrdersStore.values().stream()
+					.filter(order -> order.get("region_id") == null)
+					.forEach(order -> log.info(order));
+
 			log.info("Writing market orders");
 			return marketOrdersWriter.writeOrders();
 		});

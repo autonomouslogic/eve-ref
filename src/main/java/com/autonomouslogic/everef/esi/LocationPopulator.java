@@ -1,13 +1,13 @@
 package com.autonomouslogic.everef.esi;
 
+import static com.autonomouslogic.everef.util.EveConstants.NPC_STATION_MAX_ID;
+
 import com.autonomouslogic.everef.util.JsonUtil;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.reactivex.rxjava3.core.Completable;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.extern.log4j.Log4j2;
-
-import static com.autonomouslogic.everef.util.EveConstants.NPC_STATION_MAX_ID;
 
 /**
  * Populates location data on scraped data.
