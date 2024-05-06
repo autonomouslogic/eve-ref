@@ -42,14 +42,17 @@ All the IDs from the v1 files have been incorporated into the file above.
 Many of the backfilled structures are no longer available to be queried and therefore do not have accurate timestamps.
 To show that they were once queryable, placeholder timestamps of `1970-01-01T00:00:00Z` were used.
 
+Ethan02 later extended their structure export to include more data, such as `first_seen`.
+This was first incorporate into this file: [structures-2024-05-06_05-03-39.v2.json.bz2](https://data.everef.net/structures/history/2024/2024-05-06/structures-2024-05-06_05-03-39.v2.json.bz2).
+
 ### Sovereignty structures
 
 Some of the early v2 scrape files contain sovereignty structures, including the following fields:
 * `is_sovereignty_structure` - true if the _latest_ scrape saw it on the sovereignty ESI endpoint
 * `last_seen_sovereignty_structure` - when the structure was last seen as sovereignty
 
-These structures were fetched from the `/sovereignty/structures/` endpoint.
-However, these structures are not queryable at all on the structure information endpoint, so they were removed from the scrape.
+These structures were fetched from the `/sovereignty/structures/` ESI endpoint.
+However, these structures are not queryable at all on the ESI `/universe/structures/{structure_id}/` endpoint, so they were removed from the scrape.
 A separate scrape of current sovereignty structures is already maintained.
 
 ### Scripting
@@ -61,7 +64,8 @@ curl -s https://data.everef.net/structures/structures-latest.v2.json | jq '.[] |
 
 ### Version 1
 
-The version 1 files are simply a lists of public structure IDs.
+The version 1 files are simply a lists of public structure IDs from the `/universe/structures/` ESI endpoint.
 
 ### Other sources
-Adam4Eve maintains a list of structures accessible at [adam4eve.eu/structures.php](https://www.adam4eve.eu/structures.php).
+
+* Adam4Eve maintains a list of structures accessible at [adam4eve.eu/structures.php](https://www.adam4eve.eu/structures.php) with exports at [static.adam4eve.eu/IDs/](https://static.adam4eve.eu/IDs/).

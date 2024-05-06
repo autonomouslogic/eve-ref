@@ -53,7 +53,7 @@ public class PublicStructureSource implements StructureSource {
 					var lastModified =
 							structureScrapeHelper.getLastModified(response).orElse(timestamp);
 					log.info("Fetched {} public structure ids", ids.size());
-					log.debug("Seen structure IDs: {}", ids);
+					log.trace("Seen structure IDs: {}", ids);
 					return Flowable.fromIterable(ids)
 							.observeOn(Schedulers.computation())
 							.doOnNext(id -> {

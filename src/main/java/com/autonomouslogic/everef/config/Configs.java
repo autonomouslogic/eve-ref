@@ -690,6 +690,15 @@ public class Configs {
 			.type(String.class)
 			.build();
 
+	/**
+	 * How old a structure has to be before it's removed from the structure scrape.
+	 */
+	public static final Config<Duration> STRUCTURE_TIMEOUT = Config.<Duration>builder()
+			.name("STRUCTURE_TIMEOUT")
+			.defaultValue(Duration.ofDays(30))
+			.type(Duration.class)
+			.build();
+
 	@SneakyThrows
 	private static URL url(String url) {
 		return new URL(url);

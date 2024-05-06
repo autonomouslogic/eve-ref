@@ -86,11 +86,11 @@ public class MarketOrdersStructureSource implements StructureSource {
 								structureStore.put(structure);
 								return (Long) id;
 							})
+							.distinct()
 							.toList()
 							.flatMapPublisher(ids -> {
-								assert structureStore != null;
 								log.info("Fetched {} structure ids from market orders", ids.size());
-								log.debug("Seen structure IDs: {}", ids);
+								log.trace("Seen structure IDs: {}", ids);
 								return Flowable.fromIterable(ids);
 							});
 				})
