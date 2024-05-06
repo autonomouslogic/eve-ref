@@ -2,6 +2,7 @@ package com.autonomouslogic.everef.cli.structures;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import com.autonomouslogic.everef.cli.publiccontracts.ContractsFileBuilder;
 import com.autonomouslogic.everef.cli.publiccontracts.ContractsScrapeMeta;
@@ -362,6 +363,12 @@ public class ScrapeStructuresTest {
 		assertEquals(
 				"2000-01-01T00:00:00Z",
 				loadScrape().get("1000000000001").get("first_seen").textValue());
+	}
+
+	@Test
+	void shouldPopulateCharacter() {
+		// Apparently, some structures has character IDs as their owner IDs.
+		fail();
 	}
 
 	@Test
