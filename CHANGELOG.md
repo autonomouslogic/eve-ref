@@ -1,5 +1,13 @@
 EVE Ref Changelog
 
+## [2.45.1](https://github.com/autonomouslogic/eve-ref/compare/2.45.0...2.45.1) (2024-05-06)
+
+
+### Bug Fixes
+
+* **deps:** update font awesome to v6.5.2 ([#515](https://github.com/autonomouslogic/eve-ref/issues/515)) ([b5d01b7](https://github.com/autonomouslogic/eve-ref/commit/b5d01b7c2990e2f8d7682bd182671a95fb8e9458))
+* Various structure scrape fixes ([#517](https://github.com/autonomouslogic/eve-ref/issues/517)) ([034ae56](https://github.com/autonomouslogic/eve-ref/commit/034ae5638d7da6dd2d97311322b9a69d8ebe3d4a))
+
 ## [2.45.0](https://github.com/autonomouslogic/eve-ref/compare/2.44.0...2.45.0) (2024-05-05)
 
 
