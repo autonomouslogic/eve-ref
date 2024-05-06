@@ -367,8 +367,17 @@ public class ScrapeStructuresTest {
 
 	@Test
 	void shouldPopulateCharacter() {
-		// Apparently, some structures has character IDs as their owner IDs.
-		fail();
+		publicStructures.put(1000000000001L, Map.of("name", "Test Structure 1", "owner_id", 1500000002));
+		scrapeStructures.run().blockingAwait();
+		var structure = loadScrape().get("1000000000001");
+		assertEquals(1500000002, structure.get("owner_id").intValue());
+		assertEquals("Character 1", structure.get("owner_name").textValue());
+		assertEquals(1500000002, structure.get("character_id").intValue());
+		assertEquals("Character 1", structure.get("character_name").textValue());
+		assertNull(structure.get("corporation_id"));
+		assertNull(structure.get("corporation_name"));
+		assertNull(structure.get("alliance_id"));
+		assertNull(structure.get("alliance_name"));
 	}
 
 	@Test
