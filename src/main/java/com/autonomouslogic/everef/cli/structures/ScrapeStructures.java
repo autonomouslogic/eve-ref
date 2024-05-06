@@ -99,8 +99,6 @@ public class ScrapeStructures implements Command {
 	public static final List<String> ALL_TIMESTAMPS =
 			List.of(LAST_STRUCTURE_GET, LAST_SEEN_PUBLIC_STRUCTURE, LAST_SEEN_MARKET_STRUCTURE, FIRST_SEEN);
 
-	public static final Duration STRUCTURE_TIMEOUT = Duration.ofDays(30);
-
 	@Inject
 	protected UrlParser urlParser;
 
@@ -183,6 +181,7 @@ public class ScrapeStructures implements Command {
 	private final Duration latestCacheTime = Configs.DATA_LATEST_CACHE_CONTROL_MAX_AGE.getRequired();
 	private final Duration archiveCacheTime = Configs.DATA_ARCHIVE_CACHE_CONTROL_MAX_AGE.getRequired();
 	private final String scrapeOwnerHash = Configs.SCRAPE_CHARACTER_OWNER_HASH.getRequired();
+	private final Duration structureTimeout = Configs.STRUCTURE_TIMEOUT.getRequired();
 	private S3Url dataPath;
 	private HttpUrl dataUrl;
 	private MVStore mvStore;
@@ -310,7 +309,7 @@ public class ScrapeStructures implements Command {
 					return true;
 				}
 				var age = Duration.between(latestTimestamp.get(), scrapeTime);
-				return age.compareTo(STRUCTURE_TIMEOUT) > 0;
+				return age.compareTo(structureTimeout) > 0;
 			});
 			log.info("Removed {} old structures", removed);
 		});

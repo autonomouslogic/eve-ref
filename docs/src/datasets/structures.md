@@ -42,6 +42,9 @@ All the IDs from the v1 files have been incorporated into the file above.
 Many of the backfilled structures are no longer available to be queried and therefore do not have accurate timestamps.
 To show that they were once queryable, placeholder timestamps of `1970-01-01T00:00:00Z` were used.
 
+Ethan02 later extended their structure export to include more data, such as `first_seen`.
+This was first incorporate into this file: [structures-2024-05-06_05-03-39.v2.json.bz2](https://data.everef.net/structures/history/2024/2024-05-06/structures-2024-05-06_05-03-39.v2.json.bz2).
+
 ### Sovereignty structures
 
 Some of the early v2 scrape files contain sovereignty structures, including the following fields:

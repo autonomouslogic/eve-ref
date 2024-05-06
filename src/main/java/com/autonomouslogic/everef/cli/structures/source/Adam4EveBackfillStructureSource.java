@@ -3,9 +3,9 @@ package com.autonomouslogic.everef.cli.structures.source;
 import static com.autonomouslogic.everef.cli.structures.ScrapeStructures.FIRST_SEEN;
 import static com.autonomouslogic.everef.cli.structures.ScrapeStructures.LAST_SEEN_PUBLIC_STRUCTURE;
 import static com.autonomouslogic.everef.cli.structures.ScrapeStructures.LAST_STRUCTURE_GET;
-import static com.autonomouslogic.everef.cli.structures.ScrapeStructures.STRUCTURE_TIMEOUT;
 
 import com.autonomouslogic.everef.cli.structures.StructureStore;
+import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.http.OkHttpHelper;
 import com.autonomouslogic.everef.util.Rx;
 import com.autonomouslogic.everef.util.TempFiles;
@@ -15,6 +15,7 @@ import io.reactivex.rxjava3.core.Single;
 import java.io.File;
 import java.io.FileReader;
 import java.nio.charset.StandardCharsets;
+import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
@@ -54,6 +55,8 @@ public class Adam4EveBackfillStructureSource implements StructureSource {
 
 	@Setter
 	private Instant timestamp;
+
+	private final Duration structureTimeout = Configs.STRUCTURE_TIMEOUT.getRequired();
 
 	@Inject
 	protected Adam4EveBackfillStructureSource() {}
@@ -125,7 +128,7 @@ public class Adam4EveBackfillStructureSource implements StructureSource {
 					structureStore.put(node);
 					structureStore.updateTimestamp(structureId, LAST_STRUCTURE_GET, Instant.EPOCH);
 					structureStore.updateTimestamp(structureId, LAST_SEEN_PUBLIC_STRUCTURE, Instant.EPOCH);
-					if (lastSeen != null && lastSeen.isBefore(timestamp.minus(STRUCTURE_TIMEOUT))) {
+					if (lastSeen != null && lastSeen.isBefore(timestamp.minus(structureTimeout))) {
 						return Flowable.empty();
 					}
 					return Flowable.just(structureId);
