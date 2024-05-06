@@ -99,7 +99,7 @@ public class ScrapeStructures implements Command {
 	public static final List<String> ALL_TIMESTAMPS =
 			List.of(LAST_STRUCTURE_GET, LAST_SEEN_PUBLIC_STRUCTURE, LAST_SEEN_MARKET_STRUCTURE, FIRST_SEEN);
 
-	private static final Duration STRUCTURE_TIMEOUT = Duration.ofDays(30);
+	public static final Duration STRUCTURE_TIMEOUT = Duration.ofDays(30);
 
 	@Inject
 	protected UrlParser urlParser;
@@ -238,6 +238,7 @@ public class ScrapeStructures implements Command {
 			}
 			publicStructureSource.setTimestamp(scrapeTime.toInstant());
 			sovereigntyStructureSource.setTimestamp(scrapeTime.toInstant());
+			adam4EveBackfillStructureSource.setTimestamp(scrapeTime.toInstant());
 		});
 	}
 

@@ -71,10 +71,11 @@ public class PublicContractsStructureSource implements StructureSource {
 								jsonNodeCsvReaderProvider.get().readAll(entry.getValue())))
 						.flatMap(contract ->
 								Flowable.concat(handleEndLocation(contract), handleStartLocation(contract))))
+				.distinct()
 				.toList()
 				.flatMapPublisher(ids -> {
 					log.info("Fetched {} structure ids from public contracts", ids.size());
-					log.debug("Seen structure IDs: {}", ids);
+					log.trace("Seen structure IDs: {}", ids);
 					return Flowable.fromIterable(ids);
 				});
 	}

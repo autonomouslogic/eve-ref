@@ -3,6 +3,7 @@ package com.autonomouslogic.everef.cli.structures.source;
 import static com.autonomouslogic.everef.cli.structures.ScrapeStructures.FIRST_SEEN;
 import static com.autonomouslogic.everef.cli.structures.ScrapeStructures.LAST_SEEN_PUBLIC_STRUCTURE;
 import static com.autonomouslogic.everef.cli.structures.ScrapeStructures.LAST_STRUCTURE_GET;
+import static com.autonomouslogic.everef.cli.structures.ScrapeStructures.STRUCTURE_TIMEOUT;
 
 import com.autonomouslogic.everef.cli.structures.StructureStore;
 import com.autonomouslogic.everef.http.OkHttpHelper;
@@ -51,6 +52,9 @@ public class Adam4EveBackfillStructureSource implements StructureSource {
 	@Accessors(chain = false)
 	private StructureStore structureStore;
 
+	@Setter
+	private Instant timestamp;
+
 	@Inject
 	protected Adam4EveBackfillStructureSource() {}
 
@@ -60,10 +64,10 @@ public class Adam4EveBackfillStructureSource implements StructureSource {
 				.flatMapPublisher(this::parse)
 				.toList()
 				.flatMapPublisher(records -> {
-					log.debug("Found {} structures from Adam4Eve backfill", records.size());
+					log.debug("Examining {} structures from Adam4Eve backfill", records.size());
 					return Flowable.fromIterable(records);
 				})
-				.map(record -> {
+				.flatMap(record -> {
 					var structureId = Long.parseLong(record.get("structureID"));
 					var typeId = Optional.ofNullable(record.get("typeID"))
 							.filter(s -> !s.isBlank())
@@ -90,6 +94,7 @@ public class Adam4EveBackfillStructureSource implements StructureSource {
 					var lastSeen = Optional.ofNullable(record.get("lastSeen"))
 							.filter(s -> !s.isBlank())
 							.map(LocalDate::parse)
+							.map(d -> d.atStartOfDay(ZoneOffset.UTC).toInstant())
 							.orElse(null);
 					var node = structureStore.getOrInitStructure(structureId);
 					if (!node.has("type_id")) {
@@ -99,7 +104,7 @@ public class Adam4EveBackfillStructureSource implements StructureSource {
 						node.put("solar_system_id", solarSystemId);
 					}
 					if (!node.has("region_id")) {
-						node.put("solar_system_id", regionId);
+						node.put("region_id", regionId);
 					}
 					if (!node.has("name")) {
 						node.put("name", name);
@@ -108,8 +113,8 @@ public class Adam4EveBackfillStructureSource implements StructureSource {
 						node.put("owner_id", ownerId);
 					}
 					if (firstSeen != null) {
-						if (!node.has("first_seen")) {
-							node.put("first_seen", firstSeen.toString());
+						if (!node.has(FIRST_SEEN)) {
+							node.put(FIRST_SEEN, firstSeen.toString());
 						} else {
 							var t = Instant.parse(node.get(FIRST_SEEN).asText());
 							if (firstSeen.isBefore(t)) {
@@ -120,7 +125,17 @@ public class Adam4EveBackfillStructureSource implements StructureSource {
 					structureStore.put(node);
 					structureStore.updateTimestamp(structureId, LAST_STRUCTURE_GET, Instant.EPOCH);
 					structureStore.updateTimestamp(structureId, LAST_SEEN_PUBLIC_STRUCTURE, Instant.EPOCH);
-					return structureId;
+					if (lastSeen != null && lastSeen.isBefore(timestamp.minus(STRUCTURE_TIMEOUT))) {
+						return Flowable.empty();
+					}
+					return Flowable.just(structureId);
+				})
+				.distinct()
+				.toList()
+				.flatMapPublisher(ids -> {
+					log.info("Fetched {} structure ids from Adam4Eve", ids.size());
+					log.trace("Seen structure IDs: {}", ids);
+					return Flowable.fromIterable(ids);
 				});
 	}
 

@@ -48,8 +48,8 @@ Some of the early v2 scrape files contain sovereignty structures, including the 
 * `is_sovereignty_structure` - true if the _latest_ scrape saw it on the sovereignty ESI endpoint
 * `last_seen_sovereignty_structure` - when the structure was last seen as sovereignty
 
-These structures were fetched from the `/sovereignty/structures/` endpoint.
-However, these structures are not queryable at all on the structure information endpoint, so they were removed from the scrape.
+These structures were fetched from the `/sovereignty/structures/` ESI endpoint.
+However, these structures are not queryable at all on the ESI `/universe/structures/{structure_id}/` endpoint, so they were removed from the scrape.
 A separate scrape of current sovereignty structures is already maintained.
 
 ### Scripting
@@ -61,7 +61,8 @@ curl -s https://data.everef.net/structures/structures-latest.v2.json | jq '.[] |
 
 ### Version 1
 
-The version 1 files are simply a lists of public structure IDs.
+The version 1 files are simply a lists of public structure IDs from the `/universe/structures/` ESI endpoint.
 
 ### Other sources
-Adam4Eve maintains a list of structures accessible at [adam4eve.eu/structures.php](https://www.adam4eve.eu/structures.php).
+
+* Adam4Eve maintains a list of structures accessible at [adam4eve.eu/structures.php](https://www.adam4eve.eu/structures.php) with exports at [static.adam4eve.eu/IDs/](https://static.adam4eve.eu/IDs/).
