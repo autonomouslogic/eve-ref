@@ -14,6 +14,8 @@ import com.autonomouslogic.everef.cli.structures.source.PublicStructureSource;
 import com.autonomouslogic.everef.cli.structures.source.SirSmashAlotBackfillStructureSource;
 import com.autonomouslogic.everef.cli.structures.source.SovereigntyStructureSource;
 import com.autonomouslogic.everef.config.Configs;
+import com.autonomouslogic.everef.esi.AllianceEsi;
+import com.autonomouslogic.everef.esi.CorporationEsi;
 import com.autonomouslogic.everef.esi.EsiAuthHelper;
 import com.autonomouslogic.everef.esi.EsiHelper;
 import com.autonomouslogic.everef.esi.EsiUrl;
@@ -74,6 +76,10 @@ public class ScrapeStructures implements Command {
 	public static final String IS_MARKET_STRUCTURE = "is_market_structure";
 	public static final String LAST_SEEN_MARKET_STRUCTURE = "last_seen_market_structure";
 	public static final String FIRST_SEEN = "first_seen";
+	public static final String OWNER_ID = "owner_id";
+	public static final String OWNER_NAME = "owner_name";
+	public static final String ALLIANCE_ID = "alliance_id";
+	public static final String ALLIANCE_NAME = "alliance_name";
 
 	@Deprecated
 	public static final String IS_SOVEREIGNTY_STRUCTURE = "is_sovereignty_structure";
@@ -91,7 +97,10 @@ public class ScrapeStructures implements Command {
 			LAST_SEEN_MARKET_STRUCTURE,
 			FIRST_SEEN,
 			"constellation_id",
-			"region_id");
+			"region_id",
+			OWNER_NAME,
+			ALLIANCE_ID,
+			ALLIANCE_NAME);
 
 	public static final List<String> ALL_BOOLEANS =
 			List.of(IS_GETTABLE_STRUCTURE, IS_PUBLIC_STRUCTURE, IS_MARKET_STRUCTURE);
@@ -132,6 +141,12 @@ public class ScrapeStructures implements Command {
 
 	@Inject
 	protected UniverseApi universeApi;
+
+	@Inject
+	protected CorporationEsi corporationEsi;
+
+	@Inject
+	protected AllianceEsi allianceEsi;
 
 	@Inject
 	protected EsiAuthHelper esiAuthHelper;
@@ -223,6 +238,8 @@ public class ScrapeStructures implements Command {
 								false,
 								1),
 				populateLocations(),
+				populateCorporations(),
+				populateAlliances(),
 				buildOutput().flatMapCompletable(this::uploadFiles));
 	}
 
@@ -430,6 +447,44 @@ public class ScrapeStructures implements Command {
 				return locationPopulator.populate(pair.getValue()).andThen(Completable.fromAction(() -> {
 					structureStore.put(node);
 				}));
+			});
+		});
+	}
+
+	private Completable populateCorporations() {
+		return Completable.defer(() -> {
+			log.info("Populating corporations");
+			return structureStore.allStructures().flatMapCompletable(pair -> {
+				var node = pair.getValue();
+				var ownerId = node.get(OWNER_ID);
+				if (ownerId == null || ownerId.isNull()) {
+					return Completable.complete();
+				}
+				return corporationEsi.getCorporation(ownerId.intValue()).flatMapCompletable(corporation -> {
+					node.put(OWNER_NAME, corporation.getName());
+					Optional.ofNullable(corporation.getAllianceId())
+							.ifPresent(allianceId -> node.put(ALLIANCE_ID, allianceId));
+					structureStore.put(node);
+					return Completable.complete();
+				});
+			});
+		});
+	}
+
+	private Completable populateAlliances() {
+		return Completable.defer(() -> {
+			log.info("Populating alliances");
+			return structureStore.allStructures().flatMapCompletable(pair -> {
+				var node = pair.getValue();
+				var allianceId = node.get(ALLIANCE_ID);
+				if (allianceId == null || allianceId.isNull()) {
+					return Completable.complete();
+				}
+				return allianceEsi.getAlliance(allianceId.intValue()).flatMapCompletable(alliance -> {
+					node.put(ALLIANCE_NAME, alliance.getName());
+					structureStore.put(node);
+					return Completable.complete();
+				});
 			});
 		});
 	}

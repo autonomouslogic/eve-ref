@@ -11,6 +11,9 @@ Queries are also made to `/markets/structures/{structure_id}/` to determine if t
 The v2 scrape files are single JSON files containing an object with the structure IDs as keys.
 The object values themselves are verbatim from the structure endpoint, with the following additional fields:
 * `structure_id`
+* `owner_name` - the name of the owning corporation
+* `alliance_id` - the ID of the owning corporation's alliance
+* `alliance_name` - the name of the corporation's alliance
 * `constellation_id`
 * `region_id`
 * `is_gettable_structure` - true if the _latest_ scrape was able to get the structure details

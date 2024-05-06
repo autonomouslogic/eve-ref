@@ -12,7 +12,6 @@ import com.autonomouslogic.everef.openapi.esi.models.GetUniverseTypesTypeIdOk;
 import com.autonomouslogic.everef.util.Rx;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Maybe;
-import io.reactivex.rxjava3.functions.Supplier;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -20,8 +19,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.extern.log4j.Log4j2;
-import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.jetbrains.annotations.NotNull;
 
 @Singleton
 @Log4j2
@@ -59,7 +56,7 @@ public class UniverseEsi {
 	}
 
 	public Maybe<GetUniverseRegionsRegionIdOk> getRegion(int regionId) {
-		return getFromCacheOrFetch("region", GetUniverseRegionsRegionIdOk.class, regions, regionId, () -> {
+		return EsiHelper.getFromCacheOrFetch("region", GetUniverseRegionsRegionIdOk.class, regions, regionId, () -> {
 			var source = UniverseApi.DatasourceGetUniverseRegionsRegionId.valueOf(datasource);
 			return universeApi.getUniverseRegionsRegionId(regionId, null, source, null, null);
 		});
@@ -70,7 +67,7 @@ public class UniverseEsi {
 	}
 
 	public Maybe<GetUniverseConstellationsConstellationIdOk> getConstellation(int constellationId) {
-		return getFromCacheOrFetch(
+		return EsiHelper.getFromCacheOrFetch(
 				"constellation",
 				GetUniverseConstellationsConstellationIdOk.class,
 				constellations,
@@ -83,7 +80,7 @@ public class UniverseEsi {
 	}
 
 	public Maybe<GetUniverseSystemsSystemIdOk> getSystem(int systemId) {
-		return getFromCacheOrFetch("system", GetUniverseSystemsSystemIdOk.class, systems, systemId, () -> {
+		return EsiHelper.getFromCacheOrFetch("system", GetUniverseSystemsSystemIdOk.class, systems, systemId, () -> {
 			var source = UniverseApi.DatasourceGetUniverseSystemsSystemId.valueOf(datasource);
 			return universeApi.getUniverseSystemsSystemId(systemId, null, source, null, null);
 		});
@@ -95,40 +92,16 @@ public class UniverseEsi {
 			return Maybe.empty();
 		}
 		var intId = (int) stationId;
-		return getFromCacheOrFetch("station", GetUniverseStationsStationIdOk.class, stations, intId, () -> {
+		return EsiHelper.getFromCacheOrFetch("station", GetUniverseStationsStationIdOk.class, stations, intId, () -> {
 			var source = UniverseApi.DatasourceGetUniverseStationsStationId.valueOf(datasource);
 			return universeApi.getUniverseStationsStationId(intId, source, null);
 		});
 	}
 
 	public Maybe<GetUniverseTypesTypeIdOk> getType(int typeId) {
-		return getFromCacheOrFetch("type", GetUniverseTypesTypeIdOk.class, types, typeId, () -> {
+		return EsiHelper.getFromCacheOrFetch("type", GetUniverseTypesTypeIdOk.class, types, typeId, () -> {
 			var source = UniverseApi.DatasourceGetUniverseTypesTypeId.valueOf(datasource);
 			return universeApi.getUniverseTypesTypeId(typeId, null, source, null, null);
 		});
-	}
-
-	@NotNull
-	private <T> Maybe<T> getFromCacheOrFetch(
-			String name, Class<T> type, Map<Integer, Optional<T>> cache, int id, Supplier<T> fetcher) {
-		return Maybe.defer(() -> {
-					if (cache.containsKey(id)) {
-						return Maybe.fromOptional(cache.get(id));
-					}
-					return Maybe.defer(() -> {
-								log.trace("Fetching {} {}", name, id);
-								var obj = fetcher.get();
-								var optional = Optional.ofNullable(obj);
-								cache.put(id, optional);
-								return Maybe.fromOptional(optional);
-							})
-							.retry(2, e -> {
-								log.warn("Retrying {} {}: {}", name, id, ExceptionUtils.getRootCauseMessage(e));
-								return true;
-							})
-							.compose(Rx.offloadMaybe(EsiHelper.ESI_SCHEDULER));
-				})
-				.onErrorResumeNext(
-						e -> Maybe.error(new RuntimeException(String.format("Failed fetching %s %s", name, id), e)));
 	}
 }
