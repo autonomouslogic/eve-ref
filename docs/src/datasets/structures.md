@@ -12,8 +12,12 @@ The v2 scrape files are single JSON files containing an object with the structur
 The object values themselves are verbatim from the structure endpoint, with the following additional fields:
 * `structure_id`
 * `owner_name` - the name of the owning corporation
-* `alliance_id` - the ID of the owning corporation's alliance
-* `alliance_name` - the name of the corporation's alliance
+* `owner_character_id` - the ID of the owning character, if owner ID is a character
+* `owner_character_name` - the name of the owning character
+* `owner_corporation_id` - the ID of the owning corporation or owning character's corporation
+* `owner_corporation_name` - the name of the owning corporation
+* `owner_alliance_id` - the ID of the corporation's alliance
+* `owner_alliance_name` - the name of the corporation's alliance
 * `constellation_id`
 * `region_id`
 * `is_gettable_structure` - true if the _latest_ scrape was able to get the structure details

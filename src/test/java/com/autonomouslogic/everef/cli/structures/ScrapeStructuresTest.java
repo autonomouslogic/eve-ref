@@ -8,6 +8,7 @@ import com.autonomouslogic.everef.cli.publiccontracts.ContractsFileBuilder;
 import com.autonomouslogic.everef.cli.publiccontracts.ContractsScrapeMeta;
 import com.autonomouslogic.everef.esi.LocationPopulator;
 import com.autonomouslogic.everef.openapi.esi.models.GetAlliancesAllianceIdOk;
+import com.autonomouslogic.everef.openapi.esi.models.GetCharactersCharacterIdOk;
 import com.autonomouslogic.everef.openapi.esi.models.GetCorporationsCorporationIdOk;
 import com.autonomouslogic.everef.openapi.esi.models.GetUniverseConstellationsConstellationIdOk;
 import com.autonomouslogic.everef.openapi.esi.models.GetUniverseConstellationsConstellationIdPosition;
@@ -366,18 +367,56 @@ public class ScrapeStructuresTest {
 	}
 
 	@Test
-	void shouldPopulateCharacter() {
-		publicStructures.put(1000000000001L, Map.of("name", "Test Structure 1", "owner_id", 1500000002));
+	void shouldNotFailOnUnknownOwnerIds() {
+		publicStructures.put(1000000000001L, Map.of("name", "Test Structure 1", "owner_id", 999999999));
 		scrapeStructures.run().blockingAwait();
 		var structure = loadScrape().get("1000000000001");
-		assertEquals(1500000002, structure.get("owner_id").intValue());
-		assertEquals("Character 1", structure.get("owner_name").textValue());
-		assertEquals(1500000002, structure.get("character_id").intValue());
-		assertEquals("Character 1", structure.get("character_name").textValue());
+		assertEquals(999999999, structure.get("owner_id").intValue());
+		assertNull(structure.get("owner_name"));
+		assertNull(structure.get("character_id"));
+		assertNull(structure.get("character_name"));
 		assertNull(structure.get("corporation_id"));
 		assertNull(structure.get("corporation_name"));
 		assertNull(structure.get("alliance_id"));
 		assertNull(structure.get("alliance_name"));
+	}
+
+	@Test
+	void shouldPopulateCharacter() {
+		publicStructures.put(1000000000001L, Map.of("name", "Test Structure 1", "owner_id", 1500000001));
+		scrapeStructures.run().blockingAwait();
+		var structure = loadScrape().get("1000000000001");
+		assertEquals(1500000001, structure.get("owner_id").intValue());
+		assertEquals(1500000001, structure.get("owner_character_id").intValue());
+		assertEquals("Character 1", structure.get("owner_character_name").textValue());
+		assertNull(structure.get("corporation_id"));
+		assertNull(structure.get("corporation_name"));
+		assertNull(structure.get("alliance_id"));
+		assertNull(structure.get("alliance_name"));
+	}
+
+	@Test
+	void shouldPopulateCharacterCorporation() {
+		publicStructures.put(1000000000001L, Map.of("name", "Test Structure 1", "owner_id", 1500000002));
+		scrapeStructures.run().blockingAwait();
+		var structure = loadScrape().get("1000000000001");
+		assertEquals(1500000002, structure.get("owner_id").intValue());
+		assertEquals(1500000002, structure.get("owner_character_id").intValue());
+		assertEquals("Character 2", structure.get("owner_character_name").textValue());
+		assertNull(structure.get("alliance_id"));
+		assertNull(structure.get("alliance_name"));
+	}
+
+	@Test
+	void shouldPopulateCharacterCorporationAlliance() {
+		publicStructures.put(1000000000001L, Map.of("name", "Test Structure 1", "owner_id", 1500000003));
+		scrapeStructures.run().blockingAwait();
+		var structure = loadScrape().get("1000000000001");
+		assertEquals(1500000003, structure.get("owner_id").intValue());
+		assertEquals(1500000003, structure.get("owner_character_id").intValue());
+		assertEquals("Character 3", structure.get("owner_character_name").textValue());
+		assertEquals(1500000003, structure.get("alliance_id").intValue());
+		assertEquals("Character 3", structure.get("alliance_name").textValue());
 	}
 
 	@Test
@@ -392,7 +431,7 @@ public class ScrapeStructuresTest {
 	}
 
 	@Test
-	void shouldPopulateCorporationAndAlliance() {
+	void shouldPopulateCorporationAlliance() {
 		publicStructures.put(1000000000001L, Map.of("name", "Test Structure 1", "owner_id", 98000001));
 		scrapeStructures.run().blockingAwait();
 		var structure = loadScrape().get("1000000000001");
@@ -400,6 +439,36 @@ public class ScrapeStructuresTest {
 		assertEquals("Corporation 1", structure.get("owner_name").textValue());
 		assertEquals(99000001, structure.get("alliance_id").intValue());
 		assertEquals("Alliance 1", structure.get("alliance_name").textValue());
+	}
+
+	@Test
+	void shouldSwitchFromCharacterToCorporation() {
+		fail();
+	}
+
+	@Test
+	void shouldSwitchFromCorporationToCharacter() {
+		fail();
+	}
+
+	@Test
+	void shouldUpdateCharacter() {
+		fail();
+	}
+
+	@Test
+	void shouldUpdateCorporation() {
+		fail();
+	}
+
+	@Test
+	void shouldUpdateAlliance() {
+		fail();
+	}
+
+	@Test
+	void shouldNotSaveNpcCorporationsAsOwners() {
+		fail();
 	}
 
 	@Test
@@ -559,6 +628,12 @@ public class ScrapeStructuresTest {
 							new GetUniverseConstellationsConstellationIdPosition(0, 0, 0),
 							10000001,
 							List.of());
+					return new MockResponse().setBody(objectMapper.writeValueAsString(obj));
+				}
+
+				if (path.equals("/characters/1500000001/")) {
+					var obj = new GetCharactersCharacterIdOk(null, 0, 1500000001, null, "Character 1", 0, null, null, null, null, null
+					);
 					return new MockResponse().setBody(objectMapper.writeValueAsString(obj));
 				}
 
