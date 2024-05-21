@@ -1,6 +1,6 @@
 package com.autonomouslogic.everef.inject;
 
-import com.autonomouslogic.everef.config.Config;
+import com.autonomouslogic.commons.config.Config;
 import com.autonomouslogic.everef.config.Configs;
 import dagger.Module;
 import dagger.Provides;
