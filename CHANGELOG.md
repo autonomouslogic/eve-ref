@@ -1,5 +1,23 @@
 EVE Ref Changelog
 
+## [2.45.4](https://github.com/autonomouslogic/eve-ref/compare/2.45.3...2.45.4) (2024-06-02)
+
+
+### Documentation
+
+* Added characters-corporations-alliances ([48ba813](https://github.com/autonomouslogic/eve-ref/commit/48ba8134a28dcfa41cb53c513cb19967c3e2da6b))
+* Update index page ([ce8868d](https://github.com/autonomouslogic/eve-ref/commit/ce8868da20a0f83de96efc986c6c4f8f75276c75))
+
+
+### Dependency Updates
+
+* **deps:** Updated commons-java to 1.9.0 ([#525](https://github.com/autonomouslogic/eve-ref/issues/525)) ([54411cc](https://github.com/autonomouslogic/eve-ref/commit/54411cc897d4252eeb484d41a9cd7fae64577b07))
+
+
+### Continuous Integration
+
+* Don't release docs ([45b774c](https://github.com/autonomouslogic/eve-ref/commit/45b774c8852da9611d876a5b743943c523f93c98))
+
 ## [2.45.3](https://github.com/autonomouslogic/eve-ref/compare/2.45.2...2.45.3) (2024-05-08)
 
 
