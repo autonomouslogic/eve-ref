@@ -97,6 +97,10 @@
       {
         "scope": "ui",
         "release": false
+      },
+      {
+        "type": "docs",
+        "release": false
       }
     ]
   }
