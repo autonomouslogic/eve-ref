@@ -1,5 +1,12 @@
 EVE Ref Changelog
 
+## [2.45.7](https://github.com/autonomouslogic/eve-ref/compare/2.45.6...2.45.7) (2024-06-12)
+
+
+### Bug Fixes
+
+* Support for the Equinox SDE ([#535](https://github.com/autonomouslogic/eve-ref/issues/535)) ([8a9d553](https://github.com/autonomouslogic/eve-ref/commit/8a9d553823193074b9e2dcef8498eb3f5ee1c192))
+
 ## [2.45.6](https://github.com/autonomouslogic/eve-ref/compare/2.45.5...2.45.6) (2024-06-04)
 
 
