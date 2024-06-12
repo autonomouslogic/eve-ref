@@ -6,6 +6,7 @@
     "es" : "Habilidad en el manejo de fragatas gallentes.",
     "fr" : "Compétence liée au pilotage des frégates gallente.",
     "ja" : "ガレンテフリゲートを操作するためのスキル。",
+    "ko" : "갈란테 프리깃을 운용하기 위한 스킬입니다.",
     "ru" : "Освоив этот навык, пилот получит допуск к выполнению полётов на фрегатах производства Галлентской Федерации.",
     "zh" : "操作盖伦特护卫舰的技能。"
   },
@@ -18,6 +19,7 @@
     "es" : "Fragata gallente",
     "fr" : "Frégate gallente",
     "ja" : "ガレンテフリゲート",
+    "ko" : "갈란테 프리깃",
     "ru" : "Галлентские фрегаты",
     "zh" : "盖伦特护卫舰操作"
   },
