@@ -1,5 +1,6 @@
 package com.autonomouslogic.everef.config;
 
+import com.autonomouslogic.commons.config.Config;
 import com.autonomouslogic.everef.refdata.ReferenceDataSpec;
 import java.net.URI;
 import java.net.URL;

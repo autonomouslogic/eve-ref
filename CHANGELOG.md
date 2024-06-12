@@ -1,5 +1,44 @@
 EVE Ref Changelog
 
+## [2.45.6](https://github.com/autonomouslogic/eve-ref/compare/2.45.5...2.45.6) (2024-06-04)
+
+
+### Dependency Updates
+
+* **deps:** update all non-major dependencies ([#528](https://github.com/autonomouslogic/eve-ref/issues/528)) ([25e77cc](https://github.com/autonomouslogic/eve-ref/commit/25e77cc73fecefea2779f361e286bdb3d236ca38))
+
+## [2.45.5](https://github.com/autonomouslogic/eve-ref/compare/2.45.4...2.45.5) (2024-06-03)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @fortawesome/vue-fontawesome to v3.0.8 ([#527](https://github.com/autonomouslogic/eve-ref/issues/527)) ([2176b23](https://github.com/autonomouslogic/eve-ref/commit/2176b2374be95f2a0eec4adb7bb60747fcc7148f))
+* **deps:** update flyway monorepo to v10.13.0 ([#529](https://github.com/autonomouslogic/eve-ref/issues/529)) ([68e82c9](https://github.com/autonomouslogic/eve-ref/commit/68e82c95e2864cd65ac4cf0dedc3805e7c9a62c9))
+* **deps:** update flyway monorepo to v10.14.0 ([#530](https://github.com/autonomouslogic/eve-ref/issues/530)) ([66535dc](https://github.com/autonomouslogic/eve-ref/commit/66535dc80749cb16dade88fd637ea6da03b65821))
+
+
+### Dependency Updates
+
+* **deps:** update plugin org.jetbrains.kotlin.jvm to v2 ([#524](https://github.com/autonomouslogic/eve-ref/issues/524)) ([d64c0e1](https://github.com/autonomouslogic/eve-ref/commit/d64c0e1ffa1b4bbb38a421bf17b0bc7e6dd6b273))
+
+## [2.45.4](https://github.com/autonomouslogic/eve-ref/compare/2.45.3...2.45.4) (2024-06-02)
+
+
+### Documentation
+
+* Added characters-corporations-alliances ([48ba813](https://github.com/autonomouslogic/eve-ref/commit/48ba8134a28dcfa41cb53c513cb19967c3e2da6b))
+* Update index page ([ce8868d](https://github.com/autonomouslogic/eve-ref/commit/ce8868da20a0f83de96efc986c6c4f8f75276c75))
+
+
+### Dependency Updates
+
+* **deps:** Updated commons-java to 1.9.0 ([#525](https://github.com/autonomouslogic/eve-ref/issues/525)) ([54411cc](https://github.com/autonomouslogic/eve-ref/commit/54411cc897d4252eeb484d41a9cd7fae64577b07))
+
+
+### Continuous Integration
+
+* Don't release docs ([45b774c](https://github.com/autonomouslogic/eve-ref/commit/45b774c8852da9611d876a5b743943c523f93c98))
+
 ## [2.45.3](https://github.com/autonomouslogic/eve-ref/compare/2.45.2...2.45.3) (2024-05-08)
 
 
