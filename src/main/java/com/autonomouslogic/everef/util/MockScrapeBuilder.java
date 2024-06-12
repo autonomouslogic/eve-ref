@@ -48,8 +48,8 @@ public class MockScrapeBuilder {
 		var prefix = new File(REFDATA_RESOURCES, "sde");
 		var entries = new ArrayList<Map.Entry<String, byte[]>>();
 		FileUtils.listFiles(prefix, null, true).stream()
-				.map(f -> new File(StringUtils.remove(f.getPath(), REFDATA_RESOURCES)))
-				.forEach(f -> entries.add(createEntry("/refdata", f.getPath())));
+				.map(f -> new File(StringUtils.remove(f.getPath(), REFDATA_RESOURCES + "sde/")))
+				.forEach(f -> entries.add(createEntry("/refdata/sde", f.getPath())));
 		return createZipFile(Map.ofEntries(entries.toArray(new Map.Entry[0])));
 	}
 
