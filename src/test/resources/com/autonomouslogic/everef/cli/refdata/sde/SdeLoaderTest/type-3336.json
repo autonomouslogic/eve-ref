@@ -6,6 +6,7 @@
     "es" : "Habilidad en el manejo de acorazados gallentes.",
     "fr" : "Compétence liée au pilotage des cuirassés gallente.",
     "ja" : "ガレンテ戦艦を操作するスキル。",
+    "ko" : "갈란테 배틀쉽을 운용하기 위한 스킬입니다.",
     "ru" : "Освоив этот навык, пилот получит допуск к выполнению полётов на линкорах производства Галлентской Федерации.",
     "zh" : "操作盖伦特战列舰的技能。"
   },
@@ -18,6 +19,7 @@
     "es" : "Acorazado gallente",
     "fr" : "Cuirassé gallente",
     "ja" : "ガレンテ戦艦",
+    "ko" : "갈란테 배틀쉽",
     "ru" : "Галлентские линкоры",
     "zh" : "盖伦特战列舰操作"
   },
