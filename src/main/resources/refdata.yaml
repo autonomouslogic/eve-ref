@@ -2,7 +2,7 @@ categories:
   idField: category_id
   model: InventoryCategory
   sde:
-    file: sde/fsd/categoryIDs.yaml
+    file: sde/fsd/categories.yaml
   esi:
     file: universe/categories
     languageAttributes:
@@ -20,7 +20,7 @@ groups:
   idField: group_id
   model: InventoryGroup
   sde:
-    file: sde/fsd/groupIDs.yaml
+    file: sde/fsd/groups.yaml
   esi:
     file: universe/groups
     languageAttributes:
@@ -65,7 +65,7 @@ types:
   idField: type_id
   model: InventoryType
   sde:
-    file: sde/fsd/typeIDs.yaml
+    file: sde/fsd/types.yaml
   esi:
     file: universe/types
     languageAttributes:

@@ -62,7 +62,7 @@ public class DataIndex implements Command {
 
 	@Setter
 	@Getter
-	private String prefix;
+	private String prefix = "ccp/sde";
 
 	@Inject
 	protected DataIndex() {}
