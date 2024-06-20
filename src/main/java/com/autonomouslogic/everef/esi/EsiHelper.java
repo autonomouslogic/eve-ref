@@ -6,6 +6,7 @@ import com.autonomouslogic.everef.http.OkHttpHelper;
 import com.autonomouslogic.everef.openapi.esi.infrastructure.ApiResponse;
 import com.autonomouslogic.everef.openapi.esi.infrastructure.ResponseType;
 import com.autonomouslogic.everef.openapi.esi.infrastructure.Success;
+import com.autonomouslogic.everef.util.Rx;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.NullNode;
@@ -17,9 +18,11 @@ import io.reactivex.rxjava3.core.Scheduler;
 import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.functions.BiFunction;
 import io.reactivex.rxjava3.functions.Function;
+import io.reactivex.rxjava3.functions.Supplier;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import java.time.Duration;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.Executors;
 import javax.inject.Inject;
@@ -29,6 +32,8 @@ import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import okhttp3.OkHttpClient;
 import okhttp3.Response;
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.jetbrains.annotations.NotNull;
 
 @Singleton
 @Log4j2
@@ -242,5 +247,29 @@ public class EsiHelper {
 
 	public StandardErrorTransformer standardErrorHandling(EsiUrl url) {
 		return new StandardErrorTransformer(url);
+	}
+
+	@NotNull
+	protected static <T> Maybe<T> getFromCacheOrFetch(
+			String name, Class<T> type, Map<Integer, Optional<T>> cache, int id, Supplier<T> fetcher) {
+		return Maybe.defer(() -> {
+					if (cache.containsKey(id)) {
+						return Maybe.fromOptional(cache.get(id));
+					}
+					return Maybe.defer(() -> {
+								log.trace("Fetching {} {}", name, id);
+								var obj = fetcher.get();
+								var optional = Optional.ofNullable(obj);
+								cache.put(id, optional);
+								return Maybe.fromOptional(optional);
+							})
+							.retry(2, e -> {
+								log.warn("Retrying {} {}: {}", name, id, ExceptionUtils.getRootCauseMessage(e));
+								return true;
+							})
+							.compose(Rx.offloadMaybe(EsiHelper.ESI_SCHEDULER));
+				})
+				.onErrorResumeNext(
+						e -> Maybe.error(new RuntimeException(String.format("Failed fetching %s %s", name, id), e)));
 	}
 }
