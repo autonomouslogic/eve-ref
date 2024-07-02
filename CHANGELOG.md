@@ -1,5 +1,18 @@
 EVE Ref Changelog
 
+## [2.45.8](https://github.com/autonomouslogic/eve-ref/compare/2.45.7...2.45.8) (2024-07-02)
+
+
+### Bug Fixes
+
+* **deps:** update flyway monorepo to v10.15.2 ([#538](https://github.com/autonomouslogic/eve-ref/issues/538)) ([2e11a44](https://github.com/autonomouslogic/eve-ref/commit/2e11a44882dfb8264e65987b734bbb4d26b9f884))
+
+
+### Documentation
+
+* Datasets order ([69363b3](https://github.com/autonomouslogic/eve-ref/commit/69363b36a1b596f69bfc7fb92780359582d68ce8))
+* Spelling of Hoboleaks ([619e54f](https://github.com/autonomouslogic/eve-ref/commit/619e54fa49bc74a7db0767256652f9b9ceeca1c6))
+
 ## [2.45.7](https://github.com/autonomouslogic/eve-ref/compare/2.45.6...2.45.7) (2024-06-12)
 
 
