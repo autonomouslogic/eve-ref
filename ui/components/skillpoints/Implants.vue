@@ -33,6 +33,9 @@ import {
 import {DAY} from "~/lib/timeUtils";
 import {calculateAcceleratedSkillpoints} from "~/lib/skillUtils";
 import Duration from "~/components/dogma/units/Duration.vue";
+import refdataApi, {cacheGroupBundle} from "~/refdata";
+import {CYBERIMPLANT} from "~/lib/groupConstants";
+import refdata from "~/refdata";
 
 class ImplantSet {
 	name: string = "";
