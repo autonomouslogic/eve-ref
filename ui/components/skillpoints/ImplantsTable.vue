@@ -3,39 +3,9 @@ import {getJitaSellPrice} from "~/lib/marketUtils";
 import Money from "~/components/dogma/units/Money.vue";
 import FormattedNumber from "~/components/helpers/FormattedNumber.vue";
 import TypeLink from "~/components/helpers/TypeLink.vue";
-import {
-	CYBERNETIC_SUBPROCESSOR_BASIC,
-	CYBERNETIC_SUBPROCESSOR_IMPROVED,
-	CYBERNETIC_SUBPROCESSOR_STANDARD,
-	LIMITED_CYBERNETIC_SUBPROCESSOR,
-	LIMITED_CYBERNETIC_SUBPROCESSOR_BETA,
-	LIMITED_MEMORY_AUGMENTATION,
-	LIMITED_MEMORY_AUGMENTATION_BETA,
-	LIMITED_NEURAL_BOOST,
-	LIMITED_NEURAL_BOOST_BETA,
-	LIMITED_OCULAR_FILTER,
-	LIMITED_OCULAR_FILTER_BETA,
-	LIMITED_SOCIAL_ADAPTATION_CHIP,
-	LIMITED_SOCIAL_ADAPTATION_CHIP_BETA,
-	MEMORY_AUGMENTATION_BASIC,
-	MEMORY_AUGMENTATION_IMPROVED,
-	MEMORY_AUGMENTATION_STANDARD,
-	NEURAL_BOOST_BASIC,
-	NEURAL_BOOST_IMPROVED,
-	NEURAL_BOOST_STANDARD,
-	OCULAR_FILTER_BASIC,
-	OCULAR_FILTER_IMPROVED,
-	OCULAR_FILTER_STANDARD,
-	SOCIAL_ADAPTATION_CHIP_BASIC,
-	SOCIAL_ADAPTATION_CHIP_IMPROVED,
-	SOCIAL_ADAPTATION_CHIP_STANDARD,
-} from "~/lib/typeConstants";
 import {DAY} from "~/lib/timeUtils";
 import {calculateAcceleratedSkillpoints} from "~/lib/skillUtils";
 import Duration from "~/components/dogma/units/Duration.vue";
-import refdataApi, {cacheGroupBundle} from "~/refdata";
-import {CYBERIMPLANT} from "~/lib/groupConstants";
-import refdata from "~/refdata";
 import {ImplantIskPerSp, type ImplantSet} from "~/components/skillpoints/ImplantSet";
 
 const props = defineProps<{

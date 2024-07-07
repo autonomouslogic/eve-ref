@@ -1,8 +1,4 @@
 <script setup lang="ts">
-import {getJitaSellPrice} from "~/lib/marketUtils";
-import Money from "~/components/dogma/units/Money.vue";
-import FormattedNumber from "~/components/helpers/FormattedNumber.vue";
-import TypeLink from "~/components/helpers/TypeLink.vue";
 import {
 	CYBERNETIC_SUBPROCESSOR_BASIC,
 	CYBERNETIC_SUBPROCESSOR_IMPROVED,
@@ -30,12 +26,6 @@ import {
 	SOCIAL_ADAPTATION_CHIP_IMPROVED,
 	SOCIAL_ADAPTATION_CHIP_STANDARD,
 } from "~/lib/typeConstants";
-import {DAY} from "~/lib/timeUtils";
-import {calculateAcceleratedSkillpoints} from "~/lib/skillUtils";
-import Duration from "~/components/dogma/units/Duration.vue";
-import refdataApi, {cacheGroupBundle} from "~/refdata";
-import {CYBERIMPLANT} from "~/lib/groupConstants";
-import refdata from "~/refdata";
 import type {ImplantSet} from "~/components/skillpoints/ImplantSet";
 import ImplantsTable from "~/components/skillpoints/ImplantsTable.vue";
 
