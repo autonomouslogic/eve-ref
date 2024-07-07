@@ -1,10 +1,15 @@
 <script setup lang="ts">
 import ExternalLink from "~/components/helpers/ExternalLink.vue";
 import {EVE_REFERRAL_URL} from "~/lib/urls";
+import {cacheGroupBundle} from "~/refdata";
+import {CYBERIMPLANT} from "~/lib/groupConstants";
 
 useHead({
 	title: "Skill Points"
 });
+
+await cacheGroupBundle(CYBERIMPLANT);
+
 </script>
 
 <template>
@@ -28,6 +33,15 @@ useHead({
 		<SkillpointsPacks />
 
 		<SkillpointsImplants />
+
+		<ClientOnly>
+			<Suspense>
+				<SkillpointsFactionImplants />
+				<template #fallback>
+					Loading Faction Implants
+				</template>
+			</Suspense>
+		</ClientOnly>
 	</div>
 
 	<h2>Resources</h2>
