@@ -36,16 +36,22 @@ import Duration from "~/components/dogma/units/Duration.vue";
 import refdataApi, {cacheGroupBundle} from "~/refdata";
 import {CYBERIMPLANT} from "~/lib/groupConstants";
 import refdata from "~/refdata";
+import type {ImplantSet} from "~/components/skillpoints/ImplantSet";
+import ImplantsTable from "~/components/skillpoints/ImplantsTable.vue";
 
 const LOW_GRADE = "Low-grade";
 const MID_GRADE = "Mid-grade";
 const HIGH_GRADE = "High-grade";
+
+const grades = [LOW_GRADE, MID_GRADE, HIGH_GRADE];
 
 const ALPHA = "Alpha";
 const BETA = "Beta";
 const DELTA = "Delta";
 const EPSILON = "Epsilon";
 const GAMMA = "Gamma";
+
+const slots = [ALPHA, BETA, DELTA, EPSILON, GAMMA];
 
 const implantIds = (await refdata.getGroup({groupId: CYBERIMPLANT})).typeIds || [];
 
@@ -100,8 +106,15 @@ await Promise.allSettled(implantIds.map(async implantId => {
 	}
 }));
 
-console.log("Faction implants");
-console.log(implantSets);
+let bonus = 2;
+const sets: ImplantSet[] =
+	grades.map(grade => {
+		return {
+			name: grade,
+			bonus: bonus++,
+			typeIds: slots.map(slot => implantSets[grade][slot][0]),
+		} as ImplantSet;
+	});
 
 </script>
 
@@ -113,27 +126,7 @@ console.log(implantSets);
 		It assumes you only care about skill points and not the other bonuses.
 	</p>
 
-	<table class="table-auto w-full my-3">
-		<thead>
-			<th class="text-left">Grade Set</th>
-			<th class="text-right">Bonus</th>
-			<th class="text-left">Implant</th>
-			<th class="text-right">Price</th>
-		</thead>
-
-		<tbody>
-			<template v-for="grade in [LOW_GRADE, MID_GRADE, HIGH_GRADE]" :key="grade">
-				<template v-for="position in [ALPHA, BETA, DELTA, EPSILON, GAMMA]" :key="position">
-					<tr>
-						<td class="text-left" v-if="position == ALPHA" rowspan="5">{{ grade }}</td>
-						<td class="text-right" v-if="position == ALPHA" rowspan="5">+x</td>
-						<td class="text-left"><TypeLink :type-id="implantSets[grade][position][0]" /></td>
-						<td class="text-right"><Money :value="implantSets[grade][position][1]" /></td>
-					</tr>
-				</template>
-			</template>
-		</tbody>
-	</table>
+	<ImplantsTable :sets="sets" />
 
 </template>
 
