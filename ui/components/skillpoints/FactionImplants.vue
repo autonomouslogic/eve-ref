@@ -108,9 +108,9 @@ console.log(implantSets);
 <template>
 	<h2>Faction Implants</h2>
 	<p>
-		Exactly like standard implants, but tries to assemble the cheapest set of faction implants available.
-		This does create matching sets, as the Omega implants are ignored and different sets may be mixed.
-		It assumes you only care about skill points and not the other bonuses and builds the cheapest set available.
+		Same as standard implants above, but tries to assemble the cheapest set of faction implants available.
+		This does not create matching sets, as the Omega slot is ignored and different sets may be mixed.
+		It assumes you only care about skill points and not the other bonuses to build the cheapest combination available.
 	</p>
 
 
