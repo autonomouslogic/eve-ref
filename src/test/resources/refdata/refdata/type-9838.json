@@ -57,5 +57,5 @@
   "mass" : 0,
   "packaged_volume" : 0.75,
   "radius" : 1,
-  "produced_by_schematics" : [ 65 ]
+  "produced_by_schematic_ids" : [ 65 ]
 }

@@ -34,20 +34,26 @@ public class SchematicDecorator extends PostDecorator {
 				long schematicId = schematicEntry.getKey();
 				var schematicJson = (ObjectNode) schematicEntry.getValue();
 				var schematic = objectMapper.convertValue(schematicJson, Schematic.class);
-				var materials = Optional.ofNullable(schematic.getMaterials())
-						.map(Map::values)
-						.orElse(List.of());
-				for (var material : materials) {
-					addUsedBy(schematicId, material.getTypeId());
-				}
-				var products = Optional.ofNullable(schematic.getProducts())
-						.map(Map::values)
-						.orElse(List.of());
-				for (var product : products) {
-					addProducedBy(schematicId, product.getTypeId());
-				}
+				handleMaterials(schematic, schematicId);
+				handleProducts(schematic, schematicId);
 			}
 		});
+	}
+
+	private void handleMaterials(Schematic schematic, long schematicId) {
+		var materials =
+				Optional.ofNullable(schematic.getMaterials()).map(Map::values).orElse(List.of());
+		for (var material : materials) {
+			addUsedBy(schematicId, material.getTypeId());
+		}
+	}
+
+	private void handleProducts(Schematic schematic, long schematicId) {
+		var products =
+				Optional.ofNullable(schematic.getProducts()).map(Map::values).orElse(List.of());
+		for (var product : products) {
+			addProducedBy(schematicId, product.getTypeId());
+		}
 	}
 
 	private void addUsedBy(long schematicId, long materialTypeId) {
@@ -56,7 +62,7 @@ public class SchematicDecorator extends PostDecorator {
 			log.warn("Could not set type {} as being used by schematic {}, not found", materialTypeId, schematicId);
 			return;
 		}
-		var obj = productType.withArray("/using_in_schematics");
+		var obj = productType.withArray("/used_by_schematics_ids");
 		obj.add(schematicId);
 		types.put(materialTypeId, productType);
 	}
@@ -67,7 +73,7 @@ public class SchematicDecorator extends PostDecorator {
 			log.warn("Could not set type {} as being created by schematic {}, not found", productTypeId, schematicId);
 			return;
 		}
-		var obj = productType.withArray("/produced_by_schematics");
+		var obj = productType.withArray("/produced_by_schematic_ids");
 		obj.add(schematicId);
 		types.put(productTypeId, productType);
 	}

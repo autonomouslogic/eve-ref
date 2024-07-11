@@ -170,4 +170,12 @@ public class InventoryType {
 	@JsonProperty
 	@Schema(description = "Types which can be fitted. This is added by EVE Ref.")
 	List<Long> canBeFittedWithTypes;
+
+	@JsonProperty
+	@Schema(description = "The schematics consuming this type. This is added by EVE Ref.")
+	List<Long> usedBySchematicIds;
+
+	@JsonProperty
+	@Schema(description = "The schematics producing this type. This is added by EVE Ref.")
+	List<Long> producedBySchematicIds;
 }
