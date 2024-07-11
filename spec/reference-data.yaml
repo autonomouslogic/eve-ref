@@ -412,6 +412,41 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Region"
+  /schematics:
+    get:
+      tags:
+      - refdata
+      description: Get all schematic IDs.
+      operationId: getAllSchematics
+      responses:
+        "200":
+          description: Schematic type IDs.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: integer
+                  format: int64
+  /schematics/{schematic_id}:
+    get:
+      tags:
+      - refdata
+      operationId: getSchematic
+      parameters:
+      - name: schematic_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: The schematic.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Schematic"
   /skills:
     get:
       tags:
@@ -1013,6 +1048,22 @@ components:
             type: integer
             description: Types which can be fitted. This is added by EVE Ref.
             format: int64
+        used_by_schematic_ids:
+          type: array
+          description: The schematics consuming this type. This is added by EVE Ref.
+          items:
+            type: integer
+            description: The schematics consuming this type. This is added by EVE
+              Ref.
+            format: int64
+        produced_by_schematic_ids:
+          type: array
+          description: The schematics producing this type. This is added by EVE Ref.
+          items:
+            type: integer
+            description: The schematics producing this type. This is added by EVE
+              Ref.
+            format: int64
         is_skill:
           type: boolean
           description: Whether this type is a skill or not. This is added by EVE Ref.
@@ -1249,6 +1300,32 @@ components:
           $ref: "#/components/schemas/Coordinate"
         min:
           $ref: "#/components/schemas/Coordinate"
+    Schematic:
+      type: object
+      properties:
+        schematic_id:
+          type: integer
+          format: int64
+        name:
+          type: object
+          additionalProperties:
+            type: string
+        cycle_time:
+          type: integer
+          format: int64
+        materials:
+          type: object
+          additionalProperties:
+            $ref: "#/components/schemas/BlueprintMaterial"
+        products:
+          type: object
+          additionalProperties:
+            $ref: "#/components/schemas/BlueprintMaterial"
+        pin_type_ids:
+          type: array
+          items:
+            type: integer
+            format: int64
     Skill:
       type: object
       properties:
