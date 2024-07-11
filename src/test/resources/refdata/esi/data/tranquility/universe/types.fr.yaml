@@ -1738,3 +1738,93 @@
   radius: 85000
   type_id: 35833
   volume: 80000
+"9838":
+  capacity: 0
+  description: "Utilisés pour les nombreuses technologies avancées pour en assurer\
+    \ le bon fonctionnement, ces conduits sont fabriqués en matériaux surfondus qui\
+    \ servent de conducteurs, pour une résistance électrique nulle."
+  dogma_attributes:
+  - attribute_id: 161
+    value: 0.75
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 4
+    value: 0
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 1640
+    value: 7200
+  - attribute_id: 1641
+    value: 7200
+  group_id: 1034
+  icon_id: 1363
+  market_group_id: 1335
+  mass: 0
+  name: "Superconducteurs"
+  packaged_volume: 0.75
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 9838
+  volume: 0.75
+"2389":
+  capacity: 0
+  description: "Alors que l'humanité faisait son retour dans les vols spatiaux, les\
+    \ scientifiques Planto et Ginch ont co-découvert une structure naturelle autonome,\
+    \ entièrement composée de plasma suspendu dans un champ magnétique planétaire.\
+    \ Depuis lors, le terme a été appliqué à toutes les constructions de ce type,\
+    \ qu'elles apparaissent sous forme naturelle ou qu'elles soient produites artificiellement\
+    \ à l'aide de courants électriques."
+  dogma_attributes:
+  - attribute_id: 161
+    value: 0.19
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 4
+    value: 0
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 1640
+    value: 400
+  - attribute_id: 1641
+    value: 400
+  group_id: 1042
+  icon_id: 10017
+  market_group_id: 1334
+  mass: 0
+  name: "Plasmoïdes"
+  packaged_volume: 0.19
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 2389
+  volume: 0.19
+"3645":
+  capacity: 0
+  description: "L'eau est l'un des éléments fondamentaux pour la survie humaine. La\
+    \ plupart des mondes ne disposent que de faibles réserves et il faut compter sur\
+    \ le transport par vaisseau spatial pour s'en procurer."
+  dogma_attributes:
+  - attribute_id: 161
+    value: 0.19
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 4
+    value: 0
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 1640
+    value: 400
+  - attribute_id: 1641
+    value: 400
+  group_id: 1042
+  icon_id: 1178
+  market_group_id: 1334
+  mass: 0
+  name: "Eau"
+  packaged_volume: 0.19
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 3645
+  volume: 0.19

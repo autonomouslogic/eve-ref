@@ -61,7 +61,10 @@ public class BlueprintDecorator extends PostDecorator {
 	private void addProducedBy(long blueprintTypeId, long productTypeId, String activity) {
 		var productType = (ObjectNode) types.get(productTypeId);
 		if (productType == null) {
-			log.warn("Could not set type {} as being created by blueprint, not found", blueprintTypeId);
+			log.warn(
+					"Could not set type {} as being created by blueprint {}, not found",
+					productTypeId,
+					blueprintTypeId);
 			return;
 		}
 		var obj = productType.withObject("/produced_by_blueprints");

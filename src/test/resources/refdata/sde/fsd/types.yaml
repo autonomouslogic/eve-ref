@@ -1956,3 +1956,130 @@
       unitID: 105
     types: {}
   volume: 80000
+"9838":
+  basePrice: 850
+  description:
+    de: "Für eine Vielzahl fortschrittlicher Technologien benötigt, die zu zahlreich\
+      \ sind, um sie hier aufzulisten, werden diese Verbindungen aus speziell gekü\
+      hlten Materialien hergestellt, die perfekt als Konduktoren funktionieren, da\
+      \ sie einen effektiven elektrischen Widerstand von Null haben."
+    en: "Required for highly advanced technologies too numerous to mention to function\
+      \ properly, these conduits are made from super-cooled materials that function\
+      \ as perfect conductors, having an effective electrical resistance of zero."
+    es: "Estos conductos, indispensables para tantas tecnologías avanzadas que no\
+      \ puedo mencionarlas todas, se fabrican con materiales superrefrigerados que\
+      \ funcionan como conductores perfectos y tienen una resistencia eléctrica efectiva\
+      \ de cero."
+    fr: "Utilisés pour les nombreuses technologies avancées pour en assurer le bon\
+      \ fonctionnement, ces conduits sont fabriqués en matériaux surfondus qui servent\
+      \ de conducteurs, pour une résistance électrique nulle."
+    ja: "非常に高度なテクノロジーを適切に動作させるために必要とされる。全てを数え上げることが不可能なほど種類が豊富。完璧な伝導体として機能する過冷却素材で\
+      できており、電気抵抗は実質的にゼロである。"
+    ko: "각종 첨단 기술에 사용되는 전도체로 냉각 부품으로 구성되어 있어 전기 저항률이 0에 수렴합니다."
+    ru: "Применяются в многочисленных процессах высокотехнологических производств\
+      . Эти проводники изготовлены из сверхохлажденных материалов, которые благода\
+      ря почти нулевой сопротивляемости выполняют роль идеальных проводников."
+    zh: "在高技术产品中对它有非常高的需求以保障设备的正常运转。这种导体是采用近乎于完美导体的超级低温材料制作，所具有的有效电阻为零。"
+  groupID: 1034
+  iconID: 1363
+  marketGroupID: 1335
+  name:
+    de: "Superconductors"
+    en: "Superconductors"
+    es: "Superconductores"
+    fr: "Superconducteurs"
+    ja: "超電導体"
+    ko: "초전도체"
+    ru: "Superconductors"
+    zh: "超导体"
+  portionSize: 1
+  published: true
+  volume: 0.75
+"2389":
+  basePrice: 1
+  description:
+    de: "In den Anfangstagen, als sich die Menschheit wieder dem Raumflug widmete,\
+      \ entdeckten die Wissenschaftler Planto und Ginch in Zusammenarbeit eine selbstversorgende\
+      \ Struktur, die vollständig aus Plasma bestand, das durch ein planetares Magnetfeld\
+      \ gehalten wurde. Seitdem wird dieser Begriff für jedes ähnliche Konstrukt verwendet,\
+      \ ganz gleich, ob es unter normalen Bedingungen oder mithilfe von elektrischem\
+      \ Strom entstanden ist."
+    en: "In the early days of humanity's return to space flight, scientists Planto\
+      \ and Ginch co-discovered a self-sustaining natural structure made entirely\
+      \ from plasma suspended in a planetary magnetic field. Since then, the term\
+      \ has been applied to any such construct, whether occurring under normal conditions\
+      \ or produced artificially using electrical currents."
+    es: "En los primeros tiempos después de que la humanidad retomase los vuelos espaciales,\
+      \ los científicos Planto y Ginch descubrieron en un campo magnético planetario\
+      \ una estructura natural autónoma hecha enteramente de plasma suspendido. Desde\
+      \ entonces, se ha aplicado este término a cualquier formación, ya surgiese en\
+      \ condiciones naturales o artificialmente mediante corrientes eléctricas."
+    fr: "Alors que l'humanité faisait son retour dans les vols spatiaux, les scientifiques\
+      \ Planto et Ginch ont co-découvert une structure naturelle autonome, entièrement\
+      \ composée de plasma suspendu dans un champ magnétique planétaire. Depuis lors,\
+      \ le terme a été appliqué à toutes les constructions de ce type, qu'elles apparaissent\
+      \ sous forme naturelle ou qu'elles soient produites artificiellement à l'aide\
+      \ de courants électriques."
+    ja: "人類が宇宙世界に舞い戻った初期に、科学者であるプラントーとギンチが共同で、惑星の磁場に浮遊するプラズマだけで構成される自立自然構造物を発見した。以\
+      降、この用語は、通常の条件で発生したのか、電流を使用して人工的に生成したのかに関係なく、こうした構造物に対して使用される。"
+    ko: "인류가 우주로 재진줄했던 당시, 과학자였던 플란토와 글린치는 행성 자기장 속에서 응축된 플라즈마를 발견했습니다. 이러한 발견 이후\
+      \ 자연적 혹은 인위적으로 생성된 플라즈마 응축을 '플라즈모이드'라 부르기 시작하였습니다."
+    ru: "В самом начале возвращения человечества в космос ученые Планто и Гинч впе\
+      рвые открыли плазмоиды: самоподдерживающиеся природные структуры, состоящие\
+      \ исключительно из плазмы, поддерживающиеся во взвешенном состоянии планетар\
+      ным магнитным полем. С тех самых пор этот термин применяют к любым подобным\
+      \ образованиям: и природным, и полученным в лабораторных условиях под воздей\
+      ствием электрических потоков."
+    zh: "在人类重返宇宙的早期，科学家伯兰图和金奇共同发现了一种能自我维持的自然结构，这种结构完全由悬浮在行星磁场的等离子构成。自那时起，这个词汇被用于个所\
+      有这种物质，无论是在普通环境下形成的还是使用电流人工制成的。"
+  groupID: 1042
+  iconID: 10017
+  marketGroupID: 1334
+  name:
+    de: "Plasmoids"
+    en: "Plasmoids"
+    es: "Plasmoide"
+    fr: "Plasmoïdes"
+    ja: "プラズモイド"
+    ko: "플라즈모이드"
+    ru: "Plasmoids"
+    zh: "等离子体团"
+  portionSize: 1
+  published: true
+  volume: 0.19
+"3645":
+  basePrice: 35
+  description:
+    de: "Wasser ist eine der Grundvoraussetzungen für menschliches Überleben. Auf\
+      \ den meisten Welten ist diese Ressource knapp, so dass man dort auf Schiffsladungen\
+      \ angewiesen ist."
+    en: "Water is one of the basic conditional elements of human survival. Most worlds\
+      \ have this compound in relative short supply and hence must rely on starship\
+      \ freight."
+    es: "El agua es uno de los elementos básicos para la supervivencia humana. La\
+      \ mayoría de los mundos tienen pocos suministros de este compuesto y, por ello,\
+      \ dependen de su transporte en naves estelares."
+    fr: "L'eau est l'un des éléments fondamentaux pour la survie humaine. La plupart\
+      \ des mondes ne disposent que de faibles réserves et il faut compter sur le\
+      \ transport par vaisseau spatial pour s'en procurer."
+    ja: "水は人間の生存に欠かせない必須物質の一つである。ほとんどの惑星ではこの化合物が供給不足気味で、艦船で運ばれてくる輸入品に頼っている。"
+    ko: "인간의 생존에 있어 물은 가장 기본적인 요소 중 하나입니다. 대부분의 행성은 물이 충분하지 않기 때문에 성간 운송에 의지하고 있습니\
+      다."
+    ru: "Вода — одна из основ человеческого выживания. Большинство миров испытывае\
+      т нехватку воды и зависит от межзвездных поставок."
+    zh: "水是人类生存必不可少的基本元素之一。这种化合物的储备在许多地方都相对稀缺，因此必须要靠星际飞船运送才能满足供应。"
+  groupID: 1042
+  iconID: 1178
+  marketGroupID: 1334
+  name:
+    de: "Water"
+    en: "Water"
+    es: "Agua"
+    fr: "Eau"
+    ja: "水"
+    ko: "물"
+    ru: "Water"
+    zh: "水"
+  portionSize: 1
+  published: true
+  volume: 0.19

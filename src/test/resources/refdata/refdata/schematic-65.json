@@ -1,0 +1,31 @@
+{
+  "cycle_time" : 3600,
+  "name" : {
+    "de" : "Superconductors",
+    "en" : "Superconductors",
+    "es" : "Superconductores",
+    "fr" : "Superconducteurs",
+    "ja" : "超電導体",
+    "ko" : "초전도체",
+    "ru" : "Superconductors",
+    "zh" : "超导体"
+  },
+  "materials" : {
+    "2389" : {
+      "quantity" : 40,
+      "type_id" : 2389
+    },
+    "3645" : {
+      "quantity" : 40,
+      "type_id" : 3645
+    }
+  },
+  "products" : {
+    "9838" : {
+      "quantity" : 5,
+      "type_id" : 9838
+    }
+  },
+  "pin_type_ids" : [ 2470, 2472, 2474, 2480, 2484, 2485, 2491, 2494 ],
+  "schematic_id" : 65
+}

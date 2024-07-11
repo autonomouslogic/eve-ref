@@ -1722,3 +1722,93 @@
   radius: 85000
   type_id: 35833
   volume: 80000
+"9838":
+  capacity: 0
+  description: "Required for highly advanced technologies too numerous to mention\
+    \ to function properly, these conduits are made from super-cooled materials that\
+    \ function as perfect conductors, having an effective electrical resistance of\
+    \ zero."
+  dogma_attributes:
+  - attribute_id: 161
+    value: 0.75
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 4
+    value: 0
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 1640
+    value: 7200
+  - attribute_id: 1641
+    value: 7200
+  group_id: 1034
+  icon_id: 1363
+  market_group_id: 1335
+  mass: 0
+  name: "Superconductors"
+  packaged_volume: 0.75
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 9838
+  volume: 0.75
+"2389":
+  capacity: 0
+  description: "In the early days of humanity's return to space flight, scientists\
+    \ Planto and Ginch co-discovered a self-sustaining natural structure made entirely\
+    \ from plasma suspended in a planetary magnetic field. Since then, the term has\
+    \ been applied to any such construct, whether occurring under normal conditions\
+    \ or produced artificially using electrical currents."
+  dogma_attributes:
+  - attribute_id: 161
+    value: 0.19
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 4
+    value: 0
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 1640
+    value: 400
+  - attribute_id: 1641
+    value: 400
+  group_id: 1042
+  icon_id: 10017
+  market_group_id: 1334
+  mass: 0
+  name: "Plasmoids"
+  packaged_volume: 0.19
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 2389
+  volume: 0.19
+"3645":
+  capacity: 0
+  description: "Water is one of the basic conditional elements of human survival.\
+    \ Most worlds have this compound in relative short supply and hence must rely\
+    \ on starship freight."
+  dogma_attributes:
+  - attribute_id: 161
+    value: 0.19
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 4
+    value: 0
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 1640
+    value: 400
+  - attribute_id: 1641
+    value: 400
+  group_id: 1042
+  icon_id: 1178
+  market_group_id: 1334
+  mass: 0
+  name: "Water"
+  packaged_volume: 0.19
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 3645
+  volume: 0.19

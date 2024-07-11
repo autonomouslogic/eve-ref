@@ -1,0 +1,30 @@
+{
+  "base_price" : 850,
+  "description" : {
+    "de" : "Für eine Vielzahl fortschrittlicher Technologien benötigt, die zu zahlreich sind, um sie hier aufzulisten, werden diese Verbindungen aus speziell gekühlten Materialien hergestellt, die perfekt als Konduktoren funktionieren, da sie einen effektiven elektrischen Widerstand von Null haben.",
+    "en" : "Required for highly advanced technologies too numerous to mention to function properly, these conduits are made from super-cooled materials that function as perfect conductors, having an effective electrical resistance of zero.",
+    "es" : "Estos conductos, indispensables para tantas tecnologías avanzadas que no puedo mencionarlas todas, se fabrican con materiales superrefrigerados que funcionan como conductores perfectos y tienen una resistencia eléctrica efectiva de cero.",
+    "fr" : "Utilisés pour les nombreuses technologies avancées pour en assurer le bon fonctionnement, ces conduits sont fabriqués en matériaux surfondus qui servent de conducteurs, pour une résistance électrique nulle.",
+    "ja" : "非常に高度なテクノロジーを適切に動作させるために必要とされる。全てを数え上げることが不可能なほど種類が豊富。完璧な伝導体として機能する過冷却素材でできており、電気抵抗は実質的にゼロである。",
+    "ko" : "각종 첨단 기술에 사용되는 전도체로 냉각 부품으로 구성되어 있어 전기 저항률이 0에 수렴합니다.",
+    "ru" : "Применяются в многочисленных процессах высокотехнологических производств. Эти проводники изготовлены из сверхохлажденных материалов, которые благодаря почти нулевой сопротивляемости выполняют роль идеальных проводников.",
+    "zh" : "在高技术产品中对它有非常高的需求以保障设备的正常运转。这种导体是采用近乎于完美导体的超级低温材料制作，所具有的有效电阻为零。"
+  },
+  "group_id" : 1034,
+  "icon_id" : 1363,
+  "market_group_id" : 1335,
+  "name" : {
+    "de" : "Superconductors",
+    "en" : "Superconductors",
+    "es" : "Superconductores",
+    "fr" : "Superconducteurs",
+    "ja" : "超電導体",
+    "ko" : "초전도체",
+    "ru" : "Superconductors",
+    "zh" : "超导体"
+  },
+  "portion_size" : 1,
+  "published" : true,
+  "volume" : 0.75,
+  "type_id" : 9838
+}
