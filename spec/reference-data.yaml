@@ -1084,6 +1084,15 @@ components:
             description: The type IDs for the planetary pins which can be built on
               this planet. This is added by EVE Ref.
             format: int64
+        installable_schematic_ids:
+          type: array
+          description: The schematic IDs which can be installed into this planetary
+            processor. This is added by EVE Ref.
+          items:
+            type: integer
+            description: The schematic IDs which can be installed into this planetary
+              processor. This is added by EVE Ref.
+            format: int64
         is_skill:
           type: boolean
           description: Whether this type is a skill or not. This is added by EVE Ref.
