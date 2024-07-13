@@ -470,10 +470,10 @@ const cards: {[key: string]: any} = {
 					"reprocessingSkillType"
 				]
 		},
-	"planetSchematic":
+	"planetInteraction":
 		{
-			"name": {"en": "planetSchematic"},
-			"component": "planetSchematic",
+			"name": {"en": "Planetary Interaction"},
+			"component": "planetInteraction",
 			"alwaysShow": true,
 			"dogmaAttributes":
 				[
