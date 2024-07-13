@@ -1,0 +1,47 @@
+{
+  "capacity" : 0,
+  "description" : {
+    "en" : "In the early days of humanity's return to space flight, scientists Planto and Ginch co-discovered a self-sustaining natural structure made entirely from plasma suspended in a planetary magnetic field. Since then, the term has been applied to any such construct, whether occurring under normal conditions or produced artificially using electrical currents.",
+    "fr" : "Alors que l'humanité faisait son retour dans les vols spatiaux, les scientifiques Planto et Ginch ont co-découvert une structure naturelle autonome, entièrement composée de plasma suspendu dans un champ magnétique planétaire. Depuis lors, le terme a été appliqué à toutes les constructions de ce type, qu'elles apparaissent sous forme naturelle ou qu'elles soient produites artificiellement à l'aide de courants électriques."
+  },
+  "dogma_attributes" : {
+    "161" : {
+      "attribute_id" : 161,
+      "value" : 0.19
+    },
+    "162" : {
+      "attribute_id" : 162,
+      "value" : 1
+    },
+    "4" : {
+      "attribute_id" : 4,
+      "value" : 0
+    },
+    "38" : {
+      "attribute_id" : 38,
+      "value" : 0
+    },
+    "1640" : {
+      "attribute_id" : 1640,
+      "value" : 400
+    },
+    "1641" : {
+      "attribute_id" : 1641,
+      "value" : 400
+    }
+  },
+  "group_id" : 1042,
+  "icon_id" : 10017,
+  "market_group_id" : 1334,
+  "mass" : 0,
+  "name" : {
+    "en" : "Plasmoids",
+    "fr" : "Plasmoïdes"
+  },
+  "packaged_volume" : 0.19,
+  "portion_size" : 1,
+  "published" : true,
+  "radius" : 1,
+  "type_id" : 2389,
+  "volume" : 0.19
+}

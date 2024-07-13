@@ -45,6 +45,9 @@ public class SdeLoader {
 	@Inject
 	protected Provider<SdeRegionTransformer> sdeRegionTransformerProvider;
 
+	@Inject
+	protected Provider<SchematicTransformer> schematicTransformerProvider;
+
 	@Setter
 	@NonNull
 	private StoreHandler storeHandler;
@@ -76,6 +79,9 @@ public class SdeLoader {
 								case "dogmaEffects":
 									transformer =
 											TransformUtil.concat(transformer, sdeDogmaEffectTransformerProvider.get());
+									break;
+								case "schematics":
+									transformer = TransformUtil.concat(transformer, schematicTransformerProvider.get());
 									break;
 								case "regions":
 									transformer = TransformUtil.concat(

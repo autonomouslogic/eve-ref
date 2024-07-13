@@ -1956,3 +1956,612 @@
       unitID: 105
     types: {}
   volume: 80000
+"9838":
+  basePrice: 850
+  description:
+    de: "Für eine Vielzahl fortschrittlicher Technologien benötigt, die zu zahlreich\
+      \ sind, um sie hier aufzulisten, werden diese Verbindungen aus speziell gekü\
+      hlten Materialien hergestellt, die perfekt als Konduktoren funktionieren, da\
+      \ sie einen effektiven elektrischen Widerstand von Null haben."
+    en: "Required for highly advanced technologies too numerous to mention to function\
+      \ properly, these conduits are made from super-cooled materials that function\
+      \ as perfect conductors, having an effective electrical resistance of zero."
+    es: "Estos conductos, indispensables para tantas tecnologías avanzadas que no\
+      \ puedo mencionarlas todas, se fabrican con materiales superrefrigerados que\
+      \ funcionan como conductores perfectos y tienen una resistencia eléctrica efectiva\
+      \ de cero."
+    fr: "Utilisés pour les nombreuses technologies avancées pour en assurer le bon\
+      \ fonctionnement, ces conduits sont fabriqués en matériaux surfondus qui servent\
+      \ de conducteurs, pour une résistance électrique nulle."
+    ja: "非常に高度なテクノロジーを適切に動作させるために必要とされる。全てを数え上げることが不可能なほど種類が豊富。完璧な伝導体として機能する過冷却素材で\
+      できており、電気抵抗は実質的にゼロである。"
+    ko: "각종 첨단 기술에 사용되는 전도체로 냉각 부품으로 구성되어 있어 전기 저항률이 0에 수렴합니다."
+    ru: "Применяются в многочисленных процессах высокотехнологических производств\
+      . Эти проводники изготовлены из сверхохлажденных материалов, которые благода\
+      ря почти нулевой сопротивляемости выполняют роль идеальных проводников."
+    zh: "在高技术产品中对它有非常高的需求以保障设备的正常运转。这种导体是采用近乎于完美导体的超级低温材料制作，所具有的有效电阻为零。"
+  groupID: 1034
+  iconID: 1363
+  marketGroupID: 1335
+  name:
+    de: "Superconductors"
+    en: "Superconductors"
+    es: "Superconductores"
+    fr: "Superconducteurs"
+    ja: "超電導体"
+    ko: "초전도체"
+    ru: "Superconductors"
+    zh: "超导体"
+  portionSize: 1
+  published: true
+  volume: 0.75
+"2389":
+  basePrice: 1
+  description:
+    de: "In den Anfangstagen, als sich die Menschheit wieder dem Raumflug widmete,\
+      \ entdeckten die Wissenschaftler Planto und Ginch in Zusammenarbeit eine selbstversorgende\
+      \ Struktur, die vollständig aus Plasma bestand, das durch ein planetares Magnetfeld\
+      \ gehalten wurde. Seitdem wird dieser Begriff für jedes ähnliche Konstrukt verwendet,\
+      \ ganz gleich, ob es unter normalen Bedingungen oder mithilfe von elektrischem\
+      \ Strom entstanden ist."
+    en: "In the early days of humanity's return to space flight, scientists Planto\
+      \ and Ginch co-discovered a self-sustaining natural structure made entirely\
+      \ from plasma suspended in a planetary magnetic field. Since then, the term\
+      \ has been applied to any such construct, whether occurring under normal conditions\
+      \ or produced artificially using electrical currents."
+    es: "En los primeros tiempos después de que la humanidad retomase los vuelos espaciales,\
+      \ los científicos Planto y Ginch descubrieron en un campo magnético planetario\
+      \ una estructura natural autónoma hecha enteramente de plasma suspendido. Desde\
+      \ entonces, se ha aplicado este término a cualquier formación, ya surgiese en\
+      \ condiciones naturales o artificialmente mediante corrientes eléctricas."
+    fr: "Alors que l'humanité faisait son retour dans les vols spatiaux, les scientifiques\
+      \ Planto et Ginch ont co-découvert une structure naturelle autonome, entièrement\
+      \ composée de plasma suspendu dans un champ magnétique planétaire. Depuis lors,\
+      \ le terme a été appliqué à toutes les constructions de ce type, qu'elles apparaissent\
+      \ sous forme naturelle ou qu'elles soient produites artificiellement à l'aide\
+      \ de courants électriques."
+    ja: "人類が宇宙世界に舞い戻った初期に、科学者であるプラントーとギンチが共同で、惑星の磁場に浮遊するプラズマだけで構成される自立自然構造物を発見した。以\
+      降、この用語は、通常の条件で発生したのか、電流を使用して人工的に生成したのかに関係なく、こうした構造物に対して使用される。"
+    ko: "인류가 우주로 재진줄했던 당시, 과학자였던 플란토와 글린치는 행성 자기장 속에서 응축된 플라즈마를 발견했습니다. 이러한 발견 이후\
+      \ 자연적 혹은 인위적으로 생성된 플라즈마 응축을 '플라즈모이드'라 부르기 시작하였습니다."
+    ru: "В самом начале возвращения человечества в космос ученые Планто и Гинч впе\
+      рвые открыли плазмоиды: самоподдерживающиеся природные структуры, состоящие\
+      \ исключительно из плазмы, поддерживающиеся во взвешенном состоянии планетар\
+      ным магнитным полем. С тех самых пор этот термин применяют к любым подобным\
+      \ образованиям: и природным, и полученным в лабораторных условиях под воздей\
+      ствием электрических потоков."
+    zh: "在人类重返宇宙的早期，科学家伯兰图和金奇共同发现了一种能自我维持的自然结构，这种结构完全由悬浮在行星磁场的等离子构成。自那时起，这个词汇被用于个所\
+      有这种物质，无论是在普通环境下形成的还是使用电流人工制成的。"
+  groupID: 1042
+  iconID: 10017
+  marketGroupID: 1334
+  name:
+    de: "Plasmoids"
+    en: "Plasmoids"
+    es: "Plasmoide"
+    fr: "Plasmoïdes"
+    ja: "プラズモイド"
+    ko: "플라즈모이드"
+    ru: "Plasmoids"
+    zh: "等离子体团"
+  portionSize: 1
+  published: true
+  volume: 0.19
+"3645":
+  basePrice: 35
+  description:
+    de: "Wasser ist eine der Grundvoraussetzungen für menschliches Überleben. Auf\
+      \ den meisten Welten ist diese Ressource knapp, so dass man dort auf Schiffsladungen\
+      \ angewiesen ist."
+    en: "Water is one of the basic conditional elements of human survival. Most worlds\
+      \ have this compound in relative short supply and hence must rely on starship\
+      \ freight."
+    es: "El agua es uno de los elementos básicos para la supervivencia humana. La\
+      \ mayoría de los mundos tienen pocos suministros de este compuesto y, por ello,\
+      \ dependen de su transporte en naves estelares."
+    fr: "L'eau est l'un des éléments fondamentaux pour la survie humaine. La plupart\
+      \ des mondes ne disposent que de faibles réserves et il faut compter sur le\
+      \ transport par vaisseau spatial pour s'en procurer."
+    ja: "水は人間の生存に欠かせない必須物質の一つである。ほとんどの惑星ではこの化合物が供給不足気味で、艦船で運ばれてくる輸入品に頼っている。"
+    ko: "인간의 생존에 있어 물은 가장 기본적인 요소 중 하나입니다. 대부분의 행성은 물이 충분하지 않기 때문에 성간 운송에 의지하고 있습니\
+      다."
+    ru: "Вода — одна из основ человеческого выживания. Большинство миров испытывае\
+      т нехватку воды и зависит от межзвездных поставок."
+    zh: "水是人类生存必不可少的基本元素之一。这种化合物的储备在许多地方都相对稀缺，因此必须要靠星际飞船运送才能满足供应。"
+  groupID: 1042
+  iconID: 1178
+  marketGroupID: 1334
+  name:
+    de: "Water"
+    en: "Water"
+    es: "Agua"
+    fr: "Eau"
+    ja: "水"
+    ko: "물"
+    ru: "Water"
+    zh: "水"
+  portionSize: 1
+  published: true
+  volume: 0.19
+"2268":
+  description:
+    de: "Die Fülle an Wasser auf terrestrischen Planeten ist oftmals eine Illusion:\
+      \ Was viele spontan als \"Wasser\" bezeichnen, ist häufig eine Verbindung aus\
+      \ vielen Flüssigkeiten, mikroskopischen Partikeln und gesättigten Komponenten,\
+      \ kombiniert mit Wasser und weiteren Flüssigkeiten. Wässrige Flüssigkeiten verkö\
+      rpern die Art von Flüssigkeit, aus der pures Wasser leicht von Abfall und gefä\
+      hrlichen Partikeln getrennt werden kann. Aber nur bei der Verwendung der richtigen\
+      \ Ausrüstung."
+    en: "The abundance of water on terrestrial planets is often a misconception: What\
+      \ many refer to offhandedly as \"water\" is often an amalgamation of many liquids,\
+      \ microscopic particles, and saturated compounds combined with water and other\
+      \ liquids. Aqueous liquids represent those liquids from which pure water can\
+      \ be separated easily from waste or hazardous particles, but only using the\
+      \ proper equipment."
+    es: "La abundancia de agua en los planetas terrestres es, por lo general, un engañ\
+      o: lo que muchos llaman «agua» suele ser una amalgama de muchos líquidos, partí\
+      culas microscópicas y compuestos saturados combinados con agua y otros fluidos.\
+      \ Los líquidos acuosos son aquellos de los que el agua pura se puede separar\
+      \ fácilmente de los residuos o las partículas tóxicas, pero solo con el equipo\
+      \ adecuado."
+    fr: "L'abondance d'eau sur les planètes terrestres n'est souvent qu'une idée reç\
+      ue. En effet, ce que beaucoup désignent comme de l'eau n'est souvent qu'une\
+      \ association de plusieurs liquides avec des particules microscopiques et des\
+      \ composés saturés gorgés d'eau et d'autres liquides. Les liquides aqueux sont\
+      \ des liquides à partir desquels l'eau pure peut aisément être séparée des dé\
+      chets et des particules dangereuses, à condition de disposer du matériel approprié\
+      ."
+    ja: "陸地型惑星には水が大量にあるというのは、多くの場合、誤解である。多くの人が何気なく使用する「水」という言葉は、大量の液体、微粒子、および水と他の液\
+      体が融合した飽和化合物が混合したものを指すことが多い。水性液体とは、適切な装置を使用すれば、無駄な粒子や有害な粒子から純水を簡単に分離できる液体を指す。"
+    ko: "지구형 행성에 물이 풍부할 것이라는 생각은 흔한 편견입니다. \"물\"은 각종 액체, 미세 입자, 그리고 포화 화합물이 섞인 물질을\
+      \ 일컫습니다. 그 가운데 수성 액체는 특수한 장비를 통해 유독 성분과 오염 물질을 걸러낸 정제수를 의미합니다."
+    ru: "Представление о том, что на планетах земного типа много воды, является ош\
+      ибочным. То, что мы неточно называем «водой», на самом деле представляет соб\
+      ой объединение множества разных жидкостей, микроскопических частиц и насыщен\
+      ных соединений в сочетании с водой и другими жидкостями. Водные жидкости – э\
+      то жидкости, в которых можно легко отделить чистую воду от примесей и загряз\
+      няющих частиц, но только с применением соответствующего оборудования."
+    zh: "有人说类地行星上水资源丰富实际上是一种错误的认识：那些通常被误认作是水的东西实际上是由很多物质混合起来的。水基液体所指的是，通过使用专门的设备，这\
+      些液体中的纯水能轻易地同其他杂质和污物微粒完全分离开来。"
+  groupID: 1033
+  iconID: 10012
+  marketGroupID: 1333
+  name:
+    de: "Aqueous Liquids"
+    en: "Aqueous Liquids"
+    es: "Líquido acuoso"
+    fr: "Liquides aqueux"
+    ja: "水性液体"
+    ko: "수성 액체"
+    ru: "Aqueous Liquids"
+    zh: "水基液体"
+  portionSize: 1
+  published: true
+  volume: 0.005
+"2409":
+  basePrice: 45000
+  description:
+    de: "Die gewünschten Flüssigkeiten auf feindseligen Welten zu finden kann fast\
+      \ genauso herausfordernd sein, wie diese aus der gnadenlosen Umwelt zu extrahieren,\
+      \ was oft das kilometertiefe Bohren unter die Oberfläche oder das Kondensieren\
+      \ der Flüssigkeit aus der oberen Atmosphäre nach sich zieht. Sobald die Flü\
+      ssigkeiten entdeckt wurden, übernimmt die Anlage selbst die relativ einfache\
+      \ Aufgabe, sie von der Umgebungs-Plasma-Interferenz, den verbrühenden Magmaströ\
+      men oder potenziell infektiösen, autochtonen Bakterien zu befreien. Eine überraschende\
+      \ Menge wertvoller Flüssigkeiten kann aus den feindseligen Welten extrahiert\
+      \ werden, aber nur wenn das Gerät richtig kalibriert und sorgfältig gepflegt\
+      \ wird."
+    en: "Finding desired liquids on hostile worlds can be almost as challenging a\
+      \ task as extracting it from the unforgiving environment, which often entails\
+      \ drilling kilometers below the surface or condensing fluids from the upper\
+      \ atmosphere. Once the liquids are discovered, the facility itself begins the\
+      \ relatively simple task of separating it from the ambient plasma interference,\
+      \ scalding magma streams, or potentially infectious indigenous bacteria. A surprising\
+      \ amount of valuable liquids can be extracted from hostile worlds, but only\
+      \ if the equipment is properly calibrated and carefully maintained."
+    es: "Encontrar fluidos de interés en mundos hostiles puede ser casi tan difícil\
+      \ como extraerlos en entornos desfavorables, un proceso que a menudo requiere\
+      \ perforar kilómetros bajo la superficie o condensar líquidos de la atmósfera\
+      \ superior. Cuando se descubren los fluidos, la instalación pone en marcha la\
+      \ tarea relativamente sencilla de separarlos de la interferencia del plasma\
+      \ ambiental, las abrasadoras corrientes de magma o las bacterias indígenas,\
+      \ potencialmente infecciosas. Se puede extraer una cantidad sorprendente de\
+      \ fluidos valiosos en mundos hostiles, pero solo si el equipamiento está bien\
+      \ calibrado y su mantenimiento, al día."
+    fr: "Trouver les liquides désirés sur des mondes ennemis peut être aussi difficile\
+      \ qu'en extraire dans un environnement hostile, ce qui nécessite souvent des\
+      \ kilomètres de forage en dessous de la surface ou une condensation des fluides\
+      \ de la haute atmosphère. Une fois les liquides découverts, l'installation commence\
+      \ elle-même le travail relativement simple visant à les séparer des interfé\
+      rences plasma environnantes, des ruisseaux de magma brûlant, ou des bactéries\
+      \ locales potentiellement dangereuses. Une quantité surprenante de liquides\
+      \ de valeur peut être extraite des mondes hostiles, mais seulement si l'équipement\
+      \ est correctement calibré et parfaitement entretenu."
+    ja: "非友好的な世界で目的の液体を見つけることは、地表から何 km も掘り下げたり、高層大気から液体を凝結したりする作業が必要な厳しい環境から液体を抽出\
+      する場合と同じくらい困難だ。液体が見つかると、大気中のプラズマ干渉から液体を分離する比較的シンプルな作業がこの設備で開始され、マグマの流れや、現地固有の\
+      感染性バクテリアがあればその煮沸消毒も実施される。非友好的な世界で驚くような量の貴重な液体が抽出できることがあるが、そのためには設備を適切に調整し、入念\
+      にメンテナンスしておく必要がある。"
+    ko: "수성 액체 추출은 지면 아래 수 킬로미터를 드릴로 뚫고 내려가거나 초고층 대기에서 액체를 응축하는 작업 동반됩니다. 따라서 혹독한\
+      \ 환경이나 위협지대에서 액체를 추출하는 것은 극도로 어려운 일입니다. 추출 과정을 거친 후에는 주변의 플라즈마, 뜨거운 마그마, 또는\
+      \ 감염성이 있는 박테리아로부터 액체를 분리해내는 비교적 단순한 작업이 진행됩니다. 안정화된 장비를 사용한다면 위협지대에서 방대한 양의\
+      \ 액체를 추출하는 것이 가능합니다."
+    ru: "На непригодных к обитанию планетах найти нужные жидкости не легче, чем из\
+      влекать их в местах с экстремальными условиями. Для их поиска приходится бур\
+      ить многокилометровые скважины или конденсировать пары из верхних слоев атмо\
+      сферы. Однако когда жидкости уже найдены, постройка добывающего комплекса ст\
+      ановится относительно простой задачей. Необходимо всего лишь оградить его от\
+      \ окружения: интерференции от плазмы, магматических потоков или потенциально\
+      \ патогенных бактерий. С подобных враждебных миров можно извлекать поразител\
+      ьно большие количество ценных жидкостей, но для этого требуется тщательно от\
+      калиброванное оборудование, которое постоянно требует техобслуживания."
+    zh: "在恶劣的环境中探寻所需要的水溶液几乎同采集它们一样，是一项具有挑战性的任务。通常必须要钻探到地表以下数千米的深度，或者在上层大气层中进行气体液化作\
+      业。当水溶液被发现后，设施会直接对其进行简单的处理，将其从环境中分隔开，避免环境流质，岩浆的干扰及可能存在的细菌污染。在环境恶劣的星球上，可以采集到大量\
+      的水性溶液，但这要求所有的设备都受到了精心的维护和校对。"
+  graphicID: 4544
+  groupID: 1026
+  name:
+    de: "Barren Aqueous Liquid Extractor"
+    en: "Barren Aqueous Liquid Extractor"
+    es: "Extractor de líquido acuoso baldío"
+    fr: "Extracteur de liquide aqueux en milieu aride"
+    ja: "荒地惑星用水性液体エクストラクター"
+    ko: "수성 액체 추출기 (사막 행성)"
+    ru: "Barren Aqueous Liquid Extractor"
+    zh: "贫瘠行星水基液体采集器"
+  portionSize: 1
+  published: true
+"2412":
+  basePrice: 45000
+  description:
+    de: "Die gewünschten Flüssigkeiten auf feindseligen Welten zu finden kann fast\
+      \ genauso herausfordernd sein, wie diese aus der gnadenlosen Umwelt zu extrahieren,\
+      \ was oft das kilometertiefe Bohren unter die Oberfläche oder das Kondensieren\
+      \ der Flüssigkeit aus der oberen Atmosphäre nach sich zieht. Sobald die Flü\
+      ssigkeiten entdeckt wurden, übernimmt die Anlage selbst die relativ einfache\
+      \ Aufgabe, sie von der Umgebungs-Plasma-Interferenz, den verbrühenden Magmaströ\
+      men oder potenziell infektiösen, autochtonen Bakterien zu befreien. Eine überraschende\
+      \ Menge wertvoller Flüssigkeiten kann aus den feindseligen Welten extrahiert\
+      \ werden, aber nur wenn das Gerät richtig kalibriert und sorgfältig gepflegt\
+      \ wird."
+    en: "Finding desired liquids on hostile worlds can be almost as challenging a\
+      \ task as extracting it from the unforgiving environment, which often entails\
+      \ drilling kilometers below the surface or condensing fluids from the upper\
+      \ atmosphere. Once the liquids are discovered, the facility itself begins the\
+      \ relatively simple task of separating it from the ambient plasma interference,\
+      \ scalding magma streams, or potentially infectious indigenous bacteria. A surprising\
+      \ amount of valuable liquids can be extracted from hostile worlds, but only\
+      \ if the equipment is properly calibrated and carefully maintained."
+    es: "Encontrar fluidos de interés en mundos hostiles puede ser casi tan difícil\
+      \ como extraerlos en entornos desfavorables, un proceso que a menudo requiere\
+      \ perforar kilómetros bajo la superficie o condensar líquidos de la atmósfera\
+      \ superior. Cuando se descubren los fluidos, la instalación pone en marcha la\
+      \ tarea relativamente sencilla de separarlos de la interferencia del plasma\
+      \ ambiental, las abrasadoras corrientes de magma o las bacterias indígenas,\
+      \ potencialmente infecciosas. Se puede extraer una cantidad sorprendente de\
+      \ fluidos valiosos en mundos hostiles, pero solo si el equipamiento está bien\
+      \ calibrado y su mantenimiento, al día."
+    fr: "Trouver les liquides désirés sur des mondes ennemis peut être aussi difficile\
+      \ qu'en extraire dans un environnement hostile, ce qui nécessite souvent des\
+      \ kilomètres de forage en dessous de la surface ou une condensation des fluides\
+      \ de la haute atmosphère. Une fois les liquides découverts, l'installation commence\
+      \ elle-même le travail relativement simple visant à les séparer des interfé\
+      rences plasma environnantes, des ruisseaux de magma brûlant, ou des bactéries\
+      \ locales potentiellement dangereuses. Une quantité surprenante de liquides\
+      \ de valeur peut être extraite des mondes hostiles, mais seulement si l'équipement\
+      \ est correctement calibré et parfaitement entretenu."
+    ja: "非友好的な世界で目的の液体を見つけることは、地表から何 km も掘り下げたり、高層大気から液体を凝結したりする作業が必要な厳しい環境から液体を抽出\
+      する場合と同じくらい困難だ。液体が見つかると、大気中のプラズマ干渉から液体を分離する比較的シンプルな作業がこの設備で開始され、マグマの流れや、現地固有の\
+      感染性バクテリアがあればその煮沸消毒も実施される。非友好的な世界で驚くような量の貴重な液体が抽出できることがあるが、そのためには設備を適切に調整し、入念\
+      にメンテナンスしておく必要がある。"
+    ko: "수성 액체 추출은 지면 아래 수 킬로미터를 드릴로 뚫고 내려가거나 초고층 대기에서 액체를 응축하는 작업 동반됩니다. 따라서 혹독한\
+      \ 환경이나 위협지대에서 액체를 추출하는 것은 극도로 어려운 일입니다. 추출 과정을 거친 후에는 주변의 플라즈마, 뜨거운 마그마, 또는\
+      \ 감염성이 있는 박테리아로부터 액체를 분리해내는 비교적 단순한 작업이 진행됩니다. 안정화된 장비를 사용한다면 위협지대에서 방대한 양의\
+      \ 액체를 추출하는 것이 가능합니다."
+    ru: "На непригодных к обитанию планетах найти нужные жидкости не легче, чем из\
+      влекать их в местах с экстремальными условиями. Для их поиска приходится бур\
+      ить многокилометровые скважины или конденсировать пары из верхних слоев атмо\
+      сферы. Однако когда жидкости уже найдены, постройка добывающего комплекса ст\
+      ановится относительно простой задачей. Необходимо всего лишь оградить его от\
+      \ окружения: интерференции от плазмы, магматических потоков или потенциально\
+      \ патогенных бактерий. С подобных враждебных миров можно извлекать поразител\
+      ьно большие количество ценных жидкостей, но для этого требуется тщательно от\
+      калиброванное оборудование, которое постоянно требует техобслуживания."
+    zh: "在恶劣的环境中探寻所需要的水溶液几乎同采集它们一样，是一项具有挑战性的任务。通常必须要钻探到地表以下数千米的深度，或者在上层大气层中进行气体液化作\
+      业。当水溶液被发现后，设施会直接对其进行简单的处理，将其从环境中分隔开，避免环境流质，岩浆的干扰及可能存在的细菌污染。在环境恶劣的星球上，可以采集到大量\
+      的水性溶液，但这要求所有的设备都受到了精心的维护和校对。"
+  graphicID: 4544
+  groupID: 1026
+  name:
+    de: "Temperate Aqueous Liquid Extractor"
+    en: "Temperate Aqueous Liquid Extractor"
+    es: "Extractor de líquido acuoso templado"
+    fr: "Extracteur de liquide aqueux en milieu tempéré"
+    ja: "温暖惑星用水性液体エクストラクター"
+    ko: "수성 액체 추출기 (온대 행성)"
+    ru: "Temperate Aqueous Liquid Extractor"
+    zh: "温和行星水基液体采集器"
+  portionSize: 1
+  published: true
+"2016":
+  description:
+    de: "Dürreplaneten sind archetypische \"tote Gebiete\": trockene, felsige Welten\
+      \ mit minimaler Atmosphäre und unauffälliger Struktur. Meistens sind sie von\
+      \ Hochwasserkanälen durchzogen, die oft breit genug sind, um von der Umlaufbahn\
+      \ aus sichtbar zu sein. Die meisten dieser Welten haben über die Jahre hinweg\
+      \ beträchtliche Mengen von Eis angehäuft, können dieses aber nicht an ihrer\
+      \ Oberfläche halten. Normalerweise verdunsten Flüssigkeiten an der Oberfläche\
+      \ schnell und tragen so zu der dünnen Atmospähre bei, aber gelegentlich sickert\
+      \ die Flüssigkeit auch zurück in den Grund und gefriert dort wieder, bis es\
+      \ in der Zukunft aufgrund des örtlichen Temperaturanstiegs wieder zum Vorschein\
+      \ tritt."
+    en: "Barren planets are archetypical \"dead terrestrials\": dry, rocky worlds\
+      \ with a minimal atmosphere and an unremarkable composition. They are commonly\
+      \ etched with flood channels, which are often broad enough to be visible from\
+      \ orbit; most such worlds have accumulated significant quantities of ice over\
+      \ their lifetimes, but cannot retain it on their surface. Generally surface\
+      \ liquid evaporates rapidly, contributing to the thin atmosphere, but occasionally\
+      \ it will seep back into the ground and refreeze, ready for another breakout\
+      \ in future when the local temperature rises."
+    es: "Los planetas estériles son «cuerpos celestes muertos» arquetípicos: mundos\
+      \ secos y rocosos con una atmósfera mínima y una composición que deja que desear.\
+      \ Su superficie suele estar surcada por ramblas de inundaciones, a menudo tan\
+      \ anchas que son visibles desde la órbita. A lo largo de su historia, la mayorí\
+      a de estos mundos ha acumulado grandes cantidades de hielo, pero no son capaces\
+      \ de retenerlo, pues el líquido más superficial se evapora rápidamente, lo que\
+      \ contribuye a que la atmósfera sea fina, si bien a veces retorna al suelo y\
+      \ vuelve a congelarse hasta la próxima emanación, cuando vuelven a aumentar\
+      \ las temperaturas."
+    fr: "Les planètes arides sont l'archétype des «\_planètes telluriques mortes\_\
+      »\_: des mondes rocheux et désertiques avec une atmosphère minime et une composition\
+      \ ordinaire. Elles sont généralement traversées par des canaux de crue assez\
+      \ grands pour être visibles depuis l'espace. La plupart de ces mondes ont accumulé\
+      \ des quantités remarquables de glace au cours des siècles, mais n'ont pas pu\
+      \ les conserver à leur surface. Bien souvent, le liquide à la surface s'évapore\
+      \ rapidement, contribuant de ce fait à la faible couche d'atmosphère, même s'il\
+      \ peut arriver qu'il s'infiltre dans le sol et gèle à nouveau, en attendant\
+      \ les prochaines températures élevées pour s'évaporer."
+    ja: "荒地惑星は、原型的な「生命のない大地」である。最小限の空気と平凡な構成の乾燥した岩だらけの世界である。これらの惑星には、衛星軌道から確認できるほど\
+      の広さがある洪水路が刻まれていることが多い。このような世界のほとんどでは、その存続期間にわたり大量の氷が蓄積されるが、地表に留まることはない。多くの場合\
+      、地表の液体は急速に蒸発して薄い大気に貢献しているが、時には地下に浸透して地域の温度上昇時に再び地表に流出することもある。"
+    ko: "사막 행성은 전형적인 \"죽은 행성\"으로 암석 지형, 건조한 기후, 최소한의 대기 수준, 그리고 불균형적인 구성 요소를 지니고 있\
+      습니다. 지표면에는 다수의 방수로가 새겨져 있으며 이는 궤도상에서도 뚜렷하게 관측이 가능합니다. 사막 행성의 경우 상당량의 얼음이 생성되\
+      며 지표면에 짧은 시간 축적됩니다. 이후 행성 온도가 상승하면 지표면에 생성된 얼음은 급속도로 증발한 뒤 대기로 순환됩니다."
+    ru: "Бесплодные планеты часто называют «мертвыми землеподобными планетами». Эт\
+      о сухие, скалистые миры с разреженной атмосферой и бедным минеральным состав\
+      ом. Обычно их поверхность изборождена ливневыми руслами, которые можно разгл\
+      ядеть с орбиты. Большинство таких миров за время своего существования накопи\
+      ло огромные количества льда; но они не в состоянии удержать его на поверхнос\
+      ти. Обычно жидкость быстро испаряется с поверхности и переходит в разреженну\
+      ю атмосферу, но временами она вновь просачивается в грунт и снова замерзает\
+      \ там, где и дожидается очередного местного повышения температуры, оттаивани\
+      я и высвобождения."
+    zh: "贫瘠行星拥有典型的“死亡地貌”：干燥、多岩石、大气稀薄、矿物构成简单。这些星球的表面通常会有沟壑，很多沟壑的宽度之大甚至可以在行星轨道上用肉眼看见\
+      。大多数此类行星在形成过后的很长时间里都存积了大量的冰，但是它们无法将这些水份保持在自己的表面上。行星表面的液体会快速地蒸发，留下稀薄的大气。不过也会有\
+      例外的情况，它们会反方向渗透到更深的土层中，凝结起来等待下一次温度升高而再次向上突破。"
+  graphicID: 3837
+  groupID: 7
+  iconID: 10135
+  mass: 100000000000000000000000000000000000
+  name:
+    de: "Planet (Barren)"
+    en: "Planet (Barren)"
+    es: "Planeta (baldío)"
+    fr: "Planète (aride)"
+    ja: "惑星（荒地）"
+    ko: "사막 행성"
+    ru: "Planet (Barren)"
+    zh: "行星（贫瘠）"
+  portionSize: 1
+  published: false
+  radius: 10000
+  volume: 1
+"11":
+  description:
+    de: "Lebenspendende Welten sind häufig unter dem Namen \"Gemäßigte Planeten\"\
+      \ bekannt, da die vorherrschende milde Temperatur eines ihrer Hauptmerkmale\
+      \ ist. Planeten mit existierenden, stabilen Ökosystemen sind Hauptziele für\
+      \ Besiedlungsprojekte, da es in der Regel einfacher ist, diese vollständig bewohnbar\
+      \ zu machen. Als Folge dessen gehört die Mehrheit aller hochbevölkerten Welten\
+      \ zu diesem Typ. Tatsächlich ist es nicht ungewöhnlich, dass im Rahmen detaillierter\
+      \ Gutachten, Zeichen früherer Siedlungen aus verschiedenen Epochen der Geschichte\
+      \ New Edens entdeckt werden."
+    en: "Life-bearing worlds are often referred to as \"temperate\", as their mild\
+      \ temperatures are one of their defining features. Planets with existing, stable\
+      \ ecosystems are prime targets for colonization efforts as they are generally\
+      \ easier to make fully habitable; as a result, the majority of highly populated\
+      \ worlds are of this type. Indeed, it is not altogether uncommon for detailed\
+      \ surveys to reveal signs of previous settlements from various stages of New\
+      \ Eden's history."
+    es: "Los mundos capaces de sustentar vida suelen conocerse como «templados», ya\
+      \ que su suave temperatura es una de sus características definitorias. Los planetas\
+      \ con ecosistemas estables preexistentes son objetivos prioritarios para los\
+      \ esfuerzos de colonización, ya que suelen ser más fáciles de convertir en habitables.\
+      \ Por ello, la mayoría de los mundos muy poblados son de este tipo. Sin duda,\
+      \ es habitual que las inspecciones detalladas revelen señales de asentamientos\
+      \ anteriores de distintos momentos de la historia de Nuevo\_Edén."
+    fr: "Les planètes portant la vie sont souvent appelées «\_tempérées\_», puisqu'elles\
+      \ se caractérisent principalement par leurs températures clémentes. Les planè\
+      tes présentant un écosystème stable sont les cibles privilégiées des colonisateurs,\
+      \ puisqu'elles sont souvent entièrement habitables. Par conséquent, la plupart\
+      \ des mondes habités sont des planètes tempérées. En effet, de nombreux rapports\
+      \ ont déjà révélé des traces d'anciennes colonies à plusieurs moments de l'histoire\
+      \ de New Eden."
+    ja: "生命の息づく世界は、その温暖な気候が顕著な特徴の一つであるため、しばしば「温暖」と称される。安定した生態系が既に存在する惑星は、可住環境を築きやす\
+      いため入植活動の主要なターゲットとなる。結果として、人口の密集している世界の多くは、このタイプの惑星である。実際に、詳細な調査によってニューエデン歴史上\
+      の早い段階での入植の痕跡が見つかることも珍しくはない。"
+    ko: "생명체가 존재하는 행성들은 생명을 유지할 수 있는 포근한 기온을 가졌기에 \"온대\" 행성으로 불립니다. 안정적인 생태계를 보유한\
+      \ 행성은 주거할 수 있는 환경을 조성하기에 비교적 쉬우므로 식민지화의 주요 타겟이 되곤합니다. 그 결과 인구가 많은 대부분의 행성은 이\
+      러한 특징을 지녔다는 점을 볼 수 있습니다. 실제로 온대기후의 행성을 정밀 탐사하였을 때 고대 인류들의 정착 흔적이 나타나는 것은 드문\
+      \ 일이 아닙니다."
+    ru: "Планеты, на которых имеется жизнь, обычно называются «умеренными», поскол\
+      ьку их наиболее характерная черта – мягкий климат. Планеты с уже существующи\
+      ми стабильными экосистемами являются первейшей целью при колонизации, поскол\
+      ьку их обычно проще превратить в полностью обитаемые. Поэтому большинство об\
+      итаемых миров принадлежит именно к этому типу. И действительно, в результате\
+      \ пристального изучения на них обычно обнаруживают следы прежних поселений,\
+      \ которые можно проследить вспять к различным эпохам в истории Нового Эдема."
+    zh: "能够孕育生命的星球通常都被认作是“温和”的星球，其所拥有的适宜气候就是它们的首要特征。存在有稳定生态系统的星球通常会被作为殖民规划的首要选择，因为\
+      要在这些星球上生存下来，相对要容易得多。因此，绝大多数人口稠密的行星实际上都是属于这种类型的星体。总的来说，想要通过细致的勘察在新伊甸中发现各个历史时期\
+      的居住痕迹，并不是一件十分困难的事情。"
+  graphicID: 3832
+  groupID: 7
+  iconID: 10136
+  mass: 100000000000000000000000000000000000
+  name:
+    de: "Planet (Temperate)"
+    en: "Planet (Temperate)"
+    es: "Planeta (templado)"
+    fr: "Planète (tempérée)"
+    ja: "惑星（温暖）"
+    ko: "온대 행성"
+    ru: "Planet (Temperate)"
+    zh: "行星（温和）"
+  portionSize: 1
+  published: false
+  radius: 10000
+  volume: 1
+"2470":
+  basePrice: 250000
+  description:
+    de: "Anstatt die in dieser industriellen Einrichtung vorhandene Hitze, Interferenz\
+      \ und den vernichtenden Druck zur Abschirmung der Fertigungsanlage gegen Umwelteinflü\
+      sse zu nutzen, haben sich die Designer entschlossen, diese Faktoren zu verwenden,\
+      \ um die Struktur selbst mit Strom zu versorgen. Eine Betriebsanlage auf einem\
+      \ Eisplaneten könnte über fortschrittliche, erweiterte Kühlkörper verfügen,\
+      \ während eine Fabrik auf einem Plasmaplaneten ihre meiste, wenn nicht sogar\
+      \ ihre gesamte, Elektrizität aus magnetisierten Spulen gewinnen könnte, die\
+      \ speziell auf die lokalen Ionenwinde des Planeten abgestimmt sind. Sich die\
+      \ vorherrschenden Merkmale jeder Welt zu Nutze zu machen, hilft dabei, die Kosten\
+      \ der Errichtung einer Infrastruktur zur Massenproduktion zu senken. Eine wichtige\
+      \ Rolle spielen dabei meistens Oberflächenschutz, an die Umgebung angepasste\
+      \ Kleidung und verbesserte Fundamente."
+    en: "Instead of laboring to shield the production lines of this industrial facility\
+      \ from the surrounding environment, designers opted instead to use the available\
+      \ heat, interference, and even crushing pressure to help power the structure\
+      \ itself. A plant on an ice planet might have highly advanced extended heat\
+      \ sinks, while a factory on a plasma world might draw most, if not all of its\
+      \ electricity from magnetized coils specially attuned to the planet's local\
+      \ ion winds. Taking advantage of the indigenous features of each world helps\
+      \ offset the cost of building mass production infrastructure there, which usually\
+      \ involves protective coatings, environmental clothing, and reinforced foundations."
+    es: "En lugar de esforzarse por proteger las cadenas de producción de este centro\
+      \ industrial, los diseñadores optaron por usar el calor disponible, las interferencias\
+      \ e incluso la aplastante presión para alimentar la propia estructura. Una central\
+      \ en un planeta de hielo podría tener disipadores de calor muy avanzados, mientras\
+      \ que una fábrica en un mundo plasmático podría recoger la mayor parte de la\
+      \ electricidad, si no toda, de bobinas magnetizadas especialmente sintonizadas\
+      \ con los vientos iónicos locales. Aprovechar las características autóctonas\
+      \ de cada mundo ayuda a compensar el coste de las infraestructuras de producció\
+      n a gran escala, que suele implicar recubrimientos protectores, ropa ambiental\
+      \ y cimientos reforzados."
+    fr: "Au lieu de travailler pour protéger les lignes de production de ce complexe\
+      \ industriel face aux dangers de l'environnement, les concepteurs ont choisi\
+      \ d'utiliser la chaleur, les interférences, et même la pression écrasante pour\
+      \ contribuer à l'alimentation de la structure en elle-même. Si une usine sur\
+      \ une planète de glace peut posséder des dissipateurs de chaleur avancés, une\
+      \ usine sur une planète de plasma peut tirer tout ou partie de son électricité\
+      \ des anneaux magnétiques en harmonie avec les vents ioniques de la planète.\
+      \ Tirer profit des caractéristiques naturelles de chaque monde permet ainsi\
+      \ de compenser le coût de construction des infrastructures de production de\
+      \ masse, qui présentent généralement des revêtements de protection, des couvertures\
+      \ environnementales, et des fondations renforcées."
+    ja: "生産ラインを周辺環境から保護するために設計者が選んだのは、労力を使う代わりに、周囲の熱、干渉、さらには圧縮圧までを建造物への電力供給に利用するとい\
+      う手法であった。アイス型惑星の設備が非常に高性能な放熱機を備えている一方、プラズマ型惑星の工場では、惑星のイオン風力に合わせて特別に調整された磁化コイル\
+      から、全部ではないが大部分の電力を得ている。各惑星に固有の特性を利用することで、大量生産インフラストラクチャの建築にかかるコストを補っているのである。一\
+      般的なものには、保護コーティング、環境に適応した服、強化土台の費用などがある。"
+    ko: "방어 시설을 건설하는 대신 주변 환경을 통해 생산라인을 유지합니다. 일반적으로 열이나 압력 등의 외부 요소를 활용함으로써 공장의 가\
+      동 전력을 확보합니다. 유사한 방식으로 얼음 행성에서는 고성능 방열 장치를 운용하며 플라즈마 행성에서는 전자 코일을 통해 전력을 수급합니\
+      다. 각 행성의 고유 특성을 활용함으로써 보호 코팅이나 환경 적응 시설 등의 대형 기반 시설을 건설하는데 소모되는 비용을 감축합니다."
+    ru: "Вместо того, чтобы затрачивать массу усилий на ограждение этой фабрики от\
+      \ внешних условий, конструкторы пошли по другому пути: они используют доступ\
+      ные высокие температуры, интерференцию и даже ужасающе высокое давление для\
+      \ снабжения ее энергией. На ледовой планете фабрика будет оснащена модернизи\
+      рованными теплоприемниками; на плазмовой планете она будет получать львиную\
+      \ долю электричества от соленоидов, специально настроенных на местные ионные\
+      \ ветра. Приспосабливаемость к особым условиям каждой планеты уменьшает расх\
+      оды на строительство комплексов, в которых обычно применяются защитные покры\
+      тия (в том числе от условий окружающей среды) укрепленные основания."
+    zh: "这座工业设施并没有使用繁复措施去保护其中的生产线不受环境的影响，相反，设计师利用周围所产生的热能、干扰以及强大压力来为整座设施提供能量。冰体行星上\
+      的工厂设施可能需要非常先进和强大的散热设备。而在等离子行星上，工厂设施常常会需要其磁线圈所产生的大部分电量，这些磁线圈都按照当地的离子风进行了调整。通过\
+      利用各种星球不同的本土特性，人们不再需要花费建筑大规模工厂的高成本，这些成本原本包括了保护性外壳，环境隔离层以及强化的建筑基础。"
+  graphicID: 4534
+  groupID: 1028
+  name:
+    de: "Lava Advanced Industry Facility"
+    en: "Lava Advanced Industry Facility"
+    es: "Centro industrial avanzado de lava"
+    fr: "Site d'industrie avancée en milieu volcanique"
+    ja: "溶岩惑星用高性能インダストリー施設"
+    ko: "첨단 산업시설 (마그마 행성)"
+    ru: "Lava Advanced Industry Facility"
+    zh: "熔岩行星高级工业设施"
+  portionSize: 1
+  published: true
+"2480":
+  basePrice: 250000
+  description:
+    de: "Beinahe komplett durch Roboter-Arbeitskräfte besetzt, zeichnen sich Massenproduktionseinrichtungen\
+      \ durch die Fertigung von Artikeln in großen Mengen bei minimaler Aufsicht und\
+      \ Instandhaltung aus. Sie können sogar so unabhängig sein, dass man munkelt,\
+      \ es gäbe Fabriken der Gallente, die vollständig von Androiden betrieben und\
+      \ von einer Notmannschaft von Drohnen gelenkt werden. (Kritiker dieser Methode\
+      \ merken gerne an, dass die Einrichtungen von Sansha auf sehr ähnliche Art funktionieren.)\
+      \ So oder so - die Ergebnisse sind unwiderlegbar: Rohmaterialien und Bauteile\
+      \ werden auf der einen Seite zugeführt und auf der anderen Seite erscheinen\
+      \ die glänzenden Güter."
+    en: "Populated almost entirely by robotic laborers, mass production facilities\
+      \ excel at creating products in bulk with minimal supervision and maintenance.\
+      \ They can be so self-sufficient that rumors abound of Gallente factories operated\
+      \ entirely by androids and governed by a skeleton crew of drones. (Detractors\
+      \ of this method like to note that Sansha facilities work in much the same fashion.)\
+      \ Either way, the results are irrefutable: Raw materials and components go in\
+      \ one end, and polished commodities come out the other side."
+    es: "Operados casi por completo por obreros robóticos, los centros de producció\
+      n en masa destacan por la fabricación de productos a granel con una supervisió\
+      n y un mantenimiento mínimos. Poseen tal autosuficiencia que existen rumores\
+      \ sobre fábricas gallentes operadas completamente por androides y dirigidas\
+      \ por una tripulación mínima de drones. (A los detractores de este método les\
+      \ gusta señalar que los centros sanshas funcionan de forma muy parecida). En\
+      \ cualquier caso, los resultados son irrefutables: entran materias primas y\
+      \ componentes y salen productos refinados."
+    fr: "Peuplées presque intégralement d'ouvriers robotiques, les installations de\
+      \ production de masse excellent dans la création de produits en gros avec une\
+      \ surveillance et un entretien minimes. Elles peuvent être si autonomes qu'on\
+      \ raconte que des usines gallente seraient gérées uniquement par des androï\
+      des et dirigées par un équipage de drones. (Les détracteurs de cette méthode\
+      \ aiment d'ailleurs faire remarquer que les installations sansha fonctionnent\
+      \ aussi de cette façon.) Quoi qu'il en soit, les résultats sont irréfutables\
+      \ : les matières premières et les composants y entrent d'un côté, tandis que\
+      \ des marchandises raffinées en sortent de l'autre."
+    ja: "ほぼ全面に作業用ロボットが投入されている大量生産施設は、最小限の監督とメンテナンスで大量の製品を製造できるという利点を持つ。この施設は自給自足度が\
+      高いため、広く流布している噂によれば、ガレンテの工場は全面的にアンドロイドによって運営されており、最小限のドローンが監督しているということだ（このやり方\
+      を非難する者は、サンシャの施設もこれとほぼ同じ形式だと指摘することが多い）。いずれにせよ、未加工の資源と部品を入れると、加工品が出てくることだけは確かだ\
+      。"
+    ko: "안드로이드를 통해 운영되는 대규모 생산 시설로 최소한의 관리 및 유지 보수로 대량의 제품을 생산합니다. 높은 자급률 탓에 안드로이드\
+      가 생산을 담당하고 드론 부대가 감독관 역할을 수행한다는 기묘한 소문이 존재합니다. (산샤 네이션과 생산 프로세스가 유사하다는 점 때문에\
+      \ 비판이 제기되고 있습니다) 각종 비판에도 불구하고 결과 자체는 나무랄 데가 없습니다. 실제로 원자재 및 부품을 투입하면 완성품이 나오\
+      는 매우 효율적인 생산 과정을 자랑합니다."
+    ru: "Комплексы для массового производства практически полностью автоматизирова\
+      ны, что позволяет производить товары крупными партиями с минимальными затрат\
+      ами на надзор и обслуживание. Эти комплексы настолько автономны, что породил\
+      и слухи: на галлентских фабриках трудятся исключительно андроиды под командо\
+      ванием дронов. (Противники этого метода производства никогда не упускают отм\
+      етить, что фабрики саншистов работают по этим же принципам.) Впрочем, резуль\
+      таты в любом случае неоспоримы: извне фабрика получает партии сырья и разроз\
+      ненные запчасти, а на выход поступают отличные товары."
+    zh: "这里最主要的劳动力是机器人，像这样的大型量产设施的管理和维护非常少，而它们非常善于制造大量的产品。这些工厂可以做到如此地自给自足，有传闻说盖伦特的\
+      工厂甚至全部是由仿生人进行操作的，而管理人员则是一些智能的无人机。（对这种生产方式的嘲讽者总喜欢说萨沙也几乎采用了同样工作方式的生产设施。）不管怎样，其\
+      结果是不容否定的：原料和零件从一边进入，漂亮的格式产品就能从另一边出来。"
+  graphicID: 4523
+  groupID: 1028
+  name:
+    de: "Temperate Advanced Industry Facility"
+    en: "Temperate Advanced Industry Facility"
+    es: "Centro industrial avanzado templado"
+    fr: "Site d'industrie avancée en milieu tempéré"
+    ja: "温暖惑星用高性能インダストリー施設"
+    ko: "첨단 산업시설 (온대 행성)"
+    ru: "Temperate Advanced Industry Facility"
+    zh: "温和行星高级工业设施"
+  portionSize: 1
+  published: true

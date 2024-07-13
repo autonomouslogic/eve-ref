@@ -100,6 +100,16 @@ types:
       - 17471
       - 35892
       - 35833
+      - 9838
+      - 2389
+      - 3645
+      - 2268
+      - 2409
+      - 2412
+      - 2016
+      - 11
+      - 2470
+      - 2480
     languages:
       - en-us
       - fr
@@ -322,3 +332,21 @@ regions:
     languages:
       - en-us
       - ja
+
+schematics:
+  idField: schematic_id
+  model: Schematic
+  esi:
+    file: universe/schematics
+    renames:
+      schematic_name: name
+    languageAttributes:
+      - name
+  sde:
+    file: fsd/planetSchematics.yaml
+    renames:
+      name_id: name
+  test:
+    filePrefix: schematic
+    ids:
+      - 65

@@ -171,11 +171,6 @@ public class PublishRefDataTest {
 
 	@SneakyThrows
 	private void assertTypeBundle(long id, RefDataConfig config, RefTestConfig testConfig, Set<String> expectedKeys) {
-		// Multiplasmids don't get bundles.
-		if (id == 52225) {
-			return;
-		}
-
 		var path = String.format("base/%s/%s/bundle", config.getOutputFile(), id);
 		expectedKeys.add(path);
 

@@ -170,4 +170,30 @@ public class InventoryType {
 	@JsonProperty
 	@Schema(description = "Types which can be fitted. This is added by EVE Ref.")
 	List<Long> canBeFittedWithTypes;
+
+	@JsonProperty
+	@Schema(description = "The schematics consuming this type. This is added by EVE Ref.")
+	List<Long> usedBySchematicIds;
+
+	@JsonProperty
+	@Schema(description = "The schematics producing this type. This is added by EVE Ref.")
+	List<Long> producedBySchematicIds;
+
+	@JsonProperty
+	@Schema(
+			description =
+					"The type IDs for the planetary extractor pins which can be used to harvest this type. This is added by EVE Ref.")
+	List<Long> harvestedByPinTypeIds;
+
+	@JsonProperty
+	@Schema(
+			description =
+					"The type IDs for the planetary pins which can be built on this planet. This is added by EVE Ref.")
+	List<Long> buildablePinTypeIds;
+
+	@JsonProperty
+	@Schema(
+			description =
+					"The schematic IDs which can be installed into this planetary processor. This is added by EVE Ref.")
+	List<Long> installableSchematicIds;
 }
