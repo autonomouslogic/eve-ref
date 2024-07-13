@@ -1,5 +1,14 @@
 EVE Ref Changelog
 
+## [2.46.0](https://github.com/autonomouslogic/eve-ref/compare/2.45.8...2.46.0) (2024-07-13)
+
+
+### Features
+
+* **refdata:** Planetary interaction schematics in reference data ([#541](https://github.com/autonomouslogic/eve-ref/issues/541)) ([b80c74f](https://github.com/autonomouslogic/eve-ref/commit/b80c74fcbed364b69931e0de03f8287e84d3960e))
+* **ui:** Faction implants in skill points page ([#539](https://github.com/autonomouslogic/eve-ref/issues/539)) ([ad2c80a](https://github.com/autonomouslogic/eve-ref/commit/ad2c80aad8776f2c885556c0761199576d94c10f))
+* **ui:** Planetary schematics ([#543](https://github.com/autonomouslogic/eve-ref/issues/543)) ([0bb75aa](https://github.com/autonomouslogic/eve-ref/commit/0bb75aa3371d3586e0388b4f779d76d9ecff2f20))
+
 ## [2.45.8](https://github.com/autonomouslogic/eve-ref/compare/2.45.7...2.45.8) (2024-07-02)
 
 
