@@ -1,9 +1,11 @@
 package com.autonomouslogic.everef.cli.refdata.post;
 
 import com.autonomouslogic.everef.cli.refdata.StoreDataHelper;
+import com.autonomouslogic.everef.refdata.InventoryType;
 import com.autonomouslogic.everef.refdata.Schematic;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.reactivex.rxjava3.core.Completable;
 import java.util.List;
@@ -14,6 +16,8 @@ import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 public class SchematicDecorator extends PostDecorator {
+	private static final int HARVESTED_TYPE_DOGMA_ATTRIBUTE_ID = 709;
+
 	@Inject
 	protected ObjectMapper objectMapper;
 
@@ -26,6 +30,7 @@ public class SchematicDecorator extends PostDecorator {
 
 	public Completable create() {
 		return Completable.fromAction(() -> {
+			helper = new StoreDataHelper(storeHandler, objectMapper);
 			log.info("Decorating schematics");
 			helper = new StoreDataHelper(storeHandler, objectMapper);
 			types = storeHandler.getRefStore("types");
@@ -36,6 +41,10 @@ public class SchematicDecorator extends PostDecorator {
 				var schematic = objectMapper.convertValue(schematicJson, Schematic.class);
 				handleMaterials(schematic, schematicId);
 				handleProducts(schematic, schematicId);
+			}
+			for (Map.Entry<Long, JsonNode> typeEntry : types.entrySet()) {
+				var type = objectMapper.convertValue(typeEntry.getValue(), InventoryType.class);
+				handleHarvestedBy(type);
 			}
 		});
 	}
@@ -76,5 +85,23 @@ public class SchematicDecorator extends PostDecorator {
 		var obj = productType.withArray("/produced_by_schematic_ids");
 		obj.add(schematicId);
 		types.put(productTypeId, productType);
+	}
+
+	private void handleHarvestedBy(InventoryType extractorType) {
+		var harvestedTypeId = helper.getDogmaFromType(extractorType, HARVESTED_TYPE_DOGMA_ATTRIBUTE_ID)
+				.map(t -> t.getValue().longValue());
+		if (harvestedTypeId.isEmpty()) {
+			return;
+		}
+		var harvestedTypeNode = types.get(harvestedTypeId.get());
+		if (harvestedTypeNode == null) {
+			log.warn(
+					"Could not set type {} as being harvested by extractor {}, not found",
+					harvestedTypeId.get(),
+					extractorType.getTypeId());
+			return;
+		}
+		((ArrayNode) harvestedTypeNode.withArray("/harvested_by_pin_type_ids")).add(extractorType.getTypeId());
+		types.put(harvestedTypeId.get(), harvestedTypeNode);
 	}
 }

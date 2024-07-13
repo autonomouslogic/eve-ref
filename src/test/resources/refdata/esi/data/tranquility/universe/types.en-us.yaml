@@ -1812,3 +1812,166 @@
   radius: 1
   type_id: 3645
   volume: 0.19
+"2268":
+  capacity: 0
+  description: "The abundance of water on terrestrial planets is often a misconception:\
+    \ What many refer to offhandedly as \"water\" is often an amalgamation of many\
+    \ liquids, microscopic particles, and saturated compounds combined with water\
+    \ and other liquids. Aqueous liquids represent those liquids from which pure water\
+    \ can be separated easily from waste or hazardous particles, but only using the\
+    \ proper equipment."
+  dogma_attributes:
+  - attribute_id: 161
+    value: 0.005
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 4
+    value: 0
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 1640
+    value: 5
+  - attribute_id: 1641
+    value: 5
+  group_id: 1033
+  icon_id: 10012
+  market_group_id: 1333
+  mass: 0
+  name: "Aqueous Liquids"
+  packaged_volume: 0.005
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 2268
+  volume: 0.005
+"2409":
+  capacity: 0
+  description: "Finding desired liquids on hostile worlds can be almost as challenging\
+    \ a task as extracting it from the unforgiving environment, which often entails\
+    \ drilling kilometers below the surface or condensing fluids from the upper atmosphere.\
+    \ Once the liquids are discovered, the facility itself begins the relatively simple\
+    \ task of separating it from the ambient plasma interference, scalding magma streams,\
+    \ or potentially infectious indigenous bacteria. A surprising amount of valuable\
+    \ liquids can be extracted from hostile worlds, but only if the equipment is properly\
+    \ calibrated and carefully maintained."
+  dogma_attributes:
+  - attribute_id: 1632
+    value: 2016
+  - attribute_id: 161
+    value: 0
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 4
+    value: 0
+  - attribute_id: 709
+    value: 2268
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 1642
+    value: 1000
+  - attribute_id: 1643
+    value: 300
+  - attribute_id: 1644
+    value: 5
+  - attribute_id: 1645
+    value: 1
+  - attribute_id: 15
+    value: 800
+  - attribute_id: 49
+    value: 200
+  graphic_id: 4544
+  group_id: 1026
+  mass: 0
+  name: "Barren Aqueous Liquid Extractor"
+  packaged_volume: 0
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 2409
+  volume: 0
+"2412":
+  capacity: 0
+  description: "Finding desired liquids on hostile worlds can be almost as challenging\
+    \ a task as extracting it from the unforgiving environment, which often entails\
+    \ drilling kilometers below the surface or condensing fluids from the upper atmosphere.\
+    \ Once the liquids are discovered, the facility itself begins the relatively simple\
+    \ task of separating it from the ambient plasma interference, scalding magma streams,\
+    \ or potentially infectious indigenous bacteria. A surprising amount of valuable\
+    \ liquids can be extracted from hostile worlds, but only if the equipment is properly\
+    \ calibrated and carefully maintained."
+  dogma_attributes:
+  - attribute_id: 1632
+    value: 11
+  - attribute_id: 161
+    value: 0
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 4
+    value: 0
+  - attribute_id: 709
+    value: 2268
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 1642
+    value: 1000
+  - attribute_id: 1643
+    value: 300
+  - attribute_id: 1644
+    value: 5
+  - attribute_id: 1645
+    value: 1
+  - attribute_id: 15
+    value: 800
+  - attribute_id: 49
+    value: 200
+  graphic_id: 4544
+  group_id: 1026
+  mass: 0
+  name: "Temperate Aqueous Liquid Extractor"
+  packaged_volume: 0
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 2412
+  volume: 0
+"2016":
+  capacity: 0
+  description: "Barren planets are archetypical \"dead terrestrials\": dry, rocky\
+    \ worlds with a minimal atmosphere and an unremarkable composition. They are commonly\
+    \ etched with flood channels, which are often broad enough to be visible from\
+    \ orbit; most such worlds have accumulated significant quantities of ice over\
+    \ their lifetimes, but cannot retain it on their surface. Generally surface liquid\
+    \ evaporates rapidly, contributing to the thin atmosphere, but occasionally it\
+    \ will seep back into the ground and refreeze, ready for another breakout in future\
+    \ when the local temperature rises."
+  graphic_id: 3837
+  group_id: 7
+  icon_id: 10135
+  mass: 100000000000000000000000000000000000
+  name: "Planet (Barren)"
+  packaged_volume: 1
+  portion_size: 1
+  published: false
+  radius: 10000
+  type_id: 2016
+  volume: 1
+"11":
+  capacity: 0
+  description: "Life-bearing worlds are often referred to as \"temperate\", as their\
+    \ mild temperatures are one of their defining features. Planets with existing,\
+    \ stable ecosystems are prime targets for colonization efforts as they are generally\
+    \ easier to make fully habitable; as a result, the majority of highly populated\
+    \ worlds are of this type. Indeed, it is not altogether uncommon for detailed\
+    \ surveys to reveal signs of previous settlements from various stages of New Eden's\
+    \ history."
+  graphic_id: 3832
+  group_id: 7
+  icon_id: 10136
+  mass: 100000000000000000000000000000000000
+  name: "Planet (Temperate)"
+  packaged_volume: 1
+  portion_size: 1
+  published: false
+  radius: 10000
+  type_id: 11
+  volume: 1

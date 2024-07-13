@@ -617,6 +617,8 @@ components:
         probability:
           type: number
           format: double
+      description: "This is called 'types' in the SDE, but EVE Ref converts it to\
+        \ 'materials' and 'products' to be consistent with blueprints."
     Bundle:
       type: object
       properties:
@@ -1317,10 +1319,14 @@ components:
           type: object
           additionalProperties:
             $ref: "#/components/schemas/BlueprintMaterial"
+          description: "This is called 'types' in the SDE, but EVE Ref converts it\
+            \ to 'materials' and 'products' to be consistent with blueprints."
         products:
           type: object
           additionalProperties:
             $ref: "#/components/schemas/BlueprintMaterial"
+          description: "This is called 'types' in the SDE, but EVE Ref converts it\
+            \ to 'materials' and 'products' to be consistent with blueprints."
         pin_type_ids:
           type: array
           items:

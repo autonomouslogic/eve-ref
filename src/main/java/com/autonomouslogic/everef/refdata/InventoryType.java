@@ -178,4 +178,10 @@ public class InventoryType {
 	@JsonProperty
 	@Schema(description = "The schematics producing this type. This is added by EVE Ref.")
 	List<Long> producedBySchematicIds;
+
+	@JsonProperty
+	@Schema(
+			description =
+					"The type IDs for the extractor pins which can be used to harvest this type. This is added by EVE Ref.")
+	List<Long> harvestedByPinTypeIds;
 }

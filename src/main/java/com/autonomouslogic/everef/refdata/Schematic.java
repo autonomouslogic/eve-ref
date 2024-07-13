@@ -16,6 +16,9 @@ import lombok.extern.jackson.Jacksonized;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @Schema
 public class Schematic {
+	private static final String TYPES_DOC = "This is called 'types' in the SDE, but EVE Ref converts it to "
+			+ "'materials' and 'products' to be consistent with blueprints.";
+
 	@JsonProperty
 	Long schematicId;
 
@@ -26,9 +29,11 @@ public class Schematic {
 	Long cycleTime;
 
 	@JsonProperty
+	@Schema(description = TYPES_DOC)
 	Map<Long, BlueprintMaterial> materials;
 
 	@JsonProperty
+	@Schema(description = TYPES_DOC)
 	Map<Long, BlueprintMaterial> products;
 
 	@JsonProperty

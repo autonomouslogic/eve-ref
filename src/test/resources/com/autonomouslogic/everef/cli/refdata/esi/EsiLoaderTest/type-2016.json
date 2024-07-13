@@ -1,0 +1,21 @@
+{
+  "capacity" : 0,
+  "description" : {
+    "en" : "Barren planets are archetypical \"dead terrestrials\": dry, rocky worlds with a minimal atmosphere and an unremarkable composition. They are commonly etched with flood channels, which are often broad enough to be visible from orbit; most such worlds have accumulated significant quantities of ice over their lifetimes, but cannot retain it on their surface. Generally surface liquid evaporates rapidly, contributing to the thin atmosphere, but occasionally it will seep back into the ground and refreeze, ready for another breakout in future when the local temperature rises.",
+    "fr" : "Les planètes arides sont l'archétype des « planètes telluriques mortes » : des mondes rocheux et désertiques avec une atmosphère minime et une composition ordinaire. Elles sont généralement traversées par des canaux de crue assez grands pour être visibles depuis l'espace. La plupart de ces mondes ont accumulé des quantités remarquables de glace au cours des siècles, mais n'ont pas pu les conserver à leur surface. Bien souvent, le liquide à la surface s'évapore rapidement, contribuant de ce fait à la faible couche d'atmosphère, même s'il peut arriver qu'il s'infiltre dans le sol et gèle à nouveau, en attendant les prochaines températures élevées pour s'évaporer."
+  },
+  "graphic_id" : 3837,
+  "group_id" : 7,
+  "icon_id" : 10135,
+  "mass" : 100000000000000000000000000000000000,
+  "name" : {
+    "en" : "Planet (Barren)",
+    "fr" : "Planète (aride)"
+  },
+  "packaged_volume" : 1,
+  "portion_size" : 1,
+  "published" : false,
+  "radius" : 10000,
+  "type_id" : 2016,
+  "volume" : 1
+}

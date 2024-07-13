@@ -1,0 +1,31 @@
+{
+  "description" : {
+    "de" : "Lebenspendende Welten sind häufig unter dem Namen \"Gemäßigte Planeten\" bekannt, da die vorherrschende milde Temperatur eines ihrer Hauptmerkmale ist. Planeten mit existierenden, stabilen Ökosystemen sind Hauptziele für Besiedlungsprojekte, da es in der Regel einfacher ist, diese vollständig bewohnbar zu machen. Als Folge dessen gehört die Mehrheit aller hochbevölkerten Welten zu diesem Typ. Tatsächlich ist es nicht ungewöhnlich, dass im Rahmen detaillierter Gutachten, Zeichen früherer Siedlungen aus verschiedenen Epochen der Geschichte New Edens entdeckt werden.",
+    "en" : "Life-bearing worlds are often referred to as \"temperate\", as their mild temperatures are one of their defining features. Planets with existing, stable ecosystems are prime targets for colonization efforts as they are generally easier to make fully habitable; as a result, the majority of highly populated worlds are of this type. Indeed, it is not altogether uncommon for detailed surveys to reveal signs of previous settlements from various stages of New Eden's history.",
+    "es" : "Los mundos capaces de sustentar vida suelen conocerse como «templados», ya que su suave temperatura es una de sus características definitorias. Los planetas con ecosistemas estables preexistentes son objetivos prioritarios para los esfuerzos de colonización, ya que suelen ser más fáciles de convertir en habitables. Por ello, la mayoría de los mundos muy poblados son de este tipo. Sin duda, es habitual que las inspecciones detalladas revelen señales de asentamientos anteriores de distintos momentos de la historia de Nuevo Edén.",
+    "fr" : "Les planètes portant la vie sont souvent appelées « tempérées », puisqu'elles se caractérisent principalement par leurs températures clémentes. Les planètes présentant un écosystème stable sont les cibles privilégiées des colonisateurs, puisqu'elles sont souvent entièrement habitables. Par conséquent, la plupart des mondes habités sont des planètes tempérées. En effet, de nombreux rapports ont déjà révélé des traces d'anciennes colonies à plusieurs moments de l'histoire de New Eden.",
+    "ja" : "生命の息づく世界は、その温暖な気候が顕著な特徴の一つであるため、しばしば「温暖」と称される。安定した生態系が既に存在する惑星は、可住環境を築きやすいため入植活動の主要なターゲットとなる。結果として、人口の密集している世界の多くは、このタイプの惑星である。実際に、詳細な調査によってニューエデン歴史上の早い段階での入植の痕跡が見つかることも珍しくはない。",
+    "ko" : "생명체가 존재하는 행성들은 생명을 유지할 수 있는 포근한 기온을 가졌기에 \"온대\" 행성으로 불립니다. 안정적인 생태계를 보유한 행성은 주거할 수 있는 환경을 조성하기에 비교적 쉬우므로 식민지화의 주요 타겟이 되곤합니다. 그 결과 인구가 많은 대부분의 행성은 이러한 특징을 지녔다는 점을 볼 수 있습니다. 실제로 온대기후의 행성을 정밀 탐사하였을 때 고대 인류들의 정착 흔적이 나타나는 것은 드문 일이 아닙니다.",
+    "ru" : "Планеты, на которых имеется жизнь, обычно называются «умеренными», поскольку их наиболее характерная черта – мягкий климат. Планеты с уже существующими стабильными экосистемами являются первейшей целью при колонизации, поскольку их обычно проще превратить в полностью обитаемые. Поэтому большинство обитаемых миров принадлежит именно к этому типу. И действительно, в результате пристального изучения на них обычно обнаруживают следы прежних поселений, которые можно проследить вспять к различным эпохам в истории Нового Эдема.",
+    "zh" : "能够孕育生命的星球通常都被认作是“温和”的星球，其所拥有的适宜气候就是它们的首要特征。存在有稳定生态系统的星球通常会被作为殖民规划的首要选择，因为要在这些星球上生存下来，相对要容易得多。因此，绝大多数人口稠密的行星实际上都是属于这种类型的星体。总的来说，想要通过细致的勘察在新伊甸中发现各个历史时期的居住痕迹，并不是一件十分困难的事情。"
+  },
+  "graphic_id" : 3832,
+  "group_id" : 7,
+  "icon_id" : 10136,
+  "mass" : 100000000000000000000000000000000000,
+  "name" : {
+    "de" : "Planet (Temperate)",
+    "en" : "Planet (Temperate)",
+    "es" : "Planeta (templado)",
+    "fr" : "Planète (tempérée)",
+    "ja" : "惑星（温暖）",
+    "ko" : "온대 행성",
+    "ru" : "Planet (Temperate)",
+    "zh" : "行星（温和）"
+  },
+  "portion_size" : 1,
+  "published" : false,
+  "radius" : 10000,
+  "volume" : 1,
+  "type_id" : 11
+}

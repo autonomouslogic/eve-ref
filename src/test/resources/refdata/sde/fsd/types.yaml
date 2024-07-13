@@ -2083,3 +2083,340 @@
   portionSize: 1
   published: true
   volume: 0.19
+"2268":
+  description:
+    de: "Die Fülle an Wasser auf terrestrischen Planeten ist oftmals eine Illusion:\
+      \ Was viele spontan als \"Wasser\" bezeichnen, ist häufig eine Verbindung aus\
+      \ vielen Flüssigkeiten, mikroskopischen Partikeln und gesättigten Komponenten,\
+      \ kombiniert mit Wasser und weiteren Flüssigkeiten. Wässrige Flüssigkeiten verkö\
+      rpern die Art von Flüssigkeit, aus der pures Wasser leicht von Abfall und gefä\
+      hrlichen Partikeln getrennt werden kann. Aber nur bei der Verwendung der richtigen\
+      \ Ausrüstung."
+    en: "The abundance of water on terrestrial planets is often a misconception: What\
+      \ many refer to offhandedly as \"water\" is often an amalgamation of many liquids,\
+      \ microscopic particles, and saturated compounds combined with water and other\
+      \ liquids. Aqueous liquids represent those liquids from which pure water can\
+      \ be separated easily from waste or hazardous particles, but only using the\
+      \ proper equipment."
+    es: "La abundancia de agua en los planetas terrestres es, por lo general, un engañ\
+      o: lo que muchos llaman «agua» suele ser una amalgama de muchos líquidos, partí\
+      culas microscópicas y compuestos saturados combinados con agua y otros fluidos.\
+      \ Los líquidos acuosos son aquellos de los que el agua pura se puede separar\
+      \ fácilmente de los residuos o las partículas tóxicas, pero solo con el equipo\
+      \ adecuado."
+    fr: "L'abondance d'eau sur les planètes terrestres n'est souvent qu'une idée reç\
+      ue. En effet, ce que beaucoup désignent comme de l'eau n'est souvent qu'une\
+      \ association de plusieurs liquides avec des particules microscopiques et des\
+      \ composés saturés gorgés d'eau et d'autres liquides. Les liquides aqueux sont\
+      \ des liquides à partir desquels l'eau pure peut aisément être séparée des dé\
+      chets et des particules dangereuses, à condition de disposer du matériel approprié\
+      ."
+    ja: "陸地型惑星には水が大量にあるというのは、多くの場合、誤解である。多くの人が何気なく使用する「水」という言葉は、大量の液体、微粒子、および水と他の液\
+      体が融合した飽和化合物が混合したものを指すことが多い。水性液体とは、適切な装置を使用すれば、無駄な粒子や有害な粒子から純水を簡単に分離できる液体を指す。"
+    ko: "지구형 행성에 물이 풍부할 것이라는 생각은 흔한 편견입니다. \"물\"은 각종 액체, 미세 입자, 그리고 포화 화합물이 섞인 물질을\
+      \ 일컫습니다. 그 가운데 수성 액체는 특수한 장비를 통해 유독 성분과 오염 물질을 걸러낸 정제수를 의미합니다."
+    ru: "Представление о том, что на планетах земного типа много воды, является ош\
+      ибочным. То, что мы неточно называем «водой», на самом деле представляет соб\
+      ой объединение множества разных жидкостей, микроскопических частиц и насыщен\
+      ных соединений в сочетании с водой и другими жидкостями. Водные жидкости – э\
+      то жидкости, в которых можно легко отделить чистую воду от примесей и загряз\
+      няющих частиц, но только с применением соответствующего оборудования."
+    zh: "有人说类地行星上水资源丰富实际上是一种错误的认识：那些通常被误认作是水的东西实际上是由很多物质混合起来的。水基液体所指的是，通过使用专门的设备，这\
+      些液体中的纯水能轻易地同其他杂质和污物微粒完全分离开来。"
+  groupID: 1033
+  iconID: 10012
+  marketGroupID: 1333
+  name:
+    de: "Aqueous Liquids"
+    en: "Aqueous Liquids"
+    es: "Líquido acuoso"
+    fr: "Liquides aqueux"
+    ja: "水性液体"
+    ko: "수성 액체"
+    ru: "Aqueous Liquids"
+    zh: "水基液体"
+  portionSize: 1
+  published: true
+  volume: 0.005
+"2409":
+  basePrice: 45000
+  description:
+    de: "Die gewünschten Flüssigkeiten auf feindseligen Welten zu finden kann fast\
+      \ genauso herausfordernd sein, wie diese aus der gnadenlosen Umwelt zu extrahieren,\
+      \ was oft das kilometertiefe Bohren unter die Oberfläche oder das Kondensieren\
+      \ der Flüssigkeit aus der oberen Atmosphäre nach sich zieht. Sobald die Flü\
+      ssigkeiten entdeckt wurden, übernimmt die Anlage selbst die relativ einfache\
+      \ Aufgabe, sie von der Umgebungs-Plasma-Interferenz, den verbrühenden Magmaströ\
+      men oder potenziell infektiösen, autochtonen Bakterien zu befreien. Eine überraschende\
+      \ Menge wertvoller Flüssigkeiten kann aus den feindseligen Welten extrahiert\
+      \ werden, aber nur wenn das Gerät richtig kalibriert und sorgfältig gepflegt\
+      \ wird."
+    en: "Finding desired liquids on hostile worlds can be almost as challenging a\
+      \ task as extracting it from the unforgiving environment, which often entails\
+      \ drilling kilometers below the surface or condensing fluids from the upper\
+      \ atmosphere. Once the liquids are discovered, the facility itself begins the\
+      \ relatively simple task of separating it from the ambient plasma interference,\
+      \ scalding magma streams, or potentially infectious indigenous bacteria. A surprising\
+      \ amount of valuable liquids can be extracted from hostile worlds, but only\
+      \ if the equipment is properly calibrated and carefully maintained."
+    es: "Encontrar fluidos de interés en mundos hostiles puede ser casi tan difícil\
+      \ como extraerlos en entornos desfavorables, un proceso que a menudo requiere\
+      \ perforar kilómetros bajo la superficie o condensar líquidos de la atmósfera\
+      \ superior. Cuando se descubren los fluidos, la instalación pone en marcha la\
+      \ tarea relativamente sencilla de separarlos de la interferencia del plasma\
+      \ ambiental, las abrasadoras corrientes de magma o las bacterias indígenas,\
+      \ potencialmente infecciosas. Se puede extraer una cantidad sorprendente de\
+      \ fluidos valiosos en mundos hostiles, pero solo si el equipamiento está bien\
+      \ calibrado y su mantenimiento, al día."
+    fr: "Trouver les liquides désirés sur des mondes ennemis peut être aussi difficile\
+      \ qu'en extraire dans un environnement hostile, ce qui nécessite souvent des\
+      \ kilomètres de forage en dessous de la surface ou une condensation des fluides\
+      \ de la haute atmosphère. Une fois les liquides découverts, l'installation commence\
+      \ elle-même le travail relativement simple visant à les séparer des interfé\
+      rences plasma environnantes, des ruisseaux de magma brûlant, ou des bactéries\
+      \ locales potentiellement dangereuses. Une quantité surprenante de liquides\
+      \ de valeur peut être extraite des mondes hostiles, mais seulement si l'équipement\
+      \ est correctement calibré et parfaitement entretenu."
+    ja: "非友好的な世界で目的の液体を見つけることは、地表から何 km も掘り下げたり、高層大気から液体を凝結したりする作業が必要な厳しい環境から液体を抽出\
+      する場合と同じくらい困難だ。液体が見つかると、大気中のプラズマ干渉から液体を分離する比較的シンプルな作業がこの設備で開始され、マグマの流れや、現地固有の\
+      感染性バクテリアがあればその煮沸消毒も実施される。非友好的な世界で驚くような量の貴重な液体が抽出できることがあるが、そのためには設備を適切に調整し、入念\
+      にメンテナンスしておく必要がある。"
+    ko: "수성 액체 추출은 지면 아래 수 킬로미터를 드릴로 뚫고 내려가거나 초고층 대기에서 액체를 응축하는 작업 동반됩니다. 따라서 혹독한\
+      \ 환경이나 위협지대에서 액체를 추출하는 것은 극도로 어려운 일입니다. 추출 과정을 거친 후에는 주변의 플라즈마, 뜨거운 마그마, 또는\
+      \ 감염성이 있는 박테리아로부터 액체를 분리해내는 비교적 단순한 작업이 진행됩니다. 안정화된 장비를 사용한다면 위협지대에서 방대한 양의\
+      \ 액체를 추출하는 것이 가능합니다."
+    ru: "На непригодных к обитанию планетах найти нужные жидкости не легче, чем из\
+      влекать их в местах с экстремальными условиями. Для их поиска приходится бур\
+      ить многокилометровые скважины или конденсировать пары из верхних слоев атмо\
+      сферы. Однако когда жидкости уже найдены, постройка добывающего комплекса ст\
+      ановится относительно простой задачей. Необходимо всего лишь оградить его от\
+      \ окружения: интерференции от плазмы, магматических потоков или потенциально\
+      \ патогенных бактерий. С подобных враждебных миров можно извлекать поразител\
+      ьно большие количество ценных жидкостей, но для этого требуется тщательно от\
+      калиброванное оборудование, которое постоянно требует техобслуживания."
+    zh: "在恶劣的环境中探寻所需要的水溶液几乎同采集它们一样，是一项具有挑战性的任务。通常必须要钻探到地表以下数千米的深度，或者在上层大气层中进行气体液化作\
+      业。当水溶液被发现后，设施会直接对其进行简单的处理，将其从环境中分隔开，避免环境流质，岩浆的干扰及可能存在的细菌污染。在环境恶劣的星球上，可以采集到大量\
+      的水性溶液，但这要求所有的设备都受到了精心的维护和校对。"
+  graphicID: 4544
+  groupID: 1026
+  name:
+    de: "Barren Aqueous Liquid Extractor"
+    en: "Barren Aqueous Liquid Extractor"
+    es: "Extractor de líquido acuoso baldío"
+    fr: "Extracteur de liquide aqueux en milieu aride"
+    ja: "荒地惑星用水性液体エクストラクター"
+    ko: "수성 액체 추출기 (사막 행성)"
+    ru: "Barren Aqueous Liquid Extractor"
+    zh: "贫瘠行星水基液体采集器"
+  portionSize: 1
+  published: true
+"2412":
+  basePrice: 45000
+  description:
+    de: "Die gewünschten Flüssigkeiten auf feindseligen Welten zu finden kann fast\
+      \ genauso herausfordernd sein, wie diese aus der gnadenlosen Umwelt zu extrahieren,\
+      \ was oft das kilometertiefe Bohren unter die Oberfläche oder das Kondensieren\
+      \ der Flüssigkeit aus der oberen Atmosphäre nach sich zieht. Sobald die Flü\
+      ssigkeiten entdeckt wurden, übernimmt die Anlage selbst die relativ einfache\
+      \ Aufgabe, sie von der Umgebungs-Plasma-Interferenz, den verbrühenden Magmaströ\
+      men oder potenziell infektiösen, autochtonen Bakterien zu befreien. Eine überraschende\
+      \ Menge wertvoller Flüssigkeiten kann aus den feindseligen Welten extrahiert\
+      \ werden, aber nur wenn das Gerät richtig kalibriert und sorgfältig gepflegt\
+      \ wird."
+    en: "Finding desired liquids on hostile worlds can be almost as challenging a\
+      \ task as extracting it from the unforgiving environment, which often entails\
+      \ drilling kilometers below the surface or condensing fluids from the upper\
+      \ atmosphere. Once the liquids are discovered, the facility itself begins the\
+      \ relatively simple task of separating it from the ambient plasma interference,\
+      \ scalding magma streams, or potentially infectious indigenous bacteria. A surprising\
+      \ amount of valuable liquids can be extracted from hostile worlds, but only\
+      \ if the equipment is properly calibrated and carefully maintained."
+    es: "Encontrar fluidos de interés en mundos hostiles puede ser casi tan difícil\
+      \ como extraerlos en entornos desfavorables, un proceso que a menudo requiere\
+      \ perforar kilómetros bajo la superficie o condensar líquidos de la atmósfera\
+      \ superior. Cuando se descubren los fluidos, la instalación pone en marcha la\
+      \ tarea relativamente sencilla de separarlos de la interferencia del plasma\
+      \ ambiental, las abrasadoras corrientes de magma o las bacterias indígenas,\
+      \ potencialmente infecciosas. Se puede extraer una cantidad sorprendente de\
+      \ fluidos valiosos en mundos hostiles, pero solo si el equipamiento está bien\
+      \ calibrado y su mantenimiento, al día."
+    fr: "Trouver les liquides désirés sur des mondes ennemis peut être aussi difficile\
+      \ qu'en extraire dans un environnement hostile, ce qui nécessite souvent des\
+      \ kilomètres de forage en dessous de la surface ou une condensation des fluides\
+      \ de la haute atmosphère. Une fois les liquides découverts, l'installation commence\
+      \ elle-même le travail relativement simple visant à les séparer des interfé\
+      rences plasma environnantes, des ruisseaux de magma brûlant, ou des bactéries\
+      \ locales potentiellement dangereuses. Une quantité surprenante de liquides\
+      \ de valeur peut être extraite des mondes hostiles, mais seulement si l'équipement\
+      \ est correctement calibré et parfaitement entretenu."
+    ja: "非友好的な世界で目的の液体を見つけることは、地表から何 km も掘り下げたり、高層大気から液体を凝結したりする作業が必要な厳しい環境から液体を抽出\
+      する場合と同じくらい困難だ。液体が見つかると、大気中のプラズマ干渉から液体を分離する比較的シンプルな作業がこの設備で開始され、マグマの流れや、現地固有の\
+      感染性バクテリアがあればその煮沸消毒も実施される。非友好的な世界で驚くような量の貴重な液体が抽出できることがあるが、そのためには設備を適切に調整し、入念\
+      にメンテナンスしておく必要がある。"
+    ko: "수성 액체 추출은 지면 아래 수 킬로미터를 드릴로 뚫고 내려가거나 초고층 대기에서 액체를 응축하는 작업 동반됩니다. 따라서 혹독한\
+      \ 환경이나 위협지대에서 액체를 추출하는 것은 극도로 어려운 일입니다. 추출 과정을 거친 후에는 주변의 플라즈마, 뜨거운 마그마, 또는\
+      \ 감염성이 있는 박테리아로부터 액체를 분리해내는 비교적 단순한 작업이 진행됩니다. 안정화된 장비를 사용한다면 위협지대에서 방대한 양의\
+      \ 액체를 추출하는 것이 가능합니다."
+    ru: "На непригодных к обитанию планетах найти нужные жидкости не легче, чем из\
+      влекать их в местах с экстремальными условиями. Для их поиска приходится бур\
+      ить многокилометровые скважины или конденсировать пары из верхних слоев атмо\
+      сферы. Однако когда жидкости уже найдены, постройка добывающего комплекса ст\
+      ановится относительно простой задачей. Необходимо всего лишь оградить его от\
+      \ окружения: интерференции от плазмы, магматических потоков или потенциально\
+      \ патогенных бактерий. С подобных враждебных миров можно извлекать поразител\
+      ьно большие количество ценных жидкостей, но для этого требуется тщательно от\
+      калиброванное оборудование, которое постоянно требует техобслуживания."
+    zh: "在恶劣的环境中探寻所需要的水溶液几乎同采集它们一样，是一项具有挑战性的任务。通常必须要钻探到地表以下数千米的深度，或者在上层大气层中进行气体液化作\
+      业。当水溶液被发现后，设施会直接对其进行简单的处理，将其从环境中分隔开，避免环境流质，岩浆的干扰及可能存在的细菌污染。在环境恶劣的星球上，可以采集到大量\
+      的水性溶液，但这要求所有的设备都受到了精心的维护和校对。"
+  graphicID: 4544
+  groupID: 1026
+  name:
+    de: "Temperate Aqueous Liquid Extractor"
+    en: "Temperate Aqueous Liquid Extractor"
+    es: "Extractor de líquido acuoso templado"
+    fr: "Extracteur de liquide aqueux en milieu tempéré"
+    ja: "温暖惑星用水性液体エクストラクター"
+    ko: "수성 액체 추출기 (온대 행성)"
+    ru: "Temperate Aqueous Liquid Extractor"
+    zh: "温和行星水基液体采集器"
+  portionSize: 1
+  published: true
+"2016":
+  description:
+    de: "Dürreplaneten sind archetypische \"tote Gebiete\": trockene, felsige Welten\
+      \ mit minimaler Atmosphäre und unauffälliger Struktur. Meistens sind sie von\
+      \ Hochwasserkanälen durchzogen, die oft breit genug sind, um von der Umlaufbahn\
+      \ aus sichtbar zu sein. Die meisten dieser Welten haben über die Jahre hinweg\
+      \ beträchtliche Mengen von Eis angehäuft, können dieses aber nicht an ihrer\
+      \ Oberfläche halten. Normalerweise verdunsten Flüssigkeiten an der Oberfläche\
+      \ schnell und tragen so zu der dünnen Atmospähre bei, aber gelegentlich sickert\
+      \ die Flüssigkeit auch zurück in den Grund und gefriert dort wieder, bis es\
+      \ in der Zukunft aufgrund des örtlichen Temperaturanstiegs wieder zum Vorschein\
+      \ tritt."
+    en: "Barren planets are archetypical \"dead terrestrials\": dry, rocky worlds\
+      \ with a minimal atmosphere and an unremarkable composition. They are commonly\
+      \ etched with flood channels, which are often broad enough to be visible from\
+      \ orbit; most such worlds have accumulated significant quantities of ice over\
+      \ their lifetimes, but cannot retain it on their surface. Generally surface\
+      \ liquid evaporates rapidly, contributing to the thin atmosphere, but occasionally\
+      \ it will seep back into the ground and refreeze, ready for another breakout\
+      \ in future when the local temperature rises."
+    es: "Los planetas estériles son «cuerpos celestes muertos» arquetípicos: mundos\
+      \ secos y rocosos con una atmósfera mínima y una composición que deja que desear.\
+      \ Su superficie suele estar surcada por ramblas de inundaciones, a menudo tan\
+      \ anchas que son visibles desde la órbita. A lo largo de su historia, la mayorí\
+      a de estos mundos ha acumulado grandes cantidades de hielo, pero no son capaces\
+      \ de retenerlo, pues el líquido más superficial se evapora rápidamente, lo que\
+      \ contribuye a que la atmósfera sea fina, si bien a veces retorna al suelo y\
+      \ vuelve a congelarse hasta la próxima emanación, cuando vuelven a aumentar\
+      \ las temperaturas."
+    fr: "Les planètes arides sont l'archétype des «\_planètes telluriques mortes\_\
+      »\_: des mondes rocheux et désertiques avec une atmosphère minime et une composition\
+      \ ordinaire. Elles sont généralement traversées par des canaux de crue assez\
+      \ grands pour être visibles depuis l'espace. La plupart de ces mondes ont accumulé\
+      \ des quantités remarquables de glace au cours des siècles, mais n'ont pas pu\
+      \ les conserver à leur surface. Bien souvent, le liquide à la surface s'évapore\
+      \ rapidement, contribuant de ce fait à la faible couche d'atmosphère, même s'il\
+      \ peut arriver qu'il s'infiltre dans le sol et gèle à nouveau, en attendant\
+      \ les prochaines températures élevées pour s'évaporer."
+    ja: "荒地惑星は、原型的な「生命のない大地」である。最小限の空気と平凡な構成の乾燥した岩だらけの世界である。これらの惑星には、衛星軌道から確認できるほど\
+      の広さがある洪水路が刻まれていることが多い。このような世界のほとんどでは、その存続期間にわたり大量の氷が蓄積されるが、地表に留まることはない。多くの場合\
+      、地表の液体は急速に蒸発して薄い大気に貢献しているが、時には地下に浸透して地域の温度上昇時に再び地表に流出することもある。"
+    ko: "사막 행성은 전형적인 \"죽은 행성\"으로 암석 지형, 건조한 기후, 최소한의 대기 수준, 그리고 불균형적인 구성 요소를 지니고 있\
+      습니다. 지표면에는 다수의 방수로가 새겨져 있으며 이는 궤도상에서도 뚜렷하게 관측이 가능합니다. 사막 행성의 경우 상당량의 얼음이 생성되\
+      며 지표면에 짧은 시간 축적됩니다. 이후 행성 온도가 상승하면 지표면에 생성된 얼음은 급속도로 증발한 뒤 대기로 순환됩니다."
+    ru: "Бесплодные планеты часто называют «мертвыми землеподобными планетами». Эт\
+      о сухие, скалистые миры с разреженной атмосферой и бедным минеральным состав\
+      ом. Обычно их поверхность изборождена ливневыми руслами, которые можно разгл\
+      ядеть с орбиты. Большинство таких миров за время своего существования накопи\
+      ло огромные количества льда; но они не в состоянии удержать его на поверхнос\
+      ти. Обычно жидкость быстро испаряется с поверхности и переходит в разреженну\
+      ю атмосферу, но временами она вновь просачивается в грунт и снова замерзает\
+      \ там, где и дожидается очередного местного повышения температуры, оттаивани\
+      я и высвобождения."
+    zh: "贫瘠行星拥有典型的“死亡地貌”：干燥、多岩石、大气稀薄、矿物构成简单。这些星球的表面通常会有沟壑，很多沟壑的宽度之大甚至可以在行星轨道上用肉眼看见\
+      。大多数此类行星在形成过后的很长时间里都存积了大量的冰，但是它们无法将这些水份保持在自己的表面上。行星表面的液体会快速地蒸发，留下稀薄的大气。不过也会有\
+      例外的情况，它们会反方向渗透到更深的土层中，凝结起来等待下一次温度升高而再次向上突破。"
+  graphicID: 3837
+  groupID: 7
+  iconID: 10135
+  mass: 100000000000000000000000000000000000
+  name:
+    de: "Planet (Barren)"
+    en: "Planet (Barren)"
+    es: "Planeta (baldío)"
+    fr: "Planète (aride)"
+    ja: "惑星（荒地）"
+    ko: "사막 행성"
+    ru: "Planet (Barren)"
+    zh: "行星（贫瘠）"
+  portionSize: 1
+  published: false
+  radius: 10000
+  volume: 1
+"11":
+  description:
+    de: "Lebenspendende Welten sind häufig unter dem Namen \"Gemäßigte Planeten\"\
+      \ bekannt, da die vorherrschende milde Temperatur eines ihrer Hauptmerkmale\
+      \ ist. Planeten mit existierenden, stabilen Ökosystemen sind Hauptziele für\
+      \ Besiedlungsprojekte, da es in der Regel einfacher ist, diese vollständig bewohnbar\
+      \ zu machen. Als Folge dessen gehört die Mehrheit aller hochbevölkerten Welten\
+      \ zu diesem Typ. Tatsächlich ist es nicht ungewöhnlich, dass im Rahmen detaillierter\
+      \ Gutachten, Zeichen früherer Siedlungen aus verschiedenen Epochen der Geschichte\
+      \ New Edens entdeckt werden."
+    en: "Life-bearing worlds are often referred to as \"temperate\", as their mild\
+      \ temperatures are one of their defining features. Planets with existing, stable\
+      \ ecosystems are prime targets for colonization efforts as they are generally\
+      \ easier to make fully habitable; as a result, the majority of highly populated\
+      \ worlds are of this type. Indeed, it is not altogether uncommon for detailed\
+      \ surveys to reveal signs of previous settlements from various stages of New\
+      \ Eden's history."
+    es: "Los mundos capaces de sustentar vida suelen conocerse como «templados», ya\
+      \ que su suave temperatura es una de sus características definitorias. Los planetas\
+      \ con ecosistemas estables preexistentes son objetivos prioritarios para los\
+      \ esfuerzos de colonización, ya que suelen ser más fáciles de convertir en habitables.\
+      \ Por ello, la mayoría de los mundos muy poblados son de este tipo. Sin duda,\
+      \ es habitual que las inspecciones detalladas revelen señales de asentamientos\
+      \ anteriores de distintos momentos de la historia de Nuevo\_Edén."
+    fr: "Les planètes portant la vie sont souvent appelées «\_tempérées\_», puisqu'elles\
+      \ se caractérisent principalement par leurs températures clémentes. Les planè\
+      tes présentant un écosystème stable sont les cibles privilégiées des colonisateurs,\
+      \ puisqu'elles sont souvent entièrement habitables. Par conséquent, la plupart\
+      \ des mondes habités sont des planètes tempérées. En effet, de nombreux rapports\
+      \ ont déjà révélé des traces d'anciennes colonies à plusieurs moments de l'histoire\
+      \ de New Eden."
+    ja: "生命の息づく世界は、その温暖な気候が顕著な特徴の一つであるため、しばしば「温暖」と称される。安定した生態系が既に存在する惑星は、可住環境を築きやす\
+      いため入植活動の主要なターゲットとなる。結果として、人口の密集している世界の多くは、このタイプの惑星である。実際に、詳細な調査によってニューエデン歴史上\
+      の早い段階での入植の痕跡が見つかることも珍しくはない。"
+    ko: "생명체가 존재하는 행성들은 생명을 유지할 수 있는 포근한 기온을 가졌기에 \"온대\" 행성으로 불립니다. 안정적인 생태계를 보유한\
+      \ 행성은 주거할 수 있는 환경을 조성하기에 비교적 쉬우므로 식민지화의 주요 타겟이 되곤합니다. 그 결과 인구가 많은 대부분의 행성은 이\
+      러한 특징을 지녔다는 점을 볼 수 있습니다. 실제로 온대기후의 행성을 정밀 탐사하였을 때 고대 인류들의 정착 흔적이 나타나는 것은 드문\
+      \ 일이 아닙니다."
+    ru: "Планеты, на которых имеется жизнь, обычно называются «умеренными», поскол\
+      ьку их наиболее характерная черта – мягкий климат. Планеты с уже существующи\
+      ми стабильными экосистемами являются первейшей целью при колонизации, поскол\
+      ьку их обычно проще превратить в полностью обитаемые. Поэтому большинство об\
+      итаемых миров принадлежит именно к этому типу. И действительно, в результате\
+      \ пристального изучения на них обычно обнаруживают следы прежних поселений,\
+      \ которые можно проследить вспять к различным эпохам в истории Нового Эдема."
+    zh: "能够孕育生命的星球通常都被认作是“温和”的星球，其所拥有的适宜气候就是它们的首要特征。存在有稳定生态系统的星球通常会被作为殖民规划的首要选择，因为\
+      要在这些星球上生存下来，相对要容易得多。因此，绝大多数人口稠密的行星实际上都是属于这种类型的星体。总的来说，想要通过细致的勘察在新伊甸中发现各个历史时期\
+      的居住痕迹，并不是一件十分困难的事情。"
+  graphicID: 3832
+  groupID: 7
+  iconID: 10136
+  mass: 100000000000000000000000000000000000
+  name:
+    de: "Planet (Temperate)"
+    en: "Planet (Temperate)"
+    es: "Planeta (templado)"
+    fr: "Planète (tempérée)"
+    ja: "惑星（温暖）"
+    ko: "온대 행성"
+    ru: "Planet (Temperate)"
+    zh: "行星（温和）"
+  portionSize: 1
+  published: false
+  radius: 10000
+  volume: 1

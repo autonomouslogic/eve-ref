@@ -1,0 +1,21 @@
+{
+  "capacity" : 0,
+  "description" : {
+    "en" : "Life-bearing worlds are often referred to as \"temperate\", as their mild temperatures are one of their defining features. Planets with existing, stable ecosystems are prime targets for colonization efforts as they are generally easier to make fully habitable; as a result, the majority of highly populated worlds are of this type. Indeed, it is not altogether uncommon for detailed surveys to reveal signs of previous settlements from various stages of New Eden's history.",
+    "fr" : "Les planètes portant la vie sont souvent appelées « tempérées », puisqu'elles se caractérisent principalement par leurs températures clémentes. Les planètes présentant un écosystème stable sont les cibles privilégiées des colonisateurs, puisqu'elles sont souvent entièrement habitables. Par conséquent, la plupart des mondes habités sont des planètes tempérées. En effet, de nombreux rapports ont déjà révélé des traces d'anciennes colonies à plusieurs moments de l'histoire de New Eden."
+  },
+  "graphic_id" : 3832,
+  "group_id" : 7,
+  "icon_id" : 10136,
+  "mass" : 100000000000000000000000000000000000,
+  "name" : {
+    "en" : "Planet (Temperate)",
+    "fr" : "Planète (tempérée)"
+  },
+  "packaged_volume" : 1,
+  "portion_size" : 1,
+  "published" : false,
+  "radius" : 10000,
+  "type_id" : 11,
+  "volume" : 1
+}

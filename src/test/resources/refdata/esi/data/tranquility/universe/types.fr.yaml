@@ -1828,3 +1828,170 @@
   radius: 1
   type_id: 3645
   volume: 0.19
+"2268":
+  capacity: 0
+  description: "L'abondance d'eau sur les planètes terrestres n'est souvent qu'une\
+    \ idée reçue. En effet, ce que beaucoup désignent comme de l'eau n'est souvent\
+    \ qu'une association de plusieurs liquides avec des particules microscopiques\
+    \ et des composés saturés gorgés d'eau et d'autres liquides. Les liquides aqueux\
+    \ sont des liquides à partir desquels l'eau pure peut aisément être séparée des\
+    \ déchets et des particules dangereuses, à condition de disposer du matériel approprié\
+    ."
+  dogma_attributes:
+  - attribute_id: 161
+    value: 0.005
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 4
+    value: 0
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 1640
+    value: 5
+  - attribute_id: 1641
+    value: 5
+  group_id: 1033
+  icon_id: 10012
+  market_group_id: 1333
+  mass: 0
+  name: "Liquides aqueux"
+  packaged_volume: 0.005
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 2268
+  volume: 0.005
+"2409":
+  capacity: 0
+  description: "Trouver les liquides désirés sur des mondes ennemis peut être aussi\
+    \ difficile qu'en extraire dans un environnement hostile, ce qui nécessite souvent\
+    \ des kilomètres de forage en dessous de la surface ou une condensation des fluides\
+    \ de la haute atmosphère. Une fois les liquides découverts, l'installation commence\
+    \ elle-même le travail relativement simple visant à les séparer des interférences\
+    \ plasma environnantes, des ruisseaux de magma brûlant, ou des bactéries locales\
+    \ potentiellement dangereuses. Une quantité surprenante de liquides de valeur\
+    \ peut être extraite des mondes hostiles, mais seulement si l'équipement est correctement\
+    \ calibré et parfaitement entretenu."
+  dogma_attributes:
+  - attribute_id: 1632
+    value: 2016
+  - attribute_id: 161
+    value: 0
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 4
+    value: 0
+  - attribute_id: 709
+    value: 2268
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 1642
+    value: 1000
+  - attribute_id: 1643
+    value: 300
+  - attribute_id: 1644
+    value: 5
+  - attribute_id: 1645
+    value: 1
+  - attribute_id: 15
+    value: 800
+  - attribute_id: 49
+    value: 200
+  graphic_id: 4544
+  group_id: 1026
+  mass: 0
+  name: "Extracteur de liquide aqueux en milieu aride"
+  packaged_volume: 0
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 2409
+  volume: 0
+"2412":
+  capacity: 0
+  description: "Trouver les liquides désirés sur des mondes ennemis peut être aussi\
+    \ difficile qu'en extraire dans un environnement hostile, ce qui nécessite souvent\
+    \ des kilomètres de forage en dessous de la surface ou une condensation des fluides\
+    \ de la haute atmosphère. Une fois les liquides découverts, l'installation commence\
+    \ elle-même le travail relativement simple visant à les séparer des interférences\
+    \ plasma environnantes, des ruisseaux de magma brûlant, ou des bactéries locales\
+    \ potentiellement dangereuses. Une quantité surprenante de liquides de valeur\
+    \ peut être extraite des mondes hostiles, mais seulement si l'équipement est correctement\
+    \ calibré et parfaitement entretenu."
+  dogma_attributes:
+  - attribute_id: 1632
+    value: 11
+  - attribute_id: 161
+    value: 0
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 4
+    value: 0
+  - attribute_id: 709
+    value: 2268
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 1642
+    value: 1000
+  - attribute_id: 1643
+    value: 300
+  - attribute_id: 1644
+    value: 5
+  - attribute_id: 1645
+    value: 1
+  - attribute_id: 15
+    value: 800
+  - attribute_id: 49
+    value: 200
+  graphic_id: 4544
+  group_id: 1026
+  mass: 0
+  name: "Extracteur de liquide aqueux en milieu tempéré"
+  packaged_volume: 0
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 2412
+  volume: 0
+"2016":
+  capacity: 0
+  description: "Les planètes arides sont l'archétype des «\_planètes telluriques mortes\_\
+    »\_: des mondes rocheux et désertiques avec une atmosphère minime et une composition\
+    \ ordinaire. Elles sont généralement traversées par des canaux de crue assez grands\
+    \ pour être visibles depuis l'espace. La plupart de ces mondes ont accumulé des\
+    \ quantités remarquables de glace au cours des siècles, mais n'ont pas pu les\
+    \ conserver à leur surface. Bien souvent, le liquide à la surface s'évapore rapidement,\
+    \ contribuant de ce fait à la faible couche d'atmosphère, même s'il peut arriver\
+    \ qu'il s'infiltre dans le sol et gèle à nouveau, en attendant les prochaines\
+    \ températures élevées pour s'évaporer."
+  graphic_id: 3837
+  group_id: 7
+  icon_id: 10135
+  mass: 100000000000000000000000000000000000
+  name: "Planète (aride)"
+  packaged_volume: 1
+  portion_size: 1
+  published: false
+  radius: 10000
+  type_id: 2016
+  volume: 1
+"11":
+  capacity: 0
+  description: "Les planètes portant la vie sont souvent appelées «\_tempérées\_»\
+    , puisqu'elles se caractérisent principalement par leurs températures clémentes.\
+    \ Les planètes présentant un écosystème stable sont les cibles privilégiées des\
+    \ colonisateurs, puisqu'elles sont souvent entièrement habitables. Par conséquent,\
+    \ la plupart des mondes habités sont des planètes tempérées. En effet, de nombreux\
+    \ rapports ont déjà révélé des traces d'anciennes colonies à plusieurs moments\
+    \ de l'histoire de New Eden."
+  graphic_id: 3832
+  group_id: 7
+  icon_id: 10136
+  mass: 100000000000000000000000000000000000
+  name: "Planète (tempérée)"
+  packaged_volume: 1
+  portion_size: 1
+  published: false
+  radius: 10000
+  type_id: 11
+  volume: 1
