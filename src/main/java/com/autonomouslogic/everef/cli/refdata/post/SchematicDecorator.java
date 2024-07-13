@@ -75,7 +75,7 @@ public class SchematicDecorator extends PostDecorator {
 			log.warn("Could not set type {} as being used by schematic {}, not found", materialTypeId, schematicId);
 			return;
 		}
-		var obj = productType.withArray("/used_by_schematics_ids");
+		var obj = productType.withArray("/used_by_schematic_ids");
 		obj.add(schematicId);
 		types.put(materialTypeId, productType);
 	}
