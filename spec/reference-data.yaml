@@ -1066,6 +1066,24 @@ components:
             description: The schematics producing this type. This is added by EVE
               Ref.
             format: int64
+        harvested_by_pin_type_ids:
+          type: array
+          description: The type IDs for the planetary extractor pins which can be
+            used to harvest this type. This is added by EVE Ref.
+          items:
+            type: integer
+            description: The type IDs for the planetary extractor pins which can be
+              used to harvest this type. This is added by EVE Ref.
+            format: int64
+        buildable_pin_type_ids:
+          type: array
+          description: The type IDs for the planetary pins which can be built on this
+            planet. This is added by EVE Ref.
+          items:
+            type: integer
+            description: The type IDs for the planetary pins which can be built on
+              this planet. This is added by EVE Ref.
+            format: int64
         is_skill:
           type: boolean
           description: Whether this type is a skill or not. This is added by EVE Ref.

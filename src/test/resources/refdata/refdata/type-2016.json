@@ -29,5 +29,6 @@
   "volume" : 1,
   "type_id" : 2016,
   "capacity" : 0,
-  "packaged_volume" : 1
+  "packaged_volume" : 1,
+  "buildable_pin_type_ids" : [ 2409 ]
 }

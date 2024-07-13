@@ -182,6 +182,12 @@ public class InventoryType {
 	@JsonProperty
 	@Schema(
 			description =
-					"The type IDs for the extractor pins which can be used to harvest this type. This is added by EVE Ref.")
+					"The type IDs for the planetary extractor pins which can be used to harvest this type. This is added by EVE Ref.")
 	List<Long> harvestedByPinTypeIds;
+
+	@JsonProperty
+	@Schema(
+			description =
+					"The type IDs for the planetary pins which can be built on this planet. This is added by EVE Ref.")
+	List<Long> buildablePinTypeIds;
 }

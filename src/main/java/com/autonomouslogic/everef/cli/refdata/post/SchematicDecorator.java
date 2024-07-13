@@ -17,6 +17,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class SchematicDecorator extends PostDecorator {
 	private static final int HARVESTED_TYPE_DOGMA_ATTRIBUTE_ID = 709;
+	private static final int PLANET_TYPE_RESTRICTION_DOGMA_ATTRIBUTE_ID = 1632;
 
 	@Inject
 	protected ObjectMapper objectMapper;
@@ -45,6 +46,7 @@ public class SchematicDecorator extends PostDecorator {
 			for (Map.Entry<Long, JsonNode> typeEntry : types.entrySet()) {
 				var type = objectMapper.convertValue(typeEntry.getValue(), InventoryType.class);
 				handleHarvestedBy(type);
+				handleBuildableOnPlanets(type);
 			}
 		});
 	}
@@ -103,5 +105,23 @@ public class SchematicDecorator extends PostDecorator {
 		}
 		((ArrayNode) harvestedTypeNode.withArray("/harvested_by_pin_type_ids")).add(extractorType.getTypeId());
 		types.put(harvestedTypeId.get(), harvestedTypeNode);
+	}
+
+	private void handleBuildableOnPlanets(InventoryType extractorType) {
+		var planetTypeId = helper.getDogmaFromType(extractorType, PLANET_TYPE_RESTRICTION_DOGMA_ATTRIBUTE_ID)
+				.map(t -> t.getValue().longValue());
+		if (planetTypeId.isEmpty()) {
+			return;
+		}
+		var planetNode = types.get(planetTypeId.get());
+		if (planetNode == null) {
+			log.warn(
+					"Could not set extractor type {} as being buildable on planet type {}, planet not found",
+					extractorType.getTypeId(),
+					planetTypeId.get());
+			return;
+		}
+		((ArrayNode) planetNode.withArray("/buildable_pin_type_ids")).add(extractorType.getTypeId());
+		types.put(planetTypeId.get(), planetNode);
 	}
 }
