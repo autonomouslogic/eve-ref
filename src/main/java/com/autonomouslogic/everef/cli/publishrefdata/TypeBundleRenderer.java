@@ -40,28 +40,20 @@ public class TypeBundleRenderer extends BundleRenderer {
 		bundleUnits(unitsJson, attributesJson);
 		bundleIcons(iconsJson, attributesJson);
 
-		var valid = false;
 		if (!attributesJson.isEmpty()) {
 			bundleJson.set("dogma_attributes", attributesJson);
-			valid = true;
 		}
 		if (!skillsJson.isEmpty()) {
 			bundleJson.set("skills", skillsJson);
-			valid = true;
 		}
 		if (!unitsJson.isEmpty()) {
 			bundleJson.set("units", unitsJson);
-			valid = true;
 		}
 		if (!iconsJson.isEmpty()) {
 			bundleJson.set("icons", iconsJson);
-			valid = true;
 		}
 
-		if (valid) {
-			var path = refDataUtil.subPath("types", type.getTypeId()) + "/bundle";
-			return Maybe.just(Pair.of(path, bundleJson));
-		}
-		return Maybe.empty();
+		var path = refDataUtil.subPath("types", type.getTypeId()) + "/bundle";
+		return Maybe.just(Pair.of(path, bundleJson));
 	}
 }
