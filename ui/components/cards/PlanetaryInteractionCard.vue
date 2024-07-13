@@ -38,10 +38,18 @@ if (props.inventoryType.usedBySchematicIds) {
 	}
 }
 
+const installableSchematicIds: Schematic[] = [];
+if (props.inventoryType.installableSchematicIds) {
+	for (let schematicId of props.inventoryType.installableSchematicIds) {
+		const schematic = await refdataApi.getSchematic({schematicId});
+		installableSchematicIds.push(schematic);
+	}
+}
+
 </script>
 
 <template>
-	<template v-if="dogmaAttributes.length > 0 || producedBySchematics.length > 0 || inventoryType.harvestedByPinTypeIds || usedBySchematics.length > 0">
+	<template v-if="dogmaAttributes.length > 0 || producedBySchematics.length > 0 || inventoryType.harvestedByPinTypeIds || usedBySchematics.length > 0 || installableSchematicIds.length > 0 || inventoryType.buildablePinTypeIds">
 
 		<CardWrapper :title="title">
 			<AttributeList>
@@ -119,6 +127,28 @@ if (props.inventoryType.usedBySchematicIds) {
 							</li>
 						</template>
 					</template>
+				</ul>
+			</div>
+
+			<div v-if="installableSchematicIds.length > 0" class="mt-3">
+				<b>Installable schematics:</b>
+				<ul>
+					<template v-for="schematic in installableSchematicIds" :key="schematic.schematicId">
+						<template v-if="schematic.products">
+							<li v-for="(product, productId) in schematic.products" :key="productId">
+								<TypeLink :type-id="product.typeId" />
+							</li>
+						</template>
+					</template>
+				</ul>
+			</div>
+
+			<div v-if="inventoryType.buildablePinTypeIds && inventoryType.buildablePinTypeIds.length > 0" class="mt-3">
+				<b>Buildable pins:</b>
+				<ul>
+					<li v-for="pinTypeId in inventoryType.buildablePinTypeIds" :key="pinTypeId">
+						<TypeLink :type-id="pinTypeId" />
+					</li>
 				</ul>
 			</div>
 
