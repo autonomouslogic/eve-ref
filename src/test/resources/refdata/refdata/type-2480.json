@@ -1,0 +1,64 @@
+{
+  "base_price" : 250000,
+  "description" : {
+    "de" : "Beinahe komplett durch Roboter-Arbeitskräfte besetzt, zeichnen sich Massenproduktionseinrichtungen durch die Fertigung von Artikeln in großen Mengen bei minimaler Aufsicht und Instandhaltung aus. Sie können sogar so unabhängig sein, dass man munkelt, es gäbe Fabriken der Gallente, die vollständig von Androiden betrieben und von einer Notmannschaft von Drohnen gelenkt werden. (Kritiker dieser Methode merken gerne an, dass die Einrichtungen von Sansha auf sehr ähnliche Art funktionieren.) So oder so - die Ergebnisse sind unwiderlegbar: Rohmaterialien und Bauteile werden auf der einen Seite zugeführt und auf der anderen Seite erscheinen die glänzenden Güter.",
+    "en" : "Populated almost entirely by robotic laborers, mass production facilities excel at creating products in bulk with minimal supervision and maintenance. They can be so self-sufficient that rumors abound of Gallente factories operated entirely by androids and governed by a skeleton crew of drones. (Detractors of this method like to note that Sansha facilities work in much the same fashion.) Either way, the results are irrefutable: Raw materials and components go in one end, and polished commodities come out the other side.",
+    "es" : "Operados casi por completo por obreros robóticos, los centros de producción en masa destacan por la fabricación de productos a granel con una supervisión y un mantenimiento mínimos. Poseen tal autosuficiencia que existen rumores sobre fábricas gallentes operadas completamente por androides y dirigidas por una tripulación mínima de drones. (A los detractores de este método les gusta señalar que los centros sanshas funcionan de forma muy parecida). En cualquier caso, los resultados son irrefutables: entran materias primas y componentes y salen productos refinados.",
+    "fr" : "Peuplées presque intégralement d'ouvriers robotiques, les installations de production de masse excellent dans la création de produits en gros avec une surveillance et un entretien minimes. Elles peuvent être si autonomes qu'on raconte que des usines gallente seraient gérées uniquement par des androïdes et dirigées par un équipage de drones. (Les détracteurs de cette méthode aiment d'ailleurs faire remarquer que les installations sansha fonctionnent aussi de cette façon.) Quoi qu'il en soit, les résultats sont irréfutables : les matières premières et les composants y entrent d'un côté, tandis que des marchandises raffinées en sortent de l'autre.",
+    "ja" : "ほぼ全面に作業用ロボットが投入されている大量生産施設は、最小限の監督とメンテナンスで大量の製品を製造できるという利点を持つ。この施設は自給自足度が高いため、広く流布している噂によれば、ガレンテの工場は全面的にアンドロイドによって運営されており、最小限のドローンが監督しているということだ（このやり方を非難する者は、サンシャの施設もこれとほぼ同じ形式だと指摘することが多い）。いずれにせよ、未加工の資源と部品を入れると、加工品が出てくることだけは確かだ。",
+    "ko" : "안드로이드를 통해 운영되는 대규모 생산 시설로 최소한의 관리 및 유지 보수로 대량의 제품을 생산합니다. 높은 자급률 탓에 안드로이드가 생산을 담당하고 드론 부대가 감독관 역할을 수행한다는 기묘한 소문이 존재합니다. (산샤 네이션과 생산 프로세스가 유사하다는 점 때문에 비판이 제기되고 있습니다) 각종 비판에도 불구하고 결과 자체는 나무랄 데가 없습니다. 실제로 원자재 및 부품을 투입하면 완성품이 나오는 매우 효율적인 생산 과정을 자랑합니다.",
+    "ru" : "Комплексы для массового производства практически полностью автоматизированы, что позволяет производить товары крупными партиями с минимальными затратами на надзор и обслуживание. Эти комплексы настолько автономны, что породили слухи: на галлентских фабриках трудятся исключительно андроиды под командованием дронов. (Противники этого метода производства никогда не упускают отметить, что фабрики саншистов работают по этим же принципам.) Впрочем, результаты в любом случае неоспоримы: извне фабрика получает партии сырья и разрозненные запчасти, а на выход поступают отличные товары.",
+    "zh" : "这里最主要的劳动力是机器人，像这样的大型量产设施的管理和维护非常少，而它们非常善于制造大量的产品。这些工厂可以做到如此地自给自足，有传闻说盖伦特的工厂甚至全部是由仿生人进行操作的，而管理人员则是一些智能的无人机。（对这种生产方式的嘲讽者总喜欢说萨沙也几乎采用了同样工作方式的生产设施。）不管怎样，其结果是不容否定的：原料和零件从一边进入，漂亮的格式产品就能从另一边出来。"
+  },
+  "graphic_id" : 4523,
+  "group_id" : 1028,
+  "name" : {
+    "de" : "Temperate Advanced Industry Facility",
+    "en" : "Temperate Advanced Industry Facility",
+    "es" : "Centro industrial avanzado templado",
+    "fr" : "Site d'industrie avancée en milieu tempéré",
+    "ja" : "温暖惑星用高性能インダストリー施設",
+    "ko" : "첨단 산업시설 (온대 행성)",
+    "ru" : "Temperate Advanced Industry Facility",
+    "zh" : "温和行星高级工业设施"
+  },
+  "portion_size" : 1,
+  "published" : true,
+  "type_id" : 2480,
+  "capacity" : 0,
+  "dogma_attributes" : {
+    "1632" : {
+      "attribute_id" : 1632,
+      "value" : 11
+    },
+    "161" : {
+      "attribute_id" : 161,
+      "value" : 0
+    },
+    "162" : {
+      "attribute_id" : 162,
+      "value" : 1
+    },
+    "4" : {
+      "attribute_id" : 4,
+      "value" : 0
+    },
+    "38" : {
+      "attribute_id" : 38,
+      "value" : 0
+    },
+    "15" : {
+      "attribute_id" : 15,
+      "value" : 700
+    },
+    "49" : {
+      "attribute_id" : 49,
+      "value" : 500
+    }
+  },
+  "mass" : 0,
+  "packaged_volume" : 0,
+  "radius" : 1,
+  "volume" : 0,
+  "installable_schematic_ids" : [ 65 ]
+}

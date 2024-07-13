@@ -1,0 +1,28 @@
+{
+  "base_price" : 250000,
+  "description" : {
+    "de" : "Anstatt die in dieser industriellen Einrichtung vorhandene Hitze, Interferenz und den vernichtenden Druck zur Abschirmung der Fertigungsanlage gegen Umwelteinflüsse zu nutzen, haben sich die Designer entschlossen, diese Faktoren zu verwenden, um die Struktur selbst mit Strom zu versorgen. Eine Betriebsanlage auf einem Eisplaneten könnte über fortschrittliche, erweiterte Kühlkörper verfügen, während eine Fabrik auf einem Plasmaplaneten ihre meiste, wenn nicht sogar ihre gesamte, Elektrizität aus magnetisierten Spulen gewinnen könnte, die speziell auf die lokalen Ionenwinde des Planeten abgestimmt sind. Sich die vorherrschenden Merkmale jeder Welt zu Nutze zu machen, hilft dabei, die Kosten der Errichtung einer Infrastruktur zur Massenproduktion zu senken. Eine wichtige Rolle spielen dabei meistens Oberflächenschutz, an die Umgebung angepasste Kleidung und verbesserte Fundamente.",
+    "en" : "Instead of laboring to shield the production lines of this industrial facility from the surrounding environment, designers opted instead to use the available heat, interference, and even crushing pressure to help power the structure itself. A plant on an ice planet might have highly advanced extended heat sinks, while a factory on a plasma world might draw most, if not all of its electricity from magnetized coils specially attuned to the planet's local ion winds. Taking advantage of the indigenous features of each world helps offset the cost of building mass production infrastructure there, which usually involves protective coatings, environmental clothing, and reinforced foundations.",
+    "es" : "En lugar de esforzarse por proteger las cadenas de producción de este centro industrial, los diseñadores optaron por usar el calor disponible, las interferencias e incluso la aplastante presión para alimentar la propia estructura. Una central en un planeta de hielo podría tener disipadores de calor muy avanzados, mientras que una fábrica en un mundo plasmático podría recoger la mayor parte de la electricidad, si no toda, de bobinas magnetizadas especialmente sintonizadas con los vientos iónicos locales. Aprovechar las características autóctonas de cada mundo ayuda a compensar el coste de las infraestructuras de producción a gran escala, que suele implicar recubrimientos protectores, ropa ambiental y cimientos reforzados.",
+    "fr" : "Au lieu de travailler pour protéger les lignes de production de ce complexe industriel face aux dangers de l'environnement, les concepteurs ont choisi d'utiliser la chaleur, les interférences, et même la pression écrasante pour contribuer à l'alimentation de la structure en elle-même. Si une usine sur une planète de glace peut posséder des dissipateurs de chaleur avancés, une usine sur une planète de plasma peut tirer tout ou partie de son électricité des anneaux magnétiques en harmonie avec les vents ioniques de la planète. Tirer profit des caractéristiques naturelles de chaque monde permet ainsi de compenser le coût de construction des infrastructures de production de masse, qui présentent généralement des revêtements de protection, des couvertures environnementales, et des fondations renforcées.",
+    "ja" : "生産ラインを周辺環境から保護するために設計者が選んだのは、労力を使う代わりに、周囲の熱、干渉、さらには圧縮圧までを建造物への電力供給に利用するという手法であった。アイス型惑星の設備が非常に高性能な放熱機を備えている一方、プラズマ型惑星の工場では、惑星のイオン風力に合わせて特別に調整された磁化コイルから、全部ではないが大部分の電力を得ている。各惑星に固有の特性を利用することで、大量生産インフラストラクチャの建築にかかるコストを補っているのである。一般的なものには、保護コーティング、環境に適応した服、強化土台の費用などがある。",
+    "ko" : "방어 시설을 건설하는 대신 주변 환경을 통해 생산라인을 유지합니다. 일반적으로 열이나 압력 등의 외부 요소를 활용함으로써 공장의 가동 전력을 확보합니다. 유사한 방식으로 얼음 행성에서는 고성능 방열 장치를 운용하며 플라즈마 행성에서는 전자 코일을 통해 전력을 수급합니다. 각 행성의 고유 특성을 활용함으로써 보호 코팅이나 환경 적응 시설 등의 대형 기반 시설을 건설하는데 소모되는 비용을 감축합니다.",
+    "ru" : "Вместо того, чтобы затрачивать массу усилий на ограждение этой фабрики от внешних условий, конструкторы пошли по другому пути: они используют доступные высокие температуры, интерференцию и даже ужасающе высокое давление для снабжения ее энергией. На ледовой планете фабрика будет оснащена модернизированными теплоприемниками; на плазмовой планете она будет получать львиную долю электричества от соленоидов, специально настроенных на местные ионные ветра. Приспосабливаемость к особым условиям каждой планеты уменьшает расходы на строительство комплексов, в которых обычно применяются защитные покрытия (в том числе от условий окружающей среды) укрепленные основания.",
+    "zh" : "这座工业设施并没有使用繁复措施去保护其中的生产线不受环境的影响，相反，设计师利用周围所产生的热能、干扰以及强大压力来为整座设施提供能量。冰体行星上的工厂设施可能需要非常先进和强大的散热设备。而在等离子行星上，工厂设施常常会需要其磁线圈所产生的大部分电量，这些磁线圈都按照当地的离子风进行了调整。通过利用各种星球不同的本土特性，人们不再需要花费建筑大规模工厂的高成本，这些成本原本包括了保护性外壳，环境隔离层以及强化的建筑基础。"
+  },
+  "graphic_id" : 4534,
+  "group_id" : 1028,
+  "name" : {
+    "de" : "Lava Advanced Industry Facility",
+    "en" : "Lava Advanced Industry Facility",
+    "es" : "Centro industrial avanzado de lava",
+    "fr" : "Site d'industrie avancée en milieu volcanique",
+    "ja" : "溶岩惑星用高性能インダストリー施設",
+    "ko" : "첨단 산업시설 (마그마 행성)",
+    "ru" : "Lava Advanced Industry Facility",
+    "zh" : "熔岩行星高级工业设施"
+  },
+  "portion_size" : 1,
+  "published" : true,
+  "type_id" : 2470
+}

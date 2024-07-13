@@ -1995,3 +1995,77 @@
   radius: 10000
   type_id: 11
   volume: 1
+"2470":
+  capacity: 0
+  description: "Au lieu de travailler pour protéger les lignes de production de ce\
+    \ complexe industriel face aux dangers de l'environnement, les concepteurs ont\
+    \ choisi d'utiliser la chaleur, les interférences, et même la pression écrasante\
+    \ pour contribuer à l'alimentation de la structure en elle-même. Si une usine\
+    \ sur une planète de glace peut posséder des dissipateurs de chaleur avancés,\
+    \ une usine sur une planète de plasma peut tirer tout ou partie de son électricité\
+    \ des anneaux magnétiques en harmonie avec les vents ioniques de la planète. Tirer\
+    \ profit des caractéristiques naturelles de chaque monde permet ainsi de compenser\
+    \ le coût de construction des infrastructures de production de masse, qui pré\
+    sentent généralement des revêtements de protection, des couvertures environnementales,\
+    \ et des fondations renforcées."
+  dogma_attributes:
+  - attribute_id: 1632
+    value: 2015
+  - attribute_id: 161
+    value: 0
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 4
+    value: 0
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 15
+    value: 700
+  - attribute_id: 49
+    value: 500
+  graphic_id: 4534
+  group_id: 1028
+  mass: 0
+  name: "Site d'industrie avancée en milieu volcanique"
+  packaged_volume: 0
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 2470
+  volume: 0
+"2480":
+  capacity: 0
+  description: "Peuplées presque intégralement d'ouvriers robotiques, les installations\
+    \ de production de masse excellent dans la création de produits en gros avec une\
+    \ surveillance et un entretien minimes. Elles peuvent être si autonomes qu'on\
+    \ raconte que des usines gallente seraient gérées uniquement par des androïdes\
+    \ et dirigées par un équipage de drones. (Les détracteurs de cette méthode aiment\
+    \ d'ailleurs faire remarquer que les installations sansha fonctionnent aussi de\
+    \ cette façon.) Quoi qu'il en soit, les résultats sont irréfutables : les matiè\
+    res premières et les composants y entrent d'un côté, tandis que des marchandises\
+    \ raffinées en sortent de l'autre."
+  dogma_attributes:
+  - attribute_id: 1632
+    value: 11
+  - attribute_id: 161
+    value: 0
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 4
+    value: 0
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 15
+    value: 700
+  - attribute_id: 49
+    value: 500
+  graphic_id: 4523
+  group_id: 1028
+  mass: 0
+  name: "Site d'industrie avancée en milieu tempéré"
+  packaged_volume: 0
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 2480
+  volume: 0

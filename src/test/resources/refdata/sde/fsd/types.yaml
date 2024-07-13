@@ -2420,3 +2420,148 @@
   published: false
   radius: 10000
   volume: 1
+"2470":
+  basePrice: 250000
+  description:
+    de: "Anstatt die in dieser industriellen Einrichtung vorhandene Hitze, Interferenz\
+      \ und den vernichtenden Druck zur Abschirmung der Fertigungsanlage gegen Umwelteinflü\
+      sse zu nutzen, haben sich die Designer entschlossen, diese Faktoren zu verwenden,\
+      \ um die Struktur selbst mit Strom zu versorgen. Eine Betriebsanlage auf einem\
+      \ Eisplaneten könnte über fortschrittliche, erweiterte Kühlkörper verfügen,\
+      \ während eine Fabrik auf einem Plasmaplaneten ihre meiste, wenn nicht sogar\
+      \ ihre gesamte, Elektrizität aus magnetisierten Spulen gewinnen könnte, die\
+      \ speziell auf die lokalen Ionenwinde des Planeten abgestimmt sind. Sich die\
+      \ vorherrschenden Merkmale jeder Welt zu Nutze zu machen, hilft dabei, die Kosten\
+      \ der Errichtung einer Infrastruktur zur Massenproduktion zu senken. Eine wichtige\
+      \ Rolle spielen dabei meistens Oberflächenschutz, an die Umgebung angepasste\
+      \ Kleidung und verbesserte Fundamente."
+    en: "Instead of laboring to shield the production lines of this industrial facility\
+      \ from the surrounding environment, designers opted instead to use the available\
+      \ heat, interference, and even crushing pressure to help power the structure\
+      \ itself. A plant on an ice planet might have highly advanced extended heat\
+      \ sinks, while a factory on a plasma world might draw most, if not all of its\
+      \ electricity from magnetized coils specially attuned to the planet's local\
+      \ ion winds. Taking advantage of the indigenous features of each world helps\
+      \ offset the cost of building mass production infrastructure there, which usually\
+      \ involves protective coatings, environmental clothing, and reinforced foundations."
+    es: "En lugar de esforzarse por proteger las cadenas de producción de este centro\
+      \ industrial, los diseñadores optaron por usar el calor disponible, las interferencias\
+      \ e incluso la aplastante presión para alimentar la propia estructura. Una central\
+      \ en un planeta de hielo podría tener disipadores de calor muy avanzados, mientras\
+      \ que una fábrica en un mundo plasmático podría recoger la mayor parte de la\
+      \ electricidad, si no toda, de bobinas magnetizadas especialmente sintonizadas\
+      \ con los vientos iónicos locales. Aprovechar las características autóctonas\
+      \ de cada mundo ayuda a compensar el coste de las infraestructuras de producció\
+      n a gran escala, que suele implicar recubrimientos protectores, ropa ambiental\
+      \ y cimientos reforzados."
+    fr: "Au lieu de travailler pour protéger les lignes de production de ce complexe\
+      \ industriel face aux dangers de l'environnement, les concepteurs ont choisi\
+      \ d'utiliser la chaleur, les interférences, et même la pression écrasante pour\
+      \ contribuer à l'alimentation de la structure en elle-même. Si une usine sur\
+      \ une planète de glace peut posséder des dissipateurs de chaleur avancés, une\
+      \ usine sur une planète de plasma peut tirer tout ou partie de son électricité\
+      \ des anneaux magnétiques en harmonie avec les vents ioniques de la planète.\
+      \ Tirer profit des caractéristiques naturelles de chaque monde permet ainsi\
+      \ de compenser le coût de construction des infrastructures de production de\
+      \ masse, qui présentent généralement des revêtements de protection, des couvertures\
+      \ environnementales, et des fondations renforcées."
+    ja: "生産ラインを周辺環境から保護するために設計者が選んだのは、労力を使う代わりに、周囲の熱、干渉、さらには圧縮圧までを建造物への電力供給に利用するとい\
+      う手法であった。アイス型惑星の設備が非常に高性能な放熱機を備えている一方、プラズマ型惑星の工場では、惑星のイオン風力に合わせて特別に調整された磁化コイル\
+      から、全部ではないが大部分の電力を得ている。各惑星に固有の特性を利用することで、大量生産インフラストラクチャの建築にかかるコストを補っているのである。一\
+      般的なものには、保護コーティング、環境に適応した服、強化土台の費用などがある。"
+    ko: "방어 시설을 건설하는 대신 주변 환경을 통해 생산라인을 유지합니다. 일반적으로 열이나 압력 등의 외부 요소를 활용함으로써 공장의 가\
+      동 전력을 확보합니다. 유사한 방식으로 얼음 행성에서는 고성능 방열 장치를 운용하며 플라즈마 행성에서는 전자 코일을 통해 전력을 수급합니\
+      다. 각 행성의 고유 특성을 활용함으로써 보호 코팅이나 환경 적응 시설 등의 대형 기반 시설을 건설하는데 소모되는 비용을 감축합니다."
+    ru: "Вместо того, чтобы затрачивать массу усилий на ограждение этой фабрики от\
+      \ внешних условий, конструкторы пошли по другому пути: они используют доступ\
+      ные высокие температуры, интерференцию и даже ужасающе высокое давление для\
+      \ снабжения ее энергией. На ледовой планете фабрика будет оснащена модернизи\
+      рованными теплоприемниками; на плазмовой планете она будет получать львиную\
+      \ долю электричества от соленоидов, специально настроенных на местные ионные\
+      \ ветра. Приспосабливаемость к особым условиям каждой планеты уменьшает расх\
+      оды на строительство комплексов, в которых обычно применяются защитные покры\
+      тия (в том числе от условий окружающей среды) укрепленные основания."
+    zh: "这座工业设施并没有使用繁复措施去保护其中的生产线不受环境的影响，相反，设计师利用周围所产生的热能、干扰以及强大压力来为整座设施提供能量。冰体行星上\
+      的工厂设施可能需要非常先进和强大的散热设备。而在等离子行星上，工厂设施常常会需要其磁线圈所产生的大部分电量，这些磁线圈都按照当地的离子风进行了调整。通过\
+      利用各种星球不同的本土特性，人们不再需要花费建筑大规模工厂的高成本，这些成本原本包括了保护性外壳，环境隔离层以及强化的建筑基础。"
+  graphicID: 4534
+  groupID: 1028
+  name:
+    de: "Lava Advanced Industry Facility"
+    en: "Lava Advanced Industry Facility"
+    es: "Centro industrial avanzado de lava"
+    fr: "Site d'industrie avancée en milieu volcanique"
+    ja: "溶岩惑星用高性能インダストリー施設"
+    ko: "첨단 산업시설 (마그마 행성)"
+    ru: "Lava Advanced Industry Facility"
+    zh: "熔岩行星高级工业设施"
+  portionSize: 1
+  published: true
+"2480":
+  basePrice: 250000
+  description:
+    de: "Beinahe komplett durch Roboter-Arbeitskräfte besetzt, zeichnen sich Massenproduktionseinrichtungen\
+      \ durch die Fertigung von Artikeln in großen Mengen bei minimaler Aufsicht und\
+      \ Instandhaltung aus. Sie können sogar so unabhängig sein, dass man munkelt,\
+      \ es gäbe Fabriken der Gallente, die vollständig von Androiden betrieben und\
+      \ von einer Notmannschaft von Drohnen gelenkt werden. (Kritiker dieser Methode\
+      \ merken gerne an, dass die Einrichtungen von Sansha auf sehr ähnliche Art funktionieren.)\
+      \ So oder so - die Ergebnisse sind unwiderlegbar: Rohmaterialien und Bauteile\
+      \ werden auf der einen Seite zugeführt und auf der anderen Seite erscheinen\
+      \ die glänzenden Güter."
+    en: "Populated almost entirely by robotic laborers, mass production facilities\
+      \ excel at creating products in bulk with minimal supervision and maintenance.\
+      \ They can be so self-sufficient that rumors abound of Gallente factories operated\
+      \ entirely by androids and governed by a skeleton crew of drones. (Detractors\
+      \ of this method like to note that Sansha facilities work in much the same fashion.)\
+      \ Either way, the results are irrefutable: Raw materials and components go in\
+      \ one end, and polished commodities come out the other side."
+    es: "Operados casi por completo por obreros robóticos, los centros de producció\
+      n en masa destacan por la fabricación de productos a granel con una supervisió\
+      n y un mantenimiento mínimos. Poseen tal autosuficiencia que existen rumores\
+      \ sobre fábricas gallentes operadas completamente por androides y dirigidas\
+      \ por una tripulación mínima de drones. (A los detractores de este método les\
+      \ gusta señalar que los centros sanshas funcionan de forma muy parecida). En\
+      \ cualquier caso, los resultados son irrefutables: entran materias primas y\
+      \ componentes y salen productos refinados."
+    fr: "Peuplées presque intégralement d'ouvriers robotiques, les installations de\
+      \ production de masse excellent dans la création de produits en gros avec une\
+      \ surveillance et un entretien minimes. Elles peuvent être si autonomes qu'on\
+      \ raconte que des usines gallente seraient gérées uniquement par des androï\
+      des et dirigées par un équipage de drones. (Les détracteurs de cette méthode\
+      \ aiment d'ailleurs faire remarquer que les installations sansha fonctionnent\
+      \ aussi de cette façon.) Quoi qu'il en soit, les résultats sont irréfutables\
+      \ : les matières premières et les composants y entrent d'un côté, tandis que\
+      \ des marchandises raffinées en sortent de l'autre."
+    ja: "ほぼ全面に作業用ロボットが投入されている大量生産施設は、最小限の監督とメンテナンスで大量の製品を製造できるという利点を持つ。この施設は自給自足度が\
+      高いため、広く流布している噂によれば、ガレンテの工場は全面的にアンドロイドによって運営されており、最小限のドローンが監督しているということだ（このやり方\
+      を非難する者は、サンシャの施設もこれとほぼ同じ形式だと指摘することが多い）。いずれにせよ、未加工の資源と部品を入れると、加工品が出てくることだけは確かだ\
+      。"
+    ko: "안드로이드를 통해 운영되는 대규모 생산 시설로 최소한의 관리 및 유지 보수로 대량의 제품을 생산합니다. 높은 자급률 탓에 안드로이드\
+      가 생산을 담당하고 드론 부대가 감독관 역할을 수행한다는 기묘한 소문이 존재합니다. (산샤 네이션과 생산 프로세스가 유사하다는 점 때문에\
+      \ 비판이 제기되고 있습니다) 각종 비판에도 불구하고 결과 자체는 나무랄 데가 없습니다. 실제로 원자재 및 부품을 투입하면 완성품이 나오\
+      는 매우 효율적인 생산 과정을 자랑합니다."
+    ru: "Комплексы для массового производства практически полностью автоматизирова\
+      ны, что позволяет производить товары крупными партиями с минимальными затрат\
+      ами на надзор и обслуживание. Эти комплексы настолько автономны, что породил\
+      и слухи: на галлентских фабриках трудятся исключительно андроиды под командо\
+      ванием дронов. (Противники этого метода производства никогда не упускают отм\
+      етить, что фабрики саншистов работают по этим же принципам.) Впрочем, резуль\
+      таты в любом случае неоспоримы: извне фабрика получает партии сырья и разроз\
+      ненные запчасти, а на выход поступают отличные товары."
+    zh: "这里最主要的劳动力是机器人，像这样的大型量产设施的管理和维护非常少，而它们非常善于制造大量的产品。这些工厂可以做到如此地自给自足，有传闻说盖伦特的\
+      工厂甚至全部是由仿生人进行操作的，而管理人员则是一些智能的无人机。（对这种生产方式的嘲讽者总喜欢说萨沙也几乎采用了同样工作方式的生产设施。）不管怎样，其\
+      结果是不容否定的：原料和零件从一边进入，漂亮的格式产品就能从另一边出来。"
+  graphicID: 4523
+  groupID: 1028
+  name:
+    de: "Temperate Advanced Industry Facility"
+    en: "Temperate Advanced Industry Facility"
+    es: "Centro industrial avanzado templado"
+    fr: "Site d'industrie avancée en milieu tempéré"
+    ja: "温暖惑星用高性能インダストリー施設"
+    ko: "첨단 산업시설 (온대 행성)"
+    ru: "Temperate Advanced Industry Facility"
+    zh: "温和行星高级工业设施"
+  portionSize: 1
+  published: true

@@ -1,0 +1,50 @@
+{
+  "capacity" : 0,
+  "description" : {
+    "en" : "Instead of laboring to shield the production lines of this industrial facility from the surrounding environment, designers opted instead to use the available heat, interference, and even crushing pressure to help power the structure itself. A plant on an ice planet might have highly advanced extended heat sinks, while a factory on a plasma world might draw most, if not all of its electricity from magnetized coils specially attuned to the planet's local ion winds. Taking advantage of the indigenous features of each world helps offset the cost of building mass production infrastructure there, which usually involves protective coatings, environmental clothing, and reinforced foundations.",
+    "fr" : "Au lieu de travailler pour protéger les lignes de production de ce complexe industriel face aux dangers de l'environnement, les concepteurs ont choisi d'utiliser la chaleur, les interférences, et même la pression écrasante pour contribuer à l'alimentation de la structure en elle-même. Si une usine sur une planète de glace peut posséder des dissipateurs de chaleur avancés, une usine sur une planète de plasma peut tirer tout ou partie de son électricité des anneaux magnétiques en harmonie avec les vents ioniques de la planète. Tirer profit des caractéristiques naturelles de chaque monde permet ainsi de compenser le coût de construction des infrastructures de production de masse, qui présentent généralement des revêtements de protection, des couvertures environnementales, et des fondations renforcées."
+  },
+  "dogma_attributes" : {
+    "1632" : {
+      "attribute_id" : 1632,
+      "value" : 2015
+    },
+    "161" : {
+      "attribute_id" : 161,
+      "value" : 0
+    },
+    "162" : {
+      "attribute_id" : 162,
+      "value" : 1
+    },
+    "4" : {
+      "attribute_id" : 4,
+      "value" : 0
+    },
+    "38" : {
+      "attribute_id" : 38,
+      "value" : 0
+    },
+    "15" : {
+      "attribute_id" : 15,
+      "value" : 700
+    },
+    "49" : {
+      "attribute_id" : 49,
+      "value" : 500
+    }
+  },
+  "graphic_id" : 4534,
+  "group_id" : 1028,
+  "mass" : 0,
+  "name" : {
+    "en" : "Lava Advanced Industry Facility",
+    "fr" : "Site d'industrie avancée en milieu volcanique"
+  },
+  "packaged_volume" : 0,
+  "portion_size" : 1,
+  "published" : true,
+  "radius" : 1,
+  "type_id" : 2470,
+  "volume" : 0
+}

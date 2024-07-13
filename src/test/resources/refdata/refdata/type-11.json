@@ -30,5 +30,5 @@
   "type_id" : 11,
   "capacity" : 0,
   "packaged_volume" : 1,
-  "buildable_pin_type_ids" : [ 2412 ]
+  "buildable_pin_type_ids" : [ 2412, 2480 ]
 }

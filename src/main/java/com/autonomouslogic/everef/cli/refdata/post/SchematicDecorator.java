@@ -37,11 +37,11 @@ public class SchematicDecorator extends PostDecorator {
 			types = storeHandler.getRefStore("types");
 			schematics = storeHandler.getRefStore("schematics");
 			for (var schematicEntry : schematics.entrySet()) {
-				long schematicId = schematicEntry.getKey();
 				var schematicJson = (ObjectNode) schematicEntry.getValue();
 				var schematic = objectMapper.convertValue(schematicJson, Schematic.class);
-				handleMaterials(schematic, schematicId);
-				handleProducts(schematic, schematicId);
+				handleMaterials(schematic);
+				handleProducts(schematic);
+				handleInstallableSchematics(schematic);
 			}
 			for (Map.Entry<Long, JsonNode> typeEntry : types.entrySet()) {
 				var type = objectMapper.convertValue(typeEntry.getValue(), InventoryType.class);
@@ -51,7 +51,8 @@ public class SchematicDecorator extends PostDecorator {
 		});
 	}
 
-	private void handleMaterials(Schematic schematic, long schematicId) {
+	private void handleMaterials(Schematic schematic) {
+		var schematicId = schematic.getSchematicId();
 		var materials =
 				Optional.ofNullable(schematic.getMaterials()).map(Map::values).orElse(List.of());
 		for (var material : materials) {
@@ -59,7 +60,8 @@ public class SchematicDecorator extends PostDecorator {
 		}
 	}
 
-	private void handleProducts(Schematic schematic, long schematicId) {
+	private void handleProducts(Schematic schematic) {
+		var schematicId = schematic.getSchematicId();
 		var products =
 				Optional.ofNullable(schematic.getProducts()).map(Map::values).orElse(List.of());
 		for (var product : products) {
@@ -87,6 +89,21 @@ public class SchematicDecorator extends PostDecorator {
 		var obj = productType.withArray("/produced_by_schematic_ids");
 		obj.add(schematicId);
 		types.put(productTypeId, productType);
+	}
+
+	private void handleInstallableSchematics(Schematic schematic) {
+		for (long pinTypeId : schematic.getPinTypeIds()) {
+			var typeJson = types.get(pinTypeId);
+			if (typeJson == null) {
+				log.warn(
+						"Could not set type {} as being able to install schematic {}, pin type not found",
+						pinTypeId,
+						schematic.getSchematicId());
+				continue;
+			}
+			((ArrayNode) typeJson.withArray("/installable_schematic_ids")).add(schematic.getSchematicId());
+			types.put(pinTypeId, typeJson);
+		}
 	}
 
 	private void handleHarvestedBy(InventoryType extractorType) {

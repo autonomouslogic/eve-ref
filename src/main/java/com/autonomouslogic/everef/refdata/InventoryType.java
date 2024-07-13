@@ -190,4 +190,10 @@ public class InventoryType {
 			description =
 					"The type IDs for the planetary pins which can be built on this planet. This is added by EVE Ref.")
 	List<Long> buildablePinTypeIds;
+
+	@JsonProperty
+	@Schema(
+			description =
+					"The schematic IDs which can be installed into this planetary processor. This is added by EVE Ref.")
+	List<Long> installableSchematicIds;
 }

@@ -1975,3 +1975,73 @@
   radius: 10000
   type_id: 11
   volume: 1
+"2470":
+  capacity: 0
+  description: "Instead of laboring to shield the production lines of this industrial\
+    \ facility from the surrounding environment, designers opted instead to use the\
+    \ available heat, interference, and even crushing pressure to help power the structure\
+    \ itself. A plant on an ice planet might have highly advanced extended heat sinks,\
+    \ while a factory on a plasma world might draw most, if not all of its electricity\
+    \ from magnetized coils specially attuned to the planet's local ion winds. Taking\
+    \ advantage of the indigenous features of each world helps offset the cost of\
+    \ building mass production infrastructure there, which usually involves protective\
+    \ coatings, environmental clothing, and reinforced foundations."
+  dogma_attributes:
+  - attribute_id: 1632
+    value: 2015
+  - attribute_id: 161
+    value: 0
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 4
+    value: 0
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 15
+    value: 700
+  - attribute_id: 49
+    value: 500
+  graphic_id: 4534
+  group_id: 1028
+  mass: 0
+  name: "Lava Advanced Industry Facility"
+  packaged_volume: 0
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 2470
+  volume: 0
+"2480":
+  capacity: 0
+  description: "Populated almost entirely by robotic laborers, mass production facilities\
+    \ excel at creating products in bulk with minimal supervision and maintenance.\
+    \ They can be so self-sufficient that rumors abound of Gallente factories operated\
+    \ entirely by androids and governed by a skeleton crew of drones. (Detractors\
+    \ of this method like to note that Sansha facilities work in much the same fashion.)\
+    \ Either way, the results are irrefutable: Raw materials and components go in\
+    \ one end, and polished commodities come out the other side."
+  dogma_attributes:
+  - attribute_id: 1632
+    value: 11
+  - attribute_id: 161
+    value: 0
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 4
+    value: 0
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 15
+    value: 700
+  - attribute_id: 49
+    value: 500
+  graphic_id: 4523
+  group_id: 1028
+  mass: 0
+  name: "Temperate Advanced Industry Facility"
+  packaged_volume: 0
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 2480
+  volume: 0
