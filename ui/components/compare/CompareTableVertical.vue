@@ -5,8 +5,6 @@ import DogmaAttributeLink from "~/components/helpers/DogmaAttributeLink.vue";
 import AttributeTypeIcon from "~/components/icons/AttributeTypeIcon.vue";
 import MetaGroupName from "~/components/helpers/MetaGroupName.vue";
 
-const {locale} = useI18n();
-
 export interface Props {
 	inventoryTypes: InventoryType[],
 	dogmaAttributes: DogmaAttribute[],

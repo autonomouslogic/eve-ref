@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import refdataApi from "~/refdata";
 import {type InventoryType} from "~/refdata-openapi";
+import {prepMessages} from "~/lib/translate";
 
 const {locale} = useI18n();
 
@@ -21,6 +22,6 @@ const type: InventoryType | undefined = props.typeId ? await refdataApi.getType(
 	<NuxtLink
 		v-if="type && type.name"
 		:to="`/types/${props.typeId}`">
-		{{ type.name[locale] }}
+		{{ prepMessages(type.name)[locale] }}
 	</NuxtLink>
 </template>

@@ -5,6 +5,7 @@ import typeCardsConfig from "~/conf/typeCardsConfig";
 import DefensesCard from "~/components/cards/defenses/DefensesCard.vue";
 import TypeCardSelector from "~/components/types/TypeCardSelector.vue";
 import {loadDogmaAttributesForType} from "~/lib/dogmaUtils";
+import {prepMessages} from "~/lib/translate";
 
 const {locale} = useI18n();
 
@@ -39,14 +40,14 @@ if (Object.keys(dogmaAttributes).length > 0) {
 
 <template>
 	<TraitsCard :inventory-type="inventoryType"/>
-	<DefensesCard :title="typeCardsConfig.defenses.name[locale]"
+	<DefensesCard :title="prepMessages(typeCardsConfig.defenses.name)[locale]"
 		:inventory-type="inventoryType"
 		:dogma-attributes="cardAttributes.defenses"/>
 	<CardsContainer>
 		<template v-for="(attributes, cardId) in cardAttributes" :key="cardId">
 			<TypeCardSelector
 				:component="typeCardsConfig[cardId].component"
-				:title="typeCardsConfig[cardId].name[locale]"
+				:title="prepMessages(typeCardsConfig[cardId].name)[locale]"
 				:inventory-type="inventoryType"
 				:dogma-attributes="attributes"
 			/>
