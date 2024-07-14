@@ -16,30 +16,32 @@ While changes should be minimal, they may occur at any time.
 The full OpenAPI spec is [available on Github](https://github.com/autonomouslogic/eve-ref/blob/main/spec/reference-data.yaml).
 
 Some example paths:
-* <https://ref-data.everef.net/types>
-* <https://ref-data.everef.net/types/645>
+* <https://ref-data.everef.net/blueprints>
+* <https://ref-data.everef.net/blueprints/999>
 * <https://ref-data.everef.net/categories>
 * <https://ref-data.everef.net/categories/4>
+* <https://ref-data.everef.net/dogma_attributes>
+* <https://ref-data.everef.net/dogma_attributes/37>
+* <https://ref-data.everef.net/dogma_effects>
+* <https://ref-data.everef.net/dogma_effects/11>
 * <https://ref-data.everef.net/groups>
 * <https://ref-data.everef.net/groups/18>
 * <https://ref-data.everef.net/market_groups>
 * <https://ref-data.everef.net/market_groups/1857>
 * <https://ref-data.everef.net/meta_groups>
 * <https://ref-data.everef.net/meta_group/6>
-* <https://ref-data.everef.net/dogma_attributes>
-* <https://ref-data.everef.net/dogma_attributes/37>
-* <https://ref-data.everef.net/dogma_effects>
-* <https://ref-data.everef.net/dogma_effects/11>
-* <https://ref-data.everef.net/skills>
-* <https://ref-data.everef.net/skills/3336>
 * <https://ref-data.everef.net/mutaplasmids>
 * <https://ref-data.everef.net/mutaplasmids/52225>
-* <https://ref-data.everef.net/units>
-* <https://ref-data.everef.net/units/1>
-* <https://ref-data.everef.net/blueprints>
-* <https://ref-data.everef.net/blueprints/999>
 * <https://ref-data.everef.net/regions>
 * <https://ref-data.everef.net/regions/10000002>
+* <https://ref-data.everef.net/schematics>
+* <https://ref-data.everef.net/schematics/65>
+* <https://ref-data.everef.net/skills>
+* <https://ref-data.everef.net/skills/3336>
+* <https://ref-data.everef.net/types>
+* <https://ref-data.everef.net/types/645>
+* <https://ref-data.everef.net/units>
+* <https://ref-data.everef.net/units/1>
 
 ## Motivation
 Two primary datasets are available for third-party developers of EVE Online: the SDE and ESI.
@@ -93,7 +95,7 @@ This table show the available data and where to get it.
 | Industry target filters       |                     |                                      |                                 | `industrytargetfilters.json`        |
 | Inventory categories          | `/categories`       | `fsd/categories.yaml`                | `universe/categories.yaml`      |                                     |
 | Inventory flags               |                     | `bsd/invFlags.yaml`                  |                                 |                                     |
-| Inventory groups              | `/groups`           | `bsd/groups.yaml`                    | `universe/groups.yaml`          |                                     |
+| Inventory groups              | `/groups`           | `fsd/groups.yaml`                    | `universe/groups.yaml`          |                                     |
 | Inventory items               |                     | `bsd/invItems.yaml`                  |                                 |                                     |
 | Inventory names               |                     | `bsd/invNames.yaml`                  |                                 |                                     |
 | Inventory positions           |                     | `bsd/invPositions.yaml`              |                                 |                                     |
