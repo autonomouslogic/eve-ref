@@ -1,7 +1,7 @@
 const cards: {[key: string]: any} = {
 	"defenses":
 		{
-			"name": {"en": "defenses"},
+			"name": {"en": "Defenses"},
 			"component": "defenses",
 			"dogmaAttributes":
 				[
@@ -27,12 +27,12 @@ const cards: {[key: string]: any} = {
 		},
 	"market":
 		{
-			"name": {"en": "market"},
+			"name": {"en": "Market"},
 			"component": "market"
 		},
 	"basic":
 		{
-			"name": {"en": "basic"},
+			"name": {"en": "Basic"},
 			"component": "basic",
 			"dogmaAttributes":
 				[
@@ -52,7 +52,7 @@ const cards: {[key: string]: any} = {
 		},
 	"offenses":
 		{
-			"name": {"en": "offenses"},
+			"name": {"en": "Offenses"},
 			"dogmaAttributes":
 				[
 					"energyNeutralizerAmount",
@@ -71,7 +71,7 @@ const cards: {[key: string]: any} = {
 		},
 	"npc":
 		{
-			"name": {"en": "npc"},
+			"name": {"en": "NPC"},
 			"dogmaAttributes":
 				[
 					"AI_ChanceToNotTargetSwitch",
@@ -110,7 +110,7 @@ const cards: {[key: string]: any} = {
 		},
 	"module":
 		{
-			"name": {"en": "module"},
+			"name": {"en": "Module"},
 			"dogmaAttributes":
 				[
 					"duration",
@@ -125,13 +125,13 @@ const cards: {[key: string]: any} = {
 		},
 	"variations":
 		{
-			"name": {"en": "variations"},
+			"name": {"en": "Variations"},
 			"component": "variations",
 			"alwaysShow": true
 		},
 	"skill":
 		{
-			"name": {"en": "skill"},
+			"name": {"en": "Skill"},
 			"dogmaAttributes":
 				[
 					"primaryAttribute",
@@ -142,7 +142,7 @@ const cards: {[key: string]: any} = {
 		},
 	"cargo":
 		{
-			"name": {"en": "cargo"},
+			"name": {"en": "Cargo"},
 			"dogmaAttributes":
 				[
 					"fleetHangarCapacity",
@@ -157,7 +157,7 @@ const cards: {[key: string]: any} = {
 		},
 	"fitting":
 		{
-			"name": {"en": "fitting"},
+			"name": {"en": "Fitting"},
 			"dogmaAttributes":
 				[
 					"powerOutput",
@@ -182,7 +182,7 @@ const cards: {[key: string]: any} = {
 		},
 	"structure":
 		{
-			"name": {"en": "structure"},
+			"name": {"en": "Structure"},
 			"dogmaAttributes":
 				[
 					"tetheringRange",
@@ -197,7 +197,7 @@ const cards: {[key: string]: any} = {
 		},
 	"probe":
 		{
-			"name": {"en": "probe"},
+			"name": {"en": "Probe"},
 			"dogmaAttributes":
 				[
 					"baseMaxScanDeviation",
@@ -208,7 +208,7 @@ const cards: {[key: string]: any} = {
 		},
 	"targeting":
 		{
-			"name": {"en": "targeting"},
+			"name": {"en": "Targeting"},
 			"dogmaAttributes":
 				[
 					"maxLockedTargets",
@@ -226,7 +226,7 @@ const cards: {[key: string]: any} = {
 		},
 	"weapon":
 		{
-			"name": {"en": "weapon"},
+			"name": {"en": "Weapon"},
 			"dogmaAttributes":
 				[
 					"damageMultiplier",
@@ -244,7 +244,7 @@ const cards: {[key: string]: any} = {
 		},
 	"ammunition":
 		{
-			"name": {"en": "ammunition"},
+			"name": {"en": "Ammunition"},
 			"dogmaAttributes":
 				[
 					"emDamage",
@@ -270,7 +270,7 @@ const cards: {[key: string]: any} = {
 		},
 	"navigation":
 		{
-			"name": {"en": "navigation"},
+			"name": {"en": "Navigation"},
 			"dogmaAttributes":
 				[
 					"maxVelocity",
@@ -289,7 +289,7 @@ const cards: {[key: string]: any} = {
 		},
 	"drones":
 		{
-			"name": {"en": "drones"},
+			"name": {"en": "Drones"},
 			"dogmaAttributes":
 				[
 					"droneCapacity",
@@ -298,7 +298,7 @@ const cards: {[key: string]: any} = {
 		},
 	"fighters":
 		{
-			"name": {"en": "fighters"},
+			"name": {"en": "Fighters"},
 			"dogmaAttributes":
 				[
 					"fighterCapacity",
@@ -312,7 +312,7 @@ const cards: {[key: string]: any} = {
 		},
 	"fighterSupport":
 		{
-			"name": {"en": "fighterSupport"},
+			"name": {"en": "Fighter Support"},
 			"dogmaAttributes":
 				[
 					"fighterBonusROFPercent",
@@ -323,7 +323,7 @@ const cards: {[key: string]: any} = {
 		},
 	"requiredSkills":
 		{
-			"name": {"en": "requiredSkills"},
+			"name": {"en": "Required Skills"},
 			"component": "requiredSkills",
 			"dogmaAttributes":
 				[
@@ -341,13 +341,13 @@ const cards: {[key: string]: any} = {
 		},
 	"insurance":
 		{
-			"name": {"en": "insurance"},
+			"name": {"en": "Insurance"},
 			"component": "insurance",
 			"alwaysShow": true
 		},
 	"overloading":
 		{
-			"name": {"en": "overloading"},
+			"name": {"en": "Overloading"},
 			"dogmaAttributes":
 				[
 					"requiredThermoDynamicsSkill",
@@ -376,7 +376,7 @@ const cards: {[key: string]: any} = {
 		},
 	"capBooster":
 		{
-			"name": {"en": "capBooster"},
+			"name": {"en": "Cap Booster"},
 			"dogmaAttributes":
 				[
 					"capacitorBonus",
@@ -385,7 +385,7 @@ const cards: {[key: string]: any} = {
 		},
 	"commandBurst":
 		{
-			"name": {"en": "commandBurst"},
+			"name": {"en": "Command Burst"},
 			"dogmaAttributes":
 				[
 					"warfareBuff1ID",
@@ -400,7 +400,7 @@ const cards: {[key: string]: any} = {
 		},
 	"crystal":
 		{
-			"name": {"en": "crystal"},
+			"name": {"en": "Crystal"},
 			"dogmaAttributes":
 				[
 					"crystalsGetDamaged",
@@ -410,7 +410,7 @@ const cards: {[key: string]: any} = {
 		},
 	"fuel":
 		{
-			"name": {"en": "fuel"},
+			"name": {"en": "Fuel"},
 			"dogmaAttributes":
 				[
 					"serviceModuleFuelAmount",
@@ -421,7 +421,7 @@ const cards: {[key: string]: any} = {
 		},
 	"usage":
 		{
-			"name": {"en": "usage"},
+			"name": {"en": "Usage"},
 			"dogmaAttributes":
 				[
 					"canFitShipGroup01",
@@ -449,7 +449,7 @@ const cards: {[key: string]: any} = {
 		},
 	"mining":
 		{
-			"name": {"en": "mining"},
+			"name": {"en": "Mining"},
 			"dogmaAttributes":
 				[
 					"asteroidMetaLevel",
@@ -463,7 +463,7 @@ const cards: {[key: string]: any} = {
 		},
 	"reprocessing":
 		{
-			"name": {"en": "reprocessing"},
+			"name": {"en": "Reprocessing"},
 			"component": "reprocessing",
 			"dogmaAttributes":
 				[
@@ -524,23 +524,23 @@ const cards: {[key: string]: any} = {
 		},
 	"other":
 		{
-			"name": {"en": "other"}
+			"name": {"en": "Other"}
 		},
 	"typeInfo":
 		{
-			"name": {"en": "typeInfo"},
+			"name": {"en": "Type Info"},
 			"component": "typeInfo",
 			"alwaysShow": true
 		},
 	"skins":
 		{
-			"name": {"en": "skins"},
+			"name": {"en": "Skins"},
 			"component": "skins",
 			"alwaysShow": true
 		},
 	"skin":
 		{
-			"name": {"en": "skin"},
+			"name": {"en": "Skin"},
 			"component": "skin",
 			"alwaysShow": true
 		}
