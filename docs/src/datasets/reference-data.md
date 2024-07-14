@@ -114,7 +114,7 @@ This table show the available data and where to get it.
 | Opportunity groups            |                     |                                      | `opportunities/groups.yaml`     |                                     |
 | Opportunity tasks             |                     |                                      | `opportunities/tasks.yaml`      |                                     |
 | Planet resources              |                     | `fsd/planetResources.yaml`           |                                 |                                     |
-| Planetary schematics          |                     | `fsd/planetSchematics.yaml`          | `universe/schematics.yaml`      |                                     |
+| Planetary schematics          | `/schematics`       | `fsd/planetSchematics.yaml`          | `universe/schematics.yaml`      |                                     |
 | Planets                       |                     | `fsd/universe`                       | `universe/planets.yaml`         |                                     |
 | Races                         |                     | `fsd/races.yaml`                     | `universe/races.yaml`           |                                     |
 | Regions                       | `/regions`          | `fsd/universe`                       | `universe/regions.yaml`         |                                     |
