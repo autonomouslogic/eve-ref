@@ -13,7 +13,7 @@ const result = typeLinkService.parse(props.content);
 </script>
 
 <template>
-	<template v-for="(item, i) in result" :key="i">
+	<template v-for="(item, i) in (typeLinkService.parse(content))" :key="i">
 		<TypeLink :type-id="item" v-if="typeof item === 'number'"/>
 		<template v-else>{{ item }}</template>
 	</template>
