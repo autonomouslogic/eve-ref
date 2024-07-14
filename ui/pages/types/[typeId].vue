@@ -7,6 +7,7 @@ import MarketGroupBreadcrumbs from "~/components/helpers/MarketGroupBreadcrumbs.
 import TypeCards from "~/components/types/TypeCards.vue";
 import LinkParser from "~/components/helpers/LinkParser.vue";
 import {getIntRouteParam} from "~/lib/routeUtils";
+import {prepMessages} from "../../lib/translate";
 
 const {locale} = useI18n();
 const route = useRoute();
@@ -25,13 +26,13 @@ if (typeof inventoryType.groupId !== "number") {
 	throw new Error(`Inventory type ${typeId} has no group ID`);
 }
 useHead({
-	title: inventoryType.name?.[locale.value]
+	title: prepMessages(inventoryType.name)[locale.value]
 });
 const inventoryGroup: InventoryGroup = await refdataApi.getGroup({groupId: inventoryType.groupId});
 </script>
 
 <template>
-	<h1 v-if="inventoryType.name">{{ inventoryType.name[locale] }}</h1>
+	<h1 v-if="inventoryType.name">{{ prepMessages(inventoryType.name)[locale] }}</h1>
 	<div class="mb-3">
 		<div v-if="inventoryType.marketGroupId">
 			Market group: <MarketGroupBreadcrumbs :market-group-id="inventoryType.marketGroupId" />
@@ -48,6 +49,6 @@ const inventoryGroup: InventoryGroup = await refdataApi.getGroup({groupId: inven
 
 	<h2>Description</h2>
 	<p v-if="inventoryType.description">
-		<LinkParser :content="inventoryType.description[locale]"/>
+		<LinkParser :content="prepMessages(inventoryType.description)[locale]"/>
 	</p>
 </template>

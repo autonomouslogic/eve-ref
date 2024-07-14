@@ -6,8 +6,6 @@ import TypeTraits from "~/components/types/traits/TypeTraits.vue";
 const props = defineProps<{
 	traits: InventoryTypeTraits | undefined
 }>();
-
-const {locale} = useI18n();
 </script>
 
 <template>

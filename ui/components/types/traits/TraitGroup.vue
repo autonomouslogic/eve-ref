@@ -2,6 +2,7 @@
 import {type TraitBonus} from "~/refdata-openapi";
 import LinkParser from "~/components/helpers/LinkParser.vue";
 import UnitValue from "~/components/dogma/UnitValue.vue";
+import {prepMessages} from "~/lib/translate";
 
 const {locale} = useI18n();
 
@@ -21,7 +22,7 @@ const hasBonuses: boolean = props.bonuses !== undefined && Object.keys(props.bon
 				<template v-if="trait.bonus !== undefined && trait.unitId !== undefined">
 					<UnitValue :value="trait.bonus" :unit-id="trait.unitId" />&nbsp;
 				</template>
-				<LinkParser v-if="trait.bonusText" :content="trait.bonusText[locale]"/>
+				<LinkParser v-if="trait.bonusText" :content="prepMessages(trait.bonusText)[locale]"/>
 			</li>
 		</ul>
 	</div>

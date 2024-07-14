@@ -4,7 +4,7 @@ import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 import ExternalLink from "~/components/helpers/ExternalLink.vue";
 import {PATREON_URL} from "~/lib/urls";
 
-const {locale, availableLocales } = useI18n();
+const { locale, availableLocales } = useI18n();
 const selectedLocale = ref(locale);
 
 </script>

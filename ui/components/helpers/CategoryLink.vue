@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import refdataApi from "~/refdata";
 import {type InventoryCategory} from "~/refdata-openapi";
+import {prepMessages} from "~/lib/translate";
 
 const props = defineProps<{
 	categoryId: number | undefined
@@ -19,7 +20,7 @@ const category: InventoryCategory = await refdataApi.getCategory({categoryId: pr
 	<NuxtLink
 		v-if="category && category.name"
 		:to="`/categories/${props.categoryId}`">
-		{{ category.name[locale] }}
+		{{ prepMessages(category.name)[locale] }}
 	</NuxtLink>
 	<span v-else>(Unknown category ID {{props.categoryId}})</span>
 </template>

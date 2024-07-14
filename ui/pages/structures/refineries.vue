@@ -2,13 +2,14 @@
 import refdataApi from "~/refdata";
 import MarketGroupName from "~/components/helpers/MarketGroupName.vue";
 import {STRUCTURE_COMPARISON_REFINERY_DOGMA_NAMES} from "~/lib/structureConstants";
+import {prepMessages} from "~/lib/translate";
 
 const {locale} = useI18n();
 
 const marketGroupId = 2327;
 const marketGroup = await refdataApi.getMarketGroup({marketGroupId});
 useHead({
-	title: marketGroup.name?.[locale.value]
+	title: prepMessages(marketGroup.name)[locale.value]
 });
 const structureIds = marketGroup.typeIds;
 if (!structureIds) {

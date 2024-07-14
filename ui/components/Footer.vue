@@ -2,9 +2,6 @@
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 import ExternalLink from "~/components/helpers/ExternalLink.vue";
 import {DISCORD_URL, EVE_REFERRAL_URL, GITHUB_URL, MARKEE_DRAGON_URL, PATREON_URL} from "~/lib/urls";
-
-const {locale } = useI18n();
-
 </script>
 
 <template>
