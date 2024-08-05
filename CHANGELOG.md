@@ -1,5 +1,26 @@
 EVE Ref Changelog
 
+## [2.46.1](https://github.com/autonomouslogic/eve-ref/compare/2.46.0...2.46.1) (2024-08-05)
+
+
+### Features
+
+* **ui:** Reactions card ([ff41774](https://github.com/autonomouslogic/eve-ref/commit/ff41774b3a7ef4ce0bae5c549954b63529c63a38))
+
+
+### Bug Fixes
+
+* **deps:** update dependency org.flywaydb:flyway-core to v10.17.0 ([#550](https://github.com/autonomouslogic/eve-ref/issues/550)) ([58ed1c1](https://github.com/autonomouslogic/eve-ref/commit/58ed1c11278063584cb784bd279f8191821e457f))
+* **ui:** Changed money to include thousands and shorten anything over the limit ([20118b0](https://github.com/autonomouslogic/eve-ref/commit/20118b017798a30486ccf2abd32bc7d4f395dabd))
+* **ui:** Fixing translations ([#548](https://github.com/autonomouslogic/eve-ref/issues/548)) ([e835561](https://github.com/autonomouslogic/eve-ref/commit/e8355616e5d7b9ee3cdd7033660b9df49e37aa9c))
+* **ui:** Remove defences card on types that don't need it ([79c9e8b](https://github.com/autonomouslogic/eve-ref/commit/79c9e8b0bfe2423ebae5c2bde4fca2f4c82897b0))
+
+
+### Documentation
+
+* Added schematics to reference data file list ([f7bc524](https://github.com/autonomouslogic/eve-ref/commit/f7bc52484e51d6a554742226bf7e8f8aad95399e))
+* Updated reference data files list ([a099b02](https://github.com/autonomouslogic/eve-ref/commit/a099b026d55011a17da05775b2db8c5ae78c33fd))
+
 ## [2.46.0](https://github.com/autonomouslogic/eve-ref/compare/2.45.8...2.46.0) (2024-07-13)
 
 
