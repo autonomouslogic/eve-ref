@@ -1,5 +1,13 @@
 EVE Ref Changelog
 
+## [2.46.2](https://github.com/autonomouslogic/eve-ref/compare/2.46.1...2.46.2) (2024-08-06)
+
+
+### Bug Fixes
+
+* **deps:** update dependency org.flywaydb:flyway-database-postgresql to v10.17.0 ([#551](https://github.com/autonomouslogic/eve-ref/issues/551)) ([7612833](https://github.com/autonomouslogic/eve-ref/commit/7612833ca42d38c657f420b09ea5ddd0d4c04ecf))
+* **deps:** update font awesome to v6.6.0 ([#552](https://github.com/autonomouslogic/eve-ref/issues/552)) ([9fc92e7](https://github.com/autonomouslogic/eve-ref/commit/9fc92e70a98492caa9cc364fdf3505c6f0b97d73))
+
 ## [2.46.1](https://github.com/autonomouslogic/eve-ref/compare/2.46.0...2.46.1) (2024-08-05)
 
 
