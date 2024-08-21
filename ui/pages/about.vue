@@ -5,7 +5,7 @@ import {
 	DISCORD_URL,
 	EVE_REF_CHAR,
 	EVE_REF_CORP,
-	EVE_REFERRAL_URL,
+	EVE_REFERRAL_URL, EVE_STORE_URL,
 	GITHUB_URL,
 	HETZNER_REFERAL_URL,
 	MARKEE_DRAGON_URL,
@@ -46,6 +46,9 @@ useHead({
 			<p>
 				<ExternalLink :url="MARKEE_DRAGON_URL">Buy PLEX or Omega from Markee Dragon</ExternalLink>
 				to support EVE Ref through their affiliate programme. Use the code "everef" to get 3% off.
+			</p>
+			<p>
+				<ExternalLink :url="EVE_STORE_URL">Buy in the EVE Online Store</ExternalLink> and use code "everef".
 			</p>
 			<p>
 				<ExternalLink :url="EVE_REFERRAL_URL">Join New Eden</ExternalLink> and get get 1,000,000 free skill points.
