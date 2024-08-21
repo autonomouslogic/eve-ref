@@ -391,3 +391,12 @@ task scrapeStructures(type: JavaExec) {
 	classpath = sourceSets.main.runtimeClasspath
 	mainClass = mainClassName
 }
+
+task buildSearch(type: JavaExec) {
+	group "application"
+	args "build-search"
+	environment envProperties
+
+	classpath = sourceSets.main.runtimeClasspath
+	mainClass = mainClassName
+}

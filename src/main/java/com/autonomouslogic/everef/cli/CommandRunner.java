@@ -71,6 +71,9 @@ public class CommandRunner {
 	protected Provider<ScrapeStructures> scrapeStructuresProvider;
 
 	@Inject
+	protected Provider<BuildSearch> buildSearchProvider;
+
+	@Inject
 	protected SentryDecorator sentryDecorator;
 
 	@Inject
@@ -139,6 +142,8 @@ public class CommandRunner {
 				return basicLoginProvider.get();
 			case "scrape-structures":
 				return scrapeStructuresProvider.get();
+			case "build-search":
+				return buildSearchProvider.get();
 			default:
 				throw new IllegalArgumentException("Unknown command: " + name);
 		}
