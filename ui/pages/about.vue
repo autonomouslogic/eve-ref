@@ -51,7 +51,7 @@ useHead({
 				<ExternalLink :url="EVE_STORE_URL">Buy in the EVE Online Store</ExternalLink> and use code "everef".
 			</p>
 			<p>
-				<ExternalLink :url="EVE_REFERRAL_URL">Join New Eden</ExternalLink> and get get 1,000,000 free skill points.
+				<ExternalLink :url="EVE_REFERRAL_URL">Join New Eden</ExternalLink> and get 1,000,000 free skill points.
 			</p>
 			<p>
 				<ExternalLink :url="HETZNER_REFERAL_URL">Use Hetzner</ExternalLink> and €20 free credits.
