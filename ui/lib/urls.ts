@@ -6,5 +6,6 @@ export const EVE_STORE_URL = "https://store.eveonline.com/";
 export const DATE_TOVIKOV_CHAR = "https://evewho.com/character/1452072530";
 export const EVE_REF_CHAR = "https://evewho.com/character/2113778331";
 export const EVE_REF_CORP = "https://evewho.com/corporation/98547654";
-export const DISCORD_URL = "https://discord.gg/fZYPAxFyXG";
+export const DISCORD_URL = "/discord";
+export const REAL_DISCORD_URL = "https://discord.gg/fZYPAxFyXG";
 export const GITHUB_URL = "https://github.com/autonomouslogic/eve-ref/";
