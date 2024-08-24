@@ -6,7 +6,7 @@ import lombok.Value;
 
 @Value
 @Builder(toBuilder = true)
-public final class SearchJsonEntry {
+public class SearchJsonEntry {
 	@JsonProperty
 	public String text;
 

@@ -5,18 +5,34 @@ import static com.autonomouslogic.everef.util.ArchivePathFactory.REFERENCE_DATA;
 import com.autonomouslogic.commons.ResourceUtil;
 import com.autonomouslogic.commons.rxjava3.Rx3Util;
 import com.autonomouslogic.everef.config.Configs;
+import com.autonomouslogic.everef.data.LoadedRefData;
 import com.autonomouslogic.everef.http.OkHttpHelper;
 import com.autonomouslogic.everef.model.ReferenceEntry;
 import com.autonomouslogic.everef.model.refdata.RefDataConfig;
 import com.autonomouslogic.everef.model.refdata.RefTypeConfig;
 import com.autonomouslogic.everef.openapi.refdata.apis.RefdataApi;
+import com.autonomouslogic.everef.refdata.Blueprint;
+import com.autonomouslogic.everef.refdata.DogmaAttribute;
+import com.autonomouslogic.everef.refdata.DogmaEffect;
+import com.autonomouslogic.everef.refdata.Icon;
+import com.autonomouslogic.everef.refdata.InventoryCategory;
+import com.autonomouslogic.everef.refdata.InventoryGroup;
+import com.autonomouslogic.everef.refdata.InventoryType;
+import com.autonomouslogic.everef.refdata.MarketGroup;
+import com.autonomouslogic.everef.refdata.MetaGroup;
+import com.autonomouslogic.everef.refdata.Mutaplasmid;
 import com.autonomouslogic.everef.refdata.RefDataMeta;
+import com.autonomouslogic.everef.refdata.Region;
+import com.autonomouslogic.everef.refdata.Schematic;
+import com.autonomouslogic.everef.refdata.Skill;
+import com.autonomouslogic.everef.refdata.Unit;
 import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.url.UrlParser;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.base.CaseFormat;
+import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.schedulers.Schedulers;
@@ -26,9 +42,11 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.BiConsumer;
 import java.util.function.Function;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.inject.Provider;
 import javax.inject.Singleton;
 import lombok.NonNull;
 import lombok.SneakyThrows;
@@ -62,6 +80,9 @@ public class RefDataUtil {
 
 	@Inject
 	protected UrlParser urlParser;
+
+	@Inject
+	protected Provider<LoadedRefData> loadedRefDataProvider;
 
 	private List<RefDataConfig> cachedConfigs;
 
@@ -216,5 +237,74 @@ public class RefDataUtil {
 							Flowable.fromIterable(children).flatMap(this::getAllTypeIdsForMarketGroup));
 				})
 				.distinct();
+	}
+
+	public Single<LoadedRefData> loadLatestRefData() {
+		var loaded = loadedRefDataProvider.get();
+		return downloadLatestReferenceData()
+				.flatMapPublisher(this::parseReferenceDataArchive)
+				.observeOn(Schedulers.io())
+				.flatMapCompletable(
+						refEntry -> Completable.fromAction(() -> {
+							switch (refEntry.getType()) {
+								case "categories":
+									putToLoadedRefData(refEntry, InventoryCategory.class, loaded::putCategory);
+									break;
+								case "groups":
+									putToLoadedRefData(refEntry, InventoryGroup.class, loaded::putGroup);
+									break;
+								case "market_groups":
+									putToLoadedRefData(refEntry, MarketGroup.class, loaded::putMarketGroup);
+									break;
+								case "types":
+									putToLoadedRefData(refEntry, InventoryType.class, loaded::putType);
+									break;
+								case "dogma_attributes":
+									putToLoadedRefData(refEntry, DogmaAttribute.class, loaded::putDogmaAttribute);
+									break;
+								case "dogma_effects":
+									putToLoadedRefData(refEntry, DogmaEffect.class, loaded::putDogmaEffect);
+									break;
+								case "meta_groups":
+									putToLoadedRefData(refEntry, MetaGroup.class, loaded::putMetaGroup);
+									break;
+								case "mutaplasmids":
+									putToLoadedRefData(refEntry, Mutaplasmid.class, loaded::putMutaplasmid);
+									break;
+								case "skills":
+									putToLoadedRefData(refEntry, Skill.class, loaded::putSkill);
+									break;
+								case "units":
+									putToLoadedRefData(refEntry, Unit.class, loaded::putUnit);
+									break;
+								case "blueprints":
+									putToLoadedRefData(refEntry, Blueprint.class, loaded::putBlueprint);
+									break;
+								case "icons":
+									putToLoadedRefData(refEntry, Icon.class, loaded::putIcon);
+									break;
+								case "regions":
+									putToLoadedRefData(refEntry, Region.class, loaded::putRegion);
+									break;
+								case "schematics":
+									putToLoadedRefData(refEntry, Schematic.class, loaded::putSchematic);
+									break;
+								case "meta":
+									// ignore.
+									break;
+								default:
+									throw new IllegalStateException("Unknown ref data type: " + refEntry.getType());
+							}
+						}),
+						false,
+						Runtime.getRuntime().availableProcessors())
+				.andThen(Single.just(loaded))
+				.observeOn(Schedulers.computation());
+	}
+
+	@SneakyThrows
+	private <T> void putToLoadedRefData(ReferenceEntry refEntry, Class<T> clazz, BiConsumer<Long, T> putter) {
+		T item = objectMapper.readValue(refEntry.getContent(), clazz);
+		putter.accept(refEntry.getId(), item);
 	}
 }
