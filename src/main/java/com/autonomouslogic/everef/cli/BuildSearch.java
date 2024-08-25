@@ -9,19 +9,24 @@ import com.autonomouslogic.everef.refdata.InventoryType;
 import com.autonomouslogic.everef.refdata.MarketGroup;
 import com.autonomouslogic.everef.refdata.MetaGroup;
 import com.autonomouslogic.everef.util.RefDataUtil;
+import com.fasterxml.jackson.core.JsonEncoding;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Ordering;
 import com.google.common.collect.Streams;
+import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Flowable;
+import io.reactivex.rxjava3.core.FlowableTransformer;
 import io.reactivex.rxjava3.core.Maybe;
+import java.io.File;
 import java.io.FileOutputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.inject.Inject;
 import lombok.extern.log4j.Log4j2;
-import org.apache.commons.io.IOUtils;
+import org.reactivestreams.Publisher;
 
 /**
  * Builds the JSON for UI search.
@@ -42,67 +47,48 @@ public class BuildSearch implements Command {
 		return refDataUtil
 				.loadLatestRefData()
 				.flatMapPublisher(this::buildSearch)
-				.map(e -> e.toBuilder().text(e.getText().trim()).build())
-				.filter(e -> !e.getText().isEmpty())
-				.sorted(Ordering.natural().onResultOf(SearchJsonEntry::getText))
-				.toList()
-				.flatMapCompletable(entries -> Completable.fromAction(() -> {
-					var json = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(entries);
-					log.info("Writing {} bytes", json.length());
-					IOUtils.write(json, new FileOutputStream("/tmp/search.json"), StandardCharsets.UTF_8);
-				}));
+				.compose(cleanEntries())
+				//.sorted(Ordering.natural().onResultOf(SearchJsonEntry::getText))
+				.compose(writeToFile())
+				.ignoreElements();
 	}
 
 	private Flowable<SearchJsonEntry> buildSearch(LoadedRefData loadedRefData) {
 		return Flowable.fromStream(Streams.concat(
-				loadedRefData.getAllTypes().flatMap(type -> inventoryType(type.getValue(), loadedRefData))));
+				loadedRefData.getAllTypes().flatMap(pair -> inventoryType(pair.getValue(), loadedRefData)),
+				loadedRefData.getAllMarketGroups().flatMap(pair -> marketGroup(pair.getValue(), loadedRefData)),
+				loadedRefData.getAllCategories().flatMap(pair -> inventoryCategory(pair.getValue(), loadedRefData)),
+				loadedRefData.getAllGroups().flatMap(pair -> inventoryGroup(pair.getValue(), loadedRefData))
+		));
 	}
 
-	private Stream<SearchJsonEntry> inventoryType(InventoryType item, LoadedRefData loadedRefData) {
-		if (!item.getPublished() || item.getMarketGroupId() == null) {
-			return Stream.empty();
-		}
+	private Stream<SearchJsonEntry> inventoryType(InventoryType type, LoadedRefData loadedRefData) {
+//		if (!item.getPublished() || item.getMarketGroupId() == null) {
+//			return Stream.empty();
+//		}
 
 		String typeName;
-		if (item.getMarketGroupId() != null) {
-			typeName = Optional.ofNullable(getRootMarketGroup(item, loadedRefData))
+		if (type.getMarketGroupId() != null) {
+			typeName = Optional.ofNullable(getRootMarketGroup(type, loadedRefData))
 					.flatMap(g -> Optional.ofNullable(g.getName().get("en")))
 					.orElse("Inventory type");
-		} else if (item.getGroupId() != null) {
-			loadedRefData.getGroup(item.getGroupId()).getName().get("en");
-			typeName = Optional.ofNullable(getRootMarketGroup(item, loadedRefData))
+		} else if (type.getGroupId() != null) {
+			loadedRefData.getGroup(type.getGroupId()).getName().get("en");
+			typeName = Optional.ofNullable(getRootMarketGroup(type, loadedRefData))
 					.flatMap(g -> Optional.ofNullable(g.getName().get("en")))
 					.orElse("Inventory type");
 		} else {
 			return Stream.empty();
 		}
 		var searchEntry = SearchJsonEntry.builder()
-				.id(item.getTypeId())
-				.link("/types/" + item.getTypeId())
+				.id(type.getTypeId())
+				.link("/types/" + type.getTypeId())
 				.type(typeName)
 				.build();
-		return item.getName().keySet().stream()
-				.filter(lang -> lang.equals("en")) // only English for now
+		return type.getName().keySet().stream()
+				.filter(lang -> lang.equals("en")) // only English for now, otherwise the search file becomes massive
 				.map(lang ->
-						searchEntry.toBuilder().text(item.getName().get(lang)).build());
-
-		//		return inventoryTypeDao.getAllInventoryTypes()
-		//			.filter(type -> type.getName("en") != null)
-		////			.filter(type -> type.getPublished())
-		////			.filter(type -> type.getMarketGroupId() != null)
-		//			.map(type -> {
-		//				SearchJsonEntry entry = new SearchJsonEntry();
-		//				entry.text = type.getName("en");
-		//				entry.id = type.getTypeId();
-		//				entry.link = linkHelper.link(type);
-		//				if (type.getMarketGroup() != null) {
-		//					entry.type = marketGroupDao.chain(type).get(0).getName().get("en");
-		//				}
-		//				else if (type.getInventoryGroup() != null) {
-		//					entry.type = type.getInventoryGroup().get().getCategory().get().getName().get("en");
-		//				}
-		//				return entry;
-		//			});
+						searchEntry.toBuilder().text(type.getName().get(lang)).build());
 	}
 
 	private MarketGroup getRootMarketGroup(InventoryType type, LoadedRefData loadedRefData) {
@@ -127,60 +113,80 @@ public class BuildSearch implements Command {
 		return getRootMarketGroup(parentGroup, loadedRefData);
 	}
 
-	private Flowable<SearchJsonEntry> marketGroup(
-			ReferenceEntry refEntry, SearchJsonEntry searchEntry, MarketGroup item) {
-		return Flowable.empty();
-		//		return marketGroupDao.getAllMarketGroups()
-		//			.map(group -> {
-		//				SearchJsonEntry entry = new SearchJsonEntry();
-		//				entry.text = marketGroupDao.chain(group).stream()
-		//					.map(g -> g.getName().get("en"))
-		//					.collect(Collectors.joining(" > "));
-		//				entry.id = group.getMarketGroupId();
-		//				entry.link = linkHelper.link(group);
-		//				entry.type = "Market group";
-		//				return entry;
-		//			});
+	private Stream<SearchJsonEntry> marketGroup(MarketGroup group, LoadedRefData loadedRefData) {
+						var text = marketGroupChain(group, loadedRefData)
+								.collect(Collectors.joining(" > "));
+						return Stream.of(SearchJsonEntry.builder()
+							.text(text)
+							.id(group.getMarketGroupId())
+							.link("/market-groups/" + group.getMarketGroupId())
+							.type("Market group")
+							.build());
 	}
 
-	private Flowable<SearchJsonEntry> inventoryCategory(
-			ReferenceEntry refEntry, SearchJsonEntry searchEntry, InventoryCategory item) {
-		return Flowable.empty();
-		//		return inventoryGroupDao.getAllCategories()
-		//			.map(group -> {
-		//				SearchJsonEntry entry = new SearchJsonEntry();
-		//				entry.text = group.getName().get("en");
-		//				entry.id = group.getCategoryId();
-		//				entry.link = linkHelper.link(group);
-		//				entry.type = "Inventory category";
-		//				return entry;
-		//			});
+	private Stream<String> marketGroupChain(MarketGroup group, LoadedRefData loadedRefData) {
+		var name = group.getName().get("en");
+		if (group.getParentGroupId() == null) {
+			return Stream.of(name);
+		}
+		var parentGroup = loadedRefData.getMarketGroup(group.getParentGroupId());
+		if (parentGroup == null) {
+			return Stream.of(name);
+		}
+		return Stream.concat(marketGroupChain(parentGroup, loadedRefData), Stream.of(name));
 	}
 
-	private Maybe<SearchJsonEntry> inventoryGroup(
-			ReferenceEntry refEntry, SearchJsonEntry searchEntry, InventoryGroup item) {
-		return Maybe.empty();
-		//		return inventoryGroupDao.getAllGroups()
-		//			.map(group -> {
-		//				SearchJsonEntry entry = new SearchJsonEntry();
-		//				entry.text = group.getName().get("en");
-		//				entry.id = group.getGroupID();
-		//				entry.link = linkHelper.link(group);
-		//				entry.type = "Inventory group";
-		//				return entry;
-		//			});
+	private Stream<SearchJsonEntry> inventoryCategory(InventoryCategory category, LoadedRefData loadedRefData) {
+		return Stream.of(SearchJsonEntry.builder()
+				.text(category.getName().get("en"))
+				.id(category.getCategoryId())
+				.link("/categories/" + category.getCategoryId())
+				.type("Inventory category")
+				.build());
 	}
 
-	private Flowable<SearchJsonEntry> metaGroup(ReferenceEntry refEntry, SearchJsonEntry searchEntry, MetaGroup item) {
-		return Flowable.empty();
-		//		return inventoryTypeDao.getAllMetaGroups()
-		//			.map(group -> {
-		//				SearchJsonEntry entry = new SearchJsonEntry();
-		//				entry.text = group.getMetaGroupName();
-		//				entry.id = group.getMetaGroupId();
-		//				entry.link = linkHelper.metaGroup(group.getMetaGroupId());
-		//				entry.type = "Meta group";
-		//				return entry;
-		//			});
+	private Stream<SearchJsonEntry> inventoryGroup(InventoryGroup group, LoadedRefData loadedRefData) {
+		return Stream.of(SearchJsonEntry.builder()
+				.text(group.getName().get("en"))
+				.id(group.getGroupId())
+				.link("/groups/" + group.getGroupId())
+				.type("Inventory group")
+				.build());
+	}
+
+	private FlowableTransformer<SearchJsonEntry, SearchJsonEntry> cleanEntries() {
+		return new FlowableTransformer<>() {
+			@Override
+			public @NonNull Publisher<SearchJsonEntry> apply(@NonNull Flowable<SearchJsonEntry> upstream) {
+				return upstream.filter(e -> e.getText() != null)
+						.map(e -> e.toBuilder().text(e.getText().trim()).build())
+						.filter(e -> !e.getText().isEmpty());
+			}
+		};
+	}
+
+	private FlowableTransformer<SearchJsonEntry, SearchJsonEntry> writeToFile() {
+		return new FlowableTransformer<>() {
+			@Override
+			public @NonNull Publisher<SearchJsonEntry> apply(@NonNull Flowable<SearchJsonEntry> upstream) {
+				return Flowable.defer(() -> {
+					var file = new File("/tmp/search.json");
+					log.debug("Preparing to output to {}", file);
+					var generator =
+							objectMapper.writer().createGenerator(new FileOutputStream(file), JsonEncoding.UTF8);
+					var counter = new AtomicInteger();
+					generator.writeStartArray();
+					return upstream.doOnNext(entry -> {
+								generator.writeObject(entry);
+								counter.incrementAndGet();
+							})
+							.doFinally(() -> {
+								generator.writeEndArray();
+								generator.close();
+								log.info("Wrote {} entries to {}", counter.get(), file);
+							});
+				});
+			}
+		};
 	}
 }
