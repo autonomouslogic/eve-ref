@@ -1,23 +1,25 @@
 package com.autonomouslogic.everef.cli;
 
+import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.data.LoadedRefData;
-import com.autonomouslogic.everef.model.ReferenceEntry;
 import com.autonomouslogic.everef.model.SearchJsonEntry;
 import com.autonomouslogic.everef.refdata.InventoryCategory;
 import com.autonomouslogic.everef.refdata.InventoryGroup;
 import com.autonomouslogic.everef.refdata.InventoryType;
 import com.autonomouslogic.everef.refdata.MarketGroup;
-import com.autonomouslogic.everef.refdata.MetaGroup;
+import com.autonomouslogic.everef.s3.S3Adapter;
+import com.autonomouslogic.everef.s3.S3Util;
+import com.autonomouslogic.everef.url.S3Url;
+import com.autonomouslogic.everef.url.UrlParser;
 import com.autonomouslogic.everef.util.RefDataUtil;
+import com.autonomouslogic.everef.util.TempFiles;
 import com.fasterxml.jackson.core.JsonEncoding;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.Ordering;
 import com.google.common.collect.Streams;
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.FlowableTransformer;
-import io.reactivex.rxjava3.core.Maybe;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.Optional;
@@ -25,8 +27,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.inject.Inject;
+import javax.inject.Named;
 import lombok.extern.log4j.Log4j2;
 import org.reactivestreams.Publisher;
+import software.amazon.awssdk.services.s3.S3AsyncClient;
 
 /**
  * Builds the JSON for UI search.
@@ -41,16 +45,39 @@ public class BuildSearch implements Command {
 	protected ObjectMapper objectMapper;
 
 	@Inject
+	protected S3Util s3Util;
+
+	@Inject
+	protected S3Adapter s3Adapter;
+
+	@Inject
+	@Named("static")
+	protected S3AsyncClient s3Client;
+
+	@Inject
+	protected UrlParser urlParser;
+
+	@Inject
+	protected TempFiles tempFiles;
+
+	private S3Url staticUrl;
+
+	@Inject
 	protected BuildSearch() {}
+
+	@Inject
+	protected void init() {
+		staticUrl = (S3Url) urlParser.parse(Configs.STATIC_PATH.getRequired());
+	}
 
 	public Completable run() {
 		return refDataUtil
 				.loadLatestRefData()
 				.flatMapPublisher(this::buildSearch)
 				.compose(cleanEntries())
-				//.sorted(Ordering.natural().onResultOf(SearchJsonEntry::getText))
+				// .sorted(Ordering.natural().onResultOf(SearchJsonEntry::getText))
 				.compose(writeToFile())
-				.ignoreElements();
+				.flatMapCompletable(this::uploadFile);
 	}
 
 	private Flowable<SearchJsonEntry> buildSearch(LoadedRefData loadedRefData) {
@@ -58,14 +85,13 @@ public class BuildSearch implements Command {
 				loadedRefData.getAllTypes().flatMap(pair -> inventoryType(pair.getValue(), loadedRefData)),
 				loadedRefData.getAllMarketGroups().flatMap(pair -> marketGroup(pair.getValue(), loadedRefData)),
 				loadedRefData.getAllCategories().flatMap(pair -> inventoryCategory(pair.getValue(), loadedRefData)),
-				loadedRefData.getAllGroups().flatMap(pair -> inventoryGroup(pair.getValue(), loadedRefData))
-		));
+				loadedRefData.getAllGroups().flatMap(pair -> inventoryGroup(pair.getValue(), loadedRefData))));
 	}
 
 	private Stream<SearchJsonEntry> inventoryType(InventoryType type, LoadedRefData loadedRefData) {
-//		if (!item.getPublished() || item.getMarketGroupId() == null) {
-//			return Stream.empty();
-//		}
+		//		if (!item.getPublished() || item.getMarketGroupId() == null) {
+		//			return Stream.empty();
+		//		}
 
 		String typeName;
 		if (type.getMarketGroupId() != null) {
@@ -114,14 +140,13 @@ public class BuildSearch implements Command {
 	}
 
 	private Stream<SearchJsonEntry> marketGroup(MarketGroup group, LoadedRefData loadedRefData) {
-						var text = marketGroupChain(group, loadedRefData)
-								.collect(Collectors.joining(" > "));
-						return Stream.of(SearchJsonEntry.builder()
-							.text(text)
-							.id(group.getMarketGroupId())
-							.link("/market-groups/" + group.getMarketGroupId())
-							.type("Market group")
-							.build());
+		var text = marketGroupChain(group, loadedRefData).collect(Collectors.joining(" > "));
+		return Stream.of(SearchJsonEntry.builder()
+				.text(text)
+				.id(group.getMarketGroupId())
+				.link("/market-groups/" + group.getMarketGroupId())
+				.type("Market group")
+				.build());
 	}
 
 	private Stream<String> marketGroupChain(MarketGroup group, LoadedRefData loadedRefData) {
@@ -165,12 +190,12 @@ public class BuildSearch implements Command {
 		};
 	}
 
-	private FlowableTransformer<SearchJsonEntry, SearchJsonEntry> writeToFile() {
+	private FlowableTransformer<SearchJsonEntry, File> writeToFile() {
 		return new FlowableTransformer<>() {
 			@Override
-			public @NonNull Publisher<SearchJsonEntry> apply(@NonNull Flowable<SearchJsonEntry> upstream) {
+			public @NonNull Publisher<File> apply(@NonNull Flowable<SearchJsonEntry> upstream) {
 				return Flowable.defer(() -> {
-					var file = new File("/tmp/search.json");
+					var file = tempFiles.tempFile("search", ".json").toFile();
 					log.debug("Preparing to output to {}", file);
 					var generator =
 							objectMapper.writer().createGenerator(new FileOutputStream(file), JsonEncoding.UTF8);
@@ -180,13 +205,28 @@ public class BuildSearch implements Command {
 								generator.writeObject(entry);
 								counter.incrementAndGet();
 							})
-							.doFinally(() -> {
+							.doOnComplete(() -> {
 								generator.writeEndArray();
 								generator.close();
 								log.info("Wrote {} entries to {}", counter.get(), file);
-							});
+							})
+							.ignoreElements()
+							.andThen(Flowable.just(file));
 				});
 			}
 		};
+	}
+
+	/**
+	 * Uploads the final file to S3.
+	 * @return
+	 */
+	private Completable uploadFile(File outputFile) {
+		return Completable.defer(() -> {
+			var path = staticUrl.resolve("search.json");
+			var put = s3Util.putObjectRequest(outputFile.length(), path, "application/json");
+			log.info(String.format("Uploading search file to %s", path));
+			return s3Adapter.putObject(put, outputFile, s3Client).ignoreElement();
+		});
 	}
 }

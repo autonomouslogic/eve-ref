@@ -700,6 +700,53 @@ public class Configs {
 			.type(Duration.class)
 			.build();
 
+	/**
+	 * The AWS region for the static site.
+	 * If not supplied, normal AWS SDK defaults will be used.
+	 */
+	public static final Config<String> STATIC_AWS_REGION = Config.<String>builder()
+			.name("STATIC_AWS_REGION")
+			.type(String.class)
+			.build();
+
+	/**
+	 * The location to store data for the static site.
+	 */
+	public static final Config<URI> STATIC_PATH =
+			Config.<URI>builder().name("STATIC_PATH").type(URI.class).build();
+
+	/**
+	 * Endpoint override for the static site S3 client.
+	 */
+	public static final Config<String> STATIC_S3_ENDPOINT_URL = Config.<String>builder()
+			.name("STATIC_S3_ENDPOINT_URL")
+			.type(String.class)
+			.build();
+
+	/**
+	 * Profile for the static data S3 client.
+	 */
+	public static final Config<String> STATIC_AWS_PROFILE = Config.<String>builder()
+			.name("STATIC_AWS_PROFILE")
+			.type(String.class)
+			.build();
+
+	/**
+	 * Access key for the static S3 client.
+	 */
+	public static final Config<String> STATIC_AWS_ACCESS_KEY_ID = Config.<String>builder()
+			.name("STATIC_AWS_ACCESS_KEY_ID")
+			.type(String.class)
+			.build();
+
+	/**
+	 * Secret key for the static S3 client.
+	 */
+	public static final Config<String> STATIC_AWS_SECRET_ACCESS_KEY = Config.<String>builder()
+			.name("STATIC_AWS_SECRET_ACCESS_KEY")
+			.type(String.class)
+			.build();
+
 	@SneakyThrows
 	private static URL url(String url) {
 		return new URL(url);
