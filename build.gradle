@@ -181,7 +181,8 @@ task referenceDataClientGenerate(type: org.openapitools.generator.gradle.plugin.
 	]
 	logToStderr = true
 }
-sourceSets.main.java.srcDirs += ["$buildDir/generated/openapi/refdata/src/main/java"]
+sourceSets.main.java.srcDirs files("${buildDir}/generated/openapi/refdata/src/main/java")
+		.builtBy(tasks.referenceDataClientGenerate)
 compileKotlin.dependsOn(tasks.referenceDataClientGenerate)
 compileJava.dependsOn(tasks.referenceDataClientGenerate)
 sourcesJar.dependsOn(tasks.referenceDataClientGenerate)
@@ -197,7 +198,8 @@ openApiGenerate {
 		dateLibrary: "java8"
 	]
 }
-sourceSets.main.java.srcDirs += ["build/generate-resources/main/src/main/kotlin"]
+sourceSets.main.java.srcDirs files("${buildDir}/generate-resources/main/src/main/kotlin")
+		.builtBy(tasks.openApiGenerate)
 compileKotlin.dependsOn(tasks.openApiGenerate)
 compileJava.dependsOn(tasks.openApiGenerate)
 sourcesJar.dependsOn(tasks.openApiGenerate)
