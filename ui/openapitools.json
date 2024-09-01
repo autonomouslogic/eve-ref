@@ -22,8 +22,7 @@
         "additionalProperties": {
           "enumPropertyNaming": "PascalCase",
           "modelPropertyNaming": "camelCase",
-          "paramNaming": "camelCase",
-          "useOverride": "true"
+          "paramNaming": "camelCase"
         }
       }
     }
