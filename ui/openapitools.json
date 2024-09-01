@@ -11,7 +11,8 @@
         "additionalProperties": {
           "enumPropertyNaming": "PascalCase",
           "modelPropertyNaming": "camelCase",
-          "paramNaming": "camelCase"
+          "paramNaming": "camelCase",
+          "useOverride": "true"
         }
       },
       "esi": {
