@@ -104,7 +104,7 @@ dependencies {
 
 	implementation "org.jooq:jooq:3.19.11"
 	implementation "org.flywaydb:flyway-core:10.17.0"
-	implementation "org.flywaydb:flyway-database-postgresql:10.17.0"
+	implementation "org.flywaydb:flyway-database-postgresql:10.17.2"
 	implementation "com.h2database:h2:2.3.232"
 	implementation "org.postgresql:postgresql:42.7.4"
 
