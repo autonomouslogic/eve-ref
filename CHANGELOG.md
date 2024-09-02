@@ -1,5 +1,18 @@
 EVE Ref Changelog
 
+## [2.46.4](https://github.com/autonomouslogic/eve-ref/compare/2.46.3...2.46.4) (2024-09-02)
+
+
+### Bug Fixes
+
+* **deps:** update dependency org.flywaydb:flyway-core to v10.17.2 ([#561](https://github.com/autonomouslogic/eve-ref/issues/561)) ([eaa2d53](https://github.com/autonomouslogic/eve-ref/commit/eaa2d53b34ea602b996423dd9f1d75c255647ea9))
+* **deps:** update dependency org.flywaydb:flyway-database-postgresql to v10.17.2 ([#562](https://github.com/autonomouslogic/eve-ref/issues/562)) ([fae3752](https://github.com/autonomouslogic/eve-ref/commit/fae3752b4119d08684095761044559e30abe6a97))
+
+
+### Dependency Updates
+
+* **deps:** update all non-major dependencies ([#560](https://github.com/autonomouslogic/eve-ref/issues/560)) ([b786c48](https://github.com/autonomouslogic/eve-ref/commit/b786c487d0fb0c3707333268d629c35e125f92fa))
+
 ## [2.46.3](https://github.com/autonomouslogic/eve-ref/compare/2.46.2...2.46.3) (2024-09-01)
 
 
