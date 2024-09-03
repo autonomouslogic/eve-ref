@@ -47,6 +47,21 @@ public class AwsModule {
 
 	@Provides
 	@Singleton
+	@Named("static")
+	public AwsCredentialsProvider staticCredentialsProvider() {
+		return createProviderChain(
+				Configs.STATIC_AWS_ACCESS_KEY_ID, Configs.STATIC_AWS_SECRET_ACCESS_KEY, Configs.STATIC_AWS_PROFILE);
+	}
+
+	@Provides
+	@Singleton
+	@Named("static")
+	public Optional<Region> staticRegion() {
+		return Configs.STATIC_AWS_REGION.get().map(Region::of);
+	}
+
+	@Provides
+	@Singleton
 	@Named("refdata")
 	public Optional<Region> referenceDataRegion() {
 		return Configs.REFERENCE_DATA_AWS_REGION.get().map(Region::of);
