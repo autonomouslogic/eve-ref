@@ -22,6 +22,7 @@ import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.FlowableTransformer;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.time.Duration;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -61,6 +62,8 @@ public class BuildSearch implements Command {
 	protected TempFiles tempFiles;
 
 	private S3Url staticUrl;
+
+	private final Duration cacheControlMaxAge = Configs.STATIC_CACHE_CONTROL_MAX_AGE.getRequired();
 
 	@Inject
 	protected BuildSearch() {}
@@ -224,7 +227,7 @@ public class BuildSearch implements Command {
 	private Completable uploadFile(File outputFile) {
 		return Completable.defer(() -> {
 			var path = staticUrl.resolve("search.json");
-			var put = s3Util.putObjectRequest(outputFile.length(), path, "application/json");
+			var put = s3Util.putObjectRequest(outputFile.length(), path, "application/json", cacheControlMaxAge);
 			log.info(String.format("Uploading search file to %s", path));
 			return s3Adapter.putObject(put, outputFile, s3Client).ignoreElement();
 		});

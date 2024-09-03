@@ -747,6 +747,15 @@ public class Configs {
 			.type(String.class)
 			.build();
 
+	/**
+	 * The cache time to use for static files.
+	 */
+	public static final Config<Duration> STATIC_CACHE_CONTROL_MAX_AGE = Config.<Duration>builder()
+			.name("STATIC_CACHE_CONTROL_MAX_AGE")
+			.defaultValue(Duration.ofMinutes(5))
+			.type(Duration.class)
+			.build();
+
 	@SneakyThrows
 	private static URL url(String url) {
 		return new URL(url);
