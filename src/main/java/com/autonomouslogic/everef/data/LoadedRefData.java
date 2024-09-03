@@ -19,6 +19,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.inject.Inject;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Stream;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.tuple.Pair;
@@ -66,234 +67,209 @@ public class LoadedRefData {
 		schematics = mvStore.openMap("schematics");
 	}
 
+	// === wrapper
+
+	private <T> T get(long id, Map<Long, byte[]> map, Class<T> clazz) {
+		return Optional.ofNullable(map.get(id))
+				.map(bytes -> parse(bytes, clazz))
+				.orElse(null);
+	}
+
 	// === gets
 
 	@SneakyThrows
 	public InventoryCategory getCategory(long id) {
-		return Optional.ofNullable(categories.get(id))
-				.map(bytes -> parse(bytes, InventoryCategory.class))
-				.orElse(null);
+		return get(id, categories, InventoryCategory.class);
 	}
 
 	@SneakyThrows
 	public InventoryGroup getGroup(long id) {
-		return Optional.ofNullable(groups.get(id))
-				.map(bytes -> parse(bytes, InventoryGroup.class))
-				.orElse(null);
+		return get(id, groups, InventoryGroup.class);
 	}
 
 	@SneakyThrows
 	public MarketGroup getMarketGroup(long id) {
-		return Optional.ofNullable(marketGroups.get(id))
-				.map(bytes -> parse(bytes, MarketGroup.class))
-				.orElse(null);
+		return get(id, marketGroups, MarketGroup.class);
 	}
 
 	@SneakyThrows
 	public InventoryType getType(long id) {
-		return Optional.ofNullable(types.get(id))
-				.map(bytes -> parse(bytes, InventoryType.class))
-				.orElse(null);
+		return get(id, types, InventoryType.class);
 	}
 
 	@SneakyThrows
 	public DogmaAttribute getDogmaAttribute(long id) {
-		return Optional.ofNullable(dogmaAttributes.get(id))
-				.map(bytes -> parse(bytes, DogmaAttribute.class))
-				.orElse(null);
+		return get(id, dogmaAttributes, DogmaAttribute.class);
 	}
 
 	@SneakyThrows
 	public DogmaEffect getDogmaEffect(long id) {
-		return Optional.ofNullable(dogmaEffects.get(id))
-				.map(bytes -> parse(bytes, DogmaEffect.class))
-				.orElse(null);
+		return get(id, dogmaEffects, DogmaEffect.class);
 	}
 
 	@SneakyThrows
 	public MetaGroup getMetaGroup(long id) {
-		return Optional.ofNullable(metaGroups.get(id))
-				.map(bytes -> parse(bytes, MetaGroup.class))
-				.orElse(null);
+		return get(id, metaGroups, MetaGroup.class);
 	}
 
 	@SneakyThrows
 	public Mutaplasmid getMutaplasmid(long id) {
-		return Optional.ofNullable(mutaplasmids.get(id))
-				.map(bytes -> parse(bytes, Mutaplasmid.class))
-				.orElse(null);
+		return get(id, mutaplasmids, Mutaplasmid.class);
 	}
 
 	@SneakyThrows
 	public Skill getSkill(long id) {
-		return Optional.ofNullable(skills.get(id))
-				.map(bytes -> parse(bytes, Skill.class))
-				.orElse(null);
+		return get(id, skills, Skill.class);
 	}
 
 	@SneakyThrows
 	public Unit getUnit(long id) {
-		return Optional.ofNullable(units.get(id))
-				.map(bytes -> parse(bytes, Unit.class))
-				.orElse(null);
+		return get(id, units, Unit.class);
 	}
 
 	@SneakyThrows
 	public Blueprint getBlueprint(long id) {
-		return Optional.ofNullable(blueprints.get(id))
-				.map(bytes -> parse(bytes, Blueprint.class))
-				.orElse(null);
+		return get(id, blueprints, Blueprint.class);
 	}
 
 	@SneakyThrows
 	public Icon getIcon(long id) {
-		return Optional.ofNullable(icons.get(id))
-				.map(bytes -> parse(bytes, Icon.class))
-				.orElse(null);
+		return get(id, icons, Icon.class);
 	}
 
 	@SneakyThrows
 	public Region getRegion(long id) {
-		return Optional.ofNullable(regions.get(id))
-				.map(bytes -> parse(bytes, Region.class))
-				.orElse(null);
+		return get(id, regions, Region.class);
 	}
 
 	@SneakyThrows
 	public Schematic getSchematic(long id) {
-		return Optional.ofNullable(schematics.get(id))
-				.map(bytes -> parse(bytes, Schematic.class))
-				.orElse(null);
+		return get(id, schematics, Schematic.class);
 	}
 
 	// === puts
 
 	@SneakyThrows
+	private void put(long id, Object item, Map<Long, byte[]> map) {
+		map.put(id, objectMapper.writeValueAsBytes(item));
+	}
+
 	public void putCategory(long id, InventoryCategory item) {
-		categories.put(id, objectMapper.writeValueAsBytes(item));
+		put(id, item, categories);
 	}
 
-	@SneakyThrows
 	public void putGroup(long id, InventoryGroup item) {
-		groups.put(id, objectMapper.writeValueAsBytes(item));
+		put(id, item, groups);
 	}
 
-	@SneakyThrows
 	public void putMarketGroup(long id, MarketGroup item) {
-		marketGroups.put(id, objectMapper.writeValueAsBytes(item));
+		put(id, item, marketGroups);
 	}
 
-	@SneakyThrows
 	public void putType(long id, InventoryType item) {
-		types.put(id, objectMapper.writeValueAsBytes(item));
+		put(id, item, types);
 	}
 
-	@SneakyThrows
 	public void putDogmaAttribute(long id, DogmaAttribute item) {
-		dogmaAttributes.put(id, objectMapper.writeValueAsBytes(item));
+		put(id, item, dogmaAttributes);
 	}
 
-	@SneakyThrows
 	public void putDogmaEffect(long id, DogmaEffect item) {
-		dogmaEffects.put(id, objectMapper.writeValueAsBytes(item));
+		put(id, item, dogmaEffects);
 	}
 
-	@SneakyThrows
 	public void putMetaGroup(long id, MetaGroup item) {
-		metaGroups.put(id, objectMapper.writeValueAsBytes(item));
+		put(id, item, metaGroups);
 	}
 
-	@SneakyThrows
 	public void putMutaplasmid(long id, Mutaplasmid item) {
-		mutaplasmids.put(id, objectMapper.writeValueAsBytes(item));
+		put(id, item, mutaplasmids);
 	}
 
-	@SneakyThrows
 	public void putSkill(long id, Skill item) {
-		skills.put(id, objectMapper.writeValueAsBytes(item));
+		put(id, item, skills);
 	}
 
-	@SneakyThrows
 	public void putUnit(long id, Unit item) {
-		units.put(id, objectMapper.writeValueAsBytes(item));
+		put(id, item, units);
 	}
 
-	@SneakyThrows
 	public void putBlueprint(long id, Blueprint item) {
-		blueprints.put(id, objectMapper.writeValueAsBytes(item));
+		put(id, item, blueprints);
 	}
 
-	@SneakyThrows
 	public void putIcon(long id, Icon item) {
-		icons.put(id, objectMapper.writeValueAsBytes(item));
+		put(id, item, icons);
 	}
 
-	@SneakyThrows
 	public void putRegion(long id, Region item) {
-		regions.put(id, objectMapper.writeValueAsBytes(item));
+		put(id, item, regions);
 	}
 
-	@SneakyThrows
 	public void putSchematic(long id, Schematic item) {
-		schematics.put(id, objectMapper.writeValueAsBytes(item));
+		put(id, item, schematics);
 	}
 
 	// === streams
 
+	private <T> Stream<Pair<Long, T>> stream(Map<Long, byte[]> map, Function<Long, T> getter) {
+		return map.keySet().stream().map(id -> Pair.of(id, getter.apply(id)));
+	}
+
 	public Stream<Pair<Long, InventoryCategory>> getAllCategories() {
-		return categories.keySet().stream().map(id -> Pair.of(id, getCategory(id)));
+		return stream(categories, this::getCategory);
 	}
 
 	public Stream<Pair<Long, InventoryGroup>> getAllGroups() {
-		return groups.keySet().stream().map(id -> Pair.of(id, getGroup(id)));
+		return stream(groups, this::getGroup);
 	}
 
 	public Stream<Pair<Long, MarketGroup>> getAllMarketGroups() {
-		return marketGroups.keySet().stream().map(id -> Pair.of(id, getMarketGroup(id)));
+		return stream(marketGroups, this::getMarketGroup);
 	}
 
 	public Stream<Pair<Long, InventoryType>> getAllTypes() {
-		return types.keySet().stream().map(id -> Pair.of(id, getType(id)));
+		return stream(types, this::getType);
 	}
 
 	public Stream<Pair<Long, DogmaAttribute>> getAllDogmaAttributes() {
-		return dogmaAttributes.keySet().stream().map(id -> Pair.of(id, getDogmaAttribute(id)));
+		return stream(dogmaAttributes, this::getDogmaAttribute);
 	}
 
 	public Stream<Pair<Long, DogmaEffect>> getAllDogmaEffects() {
-		return dogmaEffects.keySet().stream().map(id -> Pair.of(id, getDogmaEffect(id)));
+		return stream(dogmaEffects, this::getDogmaEffect);
 	}
 
 	public Stream<Pair<Long, MetaGroup>> getAllMetaGroups() {
-		return metaGroups.keySet().stream().map(id -> Pair.of(id, getMetaGroup(id)));
+		return stream(metaGroups, this::getMetaGroup);
 	}
 
 	public Stream<Pair<Long, Mutaplasmid>> getAllMutaplasmids() {
-		return mutaplasmids.keySet().stream().map(id -> Pair.of(id, getMutaplasmid(id)));
+		return stream(mutaplasmids, this::getMutaplasmid);
 	}
 
 	public Stream<Pair<Long, Skill>> getAllSkills() {
-		return skills.keySet().stream().map(id -> Pair.of(id, getSkill(id)));
+		return stream(skills, this::getSkill);
 	}
 
 	public Stream<Pair<Long, Unit>> getAllUnits() {
-		return units.keySet().stream().map(id -> Pair.of(id, getUnit(id)));
+		return stream(units, this::getUnit);
 	}
 
 	public Stream<Pair<Long, Blueprint>> getAllBlueprints() {
-		return blueprints.keySet().stream().map(id -> Pair.of(id, getBlueprint(id)));
+		return stream(blueprints, this::getBlueprint);
 	}
 
 	public Stream<Pair<Long, Icon>> getAllIcons() {
-		return icons.keySet().stream().map(id -> Pair.of(id, getIcon(id)));
+		return stream(icons, this::getIcon);
 	}
 
 	public Stream<Pair<Long, Region>> getAllRegions() {
-		return regions.keySet().stream().map(id -> Pair.of(id, getRegion(id)));
+		return stream(regions, this::getRegion);
 	}
 
 	public Stream<Pair<Long, Schematic>> getAllSchematics() {
-		return schematics.keySet().stream().map(id -> Pair.of(id, getSchematic(id)));
+		return stream(schematics, this::getSchematic);
 	}
 
 	// === util
