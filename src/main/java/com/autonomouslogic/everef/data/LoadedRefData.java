@@ -77,72 +77,58 @@ public class LoadedRefData {
 
 	// === gets
 
-	@SneakyThrows
 	public InventoryCategory getCategory(long id) {
 		return get(id, categories, InventoryCategory.class);
 	}
 
-	@SneakyThrows
 	public InventoryGroup getGroup(long id) {
 		return get(id, groups, InventoryGroup.class);
 	}
 
-	@SneakyThrows
 	public MarketGroup getMarketGroup(long id) {
 		return get(id, marketGroups, MarketGroup.class);
 	}
 
-	@SneakyThrows
 	public InventoryType getType(long id) {
 		return get(id, types, InventoryType.class);
 	}
 
-	@SneakyThrows
 	public DogmaAttribute getDogmaAttribute(long id) {
 		return get(id, dogmaAttributes, DogmaAttribute.class);
 	}
 
-	@SneakyThrows
 	public DogmaEffect getDogmaEffect(long id) {
 		return get(id, dogmaEffects, DogmaEffect.class);
 	}
 
-	@SneakyThrows
 	public MetaGroup getMetaGroup(long id) {
 		return get(id, metaGroups, MetaGroup.class);
 	}
 
-	@SneakyThrows
 	public Mutaplasmid getMutaplasmid(long id) {
 		return get(id, mutaplasmids, Mutaplasmid.class);
 	}
 
-	@SneakyThrows
 	public Skill getSkill(long id) {
 		return get(id, skills, Skill.class);
 	}
 
-	@SneakyThrows
 	public Unit getUnit(long id) {
 		return get(id, units, Unit.class);
 	}
 
-	@SneakyThrows
 	public Blueprint getBlueprint(long id) {
 		return get(id, blueprints, Blueprint.class);
 	}
 
-	@SneakyThrows
 	public Icon getIcon(long id) {
 		return get(id, icons, Icon.class);
 	}
 
-	@SneakyThrows
 	public Region getRegion(long id) {
 		return get(id, regions, Region.class);
 	}
 
-	@SneakyThrows
 	public Schematic getSchematic(long id) {
 		return get(id, schematics, Schematic.class);
 	}
