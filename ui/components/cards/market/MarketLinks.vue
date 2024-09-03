@@ -8,7 +8,8 @@ const props = defineProps<{
 
 const links = {
 	"Adam4EVE": "https://www.adam4eve.eu/commodity.php?typeID=",
-	"dev.eveonline.it": "https://dev.eveonline.it/market/",
+	//"dev.eveonline.it": "https://dev.eveonline.it/market/",
+	"EVE Market Browser": "https://evemarketbrowser.com/region/0/type/",
 	"EVE Tycoon": "https://evetycoon.com/market/",
 	"jita.space": "https://www.jita.space/market/",
 };

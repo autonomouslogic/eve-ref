@@ -1,5 +1,43 @@
 EVE Ref Changelog
 
+## [2.46.4](https://github.com/autonomouslogic/eve-ref/compare/2.46.3...2.46.4) (2024-09-02)
+
+
+### Bug Fixes
+
+* **deps:** update dependency org.flywaydb:flyway-core to v10.17.2 ([#561](https://github.com/autonomouslogic/eve-ref/issues/561)) ([eaa2d53](https://github.com/autonomouslogic/eve-ref/commit/eaa2d53b34ea602b996423dd9f1d75c255647ea9))
+* **deps:** update dependency org.flywaydb:flyway-database-postgresql to v10.17.2 ([#562](https://github.com/autonomouslogic/eve-ref/issues/562)) ([fae3752](https://github.com/autonomouslogic/eve-ref/commit/fae3752b4119d08684095761044559e30abe6a97))
+
+
+### Dependency Updates
+
+* **deps:** update all non-major dependencies ([#560](https://github.com/autonomouslogic/eve-ref/issues/560)) ([b786c48](https://github.com/autonomouslogic/eve-ref/commit/b786c487d0fb0c3707333268d629c35e125f92fa))
+
+## [2.46.3](https://github.com/autonomouslogic/eve-ref/compare/2.46.2...2.46.3) (2024-09-01)
+
+
+### Features
+
+* **ui:** Added EVE Online Store affiliate ([#554](https://github.com/autonomouslogic/eve-ref/issues/554)) ([d350f2f](https://github.com/autonomouslogic/eve-ref/commit/d350f2fcc1dabf2e70a332f2c094d28b6a1da040))
+* **ui:** Discord redirect ([#556](https://github.com/autonomouslogic/eve-ref/issues/556)) ([f2e1c27](https://github.com/autonomouslogic/eve-ref/commit/f2e1c27e68ba2880fd9510efa5fc0cf83858941f))
+* **ui:** Updated favicon ([#557](https://github.com/autonomouslogic/eve-ref/issues/557)) ([3cdf6fe](https://github.com/autonomouslogic/eve-ref/commit/3cdf6fe324229077285b26743b92d947cc24ee1e))
+
+
+### Bug Fixes
+
+* **ui:** Disabled dev.eveonline.it and added EVE Market Browser in MarketLinks.vue ([360a0d8](https://github.com/autonomouslogic/eve-ref/commit/360a0d8c051ce4561d287513a9ff9a58a69d5067))
+
+
+### Dependency Updates
+
+* **deps:** update all non-major dependencies ([#537](https://github.com/autonomouslogic/eve-ref/issues/537)) ([5d100de](https://github.com/autonomouslogic/eve-ref/commit/5d100de8a6bce26a1947431e82dbfea4df0d89ff))
+* **deps:** update dependency @types/node to v20 ([#348](https://github.com/autonomouslogic/eve-ref/issues/348)) ([3c2cc14](https://github.com/autonomouslogic/eve-ref/commit/3c2cc1492b1bba1d9c1b66266656a5964626f413))
+* **deps:** update dependency nuxt to v3.12.4 [security] ([#553](https://github.com/autonomouslogic/eve-ref/issues/553)) ([a3ce8fa](https://github.com/autonomouslogic/eve-ref/commit/a3ce8faa6362b9ee9cbc66cde2b51a055d71ad09))
+* **deps:** update dependency vitest to v2 ([#540](https://github.com/autonomouslogic/eve-ref/issues/540)) ([91ee06a](https://github.com/autonomouslogic/eve-ref/commit/91ee06a6c98a583872da1af793e4c23a085047b1))
+* **deps:** update dependency vue-tsc to v2 ([#477](https://github.com/autonomouslogic/eve-ref/issues/477)) ([808f3e5](https://github.com/autonomouslogic/eve-ref/commit/808f3e502f8c20dd13f9bc6732ab9ff339317657))
+* **deps:** update typescript-eslint monorepo to v8 (major) ([#549](https://github.com/autonomouslogic/eve-ref/issues/549)) ([ccc0e44](https://github.com/autonomouslogic/eve-ref/commit/ccc0e440afb521a62fa6d76836b1f8a826ee0797))
+* **deps:** update ubuntu docker tag to v24 ([#510](https://github.com/autonomouslogic/eve-ref/issues/510)) ([6a70472](https://github.com/autonomouslogic/eve-ref/commit/6a704724f7abab99cfe36e3b86b001b7eda8af20))
+
 ## [2.46.2](https://github.com/autonomouslogic/eve-ref/compare/2.46.1...2.46.2) (2024-08-06)
 
 
