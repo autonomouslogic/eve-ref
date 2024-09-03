@@ -75,6 +75,15 @@ public class LoadedRefData {
 				.orElse(null);
 	}
 
+	@SneakyThrows
+	private void put(long id, Object item, Map<Long, byte[]> map) {
+		map.put(id, objectMapper.writeValueAsBytes(item));
+	}
+
+	private <T> Stream<Pair<Long, T>> stream(Map<Long, byte[]> map, Function<Long, T> getter) {
+		return map.keySet().stream().map(id -> Pair.of(id, getter.apply(id)));
+	}
+
 	// === gets
 
 	public InventoryCategory getCategory(long id) {
@@ -135,11 +144,6 @@ public class LoadedRefData {
 
 	// === puts
 
-	@SneakyThrows
-	private void put(long id, Object item, Map<Long, byte[]> map) {
-		map.put(id, objectMapper.writeValueAsBytes(item));
-	}
-
 	public void putCategory(long id, InventoryCategory item) {
 		put(id, item, categories);
 	}
@@ -197,10 +201,6 @@ public class LoadedRefData {
 	}
 
 	// === streams
-
-	private <T> Stream<Pair<Long, T>> stream(Map<Long, byte[]> map, Function<Long, T> getter) {
-		return map.keySet().stream().map(id -> Pair.of(id, getter.apply(id)));
-	}
 
 	public Stream<Pair<Long, InventoryCategory>> getAllCategories() {
 		return stream(categories, this::getCategory);
