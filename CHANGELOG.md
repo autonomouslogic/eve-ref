@@ -1,5 +1,23 @@
 EVE Ref Changelog
 
+## [2.47.0](https://github.com/autonomouslogic/eve-ref/compare/2.46.4...2.47.0) (2024-09-04)
+
+
+### Features
+
+* Job for generating search JSON ([#555](https://github.com/autonomouslogic/eve-ref/issues/555)) ([5571f8f](https://github.com/autonomouslogic/eve-ref/commit/5571f8f8e8d746be1459a35615f97d5914c5edd1))
+
+
+### Bug Fixes
+
+* **deps:** update dependency org.flywaydb:flyway-core to v10.17.3 ([#564](https://github.com/autonomouslogic/eve-ref/issues/564)) ([e62336b](https://github.com/autonomouslogic/eve-ref/commit/e62336bba3acd53e8303d41b736ca6733b6db522))
+* **deps:** update dependency org.flywaydb:flyway-database-postgresql to v10.17.3 ([#565](https://github.com/autonomouslogic/eve-ref/issues/565)) ([4f8d7ad](https://github.com/autonomouslogic/eve-ref/commit/4f8d7ad238f49f851014fc39ffcac44f5427d90f))
+
+
+### Dependency Updates
+
+* **deps:** update all non-major dependencies ([#566](https://github.com/autonomouslogic/eve-ref/issues/566)) ([c685c5e](https://github.com/autonomouslogic/eve-ref/commit/c685c5e46f185987cc7c5ec8fcecf98ad0ac7f71))
+
 ## [2.46.4](https://github.com/autonomouslogic/eve-ref/compare/2.46.3...2.46.4) (2024-09-02)
 
 
