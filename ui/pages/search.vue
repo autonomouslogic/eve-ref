@@ -1,33 +1,56 @@
 <script setup lang="ts">
 
-useHead({
-	title: "Search"
+interface SearchEntry {
+	text: string
+	id: number
+	link: string
+	type: string
+}
+
+// const query = useRoute().query.query;
+// Using a normal route parameter makes the page not re-search when the query changes while on the search result page.
+const query = computed(() => {
+	const q = useRoute().query.query as string | undefined;
+	if (q == undefined || q.trim() == "") {
+		return undefined;
+	}
+	return q;
 });
 
-const query = useRoute().query.query;
-const {status, data: search} = await useFetch<any[]>("https://static.everef.net/search.json", {
+useHead({
+	title: "Search" + (query.value == undefined ? "" : ` for '${query.value}'`),
+});
+
+const {status, data: search} = await useLazyFetch<SearchEntry[]>("https://static.everef.net/search.json", {
 	server: false
 });
 
 const result = computed(() => {
-	if (search.value) {
-		return search.value.filter((item) => item.text.toLowerCase().includes(query?.toString().toLowerCase()));
+	const q = query.value;
+	if (!search.value || q == undefined) {
+		return [];
 	}
-	return [];
+	return search.value
+		.filter((item) => item.text.toLowerCase().includes(q.toLowerCase()))
+		.sort((a, b) => a.text.localeCompare(b.text));
 });
 
 </script>
 
 <template>
 	<h1>Search</h1>
-	<div>Status: {{status}}</div>
-	<div>Query: {{query}}</div>
-	<div v-if="status == 'pending'">Loading ...</div>
-	<div v-else-if="status == 'error'">Failed loading search</div>
-	<div v-else>Loaded</div>
-
-	<div v-for="(item, index) in result" :key="index">
-		<div>{{item.id}}: {{item.text}}</div>
+	<div class="border border-blue-500">
+		<div>Status: {{status}}</div>
+		<div>Query: {{query}}</div>
+		<div v-if="status == 'pending'">Loading ...</div>
+		<div v-else-if="status == 'error'">Failed loading search</div>
+		<div v-else>Loaded</div>
+	</div>
+	<div v-if="result">
+		<div v-for="(item, index) in result" :key="index" class="border border-green-900">
+			<div><NuxtLink :href="item.link">{{item.text}}</NuxtLink></div>
+			<div>{{ item.type }}</div>
+		</div>
 	</div>
 
 </template>
