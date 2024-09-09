@@ -537,3 +537,24 @@
   published: true
   stackable: true
   unitID: 116
+"790":
+  attributeID: 790
+  categoryID: 7
+  dataType: 11
+  defaultValue: 0
+  description: "The skill required to reprocess this ore type."
+  displayNameID:
+    de: "Aufbereitung-Skill"
+    en: "Reprocessing Skill"
+    es: "Habilidad de reprocesamiento"
+    fr: "Compétence de retraitement"
+    ja: "再処理スキル"
+    ko: "재처리 스킬"
+    ru: "Навык переработки"
+    zh: "回收再生技能"
+  highIsGood: true
+  iconID: 0
+  name: "reprocessingSkillType"
+  published: true
+  stackable: true
+  unitID: 116

@@ -1738,3 +1738,384 @@
   radius: 85000
   type_id: 35833
   volume: 80000
+"9838":
+  capacity: 0
+  description: "Utilisés pour les nombreuses technologies avancées pour en assurer\
+    \ le bon fonctionnement, ces conduits sont fabriqués en matériaux surfondus qui\
+    \ servent de conducteurs, pour une résistance électrique nulle."
+  dogma_attributes:
+  - attribute_id: 161
+    value: 0.75
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 4
+    value: 0
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 1640
+    value: 7200
+  - attribute_id: 1641
+    value: 7200
+  group_id: 1034
+  icon_id: 1363
+  market_group_id: 1335
+  mass: 0
+  name: "Superconducteurs"
+  packaged_volume: 0.75
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 9838
+  volume: 0.75
+"2389":
+  capacity: 0
+  description: "Alors que l'humanité faisait son retour dans les vols spatiaux, les\
+    \ scientifiques Planto et Ginch ont co-découvert une structure naturelle autonome,\
+    \ entièrement composée de plasma suspendu dans un champ magnétique planétaire.\
+    \ Depuis lors, le terme a été appliqué à toutes les constructions de ce type,\
+    \ qu'elles apparaissent sous forme naturelle ou qu'elles soient produites artificiellement\
+    \ à l'aide de courants électriques."
+  dogma_attributes:
+  - attribute_id: 161
+    value: 0.19
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 4
+    value: 0
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 1640
+    value: 400
+  - attribute_id: 1641
+    value: 400
+  group_id: 1042
+  icon_id: 10017
+  market_group_id: 1334
+  mass: 0
+  name: "Plasmoïdes"
+  packaged_volume: 0.19
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 2389
+  volume: 0.19
+"3645":
+  capacity: 0
+  description: "L'eau est l'un des éléments fondamentaux pour la survie humaine. La\
+    \ plupart des mondes ne disposent que de faibles réserves et il faut compter sur\
+    \ le transport par vaisseau spatial pour s'en procurer."
+  dogma_attributes:
+  - attribute_id: 161
+    value: 0.19
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 4
+    value: 0
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 1640
+    value: 400
+  - attribute_id: 1641
+    value: 400
+  group_id: 1042
+  icon_id: 1178
+  market_group_id: 1334
+  mass: 0
+  name: "Eau"
+  packaged_volume: 0.19
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 3645
+  volume: 0.19
+"2268":
+  capacity: 0
+  description: "L'abondance d'eau sur les planètes terrestres n'est souvent qu'une\
+    \ idée reçue. En effet, ce que beaucoup désignent comme de l'eau n'est souvent\
+    \ qu'une association de plusieurs liquides avec des particules microscopiques\
+    \ et des composés saturés gorgés d'eau et d'autres liquides. Les liquides aqueux\
+    \ sont des liquides à partir desquels l'eau pure peut aisément être séparée des\
+    \ déchets et des particules dangereuses, à condition de disposer du matériel approprié\
+    ."
+  dogma_attributes:
+  - attribute_id: 161
+    value: 0.005
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 4
+    value: 0
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 1640
+    value: 5
+  - attribute_id: 1641
+    value: 5
+  group_id: 1033
+  icon_id: 10012
+  market_group_id: 1333
+  mass: 0
+  name: "Liquides aqueux"
+  packaged_volume: 0.005
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 2268
+  volume: 0.005
+"2409":
+  capacity: 0
+  description: "Trouver les liquides désirés sur des mondes ennemis peut être aussi\
+    \ difficile qu'en extraire dans un environnement hostile, ce qui nécessite souvent\
+    \ des kilomètres de forage en dessous de la surface ou une condensation des fluides\
+    \ de la haute atmosphère. Une fois les liquides découverts, l'installation commence\
+    \ elle-même le travail relativement simple visant à les séparer des interférences\
+    \ plasma environnantes, des ruisseaux de magma brûlant, ou des bactéries locales\
+    \ potentiellement dangereuses. Une quantité surprenante de liquides de valeur\
+    \ peut être extraite des mondes hostiles, mais seulement si l'équipement est correctement\
+    \ calibré et parfaitement entretenu."
+  dogma_attributes:
+  - attribute_id: 1632
+    value: 2016
+  - attribute_id: 161
+    value: 0
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 4
+    value: 0
+  - attribute_id: 709
+    value: 2268
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 1642
+    value: 1000
+  - attribute_id: 1643
+    value: 300
+  - attribute_id: 1644
+    value: 5
+  - attribute_id: 1645
+    value: 1
+  - attribute_id: 15
+    value: 800
+  - attribute_id: 49
+    value: 200
+  graphic_id: 4544
+  group_id: 1026
+  mass: 0
+  name: "Extracteur de liquide aqueux en milieu aride"
+  packaged_volume: 0
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 2409
+  volume: 0
+"2412":
+  capacity: 0
+  description: "Trouver les liquides désirés sur des mondes ennemis peut être aussi\
+    \ difficile qu'en extraire dans un environnement hostile, ce qui nécessite souvent\
+    \ des kilomètres de forage en dessous de la surface ou une condensation des fluides\
+    \ de la haute atmosphère. Une fois les liquides découverts, l'installation commence\
+    \ elle-même le travail relativement simple visant à les séparer des interférences\
+    \ plasma environnantes, des ruisseaux de magma brûlant, ou des bactéries locales\
+    \ potentiellement dangereuses. Une quantité surprenante de liquides de valeur\
+    \ peut être extraite des mondes hostiles, mais seulement si l'équipement est correctement\
+    \ calibré et parfaitement entretenu."
+  dogma_attributes:
+  - attribute_id: 1632
+    value: 11
+  - attribute_id: 161
+    value: 0
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 4
+    value: 0
+  - attribute_id: 709
+    value: 2268
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 1642
+    value: 1000
+  - attribute_id: 1643
+    value: 300
+  - attribute_id: 1644
+    value: 5
+  - attribute_id: 1645
+    value: 1
+  - attribute_id: 15
+    value: 800
+  - attribute_id: 49
+    value: 200
+  graphic_id: 4544
+  group_id: 1026
+  mass: 0
+  name: "Extracteur de liquide aqueux en milieu tempéré"
+  packaged_volume: 0
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 2412
+  volume: 0
+"2016":
+  capacity: 0
+  description: "Les planètes arides sont l'archétype des «\_planètes telluriques mortes\_\
+    »\_: des mondes rocheux et désertiques avec une atmosphère minime et une composition\
+    \ ordinaire. Elles sont généralement traversées par des canaux de crue assez grands\
+    \ pour être visibles depuis l'espace. La plupart de ces mondes ont accumulé des\
+    \ quantités remarquables de glace au cours des siècles, mais n'ont pas pu les\
+    \ conserver à leur surface. Bien souvent, le liquide à la surface s'évapore rapidement,\
+    \ contribuant de ce fait à la faible couche d'atmosphère, même s'il peut arriver\
+    \ qu'il s'infiltre dans le sol et gèle à nouveau, en attendant les prochaines\
+    \ températures élevées pour s'évaporer."
+  graphic_id: 3837
+  group_id: 7
+  icon_id: 10135
+  mass: 100000000000000000000000000000000000
+  name: "Planète (aride)"
+  packaged_volume: 1
+  portion_size: 1
+  published: false
+  radius: 10000
+  type_id: 2016
+  volume: 1
+"11":
+  capacity: 0
+  description: "Les planètes portant la vie sont souvent appelées «\_tempérées\_»\
+    , puisqu'elles se caractérisent principalement par leurs températures clémentes.\
+    \ Les planètes présentant un écosystème stable sont les cibles privilégiées des\
+    \ colonisateurs, puisqu'elles sont souvent entièrement habitables. Par conséquent,\
+    \ la plupart des mondes habités sont des planètes tempérées. En effet, de nombreux\
+    \ rapports ont déjà révélé des traces d'anciennes colonies à plusieurs moments\
+    \ de l'histoire de New Eden."
+  graphic_id: 3832
+  group_id: 7
+  icon_id: 10136
+  mass: 100000000000000000000000000000000000
+  name: "Planète (tempérée)"
+  packaged_volume: 1
+  portion_size: 1
+  published: false
+  radius: 10000
+  type_id: 11
+  volume: 1
+"2470":
+  capacity: 0
+  description: "Au lieu de travailler pour protéger les lignes de production de ce\
+    \ complexe industriel face aux dangers de l'environnement, les concepteurs ont\
+    \ choisi d'utiliser la chaleur, les interférences, et même la pression écrasante\
+    \ pour contribuer à l'alimentation de la structure en elle-même. Si une usine\
+    \ sur une planète de glace peut posséder des dissipateurs de chaleur avancés,\
+    \ une usine sur une planète de plasma peut tirer tout ou partie de son électricité\
+    \ des anneaux magnétiques en harmonie avec les vents ioniques de la planète. Tirer\
+    \ profit des caractéristiques naturelles de chaque monde permet ainsi de compenser\
+    \ le coût de construction des infrastructures de production de masse, qui pré\
+    sentent généralement des revêtements de protection, des couvertures environnementales,\
+    \ et des fondations renforcées."
+  dogma_attributes:
+  - attribute_id: 1632
+    value: 2015
+  - attribute_id: 161
+    value: 0
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 4
+    value: 0
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 15
+    value: 700
+  - attribute_id: 49
+    value: 500
+  graphic_id: 4534
+  group_id: 1028
+  mass: 0
+  name: "Site d'industrie avancée en milieu volcanique"
+  packaged_volume: 0
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 2470
+  volume: 0
+"2480":
+  capacity: 0
+  description: "Peuplées presque intégralement d'ouvriers robotiques, les installations\
+    \ de production de masse excellent dans la création de produits en gros avec une\
+    \ surveillance et un entretien minimes. Elles peuvent être si autonomes qu'on\
+    \ raconte que des usines gallente seraient gérées uniquement par des androïdes\
+    \ et dirigées par un équipage de drones. (Les détracteurs de cette méthode aiment\
+    \ d'ailleurs faire remarquer que les installations sansha fonctionnent aussi de\
+    \ cette façon.) Quoi qu'il en soit, les résultats sont irréfutables : les matiè\
+    res premières et les composants y entrent d'un côté, tandis que des marchandises\
+    \ raffinées en sortent de l'autre."
+  dogma_attributes:
+  - attribute_id: 1632
+    value: 11
+  - attribute_id: 161
+    value: 0
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 4
+    value: 0
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 15
+    value: 700
+  - attribute_id: 49
+    value: 500
+  graphic_id: 4523
+  group_id: 1028
+  mass: 0
+  name: "Site d'industrie avancée en milieu tempéré"
+  packaged_volume: 0
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 2480
+  volume: 0
+"60377":
+  capacity: 0
+  description: "Spécialisation dans le retraitement des minerais simples. Cette compé\
+    tence permet d'améliorer considérablement l'efficacité des usines de retraitement.\
+    \ Pour chaque niveau de compétence, augmente de 2\_% le rendement du retraitement\
+    \ pour les types de minerai simple suivants\_: plagioclase, pyroxeres, scordite,\
+    \ veldspar et mordunium"
+  dogma_attributes:
+  - attribute_id: 161
+    value: 0.01
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 4
+    value: 0
+  - attribute_id: 278
+    value: 3
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 1047
+    value: 0
+  - attribute_id: 275
+    value: 3
+  - attribute_id: 180
+    value: 166
+  - attribute_id: 277
+    value: 4
+  - attribute_id: 182
+    value: 3385
+  - attribute_id: 183
+    value: 3402
+  - attribute_id: 280
+    value: 0
+  - attribute_id: 379
+    value: 2
+  - attribute_id: 181
+    value: 165
+  dogma_effects:
+  - effect_id: 132
+    is_default: true
+  group_id: 1218
+  icon_id: 33
+  market_group_id: 1323
+  mass: 0
+  name: "Traitement de minerai simple"
+  packaged_volume: 0.01
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 60377
+  volume: 0.01

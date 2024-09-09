@@ -5,6 +5,7 @@
     "types": [
       "@nuxt/types",
       "@nuxtjs/i18n",
-    ]
+    ],
+    "noImplicitOverride": false
   }
 }

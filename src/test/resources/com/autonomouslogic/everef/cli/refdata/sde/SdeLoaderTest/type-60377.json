@@ -1,0 +1,30 @@
+{
+  "base_price" : 300000,
+  "description" : {
+    "de" : "Spezialisiert auf die Aufbereitung von einfachen Erzen. Ermöglicht es einer sachkundigen Person, Aufbereitungsanlagen mit wesentlich höherer Effizienz zu bedienen. 2 % Bonus auf den Aufbereitungsertrag für die folgenden einfachen Erztypen je Skillstufe: Plagioclase, Pyroxeres, Scordite, Veldspar und Mordunium",
+    "en" : "Specialization in Simple Ore reprocessing. Allows a skilled individual to utilize reprocessing facilities at considerably greater efficiency.\r\n\r\n2% bonus to reprocessing yield per skill level for the following Simple Ore types:\r\nPlagioclase\r\nPyroxeres\r\nScordite\r\nVeldspar\r\nMordunium",
+    "es" : "Especialización en el reprocesamiento de menas simples. Permite a un individuo capacitado utilizar instalaciones de reprocesamiento de forma considerablemente más eficiente.\n\n2 % de bonificación al rendimiento del reprocesamiento por nivel de habilidad de los siguientes tipos de menas simples:\nPlagioclasa\nPiroxeno\nEscordita\nVeldspar\nMordunium",
+    "fr" : "Spécialisation dans le retraitement des minerais simples. Cette compétence permet d'améliorer considérablement l'efficacité des usines de retraitement. Pour chaque niveau de compétence, augmente de 2 % le rendement du retraitement pour les types de minerai simple suivants : plagioclase, pyroxeres, scordite, veldspar et mordunium",
+    "ja" : "シンプル鉱石の再処理に特化している。このスキルがあれば、再処理施設を利用する際の生産性をいちじるしく上げることができる。\n\n以下の種類のシンプル鉱石について、スキルレベル上昇ごとに、再処理収率が2%増加。\nプラジオクレイス\nパイロゼリーズ\nスコダイト\nベルドスパー\nモードゥニウム",
+    "ko" : "기초 광물 정제에 특화되었습니다. 정제시설의 효율성이 크게 증가합니다.<br><br>매 스킬 레벨마다 기초 광물 정제 산출량 2% 증가:<br>플레지오클레이스<br>파이로제레스<br>스코다이트<br>벨드스파<br>모르두늄",
+    "ru" : "Специализация в переработке простой руды. Позволяет человеку, владеющему необходимым навыком, использовать цеха переработки с гораздо большей эффективностью. +2% к эффективности переработки за каждую степень освоения навыка при работе со следующими простыми рудами: плагиоклаз пироксер скордит вельдспар мордуний",
+    "zh" : "提炼普通矿石的专业技能。可以大大提高技能熟练者使用提炼设备时的效率。\n\n\n\n每升一级，下列普通矿石的提炼产出提高2%：\n\n斜长岩\n\n干焦岩\n\n灼烧岩\n\n凡晶石"
+  },
+  "group_id" : 1218,
+  "icon_id" : 33,
+  "market_group_id" : 1323,
+  "name" : {
+    "de" : "Simple Ore Processing",
+    "en" : "Simple Ore Processing",
+    "es" : "Procesamiento de menas simples",
+    "fr" : "Traitement de minerai simple",
+    "ja" : "シンプル鉱石処理",
+    "ko" : "기초 광물 정제",
+    "ru" : "Simple Ore Processing",
+    "zh" : "普通矿石处理技术"
+  },
+  "portion_size" : 1,
+  "published" : true,
+  "volume" : 0.01,
+  "type_id" : 60377
+}

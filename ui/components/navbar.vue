@@ -4,7 +4,7 @@ import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 import ExternalLink from "~/components/helpers/ExternalLink.vue";
 import {PATREON_URL} from "~/lib/urls";
 
-const {locale, availableLocales } = useI18n();
+const { locale, availableLocales } = useI18n();
 const selectedLocale = ref(locale);
 
 </script>
@@ -19,6 +19,7 @@ const selectedLocale = ref(locale);
 			<span><NuxtLink to="/market-groups">Market Groups</NuxtLink></span>
 			<span><NuxtLink to="/structures"><MarketGroupName :market-group-id="477" /></NuxtLink></span>
 			<span><NuxtLink to="/skill-points">Skill Points</NuxtLink></span>
+			<span><SearchBar /></span>
 		</span>
 		<span class="w-full space-x-3 text-right">
 			<span>

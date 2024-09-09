@@ -1,0 +1,31 @@
+---
+"65":
+  cycleTime: 3600
+  nameID:
+    de: "Superconductors"
+    en: "Superconductors"
+    es: "Superconductores"
+    fr: "Superconducteurs"
+    ja: "超電導体"
+    ko: "초전도체"
+    ru: "Superconductors"
+    zh: "超导体"
+  pins:
+  - 2470
+  - 2472
+  - 2474
+  - 2480
+  - 2484
+  - 2485
+  - 2491
+  - 2494
+  types:
+    "2389":
+      isInput: true
+      quantity: 40
+    "3645":
+      isInput: true
+      quantity: 40
+    "9838":
+      isInput: false
+      quantity: 5

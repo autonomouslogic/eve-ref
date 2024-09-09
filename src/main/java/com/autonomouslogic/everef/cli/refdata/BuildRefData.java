@@ -13,6 +13,8 @@ import com.autonomouslogic.everef.cli.refdata.post.MissingDogmaUnitsDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.MutaplasmidDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.OreVariationsDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.PostDecorator;
+import com.autonomouslogic.everef.cli.refdata.post.ReprocessableTypesDecorator;
+import com.autonomouslogic.everef.cli.refdata.post.SchematicDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.SkillDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.TypesDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.VariationsDecorator;
@@ -128,6 +130,9 @@ public class BuildRefData implements Command {
 	protected BlueprintDecorator blueprintDecorator;
 
 	@Inject
+	protected SchematicDecorator schematicDecorator;
+
+	@Inject
 	protected GroupsDecorator groupsDecorator;
 
 	@Inject
@@ -144,6 +149,9 @@ public class BuildRefData implements Command {
 
 	@Inject
 	protected CanFitDecorator canFitDecorator;
+
+	@Inject
+	protected ReprocessableTypesDecorator reprocessableTypesDecorator;
 
 	@Setter
 	@NonNull
@@ -190,12 +198,14 @@ public class BuildRefData implements Command {
 				mutaplasmidDecorator,
 				variationsDecorator,
 				blueprintDecorator,
+				schematicDecorator,
 				groupsDecorator,
 				typesDecorator,
 				marketGroupsDecorator,
 				oreVariationsDecorator,
 				missingDogmaUnitsDecorator,
-				canFitDecorator);
+				canFitDecorator,
+				reprocessableTypesDecorator);
 	}
 
 	@Override

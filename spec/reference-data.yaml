@@ -412,6 +412,41 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Region"
+  /schematics:
+    get:
+      tags:
+      - refdata
+      description: Get all schematic IDs.
+      operationId: getAllSchematics
+      responses:
+        "200":
+          description: Schematic type IDs.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: integer
+                  format: int64
+  /schematics/{schematic_id}:
+    get:
+      tags:
+      - refdata
+      operationId: getSchematic
+      parameters:
+      - name: schematic_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: The schematic.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Schematic"
   /skills:
     get:
       tags:
@@ -582,6 +617,8 @@ components:
         probability:
           type: number
           format: double
+      description: "This is called 'types' in the SDE, but EVE Ref converts it to\
+        \ 'materials' and 'products' to be consistent with blueprints."
     Bundle:
       type: object
       properties:
@@ -1013,6 +1050,49 @@ components:
             type: integer
             description: Types which can be fitted. This is added by EVE Ref.
             format: int64
+        used_by_schematic_ids:
+          type: array
+          description: The schematics consuming this type. This is added by EVE Ref.
+          items:
+            type: integer
+            description: The schematics consuming this type. This is added by EVE
+              Ref.
+            format: int64
+        produced_by_schematic_ids:
+          type: array
+          description: The schematics producing this type. This is added by EVE Ref.
+          items:
+            type: integer
+            description: The schematics producing this type. This is added by EVE
+              Ref.
+            format: int64
+        harvested_by_pin_type_ids:
+          type: array
+          description: The type IDs for the planetary extractor pins which can be
+            used to harvest this type. This is added by EVE Ref.
+          items:
+            type: integer
+            description: The type IDs for the planetary extractor pins which can be
+              used to harvest this type. This is added by EVE Ref.
+            format: int64
+        buildable_pin_type_ids:
+          type: array
+          description: The type IDs for the planetary pins which can be built on this
+            planet. This is added by EVE Ref.
+          items:
+            type: integer
+            description: The type IDs for the planetary pins which can be built on
+              this planet. This is added by EVE Ref.
+            format: int64
+        installable_schematic_ids:
+          type: array
+          description: The schematic IDs which can be installed into this planetary
+            processor. This is added by EVE Ref.
+          items:
+            type: integer
+            description: The schematic IDs which can be installed into this planetary
+              processor. This is added by EVE Ref.
+            format: int64
         is_skill:
           type: boolean
           description: Whether this type is a skill or not. This is added by EVE Ref.
@@ -1249,6 +1329,36 @@ components:
           $ref: "#/components/schemas/Coordinate"
         min:
           $ref: "#/components/schemas/Coordinate"
+    Schematic:
+      type: object
+      properties:
+        schematic_id:
+          type: integer
+          format: int64
+        name:
+          type: object
+          additionalProperties:
+            type: string
+        cycle_time:
+          type: integer
+          format: int64
+        materials:
+          type: object
+          additionalProperties:
+            $ref: "#/components/schemas/BlueprintMaterial"
+          description: "This is called 'types' in the SDE, but EVE Ref converts it\
+            \ to 'materials' and 'products' to be consistent with blueprints."
+        products:
+          type: object
+          additionalProperties:
+            $ref: "#/components/schemas/BlueprintMaterial"
+          description: "This is called 'types' in the SDE, but EVE Ref converts it\
+            \ to 'materials' and 'products' to be consistent with blueprints."
+        pin_type_ids:
+          type: array
+          items:
+            type: integer
+            format: int64
     Skill:
       type: object
       properties:
@@ -1283,7 +1393,18 @@ components:
             description: The other skills required for this skill.
             format: int32
           description: The other skills required for this skill.
-      description: Details about skill types. These are created by EVE Ref.
+        reprocessable_type_ids:
+          type: array
+          description: "Which type IDs this skill can be used to reprocess. This is\
+            \ found by cross-referencing dogma attribute reprocessingSkillType [790]\
+            \ on the skills."
+          items:
+            type: integer
+            description: "Which type IDs this skill can be used to reprocess. This\
+              \ is found by cross-referencing dogma attribute reprocessingSkillType\
+              \ [790] on the skills."
+            format: int64
+      description: Details about skill types. These are created entirely by EVE Ref.
     TraitBonus:
       type: object
       properties:

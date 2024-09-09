@@ -3,8 +3,6 @@ import {type DogmaAttribute, type InventoryType} from "~/refdata-openapi";
 import CardWrapper from "~/components/cards/CardWrapper.vue";
 import RequiredSkillsRow from "~/components/cards/requiredSkills/RequiredSkillsRow.vue";
 
-const {locale} = useI18n();
-
 const props = defineProps<{
 	title: string,
 	inventoryType: InventoryType,

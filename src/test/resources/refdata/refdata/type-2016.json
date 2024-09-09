@@ -1,0 +1,34 @@
+{
+  "description" : {
+    "de" : "Dürreplaneten sind archetypische \"tote Gebiete\": trockene, felsige Welten mit minimaler Atmosphäre und unauffälliger Struktur. Meistens sind sie von Hochwasserkanälen durchzogen, die oft breit genug sind, um von der Umlaufbahn aus sichtbar zu sein. Die meisten dieser Welten haben über die Jahre hinweg beträchtliche Mengen von Eis angehäuft, können dieses aber nicht an ihrer Oberfläche halten. Normalerweise verdunsten Flüssigkeiten an der Oberfläche schnell und tragen so zu der dünnen Atmospähre bei, aber gelegentlich sickert die Flüssigkeit auch zurück in den Grund und gefriert dort wieder, bis es in der Zukunft aufgrund des örtlichen Temperaturanstiegs wieder zum Vorschein tritt.",
+    "en" : "Barren planets are archetypical \"dead terrestrials\": dry, rocky worlds with a minimal atmosphere and an unremarkable composition. They are commonly etched with flood channels, which are often broad enough to be visible from orbit; most such worlds have accumulated significant quantities of ice over their lifetimes, but cannot retain it on their surface. Generally surface liquid evaporates rapidly, contributing to the thin atmosphere, but occasionally it will seep back into the ground and refreeze, ready for another breakout in future when the local temperature rises.",
+    "es" : "Los planetas estériles son «cuerpos celestes muertos» arquetípicos: mundos secos y rocosos con una atmósfera mínima y una composición que deja que desear. Su superficie suele estar surcada por ramblas de inundaciones, a menudo tan anchas que son visibles desde la órbita. A lo largo de su historia, la mayoría de estos mundos ha acumulado grandes cantidades de hielo, pero no son capaces de retenerlo, pues el líquido más superficial se evapora rápidamente, lo que contribuye a que la atmósfera sea fina, si bien a veces retorna al suelo y vuelve a congelarse hasta la próxima emanación, cuando vuelven a aumentar las temperaturas.",
+    "fr" : "Les planètes arides sont l'archétype des « planètes telluriques mortes » : des mondes rocheux et désertiques avec une atmosphère minime et une composition ordinaire. Elles sont généralement traversées par des canaux de crue assez grands pour être visibles depuis l'espace. La plupart de ces mondes ont accumulé des quantités remarquables de glace au cours des siècles, mais n'ont pas pu les conserver à leur surface. Bien souvent, le liquide à la surface s'évapore rapidement, contribuant de ce fait à la faible couche d'atmosphère, même s'il peut arriver qu'il s'infiltre dans le sol et gèle à nouveau, en attendant les prochaines températures élevées pour s'évaporer.",
+    "ja" : "荒地惑星は、原型的な「生命のない大地」である。最小限の空気と平凡な構成の乾燥した岩だらけの世界である。これらの惑星には、衛星軌道から確認できるほどの広さがある洪水路が刻まれていることが多い。このような世界のほとんどでは、その存続期間にわたり大量の氷が蓄積されるが、地表に留まることはない。多くの場合、地表の液体は急速に蒸発して薄い大気に貢献しているが、時には地下に浸透して地域の温度上昇時に再び地表に流出することもある。",
+    "ko" : "사막 행성은 전형적인 \"죽은 행성\"으로 암석 지형, 건조한 기후, 최소한의 대기 수준, 그리고 불균형적인 구성 요소를 지니고 있습니다. 지표면에는 다수의 방수로가 새겨져 있으며 이는 궤도상에서도 뚜렷하게 관측이 가능합니다. 사막 행성의 경우 상당량의 얼음이 생성되며 지표면에 짧은 시간 축적됩니다. 이후 행성 온도가 상승하면 지표면에 생성된 얼음은 급속도로 증발한 뒤 대기로 순환됩니다.",
+    "ru" : "Бесплодные планеты часто называют «мертвыми землеподобными планетами». Это сухие, скалистые миры с разреженной атмосферой и бедным минеральным составом. Обычно их поверхность изборождена ливневыми руслами, которые можно разглядеть с орбиты. Большинство таких миров за время своего существования накопило огромные количества льда; но они не в состоянии удержать его на поверхности. Обычно жидкость быстро испаряется с поверхности и переходит в разреженную атмосферу, но временами она вновь просачивается в грунт и снова замерзает там, где и дожидается очередного местного повышения температуры, оттаивания и высвобождения.",
+    "zh" : "贫瘠行星拥有典型的“死亡地貌”：干燥、多岩石、大气稀薄、矿物构成简单。这些星球的表面通常会有沟壑，很多沟壑的宽度之大甚至可以在行星轨道上用肉眼看见。大多数此类行星在形成过后的很长时间里都存积了大量的冰，但是它们无法将这些水份保持在自己的表面上。行星表面的液体会快速地蒸发，留下稀薄的大气。不过也会有例外的情况，它们会反方向渗透到更深的土层中，凝结起来等待下一次温度升高而再次向上突破。"
+  },
+  "graphic_id" : 3837,
+  "group_id" : 7,
+  "icon_id" : 10135,
+  "mass" : 100000000000000000000000000000000000,
+  "name" : {
+    "de" : "Planet (Barren)",
+    "en" : "Planet (Barren)",
+    "es" : "Planeta (baldío)",
+    "fr" : "Planète (aride)",
+    "ja" : "惑星（荒地）",
+    "ko" : "사막 행성",
+    "ru" : "Planet (Barren)",
+    "zh" : "行星（贫瘠）"
+  },
+  "portion_size" : 1,
+  "published" : false,
+  "radius" : 10000,
+  "volume" : 1,
+  "type_id" : 2016,
+  "capacity" : 0,
+  "packaged_volume" : 1,
+  "buildable_pin_type_ids" : [ 2409 ]
+}

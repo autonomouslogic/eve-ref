@@ -6,6 +6,7 @@
     "es" : "En los asteroides con un tamaño superior a la media, la intensa presión puede convertir el veldspar normal en lo que se conoce como veldspar denso, lo que aumenta el rendimiento un 10 %.\n\nEl veldspar es el tipo de mena más común en las regiones centrales del universo conocido. Su demanda es constante, ya que contiene grandes cantidades de <a href=showinfo:34>tritanio</a>, un mineral muy utilizado.\n\nSe encuentra principalmente en sistemas estelares con estado de seguridad alto.",
     "fr" : "Sur les astéroïdes de grande taille, la pression intense peut transformer le veldspar classique en veldspar dense, dont le rendement est supérieur de 10 %. Le veldspar est l'un des minerais les plus courants dans les régions centrales de l'univers connu. La demande en veldspar ne faiblit jamais car il contient du <a href=showinfo:34>tritanium</a>, l'un des minéraux les plus exploités de l'amas. Ce minerai est essentiellement disponible dans les systèmes stellaires de haute sécurité.",
     "ja" : "比較的大型のアステロイドにおいて、通常のベルドスパーに地中で強い圧力が加わって生成されるのが高密度ベルドスパーと呼ばれるもので、鉱石産出量が10%増える。\r\n\nベルドスパーは既知宇宙の中心宙域に最も普及している鉱石で、どこに行っても見つけることができる。しかし用途の広い無機物である<a href=showinfo:34>トリタニウム</a>を多く含むため、需要は絶えない。\r\n\n主にハイセキュリティ星系で発見可能。",
+    "ko" : "대형 소행성에서 벨드스파가 압축되면 생성되는 광석으로 일반적인 벨드스파에 비해 산출량이 10% 더 많습니다. <br><br>벨드스파는 뉴에덴의 중심부에서 발견되는 흔한 광석 가운데 하나로 <a href=showinfo:34>트리타늄</a>의 주요 공급원입니다.<br><br>하이 시큐리티 항성계에서 주로 채굴됩니다.",
     "ru" : "В астероидах размером выше среднего обычный вельдспар под воздействием давления превращается в так называемый плотный вельдспар. В последнем на 10% больше полезных минералов. Вельдспар — самая распространённая руда в центральных секторах известной части вселенной. Вельдспар содержит большое количество повсеместно используемого <a href=showinfo:34>тритания</a>, поэтому спрос на него никогда не падает. Встречается в основном в звёздных системах с высоким уровнем безопасности.",
     "zh" : "在中等尺寸以上的小行星中，巨大的压力会使普通的凡晶石凝结成人们所知的厚质凡晶石，也使其矿物含量提高了10%。 \n\n\n\n凡晶石是已知空间的核心星域中最为常见的矿石。它富含人们大量使用的<a href=showinfo:34>三钛合金</a>，因此需求仍然十分稳定。\n\n\n\n主要分布于高安全等级星系。"
   },
@@ -19,6 +20,7 @@
     "es" : "Veldspar denso",
     "fr" : "Veldspar dense",
     "ja" : "高密度ベルドスパー",
+    "ko" : "응축 벨드스파",
     "ru" : "Dense Veldspar",
     "zh" : "厚质凡晶石"
   },

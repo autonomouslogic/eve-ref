@@ -1,0 +1,25 @@
+{
+  "attribute_id" : 790,
+  "category_id" : 7,
+  "data_type" : 11,
+  "default_value" : 0,
+  "description" : {
+    "en" : "The skill required to reprocess this ore type."
+  },
+  "high_is_good" : true,
+  "icon_id" : 0,
+  "name" : "reprocessingSkillType",
+  "published" : true,
+  "stackable" : true,
+  "unit_id" : 116,
+  "display_name" : {
+    "de" : "Aufbereitung-Skill",
+    "en" : "Reprocessing Skill",
+    "es" : "Habilidad de reprocesamiento",
+    "fr" : "Compétence de retraitement",
+    "ja" : "再処理スキル",
+    "ko" : "재처리 스킬",
+    "ru" : "Навык переработки",
+    "zh" : "回收再生技能"
+  }
+}

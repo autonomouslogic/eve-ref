@@ -6,6 +6,7 @@
     "es" : "Habilidad en el manejo de cruceros de combate gallentes.",
     "fr" : "Compétence liée au pilotage des croiseurs de bataille gallente. Formation impossible sur les comptes d'évaluation.",
     "ja" : "ガレンテ巡洋戦艦を操作するスキル。",
+    "ko" : "갈란테 배틀크루저를 운용하기 위한 스킬입니다.",
     "ru" : "Освоив этот навык, пилот получит допуск к выполнению полётов на линейных крейсерах производства Галлентской Федерации.",
     "zh" : "操作盖伦特战列巡洋舰的技能。"
   },
@@ -18,6 +19,7 @@
     "es" : "Crucero de combate gallente",
     "fr" : "Croiseur de bataille gallente",
     "ja" : "ガレンテ巡洋戦艦",
+    "ko" : "갈란테 배틀크루저",
     "ru" : "Галлентские линейные крейсеры",
     "zh" : "盖伦特战列巡洋舰操作"
   },

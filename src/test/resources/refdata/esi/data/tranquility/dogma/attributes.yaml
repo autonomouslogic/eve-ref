@@ -293,3 +293,14 @@
   published: true
   stackable: true
   unit_id: 116
+"790":
+  attribute_id: 790
+  default_value: 0
+  description: "The skill required to reprocess this ore type."
+  display_name: "Reprocessing Skill"
+  high_is_good: true
+  icon_id: 0
+  name: "reprocessingSkillType"
+  published: true
+  stackable: true
+  unit_id: 116

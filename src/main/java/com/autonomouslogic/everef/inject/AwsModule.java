@@ -1,6 +1,6 @@
 package com.autonomouslogic.everef.inject;
 
-import com.autonomouslogic.everef.config.Config;
+import com.autonomouslogic.commons.config.Config;
 import com.autonomouslogic.everef.config.Configs;
 import dagger.Module;
 import dagger.Provides;
@@ -43,6 +43,21 @@ public class AwsModule {
 				Configs.REFERENCE_DATA_AWS_ACCESS_KEY_ID,
 				Configs.REFERENCE_DATA_AWS_SECRET_ACCESS_KEY,
 				Configs.REFERENCE_DATA_AWS_PROFILE);
+	}
+
+	@Provides
+	@Singleton
+	@Named("static")
+	public AwsCredentialsProvider staticCredentialsProvider() {
+		return createProviderChain(
+				Configs.STATIC_AWS_ACCESS_KEY_ID, Configs.STATIC_AWS_SECRET_ACCESS_KEY, Configs.STATIC_AWS_PROFILE);
+	}
+
+	@Provides
+	@Singleton
+	@Named("static")
+	public Optional<Region> staticRegion() {
+		return Configs.STATIC_AWS_REGION.get().map(Region::of);
 	}
 
 	@Provides

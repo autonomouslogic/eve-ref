@@ -6,6 +6,7 @@
     "es" : "Habilidad en el manejo de destructores gallentes.",
     "fr" : "Compétence liée au pilotage des destroyers gallente.",
     "ja" : "ガレンテ駆逐艦を操作するためのスキル。",
+    "ko" : "갈란테 디스트로이어를 운용하기 위한 스킬입니다.",
     "ru" : "Освоив этот навык, пилот получит допуск к выполнению полётов на эсминцах производства Галлентской Федерации.",
     "zh" : "操作盖伦特驱逐舰的技能。"
   },
@@ -18,6 +19,7 @@
     "es" : "Destructor gallente",
     "fr" : "Destroyer gallente",
     "ja" : "ガレンテ駆逐艦",
+    "ko" : "갈란테 디스트로이어",
     "ru" : "Галлентские эсминцы",
     "zh" : "盖伦特驱逐舰操作"
   },

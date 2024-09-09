@@ -2,8 +2,6 @@
 import refdataApi from "~/refdata";
 import MarketGroupLink from "~/components/helpers/MarketGroupLink.vue";
 
-const {locale} = useI18n();
-
 const marketGroupIds: number[] = await refdataApi.getRootMarketGroups();
 useHead({
 	title: "Market Groups"

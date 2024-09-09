@@ -314,6 +314,26 @@ public interface ReferenceDataSpec {
 	Icon getIcon(@PathParam("icon_id") long iconId);
 
 	@GET
+	@Path("/schematics")
+	@Operation(description = "Get all schematic IDs.")
+	@ApiResponse(
+			responseCode = "200",
+			description = "Schematic type IDs.",
+			useReturnTypeSchema = true,
+			content = @Content(mediaType = "application/json"))
+	List<Long> getAllSchematics();
+
+	@GET
+	@Path("/schematics/{schematic_id}")
+	@Operation
+	@ApiResponse(
+			responseCode = "200",
+			description = "The schematic.",
+			useReturnTypeSchema = true,
+			content = @Content(mediaType = "application/json"))
+	Schematic getSchematic(@PathParam("schematic_id") long schematicId);
+
+	@GET
 	@Path("/regions")
 	@Operation(description = "Get all region IDs.")
 	@ApiResponse(

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import refdataApi from "~/refdata";
 import {type DogmaAttribute} from "~/refdata-openapi";
+import {prepMessages} from "~/lib/translate";
 
 const {locale} = useI18n();
 
@@ -18,7 +19,9 @@ const dogmaAttribute = typeof props.attribute === "number" ?
 		v-if="dogmaAttribute"
 		:to="`/dogma-attributes/${dogmaAttribute.attributeId}`">
 		<slot>
-			<template v-if="dogmaAttribute.displayName && dogmaAttribute.displayName[locale]">{{ dogmaAttribute.displayName[locale] }}</template>
+			<template v-if="dogmaAttribute.displayName && prepMessages(dogmaAttribute.displayName)[locale]">
+				{{ prepMessages(dogmaAttribute.displayName)[locale] }}
+			</template>
 			<template v-else>{{dogmaAttribute.name}}</template>
 		</slot>
 	</NuxtLink>

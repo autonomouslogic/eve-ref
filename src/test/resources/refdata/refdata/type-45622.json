@@ -5,6 +5,7 @@
     "es" : "Este subsistema emplea un campo de dispersión nanoelectromecánico para fortalecer los sistemas de sensores de la nave. Fabricado a partir de un sistema complejo de interconexiones neurovisuales, unidades de respuesta de disparo automatizadas y miles de millones de circuitos avanzados a nivel molecular, el subsistema ofrece una protección mejorada frente a las contramedidas electrónicas hostiles, además de una velocidad de adquisición de objetivos y un alcance de sensor mejorados.",
     "fr" : "Ce sous-système utilise un champ de dispersion nano-électromécanique visant à renforcer les systèmes de détection d'un vaisseau. Fabriqué à partir d'un système complexe de sous-couches neurovisuelles, d'unités réactives automatisées et de milliards de circuits moléculaires avancés, ce sous-système garantit une protection améliorée contre les CME hostiles ainsi qu'une portée des capteurs et une vitesse d'acquisition des cibles accrues.",
     "ja" : "このサブシステムは、艦のセンサーシステムを強化するために、ナノエレクトロメカニカル拡散フィールドを採用している。このサブシステムは、神経視覚インターレイの複雑なシステム、自動化されたトリガー応答ユニット、数十億の高度な分子レベルの回路の複雑なシステムから作られており、敵対的なECMからの保護を向上させ、センサーの範囲と目標の取得速度を向上させる。",
+    "ko" : "나노전자기기 필드를 전개하여 함선 센서 시스템을 강화합니다. 이 서브시스템은 정교한 뉴로비주얼 레이어, 자동 트리거 응답 유닛, 그리고 수십억 개의 분자 회로로 구성되었으며 센서 강도와 타겟팅 속도를 증가시키는 동시에 적 ECM에 대한 대응책을 마련합니다.",
     "ru" : "Наночастотное электромеханическое поле рассеяния, используемое в этой подсистеме, повышает эффективность корабельных систем захвата целей. Подсистема состоит из миллиардов высокотехнологичных молекулярных схем, нейровизуальных сетей и автоматических блоков реагирования на условие, усиливающих защиту корабля от помех, наводимых на системы захвата целей, а также повышающих дальность и скорость действия этих систем.",
     "zh" : "这个子系统使用纳米机电分散场来加强舰船的感应系统。由神经视觉层、自动触发响应单元和数十亿个先进的分子级电路构成的一个复杂系统组成，提升感应器范围、目标锁定速度和针对敌对ECM的防护能力。"
   },
@@ -20,6 +21,7 @@
     "es" : "Núcleo de la Legion: secuenciador de disolución",
     "fr" : "Legion Nucléus – Séquenceur de dissolution",
     "ja" : "レギオン・コア - ディソリューション・シーケンサー",
+    "ko" : "레기온 코어 시스템 - 센서 시퀀서",
     "ru" : "Legion Core - Dissolution Sequencer",
     "zh" : "圣卒核心 - 散解程控装置"
   },
@@ -37,6 +39,7 @@
           "es" : "<b><u>Estadísticas básicas adicionales</b></u>",
           "fr" : "<b><u>Stats de base supplémentaires</b></u>",
           "ja" : "<b><u>追加ベース統計</b></u>",
+          "ko" : "<b><u>추가 기본 능력치</b></u>",
           "ru" : "<b><u>Кроме того:</b></u>",
           "zh" : "<b><u>附加基础数值</b></u>"
         },
@@ -49,6 +52,7 @@
           "es" : "+2 ranuras intermedias, +2 ranuras inferiores",
           "fr" : "+2 Emplacements intermédiaires, +2 Emplacements inférieurs",
           "ja" : "ミッドスロット+2、ロースロット+2",
+          "ko" : "미드 슬롯 +2, 로우 슬롯 +2",
           "ru" : "+2 разъёма средней мощности, +2 разъёма малой мощности",
           "zh" : "中槽+2，低槽+2"
         },
@@ -61,6 +65,7 @@
           "es" : "+1 objetivo fijado máximo",
           "fr" : "+1 Cible verrouillée max",
           "ja" : "最大ロックターゲット数+1",
+          "ko" : "최대 타겟팅 수 +1",
           "ru" : "+1 к максимуму захваченных целей",
           "zh" : "目标锁定数上限+1"
         },
@@ -77,6 +82,7 @@
             "es" : "de bonificación a la distancia-objetivo máxima.",
             "fr" : "de bonus à la portée maximale du système de ciblage",
             "ja" : "最大ターゲット範囲が拡大",
+            "ko" : "최대 타겟팅 거리 증가",
             "ru" : "увеличивается максимальная дальность захвата целей",
             "zh" : "最大锁定距离加成"
           },
@@ -91,6 +97,7 @@
             "es" : "de bonificación a la intensidad de los sensores de la nave.",
             "fr" : "de bonus à la puissance de détection du vaisseau",
             "ja" : "艦船のセンサー強度が増加",
+            "ko" : "센서 강도 증가",
             "ru" : "повышается эффективность системы захвата целей",
             "zh" : "舰船感应强度加成"
           },
@@ -105,6 +112,7 @@
             "es" : "de bonificación a la resolución de escaneo.",
             "fr" : "de bonus à la résolution du balayage",
             "ja" : "スキャン分解能にボーナス",
+            "ko" : "스캔 정밀도 향상",
             "ru" : "увеличивается разрешающая способность системы захвата целей",
             "zh" : "扫描分辨率加成"
           },

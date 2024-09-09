@@ -16,7 +16,7 @@ const props = defineProps<{
 </script>
 
 <template>
-	<CardWrapper title="Basics">
+	<CardWrapper :title="title">
 
 		<AttributeList>
 			<AttributeListItem v-if="inventoryType.basePrice">
