@@ -1,0 +1,20 @@
+{
+  "anchorable" : false,
+  "anchored" : false,
+  "category_id" : 16,
+  "fittable_non_singleton" : false,
+  "name" : {
+    "de" : "Ressourcenverarbeitung",
+    "en" : "Resource Processing",
+    "es" : "Procesamiento de recursos",
+    "fr" : "Traitement des ressources",
+    "ja" : "資源加工",
+    "ko" : "자원 정제",
+    "ru" : "Добыча и переработка сырья",
+    "zh" : "资源处理"
+  },
+  "published" : true,
+  "use_base_price" : true,
+  "group_id" : 1218,
+  "type_ids" : [ 60377 ]
+}

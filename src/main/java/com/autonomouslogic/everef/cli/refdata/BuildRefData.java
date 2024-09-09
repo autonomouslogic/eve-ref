@@ -13,6 +13,7 @@ import com.autonomouslogic.everef.cli.refdata.post.MissingDogmaUnitsDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.MutaplasmidDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.OreVariationsDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.PostDecorator;
+import com.autonomouslogic.everef.cli.refdata.post.ReprocessableTypesDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.SchematicDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.SkillDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.TypesDecorator;
@@ -149,6 +150,9 @@ public class BuildRefData implements Command {
 	@Inject
 	protected CanFitDecorator canFitDecorator;
 
+	@Inject
+	protected ReprocessableTypesDecorator reprocessableTypesDecorator;
+
 	@Setter
 	@NonNull
 	private ZonedDateTime buildTime = ZonedDateTime.now(ZoneOffset.UTC).truncatedTo(ChronoUnit.SECONDS);
@@ -200,7 +204,8 @@ public class BuildRefData implements Command {
 				marketGroupsDecorator,
 				oreVariationsDecorator,
 				missingDogmaUnitsDecorator,
-				canFitDecorator);
+				canFitDecorator,
+				reprocessableTypesDecorator);
 	}
 
 	@Override
