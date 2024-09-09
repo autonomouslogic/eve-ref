@@ -39,20 +39,29 @@ const result = computed(() => {
 
 <template>
 	<h1>Search</h1>
-	<div class="border border-blue-500">
-		<div>Status: {{status}}</div>
-		<div>Query: {{query}}</div>
-		<div v-if="status == 'pending'">Loading ...</div>
-		<div v-else-if="status == 'error'">Failed loading search</div>
-		<div v-else>Loaded</div>
-	</div>
-	<div v-if="result">
-		<div v-for="(item, index) in result" :key="index" class="border border-green-900">
-			<div><NuxtLink :href="item.link">{{item.text}}</NuxtLink></div>
-			<div>{{ item.type }}</div>
-		</div>
-	</div>
-
+	<template v-if="status == 'idle' || status == 'pending'">
+		<p> Loading search data ...</p>
+	</template>
+	<template v-else-if="status == 'error'">
+		<p>Failed to load search data.</p>
+	</template>
+	<template v-else-if="status == 'success'">
+		<template v-if="result.length == 0">
+			<p>No result for '{{query}}'</p>
+		</template>
+		<template v-else>
+			<p>{{result.length}} result for '{{query}}'</p>
+			<ul>
+				<li v-for="(item, index) in result" :key="index" class="mt-2">
+					<div><NuxtLink :href="item.link">{{item.text}}</NuxtLink></div>
+					<div class="italic text-gray-400">{{ item.type }}</div>
+				</li>
+			</ul>
+		</template>
+	</template>
+	<template v-else>
+		<p>Unknown load status: {{ status }}</p>
+	</template>
 </template>
 
 <style scoped>
