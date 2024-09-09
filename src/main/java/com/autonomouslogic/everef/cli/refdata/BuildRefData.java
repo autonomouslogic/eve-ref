@@ -205,7 +205,7 @@ public class BuildRefData implements Command {
 				oreVariationsDecorator,
 				missingDogmaUnitsDecorator,
 				canFitDecorator,
-			reprocessableTypesDecorator);
+				reprocessableTypesDecorator);
 	}
 
 	@Override

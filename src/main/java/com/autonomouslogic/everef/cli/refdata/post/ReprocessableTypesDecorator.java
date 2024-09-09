@@ -5,17 +5,10 @@ import com.autonomouslogic.everef.refdata.DogmaAttribute;
 import com.autonomouslogic.everef.refdata.InventoryType;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.reactivex.rxjava3.core.Completable;
-import lombok.NonNull;
-import lombok.extern.log4j.Log4j2;
-
-import javax.inject.Inject;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.TreeSet;
+import javax.inject.Inject;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Populates which types can be reprocessed using what skills.
@@ -40,7 +33,8 @@ public class ReprocessableTypesDecorator extends PostDecorator {
 			helper = new StoreDataHelper(storeHandler, objectMapper);
 			types = storeHandler.getRefStore("types");
 			skills = storeHandler.getRefStore("skills");
-			reprocessingSkillType = helper.getDogmaAttributeByName("reprocessingSkillType").orElseThrow();
+			reprocessingSkillType =
+					helper.getDogmaAttributeByName("reprocessingSkillType").orElseThrow();
 			crossReferenceTypes();
 		});
 	}

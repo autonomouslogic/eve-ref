@@ -1393,7 +1393,18 @@ components:
             description: The other skills required for this skill.
             format: int32
           description: The other skills required for this skill.
-      description: Details about skill types. These are created by EVE Ref.
+        reprocessable_type_ids:
+          type: array
+          description: "Which type IDs this skill can be used to reprocess. This is\
+            \ found by cross-referencing dogma attribute reprocessingSkillType [790]\
+            \ on the skills."
+          items:
+            type: integer
+            description: "Which type IDs this skill can be used to reprocess. This\
+              \ is found by cross-referencing dogma attribute reprocessingSkillType\
+              \ [790] on the skills."
+            format: int64
+      description: Details about skill types. These are created entirely by EVE Ref.
     TraitBonus:
       type: object
       properties:
