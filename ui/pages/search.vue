@@ -26,7 +26,7 @@ const {status, data: searchData} = await useLazyFetch<SearchEntry[]>("https://st
 	server: false
 });
 
-const getQuery = (entry: SearchEntry): string => entry.query || entry.text;
+const getEntrySearchable = (entry: SearchEntry): string => entry.query || entry.text;
 
 const compoundSort = (sorts: ((a: SearchEntry, b: SearchEntry) => number)[]): (a: SearchEntry, b: SearchEntry) => number => {
 	return (a: SearchEntry, b: SearchEntry): number => {
@@ -40,12 +40,12 @@ const compoundSort = (sorts: ((a: SearchEntry, b: SearchEntry) => number)[]): (a
 	};
 };
 
-const textSort = (a: SearchEntry, b: SearchEntry): number => getQuery(a).localeCompare(getQuery(b));
+const textSort = (a: SearchEntry, b: SearchEntry): number => getEntrySearchable(a).localeCompare(getEntrySearchable(b));
 
 function prefixSort(q: string): (a: SearchEntry, b: SearchEntry) => number {
 	return (a: SearchEntry, b: SearchEntry): number => {
-		const aIndex = getQuery(a).toLowerCase().indexOf(q.toLowerCase());
-		const bIndex = getQuery(b).toLowerCase().indexOf(q.toLowerCase());
+		const aIndex = getEntrySearchable(a).toLowerCase().indexOf(q.toLowerCase());
+		const bIndex = getEntrySearchable(b).toLowerCase().indexOf(q.toLowerCase());
 		if (aIndex == 0 && bIndex == 0) {
 			return 0;
 		}
@@ -77,12 +77,7 @@ const results = computed(() => {
 
 	return searchData.value
 		.filter(function (item) {
-			if (item.query != undefined) {
-				return item.query.match(regex);
-			}
-			else {
-				return item.text.match(regex);
-			}
+      return getEntrySearchable(item).match(regex);
 		})
 		.sort(compoundSort([
 			prefixSort(queryParts[0]),
