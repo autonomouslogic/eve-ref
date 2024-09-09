@@ -8,11 +8,9 @@ let lastQuery = "";
 
 async function submit() {
 	const q = query.value;
-	console.log("submit:", q);
 	if (!q) {
 		return;
 	}
-	console.log("Submit navigating");
 	await navigateTo({
 		path: "/search",
 		query: {
@@ -26,12 +24,10 @@ async function change() {
 	if (lastQuery == q) {
 		return;
 	}
-	console.log("change:", q);
 	if (lastEntryTimeout != null) {
 		clearTimeout(lastEntryTimeout);
 	}
 	lastEntryTimeout = setTimeout(() => {
-		console.log("Debounced submit");
 		submit();
 	}, debounceMs);
 	lastQuery = q;
