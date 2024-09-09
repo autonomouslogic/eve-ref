@@ -129,6 +129,12 @@ const cards: {[key: string]: any} = {
 			"component": "variations",
 			"alwaysShow": true
 		},
+	"oreVariations":
+		{
+			"name": {"en": "Ore Variations"},
+			"component": "oreVariations",
+			"alwaysShow": true
+		},
 	"skill":
 		{
 			"name": {"en": "Skill"},
