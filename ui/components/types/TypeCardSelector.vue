@@ -15,6 +15,7 @@ import BoosterCard from "~/components/cards/BoosterCard.vue";
 import IndustryCard from "~/components/cards/IndustryCard.vue";
 import PlanetaryInteractionCard from "~/components/cards/PlanetaryInteractionCard.vue";
 import BlueprintReaction from "~/components/cards/BlueprintReaction.vue";
+import OreVariationsCard from "~/components/cards/OreVariationsCard.vue";
 
 const props = defineProps<{
 	inventoryType: InventoryType,
@@ -35,6 +36,10 @@ const props = defineProps<{
 		:inventory-type="inventoryType"
 		:dogma-attributes="dogmaAttributes" />
 	<VariationsCard v-else-if="component == 'variations'"
+		:title="title"
+		:inventory-type="inventoryType"
+		:dogma-attributes="dogmaAttributes" />
+	<OreVariationsCard v-else-if="component == 'oreVariations'"
 		:title="title"
 		:inventory-type="inventoryType"
 		:dogma-attributes="dogmaAttributes" />
