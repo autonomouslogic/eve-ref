@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.v3.oas.annotations.media.Schema;
+
+import java.util.List;
 import java.util.Map;
 import lombok.Builder;
 import lombok.Value;
@@ -15,7 +17,7 @@ import lombok.extern.jackson.Jacksonized;
 @Jacksonized
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@Schema(description = "Details about skill types. These are created by EVE Ref.")
+@Schema(description = "Details about skill types. These are created entirely by EVE Ref.")
 public class Skill {
 	@JsonProperty
 	Long typeId;
@@ -45,4 +47,10 @@ public class Skill {
 	@JsonProperty
 	@Schema(description = "The other skills required for this skill.")
 	Map<Long, Integer> requiredSkills;
+
+	@JsonProperty
+	@Schema(
+		description =
+			"Which type IDs this skill can be used to reprocess. This is found by cross-referencing dogma attribute reprocessingSkillType [790] on the skills.")
+	List<Long> reprocessableTypeIds;
 }

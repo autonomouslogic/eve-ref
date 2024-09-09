@@ -33,6 +33,7 @@ groups:
       - 27
       - 257
       - 1185
+      - 1218
     languages:
       - en-us
 
@@ -110,6 +111,7 @@ types:
       - 11
       - 2470
       - 2480
+      - 60377
     languages:
       - en-us
       - fr
@@ -196,6 +198,7 @@ dogmaAttributes:
       - 1303
       - 1304
       - 1305
+      - 790
 
 dogmaEffects:
   idField: effect_id
@@ -267,6 +270,7 @@ skills:
       - 3336
       - 33093
       - 33097
+      - 60377
 
 units:
   idField: unit_id

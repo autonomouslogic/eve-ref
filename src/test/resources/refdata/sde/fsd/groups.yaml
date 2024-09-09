@@ -47,3 +47,19 @@
     zh: "势力战争盖伦特联邦战列舰"
   published: true
   useBasePrice: false
+"1218":
+  anchorable: false
+  anchored: false
+  categoryID: 16
+  fittableNonSingleton: false
+  name:
+    de: "Ressourcenverarbeitung"
+    en: "Resource Processing"
+    es: "Procesamiento de recursos"
+    fr: "Traitement des ressources"
+    ja: "資源加工"
+    ko: "자원 정제"
+    ru: "Добыча и переработка сырья"
+    zh: "资源处理"
+  published: true
+  useBasePrice: true

@@ -2045,3 +2045,52 @@
   radius: 1
   type_id: 2480
   volume: 0
+"60377":
+  capacity: 0
+  description: "Specialization in Simple Ore reprocessing. Allows a skilled individual\
+    \ to utilize reprocessing facilities at considerably greater efficiency.\r\n\r\
+    \n2% bonus to reprocessing yield per skill level for the following Simple Ore\
+    \ types:\r\nPlagioclase\r\nPyroxeres\r\nScordite\r\nVeldspar\r\nMordunium"
+  dogma_attributes:
+  - attribute_id: 161
+    value: 0.01
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 4
+    value: 0
+  - attribute_id: 278
+    value: 3
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 1047
+    value: 0
+  - attribute_id: 275
+    value: 3
+  - attribute_id: 180
+    value: 166
+  - attribute_id: 277
+    value: 4
+  - attribute_id: 182
+    value: 3385
+  - attribute_id: 183
+    value: 3402
+  - attribute_id: 280
+    value: 0
+  - attribute_id: 379
+    value: 2
+  - attribute_id: 181
+    value: 165
+  dogma_effects:
+  - effect_id: 132
+    is_default: true
+  group_id: 1218
+  icon_id: 33
+  market_group_id: 1323
+  mass: 0
+  name: "Simple Ore Processing"
+  packaged_volume: 0.01
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 60377
+  volume: 0.01
