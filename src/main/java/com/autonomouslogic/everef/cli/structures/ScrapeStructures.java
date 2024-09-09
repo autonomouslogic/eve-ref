@@ -18,6 +18,7 @@ import com.autonomouslogic.everef.esi.EsiAuthHelper;
 import com.autonomouslogic.everef.esi.EsiHelper;
 import com.autonomouslogic.everef.esi.EsiUrl;
 import com.autonomouslogic.everef.esi.LocationPopulator;
+import com.autonomouslogic.everef.esi.OwnerPopulator;
 import com.autonomouslogic.everef.http.OkHttpHelper;
 import com.autonomouslogic.everef.mvstore.MVStoreUtil;
 import com.autonomouslogic.everef.openapi.esi.apis.UniverseApi;
@@ -74,6 +75,11 @@ public class ScrapeStructures implements Command {
 	public static final String IS_MARKET_STRUCTURE = "is_market_structure";
 	public static final String LAST_SEEN_MARKET_STRUCTURE = "last_seen_market_structure";
 	public static final String FIRST_SEEN = "first_seen";
+	public static final String OWNER_ID = "owner_id";
+	public static final String OWNER_CORPORATION_ID = "owner_alliance_id";
+	public static final String OWNER_CORPORATION_NAME = "owner_alliance_name";
+	public static final String OWNER_ALLIANCE_ID = "owner_alliance_id";
+	public static final String OWNER_ALLIANCE_NAME = "owner_alliance_name";
 
 	@Deprecated
 	public static final String IS_SOVEREIGNTY_STRUCTURE = "is_sovereignty_structure";
@@ -91,7 +97,9 @@ public class ScrapeStructures implements Command {
 			LAST_SEEN_MARKET_STRUCTURE,
 			FIRST_SEEN,
 			"constellation_id",
-			"region_id");
+			"region_id",
+		OWNER_CORPORATION_ID,
+		OWNER_CORPORATION_NAME,OWNER_ALLIANCE_ID,OWNER_ALLIANCE_NAME);
 
 	public static final List<String> ALL_BOOLEANS =
 			List.of(IS_GETTABLE_STRUCTURE, IS_PUBLIC_STRUCTURE, IS_MARKET_STRUCTURE);
@@ -141,6 +149,9 @@ public class ScrapeStructures implements Command {
 
 	@Inject
 	protected LocationPopulator locationPopulator;
+
+	@Inject
+	protected OwnerPopulator ownerPopulator;
 
 	@Inject
 	protected StructureScrapeHelper structureScrapeHelper;
@@ -223,6 +234,8 @@ public class ScrapeStructures implements Command {
 								false,
 								1),
 				populateLocations(),
+				populateOwners(),
+				populateAlliances(),
 				buildOutput().flatMapCompletable(this::uploadFiles));
 	}
 
@@ -430,6 +443,18 @@ public class ScrapeStructures implements Command {
 				return locationPopulator.populate(pair.getValue()).andThen(Completable.fromAction(() -> {
 					structureStore.put(node);
 				}));
+			});
+		});
+	}
+
+	private Completable populateOwners() {
+		return Completable.defer(() -> {
+			log.info("Populating owners");
+			return structureStore.allStructures().flatMapCompletable(pair -> {
+				var structure = pair.getValue();
+				return ownerPopulator.populateOwner(structure).doOnSuccess(s -> {
+					structureStore.put(s);
+				}).ignoreElement();
 			});
 		});
 	}
