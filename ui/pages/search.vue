@@ -96,7 +96,7 @@ const results = computed(() => {
 		<template v-else>
 			<p>{{ results.length }} result for '{{ query }}'</p>
 			<ul>
-				<li v-for="(item, index) in results" :key="item.id" class="mt-2">
+				<li v-for="item in results" :key="item.id" class="mt-2">
 					<div><NuxtLink :href="item.link">{{ item.text }}</NuxtLink></div>
 					<div class="italic text-gray-400">{{ item.type }} [{{ item.id }}]</div>
 				</li>
