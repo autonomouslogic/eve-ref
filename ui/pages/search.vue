@@ -89,29 +89,21 @@ const results = computed(() => {
 
 <template>
 	<h1>Search</h1>
-	<template v-if="status == 'idle' || status == 'pending'">
-		<p> Loading search data ...</p>
-	</template>
-	<template v-else-if="status == 'error'">
-		<p>Failed to load search data.</p>
-	</template>
+	<p v-if="status == 'idle' || status == 'pending'">Loading search data ...</p>
+	<p v-else-if="status == 'error'">Failed to load search data.</p>
 	<template v-else-if="status == 'success'">
-		<template v-if="results.length == 0">
-			<p>No result for '{{query}}'</p>
-		</template>
+		<p v-if="results.length == 0">No result for '{{ query }}'</p>
 		<template v-else>
 			<p>{{ results.length }} result for '{{ query }}'</p>
 			<ul>
 				<li v-for="(item, index) in results" :key="index" class="mt-2">
-					<div><NuxtLink :href="item.link">{{item.text}}</NuxtLink></div>
+					<div><NuxtLink :href="item.link">{{ item.text }}</NuxtLink></div>
 					<div class="italic text-gray-400">{{ item.type }} [{{ item.id }}]</div>
 				</li>
 			</ul>
 		</template>
 	</template>
-	<template v-else>
-		<p>Unknown load status: {{ status }}</p>
-	</template>
+	<p v-else>Unknown load status: {{ status }}</p>
 </template>
 
 <style scoped>
