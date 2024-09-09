@@ -146,6 +146,7 @@ public class BuildSearch implements Command {
 		var text = marketGroupChain(group, loadedRefData).collect(Collectors.joining(" > "));
 		return Stream.of(SearchJsonEntry.builder()
 				.text(text)
+				.query(group.getName().get("en"))
 				.id(group.getMarketGroupId())
 				.link("/market-groups/" + group.getMarketGroupId())
 				.type("Market group")
