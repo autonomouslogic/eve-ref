@@ -40,13 +40,14 @@ async function change() {
 </script>
 
 <template>
-	<input
-		v-model="query"
-		@keydown.enter.prevent="submit"
-		@keyup="change"
-		type="text"
-		placeholder="Search"
-	/>
+	<form @submit.prevent="submit">
+		<input
+			v-model="query"
+			@keyup="change"
+			type="text"
+			placeholder="Search"
+		/>
+	</form>
 </template>
 
 <style scoped>

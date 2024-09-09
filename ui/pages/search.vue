@@ -77,7 +77,7 @@ const results = computed(() => {
 
 	return searchData.value
 		.filter(function (item) {
-      return getEntrySearchable(item).match(regex);
+			return getEntrySearchable(item).match(regex);
 		})
 		.sort(compoundSort([
 			prefixSort(queryParts[0]),
