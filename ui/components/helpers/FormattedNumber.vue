@@ -11,7 +11,7 @@ const formattedNumber = computed(() => typeof props.number === "number"
 	? new Intl.NumberFormat("en-US", {
 		minimumFractionDigits: realDecimals.value,
 		maximumFractionDigits: realDecimals.value,
-		notation: props.number >= maxNormal || props.number <= minNormal ? "engineering" : "standard"
+		notation: props.number != 0 && (props.number >= maxNormal || props.number <= minNormal) ? "engineering" : "standard"
 	}).format(props.number)
 	: "?"
 );
