@@ -74,6 +74,9 @@ public class CommandRunner {
 	protected Provider<BuildSearch> buildSearchProvider;
 
 	@Inject
+	protected Provider<FetchDonations> fetchDonationsProvider;
+
+	@Inject
 	protected SentryDecorator sentryDecorator;
 
 	@Inject
@@ -144,6 +147,8 @@ public class CommandRunner {
 				return scrapeStructuresProvider.get();
 			case "build-search":
 				return buildSearchProvider.get();
+			case "fetch-donations":
+				return fetchDonationsProvider.get();
 			default:
 				throw new IllegalArgumentException("Unknown command: " + name);
 		}

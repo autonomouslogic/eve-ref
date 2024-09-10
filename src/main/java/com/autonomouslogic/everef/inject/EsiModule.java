@@ -4,6 +4,7 @@ import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.openapi.esi.apis.MarketApi;
 import com.autonomouslogic.everef.openapi.esi.apis.SovereigntyApi;
 import com.autonomouslogic.everef.openapi.esi.apis.UniverseApi;
+import com.autonomouslogic.everef.openapi.esi.apis.WalletApi;
 import dagger.Module;
 import dagger.Provides;
 import javax.inject.Named;
@@ -28,5 +29,11 @@ public class EsiModule {
 	@Singleton
 	public SovereigntyApi sovereigntyApi(@Named("esi") OkHttpClient httpClient) {
 		return new SovereigntyApi(Configs.ESI_BASE_URL.getRequired().toString(), httpClient);
+	}
+
+	@Provides
+	@Singleton
+	public WalletApi walletApi(@Named("esi") OkHttpClient httpClient) {
+		return new WalletApi(Configs.ESI_BASE_URL.getRequired().toString(), httpClient);
 	}
 }

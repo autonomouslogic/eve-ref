@@ -402,3 +402,12 @@ task buildSearch(type: JavaExec) {
 	classpath = sourceSets.main.runtimeClasspath
 	mainClass = mainClassName
 }
+
+task fetchDonations(type: JavaExec) {
+	group "application"
+	args "fetch-donations"
+	environment envProperties
+
+	classpath = sourceSets.main.runtimeClasspath
+	mainClass = mainClassName
+}

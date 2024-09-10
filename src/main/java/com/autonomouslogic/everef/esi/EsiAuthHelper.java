@@ -17,16 +17,19 @@ import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import java.net.URI;
 import java.net.URL;
+import java.security.SecureRandom;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import okhttp3.OkHttpClient;
+import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.lang3.tuple.Pair;
 
 /**
@@ -36,7 +39,10 @@ import org.apache.commons.lang3.tuple.Pair;
 public class EsiAuthHelper {
 	private static final Duration EXPIRATION_BUFFER = Duration.ofMinutes(1);
 	private static final List<String> SCOPES =
-			List.of("esi-universe.read_structures.v1", "esi-markets.structure_markets.v1");
+			List.of("esi-universe.read_structures.v1", "esi-markets.structure_markets.v1",
+				"esi-wallet.read_character_wallet.v1",
+				"esi-wallet.read_corporation_wallet.v1",
+				"esi-wallet.read_corporation_wallets.v1");
 	private static final URL CALLBACK_URL = Configs.OAUTH_CALLBACK_URL.getRequired();
 
 	@Inject
@@ -74,7 +80,9 @@ public class EsiAuthHelper {
 
 	@SneakyThrows
 	public URI getLoginUri() {
-		return new URI(service.getAuthorizationUrl("no-state"));
+		var state = new byte[128 / 8];
+		new SecureRandom().nextBytes(state);
+		return new URI(service.getAuthorizationUrl(Hex.encodeHexString(state)));
 	}
 
 	@SneakyThrows

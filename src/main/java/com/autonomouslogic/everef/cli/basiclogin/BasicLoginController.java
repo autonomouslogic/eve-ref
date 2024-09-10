@@ -8,7 +8,7 @@ import io.micronaut.http.annotation.Produces;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
-import javax.ws.rs.QueryParam;
+import jakarta.ws.rs.QueryParam;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 
@@ -33,13 +33,16 @@ public class BasicLoginController {
 	@Path("/basic-login")
 	@SneakyThrows
 	public HttpResponse<String> loginRedirect() {
-		return HttpResponse.redirect(esiAuthHelper.getLoginUri());
+		var redirect = esiAuthHelper.getLoginUri();
+		log.debug("Redirecting to {}", redirect);
+		return HttpResponse.temporaryRedirect(redirect);
 	}
 
 	@GET
 	@Path("/basic-login-callback")
 	@Produces("text/html")
 	public String callback(@QueryParam("code") String code, @QueryParam("state") String state) {
+		log.debug("Callback code: {}, state: {}", code, state);
 		var token = esiAuthHelper.getAccessToken(code).blockingGet();
 		var verify = esiAuthHelper.verify(token.getAccessToken()).blockingGet();
 
