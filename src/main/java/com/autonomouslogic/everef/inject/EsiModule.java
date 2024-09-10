@@ -1,6 +1,8 @@
 package com.autonomouslogic.everef.inject;
 
 import com.autonomouslogic.everef.config.Configs;
+import com.autonomouslogic.everef.openapi.esi.apis.CharacterApi;
+import com.autonomouslogic.everef.openapi.esi.apis.CorporationApi;
 import com.autonomouslogic.everef.openapi.esi.apis.MarketApi;
 import com.autonomouslogic.everef.openapi.esi.apis.SovereigntyApi;
 import com.autonomouslogic.everef.openapi.esi.apis.UniverseApi;
@@ -35,5 +37,17 @@ public class EsiModule {
 	@Singleton
 	public WalletApi walletApi(@Named("esi") OkHttpClient httpClient) {
 		return new WalletApi(Configs.ESI_BASE_URL.getRequired().toString(), httpClient);
+	}
+
+	@Provides
+	@Singleton
+	public CharacterApi characterApi(@Named("esi") OkHttpClient httpClient) {
+		return new CharacterApi(Configs.ESI_BASE_URL.getRequired().toString(), httpClient);
+	}
+
+	@Provides
+	@Singleton
+	public CorporationApi corporationApi(@Named("esi") OkHttpClient httpClient) {
+		return new CorporationApi(Configs.ESI_BASE_URL.getRequired().toString(), httpClient);
 	}
 }

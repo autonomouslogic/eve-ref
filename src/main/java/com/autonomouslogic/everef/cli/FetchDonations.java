@@ -81,6 +81,12 @@ public class FetchDonations implements Command {
 	@Inject
 	protected WalletApi walletApi;
 
+	@Inject
+	protected CharacterApi characterApi;
+
+	@Inject
+	protected CorporationApi corporationApi;
+
 	private final String eveRefOwnerHash = Configs.EVE_REF_CHARACTER_OWNER_HASH.getRequired();
 
 	@Inject
@@ -94,10 +100,20 @@ public class FetchDonations implements Command {
 		return Completable.fromAction(() -> {
 			var accessToken = getAccessToken().blockingGet();
 			var verified = esiAuthHelper.verify(accessToken).blockingGet();
-			log.info("Working as character '{}' [{}]", verified.getCharacterName(), verified.getCharacterId());
-			var journal = walletApi.getCharactersCharacterIdWalletJournal((int) verified.getCharacterId(), WalletApi.DatasourceGetCharactersCharacterIdWalletJournal.tranquility, null, 1, accessToken);
-			log.info("Found {} journal entries", journal.size());
-			for (var entry : journal) {
+
+			log.info("Using character '{}' [{}]", verified.getCharacterName(), verified.getCharacterId());
+			var characterJournal = walletApi.getCharactersCharacterIdWalletJournal((int) verified.getCharacterId(), WalletApi.DatasourceGetCharactersCharacterIdWalletJournal.tranquility, null, 1, accessToken);
+			log.info("Found {} character journal entries", characterJournal.size());
+			for (var entry : characterJournal) {
+				log.info("{} {} {} {} {}", entry.getId(), entry.getDate(), entry.getRefType(), entry.getFirstPartyId(), entry.getAmount());
+			}
+
+			var corporationId = characterApi.getCharactersCharacterId((int) verified.getCharacterId(), CharacterApi.DatasourceGetCharactersCharacterId.tranquility, null).getCorporationId();
+			var corporation = corporationApi.getCorporationsCorporationId(corporationId, CorporationApi.DatasourceGetCorporationsCorporationId.tranquility, null);
+			log.info("Using corporation '{}' [{}]", corporation.getName(), corporationId);
+			var corporationJournal = walletApi.getCorporationsCorporationIdWalletsDivisionJournal((int) corporationId, 1, WalletApi.DatasourceGetCorporationsCorporationIdWalletsDivisionJournal.tranquility, null, 1, accessToken);
+			log.info("Found {} corporation journal entries", corporationJournal.size());
+			for (var entry : corporationJournal) {
 				log.info("{} {} {} {} {}", entry.getId(), entry.getDate(), entry.getRefType(), entry.getFirstPartyId(), entry.getAmount());
 			}
 		});
