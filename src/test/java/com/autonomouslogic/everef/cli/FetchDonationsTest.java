@@ -4,7 +4,7 @@ import com.autonomouslogic.everef.cli.FetchDonations.DonationEntry;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 
-public class FetchDonationsTest {
+public class FetchDonationsTest { // @todo
 	@Test
 	void shouldNotDoAnythingWithNoDonations() {
 		// No prior donations
