@@ -22,7 +22,6 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.NonNull;
@@ -38,11 +37,12 @@ import org.apache.commons.lang3.tuple.Pair;
 @Log4j2
 public class EsiAuthHelper {
 	private static final Duration EXPIRATION_BUFFER = Duration.ofMinutes(1);
-	private static final List<String> SCOPES =
-			List.of("esi-universe.read_structures.v1", "esi-markets.structure_markets.v1",
-				"esi-wallet.read_character_wallet.v1",
-				"esi-wallet.read_corporation_wallet.v1",
-				"esi-wallet.read_corporation_wallets.v1");
+	private static final List<String> SCOPES = List.of(
+			"esi-universe.read_structures.v1",
+			"esi-markets.structure_markets.v1",
+			"esi-wallet.read_character_wallet.v1",
+			"esi-wallet.read_corporation_wallet.v1",
+			"esi-wallet.read_corporation_wallets.v1");
 	private static final URL CALLBACK_URL = Configs.OAUTH_CALLBACK_URL.getRequired();
 
 	@Inject

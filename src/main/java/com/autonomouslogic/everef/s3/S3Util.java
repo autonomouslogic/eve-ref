@@ -5,6 +5,7 @@ import java.time.Duration;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
+import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 import software.amazon.awssdk.services.s3.model.ObjectCannedACL;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
@@ -61,5 +62,12 @@ public class S3Util {
 
 	public String cacheControl(Duration maxAge) {
 		return String.format("public, max-age=%s", maxAge.getSeconds());
+	}
+
+	public GetObjectRequest getObjectRequest(S3Url url) {
+		return GetObjectRequest.builder()
+				.bucket(url.getBucket())
+				.key(url.getPath())
+				.build();
 	}
 }

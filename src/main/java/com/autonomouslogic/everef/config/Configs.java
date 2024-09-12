@@ -764,6 +764,14 @@ public class Configs {
 			.type(Duration.class)
 			.build();
 
+	/**
+	 * URL for Discord donation notifications.
+	 */
+	public static final Config<String> DONATIONS_DISCORD_WEBHOOK_URL = Config.<String>builder()
+			.name("DONATIONS_DISCORD_WEBHOOK_URL")
+			.type(String.class)
+			.build();
+
 	@SneakyThrows
 	private static URL url(String url) {
 		return new URL(url);
