@@ -692,6 +692,14 @@ public class Configs {
 			.build();
 
 	/**
+	 * The character owner hash to use for querying the EVE Ref character.
+	 */
+	public static final Config<String> EVE_REF_CHARACTER_OWNER_HASH = Config.<String>builder()
+			.name("EVE_REF_CHARACTER_OWNER_HASH")
+			.type(String.class)
+			.build();
+
+	/**
 	 * How old a structure has to be before it's removed from the structure scrape.
 	 */
 	public static final Config<Duration> STRUCTURE_TIMEOUT = Config.<Duration>builder()
@@ -754,6 +762,14 @@ public class Configs {
 			.name("STATIC_CACHE_CONTROL_MAX_AGE")
 			.defaultValue(Duration.ofMinutes(5))
 			.type(Duration.class)
+			.build();
+
+	/**
+	 * URL for Discord donation notifications.
+	 */
+	public static final Config<String> DONATIONS_DISCORD_WEBHOOK_URL = Config.<String>builder()
+			.name("DONATIONS_DISCORD_WEBHOOK_URL")
+			.type(String.class)
 			.build();
 
 	@SneakyThrows

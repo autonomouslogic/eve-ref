@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import ExternalLink from "~/components/helpers/ExternalLink.vue";
 import {EVE_REFERRAL_URL, EVE_STORE_URL, MARKEE_DRAGON_URL, PATREON_URL} from "~/lib/urls";
+import Donors from "~/components/Donors.vue";
 </script>
 
 <template>
@@ -19,6 +20,11 @@ import {EVE_REFERRAL_URL, EVE_STORE_URL, MARKEE_DRAGON_URL, PATREON_URL} from "~
 		<div class="p-4">
 			<h2>Already Playing?</h2>
 			<p>Use code "everef" in the <ExternalLink :url="EVE_STORE_URL">EVE Online Store</ExternalLink>, or at <ExternalLink :url="MARKEE_DRAGON_URL">Markee Dragon</ExternalLink> to get 3% off PLEX and Omega.</p>
+		</div>
+
+		<div class="p-4">
+			<h2>Top Donors</h2>
+			<Donors />
 		</div>
 
 	</div>

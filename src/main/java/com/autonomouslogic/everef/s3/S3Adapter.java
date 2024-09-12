@@ -2,12 +2,14 @@ package com.autonomouslogic.everef.s3;
 
 import com.autonomouslogic.commons.rxjava3.Rx3Util;
 import com.autonomouslogic.everef.url.S3Url;
+import com.autonomouslogic.everef.util.TempFiles;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.FlowableTransformer;
 import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import java.io.File;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
@@ -17,10 +19,13 @@ import javax.inject.Singleton;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
+import org.apache.commons.lang3.tuple.Pair;
 import software.amazon.awssdk.core.async.AsyncRequestBody;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.DeleteObjectResponse;
+import software.amazon.awssdk.services.s3.model.GetObjectRequest;
+import software.amazon.awssdk.services.s3.model.GetObjectResponse;
 import software.amazon.awssdk.services.s3.model.ListObjectsV2Request;
 import software.amazon.awssdk.services.s3.model.ListObjectsV2Response;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
@@ -29,6 +34,9 @@ import software.amazon.awssdk.services.s3.model.PutObjectResponse;
 @Singleton
 @Log4j2
 public class S3Adapter {
+	@Inject
+	protected TempFiles tempFiles;
+
 	@Inject
 	protected S3Adapter() {}
 
@@ -68,6 +76,17 @@ public class S3Adapter {
 					var total = count.getAndAdd(n);
 					log.debug(String.format("Listing %s: %s+%s objects", s3Url, total, n));
 				});
+	}
+
+	public Single<Pair<GetObjectResponse, Path>> getObject(GetObjectRequest get, S3AsyncClient s3Client) {
+		return Single.defer(() -> {
+			var destination = tempFiles.tempFile("s3", ".tmp");
+			return getObject(get, destination, s3Client).map(response -> Pair.of(response, destination));
+		});
+	}
+
+	public Single<GetObjectResponse> getObject(GetObjectRequest get, Path destination, S3AsyncClient s3Client) {
+		return Rx3Util.toSingle(s3Client.getObject(get, destination));
 	}
 
 	public Single<PutObjectResponse> putObject(

@@ -46,10 +46,10 @@ useHead({
 			<h2>Affiliates</h2>
 			<p>
 				<ExternalLink :url="MARKEE_DRAGON_URL">Buy PLEX or Omega from Markee Dragon</ExternalLink>
-				to support EVE Ref through their affiliate programme. Use the code "everef" to get 3% off.
+				and use the code "everef" to get 3% off.
 			</p>
 			<p>
-				<ExternalLink :url="EVE_STORE_URL">Buy in the EVE Online Store</ExternalLink> and use code "everef".
+				<ExternalLink :url="EVE_STORE_URL">Buy in the EVE Online Store</ExternalLink> and use the code "everef".
 			</p>
 			<p>
 				<ExternalLink :url="EVE_REFERRAL_URL">Join New Eden</ExternalLink> and get 1,000,000 free skill points.
@@ -61,10 +61,18 @@ useHead({
 		<span>
 			<h2>ISK Donations</h2>
 			<p>
-				ISK donations are also welcome and can be made directly to
-				<ExternalLink :url="EVE_REF_CHAR">EVE Ref</ExternalLink> of
-				<ExternalLink :url="EVE_REF_CORP">EVE Ref Holdings</ExternalLink> [EVREF], or
-				<ExternalLink :url="DATE_TOVIKOV_CHAR">Dato Tovikov</ExternalLink>.
+				ISK donations are welcome.
+			</p>
+			<p>
+				Donations made to
+				<ExternalLink :url="EVE_REF_CHAR">EVE Ref</ExternalLink> or
+				<ExternalLink :url="EVE_REF_CORP">EVE Ref Holdings</ExternalLink> [EVREF]
+				will be show-cased on the front-page and on Discord.
+				They will be used for promotions and giveaways in the future.
+			</p>
+			<p>
+				Donations made to <ExternalLink :url="DATE_TOVIKOV_CHAR">Dato Tovikov</ExternalLink> or
+				<ExternalLink :url="DATE_TOVIKOV_CHAR">Tovikov Insterstellar</ExternalLink> will remain anonymous and will likely be for personal use.
 			</p>
 		</span>
 	</div>
@@ -74,7 +82,7 @@ useHead({
 		EVE Ref is the property of <ExternalLink url="https://autonomouslogic.com">Autonomous Logic</ExternalLink>. All rights reserved.
 	</p>
 	<p>
-		EVE Online and the EVE logo are the registered trademarks of CCP hf. All rights are reserved worldwide.
+		EVE Online and the EVE logo are the registered trademarks of <ExternalLink url="https://www.ccpgames.com/">CCP hf.</ExternalLink> All rights are reserved worldwide.
 		All other trademarks are the property of their respective owners. EVE Online, the EVE logo, EVE and all associated
 		logos and designs are the intellectual property of CCP hf.
 		All artwork, screenshots, characters, vehicles, storylines, world facts or other recognizable features of the
