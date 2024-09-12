@@ -1,8 +1,7 @@
-import {i18nConfigGlobalMessages} from "~/i18n.config";
+import { locales } from "~/i18n.config";
 
 const ERROR = "[unknown translation]";
 const fallbackLocale = "en";
-const locales = Object.keys(i18nConfigGlobalMessages);
 
 export function prepMessages(messages: { [key: string]: string } | undefined): { [key: string]: string } {
     if (messages === undefined) {
@@ -10,8 +9,8 @@ export function prepMessages(messages: { [key: string]: string } | undefined): {
     }
     const defaultMessage = messages[fallbackLocale];
     for (let locale of locales) {
-        if (!messages[locale]) {
-            messages[locale] = defaultMessage;
+        if (!messages[locale.code]) {
+            messages[locale.code] = defaultMessage;
         }
     }
     return messages;

@@ -1,29 +1,56 @@
-export const i18nConfigGlobalMessages = {
-    de: {
-        languageName: 'Deutsch',
+export const locales = [
+    {
+        code: "de",
+        name: "Deutsch",
     },
-    en: {
-        languageName: 'English',
+    {
+        code: "en",
+        name: "English",
     },
-    es: {
-        languageName: 'Español',
+    {
+        code: "es",
+        name: "Español",
     },
-    fr: {
-        languageName: 'Français',
+    {
+        code: "fr",
+        name: "Français",
     },
-    ja: {
-        languageName: '日本語',
+    {
+        code: "ja",
+        name: "日本語",
     },
-    ru: {
-        languageName: 'Русский',
+    {
+        code: "ru",
+        name: "Русский",
     },
-    zh: {
-        languageName: '中文',
+    {
+        code: "zh",
+        name: "中文",
     },
-};
+];
 
 export default defineI18nConfig(() => ({
-    locale: 'en',
-    fallbackLocale: 'en',
-    messages: i18nConfigGlobalMessages
+    legacy: false,
+    locale: "en",
+    defaultLocale: "en",
+    //strategy: "prefix",
+    // useCookie: true,
+    // locales: [ "de", "en", "es", "fr", "ja", "ru", "zh" ],
+    locales,
+    messages: {
+        de: {
+        },
+        en: {
+        },
+        es: {
+        },
+        fr: {
+        },
+        ja: {
+        },
+        ru: {
+        },
+        zh: {
+        },
+    }
 }));
