@@ -9,8 +9,8 @@ export function prepMessages(messages: { [key: string]: string } | undefined): {
     }
     const defaultMessage = messages[fallbackLocale];
     for (let locale of locales) {
-        if (!messages[locale.code]) {
-            messages[locale.code] = defaultMessage;
+        if (!messages[locale]) {
+            messages[locale] = defaultMessage;
         }
     }
     return messages;

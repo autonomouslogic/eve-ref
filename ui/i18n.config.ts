@@ -1,56 +1,32 @@
-export const locales = [
-    {
-        code: "de",
-        name: "Deutsch",
-    },
-    {
-        code: "en",
-        name: "English",
-    },
-    {
-        code: "es",
-        name: "Español",
-    },
-    {
-        code: "fr",
-        name: "Français",
-    },
-    {
-        code: "ja",
-        name: "日本語",
-    },
-    {
-        code: "ru",
-        name: "Русский",
-    },
-    {
-        code: "zh",
-        name: "中文",
-    },
-];
+import type {LocaleObject} from "@nuxtjs/i18n";
+
+export const locales: string[] = ["de","en","es", "fr","ja","ru","zh"];
 
 export default defineI18nConfig(() => ({
-    legacy: false,
+    legacy: true,
     locale: "en",
-    // defaultLocale: "en",
-    //strategy: "prefix",
-    // useCookie: true,
-    // locales: [ "de", "en", "es", "fr", "ja", "ru", "zh" ],
-    locales,
+    locales: locales,
     messages: {
         de: {
+            languageName: "Deutsch",
         },
         en: {
+            languageName: "English",
         },
         es: {
+            languageName: "Español",
         },
         fr: {
+            languageName: "Français",
         },
         ja: {
+            languageName: "日本語",
         },
         ru: {
+            languageName: "Русский",
         },
         zh: {
+            languageName: "中文",
         },
     }
 }));
