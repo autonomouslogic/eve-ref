@@ -1,5 +1,23 @@
 EVE Ref Changelog
 
+## [2.48.0](https://github.com/autonomouslogic/eve-ref/compare/2.47.0...2.48.0) (2024-09-13)
+
+
+### Features
+
+* Fetch donations ([#588](https://github.com/autonomouslogic/eve-ref/issues/588)) ([cee4275](https://github.com/autonomouslogic/eve-ref/commit/cee4275c6d3040182d3e9d335b50011ba76b9951))
+* **refdata:** Cross-reference reprocessable types from skills ([#573](https://github.com/autonomouslogic/eve-ref/issues/573)) ([acfe764](https://github.com/autonomouslogic/eve-ref/commit/acfe7649dc26f1c09721d7dfb7fe1906df6d3253))
+* **ui:** Ore variations ([#577](https://github.com/autonomouslogic/eve-ref/issues/577)) ([65e3bd2](https://github.com/autonomouslogic/eve-ref/commit/65e3bd28bd65f7be2f938d0bcf82ec633603ed6c))
+* **ui:** Search ([#567](https://github.com/autonomouslogic/eve-ref/issues/567)) ([9342e29](https://github.com/autonomouslogic/eve-ref/commit/9342e292c75119655e0369220e42c53c45a86c3a))
+
+
+### Bug Fixes
+
+* **ui:** Added reprocessing skill ([#574](https://github.com/autonomouslogic/eve-ref/issues/574)) ([0233411](https://github.com/autonomouslogic/eve-ref/commit/023341135b68fd144c7aad760889e66335baf3f0))
+* **ui:** Conditional engineering notation on long numbers ([#575](https://github.com/autonomouslogic/eve-ref/issues/575)) ([3edf1e0](https://github.com/autonomouslogic/eve-ref/commit/3edf1e03f1ff3108d9774e2fc359fdb3c08aeb78))
+* **ui:** Don't format zeroes as engineering notation ([#587](https://github.com/autonomouslogic/eve-ref/issues/587)) ([7141ac6](https://github.com/autonomouslogic/eve-ref/commit/7141ac6d783b7ee11248ed2a92764eb1dc9b722b))
+* **ui:** Remember chosen locale between pages ([#589](https://github.com/autonomouslogic/eve-ref/issues/589)) ([d2ab11e](https://github.com/autonomouslogic/eve-ref/commit/d2ab11ee170808dc2c8fa45a0a6caf46856be280))
+
 ## [2.47.0](https://github.com/autonomouslogic/eve-ref/compare/2.46.4...2.47.0) (2024-09-04)
 
 
