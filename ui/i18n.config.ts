@@ -1,29 +1,32 @@
-export const i18nConfigGlobalMessages = {
-    de: {
-        languageName: 'Deutsch',
-    },
-    en: {
-        languageName: 'English',
-    },
-    es: {
-        languageName: 'Español',
-    },
-    fr: {
-        languageName: 'Français',
-    },
-    ja: {
-        languageName: '日本語',
-    },
-    ru: {
-        languageName: 'Русский',
-    },
-    zh: {
-        languageName: '中文',
-    },
-};
+import type {LocaleObject} from "@nuxtjs/i18n";
+
+export const locales: string[] = ["de","en","es", "fr","ja","ru","zh"];
 
 export default defineI18nConfig(() => ({
-    locale: 'en',
-    fallbackLocale: 'en',
-    messages: i18nConfigGlobalMessages
+    legacy: false,
+    locale: "en",
+    locales: locales,
+    messages: {
+        de: {
+            languageName: "Deutsch",
+        },
+        en: {
+            languageName: "English",
+        },
+        es: {
+            languageName: "Español",
+        },
+        fr: {
+            languageName: "Français",
+        },
+        ja: {
+            languageName: "日本語",
+        },
+        ru: {
+            languageName: "Русский",
+        },
+        zh: {
+            languageName: "中文",
+        },
+    }
 }));

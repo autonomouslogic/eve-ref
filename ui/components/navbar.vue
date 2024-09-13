@@ -3,10 +3,6 @@ import MarketGroupName from "~/components/helpers/MarketGroupName.vue";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 import ExternalLink from "~/components/helpers/ExternalLink.vue";
 import {PATREON_URL} from "~/lib/urls";
-
-const { locale, availableLocales } = useI18n();
-const selectedLocale = ref(locale);
-
 </script>
 
 <template>
@@ -29,15 +25,7 @@ const selectedLocale = ref(locale);
 				</ExternalLink>
 			</span>
 			<span>
-				<select name="locale" id="locale" v-model="selectedLocale">
-					<option
-						v-for="availableLocale in availableLocales"
-						:key="availableLocale"
-						:value="availableLocale"
-						:selected="availableLocale === locale"
-						v-t="{path: 'languageName', locale: availableLocale}"
-					></option>
-				</select>
+				<LocaleSwitcher />
 			</span>
 		</span>
 	</div>

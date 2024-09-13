@@ -4,9 +4,6 @@
     "github>autonomouslogic/renovate-config"
   ],
   "packageRules": [{
-    "packageNames": ["@nuxtjs/i18n"],
-    "allowedVersions": "> 8.0.0-beta.12"
-  }, {
     "groupName": "flyway monorepo",
     "matchPackageNames": [
       "org.flywaydb.flyway",
