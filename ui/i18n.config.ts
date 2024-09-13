@@ -3,7 +3,7 @@ import type {LocaleObject} from "@nuxtjs/i18n";
 export const locales: string[] = ["de","en","es", "fr","ja","ru","zh"];
 
 export default defineI18nConfig(() => ({
-    legacy: true,
+    legacy: false,
     locale: "en",
     locales: locales,
     messages: {
