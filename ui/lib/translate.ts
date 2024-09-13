@@ -1,4 +1,4 @@
-import { locales } from "~/i18n.config";
+import {locales} from "~/i18n.config";
 
 const ERROR = "[unknown translation]";
 const fallbackLocale = "en";

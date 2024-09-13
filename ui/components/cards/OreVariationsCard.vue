@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import {type DogmaAttribute, type InventoryType} from "~/refdata-openapi";
 import CardWrapper from "~/components/cards/CardWrapper.vue";
-import {getMainDogma} from "~/lib/mainDogmaAttributes";
 import TypeLink from "~/components/helpers/TypeLink.vue";
 
 const props = defineProps<{
