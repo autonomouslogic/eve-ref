@@ -3,7 +3,7 @@ import MarketGroupName from "~/components/helpers/MarketGroupName.vue";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 import ExternalLink from "~/components/helpers/ExternalLink.vue";
 import {PATREON_URL} from "~/lib/urls";
-const localePath = useLocalePath()
+const localePath = useLocalePath();
 
 </script>
 
@@ -27,7 +27,7 @@ const localePath = useLocalePath()
 				</ExternalLink>
 			</span>
 			<span>
-        <LocaleSwitcher />
+				<LocaleSwitcher />
 			</span>
 		</span>
 	</div>

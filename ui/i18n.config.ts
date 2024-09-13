@@ -32,7 +32,7 @@ export const locales = [
 export default defineI18nConfig(() => ({
     legacy: false,
     locale: "en",
-    defaultLocale: "en",
+    // defaultLocale: "en",
     //strategy: "prefix",
     // useCookie: true,
     // locales: [ "de", "en", "es", "fr", "ja", "ru", "zh" ],

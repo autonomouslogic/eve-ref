@@ -19,8 +19,7 @@ export default defineNuxtConfig({
             '@fortawesome/vue-fontawesome'
         ]
     },
-    i18n: { // @todo i18n beta-12 requires this to be in a separate file i18n.config.ts, but beta-12 break Cloudflare Pages, so leaving it here temporarily.
-        defaultLocale: 'en',
+    i18n: {
         vueI18n: './i18n.config.ts',
     },
     css: [
