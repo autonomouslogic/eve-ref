@@ -1,5 +1,12 @@
 EVE Ref Changelog
 
+## [2.48.1](https://github.com/autonomouslogic/eve-ref/compare/2.48.0...2.48.1) (2024-09-16)
+
+
+### Bug Fixes
+
+* **refdata:** Fixed region reoslution regex ([#591](https://github.com/autonomouslogic/eve-ref/issues/591)) ([d375294](https://github.com/autonomouslogic/eve-ref/commit/d3752946a0ed15366e3471d0052b3e0f5b87f17d))
+
 ## [2.48.0](https://github.com/autonomouslogic/eve-ref/compare/2.47.0...2.48.0) (2024-09-13)
 
 
