@@ -62,9 +62,6 @@ public class RefDataMerger {
 			var hobo = hoboleaksStore.get(id);
 			var existing = refStore.get(id);
 			var ref = merge(existing, sde, esi, hobo);
-			if (name.equals("regions") && id == 10000001L) {
-				log.debug("Derelik");
-			}
 			refStore.put(id, ref);
 		} catch (Exception e) {
 			throw new IllegalStateException(String.format("Failed merging %s [%d]", name, id), e);
