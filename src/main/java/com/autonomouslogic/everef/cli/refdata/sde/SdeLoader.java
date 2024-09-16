@@ -61,6 +61,7 @@ public class SdeLoader {
 						pair -> {
 							var config = refDataUtil.getSdeConfigForFilename(
 									pair.getLeft().getName());
+							log.warn(pair.getLeft().getName());
 							if (config == null) {
 								return Completable.complete();
 							}

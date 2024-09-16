@@ -322,7 +322,7 @@ regions:
     removes:
       - constellations
   sde:
-    fileRegex: ^universe\/(?<universeId>[a-zA-Z0-9-]+)\/[a-zA-Z0-9-]+\/region\.staticdata$
+    fileRegex: ^universe\/(?<universeId>[a-zA-Z0-9-]+)\/[a-zA-Z0-9-]+\/region\.yaml$
     individualFiles: true
     renames:
       nebula: nebula_id
