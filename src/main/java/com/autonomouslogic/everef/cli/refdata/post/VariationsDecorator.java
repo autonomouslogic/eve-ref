@@ -74,12 +74,20 @@ public class VariationsDecorator extends PostDecorator {
 				for (var applicableTypeId : typeMapping.getApplicableTypeIds()) {
 					var applicableType = objectMapper.convertValue(types.get(applicableTypeId), InventoryType.class);
 					if (applicableType == null) {
+						log.warn(
+								"Applicable type {} not found for mutaplasmid {}",
+								applicableTypeId,
+								mutaplasmid.getTypeId());
 						continue;
 					}
-					var parentType = applicableType.getVariationParentTypeId() == null
+					var parentTypeId = applicableType.getVariationParentTypeId();
+					var parentType = parentTypeId == null
 							? applicableType
-							: objectMapper.convertValue(
-									types.get(applicableType.getVariationParentTypeId()), InventoryType.class);
+							: objectMapper.convertValue(types.get(parentTypeId), InventoryType.class);
+					if (parentType.getTypeId() == null) {
+						log.warn("Variations parent type {} has null type ID", parentTypeId);
+						continue;
+					}
 					var parentMetaGroupId = getTypeMetaGroup(parentType.getTypeId());
 					addMetaGroupVariation(
 							parentType.getTypeId(), parentType.getTypeId(), parentMetaGroupId, variations);
