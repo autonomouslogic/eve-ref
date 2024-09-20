@@ -62,7 +62,7 @@ public class DataIndex implements Command {
 
 	@Setter
 	@Getter
-	private String prefix = "esi-scrape/";
+	private String prefix;
 
 	@Inject
 	protected DataIndex() {}
