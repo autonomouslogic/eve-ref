@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {universeApi} from "~/esi";
-import {GetMarketsRegionIdOrdersOrderTypeEnum,} from "~/esi-openapi";
+import {type GetMarketsRegionIdOrders200Ok, GetMarketsRegionIdOrdersOrderTypeEnum,} from "~/esi-openapi";
 import UnitValue from "~/components/dogma/UnitValue.vue";
 import {getOrders} from "~/lib/marketUtils";
 import {MONEY} from "~/lib/unitConstants";
@@ -16,8 +16,12 @@ const system = !station ? undefined :
 const constellation = !system ? undefined :
 	await universeApi.getUniverseConstellationsConstellationId({constellationId: system.constellationId});
 
-const sellOrders = !constellation ? undefined : await getOrders(GetMarketsRegionIdOrdersOrderTypeEnum.Sell, props.typeId, constellation.regionId);
-const buyOrders = !constellation ? undefined : await getOrders(GetMarketsRegionIdOrdersOrderTypeEnum.Buy, props.typeId, constellation.regionId);
+const	sellOrders = !constellation ?
+	undefined :
+	await getOrders(GetMarketsRegionIdOrdersOrderTypeEnum.Sell, props.typeId, constellation.regionId);
+const	buyOrders = !constellation ?
+	undefined :
+	await getOrders(GetMarketsRegionIdOrdersOrderTypeEnum.Buy, props.typeId, constellation.regionId);
 
 const sellPrice = !sellOrders ? undefined : sellOrders.filter(e => e.locationId == station.stationId)
 	.map(e => e.price)
@@ -31,7 +35,7 @@ const buyPrice = !buyOrders ? undefined : buyOrders.filter(e => e.locationId == 
 </script>
 
 <template>
-	<tr v-if="system && (sellPrice || buyPrice)">
+	<tr v-if="system">
 		<td class="text-left">{{ system.name }}</td>
 		<td class="text-right">
 			<UnitValue v-if="sellPrice" :unit-id="MONEY" :value="sellPrice" />
