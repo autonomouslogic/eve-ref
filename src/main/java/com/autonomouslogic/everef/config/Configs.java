@@ -227,6 +227,14 @@ public class Configs {
 			.build();
 
 	/**
+	 * Prefix to use for data index.
+	 */
+	public static final Config<String> DATA_INDEX_PREFIX = Config.<String>builder()
+			.name("DATA_INDEX_PREFIX")
+			.type(String.class)
+			.build();
+
+	/**
 	 * The AWS region for the data site.
 	 * If not supplied, normal AWS SDK defaults will be used.
 	 */
