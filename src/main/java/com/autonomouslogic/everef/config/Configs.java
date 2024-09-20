@@ -230,7 +230,7 @@ public class Configs {
 	 * Prefix to use for data index.
 	 */
 	public static final Config<String> DATA_INDEX_PREFIX = Config.<String>builder()
-			.name("DATA_INDEX_CONCURRENCY")
+			.name("DATA_INDEX_PREFIX")
 			.type(String.class)
 			.build();
 
