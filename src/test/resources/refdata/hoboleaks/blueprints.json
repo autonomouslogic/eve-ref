@@ -13,35 +13,35 @@
           "level" : 1
         } ],
         "materials" : [ {
-          "typeID" : 34,
-          "quantity" : 8000000
-        }, {
-          "typeID" : 35,
-          "quantity" : 4000000
-        }, {
-          "typeID" : 36,
-          "quantity" : 600000
-        }, {
-          "typeID" : 37,
-          "quantity" : 400000
-        }, {
-          "typeID" : 38,
-          "quantity" : 12000
-        }, {
-          "typeID" : 39,
-          "quantity" : 6000
-        }, {
-          "typeID" : 40,
-          "quantity" : 3000
-        }, {
-          "typeID" : 57478,
-          "quantity" : 200
-        }, {
           "typeID" : 57479,
           "quantity" : 1
         }, {
           "typeID" : 57486,
           "quantity" : 100
+        }, {
+          "typeID" : 57478,
+          "quantity" : 200
+        }, {
+          "typeID" : 40,
+          "quantity" : 3000
+        }, {
+          "typeID" : 39,
+          "quantity" : 6000
+        }, {
+          "typeID" : 38,
+          "quantity" : 24000
+        }, {
+          "typeID" : 37,
+          "quantity" : 200000
+        }, {
+          "typeID" : 36,
+          "quantity" : 600000
+        }, {
+          "typeID" : 35,
+          "quantity" : 4000000
+        }, {
+          "typeID" : 34,
+          "quantity" : 8000000
         } ],
         "products" : [ {
           "typeID" : 645,
@@ -85,14 +85,14 @@
     "activities" : {
       "research_material" : {
         "skills" : [ {
-          "typeID" : 3409,
-          "level" : 5
+          "typeID" : 11433,
+          "level" : 1
         }, {
           "typeID" : 11450,
           "level" : 1
         }, {
-          "typeID" : 11433,
-          "level" : 1
+          "typeID" : 3409,
+          "level" : 5
         } ],
         "materials" : [ {
           "typeID" : 11466,
@@ -108,14 +108,14 @@
       },
       "research_time" : {
         "skills" : [ {
-          "typeID" : 3403,
-          "level" : 5
+          "typeID" : 11433,
+          "level" : 1
         }, {
           "typeID" : 11450,
           "level" : 1
         }, {
-          "typeID" : 11433,
-          "level" : 1
+          "typeID" : 3403,
+          "level" : 5
         } ],
         "materials" : [ {
           "typeID" : 11466,
@@ -131,39 +131,24 @@
       },
       "manufacturing" : {
         "skills" : [ {
-          "typeID" : 3380,
-          "level" : 5
-        }, {
           "typeID" : 3398,
+          "level" : 1
+        }, {
+          "typeID" : 11433,
           "level" : 1
         }, {
           "typeID" : 11450,
           "level" : 1
         }, {
-          "typeID" : 11433,
-          "level" : 1
+          "typeID" : 3380,
+          "level" : 5
         } ],
         "materials" : [ {
-          "typeID" : 11553,
-          "quantity" : 2250
-        }, {
           "typeID" : 645,
           "quantity" : 1
         }, {
-          "typeID" : 11399,
-          "quantity" : 900
-        }, {
-          "typeID" : 11556,
-          "quantity" : 1634
-        }, {
-          "typeID" : 11535,
-          "quantity" : 900
-        }, {
-          "typeID" : 3828,
-          "quantity" : 450
-        }, {
-          "typeID" : 11541,
-          "quantity" : 6300
+          "typeID" : 21025,
+          "quantity" : 3
         }, {
           "typeID" : 11478,
           "quantity" : 30
@@ -171,14 +156,29 @@
           "typeID" : 11531,
           "quantity" : 225
         }, {
-          "typeID" : 11545,
-          "quantity" : 18750
+          "typeID" : 3828,
+          "quantity" : 450
         }, {
           "typeID" : 11547,
-          "quantity" : 150
+          "quantity" : 450
         }, {
-          "typeID" : 21025,
-          "quantity" : 3
+          "typeID" : 11399,
+          "quantity" : 900
+        }, {
+          "typeID" : 11535,
+          "quantity" : 900
+        }, {
+          "typeID" : 11556,
+          "quantity" : 1634
+        }, {
+          "typeID" : 11553,
+          "quantity" : 2250
+        }, {
+          "typeID" : 11541,
+          "quantity" : 6300
+        }, {
+          "typeID" : 11545,
+          "quantity" : 18750
         } ],
         "products" : [ {
           "typeID" : 22430,
@@ -188,10 +188,10 @@
       },
       "copying" : {
         "skills" : [ {
-          "typeID" : 11450,
+          "typeID" : 11433,
           "level" : 1
         }, {
-          "typeID" : 11433,
+          "typeID" : 11450,
           "level" : 1
         } ],
         "materials" : [ {
