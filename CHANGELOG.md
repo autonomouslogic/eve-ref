@@ -1,5 +1,22 @@
 EVE Ref Changelog
 
+## [2.49.0](https://github.com/autonomouslogic/eve-ref/compare/2.48.1...2.49.0) (2024-09-20)
+
+
+### Features
+
+* **jobs:** Configurable data index prefix ([#596](https://github.com/autonomouslogic/eve-ref/issues/596)) ([0b01c83](https://github.com/autonomouslogic/eve-ref/commit/0b01c834d9e56f045e0f1c30cf0e84c529849ccf))
+
+
+### Bug Fixes
+
+* **ui:** Market prices only load on client ([#597](https://github.com/autonomouslogic/eve-ref/issues/597)) ([f2ab91e](https://github.com/autonomouslogic/eve-ref/commit/f2ab91e17f7672c272611214e018729858df796d))
+
+
+### Tests
+
+* Imported test resources ([#595](https://github.com/autonomouslogic/eve-ref/issues/595)) ([8e64f62](https://github.com/autonomouslogic/eve-ref/commit/8e64f6254bad27e3c16e60b5613504236f0d87ce))
+
 ## [2.48.1](https://github.com/autonomouslogic/eve-ref/compare/2.48.0...2.48.1) (2024-09-16)
 
 
