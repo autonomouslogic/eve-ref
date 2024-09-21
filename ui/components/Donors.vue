@@ -2,6 +2,7 @@
 
 import Money from "~/components/dogma/units/Money.vue";
 import ExternalLink from "~/components/helpers/ExternalLink.vue";
+import InternalLink from "~/components/helpers/InternalLink.vue";
 
 interface DonorEntry {
 	donor_name: string
@@ -32,6 +33,6 @@ const {status, data: donors} = await useLazyFetch<DonorEntry[]>("https://static.
 		</tr>
 	</table>
 	<div class="w-full text-right">
-		<NuxtLink to="/about">Donate ISK</NuxtLink>
+		<InternalLink to="/about">Donate ISK</InternalLink>
 	</div>
 </template>

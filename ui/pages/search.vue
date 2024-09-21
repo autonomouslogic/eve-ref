@@ -1,5 +1,7 @@
 <script setup lang="ts">
 
+import InternalLink from "~/components/helpers/InternalLink.vue";
+
 interface SearchEntry {
 	text: string
 	query: string
@@ -97,7 +99,7 @@ const results = computed(() => {
 			<p>{{ results.length }} result for '{{ query }}'</p>
 			<ul>
 				<li v-for="item in results" :key="item.id" class="mt-2">
-					<div><NuxtLink :href="item.link">{{ item.text }}</NuxtLink></div>
+					<div><InternalLink :href="item.link">{{ item.text }}</InternalLink></div>
 					<div class="italic text-gray-400">{{ item.type }} [{{ item.id }}]</div>
 				</li>
 			</ul>

@@ -8,7 +8,8 @@ const props = defineProps<{
 	<NuxtLink
 		:to="url"
 		rel="noopener"
-		target="_blank">
+		target="_blank"
+		:external="true">
 		<slot />
 	</NuxtLink>
 </template>
