@@ -2,9 +2,12 @@
 import ExternalLink from "~/components/helpers/ExternalLink.vue";
 import {EVE_REFERRAL_URL, EVE_STORE_URL, MARKEE_DRAGON_URL, PATREON_URL} from "~/lib/urls";
 import Donors from "~/components/Donors.vue";
+
+const localePath = useLocalePath();
 </script>
 
 <template>
+	<NuxtLink :to="localePath('/')">Locale index</NuxtLink>
 	<div class="mt-4 grid grid-cols-3 gap-4">
 
 		<div class="p-4">

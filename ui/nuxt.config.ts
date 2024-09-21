@@ -1,4 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+
+
 export default defineNuxtConfig({
     //ssr: false,
 
@@ -20,6 +22,9 @@ export default defineNuxtConfig({
         ]
     },
     i18n: {
+        defaultLocale: "en",
+        locales: ["de","en","es", "fr","ja","ru","zh"],
+        strategy: "prefix_and_default",
         vueI18n: './i18n.config.ts',
     },
     css: [

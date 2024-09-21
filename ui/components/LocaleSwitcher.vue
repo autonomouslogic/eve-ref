@@ -1,9 +1,16 @@
 <script setup lang="ts">
-const { locale, setLocale, availableLocales } = useI18n();
+const { locale, setLocale, availableLocales } = useI18n({ useScope: "global" });
+const switchLocalePath = useSwitchLocalePath();
+const router = useRouter();
+
+function onLocaleChanged(event: Event) {
+	const target = event.target as HTMLInputElement;
+	router.push({ path: switchLocalePath(target.value) });
+}
 </script>
 
 <template>
-	<select name="locale" id="locale" v-model="locale">
+	<select @change="onLocaleChanged">
 		<option
 			v-for="loc in availableLocales"
 			:key="loc"
