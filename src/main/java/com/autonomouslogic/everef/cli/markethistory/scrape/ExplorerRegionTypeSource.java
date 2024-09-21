@@ -39,27 +39,34 @@ class ExplorerRegionTypeSource implements RegionTypeSource {
 
 	@Override
 	public Flowable<RegionTypePair> sourcePairs(Collection<RegionTypePair> currentPairs) {
-		return refDataAccess.marketRegions().toList().flatMapPublisher(regions -> {
-			return refDataAccess.marketTypes().toList().flatMapPublisher(types -> {
-				log.debug(
-						"Exploring {} regions and {} types for a total space of {}",
-						regions.size(),
-						types.size(),
-						regions.size() * types.size());
-				var todaysGroup = today.toEpochDay() % groups;
-				var pairs = regions.stream()
-						.flatMap(region -> types.stream()
-								.map(type -> new RegionTypePair(
-										region.getRegionId().intValue(),
-										type.getTypeId().intValue())))
-						.filter(pair -> {
-							var hash = hash(pair.getTypeId(), pair.getRegionId());
-							var group = hash % groups;
-							return group == todaysGroup;
-						});
-				return Flowable.fromStream(pairs);
-			});
-		});
+		return refDataAccess
+				.marketRegions()
+				.toList()
+				.flatMapPublisher(regions -> {
+					return refDataAccess.marketTypes().toList().flatMapPublisher(types -> {
+						log.debug(
+								"Exploring {} regions and {} types for a total space of {}",
+								regions.size(),
+								types.size(),
+								regions.size() * types.size());
+						var todaysGroup = today.toEpochDay() % groups;
+						var pairs = regions.stream()
+								.flatMap(region -> types.stream()
+										.map(type -> new RegionTypePair(
+												region.getRegionId().intValue(),
+												type.getTypeId().intValue())))
+								.filter(pair -> {
+									var hash = hash(pair.getTypeId(), pair.getRegionId());
+									var group = hash % groups;
+									return group == todaysGroup;
+								});
+						return Flowable.fromStream(pairs);
+					});
+				})
+				.onErrorResumeNext(e -> {
+					log.warn("Failed exploring types, ignoring", e);
+					return Flowable.empty();
+				});
 	}
 
 	private long hash(long typeId, long regionId) {

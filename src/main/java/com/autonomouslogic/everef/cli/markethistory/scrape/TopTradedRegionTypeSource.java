@@ -36,15 +36,19 @@ class TopTradedRegionTypeSource implements RegionTypeSource {
 	@Override
 	public Flowable<RegionTypePair> sourcePairs(Collection<RegionTypePair> currentPairs) {
 		return Flowable.defer(() -> {
-			var regions = getRegions();
-			var typesPerRegion = getDesiredTypesPerRegion(regions.size());
-			var typeCaps = getTypeCaps();
-			return Flowable.fromIterable(regions).flatMap(region -> Flowable.fromIterable(typeCaps)
-					.map(Pair::getLeft)
-					.map(typeId -> new RegionTypePair(region, typeId))
-					.filter(pair -> !currentPairs.contains(pair))
-					.take(typesPerRegion));
-		});
+					var regions = getRegions();
+					var typesPerRegion = getDesiredTypesPerRegion(regions.size());
+					var typeCaps = getTypeCaps();
+					return Flowable.fromIterable(regions).flatMap(region -> Flowable.fromIterable(typeCaps)
+							.map(Pair::getLeft)
+							.map(typeId -> new RegionTypePair(region, typeId))
+							.filter(pair -> !currentPairs.contains(pair))
+							.take(typesPerRegion));
+				})
+				.onErrorResumeNext(e -> {
+					log.warn("Failed handling top traded items, ignoring", e);
+					return Flowable.empty();
+				});
 	}
 
 	private Set<Integer> getRegions() {

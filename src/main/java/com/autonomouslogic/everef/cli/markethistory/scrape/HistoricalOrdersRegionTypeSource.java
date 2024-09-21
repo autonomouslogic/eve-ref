@@ -62,7 +62,13 @@ class HistoricalOrdersRegionTypeSource implements RegionTypeSource {
 
 	@Override
 	public Flowable<RegionTypePair> sourcePairs(Collection<RegionTypePair> currentPairs) {
-		return getSampleFiles().flatMap(f -> downloadFile(f).toFlowable()).flatMap(this::parseFile);
+		return getSampleFiles()
+				.flatMap(f -> downloadFile(f).toFlowable())
+				.flatMap(this::parseFile)
+				.onErrorResumeNext(e -> {
+					log.warn("Failed fetching historical region orders, ignoring", e);
+					return Flowable.empty();
+				});
 	}
 
 	@NotNull

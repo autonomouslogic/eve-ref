@@ -10,6 +10,7 @@ import java.time.Duration;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.inject.Inject;
 import lombok.SneakyThrows;
@@ -87,58 +88,69 @@ public class EsiLimitExceededInterceptorTest {
 	@ValueSource(strings = {"code", "text"})
 	@SneakyThrows
 	void shouldStopRequests(String type) {
-		var count = new AtomicInteger(0);
 		var threads = new ArrayList<Thread>();
-		// Start threads to constantly query.
-		for (int i = 0; i < 4; i++) {
-			var thread = new Thread(() -> {
-				while (true) {
-					try {
-						esiHelper
-								.fetch(EsiUrl.builder().urlPath("/page").build())
-								.blockingGet();
-					} catch (Exception e) {
-						log.warn("Fail", e);
+		var stop = new AtomicBoolean(false);
+		try {
+			var count = new AtomicInteger(0);
+			// Start threads to constantly query.
+			for (int i = 0; i < 4; i++) {
+				var thread = new Thread(() -> {
+					while (!stop.get()) {
+						try {
+							esiHelper
+									.fetch(EsiUrl.builder().urlPath("/page").build())
+									.blockingGet();
+						} catch (Exception e) {
+							log.warn("Fail", e);
+						}
+						count.incrementAndGet();
 					}
-					count.incrementAndGet();
+					log.debug("Thread stopped");
+				});
+				threads.add(thread);
+				thread.start();
+			}
+			// Ensure requests are running.
+			log.info("Running");
+			Thread.sleep(500);
+			log.info("Count (1): " + count.get());
+			assertNotEquals(0, count.get());
+			// Execute 420 request, which should initiate a global stop.
+			log.info("Returning 420");
+			limitResetTime = Instant.now().plusSeconds(5);
+			switch (type) {
+				case "code":
+					limitStatus = 420;
+					limitBody = null;
+					break;
+				case "text":
+					limitStatus = 200;
+					limitBody = EsiLimitExceededInterceptor.ESI_420_TEXT;
+					break;
+			}
+			isLimited = true;
+			log.info("Count (2): " + count.get());
+			Thread.sleep(1500);
+			count.set(0);
+			log.info("Count (3): " + count.get());
+			Thread.sleep(3500);
+			log.info("Count (4): " + count.get());
+			assertEquals(0, count.get());
+			isLimited = false;
+			// Ensure requests are running again.
+			log.info("Resuming");
+			Thread.sleep(5000);
+			log.info("Count (6): " + count.get());
+			assertNotEquals(0, count.get());
+		} finally {
+			stop.set(true);
+			threads.forEach(thread -> {
+				try {
+					thread.interrupt();
+				} catch (Exception e) {
+					log.warn("Failed to stop thread", e);
 				}
 			});
-			threads.add(thread);
-			thread.start();
 		}
-		// Ensure requests are running.
-		log.info("Running");
-		Thread.sleep(500);
-		log.info("Count (1): " + count.get());
-		assertNotEquals(0, count.get());
-		// Execute 420 request, which should initiate a global stop.
-		log.info("Returning 420");
-		limitResetTime = Instant.now().plusSeconds(5);
-		switch (type) {
-			case "code":
-				limitStatus = 420;
-				limitBody = null;
-				break;
-			case "text":
-				limitStatus = 200;
-				limitBody = EsiLimitExceededInterceptor.ESI_420_TEXT;
-				break;
-		}
-		isLimited = true;
-		log.info("Count (2): " + count.get());
-		Thread.sleep(1500);
-		count.set(0);
-		log.info("Count (3): " + count.get());
-		Thread.sleep(3500);
-		log.info("Count (4): " + count.get());
-		assertEquals(0, count.get());
-		isLimited = false;
-		// Ensure requests are running again.
-		log.info("Resuming");
-		Thread.sleep(5000);
-		log.info("Count (6): " + count.get());
-		assertNotEquals(0, count.get());
-
-		threads.forEach(Thread::interrupt);
 	}
 }
