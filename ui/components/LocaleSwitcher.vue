@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { locale, setLocale, availableLocales } = useI18n({ useScope: "global" });
+const { locale, availableLocales } = useI18n({ useScope: "global" });
 const switchLocalePath = useSwitchLocalePath();
 const router = useRouter();
 
