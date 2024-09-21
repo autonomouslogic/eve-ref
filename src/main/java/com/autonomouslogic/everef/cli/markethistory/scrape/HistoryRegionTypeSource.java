@@ -32,13 +32,15 @@ class HistoryRegionTypeSource implements RegionTypeSource {
 
 	@Override
 	public Flowable<RegionTypePair> sourcePairs(Collection<RegionTypePair> currentPairs) {
-		var sortedCaps = marketCapCalc.getRegionTypeMarketCaps().stream()
-				.sorted(ORDERING)
-				.toList();
-		sortedCaps.stream().limit(20).forEach(cap -> log.trace("Top cap: {}", cap));
-		var pairs = sortedCaps.stream()
-				.map(cap -> new RegionTypePair(cap.getRegionId(), cap.getTypeId()))
-				.toList();
-		return Flowable.fromIterable(pairs);
+		return Flowable.defer(() -> {
+			var sortedCaps = marketCapCalc.getRegionTypeMarketCaps().stream()
+					.sorted(ORDERING)
+					.toList();
+			sortedCaps.stream().limit(20).forEach(cap -> log.trace("Top cap: {}", cap));
+			var pairs = sortedCaps.stream()
+					.map(cap -> new RegionTypePair(cap.getRegionId(), cap.getTypeId()))
+					.toList();
+			return Flowable.fromIterable(pairs);
+		});
 	}
 }

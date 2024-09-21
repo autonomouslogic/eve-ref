@@ -28,6 +28,8 @@ public class MarketEsi {
 					return esiHelper.fetchPages(
 							page -> marketApi.getMarketsRegionIdTypesWithHttpInfo(regionId, source, null, page));
 				})
-				.compose(Rx.offloadFlowable());
+				.compose(Rx.offloadFlowable())
+				.onErrorResumeNext(
+						e -> Flowable.error(new RuntimeException("Failed fetching active market order types", e)));
 	}
 }
