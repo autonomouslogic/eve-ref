@@ -15,16 +15,19 @@ import lombok.SneakyThrows;
 import okhttp3.Response;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
+import org.checkerframework.checker.units.qual.Time;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Timeout;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.junitpioneer.jupiter.SetEnvironmentVariable;
 
 @SetEnvironmentVariable(key = "ESI_USER_AGENT", value = "user-agent")
 @SetEnvironmentVariable(key = "ESI_BASE_URL", value = "http://localhost:" + TestDataUtil.TEST_PORT)
+@Timeout(10)
 public class EsiHelperTest {
 	@Inject
 	TestDataUtil testDataUtil;

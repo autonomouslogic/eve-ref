@@ -1,5 +1,6 @@
 package com.autonomouslogic.everef.esi;
 
+import com.autonomouslogic.commons.rxjava3.Rx3Util;
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.http.OkHttpHelper;
 import com.autonomouslogic.everef.openapi.esi.infrastructure.ApiResponse;
@@ -17,6 +18,8 @@ import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.functions.BiFunction;
 import io.reactivex.rxjava3.functions.Function;
 import io.reactivex.rxjava3.schedulers.Schedulers;
+
+import java.time.Duration;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.Executors;
@@ -142,7 +145,7 @@ public class EsiHelper {
 							.flatMap(page -> Flowable.fromIterable(decodeResponse(fetcher.apply(page))), false, 4));
 		})
 		// this was causing exceptions to escape to RxJava's main bit and being logged as uncaught
-		// .compose(Rx3Util.retryWithDelayFlowable(2, Duration.ofSeconds(1)))
+		 //.compose(Rx3Util.retryWithDelayFlowable(2, Duration.ofSeconds(1)))
 		;
 	}
 
