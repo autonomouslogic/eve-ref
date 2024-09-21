@@ -4,8 +4,9 @@ export const locales: string[] = ["de","en","es", "fr","ja","ru","zh"];
 
 export default defineI18nConfig(() => ({
     legacy: false,
-    locale: "en",
-    locales: locales,
+    //locale: "en",
+    fallbackLocale: "en",
+    //locales: locales,
     messages: {
         de: {
             languageName: "Deutsch",

@@ -2,6 +2,7 @@
 import refdataApi from "~/refdata";
 import {type DogmaAttribute} from "~/refdata-openapi";
 import {prepMessages} from "~/lib/translate";
+import InternalLink from "~/components/helpers/InternalLink.vue";
 
 const {locale} = useI18n();
 
@@ -15,7 +16,7 @@ const dogmaAttribute = typeof props.attribute === "number" ?
 </script>
 
 <template>
-	<NuxtLink
+	<InternalLink
 		v-if="dogmaAttribute"
 		:to="`/dogma-attributes/${dogmaAttribute.attributeId}`">
 		<slot>
@@ -24,7 +25,7 @@ const dogmaAttribute = typeof props.attribute === "number" ?
 			</template>
 			<template v-else>{{dogmaAttribute.name}}</template>
 		</slot>
-	</NuxtLink>
+	</InternalLink>
 </template>
 
 <style scoped>

@@ -2,30 +2,31 @@
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 import ExternalLink from "~/components/helpers/ExternalLink.vue";
 import {DISCORD_URL, EVE_REFERRAL_URL, EVE_STORE_URL, GITHUB_URL, MARKEE_DRAGON_URL, PATREON_URL} from "~/lib/urls";
+import InternalLink from "~/components/helpers/InternalLink.vue";
 </script>
 
 <template>
 	<div>
 		<div class="footer flex py-4 justify-around">
-			<NuxtLink href="/" class="flex items-center">
+			<InternalLink to="/" class="flex items-center">
 				<img src="~/assets/logo.png" class="h-20 mr-3 rounded-full" alt="EVE Ref Logo" />
 				<span class="self-center text-2xl font-semibold whitespace-nowrap text-black">EVE Ref</span>
-			</NuxtLink>
+			</InternalLink>
 			<div class="grid grid-cols-3 gap-x-8">
 				<div>
 					<h2>EVE Ref</h2>
 					<ul>
-						<li><NuxtLink to="/about">About</NuxtLink></li>
-						<li><NuxtLink to="/status">Status</NuxtLink></li>
-						<li><NuxtLink to="https://docs.everef.net/" :external="true">Docs</NuxtLink></li>
-						<li><NuxtLink to="https://docs.everef.net/datasets/" :external="true">Data</NuxtLink></li>
-						<li><NuxtLink to="/privacy">Privacy</NuxtLink></li>
+						<li><InternalLink to="/about">About</InternalLink></li>
+						<li><InternalLink to="/status">Status</InternalLink></li>
+						<li><ExternalLink url="https://docs.everef.net/">Docs</ExternalLink></li>
+						<li><ExternalLink url="https://docs.everef.net/datasets/">Data</ExternalLink></li>
+						<li><InternalLink to="/privacy">Privacy</InternalLink></li>
 					</ul>
 				</div>
 				<div>
 					<h2>Participate</h2>
 					<ul>
-						<li><ExternalLink :url="DISCORD_URL"><span><font-awesome-icon icon="fa-brands fa-discord" /></span> Discord</ExternalLink></li>
+						<li><InternalLink :to="DISCORD_URL"><span><font-awesome-icon icon="fa-brands fa-discord" /></span> Discord</InternalLink></li>
 						<li><ExternalLink :url="GITHUB_URL"><span><font-awesome-icon icon="fa-brands fa-github" /></span> Github</ExternalLink></li>
 					</ul>
 				</div>

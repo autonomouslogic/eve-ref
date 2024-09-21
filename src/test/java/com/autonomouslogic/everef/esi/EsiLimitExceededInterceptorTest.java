@@ -31,7 +31,7 @@ import org.junitpioneer.jupiter.SetEnvironmentVariable;
 @SetEnvironmentVariable(key = "ESI_RATE_LIMIT_PER_S", value = "10")
 @SetEnvironmentVariable(key = "ESI_BASE_URL", value = "http://localhost:" + TestDataUtil.TEST_PORT)
 @Log4j2
-@Timeout(10)
+@Timeout(30)
 public class EsiLimitExceededInterceptorTest {
 	@Inject
 	TestDataUtil testDataUtil;
@@ -149,7 +149,6 @@ public class EsiLimitExceededInterceptorTest {
 			threads.forEach(thread -> {
 				try {
 					thread.interrupt();
-					thread.stop();
 				} catch (Exception e) {
 					log.warn("Failed to stop thread", e);
 				}

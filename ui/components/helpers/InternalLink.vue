@@ -1,15 +1,17 @@
 <script setup lang="ts">
+const localePath = useLocalePath();
+
 const props = defineProps<{
-	url: string
+	to: string
 }>();
+
+
+
 </script>
 
 <template>
 	<NuxtLink
-		:to="url"
-		rel="noopener"
-		target="_blank"
-		:external="true">
+		:to="localePath(to)">
 		<slot />
 	</NuxtLink>
 </template>

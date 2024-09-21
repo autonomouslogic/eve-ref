@@ -3,18 +3,21 @@ import MarketGroupName from "~/components/helpers/MarketGroupName.vue";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 import ExternalLink from "~/components/helpers/ExternalLink.vue";
 import {PATREON_URL} from "~/lib/urls";
+import InternalLink from "~/components/helpers/InternalLink.vue";
+
+const localePath = useLocalePath();
 </script>
 
 <template>
 	<div class="header flex p-1">
 		<span class="w-full space-x-3">
 			<span>
-				<NuxtLink to="/">EVE Ref</NuxtLink>
+				<InternalLink to="/">EVE Ref</InternalLink>
 			</span>
-			<span><NuxtLink to="/categories">Categories</NuxtLink></span>
-			<span><NuxtLink to="/market-groups">Market Groups</NuxtLink></span>
-			<span><NuxtLink to="/structures"><MarketGroupName :market-group-id="477" /></NuxtLink></span>
-			<span><NuxtLink to="/skill-points">Skill Points</NuxtLink></span>
+			<span><InternalLink :to="localePath('/categories', 'en')">Categories</InternalLink></span>
+			<span><InternalLink to="/market-groups">Market Groups</InternalLink></span>
+			<span><InternalLink to="/structures"><MarketGroupName :market-group-id="477" /></InternalLink></span>
+			<span><InternalLink to="/skill-points">Skill Points</InternalLink></span>
 			<span><SearchBar /></span>
 		</span>
 		<span class="w-full space-x-3 text-right">
