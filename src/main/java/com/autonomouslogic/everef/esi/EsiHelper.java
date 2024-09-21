@@ -18,7 +18,6 @@ import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.functions.BiFunction;
 import io.reactivex.rxjava3.functions.Function;
 import io.reactivex.rxjava3.schedulers.Schedulers;
-
 import java.time.Duration;
 import java.util.List;
 import java.util.Optional;
@@ -129,24 +128,26 @@ public class EsiHelper {
 	 * @param <T>
 	 */
 	public <T> Flowable<T> fetchPages(Function<Integer, ApiResponse<List<T>>> fetcher) {
-		return Flowable.defer(() -> Flowable.just(fetcher.apply(1))).flatMap(first -> {
-			var pages = Optional.ofNullable(first.getHeaders().get("X-Pages")).stream()
-					.flatMap(List::stream)
-					.mapToInt(Integer::valueOf)
-					.findFirst()
-					.orElse(1);
-			var firstResult = decodeResponse(first);
-			if (pages == 1) {
-				return Flowable.fromIterable(firstResult);
-			}
-			return Flowable.concatArray(
-					Flowable.fromIterable(firstResult),
-					Flowable.range(2, pages - 1)
-							.flatMap(page -> Flowable.fromIterable(decodeResponse(fetcher.apply(page))), false, 4));
-		})
-		// this was causing exceptions to escape to RxJava's main bit and being logged as uncaught
-		 //.compose(Rx3Util.retryWithDelayFlowable(2, Duration.ofSeconds(1)))
-		;
+		return Flowable.defer(() -> Flowable.just(fetcher.apply(1)))
+				.flatMap(first -> {
+					var pages = Optional.ofNullable(first.getHeaders().get("X-Pages")).stream()
+							.flatMap(List::stream)
+							.mapToInt(Integer::valueOf)
+							.findFirst()
+							.orElse(1);
+					var firstResult = decodeResponse(first);
+					if (pages == 1) {
+						return Flowable.fromIterable(firstResult);
+					}
+					return Flowable.concatArray(
+							Flowable.fromIterable(firstResult),
+							Flowable.range(2, pages - 1)
+									.flatMap(
+											page -> Flowable.fromIterable(decodeResponse(fetcher.apply(page))),
+											false,
+											4));
+				})
+				.compose(Rx3Util.retryWithDelayFlowable(2, Duration.ofSeconds(1)));
 	}
 
 	/**

@@ -98,10 +98,9 @@ public class EsiLimitExceededInterceptorTest {
 					while (!stop.get()) {
 						try {
 							esiHelper
-								.fetch(EsiUrl.builder().urlPath("/page").build())
-								.blockingGet();
-						}
-						catch (Exception e) {
+									.fetch(EsiUrl.builder().urlPath("/page").build())
+									.blockingGet();
+						} catch (Exception e) {
 							log.warn("Fail", e);
 						}
 						count.incrementAndGet();
@@ -143,8 +142,7 @@ public class EsiLimitExceededInterceptorTest {
 			Thread.sleep(5000);
 			log.info("Count (6): " + count.get());
 			assertNotEquals(0, count.get());
-		}
-		finally {
+		} finally {
 			stop.set(true);
 			threads.forEach(thread -> {
 				try {

@@ -29,7 +29,11 @@ public class MarketEsi {
 							page -> marketApi.getMarketsRegionIdTypesWithHttpInfo(regionId, source, null, page));
 				})
 				.compose(Rx.offloadFlowable())
-				.onErrorResumeNext(
-						e -> Flowable.error(new RuntimeException("Failed fetching active market order types", e)));
+				.onErrorResumeNext(e -> {
+					// Had problems with UndeliverableExceptions being thrown.
+					// This is a hacky workaround, as we should definitely error on errors instead of ignoring them.
+					log.warn("Failed fetching active market order types", e);
+					return Flowable.empty();
+				});
 	}
 }
