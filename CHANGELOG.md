@@ -1,5 +1,22 @@
 EVE Ref Changelog
 
+## [2.49.1](https://github.com/autonomouslogic/eve-ref/compare/2.49.0...2.49.1) (2024-09-21)
+
+
+### Features
+
+* **ui:** Chosen locale is now remembered and URLs are locale-specific ([#600](https://github.com/autonomouslogic/eve-ref/issues/600)) ([8bca199](https://github.com/autonomouslogic/eve-ref/commit/8bca199800d418dedec6a6a6c46f39461dac9060))
+
+
+### Bug Fixes
+
+* **jobs:** Extra error handling for scrape market order history ([#601](https://github.com/autonomouslogic/eve-ref/issues/601)) ([60ee678](https://github.com/autonomouslogic/eve-ref/commit/60ee6788c3c7ee6c4629a9362c5e706ab3c23e0b))
+
+
+### Tests
+
+* Fixed EsiLimitExceededInterceptorTest ([5da8a45](https://github.com/autonomouslogic/eve-ref/commit/5da8a45329044574b45bd38ede0e64b4869fc6f4))
+
 ## [2.49.0](https://github.com/autonomouslogic/eve-ref/compare/2.48.1...2.49.0) (2024-09-20)
 
 
