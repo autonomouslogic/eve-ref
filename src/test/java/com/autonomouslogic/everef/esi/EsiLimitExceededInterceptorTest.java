@@ -21,6 +21,7 @@ import okhttp3.mockwebserver.RecordedRequest;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Timeout;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.junitpioneer.jupiter.SetEnvironmentVariable;
@@ -29,6 +30,7 @@ import org.junitpioneer.jupiter.SetEnvironmentVariable;
 @SetEnvironmentVariable(key = "ESI_RATE_LIMIT_PER_S", value = "10")
 @SetEnvironmentVariable(key = "ESI_BASE_URL", value = "http://localhost:" + TestDataUtil.TEST_PORT)
 @Log4j2
+@Timeout(30)
 public class EsiLimitExceededInterceptorTest {
 	@Inject
 	TestDataUtil testDataUtil;
@@ -137,6 +139,6 @@ public class EsiLimitExceededInterceptorTest {
 		log.info("Count (6): " + count.get());
 		assertNotEquals(0, count.get());
 
-		threads.forEach(Thread::stop);
+		threads.forEach(Thread::interrupt);
 	}
 }
