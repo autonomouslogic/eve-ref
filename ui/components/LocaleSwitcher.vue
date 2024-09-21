@@ -2,10 +2,16 @@
 const { locale, availableLocales } = useI18n({ useScope: "global" });
 const switchLocalePath = useSwitchLocalePath();
 const router = useRouter();
+const route = useRoute();
 
 function onLocaleChanged(event: Event) {
 	const target = event.target as HTMLInputElement;
-	router.push({ path: switchLocalePath(target.value) });
+	router.push({
+		path: switchLocalePath(target.value),
+		query: {
+			...route.query
+		},
+	});
 }
 </script>
 
