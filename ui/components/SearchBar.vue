@@ -1,4 +1,5 @@
 <script setup lang="ts">
+const localePath = useLocalePath();
 
 const query = ref<string>(useRoute().query.query as string || "");
 
@@ -12,7 +13,7 @@ async function submit() {
 		return;
 	}
 	await navigateTo({
-		path: "/search",
+		path: localePath("/search"),
 		query: {
 			query: q
 		}

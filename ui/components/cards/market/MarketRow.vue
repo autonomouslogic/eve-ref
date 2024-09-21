@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {universeApi} from "~/esi";
-import {type GetMarketsRegionIdOrders200Ok, GetMarketsRegionIdOrdersOrderTypeEnum,} from "~/esi-openapi";
+import {GetMarketsRegionIdOrdersOrderTypeEnum,} from "~/esi-openapi";
 import UnitValue from "~/components/dogma/UnitValue.vue";
 import {getOrders} from "~/lib/marketUtils";
 import {MONEY} from "~/lib/unitConstants";

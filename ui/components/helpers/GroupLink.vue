@@ -2,6 +2,7 @@
 import refdataApi from "~/refdata";
 import {type InventoryGroup} from "~/refdata-openapi";
 import {prepMessages} from "~/lib/translate";
+import InternalLink from "~/components/helpers/InternalLink.vue";
 
 const props = defineProps<{
 	groupId: number | undefined
@@ -17,10 +18,10 @@ const group: InventoryGroup = await refdataApi.getGroup({groupId: props.groupId}
 </script>
 
 <template>
-	<NuxtLink
+	<InternalLink
 		v-if="group && group.name"
 		:to="`/groups/${props.groupId}`">
 		{{ prepMessages(group.name)[locale] }}
-	</NuxtLink>
+	</InternalLink>
 	<span v-else>(Unknown group ID {{props.groupId}})</span>
 </template>
