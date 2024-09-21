@@ -1,6 +1,6 @@
 <script setup lang="ts">
-
 import InternalLink from "~/components/helpers/InternalLink.vue";
+const { locale } = useI18n();
 
 interface SearchEntry {
 	text: string
@@ -91,6 +91,7 @@ const results = computed(() => {
 
 <template>
 	<h1>Search</h1>
+	<p v-if="locale != 'en'" class="italic">Search page is only available in English at this moment.</p>
 	<p v-if="status == 'idle' || status == 'pending'">Loading search data ...</p>
 	<p v-else-if="status == 'error'">Failed to load search data.</p>
 	<template v-else-if="status == 'success'">
