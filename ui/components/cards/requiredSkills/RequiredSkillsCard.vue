@@ -13,16 +13,23 @@ const props = defineProps<{
 <template>
 	<template v-if="inventoryType.requiredSkills">
 		<CardWrapper :title="title">
-			<div class="grid grid-cols-3">
-				<RequiredSkillsRow
-					v-for="(level, requiredSkillTypeId) in inventoryType.requiredSkills"
-					:key="requiredSkillTypeId"
-					:skill-type-id="parseInt(`${requiredSkillTypeId}`)"
-					:level=level
-					:indent="0"
-					:shown-skills="[]"
-				/>
-			</div>
+			<table class="standard-table">
+				<thead>
+					<th>Skill</th>
+					<th>Multiplier</th>
+					<th>Level</th>
+				</thead>
+				<tbody>
+					<RequiredSkillsRow
+						v-for="(level, requiredSkillTypeId) in inventoryType.requiredSkills"
+						:key="requiredSkillTypeId"
+						:skill-type-id="parseInt(`${requiredSkillTypeId}`)"
+						:level=level
+						:indent="0"
+						:shown-skills="[]"
+					/>
+				</tbody>
+			</table>
 		</CardWrapper>
 	</template>
 </template>
