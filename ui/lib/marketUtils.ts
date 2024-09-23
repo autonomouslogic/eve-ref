@@ -1,9 +1,25 @@
 import {GetMarketsRegionIdOrdersDatasourceEnum, GetMarketsRegionIdOrdersOrderTypeEnum} from "~/esi-openapi";
 import {marketApi} from "~/esi";
+import type {DogmaAttribute, InventoryType} from "~/refdata-openapi";
+
+export interface HubStation {
+    systemName: string,
+    shortName: string,
+    stationId: number,
+    regionId: number
+}
 
 export const THE_FORGE_REGION_ID = 10000002;
 
-export const HUB_STATION_IDS = new Map<string, number>();
+export const HUB_STATION_IDS = new Map<string, HubStation>();
+// Jita IV - Moon 4 - Caldari Navy Assembly Plant
+HUB_STATION_IDS.set("Jita", {
+    systemName: "Jita",
+    shortName: "Jita",
+    stationId: 60003760,
+    regionId: THE_FORGE_REGION_ID
+} as HubStation);
+
 HUB_STATION_IDS.set("Jita", 60003760); // Jita IV - Moon 4 - Caldari Navy Assembly Plant
 HUB_STATION_IDS.set("Amarr", 60008494); // Amarr VIII (Oris) - Emperor Family Academy
 HUB_STATION_IDS.set("Rens", 60004588); // Rens VI - Moon 8 - Brutor Tribe Treasury
