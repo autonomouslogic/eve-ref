@@ -36,7 +36,7 @@ const buyPrice = !buyOrders ? undefined : buyOrders.filter(e => e.locationId == 
 
 <template>
 	<tr v-if="system">
-		<td class="text-left">{{ system.name }}</td>
+		<td>{{ system.name }}</td>
 		<td class="text-right">
 			<UnitValue v-if="sellPrice" :unit-id="MONEY" :value="sellPrice" />
 			<template v-else>None</template>

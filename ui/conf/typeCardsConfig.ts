@@ -25,6 +25,12 @@ const cards: {[key: string]: any} = {
 					"explosiveDamageResonance"
 				]
 		},
+	"variations":
+		{
+			"name": {"en": "Variations"},
+			"component": "variations",
+			"alwaysShow": true
+		},
 	"market":
 		{
 			"name": {"en": "Market"},
@@ -122,12 +128,6 @@ const cards: {[key: string]: any} = {
 					"moduleReactivationDelay",
 					"signatureRadiusAdd"
 				]
-		},
-	"variations":
-		{
-			"name": {"en": "Variations"},
-			"component": "variations",
-			"alwaysShow": true
 		},
 	"oreVariations":
 		{

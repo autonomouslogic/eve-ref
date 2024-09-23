@@ -2,6 +2,7 @@
 import {type DogmaAttribute, type InventoryType} from "~/refdata-openapi";
 import CardWrapper from "~/components/cards/CardWrapper.vue";
 import DogmaListItems from "~/components/cards/DogmaListItems.vue";
+import AttributeList from "~/components/attr/AttributeList.vue";
 
 const props = defineProps<{
 	title: string,
@@ -15,9 +16,9 @@ const props = defineProps<{
 	<template v-if="(dogmaAttributes && dogmaAttributes.length > 0) || component">
 		<CardWrapper :title="title">
 			<div v-if="component" class="text-red-700 border border-red-700 p-2 text-center">Unknown component "{{component}}"</div>
-			<dl>
+			<AttributeList>
 				<DogmaListItems :inventory-type="inventoryType" :dogma-attributes="dogmaAttributes" />
-			</dl>
+			</AttributeList>
 		</CardWrapper>
 	</template>
 </template>

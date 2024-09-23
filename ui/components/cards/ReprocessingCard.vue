@@ -25,7 +25,7 @@ const props = defineProps<{
 				</AttributeListItem>
 			</AttributeList>
 
-			<table class="table-auto text-left w-full">
+			<table class="standard-table">
 				<tbody>
 					<tr>
 						<td colspan="2">Output</td>

@@ -17,8 +17,8 @@ const props = withDefaults(defineProps<Props>(), {
 
 <template>
 	<thead>
-		<th></th>
-		<th v-for="type in inventoryTypes" :key="type.typeId">
+		<th>Attribute</th>
+		<th v-for="type in inventoryTypes" :key="type.typeId" class="text-right">
 			<h2><type-link :type-id="type.typeId" /></h2>
 		</th>
 	</thead>
@@ -44,10 +44,4 @@ const props = withDefaults(defineProps<Props>(), {
 </template>
 
 <style scoped>
-th {
-  @apply text-right px-6;
-}
-tr {
-  @apply border-b border-gray-700;
-}
 </style>

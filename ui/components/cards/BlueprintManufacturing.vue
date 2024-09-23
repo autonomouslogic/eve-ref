@@ -7,6 +7,8 @@ import refdataApi from "~/refdata";
 import BlueprintManufacturingLinks from "~/components/cards/BlueprintManufacturingLinks.vue";
 import Duration from "~/components/dogma/units/Duration.vue";
 import {secondsToMilliseconds} from "~/lib/timeUtils";
+import AttributeList from "~/components/attr/AttributeList.vue";
+import AttributeListItem from "~/components/attr/AttributeListItem.vue";
 
 const props = defineProps<{
 	title: string,
@@ -31,30 +33,43 @@ if (blueprintType?.typeId) {
 <template>
 	<template v-if="manufacturing">
 		<CardWrapper :title="title">
-			<table>
-				<tr>
-					<td>Manufacturing time:</td>
-					<td><Duration :milliseconds="secondsToMilliseconds(manufacturing.time)" /></td>
-				</tr>
-				<tr>
-					<td colspan="2">Products</td>
-				</tr>
-				<template v-if="manufacturing.products">
+			<AttributeList>
+				<AttributeListItem>
+					<template v-slot:key>Manufacturing time:</template>
+					<Duration :milliseconds="secondsToMilliseconds(manufacturing.time)" />
+				</AttributeListItem>
+			</AttributeList>
+
+			<table v-if="manufacturing.products" class="standard-table">
+				<thead>
+					<tr>
+						<th>Product</th>
+						<th class="text-right">Quantity</th>
+					</tr>
+				</thead>
+				<tbody>
 					<tr v-for="(product, productId) in manufacturing.products" :key="productId">
 						<td><TypeLink :type-id="product.typeId" /></td>
-						<td><FormattedNumber :number="product.quantity" /></td>
+						<td class="text-right"><FormattedNumber :number="product.quantity" /></td>
 					</tr>
-				</template>
-				<template v-if="manufacturing.materials">
+				</tbody>
+			</table>
+
+			<table v-if="manufacturing.materials" class="standard-table">
+				<thead>
 					<tr>
-						<td colspan="2">Ingredients</td>
+						<th>Material</th>
+						<th class="text-right">Quantity</th>
 					</tr>
+				</thead>
+				<tbody>
 					<tr v-for="(material, materialId) in manufacturing.materials" :key="materialId">
 						<td><TypeLink :type-id="material.typeId" /></td>
-						<td><FormattedNumber :number="material.quantity" /></td>
+						<td class="text-right"><FormattedNumber :number="material.quantity" /></td>
 					</tr>
-				</template>
+				</tbody>
 			</table>
+
 			<BlueprintManufacturingLinks v-if="blueprint" :blueprint="blueprint" />
 		</CardWrapper>
 	</template>
