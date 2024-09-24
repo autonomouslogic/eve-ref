@@ -7,6 +7,9 @@ import {CYBERIMPLANT} from "~/lib/groupConstants";
 useHead({
 	title: "Skill Points"
 });
+useSeoMeta({
+	ogDescription: "Skill points overview."
+});
 
 await cacheGroupBundle(CYBERIMPLANT);
 

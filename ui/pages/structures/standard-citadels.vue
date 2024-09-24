@@ -11,6 +11,9 @@ const marketGroup = await refdataApi.getMarketGroup({marketGroupId});
 useHead({
 	title: prepMessages(marketGroup.name)[locale.value]
 });
+useSeoMeta({
+	ogDescription: "Standard citadels overview."
+});
 const structureIds = marketGroup.typeIds;
 if (!structureIds) {
 	throw new Error(`Market group ${marketGroupId} has no type IDs`);

@@ -6,6 +6,9 @@ const title = "Structure Engineering Rigs";
 useHead({
 	title: title
 });
+useSeoMeta({
+	ogDescription: "Engineering rigs overview."
+});
 
 let typeIds = await getRecursiveMarketGroupTypeIds(2340);
 console.log("typeIds:", typeIds);

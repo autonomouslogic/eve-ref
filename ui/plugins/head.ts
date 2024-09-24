@@ -1,3 +1,6 @@
+import {useNuxt} from "@nuxt/kit";
+import iconPath from "~/assets/logo.png";
+
 const suffix = "EVE Ref";
 
 export default defineNuxtPlugin({
@@ -11,8 +14,10 @@ export default defineNuxtPlugin({
         });
         useSeoMeta({
             ogSiteName: "EVE Ref",
+            ogDescription: "Reference site for EVE Online",
             twitterCard: "summary",
-            ogType: "article"
+            ogType: "article",
+            ogImage: iconPath
         });
     }
 })

@@ -4,6 +4,7 @@ import CardWrapper from "~/components/cards/CardWrapper.vue";
 import AttributeTypeIcon from "~/components/icons/AttributeTypeIcon.vue";
 import {getIntRouteParam} from "~/lib/routeUtils";
 import {prepMessages} from "~/lib/translate";
+import {assertTSThisType} from "@babel/types";
 
 const route = useRoute();
 const {locale} = useI18n();
@@ -15,6 +16,11 @@ const unit = attribute.unitId ? await refdataApi.getUnit({unitId: attribute.unit
 useHead({
 	title: prepMessages(attribute.displayName)[locale.value]
 });
+if (attribute.description) {
+	useSeoMeta({
+		ogDescription: prepMessages(attribute.description)[locale.value]
+	});
+}
 </script>
 
 <template>
