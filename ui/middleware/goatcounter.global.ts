@@ -6,6 +6,15 @@ export default defineNuxtRouteMiddleware((to, from) => {
     if (!w.goatcounter || !w.goatcounter.count) {
         return;
     }
-    const path = to.path;
-    w.goatcounter.count({path})
+    let path = to.fullPath;
+    const pos = path.indexOf("#");
+    if (pos >= 0) {
+        path = path.substring(0, pos);
+    }
+    console.log("path", path);
+    w.goatcounter.count({
+        path,
+        referrer: "",
+        title: "",
+    })
 })
