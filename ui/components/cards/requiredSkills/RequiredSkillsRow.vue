@@ -15,35 +15,33 @@ const skill = await refdataApi.getSkill({skillTypeId: props.skillTypeId});
 </script>
 
 <template>
-	<tr>
-		<td :class="`skill-${indent}`">
-			<template v-if="!inventoryType">
-				Unknown skill [{{skillTypeId}}]
-			</template>
-			<template v-else>
-				<TypeLink :type-id="inventoryType.typeId" />
-			</template>
-		</td>
-		<td>(x{{skill.trainingTimeMultiplier}})</td>
-		<td>
-			[{{level}}]
-			<span class="space-x-1">
-				<span v-for="l in level" :key="l"><font-awesome-icon icon="fa-solid fa-square" /></span>
-				<span v-for="l in (5 - level)" :key="l"><font-awesome-icon icon="fa-regular fa-square" /></span>
-			</span>
-		</td>
-
-		<template v-if="skill.requiredSkills && !shownSkills.includes(skillTypeId)">
-			<RequiredSkillsRow
-				v-for="(level, requiredSkillTypeId) in skill.requiredSkills"
-				:key="requiredSkillTypeId"
-				:skill-type-id="parseInt(`${requiredSkillTypeId}`)"
-				:level=level
-				:indent="indent + 1"
-				:shown-skills="[... shownSkills, skillTypeId]"
-			/>
+	<div :class="`skill-${indent}`">
+		<template v-if="!inventoryType">
+			Unknown skill [{{skillTypeId}}]
 		</template>
-	</tr>
+		<template v-else>
+			<TypeLink :type-id="inventoryType.typeId" />
+		</template>
+	</div>
+	<div>(x{{skill.trainingTimeMultiplier}})</div>
+	<div>
+		[{{level}}]
+		<span class="space-x-1">
+			<span v-for="l in level" :key="l"><font-awesome-icon icon="fa-solid fa-square" /></span>
+			<span v-for="l in (5 - level)" :key="l"><font-awesome-icon icon="fa-regular fa-square" /></span>
+		</span>
+	</div>
+
+	<template v-if="skill.requiredSkills && !shownSkills.includes(skillTypeId)">
+		<RequiredSkillsRow
+			v-for="(level, requiredSkillTypeId) in skill.requiredSkills"
+			:key="requiredSkillTypeId"
+			:skill-type-id="parseInt(`${requiredSkillTypeId}`)"
+			:level=level
+			:indent="indent + 1"
+			:shown-skills="[... shownSkills, skillTypeId]"
+		/>
+	</template>
 </template>
 
 <style scoped>
