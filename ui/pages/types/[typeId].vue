@@ -27,7 +27,10 @@ if (typeof inventoryType.groupId !== "number") {
 }
 
 const pageTitle = prepMessages(inventoryType.name)[locale.value];
-const pageDescription = prepMessages(inventoryType.description)[locale.value];
+let pageDescription = prepMessages(inventoryType.description)[locale.value];
+if (pageDescription.length > 200) {
+	pageDescription = pageDescription.substring(0, 200);
+}
 const typeIcon = `https://images.evetech.net/types/${inventoryType.typeId}/icon`;
 useHead({
 	title: pageTitle
