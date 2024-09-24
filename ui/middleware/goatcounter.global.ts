@@ -6,6 +6,6 @@ export default defineNuxtRouteMiddleware((to, from) => {
     if (!w.goatcounter || !w.goatcounter.count) {
         return;
     }
-    const path = to.fullPath;
+    const path = to.path;
     w.goatcounter.count({path})
 })
