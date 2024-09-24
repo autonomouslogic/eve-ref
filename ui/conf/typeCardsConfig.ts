@@ -508,10 +508,15 @@ const cards: {[key: string]: any} = {
 			"name": {"en": "Invention"},
 			"component": "blueprintInvention"
 		},
-	"blueprintResearch":
+	"blueprintMaterialResearch":
 		{
-			"name": {"en": "Research"},
-			"component": "blueprintResearch"
+			"name": {"en": "Material Research"},
+			"component": "blueprintMaterialResearch"
+		},
+	"blueprintTimeResearch":
+		{
+			"name": {"en": "Time Research"},
+			"component": "blueprintTimeResearch"
 		},
 	"blueprintCopying":
 		{

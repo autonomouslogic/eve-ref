@@ -26,10 +26,11 @@ const props = defineProps<{
 			</AttributeList>
 
 			<table class="standard-table">
+				<thead>
+					<th>Output</th>
+					<th class="text-right">Quantity</th>
+				</thead>
 				<tbody>
-					<tr>
-						<td colspan="2">Output</td>
-					</tr>
 					<tr v-for="(material, materialId) in inventoryType.typeMaterials" :key="materialId">
 						<td>
 							<TypeLink :type-id="materialId" />

@@ -8,7 +8,6 @@ import RequiredSkillsCard from "~/components/cards/requiredSkills/RequiredSkills
 import TypeManufacturing from "~/components/cards/TypeManufacturing.vue";
 import BlueprintManufacturing from "~/components/cards/BlueprintManufacturing.vue";
 import BlueprintCopyingCard from "~/components/cards/BlueprintCopyingCard.vue";
-import BlueprintResearchCard from "~/components/cards/BlueprintResearchCard.vue";
 import BlueprintInventionCard from "~/components/cards/BlueprintInventionCard.vue";
 import TypeInfoCard from "~/components/cards/TypeInfoCard.vue";
 import BoosterCard from "~/components/cards/BoosterCard.vue";
@@ -16,6 +15,8 @@ import IndustryCard from "~/components/cards/IndustryCard.vue";
 import PlanetaryInteractionCard from "~/components/cards/PlanetaryInteractionCard.vue";
 import BlueprintReaction from "~/components/cards/BlueprintReaction.vue";
 import OreVariationsCard from "~/components/cards/OreVariationsCard.vue";
+import BlueprintMaterialResearchCard from "~/components/cards/BlueprintMaterialResearchCard.vue";
+import BlueprintTimeResearchCard from "~/components/cards/BlueprintTimeResearchCard.vue";
 
 const props = defineProps<{
 	inventoryType: InventoryType,
@@ -63,7 +64,11 @@ const props = defineProps<{
 		:title="title"
 		:inventory-type="inventoryType"
 		:dogma-attributes="dogmaAttributes" />
-	<BlueprintResearchCard v-else-if="component == 'blueprintResearch'"
+	<BlueprintMaterialResearchCard v-else-if="component == 'blueprintMaterialResearch'"
+		:title="title"
+		:inventory-type="inventoryType"
+		:dogma-attributes="dogmaAttributes" />
+	<BlueprintTimeResearchCard v-else-if="component == 'blueprintTimeResearch'"
 		:title="title"
 		:inventory-type="inventoryType"
 		:dogma-attributes="dogmaAttributes" />

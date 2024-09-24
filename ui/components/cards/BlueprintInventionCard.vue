@@ -25,39 +25,40 @@ const invention = blueprint?.activities?.invention;
 <template>
 	<template v-if="invention">
 		<CardWrapper :title="title">
+
 			<AttributeList v-if="invention.time">
 				<AttributeListItem>
-					<template v-slot:key>Copy time:</template>
+					<template v-slot:key>Invention time:</template>
 					<Duration :milliseconds="invention.time * 1000" />
 				</AttributeListItem>
 			</AttributeList>
 
-			<template v-if="invention.products">
-				<h3>Output</h3>
-				<table class="w-full">
-					<thead>
-						<th class="text-left"></th>
-						<th class="text-right">Probability</th>
-						<th class="text-right">Quantity</th>
-					</thead>
+			<table class="standard-table" v-if="invention.products">
+				<thead>
+					<th>Output</th>
+					<th class="text-right">Probability</th>
+					<th class="text-right">Quantity</th>
+				</thead>
+				<tbody>
 					<tr v-for="(product, index) in invention.products" :key="index">
 						<td class="text-left"><TypeLink :type-id="product.typeId" /></td>
 						<td class="text-right"><AbsolutePercent v-if="product.probability" :value="product.probability" /></td>
 						<td class="text-right"><FormattedNumber :number="product.quantity" /></td>
 					</tr>
-				</table>
-			</template>
+				</tbody>
+			</table>
 
-			<h3>Input</h3>
-			<table class="w-full">
+			<table class="standard-table">
 				<thead>
-					<th class="text-left"></th>
+					<th>Input</th>
 					<th class="text-right">Quantity</th>
 				</thead>
-				<tr v-for="(material, index) in invention.materials" :key="index">
-					<td class="text-left"><TypeLink :type-id="material.typeId" /></td>
-					<td class="text-right"><FormattedNumber :number="material.quantity" /></td>
-				</tr>
+				<tbody>
+					<tr v-for="(material, index) in invention.materials" :key="index">
+						<td class="text-left"><TypeLink :type-id="material.typeId" /></td>
+						<td class="text-right"><FormattedNumber :number="material.quantity" /></td>
+					</tr>
+				</tbody>
 			</table>
 
 			<template v-if="invention.requiredSkills">
