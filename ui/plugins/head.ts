@@ -9,5 +9,10 @@ export default defineNuxtPlugin({
                 return title ? `${title} - ${suffix}` : suffix;
             }
         });
+        useSeoMeta({
+            ogSiteName: "EVE Ref",
+            twitterCard: "summary",
+            ogType: "article"
+        });
     }
 })
