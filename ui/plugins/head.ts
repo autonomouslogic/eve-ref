@@ -7,20 +7,26 @@ export default defineNuxtPlugin({
     name: "Head",
     parallel: true,
     setup (nuxtApp) {
+        const siteName = "EVE Ref"
+        const titleTemplate = "%s %separator %siteName";
+        const description = "Reference site for EVE Online";
         const url = useRequestURL();
         useHead({
-            titleTemplate: (title) => {
-                return title ? `${title} - ${suffix}` : suffix;
+            titleTemplate,
+            templateParams: {
+                siteName,
+                separator: "|",
             }
         });
+        const t = this;
         useSeoMeta({
-            ogSiteName: "EVE Ref",
-            ogDescription: "Reference site for EVE Online",
+            ogTitle: titleTemplate,
+            ogSiteName: siteName,
+            ogDescription: description,
             twitterCard: "summary",
             ogType: "website",
             ogImage: iconPath,
             ogUrl: url.toString(),
-            ogTitle: "Test title",
         });
     }
 })
