@@ -7,6 +7,7 @@ export default defineNuxtPlugin({
     name: "Head",
     parallel: true,
     setup (nuxtApp) {
+        const url = useRequestURL();
         useHead({
             titleTemplate: (title) => {
                 return title ? `${title} - ${suffix}` : suffix;
@@ -17,7 +18,8 @@ export default defineNuxtPlugin({
             ogDescription: "Reference site for EVE Online",
             twitterCard: "summary",
             ogType: "article",
-            ogImage: iconPath
+            ogImage: iconPath,
+            ogUrl: url.toString(),
         });
     }
 })
