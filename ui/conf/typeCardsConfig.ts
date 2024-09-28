@@ -544,18 +544,18 @@ const cards: {[key: string]: any} = {
 			"component": "typeInfo",
 			"alwaysShow": true
 		},
-	"skins":
-		{
-			"name": {"en": "Skins"},
-			"component": "skins",
-			"alwaysShow": true
-		},
-	"skin":
-		{
-			"name": {"en": "Skin"},
-			"component": "skin",
-			"alwaysShow": true
-		}
+	// "skins":
+	// 	{
+	// 		"name": {"en": "Skins"},
+	// 		"component": "skins",
+	// 		"alwaysShow": true
+	// 	},
+	// "skin":
+	// 	{
+	// 		"name": {"en": "Skin"},
+	// 		"component": "skin",
+	// 		"alwaysShow": true
+	// 	}
 };
 
 export default cards;
