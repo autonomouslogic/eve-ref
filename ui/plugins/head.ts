@@ -20,6 +20,7 @@ export default defineNuxtPlugin({
             ogType: "website",
             ogImage: iconPath,
             ogUrl: url.toString(),
+            ogTitle: "Test title",
         });
     }
 })
