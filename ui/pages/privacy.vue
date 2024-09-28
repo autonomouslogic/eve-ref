@@ -2,7 +2,7 @@
 import ExternalLink from "~/components/helpers/ExternalLink.vue";
 
 useHead({
-	title: "Privacy"
+	title: "Privacy Policy"
 });
 </script>
 
