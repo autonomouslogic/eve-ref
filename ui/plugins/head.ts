@@ -17,7 +17,7 @@ export default defineNuxtPlugin({
             ogSiteName: "EVE Ref",
             ogDescription: "Reference site for EVE Online",
             twitterCard: "summary",
-            ogType: "article",
+            ogType: "website",
             ogImage: iconPath,
             ogUrl: url.toString(),
         });
