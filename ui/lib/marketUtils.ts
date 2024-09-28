@@ -9,7 +9,7 @@ HUB_STATION_IDS.set("Amarr", 60008494); // Amarr VIII (Oris) - Emperor Family Ac
 HUB_STATION_IDS.set("Rens", 60004588); // Rens VI - Moon 8 - Brutor Tribe Treasury
 HUB_STATION_IDS.set("Dodixie", 60011866); // Dodixie IX - Moon 20 - Federation Navy Assembly Plant
 HUB_STATION_IDS.set("Hek", 60005686); // Hek VIII - Moon 12 - Boundless Creation Factory
-HUB_STATION_IDS.set("Maila", 60001804); // Maila VI - Moon 1 - Zainou Biotech Production
+HUB_STATION_IDS.set("Misaba", 60006658); // Misaba V - Moon 3 - Zoar and Sons Factory
 
 export async function getOrders(orderType: GetMarketsRegionIdOrdersOrderTypeEnum, typeId: number, regionId: number) {
     return marketApi.getMarketsRegionIdOrders({
