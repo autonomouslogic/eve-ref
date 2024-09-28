@@ -4,26 +4,26 @@ const cards: {[key: string]: any} = {
 			"name": {"en": "Defenses"},
 			"component": "defenses",
 			"dogmaAttributes":
-				[
-					"shieldCapacity",
-					"shieldUniformity",
-					"shieldEmDamageResonance",
-					"shieldThermalDamageResonance",
-					"shieldKineticDamageResonance",
-					"shieldExplosiveDamageResonance",
-					"armorHP",
-					"armorUniformity",
-					"armorEmDamageResonance",
-					"armorThermalDamageResonance",
-					"armorKineticDamageResonance",
-					"armorExplosiveDamageResonance",
-					"hp",
-					"structureUniformity",
-					"emDamageResonance",
-					"thermalDamageResonance",
-					"kineticDamageResonance",
-					"explosiveDamageResonance"
-				]
+			[
+				"shieldCapacity",
+				"shieldUniformity",
+				"shieldEmDamageResonance",
+				"shieldThermalDamageResonance",
+				"shieldKineticDamageResonance",
+				"shieldExplosiveDamageResonance",
+				"armorHP",
+				"armorUniformity",
+				"armorEmDamageResonance",
+				"armorThermalDamageResonance",
+				"armorKineticDamageResonance",
+				"armorExplosiveDamageResonance",
+				"hp",
+				"structureUniformity",
+				"emDamageResonance",
+				"thermalDamageResonance",
+				"kineticDamageResonance",
+				"explosiveDamageResonance"
+			]
 		},
 	"variations":
 		{
@@ -45,6 +45,7 @@ const cards: {[key: string]: any} = {
 					"techLevel",
 					"metaLevel",
 					"metaLevelOld",
+					"hp",
 					"capacity",
 					"volume",
 					"mass",
