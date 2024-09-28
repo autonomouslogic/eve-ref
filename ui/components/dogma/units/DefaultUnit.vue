@@ -24,6 +24,7 @@ const noDecimalUnitIds = [
 const twoDecimalUnitIds = [
 	9, // m3
 	133, // ISK
+	121, // realPercent
 ];
 
 const displayName = computed(() => props.unit.displayName);

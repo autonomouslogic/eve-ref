@@ -45,7 +45,7 @@ function getValue(attr: DogmaAttribute, type: InventoryType): number {
 </script>
 
 <template>
-	<table class="table-auto text-left">
+	<table class="standard-table">
 		<CompareTableHorizontal v-if="direction == 'horizontal'"
 			:inventory-types="types"
 			:dogma-attributes="listAttributes"

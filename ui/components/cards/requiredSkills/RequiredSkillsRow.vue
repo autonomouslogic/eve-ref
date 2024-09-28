@@ -15,7 +15,7 @@ const skill = await refdataApi.getSkill({skillTypeId: props.skillTypeId});
 </script>
 
 <template>
-	<div :class="`skill-${indent}`">
+	<div :class="`skill-${indent} mr-2`">
 		<template v-if="!inventoryType">
 			Unknown skill [{{skillTypeId}}]
 		</template>
@@ -23,8 +23,8 @@ const skill = await refdataApi.getSkill({skillTypeId: props.skillTypeId});
 			<TypeLink :type-id="inventoryType.typeId" />
 		</template>
 	</div>
-	<div>(x{{skill.trainingTimeMultiplier}})</div>
-	<div>
+	<div class="w-fit mx-2">(x{{skill.trainingTimeMultiplier}})</div>
+	<div class="w-fit ml-2">
 		[{{level}}]
 		<span class="space-x-1">
 			<span v-for="l in level" :key="l"><font-awesome-icon icon="fa-solid fa-square" /></span>

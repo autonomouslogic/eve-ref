@@ -17,7 +17,7 @@ const marketPrice = props.inventoryType.typeId ? await getJitaSellPrice(props.in
 </script>
 
 <template>
-	<table v-if="prices">
+	<table v-if="prices" class="standard-table">
 		<thead>
 			<tr>
 				<th>Level</th>
@@ -30,11 +30,15 @@ const marketPrice = props.inventoryType.typeId ? await getJitaSellPrice(props.in
 		<tbody>
 			<tr v-for="level in prices.levels" :key="level.name">
 				<td>{{ level.name }}</td>
-				<td><UnitValue :unit-id="MONEY" :value="level.cost" /></td>
-				<td><UnitValue :unit-id="MONEY" :value="level.payout" /></td>
-				<td v-if="marketPrice"><FormattedNumber :number="level.payout / marketPrice * 100" :decimals="1" />%</td>
-				<td><FormattedNumber :number="level.payout / level.cost" :decimals="1" />x</td>
+				<td class="text-right"><UnitValue :unit-id="MONEY" :value="level.cost" /></td>
+				<td class="text-right"><UnitValue :unit-id="MONEY" :value="level.payout" /></td>
+				<td v-if="marketPrice" class="text-right mx-4"><FormattedNumber :number="level.payout / marketPrice * 100" :decimals="1" />%</td>
+				<td class="text-right"><FormattedNumber :number="level.payout / level.cost" :decimals="1" />x</td>
 			</tr>
 		</tbody>
 	</table>
 </template>
+
+<style scoped>
+
+</style>

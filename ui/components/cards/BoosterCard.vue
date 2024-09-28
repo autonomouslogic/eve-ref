@@ -41,7 +41,7 @@ const duration = computed(() => {
 </script>
 
 <template>
-	<CardWrapper :title="title">
+	<CardWrapper :title="title" v-if="skillpoints">
 		<AttributeList>
 			<template v-if="skillpoints !== undefined">
 				<AttributeListItem>
