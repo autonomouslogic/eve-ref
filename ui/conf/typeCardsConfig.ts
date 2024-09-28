@@ -47,6 +47,7 @@ const cards: {[key: string]: any} = {
 					"metaLevelOld",
 					"hp",
 					"capacity",
+					"generalMiningHoldCapacity",
 					"volume",
 					"mass",
 					"radius",
