@@ -36,6 +36,7 @@ public class TypeBundleRenderer extends BundleRenderer {
 		typesJson.set(Long.toString(typeId), typeJson);
 		bundleDogmaAttributes(type, attributesJson);
 		bundleTraits(type, typesJson);
+		bundleReprocessing(type, typesJson);
 		bundleVariations(type, typesJson);
 		bundleRequiredSkills(type, skillsJson, typesJson);
 		bundleDogmaAttributesUnits(attributesJson, unitsJson);

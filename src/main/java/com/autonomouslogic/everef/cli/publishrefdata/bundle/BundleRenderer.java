@@ -190,6 +190,12 @@ public abstract class BundleRenderer implements RefDataRenderer {
 		}
 	}
 
+	protected void bundleReprocessing(InventoryType type, ObjectNode typesJson) {
+		Optional.ofNullable(type.getTypeMaterials()).map(e -> e.values()).stream()
+				.flatMap(c -> c.stream())
+				.forEach(m -> addTypeToBundle(m.getMaterialTypeId(), typesJson));
+	}
+
 	private void addTypeToBundle(Long typeId, ObjectNode typesJson) {
 		var json = typesMap.get(typeId);
 		if (json != null) {
