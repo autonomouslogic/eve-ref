@@ -273,7 +273,17 @@ const cards: {[key: string]: any} = {
 					"aoeFalloff",
 					"aimedLaunch",
 					"explosionRange",
-					"detonationRange"
+					"detonationRange",
+					"crystalsGetDamaged",
+					"crystalVolatilityChance",
+					"crystalVolatilityDamage",
+					"specializationAsteroidYieldMultiplier",
+					"specializationCrystalMiningWastedVolumeMultiplierBonus",
+					"specializationCrystalMiningWasteProbabilityBonus",
+					"specializationAsteroidDurationMultiplier",
+					"specializationAsteroidTypeList",
+					"unfitCapCost",
+					"capNeedBonus"
 				]
 		},
 	"navigation":
@@ -404,16 +414,6 @@ const cards: {[key: string]: any} = {
 					"warfareBuff3Multiplier",
 					"warfareBuff4ID",
 					"warfareBuff4Multiplier"
-				]
-		},
-	"crystal":
-		{
-			"name": {"en": "Crystal"},
-			"dogmaAttributes":
-				[
-					"crystalsGetDamaged",
-					"crystalVolatilityChance",
-					"crystalVolatilityDamage"
 				]
 		},
 	"fuel":
