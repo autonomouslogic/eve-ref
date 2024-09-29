@@ -647,6 +647,11 @@ components:
           additionalProperties:
             $ref: "#/components/schemas/Icon"
           description: A map of icons. The key is the icon ID.
+        market_groups:
+          type: object
+          additionalProperties:
+            $ref: "#/components/schemas/MarketGroup"
+          description: A map of market groups. The key is the market group ID.
     Coordinate:
       type: object
       properties:

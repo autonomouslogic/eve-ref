@@ -28,4 +28,7 @@ public class Bundle {
 
 	@Schema(description = "A map of icons. The key is the icon ID.")
 	Map<String, Icon> icons;
+
+	@Schema(description = "A map of market groups. The key is the market group ID.")
+	Map<String, MarketGroup> marketGroups;
 }

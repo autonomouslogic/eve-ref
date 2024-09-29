@@ -32,9 +32,11 @@ public class TypeBundleRenderer extends BundleRenderer {
 		var skillsJson = objectMapper.createObjectNode();
 		var unitsJson = objectMapper.createObjectNode();
 		var iconsJson = objectMapper.createObjectNode();
+		var marketGroupsJson = objectMapper.createObjectNode();
 
 		typesJson.set(Long.toString(typeId), typeJson);
 		bundleDogmaAttributes(type, attributesJson);
+		bundleMarketGroup(type, marketGroupsJson);
 		bundleTraits(type, typesJson);
 		bundleReprocessing(type, typesJson);
 		bundleProducedByBlueprint(type, typesJson);
@@ -58,6 +60,9 @@ public class TypeBundleRenderer extends BundleRenderer {
 		}
 		if (!iconsJson.isEmpty()) {
 			bundleJson.set("icons", iconsJson);
+		}
+		if (!marketGroupsJson.isEmpty()) {
+			bundleJson.set("market_groups", marketGroupsJson);
 		}
 
 		var path = refDataUtil.subPath("types", type.getTypeId()) + "/bundle";

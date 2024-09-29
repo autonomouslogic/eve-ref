@@ -5,6 +5,7 @@ import com.autonomouslogic.everef.mvstore.MVStoreUtil;
 import com.autonomouslogic.everef.refdata.DogmaAttribute;
 import com.autonomouslogic.everef.refdata.DogmaTypeAttribute;
 import com.autonomouslogic.everef.refdata.InventoryType;
+import com.autonomouslogic.everef.refdata.MarketGroup;
 import com.autonomouslogic.everef.refdata.Skill;
 import com.autonomouslogic.everef.refdata.TraitBonus;
 import com.autonomouslogic.everef.util.RefDataUtil;
@@ -60,6 +61,9 @@ public abstract class BundleRenderer implements RefDataRenderer {
 	@Getter
 	protected Map<Long, JsonNode> groupsMap;
 
+	@Getter
+	protected Map<Long, JsonNode> marketGroupsMap;
+
 	public final Flowable<Pair<String, JsonNode>> render() {
 		return Flowable.defer(() -> {
 			log.info("Rendering bundle: {}", getClass().getSimpleName());
@@ -69,6 +73,7 @@ public abstract class BundleRenderer implements RefDataRenderer {
 			unitsMap = mvStoreUtil.openJsonMap(dataStore, "units", Long.class);
 			iconsMap = mvStoreUtil.openJsonMap(dataStore, "icons", Long.class);
 			groupsMap = mvStoreUtil.openJsonMap(dataStore, "groups", Long.class);
+			marketGroupsMap = mvStoreUtil.openJsonMap(dataStore, "market_groups", Long.class);
 			return renderInternal();
 		});
 	}
@@ -200,6 +205,24 @@ public abstract class BundleRenderer implements RefDataRenderer {
 		Optional.ofNullable(type.getProducedByBlueprints()).map(e -> e.values()).stream()
 				.flatMap(c -> c.stream())
 				.forEach(b -> addTypeToBundle(b.getBlueprintTypeId(), typesJson));
+	}
+
+	protected void bundleMarketGroup(InventoryType type, ObjectNode marketGroupsJson) {
+		var id = type.getMarketGroupId();
+		if (id != null) {
+			bundleMarketGroup(id, marketGroupsJson);
+		}
+	}
+
+	protected void bundleMarketGroup(long id, ObjectNode marketGroupsJson) {
+		var json = getMarketGroupsMap().get(id);
+		if (json != null) {
+			marketGroupsJson.set(Long.toString(id), json);
+			var group = objectMapper.convertValue(json, MarketGroup.class);
+			if (group.getParentGroupId() != null) {
+				bundleMarketGroup(group.getParentGroupId(), marketGroupsJson);
+			}
+		}
 	}
 
 	protected void addTypeToBundle(Long typeId, ObjectNode typesJson) {
