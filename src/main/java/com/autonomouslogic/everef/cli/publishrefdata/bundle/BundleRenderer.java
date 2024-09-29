@@ -1,5 +1,6 @@
-package com.autonomouslogic.everef.cli.publishrefdata;
+package com.autonomouslogic.everef.cli.publishrefdata.bundle;
 
+import com.autonomouslogic.everef.cli.publishrefdata.RefDataRenderer;
 import com.autonomouslogic.everef.mvstore.MVStoreUtil;
 import com.autonomouslogic.everef.refdata.DogmaAttribute;
 import com.autonomouslogic.everef.refdata.DogmaTypeAttribute;
@@ -12,6 +13,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.reactivex.rxjava3.core.Flowable;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
 import javax.inject.Inject;
 import lombok.Getter;
 import lombok.NonNull;
@@ -86,12 +88,7 @@ public abstract class BundleRenderer implements RefDataRenderer {
 				.flatMap(e -> e.values().stream())
 				.flatMap(e -> e.stream())
 				.distinct()
-				.forEach(typeId -> {
-					var json = getTypesMap().get(typeId);
-					if (json != null) {
-						typesJson.set(Long.toString(typeId), json);
-					}
-				});
+				.forEach(typeId -> addTypeToBundle(typeId, typesJson));
 	}
 
 	protected void bundleRequiredSkills(InventoryType type, ObjectNode skillsJson, ObjectNode typesJson) {
@@ -118,7 +115,7 @@ public abstract class BundleRenderer implements RefDataRenderer {
 				.forEach(id -> bundleSkill(id, skillsJson, typesJson));
 	}
 
-	protected void bundleUnits(ObjectNode unitsJson, ObjectNode attributesJson) {
+	protected void bundleDogmaAttributesUnits(ObjectNode attributesJson, ObjectNode unitsJson) {
 		if (attributesJson.isEmpty()) {
 			return;
 		}
@@ -133,7 +130,7 @@ public abstract class BundleRenderer implements RefDataRenderer {
 		});
 	}
 
-	protected void bundleIcons(ObjectNode iconsJson, ObjectNode attributesJson) {
+	protected void bundleDogmaAttributesIcons(ObjectNode attributesJson, ObjectNode iconsJson) {
 		if (attributesJson.isEmpty()) {
 			return;
 		}
@@ -149,5 +146,22 @@ public abstract class BundleRenderer implements RefDataRenderer {
 			}
 			iconsJson.set(Long.toString(iconId), iconJson);
 		});
+	}
+
+	protected void bundleTraits(InventoryType type, ObjectNode typesJson) {
+		Optional.ofNullable(type.getTraits())
+				.flatMap(traits -> Optional.ofNullable(traits.getTypes()))
+				.map(types -> types.keySet().stream())
+				.stream()
+				.flatMap(Function.identity())
+				.map(Long::parseLong)
+				.forEach(typeId -> addTypeToBundle(typeId, typesJson));
+	}
+
+	private void addTypeToBundle(Long typeId, ObjectNode typesJson) {
+		var json = typesMap.get(typeId);
+		if (json != null) {
+			typesJson.set(Long.toString(typeId), json);
+		}
 	}
 }
