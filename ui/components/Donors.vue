@@ -18,7 +18,7 @@ const {status, data: donors} = await useLazyFetch<DonorEntry[]>("https://static.
 </script>
 
 <template>
-	<table class="table w-full" v-if="status == 'success'">
+	<table class="standard-table" v-if="status == 'success'">
 		<tr v-for="donor in donors" :key="donor.donor_name">
 			<td class="font-bold">
 				<ExternalLink v-if="donor.character_id" :url="'https://evewho.com/character/' + donor.character_id">

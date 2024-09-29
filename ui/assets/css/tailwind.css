@@ -38,3 +38,23 @@ h3 {
     @apply text-2xl;
 }
 
+table.standard-table {
+    @apply table table-auto text-left min-w-full;
+
+    thead {
+        @apply bg-gray-700;
+    }
+    th, td {
+        @apply px-4 py-2;
+    }
+    th {
+        @apply font-bold;
+    }
+    td {
+        @apply border-b border-gray-700;
+    }
+    tr:last-child td {
+        @apply border-b-0;
+    }
+}
+

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import InternalLink from "~/components/helpers/InternalLink.vue";
+
 const { locale } = useI18n();
 
 interface SearchEntry {

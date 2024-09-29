@@ -4,26 +4,32 @@ const cards: {[key: string]: any} = {
 			"name": {"en": "Defenses"},
 			"component": "defenses",
 			"dogmaAttributes":
-				[
-					"shieldCapacity",
-					"shieldUniformity",
-					"shieldEmDamageResonance",
-					"shieldThermalDamageResonance",
-					"shieldKineticDamageResonance",
-					"shieldExplosiveDamageResonance",
-					"armorHP",
-					"armorUniformity",
-					"armorEmDamageResonance",
-					"armorThermalDamageResonance",
-					"armorKineticDamageResonance",
-					"armorExplosiveDamageResonance",
-					"hp",
-					"structureUniformity",
-					"emDamageResonance",
-					"thermalDamageResonance",
-					"kineticDamageResonance",
-					"explosiveDamageResonance"
-				]
+			[
+				"shieldCapacity",
+				"shieldUniformity",
+				"shieldEmDamageResonance",
+				"shieldThermalDamageResonance",
+				"shieldKineticDamageResonance",
+				"shieldExplosiveDamageResonance",
+				"armorHP",
+				"armorUniformity",
+				"armorEmDamageResonance",
+				"armorThermalDamageResonance",
+				"armorKineticDamageResonance",
+				"armorExplosiveDamageResonance",
+				"hp",
+				"structureUniformity",
+				"emDamageResonance",
+				"thermalDamageResonance",
+				"kineticDamageResonance",
+				"explosiveDamageResonance"
+			]
+		},
+	"variations":
+		{
+			"name": {"en": "Variations"},
+			"component": "variations",
+			"alwaysShow": true
 		},
 	"market":
 		{
@@ -39,7 +45,9 @@ const cards: {[key: string]: any} = {
 					"techLevel",
 					"metaLevel",
 					"metaLevelOld",
+					"hp",
 					"capacity",
+					"generalMiningHoldCapacity",
 					"volume",
 					"mass",
 					"radius",
@@ -122,12 +130,6 @@ const cards: {[key: string]: any} = {
 					"moduleReactivationDelay",
 					"signatureRadiusAdd"
 				]
-		},
-	"variations":
-		{
-			"name": {"en": "Variations"},
-			"component": "variations",
-			"alwaysShow": true
 		},
 	"oreVariations":
 		{
@@ -508,10 +510,15 @@ const cards: {[key: string]: any} = {
 			"name": {"en": "Invention"},
 			"component": "blueprintInvention"
 		},
-	"blueprintResearch":
+	"blueprintMaterialResearch":
 		{
-			"name": {"en": "Research"},
-			"component": "blueprintResearch"
+			"name": {"en": "Material Research"},
+			"component": "blueprintMaterialResearch"
+		},
+	"blueprintTimeResearch":
+		{
+			"name": {"en": "Time Research"},
+			"component": "blueprintTimeResearch"
 		},
 	"blueprintCopying":
 		{
@@ -538,18 +545,18 @@ const cards: {[key: string]: any} = {
 			"component": "typeInfo",
 			"alwaysShow": true
 		},
-	"skins":
-		{
-			"name": {"en": "Skins"},
-			"component": "skins",
-			"alwaysShow": true
-		},
-	"skin":
-		{
-			"name": {"en": "Skin"},
-			"component": "skin",
-			"alwaysShow": true
-		}
+	// "skins":
+	// 	{
+	// 		"name": {"en": "Skins"},
+	// 		"component": "skins",
+	// 		"alwaysShow": true
+	// 	},
+	// "skin":
+	// 	{
+	// 		"name": {"en": "Skin"},
+	// 		"component": "skin",
+	// 		"alwaysShow": true
+	// 	}
 };
 
 export default cards;

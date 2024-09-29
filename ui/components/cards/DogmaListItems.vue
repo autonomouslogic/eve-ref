@@ -21,19 +21,10 @@ function value(attributeId: number | undefined): number {
 
 	return attributeValue;
 }
-
-function sortAttributes(attrs: DogmaAttribute[]): DogmaAttribute[] {
-	return attrs.sort((a, b) => {
-		if (a.attributeId === undefined || b.attributeId === undefined) {
-			return 0;
-		}
-		return a.attributeId - b.attributeId;
-	});
-}
 </script>
 
 <template>
-	<AttributeListItem v-for="attribute in sortAttributes(dogmaAttributes)" :key="attribute.attributeId">
+	<AttributeListItem v-for="attribute in dogmaAttributes" :key="attribute.attributeId">
 		<template v-slot:key>
 			<template v-if="attribute">
 				<AttributeTypeIcon :dogma-attribute="attribute" :size="25" />

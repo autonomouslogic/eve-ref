@@ -17,6 +17,8 @@ const isShip = group?.categoryId == SHIP;
 
 <template>
 	<CardWrapper :title="title" v-if="isShip">
-		<CardsInsuranceCardInner :inventory-type="inventoryType" />
+		<ClientOnly>
+			<CardsInsuranceCardInner :inventory-type="inventoryType" />
+		</ClientOnly>
 	</CardWrapper>
 </template>

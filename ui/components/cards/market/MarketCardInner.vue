@@ -10,10 +10,10 @@ const stationIds = HUB_STATION_IDS.values();
 </script>
 
 <template>
-	<table class="table table-auto w-full">
+	<table class="standard-table">
 		<thead>
 			<tr>
-				<th class="text-left">Hub</th>
+				<th>Hub</th>
 				<th class="text-right">Sell</th>
 				<th class="text-right">Buy</th>
 			</tr>

@@ -2,6 +2,8 @@
 import {type DogmaAttribute, type InventoryType} from "~/refdata-openapi";
 import CardWrapper from "~/components/cards/CardWrapper.vue";
 import DefensesRow from "~/components/cards/defenses/DefensesRow.vue";
+import {SHIP} from "~/lib/categoryConstants";
+import refdataApi from "~/refdata";
 
 const props = defineProps<{
 	title: string,
@@ -9,10 +11,14 @@ const props = defineProps<{
 	dogmaAttributes: DogmaAttribute[]
 }>();
 
+const type = props.inventoryType;
+const group = !type.groupId ? undefined :
+	await refdataApi.getGroup({groupId: type.groupId});
+const isShip = group?.categoryId == SHIP;
 </script>
 
 <template>
-	<template v-if="dogmaAttributes.length > 0">
+	<template v-if="isShip && dogmaAttributes.length > 0">
 		<CardWrapper :title="title">
 			<div class="grid grid-cols-7 gap-x-1">
 				<DefensesRow :inventory-type="inventoryType"

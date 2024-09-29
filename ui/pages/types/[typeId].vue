@@ -25,9 +25,21 @@ if (inventoryType == undefined) {
 if (typeof inventoryType.groupId !== "number") {
 	throw new Error(`Inventory type ${typeId} has no group ID`);
 }
+
+const pageTitle = prepMessages(inventoryType.name)[locale.value];
+let pageDescription = prepMessages(inventoryType.description)[locale.value];
+if (pageDescription.length > 200) {
+	pageDescription = pageDescription.substring(0, 200);
+}
+const typeIcon = `https://images.evetech.net/types/${inventoryType.typeId}/icon`;
 useHead({
-	title: prepMessages(inventoryType.name)[locale.value]
+	title: pageTitle
 });
+useSeoMeta({
+	ogDescription: pageDescription,
+	ogImage: typeIcon
+});
+
 const inventoryGroup: InventoryGroup = await refdataApi.getGroup({groupId: inventoryType.groupId});
 </script>
 
@@ -43,7 +55,7 @@ const inventoryGroup: InventoryGroup = await refdataApi.getGroup({groupId: inven
 		</div>
 	</div>
 
-	<img :src="`https://images.evetech.net/types/${inventoryType.typeId}/icon`" alt="">
+	<img :src="typeIcon" alt="">
 
 	<TypeCards :inventory-type="inventoryType" />
 

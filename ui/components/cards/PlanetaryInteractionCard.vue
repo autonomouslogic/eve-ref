@@ -7,6 +7,7 @@ import refdataApi from "~/refdata";
 import Duration from "~/components/dogma/units/Duration.vue";
 import AttributeList from "~/components/attr/AttributeList.vue";
 import DogmaListItems from "~/components/cards/DogmaListItems.vue";
+import AttributeListItem from "~/components/attr/AttributeListItem.vue";
 
 const props = defineProps<{
 	title: string,
@@ -44,58 +45,62 @@ if (props.inventoryType.installableSchematicIds) {
 	<template v-if="dogmaAttributes.length > 0 || producedBySchematics.length > 0 || inventoryType.harvestedByPinTypeIds || usedBySchematics.length > 0 || installableSchematicIds.length > 0 || inventoryType.buildablePinTypeIds">
 
 		<CardWrapper :title="title">
-			<AttributeList>
+			<AttributeList :elements="dogmaAttributes.length">
 				<DogmaListItems :inventory-type="inventoryType" :dogma-attributes="dogmaAttributes" />
 			</AttributeList>
 
 			<template v-if="producedBySchematics.length > 0">
 
 				<template v-for="schematic in producedBySchematics" :key="schematic.schematicId">
-					<table class="w-full">
-						<tr v-if="schematic.name?.en">
-							<td>Schematic</td>
-							<td>{{ schematic.name.en }} [{{schematic.schematicId}}]</td>
-						</tr>
-						<tr v-if="schematic.cycleTime">
-							<td>Cycle time</td>
-							<td><Duration :milliseconds="schematic.cycleTime * 1000" /></td>
-						</tr>
-					</table>
+					<h3 v-if="schematic.name?.en">{{ schematic.name.en }}</h3>
 
-					<table v-if="schematic.products" class="w-full mt-3">
+					<AttributeList>
+						<AttributeListItem>
+							<template v-slot:key>Schematic ID:</template>
+							{{schematic.schematicId}}
+						</AttributeListItem>
+						<AttributeListItem v-if="schematic.cycleTime">
+							<template v-slot:key>Cycle time:</template>
+							<Duration :milliseconds="schematic.cycleTime * 1000" />
+						</AttributeListItem>
+					</AttributeList>
+
+					<table v-if="schematic.products" class="standard-table">
 						<thead>
 							<tr>
 								<th>Product</th>
-								<th>Quantity</th>
+								<th class="text-right">Quantity</th>
 							</tr>
 						</thead>
 						<tr v-for="(product, productId) in schematic.products" :key="productId">
 							<td><TypeLink :type-id="product.typeId" /></td>
-							<td><FormattedNumber :number="product.quantity" /></td>
+							<td class="text-right"><FormattedNumber :number="product.quantity" /></td>
 						</tr>
 					</table>
 
-					<table v-if="schematic.materials" class="w-full mt-3">
+					<table v-if="schematic.materials" class="standard-table">
 						<thead>
 							<tr>
 								<th>Material</th>
-								<th>Quantity</th>
+								<th class="text-right">Quantity</th>
 							</tr>
 						</thead>
 						<tr v-for="(material, materialId) in schematic.materials" :key="materialId">
 							<td><TypeLink :type-id="material.typeId" /></td>
-							<td><FormattedNumber :number="material.quantity" /></td>
+							<td class="text-right"><FormattedNumber :number="material.quantity" /></td>
 						</tr>
 					</table>
 
-					<div v-if="schematic.pinTypeIds && schematic.pinTypeIds.length > 0" class="mt-3">
-						<b>Produced in:</b>
-						<ul>
-							<li v-for="pinTypeId in schematic.pinTypeIds" :key="pinTypeId">
-								<TypeLink :type-id="pinTypeId" />
-							</li>
-						</ul>
-					</div>
+					<table v-if="schematic.pinTypeIds && schematic.pinTypeIds.length > 0" class="standard-table">
+						<thead>
+							<tr>
+								<th>Produced in</th>
+							</tr>
+						</thead>
+						<tr v-for="pinTypeId in schematic.pinTypeIds" :key="pinTypeId">
+							<td><TypeLink :type-id="pinTypeId" /></td>
+						</tr>
+					</table>
 
 				</template>
 			</template>

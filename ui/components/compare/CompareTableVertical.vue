@@ -17,7 +17,7 @@ const props = withDefaults(defineProps<Props>(), {
 
 <template>
 	<thead>
-		<th></th>
+		<th class="text-left">Type</th>
 		<th v-if="showMetaGroup">
 			<template v-if="!compactAttributeNames">Meta group</template>
 		</th>
@@ -42,13 +42,4 @@ const props = withDefaults(defineProps<Props>(), {
 </template>
 
 <style scoped>
-th {
-  @apply text-right;
-}
-tr {
-  @apply border-b border-gray-700;
-}
-th, td {
-  @apply px-2;
-}
 </style>
