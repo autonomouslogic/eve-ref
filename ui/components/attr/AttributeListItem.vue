@@ -1,13 +1,18 @@
 <template>
-	<dt>
-		<slot name="key" />
-	</dt>
-	<dd>
-		<slot />
-	</dd>
+	<div>
+		<dt>
+			<slot name="key" />
+		</dt>
+		<dd>
+			<slot />
+		</dd>
+	</div>
 </template>
 
 <style scoped>
+div {
+  break-inside: avoid-column;
+}
 dt {
   @apply pt-1;
 }

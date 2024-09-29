@@ -45,7 +45,7 @@ if (props.inventoryType.installableSchematicIds) {
 	<template v-if="dogmaAttributes.length > 0 || producedBySchematics.length > 0 || inventoryType.harvestedByPinTypeIds || usedBySchematics.length > 0 || installableSchematicIds.length > 0 || inventoryType.buildablePinTypeIds">
 
 		<CardWrapper :title="title">
-			<AttributeList>
+			<AttributeList :elements="dogmaAttributes.length">
 				<DogmaListItems :inventory-type="inventoryType" :dogma-attributes="dogmaAttributes" />
 			</AttributeList>
 
