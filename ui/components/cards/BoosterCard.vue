@@ -42,7 +42,7 @@ const duration = computed(() => {
 
 <template>
 	<CardWrapper :title="title" v-if="skillpoints">
-		<AttributeList>
+		<AttributeList :elements="3 + dogmaAttributes.length">
 			<template v-if="skillpoints !== undefined">
 				<AttributeListItem>
 					<template v-slot:key>Accelerated Skillpoints (alpha, Biology V):</template>
