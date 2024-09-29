@@ -196,7 +196,13 @@ public abstract class BundleRenderer implements RefDataRenderer {
 				.forEach(m -> addTypeToBundle(m.getMaterialTypeId(), typesJson));
 	}
 
-	private void addTypeToBundle(Long typeId, ObjectNode typesJson) {
+	protected void bundleProducedByBlueprint(InventoryType type, ObjectNode typesJson) {
+		Optional.ofNullable(type.getProducedByBlueprints()).map(e -> e.values()).stream()
+				.flatMap(c -> c.stream())
+				.forEach(b -> addTypeToBundle(b.getBlueprintTypeId(), typesJson));
+	}
+
+	protected void addTypeToBundle(Long typeId, ObjectNode typesJson) {
 		var json = typesMap.get(typeId);
 		if (json != null) {
 			typesJson.set(Long.toString(typeId), json);

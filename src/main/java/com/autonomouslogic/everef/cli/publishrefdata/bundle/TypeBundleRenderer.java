@@ -37,10 +37,15 @@ public class TypeBundleRenderer extends BundleRenderer {
 		bundleDogmaAttributes(type, attributesJson);
 		bundleTraits(type, typesJson);
 		bundleReprocessing(type, typesJson);
+		bundleProducedByBlueprint(type, typesJson);
 		bundleVariations(type, typesJson);
 		bundleRequiredSkills(type, skillsJson, typesJson);
 		bundleDogmaAttributesUnits(attributesJson, unitsJson);
 		bundleDogmaAttributesIcons(attributesJson, iconsJson);
+
+		if (type.getMarketGroupId() != null) {
+			unitsJson.set("133", unitsMap.get(133L)); // ISK for the market price display.
+		}
 
 		if (!attributesJson.isEmpty()) {
 			bundleJson.set("dogma_attributes", attributesJson);
