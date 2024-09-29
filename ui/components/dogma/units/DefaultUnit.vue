@@ -1,30 +1,41 @@
 <script setup lang="ts">
 import {type Unit} from "~/refdata-openapi";
 import FormattedNumber from "~/components/helpers/FormattedNumber.vue";
+import {
+	CUBIC_METER,
+	GIGAJOULE,
+	HARDPOINTS,
+	HITPOINTS,
+	KILOGRAM,
+	LEVEL,
+	MEGAWATTS,
+	METER, MONEY,
+	POINTS, REALPERCENT,
+	TERAFLOPS
+} from "~/lib/unitConstants";
 
 const props = defineProps<{
 	value: number,
 	unit: Unit
 }>();
 
+const noFormatUnitIds: number[] = [];
 const ignoreSuffixUnitIds = [
-	140, // Level
-	141, // hardpoints
+	LEVEL,
+	HARDPOINTS,
 ];
 const noDecimalUnitIds = [
-	1, // m
-	2, // kg
-	140, // Level
-	120, // points
-	106, // tf
-	114, // GJ
-	113, // HP
-	107, // MW
+	METER,
+	KILOGRAM,
+	LEVEL,
+	POINTS,
+	TERAFLOPS,
+	GIGAJOULE,
+	HITPOINTS,
+	MEGAWATTS,
 ];
 const twoDecimalUnitIds = [
-	9, // m3
-	133, // ISK
-	121, // realPercent
+	MONEY,
 ];
 
 const displayName = computed(() => props.unit.displayName);
@@ -46,7 +57,7 @@ const displayUnit = computed(() => {
 
 const decimals = computed(() => {
 	if (unitId.value === undefined) {
-		return 0;
+		return undefined;
 	}
 	if (noDecimalUnitIds.includes(unitId.value)) {
 		return 0;
@@ -54,19 +65,26 @@ const decimals = computed(() => {
 	if (twoDecimalUnitIds.includes(unitId.value)) {
 		return 2;
 	}
-	return 0;
+	return undefined;
+});
+const minDecimals = computed(() => {
+	return decimals.value;
+});
+const maxDecimals = computed(() => {
+	return decimals.value;
 });
 const formatNumber = computed(() => {
 	if (unitId.value === undefined) {
-		return 0;
+		return true;
 	}
-	return noDecimalUnitIds.includes(unitId.value) || twoDecimalUnitIds.includes(unitId.value);
+	// return noDecimalUnitIds.includes(unitId.value) || twoDecimalUnitIds.includes(unitId.value);
+	return !noFormatUnitIds.includes(unitId.value);
 });
 </script>
 
 <template>
 	<template v-if="formatNumber">
-		<FormattedNumber :number="value" :decimals="decimals" />
+		<FormattedNumber :number="value" :min-decimals="minDecimals" :max-decimals="maxDecimals" />
 	</template>
 	<template v-else>{{ value }}</template>
 	<template v-if="displayUnit">
