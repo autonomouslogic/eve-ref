@@ -14,6 +14,7 @@ import io.reactivex.rxjava3.core.Flowable;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.regex.Pattern;
 import javax.inject.Inject;
 import lombok.Getter;
 import lombok.NonNull;
@@ -24,6 +25,8 @@ import org.h2.mvstore.MVStore;
 
 @Log4j2
 public abstract class BundleRenderer implements RefDataRenderer {
+	private static final Pattern showinfoPattern = Pattern.compile("showinfo:([0-9]+)");
+
 	@Inject
 	protected ObjectMapper objectMapper;
 
@@ -39,22 +42,22 @@ public abstract class BundleRenderer implements RefDataRenderer {
 	private MVStore dataStore;
 
 	@Getter
-	private Map<Long, JsonNode> typesMap;
+	protected Map<Long, JsonNode> typesMap;
 
 	@Getter
-	private Map<Long, JsonNode> dogmaMap;
+	protected Map<Long, JsonNode> dogmaMap;
 
 	@Getter
-	private Map<Long, JsonNode> skillsMap;
+	protected Map<Long, JsonNode> skillsMap;
 
 	@Getter
-	private Map<Long, JsonNode> unitsMap;
+	protected Map<Long, JsonNode> unitsMap;
 
 	@Getter
-	private Map<Long, JsonNode> iconsMap;
+	protected Map<Long, JsonNode> iconsMap;
 
 	@Getter
-	private Map<Long, JsonNode> groupsMap;
+	protected Map<Long, JsonNode> groupsMap;
 
 	public final Flowable<Pair<String, JsonNode>> render() {
 		return Flowable.defer(() -> {
@@ -156,6 +159,14 @@ public abstract class BundleRenderer implements RefDataRenderer {
 				.flatMap(Function.identity())
 				.map(Long::parseLong)
 				.forEach(typeId -> addTypeToBundle(typeId, typesJson));
+	}
+
+	protected void bundleShowInfo(String text, ObjectNode typesJson) {
+		var matcher = showinfoPattern.matcher(text);
+		while (matcher.find()) {
+			var typeId = Long.parseLong(matcher.group(1));
+			addTypeToBundle(typeId, typesJson);
+		}
 	}
 
 	private void addTypeToBundle(Long typeId, ObjectNode typesJson) {
