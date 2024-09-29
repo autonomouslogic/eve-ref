@@ -1120,16 +1120,28 @@ components:
           type: object
           additionalProperties:
             $ref: "#/components/schemas/TraitBonus"
+          description: "Misc bonuses indexed by 'importance' from the original array.\
+            \ This is represented as an array in the SDE, but EVE Ref converts it\
+            \ to a map."
         role_bonuses:
           type: object
           additionalProperties:
             $ref: "#/components/schemas/TraitBonus"
+          description: "Role bonuses indexed by 'importance' from the original array.\
+            \ This is represented as an array in the SDE, but EVE Ref converts it\
+            \ to a map."
         types:
           type: object
           additionalProperties:
             type: object
             additionalProperties:
               $ref: "#/components/schemas/TraitBonus"
+            description: "Type traits. First key is type ID granting the bonus. Second\
+              \ key is the `important` from the original array. This is represented\
+              \ as an array in the SDE, but EVE Ref converts it to a map."
+          description: "Type traits. First key is type ID granting the bonus. Second\
+            \ key is the `important` from the original array. This is represented\
+            \ as an array in the SDE, but EVE Ref converts it to a map."
         icon_id:
           type: integer
           format: int64
@@ -1425,6 +1437,9 @@ components:
         unit_id:
           type: integer
           format: int64
+      description: "Type traits. First key is type ID granting the bonus. Second key\
+        \ is the `important` from the original array. This is represented as an array\
+        \ in the SDE, but EVE Ref converts it to a map."
     TypeMaterial:
       type: object
       properties:

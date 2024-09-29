@@ -2,8 +2,11 @@ package com.autonomouslogic.everef.cli.publishrefdata;
 
 import com.autonomouslogic.everef.refdata.InventoryType;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Maybe;
+import java.util.Optional;
+import java.util.function.Function;
 import javax.inject.Inject;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.tuple.Pair;
@@ -35,6 +38,7 @@ public class TypeBundleRenderer extends BundleRenderer {
 
 		typesJson.set(Long.toString(typeId), typeJson);
 		bundleDogmaAttributes(type, attributesJson);
+		bundleTraits(type, typesJson);
 		bundleVariations(type, typesJson);
 		bundleRequiredSkills(type, skillsJson, typesJson);
 		bundleUnits(unitsJson, attributesJson);
@@ -55,5 +59,20 @@ public class TypeBundleRenderer extends BundleRenderer {
 
 		var path = refDataUtil.subPath("types", type.getTypeId()) + "/bundle";
 		return Maybe.just(Pair.of(path, bundleJson));
+	}
+
+	private void bundleTraits(InventoryType type, ObjectNode typesJson) {
+		Optional.ofNullable(type.getTraits())
+				.flatMap(traits -> Optional.ofNullable(traits.getTypes()))
+				.map(types -> types.keySet().stream())
+				.stream()
+				.flatMap(Function.identity())
+				.map(Long::parseLong)
+				.forEach(typeId -> {
+					var json = getTypesMap().get(typeId);
+					if (json != null) {
+						typesJson.set(Long.toString(typeId), json);
+					}
+				});
 	}
 }
