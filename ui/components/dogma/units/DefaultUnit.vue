@@ -36,7 +36,6 @@ const noDecimalUnitIds = [
 ];
 const twoDecimalUnitIds = [
 	MONEY,
-	// REALPERCENT,
 ];
 
 const displayName = computed(() => props.unit.displayName);
