@@ -6,6 +6,7 @@ import com.autonomouslogic.everef.refdata.DogmaAttribute;
 import com.autonomouslogic.everef.refdata.DogmaTypeAttribute;
 import com.autonomouslogic.everef.refdata.InventoryType;
 import com.autonomouslogic.everef.refdata.Skill;
+import com.autonomouslogic.everef.refdata.TraitBonus;
 import com.autonomouslogic.everef.util.RefDataUtil;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -13,8 +14,8 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.reactivex.rxjava3.core.Flowable;
 import java.util.Map;
 import java.util.Optional;
-import java.util.function.Function;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 import javax.inject.Inject;
 import lombok.Getter;
 import lombok.NonNull;
@@ -152,13 +153,33 @@ public abstract class BundleRenderer implements RefDataRenderer {
 	}
 
 	protected void bundleTraits(InventoryType type, ObjectNode typesJson) {
-		Optional.ofNullable(type.getTraits())
-				.flatMap(traits -> Optional.ofNullable(traits.getTypes()))
-				.map(types -> types.keySet().stream())
-				.stream()
-				.flatMap(Function.identity())
-				.map(Long::parseLong)
-				.forEach(typeId -> addTypeToBundle(typeId, typesJson));
+		var traits = type.getTraits();
+		if (traits == null) {
+			return;
+		}
+		var allTraitBonuses = Stream.<TraitBonus>empty();
+		var role = traits.getRoleBonuses();
+		var misc = traits.getMiscBonuses();
+		var types = traits.getTypes();
+		if (role != null) {
+			allTraitBonuses = Stream.concat(allTraitBonuses, role.values().stream());
+		}
+		if (misc != null) {
+			allTraitBonuses = Stream.concat(allTraitBonuses, misc.values().stream());
+		}
+		if (types != null) {
+			for (Map.Entry<String, Map<String, TraitBonus>> typesEntry : types.entrySet()) {
+				var typeId = Long.parseLong(typesEntry.getKey());
+				addTypeToBundle(typeId, typesJson);
+				for (Map.Entry<String, TraitBonus> importanceEntry :
+						typesEntry.getValue().entrySet()) {
+					allTraitBonuses = Stream.concat(allTraitBonuses, Stream.of(importanceEntry.getValue()));
+				}
+			}
+		}
+		allTraitBonuses
+				.flatMap(e -> e.getBonusText().values().stream())
+				.forEach(text -> bundleShowInfo(text, typesJson));
 	}
 
 	protected void bundleShowInfo(String text, ObjectNode typesJson) {
