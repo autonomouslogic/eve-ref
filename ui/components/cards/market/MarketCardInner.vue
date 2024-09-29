@@ -1,12 +1,11 @@
 <script setup lang="ts">
-import {HUB_STATION_IDS} from "~/lib/marketUtils";
+import {HUB_STATIONS} from "~/lib/marketUtils";
 import MarketRow from "~/components/cards/market/MarketRow.vue";
 
 const props = defineProps<{
 	typeId: number
 }>();
 
-const stationIds = HUB_STATION_IDS.values();
 </script>
 
 <template>
@@ -19,7 +18,7 @@ const stationIds = HUB_STATION_IDS.values();
 			</tr>
 		</thead>
 		<tbody>
-			<MarketRow v-for="stationId in stationIds" :key="stationId" :type-id="typeId" :station-id="stationId" />
+			<MarketRow v-for="hubStation in HUB_STATIONS.values()" :key="hubStation.stationId" :type-id="typeId" :hub-station="hubStation" />
 		</tbody>
 	</table>
 </template>

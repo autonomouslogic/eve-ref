@@ -2,48 +2,38 @@
 import {universeApi} from "~/esi";
 import {GetMarketsRegionIdOrdersOrderTypeEnum,} from "~/esi-openapi";
 import UnitValue from "~/components/dogma/UnitValue.vue";
-import {getOrders} from "~/lib/marketUtils";
+import {getOrders, type HubStation} from "~/lib/marketUtils";
 import {MONEY} from "~/lib/unitConstants";
 
 const props = defineProps<{
 	typeId: number,
-	stationId: number
+	hubStation: HubStation
 }>();
 
-const station = await universeApi.getUniverseStationsStationId({ stationId: props.stationId });
-const system = !station ? undefined :
-	await universeApi.getUniverseSystemsSystemId({systemId: station.systemId});
-const constellation = !system ? undefined :
-	await universeApi.getUniverseConstellationsConstellationId({constellationId: system.constellationId});
+const	sellOrders = await getOrders(GetMarketsRegionIdOrdersOrderTypeEnum.Sell, props.typeId, props.hubStation.regionId);
+const	buyOrders = await getOrders(GetMarketsRegionIdOrdersOrderTypeEnum.Buy, props.typeId, props.hubStation.regionId);
 
-const	sellOrders = !constellation ?
-	undefined :
-	await getOrders(GetMarketsRegionIdOrdersOrderTypeEnum.Sell, props.typeId, constellation.regionId);
-const	buyOrders = !constellation ?
-	undefined :
-	await getOrders(GetMarketsRegionIdOrdersOrderTypeEnum.Buy, props.typeId, constellation.regionId);
-
-const sellPrice = !sellOrders ? undefined : sellOrders.filter(e => e.locationId == station.stationId)
+const sellPrice = !sellOrders ? undefined : sellOrders.filter(e => e.locationId == props.hubStation.stationId)
 	.map(e => e.price)
 	.sort((a, b) => a - b)
 	[0];
-
-const buyPrice = !buyOrders ? undefined : buyOrders.filter(e => e.locationId == station.stationId)
+const buyPrice = !buyOrders ? undefined : buyOrders.filter(e => e.locationId == props.hubStation.stationId)
 	.map(e => e.price)
 	.sort((a, b) => -(a - b))
 	[0];
+
 </script>
 
 <template>
-	<tr v-if="system">
-		<td>{{ system.name }}</td>
+	<tr>
+		<td>{{ hubStation.systemName }}</td>
 		<td class="text-right">
 			<UnitValue v-if="sellPrice" :unit-id="MONEY" :value="sellPrice" />
-			<template v-else>None</template>
+			<span v-else>-</span>
 		</td>
 		<td class="text-right">
 			<UnitValue v-if="buyPrice" :unit-id="MONEY" :value="buyPrice" />
-			<template v-else>None</template>
+			<span v-else>-</span>
 		</td>
 	</tr>
 </template>
