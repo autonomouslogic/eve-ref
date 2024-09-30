@@ -179,11 +179,12 @@ public class PublishRefDataTest {
 			return;
 		}
 		var expectedItem = buildTestBundle(
-				List.of(645L, 22430L, 3336L, 3327L, 33097L, 3332L, 33093L, 3328L),
+				List.of(645L, 22430L, 3336L, 3327L, 33097L, 3332L, 33093L, 3328L, 999L),
 				List.of(9L, 162L, 182L, 277L),
 				List.of(3336L, 3327L, 33097L, 3332L, 33093L, 3328L),
-				List.of(1L),
-				List.of(67L));
+				List.of(1L, 133L),
+				List.of(67L),
+				List.of(81L, 7L, 1376L, 4L));
 		var actualItem = objectMapper.readTree(mockS3Adapter
 				.getTestObject(BUCKET_NAME, path, s3)
 				.orElseThrow(() -> new RuntimeException("Missing path: " + path)));
@@ -202,7 +203,7 @@ public class PublishRefDataTest {
 		if (id != 27) {
 			return;
 		}
-		var expectedItem = buildTestBundle(List.of(645L), List.of(9L, 162L, 182L, 277L), null, List.of(1L), null);
+		var expectedItem = buildTestBundle(List.of(645L), List.of(9L, 162L, 182L, 277L), null, List.of(1L), null, null);
 		var actualItem = objectMapper.readTree(mockS3Adapter
 				.getTestObject(BUCKET_NAME, path, s3)
 				.orElseThrow(() -> new RuntimeException("Missing path: " + path)));
@@ -210,7 +211,12 @@ public class PublishRefDataTest {
 	}
 
 	private ObjectNode buildTestBundle(
-			List<Long> typeIds, List<Long> attributeIds, List<Long> skillIds, List<Long> unitIds, List<Long> iconIds) {
+			List<Long> typeIds,
+			List<Long> attributeIds,
+			List<Long> skillIds,
+			List<Long> unitIds,
+			List<Long> iconIds,
+			List<Long> marketGroupIds) {
 		var bundle = objectMapper.createObjectNode();
 		if (typeIds != null) {
 			var container = bundle.putObject("types");
@@ -250,6 +256,14 @@ public class PublishRefDataTest {
 				container.set(
 						Long.toString(id),
 						dataUtil.loadJsonResource(String.format("/refdata/refdata/icon-%s.json", id)));
+			}
+		}
+		if (marketGroupIds != null) {
+			var container = bundle.putObject("market_groups");
+			for (long id : marketGroupIds) {
+				container.set(
+						Long.toString(id),
+						dataUtil.loadJsonResource(String.format("/refdata/refdata/market-group-%s.json", id)));
 			}
 		}
 		return bundle;
