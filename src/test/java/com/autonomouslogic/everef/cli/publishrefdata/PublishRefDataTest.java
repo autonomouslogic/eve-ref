@@ -179,7 +179,7 @@ public class PublishRefDataTest {
 			return;
 		}
 		var expectedItem = buildTestBundle(
-				List.of(645L, 22430L, 3336L, 3327L, 33097L, 3332L, 33093L, 3328L, 999L),
+				List.of(645L, 22430L, 3336L, 3327L, 33097L, 3332L, 33093L, 3328L, 999L, 34L),
 				List.of(9L, 162L, 182L, 277L),
 				List.of(3336L, 3327L, 33097L, 3332L, 33093L, 3328L),
 				List.of(1L, 133L),

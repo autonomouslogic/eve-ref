@@ -112,6 +112,7 @@ types:
       - 2470
       - 2480
       - 60377
+      - 34
     languages:
       - en-us
       - fr

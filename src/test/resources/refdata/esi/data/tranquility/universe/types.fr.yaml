@@ -2119,3 +2119,30 @@
   radius: 1
   type_id: 60377
   volume: 0.01
+"34":
+  capacity: 0
+  description: "Il s'agit du principal bloc de construction pour les structures spatiales.\
+    \ Ce métal est à la fois très résistant et malléable. Il ne peut être utilisé\
+    \ pour les structures d'habitation humaine en raison de son instabilité aux tempé\
+    ratures atmosphériques. Il est très répandu dans les régions centrales de l'univers\
+    \ connu. Peut être obtenu par retraitement des minerais suivants et leurs variantes\
+    \ disponibles dans les systèmes stellaires de haute sécurité\_: <a href=showinfo:1230>veldspar</a>,\
+    \ <a href=showinfo:1228>scordite</a> et <a href=showinfo:18>plagioclase</a>. Il\
+    \ est aussi présent en grandes quantités dans des minerais rares tels que le <a\
+    \ href=showinfo:19>spodumain</a>, le <a href=showinfo:52316>bezdnacine</a>, le\
+    \ <a href=showinfo:52315>rakovene</a> et le <a href=showinfo:52306>talassonite</a>.\
+    \ Le tritanium peut également être trouvé dans les systèmes stellaires de sécurité\
+    \ nulle dans les minerais <a href=showinfo:81900>kylixium</a>, <a href=showinfo:82016>nocxite</a>,\
+    \ <a href=showinfo:82205>ueganite</a>, <a href=showinfo:82163>hezorime</a> et\
+    \ <a href=showinfo:81975>griemeer</a>, mais seulement en quantités infimes."
+  group_id: 18
+  icon_id: 22
+  market_group_id: 1857
+  mass: 0
+  name: "Tritanium"
+  packaged_volume: 0.01
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 34
+  volume: 0.01
