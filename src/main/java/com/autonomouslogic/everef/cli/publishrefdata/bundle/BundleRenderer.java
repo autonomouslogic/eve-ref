@@ -97,12 +97,18 @@ public abstract class BundleRenderer implements RefDataRenderer {
 				});
 	}
 
-	protected void bundleVariations(InventoryType type, ObjectNode typesJson) {
+	protected void bundleVariations(InventoryType type, ObjectNode typesJson, ObjectNode attributesJson) {
 		Optional.ofNullable(type.getTypeVariations()).stream()
 				.flatMap(e -> e.values().stream())
 				.flatMap(e -> e.stream())
 				.distinct()
-				.forEach(typeId -> addTypeToBundle(typeId, typesJson));
+				.forEach(typeId -> {
+					var json = typesMap.get(typeId);
+					if (json != null) {
+						addTypeToBundle(typeId, typesJson);
+						bundleDogmaAttributes(objectMapper.convertValue(json, InventoryType.class), attributesJson);
+					}
+				});
 	}
 
 	protected void bundleRequiredSkills(InventoryType type, ObjectNode skillsJson, ObjectNode typesJson) {
