@@ -8,5 +8,10 @@
     "displayName" : "kg",
     "description" : "Kilogram",
     "name" : "Mass"
+  },
+  "133" : {
+    "displayName" : "ISK",
+    "description" : "ISK",
+    "name" : "Money"
   }
 }
