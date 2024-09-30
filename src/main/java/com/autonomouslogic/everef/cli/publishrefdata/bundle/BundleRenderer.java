@@ -4,6 +4,7 @@ import com.autonomouslogic.everef.cli.publishrefdata.RefDataRenderer;
 import com.autonomouslogic.everef.mvstore.MVStoreUtil;
 import com.autonomouslogic.everef.refdata.DogmaAttribute;
 import com.autonomouslogic.everef.refdata.DogmaTypeAttribute;
+import com.autonomouslogic.everef.refdata.InventoryGroup;
 import com.autonomouslogic.everef.refdata.InventoryType;
 import com.autonomouslogic.everef.refdata.MarketGroup;
 import com.autonomouslogic.everef.refdata.Skill;
@@ -59,6 +60,9 @@ public abstract class BundleRenderer implements RefDataRenderer {
 	protected Map<Long, JsonNode> iconsMap;
 
 	@Getter
+	protected Map<Long, JsonNode> categoriesMap;
+
+	@Getter
 	protected Map<Long, JsonNode> groupsMap;
 
 	@Getter
@@ -72,6 +76,7 @@ public abstract class BundleRenderer implements RefDataRenderer {
 			skillsMap = mvStoreUtil.openJsonMap(dataStore, "skills", Long.class);
 			unitsMap = mvStoreUtil.openJsonMap(dataStore, "units", Long.class);
 			iconsMap = mvStoreUtil.openJsonMap(dataStore, "icons", Long.class);
+			categoriesMap = mvStoreUtil.openJsonMap(dataStore, "categories", Long.class);
 			groupsMap = mvStoreUtil.openJsonMap(dataStore, "groups", Long.class);
 			marketGroupsMap = mvStoreUtil.openJsonMap(dataStore, "market_groups", Long.class);
 			return renderInternal();
@@ -227,6 +232,22 @@ public abstract class BundleRenderer implements RefDataRenderer {
 			if (group.getParentGroupId() != null) {
 				bundleMarketGroup(group.getParentGroupId(), marketGroupsJson);
 			}
+		}
+	}
+
+	protected void bundleInventoryCategory(long categoryId, ObjectNode categoriesJson) {
+		var json = categoriesMap.get(categoryId);
+		if (json != null) {
+			categoriesJson.set(Long.toString(categoryId), json);
+		}
+	}
+
+	protected void bundleInventoryGroup(long groupId, ObjectNode groupsJson, ObjectNode categoriesJson) {
+		var json = groupsMap.get(groupId);
+		if (json != null) {
+			groupsJson.set(Long.toString(groupId), json);
+			var group = objectMapper.convertValue(json, InventoryGroup.class);
+			bundleInventoryCategory(group.getCategoryId(), categoriesJson);
 		}
 	}
 

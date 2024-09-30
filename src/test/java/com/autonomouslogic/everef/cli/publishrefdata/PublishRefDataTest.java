@@ -184,7 +184,9 @@ public class PublishRefDataTest {
 				List.of(3336L, 3327L, 33097L, 3332L, 33093L, 3328L),
 				List.of(1L, 133L),
 				List.of(67L),
-				List.of(81L, 7L, 1376L, 4L));
+				List.of(81L, 7L, 1376L, 4L),
+				List.of(6L),
+				List.of(27L));
 		var actualItem = objectMapper.readTree(mockS3Adapter
 				.getTestObject(BUCKET_NAME, path, s3)
 				.orElseThrow(() -> new RuntimeException("Missing path: " + path)));
@@ -203,7 +205,8 @@ public class PublishRefDataTest {
 		if (id != 27) {
 			return;
 		}
-		var expectedItem = buildTestBundle(List.of(645L), List.of(9L, 162L, 182L, 277L), null, List.of(1L), null, null);
+		var expectedItem = buildTestBundle(
+				List.of(645L), List.of(9L, 162L, 182L, 277L), null, List.of(1L), null, null, null, null);
 		var actualItem = objectMapper.readTree(mockS3Adapter
 				.getTestObject(BUCKET_NAME, path, s3)
 				.orElseThrow(() -> new RuntimeException("Missing path: " + path)));
@@ -216,7 +219,9 @@ public class PublishRefDataTest {
 			List<Long> skillIds,
 			List<Long> unitIds,
 			List<Long> iconIds,
-			List<Long> marketGroupIds) {
+			List<Long> marketGroupIds,
+			List<Long> categoryIds,
+			List<Long> groupIds) {
 		var bundle = objectMapper.createObjectNode();
 		if (typeIds != null) {
 			var container = bundle.putObject("types");
@@ -264,6 +269,22 @@ public class PublishRefDataTest {
 				container.set(
 						Long.toString(id),
 						dataUtil.loadJsonResource(String.format("/refdata/refdata/market-group-%s.json", id)));
+			}
+		}
+		if (categoryIds != null) {
+			var container = bundle.putObject("categories");
+			for (long id : categoryIds) {
+				container.set(
+						Long.toString(id),
+						dataUtil.loadJsonResource(String.format("/refdata/refdata/category-%s.json", id)));
+			}
+		}
+		if (groupIds != null) {
+			var container = bundle.putObject("groups");
+			for (long id : groupIds) {
+				container.set(
+						Long.toString(id),
+						dataUtil.loadJsonResource(String.format("/refdata/refdata/group-%s.json", id)));
 			}
 		}
 		return bundle;

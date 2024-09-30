@@ -33,10 +33,13 @@ public class TypeBundleRenderer extends BundleRenderer {
 		var unitsJson = objectMapper.createObjectNode();
 		var iconsJson = objectMapper.createObjectNode();
 		var marketGroupsJson = objectMapper.createObjectNode();
+		var categoriesJson = objectMapper.createObjectNode();
+		var groupsJson = objectMapper.createObjectNode();
 
 		typesJson.set(Long.toString(typeId), typeJson);
 		bundleDogmaAttributes(type, attributesJson);
 		bundleMarketGroup(type, marketGroupsJson);
+		bundleInventoryGroup(type.getGroupId(), groupsJson, categoriesJson);
 		bundleTraits(type, typesJson);
 		bundleDescription(type, typesJson);
 		bundleReprocessing(type, typesJson);
@@ -64,6 +67,12 @@ public class TypeBundleRenderer extends BundleRenderer {
 		}
 		if (!marketGroupsJson.isEmpty()) {
 			bundleJson.set("market_groups", marketGroupsJson);
+		}
+		if (!categoriesJson.isEmpty()) {
+			bundleJson.set("categories", categoriesJson);
+		}
+		if (!groupsJson.isEmpty()) {
+			bundleJson.set("groups", groupsJson);
 		}
 
 		var path = refDataUtil.subPath("types", type.getTypeId()) + "/bundle";
