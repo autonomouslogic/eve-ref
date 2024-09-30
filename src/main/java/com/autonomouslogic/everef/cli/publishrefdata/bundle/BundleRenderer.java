@@ -157,6 +157,11 @@ public abstract class BundleRenderer implements RefDataRenderer {
 		});
 	}
 
+	protected void bundleDescription(InventoryType type, ObjectNode typesJson) {
+		Optional.ofNullable(type.getDescription())
+				.ifPresent(d -> d.values().forEach(text -> bundleShowInfo(text, typesJson)));
+	}
+
 	protected void bundleTraits(InventoryType type, ObjectNode typesJson) {
 		var traits = type.getTraits();
 		if (traits == null) {

@@ -86,6 +86,22 @@ public class BundleRendererTest {
 		assertTrue(typesJson.has("644"));
 	}
 
+	@Test
+	void shouldBundleShowinfoFromDescriptions() {
+		renderer.typesMap = Map.of(
+				11396L, objectMapper.createObjectNode(),
+				645L, objectMapper.createObjectNode());
+		var type = InventoryType.builder()
+				.description(Map.of(
+						"en", "Input <a href=showinfo:11396>Mercoxit</a> string",
+						"de", "Input <a href=showinfo:645>Dominix</a> string"))
+				.build();
+		var typesJson = objectMapper.createObjectNode();
+		renderer.bundleDescription(type, typesJson);
+		assertTrue(typesJson.has("11396"));
+		assertTrue(typesJson.has("645"));
+	}
+
 	static class TestBundleRenderer extends BundleRenderer {
 		@Override
 		protected Flowable<Pair<String, JsonNode>> renderInternal() {

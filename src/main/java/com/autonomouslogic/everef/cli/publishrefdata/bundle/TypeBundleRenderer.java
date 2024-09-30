@@ -38,6 +38,7 @@ public class TypeBundleRenderer extends BundleRenderer {
 		bundleDogmaAttributes(type, attributesJson);
 		bundleMarketGroup(type, marketGroupsJson);
 		bundleTraits(type, typesJson);
+		bundleDescription(type, typesJson);
 		bundleReprocessing(type, typesJson);
 		bundleProducedByBlueprint(type, typesJson);
 		bundleVariations(type, typesJson);
