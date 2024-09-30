@@ -652,6 +652,16 @@ components:
           additionalProperties:
             $ref: "#/components/schemas/MarketGroup"
           description: A map of market groups. The key is the market group ID.
+        categories:
+          type: object
+          additionalProperties:
+            $ref: "#/components/schemas/InventoryCategory"
+          description: A map of inventory categories. The key is the category ID.
+        groups:
+          type: object
+          additionalProperties:
+            $ref: "#/components/schemas/InventoryGroup"
+          description: A map of inventory groups. The key is the group ID.
     Coordinate:
       type: object
       properties:

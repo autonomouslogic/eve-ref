@@ -31,4 +31,10 @@ public class Bundle {
 
 	@Schema(description = "A map of market groups. The key is the market group ID.")
 	Map<String, MarketGroup> marketGroups;
+
+	@Schema(description = "A map of inventory categories. The key is the category ID.")
+	Map<String, InventoryCategory> categories;
+
+	@Schema(description = "A map of inventory groups. The key is the group ID.")
+	Map<String, InventoryGroup> groups;
 }
