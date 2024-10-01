@@ -4,6 +4,7 @@ import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 import ExternalLink from "~/components/helpers/ExternalLink.vue";
 import {PATREON_URL} from "~/lib/urls";
 import InternalLink from "~/components/helpers/InternalLink.vue";
+import MotdBanner from "~/components/MotdBanner.vue";
 
 const localePath = useLocalePath();
 </script>
@@ -32,6 +33,8 @@ const localePath = useLocalePath();
 			</span>
 		</span>
 	</div>
+
+	<MotdBanner />
 </template>
 
 <style scoped>
