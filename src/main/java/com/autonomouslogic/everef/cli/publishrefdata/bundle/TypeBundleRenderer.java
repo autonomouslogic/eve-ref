@@ -1,4 +1,4 @@
-package com.autonomouslogic.everef.cli.publishrefdata;
+package com.autonomouslogic.everef.cli.publishrefdata.bundle;
 
 import com.autonomouslogic.everef.refdata.InventoryType;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -32,13 +32,26 @@ public class TypeBundleRenderer extends BundleRenderer {
 		var skillsJson = objectMapper.createObjectNode();
 		var unitsJson = objectMapper.createObjectNode();
 		var iconsJson = objectMapper.createObjectNode();
+		var marketGroupsJson = objectMapper.createObjectNode();
+		var categoriesJson = objectMapper.createObjectNode();
+		var groupsJson = objectMapper.createObjectNode();
 
 		typesJson.set(Long.toString(typeId), typeJson);
 		bundleDogmaAttributes(type, attributesJson);
-		bundleVariations(type, typesJson);
+		bundleMarketGroup(type, marketGroupsJson);
+		bundleInventoryGroup(type.getGroupId(), groupsJson, categoriesJson);
+		bundleTraits(type, typesJson);
+		bundleDescription(type, typesJson);
+		bundleReprocessing(type, typesJson);
+		bundleProducedByBlueprint(type, typesJson);
+		bundleVariations(type, typesJson, attributesJson);
 		bundleRequiredSkills(type, skillsJson, typesJson);
-		bundleUnits(unitsJson, attributesJson);
-		bundleIcons(iconsJson, attributesJson);
+		bundleDogmaAttributesUnits(attributesJson, unitsJson);
+		bundleDogmaAttributesIcons(attributesJson, iconsJson);
+
+		if (type.getMarketGroupId() != null) {
+			unitsJson.set("133", unitsMap.get(133L)); // ISK for the market price display.
+		}
 
 		if (!attributesJson.isEmpty()) {
 			bundleJson.set("dogma_attributes", attributesJson);
@@ -51,6 +64,15 @@ public class TypeBundleRenderer extends BundleRenderer {
 		}
 		if (!iconsJson.isEmpty()) {
 			bundleJson.set("icons", iconsJson);
+		}
+		if (!marketGroupsJson.isEmpty()) {
+			bundleJson.set("market_groups", marketGroupsJson);
+		}
+		if (!categoriesJson.isEmpty()) {
+			bundleJson.set("categories", categoriesJson);
+		}
+		if (!groupsJson.isEmpty()) {
+			bundleJson.set("groups", groupsJson);
 		}
 
 		var path = refDataUtil.subPath("types", type.getTypeId()) + "/bundle";

@@ -1,4 +1,4 @@
-package com.autonomouslogic.everef.cli.publishrefdata;
+package com.autonomouslogic.everef.cli.publishrefdata.bundle;
 
 import com.autonomouslogic.everef.refdata.InventoryGroup;
 import com.autonomouslogic.everef.refdata.InventoryType;
@@ -41,7 +41,7 @@ public class GroupBundleRenderer extends BundleRenderer {
 			if (typeJson != null) {
 				typesJson.set(Long.toString(typeId), typeJson);
 				bundleDogmaAttributes(type, attributesJson);
-				bundleUnits(unitsJson, attributesJson);
+				bundleDogmaAttributesUnits(attributesJson, unitsJson);
 			}
 		}
 

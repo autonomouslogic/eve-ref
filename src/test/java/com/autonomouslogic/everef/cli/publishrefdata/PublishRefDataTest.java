@@ -13,8 +13,10 @@ import com.autonomouslogic.everef.test.TestDataUtil;
 import com.autonomouslogic.everef.util.DataUtil;
 import com.autonomouslogic.everef.util.MockScrapeBuilder;
 import com.autonomouslogic.everef.util.RefDataUtil;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.google.common.collect.Lists;
 import java.io.File;
 import java.io.FileInputStream;
 import java.time.Instant;
@@ -178,16 +180,49 @@ public class PublishRefDataTest {
 		if (id != 645) {
 			return;
 		}
-		var expectedItem = buildTestBundle(
-				List.of(645L, 22430L, 3336L, 3327L, 33097L, 3332L, 33093L, 3328L),
-				List.of(9L, 162L, 182L, 277L),
-				List.of(3336L, 3327L, 33097L, 3332L, 33093L, 3328L),
-				List.of(1L),
-				List.of(67L));
+
+		var expectedTypes = List.of(645L, 22430L, 3336L, 3327L, 33097L, 3332L, 33093L, 3328L, 999L, 34L);
+		var expectedAttributes = List.of(9L, 162L, 182L, 277L, 183L, 278L);
+		var expectedSkills = List.of(3336L, 3327L, 33097L, 3332L, 33093L, 3328L);
+		var expectedUnits = List.of(1L, 133L);
+		var expectedIcons = List.of(67L);
+		var expectedMarketGroups = List.of(81L, 7L, 1376L, 4L);
+		var expectedCategories = List.of(6L);
+		var expectedGroups = List.of(27L);
+
+		var expectedBundle = buildTestBundle(
+				expectedTypes,
+				expectedAttributes,
+				expectedSkills,
+				expectedUnits,
+				expectedIcons,
+				expectedMarketGroups,
+				expectedCategories,
+				expectedGroups);
+
 		var actualItem = objectMapper.readTree(mockS3Adapter
 				.getTestObject(BUCKET_NAME, path, s3)
 				.orElseThrow(() -> new RuntimeException("Missing path: " + path)));
-		assertEquals(expectedItem, actualItem);
+
+		assertExpectedBundleIds(expectedTypes, actualItem, "types");
+		assertExpectedBundleIds(expectedAttributes, actualItem, "dogma_attributes");
+		assertExpectedBundleIds(expectedSkills, actualItem, "skills");
+		assertExpectedBundleIds(expectedUnits, actualItem, "units");
+		assertExpectedBundleIds(expectedIcons, actualItem, "icons");
+		assertExpectedBundleIds(expectedMarketGroups, actualItem, "market_groups");
+		assertExpectedBundleIds(expectedCategories, actualItem, "categories");
+		assertExpectedBundleIds(expectedGroups, actualItem, "groups");
+
+		assertEquals(expectedBundle, actualItem);
+	}
+
+	private void assertExpectedBundleIds(List<Long> expectedIds, JsonNode bundle, String rootField) {
+		var expected = expectedIds.stream().sorted().toList();
+		var supplied = Lists.newArrayList(bundle.get(rootField).fieldNames()).stream()
+				.map(e -> Long.parseLong(e))
+				.sorted()
+				.toList();
+		assertEquals(expected, supplied);
 	}
 
 	@SneakyThrows
@@ -202,7 +237,8 @@ public class PublishRefDataTest {
 		if (id != 27) {
 			return;
 		}
-		var expectedItem = buildTestBundle(List.of(645L), List.of(9L, 162L, 182L, 277L), null, List.of(1L), null);
+		var expectedItem = buildTestBundle(
+				List.of(645L), List.of(9L, 162L, 182L, 277L), null, List.of(1L), null, null, null, null);
 		var actualItem = objectMapper.readTree(mockS3Adapter
 				.getTestObject(BUCKET_NAME, path, s3)
 				.orElseThrow(() -> new RuntimeException("Missing path: " + path)));
@@ -210,7 +246,14 @@ public class PublishRefDataTest {
 	}
 
 	private ObjectNode buildTestBundle(
-			List<Long> typeIds, List<Long> attributeIds, List<Long> skillIds, List<Long> unitIds, List<Long> iconIds) {
+			List<Long> typeIds,
+			List<Long> attributeIds,
+			List<Long> skillIds,
+			List<Long> unitIds,
+			List<Long> iconIds,
+			List<Long> marketGroupIds,
+			List<Long> categoryIds,
+			List<Long> groupIds) {
 		var bundle = objectMapper.createObjectNode();
 		if (typeIds != null) {
 			var container = bundle.putObject("types");
@@ -250,6 +293,30 @@ public class PublishRefDataTest {
 				container.set(
 						Long.toString(id),
 						dataUtil.loadJsonResource(String.format("/refdata/refdata/icon-%s.json", id)));
+			}
+		}
+		if (marketGroupIds != null) {
+			var container = bundle.putObject("market_groups");
+			for (long id : marketGroupIds) {
+				container.set(
+						Long.toString(id),
+						dataUtil.loadJsonResource(String.format("/refdata/refdata/market-group-%s.json", id)));
+			}
+		}
+		if (categoryIds != null) {
+			var container = bundle.putObject("categories");
+			for (long id : categoryIds) {
+				container.set(
+						Long.toString(id),
+						dataUtil.loadJsonResource(String.format("/refdata/refdata/category-%s.json", id)));
+			}
+		}
+		if (groupIds != null) {
+			var container = bundle.putObject("groups");
+			for (long id : groupIds) {
+				container.set(
+						Long.toString(id),
+						dataUtil.loadJsonResource(String.format("/refdata/refdata/group-%s.json", id)));
 			}
 		}
 		return bundle;
