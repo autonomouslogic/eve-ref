@@ -23,6 +23,16 @@ const urlText = "Read more";
 				</div>
 				<div class="col-span-2 text-center md:text-left">
 					<h1 class="mb-4 text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight leading-none">{{title}}</h1>
+					<blockquote class="hidden md:block italic pl-4 py-2 mb-4 border-l border-l-2">
+						<p class="mb-4">
+							CCP and Third Party Developers used to have a mutual goal of designing safe and effective tools, and it’s
+							been my constant struggle to reignite that professional relationship for the benefit of all players.
+						</p>
+						<p>
+							I’m running for CSM to bring ESI development back to a reliable, safe and game design approved state,
+							in order to continue to push the envelope on community and social engagement in EVE.
+						</p>
+					</blockquote>
 					<p class="mb-4 font-normal text-lg lg:text-xl">{{text}}</p>
 					<ExternalLink :url="url" class="">{{urlText}} &raquo;</ExternalLink>
 				</div>
