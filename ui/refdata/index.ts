@@ -3,8 +3,8 @@ import {
     Configuration,
     DogmaAttributeToJSON,
     type FetchAPI,
-    IconToJSON,
-    InventoryTypeToJSON,
+    IconToJSON, InventoryCategoryToJSON, InventoryGroupToJSON,
+    InventoryTypeToJSON, MarketGroupToJSON,
     RefdataApi,
     SkillToJSON,
     UnitToJSON
@@ -37,6 +37,21 @@ function cacheBundleObj(bundle: Bundle): void {
         const icon = bundle.icons[iconId];
         const path = "/icons/" + iconId;
         cache[path] = JSON.stringify(IconToJSON(icon));
+    }
+    for (let marketGroupId in bundle.marketGroups) {
+        const marketGroup = bundle.marketGroups[marketGroupId];
+        const path = "/market_groups/" + marketGroupId;
+        cache[path] = JSON.stringify(MarketGroupToJSON(marketGroup));
+    }
+    for (let categoryId in bundle.categories) {
+        const category = bundle.categories[categoryId];
+        const path = "/categories/" + categoryId;
+        cache[path] = JSON.stringify(InventoryCategoryToJSON(category));
+    }
+    for (let groupId in bundle.groups) {
+        const group = bundle.groups[groupId];
+        const path = "/groups/" + groupId;
+        cache[path] = JSON.stringify(InventoryGroupToJSON(group));
     }
 }
 
