@@ -10,3 +10,4 @@ export const EVE_REF_CORP = "https://evewho.com/corporation/98547654";
 export const DISCORD_URL = "/discord";
 export const REAL_DISCORD_URL = "https://discord.gg/fZYPAxFyXG";
 export const GITHUB_URL = "https://github.com/autonomouslogic/eve-ref/";
+export const YOUTUBE_URL = "https://www.youtube.com/@eve-ref";

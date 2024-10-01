@@ -1,7 +1,15 @@
 <script setup lang="ts">
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 import ExternalLink from "~/components/helpers/ExternalLink.vue";
-import {DISCORD_URL, EVE_REFERRAL_URL, EVE_STORE_URL, GITHUB_URL, MARKEE_DRAGON_URL, PATREON_URL} from "~/lib/urls";
+import {
+	DISCORD_URL,
+	EVE_REFERRAL_URL,
+	EVE_STORE_URL,
+	GITHUB_URL,
+	MARKEE_DRAGON_URL,
+	PATREON_URL,
+	YOUTUBE_URL
+} from "~/lib/urls";
 import InternalLink from "~/components/helpers/InternalLink.vue";
 </script>
 
@@ -28,6 +36,7 @@ import InternalLink from "~/components/helpers/InternalLink.vue";
 					<ul>
 						<li><InternalLink :to="DISCORD_URL"><span><font-awesome-icon icon="fa-brands fa-discord" /></span> Discord</InternalLink></li>
 						<li><ExternalLink :url="GITHUB_URL"><span><font-awesome-icon icon="fa-brands fa-github" /></span> Github</ExternalLink></li>
+						<li><ExternalLink :url="YOUTUBE_URL"><span><font-awesome-icon icon="fa-brands fa-youtube" /></span> YouTube</ExternalLink></li>
 					</ul>
 				</div>
 				<div>
