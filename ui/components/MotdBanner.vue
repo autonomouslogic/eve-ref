@@ -4,6 +4,8 @@ import ExternalLink from "~/components/helpers/ExternalLink.vue";
 const route = useRoute();
 const isIndex = computed(() => (route.name as string).startsWith("index"));
 
+const imgSize = 196;
+
 const characterId = 90406623;
 const title = "Ariel Rin for CSM19";
 const text = "Voting for CSM starts October 17th";
@@ -15,23 +17,21 @@ const urlText = "Read more";
 <template>
 	<div class="motd">
 		<section v-if="isIndex">
-			<div class="py-8 px-4 mx-auto max-w-screen-xl text-center lg:py-16 flex">
-				<div>
-					<img :src="image" width="256" height="256" class="mx-auto" />
+			<div class="py-8 px-4 mx-auto max-w-screen-xl grid grid-cols-1 md:grid-cols-3">
+				<div class="max-w-fit justify-self-end px-4 lg:px-8 hidden md:block">
+					<img :src="image" :width="imgSize" :height="imgSize" class="" />
 				</div>
-				<div>
-					<h1 class="mb-4 text-4xl font-extrabold tracking-tight leading-none text-gray-900 md:text-5xl lg:text-6xl dark:text-white">{{title}}</h1>
-					<p class="mb-8 text-lg font-normal text-gray-500 lg:text-xl sm:px-16 lg:px-48 dark:text-gray-400">{{text}}</p>
-					<div class="flex flex-col space-y-4 sm:flex-row sm:justify-center sm:space-y-0">
-						<ExternalLink :url="url" class="py-3 px-5 sm:ms-4">{{urlText}} &raquo;</ExternalLink>
-					</div>
+				<div class="col-span-2 text-center md:text-left">
+					<h1 class="mb-4 text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight leading-none">{{title}}</h1>
+					<p class="mb-4 font-normal text-lg lg:text-xl">{{text}}</p>
+					<ExternalLink :url="url" class="">{{urlText}} &raquo;</ExternalLink>
 				</div>
 			</div>
 		</section>
 		<section v-else class="flex">
-			<div class="py-4 px-2 mx-auto max-w-screen-xl text-center flex flex-row">
-				<p class="font-bold mx-3 text-xl">{{title}}</p>
-				<ExternalLink :url="url" class="x-3 text-xl font-normal">{{urlText}} &raquo;</ExternalLink>
+			<div class="py-4 px-2 mx-auto max-w-screen-xl text-center flex flex-col md:flex-row text-xl">
+				<p class="font-extrabold mx-3 tracking-tight">{{title}}</p>
+				<ExternalLink :url="url" class="mx-3 font-normal">{{urlText}} &raquo;</ExternalLink>
 			</div>
 		</section>
 	</div>
