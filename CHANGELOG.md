@@ -1,5 +1,30 @@
 EVE Ref Changelog
 
+## [2.50.0](https://github.com/autonomouslogic/eve-ref/compare/2.49.1...2.50.0) (2024-10-01)
+
+
+### Features
+
+* **refdata:** Added inventory category, group, and market groups to type bundles, and included more information required by type pages ([#623](https://github.com/autonomouslogic/eve-ref/issues/623)) ([2f06e63](https://github.com/autonomouslogic/eve-ref/commit/2f06e631aad46e434e8599001acb414380d6ae44))
+* **ui:** Added Goat Counter ([#613](https://github.com/autonomouslogic/eve-ref/issues/613)) ([cb70018](https://github.com/autonomouslogic/eve-ref/commit/cb70018021325c4807e41a0abb497ade6cde9acd))
+* **ui:** Added option on compare table to optionally load bundles ([#630](https://github.com/autonomouslogic/eve-ref/issues/630)) ([fe3c887](https://github.com/autonomouslogic/eve-ref/commit/fe3c88797606480363601cecc2ca5f83cf1509fe))
+* **ui:** Added support for bundles market groups, categories, and groups ([#629](https://github.com/autonomouslogic/eve-ref/issues/629)) ([42856de](https://github.com/autonomouslogic/eve-ref/commit/42856dedc47120efd50f51590d298911710c396e))
+* **ui:** Added YouTube URL to footer ([d865d44](https://github.com/autonomouslogic/eve-ref/commit/d865d4427a5053d3b5d5621a71c79ec0613c88c8))
+* **ui:** MOTD banner - Ariel Rin for CSM19 ([#628](https://github.com/autonomouslogic/eve-ref/issues/628)) ([9bfb2d6](https://github.com/autonomouslogic/eve-ref/commit/9bfb2d6f3c80af4709638d694cd4524df21219e0))
+* **ui:** Share tags ([#612](https://github.com/autonomouslogic/eve-ref/issues/612)) ([163d10a](https://github.com/autonomouslogic/eve-ref/commit/163d10a8c76927e9eb99800aa6f8e317f03b059d))
+
+
+### Bug Fixes
+
+* **ui:** Column lists on type pages ([#620](https://github.com/autonomouslogic/eve-ref/issues/620)) ([692b77b](https://github.com/autonomouslogic/eve-ref/commit/692b77b34342a9f38def2e8b65b81fab0d009701))
+* **ui:** compatibilityDate in nuxt.config.ts ([#611](https://github.com/autonomouslogic/eve-ref/issues/611)) ([7ff0d4b](https://github.com/autonomouslogic/eve-ref/commit/7ff0d4b7f6759370170ae4e1ed287b991332df3e))
+* **ui:** Default formats with variable decimal places ([#621](https://github.com/autonomouslogic/eve-ref/issues/621)) ([fefd224](https://github.com/autonomouslogic/eve-ref/commit/fefd2246e7e12eb284c1ed997b80da780c3eac63))
+* **ui:** Fixed issue where negative numbers were rendered with engineering notation ([#631](https://github.com/autonomouslogic/eve-ref/issues/631)) ([ca0740e](https://github.com/autonomouslogic/eve-ref/commit/ca0740e0bdf0f307279a5eb4e2b6f817c3146114))
+* **ui:** Flat layout, styling and other UI changes ([#602](https://github.com/autonomouslogic/eve-ref/issues/602)) ([fa956f6](https://github.com/autonomouslogic/eve-ref/commit/fa956f6340f00250a65d667817897e84e06ffa28))
+* **ui:** Misaba low-sec trade hub instead of Maila ([#605](https://github.com/autonomouslogic/eve-ref/issues/605)) ([fb2e01d](https://github.com/autonomouslogic/eve-ref/commit/fb2e01d895f52e6028b296997219acc64f616bf1))
+* **ui:** Optimised market price UI ([#622](https://github.com/autonomouslogic/eve-ref/issues/622)) ([75efef8](https://github.com/autonomouslogic/eve-ref/commit/75efef8211296a96c00f2aed950a8b8e0cb15c08))
+* **ui:** Removed crystal card to ammunition card and added mining crystal attributes ([95a284a](https://github.com/autonomouslogic/eve-ref/commit/95a284acd4b9523cbdaa7cb3928d2f0b2d790247))
+
 ## [2.49.1](https://github.com/autonomouslogic/eve-ref/compare/2.49.0...2.49.1) (2024-09-21)
 
 
