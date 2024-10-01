@@ -9,18 +9,20 @@ export interface Props {
 	direction?: "vertical" | "horizontal",
 	compactAttributeNames?: boolean,
 	showMetaGroup?: boolean,
+	loadBundles?: boolean,
 }
 const props = withDefaults(defineProps<Props>(), {
 	direction: "horizontal",
 	compactAttributeNames: false,
-	showMetaGroup: false
+	showMetaGroup: false,
+	loadBundles: true
 });
 
-const types: InventoryType[] = await Promise.all(props.typeIds.map(typeId => {
-	return cacheTypeBundle(typeId).then(() => {
-		return refdataApi.getType({typeId});
-	});
-	return refdataApi.getType({typeId});
+const types: InventoryType[] = await Promise.all(props.typeIds.map(async typeId => {
+	if (props.loadBundles) {
+		await cacheTypeBundle(typeId);
+	}
+	return await refdataApi.getType({typeId});
 }));
 const dogmaAttributes: { [key: string]: DogmaTypeAttribute } = {};
 for (let type of types) {

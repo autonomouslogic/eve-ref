@@ -29,7 +29,8 @@ const dogmaAttributes = await getMainDogma(props.inventoryType);
 				:dogma-attribute-names="dogmaAttributes"
 				direction="vertical"
 				:compact-attribute-names="true"
-				:show-meta-group="true"/>
+				:show-meta-group="true"
+				:load-bundles="false" />
 		</CardWrapper>
 	</template>
 </template>
