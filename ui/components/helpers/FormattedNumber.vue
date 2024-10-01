@@ -22,11 +22,23 @@ const realMaxDecimals = computed(() => {
 
 const maxNormal = 1e15;
 const minNormal = 1/maxNormal;
+
+const notation = computed(() => {
+	if (props.number === undefined) {
+		return "standard";
+	}
+	const n = Math.abs(props.number);
+	if (n != 0 && (n >= maxNormal || n <= minNormal)) {
+		return "engineering";
+	}
+	return "standard";
+});
+
 const formattedNumber = computed(() => typeof props.number === "number"
 	? new Intl.NumberFormat("en-US", {
 		minimumFractionDigits: realMinDecimals.value,
 		maximumFractionDigits: realMaxDecimals.value,
-		notation: props.number != 0 && (props.number >= maxNormal || props.number <= minNormal) ? "engineering" : "standard"
+		notation: notation.value
 	}).format(props.number)
 	: "?"
 );
