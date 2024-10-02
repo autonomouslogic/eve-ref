@@ -17,7 +17,6 @@ const props = defineProps<{
 
 <template>
 	<CardWrapper :title="title">
-
 		<AttributeList :elements="4 + dogmaAttributes.length">
 			<AttributeListItem v-if="inventoryType.basePrice">
 				<template v-slot:key>Base price:</template>

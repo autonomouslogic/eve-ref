@@ -11,32 +11,38 @@ export interface Props {
 	compactAttributeNames: boolean,
 	showMetaGroup: boolean
 }
-const props = withDefaults(defineProps<Props>(), {
-});
+
+const props = withDefaults(defineProps<Props>(), {});
 </script>
 
 <template>
 	<thead>
-		<th>Attribute</th>
-		<th v-for="type in inventoryTypes" :key="type.typeId" class="text-right">
-			<h2><type-link :type-id="type.typeId" /></h2>
-		</th>
+		<tr>
+			<th>Attribute</th>
+			<th v-for="type in inventoryTypes" :key="type.typeId" class="text-right">
+				<h2>
+					<type-link :type-id="type.typeId"/>
+				</h2>
+			</th>
+		</tr>
 	</thead>
 	<tbody>
 		<tr v-if="showMetaGroup">
-			<td><template v-if="!compactAttributeNames">Meta group</template></td>
+			<td>
+				<template v-if="!compactAttributeNames">Meta group</template>
+			</td>
 			<td v-for="type in inventoryTypes" :key="type.typeId" class="text-right px-6">
-				<MetaGroupName :meta-group-id="type.metaGroupId" />
+				<MetaGroupName :meta-group-id="type.metaGroupId"/>
 			</td>
 		</tr>
 		<template v-for="attr in dogmaAttributes" :key="attr.attributeId">
 			<tr v-if="attr && attr.attributeId">
 				<td>
-					<AttributeTypeIcon :dogma-attribute="attr" :size="25" />
-					<DogmaAttributeLink v-if="!compactAttributeNames" :attribute="attr" />
+					<AttributeTypeIcon :dogma-attribute="attr" :size="25"/>
+					<DogmaAttributeLink v-if="!compactAttributeNames" :attribute="attr"/>
 				</td>
 				<td v-for="type in inventoryTypes" :key="type.typeId" class="text-right px-6">
-					<CompareTableCell :dogma-attribute="attr" :inventory-type="type" />
+					<CompareTableCell :dogma-attribute="attr" :inventory-type="type"/>
 				</td>
 			</tr>
 		</template>

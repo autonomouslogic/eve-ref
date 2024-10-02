@@ -17,16 +17,18 @@ const props = withDefaults(defineProps<Props>(), {
 
 <template>
 	<thead>
-		<th class="text-left">Type</th>
-		<th v-if="showMetaGroup">
-			<template v-if="!compactAttributeNames">Meta group</template>
-		</th>
-		<template v-for="attr in dogmaAttributes" :key="attr.attributeId">
-			<th v-if="attr && attr.attributeId" class="text-right">
-				<AttributeTypeIcon :dogma-attribute="attr" :size="25" />
-				<DogmaAttributeLink v-if="!compactAttributeNames" :attribute="attr" />
+		<tr>
+			<th class="text-left">Type</th>
+			<th v-if="showMetaGroup">
+				<template v-if="!compactAttributeNames">Meta group</template>
 			</th>
-		</template>
+			<template v-for="attr in dogmaAttributes" :key="attr.attributeId">
+				<th v-if="attr && attr.attributeId" class="text-right">
+					<AttributeTypeIcon :dogma-attribute="attr" :size="25" />
+					<DogmaAttributeLink v-if="!compactAttributeNames" :attribute="attr" />
+				</th>
+			</template>
+		</tr>
 	</thead>
 	<tbody>
 		<tr v-for="type in inventoryTypes" :key="type.typeId" class="border-b border-gray-700">

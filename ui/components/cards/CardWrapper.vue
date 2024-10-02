@@ -5,7 +5,7 @@ const props = defineProps<{
 </script>
 
 <template>
-	<div class="self-start">
+	<div class="self-start w-full lg:w-auto overflow-clip">
 		<h2 v-if="props.title">{{ props.title }}</h2>
 		<slot />
 	</div>
