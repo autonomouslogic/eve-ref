@@ -43,8 +43,8 @@ if (Object.keys(dogmaAttributes).length > 0) {
 </script>
 
 <template>
-	<TraitsCard :inventory-type="inventoryType"/>
-	<DefensesCard :title="prepMessages(typeCardsConfig.defenses.name)[locale]"
+	<TraitsCard class="my-4" :inventory-type="inventoryType"/>
+	<DefensesCard class="my-4" :title="prepMessages(typeCardsConfig.defenses.name)[locale]"
 		:inventory-type="inventoryType"
 		:dogma-attributes="cardAttributes.defenses"/>
 	<CardsContainer>

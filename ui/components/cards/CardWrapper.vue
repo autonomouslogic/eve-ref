@@ -5,7 +5,7 @@ const props = defineProps<{
 </script>
 
 <template>
-	<div class="self-start">
+	<div class="self-start w-full lg:w-auto overflow-hidden">
 		<h2 v-if="props.title">{{ props.title }}</h2>
 		<slot />
 	</div>
@@ -13,7 +13,7 @@ const props = defineProps<{
 
 <style scoped>
 div {
-  @apply border border-gray-700 p-3 my-4;
+  @apply border border-gray-700 p-3;
   background-color: var(--card-background-color);
 }
 </style>
