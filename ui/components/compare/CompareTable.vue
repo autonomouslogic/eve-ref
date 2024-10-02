@@ -11,6 +11,7 @@ export interface Props {
 	showMetaGroup?: boolean,
 	loadBundles?: boolean,
 }
+
 const props = withDefaults(defineProps<Props>(), {
 	direction: "horizontal",
 	compactAttributeNames: false,
@@ -47,16 +48,18 @@ function getValue(attr: DogmaAttribute, type: InventoryType): number {
 </script>
 
 <template>
-	<table class="standard-table">
-		<CompareTableHorizontal v-if="direction == 'horizontal'"
-			:inventory-types="types"
-			:dogma-attributes="listAttributes"
-			:compact-attribute-names="compactAttributeNames"
-			:show-meta-group="showMetaGroup"  />
-		<CompareTableVertical v-if="direction == 'vertical'"
-			:inventory-types="types"
-			:dogma-attributes="listAttributes"
-			:compact-attribute-names="compactAttributeNames"
-			:show-meta-group="showMetaGroup" />
-	</table>
+	<div class="overflow-scroll">
+		<table class="standard-table">
+			<CompareTableHorizontal v-if="direction == 'horizontal'"
+				:inventory-types="types"
+				:dogma-attributes="listAttributes"
+				:compact-attribute-names="compactAttributeNames"
+				:show-meta-group="showMetaGroup"/>
+			<CompareTableVertical v-if="direction == 'vertical'"
+				:inventory-types="types"
+				:dogma-attributes="listAttributes"
+				:compact-attribute-names="compactAttributeNames"
+				:show-meta-group="showMetaGroup"/>
+		</table>
+	</div>
 </template>
