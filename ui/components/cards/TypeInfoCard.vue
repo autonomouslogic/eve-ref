@@ -7,7 +7,7 @@ import UnitValue from "~/components/dogma/UnitValue.vue";
 import GroupLink from "~/components/helpers/GroupLink.vue";
 import AttributeList from "~/components/attr/AttributeList.vue";
 import AttributeListItem from "~/components/attr/AttributeListItem.vue";
-import {CUBIC_METER, METER} from "~/lib/unitConstants";
+import {CUBIC_METER, METER, MONEY} from "~/lib/unitConstants";
 
 const props = defineProps<{
 	title: string,
@@ -23,6 +23,10 @@ const props = defineProps<{
 			<AttributeListItem v-if="inventoryType.typeId">
 				<template v-slot:key>Type ID:</template>
 				{{ inventoryType.typeId }}
+			</AttributeListItem>
+			<AttributeListItem v-if="inventoryType.basePrice">
+				<template v-slot:key>Base price:</template>
+				<UnitValue :unit-id="MONEY" :value="inventoryType.basePrice" />
 			</AttributeListItem>
 			<AttributeListItem v-if="inventoryType.capacity">
 				<template v-slot:key>Capacity:</template>

@@ -2,7 +2,7 @@
 import {type DogmaAttribute, type InventoryType} from "~/refdata-openapi";
 import CardWrapper from "~/components/cards/CardWrapper.vue";
 import DefensesRow from "~/components/cards/defenses/DefensesRow.vue";
-import {SHIP} from "~/lib/categoryConstants";
+import {ENTITY, SHIP} from "~/lib/categoryConstants";
 import refdataApi from "~/refdata";
 
 const props = defineProps<{
@@ -15,12 +15,13 @@ const type = props.inventoryType;
 const group = !type.groupId ? undefined :
 	await refdataApi.getGroup({groupId: type.groupId});
 const isShip = group?.categoryId == SHIP;
+const isEntity = group?.categoryId == ENTITY;
 </script>
 
 <template>
-	<template v-if="isShip && dogmaAttributes.length > 0">
+	<template v-if="(isShip || isEntity) && dogmaAttributes.length > 0">
 		<CardWrapper :title="title">
-			<div class="grid grid-cols-7 gap-x-1">
+			<div class="grid grid-cols-4 lg:grid-cols-7 gap-x-2">
 				<DefensesRow :inventory-type="inventoryType"
 					:dogma-attributes="dogmaAttributes"
 					hp-attr-name="shieldCapacity"

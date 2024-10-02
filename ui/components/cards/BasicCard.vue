@@ -17,11 +17,8 @@ const props = defineProps<{
 
 <template>
 	<CardWrapper :title="title">
-		<AttributeList :elements="4 + dogmaAttributes.length">
-			<AttributeListItem v-if="inventoryType.basePrice">
-				<template v-slot:key>Base price:</template>
-				<UnitValue :unit-id="MONEY" :value="inventoryType.basePrice" />
-			</AttributeListItem>
+
+		<AttributeList :elements="3 + dogmaAttributes.length">
 			<AttributeListItem v-if="inventoryType.mass">
 				<template v-slot:key>Mass:</template>
 				<UnitValue :unit-id="KILOGRAM" :value="inventoryType.mass" />
