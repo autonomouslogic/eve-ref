@@ -1,5 +1,25 @@
 EVE Ref Changelog
 
+## [2.51.0](https://github.com/autonomouslogic/eve-ref/compare/2.50.0...2.51.0) (2024-10-02)
+
+
+### Features
+
+* Added meta groups and blueprints to type bundles ([#636](https://github.com/autonomouslogic/eve-ref/issues/636)) ([724cdb6](https://github.com/autonomouslogic/eve-ref/commit/724cdb61075fb80d3dbe8cb8603acbab3999b18e))
+
+
+### Bug Fixes
+
+* **ui:** Improved card and footer responsiveness ([#635](https://github.com/autonomouslogic/eve-ref/issues/635)) ([f7dc817](https://github.com/autonomouslogic/eve-ref/commit/f7dc8176482cab6b3ea99c868f0cbc9e10fa6b58))
+* **ui:** Load bundles blueprints ([11cb25f](https://github.com/autonomouslogic/eve-ref/commit/11cb25fc0d1c5de88d77ad6bbfb632170190b979))
+* **ui:** Made the defense card more responsive and show for entities and reorganised some values ([#640](https://github.com/autonomouslogic/eve-ref/issues/640)) ([d177b39](https://github.com/autonomouslogic/eve-ref/commit/d177b39754c2c6197e7e407cb5d94c0dab15a529))
+
+
+### Miscellaneous Chores
+
+* **ui:** MOTD tweaks ([699d349](https://github.com/autonomouslogic/eve-ref/commit/699d349d2871a66d629f87cbce90cb956d504130))
+* **ui:** Updated CMS19 text ([657a8a8](https://github.com/autonomouslogic/eve-ref/commit/657a8a87af3940f5f32602c19e0915601708ed98))
+
 ## [2.50.0](https://github.com/autonomouslogic/eve-ref/compare/2.49.1...2.50.0) (2024-10-01)
 
 
