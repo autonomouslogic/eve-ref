@@ -586,6 +586,7 @@ components:
         max_production_limit:
           type: integer
           format: int32
+      description: A map of blueprints. The key is the blueprint type ID.
     BlueprintActivity:
       type: object
       properties:
@@ -617,8 +618,6 @@ components:
         probability:
           type: number
           format: double
-      description: "This is called 'types' in the SDE, but EVE Ref converts it to\
-        \ 'materials' and 'products' to be consistent with blueprints."
     Bundle:
       type: object
       properties:
@@ -662,6 +661,16 @@ components:
           additionalProperties:
             $ref: "#/components/schemas/InventoryGroup"
           description: A map of inventory groups. The key is the group ID.
+        meta_groups:
+          type: object
+          additionalProperties:
+            $ref: "#/components/schemas/MetaGroup"
+          description: A map of meta groups. The key is the group ID.
+        blueprints:
+          type: object
+          additionalProperties:
+            $ref: "#/components/schemas/Blueprint"
+          description: A map of blueprints. The key is the blueprint type ID.
     Coordinate:
       type: object
       properties:
