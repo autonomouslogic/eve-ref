@@ -60,7 +60,7 @@ function attributeValueCalc(dogmaTypeAttribute: DogmaTypeAttribute | undefined, 
 		</template>
 	</div>
 
-	<div class="text-right py-au">
+	<div class="text-right">
 		<template v-if="hpAttr && hp && hp.value !== undefined">
 			<DogmaValue :attribute="hpAttr" :value="hp.value" />
 		</template>
