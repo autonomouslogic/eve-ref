@@ -9,7 +9,7 @@ const props = defineProps<{
 </script>
 
 <template>
-	<div>
+	<div class="flex gap-4 flex-col md:flex-row">
 		<TypeTraits :bonuses="props.traits?.types"/>
 		<TraitGroup title="Role Bonuses" :bonuses="props.traits?.roleBonuses"/>
 		<TraitGroup title="Misc Bonuses" :bonuses="props.traits?.miscBonuses"/>

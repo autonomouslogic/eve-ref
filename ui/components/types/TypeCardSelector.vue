@@ -36,10 +36,6 @@ const props = defineProps<{
 		:title="title"
 		:inventory-type="inventoryType"
 		:dogma-attributes="dogmaAttributes" />
-	<VariationsCard v-else-if="component == 'variations'"
-		:title="title"
-		:inventory-type="inventoryType"
-		:dogma-attributes="dogmaAttributes" />
 	<OreVariationsCard v-else-if="component == 'oreVariations'"
 		:title="title"
 		:inventory-type="inventoryType"

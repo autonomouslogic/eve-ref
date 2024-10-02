@@ -6,6 +6,9 @@ import DefensesCard from "~/components/cards/defenses/DefensesCard.vue";
 import TypeCardSelector from "~/components/types/TypeCardSelector.vue";
 import {loadDogmaAttributesForType} from "~/lib/dogmaUtils";
 import {prepMessages} from "~/lib/translate";
+import VariationsCard from "~/components/cards/VariationsCard.vue";
+import RequiredSkillsCard from "~/components/cards/requiredSkills/RequiredSkillsCard.vue";
+import DefaultCard from "~/components/cards/DefaultCard.vue";
 
 const {locale} = useI18n();
 
@@ -40,15 +43,35 @@ for (const cardName in typeCardsConfig) {
 if (Object.keys(dogmaAttributes).length > 0) {
 	cardAttributes.other = Object.values(dogmaAttributes);
 }
+
+// Full-width cards.
+const fullWidthCards = [
+	"traits",
+	"defenses",
+	"variations"
+];
+
+const contentCards: {[key: string]: DogmaTypeAttribute[] } = {};
+for (const cardName in cardAttributes) {
+	if (fullWidthCards.includes(cardName)) {
+		continue;
+	}
+	contentCards[cardName] = cardAttributes[cardName];
+}
 </script>
 
 <template>
-	<TraitsCard class="my-4" :inventory-type="inventoryType"/>
+	<TraitsCard class="my-4" :inventory-type="inventoryType" :full-width="true"/>
 	<DefensesCard class="my-4" :title="prepMessages(typeCardsConfig.defenses.name)[locale]"
 		:inventory-type="inventoryType"
-		:dogma-attributes="cardAttributes.defenses"/>
+		:dogma-attributes="cardAttributes.defenses"
+		:full-width="true"/>
+	<VariationsCard class="my-4" :title="prepMessages(typeCardsConfig.variations.name)[locale]"
+		:inventory-type="inventoryType"
+		:dogma-attributes="dogmaAttributes"
+		:full-width="true"/>
 	<CardsContainer>
-		<template v-for="(attributes, cardId) in cardAttributes" :key="cardId">
+		<template v-for="(attributes, cardId) in contentCards" :key="cardId">
 			<TypeCardSelector
 				:component="typeCardsConfig[cardId].component"
 				:title="prepMessages(typeCardsConfig[cardId].name)[locale]"

@@ -26,3 +26,9 @@ const props = defineProps<{
 		</CardWrapper>
 	</template>
 </template>
+
+<style scoped>
+  .grid {
+    grid-template-columns: auto 60px 120px;
+  }
+</style>
