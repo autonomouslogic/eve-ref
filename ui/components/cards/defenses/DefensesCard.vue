@@ -20,7 +20,7 @@ const isShip = group?.categoryId == SHIP;
 <template>
 	<template v-if="isShip && dogmaAttributes.length > 0">
 		<CardWrapper :title="title">
-			<div class="grid grid-cols-7 gap-x-1">
+			<div class="grid grid-cols-4 lg:grid-cols-7 gap-x-2">
 				<DefensesRow :inventory-type="inventoryType"
 					:dogma-attributes="dogmaAttributes"
 					hp-attr-name="shieldCapacity"
