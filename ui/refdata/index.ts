@@ -1,10 +1,15 @@
 import {
+    BlueprintToJSON,
     type Bundle,
     Configuration,
     DogmaAttributeToJSON,
     type FetchAPI,
-    IconToJSON, InventoryCategoryToJSON, InventoryGroupToJSON,
-    InventoryTypeToJSON, MarketGroupToJSON, MetaGroupToJSON,
+    IconToJSON,
+    InventoryCategoryToJSON,
+    InventoryGroupToJSON,
+    InventoryTypeToJSON,
+    MarketGroupToJSON,
+    MetaGroupToJSON,
     RefdataApi,
     SkillToJSON,
     UnitToJSON
@@ -57,6 +62,11 @@ function cacheBundleObj(bundle: Bundle): void {
         const group = bundle.metaGroups[groupId];
         const path = "/meta_groups/" + groupId;
         cache[path] = JSON.stringify(MetaGroupToJSON(group));
+    }
+    for (let blueprintId in bundle.blueprints) {
+        const blueprint = bundle.blueprints[blueprintId];
+        const path = "/blueprints/" + blueprintId;
+        cache[path] = JSON.stringify(BlueprintToJSON(blueprint));
     }
 }
 
