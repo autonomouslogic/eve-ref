@@ -1,14 +1,11 @@
 <script setup lang="ts">
 const props = defineProps<{
 	title: string | undefined;
-	fullWidth?: boolean;
 }>();
-
-const cardSize: string = props.fullWidth ? "w-full" : "flex-auto";
 </script>
 
 <template>
-	<div class="overflow-hidden" :class="cardSize">
+	<div class="overflow-hidden flex-auto">
 		<h2 v-if="props.title">{{ props.title }}</h2>
 		<slot />
 	</div>

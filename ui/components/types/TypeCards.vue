@@ -43,35 +43,15 @@ for (const cardName in typeCardsConfig) {
 if (Object.keys(dogmaAttributes).length > 0) {
 	cardAttributes.other = Object.values(dogmaAttributes);
 }
-
-// Full-width cards.
-const fullWidthCards = [
-	"traits",
-	"defenses",
-	"variations"
-];
-
-const contentCards: {[key: string]: DogmaTypeAttribute[] } = {};
-for (const cardName in cardAttributes) {
-	if (fullWidthCards.includes(cardName)) {
-		continue;
-	}
-	contentCards[cardName] = cardAttributes[cardName];
-}
 </script>
 
 <template>
-	<TraitsCard class="my-4" :inventory-type="inventoryType" :full-width="true"/>
+	<TraitsCard class="my-4" :inventory-type="inventoryType"/>
 	<DefensesCard class="my-4" :title="prepMessages(typeCardsConfig.defenses.name)[locale]"
 		:inventory-type="inventoryType"
-		:dogma-attributes="cardAttributes.defenses"
-		:full-width="true"/>
-	<VariationsCard class="my-4" :title="prepMessages(typeCardsConfig.variations.name)[locale]"
-		:inventory-type="inventoryType"
-		:dogma-attributes="cardAttributes.variations"
-		:full-width="true"/>
+		:dogma-attributes="cardAttributes.defenses" />
 	<CardsContainer>
-		<template v-for="(attributes, cardId) in contentCards" :key="cardId">
+		<template v-for="(attributes, cardId) in cardAttributes" :key="cardId">
 			<TypeCardSelector
 				:component="typeCardsConfig[cardId].component"
 				:title="prepMessages(typeCardsConfig[cardId].name)[locale]"

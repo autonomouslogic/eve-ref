@@ -5,12 +5,11 @@ import TraitsContainer from "~/components/types/traits/TraitsContainer.vue";
 
 const props = defineProps<{
 	inventoryType: InventoryType;
-	fullWidth?: boolean;
 }>();
 </script>
 
 <template>
-	<CardWrapper title="Traits" :full-width="fullWidth" v-if="inventoryType.traits">
+	<CardWrapper title="Traits" v-if="inventoryType.traits">
 		<TraitsContainer :traits="inventoryType.traits"></TraitsContainer>
 	</CardWrapper>
 </template>
