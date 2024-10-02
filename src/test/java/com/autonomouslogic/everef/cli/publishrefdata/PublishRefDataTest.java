@@ -23,6 +23,7 @@ import java.time.Instant;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Stream;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.SneakyThrows;
@@ -189,6 +190,7 @@ public class PublishRefDataTest {
 		var expectedMarketGroups = List.of(81L, 7L, 1376L, 4L);
 		var expectedCategories = List.of(6L);
 		var expectedGroups = List.of(27L);
+		var expectedMetaGroups = List.of(1L, 2L);
 
 		var expectedBundle = buildTestBundle(
 				expectedTypes,
@@ -198,11 +200,27 @@ public class PublishRefDataTest {
 				expectedIcons,
 				expectedMarketGroups,
 				expectedCategories,
-				expectedGroups);
+				expectedGroups,
+				expectedMetaGroups);
 
 		var actualItem = objectMapper.readTree(mockS3Adapter
 				.getTestObject(BUCKET_NAME, path, s3)
 				.orElseThrow(() -> new RuntimeException("Missing path: " + path)));
+
+		assertEquals(
+				Stream.of(
+								"types",
+								"dogma_attributes",
+								"skills",
+								"units",
+								"icons",
+								"market_groups",
+								"categories",
+								"groups",
+								"meta_groups")
+						.sorted()
+						.toList(),
+				Lists.newArrayList(actualItem.fieldNames()).stream().sorted().toList());
 
 		assertExpectedBundleIds(expectedTypes, actualItem, "types");
 		assertExpectedBundleIds(expectedAttributes, actualItem, "dogma_attributes");
@@ -212,6 +230,7 @@ public class PublishRefDataTest {
 		assertExpectedBundleIds(expectedMarketGroups, actualItem, "market_groups");
 		assertExpectedBundleIds(expectedCategories, actualItem, "categories");
 		assertExpectedBundleIds(expectedGroups, actualItem, "groups");
+		assertExpectedBundleIds(expectedMetaGroups, actualItem, "meta_groups");
 
 		assertEquals(expectedBundle, actualItem);
 	}
@@ -238,7 +257,7 @@ public class PublishRefDataTest {
 			return;
 		}
 		var expectedItem = buildTestBundle(
-				List.of(645L), List.of(9L, 162L, 182L, 277L), null, List.of(1L), null, null, null, null);
+				List.of(645L), List.of(9L, 162L, 182L, 277L), null, List.of(1L), null, null, null, null, null);
 		var actualItem = objectMapper.readTree(mockS3Adapter
 				.getTestObject(BUCKET_NAME, path, s3)
 				.orElseThrow(() -> new RuntimeException("Missing path: " + path)));
@@ -253,7 +272,8 @@ public class PublishRefDataTest {
 			List<Long> iconIds,
 			List<Long> marketGroupIds,
 			List<Long> categoryIds,
-			List<Long> groupIds) {
+			List<Long> groupIds,
+			List<Long> metaGroupIds) {
 		var bundle = objectMapper.createObjectNode();
 		if (typeIds != null) {
 			var container = bundle.putObject("types");
@@ -317,6 +337,14 @@ public class PublishRefDataTest {
 				container.set(
 						Long.toString(id),
 						dataUtil.loadJsonResource(String.format("/refdata/refdata/group-%s.json", id)));
+			}
+		}
+		if (metaGroupIds != null) {
+			var container = bundle.putObject("meta_groups");
+			for (long id : metaGroupIds) {
+				container.set(
+						Long.toString(id),
+						dataUtil.loadJsonResource(String.format("/refdata/refdata/meta-group-%s.json", id)));
 			}
 		}
 		return bundle;

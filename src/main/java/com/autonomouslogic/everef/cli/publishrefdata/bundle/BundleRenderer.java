@@ -68,6 +68,9 @@ public abstract class BundleRenderer implements RefDataRenderer {
 	@Getter
 	protected Map<Long, JsonNode> marketGroupsMap;
 
+	@Getter
+	protected Map<Long, JsonNode> metaGroupsMap;
+
 	public final Flowable<Pair<String, JsonNode>> render() {
 		return Flowable.defer(() -> {
 			log.info("Rendering bundle: {}", getClass().getSimpleName());
@@ -79,6 +82,7 @@ public abstract class BundleRenderer implements RefDataRenderer {
 			categoriesMap = mvStoreUtil.openJsonMap(dataStore, "categories", Long.class);
 			groupsMap = mvStoreUtil.openJsonMap(dataStore, "groups", Long.class);
 			marketGroupsMap = mvStoreUtil.openJsonMap(dataStore, "market_groups", Long.class);
+			metaGroupsMap = mvStoreUtil.openJsonMap(dataStore, "meta_groups", Long.class);
 			return renderInternal();
 		});
 	}
@@ -255,6 +259,24 @@ public abstract class BundleRenderer implements RefDataRenderer {
 			var group = objectMapper.convertValue(json, InventoryGroup.class);
 			bundleInventoryCategory(group.getCategoryId(), categoriesJson);
 		}
+	}
+
+	protected void bundleTypesMetaGroups(ObjectNode typesJson, ObjectNode metaGroupsJson) {
+		if (typesJson.isEmpty()) {
+			return;
+		}
+		typesJson.fields().forEachRemaining(entry -> {
+			var type = objectMapper.convertValue(entry.getValue(), InventoryType.class);
+			var groupId = type.getMetaGroupId();
+			if (groupId == null) {
+				return;
+			}
+			var groupJson = getMetaGroupsMap().get(groupId.longValue());
+			if (groupJson == null) {
+				return;
+			}
+			metaGroupsJson.set(Long.toString(groupId), groupJson);
+		});
 	}
 
 	protected void addTypeToBundle(Long typeId, ObjectNode typesJson) {

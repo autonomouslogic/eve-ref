@@ -4,7 +4,7 @@ import {
     DogmaAttributeToJSON,
     type FetchAPI,
     IconToJSON, InventoryCategoryToJSON, InventoryGroupToJSON,
-    InventoryTypeToJSON, MarketGroupToJSON,
+    InventoryTypeToJSON, MarketGroupToJSON, MetaGroupToJSON,
     RefdataApi,
     SkillToJSON,
     UnitToJSON
@@ -52,6 +52,11 @@ function cacheBundleObj(bundle: Bundle): void {
         const group = bundle.groups[groupId];
         const path = "/groups/" + groupId;
         cache[path] = JSON.stringify(InventoryGroupToJSON(group));
+    }
+    for (let groupId in bundle.metaGroups) {
+        const group = bundle.metaGroups[groupId];
+        const path = "/meta_groups/" + groupId;
+        cache[path] = JSON.stringify(MetaGroupToJSON(group));
     }
 }
 
