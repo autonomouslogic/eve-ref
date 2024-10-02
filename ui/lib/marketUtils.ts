@@ -1,6 +1,5 @@
 import {GetMarketsRegionIdOrdersDatasourceEnum, GetMarketsRegionIdOrdersOrderTypeEnum} from "~/esi-openapi";
 import {marketApi} from "~/esi";
-import type {DogmaAttribute, InventoryType} from "~/refdata-openapi";
 import {DOMAIN, HEIMATAR, METROPOLIS, SINQ_LAISON, THE_FORGE} from "~/lib/regionConstants";
 
 export interface HubStation {

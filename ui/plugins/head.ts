@@ -1,4 +1,3 @@
-import {useNuxt} from "@nuxt/kit";
 import iconPath from "~/assets/logo.png";
 
 const suffix = "EVE Ref";

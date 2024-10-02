@@ -4,7 +4,7 @@ import CardWrapper from "~/components/cards/CardWrapper.vue";
 import TraitsContainer from "~/components/types/traits/TraitsContainer.vue";
 
 const props = defineProps<{
-	inventoryType: InventoryType
+	inventoryType: InventoryType;
 }>();
 </script>
 
