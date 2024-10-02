@@ -68,7 +68,7 @@ for (const cardName in cardAttributes) {
 		:full-width="true"/>
 	<VariationsCard class="my-4" :title="prepMessages(typeCardsConfig.variations.name)[locale]"
 		:inventory-type="inventoryType"
-		:dogma-attributes="dogmaAttributes"
+		:dogma-attributes="cardAttributes.variations"
 		:full-width="true"/>
 	<CardsContainer>
 		<template v-for="(attributes, cardId) in contentCards" :key="cardId">
