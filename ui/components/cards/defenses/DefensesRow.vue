@@ -51,25 +51,28 @@ function attributeValueCalc(dogmaTypeAttribute: DogmaTypeAttribute | undefined, 
 </script>
 
 <template>
-	<div v-if="hpAttr && hp">
-		<DogmaAttributeLink :attribute="hpAttr">
-			<AttributeTypeIcon :dogma-attribute="hpAttr" />
-			<span v-if="hpAttr.displayName">{{ prepMessages(hpAttr.displayName)[locale] }}</span>
-		</DogmaAttributeLink>
+	<div class="col-span-2 lg:col-span-1">
+		<template v-if="hpAttr && hp">
+			<DogmaAttributeLink :attribute="hpAttr">
+				<AttributeTypeIcon :dogma-attribute="hpAttr" />
+				<span v-if="hpAttr.displayName">{{ prepMessages(hpAttr.displayName)[locale] }}</span>
+			</DogmaAttributeLink>
+		</template>
 	</div>
-	<div v-else />
 
-	<div v-if="hpAttr && hp && hp.value !== undefined" class="text-right">
-		<DogmaValue :attribute="hpAttr" :value="hp.value" />
+	<div class="text-right">
+		<template v-if="hpAttr && hp && hp.value !== undefined">
+			<DogmaValue :attribute="hpAttr" :value="hp.value" />
+		</template>
 	</div>
-	<div v-else />
 
-	<div v-if="uniformityAttr && uniformity && uniformity.value !== undefined" class="text-right w-min">
-		<DogmaAttributeLink :attribute="uniformityAttr">
-			({{ uniformityDisplay(uniformity.value) }}%)
-		</DogmaAttributeLink>
+	<div class="text-right w-min">
+		<template v-if="uniformityAttr && uniformity && uniformity.value !== undefined">
+			<DogmaAttributeLink :attribute="uniformityAttr">
+				({{ uniformityDisplay(uniformity.value) }}%)
+			</DogmaAttributeLink>
+		</template>
 	</div>
-	<div v-else />
 
 	<DefensesRowResistance :resonance-attr="emResonanceAttr" :resonance="emResonance" color="#007bff" />
 	<DefensesRowResistance :resonance-attr="thermalResonanceAttr" :resonance="thermalResonance" color="#ee5f5b" />

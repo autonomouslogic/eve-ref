@@ -52,7 +52,6 @@ const cards: {[key: string]: any} = {
 					"mass",
 					"radius",
 					"nondestructible",
-					"cargoScanResistance",
 					"disallowInHighSec",
 					"disallowInEmpireSpace",
 					"isCapitalSize",
@@ -75,6 +74,18 @@ const cards: {[key: string]: any} = {
 					"entityAttackDelayMin",
 					"entityAttackDelayMax",
 					"entityMissileTypeID"
+				]
+		},
+	"resistances":
+		{
+			"name": {"en": "Resistances"},
+			"dogmaAttributes":
+				[
+					"energyWarfareResistance",
+					"weaponDisruptionResistance",
+					"stasisWebifierResistance",
+					"energyWarfareResistance",
+					"cargoScanResistance",
 				]
 		},
 	"npc":
@@ -103,7 +114,6 @@ const cards: {[key: string]: any} = {
 					"entityDefenderChance",
 					"entityShieldBoostAmountPerSecond",
 					"entityShieldBoostDuration",
-					"shieldRechargeRate",
 					"entityChaseMaxDelay",
 					"entityChaseMaxDelayChance",
 					"entityChaseMaxDistance",
@@ -170,17 +180,11 @@ const cards: {[key: string]: any} = {
 				[
 					"powerOutput",
 					"cpuOutput",
-					"capacitorCapacity",
-					"rechargeRate",
 					"turretSlotsLeft",
 					"launcherSlotsLeft",
 					"hiSlots",
 					"medSlots",
 					"lowSlots",
-					"rigSlots",
-					"upgradeSlotsLeft",
-					"rigSize",
-					"upgradeCapacity",
 					"serviceSlots",
 					"cpu",
 					"power",
@@ -188,9 +192,37 @@ const cards: {[key: string]: any} = {
 					"maxTypeFitted"
 				]
 		},
-	"structure":
+	"overload":
 		{
-			"name": {"en": "Structure"},
+			"name": {"en": "Overloading"},
+			"dogmaAttributes":
+				[
+					"heatCapacityHi",
+					"heatDissipationRateHi",
+					"heatDissipationRateMed",
+					"heatDissipationRateLow",
+					"heatCapacityMed",
+					"heatCapacityLow",
+					"heatGenerationMultiplier",
+					"heatAttenuationHi",
+					"heatAttenuationMed",
+					"heatAttenuationLow",
+				]
+		},
+	"rigging":
+		{
+			"name": {"en": "Rigging"},
+			"dogmaAttributes":
+				[
+					"rigSlots",
+					"upgradeSlotsLeft",
+					"rigSize",
+					"upgradeCapacity"
+				]
+		},
+	"playerStructure":
+		{
+			"name": {"en": "Player Structure"},
 			"dogmaAttributes":
 				[
 					"tetheringRange",
@@ -392,13 +424,55 @@ const cards: {[key: string]: any} = {
 					"memoryBonus"
 				]
 		},
-	"capBooster":
+	"capacitor":
 		{
-			"name": {"en": "Cap Booster"},
+			"name": {"en": "Capacitor"},
 			"dogmaAttributes":
 				[
+					"capacitorCapacity",
+					"rechargeRate",
 					"capacitorBonus",
 					"capNeedBonus"
+				]
+		},
+	"shield":
+		{
+			"name": {"en": "Shield"},
+			"dogmaAttributes":
+				[
+					"shieldCapacity",
+					"shieldRechargeRate",
+					"shieldUniformity",
+					"shieldEmDamageResonance",
+					"shieldThermalDamageResonance",
+					"shieldKineticDamageResonance",
+					"shieldExplosiveDamageResonance",
+				]
+		},
+	"armor":
+		{
+			"name": {"en": "Armor"},
+			"dogmaAttributes":
+				[
+					"armorHP",
+					"armorUniformity",
+					"armorEmDamageResonance",
+					"armorThermalDamageResonance",
+					"armorKineticDamageResonance",
+					"armorExplosiveDamageResonance",
+				]
+		},
+	"structure":
+		{
+			"name": {"en": "Structure"},
+			"dogmaAttributes":
+				[
+					"hp",
+					"structureUniformity",
+					"emDamageResonance",
+					"thermalDamageResonance",
+					"kineticDamageResonance",
+					"explosiveDamageResonance",
 				]
 		},
 	"commandBurst":
