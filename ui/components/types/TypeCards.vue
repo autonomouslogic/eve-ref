@@ -6,9 +6,6 @@ import DefensesCard from "~/components/cards/defenses/DefensesCard.vue";
 import TypeCardSelector from "~/components/types/TypeCardSelector.vue";
 import {loadDogmaAttributesForType} from "~/lib/dogmaUtils";
 import {prepMessages} from "~/lib/translate";
-import VariationsCard from "~/components/cards/VariationsCard.vue";
-import RequiredSkillsCard from "~/components/cards/requiredSkills/RequiredSkillsCard.vue";
-import DefaultCard from "~/components/cards/DefaultCard.vue";
 
 const {locale} = useI18n();
 

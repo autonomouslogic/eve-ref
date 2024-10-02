@@ -2,15 +2,15 @@
 import {type Unit} from "~/refdata-openapi";
 import FormattedNumber from "~/components/helpers/FormattedNumber.vue";
 import {
-	CUBIC_METER,
 	GIGAJOULE,
 	HARDPOINTS,
 	HITPOINTS,
 	KILOGRAM,
 	LEVEL,
 	MEGAWATTS,
-	METER, MONEY,
-	POINTS, REALPERCENT,
+	METER,
+	MONEY,
+	POINTS,
 	TERAFLOPS
 } from "~/lib/unitConstants";
 

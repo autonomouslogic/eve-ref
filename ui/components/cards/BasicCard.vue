@@ -6,7 +6,7 @@ import FormattedNumber from "~/components/helpers/FormattedNumber.vue";
 import UnitValue from "~/components/dogma/UnitValue.vue";
 import AttributeList from "~/components/attr/AttributeList.vue";
 import AttributeListItem from "~/components/attr/AttributeListItem.vue";
-import {CUBIC_METER, KILOGRAM, MONEY} from "~/lib/unitConstants";
+import {CUBIC_METER, KILOGRAM} from "~/lib/unitConstants";
 
 const props = defineProps<{
 	title: string,
