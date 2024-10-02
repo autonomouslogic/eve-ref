@@ -8,7 +8,6 @@ const imgSize = 196;
 
 const characterId = 90406623;
 const title = "Ariel Rin for CSM19";
-const text = "Voting for CSM starts October 17th";
 const image = `https://images.evetech.net/characters/${characterId}/portrait`;
 const url = "https://forums.eveonline.com/t/ariel-rin-for-csm19/462992";
 const urlText = "Read more";
@@ -33,7 +32,20 @@ const urlText = "Read more";
 							in order to continue to push the envelope on community and social engagement in EVE.
 						</p>
 					</blockquote>
-					<p class="mb-4 font-normal text-lg lg:text-xl">{{text}}</p>
+					<p class="mb-4">
+						The ESI is a tool provided by CCP by which tools like EVE Ref, Alliance Auth, zKillboard, EVE Kill, Adam4EVE, Fuzzworks, EVE Tycoon, Mokaam, Excel Plugin, and many others get their data.
+						It's a critical part of the EVE ecosystem and it has been neglected for years.
+						At the current rate, it seems like it will eventually whither into non-existance and all the tools we rely on will cease to function.
+					</p>
+					<p class="mb-4">
+						One such victim has already been Evepraisal.
+						Undocumented changes caused it to be banned from the ESI and the maintainer decided to pull the plug on it.
+					</p>
+					<p class="mb-4">
+						Ariel Rin has been working hard to open a dialogue with CCP about the ESI for years.
+						I hope you will consider them as the #1 choice on your ballot this year.
+					</p>
+					<p class="mb-4 font-normal text-lg lg:text-xl">Voting for CSM starts October 17th</p>
 					<ExternalLink :url="url" class="">{{urlText}} &raquo;</ExternalLink>
 				</div>
 			</div>
