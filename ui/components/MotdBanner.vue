@@ -20,31 +20,30 @@ const urlText = "Read more";
 				<div class="max-w-fit justify-self-end px-4 lg:px-8 hidden md:block">
 					<img :src="image" :width="imgSize" :height="imgSize" class="" />
 				</div>
-				<div class="col-span-2 text-center md:text-left">
+				<div class="col-span-2 text-center sm:text-left">
 					<h1 class="mb-4 text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight leading-none">{{title}}</h1>
-					<blockquote class="hidden md:block italic pl-4 py-2 mb-4 border-l border-l-2">
+					<span class="hidden sm:block">
+						<blockquote class="italic pl-4 py-2 mb-4 border-l border-l-2">
+							<p class="mb-4">
+								CCP and Third Party Developers used to have a mutual goal of designing safe and effective tools, and it’s
+								been my constant struggle to reignite that professional relationship for the benefit of all players.
+							</p>
+							<p>
+								I’m running for CSM to bring ESI development back to a reliable, safe and game design approved state,
+								in order to continue to push the envelope on community and social engagement in EVE.
+							</p>
+						</blockquote>
 						<p class="mb-4">
-							CCP and Third Party Developers used to have a mutual goal of designing safe and effective tools, and it’s
-							been my constant struggle to reignite that professional relationship for the benefit of all players.
+							The ESI API, provided by CCP, is the source of all the data for the tools we rely on, such as EVE Ref,
+							Alliance Auth, zKillboard, EVE Kill, Adam4EVE, Fuzzworks, EVE Tycoon, Mokaam, Excel Plugin, and many more.
+							Unfortunately, this vital resource has been neglected for far too long.
+							Without it, all of these tools will cease to function.
 						</p>
-						<p>
-							I’m running for CSM to bring ESI development back to a reliable, safe and game design approved state,
-							in order to continue to push the envelope on community and social engagement in EVE.
+						<p class="mb-4">
+							Ariel Rin has been advocating for the revitalization of the ESI.
+							I hope you will consider them as the #1 choice on your ballot.
 						</p>
-					</blockquote>
-					<p class="mb-4">
-						The ESI is a tool provided by CCP by which tools like EVE Ref, Alliance Auth, zKillboard, EVE Kill, Adam4EVE, Fuzzworks, EVE Tycoon, Mokaam, Excel Plugin, and many others get their data.
-						It's a critical part of the EVE ecosystem and it has been neglected for years.
-						At the current rate, it seems like it will eventually whither into non-existance and all the tools we rely on will cease to function.
-					</p>
-					<p class="mb-4">
-						One such victim has already been Evepraisal.
-						Undocumented changes caused it to be banned from the ESI and the maintainer decided to pull the plug on it.
-					</p>
-					<p class="mb-4">
-						Ariel Rin has been working hard to open a dialogue with CCP about the ESI for years.
-						I hope you will consider them as the #1 choice on your ballot this year.
-					</p>
+					</span>
 					<p class="mb-4 font-normal text-lg lg:text-xl">Voting for CSM starts October 17th</p>
 					<ExternalLink :url="url" class="">{{urlText}} &raquo;</ExternalLink>
 				</div>
