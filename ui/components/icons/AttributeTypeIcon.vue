@@ -2,7 +2,7 @@
 import refdataApi from "~/refdata";
 import {type DogmaAttribute, type Icon} from "~/refdata-openapi";
 
-const ownImageServer = "https://everef.net/img";
+const ownImageServer = "https://iec.jita.space";
 
 const props = defineProps<{
 	dogmaAttribute: DogmaAttribute,
@@ -15,7 +15,7 @@ const icon: Icon = await refdataApi.getIcon({iconId});
 let iconUrl = "";
 if (icon) {
 	if (icon.iconFile?.toLowerCase().startsWith("res:/ui/texture/icons/")) {
-		iconUrl = ownImageServer + "/Icons/items/" + icon.iconFile.substring(22);
+		iconUrl = ownImageServer + "/items/" + icon.iconFile.substring(22);
 	}
 }
 </script>
