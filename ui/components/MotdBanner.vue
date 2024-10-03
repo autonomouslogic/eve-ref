@@ -35,7 +35,7 @@ const urlText = "Read more";
 						</blockquote>
 						<p class="mb-4">
 							The ESI API, provided by CCP, is the source of all the data for the tools we rely on, such as EVE Ref,
-							Alliance Auth, zKillboard, EVE Kill, Adam4EVE, Fuzzworks, EVE Tycoon, Mokaam, Excel Plugin, and many more.
+							Alliance Auth, zKillboard, Fuzzworks, jEveAssets, Jita Space, EVE Kill, Adam4EVE, Fuzzworks, EVE Tycoon, Mokaam, Excel Plugin, and many more.
 							Unfortunately, this vital resource has been neglected for far too long.
 							Without it, all of these tools will cease to function.
 						</p>
