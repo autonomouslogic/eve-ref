@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import {universeApi} from "~/esi";
 import {GetMarketsRegionIdOrdersOrderTypeEnum,} from "~/esi-openapi";
 import UnitValue from "~/components/dogma/UnitValue.vue";
 import {getOrders, type HubStation} from "~/lib/marketUtils";

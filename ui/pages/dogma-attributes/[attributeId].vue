@@ -4,7 +4,6 @@ import CardWrapper from "~/components/cards/CardWrapper.vue";
 import AttributeTypeIcon from "~/components/icons/AttributeTypeIcon.vue";
 import {getIntRouteParam} from "~/lib/routeUtils";
 import {prepMessages} from "~/lib/translate";
-import {assertTSThisType} from "@babel/types";
 
 const route = useRoute();
 const {locale} = useI18n();

@@ -46,7 +46,7 @@ if (Object.keys(dogmaAttributes).length > 0) {
 	<TraitsCard class="my-4" :inventory-type="inventoryType"/>
 	<DefensesCard class="my-4" :title="prepMessages(typeCardsConfig.defenses.name)[locale]"
 		:inventory-type="inventoryType"
-		:dogma-attributes="cardAttributes.defenses"/>
+		:dogma-attributes="cardAttributes.defenses" />
 	<CardsContainer>
 		<template v-for="(attributes, cardId) in cardAttributes" :key="cardId">
 			<TypeCardSelector

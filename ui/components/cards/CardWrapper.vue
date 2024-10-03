@@ -1,11 +1,11 @@
 <script setup lang="ts">
 const props = defineProps<{
-	title: string | undefined
+	title: string | undefined;
 }>();
 </script>
 
 <template>
-	<div class="self-start w-full lg:w-auto overflow-hidden">
+	<div class="overflow-hidden flex-auto">
 		<h2 v-if="props.title">{{ props.title }}</h2>
 		<slot />
 	</div>

@@ -29,10 +29,12 @@ if (props.bonuses) {
 </script>
 
 <template>
-	<h3>Type Bonuses</h3>
-	<div v-for="(formattedBonus, typeId) of formattedBonuses" :key="typeId">
-		<TypeLink :type-id="typeId" /> bonuses per level
-		<TraitGroup title="" :bonuses="formattedBonus" />
+	<div>
+		<h3>Type Bonuses</h3>
+		<div v-for="(formattedBonus, typeId) of formattedBonuses" :key="typeId">
+			<TypeLink :type-id="typeId" /> bonuses per level
+			<TraitGroup title="" :bonuses="formattedBonus" />
+		</div>
 	</div>
 </template>
 

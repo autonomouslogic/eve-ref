@@ -2,7 +2,6 @@
 import ExternalLink from "~/components/helpers/ExternalLink.vue";
 import {EVE_REFERRAL_URL, EVE_STORE_URL, MARKEE_DRAGON_URL, PATREON_URL} from "~/lib/urls";
 import Donors from "~/components/Donors.vue";
-import MotdBanner from "~/components/MotdBanner.vue";
 </script>
 
 <template>
