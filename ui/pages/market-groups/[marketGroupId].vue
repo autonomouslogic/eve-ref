@@ -24,15 +24,13 @@ useHead({
 		<div v-if="marketGroup.parentGroupId" class="mb-3">
 			Market group: <MarketGroupBreadcrumbs :market-group-id="marketGroup.parentGroupId" />
 		</div>
-		<ul>
-			<li v-for="marketGroupId in marketGroup.childMarketGroupIds" :key="marketGroupId">
-				<MarketGroupLink :marketGroupId="marketGroupId"></MarketGroupLink>
-			</li>
-		</ul>
-		<ul>
-			<li v-for="typeId in marketGroup.typeIds" :key="typeId">
-				<TypeLink :typeId="typeId"></TypeLink> <MarketPrice :type-id="typeId" order-type="sell" />
-			</li>
-		</ul>
+		<div class="flex flex-col">
+			<MarketGroupLink class="py-2" v-for="marketGroupId in marketGroup.childMarketGroupIds" :key="marketGroupId" :marketGroupId="marketGroupId"></MarketGroupLink>
+		</div>
+		<div class="flex flex-col">
+			<div class="py-2" v-for="typeId in marketGroup.typeIds" :key="typeId">
+				<TypeLink :typeId="typeId" /> <MarketPrice :type-id="typeId" order-type="sell" />
+			</div>
+		</div>
 	</div>
 </template>

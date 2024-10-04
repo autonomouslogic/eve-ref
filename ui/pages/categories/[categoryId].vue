@@ -18,11 +18,14 @@ const groupIds = category?.groupIds;
 <template>
 	<div v-if="category">
 		<h1 v-if="category.name">{{ prepMessages(category.name)[locale] }}</h1>
-		<ul>
-			<li v-for="groupId in groupIds" :key="groupId">
-				<GroupLink :groupId="groupId"></GroupLink>
-			</li>
-		</ul>
+		<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+			<GroupLink
+				class="py-2"
+				v-for="groupId in groupIds"
+				:key="groupId"
+				:groupId="groupId">
+			</GroupLink>
+		</div>
 	</div>
 	<div v-else>(Unknown category ID {{ categoryId }})</div>
 </template>

@@ -11,10 +11,13 @@ useHead({
 <template>
 	<div>
 		<h1>Market Groups</h1>
-		<ul>
-			<li v-for="marketGroupId in marketGroupIds" :key="marketGroupId">
-				<MarketGroupLink :marketGroupId="marketGroupId"></MarketGroupLink>
-			</li>
-		</ul>
+		<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+			<MarketGroupLink
+				class="py-2"
+				v-for="marketGroupId in marketGroupIds"
+				:key="marketGroupId"
+				:marketGroupId="marketGroupId">
+			</MarketGroupLink>
+		</div>
 	</div>
 </template>
