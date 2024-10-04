@@ -1,11 +1,14 @@
 <script setup lang="ts">
+import InternalLink from "~/components/helpers/InternalLink.vue";
+
 const error = useError();
 </script>
 
 <template>
-	<div class="flex flex-col h-screen justify-between">
-		<div class="container mb-auto px-4">
-			<h1>{{ error.statusCode }}</h1>
+	<div class="container mx-auto mt-4 flex flex-col md:flex-row">
+		<img src="~/assets/logo.png" class="h-20 w-20 md:h-40 md:w-40 rounded-full mr-8 mb-8" alt="EVE Ref Logo" />
+		<span>
+			<div class="text-2xl md:text-4xl mb-4">{{ error.statusMessage }}</div>
 			<ul>
 				<li v-if="error.url">URL: {{ error.url }}</li>
 				<li v-if="error.statusCode">Status code: {{ error.statusCode }}</li>
@@ -15,6 +18,6 @@ const error = useError();
 				<li v-if="error.data">Data: {{ error.data }}</li>
 			</ul>
 			<a href="/">Go home &raquo;</a>
-		</div>
+		</span>
 	</div>
 </template>
