@@ -1,5 +1,27 @@
 EVE Ref Changelog
 
+## [2.52.0](https://github.com/autonomouslogic/eve-ref/compare/2.51.0...2.52.0) (2024-10-04)
+
+
+### Features
+
+* **refdata:** Type IDs populated on meta groups in reference data, and fixed public contract scrape to use reference data instead of HTML from old EVE Ref ([#652](https://github.com/autonomouslogic/eve-ref/issues/652)) ([9aa622f](https://github.com/autonomouslogic/eve-ref/commit/9aa622fc0cd0e7548f958b1fb8f67962f2abbb55))
+* **ui:** Added market price to variations, market groups, inventory groups, and compare tables ([#648](https://github.com/autonomouslogic/eve-ref/issues/648)) ([033731f](https://github.com/autonomouslogic/eve-ref/commit/033731f9b22c848a7195f9c776ab32ffd3e76586))
+* **ui:** Custom error page ([#646](https://github.com/autonomouslogic/eve-ref/issues/646)) ([ea07b8d](https://github.com/autonomouslogic/eve-ref/commit/ea07b8da9b59a773d932ad899e3613141a595941))
+
+
+### Bug Fixes
+
+* **ui:** Improved card layout ([#641](https://github.com/autonomouslogic/eve-ref/issues/641)) ([c78d16e](https://github.com/autonomouslogic/eve-ref/commit/c78d16ebb2ddce148d578ddb2f356b02c07e0eb2))
+* **ui:** Improved layout on list pages ([#649](https://github.com/autonomouslogic/eve-ref/issues/649)) ([acfce93](https://github.com/autonomouslogic/eve-ref/commit/acfce931ac3f38019215027520544c29204cb30b))
+* **ui:** Styles navigation bar and moved language selection to footer ([#650](https://github.com/autonomouslogic/eve-ref/issues/650)) ([01383bc](https://github.com/autonomouslogic/eve-ref/commit/01383bc46fa8e9ed851d81d91d55e39ae30eb8dd))
+* **ui:** Switched dogma icons to iec.jita.space - temporary solution for [#642](https://github.com/autonomouslogic/eve-ref/issues/642) ([33cd063](https://github.com/autonomouslogic/eve-ref/commit/33cd063b9c87122f05c41edd7fefaeb86809ab26))
+
+
+### Miscellaneous Chores
+
+* **ui:** Tools in CSM banner ([be25c0c](https://github.com/autonomouslogic/eve-ref/commit/be25c0c2285b24b2dc1b3b2cd671d6a7c32ff6e2))
+
 ## [2.51.0](https://github.com/autonomouslogic/eve-ref/compare/2.50.0...2.51.0) (2024-10-02)
 
 
