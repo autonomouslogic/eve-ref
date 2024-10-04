@@ -28,7 +28,6 @@ import com.autonomouslogic.everef.esi.EsiLimitExceededInterceptorTest;
 import com.autonomouslogic.everef.esi.EsiRateLimitInterceptorTest;
 import com.autonomouslogic.everef.esi.EsiVerifyResponseTest;
 import com.autonomouslogic.everef.esi.LocationPopulatorTest;
-import com.autonomouslogic.everef.esi.MetaGroupScraperTest;
 import com.autonomouslogic.everef.esi.MockEsiAuthHelperModule;
 import com.autonomouslogic.everef.esi.MockLocationPopulatorModule;
 import com.autonomouslogic.everef.http.DataCrawlerTest;
@@ -93,8 +92,6 @@ public interface TestComponent {
 	void inject(MarketHistoryDaoTest test);
 
 	void inject(MarketHistoryEntryTest test);
-
-	void inject(MetaGroupScraperTest test);
 
 	void inject(MVStoreTest test);
 

@@ -11,5 +11,6 @@
     "ru" : "Tech II",
     "zh" : "二级科技"
   },
-  "meta_group_id" : 2
+  "meta_group_id" : 2,
+  "type_ids" : [ 2048, 22430, 22431 ]
 }

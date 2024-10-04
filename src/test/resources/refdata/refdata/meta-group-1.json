@@ -9,5 +9,6 @@
     "ru" : "Tech I",
     "zh" : "一级科技"
   },
-  "meta_group_id" : 1
+  "meta_group_id" : 1,
+  "type_ids" : [ 189, 645, 2046, 35833 ]
 }
