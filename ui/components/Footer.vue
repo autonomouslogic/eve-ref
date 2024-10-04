@@ -28,6 +28,9 @@ import InternalLink from "~/components/helpers/InternalLink.vue";
 					<li><ExternalLink url="https://docs.everef.net/">Docs</ExternalLink></li>
 					<li><ExternalLink url="https://docs.everef.net/datasets/">Data</ExternalLink></li>
 					<li><InternalLink to="/privacy">Privacy</InternalLink></li>
+					<li>
+						<LocaleSwitcher/>
+					</li>
 				</ul>
 			</div>
 			<div>
@@ -54,6 +57,7 @@ import InternalLink from "~/components/helpers/InternalLink.vue";
 <style scoped>
 .footer {
   background-color: var(--header-background-color);
+  color: black;
 }
 
 h1, h2, h3, h4, h5, h6 {

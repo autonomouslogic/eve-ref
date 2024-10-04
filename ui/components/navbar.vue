@@ -10,31 +10,44 @@ const localePath = useLocalePath();
 </script>
 
 <template>
-	<div class="header flex p-1">
-		<span class="w-full space-x-3">
-			<span>
-				<InternalLink to="/">EVE Ref</InternalLink>
+	<div class="header flex flex-col p-1 space-y-2">
+		<div class="flex flex-nowrap flex-row">
+			<span class="flex-auto space-x-3">
+				<span>
+					<InternalLink to="/">EVE Ref</InternalLink>
+				</span>
+				<span>
+					<InternalLink :to="localePath('/categories', 'en')">Categories</InternalLink>
+				</span>
+				<span>
+					<InternalLink to="/market-groups">Market Groups</InternalLink>
+				</span>
+				<span>
+					<InternalLink to="/structures">
+						<MarketGroupName :market-group-id="477"/>
+					</InternalLink>
+				</span>
+				<span>
+					<InternalLink to="/skill-points">Skill Points</InternalLink>
+				</span>
 			</span>
-			<span><InternalLink :to="localePath('/categories', 'en')">Categories</InternalLink></span>
-			<span><InternalLink to="/market-groups">Market Groups</InternalLink></span>
-			<span><InternalLink to="/structures"><MarketGroupName :market-group-id="477" /></InternalLink></span>
-			<span><InternalLink to="/skill-points">Skill Points</InternalLink></span>
-			<span><SearchBar /></span>
-		</span>
-		<span class="w-full space-x-3 text-right">
-			<span>
-				<ExternalLink :url="PATREON_URL" class="header-patreon">
-					<span><font-awesome-icon icon="fa-brands fa-patreon" /></span>
-					Patreon
-				</ExternalLink>
+			<span class="flex-auto space-x-3 text-right">
+				<span>
+					<ExternalLink :url="PATREON_URL" class="header-patreon whitespace-nowrap">
+						<span>
+							<font-awesome-icon icon="fa-brands fa-patreon"/>
+						</span>
+						Patreon
+					</ExternalLink>
+				</span>
 			</span>
-			<span>
-				<LocaleSwitcher />
-			</span>
+		</div>
+		<span>
+			<SearchBar class="w-full md:w-3/4 xl:w-2/4" />
 		</span>
 	</div>
 
-	<MotdBanner />
+	<MotdBanner/>
 </template>
 
 <style scoped>
