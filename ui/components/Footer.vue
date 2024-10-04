@@ -28,6 +28,9 @@ import InternalLink from "~/components/helpers/InternalLink.vue";
 					<li><ExternalLink url="https://docs.everef.net/">Docs</ExternalLink></li>
 					<li><ExternalLink url="https://docs.everef.net/datasets/">Data</ExternalLink></li>
 					<li><InternalLink to="/privacy">Privacy</InternalLink></li>
+					<li>
+						<LocaleSwitcher/>
+					</li>
 				</ul>
 			</div>
 			<div>
