@@ -9,6 +9,7 @@ export interface Props {
 	direction?: "vertical" | "horizontal",
 	compactAttributeNames?: boolean,
 	showMetaGroup?: boolean,
+	showMarketPrice?: boolean,
 	loadBundles?: boolean,
 }
 
@@ -16,6 +17,7 @@ const props = withDefaults(defineProps<Props>(), {
 	direction: "horizontal",
 	compactAttributeNames: false,
 	showMetaGroup: false,
+	showMarketPrice: true,
 	loadBundles: true
 });
 
@@ -54,12 +56,14 @@ function getValue(attr: DogmaAttribute, type: InventoryType): number {
 				:inventory-types="types"
 				:dogma-attributes="listAttributes"
 				:compact-attribute-names="compactAttributeNames"
-				:show-meta-group="showMetaGroup"/>
+				:show-meta-group="showMetaGroup"
+				:show-market-price="showMarketPrice"/>
 			<CompareTableVertical v-if="direction == 'vertical'"
 				:inventory-types="types"
 				:dogma-attributes="listAttributes"
 				:compact-attribute-names="compactAttributeNames"
-				:show-meta-group="showMetaGroup"/>
+				:show-meta-group="showMetaGroup"
+				:show-market-price="showMarketPrice"/>
 		</table>
 	</div>
 </template>

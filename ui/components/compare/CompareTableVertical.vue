@@ -4,11 +4,13 @@ import TypeLink from "~/components/helpers/TypeLink.vue";
 import DogmaAttributeLink from "~/components/helpers/DogmaAttributeLink.vue";
 import AttributeTypeIcon from "~/components/icons/AttributeTypeIcon.vue";
 import MetaGroupName from "~/components/helpers/MetaGroupName.vue";
+import MarketPrice from "~/components/helpers/MarketPrice.vue";
 
 export interface Props {
 	inventoryTypes: InventoryType[],
 	dogmaAttributes: DogmaAttribute[],
 	compactAttributeNames: boolean,
+	showMarketPrice: boolean,
 	showMetaGroup: boolean
 }
 const props = withDefaults(defineProps<Props>(), {
@@ -19,6 +21,9 @@ const props = withDefaults(defineProps<Props>(), {
 	<thead>
 		<tr>
 			<th class="text-left">Type</th>
+			<th v-if="showMarketPrice" class="text-right">
+				<template v-if="!compactAttributeNames">Price</template>
+			</th>
 			<th v-if="showMetaGroup">
 				<template v-if="!compactAttributeNames">Meta group</template>
 			</th>
@@ -33,6 +38,9 @@ const props = withDefaults(defineProps<Props>(), {
 	<tbody>
 		<tr v-for="type in inventoryTypes" :key="type.typeId" class="border-b border-gray-700">
 			<td class="text-left"><type-link :type-id="type.typeId" /></td>
+			<td v-if="showMarketPrice" class="text-right">
+				<MarketPrice v-if="type.typeId" :type-id="type.typeId" />
+			</td>
 			<td v-if="showMetaGroup">
 				<MetaGroupName :meta-group-id="type.metaGroupId" />
 			</td>

@@ -4,11 +4,13 @@ import TypeLink from "~/components/helpers/TypeLink.vue";
 import DogmaAttributeLink from "~/components/helpers/DogmaAttributeLink.vue";
 import AttributeTypeIcon from "~/components/icons/AttributeTypeIcon.vue";
 import MetaGroupName from "~/components/helpers/MetaGroupName.vue";
+import MarketPrice from "~/components/helpers/MarketPrice.vue";
 
 export interface Props {
 	inventoryTypes: InventoryType[],
 	dogmaAttributes: DogmaAttribute[],
 	compactAttributeNames: boolean,
+	showMarketPrice: boolean,
 	showMetaGroup: boolean
 }
 
@@ -27,6 +29,14 @@ const props = withDefaults(defineProps<Props>(), {});
 		</tr>
 	</thead>
 	<tbody>
+		<tr v-if="showMarketPrice">
+			<td>
+				<template v-if="!compactAttributeNames">Price</template>
+			</td>
+			<td v-for="type in inventoryTypes" :key="type.typeId" class="text-right px-6">
+				<MarketPrice v-if="type.typeId" :type-id="type.typeId"/>
+			</td>
+		</tr>
 		<tr v-if="showMetaGroup">
 			<td>
 				<template v-if="!compactAttributeNames">Meta group</template>
