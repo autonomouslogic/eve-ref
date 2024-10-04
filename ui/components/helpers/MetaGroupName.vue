@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import refdataApi from "~/refdata";
-import {prepMessages} from "~/lib/translate";
+import {tr} from "~/lib/translate";
 
 const props = defineProps<{
 	metaGroupId: number | undefined
@@ -13,6 +13,6 @@ const metaGroup = props.metaGroupId === undefined ? undefined :
 
 <template>
 	<template v-if="metaGroup && metaGroup.name">
-		{{ prepMessages(metaGroup.name)[locale] }}
+		{{ tr(metaGroup.name, locale) }}
 	</template>
 </template>

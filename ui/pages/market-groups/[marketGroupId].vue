@@ -5,7 +5,7 @@ import TypeLink from "~/components/helpers/TypeLink.vue";
 import MarketGroupLink from "~/components/helpers/MarketGroupLink.vue";
 import MarketGroupBreadcrumbs from "~/components/helpers/MarketGroupBreadcrumbs.vue";
 import {getIntRouteParam} from "~/lib/routeUtils";
-import {prepMessages} from "~/lib/translate";
+import {tr} from "~/lib/translate";
 import MarketPrice from "~/components/helpers/MarketPrice.vue";
 
 const route = useRoute();
@@ -14,13 +14,13 @@ const {locale} = useI18n();
 const marketGroupId: number = getIntRouteParam(route, "marketGroupId");
 const marketGroup: MarketGroup = await refdataApi.getMarketGroup({marketGroupId});
 useHead({
-	title: prepMessages(marketGroup.name)[locale.value]
+	title: tr(marketGroup.name, locale.value)
 });
 </script>
 
 <template>
 	<div>
-		<h1 v-if="marketGroup.name">{{ prepMessages(marketGroup.name)[locale] }}</h1>
+		<h1 v-if="marketGroup.name">{{ tr(marketGroup.name, locale) }}</h1>
 		<div v-if="marketGroup.parentGroupId" class="mb-3">
 			Market group: <MarketGroupBreadcrumbs :market-group-id="marketGroup.parentGroupId" />
 		</div>

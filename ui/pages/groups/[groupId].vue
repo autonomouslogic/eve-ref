@@ -3,7 +3,7 @@ import refdataApi from "~/refdata";
 import {getIntRouteParam} from "~/lib/routeUtils";
 import CategoryLink from "~/components/helpers/CategoryLink.vue";
 import {getGroupDogma} from "~/lib/mainDogmaAttributes";
-import {prepMessages} from "~/lib/translate";
+import {tr} from "~/lib/translate";
 
 const route = useRoute();
 const {locale} = useI18n();
@@ -12,7 +12,7 @@ const groupId = getIntRouteParam(route, "groupId");
 
 const group = await refdataApi.getGroup({groupId});
 useHead({
-	title: prepMessages(group.name)[locale.value]
+	title: tr(group.name, locale.value)
 });
 const typeIds: number[] = group.typeIds?.filter((typeId) => typeId !== undefined) as number[];
 const attributes = await getGroupDogma(groupId);
@@ -20,7 +20,7 @@ const attributes = await getGroupDogma(groupId);
 
 <template>
 	<div>
-		<h1 v-if="group.name">{{ prepMessages(group.name)[locale] }}</h1>
+		<h1 v-if="group.name">{{ tr(group.name, locale) }}p</h1>
 		<div class="mb-3">
 			Category: <CategoryLink :category-id="group.categoryId" />
 		</div>

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import refdataApi from "~/refdata";
 import {type InventoryGroup} from "~/refdata-openapi";
-import {prepMessages} from "~/lib/translate";
+import {tr} from "~/lib/translate";
 import InternalLink from "~/components/helpers/InternalLink.vue";
 
 const props = defineProps<{
@@ -21,7 +21,7 @@ const group: InventoryGroup = await refdataApi.getGroup({groupId: props.groupId}
 	<InternalLink
 		v-if="group && group.name"
 		:to="`/groups/${props.groupId}`">
-		{{ prepMessages(group.name)[locale] }}
+		{{ tr(group.name, locale) }}
 	</InternalLink>
 	<span v-else>(Unknown group ID {{props.groupId}})</span>
 </template>

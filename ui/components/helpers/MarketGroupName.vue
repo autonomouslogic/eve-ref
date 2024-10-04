@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import refdataApi from "~/refdata";
 import {type MarketGroup} from "~/refdata-openapi";
-import {prepMessages} from "~/lib/translate";
+import {tr} from "~/lib/translate";
 
 const props = defineProps<{
 	marketGroupId: number | undefined
@@ -18,6 +18,6 @@ const marketGroup: MarketGroup = await refdataApi.getMarketGroup({marketGroupId:
 
 <template>
 	<template v-if="marketGroup && marketGroup.name">
-		{{ prepMessages(marketGroup.name)[locale] }}
+		{{ tr(marketGroup.name, locale) }}
 	</template>
 </template>
