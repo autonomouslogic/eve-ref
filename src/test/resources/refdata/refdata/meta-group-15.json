@@ -11,5 +11,6 @@
     "ru" : "Бездна",
     "zh" : "深渊"
   },
-  "meta_group_id" : 15
+  "meta_group_id" : 15,
+  "type_ids" : [ 52227 ]
 }

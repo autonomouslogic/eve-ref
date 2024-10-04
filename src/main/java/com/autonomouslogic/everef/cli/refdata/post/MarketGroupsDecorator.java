@@ -1,6 +1,5 @@
 package com.autonomouslogic.everef.cli.refdata.post;
 
-import com.autonomouslogic.everef.refdata.InventoryType;
 import com.autonomouslogic.everef.refdata.MarketGroup;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -21,7 +20,7 @@ public class MarketGroupsDecorator extends PostDecorator {
 	protected MarketGroupsDecorator() {}
 
 	public Completable create() {
-		return Completable.concatArray(referenceChildGroups(), referenceTypesOnGroups());
+		return Completable.concatArray(referenceChildGroups());
 	}
 
 	@NotNull
@@ -43,30 +42,6 @@ public class MarketGroupsDecorator extends PostDecorator {
 				}
 				((ArrayNode) parentJson.withArray("child_market_group_ids")).add(groupId);
 				groups.put(parentId, parentJson);
-			}
-		});
-	}
-
-	@NotNull
-	private Completable referenceTypesOnGroups() {
-		return Completable.fromAction(() -> {
-			log.info("Referencing types on market groups");
-			var types = storeHandler.getRefStore("types");
-			var groups = storeHandler.getRefStore("marketGroups");
-			for (var typeJson : types.values()) {
-				var type = objectMapper.convertValue(typeJson, InventoryType.class);
-				var typeId = type.getTypeId();
-				var groupId = type.getMarketGroupId();
-				if (groupId == null) {
-					continue;
-				}
-				var groupJson = groups.get(groupId);
-				if (groupJson == null) {
-					log.warn("Unable to reference type {} on market group {}, market group not found", typeId, groupId);
-					continue;
-				}
-				((ArrayNode) groupJson.withArray("type_ids")).add(typeId);
-				groups.put(groupId, groupJson);
 			}
 		});
 	}
