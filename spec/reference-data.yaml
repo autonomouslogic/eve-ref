@@ -1227,6 +1227,13 @@ components:
           type: object
           additionalProperties:
             type: string
+        type_ids:
+          type: array
+          description: The type IDs in this meta group. This is added by EVE Ref.
+          items:
+            type: integer
+            description: The type IDs in this meta group. This is added by EVE Ref.
+            format: int64
       description: A meta group
     ModifierInfo:
       type: object
