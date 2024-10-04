@@ -37,18 +37,26 @@ async function change() {
 </script>
 
 <template>
-	<form @submit.prevent="submit">
-		<input
-			v-model="query"
-			@keyup="change"
-			type="text"
-			placeholder="Search"
-		/>
-	</form>
+	<div class="search">
+		<form @submit.prevent="submit">
+			<input
+				v-model="query"
+				@keyup="change"
+				type="text"
+				placeholder="Search"
+			/>
+		</form>
+	</div>
 </template>
 
 <style scoped>
+.search {
+  @apply flex items-center;
+}
+form, input {
+  @apply w-full;
+}
 input {
-  @apply border border-solid border-gray-700 p-1;
+  @apply border border-solid border-gray-300 p-1;
 }
 </style>

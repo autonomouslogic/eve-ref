@@ -6,6 +6,7 @@ import MarketGroupLink from "~/components/helpers/MarketGroupLink.vue";
 import MarketGroupBreadcrumbs from "~/components/helpers/MarketGroupBreadcrumbs.vue";
 import {getIntRouteParam} from "~/lib/routeUtils";
 import {prepMessages} from "~/lib/translate";
+import MarketPrice from "~/components/helpers/MarketPrice.vue";
 
 const route = useRoute();
 const {locale} = useI18n();
@@ -27,12 +28,9 @@ useHead({
 			<MarketGroupLink class="py-2" v-for="marketGroupId in marketGroup.childMarketGroupIds" :key="marketGroupId" :marketGroupId="marketGroupId"></MarketGroupLink>
 		</div>
 		<div class="flex flex-col">
-			<TypeLink
-				class="py-2"
-				v-for="typeId in marketGroup.typeIds"
-				:key="typeId"
-				:typeId="typeId">
-			</TypeLink>
+			<div class="py-2" v-for="typeId in marketGroup.typeIds" :key="typeId">
+				<TypeLink :typeId="typeId" /> <MarketPrice :type-id="typeId" order-type="sell" />
+			</div>
 		</div>
 	</div>
 </template>
