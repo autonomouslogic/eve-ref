@@ -5,6 +5,7 @@ import com.autonomouslogic.everef.esi.EsiUrl;
 import com.autonomouslogic.everef.esi.UniverseEsi;
 import com.autonomouslogic.everef.http.OkHttpHelper;
 import com.autonomouslogic.everef.openapi.refdata.apis.RefdataApi;
+import com.autonomouslogic.everef.openapi.refdata.invoker.ApiException;
 import com.autonomouslogic.everef.util.JsonUtil;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -26,7 +27,7 @@ import lombok.extern.log4j.Log4j2;
  */
 @Log4j2
 public class ContractAbyssalFetcher {
-	private static final int ABYSSAL_META_GROUP = 15;
+	private static final long ABYSSAL_META_GROUP = 15;
 
 	@Inject
 	protected ObjectMapper objectMapper;
@@ -62,8 +63,7 @@ public class ContractAbyssalFetcher {
 
 	public Completable apply(long contractId, Flowable<ObjectNode> in) {
 		return Completable.defer(() -> {
-			abyssalTypeIds = refdataApi.getMetaGroup(15L).join().getTypeIds();
-			log.debug("Loaded {} abyssal type IDs", abyssalTypeIds.size());
+			initAbyssalTypes();
 			return in.flatMap(item -> isPotentialAbyssalItem(item).flatMapPublisher(isAbyssal -> {
 						return isAbyssal ? Flowable.just(item) : Flowable.empty();
 					}))
@@ -183,5 +183,10 @@ public class ContractAbyssalFetcher {
 		dogmaEffect.put("item_id", itemId);
 		dogmaEffect.put("http_last_modified", lastModified.toString());
 		dogmaEffectsStore.put(ContractsFileBuilder.DOGMA_EFFECT_ID.apply(dogmaEffect), dogmaEffect);
+	}
+
+	private void initAbyssalTypes() throws ApiException {
+		abyssalTypeIds = refdataApi.getMetaGroup(ABYSSAL_META_GROUP).join().getTypeIds();
+		log.trace("Loaded {} abyssal type IDs", abyssalTypeIds.size());
 	}
 }

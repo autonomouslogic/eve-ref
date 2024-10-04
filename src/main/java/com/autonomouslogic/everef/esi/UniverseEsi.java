@@ -112,23 +112,32 @@ public class UniverseEsi {
 	private <T> Maybe<T> getFromCacheOrFetch(
 			String name, Class<T> type, Map<Integer, Optional<T>> cache, int id, Supplier<T> fetcher) {
 		return Maybe.defer(() -> {
-					if (cache.containsKey(id)) {
-						return Maybe.fromOptional(cache.get(id));
-					}
-					return Maybe.defer(() -> {
-								log.trace("Fetching {} {}", name, id);
-								var obj = fetcher.get();
-								var optional = Optional.ofNullable(obj);
-								cache.put(id, optional);
-								return Maybe.fromOptional(optional);
-							})
-							.retry(2, e -> {
-								log.warn("Retrying {} {}: {}", name, id, ExceptionUtils.getRootCauseMessage(e));
-								return true;
-							})
-							.compose(Rx.offloadMaybe(EsiHelper.ESI_SCHEDULER));
-				})
-				.onErrorResumeNext(
-						e -> Maybe.error(new RuntimeException(String.format("Failed fetching %s %s", name, id), e)));
+			if (cache.containsKey(id)) {
+				return Maybe.fromOptional(cache.get(id));
+			}
+			return Maybe.defer(() -> {
+						if (cache.containsKey(id)) {
+							return Maybe.fromOptional(cache.get(id));
+						}
+						log.trace(
+								"Fetching {} {} - [{} - {} - {}]",
+								name,
+								id,
+								cache.size(),
+								cache.containsKey(id),
+								System.identityHashCode(cache));
+						var obj = fetcher.get();
+						var optional = Optional.ofNullable(obj);
+						cache.put(id, optional);
+						return Maybe.fromOptional(optional);
+					})
+					.retry(2, e -> {
+						log.warn("Retrying {} {}: {}", name, id, ExceptionUtils.getRootCauseMessage(e));
+						return true;
+					})
+					.compose(Rx.offloadMaybe(EsiHelper.ESI_SCHEDULER))
+					.onErrorResumeNext(e ->
+							Maybe.error(new RuntimeException(String.format("Failed fetching %s %s", name, id), e)));
+		});
 	}
 }
