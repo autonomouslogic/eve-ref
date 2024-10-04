@@ -2,9 +2,9 @@ package com.autonomouslogic.everef.cli.publiccontracts;
 
 import com.autonomouslogic.everef.esi.EsiHelper;
 import com.autonomouslogic.everef.esi.EsiUrl;
-import com.autonomouslogic.everef.esi.MetaGroupScraper;
 import com.autonomouslogic.everef.esi.UniverseEsi;
 import com.autonomouslogic.everef.http.OkHttpHelper;
+import com.autonomouslogic.everef.openapi.refdata.apis.RefdataApi;
 import com.autonomouslogic.everef.util.JsonUtil;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,6 +15,7 @@ import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Single;
 import java.time.Instant;
 import java.time.ZonedDateTime;
+import java.util.List;
 import java.util.Map;
 import javax.inject.Inject;
 import lombok.Setter;
@@ -40,7 +41,7 @@ public class ContractAbyssalFetcher {
 	protected UniverseEsi universeEsi;
 
 	@Inject
-	protected MetaGroupScraper metaGroupScraper;
+	protected RefdataApi refdataApi;
 
 	@Setter
 	private Map<Long, JsonNode> dynamicItemsStore;
@@ -54,22 +55,28 @@ public class ContractAbyssalFetcher {
 	@Setter
 	private Map<String, JsonNode> dogmaAttributesStore;
 
+	List<Long> abyssalTypeIds;
+
 	@Inject
 	protected ContractAbyssalFetcher() {}
 
 	public Completable apply(long contractId, Flowable<ObjectNode> in) {
-		return in.flatMap(item -> isPotentialAbyssalItem(item).flatMapPublisher(isAbyssal -> {
-					return isAbyssal ? Flowable.just(item) : Flowable.empty();
-				}))
-				.filter(item -> isItemNotSeen(item))
-				.flatMapCompletable(
-						item -> {
-							long itemId = item.get("item_id").longValue();
-							long typeId = item.get("type_id").longValue();
-							return resolveDynamicItem(contractId, typeId, itemId);
-						},
-						false,
-						1);
+		return Completable.defer(() -> {
+			abyssalTypeIds = refdataApi.getMetaGroup(15L).join().getTypeIds();
+			log.debug("Loaded {} abyssal type IDs", abyssalTypeIds.size());
+			return in.flatMap(item -> isPotentialAbyssalItem(item).flatMapPublisher(isAbyssal -> {
+						return isAbyssal ? Flowable.just(item) : Flowable.empty();
+					}))
+					.filter(item -> isItemNotSeen(item))
+					.flatMapCompletable(
+							item -> {
+								long itemId = item.get("item_id").longValue();
+								long typeId = item.get("type_id").longValue();
+								return resolveDynamicItem(contractId, typeId, itemId);
+							},
+							false,
+							1);
+		});
 	}
 
 	public Single<Boolean> isPotentialAbyssalItem(ObjectNode item) {
@@ -86,27 +93,16 @@ public class ContractAbyssalFetcher {
 			if (JsonUtil.compareLongs(item.get("quantity"), 1) > 0) {
 				return Single.just(false);
 			}
-			return verifyMetaGroup(item).flatMap(b -> {
-				if (!b) {
-					return Single.just(b);
-				}
-				return verifyType(item);
-			});
+			if (!abyssalTypeIds.contains(item.get("type_id").asLong())) {
+				return Single.just(false);
+			}
+			return verifyType(item);
 		});
 	}
 
 	private Single<Boolean> verifyType(ObjectNode item) {
 		var typeId = item.get("type_id").asInt();
 		return universeEsi.getType(typeId).isEmpty().map(empty -> !empty);
-	}
-
-	private Single<Boolean> verifyMetaGroup(ObjectNode item) {
-		var typeId = item.get("type_id").asInt();
-		return metaGroupScraper
-				.scrapeTypeIds(ABYSSAL_META_GROUP)
-				.filter(id -> id == typeId)
-				.isEmpty()
-				.map(empty -> !empty);
 	}
 
 	private boolean isItemNotSeen(ObjectNode item) {
