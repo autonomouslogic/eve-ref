@@ -57,6 +57,7 @@ import InternalLink from "~/components/helpers/InternalLink.vue";
 <style scoped>
 .footer {
   background-color: var(--header-background-color);
+  color: black;
 }
 
 h1, h2, h3, h4, h5, h6 {
