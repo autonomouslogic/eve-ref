@@ -134,6 +134,16 @@ public interface ReferenceDataSpec {
 	List<Integer> getRootMarketGroups();
 
 	@GET
+	@Path("/market_groups/root/bundle")
+	@Operation(description = "Get bundle for root market groups.")
+	@ApiResponse(
+			responseCode = "200",
+			description = "Root market group bundle.",
+			useReturnTypeSchema = true,
+			content = @Content(mediaType = "application/json"))
+	Bundle getRootMarketGroupsBundle();
+
+	@GET
 	@Path("/market_groups/{market_group_id}")
 	@Operation
 	@ApiResponse(
@@ -151,7 +161,7 @@ public interface ReferenceDataSpec {
 			description = "The market group bundle.",
 			useReturnTypeSchema = true,
 			content = @Content(mediaType = "application/json"))
-	MarketGroup getMarketGroupBundle(@PathParam("market_group_id") long marketGroupId);
+	Bundle getMarketGroupBundle(@PathParam("market_group_id") long marketGroupId);
 
 	@GET
 	@Path("/meta_groups")

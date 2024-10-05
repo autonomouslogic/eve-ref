@@ -129,6 +129,13 @@ export async function cacheGroupBundle(groupId: number): Promise<void> {
     }
 }
 
+export async function cacheRootMarketGroupBundle(): Promise<void> {
+    const bundle = await refdataApi.getRootMarketGroupBundle();
+    if (bundle) {
+        cacheBundleObj(bundle);
+    }
+}
+
 export async function cacheMarketGroupBundle(marketGroupId: number): Promise<void> {
     const bundle = await refdataApi.getMarketGroupBundle({marketGroupId});
     if (bundle) {

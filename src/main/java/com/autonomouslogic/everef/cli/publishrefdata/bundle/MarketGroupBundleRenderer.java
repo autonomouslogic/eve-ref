@@ -1,13 +1,20 @@
 package com.autonomouslogic.everef.cli.publishrefdata.bundle;
 
+import com.autonomouslogic.everef.cli.publishrefdata.RootMarketGroupIndexRenderer;
 import com.autonomouslogic.everef.refdata.InventoryType;
 import com.autonomouslogic.everef.refdata.MarketGroup;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Maybe;
 import javax.inject.Inject;
+import javax.inject.Provider;
+
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.tuple.Pair;
+
+import java.util.List;
+import java.util.Optional;
 
 /**
  * Renders the basic objects in the reference data collections.
@@ -15,11 +22,33 @@ import org.apache.commons.lang3.tuple.Pair;
 @Log4j2
 public class MarketGroupBundleRenderer extends BundleRenderer {
 	@Inject
+	protected Provider<RootMarketGroupIndexRenderer> rootMarketGroupIndexRendererProvider;
+
+	@Inject
 	protected MarketGroupBundleRenderer() {}
 
 	@Override
 	protected Flowable<Pair<String, JsonNode>> renderInternal() {
-		return Flowable.fromIterable(getGroupsMap().keySet()).flatMapMaybe(this::createGroupBundle);
+		return Flowable.concat(
+			createRootMarketGroupsBundle().toFlowable(),
+			Flowable.fromIterable(getGroupsMap().keySet()).flatMapMaybe(this::createGroupBundle)
+		);
+	}
+
+	private Maybe<Pair<String, JsonNode>> createRootMarketGroupsBundle() {
+		var rootGroupIds = rootMarketGroupIndexRendererProvider.get().setDataStore(getDataStore()).render()
+				.map(Pair::getRight)
+			.map(json -> objectMapper.convertValue(json, MarketGroup.class))
+			.map(MarketGroup::getMarketGroupId)
+			.toList().blockingGet();
+
+		var bundleJson = generateBundle(rootGroupIds, List.of());
+
+		if (bundleJson.isPresent()) {
+			var path = "market_groups/root/bundle";
+			return Maybe.just(Pair.of(path, bundleJson.get()));
+		}
+		return Maybe.empty();
 	}
 
 	private Maybe<Pair<String, JsonNode>> createGroupBundle(long groupId) {
@@ -31,6 +60,16 @@ public class MarketGroupBundleRenderer extends BundleRenderer {
 			return Maybe.empty();
 		}
 
+		var bundleJson = generateBundle(childGroupIds, typeIds);
+
+		if (bundleJson.isPresent()) {
+			var path = refDataUtil.subPath("market_groups", group.getMarketGroupId()) + "/bundle";
+			return Maybe.just(Pair.of(path, bundleJson.get()));
+		}
+		return Maybe.empty();
+	}
+
+	private Optional<ObjectNode> generateBundle(List<Long> childGroupIds, List<Long> typeIds) {
 		var bundleJson = objectMapper.createObjectNode();
 		var typesJson = objectMapper.createObjectNode();
 		var marketGroupsJson = objectMapper.createObjectNode();
@@ -85,9 +124,10 @@ public class MarketGroupBundleRenderer extends BundleRenderer {
 		}
 
 		if (valid) {
-			var path = refDataUtil.subPath("market_groups", group.getMarketGroupId()) + "/bundle";
-			return Maybe.just(Pair.of(path, bundleJson));
+			return Optional.of(bundleJson);
 		}
-		return Maybe.empty();
+		else {
+			return Optional.empty();
+		}
 	}
 }

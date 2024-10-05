@@ -305,6 +305,19 @@ paths:
                 items:
                   type: integer
                   format: int32
+  /market_groups/root/bundle:
+    get:
+      tags:
+      - refdata
+      description: Get bundle for root market groups.
+      operationId: getRootMarketGroupsBundle
+      responses:
+        "200":
+          description: Root market group bundle.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Bundle"
   /market_groups/{market_group_id}:
     get:
       tags:
@@ -328,7 +341,7 @@ paths:
     get:
       tags:
       - refdata
-      operationId: Bundle
+      operationId: getMarketGroupBundle
       parameters:
       - name: market_group_id
         in: path

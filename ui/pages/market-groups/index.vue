@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import refdataApi from "~/refdata";
+import refdataApi, {cacheRootMarketGroupBundle} from "~/refdata";
 import MarketGroupLink from "~/components/helpers/MarketGroupLink.vue";
 
+await cacheRootMarketGroupBundle();
 const marketGroupIds: number[] = await refdataApi.getRootMarketGroups();
 useHead({
 	title: "Market Groups"
