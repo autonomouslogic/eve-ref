@@ -67,10 +67,10 @@ public interface ReferenceDataSpec {
 	@Path("/categories/{category_id}/bundle")
 	@Operation
 	@ApiResponse(
-		responseCode = "200",
-		description = "The category bundle.",
-		useReturnTypeSchema = true,
-		content = @Content(mediaType = "application/json"))
+			responseCode = "200",
+			description = "The category bundle.",
+			useReturnTypeSchema = true,
+			content = @Content(mediaType = "application/json"))
 	Bundle getCategoryBundle(@PathParam("category_id") long categoryId);
 
 	@GET

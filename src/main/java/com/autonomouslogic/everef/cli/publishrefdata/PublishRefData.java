@@ -222,7 +222,7 @@ public class PublishRefData implements Command {
 								.setDataStore(dataStore)
 								.render(),
 						typeBundleRendererProvider.get().setDataStore(dataStore).render(),
-				categoryBundleRendererProvider
+						categoryBundleRendererProvider
 								.get()
 								.setDataStore(dataStore)
 								.render(),

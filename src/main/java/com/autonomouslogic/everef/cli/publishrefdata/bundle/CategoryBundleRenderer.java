@@ -1,15 +1,12 @@
 package com.autonomouslogic.everef.cli.publishrefdata.bundle;
 
 import com.autonomouslogic.everef.refdata.InventoryCategory;
-import com.autonomouslogic.everef.refdata.InventoryGroup;
-import com.autonomouslogic.everef.refdata.InventoryType;
 import com.fasterxml.jackson.databind.JsonNode;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Maybe;
+import javax.inject.Inject;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.tuple.Pair;
-
-import javax.inject.Inject;
 
 /**
  * Renders the basic objects in the reference data collections.
