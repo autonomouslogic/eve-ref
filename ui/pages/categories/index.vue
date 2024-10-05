@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import refdataApi from "~/refdata";
+import refdataApi, {cacheCategoriesBundle} from "~/refdata";
 import CategoryLink from "~/components/helpers/CategoryLink.vue";
 import {tr} from "~/lib/translate";
 const {locale} = useI18n();
@@ -7,6 +7,8 @@ const {locale} = useI18n();
 useHead({
 	title: "Categories"
 });
+
+await cacheCategoriesBundle();
 
 const categoryIds: number[] = await refdataApi.getAllCategories();
 const categories = await Promise.all(categoryIds.map(async (categoryId) => await refdataApi.getCategory({categoryId})));

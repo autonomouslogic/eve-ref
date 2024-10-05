@@ -4,6 +4,7 @@ import com.autonomouslogic.commons.rxjava3.Rx3Util;
 import com.autonomouslogic.everef.cli.Command;
 import com.autonomouslogic.everef.cli.publishrefdata.bundle.CategoryBundleRenderer;
 import com.autonomouslogic.everef.cli.publishrefdata.bundle.GroupBundleRenderer;
+import com.autonomouslogic.everef.cli.publishrefdata.bundle.RootCategoryBundleRenderer;
 import com.autonomouslogic.everef.cli.publishrefdata.bundle.TypeBundleRenderer;
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.http.OkHttpHelper;
@@ -96,6 +97,9 @@ public class PublishRefData implements Command {
 
 	@Inject
 	protected Provider<TypeBundleRenderer> typeBundleRendererProvider;
+
+	@Inject
+	protected Provider<RootCategoryBundleRenderer> rootCategoryBundleRendererProvider;
 
 	@Inject
 	protected Provider<CategoryBundleRenderer> categoryBundleRendererProvider;
@@ -222,6 +226,10 @@ public class PublishRefData implements Command {
 								.setDataStore(dataStore)
 								.render(),
 						typeBundleRendererProvider.get().setDataStore(dataStore).render(),
+						rootCategoryBundleRendererProvider
+								.get()
+								.setDataStore(dataStore)
+								.render(),
 						categoryBundleRendererProvider
 								.get()
 								.setDataStore(dataStore)

@@ -64,6 +64,18 @@ paths:
                 items:
                   type: integer
                   format: int32
+  /categories/bundle:
+    get:
+      tags:
+      - refdata
+      operationId: getCategoriesBundle
+      responses:
+        "200":
+          description: The categories bundle.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Bundle"
   /categories/{category_id}:
     get:
       tags:

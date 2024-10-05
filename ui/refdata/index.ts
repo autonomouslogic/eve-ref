@@ -108,13 +108,6 @@ const refdataApi: RefdataApi = new RefdataApi(config);
 
 export default refdataApi;
 
-export async function cacheTypeBundle(typeId: number): Promise<void> {
-    const bundle = await refdataApi.getTypeBundle({typeId});
-    if (bundle) {
-        cacheBundleObj(bundle);
-    }
-}
-
 export async function cacheCategoryBundle(categoryId: number): Promise<void> {
     const bundle = await refdataApi.getCategoryBundle({categoryId});
     if (bundle) {
@@ -122,8 +115,22 @@ export async function cacheCategoryBundle(categoryId: number): Promise<void> {
     }
 }
 
+export async function cacheCategoriesBundle(): Promise<void> {
+    const bundle = await refdataApi.getCategoriesBundle();
+    if (bundle) {
+        cacheBundleObj(bundle);
+    }
+}
+
 export async function cacheGroupBundle(groupId: number): Promise<void> {
     const bundle = await refdataApi.getGroupBundle({groupId});
+    if (bundle) {
+        cacheBundleObj(bundle);
+    }
+}
+
+export async function cacheTypeBundle(typeId: number): Promise<void> {
+    const bundle = await refdataApi.getTypeBundle({typeId});
     if (bundle) {
         cacheBundleObj(bundle);
     }
