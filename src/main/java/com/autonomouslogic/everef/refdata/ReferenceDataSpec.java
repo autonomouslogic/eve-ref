@@ -64,6 +64,16 @@ public interface ReferenceDataSpec {
 	InventoryCategory getCategory(@PathParam("category_id") long categoryId);
 
 	@GET
+	@Path("/categories/{category_id}/bundle")
+	@Operation
+	@ApiResponse(
+		responseCode = "200",
+		description = "The category bundle.",
+		useReturnTypeSchema = true,
+		content = @Content(mediaType = "application/json"))
+	Bundle getCategoryBundle(@PathParam("category_id") long categoryId);
+
+	@GET
 	@Path("/groups")
 	@Operation(description = "Get all type IDs.")
 	@ApiResponse(

@@ -2,6 +2,7 @@ package com.autonomouslogic.everef.cli.publishrefdata;
 
 import static com.autonomouslogic.everef.test.TestDataUtil.TEST_PORT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import com.autonomouslogic.everef.model.refdata.RefDataConfig;
 import com.autonomouslogic.everef.model.refdata.RefTestConfig;
@@ -131,6 +132,9 @@ public class PublishRefDataTest {
 				assertFile(id, config, testConfig, expectedKeys);
 				if (config.getId().equals("types")) {
 					assertTypeBundle(id, config, testConfig, expectedKeys);
+				}
+				if (config.getId().equals("categories")) {
+					fail();
 				}
 				if (config.getId().equals("groups")) {
 					assertGroupBundle(id, config, testConfig, expectedKeys);

@@ -83,6 +83,25 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/InventoryCategory"
+  /categories/{category_id}/bundle:
+    get:
+      tags:
+      - refdata
+      operationId: getCategoryBundle
+      parameters:
+      - name: category_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: The category bundle.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Bundle"
   /dogma_attributes:
     get:
       tags:
