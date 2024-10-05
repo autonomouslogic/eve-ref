@@ -144,6 +144,16 @@ public interface ReferenceDataSpec {
 	MarketGroup getMarketGroup(@PathParam("market_group_id") long marketGroupId);
 
 	@GET
+	@Path("/market_groups/{market_group_id}/bundle")
+	@Operation
+	@ApiResponse(
+			responseCode = "200",
+			description = "The market group bundle.",
+			useReturnTypeSchema = true,
+			content = @Content(mediaType = "application/json"))
+	MarketGroup getMarketGroupBundle(@PathParam("market_group_id") long marketGroupId);
+
+	@GET
 	@Path("/meta_groups")
 	@Operation(description = "Get all meta group IDs.")
 	@ApiResponse(

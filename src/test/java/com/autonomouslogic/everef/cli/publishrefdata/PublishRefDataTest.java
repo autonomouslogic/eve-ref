@@ -135,9 +135,13 @@ public class PublishRefDataTest {
 				}
 				if (config.getId().equals("categories")) {
 					fail();
+					// @todo test root too
 				}
 				if (config.getId().equals("groups")) {
 					assertGroupBundle(id, config, testConfig, expectedKeys);
+				}
+				if (config.getId().equals("market-groups")) {
+					fail();
 				}
 			}
 		}

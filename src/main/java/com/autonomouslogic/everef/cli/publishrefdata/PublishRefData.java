@@ -4,6 +4,7 @@ import com.autonomouslogic.commons.rxjava3.Rx3Util;
 import com.autonomouslogic.everef.cli.Command;
 import com.autonomouslogic.everef.cli.publishrefdata.bundle.CategoryBundleRenderer;
 import com.autonomouslogic.everef.cli.publishrefdata.bundle.GroupBundleRenderer;
+import com.autonomouslogic.everef.cli.publishrefdata.bundle.MarketGroupBundleRenderer;
 import com.autonomouslogic.everef.cli.publishrefdata.bundle.RootCategoryBundleRenderer;
 import com.autonomouslogic.everef.cli.publishrefdata.bundle.TypeBundleRenderer;
 import com.autonomouslogic.everef.config.Configs;
@@ -106,6 +107,9 @@ public class PublishRefData implements Command {
 
 	@Inject
 	protected Provider<GroupBundleRenderer> groupBundleRendererProvider;
+
+	@Inject
+	protected Provider<MarketGroupBundleRenderer> marketGroupBundleRendererProvider;
 
 	private S3Url refDataUrl;
 	private URI dataBaseUrl = Configs.DATA_BASE_URL.getRequired();
@@ -235,6 +239,10 @@ public class PublishRefData implements Command {
 								.setDataStore(dataStore)
 								.render(),
 						groupBundleRendererProvider
+								.get()
+								.setDataStore(dataStore)
+								.render(),
+						marketGroupBundleRendererProvider
 								.get()
 								.setDataStore(dataStore)
 								.render())

@@ -324,6 +324,25 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/MarketGroup"
+  /market_groups/{market_group_id}/bundle:
+    get:
+      tags:
+      - refdata
+      operationId: Bundle
+      parameters:
+      - name: market_group_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: The market group bundle.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Bundle"
   /meta:
     get:
       tags:

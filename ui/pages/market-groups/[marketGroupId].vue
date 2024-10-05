@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import refdataApi from "~/refdata";
+import refdataApi, {cacheMarketGroupBundle} from "~/refdata";
 import {type MarketGroup} from "~/refdata-openapi";
 import TypeLink from "~/components/helpers/TypeLink.vue";
 import MarketGroupLink from "~/components/helpers/MarketGroupLink.vue";
@@ -12,10 +12,31 @@ const route = useRoute();
 const {locale} = useI18n();
 
 const marketGroupId: number = getIntRouteParam(route, "marketGroupId");
+await cacheMarketGroupBundle(marketGroupId);
+
 const marketGroup: MarketGroup = await refdataApi.getMarketGroup({marketGroupId});
 useHead({
 	title: tr(marketGroup.name, locale.value)
 });
+
+const childIds: number[] = marketGroup.childMarketGroupIds?.filter((id) => id !== undefined) as number[];
+const childGroups = await Promise.all(childIds.map(async (marketGroupId) => await refdataApi.getMarketGroup({marketGroupId})));
+const sortedChildIds = computed(() => childGroups.sort((a, b) => {
+	const an = tr(a.name, locale.value) || "";
+	const bn = tr(b.name, locale.value) || "";
+	return an.localeCompare(bn);
+})
+	.map((group) => group.getMarketGroupId()));
+
+const typeIds: number[] = marketGroup.typeIds?.filter((typeId) => typeId !== undefined) as number[];
+const types = await Promise.all(typeIds.map(async (typeId) => await refdataApi.getType({typeId})));
+const sortedTypeIds = computed(() => types.sort((a, b) => {
+	const an = tr(a.name, locale.value) || "";
+	const bn = tr(b.name, locale.value) || "";
+	return an.localeCompare(bn);
+})
+	.map((type) => type.typeId));
+
 </script>
 
 <template>
@@ -25,10 +46,12 @@ useHead({
 			Market group: <MarketGroupBreadcrumbs :market-group-id="marketGroup.parentGroupId" />
 		</div>
 		<div class="flex flex-col">
-			<MarketGroupLink class="py-2" v-for="marketGroupId in marketGroup.childMarketGroupIds" :key="marketGroupId" :marketGroupId="marketGroupId"></MarketGroupLink>
+			<MarketGroupLink class="py-2" v-for="marketGroupId in sortedChildIds"
+				:key="marketGroupId" 
+				:marketGroupId="marketGroupId" />
 		</div>
 		<div class="flex flex-col">
-			<div class="py-2" v-for="typeId in marketGroup.typeIds" :key="typeId">
+			<div class="py-2" v-for="typeId in sortedTypeIds" :key="typeId">
 				<TypeLink :typeId="typeId" /> <MarketPrice :type-id="typeId" order-type="sell" />
 			</div>
 		</div>
