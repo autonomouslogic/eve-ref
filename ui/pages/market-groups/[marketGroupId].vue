@@ -46,12 +46,12 @@ const sortedTypeIds = computed(() => types.sort((a, b) => {
 		<div v-if="marketGroup.parentGroupId" class="mb-3">
 			Market group: <MarketGroupBreadcrumbs :market-group-id="marketGroup.parentGroupId" />
 		</div>
-		<div class="flex flex-col">
+		<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
 			<MarketGroupLink class="py-2" v-for="childId in sortedChildIds"
 				:key="childId"
 				:marketGroupId="childId" />
 		</div>
-		<div class="flex flex-col">
+		<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
 			<div class="py-2" v-for="typeId in sortedTypeIds" :key="typeId">
 				<TypeLink :typeId="typeId" /> <MarketPrice :type-id="typeId" order-type="sell" />
 			</div>
