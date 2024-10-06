@@ -22,7 +22,8 @@ const sortedGroupIds = computed(() => groups.sort((a, b) => {
 	const bn = tr(b.name, locale.value) || "";
 	return an.localeCompare(bn);
 })
-	.map((group) => group.groupId));
+	.map((group) => group.groupId)
+	.filter((groupId) => groupId !== undefined));
 
 </script>
 

@@ -17,7 +17,8 @@ const sortedCategoryIds = computed(() => categories.sort((a, b) => {
 	const bn = tr(b.name, locale.value) || "";
 	return an.localeCompare(bn);
 })
-	.map((category) => category.categoryId));
+	.map((category) => category.categoryId)
+	.filter((categoryId) => categoryId !== undefined));
 
 </script>
 

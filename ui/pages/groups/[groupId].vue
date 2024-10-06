@@ -24,7 +24,8 @@ const sortedTypeIds = computed(() => types.sort((a, b) => {
 	const bn = tr(b.name, locale.value) || "";
 	return an.localeCompare(bn);
 })
-	.map((type) => type.typeId));
+	.map((type) => type.typeId)
+	.filter((typeId) => typeId !== undefined));
 </script>
 
 <template>

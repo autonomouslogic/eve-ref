@@ -35,7 +35,8 @@ const sortedTypeIds = computed(() => types.sort((a, b) => {
 	const bn = tr(b.name, locale.value) || "";
 	return an.localeCompare(bn);
 })
-	.map((type) => type.typeId));
+	.map((type) => type.typeId)
+	.filter((typeId) => typeId !== undefined));
 
 </script>
 
@@ -46,9 +47,9 @@ const sortedTypeIds = computed(() => types.sort((a, b) => {
 			Market group: <MarketGroupBreadcrumbs :market-group-id="marketGroup.parentGroupId" />
 		</div>
 		<div class="flex flex-col">
-			<MarketGroupLink class="py-2" v-for="marketGroupId in sortedChildIds"
-				:key="marketGroupId"
-				:marketGroupId="marketGroupId" />
+			<MarketGroupLink class="py-2" v-for="childId in sortedChildIds"
+				:key="childId"
+				:marketGroupId="childId" />
 		</div>
 		<div class="flex flex-col">
 			<div class="py-2" v-for="typeId in sortedTypeIds" :key="typeId">
