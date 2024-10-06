@@ -1,5 +1,18 @@
 EVE Ref Changelog
 
+## [2.53.0](https://github.com/autonomouslogic/eve-ref/compare/2.52.0...2.53.0) (2024-10-06)
+
+
+### Features
+
+* **refdata:** Inventory types used in blueprints ([#655](https://github.com/autonomouslogic/eve-ref/issues/655)) ([ab64428](https://github.com/autonomouslogic/eve-ref/commit/ab644288d0df40eb5c5e806df8e7c60b69dbce43))
+* **ui:** Added reference data bundles for categories, groups, and market groups, and sorted various lists by name ([#653](https://github.com/autonomouslogic/eve-ref/issues/653)) ([13981fb](https://github.com/autonomouslogic/eve-ref/commit/13981fb8caeac03aa886e3e0bfd4f3d741ac6429))
+
+
+### Bug Fixes
+
+* **ui:** Grids on market group root pages ([#654](https://github.com/autonomouslogic/eve-ref/issues/654)) ([6f844d9](https://github.com/autonomouslogic/eve-ref/commit/6f844d98e9e8eb570609817d8b656e75804d5f89))
+
 ## [2.52.0](https://github.com/autonomouslogic/eve-ref/compare/2.51.0...2.52.0) (2024-10-04)
 
 
