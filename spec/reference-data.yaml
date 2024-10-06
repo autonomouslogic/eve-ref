@@ -1180,6 +1180,18 @@ components:
             description: The schematic IDs which can be installed into this planetary
               processor. This is added by EVE Ref.
             format: int64
+        used_in_blueprints:
+          type: object
+          additionalProperties:
+            type: object
+            additionalProperties:
+              $ref: "#/components/schemas/UsedInBlueprint"
+            description: The blueprints in which this type is used. The first key
+              is the blueprint ID and the second key is the activity name. This is
+              added by EVE Ref.
+          description: The blueprints in which this type is used. The first key is
+            the blueprint ID and the second key is the activity name. This is added
+            by EVE Ref.
         is_skill:
           type: boolean
           description: Whether this type is a skill or not. This is added by EVE Ref.
@@ -1559,3 +1571,18 @@ components:
           type: object
           additionalProperties:
             type: string
+    UsedInBlueprint:
+      type: object
+      properties:
+        material_type_id:
+          type: integer
+          description: The material type ID.
+          format: int64
+        activity:
+          type: string
+          description: The activity this material is used in.
+        quantity:
+          type: integer
+          description: The quantity.
+          format: int64
+      description: Details a material used in a blueprint. This is added by EVE Ref.

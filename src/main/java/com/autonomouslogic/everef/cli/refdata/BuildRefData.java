@@ -16,6 +16,7 @@ import com.autonomouslogic.everef.cli.refdata.post.PostDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.ReprocessableTypesDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.SchematicDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.SkillDecorator;
+import com.autonomouslogic.everef.cli.refdata.post.TypeUsedInBlueprintsDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.TypesDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.VariationsDecorator;
 import com.autonomouslogic.everef.cli.refdata.sde.SdeLoader;
@@ -153,6 +154,9 @@ public class BuildRefData implements Command {
 	@Inject
 	protected ReprocessableTypesDecorator reprocessableTypesDecorator;
 
+	@Inject
+	protected TypeUsedInBlueprintsDecorator typeUsedInBlueprintsDecorator;
+
 	@Setter
 	@NonNull
 	private ZonedDateTime buildTime = ZonedDateTime.now(ZoneOffset.UTC).truncatedTo(ChronoUnit.SECONDS);
@@ -205,7 +209,8 @@ public class BuildRefData implements Command {
 				oreVariationsDecorator,
 				missingDogmaUnitsDecorator,
 				canFitDecorator,
-				reprocessableTypesDecorator);
+				reprocessableTypesDecorator,
+				typeUsedInBlueprintsDecorator);
 	}
 
 	@Override
@@ -359,7 +364,12 @@ public class BuildRefData implements Command {
 			generator.writeStartObject();
 			for (var entry : store.entrySet()) {
 				generator.writeFieldName(entry.getKey().toString());
-				printer.writeValue(generator, entry.getValue());
+				var json = entry.getValue();
+				var bytes = json.toString().length();
+				if (bytes > 64 * 1024) {
+					log.info("Large entry: {} {} - {} bytes", name, entry.getKey(), bytes);
+				}
+				printer.writeValue(generator, json);
 			}
 			generator.writeEndObject();
 		}

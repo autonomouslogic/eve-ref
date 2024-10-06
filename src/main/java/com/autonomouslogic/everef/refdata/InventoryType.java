@@ -196,4 +196,11 @@ public class InventoryType {
 			description =
 					"The schematic IDs which can be installed into this planetary processor. This is added by EVE Ref.")
 	List<Long> installableSchematicIds;
+
+	@JsonProperty
+	@Schema(
+			description =
+					"The blueprints in which this type is used. The first key is the blueprint ID and the second key is the activity name. "
+							+ "This is added by EVE Ref.")
+	Map<Long, Map<String, UsedInBlueprint>> usedInBlueprints;
 }
