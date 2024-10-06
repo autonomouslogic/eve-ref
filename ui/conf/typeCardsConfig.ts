@@ -48,6 +48,7 @@ const cards: {[key: string]: any} = {
 					"hp",
 					"capacity",
 					"generalMiningHoldCapacity",
+					"specialColonyResourcesHoldCapacity",
 					"volume",
 					"mass",
 					"radius",

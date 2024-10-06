@@ -64,6 +64,26 @@ public interface ReferenceDataSpec {
 	InventoryCategory getCategory(@PathParam("category_id") long categoryId);
 
 	@GET
+	@Path("/categories/bundle")
+	@Operation
+	@ApiResponse(
+			responseCode = "200",
+			description = "The categories bundle.",
+			useReturnTypeSchema = true,
+			content = @Content(mediaType = "application/json"))
+	Bundle getCategoriesBundle();
+
+	@GET
+	@Path("/categories/{category_id}/bundle")
+	@Operation
+	@ApiResponse(
+			responseCode = "200",
+			description = "The category bundle.",
+			useReturnTypeSchema = true,
+			content = @Content(mediaType = "application/json"))
+	Bundle getCategoryBundle(@PathParam("category_id") long categoryId);
+
+	@GET
 	@Path("/groups")
 	@Operation(description = "Get all type IDs.")
 	@ApiResponse(
@@ -114,6 +134,16 @@ public interface ReferenceDataSpec {
 	List<Integer> getRootMarketGroups();
 
 	@GET
+	@Path("/market_groups/root/bundle")
+	@Operation(description = "Get bundle for root market groups.")
+	@ApiResponse(
+			responseCode = "200",
+			description = "Root market group bundle.",
+			useReturnTypeSchema = true,
+			content = @Content(mediaType = "application/json"))
+	Bundle getRootMarketGroupsBundle();
+
+	@GET
 	@Path("/market_groups/{market_group_id}")
 	@Operation
 	@ApiResponse(
@@ -122,6 +152,16 @@ public interface ReferenceDataSpec {
 			useReturnTypeSchema = true,
 			content = @Content(mediaType = "application/json"))
 	MarketGroup getMarketGroup(@PathParam("market_group_id") long marketGroupId);
+
+	@GET
+	@Path("/market_groups/{market_group_id}/bundle")
+	@Operation
+	@ApiResponse(
+			responseCode = "200",
+			description = "The market group bundle.",
+			useReturnTypeSchema = true,
+			content = @Content(mediaType = "application/json"))
+	Bundle getMarketGroupBundle(@PathParam("market_group_id") long marketGroupId);
 
 	@GET
 	@Path("/meta_groups")

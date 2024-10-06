@@ -4,7 +4,7 @@ import {getAttributeByName, getTypeAttributeByName} from "~/lib/dogmaUtils";
 import AttributeTypeIcon from "~/components/icons/AttributeTypeIcon.vue";
 import DogmaAttributeLink from "~/components/helpers/DogmaAttributeLink.vue";
 import DefensesRowResistance from "~/components/cards/defenses/DefensesRowResistance.vue";
-import {prepMessages} from "../../../lib/translate";
+import {tr} from "~/lib/translate";
 
 const {locale} = useI18n();
 
@@ -55,7 +55,7 @@ function attributeValueCalc(dogmaTypeAttribute: DogmaTypeAttribute | undefined, 
 		<template v-if="hpAttr && hp">
 			<DogmaAttributeLink :attribute="hpAttr">
 				<AttributeTypeIcon :dogma-attribute="hpAttr" />
-				<span v-if="hpAttr.displayName">{{ prepMessages(hpAttr.displayName)[locale] }}</span>
+				<span v-if="hpAttr.displayName">{{ tr(hpAttr.displayName, locale) }}</span>
 			</DogmaAttributeLink>
 		</template>
 	</div>

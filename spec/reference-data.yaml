@@ -64,6 +64,18 @@ paths:
                 items:
                   type: integer
                   format: int32
+  /categories/bundle:
+    get:
+      tags:
+      - refdata
+      operationId: getCategoriesBundle
+      responses:
+        "200":
+          description: The categories bundle.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Bundle"
   /categories/{category_id}:
     get:
       tags:
@@ -83,6 +95,25 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/InventoryCategory"
+  /categories/{category_id}/bundle:
+    get:
+      tags:
+      - refdata
+      operationId: getCategoryBundle
+      parameters:
+      - name: category_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: The category bundle.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Bundle"
   /dogma_attributes:
     get:
       tags:
@@ -274,6 +305,19 @@ paths:
                 items:
                   type: integer
                   format: int32
+  /market_groups/root/bundle:
+    get:
+      tags:
+      - refdata
+      description: Get bundle for root market groups.
+      operationId: getRootMarketGroupsBundle
+      responses:
+        "200":
+          description: Root market group bundle.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Bundle"
   /market_groups/{market_group_id}:
     get:
       tags:
@@ -293,6 +337,25 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/MarketGroup"
+  /market_groups/{market_group_id}/bundle:
+    get:
+      tags:
+      - refdata
+      operationId: getMarketGroupBundle
+      parameters:
+      - name: market_group_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: The market group bundle.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Bundle"
   /meta:
     get:
       tags:

@@ -17,15 +17,13 @@ const localePath = useLocalePath();
 					<InternalLink to="/">EVE Ref</InternalLink>
 				</span>
 				<span>
-					<InternalLink :to="localePath('/categories', 'en')">Categories</InternalLink>
+					<InternalLink to="/categories">Categories</InternalLink>
 				</span>
 				<span>
 					<InternalLink to="/market-groups">Market Groups</InternalLink>
 				</span>
 				<span>
-					<InternalLink to="/structures">
-						<MarketGroupName :market-group-id="477"/>
-					</InternalLink>
+					<InternalLink to="/structures">Structures</InternalLink>
 				</span>
 				<span>
 					<InternalLink to="/skill-points">Skill Points</InternalLink>

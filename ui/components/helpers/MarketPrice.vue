@@ -1,9 +1,4 @@
 <script setup lang="ts">
-import {GetMarketsRegionIdOrdersOrderTypeEnum,} from "~/esi-openapi";
-import UnitValue from "~/components/dogma/UnitValue.vue";
-import {getOrders, HUB_STATIONS} from "~/lib/marketUtils";
-import {MONEY} from "~/lib/unitConstants";
-import MarketCardInner from "~/components/cards/market/MarketCardInner.vue";
 import MarketPriceInner from "~/components/helpers/MarketPriceInner.vue";
 
 interface Props {
