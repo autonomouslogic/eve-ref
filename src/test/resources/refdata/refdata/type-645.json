@@ -561,5 +561,14 @@
       "blueprint_type_id" : 999,
       "blueprint_activity" : "manufacturing"
     }
+  },
+  "used_in_blueprints" : {
+    "22431" : {
+      "manufacturing" : {
+        "material_type_id" : 645,
+        "activity" : "manufacturing",
+        "quantity" : 1
+      }
+    }
   }
 }
