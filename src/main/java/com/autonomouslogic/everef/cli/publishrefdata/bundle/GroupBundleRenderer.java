@@ -26,12 +26,11 @@ public class GroupBundleRenderer extends BundleRenderer {
 		var groupJson = getGroupsMap().get(groupId);
 		var group = objectMapper.convertValue(groupJson, InventoryGroup.class);
 		var typeIds = group.getTypeIds();
-		if (typeIds == null || typeIds.isEmpty()) {
-			return Maybe.empty();
-		}
 
 		var bundleJson = objectMapper.createObjectNode();
-		var typesJson = bundleJson.putObject("types");
+		bundleJson.withObject("groups").put(Long.toString(groupId), groupJson);
+
+		var typesJson = objectMapper.createObjectNode();
 		var attributesJson = objectMapper.createObjectNode();
 		var unitsJson = objectMapper.createObjectNode();
 		var iconsJson = objectMapper.createObjectNode();
@@ -39,13 +38,15 @@ public class GroupBundleRenderer extends BundleRenderer {
 
 		unitsJson.set("133", unitsMap.get(133L)); // ISK for the market price display.
 
-		for (long typeId : typeIds) {
-			var typeJson = getTypesMap().get(typeId);
-			var type = objectMapper.convertValue(typeJson, InventoryType.class);
-			if (typeJson != null) {
-				typesJson.set(Long.toString(typeId), typeJson);
-				bundleDogmaAttributes(type, attributesJson);
-				bundleDogmaAttributesUnits(attributesJson, unitsJson);
+		if (typeIds != null) {
+			for (long typeId : typeIds) {
+				var typeJson = getTypesMap().get(typeId);
+				var type = objectMapper.convertValue(typeJson, InventoryType.class);
+				if (typeJson != null) {
+					typesJson.set(Long.toString(typeId), typeJson);
+					bundleDogmaAttributes(type, attributesJson);
+					bundleDogmaAttributesUnits(attributesJson, unitsJson);
+				}
 			}
 		}
 
@@ -54,6 +55,10 @@ public class GroupBundleRenderer extends BundleRenderer {
 		bundleTypesMetaGroups(typesJson, metaGroupsJson);
 
 		var valid = false;
+		if (!typesJson.isEmpty()) {
+			bundleJson.set("types", typesJson);
+			valid = true;
+		}
 		if (!attributesJson.isEmpty()) {
 			bundleJson.set("dogma_attributes", attributesJson);
 			valid = true;

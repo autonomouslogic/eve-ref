@@ -21,7 +21,7 @@ public class RootCategoryBundleRenderer extends BundleRenderer {
 		for (var entry : getCategoriesMap().entrySet()) {
 			categoriesJson.set(Long.toString(entry.getKey()), entry.getValue());
 		}
-		var path = "categories/bundle";
+		var path = refDataUtil.subPath("categories/bundle");
 		return Flowable.just(Pair.of(path, bundleJson));
 	}
 }

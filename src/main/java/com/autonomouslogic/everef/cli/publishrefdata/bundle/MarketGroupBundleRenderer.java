@@ -47,7 +47,7 @@ public class MarketGroupBundleRenderer extends BundleRenderer {
 		var bundleJson = generateBundle(rootGroupIds, List.of());
 
 		if (bundleJson.isPresent()) {
-			var path = "market_groups/root/bundle";
+			var path = refDataUtil.subPath("market_groups/root/bundle");
 			return Maybe.just(Pair.of(path, bundleJson.get()));
 		}
 		return Maybe.empty();

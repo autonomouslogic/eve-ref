@@ -25,6 +25,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.Builder;
@@ -127,7 +128,9 @@ public class PublishRefDataTest {
 
 		var expectedKeys = new HashSet<String>();
 		expectedKeys.add("base/meta");
+		expectedKeys.add("base/categories/bundle");
 		expectedKeys.add("base/market_groups/root");
+		expectedKeys.add("base/market_groups/root/bundle");
 		for (var config : refDataUtil.loadReferenceDataConfig()) {
 			var testConfig = config.getTest();
 			assertIndex(config, testConfig, expectedKeys);
@@ -137,14 +140,13 @@ public class PublishRefDataTest {
 					assertTypeBundle(id, config, testConfig, expectedKeys);
 				}
 				if (config.getId().equals("categories")) {
-					//					fail(); @todo
-					// @todo test root too
+					assertCategoryBundle(id, config, testConfig, expectedKeys);
 				}
 				if (config.getId().equals("groups")) {
 					assertGroupBundle(id, config, testConfig, expectedKeys);
 				}
-				if (config.getId().equals("market-groups")) {
-					//					fail(); @todo
+				if (config.getId().equals("marketGroups")) {
+					assertMarketGroupBundle(id, config, testConfig, expectedKeys);
 				}
 			}
 		}
@@ -152,8 +154,8 @@ public class PublishRefDataTest {
 		// `/types` isn't uploaded because it already matches.
 		expectedKeys.remove("base/types");
 		assertEquals(
-				expectedKeys.stream().sorted().toList(),
-				putKeys.stream().sorted().toList());
+				expectedKeys.stream().sorted().collect(Collectors.joining("\n")),
+				putKeys.stream().sorted().collect(Collectors.joining("\n")));
 
 		var deleteKeys = mockS3Adapter.getAllDeleteKeys(BUCKET_NAME, s3);
 		assertEquals(List.of("base/types/999999999"), deleteKeys);
@@ -200,6 +202,69 @@ public class PublishRefDataTest {
 							.categoryIds(List.of(6L))
 							.groupIds(List.of(27L))
 							.metaGroupIds(List.of(1L, 2L))
+							.build(),
+					path);
+		}
+	}
+
+	@SneakyThrows
+	private void assertCategoryBundle(
+			long id, RefDataConfig config, RefTestConfig testConfig, Set<String> expectedKeys) {
+		var path = String.format("base/%s/%s/bundle", config.getOutputFile(), id);
+		expectedKeys.add(path);
+
+		if (id == 6) {
+			assertBundle(
+					ExpectedBundleIds.builder()
+							.categoryIds(List.of(6L))
+							.groupIds(List.of(27L))
+							.build(),
+					path);
+		}
+	}
+
+	@SneakyThrows
+	private void assertGroupBundle(long id, RefDataConfig config, RefTestConfig testConfig, Set<String> expectedKeys) {
+		var path = String.format("base/%s/%s/bundle", config.getOutputFile(), id);
+		expectedKeys.add(path);
+
+		// Only spot-check one complete one.
+		if (id == 27) {
+			assertBundle(
+					ExpectedBundleIds.builder()
+							.groupIds(List.of(27L))
+							.typeIds(List.of(645L))
+							.attributeIds(List.of(9L, 162L, 182L, 277L))
+							.unitIds(List.of(1L, 133L))
+							.iconIds(List.of(67L))
+							.metaGroupIds(List.of(1L))
+							.build(),
+					path);
+		}
+	}
+
+	@SneakyThrows
+	private void assertMarketGroupBundle(
+			long id, RefDataConfig config, RefTestConfig testConfig, Set<String> expectedKeys) {
+		var path = String.format("base/%s/%s/bundle", config.getOutputFile(), id);
+		expectedKeys.add(path);
+
+		if (id == 7) {
+			assertBundle(
+					ExpectedBundleIds.builder()
+							.marketGroupIds(List.of(7L, 81L))
+							.unitIds(List.of(133L))
+							.build(),
+					path);
+		} else if (id == 81) {
+			assertBundle(
+					ExpectedBundleIds.builder()
+							.marketGroupIds(List.of(81L))
+							.typeIds(List.of(645L))
+							.attributeIds(List.of(9L, 162L, 182L, 277L))
+							.unitIds(List.of(1L, 133L))
+							.iconIds(List.of(67L))
+							.metaGroupIds(List.of(1L))
 							.build(),
 					path);
 		}
@@ -253,28 +318,6 @@ public class PublishRefDataTest {
 				.sorted()
 				.toList();
 		assertEquals(expected, supplied, rootField);
-	}
-
-	@SneakyThrows
-	private void assertGroupBundle(long id, RefDataConfig config, RefTestConfig testConfig, Set<String> expectedKeys) {
-		if (id == 1185) {
-			return;
-		}
-		var path = String.format("base/%s/%s/bundle", config.getOutputFile(), id);
-		expectedKeys.add(path);
-
-		// Only spot-check one complete one.
-		if (id == 27) {
-			assertBundle(
-					ExpectedBundleIds.builder()
-							.typeIds(List.of(645L))
-							.attributeIds(List.of(9L, 162L, 182L, 277L))
-							.unitIds(List.of(1L, 133L))
-							.iconIds(List.of(67L))
-							.metaGroupIds(List.of(1L))
-							.build(),
-					path);
-		}
 	}
 
 	private ObjectNode buildTestBundle(ExpectedBundleIds expectedBundleIds) {

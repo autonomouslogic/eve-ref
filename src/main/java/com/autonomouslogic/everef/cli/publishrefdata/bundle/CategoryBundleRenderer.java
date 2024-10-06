@@ -25,18 +25,22 @@ public class CategoryBundleRenderer extends BundleRenderer {
 		var categoryJson = getCategoriesMap().get(categoryId);
 		var category = objectMapper.convertValue(categoryJson, InventoryCategory.class);
 		var groupIds = category.getGroupIds();
-		if (groupIds == null || groupIds.isEmpty()) {
-			return Maybe.empty();
-		}
 
 		var bundleJson = objectMapper.createObjectNode();
-		var groupsJson = bundleJson.putObject("groups");
+		bundleJson.withObject("categories").put(Long.toString(categoryId), categoryJson);
+		var groupsJson = objectMapper.createObjectNode();
 
-		for (long groupId : groupIds) {
-			var groupJson = getGroupsMap().get(groupId);
-			if (groupJson != null) {
-				groupsJson.set(Long.toString(groupId), groupJson);
+		if (groupIds != null) {
+			for (long groupId : groupIds) {
+				var groupJson = getGroupsMap().get(groupId);
+				if (groupJson != null) {
+					groupsJson.set(Long.toString(groupId), groupJson);
+				}
 			}
+		}
+
+		if (!groupsJson.isEmpty()) {
+			bundleJson.put("groups", groupsJson);
 		}
 
 		var path = refDataUtil.subPath("categories", category.getCategoryId()) + "/bundle";
