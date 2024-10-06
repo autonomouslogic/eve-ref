@@ -1574,10 +1574,6 @@ components:
     UsedInBlueprint:
       type: object
       properties:
-        blueprint_type_id:
-          type: integer
-          description: The blueprint type ID.
-          format: int64
         material_type_id:
           type: integer
           description: The material type ID.
