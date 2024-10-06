@@ -5,6 +5,7 @@ import com.autonomouslogic.everef.refdata.InventoryType;
 import com.autonomouslogic.everef.refdata.MarketGroup;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.google.common.collect.Lists;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Maybe;
 import javax.inject.Inject;
@@ -31,15 +32,15 @@ public class MarketGroupBundleRenderer extends BundleRenderer {
 	protected Flowable<Pair<String, JsonNode>> renderInternal() {
 		return Flowable.concat(
 			createRootMarketGroupsBundle().toFlowable(),
-			Flowable.fromIterable(getGroupsMap().keySet()).flatMapMaybe(this::createGroupBundle)
+			Flowable.fromIterable(getMarketGroupsMap().keySet()).flatMapMaybe(this::createMarketGroupBundle)
 		);
 	}
 
 	private Maybe<Pair<String, JsonNode>> createRootMarketGroupsBundle() {
 		var rootGroupIds = rootMarketGroupIndexRendererProvider.get().setDataStore(getDataStore()).render()
 				.map(Pair::getRight)
-			.map(json -> objectMapper.convertValue(json, MarketGroup.class))
-			.map(MarketGroup::getMarketGroupId)
+			.flatMap(json -> Flowable.fromIterable(Lists.newArrayList(json.elements())))
+			.map(JsonNode::asLong)
 			.toList().blockingGet();
 
 		var bundleJson = generateBundle(rootGroupIds, List.of());
@@ -51,8 +52,12 @@ public class MarketGroupBundleRenderer extends BundleRenderer {
 		return Maybe.empty();
 	}
 
-	private Maybe<Pair<String, JsonNode>> createGroupBundle(long groupId) {
+	private Maybe<Pair<String, JsonNode>> createMarketGroupBundle(long groupId) {
 		var groupJson = getMarketGroupsMap().get(groupId);
+		if (groupJson == null) {
+			log.warn("Market group {} not found", groupId);
+			return Maybe.empty();
+		}
 		var group = objectMapper.convertValue(groupJson, MarketGroup.class);
 		var typeIds = group.getTypeIds();
 		var childGroupIds = group.getChildMarketGroupIds();
@@ -80,13 +85,15 @@ public class MarketGroupBundleRenderer extends BundleRenderer {
 
 		unitsJson.set("133", unitsMap.get(133L)); // ISK for the market price display.
 
-		for (long typeId : typeIds) {
-			var typeJson = getTypesMap().get(typeId);
-			var type = objectMapper.convertValue(typeJson, InventoryType.class);
-			if (typeJson != null) {
-				typesJson.set(Long.toString(typeId), typeJson);
-				bundleDogmaAttributes(type, attributesJson);
-				bundleDogmaAttributesUnits(attributesJson, unitsJson);
+		if (typeIds != null && !typeIds.isEmpty()) {
+			for (long typeId : typeIds) {
+				var typeJson = getTypesMap().get(typeId);
+				var type = objectMapper.convertValue(typeJson, InventoryType.class);
+				if (typeJson != null) {
+					typesJson.set(Long.toString(typeId), typeJson);
+					bundleDogmaAttributes(type, attributesJson);
+					bundleDogmaAttributesUnits(attributesJson, unitsJson);
+				}
 			}
 		}
 
@@ -94,10 +101,12 @@ public class MarketGroupBundleRenderer extends BundleRenderer {
 		bundleDogmaAttributesIcons(attributesJson, iconsJson);
 		bundleTypesMetaGroups(typesJson, metaGroupsJson);
 
-		for (var childGroupId : childGroupIds) {
-			var json = getMarketGroupsMap().get(childGroupId);
-			if (json != null) {
-				marketGroupsJson.set(Long.toString(childGroupId), json);
+		if (childGroupIds != null && !childGroupIds.isEmpty()) {
+			for (var childGroupId : childGroupIds) {
+				var json = getMarketGroupsMap().get(childGroupId);
+				if (json != null) {
+					marketGroupsJson.set(Long.toString(childGroupId), json);
+				}
 			}
 		}
 

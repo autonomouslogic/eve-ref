@@ -130,7 +130,7 @@ export async function cacheGroupBundle(groupId: number): Promise<void> {
 }
 
 export async function cacheRootMarketGroupBundle(): Promise<void> {
-    const bundle = await refdataApi.getRootMarketGroupBundle();
+    const bundle = await refdataApi.getRootMarketGroupsBundle();
     if (bundle) {
         cacheBundleObj(bundle);
     }
