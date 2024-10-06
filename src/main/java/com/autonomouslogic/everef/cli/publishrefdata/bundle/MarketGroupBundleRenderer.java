@@ -8,14 +8,12 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.Lists;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Maybe;
-import javax.inject.Inject;
-import javax.inject.Provider;
-
-import lombok.extern.log4j.Log4j2;
-import org.apache.commons.lang3.tuple.Pair;
-
 import java.util.List;
 import java.util.Optional;
+import javax.inject.Inject;
+import javax.inject.Provider;
+import lombok.extern.log4j.Log4j2;
+import org.apache.commons.lang3.tuple.Pair;
 
 /**
  * Renders the basic objects in the reference data collections.
@@ -31,17 +29,20 @@ public class MarketGroupBundleRenderer extends BundleRenderer {
 	@Override
 	protected Flowable<Pair<String, JsonNode>> renderInternal() {
 		return Flowable.concat(
-			createRootMarketGroupsBundle().toFlowable(),
-			Flowable.fromIterable(getMarketGroupsMap().keySet()).flatMapMaybe(this::createMarketGroupBundle)
-		);
+				createRootMarketGroupsBundle().toFlowable(),
+				Flowable.fromIterable(getMarketGroupsMap().keySet()).flatMapMaybe(this::createMarketGroupBundle));
 	}
 
 	private Maybe<Pair<String, JsonNode>> createRootMarketGroupsBundle() {
-		var rootGroupIds = rootMarketGroupIndexRendererProvider.get().setDataStore(getDataStore()).render()
+		var rootGroupIds = rootMarketGroupIndexRendererProvider
+				.get()
+				.setDataStore(getDataStore())
+				.render()
 				.map(Pair::getRight)
-			.flatMap(json -> Flowable.fromIterable(Lists.newArrayList(json.elements())))
-			.map(JsonNode::asLong)
-			.toList().blockingGet();
+				.flatMap(json -> Flowable.fromIterable(Lists.newArrayList(json.elements())))
+				.map(JsonNode::asLong)
+				.toList()
+				.blockingGet();
 
 		var bundleJson = generateBundle(rootGroupIds, List.of());
 
@@ -68,6 +69,7 @@ public class MarketGroupBundleRenderer extends BundleRenderer {
 		var bundleJson = generateBundle(childGroupIds, typeIds);
 
 		if (bundleJson.isPresent()) {
+			bundleJson.get().withObject("market_groups").put(Long.toString(groupId), groupJson);
 			var path = refDataUtil.subPath("market_groups", group.getMarketGroupId()) + "/bundle";
 			return Maybe.just(Pair.of(path, bundleJson.get()));
 		}
@@ -85,14 +87,14 @@ public class MarketGroupBundleRenderer extends BundleRenderer {
 
 		unitsJson.set("133", unitsMap.get(133L)); // ISK for the market price display.
 
-		if (typeIds != null && !typeIds.isEmpty()) {
+		if (typeIds != null) {
 			for (long typeId : typeIds) {
 				var typeJson = getTypesMap().get(typeId);
 				var type = objectMapper.convertValue(typeJson, InventoryType.class);
 				if (typeJson != null) {
 					typesJson.set(Long.toString(typeId), typeJson);
 					bundleDogmaAttributes(type, attributesJson);
-					bundleDogmaAttributesUnits(attributesJson, unitsJson);
+					bundleDogmaAttributesUnits(attributesJson, unitsJson); // @todo probably duplicate
 				}
 			}
 		}
@@ -101,7 +103,7 @@ public class MarketGroupBundleRenderer extends BundleRenderer {
 		bundleDogmaAttributesIcons(attributesJson, iconsJson);
 		bundleTypesMetaGroups(typesJson, metaGroupsJson);
 
-		if (childGroupIds != null && !childGroupIds.isEmpty()) {
+		if (childGroupIds != null) {
 			for (var childGroupId : childGroupIds) {
 				var json = getMarketGroupsMap().get(childGroupId);
 				if (json != null) {
@@ -113,6 +115,10 @@ public class MarketGroupBundleRenderer extends BundleRenderer {
 		var valid = false;
 		if (!typesJson.isEmpty()) {
 			bundleJson.set("types", typesJson);
+			valid = true;
+		}
+		if (!marketGroupsJson.isEmpty()) {
+			bundleJson.set("market_groups", marketGroupsJson);
 			valid = true;
 		}
 		if (!attributesJson.isEmpty()) {
@@ -134,8 +140,7 @@ public class MarketGroupBundleRenderer extends BundleRenderer {
 
 		if (valid) {
 			return Optional.of(bundleJson);
-		}
-		else {
+		} else {
 			return Optional.empty();
 		}
 	}
