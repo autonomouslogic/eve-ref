@@ -1,5 +1,30 @@
 EVE Ref Changelog
 
+## [2.53.1](https://github.com/autonomouslogic/eve-ref/compare/2.53.0...2.53.1) (2024-10-07)
+
+
+### Bug Fixes
+
+* **deps:** update dependency org.flywaydb:flyway-core to v10.19.0 ([#658](https://github.com/autonomouslogic/eve-ref/issues/658)) ([6b119aa](https://github.com/autonomouslogic/eve-ref/commit/6b119aa8e2d897a60cb286da3868f180171c24f5))
+* **deps:** update flyway to v10.19.0 ([#659](https://github.com/autonomouslogic/eve-ref/issues/659)) ([ba3c43e](https://github.com/autonomouslogic/eve-ref/commit/ba3c43e1190346e2315529c10230c2d8e8a01cfa))
+* **ui:** Render newlines and HTML from type descriptions ([#661](https://github.com/autonomouslogic/eve-ref/issues/661)) ([dd75cf0](https://github.com/autonomouslogic/eve-ref/commit/dd75cf071e39480d2b2ee2d64c35c2baa00c4a1b))
+
+
+### Documentation
+
+* CCP Alumni update ([670dcdc](https://github.com/autonomouslogic/eve-ref/commit/670dcdcc33b80bafb6683e522b0302cfad2dddcb))
+* CSM 1-3 delegates ([#663](https://github.com/autonomouslogic/eve-ref/issues/663)) ([5634f15](https://github.com/autonomouslogic/eve-ref/commit/5634f1568062abab88cf9c2ad993d86a0d8607b0))
+* CSM docs ([#656](https://github.com/autonomouslogic/eve-ref/issues/656)) ([6d79e24](https://github.com/autonomouslogic/eve-ref/commit/6d79e24c6622eea2e89125b7757e847a83199dce))
+* CSM tweaks ([018e8fc](https://github.com/autonomouslogic/eve-ref/commit/018e8fc0c89b85d4b78f034c200de4bbd021c3d5))
+* Update CSM4 list to use character names instead of real names ([9fa613d](https://github.com/autonomouslogic/eve-ref/commit/9fa613db99fd0c36f52107dc95681f4296b83678))
+
+
+### Dependency Updates
+
+* **deps:** update all non-major dependencies ([#657](https://github.com/autonomouslogic/eve-ref/issues/657)) ([f3fc431](https://github.com/autonomouslogic/eve-ref/commit/f3fc431689caa02a2456e6f13563126a103c3630))
+* **deps:** update all non-major dependencies to v8.8.1 ([#662](https://github.com/autonomouslogic/eve-ref/issues/662)) ([34a938a](https://github.com/autonomouslogic/eve-ref/commit/34a938a5f9d9e895d78b5be77278f412e55ffb15))
+* **deps:** update dependency @nuxt/test-utils to v3.14.3 ([#660](https://github.com/autonomouslogic/eve-ref/issues/660)) ([8df62d2](https://github.com/autonomouslogic/eve-ref/commit/8df62d21afef206208c757980b3278cd51c9ffd3))
+
 ## [2.53.0](https://github.com/autonomouslogic/eve-ref/compare/2.52.0...2.53.0) (2024-10-06)
 
 
