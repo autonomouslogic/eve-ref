@@ -103,7 +103,7 @@ dependencies {
 	implementation "org.apache.commons:commons-lang3:3.17.0"
 
 	implementation "org.jooq:jooq:3.19.11"
-	implementation "org.flywaydb:flyway-core:10.17.3"
+	implementation "org.flywaydb:flyway-core:10.19.0"
 	implementation "org.flywaydb:flyway-database-postgresql:10.19.0"
 	implementation "com.h2database:h2:2.3.232"
 	implementation "org.postgresql:postgresql:42.7.4"
