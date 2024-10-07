@@ -6,9 +6,9 @@ import {MONEY} from "~/lib/unitConstants";
 
 interface Props {
 	typeId: number,
-	orderType: "sell" | "buy"
-	regionId: number,
-	stationId: number
+	orderType?: "sell" | "buy"
+	regionId?: number,
+	stationId?: number
 }
 const props = withDefaults(defineProps<Props>(), {
 	orderType: "sell",
