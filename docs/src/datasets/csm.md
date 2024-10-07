@@ -228,76 +228,176 @@ Blog posts announcing the results:
 ## CSM Alumni
 
 
-| Character                | CSM9 | CSM8  | CSM7 | CSM6  | CSM5  | CSM4 |
-|--------------------------|------|-------|------|-------|-------|------|
-| Corbexx                  | d    |       |      |       |       |      |
-| Corebloodbrothers        | d    |       |      |       |       |      |
-| DJ FunkyBacon            | d    |       |      |       |       |      |
-| Major JSilva             | d    |       |      |       |       |      |
-| Sion Kumitomo            | d    |       |      |       |       |      |
-| Steve Ronuken            | d    |       |      |       |       |      |
-| Sugar Kyle               | d    |       |      |       |       |      |
-| Xander Phoena            | d    |       |      |       |       |      |
-| Matias Otero             | d    |       |      |       |       |      |
-| Ali Aras                 | d    | d     |      |       |       |      |
-| Mangala Solaris          | d    | d     |      |       |       |      |
-| Mike Azariah             | d    | d     |      |       |       |      |
-| mynnna                   | d    | d     |      |       |       |      |
-| progodlegend             | d    | d     |      |       |       |      |
-| Chitsa Jason             |      | d     |      |       |       |      |
-| James Arget              |      | d     |      |       |       |      |
-| Kesper North             |      | d     |      |       |       |      |
-| Korvin                   |      | d     |      |       |       |      |
-| Malcanis                 |      | d     |      |       |       |      |
-| Ripard Teg               |      | d     |      |       |       |      |
-| Sala Cameron             |      | d     |      |       |       |      |
-| Sort Dragon              |      | d     |      |       |       |      |
-| Trebor Daehdoow          |      | d     | d    | d     | d     |      |
-| Alekseyev Karrde         |      |       | d    |       |       |      |
-| Dovinian                 |      |       | d    |       |       |      |
-| Greene Lee               |      |       | d    |       |       |      |
-| Hans Jagerblitzen        |      |       | d    |       |       |      |
-| Issler Dainze            |      |       | d    |       |       |      |
-| Kelduum Revaan           |      |       | d    |       |       |      |
-| Seleene                  |      |       | d    | d     |       |      |
-| The Mittani              |      |       | d    | d     |       |      |
-| UAxDEATH                 |      |       | d    | d     |       |      |
-| Darius III               |      |       | d    | a     |       |      |
-| Elise Randolph           |      |       | d    | a     |       |      |
-| Two Step                 |      |       | d    | a     |       |      |
-| Meissa Anunthiel         |      |       | d    | d     | d     |      |
-| Draco Llasa              |      |       |      | d     |       |      |
-| Vile Rat                 |      |       |      | d     |       |      |
-| White Tree               |      |       |      | d     |       |      |
-| Killer2                  |      |       |      | d     |       |      |
-| Prometheus Exenthal      |      |       |      | a     |       |      |
-| Krutoj                   |      |       |      | a     |       |      |
-| Ankhesentapemkah         |      |       |      |       | d     |      |
-| Dierdra Vaal             |      |       |      |       | d     |      |
-| Korvin                   |      |       |      |       | d     |      |
-| Mynxee                   |      |       |      |       | d     |      |
-| Sokratesz                |      |       |      |       | d     |      |
-| TeaDaze                  |      |       |      |       | d     |      |
-| Vuk Lau                  |      |       |      |       | d     |      |
-| ALPHA12125               |      |       |      |       | a     |      |
-| ElvenLord                |      |       |      |       | a     |      |
-| Helen Highwater          |      |       |      |       | a     |      |
-| mazzilliu                |      |       |      |       | a     |      |
-| T'Amber                  |      |       |      |       | a     |      |
-| Greg Russo               |      |       |      |       |       | d    |
-| Andrey Antonov           |      |       |      |       |       | d    |
-| Asher Dratel             |      |       |      |       |       | d    |
-| Denis Descheneaux        |      |       |      |       |       | d    |
-| Jaime Tiampo             |      |       |      |       |       | d    |
-| Jason Renouf             |      |       |      |       |       | d    |
-| John Zastrow             |      |       |      |       |       | d    |
-| Tim Heusschen            |      |       |      |       |       | d    |
-| Tomas Ljumovic           |      |       |      |       |       | d    |
-| Iain Compton             |      |       |      |       |       | a    |
-| Justin Easterling        |      |       |      |       |       | a    |
-| Paul Alexander Oosterman |      |       |      |       |       | a    |
-| Shayne Smart             |      |       |      |       |       | a    |
-| Stephan Pirson           |      |       |      |       |       | a    |
+| Character                | CSM18 | CSM17 | CSM16 | CSM15 | CSM14 | CSM13 | CSM12 | CSM11 | CSM10 | CSM9 | CSM8  | CSM7 | CSM6  | CSM5  | CSM4 |
+|--------------------------|-------|-------|-------|-------|-------|-------|-------|-------|-------|------|-------|------|-------|-------|------|
+| Angry Mustache           | d     |       |       |       |       |       |       |       |       |      |       |      |       |       |      |
+| Kazanir                  | d     |       |       |       |       |       |       |       |       |      |       |      |       |       |      |
+| Storm Delay              | d     |       |       |       |       |       |       |       |       |      |       |      |       |       |      |
+| Alcoholic Satan          | d     |       |       |       |       |       |       |       |       |      |       |      |       |       |      |
+| Luke Anninan             | d     |       |       |       |       |       |       |       |       |      |       |      |       |       |      |
+| Dark Shines              | d     |       |       |       |       |       |       |       |       |      |       |      |       |       |      |
+| Mike Azariah             | d     |       |       |       |       |       |       |       |       |      |       |      |       |       |      |
+| The Oz                   | d     |       |       |       |       |       |       |       |       |      |       |      |       |       |      |
+| Mark Resurrectus         | d     |       |       |       |       |       |       |       |       |      |       |      |       |       |      |
+| Amelia Duskspace         | d     |       |       |       |       |       |       |       |       |      |       |      |       |       |      |
+| Kshal Aideron            | d     |       |       |       |       |       |       |       |       |      |       |      |       |       |      |
+| Stitch Kaneland          | d     |       |       |       |       |       |       |       |       |      |       |      |       |       |      |
+| Angry Mustache           |       | d     |       |       |       |       |       |       |       |      |       |      |       |       |      |
+| Arsia Elkin              |       | d     |       |       |       |       |       |       |       |      |       |      |       |       |      |
+| Brisc Rubal              |       | d     |       |       |       |       |       |       |       |      |       |      |       |       |      |
+| Jinx De'Caire            |       | d     |       |       |       |       |       |       |       |      |       |      |       |       |      |
+| Kazanir                  |       | d     |       |       |       |       |       |       |       |      |       |      |       |       |      |
+| Kenneth Feld             |       | d     |       |       |       |       |       |       |       |      |       |      |       |       |      |
+| Luke Anninan             |       | d     |       |       |       |       |       |       |       |      |       |      |       |       |      |
+| Mark Resurrectus         |       | d     |       |       |       |       |       |       |       |      |       |      |       |       |      |
+| Pandoralica              |       | d     |       |       |       |       |       |       |       |      |       |      |       |       |      |
+| Storm Delay              |       | d     |       |       |       |       |       |       |       |      |       |      |       |       |      |
+| Brisc Rubal              |       |       | d     |       |       |       |       |       |       |      |       |      |       |       |      |
+| Gobbins                  |       |       | d     |       |       |       |       |       |       |      |       |      |       |       |      |
+| I Beast                  |       |       | d     |       |       |       |       |       |       |      |       |      |       |       |      |
+| Innominate               |       |       | d     |       |       |       |       |       |       |      |       |      |       |       |      |
+| Kenneth Feld             |       |       | d     |       |       |       |       |       |       |      |       |      |       |       |      |
+| Merkelchen               |       |       | d     |       |       |       |       |       |       |      |       |      |       |       |      |
+| Mike Azariah             |       |       | d     |       |       |       |       |       |       |      |       |      |       |       |      |
+| progodlegend             |       |       | d     |       |       |       |       |       |       |      |       |      |       |       |      |
+| Suitonia                 |       |       | d     |       |       |       |       |       |       |      |       |      |       |       |      |
+| Vily                     |       |       | d     |       |       |       |       |       |       |      |       |      |       |       |      |
+| Kenneth Feld             |       |       |       | d     |       |       |       |       |       |      |       |      |       |       |      |
+| Merkelchen               |       |       |       | d     |       |       |       |       |       |      |       |      |       |       |      |
+| Gobbins                  |       |       |       | d     |       |       |       |       |       |      |       |      |       |       |      |
+| Brisc Rubal              |       |       |       | d     |       |       |       |       |       |      |       |      |       |       |      |
+| Vily                     |       |       |       | d     |       |       |       |       |       |      |       |      |       |       |      |
+| Phantomite               |       |       |       | d     |       |       |       |       |       |      |       |      |       |       |      |
+| Innominate               |       |       |       | d     |       |       |       |       |       |      |       |      |       |       |      |
+| Mike Azariah             |       |       |       | d     |       |       |       |       |       |      |       |      |       |       |      |
+| Torvald Uruz             |       |       |       | d     |       |       |       |       |       |      |       |      |       |       |      |
+| Maria Taylor             |       |       |       | d     |       |       |       |       |       |      |       |      |       |       |      |
+| Aryth                    |       |       |       |       | d     |       |       |       |       |      |       |      |       |       |      |
+| Merkelchen               |       |       |       |       | d     |       |       |       |       |      |       |      |       |       |      |
+| Innominate               |       |       |       |       | d     |       |       |       |       |      |       |      |       |       |      |
+| Killah Bee               |       |       |       |       | d     |       |       |       |       |      |       |      |       |       |      |
+| Steve Ronuken            |       |       |       |       | d     |       |       |       |       |      |       |      |       |       |      |
+| Gobbins                  |       |       |       |       | d     |       |       |       |       |      |       |      |       |       |      |
+| Vily                     |       |       |       |       | d     |       |       |       |       |      |       |      |       |       |      |
+| Dunk Dinkle              |       |       |       |       | d     |       |       |       |       |      |       |      |       |       |      |
+| ExookiZ                  |       |       |       |       | d     |       |       |       |       |      |       |      |       |       |      |
+| Olmeca Gold              |       |       |       |       | d     |       |       |       |       |      |       |      |       |       |      |
+| Steve Ronuken            |       |       |       |       |       | d     |       |       |       |      |       |      |       |       |      |
+| Merkelchen               |       |       |       |       |       | d     |       |       |       |      |       |      |       |       |      |
+| The Judge                |       |       |       |       |       | d     |       |       |       |      |       |      |       |       |      |
+| Brisc Rubal              |       |       |       |       |       | d     |       |       |       |      |       |      |       |       |      |
+| Jin'taan                 |       |       |       |       |       | d     |       |       |       |      |       |      |       |       |      |
+| Innominate               |       |       |       |       |       | d     |       |       |       |      |       |      |       |       |      |
+| Sort Dragon              |       |       |       |       |       | d     |       |       |       |      |       |      |       |       |      |
+| Killah Bee               |       |       |       |       |       | d     |       |       |       |      |       |      |       |       |      |
+| Suitonia                 |       |       |       |       |       | d     |       |       |       |      |       |      |       |       |      |
+| Aryth                    |       |       |       |       |       | d     |       |       |       |      |       |      |       |       |      |
+| Innominate               |       |       |       |       |       |       | d     |       |       |      |       |      |       |       |      |
+| NoobMan                  |       |       |       |       |       |       | d     |       |       |      |       |      |       |       |      |
+| Jin'taan                 |       |       |       |       |       |       | d     |       |       |      |       |      |       |       |      |
+| The Judge                |       |       |       |       |       |       | d     |       |       |      |       |      |       |       |      |
+| Aryth                    |       |       |       |       |       |       | d     |       |       |      |       |      |       |       |      |
+| Steve Ronuken            |       |       |       |       |       |       | d     |       |       |      |       |      |       |       |      |
+| Vince Draken             |       |       |       |       |       |       | d     |       |       |      |       |      |       |       |      |
+| Rhiload Feron-drake      |       |       |       |       |       |       | d     |       |       |      |       |      |       |       |      |
+| Suitonia                 |       |       |       |       |       |       | d     |       |       |      |       |      |       |       |      |
+| Yukiko Kami              |       |       |       |       |       |       | d     |       |       |      |       |      |       |       |      |
+| Innominate               |       |       |       |       |       |       |       | d     |       |      |       |      |       |       |      |
+| NoobMan                  |       |       |       |       |       |       |       | d     |       |      |       |      |       |       |      |
+| Jin'taan                 |       |       |       |       |       |       |       | d     |       |      |       |      |       |       |      |
+| Fafer                    |       |       |       |       |       |       |       | d     |       |      |       |      |       |       |      |
+| The Judge                |       |       |       |       |       |       |       | d     |       |      |       |      |       |       |      |
+| Kyle Aparthos            |       |       |       |       |       |       |       | d     |       |      |       |      |       |       |      |
+| Bobmon                   |       |       |       |       |       |       |       | d     |       |      |       |      |       |       |      |
+| Xenuria                  |       |       |       |       |       |       |       | d     |       |      |       |      |       |       |      |
+| Mr Hyde113               |       |       |       |       |       |       |       | d     |       |      |       |      |       |       |      |
+| Gorski Car               |       |       |       |       |       |       |       | d     |       |      |       |      |       |       |      |
+| Aryth                    |       |       |       |       |       |       |       | d     |       |      |       |      |       |       |      |
+| Nashh Kadavr             |       |       |       |       |       |       |       | d     |       |      |       |      |       |       |      |
+| Steve Ronuken            |       |       |       |       |       |       |       | d     |       |      |       |      |       |       |      |
+| Sullen Decimus           |       |       |       |       |       |       |       | d     |       |      |       |      |       |       |      |
+| Steve Ronuken            |       |       |       |       |       |       |       |       | d     |      |       |      |       |       |      |
+| Sion Kumitomo            |       |       |       |       |       |       |       |       | d     |      |       |      |       |       |      |
+| Sugar Kyle               |       |       |       |       |       |       |       |       | d     |      |       |      |       |       |      |
+| corebloodbrothers        |       |       |       |       |       |       |       |       | d     |      |       |      |       |       |      |
+| Mike Azariah             |       |       |       |       |       |       |       |       | d     |      |       |      |       |       |      |
+| corbexx                  |       |       |       |       |       |       |       |       | d     |      |       |      |       |       |      |
+| Endie                    |       |       |       |       |       |       |       |       | d     |      |       |      |       |       |      |
+| Sort Dragon              |       |       |       |       |       |       |       |       | d     |      |       |      |       |       |      |
+| Gorga                    |       |       |       |       |       |       |       |       | d     |      |       |      |       |       |      |
+| Thoric Frosthammer       |       |       |       |       |       |       |       |       | d     |      |       |      |       |       |      |
+| Chance Ravinne           |       |       |       |       |       |       |       |       | d     |      |       |      |       |       |      |
+| Jayne Fillon             |       |       |       |       |       |       |       |       | d     |      |       |      |       |       |      |
+| Manfred Sideous          |       |       |       |       |       |       |       |       | d     |      |       |      |       |       |      |
+| Cagali Cagali            |       |       |       |       |       |       |       |       | d     |      |       |      |       |       |      |
+| Corbexx                  |       |       |       |       |       |       |       |       |       | d    |       |      |       |       |      |
+| Corebloodbrothers        |       |       |       |       |       |       |       |       |       | d    |       |      |       |       |      |
+| DJ FunkyBacon            |       |       |       |       |       |       |       |       |       | d    |       |      |       |       |      |
+| Major JSilva             |       |       |       |       |       |       |       |       |       | d    |       |      |       |       |      |
+| Sion Kumitomo            |       |       |       |       |       |       |       |       |       | d    |       |      |       |       |      |
+| Steve Ronuken            |       |       |       |       |       |       |       |       |       | d    |       |      |       |       |      |
+| Sugar Kyle               |       |       |       |       |       |       |       |       |       | d    |       |      |       |       |      |
+| Xander Phoena            |       |       |       |       |       |       |       |       |       | d    |       |      |       |       |      |
+| Matias Otero             |       |       |       |       |       |       |       |       |       | d    |       |      |       |       |      |
+| Ali Aras                 |       |       |       |       |       |       |       |       |       | d    | d     |      |       |       |      |
+| Mangala Solaris          |       |       |       |       |       |       |       |       |       | d    | d     |      |       |       |      |
+| Mike Azariah             |       |       |       |       |       |       |       |       |       | d    | d     |      |       |       |      |
+| mynnna                   |       |       |       |       |       |       |       |       |       | d    | d     |      |       |       |      |
+| progodlegend             |       |       |       |       |       |       |       |       |       | d    | d     |      |       |       |      |
+| Chitsa Jason             |       |       |       |       |       |       |       |       |       |      | d     |      |       |       |      |
+| James Arget              |       |       |       |       |       |       |       |       |       |      | d     |      |       |       |      |
+| Kesper North             |       |       |       |       |       |       |       |       |       |      | d     |      |       |       |      |
+| Korvin                   |       |       |       |       |       |       |       |       |       |      | d     |      |       |       |      |
+| Malcanis                 |       |       |       |       |       |       |       |       |       |      | d     |      |       |       |      |
+| Ripard Teg               |       |       |       |       |       |       |       |       |       |      | d     |      |       |       |      |
+| Sala Cameron             |       |       |       |       |       |       |       |       |       |      | d     |      |       |       |      |
+| Sort Dragon              |       |       |       |       |       |       |       |       |       |      | d     |      |       |       |      |
+| Trebor Daehdoow          |       |       |       |       |       |       |       |       |       |      | d     | d    | d     | d     |      |
+| Alekseyev Karrde         |       |       |       |       |       |       |       |       |       |      |       | d    |       |       |      |
+| Dovinian                 |       |       |       |       |       |       |       |       |       |      |       | d    |       |       |      |
+| Greene Lee               |       |       |       |       |       |       |       |       |       |      |       | d    |       |       |      |
+| Hans Jagerblitzen        |       |       |       |       |       |       |       |       |       |      |       | d    |       |       |      |
+| Issler Dainze            |       |       |       |       |       |       |       |       |       |      |       | d    |       |       |      |
+| Kelduum Revaan           |       |       |       |       |       |       |       |       |       |      |       | d    |       |       |      |
+| Seleene                  |       |       |       |       |       |       |       |       |       |      |       | d    | d     |       |      |
+| The Mittani              |       |       |       |       |       |       |       |       |       |      |       | d    | d     |       |      |
+| UAxDEATH                 |       |       |       |       |       |       |       |       |       |      |       | d    | d     |       |      |
+| Darius III               |       |       |       |       |       |       |       |       |       |      |       | d    | a     |       |      |
+| Elise Randolph           |       |       |       |       |       |       |       |       |       |      |       | d    | a     |       |      |
+| Two Step                 |       |       |       |       |       |       |       |       |       |      |       | d    | a     |       |      |
+| Meissa Anunthiel         |       |       |       |       |       |       |       |       |       |      |       | d    | d     | d     |      |
+| Draco Llasa              |       |       |       |       |       |       |       |       |       |      |       |      | d     |       |      |
+| Vile Rat                 |       |       |       |       |       |       |       |       |       |      |       |      | d     |       |      |
+| White Tree               |       |       |       |       |       |       |       |       |       |      |       |      | d     |       |      |
+| Killer2                  |       |       |       |       |       |       |       |       |       |      |       |      | d     |       |      |
+| Prometheus Exenthal      |       |       |       |       |       |       |       |       |       |      |       |      | a     |       |      |
+| Krutoj                   |       |       |       |       |       |       |       |       |       |      |       |      | a     |       |      |
+| Ankhesentapemkah         |       |       |       |       |       |       |       |       |       |      |       |      |       | d     |      |
+| Dierdra Vaal             |       |       |       |       |       |       |       |       |       |      |       |      |       | d     |      |
+| Korvin                   |       |       |       |       |       |       |       |       |       |      |       |      |       | d     |      |
+| Mynxee                   |       |       |       |       |       |       |       |       |       |      |       |      |       | d     |      |
+| Sokratesz                |       |       |       |       |       |       |       |       |       |      |       |      |       | d     |      |
+| TeaDaze                  |       |       |       |       |       |       |       |       |       |      |       |      |       | d     |      |
+| Vuk Lau                  |       |       |       |       |       |       |       |       |       |      |       |      |       | d     |      |
+| ALPHA12125               |       |       |       |       |       |       |       |       |       |      |       |      |       | a     |      |
+| ElvenLord                |       |       |       |       |       |       |       |       |       |      |       |      |       | a     |      |
+| Helen Highwater          |       |       |       |       |       |       |       |       |       |      |       |      |       | a     |      |
+| mazzilliu                |       |       |       |       |       |       |       |       |       |      |       |      |       | a     |      |
+| T'Amber                  |       |       |       |       |       |       |       |       |       |      |       |      |       | a     |      |
+| Greg Russo               |       |       |       |       |       |       |       |       |       |      |       |      |       |       | d    |
+| Andrey Antonov           |       |       |       |       |       |       |       |       |       |      |       |      |       |       | d    |
+| Asher Dratel             |       |       |       |       |       |       |       |       |       |      |       |      |       |       | d    |
+| Denis Descheneaux        |       |       |       |       |       |       |       |       |       |      |       |      |       |       | d    |
+| Jaime Tiampo             |       |       |       |       |       |       |       |       |       |      |       |      |       |       | d    |
+| Jason Renouf             |       |       |       |       |       |       |       |       |       |      |       |      |       |       | d    |
+| John Zastrow             |       |       |       |       |       |       |       |       |       |      |       |      |       |       | d    |
+| Tim Heusschen            |       |       |       |       |       |       |       |       |       |      |       |      |       |       | d    |
+| Tomas Ljumovic           |       |       |       |       |       |       |       |       |       |      |       |      |       |       | d    |
+| Iain Compton             |       |       |       |       |       |       |       |       |       |      |       |      |       |       | a    |
+| Justin Easterling        |       |       |       |       |       |       |       |       |       |      |       |      |       |       | a    |
+| Paul Alexander Oosterman |       |       |       |       |       |       |       |       |       |      |       |      |       |       | a    |
+| Shayne Smart             |       |       |       |       |       |       |       |       |       |      |       |      |       |       | a    |
+| Stephan Pirson           |       |       |       |       |       |       |       |       |       |      |       |      |       |       | a    |
 
 _"d" means delegate, "a" means alternate council member._
 
