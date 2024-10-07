@@ -226,7 +226,7 @@ Blog posts announcing the results:
     * Shayne Smart
 
 ## CSM Alumni
-There are a total 120 CSM alumni members.
+There are a total of 120 CSM alumni members, excluding CSMs 1-3.
 
 | Character                | CSM18 | CSM17 | CSM16 | CSM15 | CSM14 | CSM13 | CSM12 | CSM11 | CSM10 | CSM9 | CSM8  | CSM7 | CSM6  | CSM5  | CSM4 |
 |--------------------------|-------|-------|-------|-------|-------|-------|-------|-------|-------|------|-------|------|-------|-------|------|
