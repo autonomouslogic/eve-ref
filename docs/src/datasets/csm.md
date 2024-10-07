@@ -147,7 +147,7 @@ Blog posts announcing the results:
   * Ripard Teg
   * Sala Cameron
   * Sort Dragon
-  * Trebor Daehdoow
+  * Trebor Daehdoow - incumbent
 
 ## Early CSM Elections
 CSM 1-7 were [first-past-the-post](https://en.wikipedia.org/wiki/First-past-the-post_voting) elections.
@@ -157,20 +157,20 @@ I was unable to find data for CSM 1-3. If anyone knows where I can find this, pl
 
 Blog posts announcing the results:
 * [CSM7](https://www.eveonline.com/news/view/csm-7-the-results) - 2012-03-24
-  * The Mittani
-  * Two Step
-  * Elise Randolph
+  * The Mittani - incumbent
+  * Two Step - incumbent
+  * Elise Randolph - incumbent
   * Greene Lee
-  * Trebor Daehdoow
+  * Trebor Daehdoow - incumbent
   * Kelduum Revaan
-  * Seleene
-  * UAxDEATH
+  * Seleene - incumbent
+  * UAxDEATH - incumbent
   * Hans Jagerblitzen
-  * Meissa Anunthiel
+  * Meissa Anunthiel - incumbent
   * Dovinian
   * Issler Dainze
   * Alekseyev Karrde
-  * Darius III
+  * Darius III - incumbent
 * [CSM6](https://www.eveonline.com/news/view/csm6-elections-the-results) - 2011-03-27
   * _Delegates_
     * The Mittani
@@ -228,48 +228,67 @@ Blog posts announcing the results:
 ## CSM Alumni
 
 
-| Character                | CSM4 | CSM5  | CSM6  |
-|--------------------------|------|-------|-------|
-| ALPHA12125               |      | a     |       |
-| Andrey Antonov           | d    |       |       |
-| Ankhesentapemkah         |      | d     |       |
-| Asher Dratel             | d    |       |       |
-| Darius III               |      |       | a     |
-| Denis Descheneaux        | d    |       |       |
-| Dierdra Vaal             |      | d     |       |
-| Draco Llasa              |      |       | d     |
-| Elise Randolph           |      |       | a     |
-| ElvenLord                |      | a     |       |
-| Greg Russo               | d    |       |       |
-| Helen Highwater          |      | a     |       |
-| Iain Compton             | a    |       |       |
-| Jaime Tiampo             | d    |       |       |
-| Jason Renouf             | d    |       |       |
-| John Zastrow             | d    |       |       |
-| Justin Easterling        | a    |       |       |
-| Killer2                  |      |       | d     |
-| Korvin                   |      | d     |       |
-| Krutoj                   |      |       | a     |
-| mazzilliu                |      | a     |       |
-| Meissa Anunthiel         |      | d     | d     |
-| Mynxee                   |      | d     |       |
-| Paul Alexander Oosterman | a    |       |       |
-| Prometheus Exenthal      |      |       | a     |
-| Seleene                  |      |       | d     |
-| Shayne Smart             | a    |       |       |
-| Sokratesz                |      | d     |       |
-| Stephan Pirson           | a    |       |       |
-| T'Amber                  |      | a     |       |
-| TeaDaze                  |      | d     |       |
-| The Mittani              |      |       | d     |
-| Tim Heusschen            | d    |       |       |
-| Tomas Ljumovic           | d    |       |       |
-| Trebor Daehdoow          |      | d     | d     |
-| Two Step                 |      |       | a     |
-| UAxDEATH                 |      |       | d     |
-| Vile Rat                 |      |       | d     |
-| Vuk Lau                  |      | d     |       |
-| White Tree               |      |       | d     |
+| Character                | CSM9 | CSM8  | CSM7 | CSM6  | CSM5  | CSM4 |
+|--------------------------|------|-------|------|-------|-------|------|
+| Ali Aras                 |      | d     |      |       |       |      |
+| Chitsa Jason             |      | d     |      |       |       |      |
+| James Arget              |      | d     |      |       |       |      |
+| Kesper North             |      | d     |      |       |       |      |
+| Korvin                   |      | d     |      |       |       |      |
+| Malcanis                 |      | d     |      |       |       |      |
+| Mangala Solaris          |      | d     |      |       |       |      |
+| Mike Azariah             |      | d     |      |       |       |      |
+| mynnna                   |      | d     |      |       |       |      |
+| progodlegend             |      | d     |      |       |       |      |
+| Ripard Teg               |      | d     |      |       |       |      |
+| Sala Cameron             |      | d     |      |       |       |      |
+| Sort Dragon              |      | d     |      |       |       |      |
+| Trebor Daehdoow          |      | d     | d    | d     | d     |      |
+| Alekseyev Karrde         |      |       | d    |       |       |      |
+| Dovinian                 |      |       | d    |       |       |      |
+| Greene Lee               |      |       | d    |       |       |      |
+| Hans Jagerblitzen        |      |       | d    |       |       |      |
+| Issler Dainze            |      |       | d    |       |       |      |
+| Kelduum Revaan           |      |       | d    |       |       |      |
+| Seleene                  |      |       | d    | d     |       |      |
+| The Mittani              |      |       | d    | d     |       |      |
+| UAxDEATH                 |      |       | d    | d     |       |      |
+| Darius III               |      |       | d    | a     |       |      |
+| Elise Randolph           |      |       | d    | a     |       |      |
+| Two Step                 |      |       | d    | a     |       |      |
+| Meissa Anunthiel         |      |       | d    | d     | d     |      |
+| Draco Llasa              |      |       |      | d     |       |      |
+| Vile Rat                 |      |       |      | d     |       |      |
+| White Tree               |      |       |      | d     |       |      |
+| Killer2                  |      |       |      | d     |       |      |
+| Prometheus Exenthal      |      |       |      | a     |       |      |
+| Krutoj                   |      |       |      | a     |       |      |
+| Ankhesentapemkah         |      |       |      |       | d     |      |
+| Dierdra Vaal             |      |       |      |       | d     |      |
+| Korvin                   |      |       |      |       | d     |      |
+| Mynxee                   |      |       |      |       | d     |      |
+| Sokratesz                |      |       |      |       | d     |      |
+| TeaDaze                  |      |       |      |       | d     |      |
+| Vuk Lau                  |      |       |      |       | d     |      |
+| ALPHA12125               |      |       |      |       | a     |      |
+| ElvenLord                |      |       |      |       | a     |      |
+| Helen Highwater          |      |       |      |       | a     |      |
+| mazzilliu                |      |       |      |       | a     |      |
+| T'Amber                  |      |       |      |       | a     |      |
+| Greg Russo               |      |       |      |       |       | d    |
+| Andrey Antonov           |      |       |      |       |       | d    |
+| Asher Dratel             |      |       |      |       |       | d    |
+| Denis Descheneaux        |      |       |      |       |       | d    |
+| Jaime Tiampo             |      |       |      |       |       | d    |
+| Jason Renouf             |      |       |      |       |       | d    |
+| John Zastrow             |      |       |      |       |       | d    |
+| Tim Heusschen            |      |       |      |       |       | d    |
+| Tomas Ljumovic           |      |       |      |       |       | d    |
+| Iain Compton             |      |       |      |       |       | a    |
+| Justin Easterling        |      |       |      |       |       | a    |
+| Paul Alexander Oosterman |      |       |      |       |       | a    |
+| Shayne Smart             |      |       |      |       |       | a    |
+| Stephan Pirson           |      |       |      |       |       | a    |
 
 
 _"d" means delegate, "a" means alternate council member._
