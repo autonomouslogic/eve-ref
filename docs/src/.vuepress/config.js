@@ -55,6 +55,7 @@ module.exports = {
           children: [
             'datasets/',
             'datasets/downloading-datasets',
+            'datasets/csm',
             'datasets/fuzzwork-ordersets',
             'datasets/hoboleaks-sde',
             'datasets/incursions',
