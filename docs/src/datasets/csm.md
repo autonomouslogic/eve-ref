@@ -356,6 +356,7 @@ _"d" means delegate, "a" means alternate council member._
 ## CCP Alumni
 Some former CSM members have gone on to work for CCP Games:
 * Elise Randolph - CCP Swift
+* Mark Resurrectus - CCP Jötunn
 
 ## Other Resources
 * [The Council of Stellar Management](https://community.eveonline.com/community/csm/) - EVE Community
