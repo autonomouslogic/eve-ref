@@ -119,20 +119,20 @@ Blog posts announcing the results:
   * Manfred Sideous
   * Cagali Cagali
 * [CSM9](https://www.eveonline.com/news/view/csm9-presenting-the-new-council-members-election-data-and-officer-changes) - 2014-05-10
-  * Ali Aras
+  * Ali Aras - incumbent
   * Major JSilva
   * Sugar Kyle
   * Corbexx
   * DJ FunkyBacon
-  * Mangala Solaris
+  * Mangala Solaris - incumbent
   * Steve Ronuken
   * Sion Kumitomo
-  * Mike Azariah
-  * Progodlegend
+  * Mike Azariah - incumbent
+  * Progodlegend - incumbent
   * Corebloodbrothers
   * Xander Phoena
   * Matias Otero
-  * Mynnna
+  * Mynnna - incumbent
 * [CSM8](https://www.eveonline.com/news/view/csm8-election-results) - 2013-04-28
   * Ali Aras
   * Chitsa Jason
@@ -230,16 +230,25 @@ Blog posts announcing the results:
 
 | Character                | CSM9 | CSM8  | CSM7 | CSM6  | CSM5  | CSM4 |
 |--------------------------|------|-------|------|-------|-------|------|
-| Ali Aras                 |      | d     |      |       |       |      |
+| Corbexx                  | d    |       |      |       |       |      |
+| Corebloodbrothers        | d    |       |      |       |       |      |
+| DJ FunkyBacon            | d    |       |      |       |       |      |
+| Major JSilva             | d    |       |      |       |       |      |
+| Sion Kumitomo            | d    |       |      |       |       |      |
+| Steve Ronuken            | d    |       |      |       |       |      |
+| Sugar Kyle               | d    |       |      |       |       |      |
+| Xander Phoena            | d    |       |      |       |       |      |
+| Matias Otero             | d    |       |      |       |       |      |
+| Ali Aras                 | d    | d     |      |       |       |      |
+| Mangala Solaris          | d    | d     |      |       |       |      |
+| Mike Azariah             | d    | d     |      |       |       |      |
+| mynnna                   | d    | d     |      |       |       |      |
+| progodlegend             | d    | d     |      |       |       |      |
 | Chitsa Jason             |      | d     |      |       |       |      |
 | James Arget              |      | d     |      |       |       |      |
 | Kesper North             |      | d     |      |       |       |      |
 | Korvin                   |      | d     |      |       |       |      |
 | Malcanis                 |      | d     |      |       |       |      |
-| Mangala Solaris          |      | d     |      |       |       |      |
-| Mike Azariah             |      | d     |      |       |       |      |
-| mynnna                   |      | d     |      |       |       |      |
-| progodlegend             |      | d     |      |       |       |      |
 | Ripard Teg               |      | d     |      |       |       |      |
 | Sala Cameron             |      | d     |      |       |       |      |
 | Sort Dragon              |      | d     |      |       |       |      |
@@ -290,10 +299,11 @@ Blog posts announcing the results:
 | Shayne Smart             |      |       |      |       |       | a    |
 | Stephan Pirson           |      |       |      |       |       | a    |
 
-
 _"d" means delegate, "a" means alternate council member._
 
-
+## CCP Alumni
+Some former CSM members have gone on to work for CCP Games:
+* Elise Randolph - CCP Swift
 
 ## Other Resources
 * [The Council of Stellar Management](https://community.eveonline.com/community/csm/) - EVE Community
