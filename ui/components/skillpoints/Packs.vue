@@ -83,11 +83,13 @@ packs.sort((a, b) => a.price.plex - b.price.plex);
 	</p>
 	<table class="table-auto w-full my-3">
 		<thead>
-			<th class="text-left"></th>
-			<th class="text-right">Price</th>
-			<th class="text-left">Account</th>
-			<th class="text-right">Total SP</th>
-			<th class="text-right">ISK/SP</th>
+			<tr>
+				<th class="text-left"></th>
+				<th class="text-right">Price</th>
+				<th class="text-left">Account</th>
+				<th class="text-right">Total SP</th>
+				<th class="text-right">ISK/SP</th>
+			</tr>
 		</thead>
 
 		<template v-for="(pack, idx) in packs" :key="idx">

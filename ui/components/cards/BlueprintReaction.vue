@@ -43,8 +43,10 @@ if (blueprintType?.typeId) {
 
 			<table v-if="reaction.products" class="standard-table">
 				<thead>
-					<th>Product</th>
-					<th class="text-right">Quantity</th>
+					<tr>
+						<th>Product</th>
+						<th class="text-right">Quantity</th>
+					</tr>
 				</thead>
 				<tbody>
 					<tr v-for="(product, productId) in reaction.products" :key="productId">
@@ -56,8 +58,10 @@ if (blueprintType?.typeId) {
 
 			<table v-if="reaction.materials" class="standard-table">
 				<thead>
-					<th>Ingredient</th>
-					<th class="text-right">Quantity</th>
+					<tr>
+						<th>Ingredient</th>
+						<th class="text-right">Quantity</th>
+					</tr>
 				</thead>
 				<tbody>
 					<tr v-for="(material, materialId) in reaction.materials" :key="materialId">

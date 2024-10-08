@@ -27,8 +27,10 @@ const props = defineProps<{
 
 			<table class="standard-table">
 				<thead>
-					<th>Output</th>
-					<th class="text-right">Quantity</th>
+					<tr>
+						<th>Output</th>
+						<th class="text-right">Quantity</th>
+					</tr>
 				</thead>
 				<tbody>
 					<tr v-for="(material, materialId) in inventoryType.typeMaterials" :key="materialId">
