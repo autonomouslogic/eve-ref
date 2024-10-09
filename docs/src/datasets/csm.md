@@ -415,6 +415,8 @@ Some former CSM members have gone on to work for CCP Games:
 * Suitonia - CCP Kestrel
 
 ## Other Resources
+* [Brisc Rubal's - CSM Historical Data](https://docs.google.com/spreadsheets/d/1DQRi01dwsnXVHLviKeJf2AF_h6CLLvHAp7lovkzkCzk/edit) - includes news and minutes
 * [The Council of Stellar Management](https://community.eveonline.com/community/csm/) - EVE Community
 * [CSM Summit Meeting Minutes](https://community.eveonline.com/community/csm/meeting-minutes) - EVE Community
 * [Council of Stellar Management](https://wiki.eveuniversity.org/Council_of_Stellar_Management) - EVE University Wiki
+* [teadaze's CSM DB](https://teadaze.net/csmDB/) for CSM 2-5
