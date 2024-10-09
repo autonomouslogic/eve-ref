@@ -505,6 +505,8 @@ const cards: {[key: string]: any} = {
 	"usage":
 		{
 			"name": {"en": "Usage"},
+			"component": "usage",
+			"alwaysShow": true,
 			"dogmaAttributes":
 				[
 					"canFitShipGroup01",
