@@ -131,6 +131,7 @@ const cards: {[key: string]: any} = {
 			"dogmaAttributes":
 				[
 					"duration",
+					"durationHighisGood",
 					"maxGroupFitted",
 					"maxGroupActive",
 					"disallowEarlyDeactivation",
