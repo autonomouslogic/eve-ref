@@ -168,6 +168,7 @@ const cards: {[key: string]: any} = {
 					"fleetHangarCapacity",
 					"specialOreHoldCapacity",
 					"specialPlanetaryCommoditiesHoldCapacity",
+					"specialCommandCenterHoldCapacity",
 					"shipMaintenanceBayCapacity",
 					"specialMineralHoldCapacity",
 					"specialGasHoldCapacity",
