@@ -164,12 +164,15 @@ const cards: {[key: string]: any} = {
 			"name": {"en": "Cargo"},
 			"dogmaAttributes":
 				[
+					"capacity",
 					"fleetHangarCapacity",
 					"specialOreHoldCapacity",
 					"specialPlanetaryCommoditiesHoldCapacity",
 					"shipMaintenanceBayCapacity",
-					"specialFuelBayCapacity",
 					"specialMineralHoldCapacity",
+					"specialGasHoldCapacity",
+					"specialAmmoHoldCapacity",
+					"specialFuelBayCapacity",
 					"hasFleetHangars",
 					"hasShipMaintenanceBay"
 				]
