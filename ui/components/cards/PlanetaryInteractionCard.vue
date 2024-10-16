@@ -10,6 +10,7 @@ import DogmaListItems from "~/components/cards/DogmaListItems.vue";
 import AttributeListItem from "~/components/attr/AttributeListItem.vue";
 import {CUBIC_METER} from "~/lib/unitConstants";
 import UnitValue from "~/components/dogma/UnitValue.vue";
+import PlanetaryInteractionLinks from "~/components/cards/PlanetaryInteractionLinks.vue";
 
 const props = defineProps<{
 	title: string,
@@ -209,6 +210,8 @@ for (const schematic of producedBySchematics.values()) {
 					</li>
 				</ul>
 			</div>
+
+			<PlanetaryInteractionLinks />
 
 		</CardWrapper>
 	</template>
