@@ -64,84 +64,155 @@ export class PackPrice {
     plex: number = 0;
     omega: number = 0;
     includedSp: number = 0;
-    accelerator: number = 0;
+    accelerators: Accelerators[] = [];
     skillExtractors: number = 0;
     mct: number = 0;
+}
+
+export class Accelerators {
+    accelerator: number = 0;
+    count: number = 0;
 }
 
 export const packPrices: PackPrice[] = [
     {
         name: "Apprentice Bundle",
-        plex: 565,
-        includedSp: 50_000,
-        accelerator: GENIUS_BOOST_CEREBRAL_ACCELERATOR,
+        plex: 280,
+        includedSp: 250_000,
+        accelerators: [
+            {
+                accelerator: GENIUS_BOOST_CEREBRAL_ACCELERATOR,
+                count: 1
+            } as Accelerators
+        ],
     } as PackPrice,
     {
         name: "Novice Bundle",
-        plex: 658,
-        includedSp: 100_000 + 250_000,
-        accelerator: EXPERT_BOOST_CEREBRAL_ACCELERATOR,
+        plex: 520,
+        includedSp: 500_000,
+        accelerators: [
+            {
+                accelerator: STANDARD_BOOST_CEREBRAL_ACCELERATOR,
+                count: 1
+            } as Accelerators,
+            {
+                accelerator: EXPERT_BOOST_CEREBRAL_ACCELERATOR,
+                count: 1
+            } as Accelerators
+        ],
     } as PackPrice,
     {
         name: "Graduate Bundle",
-        plex: 820,
-        includedSp: 2 * 100_000 + 2 * 250_000,
-        accelerator: GENIUS_BOOST_CEREBRAL_ACCELERATOR,
+        plex: 735,
+        includedSp: 250_000 + 500_000,
+        accelerators: [
+            {
+                accelerator: SPECIALIST_BOOST_CEREBRAL_ACCELERATOR,
+                count: 2
+            } as Accelerators
+        ],
     } as PackPrice,
     {
         name: "Master Bundle",
-        plex: 1530,
-        includedSp: 1_000_000 + 3 * 250_000,
-        accelerator: STANDARD_BOOST_CEREBRAL_ACCELERATOR,
+        plex: 1510,
+        includedSp: 1_000_000 + 500_000 + 250_000,
+        accelerators: [
+            {
+                accelerator: STANDARD_BOOST_CEREBRAL_ACCELERATOR,
+                count: 2
+            } as Accelerators
+            ],
+    } as PackPrice,
+    {
+        name: "Prodigy Bundle",
+        plex: 1154,
+        includedSp: 1_000_000 + 250_000,
+        accelerators: [
+            {
+                accelerator: ADVANCED_BOOST_CEREBRAL_ACCELERATOR,
+                count: 2
+            } as Accelerators
+            ],
     } as PackPrice,
     {
         name: "Explorer Career Pack",
         plex: 275,
         omega: 14 * DAY,
-        accelerator: ADVANCED_BOOST_CEREBRAL_ACCELERATOR,
+        accelerators: [
+            {
+                accelerator: ADVANCED_BOOST_CEREBRAL_ACCELERATOR,
+                count: 1
+            } as Accelerators
+        ],
     } as PackPrice,
     {
         name: "Industrialist Career Pack",
         plex: 350,
         omega: 14 * DAY,
-        accelerator: ADVANCED_BOOST_CEREBRAL_ACCELERATOR,
+        accelerators: [
+            {
+                accelerator: ADVANCED_BOOST_CEREBRAL_ACCELERATOR,
+                count: 1
+            } as Accelerators
+        ],
     } as PackPrice,
     {
         name: "Enforcer Career Pack",
         plex: 425,
         omega: 14 * DAY,
-        accelerator: ADVANCED_BOOST_CEREBRAL_ACCELERATOR,
+        accelerators: [
+            {
+                accelerator: ADVANCED_BOOST_CEREBRAL_ACCELERATOR,
+                count: 1
+            } as Accelerators
+        ],
     } as PackPrice,
     {
         name: "Soldier of Fortune Career Pack",
         plex: 475,
         omega: 14 * DAY,
-        accelerator: ADVANCED_BOOST_CEREBRAL_ACCELERATOR,
-    } as PackPrice,
-    {
-        name: "Warclone Omega Bundle",
-        plex: 250,
-        omega: 14 * DAY,
+        accelerators: [
+            {
+                accelerator: ADVANCED_BOOST_CEREBRAL_ACCELERATOR,
+                count: 1
+            } as Accelerators
+        ],
     } as PackPrice,
     {
         name: "Bronze Starter Pack",
         plex: 250,
         includedSp: 50_000,
-        accelerator: SPECIALIST_BOOST_CEREBRAL_ACCELERATOR,
+        omega: 14 * DAY,
+        accelerators: [
+            {
+                accelerator: SPECIALIST_BOOST_CEREBRAL_ACCELERATOR,
+                count: 1
+            } as Accelerators
+        ],
     } as PackPrice,
     {
         name: "Silver Starter Pack",
         plex: 500,
         includedSp: 250_000,
         omega: 30 * DAY,
-        accelerator: ADVANCED_BOOST_CEREBRAL_ACCELERATOR,
+        accelerators: [
+            {
+                accelerator: ADVANCED_BOOST_CEREBRAL_ACCELERATOR,
+                count: 1
+            } as Accelerators
+        ],
     } as PackPrice,
     {
         name: "Gold Starter Pack",
         plex: 1000,
         includedSp: 500_000,
         omega: 60 * DAY,
-        accelerator: STANDARD_BOOST_CEREBRAL_ACCELERATOR,
+        accelerators: [
+            {
+                accelerator: STANDARD_BOOST_CEREBRAL_ACCELERATOR,
+                count: 1
+            } as Accelerators
+        ],
     } as PackPrice,
     {
         name: "Platinum Starter Pack",
@@ -149,7 +220,12 @@ export const packPrices: PackPrice[] = [
         includedSp: 500_000,
         omega: 90 * DAY,
         mct: 2,
-        accelerator: SPECIALIST_BOOST_CEREBRAL_ACCELERATOR,
+        accelerators: [
+            {
+                accelerator: SPECIALIST_BOOST_CEREBRAL_ACCELERATOR,
+                count: 1
+            } as Accelerators
+        ],
         skillExtractors: 10,
     } as PackPrice,
 ]

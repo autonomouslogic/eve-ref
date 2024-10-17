@@ -51,17 +51,20 @@ await Promise.all(packPrices.map(async packPrice => {
 		pack.finalSpOmega += packPrice.mct * omegaSkillPointsPerMonth;
 		pack.omegaOnly = true;
 	}
-	if (packPrice.accelerator > 0) {
-		await cacheTypeBundle(packPrice.accelerator);
-		const type = await refdata.getType({typeId: packPrice.accelerator});
-		const attrs = Object.values(await loadDogmaAttributesForType(type));
-		const bonus = getTypeAttributeByName("intelligenceBonus", type, attrs)?.value || 0;
-		const baseDuration = getTypeAttributeByName("boosterDuration", type, attrs)?.value || 0;
-		const duration = calculateBoosterDuration(baseDuration, biology);
-		const acceleratedSpOmega = calculateAcceleratedSkillpoints(bonus, duration, true);
-		const acceleratedSpAlpha = calculateAcceleratedSkillpoints(bonus, duration, false);
-		pack.finalSpOmega += acceleratedSpOmega;
-		pack.finalSpAlpha += acceleratedSpAlpha;
+	if (packPrice.accelerators && packPrice.accelerators.length > 0) {
+		const accelerators = packPrice.accelerators;
+		for (let accelerator of accelerators) {
+			await cacheTypeBundle(accelerator.accelerator);
+			const type = await refdata.getType({typeId: accelerator.accelerator});
+			const attrs = Object.values(await loadDogmaAttributesForType(type));
+			const bonus = getTypeAttributeByName("intelligenceBonus", type, attrs)?.value || 0;
+			const baseDuration = getTypeAttributeByName("boosterDuration", type, attrs)?.value || 0;
+			const duration = calculateBoosterDuration(baseDuration, biology);
+			const acceleratedSpOmega = calculateAcceleratedSkillpoints(bonus, duration, true);
+			const acceleratedSpAlpha = calculateAcceleratedSkillpoints(bonus, duration, false);
+			pack.finalSpOmega += acceleratedSpOmega * accelerator.count;
+			pack.finalSpAlpha += acceleratedSpAlpha * accelerator.count;
+		}
 	}
 
 	pack.isk = packPrice.plex * plexPrice;
@@ -107,9 +110,11 @@ packs.sort((a, b) => a.price.plex - b.price.plex);
 						<p v-if="pack.price.skillExtractors > 0">
 							{{ pack.price.skillExtractors }}x <TypeLink :type-id="SKILL_EXTRACTOR" />
 						</p>
-						<p v-if="pack.price.accelerator > 0">
-							<TypeLink :type-id="pack.price.accelerator" />
-						</p>
+						<template v-if="pack.price.accelerators?.length > 0">
+							<p v-for="accelerator in pack.price.accelerators" :key="accelerator.accelerator">
+								{{accelerator.count}}x <TypeLink :type-id="accelerator.accelerator" />
+							</p>
+						</template>
 					</div>
 				</td>
 				<td class="text-right" rowspan="2">
