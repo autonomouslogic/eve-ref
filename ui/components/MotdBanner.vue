@@ -12,12 +12,10 @@ const image = `https://images.evetech.net/characters/${characterId}/portrait`;
 const forumUrl = "https://forums.eveonline.com/t/ariel-rin-for-csm19/462992";
 const voteUrl = "https://community.eveonline.com/community/csm/vote#Ariel%20Rin";
 const urlText = "Read more about Ariel Rin";
-
-const votingEnds = new Date("2024-10-24 11:01:00 UTC");
 </script>
 
 <template>
-	<div v-if="new Date() < votingEnds" class="motd">
+	<div class="motd">
 		<section v-if="isIndex">
 			<div class="py-8 px-4 mx-auto max-w-screen-xl grid grid-cols-1 md:grid-cols-3">
 				<div class="max-w-fit justify-self-end px-4 lg:px-8 hidden md:block">
