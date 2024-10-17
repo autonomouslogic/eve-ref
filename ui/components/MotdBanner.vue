@@ -9,12 +9,15 @@ const imgSize = 196;
 const characterId = 90406623;
 const title = "Ariel Rin for CSM19";
 const image = `https://images.evetech.net/characters/${characterId}/portrait`;
-const url = "https://forums.eveonline.com/t/ariel-rin-for-csm19/462992";
-const urlText = "Read more";
+const forumUrl = "https://forums.eveonline.com/t/ariel-rin-for-csm19/462992";
+const voteUrl = "https://community.eveonline.com/community/csm/vote#Ariel%20Rin";
+const urlText = "Read more about Ariel Rin";
+
+const votingEnds = new Date("2024-10-24 11:01:00 UTC");
 </script>
 
 <template>
-	<div class="motd">
+	<div v-if="new Date() < votingEnds" class="motd">
 		<section v-if="isIndex">
 			<div class="py-8 px-4 mx-auto max-w-screen-xl grid grid-cols-1 md:grid-cols-3">
 				<div class="max-w-fit justify-self-end px-4 lg:px-8 hidden md:block">
@@ -43,16 +46,20 @@ const urlText = "Read more";
 							Ariel Rin has been advocating for the revitalization of the ESI.
 							I hope you will consider them as the #1 choice on your ballot.
 						</p>
+						<p class="mb-4">
+							<ExternalLink :url="forumUrl" class="">{{urlText}} &raquo;</ExternalLink>
+						</p>
 					</span>
-					<p class="mb-4 font-normal text-lg lg:text-xl">Voting for CSM starts October 17th</p>
-					<ExternalLink :url="url" class="">{{urlText}} &raquo;</ExternalLink>
+					<p class="mb-4 font-normal text-lg lg:text-xl">
+						<ExternalLink :url="voteUrl">Voting is now open &raquo;</ExternalLink>
+					</p>
 				</div>
 			</div>
 		</section>
 		<section v-else class="flex">
 			<div class="py-4 px-2 mx-auto max-w-screen-xl text-center flex flex-col md:flex-row text-xl">
 				<p class="font-extrabold mx-3 tracking-tight">{{title}}</p>
-				<ExternalLink :url="url" class="mx-3 font-normal">{{urlText}} &raquo;</ExternalLink>
+				<ExternalLink :url="voteUrl" class="mx-3 font-normal">Voting is now open &raquo;</ExternalLink>
 			</div>
 		</section>
 	</div>
