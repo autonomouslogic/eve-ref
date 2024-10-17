@@ -71,7 +71,7 @@ export class PackPrice {
 
 export class Accelerators {
     accelerator: number = 0;
-    count: number = 1;
+    count: number = 0;
 }
 
 export const packPrices: PackPrice[] = [
@@ -81,8 +81,9 @@ export const packPrices: PackPrice[] = [
         includedSp: 250_000,
         accelerators: [
             {
-            accelerator: GENIUS_BOOST_CEREBRAL_ACCELERATOR
-        } as Accelerators
+                accelerator: GENIUS_BOOST_CEREBRAL_ACCELERATOR,
+                count: 1
+            } as Accelerators
         ],
     } as PackPrice,
     {
