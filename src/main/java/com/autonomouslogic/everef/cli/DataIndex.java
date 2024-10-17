@@ -62,7 +62,7 @@ public class DataIndex implements Command {
 
 	@Setter
 	@Getter
-	private String prefix = Configs.DATA_INDEX_PREFIX.get().orElse("ccp");
+	private String prefix = Configs.DATA_INDEX_PREFIX.get().orElse(null);
 
 	@Inject
 	protected DataIndex() {}
