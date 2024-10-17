@@ -21,6 +21,9 @@ const links = {
 			<li>
 				<ExternalLink url="https://www.adam4eve.eu/pi_rank.php">PI Profitability on Adam4Eve</ExternalLink>
 			</li>
+			<li>
+				<ExternalLink url="https://www.fuzzwork.co.uk/pi/">PI Schematics on Fuzzwork</ExternalLink>
+			</li>
 		</ul>
 	</div>
 </template>
