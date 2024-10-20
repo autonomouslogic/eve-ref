@@ -228,7 +228,9 @@ public class BuildSearch implements Command {
 	private Completable uploadFile(File outputFile) {
 		return Completable.defer(() -> {
 			var path = staticUrl.resolve("search.json");
-			var put = s3Util.putObjectRequest(outputFile.length(), path, "application/json", cacheControlMaxAge);
+			var put = s3Util.putObjectRequest(outputFile.length(), path, "application/json").toBuilder()
+					.cacheControl(s3Util.cacheControl(cacheControlMaxAge, true))
+					.build();
 			log.info(String.format("Uploading search file to %s", path));
 			return s3Adapter.putObject(put, outputFile, s3Client).ignoreElement();
 		});
