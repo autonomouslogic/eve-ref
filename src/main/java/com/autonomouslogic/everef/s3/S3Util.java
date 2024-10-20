@@ -2,8 +2,13 @@ package com.autonomouslogic.everef.s3;
 
 import com.autonomouslogic.everef.url.S3Url;
 import java.time.Duration;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+
+import okhttp3.CacheControl;
 import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 import software.amazon.awssdk.services.s3.model.ObjectCannedACL;
@@ -61,7 +66,17 @@ public class S3Util {
 	}
 
 	public String cacheControl(Duration maxAge) {
-		return String.format("public, max-age=%s", maxAge.getSeconds());
+		return cacheControl(maxAge, false);
+	}
+
+	public String cacheControl(Duration maxAge, boolean immutable) {
+		var parts = new ArrayList<String>();
+		parts.add("public");
+		parts.add("max-age=" + maxAge.toSeconds());
+		if (immutable) {
+			parts.add("immutable");
+		}
+		return String.join(", ", parts);
 	}
 
 	public GetObjectRequest getObjectRequest(S3Url url) {
