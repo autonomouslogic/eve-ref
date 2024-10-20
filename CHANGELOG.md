@@ -1,5 +1,40 @@
 EVE Ref Changelog
 
+## [2.53.3](https://github.com/autonomouslogic/eve-ref/compare/2.53.2...2.53.3) (2024-10-20)
+
+
+### Features
+
+* **ui:** Added usage card for showing what can be fitted to a ship ([#665](https://github.com/autonomouslogic/eve-ref/issues/665)) ([b524d18](https://github.com/autonomouslogic/eve-ref/commit/b524d180ca1a4dcb63e164a886989fa401ba5e94))
+* **ui:** Added volume to planetary schematics ([#668](https://github.com/autonomouslogic/eve-ref/issues/668)) ([0f233c3](https://github.com/autonomouslogic/eve-ref/commit/0f233c38ac10671012190cb4d146d58cbaf06506))
+
+
+### Bug Fixes
+
+* Search optimisation ([#672](https://github.com/autonomouslogic/eve-ref/issues/672)) ([deb4f7f](https://github.com/autonomouslogic/eve-ref/commit/deb4f7f9c1adb1ad45bc3c9f55fb96cd5feb2270))
+* **ui:** Added basic, gas, and ammo cargo holds to cargo card ([0db8943](https://github.com/autonomouslogic/eve-ref/commit/0db894386fe99d28af00782a3b2bfdd8d582c69f))
+* **ui:** Added Command Center Hold Capacity to cargo card ([b9d0d5e](https://github.com/autonomouslogic/eve-ref/commit/b9d0d5e25b7e62c32ce80f02993b8b8d4bcf43ab))
+* **ui:** Added durationHighisGood to module card ([fad0c7f](https://github.com/autonomouslogic/eve-ref/commit/fad0c7f9e5f3d20ce077838beb3344f8b993c3ad))
+* **ui:** Added Fuzzwork PI link ([ea606b9](https://github.com/autonomouslogic/eve-ref/commit/ea606b98c79c3de991c3b82082e13e5a45e71050))
+* **ui:** Removed conditional MOTD ([#671](https://github.com/autonomouslogic/eve-ref/issues/671)) ([339d0c3](https://github.com/autonomouslogic/eve-ref/commit/339d0c3aaa55ea5e7874c80a320c0a22e91318ad))
+* **ui:** Reorganised cargo attributes and added all possible ([86ac6b0](https://github.com/autonomouslogic/eve-ref/commit/86ac6b09f64d2c5fd9900e0057754feb37b980a3))
+* **ui:** Updated NES packs and boosters on the skill points page ([#670](https://github.com/autonomouslogic/eve-ref/issues/670)) ([bb94c57](https://github.com/autonomouslogic/eve-ref/commit/bb94c57c3b3e421ae49b56a420c1370796691e91))
+
+
+### Documentation
+
+* More CSM resources ([68b6bbc](https://github.com/autonomouslogic/eve-ref/commit/68b6bbc5b7d54c98e2ea49bef0a11742696a2e10))
+
+
+### Miscellaneous Chores
+
+* **ui:** Updated MOTD for CSM voting ([#669](https://github.com/autonomouslogic/eve-ref/issues/669)) ([ac8b89a](https://github.com/autonomouslogic/eve-ref/commit/ac8b89a9acd7bc57ecce14ae43e65b30684d5836))
+
+
+### Tests
+
+* Fixed testing ([cfd38a4](https://github.com/autonomouslogic/eve-ref/commit/cfd38a4c30d8ffe5192412efecee5a8ba38902d6))
+
 ## [2.53.2](https://github.com/autonomouslogic/eve-ref/compare/2.53.1...2.53.2) (2024-10-08)
 
 
