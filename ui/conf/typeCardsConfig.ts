@@ -238,7 +238,15 @@ const cards: {[key: string]: any} = {
 					"rigSlots",
 					"upgradeSlotsLeft",
 					"rigSize",
-					"upgradeCapacity"
+					"upgradeCapacity",
+					"upgradeCost",
+					"attributeEngRigTimeBonus",
+					"attributeEngRigMatBonus",
+					"attributeEngRigCostBonus",
+					"attributeAdvCompManufactureMaterialMultiplier",
+					"hiSecModifier",
+					"lowSecModifier",
+					"nullSecModifier"
 				]
 		},
 	"playerStructure":
