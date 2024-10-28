@@ -9,6 +9,7 @@ import com.autonomouslogic.everef.cli.refdata.transformer.BlueprintTransformer;
 import com.autonomouslogic.everef.util.CompressUtil;
 import com.autonomouslogic.everef.util.RefDataUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.reactivex.rxjava3.core.Completable;
 import java.io.File;
 import javax.inject.Inject;
@@ -43,6 +44,9 @@ public class HoboleaksLoader {
 	@Inject
 	protected Provider<BlueprintTransformer> blueprintTransformerProvider;
 
+	@Inject
+	protected Provider<HoboleaksIndustryModifierSourcesLoader> hoboleaksIndustryModifierSourcesLoaderProvider;
+
 	@Setter
 	@NonNull
 	private StoreHandler storeHandler;
@@ -51,12 +55,22 @@ public class HoboleaksLoader {
 	protected HoboleaksLoader() {}
 
 	public Completable load(@NonNull File file) {
+		var modifierSourcesLoader =
+				hoboleaksIndustryModifierSourcesLoaderProvider.get().setStoreHandler(storeHandler);
 		return CompressUtil.loadArchive(file)
 				.flatMapCompletable(
 						pair -> {
-							String filename = pair.getLeft().getName();
-							var config = refDataUtil.getHoboleaksConfigForFilename(
-								filename);
+							var filename = pair.getLeft().getName();
+							var bytes = pair.getRight();
+							switch (filename) {
+								case "industrymodifiersources.json":
+									modifierSourcesLoader.setModifierSources((ObjectNode) objectMapper.readTree(bytes));
+									return modifierSourcesLoader.load();
+								case "industrytargetfilters.json":
+									modifierSourcesLoader.setTargetFilters((ObjectNode) objectMapper.readTree(bytes));
+									return modifierSourcesLoader.load();
+							}
+							var config = refDataUtil.getHoboleaksConfigForFilename(filename);
 							if (config == null) {
 								return Completable.complete();
 							}
@@ -76,7 +90,7 @@ public class HoboleaksLoader {
 									break;
 							}
 							storeLoader.setTransformer(TransformUtil.concat(fieldRenamer, transformer));
-							return storeLoader.readValues(pair.getRight(), config.getHoboleaks());
+							return storeLoader.readValues(bytes, config.getHoboleaks());
 						},
 						false,
 						1);

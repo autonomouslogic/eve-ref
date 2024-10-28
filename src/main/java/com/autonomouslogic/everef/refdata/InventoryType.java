@@ -205,12 +205,14 @@ public class InventoryType {
 	Map<Long, Map<String, UsedInBlueprint>> usedInBlueprints;
 
 	@JsonProperty
-	@Schema(description = "For structure engineering rigs, these are the category IDs the rig affects in some way. " +
-		"This is added by EVE Ref.")
+	@Schema(
+			description = "For structure engineering rigs, these are the category IDs the rig affects in some way. "
+					+ "This is added by EVE Ref.")
 	List<Long> engineeringRigAffectedCategoryIds;
 
 	@JsonProperty
-	@Schema(description = "For structure engineering rigs, these are the group IDs the rig affects in some way. " +
-		"This is added by EVE Ref.")
+	@Schema(
+			description = "For structure engineering rigs, these are the group IDs the rig affects in some way. "
+					+ "This is added by EVE Ref.")
 	List<Long> engineeringRigAffectedGroupIds;
 }
