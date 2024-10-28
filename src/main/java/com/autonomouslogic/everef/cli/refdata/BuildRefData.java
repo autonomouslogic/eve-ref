@@ -214,7 +214,8 @@ public class BuildRefData implements Command {
 				missingDogmaUnitsDecorator,
 				canFitDecorator,
 				reprocessableTypesDecorator,
-				typeUsedInBlueprintsDecorator,industryModifierSourcesDecorator);
+				typeUsedInBlueprintsDecorator,
+				industryModifierSourcesDecorator);
 	}
 
 	@Override

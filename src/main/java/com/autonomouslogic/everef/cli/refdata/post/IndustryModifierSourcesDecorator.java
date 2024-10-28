@@ -7,12 +7,11 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.reactivex.rxjava3.core.Completable;
-import lombok.extern.log4j.Log4j2;
-
-import javax.inject.Inject;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import javax.inject.Inject;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Populates which standup rigs modifies individual types.
