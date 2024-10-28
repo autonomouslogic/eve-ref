@@ -40,6 +40,7 @@ public class HoboleaksIndustryModifierSourcesLoader {
 		if (modifierSources == null || targetFilters == null) {
 			return Completable.complete();
 		}
+		log.info("Loading Hoboleaks industry modifier sources");
 		var types = storeHandler.getHoboleaksStore("types");
 		modifierSources.fields().forEachRemaining(entry -> {
 			var typeId = Long.parseLong(entry.getKey());
