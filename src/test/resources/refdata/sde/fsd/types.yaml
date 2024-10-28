@@ -2595,8 +2595,8 @@
       ктивностью. +2% к\_эффективности переработки за каждую степень освоения навы\
       ка при работе со следующими простыми рудами: плагиоклаз пироксер скордит вел\
       ьдспар мордуний"
-    zh: "提炼普通矿石的专业技能。可以大大提高技能熟练者使用提炼设备时的效率。\n\n\n\n每升一级，下列普通矿石的提炼产出提高2%：\n\n斜长岩\n\n\
-      干焦岩\n\n灼烧岩\n\n凡晶石"
+    zh: "提炼普通矿石的专业技能。可以大大提高技能熟练者使用提炼设备时的效率。每升一级，下列普通矿石的提炼产出提高2%：斜长岩、干焦岩、灼烧岩、凡晶石、摩多\
+      石"
   groupID: 1218
   iconID: 33
   marketGroupID: 1323
@@ -2646,7 +2646,7 @@
       \ su inestabilidad a las temperaturas atmosféricas. Es muy común en las regiones\
       \ centrales del universo conocido.\r\n\r\nPuede obtenerse mediante el reprocesamiento\
       \ de las siguientes menas y sus variaciones disponibles en sistemas estelares\
-      \ con estado de seguridad alto:\r\n<a href=showinfo:1230>Veldspar</a>, <a href=showinfo:1228>escordita</a>\
+      \ con estado de seguridad alto: <a href=showinfo:1230>veldspar</a>, <a href=showinfo:1228>escordita</a>\
       \ y <a href=showinfo:18>plagioclasa</a>.\r\n\r\nTambién está presente en enormes\
       \ cantidades en menas poco comunes como <a href=showinfo:19>espodumain</a>,\
       \ <a href=showinfo:52316>bezdnacina</a>, <a href=showinfo:52315>rakovena</a>\
@@ -2656,7 +2656,7 @@
       \ href=showinfo:82163>hezorima</a> y <a href=showinfo:81975>griemeer</a>, pero\
       \ solo en pequeñas cantidades."
     fr: "Il s'agit du principal bloc de construction pour les structures spatiales.\
-      \ Ce métal est à la fois très résistant et malléable. Il ne peut être utilisé\
+      \ Ce métal est à la fois très résistant et malléable. Il ne peut pas être utilisé\
       \ pour les structures d'habitation humaine en raison de son instabilité aux\
       \ températures atmosphériques. Il est très répandu dans les régions centrales\
       \ de l'univers connu. Peut être obtenu par retraitement des minerais suivants\
@@ -2671,8 +2671,8 @@
       \ href=showinfo:82205>ueganite</a>, <a href=showinfo:82163>hezorime</a> et <a\
       \ href=showinfo:81975>griemeer</a>, mais seulement en quantités infimes."
     ja: "宇宙建造物の主要な建築素材。高い硬度を持ちながら、曲げることも可能な金属。大気温度の中では不安定であるため、人間の住居には使用できない。既知宙域の\
-      中央リージョン全域に存在する。\r\n\r\nハイセキュリティステータス星系で入手可能な、以下の鉱石やその亜種を再処理することによって得ることができる。\
-      \r\n<a href=showinfo:1230>ベルドスパー</a>、<a href=showinfo:1228>スコダイト</a>、そして<a href=showinfo:18>プ\
+      中央リージョン全域に存在する。\r\n\r\nハイセキュリティステータス星系で入手可能な、次の鉱石やその亜種を再処理することによって得ることができる：\
+      <a href=showinfo:1230>ベルドスパー</a>、<a href=showinfo:1228>スコダイト</a>、そして<a href=showinfo:18>プ\
       ラジオクレイス</a>。\r\n\r\n<a href=showinfo:19>スポデュメイン</a>や<a href=showinfo:52316>ベ\
       ズドナシン</a>、<a href=showinfo:52315>ラコベネ</a>、<a href=showinfo:52306>タラソナイト</a>と\
       いった希少鉱石の中にも相当量含まれている。\r\n\r\nトリタニウムはまた微量ながら、ゼロセキュリティステータスの星系において<a href=showinfo:81900>キ\
@@ -2680,28 +2680,28 @@
       <a href=showinfo:82163>ヘゾライム</a>、そして<a href=showinfo:81975>グリーミーア</a>に含まれる形で\
       も見つかる。"
     ko: "구조물 건설에 사용되는 핵심 재료로 탄성이 강하고 단단한 특성을 갖고 있습니다. 실온에서의 구조적 불안정성으로 인해 거주 지역에서\
-      \ 사용할 수 없습니다. 뉴에덴 중심부에서 흔히 발견됩니다.<BR><BR>아래의 광석을 정제하여 획득할 수 있습니다:<BR>하이 시큐리티\
-      \ 항성계:<BR><a href=showinfo:1230>벨드스파</a>, <a href=showinfo:1228>스코다이트</a>, <a\
-      \ href=showinfo:18>플레지오클레이스</a><BR><BR>또한 <a href=showinfo:19>스포듀마인</a>, <a\
-      \ href=showinfo:52316>베즈드나신</a>, <a href=showinfo:52315>라코벤</a>, <a href=showinfo:52306>탈\
-      라소나이트</a>에도 다량 함유되어 있습니다.<br><br>추가로 널 시큐리티 항성계에서 발견되는 광석인 <a href=showinfo:81900>카\
-      일릭슘</a>, <a href=showinfo:82016>녹사이트</a>, <a href=showinfo:82205>유가나이트</a>,\
-      \ <a href=showinfo:82163>헤조라임</a>, 그리고 <a href=showinfo:81975>그리미어</a>에도 소량의\
-      \ 트리타늄이 함유되어 있습니다."
+      \ 사용할 수 없습니다. 뉴에덴 중심부에서 흔히 발견됩니다.\r\n\r\n아래의 광석을 정제하여 획득할 수 있습니다. 하이 시큐리티 항성\
+      계: <a href=showinfo:1230>벨드스파</a>, <a href=showinfo:1228>스코다이트</a>, <a href=showinfo:18>플\
+      레지오클레이스</a>\r\n\r\n또한 <a href=showinfo:19>스포듀마인</a>, <a href=showinfo:52316>베\
+      즈드나신</a>, <a href=showinfo:52315>라코벤</a>, <a href=showinfo:52306>탈라소나이트</a>에\
+      도 다량 함유되어 있습니다.\r\n\r\n추가로 널 시큐리티 항성계에서 발견되는 광석인 <a href=showinfo:81900>카일릭슘\
+      </a>, <a href=showinfo:82016>녹사이트</a>, <a href=showinfo:82205>유가나이트</a>, <a\
+      \ href=showinfo:82163>헤조라임</a>, 그리고 <a href=showinfo:81975>그리미어</a>에도 소량의 트리\
+      타늄이 함유되어 있습니다."
     ru: "Основной материал для строительства космических сооружений. Очень твёрдый\
       \ металл, который отлично гнётся. В атмосфере становится неустойчивым, поэто\
       му непригоден для использования в местах обитания человека. Широко распростр\
       анён в центральных секторах известной вселенной. Добывается путём переработк\
-      и следующих руд и их разновидностей в системах с высоким уровнем безопасност\
-      и: <a href=showinfo:1230>вельдспар</a>, <a href=showinfo:1228>скордит</a> и\
-      \ <a href=showinfo:18>плагиоклаз</a>. Кроме того, в огромных количествах при\
-      сутствует в редких рудах, таких как <a href=showinfo:19>сподумейн</a>, <a href=showinfo:52316>б\
-      езднацин</a>, <a href=showinfo:52315>раковин</a> и <a href=showinfo:52306>та\
-      лассонит</a>. Также тританий встречается в системах с нулевым уровнем безопа\
-      сности. Его можно добыть из <a href=showinfo:81900>килиция</a>, <a href=showinfo:82016>н\
-      окцита</a>, <a href=showinfo:82205>уэганита</a>, <a href=showinfo:82163>гезо\
-      рима</a> и <a href=showinfo:81975>гримира</a>, но только в следовых количест\
-      вах."
+      и следующих руд и их разновидностей в звёздных системах с высоким уровнем бе\
+      зопасности: <a href=showinfo:1230>вельдспар</a>, <a href=showinfo:1228>скорд\
+      ит</a> и <a href=showinfo:18>плагиоклаз</a>. Кроме того, в огромных количест\
+      вах присутствует в редких рудах, таких как <a href=showinfo:19>сподумейн</a>,\
+      \ <a href=showinfo:52316>безднацин</a>, <a href=showinfo:52315>раковин</a> и\
+      \ <a href=showinfo:52306>талассонит</a>. Также тританий встречается в систем\
+      ах с нулевым уровнем безопасности. Его можно добыть из <a href=showinfo:81900>к\
+      илиция</a>, <a href=showinfo:82016>нокцита</a>, <a href=showinfo:82205>уэган\
+      ита</a>, <a href=showinfo:82163>гезорима</a> и <a href=showinfo:81975>гримир\
+      а</a>, но только в следовых количествах."
     zh: "太空建筑的主要建造材料。一种非常坚硬但有韧性的金属。由于在大气温度下不稳定，不可在人类生活环境中使用。在已知星系的核心星域中十分常见。可以从分布在\
       高安全等级星系中的下列矿石及其变种中提炼获得：<a href=showinfo:1230>凡晶石</a>、<a href=showinfo:1228>灼\
       烧岩</a>和<a href=showinfo:18>斜长岩</a>。它还大量存在于多种稀有矿石之中，例如<a href=showinfo:19>灰岩\
@@ -2724,3 +2724,174 @@
   portionSize: 1
   published: true
   volume: 0.01
+"37158":
+  description:
+    de: "Die Standup-M-Set-Modifikation Materialeffizienz für die Herstellung von\
+      \ Munition I bietet Strukturadministratoren die Möglichkeit, in ihren Upwell-Strukturen\
+      \ Materialanforderungen für die Herstellung von Munition, Ladungen und Skripten\
+      \ zu verringern.\n\n\n\nStandup ist ein gesetzlich geschütztes System, welches\
+      \ eine Strukturautonome Nanofertigungseinheit (Upwell) nutzt, das eine integrierte\
+      \ Vorlagensoftware, eine Nanofertigungsanlage und ausreichend Nanomasse enthä\
+      lt, um die Fertigung einer Vielzahl an Dienstmodulen, Strukturmodulen und Strukturmodifikationen\
+      \ zu ermöglichen, wenn es in entsprechende Slots in einer Struktur mit Upwell-Technologie\
+      \ eingebaut wird.\n\n\n\nHinweis: Nur eine Modifikation desselben Typs, inkl.\
+      \ beider Tech-Varianten, kann in eine Struktur eingebaut sein."
+    en: "The Standup M-Set Ammunition Manufacturing Material Efficiency I rig provides\
+      \ a means for structure operators to decrease material requirements manufacturing\
+      \ ammunition, charges and scripts in their Upwell structures.\r\n\r\nStandup\
+      \ is a proprietary system that uses a Structure Autonomous Nanoassembly Device\
+      \ (Upwell) containing integrated template software, a nanoassembler array and\
+      \ sufficient nanomass to enable the construction of a variety of service modules,\
+      \ structure modules and structure rigs when inserted into the appropriate slots\
+      \ on a structure built with Upwell technology.\r\n\r\nNote: Only one rig of\
+      \ the same type, counting both tech variations, may be fitted at the same time\
+      \ on a structure."
+    es: "El complemento Standup mediano de eficiencia de materiales en la fabricació\
+      n de munición\_I permite a los administradores de estructuras reducir los materiales\
+      \ requeridos para fabricar munición, cargas y scripts en las estructuras de\
+      \ Upwell.\n\nStandup es un sistema patentado que utiliza un dispositivo de nanoensamblaje\
+      \ autónomo estructural (de Upwell) que contiene una plantilla integrada de software,\
+      \ una matriz de nanoensambladores y suficiente nanomasa como para construir\
+      \ una serie de módulos de servicio, de estructura y complementos de estructura\
+      \ cuando se insertan en las ranuras apropiadas en una estructura construida\
+      \ con la tecnología de Upwell.\n\nAviso: Solo se puede equipar un complemento\
+      \ del mismo tipo en una estructura, contando ambas variaciones tecnológicas."
+    fr: "L'optimisation de productivité matérielle de la production de munitions 'Standup'\
+      \ I M permet aux opérateurs de structure Upwell d'améliorer la productivité\
+      \ matérielle des lignes de production de munitions, de charges et de scripts.\n\
+      \n\n\nLa technologie brevetée 'Standup' exploite un dispositif autonome de nano-assemblage\
+      \ pour structure Upwell, alliant un logiciel de modélisation intégré, une baie\
+      \ de nano-assemblage et une réserve de nanomasse. Une fois insérés dans les\
+      \ emplacements dédiés sur les structures Upwell, les dispositifs 'Standup' lancent\
+      \ directement l'assemblage moléculaire de divers modules de services, modules\
+      \ de structure et optimisations de structure.\n\n\n\nRemarque : une structure\
+      \ ne peut équiper qu'une seule optimisation du même type, déclinaisons de tech\
+      \ comprises."
+    ja: "スタンドアップ中型弾薬生産効率1のリグを使用することで、ストラクチャのオペレーターはアップウェルストラクチャで弾薬、チャージ、スクリプトを製造する\
+      際に必要な材料を減少させることができます。スタンドアップは、アップウェルテクノロジーにより建造されたストラクチャの適切なスロットに挿入した場合に統合テン\
+      プレートソフトウェア、ナノアセンブラー施設、ナノ物質を持つ自立式ナノ集合体ストラクチャデバイス（アップウェル）を使用して、様々なサービスモジュール、スト\
+      ラクチャモデル、そしてストラクチャリグを作り出すことができる独自システムである。\n注： Techが両方とも異なるものであっても、1つのストラクチャには\
+      同じタイプのリグを複数装備することはできない。"
+    ko: "스탠드업 리그를 장착하면 업웰 구조물에서 제작되는 탄약, 차지, 스크립트의 자원요구치가 감소합니다. <br><br>스탠드업은 자율구\
+      조형 나노어셈블러 장치(업웰)를 사용하는 시스템으로 템플릿 소프트웨어가 내장되어 있으며 나노어셈블리 배열, 충분한 양의 나노물질이 탑재돼\
+      있습니다. 업웰 기반 구조물에 장착 시 다양한 종류의 서비스 모듈, 구조물 모듈, 구조물 장착형 리그를 제조할 수 있습니다. 참고: 테크\
+      \ 레벨과 상관없이 동일한 종류의 리그는 한 개 이상 장착할 수 없습니다."
+    ru: "Этот стационар-модификатор первой техкатегории позволяет повысить материа\
+      лоэффективность производства боеприпасов, зарядов и скриптов, если сооружени\
+      е, где ведётся соответствующий проект, разработано консорциумом «Апвелл» и о\
+      снащено этим модулем.\n\n\n\nСТАЦИОНАР — это проприетарная система: её назва\
+      ние представляет собой акроним основного компонента системы. Стационарный ав\
+      тономный центральный инженерно-организующий наносборщик «Апвелл» содержит ин\
+      тегрированный шаблон программного обеспечения, линию наносборщиков и достато\
+      чное количество наномассы для сборки различных модулей технического обслужив\
+      ания, модулей и тюнинг-модулей для сооружений, которые устанавливаются в под\
+      ходящие разъёмы на сооружениях, сконструированных по проектам консорциума «А\
+      пвелл».\n\n\n\nВнимание: одновременно сооружение можно оснастить только одни\
+      м модификатором этого типа, независимо от вариаций техкатегории."
+    zh: "屹立中型弹药制造材料效率 I 改装件让建筑操作员能够降低在昇威建筑中制造弹药和脚本的材料要求。\n\n\n\n屹立专用系统采用了昇威建筑分控纳米装\
+      配装置，由集成模版软件、纳米装配阵列和许多纳米块体构成。安装在采用昇威科技建造的建筑上的专门槽位中可以制造各种服务装备、建筑装备和建筑改装件。\n\n\n\
+      \n注：只能同时在一个建筑上装配一件相同类型的改装件，包括衍生型号在内。"
+  groupID: 1820
+  iconID: 21729
+  marketGroupID: 2347
+  mass: 200
+  metaGroupID: 54
+  name:
+    de: "Standup M-Set Ammunition Manufacturing Material Efficiency I"
+    en: "Standup M-Set Ammunition Manufacturing Material Efficiency I"
+    es: "Eficiencia de materiales en la fabricación de munición Standup\_I\_(M)"
+    fr: "Productivité matérielle de la production de munitions Standup I M"
+    ja: "スタンドアップ中型弾薬製造資源効率I"
+    ko: "스탠드업 M-Set 탄약 제조 자원효율성 장치 I"
+    ru: "Standup M-Set Ammunition Manufacturing Material Efficiency I"
+    zh: "屹立中型弹药制造材料效率 I"
+  portionSize: 1
+  published: true
+  radius: 100
+  volume: 10
+"37150":
+  description:
+    de: "Die Standup-M-Set-Modifikation Zeiteffizienz für die Herstellung von Munition\
+      \ I bietet Strukturadministratoren die Möglichkeit, in ihren Upwell-Strukturen\
+      \ Zeitanforderungen für die Herstellung von Munition, Ladungen und Skripten\
+      \ zu verringern.\n\n\n\nStandup ist ein gesetzlich geschütztes System, welches\
+      \ eine Strukturautonome Nanofertigungseinheit (Upwell) nutzt, das eine integrierte\
+      \ Vorlagensoftware, eine Nanofertigungsanlage und ausreichend Nanomasse enthä\
+      lt, um die Fertigung einer Vielzahl an Dienstmodulen, Strukturmodulen und Strukturmodifikationen\
+      \ zu ermöglichen, wenn es in entsprechende Slots in einer Struktur mit Upwell-Technologie\
+      \ eingebaut wird.\n\n\n\nHinweis: Nur eine Modifikation desselben Typs, inkl.\
+      \ beider Tech-Varianten, kann in eine Struktur eingebaut sein."
+    en: "The Standup M-Set Ammunition Manufacturing Time Efficiency I rig provides\
+      \ a means for structure operators to decrease time requirements manufacturing\
+      \ ammunition, charges and scripts in their Upwell structures.\r\n\r\nStandup\
+      \ is a proprietary system that uses a Structure Autonomous Nanoassembly Device\
+      \ (Upwell) containing integrated template software, a nanoassembler array and\
+      \ sufficient nanomass to enable the construction of a variety of service modules,\
+      \ structure modules and structure rigs when inserted into the appropriate slots\
+      \ on a structure built with Upwell technology.\r\n\r\nNote: Only one rig of\
+      \ the same type, counting both tech variations, may be fitted at the same time\
+      \ on a structure."
+    es: "El complemento Standup mediano de eficiencia temporal en la fabricación de\
+      \ munición\_I permite a los administradores de estructuras reducir el tiempo\
+      \ requerido para fabricar munición, cargas y scripts en las estructuras de Upwell.\n\
+      \n\n\nStandup es un sistema patentado que utiliza un dispositivo de nanoensamblaje\
+      \ autónomo estructural (de Upwell) que contiene una plantilla integrada de software,\
+      \ una matriz de nanoensambladores y suficiente nanomasa como para construir\
+      \ una serie de módulos de servicio, de estructura y complementos de estructura\
+      \ cuando se insertan en las ranuras apropiadas en una estructura construida\
+      \ con la tecnología de Upwell.\n\n\n\nAviso: Solo se puede equipar un complemento\
+      \ del mismo tipo a la vez en una estructura, incluidas ambas variaciones tecnoló\
+      gicas."
+    fr: "L'optimisation de productivité horaire de la production de munitions 'Standup'\
+      \ I M permet aux opérateurs de structure Upwell d'améliorer la productivité\
+      \ horaire des lignes de production de munitions, de charges et de scripts.\n\
+      \n\n\nLa technologie brevetée 'Standup' exploite un dispositif autonome de nano-assemblage\
+      \ pour structure Upwell, alliant un logiciel de modélisation intégré, une baie\
+      \ de nano-assemblage et une réserve de nanomasse. Une fois insérés dans les\
+      \ emplacements dédiés sur les structures Upwell, les dispositifs 'Standup' lancent\
+      \ directement l'assemblage moléculaire de divers modules de services, modules\
+      \ de structure et optimisations de structure.\n\n\n\nRemarque : une structure\
+      \ ne peut équiper qu'une seule optimisation du même type, déclinaisons de tech\
+      \ comprises."
+    ja: "スタンドアップ中型弾薬製造時間効率1のリグを使用することで、ストラクチャのオペレーターはアップウェルストラクチャで弾薬、チャージ、スクリプトを製造\
+      する際に必要な時間を減少させることができます。スタンドアップは、アップウェルテクノロジーにより建造されたストラクチャの適切なスロットに挿入した場合に統合\
+      テンプレートソフトウェア、ナノアセンブラー施設、ナノ物質を持つ自立式ナノ集合体ストラクチャデバイス（アップウェル）を使用して、様々なサービスモジュール、\
+      ストラクチャモデル、そしてストラクチャリグを作り出すことができる独自システムである。\n注： Techが両方とも異なるものであっても、1つのストラクチャ\
+      には同じタイプのリグを複数装備することはできない。"
+    ko: "스탠드업 리그를 장착하면 업웰 구조물에서 제작되는 탄약, 차지, 스크립트의 제조 시간이 감소합니다. <br><br>스탠드업은 자율구\
+      조형 나노어셈블러 장치(업웰)를 사용하는 시스템으로 템플릿 소프트웨어가 내장되어 있으며 나노어셈블리 배열, 충분한 양의 나노물질이 탑재돼\
+      있습니다. 업웰 기반 구조물에 장착 시 다양한 종류의 서비스 모듈, 구조물 모듈, 구조물 장착형 리그를 제조할 수 있습니다. 참고: 테크\
+      \ 레벨과 상관없이 동일한 종류의 리그는 한 개 이상 장착할 수 없습니다."
+    ru: "Этот стационар-модификатор первой техкатегории позволяет снизить расход в\
+      ремени на производство боеприпасов, зарядов и скриптов, если сооружение, где\
+      \ ведётся соответствующий проект, разработано консорциумом «Апвелл» и оснаще\
+      но этим модулем.\n\n\n\nСТАЦИОНАР — это проприетарная система: её название п\
+      редставляет собой акроним основного компонента системы. Стационарный автоном\
+      ный центральный инженерно-организующий наносборщик «Апвелл» содержит интегри\
+      рованный шаблон программного обеспечения, линию наносборщиков и достаточное\
+      \ количество наномассы для сборки различных модулей технического обслуживани\
+      я, модулей и тюнинг-модулей для сооружений, которые устанавливаются в подход\
+      ящие разъёмы на сооружениях, сконструированных по проектам консорциума «Апве\
+      лл».\n\n\n\nВнимание: одновременно сооружение можно оснастить только одним м\
+      одификатором этого типа, независимо от вариаций техкатегории."
+    zh: "屹立中型弹药制造时间效率 I 改装件让建筑操作员能够降低在昇威建筑中制造弹药和脚本的时间要求。\n\n\n\n屹立专用系统采用了昇威建筑分控纳米装\
+      配装置，由集成模版软件、纳米装配阵列和许多纳米块体构成。安装在采用昇威科技建造的建筑上的专门槽位中可以制造各种服务装备、建筑装备和建筑改装件。\n\n\n\
+      \n注：只能同时在一个建筑上装配一件相同类型的改装件，包括衍生型号在内。"
+  groupID: 1821
+  iconID: 21729
+  marketGroupID: 2347
+  mass: 200
+  metaGroupID: 54
+  name:
+    de: "Standup M-Set Ammunition Manufacturing Time Efficiency I"
+    en: "Standup M-Set Ammunition Manufacturing Time Efficiency I"
+    es: "Eficiencia temporal en la fabricación de munición Standup\_I (M)"
+    fr: "Productivité horaire de la production de munitions 'Standup' I M"
+    ja: "スタンドアップ中型弾薬製造時間効率I"
+    ko: "스탠드업 M-Set 탄약 제조 시간효율성 장치 I"
+    ru: "Standup M-Set Ammunition Manufacturing Time Efficiency I"
+    zh: "屹立中型弹药制造时间效率 I"
+  portionSize: 1
+  published: true
+  radius: 100
+  volume: 10
