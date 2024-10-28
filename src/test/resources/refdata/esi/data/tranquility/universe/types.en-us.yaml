@@ -2573,3 +2573,80 @@
   radius: 100
   type_id: 43891
   volume: 10
+"43714":
+  capacity: 0
+  description: "The Standup L-Set Basic Small Ship Manufacturing Efficiency I rig\
+    \ provides a means for structure operators to decrease both material and time\
+    \ requirements for manufacturing frigates, destroyers and shuttles in their Upwell\
+    \ structures.\r\n\r\nStandup is a proprietary system that uses a Structure Autonomous\
+    \ Nanoassembly Device (Upwell) containing integrated template software, a nanoassembler\
+    \ array and sufficient nanomass to enable the construction of a variety of service\
+    \ modules, structure modules and structure rigs when inserted into the appropriate\
+    \ slots on a structure built with Upwell technology.\r\n\r\nNote: Only one rig\
+    \ of the same type, counting both tech variations, may be fitted at the same time\
+    \ on a structure."
+  dogma_attributes:
+  - attribute_id: 1153
+    value: 100
+  - attribute_id: 4
+    value: 200
+  - attribute_id: 1544
+    value: 1
+  - attribute_id: 9
+    value: 40
+  - attribute_id: 1547
+    value: 3
+  - attribute_id: 1298
+    value: 1657
+  - attribute_id: 1299
+    value: 1404
+  - attribute_id: 1300
+    value: 1406
+  - attribute_id: 277
+    value: 1
+  - attribute_id: 2334
+    value: 1
+  - attribute_id: 2593
+    value: -20
+  - attribute_id: 2594
+    value: -2
+  - attribute_id: 2595
+    value: 0
+  - attribute_id: 422
+    value: 1
+  - attribute_id: 2355
+    value: 1
+  - attribute_id: 2356
+    value: 1.9
+  - attribute_id: 2357
+    value: 2.1
+  - attribute_id: 2358
+    value: 1
+  - attribute_id: 182
+    value: 26252
+  - attribute_id: 161
+    value: 20
+  - attribute_id: 162
+    value: 100
+  - attribute_id: 38
+    value: 0
+  dogma_effects:
+  - effect_id: 2663
+    is_default: true
+  - effect_id: 6812
+    is_default: false
+  - effect_id: 6813
+    is_default: false
+  - effect_id: 6842
+    is_default: false
+  group_id: 1853
+  icon_id: 21729
+  market_group_id: 2348
+  mass: 200
+  name: "Standup L-Set Basic Small Ship Manufacturing Efficiency I"
+  packaged_volume: 20
+  portion_size: 1
+  published: true
+  radius: 100
+  type_id: 43714
+  volume: 20

@@ -2604,3 +2604,82 @@
   radius: 100
   type_id: 43891
   volume: 10
+"43714":
+  capacity: 0
+  description: "L'optimisation d'efficience industrielle de la production de petits\
+    \ vaisseaux standards 'Standup' I L permet aux opérateurs de structure Upwell\
+    \ d'améliorer la productivité horaire et matérielle des lignes de production de\
+    \ frégates, de destroyers et de navettes.\n\n\n\nLa technologie brevetée 'Standup'\
+    \ exploite un dispositif autonome de nano-assemblage pour structure Upwell, alliant\
+    \ un logiciel de modélisation intégré, une baie de nano-assemblage et une réserve\
+    \ de nanomasse. Une fois insérés dans les emplacements dédiés sur les structures\
+    \ Upwell, les dispositifs 'Standup' lancent directement l'assemblage moléculaire\
+    \ de divers modules de services, modules de structure et optimisations de structure.\n\
+    \n\n\nRemarque : une structure ne peut équiper qu'une seule optimisation du mê\
+    me type, déclinaisons de tech comprises."
+  dogma_attributes:
+  - attribute_id: 1153
+    value: 100
+  - attribute_id: 4
+    value: 200
+  - attribute_id: 1544
+    value: 1
+  - attribute_id: 9
+    value: 40
+  - attribute_id: 1547
+    value: 3
+  - attribute_id: 1298
+    value: 1657
+  - attribute_id: 1299
+    value: 1404
+  - attribute_id: 1300
+    value: 1406
+  - attribute_id: 277
+    value: 1
+  - attribute_id: 2334
+    value: 1
+  - attribute_id: 2593
+    value: -20
+  - attribute_id: 2594
+    value: -2
+  - attribute_id: 2595
+    value: 0
+  - attribute_id: 422
+    value: 1
+  - attribute_id: 2355
+    value: 1
+  - attribute_id: 2356
+    value: 1.9
+  - attribute_id: 2357
+    value: 2.1
+  - attribute_id: 2358
+    value: 1
+  - attribute_id: 182
+    value: 26252
+  - attribute_id: 161
+    value: 20
+  - attribute_id: 162
+    value: 100
+  - attribute_id: 38
+    value: 0
+  dogma_effects:
+  - effect_id: 2663
+    is_default: true
+  - effect_id: 6812
+    is_default: false
+  - effect_id: 6813
+    is_default: false
+  - effect_id: 6842
+    is_default: false
+  group_id: 1853
+  icon_id: 21729
+  market_group_id: 2348
+  mass: 200
+  name: "Efficience industrielle de la production de petits vaisseaux standards 'Standup'\
+    \ I L"
+  packaged_volume: 20
+  portion_size: 1
+  published: true
+  radius: 100
+  type_id: 43714
+  volume: 20
