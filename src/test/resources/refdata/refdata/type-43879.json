@@ -1,0 +1,141 @@
+{
+  "description" : {
+    "de" : "Die Standup-M-Set-Modifikation Kostenoptimierung von Erfindungen I bietet Strukturadministratoren die Möglichkeit, in ihren Upwell-Strukturen die Kostenanforderungen für Erfindungen zu verringern.\n\n\n\nStandup ist ein gesetzlich geschütztes System, welches eine Strukturautonome Nanofertigungseinheit (Upwell) nutzt, das eine integrierte Vorlagensoftware, eine Nanofertigungsanlage und ausreichend Nanomasse enthält, um die Fertigung einer Vielzahl an Dienstmodulen, Strukturmodulen und Strukturmodifikationen zu ermöglichen, wenn es in entsprechende Slots in einer Struktur mit Upwell-Technologie eingebaut wird.\n\n\n\nHinweis: Nur eine Modifikation desselben Typs, inkl. beider Tech-Varianten, kann in eine Struktur eingebaut sein.",
+    "en" : "The Standup M-Set Invention Cost Optimization I rig provides a means for structure operators to decrease cost requirements when performing invention in their Upwell structures.\r\n\r\nStandup is a proprietary system that uses a Structure Autonomous Nanoassembly Device (Upwell) containing integrated template software, a nanoassembler array and sufficient nanomass to enable the construction of a variety of service modules, structure modules and structure rigs when inserted into the appropriate slots on a structure built with Upwell technology.\r\n\r\nNote: Only one rig of the same type, counting both tech variations, may be fitted at the same time on a structure.",
+    "es" : "El complemento Standup mediano de optimización del coste de invención I permite a los administradores de estructuras reducir los costes requeridos para realizar invenciones en sus estructuras de Upwell.\n\nStandup es un sistema patentado que utiliza un dispositivo de nanoensamblaje autónomo estructural (de Upwell) que contiene una plantilla integrada de software, una matriz de nanoensambladores y suficiente nanomasa como para construir una serie de módulos de servicio, de estructura y complementos de estructura cuando se insertan en las ranuras apropiadas en una estructura construida con la tecnología de Upwell.\n\nAviso: Solo se puede equipar un complemento del mismo tipo en una estructura, contando ambas variaciones tecnológicas.",
+    "fr" : "L'optimisation des coûts d'invention 'Standup' I M permet aux opérateurs de structure Upwell de réduire le coût financier des tâches d'invention.\n\n\n\nLa technologie brevetée 'Standup' exploite un dispositif autonome de nano-assemblage pour structure Upwell, alliant un logiciel de modélisation intégré, une baie de nano-assemblage et une réserve de nanomasse. Une fois insérés dans les emplacements dédiés sur les structures Upwell, les dispositifs 'Standup' lancent directement l'assemblage moléculaire de divers modules de services, modules de structure et optimisations de structure.\n\n\n\nRemarque : une structure ne peut équiper qu'une seule optimisation du même type, déclinaisons de tech comprises.",
+    "ja" : "スタンドアップ中型コスト最適化1のリグを使用することで、ストラクチャのオペレーターはアップウェルストラクチャで発明を行う際に必要なコストを減少させることができます。スタンドアップは、アップウェルテクノロジーにより建造されたストラクチャの適切なスロットに挿入した場合に統合テンプレートソフトウェア、ナノアセンブラー施設、ナノ物質を持つ自立式ナノ集合体ストラクチャデバイス（アップウェル）を使用して、様々なサービスモジュール、ストラクチャモデル、そしてストラクチャリグを作り出すことができる独自システムである。\n注： Techが両方とも異なるものであっても、1つのストラクチャには同じタイプのリグを複数装備することはできない。",
+    "ko" : "스탠드업 리그를 장착하면 업웰 구조물의 인벤션 연구비용이 감소합니다. <br><br>스탠드업은 자율구조형 나노어셈블러 장치(업웰)를 사용하는 시스템으로 템플릿 소프트웨어가 내장되어 있으며 나노어셈블리 배열, 충분한 양의 나노물질이 탑재돼있습니다. 업웰 기반 구조물에 장착 시 다양한 종류의 서비스 모듈, 구조물 모듈, 구조물 장착형 리그를 제조할 수 있습니다. 참고: 테크 레벨과 상관없이 동일한 종류의 리그는 한 개 이상 장착할 수 없습니다.",
+    "ru" : "Этот стационар-модификатор первой техкатегории позволяет снизить стоимость проектов по модернизации, если сооружение, где ведётся соответствующий проект, разработано консорциумом «Апвелл» и оснащено этим модулем.\n\n\n\nСТАЦИОНАР — это проприетарная система: её название представляет собой акроним основного компонента системы. Стационарный автономный центральный инженерно-организующий наносборщик «Апвелл» содержит интегрированный шаблон программного обеспечения, линию наносборщиков и достаточное количество наномассы для сборки различных модулей технического обслуживания, модулей и тюнинг-модулей для сооружений, которые устанавливаются в подходящие разъёмы на сооружениях, сконструированных по проектам консорциума «Апвелл».\n\n\n\nВнимание: одновременно сооружение можно оснастить только одним модификатором этого типа, независимо от вариаций техкатегории.",
+    "zh" : "屹立中型发明成本优化 I 改装件让建筑操作员能够降低在昇威建筑中进行发明的费用要求。\n\n\n\n屹立专用系统采用了昇威建筑分控纳米装配装置，由集成模版软件、纳米装配阵列和许多纳米块体构成。安装在采用昇威科技建造的建筑上的专门槽位中可以制造各种服务装备、建筑装备和建筑改装件。\n\n\n\n注：只能同时在一个建筑上装配一件相同类型的改装件，包括衍生型号在内。"
+  },
+  "group_id" : 1842,
+  "icon_id" : 21729,
+  "market_group_id" : 2347,
+  "mass" : 200,
+  "meta_group_id" : 54,
+  "name" : {
+    "de" : "Standup M-Set Invention Cost Optimization I",
+    "en" : "Standup M-Set Invention Cost Optimization I",
+    "es" : "Optimización de coste en invención Standup I (M)",
+    "fr" : "Optimisation des coûts d'invention 'Standup' I M",
+    "ja" : "スタンドアップ中型発明コスト最適化I",
+    "ko" : "스탠드업 M-Set 인벤션 비용 최적화 장치 I",
+    "ru" : "Standup M-Set Invention Cost Optimization I",
+    "zh" : "屹立中型发明成本优化 I"
+  },
+  "portion_size" : 1,
+  "published" : true,
+  "radius" : 100,
+  "volume" : 10,
+  "type_id" : 43879,
+  "capacity" : 0,
+  "dogma_attributes" : {
+    "1153" : {
+      "attribute_id" : 1153,
+      "value" : 100
+    },
+    "4" : {
+      "attribute_id" : 4,
+      "value" : 200
+    },
+    "1544" : {
+      "attribute_id" : 1544,
+      "value" : 1
+    },
+    "9" : {
+      "attribute_id" : 9,
+      "value" : 40
+    },
+    "1547" : {
+      "attribute_id" : 1547,
+      "value" : 2
+    },
+    "1298" : {
+      "attribute_id" : 1298,
+      "value" : 1657
+    },
+    "1299" : {
+      "attribute_id" : 1299,
+      "value" : 1404
+    },
+    "1300" : {
+      "attribute_id" : 1300,
+      "value" : 1406
+    },
+    "277" : {
+      "attribute_id" : 277,
+      "value" : 1
+    },
+    "2334" : {
+      "attribute_id" : 2334,
+      "value" : 1
+    },
+    "2593" : {
+      "attribute_id" : 2593,
+      "value" : 0
+    },
+    "2594" : {
+      "attribute_id" : 2594,
+      "value" : 0
+    },
+    "2595" : {
+      "attribute_id" : 2595,
+      "value" : -10
+    },
+    "422" : {
+      "attribute_id" : 422,
+      "value" : 1
+    },
+    "2355" : {
+      "attribute_id" : 2355,
+      "value" : 1
+    },
+    "2356" : {
+      "attribute_id" : 2356,
+      "value" : 1.9
+    },
+    "2357" : {
+      "attribute_id" : 2357,
+      "value" : 2.1
+    },
+    "2358" : {
+      "attribute_id" : 2358,
+      "value" : 1
+    },
+    "182" : {
+      "attribute_id" : 182,
+      "value" : 26252
+    },
+    "161" : {
+      "attribute_id" : 161,
+      "value" : 10
+    },
+    "162" : {
+      "attribute_id" : 162,
+      "value" : 100
+    },
+    "38" : {
+      "attribute_id" : 38,
+      "value" : 0
+    }
+  },
+  "dogma_effects" : {
+    "2663" : {
+      "effect_id" : 2663,
+      "is_default" : true
+    },
+    "6830" : {
+      "effect_id" : 6830,
+      "is_default" : false
+    },
+    "6842" : {
+      "effect_id" : 6842,
+      "is_default" : false
+    }
+  },
+  "packaged_volume" : 10,
+  "required_skills" : {
+    "26252" : 1
+  }
+}

@@ -25,18 +25,6 @@ const props = defineProps<{
 				<template v-slot:key>Type ID:</template>
 				{{ inventoryType.typeId }}
 			</AttributeListItem>
-			<AttributeListItem>
-				<template v-slot:key>Reference Data:</template>
-				<ExternalLink :url="`https://ref-data.everef.net/types/${inventoryType.typeId}`">View JSON</ExternalLink>
-			</AttributeListItem>
-			<AttributeListItem>
-				<template v-slot:key>ESI Data:</template>
-				<ExternalLink :url="`https://esi.evetech.net/latest/universe/types/${inventoryType.typeId}/`">View JSON</ExternalLink>
-			</AttributeListItem>
-			<AttributeListItem>
-				<template v-slot:key>SDE Data:</template>
-				<ExternalLink :url="`https://sde.jita.space/latest/universe/types/${inventoryType.typeId}`">View JSON</ExternalLink>
-			</AttributeListItem>
 			<AttributeListItem v-if="inventoryType.basePrice">
 				<template v-slot:key>Base price:</template>
 				<UnitValue :unit-id="MONEY" :value="inventoryType.basePrice" />
@@ -97,6 +85,18 @@ const props = defineProps<{
 				<template v-slot:key>Volume:</template>
 				<UnitValue :unit-id="CUBIC_METER" :value="inventoryType.volume" />
 			</AttributeListItem>
+      <AttributeListItem>
+        <template v-slot:key>Reference Data:</template>
+        <ExternalLink :url="`https://ref-data.everef.net/types/${inventoryType.typeId}`">View JSON</ExternalLink>
+      </AttributeListItem>
+      <AttributeListItem>
+        <template v-slot:key>ESI:</template>
+        <ExternalLink :url="`https://esi.evetech.net/latest/universe/types/${inventoryType.typeId}/`">View JSON</ExternalLink>
+      </AttributeListItem>
+      <AttributeListItem>
+        <template v-slot:key>SDE:</template>
+        <ExternalLink :url="`https://sde.jita.space/latest/universe/types/${inventoryType.typeId}`">View JSON</ExternalLink>
+      </AttributeListItem>
 
 			<DogmaListItems :inventory-type="inventoryType" :dogma-attributes="dogmaAttributes" />
 

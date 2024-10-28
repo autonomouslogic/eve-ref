@@ -8,6 +8,7 @@ import com.autonomouslogic.everef.cli.refdata.TransformerBuilder;
 import com.autonomouslogic.everef.cli.refdata.transformer.BlueprintTransformer;
 import com.autonomouslogic.everef.util.CompressUtil;
 import com.autonomouslogic.everef.util.RefDataUtil;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.reactivex.rxjava3.core.Completable;
 import java.io.File;
 import javax.inject.Inject;
@@ -31,6 +32,9 @@ public class HoboleaksLoader {
 	protected TransformerBuilder transformerBuilder;
 
 	@Inject
+	protected ObjectMapper objectMapper;
+
+	@Inject
 	protected Provider<SimpleStoreLoader> simpleLoaderProvider;
 
 	@Inject
@@ -50,8 +54,9 @@ public class HoboleaksLoader {
 		return CompressUtil.loadArchive(file)
 				.flatMapCompletable(
 						pair -> {
+							String filename = pair.getLeft().getName();
 							var config = refDataUtil.getHoboleaksConfigForFilename(
-									pair.getLeft().getName());
+								filename);
 							if (config == null) {
 								return Completable.complete();
 							}

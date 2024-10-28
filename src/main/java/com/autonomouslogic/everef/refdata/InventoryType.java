@@ -203,4 +203,14 @@ public class InventoryType {
 					"The blueprints in which this type is used. The first key is the blueprint ID and the second key is the activity name. "
 							+ "This is added by EVE Ref.")
 	Map<Long, Map<String, UsedInBlueprint>> usedInBlueprints;
+
+	@JsonProperty
+	@Schema(description = "For structure engineering rigs, these are the category IDs the rig affects in some way. " +
+		"This is added by EVE Ref.")
+	List<Long> engineeringRigAffectedCategoryIds;
+
+	@JsonProperty
+	@Schema(description = "For structure engineering rigs, these are the group IDs the rig affects in some way. " +
+		"This is added by EVE Ref.")
+	List<Long> engineeringRigAffectedGroupIds;
 }
