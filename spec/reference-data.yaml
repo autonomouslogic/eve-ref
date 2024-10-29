@@ -1192,6 +1192,24 @@ components:
           description: The blueprints in which this type is used. The first key is
             the blueprint ID and the second key is the activity name. This is added
             by EVE Ref.
+        engineering_rig_category_ids:
+          type: array
+          description: "For structure engineering rigs, these are the category IDs\
+            \ the rig affects in some way. This is added by EVE Ref."
+          items:
+            type: integer
+            description: "For structure engineering rigs, these are the category IDs\
+              \ the rig affects in some way. This is added by EVE Ref."
+            format: int64
+        engineering_rig_group_ids:
+          type: array
+          description: "For structure engineering rigs, these are the group IDs the\
+            \ rig affects in some way. This is added by EVE Ref."
+          items:
+            type: integer
+            description: "For structure engineering rigs, these are the group IDs\
+              \ the rig affects in some way. This is added by EVE Ref."
+            format: int64
         is_skill:
           type: boolean
           description: Whether this type is a skill or not. This is added by EVE Ref.

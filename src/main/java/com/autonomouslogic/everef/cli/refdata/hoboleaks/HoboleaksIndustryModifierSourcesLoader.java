@@ -80,13 +80,13 @@ public class HoboleaksIndustryModifierSourcesLoader {
 		if (filter.has("categoryIDs")) {
 			var categoryIds = (ArrayNode) filter.get("categoryIDs");
 			if (!categoryIds.isEmpty()) {
-				type.withArrayProperty("engineering_rig_affected_category_ids").addAll(categoryIds);
+				type.withArrayProperty("engineering_rig_category_ids").addAll(categoryIds);
 			}
 		}
 		if (filter.has("groupIDs")) {
 			var groupIds = (ArrayNode) filter.get("groupIDs");
 			if (!groupIds.isEmpty()) {
-				type.withArrayProperty("engineering_rig_affected_group_ids").addAll(groupIds);
+				type.withArrayProperty("engineering_rig_group_ids").addAll(groupIds);
 			}
 		}
 		types.put(typeId, type);

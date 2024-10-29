@@ -208,11 +208,11 @@ public class InventoryType {
 	@Schema(
 			description = "For structure engineering rigs, these are the category IDs the rig affects in some way. "
 					+ "This is added by EVE Ref.")
-	List<Long> engineeringRigAffectedCategoryIds;
+	List<Long> engineeringRigCategoryIds;
 
 	@JsonProperty
 	@Schema(
 			description = "For structure engineering rigs, these are the group IDs the rig affects in some way. "
 					+ "This is added by EVE Ref.")
-	List<Long> engineeringRigAffectedGroupIds;
+	List<Long> engineeringRigGroupIds;
 }
