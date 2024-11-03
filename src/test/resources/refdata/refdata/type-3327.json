@@ -87,5 +87,6 @@
   "mass" : 0,
   "packaged_volume" : 0.01,
   "radius" : 1,
+  "category_id" : 257,
   "is_skill" : true
 }

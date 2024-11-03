@@ -44,6 +44,10 @@ public class InventoryType {
 	@JsonProperty
 	Long graphicId;
 
+	@Schema(description = "The category ID the group is in. This is added by EVE Ref.")
+	@JsonProperty
+	Long categoryId;
+
 	@JsonProperty
 	Long groupId;
 

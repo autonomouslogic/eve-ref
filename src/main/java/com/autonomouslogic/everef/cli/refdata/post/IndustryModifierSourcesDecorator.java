@@ -22,7 +22,6 @@ public class IndustryModifierSourcesDecorator extends PostDecorator {
 	protected ObjectMapper objectMapper;
 
 	private Map<Long, JsonNode> types;
-	private Map<Long, JsonNode> blueprints;
 
 	@Inject
 	protected IndustryModifierSourcesDecorator() {}

@@ -997,6 +997,10 @@ components:
         graphic_id:
           type: integer
           format: int64
+        category_id:
+          type: integer
+          description: The category ID the group is in. This is added by EVE Ref.
+          format: int64
         group_id:
           type: integer
           format: int64

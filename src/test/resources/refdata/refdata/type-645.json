@@ -549,6 +549,7 @@
       "quantity" : 3000
     }
   },
+  "category_id" : 27,
   "required_skills" : {
     "3336" : 1
   },
