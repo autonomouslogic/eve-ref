@@ -80,14 +80,18 @@ public class HoboleaksIndustryModifierSourcesLoader {
 			log.warn("No filter found for filter ID {}", filterId);
 		}
 		if (filter.has("categoryIDs")) {
-			var categoryIds = Streams.stream(filter.get("categoryIDs").elements()).map(e -> e.asLong()).toList();
+			var categoryIds = Streams.stream(filter.get("categoryIDs").elements())
+					.map(e -> e.asLong())
+					.toList();
 			if (!categoryIds.isEmpty()) {
 				var array = type.withArrayProperty("engineering_rig_affected_category_ids");
 				JsonUtil.addToArraySetSorted(categoryIds, array);
 			}
 		}
 		if (filter.has("groupIDs")) {
-			var groupIds = Streams.stream(filter.get("groupIDs").elements()).map(e -> e.asLong()).toList();
+			var groupIds = Streams.stream(filter.get("groupIDs").elements())
+					.map(e -> e.asLong())
+					.toList();
 			if (!groupIds.isEmpty()) {
 				var array = type.withArrayProperty("engineering_rig_affected_group_ids");
 				JsonUtil.addToArraySetSorted(groupIds, array);

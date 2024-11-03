@@ -206,7 +206,7 @@ public class BuildRefData implements Command {
 	protected void init() {
 		dataUrl = (S3Url) urlParser.parse(Configs.DATA_PATH.getRequired());
 		allDecorators = List.of(
-			categoryIdDecorator,
+				categoryIdDecorator,
 				skillDecorator,
 				mutaplasmidDecorator,
 				variationsDecorator,

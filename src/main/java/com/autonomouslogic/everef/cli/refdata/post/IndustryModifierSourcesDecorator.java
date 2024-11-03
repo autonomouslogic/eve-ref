@@ -4,7 +4,6 @@ import com.autonomouslogic.everef.refdata.InventoryType;
 import com.autonomouslogic.everef.util.JsonUtil;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
 import io.reactivex.rxjava3.core.Completable;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -49,9 +48,9 @@ public class IndustryModifierSourcesDecorator extends PostDecorator {
 				var categoryId = type.getCategoryId();
 				var groupId = type.getGroupId();
 				var rigIds = Stream.concat(
-					Optional.ofNullable(categoryRigs.get(categoryId)).orElse(Set.of()).stream(),
-					Optional.ofNullable(groupRigs.get(groupId)).orElse(Set.of()).stream()
-				).toList();
+								Optional.ofNullable(categoryRigs.get(categoryId)).orElse(Set.of()).stream(),
+								Optional.ofNullable(groupRigs.get(groupId)).orElse(Set.of()).stream())
+						.toList();
 				if (!rigIds.isEmpty()) {
 					var array = typeJson.withArrayProperty("engineering_rig_source_type_ids");
 					JsonUtil.addToArraySetSorted(rigIds, array);

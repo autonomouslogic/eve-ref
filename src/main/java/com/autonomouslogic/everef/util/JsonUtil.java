@@ -5,13 +5,10 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.LongNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.Streams;
-
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
-
 import lombok.NonNull;
 import org.apache.commons.lang3.StringUtils;
 
@@ -73,10 +70,11 @@ public class JsonUtil {
 	}
 
 	public static void addToArraySetSorted(Collection<Long> nums, ArrayNode array) {
-		var newNums = Stream.concat(nums.stream(), Streams.stream(array.iterator())
-				.map(JsonNode::asLong))
-			.distinct()
-				.sorted().toList();
+		var newNums = Stream.concat(
+						nums.stream(), Streams.stream(array.iterator()).map(JsonNode::asLong))
+				.distinct()
+				.sorted()
+				.toList();
 		array.removeAll();
 		newNums.forEach(array::add);
 	}
