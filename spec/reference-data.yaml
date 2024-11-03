@@ -1214,6 +1214,15 @@ components:
             description: "For structure engineering rigs, these are the group IDs\
               \ the rig affects in some way. This is added by EVE Ref."
             format: int64
+        engineering_rig_source_type_ids:
+          type: array
+          description: These are the type IDs of the engineering rigs which affect
+            this type in some way. This is added by EVE Ref.
+          items:
+            type: integer
+            description: These are the type IDs of the engineering rigs which affect
+              this type in some way. This is added by EVE Ref.
+            format: int64
         is_skill:
           type: boolean
           description: Whether this type is a skill or not. This is added by EVE Ref.

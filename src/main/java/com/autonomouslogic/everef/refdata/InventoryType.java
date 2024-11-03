@@ -219,4 +219,10 @@ public class InventoryType {
 			description = "For structure engineering rigs, these are the group IDs the rig affects in some way. "
 					+ "This is added by EVE Ref.")
 	List<Long> engineeringRigGroupIds;
+
+	@JsonProperty
+	@Schema(
+			description = "These are the type IDs of the engineering rigs which affect this type in some way. "
+					+ "This is added by EVE Ref.")
+	List<Long> engineeringRigSourceTypeIds;
 }

@@ -1,8 +1,10 @@
 package com.autonomouslogic.everef.cli.refdata.post;
 
 import com.autonomouslogic.everef.refdata.InventoryType;
+import com.autonomouslogic.everef.util.JsonUtil;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import io.reactivex.rxjava3.core.Completable;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -10,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Stream;
 import javax.inject.Inject;
 import lombok.extern.log4j.Log4j2;
 
@@ -38,6 +41,22 @@ public class IndustryModifierSourcesDecorator extends PostDecorator {
 				var type = objectMapper.convertValue(typeJson, InventoryType.class);
 				indexType(type.getEngineeringRigCategoryIds(), typeId, categoryRigs);
 				indexType(type.getEngineeringRigGroupIds(), typeId, groupRigs);
+			});
+
+			// Decorate types with the engineering rig sources.
+			types.forEach((typeId, typeJson) -> {
+				var type = objectMapper.convertValue(typeJson, InventoryType.class);
+				var categoryId = type.getCategoryId();
+				var groupId = type.getGroupId();
+				var rigIds = Stream.concat(
+					Optional.ofNullable(categoryRigs.get(categoryId)).orElse(Set.of()).stream(),
+					Optional.ofNullable(groupRigs.get(groupId)).orElse(Set.of()).stream()
+				).toList();
+				if (!rigIds.isEmpty()) {
+					var array = typeJson.withArray("/engineering_rig_source_type_ids", JsonNode.OverwriteMode.ALL, true);
+					JsonUtil.addToArraySetSorted(rigIds, array);
+				}
+				types.put(typeId, typeJson);
 			});
 		});
 	}
