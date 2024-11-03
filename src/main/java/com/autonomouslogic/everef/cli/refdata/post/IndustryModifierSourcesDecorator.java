@@ -39,8 +39,8 @@ public class IndustryModifierSourcesDecorator extends PostDecorator {
 			var groupRigs = new HashMap<Long, Set<Long>>();
 			types.forEach((typeId, typeJson) -> {
 				var type = objectMapper.convertValue(typeJson, InventoryType.class);
-				indexType(type.getEngineeringRigCategoryIds(), typeId, categoryRigs);
-				indexType(type.getEngineeringRigGroupIds(), typeId, groupRigs);
+				indexType(type.getEngineeringRigAffectedCategoryIds(), typeId, categoryRigs);
+				indexType(type.getEngineeringRigAffectedGroupIds(), typeId, groupRigs);
 			});
 
 			// Decorate types with the engineering rig sources.
@@ -53,7 +53,7 @@ public class IndustryModifierSourcesDecorator extends PostDecorator {
 					Optional.ofNullable(groupRigs.get(groupId)).orElse(Set.of()).stream()
 				).toList();
 				if (!rigIds.isEmpty()) {
-					var array = typeJson.withArray("/engineering_rig_source_type_ids", JsonNode.OverwriteMode.ALL, true);
+					var array = typeJson.withArrayProperty("engineering_rig_source_type_ids");
 					JsonUtil.addToArraySetSorted(rigIds, array);
 				}
 				types.put(typeId, typeJson);

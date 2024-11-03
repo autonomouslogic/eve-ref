@@ -1,10 +1,12 @@
 package com.autonomouslogic.everef.cli.refdata.hoboleaks;
 
 import com.autonomouslogic.everef.cli.refdata.StoreHandler;
+import com.autonomouslogic.everef.util.JsonUtil;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.google.common.collect.Streams;
 import io.reactivex.rxjava3.core.Completable;
 import javax.inject.Inject;
 import lombok.NonNull;
@@ -78,15 +80,17 @@ public class HoboleaksIndustryModifierSourcesLoader {
 			log.warn("No filter found for filter ID {}", filterId);
 		}
 		if (filter.has("categoryIDs")) {
-			var categoryIds = (ArrayNode) filter.get("categoryIDs");
+			var categoryIds = Streams.stream(filter.get("categoryIDs").elements()).map(e -> e.asLong()).toList();
 			if (!categoryIds.isEmpty()) {
-				type.withArrayProperty("engineering_rig_category_ids").addAll(categoryIds);
+				var array = type.withArrayProperty("engineering_rig_affected_category_ids");
+				JsonUtil.addToArraySetSorted(categoryIds, array);
 			}
 		}
 		if (filter.has("groupIDs")) {
-			var groupIds = (ArrayNode) filter.get("groupIDs");
+			var groupIds = Streams.stream(filter.get("groupIDs").elements()).map(e -> e.asLong()).toList();
 			if (!groupIds.isEmpty()) {
-				type.withArrayProperty("engineering_rig_group_ids").addAll(groupIds);
+				var array = type.withArrayProperty("engineering_rig_affected_group_ids");
+				JsonUtil.addToArraySetSorted(groupIds, array);
 			}
 		}
 		types.put(typeId, type);
