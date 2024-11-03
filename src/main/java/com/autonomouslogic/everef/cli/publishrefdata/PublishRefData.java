@@ -18,6 +18,7 @@ import com.autonomouslogic.everef.s3.S3Adapter;
 import com.autonomouslogic.everef.s3.S3Util;
 import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.url.UrlParser;
+import com.autonomouslogic.everef.util.ProgressReporter;
 import com.autonomouslogic.everef.util.RefDataUtil;
 import com.autonomouslogic.everef.util.TempFiles;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -254,9 +255,12 @@ public class PublishRefData implements Command {
 	private Completable uploadFiles(Map<String, ListedS3Object> existing) {
 		return Completable.defer(() -> {
 			log.info("Evaluating {} files for upload", fileMap.size());
+			var reporter = new ProgressReporter(getName(), fileMap.size(), Duration.ofMinutes(1));
+			reporter.start();
 			var skipped = new AtomicInteger();
 			var uploaded = new AtomicInteger();
 			return Flowable.fromIterable(fileMap.entrySet())
+					.doOnNext(entry -> reporter.increment())
 					.map(entry -> refDataUtil.createEntryForPath(
 							entry.getKey(), objectMapper.writeValueAsBytes(entry.getValue())))
 					.filter(entry -> filterExisting(skipped, existing, entry))
