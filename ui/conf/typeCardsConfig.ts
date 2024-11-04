@@ -240,6 +240,15 @@ const cards: {[key: string]: any} = {
 					"rigSize",
 					"upgradeCapacity",
 					"upgradeCost",
+				]
+		},
+	"engineeringRig":
+		{
+			"name": {"en": "Engineering Rig"},
+			"component": "engineeringRig",
+			"alwaysShow": true,
+			"dogmaAttributes":
+				[
 					"attributeEngRigTimeBonus",
 					"attributeEngRigMatBonus",
 					"attributeEngRigCostBonus",
