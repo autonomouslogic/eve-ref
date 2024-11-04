@@ -86,15 +86,21 @@ const props = defineProps<{
 				<UnitValue :unit-id="CUBIC_METER" :value="inventoryType.volume" />
 			</AttributeListItem>
 			<AttributeListItem>
-				<template v-slot:key>Reference Data:</template>
+				<template v-slot:key>
+					<ExternalLink url="https://docs.everef.net/datasets/reference-data">Reference Data</ExternalLink>:
+				</template>
 				<ExternalLink :url="`https://ref-data.everef.net/types/${inventoryType.typeId}`">View JSON</ExternalLink>
 			</AttributeListItem>
 			<AttributeListItem>
-				<template v-slot:key>ESI:</template>
+				<template v-slot:key>
+					<ExternalLink url="https://esi.evetech.net/">ESI</ExternalLink>:
+				</template>
 				<ExternalLink :url="`https://esi.evetech.net/latest/universe/types/${inventoryType.typeId}/`">View JSON</ExternalLink>
 			</AttributeListItem>
 			<AttributeListItem>
-				<template v-slot:key>SDE:</template>
+				<template v-slot:key>
+					<ExternalLink url="https://sde.jita.space/">SDE</ExternalLink>:
+				</template>
 				<ExternalLink :url="`https://sde.jita.space/latest/universe/types/${inventoryType.typeId}`">View JSON</ExternalLink>
 			</AttributeListItem>
 

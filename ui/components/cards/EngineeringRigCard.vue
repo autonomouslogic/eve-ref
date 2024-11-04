@@ -32,6 +32,9 @@ var fields = computed(() => {
 	if (type.engineeringRigAffectedGroupIds) {
 		n++;
 	}
+	if (type.engineeringRigSourceTypeIds) {
+		n++;
+	}
 	return n;
 });
 
