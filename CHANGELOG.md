@@ -1,5 +1,17 @@
 EVE Ref Changelog
 
+## [2.53.5](https://github.com/autonomouslogic/eve-ref/compare/2.53.4...2.53.5) (2024-11-06)
+
+
+### Bug Fixes
+
+* **ui:** Patreon MOTD ([f8a01bf](https://github.com/autonomouslogic/eve-ref/commit/f8a01bfd0d95bf1710c818f3e7452f0d9af4c271))
+
+
+### Dependency Updates
+
+* **deps:** update all non-major dependencies ([#680](https://github.com/autonomouslogic/eve-ref/issues/680)) ([4be3b4a](https://github.com/autonomouslogic/eve-ref/commit/4be3b4a1f1e221f4bb2c35b6478677f9263d75fb))
+
 ## [2.53.4](https://github.com/autonomouslogic/eve-ref/compare/2.53.3...2.53.4) (2024-11-04)
 
 
