@@ -7,5 +7,5 @@ node_modules
 .env
 dist
 .DS_Store
-refdata-openapi
-esi-openapi
+#refdata-openapi
+#esi-openapi
