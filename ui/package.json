@@ -3,8 +3,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "npm run generate-api && nuxt build",
-    "dev": "npm run generate-api && HOST=0.0.0.0 PORT=3000 nuxt dev",
+    "build": "nuxt build",
+    "dev": "HOST=0.0.0.0 PORT=3000 nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",

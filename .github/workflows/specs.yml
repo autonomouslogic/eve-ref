@@ -19,5 +19,6 @@ jobs:
         run: |
           echo "Run 'make specs' to generate specs"
           echo Remember to update the spec version
+          make init
           make specs
           if [[ `git status --porcelain` ]]; then echo "The specs have changed:"; git diff; exit 1; fi
