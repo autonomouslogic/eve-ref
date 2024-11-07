@@ -23,7 +23,7 @@
     "@types/node": "22.9.0",
     "@typescript-eslint/eslint-plugin": "8.13.0",
     "@typescript-eslint/parser": "8.13.0",
-    "@vue/devtools-api": "7.6.3",
+    "@vue/devtools-api": "6.6.4",
     "eslint": "8.57.1",
     "eslint-plugin-vue": "9.30.0",
     "luxon": "3.5.0",

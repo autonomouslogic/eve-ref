@@ -4,3 +4,6 @@ build/
 local.env
 node_modules/
 .kotlin/
+
+# Local Netlify folder
+.netlify
