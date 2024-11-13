@@ -36,7 +36,7 @@ public class CategoryIdDecorator extends PostDecorator {
 					return;
 				}
 				var group = objectMapper.convertValue(groups.get(type.getGroupId()), InventoryType.class);
-				((ObjectNode) typeJson).put("category_id", group.getGroupId());
+				((ObjectNode) typeJson).put("category_id", group.getCategoryId());
 				types.put(typeId, typeJson);
 			});
 		});
