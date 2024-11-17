@@ -995,11 +995,11 @@
     \ are capable of making a special type of jump portal usable only by covert ops\
     \ vessels. This enables them to stealthily plant reconnaissance and espionage\
     \ forces in enemy territory. For the final word in clandestine maneuvers, look\
-    \ no further.\r\n\r\nDeveloper: CreoDron\r\n\r\nAs the largest drone developer\
-    \ and manufacturer in space, CreoDron has a vested interest in drone carriers.\
-    \ While sacrificing relatively little in the way of defensive capability, the\
-    \ Sin can chew its way through surprisingly strong opponents - provided, of course,\
-    \ that the pilot uses top-of-the-line CreoDron drones."
+    \ no further.\r\n\r\nAs the largest drone developer and manufacturer in space,\
+    \ CreoDron has a vested interest in drone carriers. While sacrificing relatively\
+    \ little in the way of defensive capability, the Sin can chew its way through\
+    \ surprisingly strong opponents - provided, of course, that the pilot uses top-of-the-line\
+    \ CreoDron drones."
   dogma_attributes:
   - attribute_id: 3
     value: 0

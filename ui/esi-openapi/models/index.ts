@@ -226,6 +226,7 @@ export * from './GetMarketsRegionIdHistoryUnprocessableEntity';
 export * from './GetMarketsRegionIdOrders200Ok';
 export * from './GetMarketsRegionIdOrdersNotFound';
 export * from './GetMarketsRegionIdOrdersUnprocessableEntity';
+export * from './GetMarketsRegionIdTypesNotFound';
 export * from './GetMarketsStructuresStructureId200Ok';
 export * from './GetOpportunitiesGroupsGroupIdOk';
 export * from './GetOpportunitiesTasksTaskIdOk';

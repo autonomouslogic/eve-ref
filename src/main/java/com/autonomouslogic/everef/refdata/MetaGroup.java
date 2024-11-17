@@ -34,4 +34,7 @@ public class MetaGroup {
 	@JsonProperty
 	@Schema(description = "The type IDs in this meta group. This is added by EVE Ref.")
 	List<Long> typeIds;
+
+	@JsonProperty
+	List<Double> color;
 }
