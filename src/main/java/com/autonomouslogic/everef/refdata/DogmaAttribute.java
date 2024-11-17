@@ -46,6 +46,9 @@ public class DogmaAttribute {
 	Integer iconId;
 
 	@JsonProperty
+	Long minAttributeId;
+
+	@JsonProperty
 	Long maxAttributeId;
 
 	@JsonProperty

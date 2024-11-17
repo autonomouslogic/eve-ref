@@ -776,6 +776,9 @@ components:
         icon_id:
           type: integer
           format: int32
+        min_attribute_id:
+          type: integer
+          format: int64
         max_attribute_id:
           type: integer
           format: int64
@@ -1309,6 +1312,11 @@ components:
             type: integer
             description: The type IDs in this meta group. This is added by EVE Ref.
             format: int64
+        color:
+          type: array
+          items:
+            type: number
+            format: double
       description: A meta group
     ModifierInfo:
       type: object
