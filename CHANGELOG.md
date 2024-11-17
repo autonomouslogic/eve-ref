@@ -1,5 +1,17 @@
 EVE Ref Changelog
 
+## [2.53.6](https://github.com/autonomouslogic/eve-ref/compare/2.53.5...2.53.6) (2024-11-17)
+
+
+### Bug Fixes
+
+* Updated ESI and Reference Data for ESI 1.27 and SDE 2024-11-12 ([#686](https://github.com/autonomouslogic/eve-ref/issues/686)) ([b89beb6](https://github.com/autonomouslogic/eve-ref/commit/b89beb625150bb42c39f9792b8cbd1b32e8b3fc5))
+
+
+### Miscellaneous Chores
+
+* **ui:** Move to Cloudflare Pages ([#684](https://github.com/autonomouslogic/eve-ref/issues/684)) ([d388fa1](https://github.com/autonomouslogic/eve-ref/commit/d388fa1a1f3de08752ea18ec7b20b6f02dddfc64))
+
 ## [2.53.5](https://github.com/autonomouslogic/eve-ref/compare/2.53.4...2.53.5) (2024-11-06)
 
 
