@@ -16,31 +16,31 @@ import { exists, mapValues } from '../runtime';
 /**
  * Not found
  * @export
- * @interface GetUniverseMoonsMoonIdNotFound
+ * @interface GetMarketsRegionIdTypesNotFound
  */
-export interface GetUniverseMoonsMoonIdNotFound {
+export interface GetMarketsRegionIdTypesNotFound {
     /**
      * Not found message
      * @type {string}
-     * @memberof GetUniverseMoonsMoonIdNotFound
+     * @memberof GetMarketsRegionIdTypesNotFound
      */
     error?: string;
 }
 
 /**
- * Check if a given object implements the GetUniverseMoonsMoonIdNotFound interface.
+ * Check if a given object implements the GetMarketsRegionIdTypesNotFound interface.
  */
-export function instanceOfGetUniverseMoonsMoonIdNotFound(value: object): boolean {
+export function instanceOfGetMarketsRegionIdTypesNotFound(value: object): boolean {
     let isInstance = true;
 
     return isInstance;
 }
 
-export function GetUniverseMoonsMoonIdNotFoundFromJSON(json: any): GetUniverseMoonsMoonIdNotFound {
-    return GetUniverseMoonsMoonIdNotFoundFromJSONTyped(json, false);
+export function GetMarketsRegionIdTypesNotFoundFromJSON(json: any): GetMarketsRegionIdTypesNotFound {
+    return GetMarketsRegionIdTypesNotFoundFromJSONTyped(json, false);
 }
 
-export function GetUniverseMoonsMoonIdNotFoundFromJSONTyped(json: any, ignoreDiscriminator: boolean): GetUniverseMoonsMoonIdNotFound {
+export function GetMarketsRegionIdTypesNotFoundFromJSONTyped(json: any, ignoreDiscriminator: boolean): GetMarketsRegionIdTypesNotFound {
     if ((json === undefined) || (json === null)) {
         return json;
     }
@@ -50,7 +50,7 @@ export function GetUniverseMoonsMoonIdNotFoundFromJSONTyped(json: any, ignoreDis
     };
 }
 
-export function GetUniverseMoonsMoonIdNotFoundToJSON(value?: GetUniverseMoonsMoonIdNotFound | null): any {
+export function GetMarketsRegionIdTypesNotFoundToJSON(value?: GetMarketsRegionIdTypesNotFound | null): any {
     if (value === undefined) {
         return undefined;
     }

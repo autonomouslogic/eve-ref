@@ -258,6 +258,7 @@ models/GetMarketsRegionIdHistoryUnprocessableEntity.ts
 models/GetMarketsRegionIdOrders200Ok.ts
 models/GetMarketsRegionIdOrdersNotFound.ts
 models/GetMarketsRegionIdOrdersUnprocessableEntity.ts
+models/GetMarketsRegionIdTypesNotFound.ts
 models/GetMarketsStructuresStructureId200Ok.ts
 models/GetOpportunitiesGroupsGroupIdOk.ts
 models/GetOpportunitiesTasksTaskIdOk.ts
