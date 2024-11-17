@@ -1000,17 +1000,17 @@
   volume: 40
 "22430":
   capacity: 800
-  description: "Les cuirassés des forces clandestines sont conçus pour les missions\
-    \ d'infiltration et d'espionnage derrière les lignes ennemies. Équipés d'un propulseur\
-    \ interstellaire et d'un générateur de portail, ils sont capables de créer un\
-    \ portail interstellaire furtif, voué à envoyer des vaisseaux des opérations secrè\
-    tes en mission de reconnaissance et d'espionnage derrière les lignes ennemies.\
-    \ Ces vaisseaux incarnent sans aucun doute l'atout maître des manœuvres clandestines.\n\
-    \nConstructeur : CreoDron\n\nPlus grand concepteur et fabricant de drones de tout\
-    \ l'espace, CreoDron investit tout logiquement dans les vaisseaux porte-drones.\
-    \ Tout en sacrifiant relativement peu de choses à ses capacités défensives, le\
-    \ Sin se fraye habilement un chemin parmi ses adversaires... à condition, bien\
-    \ entendu, que le pilote utilise des drones CreoDron ultra-perfectionnés."
+  description: "Les cuirassés des forces spéciales sont conçus pour les missions d'infiltration\
+    \ et d'espionnage derrière les lignes ennemies. Grâce à l'utilisation d'un propulseur\
+    \ interstellaire et d'un générateur de portail, ils peuvent créer un portail interstellaire\
+    \ particulier, utilisable uniquement par les vaisseaux des opérations secrètes.\
+    \ Cela leur permet par exemple d'envoyer furtivement des unités de reconnaissance\
+    \ et d'espionnage en territoire ennemi. Autrement dit, le plan idéal pour les\
+    \ manœuvres clandestines. Plus grand concepteur et fabricant de drones de tout\
+    \ l'espace, CreoDron investit tout logiquement dans les porte-drones. Tout en\
+    \ sacrifiant relativement peu de choses à ses capacités défensives, le Sin se\
+    \ fraye habilement un chemin parmi ses adversaires, à condition, bien entendu,\
+    \ que le pilote utilise des drones CreoDron ultra-perfectionnés."
   dogma_attributes:
   - attribute_id: 3
     value: 0

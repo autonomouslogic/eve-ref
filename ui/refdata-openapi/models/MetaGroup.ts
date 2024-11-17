@@ -55,6 +55,12 @@ export interface MetaGroup {
      * @memberof MetaGroup
      */
     typeIds?: Array<number>;
+    /**
+     * 
+     * @type {Array<number>}
+     * @memberof MetaGroup
+     */
+    color?: Array<number>;
 }
 
 /**
@@ -82,6 +88,7 @@ export function MetaGroupFromJSONTyped(json: any, ignoreDiscriminator: boolean):
         'name': !exists(json, 'name') ? undefined : json['name'],
         'description': !exists(json, 'description') ? undefined : json['description'],
         'typeIds': !exists(json, 'type_ids') ? undefined : json['type_ids'],
+        'color': !exists(json, 'color') ? undefined : json['color'],
     };
 }
 
@@ -100,6 +107,7 @@ export function MetaGroupToJSON(value?: MetaGroup | null): any {
         'name': value.name,
         'description': value.description,
         'type_ids': value.typeIds,
+        'color': value.color,
     };
 }
 
