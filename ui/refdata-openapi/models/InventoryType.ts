@@ -105,6 +105,12 @@ export interface InventoryType {
      */
     graphicId?: number;
     /**
+     * The category ID the group is in. This is added by EVE Ref.
+     * @type {number}
+     * @memberof InventoryType
+     */
+    categoryId?: number;
+    /**
      * 
      * @type {number}
      * @memberof InventoryType
@@ -309,6 +315,24 @@ export interface InventoryType {
      */
     usedInBlueprints?: { [key: string]: { [key: string]: UsedInBlueprint; }; };
     /**
+     * For structure engineering rigs, these are the category IDs the rig affects in some way. This is added by EVE Ref.
+     * @type {Array<number>}
+     * @memberof InventoryType
+     */
+    engineeringRigAffectedCategoryIds?: Array<number>;
+    /**
+     * For structure engineering rigs, these are the group IDs the rig affects in some way. This is added by EVE Ref.
+     * @type {Array<number>}
+     * @memberof InventoryType
+     */
+    engineeringRigAffectedGroupIds?: Array<number>;
+    /**
+     * These are the type IDs of the engineering rigs which affect this type in some way. This is added by EVE Ref.
+     * @type {Array<number>}
+     * @memberof InventoryType
+     */
+    engineeringRigSourceTypeIds?: Array<number>;
+    /**
      * Whether this type is a skill or not. This is added by EVE Ref.
      * @type {boolean}
      * @memberof InventoryType
@@ -361,6 +385,7 @@ export function InventoryTypeFromJSONTyped(json: any, ignoreDiscriminator: boole
         'dogmaEffects': !exists(json, 'dogma_effects') ? undefined : (mapValues(json['dogma_effects'], DogmaTypeEffectFromJSON)),
         'factionId': !exists(json, 'faction_id') ? undefined : json['faction_id'],
         'graphicId': !exists(json, 'graphic_id') ? undefined : json['graphic_id'],
+        'categoryId': !exists(json, 'category_id') ? undefined : json['category_id'],
         'groupId': !exists(json, 'group_id') ? undefined : json['group_id'],
         'iconId': !exists(json, 'icon_id') ? undefined : json['icon_id'],
         'marketGroupId': !exists(json, 'market_group_id') ? undefined : json['market_group_id'],
@@ -395,6 +420,9 @@ export function InventoryTypeFromJSONTyped(json: any, ignoreDiscriminator: boole
         'buildablePinTypeIds': !exists(json, 'buildable_pin_type_ids') ? undefined : json['buildable_pin_type_ids'],
         'installableSchematicIds': !exists(json, 'installable_schematic_ids') ? undefined : json['installable_schematic_ids'],
         'usedInBlueprints': !exists(json, 'used_in_blueprints') ? undefined : json['used_in_blueprints'],
+        'engineeringRigAffectedCategoryIds': !exists(json, 'engineering_rig_affected_category_ids') ? undefined : json['engineering_rig_affected_category_ids'],
+        'engineeringRigAffectedGroupIds': !exists(json, 'engineering_rig_affected_group_ids') ? undefined : json['engineering_rig_affected_group_ids'],
+        'engineeringRigSourceTypeIds': !exists(json, 'engineering_rig_source_type_ids') ? undefined : json['engineering_rig_source_type_ids'],
         'isSkill': !exists(json, 'is_skill') ? undefined : json['is_skill'],
         'isMutaplasmid': !exists(json, 'is_mutaplasmid') ? undefined : json['is_mutaplasmid'],
         'isDynamicItem': !exists(json, 'is_dynamic_item') ? undefined : json['is_dynamic_item'],
@@ -419,6 +447,7 @@ export function InventoryTypeToJSON(value?: InventoryType | null): any {
         'dogma_effects': value.dogmaEffects === undefined ? undefined : (mapValues(value.dogmaEffects, DogmaTypeEffectToJSON)),
         'faction_id': value.factionId,
         'graphic_id': value.graphicId,
+        'category_id': value.categoryId,
         'group_id': value.groupId,
         'icon_id': value.iconId,
         'market_group_id': value.marketGroupId,
@@ -453,6 +482,9 @@ export function InventoryTypeToJSON(value?: InventoryType | null): any {
         'buildable_pin_type_ids': value.buildablePinTypeIds,
         'installable_schematic_ids': value.installableSchematicIds,
         'used_in_blueprints': value.usedInBlueprints,
+        'engineering_rig_affected_category_ids': value.engineeringRigAffectedCategoryIds,
+        'engineering_rig_affected_group_ids': value.engineeringRigAffectedGroupIds,
+        'engineering_rig_source_type_ids': value.engineeringRigSourceTypeIds,
         'is_skill': value.isSkill,
         'is_mutaplasmid': value.isMutaplasmid,
         'is_dynamic_item': value.isDynamicItem,
