@@ -1,3 +1,5 @@
 ignore:
   - "src/main/java/com/autonomouslogic/everef/cli/ImportTestResources.java"
   - "src/main/java/com/autonomouslogic/everef/cli/VerifyRefDataModels.java"
+  - "ui/esi-openapi/"
+  - "ui/refdata-openapi/"

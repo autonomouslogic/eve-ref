@@ -1,5 +1,36 @@
 EVE Ref Changelog
 
+## [2.53.5](https://github.com/autonomouslogic/eve-ref/compare/2.53.4...2.53.5) (2024-11-06)
+
+
+### Bug Fixes
+
+* **ui:** Patreon MOTD ([f8a01bf](https://github.com/autonomouslogic/eve-ref/commit/f8a01bfd0d95bf1710c818f3e7452f0d9af4c271))
+
+
+### Dependency Updates
+
+* **deps:** update all non-major dependencies ([#680](https://github.com/autonomouslogic/eve-ref/issues/680)) ([4be3b4a](https://github.com/autonomouslogic/eve-ref/commit/4be3b4a1f1e221f4bb2c35b6478677f9263d75fb))
+
+## [2.53.4](https://github.com/autonomouslogic/eve-ref/compare/2.53.3...2.53.4) (2024-11-04)
+
+
+### Bug Fixes
+
+* **deps:** update dependency org.flywaydb:flyway-core to v10.20.1 ([#681](https://github.com/autonomouslogic/eve-ref/issues/681)) ([ab9cc1a](https://github.com/autonomouslogic/eve-ref/commit/ab9cc1a2b542f2f78b089f599ba460bfa56572b7))
+* **deps:** update flyway to v10.20.1 ([#682](https://github.com/autonomouslogic/eve-ref/issues/682)) ([3a20692](https://github.com/autonomouslogic/eve-ref/commit/3a20692cefae09de011a2cb0385540cc8b1c0750))
+* **ui:** Generic welcome MOTD banner ([#673](https://github.com/autonomouslogic/eve-ref/issues/673)) ([6fcfc00](https://github.com/autonomouslogic/eve-ref/commit/6fcfc009fd39c5f452a8c62858ec3dd8955069ce))
+
+
+### Documentation
+
+* Added CSM 19 members ([#675](https://github.com/autonomouslogic/eve-ref/issues/675)) ([acee592](https://github.com/autonomouslogic/eve-ref/commit/acee592f60d3e6f85639376cd19a91612c973f9f))
+
+
+### Dependency Updates
+
+* **deps:** update dependency @types/node to v22 ([#678](https://github.com/autonomouslogic/eve-ref/issues/678)) ([a976157](https://github.com/autonomouslogic/eve-ref/commit/a9761571af6d2ae9787c763f124f85ffe887658b))
+
 ## [2.53.3](https://github.com/autonomouslogic/eve-ref/compare/2.53.2...2.53.3) (2024-10-20)
 
 

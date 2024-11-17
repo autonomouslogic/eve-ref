@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import ExternalLink from "~/components/helpers/ExternalLink.vue";
+import {PATREON_URL} from "~/lib/urls";
 
 const route = useRoute();
 const isIndex = computed(() => (route.name as string).startsWith("index"));
 
 const title = "Welcome to the new EVE Ref";
-const url = "https://everef.net/discord";
-const urlText = "Join us on Discord";
+const text = "The new version of EVE Ref has been in the works for over a year and I'm thrilled to finally release it.";
+const url = PATREON_URL;
+const urlText = "Support on Patreon";
 </script>
 
 <template>
@@ -16,9 +18,7 @@ const urlText = "Join us on Discord";
 				<div class="text-center sm:text-left">
 					<h1 class="mb-4 text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight leading-none">{{title}}</h1>
 					<span class="hidden sm:block">
-						<p class="mb-4">
-							The new version of EVE Ref has been in the works for over a year and I'm thrilled to finally release it.
-						</p>
+						<p class="mb-4">{{text}}</p>
 					</span>
 					<p class="mb-4 font-normal text-lg lg:text-xl">
 						<ExternalLink :url="url">{{urlText}} &raquo;</ExternalLink>
