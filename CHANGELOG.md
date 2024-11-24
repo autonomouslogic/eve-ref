@@ -1,5 +1,12 @@
 EVE Ref Changelog
 
+## [2.53.7](https://github.com/autonomouslogic/eve-ref/compare/2.53.6...2.53.7) (2024-11-24)
+
+
+### Bug Fixes
+
+* Don't fetch Abyssal type IDs constantly ([#690](https://github.com/autonomouslogic/eve-ref/issues/690)) ([6ee84f5](https://github.com/autonomouslogic/eve-ref/commit/6ee84f5412ea4d6ca28806d4fc4e9480fdb77baf))
+
 ## [2.53.6](https://github.com/autonomouslogic/eve-ref/compare/2.53.5...2.53.6) (2024-11-17)
 
 
