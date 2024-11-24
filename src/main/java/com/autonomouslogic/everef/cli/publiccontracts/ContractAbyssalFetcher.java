@@ -56,7 +56,7 @@ public class ContractAbyssalFetcher {
 	@Setter
 	private Map<String, JsonNode> dogmaAttributesStore;
 
-	List<Long> abyssalTypeIds;
+	private List<Long> abyssalTypeIds;
 
 	@Inject
 	protected ContractAbyssalFetcher() {}
@@ -186,6 +186,9 @@ public class ContractAbyssalFetcher {
 	}
 
 	private void initAbyssalTypes() throws ApiException {
+		if (abyssalTypeIds != null) {
+			return;
+		}
 		abyssalTypeIds = refdataApi.getMetaGroup(ABYSSAL_META_GROUP).join().getTypeIds();
 		log.trace("Loaded {} abyssal type IDs", abyssalTypeIds.size());
 	}
