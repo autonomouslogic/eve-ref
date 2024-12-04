@@ -1,5 +1,12 @@
 EVE Ref Changelog
 
+## [2.53.9](https://github.com/autonomouslogic/eve-ref/compare/2.53.8...2.53.9) (2024-12-04)
+
+
+### Bug Fixes
+
+* **deps:** update font awesome to v6.7.1 ([#695](https://github.com/autonomouslogic/eve-ref/issues/695)) ([5dd0a16](https://github.com/autonomouslogic/eve-ref/commit/5dd0a16d857196d8adfec96ad764829b84b7df09))
+
 ## [2.53.8](https://github.com/autonomouslogic/eve-ref/compare/2.53.7...2.53.8) (2024-12-02)
 
 
