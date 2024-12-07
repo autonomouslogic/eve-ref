@@ -1,5 +1,39 @@
 EVE Ref Changelog
 
+## [2.53.9](https://github.com/autonomouslogic/eve-ref/compare/2.53.8...2.53.9) (2024-12-04)
+
+
+### Bug Fixes
+
+* **deps:** update font awesome to v6.7.1 ([#695](https://github.com/autonomouslogic/eve-ref/issues/695)) ([5dd0a16](https://github.com/autonomouslogic/eve-ref/commit/5dd0a16d857196d8adfec96ad764829b84b7df09))
+
+## [2.53.8](https://github.com/autonomouslogic/eve-ref/compare/2.53.7...2.53.8) (2024-12-02)
+
+
+### Bug Fixes
+
+* **deps:** update dependency org.flywaydb:flyway-core to v10.22.0 ([#693](https://github.com/autonomouslogic/eve-ref/issues/693)) ([f4065ae](https://github.com/autonomouslogic/eve-ref/commit/f4065ae47b4fdf00a46dc0e1fc1b8abb04515696))
+* **deps:** update flyway to v10.22.0 ([#694](https://github.com/autonomouslogic/eve-ref/issues/694)) ([22ccace](https://github.com/autonomouslogic/eve-ref/commit/22ccace0ed24c19dc307a0feaa21d950eb7be81c))
+
+## [2.53.7](https://github.com/autonomouslogic/eve-ref/compare/2.53.6...2.53.7) (2024-11-24)
+
+
+### Bug Fixes
+
+* Don't fetch Abyssal type IDs constantly ([#690](https://github.com/autonomouslogic/eve-ref/issues/690)) ([6ee84f5](https://github.com/autonomouslogic/eve-ref/commit/6ee84f5412ea4d6ca28806d4fc4e9480fdb77baf))
+
+## [2.53.6](https://github.com/autonomouslogic/eve-ref/compare/2.53.5...2.53.6) (2024-11-17)
+
+
+### Bug Fixes
+
+* Updated ESI and Reference Data for ESI 1.27 and SDE 2024-11-12 ([#686](https://github.com/autonomouslogic/eve-ref/issues/686)) ([b89beb6](https://github.com/autonomouslogic/eve-ref/commit/b89beb625150bb42c39f9792b8cbd1b32e8b3fc5))
+
+
+### Miscellaneous Chores
+
+* **ui:** Move to Cloudflare Pages ([#684](https://github.com/autonomouslogic/eve-ref/issues/684)) ([d388fa1](https://github.com/autonomouslogic/eve-ref/commit/d388fa1a1f3de08752ea18ec7b20b6f02dddfc64))
+
 ## [2.53.5](https://github.com/autonomouslogic/eve-ref/compare/2.53.4...2.53.5) (2024-11-06)
 
 
