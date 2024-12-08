@@ -18,6 +18,7 @@ import OreVariationsCard from "~/components/cards/OreVariationsCard.vue";
 import BlueprintMaterialResearchCard from "~/components/cards/BlueprintMaterialResearchCard.vue";
 import BlueprintTimeResearchCard from "~/components/cards/BlueprintTimeResearchCard.vue";
 import UsageCard from "~/components/cards/UsageCard.vue";
+import EngineeringRigCard from "~/components/cards/EngineeringRigCard.vue";
 
 const props = defineProps<{
 	inventoryType: InventoryType,
@@ -102,6 +103,10 @@ const props = defineProps<{
 		:inventory-type="inventoryType"
 		:dogma-attributes="dogmaAttributes" />
 	<UsageCard v-else-if="component == 'usage'"
+		:title="title"
+		:inventory-type="inventoryType"
+		:dogma-attributes="dogmaAttributes" />
+	<EngineeringRigCard v-else-if="component == 'engineeringRig'"
 		:title="title"
 		:inventory-type="inventoryType"
 		:dogma-attributes="dogmaAttributes" />

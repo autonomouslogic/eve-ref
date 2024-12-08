@@ -1000,6 +1000,10 @@ components:
         graphic_id:
           type: integer
           format: int64
+        category_id:
+          type: integer
+          description: The category ID the group is in. This is added by EVE Ref.
+          format: int64
         group_id:
           type: integer
           format: int64
@@ -1195,6 +1199,33 @@ components:
           description: The blueprints in which this type is used. The first key is
             the blueprint ID and the second key is the activity name. This is added
             by EVE Ref.
+        engineering_rig_affected_category_ids:
+          type: array
+          description: "For structure engineering rigs, these are the category IDs\
+            \ the rig affects in some way. This is added by EVE Ref."
+          items:
+            type: integer
+            description: "For structure engineering rigs, these are the category IDs\
+              \ the rig affects in some way. This is added by EVE Ref."
+            format: int64
+        engineering_rig_affected_group_ids:
+          type: array
+          description: "For structure engineering rigs, these are the group IDs the\
+            \ rig affects in some way. This is added by EVE Ref."
+          items:
+            type: integer
+            description: "For structure engineering rigs, these are the group IDs\
+              \ the rig affects in some way. This is added by EVE Ref."
+            format: int64
+        engineering_rig_source_type_ids:
+          type: array
+          description: These are the type IDs of the engineering rigs which affect
+            this type in some way. This is added by EVE Ref.
+          items:
+            type: integer
+            description: These are the type IDs of the engineering rigs which affect
+              this type in some way. This is added by EVE Ref.
+            format: int64
         is_skill:
           type: boolean
           description: Whether this type is a skill or not. This is added by EVE Ref.

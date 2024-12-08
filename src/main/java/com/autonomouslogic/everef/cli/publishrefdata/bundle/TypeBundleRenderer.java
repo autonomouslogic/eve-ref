@@ -50,6 +50,7 @@ public class TypeBundleRenderer extends BundleRenderer {
 		bundleDogmaAttributesUnits(attributesJson, unitsJson);
 		bundleDogmaAttributesIcons(attributesJson, iconsJson);
 		bundleTypesMetaGroups(typesJson, metaGroupsJson);
+		bundleEngineeringRigs(type, typesJson, categoriesJson, groupsJson);
 
 		if (type.getMarketGroupId() != null) {
 			unitsJson.set("133", unitsMap.get(133L)); // ISK for the market price display.

@@ -249,3 +249,77 @@
   - 62450
   - 62451
   - 62452
+"513":
+  category_id: 6
+  group_id: 513
+  name: "Freighter"
+  published: true
+  types:
+  - 20183
+  - 20185
+  - 20187
+  - 20189
+  - 34328
+  - 81040
+"941":
+  category_id: 6
+  group_id: 941
+  name: "Industrial Command Ship"
+  published: true
+  types:
+  - 28606
+  - 33685
+  - 42244
+"1869":
+  category_id: 66
+  group_id: 1869
+  name: "Structure Engineering Rig XL - Structure and Component Efficiency"
+  published: true
+  types:
+  - 43704
+  - 43705
+  - 45548
+"332":
+  category_id: 17
+  group_id: 332
+  name: "Tool"
+  published: true
+  types:
+  - 11457
+  - 11458
+  - 11459
+  - 11460
+  - 11461
+  - 11462
+  - 11463
+  - 11464
+  - 11465
+  - 11466
+  - 11467
+  - 11468
+  - 11469
+  - 11470
+  - 11471
+  - 11472
+  - 11473
+  - 11474
+  - 11475
+  - 11476
+  - 11477
+  - 11478
+  - 11479
+  - 11480
+  - 11481
+  - 11482
+  - 11483
+  - 11484
+  - 11485
+  - 11486
+  - 11513
+  - 11514
+  - 11653
+  - 11746
+  - 20422
+  - 24468
+  - 27021
+  - 27023

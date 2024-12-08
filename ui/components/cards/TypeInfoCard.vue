@@ -8,6 +8,7 @@ import GroupLink from "~/components/helpers/GroupLink.vue";
 import AttributeList from "~/components/attr/AttributeList.vue";
 import AttributeListItem from "~/components/attr/AttributeListItem.vue";
 import {CUBIC_METER, METER, MONEY} from "~/lib/unitConstants";
+import ExternalLink from "~/components/helpers/ExternalLink.vue";
 
 const props = defineProps<{
 	title: string,
@@ -19,7 +20,7 @@ const props = defineProps<{
 <template>
 	<CardWrapper title="Type Info">
 
-		<AttributeList :elements="15 + dogmaAttributes.length">
+		<AttributeList :elements="17 + dogmaAttributes.length">
 			<AttributeListItem v-if="inventoryType.typeId">
 				<template v-slot:key>Type ID:</template>
 				{{ inventoryType.typeId }}
@@ -83,6 +84,24 @@ const props = defineProps<{
 			<AttributeListItem v-if="inventoryType.volume">
 				<template v-slot:key>Volume:</template>
 				<UnitValue :unit-id="CUBIC_METER" :value="inventoryType.volume" />
+			</AttributeListItem>
+			<AttributeListItem>
+				<template v-slot:key>
+					<ExternalLink url="https://docs.everef.net/datasets/reference-data">Reference Data</ExternalLink>:
+				</template>
+				<ExternalLink :url="`https://ref-data.everef.net/types/${inventoryType.typeId}`">View JSON</ExternalLink>
+			</AttributeListItem>
+			<AttributeListItem>
+				<template v-slot:key>
+					<ExternalLink url="https://esi.evetech.net/">ESI</ExternalLink>:
+				</template>
+				<ExternalLink :url="`https://esi.evetech.net/latest/universe/types/${inventoryType.typeId}/`">View JSON</ExternalLink>
+			</AttributeListItem>
+			<AttributeListItem>
+				<template v-slot:key>
+					<ExternalLink url="https://sde.jita.space/">SDE</ExternalLink>:
+				</template>
+				<ExternalLink :url="`https://sde.jita.space/latest/universe/types/${inventoryType.typeId}`">View JSON</ExternalLink>
 			</AttributeListItem>
 
 			<DogmaListItems :inventory-type="inventoryType" :dogma-attributes="dogmaAttributes" />

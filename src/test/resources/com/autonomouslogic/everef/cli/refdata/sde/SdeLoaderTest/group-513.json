@@ -1,0 +1,20 @@
+{
+  "anchorable" : false,
+  "anchored" : false,
+  "category_id" : 6,
+  "fittable_non_singleton" : false,
+  "icon_id" : 0,
+  "name" : {
+    "de" : "Frachter",
+    "en" : "Freighter",
+    "es" : "Carguero",
+    "fr" : "Transport de fret",
+    "ja" : "超大型輸送艦",
+    "ko" : "프레이터",
+    "ru" : "Фрейтер",
+    "zh" : "货舰"
+  },
+  "published" : true,
+  "use_base_price" : false,
+  "group_id" : 513
+}

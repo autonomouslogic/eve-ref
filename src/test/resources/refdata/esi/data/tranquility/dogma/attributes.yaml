@@ -304,3 +304,13 @@
   published: true
   stackable: true
   unit_id: 116
+"2355":
+  attribute_id: 2355
+  default_value: 1
+  description: ""
+  display_name: "High Security Bonus Multiplier"
+  high_is_good: true
+  name: "hiSecModifier"
+  published: true
+  stackable: true
+  unit_id: 104

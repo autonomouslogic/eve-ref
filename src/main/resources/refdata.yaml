@@ -13,6 +13,8 @@ categories:
     filePrefix: category
     ids:
       - 6
+      - 66
+      - 23
     languages:
       - en-us
 
@@ -34,6 +36,10 @@ groups:
       - 257
       - 1185
       - 1218
+      - 513
+      - 941
+      - 1869
+      - 332
     languages:
       - en-us
 
@@ -113,6 +119,15 @@ types:
       - 2480
       - 60377
       - 34
+      - 37158
+      - 37150
+      - 43880
+      - 43879
+      - 43729
+      - 43891
+      - 43714
+      - 37152
+      - 43704
     languages:
       - en-us
       - fr
@@ -200,6 +215,7 @@ dogmaAttributes:
       - 1304
       - 1305
       - 790
+      - 2355
 
 dogmaEffects:
   idField: effect_id
