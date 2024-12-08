@@ -6,6 +6,7 @@
   "packageRules": [{
     "groupName": "flyway monorepo",
     "matchPackageNames": [
+      "flyway",
       "org.flywaydb.flyway",
       "org.flywaydb:flyway-core"
     ]

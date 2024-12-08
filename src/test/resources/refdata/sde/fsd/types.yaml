@@ -2720,3 +2720,777 @@
   portionSize: 1
   published: true
   volume: 0.01
+"37158":
+  description:
+    de: "Die Standup-M-Set-Modifikation Materialeffizienz für die Herstellung von\
+      \ Munition I bietet Strukturadministratoren die Möglichkeit, in ihren Upwell-Strukturen\
+      \ Materialanforderungen für die Herstellung von Munition, Ladungen und Skripten\
+      \ zu verringern.\n\n\n\nStandup ist ein gesetzlich geschütztes System, welches\
+      \ eine Strukturautonome Nanofertigungseinheit (Upwell) nutzt, das eine integrierte\
+      \ Vorlagensoftware, eine Nanofertigungsanlage und ausreichend Nanomasse enthä\
+      lt, um die Fertigung einer Vielzahl an Dienstmodulen, Strukturmodulen und Strukturmodifikationen\
+      \ zu ermöglichen, wenn es in entsprechende Slots in einer Struktur mit Upwell-Technologie\
+      \ eingebaut wird.\n\n\n\nHinweis: Nur eine Modifikation desselben Typs, inkl.\
+      \ beider Tech-Varianten, kann in eine Struktur eingebaut sein."
+    en: "The Standup M-Set Ammunition Manufacturing Material Efficiency I rig provides\
+      \ a means for structure operators to decrease material requirements manufacturing\
+      \ ammunition, charges and scripts in their Upwell structures.\r\n\r\nStandup\
+      \ is a proprietary system that uses a Structure Autonomous Nanoassembly Device\
+      \ (Upwell) containing integrated template software, a nanoassembler array and\
+      \ sufficient nanomass to enable the construction of a variety of service modules,\
+      \ structure modules and structure rigs when inserted into the appropriate slots\
+      \ on a structure built with Upwell technology.\r\n\r\nNote: Only one rig of\
+      \ the same type, counting both tech variations, may be fitted at the same time\
+      \ on a structure."
+    es: "El complemento Standup mediano de eficiencia de materiales en la fabricació\
+      n de munición\_I permite a los administradores de estructuras reducir los materiales\
+      \ requeridos para fabricar munición, cargas y scripts en las estructuras de\
+      \ Upwell.\n\nStandup es un sistema patentado que utiliza un dispositivo de nanoensamblaje\
+      \ autónomo estructural (de Upwell) que contiene una plantilla integrada de software,\
+      \ una matriz de nanoensambladores y suficiente nanomasa como para construir\
+      \ una serie de módulos de servicio, de estructura y complementos de estructura\
+      \ cuando se insertan en las ranuras apropiadas en una estructura construida\
+      \ con la tecnología de Upwell.\n\nAviso: Solo se puede equipar un complemento\
+      \ del mismo tipo en una estructura, contando ambas variaciones tecnológicas."
+    fr: "L'optimisation de productivité matérielle de la production de munitions 'Standup'\
+      \ I M permet aux opérateurs de structure Upwell d'améliorer la productivité\
+      \ matérielle des lignes de production de munitions, de charges et de scripts.\n\
+      \n\n\nLa technologie brevetée 'Standup' exploite un dispositif autonome de nano-assemblage\
+      \ pour structure Upwell, alliant un logiciel de modélisation intégré, une baie\
+      \ de nano-assemblage et une réserve de nanomasse. Une fois insérés dans les\
+      \ emplacements dédiés sur les structures Upwell, les dispositifs 'Standup' lancent\
+      \ directement l'assemblage moléculaire de divers modules de services, modules\
+      \ de structure et optimisations de structure.\n\n\n\nRemarque : une structure\
+      \ ne peut équiper qu'une seule optimisation du même type, déclinaisons de tech\
+      \ comprises."
+    ja: "スタンドアップ中型弾薬生産効率1のリグを使用することで、ストラクチャのオペレーターはアップウェルストラクチャで弾薬、チャージ、スクリプトを製造する\
+      際に必要な材料を減少させることができます。スタンドアップは、アップウェルテクノロジーにより建造されたストラクチャの適切なスロットに挿入した場合に統合テン\
+      プレートソフトウェア、ナノアセンブラー施設、ナノ物質を持つ自立式ナノ集合体ストラクチャデバイス（アップウェル）を使用して、様々なサービスモジュール、スト\
+      ラクチャモデル、そしてストラクチャリグを作り出すことができる独自システムである。\n注： Techが両方とも異なるものであっても、1つのストラクチャには\
+      同じタイプのリグを複数装備することはできない。"
+    ko: "스탠드업 리그를 장착하면 업웰 구조물에서 제작되는 탄약, 차지, 스크립트의 자원요구치가 감소합니다. <br><br>스탠드업은 자율구\
+      조형 나노어셈블러 장치(업웰)를 사용하는 시스템으로 템플릿 소프트웨어가 내장되어 있으며 나노어셈블리 배열, 충분한 양의 나노물질이 탑재돼\
+      있습니다. 업웰 기반 구조물에 장착 시 다양한 종류의 서비스 모듈, 구조물 모듈, 구조물 장착형 리그를 제조할 수 있습니다. 참고: 테크\
+      \ 레벨과 상관없이 동일한 종류의 리그는 한 개 이상 장착할 수 없습니다."
+    ru: "Этот стационар-модификатор первой техкатегории позволяет повысить материа\
+      лоэффективность производства боеприпасов, зарядов и скриптов, если сооружени\
+      е, где ведётся соответствующий проект, разработано консорциумом «Апвелл» и о\
+      снащено этим модулем.\n\n\n\nСТАЦИОНАР — это проприетарная система: её назва\
+      ние представляет собой акроним основного компонента системы. Стационарный ав\
+      тономный центральный инженерно-организующий наносборщик «Апвелл» содержит ин\
+      тегрированный шаблон программного обеспечения, линию наносборщиков и достато\
+      чное количество наномассы для сборки различных модулей технического обслужив\
+      ания, модулей и тюнинг-модулей для сооружений, которые устанавливаются в под\
+      ходящие разъёмы на сооружениях, сконструированных по проектам консорциума «А\
+      пвелл».\n\n\n\nВнимание: одновременно сооружение можно оснастить только одни\
+      м модификатором этого типа, независимо от вариаций техкатегории."
+    zh: "屹立中型弹药制造材料效率 I 改装件让建筑操作员能够降低在昇威建筑中制造弹药和脚本的材料要求。\n\n\n\n屹立专用系统采用了昇威建筑分控纳米装\
+      配装置，由集成模版软件、纳米装配阵列和许多纳米块体构成。安装在采用昇威科技建造的建筑上的专门槽位中可以制造各种服务装备、建筑装备和建筑改装件。\n\n\n\
+      \n注：只能同时在一个建筑上装配一件相同类型的改装件，包括衍生型号在内。"
+  groupID: 1820
+  iconID: 21729
+  marketGroupID: 2347
+  mass: 200
+  metaGroupID: 54
+  name:
+    de: "Standup M-Set Ammunition Manufacturing Material Efficiency I"
+    en: "Standup M-Set Ammunition Manufacturing Material Efficiency I"
+    es: "Eficiencia de materiales en la fabricación de munición Standup\_I\_(M)"
+    fr: "Productivité matérielle de la production de munitions Standup I M"
+    ja: "スタンドアップ中型弾薬製造資源効率I"
+    ko: "스탠드업 M-Set 탄약 제조 자원효율성 장치 I"
+    ru: "Standup M-Set Ammunition Manufacturing Material Efficiency I"
+    zh: "屹立中型弹药制造材料效率 I"
+  portionSize: 1
+  published: true
+  radius: 100
+  volume: 10
+"37150":
+  description:
+    de: "Die Standup-M-Set-Modifikation Zeiteffizienz für die Herstellung von Munition\
+      \ I bietet Strukturadministratoren die Möglichkeit, in ihren Upwell-Strukturen\
+      \ Zeitanforderungen für die Herstellung von Munition, Ladungen und Skripten\
+      \ zu verringern.\n\n\n\nStandup ist ein gesetzlich geschütztes System, welches\
+      \ eine Strukturautonome Nanofertigungseinheit (Upwell) nutzt, das eine integrierte\
+      \ Vorlagensoftware, eine Nanofertigungsanlage und ausreichend Nanomasse enthä\
+      lt, um die Fertigung einer Vielzahl an Dienstmodulen, Strukturmodulen und Strukturmodifikationen\
+      \ zu ermöglichen, wenn es in entsprechende Slots in einer Struktur mit Upwell-Technologie\
+      \ eingebaut wird.\n\n\n\nHinweis: Nur eine Modifikation desselben Typs, inkl.\
+      \ beider Tech-Varianten, kann in eine Struktur eingebaut sein."
+    en: "The Standup M-Set Ammunition Manufacturing Time Efficiency I rig provides\
+      \ a means for structure operators to decrease time requirements manufacturing\
+      \ ammunition, charges and scripts in their Upwell structures.\r\n\r\nStandup\
+      \ is a proprietary system that uses a Structure Autonomous Nanoassembly Device\
+      \ (Upwell) containing integrated template software, a nanoassembler array and\
+      \ sufficient nanomass to enable the construction of a variety of service modules,\
+      \ structure modules and structure rigs when inserted into the appropriate slots\
+      \ on a structure built with Upwell technology.\r\n\r\nNote: Only one rig of\
+      \ the same type, counting both tech variations, may be fitted at the same time\
+      \ on a structure."
+    es: "El complemento Standup mediano de eficiencia temporal en la fabricación de\
+      \ munición\_I permite a los administradores de estructuras reducir el tiempo\
+      \ requerido para fabricar munición, cargas y scripts en las estructuras de Upwell.\n\
+      \n\n\nStandup es un sistema patentado que utiliza un dispositivo de nanoensamblaje\
+      \ autónomo estructural (de Upwell) que contiene una plantilla integrada de software,\
+      \ una matriz de nanoensambladores y suficiente nanomasa como para construir\
+      \ una serie de módulos de servicio, de estructura y complementos de estructura\
+      \ cuando se insertan en las ranuras apropiadas en una estructura construida\
+      \ con la tecnología de Upwell.\n\n\n\nAviso: Solo se puede equipar un complemento\
+      \ del mismo tipo a la vez en una estructura, incluidas ambas variaciones tecnoló\
+      gicas."
+    fr: "L'optimisation de productivité horaire de la production de munitions 'Standup'\
+      \ I M permet aux opérateurs de structure Upwell d'améliorer la productivité\
+      \ horaire des lignes de production de munitions, de charges et de scripts.\n\
+      \n\n\nLa technologie brevetée 'Standup' exploite un dispositif autonome de nano-assemblage\
+      \ pour structure Upwell, alliant un logiciel de modélisation intégré, une baie\
+      \ de nano-assemblage et une réserve de nanomasse. Une fois insérés dans les\
+      \ emplacements dédiés sur les structures Upwell, les dispositifs 'Standup' lancent\
+      \ directement l'assemblage moléculaire de divers modules de services, modules\
+      \ de structure et optimisations de structure.\n\n\n\nRemarque : une structure\
+      \ ne peut équiper qu'une seule optimisation du même type, déclinaisons de tech\
+      \ comprises."
+    ja: "スタンドアップ中型弾薬製造時間効率1のリグを使用することで、ストラクチャのオペレーターはアップウェルストラクチャで弾薬、チャージ、スクリプトを製造\
+      する際に必要な時間を減少させることができます。スタンドアップは、アップウェルテクノロジーにより建造されたストラクチャの適切なスロットに挿入した場合に統合\
+      テンプレートソフトウェア、ナノアセンブラー施設、ナノ物質を持つ自立式ナノ集合体ストラクチャデバイス（アップウェル）を使用して、様々なサービスモジュール、\
+      ストラクチャモデル、そしてストラクチャリグを作り出すことができる独自システムである。\n注： Techが両方とも異なるものであっても、1つのストラクチャ\
+      には同じタイプのリグを複数装備することはできない。"
+    ko: "스탠드업 리그를 장착하면 업웰 구조물에서 제작되는 탄약, 차지, 스크립트의 제조 시간이 감소합니다. <br><br>스탠드업은 자율구\
+      조형 나노어셈블러 장치(업웰)를 사용하는 시스템으로 템플릿 소프트웨어가 내장되어 있으며 나노어셈블리 배열, 충분한 양의 나노물질이 탑재돼\
+      있습니다. 업웰 기반 구조물에 장착 시 다양한 종류의 서비스 모듈, 구조물 모듈, 구조물 장착형 리그를 제조할 수 있습니다. 참고: 테크\
+      \ 레벨과 상관없이 동일한 종류의 리그는 한 개 이상 장착할 수 없습니다."
+    ru: "Этот стационар-модификатор первой техкатегории позволяет снизить расход в\
+      ремени на производство боеприпасов, зарядов и скриптов, если сооружение, где\
+      \ ведётся соответствующий проект, разработано консорциумом «Апвелл» и оснаще\
+      но этим модулем.\n\n\n\nСТАЦИОНАР — это проприетарная система: её название п\
+      редставляет собой акроним основного компонента системы. Стационарный автоном\
+      ный центральный инженерно-организующий наносборщик «Апвелл» содержит интегри\
+      рованный шаблон программного обеспечения, линию наносборщиков и достаточное\
+      \ количество наномассы для сборки различных модулей технического обслуживани\
+      я, модулей и тюнинг-модулей для сооружений, которые устанавливаются в подход\
+      ящие разъёмы на сооружениях, сконструированных по проектам консорциума «Апве\
+      лл».\n\n\n\nВнимание: одновременно сооружение можно оснастить только одним м\
+      одификатором этого типа, независимо от вариаций техкатегории."
+    zh: "屹立中型弹药制造时间效率 I 改装件让建筑操作员能够降低在昇威建筑中制造弹药和脚本的时间要求。\n\n\n\n屹立专用系统采用了昇威建筑分控纳米装\
+      配装置，由集成模版软件、纳米装配阵列和许多纳米块体构成。安装在采用昇威科技建造的建筑上的专门槽位中可以制造各种服务装备、建筑装备和建筑改装件。\n\n\n\
+      \n注：只能同时在一个建筑上装配一件相同类型的改装件，包括衍生型号在内。"
+  groupID: 1821
+  iconID: 21729
+  marketGroupID: 2347
+  mass: 200
+  metaGroupID: 54
+  name:
+    de: "Standup M-Set Ammunition Manufacturing Time Efficiency I"
+    en: "Standup M-Set Ammunition Manufacturing Time Efficiency I"
+    es: "Eficiencia temporal en la fabricación de munición Standup\_I (M)"
+    fr: "Productivité horaire de la production de munitions 'Standup' I M"
+    ja: "スタンドアップ中型弾薬製造時間効率I"
+    ko: "스탠드업 M-Set 탄약 제조 시간효율성 장치 I"
+    ru: "Standup M-Set Ammunition Manufacturing Time Efficiency I"
+    zh: "屹立中型弹药制造时间效率 I"
+  portionSize: 1
+  published: true
+  radius: 100
+  volume: 10
+"43880":
+  description:
+    de: "Die Standup-M-Set-Erfindungsbeschleuniger-Modifikation I bietet Strukturadministratoren\
+      \ die Möglichkeit, in ihren Upwell-Strukturen die Zeitanforderungen für Erfindungen\
+      \ zu verringern.\n\n\n\nStandup ist ein gesetzlich geschütztes System, welches\
+      \ eine Strukturautonome Nanofertigungseinheit (Upwell) nutzt, das eine integrierte\
+      \ Vorlagensoftware, eine Nanofertigungsanlage und ausreichend Nanomasse enthä\
+      lt, um die Fertigung einer Vielzahl an Dienstmodulen, Strukturmodulen und Strukturmodifikationen\
+      \ zu ermöglichen, wenn es in entsprechende Slots in einer Struktur mit Upwell-Technologie\
+      \ eingebaut wird.\n\n\n\nHinweis: Nur eine Modifikation desselben Typs, inkl.\
+      \ beider Tech-Varianten, kann in eine Struktur eingebaut sein."
+    en: "The Standup M-Set Invention Accelerator I rig provides a means for structure\
+      \ operators to decrease time requirements when performing invention in their\
+      \ Upwell structures.\r\n\r\nStandup is a proprietary system that uses a Structure\
+      \ Autonomous Nanoassembly Device (Upwell) containing integrated template software,\
+      \ a nanoassembler array and sufficient nanomass to enable the construction of\
+      \ a variety of service modules, structure modules and structure rigs when inserted\
+      \ into the appropriate slots on a structure built with Upwell technology.\r\n\
+      \r\nNote: Only one rig of the same type, counting both tech variations, may\
+      \ be fitted at the same time on a structure."
+    es: "El complemento Standup mediano de acelerador de invención\_I permite a los\
+      \ administradores de estructuras reducir el tiempo requerido para realizar invenciones\
+      \ en sus estructuras de Upwell.\n\n\n\nStandup es un sistema patentado que utiliza\
+      \ un dispositivo de nanoensamblaje autónomo estructural (de Upwell) que contiene\
+      \ una plantilla integrada de software, una matriz de nanoensambladores y suficiente\
+      \ nanomasa como para construir una serie de módulos de servicio, de estructura\
+      \ y complementos de estructura cuando se insertan en las ranuras apropiadas\
+      \ en una estructura construida con la tecnología de Upwell.\n\n\n\nAviso: Solo\
+      \ se puede equipar un complemento del mismo tipo en una estructura, contando\
+      \ ambas variaciones tecnológicas."
+    fr: "L'optimisation d'accélérateur d'invention 'Standup' I M permet aux opérateurs\
+      \ de structure Upwell de raccourcir la durée des tâches d'invention.\n\n\n\n\
+      La technologie brevetée 'Standup' exploite un dispositif autonome de nano-assemblage\
+      \ pour structure Upwell, alliant un logiciel de modélisation intégré, une baie\
+      \ de nano-assemblage et une réserve de nanomasse. Une fois insérés dans les\
+      \ emplacements dédiés sur les structures Upwell, les dispositifs 'Standup' lancent\
+      \ directement l'assemblage moléculaire de divers modules de services, modules\
+      \ de structure et optimisations de structure.\n\n\n\nRemarque : une structure\
+      \ ne peut équiper qu'une seule optimisation du même type, déclinaisons de tech\
+      \ comprises."
+    ja: "スタンドアップ中型発明加速器1のリグを使用することで、ストラクチャのオペレーターはアップウェルストラクチャで発明を行う際に必要な時間を減少させるこ\
+      とができます。スタンドアップは、アップウェルテクノロジーにより建造されたストラクチャの適切なスロットに挿入した場合に統合テンプレートソフトウェア、ナノア\
+      センブラー施設、ナノ物質を持つ自立式ナノ集合体ストラクチャデバイス（アップウェル）を使用して、様々なサービスモジュール、ストラクチャモデル、そしてストラ\
+      クチャリグを作り出すことができる独自システムである。\n注： Techが両方とも異なるものであっても、1つのストラクチャには同じタイプのリグを複数装備す\
+      ることはできない。"
+    ko: "스탠드업 리그를 장착하면 업웰 구조물의 인벤션 작업에 소요되는 시간이 감소합니다. <br><br>스탠드업은 자율구조형 나노어셈블러\
+      \ 장치(업웰)를 사용하는 시스템으로 템플릿 소프트웨어가 내장되어 있으며 나노어셈블리 배열, 충분한 양의 나노물질이 탑재돼있습니다. 업웰\
+      \ 기반 구조물에 장착 시 다양한 종류의 서비스 모듈, 구조물 모듈, 구조물 장착형 리그를 제조할 수 있습니다. 참고: 테크 레벨과 상관\
+      없이 동일한 종류의 리그는 한 개 이상 장착할 수 없습니다."
+    ru: "Этот стационар-модификатор первой техкатегории позволяет снизить расход в\
+      ремени на проведение проектов по модернизации, если сооружение, где ведётся\
+      \ соответствующий проект, разработано консорциумом «Апвелл» и оснащено этим\
+      \ модулем.\n\n\n\nСТАЦИОНАР — это проприетарная система: её название предста\
+      вляет собой акроним основного компонента системы. Стационарный автономный це\
+      нтральный инженерно-организующий наносборщик «Апвелл» содержит интегрированн\
+      ый шаблон программного обеспечения, линию наносборщиков и достаточное количе\
+      ство наномассы для сборки различных модулей технического обслуживания, модул\
+      ей и тюнинг-модулей для сооружений, которые устанавливаются в подходящие раз\
+      ъёмы на сооружениях, сконструированных по проектам консорциума «Апвелл».\n\n\
+      \n\nВнимание: одновременно сооружение можно оснастить только одним модификат\
+      ором этого типа, независимо от вариаций техкатегории."
+    zh: "屹立中型发明加速 I 改装件让建筑操作员能够降低在昇威建筑中进行发明的时间要求。\n\n\n\n屹立专用系统采用了昇威建筑分控纳米装配装置，由集成\
+      模版软件、纳米装配阵列和许多纳米块体构成。安装在采用昇威科技建造的建筑上的专门槽位中可以制造各种服务装备、建筑装备和建筑改装件。\n\n\n\n注：只能\
+      同时在一个建筑上装配一件相同类型的改装件，包括衍生型号在内。"
+  groupID: 1843
+  iconID: 21729
+  marketGroupID: 2347
+  mass: 200
+  metaGroupID: 54
+  name:
+    de: "Standup M-Set Invention Accelerator I"
+    en: "Standup M-Set Invention Accelerator I"
+    es: "Acelerador de invención Standup\_I (M)"
+    fr: "Accélérateur d'invention 'Standup' I M"
+    ja: "スタンドアップ中型発明加速器I"
+    ko: "스탠드업 M-Set 인벤션 가속 장치 I"
+    ru: "Standup M-Set Invention Accelerator I"
+    zh: "屹立中型发明加速 I"
+  portionSize: 1
+  published: true
+  radius: 100
+  volume: 10
+"43879":
+  description:
+    de: "Die Standup-M-Set-Modifikation Kostenoptimierung von Erfindungen I bietet\
+      \ Strukturadministratoren die Möglichkeit, in ihren Upwell-Strukturen die Kostenanforderungen\
+      \ für Erfindungen zu verringern.\n\n\n\nStandup ist ein gesetzlich geschütztes\
+      \ System, welches eine Strukturautonome Nanofertigungseinheit (Upwell) nutzt,\
+      \ das eine integrierte Vorlagensoftware, eine Nanofertigungsanlage und ausreichend\
+      \ Nanomasse enthält, um die Fertigung einer Vielzahl an Dienstmodulen, Strukturmodulen\
+      \ und Strukturmodifikationen zu ermöglichen, wenn es in entsprechende Slots\
+      \ in einer Struktur mit Upwell-Technologie eingebaut wird.\n\n\n\nHinweis: Nur\
+      \ eine Modifikation desselben Typs, inkl. beider Tech-Varianten, kann in eine\
+      \ Struktur eingebaut sein."
+    en: "The Standup M-Set Invention Cost Optimization I rig provides a means for\
+      \ structure operators to decrease cost requirements when performing invention\
+      \ in their Upwell structures.\r\n\r\nStandup is a proprietary system that uses\
+      \ a Structure Autonomous Nanoassembly Device (Upwell) containing integrated\
+      \ template software, a nanoassembler array and sufficient nanomass to enable\
+      \ the construction of a variety of service modules, structure modules and structure\
+      \ rigs when inserted into the appropriate slots on a structure built with Upwell\
+      \ technology.\r\n\r\nNote: Only one rig of the same type, counting both tech\
+      \ variations, may be fitted at the same time on a structure."
+    es: "El complemento Standup mediano de optimización del coste de invención\_I\
+      \ permite a los administradores de estructuras reducir los costes requeridos\
+      \ para realizar invenciones en sus estructuras de Upwell.\n\nStandup es un sistema\
+      \ patentado que utiliza un dispositivo de nanoensamblaje autónomo estructural\
+      \ (de Upwell) que contiene una plantilla integrada de software, una matriz de\
+      \ nanoensambladores y suficiente nanomasa como para construir una serie de mó\
+      dulos de servicio, de estructura y complementos de estructura cuando se insertan\
+      \ en las ranuras apropiadas en una estructura construida con la tecnología de\
+      \ Upwell.\n\nAviso: Solo se puede equipar un complemento del mismo tipo en una\
+      \ estructura, contando ambas variaciones tecnológicas."
+    fr: "L'optimisation des coûts d'invention 'Standup'\_I\_M permet aux opérateurs\
+      \ de structure Upwell de réduire le coût financier des tâches d'invention.\n\
+      \n\n\nLa technologie brevetée 'Standup' exploite un dispositif autonome de nano-assemblage\
+      \ pour structure Upwell, alliant un logiciel de modélisation intégré, une baie\
+      \ de nano-assemblage et une réserve de nanomasse. Une fois insérés dans les\
+      \ emplacements dédiés sur les structures Upwell, les dispositifs 'Standup' lancent\
+      \ directement l'assemblage moléculaire de divers modules de services, modules\
+      \ de structure et optimisations de structure.\n\n\n\nRemarque\_: une structure\
+      \ ne peut équiper qu'une seule optimisation du même type, déclinaisons de tech\
+      \ comprises."
+    ja: "スタンドアップ中型コスト最適化1のリグを使用することで、ストラクチャのオペレーターはアップウェルストラクチャで発明を行う際に必要なコストを減少させ\
+      ることができます。スタンドアップは、アップウェルテクノロジーにより建造されたストラクチャの適切なスロットに挿入した場合に統合テンプレートソフトウェア、ナ\
+      ノアセンブラー施設、ナノ物質を持つ自立式ナノ集合体ストラクチャデバイス（アップウェル）を使用して、様々なサービスモジュール、ストラクチャモデル、そしてス\
+      トラクチャリグを作り出すことができる独自システムである。\n注： Techが両方とも異なるものであっても、1つのストラクチャには同じタイプのリグを複数装\
+      備することはできない。"
+    ko: "스탠드업 리그를 장착하면 업웰 구조물의 인벤션 연구비용이 감소합니다. <br><br>스탠드업은 자율구조형 나노어셈블러 장치(업웰)를\
+      \ 사용하는 시스템으로 템플릿 소프트웨어가 내장되어 있으며 나노어셈블리 배열, 충분한 양의 나노물질이 탑재돼있습니다. 업웰 기반 구조물에\
+      \ 장착 시 다양한 종류의 서비스 모듈, 구조물 모듈, 구조물 장착형 리그를 제조할 수 있습니다. 참고: 테크 레벨과 상관없이 동일한 종\
+      류의 리그는 한 개 이상 장착할 수 없습니다."
+    ru: "Этот стационар-модификатор первой техкатегории позволяет снизить стоимост\
+      ь проектов по модернизации, если сооружение, где ведётся соответствующий про\
+      ект, разработано консорциумом «Апвелл» и оснащено этим модулем.\n\n\n\nСТАЦИ\
+      ОНАР — это проприетарная система: её название представляет собой акроним осн\
+      овного компонента системы. Стационарный автономный центральный инженерно-орг\
+      анизующий наносборщик «Апвелл» содержит интегрированный шаблон программного\
+      \ обеспечения, линию наносборщиков и достаточное количество наномассы для сб\
+      орки различных модулей технического обслуживания, модулей и тюнинг-модулей д\
+      ля сооружений, которые устанавливаются в подходящие разъёмы на сооружениях,\
+      \ сконструированных по проектам консорциума «Апвелл».\n\n\n\nВнимание: однов\
+      ременно сооружение можно оснастить только одним модификатором этого типа, не\
+      зависимо от вариаций техкатегории."
+    zh: "屹立中型发明成本优化 I 改装件让建筑操作员能够降低在昇威建筑中进行发明的费用要求。\n\n\n\n屹立专用系统采用了昇威建筑分控纳米装配装置，由\
+      集成模版软件、纳米装配阵列和许多纳米块体构成。安装在采用昇威科技建造的建筑上的专门槽位中可以制造各种服务装备、建筑装备和建筑改装件。\n\n\n\n注：\
+      只能同时在一个建筑上装配一件相同类型的改装件，包括衍生型号在内。"
+  groupID: 1842
+  iconID: 21729
+  marketGroupID: 2347
+  mass: 200
+  metaGroupID: 54
+  name:
+    de: "Standup M-Set Invention Cost Optimization I"
+    en: "Standup M-Set Invention Cost Optimization I"
+    es: "Optimización de coste en invención Standup\_I\_(M)"
+    fr: "Optimisation des coûts d'invention 'Standup' I M"
+    ja: "スタンドアップ中型発明コスト最適化I"
+    ko: "스탠드업 M-Set 인벤션 비용 최적화 장치 I"
+    ru: "Standup M-Set Invention Cost Optimization I"
+    zh: "屹立中型发明成本优化 I"
+  portionSize: 1
+  published: true
+  radius: 100
+  volume: 10
+"43729":
+  description:
+    de: "Die Standup-L-Set-Modifikation Optimierung von Blaupausenkopien II bietet\
+      \ Strukturadministratoren die Möglichkeit, in ihren Upwell-Strukturen Kosten-\
+      \ und Zeitanforderungen für die Anfertigung von Blaupausenkopien zu verringern.\n\
+      \n\n\nStandup ist ein gesetzlich geschütztes System, welches eine Strukturautonome\
+      \ Nanofertigungseinheit (Upwell) nutzt, das eine integrierte Vorlagensoftware,\
+      \ eine Nanofertigungsanlage und ausreichend Nanomasse enthält, um die Fertigung\
+      \ einer Vielzahl an Dienstmodulen, Strukturmodulen und Strukturmodifikationen\
+      \ zu ermöglichen, wenn es in entsprechende Slots in einer Struktur mit Upwell-Technologie\
+      \ eingebaut wird.\n\n\n\nHinweis: Nur eine Modifikation desselben Typs, inkl.\
+      \ beider Tech-Varianten, kann in eine Struktur eingebaut sein."
+    en: "The Standup L-Set Blueprint Copy Optimization I rig provides a means for\
+      \ structure operators to decrease both cost and time requirements for copying\
+      \ blueprints in their Upwell structures.\r\n\r\nStandup is a proprietary system\
+      \ that uses a Structure Autonomous Nanoassembly Device (Upwell) containing integrated\
+      \ template software, a nanoassembler array and sufficient nanomass to enable\
+      \ the construction of a variety of service modules, structure modules and structure\
+      \ rigs when inserted into the appropriate slots on a structure built with Upwell\
+      \ technology.\r\n\r\nNote: Only one rig of the same type, counting both tech\
+      \ variations, may be fitted at the same time on a structure."
+    es: "El complemento Standup grande de optimización de copia de planos\_I permite\
+      \ a los administradores de estructuras reducir los costes y el tiempo requeridos\
+      \ para copiar planos en sus estructuras de Upwell.\n\n\n\nStandup es un sistema\
+      \ patentado que utiliza un dispositivo de nanoensamblaje autónomo estructural\
+      \ (de Upwell) que contiene una plantilla integrada de software, una matriz de\
+      \ nanoensambladores y suficiente nanomasa como para construir una serie de mó\
+      dulos de servicio, de estructura y complementos de estructura cuando se insertan\
+      \ en las ranuras apropiadas en una estructura construida con la tecnología de\
+      \ Upwell.\n\n\n\nAviso: Solo se puede equipar un complemento del mismo tipo\
+      \ en una estructura, contando ambas variaciones tecnológicas."
+    fr: "L'optimisation de copie de plan de construction 'Standup' I L permet aux\
+      \ opérateurs de structure Upwell de réduire le coût financier et la durée de\
+      \ copie des plans de construction.\n\n\n\nLa technologie brevetée 'Standup'\
+      \ exploite un dispositif autonome de nano-assemblage pour structure Upwell,\
+      \ alliant un logiciel de modélisation intégré, une baie de nano-assemblage et\
+      \ une réserve de nanomasse. Une fois insérés dans les emplacements dédiés sur\
+      \ les structures Upwell, les dispositifs 'Standup' lancent directement l'assemblage\
+      \ moléculaire de divers modules de services, modules de structure et optimisations\
+      \ de structure.\n\n\n\nRemarque : une structure ne peut équiper qu'une seule\
+      \ optimisation du même type, déclinaisons de tech comprises."
+    ja: "スタンドアップ大型ブループリントコピー最適化1のリグを使用することで、ストラクチャのオペレーターはアップウェルストラクチャでブループリントの複製を\
+      行う際に必要なコストと時間を減少させることができます。スタンドアップは、アップウェルテクノロジーにより建造されたストラクチャの適切なスロットに挿入した場\
+      合に統合テンプレートソフトウェア、ナノアセンブラー施設、ナノ物質を持つ自立式ナノ集合体ストラクチャデバイス（アップウェル）を使用して、様々なサービスモジ\
+      ュール、ストラクチャモデル、そしてストラクチャリグを作り出すことができる独自システムである。\n注： Techが両方とも異なるものであっても、1つのスト\
+      ラクチャには同じタイプのリグを複数装備することはできない。"
+    ko: "스탠드업 리그를 장착하면 업웰 구조물의 블루프린트 복제에 드는 비용과 시간이 감소합니다. <br><br>스탠드업은 자율구조형 나노어\
+      셈블러 장치(업웰)를 사용하는 시스템으로 템플릿 소프트웨어가 내장되어 있으며 나노어셈블리 배열, 충분한 양의 나노물질이 탑재돼있습니다.\
+      \ 업웰 기반 구조물에 장착 시 다양한 종류의 서비스 모듈, 구조물 모듈, 구조물 장착형 리그를 제조할 수 있습니다. <br><br>참고\
+      : 테크 레벨과 상관없이 동일한 종류의 리그는 한 개 이상 장착할 수 없습니다."
+    ru: "Этот стационар-модификатор второй техкатегории позволяет снизить стоимост\
+      ь и расход времени на копирование чертежей, если сооружение, где ведётся соо\
+      тветствующий проект, разработано консорциумом «Апвелл» и оснащено этим модул\
+      ем.\n\n\n\nСТАЦИОНАР — это проприетарная система: её название представляет с\
+      обой акроним основного компонента системы. Стационарный автономный центральн\
+      ый инженерно-организующий наносборщик «Апвелл» содержит интегрированный шабл\
+      он программного обеспечения, линию наносборщиков и достаточное количество на\
+      номассы для сборки различных модулей технического обслуживания, модулей и тю\
+      нинг-модулей для сооружений, которые устанавливаются в подходящие разъёмы на\
+      \ сооружениях, сконструированных по проектам консорциума «Апвелл».\n\n\n\nВн\
+      имание: одновременно сооружение можно оснастить только одним модификатором э\
+      того типа, независимо от вариаций техкатегории."
+    zh: "屹立大型蓝图拷贝优化 I 改装件让建筑操作员能够降低在昇威建筑中拷贝蓝图的费用和时间要求。\n\n\n\n屹立专用系统采用了昇威建筑分控纳米装配装\
+      置，由集成模版软件、纳米装配阵列和许多纳米块体构成。安装在采用昇威科技建造的建筑上的专门槽位中可以制造各种服务装备、建筑装备和建筑改装件。\n\n\n\n\
+      注：只能同时在一个建筑上装配一件相同类型的改装件，包括衍生型号在内。"
+  groupID: 1866
+  iconID: 21729
+  marketGroupID: 2348
+  mass: 200
+  metaGroupID: 54
+  name:
+    de: "Standup L-Set Blueprint Copy Optimization I"
+    en: "Standup L-Set Blueprint Copy Optimization I"
+    es: "Optimización de copia de plano Standup (G)\_I"
+    fr: "Optimisation des coûts de copie des plans de construction 'Standup' I L"
+    ja: "スタンドアップ大型設計図コピー最適化I"
+    ko: "스탠드업 L-Set 블루프린트 복제 최적화 I"
+    ru: "Standup L-Set Blueprint Copy Optimization I"
+    zh: "屹立大型蓝图拷贝优化 I"
+  portionSize: 1
+  published: true
+  radius: 100
+  volume: 20
+"43891":
+  description:
+    de: "Die Standup-M-Set-Modifikation Kostenoptimierung für Blaupausenkopien I bietet\
+      \ Strukturadministratoren die Möglichkeit, in ihren Upwell-Strukturen die Kostenanforderungen\
+      \ für Kopien zu verringern.\n\n\n\nStandup ist ein gesetzlich geschütztes System,\
+      \ welches eine Strukturautonome Nanofertigungseinheit (Upwell) nutzt, das eine\
+      \ integrierte Vorlagensoftware, eine Nanofertigungsanlage und ausreichend Nanomasse\
+      \ enthält, um die Fertigung einer Vielzahl an Dienstmodulen, Strukturmodulen\
+      \ und Strukturmodifikationen zu ermöglichen, wenn es in entsprechende Slots\
+      \ in einer Struktur mit Upwell-Technologie eingebaut wird.\n\n\n\nHinweis: Nur\
+      \ eine Modifikation desselben Typs, inkl. beider Tech-Varianten, kann in eine\
+      \ Struktur eingebaut sein."
+    en: "The Standup M-Set Blueprint Copy Cost Optimization I rig provides a means\
+      \ for structure operators to decrease cost requirements when copying in their\
+      \ Upwell structures.\r\n\r\nStandup is a proprietary system that uses a Structure\
+      \ Autonomous Nanoassembly Device (Upwell) containing integrated template software,\
+      \ a nanoassembler array and sufficient nanomass to enable the construction of\
+      \ a variety of service modules, structure modules and structure rigs when inserted\
+      \ into the appropriate slots on a structure built with Upwell technology.\r\n\
+      \r\nNote: Only one rig of the same type, counting both tech variations, may\
+      \ be fitted at the same time on a structure."
+    es: "El complemento Standup mediano de optimización de coste de copia de planos\_\
+      I permite a los administradores de estructuras disminuir el tiempo requerido\
+      \ para copiar sus estructuras de Upwell.\n\n\n\nStandup es un sistema patentado\
+      \ que utiliza un dispositivo de nanoensamblaje autónomo estructural (de Upwell)\
+      \ que contiene una plantilla integrada de software, una matriz de nanoensambladores\
+      \ y suficiente nanomasa como para construir una serie de módulos de servicio,\
+      \ de estructura y complementos de estructura cuando se insertan en las ranuras\
+      \ apropiadas en una estructura construida con la tecnología de Upwell.\n\n\n\
+      \nAviso: Solo se puede equipar un complemento del mismo tipo en una estructura,\
+      \ contando ambas variaciones tecnológicas."
+    fr: "L'optimisation des coûts de copie des plans de construction 'Standup'\_I\_\
+      M permet aux opérateurs de structure Upwell de réduire le coût financier des\
+      \ copies de plans de construction.\n\n\n\nLa technologie brevetée 'Standup'\
+      \ exploite un dispositif autonome de nano-assemblage pour structure Upwell,\
+      \ alliant un logiciel de modélisation intégré, une baie de nano-assemblage et\
+      \ une réserve de nanomasse. Une fois insérés dans les emplacements dédiés sur\
+      \ les structures Upwell, les dispositifs 'Standup' lancent directement l'assemblage\
+      \ moléculaire de divers modules de services, modules de structure et optimisations\
+      \ de structure.\n\n\n\nRemarque\_: une structure ne peut équiper qu'une seule\
+      \ optimisation du même type, déclinaisons de tech comprises."
+    ja: "スタンドアップ中型ブループリントコピーコスト最適化1のリグを使用することで、ストラクチャのオペレーターはアップウェルストラクチャで複製を行う際に必\
+      要なコストを減少させることができます。スタンドアップは、アップウェルテクノロジーにより建造されたストラクチャの適切なスロットに挿入した場合に統合テンプレ\
+      ートソフトウェア、ナノアセンブラー施設、ナノ物質を持つ自立式ナノ集合体ストラクチャデバイス（アップウェル）を使用して、様々なサービスモジュール、ストラク\
+      チャモデル、そしてストラクチャリグを作り出すことができる独自システムである。\n注： Techが両方とも異なるものであっても、1つのストラクチャには同じ\
+      タイプのリグを複数装備することはできない。"
+    ko: "스탠드업 리그를 장착하면 업웰 구조물의 블루프린트 복제에 소모되는 비용이 감소합니다. <br><br>스탠드업은 자율구조형 나노어셈블\
+      러 장치(업웰)를 사용하는 시스템으로 템플릿 소프트웨어가 내장되어 있으며 나노어셈블리 배열, 충분한 양의 나노물질이 탑재돼있습니다. 업웰\
+      \ 기반 구조물에 장착 시 다양한 종류의 서비스 모듈, 구조물 모듈, 구조물 장착형 리그를 제조할 수 있습니다. 참고: 테크 레벨과 상관\
+      없이 동일한 종류의 리그는 한 개 이상 장착할 수 없습니다."
+    ru: "Этот стационар-модификатор первой техкатегории позволяет снизить стоимост\
+      ь копирования чертежей, если сооружение, где ведётся соответствующий проект\
+      , разработано консорциумом «Апвелл» и оснащено этим модулем.\n\n\n\nСТАЦИОНА\
+      Р — это проприетарная система: её название представляет собой акроним основн\
+      ого компонента системы. Стационарный автономный центральный инженерно-органи\
+      зующий наносборщик «Апвелл» содержит интегрированный шаблон программного обе\
+      спечения, линию наносборщиков и достаточное количество наномассы для сборки\
+      \ различных модулей технического обслуживания, модулей и тюнинг-модулей для\
+      \ сооружений, которые устанавливаются в подходящие разъёмы на сооружениях, с\
+      конструированных по проектам консорциума «Апвелл».\n\n\n\nВнимание: одноврем\
+      енно сооружение можно оснастить только одним модификатором этого типа, незав\
+      исимо от вариаций техкатегории."
+    zh: "屹立中型蓝图拷贝成本优化 I 改装件让建筑操作员能够降低在昇威建筑中拷贝蓝图的费用要求。\n\n\n\n屹立专用系统采用了昇威建筑分控纳米装配装置\
+      ，由集成模版软件、纳米装配阵列和许多纳米块体构成。安装在采用昇威科技建造的建筑上的专门槽位中可以制造各种服务装备、建筑装备和建筑改装件。\n\n\n\n\
+      注：只能同时在一个建筑上装配一件相同类型的改装件，包括衍生型号在内。"
+  groupID: 1848
+  iconID: 21729
+  marketGroupID: 2347
+  mass: 200
+  metaGroupID: 54
+  name:
+    de: "Standup M-Set Blueprint Copy Cost Optimization I"
+    en: "Standup M-Set Blueprint Copy Cost Optimization I"
+    es: "Optimización de coste de copia de planos Standup\_I (M)"
+    fr: "Optimisation des coûts de copie des plans de construction 'Standup' I M"
+    ja: "スタンドアップ中型設計図コピーコスト最適化I"
+    ko: "스탠드업 M-Set 블루프린트 복제 비용 최적화 장치 I"
+    ru: "Standup M-Set Blueprint Copy Cost Optimization I"
+    zh: "屹立中型蓝图拷贝成本优化 I"
+  portionSize: 1
+  published: true
+  radius: 100
+  volume: 10
+"43714":
+  description:
+    de: "Die Standup-L-Set-Modifikation Herstellungseffizienz für gewöhnliche kleine\
+      \ Schiffe I bietet Strukturadministratoren die Möglichkeit, in ihren Upwell-Strukturen\
+      \ Material- und Zeitanforderungen für die Herstellung von Fregatten, Zerstö\
+      rern und Shuttles zu verringern.\n\n\n\nStandup ist ein gesetzlich geschütztes\
+      \ System, welches eine Strukturautonome Nanofertigungseinheit (Upwell) nutzt,\
+      \ das eine integrierte Vorlagensoftware, eine Nanofertigungsanlage und ausreichend\
+      \ Nanomasse enthält, um die Fertigung einer Vielzahl an Dienstmodulen, Strukturmodulen\
+      \ und Strukturmodifikationen zu ermöglichen, wenn es in entsprechende Slots\
+      \ in einer Struktur mit Upwell-Technologie eingebaut wird.\n\n\n\nHinweis: Nur\
+      \ eine Modifikation desselben Typs, inkl. beider Tech-Varianten, kann in eine\
+      \ Struktur eingebaut sein."
+    en: "The Standup L-Set Basic Small Ship Manufacturing Efficiency I rig provides\
+      \ a means for structure operators to decrease both material and time requirements\
+      \ for manufacturing frigates, destroyers and shuttles in their Upwell structures.\r\
+      \n\r\nStandup is a proprietary system that uses a Structure Autonomous Nanoassembly\
+      \ Device (Upwell) containing integrated template software, a nanoassembler array\
+      \ and sufficient nanomass to enable the construction of a variety of service\
+      \ modules, structure modules and structure rigs when inserted into the appropriate\
+      \ slots on a structure built with Upwell technology.\r\n\r\nNote: Only one rig\
+      \ of the same type, counting both tech variations, may be fitted at the same\
+      \ time on a structure."
+    es: "El complemento Standup grande de eficiencia en la fabricación de naves pequeñ\
+      as con tecnología básica\_I permite a los administradores de estructuras reducir\
+      \ los materiales y el tiempo requeridos para la fabricación de fragatas, destructores\
+      \ y lanzaderas en las estructuras de Upwell.\n\n\n\nStandup es un sistema patentado\
+      \ que utiliza un dispositivo de nanoensamblaje autónomo estructural (de Upwell)\
+      \ que contiene una plantilla integrada de software, una matriz de nanoensambladores\
+      \ y suficiente nanomasa como para construir una serie de módulos de servicio,\
+      \ de estructura y complementos de estructura cuando se insertan en las ranuras\
+      \ apropiadas en una estructura construida con la tecnología de Upwell.\n\n\n\
+      \nAviso: Solo se puede equipar un complemento del mismo tipo en una estructura,\
+      \ contando ambas variaciones tecnológicas."
+    fr: "L'optimisation d'efficience industrielle de la production de petits vaisseaux\
+      \ standards 'Standup' I L permet aux opérateurs de structure Upwell d'améliorer\
+      \ la productivité horaire et matérielle des lignes de production de frégates,\
+      \ de destroyers et de navettes.\n\n\n\nLa technologie brevetée 'Standup' exploite\
+      \ un dispositif autonome de nano-assemblage pour structure Upwell, alliant un\
+      \ logiciel de modélisation intégré, une baie de nano-assemblage et une réserve\
+      \ de nanomasse. Une fois insérés dans les emplacements dédiés sur les structures\
+      \ Upwell, les dispositifs 'Standup' lancent directement l'assemblage moléculaire\
+      \ de divers modules de services, modules de structure et optimisations de structure.\n\
+      \n\n\nRemarque : une structure ne peut équiper qu'une seule optimisation du\
+      \ même type, déclinaisons de tech comprises."
+    ja: "スタンドアップ大型標準小型艦製造効率1のリグを使用することで、ストラクチャのオペレーターはアップウェルストラクチャでフリゲート、駆逐艦、シャトルを\
+      製造する際に必要な材料と時間を減少させることができます。スタンドアップは、アップウェルテクノロジーにより建造されたストラクチャの適切なスロットに挿入した\
+      場合に統合テンプレートソフトウェア、ナノアセンブラー施設、ナノ物質を持つ自立式ナノ集合体ストラクチャデバイス（アップウェル）を使用して、様々なサービスモ\
+      ジュール、ストラクチャモデル、そしてストラクチャリグを作り出すことができる独自システムである。\n注： Techが両方とも異なるものであっても、1つのス\
+      トラクチャには同じタイプのリグを複数装備することはできない。"
+    ko: "스탠드업 리그를 장착하면 업웰 구조물에서 제작되는 프리깃, 디스트로이어, 셔틀의 재료 소모량과 제조 시간이 감소합니다. <br><br>스\
+      탠드업은 자율구조형 나노어셈블러 장치(업웰)를 사용하는 시스템으로 템플릿 소프트웨어가 내장되어 있으며 나노어셈블리 배열, 충분한 양의 나\
+      노물질이 탑재돼있습니다. 업웰 기반 구조물에 장착 시 다양한 종류의 서비스 모듈, 구조물 모듈, 구조물 장착형 리그를 제조할 수 있습니다\
+      . 참고: 테크 레벨과 상관없이 동일한 종류의 리그는 한 개 이상 장착할 수 없습니다."
+    ru: "Этот стационар-модификатор первой техкатегории позволяет одновременно пов\
+      ысить материалоэффективность и снизить расход времени на производство фрегат\
+      ов, эсминцев и катеров, если сооружение, где ведётся соответствующий проект\
+      , разработано консорциумом «Апвелл» и оснащено этим модулем.\n\n\n\nСТАЦИОНА\
+      Р — это проприетарная система: её название представляет собой акроним основн\
+      ого компонента системы. Стационарный автономный центральный инженерно-органи\
+      зующий наносборщик «Апвелл» содержит интегрированный шаблон программного обе\
+      спечения, линию наносборщиков и достаточное количество наномассы для сборки\
+      \ различных модулей технического обслуживания, модулей и тюнинг-модулей для\
+      \ сооружений, которые устанавливаются в подходящие разъёмы на сооружениях, с\
+      конструированных по проектам консорциума «Апвелл».\n\n\n\nВнимание: одноврем\
+      енно сооружение можно оснастить только одним модификатором этого типа, незав\
+      исимо от вариаций техкатегории."
+    zh: "屹立大型基础小型舰船制造效率 I 改装件让建筑操作员能够降低在昇威建筑中制造护卫舰、驱逐舰和穿梭机的材料和时间要求。\n\n\n\n屹立专用系统采\
+      用了昇威建筑分控纳米装配装置，由集成模版软件、纳米装配阵列和许多纳米块体构成。安装在采用昇威科技建造的建筑上的专门槽位中可以制造各种服务装备、建筑装备和\
+      建筑改装件。\n\n\n\n注：只能同时在一个建筑上装配一件相同类型的改装件，包括衍生型号在内。"
+  groupID: 1853
+  iconID: 21729
+  marketGroupID: 2348
+  mass: 200
+  metaGroupID: 54
+  name:
+    de: "Standup L-Set Basic Small Ship Manufacturing Efficiency I"
+    en: "Standup L-Set Basic Small Ship Manufacturing Efficiency I"
+    es: "Eficiencia en la fabricación de naves básicas pequeñas Standup\_I\_(G)"
+    fr: "Efficience industrielle de la production de petits vaisseaux standards 'Standup'\
+      \ I L"
+    ja: "スタンドアップ大型標準小型艦製造効率I"
+    ko: "스탠드업 L-Set 기본 소형 함선 제작 효율성 장치 I"
+    ru: "Standup L-Set Basic Small Ship Manufacturing Efficiency I"
+    zh: "屹立大型基础小型舰船制造效率 I"
+  portionSize: 1
+  published: true
+  radius: 100
+  volume: 20
+"37152":
+  description:
+    de: "Die Standup-M-Set-Modifikation Materialeffizienz für die Herstellung von\
+      \ gewöhnlichen großen Schiffe II bietet Strukturadministratoren die Möglichkeit,\
+      \ in ihren Upwell-Strukturen Materialanforderungen für die Herstellung von Schlachtschiffen,\
+      \ Frachtern und Industrie-Kommandoschiffen zu verringern.\n\n\n\nStandup ist\
+      \ ein gesetzlich geschütztes System, welches eine Strukturautonome Nanofertigungseinheit\
+      \ (Upwell) nutzt, das eine integrierte Vorlagensoftware, eine Nanofertigungsanlage\
+      \ und ausreichend Nanomasse enthält, um die Fertigung einer Vielzahl an Dienstmodulen,\
+      \ Strukturmodulen und Strukturmodifikationen zu ermöglichen, wenn es in entsprechende\
+      \ Slots in einer Struktur mit Upwell-Technologie eingebaut wird.\n\n\n\nHinweis:\
+      \ Nur eine Modifikation desselben Typs, inkl. beider Tech-Varianten, kann in\
+      \ eine Struktur eingebaut sein."
+    en: "The Standup M-Set Basic Large Ship Manufacturing Material Efficiency II rig\
+      \ provides a means for structure operators to decrease material requirements\
+      \ for manufacturing battleships, freighters and industrial command ships in\
+      \ their Upwell structures.\r\n\r\nStandup is a proprietary system that uses\
+      \ a Structure Autonomous Nanoassembly Device (Upwell) containing integrated\
+      \ template software, a nanoassembler array and sufficient nanomass to enable\
+      \ the construction of a variety of service modules, structure modules and structure\
+      \ rigs when inserted into the appropriate slots on a structure built with Upwell\
+      \ technology.\r\n\r\nNote: Only one rig of the same type, counting both tech\
+      \ variations, may be fitted at the same time on a structure."
+    es: "El complemento Standup mediano de eficiencia de materiales en la fabricació\
+      n de naves grandes con tecnología básica\_II permite a los administradores de\
+      \ estructuras reducir los materiales requeridos para la fabricación de acorazados,\
+      \ cargueros y naves de mando industriales en sus estructuras de Upwell.\n\n\n\
+      \nStandup es un sistema patentado que utiliza un dispositivo de nanoensamblaje\
+      \ autónomo estructural (de Upwell) que contiene una plantilla integrada de software,\
+      \ una matriz de nanoensambladores y suficiente nanomasa como para construir\
+      \ una serie de módulos de servicio, de estructura y complementos de estructura\
+      \ cuando se insertan en las ranuras apropiadas en una estructura construida\
+      \ con la tecnología de Upwell.\n\n\n\nAviso: Solo se puede equipar un complemento\
+      \ del mismo tipo en una estructura, contando ambas variaciones tecnológicas."
+    fr: "L'optimisation de productivité matérielle de la production de grands vaisseaux\
+      \ standards 'Standup' II M permet aux opérateurs de structure Upwell d'améliorer\
+      \ la productivité matérielle des lignes de production de cuirassés, de cargos\
+      \ et de vaisseaux de commandement industriel.\n\n\n\nLa technologie breveté\
+      e 'Standup' exploite un dispositif autonome de nano-assemblage pour structure\
+      \ Upwell, alliant un logiciel de modélisation intégré, une baie de nano-assemblage\
+      \ et une réserve de nanomasse. Une fois insérés dans les emplacements dédié\
+      s sur les structures Upwell, les dispositifs 'Standup' lancent directement l'assemblage\
+      \ moléculaire de divers modules de services, modules de structure et optimisations\
+      \ de structure.\n\n\n\nRemarque : une structure ne peut équiper qu'une seule\
+      \ optimisation du même type, déclinaisons de tech comprises."
+    ja: "スタンドアップ中型標準大型艦製造材料効率2のリグを使用することで、ストラクチャのオペレーターはアップウェルストラクチャで戦艦、超大型輸送艦、指揮型\
+      輸送艦を製造する際に必要な材料を減少させることができます。スタンドアップは、アップウェルテクノロジーにより建造されたストラクチャの適切なスロットに挿入し\
+      た場合に統合テンプレートソフトウェア、ナノアセンブラー施設、ナノ物質を持つ自立式ナノ集合体ストラクチャデバイス（アップウェル）を使用して、様々なサービス\
+      モジュール、ストラクチャモデル、そしてストラクチャリグを作り出すことができる独自システムである。\n注： Techが両方とも異なるものであっても、1つの\
+      ストラクチャには同じタイプのリグを複数装備することはできない。"
+    ko: "스탠드업 리그를 장착하면 업웰 구조물에서 제작되는 배틀쉽, 프레이터, 인더스트리얼 커맨드쉽의 자원요구치가 감소합니다. <br><br>스\
+      탠드업은 자율구조형 나노어셈블러 장치(업웰)를 사용하는 시스템으로 템플릿 소프트웨어가 내장되어 있으며 나노어셈블리 배열, 충분한 양의 나\
+      노물질이 탑재돼있습니다. 업웰 기반 구조물에 장착 시 다양한 종류의 서비스 모듈, 구조물 모듈, 구조물 장착형 리그를 제조할 수 있습니다\
+      . 참고: 테크 레벨과 상관없이 동일한 종류의 리그는 한 개 이상 장착할 수 없습니다."
+    ru: "Этот стационар-модификатор второй техкатегории позволяет повысить материа\
+      лоэффективность производства линкоров, фрейтеров и флагманов буровых флотили\
+      й, если сооружение, где ведётся соответствующий проект, разработано консорци\
+      умом «Апвелл» и оснащено этим модулем.\n\n\n\nСТАЦИОНАР — это проприетарная\
+      \ система: её название представляет собой акроним основного компонента систе\
+      мы. Стационарный автономный центральный инженерно-организующий наносборщик «\
+      Апвелл» содержит интегрированный шаблон программного обеспечения, линию нано\
+      сборщиков и достаточное количество наномассы для сборки различных модулей те\
+      хнического обслуживания, модулей и тюнинг-модулей для сооружений, которые ус\
+      танавливаются в подходящие разъёмы на сооружениях, сконструированных по прое\
+      ктам консорциума «Апвелл».\n\n\n\nВнимание: одновременно сооружение можно ос\
+      настить только одним модификатором этого типа, независимо от вариаций техкат\
+      егории."
+    zh: "屹立中型基础大型舰船制造材料效率 II 改装件让建筑操作员能够降低在昇威建筑中制造战列舰、货舰和工业指挥舰的材料要求。\n\n\n\n屹立专用系统\
+      采用了昇威建筑分控纳米装配装置，由集成模版软件、纳米装配阵列和许多纳米块体构成。安装在采用昇威科技建造的建筑上的专门槽位中可以制造各种服务装备、建筑装备\
+      和建筑改装件。\n\n\n\n注：只能同时在一个建筑上装配一件相同类型的改装件，包括衍生型号在内。"
+  groupID: 1828
+  iconID: 21729
+  marketGroupID: 2347
+  mass: 200
+  metaGroupID: 53
+  name:
+    de: "Standup M-Set Basic Large Ship Manufacturing Material Efficiency II"
+    en: "Standup M-Set Basic Large Ship Manufacturing Material Efficiency II"
+    es: "Eficiencia de materiales en la fabricación de naves grandes básicas Standup\
+      \ (M)\_II"
+    fr: "Productivité matérielle de la production de grands vaisseaux standards 'Standup'\
+      \ II M"
+    ja: "スタンドアップ中型標準大型艦製造資源効率II"
+    ko: "스탠드업 M-Set 기본 대형 함선 제작 자원효율성 장치 II"
+    ru: "Standup M-Set Basic Large Ship Manufacturing Material Efficiency II"
+    zh: "屹立中型基础大型舰船制造材料效率 II"
+  portionSize: 1
+  published: true
+  radius: 100
+  variationParentTypeID: 43732
+  volume: 10
+"43704":
+  description:
+    de: "Die Standup-XL-Set-Modifikation Herstellungseffizienz für Strukturen und\
+      \ Komponenten I bietet Strukturadministratoren die Möglichkeit, in ihren Upwell-Strukturen\
+      \ Material- und Zeitanforderungen für die Herstellung von Komponenten, Upwell-Strukturen,\
+      \ Strukturmodulen, Sternenbasis-Strukturen und Treibstoffblocks zu verringern.\n\
+      \nStandup ist ein gesetzlich geschütztes System, welches eine Strukturautonome\
+      \ Nanofertigungseinheit (Upwell) nutzt, das eine integrierte Vorlagensoftware,\
+      \ eine Nanofertigungsanlage und ausreichend Nanomasse enthält, um die Fertigung\
+      \ einer Vielzahl an Dienstmodulen, Strukturmodulen und Strukturmodifikationen\
+      \ zu ermöglichen, wenn es in entsprechende Slots in einer Struktur mit Upwell-Technologie\
+      \ eingebaut wird.\n\nHinweis: Nur eine Modifikation desselben Typs, inkl. Tech-Varianten,\
+      \ kann in eine Struktur eingebaut sein."
+    en: "The Standup XL-Set Structure and Component Manufacturing Efficiency I rig\
+      \ provides a means for structure operators to decrease both material and time\
+      \ requirements manufacturing components, Upwell structures, structure modules,\
+      \ starbase structures and fuel blocks in their Upwell structures.\n\nStandup\
+      \ is a proprietary system that uses a Structure Autonomous Nanoassembly Device\
+      \ (Upwell) containing integrated template software, a nanoassembler array and\
+      \ sufficient nanomass to enable the construction of a variety of service modules,\
+      \ structure modules and structure rigs when inserted into the appropriate slots\
+      \ on a structure built with Upwell technology.\n\nNote: Only one rig of the\
+      \ same type, counting tech variations, may be fitted at the same time on a structure."
+    es: "El complemento Standup extragrande de eficiencia en la fabricación de componentes\
+      \ y estructuras\_I permite a los administradores de estructuras reducir los\
+      \ materiales y el tiempo requeridos para fabricar componentes, estructuras de\
+      \ Upwell, módulos de estructuras, estructuras de bases estelares y bloques de\
+      \ combustible en sus estructuras de Upwell.\n\nStandup es un sistema patentado\
+      \ que utiliza un dispositivo de nanoensamblaje autónomo estructural (de Upwell)\
+      \ que contiene una plantilla integrada de software, una matriz de nanoensambladores\
+      \ y suficiente nanomasa como para construir una serie de módulos de servicio,\
+      \ de estructura y complementos de estructura cuando se insertan en las ranuras\
+      \ apropiadas en una estructura construida con la tecnología de Upwell.\n\nAviso:\
+      \ Solo se puede equipar un complemento del mismo tipo en una estructura, contando\
+      \ las variaciones tecnológicas."
+    fr: "L'optimisation d'efficience industrielle de la production de structures et\
+      \ de composants 'Standup' I XL permet aux opérateurs de structure Upwell d'amé\
+      liorer la productivité matérielle et horaire des lignes de production de composants,\
+      \ de structures Upwell, de modules de structure, de bases stellaires et de blocs\
+      \ de carburant.\n\nLa technologie brevetée 'Standup' exploite un dispositif\
+      \ autonome de nano-assemblage pour structure Upwell, alliant un logiciel de\
+      \ modélisation intégré, une baie de nano-assemblage et une réserve de nanomasse.\
+      \ Une fois insérés dans les emplacements dédiés sur les structures Upwell, les\
+      \ dispositifs 'Standup' lancent directement l'assemblage moléculaire de divers\
+      \ modules de services, modules de structure et optimisations de structure.\n\
+      \nRemarque : une seule optimisation du même type, y compris les déclinaisons\
+      \ de tech, peut être montée sur une structure à la fois."
+    ja: "スタンドアップ超大型ストラクチャ・部品製造効率Iリグを使用することで、ストラクチャのオペレーターはアップウェルストラクチャで部品、アップウェルスト\
+      ラクチャ、ストラクチャモジュール、スターベースストラクチャ、燃料ブロックを製造する際に必要な材料と時間を減少させることができる。\n\n「スタンドアップ\
+      」は、自律式ナノ集合体ストラクチャデバイス（アップウェル）を利用した独自システムである。アップウェルの技術を利用して建設されたストラクチャの適切なスロッ\
+      トに挿入すると、統合テンプレートソフトウェア、ナノアセンブラー施設、ナノ物質を使い、様々なサービスモジュール、ストラクチャモジュール、ストラクチャリグを\
+      作り出すことができる。\n\n注：異なる技術であっても、1つのストラクチャに同じタイプのリグを同時に複数装備させることはできない。"
+    ko: "스탠드업 리그를 장착하면 업웰 구조물에서 제작되는 부품, 업웰 구조물, 구조물 모듈, 스타베이스 구조물, 연료 블록의 자원요구치와\
+      \ 생산 시간이 감소합니다. <br><br>스탠드업은 자율구조형 나노어셈블러 장치(업웰)를 사용하는 시스템으로 템플릿 소프트웨어가 내장되\
+      어 있으며 나노어셈블리 배열, 충분한 양의 나노물질이 탑재돼있습니다. 업웰 기반 구조물에 장착 시 다양한 종류의 서비스 모듈, 구조물 모\
+      듈, 구조물 장착형 리그를 제조할 수 있습니다. 참고: 테크 레벨과 관계없이 동일한 종류의 리그는 한 개 이상 장착할 수 없습니다."
+    ru: "Этот стационар-модификатор первой техкатегории позволяет одновременно пов\
+      ысить материалоэффективность и снизить расход времени на производство компон\
+      ентов сооружений, самих сооружений, в том числе разработанных консорциумом «\
+      Апвелл», а также блоков ПОСов и топливных блоков, если сооружение, где ведёт\
+      ся соответствующий проект, разработано консорциумом «Апвелл» и оснащено этим\
+      \ модулем.\n\nСТАЦИОНАР — это проприетарная система: её название представляе\
+      т собой акроним основного компонента системы. Стационарный автономный центра\
+      льный инженерно-организующий наносборщик «Апвелл» содержит интегрированный ш\
+      аблон программного обеспечения, линию наносборщиков и достаточное количество\
+      \ наномассы для сборки различных модулей технического обслуживания, модулей\
+      \ и тюнинг-модулей для сооружений, которые устанавливаются в подходящие разъ\
+      ёмы на сооружениях, сконструированных по проектам консорциума «Апвелл».\n\nВ\
+      нимание: одновременно сооружение можно оснастить только одним тюнинг-модулем\
+      \ этого типа, независимо от его техкатегории."
+    zh: "屹立超大型建筑和组件制造效率 I 改装件让建筑操作员能够降低在昇威建筑中制造组件、昇威建筑、建筑装备、母星建筑和燃料块的材料和时间要求。\n\n屹\
+      立专用系统采用了昇威建筑分控纳米装配装置，由集成模版软件、纳米装配阵列和许多纳米块体构成。安装在采用昇威科技建造的建筑上的专门槽位中可以制造各种服务装备\
+      、建筑装备和建筑改装件。\n\n注：只能同时在一个建筑上装配一件相同类型的改装件，包括衍生型号在内。"
+  groupID: 1869
+  iconID: 21729
+  marketGroupID: 2349
+  mass: 200
+  metaGroupID: 54
+  name:
+    de: "Standup XL-Set Structure and Component Manufacturing Efficiency I"
+    en: "Standup XL-Set Structure and Component Manufacturing Efficiency I"
+    es: "Eficiencia en la fabricación de componentes y estructuras Standup\_I (XL)"
+    fr: "Efficience industrielle de la production de structures et de composants 'Standup'\
+      \ I XL"
+    ja: "スタンドアップ超大型ストラクチャおよびコンポーネント製造効率I"
+    ko: "스탠드업 XL-Set 구조물 및 부품 제조 효율성 장치 I"
+    ru: "Standup XL-Set Structure and Component Manufacturing Efficiency I"
+    zh: "屹立超大型建筑和组件制造效率 I"
+  portionSize: 1
+  published: true
+  radius: 100
+  volume: 40

@@ -10,3 +10,26 @@
     ru: "Корабль"
     zh: "舰船"
   published: true
+"66":
+  name:
+    de: "Strukturmodul"
+    en: "Structure Module"
+    es: "Módulo de estructura"
+    fr: "Module de structure"
+    ja: "ストラクチャモジュール"
+    ko: "구조물 모듈"
+    ru: "Блоки сооружений"
+    zh: "建筑装备"
+  published: true
+"23":
+  iconID: 0
+  name:
+    de: "Sternenbasis"
+    en: "Starbase"
+    es: "Base estelar"
+    fr: "Base stellaire"
+    ja: "スターベース"
+    ko: "스타베이스"
+    ru: "ПОСы"
+    zh: "母星"
+  published: true

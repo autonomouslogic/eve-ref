@@ -238,7 +238,8 @@ const cards: {[key: string]: any} = {
 					"rigSlots",
 					"upgradeSlotsLeft",
 					"rigSize",
-					"upgradeCapacity"
+					"upgradeCapacity",
+					"upgradeCost",
 				]
 		},
 	"playerStructure":
@@ -566,15 +567,6 @@ const cards: {[key: string]: any} = {
 					"asteroidMaxRadius"
 				]
 		},
-	"reprocessing":
-		{
-			"name": {"en": "Reprocessing"},
-			"component": "reprocessing",
-			"dogmaAttributes":
-				[
-					"reprocessingSkillType"
-				]
-		},
 	"planetInteraction":
 		{
 			"name": {"en": "Planetary Interaction"},
@@ -626,6 +618,31 @@ const cards: {[key: string]: any} = {
 		{
 			"name": {"en": "Reaction"},
 			"component": "blueprintReaction"
+		},
+	"engineeringRig":
+		{
+			"name": {"en": "Engineering Rig"},
+			"component": "engineeringRig",
+			"alwaysShow": true,
+			"dogmaAttributes":
+				[
+					"attributeEngRigTimeBonus",
+					"attributeEngRigMatBonus",
+					"attributeEngRigCostBonus",
+					"attributeAdvCompManufactureMaterialMultiplier",
+					"hiSecModifier",
+					"lowSecModifier",
+					"nullSecModifier"
+				]
+		},
+	"reprocessing":
+		{
+			"name": {"en": "Reprocessing"},
+			"component": "reprocessing",
+			"dogmaAttributes":
+				[
+					"reprocessingSkillType"
+				]
 		},
 	"industry":
 		{

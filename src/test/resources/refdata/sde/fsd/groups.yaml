@@ -63,3 +63,72 @@
     zh: "资源处理"
   published: true
   useBasePrice: true
+"513":
+  anchorable: false
+  anchored: false
+  categoryID: 6
+  fittableNonSingleton: false
+  iconID: 0
+  name:
+    de: "Frachter"
+    en: "Freighter"
+    es: "Carguero"
+    fr: "Transport de fret"
+    ja: "超大型輸送艦"
+    ko: "프레이터"
+    ru: "Фрейтер"
+    zh: "货舰"
+  published: true
+  useBasePrice: false
+"941":
+  anchorable: false
+  anchored: false
+  categoryID: 6
+  fittableNonSingleton: false
+  name:
+    de: "Industrial-Kommandoschiff"
+    en: "Industrial Command Ship"
+    es: "Nave de mando industrial"
+    fr: "Vaisseau de commandement industriel"
+    ja: "指揮型輸送艦"
+    ko: "인더스트리얼 커맨드쉽"
+    ru: "Флагман буровой флотилии"
+    zh: "工业指挥舰"
+  published: true
+  useBasePrice: false
+"1869":
+  anchorable: false
+  anchored: false
+  categoryID: 66
+  fittableNonSingleton: false
+  name:
+    de: "Struktur: Ingenieursanlage XL - Ausrüstungs- und Komponenteneffizienz"
+    en: "Structure Engineering Rig XL - Structure and Component Efficiency"
+    es: "Complemento de ingeniería para estructuras (XL): eficiencia de componente\
+      \ y estructura"
+    fr: "Optimisation d'ingénierie XL (Structure) – Efficience industrielle structures\
+      \ et composants"
+    ja: "ストラクチャエンジニアリングリグXL - ストラクチャとコンポーネント効率"
+    ko: "구조물 엔지니어링 리그 XL - 구조물 및 부품 효율성"
+    ru: "Промышленный модификатор сверхбольших сооружений - эффективность производ\
+      ства сооружений и компонентов"
+    zh: "建筑工程超大型改装件 - 建筑和组件效率"
+  published: true
+  useBasePrice: false
+"332":
+  anchorable: false
+  anchored: false
+  categoryID: 17
+  fittableNonSingleton: false
+  iconID: 0
+  name:
+    de: "Werkzeug"
+    en: "Tool"
+    es: "Herramienta"
+    fr: "Outil"
+    ja: "ツール"
+    ko: "도구"
+    ru: "Инструмент"
+    zh: "工具"
+  published: true
+  useBasePrice: false

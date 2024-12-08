@@ -1,0 +1,15 @@
+{
+  "name" : {
+    "de" : "Strukturmodul",
+    "en" : "Structure Module",
+    "es" : "Módulo de estructura",
+    "fr" : "Module de structure",
+    "ja" : "ストラクチャモジュール",
+    "ko" : "구조물 모듈",
+    "ru" : "Блоки сооружений",
+    "zh" : "建筑装备"
+  },
+  "published" : true,
+  "category_id" : 66,
+  "group_ids" : [ 1869 ]
+}

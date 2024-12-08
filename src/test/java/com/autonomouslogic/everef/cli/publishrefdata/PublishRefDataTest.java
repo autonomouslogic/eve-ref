@@ -190,10 +190,12 @@ public class PublishRefDataTest {
 		var path = String.format("base/%s/%s/bundle", config.getOutputFile(), id);
 		expectedKeys.add(path);
 
+		// Dominix
 		if (id == 645) {
 			assertBundle(
 					ExpectedBundleIds.builder()
-							.typeIds(List.of(645L, 22430L, 3336L, 3327L, 33097L, 3332L, 33093L, 3328L, 999L, 34L))
+							.typeIds(List.of(
+									645L, 22430L, 3336L, 3327L, 33097L, 3332L, 33093L, 3328L, 999L, 34L, 37152L))
 							.attributeIds(List.of(9L, 162L, 182L, 277L, 183L, 278L))
 							.skillIds(List.of(3336L, 3327L, 33097L, 3332L, 33093L, 3328L))
 							.unitIds(List.of(1L, 133L))
@@ -202,6 +204,38 @@ public class PublishRefDataTest {
 							.categoryIds(List.of(6L))
 							.groupIds(List.of(27L))
 							.metaGroupIds(List.of(1L, 2L))
+							.build(),
+					path);
+		}
+		// Standup M-Set Basic Large Ship Manufacturing Material Efficiency II
+		if (id == 37152) {
+			assertBundle(
+					ExpectedBundleIds.builder()
+							.typeIds(List.of(37152L))
+							.attributeIds(List.of(9L, 162L, 182L, 277L, 2355L))
+							.skillIds(List.of())
+							.unitIds(List.of(1L, 133L))
+							.iconIds(List.of(67L))
+							.marketGroupIds(List.of())
+							.categoryIds(List.of())
+							.groupIds(List.of(27L, 513L, 941L))
+							.metaGroupIds(List.of())
+							.build(),
+					path);
+		}
+		// Standup XL-Set Structure and Component Manufacturing Efficiency I
+		if (id == 43704) {
+			assertBundle(
+					ExpectedBundleIds.builder()
+							.typeIds(List.of(43704L))
+							.attributeIds(List.of(9L, 162L, 182L, 277L, 2355L))
+							.skillIds(List.of())
+							.unitIds(List.of(1L, 133L))
+							.iconIds(List.of(67L))
+							.marketGroupIds(List.of())
+							.categoryIds(List.of(66L, 23L))
+							.groupIds(List.of(1869L, 332L))
+							.metaGroupIds(List.of())
 							.build(),
 					path);
 		}
@@ -217,7 +251,7 @@ public class PublishRefDataTest {
 			assertBundle(
 					ExpectedBundleIds.builder()
 							.categoryIds(List.of(6L))
-							.groupIds(List.of(27L))
+							.groupIds(List.of(27L, 513L, 941L))
 							.build(),
 					path);
 		}
@@ -293,20 +327,20 @@ public class PublishRefDataTest {
 				.toList();
 		assertEquals(List.of(), unknownFields);
 
-		assertExpectedBundleIds(expectedBundleIds.getTypeIds(), actualItem, "types");
-		assertExpectedBundleIds(expectedBundleIds.getAttributeIds(), actualItem, "dogma_attributes");
-		assertExpectedBundleIds(expectedBundleIds.getSkillIds(), actualItem, "skills");
-		assertExpectedBundleIds(expectedBundleIds.getUnitIds(), actualItem, "units");
-		assertExpectedBundleIds(expectedBundleIds.getIconIds(), actualItem, "icons");
-		assertExpectedBundleIds(expectedBundleIds.getMarketGroupIds(), actualItem, "market_groups");
-		assertExpectedBundleIds(expectedBundleIds.getCategoryIds(), actualItem, "categories");
-		assertExpectedBundleIds(expectedBundleIds.getGroupIds(), actualItem, "groups");
-		assertExpectedBundleIds(expectedBundleIds.getMetaGroupIds(), actualItem, "meta_groups");
+		assertExpectedBundleIds(expectedBundleIds.getTypeIds(), actualItem, "types", path);
+		assertExpectedBundleIds(expectedBundleIds.getAttributeIds(), actualItem, "dogma_attributes", path);
+		assertExpectedBundleIds(expectedBundleIds.getSkillIds(), actualItem, "skills", path);
+		assertExpectedBundleIds(expectedBundleIds.getUnitIds(), actualItem, "units", path);
+		assertExpectedBundleIds(expectedBundleIds.getIconIds(), actualItem, "icons", path);
+		assertExpectedBundleIds(expectedBundleIds.getMarketGroupIds(), actualItem, "market_groups", path);
+		assertExpectedBundleIds(expectedBundleIds.getCategoryIds(), actualItem, "categories", path);
+		assertExpectedBundleIds(expectedBundleIds.getGroupIds(), actualItem, "groups", path);
+		assertExpectedBundleIds(expectedBundleIds.getMetaGroupIds(), actualItem, "meta_groups", path);
 
 		assertEquals(expectedBundle, actualItem);
 	}
 
-	private void assertExpectedBundleIds(List<Long> expectedIds, JsonNode bundle, String rootField) {
+	private void assertExpectedBundleIds(List<Long> expectedIds, JsonNode bundle, String rootField, String path) {
 		var expected = Optional.ofNullable(expectedIds).orElse(List.of()).stream()
 				.sorted()
 				.toList();
@@ -317,7 +351,7 @@ public class PublishRefDataTest {
 				.map(e -> Long.parseLong(e))
 				.sorted()
 				.toList();
-		assertEquals(expected, supplied, rootField);
+		assertEquals(expected, supplied, rootField + " on " + path);
 	}
 
 	private ObjectNode buildTestBundle(ExpectedBundleIds expectedBundleIds) {

@@ -1,0 +1,20 @@
+{
+  "anchorable" : false,
+  "anchored" : false,
+  "category_id" : 17,
+  "fittable_non_singleton" : false,
+  "icon_id" : 0,
+  "name" : {
+    "de" : "Werkzeug",
+    "en" : "Tool",
+    "es" : "Herramienta",
+    "fr" : "Outil",
+    "ja" : "ツール",
+    "ko" : "도구",
+    "ru" : "Инструмент",
+    "zh" : "工具"
+  },
+  "published" : true,
+  "use_base_price" : false,
+  "group_id" : 332
+}

@@ -1,10 +1,14 @@
 package com.autonomouslogic.everef.util;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.LongNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.Streams;
+import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 import lombok.NonNull;
 import org.apache.commons.lang3.StringUtils;
 
@@ -59,5 +63,19 @@ public class JsonUtil {
 
 	public static Optional<Long> getNonBlankLongField(@NonNull JsonNode node, @NonNull String field) {
 		return getNonBlankStringField(node, field).map(Long::parseLong);
+	}
+
+	public static void addToArraySetSorted(long num, ArrayNode array) {
+		addToArraySetSorted(List.of(num), array);
+	}
+
+	public static void addToArraySetSorted(Collection<Long> nums, ArrayNode array) {
+		var newNums = Stream.concat(
+						nums.stream(), Streams.stream(array.iterator()).map(JsonNode::asLong))
+				.distinct()
+				.sorted()
+				.toList();
+		array.removeAll();
+		newNums.forEach(array::add);
 	}
 }

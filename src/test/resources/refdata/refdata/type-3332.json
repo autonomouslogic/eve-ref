@@ -100,6 +100,7 @@
   "mass" : 0,
   "packaged_volume" : 0.01,
   "radius" : 1,
+  "category_id" : 16,
   "is_skill" : true,
   "required_skills" : {
     "3327" : 2,
