@@ -1,0 +1,15 @@
+{
+  "attribute_id" : 2355,
+  "default_value" : 1,
+  "description" : {
+    "en" : ""
+  },
+  "display_name" : {
+    "en" : "High Security Bonus Multiplier"
+  },
+  "high_is_good" : true,
+  "name" : "hiSecModifier",
+  "published" : true,
+  "stackable" : true,
+  "unit_id" : 104
+}

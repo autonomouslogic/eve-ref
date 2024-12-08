@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.reactivex.rxjava3.core.Flowable;
+import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
 import java.util.regex.Pattern;
@@ -257,7 +258,9 @@ public abstract class BundleRenderer implements RefDataRenderer {
 		if (json != null) {
 			groupsJson.set(Long.toString(groupId), json);
 			var group = objectMapper.convertValue(json, InventoryGroup.class);
-			bundleInventoryCategory(group.getCategoryId(), categoriesJson);
+			if (categoriesJson != null) {
+				bundleInventoryCategory(group.getCategoryId(), categoriesJson);
+			}
 		}
 	}
 
@@ -277,6 +280,19 @@ public abstract class BundleRenderer implements RefDataRenderer {
 			}
 			metaGroupsJson.set(Long.toString(groupId), groupJson);
 		});
+	}
+
+	protected void bundleEngineeringRigs(
+			InventoryType type, ObjectNode typesJson, ObjectNode categoriesJson, ObjectNode groupsJson) {
+		Optional.ofNullable(type.getEngineeringRigSourceTypeIds()).stream()
+				.flatMap(Collection::stream)
+				.forEach(id -> addTypeToBundle(id, typesJson));
+		Optional.ofNullable(type.getEngineeringRigAffectedCategoryIds()).stream()
+				.flatMap(Collection::stream)
+				.forEach(id -> bundleInventoryCategory(id, categoriesJson));
+		Optional.ofNullable(type.getEngineeringRigAffectedGroupIds()).stream()
+				.flatMap(Collection::stream)
+				.forEach(id -> bundleInventoryGroup(id, groupsJson, null));
 	}
 
 	protected void addTypeToBundle(Long typeId, ObjectNode typesJson) {

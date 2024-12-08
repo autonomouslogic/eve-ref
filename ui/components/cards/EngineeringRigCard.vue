@@ -66,7 +66,7 @@ var fields = computed(() => {
 
 			<AttributeListItem v-if="inventoryType.engineeringRigSourceTypeIds">
 				<template v-slot:key>
-					Rig types:
+					Source rigs:
 				</template>
 				<div v-for="typeId in inventoryType.engineeringRigSourceTypeIds" :key="typeId">
 					<TypeLink :type-id="typeId" />
