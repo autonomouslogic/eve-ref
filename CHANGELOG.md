@@ -1,5 +1,28 @@
 EVE Ref Changelog
 
+## [2.54.0](https://github.com/autonomouslogic/eve-ref/compare/2.53.9...2.54.0) (2024-12-08)
+
+
+### Features
+
+* Upwell structure rigs categories and groups ([#677](https://github.com/autonomouslogic/eve-ref/issues/677)) ([0545d2e](https://github.com/autonomouslogic/eve-ref/commit/0545d2e8a112859ee913ba2fb15ef075c07e5f4b))
+
+
+### Bug Fixes
+
+* **deps:** update dependency org.flywaydb:flyway-core to v11 ([#687](https://github.com/autonomouslogic/eve-ref/issues/687)) ([7eb14f0](https://github.com/autonomouslogic/eve-ref/commit/7eb14f0753bbc44c42546027f956a9d388c4ebfe))
+* **deps:** update flyway to v11 (major) ([#688](https://github.com/autonomouslogic/eve-ref/issues/688)) ([5802f5e](https://github.com/autonomouslogic/eve-ref/commit/5802f5edbd682e2fae9a635d8d28a4185b7c42f3))
+
+
+### Dependency Updates
+
+* **deps:** update codecov/codecov-action action to v5 ([#685](https://github.com/autonomouslogic/eve-ref/issues/685)) ([c4106bd](https://github.com/autonomouslogic/eve-ref/commit/c4106bd5e640d5f286274267a7db3e94b6e8b7a4))
+
+
+### Miscellaneous Chores
+
+* Added flyway to monorepo ([a9ba671](https://github.com/autonomouslogic/eve-ref/commit/a9ba671a94c0115700b98ced993ca6239e9d0bbf))
+
 ## [2.53.9](https://github.com/autonomouslogic/eve-ref/compare/2.53.8...2.53.9) (2024-12-04)
 
 
