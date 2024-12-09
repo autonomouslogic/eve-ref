@@ -24,7 +24,7 @@ import InternalLink from "~/components/helpers/InternalLink.vue";
 				<h2>EVE Ref</h2>
 				<ul>
 					<li><InternalLink to="/about">About</InternalLink></li>
-					<li><InternalLink to="/status">Status</InternalLink></li>
+					<li><ExternalLink url="https://status.everef.net/">Status</ExternalLink></li>
 					<li><ExternalLink url="https://docs.everef.net/">Docs</ExternalLink></li>
 					<li><ExternalLink url="https://docs.everef.net/datasets/">Data</ExternalLink></li>
 					<li><InternalLink to="/privacy">Privacy</InternalLink></li>
