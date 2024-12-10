@@ -4,8 +4,14 @@ const defaultMaxAge = Duration.fromISO("PT5M");
 const assetsMaxAge = Duration.fromISO("PT1H");
 
 export default defineEventHandler(event => {
+    const req = event.node.req;
     const res = event.node.res;
+    console.log("event", event);
+    // console.log("req", req);
+    // console.log("res", res);
+    console.log("req.headers.host", req.headers.host);
     console.log("res.statusCode", res.statusCode);
+    console.log("event.handled", event.handled);
     if (res.statusCode != 200) {
         return;
     }
