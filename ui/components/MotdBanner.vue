@@ -1,14 +1,15 @@
 <script setup lang="ts">
 import ExternalLink from "~/components/helpers/ExternalLink.vue";
 import {PATREON_URL} from "~/lib/urls";
+import InternalLink from "~/components/helpers/InternalLink.vue";
 
 const route = useRoute();
 const isIndex = computed(() => (route.name as string).startsWith("index"));
 
-const title = "Welcome to the new EVE Ref";
-const text = "The new version of EVE Ref has been in the works for over a year and I'm thrilled to finally release it.";
-const url = PATREON_URL;
-const urlText = "Support on Patreon";
+const title = "I'm giving away over 30 billion ISK";
+const text = "Let's celebrate the new year by helping me give away over 30 billion ISK in December.";
+const url = "/giveaways";
+const urlText = "Join Giveaway";
 </script>
 
 <template>
@@ -17,11 +18,11 @@ const urlText = "Support on Patreon";
 			<div class="py-8 px-4 mx-auto max-w-screen-xl grid">
 				<div class="text-center sm:text-left">
 					<h1 class="mb-4 text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight leading-none">{{title}}</h1>
-					<span class="hidden sm:block">
+					<span v-if="text" class="hidden sm:block">
 						<p class="mb-4">{{text}}</p>
 					</span>
 					<p class="mb-4 font-normal text-lg lg:text-xl">
-						<ExternalLink :url="url">{{urlText}} &raquo;</ExternalLink>
+						<InternalLink :to="url">{{urlText}} &raquo;</InternalLink>
 					</p>
 				</div>
 			</div>
