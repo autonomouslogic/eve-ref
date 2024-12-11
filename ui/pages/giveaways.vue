@@ -112,7 +112,12 @@ const totalWorth = unrolled.reduce((acc, prize) => acc + prize.worth, 0);
 	</p>
 	<p>
 		I'm giving away <Money :value="totalWorth" /> in December 2024.
+	</p>
+	<p>
 		Below is the approximate schedule of the upcoming giveaways.
+	</p>
+	<p>
+		Items will be contracted in Jita and codes will be sent on Discord and can be redeemed via the <ExternalLink url="https://secure.eveonline.com/code-activation">Code Activation</ExternalLink> page.
 	</p>
 
 	<h2>Schedule</h2>
