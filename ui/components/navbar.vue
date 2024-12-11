@@ -31,6 +31,9 @@ const localePath = useLocalePath();
 			</span>
 			<span class="flex-auto space-x-3 text-right">
 				<span>
+					<InternalLink to="/giveaways">Giveaways</InternalLink>
+				</span>
+				<span>
 					<ExternalLink :url="PATREON_URL" class="header-patreon whitespace-nowrap">
 						<span>
 							<font-awesome-icon icon="fa-brands fa-patreon"/>
