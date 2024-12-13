@@ -4,3 +4,4 @@ build/
 local.env
 node_modules/
 .kotlin/
+.profileconfig.json

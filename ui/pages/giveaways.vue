@@ -146,7 +146,7 @@ const totalWorth = unrolled.reduce((acc, prize) => acc + prize.worth, 0);
 						<template v-if="prize.dates[0].toMillis() - DateTime.now().toMillis() < DAY">
 							(today)
 						</template>
-						<template v-if="prize.dates[0].toMillis() - DateTime.now().toMillis() < 7 * DAY">
+						<template v-else-if="prize.dates[0].toMillis() - DateTime.now().toMillis() < 8 * DAY">
 							(next {{weekdays[prize.dates[0].weekday - 1]}})
 						</template>
 					</template>
