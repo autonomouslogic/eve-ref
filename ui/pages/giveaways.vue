@@ -29,9 +29,10 @@ useHead({
 
 interface Prize {
 	name: string,
-	worth: number,
 	typeId: number,
 	quantity: number,
+	winners: number,
+	value: number,
 	dates: DateTime[],
 	i: number
 }
@@ -49,7 +50,7 @@ for (let i = 0; i < 19; i++) {
 const prizes: Prize[] = [
 	{
 		name: "Weekend Fleet Pack (50x PLEX, 3 Day Omega)",
-		worth: (50 + 500 * 12 / 365 * 3) * plexPrice,
+		value: (50 + 500 * 12 / 365 * 3) * plexPrice,
 		dates: fleetPackDates
 	} as Prize,
 	{
@@ -64,7 +65,6 @@ const prizes: Prize[] = [
 	} as Prize,
 	{
 		typeId: LARGE_SKILL_INJECTOR,
-		quantity: 1,
 		dates: [
 			DateTime.fromISO("2024-12-14T20:00:00+09"),
 			DateTime.fromISO("2024-12-22T20:00:00+09"),
@@ -73,7 +73,7 @@ const prizes: Prize[] = [
 	} as Prize,
 	{
 		typeId: LARGE_SKILL_INJECTOR,
-		quantity: 5,
+		winners: 5,
 		dates: [
 			DateTime.fromISO("2024-12-31T20:00:00+09")
 		]
@@ -82,18 +82,25 @@ const prizes: Prize[] = [
 
 var i = 0;
 for (let prize of prizes) {
-	if (prize.worth == undefined && prize.typeId != undefined && prize.quantity > 0) {
+	if (prize.quantity == undefined) {
+		prize.quantity = 1;
+	}
+	if (prize.winners == undefined) {
+		prize.winners = 1;
+	}
+	if (prize.value == undefined && prize.typeId != undefined) {
 		const price = await getJitaSellPrice(prize.typeId) || 0;
-		prize.worth = price * prize.quantity;
+		prize.value = price * prize.quantity;
 	}
 }
 
 const unrolled = prizes.flatMap(prize => prize.dates.map(date => {
 	return ({
 		name: prize.name,
-		worth: prize.worth,
 		typeId: prize.typeId,
 		quantity: prize.quantity,
+		value: prize.value,
+		winners: prize.winners,
 		dates: [date],
 		i : i++
 	});
@@ -101,7 +108,7 @@ const unrolled = prizes.flatMap(prize => prize.dates.map(date => {
 
 unrolled.sort((a, b) => a.dates[0].toMillis() - b.dates[0].toMillis());
 
-const totalWorth = unrolled.reduce((acc, prize) => acc + prize.worth, 0);
+const totalWorth = unrolled.reduce((acc, prize) => acc + prize.value * prize.winners, 0);
 
 </script>
 
@@ -117,27 +124,32 @@ const totalWorth = unrolled.reduce((acc, prize) => acc + prize.worth, 0);
 		Below is the approximate schedule of the upcoming giveaways.
 	</p>
 	<p>
-		Items will be contracted in Jita and codes will be sent on Discord and can be redeemed via the <ExternalLink url="https://secure.eveonline.com/code-activation">Code Activation</ExternalLink> page.
+		Items will be contracted in Jita. Codes will be sent on Discord and can be redeemed via the <ExternalLink url="https://secure.eveonline.com/code-activation">Code Activation</ExternalLink> page.
 	</p>
 
 	<h2>Schedule</h2>
 	<table class="standard-table">
 		<thead>
 			<th>Prize</th>
-			<th class="text-right">Worth</th>
-			<th>Approximate draw time</th>
+			<th class="text-right">Value</th>
+			<th class="text-right">Winners</th>
+			<th>Draw time</th>
 		</thead>
 		<tbody>
 			<tr v-for="prize in unrolled" :key="prize.i">
 
 				<td v-if="prize.name">{{prize.name}}</td>
 				<td v-else-if="prize.typeId">
-					<template v-if="prize.quantity">{{prize.quantity}}&nbsp;</template>
+					<template v-if="prize.quantity > 1">{{prize.quantity}}x&nbsp;</template>
 					<TypeLink :type-id="prize.typeId" />
 				</td>
 
 				<td class="text-right">
-					<Money :value="prize.worth" />
+					<Money :value="prize.value" />
+				</td>
+
+				<td class="text-right">
+					{{prize.winners}}
 				</td>
 
 				<td>
