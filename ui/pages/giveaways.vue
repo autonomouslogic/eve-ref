@@ -33,9 +33,14 @@ interface Prize {
 	quantity: number,
 	winners: number,
 	value: number,
+	jitaSpace: boolean,
 	dates: DateTime[],
 	i: number
 }
+
+const ASTERO_SCOPE_SYNDICATION = 56880;
+const VEXOR_SCOPE_SYNDICATION = 56882;
+const FEDERATION_NAVY_MEDIA_MIASMA = 84115;
 
 const weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
@@ -77,6 +82,25 @@ const prizes: Prize[] = [
 		dates: [
 			DateTime.fromISO("2024-12-31T20:00:00+09")
 		]
+	} as Prize,
+	{
+		typeId: ASTERO_SCOPE_SYNDICATION,
+		dates: [
+			DateTime.fromISO("2024-12-17T11:00:00+09")
+		]
+	} as Prize,
+	{
+		typeId: VEXOR_SCOPE_SYNDICATION,
+		dates: [
+			DateTime.fromISO("2024-12-17T11:00:00+09")
+		]
+	} as Prize,
+	{
+		typeId: FEDERATION_NAVY_MEDIA_MIASMA,
+		jitaSpace: true,
+		dates: [
+			DateTime.fromISO("2024-12-18T03:00:00+09")
+		]
 	} as Prize
 ];
 
@@ -101,6 +125,7 @@ const unrolled = prizes.flatMap(prize => prize.dates.map(date => {
 		quantity: prize.quantity,
 		value: prize.value,
 		winners: prize.winners,
+		jitaSpace: prize.jitaSpace,
 		dates: [date],
 		i : i++
 	});
@@ -142,6 +167,9 @@ const totalWorth = unrolled.reduce((acc, prize) => acc + prize.value * prize.win
 				<td v-else-if="prize.typeId">
 					<template v-if="prize.quantity > 1">{{prize.quantity}}x&nbsp;</template>
 					<TypeLink :type-id="prize.typeId" />
+					<template v-if="prize.jitaSpace">
+						- sponsored by <ExternalLink url="https://jita.space" title="Jita Space">Jita.space</ExternalLink>
+					</template>
 				</td>
 
 				<td class="text-right">
