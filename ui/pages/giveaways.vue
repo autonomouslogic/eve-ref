@@ -13,7 +13,7 @@ import {
 	PATREON_URL
 } from "~/lib/urls";
 import {getJitaSellPrice} from "~/lib/marketUtils";
-import {LARGE_SKILL_INJECTOR, PLEX_TYPE_ID} from "~/lib/typeConstants";
+import {DAILY_ALPHA_INJECTOR, LARGE_SKILL_INJECTOR, PLEX_TYPE_ID} from "~/lib/typeConstants";
 import {DateTime} from "luxon";
 import refdata from "~/refdata";
 import TypeLink from "~/components/helpers/TypeLink.vue";
@@ -40,7 +40,9 @@ interface Prize {
 
 const ASTERO_SCOPE_SYNDICATION = 56880;
 const VEXOR_SCOPE_SYNDICATION = 56882;
-const FEDERATION_NAVY_MEDIA_MIASMA = 84115;
+const LESHAK_SCOPE_SYNDICATION = 61182;
+const FEDERATION_NAVY_COMET_MEDIA_MIASMA = 84115;
+const NIGHTMARE_MEDIA_MIASMA = 84131;
 
 const weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
@@ -96,10 +98,23 @@ const prizes: Prize[] = [
 		]
 	} as Prize,
 	{
-		typeId: FEDERATION_NAVY_MEDIA_MIASMA,
+		typeId: LESHAK_SCOPE_SYNDICATION,
+		dates: [
+			DateTime.fromISO("2024-12-20T09:00:00+09")
+		]
+	} as Prize,
+	{
+		typeId: FEDERATION_NAVY_COMET_MEDIA_MIASMA,
 		jitaSpace: true,
 		dates: [
 			DateTime.fromISO("2024-12-18T03:00:00+09")
+		]
+	} as Prize,
+	{
+		typeId: NIGHTMARE_MEDIA_MIASMA,
+		jitaSpace: true,
+		dates: [
+			DateTime.fromISO("2024-12-19T03:00:00+09")
 		]
 	} as Prize
 ];
