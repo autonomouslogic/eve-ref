@@ -41,6 +41,7 @@ interface Prize {
 const ASTERO_SCOPE_SYNDICATION = 56880;
 const VEXOR_SCOPE_SYNDICATION = 56882;
 const LESHAK_SCOPE_SYNDICATION = 61182;
+const RUPTURE_SCOPE_SYNDICATION = 56883;
 const FEDERATION_NAVY_COMET_MEDIA_MIASMA = 84115;
 const NIGHTMARE_MEDIA_MIASMA = 84131;
 
@@ -101,6 +102,12 @@ const prizes: Prize[] = [
 		typeId: LESHAK_SCOPE_SYNDICATION,
 		dates: [
 			DateTime.fromISO("2024-12-20T09:00:00+09")
+		]
+	} as Prize,
+	{
+		typeId: RUPTURE_SCOPE_SYNDICATION,
+		dates: [
+			DateTime.fromISO("2024-12-20T08:00:00+09")
 		]
 	} as Prize,
 	{
