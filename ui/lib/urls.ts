@@ -11,3 +11,7 @@ export const DISCORD_URL = "/discord";
 export const REAL_DISCORD_URL = "https://discord.gg/fZYPAxFyXG";
 export const GITHUB_URL = "https://github.com/autonomouslogic/eve-ref/";
 export const YOUTUBE_URL = "https://www.youtube.com/@eve-ref";
+
+export function getTypeIconUrl(typeId: number): string {
+    return `https://images.evetech.net/types/${typeId}/icon`;
+}

@@ -8,6 +8,8 @@ import TypeCards from "~/components/types/TypeCards.vue";
 import LinkParser from "~/components/helpers/LinkParser.vue";
 import {getIntRouteParam} from "~/lib/routeUtils";
 import {tr} from "~/lib/translate";
+import TypeIcon from "~/components/icons/TypeIcon.vue";
+import {getTypeIconUrl} from "~/lib/urls";
 
 const {locale} = useI18n();
 const route = useRoute();
@@ -31,13 +33,13 @@ let pageDescription = tr(inventoryType.description, locale.value) || "";
 if (pageDescription.length > 200) {
 	pageDescription = pageDescription.substring(0, 200);
 }
-const typeIcon = `https://images.evetech.net/types/${inventoryType.typeId}/icon`;
+const typeIconUrl = inventoryType && inventoryType.typeId ? getTypeIconUrl(inventoryType.typeId) : "";
 useHead({
 	title: pageTitle
 });
 useSeoMeta({
 	ogDescription: pageDescription,
-	ogImage: typeIcon
+	ogImage: typeIconUrl
 });
 
 const inventoryGroup: InventoryGroup = await refdataApi.getGroup({groupId: inventoryType.groupId});
@@ -55,7 +57,7 @@ const inventoryGroup: InventoryGroup = await refdataApi.getGroup({groupId: inven
 		</div>
 	</div>
 
-	<img :src="typeIcon" alt="">
+	<TypeIcon :type-id="inventoryType.typeId || 0" />
 
 	<TypeCards :inventory-type="inventoryType" />
 
