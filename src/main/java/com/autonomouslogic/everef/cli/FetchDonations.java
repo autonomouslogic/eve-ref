@@ -58,8 +58,8 @@ import software.amazon.awssdk.services.s3.model.NoSuchKeyException;
 @Log4j2
 public class FetchDonations implements Command {
 	private static final List<String> DONATION_REF_TYPES = List.of("player_donation", "corporation_account_withdrawal");
-	private static final String DONATIONS_LIST_FILE = "donations-all.json";
-	private static final String DONATIONS_SUMMARY_FILE = "donations.json";
+	public static final String DONATIONS_LIST_FILE = "donations-all.json";
+	public static final String DONATIONS_SUMMARY_FILE = "donations.json";
 	private static final Pattern DISALLOWED_DISCORD_CHARACTERS = Pattern.compile("[^a-zA-Z0-9_\\- ]");
 	private static final List<String> EMOJIS = List.of(
 			":money_with_wings:",
