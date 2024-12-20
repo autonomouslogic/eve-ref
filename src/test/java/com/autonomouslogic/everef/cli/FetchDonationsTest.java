@@ -1,8 +1,11 @@
 package com.autonomouslogic.everef.cli;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 import com.autonomouslogic.everef.cli.FetchDonations.DonationEntry;
+import com.autonomouslogic.everef.cli.FetchDonations.SummaryEntry;
 import com.autonomouslogic.everef.openapi.esi.models.GetCharactersCharacterIdOk;
 import com.autonomouslogic.everef.openapi.esi.models.GetCharactersCharacterIdWalletJournal200Ok;
 import com.autonomouslogic.everef.openapi.esi.models.GetCorporationsCorporationIdOk;
@@ -11,9 +14,12 @@ import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.test.MockS3Adapter;
 import com.autonomouslogic.everef.test.TestDataUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import java.io.IOException;
 import java.time.OffsetDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.SneakyThrows;
@@ -42,10 +48,10 @@ import software.amazon.awssdk.services.s3.S3AsyncClient;
 @SetEnvironmentVariable(key = "EVE_REF_CHARACTER_OWNER_HASH", value = "ownerhash")
 @SetEnvironmentVariable(key = "STATIC_PATH", value = "s3://static/")
 public class FetchDonationsTest {
-	private static final long TEST_DONOR_CHARACTER_ID = 100000001;
-	private static final long TEST_DONOR_CORPORATION_ID = 200000001;
-	private static final long TEST_CHARACTER_ID = 100000000;
-	private static final long TEST_CORPORATION_ID = 200000000;
+	private static final int TEST_CHARACTER_ID = 1000000000;
+	private static final int TEST_CORPORATION_ID = 2000000000;
+	private static final int TEST_DONOR_CHARACTER_ID = 1000000001;
+	private static final int TEST_DONOR_CORPORATION_ID = 2000000001;
 
 	@Inject
 	FetchDonations fetchDonations;
@@ -62,7 +68,13 @@ public class FetchDonationsTest {
 
 	MockWebServer server;
 
-	OffsetDateTime donationTime = OffsetDateTime.now().minusHours(1);
+	OffsetDateTime donationTime = OffsetDateTime.now().minusHours(1).truncatedTo(ChronoUnit.SECONDS);
+
+	ObjectNode discordCall;
+
+	List<GetCharactersCharacterIdWalletJournal200Ok> characterJournal;
+	List<GetCorporationsCorporationIdWalletsDivisionJournal200Ok> corporationJournal;
+	List<DonationEntry> existingDonations;
 
 	@Inject
 	protected FetchDonationsTest() {}
@@ -72,6 +84,11 @@ public class FetchDonationsTest {
 	void before() {
 		DaggerTestComponent.builder().build().inject(this);
 
+		discordCall = null;
+		characterJournal = new ArrayList<>();
+		corporationJournal = new ArrayList<>();
+		existingDonations = new ArrayList<>();
+
 		server = new MockWebServer();
 		server.setDispatcher(new TestDispatcher());
 		server.start(TestDataUtil.TEST_PORT);
@@ -80,7 +97,6 @@ public class FetchDonationsTest {
 	@AfterEach
 	@SneakyThrows
 	void after() {
-		assertNull(server.takeRequest(0, TimeUnit.MILLISECONDS));
 		server.close();
 	}
 
@@ -100,23 +116,58 @@ public class FetchDonationsTest {
 	void shouldUpdateWithFirstDonations() {
 		// No prior donations
 		// New donations
+		addCharacterTransaction();
 
 		fetchDonations.run().blockingAwait();
 
-		assertDonationsFile(List.of(DonationEntry.builder().build()));
-		assertSummaryFile(List.of(new Object()));
-		assertNoDiscordUpdate();
+		assertDonationsFile(List.of(DonationEntry.builder()
+				.id(1)
+				.date(donationTime.toInstant())
+				.firstPartyId(TEST_DONOR_CHARACTER_ID)
+				.characterId(TEST_DONOR_CHARACTER_ID)
+				.donorName("Donor Character")
+				.secondPartyId(TEST_CHARACTER_ID)
+				.amount(100.0)
+				.build()));
+		assertSummaryFile(List.of(SummaryEntry.builder()
+				.donorName("Donor Character")
+				.amount(100.00)
+				.characterId(TEST_DONOR_CHARACTER_ID)
+				.build()));
+		assertDiscordUpdate("");
 	}
 
 	@Test
 	void shouldUpdateWithSameDonations() {
 		// Existing prior donations
+		existingDonations.add(DonationEntry.builder()
+				.id(1)
+				.date(donationTime.toInstant())
+				.firstPartyId(TEST_DONOR_CHARACTER_ID)
+				.characterId(TEST_DONOR_CHARACTER_ID)
+				.donorName("Donor Character")
+				.secondPartyId(TEST_CHARACTER_ID)
+				.amount(100.0)
+				.build());
 		// Same donations on ESI journal
+		addCharacterTransaction();
 
 		fetchDonations.run().blockingAwait();
 
-		assertDonationsFile(List.of(DonationEntry.builder().build()));
-		assertSummaryFile(List.of(new Object()));
+		assertDonationsFile(List.of(DonationEntry.builder()
+				.id(1)
+				.date(donationTime.toInstant())
+				.firstPartyId(TEST_DONOR_CHARACTER_ID)
+				.characterId(TEST_DONOR_CHARACTER_ID)
+				.donorName("Donor Character")
+				.secondPartyId(TEST_CHARACTER_ID)
+				.amount(100.0)
+				.build()));
+		assertSummaryFile(List.of(SummaryEntry.builder()
+				.donorName("Donor Character")
+				.amount(100.00)
+				.characterId(TEST_DONOR_CHARACTER_ID)
+				.build()));
 		assertNoDiscordUpdate();
 	}
 
@@ -128,8 +179,8 @@ public class FetchDonationsTest {
 		fetchDonations.run().blockingAwait();
 
 		assertDonationsFile(List.of(DonationEntry.builder().build()));
-		assertSummaryFile(List.of(new Object()));
-		assertDiscordUpdate(List.of(new Object()));
+		assertSummaryFile(List.of());
+		assertDiscordUpdate("");
 	}
 
 	@Test
@@ -140,8 +191,8 @@ public class FetchDonationsTest {
 		fetchDonations.run().blockingAwait();
 
 		assertDonationsFile(List.of(DonationEntry.builder().build()));
-		assertSummaryFile(List.of(new Object()));
-		assertDiscordUpdate(List.of(new Object()));
+		assertSummaryFile(List.of());
+		assertDiscordUpdate("");
 	}
 
 	@Test
@@ -152,8 +203,8 @@ public class FetchDonationsTest {
 		fetchDonations.run().blockingAwait();
 
 		assertDonationsFile(List.of(DonationEntry.builder().build()));
-		assertSummaryFile(List.of(new Object()));
-		assertDiscordUpdate(List.of(new Object()));
+		assertSummaryFile(List.of());
+		assertDiscordUpdate("");
 	}
 
 	@Test
@@ -163,13 +214,81 @@ public class FetchDonationsTest {
 	@Disabled
 	void shouldNotNotifyDiscordOfDonationsBelowMinimum() {}
 
-	private void assertDonationsFile(List<DonationEntry> entries) {}
+	@SuppressWarnings("unchecked")
+	private void assertDonationsFile(List<DonationEntry> expected) {
+		var supplied = mockS3Adapter
+				.getTestObject("static", FetchDonations.DONATIONS_LIST_FILE, s3Client)
+				.map(b -> {
+					try {
+						var type =
+								objectMapper.getTypeFactory().constructCollectionType(List.class, DonationEntry.class);
+						return (List<DonationEntry>) objectMapper.readValue(b, type);
+					} catch (IOException e) {
+						throw new RuntimeException(e);
+					}
+				})
+				.orElse(List.of());
+		assertEquals(expected, supplied);
+	}
 
-	private void assertSummaryFile(List<Object> entries) {}
+	@SuppressWarnings("unchecked")
+	private void assertSummaryFile(List<SummaryEntry> expected) {
+		var supplied = mockS3Adapter
+				.getTestObject("static", FetchDonations.DONATIONS_SUMMARY_FILE, s3Client)
+				.map(b -> {
+					try {
+						var type =
+								objectMapper.getTypeFactory().constructCollectionType(List.class, SummaryEntry.class);
+						return (List<SummaryEntry>) objectMapper.readValue(b, type);
+					} catch (IOException e) {
+						throw new RuntimeException(e);
+					}
+				})
+				.orElse(List.of());
+		assertEquals(expected, supplied);
+	}
 
-	private void assertNoDiscordUpdate() {}
+	private void assertNoDiscordUpdate() {
+		assertNull(discordCall);
+	}
 
-	private void assertDiscordUpdate(List<Object> entries) {}
+	private void assertDiscordUpdate(String message) {
+		assertNotNull(discordCall);
+	}
+
+	private void addCharacterTransaction() {
+		characterJournal.add(new GetCharactersCharacterIdWalletJournal200Ok(
+				donationTime,
+				"",
+				1,
+				GetCharactersCharacterIdWalletJournal200Ok.RefType.player_donation,
+				100.0,
+				0.0,
+				0L,
+				GetCharactersCharacterIdWalletJournal200Ok.ContextIdType.character_id,
+				1000000001,
+				"",
+				1000000000,
+				null,
+				null));
+	}
+
+	private void addCorporationTransaction() {
+		corporationJournal.add(new GetCorporationsCorporationIdWalletsDivisionJournal200Ok(
+				donationTime,
+				"",
+				1,
+				GetCorporationsCorporationIdWalletsDivisionJournal200Ok.RefType.corporation_account_withdrawal,
+				100.0,
+				0.0,
+				0L,
+				GetCorporationsCorporationIdWalletsDivisionJournal200Ok.ContextIdType.corporation_id,
+				2000000001,
+				"",
+				2000000000,
+				null,
+				null));
+	}
 
 	class TestDispatcher extends Dispatcher {
 		@NotNull
@@ -249,44 +368,18 @@ public class FetchDonationsTest {
 									false)));
 				}
 
-				if (path.equals("/characters/1000000000/wallet/journal/")) {
-					return new MockResponse()
-							.setBody(objectMapper.writeValueAsString(
-									List.of(new GetCharactersCharacterIdWalletJournal200Ok(
-											donationTime,
-											"",
-											1,
-											GetCharactersCharacterIdWalletJournal200Ok.RefType.player_donation,
-											100.0,
-											0.0,
-											0L,
-											GetCharactersCharacterIdWalletJournal200Ok.ContextIdType.character_id,
-											1000000001,
-											"",
-											1000000000,
-											null,
-											null))));
+				if (path.equals("/characters/" + TEST_CHARACTER_ID + "/wallet/journal/")) {
+					return new MockResponse().setBody(objectMapper.writeValueAsString(characterJournal));
 				}
 
-				if (path.equals("/corporations/2000000000/wallets/1/journal/")) {
-					return new MockResponse()
-							.setBody(objectMapper.writeValueAsString(
-									List.of(new GetCorporationsCorporationIdWalletsDivisionJournal200Ok(
-											donationTime,
-											"",
-											1,
-											GetCorporationsCorporationIdWalletsDivisionJournal200Ok.RefType
-													.corporation_account_withdrawal,
-											100.0,
-											0.0,
-											0L,
-											GetCorporationsCorporationIdWalletsDivisionJournal200Ok.ContextIdType
-													.corporation_id,
-											2000000001,
-											"",
-											2000000000,
-											null,
-											null))));
+				if (path.equals("/corporations/" + TEST_CORPORATION_ID + "/wallets/1/journal/")) {
+					return new MockResponse().setBody(objectMapper.writeValueAsString(corporationJournal));
+				}
+
+				if (path.equals("/discord")) {
+					discordCall =
+							(ObjectNode) objectMapper.readTree(request.getBody().readUtf8());
+					return new MockResponse();
 				}
 
 				log.error(String.format("Unaccounted for URL: %s", path));

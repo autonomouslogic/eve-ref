@@ -338,9 +338,10 @@ public class FetchDonations implements Command {
 			log.debug("No Discord webhook URL configured");
 			return;
 		}
+		log.debug("Notifying Discord");
 		var body = objectMapper.createObjectNode();
 		body.put("content", message);
-		log.debug("Notifying Discord: {}", message);
+		log.trace("Discord notification: {}", body);
 		var response = okHttpHelper
 				.post(
 						discordUrl.get().toString(),
