@@ -299,6 +299,7 @@ public class FetchDonationsTest {
 		addCharacterTransaction(2, TEST_DONOR_CHARACTER_ID_1, 200, donationTime);
 		addCharacterTransaction(3, TEST_DONOR_CHARACTER_ID_1, 300, donationTime);
 
+		putDonationsFile();
 		fetchDonations.run().blockingAwait();
 
 		assertSummaryFile(List.of(SummaryEntry.builder()
@@ -307,7 +308,7 @@ public class FetchDonationsTest {
 				.characterId(TEST_DONOR_CHARACTER_ID_1)
 				.build()));
 
-		assertDiscordUpdate("**Donor Character 1** donated 500.00 ISK :gift:");
+		assertDiscordUpdate("**Donor Character 1** donated 500.00 ISK :moneybag:");
 	}
 
 	@Test
