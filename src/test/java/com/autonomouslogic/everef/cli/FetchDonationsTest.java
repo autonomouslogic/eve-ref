@@ -312,6 +312,32 @@ public class FetchDonationsTest {
 	}
 
 	@Test
+	void shouldSummariseMultipleDonationsFromDifferentEntities() {
+		// No prior donations
+		// Multiple new donations from different people
+		addCharacterTransaction(2, TEST_DONOR_CHARACTER_ID_1, 200, donationTime);
+		addCharacterTransaction(3, TEST_DONOR_CHARACTER_ID_2, 300, donationTime);
+
+		putDonationsFile();
+		fetchDonations.run().blockingAwait();
+
+		assertSummaryFile(List.of(
+				SummaryEntry.builder()
+						.donorName("Donor Character 2")
+						.amount(300.00)
+						.characterId(TEST_DONOR_CHARACTER_ID_2)
+						.build(),
+				SummaryEntry.builder()
+						.donorName("Donor Character 1")
+						.amount(200.00)
+						.characterId(TEST_DONOR_CHARACTER_ID_1)
+						.build()));
+
+		assertDiscordUpdate("**Donor Character 2** donated 300.00 ISK :partying_face:\n"
+				+ "**Donor Character 1** donated 200.00 ISK :thumbsup:");
+	}
+
+	@Test
 	@Disabled
 	void shouldReplaceWeirdCharactersInDonorNames() {}
 
