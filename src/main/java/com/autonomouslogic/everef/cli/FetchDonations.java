@@ -31,10 +31,15 @@ import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.TreeMap;
 import java.util.concurrent.CompletionException;
+import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -164,14 +169,33 @@ public class FetchDonations implements Command {
 			var newDonations = resolveNewDonations(previous, donations);
 			log.info("Found {} new donations", newDonations.size());
 
-			uploadFile(objectMapper.writeValueAsBytes(donations), DONATIONS_LIST_FILE);
+			var allDonations = Stream.concat(previous.stream(), newDonations.stream())
+					.collect(Collectors.toMap(
+							new Function<DonationEntry, Long>() {
+								@Override
+								public Long apply(DonationEntry donationEntry) {
+									return donationEntry.getId();
+								}
+							},
+							new Function<DonationEntry, DonationEntry>() {
+								@Override
+								public DonationEntry apply(DonationEntry donationEntry) {
+									return donationEntry;
+								}
+							},
+							(a, b) -> b,
+							new Supplier<Map<Long, DonationEntry>>() {
+								@Override
+								public Map<Long, DonationEntry> get() {
+									return new TreeMap<>();
+								}
+							}));
+			uploadFile(objectMapper.writeValueAsBytes(allDonations.values()), DONATIONS_LIST_FILE);
 
-			var summary = buildSummary(donations);
+			var summary = buildSummary(allDonations.values());
 			uploadFile(objectMapper.writeValueAsBytes(summary), DONATIONS_SUMMARY_FILE);
 
-			if (!previous.isEmpty()) {
-				notifyDiscord(newDonations);
-			}
+			notifyDiscord(newDonations);
 		});
 	}
 
@@ -240,7 +264,7 @@ public class FetchDonations implements Command {
 		return journals;
 	}
 
-	private List<SummaryEntry> buildSummary(List<DonationEntry> donations) {
+	private List<SummaryEntry> buildSummary(Collection<DonationEntry> donations) {
 		return summarise(donations).stream()
 				.sorted(Ordering.natural().reverse().onResultOf(SummaryEntry::getAmount))
 				.toList();
@@ -294,7 +318,7 @@ public class FetchDonations implements Command {
 				characterId, CharacterApi.DatasourceGetCharactersCharacterId.tranquility, null);
 	}
 
-	private static @NotNull List<SummaryEntry> summarise(List<DonationEntry> donations) {
+	private static @NotNull List<SummaryEntry> summarise(Collection<DonationEntry> donations) {
 		var totals = new HashMap<String, SummaryEntry>();
 		for (var entry : donations) {
 			var donor = entry.getDonorName();
