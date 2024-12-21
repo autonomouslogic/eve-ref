@@ -34,12 +34,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.TreeMap;
 import java.util.concurrent.CompletionException;
-import java.util.function.Function;
-import java.util.function.Supplier;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -160,7 +157,6 @@ public class FetchDonations implements Command {
 					corporationId);
 
 			var previous = downloadFileJsonList(DONATIONS_LIST_FILE, DonationEntry.class);
-			//			previous = List.of();
 			log.info("Loaded {} previous donations", previous.size());
 
 			var donations = getDonations(characterId, corporationId, accessToken);
@@ -171,25 +167,7 @@ public class FetchDonations implements Command {
 
 			var allDonations = Stream.concat(previous.stream(), newDonations.stream())
 					.collect(Collectors.toMap(
-							new Function<DonationEntry, Long>() {
-								@Override
-								public Long apply(DonationEntry donationEntry) {
-									return donationEntry.getId();
-								}
-							},
-							new Function<DonationEntry, DonationEntry>() {
-								@Override
-								public DonationEntry apply(DonationEntry donationEntry) {
-									return donationEntry;
-								}
-							},
-							(a, b) -> b,
-							new Supplier<Map<Long, DonationEntry>>() {
-								@Override
-								public Map<Long, DonationEntry> get() {
-									return new TreeMap<>();
-								}
-							}));
+							DonationEntry::getId, donationEntry -> donationEntry, (a, b) -> b, TreeMap::new));
 			uploadFile(objectMapper.writeValueAsBytes(allDonations.values()), DONATIONS_LIST_FILE);
 
 			var summary = buildSummary(allDonations.values());
