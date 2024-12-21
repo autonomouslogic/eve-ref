@@ -4,12 +4,16 @@ import com.autonomouslogic.everef.s3.ListedS3Object;
 import com.autonomouslogic.everef.s3.S3Adapter;
 import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.util.HashUtil;
+import com.autonomouslogic.everef.util.TempFiles;
 import com.google.common.base.Strings;
 import com.google.common.hash.Hashing;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Single;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.nio.file.Path;
 import java.time.Instant;
 import java.util.Collections;
 import java.util.LinkedHashSet;
@@ -17,9 +21,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.CompletionException;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import lombok.EqualsAndHashCode;
+import lombok.SneakyThrows;
 import lombok.Value;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.io.IOUtils;
@@ -30,6 +36,9 @@ import software.amazon.awssdk.services.s3.S3AsyncClient;
 import software.amazon.awssdk.services.s3.model.CommonPrefix;
 import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.DeleteObjectResponse;
+import software.amazon.awssdk.services.s3.model.GetObjectRequest;
+import software.amazon.awssdk.services.s3.model.GetObjectResponse;
+import software.amazon.awssdk.services.s3.model.NoSuchKeyException;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectResponse;
 import software.amazon.awssdk.services.s3.model.S3Object;
@@ -58,7 +67,9 @@ public class MockS3Adapter extends S3Adapter {
 		Instant lastModified;
 	}
 
-	protected MockS3Adapter() {}
+	protected MockS3Adapter() {
+		tempFiles = new TempFiles();
+	}
 
 	public void putTestObject(String bucket, String key, String content, S3AsyncClient client) {
 		putTestObject(bucket, key, content, client, Instant.now());
@@ -78,6 +89,23 @@ public class MockS3Adapter extends S3Adapter {
 
 	public Optional<byte[]> getTestObject(String bucket, String key, S3AsyncClient client) {
 		return Optional.ofNullable(data.get(new Entry(bucket, key, client, null)));
+	}
+
+	@Override
+	@SneakyThrows
+	public Single<GetObjectResponse> getObject(GetObjectRequest get, Path destination, S3AsyncClient s3Client) {
+		return Single.fromCallable(() -> {
+			var bytes = getTestObject(get.bucket(), get.key(), s3Client);
+			if (bytes.isEmpty()) {
+				// @todo I think this is correct
+				throw new CompletionException(NoSuchKeyException.builder().build());
+			}
+			try (var in = new ByteArrayInputStream(bytes.get());
+					var out = new FileOutputStream(destination.toFile())) {
+				IOUtils.copy(in, out);
+			}
+			return GetObjectResponse.builder().build();
+		});
 	}
 
 	@Override
