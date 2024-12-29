@@ -52,8 +52,10 @@ public class FetchDonationsTest {
 	private static final int TEST_CORPORATION_ID = 2000000000;
 	private static final int TEST_DONOR_CHARACTER_ID_1 = 1000000001;
 	private static final int TEST_DONOR_CHARACTER_ID_2 = 1000000002;
+	private static final int TEST_DONOR_CHARACTER_ID_3 = 1000000003;
 	private static final int TEST_DONOR_CORPORATION_ID_1 = 2000000001;
 	private static final int TEST_DONOR_CORPORATION_ID_2 = 2000000002;
+	private static final int TEST_DONOR_CORPORATION_ID_3 = 2000000003;
 
 	@Inject
 	FetchDonations fetchDonations;
@@ -284,6 +286,42 @@ public class FetchDonationsTest {
 	}
 
 	@Test
+	void shouldKeepOldDonationsWhenNoDonations() {
+		// Existing prior donations
+		existingDonations.add(DonationEntry.builder()
+				.id(1)
+				.date(donationTime.toInstant())
+				.firstPartyId(TEST_DONOR_CHARACTER_ID_1)
+				.characterId(TEST_DONOR_CHARACTER_ID_1)
+				.donorName("Donor Character 1")
+				.secondPartyId(TEST_CHARACTER_ID)
+				.amount(100.0)
+				.build());
+		// No donations on ESI
+
+		putDonationsFile();
+		fetchDonations.run().blockingAwait();
+
+		assertDonationsFile(List.of(DonationEntry.builder()
+				.id(1)
+				.date(donationTime.toInstant())
+				.firstPartyId(TEST_DONOR_CHARACTER_ID_1)
+				.characterId(TEST_DONOR_CHARACTER_ID_1)
+				.donorName("Donor Character 1")
+				.secondPartyId(TEST_CHARACTER_ID)
+				.amount(100.0)
+				.build()));
+
+		assertSummaryFile(List.of(SummaryEntry.builder()
+				.donorName("Donor Character 1")
+				.amount(100.00)
+				.characterId(TEST_DONOR_CHARACTER_ID_1)
+				.build()));
+
+		assertNoDiscordUpdate();
+	}
+
+	@Test
 	void shouldSummariseMultipleDonationsFromTheSameEntity() {
 		// Existing prior donations from the same person
 		existingDonations.add(DonationEntry.builder()
@@ -338,8 +376,18 @@ public class FetchDonationsTest {
 	}
 
 	@Test
-	@Disabled
-	void shouldReplaceWeirdCharactersInDonorNames() {}
+	void shouldReplaceWeirdCharactersInDonorNames() {
+		addCharacterTransaction(2, TEST_DONOR_CHARACTER_ID_3, 200, donationTime);
+		fetchDonations.run().blockingAwait();
+		assertDiscordUpdate("**Weird name??_??** donated 200.00 ISK :trophy:");
+	}
+
+	@Test
+	void shouldShortenLargeAmountsOfMoney() {
+		addCharacterTransaction(2, TEST_DONOR_CHARACTER_ID_1, 12345678912L, donationTime);
+		fetchDonations.run().blockingAwait();
+		assertDiscordUpdate("**Donor Character 1** donated 12.35b ISK :money_mouth:");
+	}
 
 	@Test
 	@Disabled
@@ -510,6 +558,22 @@ public class FetchDonationsTest {
 									"")));
 				}
 
+				if (path.equals("/characters/" + TEST_DONOR_CHARACTER_ID_3 + "/")) {
+					return new MockResponse()
+							.setBody(objectMapper.writeValueAsString(new GetCharactersCharacterIdOk(
+									OffsetDateTime.now(),
+									0,
+									(int) TEST_DONOR_CORPORATION_ID_2,
+									GetCharactersCharacterIdOk.Gender.female,
+									"Weird name!+_&\\",
+									0,
+									0,
+									"",
+									0,
+									0f,
+									"")));
+				}
+
 				if (path.equals("/corporations/" + TEST_DONOR_CORPORATION_ID_1 + "/")) {
 					return new MockResponse()
 							.setBody(objectMapper.writeValueAsString(new GetCorporationsCorporationIdOk(
@@ -536,6 +600,25 @@ public class FetchDonationsTest {
 									(int) TEST_DONOR_CHARACTER_ID_2,
 									1,
 									"Donor Corporation 2",
+									0,
+									"T",
+									0,
+									OffsetDateTime.now(),
+									"",
+									0,
+									0,
+									0L,
+									"",
+									false)));
+				}
+
+				if (path.equals("/corporations/" + TEST_DONOR_CORPORATION_ID_3 + "/")) {
+					return new MockResponse()
+							.setBody(objectMapper.writeValueAsString(new GetCorporationsCorporationIdOk(
+									0,
+									(int) TEST_DONOR_CHARACTER_ID_2,
+									1,
+									"Weird name!+_&\\",
 									0,
 									"T",
 									0,
