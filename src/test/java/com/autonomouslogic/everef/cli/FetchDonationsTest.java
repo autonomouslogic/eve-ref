@@ -353,8 +353,8 @@ public class FetchDonationsTest {
 	void shouldSummariseMultipleDonationsFromDifferentEntities() {
 		// No prior donations
 		// Multiple new donations from different people
-		addCharacterTransaction(2, TEST_DONOR_CHARACTER_ID_1, 200, donationTime);
-		addCharacterTransaction(3, TEST_DONOR_CHARACTER_ID_2, 300, donationTime);
+		addCharacterTransaction(1, TEST_DONOR_CHARACTER_ID_1, 200, donationTime);
+		addCharacterTransaction(2, TEST_DONOR_CHARACTER_ID_2, 300, donationTime);
 
 		putDonationsFile();
 		fetchDonations.run().blockingAwait();
@@ -377,16 +377,101 @@ public class FetchDonationsTest {
 
 	@Test
 	void shouldReplaceWeirdCharactersInDonorNames() {
-		addCharacterTransaction(2, TEST_DONOR_CHARACTER_ID_3, 200, donationTime);
+		addCharacterTransaction(1, TEST_DONOR_CHARACTER_ID_3, 200, donationTime);
 		fetchDonations.run().blockingAwait();
 		assertDiscordUpdate("**Weird name??_??** donated 200.00 ISK :trophy:");
 	}
 
 	@Test
 	void shouldShortenLargeAmountsOfMoney() {
-		addCharacterTransaction(2, TEST_DONOR_CHARACTER_ID_1, 12345678912L, donationTime);
+		addCharacterTransaction(1, TEST_DONOR_CHARACTER_ID_1, 12345678912L, donationTime);
 		fetchDonations.run().blockingAwait();
 		assertDiscordUpdate("**Donor Character 1** donated 12.35b ISK :money_mouth:");
+	}
+
+	@Test
+	void shouldIncludeAllRelevantTransactions() {
+		addCharacterTransaction(
+				1,
+				TEST_DONOR_CHARACTER_ID_1,
+				1,
+				donationTime,
+				GetCharactersCharacterIdWalletJournal200Ok.RefType.player_donation);
+		addCharacterTransaction(
+				2,
+				TEST_DONOR_CHARACTER_ID_2,
+				10,
+				donationTime,
+				GetCharactersCharacterIdWalletJournal200Ok.RefType.corporation_account_withdrawal);
+		addCorporationTransaction(
+				1,
+				TEST_DONOR_CORPORATION_ID_1,
+				100,
+				donationTime,
+				GetCorporationsCorporationIdWalletsDivisionJournal200Ok.RefType.player_donation);
+		addCorporationTransaction(
+				2,
+				TEST_DONOR_CORPORATION_ID_2,
+				1000,
+				donationTime,
+				GetCorporationsCorporationIdWalletsDivisionJournal200Ok.RefType.corporation_account_withdrawal);
+		fetchDonations.run().blockingAwait();
+		assertDiscordUpdate("**Donor Corporation 2** donated 1,000.00 ISK :gift:\n"
+				+ "**Donor Corporation 1** donated 100.00 ISK :pound:\n"
+				+ "**Donor Character 2** donated 10.00 ISK :thumbsup:\n"
+				+ "**Donor Character 1** donated 1.00 ISK :trophy:");
+	}
+
+	@Test
+	void shouldNotIncludeAllIrrelevantTransactions() {
+		addCharacterTransaction(
+				1,
+				TEST_DONOR_CHARACTER_ID_1,
+				1,
+				donationTime,
+				GetCharactersCharacterIdWalletJournal200Ok.RefType.agent_donation);
+		addCorporationTransaction(
+				1,
+				TEST_DONOR_CORPORATION_ID_1,
+				100,
+				donationTime,
+				GetCorporationsCorporationIdWalletsDivisionJournal200Ok.RefType.acceleration_gate_fee);
+		fetchDonations.run().blockingAwait();
+		assertDonationsFile(List.of());
+		assertSummaryFile(List.of());
+		assertNoDiscordUpdate();
+	}
+
+	@Test
+	void shouldNotIncludeTransactionsFromSelf() {
+		addCharacterTransaction(
+				1,
+				TEST_CHARACTER_ID,
+				1,
+				donationTime,
+				GetCharactersCharacterIdWalletJournal200Ok.RefType.player_donation);
+		addCharacterTransaction(
+				1,
+				TEST_CORPORATION_ID,
+				10,
+				donationTime,
+				GetCharactersCharacterIdWalletJournal200Ok.RefType.corporation_account_withdrawal);
+		addCorporationTransaction(
+				1,
+				TEST_CHARACTER_ID,
+				100,
+				donationTime,
+				GetCorporationsCorporationIdWalletsDivisionJournal200Ok.RefType.player_donation);
+		addCorporationTransaction(
+				1,
+				TEST_CORPORATION_ID,
+				1000,
+				donationTime,
+				GetCorporationsCorporationIdWalletsDivisionJournal200Ok.RefType.corporation_account_withdrawal);
+		fetchDonations.run().blockingAwait();
+		assertDonationsFile(List.of());
+		assertSummaryFile(List.of());
+		assertNoDiscordUpdate();
 	}
 
 	@Test
@@ -441,11 +526,21 @@ public class FetchDonationsTest {
 	}
 
 	private void addCharacterTransaction(int id, int donorId, double amount, OffsetDateTime time) {
+		addCharacterTransaction(
+				id, donorId, amount, time, GetCharactersCharacterIdWalletJournal200Ok.RefType.player_donation);
+	}
+
+	private void addCharacterTransaction(
+			int id,
+			int donorId,
+			double amount,
+			OffsetDateTime time,
+			GetCharactersCharacterIdWalletJournal200Ok.RefType refType) {
 		characterJournal.add(new GetCharactersCharacterIdWalletJournal200Ok(
 				time,
 				"",
 				id,
-				GetCharactersCharacterIdWalletJournal200Ok.RefType.player_donation,
+				refType,
 				amount,
 				0.0,
 				0L,
@@ -458,16 +553,34 @@ public class FetchDonationsTest {
 	}
 
 	private void addCorporationTransaction() {
+		addCorporationTransaction(1, TEST_DONOR_CORPORATION_ID_1, 100, donationTime);
+	}
+
+	private void addCorporationTransaction(int id, int donorId, double amount, OffsetDateTime time) {
+		addCorporationTransaction(
+				id,
+				donorId,
+				amount,
+				time,
+				GetCorporationsCorporationIdWalletsDivisionJournal200Ok.RefType.corporation_account_withdrawal);
+	}
+
+	private void addCorporationTransaction(
+			int id,
+			int donorId,
+			double amount,
+			OffsetDateTime time,
+			GetCorporationsCorporationIdWalletsDivisionJournal200Ok.RefType refType) {
 		corporationJournal.add(new GetCorporationsCorporationIdWalletsDivisionJournal200Ok(
-				donationTime,
+				time,
 				"",
-				1,
-				GetCorporationsCorporationIdWalletsDivisionJournal200Ok.RefType.corporation_account_withdrawal,
-				100.0,
+				id,
+				refType,
+				amount,
 				0.0,
 				0L,
 				GetCorporationsCorporationIdWalletsDivisionJournal200Ok.ContextIdType.corporation_id,
-				2000000001,
+				donorId,
 				"",
 				2000000000,
 				null,
