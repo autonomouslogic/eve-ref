@@ -1,5 +1,30 @@
 EVE Ref Changelog
 
+## [2.54.1](https://github.com/autonomouslogic/eve-ref/compare/2.54.0...2.54.1) (2024-12-30)
+
+
+### Features
+
+* **ui:** Giveaways ([#698](https://github.com/autonomouslogic/eve-ref/issues/698)) ([7c73daf](https://github.com/autonomouslogic/eve-ref/commit/7c73dafd8d07e9f1c1e4f9e05e499aaa0a083d30))
+
+
+### Bug Fixes
+
+* FetchDonations should not ignore and forget donations ([#699](https://github.com/autonomouslogic/eve-ref/issues/699)) ([36b24a9](https://github.com/autonomouslogic/eve-ref/commit/36b24a973fc0b83c9d70e6e46b40ed9a3d0a3005))
+* **ui:** Added some SKIN giveaways ([d044a72](https://github.com/autonomouslogic/eve-ref/commit/d044a72abcf87b9f94393b2cfe383f5cec0abfaf))
+* **ui:** Added winners to giveaway page ([413c1b8](https://github.com/autonomouslogic/eve-ref/commit/413c1b8e194739975a671dd5103a238fea1ecf21))
+* **ui:** Added winners to giveaway page ([ba623ff](https://github.com/autonomouslogic/eve-ref/commit/ba623ffcfaa83649d4404a5a1fc5bd9dba8e17e6))
+* **ui:** Code activation link on giveaways page ([a901f0e](https://github.com/autonomouslogic/eve-ref/commit/a901f0e8cd8c4b7006c75562fde77d47e2c7eb4e))
+* **ui:** Fixed link to status page ([92aea62](https://github.com/autonomouslogic/eve-ref/commit/92aea62dc93f45fc4be06ed9c79f8d93cdcdfa40))
+* **ui:** Fixed relative day on giveaways ([b5a3bdb](https://github.com/autonomouslogic/eve-ref/commit/b5a3bdb04d2fb7cf550c3573cf4c02ed925d439e))
+* **ui:** SKIN giveaway ([bf3e048](https://github.com/autonomouslogic/eve-ref/commit/bf3e048c3f2b8a8b5360683859b603db1bb85245))
+* **ui:** SKIN giveaway ([db1f5c1](https://github.com/autonomouslogic/eve-ref/commit/db1f5c1d5e1947d09032d75fa95ed3d96284b3d3))
+
+
+### Code Refactoring
+
+* **ui:** TypeIcon component ([abf952c](https://github.com/autonomouslogic/eve-ref/commit/abf952c4c79c9d78849cfab95b6340baec9f471e))
+
 ## [2.54.0](https://github.com/autonomouslogic/eve-ref/compare/2.53.9...2.54.0) (2024-12-08)
 
 
