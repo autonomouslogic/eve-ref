@@ -31,9 +31,11 @@ import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
+import java.util.TreeMap;
 import java.util.concurrent.CompletionException;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -58,8 +60,8 @@ import software.amazon.awssdk.services.s3.model.NoSuchKeyException;
 @Log4j2
 public class FetchDonations implements Command {
 	private static final List<String> DONATION_REF_TYPES = List.of("player_donation", "corporation_account_withdrawal");
-	private static final String DONATIONS_LIST_FILE = "donations-all.json";
-	private static final String DONATIONS_SUMMARY_FILE = "donations.json";
+	public static final String DONATIONS_LIST_FILE = "donations-all.json";
+	public static final String DONATIONS_SUMMARY_FILE = "donations.json";
 	private static final Pattern DISALLOWED_DISCORD_CHARACTERS = Pattern.compile("[^a-zA-Z0-9_\\- ]");
 	private static final List<String> EMOJIS = List.of(
 			":money_with_wings:",
@@ -155,7 +157,6 @@ public class FetchDonations implements Command {
 					corporationId);
 
 			var previous = downloadFileJsonList(DONATIONS_LIST_FILE, DonationEntry.class);
-			//			previous = List.of();
 			log.info("Loaded {} previous donations", previous.size());
 
 			var donations = getDonations(characterId, corporationId, accessToken);
@@ -164,14 +165,15 @@ public class FetchDonations implements Command {
 			var newDonations = resolveNewDonations(previous, donations);
 			log.info("Found {} new donations", newDonations.size());
 
-			uploadFile(objectMapper.writeValueAsBytes(donations), DONATIONS_LIST_FILE);
+			var allDonations = Stream.concat(previous.stream(), newDonations.stream())
+					.collect(Collectors.toMap(
+							DonationEntry::getId, donationEntry -> donationEntry, (a, b) -> b, TreeMap::new));
+			uploadFile(objectMapper.writeValueAsBytes(allDonations.values()), DONATIONS_LIST_FILE);
 
-			var summary = buildSummary(donations);
+			var summary = buildSummary(allDonations.values());
 			uploadFile(objectMapper.writeValueAsBytes(summary), DONATIONS_SUMMARY_FILE);
 
-			if (!previous.isEmpty()) {
-				notifyDiscord(newDonations);
-			}
+			notifyDiscord(newDonations);
 		});
 	}
 
@@ -240,7 +242,7 @@ public class FetchDonations implements Command {
 		return journals;
 	}
 
-	private List<SummaryEntry> buildSummary(List<DonationEntry> donations) {
+	private List<SummaryEntry> buildSummary(Collection<DonationEntry> donations) {
 		return summarise(donations).stream()
 				.sorted(Ordering.natural().reverse().onResultOf(SummaryEntry::getAmount))
 				.toList();
@@ -294,7 +296,7 @@ public class FetchDonations implements Command {
 				characterId, CharacterApi.DatasourceGetCharactersCharacterId.tranquility, null);
 	}
 
-	private static @NotNull List<SummaryEntry> summarise(List<DonationEntry> donations) {
+	private static @NotNull List<SummaryEntry> summarise(Collection<DonationEntry> donations) {
 		var totals = new HashMap<String, SummaryEntry>();
 		for (var entry : donations) {
 			var donor = entry.getDonorName();
@@ -338,9 +340,10 @@ public class FetchDonations implements Command {
 			log.debug("No Discord webhook URL configured");
 			return;
 		}
+		log.debug("Notifying Discord");
 		var body = objectMapper.createObjectNode();
 		body.put("content", message);
-		log.debug("Notifying Discord: {}", message);
+		log.trace("Discord notification: {}", body);
 		var response = okHttpHelper
 				.post(
 						discordUrl.get().toString(),

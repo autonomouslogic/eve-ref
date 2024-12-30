@@ -1,6 +1,7 @@
 package com.autonomouslogic.everef.test;
 
 import com.autonomouslogic.everef.cli.DataIndexTest;
+import com.autonomouslogic.everef.cli.FetchDonationsTest;
 import com.autonomouslogic.everef.cli.MockDataIndexModule;
 import com.autonomouslogic.everef.cli.decorator.HealthcheckDecoratorTest;
 import com.autonomouslogic.everef.cli.decorator.SlackDecoratorTest;
@@ -78,6 +79,8 @@ public interface TestComponent {
 	void inject(EsiVerifyResponseTest test);
 
 	void inject(ExplorerRegionTypeSourceTest test);
+
+	void inject(FetchDonationsTest test);
 
 	void inject(FlywayMigrateTest test);
 
