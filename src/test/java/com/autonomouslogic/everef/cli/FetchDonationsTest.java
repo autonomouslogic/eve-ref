@@ -399,13 +399,13 @@ public class FetchDonationsTest {
 				GetCharactersCharacterIdWalletJournal200Ok.RefType.player_donation);
 		addCharacterTransaction(
 				2,
-				TEST_DONOR_CHARACTER_ID_2,
+				TEST_DONOR_CORPORATION_ID_1,
 				10,
 				donationTime,
 				GetCharactersCharacterIdWalletJournal200Ok.RefType.corporation_account_withdrawal);
 		addCorporationTransaction(
 				1,
-				TEST_DONOR_CORPORATION_ID_1,
+				TEST_DONOR_CHARACTER_ID_2,
 				100,
 				donationTime,
 				GetCorporationsCorporationIdWalletsDivisionJournal200Ok.RefType.player_donation);
@@ -417,13 +417,13 @@ public class FetchDonationsTest {
 				GetCorporationsCorporationIdWalletsDivisionJournal200Ok.RefType.corporation_account_withdrawal);
 		fetchDonations.run().blockingAwait();
 		assertDiscordUpdate("**Donor Corporation 2** donated 1,000.00 ISK :gift:\n"
-				+ "**Donor Corporation 1** donated 100.00 ISK :pound:\n"
-				+ "**Donor Character 2** donated 10.00 ISK :thumbsup:\n"
+				+ "**Donor Character 2** donated 100.00 ISK :gem:\n"
+				+ "**Donor Corporation 1** donated 10.00 ISK :pound:\n"
 				+ "**Donor Character 1** donated 1.00 ISK :trophy:");
 	}
 
 	@Test
-	void shouldNotIncludeAllIrrelevantTransactions() {
+	void shouldNotIncludeIrrelevantTransactions() {
 		addCharacterTransaction(
 				1,
 				TEST_DONOR_CHARACTER_ID_1,
