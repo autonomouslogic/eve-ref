@@ -56,85 +56,7 @@ for (let i = 0; i < 19; i++) {
 	fleetPackDates.push(firstFleetPack.plus({days: i}));
 }
 
-const prizes: Prize[] = [
-	{
-		name: "Weekend Fleet Pack (50x PLEX, 3 Day Omega)",
-		value: (50 + 500 * 12 / 365 * 3) * plexPrice,
-		dates: fleetPackDates
-	} as Prize,
-	{
-		typeId: PLEX_TYPE_ID,
-		quantity: 500,
-		dates: [
-			DateTime.fromISO("2024-12-15T20:00:00+09"),
-			DateTime.fromISO("2024-12-22T20:00:00+09"),
-			DateTime.fromISO("2024-12-29T20:00:00+09"),
-			DateTime.fromISO("2024-12-31T20:00:00+09")
-		]
-	} as Prize,
-	{
-		typeId: LARGE_SKILL_INJECTOR,
-		dates: [
-			DateTime.fromISO("2024-12-14T20:00:00+09"),
-			DateTime.fromISO("2024-12-22T20:00:00+09"),
-			DateTime.fromISO("2024-12-28T20:00:00+09")
-		]
-	} as Prize,
-	{
-		typeId: LARGE_SKILL_INJECTOR,
-		winners: 5,
-		dates: [
-			DateTime.fromISO("2024-12-31T20:00:00+09")
-		]
-	} as Prize,
-	{
-		typeId: ASTERO_SCOPE_SYNDICATION,
-		dates: [
-			DateTime.fromISO("2024-12-17T11:00:00+09")
-		]
-	} as Prize,
-	{
-		typeId: VEXOR_SCOPE_SYNDICATION,
-		dates: [
-			DateTime.fromISO("2024-12-17T11:00:00+09")
-		]
-	} as Prize,
-	{
-		typeId: LESHAK_SCOPE_SYNDICATION,
-		dates: [
-			DateTime.fromISO("2024-12-20T09:00:00+09")
-		]
-	} as Prize,
-	{
-		typeId: RUPTURE_SCOPE_SYNDICATION,
-		dates: [
-			DateTime.fromISO("2024-12-20T08:00:00+09")
-		]
-	} as Prize,
-	{
-		typeId: STRATIOS_SCOPE_SYNDICATION,
-		dates: [
-			DateTime.fromISO("2024-12-18T16:00:00+09"),
-			DateTime.fromISO("2024-12-19T16:00:00+09"),
-			DateTime.fromISO("2024-12-20T16:00:00+09"),
-			DateTime.fromISO("2024-12-21T16:00:00+09"),
-		]
-	} as Prize,
-	{
-		typeId: FEDERATION_NAVY_COMET_MEDIA_MIASMA,
-		jitaSpace: true,
-		dates: [
-			DateTime.fromISO("2024-12-18T03:00:00+09")
-		]
-	} as Prize,
-	{
-		typeId: NIGHTMARE_MEDIA_MIASMA,
-		jitaSpace: true,
-		dates: [
-			DateTime.fromISO("2024-12-19T03:00:00+09")
-		]
-	} as Prize
-];
+const prizes: Prize[] = [];
 
 var i = 0;
 for (let prize of prizes) {
@@ -167,15 +89,16 @@ unrolled.sort((a, b) => a.dates[0].toMillis() - b.dates[0].toMillis());
 
 const totalWorth = unrolled.reduce((acc, prize) => acc + prize.value * prize.winners, 0);
 
+const pastGiveaways = {
+	"December 2024": 33.52e9
+};
+
 </script>
 
 <template>
 	<h1>🎉 Giveaways</h1>
 	<p>
 		Join #giveaways on <InternalLink :to="DISCORD_URL">Discord</InternalLink> to participate.
-	</p>
-	<p>
-		I'm giving away <Money :value="totalWorth" /> in December 2024.
 	</p>
 	<p>
 		Below is the approximate schedule of the upcoming giveaways.
@@ -185,7 +108,10 @@ const totalWorth = unrolled.reduce((acc, prize) => acc + prize.value * prize.win
 	</p>
 
 	<h2>Schedule</h2>
-	<table class="standard-table">
+	<p v-if="unrolled.length == 0">
+		No scheduled giveaways rigth now.
+	</p>
+	<table v-else class="standard-table">
 		<thead>
 			<th>Prize</th>
 			<th class="text-right">Value</th>
@@ -226,7 +152,22 @@ const totalWorth = unrolled.reduce((acc, prize) => acc + prize.value * prize.win
 						Ended
 					</template>
 				</td>
+  
+			</tr>
+		</tbody>
+	</table>
 
+	<h2>Past giveaways</h2>
+
+	<table class="standard-table">
+		<thead>
+			<th>Event</th>
+			<th class="text-right">Prizes</th>
+		</thead>
+		<tbody>
+			<tr v-for="(prizes, name) in pastGiveaways" :key="name">
+				<td>{{name}}</td>
+				<td class="text-right"><Money :value="prizes" /></td>
 			</tr>
 		</tbody>
 	</table>

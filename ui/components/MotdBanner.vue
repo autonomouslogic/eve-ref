@@ -13,7 +13,7 @@ const urlText = "Join Giveaway";
 </script>
 
 <template>
-	<div class="motd">
+	<div v-if="false" class="motd">
 		<section v-if="isIndex">
 			<div class="py-8 px-4 mx-auto max-w-screen-xl grid">
 				<div class="text-center sm:text-left">
