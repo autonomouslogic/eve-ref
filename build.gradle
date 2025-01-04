@@ -1,10 +1,7 @@
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-
 import java.time.LocalDate
 
 plugins {
 	id "java"
-	id "org.jetbrains.kotlin.jvm" version "2.1.0"
 	id "idea"
 	id "application"
 	id "jacoco"
@@ -13,7 +10,7 @@ plugins {
 	id "com.diffplug.spotless" version "6.25.0"
 	id "org.openapi.generator" version "7.10.0"
 	id "io.swagger.core.v3.swagger-gradle-plugin" version "2.2.26"
-	id "org.flywaydb.flyway" version "11.0.1" apply false	
+	id "org.flywaydb.flyway" version "11.0.1" apply false
 	id "nu.studer.jooq" version "9.0" apply false
 	id "io.micronaut.application" version "4.4.4"
 }
@@ -24,12 +21,6 @@ java {
 	toolchain {
 		sourceCompatibility = JavaVersion.VERSION_17
 		targetCompatibility = JavaVersion.VERSION_17
-	}
-}
-
-compileKotlin {
-	compilerOptions {
-		jvmTarget = JvmTarget.JVM_17
 	}
 }
 
@@ -142,8 +133,8 @@ task referenceDataClientGenerate(type: org.openapitools.generator.gradle.plugin.
 	library = "native"
 	inputSpec = "$rootDir/spec/reference-data.yaml"
 	outputDir = "$buildDir/generated/openapi/refdata"
-	apiPackage = "com.autonomouslogic.everef.openapi.refdata.apis"
-	invokerPackage = "com.autonomouslogic.everef.openapi.refdata.invoker"
+	apiPackage = "${group}.openapi.refdata.apis"
+	invokerPackage = "${group}.openapi.refdata.invoker"
 	configOptions = [
 			serializationLibrary: "jackson",
 			dateLibrary: "java8",
@@ -183,24 +174,26 @@ task referenceDataClientGenerate(type: org.openapitools.generator.gradle.plugin.
 }
 sourceSets.main.java.srcDirs files("${buildDir}/generated/openapi/refdata/src/main/java")
 		.builtBy(tasks.referenceDataClientGenerate)
-compileKotlin.dependsOn(tasks.referenceDataClientGenerate)
 compileJava.dependsOn(tasks.referenceDataClientGenerate)
 sourcesJar.dependsOn(tasks.referenceDataClientGenerate)
 delombok.dependsOn(tasks.referenceDataClientGenerate)
 
 openApiGenerate {
-	generatorName = "kotlin"
+	generatorName = "java"
+	library = "native"
 	inputSpec = "$rootDir/spec/esi-swagger.json"
 	packageName = "${group}.openapi.esi"
 	configOptions = [
-		library: "jvm-okhttp4",
-		serializationLibrary: "jackson",
-		dateLibrary: "java8"
+			serializationLibrary: "jackson",
+			dateLibrary: "java8",
+			asyncNative: "true"
+	]
+	additionalProperties = [
+			supportUrlQuery: "false"
 	]
 }
 sourceSets.main.java.srcDirs files("${buildDir}/generate-resources/main/src/main/kotlin")
 		.builtBy(tasks.openApiGenerate)
-compileKotlin.dependsOn(tasks.openApiGenerate)
 compileJava.dependsOn(tasks.openApiGenerate)
 sourcesJar.dependsOn(tasks.openApiGenerate)
 delombok.dependsOn(tasks.openApiGenerate)
@@ -252,7 +245,7 @@ micronaut {
 	runtime("netty")
 	testRuntime("junit5")
 }
-
+		
 application {
 	mainClass = mainClassName
 	applicationDefaultJvmArgs = [
