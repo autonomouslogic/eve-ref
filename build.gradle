@@ -133,7 +133,9 @@ task referenceDataClientGenerate(type: org.openapitools.generator.gradle.plugin.
 	library = "native"
 	inputSpec = "$rootDir/spec/reference-data.yaml"
 	outputDir = "$buildDir/generated/openapi/refdata"
+	packageName = "${group}.openapi.refdata"
 	apiPackage = "${group}.openapi.refdata.apis"
+	modelPackage = "${group}.openapi.refdata.models"
 	invokerPackage = "${group}.openapi.refdata.invoker"
 	configOptions = [
 			serializationLibrary: "jackson",
@@ -182,7 +184,11 @@ openApiGenerate {
 	generatorName = "java"
 	library = "native"
 	inputSpec = "$rootDir/spec/esi-swagger.json"
+	outputDir = "$buildDir/generated/openapi/esi"
 	packageName = "${group}.openapi.esi"
+	apiPackage = "${group}.openapi.esi.apis"
+	modelPackage = "${group}.openapi.esi.models"
+	invokerPackage = "${group}.openapi.esi.invoker"
 	configOptions = [
 			serializationLibrary: "jackson",
 			dateLibrary: "java8",
@@ -192,7 +198,7 @@ openApiGenerate {
 			supportUrlQuery: "false"
 	]
 }
-sourceSets.main.java.srcDirs files("${buildDir}/generate-resources/main/src/main/kotlin")
+sourceSets.main.java.srcDirs files("${buildDir}/generated/openapi/esi/src/main/java")
 		.builtBy(tasks.openApiGenerate)
 compileJava.dependsOn(tasks.openApiGenerate)
 sourcesJar.dependsOn(tasks.openApiGenerate)
@@ -245,7 +251,7 @@ micronaut {
 	runtime("netty")
 	testRuntime("junit5")
 }
-		
+
 application {
 	mainClass = mainClassName
 	applicationDefaultJvmArgs = [
