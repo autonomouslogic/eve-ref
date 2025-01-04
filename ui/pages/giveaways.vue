@@ -109,7 +109,7 @@ const pastGiveaways = {
 
 	<h2>Schedule</h2>
 	<p v-if="unrolled.length == 0">
-		No scheduled giveaways rigth now.
+		No scheduled giveaways right now, but some may be posted sporadically on Discord.
 	</p>
 	<table v-else class="standard-table">
 		<thead>
@@ -152,7 +152,7 @@ const pastGiveaways = {
 						Ended
 					</template>
 				</td>
-  
+
 			</tr>
 		</tbody>
 	</table>
