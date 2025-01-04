@@ -152,7 +152,7 @@ const pastGiveaways = {
 						Ended
 					</template>
 				</td>
-  
+
 			</tr>
 		</tbody>
 	</table>

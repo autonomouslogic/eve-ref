@@ -12,8 +12,8 @@ plugins {
 	id "io.freefair.lombok" version "8.11"
 	id "com.diffplug.spotless" version "6.25.0"
 	id "org.openapi.generator" version "7.10.0"
-	id "io.swagger.core.v3.swagger-gradle-plugin" version "2.2.27"
-	id "org.flywaydb.flyway" version "11.0.1" apply false
+	id "io.swagger.core.v3.swagger-gradle-plugin" version "2.2.26"
+	id "org.flywaydb.flyway" version "11.0.1" apply false	
 	id "nu.studer.jooq" version "9.0" apply false
 	id "io.micronaut.application" version "4.4.4"
 }
