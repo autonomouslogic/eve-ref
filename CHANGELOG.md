@@ -1,5 +1,14 @@
 EVE Ref Changelog
 
+## [2.54.2](https://github.com/autonomouslogic/eve-ref/compare/2.54.1...2.54.2) (2025-01-04)
+
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([#692](https://github.com/autonomouslogic/eve-ref/issues/692)) ([cdadcc3](https://github.com/autonomouslogic/eve-ref/commit/cdadcc3504f2a178ac1d544b174d6e065ebdb9f8))
+* **ui:** Giveaway update ([a3ab60f](https://github.com/autonomouslogic/eve-ref/commit/a3ab60f15f6dfe2670fcbc0363770417adcc1f8c))
+* **ui:** Removed December giveaway schedule ([060159a](https://github.com/autonomouslogic/eve-ref/commit/060159ad8681646347c0f0ede1faf28cfdd36da8))
+
 ## [2.54.1](https://github.com/autonomouslogic/eve-ref/compare/2.54.0...2.54.1) (2024-12-30)
 
 
