@@ -45,9 +45,8 @@ public class SovereigntyStructureSource implements StructureSource {
 	@Override
 	public Flowable<Long> getStructures() {
 		return Flowable.defer(() -> {
-			var response = sovereigntyApi
-					.getSovereigntyStructuresWithHttpInfo(EsiConstants.Datasource.tranquility.toString(), null)
-					.join();
+			var response = sovereigntyApi.getSovereigntyStructuresWithHttpInfo(
+					EsiConstants.Datasource.tranquility.toString(), null);
 			if (response.getStatusCode() != 200) {
 				return Flowable.error(new RuntimeException(
 						String.format("Failed to fetch sovereignty structure ids: %s", response.getStatusCode())));

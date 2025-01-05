@@ -180,6 +180,7 @@ sourcesJar.dependsOn(tasks.referenceDataClientGenerate)
 delombok.dependsOn(tasks.referenceDataClientGenerate)
 
 task esiClientGenerate(type: org.openapitools.generator.gradle.plugin.tasks.GenerateTask) {
+	group = "openapi tools"
 	generatorName = "java"
 	library = "native"
 	inputSpec = "$rootDir/spec/esi-swagger.json"
@@ -190,7 +191,7 @@ task esiClientGenerate(type: org.openapitools.generator.gradle.plugin.tasks.Gene
 	configOptions = [
 			serializationLibrary: "jackson",
 			dateLibrary: "java8",
-			asyncNative: "true"
+			asyncNative: "false"
 	]
 	additionalProperties = [
 			supportUrlQuery: "false"

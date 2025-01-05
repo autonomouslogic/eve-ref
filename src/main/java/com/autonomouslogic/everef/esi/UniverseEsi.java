@@ -50,9 +50,7 @@ public class UniverseEsi {
 			}
 			return Flowable.defer(() -> {
 						log.trace("Fetching region ids");
-						var regions = universeApi
-								.getUniverseRegions(datasource.toString(), null)
-								.join();
+						var regions = universeApi.getUniverseRegions(datasource.toString(), null);
 						regionIds = regions;
 						return Flowable.fromIterable(regions);
 					})
@@ -62,9 +60,7 @@ public class UniverseEsi {
 
 	public Maybe<GetUniverseRegionsRegionIdOk> getRegion(int regionId) {
 		return getFromCacheOrFetch("region", GetUniverseRegionsRegionIdOk.class, regions, regionId, () -> {
-			return universeApi
-					.getUniverseRegionsRegionId(regionId, null, datasource.toString(), null, null)
-					.join();
+			return universeApi.getUniverseRegionsRegionId(regionId, null, datasource.toString(), null, null);
 		});
 	}
 
@@ -79,18 +75,14 @@ public class UniverseEsi {
 				constellations,
 				constellationId,
 				() -> {
-					return universeApi
-							.getUniverseConstellationsConstellationId(
-									constellationId, null, datasource.toString(), null, null)
-							.join();
+					return universeApi.getUniverseConstellationsConstellationId(
+							constellationId, null, datasource.toString(), null, null);
 				});
 	}
 
 	public Maybe<GetUniverseSystemsSystemIdOk> getSystem(int systemId) {
 		return getFromCacheOrFetch("system", GetUniverseSystemsSystemIdOk.class, systems, systemId, () -> {
-			return universeApi
-					.getUniverseSystemsSystemId(systemId, null, datasource.toString(), null, null)
-					.join();
+			return universeApi.getUniverseSystemsSystemId(systemId, null, datasource.toString(), null, null);
 		});
 	}
 
@@ -101,17 +93,13 @@ public class UniverseEsi {
 		}
 		var intId = (int) stationId;
 		return getFromCacheOrFetch("station", GetUniverseStationsStationIdOk.class, stations, intId, () -> {
-			return universeApi
-					.getUniverseStationsStationId(intId, datasource.toString(), null)
-					.join();
+			return universeApi.getUniverseStationsStationId(intId, datasource.toString(), null);
 		});
 	}
 
 	public Maybe<GetUniverseTypesTypeIdOk> getType(int typeId) {
 		return getFromCacheOrFetch("type", GetUniverseTypesTypeIdOk.class, types, typeId, () -> {
-			return universeApi
-					.getUniverseTypesTypeId(typeId, null, datasource.toString(), null, null)
-					.join();
+			return universeApi.getUniverseTypesTypeId(typeId, null, datasource.toString(), null, null);
 		});
 	}
 

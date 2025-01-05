@@ -199,10 +199,8 @@ public class FetchDonations implements Command {
 	@SneakyThrows
 	private List<DonationEntry> getCharacterDonations(int characterId, String accessToken) {
 		var journals = esiHelper
-				.fetchPages(page -> walletApi
-						.getCharactersCharacterIdWalletJournalWithHttpInfo(
-								characterId, EsiConstants.Datasource.tranquility.toString(), null, page, accessToken)
-						.join())
+				.fetchPages(page -> walletApi.getCharactersCharacterIdWalletJournalWithHttpInfo(
+						characterId, EsiConstants.Datasource.tranquility.toString(), null, page, accessToken))
 				.doOnNext(e -> log.debug("Character journal: {}", e))
 				.filter(e -> DONATION_REF_TYPES.contains(e.getRefType().toString()))
 				.map(e -> DonationEntry.builder()
@@ -220,15 +218,8 @@ public class FetchDonations implements Command {
 	@SneakyThrows
 	private List<DonationEntry> getCorporationDonations(int corporationId, String accessToken) {
 		var journals = esiHelper
-				.fetchPages(page -> walletApi
-						.getCorporationsCorporationIdWalletsDivisionJournalWithHttpInfo(
-								corporationId,
-								1,
-								EsiConstants.Datasource.tranquility.toString(),
-								null,
-								page,
-								accessToken)
-						.join())
+				.fetchPages(page -> walletApi.getCorporationsCorporationIdWalletsDivisionJournalWithHttpInfo(
+						corporationId, 1, EsiConstants.Datasource.tranquility.toString(), null, page, accessToken))
 				.doOnNext(e -> log.debug("Corporation journal: {}", e))
 				.filter(e -> DONATION_REF_TYPES.contains(e.getRefType().toString()))
 				.map(e -> DonationEntry.builder()
@@ -286,17 +277,14 @@ public class FetchDonations implements Command {
 	}
 
 	@SneakyThrows
-	private @NotNull GetCorporationsCorporationIdOk getCorporation(int corporationId) {
-		return corporationApi
-				.getCorporationsCorporationId(corporationId, EsiConstants.Datasource.tranquility.toString(), null)
-				.join();
+	private @NotNull GetCorporationsCorporationIdOk getCorporation(int corporationId) throws ApiException {
+		return corporationApi.getCorporationsCorporationId(
+				corporationId, EsiConstants.Datasource.tranquility.toString(), null);
 	}
 
 	@SneakyThrows
-	private @NotNull GetCharactersCharacterIdOk getCharacter(int characterId) {
-		return characterApi
-				.getCharactersCharacterId(characterId, EsiConstants.Datasource.tranquility.toString(), null)
-				.join();
+	private @NotNull GetCharactersCharacterIdOk getCharacter(int characterId) throws ApiException {
+		return characterApi.getCharactersCharacterId(characterId, EsiConstants.Datasource.tranquility.toString(), null);
 	}
 
 	private static @NotNull List<SummaryEntry> summarise(Collection<DonationEntry> donations) {
@@ -361,6 +349,7 @@ public class FetchDonations implements Command {
 		}
 	}
 
+	@SneakyThrows
 	private @Nullable DonationEntry resolveDonorName(DonationEntry entry) {
 		var id = entry.getFirstPartyId();
 		try {
