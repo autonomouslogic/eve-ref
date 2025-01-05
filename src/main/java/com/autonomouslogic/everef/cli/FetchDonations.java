@@ -7,7 +7,6 @@ import com.autonomouslogic.everef.http.OkHttpHelper;
 import com.autonomouslogic.everef.openapi.esi.api.CharacterApi;
 import com.autonomouslogic.everef.openapi.esi.api.CorporationApi;
 import com.autonomouslogic.everef.openapi.esi.api.WalletApi;
-import com.autonomouslogic.everef.openapi.esi.infrastructure.ClientException;
 import com.autonomouslogic.everef.openapi.esi.model.GetCharactersCharacterIdOk;
 import com.autonomouslogic.everef.openapi.esi.model.GetCorporationsCorporationIdOk;
 import com.autonomouslogic.everef.pug.NumberFormats;

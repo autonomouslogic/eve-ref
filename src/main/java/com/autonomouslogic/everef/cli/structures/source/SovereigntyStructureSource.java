@@ -5,15 +5,13 @@ import static com.autonomouslogic.everef.cli.structures.ScrapeStructures.LAST_SE
 
 import com.autonomouslogic.everef.cli.structures.StructureScrapeHelper;
 import com.autonomouslogic.everef.cli.structures.StructureStore;
+import com.autonomouslogic.everef.esi.EsiConstants;
+import com.autonomouslogic.everef.esi.EsiHelper;
 import com.autonomouslogic.everef.openapi.esi.api.SovereigntyApi;
-import com.autonomouslogic.everef.openapi.esi.infrastructure.Success;
-import com.autonomouslogic.everef.openapi.esi.model.GetSovereigntyStructures200Ok;
-import com.autonomouslogic.everef.util.Rx;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import java.time.Instant;
-import java.util.List;
 import javax.inject.Inject;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -31,6 +29,9 @@ public class SovereigntyStructureSource implements StructureSource {
 	@Inject
 	protected StructureScrapeHelper structureScrapeHelper;
 
+	@Inject
+	protected EsiHelper esiHelper;
+
 	@Setter
 	@Accessors(chain = false)
 	private StructureStore structureStore;
@@ -43,15 +44,14 @@ public class SovereigntyStructureSource implements StructureSource {
 
 	@Override
 	public Flowable<Long> getStructures() {
-		return Flowable.defer(() -> {
-					var response = sovereigntyApi.getSovereigntyStructuresWithHttpInfo(
-							SovereigntyApi.DatasourceGetSovereigntyStructures.tranquility, null);
+		return esiHelper
+				.getResponse(() -> sovereigntyApi.getSovereigntyStructuresWithHttpInfo(EsiConstants.TRANQUILITY, null))
+				.flatMapPublisher(response -> {
 					if (response.getStatusCode() != 200) {
 						return Flowable.error(new RuntimeException(String.format(
 								"Failed to fetch sovereignty structure ids: %s", response.getStatusCode())));
 					}
-					var structures = ((Success<List<GetSovereigntyStructures200Ok>>) response)
-							.getData().stream().distinct().toList();
+					var structures = response.getData().stream().distinct().toList();
 					var lastModified =
 							structureScrapeHelper.getLastModified(response).orElse(timestamp);
 					log.debug("Fetched {} sovereignty structure ids", structures.size());
@@ -73,7 +73,6 @@ public class SovereigntyStructureSource implements StructureSource {
 								structureStore.put(node);
 								return id;
 							});
-				})
-				.compose(Rx.offloadFlowable());
+				});
 	}
 }

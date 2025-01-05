@@ -5,14 +5,14 @@ import static com.autonomouslogic.everef.cli.structures.ScrapeStructures.LAST_SE
 
 import com.autonomouslogic.everef.cli.structures.StructureScrapeHelper;
 import com.autonomouslogic.everef.cli.structures.StructureStore;
+import com.autonomouslogic.everef.esi.EsiConstants;
+import com.autonomouslogic.everef.esi.EsiHelper;
 import com.autonomouslogic.everef.openapi.esi.api.UniverseApi;
-import com.autonomouslogic.everef.openapi.esi.infrastructure.Success;
 import com.autonomouslogic.everef.util.Rx;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import java.time.Instant;
-import java.util.Set;
 import javax.inject.Inject;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -29,6 +29,9 @@ public class PublicStructureSource implements StructureSource {
 	@Inject
 	protected StructureScrapeHelper structureScrapeHelper;
 
+	@Inject
+	protected EsiHelper esiHelper;
+
 	@Setter
 	@Accessors(chain = false)
 	private StructureStore structureStore;
@@ -41,15 +44,15 @@ public class PublicStructureSource implements StructureSource {
 
 	@Override
 	public Flowable<Long> getStructures() {
-		return Flowable.defer(() -> {
+		return esiHelper
+				.getResponse(() -> universeApi.getUniverseStructuresWithHttpInfo(EsiConstants.TRANQUILITY, null, null))
+				.flatMapPublisher(response -> {
 					log.info("Fetching public structure ids");
-					var response = universeApi.getUniverseStructuresWithHttpInfo(
-							UniverseApi.DatasourceGetUniverseStructures.tranquility, null, null);
 					if (response.getStatusCode() != 200) {
 						return Flowable.error(new RuntimeException(
 								String.format("Failed to fetch public structure ids: %s", response.getStatusCode())));
 					}
-					var ids = ((Success<Set<Long>>) response).getData();
+					var ids = response.getData();
 					var lastModified =
 							structureScrapeHelper.getLastModified(response).orElse(timestamp);
 					log.info("Fetched {} public structure ids", ids.size());

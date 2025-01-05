@@ -3,9 +3,7 @@ package com.autonomouslogic.everef.esi;
 import com.autonomouslogic.commons.rxjava3.Rx3Util;
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.http.OkHttpHelper;
-import com.autonomouslogic.everef.openapi.esi.infrastructure.ApiResponse;
-import com.autonomouslogic.everef.openapi.esi.infrastructure.ResponseType;
-import com.autonomouslogic.everef.openapi.esi.infrastructure.Success;
+import com.autonomouslogic.everef.openapi.esi.invoker.ApiResponse;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.NullNode;
@@ -17,10 +15,12 @@ import io.reactivex.rxjava3.core.Scheduler;
 import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.functions.BiFunction;
 import io.reactivex.rxjava3.functions.Function;
+import io.reactivex.rxjava3.functions.Supplier;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import java.time.Duration;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executors;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -211,6 +211,14 @@ public class EsiHelper {
 		return Flowable.fromIterable(node);
 	}
 
+	public <T> Single<ApiResponse<T>> getResponse(Supplier<CompletableFuture<ApiResponse<T>>> supplier) {
+		return Single.defer(() -> getResponse(supplier.get()));
+	}
+
+	public <T> Single<ApiResponse<T>> getResponse(CompletableFuture<ApiResponse<T>> responseFuture) {
+		return Rx3Util.toSingle(responseFuture).observeOn(Schedulers.computation());
+	}
+
 	/**
 	 * Extracts a result from an OpenAPI generated ESI API response.
 	 * @param response
@@ -218,11 +226,11 @@ public class EsiHelper {
 	 * @param <T>
 	 */
 	private <T> T decodeResponse(ApiResponse<T> response) {
-		if (response.getResponseType() != ResponseType.Success) {
-			throw new RuntimeException(
-					String.format("Unexpected response type: %s - %s", response.getResponseType(), response));
+		int status = response.getStatusCode();
+		if (status / 100 != 2) {
+			throw new RuntimeException(String.format("Unexpected response: %s", status, response));
 		}
-		return ((Success<T>) response).getData();
+		return response.getData();
 	}
 
 	/**
