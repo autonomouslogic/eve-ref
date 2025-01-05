@@ -2,11 +2,13 @@ package com.autonomouslogic.everef.cli;
 
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.esi.EsiAuthHelper;
+import com.autonomouslogic.everef.esi.EsiConstants;
 import com.autonomouslogic.everef.esi.EsiHelper;
 import com.autonomouslogic.everef.http.OkHttpHelper;
 import com.autonomouslogic.everef.openapi.esi.api.CharacterApi;
 import com.autonomouslogic.everef.openapi.esi.api.CorporationApi;
 import com.autonomouslogic.everef.openapi.esi.api.WalletApi;
+import com.autonomouslogic.everef.openapi.esi.invoker.ApiException;
 import com.autonomouslogic.everef.openapi.esi.model.GetCharactersCharacterIdOk;
 import com.autonomouslogic.everef.openapi.esi.model.GetCorporationsCorporationIdOk;
 import com.autonomouslogic.everef.pug.NumberFormats;
@@ -197,12 +199,10 @@ public class FetchDonations implements Command {
 	@SneakyThrows
 	private List<DonationEntry> getCharacterDonations(int characterId, String accessToken) {
 		var journals = esiHelper
-				.fetchPages(page -> walletApi.getCharactersCharacterIdWalletJournalWithHttpInfo(
-						characterId,
-						WalletApi.DatasourceGetCharactersCharacterIdWalletJournal.tranquility,
-						null,
-						page,
-						accessToken))
+				.fetchPages(page -> walletApi
+						.getCharactersCharacterIdWalletJournalWithHttpInfo(
+								characterId, EsiConstants.Datasource.tranquility.toString(), null, page, accessToken)
+						.join())
 				.doOnNext(e -> log.debug("Character journal: {}", e))
 				.filter(e -> DONATION_REF_TYPES.contains(e.getRefType().toString()))
 				.map(e -> DonationEntry.builder()
@@ -220,13 +220,15 @@ public class FetchDonations implements Command {
 	@SneakyThrows
 	private List<DonationEntry> getCorporationDonations(int corporationId, String accessToken) {
 		var journals = esiHelper
-				.fetchPages(page -> walletApi.getCorporationsCorporationIdWalletsDivisionJournalWithHttpInfo(
-						corporationId,
-						1,
-						WalletApi.DatasourceGetCorporationsCorporationIdWalletsDivisionJournal.tranquility,
-						null,
-						page,
-						accessToken))
+				.fetchPages(page -> walletApi
+						.getCorporationsCorporationIdWalletsDivisionJournalWithHttpInfo(
+								corporationId,
+								1,
+								EsiConstants.Datasource.tranquility.toString(),
+								null,
+								page,
+								accessToken)
+						.join())
 				.doOnNext(e -> log.debug("Corporation journal: {}", e))
 				.filter(e -> DONATION_REF_TYPES.contains(e.getRefType().toString()))
 				.map(e -> DonationEntry.builder()
@@ -285,14 +287,16 @@ public class FetchDonations implements Command {
 
 	@SneakyThrows
 	private @NotNull GetCorporationsCorporationIdOk getCorporation(int corporationId) {
-		return corporationApi.getCorporationsCorporationId(
-				corporationId, CorporationApi.DatasourceGetCorporationsCorporationId.tranquility, null);
+		return corporationApi
+				.getCorporationsCorporationId(corporationId, EsiConstants.Datasource.tranquility.toString(), null)
+				.join();
 	}
 
 	@SneakyThrows
 	private @NotNull GetCharactersCharacterIdOk getCharacter(int characterId) {
-		return characterApi.getCharactersCharacterId(
-				characterId, CharacterApi.DatasourceGetCharactersCharacterId.tranquility, null);
+		return characterApi
+				.getCharactersCharacterId(characterId, EsiConstants.Datasource.tranquility.toString(), null)
+				.join();
 	}
 
 	private static @NotNull List<SummaryEntry> summarise(Collection<DonationEntry> donations) {
@@ -365,8 +369,8 @@ public class FetchDonations implements Command {
 					.donorName(character.getName())
 					.characterId(id)
 					.build();
-		} catch (ClientException e) {
-			if (e.getStatusCode() != 404) {
+		} catch (ApiException e) {
+			if (e.getCode() != 404) {
 				throw e;
 			}
 			try {
@@ -375,8 +379,8 @@ public class FetchDonations implements Command {
 						.donorName(corporation.getName())
 						.corporationId(id)
 						.build();
-			} catch (ClientException e2) {
-				if (e.getStatusCode() != 404) {
+			} catch (ApiException e2) {
+				if (e.getCode() != 404) {
 					throw e;
 				}
 			}

@@ -15,12 +15,10 @@ import io.reactivex.rxjava3.core.Scheduler;
 import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.functions.BiFunction;
 import io.reactivex.rxjava3.functions.Function;
-import io.reactivex.rxjava3.functions.Supplier;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import java.time.Duration;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executors;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -209,14 +207,6 @@ public class EsiHelper {
 					new RuntimeException(String.format("Expected array, got %s - %s", node.getNodeType(), url)));
 		}
 		return Flowable.fromIterable(node);
-	}
-
-	public <T> Single<ApiResponse<T>> getResponse(Supplier<CompletableFuture<ApiResponse<T>>> supplier) {
-		return Single.defer(() -> getResponse(supplier.get()));
-	}
-
-	public <T> Single<ApiResponse<T>> getResponse(CompletableFuture<ApiResponse<T>> responseFuture) {
-		return Rx3Util.toSingle(responseFuture).observeOn(Schedulers.computation());
 	}
 
 	/**

@@ -1,53 +1,65 @@
 package com.autonomouslogic.everef.inject;
 
-import com.autonomouslogic.everef.config.Configs;
+import static com.autonomouslogic.everef.config.Configs.REF_DATA_BASE_URL;
+
 import com.autonomouslogic.everef.openapi.esi.api.CharacterApi;
 import com.autonomouslogic.everef.openapi.esi.api.CorporationApi;
 import com.autonomouslogic.everef.openapi.esi.api.MarketApi;
 import com.autonomouslogic.everef.openapi.esi.api.SovereigntyApi;
 import com.autonomouslogic.everef.openapi.esi.api.UniverseApi;
 import com.autonomouslogic.everef.openapi.esi.api.WalletApi;
+import com.autonomouslogic.everef.openapi.esi.invoker.ApiClient;
 import dagger.Module;
 import dagger.Provides;
-import javax.inject.Named;
 import javax.inject.Singleton;
-import okhttp3.OkHttpClient;
 
 @Module
 public class EsiModule {
 	@Provides
 	@Singleton
-	public UniverseApi universeApi(@Named("esi") OkHttpClient httpClient) {
-		return new UniverseApi(Configs.ESI_BASE_URL.getRequired().toString(), httpClient);
+	public ApiClient apiClient() {
+		var base = REF_DATA_BASE_URL.getRequired();
+		var api = new ApiClient();
+		api.setScheme(base.getScheme());
+		api.setHost(base.getHost());
+		api.setPort(base.getPort());
+		api.setBasePath(base.getPath());
+		return api;
 	}
 
 	@Provides
 	@Singleton
-	public MarketApi marketApi(@Named("esi") OkHttpClient httpClient) {
-		return new MarketApi(Configs.ESI_BASE_URL.getRequired().toString(), httpClient);
+	public UniverseApi universeApi(ApiClient apiClient) {
+		return new UniverseApi(apiClient);
 	}
 
 	@Provides
 	@Singleton
-	public SovereigntyApi sovereigntyApi(@Named("esi") OkHttpClient httpClient) {
-		return new SovereigntyApi(Configs.ESI_BASE_URL.getRequired().toString(), httpClient);
+	public MarketApi marketApi(ApiClient apiClient) {
+		return new MarketApi(apiClient);
 	}
 
 	@Provides
 	@Singleton
-	public WalletApi walletApi(@Named("esi") OkHttpClient httpClient) {
-		return new WalletApi(Configs.ESI_BASE_URL.getRequired().toString(), httpClient);
+	public SovereigntyApi sovereigntyApi(ApiClient apiClient) {
+		return new SovereigntyApi(apiClient);
 	}
 
 	@Provides
 	@Singleton
-	public CharacterApi characterApi(@Named("esi") OkHttpClient httpClient) {
-		return new CharacterApi(Configs.ESI_BASE_URL.getRequired().toString(), httpClient);
+	public WalletApi walletApi(ApiClient apiClient) {
+		return new WalletApi(apiClient);
 	}
 
 	@Provides
 	@Singleton
-	public CorporationApi corporationApi(@Named("esi") OkHttpClient httpClient) {
-		return new CorporationApi(Configs.ESI_BASE_URL.getRequired().toString(), httpClient);
+	public CharacterApi characterApi(ApiClient apiClient) {
+		return new CharacterApi(apiClient);
+	}
+
+	@Provides
+	@Singleton
+	public CorporationApi corporationApi(ApiClient apiClient) {
+		return new CorporationApi(apiClient);
 	}
 }

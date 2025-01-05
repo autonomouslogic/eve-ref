@@ -44,9 +44,11 @@ public class PublicStructureSource implements StructureSource {
 
 	@Override
 	public Flowable<Long> getStructures() {
-		return esiHelper
-				.getResponse(() -> universeApi.getUniverseStructuresWithHttpInfo(EsiConstants.TRANQUILITY, null, null))
-				.flatMapPublisher(response -> {
+		return Flowable.defer(() -> {
+					var response = universeApi
+							.getUniverseStructuresWithHttpInfo(
+									EsiConstants.Datasource.tranquility.toString(), null, null)
+							.join();
 					log.info("Fetching public structure ids");
 					if (response.getStatusCode() != 200) {
 						return Flowable.error(new RuntimeException(

@@ -24,9 +24,10 @@ public class MarketEsi {
 
 	public Flowable<Integer> getActiveMarketOrderTypes(int regionId) {
 		return Flowable.defer(() -> {
-					var source = MarketApi.DatasourceGetMarketsRegionIdTypes.valueOf(datasource);
-					return esiHelper.fetchPages(
-							page -> marketApi.getMarketsRegionIdTypesWithHttpInfo(regionId, source, null, page));
+					var source = EsiConstants.Datasource.valueOf(datasource);
+					return esiHelper.fetchPages(page -> marketApi
+							.getMarketsRegionIdTypesWithHttpInfo(regionId, source.toString(), null, page)
+							.join());
 				})
 				.compose(Rx.offloadFlowable())
 				.onErrorResumeNext(e -> {

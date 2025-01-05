@@ -44,35 +44,35 @@ public class SovereigntyStructureSource implements StructureSource {
 
 	@Override
 	public Flowable<Long> getStructures() {
-		return esiHelper
-				.getResponse(() -> sovereigntyApi.getSovereigntyStructuresWithHttpInfo(EsiConstants.TRANQUILITY, null))
-				.flatMapPublisher(response -> {
-					if (response.getStatusCode() != 200) {
-						return Flowable.error(new RuntimeException(String.format(
-								"Failed to fetch sovereignty structure ids: %s", response.getStatusCode())));
-					}
-					var structures = response.getData().stream().distinct().toList();
-					var lastModified =
-							structureScrapeHelper.getLastModified(response).orElse(timestamp);
-					log.debug("Fetched {} sovereignty structure ids", structures.size());
-					return Flowable.fromIterable(structures)
-							.observeOn(Schedulers.computation())
-							.map(structure -> {
-								var id = structure.getStructureId();
-								var type = structure.getStructureTypeId();
-								var system = structure.getSolarSystemId();
-								var node = structureStore.getOrInitStructure(id);
-								node.put(IS_SOVEREIGNTY_STRUCTURE, true);
-								node.put(LAST_SEEN_SOVEREIGNTY_STRUCTURE, lastModified.toString());
-								if (!node.has("type_id")) {
-									node.put("type_id", type);
-								}
-								if (!node.has("solar_system_id")) {
-									node.put("solar_system_id", system);
-								}
-								structureStore.put(node);
-								return id;
-							});
-				});
+		return Flowable.defer(() -> {
+			var response = sovereigntyApi
+					.getSovereigntyStructuresWithHttpInfo(EsiConstants.Datasource.tranquility.toString(), null)
+					.join();
+			if (response.getStatusCode() != 200) {
+				return Flowable.error(new RuntimeException(
+						String.format("Failed to fetch sovereignty structure ids: %s", response.getStatusCode())));
+			}
+			var structures = response.getData().stream().distinct().toList();
+			var lastModified = structureScrapeHelper.getLastModified(response).orElse(timestamp);
+			log.debug("Fetched {} sovereignty structure ids", structures.size());
+			return Flowable.fromIterable(structures)
+					.observeOn(Schedulers.computation())
+					.map(structure -> {
+						var id = structure.getStructureId();
+						var type = structure.getStructureTypeId();
+						var system = structure.getSolarSystemId();
+						var node = structureStore.getOrInitStructure(id);
+						node.put(IS_SOVEREIGNTY_STRUCTURE, true);
+						node.put(LAST_SEEN_SOVEREIGNTY_STRUCTURE, lastModified.toString());
+						if (!node.has("type_id")) {
+							node.put("type_id", type);
+						}
+						if (!node.has("solar_system_id")) {
+							node.put("solar_system_id", system);
+						}
+						structureStore.put(node);
+						return id;
+					});
+		});
 	}
 }
