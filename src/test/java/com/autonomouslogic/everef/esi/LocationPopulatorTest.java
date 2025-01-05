@@ -2,18 +2,14 @@ package com.autonomouslogic.everef.esi;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import com.autonomouslogic.everef.openapi.esi.models.GetUniverseConstellationsConstellationIdOk;
-import com.autonomouslogic.everef.openapi.esi.models.GetUniverseConstellationsConstellationIdPosition;
-import com.autonomouslogic.everef.openapi.esi.models.GetUniverseRegionsRegionIdOk;
-import com.autonomouslogic.everef.openapi.esi.models.GetUniverseStationsStationIdOk;
-import com.autonomouslogic.everef.openapi.esi.models.GetUniverseStationsStationIdPosition;
-import com.autonomouslogic.everef.openapi.esi.models.GetUniverseSystemsSystemIdOk;
-import com.autonomouslogic.everef.openapi.esi.models.GetUniverseSystemsSystemIdPosition;
+import com.autonomouslogic.everef.openapi.esi.model.GetUniverseConstellationsConstellationIdOk;
+import com.autonomouslogic.everef.openapi.esi.model.GetUniverseRegionsRegionIdOk;
+import com.autonomouslogic.everef.openapi.esi.model.GetUniverseStationsStationIdOk;
+import com.autonomouslogic.everef.openapi.esi.model.GetUniverseSystemsSystemIdOk;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.test.TestDataUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import java.util.List;
 import javax.inject.Inject;
 import lombok.SneakyThrows;
 import okhttp3.mockwebserver.Dispatcher;
@@ -51,33 +47,19 @@ public class LocationPopulatorTest {
 
 		server = new MockWebServer();
 
-		region = objectMapper.writeValueAsString(new GetUniverseRegionsRegionIdOk(List.of(), "Region", 100, ""));
-		constellation = objectMapper.writeValueAsString(new GetUniverseConstellationsConstellationIdOk(
-				200, "Constellation", new GetUniverseConstellationsConstellationIdPosition(0, 0, 0), 100, List.of()));
-		system = objectMapper.writeValueAsString(new GetUniverseSystemsSystemIdOk(
-				200,
-				"System",
-				new GetUniverseSystemsSystemIdPosition(0, 0, 0),
-				0,
-				300,
-				List.of(),
-				"",
-				0,
-				List.of(),
-				List.of()));
-		station = objectMapper.writeValueAsString(new GetUniverseStationsStationIdOk(
-				0,
-				"Station",
-				0,
-				new GetUniverseStationsStationIdPosition(0, 0, 0),
-				0,
-				0,
-				List.of(),
-				400,
-				300,
-				0,
-				null,
-				null));
+		region = objectMapper.writeValueAsString(
+				new GetUniverseRegionsRegionIdOk().regionId(100).name("Region"));
+		constellation = objectMapper.writeValueAsString(new GetUniverseConstellationsConstellationIdOk()
+				.constellationId(200)
+				.name("Constellation"));
+		system = objectMapper.writeValueAsString(new GetUniverseSystemsSystemIdOk()
+				.constellationId(200)
+				.systemId(300)
+				.name("System"));
+		station = objectMapper.writeValueAsString(new GetUniverseStationsStationIdOk()
+				.stationId(400)
+				.systemId(300)
+				.name("Station"));
 
 		server.setDispatcher(new Dispatcher() {
 			@NotNull
