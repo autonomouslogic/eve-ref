@@ -133,10 +133,9 @@ task referenceDataClientGenerate(type: org.openapitools.generator.gradle.plugin.
 	library = "native"
 	inputSpec = "$rootDir/spec/reference-data.yaml"
 	outputDir = "$buildDir/generated/openapi/refdata"
-	packageName = "${group}.openapi.refdata"
-	apiPackage = "${group}.openapi.refdata.apis"
-	modelPackage = "${group}.openapi.refdata.models"
-	invokerPackage = "${group}.openapi.refdata.invoker"
+	apiPackage = "com.autonomouslogic.everef.openapi.refdata.api"
+	modelPackage = "com.autonomouslogic.everef.openapi.refdata.model"
+	invokerPackage = "com.autonomouslogic.everef.openapi.refdata.invoker"
 	configOptions = [
 			serializationLibrary: "jackson",
 			dateLibrary: "java8",
@@ -180,15 +179,14 @@ compileJava.dependsOn(tasks.referenceDataClientGenerate)
 sourcesJar.dependsOn(tasks.referenceDataClientGenerate)
 delombok.dependsOn(tasks.referenceDataClientGenerate)
 
-openApiGenerate {
+task esiClientGenerate(type: org.openapitools.generator.gradle.plugin.tasks.GenerateTask) {
 	generatorName = "java"
 	library = "native"
 	inputSpec = "$rootDir/spec/esi-swagger.json"
 	outputDir = "$buildDir/generated/openapi/esi"
-	packageName = "${group}.openapi.esi"
-	apiPackage = "${group}.openapi.esi.apis"
-	modelPackage = "${group}.openapi.esi.models"
-	invokerPackage = "${group}.openapi.esi.invoker"
+	apiPackage = "com.autonomouslogic.everef.openapi.esi.api"
+	modelPackage = "com.autonomouslogic.everef.openapi.esi.model"
+	invokerPackage = "com.autonomouslogic.everef.openapi.esi.invoker"
 	configOptions = [
 			serializationLibrary: "jackson",
 			dateLibrary: "java8",
@@ -199,10 +197,10 @@ openApiGenerate {
 	]
 }
 sourceSets.main.java.srcDirs files("${buildDir}/generated/openapi/esi/src/main/java")
-		.builtBy(tasks.openApiGenerate)
-compileJava.dependsOn(tasks.openApiGenerate)
-sourcesJar.dependsOn(tasks.openApiGenerate)
-delombok.dependsOn(tasks.openApiGenerate)
+		.builtBy(tasks.esiClientGenerate)
+compileJava.dependsOn(tasks.esiClientGenerate)
+sourcesJar.dependsOn(tasks.esiClientGenerate)
+delombok.dependsOn(tasks.esiClientGenerate)
 
 test {
 	environment "LOG_LEVEL", "trace"
