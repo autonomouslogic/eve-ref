@@ -1,7 +1,7 @@
 package com.autonomouslogic.everef.esi;
 
 import com.autonomouslogic.everef.config.Configs;
-import com.autonomouslogic.everef.openapi.esi.apis.MarketApi;
+import com.autonomouslogic.everef.openapi.esi.api.MarketApi;
 import com.autonomouslogic.everef.util.Rx;
 import io.reactivex.rxjava3.core.Flowable;
 import javax.inject.Inject;

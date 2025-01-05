@@ -5,7 +5,7 @@ import static com.autonomouslogic.everef.cli.structures.ScrapeStructures.LAST_SE
 
 import com.autonomouslogic.everef.cli.structures.StructureScrapeHelper;
 import com.autonomouslogic.everef.cli.structures.StructureStore;
-import com.autonomouslogic.everef.openapi.esi.apis.UniverseApi;
+import com.autonomouslogic.everef.openapi.esi.api.UniverseApi;
 import com.autonomouslogic.everef.openapi.esi.infrastructure.Success;
 import com.autonomouslogic.everef.util.Rx;
 import com.fasterxml.jackson.databind.ObjectMapper;

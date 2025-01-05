@@ -1,12 +1,12 @@
 package com.autonomouslogic.everef.inject;
 
 import com.autonomouslogic.everef.config.Configs;
-import com.autonomouslogic.everef.openapi.esi.apis.CharacterApi;
-import com.autonomouslogic.everef.openapi.esi.apis.CorporationApi;
-import com.autonomouslogic.everef.openapi.esi.apis.MarketApi;
-import com.autonomouslogic.everef.openapi.esi.apis.SovereigntyApi;
-import com.autonomouslogic.everef.openapi.esi.apis.UniverseApi;
-import com.autonomouslogic.everef.openapi.esi.apis.WalletApi;
+import com.autonomouslogic.everef.openapi.esi.api.CharacterApi;
+import com.autonomouslogic.everef.openapi.esi.api.CorporationApi;
+import com.autonomouslogic.everef.openapi.esi.api.MarketApi;
+import com.autonomouslogic.everef.openapi.esi.api.SovereigntyApi;
+import com.autonomouslogic.everef.openapi.esi.api.UniverseApi;
+import com.autonomouslogic.everef.openapi.esi.api.WalletApi;
 import dagger.Module;
 import dagger.Provides;
 import javax.inject.Named;

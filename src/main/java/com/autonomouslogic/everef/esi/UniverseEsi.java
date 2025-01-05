@@ -3,12 +3,12 @@ package com.autonomouslogic.everef.esi;
 import static com.autonomouslogic.everef.util.EveConstants.NPC_STATION_MAX_ID;
 
 import com.autonomouslogic.everef.config.Configs;
-import com.autonomouslogic.everef.openapi.esi.apis.UniverseApi;
-import com.autonomouslogic.everef.openapi.esi.models.GetUniverseConstellationsConstellationIdOk;
-import com.autonomouslogic.everef.openapi.esi.models.GetUniverseRegionsRegionIdOk;
-import com.autonomouslogic.everef.openapi.esi.models.GetUniverseStationsStationIdOk;
-import com.autonomouslogic.everef.openapi.esi.models.GetUniverseSystemsSystemIdOk;
-import com.autonomouslogic.everef.openapi.esi.models.GetUniverseTypesTypeIdOk;
+import com.autonomouslogic.everef.openapi.esi.api.UniverseApi;
+import com.autonomouslogic.everef.openapi.esi.model.GetUniverseConstellationsConstellationIdOk;
+import com.autonomouslogic.everef.openapi.esi.model.GetUniverseRegionsRegionIdOk;
+import com.autonomouslogic.everef.openapi.esi.model.GetUniverseStationsStationIdOk;
+import com.autonomouslogic.everef.openapi.esi.model.GetUniverseSystemsSystemIdOk;
+import com.autonomouslogic.everef.openapi.esi.model.GetUniverseTypesTypeIdOk;
 import com.autonomouslogic.everef.util.Rx;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Maybe;

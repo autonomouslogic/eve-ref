@@ -4,7 +4,7 @@ import com.autonomouslogic.everef.esi.EsiHelper;
 import com.autonomouslogic.everef.esi.EsiUrl;
 import com.autonomouslogic.everef.esi.UniverseEsi;
 import com.autonomouslogic.everef.http.OkHttpHelper;
-import com.autonomouslogic.everef.openapi.refdata.apis.RefdataApi;
+import com.autonomouslogic.everef.openapi.refdata.api.RefdataApi;
 import com.autonomouslogic.everef.openapi.refdata.invoker.ApiException;
 import com.autonomouslogic.everef.util.JsonUtil;
 import com.fasterxml.jackson.databind.JsonNode;

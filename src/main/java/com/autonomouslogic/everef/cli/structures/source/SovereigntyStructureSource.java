@@ -5,9 +5,9 @@ import static com.autonomouslogic.everef.cli.structures.ScrapeStructures.LAST_SE
 
 import com.autonomouslogic.everef.cli.structures.StructureScrapeHelper;
 import com.autonomouslogic.everef.cli.structures.StructureStore;
-import com.autonomouslogic.everef.openapi.esi.apis.SovereigntyApi;
+import com.autonomouslogic.everef.openapi.esi.api.SovereigntyApi;
 import com.autonomouslogic.everef.openapi.esi.infrastructure.Success;
-import com.autonomouslogic.everef.openapi.esi.models.GetSovereigntyStructures200Ok;
+import com.autonomouslogic.everef.openapi.esi.model.GetSovereigntyStructures200Ok;
 import com.autonomouslogic.everef.util.Rx;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.reactivex.rxjava3.core.Flowable;

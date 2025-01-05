@@ -4,7 +4,7 @@ import static com.autonomouslogic.everef.util.EveConstants.NPC_STATION_MAX_ID;
 
 import com.autonomouslogic.everef.cli.structures.StructureScrapeHelper;
 import com.autonomouslogic.everef.cli.structures.StructureStore;
-import com.autonomouslogic.everef.openapi.esi.apis.UniverseApi;
+import com.autonomouslogic.everef.openapi.esi.api.UniverseApi;
 import com.autonomouslogic.everef.util.CompressUtil;
 import com.autonomouslogic.everef.util.DataUtil;
 import com.autonomouslogic.everef.util.JsonNodeCsvReader;
