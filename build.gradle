@@ -12,7 +12,7 @@ plugins {
 	id "io.freefair.lombok" version "8.11"
 	id "com.diffplug.spotless" version "6.25.0"
 	id "org.openapi.generator" version "7.10.0"
-	id "io.swagger.core.v3.swagger-gradle-plugin" version "2.2.26"
+	id "io.swagger.core.v3.swagger-gradle-plugin" version "2.2.27"
 	id "org.flywaydb.flyway" version "11.1.0" apply false	
 	id "nu.studer.jooq" version "9.0" apply false
 	id "io.micronaut.application" version "4.4.4"
@@ -39,7 +39,7 @@ ext {
 	if (file("local.env").exists()) {
 		file("local.env").withInputStream { envProperties.load(it) }
 	}
-	micronautVersion = "4.7.3"
+	micronautVersion = "4.7.4"
 }
 
 repositories {
@@ -53,25 +53,25 @@ java {
 }
 
 dependencies {
-	annotationProcessor "com.google.dagger:dagger-compiler:2.54"
+	annotationProcessor "com.google.dagger:dagger-compiler:2.55"
 	implementation project(":database")
-	implementation "com.google.dagger:dagger:2.54"
+	implementation "com.google.dagger:dagger:2.55"
 	implementation "com.google.guava:guava:33.4.0-jre"
 	implementation "org.apache.logging.log4j:log4j-api:2.24.3"
 	implementation "org.apache.logging.log4j:log4j-core:2.24.3"
 	implementation "org.apache.logging.log4j:log4j-layout-template-json:2.24.3"
 	implementation "org.apache.logging.log4j:log4j-slf4j2-impl:2.24.3"
 	implementation "io.reactivex.rxjava3:rxjava:3.1.10"
-	implementation "com.autonomouslogic.commons:commons-java:1.9.2"
-	implementation("de.neuland-bfi:pug4j:2.3.0") {
+	implementation "com.autonomouslogic.commons:commons-java:1.9.3"
+	implementation("de.neuland-bfi:pug4j:2.3.1") {
 		exclude group: "org.graalvm.js"
 		exclude group: "org.graalvm.sdk"
 		exclude group: "org.graalvm.compiler"
 		exclude group: "org.graalvm.tools"
 		exclude group: "com.vladsch.flexmark"
 	}
-	implementation "software.amazon.awssdk:s3:2.29.45"
-	implementation "software.amazon.awssdk:dynamodb:2.29.45"
+	implementation "software.amazon.awssdk:s3:2.29.50"
+	implementation "software.amazon.awssdk:dynamodb:2.29.50"
 	implementation "com.autonomouslogic.dynamomapper:dynamo-mapper:2.1.17"
 	implementation "com.fasterxml.jackson.core:jackson-annotations:2.18.2"
 	implementation "com.fasterxml.jackson.core:jackson-core:2.18.2"
@@ -88,9 +88,9 @@ dependencies {
 	implementation "org.apache.commons:commons-csv:1.12.0"
 	implementation "net.gpedro.integrations.slack:slack-webhook:1.4.0"
 	implementation "org.jsoup:jsoup:1.18.3"
-	implementation "commons-codec:commons-codec:1.17.1"
+	implementation "commons-codec:commons-codec:1.17.2"
 	implementation "io.dropwizard.metrics:metrics-core:4.2.29"
-	implementation "com.autonomouslogic.customspecfilter:custom-spec-filter:1.2.1"
+	implementation "com.autonomouslogic.customspecfilter:custom-spec-filter:1.2.2"
 	implementation "io.swagger.core.v3:swagger-core:2.2.27"
 	implementation "io.swagger.core.v3:swagger-jaxrs2:2.2.27"
 	implementation "javax.ws.rs:javax.ws.rs-api:2.1.1"
@@ -102,7 +102,7 @@ dependencies {
 	implementation "com.github.scribejava:scribejava-core:8.3.3"
 	implementation "org.apache.commons:commons-lang3:3.17.0"
 
-	implementation "org.jooq:jooq:3.19.16"
+	implementation "org.jooq:jooq:3.19.17"
 	implementation "org.flywaydb:flyway-core:11.1.0"
 	implementation "org.flywaydb:flyway-database-postgresql:11.1.0"
 	implementation "com.h2database:h2:2.3.232"
@@ -114,8 +114,8 @@ dependencies {
 	implementation "io.micronaut.jaxrs:micronaut-jaxrs-server"
 	implementation "io.micronaut:micronaut-management"
 
-	testAnnotationProcessor "com.google.dagger:dagger-compiler:2.54"
-	testImplementation "com.google.dagger:dagger:2.54"
+	testAnnotationProcessor "com.google.dagger:dagger-compiler:2.55"
+	testImplementation "com.google.dagger:dagger:2.55"
 	testImplementation "org.junit.jupiter:junit-jupiter:5.11.4"
 	testImplementation "org.junit.jupiter:junit-jupiter-params:5.11.4"
 	testImplementation "org.junit-pioneer:junit-pioneer:2.3.0"
