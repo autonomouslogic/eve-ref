@@ -1,5 +1,28 @@
 EVE Ref Changelog
 
+## [2.55.0](https://github.com/autonomouslogic/eve-ref/compare/2.54.3...2.55.0) (2025-01-11)
+
+
+### Features
+
+* Added key generator script ([#708](https://github.com/autonomouslogic/eve-ref/issues/708)) ([da75588](https://github.com/autonomouslogic/eve-ref/commit/da75588108c578b193ddf8eef8dd1149386992a3))
+
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([#703](https://github.com/autonomouslogic/eve-ref/issues/703)) ([1f47d8e](https://github.com/autonomouslogic/eve-ref/commit/1f47d8e93aca9449f9c03016b81984f0ad0de128))
+
+
+### Dependency Updates
+
+* **deps:** Java 21 ([#381](https://github.com/autonomouslogic/eve-ref/issues/381)) ([a503cec](https://github.com/autonomouslogic/eve-ref/commit/a503cece1e0aea3020933a94e10efa3d1e92dc63))
+* **deps:** update plugin com.diffplug.spotless to v7 ([#707](https://github.com/autonomouslogic/eve-ref/issues/707)) ([6526ce3](https://github.com/autonomouslogic/eve-ref/commit/6526ce3478d94fc0bcb031eabac5144ac1884337))
+
+
+### Code Refactoring
+
+* Switched to the built-in Java HttpClient ([#702](https://github.com/autonomouslogic/eve-ref/issues/702)) ([5326773](https://github.com/autonomouslogic/eve-ref/commit/532677343a48145cee7766c38cd79cb7c9e50d69))
+
 ## [2.54.3](https://github.com/autonomouslogic/eve-ref/compare/2.54.2...2.54.3) (2025-01-06)
 
 
