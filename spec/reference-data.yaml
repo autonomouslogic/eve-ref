@@ -12,7 +12,6 @@ externalDocs:
   url: https://github.com/autonomouslogic/eve-ref/blob/main/docs/refdata.md
 servers:
 - url: https://ref-data.everef.net
-  variables: {}
 paths:
   /blueprints:
     get:
@@ -48,7 +47,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Blueprint'
+                $ref: "#/components/schemas/Blueprint"
   /categories:
     get:
       tags:
@@ -65,6 +64,18 @@ paths:
                 items:
                   type: integer
                   format: int32
+  /categories/bundle:
+    get:
+      tags:
+      - refdata
+      operationId: getCategoriesBundle
+      responses:
+        "200":
+          description: The categories bundle.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Bundle"
   /categories/{category_id}:
     get:
       tags:
@@ -83,7 +94,26 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InventoryCategory'
+                $ref: "#/components/schemas/InventoryCategory"
+  /categories/{category_id}/bundle:
+    get:
+      tags:
+      - refdata
+      operationId: getCategoryBundle
+      parameters:
+      - name: category_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: The category bundle.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Bundle"
   /dogma_attributes:
     get:
       tags:
@@ -118,7 +148,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DogmaAttribute'
+                $ref: "#/components/schemas/DogmaAttribute"
   /dogma_effects:
     get:
       tags:
@@ -153,7 +183,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DogmaEffect'
+                $ref: "#/components/schemas/DogmaEffect"
   /groups:
     get:
       tags:
@@ -188,7 +218,26 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InventoryGroup'
+                $ref: "#/components/schemas/InventoryGroup"
+  /groups/{group_id}/bundle:
+    get:
+      tags:
+      - refdata
+      operationId: getGroupBundle
+      parameters:
+      - name: group_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: The group bundle.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Bundle"
   /icons:
     get:
       tags:
@@ -223,7 +272,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Icon'
+                $ref: "#/components/schemas/Icon"
   /market_groups:
     get:
       tags:
@@ -256,6 +305,19 @@ paths:
                 items:
                   type: integer
                   format: int32
+  /market_groups/root/bundle:
+    get:
+      tags:
+      - refdata
+      description: Get bundle for root market groups.
+      operationId: getRootMarketGroupsBundle
+      responses:
+        "200":
+          description: Root market group bundle.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Bundle"
   /market_groups/{market_group_id}:
     get:
       tags:
@@ -274,7 +336,26 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/MarketGroup'
+                $ref: "#/components/schemas/MarketGroup"
+  /market_groups/{market_group_id}/bundle:
+    get:
+      tags:
+      - refdata
+      operationId: getMarketGroupBundle
+      parameters:
+      - name: market_group_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: The market group bundle.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Bundle"
   /meta:
     get:
       tags:
@@ -287,7 +368,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RefDataMeta'
+                $ref: "#/components/schemas/RefDataMeta"
   /meta_groups:
     get:
       tags:
@@ -322,7 +403,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/MetaGroup'
+                $ref: "#/components/schemas/MetaGroup"
   /mutaplasmids:
     get:
       tags:
@@ -357,7 +438,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Mutaplasmid'
+                $ref: "#/components/schemas/Mutaplasmid"
   /regions:
     get:
       tags:
@@ -393,7 +474,42 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Region'
+                $ref: "#/components/schemas/Region"
+  /schematics:
+    get:
+      tags:
+      - refdata
+      description: Get all schematic IDs.
+      operationId: getAllSchematics
+      responses:
+        "200":
+          description: Schematic type IDs.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: integer
+                  format: int64
+  /schematics/{schematic_id}:
+    get:
+      tags:
+      - refdata
+      operationId: getSchematic
+      parameters:
+      - name: schematic_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: The schematic.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Schematic"
   /skills:
     get:
       tags:
@@ -428,7 +544,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Skill'
+                $ref: "#/components/schemas/Skill"
   /types:
     get:
       tags:
@@ -463,7 +579,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/InventoryType'
+                $ref: "#/components/schemas/InventoryType"
   /types/{type_id}/bundle:
     get:
       tags:
@@ -482,7 +598,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Bundle'
+                $ref: "#/components/schemas/Bundle"
   /units:
     get:
       tags:
@@ -517,7 +633,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Unit'
+                $ref: "#/components/schemas/Unit"
 components:
   schemas:
     Blueprint:
@@ -529,10 +645,11 @@ components:
         activities:
           type: object
           additionalProperties:
-            $ref: '#/components/schemas/BlueprintActivity'
+            $ref: "#/components/schemas/BlueprintActivity"
         max_production_limit:
           type: integer
           format: int32
+      description: A map of blueprints. The key is the blueprint type ID.
     BlueprintActivity:
       type: object
       properties:
@@ -542,11 +659,11 @@ components:
         materials:
           type: object
           additionalProperties:
-            $ref: '#/components/schemas/BlueprintMaterial'
+            $ref: "#/components/schemas/BlueprintMaterial"
         products:
           type: object
           additionalProperties:
-            $ref: '#/components/schemas/BlueprintMaterial'
+            $ref: "#/components/schemas/BlueprintMaterial"
         required_skills:
           type: object
           additionalProperties:
@@ -570,28 +687,53 @@ components:
         types:
           type: object
           additionalProperties:
-            $ref: '#/components/schemas/InventoryType'
+            $ref: "#/components/schemas/InventoryType"
           description: A map of types. The key is the type ID.
         dogma_attributes:
           type: object
           additionalProperties:
-            $ref: '#/components/schemas/DogmaAttribute'
+            $ref: "#/components/schemas/DogmaAttribute"
           description: A map of dogma attributes. The key is the attribute ID.
         skills:
           type: object
           additionalProperties:
-            $ref: '#/components/schemas/Skill'
+            $ref: "#/components/schemas/Skill"
           description: A map of skills. The key is the skill ID.
         units:
           type: object
           additionalProperties:
-            $ref: '#/components/schemas/Unit'
+            $ref: "#/components/schemas/Unit"
           description: A map of units. The key is the unit ID.
         icons:
           type: object
           additionalProperties:
-            $ref: '#/components/schemas/Icon'
+            $ref: "#/components/schemas/Icon"
           description: A map of icons. The key is the icon ID.
+        market_groups:
+          type: object
+          additionalProperties:
+            $ref: "#/components/schemas/MarketGroup"
+          description: A map of market groups. The key is the market group ID.
+        categories:
+          type: object
+          additionalProperties:
+            $ref: "#/components/schemas/InventoryCategory"
+          description: A map of inventory categories. The key is the category ID.
+        groups:
+          type: object
+          additionalProperties:
+            $ref: "#/components/schemas/InventoryGroup"
+          description: A map of inventory groups. The key is the group ID.
+        meta_groups:
+          type: object
+          additionalProperties:
+            $ref: "#/components/schemas/MetaGroup"
+          description: A map of meta groups. The key is the group ID.
+        blueprints:
+          type: object
+          additionalProperties:
+            $ref: "#/components/schemas/Blueprint"
+          description: A map of blueprints. The key is the blueprint type ID.
     Coordinate:
       type: object
       properties:
@@ -634,6 +776,9 @@ components:
         icon_id:
           type: integer
           format: int32
+        min_attribute_id:
+          type: integer
+          format: int64
         max_attribute_id:
           type: integer
           format: int64
@@ -732,7 +877,7 @@ components:
         modifiers:
           type: array
           items:
-            $ref: '#/components/schemas/ModifierInfo'
+            $ref: "#/components/schemas/ModifierInfo"
     DogmaTypeAttribute:
       type: object
       properties:
@@ -842,18 +987,22 @@ components:
         dogma_attributes:
           type: object
           additionalProperties:
-            $ref: '#/components/schemas/DogmaTypeAttribute'
+            $ref: "#/components/schemas/DogmaTypeAttribute"
           description: A map of dogma attributes. The key is the attribute ID
         dogma_effects:
           type: object
           additionalProperties:
-            $ref: '#/components/schemas/DogmaTypeEffect'
+            $ref: "#/components/schemas/DogmaTypeEffect"
           description: A map of dogma attributes. The key is the attribute ID
         faction_id:
           type: integer
           format: int64
         graphic_id:
           type: integer
+          format: int64
+        category_id:
+          type: integer
+          description: The category ID the group is in. This is added by EVE Ref.
           format: int64
         group_id:
           type: integer
@@ -905,7 +1054,7 @@ components:
           type: integer
           format: int64
         traits:
-          $ref: '#/components/schemas/InventoryTypeTraits'
+          $ref: "#/components/schemas/InventoryTypeTraits"
         variation_parent_type_id:
           type: integer
           format: int64
@@ -974,13 +1123,109 @@ components:
         produced_by_blueprints:
           type: object
           additionalProperties:
-            $ref: '#/components/schemas/ProducingBlueprint'
+            $ref: "#/components/schemas/ProducingBlueprint"
           description: The blueprints producing this type. The key is the blueprint
             type ID. This is added by EVE Ref.
         type_materials:
           type: object
           additionalProperties:
-            $ref: '#/components/schemas/TypeMaterial'
+            $ref: "#/components/schemas/TypeMaterial"
+        can_fit_types:
+          type: array
+          description: Types this can be fitted to. This is added by EVE Ref.
+          items:
+            type: integer
+            description: Types this can be fitted to. This is added by EVE Ref.
+            format: int64
+        can_be_fitted_with_types:
+          type: array
+          description: Types which can be fitted. This is added by EVE Ref.
+          items:
+            type: integer
+            description: Types which can be fitted. This is added by EVE Ref.
+            format: int64
+        used_by_schematic_ids:
+          type: array
+          description: The schematics consuming this type. This is added by EVE Ref.
+          items:
+            type: integer
+            description: The schematics consuming this type. This is added by EVE
+              Ref.
+            format: int64
+        produced_by_schematic_ids:
+          type: array
+          description: The schematics producing this type. This is added by EVE Ref.
+          items:
+            type: integer
+            description: The schematics producing this type. This is added by EVE
+              Ref.
+            format: int64
+        harvested_by_pin_type_ids:
+          type: array
+          description: The type IDs for the planetary extractor pins which can be
+            used to harvest this type. This is added by EVE Ref.
+          items:
+            type: integer
+            description: The type IDs for the planetary extractor pins which can be
+              used to harvest this type. This is added by EVE Ref.
+            format: int64
+        buildable_pin_type_ids:
+          type: array
+          description: The type IDs for the planetary pins which can be built on this
+            planet. This is added by EVE Ref.
+          items:
+            type: integer
+            description: The type IDs for the planetary pins which can be built on
+              this planet. This is added by EVE Ref.
+            format: int64
+        installable_schematic_ids:
+          type: array
+          description: The schematic IDs which can be installed into this planetary
+            processor. This is added by EVE Ref.
+          items:
+            type: integer
+            description: The schematic IDs which can be installed into this planetary
+              processor. This is added by EVE Ref.
+            format: int64
+        used_in_blueprints:
+          type: object
+          additionalProperties:
+            type: object
+            additionalProperties:
+              $ref: "#/components/schemas/UsedInBlueprint"
+            description: The blueprints in which this type is used. The first key
+              is the blueprint ID and the second key is the activity name. This is
+              added by EVE Ref.
+          description: The blueprints in which this type is used. The first key is
+            the blueprint ID and the second key is the activity name. This is added
+            by EVE Ref.
+        engineering_rig_affected_category_ids:
+          type: array
+          description: "For structure engineering rigs, these are the category IDs\
+            \ the rig affects in some way. This is added by EVE Ref."
+          items:
+            type: integer
+            description: "For structure engineering rigs, these are the category IDs\
+              \ the rig affects in some way. This is added by EVE Ref."
+            format: int64
+        engineering_rig_affected_group_ids:
+          type: array
+          description: "For structure engineering rigs, these are the group IDs the\
+            \ rig affects in some way. This is added by EVE Ref."
+          items:
+            type: integer
+            description: "For structure engineering rigs, these are the group IDs\
+              \ the rig affects in some way. This is added by EVE Ref."
+            format: int64
+        engineering_rig_source_type_ids:
+          type: array
+          description: These are the type IDs of the engineering rigs which affect
+            this type in some way. This is added by EVE Ref.
+          items:
+            type: integer
+            description: These are the type IDs of the engineering rigs which affect
+              this type in some way. This is added by EVE Ref.
+            format: int64
         is_skill:
           type: boolean
           description: Whether this type is a skill or not. This is added by EVE Ref.
@@ -1007,17 +1252,29 @@ components:
         misc_bonuses:
           type: object
           additionalProperties:
-            $ref: '#/components/schemas/TraitBonus'
+            $ref: "#/components/schemas/TraitBonus"
+          description: "Misc bonuses indexed by 'importance' from the original array.\
+            \ This is represented as an array in the SDE, but EVE Ref converts it\
+            \ to a map."
         role_bonuses:
           type: object
           additionalProperties:
-            $ref: '#/components/schemas/TraitBonus'
+            $ref: "#/components/schemas/TraitBonus"
+          description: "Role bonuses indexed by 'importance' from the original array.\
+            \ This is represented as an array in the SDE, but EVE Ref converts it\
+            \ to a map."
         types:
           type: object
           additionalProperties:
             type: object
             additionalProperties:
-              $ref: '#/components/schemas/TraitBonus'
+              $ref: "#/components/schemas/TraitBonus"
+            description: "Type traits. First key is type ID granting the bonus. Second\
+              \ key is the `important` from the original array. This is represented\
+              \ as an array in the SDE, but EVE Ref converts it to a map."
+          description: "Type traits. First key is type ID granting the bonus. Second\
+            \ key is the `important` from the original array. This is represented\
+            \ as an array in the SDE, but EVE Ref converts it to a map."
         icon_id:
           type: integer
           format: int64
@@ -1079,6 +1336,18 @@ components:
           type: object
           additionalProperties:
             type: string
+        type_ids:
+          type: array
+          description: The type IDs in this meta group. This is added by EVE Ref.
+          items:
+            type: integer
+            description: The type IDs in this meta group. This is added by EVE Ref.
+            format: int64
+        color:
+          type: array
+          items:
+            type: number
+            format: double
       description: A meta group
     ModifierInfo:
       type: object
@@ -1114,11 +1383,11 @@ components:
         type_mappings:
           type: object
           additionalProperties:
-            $ref: '#/components/schemas/MutaplasmidTypeMapping'
+            $ref: "#/components/schemas/MutaplasmidTypeMapping"
         dogma_modifications:
           type: object
           additionalProperties:
-            $ref: '#/components/schemas/MutaplasmidDogmaModifications'
+            $ref: "#/components/schemas/MutaplasmidDogmaModifications"
           description: Which dogma attributes are modified by this mutaplasmid and
             by how much.
       description: Details about a mutaplasmid. These are created by EVE Ref and derived
@@ -1166,11 +1435,11 @@ components:
           type: string
           format: date-time
         esi:
-          $ref: '#/components/schemas/RefDataMetaFileInfo'
+          $ref: "#/components/schemas/RefDataMetaFileInfo"
         sde:
-          $ref: '#/components/schemas/RefDataMetaFileInfo'
+          $ref: "#/components/schemas/RefDataMetaFileInfo"
         hoboleaks:
-          $ref: '#/components/schemas/RefDataMetaFileInfo'
+          $ref: "#/components/schemas/RefDataMetaFileInfo"
     RefDataMetaFileInfo:
       type: object
       properties:
@@ -1212,11 +1481,41 @@ components:
             description: The key is the language code.
           description: The key is the language code.
         center:
-          $ref: '#/components/schemas/Coordinate'
+          $ref: "#/components/schemas/Coordinate"
         max:
-          $ref: '#/components/schemas/Coordinate'
+          $ref: "#/components/schemas/Coordinate"
         min:
-          $ref: '#/components/schemas/Coordinate'
+          $ref: "#/components/schemas/Coordinate"
+    Schematic:
+      type: object
+      properties:
+        schematic_id:
+          type: integer
+          format: int64
+        name:
+          type: object
+          additionalProperties:
+            type: string
+        cycle_time:
+          type: integer
+          format: int64
+        materials:
+          type: object
+          additionalProperties:
+            $ref: "#/components/schemas/BlueprintMaterial"
+          description: "This is called 'types' in the SDE, but EVE Ref converts it\
+            \ to 'materials' and 'products' to be consistent with blueprints."
+        products:
+          type: object
+          additionalProperties:
+            $ref: "#/components/schemas/BlueprintMaterial"
+          description: "This is called 'types' in the SDE, but EVE Ref converts it\
+            \ to 'materials' and 'products' to be consistent with blueprints."
+        pin_type_ids:
+          type: array
+          items:
+            type: integer
+            format: int64
     Skill:
       type: object
       properties:
@@ -1251,7 +1550,18 @@ components:
             description: The other skills required for this skill.
             format: int32
           description: The other skills required for this skill.
-      description: Details about skill types. These are created by EVE Ref.
+        reprocessable_type_ids:
+          type: array
+          description: "Which type IDs this skill can be used to reprocess. This is\
+            \ found by cross-referencing dogma attribute reprocessingSkillType [790]\
+            \ on the skills."
+          items:
+            type: integer
+            description: "Which type IDs this skill can be used to reprocess. This\
+              \ is found by cross-referencing dogma attribute reprocessingSkillType\
+              \ [790] on the skills."
+            format: int64
+      description: Details about skill types. These are created entirely by EVE Ref.
     TraitBonus:
       type: object
       properties:
@@ -1272,6 +1582,9 @@ components:
         unit_id:
           type: integer
           format: int64
+      description: "Type traits. First key is type ID granting the bonus. Second key\
+        \ is the `important` from the original array. This is represented as an array\
+        \ in the SDE, but EVE Ref converts it to a map."
     TypeMaterial:
       type: object
       properties:
@@ -1297,3 +1610,18 @@ components:
           type: object
           additionalProperties:
             type: string
+    UsedInBlueprint:
+      type: object
+      properties:
+        material_type_id:
+          type: integer
+          description: The material type ID.
+          format: int64
+        activity:
+          type: string
+          description: The activity this material is used in.
+        quantity:
+          type: integer
+          description: The quantity.
+          format: int64
+      description: Details a material used in a blueprint. This is added by EVE Ref.

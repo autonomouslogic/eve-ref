@@ -1,0 +1,3 @@
+exclude_patterns:
+  - "ui/esi-openapi/"
+  - "ui/refdata-openapi/"

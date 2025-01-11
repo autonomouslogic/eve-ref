@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import refdataApi from "~/refdata";
-import {DogmaTypeAttribute, InventoryType} from "~/refdata-openapi";
+import {type DogmaAttribute, type DogmaTypeAttribute, type InventoryType} from "~/refdata-openapi";
 import TraitsCard from "~/components/cards/TraitsCard.vue";
 import typeCardsConfig from "~/conf/typeCardsConfig";
-import DefensesCard from "~/components/cards/DefensesCard.vue";
+import DefensesCard from "~/components/cards/defenses/DefensesCard.vue";
 import TypeCardSelector from "~/components/types/TypeCardSelector.vue";
+import {loadDogmaAttributesForType} from "~/lib/dogmaUtils";
+import {tr} from "~/lib/translate";
 
 const {locale} = useI18n();
 
@@ -13,19 +14,8 @@ const props = defineProps<{
 }>();
 
 // Load all dogma attribute names for this type.
-const dogmaAttributes: { [key: string]: DogmaTypeAttribute } = {};
-if (props.inventoryType.dogmaAttributes) {
-	const promises = [];
-	for (const attrId in props.inventoryType.dogmaAttributes) {
-		promises.push((async () => {
-			const attr = await refdataApi.getDogmaAttribute({attributeId: parseInt(attrId)});
-			if (attr && attr.name) {
-				dogmaAttributes[attr.name] = attr;
-			}
-		})());
-	}
-	await Promise.all(promises);
-}
+const dogmaAttributes = await loadDogmaAttributesForType(props.inventoryType);
+const allDogmaAttributes: { [key: string]: DogmaAttribute } = JSON.parse(JSON.stringify(dogmaAttributes));
 
 // For each card, extract the attributes needed for each card.
 const cardAttributes: {[key: string]: DogmaTypeAttribute[] } = {};
@@ -40,6 +30,9 @@ for (const cardName in typeCardsConfig) {
 			cardAttributes[cardName].push(dogmaAttributes[attrName]);
 			delete dogmaAttributes[attrName];
 		}
+		else if (allDogmaAttributes[attrName]) {
+			cardAttributes[cardName].push(allDogmaAttributes[attrName]);
+		}
 	}
 }
 
@@ -50,15 +43,15 @@ if (Object.keys(dogmaAttributes).length > 0) {
 </script>
 
 <template>
-	<TraitsCard :inventory-type="inventoryType"/>
-	<DefensesCard :title="typeCardsConfig.defenses.name[locale]"
+	<TraitsCard class="my-4" :inventory-type="inventoryType"/>
+	<DefensesCard class="my-4" :title="tr(typeCardsConfig.defenses.name, locale) || ''"
 		:inventory-type="inventoryType"
-		:dogma-attributes="cardAttributes.defenses"/>
+		:dogma-attributes="cardAttributes.defenses" />
 	<CardsContainer>
 		<template v-for="(attributes, cardId) in cardAttributes" :key="cardId">
 			<TypeCardSelector
 				:component="typeCardsConfig[cardId].component"
-				:title="typeCardsConfig[cardId].name[locale]"
+				:title="tr(typeCardsConfig[cardId].name, locale)|| ''"
 				:inventory-type="inventoryType"
 				:dogma-attributes="attributes"
 			/>

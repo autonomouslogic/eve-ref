@@ -1,0 +1,31 @@
+{
+  "description" : {
+    "de" : "Das Standup-Marktzentrum ist ein Dienstmodul, welches die Nutzung von SCC anerkannten Markttransaktions- und Verwaltungszentrum ermöglicht, wenn es in einer Struktur mit Upwell-Technologie installiert wurde. Verfügt eine Upwell-Struktur über mindestens ein Online-Dienstmodul, schaltet sie in den Modus „Volle Leistung“ und erhält dadurch deutlich erhöhte Trefferpunkte für Schild und Panzerung sowie einen zusätzlichen Verstärkungszyklus. Standup ist ein gesetzlich geschütztes System, welches eine Strukturautonome Nanofertigungseinheit (Upwell) nutzt, das eine integrierte Vorlagensoftware, eine Nanofertigungsanlage und ausreichend Nanomasse enthält, um die Fertigung einer Vielzahl an Dienstmodulen, Strukturmodulen und Strukturmodifikationen zu ermöglichen, wenn es in entsprechende Slots in einer Struktur mit Upwell-Technologie eingebaut wird.",
+    "en" : "The Standup Market Hub is a service module that allows the use of an SCC-approved market transaction and administration hub when installed into an Upwell technology structure.\r\n\r\nWhile an Upwell Structure has at least one service module online, it will enter \"full power\" mode and gain significantly increased shield and armor hitpoints and an extra reinforcement cycle.\r\n\r\nStandup is a proprietary system that uses a Structure Autonomous Nanoassembly Device (Upwell) containing integrated template software, a nanoassembler array and sufficient nanomass to enable the construction of a variety of service modules, structure modules and structure rigs when inserted into the appropriate slots on a structure built with Upwell technology.",
+    "es" : "El centro mercantil Standup es un módulo de servicio que permite el uso de un centro de administración y de transacciones comerciales aprobado por la CCS cuando se instala en una estructura con tecnología Upwell.\n\nCuando una estructura de Upwell tiene al menos un módulo de servicio conectado, entra en el modo de potencia máxima y obtiene muchos más puntos de vida de escudo y blindaje, además de un ciclo de refuerzo adicional.\n\nStandup es un sistema patentado que utiliza un dispositivo de nanoensamblaje autónomo estructural (de Upwell) que contiene una plantilla integrada de software, una matriz de nanoensambladores y suficiente nanomasa como para construir una serie de módulos de servicio, de estructura y complementos de estructura cuando se insertan en las ranuras apropiadas en una estructura construida con la tecnología de Upwell.",
+    "fr" : "Le centre commercial 'Standup' est un module de service qui permet d'effectuer des transactions approuvées par la CCS et de servir de centre administratif lorsqu'il est installé sur une structure Upwell. Si une structure Upwell dispose d'au moins un module de service fonctionnel, elle entre en mode pleine puissance. Elle bénéficie alors d'une augmentation des points de vie des boucliers et du blindage, ainsi que d'un cycle de renfort de blindage additionnel. La technologie brevetée 'Standup' exploite un dispositif autonome de nano-assemblage pour structure Upwell, alliant un logiciel de modélisation intégré, une baie de nano-assemblage et une réserve de nano-masse. Une fois insérés dans les emplacements dédiés sur les structures Upwell, les dispositifs 'Standup' permettent l'assemblage moléculaire de divers modules de services, modules de structure et optimisations de structure.",
+    "ja" : "スタンドアップマーケットハブは、アップウェル技術ストラクチャに設置すると、SCC承認の市場取引および管理ハブの使用を可能にするサービスモジュールである。\r\n\nアップウェルストラクチャが少なくとも1つのサービスモジュールをオンラインにしている間、「フルパワー」モードに入り、大幅に増加したシールドとアーマーのヒットポイントと追加の強化サイクルを得る。\r\n\nスタンドアップは、自動ナノアセンブリーストラクチャデバイス（アップウェル）を使用して、様々なサービスモジュール、ストラクチャモジュール、そしてストラクチャリグを作り出すことができるプロプライエタリシステムである。アップウェルテクノロジーで建造されたストラクチャの適切なスロットに挿入して使う。アップウェルには統合テンプレートソフトウェア、ナノアセンブラー配列と、十分なナノ物質が含まれている。",
+    "ko" : "서비스 모듈로 분류되며 업웰 구조물에 설치 시 안전무역위원회(SCC) 공인 거래소와 행정 구역이 개방됩니다. <br><br>서비스 모듈이 온라인 상태일 경우 업웰 구조물은 최대 전력 모드로 전환되며 실드량 및 장갑 내구도가 증가하고 추가 강화 시간대가 생성됩니다. <br><br>스탠드업은 자율구조형 나노어셈블러 장치(업웰)를 사용하는 시스템으로 템플릿 소프트웨어가 내장되어 있으며 나노어셈블리 배열, 충분한 양의 나노물질이 탑재돼있습니다. 업웰 기반 구조물에 장착 시 다양한 종류의 서비스 모듈, 구조물 모듈, 구조물 장착형 리그를 제조할 수 있습니다.",
+    "ru" : "Торговый центр на базе «Стационар» — это служебный модуль, позволяющий проводить разрешённые торговые операции и использовать административный центр на сооружениях консорциума «Апвелл». Так как у этого сооружения консорциума «Апвелл» есть по меньшей мере один работающий служебный модуль, оно переходит в режим полной мощности и получает значительно увеличенный запас прочности щитов и брони, а также дополнительный цикл укрепления. СТАЦИОНАР — это проприетарная система, использующая стационарный автономный наносборщик производства «Апвелл», который и лёг в основу её названия. Он содержит встроенное ПО для создания шаблонов, линию наносборщиков и достаточное количество наномассы для сборки различных модулей технического обслуживания, а также модулей и надстроек для сооружений, сконструированных по проектам консорциума «Апвелл», которые устанавливаются в соответствующие разъёмы.",
+    "zh" : "这种屹立市场中心服务装备安装在昇威科技建筑内，能够使用商业安全委员会许可的市场交易和管理中心。\n\n\n\n如果昇威建筑启用了至少一个服务装备，将进入全能量运转模式，将会额外获得海量的护盾和装甲值以及一个额外的增强模式循环。\n\n\n\n屹立专用系统采用了昇威建筑分控纳米装配装置，由集成模版软件、纳米装配阵列和许多纳米块体构成。安装在采用昇威科技建造的建筑上的专门槽位中可以制造各种服务装备、建筑装备和建筑改装件。"
+  },
+  "group_id" : 1321,
+  "icon_id" : 21595,
+  "market_group_id" : 2232,
+  "mass" : 4000,
+  "meta_group_id" : 54,
+  "name" : {
+    "de" : "Standup Market Hub I",
+    "en" : "Standup Market Hub I",
+    "es" : "Centro mercantil Standup I",
+    "fr" : "Centre d'affaires 'Standup' I",
+    "ja" : "スタンドアップマーケットハブI",
+    "ko" : "스탠드업 거래소 허브 I",
+    "ru" : "Standup Market Hub I",
+    "zh" : "屹立市场中心 I"
+  },
+  "portion_size" : 1,
+  "published" : true,
+  "volume" : 32000,
+  "type_id" : 35892
+}

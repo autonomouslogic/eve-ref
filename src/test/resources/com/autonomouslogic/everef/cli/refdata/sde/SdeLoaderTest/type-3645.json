@@ -1,0 +1,30 @@
+{
+  "base_price" : 35,
+  "description" : {
+    "de" : "Wasser ist eine der Grundvoraussetzungen für menschliches Überleben. Auf den meisten Welten ist diese Ressource knapp, so dass man dort auf Schiffsladungen angewiesen ist.",
+    "en" : "Water is one of the basic conditional elements of human survival. Most worlds have this compound in relative short supply and hence must rely on starship freight.",
+    "es" : "El agua es uno de los elementos básicos para la supervivencia humana. La mayoría de los mundos tienen pocos suministros de este compuesto y, por ello, dependen de su transporte en naves estelares.",
+    "fr" : "L'eau est l'un des éléments fondamentaux pour la survie humaine. La plupart des mondes ne disposent que de faibles réserves et il faut compter sur le transport par vaisseau spatial pour s'en procurer.",
+    "ja" : "水は人間の生存に欠かせない必須物質の一つである。ほとんどの惑星ではこの化合物が供給不足気味で、艦船で運ばれてくる輸入品に頼っている。",
+    "ko" : "인간의 생존에 있어 물은 가장 기본적인 요소 중 하나입니다. 대부분의 행성은 물이 충분하지 않기 때문에 성간 운송에 의지하고 있습니다.",
+    "ru" : "Вода — одна из основ человеческого выживания. Большинство миров испытывает нехватку воды и зависит от межзвездных поставок.",
+    "zh" : "水是人类生存必不可少的基本元素之一。这种化合物的储备在许多地方都相对稀缺，因此必须要靠星际飞船运送才能满足供应。"
+  },
+  "group_id" : 1042,
+  "icon_id" : 1178,
+  "market_group_id" : 1334,
+  "name" : {
+    "de" : "Water",
+    "en" : "Water",
+    "es" : "Agua",
+    "fr" : "Eau",
+    "ja" : "水",
+    "ko" : "물",
+    "ru" : "Water",
+    "zh" : "水"
+  },
+  "portion_size" : 1,
+  "published" : true,
+  "volume" : 0.19,
+  "type_id" : 3645
+}

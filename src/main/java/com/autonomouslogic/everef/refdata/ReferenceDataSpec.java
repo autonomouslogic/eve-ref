@@ -31,7 +31,7 @@ import javax.ws.rs.PathParam;
 						url = "https://github.com/autonomouslogic/eve-ref/blob/main/docs/refdata.md"))
 @Tag(name = "refdata")
 public interface ReferenceDataSpec {
-	public static final String BASE_URL = "https://ref-data.everef.net";
+	String BASE_URL = "https://ref-data.everef.net";
 
 	@GET
 	@Path("/meta")
@@ -64,6 +64,26 @@ public interface ReferenceDataSpec {
 	InventoryCategory getCategory(@PathParam("category_id") long categoryId);
 
 	@GET
+	@Path("/categories/bundle")
+	@Operation
+	@ApiResponse(
+			responseCode = "200",
+			description = "The categories bundle.",
+			useReturnTypeSchema = true,
+			content = @Content(mediaType = "application/json"))
+	Bundle getCategoriesBundle();
+
+	@GET
+	@Path("/categories/{category_id}/bundle")
+	@Operation
+	@ApiResponse(
+			responseCode = "200",
+			description = "The category bundle.",
+			useReturnTypeSchema = true,
+			content = @Content(mediaType = "application/json"))
+	Bundle getCategoryBundle(@PathParam("category_id") long categoryId);
+
+	@GET
 	@Path("/groups")
 	@Operation(description = "Get all type IDs.")
 	@ApiResponse(
@@ -82,6 +102,16 @@ public interface ReferenceDataSpec {
 			useReturnTypeSchema = true,
 			content = @Content(mediaType = "application/json"))
 	InventoryGroup getGroup(@PathParam("group_id") long groupId);
+
+	@GET
+	@Path("/groups/{group_id}/bundle")
+	@Operation
+	@ApiResponse(
+			responseCode = "200",
+			description = "The group bundle.",
+			useReturnTypeSchema = true,
+			content = @Content(mediaType = "application/json"))
+	Bundle getGroupBundle(@PathParam("group_id") long groupId);
 
 	@GET
 	@Path("/market_groups")
@@ -104,6 +134,16 @@ public interface ReferenceDataSpec {
 	List<Integer> getRootMarketGroups();
 
 	@GET
+	@Path("/market_groups/root/bundle")
+	@Operation(description = "Get bundle for root market groups.")
+	@ApiResponse(
+			responseCode = "200",
+			description = "Root market group bundle.",
+			useReturnTypeSchema = true,
+			content = @Content(mediaType = "application/json"))
+	Bundle getRootMarketGroupsBundle();
+
+	@GET
 	@Path("/market_groups/{market_group_id}")
 	@Operation
 	@ApiResponse(
@@ -112,6 +152,16 @@ public interface ReferenceDataSpec {
 			useReturnTypeSchema = true,
 			content = @Content(mediaType = "application/json"))
 	MarketGroup getMarketGroup(@PathParam("market_group_id") long marketGroupId);
+
+	@GET
+	@Path("/market_groups/{market_group_id}/bundle")
+	@Operation
+	@ApiResponse(
+			responseCode = "200",
+			description = "The market group bundle.",
+			useReturnTypeSchema = true,
+			content = @Content(mediaType = "application/json"))
+	Bundle getMarketGroupBundle(@PathParam("market_group_id") long marketGroupId);
 
 	@GET
 	@Path("/meta_groups")
@@ -302,6 +352,26 @@ public interface ReferenceDataSpec {
 			useReturnTypeSchema = true,
 			content = @Content(mediaType = "application/json"))
 	Icon getIcon(@PathParam("icon_id") long iconId);
+
+	@GET
+	@Path("/schematics")
+	@Operation(description = "Get all schematic IDs.")
+	@ApiResponse(
+			responseCode = "200",
+			description = "Schematic type IDs.",
+			useReturnTypeSchema = true,
+			content = @Content(mediaType = "application/json"))
+	List<Long> getAllSchematics();
+
+	@GET
+	@Path("/schematics/{schematic_id}")
+	@Operation
+	@ApiResponse(
+			responseCode = "200",
+			description = "The schematic.",
+			useReturnTypeSchema = true,
+			content = @Content(mediaType = "application/json"))
+	Schematic getSchematic(@PathParam("schematic_id") long schematicId);
 
 	@GET
 	@Path("/regions")

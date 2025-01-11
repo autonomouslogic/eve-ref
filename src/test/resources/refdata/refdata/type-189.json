@@ -6,6 +6,7 @@
     "es" : "Munición de proyectiles de medio calibre. Esta munición, muy habitual entre los pilotos minmatarianos, es incendiaria y de gran penetración. Ten cuidado al manejarla, a menos que quieras despertarte con un cuerno en la frente.\n\n20 % de bonificación de velocidad de rastreo.",
     "fr" : "Munition de projectile intermédiaire. Cette munition très appréciée des pilotes minmatar est incendiaire et dispose d'un grand pouvoir de pénétration. Faites bien attention en la manipulant si vous ne voulez pas vous réveiller avec une oreille supplémentaire au beau milieu du front.\n\nAugmente de 20 % la vitesse de poursuite.",
     "ja" : "中型プロジェクタイル弾。ミンマターのパイロットにきわめて人気の弾で、焼夷弾だが貫通力にも優れる。ただし、取り扱いには注意しないと、気がつけば額から余分なつま先が生えているなんていう事態になりかねない。\n追跡速度が20%増加。",
+    "ko" : "중형 발사체 탄약입니다. 민마타에서 주로 사용되며 열 피해와 더불어 탁월한 관통력을 자랑합니다. 방사능으로 인해 이마에 발가락이 자라는 꼴을 보고 싶지 않다면 취급 시 각별한 주의를 권장합니다. <br><br>트래킹 속도 20% 증가",
     "ru" : "Снаряды среднего калибра. Эти зажигательные снаряды, часто используемые пилотами Минматар, обладают высокой поражающей способностью. С ними следует обращаться очень осторожно — если, конечно, вы не хотите, чтобы в один прекрасный день у вас выросла третья нога.\n\n\n\nБонус к скорости слежения — 20%.",
     "zh" : "中型射弹弹药。米玛塔尔共和国飞行员的常用弹药，具有燃烧性和很强的穿透力。不过一定要谨慎操作，你肯定不希望一觉醒来发现脚被烧着了。20%跟踪速度加成。"
   },
@@ -21,6 +22,7 @@
     "es" : "Uranio empobrecido (M)",
     "fr" : "Uranium appauvri M",
     "ja" : "劣化ウラン弾M",
+    "ko" : "열화 우라늄탄 M",
     "ru" : "Depleted Uranium M",
     "zh" : "硬钼弹 M"
   },

@@ -6,6 +6,7 @@
     "es" : "Habilidad en el manejo de cruceros gallentes.",
     "fr" : "Compétence liée au pilotage des croiseurs gallente.",
     "ja" : "ガレンテ巡洋艦を操作するためのスキル。",
+    "ko" : "갈란테 크루저를 운용하기 위한 스킬입니다.",
     "ru" : "Освоив этот навык, пилот получит допуск к выполнению полётов на крейсерах производства Галлентской Федерации.",
     "zh" : "操作盖伦特巡洋舰的技能。"
   },
@@ -18,6 +19,7 @@
     "es" : "Crucero gallente",
     "fr" : "Croiseur gallente",
     "ja" : "ガレンテ巡洋艦",
+    "ko" : "갈란테 크루저",
     "ru" : "Галлентские крейсеры",
     "zh" : "盖伦特巡洋舰操作"
   },
@@ -98,6 +100,7 @@
   "mass" : 0,
   "packaged_volume" : 0.01,
   "radius" : 1,
+  "category_id" : 16,
   "is_skill" : true,
   "required_skills" : {
     "3327" : 2,

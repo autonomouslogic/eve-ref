@@ -1,0 +1,85 @@
+{
+  "capacity" : 0,
+  "description" : {
+    "en" : "Specialization in Simple Ore reprocessing. Allows a skilled individual to utilize reprocessing facilities at considerably greater efficiency.\r\n\r\n2% bonus to reprocessing yield per skill level for the following Simple Ore types:\r\nPlagioclase\r\nPyroxeres\r\nScordite\r\nVeldspar\r\nMordunium",
+    "fr" : "Spécialisation dans le retraitement des minerais simples. Cette compétence permet d'améliorer considérablement l'efficacité des usines de retraitement. Pour chaque niveau de compétence, augmente de 2 % le rendement du retraitement pour les types de minerai simple suivants : plagioclase, pyroxeres, scordite, veldspar et mordunium"
+  },
+  "dogma_attributes" : {
+    "161" : {
+      "attribute_id" : 161,
+      "value" : 0.01
+    },
+    "162" : {
+      "attribute_id" : 162,
+      "value" : 1
+    },
+    "4" : {
+      "attribute_id" : 4,
+      "value" : 0
+    },
+    "278" : {
+      "attribute_id" : 278,
+      "value" : 3
+    },
+    "38" : {
+      "attribute_id" : 38,
+      "value" : 0
+    },
+    "1047" : {
+      "attribute_id" : 1047,
+      "value" : 0
+    },
+    "275" : {
+      "attribute_id" : 275,
+      "value" : 3
+    },
+    "180" : {
+      "attribute_id" : 180,
+      "value" : 166
+    },
+    "277" : {
+      "attribute_id" : 277,
+      "value" : 4
+    },
+    "182" : {
+      "attribute_id" : 182,
+      "value" : 3385
+    },
+    "183" : {
+      "attribute_id" : 183,
+      "value" : 3402
+    },
+    "280" : {
+      "attribute_id" : 280,
+      "value" : 0
+    },
+    "379" : {
+      "attribute_id" : 379,
+      "value" : 2
+    },
+    "181" : {
+      "attribute_id" : 181,
+      "value" : 165
+    }
+  },
+  "dogma_effects" : {
+    "132" : {
+      "effect_id" : 132,
+      "is_default" : true
+    }
+  },
+  "group_id" : 1218,
+  "icon_id" : 33,
+  "market_group_id" : 1323,
+  "mass" : 0,
+  "name" : {
+    "en" : "Simple Ore Processing",
+    "fr" : "Traitement de minerai simple"
+  },
+  "packaged_volume" : 0.01,
+  "portion_size" : 1,
+  "published" : true,
+  "radius" : 1,
+  "type_id" : 60377,
+  "volume" : 0.01
+}

@@ -108,4 +108,46 @@ public class ObjectMergerTest {
 		var actual = objectMerger.merge(input);
 		assertEquals(expected, actual);
 	}
+
+	@Test
+	@SneakyThrows
+	void shouldNotReplaceWithNullValues() {
+		var input = new ObjectNode[] {
+			(ObjectNode) objectMapper.readTree("""
+				{
+					"var1": "Text"
+				}"""),
+			(ObjectNode) objectMapper.readTree("""
+				{
+					"var1": null
+				}""")
+		};
+		var expected = objectMapper.readTree("""
+			{
+				"var1": "Text"
+			}""");
+		var actual = objectMerger.merge(input);
+		assertEquals(expected, actual);
+	}
+
+	@Test
+	@SneakyThrows
+	void shouldNotReplaceWithEmptyStrings() {
+		var input = new ObjectNode[] {
+			(ObjectNode) objectMapper.readTree("""
+				{
+					"var1": "Text"
+				}"""),
+			(ObjectNode) objectMapper.readTree("""
+				{
+					"var1": ""
+				}""")
+		};
+		var expected = objectMapper.readTree("""
+			{
+				"var1": "Text"
+			}""");
+		var actual = objectMerger.merge(input);
+		assertEquals(expected, actual);
+	}
 }

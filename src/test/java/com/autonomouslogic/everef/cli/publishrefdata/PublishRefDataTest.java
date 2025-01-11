@@ -13,17 +13,25 @@ import com.autonomouslogic.everef.test.TestDataUtil;
 import com.autonomouslogic.everef.util.DataUtil;
 import com.autonomouslogic.everef.util.MockScrapeBuilder;
 import com.autonomouslogic.everef.util.RefDataUtil;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.google.common.collect.Iterators;
+import com.google.common.collect.Lists;
 import java.io.File;
 import java.io.FileInputStream;
 import java.time.Instant;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 import javax.inject.Inject;
 import javax.inject.Named;
+import lombok.Builder;
+import lombok.Singular;
 import lombok.SneakyThrows;
+import lombok.Value;
 import lombok.extern.log4j.Log4j2;
 import okhttp3.mockwebserver.Dispatcher;
 import okhttp3.mockwebserver.MockResponse;
@@ -120,7 +128,9 @@ public class PublishRefDataTest {
 
 		var expectedKeys = new HashSet<String>();
 		expectedKeys.add("base/meta");
+		expectedKeys.add("base/categories/bundle");
 		expectedKeys.add("base/market_groups/root");
+		expectedKeys.add("base/market_groups/root/bundle");
 		for (var config : refDataUtil.loadReferenceDataConfig()) {
 			var testConfig = config.getTest();
 			assertIndex(config, testConfig, expectedKeys);
@@ -129,14 +139,23 @@ public class PublishRefDataTest {
 				if (config.getId().equals("types")) {
 					assertTypeBundle(id, config, testConfig, expectedKeys);
 				}
+				if (config.getId().equals("categories")) {
+					assertCategoryBundle(id, config, testConfig, expectedKeys);
+				}
+				if (config.getId().equals("groups")) {
+					assertGroupBundle(id, config, testConfig, expectedKeys);
+				}
+				if (config.getId().equals("marketGroups")) {
+					assertMarketGroupBundle(id, config, testConfig, expectedKeys);
+				}
 			}
 		}
 
 		// `/types` isn't uploaded because it already matches.
 		expectedKeys.remove("base/types");
 		assertEquals(
-				expectedKeys.stream().sorted().toList(),
-				putKeys.stream().sorted().toList());
+				expectedKeys.stream().sorted().collect(Collectors.joining("\n")),
+				putKeys.stream().sorted().collect(Collectors.joining("\n")));
 
 		var deleteKeys = mockS3Adapter.getAllDeleteKeys(BUCKET_NAME, s3);
 		assertEquals(List.of("base/types/999999999"), deleteKeys);
@@ -168,34 +187,186 @@ public class PublishRefDataTest {
 
 	@SneakyThrows
 	private void assertTypeBundle(long id, RefDataConfig config, RefTestConfig testConfig, Set<String> expectedKeys) {
-		// Multiplasmids don't get bundles.
-		if (id == 52225) {
-			return;
-		}
+		var path = String.format("base/%s/%s/bundle", config.getOutputFile(), id);
+		expectedKeys.add(path);
 
+		// Dominix
+		if (id == 645) {
+			assertBundle(
+					ExpectedBundleIds.builder()
+							.typeIds(List.of(
+									645L, 22430L, 3336L, 3327L, 33097L, 3332L, 33093L, 3328L, 999L, 34L, 37152L))
+							.attributeIds(List.of(9L, 162L, 182L, 277L, 183L, 278L))
+							.skillIds(List.of(3336L, 3327L, 33097L, 3332L, 33093L, 3328L))
+							.unitIds(List.of(1L, 133L))
+							.iconIds(List.of(67L))
+							.marketGroupIds(List.of(81L, 7L, 1376L, 4L))
+							.categoryIds(List.of(6L))
+							.groupIds(List.of(27L))
+							.metaGroupIds(List.of(1L, 2L))
+							.build(),
+					path);
+		}
+		// Standup M-Set Basic Large Ship Manufacturing Material Efficiency II
+		if (id == 37152) {
+			assertBundle(
+					ExpectedBundleIds.builder()
+							.typeIds(List.of(37152L))
+							.attributeIds(List.of(9L, 162L, 182L, 277L, 2355L))
+							.skillIds(List.of())
+							.unitIds(List.of(1L, 133L))
+							.iconIds(List.of(67L))
+							.marketGroupIds(List.of())
+							.categoryIds(List.of())
+							.groupIds(List.of(27L, 513L, 941L))
+							.metaGroupIds(List.of())
+							.build(),
+					path);
+		}
+		// Standup XL-Set Structure and Component Manufacturing Efficiency I
+		if (id == 43704) {
+			assertBundle(
+					ExpectedBundleIds.builder()
+							.typeIds(List.of(43704L))
+							.attributeIds(List.of(9L, 162L, 182L, 277L, 2355L))
+							.skillIds(List.of())
+							.unitIds(List.of(1L, 133L))
+							.iconIds(List.of(67L))
+							.marketGroupIds(List.of())
+							.categoryIds(List.of(66L, 23L))
+							.groupIds(List.of(1869L, 332L))
+							.metaGroupIds(List.of())
+							.build(),
+					path);
+		}
+	}
+
+	@SneakyThrows
+	private void assertCategoryBundle(
+			long id, RefDataConfig config, RefTestConfig testConfig, Set<String> expectedKeys) {
+		var path = String.format("base/%s/%s/bundle", config.getOutputFile(), id);
+		expectedKeys.add(path);
+
+		if (id == 6) {
+			assertBundle(
+					ExpectedBundleIds.builder()
+							.categoryIds(List.of(6L))
+							.groupIds(List.of(27L, 513L, 941L))
+							.build(),
+					path);
+		}
+	}
+
+	@SneakyThrows
+	private void assertGroupBundle(long id, RefDataConfig config, RefTestConfig testConfig, Set<String> expectedKeys) {
 		var path = String.format("base/%s/%s/bundle", config.getOutputFile(), id);
 		expectedKeys.add(path);
 
 		// Only spot-check one complete one.
-		if (id != 645) {
-			return;
+		if (id == 27) {
+			assertBundle(
+					ExpectedBundleIds.builder()
+							.groupIds(List.of(27L))
+							.typeIds(List.of(645L))
+							.attributeIds(List.of(9L, 162L, 182L, 277L))
+							.unitIds(List.of(1L, 133L))
+							.iconIds(List.of(67L))
+							.metaGroupIds(List.of(1L))
+							.build(),
+					path);
 		}
-		var expectedItem = buildTestTypeBundle(
-				List.of(645L, 22430L, 3336L, 3327L, 33097L, 3332L, 33093L, 3328L),
-				List.of(9L, 162L, 182L, 277L),
-				List.of(3336L, 3327L, 33097L, 3332L, 33093L, 3328L),
-				List.of(1L),
-				List.of(67L));
+	}
+
+	@SneakyThrows
+	private void assertMarketGroupBundle(
+			long id, RefDataConfig config, RefTestConfig testConfig, Set<String> expectedKeys) {
+		var path = String.format("base/%s/%s/bundle", config.getOutputFile(), id);
+		expectedKeys.add(path);
+
+		if (id == 7) {
+			assertBundle(
+					ExpectedBundleIds.builder()
+							.marketGroupIds(List.of(7L, 81L))
+							.unitIds(List.of(133L))
+							.build(),
+					path);
+		} else if (id == 81) {
+			assertBundle(
+					ExpectedBundleIds.builder()
+							.marketGroupIds(List.of(81L))
+							.typeIds(List.of(645L))
+							.attributeIds(List.of(9L, 162L, 182L, 277L))
+							.unitIds(List.of(1L, 133L))
+							.iconIds(List.of(67L))
+							.metaGroupIds(List.of(1L))
+							.build(),
+					path);
+		}
+	}
+
+	@SneakyThrows
+	private void assertBundle(ExpectedBundleIds expectedBundleIds, String path) {
+		var expectedBundle = buildTestBundle(expectedBundleIds);
+
 		var actualItem = objectMapper.readTree(mockS3Adapter
 				.getTestObject(BUCKET_NAME, path, s3)
 				.orElseThrow(() -> new RuntimeException("Missing path: " + path)));
-		assertEquals(expectedItem, actualItem);
+
+		var knownBundleFields = Set.of(
+				"types",
+				"dogma_attributes",
+				"skills",
+				"units",
+				"icons",
+				"market_groups",
+				"categories",
+				"groups",
+				"meta_groups");
+		var unknownFields = Lists.newArrayList(actualItem.fieldNames()).stream()
+				.filter(o -> !knownBundleFields.contains(o))
+				.toList();
+		assertEquals(List.of(), unknownFields);
+
+		assertExpectedBundleIds(expectedBundleIds.getTypeIds(), actualItem, "types", path);
+		assertExpectedBundleIds(expectedBundleIds.getAttributeIds(), actualItem, "dogma_attributes", path);
+		assertExpectedBundleIds(expectedBundleIds.getSkillIds(), actualItem, "skills", path);
+		assertExpectedBundleIds(expectedBundleIds.getUnitIds(), actualItem, "units", path);
+		assertExpectedBundleIds(expectedBundleIds.getIconIds(), actualItem, "icons", path);
+		assertExpectedBundleIds(expectedBundleIds.getMarketGroupIds(), actualItem, "market_groups", path);
+		assertExpectedBundleIds(expectedBundleIds.getCategoryIds(), actualItem, "categories", path);
+		assertExpectedBundleIds(expectedBundleIds.getGroupIds(), actualItem, "groups", path);
+		assertExpectedBundleIds(expectedBundleIds.getMetaGroupIds(), actualItem, "meta_groups", path);
+
+		assertEquals(expectedBundle, actualItem);
 	}
 
-	private ObjectNode buildTestTypeBundle(
-			List<Long> typeIds, List<Long> attributeIds, List<Long> skillIds, List<Long> unitIds, List<Long> iconIds) {
+	private void assertExpectedBundleIds(List<Long> expectedIds, JsonNode bundle, String rootField, String path) {
+		var expected = Optional.ofNullable(expectedIds).orElse(List.of()).stream()
+				.sorted()
+				.toList();
+		var supplied = Lists.newArrayList(Optional.ofNullable(bundle.get(rootField))
+						.map(JsonNode::fieldNames)
+						.orElse(Iterators.forArray()))
+				.stream()
+				.map(e -> Long.parseLong(e))
+				.sorted()
+				.toList();
+		assertEquals(expected, supplied, rootField + " on " + path);
+	}
+
+	private ObjectNode buildTestBundle(ExpectedBundleIds expectedBundleIds) {
+		var typeIds = expectedBundleIds.getTypeIds();
+		var attributeIds = expectedBundleIds.getAttributeIds();
+		var skillIds = expectedBundleIds.getSkillIds();
+		var unitIds = expectedBundleIds.getUnitIds();
+		var iconIds = expectedBundleIds.getIconIds();
+		var marketGroupIds = expectedBundleIds.getMarketGroupIds();
+		var categoryIds = expectedBundleIds.getCategoryIds();
+		var groupIds = expectedBundleIds.getGroupIds();
+		var metaGroupIds = expectedBundleIds.getMetaGroupIds();
+
 		var bundle = objectMapper.createObjectNode();
-		if (typeIds != null) {
+		if (typeIds != null && !typeIds.isEmpty()) {
 			var container = bundle.putObject("types");
 			for (long id : typeIds) {
 				container.set(
@@ -203,7 +374,7 @@ public class PublishRefDataTest {
 						dataUtil.loadJsonResource(String.format("/refdata/refdata/type-%s.json", id)));
 			}
 		}
-		if (attributeIds != null) {
+		if (attributeIds != null && !attributeIds.isEmpty()) {
 			var container = bundle.putObject("dogma_attributes");
 			for (long id : attributeIds) {
 				container.set(
@@ -211,7 +382,7 @@ public class PublishRefDataTest {
 						dataUtil.loadJsonResource(String.format("/refdata/refdata/dogma-attribute-%s.json", id)));
 			}
 		}
-		if (skillIds != null) {
+		if (skillIds != null && !skillIds.isEmpty()) {
 			var container = bundle.putObject("skills");
 			for (long id : skillIds) {
 				container.set(
@@ -219,7 +390,7 @@ public class PublishRefDataTest {
 						dataUtil.loadJsonResource(String.format("/refdata/refdata/skill-%s.json", id)));
 			}
 		}
-		if (unitIds != null) {
+		if (unitIds != null && !unitIds.isEmpty()) {
 			var container = bundle.putObject("units");
 			for (long id : unitIds) {
 				container.set(
@@ -227,12 +398,44 @@ public class PublishRefDataTest {
 						dataUtil.loadJsonResource(String.format("/refdata/refdata/unit-%s.json", id)));
 			}
 		}
-		if (iconIds != null) {
+		if (iconIds != null && !iconIds.isEmpty()) {
 			var container = bundle.putObject("icons");
 			for (long id : iconIds) {
 				container.set(
 						Long.toString(id),
 						dataUtil.loadJsonResource(String.format("/refdata/refdata/icon-%s.json", id)));
+			}
+		}
+		if (marketGroupIds != null && !marketGroupIds.isEmpty()) {
+			var container = bundle.putObject("market_groups");
+			for (long id : marketGroupIds) {
+				container.set(
+						Long.toString(id),
+						dataUtil.loadJsonResource(String.format("/refdata/refdata/market-group-%s.json", id)));
+			}
+		}
+		if (categoryIds != null && !categoryIds.isEmpty()) {
+			var container = bundle.putObject("categories");
+			for (long id : categoryIds) {
+				container.set(
+						Long.toString(id),
+						dataUtil.loadJsonResource(String.format("/refdata/refdata/category-%s.json", id)));
+			}
+		}
+		if (groupIds != null && !groupIds.isEmpty()) {
+			var container = bundle.putObject("groups");
+			for (long id : groupIds) {
+				container.set(
+						Long.toString(id),
+						dataUtil.loadJsonResource(String.format("/refdata/refdata/group-%s.json", id)));
+			}
+		}
+		if (metaGroupIds != null && !metaGroupIds.isEmpty()) {
+			var container = bundle.putObject("meta_groups");
+			for (long id : metaGroupIds) {
+				container.set(
+						Long.toString(id),
+						dataUtil.loadJsonResource(String.format("/refdata/refdata/meta-group-%s.json", id)));
 			}
 		}
 		return bundle;
@@ -284,5 +487,36 @@ public class PublishRefDataTest {
 				return new MockResponse().setResponseCode(500);
 			}
 		}
+	}
+
+	@Value
+	@Builder
+	private static class ExpectedBundleIds {
+		@Singular
+		List<Long> typeIds;
+
+		@Singular
+		List<Long> attributeIds;
+
+		@Singular
+		List<Long> skillIds;
+
+		@Singular
+		List<Long> unitIds;
+
+		@Singular
+		List<Long> iconIds;
+
+		@Singular
+		List<Long> marketGroupIds;
+
+		@Singular
+		List<Long> categoryIds;
+
+		@Singular
+		List<Long> groupIds;
+
+		@Singular
+		List<Long> metaGroupIds;
 	}
 }

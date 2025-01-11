@@ -10,15 +10,18 @@ import java.nio.file.attribute.FileTime;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
+import java.util.function.Consumer;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.jetbrains.annotations.NotNull;
 
 @Singleton
 @Log4j2
@@ -30,8 +33,21 @@ public class OkHttpHelper {
 		return get(url, client, Schedulers.io());
 	}
 
+	public Single<Response> get(
+			@NonNull String url, @NonNull OkHttpClient client, @NonNull Consumer<Request.Builder> requestConsumer) {
+		return get(url, client, Schedulers.io(), requestConsumer);
+	}
+
 	public Single<Response> get(@NonNull String url, @NonNull OkHttpClient client, @NonNull Scheduler scheduler) {
-		return get(url, client, scheduler, 2, true);
+		return get(url, client, scheduler, 2, true, r -> {});
+	}
+
+	public Single<Response> get(
+			@NonNull String url,
+			@NonNull OkHttpClient client,
+			@NonNull Scheduler scheduler,
+			@NonNull Consumer<Request.Builder> requestConsumer) {
+		return get(url, client, scheduler, 2, true, requestConsumer);
 	}
 
 	private Single<Response> get(
@@ -39,24 +55,35 @@ public class OkHttpHelper {
 			@NonNull OkHttpClient client,
 			@NonNull Scheduler scheduler,
 			int retries,
-			boolean observeOnComputation) {
+			boolean observeOnComputation,
+			@NonNull Consumer<Request.Builder> requestConsumer) {
 		return Single.defer(() -> {
-			var request = getRequest(url);
-			var response = execute(request, client, scheduler);
-			if (retries > 0) {
-				response = response.retry(retries, e -> {
-					var msg = ExceptionUtils.getMessage(e);
-					log.warn(String.format("Retrying request: %s %s - %s", request.method(), request.url(), msg));
-					return true;
-				});
-			}
-			response = response.onErrorResumeNext(
-					e -> Single.error(new RuntimeException(String.format("Error during GET %s", url), e)));
-			if (observeOnComputation) {
-				response = response.observeOn(Schedulers.computation());
-			}
-			return response;
+			var request = getRequest(url, requestConsumer);
+			return executeWithRetries(url, client, scheduler, retries, observeOnComputation, request);
 		});
+	}
+
+	private @NotNull Single<Response> executeWithRetries(
+			@NotNull String url,
+			@NotNull OkHttpClient client,
+			@NotNull Scheduler scheduler,
+			int retries,
+			boolean observeOnComputation,
+			Request request) {
+		var response = execute(request, client, scheduler);
+		if (retries > 0) {
+			response = response.retry(retries, e -> {
+				var msg = ExceptionUtils.getMessage(e);
+				log.warn(String.format("Retrying request: %s %s - %s", request.method(), request.url(), msg));
+				return true;
+			});
+		}
+		response = response.onErrorResumeNext(
+				e -> Single.error(new RuntimeException(String.format("Error during %s %s", request.method(), url), e)));
+		if (observeOnComputation) {
+			response = response.observeOn(Schedulers.computation());
+		}
+		return response;
 	}
 
 	public Single<Response> download(@NonNull String url, @NonNull File file, @NonNull OkHttpClient client) {
@@ -67,7 +94,7 @@ public class OkHttpHelper {
 			@NonNull String url, @NonNull File file, @NonNull OkHttpClient client, @NonNull Scheduler scheduler) {
 		return Single.defer(() -> {
 					log.debug("Downloading {} to {}", url, file);
-					return get(url, client, scheduler, 0, false)
+					return get(url, client, scheduler, 0, false, r -> {})
 							.flatMap(response -> Single.fromCallable(() -> {
 								var lastModified = getLastModified(response);
 								if (response.code() != 200) {
@@ -88,6 +115,37 @@ public class OkHttpHelper {
 				.observeOn(Schedulers.computation());
 	}
 
+	public Single<Response> post(
+			@NonNull String url,
+			@NonNull byte[] body,
+			@NonNull OkHttpClient client,
+			@NonNull Consumer<Request.Builder> requestConsumer) {
+		return post(url, body, client, Schedulers.io(), requestConsumer);
+	}
+
+	public Single<Response> post(
+			@NonNull String url,
+			@NonNull byte[] body,
+			@NonNull OkHttpClient client,
+			@NonNull Scheduler scheduler,
+			@NonNull Consumer<Request.Builder> requestConsumer) {
+		return post(url, body, client, scheduler, 0, true, requestConsumer);
+	}
+
+	private Single<Response> post(
+			@NonNull String url,
+			@NonNull byte[] body,
+			@NonNull OkHttpClient client,
+			@NonNull Scheduler scheduler,
+			int retries,
+			boolean observeOnComputation,
+			@NonNull Consumer<Request.Builder> requestConsumer) {
+		return Single.defer(() -> {
+			var request = postRequest(url, body, requestConsumer);
+			return executeWithRetries(url, client, scheduler, retries, observeOnComputation, request);
+		});
+	}
+
 	/**
 	 * Executes a request on the provided scheduler.
 	 * Not that this does not bring execution back to the computation scheduler.
@@ -96,7 +154,7 @@ public class OkHttpHelper {
 	 * @param scheduler
 	 * @return
 	 */
-	private Single<Response> execute(
+	public Single<Response> execute(
 			@NonNull Request request, @NonNull OkHttpClient client, @NonNull Scheduler scheduler) {
 		return Single.fromCallable(() -> {
 					log.trace(String.format("Requesting %s %s", request.method(), request.url()));
@@ -107,8 +165,21 @@ public class OkHttpHelper {
 						String.format("Error requesting %s %s", request.method(), request.url()), e)));
 	}
 
-	private Request getRequest(@NonNull String url) {
-		return new Request.Builder().get().url(url).build();
+	public Request getRequest(@NonNull String url) {
+		return getRequest(url, b -> {});
+	}
+
+	public Request getRequest(@NonNull String url, @NonNull Consumer<Request.Builder> requestConsumer) {
+		var builder = new Request.Builder().get().url(url);
+		requestConsumer.accept(builder);
+		return builder.build();
+	}
+
+	public Request postRequest(
+			@NonNull String url, @NonNull byte[] body, @NonNull Consumer<Request.Builder> requestConsumer) {
+		var builder = new Request.Builder().post(RequestBody.create(body)).url(url);
+		requestConsumer.accept(builder);
+		return builder.build();
 	}
 
 	public Optional<ZonedDateTime> getLastModified(@NonNull Response response) {

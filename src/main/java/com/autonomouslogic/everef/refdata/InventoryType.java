@@ -44,6 +44,10 @@ public class InventoryType {
 	@JsonProperty
 	Long graphicId;
 
+	@Schema(description = "The category ID the group is in. This is added by EVE Ref.")
+	@JsonProperty
+	Long categoryId;
+
 	@JsonProperty
 	Long groupId;
 
@@ -162,4 +166,63 @@ public class InventoryType {
 
 	@JsonProperty
 	Map<Long, TypeMaterial> typeMaterials;
+
+	@JsonProperty
+	@Schema(description = "Types this can be fitted to. This is added by EVE Ref.")
+	List<Long> canFitTypes;
+
+	@JsonProperty
+	@Schema(description = "Types which can be fitted. This is added by EVE Ref.")
+	List<Long> canBeFittedWithTypes;
+
+	@JsonProperty
+	@Schema(description = "The schematics consuming this type. This is added by EVE Ref.")
+	List<Long> usedBySchematicIds;
+
+	@JsonProperty
+	@Schema(description = "The schematics producing this type. This is added by EVE Ref.")
+	List<Long> producedBySchematicIds;
+
+	@JsonProperty
+	@Schema(
+			description =
+					"The type IDs for the planetary extractor pins which can be used to harvest this type. This is added by EVE Ref.")
+	List<Long> harvestedByPinTypeIds;
+
+	@JsonProperty
+	@Schema(
+			description =
+					"The type IDs for the planetary pins which can be built on this planet. This is added by EVE Ref.")
+	List<Long> buildablePinTypeIds;
+
+	@JsonProperty
+	@Schema(
+			description =
+					"The schematic IDs which can be installed into this planetary processor. This is added by EVE Ref.")
+	List<Long> installableSchematicIds;
+
+	@JsonProperty
+	@Schema(
+			description =
+					"The blueprints in which this type is used. The first key is the blueprint ID and the second key is the activity name. "
+							+ "This is added by EVE Ref.")
+	Map<Long, Map<String, UsedInBlueprint>> usedInBlueprints;
+
+	@JsonProperty
+	@Schema(
+			description = "For structure engineering rigs, these are the category IDs the rig affects in some way. "
+					+ "This is added by EVE Ref.")
+	List<Long> engineeringRigAffectedCategoryIds;
+
+	@JsonProperty
+	@Schema(
+			description = "For structure engineering rigs, these are the group IDs the rig affects in some way. "
+					+ "This is added by EVE Ref.")
+	List<Long> engineeringRigAffectedGroupIds;
+
+	@JsonProperty
+	@Schema(
+			description = "These are the type IDs of the engineering rigs which affect this type in some way. "
+					+ "This is added by EVE Ref.")
+	List<Long> engineeringRigSourceTypeIds;
 }

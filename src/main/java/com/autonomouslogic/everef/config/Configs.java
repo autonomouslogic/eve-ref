@@ -1,10 +1,13 @@
 package com.autonomouslogic.everef.config;
 
+import com.autonomouslogic.commons.config.Config;
 import com.autonomouslogic.everef.refdata.ReferenceDataSpec;
 import java.net.URI;
+import java.net.URL;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.Period;
+import lombok.SneakyThrows;
 
 public class Configs {
 	/**
@@ -224,6 +227,14 @@ public class Configs {
 			.build();
 
 	/**
+	 * Prefix to use for data index.
+	 */
+	public static final Config<String> DATA_INDEX_PREFIX = Config.<String>builder()
+			.name("DATA_INDEX_PREFIX")
+			.type(String.class)
+			.build();
+
+	/**
 	 * The AWS region for the data site.
 	 * If not supplied, normal AWS SDK defaults will be used.
 	 */
@@ -257,6 +268,39 @@ public class Configs {
 	 */
 	public static final Config<String> DATA_AWS_SECRET_ACCESS_KEY = Config.<String>builder()
 			.name("DATA_AWS_SECRET_ACCESS_KEY")
+			.type(String.class)
+			.build();
+
+	/**
+	 * The AWS region for DynamoDB.
+	 * If not supplied, normal AWS SDK defaults will be used.
+	 */
+	public static final Config<String> DYNAMODB_AWS_REGION = Config.<String>builder()
+			.name("DYNAMODB_AWS_REGION")
+			.type(String.class)
+			.build();
+
+	/**
+	 * Profile for the DynamoDB.
+	 */
+	public static final Config<String> DYNAMODB_AWS_PROFILE = Config.<String>builder()
+			.name("DYNAMODB_AWS_PROFILE")
+			.type(String.class)
+			.build();
+
+	/**
+	 * Access key for DynamoDB..
+	 */
+	public static final Config<String> DYNAMODB_AWS_ACCESS_KEY_ID = Config.<String>builder()
+			.name("DYNAMODB_AWS_ACCESS_KEY_ID")
+			.type(String.class)
+			.build();
+
+	/**
+	 * Secret key for DynamoDB.
+	 */
+	public static final Config<String> DYNAMODB_AWS_SECRET_ACCESS_KEY = Config.<String>builder()
+			.name("DYNAMODB_AWS_SECRET_ACCESS_KEY")
 			.type(String.class)
 			.build();
 
@@ -560,7 +604,6 @@ public class Configs {
 	public static final Config<LocalDate> IMPORT_MARKET_HISTORY_MIN_DATE = Config.<LocalDate>builder()
 			.name("IMPORT_MARKET_HISTORY_MIN_DATE")
 			.type(LocalDate.class)
-			.defaultValue(LocalDate.parse("2003-01-01"))
 			.build();
 
 	/**
@@ -589,4 +632,156 @@ public class Configs {
 			.type(Boolean.class)
 			.defaultValue(true)
 			.build();
+
+	/**
+	 * The DSN URL to use for Sentry.
+	 */
+	public static final Config<URI> SENTRY_DSN =
+			Config.<URI>builder().name("SENTRY_DSN").type(URI.class).build();
+
+	/**
+	 * Port to start HTTP on.
+	 */
+	public static final Config<Integer> MICRONAUT_PORT = Config.<Integer>builder()
+			.name("MICRONAUT_PORT")
+			.defaultValue(8080)
+			.type(Integer.class)
+			.build();
+
+	/**
+	 * Client ID for OAuth2 against EVE Online.
+	 */
+	public static final Config<String> EVE_OAUTH_CLIENT_ID = Config.<String>builder()
+			.name("EVE_OAUTH_CLIENT_ID")
+			.type(String.class)
+			.build();
+
+	/**
+	 * secret key for OAuth2 against EVE Online.
+	 */
+	public static final Config<String> EVE_OAUTH_SECRET_KEY = Config.<String>builder()
+			.name("EVE_OAUTH_SECRET_KEY")
+			.type(String.class)
+			.build();
+
+	/**
+	 * Authorization URL for OAuth2 against EVE Online.
+	 */
+	public static final Config<URL> EVE_OAUTH_AUTHORIZATION_URL = Config.<URL>builder()
+			.name("EVE_OAUTH_AUTHORIZATION_URL")
+			.defaultValue(url("https://login.eveonline.com/v2/oauth/authorize"))
+			.type(URL.class)
+			.build();
+
+	/**
+	 * Token URL for OAuth2 against EVE Online.
+	 */
+	public static final Config<URL> EVE_OAUTH_TOKEN_URL = Config.<URL>builder()
+			.name("EVE_OAUTH_TOKEN_URL")
+			.defaultValue(url("https://login.eveonline.com/v2/oauth/token"))
+			.type(URL.class)
+			.build();
+
+	/**
+	 * Token URL for OAuth2 against EVE Online.
+	 */
+	public static final Config<URL> OAUTH_CALLBACK_URL = Config.<URL>builder()
+			.name("OAUTH_CALLBACK_URL")
+			.defaultValue(url("http://localhost:8080/basic-login-callback"))
+			.type(URL.class)
+			.build();
+
+	/**
+	 * The character owner hash to use for scrape actions requiring authentication.
+	 */
+	public static final Config<String> SCRAPE_CHARACTER_OWNER_HASH = Config.<String>builder()
+			.name("SCRAPE_CHARACTER_OWNER_HASH")
+			.type(String.class)
+			.build();
+
+	/**
+	 * The character owner hash to use for querying the EVE Ref character.
+	 */
+	public static final Config<String> EVE_REF_CHARACTER_OWNER_HASH = Config.<String>builder()
+			.name("EVE_REF_CHARACTER_OWNER_HASH")
+			.type(String.class)
+			.build();
+
+	/**
+	 * How old a structure has to be before it's removed from the structure scrape.
+	 */
+	public static final Config<Duration> STRUCTURE_TIMEOUT = Config.<Duration>builder()
+			.name("STRUCTURE_TIMEOUT")
+			.defaultValue(Duration.ofDays(30))
+			.type(Duration.class)
+			.build();
+
+	/**
+	 * The AWS region for the static site.
+	 * If not supplied, normal AWS SDK defaults will be used.
+	 */
+	public static final Config<String> STATIC_AWS_REGION = Config.<String>builder()
+			.name("STATIC_AWS_REGION")
+			.type(String.class)
+			.build();
+
+	/**
+	 * The location to store data for the static site.
+	 */
+	public static final Config<URI> STATIC_PATH =
+			Config.<URI>builder().name("STATIC_PATH").type(URI.class).build();
+
+	/**
+	 * Endpoint override for the static site S3 client.
+	 */
+	public static final Config<String> STATIC_S3_ENDPOINT_URL = Config.<String>builder()
+			.name("STATIC_S3_ENDPOINT_URL")
+			.type(String.class)
+			.build();
+
+	/**
+	 * Profile for the static data S3 client.
+	 */
+	public static final Config<String> STATIC_AWS_PROFILE = Config.<String>builder()
+			.name("STATIC_AWS_PROFILE")
+			.type(String.class)
+			.build();
+
+	/**
+	 * Access key for the static S3 client.
+	 */
+	public static final Config<String> STATIC_AWS_ACCESS_KEY_ID = Config.<String>builder()
+			.name("STATIC_AWS_ACCESS_KEY_ID")
+			.type(String.class)
+			.build();
+
+	/**
+	 * Secret key for the static S3 client.
+	 */
+	public static final Config<String> STATIC_AWS_SECRET_ACCESS_KEY = Config.<String>builder()
+			.name("STATIC_AWS_SECRET_ACCESS_KEY")
+			.type(String.class)
+			.build();
+
+	/**
+	 * The cache time to use for static files.
+	 */
+	public static final Config<Duration> STATIC_CACHE_CONTROL_MAX_AGE = Config.<Duration>builder()
+			.name("STATIC_CACHE_CONTROL_MAX_AGE")
+			.defaultValue(Duration.ofMinutes(5))
+			.type(Duration.class)
+			.build();
+
+	/**
+	 * URL for Discord donation notifications.
+	 */
+	public static final Config<String> DONATIONS_DISCORD_WEBHOOK_URL = Config.<String>builder()
+			.name("DONATIONS_DISCORD_WEBHOOK_URL")
+			.type(String.class)
+			.build();
+
+	@SneakyThrows
+	private static URL url(String url) {
+		return new URL(url);
+	}
 }

@@ -2,7 +2,7 @@
   "type_mappings" : {
     "52230" : {
       "resulting_type_id" : 52230,
-      "applicable_type_ids" : [ 47254, 47255, 47256, 47257, 47258 ]
+      "applicable_type_ids" : [ 47254, 47255, 47256, 47257, 47258, 84961 ]
     }
   },
   "dogma_modifications" : {

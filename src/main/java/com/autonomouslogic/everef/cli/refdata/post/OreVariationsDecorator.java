@@ -1,7 +1,6 @@
 package com.autonomouslogic.everef.cli.refdata.post;
 
 import com.autonomouslogic.everef.cli.refdata.StoreDataHelper;
-import com.autonomouslogic.everef.cli.refdata.StoreHandler;
 import com.autonomouslogic.everef.refdata.DogmaAttribute;
 import com.autonomouslogic.everef.refdata.InventoryType;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -15,20 +14,15 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 import javax.inject.Inject;
 import lombok.NonNull;
-import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 
 /**
  * Populates ore variations on types.
  */
 @Log4j2
-public class OreVariationsDecorator implements PostDecorator {
+public class OreVariationsDecorator extends PostDecorator {
 	@Inject
 	protected ObjectMapper objectMapper;
-
-	@Setter
-	@NonNull
-	private StoreHandler storeHandler;
 
 	private Map<Long, JsonNode> types;
 	private StoreDataHelper helper;

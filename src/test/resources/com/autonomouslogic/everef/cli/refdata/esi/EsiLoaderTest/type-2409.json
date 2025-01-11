@@ -1,0 +1,70 @@
+{
+  "capacity" : 0,
+  "description" : {
+    "en" : "Finding desired liquids on hostile worlds can be almost as challenging a task as extracting it from the unforgiving environment, which often entails drilling kilometers below the surface or condensing fluids from the upper atmosphere. Once the liquids are discovered, the facility itself begins the relatively simple task of separating it from the ambient plasma interference, scalding magma streams, or potentially infectious indigenous bacteria. A surprising amount of valuable liquids can be extracted from hostile worlds, but only if the equipment is properly calibrated and carefully maintained.",
+    "fr" : "Trouver les liquides désirés sur des mondes ennemis peut être aussi difficile qu'en extraire dans un environnement hostile, ce qui nécessite souvent des kilomètres de forage en dessous de la surface ou une condensation des fluides de la haute atmosphère. Une fois les liquides découverts, l'installation commence elle-même le travail relativement simple visant à les séparer des interférences plasma environnantes, des ruisseaux de magma brûlant, ou des bactéries locales potentiellement dangereuses. Une quantité surprenante de liquides de valeur peut être extraite des mondes hostiles, mais seulement si l'équipement est correctement calibré et parfaitement entretenu."
+  },
+  "dogma_attributes" : {
+    "1632" : {
+      "attribute_id" : 1632,
+      "value" : 2016
+    },
+    "161" : {
+      "attribute_id" : 161,
+      "value" : 0
+    },
+    "162" : {
+      "attribute_id" : 162,
+      "value" : 1
+    },
+    "4" : {
+      "attribute_id" : 4,
+      "value" : 0
+    },
+    "709" : {
+      "attribute_id" : 709,
+      "value" : 2268
+    },
+    "38" : {
+      "attribute_id" : 38,
+      "value" : 0
+    },
+    "1642" : {
+      "attribute_id" : 1642,
+      "value" : 1000
+    },
+    "1643" : {
+      "attribute_id" : 1643,
+      "value" : 300
+    },
+    "1644" : {
+      "attribute_id" : 1644,
+      "value" : 5
+    },
+    "1645" : {
+      "attribute_id" : 1645,
+      "value" : 1
+    },
+    "15" : {
+      "attribute_id" : 15,
+      "value" : 800
+    },
+    "49" : {
+      "attribute_id" : 49,
+      "value" : 200
+    }
+  },
+  "graphic_id" : 4544,
+  "group_id" : 1026,
+  "mass" : 0,
+  "name" : {
+    "en" : "Barren Aqueous Liquid Extractor",
+    "fr" : "Extracteur de liquide aqueux en milieu aride"
+  },
+  "packaged_volume" : 0,
+  "portion_size" : 1,
+  "published" : true,
+  "radius" : 1,
+  "type_id" : 2409,
+  "volume" : 0
+}

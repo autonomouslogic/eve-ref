@@ -13,8 +13,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Ordering;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Flowable;
+import io.reactivex.rxjava3.core.Single;
 import java.time.LocalDate;
+import java.time.Period;
+import java.time.ZoneOffset;
 import java.util.List;
+import java.util.Optional;
 import javax.inject.Inject;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.tuple.Pair;
@@ -40,7 +44,9 @@ public class ImportMarketHistory implements Command {
 	@Inject
 	protected ObjectMapper objectMapper;
 
-	private final LocalDate minDate = Configs.IMPORT_MARKET_HISTORY_MIN_DATE.getRequired();
+	private final Optional<LocalDate> minDate = Configs.IMPORT_MARKET_HISTORY_MIN_DATE.get();
+
+	private final Period lookback = Configs.ESI_MARKET_HISTORY_LOOKBACK.getRequired();
 
 	private final int loadConcurrency = Configs.MARKET_HISTORY_LOAD_CONCURRENCY.getRequired();
 
@@ -84,6 +90,34 @@ public class ImportMarketHistory implements Command {
 	}
 
 	private Flowable<Pair<LocalDate, HttpUrl>> resolveFilesToDownload() {
-		return fileResolver.setMinDate(minDate).resolveFilesToDownload().sorted(IMPORT_ORDERING);
+		return resolveMinDate().flatMapPublisher(resolvedMinDate -> {
+			log.info("Importing market data from {}", resolvedMinDate);
+			return fileResolver
+					.setMinDate(resolvedMinDate)
+					.resolveFilesToDownload()
+					.sorted(IMPORT_ORDERING);
+		});
+	}
+
+	protected Single<LocalDate> resolveMinDate() {
+		return Single.defer(() -> {
+			if (minDate.isPresent()) {
+				log.trace("Using min date from config: {}", minDate.get());
+				return Single.just(minDate.get());
+			} else {
+				return marketHistoryDao
+						.fetchLatestDate()
+						.switchIfEmpty(Single.fromCallable(() -> {
+							var date = LocalDate.now(ZoneOffset.UTC);
+							log.trace("No entries found, using min date from today: {}", date);
+							return date;
+						}))
+						.flatMap(latest -> Single.fromCallable(() -> {
+							var date = latest.minus(lookback);
+							log.trace("Last seen date {}, using min date: {}", latest, date);
+							return date;
+						}));
+			}
+		});
 	}
 }

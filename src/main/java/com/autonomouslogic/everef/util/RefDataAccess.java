@@ -45,20 +45,25 @@ public class RefDataAccess {
 	}
 
 	public Flowable<Region> allRegions() {
-		return loadReferenceDataArchive("regions", Region.class);
+		return loadReferenceDataArchive("regions", Region.class)
+				.switchIfEmpty(Flowable.error(new IllegalStateException("No regions found")));
 	}
 
 	public Flowable<InventoryType> allTypes() {
-		return loadReferenceDataArchive("types", InventoryType.class);
+		return loadReferenceDataArchive("types", InventoryType.class)
+				.switchIfEmpty(Flowable.error(new IllegalStateException("No types found")));
 	}
 
 	public Flowable<InventoryType> marketTypes() {
-		return allTypes().filter(type -> type.getMarketGroupId() != null);
+		return allTypes()
+				.filter(type -> type.getMarketGroupId() != null)
+				.switchIfEmpty(Flowable.error(new IllegalStateException("No market types found")));
 	}
 
 	public Flowable<Region> marketRegions() {
 		return allRegions()
 				.filter(region -> region.getUniverseId() != null)
-				.filter(region -> EveConstants.MARKET_UNIVERSE_IDS.contains(region.getUniverseId()));
+				.filter(region -> EveConstants.MARKET_UNIVERSE_IDS.contains(region.getUniverseId()))
+				.switchIfEmpty(Flowable.error(new IllegalStateException("No market regions found")));
 	}
 }

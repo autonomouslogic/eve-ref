@@ -93,6 +93,14 @@
         "type": "chore",
         "scope": "deps",
         "release": "patch"
+      },
+      {
+        "scope": "ui",
+        "release": false
+      },
+      {
+        "type": "docs",
+        "release": false
       }
     ]
   }

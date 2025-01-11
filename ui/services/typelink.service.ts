@@ -5,6 +5,7 @@ export default class TypeLinkService {
     }
 
     public parse(message: string): (string|number)[] {
+        message = message.replaceAll(/\r?\n/g, "<br/>");
         const components: string[] = this.splitString(message);
 
         return components.map((component: string): (string|number) => {

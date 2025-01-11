@@ -108,7 +108,7 @@ public class ImportTestResources implements Command {
 				}
 				output = yamlMapper.writeValueAsBytes(newContent);
 			}
-			var outputFile = new File(REFDATA_RESOURCES + "/" + entry.getName());
+			var outputFile = new File(REFDATA_RESOURCES + "/sde/" + entry.getName());
 			outputFile.getParentFile().mkdirs();
 			log.info("Writing {}", outputFile);
 			try (var out = new FileOutputStream(outputFile)) {

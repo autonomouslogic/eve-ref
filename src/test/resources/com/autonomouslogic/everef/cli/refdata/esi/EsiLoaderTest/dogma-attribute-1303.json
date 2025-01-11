@@ -1,0 +1,16 @@
+{
+  "attribute_id" : 1303,
+  "default_value" : 0,
+  "description" : {
+    "en" : ""
+  },
+  "display_name" : {
+    "en" : "Can be fitted to"
+  },
+  "high_is_good" : true,
+  "icon_id" : 1443,
+  "name" : "canFitShipType2",
+  "published" : true,
+  "stackable" : true,
+  "unit_id" : 116
+}

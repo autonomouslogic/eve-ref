@@ -1,0 +1,14 @@
+{
+  "type_id" : 60377,
+  "primary_dogma_attribute_id" : 166,
+  "secondary_dogma_attribute_id" : 165,
+  "primary_character_attribute_id" : 4,
+  "secondary_character_attribute_id" : 1,
+  "training_time_multiplier" : 3,
+  "can_not_be_trained_on_trial" : false,
+  "required_skills" : {
+    "3385" : 4,
+    "3402" : 3
+  },
+  "reprocessable_type_ids" : [ 1230, 17470, 17471 ]
+}

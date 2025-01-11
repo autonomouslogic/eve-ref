@@ -30,7 +30,7 @@
   "52228" : {
     "inputOutputMapping" : [ {
       "resultingType" : 52230,
-      "applicableTypes" : [ 47254, 47255, 47256, 47257, 47258 ]
+      "applicableTypes" : [ 47254, 47255, 47256, 47257, 47258, 84961 ]
     } ],
     "attributeIDs" : {
       "73" : {

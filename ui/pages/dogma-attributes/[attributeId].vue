@@ -2,13 +2,24 @@
 import refdataApi from "~/refdata";
 import CardWrapper from "~/components/cards/CardWrapper.vue";
 import AttributeTypeIcon from "~/components/icons/AttributeTypeIcon.vue";
+import {getIntRouteParam} from "~/lib/routeUtils";
+import {tr} from "~/lib/translate";
 
 const route = useRoute();
 const {locale} = useI18n();
 
-const attributeId = parseInt(route.params.attributeId[0] ?? route.params.attributeId);
+const attributeId = getIntRouteParam(route, "attributeId");
 const attribute = await refdataApi.getDogmaAttribute({attributeId});
 const unit = attribute.unitId ? await refdataApi.getUnit({unitId: attribute.unitId}) : null;
+
+useHead({
+	title: tr(attribute.displayName, locale.value)
+});
+if (attribute.description) {
+	useSeoMeta({
+		ogDescription: tr(attribute.displayName, locale.value)
+	});
+}
 </script>
 
 <template>
@@ -16,9 +27,9 @@ const unit = attribute.unitId ? await refdataApi.getUnit({unitId: attribute.unit
 	<div v-else>
 		<h1 v-if="attribute.displayName">
 			<AttributeTypeIcon :dogma-attribute="attribute" :size="50" />
-			{{ attribute.displayName[locale] }}
+			{{ tr(attribute.displayName, locale) }}
 		</h1>
-		<p v-if="attribute.description">{{ attribute.description[locale] }}</p>
+		<p v-if="attribute.description">{{ tr(attribute.description, locale) }}</p>
 		<CardsContainer>
 			<CardWrapper title="Dogma attribute">
 				<ul>
@@ -37,8 +48,8 @@ const unit = attribute.unitId ? await refdataApi.getUnit({unitId: attribute.unit
 			<CardWrapper v-if="unit" title="Unit">
 				<ul>
 					<li>Unit ID: {{ unit.unitId }}</li>
-					<li v-if="unit.name">Name: {{ unit.name[locale] }}</li>
-					<li v-if="unit.description">Description: {{ unit.description[locale] }}</li>
+					<li v-if="unit.name">Name: {{ tr(unit.name, locale) }}</li>
+					<li v-if="unit.description">Description: {{ tr(unit.description, locale) }}</li>
 					<li>Display name: {{ unit.displayName }}</li>
 				</ul>
 			</CardWrapper>

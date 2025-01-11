@@ -8,9 +8,8 @@ import static org.mockito.Mockito.when;
 import com.autonomouslogic.commons.ListUtil;
 import com.autonomouslogic.commons.ResourceUtil;
 import com.autonomouslogic.everef.esi.LocationPopulator;
-import com.autonomouslogic.everef.esi.MetaGroupScraperTest;
 import com.autonomouslogic.everef.esi.MockLocationPopulatorModule;
-import com.autonomouslogic.everef.openapi.esi.models.GetUniverseTypesTypeIdOk;
+import com.autonomouslogic.everef.openapi.esi.model.GetUniverseTypesTypeIdOk;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.test.MockS3Adapter;
 import com.autonomouslogic.everef.test.TestDataUtil;
@@ -83,7 +82,7 @@ import software.amazon.awssdk.services.s3.S3AsyncClient;
 @SetEnvironmentVariable(key = "DATA_BASE_URL", value = "http://localhost:" + TestDataUtil.TEST_PORT)
 @SetEnvironmentVariable(key = "ESI_USER_AGENT", value = "user-agent")
 @SetEnvironmentVariable(key = "ESI_BASE_URL", value = "http://localhost:" + TestDataUtil.TEST_PORT)
-@SetEnvironmentVariable(key = "EVE_REF_BASE_URL", value = "http://localhost:" + TestDataUtil.TEST_PORT)
+@SetEnvironmentVariable(key = "REF_DATA_BASE_URL", value = "http://localhost:" + TestDataUtil.TEST_PORT)
 public class ScrapePublicContractsTest {
 	static final String BUCKET_NAME = "data-bucket";
 
@@ -111,8 +110,8 @@ public class ScrapePublicContractsTest {
 
 	final String lastModified = "Mon, 03 Apr 2023 03:47:30 GMT";
 	final Instant lastModifiedInstant = Instant.parse("2023-04-03T03:47:30Z");
-	final GetUniverseTypesTypeIdOk type = new GetUniverseTypesTypeIdOk(
-			"", 0, "", true, 0, 0.0f, List.of(), List.of(), 0, 0, 0, 0.0f, 0.0f, 0, 0.0f, 0.0f);
+	final GetUniverseTypesTypeIdOk type = new GetUniverseTypesTypeIdOk();
+	//			"", 0, "", true, 0, 0.0f, List.of(), List.of(), 0, 0, 0, 0.0f, 0.0f, 0, 0.0f, 0.0f);
 
 	MockWebServer server;
 
@@ -199,7 +198,7 @@ public class ScrapePublicContractsTest {
 						"/dogma/dynamic/items/47804/1027826381003/?datasource=tranquility&language=en",
 						"/dogma/dynamic/items/47804/2000/?datasource=tranquility&language=en",
 						"/dogma/dynamic/items/49734/1040731418725/?datasource=tranquility&language=en",
-						"/meta-groups/15",
+						"/meta_groups/15",
 						"/public-contracts/public-contracts-latest.v2.tar.bz2",
 						"/universe/regions/10000001/?datasource=tranquility",
 						"/universe/regions/10000002/?datasource=tranquility",
@@ -351,7 +350,7 @@ public class ScrapePublicContractsTest {
 						return mockResponse("{\"region_id\":10000001,\"name\":\"Derelik\",\"constellations\":[]}");
 					case "/universe/regions/10000002/":
 						return mockResponse("{\"region_id\":10000002,\"name\":\"The Forge\",\"constellations\":[]}");
-					case "/meta-groups/15":
+					case "/meta_groups/15":
 						return metaGroup15();
 					case "/public-contracts/public-contracts-latest.v2.tar.bz2":
 						return mockLatestFile();
@@ -410,10 +409,10 @@ public class ScrapePublicContractsTest {
 
 	@SneakyThrows
 	MockResponse metaGroup15() {
-		var html = IOUtils.toString(
-				ResourceUtil.loadContextual(MetaGroupScraperTest.class, "/meta-groups-15.html"),
+		var json = IOUtils.toString(
+				ResourceUtil.loadContextual(ScrapePublicContractsTest.class, "/meta-groups-15.json"),
 				StandardCharsets.UTF_8);
-		return mockResponse(html);
+		return mockResponse(json);
 	}
 
 	@SneakyThrows

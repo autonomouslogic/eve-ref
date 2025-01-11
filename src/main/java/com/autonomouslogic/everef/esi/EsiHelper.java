@@ -3,15 +3,14 @@ package com.autonomouslogic.everef.esi;
 import com.autonomouslogic.commons.rxjava3.Rx3Util;
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.http.OkHttpHelper;
-import com.autonomouslogic.everef.openapi.esi.infrastructure.ApiResponse;
-import com.autonomouslogic.everef.openapi.esi.infrastructure.ResponseType;
-import com.autonomouslogic.everef.openapi.esi.infrastructure.Success;
+import com.autonomouslogic.everef.openapi.esi.invoker.ApiResponse;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.NullNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import io.reactivex.rxjava3.core.Flowable;
+import io.reactivex.rxjava3.core.Maybe;
 import io.reactivex.rxjava3.core.Scheduler;
 import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.functions.BiFunction;
@@ -62,7 +61,34 @@ public class EsiHelper {
 	 * @return
 	 */
 	public Single<Response> fetch(EsiUrl url) {
-		return okHttpHelper.get(url.toString(), esiHttpClient, ESI_SCHEDULER);
+		return fetch(url, Optional.empty());
+	}
+
+	/**
+	 * Fetches the requested URL.
+	 * This call does NOT include standard error handling.
+	 * @param url
+	 * @return
+	 */
+	public Single<Response> fetch(EsiUrl url, Optional<String> accessToken) {
+		return okHttpHelper.get(
+				url.toString(),
+				esiHttpClient,
+				ESI_SCHEDULER,
+				r -> accessToken.ifPresent(token -> r.addHeader("Authorization", "Bearer " + token)));
+	}
+
+	/**
+	 * Fetches the requested URL.
+	 * This call does NOT include standard error handling.
+	 * @param url
+	 * @return
+	 */
+	public Single<Response> fetch(EsiUrl url, Maybe<String> accessToken) {
+		return accessToken
+				.map(Optional::of)
+				.switchIfEmpty(Single.just(Optional.empty()))
+				.flatMap(token -> fetch(url, token));
 	}
 
 	/**
@@ -71,8 +97,8 @@ public class EsiHelper {
 	 * @param url
 	 * @return
 	 */
-	protected Flowable<Response> fetchPages(EsiUrl url) {
-		return fetch(url).flatMapPublisher(first -> {
+	protected Flowable<Response> fetchPages(EsiUrl url, Maybe<String> accessToken) {
+		return fetch(url, accessToken).flatMapPublisher(first -> {
 			var pages = first.header(PAGES_HEADER);
 			if (pages == null || pages.isEmpty()) {
 				return Flowable.just(first);
@@ -85,8 +111,12 @@ public class EsiHelper {
 					Flowable.just(first),
 					Flowable.range(2, pagesInt - 1)
 							.flatMapSingle(
-									page -> fetch(url.toBuilder().page(page).build()), false, 4));
+									page -> fetch(url.toBuilder().page(page).build(), accessToken), false, 4));
 		});
+	}
+
+	protected Flowable<Response> fetchPages(EsiUrl url) {
+		return fetchPages(url, Maybe.empty());
 	}
 
 	/**
@@ -133,11 +163,16 @@ public class EsiHelper {
 	 * @param url
 	 * @return
 	 */
-	public Flowable<JsonNode> fetchPagesOfJsonArrays(EsiUrl url, BiFunction<JsonNode, Response, JsonNode> augmenter) {
-		return fetchPages(url).compose(standardErrorHandling(url)).flatMap(response -> {
+	public Flowable<JsonNode> fetchPagesOfJsonArrays(
+			EsiUrl url, BiFunction<JsonNode, Response, JsonNode> augmenter, Maybe<String> accessToken) {
+		return fetchPages(url, accessToken).compose(standardErrorHandling(url)).flatMap(response -> {
 			var node = decodeResponse(response);
 			return decodeArrayNode(url, node).map(entry -> augmenter.apply(entry, response));
 		});
+	}
+
+	public Flowable<JsonNode> fetchPagesOfJsonArrays(EsiUrl url, BiFunction<JsonNode, Response, JsonNode> augmenter) {
+		return fetchPagesOfJsonArrays(url, augmenter, Maybe.empty());
 	}
 
 	/**
@@ -181,11 +216,11 @@ public class EsiHelper {
 	 * @param <T>
 	 */
 	private <T> T decodeResponse(ApiResponse<T> response) {
-		if (response.getResponseType() != ResponseType.Success) {
-			throw new RuntimeException(
-					String.format("Unexpected response type: %s - %s", response.getResponseType(), response));
+		int status = response.getStatusCode();
+		if (status / 100 != 2) {
+			throw new RuntimeException(String.format("Unexpected response: %s", status, response));
 		}
-		return ((Success<T>) response).getData();
+		return response.getData();
 	}
 
 	/**

@@ -1,5 +1,855 @@
 EVE Ref Changelog
 
+## [2.54.3](https://github.com/autonomouslogic/eve-ref/compare/2.54.2...2.54.3) (2025-01-06)
+
+
+### Bug Fixes
+
+* **deps:** update dependency org.flywaydb:flyway-core to v11.1.0 ([#705](https://github.com/autonomouslogic/eve-ref/issues/705)) ([6dd5f28](https://github.com/autonomouslogic/eve-ref/commit/6dd5f28dd5546e7ede2573b207c25167d1557918))
+* **deps:** update flyway to v11.1.0 ([#706](https://github.com/autonomouslogic/eve-ref/issues/706)) ([9efaa97](https://github.com/autonomouslogic/eve-ref/commit/9efaa979c31c7510ee2f2309edb38d513362ded5))
+* **deps:** update font awesome to v6.7.2 ([#704](https://github.com/autonomouslogic/eve-ref/issues/704)) ([bcaee4a](https://github.com/autonomouslogic/eve-ref/commit/bcaee4a8523c27f70d116dbd11c193c5f497eb83))
+
+## [2.54.2](https://github.com/autonomouslogic/eve-ref/compare/2.54.1...2.54.2) (2025-01-04)
+
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([#692](https://github.com/autonomouslogic/eve-ref/issues/692)) ([cdadcc3](https://github.com/autonomouslogic/eve-ref/commit/cdadcc3504f2a178ac1d544b174d6e065ebdb9f8))
+* **ui:** Giveaway update ([a3ab60f](https://github.com/autonomouslogic/eve-ref/commit/a3ab60f15f6dfe2670fcbc0363770417adcc1f8c))
+* **ui:** Removed December giveaway schedule ([060159a](https://github.com/autonomouslogic/eve-ref/commit/060159ad8681646347c0f0ede1faf28cfdd36da8))
+
+## [2.54.1](https://github.com/autonomouslogic/eve-ref/compare/2.54.0...2.54.1) (2024-12-30)
+
+
+### Features
+
+* **ui:** Giveaways ([#698](https://github.com/autonomouslogic/eve-ref/issues/698)) ([7c73daf](https://github.com/autonomouslogic/eve-ref/commit/7c73dafd8d07e9f1c1e4f9e05e499aaa0a083d30))
+
+
+### Bug Fixes
+
+* FetchDonations should not ignore and forget donations ([#699](https://github.com/autonomouslogic/eve-ref/issues/699)) ([36b24a9](https://github.com/autonomouslogic/eve-ref/commit/36b24a973fc0b83c9d70e6e46b40ed9a3d0a3005))
+* **ui:** Added some SKIN giveaways ([d044a72](https://github.com/autonomouslogic/eve-ref/commit/d044a72abcf87b9f94393b2cfe383f5cec0abfaf))
+* **ui:** Added winners to giveaway page ([413c1b8](https://github.com/autonomouslogic/eve-ref/commit/413c1b8e194739975a671dd5103a238fea1ecf21))
+* **ui:** Added winners to giveaway page ([ba623ff](https://github.com/autonomouslogic/eve-ref/commit/ba623ffcfaa83649d4404a5a1fc5bd9dba8e17e6))
+* **ui:** Code activation link on giveaways page ([a901f0e](https://github.com/autonomouslogic/eve-ref/commit/a901f0e8cd8c4b7006c75562fde77d47e2c7eb4e))
+* **ui:** Fixed link to status page ([92aea62](https://github.com/autonomouslogic/eve-ref/commit/92aea62dc93f45fc4be06ed9c79f8d93cdcdfa40))
+* **ui:** Fixed relative day on giveaways ([b5a3bdb](https://github.com/autonomouslogic/eve-ref/commit/b5a3bdb04d2fb7cf550c3573cf4c02ed925d439e))
+* **ui:** SKIN giveaway ([bf3e048](https://github.com/autonomouslogic/eve-ref/commit/bf3e048c3f2b8a8b5360683859b603db1bb85245))
+* **ui:** SKIN giveaway ([db1f5c1](https://github.com/autonomouslogic/eve-ref/commit/db1f5c1d5e1947d09032d75fa95ed3d96284b3d3))
+
+
+### Code Refactoring
+
+* **ui:** TypeIcon component ([abf952c](https://github.com/autonomouslogic/eve-ref/commit/abf952c4c79c9d78849cfab95b6340baec9f471e))
+
+## [2.54.0](https://github.com/autonomouslogic/eve-ref/compare/2.53.9...2.54.0) (2024-12-08)
+
+
+### Features
+
+* Upwell structure rigs categories and groups ([#677](https://github.com/autonomouslogic/eve-ref/issues/677)) ([0545d2e](https://github.com/autonomouslogic/eve-ref/commit/0545d2e8a112859ee913ba2fb15ef075c07e5f4b))
+
+
+### Bug Fixes
+
+* **deps:** update dependency org.flywaydb:flyway-core to v11 ([#687](https://github.com/autonomouslogic/eve-ref/issues/687)) ([7eb14f0](https://github.com/autonomouslogic/eve-ref/commit/7eb14f0753bbc44c42546027f956a9d388c4ebfe))
+* **deps:** update flyway to v11 (major) ([#688](https://github.com/autonomouslogic/eve-ref/issues/688)) ([5802f5e](https://github.com/autonomouslogic/eve-ref/commit/5802f5edbd682e2fae9a635d8d28a4185b7c42f3))
+
+
+### Dependency Updates
+
+* **deps:** update codecov/codecov-action action to v5 ([#685](https://github.com/autonomouslogic/eve-ref/issues/685)) ([c4106bd](https://github.com/autonomouslogic/eve-ref/commit/c4106bd5e640d5f286274267a7db3e94b6e8b7a4))
+
+
+### Miscellaneous Chores
+
+* Added flyway to monorepo ([a9ba671](https://github.com/autonomouslogic/eve-ref/commit/a9ba671a94c0115700b98ced993ca6239e9d0bbf))
+
+## [2.53.9](https://github.com/autonomouslogic/eve-ref/compare/2.53.8...2.53.9) (2024-12-04)
+
+
+### Bug Fixes
+
+* **deps:** update font awesome to v6.7.1 ([#695](https://github.com/autonomouslogic/eve-ref/issues/695)) ([5dd0a16](https://github.com/autonomouslogic/eve-ref/commit/5dd0a16d857196d8adfec96ad764829b84b7df09))
+
+## [2.53.8](https://github.com/autonomouslogic/eve-ref/compare/2.53.7...2.53.8) (2024-12-02)
+
+
+### Bug Fixes
+
+* **deps:** update dependency org.flywaydb:flyway-core to v10.22.0 ([#693](https://github.com/autonomouslogic/eve-ref/issues/693)) ([f4065ae](https://github.com/autonomouslogic/eve-ref/commit/f4065ae47b4fdf00a46dc0e1fc1b8abb04515696))
+* **deps:** update flyway to v10.22.0 ([#694](https://github.com/autonomouslogic/eve-ref/issues/694)) ([22ccace](https://github.com/autonomouslogic/eve-ref/commit/22ccace0ed24c19dc307a0feaa21d950eb7be81c))
+
+## [2.53.7](https://github.com/autonomouslogic/eve-ref/compare/2.53.6...2.53.7) (2024-11-24)
+
+
+### Bug Fixes
+
+* Don't fetch Abyssal type IDs constantly ([#690](https://github.com/autonomouslogic/eve-ref/issues/690)) ([6ee84f5](https://github.com/autonomouslogic/eve-ref/commit/6ee84f5412ea4d6ca28806d4fc4e9480fdb77baf))
+
+## [2.53.6](https://github.com/autonomouslogic/eve-ref/compare/2.53.5...2.53.6) (2024-11-17)
+
+
+### Bug Fixes
+
+* Updated ESI and Reference Data for ESI 1.27 and SDE 2024-11-12 ([#686](https://github.com/autonomouslogic/eve-ref/issues/686)) ([b89beb6](https://github.com/autonomouslogic/eve-ref/commit/b89beb625150bb42c39f9792b8cbd1b32e8b3fc5))
+
+
+### Miscellaneous Chores
+
+* **ui:** Move to Cloudflare Pages ([#684](https://github.com/autonomouslogic/eve-ref/issues/684)) ([d388fa1](https://github.com/autonomouslogic/eve-ref/commit/d388fa1a1f3de08752ea18ec7b20b6f02dddfc64))
+
+## [2.53.5](https://github.com/autonomouslogic/eve-ref/compare/2.53.4...2.53.5) (2024-11-06)
+
+
+### Bug Fixes
+
+* **ui:** Patreon MOTD ([f8a01bf](https://github.com/autonomouslogic/eve-ref/commit/f8a01bfd0d95bf1710c818f3e7452f0d9af4c271))
+
+
+### Dependency Updates
+
+* **deps:** update all non-major dependencies ([#680](https://github.com/autonomouslogic/eve-ref/issues/680)) ([4be3b4a](https://github.com/autonomouslogic/eve-ref/commit/4be3b4a1f1e221f4bb2c35b6478677f9263d75fb))
+
+## [2.53.4](https://github.com/autonomouslogic/eve-ref/compare/2.53.3...2.53.4) (2024-11-04)
+
+
+### Bug Fixes
+
+* **deps:** update dependency org.flywaydb:flyway-core to v10.20.1 ([#681](https://github.com/autonomouslogic/eve-ref/issues/681)) ([ab9cc1a](https://github.com/autonomouslogic/eve-ref/commit/ab9cc1a2b542f2f78b089f599ba460bfa56572b7))
+* **deps:** update flyway to v10.20.1 ([#682](https://github.com/autonomouslogic/eve-ref/issues/682)) ([3a20692](https://github.com/autonomouslogic/eve-ref/commit/3a20692cefae09de011a2cb0385540cc8b1c0750))
+* **ui:** Generic welcome MOTD banner ([#673](https://github.com/autonomouslogic/eve-ref/issues/673)) ([6fcfc00](https://github.com/autonomouslogic/eve-ref/commit/6fcfc009fd39c5f452a8c62858ec3dd8955069ce))
+
+
+### Documentation
+
+* Added CSM 19 members ([#675](https://github.com/autonomouslogic/eve-ref/issues/675)) ([acee592](https://github.com/autonomouslogic/eve-ref/commit/acee592f60d3e6f85639376cd19a91612c973f9f))
+
+
+### Dependency Updates
+
+* **deps:** update dependency @types/node to v22 ([#678](https://github.com/autonomouslogic/eve-ref/issues/678)) ([a976157](https://github.com/autonomouslogic/eve-ref/commit/a9761571af6d2ae9787c763f124f85ffe887658b))
+
+## [2.53.3](https://github.com/autonomouslogic/eve-ref/compare/2.53.2...2.53.3) (2024-10-20)
+
+
+### Features
+
+* **ui:** Added usage card for showing what can be fitted to a ship ([#665](https://github.com/autonomouslogic/eve-ref/issues/665)) ([b524d18](https://github.com/autonomouslogic/eve-ref/commit/b524d180ca1a4dcb63e164a886989fa401ba5e94))
+* **ui:** Added volume to planetary schematics ([#668](https://github.com/autonomouslogic/eve-ref/issues/668)) ([0f233c3](https://github.com/autonomouslogic/eve-ref/commit/0f233c38ac10671012190cb4d146d58cbaf06506))
+
+
+### Bug Fixes
+
+* Search optimisation ([#672](https://github.com/autonomouslogic/eve-ref/issues/672)) ([deb4f7f](https://github.com/autonomouslogic/eve-ref/commit/deb4f7f9c1adb1ad45bc3c9f55fb96cd5feb2270))
+* **ui:** Added basic, gas, and ammo cargo holds to cargo card ([0db8943](https://github.com/autonomouslogic/eve-ref/commit/0db894386fe99d28af00782a3b2bfdd8d582c69f))
+* **ui:** Added Command Center Hold Capacity to cargo card ([b9d0d5e](https://github.com/autonomouslogic/eve-ref/commit/b9d0d5e25b7e62c32ce80f02993b8b8d4bcf43ab))
+* **ui:** Added durationHighisGood to module card ([fad0c7f](https://github.com/autonomouslogic/eve-ref/commit/fad0c7f9e5f3d20ce077838beb3344f8b993c3ad))
+* **ui:** Added Fuzzwork PI link ([ea606b9](https://github.com/autonomouslogic/eve-ref/commit/ea606b98c79c3de991c3b82082e13e5a45e71050))
+* **ui:** Removed conditional MOTD ([#671](https://github.com/autonomouslogic/eve-ref/issues/671)) ([339d0c3](https://github.com/autonomouslogic/eve-ref/commit/339d0c3aaa55ea5e7874c80a320c0a22e91318ad))
+* **ui:** Reorganised cargo attributes and added all possible ([86ac6b0](https://github.com/autonomouslogic/eve-ref/commit/86ac6b09f64d2c5fd9900e0057754feb37b980a3))
+* **ui:** Updated NES packs and boosters on the skill points page ([#670](https://github.com/autonomouslogic/eve-ref/issues/670)) ([bb94c57](https://github.com/autonomouslogic/eve-ref/commit/bb94c57c3b3e421ae49b56a420c1370796691e91))
+
+
+### Documentation
+
+* More CSM resources ([68b6bbc](https://github.com/autonomouslogic/eve-ref/commit/68b6bbc5b7d54c98e2ea49bef0a11742696a2e10))
+
+
+### Miscellaneous Chores
+
+* **ui:** Updated MOTD for CSM voting ([#669](https://github.com/autonomouslogic/eve-ref/issues/669)) ([ac8b89a](https://github.com/autonomouslogic/eve-ref/commit/ac8b89a9acd7bc57ecce14ae43e65b30684d5836))
+
+
+### Tests
+
+* Fixed testing ([cfd38a4](https://github.com/autonomouslogic/eve-ref/commit/cfd38a4c30d8ffe5192412efecee5a8ba38902d6))
+
+## [2.53.2](https://github.com/autonomouslogic/eve-ref/compare/2.53.1...2.53.2) (2024-10-08)
+
+
+### Dependency Updates
+
+* **deps:** update all non-major dependencies ([#664](https://github.com/autonomouslogic/eve-ref/issues/664)) ([19f8655](https://github.com/autonomouslogic/eve-ref/commit/19f8655dbbdb92611135e6c83b02000f403a8564))
+
+## [2.53.1](https://github.com/autonomouslogic/eve-ref/compare/2.53.0...2.53.1) (2024-10-07)
+
+
+### Bug Fixes
+
+* **deps:** update dependency org.flywaydb:flyway-core to v10.19.0 ([#658](https://github.com/autonomouslogic/eve-ref/issues/658)) ([6b119aa](https://github.com/autonomouslogic/eve-ref/commit/6b119aa8e2d897a60cb286da3868f180171c24f5))
+* **deps:** update flyway to v10.19.0 ([#659](https://github.com/autonomouslogic/eve-ref/issues/659)) ([ba3c43e](https://github.com/autonomouslogic/eve-ref/commit/ba3c43e1190346e2315529c10230c2d8e8a01cfa))
+* **ui:** Render newlines and HTML from type descriptions ([#661](https://github.com/autonomouslogic/eve-ref/issues/661)) ([dd75cf0](https://github.com/autonomouslogic/eve-ref/commit/dd75cf071e39480d2b2ee2d64c35c2baa00c4a1b))
+
+
+### Documentation
+
+* CCP Alumni update ([670dcdc](https://github.com/autonomouslogic/eve-ref/commit/670dcdcc33b80bafb6683e522b0302cfad2dddcb))
+* CSM 1-3 delegates ([#663](https://github.com/autonomouslogic/eve-ref/issues/663)) ([5634f15](https://github.com/autonomouslogic/eve-ref/commit/5634f1568062abab88cf9c2ad993d86a0d8607b0))
+* CSM docs ([#656](https://github.com/autonomouslogic/eve-ref/issues/656)) ([6d79e24](https://github.com/autonomouslogic/eve-ref/commit/6d79e24c6622eea2e89125b7757e847a83199dce))
+* CSM tweaks ([018e8fc](https://github.com/autonomouslogic/eve-ref/commit/018e8fc0c89b85d4b78f034c200de4bbd021c3d5))
+* Update CSM4 list to use character names instead of real names ([9fa613d](https://github.com/autonomouslogic/eve-ref/commit/9fa613db99fd0c36f52107dc95681f4296b83678))
+
+
+### Dependency Updates
+
+* **deps:** update all non-major dependencies ([#657](https://github.com/autonomouslogic/eve-ref/issues/657)) ([f3fc431](https://github.com/autonomouslogic/eve-ref/commit/f3fc431689caa02a2456e6f13563126a103c3630))
+* **deps:** update all non-major dependencies to v8.8.1 ([#662](https://github.com/autonomouslogic/eve-ref/issues/662)) ([34a938a](https://github.com/autonomouslogic/eve-ref/commit/34a938a5f9d9e895d78b5be77278f412e55ffb15))
+* **deps:** update dependency @nuxt/test-utils to v3.14.3 ([#660](https://github.com/autonomouslogic/eve-ref/issues/660)) ([8df62d2](https://github.com/autonomouslogic/eve-ref/commit/8df62d21afef206208c757980b3278cd51c9ffd3))
+
+## [2.53.0](https://github.com/autonomouslogic/eve-ref/compare/2.52.0...2.53.0) (2024-10-06)
+
+
+### Features
+
+* **refdata:** Inventory types used in blueprints ([#655](https://github.com/autonomouslogic/eve-ref/issues/655)) ([ab64428](https://github.com/autonomouslogic/eve-ref/commit/ab644288d0df40eb5c5e806df8e7c60b69dbce43))
+* **ui:** Added reference data bundles for categories, groups, and market groups, and sorted various lists by name ([#653](https://github.com/autonomouslogic/eve-ref/issues/653)) ([13981fb](https://github.com/autonomouslogic/eve-ref/commit/13981fb8caeac03aa886e3e0bfd4f3d741ac6429))
+
+
+### Bug Fixes
+
+* **ui:** Grids on market group root pages ([#654](https://github.com/autonomouslogic/eve-ref/issues/654)) ([6f844d9](https://github.com/autonomouslogic/eve-ref/commit/6f844d98e9e8eb570609817d8b656e75804d5f89))
+
+## [2.52.0](https://github.com/autonomouslogic/eve-ref/compare/2.51.0...2.52.0) (2024-10-04)
+
+
+### Features
+
+* **refdata:** Type IDs populated on meta groups in reference data, and fixed public contract scrape to use reference data instead of HTML from old EVE Ref ([#652](https://github.com/autonomouslogic/eve-ref/issues/652)) ([9aa622f](https://github.com/autonomouslogic/eve-ref/commit/9aa622fc0cd0e7548f958b1fb8f67962f2abbb55))
+* **ui:** Added market price to variations, market groups, inventory groups, and compare tables ([#648](https://github.com/autonomouslogic/eve-ref/issues/648)) ([033731f](https://github.com/autonomouslogic/eve-ref/commit/033731f9b22c848a7195f9c776ab32ffd3e76586))
+* **ui:** Custom error page ([#646](https://github.com/autonomouslogic/eve-ref/issues/646)) ([ea07b8d](https://github.com/autonomouslogic/eve-ref/commit/ea07b8da9b59a773d932ad899e3613141a595941))
+
+
+### Bug Fixes
+
+* **ui:** Improved card layout ([#641](https://github.com/autonomouslogic/eve-ref/issues/641)) ([c78d16e](https://github.com/autonomouslogic/eve-ref/commit/c78d16ebb2ddce148d578ddb2f356b02c07e0eb2))
+* **ui:** Improved layout on list pages ([#649](https://github.com/autonomouslogic/eve-ref/issues/649)) ([acfce93](https://github.com/autonomouslogic/eve-ref/commit/acfce931ac3f38019215027520544c29204cb30b))
+* **ui:** Styles navigation bar and moved language selection to footer ([#650](https://github.com/autonomouslogic/eve-ref/issues/650)) ([01383bc](https://github.com/autonomouslogic/eve-ref/commit/01383bc46fa8e9ed851d81d91d55e39ae30eb8dd))
+* **ui:** Switched dogma icons to iec.jita.space - temporary solution for [#642](https://github.com/autonomouslogic/eve-ref/issues/642) ([33cd063](https://github.com/autonomouslogic/eve-ref/commit/33cd063b9c87122f05c41edd7fefaeb86809ab26))
+
+
+### Miscellaneous Chores
+
+* **ui:** Tools in CSM banner ([be25c0c](https://github.com/autonomouslogic/eve-ref/commit/be25c0c2285b24b2dc1b3b2cd671d6a7c32ff6e2))
+
+## [2.51.0](https://github.com/autonomouslogic/eve-ref/compare/2.50.0...2.51.0) (2024-10-02)
+
+
+### Features
+
+* Added meta groups and blueprints to type bundles ([#636](https://github.com/autonomouslogic/eve-ref/issues/636)) ([724cdb6](https://github.com/autonomouslogic/eve-ref/commit/724cdb61075fb80d3dbe8cb8603acbab3999b18e))
+
+
+### Bug Fixes
+
+* **ui:** Improved card and footer responsiveness ([#635](https://github.com/autonomouslogic/eve-ref/issues/635)) ([f7dc817](https://github.com/autonomouslogic/eve-ref/commit/f7dc8176482cab6b3ea99c868f0cbc9e10fa6b58))
+* **ui:** Load bundles blueprints ([11cb25f](https://github.com/autonomouslogic/eve-ref/commit/11cb25fc0d1c5de88d77ad6bbfb632170190b979))
+* **ui:** Made the defense card more responsive and show for entities and reorganised some values ([#640](https://github.com/autonomouslogic/eve-ref/issues/640)) ([d177b39](https://github.com/autonomouslogic/eve-ref/commit/d177b39754c2c6197e7e407cb5d94c0dab15a529))
+
+
+### Miscellaneous Chores
+
+* **ui:** MOTD tweaks ([699d349](https://github.com/autonomouslogic/eve-ref/commit/699d349d2871a66d629f87cbce90cb956d504130))
+* **ui:** Updated CMS19 text ([657a8a8](https://github.com/autonomouslogic/eve-ref/commit/657a8a87af3940f5f32602c19e0915601708ed98))
+
+## [2.50.0](https://github.com/autonomouslogic/eve-ref/compare/2.49.1...2.50.0) (2024-10-01)
+
+
+### Features
+
+* **refdata:** Added inventory category, group, and market groups to type bundles, and included more information required by type pages ([#623](https://github.com/autonomouslogic/eve-ref/issues/623)) ([2f06e63](https://github.com/autonomouslogic/eve-ref/commit/2f06e631aad46e434e8599001acb414380d6ae44))
+* **ui:** Added Goat Counter ([#613](https://github.com/autonomouslogic/eve-ref/issues/613)) ([cb70018](https://github.com/autonomouslogic/eve-ref/commit/cb70018021325c4807e41a0abb497ade6cde9acd))
+* **ui:** Added option on compare table to optionally load bundles ([#630](https://github.com/autonomouslogic/eve-ref/issues/630)) ([fe3c887](https://github.com/autonomouslogic/eve-ref/commit/fe3c88797606480363601cecc2ca5f83cf1509fe))
+* **ui:** Added support for bundles market groups, categories, and groups ([#629](https://github.com/autonomouslogic/eve-ref/issues/629)) ([42856de](https://github.com/autonomouslogic/eve-ref/commit/42856dedc47120efd50f51590d298911710c396e))
+* **ui:** Added YouTube URL to footer ([d865d44](https://github.com/autonomouslogic/eve-ref/commit/d865d4427a5053d3b5d5621a71c79ec0613c88c8))
+* **ui:** MOTD banner - Ariel Rin for CSM19 ([#628](https://github.com/autonomouslogic/eve-ref/issues/628)) ([9bfb2d6](https://github.com/autonomouslogic/eve-ref/commit/9bfb2d6f3c80af4709638d694cd4524df21219e0))
+* **ui:** Share tags ([#612](https://github.com/autonomouslogic/eve-ref/issues/612)) ([163d10a](https://github.com/autonomouslogic/eve-ref/commit/163d10a8c76927e9eb99800aa6f8e317f03b059d))
+
+
+### Bug Fixes
+
+* **ui:** Column lists on type pages ([#620](https://github.com/autonomouslogic/eve-ref/issues/620)) ([692b77b](https://github.com/autonomouslogic/eve-ref/commit/692b77b34342a9f38def2e8b65b81fab0d009701))
+* **ui:** compatibilityDate in nuxt.config.ts ([#611](https://github.com/autonomouslogic/eve-ref/issues/611)) ([7ff0d4b](https://github.com/autonomouslogic/eve-ref/commit/7ff0d4b7f6759370170ae4e1ed287b991332df3e))
+* **ui:** Default formats with variable decimal places ([#621](https://github.com/autonomouslogic/eve-ref/issues/621)) ([fefd224](https://github.com/autonomouslogic/eve-ref/commit/fefd2246e7e12eb284c1ed997b80da780c3eac63))
+* **ui:** Fixed issue where negative numbers were rendered with engineering notation ([#631](https://github.com/autonomouslogic/eve-ref/issues/631)) ([ca0740e](https://github.com/autonomouslogic/eve-ref/commit/ca0740e0bdf0f307279a5eb4e2b6f817c3146114))
+* **ui:** Flat layout, styling and other UI changes ([#602](https://github.com/autonomouslogic/eve-ref/issues/602)) ([fa956f6](https://github.com/autonomouslogic/eve-ref/commit/fa956f6340f00250a65d667817897e84e06ffa28))
+* **ui:** Misaba low-sec trade hub instead of Maila ([#605](https://github.com/autonomouslogic/eve-ref/issues/605)) ([fb2e01d](https://github.com/autonomouslogic/eve-ref/commit/fb2e01d895f52e6028b296997219acc64f616bf1))
+* **ui:** Optimised market price UI ([#622](https://github.com/autonomouslogic/eve-ref/issues/622)) ([75efef8](https://github.com/autonomouslogic/eve-ref/commit/75efef8211296a96c00f2aed950a8b8e0cb15c08))
+* **ui:** Removed crystal card to ammunition card and added mining crystal attributes ([95a284a](https://github.com/autonomouslogic/eve-ref/commit/95a284acd4b9523cbdaa7cb3928d2f0b2d790247))
+
+## [2.49.1](https://github.com/autonomouslogic/eve-ref/compare/2.49.0...2.49.1) (2024-09-21)
+
+
+### Features
+
+* **ui:** Chosen locale is now remembered and URLs are locale-specific ([#600](https://github.com/autonomouslogic/eve-ref/issues/600)) ([8bca199](https://github.com/autonomouslogic/eve-ref/commit/8bca199800d418dedec6a6a6c46f39461dac9060))
+
+
+### Bug Fixes
+
+* **jobs:** Extra error handling for scrape market order history ([#601](https://github.com/autonomouslogic/eve-ref/issues/601)) ([60ee678](https://github.com/autonomouslogic/eve-ref/commit/60ee6788c3c7ee6c4629a9362c5e706ab3c23e0b))
+
+
+### Tests
+
+* Fixed EsiLimitExceededInterceptorTest ([5da8a45](https://github.com/autonomouslogic/eve-ref/commit/5da8a45329044574b45bd38ede0e64b4869fc6f4))
+
+## [2.49.0](https://github.com/autonomouslogic/eve-ref/compare/2.48.1...2.49.0) (2024-09-20)
+
+
+### Features
+
+* **jobs:** Configurable data index prefix ([#596](https://github.com/autonomouslogic/eve-ref/issues/596)) ([0b01c83](https://github.com/autonomouslogic/eve-ref/commit/0b01c834d9e56f045e0f1c30cf0e84c529849ccf))
+
+
+### Bug Fixes
+
+* **ui:** Market prices only load on client ([#597](https://github.com/autonomouslogic/eve-ref/issues/597)) ([f2ab91e](https://github.com/autonomouslogic/eve-ref/commit/f2ab91e17f7672c272611214e018729858df796d))
+
+
+### Tests
+
+* Imported test resources ([#595](https://github.com/autonomouslogic/eve-ref/issues/595)) ([8e64f62](https://github.com/autonomouslogic/eve-ref/commit/8e64f6254bad27e3c16e60b5613504236f0d87ce))
+
+## [2.48.1](https://github.com/autonomouslogic/eve-ref/compare/2.48.0...2.48.1) (2024-09-16)
+
+
+### Bug Fixes
+
+* **refdata:** Fixed region reoslution regex ([#591](https://github.com/autonomouslogic/eve-ref/issues/591)) ([d375294](https://github.com/autonomouslogic/eve-ref/commit/d3752946a0ed15366e3471d0052b3e0f5b87f17d))
+
+## [2.48.0](https://github.com/autonomouslogic/eve-ref/compare/2.47.0...2.48.0) (2024-09-13)
+
+
+### Features
+
+* Fetch donations ([#588](https://github.com/autonomouslogic/eve-ref/issues/588)) ([cee4275](https://github.com/autonomouslogic/eve-ref/commit/cee4275c6d3040182d3e9d335b50011ba76b9951))
+* **refdata:** Cross-reference reprocessable types from skills ([#573](https://github.com/autonomouslogic/eve-ref/issues/573)) ([acfe764](https://github.com/autonomouslogic/eve-ref/commit/acfe7649dc26f1c09721d7dfb7fe1906df6d3253))
+* **ui:** Ore variations ([#577](https://github.com/autonomouslogic/eve-ref/issues/577)) ([65e3bd2](https://github.com/autonomouslogic/eve-ref/commit/65e3bd28bd65f7be2f938d0bcf82ec633603ed6c))
+* **ui:** Search ([#567](https://github.com/autonomouslogic/eve-ref/issues/567)) ([9342e29](https://github.com/autonomouslogic/eve-ref/commit/9342e292c75119655e0369220e42c53c45a86c3a))
+
+
+### Bug Fixes
+
+* **ui:** Added reprocessing skill ([#574](https://github.com/autonomouslogic/eve-ref/issues/574)) ([0233411](https://github.com/autonomouslogic/eve-ref/commit/023341135b68fd144c7aad760889e66335baf3f0))
+* **ui:** Conditional engineering notation on long numbers ([#575](https://github.com/autonomouslogic/eve-ref/issues/575)) ([3edf1e0](https://github.com/autonomouslogic/eve-ref/commit/3edf1e03f1ff3108d9774e2fc359fdb3c08aeb78))
+* **ui:** Don't format zeroes as engineering notation ([#587](https://github.com/autonomouslogic/eve-ref/issues/587)) ([7141ac6](https://github.com/autonomouslogic/eve-ref/commit/7141ac6d783b7ee11248ed2a92764eb1dc9b722b))
+* **ui:** Remember chosen locale between pages ([#589](https://github.com/autonomouslogic/eve-ref/issues/589)) ([d2ab11e](https://github.com/autonomouslogic/eve-ref/commit/d2ab11ee170808dc2c8fa45a0a6caf46856be280))
+
+## [2.47.0](https://github.com/autonomouslogic/eve-ref/compare/2.46.4...2.47.0) (2024-09-04)
+
+
+### Features
+
+* Job for generating search JSON ([#555](https://github.com/autonomouslogic/eve-ref/issues/555)) ([5571f8f](https://github.com/autonomouslogic/eve-ref/commit/5571f8f8e8d746be1459a35615f97d5914c5edd1))
+
+
+### Bug Fixes
+
+* **deps:** update dependency org.flywaydb:flyway-core to v10.17.3 ([#564](https://github.com/autonomouslogic/eve-ref/issues/564)) ([e62336b](https://github.com/autonomouslogic/eve-ref/commit/e62336bba3acd53e8303d41b736ca6733b6db522))
+* **deps:** update dependency org.flywaydb:flyway-database-postgresql to v10.17.3 ([#565](https://github.com/autonomouslogic/eve-ref/issues/565)) ([4f8d7ad](https://github.com/autonomouslogic/eve-ref/commit/4f8d7ad238f49f851014fc39ffcac44f5427d90f))
+
+
+### Dependency Updates
+
+* **deps:** update all non-major dependencies ([#566](https://github.com/autonomouslogic/eve-ref/issues/566)) ([c685c5e](https://github.com/autonomouslogic/eve-ref/commit/c685c5e46f185987cc7c5ec8fcecf98ad0ac7f71))
+
+## [2.46.4](https://github.com/autonomouslogic/eve-ref/compare/2.46.3...2.46.4) (2024-09-02)
+
+
+### Bug Fixes
+
+* **deps:** update dependency org.flywaydb:flyway-core to v10.17.2 ([#561](https://github.com/autonomouslogic/eve-ref/issues/561)) ([eaa2d53](https://github.com/autonomouslogic/eve-ref/commit/eaa2d53b34ea602b996423dd9f1d75c255647ea9))
+* **deps:** update dependency org.flywaydb:flyway-database-postgresql to v10.17.2 ([#562](https://github.com/autonomouslogic/eve-ref/issues/562)) ([fae3752](https://github.com/autonomouslogic/eve-ref/commit/fae3752b4119d08684095761044559e30abe6a97))
+
+
+### Dependency Updates
+
+* **deps:** update all non-major dependencies ([#560](https://github.com/autonomouslogic/eve-ref/issues/560)) ([b786c48](https://github.com/autonomouslogic/eve-ref/commit/b786c487d0fb0c3707333268d629c35e125f92fa))
+
+## [2.46.3](https://github.com/autonomouslogic/eve-ref/compare/2.46.2...2.46.3) (2024-09-01)
+
+
+### Features
+
+* **ui:** Added EVE Online Store affiliate ([#554](https://github.com/autonomouslogic/eve-ref/issues/554)) ([d350f2f](https://github.com/autonomouslogic/eve-ref/commit/d350f2fcc1dabf2e70a332f2c094d28b6a1da040))
+* **ui:** Discord redirect ([#556](https://github.com/autonomouslogic/eve-ref/issues/556)) ([f2e1c27](https://github.com/autonomouslogic/eve-ref/commit/f2e1c27e68ba2880fd9510efa5fc0cf83858941f))
+* **ui:** Updated favicon ([#557](https://github.com/autonomouslogic/eve-ref/issues/557)) ([3cdf6fe](https://github.com/autonomouslogic/eve-ref/commit/3cdf6fe324229077285b26743b92d947cc24ee1e))
+
+
+### Bug Fixes
+
+* **ui:** Disabled dev.eveonline.it and added EVE Market Browser in MarketLinks.vue ([360a0d8](https://github.com/autonomouslogic/eve-ref/commit/360a0d8c051ce4561d287513a9ff9a58a69d5067))
+
+
+### Dependency Updates
+
+* **deps:** update all non-major dependencies ([#537](https://github.com/autonomouslogic/eve-ref/issues/537)) ([5d100de](https://github.com/autonomouslogic/eve-ref/commit/5d100de8a6bce26a1947431e82dbfea4df0d89ff))
+* **deps:** update dependency @types/node to v20 ([#348](https://github.com/autonomouslogic/eve-ref/issues/348)) ([3c2cc14](https://github.com/autonomouslogic/eve-ref/commit/3c2cc1492b1bba1d9c1b66266656a5964626f413))
+* **deps:** update dependency nuxt to v3.12.4 [security] ([#553](https://github.com/autonomouslogic/eve-ref/issues/553)) ([a3ce8fa](https://github.com/autonomouslogic/eve-ref/commit/a3ce8faa6362b9ee9cbc66cde2b51a055d71ad09))
+* **deps:** update dependency vitest to v2 ([#540](https://github.com/autonomouslogic/eve-ref/issues/540)) ([91ee06a](https://github.com/autonomouslogic/eve-ref/commit/91ee06a6c98a583872da1af793e4c23a085047b1))
+* **deps:** update dependency vue-tsc to v2 ([#477](https://github.com/autonomouslogic/eve-ref/issues/477)) ([808f3e5](https://github.com/autonomouslogic/eve-ref/commit/808f3e502f8c20dd13f9bc6732ab9ff339317657))
+* **deps:** update typescript-eslint monorepo to v8 (major) ([#549](https://github.com/autonomouslogic/eve-ref/issues/549)) ([ccc0e44](https://github.com/autonomouslogic/eve-ref/commit/ccc0e440afb521a62fa6d76836b1f8a826ee0797))
+* **deps:** update ubuntu docker tag to v24 ([#510](https://github.com/autonomouslogic/eve-ref/issues/510)) ([6a70472](https://github.com/autonomouslogic/eve-ref/commit/6a704724f7abab99cfe36e3b86b001b7eda8af20))
+
+## [2.46.2](https://github.com/autonomouslogic/eve-ref/compare/2.46.1...2.46.2) (2024-08-06)
+
+
+### Bug Fixes
+
+* **deps:** update dependency org.flywaydb:flyway-database-postgresql to v10.17.0 ([#551](https://github.com/autonomouslogic/eve-ref/issues/551)) ([7612833](https://github.com/autonomouslogic/eve-ref/commit/7612833ca42d38c657f420b09ea5ddd0d4c04ecf))
+* **deps:** update font awesome to v6.6.0 ([#552](https://github.com/autonomouslogic/eve-ref/issues/552)) ([9fc92e7](https://github.com/autonomouslogic/eve-ref/commit/9fc92e70a98492caa9cc364fdf3505c6f0b97d73))
+
+## [2.46.1](https://github.com/autonomouslogic/eve-ref/compare/2.46.0...2.46.1) (2024-08-05)
+
+
+### Features
+
+* **ui:** Reactions card ([ff41774](https://github.com/autonomouslogic/eve-ref/commit/ff41774b3a7ef4ce0bae5c549954b63529c63a38))
+
+
+### Bug Fixes
+
+* **deps:** update dependency org.flywaydb:flyway-core to v10.17.0 ([#550](https://github.com/autonomouslogic/eve-ref/issues/550)) ([58ed1c1](https://github.com/autonomouslogic/eve-ref/commit/58ed1c11278063584cb784bd279f8191821e457f))
+* **ui:** Changed money to include thousands and shorten anything over the limit ([20118b0](https://github.com/autonomouslogic/eve-ref/commit/20118b017798a30486ccf2abd32bc7d4f395dabd))
+* **ui:** Fixing translations ([#548](https://github.com/autonomouslogic/eve-ref/issues/548)) ([e835561](https://github.com/autonomouslogic/eve-ref/commit/e8355616e5d7b9ee3cdd7033660b9df49e37aa9c))
+* **ui:** Remove defences card on types that don't need it ([79c9e8b](https://github.com/autonomouslogic/eve-ref/commit/79c9e8b0bfe2423ebae5c2bde4fca2f4c82897b0))
+
+
+### Documentation
+
+* Added schematics to reference data file list ([f7bc524](https://github.com/autonomouslogic/eve-ref/commit/f7bc52484e51d6a554742226bf7e8f8aad95399e))
+* Updated reference data files list ([a099b02](https://github.com/autonomouslogic/eve-ref/commit/a099b026d55011a17da05775b2db8c5ae78c33fd))
+
+## [2.46.0](https://github.com/autonomouslogic/eve-ref/compare/2.45.8...2.46.0) (2024-07-13)
+
+
+### Features
+
+* **refdata:** Planetary interaction schematics in reference data ([#541](https://github.com/autonomouslogic/eve-ref/issues/541)) ([b80c74f](https://github.com/autonomouslogic/eve-ref/commit/b80c74fcbed364b69931e0de03f8287e84d3960e))
+* **ui:** Faction implants in skill points page ([#539](https://github.com/autonomouslogic/eve-ref/issues/539)) ([ad2c80a](https://github.com/autonomouslogic/eve-ref/commit/ad2c80aad8776f2c885556c0761199576d94c10f))
+* **ui:** Planetary schematics ([#543](https://github.com/autonomouslogic/eve-ref/issues/543)) ([0bb75aa](https://github.com/autonomouslogic/eve-ref/commit/0bb75aa3371d3586e0388b4f779d76d9ecff2f20))
+
+## [2.45.8](https://github.com/autonomouslogic/eve-ref/compare/2.45.7...2.45.8) (2024-07-02)
+
+
+### Bug Fixes
+
+* **deps:** update flyway monorepo to v10.15.2 ([#538](https://github.com/autonomouslogic/eve-ref/issues/538)) ([2e11a44](https://github.com/autonomouslogic/eve-ref/commit/2e11a44882dfb8264e65987b734bbb4d26b9f884))
+
+
+### Documentation
+
+* Datasets order ([69363b3](https://github.com/autonomouslogic/eve-ref/commit/69363b36a1b596f69bfc7fb92780359582d68ce8))
+* Spelling of Hoboleaks ([619e54f](https://github.com/autonomouslogic/eve-ref/commit/619e54fa49bc74a7db0767256652f9b9ceeca1c6))
+
+## [2.45.7](https://github.com/autonomouslogic/eve-ref/compare/2.45.6...2.45.7) (2024-06-12)
+
+
+### Bug Fixes
+
+* Support for the Equinox SDE ([#535](https://github.com/autonomouslogic/eve-ref/issues/535)) ([8a9d553](https://github.com/autonomouslogic/eve-ref/commit/8a9d553823193074b9e2dcef8498eb3f5ee1c192))
+
+## [2.45.6](https://github.com/autonomouslogic/eve-ref/compare/2.45.5...2.45.6) (2024-06-04)
+
+
+### Dependency Updates
+
+* **deps:** update all non-major dependencies ([#528](https://github.com/autonomouslogic/eve-ref/issues/528)) ([25e77cc](https://github.com/autonomouslogic/eve-ref/commit/25e77cc73fecefea2779f361e286bdb3d236ca38))
+
+## [2.45.5](https://github.com/autonomouslogic/eve-ref/compare/2.45.4...2.45.5) (2024-06-03)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @fortawesome/vue-fontawesome to v3.0.8 ([#527](https://github.com/autonomouslogic/eve-ref/issues/527)) ([2176b23](https://github.com/autonomouslogic/eve-ref/commit/2176b2374be95f2a0eec4adb7bb60747fcc7148f))
+* **deps:** update flyway monorepo to v10.13.0 ([#529](https://github.com/autonomouslogic/eve-ref/issues/529)) ([68e82c9](https://github.com/autonomouslogic/eve-ref/commit/68e82c95e2864cd65ac4cf0dedc3805e7c9a62c9))
+* **deps:** update flyway monorepo to v10.14.0 ([#530](https://github.com/autonomouslogic/eve-ref/issues/530)) ([66535dc](https://github.com/autonomouslogic/eve-ref/commit/66535dc80749cb16dade88fd637ea6da03b65821))
+
+
+### Dependency Updates
+
+* **deps:** update plugin org.jetbrains.kotlin.jvm to v2 ([#524](https://github.com/autonomouslogic/eve-ref/issues/524)) ([d64c0e1](https://github.com/autonomouslogic/eve-ref/commit/d64c0e1ffa1b4bbb38a421bf17b0bc7e6dd6b273))
+
+## [2.45.4](https://github.com/autonomouslogic/eve-ref/compare/2.45.3...2.45.4) (2024-06-02)
+
+
+### Documentation
+
+* Added characters-corporations-alliances ([48ba813](https://github.com/autonomouslogic/eve-ref/commit/48ba8134a28dcfa41cb53c513cb19967c3e2da6b))
+* Update index page ([ce8868d](https://github.com/autonomouslogic/eve-ref/commit/ce8868da20a0f83de96efc986c6c4f8f75276c75))
+
+
+### Dependency Updates
+
+* **deps:** Updated commons-java to 1.9.0 ([#525](https://github.com/autonomouslogic/eve-ref/issues/525)) ([54411cc](https://github.com/autonomouslogic/eve-ref/commit/54411cc897d4252eeb484d41a9cd7fae64577b07))
+
+
+### Continuous Integration
+
+* Don't release docs ([45b774c](https://github.com/autonomouslogic/eve-ref/commit/45b774c8852da9611d876a5b743943c523f93c98))
+
+## [2.45.3](https://github.com/autonomouslogic/eve-ref/compare/2.45.2...2.45.3) (2024-05-08)
+
+
+### Bug Fixes
+
+* **deps:** update flyway monorepo to v10.12.0 ([#516](https://github.com/autonomouslogic/eve-ref/issues/516)) ([f6ce811](https://github.com/autonomouslogic/eve-ref/commit/f6ce811cb77f2f3bb2f1fe7d80395458c9744d77))
+
+## [2.45.2](https://github.com/autonomouslogic/eve-ref/compare/2.45.1...2.45.2) (2024-05-07)
+
+
+### Dependency Updates
+
+* **deps:** update all non-major dependencies ([#514](https://github.com/autonomouslogic/eve-ref/issues/514)) ([f76b0e0](https://github.com/autonomouslogic/eve-ref/commit/f76b0e06f85cee97ae457674b7401e725053c74c))
+
+## [2.45.1](https://github.com/autonomouslogic/eve-ref/compare/2.45.0...2.45.1) (2024-05-06)
+
+
+### Bug Fixes
+
+* **deps:** update font awesome to v6.5.2 ([#515](https://github.com/autonomouslogic/eve-ref/issues/515)) ([b5d01b7](https://github.com/autonomouslogic/eve-ref/commit/b5d01b7c2990e2f8d7682bd182671a95fb8e9458))
+* Various structure scrape fixes ([#517](https://github.com/autonomouslogic/eve-ref/issues/517)) ([034ae56](https://github.com/autonomouslogic/eve-ref/commit/034ae5638d7da6dd2d97311322b9a69d8ebe3d4a))
+
+## [2.45.0](https://github.com/autonomouslogic/eve-ref/compare/2.44.0...2.45.0) (2024-05-05)
+
+
+### Features
+
+* Added first_seen to structure scrape ([#500](https://github.com/autonomouslogic/eve-ref/issues/500)) ([9fe248b](https://github.com/autonomouslogic/eve-ref/commit/9fe248bc4e86998acd766199e048b8424ae4cf46))
+* Added structure locations from market orders and contracts ([#502](https://github.com/autonomouslogic/eve-ref/issues/502)) ([65aeaaf](https://github.com/autonomouslogic/eve-ref/commit/65aeaaf8d2d04c7b32b67ff2b62ba45df9831b57))
+* Scrape market orders from player structures ([#501](https://github.com/autonomouslogic/eve-ref/issues/501)) ([979c1df](https://github.com/autonomouslogic/eve-ref/commit/979c1dfcb59986974f860ba08bfb6a39d3f9eee6))
+* **ui:** Added attribute breakdown for accounts ([#511](https://github.com/autonomouslogic/eve-ref/issues/511)) ([672e577](https://github.com/autonomouslogic/eve-ref/commit/672e577968fb4ed67b2ab1c6cdf3978569dd4677))
+* **ui:** Structure rig comparison table ([#481](https://github.com/autonomouslogic/eve-ref/issues/481)) ([4f0e4c9](https://github.com/autonomouslogic/eve-ref/commit/4f0e4c984df55c66da63b0319a437dc62d324dcc))
+
+
+### Bug Fixes
+
+* Explicitly added region and constellation to custom properties ([b2267e6](https://github.com/autonomouslogic/eve-ref/commit/b2267e6d717f0de6818d679f6c835efa3b03b2b2))
+* **ui:** Added average attributes with +5 implants to skill points overview ([3263597](https://github.com/autonomouslogic/eve-ref/commit/3263597b4653742735ff627010759db0b3f89b9c))
+
+
+### Documentation
+
+* Update market history stats ([396001b](https://github.com/autonomouslogic/eve-ref/commit/396001b197a2a84f2d8a8ddb8880f569d1d5d372))
+
+## [2.44.0](https://github.com/autonomouslogic/eve-ref/compare/2.43.1...2.44.0) (2024-04-26)
+
+
+### Features
+
+* Inventory group bundles ([#509](https://github.com/autonomouslogic/eve-ref/issues/509)) ([7f797f9](https://github.com/autonomouslogic/eve-ref/commit/7f797f9fa553bd62cf95fcbf44e8aad965f6cb82))
+* Skill point price overview ([#508](https://github.com/autonomouslogic/eve-ref/issues/508)) ([9932ac0](https://github.com/autonomouslogic/eve-ref/commit/9932ac0d717e86b7b181e378092491e364fef2a6))
+
+
+### Bug Fixes
+
+* Spelling on skill point overview ([1b7ad92](https://github.com/autonomouslogic/eve-ref/commit/1b7ad924b8c8f7be59f30d66869d8da939544158))
+
+## [2.43.1](https://github.com/autonomouslogic/eve-ref/compare/2.43.0...2.43.1) (2024-04-08)
+
+
+### Documentation
+
+* Reduced recommended rclone concurrency ([64ecaaf](https://github.com/autonomouslogic/eve-ref/commit/64ecaaf2e00a7204fe2ee79cd6c8fa63206bda38))
+
+
+### Dependency Updates
+
+* **deps:** update all non-major dependencies ([#494](https://github.com/autonomouslogic/eve-ref/issues/494)) ([7175a1b](https://github.com/autonomouslogic/eve-ref/commit/7175a1b1bd2d6b06e838cabb563757ece4ca2eed))
+
+
+### Code Refactoring
+
+* Structure refactor ([#497](https://github.com/autonomouslogic/eve-ref/issues/497)) ([bd9784b](https://github.com/autonomouslogic/eve-ref/commit/bd9784bc2fbdac9922c8cb3c3654574c2f1b610a))
+
+## [2.43.0](https://github.com/autonomouslogic/eve-ref/compare/2.42.0...2.43.0) (2024-04-02)
+
+
+### Features
+
+* **jobs:** Structure scrape ([#488](https://github.com/autonomouslogic/eve-ref/issues/488)) ([a05b74e](https://github.com/autonomouslogic/eve-ref/commit/a05b74e28a0b479bca8b6e348b43eb6c46669d2f))
+
+
+### Bug Fixes
+
+* **deps:** update flyway monorepo to v10.10.0 ([#495](https://github.com/autonomouslogic/eve-ref/issues/495)) ([6be7387](https://github.com/autonomouslogic/eve-ref/commit/6be73874836732e1f0cb37f74406ecc9905dc12c))
+* **jobs:** Remove sovereignty structures from structure scrape ([#496](https://github.com/autonomouslogic/eve-ref/issues/496)) ([80c80e2](https://github.com/autonomouslogic/eve-ref/commit/80c80e2a69af964332a3a4ae8e61289c1c233f78))
+
+## [2.42.0](https://github.com/autonomouslogic/eve-ref/compare/2.41.0...2.42.0) (2024-03-30)
+
+
+### Features
+
+* Can-fit decorator ([#491](https://github.com/autonomouslogic/eve-ref/issues/491)) ([2845170](https://github.com/autonomouslogic/eve-ref/commit/28451706e7b8668e32db89bc46c9cf522509fc83))
+
+## [2.41.0](https://github.com/autonomouslogic/eve-ref/compare/2.40.2...2.41.0) (2024-03-24)
+
+
+### Features
+
+* **jobs:** Simple Eve Online login ([#487](https://github.com/autonomouslogic/eve-ref/issues/487)) ([65425d7](https://github.com/autonomouslogic/eve-ref/commit/65425d765ab3cce729097bbdda14be96f19488a6))
+
+
+### Documentation
+
+* Allow timestamp checking ([#484](https://github.com/autonomouslogic/eve-ref/issues/484)) ([b38a46e](https://github.com/autonomouslogic/eve-ref/commit/b38a46e92c126d5a7f08c955e182293f90961376))
+* rclone support ([#485](https://github.com/autonomouslogic/eve-ref/issues/485)) ([214303f](https://github.com/autonomouslogic/eve-ref/commit/214303fd64ee2a472b64aa0ee5095a101ec5496a))
+
+## [2.40.2](https://github.com/autonomouslogic/eve-ref/compare/2.40.1...2.40.2) (2024-03-07)
+
+
+### Documentation
+
+* Killmails ([#480](https://github.com/autonomouslogic/eve-ref/issues/480)) ([d5e5b12](https://github.com/autonomouslogic/eve-ref/commit/d5e5b12c295f4e1f2eb35f66eda5ba5b85419c12))
+
+
+### Dependency Updates
+
+* **deps:** update all non-major dependencies ([#478](https://github.com/autonomouslogic/eve-ref/issues/478)) ([98a0eda](https://github.com/autonomouslogic/eve-ref/commit/98a0edae8527dfe32fb6d1ea5eefead0080db3de))
+* **deps:** update typescript-eslint monorepo to v7 (major) ([#474](https://github.com/autonomouslogic/eve-ref/issues/474)) ([8aa5917](https://github.com/autonomouslogic/eve-ref/commit/8aa59178b61b6c2ea4eb4d0d990c82e58d74984b))
+
+## [2.40.1](https://github.com/autonomouslogic/eve-ref/compare/2.40.0...2.40.1) (2024-03-05)
+
+
+### Bug Fixes
+
+* **deps:** update flyway monorepo to v10.8.1 ([#479](https://github.com/autonomouslogic/eve-ref/issues/479)) ([e38d1e3](https://github.com/autonomouslogic/eve-ref/commit/e38d1e390dd3a2708dfd1aad3f444246e5f9e1a2))
+* **ui:** Updated privacy pages ([7161bd2](https://github.com/autonomouslogic/eve-ref/commit/7161bd2dc28ebee946d28053c871296ba3ed2325))
+
+## [2.40.0](https://github.com/autonomouslogic/eve-ref/compare/2.39.9...2.40.0) (2024-02-16)
+
+
+### Features
+
+* **jobs:** Added command name to Sentry submissions ([90d6fd0](https://github.com/autonomouslogic/eve-ref/commit/90d6fd088ff79df4d3272f17c99ee84bb0d2cab6))
+* **jobs:** Sentry integration ([#476](https://github.com/autonomouslogic/eve-ref/issues/476)) ([7e9d58c](https://github.com/autonomouslogic/eve-ref/commit/7e9d58cfc09b30222e39b67e5cb550cb2459a119))
+* **ui:** Added link to EVE Cookbook ([#475](https://github.com/autonomouslogic/eve-ref/issues/475)) ([a001ec4](https://github.com/autonomouslogic/eve-ref/commit/a001ec4f4d8b829a98f8c40c8108acff7f0cf2b7))
+* **ui:** Added link to EVE Cookbook ([#475](https://github.com/autonomouslogic/eve-ref/issues/475)) ([cc0c6af](https://github.com/autonomouslogic/eve-ref/commit/cc0c6afe5b5443a3cbcfcc5b0df084c0b657bccd))
+* **ui:** EVE Tycoon manufacturing link ([#473](https://github.com/autonomouslogic/eve-ref/issues/473)) ([56cf96f](https://github.com/autonomouslogic/eve-ref/commit/56cf96fad96d96290c591dc75dbaa98ccdab10be))
+
+
+### Bug Fixes
+
+* **jobs:** Added missing Flyway dependency ([06120cb](https://github.com/autonomouslogic/eve-ref/commit/06120cb247ea29fa3a49be74723cab4db952e5f9))
+
+
+### Miscellaneous Chores
+
+* Merge remote-tracking branch 'refs/remotes/origin/main' ([e128a27](https://github.com/autonomouslogic/eve-ref/commit/e128a27a7709e5e69c42e83bd4ced9975569e94f))
+
+## [2.39.9](https://github.com/autonomouslogic/eve-ref/compare/2.39.8...2.39.9) (2024-02-06)
+
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([#469](https://github.com/autonomouslogic/eve-ref/issues/469)) ([3705591](https://github.com/autonomouslogic/eve-ref/commit/37055918879b6c708fe80b3a9c7b46d091e27f34))
+
+## [2.39.8](https://github.com/autonomouslogic/eve-ref/compare/2.39.7...2.39.8) (2024-02-05)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @fortawesome/vue-fontawesome to v3.0.6 ([#465](https://github.com/autonomouslogic/eve-ref/issues/465)) ([f57f605](https://github.com/autonomouslogic/eve-ref/commit/f57f6050b09f8deb2616ec2c92dc2ce08cac42ae))
+* **deps:** update flyway monorepo to v10.7.1 ([#467](https://github.com/autonomouslogic/eve-ref/issues/467)) ([eb89267](https://github.com/autonomouslogic/eve-ref/commit/eb892677fbbad7ed2409c58170d7b54da8ccab9b))
+
+
+### Dependency Updates
+
+* **deps:** update all non-major dependencies ([#466](https://github.com/autonomouslogic/eve-ref/issues/466)) ([9b6efe7](https://github.com/autonomouslogic/eve-ref/commit/9b6efe7d63ef2b3fa70377652c2a6e3bb7ee6a45))
+* **deps:** update all non-major dependencies ([#468](https://github.com/autonomouslogic/eve-ref/issues/468)) ([81ef535](https://github.com/autonomouslogic/eve-ref/commit/81ef535dcb64f32129c3f9a4a7764283944fe60b))
+
+## [2.39.7](https://github.com/autonomouslogic/eve-ref/compare/2.39.6...2.39.7) (2024-02-01)
+
+
+### Dependency Updates
+
+* **deps:** update codecov/codecov-action action to v4 ([#462](https://github.com/autonomouslogic/eve-ref/issues/462)) ([38af0ea](https://github.com/autonomouslogic/eve-ref/commit/38af0ea5a5f0e634aaaac4a058e66e951b5053dd))
+
+## [2.39.6](https://github.com/autonomouslogic/eve-ref/compare/2.39.5...2.39.6) (2024-01-24)
+
+
+### Features
+
+* **ui:** Added market link to jita.space ([#444](https://github.com/autonomouslogic/eve-ref/issues/444)) ([4657c2e](https://github.com/autonomouslogic/eve-ref/commit/4657c2e7c86079a4562f814ab2adfdf0af3069aa))
+* **ui:** Basic comparison of ship variations ([#439](https://github.com/autonomouslogic/eve-ref/issues/439)) ([dd2b2a8](https://github.com/autonomouslogic/eve-ref/commit/dd2b2a85d543436135475cecfeeb55fa65197fe5))
+* **ui:** Blueprint copying card ([#448](https://github.com/autonomouslogic/eve-ref/issues/448)) ([b53ad26](https://github.com/autonomouslogic/eve-ref/commit/b53ad26139443749b6b4c4b1b480bf5eefd56a49))
+* **ui:** Blueprint research card ([#447](https://github.com/autonomouslogic/eve-ref/issues/447)) ([65b06af](https://github.com/autonomouslogic/eve-ref/commit/65b06af8e16af492aa037f73ca68e327ef1704ec))
+* **ui:** Booster card with injected skillpoints ([#456](https://github.com/autonomouslogic/eve-ref/issues/456)) ([d7ebf07](https://github.com/autonomouslogic/eve-ref/commit/d7ebf071b219137bffdee1d0697ea8199a290443))
+* **ui:** Comparison tables on inventory group pages ([#445](https://github.com/autonomouslogic/eve-ref/issues/445)) ([d7c877a](https://github.com/autonomouslogic/eve-ref/commit/d7c877a58722f1a54f1866e5d08c65166027b863))
+* **ui:** Dark orange layout ([#435](https://github.com/autonomouslogic/eve-ref/issues/435)) ([b9eb0ae](https://github.com/autonomouslogic/eve-ref/commit/b9eb0aef75c5cdc6a2b79513787838d1614beff9))
+* **ui:** Display money in a shortened format ([#436](https://github.com/autonomouslogic/eve-ref/issues/436)) ([b7c0db5](https://github.com/autonomouslogic/eve-ref/commit/b7c0db515239c4f4b392733d8bed6f7c486488ee))
+* **ui:** Industry card with link to Adam4Eve material influence ([#457](https://github.com/autonomouslogic/eve-ref/issues/457)) ([17700fd](https://github.com/autonomouslogic/eve-ref/commit/17700fdc7c086bf8befe01eecdc39f080448cf7d))
+* **ui:** Invention card ([#449](https://github.com/autonomouslogic/eve-ref/issues/449)) ([a58d997](https://github.com/autonomouslogic/eve-ref/commit/a58d9972507ee65fe5b78ce051c6562a19fd7ffa))
+* **ui:** Partner assets, about, generalised link URLs ([#446](https://github.com/autonomouslogic/eve-ref/issues/446)) ([cca2283](https://github.com/autonomouslogic/eve-ref/commit/cca22837fc5242340e46a6909f5efc413a978a83))
+* **ui:** Vertical compare table ([#438](https://github.com/autonomouslogic/eve-ref/issues/438)) ([e7f9ba9](https://github.com/autonomouslogic/eve-ref/commit/e7f9ba91edb9cf5936e4ad717bbc260f1ee60823))
+
+
+### Bug Fixes
+
+* **ui:** Changed footer links ([988275b](https://github.com/autonomouslogic/eve-ref/commit/988275bd0b4887fe0e753ad820e2459deec8aa3d))
+* **ui:** Client cards via inner wrappers ([#450](https://github.com/autonomouslogic/eve-ref/issues/450)) ([1f1f24f](https://github.com/autonomouslogic/eve-ref/commit/1f1f24fee4b4aa6addda720ef48d350a3dcb91df))
+* **ui:** Fixed dev.eveonline.it market link ([3c452de](https://github.com/autonomouslogic/eve-ref/commit/3c452de4a1e057fd43c37e9b40500a0d1cc7af4d))
+* **ui:** Fixed variations comparison after inventory comparison update ([b2b61da](https://github.com/autonomouslogic/eve-ref/commit/b2b61daadde040deaa38c97f51e4367f74eb4ea6))
+* **ui:** Insurance load fixes and fixed Jita market price lookup ([#437](https://github.com/autonomouslogic/eve-ref/issues/437)) ([d8cd8eb](https://github.com/autonomouslogic/eve-ref/commit/d8cd8eb2dd81fcf7a92f98c45adaa78d4955ef38))
+* **ui:** Made the MarketRow component render client-only ([#440](https://github.com/autonomouslogic/eve-ref/issues/440)) ([ecf518f](https://github.com/autonomouslogic/eve-ref/commit/ecf518f66dff24e07cb4c926b6cda4aa9233af9c))
+* **ui:** Proper client-side components ([766a142](https://github.com/autonomouslogic/eve-ref/commit/766a142a7a2680447dd9fff629a1ecd370287646))
+* **ui:** Sorted default dogma attributes by ID before rendering ([#442](https://github.com/autonomouslogic/eve-ref/issues/442)) ([805bced](https://github.com/autonomouslogic/eve-ref/commit/805bcedbcc85e0aa1bce17739bfd2034d8b69aeb))
+* **ui:** Taller loading bar ([bd1a9f3](https://github.com/autonomouslogic/eve-ref/commit/bd1a9f35403de12068e07ac966ea4349395c64b6))
+
+
+### Documentation
+
+* Update market history ([4b9bd32](https://github.com/autonomouslogic/eve-ref/commit/4b9bd323ef927eb8f58c307b98279bb2f012ccd6))
+
+
+### Dependency Updates
+
+* **deps:** update plugin org.danilopianini.git-sensitive-semantic-versioning-gradle-plugin to v3 ([#451](https://github.com/autonomouslogic/eve-ref/issues/451)) ([2f93722](https://github.com/autonomouslogic/eve-ref/commit/2f9372274cc1fb5e91a05efc3c077e6e0542ea53))
+
+
+### Miscellaneous Chores
+
+* Added script for updating zip file times ([2699896](https://github.com/autonomouslogic/eve-ref/commit/269989693dd8f009f98579afb078060efe3c1ded))
+
+## [2.39.5](https://github.com/autonomouslogic/eve-ref/compare/2.39.4...2.39.5) (2024-01-08)
+
+
+### Features
+
+* **ui:** Added page titles ([#434](https://github.com/autonomouslogic/eve-ref/issues/434)) ([43ff7a8](https://github.com/autonomouslogic/eve-ref/commit/43ff7a80c001ca0d1eb51726eb0e4ba916cb6bd3))
+* **ui:** Redirects for /type and /market ([#429](https://github.com/autonomouslogic/eve-ref/issues/429)) ([66663e4](https://github.com/autonomouslogic/eve-ref/commit/66663e4986ba9f580c374bcde3e9dfbfacc2308d))
+
+
+### Bug Fixes
+
+* **jobs:** Fixed directory overview on DataIndex ([#428](https://github.com/autonomouslogic/eve-ref/issues/428)) ([6405201](https://github.com/autonomouslogic/eve-ref/commit/640520148d881adbf94ad2df3a36755812735117))
+
+## [2.39.4](https://github.com/autonomouslogic/eve-ref/compare/2.39.3...2.39.4) (2024-01-07)
+
+
+### Features
+
+* **ui:** Formatted time and duration ([#423](https://github.com/autonomouslogic/eve-ref/issues/423)) ([9bf0754](https://github.com/autonomouslogic/eve-ref/commit/9bf075462064d831070ce7dc532fb2c2eb9cca83))
+
+
+### Bug Fixes
+
+* **ui:** Recursive skill requirements don't cause the browser to eat up all the memory ([#427](https://github.com/autonomouslogic/eve-ref/issues/427)) ([637c7b0](https://github.com/autonomouslogic/eve-ref/commit/637c7b0f2fc38442e2c867a7dfe0d60066fbaace))
+
+
+### Dependency Updates
+
+* **deps:** update dependency vitest to v1 ([#384](https://github.com/autonomouslogic/eve-ref/issues/384)) ([646aec0](https://github.com/autonomouslogic/eve-ref/commit/646aec05a1566b4f7084627daa8e029c8fdefa18))
+* **deps:** update plugin nu.studer.jooq to v9 ([#415](https://github.com/autonomouslogic/eve-ref/issues/415)) ([90f5f50](https://github.com/autonomouslogic/eve-ref/commit/90f5f50fd77d3d6be03ca9d37add87278ec77434))
+
+
+### Continuous Integration
+
+* **actions:** Require scopes in PR and make UI scope not result in releases ([#426](https://github.com/autonomouslogic/eve-ref/issues/426)) ([be0583f](https://github.com/autonomouslogic/eve-ref/commit/be0583f767d79bc154a0634e393eaacaf2916f8a))
+
+## [2.39.3](https://github.com/autonomouslogic/eve-ref/compare/2.39.2...2.39.3) (2024-01-05)
+
+
+### Features
+
+* Added group links on attributes ([#422](https://github.com/autonomouslogic/eve-ref/issues/422)) ([ad47b53](https://github.com/autonomouslogic/eve-ref/commit/ad47b53f371a3d26f02674738166d1d14d8718a2))
+* Formatted time and duration ([#423](https://github.com/autonomouslogic/eve-ref/issues/423)) ([e8d4aec](https://github.com/autonomouslogic/eve-ref/commit/e8d4aec1d3681dd00a93bd336d54fed025cec68b))
+
+
+### Bug Fixes
+
+* Browser hydration errors ([#425](https://github.com/autonomouslogic/eve-ref/issues/425)) ([c9dc49a](https://github.com/autonomouslogic/eve-ref/commit/c9dc49a8b4c42dff7e2fe1b459a1af8ce2dc397b))
+* Defenses card styling ([#421](https://github.com/autonomouslogic/eve-ref/issues/421)) ([bca7d1d](https://github.com/autonomouslogic/eve-ref/commit/bca7d1db88404c2d2e4cd886bd9dedbaefaee116))
+
+
+### Dependency Updates
+
+* **deps:** update all non-major dependencies ([#416](https://github.com/autonomouslogic/eve-ref/issues/416)) ([73d3dd4](https://github.com/autonomouslogic/eve-ref/commit/73d3dd49783c09613019c2a55955d7e3f4ebe01e))
+* **deps:** Updated @nuxtjs/i18n to 8.0.0 ([#420](https://github.com/autonomouslogic/eve-ref/issues/420)) ([8194bb4](https://github.com/autonomouslogic/eve-ref/commit/8194bb462d7fa9318497c07504cb777741f2eb4d))
+
+## [2.39.2](https://github.com/autonomouslogic/eve-ref/compare/2.39.1...2.39.2) (2024-01-01)
+
+
+### Features
+
+* Privacy policies ([#413](https://github.com/autonomouslogic/eve-ref/issues/413)) ([059e5ab](https://github.com/autonomouslogic/eve-ref/commit/059e5ab6c96b16696025ff5e91ffd96a8eff4348))
+* Switched attributes to description lists (dl, dt, dd) ([#414](https://github.com/autonomouslogic/eve-ref/issues/414)) ([b4da512](https://github.com/autonomouslogic/eve-ref/commit/b4da5121253f61e1cf9569d443ea9f31e5884d0b))
+
+
+### Bug Fixes
+
+* **deps:** update flyway monorepo to v10.4.1 ([#417](https://github.com/autonomouslogic/eve-ref/issues/417)) ([bbfca34](https://github.com/autonomouslogic/eve-ref/commit/bbfca34aef18cc3a5e21d434a3ec0e0734a029a4))
+* **deps:** update font awesome to v6.5.1 ([#418](https://github.com/autonomouslogic/eve-ref/issues/418)) ([81f8cbe](https://github.com/autonomouslogic/eve-ref/commit/81f8cbeded9d2e073737a76040342550308b1f1d))
+
+## [2.39.1](https://github.com/autonomouslogic/eve-ref/compare/2.39.0...2.39.1) (2023-12-24)
+
+
+### Bug Fixes
+
+* Dogma attribute value layout ([6a5d122](https://github.com/autonomouslogic/eve-ref/commit/6a5d1220fe24113823eb514d3c4f8c3b7346427a))
+
+## [2.39.0](https://github.com/autonomouslogic/eve-ref/compare/2.38.2...2.39.0) (2023-12-23)
+
+
+### Features
+
+* Added Adam4EVE manufacturing link ([#412](https://github.com/autonomouslogic/eve-ref/issues/412)) ([a970a2c](https://github.com/autonomouslogic/eve-ref/commit/a970a2c2e106ce0efdab16926d89a233aca06a6d))
+* Added Fuzzwork manufacturing link ([#406](https://github.com/autonomouslogic/eve-ref/issues/406)) ([7cc37ff](https://github.com/autonomouslogic/eve-ref/commit/7cc37ff84d0be0f0f8231f4095f22583460c07f5))
+* Structures overview ([#400](https://github.com/autonomouslogic/eve-ref/issues/400)) ([b9724a0](https://github.com/autonomouslogic/eve-ref/commit/b9724a0037aea1de71609fcd71a799b7154ca124))
+
+
+### Documentation
+
+* Market orders format ([#403](https://github.com/autonomouslogic/eve-ref/issues/403)) ([22e9260](https://github.com/autonomouslogic/eve-ref/commit/22e9260546a54016f1e5c7b9a302dd6538a330f0))
+* Public contracts format ([#404](https://github.com/autonomouslogic/eve-ref/issues/404)) ([81f1fda](https://github.com/autonomouslogic/eve-ref/commit/81f1fda1c8d0063678fbefead653a4c0bd3960fb))
+
+## [2.38.2](https://github.com/autonomouslogic/eve-ref/compare/2.38.1...2.38.2) (2023-12-19)
+
+
+### Bug Fixes
+
+* **deps:** update dependency com.google.guava:guava to v33 ([#398](https://github.com/autonomouslogic/eve-ref/issues/398)) ([851e928](https://github.com/autonomouslogic/eve-ref/commit/851e9289cf6d51992a504dc74af1d64705a940ac))
+* **deps:** update flyway monorepo to v10 (major) ([#374](https://github.com/autonomouslogic/eve-ref/issues/374)) ([451a0a3](https://github.com/autonomouslogic/eve-ref/commit/451a0a3e010557e6db67185474bc6fe107bfbe3c))
+
+## [2.38.1](https://github.com/autonomouslogic/eve-ref/compare/2.38.0...2.38.1) (2023-12-18)
+
+
+### Bug Fixes
+
+* IMPORT_MARKET_HISTORY_MIN_DATE defaults to the latest date or today, minus 450 days ([#397](https://github.com/autonomouslogic/eve-ref/issues/397)) ([3997a81](https://github.com/autonomouslogic/eve-ref/commit/3997a81dc2dc9b27ea37c6fa1af2aa46a6fec5de))
+
+## [2.38.0](https://github.com/autonomouslogic/eve-ref/compare/2.37.2...2.38.0) (2023-12-14)
+
+
+### Features
+
+* Redirect on /data ([#392](https://github.com/autonomouslogic/eve-ref/issues/392)) ([2781cb6](https://github.com/autonomouslogic/eve-ref/commit/2781cb69ba5f1e3b8a232aa0f61922ac571a9e75))
+
+
+### Bug Fixes
+
+* Fixed nullpointer in publish ref data ([#394](https://github.com/autonomouslogic/eve-ref/issues/394)) ([36ee874](https://github.com/autonomouslogic/eve-ref/commit/36ee874421d1367a83c85d834f36f4bd6e687ea6))
+
+## [2.37.2](https://github.com/autonomouslogic/eve-ref/compare/2.37.1...2.37.2) (2023-12-10)
+
+
+### Features
+
+* Elliptic-curve signature tooling ([#382](https://github.com/autonomouslogic/eve-ref/issues/382)) ([d24aea1](https://github.com/autonomouslogic/eve-ref/commit/d24aea136a08c52574bc552a3f6d438545f81b6f))
+
+
+### Bug Fixes
+
+* Object merges don't merge null or empty-strings ([#390](https://github.com/autonomouslogic/eve-ref/issues/390)) ([933cfdc](https://github.com/autonomouslogic/eve-ref/commit/933cfdcf17129359a2d13b653e087b978e029ddc))
+
+
+### Dependency Updates
+
+* **deps:** Updated ESI Swagger ([#385](https://github.com/autonomouslogic/eve-ref/issues/385)) ([4a5ed06](https://github.com/autonomouslogic/eve-ref/commit/4a5ed06bec81dba2c409fe197ce8eca79b0da260))
+* **deps:** Updated to Bouncy Castle for JVM 1.8 ([#383](https://github.com/autonomouslogic/eve-ref/issues/383)) ([5b578b4](https://github.com/autonomouslogic/eve-ref/commit/5b578b422e0fb0efdb0f7f7eab4676311ca1cd56))
+
 ## [2.37.1](https://github.com/autonomouslogic/eve-ref/compare/2.37.0...2.37.1) (2023-12-01)
 
 
@@ -10,12 +860,12 @@ EVE Ref Changelog
 
 ### Dependency Updates
 
-* **deps:** update actions/setup-java action to v4 [skip ci] ([#379](https://github.com/autonomouslogic/eve-ref/issues/379)) ([cf9657d](https://github.com/autonomouslogic/eve-ref/commit/cf9657dff29541fef025c3202792338026f4b0db))
+* **deps:** update actions/setup-java action to v4 ([#379](https://github.com/autonomouslogic/eve-ref/issues/379)) ([cf9657d](https://github.com/autonomouslogic/eve-ref/commit/cf9657dff29541fef025c3202792338026f4b0db))
 
 
 ### Miscellaneous Chores
 
-* Flyway mono repo. [skip ci] [skip release] ([ad89181](https://github.com/autonomouslogic/eve-ref/commit/ad8918106b4bdfbf4eb2784c4f3d0512d967ab24))
+* Flyway mono repo. ([ad89181](https://github.com/autonomouslogic/eve-ref/commit/ad8918106b4bdfbf4eb2784c4f3d0512d967ab24))
 
 ## [2.37.0](https://github.com/autonomouslogic/eve-ref/compare/2.36.3...2.37.0) (2023-11-11)
 
@@ -39,22 +889,22 @@ EVE Ref Changelog
 
 ### Continuous Integration
 
-* Re-added publish script during release. [skip ci] ([e2cde9b](https://github.com/autonomouslogic/eve-ref/commit/e2cde9baceb509cc820f3220bcdda2c6ac845cf1))
+* Re-added publish script during release. ([e2cde9b](https://github.com/autonomouslogic/eve-ref/commit/e2cde9baceb509cc820f3220bcdda2c6ac845cf1))
 
 ## [2.36.2](https://github.com/autonomouslogic/eve-ref/compare/2.36.1...2.36.2) (2023-11-02)
 
 
 ### Features
 
-* Basic blueprint manufacturing card [skip release] ([#345](https://github.com/autonomouslogic/eve-ref/issues/345)) ([43488dd](https://github.com/autonomouslogic/eve-ref/commit/43488dd233168ad5c7f2033f39fb34c4f4a272db))
-* Insurance card [skip release] ([#343](https://github.com/autonomouslogic/eve-ref/issues/343)) ([8792242](https://github.com/autonomouslogic/eve-ref/commit/8792242a2f4a9f2c918bec22a2eabd7233de2a6a))
-* Manufacturing overview for types [skip release] ([#344](https://github.com/autonomouslogic/eve-ref/issues/344)) ([a377c34](https://github.com/autonomouslogic/eve-ref/commit/a377c3423a27d1ab6d525d5de9f39b150fa25ce7))
-* Market links [skip release] ([#342](https://github.com/autonomouslogic/eve-ref/issues/342)) ([ec8df9c](https://github.com/autonomouslogic/eve-ref/commit/ec8df9c46ae04ea79c9fbda9611b91a95702f69d))
+* Basic blueprint manufacturing card ([#345](https://github.com/autonomouslogic/eve-ref/issues/345)) ([43488dd](https://github.com/autonomouslogic/eve-ref/commit/43488dd233168ad5c7f2033f39fb34c4f4a272db))
+* Insurance card ([#343](https://github.com/autonomouslogic/eve-ref/issues/343)) ([8792242](https://github.com/autonomouslogic/eve-ref/commit/8792242a2f4a9f2c918bec22a2eabd7233de2a6a))
+* Manufacturing overview for types ([#344](https://github.com/autonomouslogic/eve-ref/issues/344)) ([a377c34](https://github.com/autonomouslogic/eve-ref/commit/a377c3423a27d1ab6d525d5de9f39b150fa25ce7))
+* Market links ([#342](https://github.com/autonomouslogic/eve-ref/issues/342)) ([ec8df9c](https://github.com/autonomouslogic/eve-ref/commit/ec8df9c46ae04ea79c9fbda9611b91a95702f69d))
 
 
 ### Bug Fixes
 
-* Disabled insurance cards when there's no insurance [skip release] ([#346](https://github.com/autonomouslogic/eve-ref/issues/346)) ([ff2c4a6](https://github.com/autonomouslogic/eve-ref/commit/ff2c4a6516ad9405405729c29a7c8ed1010087f6))
+* Disabled insurance cards when there's no insurance ([#346](https://github.com/autonomouslogic/eve-ref/issues/346)) ([ff2c4a6](https://github.com/autonomouslogic/eve-ref/commit/ff2c4a6516ad9405405729c29a7c8ed1010087f6))
 
 
 ### Dependency Updates
@@ -70,7 +920,7 @@ EVE Ref Changelog
 
 ### Continuous Integration
 
-* Removed publish script during release. [skip ci] ([f61c7d4](https://github.com/autonomouslogic/eve-ref/commit/f61c7d40512c1be2c467705104a41b3533e02ffc))
+* Removed publish script during release. ([f61c7d4](https://github.com/autonomouslogic/eve-ref/commit/f61c7d40512c1be2c467705104a41b3533e02ffc))
 
 ## [2.36.1](https://github.com/autonomouslogic/eve-ref/compare/2.36.0...2.36.1) (2023-10-21)
 

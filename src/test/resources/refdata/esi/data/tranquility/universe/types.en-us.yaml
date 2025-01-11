@@ -995,11 +995,11 @@
     \ are capable of making a special type of jump portal usable only by covert ops\
     \ vessels. This enables them to stealthily plant reconnaissance and espionage\
     \ forces in enemy territory. For the final word in clandestine maneuvers, look\
-    \ no further.\r\n\r\nDeveloper: CreoDron\r\n\r\nAs the largest drone developer\
-    \ and manufacturer in space, CreoDron has a vested interest in drone carriers.\
-    \ While sacrificing relatively little in the way of defensive capability, the\
-    \ Sin can chew its way through surprisingly strong opponents - provided, of course,\
-    \ that the pilot uses top-of-the-line CreoDron drones."
+    \ no further.\r\n\r\nAs the largest drone developer and manufacturer in space,\
+    \ CreoDron has a vested interest in drone carriers. While sacrificing relatively\
+    \ little in the way of defensive capability, the Sin can chew its way through\
+    \ surprisingly strong opponents - provided, of course, that the pilot uses top-of-the-line\
+    \ CreoDron drones."
   dogma_attributes:
   - attribute_id: 3
     value: 0
@@ -1135,8 +1135,6 @@
     value: 0
   - attribute_id: 217
     value: 395
-  - attribute_id: 1253
-    value: 5
   - attribute_id: 1768
     value: 11406
   - attribute_id: 1257
@@ -1158,7 +1156,7 @@
   - attribute_id: 3320
     value: 1
   - attribute_id: 2298
-    value: 6.5
+    value: 7.5
   - attribute_id: 1281
     value: 1
   - attribute_id: 263
@@ -1442,3 +1440,1379 @@
   radius: 1
   type_id: 17471
   volume: 0.1
+"35892":
+  capacity: 0
+  description: "The Standup Market Hub is a service module that allows the use of\
+    \ an SCC-approved market transaction and administration hub when installed into\
+    \ an Upwell technology structure.\r\n\r\nWhile an Upwell Structure has at least\
+    \ one service module online, it will enter \"full power\" mode and gain significantly\
+    \ increased shield and armor hitpoints and an extra reinforcement cycle.\r\n\r\
+    \nStandup is a proprietary system that uses a Structure Autonomous Nanoassembly\
+    \ Device (Upwell) containing integrated template software, a nanoassembler array\
+    \ and sufficient nanomass to enable the construction of a variety of service modules,\
+    \ structure modules and structure rigs when inserted into the appropriate slots\
+    \ on a structure built with Upwell technology."
+  dogma_attributes:
+  - attribute_id: 4
+    value: 4000
+  - attribute_id: 1304
+    value: 40340
+  - attribute_id: 1302
+    value: 35833
+  - attribute_id: 1303
+    value: 35834
+  - attribute_id: 1944
+    value: 35827
+  - attribute_id: 1305
+    value: 35826
+  - attribute_id: 2334
+    value: 1
+  - attribute_id: 2463
+    value: 47512
+  - attribute_id: 161
+    value: 32000
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 50
+    value: 1200
+  - attribute_id: 30
+    value: 100000
+  - attribute_id: 2486
+    value: 47513
+  - attribute_id: 2103
+    value: 35836
+  - attribute_id: 2488
+    value: 47515
+  - attribute_id: 2108
+    value: 1136
+  - attribute_id: 2109
+    value: 40
+  - attribute_id: 2110
+    value: 2880
+  - attribute_id: 2758
+    value: 47516
+  - attribute_id: 2487
+    value: 47514
+  - attribute_id: 2744
+    value: 4
+  - attribute_id: 2804
+    value: 1
+  - attribute_id: 2431
+    value: 1
+  dogma_effects:
+  - effect_id: 16
+    is_default: false
+  - effect_id: 6306
+    is_default: false
+  - effect_id: 7009
+    is_default: false
+  group_id: 1321
+  icon_id: 21595
+  market_group_id: 2232
+  mass: 4000
+  name: "Standup Market Hub I"
+  packaged_volume: 32000
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 35892
+  volume: 32000
+"35833":
+  capacity: 0
+  description: "Conceived as a good balance of capability and investment in the Upwell\
+    \ Consortium's Citadel range of space stations, the Fortizar has been designed\
+    \ for large-scale operations in space, such as providing a well-equipped home\
+    \ for large corporations and small alliances, or as a border or trade post for\
+    \ larger alliances.\r\n\r\nThe Fortizar has been built with new spaceship tethering\
+    \ technology as standard, and will readily accommodate most ships, including freighters\
+    \ and even capital ships, in its internal docking bays. While the docks are unable\
+    \ to service 'supercapital' level vessels, the defensive capabilities of the Fortizar\
+    \ are considerably enhanced in lower security star systems with the ability to\
+    \ mount area effect weapons. The Fortizar can be configured using Upwell's Standup\
+    \ brand service and structure modules so as to serve the specific needs of the\
+    \ structure operator. Further adjustment of the hardware of the Fortizar can be\
+    \ achieved by installed Standup L-Set rigs to optimize the specific role of the\
+    \ citadel."
+  dogma_attributes:
+  - attribute_id: 1547
+    value: 3
+  - attribute_id: 2112
+    value: 0.00001
+  - attribute_id: 1154
+    value: 3
+  - attribute_id: 4
+    value: 10000000000
+  - attribute_id: 2737
+    value: 5
+  - attribute_id: 263
+    value: 6750000
+  - attribute_id: 136
+    value: 1
+  - attribute_id: 9
+    value: 21600000
+  - attribute_id: 11
+    value: 2700000
+  - attribute_id: 12
+    value: 4
+  - attribute_id: 13
+    value: 5
+  - attribute_id: 14
+    value: 6
+  - attribute_id: 271
+    value: 0.8
+  - attribute_id: 272
+    value: 0.8
+  - attribute_id: 273
+    value: 0.8
+  - attribute_id: 274
+    value: 0.8
+  - attribute_id: 2115
+    value: 0.00001
+  - attribute_id: 269
+    value: 0.8
+  - attribute_id: 2055
+    value: 300000
+  - attribute_id: 2244
+    value: 1
+  - attribute_id: 3354
+    value: 1500
+  - attribute_id: 3355
+    value: 1500
+  - attribute_id: 265
+    value: 5400000
+  - attribute_id: 797
+    value: 490000
+  - attribute_id: 3101
+    value: 56204
+  - attribute_id: 161
+    value: 80000
+  - attribute_id: 162
+    value: 85000
+  - attribute_id: 2339
+    value: -25
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 1137
+    value: 3
+  - attribute_id: 552
+    value: 100000
+  - attribute_id: 3356
+    value: 1500
+  - attribute_id: 1927
+    value: 1
+  - attribute_id: 2333
+    value: 25
+  - attribute_id: 48
+    value: 38000
+  - attribute_id: 2056
+    value: 5
+  - attribute_id: 2738
+    value: 2
+  - attribute_id: 2739
+    value: 2
+  - attribute_id: 564
+    value: 40
+  - attribute_id: 55
+    value: 5760000
+  - attribute_id: 2749
+    value: -20
+  - attribute_id: 2750
+    value: 1
+  - attribute_id: 2751
+    value: 1
+  - attribute_id: 192
+    value: 7
+  - attribute_id: 2113
+    value: 0.00001
+  - attribute_id: 525
+    value: 1
+  - attribute_id: 267
+    value: 0.8
+  - attribute_id: 2116
+    value: 0.00001
+  - attribute_id: 268
+    value: 0.8
+  - attribute_id: 2743
+    value: 1
+  - attribute_id: 76
+    value: 380000
+  - attribute_id: 2253
+    value: 0.00001
+  - attribute_id: 79
+    value: 2500
+  - attribute_id: 208
+    value: 500
+  - attribute_id: 209
+    value: 500
+  - attribute_id: 210
+    value: 500
+  - attribute_id: 211
+    value: 500
+  - attribute_id: 270
+    value: 0.8
+  - attribute_id: 2135
+    value: 0.00001
+  - attribute_id: 18
+    value: 0
+  - attribute_id: 2268
+    value: 10000
+  - attribute_id: 479
+    value: 999999999999
+  - attribute_id: 482
+    value: 400000
+  - attribute_id: 484
+    value: 1
+  - attribute_id: 101
+    value: 3
+  - attribute_id: 2790
+    value: 10000
+  - attribute_id: 1132
+    value: 400
+  - attribute_id: 109
+    value: 0.8
+  - attribute_id: 110
+    value: 0.8
+  - attribute_id: 111
+    value: 0.8
+  - attribute_id: 2433
+    value: 1
+  - attribute_id: 113
+    value: 0.8
+  - attribute_id: 2034
+    value: 27000000
+  - attribute_id: 2035
+    value: 15000
+  - attribute_id: 2036
+    value: 15000
+  - attribute_id: 2805
+    value: 0
+  - attribute_id: 264
+    value: 0
+  - attribute_id: 2216
+    value: 5
+  - attribute_id: 2045
+    value: 0.00001
+  - attribute_id: 524
+    value: 1
+  - attribute_id: 1919
+    value: 4
+  dogma_effects:
+  - effect_id: 6565
+    is_default: false
+  - effect_id: 6568
+    is_default: false
+  - effect_id: 7008
+    is_default: false
+  - effect_id: 7030
+    is_default: false
+  - effect_id: 7039
+    is_default: false
+  - effect_id: 7040
+    is_default: false
+  graphic_id: 21138
+  group_id: 1657
+  market_group_id: 2201
+  mass: 10000000000
+  name: "Fortizar"
+  packaged_volume: 80000
+  portion_size: 1
+  published: true
+  radius: 85000
+  type_id: 35833
+  volume: 80000
+"9838":
+  capacity: 0
+  description: "Required for highly advanced technologies too numerous to mention\
+    \ to function properly, these conduits are made from super-cooled materials that\
+    \ function as perfect conductors, having an effective electrical resistance of\
+    \ zero."
+  dogma_attributes:
+  - attribute_id: 161
+    value: 0.75
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 4
+    value: 0
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 1640
+    value: 7200
+  - attribute_id: 1641
+    value: 7200
+  group_id: 1034
+  icon_id: 1363
+  market_group_id: 1335
+  mass: 0
+  name: "Superconductors"
+  packaged_volume: 0.75
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 9838
+  volume: 0.75
+"2389":
+  capacity: 0
+  description: "In the early days of humanity's return to space flight, scientists\
+    \ Planto and Ginch co-discovered a self-sustaining natural structure made entirely\
+    \ from plasma suspended in a planetary magnetic field. Since then, the term has\
+    \ been applied to any such construct, whether occurring under normal conditions\
+    \ or produced artificially using electrical currents."
+  dogma_attributes:
+  - attribute_id: 161
+    value: 0.19
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 4
+    value: 0
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 1640
+    value: 400
+  - attribute_id: 1641
+    value: 400
+  group_id: 1042
+  icon_id: 10017
+  market_group_id: 1334
+  mass: 0
+  name: "Plasmoids"
+  packaged_volume: 0.19
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 2389
+  volume: 0.19
+"3645":
+  capacity: 0
+  description: "Water is one of the basic conditional elements of human survival.\
+    \ Most worlds have this compound in relative short supply and hence must rely\
+    \ on starship freight."
+  dogma_attributes:
+  - attribute_id: 161
+    value: 0.19
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 4
+    value: 0
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 1640
+    value: 400
+  - attribute_id: 1641
+    value: 400
+  group_id: 1042
+  icon_id: 1178
+  market_group_id: 1334
+  mass: 0
+  name: "Water"
+  packaged_volume: 0.19
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 3645
+  volume: 0.19
+"2268":
+  capacity: 0
+  description: "The abundance of water on terrestrial planets is often a misconception:\
+    \ What many refer to offhandedly as \"water\" is often an amalgamation of many\
+    \ liquids, microscopic particles, and saturated compounds combined with water\
+    \ and other liquids. Aqueous liquids represent those liquids from which pure water\
+    \ can be separated easily from waste or hazardous particles, but only using the\
+    \ proper equipment."
+  dogma_attributes:
+  - attribute_id: 161
+    value: 0.005
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 4
+    value: 0
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 1640
+    value: 5
+  - attribute_id: 1641
+    value: 5
+  group_id: 1033
+  icon_id: 10012
+  market_group_id: 1333
+  mass: 0
+  name: "Aqueous Liquids"
+  packaged_volume: 0.005
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 2268
+  volume: 0.005
+"2409":
+  capacity: 0
+  description: "Finding desired liquids on hostile worlds can be almost as challenging\
+    \ a task as extracting it from the unforgiving environment, which often entails\
+    \ drilling kilometers below the surface or condensing fluids from the upper atmosphere.\
+    \ Once the liquids are discovered, the facility itself begins the relatively simple\
+    \ task of separating it from the ambient plasma interference, scalding magma streams,\
+    \ or potentially infectious indigenous bacteria. A surprising amount of valuable\
+    \ liquids can be extracted from hostile worlds, but only if the equipment is properly\
+    \ calibrated and carefully maintained."
+  dogma_attributes:
+  - attribute_id: 1632
+    value: 2016
+  - attribute_id: 161
+    value: 0
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 4
+    value: 0
+  - attribute_id: 709
+    value: 2268
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 1642
+    value: 1000
+  - attribute_id: 1643
+    value: 300
+  - attribute_id: 1644
+    value: 5
+  - attribute_id: 1645
+    value: 1
+  - attribute_id: 15
+    value: 800
+  - attribute_id: 49
+    value: 200
+  graphic_id: 4544
+  group_id: 1026
+  mass: 0
+  name: "Barren Aqueous Liquid Extractor"
+  packaged_volume: 0
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 2409
+  volume: 0
+"2412":
+  capacity: 0
+  description: "Finding desired liquids on hostile worlds can be almost as challenging\
+    \ a task as extracting it from the unforgiving environment, which often entails\
+    \ drilling kilometers below the surface or condensing fluids from the upper atmosphere.\
+    \ Once the liquids are discovered, the facility itself begins the relatively simple\
+    \ task of separating it from the ambient plasma interference, scalding magma streams,\
+    \ or potentially infectious indigenous bacteria. A surprising amount of valuable\
+    \ liquids can be extracted from hostile worlds, but only if the equipment is properly\
+    \ calibrated and carefully maintained."
+  dogma_attributes:
+  - attribute_id: 1632
+    value: 11
+  - attribute_id: 161
+    value: 0
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 4
+    value: 0
+  - attribute_id: 709
+    value: 2268
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 1642
+    value: 1000
+  - attribute_id: 1643
+    value: 300
+  - attribute_id: 1644
+    value: 5
+  - attribute_id: 1645
+    value: 1
+  - attribute_id: 15
+    value: 800
+  - attribute_id: 49
+    value: 200
+  graphic_id: 4544
+  group_id: 1026
+  mass: 0
+  name: "Temperate Aqueous Liquid Extractor"
+  packaged_volume: 0
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 2412
+  volume: 0
+"2016":
+  capacity: 0
+  description: "Barren planets are archetypical \"dead terrestrials\": dry, rocky\
+    \ worlds with a minimal atmosphere and an unremarkable composition. They are commonly\
+    \ etched with flood channels, which are often broad enough to be visible from\
+    \ orbit; most such worlds have accumulated significant quantities of ice over\
+    \ their lifetimes, but cannot retain it on their surface. Generally surface liquid\
+    \ evaporates rapidly, contributing to the thin atmosphere, but occasionally it\
+    \ will seep back into the ground and refreeze, ready for another breakout in future\
+    \ when the local temperature rises."
+  graphic_id: 3837
+  group_id: 7
+  icon_id: 10135
+  mass: 100000000000000000000000000000000000
+  name: "Planet (Barren)"
+  packaged_volume: 1
+  portion_size: 1
+  published: false
+  radius: 10000
+  type_id: 2016
+  volume: 1
+"11":
+  capacity: 0
+  description: "Life-bearing worlds are often referred to as \"temperate\", as their\
+    \ mild temperatures are one of their defining features. Planets with existing,\
+    \ stable ecosystems are prime targets for colonization efforts as they are generally\
+    \ easier to make fully habitable; as a result, the majority of highly populated\
+    \ worlds are of this type. Indeed, it is not altogether uncommon for detailed\
+    \ surveys to reveal signs of previous settlements from various stages of New Eden's\
+    \ history."
+  graphic_id: 3832
+  group_id: 7
+  icon_id: 10136
+  mass: 100000000000000000000000000000000000
+  name: "Planet (Temperate)"
+  packaged_volume: 1
+  portion_size: 1
+  published: false
+  radius: 10000
+  type_id: 11
+  volume: 1
+"2470":
+  capacity: 0
+  description: "Instead of laboring to shield the production lines of this industrial\
+    \ facility from the surrounding environment, designers opted instead to use the\
+    \ available heat, interference, and even crushing pressure to help power the structure\
+    \ itself. A plant on an ice planet might have highly advanced extended heat sinks,\
+    \ while a factory on a plasma world might draw most, if not all of its electricity\
+    \ from magnetized coils specially attuned to the planet's local ion winds. Taking\
+    \ advantage of the indigenous features of each world helps offset the cost of\
+    \ building mass production infrastructure there, which usually involves protective\
+    \ coatings, environmental clothing, and reinforced foundations."
+  dogma_attributes:
+  - attribute_id: 1632
+    value: 2015
+  - attribute_id: 161
+    value: 0
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 4
+    value: 0
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 15
+    value: 700
+  - attribute_id: 49
+    value: 500
+  graphic_id: 4534
+  group_id: 1028
+  mass: 0
+  name: "Lava Advanced Industry Facility"
+  packaged_volume: 0
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 2470
+  volume: 0
+"2480":
+  capacity: 0
+  description: "Populated almost entirely by robotic laborers, mass production facilities\
+    \ excel at creating products in bulk with minimal supervision and maintenance.\
+    \ They can be so self-sufficient that rumors abound of Gallente factories operated\
+    \ entirely by androids and governed by a skeleton crew of drones. (Detractors\
+    \ of this method like to note that Sansha facilities work in much the same fashion.)\
+    \ Either way, the results are irrefutable: Raw materials and components go in\
+    \ one end, and polished commodities come out the other side."
+  dogma_attributes:
+  - attribute_id: 1632
+    value: 11
+  - attribute_id: 161
+    value: 0
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 4
+    value: 0
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 15
+    value: 700
+  - attribute_id: 49
+    value: 500
+  graphic_id: 4523
+  group_id: 1028
+  mass: 0
+  name: "Temperate Advanced Industry Facility"
+  packaged_volume: 0
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 2480
+  volume: 0
+"60377":
+  capacity: 0
+  description: "Specialization in Simple Ore reprocessing. Allows a skilled individual\
+    \ to utilize reprocessing facilities at considerably greater efficiency.\r\n\r\
+    \n2% bonus to reprocessing yield per skill level for the following Simple Ore\
+    \ types:\r\nPlagioclase\r\nPyroxeres\r\nScordite\r\nVeldspar\r\nMordunium"
+  dogma_attributes:
+  - attribute_id: 161
+    value: 0.01
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 4
+    value: 0
+  - attribute_id: 278
+    value: 3
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 1047
+    value: 0
+  - attribute_id: 275
+    value: 3
+  - attribute_id: 180
+    value: 166
+  - attribute_id: 277
+    value: 4
+  - attribute_id: 182
+    value: 3385
+  - attribute_id: 183
+    value: 3402
+  - attribute_id: 280
+    value: 0
+  - attribute_id: 379
+    value: 2
+  - attribute_id: 181
+    value: 165
+  dogma_effects:
+  - effect_id: 132
+    is_default: true
+  group_id: 1218
+  icon_id: 33
+  market_group_id: 1323
+  mass: 0
+  name: "Simple Ore Processing"
+  packaged_volume: 0.01
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 60377
+  volume: 0.01
+"34":
+  capacity: 0
+  description: "The main building block in space structures. A very hard, yet bendable\
+    \ metal. Cannot be used in human habitats due to its instability at atmospheric\
+    \ temperatures. Very common throughout the central regions of known universe.\r\
+    \n\r\nMay be obtained by reprocessing the following ores and their variations\
+    \ available in high security status star systems: <a href=showinfo:1230>veldspar</a>,\
+    \ <a href=showinfo:1228>scordite</a>, and <a href=showinfo:18>plagioclase</a>.\r\
+    \n\r\nIt is also present in huge amounts in rare ores such as <a href=showinfo:19>spodumain</a>,\
+    \ <a href=showinfo:52316>bezdnacine</a>, <a href=showinfo:52315>rakovene</a> and\
+    \ <a href=showinfo:52306>talassonite</a>.\r\n\r\nTritanium can also be found in\
+    \ null security status star systems in <a href=showinfo:81900>kylixium</a>, <a\
+    \ href=showinfo:82016>nocxite</a>, <a href=showinfo:82205>ueganite</a>, <a href=showinfo:82163>hezorime</a>,\
+    \ and <a href=showinfo:81975>griemeer</a>, but only in trace quantities."
+  group_id: 18
+  icon_id: 22
+  market_group_id: 1857
+  mass: 0
+  name: "Tritanium"
+  packaged_volume: 0.01
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 34
+  volume: 0.01
+"37158":
+  capacity: 0
+  description: "The Standup M-Set Ammunition Manufacturing Material Efficiency I rig\
+    \ provides a means for structure operators to decrease material requirements manufacturing\
+    \ ammunition, charges and scripts in their Upwell structures.\r\n\r\nStandup is\
+    \ a proprietary system that uses a Structure Autonomous Nanoassembly Device (Upwell)\
+    \ containing integrated template software, a nanoassembler array and sufficient\
+    \ nanomass to enable the construction of a variety of service modules, structure\
+    \ modules and structure rigs when inserted into the appropriate slots on a structure\
+    \ built with Upwell technology.\r\n\r\nNote: Only one rig of the same type, counting\
+    \ both tech variations, may be fitted at the same time on a structure."
+  dogma_attributes:
+  - attribute_id: 1153
+    value: 100
+  - attribute_id: 4
+    value: 200
+  - attribute_id: 1544
+    value: 1
+  - attribute_id: 9
+    value: 40
+  - attribute_id: 1547
+    value: 2
+  - attribute_id: 1298
+    value: 1657
+  - attribute_id: 1299
+    value: 1404
+  - attribute_id: 1300
+    value: 1406
+  - attribute_id: 277
+    value: 1
+  - attribute_id: 2334
+    value: 1
+  - attribute_id: 2593
+    value: 0
+  - attribute_id: 2594
+    value: -2
+  - attribute_id: 2595
+    value: 0
+  - attribute_id: 422
+    value: 1
+  - attribute_id: 2095
+    value: 32
+  - attribute_id: 2096
+    value: 3.2
+  - attribute_id: 2355
+    value: 1
+  - attribute_id: 2356
+    value: 1.9
+  - attribute_id: 2357
+    value: 2.1
+  - attribute_id: 2358
+    value: 1
+  - attribute_id: 182
+    value: 26252
+  - attribute_id: 161
+    value: 10
+  - attribute_id: 162
+    value: 100
+  - attribute_id: 38
+    value: 0
+  dogma_effects:
+  - effect_id: 2663
+    is_default: true
+  - effect_id: 6808
+    is_default: false
+  - effect_id: 6842
+    is_default: false
+  group_id: 1820
+  icon_id: 21729
+  market_group_id: 2347
+  mass: 200
+  name: "Standup M-Set Ammunition Manufacturing Material Efficiency I"
+  packaged_volume: 10
+  portion_size: 1
+  published: true
+  radius: 100
+  type_id: 37158
+  volume: 10
+"37150":
+  capacity: 0
+  description: "The Standup M-Set Ammunition Manufacturing Time Efficiency I rig provides\
+    \ a means for structure operators to decrease time requirements manufacturing\
+    \ ammunition, charges and scripts in their Upwell structures.\r\n\r\nStandup is\
+    \ a proprietary system that uses a Structure Autonomous Nanoassembly Device (Upwell)\
+    \ containing integrated template software, a nanoassembler array and sufficient\
+    \ nanomass to enable the construction of a variety of service modules, structure\
+    \ modules and structure rigs when inserted into the appropriate slots on a structure\
+    \ built with Upwell technology.\r\n\r\nNote: Only one rig of the same type, counting\
+    \ both tech variations, may be fitted at the same time on a structure."
+  dogma_attributes:
+  - attribute_id: 1153
+    value: 100
+  - attribute_id: 4
+    value: 200
+  - attribute_id: 1544
+    value: 1
+  - attribute_id: 9
+    value: 40
+  - attribute_id: 1547
+    value: 2
+  - attribute_id: 1298
+    value: 1657
+  - attribute_id: 1299
+    value: 1404
+  - attribute_id: 1300
+    value: 1406
+  - attribute_id: 277
+    value: 1
+  - attribute_id: 2334
+    value: 1
+  - attribute_id: 2593
+    value: -20
+  - attribute_id: 2594
+    value: 0
+  - attribute_id: 2595
+    value: 0
+  - attribute_id: 422
+    value: 1
+  - attribute_id: 2095
+    value: 32
+  - attribute_id: 2096
+    value: 3.2
+  - attribute_id: 2355
+    value: 1
+  - attribute_id: 2356
+    value: 1.9
+  - attribute_id: 2357
+    value: 2.1
+  - attribute_id: 2358
+    value: 1
+  - attribute_id: 182
+    value: 26252
+  - attribute_id: 161
+    value: 10
+  - attribute_id: 162
+    value: 100
+  - attribute_id: 38
+    value: 0
+  dogma_effects:
+  - effect_id: 2663
+    is_default: true
+  - effect_id: 6809
+    is_default: false
+  - effect_id: 6842
+    is_default: false
+  group_id: 1821
+  icon_id: 21729
+  market_group_id: 2347
+  mass: 200
+  name: "Standup M-Set Ammunition Manufacturing Time Efficiency I"
+  packaged_volume: 10
+  portion_size: 1
+  published: true
+  radius: 100
+  type_id: 37150
+  volume: 10
+"43880":
+  capacity: 0
+  description: "The Standup M-Set Invention Accelerator I rig provides a means for\
+    \ structure operators to decrease time requirements when performing invention\
+    \ in their Upwell structures.\r\n\r\nStandup is a proprietary system that uses\
+    \ a Structure Autonomous Nanoassembly Device (Upwell) containing integrated template\
+    \ software, a nanoassembler array and sufficient nanomass to enable the construction\
+    \ of a variety of service modules, structure modules and structure rigs when inserted\
+    \ into the appropriate slots on a structure built with Upwell technology.\r\n\r\
+    \nNote: Only one rig of the same type, counting both tech variations, may be fitted\
+    \ at the same time on a structure."
+  dogma_attributes:
+  - attribute_id: 1153
+    value: 100
+  - attribute_id: 4
+    value: 200
+  - attribute_id: 1544
+    value: 1
+  - attribute_id: 9
+    value: 40
+  - attribute_id: 1547
+    value: 2
+  - attribute_id: 1298
+    value: 1657
+  - attribute_id: 1299
+    value: 1404
+  - attribute_id: 1300
+    value: 1406
+  - attribute_id: 277
+    value: 1
+  - attribute_id: 2334
+    value: 1
+  - attribute_id: 2593
+    value: -20
+  - attribute_id: 2594
+    value: 0
+  - attribute_id: 2595
+    value: 0
+  - attribute_id: 422
+    value: 1
+  - attribute_id: 2355
+    value: 1
+  - attribute_id: 2356
+    value: 1.9
+  - attribute_id: 2357
+    value: 2.1
+  - attribute_id: 2358
+    value: 1
+  - attribute_id: 182
+    value: 26252
+  - attribute_id: 161
+    value: 10
+  - attribute_id: 162
+    value: 100
+  - attribute_id: 38
+    value: 0
+  dogma_effects:
+  - effect_id: 2663
+    is_default: true
+  - effect_id: 6831
+    is_default: false
+  - effect_id: 6842
+    is_default: false
+  group_id: 1843
+  icon_id: 21729
+  market_group_id: 2347
+  mass: 200
+  name: "Standup M-Set Invention Accelerator I"
+  packaged_volume: 10
+  portion_size: 1
+  published: true
+  radius: 100
+  type_id: 43880
+  volume: 10
+"43879":
+  capacity: 0
+  description: "The Standup M-Set Invention Cost Optimization I rig provides a means\
+    \ for structure operators to decrease cost requirements when performing invention\
+    \ in their Upwell structures.\r\n\r\nStandup is a proprietary system that uses\
+    \ a Structure Autonomous Nanoassembly Device (Upwell) containing integrated template\
+    \ software, a nanoassembler array and sufficient nanomass to enable the construction\
+    \ of a variety of service modules, structure modules and structure rigs when inserted\
+    \ into the appropriate slots on a structure built with Upwell technology.\r\n\r\
+    \nNote: Only one rig of the same type, counting both tech variations, may be fitted\
+    \ at the same time on a structure."
+  dogma_attributes:
+  - attribute_id: 1153
+    value: 100
+  - attribute_id: 4
+    value: 200
+  - attribute_id: 1544
+    value: 1
+  - attribute_id: 9
+    value: 40
+  - attribute_id: 1547
+    value: 2
+  - attribute_id: 1298
+    value: 1657
+  - attribute_id: 1299
+    value: 1404
+  - attribute_id: 1300
+    value: 1406
+  - attribute_id: 277
+    value: 1
+  - attribute_id: 2334
+    value: 1
+  - attribute_id: 2593
+    value: 0
+  - attribute_id: 2594
+    value: 0
+  - attribute_id: 2595
+    value: -10
+  - attribute_id: 422
+    value: 1
+  - attribute_id: 2355
+    value: 1
+  - attribute_id: 2356
+    value: 1.9
+  - attribute_id: 2357
+    value: 2.1
+  - attribute_id: 2358
+    value: 1
+  - attribute_id: 182
+    value: 26252
+  - attribute_id: 161
+    value: 10
+  - attribute_id: 162
+    value: 100
+  - attribute_id: 38
+    value: 0
+  dogma_effects:
+  - effect_id: 2663
+    is_default: true
+  - effect_id: 6830
+    is_default: false
+  - effect_id: 6842
+    is_default: false
+  group_id: 1842
+  icon_id: 21729
+  market_group_id: 2347
+  mass: 200
+  name: "Standup M-Set Invention Cost Optimization I"
+  packaged_volume: 10
+  portion_size: 1
+  published: true
+  radius: 100
+  type_id: 43879
+  volume: 10
+"43729":
+  capacity: 0
+  description: "The Standup L-Set Blueprint Copy Optimization I rig provides a means\
+    \ for structure operators to decrease both cost and time requirements for copying\
+    \ blueprints in their Upwell structures.\r\n\r\nStandup is a proprietary system\
+    \ that uses a Structure Autonomous Nanoassembly Device (Upwell) containing integrated\
+    \ template software, a nanoassembler array and sufficient nanomass to enable the\
+    \ construction of a variety of service modules, structure modules and structure\
+    \ rigs when inserted into the appropriate slots on a structure built with Upwell\
+    \ technology.\r\n\r\nNote: Only one rig of the same type, counting both tech variations,\
+    \ may be fitted at the same time on a structure."
+  dogma_attributes:
+  - attribute_id: 1153
+    value: 100
+  - attribute_id: 4
+    value: 200
+  - attribute_id: 1544
+    value: 1
+  - attribute_id: 9
+    value: 40
+  - attribute_id: 1547
+    value: 3
+  - attribute_id: 1298
+    value: 1657
+  - attribute_id: 1299
+    value: 1404
+  - attribute_id: 1300
+    value: 1406
+  - attribute_id: 277
+    value: 1
+  - attribute_id: 2334
+    value: 1
+  - attribute_id: 2593
+    value: -20
+  - attribute_id: 2594
+    value: 0
+  - attribute_id: 2595
+    value: -10
+  - attribute_id: 422
+    value: 1
+  - attribute_id: 2355
+    value: 1
+  - attribute_id: 2356
+    value: 1.9
+  - attribute_id: 2357
+    value: 2.1
+  - attribute_id: 2358
+    value: 1
+  - attribute_id: 182
+    value: 26252
+  - attribute_id: 161
+    value: 20
+  - attribute_id: 162
+    value: 100
+  - attribute_id: 38
+    value: 0
+  dogma_effects:
+  - effect_id: 2663
+    is_default: true
+  - effect_id: 6836
+    is_default: false
+  - effect_id: 6837
+    is_default: false
+  - effect_id: 6842
+    is_default: false
+  group_id: 1866
+  icon_id: 21729
+  market_group_id: 2348
+  mass: 200
+  name: "Standup L-Set Blueprint Copy Optimization I"
+  packaged_volume: 20
+  portion_size: 1
+  published: true
+  radius: 100
+  type_id: 43729
+  volume: 20
+"43891":
+  capacity: 0
+  description: "The Standup M-Set Blueprint Copy Cost Optimization I rig provides\
+    \ a means for structure operators to decrease cost requirements when copying in\
+    \ their Upwell structures.\r\n\r\nStandup is a proprietary system that uses a\
+    \ Structure Autonomous Nanoassembly Device (Upwell) containing integrated template\
+    \ software, a nanoassembler array and sufficient nanomass to enable the construction\
+    \ of a variety of service modules, structure modules and structure rigs when inserted\
+    \ into the appropriate slots on a structure built with Upwell technology.\r\n\r\
+    \nNote: Only one rig of the same type, counting both tech variations, may be fitted\
+    \ at the same time on a structure."
+  dogma_attributes:
+  - attribute_id: 1153
+    value: 100
+  - attribute_id: 4
+    value: 200
+  - attribute_id: 1544
+    value: 1
+  - attribute_id: 9
+    value: 40
+  - attribute_id: 1547
+    value: 2
+  - attribute_id: 1298
+    value: 1657
+  - attribute_id: 1299
+    value: 1404
+  - attribute_id: 1300
+    value: 1406
+  - attribute_id: 277
+    value: 1
+  - attribute_id: 2334
+    value: 1
+  - attribute_id: 2593
+    value: 0
+  - attribute_id: 2594
+    value: 0
+  - attribute_id: 2595
+    value: -10
+  - attribute_id: 422
+    value: 1
+  - attribute_id: 2355
+    value: 1
+  - attribute_id: 2356
+    value: 1.9
+  - attribute_id: 2357
+    value: 2.1
+  - attribute_id: 2358
+    value: 1
+  - attribute_id: 182
+    value: 26252
+  - attribute_id: 161
+    value: 10
+  - attribute_id: 162
+    value: 100
+  - attribute_id: 38
+    value: 0
+  dogma_effects:
+  - effect_id: 2663
+    is_default: true
+  - effect_id: 6836
+    is_default: false
+  - effect_id: 6842
+    is_default: false
+  group_id: 1848
+  icon_id: 21729
+  market_group_id: 2347
+  mass: 200
+  name: "Standup M-Set Blueprint Copy Cost Optimization I"
+  packaged_volume: 10
+  portion_size: 1
+  published: true
+  radius: 100
+  type_id: 43891
+  volume: 10
+"43714":
+  capacity: 0
+  description: "The Standup L-Set Basic Small Ship Manufacturing Efficiency I rig\
+    \ provides a means for structure operators to decrease both material and time\
+    \ requirements for manufacturing frigates, destroyers and shuttles in their Upwell\
+    \ structures.\r\n\r\nStandup is a proprietary system that uses a Structure Autonomous\
+    \ Nanoassembly Device (Upwell) containing integrated template software, a nanoassembler\
+    \ array and sufficient nanomass to enable the construction of a variety of service\
+    \ modules, structure modules and structure rigs when inserted into the appropriate\
+    \ slots on a structure built with Upwell technology.\r\n\r\nNote: Only one rig\
+    \ of the same type, counting both tech variations, may be fitted at the same time\
+    \ on a structure."
+  dogma_attributes:
+  - attribute_id: 1153
+    value: 100
+  - attribute_id: 4
+    value: 200
+  - attribute_id: 1544
+    value: 1
+  - attribute_id: 9
+    value: 40
+  - attribute_id: 1547
+    value: 3
+  - attribute_id: 1298
+    value: 1657
+  - attribute_id: 1299
+    value: 1404
+  - attribute_id: 1300
+    value: 1406
+  - attribute_id: 277
+    value: 1
+  - attribute_id: 2334
+    value: 1
+  - attribute_id: 2593
+    value: -20
+  - attribute_id: 2594
+    value: -2
+  - attribute_id: 2595
+    value: 0
+  - attribute_id: 422
+    value: 1
+  - attribute_id: 2355
+    value: 1
+  - attribute_id: 2356
+    value: 1.9
+  - attribute_id: 2357
+    value: 2.1
+  - attribute_id: 2358
+    value: 1
+  - attribute_id: 182
+    value: 26252
+  - attribute_id: 161
+    value: 20
+  - attribute_id: 162
+    value: 100
+  - attribute_id: 38
+    value: 0
+  dogma_effects:
+  - effect_id: 2663
+    is_default: true
+  - effect_id: 6812
+    is_default: false
+  - effect_id: 6813
+    is_default: false
+  - effect_id: 6842
+    is_default: false
+  group_id: 1853
+  icon_id: 21729
+  market_group_id: 2348
+  mass: 200
+  name: "Standup L-Set Basic Small Ship Manufacturing Efficiency I"
+  packaged_volume: 20
+  portion_size: 1
+  published: true
+  radius: 100
+  type_id: 43714
+  volume: 20
+"37152":
+  capacity: 0
+  description: "The Standup M-Set Basic Large Ship Manufacturing Material Efficiency\
+    \ II rig provides a means for structure operators to decrease material requirements\
+    \ for manufacturing battleships, freighters and industrial command ships in their\
+    \ Upwell structures.\r\n\r\nStandup is a proprietary system that uses a Structure\
+    \ Autonomous Nanoassembly Device (Upwell) containing integrated template software,\
+    \ a nanoassembler array and sufficient nanomass to enable the construction of\
+    \ a variety of service modules, structure modules and structure rigs when inserted\
+    \ into the appropriate slots on a structure built with Upwell technology.\r\n\r\
+    \nNote: Only one rig of the same type, counting both tech variations, may be fitted\
+    \ at the same time on a structure."
+  dogma_attributes:
+  - attribute_id: 1153
+    value: 150
+  - attribute_id: 4
+    value: 200
+  - attribute_id: 1544
+    value: 1
+  - attribute_id: 9
+    value: 40
+  - attribute_id: 1547
+    value: 2
+  - attribute_id: 1298
+    value: 1657
+  - attribute_id: 1299
+    value: 1404
+  - attribute_id: 1300
+    value: 1406
+  - attribute_id: 277
+    value: 1
+  - attribute_id: 2334
+    value: 1
+  - attribute_id: 2593
+    value: 0
+  - attribute_id: 2594
+    value: -2.4
+  - attribute_id: 2595
+    value: 0
+  - attribute_id: 422
+    value: 2
+  - attribute_id: 2095
+    value: 32
+  - attribute_id: 2096
+    value: 3.2
+  - attribute_id: 2355
+    value: 1
+  - attribute_id: 2356
+    value: 1.9
+  - attribute_id: 2357
+    value: 2.1
+  - attribute_id: 2358
+    value: 1
+  - attribute_id: 182
+    value: 26252
+  - attribute_id: 161
+    value: 10
+  - attribute_id: 162
+    value: 100
+  - attribute_id: 38
+    value: 0
+  dogma_effects:
+  - effect_id: 2663
+    is_default: true
+  - effect_id: 6816
+    is_default: false
+  - effect_id: 6842
+    is_default: false
+  group_id: 1828
+  icon_id: 21729
+  market_group_id: 2347
+  mass: 200
+  name: "Standup M-Set Basic Large Ship Manufacturing Material Efficiency II"
+  packaged_volume: 10
+  portion_size: 1
+  published: true
+  radius: 100
+  type_id: 37152
+  volume: 10
+"43704":
+  capacity: 0
+  description: "The Standup XL-Set Structure and Component Manufacturing Efficiency\
+    \ I rig provides a means for structure operators to decrease both material and\
+    \ time requirements manufacturing components, Upwell structures, structure modules,\
+    \ starbase structures and fuel blocks in their Upwell structures.\n\nStandup is\
+    \ a proprietary system that uses a Structure Autonomous Nanoassembly Device (Upwell)\
+    \ containing integrated template software, a nanoassembler array and sufficient\
+    \ nanomass to enable the construction of a variety of service modules, structure\
+    \ modules and structure rigs when inserted into the appropriate slots on a structure\
+    \ built with Upwell technology.\n\nNote: Only one rig of the same type, counting\
+    \ tech variations, may be fitted at the same time on a structure."
+  dogma_attributes:
+  - attribute_id: 1153
+    value: 100
+  - attribute_id: 2594
+    value: -2
+  - attribute_id: 2595
+    value: 0
+  - attribute_id: 4
+    value: 200
+  - attribute_id: 2358
+    value: 1
+  - attribute_id: 422
+    value: 1
+  - attribute_id: 2593
+    value: -20
+  - attribute_id: 1544
+    value: 1
+  - attribute_id: 9
+    value: 40
+  - attribute_id: 1547
+    value: 4
+  - attribute_id: 162
+    value: 100
+  - attribute_id: 161
+    value: 40
+  - attribute_id: 2355
+    value: 1
+  - attribute_id: 1298
+    value: 1657
+  - attribute_id: 1299
+    value: 1404
+  - attribute_id: 2356
+    value: 1.9
+  - attribute_id: 277
+    value: 1
+  - attribute_id: 182
+    value: 26252
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 2334
+    value: 1
+  - attribute_id: 2357
+    value: 2.1
+  dogma_effects:
+  - effect_id: 2663
+    is_default: true
+  - effect_id: 6824
+    is_default: false
+  - effect_id: 6825
+    is_default: false
+  - effect_id: 6826
+    is_default: false
+  - effect_id: 6827
+    is_default: false
+  - effect_id: 6828
+    is_default: false
+  - effect_id: 6829
+    is_default: false
+  - effect_id: 6842
+    is_default: false
+  - effect_id: 6888
+    is_default: false
+  - effect_id: 6889
+    is_default: false
+  group_id: 1869
+  icon_id: 21729
+  market_group_id: 2349
+  mass: 200
+  name: "Standup XL-Set Structure and Component Manufacturing Efficiency I"
+  packaged_volume: 40
+  portion_size: 1
+  published: true
+  radius: 100
+  type_id: 43704
+  volume: 40

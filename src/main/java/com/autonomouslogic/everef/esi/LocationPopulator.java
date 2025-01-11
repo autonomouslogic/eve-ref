@@ -1,5 +1,7 @@
 package com.autonomouslogic.everef.esi;
 
+import static com.autonomouslogic.everef.util.EveConstants.NPC_STATION_MAX_ID;
+
 import com.autonomouslogic.everef.util.JsonUtil;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.reactivex.rxjava3.core.Completable;
@@ -38,7 +40,7 @@ public class LocationPopulator {
 				return;
 			}
 			var stationId = record.get(stationKey);
-			if (!JsonUtil.isNullOrEmpty(stationId)) {
+			if (!JsonUtil.isNullOrEmpty(stationId) && stationId.asLong() < NPC_STATION_MAX_ID) {
 				record.set("station_id", stationId);
 			}
 		});
@@ -67,6 +69,9 @@ public class LocationPopulator {
 				return Completable.complete();
 			}
 			var systemId = record.get("system_id");
+			if (systemId == null) {
+				systemId = record.get("solar_system_id");
+			}
 			if (JsonUtil.isNullOrEmpty(systemId)) {
 				return Completable.complete();
 			}

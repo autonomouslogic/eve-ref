@@ -5,10 +5,11 @@
     "es" : "Nave",
     "fr" : "Vaisseau",
     "ja" : "艦船",
+    "ko" : "함선",
     "ru" : "Корабль",
     "zh" : "舰船"
   },
   "published" : true,
   "category_id" : 6,
-  "group_ids" : [ 27 ]
+  "group_ids" : [ 27, 513, 941 ]
 }

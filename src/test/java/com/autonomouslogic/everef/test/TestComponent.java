@@ -1,6 +1,7 @@
 package com.autonomouslogic.everef.test;
 
 import com.autonomouslogic.everef.cli.DataIndexTest;
+import com.autonomouslogic.everef.cli.FetchDonationsTest;
 import com.autonomouslogic.everef.cli.MockDataIndexModule;
 import com.autonomouslogic.everef.cli.decorator.HealthcheckDecoratorTest;
 import com.autonomouslogic.everef.cli.decorator.SlackDecoratorTest;
@@ -20,13 +21,15 @@ import com.autonomouslogic.everef.cli.refdata.TransformUtilTest;
 import com.autonomouslogic.everef.cli.refdata.esi.EsiLoaderTest;
 import com.autonomouslogic.everef.cli.refdata.hoboleaks.HoboleaksLoaderTest;
 import com.autonomouslogic.everef.cli.refdata.sde.SdeLoaderTest;
+import com.autonomouslogic.everef.cli.structures.ScrapeStructuresTest;
 import com.autonomouslogic.everef.db.DbAdapterTest;
 import com.autonomouslogic.everef.db.MarketHistoryDaoTest;
 import com.autonomouslogic.everef.esi.EsiHelperTest;
 import com.autonomouslogic.everef.esi.EsiLimitExceededInterceptorTest;
 import com.autonomouslogic.everef.esi.EsiRateLimitInterceptorTest;
+import com.autonomouslogic.everef.esi.EsiVerifyResponseTest;
 import com.autonomouslogic.everef.esi.LocationPopulatorTest;
-import com.autonomouslogic.everef.esi.MetaGroupScraperTest;
+import com.autonomouslogic.everef.esi.MockEsiAuthHelperModule;
 import com.autonomouslogic.everef.esi.MockLocationPopulatorModule;
 import com.autonomouslogic.everef.http.DataCrawlerTest;
 import com.autonomouslogic.everef.http.MockDataCrawlerModule;
@@ -52,7 +55,8 @@ import javax.inject.Singleton;
 			MockLocationPopulatorModule.class,
 			MockDataCrawlerModule.class,
 			RefDataApiModule.class,
-			GenericMockModule.class
+			GenericMockModule.class,
+			MockEsiAuthHelperModule.class
 		})
 @Singleton
 public interface TestComponent {
@@ -72,7 +76,11 @@ public interface TestComponent {
 
 	void inject(EsiRateLimitInterceptorTest test);
 
+	void inject(EsiVerifyResponseTest test);
+
 	void inject(ExplorerRegionTypeSourceTest test);
+
+	void inject(FetchDonationsTest test);
 
 	void inject(FlywayMigrateTest test);
 
@@ -87,8 +95,6 @@ public interface TestComponent {
 	void inject(MarketHistoryDaoTest test);
 
 	void inject(MarketHistoryEntryTest test);
-
-	void inject(MetaGroupScraperTest test);
 
 	void inject(MVStoreTest test);
 
@@ -107,6 +113,8 @@ public interface TestComponent {
 	void inject(ScrapeMarketOrdersTest test);
 
 	void inject(ScrapePublicContractsTest test);
+
+	void inject(ScrapeStructuresTest test);
 
 	void inject(SdeLoaderTest test);
 

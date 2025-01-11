@@ -1,14 +1,10 @@
 package com.autonomouslogic.everef.cli.refdata.post;
 
-import com.autonomouslogic.everef.cli.refdata.StoreHandler;
-import com.autonomouslogic.everef.refdata.InventoryType;
 import com.autonomouslogic.everef.refdata.MarketGroup;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import io.reactivex.rxjava3.core.Completable;
 import javax.inject.Inject;
-import lombok.NonNull;
-import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 import org.jetbrains.annotations.NotNull;
 
@@ -16,19 +12,15 @@ import org.jetbrains.annotations.NotNull;
  * References market groups and types on other market groups.
  */
 @Log4j2
-public class MarketGroupsDecorator implements PostDecorator {
+public class MarketGroupsDecorator extends PostDecorator {
 	@Inject
 	protected ObjectMapper objectMapper;
-
-	@Setter
-	@NonNull
-	private StoreHandler storeHandler;
 
 	@Inject
 	protected MarketGroupsDecorator() {}
 
 	public Completable create() {
-		return Completable.concatArray(referenceChildGroups(), referenceTypesOnGroups());
+		return Completable.concatArray(referenceChildGroups());
 	}
 
 	@NotNull
@@ -50,30 +42,6 @@ public class MarketGroupsDecorator implements PostDecorator {
 				}
 				((ArrayNode) parentJson.withArray("child_market_group_ids")).add(groupId);
 				groups.put(parentId, parentJson);
-			}
-		});
-	}
-
-	@NotNull
-	private Completable referenceTypesOnGroups() {
-		return Completable.fromAction(() -> {
-			log.info("Referencing types on market groups");
-			var types = storeHandler.getRefStore("types");
-			var groups = storeHandler.getRefStore("marketGroups");
-			for (var typeJson : types.values()) {
-				var type = objectMapper.convertValue(typeJson, InventoryType.class);
-				var typeId = type.getTypeId();
-				var groupId = type.getMarketGroupId();
-				if (groupId == null) {
-					continue;
-				}
-				var groupJson = groups.get(groupId);
-				if (groupJson == null) {
-					log.warn("Unable to reference type {} on market group {}, market group not found", typeId, groupId);
-					continue;
-				}
-				((ArrayNode) groupJson.withArray("type_ids")).add(typeId);
-				groups.put(groupId, groupJson);
 			}
 		});
 	}

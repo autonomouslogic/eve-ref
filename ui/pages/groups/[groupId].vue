@@ -1,24 +1,45 @@
 <script setup lang="ts">
-import refdataApi from "~/refdata";
-import TypeLink from "~/components/helpers/TypeLink.vue";
+import refdataApi, {cacheGroupBundle} from "~/refdata";
+import {getIntRouteParam} from "~/lib/routeUtils";
+import CategoryLink from "~/components/helpers/CategoryLink.vue";
+import {getGroupDogma} from "~/lib/mainDogmaAttributes";
+import {tr} from "~/lib/translate";
 
 const route = useRoute();
 const {locale} = useI18n();
 
-const groupId: number = Array.isArray(route.params.groupId) ? parseInt(route.params.groupId[0]) : parseInt(route.params.groupId);
+const groupId = getIntRouteParam(route, "groupId");
 
+await cacheGroupBundle(groupId);
 const group = await refdataApi.getGroup({groupId});
-const typeIds = group.typeIds;
+useHead({
+	title: tr(group.name, locale.value)
+});
+const attributes = await getGroupDogma(groupId);
+
+const typeIds: number[] = group.typeIds?.filter((typeId) => typeId !== undefined) as number[];
+const types = await Promise.all(typeIds.map(async (typeId) => await refdataApi.getType({typeId})));
+const sortedTypeIds = computed(() => types.sort((a, b) => {
+	const an = tr(a.name, locale.value) || "";
+	const bn = tr(b.name, locale.value) || "";
+	return an.localeCompare(bn);
+})
+	.map((type) => type.typeId)
+	.filter((typeId) => typeId !== undefined));
 </script>
 
 <template>
 	<div>
-		<h1 v-if="group.name">{{ group.name[locale] }}</h1>
-		<p>Types:</p>
-		<ul>
-			<li v-for="typeId in typeIds" :key="typeId">
-				<TypeLink :typeId="typeId"></TypeLink>
-			</li>
-		</ul>
+		<h1 v-if="group.name">{{ tr(group.name, locale) }}</h1>
+		<div class="mb-3">
+			Category: <CategoryLink :category-id="group.categoryId" />
+		</div>
+		<CompareTable
+			:type-ids="sortedTypeIds"
+			:dogma-attribute-names="attributes || []"
+			direction="vertical"
+			:compact-attribute-names="true"
+			:show-meta-group="true"
+			:load-bundles="false" />
 	</div>
 </template>

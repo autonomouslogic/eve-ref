@@ -1,50 +1,56 @@
 const cards: {[key: string]: any} = {
 	"defenses":
 		{
-			"name": {"en": "defenses"},
+			"name": {"en": "Defenses"},
 			"component": "defenses",
 			"dogmaAttributes":
-				[
-					"shieldCapacity",
-					"shieldUniformity",
-					"shieldEmDamageResonance",
-					"shieldThermalDamageResonance",
-					"shieldKineticDamageResonance",
-					"shieldExplosiveDamageResonance",
-					"armorHP",
-					"armorUniformity",
-					"armorEmDamageResonance",
-					"armorThermalDamageResonance",
-					"armorKineticDamageResonance",
-					"armorExplosiveDamageResonance",
-					"hp",
-					"structureUniformity",
-					"emDamageResonance",
-					"thermalDamageResonance",
-					"kineticDamageResonance",
-					"explosiveDamageResonance"
-				]
+			[
+				"shieldCapacity",
+				"shieldUniformity",
+				"shieldEmDamageResonance",
+				"shieldThermalDamageResonance",
+				"shieldKineticDamageResonance",
+				"shieldExplosiveDamageResonance",
+				"armorHP",
+				"armorUniformity",
+				"armorEmDamageResonance",
+				"armorThermalDamageResonance",
+				"armorKineticDamageResonance",
+				"armorExplosiveDamageResonance",
+				"hp",
+				"structureUniformity",
+				"emDamageResonance",
+				"thermalDamageResonance",
+				"kineticDamageResonance",
+				"explosiveDamageResonance"
+			]
+		},
+	"variations":
+		{
+			"name": {"en": "Variations"},
+			"component": "variations",
+			"alwaysShow": true
 		},
 	"market":
 		{
-			"name": {"en": "market"},
+			"name": {"en": "Market"},
 			"component": "market"
 		},
 	"basic":
 		{
-			"name": {"en": "basic"},
+			"name": {"en": "Basic"},
 			"component": "basic",
 			"dogmaAttributes":
 				[
 					"techLevel",
 					"metaLevel",
 					"metaLevelOld",
+					"hp",
 					"capacity",
 					"volume",
 					"mass",
 					"radius",
 					"nondestructible",
-					"cargoScanResistance",
 					"disallowInHighSec",
 					"disallowInEmpireSpace",
 					"isCapitalSize",
@@ -52,7 +58,7 @@ const cards: {[key: string]: any} = {
 		},
 	"offenses":
 		{
-			"name": {"en": "offenses"},
+			"name": {"en": "Offenses"},
 			"dogmaAttributes":
 				[
 					"energyNeutralizerAmount",
@@ -69,9 +75,21 @@ const cards: {[key: string]: any} = {
 					"entityMissileTypeID"
 				]
 		},
+	"resistances":
+		{
+			"name": {"en": "Resistances"},
+			"dogmaAttributes":
+				[
+					"energyWarfareResistance",
+					"weaponDisruptionResistance",
+					"stasisWebifierResistance",
+					"energyWarfareResistance",
+					"cargoScanResistance",
+				]
+		},
 	"npc":
 		{
-			"name": {"en": "npc"},
+			"name": {"en": "NPC"},
 			"dogmaAttributes":
 				[
 					"AI_ChanceToNotTargetSwitch",
@@ -95,7 +113,6 @@ const cards: {[key: string]: any} = {
 					"entityDefenderChance",
 					"entityShieldBoostAmountPerSecond",
 					"entityShieldBoostDuration",
-					"shieldRechargeRate",
 					"entityChaseMaxDelay",
 					"entityChaseMaxDelayChance",
 					"entityChaseMaxDistance",
@@ -110,10 +127,11 @@ const cards: {[key: string]: any} = {
 		},
 	"module":
 		{
-			"name": {"en": "module"},
+			"name": {"en": "Module"},
 			"dogmaAttributes":
 				[
 					"duration",
+					"durationHighisGood",
 					"maxGroupFitted",
 					"maxGroupActive",
 					"disallowEarlyDeactivation",
@@ -123,15 +141,15 @@ const cards: {[key: string]: any} = {
 					"signatureRadiusAdd"
 				]
 		},
-	"variations":
+	"oreVariations":
 		{
-			"name": {"en": "variations"},
-			"component": "variations",
+			"name": {"en": "Ore Variations"},
+			"component": "oreVariations",
 			"alwaysShow": true
 		},
 	"skill":
 		{
-			"name": {"en": "skill"},
+			"name": {"en": "Skill"},
 			"dogmaAttributes":
 				[
 					"primaryAttribute",
@@ -142,37 +160,52 @@ const cards: {[key: string]: any} = {
 		},
 	"cargo":
 		{
-			"name": {"en": "cargo"},
+			"name": {"en": "Cargo"},
 			"dogmaAttributes":
 				[
+					"capacity",
 					"fleetHangarCapacity",
-					"specialOreHoldCapacity",
-					"specialPlanetaryCommoditiesHoldCapacity",
+					"frigateEscapeBayCapacity",
+					"generalMiningHoldCapacity",
+					"outputMoonMaterialBayCapacity",
 					"shipMaintenanceBayCapacity",
+					"specialAmmoHoldCapacity",
+					"specialAsteroidHoldCapacity",
+					"specialBoosterHoldCapacity",
+					"specialColonyResourcesHoldCapacity",
+					"specialCommandCenterHoldCapacity",
+					"specialCorpseHoldCapacity",
 					"specialFuelBayCapacity",
+					"specialGasHoldCapacity",
+					"specialIceHoldCapacity",
+					"specialIndustrialShipHoldCapacity",
+					"specialLargeShipHoldCapacity",
+					"specialMaterialBayCapacity",
+					"specialMediumShipHoldCapacity",
 					"specialMineralHoldCapacity",
+					"specialMobileDepotHoldCapacity",
+					"specialPlanetaryCommoditiesHoldCapacity",
+					"specialQuafeHoldCapacity",
+					"specialSalvageHoldCapacity",
+					"specialShipHoldCapacity",
+					"specialSmallShipHoldCapacity",
+					"specialSubsystemHoldCapacity",
 					"hasFleetHangars",
 					"hasShipMaintenanceBay"
 				]
 		},
 	"fitting":
 		{
-			"name": {"en": "fitting"},
+			"name": {"en": "Fitting"},
 			"dogmaAttributes":
 				[
 					"powerOutput",
 					"cpuOutput",
-					"capacitorCapacity",
-					"rechargeRate",
 					"turretSlotsLeft",
 					"launcherSlotsLeft",
 					"hiSlots",
 					"medSlots",
 					"lowSlots",
-					"rigSlots",
-					"upgradeSlotsLeft",
-					"rigSize",
-					"upgradeCapacity",
 					"serviceSlots",
 					"cpu",
 					"power",
@@ -180,9 +213,38 @@ const cards: {[key: string]: any} = {
 					"maxTypeFitted"
 				]
 		},
-	"structure":
+	"overload":
 		{
-			"name": {"en": "structure"},
+			"name": {"en": "Overloading"},
+			"dogmaAttributes":
+				[
+					"heatCapacityHi",
+					"heatDissipationRateHi",
+					"heatDissipationRateMed",
+					"heatDissipationRateLow",
+					"heatCapacityMed",
+					"heatCapacityLow",
+					"heatGenerationMultiplier",
+					"heatAttenuationHi",
+					"heatAttenuationMed",
+					"heatAttenuationLow",
+				]
+		},
+	"rigging":
+		{
+			"name": {"en": "Rigging"},
+			"dogmaAttributes":
+				[
+					"rigSlots",
+					"upgradeSlotsLeft",
+					"rigSize",
+					"upgradeCapacity",
+					"upgradeCost",
+				]
+		},
+	"playerStructure":
+		{
+			"name": {"en": "Player Structure"},
 			"dogmaAttributes":
 				[
 					"tetheringRange",
@@ -197,7 +259,7 @@ const cards: {[key: string]: any} = {
 		},
 	"probe":
 		{
-			"name": {"en": "probe"},
+			"name": {"en": "Probe"},
 			"dogmaAttributes":
 				[
 					"baseMaxScanDeviation",
@@ -208,7 +270,7 @@ const cards: {[key: string]: any} = {
 		},
 	"targeting":
 		{
-			"name": {"en": "targeting"},
+			"name": {"en": "Targeting"},
 			"dogmaAttributes":
 				[
 					"maxLockedTargets",
@@ -226,7 +288,7 @@ const cards: {[key: string]: any} = {
 		},
 	"weapon":
 		{
-			"name": {"en": "weapon"},
+			"name": {"en": "Weapon"},
 			"dogmaAttributes":
 				[
 					"damageMultiplier",
@@ -244,7 +306,7 @@ const cards: {[key: string]: any} = {
 		},
 	"ammunition":
 		{
-			"name": {"en": "ammunition"},
+			"name": {"en": "Ammunition"},
 			"dogmaAttributes":
 				[
 					"emDamage",
@@ -265,12 +327,22 @@ const cards: {[key: string]: any} = {
 					"aoeFalloff",
 					"aimedLaunch",
 					"explosionRange",
-					"detonationRange"
+					"detonationRange",
+					"crystalsGetDamaged",
+					"crystalVolatilityChance",
+					"crystalVolatilityDamage",
+					"specializationAsteroidYieldMultiplier",
+					"specializationCrystalMiningWastedVolumeMultiplierBonus",
+					"specializationCrystalMiningWasteProbabilityBonus",
+					"specializationAsteroidDurationMultiplier",
+					"specializationAsteroidTypeList",
+					"unfitCapCost",
+					"capNeedBonus"
 				]
 		},
 	"navigation":
 		{
-			"name": {"en": "navigation"},
+			"name": {"en": "Navigation"},
 			"dogmaAttributes":
 				[
 					"maxVelocity",
@@ -289,7 +361,7 @@ const cards: {[key: string]: any} = {
 		},
 	"drones":
 		{
-			"name": {"en": "drones"},
+			"name": {"en": "Drones"},
 			"dogmaAttributes":
 				[
 					"droneCapacity",
@@ -298,7 +370,7 @@ const cards: {[key: string]: any} = {
 		},
 	"fighters":
 		{
-			"name": {"en": "fighters"},
+			"name": {"en": "Fighters"},
 			"dogmaAttributes":
 				[
 					"fighterCapacity",
@@ -312,7 +384,7 @@ const cards: {[key: string]: any} = {
 		},
 	"fighterSupport":
 		{
-			"name": {"en": "fighterSupport"},
+			"name": {"en": "Fighter Support"},
 			"dogmaAttributes":
 				[
 					"fighterBonusROFPercent",
@@ -323,7 +395,7 @@ const cards: {[key: string]: any} = {
 		},
 	"requiredSkills":
 		{
-			"name": {"en": "requiredSkills"},
+			"name": {"en": "Required Skills"},
 			"component": "requiredSkills",
 			"dogmaAttributes":
 				[
@@ -341,13 +413,13 @@ const cards: {[key: string]: any} = {
 		},
 	"insurance":
 		{
-			"name": {"en": "insurance"},
+			"name": {"en": "Insurance"},
 			"component": "insurance",
 			"alwaysShow": true
 		},
 	"overloading":
 		{
-			"name": {"en": "overloading"},
+			"name": {"en": "Overloading"},
 			"dogmaAttributes":
 				[
 					"requiredThermoDynamicsSkill",
@@ -358,7 +430,8 @@ const cards: {[key: string]: any} = {
 		},
 	"booster":
 		{
-			"name": {"en": "booster"},
+			"name": {"en": "Booster"},
+			"component": "booster",
 			"dogmaAttributes":
 				[
 					"boosterDuration",
@@ -373,18 +446,60 @@ const cards: {[key: string]: any} = {
 					"memoryBonus"
 				]
 		},
-	"capBooster":
+	"capacitor":
 		{
-			"name": {"en": "capBooster"},
+			"name": {"en": "Capacitor"},
 			"dogmaAttributes":
 				[
+					"capacitorCapacity",
+					"rechargeRate",
 					"capacitorBonus",
 					"capNeedBonus"
 				]
 		},
+	"shield":
+		{
+			"name": {"en": "Shield"},
+			"dogmaAttributes":
+				[
+					"shieldCapacity",
+					"shieldRechargeRate",
+					"shieldUniformity",
+					"shieldEmDamageResonance",
+					"shieldThermalDamageResonance",
+					"shieldKineticDamageResonance",
+					"shieldExplosiveDamageResonance",
+				]
+		},
+	"armor":
+		{
+			"name": {"en": "Armor"},
+			"dogmaAttributes":
+				[
+					"armorHP",
+					"armorUniformity",
+					"armorEmDamageResonance",
+					"armorThermalDamageResonance",
+					"armorKineticDamageResonance",
+					"armorExplosiveDamageResonance",
+				]
+		},
+	"structure":
+		{
+			"name": {"en": "Structure"},
+			"dogmaAttributes":
+				[
+					"hp",
+					"structureUniformity",
+					"emDamageResonance",
+					"thermalDamageResonance",
+					"kineticDamageResonance",
+					"explosiveDamageResonance",
+				]
+		},
 	"commandBurst":
 		{
-			"name": {"en": "commandBurst"},
+			"name": {"en": "Command Burst"},
 			"dogmaAttributes":
 				[
 					"warfareBuff1ID",
@@ -397,19 +512,9 @@ const cards: {[key: string]: any} = {
 					"warfareBuff4Multiplier"
 				]
 		},
-	"crystal":
-		{
-			"name": {"en": "crystal"},
-			"dogmaAttributes":
-				[
-					"crystalsGetDamaged",
-					"crystalVolatilityChance",
-					"crystalVolatilityDamage"
-				]
-		},
 	"fuel":
 		{
-			"name": {"en": "fuel"},
+			"name": {"en": "Fuel"},
 			"dogmaAttributes":
 				[
 					"serviceModuleFuelAmount",
@@ -420,7 +525,9 @@ const cards: {[key: string]: any} = {
 		},
 	"usage":
 		{
-			"name": {"en": "usage"},
+			"name": {"en": "Usage"},
+			"component": "usage",
+			"alwaysShow": true,
 			"dogmaAttributes":
 				[
 					"canFitShipGroup01",
@@ -448,7 +555,7 @@ const cards: {[key: string]: any} = {
 		},
 	"mining":
 		{
-			"name": {"en": "mining"},
+			"name": {"en": "Mining"},
 			"dogmaAttributes":
 				[
 					"asteroidMetaLevel",
@@ -460,19 +567,10 @@ const cards: {[key: string]: any} = {
 					"asteroidMaxRadius"
 				]
 		},
-	"reprocessing":
+	"planetInteraction":
 		{
-			"name": {"en": "reprocessing"},
-			"component": "reprocessing",
-			"dogmaAttributes":
-				[
-					"reprocessingSkillType"
-				]
-		},
-	"planetSchematic":
-		{
-			"name": {"en": "planetSchematic"},
-			"component": "planetSchematic",
+			"name": {"en": "Planetary Interaction"},
+			"component": "planetInteraction",
 			"alwaysShow": true,
 			"dogmaAttributes":
 				[
@@ -501,10 +599,15 @@ const cards: {[key: string]: any} = {
 			"name": {"en": "Invention"},
 			"component": "blueprintInvention"
 		},
-	"blueprintResearch":
+	"blueprintMaterialResearch":
 		{
-			"name": {"en": "Research"},
-			"component": "blueprintResearch"
+			"name": {"en": "Material Research"},
+			"component": "blueprintMaterialResearch"
+		},
+	"blueprintTimeResearch":
+		{
+			"name": {"en": "Time Research"},
+			"component": "blueprintTimeResearch"
 		},
 	"blueprintCopying":
 		{
@@ -516,33 +619,58 @@ const cards: {[key: string]: any} = {
 			"name": {"en": "Reaction"},
 			"component": "blueprintReaction"
 		},
+	"engineeringRig":
+		{
+			"name": {"en": "Engineering Rig"},
+			"component": "engineeringRig",
+			"alwaysShow": true,
+			"dogmaAttributes":
+				[
+					"attributeEngRigTimeBonus",
+					"attributeEngRigMatBonus",
+					"attributeEngRigCostBonus",
+					"attributeAdvCompManufactureMaterialMultiplier",
+					"hiSecModifier",
+					"lowSecModifier",
+					"nullSecModifier"
+				]
+		},
+	"reprocessing":
+		{
+			"name": {"en": "Reprocessing"},
+			"component": "reprocessing",
+			"dogmaAttributes":
+				[
+					"reprocessingSkillType"
+				]
+		},
 	"industry":
 		{
-			"name": {"en": "industry"},
+			"name": {"en": "Industry"},
 			"component": "industry"
 		},
 	"other":
 		{
-			"name": {"en": "other"}
+			"name": {"en": "Other"}
 		},
 	"typeInfo":
 		{
-			"name": {"en": "typeInfo"},
+			"name": {"en": "Type Info"},
 			"component": "typeInfo",
 			"alwaysShow": true
 		},
-	"skins":
-		{
-			"name": {"en": "skins"},
-			"component": "skins",
-			"alwaysShow": true
-		},
-	"skin":
-		{
-			"name": {"en": "skin"},
-			"component": "skin",
-			"alwaysShow": true
-		}
+	// "skins":
+	// 	{
+	// 		"name": {"en": "Skins"},
+	// 		"component": "skins",
+	// 		"alwaysShow": true
+	// 	},
+	// "skin":
+	// 	{
+	// 		"name": {"en": "Skin"},
+	// 		"component": "skin",
+	// 		"alwaysShow": true
+	// 	}
 };
 
 export default cards;

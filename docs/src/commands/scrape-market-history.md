@@ -112,3 +112,30 @@ Source ExplorerRegionTypeSource: hit 161 of 13920 pairs - 1.2%
 Much less impact from `TopTradedRegionTypeSource` than before, with the others seeing similar hits.
 This is probably because once top-traded has a hit, it goes into the history and will be picked up on the next run.
 At the end of this run, 252484 pairs and 79 regions were in the history, meaning 550 pairs and 1 region were discovered.
+
+### 2024-05-02
+
+214 days since initial update for two full rounds of exploration.
+
+
+```
+HistoryRegionTypeSource returned 277699 pairs, adding 277699 new pairs, new total is 277699, 85 new regions, est. runtime PT15H25M39S
+ActiveOrdersRegionTypeSource returned 233649 pairs, adding 37114 new pairs, new total is 314813, 1 new regions, est. runtime PT2H3M42S
+HistoricalOrdersRegionTypeSource returned 194129 pairs, adding 4944 new pairs, new total is 319757, 0 new regions, est. runtime PT16M28S
+TopTradedRegionTypeSource returned 35532 pairs, adding 35532 new pairs, new total is 355289, 0 new regions, est. runtime PT1H58M26S
+ExplorerRegionTypeSource returned 17289 pairs, adding 13893 new pairs, new total is 369182, 16 new regions, est. runtime PT46M18S
+RecentRegionTypeRemover returned 0 pairs, adding 0 new pairs, new total is 369182, 0 new regions, est. runtime PT0S
+```
+
+277,699 pairs were present before this run, meaning a full 29,148 pairs and 10 regions added since the beginning.
+
+```
+Source HistoryRegionTypeSource: hit 267274 of 277699 pairs - 96.2%
+Source ActiveOrdersRegionTypeSource: hit 335 of 37114 pairs - 0.9%
+Source HistoricalOrdersRegionTypeSource: hit 29 of 4944 pairs - 0.6%
+Source TopTradedRegionTypeSource: hit 11 of 35532 pairs - 0.0%
+Source ExplorerRegionTypeSource: hit 14 of 13893 pairs - 0.1%
+```
+
+Active orders still sees a lot of hits, which makes sense since it's a view into the active market.
+Explorer has dropped from 1.2% to 0.1%, which means that strategy is working.

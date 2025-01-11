@@ -249,3 +249,68 @@
   icon_id: 1390
   name: "radius"
   stackable: true
+"1302":
+  attribute_id: 1302
+  default_value: 0
+  description: ""
+  display_name: "Can be fitted to"
+  high_is_good: true
+  icon_id: 1443
+  name: "canFitShipType1"
+  published: true
+  stackable: true
+  unit_id: 116
+"1303":
+  attribute_id: 1303
+  default_value: 0
+  description: ""
+  display_name: "Can be fitted to"
+  high_is_good: true
+  icon_id: 1443
+  name: "canFitShipType2"
+  published: true
+  stackable: true
+  unit_id: 116
+"1304":
+  attribute_id: 1304
+  default_value: 0
+  description: ""
+  display_name: "Can be fitted to"
+  high_is_good: true
+  icon_id: 1443
+  name: "canFitShipType3"
+  published: true
+  stackable: true
+  unit_id: 116
+"1305":
+  attribute_id: 1305
+  default_value: 0
+  description: ""
+  display_name: "Can be fitted to"
+  high_is_good: true
+  icon_id: 1443
+  name: "canFitShipType4"
+  published: true
+  stackable: true
+  unit_id: 116
+"790":
+  attribute_id: 790
+  default_value: 0
+  description: "The skill required to reprocess this ore type."
+  display_name: "Reprocessing Skill"
+  high_is_good: true
+  icon_id: 0
+  name: "reprocessingSkillType"
+  published: true
+  stackable: true
+  unit_id: 116
+"2355":
+  attribute_id: 2355
+  default_value: 1
+  description: ""
+  display_name: "High Security Bonus Multiplier"
+  high_is_good: true
+  name: "hiSecModifier"
+  published: true
+  stackable: true
+  unit_id: 104

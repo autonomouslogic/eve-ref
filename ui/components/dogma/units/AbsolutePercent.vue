@@ -7,5 +7,5 @@ const props = defineProps<{
 </script>
 
 <template>
-	<FormattedNumber :number="value * 100.0" :decimals="2" />%
+	<FormattedNumber :number="value * 100.0" />%
 </template>

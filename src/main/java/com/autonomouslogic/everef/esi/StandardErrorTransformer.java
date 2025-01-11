@@ -18,7 +18,7 @@ public class StandardErrorTransformer implements FlowableTransformer<Response, R
 		return upstream.flatMap(response -> {
 			var status = response.code();
 			if (status == 401 || status == 403) {
-				return Flowable.error(new RuntimeException(String.format("Received %s for %s", status, url)));
+				return Flowable.error(new EsiException(status, String.format("Received %s for %s", status, url)));
 			}
 			if (status == 204
 					|| status == 404

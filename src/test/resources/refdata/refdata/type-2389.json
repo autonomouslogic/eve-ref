@@ -1,0 +1,61 @@
+{
+  "base_price" : 1,
+  "description" : {
+    "de" : "In den Anfangstagen, als sich die Menschheit wieder dem Raumflug widmete, entdeckten die Wissenschaftler Planto und Ginch in Zusammenarbeit eine selbstversorgende Struktur, die vollständig aus Plasma bestand, das durch ein planetares Magnetfeld gehalten wurde. Seitdem wird dieser Begriff für jedes ähnliche Konstrukt verwendet, ganz gleich, ob es unter normalen Bedingungen oder mithilfe von elektrischem Strom entstanden ist.",
+    "en" : "In the early days of humanity's return to space flight, scientists Planto and Ginch co-discovered a self-sustaining natural structure made entirely from plasma suspended in a planetary magnetic field. Since then, the term has been applied to any such construct, whether occurring under normal conditions or produced artificially using electrical currents.",
+    "es" : "En los primeros tiempos después de que la humanidad retomase los vuelos espaciales, los científicos Planto y Ginch descubrieron en un campo magnético planetario una estructura natural autónoma hecha enteramente de plasma suspendido. Desde entonces, se ha aplicado este término a cualquier formación, ya surgiese en condiciones naturales o artificialmente mediante corrientes eléctricas.",
+    "fr" : "Alors que l'humanité faisait son retour dans les vols spatiaux, les scientifiques Planto et Ginch ont co-découvert une structure naturelle autonome, entièrement composée de plasma suspendu dans un champ magnétique planétaire. Depuis lors, le terme a été appliqué à toutes les constructions de ce type, qu'elles apparaissent sous forme naturelle ou qu'elles soient produites artificiellement à l'aide de courants électriques.",
+    "ja" : "人類が宇宙世界に舞い戻った初期に、科学者であるプラントーとギンチが共同で、惑星の磁場に浮遊するプラズマだけで構成される自立自然構造物を発見した。以降、この用語は、通常の条件で発生したのか、電流を使用して人工的に生成したのかに関係なく、こうした構造物に対して使用される。",
+    "ko" : "인류가 우주로 재진줄했던 당시, 과학자였던 플란토와 글린치는 행성 자기장 속에서 응축된 플라즈마를 발견했습니다. 이러한 발견 이후 자연적 혹은 인위적으로 생성된 플라즈마 응축을 '플라즈모이드'라 부르기 시작하였습니다.",
+    "ru" : "В самом начале возвращения человечества в космос ученые Планто и Гинч впервые открыли плазмоиды: самоподдерживающиеся природные структуры, состоящие исключительно из плазмы, поддерживающиеся во взвешенном состоянии планетарным магнитным полем. С тех самых пор этот термин применяют к любым подобным образованиям: и природным, и полученным в лабораторных условиях под воздействием электрических потоков.",
+    "zh" : "在人类重返宇宙的早期，科学家伯兰图和金奇共同发现了一种能自我维持的自然结构，这种结构完全由悬浮在行星磁场的等离子构成。自那时起，这个词汇被用于个所有这种物质，无论是在普通环境下形成的还是使用电流人工制成的。"
+  },
+  "group_id" : 1042,
+  "icon_id" : 10017,
+  "market_group_id" : 1334,
+  "name" : {
+    "de" : "Plasmoids",
+    "en" : "Plasmoids",
+    "es" : "Plasmoide",
+    "fr" : "Plasmoïdes",
+    "ja" : "プラズモイド",
+    "ko" : "플라즈모이드",
+    "ru" : "Plasmoids",
+    "zh" : "等离子体团"
+  },
+  "portion_size" : 1,
+  "published" : true,
+  "volume" : 0.19,
+  "type_id" : 2389,
+  "capacity" : 0,
+  "dogma_attributes" : {
+    "161" : {
+      "attribute_id" : 161,
+      "value" : 0.19
+    },
+    "162" : {
+      "attribute_id" : 162,
+      "value" : 1
+    },
+    "4" : {
+      "attribute_id" : 4,
+      "value" : 0
+    },
+    "38" : {
+      "attribute_id" : 38,
+      "value" : 0
+    },
+    "1640" : {
+      "attribute_id" : 1640,
+      "value" : 400
+    },
+    "1641" : {
+      "attribute_id" : 1641,
+      "value" : 400
+    }
+  },
+  "mass" : 0,
+  "packaged_volume" : 0.19,
+  "radius" : 1,
+  "used_by_schematic_ids" : [ 65 ]
+}

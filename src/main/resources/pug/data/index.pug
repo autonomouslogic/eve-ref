@@ -18,9 +18,15 @@ block content
 					a(href="https://docs.everef.net/datasets/") docs.everef.net/datasets/
 					| .
 				p
-					div= "Directories: " + format.integer(common.size())
-					div= "Files: " + format.integer(objects.size())
-					div= "Total size: " + format.fileSize(totalSize)
+					div
+						span Directories:&nbsp;
+						span.data-directory-directories= format.integer(directories.size())
+					div
+						span Files:&nbsp;
+						span.data-directory-files= format.integer(files.size())
+					div
+						span Total size:&nbsp;
+						span.data-directory-size= format.fileSize(totalSize)
 		.row.mb-3
 			.col-12
 				pre
@@ -33,7 +39,7 @@ block content
 						tbody
 							//- Directories
 							for dir in directories
-								tr(class="data-dir")
+								tr.data-dir
 									td
 										a.url(href="/" + dir.getPath() + "/")= helper.basename(dir.getPath())
 										= "/"
@@ -43,7 +49,7 @@ block content
 									td= " "
 							//- Files
 							for file in files
-								tr(class="data-file")
+								tr.data-file
 									td
 										a(class="data-file-url", href= "/" + file.getPath())= helper.filename(file.getPath())
 									td(class="data-file-size-formatted").text-right= format.fileSize(file.getSize())

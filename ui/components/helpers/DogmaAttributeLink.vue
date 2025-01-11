@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import refdataApi from "~/refdata";
-import {DogmaAttribute} from "~/refdata-openapi";
+import {type DogmaAttribute} from "~/refdata-openapi";
+import {tr} from "~/lib/translate";
+import InternalLink from "~/components/helpers/InternalLink.vue";
 
 const {locale} = useI18n();
 
@@ -14,12 +16,16 @@ const dogmaAttribute = typeof props.attribute === "number" ?
 </script>
 
 <template>
-	<NuxtLink
+	<InternalLink
 		v-if="dogmaAttribute"
 		:to="`/dogma-attributes/${dogmaAttribute.attributeId}`">
-		<template v-if="dogmaAttribute.displayName && dogmaAttribute.displayName[locale]">{{ dogmaAttribute.displayName[locale] }}</template>
-		<template v-else>{{dogmaAttribute.name}}</template>
-	</NuxtLink>
+		<slot>
+			<template v-if="dogmaAttribute.displayName && tr(dogmaAttribute.displayName, locale)">
+				{{ tr(dogmaAttribute.displayName, locale) }}
+			</template>
+			<template v-else>{{dogmaAttribute.name}}</template>
+		</slot>
+	</InternalLink>
 </template>
 
 <style scoped>

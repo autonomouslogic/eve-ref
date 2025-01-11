@@ -35,6 +35,14 @@ public class ObjectMerger {
 		} else if (nodes[0].isArray()) {
 			return mergeArrays(castToArrays(nodes));
 		} else {
+			for (int i = nodes.length - 1; i >= 0; i--) {
+				var node = nodes[i];
+				if (node != null
+						&& !node.isNull()
+						&& (node.isTextual() && !node.asText().isEmpty())) {
+					return nodes[i];
+				}
+			}
 			return nodes[nodes.length - 1];
 		}
 	}

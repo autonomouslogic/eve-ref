@@ -1,6 +1,5 @@
 package com.autonomouslogic.everef.cli.refdata.post;
 
-import com.autonomouslogic.everef.cli.refdata.StoreHandler;
 import com.autonomouslogic.everef.refdata.InventoryType;
 import com.autonomouslogic.everef.refdata.Mutaplasmid;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -15,7 +14,6 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 import javax.inject.Inject;
 import lombok.NonNull;
-import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -23,16 +21,12 @@ import lombok.extern.log4j.Log4j2;
  *
  */
 @Log4j2
-public class VariationsDecorator implements PostDecorator {
+public class VariationsDecorator extends PostDecorator {
 	private static final int TECH_1_META_GROUP = 1;
 	private static final int ABYSSAL_META_GROUP = 15;
 
 	@Inject
 	protected ObjectMapper objectMapper;
-
-	@Setter
-	@NonNull
-	private StoreHandler storeHandler;
 
 	private Map<Long, JsonNode> types;
 	private Map<Long, JsonNode> mutaplasmids;

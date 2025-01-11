@@ -1,5 +1,5 @@
-.PHONY: dist test format clean docker docs
-EVE_REF_VERSION = $(shell ./gradlew properties | grep version | cut -d' ' -f 2)
+.PHONY: dist test format clean docker docs openapi-ui
+EVE_REF_VERSION = $(shell ./gradlew properties | grep 'version:' | cut -d' ' -f 2)
 DOCKER_TAG_BASE = autonomouslogic/eve-ref
 DOCKER_TAG = $(DOCKER_TAG_BASE):$(EVE_REF_VERSION)
 DOCKER_TAG_LATEST = $(DOCKER_TAG_BASE):latest
@@ -30,6 +30,10 @@ format:
 
 specs: generate-database
 	./gradlew refDataSpec --stacktrace
+	make openapi-ui
+
+openapi-ui:
+	cd ui ; npm run generate-api
 
 dev-ui: specs
 	cd ui ; npm run dev
@@ -57,6 +61,12 @@ docker-data-index: docker
 
 clean:
 	./gradlew clean --stacktrace
+	rm -R ui/.nuxt || true
+	rm -R ui/.nitro || true
+	rm -R ui/.cache || true
+	rm -R ui/.output || true
+	rm -R ui/.env || true
+	rm -R ui/dist || true
 
 version:
 	echo $(EVE_REF_VERSION)

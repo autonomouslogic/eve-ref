@@ -1,24 +1,67 @@
 <script setup lang="ts">
-const {locale, availableLocales } = useI18n();
-const selectedLocale = ref(locale);
+import MarketGroupName from "~/components/helpers/MarketGroupName.vue";
+import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
+import ExternalLink from "~/components/helpers/ExternalLink.vue";
+import {PATREON_URL} from "~/lib/urls";
+import InternalLink from "~/components/helpers/InternalLink.vue";
+import MotdBanner from "~/components/MotdBanner.vue";
 
+const localePath = useLocalePath();
 </script>
 
 <template>
-	<div class="p-1 space-x-3 border-b-2 border-neutral-400">
+	<div class="header flex flex-col p-1 space-y-2">
+		<div class="flex flex-nowrap flex-row">
+			<span class="flex-auto space-x-3">
+				<span>
+					<InternalLink to="/">EVE Ref</InternalLink>
+				</span>
+				<span>
+					<InternalLink to="/categories">Categories</InternalLink>
+				</span>
+				<span>
+					<InternalLink to="/market-groups">Market Groups</InternalLink>
+				</span>
+				<span>
+					<InternalLink to="/structures">Structures</InternalLink>
+				</span>
+				<span>
+					<InternalLink to="/skill-points">Skill Points</InternalLink>
+				</span>
+			</span>
+			<span class="flex-auto space-x-3 text-right">
+				<span>
+					<InternalLink to="/giveaways">Giveaways</InternalLink>
+				</span>
+				<span>
+					<ExternalLink :url="PATREON_URL" class="header-patreon whitespace-nowrap">
+						<span>
+							<font-awesome-icon icon="fa-brands fa-patreon"/>
+						</span>
+						Patreon
+					</ExternalLink>
+				</span>
+			</span>
+		</div>
 		<span>
-			Language:
-			<select name="locale" id="locale" v-model="selectedLocale">
-				<option
-					v-for="availableLocale in availableLocales"
-					:key="availableLocale"
-					:value="availableLocale"
-					:selected="availableLocale === locale"
-					v-t="{path: 'languageName', locale: availableLocale}"
-				></option>
-			</select>
+			<SearchBar class="w-full md:w-3/4 xl:w-2/4" />
 		</span>
-		<span><NuxtLink to="/categories">Categories</NuxtLink></span>
-		<span><NuxtLink to="/market-groups">Market Groups</NuxtLink></span>
 	</div>
+
+	<MotdBanner/>
 </template>
+
+<style scoped>
+.header {
+  background-color: var(--header-background-color);
+  color: black;
+}
+
+a {
+  color: black;
+}
+
+a.header-patreon {
+  color: var(--link-color);
+}
+</style>

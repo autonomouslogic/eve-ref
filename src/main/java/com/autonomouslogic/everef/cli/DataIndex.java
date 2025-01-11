@@ -62,7 +62,7 @@ public class DataIndex implements Command {
 
 	@Setter
 	@Getter
-	private String prefix;
+	private String prefix = Configs.DATA_INDEX_PREFIX.get().orElse(null);
 
 	@Inject
 	protected DataIndex() {}
@@ -107,7 +107,6 @@ public class DataIndex implements Command {
 
 	private Single<VirtualDirectory> listBucketContents() {
 		return Single.defer(() -> {
-					log.debug("Listing contents");
 					if (!dataUrl.getPath().equals("")) {
 						throw new RuntimeException("Data index must be run at the root of the bucket");
 					}
@@ -118,6 +117,7 @@ public class DataIndex implements Command {
 					if (!url.toString().endsWith("/")) {
 						url = url.toBuilder().path(url.getPath() + "/").build();
 					}
+					log.debug("Listing contents at {}", url);
 					var dir = new VirtualDirectory();
 					return s3Adapter
 							.listObjects(url, recursive, s3)
@@ -149,11 +149,14 @@ public class DataIndex implements Command {
 
 	private byte[] renderIndexPage(@NonNull String prefix, List<FileEntry> entries) {
 		var directoryParts = splitDirectoryPath(prefix);
+		var files = entries.stream().filter(e -> !e.isDirectory()).toList();
+		var totalSize = files.stream().mapToLong(FileEntry::getSize).sum();
 		// Prepare model.
 		Map<String, Object> model = new HashMap<>();
 		model.put("pageTitle", dataDomain + "/" + prefix);
 		model.put("directories", entries.stream().filter(e -> e.isDirectory()).toList());
-		model.put("files", entries.stream().filter(e -> !e.isDirectory()).toList());
+		model.put("files", files);
+		model.put("totalSize", totalSize);
 		model.put("domain", dataDomain);
 		model.put("directoryParts", directoryParts);
 		// Render template.

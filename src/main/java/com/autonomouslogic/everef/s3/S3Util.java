@@ -2,9 +2,11 @@ package com.autonomouslogic.everef.s3;
 
 import com.autonomouslogic.everef.url.S3Url;
 import java.time.Duration;
+import java.util.ArrayList;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
+import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 import software.amazon.awssdk.services.s3.model.ObjectCannedACL;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
@@ -21,6 +23,16 @@ public class S3Util {
 				.bucket(url.getBucket())
 				.key(url.getPath())
 				.contentLength(len)
+				.build();
+	}
+
+	public PutObjectRequest putObjectRequest(long len, S3Url url, String contentType) {
+		return putObjectRequest(len, url).toBuilder().contentType(contentType).build();
+	}
+
+	public PutObjectRequest putObjectRequest(long len, S3Url url, String contentType, Duration maxAge) {
+		return putObjectRequest(len, url, contentType).toBuilder()
+				.cacheControl(cacheControl(maxAge))
 				.build();
 	}
 
@@ -50,6 +62,23 @@ public class S3Util {
 	}
 
 	public String cacheControl(Duration maxAge) {
-		return String.format("public, max-age=%s", maxAge.getSeconds());
+		return cacheControl(maxAge, false);
+	}
+
+	public String cacheControl(Duration maxAge, boolean immutable) {
+		var parts = new ArrayList<String>();
+		parts.add("public");
+		parts.add("max-age=" + maxAge.toSeconds());
+		if (immutable) {
+			parts.add("immutable");
+		}
+		return String.join(", ", parts);
+	}
+
+	public GetObjectRequest getObjectRequest(S3Url url) {
+		return GetObjectRequest.builder()
+				.bucket(url.getBucket())
+				.key(url.getPath())
+				.build();
 	}
 }

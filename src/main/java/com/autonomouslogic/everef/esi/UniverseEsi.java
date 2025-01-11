@@ -1,12 +1,14 @@
 package com.autonomouslogic.everef.esi;
 
+import static com.autonomouslogic.everef.util.EveConstants.NPC_STATION_MAX_ID;
+
 import com.autonomouslogic.everef.config.Configs;
-import com.autonomouslogic.everef.openapi.esi.apis.UniverseApi;
-import com.autonomouslogic.everef.openapi.esi.models.GetUniverseConstellationsConstellationIdOk;
-import com.autonomouslogic.everef.openapi.esi.models.GetUniverseRegionsRegionIdOk;
-import com.autonomouslogic.everef.openapi.esi.models.GetUniverseStationsStationIdOk;
-import com.autonomouslogic.everef.openapi.esi.models.GetUniverseSystemsSystemIdOk;
-import com.autonomouslogic.everef.openapi.esi.models.GetUniverseTypesTypeIdOk;
+import com.autonomouslogic.everef.openapi.esi.api.UniverseApi;
+import com.autonomouslogic.everef.openapi.esi.model.GetUniverseConstellationsConstellationIdOk;
+import com.autonomouslogic.everef.openapi.esi.model.GetUniverseRegionsRegionIdOk;
+import com.autonomouslogic.everef.openapi.esi.model.GetUniverseStationsStationIdOk;
+import com.autonomouslogic.everef.openapi.esi.model.GetUniverseSystemsSystemIdOk;
+import com.autonomouslogic.everef.openapi.esi.model.GetUniverseTypesTypeIdOk;
 import com.autonomouslogic.everef.util.Rx;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Maybe;
@@ -27,7 +29,8 @@ public class UniverseEsi {
 	@Inject
 	protected UniverseApi universeApi;
 
-	private final String datasource = Configs.ESI_DATASOURCE.getRequired();
+	private final EsiConstants.Datasource datasource =
+			EsiConstants.Datasource.valueOf(Configs.ESI_DATASOURCE.getRequired());
 
 	private List<Integer> regionIds;
 	private final Map<Integer, Optional<GetUniverseRegionsRegionIdOk>> regions = new ConcurrentHashMap<>();
@@ -47,8 +50,7 @@ public class UniverseEsi {
 			}
 			return Flowable.defer(() -> {
 						log.trace("Fetching region ids");
-						var d = UniverseApi.DatasourceGetUniverseRegions.valueOf(datasource);
-						var regions = universeApi.getUniverseRegions(d, null);
+						var regions = universeApi.getUniverseRegions(datasource.toString(), null);
 						regionIds = regions;
 						return Flowable.fromIterable(regions);
 					})
@@ -58,8 +60,7 @@ public class UniverseEsi {
 
 	public Maybe<GetUniverseRegionsRegionIdOk> getRegion(int regionId) {
 		return getFromCacheOrFetch("region", GetUniverseRegionsRegionIdOk.class, regions, regionId, () -> {
-			var source = UniverseApi.DatasourceGetUniverseRegionsRegionId.valueOf(datasource);
-			return universeApi.getUniverseRegionsRegionId(regionId, null, source, null, null);
+			return universeApi.getUniverseRegionsRegionId(regionId, null, datasource.toString(), null, null);
 		});
 	}
 
@@ -74,36 +75,31 @@ public class UniverseEsi {
 				constellations,
 				constellationId,
 				() -> {
-					var source = UniverseApi.DatasourceGetUniverseConstellationsConstellationId.valueOf(datasource);
 					return universeApi.getUniverseConstellationsConstellationId(
-							constellationId, null, source, null, null);
+							constellationId, null, datasource.toString(), null, null);
 				});
 	}
 
 	public Maybe<GetUniverseSystemsSystemIdOk> getSystem(int systemId) {
 		return getFromCacheOrFetch("system", GetUniverseSystemsSystemIdOk.class, systems, systemId, () -> {
-			var source = UniverseApi.DatasourceGetUniverseSystemsSystemId.valueOf(datasource);
-			return universeApi.getUniverseSystemsSystemId(systemId, null, source, null, null);
+			return universeApi.getUniverseSystemsSystemId(systemId, null, datasource.toString(), null, null);
 		});
 	}
 
 	public Maybe<GetUniverseStationsStationIdOk> getNpcStation(long stationId) {
-		// All NPC stations will have an ID below 100 million.
-		if (stationId > 100_000_000) {
+		if (stationId > NPC_STATION_MAX_ID) {
 			log.trace(String.format("Ignoring request for non-NPC station %s", stationId));
 			return Maybe.empty();
 		}
 		var intId = (int) stationId;
 		return getFromCacheOrFetch("station", GetUniverseStationsStationIdOk.class, stations, intId, () -> {
-			var source = UniverseApi.DatasourceGetUniverseStationsStationId.valueOf(datasource);
-			return universeApi.getUniverseStationsStationId(intId, source, null);
+			return universeApi.getUniverseStationsStationId(intId, datasource.toString(), null);
 		});
 	}
 
 	public Maybe<GetUniverseTypesTypeIdOk> getType(int typeId) {
 		return getFromCacheOrFetch("type", GetUniverseTypesTypeIdOk.class, types, typeId, () -> {
-			var source = UniverseApi.DatasourceGetUniverseTypesTypeId.valueOf(datasource);
-			return universeApi.getUniverseTypesTypeId(typeId, null, source, null, null);
+			return universeApi.getUniverseTypesTypeId(typeId, null, datasource.toString(), null, null);
 		});
 	}
 
@@ -111,23 +107,26 @@ public class UniverseEsi {
 	private <T> Maybe<T> getFromCacheOrFetch(
 			String name, Class<T> type, Map<Integer, Optional<T>> cache, int id, Supplier<T> fetcher) {
 		return Maybe.defer(() -> {
-					if (cache.containsKey(id)) {
-						return Maybe.fromOptional(cache.get(id));
-					}
-					return Maybe.defer(() -> {
-								log.trace("Fetching {} {}", name, id);
-								var obj = fetcher.get();
-								var optional = Optional.ofNullable(obj);
-								cache.put(id, optional);
-								return Maybe.fromOptional(optional);
-							})
-							.retry(2, e -> {
-								log.warn("Retrying {} {}: {}", name, id, ExceptionUtils.getRootCauseMessage(e));
-								return true;
-							})
-							.compose(Rx.offloadMaybe(EsiHelper.ESI_SCHEDULER));
-				})
-				.onErrorResumeNext(
-						e -> Maybe.error(new RuntimeException(String.format("Failed fetching %s %s", name, id), e)));
+			if (cache.containsKey(id)) {
+				return Maybe.fromOptional(cache.get(id));
+			}
+			return Maybe.defer(() -> {
+						if (cache.containsKey(id)) {
+							return Maybe.fromOptional(cache.get(id));
+						}
+						log.trace("Fetching {} {}", name, id);
+						var obj = fetcher.get();
+						var optional = Optional.ofNullable(obj);
+						cache.put(id, optional);
+						return Maybe.fromOptional(optional);
+					})
+					.retry(2, e -> {
+						log.warn("Retrying {} {}: {}", name, id, ExceptionUtils.getRootCauseMessage(e));
+						return true;
+					})
+					.compose(Rx.offloadMaybe(EsiHelper.ESI_SCHEDULER))
+					.onErrorResumeNext(e ->
+							Maybe.error(new RuntimeException(String.format("Failed fetching %s %s", name, id), e)));
+		});
 	}
 }

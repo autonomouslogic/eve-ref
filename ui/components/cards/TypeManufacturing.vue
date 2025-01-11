@@ -1,9 +1,13 @@
 <script setup lang="ts">
-import {Blueprint, BlueprintActivity, DogmaAttribute, InventoryType} from "~/refdata-openapi";
+import {type Blueprint, type BlueprintActivity, type DogmaAttribute, type InventoryType} from "~/refdata-openapi";
 import CardWrapper from "~/components/cards/CardWrapper.vue";
 import TypeLink from "~/components/helpers/TypeLink.vue";
 import FormattedNumber from "~/components/helpers/FormattedNumber.vue";
 import refdataApi from "~/refdata";
+import BlueprintManufacturingLinks from "~/components/cards/BlueprintManufacturingLinks.vue";
+import Duration from "~/components/dogma/units/Duration.vue";
+import {secondsToMilliseconds} from "~/lib/timeUtils";
+import AttributeList from "~/components/attr/AttributeList.vue";
 
 const props = defineProps<{
 	title: string,
@@ -45,34 +49,39 @@ if (blueprintType?.typeId) {
 <template>
 	<template v-if="blueprintType && blueprint">
 		<CardWrapper :title="title">
-			<table>
-				<tr>
-					<td>Blueprint:</td>
-					<td><TypeLink :type-id="blueprintType.typeId" /></td>
-				</tr>
-				<template v-if="manufacturing">
-					<tr v-for="(product, id) in manufacturing.products" :key="id">
-						<td><TypeLink :type-id="product.typeId" /></td>
-						<td><FormattedNumber :number="product.quantity" /></td>
-					</tr>
-					<tr>
-						<td>Manufacturing time:</td>
-						<td>{{ manufacturing.time }}s</td>
-					</tr>
-				</template>
-				<tr v-if="copying">
-					<td>Copy time:</td>
-					<td>{{ copying.time }}s</td>
-				</tr>
-				<tr v-if="researchMaterial">
-					<td>Material research:</td>
-					<td>{{ researchMaterial.time }}s</td>
-				</tr>
-				<tr v-if="researchTime">
-					<td>Time research:</td>
-					<td>{{ researchTime.time }}s</td>
-				</tr>
-			</table>
+			<AttributeList>
+				<AttrAttributeListItem>
+					<template v-slot:key>Blueprint:</template>
+					<TypeLink :type-id="blueprintType.typeId" />
+				</AttrAttributeListItem>
+			</AttributeList>
+
+			<template v-if="manufacturing">
+				<AttrAttributeListItem v-for="(product, id) in manufacturing.products" :key="id">
+					<template v-slot:key>Output <TypeLink :type-id="product.typeId" />:</template>
+					<FormattedNumber :number="product.quantity" />
+				</AttrAttributeListItem>
+				<AttrAttributeListItem>
+					<template v-slot:key>Manufacturing time:</template>
+					<Duration :milliseconds="secondsToMilliseconds(manufacturing.time)" />
+				</AttrAttributeListItem>
+			</template>
+			<AttrAttributeListItem v-if="copying">
+				<template v-slot:key>Copy time:</template>
+				<Duration :milliseconds="secondsToMilliseconds(copying.time)" />
+			</AttrAttributeListItem>
+			<AttrAttributeListItem v-if="researchMaterial">
+				<template v-slot:key>Material research:</template>
+				<Duration :milliseconds="secondsToMilliseconds(researchMaterial.time)" />
+			</AttrAttributeListItem>
+			<AttrAttributeListItem v-if="researchTime">
+				<template v-slot:key>Time research:</template>
+				<Duration :milliseconds="secondsToMilliseconds(researchTime.time)" />
+			</AttrAttributeListItem>
+
+			<div class="mt-2">
+				<BlueprintManufacturingLinks v-if="blueprint" :blueprint="blueprint" />
+			</div>
 		</CardWrapper>
 	</template>
 </template>

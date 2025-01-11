@@ -23,26 +23,26 @@
       time: 192000
     manufacturing:
       materials:
-      - quantity: 8000000
-        typeID: 34
-      - quantity: 4000000
-        typeID: 35
-      - quantity: 600000
-        typeID: 36
-      - quantity: 400000
-        typeID: 37
-      - quantity: 12000
-        typeID: 38
-      - quantity: 6000
-        typeID: 39
-      - quantity: 3000
-        typeID: 40
-      - quantity: 200
-        typeID: 57478
       - quantity: 1
         typeID: 57479
       - quantity: 100
         typeID: 57486
+      - quantity: 200
+        typeID: 57478
+      - quantity: 3000
+        typeID: 40
+      - quantity: 6000
+        typeID: 39
+      - quantity: 24000
+        typeID: 38
+      - quantity: 200000
+        typeID: 37
+      - quantity: 600000
+        typeID: 36
+      - quantity: 4000000
+        typeID: 35
+      - quantity: 8000000
+        typeID: 34
       products:
       - quantity: 1
         typeID: 645
@@ -66,48 +66,48 @@
         typeID: 3812
       skills:
       - level: 1
-        typeID: 11450
-      - level: 1
         typeID: 11433
+      - level: 1
+        typeID: 11450
       time: 288000
     manufacturing:
       materials:
-      - quantity: 2250
-        typeID: 11553
       - quantity: 1
         typeID: 645
-      - quantity: 900
-        typeID: 11399
-      - quantity: 1634
-        typeID: 11556
-      - quantity: 900
-        typeID: 11535
-      - quantity: 450
-        typeID: 3828
-      - quantity: 6300
-        typeID: 11541
+      - quantity: 3
+        typeID: 21025
       - quantity: 30
         typeID: 11478
       - quantity: 225
         typeID: 11531
+      - quantity: 450
+        typeID: 3828
+      - quantity: 450
+        typeID: 11547
+      - quantity: 900
+        typeID: 11399
+      - quantity: 900
+        typeID: 11535
+      - quantity: 1634
+        typeID: 11556
+      - quantity: 2250
+        typeID: 11553
+      - quantity: 6300
+        typeID: 11541
       - quantity: 18750
         typeID: 11545
-      - quantity: 150
-        typeID: 11547
-      - quantity: 3
-        typeID: 21025
       products:
       - quantity: 1
         typeID: 22430
       skills:
-      - level: 5
-        typeID: 3380
       - level: 1
         typeID: 3398
       - level: 1
-        typeID: 11450
-      - level: 1
         typeID: 11433
+      - level: 1
+        typeID: 11450
+      - level: 5
+        typeID: 3380
       time: 360000
     research_material:
       materials:
@@ -118,12 +118,12 @@
       - quantity: 70
         typeID: 3814
       skills:
-      - level: 5
-        typeID: 3409
-      - level: 1
-        typeID: 11450
       - level: 1
         typeID: 11433
+      - level: 1
+        typeID: 11450
+      - level: 5
+        typeID: 3409
       time: 126000
     research_time:
       materials:
@@ -134,12 +134,12 @@
       - quantity: 60
         typeID: 3814
       skills:
-      - level: 5
-        typeID: 3403
-      - level: 1
-        typeID: 11450
       - level: 1
         typeID: 11433
+      - level: 1
+        typeID: 11450
+      - level: 5
+        typeID: 3403
       time: 126000
   blueprintTypeID: 22431
   maxProductionLimit: 1

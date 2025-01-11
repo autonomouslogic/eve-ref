@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import UnitValue from "~/components/dogma/UnitValue.vue";
-import {DogmaAttribute} from "~/refdata-openapi";
+import {type DogmaAttribute} from "~/refdata-openapi";
 
 const props = defineProps<{
 	value: number,
@@ -10,7 +10,7 @@ const props = defineProps<{
 
 <template>
 	<template v-if="attribute">
-		<UnitValue v-if="attribute.unitId" :value="parseInt(`${value}`)" :unit-id="attribute.unitId" />
+		<UnitValue v-if="attribute.unitId" :value="parseFloat(`${value}`)" :unit-id="attribute.unitId" />
 		<span v-else>{{ props.value }}</span>
 	</template>
 </template>

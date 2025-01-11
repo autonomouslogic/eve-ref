@@ -2,7 +2,7 @@ categories:
   idField: category_id
   model: InventoryCategory
   sde:
-    file: sde/fsd/categoryIDs.yaml
+    file: fsd/categories.yaml
   esi:
     file: universe/categories
     languageAttributes:
@@ -13,6 +13,8 @@ categories:
     filePrefix: category
     ids:
       - 6
+      - 66
+      - 23
     languages:
       - en-us
 
@@ -20,7 +22,7 @@ groups:
   idField: group_id
   model: InventoryGroup
   sde:
-    file: sde/fsd/groupIDs.yaml
+    file: fsd/groups.yaml
   esi:
     file: universe/groups
     languageAttributes:
@@ -33,6 +35,11 @@ groups:
       - 27
       - 257
       - 1185
+      - 1218
+      - 513
+      - 941
+      - 1869
+      - 332
     languages:
       - en-us
 
@@ -40,7 +47,7 @@ marketGroups:
   idField: market_group_id
   model: MarketGroup
   sde:
-    file: sde/fsd/marketGroups.yaml
+    file: fsd/marketGroups.yaml
     renames:
       name_id: name
       description_id: description
@@ -65,7 +72,7 @@ types:
   idField: type_id
   model: InventoryType
   sde:
-    file: sde/fsd/typeIDs.yaml
+    file: fsd/types.yaml
   esi:
     file: universe/types
     languageAttributes:
@@ -98,6 +105,29 @@ types:
       - 1230
       - 17470
       - 17471
+      - 35892
+      - 35833
+      - 9838
+      - 2389
+      - 3645
+      - 2268
+      - 2409
+      - 2412
+      - 2016
+      - 11
+      - 2470
+      - 2480
+      - 60377
+      - 34
+      - 37158
+      - 37150
+      - 43880
+      - 43879
+      - 43729
+      - 43891
+      - 43714
+      - 37152
+      - 43704
     languages:
       - en-us
       - fr
@@ -106,7 +136,7 @@ typeMaterials:
   outputStore: types
   dedicatedOutput: false
   sde:
-    file: sde/fsd/typeMaterials.yaml
+    file: fsd/typeMaterials.yaml
     renames:
       materials: type_materials
     arrayToObjects:
@@ -126,7 +156,7 @@ typeDogma:
   outputStore: types
   dedicatedOutput: false
   sde:
-    file: sde/fsd/typeDogma.yaml
+    file: fsd/typeDogma.yaml
     arrayToObjects:
       dogma_attributes: attribute_id
       dogma_effects: effect_id
@@ -140,7 +170,7 @@ dogmaAttributes:
   idField: attribute_id
   model: DogmaAttribute
   sde:
-    file: sde/fsd/dogmaAttributes.yaml
+    file: fsd/dogmaAttributes.yaml
     renames:
       display_name_id: display_name
       tooltip_title_id: tooltip_title
@@ -180,12 +210,18 @@ dogmaAttributes:
       - 2699
       - 2711
       - 162
+      - 1302
+      - 1303
+      - 1304
+      - 1305
+      - 790
+      - 2355
 
 dogmaEffects:
   idField: effect_id
   model: DogmaEffect
   sde:
-    file: sde/fsd/dogmaEffects.yaml
+    file: fsd/dogmaEffects.yaml
     renames:
       description_id: description
       display_name_id: display_name
@@ -215,7 +251,7 @@ metaGroups:
   idField: meta_group_id
   model: MetaGroup
   sde:
-    file: sde/fsd/metaGroups.yaml
+    file: fsd/metaGroups.yaml
     renames:
       name_id: name
       description_id: description
@@ -251,6 +287,7 @@ skills:
       - 3336
       - 33093
       - 33097
+      - 60377
 
 units:
   idField: unit_id
@@ -265,12 +302,13 @@ units:
     ids:
       - 1
       - 2
+      - 133
 
 blueprints:
   idField: blueprint_type_id
   model: Blueprint
   sde:
-    file: sde/fsd/blueprints.yaml
+    file: fsd/blueprints.yaml
   hoboleaks:
     file: blueprints.json
   test:
@@ -283,7 +321,7 @@ icons:
   idField: icon_id
   model: Icon
   sde:
-    file: sde/fsd/iconIDs.yaml
+    file: fsd/iconIDs.yaml
   test:
     filePrefix: icon
     ids:
@@ -302,7 +340,7 @@ regions:
     removes:
       - constellations
   sde:
-    fileRegex: ^sde\/fsd\/universe\/(?<universeId>[a-zA-Z0-9-]+)\/[a-zA-Z0-9-]+\/region\.staticdata$
+    fileRegex: ^universe\/(?<universeId>[a-zA-Z0-9-]+)\/[a-zA-Z0-9-]+\/region\.yaml$
     individualFiles: true
     renames:
       nebula: nebula_id
@@ -316,3 +354,21 @@ regions:
     languages:
       - en-us
       - ja
+
+schematics:
+  idField: schematic_id
+  model: Schematic
+  esi:
+    file: universe/schematics
+    renames:
+      schematic_name: name
+    languageAttributes:
+      - name
+  sde:
+    file: fsd/planetSchematics.yaml
+    renames:
+      name_id: name
+  test:
+    filePrefix: schematic
+    ids:
+      - 65

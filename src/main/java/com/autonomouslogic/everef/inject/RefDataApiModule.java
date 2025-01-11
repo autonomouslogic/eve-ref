@@ -2,7 +2,7 @@ package com.autonomouslogic.everef.inject;
 
 import static com.autonomouslogic.everef.config.Configs.REF_DATA_BASE_URL;
 
-import com.autonomouslogic.everef.openapi.refdata.apis.RefdataApi;
+import com.autonomouslogic.everef.openapi.refdata.api.RefdataApi;
 import com.autonomouslogic.everef.openapi.refdata.invoker.ApiClient;
 import dagger.Module;
 import dagger.Provides;

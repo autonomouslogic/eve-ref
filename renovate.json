@@ -3,14 +3,19 @@
   "extends": [
     "github>autonomouslogic/renovate-config"
   ],
-  "packageRules": [{
-    "packageNames": ["@nuxtjs/i18n"],
-    "allowedVersions": "> 8.0.0-beta.12"
-  }, {
-    "groupName": "flyway monorepo",
+  "packageRules": [
+    {
+      "groupName": "flyway monorepo",
+      "matchPackageNames": [
+        "flyway",
+        "org.flywaydb.flyway",
+        "org.flywaydb:flyway-core"
+      ]
+    }, {
+    "groupName": "swagger-gradle-plugin",
     "matchPackageNames": [
-      "org.flywaydb.flyway",
-      "org.flywaydb:flyway-core"
-    ]
+      "io.swagger.core.v3.swagger-gradle-plugin"
+    ],
+    "allowedVersions": ">2.2.27"
   }]
 }

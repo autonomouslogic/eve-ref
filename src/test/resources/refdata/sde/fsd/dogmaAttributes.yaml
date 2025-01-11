@@ -453,3 +453,128 @@
   name: "radius"
   published: false
   stackable: true
+"1302":
+  attributeID: 1302
+  categoryID: 1
+  dataType: 11
+  defaultValue: 0
+  description: ""
+  displayNameID:
+    de: "Kann eingebaut werden in"
+    en: "Can be fitted to"
+    es: "Se puede equipar en"
+    fr: "Peut être équipé sur"
+    ja: "装着可能対象"
+    ko: "피팅 가능한 대상:"
+    ru: "Устанавливается на"
+    zh: "可装配至"
+  highIsGood: true
+  iconID: 1443
+  name: "canFitShipType1"
+  published: true
+  stackable: true
+  unitID: 116
+"1303":
+  attributeID: 1303
+  categoryID: 1
+  dataType: 11
+  defaultValue: 0
+  description: ""
+  displayNameID:
+    de: "Kann eingebaut werden in"
+    en: "Can be fitted to"
+    es: "Se puede equipar en"
+    fr: "Peut être équipé sur"
+    ja: "装着可能対象"
+    ko: "피팅 가능한 대상:"
+    ru: "Устанавливается на"
+    zh: "可装配至"
+  highIsGood: true
+  iconID: 1443
+  name: "canFitShipType2"
+  published: true
+  stackable: true
+  unitID: 116
+"1304":
+  attributeID: 1304
+  categoryID: 1
+  dataType: 11
+  defaultValue: 0
+  description: ""
+  displayNameID:
+    de: "Kann eingebaut werden in"
+    en: "Can be fitted to"
+    es: "Se puede equipar en"
+    fr: "Peut être équipé sur"
+    ja: "装着可能対象"
+    ko: "피팅 가능한 대상:"
+    ru: "Устанавливается на"
+    zh: "可装配至"
+  highIsGood: true
+  iconID: 1443
+  name: "canFitShipType3"
+  published: true
+  stackable: true
+  unitID: 116
+"1305":
+  attributeID: 1305
+  categoryID: 1
+  dataType: 11
+  defaultValue: 0
+  description: ""
+  displayNameID:
+    de: "Kann eingebaut werden in"
+    en: "Can be fitted to"
+    es: "Se puede equipar en"
+    fr: "Peut être équipé sur"
+    ja: "装着可能対象"
+    ko: "피팅 가능한 대상:"
+    ru: "Устанавливается на"
+    zh: "可装配至"
+  highIsGood: true
+  iconID: 1443
+  name: "canFitShipType4"
+  published: true
+  stackable: true
+  unitID: 116
+"790":
+  attributeID: 790
+  categoryID: 7
+  dataType: 11
+  defaultValue: 0
+  description: "The skill required to reprocess this ore type."
+  displayNameID:
+    de: "Aufbereitung-Skill"
+    en: "Reprocessing Skill"
+    es: "Habilidad de reprocesamiento"
+    fr: "Compétence de retraitement"
+    ja: "再処理スキル"
+    ko: "재처리 스킬"
+    ru: "Навык переработки"
+    zh: "回收再生技能"
+  highIsGood: true
+  iconID: 0
+  name: "reprocessingSkillType"
+  published: true
+  stackable: true
+  unitID: 116
+"2355":
+  attributeID: 2355
+  categoryID: 37
+  dataType: 5
+  defaultValue: 1
+  description: ""
+  displayNameID:
+    de: "Hochsicherheits-Bonusmultiplikator"
+    en: "High Security Bonus Multiplier"
+    es: "Multiplicador de bonificación de seguridad alta"
+    fr: "High Security Bonus Multiplier"
+    ja: "高セキュリティボーナス乗数"
+    ko: "하이 시큐리티 보너스 배수"
+    ru: "Изменение влияния в планетных системах метрополии («хай-сек»)"
+    zh: "高安加成系数"
+  highIsGood: true
+  name: "hiSecModifier"
+  published: true
+  stackable: true
+  unitID: 104

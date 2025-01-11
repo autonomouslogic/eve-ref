@@ -1,6 +1,8 @@
 package com.autonomouslogic.everef.cli;
 
+import com.autonomouslogic.everef.cli.basiclogin.BasicLogin;
 import com.autonomouslogic.everef.cli.decorator.HealthcheckDecorator;
+import com.autonomouslogic.everef.cli.decorator.SentryDecorator;
 import com.autonomouslogic.everef.cli.decorator.SlackDecorator;
 import com.autonomouslogic.everef.cli.flyway.FlywayMigrate;
 import com.autonomouslogic.everef.cli.markethistory.imports.ImportMarketHistory;
@@ -9,7 +11,9 @@ import com.autonomouslogic.everef.cli.marketorders.ScrapeMarketOrders;
 import com.autonomouslogic.everef.cli.publiccontracts.ScrapePublicContracts;
 import com.autonomouslogic.everef.cli.publishrefdata.PublishRefData;
 import com.autonomouslogic.everef.cli.refdata.BuildRefData;
+import com.autonomouslogic.everef.cli.structures.ScrapeStructures;
 import io.reactivex.rxjava3.core.Completable;
+import io.sentry.Sentry;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -61,6 +65,24 @@ public class CommandRunner {
 	protected Provider<ImportMarketHistory> importMarketHistoryProvider;
 
 	@Inject
+	protected Provider<BasicLogin> basicLoginProvider;
+
+	@Inject
+	protected Provider<ScrapeStructures> scrapeStructuresProvider;
+
+	@Inject
+	protected Provider<BuildSearch> buildSearchProvider;
+
+	@Inject
+	protected Provider<FetchDonations> fetchDonationsProvider;
+
+	@Inject
+	protected Provider<GenerateKeyPair> generateKeyPairProvider;
+
+	@Inject
+	protected SentryDecorator sentryDecorator;
+
+	@Inject
 	protected HealthcheckDecorator healthcheckDecorator;
 
 	@Inject
@@ -76,9 +98,10 @@ public class CommandRunner {
 		if (args.length > 1) {
 			throw new IllegalArgumentException("More than one command specified");
 		}
-		var command = createCommand(args[0]);
-		command = decorateCommand(command);
-		return runCommand(command);
+		final var command = createCommand(args[0]);
+		Sentry.configureScope(scope -> scope.setContexts("command", command.getName()));
+		var decoratedCommand = decorateCommand(command);
+		return runCommand(decoratedCommand);
 	}
 
 	private Completable runCommand(Command command) {
@@ -121,6 +144,16 @@ public class CommandRunner {
 				return flywayMigrateProvider.get();
 			case "import-market-history":
 				return importMarketHistoryProvider.get();
+			case "basic-login":
+				return basicLoginProvider.get();
+			case "scrape-structures":
+				return scrapeStructuresProvider.get();
+			case "build-search":
+				return buildSearchProvider.get();
+			case "fetch-donations":
+				return fetchDonationsProvider.get();
+			case "generate-key-pair":
+				return generateKeyPairProvider.get();
 			default:
 				throw new IllegalArgumentException("Unknown command: " + name);
 		}
@@ -129,6 +162,7 @@ public class CommandRunner {
 	private Command decorateCommand(Command command) {
 		command = healthcheckDecorator.decorate(command);
 		command = slackDecorator.decorate(command);
+		command = sentryDecorator.decorate(command);
 		return command;
 	}
 }

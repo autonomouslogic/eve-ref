@@ -1,0 +1,180 @@
+<script setup lang="ts">
+import ExternalLink from "~/components/helpers/ExternalLink.vue";
+import {
+	DATE_TOVIKOV_CHAR,
+	DISCORD_URL,
+	EVE_REF_CHAR,
+	EVE_REF_CORP,
+	EVE_REFERRAL_URL,
+	EVE_STORE_URL,
+	GITHUB_URL,
+	HETZNER_REFERAL_URL,
+	MARKEE_DRAGON_URL,
+	PATREON_URL
+} from "~/lib/urls";
+import {getJitaSellPrice} from "~/lib/marketUtils";
+import {DAILY_ALPHA_INJECTOR, LARGE_SKILL_INJECTOR, PLEX_TYPE_ID} from "~/lib/typeConstants";
+import {DateTime} from "luxon";
+import refdata from "~/refdata";
+import TypeLink from "~/components/helpers/TypeLink.vue";
+import Money from "~/components/dogma/units/Money.vue";
+import Datetime from "~/components/dogma/units/Datetime.vue";
+import InternalLink from "~/components/helpers/InternalLink.vue";
+import Duration from "~/components/dogma/units/Duration.vue";
+import {DAY} from "~/lib/timeUtils";
+
+useHead({
+	title: "🎉 Giveaways"
+});
+
+interface Prize {
+	name: string,
+	typeId: number,
+	quantity: number,
+	winners: number,
+	value: number,
+	jitaSpace: boolean,
+	dates: DateTime[],
+	i: number
+}
+
+const ASTERO_SCOPE_SYNDICATION = 56880;
+const VEXOR_SCOPE_SYNDICATION = 56882;
+const LESHAK_SCOPE_SYNDICATION = 61182;
+const RUPTURE_SCOPE_SYNDICATION = 56883;
+const STRATIOS_SCOPE_SYNDICATION = 61186;
+const FEDERATION_NAVY_COMET_MEDIA_MIASMA = 84115;
+const NIGHTMARE_MEDIA_MIASMA = 84131;
+
+const weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+
+const plexPrice = await getJitaSellPrice(PLEX_TYPE_ID) || 0;
+
+const firstFleetPack = DateTime.fromISO("2024-12-13T20:00:00+09");
+const fleetPackDates = [];
+for (let i = 0; i < 19; i++) {
+	fleetPackDates.push(firstFleetPack.plus({days: i}));
+}
+
+const prizes: Prize[] = [];
+
+var i = 0;
+for (let prize of prizes) {
+	if (prize.quantity == undefined) {
+		prize.quantity = 1;
+	}
+	if (prize.winners == undefined) {
+		prize.winners = 1;
+	}
+	if (prize.value == undefined && prize.typeId != undefined) {
+		const price = await getJitaSellPrice(prize.typeId) || 0;
+		prize.value = price * prize.quantity;
+	}
+}
+
+const unrolled = prizes.flatMap(prize => prize.dates.map(date => {
+	return ({
+		name: prize.name,
+		typeId: prize.typeId,
+		quantity: prize.quantity,
+		value: prize.value,
+		winners: prize.winners,
+		jitaSpace: prize.jitaSpace,
+		dates: [date],
+		i : i++
+	});
+}));
+
+unrolled.sort((a, b) => a.dates[0].toMillis() - b.dates[0].toMillis());
+
+const totalWorth = unrolled.reduce((acc, prize) => acc + prize.value * prize.winners, 0);
+
+const pastGiveaways = {
+	"December 2024": 33.52e9
+};
+
+</script>
+
+<template>
+	<h1>🎉 Giveaways</h1>
+	<p>
+		Join #giveaways on <InternalLink :to="DISCORD_URL">Discord</InternalLink> to participate.
+	</p>
+	<p>
+		Below is the approximate schedule of the upcoming giveaways.
+	</p>
+	<p>
+		Items will be contracted in Jita. Codes will be sent on Discord and can be redeemed via the <ExternalLink url="https://secure.eveonline.com/code-activation">Code Activation</ExternalLink> page.
+	</p>
+
+	<h2>Schedule</h2>
+	<p v-if="unrolled.length == 0">
+		No scheduled giveaways right now, but some may be posted sporadically on Discord.
+	</p>
+	<table v-else class="standard-table">
+		<thead>
+			<th>Prize</th>
+			<th class="text-right">Value</th>
+			<th class="text-right">Winners</th>
+			<th>Draw time</th>
+		</thead>
+		<tbody>
+			<tr v-for="prize in unrolled" :key="prize.i">
+
+				<td v-if="prize.name">{{prize.name}}</td>
+				<td v-else-if="prize.typeId">
+					<template v-if="prize.quantity > 1">{{prize.quantity}}x&nbsp;</template>
+					<TypeLink :type-id="prize.typeId" />
+					<template v-if="prize.jitaSpace">
+						- sponsored by <ExternalLink url="https://jita.space" title="Jita Space">Jita.space</ExternalLink>
+					</template>
+				</td>
+
+				<td class="text-right">
+					<Money :value="prize.value" />
+				</td>
+
+				<td class="text-right">
+					{{prize.winners}}
+				</td>
+
+				<td>
+					<template v-if="prize.dates[0].toMillis() > DateTime.now().toMillis()">
+						<Datetime :millisecond-epoch="prize.dates[0].toMillis()" />
+						<template v-if="prize.dates[0].toMillis() - DateTime.now().toMillis() < DAY">
+							(today)
+						</template>
+						<template v-else-if="prize.dates[0].toMillis() - DateTime.now().toMillis() < 8 * DAY">
+							(next {{weekdays[prize.dates[0].weekday - 1]}})
+						</template>
+					</template>
+					<template v-else>
+						Ended
+					</template>
+				</td>
+
+			</tr>
+		</tbody>
+	</table>
+
+	<h2>Past giveaways</h2>
+
+	<table class="standard-table">
+		<thead>
+			<th>Event</th>
+			<th class="text-right">Prizes</th>
+		</thead>
+		<tbody>
+			<tr v-for="(prizes, name) in pastGiveaways" :key="name">
+				<td>{{name}}</td>
+				<td class="text-right"><Money :value="prizes" /></td>
+			</tr>
+		</tbody>
+	</table>
+</template>
+
+<style scoped>
+p {
+  @apply my-4;
+}
+</style>

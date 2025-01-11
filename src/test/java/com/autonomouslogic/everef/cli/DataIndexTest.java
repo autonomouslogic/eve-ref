@@ -141,6 +141,7 @@ public class DataIndexTest {
 				// Timestamp overridden by header in metadata.
 				List.of(new FileLink("/data.zip", "data.zip", "16 bytes", "16", "1999-07-12T14:26:23Z")),
 				getFileLinks(html));
+		verifySizeOverview(html, "2", "1", "16 bytes");
 	}
 
 	private void verifyDir1Index() {
@@ -149,6 +150,7 @@ public class DataIndexTest {
 		assertEquals(
 				List.of(new FileLink("/dir/more-data.zip", "more-data.zip", "25 bytes", "25", "2000-01-01T00:00:03Z")),
 				getFileLinks(html));
+		verifySizeOverview(html, "1", "1", "25 bytes");
 	}
 
 	private void verifyDir1SubIndex() {
@@ -158,6 +160,7 @@ public class DataIndexTest {
 				List.of(new FileLink(
 						"/dir/sub/sub-data.zip", "sub-data.zip", "28 bytes", "28", "2000-01-01T00:00:04Z")),
 				getFileLinks(html));
+		verifySizeOverview(html, "0", "1", "28 bytes");
 	}
 
 	private void verifyDir2Index() {
@@ -167,6 +170,7 @@ public class DataIndexTest {
 				List.of(new FileLink(
 						"/dir2/more-data2.zip", "more-data2.zip", "27 bytes", "27", "2000-01-01T00:00:05Z")),
 				getFileLinks(html));
+		verifySizeOverview(html, "0", "1", "27 bytes");
 	}
 
 	private String getPageContent(String path) {
@@ -196,6 +200,20 @@ public class DataIndexTest {
 							attrTime.toString());
 				})
 				.toList();
+	}
+
+	private void verifySizeOverview(
+			String html, String expectedDirectories, String expectedFiles, String expectedSize) {
+		var dom = Jsoup.parse(html);
+		var directories = dom.select(".data-directory-directories");
+		var files = dom.select(".data-directory-files");
+		var size = dom.select(".data-directory-size");
+		assertEquals(1, directories.size());
+		assertEquals(1, files.size());
+		assertEquals(1, size.size());
+		assertEquals(expectedDirectories, directories.text());
+		assertEquals(expectedFiles, files.text());
+		assertEquals(expectedSize, size.text());
 	}
 
 	@Value

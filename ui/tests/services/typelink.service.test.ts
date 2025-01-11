@@ -19,4 +19,13 @@ describe('TypeLinkService', () => {
         const actual = new TypeLinkService().parse(input);
         expect(actual).toEqual(expected);
     });
+
+    it.each([
+        ["a\nb"],
+        ["a\r\nb"],
+    ])('should render line-breaks', (input: string) => {
+        const expected = ['a<br/>b'];
+        const actual = new TypeLinkService().parse(input);
+        expect(actual).toEqual(expected);
+    });
 });

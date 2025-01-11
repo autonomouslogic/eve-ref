@@ -1,0 +1,134 @@
+---
+"27":
+  anchorable: false
+  anchored: false
+  categoryID: 6
+  fittableNonSingleton: false
+  name:
+    de: "Schlachtschiff"
+    en: "Battleship"
+    es: "Acorazado"
+    fr: "Cuirassé"
+    ja: "戦艦"
+    ko: "배틀쉽"
+    ru: "Линкор"
+    zh: "战列舰"
+  published: true
+  useBasePrice: false
+"257":
+  anchorable: false
+  anchored: false
+  categoryID: 16
+  fittableNonSingleton: false
+  name:
+    de: "Raumschiff-Kommando"
+    en: "Spaceship Command"
+    es: "Manejo de naves espaciales"
+    fr: "Pilotage de vaisseau"
+    ja: "宇宙船操作"
+    ko: "함선 운용"
+    ru: "Допуски к управлению кораблями"
+    zh: "飞船操控学"
+  published: true
+  useBasePrice: true
+"1185":
+  anchorable: false
+  anchored: false
+  categoryID: 11
+  fittableNonSingleton: false
+  name:
+    de: "FW Schlachtkreuzer der Gallente-Föderation"
+    en: "FW Gallente Federation Battlecruiser"
+    es: "Crucero de combate de GF de la Federación Gallente"
+    fr: "Croiseur de bataille Fédération gallente GF"
+    ja: "FWガレンテ連邦巡洋戦艦"
+    ko: "FW 갈란테 배틀크루저"
+    ru: "Линейный крейсер ополчения Галлентской Федерации"
+    zh: "势力战争盖伦特联邦战列舰"
+  published: true
+  useBasePrice: false
+"1218":
+  anchorable: false
+  anchored: false
+  categoryID: 16
+  fittableNonSingleton: false
+  name:
+    de: "Ressourcenverarbeitung"
+    en: "Resource Processing"
+    es: "Procesamiento de recursos"
+    fr: "Traitement des ressources"
+    ja: "資源加工"
+    ko: "자원 정제"
+    ru: "Добыча и переработка сырья"
+    zh: "资源处理"
+  published: true
+  useBasePrice: true
+"513":
+  anchorable: false
+  anchored: false
+  categoryID: 6
+  fittableNonSingleton: false
+  iconID: 0
+  name:
+    de: "Frachter"
+    en: "Freighter"
+    es: "Carguero"
+    fr: "Transport de fret"
+    ja: "超大型輸送艦"
+    ko: "프레이터"
+    ru: "Фрейтер"
+    zh: "货舰"
+  published: true
+  useBasePrice: false
+"941":
+  anchorable: false
+  anchored: false
+  categoryID: 6
+  fittableNonSingleton: false
+  name:
+    de: "Industrial-Kommandoschiff"
+    en: "Industrial Command Ship"
+    es: "Nave de mando industrial"
+    fr: "Vaisseau de commandement industriel"
+    ja: "指揮型輸送艦"
+    ko: "인더스트리얼 커맨드쉽"
+    ru: "Флагман буровой флотилии"
+    zh: "工业指挥舰"
+  published: true
+  useBasePrice: false
+"1869":
+  anchorable: false
+  anchored: false
+  categoryID: 66
+  fittableNonSingleton: false
+  name:
+    de: "Struktur: Ingenieursanlage XL - Ausrüstungs- und Komponenteneffizienz"
+    en: "Structure Engineering Rig XL - Structure and Component Efficiency"
+    es: "Complemento de ingeniería para estructuras (XL): eficiencia de componente\
+      \ y estructura"
+    fr: "Optimisation d'ingénierie XL (Structure) – Efficience industrielle structures\
+      \ et composants"
+    ja: "ストラクチャエンジニアリングリグXL - ストラクチャとコンポーネント効率"
+    ko: "구조물 엔지니어링 리그 XL - 구조물 및 부품 효율성"
+    ru: "Промышленный модификатор сверхбольших сооружений - эффективность производ\
+      ства сооружений и компонентов"
+    zh: "建筑工程超大型改装件 - 建筑和组件效率"
+  published: true
+  useBasePrice: false
+"332":
+  anchorable: false
+  anchored: false
+  categoryID: 17
+  fittableNonSingleton: false
+  iconID: 0
+  name:
+    de: "Werkzeug"
+    en: "Tool"
+    es: "Herramienta"
+    fr: "Outil"
+    ja: "ツール"
+    ko: "도구"
+    ru: "Инструмент"
+    zh: "工具"
+  published: true
+  useBasePrice: false

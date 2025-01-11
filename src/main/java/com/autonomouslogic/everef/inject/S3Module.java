@@ -1,6 +1,6 @@
 package com.autonomouslogic.everef.inject;
 
-import com.autonomouslogic.everef.config.Config;
+import com.autonomouslogic.commons.config.Config;
 import com.autonomouslogic.everef.config.Configs;
 import dagger.Module;
 import dagger.Provides;
@@ -22,6 +22,9 @@ public class S3Module {
 
 	@Setter
 	S3AsyncClient referenceDataClient;
+
+	@Setter
+	S3AsyncClient staticClient;
 
 	@Provides
 	@Named("data")
@@ -45,6 +48,18 @@ public class S3Module {
 			return referenceDataClient;
 		}
 		return createClient(credentialsProvider, region, Configs.REFERENCE_DATA_S3_ENDPOINT_URL);
+	}
+
+	@Provides
+	@Named("static")
+	@Singleton
+	@SneakyThrows
+	public S3AsyncClient staticClient(
+			@Named("static") AwsCredentialsProvider credentialsProvider, @Named("static") Optional<Region> region) {
+		if (staticClient != null) {
+			return staticClient;
+		}
+		return createClient(credentialsProvider, region, Configs.STATIC_S3_ENDPOINT_URL);
 	}
 
 	private static S3AsyncClient createClient(

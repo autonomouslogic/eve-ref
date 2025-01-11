@@ -6,13 +6,19 @@ import com.autonomouslogic.everef.cli.Command;
 import com.autonomouslogic.everef.cli.refdata.esi.EsiLoader;
 import com.autonomouslogic.everef.cli.refdata.hoboleaks.HoboleaksLoader;
 import com.autonomouslogic.everef.cli.refdata.post.BlueprintDecorator;
+import com.autonomouslogic.everef.cli.refdata.post.CanFitDecorator;
+import com.autonomouslogic.everef.cli.refdata.post.CategoryIdDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.GroupsDecorator;
+import com.autonomouslogic.everef.cli.refdata.post.IndustryModifierSourcesDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.MarketGroupsDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.MissingDogmaUnitsDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.MutaplasmidDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.OreVariationsDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.PostDecorator;
+import com.autonomouslogic.everef.cli.refdata.post.ReprocessableTypesDecorator;
+import com.autonomouslogic.everef.cli.refdata.post.SchematicDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.SkillDecorator;
+import com.autonomouslogic.everef.cli.refdata.post.TypeUsedInBlueprintsDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.TypesDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.VariationsDecorator;
 import com.autonomouslogic.everef.cli.refdata.sde.SdeLoader;
@@ -127,6 +133,9 @@ public class BuildRefData implements Command {
 	protected BlueprintDecorator blueprintDecorator;
 
 	@Inject
+	protected SchematicDecorator schematicDecorator;
+
+	@Inject
 	protected GroupsDecorator groupsDecorator;
 
 	@Inject
@@ -140,6 +149,21 @@ public class BuildRefData implements Command {
 
 	@Inject
 	protected MissingDogmaUnitsDecorator missingDogmaUnitsDecorator;
+
+	@Inject
+	protected CanFitDecorator canFitDecorator;
+
+	@Inject
+	protected ReprocessableTypesDecorator reprocessableTypesDecorator;
+
+	@Inject
+	protected TypeUsedInBlueprintsDecorator typeUsedInBlueprintsDecorator;
+
+	@Inject
+	protected IndustryModifierSourcesDecorator industryModifierSourcesDecorator;
+
+	@Inject
+	protected CategoryIdDecorator categoryIdDecorator;
 
 	@Setter
 	@NonNull
@@ -170,6 +194,8 @@ public class BuildRefData implements Command {
 	@Getter
 	private StoreHandler storeHandler;
 
+	private List<PostDecorator> allDecorators;
+
 	private S3Url dataUrl;
 	private MVStore mvStore;
 
@@ -179,17 +205,27 @@ public class BuildRefData implements Command {
 	@Inject
 	protected void init() {
 		dataUrl = (S3Url) urlParser.parse(Configs.DATA_PATH.getRequired());
+		allDecorators = List.of(
+				categoryIdDecorator,
+				skillDecorator,
+				mutaplasmidDecorator,
+				variationsDecorator,
+				blueprintDecorator,
+				schematicDecorator,
+				groupsDecorator,
+				typesDecorator,
+				marketGroupsDecorator,
+				oreVariationsDecorator,
+				missingDogmaUnitsDecorator,
+				canFitDecorator,
+				reprocessableTypesDecorator,
+				typeUsedInBlueprintsDecorator,
+				industryModifierSourcesDecorator);
 	}
 
 	@Override
 	public Completable run() {
-		return Completable.concatArray(initMvStore(), latestFiles().andThen(Completable.defer(() -> {
-			if (processingNeeded()) {
-				return processData();
-			}
-			log.info("No update needed");
-			return Completable.complete();
-		})));
+		return Completable.concatArray(initMvStore(), latestFiles(), checkAndProcess());
 	}
 
 	private Completable latestFiles() {
@@ -215,6 +251,16 @@ public class BuildRefData implements Command {
 						.sha256(HashUtil.sha256Hex(hoboleaksFile))
 						.build())
 				.build();
+	}
+
+	private Completable checkAndProcess() {
+		return Completable.defer(() -> {
+			if (!processingNeeded()) {
+				log.info("No update needed");
+				return Completable.complete();
+			}
+			return processData();
+		});
 	}
 
 	private boolean processingNeeded() {
@@ -249,15 +295,9 @@ public class BuildRefData implements Command {
 			esiLoader.setStoreHandler(storeHandler);
 			hoboleaksLoader.setStoreHandler(storeHandler);
 
-			skillDecorator.setStoreHandler(storeHandler);
-			mutaplasmidDecorator.setStoreHandler(storeHandler);
-			variationsDecorator.setStoreHandler(storeHandler);
-			blueprintDecorator.setStoreHandler(storeHandler);
-			groupsDecorator.setStoreHandler(storeHandler);
-			typesDecorator.setStoreHandler(storeHandler);
-			marketGroupsDecorator.setStoreHandler(storeHandler);
-			oreVariationsDecorator.setStoreHandler(storeHandler);
-			missingDogmaUnitsDecorator.setStoreHandler(storeHandler);
+			for (var decorator : allDecorators) {
+				decorator.setStoreHandler(storeHandler);
+			}
 		});
 	}
 
@@ -274,19 +314,8 @@ public class BuildRefData implements Command {
 	}
 
 	private Completable postDatasets() {
-		return Completable.concat(List.of(
-						skillDecorator,
-						mutaplasmidDecorator,
-						variationsDecorator,
-						blueprintDecorator,
-						groupsDecorator,
-						typesDecorator,
-						marketGroupsDecorator,
-						oreVariationsDecorator,
-						missingDogmaUnitsDecorator)
-				.stream()
-				.map(this::runPostDecorator)
-				.toList());
+		return Completable.concat(
+				allDecorators.stream().map(this::runPostDecorator).toList());
 	}
 
 	private Completable runPostDecorator(PostDecorator decorator) {
@@ -345,7 +374,12 @@ public class BuildRefData implements Command {
 			generator.writeStartObject();
 			for (var entry : store.entrySet()) {
 				generator.writeFieldName(entry.getKey().toString());
-				printer.writeValue(generator, entry.getValue());
+				var json = entry.getValue();
+				var bytes = json.toString().length();
+				if (bytes > 64 * 1024) {
+					log.info("Large entry: {} {} - {} bytes", name, entry.getKey(), bytes);
+				}
+				printer.writeValue(generator, json);
 			}
 			generator.writeEndObject();
 		}

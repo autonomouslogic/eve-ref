@@ -1,10 +1,18 @@
 import {
-    Bundle,
+    BlueprintToJSON,
+    type Bundle,
     Configuration,
     DogmaAttributeToJSON,
-    FetchAPI, IconToJSON,
+    type FetchAPI,
+    IconToJSON,
+    InventoryCategoryToJSON,
+    InventoryGroupToJSON,
     InventoryTypeToJSON,
-    RefdataApi, SkillToJSON, UnitToJSON
+    MarketGroupToJSON,
+    MetaGroupToJSON,
+    RefdataApi,
+    SkillToJSON,
+    UnitToJSON
 } from "~/refdata-openapi";
 
 const cache: { [key: string]: string; } = {};
@@ -34,6 +42,31 @@ function cacheBundleObj(bundle: Bundle): void {
         const icon = bundle.icons[iconId];
         const path = "/icons/" + iconId;
         cache[path] = JSON.stringify(IconToJSON(icon));
+    }
+    for (let marketGroupId in bundle.marketGroups) {
+        const marketGroup = bundle.marketGroups[marketGroupId];
+        const path = "/market_groups/" + marketGroupId;
+        cache[path] = JSON.stringify(MarketGroupToJSON(marketGroup));
+    }
+    for (let categoryId in bundle.categories) {
+        const category = bundle.categories[categoryId];
+        const path = "/categories/" + categoryId;
+        cache[path] = JSON.stringify(InventoryCategoryToJSON(category));
+    }
+    for (let groupId in bundle.groups) {
+        const group = bundle.groups[groupId];
+        const path = "/groups/" + groupId;
+        cache[path] = JSON.stringify(InventoryGroupToJSON(group));
+    }
+    for (let groupId in bundle.metaGroups) {
+        const group = bundle.metaGroups[groupId];
+        const path = "/meta_groups/" + groupId;
+        cache[path] = JSON.stringify(MetaGroupToJSON(group));
+    }
+    for (let blueprintId in bundle.blueprints) {
+        const blueprint = bundle.blueprints[blueprintId];
+        const path = "/blueprints/" + blueprintId;
+        cache[path] = JSON.stringify(BlueprintToJSON(blueprint));
     }
 }
 
@@ -75,7 +108,42 @@ const refdataApi: RefdataApi = new RefdataApi(config);
 
 export default refdataApi;
 
-export async function cacheBundle(typeId: number): Promise<void> {
+export async function cacheCategoryBundle(categoryId: number): Promise<void> {
+    const bundle = await refdataApi.getCategoryBundle({categoryId});
+    if (bundle) {
+        cacheBundleObj(bundle);
+    }
+}
+
+export async function cacheCategoriesBundle(): Promise<void> {
+    const bundle = await refdataApi.getCategoriesBundle();
+    if (bundle) {
+        cacheBundleObj(bundle);
+    }
+}
+
+export async function cacheGroupBundle(groupId: number): Promise<void> {
+    const bundle = await refdataApi.getGroupBundle({groupId});
+    if (bundle) {
+        cacheBundleObj(bundle);
+    }
+}
+
+export async function cacheRootMarketGroupBundle(): Promise<void> {
+    const bundle = await refdataApi.getRootMarketGroupsBundle();
+    if (bundle) {
+        cacheBundleObj(bundle);
+    }
+}
+
+export async function cacheMarketGroupBundle(marketGroupId: number): Promise<void> {
+    const bundle = await refdataApi.getMarketGroupBundle({marketGroupId});
+    if (bundle) {
+        cacheBundleObj(bundle);
+    }
+}
+
+export async function cacheTypeBundle(typeId: number): Promise<void> {
     const bundle = await refdataApi.getTypeBundle({typeId});
     if (bundle) {
         cacheBundleObj(bundle);

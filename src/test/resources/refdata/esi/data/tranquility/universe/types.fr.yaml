@@ -1000,17 +1000,17 @@
   volume: 40
 "22430":
   capacity: 800
-  description: "Les cuirassés des forces clandestines sont conçus pour les missions\
-    \ d'infiltration et d'espionnage derrière les lignes ennemies. Équipés d'un propulseur\
-    \ interstellaire et d'un générateur de portail, ils sont capables de créer un\
-    \ portail interstellaire furtif, voué à envoyer des vaisseaux des opérations secrè\
-    tes en mission de reconnaissance et d'espionnage derrière les lignes ennemies.\
-    \ Ces vaisseaux incarnent sans aucun doute l'atout maître des manœuvres clandestines.\n\
-    \nConstructeur : CreoDron\n\nPlus grand concepteur et fabricant de drones de tout\
-    \ l'espace, CreoDron investit tout logiquement dans les vaisseaux porte-drones.\
-    \ Tout en sacrifiant relativement peu de choses à ses capacités défensives, le\
-    \ Sin se fraye habilement un chemin parmi ses adversaires... à condition, bien\
-    \ entendu, que le pilote utilise des drones CreoDron ultra-perfectionnés."
+  description: "Les cuirassés des forces spéciales sont conçus pour les missions d'infiltration\
+    \ et d'espionnage derrière les lignes ennemies. Grâce à l'utilisation d'un propulseur\
+    \ interstellaire et d'un générateur de portail, ils peuvent créer un portail interstellaire\
+    \ particulier, utilisable uniquement par les vaisseaux des opérations secrètes.\
+    \ Cela leur permet par exemple d'envoyer furtivement des unités de reconnaissance\
+    \ et d'espionnage en territoire ennemi. Autrement dit, le plan idéal pour les\
+    \ manœuvres clandestines. Plus grand concepteur et fabricant de drones de tout\
+    \ l'espace, CreoDron investit tout logiquement dans les porte-drones. Tout en\
+    \ sacrifiant relativement peu de choses à ses capacités défensives, le Sin se\
+    \ fraye habilement un chemin parmi ses adversaires, à condition, bien entendu,\
+    \ que le pilote utilise des drones CreoDron ultra-perfectionnés."
   dogma_attributes:
   - attribute_id: 3
     value: 0
@@ -1146,8 +1146,6 @@
     value: 0
   - attribute_id: 217
     value: 395
-  - attribute_id: 1253
-    value: 5
   - attribute_id: 1768
     value: 11406
   - attribute_id: 1257
@@ -1169,7 +1167,7 @@
   - attribute_id: 3320
     value: 1
   - attribute_id: 2298
-    value: 6.5
+    value: 7.5
   - attribute_id: 1281
     value: 1
   - attribute_id: 263
@@ -1456,3 +1454,1403 @@
   radius: 1
   type_id: 17471
   volume: 0.1
+"35892":
+  capacity: 0
+  description: "Le centre commercial 'Standup' est un module de service qui permet\
+    \ d'effectuer des transactions approuvées par la CCS et de servir de centre administratif\
+    \ lorsqu'il est installé sur une structure Upwell. Si une structure Upwell dispose\
+    \ d'au moins un module de service fonctionnel, elle entre en mode pleine puissance.\
+    \ Elle bénéficie alors d'une augmentation des points de vie des boucliers et du\
+    \ blindage, ainsi que d'un cycle de renfort de blindage additionnel. La technologie\
+    \ brevetée 'Standup' exploite un dispositif autonome de nano-assemblage pour structure\
+    \ Upwell, alliant un logiciel de modélisation intégré, une baie de nano-assemblage\
+    \ et une réserve de nano-masse. Une fois insérés dans les emplacements dédiés\
+    \ sur les structures Upwell, les dispositifs 'Standup' permettent l'assemblage\
+    \ moléculaire de divers modules de services, modules de structure et optimisations\
+    \ de structure."
+  dogma_attributes:
+  - attribute_id: 4
+    value: 4000
+  - attribute_id: 1304
+    value: 40340
+  - attribute_id: 1302
+    value: 35833
+  - attribute_id: 1303
+    value: 35834
+  - attribute_id: 1944
+    value: 35827
+  - attribute_id: 1305
+    value: 35826
+  - attribute_id: 2334
+    value: 1
+  - attribute_id: 2463
+    value: 47512
+  - attribute_id: 161
+    value: 32000
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 50
+    value: 1200
+  - attribute_id: 30
+    value: 100000
+  - attribute_id: 2486
+    value: 47513
+  - attribute_id: 2103
+    value: 35836
+  - attribute_id: 2488
+    value: 47515
+  - attribute_id: 2108
+    value: 1136
+  - attribute_id: 2109
+    value: 40
+  - attribute_id: 2110
+    value: 2880
+  - attribute_id: 2758
+    value: 47516
+  - attribute_id: 2487
+    value: 47514
+  - attribute_id: 2744
+    value: 4
+  - attribute_id: 2804
+    value: 1
+  - attribute_id: 2431
+    value: 1
+  dogma_effects:
+  - effect_id: 16
+    is_default: false
+  - effect_id: 6306
+    is_default: false
+  - effect_id: 7009
+    is_default: false
+  group_id: 1321
+  icon_id: 21595
+  market_group_id: 2232
+  mass: 4000
+  name: "Centre d'affaires 'Standup' I"
+  packaged_volume: 32000
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 35892
+  volume: 32000
+"35833":
+  capacity: 0
+  description: "Grâce à ses nombreux services de structure, la citadelle Fortizar\
+    \ du consortium Upwell représente la base d'opérations idéale des grandes corporations\
+    \ ou des petites alliances capsulières en quête de territoire, ou encore une solide\
+    \ plate-forme commerciale pour les grandes alliances. La Fortizar accueille tous\
+    \ les vaisseaux sous-capitaux dans ses baies d'amarrage traditionnelles, et jusqu'aux\
+    \ vaisseaux de classe cargo et capital grâce à ses technologies d'arrimage innovantes.\
+    \ Bien que la Fortizar ne dispose d'aucune baie capable d'amarrer les vaisseaux\
+    \ supercapitaux, la citadelle est parée de systèmes défensifs avancés particuliè\
+    rement redoutables en espace de basse sécurité, où elle se hérisse d'armes à effet\
+    \ de zone dissuasives. La citadelle Fortizar se configure avec la gamme de modules\
+    \ dédiée 'Standup' intégrant la technologie Upwell, au profit de la synchronisation\
+    \ parfaite des manœuvres des opérateurs de structure. Les sets d'optimisation\
+    \ 'Standup'\_L permettent également de parachever la spécialisation de la Fortizar\
+    \ grâce à leurs paramétrages sophistiqués."
+  dogma_attributes:
+  - attribute_id: 1547
+    value: 3
+  - attribute_id: 2112
+    value: 0.00001
+  - attribute_id: 1154
+    value: 3
+  - attribute_id: 4
+    value: 10000000000
+  - attribute_id: 2737
+    value: 5
+  - attribute_id: 263
+    value: 6750000
+  - attribute_id: 136
+    value: 1
+  - attribute_id: 9
+    value: 21600000
+  - attribute_id: 11
+    value: 2700000
+  - attribute_id: 12
+    value: 4
+  - attribute_id: 13
+    value: 5
+  - attribute_id: 14
+    value: 6
+  - attribute_id: 271
+    value: 0.8
+  - attribute_id: 272
+    value: 0.8
+  - attribute_id: 273
+    value: 0.8
+  - attribute_id: 274
+    value: 0.8
+  - attribute_id: 2115
+    value: 0.00001
+  - attribute_id: 269
+    value: 0.8
+  - attribute_id: 2055
+    value: 300000
+  - attribute_id: 2244
+    value: 1
+  - attribute_id: 3354
+    value: 1500
+  - attribute_id: 3355
+    value: 1500
+  - attribute_id: 265
+    value: 5400000
+  - attribute_id: 797
+    value: 490000
+  - attribute_id: 3101
+    value: 56204
+  - attribute_id: 161
+    value: 80000
+  - attribute_id: 162
+    value: 85000
+  - attribute_id: 2339
+    value: -25
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 1137
+    value: 3
+  - attribute_id: 552
+    value: 100000
+  - attribute_id: 3356
+    value: 1500
+  - attribute_id: 1927
+    value: 1
+  - attribute_id: 2333
+    value: 25
+  - attribute_id: 48
+    value: 38000
+  - attribute_id: 2056
+    value: 5
+  - attribute_id: 2738
+    value: 2
+  - attribute_id: 2739
+    value: 2
+  - attribute_id: 564
+    value: 40
+  - attribute_id: 55
+    value: 5760000
+  - attribute_id: 2749
+    value: -20
+  - attribute_id: 2750
+    value: 1
+  - attribute_id: 2751
+    value: 1
+  - attribute_id: 192
+    value: 7
+  - attribute_id: 2113
+    value: 0.00001
+  - attribute_id: 525
+    value: 1
+  - attribute_id: 267
+    value: 0.8
+  - attribute_id: 2116
+    value: 0.00001
+  - attribute_id: 268
+    value: 0.8
+  - attribute_id: 2743
+    value: 1
+  - attribute_id: 76
+    value: 380000
+  - attribute_id: 2253
+    value: 0.00001
+  - attribute_id: 79
+    value: 2500
+  - attribute_id: 208
+    value: 500
+  - attribute_id: 209
+    value: 500
+  - attribute_id: 210
+    value: 500
+  - attribute_id: 211
+    value: 500
+  - attribute_id: 270
+    value: 0.8
+  - attribute_id: 2135
+    value: 0.00001
+  - attribute_id: 18
+    value: 0
+  - attribute_id: 2268
+    value: 10000
+  - attribute_id: 479
+    value: 999999999999
+  - attribute_id: 482
+    value: 400000
+  - attribute_id: 484
+    value: 1
+  - attribute_id: 101
+    value: 3
+  - attribute_id: 2790
+    value: 10000
+  - attribute_id: 1132
+    value: 400
+  - attribute_id: 109
+    value: 0.8
+  - attribute_id: 110
+    value: 0.8
+  - attribute_id: 111
+    value: 0.8
+  - attribute_id: 2433
+    value: 1
+  - attribute_id: 113
+    value: 0.8
+  - attribute_id: 2034
+    value: 27000000
+  - attribute_id: 2035
+    value: 15000
+  - attribute_id: 2036
+    value: 15000
+  - attribute_id: 2805
+    value: 0
+  - attribute_id: 264
+    value: 0
+  - attribute_id: 2216
+    value: 5
+  - attribute_id: 2045
+    value: 0.00001
+  - attribute_id: 524
+    value: 1
+  - attribute_id: 1919
+    value: 4
+  dogma_effects:
+  - effect_id: 6565
+    is_default: false
+  - effect_id: 6568
+    is_default: false
+  - effect_id: 7008
+    is_default: false
+  - effect_id: 7030
+    is_default: false
+  - effect_id: 7039
+    is_default: false
+  - effect_id: 7040
+    is_default: false
+  graphic_id: 21138
+  group_id: 1657
+  market_group_id: 2201
+  mass: 10000000000
+  name: "Fortizar"
+  packaged_volume: 80000
+  portion_size: 1
+  published: true
+  radius: 85000
+  type_id: 35833
+  volume: 80000
+"9838":
+  capacity: 0
+  description: "Utilisés pour les nombreuses technologies avancées pour en assurer\
+    \ le bon fonctionnement, ces conduits sont fabriqués en matériaux surfondus qui\
+    \ servent de conducteurs, pour une résistance électrique nulle."
+  dogma_attributes:
+  - attribute_id: 161
+    value: 0.75
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 4
+    value: 0
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 1640
+    value: 7200
+  - attribute_id: 1641
+    value: 7200
+  group_id: 1034
+  icon_id: 1363
+  market_group_id: 1335
+  mass: 0
+  name: "Superconducteurs"
+  packaged_volume: 0.75
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 9838
+  volume: 0.75
+"2389":
+  capacity: 0
+  description: "Alors que l'humanité faisait son retour dans les vols spatiaux, les\
+    \ scientifiques Planto et Ginch ont co-découvert une structure naturelle autonome,\
+    \ entièrement composée de plasma suspendu dans un champ magnétique planétaire.\
+    \ Depuis lors, le terme a été appliqué à toutes les constructions de ce type,\
+    \ qu'elles apparaissent sous forme naturelle ou qu'elles soient produites artificiellement\
+    \ à l'aide de courants électriques."
+  dogma_attributes:
+  - attribute_id: 161
+    value: 0.19
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 4
+    value: 0
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 1640
+    value: 400
+  - attribute_id: 1641
+    value: 400
+  group_id: 1042
+  icon_id: 10017
+  market_group_id: 1334
+  mass: 0
+  name: "Plasmoïdes"
+  packaged_volume: 0.19
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 2389
+  volume: 0.19
+"3645":
+  capacity: 0
+  description: "L'eau est l'un des éléments fondamentaux pour la survie humaine. La\
+    \ plupart des mondes ne disposent que de faibles réserves et il faut compter sur\
+    \ le transport par vaisseau spatial pour s'en procurer."
+  dogma_attributes:
+  - attribute_id: 161
+    value: 0.19
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 4
+    value: 0
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 1640
+    value: 400
+  - attribute_id: 1641
+    value: 400
+  group_id: 1042
+  icon_id: 1178
+  market_group_id: 1334
+  mass: 0
+  name: "Eau"
+  packaged_volume: 0.19
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 3645
+  volume: 0.19
+"2268":
+  capacity: 0
+  description: "L'abondance d'eau sur les planètes terrestres n'est souvent qu'une\
+    \ idée reçue. En effet, ce que beaucoup désignent comme de l'eau n'est souvent\
+    \ qu'une association de plusieurs liquides avec des particules microscopiques\
+    \ et des composés saturés gorgés d'eau et d'autres liquides. Les liquides aqueux\
+    \ sont des liquides à partir desquels l'eau pure peut aisément être séparée des\
+    \ déchets et des particules dangereuses, à condition de disposer du matériel approprié\
+    ."
+  dogma_attributes:
+  - attribute_id: 161
+    value: 0.005
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 4
+    value: 0
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 1640
+    value: 5
+  - attribute_id: 1641
+    value: 5
+  group_id: 1033
+  icon_id: 10012
+  market_group_id: 1333
+  mass: 0
+  name: "Liquides aqueux"
+  packaged_volume: 0.005
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 2268
+  volume: 0.005
+"2409":
+  capacity: 0
+  description: "Trouver les liquides désirés sur des mondes ennemis peut être aussi\
+    \ difficile qu'en extraire dans un environnement hostile, ce qui nécessite souvent\
+    \ des kilomètres de forage en dessous de la surface ou une condensation des fluides\
+    \ de la haute atmosphère. Une fois les liquides découverts, l'installation commence\
+    \ elle-même le travail relativement simple visant à les séparer des interférences\
+    \ plasma environnantes, des ruisseaux de magma brûlant, ou des bactéries locales\
+    \ potentiellement dangereuses. Une quantité surprenante de liquides de valeur\
+    \ peut être extraite des mondes hostiles, mais seulement si l'équipement est correctement\
+    \ calibré et parfaitement entretenu."
+  dogma_attributes:
+  - attribute_id: 1632
+    value: 2016
+  - attribute_id: 161
+    value: 0
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 4
+    value: 0
+  - attribute_id: 709
+    value: 2268
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 1642
+    value: 1000
+  - attribute_id: 1643
+    value: 300
+  - attribute_id: 1644
+    value: 5
+  - attribute_id: 1645
+    value: 1
+  - attribute_id: 15
+    value: 800
+  - attribute_id: 49
+    value: 200
+  graphic_id: 4544
+  group_id: 1026
+  mass: 0
+  name: "Extracteur de liquide aqueux en milieu aride"
+  packaged_volume: 0
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 2409
+  volume: 0
+"2412":
+  capacity: 0
+  description: "Trouver les liquides désirés sur des mondes ennemis peut être aussi\
+    \ difficile qu'en extraire dans un environnement hostile, ce qui nécessite souvent\
+    \ des kilomètres de forage en dessous de la surface ou une condensation des fluides\
+    \ de la haute atmosphère. Une fois les liquides découverts, l'installation commence\
+    \ elle-même le travail relativement simple visant à les séparer des interférences\
+    \ plasma environnantes, des ruisseaux de magma brûlant, ou des bactéries locales\
+    \ potentiellement dangereuses. Une quantité surprenante de liquides de valeur\
+    \ peut être extraite des mondes hostiles, mais seulement si l'équipement est correctement\
+    \ calibré et parfaitement entretenu."
+  dogma_attributes:
+  - attribute_id: 1632
+    value: 11
+  - attribute_id: 161
+    value: 0
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 4
+    value: 0
+  - attribute_id: 709
+    value: 2268
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 1642
+    value: 1000
+  - attribute_id: 1643
+    value: 300
+  - attribute_id: 1644
+    value: 5
+  - attribute_id: 1645
+    value: 1
+  - attribute_id: 15
+    value: 800
+  - attribute_id: 49
+    value: 200
+  graphic_id: 4544
+  group_id: 1026
+  mass: 0
+  name: "Extracteur de liquide aqueux en milieu tempéré"
+  packaged_volume: 0
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 2412
+  volume: 0
+"2016":
+  capacity: 0
+  description: "Les planètes arides sont l'archétype des «\_planètes telluriques mortes\_\
+    »\_: des mondes rocheux et désertiques avec une atmosphère minime et une composition\
+    \ ordinaire. Elles sont généralement traversées par des canaux de crue assez grands\
+    \ pour être visibles depuis l'espace. La plupart de ces mondes ont accumulé des\
+    \ quantités remarquables de glace au cours des siècles, mais n'ont pas pu les\
+    \ conserver à leur surface. Bien souvent, le liquide à la surface s'évapore rapidement,\
+    \ contribuant de ce fait à la faible couche d'atmosphère, même s'il peut arriver\
+    \ qu'il s'infiltre dans le sol et gèle à nouveau, en attendant les prochaines\
+    \ températures élevées pour s'évaporer."
+  graphic_id: 3837
+  group_id: 7
+  icon_id: 10135
+  mass: 100000000000000000000000000000000000
+  name: "Planète (aride)"
+  packaged_volume: 1
+  portion_size: 1
+  published: false
+  radius: 10000
+  type_id: 2016
+  volume: 1
+"11":
+  capacity: 0
+  description: "Les planètes portant la vie sont souvent appelées «\_tempérées\_»\
+    , puisqu'elles se caractérisent principalement par leurs températures clémentes.\
+    \ Les planètes présentant un écosystème stable sont les cibles privilégiées des\
+    \ colonisateurs, puisqu'elles sont souvent entièrement habitables. Par conséquent,\
+    \ la plupart des mondes habités sont des planètes tempérées. En effet, de nombreux\
+    \ rapports ont déjà révélé des traces d'anciennes colonies à plusieurs moments\
+    \ de l'histoire de New Eden."
+  graphic_id: 3832
+  group_id: 7
+  icon_id: 10136
+  mass: 100000000000000000000000000000000000
+  name: "Planète (tempérée)"
+  packaged_volume: 1
+  portion_size: 1
+  published: false
+  radius: 10000
+  type_id: 11
+  volume: 1
+"2470":
+  capacity: 0
+  description: "Au lieu de travailler pour protéger les lignes de production de ce\
+    \ complexe industriel face aux dangers de l'environnement, les concepteurs ont\
+    \ choisi d'utiliser la chaleur, les interférences, et même la pression écrasante\
+    \ pour contribuer à l'alimentation de la structure en elle-même. Si une usine\
+    \ sur une planète de glace peut posséder des dissipateurs de chaleur avancés,\
+    \ une usine sur une planète de plasma peut tirer tout ou partie de son électricité\
+    \ des anneaux magnétiques en harmonie avec les vents ioniques de la planète. Tirer\
+    \ profit des caractéristiques naturelles de chaque monde permet ainsi de compenser\
+    \ le coût de construction des infrastructures de production de masse, qui pré\
+    sentent généralement des revêtements de protection, des couvertures environnementales,\
+    \ et des fondations renforcées."
+  dogma_attributes:
+  - attribute_id: 1632
+    value: 2015
+  - attribute_id: 161
+    value: 0
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 4
+    value: 0
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 15
+    value: 700
+  - attribute_id: 49
+    value: 500
+  graphic_id: 4534
+  group_id: 1028
+  mass: 0
+  name: "Site d'industrie avancée en milieu volcanique"
+  packaged_volume: 0
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 2470
+  volume: 0
+"2480":
+  capacity: 0
+  description: "Peuplées presque intégralement d'ouvriers robotiques, les installations\
+    \ de production de masse excellent dans la création de produits en gros avec une\
+    \ surveillance et un entretien minimes. Elles peuvent être si autonomes qu'on\
+    \ raconte que des usines gallente seraient gérées uniquement par des androïdes\
+    \ et dirigées par un équipage de drones. (Les détracteurs de cette méthode aiment\
+    \ d'ailleurs faire remarquer que les installations sansha fonctionnent aussi de\
+    \ cette façon.) Quoi qu'il en soit, les résultats sont irréfutables : les matiè\
+    res premières et les composants y entrent d'un côté, tandis que des marchandises\
+    \ raffinées en sortent de l'autre."
+  dogma_attributes:
+  - attribute_id: 1632
+    value: 11
+  - attribute_id: 161
+    value: 0
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 4
+    value: 0
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 15
+    value: 700
+  - attribute_id: 49
+    value: 500
+  graphic_id: 4523
+  group_id: 1028
+  mass: 0
+  name: "Site d'industrie avancée en milieu tempéré"
+  packaged_volume: 0
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 2480
+  volume: 0
+"60377":
+  capacity: 0
+  description: "Spécialisation dans le retraitement des minerais simples. Cette compé\
+    tence permet d'améliorer considérablement l'efficacité des usines de retraitement.\
+    \ Pour chaque niveau de compétence, augmente de 2\_% le rendement du retraitement\
+    \ pour les types de minerai simple suivants\_: plagioclase, pyroxeres, scordite,\
+    \ veldspar et mordunium"
+  dogma_attributes:
+  - attribute_id: 161
+    value: 0.01
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 4
+    value: 0
+  - attribute_id: 278
+    value: 3
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 1047
+    value: 0
+  - attribute_id: 275
+    value: 3
+  - attribute_id: 180
+    value: 166
+  - attribute_id: 277
+    value: 4
+  - attribute_id: 182
+    value: 3385
+  - attribute_id: 183
+    value: 3402
+  - attribute_id: 280
+    value: 0
+  - attribute_id: 379
+    value: 2
+  - attribute_id: 181
+    value: 165
+  dogma_effects:
+  - effect_id: 132
+    is_default: true
+  group_id: 1218
+  icon_id: 33
+  market_group_id: 1323
+  mass: 0
+  name: "Traitement de minerai simple"
+  packaged_volume: 0.01
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 60377
+  volume: 0.01
+"34":
+  capacity: 0
+  description: "Il s'agit du principal bloc de construction pour les structures spatiales.\
+    \ Ce métal est à la fois très résistant et malléable. Il ne peut pas être utilisé\
+    \ pour les structures d'habitation humaine en raison de son instabilité aux tempé\
+    ratures atmosphériques. Il est très répandu dans les régions centrales de l'univers\
+    \ connu. Peut être obtenu par retraitement des minerais suivants et leurs variantes\
+    \ disponibles dans les systèmes stellaires de haute sécurité\_: <a href=showinfo:1230>veldspar</a>,\
+    \ <a href=showinfo:1228>scordite</a> et <a href=showinfo:18>plagioclase</a>. Il\
+    \ est aussi présent en grandes quantités dans des minerais rares tels que le <a\
+    \ href=showinfo:19>spodumain</a>, le <a href=showinfo:52316>bezdnacine</a>, le\
+    \ <a href=showinfo:52315>rakovene</a> et le <a href=showinfo:52306>talassonite</a>.\
+    \ Le tritanium peut également être trouvé dans les systèmes stellaires de sécurité\
+    \ nulle dans les minerais <a href=showinfo:81900>kylixium</a>, <a href=showinfo:82016>nocxite</a>,\
+    \ <a href=showinfo:82205>ueganite</a>, <a href=showinfo:82163>hezorime</a> et\
+    \ <a href=showinfo:81975>griemeer</a>, mais seulement en quantités infimes."
+  group_id: 18
+  icon_id: 22
+  market_group_id: 1857
+  mass: 0
+  name: "Tritanium"
+  packaged_volume: 0.01
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 34
+  volume: 0.01
+"37158":
+  capacity: 0
+  description: "L'optimisation de productivité matérielle de la production de munitions\
+    \ 'Standup' I M permet aux opérateurs de structure Upwell d'améliorer la productivité\
+    \ matérielle des lignes de production de munitions, de charges et de scripts.\n\
+    \n\n\nLa technologie brevetée 'Standup' exploite un dispositif autonome de nano-assemblage\
+    \ pour structure Upwell, alliant un logiciel de modélisation intégré, une baie\
+    \ de nano-assemblage et une réserve de nanomasse. Une fois insérés dans les emplacements\
+    \ dédiés sur les structures Upwell, les dispositifs 'Standup' lancent directement\
+    \ l'assemblage moléculaire de divers modules de services, modules de structure\
+    \ et optimisations de structure.\n\n\n\nRemarque : une structure ne peut équiper\
+    \ qu'une seule optimisation du même type, déclinaisons de tech comprises."
+  dogma_attributes:
+  - attribute_id: 1153
+    value: 100
+  - attribute_id: 4
+    value: 200
+  - attribute_id: 1544
+    value: 1
+  - attribute_id: 9
+    value: 40
+  - attribute_id: 1547
+    value: 2
+  - attribute_id: 1298
+    value: 1657
+  - attribute_id: 1299
+    value: 1404
+  - attribute_id: 1300
+    value: 1406
+  - attribute_id: 277
+    value: 1
+  - attribute_id: 2334
+    value: 1
+  - attribute_id: 2593
+    value: 0
+  - attribute_id: 2594
+    value: -2
+  - attribute_id: 2595
+    value: 0
+  - attribute_id: 422
+    value: 1
+  - attribute_id: 2095
+    value: 32
+  - attribute_id: 2096
+    value: 3.2
+  - attribute_id: 2355
+    value: 1
+  - attribute_id: 2356
+    value: 1.9
+  - attribute_id: 2357
+    value: 2.1
+  - attribute_id: 2358
+    value: 1
+  - attribute_id: 182
+    value: 26252
+  - attribute_id: 161
+    value: 10
+  - attribute_id: 162
+    value: 100
+  - attribute_id: 38
+    value: 0
+  dogma_effects:
+  - effect_id: 2663
+    is_default: true
+  - effect_id: 6808
+    is_default: false
+  - effect_id: 6842
+    is_default: false
+  group_id: 1820
+  icon_id: 21729
+  market_group_id: 2347
+  mass: 200
+  name: "Productivité matérielle de la production de munitions Standup I M"
+  packaged_volume: 10
+  portion_size: 1
+  published: true
+  radius: 100
+  type_id: 37158
+  volume: 10
+"37150":
+  capacity: 0
+  description: "L'optimisation de productivité horaire de la production de munitions\
+    \ 'Standup' I M permet aux opérateurs de structure Upwell d'améliorer la productivité\
+    \ horaire des lignes de production de munitions, de charges et de scripts.\n\n\
+    \n\nLa technologie brevetée 'Standup' exploite un dispositif autonome de nano-assemblage\
+    \ pour structure Upwell, alliant un logiciel de modélisation intégré, une baie\
+    \ de nano-assemblage et une réserve de nanomasse. Une fois insérés dans les emplacements\
+    \ dédiés sur les structures Upwell, les dispositifs 'Standup' lancent directement\
+    \ l'assemblage moléculaire de divers modules de services, modules de structure\
+    \ et optimisations de structure.\n\n\n\nRemarque : une structure ne peut équiper\
+    \ qu'une seule optimisation du même type, déclinaisons de tech comprises."
+  dogma_attributes:
+  - attribute_id: 1153
+    value: 100
+  - attribute_id: 4
+    value: 200
+  - attribute_id: 1544
+    value: 1
+  - attribute_id: 9
+    value: 40
+  - attribute_id: 1547
+    value: 2
+  - attribute_id: 1298
+    value: 1657
+  - attribute_id: 1299
+    value: 1404
+  - attribute_id: 1300
+    value: 1406
+  - attribute_id: 277
+    value: 1
+  - attribute_id: 2334
+    value: 1
+  - attribute_id: 2593
+    value: -20
+  - attribute_id: 2594
+    value: 0
+  - attribute_id: 2595
+    value: 0
+  - attribute_id: 422
+    value: 1
+  - attribute_id: 2095
+    value: 32
+  - attribute_id: 2096
+    value: 3.2
+  - attribute_id: 2355
+    value: 1
+  - attribute_id: 2356
+    value: 1.9
+  - attribute_id: 2357
+    value: 2.1
+  - attribute_id: 2358
+    value: 1
+  - attribute_id: 182
+    value: 26252
+  - attribute_id: 161
+    value: 10
+  - attribute_id: 162
+    value: 100
+  - attribute_id: 38
+    value: 0
+  dogma_effects:
+  - effect_id: 2663
+    is_default: true
+  - effect_id: 6809
+    is_default: false
+  - effect_id: 6842
+    is_default: false
+  group_id: 1821
+  icon_id: 21729
+  market_group_id: 2347
+  mass: 200
+  name: "Productivité horaire de la production de munitions 'Standup' I M"
+  packaged_volume: 10
+  portion_size: 1
+  published: true
+  radius: 100
+  type_id: 37150
+  volume: 10
+"43880":
+  capacity: 0
+  description: "L'optimisation d'accélérateur d'invention 'Standup' I M permet aux\
+    \ opérateurs de structure Upwell de raccourcir la durée des tâches d'invention.\n\
+    \n\n\nLa technologie brevetée 'Standup' exploite un dispositif autonome de nano-assemblage\
+    \ pour structure Upwell, alliant un logiciel de modélisation intégré, une baie\
+    \ de nano-assemblage et une réserve de nanomasse. Une fois insérés dans les emplacements\
+    \ dédiés sur les structures Upwell, les dispositifs 'Standup' lancent directement\
+    \ l'assemblage moléculaire de divers modules de services, modules de structure\
+    \ et optimisations de structure.\n\n\n\nRemarque : une structure ne peut équiper\
+    \ qu'une seule optimisation du même type, déclinaisons de tech comprises."
+  dogma_attributes:
+  - attribute_id: 1153
+    value: 100
+  - attribute_id: 4
+    value: 200
+  - attribute_id: 1544
+    value: 1
+  - attribute_id: 9
+    value: 40
+  - attribute_id: 1547
+    value: 2
+  - attribute_id: 1298
+    value: 1657
+  - attribute_id: 1299
+    value: 1404
+  - attribute_id: 1300
+    value: 1406
+  - attribute_id: 277
+    value: 1
+  - attribute_id: 2334
+    value: 1
+  - attribute_id: 2593
+    value: -20
+  - attribute_id: 2594
+    value: 0
+  - attribute_id: 2595
+    value: 0
+  - attribute_id: 422
+    value: 1
+  - attribute_id: 2355
+    value: 1
+  - attribute_id: 2356
+    value: 1.9
+  - attribute_id: 2357
+    value: 2.1
+  - attribute_id: 2358
+    value: 1
+  - attribute_id: 182
+    value: 26252
+  - attribute_id: 161
+    value: 10
+  - attribute_id: 162
+    value: 100
+  - attribute_id: 38
+    value: 0
+  dogma_effects:
+  - effect_id: 2663
+    is_default: true
+  - effect_id: 6831
+    is_default: false
+  - effect_id: 6842
+    is_default: false
+  group_id: 1843
+  icon_id: 21729
+  market_group_id: 2347
+  mass: 200
+  name: "Accélérateur d'invention 'Standup' I M"
+  packaged_volume: 10
+  portion_size: 1
+  published: true
+  radius: 100
+  type_id: 43880
+  volume: 10
+"43879":
+  capacity: 0
+  description: "L'optimisation des coûts d'invention 'Standup'\_I\_M permet aux opé\
+    rateurs de structure Upwell de réduire le coût financier des tâches d'invention.\n\
+    \n\n\nLa technologie brevetée 'Standup' exploite un dispositif autonome de nano-assemblage\
+    \ pour structure Upwell, alliant un logiciel de modélisation intégré, une baie\
+    \ de nano-assemblage et une réserve de nanomasse. Une fois insérés dans les emplacements\
+    \ dédiés sur les structures Upwell, les dispositifs 'Standup' lancent directement\
+    \ l'assemblage moléculaire de divers modules de services, modules de structure\
+    \ et optimisations de structure.\n\n\n\nRemarque\_: une structure ne peut équiper\
+    \ qu'une seule optimisation du même type, déclinaisons de tech comprises."
+  dogma_attributes:
+  - attribute_id: 1153
+    value: 100
+  - attribute_id: 4
+    value: 200
+  - attribute_id: 1544
+    value: 1
+  - attribute_id: 9
+    value: 40
+  - attribute_id: 1547
+    value: 2
+  - attribute_id: 1298
+    value: 1657
+  - attribute_id: 1299
+    value: 1404
+  - attribute_id: 1300
+    value: 1406
+  - attribute_id: 277
+    value: 1
+  - attribute_id: 2334
+    value: 1
+  - attribute_id: 2593
+    value: 0
+  - attribute_id: 2594
+    value: 0
+  - attribute_id: 2595
+    value: -10
+  - attribute_id: 422
+    value: 1
+  - attribute_id: 2355
+    value: 1
+  - attribute_id: 2356
+    value: 1.9
+  - attribute_id: 2357
+    value: 2.1
+  - attribute_id: 2358
+    value: 1
+  - attribute_id: 182
+    value: 26252
+  - attribute_id: 161
+    value: 10
+  - attribute_id: 162
+    value: 100
+  - attribute_id: 38
+    value: 0
+  dogma_effects:
+  - effect_id: 2663
+    is_default: true
+  - effect_id: 6830
+    is_default: false
+  - effect_id: 6842
+    is_default: false
+  group_id: 1842
+  icon_id: 21729
+  market_group_id: 2347
+  mass: 200
+  name: "Optimisation des coûts d'invention 'Standup' I M"
+  packaged_volume: 10
+  portion_size: 1
+  published: true
+  radius: 100
+  type_id: 43879
+  volume: 10
+"43729":
+  capacity: 0
+  description: "L'optimisation de copie de plan de construction 'Standup' I L permet\
+    \ aux opérateurs de structure Upwell de réduire le coût financier et la durée\
+    \ de copie des plans de construction.\n\n\n\nLa technologie brevetée 'Standup'\
+    \ exploite un dispositif autonome de nano-assemblage pour structure Upwell, alliant\
+    \ un logiciel de modélisation intégré, une baie de nano-assemblage et une réserve\
+    \ de nanomasse. Une fois insérés dans les emplacements dédiés sur les structures\
+    \ Upwell, les dispositifs 'Standup' lancent directement l'assemblage moléculaire\
+    \ de divers modules de services, modules de structure et optimisations de structure.\n\
+    \n\n\nRemarque : une structure ne peut équiper qu'une seule optimisation du mê\
+    me type, déclinaisons de tech comprises."
+  dogma_attributes:
+  - attribute_id: 1153
+    value: 100
+  - attribute_id: 4
+    value: 200
+  - attribute_id: 1544
+    value: 1
+  - attribute_id: 9
+    value: 40
+  - attribute_id: 1547
+    value: 3
+  - attribute_id: 1298
+    value: 1657
+  - attribute_id: 1299
+    value: 1404
+  - attribute_id: 1300
+    value: 1406
+  - attribute_id: 277
+    value: 1
+  - attribute_id: 2334
+    value: 1
+  - attribute_id: 2593
+    value: -20
+  - attribute_id: 2594
+    value: 0
+  - attribute_id: 2595
+    value: -10
+  - attribute_id: 422
+    value: 1
+  - attribute_id: 2355
+    value: 1
+  - attribute_id: 2356
+    value: 1.9
+  - attribute_id: 2357
+    value: 2.1
+  - attribute_id: 2358
+    value: 1
+  - attribute_id: 182
+    value: 26252
+  - attribute_id: 161
+    value: 20
+  - attribute_id: 162
+    value: 100
+  - attribute_id: 38
+    value: 0
+  dogma_effects:
+  - effect_id: 2663
+    is_default: true
+  - effect_id: 6836
+    is_default: false
+  - effect_id: 6837
+    is_default: false
+  - effect_id: 6842
+    is_default: false
+  group_id: 1866
+  icon_id: 21729
+  market_group_id: 2348
+  mass: 200
+  name: "Optimisation des coûts de copie des plans de construction 'Standup' I L"
+  packaged_volume: 20
+  portion_size: 1
+  published: true
+  radius: 100
+  type_id: 43729
+  volume: 20
+"43891":
+  capacity: 0
+  description: "L'optimisation des coûts de copie des plans de construction 'Standup'\_\
+    I\_M permet aux opérateurs de structure Upwell de réduire le coût financier des\
+    \ copies de plans de construction.\n\n\n\nLa technologie brevetée 'Standup' exploite\
+    \ un dispositif autonome de nano-assemblage pour structure Upwell, alliant un\
+    \ logiciel de modélisation intégré, une baie de nano-assemblage et une réserve\
+    \ de nanomasse. Une fois insérés dans les emplacements dédiés sur les structures\
+    \ Upwell, les dispositifs 'Standup' lancent directement l'assemblage moléculaire\
+    \ de divers modules de services, modules de structure et optimisations de structure.\n\
+    \n\n\nRemarque\_: une structure ne peut équiper qu'une seule optimisation du mê\
+    me type, déclinaisons de tech comprises."
+  dogma_attributes:
+  - attribute_id: 1153
+    value: 100
+  - attribute_id: 4
+    value: 200
+  - attribute_id: 1544
+    value: 1
+  - attribute_id: 9
+    value: 40
+  - attribute_id: 1547
+    value: 2
+  - attribute_id: 1298
+    value: 1657
+  - attribute_id: 1299
+    value: 1404
+  - attribute_id: 1300
+    value: 1406
+  - attribute_id: 277
+    value: 1
+  - attribute_id: 2334
+    value: 1
+  - attribute_id: 2593
+    value: 0
+  - attribute_id: 2594
+    value: 0
+  - attribute_id: 2595
+    value: -10
+  - attribute_id: 422
+    value: 1
+  - attribute_id: 2355
+    value: 1
+  - attribute_id: 2356
+    value: 1.9
+  - attribute_id: 2357
+    value: 2.1
+  - attribute_id: 2358
+    value: 1
+  - attribute_id: 182
+    value: 26252
+  - attribute_id: 161
+    value: 10
+  - attribute_id: 162
+    value: 100
+  - attribute_id: 38
+    value: 0
+  dogma_effects:
+  - effect_id: 2663
+    is_default: true
+  - effect_id: 6836
+    is_default: false
+  - effect_id: 6842
+    is_default: false
+  group_id: 1848
+  icon_id: 21729
+  market_group_id: 2347
+  mass: 200
+  name: "Optimisation des coûts de copie des plans de construction 'Standup' I M"
+  packaged_volume: 10
+  portion_size: 1
+  published: true
+  radius: 100
+  type_id: 43891
+  volume: 10
+"43714":
+  capacity: 0
+  description: "L'optimisation d'efficience industrielle de la production de petits\
+    \ vaisseaux standards 'Standup' I L permet aux opérateurs de structure Upwell\
+    \ d'améliorer la productivité horaire et matérielle des lignes de production de\
+    \ frégates, de destroyers et de navettes.\n\n\n\nLa technologie brevetée 'Standup'\
+    \ exploite un dispositif autonome de nano-assemblage pour structure Upwell, alliant\
+    \ un logiciel de modélisation intégré, une baie de nano-assemblage et une réserve\
+    \ de nanomasse. Une fois insérés dans les emplacements dédiés sur les structures\
+    \ Upwell, les dispositifs 'Standup' lancent directement l'assemblage moléculaire\
+    \ de divers modules de services, modules de structure et optimisations de structure.\n\
+    \n\n\nRemarque : une structure ne peut équiper qu'une seule optimisation du mê\
+    me type, déclinaisons de tech comprises."
+  dogma_attributes:
+  - attribute_id: 1153
+    value: 100
+  - attribute_id: 4
+    value: 200
+  - attribute_id: 1544
+    value: 1
+  - attribute_id: 9
+    value: 40
+  - attribute_id: 1547
+    value: 3
+  - attribute_id: 1298
+    value: 1657
+  - attribute_id: 1299
+    value: 1404
+  - attribute_id: 1300
+    value: 1406
+  - attribute_id: 277
+    value: 1
+  - attribute_id: 2334
+    value: 1
+  - attribute_id: 2593
+    value: -20
+  - attribute_id: 2594
+    value: -2
+  - attribute_id: 2595
+    value: 0
+  - attribute_id: 422
+    value: 1
+  - attribute_id: 2355
+    value: 1
+  - attribute_id: 2356
+    value: 1.9
+  - attribute_id: 2357
+    value: 2.1
+  - attribute_id: 2358
+    value: 1
+  - attribute_id: 182
+    value: 26252
+  - attribute_id: 161
+    value: 20
+  - attribute_id: 162
+    value: 100
+  - attribute_id: 38
+    value: 0
+  dogma_effects:
+  - effect_id: 2663
+    is_default: true
+  - effect_id: 6812
+    is_default: false
+  - effect_id: 6813
+    is_default: false
+  - effect_id: 6842
+    is_default: false
+  group_id: 1853
+  icon_id: 21729
+  market_group_id: 2348
+  mass: 200
+  name: "Efficience industrielle de la production de petits vaisseaux standards 'Standup'\
+    \ I L"
+  packaged_volume: 20
+  portion_size: 1
+  published: true
+  radius: 100
+  type_id: 43714
+  volume: 20
+"37152":
+  capacity: 0
+  description: "L'optimisation de productivité matérielle de la production de grands\
+    \ vaisseaux standards 'Standup' II M permet aux opérateurs de structure Upwell\
+    \ d'améliorer la productivité matérielle des lignes de production de cuirassé\
+    s, de cargos et de vaisseaux de commandement industriel.\n\n\n\nLa technologie\
+    \ brevetée 'Standup' exploite un dispositif autonome de nano-assemblage pour structure\
+    \ Upwell, alliant un logiciel de modélisation intégré, une baie de nano-assemblage\
+    \ et une réserve de nanomasse. Une fois insérés dans les emplacements dédiés sur\
+    \ les structures Upwell, les dispositifs 'Standup' lancent directement l'assemblage\
+    \ moléculaire de divers modules de services, modules de structure et optimisations\
+    \ de structure.\n\n\n\nRemarque : une structure ne peut équiper qu'une seule optimisation\
+    \ du même type, déclinaisons de tech comprises."
+  dogma_attributes:
+  - attribute_id: 1153
+    value: 150
+  - attribute_id: 4
+    value: 200
+  - attribute_id: 1544
+    value: 1
+  - attribute_id: 9
+    value: 40
+  - attribute_id: 1547
+    value: 2
+  - attribute_id: 1298
+    value: 1657
+  - attribute_id: 1299
+    value: 1404
+  - attribute_id: 1300
+    value: 1406
+  - attribute_id: 277
+    value: 1
+  - attribute_id: 2334
+    value: 1
+  - attribute_id: 2593
+    value: 0
+  - attribute_id: 2594
+    value: -2.4
+  - attribute_id: 2595
+    value: 0
+  - attribute_id: 422
+    value: 2
+  - attribute_id: 2095
+    value: 32
+  - attribute_id: 2096
+    value: 3.2
+  - attribute_id: 2355
+    value: 1
+  - attribute_id: 2356
+    value: 1.9
+  - attribute_id: 2357
+    value: 2.1
+  - attribute_id: 2358
+    value: 1
+  - attribute_id: 182
+    value: 26252
+  - attribute_id: 161
+    value: 10
+  - attribute_id: 162
+    value: 100
+  - attribute_id: 38
+    value: 0
+  dogma_effects:
+  - effect_id: 2663
+    is_default: true
+  - effect_id: 6816
+    is_default: false
+  - effect_id: 6842
+    is_default: false
+  group_id: 1828
+  icon_id: 21729
+  market_group_id: 2347
+  mass: 200
+  name: "Productivité matérielle de la production de grands vaisseaux standards 'Standup'\
+    \ II M"
+  packaged_volume: 10
+  portion_size: 1
+  published: true
+  radius: 100
+  type_id: 37152
+  volume: 10
+"43704":
+  capacity: 0
+  description: "L'optimisation d'efficience industrielle de la production de structures\
+    \ et de composants 'Standup' I XL permet aux opérateurs de structure Upwell d'amé\
+    liorer la productivité matérielle et horaire des lignes de production de composants,\
+    \ de structures Upwell, de modules de structure, de bases stellaires et de blocs\
+    \ de carburant.\n\nLa technologie brevetée 'Standup' exploite un dispositif autonome\
+    \ de nano-assemblage pour structure Upwell, alliant un logiciel de modélisation\
+    \ intégré, une baie de nano-assemblage et une réserve de nanomasse. Une fois insé\
+    rés dans les emplacements dédiés sur les structures Upwell, les dispositifs 'Standup'\
+    \ lancent directement l'assemblage moléculaire de divers modules de services,\
+    \ modules de structure et optimisations de structure.\n\nRemarque : une seule\
+    \ optimisation du même type, y compris les déclinaisons de tech, peut être monté\
+    e sur une structure à la fois."
+  dogma_attributes:
+  - attribute_id: 1153
+    value: 100
+  - attribute_id: 2594
+    value: -2
+  - attribute_id: 2595
+    value: 0
+  - attribute_id: 4
+    value: 200
+  - attribute_id: 2358
+    value: 1
+  - attribute_id: 422
+    value: 1
+  - attribute_id: 2593
+    value: -20
+  - attribute_id: 1544
+    value: 1
+  - attribute_id: 9
+    value: 40
+  - attribute_id: 1547
+    value: 4
+  - attribute_id: 162
+    value: 100
+  - attribute_id: 161
+    value: 40
+  - attribute_id: 2355
+    value: 1
+  - attribute_id: 1298
+    value: 1657
+  - attribute_id: 1299
+    value: 1404
+  - attribute_id: 2356
+    value: 1.9
+  - attribute_id: 277
+    value: 1
+  - attribute_id: 182
+    value: 26252
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 2334
+    value: 1
+  - attribute_id: 2357
+    value: 2.1
+  dogma_effects:
+  - effect_id: 2663
+    is_default: true
+  - effect_id: 6824
+    is_default: false
+  - effect_id: 6825
+    is_default: false
+  - effect_id: 6826
+    is_default: false
+  - effect_id: 6827
+    is_default: false
+  - effect_id: 6828
+    is_default: false
+  - effect_id: 6829
+    is_default: false
+  - effect_id: 6842
+    is_default: false
+  - effect_id: 6888
+    is_default: false
+  - effect_id: 6889
+    is_default: false
+  group_id: 1869
+  icon_id: 21729
+  market_group_id: 2349
+  mass: 200
+  name: "Efficience industrielle de la production de structures et de composants 'Standup'\
+    \ I XL"
+  packaged_volume: 40
+  portion_size: 1
+  published: true
+  radius: 100
+  type_id: 43704
+  volume: 40

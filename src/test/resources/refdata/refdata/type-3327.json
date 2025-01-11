@@ -6,6 +6,7 @@
     "es" : "Operación básica de naves espaciales. +2 % de bonificación a la agilidad de todas las naves por nivel de habilidad.",
     "fr" : "Pilotage de base des vaisseaux. Augmente de 2 % par niveau de compétence la maniabilité de tous les vaisseaux.",
     "ja" : "宇宙船の基本操作スキル。スキルレベル上昇ごとに全ての船の機動性が2%上昇。",
+    "ko" : "함선 운용을 위한 스킬입니다. 매 레벨마다 함선 기동성 2% 증가",
     "ru" : "Базовые навыки управления кораблями. За каждую степень освоения навыка: на 2% повышается маневренность всех кораблей.",
     "zh" : "操控舰船的基本技能。每升一级，所有飞船的灵活性提升2%。"
   },
@@ -18,6 +19,7 @@
     "es" : "Manejo de naves espaciales",
     "fr" : "Pilotage de vaisseau",
     "ja" : "宇宙船操作",
+    "ko" : "함선 운용",
     "ru" : "Допуски к управлению кораблями",
     "zh" : "飞船操控学"
   },
@@ -85,5 +87,6 @@
   "mass" : 0,
   "packaged_volume" : 0.01,
   "radius" : 1,
+  "category_id" : 16,
   "is_skill" : true
 }

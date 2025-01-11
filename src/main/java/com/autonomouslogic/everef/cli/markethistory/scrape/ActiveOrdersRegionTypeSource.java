@@ -24,9 +24,17 @@ class ActiveOrdersRegionTypeSource implements RegionTypeSource {
 
 	@Override
 	public Flowable<RegionTypePair> sourcePairs(Collection<RegionTypePair> currentPairs) {
-		return refDataAccess.allRegions().flatMap(region -> {
-			var regionId = region.getRegionId().intValue();
-			return marketEsi.getActiveMarketOrderTypes(regionId).map(typeId -> new RegionTypePair(regionId, typeId));
-		});
+		return refDataAccess
+				.allRegions()
+				.flatMap(region -> {
+					var regionId = region.getRegionId().intValue();
+					return marketEsi
+							.getActiveMarketOrderTypes(regionId)
+							.map(typeId -> new RegionTypePair(regionId, typeId));
+				})
+				.onErrorResumeNext(e -> {
+					log.warn("Failed fetching active market order types, ignoring", e);
+					return Flowable.empty();
+				});
 	}
 }

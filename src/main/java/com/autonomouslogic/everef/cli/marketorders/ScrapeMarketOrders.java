@@ -4,6 +4,7 @@ import static com.autonomouslogic.everef.util.ArchivePathFactory.MARKET_ORDERS;
 
 import com.autonomouslogic.everef.cli.Command;
 import com.autonomouslogic.everef.config.Configs;
+import com.autonomouslogic.everef.esi.EsiAuthHelper;
 import com.autonomouslogic.everef.s3.S3Adapter;
 import com.autonomouslogic.everef.s3.S3Util;
 import com.autonomouslogic.everef.url.S3Url;
@@ -52,6 +53,9 @@ public class ScrapeMarketOrders implements Command {
 	@Inject
 	protected DataIndexHelper dataIndexHelper;
 
+	@Inject
+	protected EsiAuthHelper esiAuthHelper;
+
 	private S3Url dataUrl;
 	private Map<Long, JsonNode> marketOrdersStore;
 
@@ -60,6 +64,7 @@ public class ScrapeMarketOrders implements Command {
 
 	private final Duration latestCacheTime = Configs.DATA_LATEST_CACHE_CONTROL_MAX_AGE.getRequired();
 	private final Duration archiveCacheTime = Configs.DATA_ARCHIVE_CACHE_CONTROL_MAX_AGE.getRequired();
+	private final String scrapeOwnerHash = Configs.SCRAPE_CHARACTER_OWNER_HASH.getRequired();
 
 	@Inject
 	protected ScrapeMarketOrders() {}
@@ -73,7 +78,11 @@ public class ScrapeMarketOrders implements Command {
 	@Override
 	public Completable run() {
 		return Completable.concatArray(
-				initScrapeTime(), initStore(), fetchOrders(), writeOrders().flatMapCompletable(this::uploadFile));
+				initScrapeTime(),
+				initStore(),
+				initLogin(),
+				fetchOrders(),
+				writeOrders().flatMapCompletable(this::uploadFile));
 	}
 
 	private Completable initScrapeTime() {
@@ -92,6 +101,10 @@ public class ScrapeMarketOrders implements Command {
 		});
 	}
 
+	private Completable initLogin() {
+		return esiAuthHelper.getTokenStringForOwnerHash(scrapeOwnerHash).ignoreElement();
+	}
+
 	private Completable fetchOrders() {
 		return Completable.defer(() -> {
 			log.info("Fetching market orders");
@@ -101,6 +114,10 @@ public class ScrapeMarketOrders implements Command {
 
 	private Single<File> writeOrders() {
 		return Single.defer(() -> {
+			marketOrdersStore.values().stream()
+					.filter(order -> order.get("region_id") == null)
+					.forEach(order -> log.info(order));
+
 			log.info("Writing market orders");
 			return marketOrdersWriter.writeOrders();
 		});

@@ -1,0 +1,83 @@
+{
+  "base_price" : 45000,
+  "description" : {
+    "de" : "Die gewünschten Flüssigkeiten auf feindseligen Welten zu finden kann fast genauso herausfordernd sein, wie diese aus der gnadenlosen Umwelt zu extrahieren, was oft das kilometertiefe Bohren unter die Oberfläche oder das Kondensieren der Flüssigkeit aus der oberen Atmosphäre nach sich zieht. Sobald die Flüssigkeiten entdeckt wurden, übernimmt die Anlage selbst die relativ einfache Aufgabe, sie von der Umgebungs-Plasma-Interferenz, den verbrühenden Magmaströmen oder potenziell infektiösen, autochtonen Bakterien zu befreien. Eine überraschende Menge wertvoller Flüssigkeiten kann aus den feindseligen Welten extrahiert werden, aber nur wenn das Gerät richtig kalibriert und sorgfältig gepflegt wird.",
+    "en" : "Finding desired liquids on hostile worlds can be almost as challenging a task as extracting it from the unforgiving environment, which often entails drilling kilometers below the surface or condensing fluids from the upper atmosphere. Once the liquids are discovered, the facility itself begins the relatively simple task of separating it from the ambient plasma interference, scalding magma streams, or potentially infectious indigenous bacteria. A surprising amount of valuable liquids can be extracted from hostile worlds, but only if the equipment is properly calibrated and carefully maintained.",
+    "es" : "Encontrar fluidos de interés en mundos hostiles puede ser casi tan difícil como extraerlos en entornos desfavorables, un proceso que a menudo requiere perforar kilómetros bajo la superficie o condensar líquidos de la atmósfera superior. Cuando se descubren los fluidos, la instalación pone en marcha la tarea relativamente sencilla de separarlos de la interferencia del plasma ambiental, las abrasadoras corrientes de magma o las bacterias indígenas, potencialmente infecciosas. Se puede extraer una cantidad sorprendente de fluidos valiosos en mundos hostiles, pero solo si el equipamiento está bien calibrado y su mantenimiento, al día.",
+    "fr" : "Trouver les liquides désirés sur des mondes ennemis peut être aussi difficile qu'en extraire dans un environnement hostile, ce qui nécessite souvent des kilomètres de forage en dessous de la surface ou une condensation des fluides de la haute atmosphère. Une fois les liquides découverts, l'installation commence elle-même le travail relativement simple visant à les séparer des interférences plasma environnantes, des ruisseaux de magma brûlant, ou des bactéries locales potentiellement dangereuses. Une quantité surprenante de liquides de valeur peut être extraite des mondes hostiles, mais seulement si l'équipement est correctement calibré et parfaitement entretenu.",
+    "ja" : "非友好的な世界で目的の液体を見つけることは、地表から何 km も掘り下げたり、高層大気から液体を凝結したりする作業が必要な厳しい環境から液体を抽出する場合と同じくらい困難だ。液体が見つかると、大気中のプラズマ干渉から液体を分離する比較的シンプルな作業がこの設備で開始され、マグマの流れや、現地固有の感染性バクテリアがあればその煮沸消毒も実施される。非友好的な世界で驚くような量の貴重な液体が抽出できることがあるが、そのためには設備を適切に調整し、入念にメンテナンスしておく必要がある。",
+    "ko" : "수성 액체 추출은 지면 아래 수 킬로미터를 드릴로 뚫고 내려가거나 초고층 대기에서 액체를 응축하는 작업 동반됩니다. 따라서 혹독한 환경이나 위협지대에서 액체를 추출하는 것은 극도로 어려운 일입니다. 추출 과정을 거친 후에는 주변의 플라즈마, 뜨거운 마그마, 또는 감염성이 있는 박테리아로부터 액체를 분리해내는 비교적 단순한 작업이 진행됩니다. 안정화된 장비를 사용한다면 위협지대에서 방대한 양의 액체를 추출하는 것이 가능합니다.",
+    "ru" : "На непригодных к обитанию планетах найти нужные жидкости не легче, чем извлекать их в местах с экстремальными условиями. Для их поиска приходится бурить многокилометровые скважины или конденсировать пары из верхних слоев атмосферы. Однако когда жидкости уже найдены, постройка добывающего комплекса становится относительно простой задачей. Необходимо всего лишь оградить его от окружения: интерференции от плазмы, магматических потоков или потенциально патогенных бактерий. С подобных враждебных миров можно извлекать поразительно большие количество ценных жидкостей, но для этого требуется тщательно откалиброванное оборудование, которое постоянно требует техобслуживания.",
+    "zh" : "在恶劣的环境中探寻所需要的水溶液几乎同采集它们一样，是一项具有挑战性的任务。通常必须要钻探到地表以下数千米的深度，或者在上层大气层中进行气体液化作业。当水溶液被发现后，设施会直接对其进行简单的处理，将其从环境中分隔开，避免环境流质，岩浆的干扰及可能存在的细菌污染。在环境恶劣的星球上，可以采集到大量的水性溶液，但这要求所有的设备都受到了精心的维护和校对。"
+  },
+  "graphic_id" : 4544,
+  "group_id" : 1026,
+  "name" : {
+    "de" : "Temperate Aqueous Liquid Extractor",
+    "en" : "Temperate Aqueous Liquid Extractor",
+    "es" : "Extractor de líquido acuoso templado",
+    "fr" : "Extracteur de liquide aqueux en milieu tempéré",
+    "ja" : "温暖惑星用水性液体エクストラクター",
+    "ko" : "수성 액체 추출기 (온대 행성)",
+    "ru" : "Temperate Aqueous Liquid Extractor",
+    "zh" : "温和行星水基液体采集器"
+  },
+  "portion_size" : 1,
+  "published" : true,
+  "type_id" : 2412,
+  "capacity" : 0,
+  "dogma_attributes" : {
+    "1632" : {
+      "attribute_id" : 1632,
+      "value" : 11
+    },
+    "161" : {
+      "attribute_id" : 161,
+      "value" : 0
+    },
+    "162" : {
+      "attribute_id" : 162,
+      "value" : 1
+    },
+    "4" : {
+      "attribute_id" : 4,
+      "value" : 0
+    },
+    "709" : {
+      "attribute_id" : 709,
+      "value" : 2268
+    },
+    "38" : {
+      "attribute_id" : 38,
+      "value" : 0
+    },
+    "1642" : {
+      "attribute_id" : 1642,
+      "value" : 1000
+    },
+    "1643" : {
+      "attribute_id" : 1643,
+      "value" : 300
+    },
+    "1644" : {
+      "attribute_id" : 1644,
+      "value" : 5
+    },
+    "1645" : {
+      "attribute_id" : 1645,
+      "value" : 1
+    },
+    "15" : {
+      "attribute_id" : 15,
+      "value" : 800
+    },
+    "49" : {
+      "attribute_id" : 49,
+      "value" : 200
+    }
+  },
+  "mass" : 0,
+  "packaged_volume" : 0,
+  "radius" : 1,
+  "volume" : 0
+}

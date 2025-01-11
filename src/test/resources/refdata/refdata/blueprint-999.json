@@ -30,38 +30,6 @@
     },
     "manufacturing" : {
       "materials" : {
-        "34" : {
-          "quantity" : 8000000,
-          "type_id" : 34
-        },
-        "35" : {
-          "quantity" : 4000000,
-          "type_id" : 35
-        },
-        "36" : {
-          "quantity" : 600000,
-          "type_id" : 36
-        },
-        "37" : {
-          "quantity" : 400000,
-          "type_id" : 37
-        },
-        "38" : {
-          "quantity" : 12000,
-          "type_id" : 38
-        },
-        "39" : {
-          "quantity" : 6000,
-          "type_id" : 39
-        },
-        "40" : {
-          "quantity" : 3000,
-          "type_id" : 40
-        },
-        "57478" : {
-          "quantity" : 200,
-          "type_id" : 57478
-        },
         "57479" : {
           "quantity" : 1,
           "type_id" : 57479
@@ -69,6 +37,38 @@
         "57486" : {
           "quantity" : 100,
           "type_id" : 57486
+        },
+        "57478" : {
+          "quantity" : 200,
+          "type_id" : 57478
+        },
+        "40" : {
+          "quantity" : 3000,
+          "type_id" : 40
+        },
+        "39" : {
+          "quantity" : 6000,
+          "type_id" : 39
+        },
+        "38" : {
+          "quantity" : 24000,
+          "type_id" : 38
+        },
+        "37" : {
+          "quantity" : 200000,
+          "type_id" : 37
+        },
+        "36" : {
+          "quantity" : 600000,
+          "type_id" : 36
+        },
+        "35" : {
+          "quantity" : 4000000,
+          "type_id" : 35
+        },
+        "34" : {
+          "quantity" : 8000000,
+          "type_id" : 34
         }
       },
       "products" : {

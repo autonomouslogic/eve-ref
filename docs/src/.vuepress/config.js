@@ -55,13 +55,16 @@ module.exports = {
           children: [
             'datasets/',
             'datasets/downloading-datasets',
+            'datasets/csm',
             'datasets/fuzzwork-ordersets',
             'datasets/hoboleaks-sde',
             'datasets/incursions',
+            'datasets/killmails',
             'datasets/market-history',
             'datasets/market-orders',
             'datasets/public-contracts',
             'datasets/reference-data',
+            'datasets/structures',
           ]
         },
         {
@@ -84,6 +87,13 @@ module.exports = {
           children: [
             'development/esi-code-generation.md',
             'development/logging.md'
+          ]
+        },
+        {
+          title: "Meta",
+          collapsable: false,
+          children: [
+            'privacy.md'
           ]
         }
     ]

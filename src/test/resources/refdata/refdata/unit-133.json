@@ -1,0 +1,10 @@
+{
+  "display_name" : "ISK",
+  "description" : {
+    "en" : "ISK"
+  },
+  "name" : {
+    "en" : "Money"
+  },
+  "unit_id" : 133
+}

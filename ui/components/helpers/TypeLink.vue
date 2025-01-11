@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import refdataApi from "~/refdata";
-import {InventoryType} from "~/refdata-openapi";
+import {type InventoryType} from "~/refdata-openapi";
+import {tr} from "~/lib/translate";
+import InternalLink from "~/components/helpers/InternalLink.vue";
 
 const {locale} = useI18n();
 
@@ -18,9 +20,9 @@ const type: InventoryType | undefined = props.typeId ? await refdataApi.getType(
 </script>
 
 <template>
-	<NuxtLink
+	<InternalLink
 		v-if="type && type.name"
 		:to="`/types/${props.typeId}`">
-		{{ type.name[locale] }}
-	</NuxtLink>
+		{{ tr(type.name, locale) }}
+	</InternalLink>
 </template>

@@ -1,7 +1,9 @@
 # Market History
 
 [data.everef.net/market-history/](https://data.everef.net/market-history/) contains daily archive files of market history data.
-They are produced by the [Scrape Markey History](../commands/scrape-market-history.md) command.
+They are produced by the [Scrape Market History](../commands/scrape-market-history.md) command.
+
+To import history into a database, using the [Import Market History](../commands/import-market-history.md) command is recommended.
 
 Due to the nature of the ESI market history endpoint, it's possible for new data to be discovered after the daily archive
 has been created.

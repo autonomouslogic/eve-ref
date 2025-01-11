@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import refdataApi from "~/refdata";
-import {InventoryGroup} from "~/refdata-openapi";
+import {type InventoryGroup} from "~/refdata-openapi";
+import {tr} from "~/lib/translate";
+import InternalLink from "~/components/helpers/InternalLink.vue";
 
 const props = defineProps<{
 	groupId: number | undefined
@@ -16,10 +18,10 @@ const group: InventoryGroup = await refdataApi.getGroup({groupId: props.groupId}
 </script>
 
 <template>
-	<NuxtLink
+	<InternalLink
 		v-if="group && group.name"
 		:to="`/groups/${props.groupId}`">
-		{{ group.name[locale] }}
-	</NuxtLink>
+		{{ tr(group.name, locale) }}
+	</InternalLink>
 	<span v-else>(Unknown group ID {{props.groupId}})</span>
 </template>

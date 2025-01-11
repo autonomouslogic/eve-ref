@@ -1,4 +1,22 @@
-import {DogmaAttribute, DogmaTypeAttribute, InventoryType} from "~/refdata-openapi";
+import {type DogmaAttribute, type DogmaTypeAttribute, type InventoryType} from "~/refdata-openapi";
+import refdataApi from "~/refdata";
+
+export async function loadDogmaAttributesForType(type: InventoryType): Promise<{ [key: string]: DogmaAttribute }> {
+    const dogmaAttributes: { [key: string]: DogmaAttribute } = {};
+    if (type.dogmaAttributes) {
+        const promises = [];
+        for (const attrId in type.dogmaAttributes) {
+            promises.push((async () => {
+                const attr = await refdataApi.getDogmaAttribute({attributeId: parseInt(attrId)});
+                if (attr && attr.name) {
+                    dogmaAttributes[attr.name] = attr;
+                }
+            })());
+        }
+        await Promise.all(promises);
+    }
+    return dogmaAttributes;
+}
 
 export function hasDogmaAttributeValue(name: string, type: InventoryType, attributes: DogmaAttribute[]): boolean {
     if (!type.dogmaAttributes) {

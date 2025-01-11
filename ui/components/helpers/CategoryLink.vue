@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import refdataApi from "~/refdata";
-import {InventoryCategory} from "~/refdata-openapi";
+import {type InventoryCategory} from "~/refdata-openapi";
+import {tr} from "~/lib/translate";
+import InternalLink from "~/components/helpers/InternalLink.vue";
 
 const props = defineProps<{
 	categoryId: number | undefined
@@ -16,10 +18,10 @@ const category: InventoryCategory = await refdataApi.getCategory({categoryId: pr
 </script>
 
 <template>
-	<NuxtLink
+	<InternalLink
 		v-if="category && category.name"
 		:to="`/categories/${props.categoryId}`">
-		{{ category.name[locale] }}
-	</NuxtLink>
+		{{ tr(category.name, locale) }}
+	</InternalLink>
 	<span v-else>(Unknown category ID {{props.categoryId}})</span>
 </template>

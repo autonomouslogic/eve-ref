@@ -1,9 +1,7 @@
 <script setup lang="ts">
-import {DogmaAttribute, InventoryType} from "~/refdata-openapi";
+import {type DogmaAttribute, type InventoryType} from "~/refdata-openapi";
 import CardWrapper from "~/components/cards/CardWrapper.vue";
 import RequiredSkillsRow from "~/components/cards/requiredSkills/RequiredSkillsRow.vue";
-
-const {locale} = useI18n();
 
 const props = defineProps<{
 	title: string,
@@ -22,8 +20,15 @@ const props = defineProps<{
 					:skill-type-id="parseInt(`${requiredSkillTypeId}`)"
 					:level=level
 					:indent="0"
+					:shown-skills="[]"
 				/>
 			</div>
 		</CardWrapper>
 	</template>
 </template>
+
+<style scoped>
+  .grid {
+    grid-template-columns: auto 60px 120px;
+  }
+</style>

@@ -1,0 +1,47 @@
+{
+  "capacity" : 0,
+  "description" : {
+    "en" : "The abundance of water on terrestrial planets is often a misconception: What many refer to offhandedly as \"water\" is often an amalgamation of many liquids, microscopic particles, and saturated compounds combined with water and other liquids. Aqueous liquids represent those liquids from which pure water can be separated easily from waste or hazardous particles, but only using the proper equipment.",
+    "fr" : "L'abondance d'eau sur les planètes terrestres n'est souvent qu'une idée reçue. En effet, ce que beaucoup désignent comme de l'eau n'est souvent qu'une association de plusieurs liquides avec des particules microscopiques et des composés saturés gorgés d'eau et d'autres liquides. Les liquides aqueux sont des liquides à partir desquels l'eau pure peut aisément être séparée des déchets et des particules dangereuses, à condition de disposer du matériel approprié."
+  },
+  "dogma_attributes" : {
+    "161" : {
+      "attribute_id" : 161,
+      "value" : 0.005
+    },
+    "162" : {
+      "attribute_id" : 162,
+      "value" : 1
+    },
+    "4" : {
+      "attribute_id" : 4,
+      "value" : 0
+    },
+    "38" : {
+      "attribute_id" : 38,
+      "value" : 0
+    },
+    "1640" : {
+      "attribute_id" : 1640,
+      "value" : 5
+    },
+    "1641" : {
+      "attribute_id" : 1641,
+      "value" : 5
+    }
+  },
+  "group_id" : 1033,
+  "icon_id" : 10012,
+  "market_group_id" : 1333,
+  "mass" : 0,
+  "name" : {
+    "en" : "Aqueous Liquids",
+    "fr" : "Liquides aqueux"
+  },
+  "packaged_volume" : 0.005,
+  "portion_size" : 1,
+  "published" : true,
+  "radius" : 1,
+  "type_id" : 2268,
+  "volume" : 0.005
+}

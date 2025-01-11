@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import {DogmaAttribute, InventoryType} from "~/refdata-openapi";
-import CardWrapper from "~/components/cards/CardWrapper.vue";
-import MarketRow from "~/components/cards/market/MarketRow.vue";
+import {type InventoryType} from "~/refdata-openapi";
+import ExternalLink from "~/components/helpers/ExternalLink.vue";
 
 const props = defineProps<{
 	inventoryType: InventoryType,
@@ -9,23 +8,20 @@ const props = defineProps<{
 
 const links = {
 	"Adam4EVE": "https://www.adam4eve.eu/commodity.php?typeID=",
-	"dev.eveonline.it": "https://evetycoon.com/market/",
+	//"dev.eveonline.it": "https://dev.eveonline.it/market/",
+	"EVE Market Browser": "https://evemarketbrowser.com/region/0/type/",
 	"EVE Tycoon": "https://evetycoon.com/market/",
+	"jita.space": "https://www.jita.space/market/",
 };
 
 </script>
 
 <template>
-	<div v-if="inventoryType">
+	<div v-if="inventoryType" class="mt-2">
 		View on:
 		<ul>
 			<li v-for="(link, name) in links" :key="name">
-				<NuxtLink
-					:to="`${link}${inventoryType.typeId}`"
-					rel="noopener"
-					target="_blank">
-					{{ name }}
-				</NuxtLink>
+				<ExternalLink :url="`${link}${inventoryType.typeId}`">{{name}}</ExternalLink>
 			</li>
 		</ul>
 	</div>

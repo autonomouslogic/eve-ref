@@ -2,17 +2,23 @@ package com.autonomouslogic.everef.cli.publishrefdata;
 
 import com.autonomouslogic.commons.rxjava3.Rx3Util;
 import com.autonomouslogic.everef.cli.Command;
+import com.autonomouslogic.everef.cli.publishrefdata.bundle.CategoryBundleRenderer;
+import com.autonomouslogic.everef.cli.publishrefdata.bundle.GroupBundleRenderer;
+import com.autonomouslogic.everef.cli.publishrefdata.bundle.MarketGroupBundleRenderer;
+import com.autonomouslogic.everef.cli.publishrefdata.bundle.RootCategoryBundleRenderer;
+import com.autonomouslogic.everef.cli.publishrefdata.bundle.TypeBundleRenderer;
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.http.OkHttpHelper;
 import com.autonomouslogic.everef.model.ReferenceEntry;
 import com.autonomouslogic.everef.mvstore.MVStoreUtil;
-import com.autonomouslogic.everef.openapi.refdata.apis.RefdataApi;
+import com.autonomouslogic.everef.openapi.refdata.api.RefdataApi;
 import com.autonomouslogic.everef.refdata.RefDataMeta;
 import com.autonomouslogic.everef.s3.ListedS3Object;
 import com.autonomouslogic.everef.s3.S3Adapter;
 import com.autonomouslogic.everef.s3.S3Util;
 import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.url.UrlParser;
+import com.autonomouslogic.everef.util.ProgressReporter;
 import com.autonomouslogic.everef.util.RefDataUtil;
 import com.autonomouslogic.everef.util.TempFiles;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -93,6 +99,18 @@ public class PublishRefData implements Command {
 
 	@Inject
 	protected Provider<TypeBundleRenderer> typeBundleRendererProvider;
+
+	@Inject
+	protected Provider<RootCategoryBundleRenderer> rootCategoryBundleRendererProvider;
+
+	@Inject
+	protected Provider<CategoryBundleRenderer> categoryBundleRendererProvider;
+
+	@Inject
+	protected Provider<GroupBundleRenderer> groupBundleRendererProvider;
+
+	@Inject
+	protected Provider<MarketGroupBundleRenderer> marketGroupBundleRendererProvider;
 
 	private S3Url refDataUrl;
 	private URI dataBaseUrl = Configs.DATA_BASE_URL.getRequired();
@@ -212,7 +230,23 @@ public class PublishRefData implements Command {
 								.get()
 								.setDataStore(dataStore)
 								.render(),
-						typeBundleRendererProvider.get().setDataStore(dataStore).render())
+						typeBundleRendererProvider.get().setDataStore(dataStore).render(),
+						rootCategoryBundleRendererProvider
+								.get()
+								.setDataStore(dataStore)
+								.render(),
+						categoryBundleRendererProvider
+								.get()
+								.setDataStore(dataStore)
+								.render(),
+						groupBundleRendererProvider
+								.get()
+								.setDataStore(dataStore)
+								.render(),
+						marketGroupBundleRendererProvider
+								.get()
+								.setDataStore(dataStore)
+								.render())
 				.flatMapCompletable(entry -> Completable.fromAction(() -> {
 					fileMap.put(entry.getLeft(), entry.getRight());
 				})));
@@ -221,13 +255,26 @@ public class PublishRefData implements Command {
 	private Completable uploadFiles(Map<String, ListedS3Object> existing) {
 		return Completable.defer(() -> {
 			log.info("Evaluating {} files for upload", fileMap.size());
+			var reporter = new ProgressReporter(getName(), fileMap.size(), Duration.ofMinutes(1));
+			reporter.start();
 			var skipped = new AtomicInteger();
+			var uploaded = new AtomicInteger();
 			return Flowable.fromIterable(fileMap.entrySet())
+					.doOnNext(entry -> reporter.increment())
 					.map(entry -> refDataUtil.createEntryForPath(
 							entry.getKey(), objectMapper.writeValueAsBytes(entry.getValue())))
 					.filter(entry -> filterExisting(skipped, existing, entry))
-					.flatMapCompletable(this::uploadFile, false, UPLOAD_CONCURRENCY)
-					.doOnComplete(() -> log.info("Skipped {} entries", skipped.get()))
+					.flatMapCompletable(
+							entry -> {
+								uploaded.incrementAndGet();
+								return uploadFile(entry);
+							},
+							false,
+							UPLOAD_CONCURRENCY)
+					.doOnComplete(() -> {
+						log.info("Uploaded {} entries", uploaded.get());
+						log.info("Skipped {} entries", skipped.get());
+					})
 					.andThen(Completable.defer(() -> deleteRemaining(new ArrayList<>(existing.keySet()))));
 		});
 	}
