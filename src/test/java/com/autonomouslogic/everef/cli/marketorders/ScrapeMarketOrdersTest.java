@@ -6,8 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import com.autonomouslogic.commons.ListUtil;
 import com.autonomouslogic.commons.ResourceUtil;
 import com.autonomouslogic.everef.esi.LocationPopulator;
-import com.autonomouslogic.everef.openapi.esi.models.GetUniverseSystemsSystemIdOk;
-import com.autonomouslogic.everef.openapi.esi.models.GetUniverseSystemsSystemIdPosition;
+import com.autonomouslogic.everef.openapi.esi.model.GetUniverseSystemsSystemIdOk;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.test.MockS3Adapter;
 import com.autonomouslogic.everef.test.TestDataUtil;
@@ -95,17 +94,10 @@ public class ScrapeMarketOrdersTest {
 							.setBody("[10000001,10000002]");
 					case "/universe/systems/30000001/?datasource=tranquility" -> new MockResponse()
 							.setResponseCode(200)
-							.setBody(objectMapper.writeValueAsString(new GetUniverseSystemsSystemIdOk(
-									20000001,
-									"test",
-									new GetUniverseSystemsSystemIdPosition(0, 0, 0),
-									0,
-									30000001,
-									null,
-									null,
-									null,
-									null,
-									null)));
+							.setBody(objectMapper.writeValueAsString(new GetUniverseSystemsSystemIdOk()
+									.name("test")
+									.systemId(30000001)
+									.constellationId(20000001)));
 					case "/universe/regions/10000001/?datasource=tranquility" -> new MockResponse()
 							.setResponseCode(200)
 							.setBody("{\"region_id\":10000001,\"name\":\"Derelik\",\"constellations\":[]}");

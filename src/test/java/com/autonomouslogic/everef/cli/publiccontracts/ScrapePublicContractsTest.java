@@ -9,7 +9,7 @@ import com.autonomouslogic.commons.ListUtil;
 import com.autonomouslogic.commons.ResourceUtil;
 import com.autonomouslogic.everef.esi.LocationPopulator;
 import com.autonomouslogic.everef.esi.MockLocationPopulatorModule;
-import com.autonomouslogic.everef.openapi.esi.models.GetUniverseTypesTypeIdOk;
+import com.autonomouslogic.everef.openapi.esi.model.GetUniverseTypesTypeIdOk;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.test.MockS3Adapter;
 import com.autonomouslogic.everef.test.TestDataUtil;
@@ -110,8 +110,8 @@ public class ScrapePublicContractsTest {
 
 	final String lastModified = "Mon, 03 Apr 2023 03:47:30 GMT";
 	final Instant lastModifiedInstant = Instant.parse("2023-04-03T03:47:30Z");
-	final GetUniverseTypesTypeIdOk type = new GetUniverseTypesTypeIdOk(
-			"", 0, "", true, 0, 0.0f, List.of(), List.of(), 0, 0, 0, 0.0f, 0.0f, 0, 0.0f, 0.0f);
+	final GetUniverseTypesTypeIdOk type = new GetUniverseTypesTypeIdOk();
+	//			"", 0, "", true, 0, 0.0f, List.of(), List.of(), 0, 0, 0, 0.0f, 0.0f, 0, 0.0f, 0.0f);
 
 	MockWebServer server;
 

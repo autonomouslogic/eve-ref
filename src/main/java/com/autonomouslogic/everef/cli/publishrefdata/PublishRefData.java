@@ -11,7 +11,7 @@ import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.http.OkHttpHelper;
 import com.autonomouslogic.everef.model.ReferenceEntry;
 import com.autonomouslogic.everef.mvstore.MVStoreUtil;
-import com.autonomouslogic.everef.openapi.refdata.apis.RefdataApi;
+import com.autonomouslogic.everef.openapi.refdata.api.RefdataApi;
 import com.autonomouslogic.everef.refdata.RefDataMeta;
 import com.autonomouslogic.everef.s3.ListedS3Object;
 import com.autonomouslogic.everef.s3.S3Adapter;
