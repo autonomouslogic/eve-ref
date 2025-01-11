@@ -3,9 +3,7 @@ package com.autonomouslogic.everef.esi;
 import com.autonomouslogic.commons.rxjava3.Rx3Util;
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.http.OkHttpHelper;
-import com.autonomouslogic.everef.openapi.esi.infrastructure.ApiResponse;
-import com.autonomouslogic.everef.openapi.esi.infrastructure.ResponseType;
-import com.autonomouslogic.everef.openapi.esi.infrastructure.Success;
+import com.autonomouslogic.everef.openapi.esi.invoker.ApiResponse;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.NullNode;
@@ -218,11 +216,11 @@ public class EsiHelper {
 	 * @param <T>
 	 */
 	private <T> T decodeResponse(ApiResponse<T> response) {
-		if (response.getResponseType() != ResponseType.Success) {
-			throw new RuntimeException(
-					String.format("Unexpected response type: %s - %s", response.getResponseType(), response));
+		int status = response.getStatusCode();
+		if (status / 100 != 2) {
+			throw new RuntimeException(String.format("Unexpected response: %s", status, response));
 		}
-		return ((Success<T>) response).getData();
+		return response.getData();
 	}
 
 	/**

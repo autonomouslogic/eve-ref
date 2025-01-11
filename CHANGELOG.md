@@ -1,5 +1,23 @@
 EVE Ref Changelog
 
+## [2.54.3](https://github.com/autonomouslogic/eve-ref/compare/2.54.2...2.54.3) (2025-01-06)
+
+
+### Bug Fixes
+
+* **deps:** update dependency org.flywaydb:flyway-core to v11.1.0 ([#705](https://github.com/autonomouslogic/eve-ref/issues/705)) ([6dd5f28](https://github.com/autonomouslogic/eve-ref/commit/6dd5f28dd5546e7ede2573b207c25167d1557918))
+* **deps:** update flyway to v11.1.0 ([#706](https://github.com/autonomouslogic/eve-ref/issues/706)) ([9efaa97](https://github.com/autonomouslogic/eve-ref/commit/9efaa979c31c7510ee2f2309edb38d513362ded5))
+* **deps:** update font awesome to v6.7.2 ([#704](https://github.com/autonomouslogic/eve-ref/issues/704)) ([bcaee4a](https://github.com/autonomouslogic/eve-ref/commit/bcaee4a8523c27f70d116dbd11c193c5f497eb83))
+
+## [2.54.2](https://github.com/autonomouslogic/eve-ref/compare/2.54.1...2.54.2) (2025-01-04)
+
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([#692](https://github.com/autonomouslogic/eve-ref/issues/692)) ([cdadcc3](https://github.com/autonomouslogic/eve-ref/commit/cdadcc3504f2a178ac1d544b174d6e065ebdb9f8))
+* **ui:** Giveaway update ([a3ab60f](https://github.com/autonomouslogic/eve-ref/commit/a3ab60f15f6dfe2670fcbc0363770417adcc1f8c))
+* **ui:** Removed December giveaway schedule ([060159a](https://github.com/autonomouslogic/eve-ref/commit/060159ad8681646347c0f0ede1faf28cfdd36da8))
+
 ## [2.54.1](https://github.com/autonomouslogic/eve-ref/compare/2.54.0...2.54.1) (2024-12-30)
 
 

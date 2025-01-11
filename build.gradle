@@ -1,10 +1,7 @@
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-
 import java.time.LocalDate
 
 plugins {
 	id "java"
-	id "org.jetbrains.kotlin.jvm" version "2.1.0"
 	id "idea"
 	id "application"
 	id "jacoco"
@@ -13,7 +10,7 @@ plugins {
 	id "com.diffplug.spotless" version "6.25.0"
 	id "org.openapi.generator" version "7.10.0"
 	id "io.swagger.core.v3.swagger-gradle-plugin" version "2.2.26"
-	id "org.flywaydb.flyway" version "11.0.1" apply false
+	id "org.flywaydb.flyway" version "11.1.0" apply false
 	id "nu.studer.jooq" version "9.0" apply false
 	id "io.micronaut.application" version "4.4.4"
 }
@@ -24,12 +21,6 @@ java {
 	toolchain {
 		sourceCompatibility = JavaVersion.VERSION_17
 		targetCompatibility = JavaVersion.VERSION_17
-	}
-}
-
-compileKotlin {
-	compilerOptions {
-		jvmTarget = JvmTarget.JVM_17
 	}
 }
 
@@ -103,8 +94,8 @@ dependencies {
 	implementation "org.apache.commons:commons-lang3:3.17.0"
 
 	implementation "org.jooq:jooq:3.19.16"
-	implementation "org.flywaydb:flyway-core:11.0.1"
-	implementation "org.flywaydb:flyway-database-postgresql:11.0.1"
+	implementation "org.flywaydb:flyway-core:11.1.0"
+	implementation "org.flywaydb:flyway-database-postgresql:11.1.0"
 	implementation "com.h2database:h2:2.3.232"
 	implementation "org.postgresql:postgresql:42.7.4"
 
@@ -142,7 +133,8 @@ task referenceDataClientGenerate(type: org.openapitools.generator.gradle.plugin.
 	library = "native"
 	inputSpec = "$rootDir/spec/reference-data.yaml"
 	outputDir = "$buildDir/generated/openapi/refdata"
-	apiPackage = "com.autonomouslogic.everef.openapi.refdata.apis"
+	apiPackage = "com.autonomouslogic.everef.openapi.refdata.api"
+	modelPackage = "com.autonomouslogic.everef.openapi.refdata.model"
 	invokerPackage = "com.autonomouslogic.everef.openapi.refdata.invoker"
 	configOptions = [
 			serializationLibrary: "jackson",
@@ -183,27 +175,33 @@ task referenceDataClientGenerate(type: org.openapitools.generator.gradle.plugin.
 }
 sourceSets.main.java.srcDirs files("${buildDir}/generated/openapi/refdata/src/main/java")
 		.builtBy(tasks.referenceDataClientGenerate)
-compileKotlin.dependsOn(tasks.referenceDataClientGenerate)
 compileJava.dependsOn(tasks.referenceDataClientGenerate)
 sourcesJar.dependsOn(tasks.referenceDataClientGenerate)
 delombok.dependsOn(tasks.referenceDataClientGenerate)
 
-openApiGenerate {
-	generatorName = "kotlin"
+task esiClientGenerate(type: org.openapitools.generator.gradle.plugin.tasks.GenerateTask) {
+	group = "openapi tools"
+	generatorName = "java"
+	library = "native"
 	inputSpec = "$rootDir/spec/esi-swagger.json"
-	packageName = "${group}.openapi.esi"
+	outputDir = "$buildDir/generated/openapi/esi"
+	apiPackage = "com.autonomouslogic.everef.openapi.esi.api"
+	modelPackage = "com.autonomouslogic.everef.openapi.esi.model"
+	invokerPackage = "com.autonomouslogic.everef.openapi.esi.invoker"
 	configOptions = [
-		library: "jvm-okhttp4",
-		serializationLibrary: "jackson",
-		dateLibrary: "java8"
+			serializationLibrary: "jackson",
+			dateLibrary: "java8",
+			asyncNative: "false"
+	]
+	additionalProperties = [
+			supportUrlQuery: "false"
 	]
 }
-sourceSets.main.java.srcDirs files("${buildDir}/generate-resources/main/src/main/kotlin")
-		.builtBy(tasks.openApiGenerate)
-compileKotlin.dependsOn(tasks.openApiGenerate)
-compileJava.dependsOn(tasks.openApiGenerate)
-sourcesJar.dependsOn(tasks.openApiGenerate)
-delombok.dependsOn(tasks.openApiGenerate)
+sourceSets.main.java.srcDirs files("${buildDir}/generated/openapi/esi/src/main/java")
+		.builtBy(tasks.esiClientGenerate)
+compileJava.dependsOn(tasks.esiClientGenerate)
+sourcesJar.dependsOn(tasks.esiClientGenerate)
+delombok.dependsOn(tasks.esiClientGenerate)
 
 test {
 	environment "LOG_LEVEL", "trace"

@@ -2,14 +2,15 @@ package com.autonomouslogic.everef.cli;
 
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.esi.EsiAuthHelper;
+import com.autonomouslogic.everef.esi.EsiConstants;
 import com.autonomouslogic.everef.esi.EsiHelper;
 import com.autonomouslogic.everef.http.OkHttpHelper;
-import com.autonomouslogic.everef.openapi.esi.apis.CharacterApi;
-import com.autonomouslogic.everef.openapi.esi.apis.CorporationApi;
-import com.autonomouslogic.everef.openapi.esi.apis.WalletApi;
-import com.autonomouslogic.everef.openapi.esi.infrastructure.ClientException;
-import com.autonomouslogic.everef.openapi.esi.models.GetCharactersCharacterIdOk;
-import com.autonomouslogic.everef.openapi.esi.models.GetCorporationsCorporationIdOk;
+import com.autonomouslogic.everef.openapi.esi.api.CharacterApi;
+import com.autonomouslogic.everef.openapi.esi.api.CorporationApi;
+import com.autonomouslogic.everef.openapi.esi.api.WalletApi;
+import com.autonomouslogic.everef.openapi.esi.invoker.ApiException;
+import com.autonomouslogic.everef.openapi.esi.model.GetCharactersCharacterIdOk;
+import com.autonomouslogic.everef.openapi.esi.model.GetCorporationsCorporationIdOk;
 import com.autonomouslogic.everef.pug.NumberFormats;
 import com.autonomouslogic.everef.s3.S3Adapter;
 import com.autonomouslogic.everef.s3.S3Util;
@@ -199,11 +200,7 @@ public class FetchDonations implements Command {
 	private List<DonationEntry> getCharacterDonations(int characterId, String accessToken) {
 		var journals = esiHelper
 				.fetchPages(page -> walletApi.getCharactersCharacterIdWalletJournalWithHttpInfo(
-						characterId,
-						WalletApi.DatasourceGetCharactersCharacterIdWalletJournal.tranquility,
-						null,
-						page,
-						accessToken))
+						characterId, EsiConstants.Datasource.tranquility.toString(), null, page, accessToken))
 				.doOnNext(e -> log.debug("Character journal: {}", e))
 				.filter(e -> DONATION_REF_TYPES.contains(e.getRefType().toString()))
 				.map(e -> DonationEntry.builder()
@@ -222,12 +219,7 @@ public class FetchDonations implements Command {
 	private List<DonationEntry> getCorporationDonations(int corporationId, String accessToken) {
 		var journals = esiHelper
 				.fetchPages(page -> walletApi.getCorporationsCorporationIdWalletsDivisionJournalWithHttpInfo(
-						corporationId,
-						1,
-						WalletApi.DatasourceGetCorporationsCorporationIdWalletsDivisionJournal.tranquility,
-						null,
-						page,
-						accessToken))
+						corporationId, 1, EsiConstants.Datasource.tranquility.toString(), null, page, accessToken))
 				.doOnNext(e -> log.debug("Corporation journal: {}", e))
 				.filter(e -> DONATION_REF_TYPES.contains(e.getRefType().toString()))
 				.map(e -> DonationEntry.builder()
@@ -285,15 +277,14 @@ public class FetchDonations implements Command {
 	}
 
 	@SneakyThrows
-	private @NotNull GetCorporationsCorporationIdOk getCorporation(int corporationId) {
+	private @NotNull GetCorporationsCorporationIdOk getCorporation(int corporationId) throws ApiException {
 		return corporationApi.getCorporationsCorporationId(
-				corporationId, CorporationApi.DatasourceGetCorporationsCorporationId.tranquility, null);
+				corporationId, EsiConstants.Datasource.tranquility.toString(), null);
 	}
 
 	@SneakyThrows
-	private @NotNull GetCharactersCharacterIdOk getCharacter(int characterId) {
-		return characterApi.getCharactersCharacterId(
-				characterId, CharacterApi.DatasourceGetCharactersCharacterId.tranquility, null);
+	private @NotNull GetCharactersCharacterIdOk getCharacter(int characterId) throws ApiException {
+		return characterApi.getCharactersCharacterId(characterId, EsiConstants.Datasource.tranquility.toString(), null);
 	}
 
 	private static @NotNull List<SummaryEntry> summarise(Collection<DonationEntry> donations) {
@@ -358,6 +349,7 @@ public class FetchDonations implements Command {
 		}
 	}
 
+	@SneakyThrows
 	private @Nullable DonationEntry resolveDonorName(DonationEntry entry) {
 		var id = entry.getFirstPartyId();
 		try {
@@ -366,8 +358,8 @@ public class FetchDonations implements Command {
 					.donorName(character.getName())
 					.characterId(id)
 					.build();
-		} catch (ClientException e) {
-			if (e.getStatusCode() != 404) {
+		} catch (ApiException e) {
+			if (e.getCode() != 404) {
 				throw e;
 			}
 			try {
@@ -376,8 +368,8 @@ public class FetchDonations implements Command {
 						.donorName(corporation.getName())
 						.corporationId(id)
 						.build();
-			} catch (ClientException e2) {
-				if (e.getStatusCode() != 404) {
+			} catch (ApiException e2) {
+				if (e.getCode() != 404) {
 					throw e;
 				}
 			}
