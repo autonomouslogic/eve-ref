@@ -1,6 +1,6 @@
 package com.autonomouslogic.everef.cli.structures;
 
-import com.autonomouslogic.everef.openapi.esi.infrastructure.ApiResponse;
+import com.autonomouslogic.everef.openapi.esi.invoker.ApiResponse;
 import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;

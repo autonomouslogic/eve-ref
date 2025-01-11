@@ -6,10 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import com.autonomouslogic.everef.cli.publiccontracts.ContractsFileBuilder;
 import com.autonomouslogic.everef.cli.publiccontracts.ContractsScrapeMeta;
 import com.autonomouslogic.everef.esi.LocationPopulator;
-import com.autonomouslogic.everef.openapi.esi.models.GetUniverseConstellationsConstellationIdOk;
-import com.autonomouslogic.everef.openapi.esi.models.GetUniverseConstellationsConstellationIdPosition;
-import com.autonomouslogic.everef.openapi.esi.models.GetUniverseSystemsSystemIdOk;
-import com.autonomouslogic.everef.openapi.esi.models.GetUniverseSystemsSystemIdPosition;
+import com.autonomouslogic.everef.openapi.esi.model.GetUniverseConstellationsConstellationIdOk;
+import com.autonomouslogic.everef.openapi.esi.model.GetUniverseSystemsSystemIdOk;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.test.MockS3Adapter;
 import com.autonomouslogic.everef.test.TestDataUtil;
@@ -497,27 +495,18 @@ public class ScrapeStructuresTest {
 				}
 
 				if (path.equals("/universe/systems/30000001/")) {
-					var obj = new GetUniverseSystemsSystemIdOk(
-							20000001,
-							"System",
-							new GetUniverseSystemsSystemIdPosition(0, 0, 0),
-							0,
-							30000001,
-							List.of(),
-							"",
-							0,
-							List.of(),
-							List.of());
+					var obj = new GetUniverseSystemsSystemIdOk()
+							.systemId(30000001)
+							.constellationId(20000001)
+							.name("System");
 					return new MockResponse().setBody(objectMapper.writeValueAsString(obj));
 				}
 
 				if (path.equals("/universe/constellations/20000001/")) {
-					var obj = new GetUniverseConstellationsConstellationIdOk(
-							20000001,
-							"Constellation",
-							new GetUniverseConstellationsConstellationIdPosition(0, 0, 0),
-							10000001,
-							List.of());
+					var obj = new GetUniverseConstellationsConstellationIdOk()
+							.constellationId(20000001)
+							.name("Constellation")
+							.regionId(10000001);
 					return new MockResponse().setBody(objectMapper.writeValueAsString(obj));
 				}
 

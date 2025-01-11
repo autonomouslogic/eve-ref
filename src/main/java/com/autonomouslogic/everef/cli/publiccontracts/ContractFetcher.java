@@ -6,7 +6,7 @@ import com.autonomouslogic.everef.esi.EsiUrl;
 import com.autonomouslogic.everef.esi.LocationPopulator;
 import com.autonomouslogic.everef.esi.UniverseEsi;
 import com.autonomouslogic.everef.http.OkHttpHelper;
-import com.autonomouslogic.everef.openapi.esi.models.GetUniverseRegionsRegionIdOk;
+import com.autonomouslogic.everef.openapi.esi.model.GetUniverseRegionsRegionIdOk;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
