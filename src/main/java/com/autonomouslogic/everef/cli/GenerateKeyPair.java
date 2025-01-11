@@ -20,8 +20,10 @@ public class GenerateKeyPair implements Command {
 		return Completable.fromAction(() -> {
 			var privateKey = keyGenerator.generatePrivateKey();
 			var publicKey = keyGenerator.generatePublicKey(privateKey);
+			var publicKeyHash = keyGenerator.createKeyHash(publicKey);
 			log.info("Private key: {}", privateKey);
 			log.info("Public key: {}", publicKey);
+			log.info("Public key hash: {}", publicKeyHash);
 		});
 	}
 }

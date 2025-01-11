@@ -1,10 +1,12 @@
 package com.autonomouslogic.everef.crypto;
 
+import com.google.common.hash.Hashing;
 import java.security.SecureRandom;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.SneakyThrows;
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.codec.binary.Hex;
 import org.bouncycastle.crypto.generators.Ed25519KeyPairGenerator;
 import org.bouncycastle.crypto.params.Ed25519KeyGenerationParameters;
 import org.bouncycastle.crypto.params.Ed25519PrivateKeyParameters;
@@ -41,5 +43,10 @@ public class EcKeyGenerator {
 		var decoded = Base64.decodeBase64(privateKey);
 		var key = new Ed25519PrivateKeyParameters(decoded, 0);
 		return Base64.encodeBase64String(key.generatePublicKey().getEncoded());
+	}
+
+	public String createKeyHash(String key) {
+		var decoded = Base64.decodeBase64(key);
+		return Hex.encodeHexString(Hashing.sha256().hashBytes(decoded).asBytes());
 	}
 }
