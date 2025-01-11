@@ -24,12 +24,6 @@ java {
 	}
 }
 
-kotlin {
-	jvmToolchain {
-		languageVersion.set(JavaLanguageVersion.of("17"))
-	}
-}
-
 ext {
 	mainClassName = "com.autonomouslogic.everef.Main"
 	envProperties = new Properties()
