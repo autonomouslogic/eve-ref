@@ -2,16 +2,13 @@ package com.autonomouslogic.everef.cli.structures.source;
 
 import static com.autonomouslogic.everef.util.EveConstants.NPC_STATION_MAX_ID;
 
-import com.autonomouslogic.everef.cli.structures.StructureScrapeHelper;
 import com.autonomouslogic.everef.cli.structures.StructureStore;
-import com.autonomouslogic.everef.openapi.esi.api.UniverseApi;
 import com.autonomouslogic.everef.util.CompressUtil;
 import com.autonomouslogic.everef.util.DataUtil;
 import com.autonomouslogic.everef.util.JsonNodeCsvReader;
 import com.autonomouslogic.everef.util.JsonUtil;
 import com.autonomouslogic.everef.util.Rx;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Maybe;
 import java.io.File;
@@ -26,15 +23,6 @@ import org.jetbrains.annotations.NotNull;
 
 @Log4j2
 public class PublicContractsStructureSource implements StructureSource {
-	@Inject
-	protected UniverseApi universeApi;
-
-	@Inject
-	protected ObjectMapper objectMapper;
-
-	@Inject
-	protected StructureScrapeHelper structureScrapeHelper;
-
 	@Inject
 	protected DataUtil dataUtil;
 

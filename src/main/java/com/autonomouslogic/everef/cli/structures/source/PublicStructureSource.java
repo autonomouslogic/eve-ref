@@ -45,9 +45,9 @@ public class PublicStructureSource implements StructureSource {
 	@Override
 	public Flowable<Long> getStructures() {
 		return Flowable.defer(() -> {
+					log.info("Fetching public structure ids");
 					var response = universeApi.getUniverseStructuresWithHttpInfo(
 							EsiConstants.Datasource.tranquility.toString(), null, null);
-					log.info("Fetching public structure ids");
 					if (response.getStatusCode() != 200) {
 						return Flowable.error(new RuntimeException(
 								String.format("Failed to fetch public structure ids: %s", response.getStatusCode())));

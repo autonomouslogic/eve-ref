@@ -20,7 +20,6 @@ import com.autonomouslogic.everef.esi.EsiUrl;
 import com.autonomouslogic.everef.esi.LocationPopulator;
 import com.autonomouslogic.everef.http.OkHttpHelper;
 import com.autonomouslogic.everef.mvstore.MVStoreUtil;
-import com.autonomouslogic.everef.openapi.esi.api.UniverseApi;
 import com.autonomouslogic.everef.openapi.refdata.api.RefdataApi;
 import com.autonomouslogic.everef.s3.S3Adapter;
 import com.autonomouslogic.everef.s3.S3Util;
@@ -129,9 +128,6 @@ public class ScrapeStructures implements Command {
 
 	@Inject
 	protected MVStoreUtil mvStoreUtil;
-
-	@Inject
-	protected UniverseApi universeApi;
 
 	@Inject
 	protected EsiAuthHelper esiAuthHelper;

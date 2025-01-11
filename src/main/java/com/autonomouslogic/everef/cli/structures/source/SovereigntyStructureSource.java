@@ -6,9 +6,7 @@ import static com.autonomouslogic.everef.cli.structures.ScrapeStructures.LAST_SE
 import com.autonomouslogic.everef.cli.structures.StructureScrapeHelper;
 import com.autonomouslogic.everef.cli.structures.StructureStore;
 import com.autonomouslogic.everef.esi.EsiConstants;
-import com.autonomouslogic.everef.esi.EsiHelper;
 import com.autonomouslogic.everef.openapi.esi.api.SovereigntyApi;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import java.time.Instant;
@@ -24,13 +22,7 @@ public class SovereigntyStructureSource implements StructureSource {
 	protected SovereigntyApi sovereigntyApi;
 
 	@Inject
-	protected ObjectMapper objectMapper;
-
-	@Inject
 	protected StructureScrapeHelper structureScrapeHelper;
-
-	@Inject
-	protected EsiHelper esiHelper;
 
 	@Setter
 	@Accessors(chain = false)
