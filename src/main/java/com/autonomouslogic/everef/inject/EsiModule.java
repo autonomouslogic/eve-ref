@@ -1,6 +1,6 @@
 package com.autonomouslogic.everef.inject;
 
-import static com.autonomouslogic.everef.config.Configs.REF_DATA_BASE_URL;
+import static com.autonomouslogic.everef.config.Configs.ESI_BASE_URL;
 
 import com.autonomouslogic.everef.openapi.esi.api.CharacterApi;
 import com.autonomouslogic.everef.openapi.esi.api.CorporationApi;
@@ -18,7 +18,7 @@ public class EsiModule {
 	@Provides
 	@Singleton
 	public ApiClient apiClient() {
-		var base = REF_DATA_BASE_URL.getRequired();
+		var base = ESI_BASE_URL.getRequired();
 		var api = new ApiClient();
 		api.setScheme(base.getScheme());
 		api.setHost(base.getHost());

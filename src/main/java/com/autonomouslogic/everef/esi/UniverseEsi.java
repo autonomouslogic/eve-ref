@@ -114,13 +114,7 @@ public class UniverseEsi {
 						if (cache.containsKey(id)) {
 							return Maybe.fromOptional(cache.get(id));
 						}
-						log.trace(
-								"Fetching {} {} - [{} - {} - {}]",
-								name,
-								id,
-								cache.size(),
-								cache.containsKey(id),
-								System.identityHashCode(cache));
+						log.trace("Fetching {} {}", name, id);
 						var obj = fetcher.get();
 						var optional = Optional.ofNullable(obj);
 						cache.put(id, optional);

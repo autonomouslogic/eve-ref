@@ -51,6 +51,7 @@ public class LocationPopulatorTest {
 				new GetUniverseRegionsRegionIdOk().regionId(100).name("Region"));
 		constellation = objectMapper.writeValueAsString(new GetUniverseConstellationsConstellationIdOk()
 				.constellationId(200)
+				.regionId(100)
 				.name("Constellation"));
 		system = objectMapper.writeValueAsString(new GetUniverseSystemsSystemIdOk()
 				.constellationId(200)
