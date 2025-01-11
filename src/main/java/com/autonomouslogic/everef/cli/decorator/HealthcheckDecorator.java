@@ -3,6 +3,7 @@ package com.autonomouslogic.everef.cli.decorator;
 import com.autonomouslogic.everef.cli.Command;
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.util.Rx;
+import dagger.Lazy;
 import io.reactivex.rxjava3.core.Completable;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
@@ -22,7 +23,7 @@ import org.jetbrains.annotations.NotNull;
 @Log4j2
 public class HealthcheckDecorator {
 	@Inject
-	protected OkHttpClient okHttpClient;
+	protected Lazy<OkHttpClient> okHttpClient;
 
 	private final Optional<String> finishUrl;
 	private final Optional<String> startUrl;
@@ -41,6 +42,7 @@ public class HealthcheckDecorator {
 		if (!enabled()) {
 			return command;
 		}
+		okHttpClient.get();
 		return new HealthcheckCommand(command);
 	}
 
@@ -72,7 +74,8 @@ public class HealthcheckDecorator {
 
 	@SneakyThrows
 	private void executeCall(@NotNull String url, @NotNull Optional<String> body) {
-		var call = okHttpClient.newCall(new Request.Builder()
+		var client = okHttpClient.get();
+		var call = client.newCall(new Request.Builder()
 				.post(RequestBody.create(body.orElse("").getBytes(StandardCharsets.UTF_8)))
 				.url(url)
 				.build());

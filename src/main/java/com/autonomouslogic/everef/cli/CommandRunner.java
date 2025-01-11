@@ -77,6 +77,9 @@ public class CommandRunner {
 	protected Provider<FetchDonations> fetchDonationsProvider;
 
 	@Inject
+	protected Provider<GenerateKeyPair> generateKeyPairProvider;
+
+	@Inject
 	protected SentryDecorator sentryDecorator;
 
 	@Inject
@@ -149,6 +152,8 @@ public class CommandRunner {
 				return buildSearchProvider.get();
 			case "fetch-donations":
 				return fetchDonationsProvider.get();
+			case "generate-key-pair":
+				return generateKeyPairProvider.get();
 			default:
 				throw new IllegalArgumentException("Unknown command: " + name);
 		}
