@@ -20,10 +20,7 @@ public class EsiModule {
 	public ApiClient apiClient() {
 		var base = ESI_BASE_URL.getRequired();
 		var api = new ApiClient();
-		api.setScheme(base.getScheme());
-		api.setHost(base.getHost());
-		api.setPort(base.getPort());
-		api.setBasePath(base.getPath());
+		api.updateBaseUri(base.toString());
 		return api;
 	}
 
