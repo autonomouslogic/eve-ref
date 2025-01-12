@@ -4,6 +4,7 @@ import com.autonomouslogic.everef.cli.CommandRunner;
 import com.autonomouslogic.everef.cli.decorator.SentryDecorator;
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.inject.MainComponent;
+import com.autonomouslogic.everef.util.VirtualThreads;
 import io.reactivex.rxjava3.plugins.RxJavaPlugins;
 import io.sentry.Sentry;
 import javax.inject.Inject;
@@ -30,7 +31,8 @@ public class Main {
 			System.exit(1);
 		});
 		try {
-			MainComponent.create().createMain().start(args);
+			var main = MainComponent.create().createMain();
+			VirtualThreads.EXECUTOR.submit(() -> main.start(args)).get();
 		} catch (Throwable e) {
 			log.fatal("Root error, exiting", e);
 			SentryDecorator.captureException(e);
