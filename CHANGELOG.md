@@ -1,5 +1,12 @@
 EVE Ref Changelog
 
+## [2.55.1](https://github.com/autonomouslogic/eve-ref/compare/2.55.0...2.55.1) (2025-01-13)
+
+
+### Bug Fixes
+
+* API client base path handling ([#716](https://github.com/autonomouslogic/eve-ref/issues/716)) ([7f49b72](https://github.com/autonomouslogic/eve-ref/commit/7f49b72b82f0514592b9df7d78fcd6c783d0291f))
+
 ## [2.55.0](https://github.com/autonomouslogic/eve-ref/compare/2.54.3...2.55.0) (2025-01-11)
 
 
