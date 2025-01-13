@@ -139,7 +139,7 @@ task referenceDataClientGenerate(type: org.openapitools.generator.gradle.plugin.
 	configOptions = [
 			serializationLibrary: "jackson",
 			dateLibrary: "java8",
-			asyncNative: "true"
+			asyncNative: "false"
 	]
 	additionalProperties = [
 			supportUrlQuery: "false"
