@@ -5,7 +5,7 @@ plugins {
 	id "idea"
 	id "application"
 	id "jacoco"
-	id "org.danilopianini.git-sensitive-semantic-versioning-gradle-plugin" version "3.1.7"
+	id "org.danilopianini.git-sensitive-semantic-versioning-gradle-plugin" version "4.0.2"
 	id "io.freefair.lombok" version "8.11"
 	id "com.diffplug.spotless" version "7.0.1"
 	id "org.openapi.generator" version "7.10.0"
