@@ -113,7 +113,7 @@ public class FetchDonationsTest {
 		fetchDonations.run().blockingAwait();
 
 		assertDonationsFile(List.of());
-		assertSummaryFile(SummaryFile.builder().top(List.of()).build());
+		assertSummaryFile(SummaryFile.builder().top(List.of()).recent(List.of()).build());
 		assertNoDiscordUpdate();
 	}
 
@@ -134,13 +134,12 @@ public class FetchDonationsTest {
 				.secondPartyId(TEST_CHARACTER_ID)
 				.amount(100.0)
 				.build()));
-		assertSummaryFile(SummaryFile.builder()
-				.top(List.of(SummaryEntry.builder()
-						.donorName("Donor Character 1")
-						.amount(100.00)
-						.characterId(TEST_DONOR_CHARACTER_ID_1)
-						.build()))
+		var entries = List.of(SummaryEntry.builder()
+				.donorName("Donor Character 1")
+				.amount(100.00)
+				.characterId(TEST_DONOR_CHARACTER_ID_1)
 				.build());
+		assertSummaryFile(SummaryFile.builder().top(entries).recent(entries).build());
 
 		assertDiscordUpdate("**Donor Character 1** donated 100.00 ISK :sunglasses:");
 	}
@@ -172,13 +171,13 @@ public class FetchDonationsTest {
 				.secondPartyId(TEST_CHARACTER_ID)
 				.amount(100.0)
 				.build()));
-		assertSummaryFile(SummaryFile.builder()
-				.top(List.of(SummaryEntry.builder()
-						.donorName("Donor Character")
-						.amount(100.00)
-						.characterId(TEST_DONOR_CHARACTER_ID_1)
-						.build()))
+
+		var entries = List.of(SummaryEntry.builder()
+				.donorName("Donor Character")
+				.amount(100.00)
+				.characterId(TEST_DONOR_CHARACTER_ID_1)
 				.build());
+		assertSummaryFile(SummaryFile.builder().top(entries).recent(entries).build());
 
 		assertNoDiscordUpdate();
 	}
@@ -222,19 +221,18 @@ public class FetchDonationsTest {
 						.amount(200.0)
 						.build()));
 
-		assertSummaryFile(SummaryFile.builder()
-				.top(List.of(
-						SummaryEntry.builder()
-								.donorName("Donor Character 2")
-								.amount(200.00)
-								.characterId(TEST_DONOR_CHARACTER_ID_2)
-								.build(),
-						SummaryEntry.builder()
-								.donorName("Donor Character 1")
-								.amount(100.00)
-								.characterId(TEST_DONOR_CHARACTER_ID_1)
-								.build()))
-				.build());
+		var entries = List.of(
+				SummaryEntry.builder()
+						.donorName("Donor Character 2")
+						.amount(200.00)
+						.characterId(TEST_DONOR_CHARACTER_ID_2)
+						.build(),
+				SummaryEntry.builder()
+						.donorName("Donor Character 1")
+						.amount(100.00)
+						.characterId(TEST_DONOR_CHARACTER_ID_1)
+						.build());
+		assertSummaryFile(SummaryFile.builder().top(entries).recent(entries).build());
 
 		assertDiscordUpdate("**Donor Character 2** donated 200.00 ISK :gift:");
 	}
@@ -277,19 +275,18 @@ public class FetchDonationsTest {
 						.amount(200.0)
 						.build()));
 
-		assertSummaryFile(SummaryFile.builder()
-				.top(List.of(
-						SummaryEntry.builder()
-								.donorName("Donor Character 2")
-								.amount(200.00)
-								.characterId(TEST_DONOR_CHARACTER_ID_2)
-								.build(),
-						SummaryEntry.builder()
-								.donorName("Donor Character 1")
-								.amount(100.00)
-								.characterId(TEST_DONOR_CHARACTER_ID_1)
-								.build()))
-				.build());
+		var entries = List.of(
+				SummaryEntry.builder()
+						.donorName("Donor Character 2")
+						.amount(200.00)
+						.characterId(TEST_DONOR_CHARACTER_ID_2)
+						.build(),
+				SummaryEntry.builder()
+						.donorName("Donor Character 1")
+						.amount(100.00)
+						.characterId(TEST_DONOR_CHARACTER_ID_1)
+						.build());
+		assertSummaryFile(SummaryFile.builder().top(entries).recent(entries).build());
 
 		assertDiscordUpdate("**Donor Character 2** donated 200.00 ISK :gift:");
 	}
@@ -321,13 +318,12 @@ public class FetchDonationsTest {
 				.amount(100.0)
 				.build()));
 
-		assertSummaryFile(SummaryFile.builder()
-				.top(List.of(SummaryEntry.builder()
-						.donorName("Donor Character 1")
-						.amount(100.00)
-						.characterId(TEST_DONOR_CHARACTER_ID_1)
-						.build()))
+		var entries = List.of(SummaryEntry.builder()
+				.donorName("Donor Character 1")
+				.amount(100.00)
+				.characterId(TEST_DONOR_CHARACTER_ID_1)
 				.build());
+		assertSummaryFile(SummaryFile.builder().top(entries).recent(entries).build());
 
 		assertNoDiscordUpdate();
 	}
@@ -351,13 +347,12 @@ public class FetchDonationsTest {
 		putDonationsFile();
 		fetchDonations.run().blockingAwait();
 
-		assertSummaryFile(SummaryFile.builder()
-				.top(List.of(SummaryEntry.builder()
-						.donorName("Donor Character 1")
-						.amount(600.00)
-						.characterId(TEST_DONOR_CHARACTER_ID_1)
-						.build()))
+		var entries = List.of(SummaryEntry.builder()
+				.donorName("Donor Character 1")
+				.amount(600.00)
+				.characterId(TEST_DONOR_CHARACTER_ID_1)
 				.build());
+		assertSummaryFile(SummaryFile.builder().top(entries).recent(entries).build());
 
 		assertDiscordUpdate("**Donor Character 1** donated 500.00 ISK :moneybag:");
 	}
@@ -372,19 +367,18 @@ public class FetchDonationsTest {
 		putDonationsFile();
 		fetchDonations.run().blockingAwait();
 
-		assertSummaryFile(SummaryFile.builder()
-				.top(List.of(
-						SummaryEntry.builder()
-								.donorName("Donor Character 2")
-								.amount(300.00)
-								.characterId(TEST_DONOR_CHARACTER_ID_2)
-								.build(),
-						SummaryEntry.builder()
-								.donorName("Donor Character 1")
-								.amount(200.00)
-								.characterId(TEST_DONOR_CHARACTER_ID_1)
-								.build()))
-				.build());
+		var entries = List.of(
+				SummaryEntry.builder()
+						.donorName("Donor Character 2")
+						.amount(300.00)
+						.characterId(TEST_DONOR_CHARACTER_ID_2)
+						.build(),
+				SummaryEntry.builder()
+						.donorName("Donor Character 1")
+						.amount(200.00)
+						.characterId(TEST_DONOR_CHARACTER_ID_1)
+						.build());
+		assertSummaryFile(SummaryFile.builder().top(entries).recent(entries).build());
 
 		assertDiscordUpdate("**Donor Character 2** donated 300.00 ISK :partying_face:\n"
 				+ "**Donor Character 1** donated 200.00 ISK :thumbsup:");
@@ -453,7 +447,7 @@ public class FetchDonationsTest {
 				GetCorporationsCorporationIdWalletsDivisionJournal200Ok.RefTypeEnum.ACCELERATION_GATE_FEE);
 		fetchDonations.run().blockingAwait();
 		assertDonationsFile(List.of());
-		assertSummaryFile(SummaryFile.builder().top(List.of()).build());
+		assertSummaryFile(SummaryFile.builder().top(List.of()).recent(List.of()).build());
 		assertNoDiscordUpdate();
 	}
 
@@ -485,7 +479,7 @@ public class FetchDonationsTest {
 				GetCorporationsCorporationIdWalletsDivisionJournal200Ok.RefTypeEnum.CORPORATION_ACCOUNT_WITHDRAWAL);
 		fetchDonations.run().blockingAwait();
 		assertDonationsFile(List.of());
-		assertSummaryFile(SummaryFile.builder().top(List.of()).build());
+		assertSummaryFile(SummaryFile.builder().top(List.of()).recent(List.of()).build());
 		assertNoDiscordUpdate();
 	}
 

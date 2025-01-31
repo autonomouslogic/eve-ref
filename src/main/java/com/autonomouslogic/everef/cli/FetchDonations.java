@@ -283,7 +283,7 @@ public class FetchDonations implements Command {
 
 	private static @NotNull SummaryFile buildSummary(Collection<DonationEntry> donations) {
 		return SummaryFile.builder()
-				//			.recent(summarise(donations, Duration.ofDays(7)))
+				.recent(summarise(donations, Duration.ofDays(7)))
 				.top(summarise(donations, Duration.ofDays(90)))
 				.build();
 	}
