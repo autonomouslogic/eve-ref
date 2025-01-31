@@ -17,6 +17,7 @@ import com.autonomouslogic.everef.test.TestDataUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.io.IOException;
+import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -382,6 +383,80 @@ public class FetchDonationsTest {
 
 		assertDiscordUpdate("**Donor Character 2** donated 300.00 ISK :partying_face:\n"
 				+ "**Donor Character 1** donated 200.00 ISK :thumbsup:");
+	}
+
+	@Test
+	void shouldNotSummariseOldDonations() {
+		// Existing prior donations
+		existingDonations.add(DonationEntry.builder()
+				.id(1)
+				.date(donationTime.toInstant())
+				.firstPartyId(TEST_DONOR_CHARACTER_ID_1)
+				.characterId(TEST_DONOR_CHARACTER_ID_1)
+				.donorName("Donor Character 1")
+				.secondPartyId(TEST_CHARACTER_ID)
+				.amount(10_000_001.0)
+				.build());
+		existingDonations.add(DonationEntry.builder()
+				.id(2)
+				.date(donationTime.toInstant().minus(Duration.ofDays(7)))
+				.firstPartyId(TEST_DONOR_CHARACTER_ID_1)
+				.characterId(TEST_DONOR_CHARACTER_ID_1)
+				.donorName("Donor Character 1")
+				.secondPartyId(TEST_CHARACTER_ID)
+				.amount(10_000_010.0)
+				.build());
+		existingDonations.add(DonationEntry.builder()
+				.id(3)
+				.date(donationTime.toInstant().minus(Duration.ofDays(90)))
+				.firstPartyId(TEST_DONOR_CHARACTER_ID_1)
+				.characterId(TEST_DONOR_CHARACTER_ID_1)
+				.donorName("Donor Character 1")
+				.secondPartyId(TEST_CHARACTER_ID)
+				.amount(10_000_100.0)
+				.build());
+
+		putDonationsFile();
+		fetchDonations.run().blockingAwait();
+
+		assertSummaryFile(SummaryFile.builder()
+				.top(List.of(SummaryEntry.builder()
+						.donorName("Donor Character 1")
+						.amount(20_000_011.0)
+						.characterId(TEST_DONOR_CHARACTER_ID_1)
+						.build()))
+				.recent(List.of(SummaryEntry.builder()
+						.donorName("Donor Character 1")
+						.amount(10_000_001.0)
+						.characterId(TEST_DONOR_CHARACTER_ID_1)
+						.build()))
+				.build());
+	}
+
+	@Test
+	void shouldNotIncludeSmallDonationsInRecent() {
+		// Existing prior donations
+		existingDonations.add(DonationEntry.builder()
+				.id(1)
+				.date(donationTime.toInstant())
+				.firstPartyId(TEST_DONOR_CHARACTER_ID_1)
+				.characterId(TEST_DONOR_CHARACTER_ID_1)
+				.donorName("Donor Character 1")
+				.secondPartyId(TEST_CHARACTER_ID)
+				.amount(1.0)
+				.build());
+
+		putDonationsFile();
+		fetchDonations.run().blockingAwait();
+
+		assertSummaryFile(SummaryFile.builder()
+				.top(List.of(SummaryEntry.builder()
+						.donorName("Donor Character 1")
+						.amount(1.0)
+						.characterId(TEST_DONOR_CHARACTER_ID_1)
+						.build()))
+				.recent(List.of())
+				.build());
 	}
 
 	@Test

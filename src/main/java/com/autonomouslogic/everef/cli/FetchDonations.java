@@ -60,6 +60,7 @@ import software.amazon.awssdk.services.s3.model.NoSuchKeyException;
  */
 @Log4j2
 public class FetchDonations implements Command {
+	private static final double MIN_RECENT_DONATION_AMOUNT = 10_000_000;
 	private static final List<String> DONATION_REF_TYPES = List.of("player_donation", "corporation_account_withdrawal");
 	public static final String DONATIONS_LIST_FILE = "donations-all.json";
 	public static final String DONATIONS_SUMMARY_FILE = "donations.json";
@@ -283,20 +284,24 @@ public class FetchDonations implements Command {
 
 	private static @NotNull SummaryFile buildSummary(Collection<DonationEntry> donations) {
 		return SummaryFile.builder()
-				.recent(summarise(donations, Duration.ofDays(7)))
-				.top(summarise(donations, Duration.ofDays(90)))
+				.recent(summarise(donations, Duration.ofDays(7), MIN_RECENT_DONATION_AMOUNT))
+				.top(summarise(donations, Duration.ofDays(90), 0.0))
 				.build();
 	}
 
 	private static @NotNull List<SummaryEntry> summarise(Collection<DonationEntry> donations) {
-		return summarise(donations, null);
+		return summarise(donations, null, 0.0);
 	}
 
-	private static @NotNull List<SummaryEntry> summarise(Collection<DonationEntry> donations, Duration lookback) {
+	private static @NotNull List<SummaryEntry> summarise(
+			Collection<DonationEntry> donations, Duration lookback, double minAmount) {
 		var now = Instant.now();
 		var totals = new HashMap<String, SummaryEntry>();
 		for (var entry : donations) {
 			if (lookback != null && entry.getDate().isBefore(now.minus(lookback))) {
+				continue;
+			}
+			if (entry.getAmount() < minAmount) {
 				continue;
 			}
 			var donor = entry.getDonorName();
