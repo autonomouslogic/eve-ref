@@ -4,20 +4,9 @@ import Money from "~/components/dogma/units/Money.vue";
 import ExternalLink from "~/components/helpers/ExternalLink.vue";
 import InternalLink from "~/components/helpers/InternalLink.vue";
 import {useLazyFetch} from "nuxt/app";
+import type {DonationsFile} from "~/lib/donations";
 
-interface SummaryFile {
-	top: DonorEntry[],
-	recent: DonorEntry[]
-}
-
-interface DonorEntry {
-	donor_name: string
-	amount: number
-	character_id: number
-	corporation_id: number
-}
-
-const {status, data: donors} = await useLazyFetch<SummaryFile>("https://static.everef.net/donations.json", {
+const {status, data: donors} = await useLazyFetch<DonationsFile>("https://static.everef.net/donations.json", {
 	server: false
 });
 

@@ -399,7 +399,7 @@ public class FetchDonationsTest {
 				.build());
 		existingDonations.add(DonationEntry.builder()
 				.id(2)
-				.date(donationTime.toInstant().minus(Duration.ofDays(7)))
+				.date(donationTime.toInstant().minus(Duration.ofDays(1)))
 				.firstPartyId(TEST_DONOR_CHARACTER_ID_1)
 				.characterId(TEST_DONOR_CHARACTER_ID_1)
 				.donorName("Donor Character 1")
