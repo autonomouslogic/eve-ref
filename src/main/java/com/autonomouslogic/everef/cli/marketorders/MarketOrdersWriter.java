@@ -31,7 +31,7 @@ public class MarketOrdersWriter {
 
 	public Single<File> writeOrders() {
 		return prepareSortedIds().flatMap(ids -> Single.fromCallable(() -> {
-					log.info(String.format("Preparing to write %s market orders.", marketOrdersStore.size()));
+					log.info(String.format("Writing %s market orders.", marketOrdersStore.size()));
 					var start = Instant.now();
 					var csv = tempFiles.tempFile("market-orders", ".csv").toFile();
 					var iterable = Iterables.transform(ids, id -> marketOrdersStore.get(id));

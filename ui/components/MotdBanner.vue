@@ -2,35 +2,56 @@
 import ExternalLink from "~/components/helpers/ExternalLink.vue";
 import {PATREON_URL} from "~/lib/urls";
 import InternalLink from "~/components/helpers/InternalLink.vue";
+import {useLazyFetch} from "nuxt/app";
+import type {DonationsFile} from "~/lib/donations";
+import {formatMoney} from "~/lib/money";
 
 const route = useRoute();
-const isIndex = computed(() => (route.name as string).startsWith("index"));
 
-const title = "I'm giving away over 30 billion ISK";
-const text = "Let's celebrate the new year by helping me give away over 30 billion ISK in December.";
-const url = "/giveaways";
-const urlText = "Join Giveaway";
+interface Motd {
+	text: string
+	url: string
+	urlText: string
+}
+
+const {status: donorsStatus, data: donors} = await useLazyFetch<DonationsFile>("https://static.everef.net/donations.json", {
+	server: false
+});
+
+const motd = computed(() => {
+	// Recent donors.
+	if (donorsStatus.value == "success" && donors?.value?.recent?.length && donors.value.recent.length > 0) {
+		const donorsText = donors.value.recent.map(donor => {
+			return `${donor.donor_name} donated ${formatMoney(donor.amount)}`;
+		}).join("<br/>");
+		console.log(donorsText);
+		return {
+			text: `${donorsText}`,
+			url: "/about",
+			urlText: "Donate ISK"
+		} as Motd;
+	}
+
+	return {
+		text: "EVE Ref is funded by donations",
+		url: "/about",
+		urlText: "Support"
+	} as Motd;
+
+	// // No MOTD
+	// return null;
+});
+
 </script>
 
 <template>
-	<div v-if="false" class="motd">
-		<section v-if="isIndex">
-			<div class="py-8 px-4 mx-auto max-w-screen-xl grid">
-				<div class="text-center sm:text-left">
-					<h1 class="mb-4 text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight leading-none">{{title}}</h1>
-					<span v-if="text" class="hidden sm:block">
-						<p class="mb-4">{{text}}</p>
-					</span>
-					<p class="mb-4 font-normal text-lg lg:text-xl">
-						<InternalLink :to="url">{{urlText}} &raquo;</InternalLink>
-					</p>
-				</div>
-			</div>
-		</section>
-		<section v-else class="flex">
+	<div v-if="motd" class="motd">
+		<section class="flex">
 			<div class="py-4 px-2 mx-auto max-w-screen-xl text-center flex flex-col md:flex-row text-xl">
-				<p class="font-extrabold mx-3 tracking-tight">{{title}}</p>
-				<ExternalLink :url="url" class="mx-3 font-normal">{{urlText}} &raquo;</ExternalLink>
+				<p class="font-extrabold mx-3 tracking-tight">
+					<span v-html="motd.text"></span>
+				</p>
+				<ExternalLink :url="motd.url" class="mx-3 font-normal">{{motd.urlText}} &raquo;</ExternalLink>
 			</div>
 		</section>
 	</div>
