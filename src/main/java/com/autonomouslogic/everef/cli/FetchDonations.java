@@ -234,12 +234,6 @@ public class FetchDonations implements Command {
 		return journals;
 	}
 
-	private List<SummaryEntry> buildSummary(Collection<DonationEntry> donations) {
-		return summarise(donations).stream()
-				.sorted(Ordering.natural().reverse().onResultOf(SummaryEntry::getAmount))
-				.toList();
-	}
-
 	private Maybe<String> getAccessToken() {
 		return esiAuthHelper.getTokenStringForOwnerHash(eveRefOwnerHash).toMaybe();
 	}
@@ -287,9 +281,24 @@ public class FetchDonations implements Command {
 		return characterApi.getCharactersCharacterId(characterId, EsiConstants.Datasource.tranquility.toString(), null);
 	}
 
+	private static @NotNull SummaryFile buildSummary(Collection<DonationEntry> donations) {
+		return SummaryFile.builder()
+				//			.recent(summarise(donations, Duration.ofDays(7)))
+				.top(summarise(donations, Duration.ofDays(90)))
+				.build();
+	}
+
 	private static @NotNull List<SummaryEntry> summarise(Collection<DonationEntry> donations) {
+		return summarise(donations, null);
+	}
+
+	private static @NotNull List<SummaryEntry> summarise(Collection<DonationEntry> donations, Duration lookback) {
+		var now = Instant.now();
 		var totals = new HashMap<String, SummaryEntry>();
 		for (var entry : donations) {
+			if (lookback != null && entry.getDate().isBefore(now.minus(lookback))) {
+				continue;
+			}
 			var donor = entry.getDonorName();
 			var sum = totals.get(donor);
 			if (sum == null) {
@@ -306,7 +315,9 @@ public class FetchDonations implements Command {
 			}
 			totals.put(donor, sum);
 		}
-		return new ArrayList<>(totals.values());
+		return totals.values().stream()
+				.sorted(Ordering.natural().reverse().onResultOf(SummaryEntry::getAmount))
+				.toList();
 	}
 
 	private void notifyDiscord(List<DonationEntry> donations) {
@@ -417,6 +428,19 @@ public class FetchDonations implements Command {
 
 		@JsonProperty
 		double amount;
+	}
+
+	@Value
+	@Builder(toBuilder = true)
+	@Jacksonized
+	@JsonInclude(JsonInclude.Include.NON_NULL)
+	@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
+	public static class SummaryFile {
+		@JsonProperty
+		List<SummaryEntry> recent;
+
+		@JsonProperty
+		List<SummaryEntry> top;
 	}
 
 	@Value
