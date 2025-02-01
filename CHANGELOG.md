@@ -1,5 +1,13 @@
 EVE Ref Changelog
 
+## [2.55.2](https://github.com/autonomouslogic/eve-ref/compare/2.55.1...2.55.2) (2025-02-01)
+
+
+### Bug Fixes
+
+* **deps:** update dependency io.sentry:sentry to v8 [skip release] ([#718](https://github.com/autonomouslogic/eve-ref/issues/718)) ([3c07e2f](https://github.com/autonomouslogic/eve-ref/commit/3c07e2f6fafc8797d1122172aa17e9da099e9a54))
+* Donations in MOTD ([#720](https://github.com/autonomouslogic/eve-ref/issues/720)) ([77b1a19](https://github.com/autonomouslogic/eve-ref/commit/77b1a19b14597af868f640f5daa8571532c85fbe))
+
 ## [2.55.1](https://github.com/autonomouslogic/eve-ref/compare/2.55.0...2.55.1) (2025-01-13)
 
 
