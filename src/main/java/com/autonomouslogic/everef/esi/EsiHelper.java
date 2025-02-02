@@ -98,7 +98,7 @@ public class EsiHelper {
 	 * @return
 	 */
 	protected Flowable<Response> fetchPages(EsiUrl url, Maybe<String> accessToken) {
-		return fetch(url, accessToken).flatMapPublisher(first -> {
+		return fetch(url.toBuilder().page(1).build(), accessToken).flatMapPublisher(first -> {
 			var pages = first.header(PAGES_HEADER);
 			if (pages == null || pages.isEmpty()) {
 				return Flowable.just(first);
