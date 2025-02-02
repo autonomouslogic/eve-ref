@@ -94,6 +94,7 @@ public class OkHttpModule {
 				.connectTimeout(Duration.ofSeconds(5))
 				.readTimeout(Duration.ofSeconds(20))
 				.writeTimeout(Duration.ofSeconds(5))
+				.callTimeout(Duration.ofSeconds(60))
 				.cache(cache);
 	}
 }
