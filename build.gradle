@@ -9,7 +9,7 @@ plugins {
 	id "io.freefair.lombok" version "8.12"
 	id "com.diffplug.spotless" version "7.0.2"
 	id "org.openapi.generator" version "7.11.0"
-	id "io.swagger.core.v3.swagger-gradle-plugin" version "2.2.28"
+	id "io.swagger.core.v3.swagger-gradle-plugin" version "2.2.26"
 	id "org.flywaydb.flyway" version "11.3.0" apply false
 	id "nu.studer.jooq" version "9.0" apply false
 	id "io.micronaut.application" version "4.4.5"
@@ -118,6 +118,7 @@ task refDataSpec(type: io.swagger.v3.plugins.gradle.tasks.ResolveTask) {
 	filterClass = "com.autonomouslogic.customspecfilter.CustomSpecFilter"
 	outputFormat = "YAML"
 	prettyPrint = "true"
+	sortOutput = true
 	classpath = sourceSets.main.runtimeClasspath
 	resourcePackages = ["com.autonomouslogic.everef.refdata"]
 	outputDir = file("spec")
