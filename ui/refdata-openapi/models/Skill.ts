@@ -21,22 +21,10 @@ import { exists, mapValues } from '../runtime';
 export interface Skill {
     /**
      * 
-     * @type {number}
+     * @type {boolean}
      * @memberof Skill
      */
-    typeId?: number;
-    /**
-     * The dogma attribute ID of the primary training attribute.
-     * @type {number}
-     * @memberof Skill
-     */
-    primaryDogmaAttributeId?: number;
-    /**
-     * The dogma attribute ID of the secondary training attribute.
-     * @type {number}
-     * @memberof Skill
-     */
-    secondaryDogmaAttributeId?: number;
+    canNotBeTrainedOnTrial?: boolean;
     /**
      * The character attribute ID of the primary training attribute.
      * @type {number}
@@ -44,11 +32,35 @@ export interface Skill {
      */
     primaryCharacterAttributeId?: number;
     /**
+     * The dogma attribute ID of the primary training attribute.
+     * @type {number}
+     * @memberof Skill
+     */
+    primaryDogmaAttributeId?: number;
+    /**
+     * Which type IDs this skill can be used to reprocess. This is found by cross-referencing dogma attribute reprocessingSkillType [790] on the skills.
+     * @type {Array<number>}
+     * @memberof Skill
+     */
+    reprocessableTypeIds?: Array<number>;
+    /**
+     * The other skills required for this skill.
+     * @type {{ [key: string]: number; }}
+     * @memberof Skill
+     */
+    requiredSkills?: { [key: string]: number; };
+    /**
      * The character attribute ID of the secondary training attribute.
      * @type {number}
      * @memberof Skill
      */
     secondaryCharacterAttributeId?: number;
+    /**
+     * The dogma attribute ID of the secondary training attribute.
+     * @type {number}
+     * @memberof Skill
+     */
+    secondaryDogmaAttributeId?: number;
     /**
      * 
      * @type {number}
@@ -57,22 +69,10 @@ export interface Skill {
     trainingTimeMultiplier?: number;
     /**
      * 
-     * @type {boolean}
+     * @type {number}
      * @memberof Skill
      */
-    canNotBeTrainedOnTrial?: boolean;
-    /**
-     * The other skills required for this skill.
-     * @type {{ [key: string]: number; }}
-     * @memberof Skill
-     */
-    requiredSkills?: { [key: string]: number; };
-    /**
-     * Which type IDs this skill can be used to reprocess. This is found by cross-referencing dogma attribute reprocessingSkillType [790] on the skills.
-     * @type {Array<number>}
-     * @memberof Skill
-     */
-    reprocessableTypeIds?: Array<number>;
+    typeId?: number;
 }
 
 /**
@@ -94,15 +94,15 @@ export function SkillFromJSONTyped(json: any, ignoreDiscriminator: boolean): Ski
     }
     return {
         
-        'typeId': !exists(json, 'type_id') ? undefined : json['type_id'],
-        'primaryDogmaAttributeId': !exists(json, 'primary_dogma_attribute_id') ? undefined : json['primary_dogma_attribute_id'],
-        'secondaryDogmaAttributeId': !exists(json, 'secondary_dogma_attribute_id') ? undefined : json['secondary_dogma_attribute_id'],
-        'primaryCharacterAttributeId': !exists(json, 'primary_character_attribute_id') ? undefined : json['primary_character_attribute_id'],
-        'secondaryCharacterAttributeId': !exists(json, 'secondary_character_attribute_id') ? undefined : json['secondary_character_attribute_id'],
-        'trainingTimeMultiplier': !exists(json, 'training_time_multiplier') ? undefined : json['training_time_multiplier'],
         'canNotBeTrainedOnTrial': !exists(json, 'can_not_be_trained_on_trial') ? undefined : json['can_not_be_trained_on_trial'],
-        'requiredSkills': !exists(json, 'required_skills') ? undefined : json['required_skills'],
+        'primaryCharacterAttributeId': !exists(json, 'primary_character_attribute_id') ? undefined : json['primary_character_attribute_id'],
+        'primaryDogmaAttributeId': !exists(json, 'primary_dogma_attribute_id') ? undefined : json['primary_dogma_attribute_id'],
         'reprocessableTypeIds': !exists(json, 'reprocessable_type_ids') ? undefined : json['reprocessable_type_ids'],
+        'requiredSkills': !exists(json, 'required_skills') ? undefined : json['required_skills'],
+        'secondaryCharacterAttributeId': !exists(json, 'secondary_character_attribute_id') ? undefined : json['secondary_character_attribute_id'],
+        'secondaryDogmaAttributeId': !exists(json, 'secondary_dogma_attribute_id') ? undefined : json['secondary_dogma_attribute_id'],
+        'trainingTimeMultiplier': !exists(json, 'training_time_multiplier') ? undefined : json['training_time_multiplier'],
+        'typeId': !exists(json, 'type_id') ? undefined : json['type_id'],
     };
 }
 
@@ -115,15 +115,15 @@ export function SkillToJSON(value?: Skill | null): any {
     }
     return {
         
-        'type_id': value.typeId,
-        'primary_dogma_attribute_id': value.primaryDogmaAttributeId,
-        'secondary_dogma_attribute_id': value.secondaryDogmaAttributeId,
-        'primary_character_attribute_id': value.primaryCharacterAttributeId,
-        'secondary_character_attribute_id': value.secondaryCharacterAttributeId,
-        'training_time_multiplier': value.trainingTimeMultiplier,
         'can_not_be_trained_on_trial': value.canNotBeTrainedOnTrial,
-        'required_skills': value.requiredSkills,
+        'primary_character_attribute_id': value.primaryCharacterAttributeId,
+        'primary_dogma_attribute_id': value.primaryDogmaAttributeId,
         'reprocessable_type_ids': value.reprocessableTypeIds,
+        'required_skills': value.requiredSkills,
+        'secondary_character_attribute_id': value.secondaryCharacterAttributeId,
+        'secondary_dogma_attribute_id': value.secondaryDogmaAttributeId,
+        'training_time_multiplier': value.trainingTimeMultiplier,
+        'type_id': value.typeId,
     };
 }
 

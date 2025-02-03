@@ -28,16 +28,16 @@ import {
 export interface Blueprint {
     /**
      * 
-     * @type {number}
-     * @memberof Blueprint
-     */
-    blueprintTypeId?: number;
-    /**
-     * 
      * @type {{ [key: string]: BlueprintActivity; }}
      * @memberof Blueprint
      */
     activities?: { [key: string]: BlueprintActivity; };
+    /**
+     * 
+     * @type {number}
+     * @memberof Blueprint
+     */
+    blueprintTypeId?: number;
     /**
      * 
      * @type {number}
@@ -65,8 +65,8 @@ export function BlueprintFromJSONTyped(json: any, ignoreDiscriminator: boolean):
     }
     return {
         
-        'blueprintTypeId': !exists(json, 'blueprint_type_id') ? undefined : json['blueprint_type_id'],
         'activities': !exists(json, 'activities') ? undefined : (mapValues(json['activities'], BlueprintActivityFromJSON)),
+        'blueprintTypeId': !exists(json, 'blueprint_type_id') ? undefined : json['blueprint_type_id'],
         'maxProductionLimit': !exists(json, 'max_production_limit') ? undefined : json['max_production_limit'],
     };
 }
@@ -80,8 +80,8 @@ export function BlueprintToJSON(value?: Blueprint | null): any {
     }
     return {
         
-        'blueprint_type_id': value.blueprintTypeId,
         'activities': value.activities === undefined ? undefined : (mapValues(value.activities, BlueprintActivityToJSON)),
+        'blueprint_type_id': value.blueprintTypeId,
         'max_production_limit': value.maxProductionLimit,
     };
 }
