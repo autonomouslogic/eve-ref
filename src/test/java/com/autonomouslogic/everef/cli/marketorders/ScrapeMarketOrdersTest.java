@@ -104,16 +104,16 @@ public class ScrapeMarketOrdersTest {
 					case "/universe/regions/10000002/?datasource=tranquility" -> new MockResponse()
 							.setResponseCode(200)
 							.setBody("{\"region_id\":10000002,\"name\":\"The Forge\",\"constellations\":[]}");
-					case "/markets/10000001/orders?order_type=all&datasource=tranquility&language=en" -> mockRegionOrders(
+					case "/markets/10000001/orders?order_type=all&datasource=tranquility&language=en&page=1" -> mockRegionOrders(
 							recordedRequest, 10000001, 1, 2);
 					case "/markets/10000001/orders?order_type=all&datasource=tranquility&language=en&page=2" -> mockRegionOrders(
 							recordedRequest, 10000001, 2, 2);
-					case "/markets/10000002/orders?order_type=all&datasource=tranquility&language=en" -> mockRegionOrders(
+					case "/markets/10000002/orders?order_type=all&datasource=tranquility&language=en&page=1" -> mockRegionOrders(
 							recordedRequest, 10000002, 1, 2);
 					case "/markets/10000002/orders?order_type=all&datasource=tranquility&language=en&page=2" -> mockRegionOrders(
 							recordedRequest, 10000002, 2, 2);
 					case "/base/structures/structures-latest.v2.json" -> mockStructures();
-					case "/markets/structures/1000000000001/?datasource=tranquility&language=en" -> mockStructureOrders(
+					case "/markets/structures/1000000000001/?datasource=tranquility&language=en&page=1" -> mockStructureOrders(
 							recordedRequest, 1000000000001L, 1, 2);
 					case "/markets/structures/1000000000001/?datasource=tranquility&language=en&page=2" -> mockStructureOrders(
 							recordedRequest, 1000000000001L, 2, 2);
@@ -121,7 +121,7 @@ public class ScrapeMarketOrdersTest {
 							"Fetch non-market structure");
 					case "/markets/structures/1000000000003/?datasource=tranquility&language=en" -> new MockResponse()
 							.setResponseCode(403);
-					case "/markets/structures/1000000000004/?datasource=tranquility&language=en" -> mockStructureOrders(
+					case "/markets/structures/1000000000004/?datasource=tranquility&language=en&page=1" -> mockStructureOrders(
 							recordedRequest, 1000000000004L, 1, 1);
 					default -> {
 						log.error("Unaccounted for URL: {}", recordedRequest.getPath());

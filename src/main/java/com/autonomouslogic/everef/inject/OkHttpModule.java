@@ -92,9 +92,9 @@ public class OkHttpModule {
 				.followRedirects(true)
 				.followSslRedirects(true)
 				.connectTimeout(Duration.ofSeconds(5))
-				.readTimeout(Duration.ofSeconds(20))
+				.readTimeout(Duration.ofSeconds(60))
 				.writeTimeout(Duration.ofSeconds(5))
-				.callTimeout(Duration.ofSeconds(60))
+				.callTimeout(Duration.ofSeconds(120))
 				.cache(cache);
 	}
 }
