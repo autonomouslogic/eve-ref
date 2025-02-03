@@ -28,24 +28,6 @@ import {
 export interface DogmaEffect {
     /**
      * 
-     * @type {number}
-     * @memberof DogmaEffect
-     */
-    effectId?: number;
-    /**
-     * 
-     * @type {string}
-     * @memberof DogmaEffect
-     */
-    name?: string;
-    /**
-     * 
-     * @type {{ [key: string]: string; }}
-     * @memberof DogmaEffect
-     */
-    displayName?: { [key: string]: string; };
-    /**
-     * 
      * @type {{ [key: string]: string; }}
      * @memberof DogmaEffect
      */
@@ -61,7 +43,37 @@ export interface DogmaEffect {
      * @type {number}
      * @memberof DogmaEffect
      */
+    dischargeAttributeId?: number;
+    /**
+     * 
+     * @type {{ [key: string]: string; }}
+     * @memberof DogmaEffect
+     */
+    displayName?: { [key: string]: string; };
+    /**
+     * 
+     * @type {number}
+     * @memberof DogmaEffect
+     */
+    distribution?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof DogmaEffect
+     */
+    durationAttributeId?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof DogmaEffect
+     */
     effectCategory?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof DogmaEffect
+     */
+    effectId?: number;
     /**
      * 
      * @type {string}
@@ -76,24 +88,6 @@ export interface DogmaEffect {
     electronicChance?: boolean;
     /**
      * 
-     * @type {string}
-     * @memberof DogmaEffect
-     */
-    guid?: string;
-    /**
-     * 
-     * @type {number}
-     * @memberof DogmaEffect
-     */
-    dischargeAttributeId?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof DogmaEffect
-     */
-    durationAttributeId?: number;
-    /**
-     * 
      * @type {number}
      * @memberof DogmaEffect
      */
@@ -103,43 +97,13 @@ export interface DogmaEffect {
      * @type {number}
      * @memberof DogmaEffect
      */
-    rangeAttributeId?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof DogmaEffect
-     */
-    npcUsageChanceAttributeId?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof DogmaEffect
-     */
-    trackingSpeedAttributeId?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof DogmaEffect
-     */
-    npcActivationChanceAttributeId?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof DogmaEffect
-     */
     fittingUsageChanceAttributeId?: number;
     /**
      * 
-     * @type {number}
+     * @type {string}
      * @memberof DogmaEffect
      */
-    resistanceAttributeId?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof DogmaEffect
-     */
-    distribution?: number;
+    guid?: string;
     /**
      * 
      * @type {number}
@@ -166,6 +130,30 @@ export interface DogmaEffect {
     isWarpSafe?: boolean;
     /**
      * 
+     * @type {Array<ModifierInfo>}
+     * @memberof DogmaEffect
+     */
+    modifiers?: Array<ModifierInfo>;
+    /**
+     * 
+     * @type {string}
+     * @memberof DogmaEffect
+     */
+    name?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof DogmaEffect
+     */
+    npcActivationChanceAttributeId?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof DogmaEffect
+     */
+    npcUsageChanceAttributeId?: number;
+    /**
+     * 
      * @type {boolean}
      * @memberof DogmaEffect
      */
@@ -178,10 +166,22 @@ export interface DogmaEffect {
     published?: boolean;
     /**
      * 
+     * @type {number}
+     * @memberof DogmaEffect
+     */
+    rangeAttributeId?: number;
+    /**
+     * 
      * @type {boolean}
      * @memberof DogmaEffect
      */
     rangeChance?: boolean;
+    /**
+     * 
+     * @type {number}
+     * @memberof DogmaEffect
+     */
+    resistanceAttributeId?: number;
     /**
      * 
      * @type {string}
@@ -190,10 +190,10 @@ export interface DogmaEffect {
     sfxName?: string;
     /**
      * 
-     * @type {Array<ModifierInfo>}
+     * @type {number}
      * @memberof DogmaEffect
      */
-    modifiers?: Array<ModifierInfo>;
+    trackingSpeedAttributeId?: number;
 }
 
 /**
@@ -215,34 +215,34 @@ export function DogmaEffectFromJSONTyped(json: any, ignoreDiscriminator: boolean
     }
     return {
         
-        'effectId': !exists(json, 'effect_id') ? undefined : json['effect_id'],
-        'name': !exists(json, 'name') ? undefined : json['name'],
-        'displayName': !exists(json, 'display_name') ? undefined : json['display_name'],
         'description': !exists(json, 'description') ? undefined : json['description'],
         'disallowAutoRepeat': !exists(json, 'disallow_auto_repeat') ? undefined : json['disallow_auto_repeat'],
+        'dischargeAttributeId': !exists(json, 'discharge_attribute_id') ? undefined : json['discharge_attribute_id'],
+        'displayName': !exists(json, 'display_name') ? undefined : json['display_name'],
+        'distribution': !exists(json, 'distribution') ? undefined : json['distribution'],
+        'durationAttributeId': !exists(json, 'duration_attribute_id') ? undefined : json['duration_attribute_id'],
         'effectCategory': !exists(json, 'effect_category') ? undefined : json['effect_category'],
+        'effectId': !exists(json, 'effect_id') ? undefined : json['effect_id'],
         'effectName': !exists(json, 'effect_name') ? undefined : json['effect_name'],
         'electronicChance': !exists(json, 'electronic_chance') ? undefined : json['electronic_chance'],
-        'guid': !exists(json, 'guid') ? undefined : json['guid'],
-        'dischargeAttributeId': !exists(json, 'discharge_attribute_id') ? undefined : json['discharge_attribute_id'],
-        'durationAttributeId': !exists(json, 'duration_attribute_id') ? undefined : json['duration_attribute_id'],
         'falloffAttributeId': !exists(json, 'falloff_attribute_id') ? undefined : json['falloff_attribute_id'],
-        'rangeAttributeId': !exists(json, 'range_attribute_id') ? undefined : json['range_attribute_id'],
-        'npcUsageChanceAttributeId': !exists(json, 'npc_usage_chance_attribute_id') ? undefined : json['npc_usage_chance_attribute_id'],
-        'trackingSpeedAttributeId': !exists(json, 'tracking_speed_attribute_id') ? undefined : json['tracking_speed_attribute_id'],
-        'npcActivationChanceAttributeId': !exists(json, 'npc_activation_chance_attribute_id') ? undefined : json['npc_activation_chance_attribute_id'],
         'fittingUsageChanceAttributeId': !exists(json, 'fitting_usage_chance_attribute_id') ? undefined : json['fitting_usage_chance_attribute_id'],
-        'resistanceAttributeId': !exists(json, 'resistance_attribute_id') ? undefined : json['resistance_attribute_id'],
-        'distribution': !exists(json, 'distribution') ? undefined : json['distribution'],
+        'guid': !exists(json, 'guid') ? undefined : json['guid'],
         'iconId': !exists(json, 'icon_id') ? undefined : json['icon_id'],
         'isAssistance': !exists(json, 'is_assistance') ? undefined : json['is_assistance'],
         'isOffensive': !exists(json, 'is_offensive') ? undefined : json['is_offensive'],
         'isWarpSafe': !exists(json, 'is_warp_safe') ? undefined : json['is_warp_safe'],
+        'modifiers': !exists(json, 'modifiers') ? undefined : ((json['modifiers'] as Array<any>).map(ModifierInfoFromJSON)),
+        'name': !exists(json, 'name') ? undefined : json['name'],
+        'npcActivationChanceAttributeId': !exists(json, 'npc_activation_chance_attribute_id') ? undefined : json['npc_activation_chance_attribute_id'],
+        'npcUsageChanceAttributeId': !exists(json, 'npc_usage_chance_attribute_id') ? undefined : json['npc_usage_chance_attribute_id'],
         'propulsionChance': !exists(json, 'propulsion_chance') ? undefined : json['propulsion_chance'],
         'published': !exists(json, 'published') ? undefined : json['published'],
+        'rangeAttributeId': !exists(json, 'range_attribute_id') ? undefined : json['range_attribute_id'],
         'rangeChance': !exists(json, 'range_chance') ? undefined : json['range_chance'],
+        'resistanceAttributeId': !exists(json, 'resistance_attribute_id') ? undefined : json['resistance_attribute_id'],
         'sfxName': !exists(json, 'sfx_name') ? undefined : json['sfx_name'],
-        'modifiers': !exists(json, 'modifiers') ? undefined : ((json['modifiers'] as Array<any>).map(ModifierInfoFromJSON)),
+        'trackingSpeedAttributeId': !exists(json, 'tracking_speed_attribute_id') ? undefined : json['tracking_speed_attribute_id'],
     };
 }
 
@@ -255,34 +255,34 @@ export function DogmaEffectToJSON(value?: DogmaEffect | null): any {
     }
     return {
         
-        'effect_id': value.effectId,
-        'name': value.name,
-        'display_name': value.displayName,
         'description': value.description,
         'disallow_auto_repeat': value.disallowAutoRepeat,
+        'discharge_attribute_id': value.dischargeAttributeId,
+        'display_name': value.displayName,
+        'distribution': value.distribution,
+        'duration_attribute_id': value.durationAttributeId,
         'effect_category': value.effectCategory,
+        'effect_id': value.effectId,
         'effect_name': value.effectName,
         'electronic_chance': value.electronicChance,
-        'guid': value.guid,
-        'discharge_attribute_id': value.dischargeAttributeId,
-        'duration_attribute_id': value.durationAttributeId,
         'falloff_attribute_id': value.falloffAttributeId,
-        'range_attribute_id': value.rangeAttributeId,
-        'npc_usage_chance_attribute_id': value.npcUsageChanceAttributeId,
-        'tracking_speed_attribute_id': value.trackingSpeedAttributeId,
-        'npc_activation_chance_attribute_id': value.npcActivationChanceAttributeId,
         'fitting_usage_chance_attribute_id': value.fittingUsageChanceAttributeId,
-        'resistance_attribute_id': value.resistanceAttributeId,
-        'distribution': value.distribution,
+        'guid': value.guid,
         'icon_id': value.iconId,
         'is_assistance': value.isAssistance,
         'is_offensive': value.isOffensive,
         'is_warp_safe': value.isWarpSafe,
+        'modifiers': value.modifiers === undefined ? undefined : ((value.modifiers as Array<any>).map(ModifierInfoToJSON)),
+        'name': value.name,
+        'npc_activation_chance_attribute_id': value.npcActivationChanceAttributeId,
+        'npc_usage_chance_attribute_id': value.npcUsageChanceAttributeId,
         'propulsion_chance': value.propulsionChance,
         'published': value.published,
+        'range_attribute_id': value.rangeAttributeId,
         'range_chance': value.rangeChance,
+        'resistance_attribute_id': value.resistanceAttributeId,
         'sfx_name': value.sfxName,
-        'modifiers': value.modifiers === undefined ? undefined : ((value.modifiers as Array<any>).map(ModifierInfoToJSON)),
+        'tracking_speed_attribute_id': value.trackingSpeedAttributeId,
     };
 }
 

@@ -43,13 +43,13 @@ export interface RefDataMeta {
      * @type {RefDataMetaFileInfo}
      * @memberof RefDataMeta
      */
-    sde?: RefDataMetaFileInfo;
+    hoboleaks?: RefDataMetaFileInfo;
     /**
      * 
      * @type {RefDataMetaFileInfo}
      * @memberof RefDataMeta
      */
-    hoboleaks?: RefDataMetaFileInfo;
+    sde?: RefDataMetaFileInfo;
 }
 
 /**
@@ -73,8 +73,8 @@ export function RefDataMetaFromJSONTyped(json: any, ignoreDiscriminator: boolean
         
         'buildTime': !exists(json, 'build_time') ? undefined : (new Date(json['build_time'])),
         'esi': !exists(json, 'esi') ? undefined : RefDataMetaFileInfoFromJSON(json['esi']),
-        'sde': !exists(json, 'sde') ? undefined : RefDataMetaFileInfoFromJSON(json['sde']),
         'hoboleaks': !exists(json, 'hoboleaks') ? undefined : RefDataMetaFileInfoFromJSON(json['hoboleaks']),
+        'sde': !exists(json, 'sde') ? undefined : RefDataMetaFileInfoFromJSON(json['sde']),
     };
 }
 
@@ -89,8 +89,8 @@ export function RefDataMetaToJSON(value?: RefDataMeta | null): any {
         
         'build_time': value.buildTime === undefined ? undefined : (value.buildTime.toISOString()),
         'esi': RefDataMetaFileInfoToJSON(value.esi),
-        'sde': RefDataMetaFileInfoToJSON(value.sde),
         'hoboleaks': RefDataMetaFileInfoToJSON(value.hoboleaks),
+        'sde': RefDataMetaFileInfoToJSON(value.sde),
     };
 }
 

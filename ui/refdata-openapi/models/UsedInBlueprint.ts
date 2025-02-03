@@ -20,17 +20,17 @@ import { exists, mapValues } from '../runtime';
  */
 export interface UsedInBlueprint {
     /**
-     * The material type ID.
-     * @type {number}
-     * @memberof UsedInBlueprint
-     */
-    materialTypeId?: number;
-    /**
      * The activity this material is used in.
      * @type {string}
      * @memberof UsedInBlueprint
      */
     activity?: string;
+    /**
+     * The material type ID.
+     * @type {number}
+     * @memberof UsedInBlueprint
+     */
+    materialTypeId?: number;
     /**
      * The quantity.
      * @type {number}
@@ -58,8 +58,8 @@ export function UsedInBlueprintFromJSONTyped(json: any, ignoreDiscriminator: boo
     }
     return {
         
-        'materialTypeId': !exists(json, 'material_type_id') ? undefined : json['material_type_id'],
         'activity': !exists(json, 'activity') ? undefined : json['activity'],
+        'materialTypeId': !exists(json, 'material_type_id') ? undefined : json['material_type_id'],
         'quantity': !exists(json, 'quantity') ? undefined : json['quantity'],
     };
 }
@@ -73,8 +73,8 @@ export function UsedInBlueprintToJSON(value?: UsedInBlueprint | null): any {
     }
     return {
         
-        'material_type_id': value.materialTypeId,
         'activity': value.activity,
+        'material_type_id': value.materialTypeId,
         'quantity': value.quantity,
     };
 }

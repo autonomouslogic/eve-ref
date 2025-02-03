@@ -81,11 +81,17 @@ import {
  */
 export interface Bundle {
     /**
-     * A map of types. The key is the type ID.
-     * @type {{ [key: string]: InventoryType; }}
+     * A map of blueprints. The key is the blueprint type ID.
+     * @type {{ [key: string]: Blueprint; }}
      * @memberof Bundle
      */
-    types?: { [key: string]: InventoryType; };
+    blueprints?: { [key: string]: Blueprint; };
+    /**
+     * A map of inventory categories. The key is the category ID.
+     * @type {{ [key: string]: InventoryCategory; }}
+     * @memberof Bundle
+     */
+    categories?: { [key: string]: InventoryCategory; };
     /**
      * A map of dogma attributes. The key is the attribute ID.
      * @type {{ [key: string]: DogmaAttribute; }}
@@ -93,17 +99,11 @@ export interface Bundle {
      */
     dogmaAttributes?: { [key: string]: DogmaAttribute; };
     /**
-     * A map of skills. The key is the skill ID.
-     * @type {{ [key: string]: Skill; }}
+     * A map of inventory groups. The key is the group ID.
+     * @type {{ [key: string]: InventoryGroup; }}
      * @memberof Bundle
      */
-    skills?: { [key: string]: Skill; };
-    /**
-     * A map of units. The key is the unit ID.
-     * @type {{ [key: string]: Unit; }}
-     * @memberof Bundle
-     */
-    units?: { [key: string]: Unit; };
+    groups?: { [key: string]: InventoryGroup; };
     /**
      * A map of icons. The key is the icon ID.
      * @type {{ [key: string]: Icon; }}
@@ -117,29 +117,29 @@ export interface Bundle {
      */
     marketGroups?: { [key: string]: MarketGroup; };
     /**
-     * A map of inventory categories. The key is the category ID.
-     * @type {{ [key: string]: InventoryCategory; }}
-     * @memberof Bundle
-     */
-    categories?: { [key: string]: InventoryCategory; };
-    /**
-     * A map of inventory groups. The key is the group ID.
-     * @type {{ [key: string]: InventoryGroup; }}
-     * @memberof Bundle
-     */
-    groups?: { [key: string]: InventoryGroup; };
-    /**
      * A map of meta groups. The key is the group ID.
      * @type {{ [key: string]: MetaGroup; }}
      * @memberof Bundle
      */
     metaGroups?: { [key: string]: MetaGroup; };
     /**
-     * A map of blueprints. The key is the blueprint type ID.
-     * @type {{ [key: string]: Blueprint; }}
+     * A map of skills. The key is the skill ID.
+     * @type {{ [key: string]: Skill; }}
      * @memberof Bundle
      */
-    blueprints?: { [key: string]: Blueprint; };
+    skills?: { [key: string]: Skill; };
+    /**
+     * A map of types. The key is the type ID.
+     * @type {{ [key: string]: InventoryType; }}
+     * @memberof Bundle
+     */
+    types?: { [key: string]: InventoryType; };
+    /**
+     * A map of units. The key is the unit ID.
+     * @type {{ [key: string]: Unit; }}
+     * @memberof Bundle
+     */
+    units?: { [key: string]: Unit; };
 }
 
 /**
@@ -161,16 +161,16 @@ export function BundleFromJSONTyped(json: any, ignoreDiscriminator: boolean): Bu
     }
     return {
         
-        'types': !exists(json, 'types') ? undefined : (mapValues(json['types'], InventoryTypeFromJSON)),
+        'blueprints': !exists(json, 'blueprints') ? undefined : (mapValues(json['blueprints'], BlueprintFromJSON)),
+        'categories': !exists(json, 'categories') ? undefined : (mapValues(json['categories'], InventoryCategoryFromJSON)),
         'dogmaAttributes': !exists(json, 'dogma_attributes') ? undefined : (mapValues(json['dogma_attributes'], DogmaAttributeFromJSON)),
-        'skills': !exists(json, 'skills') ? undefined : (mapValues(json['skills'], SkillFromJSON)),
-        'units': !exists(json, 'units') ? undefined : (mapValues(json['units'], UnitFromJSON)),
+        'groups': !exists(json, 'groups') ? undefined : (mapValues(json['groups'], InventoryGroupFromJSON)),
         'icons': !exists(json, 'icons') ? undefined : (mapValues(json['icons'], IconFromJSON)),
         'marketGroups': !exists(json, 'market_groups') ? undefined : (mapValues(json['market_groups'], MarketGroupFromJSON)),
-        'categories': !exists(json, 'categories') ? undefined : (mapValues(json['categories'], InventoryCategoryFromJSON)),
-        'groups': !exists(json, 'groups') ? undefined : (mapValues(json['groups'], InventoryGroupFromJSON)),
         'metaGroups': !exists(json, 'meta_groups') ? undefined : (mapValues(json['meta_groups'], MetaGroupFromJSON)),
-        'blueprints': !exists(json, 'blueprints') ? undefined : (mapValues(json['blueprints'], BlueprintFromJSON)),
+        'skills': !exists(json, 'skills') ? undefined : (mapValues(json['skills'], SkillFromJSON)),
+        'types': !exists(json, 'types') ? undefined : (mapValues(json['types'], InventoryTypeFromJSON)),
+        'units': !exists(json, 'units') ? undefined : (mapValues(json['units'], UnitFromJSON)),
     };
 }
 
@@ -183,16 +183,16 @@ export function BundleToJSON(value?: Bundle | null): any {
     }
     return {
         
-        'types': value.types === undefined ? undefined : (mapValues(value.types, InventoryTypeToJSON)),
+        'blueprints': value.blueprints === undefined ? undefined : (mapValues(value.blueprints, BlueprintToJSON)),
+        'categories': value.categories === undefined ? undefined : (mapValues(value.categories, InventoryCategoryToJSON)),
         'dogma_attributes': value.dogmaAttributes === undefined ? undefined : (mapValues(value.dogmaAttributes, DogmaAttributeToJSON)),
-        'skills': value.skills === undefined ? undefined : (mapValues(value.skills, SkillToJSON)),
-        'units': value.units === undefined ? undefined : (mapValues(value.units, UnitToJSON)),
+        'groups': value.groups === undefined ? undefined : (mapValues(value.groups, InventoryGroupToJSON)),
         'icons': value.icons === undefined ? undefined : (mapValues(value.icons, IconToJSON)),
         'market_groups': value.marketGroups === undefined ? undefined : (mapValues(value.marketGroups, MarketGroupToJSON)),
-        'categories': value.categories === undefined ? undefined : (mapValues(value.categories, InventoryCategoryToJSON)),
-        'groups': value.groups === undefined ? undefined : (mapValues(value.groups, InventoryGroupToJSON)),
         'meta_groups': value.metaGroups === undefined ? undefined : (mapValues(value.metaGroups, MetaGroupToJSON)),
-        'blueprints': value.blueprints === undefined ? undefined : (mapValues(value.blueprints, BlueprintToJSON)),
+        'skills': value.skills === undefined ? undefined : (mapValues(value.skills, SkillToJSON)),
+        'types': value.types === undefined ? undefined : (mapValues(value.types, InventoryTypeToJSON)),
+        'units': value.units === undefined ? undefined : (mapValues(value.units, UnitToJSON)),
     };
 }
 

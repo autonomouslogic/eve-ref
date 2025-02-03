@@ -28,12 +28,6 @@ import {
 export interface BlueprintActivity {
     /**
      * 
-     * @type {number}
-     * @memberof BlueprintActivity
-     */
-    time?: number;
-    /**
-     * 
      * @type {{ [key: string]: BlueprintMaterial; }}
      * @memberof BlueprintActivity
      */
@@ -50,6 +44,12 @@ export interface BlueprintActivity {
      * @memberof BlueprintActivity
      */
     requiredSkills?: { [key: string]: number; };
+    /**
+     * 
+     * @type {number}
+     * @memberof BlueprintActivity
+     */
+    time?: number;
 }
 
 /**
@@ -71,10 +71,10 @@ export function BlueprintActivityFromJSONTyped(json: any, ignoreDiscriminator: b
     }
     return {
         
-        'time': !exists(json, 'time') ? undefined : json['time'],
         'materials': !exists(json, 'materials') ? undefined : (mapValues(json['materials'], BlueprintMaterialFromJSON)),
         'products': !exists(json, 'products') ? undefined : (mapValues(json['products'], BlueprintMaterialFromJSON)),
         'requiredSkills': !exists(json, 'required_skills') ? undefined : json['required_skills'],
+        'time': !exists(json, 'time') ? undefined : json['time'],
     };
 }
 
@@ -87,10 +87,10 @@ export function BlueprintActivityToJSON(value?: BlueprintActivity | null): any {
     }
     return {
         
-        'time': value.time,
         'materials': value.materials === undefined ? undefined : (mapValues(value.materials, BlueprintMaterialToJSON)),
         'products': value.products === undefined ? undefined : (mapValues(value.products, BlueprintMaterialToJSON)),
         'required_skills': value.requiredSkills,
+        'time': value.time,
     };
 }
 

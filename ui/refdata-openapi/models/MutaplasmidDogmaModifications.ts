@@ -21,10 +21,10 @@ import { exists, mapValues } from '../runtime';
 export interface MutaplasmidDogmaModifications {
     /**
      * 
-     * @type {number}
+     * @type {boolean}
      * @memberof MutaplasmidDogmaModifications
      */
-    min?: number;
+    highIsGood?: boolean;
     /**
      * 
      * @type {number}
@@ -33,10 +33,10 @@ export interface MutaplasmidDogmaModifications {
     max?: number;
     /**
      * 
-     * @type {boolean}
+     * @type {number}
      * @memberof MutaplasmidDogmaModifications
      */
-    highIsGood?: boolean;
+    min?: number;
 }
 
 /**
@@ -58,9 +58,9 @@ export function MutaplasmidDogmaModificationsFromJSONTyped(json: any, ignoreDisc
     }
     return {
         
-        'min': !exists(json, 'min') ? undefined : json['min'],
-        'max': !exists(json, 'max') ? undefined : json['max'],
         'highIsGood': !exists(json, 'high_is_good') ? undefined : json['high_is_good'],
+        'max': !exists(json, 'max') ? undefined : json['max'],
+        'min': !exists(json, 'min') ? undefined : json['min'],
     };
 }
 
@@ -73,9 +73,9 @@ export function MutaplasmidDogmaModificationsToJSON(value?: MutaplasmidDogmaModi
     }
     return {
         
-        'min': value.min,
-        'max': value.max,
         'high_is_good': value.highIsGood,
+        'max': value.max,
+        'min': value.min,
     };
 }
 

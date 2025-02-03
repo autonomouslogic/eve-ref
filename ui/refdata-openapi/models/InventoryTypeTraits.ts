@@ -27,6 +27,12 @@ import {
  */
 export interface InventoryTypeTraits {
     /**
+     * 
+     * @type {number}
+     * @memberof InventoryTypeTraits
+     */
+    iconId?: number;
+    /**
      * Misc bonuses indexed by 'importance' from the original array. This is represented as an array in the SDE, but EVE Ref converts it to a map.
      * @type {{ [key: string]: TraitBonus; }}
      * @memberof InventoryTypeTraits
@@ -44,12 +50,6 @@ export interface InventoryTypeTraits {
      * @memberof InventoryTypeTraits
      */
     types?: { [key: string]: { [key: string]: TraitBonus; }; };
-    /**
-     * 
-     * @type {number}
-     * @memberof InventoryTypeTraits
-     */
-    iconId?: number;
 }
 
 /**
@@ -71,10 +71,10 @@ export function InventoryTypeTraitsFromJSONTyped(json: any, ignoreDiscriminator:
     }
     return {
         
+        'iconId': !exists(json, 'icon_id') ? undefined : json['icon_id'],
         'miscBonuses': !exists(json, 'misc_bonuses') ? undefined : (mapValues(json['misc_bonuses'], TraitBonusFromJSON)),
         'roleBonuses': !exists(json, 'role_bonuses') ? undefined : (mapValues(json['role_bonuses'], TraitBonusFromJSON)),
         'types': !exists(json, 'types') ? undefined : json['types'],
-        'iconId': !exists(json, 'icon_id') ? undefined : json['icon_id'],
     };
 }
 
@@ -87,10 +87,10 @@ export function InventoryTypeTraitsToJSON(value?: InventoryTypeTraits | null): a
     }
     return {
         
+        'icon_id': value.iconId,
         'misc_bonuses': value.miscBonuses === undefined ? undefined : (mapValues(value.miscBonuses, TraitBonusToJSON)),
         'role_bonuses': value.roleBonuses === undefined ? undefined : (mapValues(value.roleBonuses, TraitBonusToJSON)),
         'types': value.types,
-        'icon_id': value.iconId,
     };
 }
 

@@ -21,16 +21,34 @@ import { exists, mapValues } from '../runtime';
 export interface InventoryGroup {
     /**
      * 
-     * @type {number}
+     * @type {boolean}
      * @memberof InventoryGroup
      */
-    groupId?: number;
+    anchorable?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof InventoryGroup
+     */
+    anchored?: boolean;
     /**
      * 
      * @type {number}
      * @memberof InventoryGroup
      */
     categoryId?: number;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof InventoryGroup
+     */
+    fittableNonSingleton?: boolean;
+    /**
+     * 
+     * @type {number}
+     * @memberof InventoryGroup
+     */
+    groupId?: number;
     /**
      * 
      * @type {number}
@@ -48,37 +66,19 @@ export interface InventoryGroup {
      * @type {boolean}
      * @memberof InventoryGroup
      */
-    anchorable?: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof InventoryGroup
-     */
-    anchored?: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof InventoryGroup
-     */
-    fittableNonSingleton?: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof InventoryGroup
-     */
     published?: boolean;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof InventoryGroup
-     */
-    useBasePrice?: boolean;
     /**
      * The type IDs in this group. This is added by EVE Ref.
      * @type {Array<number>}
      * @memberof InventoryGroup
      */
     typeIds?: Array<number>;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof InventoryGroup
+     */
+    useBasePrice?: boolean;
 }
 
 /**
@@ -100,16 +100,16 @@ export function InventoryGroupFromJSONTyped(json: any, ignoreDiscriminator: bool
     }
     return {
         
-        'groupId': !exists(json, 'group_id') ? undefined : json['group_id'],
-        'categoryId': !exists(json, 'category_id') ? undefined : json['category_id'],
-        'iconId': !exists(json, 'icon_id') ? undefined : json['icon_id'],
-        'name': !exists(json, 'name') ? undefined : json['name'],
         'anchorable': !exists(json, 'anchorable') ? undefined : json['anchorable'],
         'anchored': !exists(json, 'anchored') ? undefined : json['anchored'],
+        'categoryId': !exists(json, 'category_id') ? undefined : json['category_id'],
         'fittableNonSingleton': !exists(json, 'fittable_non_singleton') ? undefined : json['fittable_non_singleton'],
+        'groupId': !exists(json, 'group_id') ? undefined : json['group_id'],
+        'iconId': !exists(json, 'icon_id') ? undefined : json['icon_id'],
+        'name': !exists(json, 'name') ? undefined : json['name'],
         'published': !exists(json, 'published') ? undefined : json['published'],
-        'useBasePrice': !exists(json, 'use_base_price') ? undefined : json['use_base_price'],
         'typeIds': !exists(json, 'type_ids') ? undefined : json['type_ids'],
+        'useBasePrice': !exists(json, 'use_base_price') ? undefined : json['use_base_price'],
     };
 }
 
@@ -122,16 +122,16 @@ export function InventoryGroupToJSON(value?: InventoryGroup | null): any {
     }
     return {
         
-        'group_id': value.groupId,
-        'category_id': value.categoryId,
-        'icon_id': value.iconId,
-        'name': value.name,
         'anchorable': value.anchorable,
         'anchored': value.anchored,
+        'category_id': value.categoryId,
         'fittable_non_singleton': value.fittableNonSingleton,
+        'group_id': value.groupId,
+        'icon_id': value.iconId,
+        'name': value.name,
         'published': value.published,
-        'use_base_price': value.useBasePrice,
         'type_ids': value.typeIds,
+        'use_base_price': value.useBasePrice,
     };
 }
 

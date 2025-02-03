@@ -21,10 +21,16 @@ import { exists, mapValues } from '../runtime';
 export interface MetaGroup {
     /**
      * 
-     * @type {number}
+     * @type {Array<number>}
      * @memberof MetaGroup
      */
-    metaGroupId?: number;
+    color?: Array<number>;
+    /**
+     * 
+     * @type {{ [key: string]: string; }}
+     * @memberof MetaGroup
+     */
+    description?: { [key: string]: string; };
     /**
      * 
      * @type {number}
@@ -39,28 +45,22 @@ export interface MetaGroup {
     iconSuffix?: string;
     /**
      * 
-     * @type {{ [key: string]: string; }}
+     * @type {number}
      * @memberof MetaGroup
      */
-    name?: { [key: string]: string; };
+    metaGroupId?: number;
     /**
      * 
      * @type {{ [key: string]: string; }}
      * @memberof MetaGroup
      */
-    description?: { [key: string]: string; };
+    name?: { [key: string]: string; };
     /**
      * The type IDs in this meta group. This is added by EVE Ref.
      * @type {Array<number>}
      * @memberof MetaGroup
      */
     typeIds?: Array<number>;
-    /**
-     * 
-     * @type {Array<number>}
-     * @memberof MetaGroup
-     */
-    color?: Array<number>;
 }
 
 /**
@@ -82,13 +82,13 @@ export function MetaGroupFromJSONTyped(json: any, ignoreDiscriminator: boolean):
     }
     return {
         
-        'metaGroupId': !exists(json, 'meta_group_id') ? undefined : json['meta_group_id'],
+        'color': !exists(json, 'color') ? undefined : json['color'],
+        'description': !exists(json, 'description') ? undefined : json['description'],
         'iconId': !exists(json, 'icon_id') ? undefined : json['icon_id'],
         'iconSuffix': !exists(json, 'icon_suffix') ? undefined : json['icon_suffix'],
+        'metaGroupId': !exists(json, 'meta_group_id') ? undefined : json['meta_group_id'],
         'name': !exists(json, 'name') ? undefined : json['name'],
-        'description': !exists(json, 'description') ? undefined : json['description'],
         'typeIds': !exists(json, 'type_ids') ? undefined : json['type_ids'],
-        'color': !exists(json, 'color') ? undefined : json['color'],
     };
 }
 
@@ -101,13 +101,13 @@ export function MetaGroupToJSON(value?: MetaGroup | null): any {
     }
     return {
         
-        'meta_group_id': value.metaGroupId,
+        'color': value.color,
+        'description': value.description,
         'icon_id': value.iconId,
         'icon_suffix': value.iconSuffix,
+        'meta_group_id': value.metaGroupId,
         'name': value.name,
-        'description': value.description,
         'type_ids': value.typeIds,
-        'color': value.color,
     };
 }
 
