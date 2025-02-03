@@ -1,5 +1,20 @@
 EVE Ref Changelog
 
+## [2.55.3](https://github.com/autonomouslogic/eve-ref/compare/2.55.2...2.55.3) (2025-02-03)
+
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([#721](https://github.com/autonomouslogic/eve-ref/issues/721)) ([9233458](https://github.com/autonomouslogic/eve-ref/commit/92334588e9928a7f760365cfe5d30a9d9a91c354))
+* **deps:** update dependency org.flywaydb:flyway-core to v11.3.0 ([#722](https://github.com/autonomouslogic/eve-ref/issues/722)) ([a7655fb](https://github.com/autonomouslogic/eve-ref/commit/a7655fb442a59ec0f5b8e0098b72ea8ecafe93db))
+* **deps:** update flyway to v11.3.0 ([#723](https://github.com/autonomouslogic/eve-ref/issues/723)) ([f21d6aa](https://github.com/autonomouslogic/eve-ref/commit/f21d6aa822ad58222f05cb8db9ebab71367c9947))
+* Explicitly add page numbers when fetching the first page ([#724](https://github.com/autonomouslogic/eve-ref/issues/724)) ([5ac229c](https://github.com/autonomouslogic/eve-ref/commit/5ac229cdfbe1a0b551b1961cddcd984e58fd231f))
+
+
+### Dependency Updates
+
+* **deps:** update plugin org.danilopianini.git-sensitive-semantic-versioning-gradle-plugin to v4 ([#719](https://github.com/autonomouslogic/eve-ref/issues/719)) ([0e85b66](https://github.com/autonomouslogic/eve-ref/commit/0e85b66f27e06b08db398b2ba5e87aa2ce410417))
+
 ## [2.55.2](https://github.com/autonomouslogic/eve-ref/compare/2.55.1...2.55.2) (2025-02-01)
 
 
