@@ -1,5 +1,12 @@
 EVE Ref Changelog
 
+## [2.55.4](https://github.com/autonomouslogic/eve-ref/compare/2.55.3...2.55.4) (2025-02-04)
+
+
+### Bug Fixes
+
+* Add bash to the Docker image ([4bece27](https://github.com/autonomouslogic/eve-ref/commit/4bece270659ba3521d062dda4387df00bf345179))
+
 ## [2.55.3](https://github.com/autonomouslogic/eve-ref/compare/2.55.2...2.55.3) (2025-02-03)
 
 
