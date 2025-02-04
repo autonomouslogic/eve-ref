@@ -57,7 +57,7 @@ docker-push-dev: docker
 	docker push $(DOCKER_TAG)
 
 docker-placeholder: docker
-	docker run -it --env-file local.env $(DOCKER_TAG) placeholder
+	docker run -it $(DOCKER_TAG) placeholder
 
 docker-data-index: docker
 	docker run -it --env-file local.env $(DOCKER_TAG) data-index
