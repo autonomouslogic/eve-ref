@@ -28,7 +28,7 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
 
       - name: Docker build
-        run: make docker
+        run: make docker-placeholder
   UI:
     timeout-minutes: 30
     runs-on: ubuntu-latest

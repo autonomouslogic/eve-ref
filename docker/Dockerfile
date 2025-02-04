@@ -12,6 +12,6 @@ ARG EVE_REF_VERSION
 ENV EVE_REF_VERSION=${EVE_REF_VERSION}
 COPY --from=build /eve-ref /eve-ref
 WORKDIR /eve-ref
-RUN apk --no-cache add bash
+#RUN apk --no-cache add bash
 ENTRYPOINT ["./entry.sh"]
 CMD ["placeholder"]
