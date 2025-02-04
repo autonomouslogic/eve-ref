@@ -13,13 +13,11 @@
       ]
     },
     {
-      "groupName": "aws",
       "matchPackageNames": [
         "software.amazon.awssdk:s3",
         "software.amazon.awssdk:dynamodb"
       ],
-      "allowedVersions": ">2.30.11",
-      "automerge": false
+      "allowedVersions": "=2.29.52"
     }
   ]
 }
