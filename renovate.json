@@ -11,11 +11,15 @@
         "org.flywaydb.flyway",
         "org.flywaydb:flyway-core"
       ]
-    }, {
-    "groupName": "swagger-gradle-plugin",
-    "matchPackageNames": [
-      "io.swagger.core.v3.swagger-gradle-plugin"
-    ],
-    "allowedVersions": ">2.2.27"
-  }]
+    },
+    {
+      "groupName": "aws",
+      "matchPackageNames": [
+        "software.amazon.awssdk:s3",
+        "software.amazon.awssdk:dynamodb"
+      ],
+      "allowedVersions": ">2.30.11",
+      "automerge": false
+    }
+  ]
 }
