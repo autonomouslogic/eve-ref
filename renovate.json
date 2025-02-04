@@ -17,5 +17,11 @@
       "io.swagger.core.v3.swagger-gradle-plugin"
     ],
     "allowedVersions": ">2.2.27"
+  }, {
+    "matchPackageNames": [
+      "software.amazon.awssdk:s3",
+      "software.amazon.awssdk:dynamodb"
+    ],
+    "allowedVersions": ">2.30.11"
   }]
 }
