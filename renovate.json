@@ -13,6 +13,7 @@
       ]
     },
     {
+      "groupName": "aws",
       "matchPackageNames": [
         "software.amazon.awssdk:s3",
         "software.amazon.awssdk:dynamodb"
