@@ -1,5 +1,19 @@
 EVE Ref Changelog
 
+## [2.55.5](https://github.com/autonomouslogic/eve-ref/compare/2.55.4...2.55.5) (2025-02-04)
+
+
+### Bug Fixes
+
+* **deps:** Downgraded AWS to 2.29.50 ([#727](https://github.com/autonomouslogic/eve-ref/issues/727)) ([fe92b63](https://github.com/autonomouslogic/eve-ref/commit/fe92b6367aa60bee1a4e7c85682716a61beecbdf))
+
+## [2.55.4](https://github.com/autonomouslogic/eve-ref/compare/2.55.3...2.55.4) (2025-02-04)
+
+
+### Bug Fixes
+
+* Add bash to the Docker image ([4bece27](https://github.com/autonomouslogic/eve-ref/commit/4bece270659ba3521d062dda4387df00bf345179))
+
 ## [2.55.3](https://github.com/autonomouslogic/eve-ref/compare/2.55.2...2.55.3) (2025-02-03)
 
 
