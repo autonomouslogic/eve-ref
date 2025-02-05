@@ -1,5 +1,18 @@
 EVE Ref Changelog
 
+## [2.55.6](https://github.com/autonomouslogic/eve-ref/compare/2.55.5...2.55.6) (2025-02-05)
+
+
+### Dependency Updates
+
+* **deps:** update dependency vitest to v2.1.9 [security] ([#729](https://github.com/autonomouslogic/eve-ref/issues/729)) ([ac3db1d](https://github.com/autonomouslogic/eve-ref/commit/ac3db1d90f26b7dba0ce824cd259c52fa59c927e))
+
+
+### Continuous Integration
+
+* Pin AWS version ([01323e4](https://github.com/autonomouslogic/eve-ref/commit/01323e4b89bbe358d48a430ae58cef3d9d70ffa6))
+* Test Docker run ([#726](https://github.com/autonomouslogic/eve-ref/issues/726)) ([daa8104](https://github.com/autonomouslogic/eve-ref/commit/daa81044cfe388cf2c10b74e7d82e1619d07356b))
+
 ## [2.55.5](https://github.com/autonomouslogic/eve-ref/compare/2.55.4...2.55.5) (2025-02-04)
 
 
