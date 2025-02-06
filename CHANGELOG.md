@@ -1,5 +1,12 @@
 EVE Ref Changelog
 
+## [2.55.7](https://github.com/autonomouslogic/eve-ref/compare/2.55.6...2.55.7) (2025-02-06)
+
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([#725](https://github.com/autonomouslogic/eve-ref/issues/725)) ([8bb705a](https://github.com/autonomouslogic/eve-ref/commit/8bb705a28b644d8e4bade3ffbef67d58ebf74ade))
+
 ## [2.55.6](https://github.com/autonomouslogic/eve-ref/compare/2.55.5...2.55.6) (2025-02-05)
 
 
