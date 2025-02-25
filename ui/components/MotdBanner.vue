@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import ExternalLink from "~/components/helpers/ExternalLink.vue";
-import {PATREON_URL} from "~/lib/urls";
+import {MARKEE_DRAGON_URL, PATREON_URL} from "~/lib/urls";
 import InternalLink from "~/components/helpers/InternalLink.vue";
 import {useLazyFetch} from "nuxt/app";
 import type {DonationsFile} from "~/lib/donations";
@@ -19,6 +19,14 @@ const {status: donorsStatus, data: donors} = await useLazyFetch<DonationsFile>("
 });
 
 const motd = computed(() => {
+	if (new Date().getTime() < new Date("2025-03-04T23:59:00Z").getTime()) {
+		return {
+			text: "Get 20% off PLEX plus an additional 3% with code \"everef\"",
+			url: MARKEE_DRAGON_URL,
+			urlText: "Markee Dragon"
+		} as Motd;
+	}
+
 	// Recent donors.
 	if (donorsStatus.value == "success" && donors?.value?.recent?.length && donors.value.recent.length > 0) {
 		const donorsText = donors.value.recent.map(donor => {
@@ -33,9 +41,9 @@ const motd = computed(() => {
 	}
 
 	return {
-		text: "EVE Ref is funded by donations",
-		url: "/about",
-		urlText: "Support"
+		text: "Save 3% on PLEX and Omega with code \"everef\" at checkout",
+		url: MARKEE_DRAGON_URL,
+		urlText: "Markee Dragon"
 	} as Motd;
 
 	// // No MOTD
