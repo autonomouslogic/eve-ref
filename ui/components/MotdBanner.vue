@@ -5,6 +5,7 @@ import InternalLink from "~/components/helpers/InternalLink.vue";
 import {useLazyFetch} from "nuxt/app";
 import type {DonationsFile} from "~/lib/donations";
 import {formatMoney} from "~/lib/money";
+import {DAY} from "~/lib/timeUtils";
 
 const route = useRoute();
 
@@ -13,6 +14,19 @@ interface Motd {
 	url: string
 	urlText: string
 }
+
+const motdFallbacks: Motd[] = [
+	{
+		text: "Save 3% on PLEX and Omega with code \"everef\" at checkout",
+		url: MARKEE_DRAGON_URL,
+		urlText: "Markee Dragon"
+	} as Motd,
+	{
+		text: "EVE is supported by you",
+		url: PATREON_URL,
+		urlText: "Become a Patreon"
+	} as Motd,
+];
 
 const {status: donorsStatus, data: donors} = await useLazyFetch<DonationsFile>("https://static.everef.net/donations.json", {
 	server: false
@@ -32,7 +46,6 @@ const motd = computed(() => {
 		const donorsText = donors.value.recent.map(donor => {
 			return `${donor.donor_name} donated ${formatMoney(donor.amount)}`;
 		}).join("<br/>");
-		console.log(donorsText);
 		return {
 			text: `${donorsText}`,
 			url: "/about",
@@ -40,14 +53,12 @@ const motd = computed(() => {
 		} as Motd;
 	}
 
-	return {
-		text: "Save 3% on PLEX and Omega with code \"everef\" at checkout",
-		url: MARKEE_DRAGON_URL,
-		urlText: "Markee Dragon"
-	} as Motd;
-
-	// // No MOTD
-	// return null;
+	const time = new Date().getTime();
+	const day = Math.floor(time / DAY);
+	if (day % 3 == 0) {
+		return null;
+	}
+	return motdFallbacks[day % motdFallbacks.length];
 });
 
 </script>
