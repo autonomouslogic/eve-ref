@@ -1,5 +1,16 @@
 EVE Ref Changelog
 
+## [2.55.8](https://github.com/autonomouslogic/eve-ref/compare/2.55.7...2.55.8) (2025-03-03)
+
+
+### Bug Fixes
+
+* **deps:** update aws to v2.29.52 ([#733](https://github.com/autonomouslogic/eve-ref/issues/733)) ([e2860c3](https://github.com/autonomouslogic/eve-ref/commit/e2860c3eb5be3d02b036bb516432e2ce1656d6f8))
+* **deps:** update dependency org.flywaydb:flyway-core to v11.3.4 ([#734](https://github.com/autonomouslogic/eve-ref/issues/734)) ([e558f88](https://github.com/autonomouslogic/eve-ref/commit/e558f883dad95dab1ed1df7049b39de35230d00b))
+* **ui:** Generic selection of fallback MOTDs ([#731](https://github.com/autonomouslogic/eve-ref/issues/731)) ([67e7eba](https://github.com/autonomouslogic/eve-ref/commit/67e7ebac79cf4bf7a03b4447d308aafcf3b22001))
+* **ui:** PLEX sale in MOTD banner ([7009b7e](https://github.com/autonomouslogic/eve-ref/commit/7009b7e8282c2f900f3b139bca52becc345d3e32))
+* **ui:** Updated monthly giveaway tallies ([#732](https://github.com/autonomouslogic/eve-ref/issues/732)) ([6ff1c93](https://github.com/autonomouslogic/eve-ref/commit/6ff1c930b5fd98742ca8acee7eda4d45ff4f9162))
+
 ## [2.55.7](https://github.com/autonomouslogic/eve-ref/compare/2.55.6...2.55.7) (2025-02-06)
 
 
