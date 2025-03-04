@@ -50,7 +50,7 @@ const weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Satur
 
 const plexPrice = await getJitaSellPrice(PLEX_TYPE_ID) || 0;
 
-const firstFleetPack = DateTime.fromISO("2025-03-07T06:00:00-08");
+const firstFleetPack = DateTime.fromISO("2025-03-07T14:00:00Z");
 const fleetPackDates = [];
 for (let i = 0; i < 4; i++) {
 	fleetPackDates.push(firstFleetPack.plus({days: i * 7}));
