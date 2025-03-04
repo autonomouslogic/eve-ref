@@ -41,6 +41,14 @@ const motd = computed(() => {
 		} as Motd;
 	}
 
+	if (new Date().getDay() == 5) {
+		return {
+			text: "Win 50x PLEX and 3 Day Omega every Friday",
+			url: "/giveaways",
+			urlText: "Giveaways"
+		} as Motd;
+	}
+
 	// Recent donors.
 	if (donorsStatus.value == "success" && donors?.value?.recent?.length && donors.value.recent.length > 0) {
 		const donorsText = donors.value.recent.map(donor => {

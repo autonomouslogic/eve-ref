@@ -50,13 +50,20 @@ const weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Satur
 
 const plexPrice = await getJitaSellPrice(PLEX_TYPE_ID) || 0;
 
-const firstFleetPack = DateTime.fromISO("2024-12-13T20:00:00+09");
+const firstFleetPack = DateTime.fromISO("2025-03-07T14:00:00Z");
 const fleetPackDates = [];
-for (let i = 0; i < 19; i++) {
-	fleetPackDates.push(firstFleetPack.plus({days: i}));
+for (let i = 0; i < 4; i++) {
+	fleetPackDates.push(firstFleetPack.plus({days: i * 7}));
 }
 
-const prizes: Prize[] = [];
+const prizes: Prize[] = [
+	{
+		name: "Weekend Fleet Pack (50x PLEX, 3 Day Omega)",
+		value: (50 + 500 * 12 / 365 * 3) * plexPrice,
+		dates: fleetPackDates,
+		winners: 2
+	} as Prize,
+];
 
 var i = 0;
 for (let prize of prizes) {
@@ -90,6 +97,7 @@ unrolled.sort((a, b) => a.dates[0].toMillis() - b.dates[0].toMillis());
 const totalWorth = unrolled.reduce((acc, prize) => acc + prize.value * prize.winners, 0);
 
 const pastGiveaways = {
+	"March 2025": 4.92e9,
 	"February 2025": 15727787671,
 	"January 2025": 610787671,
 	"December 2024": 33.52e9,
