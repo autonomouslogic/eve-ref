@@ -1,5 +1,17 @@
 EVE Ref Changelog
 
+## [2.55.9](https://github.com/autonomouslogic/eve-ref/compare/2.55.8...2.55.9) (2025-03-04)
+
+
+### Bug Fixes
+
+* **deps:** update flyway to v11.3.4 ([#735](https://github.com/autonomouslogic/eve-ref/issues/735)) ([61ad33f](https://github.com/autonomouslogic/eve-ref/commit/61ad33f8770a724e1ce82d501ae6e00f31c29427))
+
+
+### Miscellaneous Chores
+
+* **ui:** March giveaways ([#738](https://github.com/autonomouslogic/eve-ref/issues/738)) ([7ca1e86](https://github.com/autonomouslogic/eve-ref/commit/7ca1e865ad3adf726fa99b9539eaa16e57617b47))
+
 ## [2.55.8](https://github.com/autonomouslogic/eve-ref/compare/2.55.7...2.55.8) (2025-03-03)
 
 
