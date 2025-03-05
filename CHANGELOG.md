@@ -1,5 +1,17 @@
 EVE Ref Changelog
 
+## [2.55.10](https://github.com/autonomouslogic/eve-ref/compare/2.55.9...2.55.10) (2025-03-05)
+
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([#736](https://github.com/autonomouslogic/eve-ref/issues/736)) ([c1a8a21](https://github.com/autonomouslogic/eve-ref/commit/c1a8a21b04e4d19f42b308a090a691415d3533d5))
+
+
+### Miscellaneous Chores
+
+* **ui:** Fallback MOTD based on hour and added another one for free skill points ([cf824f0](https://github.com/autonomouslogic/eve-ref/commit/cf824f0cb1a5a2cc034fd9aa8f600a8ea036cdf9))
+
 ## [2.55.9](https://github.com/autonomouslogic/eve-ref/compare/2.55.8...2.55.9) (2025-03-04)
 
 
