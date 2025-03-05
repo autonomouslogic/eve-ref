@@ -6,9 +6,9 @@ plugins {
 	id "application"
 	id "jacoco"
 	id "org.danilopianini.git-sensitive-semantic-versioning-gradle-plugin" version "4.0.2"
-	id "io.freefair.lombok" version "8.12.1"
+	id "io.freefair.lombok" version "8.12.2.1"
 	id "com.diffplug.spotless" version "7.0.2"
-	id "org.openapi.generator" version "7.11.0"
+	id "org.openapi.generator" version "7.12.0"
 	id "io.swagger.core.v3.swagger-gradle-plugin" version "2.2.28"
 	id "org.flywaydb.flyway" version "11.3.4" apply false
 	id "nu.studer.jooq" version "9.0" apply false
@@ -30,7 +30,7 @@ ext {
 	if (file("local.env").exists()) {
 		file("local.env").withInputStream { envProperties.load(it) }
 	}
-	micronautVersion = "4.7.5"
+	micronautVersion = "4.7.6"
 }
 
 repositories {
@@ -53,7 +53,7 @@ dependencies {
 	implementation "org.apache.logging.log4j:log4j-layout-template-json:2.24.3"
 	implementation "org.apache.logging.log4j:log4j-slf4j2-impl:2.24.3"
 	implementation "io.reactivex.rxjava3:rxjava:3.1.10"
-	implementation "com.autonomouslogic.commons:commons-java:1.9.3"
+	implementation "com.autonomouslogic.commons:commons-java:1.9.4"
 	implementation("de.neuland-bfi:pug4j:2.3.1") {
 		exclude group: "org.graalvm.js"
 		exclude group: "org.graalvm.sdk"
@@ -64,13 +64,13 @@ dependencies {
 	implementation "software.amazon.awssdk:s3:2.29.52"
 	implementation "software.amazon.awssdk:dynamodb:2.29.52"
 	implementation "com.autonomouslogic.dynamomapper:dynamo-mapper:2.1.17"
-	implementation "com.fasterxml.jackson.core:jackson-annotations:2.18.2"
-	implementation "com.fasterxml.jackson.core:jackson-core:2.18.2"
-	implementation "com.fasterxml.jackson.core:jackson-databind:2.18.2"
-	implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.18.2"
-	implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-csv:2.18.2"
-	implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.18.2"
-	implementation "com.fasterxml.jackson.module:jackson-module-kotlin:2.18.2"
+	implementation "com.fasterxml.jackson.core:jackson-annotations:2.18.3"
+	implementation "com.fasterxml.jackson.core:jackson-core:2.18.3"
+	implementation "com.fasterxml.jackson.core:jackson-databind:2.18.3"
+	implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.18.3"
+	implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-csv:2.18.3"
+	implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.18.3"
+	implementation "com.fasterxml.jackson.module:jackson-module-kotlin:2.18.3"
 	implementation "org.apache.commons:commons-pool2:2.12.1"
 	implementation "org.apache.commons:commons-compress:1.27.1"
 	implementation "org.tukaani:xz:1.10"
@@ -78,7 +78,7 @@ dependencies {
 	implementation "com.squareup.okhttp3:okhttp:4.12.0"
 	implementation "org.apache.commons:commons-csv:1.13.0"
 	implementation "net.gpedro.integrations.slack:slack-webhook:1.4.0"
-	implementation "org.jsoup:jsoup:1.18.3"
+	implementation "org.jsoup:jsoup:1.19.1"
 	implementation "commons-codec:commons-codec:1.18.0"
 	implementation "io.dropwizard.metrics:metrics-core:4.2.30"
 	implementation "com.autonomouslogic.customspecfilter:custom-spec-filter:1.2.3"
@@ -89,11 +89,11 @@ dependencies {
 	implementation "org.openapitools:jackson-databind-nullable:0.2.6"
 	implementation "org.apache.commons:commons-rng-simple:1.6"
 	implementation "org.bouncycastle:bcprov-jdk18on:1.80"
-	implementation "io.sentry:sentry:8.1.0"
+	implementation "io.sentry:sentry:8.3.0"
 	implementation "com.github.scribejava:scribejava-core:8.3.3"
 	implementation "org.apache.commons:commons-lang3:3.17.0"
 
-	implementation "org.jooq:jooq:3.19.18"
+	implementation "org.jooq:jooq:3.20.1"
 	implementation "org.flywaydb:flyway-core:11.3.4"
 	implementation "org.flywaydb:flyway-database-postgresql:11.3.4"
 	implementation "com.h2database:h2:2.3.232"
@@ -107,10 +107,10 @@ dependencies {
 
 	testAnnotationProcessor "com.google.dagger:dagger-compiler:2.55"
 	testImplementation "com.google.dagger:dagger:2.55"
-	testImplementation "org.junit.jupiter:junit-jupiter:5.11.4"
-	testImplementation "org.junit.jupiter:junit-jupiter-params:5.11.4"
+	testImplementation "org.junit.jupiter:junit-jupiter:5.12.0"
+	testImplementation "org.junit.jupiter:junit-jupiter-params:5.12.0"
 	testImplementation "org.junit-pioneer:junit-pioneer:2.3.0"
-	testImplementation "org.mockito:mockito-junit-jupiter:5.15.2"
+	testImplementation "org.mockito:mockito-junit-jupiter:5.16.0"
 	testImplementation "com.squareup.okhttp3:mockwebserver:4.12.0"
 }
 

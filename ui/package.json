@@ -14,22 +14,22 @@
     "test": "vitest run"
   },
   "devDependencies": {
-    "@nuxt/test-utils": "3.15.4",
+    "@nuxt/test-utils": "3.17.1",
     "@nuxt/types": "2.18.1",
     "@nuxtjs/i18n": "8.5.6",
     "@nuxtjs/tailwindcss": "6.13.1",
-    "@openapitools/openapi-generator-cli": "2.16.3",
+    "@openapitools/openapi-generator-cli": "2.17.0",
     "@types/luxon": "3.4.2",
-    "@types/node": "22.13.1",
-    "@typescript-eslint/eslint-plugin": "8.23.0",
-    "@typescript-eslint/parser": "8.23.0",
+    "@types/node": "22.13.9",
+    "@typescript-eslint/eslint-plugin": "8.26.0",
+    "@typescript-eslint/parser": "8.26.0",
     "eslint": "8.57.1",
-    "eslint-plugin-vue": "9.32.0",
+    "eslint-plugin-vue": "9.33.0",
     "luxon": "3.5.0",
     "nuxt": "3.15.4",
-    "typescript": "5.7.3",
+    "typescript": "5.8.2",
     "vitest": "2.1.9",
-    "vue-tsc": "2.2.0"
+    "vue-tsc": "2.2.8"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "6.7.2",
