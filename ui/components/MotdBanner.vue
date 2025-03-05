@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import ExternalLink from "~/components/helpers/ExternalLink.vue";
-import {MARKEE_DRAGON_URL, PATREON_URL} from "~/lib/urls";
+import {EVE_REFERRAL_URL, MARKEE_DRAGON_URL, PATREON_URL} from "~/lib/urls";
 import InternalLink from "~/components/helpers/InternalLink.vue";
 import {useLazyFetch} from "nuxt/app";
 import type {DonationsFile} from "~/lib/donations";
 import {formatMoney} from "~/lib/money";
-import {DAY} from "~/lib/timeUtils";
+import {DAY, HOUR} from "~/lib/timeUtils";
 
 const route = useRoute();
 
@@ -22,9 +22,14 @@ const motdFallbacks: Motd[] = [
 		urlText: "Markee Dragon"
 	} as Motd,
 	{
-		text: "EVE is supported by you",
+		text: "EVE Ref is supported by you",
 		url: PATREON_URL,
 		urlText: "Become a Patreon"
+	} as Motd,
+	{
+		text: "Get 1,000,000 skill points",
+		url: EVE_REFERRAL_URL,
+		urlText: "Play EVE Online"
 	} as Motd,
 ];
 
@@ -63,10 +68,11 @@ const motd = computed(() => {
 
 	const time = new Date().getTime();
 	const day = Math.floor(time / DAY);
+	const hour = Math.floor(time / HOUR);
 	if (day % 3 == 0) {
 		return null;
 	}
-	return motdFallbacks[day % motdFallbacks.length];
+	return motdFallbacks[hour % motdFallbacks.length];
 });
 
 </script>
