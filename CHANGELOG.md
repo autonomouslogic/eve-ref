@@ -1,5 +1,12 @@
 EVE Ref Changelog
 
+## [2.55.11](https://github.com/autonomouslogic/eve-ref/compare/2.55.10...2.55.11) (2025-03-12)
+
+
+### Bug Fixes
+
+* **deps:** update commons-java to v1.9.5 ([bc65736](https://github.com/autonomouslogic/eve-ref/commit/bc65736679eda0c96092698d6e74294e0c0fdf0b))
+
 ## [2.55.10](https://github.com/autonomouslogic/eve-ref/compare/2.55.9...2.55.10) (2025-03-05)
 
 
