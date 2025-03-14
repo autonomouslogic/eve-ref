@@ -2,6 +2,7 @@ package com.autonomouslogic.everef.http;
 
 import com.autonomouslogic.everef.util.VirtualThreads;
 import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.nio.file.Files;
@@ -119,6 +120,8 @@ public class OkHttpHelper {
 					log.trace(String.format("Requesting %s %s", request.method(), request.url()));
 					return client.newCall(request).execute();
 				})
+				.subscribeOn(Schedulers.io())
+				.observeOn(VirtualThreads.SCHEDULER)
 				.onErrorResumeNext(e -> Single.error(new RuntimeException(
 						String.format("Error requesting %s %s", request.method(), request.url()), e)));
 	}
