@@ -21,12 +21,6 @@ import { exists, mapValues } from '../runtime';
 export interface Icon {
     /**
      * 
-     * @type {number}
-     * @memberof Icon
-     */
-    iconId?: number;
-    /**
-     * 
      * @type {string}
      * @memberof Icon
      */
@@ -37,6 +31,12 @@ export interface Icon {
      * @memberof Icon
      */
     iconFile?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof Icon
+     */
+    iconId?: number;
     /**
      * 
      * @type {boolean}
@@ -64,9 +64,9 @@ export function IconFromJSONTyped(json: any, ignoreDiscriminator: boolean): Icon
     }
     return {
         
-        'iconId': !exists(json, 'icon_id') ? undefined : json['icon_id'],
         'description': !exists(json, 'description') ? undefined : json['description'],
         'iconFile': !exists(json, 'icon_file') ? undefined : json['icon_file'],
+        'iconId': !exists(json, 'icon_id') ? undefined : json['icon_id'],
         'obsolete': !exists(json, 'obsolete') ? undefined : json['obsolete'],
     };
 }
@@ -80,9 +80,9 @@ export function IconToJSON(value?: Icon | null): any {
     }
     return {
         
-        'icon_id': value.iconId,
         'description': value.description,
         'icon_file': value.iconFile,
+        'icon_id': value.iconId,
         'obsolete': value.obsolete,
     };
 }

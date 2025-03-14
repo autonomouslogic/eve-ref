@@ -20,23 +20,11 @@ import { exists, mapValues } from '../runtime';
  */
 export interface MarketGroup {
     /**
-     * 
-     * @type {number}
+     * The market group IDs which are direct children of this group. This is added by EVE Ref.
+     * @type {Array<number>}
      * @memberof MarketGroup
      */
-    marketGroupId?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof MarketGroup
-     */
-    parentGroupId?: number;
-    /**
-     * 
-     * @type {{ [key: string]: string; }}
-     * @memberof MarketGroup
-     */
-    name?: { [key: string]: string; };
+    childMarketGroupIds?: Array<number>;
     /**
      * 
      * @type {{ [key: string]: string; }}
@@ -45,22 +33,34 @@ export interface MarketGroup {
     description?: { [key: string]: string; };
     /**
      * 
+     * @type {boolean}
+     * @memberof MarketGroup
+     */
+    hasTypes?: boolean;
+    /**
+     * 
      * @type {number}
      * @memberof MarketGroup
      */
     iconId?: number;
     /**
      * 
-     * @type {boolean}
+     * @type {number}
      * @memberof MarketGroup
      */
-    hasTypes?: boolean;
+    marketGroupId?: number;
     /**
-     * The market group IDs which are direct children of this group. This is added by EVE Ref.
-     * @type {Array<number>}
+     * 
+     * @type {{ [key: string]: string; }}
      * @memberof MarketGroup
      */
-    childMarketGroupIds?: Array<number>;
+    name?: { [key: string]: string; };
+    /**
+     * 
+     * @type {number}
+     * @memberof MarketGroup
+     */
+    parentGroupId?: number;
     /**
      * The type IDs in this market group. This is added by EVE Ref.
      * @type {Array<number>}
@@ -88,13 +88,13 @@ export function MarketGroupFromJSONTyped(json: any, ignoreDiscriminator: boolean
     }
     return {
         
-        'marketGroupId': !exists(json, 'market_group_id') ? undefined : json['market_group_id'],
-        'parentGroupId': !exists(json, 'parent_group_id') ? undefined : json['parent_group_id'],
-        'name': !exists(json, 'name') ? undefined : json['name'],
-        'description': !exists(json, 'description') ? undefined : json['description'],
-        'iconId': !exists(json, 'icon_id') ? undefined : json['icon_id'],
-        'hasTypes': !exists(json, 'has_types') ? undefined : json['has_types'],
         'childMarketGroupIds': !exists(json, 'child_market_group_ids') ? undefined : json['child_market_group_ids'],
+        'description': !exists(json, 'description') ? undefined : json['description'],
+        'hasTypes': !exists(json, 'has_types') ? undefined : json['has_types'],
+        'iconId': !exists(json, 'icon_id') ? undefined : json['icon_id'],
+        'marketGroupId': !exists(json, 'market_group_id') ? undefined : json['market_group_id'],
+        'name': !exists(json, 'name') ? undefined : json['name'],
+        'parentGroupId': !exists(json, 'parent_group_id') ? undefined : json['parent_group_id'],
         'typeIds': !exists(json, 'type_ids') ? undefined : json['type_ids'],
     };
 }
@@ -108,13 +108,13 @@ export function MarketGroupToJSON(value?: MarketGroup | null): any {
     }
     return {
         
-        'market_group_id': value.marketGroupId,
-        'parent_group_id': value.parentGroupId,
-        'name': value.name,
-        'description': value.description,
-        'icon_id': value.iconId,
-        'has_types': value.hasTypes,
         'child_market_group_ids': value.childMarketGroupIds,
+        'description': value.description,
+        'has_types': value.hasTypes,
+        'icon_id': value.iconId,
+        'market_group_id': value.marketGroupId,
+        'name': value.name,
+        'parent_group_id': value.parentGroupId,
         'type_ids': value.typeIds,
     };
 }

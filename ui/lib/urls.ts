@@ -1,4 +1,4 @@
-export const MARKEE_DRAGON_URL = "https://store.markeedragon.com/affiliate.php?id=933";
+export const MARKEE_DRAGON_URL = "https://store.markeedragon.com/affiliate.php?id=933&redirect=index.php?cat=4";
 export const EVE_REFERRAL_URL = "https://www.eveonline.com/signup?invc=b28d194d-7181-4bf0-8e3f-72cebbc7ca7d";
 export const HETZNER_REFERAL_URL = "https://hetzner.cloud/?ref=cDNPHOBYSP52";
 export const PATREON_URL = "https://patreon.com/everef";

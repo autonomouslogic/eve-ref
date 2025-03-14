@@ -21,16 +21,16 @@ import { exists, mapValues } from '../runtime';
 export interface MutaplasmidTypeMapping {
     /**
      * 
-     * @type {number}
-     * @memberof MutaplasmidTypeMapping
-     */
-    resultingTypeId?: number;
-    /**
-     * 
      * @type {Array<number>}
      * @memberof MutaplasmidTypeMapping
      */
     applicableTypeIds?: Array<number>;
+    /**
+     * 
+     * @type {number}
+     * @memberof MutaplasmidTypeMapping
+     */
+    resultingTypeId?: number;
 }
 
 /**
@@ -52,8 +52,8 @@ export function MutaplasmidTypeMappingFromJSONTyped(json: any, ignoreDiscriminat
     }
     return {
         
-        'resultingTypeId': !exists(json, 'resulting_type_id') ? undefined : json['resulting_type_id'],
         'applicableTypeIds': !exists(json, 'applicable_type_ids') ? undefined : json['applicable_type_ids'],
+        'resultingTypeId': !exists(json, 'resulting_type_id') ? undefined : json['resulting_type_id'],
     };
 }
 
@@ -66,8 +66,8 @@ export function MutaplasmidTypeMappingToJSON(value?: MutaplasmidTypeMapping | nu
     }
     return {
         
-        'resulting_type_id': value.resultingTypeId,
         'applicable_type_ids': value.applicableTypeIds,
+        'resulting_type_id': value.resultingTypeId,
     };
 }
 

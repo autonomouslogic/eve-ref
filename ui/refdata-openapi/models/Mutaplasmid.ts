@@ -33,6 +33,12 @@ import {
  */
 export interface Mutaplasmid {
     /**
+     * Which dogma attributes are modified by this mutaplasmid and by how much.
+     * @type {{ [key: string]: MutaplasmidDogmaModifications; }}
+     * @memberof Mutaplasmid
+     */
+    dogmaModifications?: { [key: string]: MutaplasmidDogmaModifications; };
+    /**
      * 
      * @type {number}
      * @memberof Mutaplasmid
@@ -44,12 +50,6 @@ export interface Mutaplasmid {
      * @memberof Mutaplasmid
      */
     typeMappings?: { [key: string]: MutaplasmidTypeMapping; };
-    /**
-     * Which dogma attributes are modified by this mutaplasmid and by how much.
-     * @type {{ [key: string]: MutaplasmidDogmaModifications; }}
-     * @memberof Mutaplasmid
-     */
-    dogmaModifications?: { [key: string]: MutaplasmidDogmaModifications; };
 }
 
 /**
@@ -71,9 +71,9 @@ export function MutaplasmidFromJSONTyped(json: any, ignoreDiscriminator: boolean
     }
     return {
         
+        'dogmaModifications': !exists(json, 'dogma_modifications') ? undefined : (mapValues(json['dogma_modifications'], MutaplasmidDogmaModificationsFromJSON)),
         'typeId': !exists(json, 'type_id') ? undefined : json['type_id'],
         'typeMappings': !exists(json, 'type_mappings') ? undefined : (mapValues(json['type_mappings'], MutaplasmidTypeMappingFromJSON)),
-        'dogmaModifications': !exists(json, 'dogma_modifications') ? undefined : (mapValues(json['dogma_modifications'], MutaplasmidDogmaModificationsFromJSON)),
     };
 }
 
@@ -86,9 +86,9 @@ export function MutaplasmidToJSON(value?: Mutaplasmid | null): any {
     }
     return {
         
+        'dogma_modifications': value.dogmaModifications === undefined ? undefined : (mapValues(value.dogmaModifications, MutaplasmidDogmaModificationsToJSON)),
         'type_id': value.typeId,
         'type_mappings': value.typeMappings === undefined ? undefined : (mapValues(value.typeMappings, MutaplasmidTypeMappingToJSON)),
-        'dogma_modifications': value.dogmaModifications === undefined ? undefined : (mapValues(value.dogmaModifications, MutaplasmidDogmaModificationsToJSON)),
     };
 }
 

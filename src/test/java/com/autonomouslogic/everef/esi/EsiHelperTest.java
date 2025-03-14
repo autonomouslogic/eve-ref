@@ -63,7 +63,7 @@ public class EsiHelperTest {
 				.blockingGet();
 		var bodies = getBodies(responses);
 		assertEquals(List.of("page-1"), bodies);
-		testDataUtil.assertRequest(server.takeRequest(), "/pages?datasource=tranquility&language=en");
+		testDataUtil.assertRequest(server.takeRequest(), "/pages?datasource=tranquility&language=en&page=1");
 		testDataUtil.assertNoMoreRequests(server);
 	}
 
@@ -77,7 +77,7 @@ public class EsiHelperTest {
 				.blockingGet();
 		var bodies = getBodies(responses);
 		assertEquals(List.of("page-1"), bodies);
-		testDataUtil.assertRequest(server.takeRequest(), "/pages?datasource=tranquility&language=en");
+		testDataUtil.assertRequest(server.takeRequest(), "/pages?datasource=tranquility&language=en&page=1");
 		testDataUtil.assertNoMoreRequests(server);
 	}
 
@@ -99,7 +99,7 @@ public class EsiHelperTest {
 		}
 		assertEquals(
 				Set.of(
-						"/pages?datasource=tranquility&language=en",
+						"/pages?datasource=tranquility&language=en&page=1",
 						"/pages?datasource=tranquility&language=en&page=2",
 						"/pages?datasource=tranquility&language=en&page=3"),
 				paths);

@@ -60,6 +60,12 @@ import software.amazon.awssdk.services.s3.model.NoSuchKeyException;
  */
 @Log4j2
 public class FetchDonations implements Command {
+	private static final double MIN_RECENT_DONATION_AMOUNT = 10_000_000;
+	private static final Duration RECENT_LOOKBACK = Duration.ofDays(1);
+	private static final Duration TOP_LOOKBACK = Duration.ofDays(90);
+	private static final int RECENT_LIMIT = 3;
+	private static final int TOP_LIMIT = 15;
+
 	private static final List<String> DONATION_REF_TYPES = List.of("player_donation", "corporation_account_withdrawal");
 	public static final String DONATIONS_LIST_FILE = "donations-all.json";
 	public static final String DONATIONS_SUMMARY_FILE = "donations.json";
@@ -234,12 +240,6 @@ public class FetchDonations implements Command {
 		return journals;
 	}
 
-	private List<SummaryEntry> buildSummary(Collection<DonationEntry> donations) {
-		return summarise(donations).stream()
-				.sorted(Ordering.natural().reverse().onResultOf(SummaryEntry::getAmount))
-				.toList();
-	}
-
 	private Maybe<String> getAccessToken() {
 		return esiAuthHelper.getTokenStringForOwnerHash(eveRefOwnerHash).toMaybe();
 	}
@@ -287,9 +287,28 @@ public class FetchDonations implements Command {
 		return characterApi.getCharactersCharacterId(characterId, EsiConstants.Datasource.tranquility.toString(), null);
 	}
 
+	private static @NotNull SummaryFile buildSummary(Collection<DonationEntry> donations) {
+		return SummaryFile.builder()
+				.recent(summarise(donations, RECENT_LOOKBACK, MIN_RECENT_DONATION_AMOUNT, RECENT_LIMIT))
+				.top(summarise(donations, TOP_LOOKBACK, 0.0, TOP_LIMIT))
+				.build();
+	}
+
 	private static @NotNull List<SummaryEntry> summarise(Collection<DonationEntry> donations) {
+		return summarise(donations, null, 0.0, Integer.MAX_VALUE);
+	}
+
+	private static @NotNull List<SummaryEntry> summarise(
+			Collection<DonationEntry> donations, Duration lookback, double minAmount, int limit) {
+		var now = Instant.now();
 		var totals = new HashMap<String, SummaryEntry>();
 		for (var entry : donations) {
+			if (lookback != null && entry.getDate().isBefore(now.minus(lookback))) {
+				continue;
+			}
+			if (entry.getAmount() < minAmount) {
+				continue;
+			}
 			var donor = entry.getDonorName();
 			var sum = totals.get(donor);
 			if (sum == null) {
@@ -306,7 +325,10 @@ public class FetchDonations implements Command {
 			}
 			totals.put(donor, sum);
 		}
-		return new ArrayList<>(totals.values());
+		return totals.values().stream()
+				.sorted(Ordering.natural().reverse().onResultOf(SummaryEntry::getAmount))
+				.limit(limit)
+				.toList();
 	}
 
 	private void notifyDiscord(List<DonationEntry> donations) {
@@ -417,6 +439,19 @@ public class FetchDonations implements Command {
 
 		@JsonProperty
 		double amount;
+	}
+
+	@Value
+	@Builder(toBuilder = true)
+	@Jacksonized
+	@JsonInclude(JsonInclude.Include.NON_NULL)
+	@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
+	public static class SummaryFile {
+		@JsonProperty
+		List<SummaryEntry> recent;
+
+		@JsonProperty
+		List<SummaryEntry> top;
 	}
 
 	@Value
