@@ -9,6 +9,7 @@ import com.autonomouslogic.everef.openapi.esi.model.GetUniverseRegionsRegionIdOk
 import com.autonomouslogic.everef.openapi.esi.model.GetUniverseStationsStationIdOk;
 import com.autonomouslogic.everef.openapi.esi.model.GetUniverseSystemsSystemIdOk;
 import com.autonomouslogic.everef.openapi.esi.model.GetUniverseTypesTypeIdOk;
+import com.autonomouslogic.everef.util.VirtualThreads;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Maybe;
 import io.reactivex.rxjava3.functions.Supplier;
@@ -44,16 +45,17 @@ public class UniverseEsi {
 
 	public Flowable<Integer> getRegionIds() {
 		return Flowable.defer(() -> {
-			if (regionIds != null) {
-				return Flowable.fromIterable(regionIds);
-			}
-			return Flowable.defer(() -> {
-				log.trace("Fetching region ids");
-				var regions = universeApi.getUniverseRegions(datasource.toString(), null);
-				regionIds = regions;
-				return Flowable.fromIterable(regions);
-			});
-		});
+					if (regionIds != null) {
+						return Flowable.fromIterable(regionIds);
+					}
+					return Flowable.defer(() -> {
+						log.trace("Fetching region ids");
+						var regions = universeApi.getUniverseRegions(datasource.toString(), null);
+						regionIds = regions;
+						return Flowable.fromIterable(regions);
+					});
+				})
+				.observeOn(VirtualThreads.SCHEDULER);
 	}
 
 	public Maybe<GetUniverseRegionsRegionIdOk> getRegion(int regionId) {
@@ -122,8 +124,9 @@ public class UniverseEsi {
 						log.warn("Retrying {} {}: {}", name, id, ExceptionUtils.getRootCauseMessage(e));
 						return true;
 					})
-					.onErrorResumeNext(e ->
-							Maybe.error(new RuntimeException(String.format("Failed fetching %s %s", name, id), e)));
+					.onErrorResumeNext(
+							e -> Maybe.error(new RuntimeException(String.format("Failed fetching %s %s", name, id), e)))
+					.observeOn(VirtualThreads.SCHEDULER);
 		});
 	}
 }

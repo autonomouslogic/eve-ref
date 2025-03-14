@@ -86,7 +86,7 @@ public class S3Adapter {
 	}
 
 	public Single<GetObjectResponse> getObject(GetObjectRequest get, Path destination, S3AsyncClient s3Client) {
-		return Rx3Util.toSingle(s3Client.getObject(get, destination));
+		return Rx3Util.toSingle(s3Client.getObject(get, destination)).observeOn(VirtualThreads.SCHEDULER);
 	}
 
 	public Single<PutObjectResponse> putObject(
