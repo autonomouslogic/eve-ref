@@ -2,7 +2,6 @@ package com.autonomouslogic.everef.cli.decorator;
 
 import com.autonomouslogic.everef.cli.Command;
 import com.autonomouslogic.everef.config.Configs;
-import com.autonomouslogic.everef.util.Rx;
 import dagger.Lazy;
 import io.reactivex.rxjava3.core.Completable;
 import java.nio.charset.StandardCharsets;
@@ -68,8 +67,7 @@ public class HealthcheckDecorator {
 				.onErrorResumeNext(e -> {
 					log.warn(String.format("Healthcheck \"%s\" failed", url.get()), e);
 					return Completable.complete();
-				})
-				.compose(Rx.offloadCompletable());
+				});
 	}
 
 	@SneakyThrows

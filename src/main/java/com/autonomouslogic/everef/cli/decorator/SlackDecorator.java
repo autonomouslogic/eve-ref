@@ -2,7 +2,6 @@ package com.autonomouslogic.everef.cli.decorator;
 
 import com.autonomouslogic.everef.cli.Command;
 import com.autonomouslogic.everef.config.Configs;
-import com.autonomouslogic.everef.util.Rx;
 import io.reactivex.rxjava3.core.Completable;
 import java.time.Duration;
 import java.time.Instant;
@@ -63,8 +62,7 @@ public class SlackDecorator {
 				.onErrorResumeNext(e -> {
 					log.warn(String.format("Slack \"%s\" failed", url.get()), e);
 					return Completable.complete();
-				})
-				.compose(Rx.offloadCompletable());
+				});
 	}
 
 	private Completable reportSuccess(@NonNull String commandName, @NonNull Instant start) {

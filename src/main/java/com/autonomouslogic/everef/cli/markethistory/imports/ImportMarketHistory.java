@@ -7,7 +7,6 @@ import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.db.MarketHistoryDao;
 import com.autonomouslogic.everef.model.MarketHistoryEntry;
 import com.autonomouslogic.everef.url.HttpUrl;
-import com.autonomouslogic.everef.util.Rx;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Ordering;
@@ -77,16 +76,15 @@ public class ImportMarketHistory implements Command {
 
 	private Completable insertDayEntries(Pair<LocalDate, List<JsonNode>> dateList) {
 		return Completable.fromAction(() -> {
-					var date = dateList.getLeft();
-					var nodes = dateList.getRight();
-					log.info("Inserting {} entries for {}", nodes.size(), date);
-					var entries = dateList.getRight().stream()
-							.map(node -> objectMapper.convertValue(node, MarketHistoryEntry.class))
-							.toList();
-					marketHistoryDao.insert(entries);
-					log.debug("Completed {}", date);
-				})
-				.compose(Rx.offloadCompletable());
+			var date = dateList.getLeft();
+			var nodes = dateList.getRight();
+			log.info("Inserting {} entries for {}", nodes.size(), date);
+			var entries = dateList.getRight().stream()
+					.map(node -> objectMapper.convertValue(node, MarketHistoryEntry.class))
+					.toList();
+			marketHistoryDao.insert(entries);
+			log.debug("Completed {}", date);
+		});
 	}
 
 	private Flowable<Pair<LocalDate, HttpUrl>> resolveFilesToDownload() {

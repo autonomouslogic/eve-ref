@@ -14,7 +14,6 @@ import com.google.common.cache.CacheBuilder;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Maybe;
 import io.reactivex.rxjava3.core.Single;
-import io.reactivex.rxjava3.schedulers.Schedulers;
 import java.net.URI;
 import java.net.URL;
 import java.security.SecureRandom;
@@ -87,16 +86,12 @@ public class EsiAuthHelper {
 
 	@SneakyThrows
 	public Single<OAuth2AccessToken> getAccessToken(@NonNull String code) {
-		return Single.fromFuture(service.getAccessTokenAsync(code))
-				.subscribeOn(Schedulers.io())
-				.observeOn(Schedulers.computation());
+		return Single.fromFuture(service.getAccessTokenAsync(code));
 	}
 
 	@SneakyThrows
 	public Single<OAuth2AccessToken> refreshAccessToken(@NonNull String refreshToken) {
-		return Single.fromFuture(service.refreshAccessTokenAsync(refreshToken))
-				.subscribeOn(Schedulers.io())
-				.observeOn(Schedulers.computation());
+		return Single.fromFuture(service.refreshAccessTokenAsync(refreshToken));
 	}
 
 	@SneakyThrows
@@ -108,7 +103,7 @@ public class EsiAuthHelper {
 							.newBuilder()
 							.header("Authorization", "Bearer " + token)
 							.build();
-					return okHttpHelper.execute(request, esiHttpClient, Schedulers.io());
+					return okHttpHelper.execute(request, esiHttpClient);
 				})
 				.map(response -> {
 					var verify = objectMapper.readValue(response.body().byteStream(), EsiVerifyResponse.class);

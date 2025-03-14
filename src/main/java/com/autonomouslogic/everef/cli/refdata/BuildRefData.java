@@ -37,7 +37,6 @@ import com.autonomouslogic.everef.util.DataIndexHelper;
 import com.autonomouslogic.everef.util.DataUtil;
 import com.autonomouslogic.everef.util.HashUtil;
 import com.autonomouslogic.everef.util.RefDataUtil;
-import com.autonomouslogic.everef.util.Rx;
 import com.autonomouslogic.everef.util.TempFiles;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -338,20 +337,19 @@ public class BuildRefData implements Command {
 
 	private Single<File> buildOutputFile() {
 		return Single.fromCallable(() -> {
-					var file = File.createTempFile("ref-data-", ".tar");
-					log.info("Writing ref data to {}", file);
-					try (var tar = new TarArchiveOutputStream(new FileOutputStream(file))) {
-						writeMeta(tar);
-						for (RefDataConfig config : refDataUtil.loadReferenceDataConfig()) {
-							writeEntries(config.getOutputFile(), storeHandler.getRefStore(config.getId()), tar);
-						}
-					}
-					log.debug(String.format("Wrote %.0f MiB to %s", file.length() / 1024.0 / 1024.0, file));
-					var compressed = CompressUtil.compressXz(file);
-					compressed.deleteOnExit();
-					return compressed;
-				})
-				.compose(Rx.offloadSingle());
+			var file = File.createTempFile("ref-data-", ".tar");
+			log.info("Writing ref data to {}", file);
+			try (var tar = new TarArchiveOutputStream(new FileOutputStream(file))) {
+				writeMeta(tar);
+				for (RefDataConfig config : refDataUtil.loadReferenceDataConfig()) {
+					writeEntries(config.getOutputFile(), storeHandler.getRefStore(config.getId()), tar);
+				}
+			}
+			log.debug(String.format("Wrote %.0f MiB to %s", file.length() / 1024.0 / 1024.0, file));
+			var compressed = CompressUtil.compressXz(file);
+			compressed.deleteOnExit();
+			return compressed;
+		});
 	}
 
 	@SneakyThrows

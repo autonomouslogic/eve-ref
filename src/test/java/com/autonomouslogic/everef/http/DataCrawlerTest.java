@@ -55,10 +55,13 @@ public class DataCrawlerTest {
 		var urls = dataCrawler.crawl().toList().blockingGet();
 		assertEquals(
 				List.of(
-						urlParser.parse("http://localhost:" + TestDataUtil.TEST_PORT + "/data/test.zip"),
-						urlParser.parse("http://localhost:" + TestDataUtil.TEST_PORT
-								+ "/data/esi-scrape/eve-ref-esi-scrape-latest.tar.xz")),
-				urls);
+								urlParser.parse("http://localhost:" + TestDataUtil.TEST_PORT + "/data/test.zip"),
+								urlParser.parse("http://localhost:" + TestDataUtil.TEST_PORT
+										+ "/data/esi-scrape/eve-ref-esi-scrape-latest.tar.xz"))
+						.stream()
+						.sorted()
+						.toList(),
+				urls.stream().sorted().toList());
 
 		testDataUtil.assertRequest(server.takeRequest(), "/data/");
 		testDataUtil.assertRequest(server.takeRequest(), "/data/esi-scrape/");
@@ -102,10 +105,13 @@ public class DataCrawlerTest {
 		var urls = dataCrawler.crawl().toList().blockingGet();
 		assertEquals(
 				List.of(
-						urlParser.parse("http://localhost:" + TestDataUtil.TEST_PORT + "/data/test.zip"),
-						urlParser.parse("http://localhost:" + TestDataUtil.TEST_PORT
-								+ "/data/esi-scrape/eve-ref-esi-scrape-latest.tar.xz")),
-				urls);
+								urlParser.parse("http://localhost:" + TestDataUtil.TEST_PORT + "/data/test.zip"),
+								urlParser.parse("http://localhost:" + TestDataUtil.TEST_PORT
+										+ "/data/esi-scrape/eve-ref-esi-scrape-latest.tar.xz"))
+						.stream()
+						.sorted()
+						.toList(),
+				urls.stream().sorted().toList());
 
 		testDataUtil.assertRequest(server.takeRequest(), "/");
 		testDataUtil.assertRequest(server.takeRequest(), "/data/esi-scrape/");
@@ -120,10 +126,13 @@ public class DataCrawlerTest {
 
 		assertEquals(
 				List.of(
-						urlParser.parse("http://localhost:" + TestDataUtil.TEST_PORT + "/data/test.zip"),
-						urlParser.parse("http://localhost:" + TestDataUtil.TEST_PORT
-								+ "/data/esi-scrape/eve-ref-esi-scrape-latest.tar.xz")),
-				urls);
+								urlParser.parse("http://localhost:" + TestDataUtil.TEST_PORT + "/data/test.zip"),
+								urlParser.parse("http://localhost:" + TestDataUtil.TEST_PORT
+										+ "/data/esi-scrape/eve-ref-esi-scrape-latest.tar.xz"))
+						.stream()
+						.sorted()
+						.toList(),
+				urls.stream().sorted().toList());
 
 		testDataUtil.assertRequest(server.takeRequest(), "/");
 		testDataUtil.assertRequest(server.takeRequest(), "/data/esi-scrape/");

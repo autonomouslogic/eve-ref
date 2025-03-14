@@ -2,7 +2,6 @@ package com.autonomouslogic.everef.esi;
 
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.openapi.esi.api.MarketApi;
-import com.autonomouslogic.everef.util.Rx;
 import io.reactivex.rxjava3.core.Flowable;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -28,7 +27,6 @@ public class MarketEsi {
 					return esiHelper.fetchPages(page ->
 							marketApi.getMarketsRegionIdTypesWithHttpInfo(regionId, source.toString(), null, page));
 				})
-				.compose(Rx.offloadFlowable())
 				.onErrorResumeNext(e -> {
 					// Had problems with UndeliverableExceptions being thrown.
 					// This is a hacky workaround, as we should definitely error on errors instead of ignoring them.

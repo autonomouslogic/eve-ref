@@ -69,20 +69,19 @@ public class CompressUtil {
 
 	public static Flowable<Pair<ArchiveEntry, byte[]>> loadArchive(File file) {
 		return Flowable.generate(
-						() -> CompressUtil.uncompressArchive(file),
-						(BiConsumer<ArchiveInputStream, Emitter<Pair<ArchiveEntry, byte[]>>>) (stream, emitter) -> {
-							var entry = stream.getNextEntry();
-							if (entry == null) {
-								log.trace("Finished reading: {}", file.getPath());
-								emitter.onComplete();
-							} else {
-								log.trace("Reading entry {}#{}", file.getPath(), entry.getName());
-								var bytes = IOUtils.toByteArray(stream);
-								emitter.onNext(Pair.of(entry, bytes));
-							}
-						},
-						stream -> stream.close())
-				.compose(Rx.offloadFlowable());
+				() -> CompressUtil.uncompressArchive(file),
+				(BiConsumer<ArchiveInputStream, Emitter<Pair<ArchiveEntry, byte[]>>>) (stream, emitter) -> {
+					var entry = stream.getNextEntry();
+					if (entry == null) {
+						log.trace("Finished reading: {}", file.getPath());
+						emitter.onComplete();
+					} else {
+						log.trace("Reading entry {}#{}", file.getPath(), entry.getName());
+						var bytes = IOUtils.toByteArray(stream);
+						emitter.onNext(Pair.of(entry, bytes));
+					}
+				},
+				stream -> stream.close());
 	}
 
 	@SneakyThrows

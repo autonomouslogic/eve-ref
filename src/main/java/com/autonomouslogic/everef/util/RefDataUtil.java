@@ -35,7 +35,6 @@ import com.google.common.base.CaseFormat;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Single;
-import io.reactivex.rxjava3.schedulers.Schedulers;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -227,7 +226,7 @@ public class RefDataUtil {
 	@SneakyThrows
 	public Flowable<Long> getAllTypeIdsForMarketGroup(long marketGroupId) {
 		return Rx3Util.toMaybe(refdataApi.getMarketGroup(marketGroupId))
-				.observeOn(Schedulers.computation())
+				.observeOn(VirtualThreads.SCHEDULER)
 				.flatMapPublisher(marketGroup -> {
 					var types = Optional.ofNullable(marketGroup.getTypeIds()).orElse(List.of());
 					var children = Optional.ofNullable(marketGroup.getChildMarketGroupIds())
@@ -243,7 +242,6 @@ public class RefDataUtil {
 		var loaded = loadedRefDataProvider.get();
 		return downloadLatestReferenceData()
 				.flatMapPublisher(this::parseReferenceDataArchive)
-				.observeOn(Schedulers.io())
 				.flatMapCompletable(
 						refEntry -> Completable.fromAction(() -> {
 							switch (refEntry.getType()) {
@@ -298,8 +296,7 @@ public class RefDataUtil {
 						}),
 						false,
 						Runtime.getRuntime().availableProcessors())
-				.andThen(Single.just(loaded))
-				.observeOn(Schedulers.computation());
+				.andThen(Single.just(loaded));
 	}
 
 	@SneakyThrows
