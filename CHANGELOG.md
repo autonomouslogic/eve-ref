@@ -1,5 +1,18 @@
 EVE Ref Changelog
 
+## [2.55.12](https://github.com/autonomouslogic/eve-ref/compare/2.55.11...2.55.12) (2025-03-14)
+
+
+### Documentation
+
+* Update downloading-datasets.md ([4844a92](https://github.com/autonomouslogic/eve-ref/commit/4844a925bbf561dcdcddee7ee9c99578f99a72e2))
+
+
+### Dependency Updates
+
+* **deps:** update dependency vitest to v3 ([#717](https://github.com/autonomouslogic/eve-ref/issues/717)) ([28759e1](https://github.com/autonomouslogic/eve-ref/commit/28759e1517262ef1a17fbdf83fb3d35c6b3e80bf))
+* **deps:** update plugin nu.studer.jooq to v10 ([#740](https://github.com/autonomouslogic/eve-ref/issues/740)) ([90f1dea](https://github.com/autonomouslogic/eve-ref/commit/90f1dea1a6d51b0618de9a6baee7e698630fc7a5))
+
 ## [2.55.11](https://github.com/autonomouslogic/eve-ref/compare/2.55.10...2.55.11) (2025-03-12)
 
 
