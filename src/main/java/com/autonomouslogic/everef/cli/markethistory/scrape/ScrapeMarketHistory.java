@@ -18,6 +18,7 @@ import com.autonomouslogic.everef.url.UrlParser;
 import com.autonomouslogic.everef.util.DataIndexHelper;
 import com.autonomouslogic.everef.util.ProgressReporter;
 import com.autonomouslogic.everef.util.TempFiles;
+import com.autonomouslogic.everef.util.VirtualThreads;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -25,6 +26,7 @@ import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.CompletableSource;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Maybe;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 import java.io.FileOutputStream;
 import java.net.URI;
 import java.time.Duration;
@@ -311,51 +313,57 @@ public class ScrapeMarketHistory implements Command {
 
 	private Maybe<S3Url> uploadArchive(LocalDate date) {
 		return Maybe.defer(() -> {
-			var existingCount = totals.get(date);
-			var entries = mapSet.getOrCreateMap(date.toString());
-			if (existingCount == entries.size()) {
-				log.debug(String.format("Skipping upload for %s, no new entries", date));
-				return Maybe.empty();
-			}
-			if (entries.size() < existingCount) {
-				return Maybe.error(new IllegalStateException(String.format(
-						"Entries for %s have shrunk from %s to %s (%s)",
-						date, existingCount, entries.size(), entries.size() - existingCount)));
-			}
-			totals.put(date, entries.size());
-			log.debug("Writing archive for {} - {} entries", date, entries.size());
-			var archive = marketHistoryFileBuilderProvider.get().writeEntries(entries.values());
-			var archivePath = dataUrl.resolve(MARKET_HISTORY.createArchivePath(date));
-			var archivePut = s3Util.putPublicObjectRequest(
-					archive.length(), archivePath, "application/x-bzip2", latestCacheTime);
-			log.info(String.format("Uploading archive for %s", date));
-			return s3Adapter
-					.putObject(archivePut, archive, s3Client)
-					.ignoreElement()
-					.andThen(Completable.fromAction(() -> {
-						log.debug("Uploaded archive for {}", date);
-						archive.delete();
-					}))
-					.andThen(Maybe.just(archivePath));
-		});
+					var existingCount = totals.get(date);
+					var entries = mapSet.getOrCreateMap(date.toString());
+					if (existingCount == entries.size()) {
+						log.debug(String.format("Skipping upload for %s, no new entries", date));
+						return Maybe.empty();
+					}
+					if (entries.size() < existingCount) {
+						return Maybe.error(new IllegalStateException(String.format(
+								"Entries for %s have shrunk from %s to %s (%s)",
+								date, existingCount, entries.size(), entries.size() - existingCount)));
+					}
+					totals.put(date, entries.size());
+					log.debug("Writing archive for {} - {} entries", date, entries.size());
+					var archive = marketHistoryFileBuilderProvider.get().writeEntries(entries.values());
+					var archivePath = dataUrl.resolve(MARKET_HISTORY.createArchivePath(date));
+					var archivePut = s3Util.putPublicObjectRequest(
+							archive.length(), archivePath, "application/x-bzip2", latestCacheTime);
+					log.info(String.format("Uploading archive for %s", date));
+					return s3Adapter
+							.putObject(archivePut, archive, s3Client)
+							.ignoreElement()
+							.andThen(Completable.fromAction(() -> {
+								log.debug("Uploaded archive for {}", date);
+								archive.delete();
+							}))
+							.andThen(Maybe.just(archivePath));
+				})
+				.subscribeOn(Schedulers.io())
+				.observeOn(VirtualThreads.SCHEDULER);
 	}
 
 	private Completable uploadTotalPairs() {
 		return Completable.defer(() -> {
-			log.debug("Building total pairs file");
-			var file = tempFiles.tempFile("market-history-pairs", ".json").toFile();
-			try (var out = new FileOutputStream(file)) {
-				objectMapper.writeValue(out, totals);
-			}
-			var archivePath = dataUrl.resolve(MARKET_HISTORY.getFolder() + "/").resolve("totals.json");
-			var archivePut =
-					s3Util.putPublicObjectRequest(file.length(), archivePath, "application/json", latestCacheTime);
-			log.info("Uploading total pairs file");
-			return s3Adapter
-					.putObject(archivePut, file, s3Client)
-					.ignoreElement()
-					.andThen(Completable.fromAction(() -> file.delete()));
-		});
+					log.debug("Building total pairs file");
+					var file =
+							tempFiles.tempFile("market-history-pairs", ".json").toFile();
+					try (var out = new FileOutputStream(file)) {
+						objectMapper.writeValue(out, totals);
+					}
+					var archivePath =
+							dataUrl.resolve(MARKET_HISTORY.getFolder() + "/").resolve("totals.json");
+					var archivePut = s3Util.putPublicObjectRequest(
+							file.length(), archivePath, "application/json", latestCacheTime);
+					log.info("Uploading total pairs file");
+					return s3Adapter
+							.putObject(archivePut, file, s3Client)
+							.ignoreElement()
+							.andThen(Completable.fromAction(() -> file.delete()));
+				})
+				.subscribeOn(Schedulers.io())
+				.observeOn(VirtualThreads.SCHEDULER);
 	}
 
 	private Completable downloadTotalPairs() {

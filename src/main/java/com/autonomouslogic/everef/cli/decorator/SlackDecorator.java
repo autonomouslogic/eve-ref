@@ -2,6 +2,7 @@ package com.autonomouslogic.everef.cli.decorator;
 
 import com.autonomouslogic.everef.cli.Command;
 import com.autonomouslogic.everef.config.Configs;
+import com.autonomouslogic.everef.util.VirtualThreads;
 import io.reactivex.rxjava3.core.Completable;
 import java.time.Duration;
 import java.time.Instant;
@@ -53,7 +54,7 @@ public class SlackDecorator {
 						return;
 					}
 					log.trace("Sending Slack message");
-					new SlackApi(url.get()).call(message);
+					VirtualThreads.offload(() -> new SlackApi(url.get()).call(message));
 				})
 				.retry(2, e -> {
 					log.warn(String.format("Slack \"%s\" retrying: %s", url.get(), ExceptionUtils.getMessage(e)));

@@ -2,6 +2,7 @@ package com.autonomouslogic.everef.cli.decorator;
 
 import com.autonomouslogic.everef.cli.Command;
 import com.autonomouslogic.everef.config.Configs;
+import com.autonomouslogic.everef.util.VirtualThreads;
 import dagger.Lazy;
 import io.reactivex.rxjava3.core.Completable;
 import java.nio.charset.StandardCharsets;
@@ -58,7 +59,7 @@ public class HealthcheckDecorator {
 			return Completable.complete();
 		}
 		return Completable.fromAction(() -> {
-					executeCall(url.get(), body);
+					VirtualThreads.offload(() -> executeCall(url.get(), body));
 				})
 				.retry(2, e -> {
 					log.warn(String.format("Healthcheck \"%s\" retrying: %s", url.get(), ExceptionUtils.getMessage(e)));

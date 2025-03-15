@@ -67,7 +67,7 @@ public class ImportMarketHistory implements Command {
 
 	private Completable runImport() {
 		return resolveFilesToDownload()
-				.parallel(insertConcurrency)
+				.parallel(loadConcurrency)
 				.runOn(VirtualThreads.SCHEDULER)
 				.flatMap(availableFile -> loadFile(availableFile))
 				.sequential()
@@ -79,7 +79,7 @@ public class ImportMarketHistory implements Command {
 	}
 
 	private Completable insertDayEntries(Pair<LocalDate, List<JsonNode>> dateList) {
-		return Completable.fromAction(() -> {
+		return Completable.fromAction(() -> VirtualThreads.offload(() -> {
 			var date = dateList.getLeft();
 			var nodes = dateList.getRight();
 			log.info("Inserting {} entries for {}", nodes.size(), date);
@@ -88,7 +88,7 @@ public class ImportMarketHistory implements Command {
 					.toList();
 			marketHistoryDao.insert(entries);
 			log.debug("Completed {}", date);
-		});
+		}));
 	}
 
 	private Flowable<Pair<LocalDate, HttpUrl>> resolveFilesToDownload() {
