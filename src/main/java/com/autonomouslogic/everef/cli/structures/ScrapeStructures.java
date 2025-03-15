@@ -31,6 +31,7 @@ import com.autonomouslogic.everef.util.DataIndexHelper;
 import com.autonomouslogic.everef.util.JsonUtil;
 import com.autonomouslogic.everef.util.ProgressReporter;
 import com.autonomouslogic.everef.util.TempFiles;
+import com.autonomouslogic.everef.util.VirtualThreads;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -251,6 +252,7 @@ public class ScrapeStructures implements Command {
 	@SneakyThrows
 	private Completable initMarketStructures() {
 		return Rx3Util.toSingle(refdataApi.getType(STANDARD_MARKET_HUB_I_TYPE_ID))
+				.observeOn(VirtualThreads.SCHEDULER)
 				.flatMapCompletable(marketHub -> Completable.fromAction(() -> {
 					marketStructureTypeIds = marketHub.getCanFitTypes();
 					log.info("Prepared {} market structure type IDs", marketStructureTypeIds.size());

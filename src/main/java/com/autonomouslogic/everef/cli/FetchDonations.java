@@ -16,6 +16,7 @@ import com.autonomouslogic.everef.s3.S3Adapter;
 import com.autonomouslogic.everef.s3.S3Util;
 import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.url.UrlParser;
+import com.autonomouslogic.everef.util.VirtualThreads;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -205,8 +206,9 @@ public class FetchDonations implements Command {
 	@SneakyThrows
 	private List<DonationEntry> getCharacterDonations(int characterId, String accessToken) {
 		var journals = esiHelper
-				.fetchPages(page -> walletApi.getCharactersCharacterIdWalletJournalWithHttpInfo(
-						characterId, EsiConstants.Datasource.tranquility.toString(), null, page, accessToken))
+				.fetchPages(page ->
+						VirtualThreads.offload(() -> walletApi.getCharactersCharacterIdWalletJournalWithHttpInfo(
+								characterId, EsiConstants.Datasource.tranquility.toString(), null, page, accessToken)))
 				.doOnNext(e -> log.debug("Character journal: {}", e))
 				.filter(e -> DONATION_REF_TYPES.contains(e.getRefType().toString()))
 				.map(e -> DonationEntry.builder()
@@ -224,8 +226,14 @@ public class FetchDonations implements Command {
 	@SneakyThrows
 	private List<DonationEntry> getCorporationDonations(int corporationId, String accessToken) {
 		var journals = esiHelper
-				.fetchPages(page -> walletApi.getCorporationsCorporationIdWalletsDivisionJournalWithHttpInfo(
-						corporationId, 1, EsiConstants.Datasource.tranquility.toString(), null, page, accessToken))
+				.fetchPages(page -> VirtualThreads.offload(
+						() -> walletApi.getCorporationsCorporationIdWalletsDivisionJournalWithHttpInfo(
+								corporationId,
+								1,
+								EsiConstants.Datasource.tranquility.toString(),
+								null,
+								page,
+								accessToken)))
 				.doOnNext(e -> log.debug("Corporation journal: {}", e))
 				.filter(e -> DONATION_REF_TYPES.contains(e.getRefType().toString()))
 				.map(e -> DonationEntry.builder()
@@ -278,13 +286,14 @@ public class FetchDonations implements Command {
 
 	@SneakyThrows
 	private @NotNull GetCorporationsCorporationIdOk getCorporation(int corporationId) throws ApiException {
-		return corporationApi.getCorporationsCorporationId(
-				corporationId, EsiConstants.Datasource.tranquility.toString(), null);
+		return VirtualThreads.offload(() -> corporationApi.getCorporationsCorporationId(
+				corporationId, EsiConstants.Datasource.tranquility.toString(), null));
 	}
 
 	@SneakyThrows
 	private @NotNull GetCharactersCharacterIdOk getCharacter(int characterId) throws ApiException {
-		return characterApi.getCharactersCharacterId(characterId, EsiConstants.Datasource.tranquility.toString(), null);
+		return VirtualThreads.offload(() -> characterApi.getCharactersCharacterId(
+				characterId, EsiConstants.Datasource.tranquility.toString(), null));
 	}
 
 	private static @NotNull SummaryFile buildSummary(Collection<DonationEntry> donations) {

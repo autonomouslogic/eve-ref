@@ -5,6 +5,7 @@ import com.autonomouslogic.dynamomapper.DynamoAsyncMapper;
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.http.OkHttpHelper;
 import com.autonomouslogic.everef.model.CharacterLogin;
+import com.autonomouslogic.everef.util.VirtualThreads;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.scribejava.core.builder.ServiceBuilder;
 import com.github.scribejava.core.model.OAuth2AccessToken;
@@ -115,12 +116,14 @@ public class EsiAuthHelper {
 	@SneakyThrows
 	public Completable putCharacterLogin(CharacterLogin characterLogin) {
 		return Completable.defer(() -> Rx3Util.toSingle(dynamoAsyncMapper.putItemFromKeyObject(characterLogin))
+				.observeOn(VirtualThreads.SCHEDULER)
 				.ignoreElement());
 	}
 
 	@SneakyThrows
 	public Maybe<CharacterLogin> getCharacterLogin(String ownerHash) {
 		return Rx3Util.toMaybe(dynamoAsyncMapper.getItemFromPrimaryKey(ownerHash, CharacterLogin.class))
+				.observeOn(VirtualThreads.SCHEDULER)
 				.flatMap(r -> Maybe.fromOptional(Optional.ofNullable(r.item())));
 	}
 

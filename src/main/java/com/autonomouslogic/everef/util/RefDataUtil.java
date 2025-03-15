@@ -227,6 +227,7 @@ public class RefDataUtil {
 	public Flowable<Long> getAllTypeIdsForMarketGroup(long marketGroupId) {
 		return Rx3Util.toMaybe(refdataApi.getMarketGroup(marketGroupId))
 				.observeOn(VirtualThreads.SCHEDULER)
+				.observeOn(VirtualThreads.SCHEDULER)
 				.flatMapPublisher(marketGroup -> {
 					var types = Optional.ofNullable(marketGroup.getTypeIds()).orElse(List.of());
 					var children = Optional.ofNullable(marketGroup.getChildMarketGroupIds())
