@@ -31,17 +31,17 @@ class HeadObjectFlowableTransformer implements FlowableTransformer<ListedS3Objec
 
 	@Override
 	public Publisher<ListedS3Object> apply(@NonNull Flowable<ListedS3Object> upstream) {
-		return upstream.flatMap(
-				obj -> {
+		return upstream.parallel(32)
+				.runOn(VirtualThreads.SCHEDULER)
+				.flatMap(obj -> {
 					if (obj.isDirectory()) {
 						return Flowable.just(obj);
 					}
 					return headObject(obj)
 							.toFlowable()
 							.compose(Rx3Util.retryWithDelayFlowable(2, Duration.ofSeconds(5)));
-				},
-				false,
-				32);
+				})
+				.sequential();
 	}
 
 	@NotNull

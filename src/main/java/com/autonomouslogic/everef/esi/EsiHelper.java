@@ -3,6 +3,7 @@ package com.autonomouslogic.everef.esi;
 import com.autonomouslogic.commons.rxjava3.Rx3Util;
 import com.autonomouslogic.everef.http.OkHttpHelper;
 import com.autonomouslogic.everef.openapi.esi.invoker.ApiResponse;
+import com.autonomouslogic.everef.util.VirtualThreads;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.NullNode;
@@ -126,10 +127,10 @@ public class EsiHelper {
 					return Flowable.concatArray(
 							Flowable.fromIterable(firstResult),
 							Flowable.range(2, pages - 1)
-									.flatMap(
-											page -> Flowable.fromIterable(decodeResponse(fetcher.apply(page))),
-											false,
-											4));
+									.parallel(4)
+									.runOn(VirtualThreads.SCHEDULER)
+									.flatMap(page -> Flowable.fromIterable(decodeResponse(fetcher.apply(page))))
+									.sequential());
 				})
 				.compose(Rx3Util.retryWithDelayFlowable(2, Duration.ofSeconds(1)));
 	}

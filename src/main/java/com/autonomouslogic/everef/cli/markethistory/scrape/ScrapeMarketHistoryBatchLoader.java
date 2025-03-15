@@ -4,6 +4,7 @@ import com.autonomouslogic.everef.cli.markethistory.MarketHistoryLoader;
 import com.autonomouslogic.everef.cli.markethistory.MarketHistoryUtil;
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.url.DataUrl;
+import com.autonomouslogic.everef.util.VirtualThreads;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.google.common.collect.Ordering;
 import io.reactivex.rxjava3.core.Flowable;
@@ -58,25 +59,25 @@ class ScrapeMarketHistoryBatchLoader {
 		}
 		return f.sorted(Ordering.natural().onResultOf(Pair::getLeft))
 				.switchIfEmpty(Flowable.error(new RuntimeException("No market history files found.")))
-				.flatMap(
-						p -> {
-							return marketHistoryLoader
-									.loadDailyFile(p.getRight(), p.getLeft())
-									.flatMap(entry -> Flowable.fromIterable(entry.getRight()))
-									.map(entry -> {
-										totalEntries.incrementAndGet();
-										return Pair.of(p.getLeft(), entry);
-									})
-									.toList()
-									.flatMapPublisher(entries -> {
-										synchronized (fileTotals) {
-											fileTotals.put(p.getLeft(), entries.size());
-										}
-										return Flowable.fromIterable(entries);
-									});
-						},
-						false,
-						downloadConcurrency)
+				.parallel(downloadConcurrency)
+				.runOn(VirtualThreads.SCHEDULER)
+				.flatMap(p -> {
+					return marketHistoryLoader
+							.loadDailyFile(p.getRight(), p.getLeft())
+							.flatMap(entry -> Flowable.fromIterable(entry.getRight()))
+							.map(entry -> {
+								totalEntries.incrementAndGet();
+								return Pair.of(p.getLeft(), entry);
+							})
+							.toList()
+							.flatMapPublisher(entries -> {
+								synchronized (fileTotals) {
+									fileTotals.put(p.getLeft(), entries.size());
+								}
+								return Flowable.fromIterable(entries);
+							});
+				})
+				.sequential()
 				.doOnComplete(() -> log.info("Loaded {} market history entries", totalEntries.get()))
 				.switchIfEmpty(Flowable.error(new RuntimeException("No market data found in history files.")));
 	}

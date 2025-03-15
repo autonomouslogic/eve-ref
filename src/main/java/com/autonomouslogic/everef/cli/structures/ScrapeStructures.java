@@ -423,12 +423,19 @@ public class ScrapeStructures implements Command {
 	private Completable populateLocations() {
 		return Completable.defer(() -> {
 			log.info("Populating locations");
-			return structureStore.allStructures().flatMapCompletable(pair -> {
-				var node = pair.getValue();
-				return locationPopulator.populate(pair.getValue()).andThen(Completable.fromAction(() -> {
-					structureStore.put(node);
-				}));
-			});
+			return structureStore
+					.allStructures()
+					.flatMapCompletable(
+							pair -> {
+								var node = pair.getValue();
+								return locationPopulator
+										.populate(pair.getValue())
+										.andThen(Completable.fromAction(() -> {
+											structureStore.put(node);
+										}));
+							},
+							false,
+							32);
 		});
 	}
 
