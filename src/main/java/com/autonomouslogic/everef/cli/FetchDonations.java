@@ -51,6 +51,7 @@ import lombok.extern.jackson.Jacksonized;
 import lombok.extern.log4j.Log4j2;
 import okhttp3.OkHttpClient;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
@@ -389,8 +390,9 @@ public class FetchDonations implements Command {
 					.donorName(character.getName())
 					.characterId(id)
 					.build();
-		} catch (ApiException e) {
-			if (e.getCode() != 404) {
+		} catch (Exception e) {
+			var apiException = ExceptionUtils.throwableOfType(e, ApiException.class);
+			if (apiException == null || apiException.getCode() != 404) {
 				throw e;
 			}
 			try {
@@ -400,7 +402,8 @@ public class FetchDonations implements Command {
 						.corporationId(id)
 						.build();
 			} catch (ApiException e2) {
-				if (e.getCode() != 404) {
+				var apiException2 = ExceptionUtils.throwableOfType(e, ApiException.class);
+				if (apiException2 == null || apiException2.getCode() != 404) {
 					throw e;
 				}
 			}
