@@ -17,8 +17,8 @@ import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.url.UrlParser;
 import com.autonomouslogic.everef.util.DataIndexHelper;
 import com.autonomouslogic.everef.util.ProgressReporter;
+import com.autonomouslogic.everef.util.Rx;
 import com.autonomouslogic.everef.util.TempFiles;
-import com.autonomouslogic.everef.util.VirtualThreads;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -26,7 +26,6 @@ import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.CompletableSource;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Maybe;
-import io.reactivex.rxjava3.schedulers.Schedulers;
 import java.io.FileOutputStream;
 import java.net.URI;
 import java.time.Duration;
@@ -340,8 +339,7 @@ public class ScrapeMarketHistory implements Command {
 							}))
 							.andThen(Maybe.just(archivePath));
 				})
-				.subscribeOn(Schedulers.io())
-				.observeOn(VirtualThreads.SCHEDULER);
+				.compose(Rx.offloadMaybe());
 	}
 
 	private Completable uploadTotalPairs() {
@@ -362,8 +360,7 @@ public class ScrapeMarketHistory implements Command {
 							.ignoreElement()
 							.andThen(Completable.fromAction(() -> file.delete()));
 				})
-				.subscribeOn(Schedulers.io())
-				.observeOn(VirtualThreads.SCHEDULER);
+				.compose(Rx.offloadCompletable());
 	}
 
 	private Completable downloadTotalPairs() {

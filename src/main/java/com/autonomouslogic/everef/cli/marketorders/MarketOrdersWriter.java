@@ -2,6 +2,7 @@ package com.autonomouslogic.everef.cli.marketorders;
 
 import com.autonomouslogic.everef.util.CompressUtil;
 import com.autonomouslogic.everef.util.JsonNodeCsvWriter;
+import com.autonomouslogic.everef.util.Rx;
 import com.autonomouslogic.everef.util.TempFiles;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.google.common.collect.Iterables;
@@ -41,26 +42,28 @@ public class MarketOrdersWriter {
 					var time = Duration.between(start, Instant.now());
 					log.info(String.format("Market orders written in %s", time));
 					return compressed;
-				}));
+				}))
+				.compose(Rx.offloadSingle());
 	}
 
 	private Single<List<Long>> prepareSortedIds() {
 		return Single.fromCallable(() -> {
-			log.debug("Preparing sorted IDs.");
-			var start = Instant.now();
+					log.debug("Preparing sorted IDs.");
+					var start = Instant.now();
 
-			var ids = new ArrayList<>(marketOrdersStore.keySet());
-			ids.sort(Ordering.compound(List.of(
-					ordering("region_id"),
-					ordering("type_id"),
-					ordering("is_buy_order"),
-					ordering("system_id"),
-					ordering("order_id"))));
+					var ids = new ArrayList<>(marketOrdersStore.keySet());
+					ids.sort(Ordering.compound(List.of(
+							ordering("region_id"),
+							ordering("type_id"),
+							ordering("is_buy_order"),
+							ordering("system_id"),
+							ordering("order_id"))));
 
-			var time = Duration.between(start, Instant.now());
-			log.info(String.format("Sorted IDs prepared in %s", time));
-			return ids;
-		});
+					var time = Duration.between(start, Instant.now());
+					log.info(String.format("Sorted IDs prepared in %s", time));
+					return ids;
+				})
+				.compose(Rx.offloadSingle());
 	}
 
 	private Ordering<Long> ordering(String field) {

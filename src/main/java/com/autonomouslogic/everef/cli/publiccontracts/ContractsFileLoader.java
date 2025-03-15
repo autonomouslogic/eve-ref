@@ -3,6 +3,7 @@ package com.autonomouslogic.everef.cli.publiccontracts;
 import com.autonomouslogic.everef.http.OkHttpHelper;
 import com.autonomouslogic.everef.util.DataUtil;
 import com.autonomouslogic.everef.util.JsonNodeCsvReader;
+import com.autonomouslogic.everef.util.Rx;
 import com.autonomouslogic.everef.util.TempFiles;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -98,10 +99,11 @@ public class ContractsFileLoader {
 
 	public Single<ContractsScrapeMeta> loadFile(@NonNull File file) {
 		return Single.fromCallable(() -> {
-			try (var in = openFile(file)) {
-				return loadAllEntries(in);
-			}
-		});
+					try (var in = openFile(file)) {
+						return loadAllEntries(in);
+					}
+				})
+				.compose(Rx.offloadSingle());
 	}
 
 	@SneakyThrows

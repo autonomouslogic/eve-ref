@@ -129,9 +129,9 @@ public class UniverseEsi {
 						log.warn("Retrying {} {}: {}", name, id, ExceptionUtils.getRootCauseMessage(e));
 						return true;
 					})
-					.onErrorResumeNext(
-							e -> Maybe.error(new RuntimeException(String.format("Failed fetching %s %s", name, id), e)))
-					.observeOn(VirtualThreads.SCHEDULER);
+					.observeOn(VirtualThreads.SCHEDULER)
+					.onErrorResumeNext(e ->
+							Maybe.error(new RuntimeException(String.format("Failed fetching %s %s", name, id), e)));
 		});
 	}
 }

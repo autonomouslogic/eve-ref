@@ -47,8 +47,9 @@ public class JsonNodeCsvReader {
 	@SneakyThrows
 	public Flowable<JsonNode> readCompressed(File file) {
 		return Flowable.defer(() -> {
-			var in = CompressUtil.uncompress(file);
-			return Flowable.fromStream(readAll(in)).doFinally(in::close);
-		});
+					var in = CompressUtil.uncompress(file);
+					return Flowable.fromStream(readAll(in)).doFinally(in::close);
+				})
+				.compose(Rx.offloadFlowable());
 	}
 }

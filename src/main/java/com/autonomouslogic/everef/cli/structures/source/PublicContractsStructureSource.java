@@ -7,6 +7,7 @@ import com.autonomouslogic.everef.util.CompressUtil;
 import com.autonomouslogic.everef.util.DataUtil;
 import com.autonomouslogic.everef.util.JsonNodeCsvReader;
 import com.autonomouslogic.everef.util.JsonUtil;
+import com.autonomouslogic.everef.util.Rx;
 import com.fasterxml.jackson.databind.JsonNode;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Maybe;
@@ -52,6 +53,7 @@ public class PublicContractsStructureSource implements StructureSource {
 
 	private Flowable<Long> process(@NonNull File file) {
 		return Flowable.defer(() -> CompressUtil.loadArchive(file)
+						.compose(Rx.offloadFlowable())
 						.filter(entry -> entry.getKey().getName().equals("contracts.csv"))
 						.flatMap(entry -> Flowable.fromStream(
 								jsonNodeCsvReaderProvider.get().readAll(entry.getValue())))

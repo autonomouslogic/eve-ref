@@ -3,6 +3,7 @@ package com.autonomouslogic.everef.cli.structures.source;
 import static com.autonomouslogic.everef.cli.structures.ScrapeStructures.LAST_SEEN_PUBLIC_STRUCTURE;
 
 import com.autonomouslogic.everef.cli.structures.StructureStore;
+import com.autonomouslogic.everef.util.Rx;
 import io.reactivex.rxjava3.core.Flowable;
 import java.io.File;
 import java.io.FileReader;
@@ -64,12 +65,13 @@ public class SirSmashAlotBackfillStructureSource implements StructureSource {
 
 	private Flowable<CSVRecord> parse(File file) {
 		return Flowable.defer(() -> {
-			var records = new ArrayList<CSVRecord>();
-			try (var reader = new FileReader(file, StandardCharsets.UTF_8)) {
-				CSVFormat.RFC4180.builder().setHeader().setSkipHeaderRecord(true).build().parse(reader).stream()
-						.forEach(records::add);
-			}
-			return Flowable.fromIterable(records);
-		});
+					var records = new ArrayList<CSVRecord>();
+					try (var reader = new FileReader(file, StandardCharsets.UTF_8)) {
+						CSVFormat.RFC4180.builder().setHeader().setSkipHeaderRecord(true).build().parse(reader).stream()
+								.forEach(records::add);
+					}
+					return Flowable.fromIterable(records);
+				})
+				.compose(Rx.offloadFlowable());
 	}
 }

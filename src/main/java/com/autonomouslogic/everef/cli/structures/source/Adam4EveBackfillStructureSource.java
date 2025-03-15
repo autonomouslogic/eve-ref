@@ -7,6 +7,7 @@ import static com.autonomouslogic.everef.cli.structures.ScrapeStructures.LAST_ST
 import com.autonomouslogic.everef.cli.structures.StructureStore;
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.http.OkHttpHelper;
+import com.autonomouslogic.everef.util.Rx;
 import com.autonomouslogic.everef.util.TempFiles;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.reactivex.rxjava3.core.Flowable;
@@ -156,19 +157,20 @@ public class Adam4EveBackfillStructureSource implements StructureSource {
 
 	private Flowable<CSVRecord> parse(File file) {
 		return Flowable.defer(() -> {
-			var records = new ArrayList<CSVRecord>();
-			try (var reader = new FileReader(file, StandardCharsets.UTF_8)) {
-				CSVFormat.RFC4180
-						.builder()
-						.setDelimiter(';')
-						.setHeader()
-						.setSkipHeaderRecord(true)
-						.build()
-						.parse(reader)
-						.stream()
-						.forEach(records::add);
-			}
-			return Flowable.fromIterable(records);
-		});
+					var records = new ArrayList<CSVRecord>();
+					try (var reader = new FileReader(file, StandardCharsets.UTF_8)) {
+						CSVFormat.RFC4180
+								.builder()
+								.setDelimiter(';')
+								.setHeader()
+								.setSkipHeaderRecord(true)
+								.build()
+								.parse(reader)
+								.stream()
+								.forEach(records::add);
+					}
+					return Flowable.fromIterable(records);
+				})
+				.compose(Rx.offloadFlowable());
 	}
 }

@@ -8,6 +8,7 @@ import com.autonomouslogic.everef.cli.structures.StructureStore;
 import com.autonomouslogic.everef.esi.EsiConstants;
 import com.autonomouslogic.everef.esi.EsiHelper;
 import com.autonomouslogic.everef.openapi.esi.api.UniverseApi;
+import com.autonomouslogic.everef.util.Rx;
 import com.autonomouslogic.everef.util.VirtualThreads;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.reactivex.rxjava3.core.Flowable;
@@ -44,25 +45,27 @@ public class PublicStructureSource implements StructureSource {
 	@Override
 	public Flowable<Long> getStructures() {
 		return Flowable.defer(() -> {
-			log.info("Fetching public structure ids");
-			var response = VirtualThreads.offload(() -> universeApi.getUniverseStructuresWithHttpInfo(
-					EsiConstants.Datasource.tranquility.toString(), null, null));
-			if (response.getStatusCode() != 200) {
-				return Flowable.error(new RuntimeException(
-						String.format("Failed to fetch public structure ids: %s", response.getStatusCode())));
-			}
-			var ids = response.getData();
-			var lastModified = structureScrapeHelper.getLastModified(response).orElse(timestamp);
-			log.info("Fetched {} public structure ids", ids.size());
-			log.trace("Seen structure IDs: {}", ids);
-			return Flowable.fromIterable(ids)
-					.observeOn(VirtualThreads.SCHEDULER)
-					.doOnNext(id -> {
-						var node = structureStore.getOrInitStructure(id);
-						node.put(IS_PUBLIC_STRUCTURE, true);
-						node.put(LAST_SEEN_PUBLIC_STRUCTURE, lastModified.toString());
-						structureStore.put(node);
-					});
-		});
+					log.info("Fetching public structure ids");
+					var response = VirtualThreads.offload(() -> universeApi.getUniverseStructuresWithHttpInfo(
+							EsiConstants.Datasource.tranquility.toString(), null, null));
+					if (response.getStatusCode() != 200) {
+						return Flowable.error(new RuntimeException(
+								String.format("Failed to fetch public structure ids: %s", response.getStatusCode())));
+					}
+					var ids = response.getData();
+					var lastModified =
+							structureScrapeHelper.getLastModified(response).orElse(timestamp);
+					log.info("Fetched {} public structure ids", ids.size());
+					log.trace("Seen structure IDs: {}", ids);
+					return Flowable.fromIterable(ids)
+							.observeOn(VirtualThreads.SCHEDULER)
+							.doOnNext(id -> {
+								var node = structureStore.getOrInitStructure(id);
+								node.put(IS_PUBLIC_STRUCTURE, true);
+								node.put(LAST_SEEN_PUBLIC_STRUCTURE, lastModified.toString());
+								structureStore.put(node);
+							});
+				})
+				.compose(Rx.offloadFlowable());
 	}
 }

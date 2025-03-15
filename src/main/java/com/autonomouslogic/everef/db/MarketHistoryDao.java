@@ -4,6 +4,7 @@ import com.autonomouslogic.everef.db.schema.Tables;
 import com.autonomouslogic.everef.db.schema.tables.MarketHistory;
 import com.autonomouslogic.everef.db.schema.tables.records.MarketHistoryRecord;
 import com.autonomouslogic.everef.model.MarketHistoryEntry;
+import com.autonomouslogic.everef.util.Rx;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import io.reactivex.rxjava3.core.Maybe;
@@ -64,15 +65,16 @@ public class MarketHistoryDao extends BaseDao<MarketHistory, MarketHistoryRecord
 
 	public Maybe<MarketHistoryEntry> fetchByPK(LocalDate date, int regionId, int typeId) {
 		return Maybe.defer(() -> {
-			var record = dbAccess.context()
-					.selectFrom(table)
-					.where(
-							Tables.MARKET_HISTORY.DATE.eq(date),
-							Tables.MARKET_HISTORY.REGION_ID.eq(regionId),
-							Tables.MARKET_HISTORY.TYPE_ID.eq(typeId))
-					.fetchOne();
-			return record == null ? Maybe.empty() : Maybe.just(fromRecord(record));
-		});
+					var record = dbAccess.context()
+							.selectFrom(table)
+							.where(
+									Tables.MARKET_HISTORY.DATE.eq(date),
+									Tables.MARKET_HISTORY.REGION_ID.eq(regionId),
+									Tables.MARKET_HISTORY.TYPE_ID.eq(typeId))
+							.fetchOne();
+					return record == null ? Maybe.empty() : Maybe.just(fromRecord(record));
+				})
+				.compose(Rx.offloadMaybe());
 	}
 
 	/**
@@ -100,6 +102,7 @@ public class MarketHistoryDao extends BaseDao<MarketHistory, MarketHistoryRecord
 						stmt.fetch().forEach(r -> dailyPairs.put(r.value1(), r.value2()));
 						return dailyPairs;
 					})
+					.compose(Rx.offloadSingle())
 					.doOnSuccess(dailyPairs -> dailyPairsCache.put(minDate, dailyPairs));
 		});
 	}
@@ -109,15 +112,17 @@ public class MarketHistoryDao extends BaseDao<MarketHistory, MarketHistoryRecord
 	 */
 	public Maybe<LocalDate> fetchLatestDate() {
 		return Maybe.defer(() -> {
-			var stmt = dbAccess.context()
-					.select(DSL.max(Tables.MARKET_HISTORY.DATE))
-					.from(Tables.MARKET_HISTORY);
-			var result = stmt.fetch();
-			if (result.isEmpty()) {
-				return Maybe.empty();
-			} else {
-				return Maybe.fromOptional(Optional.ofNullable(result.get(0).value1()));
-			}
-		});
+					var stmt = dbAccess.context()
+							.select(DSL.max(Tables.MARKET_HISTORY.DATE))
+							.from(Tables.MARKET_HISTORY);
+					var result = stmt.fetch();
+					if (result.isEmpty()) {
+						return Maybe.empty();
+					} else {
+						return Maybe.fromOptional(
+								Optional.ofNullable(result.get(0).value1()));
+					}
+				})
+				.compose(Rx.offloadMaybe());
 	}
 }
