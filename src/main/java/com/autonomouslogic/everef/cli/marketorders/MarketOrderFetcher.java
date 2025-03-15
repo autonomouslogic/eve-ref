@@ -13,6 +13,7 @@ import com.autonomouslogic.everef.esi.UniverseEsi;
 import com.autonomouslogic.everef.http.OkHttpHelper;
 import com.autonomouslogic.everef.util.DataUtil;
 import com.autonomouslogic.everef.util.JsonUtil;
+import com.autonomouslogic.everef.util.VirtualThreads;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.reactivex.rxjava3.core.Completable;
@@ -58,9 +59,12 @@ public class MarketOrderFetcher {
 
 	public Completable fetchMarketOrders() {
 		return Flowable.concatArray(fetchPublicOrders(), fetchStructureOrders())
+				.parallel(32)
+				.runOn(VirtualThreads.SCHEDULER)
 				.flatMap(order ->
 						locationPopulator.populate(order, "location_id").andThen(Flowable.just(order)))
 				.doOnNext(this::verifyOrderLocation)
+				.sequential()
 				.flatMapCompletable(this::saveMarketOrder)
 				.onErrorResumeNext(e -> Completable.error(new RuntimeException("Failed fetching market orders", e)));
 	}
@@ -68,50 +72,50 @@ public class MarketOrderFetcher {
 	private Flowable<ObjectNode> fetchPublicOrders() {
 		return universeEsi
 				.getAllRegions()
-				.flatMap(
-						region -> {
-							return fetchOrders(
-											String.format("/markets/%s/orders?order_type=all", region.getRegionId()),
-											region.getName(),
-											false)
-									.map(order -> {
-										if (!order.has("station_id")) {
-											order.put("station_id", order.get("location_id"));
-										}
-										order.put("region_id", region.getRegionId());
-										return order;
-									});
-						},
-						false,
-						4);
+				.parallel(4)
+				.runOn(VirtualThreads.SCHEDULER)
+				.flatMap(region -> {
+					return fetchOrders(
+									String.format("/markets/%s/orders?order_type=all", region.getRegionId()),
+									region.getName(),
+									false)
+							.map(order -> {
+								if (!order.has("station_id")) {
+									order.put("station_id", order.get("location_id"));
+								}
+								order.put("region_id", region.getRegionId());
+								return order;
+							});
+				})
+				.sequential();
 	}
 
 	private Flowable<ObjectNode> fetchStructureOrders() {
 		return dataUtil.downloadLatestStructures().flatMapPublisher(structures -> {
 			return Flowable.fromIterable(structures.values())
 					.filter(s -> s.isMarketStructure())
-					.flatMap(
-							structure -> {
-								return fetchOrders(
-												String.format("/markets/structures/%s/", structure.getStructureId()),
-												Long.toString(structure.getStructureId()),
-												true)
-										.map(order -> {
-											Optional.ofNullable(structure.getSolarSystemId())
-													.ifPresent(v -> order.put("system_id", v));
-											Optional.ofNullable(structure.getConstellationId())
-													.ifPresent(v -> order.put("constellation_id", v));
-											Optional.ofNullable(structure.getRegionId())
-													.ifPresent(v -> order.put("region_id", v));
-											return order;
-										});
-							},
-							false,
-							4)
+					.parallel(4)
+					.runOn(VirtualThreads.SCHEDULER)
+					.flatMap(structure -> {
+						return fetchOrders(
+										String.format("/markets/structures/%s/", structure.getStructureId()),
+										Long.toString(structure.getStructureId()),
+										true)
+								.map(order -> {
+									Optional.ofNullable(structure.getSolarSystemId())
+											.ifPresent(v -> order.put("system_id", v));
+									Optional.ofNullable(structure.getConstellationId())
+											.ifPresent(v -> order.put("constellation_id", v));
+									Optional.ofNullable(structure.getRegionId())
+											.ifPresent(v -> order.put("region_id", v));
+									return order;
+								});
+					})
 					.filter(order -> {
 						long id = order.get("order_id").asLong();
 						return !marketOrdersStore.containsKey(id);
-					});
+					})
+					.sequential();
 		});
 	}
 

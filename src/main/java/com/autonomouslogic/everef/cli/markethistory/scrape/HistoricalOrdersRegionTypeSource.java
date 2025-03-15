@@ -7,8 +7,8 @@ import com.autonomouslogic.everef.model.RegionTypePair;
 import com.autonomouslogic.everef.url.DataUrl;
 import com.autonomouslogic.everef.util.ArchivePathFactory;
 import com.autonomouslogic.everef.util.CompressUtil;
-import com.autonomouslogic.everef.util.Rx;
 import com.autonomouslogic.everef.util.TempFiles;
+import com.autonomouslogic.everef.util.VirtualThreads;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.MappingIterator;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
@@ -116,22 +116,21 @@ class HistoricalOrdersRegionTypeSource implements RegionTypeSource {
 	}
 
 	private Flowable<RegionTypePair> parseFile(File file) {
-		return Flowable.defer(() -> {
-					log.trace("Reading market order file {}", file);
-					var in = CompressUtil.uncompress(file);
-					var schema = csvMapper
-							.schemaFor(Object.class)
-							.withHeader()
-							.withStrictHeaders(true)
-							.withColumnReordering(true);
-					MappingIterator<JsonNode> iterator =
-							csvMapper.readerFor(JsonNode.class).with(schema).readValues(in);
-					var pairs = new HashSet<RegionTypePair>();
-					iterator.forEachRemaining(node -> {
-						pairs.add(RegionTypePair.fromHistory(node));
-					});
-					return Flowable.fromIterable(pairs);
-				})
-				.compose(Rx.offloadFlowable());
+		return Flowable.fromIterable(VirtualThreads.offload(() -> {
+			log.trace("Reading market order file {}", file);
+			var in = CompressUtil.uncompress(file);
+			var schema = csvMapper
+					.schemaFor(Object.class)
+					.withHeader()
+					.withStrictHeaders(true)
+					.withColumnReordering(true);
+			MappingIterator<JsonNode> iterator =
+					csvMapper.readerFor(JsonNode.class).with(schema).readValues(in);
+			var pairs = new HashSet<RegionTypePair>();
+			iterator.forEachRemaining(node -> {
+				pairs.add(RegionTypePair.fromHistory(node));
+			});
+			return pairs;
+		}));
 	}
 }

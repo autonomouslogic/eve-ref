@@ -11,7 +11,6 @@ import dagger.Component;
 import dagger.Module;
 import dagger.Provides;
 import io.reactivex.rxjava3.core.Completable;
-import io.reactivex.rxjava3.schedulers.Schedulers;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.SneakyThrows;
@@ -28,7 +27,7 @@ public class DataIndexHelperTest {
 			var obj = mock(DataIndex.class);
 			when(obj.setRecursive(anyBoolean())).thenReturn(obj);
 			when(obj.setPrefix(anyString())).thenReturn(obj);
-			when(obj.run()).thenReturn(Completable.complete().subscribeOn(Schedulers.computation()));
+			when(obj.run()).thenReturn(Completable.complete().subscribeOn(VirtualThreads.SCHEDULER));
 			return obj;
 		}
 	}

@@ -1,8 +1,8 @@
 package com.autonomouslogic.everef.http;
 
-import io.reactivex.rxjava3.core.Scheduler;
+import com.autonomouslogic.everef.util.Rx;
+import com.autonomouslogic.everef.util.VirtualThreads;
 import io.reactivex.rxjava3.core.Single;
-import io.reactivex.rxjava3.schedulers.Schedulers;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.nio.file.Files;
@@ -29,48 +29,29 @@ public class OkHttpHelper {
 	@Inject
 	protected OkHttpHelper() {}
 
-	public Single<Response> get(@NonNull String url, @NonNull OkHttpClient client) {
-		return get(url, client, Schedulers.io());
-	}
-
 	public Single<Response> get(
 			@NonNull String url, @NonNull OkHttpClient client, @NonNull Consumer<Request.Builder> requestConsumer) {
-		return get(url, client, Schedulers.io(), requestConsumer);
+		return get(url, client, 2, requestConsumer);
 	}
 
-	public Single<Response> get(@NonNull String url, @NonNull OkHttpClient client, @NonNull Scheduler scheduler) {
-		return get(url, client, scheduler, 2, true, r -> {});
-	}
-
-	public Single<Response> get(
-			@NonNull String url,
-			@NonNull OkHttpClient client,
-			@NonNull Scheduler scheduler,
-			@NonNull Consumer<Request.Builder> requestConsumer) {
-		return get(url, client, scheduler, 2, true, requestConsumer);
+	public Single<Response> get(@NonNull String url, @NonNull OkHttpClient client) {
+		return get(url, client, 2, r -> {});
 	}
 
 	private Single<Response> get(
 			@NonNull String url,
 			@NonNull OkHttpClient client,
-			@NonNull Scheduler scheduler,
 			int retries,
-			boolean observeOnComputation,
 			@NonNull Consumer<Request.Builder> requestConsumer) {
 		return Single.defer(() -> {
 			var request = getRequest(url, requestConsumer);
-			return executeWithRetries(url, client, scheduler, retries, observeOnComputation, request);
+			return executeWithRetries(url, client, retries, request);
 		});
 	}
 
 	private @NotNull Single<Response> executeWithRetries(
-			@NotNull String url,
-			@NotNull OkHttpClient client,
-			@NotNull Scheduler scheduler,
-			int retries,
-			boolean observeOnComputation,
-			Request request) {
-		var response = execute(request, client, scheduler);
+			@NotNull String url, @NotNull OkHttpClient client, int retries, Request request) {
+		var response = execute(request, client);
 		if (retries > 0) {
 			response = response.retry(retries, e -> {
 				var msg = ExceptionUtils.getMessage(e);
@@ -80,21 +61,13 @@ public class OkHttpHelper {
 		}
 		response = response.onErrorResumeNext(
 				e -> Single.error(new RuntimeException(String.format("Error during %s %s", request.method(), url), e)));
-		if (observeOnComputation) {
-			response = response.observeOn(Schedulers.computation());
-		}
 		return response;
 	}
 
 	public Single<Response> download(@NonNull String url, @NonNull File file, @NonNull OkHttpClient client) {
-		return download(url, file, client, Schedulers.io());
-	}
-
-	public Single<Response> download(
-			@NonNull String url, @NonNull File file, @NonNull OkHttpClient client, @NonNull Scheduler scheduler) {
 		return Single.defer(() -> {
 					log.debug("Downloading {} to {}", url, file);
-					return get(url, client, scheduler, 0, false, r -> {})
+					return get(url, client, 0, r -> {})
 							.flatMap(response -> Single.fromCallable(() -> {
 								var lastModified = getLastModified(response);
 								if (response.code() != 200) {
@@ -112,7 +85,7 @@ public class OkHttpHelper {
 								return response;
 							}));
 				})
-				.observeOn(Schedulers.computation());
+				.observeOn(VirtualThreads.SCHEDULER);
 	}
 
 	public Single<Response> post(
@@ -120,29 +93,18 @@ public class OkHttpHelper {
 			@NonNull byte[] body,
 			@NonNull OkHttpClient client,
 			@NonNull Consumer<Request.Builder> requestConsumer) {
-		return post(url, body, client, Schedulers.io(), requestConsumer);
-	}
-
-	public Single<Response> post(
-			@NonNull String url,
-			@NonNull byte[] body,
-			@NonNull OkHttpClient client,
-			@NonNull Scheduler scheduler,
-			@NonNull Consumer<Request.Builder> requestConsumer) {
-		return post(url, body, client, scheduler, 0, true, requestConsumer);
+		return post(url, body, client, 0, requestConsumer);
 	}
 
 	private Single<Response> post(
 			@NonNull String url,
 			@NonNull byte[] body,
 			@NonNull OkHttpClient client,
-			@NonNull Scheduler scheduler,
 			int retries,
-			boolean observeOnComputation,
 			@NonNull Consumer<Request.Builder> requestConsumer) {
 		return Single.defer(() -> {
 			var request = postRequest(url, body, requestConsumer);
-			return executeWithRetries(url, client, scheduler, retries, observeOnComputation, request);
+			return executeWithRetries(url, client, retries, request);
 		});
 	}
 
@@ -151,16 +113,14 @@ public class OkHttpHelper {
 	 * Not that this does not bring execution back to the computation scheduler.
 	 * @param request
 	 * @param client
-	 * @param scheduler
 	 * @return
 	 */
-	public Single<Response> execute(
-			@NonNull Request request, @NonNull OkHttpClient client, @NonNull Scheduler scheduler) {
+	public Single<Response> execute(@NonNull Request request, @NonNull OkHttpClient client) {
 		return Single.fromCallable(() -> {
 					log.trace(String.format("Requesting %s %s", request.method(), request.url()));
 					return client.newCall(request).execute();
 				})
-				.subscribeOn(scheduler)
+				.compose(Rx.offloadSingle())
 				.onErrorResumeNext(e -> Single.error(new RuntimeException(
 						String.format("Error requesting %s %s", request.method(), request.url()), e)));
 	}

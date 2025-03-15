@@ -5,8 +5,8 @@ import static com.autonomouslogic.everef.cli.structures.ScrapeStructures.LAST_ST
 
 import com.autonomouslogic.everef.cli.structures.StructureStore;
 import com.autonomouslogic.everef.util.Rx;
+import com.autonomouslogic.everef.util.VirtualThreads;
 import io.reactivex.rxjava3.core.Flowable;
-import io.reactivex.rxjava3.schedulers.Schedulers;
 import java.io.FileInputStream;
 import java.time.Instant;
 import java.util.List;
@@ -44,7 +44,7 @@ public class BackfillPublicStructureSource implements StructureSource {
 					}
 					log.debug("Found {} public structure ids from backfill", ids.size());
 					return Flowable.fromIterable(ids)
-							.observeOn(Schedulers.computation())
+							.observeOn(VirtualThreads.SCHEDULER)
 							.doOnNext(id -> {
 								structureStore.getOrInitStructure(id);
 								structureStore.updateTimestamp(id, LAST_STRUCTURE_GET, Instant.EPOCH);

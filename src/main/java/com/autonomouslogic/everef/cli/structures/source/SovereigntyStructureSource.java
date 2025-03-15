@@ -7,8 +7,8 @@ import com.autonomouslogic.everef.cli.structures.StructureScrapeHelper;
 import com.autonomouslogic.everef.cli.structures.StructureStore;
 import com.autonomouslogic.everef.esi.EsiConstants;
 import com.autonomouslogic.everef.openapi.esi.api.SovereigntyApi;
+import com.autonomouslogic.everef.util.VirtualThreads;
 import io.reactivex.rxjava3.core.Flowable;
-import io.reactivex.rxjava3.schedulers.Schedulers;
 import java.time.Instant;
 import javax.inject.Inject;
 import lombok.Setter;
@@ -37,8 +37,8 @@ public class SovereigntyStructureSource implements StructureSource {
 	@Override
 	public Flowable<Long> getStructures() {
 		return Flowable.defer(() -> {
-			var response = sovereigntyApi.getSovereigntyStructuresWithHttpInfo(
-					EsiConstants.Datasource.tranquility.toString(), null);
+			var response = VirtualThreads.offload(() -> sovereigntyApi.getSovereigntyStructuresWithHttpInfo(
+					EsiConstants.Datasource.tranquility.toString(), null));
 			if (response.getStatusCode() != 200) {
 				return Flowable.error(new RuntimeException(
 						String.format("Failed to fetch sovereignty structure ids: %s", response.getStatusCode())));
@@ -47,7 +47,7 @@ public class SovereigntyStructureSource implements StructureSource {
 			var lastModified = structureScrapeHelper.getLastModified(response).orElse(timestamp);
 			log.debug("Fetched {} sovereignty structure ids", structures.size());
 			return Flowable.fromIterable(structures)
-					.observeOn(Schedulers.computation())
+					.observeOn(VirtualThreads.SCHEDULER)
 					.map(structure -> {
 						var id = structure.getStructureId();
 						var type = structure.getStructureTypeId();

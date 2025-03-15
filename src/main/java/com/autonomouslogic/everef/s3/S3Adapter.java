@@ -3,10 +3,10 @@ package com.autonomouslogic.everef.s3;
 import com.autonomouslogic.commons.rxjava3.Rx3Util;
 import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.util.TempFiles;
+import com.autonomouslogic.everef.util.VirtualThreads;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.FlowableTransformer;
 import io.reactivex.rxjava3.core.Single;
-import io.reactivex.rxjava3.schedulers.Schedulers;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -68,7 +68,7 @@ public class S3Adapter {
 				S3Url.builder().bucket(req.bucket()).path(req.prefix()).build().toString();
 		var count = new AtomicInteger();
 		return Flowable.fromPublisher(client.listObjectsV2Paginator(req))
-				.observeOn(Schedulers.computation())
+				.observeOn(VirtualThreads.SCHEDULER)
 				.onErrorResumeNext(e -> Flowable.error(new RuntimeException(
 						String.format("Error listing bucket %s at prefix %s", req.bucket(), req.prefix()), e)))
 				.doOnNext(response -> {
@@ -86,7 +86,7 @@ public class S3Adapter {
 	}
 
 	public Single<GetObjectResponse> getObject(GetObjectRequest get, Path destination, S3AsyncClient s3Client) {
-		return Rx3Util.toSingle(s3Client.getObject(get, destination));
+		return Rx3Util.toSingle(s3Client.getObject(get, destination)).observeOn(VirtualThreads.SCHEDULER);
 	}
 
 	public Single<PutObjectResponse> putObject(
@@ -97,7 +97,7 @@ public class S3Adapter {
 					log.warn(String.format("Retrying put to %s", req.key()), e);
 					return true;
 				})
-				.observeOn(Schedulers.computation())
+				.observeOn(VirtualThreads.SCHEDULER)
 				.onErrorResumeNext(e -> Single.error(new RuntimeException(
 						String.format("Error putting object to s3://%s/%s", req.bucket(), req.key()), e)));
 	}
@@ -138,7 +138,7 @@ public class S3Adapter {
 					log.warn(String.format("Retrying delete to %s", req.key()), e);
 					return true;
 				})
-				.observeOn(Schedulers.computation())
+				.observeOn(VirtualThreads.SCHEDULER)
 				.onErrorResumeNext(e -> Single.error(new RuntimeException(
 						String.format("Error deleting object to s3://%s/%s", req.bucket(), req.key()), e)));
 	}

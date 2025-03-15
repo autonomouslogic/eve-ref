@@ -5,8 +5,8 @@ import com.autonomouslogic.everef.http.OkHttpHelper;
 import com.autonomouslogic.everef.model.MarketHistoryEntry;
 import com.autonomouslogic.everef.url.DataUrl;
 import com.autonomouslogic.everef.util.CompressUtil;
-import com.autonomouslogic.everef.util.Rx;
 import com.autonomouslogic.everef.util.TempFiles;
+import com.autonomouslogic.everef.util.VirtualThreads;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.MappingIterator;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
@@ -88,16 +88,15 @@ public class MarketHistoryLoader {
 	}
 
 	private Flowable<Pair<LocalDate, List<JsonNode>>> parseDailyFile(File file, LocalDate date) {
-		return Flowable.defer(() -> {
-					log.trace("Reading market history file: {}", file);
-					List<JsonNode> list;
-					try (var in = CompressUtil.uncompress(file)) {
-						list = readCsvEntries(in);
-					}
-					log.trace("Read {} entries from {}", list.size(), file);
-					return Flowable.just(Pair.of(date, list));
-				})
-				.compose(Rx.offloadFlowable());
+		return Flowable.defer(() -> VirtualThreads.offload(() -> {
+			log.trace("Reading market history file: {}", file);
+			List<JsonNode> list;
+			try (var in = CompressUtil.uncompress(file)) {
+				list = readCsvEntries(in);
+			}
+			log.trace("Read {} entries from {}", list.size(), file);
+			return Flowable.just(Pair.of(date, list));
+		}));
 	}
 
 	@NotNull

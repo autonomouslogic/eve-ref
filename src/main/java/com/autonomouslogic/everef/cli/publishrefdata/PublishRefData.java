@@ -21,6 +21,7 @@ import com.autonomouslogic.everef.url.UrlParser;
 import com.autonomouslogic.everef.util.ProgressReporter;
 import com.autonomouslogic.everef.util.RefDataUtil;
 import com.autonomouslogic.everef.util.TempFiles;
+import com.autonomouslogic.everef.util.VirtualThreads;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.reactivex.rxjava3.core.Completable;
@@ -161,6 +162,7 @@ public class PublishRefData implements Command {
 	@SneakyThrows
 	private Completable loadCurrentMeta() {
 		return Rx3Util.toMaybe(refdataApi.getMeta())
+				.observeOn(VirtualThreads.SCHEDULER)
 				.doOnSuccess(meta -> currentMeta = meta)
 				.ignoreElement();
 	}
