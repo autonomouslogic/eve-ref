@@ -7,6 +7,7 @@ import com.autonomouslogic.everef.esi.LocationPopulator;
 import com.autonomouslogic.everef.esi.UniverseEsi;
 import com.autonomouslogic.everef.http.OkHttpHelper;
 import com.autonomouslogic.everef.openapi.esi.model.GetUniverseRegionsRegionIdOk;
+import com.autonomouslogic.everef.util.VirtualThreads;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -77,7 +78,12 @@ public class ContractFetcher {
 
 	public Flowable<Long> fetchPublicContracts() {
 		return buildKnownItemIndex()
-				.andThen(universeEsi.getAllRegions().flatMap(region -> fetchContractsForRegion(region), 3));
+				.andThen(universeEsi
+						.getAllRegions()
+						.parallel(3)
+						.runOn(VirtualThreads.SCHEDULER)
+						.flatMap(region -> fetchContractsForRegion(region))
+						.sequential());
 	}
 
 	private Flowable<Long> fetchContractsForRegion(GetUniverseRegionsRegionIdOk region) {
@@ -85,7 +91,10 @@ public class ContractFetcher {
 		return Flowable.defer(() -> {
 					log.info(String.format("Fetching public contracts from %s", region.getName()));
 					return fetchContractsFromEsi(region)
-							.flatMap(contract -> populateLocation(region, contract), 32)
+							.parallel(32)
+							.runOn(VirtualThreads.SCHEDULER)
+							.flatMap(contract -> populateLocation(region, contract))
+							.sequential()
 							.doOnNext(ignore -> {
 								var n = count.incrementAndGet();
 								if (n % 1_000 == 0) {
