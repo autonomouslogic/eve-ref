@@ -3,7 +3,6 @@ package com.autonomouslogic.everef.cli.structures;
 import static com.autonomouslogic.everef.util.ArchivePathFactory.STRUCTURES;
 import static com.autonomouslogic.everef.util.EveConstants.STANDARD_MARKET_HUB_I_TYPE_ID;
 
-import com.autonomouslogic.commons.rxjava3.Rx3Util;
 import com.autonomouslogic.everef.cli.Command;
 import com.autonomouslogic.everef.cli.structures.source.Adam4EveBackfillStructureSource;
 import com.autonomouslogic.everef.cli.structures.source.BackfillPublicStructureSource;
@@ -251,12 +250,11 @@ public class ScrapeStructures implements Command {
 
 	@SneakyThrows
 	private Completable initMarketStructures() {
-		return Rx3Util.toSingle(refdataApi.getType(STANDARD_MARKET_HUB_I_TYPE_ID))
-				.observeOn(VirtualThreads.SCHEDULER)
-				.flatMapCompletable(marketHub -> Completable.fromAction(() -> {
-					marketStructureTypeIds = marketHub.getCanFitTypes();
-					log.info("Prepared {} market structure type IDs", marketStructureTypeIds.size());
-				}));
+		return Completable.fromAction(() -> {
+			var marketHub = VirtualThreads.offload(() -> refdataApi.getType(STANDARD_MARKET_HUB_I_TYPE_ID));
+			marketStructureTypeIds = marketHub.getCanFitTypes();
+			log.info("Prepared {} market structure type IDs", marketStructureTypeIds.size());
+		});
 	}
 
 	private Completable loadPreviousScrape() {

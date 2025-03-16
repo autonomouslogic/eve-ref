@@ -189,7 +189,7 @@ public class ContractAbyssalFetcher {
 		if (abyssalTypeIds != null) {
 			return;
 		}
-		abyssalTypeIds = refdataApi.getMetaGroup(ABYSSAL_META_GROUP).join().getTypeIds();
+		abyssalTypeIds = refdataApi.getMetaGroup(ABYSSAL_META_GROUP).getTypeIds();
 		log.trace("Loaded {} abyssal type IDs", abyssalTypeIds.size());
 	}
 }

@@ -1,6 +1,5 @@
 package com.autonomouslogic.everef.cli.publishrefdata;
 
-import com.autonomouslogic.commons.rxjava3.Rx3Util;
 import com.autonomouslogic.everef.cli.Command;
 import com.autonomouslogic.everef.cli.publishrefdata.bundle.CategoryBundleRenderer;
 import com.autonomouslogic.everef.cli.publishrefdata.bundle.GroupBundleRenderer;
@@ -161,10 +160,9 @@ public class PublishRefData implements Command {
 
 	@SneakyThrows
 	private Completable loadCurrentMeta() {
-		return Rx3Util.toMaybe(refdataApi.getMeta())
-				.observeOn(VirtualThreads.SCHEDULER)
-				.doOnSuccess(meta -> currentMeta = meta)
-				.ignoreElement();
+		return Completable.fromAction(() -> {
+			currentMeta = VirtualThreads.offload(() -> refdataApi.getMeta());
+		});
 	}
 
 	private boolean shouldUpdate() {
