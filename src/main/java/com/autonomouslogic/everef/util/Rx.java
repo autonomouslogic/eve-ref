@@ -3,40 +3,31 @@ package com.autonomouslogic.everef.util;
 import io.reactivex.rxjava3.core.CompletableTransformer;
 import io.reactivex.rxjava3.core.FlowableTransformer;
 import io.reactivex.rxjava3.core.MaybeTransformer;
-import io.reactivex.rxjava3.core.Scheduler;
 import io.reactivex.rxjava3.core.SingleTransformer;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
+/**
+ * @deprecated Use {@link VirtualThreads}
+ */
+@Deprecated
 public class Rx {
+	@Deprecated
 	public static <T> FlowableTransformer<T, T> offloadFlowable() {
-		return offloadFlowable(Schedulers.io());
+		return upstream -> upstream.subscribeOn(Schedulers.io()).observeOn(VirtualThreads.SCHEDULER);
 	}
 
-	public static <T> FlowableTransformer<T, T> offloadFlowable(Scheduler scheduler) {
-		return upstream -> upstream.subscribeOn(scheduler).observeOn(Schedulers.computation());
-	}
-
+	@Deprecated
 	public static <T> MaybeTransformer<T, T> offloadMaybe() {
-		return offloadMaybe(Schedulers.io());
+		return upstream -> upstream.subscribeOn(Schedulers.io()).observeOn(VirtualThreads.SCHEDULER);
 	}
 
-	public static <T> MaybeTransformer<T, T> offloadMaybe(Scheduler scheduler) {
-		return upstream -> upstream.subscribeOn(scheduler).observeOn(Schedulers.computation());
-	}
-
+	@Deprecated
 	public static <T> SingleTransformer<T, T> offloadSingle() {
-		return offloadSingle(Schedulers.io());
+		return upstream -> upstream.subscribeOn(Schedulers.io()).observeOn(VirtualThreads.SCHEDULER);
 	}
 
-	public static <T> SingleTransformer<T, T> offloadSingle(Scheduler scheduler) {
-		return upstream -> upstream.subscribeOn(scheduler).observeOn(Schedulers.computation());
-	}
-
+	@Deprecated
 	public static CompletableTransformer offloadCompletable() {
-		return offloadCompletable(Schedulers.io());
-	}
-
-	public static CompletableTransformer offloadCompletable(Scheduler scheduler) {
-		return upstream -> upstream.subscribeOn(scheduler).observeOn(Schedulers.computation());
+		return upstream -> upstream.subscribeOn(Schedulers.io()).observeOn(VirtualThreads.SCHEDULER);
 	}
 }

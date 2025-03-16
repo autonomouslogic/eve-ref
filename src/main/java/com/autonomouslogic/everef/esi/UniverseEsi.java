@@ -9,7 +9,7 @@ import com.autonomouslogic.everef.openapi.esi.model.GetUniverseRegionsRegionIdOk
 import com.autonomouslogic.everef.openapi.esi.model.GetUniverseStationsStationIdOk;
 import com.autonomouslogic.everef.openapi.esi.model.GetUniverseSystemsSystemIdOk;
 import com.autonomouslogic.everef.openapi.esi.model.GetUniverseTypesTypeIdOk;
-import com.autonomouslogic.everef.util.Rx;
+import com.autonomouslogic.everef.util.VirtualThreads;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Maybe;
 import io.reactivex.rxjava3.functions.Supplier;
@@ -45,22 +45,24 @@ public class UniverseEsi {
 
 	public Flowable<Integer> getRegionIds() {
 		return Flowable.defer(() -> {
-			if (regionIds != null) {
-				return Flowable.fromIterable(regionIds);
-			}
-			return Flowable.defer(() -> {
+					if (regionIds != null) {
+						return Flowable.fromIterable(regionIds);
+					}
+					return Flowable.defer(() -> {
 						log.trace("Fetching region ids");
-						var regions = universeApi.getUniverseRegions(datasource.toString(), null);
+						var regions = VirtualThreads.offload(
+								() -> universeApi.getUniverseRegions(datasource.toString(), null));
 						regionIds = regions;
 						return Flowable.fromIterable(regions);
-					})
-					.compose(Rx.offloadFlowable(EsiHelper.ESI_SCHEDULER));
-		});
+					});
+				})
+				.observeOn(VirtualThreads.SCHEDULER);
 	}
 
 	public Maybe<GetUniverseRegionsRegionIdOk> getRegion(int regionId) {
 		return getFromCacheOrFetch("region", GetUniverseRegionsRegionIdOk.class, regions, regionId, () -> {
-			return universeApi.getUniverseRegionsRegionId(regionId, null, datasource.toString(), null, null);
+			return VirtualThreads.offload(
+					() -> universeApi.getUniverseRegionsRegionId(regionId, null, datasource.toString(), null, null));
 		});
 	}
 
@@ -75,14 +77,15 @@ public class UniverseEsi {
 				constellations,
 				constellationId,
 				() -> {
-					return universeApi.getUniverseConstellationsConstellationId(
-							constellationId, null, datasource.toString(), null, null);
+					return VirtualThreads.offload(() -> universeApi.getUniverseConstellationsConstellationId(
+							constellationId, null, datasource.toString(), null, null));
 				});
 	}
 
 	public Maybe<GetUniverseSystemsSystemIdOk> getSystem(int systemId) {
 		return getFromCacheOrFetch("system", GetUniverseSystemsSystemIdOk.class, systems, systemId, () -> {
-			return universeApi.getUniverseSystemsSystemId(systemId, null, datasource.toString(), null, null);
+			return VirtualThreads.offload(
+					() -> universeApi.getUniverseSystemsSystemId(systemId, null, datasource.toString(), null, null));
 		});
 	}
 
@@ -93,13 +96,15 @@ public class UniverseEsi {
 		}
 		var intId = (int) stationId;
 		return getFromCacheOrFetch("station", GetUniverseStationsStationIdOk.class, stations, intId, () -> {
-			return universeApi.getUniverseStationsStationId(intId, datasource.toString(), null);
+			return VirtualThreads.offload(
+					() -> universeApi.getUniverseStationsStationId(intId, datasource.toString(), null));
 		});
 	}
 
 	public Maybe<GetUniverseTypesTypeIdOk> getType(int typeId) {
 		return getFromCacheOrFetch("type", GetUniverseTypesTypeIdOk.class, types, typeId, () -> {
-			return universeApi.getUniverseTypesTypeId(typeId, null, datasource.toString(), null, null);
+			return VirtualThreads.offload(
+					() -> universeApi.getUniverseTypesTypeId(typeId, null, datasource.toString(), null, null));
 		});
 	}
 
@@ -124,7 +129,7 @@ public class UniverseEsi {
 						log.warn("Retrying {} {}: {}", name, id, ExceptionUtils.getRootCauseMessage(e));
 						return true;
 					})
-					.compose(Rx.offloadMaybe(EsiHelper.ESI_SCHEDULER))
+					.observeOn(VirtualThreads.SCHEDULER)
 					.onErrorResumeNext(e ->
 							Maybe.error(new RuntimeException(String.format("Failed fetching %s %s", name, id), e)));
 		});

@@ -21,10 +21,10 @@ import { exists, mapValues } from '../runtime';
 export interface Unit {
     /**
      * 
-     * @type {number}
+     * @type {{ [key: string]: string; }}
      * @memberof Unit
      */
-    unitId?: number;
+    description?: { [key: string]: string; };
     /**
      * 
      * @type {string}
@@ -39,10 +39,10 @@ export interface Unit {
     name?: { [key: string]: string; };
     /**
      * 
-     * @type {{ [key: string]: string; }}
+     * @type {number}
      * @memberof Unit
      */
-    description?: { [key: string]: string; };
+    unitId?: number;
 }
 
 /**
@@ -64,10 +64,10 @@ export function UnitFromJSONTyped(json: any, ignoreDiscriminator: boolean): Unit
     }
     return {
         
-        'unitId': !exists(json, 'unit_id') ? undefined : json['unit_id'],
+        'description': !exists(json, 'description') ? undefined : json['description'],
         'displayName': !exists(json, 'display_name') ? undefined : json['display_name'],
         'name': !exists(json, 'name') ? undefined : json['name'],
-        'description': !exists(json, 'description') ? undefined : json['description'],
+        'unitId': !exists(json, 'unit_id') ? undefined : json['unit_id'],
     };
 }
 
@@ -80,10 +80,10 @@ export function UnitToJSON(value?: Unit | null): any {
     }
     return {
         
-        'unit_id': value.unitId,
+        'description': value.description,
         'display_name': value.displayName,
         'name': value.name,
-        'description': value.description,
+        'unit_id': value.unitId,
     };
 }
 

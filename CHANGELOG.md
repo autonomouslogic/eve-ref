@@ -1,5 +1,111 @@
 EVE Ref Changelog
 
+## [2.55.11](https://github.com/autonomouslogic/eve-ref/compare/2.55.10...2.55.11) (2025-03-12)
+
+
+### Bug Fixes
+
+* **deps:** update commons-java to v1.9.5 ([bc65736](https://github.com/autonomouslogic/eve-ref/commit/bc65736679eda0c96092698d6e74294e0c0fdf0b))
+
+## [2.55.10](https://github.com/autonomouslogic/eve-ref/compare/2.55.9...2.55.10) (2025-03-05)
+
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([#736](https://github.com/autonomouslogic/eve-ref/issues/736)) ([c1a8a21](https://github.com/autonomouslogic/eve-ref/commit/c1a8a21b04e4d19f42b308a090a691415d3533d5))
+
+
+### Miscellaneous Chores
+
+* **ui:** Fallback MOTD based on hour and added another one for free skill points ([cf824f0](https://github.com/autonomouslogic/eve-ref/commit/cf824f0cb1a5a2cc034fd9aa8f600a8ea036cdf9))
+
+## [2.55.9](https://github.com/autonomouslogic/eve-ref/compare/2.55.8...2.55.9) (2025-03-04)
+
+
+### Bug Fixes
+
+* **deps:** update flyway to v11.3.4 ([#735](https://github.com/autonomouslogic/eve-ref/issues/735)) ([61ad33f](https://github.com/autonomouslogic/eve-ref/commit/61ad33f8770a724e1ce82d501ae6e00f31c29427))
+
+
+### Miscellaneous Chores
+
+* **ui:** March giveaways ([#738](https://github.com/autonomouslogic/eve-ref/issues/738)) ([7ca1e86](https://github.com/autonomouslogic/eve-ref/commit/7ca1e865ad3adf726fa99b9539eaa16e57617b47))
+
+## [2.55.8](https://github.com/autonomouslogic/eve-ref/compare/2.55.7...2.55.8) (2025-03-03)
+
+
+### Bug Fixes
+
+* **deps:** update aws to v2.29.52 ([#733](https://github.com/autonomouslogic/eve-ref/issues/733)) ([e2860c3](https://github.com/autonomouslogic/eve-ref/commit/e2860c3eb5be3d02b036bb516432e2ce1656d6f8))
+* **deps:** update dependency org.flywaydb:flyway-core to v11.3.4 ([#734](https://github.com/autonomouslogic/eve-ref/issues/734)) ([e558f88](https://github.com/autonomouslogic/eve-ref/commit/e558f883dad95dab1ed1df7049b39de35230d00b))
+* **ui:** Generic selection of fallback MOTDs ([#731](https://github.com/autonomouslogic/eve-ref/issues/731)) ([67e7eba](https://github.com/autonomouslogic/eve-ref/commit/67e7ebac79cf4bf7a03b4447d308aafcf3b22001))
+* **ui:** PLEX sale in MOTD banner ([7009b7e](https://github.com/autonomouslogic/eve-ref/commit/7009b7e8282c2f900f3b139bca52becc345d3e32))
+* **ui:** Updated monthly giveaway tallies ([#732](https://github.com/autonomouslogic/eve-ref/issues/732)) ([6ff1c93](https://github.com/autonomouslogic/eve-ref/commit/6ff1c930b5fd98742ca8acee7eda4d45ff4f9162))
+
+## [2.55.7](https://github.com/autonomouslogic/eve-ref/compare/2.55.6...2.55.7) (2025-02-06)
+
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([#725](https://github.com/autonomouslogic/eve-ref/issues/725)) ([8bb705a](https://github.com/autonomouslogic/eve-ref/commit/8bb705a28b644d8e4bade3ffbef67d58ebf74ade))
+
+## [2.55.6](https://github.com/autonomouslogic/eve-ref/compare/2.55.5...2.55.6) (2025-02-05)
+
+
+### Dependency Updates
+
+* **deps:** update dependency vitest to v2.1.9 [security] ([#729](https://github.com/autonomouslogic/eve-ref/issues/729)) ([ac3db1d](https://github.com/autonomouslogic/eve-ref/commit/ac3db1d90f26b7dba0ce824cd259c52fa59c927e))
+
+
+### Continuous Integration
+
+* Pin AWS version ([01323e4](https://github.com/autonomouslogic/eve-ref/commit/01323e4b89bbe358d48a430ae58cef3d9d70ffa6))
+* Test Docker run ([#726](https://github.com/autonomouslogic/eve-ref/issues/726)) ([daa8104](https://github.com/autonomouslogic/eve-ref/commit/daa81044cfe388cf2c10b74e7d82e1619d07356b))
+
+## [2.55.5](https://github.com/autonomouslogic/eve-ref/compare/2.55.4...2.55.5) (2025-02-04)
+
+
+### Bug Fixes
+
+* **deps:** Downgraded AWS to 2.29.50 ([#727](https://github.com/autonomouslogic/eve-ref/issues/727)) ([fe92b63](https://github.com/autonomouslogic/eve-ref/commit/fe92b6367aa60bee1a4e7c85682716a61beecbdf))
+
+## [2.55.4](https://github.com/autonomouslogic/eve-ref/compare/2.55.3...2.55.4) (2025-02-04)
+
+
+### Bug Fixes
+
+* Add bash to the Docker image ([4bece27](https://github.com/autonomouslogic/eve-ref/commit/4bece270659ba3521d062dda4387df00bf345179))
+
+## [2.55.3](https://github.com/autonomouslogic/eve-ref/compare/2.55.2...2.55.3) (2025-02-03)
+
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([#721](https://github.com/autonomouslogic/eve-ref/issues/721)) ([9233458](https://github.com/autonomouslogic/eve-ref/commit/92334588e9928a7f760365cfe5d30a9d9a91c354))
+* **deps:** update dependency org.flywaydb:flyway-core to v11.3.0 ([#722](https://github.com/autonomouslogic/eve-ref/issues/722)) ([a7655fb](https://github.com/autonomouslogic/eve-ref/commit/a7655fb442a59ec0f5b8e0098b72ea8ecafe93db))
+* **deps:** update flyway to v11.3.0 ([#723](https://github.com/autonomouslogic/eve-ref/issues/723)) ([f21d6aa](https://github.com/autonomouslogic/eve-ref/commit/f21d6aa822ad58222f05cb8db9ebab71367c9947))
+* Explicitly add page numbers when fetching the first page ([#724](https://github.com/autonomouslogic/eve-ref/issues/724)) ([5ac229c](https://github.com/autonomouslogic/eve-ref/commit/5ac229cdfbe1a0b551b1961cddcd984e58fd231f))
+
+
+### Dependency Updates
+
+* **deps:** update plugin org.danilopianini.git-sensitive-semantic-versioning-gradle-plugin to v4 ([#719](https://github.com/autonomouslogic/eve-ref/issues/719)) ([0e85b66](https://github.com/autonomouslogic/eve-ref/commit/0e85b66f27e06b08db398b2ba5e87aa2ce410417))
+
+## [2.55.2](https://github.com/autonomouslogic/eve-ref/compare/2.55.1...2.55.2) (2025-02-01)
+
+
+### Bug Fixes
+
+* **deps:** update dependency io.sentry:sentry to v8 [skip release] ([#718](https://github.com/autonomouslogic/eve-ref/issues/718)) ([3c07e2f](https://github.com/autonomouslogic/eve-ref/commit/3c07e2f6fafc8797d1122172aa17e9da099e9a54))
+* Donations in MOTD ([#720](https://github.com/autonomouslogic/eve-ref/issues/720)) ([77b1a19](https://github.com/autonomouslogic/eve-ref/commit/77b1a19b14597af868f640f5daa8571532c85fbe))
+
+## [2.55.1](https://github.com/autonomouslogic/eve-ref/compare/2.55.0...2.55.1) (2025-01-13)
+
+
+### Bug Fixes
+
+* API client base path handling ([#716](https://github.com/autonomouslogic/eve-ref/issues/716)) ([7f49b72](https://github.com/autonomouslogic/eve-ref/commit/7f49b72b82f0514592b9df7d78fcd6c783d0291f))
+
 ## [2.55.0](https://github.com/autonomouslogic/eve-ref/compare/2.54.3...2.55.0) (2025-01-11)
 
 

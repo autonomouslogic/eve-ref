@@ -1,25 +1,21 @@
 package com.autonomouslogic.everef.esi;
 
 import com.autonomouslogic.commons.rxjava3.Rx3Util;
-import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.http.OkHttpHelper;
 import com.autonomouslogic.everef.openapi.esi.invoker.ApiResponse;
+import com.autonomouslogic.everef.util.VirtualThreads;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.NullNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Maybe;
-import io.reactivex.rxjava3.core.Scheduler;
 import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.functions.BiFunction;
 import io.reactivex.rxjava3.functions.Function;
-import io.reactivex.rxjava3.schedulers.Schedulers;
 import java.time.Duration;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.Executors;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
@@ -32,14 +28,6 @@ import okhttp3.Response;
 @Log4j2
 public class EsiHelper {
 	private static final String PAGES_HEADER = "X-Pages";
-	public static final Scheduler ESI_SCHEDULER;
-
-	static {
-		var threads = Configs.ESI_HTTP_THREADS.getRequired();
-		var factory = new ThreadFactoryBuilder().setNameFormat("esi-http-%d").build();
-		log.debug("Using {} threads for ESI HTTP requests", threads);
-		ESI_SCHEDULER = Schedulers.from(Executors.newFixedThreadPool(threads, factory));
-	}
 
 	@Inject
 	@Named("esi")
@@ -74,7 +62,6 @@ public class EsiHelper {
 		return okHttpHelper.get(
 				url.toString(),
 				esiHttpClient,
-				ESI_SCHEDULER,
 				r -> accessToken.ifPresent(token -> r.addHeader("Authorization", "Bearer " + token)));
 	}
 
@@ -98,7 +85,7 @@ public class EsiHelper {
 	 * @return
 	 */
 	protected Flowable<Response> fetchPages(EsiUrl url, Maybe<String> accessToken) {
-		return fetch(url, accessToken).flatMapPublisher(first -> {
+		return fetch(url.toBuilder().page(1).build(), accessToken).flatMapPublisher(first -> {
 			var pages = first.header(PAGES_HEADER);
 			if (pages == null || pages.isEmpty()) {
 				return Flowable.just(first);
@@ -140,10 +127,10 @@ public class EsiHelper {
 					return Flowable.concatArray(
 							Flowable.fromIterable(firstResult),
 							Flowable.range(2, pages - 1)
-									.flatMap(
-											page -> Flowable.fromIterable(decodeResponse(fetcher.apply(page))),
-											false,
-											4));
+									.parallel(4)
+									.runOn(VirtualThreads.SCHEDULER)
+									.flatMap(page -> Flowable.fromIterable(decodeResponse(fetcher.apply(page))))
+									.sequential());
 				})
 				.compose(Rx3Util.retryWithDelayFlowable(2, Duration.ofSeconds(1)));
 	}

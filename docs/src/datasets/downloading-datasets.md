@@ -10,20 +10,20 @@ The preferred method to download the data is with [rclone](https://rclone.org/) 
 
 As an example, to sync all market orders from 2023 using concurrent downloads, you can use the following command:
 ```shell
-rclone sync -v --checkers 2 --transfers 2 --http-url https://data.everef.net :http:/market-orders/history/2023 pathtosync
+rclone sync -v --checkers 2 --transfers 2 --multi-thread-streams 0 --http-url https://data.everef.net :http:/market-orders/history/2023 pathtosync
 ```
 
 ## Download with rclone on Docker
 To sync data with `rclone` on Docker instead, use the following command:
 ```shell
-docker run --rm -v $(pwd):/data -w /data rclone/rclone sync -v --checkers 2 --transfers 2 --http-url https://data.everef.net :http:/market-orders/history/2023 pathtosync
+docker run --rm -v $(pwd):/data -w /data rclone/rclone sync -v --checkers 2 --transfers 2 --multi-thread-streams 0 --http-url https://data.everef.net :http:/market-orders/history/2023 pathtosyncto
 ```
 
 ## Mount with rclone
 `rclone` supports [mounting](https://rclone.org/commands/rclone_mount/) straight onto the file system:
 
 ```shell
-rclone mount --attr-timeout 1m --dir-cache-time 1m --vfs-cache-mode full --transfers 4 --http-url https://data.everef.net :http:/ pathtomount
+rclone mount --attr-timeout 1m --dir-cache-time 1m --vfs-cache-mode full --checkers 2 --transfers 2 --multi-thread-streams 0 --http-url https://data.everef.net :http:/ pathtomount
 ```
 
 ## Download with wget

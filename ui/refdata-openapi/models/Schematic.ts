@@ -31,18 +31,6 @@ export interface Schematic {
      * @type {number}
      * @memberof Schematic
      */
-    schematicId?: number;
-    /**
-     * 
-     * @type {{ [key: string]: string; }}
-     * @memberof Schematic
-     */
-    name?: { [key: string]: string; };
-    /**
-     * 
-     * @type {number}
-     * @memberof Schematic
-     */
     cycleTime?: number;
     /**
      * This is called 'types' in the SDE, but EVE Ref converts it to 'materials' and 'products' to be consistent with blueprints.
@@ -51,6 +39,18 @@ export interface Schematic {
      */
     materials?: { [key: string]: BlueprintMaterial; };
     /**
+     * 
+     * @type {{ [key: string]: string; }}
+     * @memberof Schematic
+     */
+    name?: { [key: string]: string; };
+    /**
+     * 
+     * @type {Array<number>}
+     * @memberof Schematic
+     */
+    pinTypeIds?: Array<number>;
+    /**
      * This is called 'types' in the SDE, but EVE Ref converts it to 'materials' and 'products' to be consistent with blueprints.
      * @type {{ [key: string]: BlueprintMaterial; }}
      * @memberof Schematic
@@ -58,10 +58,10 @@ export interface Schematic {
     products?: { [key: string]: BlueprintMaterial; };
     /**
      * 
-     * @type {Array<number>}
+     * @type {number}
      * @memberof Schematic
      */
-    pinTypeIds?: Array<number>;
+    schematicId?: number;
 }
 
 /**
@@ -83,12 +83,12 @@ export function SchematicFromJSONTyped(json: any, ignoreDiscriminator: boolean):
     }
     return {
         
-        'schematicId': !exists(json, 'schematic_id') ? undefined : json['schematic_id'],
-        'name': !exists(json, 'name') ? undefined : json['name'],
         'cycleTime': !exists(json, 'cycle_time') ? undefined : json['cycle_time'],
         'materials': !exists(json, 'materials') ? undefined : (mapValues(json['materials'], BlueprintMaterialFromJSON)),
-        'products': !exists(json, 'products') ? undefined : (mapValues(json['products'], BlueprintMaterialFromJSON)),
+        'name': !exists(json, 'name') ? undefined : json['name'],
         'pinTypeIds': !exists(json, 'pin_type_ids') ? undefined : json['pin_type_ids'],
+        'products': !exists(json, 'products') ? undefined : (mapValues(json['products'], BlueprintMaterialFromJSON)),
+        'schematicId': !exists(json, 'schematic_id') ? undefined : json['schematic_id'],
     };
 }
 
@@ -101,12 +101,12 @@ export function SchematicToJSON(value?: Schematic | null): any {
     }
     return {
         
-        'schematic_id': value.schematicId,
-        'name': value.name,
         'cycle_time': value.cycleTime,
         'materials': value.materials === undefined ? undefined : (mapValues(value.materials, BlueprintMaterialToJSON)),
-        'products': value.products === undefined ? undefined : (mapValues(value.products, BlueprintMaterialToJSON)),
+        'name': value.name,
         'pin_type_ids': value.pinTypeIds,
+        'products': value.products === undefined ? undefined : (mapValues(value.products, BlueprintMaterialToJSON)),
+        'schematic_id': value.schematicId,
     };
 }
 

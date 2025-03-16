@@ -16,6 +16,7 @@ import com.autonomouslogic.everef.s3.S3Adapter;
 import com.autonomouslogic.everef.s3.S3Util;
 import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.url.UrlParser;
+import com.autonomouslogic.everef.util.VirtualThreads;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -50,6 +51,7 @@ import lombok.extern.jackson.Jacksonized;
 import lombok.extern.log4j.Log4j2;
 import okhttp3.OkHttpClient;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
@@ -60,6 +62,12 @@ import software.amazon.awssdk.services.s3.model.NoSuchKeyException;
  */
 @Log4j2
 public class FetchDonations implements Command {
+	private static final double MIN_RECENT_DONATION_AMOUNT = 10_000_000;
+	private static final Duration RECENT_LOOKBACK = Duration.ofDays(1);
+	private static final Duration TOP_LOOKBACK = Duration.ofDays(90);
+	private static final int RECENT_LIMIT = 3;
+	private static final int TOP_LIMIT = 15;
+
 	private static final List<String> DONATION_REF_TYPES = List.of("player_donation", "corporation_account_withdrawal");
 	public static final String DONATIONS_LIST_FILE = "donations-all.json";
 	public static final String DONATIONS_SUMMARY_FILE = "donations.json";
@@ -199,8 +207,9 @@ public class FetchDonations implements Command {
 	@SneakyThrows
 	private List<DonationEntry> getCharacterDonations(int characterId, String accessToken) {
 		var journals = esiHelper
-				.fetchPages(page -> walletApi.getCharactersCharacterIdWalletJournalWithHttpInfo(
-						characterId, EsiConstants.Datasource.tranquility.toString(), null, page, accessToken))
+				.fetchPages(page ->
+						VirtualThreads.offload(() -> walletApi.getCharactersCharacterIdWalletJournalWithHttpInfo(
+								characterId, EsiConstants.Datasource.tranquility.toString(), null, page, accessToken)))
 				.doOnNext(e -> log.debug("Character journal: {}", e))
 				.filter(e -> DONATION_REF_TYPES.contains(e.getRefType().toString()))
 				.map(e -> DonationEntry.builder()
@@ -218,8 +227,14 @@ public class FetchDonations implements Command {
 	@SneakyThrows
 	private List<DonationEntry> getCorporationDonations(int corporationId, String accessToken) {
 		var journals = esiHelper
-				.fetchPages(page -> walletApi.getCorporationsCorporationIdWalletsDivisionJournalWithHttpInfo(
-						corporationId, 1, EsiConstants.Datasource.tranquility.toString(), null, page, accessToken))
+				.fetchPages(page -> VirtualThreads.offload(
+						() -> walletApi.getCorporationsCorporationIdWalletsDivisionJournalWithHttpInfo(
+								corporationId,
+								1,
+								EsiConstants.Datasource.tranquility.toString(),
+								null,
+								page,
+								accessToken)))
 				.doOnNext(e -> log.debug("Corporation journal: {}", e))
 				.filter(e -> DONATION_REF_TYPES.contains(e.getRefType().toString()))
 				.map(e -> DonationEntry.builder()
@@ -232,12 +247,6 @@ public class FetchDonations implements Command {
 				.toList()
 				.blockingGet();
 		return journals;
-	}
-
-	private List<SummaryEntry> buildSummary(Collection<DonationEntry> donations) {
-		return summarise(donations).stream()
-				.sorted(Ordering.natural().reverse().onResultOf(SummaryEntry::getAmount))
-				.toList();
 	}
 
 	private Maybe<String> getAccessToken() {
@@ -278,18 +287,38 @@ public class FetchDonations implements Command {
 
 	@SneakyThrows
 	private @NotNull GetCorporationsCorporationIdOk getCorporation(int corporationId) throws ApiException {
-		return corporationApi.getCorporationsCorporationId(
-				corporationId, EsiConstants.Datasource.tranquility.toString(), null);
+		return VirtualThreads.offload(() -> corporationApi.getCorporationsCorporationId(
+				corporationId, EsiConstants.Datasource.tranquility.toString(), null));
 	}
 
 	@SneakyThrows
 	private @NotNull GetCharactersCharacterIdOk getCharacter(int characterId) throws ApiException {
-		return characterApi.getCharactersCharacterId(characterId, EsiConstants.Datasource.tranquility.toString(), null);
+		return VirtualThreads.offload(() -> characterApi.getCharactersCharacterId(
+				characterId, EsiConstants.Datasource.tranquility.toString(), null));
+	}
+
+	private static @NotNull SummaryFile buildSummary(Collection<DonationEntry> donations) {
+		return SummaryFile.builder()
+				.recent(summarise(donations, RECENT_LOOKBACK, MIN_RECENT_DONATION_AMOUNT, RECENT_LIMIT))
+				.top(summarise(donations, TOP_LOOKBACK, 0.0, TOP_LIMIT))
+				.build();
 	}
 
 	private static @NotNull List<SummaryEntry> summarise(Collection<DonationEntry> donations) {
+		return summarise(donations, null, 0.0, Integer.MAX_VALUE);
+	}
+
+	private static @NotNull List<SummaryEntry> summarise(
+			Collection<DonationEntry> donations, Duration lookback, double minAmount, int limit) {
+		var now = Instant.now();
 		var totals = new HashMap<String, SummaryEntry>();
 		for (var entry : donations) {
+			if (lookback != null && entry.getDate().isBefore(now.minus(lookback))) {
+				continue;
+			}
+			if (entry.getAmount() < minAmount) {
+				continue;
+			}
 			var donor = entry.getDonorName();
 			var sum = totals.get(donor);
 			if (sum == null) {
@@ -306,7 +335,10 @@ public class FetchDonations implements Command {
 			}
 			totals.put(donor, sum);
 		}
-		return new ArrayList<>(totals.values());
+		return totals.values().stream()
+				.sorted(Ordering.natural().reverse().onResultOf(SummaryEntry::getAmount))
+				.limit(limit)
+				.toList();
 	}
 
 	private void notifyDiscord(List<DonationEntry> donations) {
@@ -358,8 +390,9 @@ public class FetchDonations implements Command {
 					.donorName(character.getName())
 					.characterId(id)
 					.build();
-		} catch (ApiException e) {
-			if (e.getCode() != 404) {
+		} catch (Exception e) {
+			var apiException = ExceptionUtils.throwableOfType(e, ApiException.class);
+			if (apiException == null || apiException.getCode() != 404) {
 				throw e;
 			}
 			try {
@@ -369,7 +402,8 @@ public class FetchDonations implements Command {
 						.corporationId(id)
 						.build();
 			} catch (ApiException e2) {
-				if (e.getCode() != 404) {
+				var apiException2 = ExceptionUtils.throwableOfType(e, ApiException.class);
+				if (apiException2 == null || apiException2.getCode() != 404) {
 					throw e;
 				}
 			}
@@ -417,6 +451,19 @@ public class FetchDonations implements Command {
 
 		@JsonProperty
 		double amount;
+	}
+
+	@Value
+	@Builder(toBuilder = true)
+	@Jacksonized
+	@JsonInclude(JsonInclude.Include.NON_NULL)
+	@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
+	public static class SummaryFile {
+		@JsonProperty
+		List<SummaryEntry> recent;
+
+		@JsonProperty
+		List<SummaryEntry> top;
 	}
 
 	@Value

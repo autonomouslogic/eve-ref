@@ -28,6 +28,60 @@ import {
 export interface Region {
     /**
      * 
+     * @type {Coordinate}
+     * @memberof Region
+     */
+    center?: Coordinate;
+    /**
+     * The key is the language code.
+     * @type {{ [key: string]: string; }}
+     * @memberof Region
+     */
+    description?: { [key: string]: string; };
+    /**
+     * 
+     * @type {number}
+     * @memberof Region
+     */
+    descriptionId?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof Region
+     */
+    factionId?: number;
+    /**
+     * 
+     * @type {Coordinate}
+     * @memberof Region
+     */
+    max?: Coordinate;
+    /**
+     * 
+     * @type {Coordinate}
+     * @memberof Region
+     */
+    min?: Coordinate;
+    /**
+     * The key is the language code.
+     * @type {{ [key: string]: string; }}
+     * @memberof Region
+     */
+    name?: { [key: string]: string; };
+    /**
+     * 
+     * @type {number}
+     * @memberof Region
+     */
+    nameId?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof Region
+     */
+    nebulaId?: number;
+    /**
+     * 
      * @type {number}
      * @memberof Region
      */
@@ -44,60 +98,6 @@ export interface Region {
      * @memberof Region
      */
     wormholeClassId?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof Region
-     */
-    nebulaId?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof Region
-     */
-    nameId?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof Region
-     */
-    descriptionId?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof Region
-     */
-    factionId?: number;
-    /**
-     * The key is the language code.
-     * @type {{ [key: string]: string; }}
-     * @memberof Region
-     */
-    name?: { [key: string]: string; };
-    /**
-     * The key is the language code.
-     * @type {{ [key: string]: string; }}
-     * @memberof Region
-     */
-    description?: { [key: string]: string; };
-    /**
-     * 
-     * @type {Coordinate}
-     * @memberof Region
-     */
-    center?: Coordinate;
-    /**
-     * 
-     * @type {Coordinate}
-     * @memberof Region
-     */
-    max?: Coordinate;
-    /**
-     * 
-     * @type {Coordinate}
-     * @memberof Region
-     */
-    min?: Coordinate;
 }
 
 /**
@@ -119,18 +119,18 @@ export function RegionFromJSONTyped(json: any, ignoreDiscriminator: boolean): Re
     }
     return {
         
+        'center': !exists(json, 'center') ? undefined : CoordinateFromJSON(json['center']),
+        'description': !exists(json, 'description') ? undefined : json['description'],
+        'descriptionId': !exists(json, 'description_id') ? undefined : json['description_id'],
+        'factionId': !exists(json, 'faction_id') ? undefined : json['faction_id'],
+        'max': !exists(json, 'max') ? undefined : CoordinateFromJSON(json['max']),
+        'min': !exists(json, 'min') ? undefined : CoordinateFromJSON(json['min']),
+        'name': !exists(json, 'name') ? undefined : json['name'],
+        'nameId': !exists(json, 'name_id') ? undefined : json['name_id'],
+        'nebulaId': !exists(json, 'nebula_id') ? undefined : json['nebula_id'],
         'regionId': !exists(json, 'region_id') ? undefined : json['region_id'],
         'universeId': !exists(json, 'universe_id') ? undefined : json['universe_id'],
         'wormholeClassId': !exists(json, 'wormhole_class_id') ? undefined : json['wormhole_class_id'],
-        'nebulaId': !exists(json, 'nebula_id') ? undefined : json['nebula_id'],
-        'nameId': !exists(json, 'name_id') ? undefined : json['name_id'],
-        'descriptionId': !exists(json, 'description_id') ? undefined : json['description_id'],
-        'factionId': !exists(json, 'faction_id') ? undefined : json['faction_id'],
-        'name': !exists(json, 'name') ? undefined : json['name'],
-        'description': !exists(json, 'description') ? undefined : json['description'],
-        'center': !exists(json, 'center') ? undefined : CoordinateFromJSON(json['center']),
-        'max': !exists(json, 'max') ? undefined : CoordinateFromJSON(json['max']),
-        'min': !exists(json, 'min') ? undefined : CoordinateFromJSON(json['min']),
     };
 }
 
@@ -143,18 +143,18 @@ export function RegionToJSON(value?: Region | null): any {
     }
     return {
         
+        'center': CoordinateToJSON(value.center),
+        'description': value.description,
+        'description_id': value.descriptionId,
+        'faction_id': value.factionId,
+        'max': CoordinateToJSON(value.max),
+        'min': CoordinateToJSON(value.min),
+        'name': value.name,
+        'name_id': value.nameId,
+        'nebula_id': value.nebulaId,
         'region_id': value.regionId,
         'universe_id': value.universeId,
         'wormhole_class_id': value.wormholeClassId,
-        'nebula_id': value.nebulaId,
-        'name_id': value.nameId,
-        'description_id': value.descriptionId,
-        'faction_id': value.factionId,
-        'name': value.name,
-        'description': value.description,
-        'center': CoordinateToJSON(value.center),
-        'max': CoordinateToJSON(value.max),
-        'min': CoordinateToJSON(value.min),
     };
 }
 

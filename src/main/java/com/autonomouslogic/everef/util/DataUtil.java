@@ -14,7 +14,6 @@ import com.autonomouslogic.everef.model.Structure;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.reactivex.rxjava3.core.Single;
-import io.reactivex.rxjava3.schedulers.Schedulers;
 import java.io.File;
 import java.net.URI;
 import java.util.LinkedHashMap;
@@ -95,16 +94,12 @@ public class DataUtil {
 	}
 
 	public Single<Map<String, Structure>> downloadLatestStructures() {
-		return download(STRUCTURES, "structures", ".json")
-				.observeOn(Schedulers.io())
-				.map(file -> {
-					var type = objectMapper
-							.getTypeFactory()
-							.constructMapType(LinkedHashMap.class, String.class, Structure.class);
-					Map<String, Structure> parsed = objectMapper.readValue(file, type);
-					return parsed;
-				})
-				.observeOn(Schedulers.computation());
+		return download(STRUCTURES, "structures", ".json").map(file -> {
+			var type =
+					objectMapper.getTypeFactory().constructMapType(LinkedHashMap.class, String.class, Structure.class);
+			Map<String, Structure> parsed = objectMapper.readValue(file, type);
+			return parsed;
+		});
 	}
 
 	private Single<File> download(ArchivePathFactory archive, String name, String suffix) {

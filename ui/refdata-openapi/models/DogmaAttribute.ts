@@ -84,13 +84,13 @@ export interface DogmaAttribute {
      * @type {number}
      * @memberof DogmaAttribute
      */
-    minAttributeId?: number;
+    maxAttributeId?: number;
     /**
      * 
      * @type {number}
      * @memberof DogmaAttribute
      */
-    maxAttributeId?: number;
+    minAttributeId?: number;
     /**
      * 
      * @type {string}
@@ -158,8 +158,8 @@ export function DogmaAttributeFromJSONTyped(json: any, ignoreDiscriminator: bool
         'displayWhenZero': !exists(json, 'display_when_zero') ? undefined : json['display_when_zero'],
         'highIsGood': !exists(json, 'high_is_good') ? undefined : json['high_is_good'],
         'iconId': !exists(json, 'icon_id') ? undefined : json['icon_id'],
-        'minAttributeId': !exists(json, 'min_attribute_id') ? undefined : json['min_attribute_id'],
         'maxAttributeId': !exists(json, 'max_attribute_id') ? undefined : json['max_attribute_id'],
+        'minAttributeId': !exists(json, 'min_attribute_id') ? undefined : json['min_attribute_id'],
         'name': !exists(json, 'name') ? undefined : json['name'],
         'published': !exists(json, 'published') ? undefined : json['published'],
         'stackable': !exists(json, 'stackable') ? undefined : json['stackable'],
@@ -188,8 +188,8 @@ export function DogmaAttributeToJSON(value?: DogmaAttribute | null): any {
         'display_when_zero': value.displayWhenZero,
         'high_is_good': value.highIsGood,
         'icon_id': value.iconId,
-        'min_attribute_id': value.minAttributeId,
         'max_attribute_id': value.maxAttributeId,
+        'min_attribute_id': value.minAttributeId,
         'name': value.name,
         'published': value.published,
         'stackable': value.stackable,

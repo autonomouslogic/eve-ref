@@ -27,6 +27,12 @@ export interface ModifierInfo {
     domain?: string;
     /**
      * 
+     * @type {number}
+     * @memberof ModifierInfo
+     */
+    effectId?: number;
+    /**
+     * 
      * @type {string}
      * @memberof ModifierInfo
      */
@@ -54,19 +60,13 @@ export interface ModifierInfo {
      * @type {number}
      * @memberof ModifierInfo
      */
-    skillTypeId?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof ModifierInfo
-     */
-    effectId?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof ModifierInfo
-     */
     operator?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof ModifierInfo
+     */
+    skillTypeId?: number;
 }
 
 /**
@@ -89,13 +89,13 @@ export function ModifierInfoFromJSONTyped(json: any, ignoreDiscriminator: boolea
     return {
         
         'domain': !exists(json, 'domain') ? undefined : json['domain'],
+        'effectId': !exists(json, 'effect_id') ? undefined : json['effect_id'],
         'func': !exists(json, 'func') ? undefined : json['func'],
         'groupId': !exists(json, 'group_id') ? undefined : json['group_id'],
         'modifiedAttributeId': !exists(json, 'modified_attribute_id') ? undefined : json['modified_attribute_id'],
         'modifyingAttributeId': !exists(json, 'modifying_attribute_id') ? undefined : json['modifying_attribute_id'],
-        'skillTypeId': !exists(json, 'skill_type_id') ? undefined : json['skill_type_id'],
-        'effectId': !exists(json, 'effect_id') ? undefined : json['effect_id'],
         'operator': !exists(json, 'operator') ? undefined : json['operator'],
+        'skillTypeId': !exists(json, 'skill_type_id') ? undefined : json['skill_type_id'],
     };
 }
 
@@ -109,13 +109,13 @@ export function ModifierInfoToJSON(value?: ModifierInfo | null): any {
     return {
         
         'domain': value.domain,
+        'effect_id': value.effectId,
         'func': value.func,
         'group_id': value.groupId,
         'modified_attribute_id': value.modifiedAttributeId,
         'modifying_attribute_id': value.modifyingAttributeId,
-        'skill_type_id': value.skillTypeId,
-        'effect_id': value.effectId,
         'operator': value.operator,
+        'skill_type_id': value.skillTypeId,
     };
 }
 

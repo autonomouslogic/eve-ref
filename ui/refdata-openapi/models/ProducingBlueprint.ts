@@ -21,16 +21,16 @@ import { exists, mapValues } from '../runtime';
 export interface ProducingBlueprint {
     /**
      * 
-     * @type {number}
-     * @memberof ProducingBlueprint
-     */
-    blueprintTypeId?: number;
-    /**
-     * 
      * @type {string}
      * @memberof ProducingBlueprint
      */
     blueprintActivity?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof ProducingBlueprint
+     */
+    blueprintTypeId?: number;
 }
 
 /**
@@ -52,8 +52,8 @@ export function ProducingBlueprintFromJSONTyped(json: any, ignoreDiscriminator: 
     }
     return {
         
-        'blueprintTypeId': !exists(json, 'blueprint_type_id') ? undefined : json['blueprint_type_id'],
         'blueprintActivity': !exists(json, 'blueprint_activity') ? undefined : json['blueprint_activity'],
+        'blueprintTypeId': !exists(json, 'blueprint_type_id') ? undefined : json['blueprint_type_id'],
     };
 }
 
@@ -66,8 +66,8 @@ export function ProducingBlueprintToJSON(value?: ProducingBlueprint | null): any
     }
     return {
         
-        'blueprint_type_id': value.blueprintTypeId,
         'blueprint_activity': value.blueprintActivity,
+        'blueprint_type_id': value.blueprintTypeId,
     };
 }
 

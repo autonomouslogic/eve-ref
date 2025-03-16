@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 import com.autonomouslogic.everef.cli.FetchDonations.DonationEntry;
 import com.autonomouslogic.everef.cli.FetchDonations.SummaryEntry;
+import com.autonomouslogic.everef.cli.FetchDonations.SummaryFile;
 import com.autonomouslogic.everef.openapi.esi.model.GetCharactersCharacterIdOk;
 import com.autonomouslogic.everef.openapi.esi.model.GetCharactersCharacterIdWalletJournal200Ok;
 import com.autonomouslogic.everef.openapi.esi.model.GetCorporationsCorporationIdOk;
@@ -16,6 +17,7 @@ import com.autonomouslogic.everef.test.TestDataUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.io.IOException;
+import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -112,7 +114,7 @@ public class FetchDonationsTest {
 		fetchDonations.run().blockingAwait();
 
 		assertDonationsFile(List.of());
-		assertSummaryFile(List.of());
+		assertSummaryFile(SummaryFile.builder().top(List.of()).recent(List.of()).build());
 		assertNoDiscordUpdate();
 	}
 
@@ -120,7 +122,7 @@ public class FetchDonationsTest {
 	void shouldUpdateWithFirstDonations() {
 		// No prior donations
 		// New donations
-		addCharacterTransaction();
+		addCharacterTransaction(1, TEST_DONOR_CHARACTER_ID_1, 100_000_000, donationTime);
 
 		fetchDonations.run().blockingAwait();
 
@@ -131,15 +133,16 @@ public class FetchDonationsTest {
 				.characterId(TEST_DONOR_CHARACTER_ID_1)
 				.donorName("Donor Character 1")
 				.secondPartyId(TEST_CHARACTER_ID)
-				.amount(100.0)
+				.amount(100_000_000.0)
 				.build()));
-		assertSummaryFile(List.of(SummaryEntry.builder()
+		var entries = List.of(SummaryEntry.builder()
 				.donorName("Donor Character 1")
-				.amount(100.00)
+				.amount(100_000_000.00)
 				.characterId(TEST_DONOR_CHARACTER_ID_1)
-				.build()));
+				.build());
+		assertSummaryFile(SummaryFile.builder().top(entries).recent(entries).build());
 
-		assertDiscordUpdate("**Donor Character 1** donated 100.00 ISK :sunglasses:");
+		assertDiscordUpdate("**Donor Character 1** donated 100.00m ISK :gift:");
 	}
 
 	@Test
@@ -152,10 +155,10 @@ public class FetchDonationsTest {
 				.characterId(TEST_DONOR_CHARACTER_ID_1)
 				.donorName("Donor Character")
 				.secondPartyId(TEST_CHARACTER_ID)
-				.amount(100.0)
+				.amount(100_000_000.0)
 				.build());
 		// Same donations on ESI journal
-		addCharacterTransaction();
+		addCharacterTransaction(1, TEST_DONOR_CHARACTER_ID_1, 100_000_000, donationTime);
 
 		putDonationsFile();
 		fetchDonations.run().blockingAwait();
@@ -167,13 +170,15 @@ public class FetchDonationsTest {
 				.characterId(TEST_DONOR_CHARACTER_ID_1)
 				.donorName("Donor Character")
 				.secondPartyId(TEST_CHARACTER_ID)
-				.amount(100.0)
+				.amount(100_000_000.0)
 				.build()));
-		assertSummaryFile(List.of(SummaryEntry.builder()
+
+		var entries = List.of(SummaryEntry.builder()
 				.donorName("Donor Character")
-				.amount(100.00)
+				.amount(100_000_000.00)
 				.characterId(TEST_DONOR_CHARACTER_ID_1)
-				.build()));
+				.build());
+		assertSummaryFile(SummaryFile.builder().top(entries).recent(entries).build());
 
 		assertNoDiscordUpdate();
 	}
@@ -188,11 +193,11 @@ public class FetchDonationsTest {
 				.characterId(TEST_DONOR_CHARACTER_ID_1)
 				.donorName("Donor Character 1")
 				.secondPartyId(TEST_CHARACTER_ID)
-				.amount(100.0)
+				.amount(100_000_000.0)
 				.build());
 		// New donations
-		addCharacterTransaction(1, TEST_DONOR_CHARACTER_ID_1, 100, donationTime);
-		addCharacterTransaction(2, TEST_DONOR_CHARACTER_ID_2, 200, donationTime.plusMinutes(1));
+		addCharacterTransaction(1, TEST_DONOR_CHARACTER_ID_1, 100_000_000, donationTime);
+		addCharacterTransaction(2, TEST_DONOR_CHARACTER_ID_2, 200_000_000, donationTime.plusMinutes(1));
 
 		putDonationsFile();
 		fetchDonations.run().blockingAwait();
@@ -205,7 +210,7 @@ public class FetchDonationsTest {
 						.characterId(TEST_DONOR_CHARACTER_ID_1)
 						.donorName("Donor Character 1")
 						.secondPartyId(TEST_CHARACTER_ID)
-						.amount(100.0)
+						.amount(100_000_000.0)
 						.build(),
 				DonationEntry.builder()
 						.id(2)
@@ -214,22 +219,23 @@ public class FetchDonationsTest {
 						.characterId(TEST_DONOR_CHARACTER_ID_2)
 						.donorName("Donor Character 2")
 						.secondPartyId(TEST_CHARACTER_ID)
-						.amount(200.0)
+						.amount(200_000_000.0)
 						.build()));
 
-		assertSummaryFile(List.of(
+		var entries = List.of(
 				SummaryEntry.builder()
 						.donorName("Donor Character 2")
-						.amount(200.00)
+						.amount(200_000_000.00)
 						.characterId(TEST_DONOR_CHARACTER_ID_2)
 						.build(),
 				SummaryEntry.builder()
 						.donorName("Donor Character 1")
-						.amount(100.00)
+						.amount(100_000_000.00)
 						.characterId(TEST_DONOR_CHARACTER_ID_1)
-						.build()));
+						.build());
+		assertSummaryFile(SummaryFile.builder().top(entries).recent(entries).build());
 
-		assertDiscordUpdate("**Donor Character 2** donated 200.00 ISK :gift:");
+		assertDiscordUpdate("**Donor Character 2** donated 200.00m ISK :thumbsup:");
 	}
 
 	@Test
@@ -242,10 +248,10 @@ public class FetchDonationsTest {
 				.characterId(TEST_DONOR_CHARACTER_ID_1)
 				.donorName("Donor Character 1")
 				.secondPartyId(TEST_CHARACTER_ID)
-				.amount(100.0)
+				.amount(100_000_000.0)
 				.build());
 		// New donations, but missing prior
-		addCharacterTransaction(2, TEST_DONOR_CHARACTER_ID_2, 200, donationTime);
+		addCharacterTransaction(2, TEST_DONOR_CHARACTER_ID_2, 200_000_000, donationTime);
 
 		putDonationsFile();
 		fetchDonations.run().blockingAwait();
@@ -258,7 +264,7 @@ public class FetchDonationsTest {
 						.characterId(TEST_DONOR_CHARACTER_ID_1)
 						.donorName("Donor Character 1")
 						.secondPartyId(TEST_CHARACTER_ID)
-						.amount(100.0)
+						.amount(100_000_000.0)
 						.build(),
 				DonationEntry.builder()
 						.id(2)
@@ -267,22 +273,23 @@ public class FetchDonationsTest {
 						.characterId(TEST_DONOR_CHARACTER_ID_2)
 						.donorName("Donor Character 2")
 						.secondPartyId(TEST_CHARACTER_ID)
-						.amount(200.0)
+						.amount(200_000_000.0)
 						.build()));
 
-		assertSummaryFile(List.of(
+		var entries = List.of(
 				SummaryEntry.builder()
 						.donorName("Donor Character 2")
-						.amount(200.00)
+						.amount(200_000_000.00)
 						.characterId(TEST_DONOR_CHARACTER_ID_2)
 						.build(),
 				SummaryEntry.builder()
 						.donorName("Donor Character 1")
-						.amount(100.00)
+						.amount(100_000_000.00)
 						.characterId(TEST_DONOR_CHARACTER_ID_1)
-						.build()));
+						.build());
+		assertSummaryFile(SummaryFile.builder().top(entries).recent(entries).build());
 
-		assertDiscordUpdate("**Donor Character 2** donated 200.00 ISK :gift:");
+		assertDiscordUpdate("**Donor Character 2** donated 200.00m ISK :thumbsup:");
 	}
 
 	@Test
@@ -295,7 +302,7 @@ public class FetchDonationsTest {
 				.characterId(TEST_DONOR_CHARACTER_ID_1)
 				.donorName("Donor Character 1")
 				.secondPartyId(TEST_CHARACTER_ID)
-				.amount(100.0)
+				.amount(100_000_000.0)
 				.build());
 		// No donations on ESI
 
@@ -309,14 +316,15 @@ public class FetchDonationsTest {
 				.characterId(TEST_DONOR_CHARACTER_ID_1)
 				.donorName("Donor Character 1")
 				.secondPartyId(TEST_CHARACTER_ID)
-				.amount(100.0)
+				.amount(100_000_000.0)
 				.build()));
 
-		assertSummaryFile(List.of(SummaryEntry.builder()
+		var entries = List.of(SummaryEntry.builder()
 				.donorName("Donor Character 1")
-				.amount(100.00)
+				.amount(100_000_000.00)
 				.characterId(TEST_DONOR_CHARACTER_ID_1)
-				.build()));
+				.build());
+		assertSummaryFile(SummaryFile.builder().top(entries).recent(entries).build());
 
 		assertNoDiscordUpdate();
 	}
@@ -331,48 +339,124 @@ public class FetchDonationsTest {
 				.characterId(TEST_DONOR_CHARACTER_ID_1)
 				.donorName("Donor Character 1")
 				.secondPartyId(TEST_CHARACTER_ID)
-				.amount(100.0)
+				.amount(100_000_000.0)
 				.build());
 		// Multiple new donations from the same person
-		addCharacterTransaction(2, TEST_DONOR_CHARACTER_ID_1, 200, donationTime);
-		addCharacterTransaction(3, TEST_DONOR_CHARACTER_ID_1, 300, donationTime);
+		addCharacterTransaction(2, TEST_DONOR_CHARACTER_ID_1, 200_000_000, donationTime);
+		addCharacterTransaction(3, TEST_DONOR_CHARACTER_ID_1, 300_000_000, donationTime);
 
 		putDonationsFile();
 		fetchDonations.run().blockingAwait();
 
-		assertSummaryFile(List.of(SummaryEntry.builder()
+		var entries = List.of(SummaryEntry.builder()
 				.donorName("Donor Character 1")
-				.amount(600.00)
+				.amount(600_000_000.00)
 				.characterId(TEST_DONOR_CHARACTER_ID_1)
-				.build()));
+				.build());
+		assertSummaryFile(SummaryFile.builder().top(entries).recent(entries).build());
 
-		assertDiscordUpdate("**Donor Character 1** donated 500.00 ISK :moneybag:");
+		assertDiscordUpdate("**Donor Character 1** donated 500.00m ISK :money_with_wings:");
 	}
 
 	@Test
 	void shouldSummariseMultipleDonationsFromDifferentEntities() {
 		// No prior donations
 		// Multiple new donations from different people
-		addCharacterTransaction(1, TEST_DONOR_CHARACTER_ID_1, 200, donationTime);
-		addCharacterTransaction(2, TEST_DONOR_CHARACTER_ID_2, 300, donationTime);
+		addCharacterTransaction(1, TEST_DONOR_CHARACTER_ID_1, 200_000_000, donationTime);
+		addCharacterTransaction(2, TEST_DONOR_CHARACTER_ID_2, 300_000_000, donationTime);
 
 		putDonationsFile();
 		fetchDonations.run().blockingAwait();
 
-		assertSummaryFile(List.of(
+		var entries = List.of(
 				SummaryEntry.builder()
 						.donorName("Donor Character 2")
-						.amount(300.00)
+						.amount(300_000_000.00)
 						.characterId(TEST_DONOR_CHARACTER_ID_2)
 						.build(),
 				SummaryEntry.builder()
 						.donorName("Donor Character 1")
-						.amount(200.00)
+						.amount(200_000_000.00)
 						.characterId(TEST_DONOR_CHARACTER_ID_1)
-						.build()));
+						.build());
+		assertSummaryFile(SummaryFile.builder().top(entries).recent(entries).build());
 
-		assertDiscordUpdate("**Donor Character 2** donated 300.00 ISK :partying_face:\n"
-				+ "**Donor Character 1** donated 200.00 ISK :thumbsup:");
+		assertDiscordUpdate("**Donor Character 2** donated 300.00m ISK :atm:\n"
+				+ "**Donor Character 1** donated 200.00m ISK :money_mouth:");
+	}
+
+	@Test
+	void shouldNotSummariseOldDonations() {
+		// Existing prior donations
+		existingDonations.add(DonationEntry.builder()
+				.id(1)
+				.date(donationTime.toInstant())
+				.firstPartyId(TEST_DONOR_CHARACTER_ID_1)
+				.characterId(TEST_DONOR_CHARACTER_ID_1)
+				.donorName("Donor Character 1")
+				.secondPartyId(TEST_CHARACTER_ID)
+				.amount(10_000_001.0)
+				.build());
+		existingDonations.add(DonationEntry.builder()
+				.id(2)
+				.date(donationTime.toInstant().minus(Duration.ofDays(1)))
+				.firstPartyId(TEST_DONOR_CHARACTER_ID_1)
+				.characterId(TEST_DONOR_CHARACTER_ID_1)
+				.donorName("Donor Character 1")
+				.secondPartyId(TEST_CHARACTER_ID)
+				.amount(10_000_010.0)
+				.build());
+		existingDonations.add(DonationEntry.builder()
+				.id(3)
+				.date(donationTime.toInstant().minus(Duration.ofDays(90)))
+				.firstPartyId(TEST_DONOR_CHARACTER_ID_1)
+				.characterId(TEST_DONOR_CHARACTER_ID_1)
+				.donorName("Donor Character 1")
+				.secondPartyId(TEST_CHARACTER_ID)
+				.amount(10_000_100.0)
+				.build());
+
+		putDonationsFile();
+		fetchDonations.run().blockingAwait();
+
+		assertSummaryFile(SummaryFile.builder()
+				.top(List.of(SummaryEntry.builder()
+						.donorName("Donor Character 1")
+						.amount(20_000_011.0)
+						.characterId(TEST_DONOR_CHARACTER_ID_1)
+						.build()))
+				.recent(List.of(SummaryEntry.builder()
+						.donorName("Donor Character 1")
+						.amount(10_000_001.0)
+						.characterId(TEST_DONOR_CHARACTER_ID_1)
+						.build()))
+				.build());
+	}
+
+	@Test
+	void shouldNotIncludeSmallDonationsInRecent() {
+		// Existing prior donations
+		existingDonations.add(DonationEntry.builder()
+				.id(1)
+				.date(donationTime.toInstant())
+				.firstPartyId(TEST_DONOR_CHARACTER_ID_1)
+				.characterId(TEST_DONOR_CHARACTER_ID_1)
+				.donorName("Donor Character 1")
+				.secondPartyId(TEST_CHARACTER_ID)
+				.amount(1.0)
+				.build());
+
+		putDonationsFile();
+		fetchDonations.run().blockingAwait();
+
+		assertSummaryFile(SummaryFile.builder()
+				.top(List.of(SummaryEntry.builder()
+						.donorName("Donor Character 1")
+						.amount(1.0)
+						.characterId(TEST_DONOR_CHARACTER_ID_1)
+						.build()))
+				.recent(List.of())
+				.build());
 	}
 
 	@Test
@@ -438,7 +522,7 @@ public class FetchDonationsTest {
 				GetCorporationsCorporationIdWalletsDivisionJournal200Ok.RefTypeEnum.ACCELERATION_GATE_FEE);
 		fetchDonations.run().blockingAwait();
 		assertDonationsFile(List.of());
-		assertSummaryFile(List.of());
+		assertSummaryFile(SummaryFile.builder().top(List.of()).recent(List.of()).build());
 		assertNoDiscordUpdate();
 	}
 
@@ -470,7 +554,7 @@ public class FetchDonationsTest {
 				GetCorporationsCorporationIdWalletsDivisionJournal200Ok.RefTypeEnum.CORPORATION_ACCOUNT_WITHDRAWAL);
 		fetchDonations.run().blockingAwait();
 		assertDonationsFile(List.of());
-		assertSummaryFile(List.of());
+		assertSummaryFile(SummaryFile.builder().top(List.of()).recent(List.of()).build());
 		assertNoDiscordUpdate();
 	}
 
@@ -496,19 +580,17 @@ public class FetchDonationsTest {
 	}
 
 	@SuppressWarnings("unchecked")
-	private void assertSummaryFile(List<SummaryEntry> expected) {
+	private void assertSummaryFile(SummaryFile expected) {
 		var supplied = mockS3Adapter
 				.getTestObject("static", FetchDonations.DONATIONS_SUMMARY_FILE, s3Client)
 				.map(b -> {
 					try {
-						var type =
-								objectMapper.getTypeFactory().constructCollectionType(List.class, SummaryEntry.class);
-						return (List<SummaryEntry>) objectMapper.readValue(b, type);
+						return objectMapper.readValue(b, SummaryFile.class);
 					} catch (IOException e) {
 						throw new RuntimeException(e);
 					}
 				})
-				.orElse(List.of());
+				.orElse(null);
 		assertEquals(expected, supplied);
 	}
 
@@ -519,10 +601,6 @@ public class FetchDonationsTest {
 	private void assertDiscordUpdate(String message) {
 		assertNotNull(discordCall);
 		assertEquals(message, discordCall.get("content").asText());
-	}
-
-	private void addCharacterTransaction() {
-		addCharacterTransaction(1, TEST_DONOR_CHARACTER_ID_1, 100, donationTime);
 	}
 
 	private void addCharacterTransaction(int id, int donorId, double amount, OffsetDateTime time) {
@@ -543,10 +621,6 @@ public class FetchDonationsTest {
 				.amount(amount)
 				.firstPartyId(donorId)
 				.secondPartyId(TEST_CHARACTER_ID));
-	}
-
-	private void addCorporationTransaction() {
-		addCorporationTransaction(1, TEST_DONOR_CORPORATION_ID_1, 100, donationTime);
 	}
 
 	private void addCorporationTransaction(int id, int donorId, double amount, OffsetDateTime time) {

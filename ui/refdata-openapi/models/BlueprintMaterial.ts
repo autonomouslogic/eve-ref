@@ -24,7 +24,7 @@ export interface BlueprintMaterial {
      * @type {number}
      * @memberof BlueprintMaterial
      */
-    typeId?: number;
+    probability?: number;
     /**
      * 
      * @type {number}
@@ -36,7 +36,7 @@ export interface BlueprintMaterial {
      * @type {number}
      * @memberof BlueprintMaterial
      */
-    probability?: number;
+    typeId?: number;
 }
 
 /**
@@ -58,9 +58,9 @@ export function BlueprintMaterialFromJSONTyped(json: any, ignoreDiscriminator: b
     }
     return {
         
-        'typeId': !exists(json, 'type_id') ? undefined : json['type_id'],
-        'quantity': !exists(json, 'quantity') ? undefined : json['quantity'],
         'probability': !exists(json, 'probability') ? undefined : json['probability'],
+        'quantity': !exists(json, 'quantity') ? undefined : json['quantity'],
+        'typeId': !exists(json, 'type_id') ? undefined : json['type_id'],
     };
 }
 
@@ -73,9 +73,9 @@ export function BlueprintMaterialToJSON(value?: BlueprintMaterial | null): any {
     }
     return {
         
-        'type_id': value.typeId,
-        'quantity': value.quantity,
         'probability': value.probability,
+        'quantity': value.quantity,
+        'type_id': value.typeId,
     };
 }
 

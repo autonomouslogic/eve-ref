@@ -26,6 +26,18 @@ export interface InventoryCategory {
      */
     categoryId?: number;
     /**
+     * The group IDs in this category. This is added by EVE Ref.
+     * @type {Array<number>}
+     * @memberof InventoryCategory
+     */
+    groupIds?: Array<number>;
+    /**
+     * 
+     * @type {number}
+     * @memberof InventoryCategory
+     */
+    iconId?: number;
+    /**
      * 
      * @type {{ [key: string]: string; }}
      * @memberof InventoryCategory
@@ -37,18 +49,6 @@ export interface InventoryCategory {
      * @memberof InventoryCategory
      */
     published?: boolean;
-    /**
-     * 
-     * @type {number}
-     * @memberof InventoryCategory
-     */
-    iconId?: number;
-    /**
-     * The group IDs in this category. This is added by EVE Ref.
-     * @type {Array<number>}
-     * @memberof InventoryCategory
-     */
-    groupIds?: Array<number>;
 }
 
 /**
@@ -71,10 +71,10 @@ export function InventoryCategoryFromJSONTyped(json: any, ignoreDiscriminator: b
     return {
         
         'categoryId': !exists(json, 'category_id') ? undefined : json['category_id'],
+        'groupIds': !exists(json, 'group_ids') ? undefined : json['group_ids'],
+        'iconId': !exists(json, 'icon_id') ? undefined : json['icon_id'],
         'name': !exists(json, 'name') ? undefined : json['name'],
         'published': !exists(json, 'published') ? undefined : json['published'],
-        'iconId': !exists(json, 'icon_id') ? undefined : json['icon_id'],
-        'groupIds': !exists(json, 'group_ids') ? undefined : json['group_ids'],
     };
 }
 
@@ -88,10 +88,10 @@ export function InventoryCategoryToJSON(value?: InventoryCategory | null): any {
     return {
         
         'category_id': value.categoryId,
+        'group_ids': value.groupIds,
+        'icon_id': value.iconId,
         'name': value.name,
         'published': value.published,
-        'icon_id': value.iconId,
-        'group_ids': value.groupIds,
     };
 }
 

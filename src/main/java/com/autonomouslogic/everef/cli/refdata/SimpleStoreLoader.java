@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.reactivex.rxjava3.core.Completable;
-import io.reactivex.rxjava3.schedulers.Schedulers;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Map;
@@ -60,21 +59,20 @@ public class SimpleStoreLoader {
 	@SneakyThrows
 	public Completable readValues(@NonNull byte[] bytes, RefTypeConfig refTypeConfig) {
 		return Completable.fromAction(() -> {
-					var container = readContainer(bytes);
-					if (refTypeConfig.isIndividualFiles()) {
-						var transformed = transform(container);
-						var id = transformed.get(idFieldName).asLong();
-						writeEntry(transformed, id);
-					} else {
-						container.fields().forEachRemaining(entry -> {
-							var id = Long.parseLong(entry.getKey());
-							var json = (ObjectNode) entry.getValue();
-							var transformed = transform(json);
-							writeEntry(transformed, id);
-						});
-					}
-				})
-				.subscribeOn(Schedulers.computation());
+			var container = readContainer(bytes);
+			if (refTypeConfig.isIndividualFiles()) {
+				var transformed = transform(container);
+				var id = transformed.get(idFieldName).asLong();
+				writeEntry(transformed, id);
+			} else {
+				container.fields().forEachRemaining(entry -> {
+					var id = Long.parseLong(entry.getKey());
+					var json = (ObjectNode) entry.getValue();
+					var transformed = transform(json);
+					writeEntry(transformed, id);
+				});
+			}
+		});
 	}
 
 	@SneakyThrows

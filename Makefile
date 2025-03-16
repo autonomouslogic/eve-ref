@@ -53,11 +53,14 @@ docker-push: docker
 	docker push $(DOCKER_TAG)
 	docker push $(DOCKER_TAG_LATEST)
 
+docker-push-dev: docker
+	docker push $(DOCKER_TAG)
+
 docker-placeholder: docker
-	docker run -it --env-file local.env $(DOCKER_TAG) placeholder
+	docker run --rm $(DOCKER_TAG) placeholder
 
 docker-data-index: docker
-	docker run -it --env-file local.env $(DOCKER_TAG) data-index
+	docker run --rm --env-file local.env $(DOCKER_TAG) data-index
 
 clean:
 	./gradlew clean --stacktrace
