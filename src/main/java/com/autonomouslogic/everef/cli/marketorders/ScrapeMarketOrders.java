@@ -105,7 +105,7 @@ public class ScrapeMarketOrders implements Command {
 
 	private void fetchOrders() {
 		log.info("Fetching market orders");
-		marketOrderFetcher.fetchMarketOrders().blockingAwait();
+		marketOrderFetcher.fetchMarketOrders();
 	}
 
 	private File writeOrders() {
@@ -114,7 +114,7 @@ public class ScrapeMarketOrders implements Command {
 				.forEach(order -> log.info(order));
 
 		log.info("Writing market orders");
-		return marketOrdersWriter.writeOrders().blockingGet();
+		return marketOrdersWriter.writeOrders();
 	}
 
 	private void uploadFile(File outputFile) {

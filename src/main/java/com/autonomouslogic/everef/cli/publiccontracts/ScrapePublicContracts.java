@@ -15,7 +15,6 @@ import com.autonomouslogic.everef.util.DataIndexHelper;
 import com.autonomouslogic.everef.util.TempFiles;
 import com.fasterxml.jackson.databind.JsonNode;
 import io.reactivex.rxjava3.core.Completable;
-import io.reactivex.rxjava3.core.Single;
 import java.io.File;
 import java.time.Duration;
 import java.time.Instant;
@@ -105,41 +104,37 @@ public class ScrapePublicContracts implements Command {
 		dataUrl = (S3Url) urlParser.parse(Configs.DATA_PATH.getRequired());
 	}
 
-	public Completable runAsync() {
-		return Completable.concatArray(
-						initScrapeTime(),
-						initMvStore(),
-						initMeta(),
-						loadLatestContracts(),
-						fetchAndStoreContracts(),
-						deleteOldContracts(),
-						buildFile().flatMapCompletable(this::uploadFiles))
-				.doFinally(this::closeMvStore);
+	public void run() {
+		initScrapeTime();
+		initMvStore();
+		initMeta();
+		loadLatestContracts();
+		fetchAndStoreContracts();
+		deleteOldContracts();
+		var file = buildFile();
+		uploadFiles(file);
+		closeMvStore();
 	}
 
-	private Completable initScrapeTime() {
-		return Completable.fromAction(() -> {
-			if (scrapeTime == null) {
-				scrapeTime = ZonedDateTime.now(ZoneOffset.UTC);
-			}
-			contractsScrapeMeta = new ContractsScrapeMeta().setScrapeStart(scrapeTime.toInstant());
-		});
+	private void initScrapeTime() {
+		if (scrapeTime == null) {
+			scrapeTime = ZonedDateTime.now(ZoneOffset.UTC);
+		}
+		contractsScrapeMeta = new ContractsScrapeMeta().setScrapeStart(scrapeTime.toInstant());
 	}
 
-	private Completable initMvStore() {
-		return Completable.fromAction(() -> {
-			log.info("Opening MVStore");
-			mvStore = mvStoreUtil.createTempStore("public-contracts");
-			log.debug("MVStore opened at {}", mvStore.getFileStore().getFileName());
-			contractsStore = mvStoreUtil.openJsonMap(mvStore, "contracts", Long.class);
-			itemsStore = mvStoreUtil.openJsonMap(mvStore, "items", Long.class);
-			bidsStore = mvStoreUtil.openJsonMap(mvStore, "bids", Long.class);
-			dynamicItemsStore = mvStoreUtil.openJsonMap(mvStore, "dynamic_items", Long.class);
-			nonDynamicItemsStore = mvStoreUtil.openJsonMap(mvStore, "non_dynamic_items", Long.class);
-			dogmaAttributesStore = mvStoreUtil.openJsonMap(mvStore, "dogma_attributes", String.class);
-			dogmaEffectsStore = mvStoreUtil.openJsonMap(mvStore, "dogma_effects", String.class);
-			log.debug("MVStore initialised");
-		});
+	private void initMvStore() {
+		log.info("Opening MVStore");
+		mvStore = mvStoreUtil.createTempStore("public-contracts");
+		log.debug("MVStore opened at {}", mvStore.getFileStore().getFileName());
+		contractsStore = mvStoreUtil.openJsonMap(mvStore, "contracts", Long.class);
+		itemsStore = mvStoreUtil.openJsonMap(mvStore, "items", Long.class);
+		bidsStore = mvStoreUtil.openJsonMap(mvStore, "bids", Long.class);
+		dynamicItemsStore = mvStoreUtil.openJsonMap(mvStore, "dynamic_items", Long.class);
+		nonDynamicItemsStore = mvStoreUtil.openJsonMap(mvStore, "non_dynamic_items", Long.class);
+		dogmaAttributesStore = mvStoreUtil.openJsonMap(mvStore, "dogma_attributes", String.class);
+		dogmaEffectsStore = mvStoreUtil.openJsonMap(mvStore, "dogma_effects", String.class);
+		log.debug("MVStore initialised");
 	}
 
 	private void closeMvStore() {
@@ -151,19 +146,17 @@ public class ScrapePublicContracts implements Command {
 	}
 
 	@SneakyThrows
-	private Completable initMeta() {
-		return Completable.fromAction(() -> {
-			contractsScrapeMeta = new ContractsScrapeMeta()
-					.setDatasource(Configs.ESI_DATASOURCE.getRequired())
-					.setScrapeStart(scrapeTime.truncatedTo(ChronoUnit.SECONDS).toInstant());
-		});
+	private void initMeta() {
+		contractsScrapeMeta = new ContractsScrapeMeta()
+				.setDatasource(Configs.ESI_DATASOURCE.getRequired())
+				.setScrapeStart(scrapeTime.truncatedTo(ChronoUnit.SECONDS).toInstant());
 	}
 
 	/**
 	 * Loads the latest contract scrape file and imports it into the MVStore.
 	 */
-	private Completable loadLatestContracts() {
-		return Completable.defer(() -> contractsFileLoaderProvider
+	private void loadLatestContracts() {
+		contractsFileLoaderProvider
 				.get()
 				.setContractsStore(contractsStore)
 				.setItemsStore(itemsStore)
@@ -184,63 +177,61 @@ public class ScrapePublicContracts implements Command {
 				.onErrorResumeNext(e -> {
 					log.warn("Failed reading latest contracts, ignoring", e);
 					return Completable.complete();
-				}));
+				})
+				.blockingAwait();
 	}
 
 	/**
 	 * Fetches all the public contracts and saves them to the MVStore.
 	 */
-	private Completable fetchAndStoreContracts() {
-		return Completable.defer(() -> {
-			log.info("Fetching contracts");
-			var start = Instant.now();
-			var contractFetcher = contractFetcherProvider
-					.get()
-					.setContractsStore(contractsStore)
-					.setItemsStore(itemsStore)
-					.setBidsStore(bidsStore);
-			var abyssalFetcher = contractFetcher.getContractAbyssalFetcher();
-			abyssalFetcher
-					.setDynamicItemsStore(dynamicItemsStore)
-					.setNonDynamicItemsStore(nonDynamicItemsStore)
-					.setDogmaAttributesStore(dogmaAttributesStore)
-					.setDogmaEffectsStore(dogmaEffectsStore);
+	private void fetchAndStoreContracts() {
+		log.info("Fetching contracts");
+		var start = Instant.now();
+		var contractFetcher = contractFetcherProvider
+				.get()
+				.setContractsStore(contractsStore)
+				.setItemsStore(itemsStore)
+				.setBidsStore(bidsStore);
+		var abyssalFetcher = contractFetcher.getContractAbyssalFetcher();
+		abyssalFetcher
+				.setDynamicItemsStore(dynamicItemsStore)
+				.setNonDynamicItemsStore(nonDynamicItemsStore)
+				.setDogmaAttributesStore(dogmaAttributesStore)
+				.setDogmaEffectsStore(dogmaEffectsStore);
 
-			return contractFetcher
-					.fetchPublicContracts()
-					.doOnNext(contractId -> {
-						seenContractIds.add(contractId);
-					})
-					.doOnComplete(() -> {
-						contractsScrapeMeta.setScrapeEnd(Instant.now().truncatedTo(ChronoUnit.SECONDS));
-						mvStore.commit();
-						log.info(String.format(
-								"Fetched %s contracts in %s",
-								seenContractIds.size(),
-								Duration.between(start, Instant.now()).truncatedTo(ChronoUnit.MILLIS)));
-					})
-					.ignoreElements();
-		});
+		contractFetcher
+				.fetchPublicContracts()
+				.doOnNext(contractId -> {
+					seenContractIds.add(contractId);
+				})
+				.doOnComplete(() -> {
+					contractsScrapeMeta.setScrapeEnd(Instant.now().truncatedTo(ChronoUnit.SECONDS));
+					mvStore.commit();
+					log.info(String.format(
+							"Fetched %s contracts in %s",
+							seenContractIds.size(),
+							Duration.between(start, Instant.now()).truncatedTo(ChronoUnit.MILLIS)));
+				})
+				.ignoreElements()
+				.blockingAwait();
 	}
 
 	/**
 	 * Deletes contracts from the database which don't exist anymore.
 	 * @return
 	 */
-	private Completable deleteOldContracts() {
-		return Completable.fromAction(() -> {
-			log.info("Deleting old contracts");
-			int removed = new MapRemover<>(contractsStore)
-					.removeIf((contractId, contract) -> !seenContractIds.contains(contractId))
-					.getEntriesRemoved();
-			log.debug(String.format("Deleted %s old contracts", removed));
-			deleteContractSub("items", itemsStore);
-			deleteContractSub("bids", bidsStore);
-			deleteContractSub("dynamic items", dynamicItemsStore);
-			deleteContractSub("non dynamic items", nonDynamicItemsStore);
-			deleteContractSub("dogma attributes", dogmaAttributesStore);
-			deleteContractSub("dogma effects", dogmaEffectsStore);
-		});
+	private void deleteOldContracts() {
+		log.info("Deleting old contracts");
+		int removed = new MapRemover<>(contractsStore)
+				.removeIf((contractId, contract) -> !seenContractIds.contains(contractId))
+				.getEntriesRemoved();
+		log.debug(String.format("Deleted %s old contracts", removed));
+		deleteContractSub("items", itemsStore);
+		deleteContractSub("bids", bidsStore);
+		deleteContractSub("dynamic items", dynamicItemsStore);
+		deleteContractSub("non dynamic items", nonDynamicItemsStore);
+		deleteContractSub("dogma attributes", dogmaAttributesStore);
+		deleteContractSub("dogma effects", dogmaEffectsStore);
 	}
 
 	private <K> void deleteContractSub(String name, Map<K, JsonNode> map) {
@@ -256,8 +247,8 @@ public class ScrapePublicContracts implements Command {
 	/**
 	 * Builds the output file.
 	 */
-	private Single<File> buildFile() {
-		return Single.defer(() -> contractsFileBuilderProvider
+	private File buildFile() {
+		return contractsFileBuilderProvider
 				.get()
 				.setContractsScrapeMeta(contractsScrapeMeta)
 				.setContractsStore(contractsStore)
@@ -267,29 +258,27 @@ public class ScrapePublicContracts implements Command {
 				.setNonDynamicItemsStore(nonDynamicItemsStore)
 				.setDogmaAttributesStore(dogmaAttributesStore)
 				.setDogmaEffectsStore(dogmaEffectsStore)
-				.buildFile());
+				.buildFile()
+				.blockingGet();
 	}
 
 	/**
 	 * Uploads the final file to S3.
 	 * @return
 	 */
-	private Completable uploadFiles(File outputFile) {
-		return Completable.defer(() -> {
-			var latestPath = dataUrl.resolve(PUBLIC_CONTRACTS.createLatestPath());
-			var archivePath = dataUrl.resolve(PUBLIC_CONTRACTS.createArchivePath(scrapeTime));
-			var latestPut = s3Util.putPublicObjectRequest(
-					outputFile.length(), latestPath, "application/x-bzip2", latestCacheTime);
-			var archivePut = s3Util.putPublicObjectRequest(
-					outputFile.length(), archivePath, "application/x-bzip2", archiveCacheTime);
-			log.info(String.format("Uploading latest file to %s", latestPath));
-			log.info(String.format("Uploading archive file to %s", archivePath));
-			return Completable.mergeArray(
-							s3Adapter.putObject(latestPut, outputFile, s3Client).ignoreElement(),
-							s3Adapter
-									.putObject(archivePut, outputFile, s3Client)
-									.ignoreElement())
-					.andThen(Completable.defer(() -> dataIndexHelper.updateIndex(latestPath, archivePath)));
-		});
+	private void uploadFiles(File outputFile) {
+		var latestPath = dataUrl.resolve(PUBLIC_CONTRACTS.createLatestPath());
+		var archivePath = dataUrl.resolve(PUBLIC_CONTRACTS.createArchivePath(scrapeTime));
+		var latestPut =
+				s3Util.putPublicObjectRequest(outputFile.length(), latestPath, "application/x-bzip2", latestCacheTime);
+		var archivePut = s3Util.putPublicObjectRequest(
+				outputFile.length(), archivePath, "application/x-bzip2", archiveCacheTime);
+		log.info(String.format("Uploading latest file to %s", latestPath));
+		log.info(String.format("Uploading archive file to %s", archivePath));
+		Completable.mergeArray(
+						s3Adapter.putObject(latestPut, outputFile, s3Client).ignoreElement(),
+						s3Adapter.putObject(archivePut, outputFile, s3Client).ignoreElement())
+				.blockingAwait();
+		dataIndexHelper.updateIndex(latestPath, archivePath).blockingAwait();
 	}
 }
