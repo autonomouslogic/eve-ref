@@ -5,7 +5,9 @@ import io.reactivex.rxjava3.core.Completable;
 
 public interface Command extends Runnable {
 	@Deprecated
-	Completable runAsync();
+	default Completable runAsync() {
+		throw new UnsupportedOperationException();
+	}
 
 	default void run() {
 		VirtualThreads.checkThread();

@@ -76,13 +76,13 @@ public class ScrapeMarketOrders implements Command {
 
 	@SneakyThrows
 	@Override
-	public Completable runAsync() {
-		return Completable.concatArray(
-				initScrapeTime(),
-				initStore(),
-				initLogin(),
-				fetchOrders(),
-				writeOrders().flatMapCompletable(this::uploadFile));
+	public void run() {
+		initScrapeTime().blockingAwait();
+		initStore().blockingAwait();
+		initLogin().blockingAwait();
+		fetchOrders().blockingAwait();
+		var file = writeOrders().blockingGet();
+		uploadFile(file).blockingAwait();
 	}
 
 	private Completable initScrapeTime() {
