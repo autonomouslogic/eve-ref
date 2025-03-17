@@ -364,8 +364,7 @@ public class ScrapeStructuresTest {
 		publicStructures.put(1000000000001L, Map.of("name", "Test Structure 1"));
 		scrapeStructures
 				.setScrapeTime(ZonedDateTime.parse("2020-01-02T03:04:05Z"))
-				.runAsync()
-				.blockingAwait();
+				.run();
 		Mockito.verify(dataIndexHelper)
 				.updateIndex(
 						S3Url.builder()

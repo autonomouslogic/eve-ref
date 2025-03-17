@@ -144,8 +144,7 @@ public class BuildRefDataTest {
 	void shouldBuildRefData() {
 		buildRefData
 				.setBuildTime(ZonedDateTime.parse("2022-01-05T04:05:06.89Z"))
-				.runAsync()
-				.blockingAwait();
+				.run();
 
 		// Get saved file.
 		var archiveFile = "base/reference-data/history/2022/reference-data-2022-01-05.tar.xz";

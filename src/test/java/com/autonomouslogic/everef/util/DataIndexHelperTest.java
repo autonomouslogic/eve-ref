@@ -68,23 +68,23 @@ public class DataIndexHelperTest {
 
 		inOrder.verify(dataIndex).setPrefix("market-orders/");
 		inOrder.verify(dataIndex).setRecursive(false);
-		inOrder.verify(dataIndex).runAsync();
+		inOrder.verify(dataIndex).run();
 
 		inOrder.verify(dataIndex).setPrefix("");
 		inOrder.verify(dataIndex).setRecursive(false);
-		inOrder.verify(dataIndex).runAsync();
+		inOrder.verify(dataIndex).run();
 
 		inOrder.verify(dataIndex).setPrefix("market-orders/history/2023/2023-09-11/");
 		inOrder.verify(dataIndex).setRecursive(false);
-		inOrder.verify(dataIndex).runAsync();
+		inOrder.verify(dataIndex).run();
 
 		inOrder.verify(dataIndex).setPrefix("market-orders/history/2023/");
 		inOrder.verify(dataIndex).setRecursive(false);
-		inOrder.verify(dataIndex).runAsync();
+		inOrder.verify(dataIndex).run();
 
 		inOrder.verify(dataIndex).setPrefix("market-orders/history/");
 		inOrder.verify(dataIndex).setRecursive(false);
-		inOrder.verify(dataIndex).runAsync();
+		inOrder.verify(dataIndex).run();
 
 		inOrder.verifyNoMoreInteractions();
 	}
