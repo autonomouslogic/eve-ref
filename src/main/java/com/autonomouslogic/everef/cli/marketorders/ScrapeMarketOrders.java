@@ -12,7 +12,6 @@ import com.autonomouslogic.everef.url.UrlParser;
 import com.autonomouslogic.everef.util.DataIndexHelper;
 import com.fasterxml.jackson.databind.JsonNode;
 import io.reactivex.rxjava3.core.Completable;
-import io.reactivex.rxjava3.core.Single;
 import java.io.File;
 import java.time.Duration;
 import java.time.ZoneOffset;
@@ -77,69 +76,61 @@ public class ScrapeMarketOrders implements Command {
 	@SneakyThrows
 	@Override
 	public void run() {
-		initScrapeTime().blockingAwait();
-		initStore().blockingAwait();
-		initLogin().blockingAwait();
-		fetchOrders().blockingAwait();
-		var file = writeOrders().blockingGet();
-		uploadFile(file).blockingAwait();
+		initScrapeTime();
+		initStore();
+		initLogin();
+		fetchOrders();
+		var file = writeOrders();
+		uploadFile(file);
 	}
 
-	private Completable initScrapeTime() {
-		return Completable.fromAction(() -> {
-			if (scrapeTime == null) {
-				scrapeTime = ZonedDateTime.now(ZoneOffset.UTC);
-			}
-		});
+	private void initScrapeTime() {
+		if (scrapeTime == null) {
+			scrapeTime = ZonedDateTime.now(ZoneOffset.UTC);
+		}
 	}
 
-	private Completable initStore() {
-		return Completable.fromAction(() -> {
-			marketOrdersStore = new HashMap<>();
-			marketOrderFetcher.setMarketOrdersStore(marketOrdersStore);
-			marketOrdersWriter.setMarketOrdersStore(marketOrdersStore);
-		});
+	private void initStore() {
+		marketOrdersStore = new HashMap<>();
+		marketOrderFetcher.setMarketOrdersStore(marketOrdersStore);
+		marketOrdersWriter.setMarketOrdersStore(marketOrdersStore);
 	}
 
-	private Completable initLogin() {
-		return esiAuthHelper.getTokenStringForOwnerHash(scrapeOwnerHash).ignoreElement();
+	private void initLogin() {
+		esiAuthHelper
+				.getTokenStringForOwnerHash(scrapeOwnerHash)
+				.ignoreElement()
+				.blockingAwait();
 	}
 
-	private Completable fetchOrders() {
-		return Completable.defer(() -> {
-			log.info("Fetching market orders");
-			return marketOrderFetcher.fetchMarketOrders();
-		});
+	private void fetchOrders() {
+		log.info("Fetching market orders");
+		marketOrderFetcher.fetchMarketOrders().blockingAwait();
 	}
 
-	private Single<File> writeOrders() {
-		return Single.defer(() -> {
-			marketOrdersStore.values().stream()
-					.filter(order -> order.get("region_id") == null)
-					.forEach(order -> log.info(order));
+	private File writeOrders() {
+		marketOrdersStore.values().stream()
+				.filter(order -> order.get("region_id") == null)
+				.forEach(order -> log.info(order));
 
-			log.info("Writing market orders");
-			return marketOrdersWriter.writeOrders();
-		});
+		log.info("Writing market orders");
+		return marketOrdersWriter.writeOrders().blockingGet();
 	}
 
-	private Completable uploadFile(File outputFile) {
-		return Completable.defer(() -> {
-			log.debug(String.format("Uploading completed file from %s", outputFile));
-			var latestPath = dataUrl.resolve(MARKET_ORDERS.createLatestPath());
-			var archivePath = dataUrl.resolve(MARKET_ORDERS.createArchivePath(scrapeTime));
-			var latestPut = s3Util.putPublicObjectRequest(
-					outputFile.length(), latestPath, "application/x-bzip2", latestCacheTime);
-			var archivePut = s3Util.putPublicObjectRequest(
-					outputFile.length(), archivePath, "application/x-bzip2", archiveCacheTime);
-			log.info(String.format("Uploading latest file to %s", latestPath));
-			log.info(String.format("Uploading archive file to %s", archivePath));
-			return Completable.mergeArray(
-							s3Adapter.putObject(latestPut, outputFile, s3Client).ignoreElement(),
-							s3Adapter
-									.putObject(archivePut, outputFile, s3Client)
-									.ignoreElement())
-					.andThen(Completable.defer(() -> dataIndexHelper.updateIndex(latestPath, archivePath)));
-		});
+	private void uploadFile(File outputFile) {
+		log.debug(String.format("Uploading completed file from %s", outputFile));
+		var latestPath = dataUrl.resolve(MARKET_ORDERS.createLatestPath());
+		var archivePath = dataUrl.resolve(MARKET_ORDERS.createArchivePath(scrapeTime));
+		var latestPut =
+				s3Util.putPublicObjectRequest(outputFile.length(), latestPath, "application/x-bzip2", latestCacheTime);
+		var archivePut = s3Util.putPublicObjectRequest(
+				outputFile.length(), archivePath, "application/x-bzip2", archiveCacheTime);
+		log.info(String.format("Uploading latest file to %s", latestPath));
+		log.info(String.format("Uploading archive file to %s", archivePath));
+		Completable.mergeArray(
+						s3Adapter.putObject(latestPut, outputFile, s3Client).ignoreElement(),
+						s3Adapter.putObject(archivePut, outputFile, s3Client).ignoreElement())
+				.blockingAwait();
+		dataIndexHelper.updateIndex(latestPath, archivePath).blockingAwait();
 	}
 }
