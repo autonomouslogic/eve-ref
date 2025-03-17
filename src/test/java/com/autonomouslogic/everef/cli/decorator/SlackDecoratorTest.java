@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -31,7 +32,6 @@ import org.junit.jupiter.api.Timeout;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junitpioneer.jupiter.SetEnvironmentVariable;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
@@ -65,9 +65,10 @@ public class SlackDecoratorTest {
 			server.enqueue(new MockResponse().setResponseCode(204));
 		}
 
-		when(testCommand.runAsync())
+		lenient()
+				.when(testCommand.runAsync())
 				.thenReturn(Completable.timer(1, TimeUnit.SECONDS).observeOn(VirtualThreads.SCHEDULER));
-		Mockito.lenient().when(testCommand.getName()).thenReturn("command-name");
+		lenient().when(testCommand.getName()).thenReturn("command-name");
 	}
 
 	@AfterEach
@@ -80,7 +81,7 @@ public class SlackDecoratorTest {
 	@SneakyThrows
 	void shouldCallDelegateWhenDisabled() {
 		slackDecorator.decorate(testCommand).run();
-		verify(testCommand).runAsync();
+		verify(testCommand).run();
 		testDataUtil.assertNoMoreRequests(server);
 	}
 

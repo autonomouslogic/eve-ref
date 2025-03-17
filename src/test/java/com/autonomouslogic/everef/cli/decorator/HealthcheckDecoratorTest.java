@@ -3,6 +3,7 @@ package com.autonomouslogic.everef.cli.decorator;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -50,7 +51,7 @@ public class HealthcheckDecoratorTest {
 			server.enqueue(new MockResponse().setResponseCode(204));
 		}
 
-		when(testCommand.runAsync()).thenReturn(Completable.complete());
+		lenient().when(testCommand.runAsync()).thenReturn(Completable.complete());
 	}
 
 	@AfterEach
@@ -63,7 +64,7 @@ public class HealthcheckDecoratorTest {
 	@SneakyThrows
 	void shouldCallDelegateWhenDisabled() {
 		healthcheckDecorator.decorate(testCommand).run();
-		verify(testCommand).runAsync();
+		verify(testCommand).run();
 		testDataUtil.assertNoMoreRequests(server);
 	}
 
