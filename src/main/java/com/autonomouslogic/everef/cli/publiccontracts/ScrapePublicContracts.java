@@ -156,29 +156,25 @@ public class ScrapePublicContracts implements Command {
 	 * Loads the latest contract scrape file and imports it into the MVStore.
 	 */
 	private void loadLatestContracts() {
-		contractsFileLoaderProvider
-				.get()
-				.setContractsStore(contractsStore)
-				.setItemsStore(itemsStore)
-				.setBidsStore(bidsStore)
-				.setDynamicItemsStore(dynamicItemsStore)
-				.setNonDynamicItemsStore(nonDynamicItemsStore)
-				.setDogmaAttributesStore(dogmaAttributesStore)
-				.setDogmaEffectsStore(dogmaEffectsStore)
-				.downloadAndLoad()
-				.doOnSuccess(meta -> {
-					var age = Duration.between(meta.getScrapeStart(), Instant.now());
-					if (age.compareTo(Duration.ofHours(1)) > 0) {
-						log.warn("Downloaded latest contracts is old: {}", age);
-					}
-					log.info("Loaded latest contracts from scrape starting: {} - age: {}", meta.getScrapeStart(), age);
-				})
-				.ignoreElement()
-				.onErrorResumeNext(e -> {
-					log.warn("Failed reading latest contracts, ignoring", e);
-					return Completable.complete();
-				})
-				.blockingAwait();
+		try {
+			var meta = contractsFileLoaderProvider
+					.get()
+					.setContractsStore(contractsStore)
+					.setItemsStore(itemsStore)
+					.setBidsStore(bidsStore)
+					.setDynamicItemsStore(dynamicItemsStore)
+					.setNonDynamicItemsStore(nonDynamicItemsStore)
+					.setDogmaAttributesStore(dogmaAttributesStore)
+					.setDogmaEffectsStore(dogmaEffectsStore)
+					.downloadAndLoad();
+			var age = Duration.between(meta.getScrapeStart(), Instant.now());
+			if (age.compareTo(Duration.ofHours(1)) > 0) {
+				log.warn("Downloaded latest contracts is old: {}", age);
+			}
+			log.info("Loaded latest contracts from scrape starting: {} - age: {}", meta.getScrapeStart(), age);
+		} catch (Exception e) {
+			log.warn("Failed reading latest contracts, ignoring", e);
+		}
 	}
 
 	/**
@@ -199,21 +195,13 @@ public class ScrapePublicContracts implements Command {
 				.setDogmaAttributesStore(dogmaAttributesStore)
 				.setDogmaEffectsStore(dogmaEffectsStore);
 
-		contractFetcher
-				.fetchPublicContracts()
-				.doOnNext(contractId -> {
-					seenContractIds.add(contractId);
-				})
-				.doOnComplete(() -> {
-					contractsScrapeMeta.setScrapeEnd(Instant.now().truncatedTo(ChronoUnit.SECONDS));
-					mvStore.commit();
-					log.info(String.format(
-							"Fetched %s contracts in %s",
-							seenContractIds.size(),
-							Duration.between(start, Instant.now()).truncatedTo(ChronoUnit.MILLIS)));
-				})
-				.ignoreElements()
-				.blockingAwait();
+		var ids = contractFetcher.fetchPublicContracts();
+		seenContractIds.addAll(ids);
+		contractsScrapeMeta.setScrapeEnd(Instant.now().truncatedTo(ChronoUnit.SECONDS));
+		mvStore.commit();
+		log.info(String.format(
+				"Fetched %s contracts in %s",
+				seenContractIds.size(), Duration.between(start, Instant.now()).truncatedTo(ChronoUnit.MILLIS)));
 	}
 
 	/**
@@ -258,8 +246,7 @@ public class ScrapePublicContracts implements Command {
 				.setNonDynamicItemsStore(nonDynamicItemsStore)
 				.setDogmaAttributesStore(dogmaAttributesStore)
 				.setDogmaEffectsStore(dogmaEffectsStore)
-				.buildFile()
-				.blockingGet();
+				.buildFile();
 	}
 
 	/**

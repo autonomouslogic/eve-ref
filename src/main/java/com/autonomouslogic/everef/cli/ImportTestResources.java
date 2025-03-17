@@ -72,16 +72,21 @@ public class ImportTestResources implements Command {
 	@Inject
 	protected ImportTestResources() {}
 
-	public Completable runAsync() {
+	public void run() {
 		if (!new File(TEST_RESOURCES).exists()) {
 			throw new RuntimeException("Test resources directory does not exist");
 		}
-		return Completable.concatArray(
-				Completable.mergeArray(
-						dataUtil.downloadLatestSde().flatMapCompletable(this::loadSdeResources),
-						dataUtil.downloadLatestEsi().flatMapCompletable(this::loadEsiResources),
-						dataUtil.downloadLatestHoboleaks().flatMapCompletable(this::loadHoboleaksResources)),
-				buildRefData());
+
+		var sdeFile = dataUtil.downloadLatestSde().blockingGet();
+		loadSdeResources(sdeFile).blockingAwait();
+
+		var esiFile = dataUtil.downloadLatestEsi();
+		loadEsiResources(esiFile).blockingAwait();
+
+		var hoboleaksFile = dataUtil.downloadLatestHoboleaks();
+		loadHoboleaksResources(hoboleaksFile).blockingAwait();
+
+		buildRefData().blockingAwait();
 	}
 
 	private Completable loadSdeResources(File file) {

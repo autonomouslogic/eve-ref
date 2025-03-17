@@ -481,8 +481,7 @@ public class ScrapeStructuresTest {
 							.setNonDynamicItemsStore(Map.of())
 							.setDogmaAttributesStore(Map.of())
 							.setDogmaEffectsStore(Map.of())
-							.buildFile()
-							.blockingGet();
+							.buildFile();
 					return new MockResponse()
 							.setBody(new Buffer().write(IOUtils.toByteArray(new FileInputStream(archive))));
 				}
