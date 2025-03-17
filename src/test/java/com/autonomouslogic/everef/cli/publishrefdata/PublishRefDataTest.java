@@ -122,7 +122,7 @@ public class PublishRefDataTest {
 	@Test
 	@SneakyThrows
 	void shouldPublishRefData() {
-		publishRefData.runAsync().blockingAwait();
+		publishRefData.run();
 
 		var putKeys = mockS3Adapter.getAllPutKeys(BUCKET_NAME, s3);
 
@@ -445,7 +445,7 @@ public class PublishRefDataTest {
 	@SneakyThrows
 	void shouldNotPublishRefDataIfThereNoUpdate() {
 		refDataFile = mockScrapeBuilder.createTestRefdata(meta);
-		publishRefData.runAsync().blockingAwait();
+		publishRefData.run();
 
 		var putKeys = mockS3Adapter.getAllPutKeys(BUCKET_NAME, s3);
 		var deleteKeys = mockS3Adapter.getAllDeleteKeys(BUCKET_NAME, s3);

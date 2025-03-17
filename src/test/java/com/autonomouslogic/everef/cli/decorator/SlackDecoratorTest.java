@@ -79,7 +79,7 @@ public class SlackDecoratorTest {
 	@Test
 	@SneakyThrows
 	void shouldCallDelegateWhenDisabled() {
-		slackDecorator.decorate(testCommand).runAsync().blockingAwait();
+		slackDecorator.decorate(testCommand).run();
 		verify(testCommand).runAsync();
 		testDataUtil.assertNoMoreRequests(server);
 	}
@@ -90,7 +90,7 @@ public class SlackDecoratorTest {
 			key = "SLACK_WEBHOOK_URL",
 			value = "http://localhost:" + TestDataUtil.TEST_PORT + "/webhook?key=val")
 	void shouldReportSuccess() {
-		slackDecorator.decorate(testCommand).runAsync().blockingAwait();
+		slackDecorator.decorate(testCommand).run();
 		verify(testCommand).runAsync();
 		var request = server.takeRequest();
 		testDataUtil.assertRequest(request, "POST", "/webhook?key=val", body -> {
@@ -118,7 +118,7 @@ public class SlackDecoratorTest {
 						.andThen(Completable.error(new RuntimeException("test error message"))));
 		var error = assertThrows(
 				RuntimeException.class,
-				() -> slackDecorator.decorate(testCommand).runAsync().blockingAwait());
+				() -> slackDecorator.decorate(testCommand).run());
 		error.printStackTrace();
 		assertEquals("test error message", error.getMessage());
 		verify(testCommand).runAsync();
@@ -148,7 +148,7 @@ public class SlackDecoratorTest {
 			value = "http://localhost:" + TestDataUtil.TEST_PORT + "/webhook?key=val")
 	@SetEnvironmentVariable(key = "SLACK_REPORT_SUCCESS", value = "false")
 	void shouldNotReportSuccessWhenConfiguredNotTo() {
-		slackDecorator.decorate(testCommand).runAsync().blockingAwait();
+		slackDecorator.decorate(testCommand).run();
 		verify(testCommand).runAsync();
 		testDataUtil.assertNoMoreRequests(server);
 	}
@@ -163,7 +163,7 @@ public class SlackDecoratorTest {
 		when(testCommand.runAsync()).thenReturn(Completable.error(new RuntimeException("test error message")));
 		var error = assertThrows(
 				RuntimeException.class,
-				() -> slackDecorator.decorate(testCommand).runAsync().blockingAwait());
+				() -> slackDecorator.decorate(testCommand).run());
 		assertEquals("test error message", error.getMessage());
 		verify(testCommand).runAsync();
 		testDataUtil.assertNoMoreRequests(server);
@@ -179,7 +179,7 @@ public class SlackDecoratorTest {
 		when(testCommand.runAsync()).thenReturn(Completable.error(new RuntimeException("test error message")));
 		var error = assertThrows(
 				RuntimeException.class,
-				() -> slackDecorator.decorate(testCommand).runAsync().blockingAwait());
+				() -> slackDecorator.decorate(testCommand).run());
 		assertEquals("test error message", error.getMessage());
 		verify(testCommand).runAsync();
 		var request = server.takeRequest();

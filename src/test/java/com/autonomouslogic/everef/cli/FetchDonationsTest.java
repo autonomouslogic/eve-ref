@@ -111,7 +111,7 @@ public class FetchDonationsTest {
 		// No prior donations
 		// No current donations
 
-		fetchDonations.runAsync().blockingAwait();
+		fetchDonations.run();
 
 		assertDonationsFile(List.of());
 		assertSummaryFile(SummaryFile.builder().top(List.of()).recent(List.of()).build());
@@ -124,7 +124,7 @@ public class FetchDonationsTest {
 		// New donations
 		addCharacterTransaction(1, TEST_DONOR_CHARACTER_ID_1, 100_000_000, donationTime);
 
-		fetchDonations.runAsync().blockingAwait();
+		fetchDonations.run();
 
 		assertDonationsFile(List.of(DonationEntry.builder()
 				.id(1)
@@ -161,7 +161,7 @@ public class FetchDonationsTest {
 		addCharacterTransaction(1, TEST_DONOR_CHARACTER_ID_1, 100_000_000, donationTime);
 
 		putDonationsFile();
-		fetchDonations.runAsync().blockingAwait();
+		fetchDonations.run();
 
 		assertDonationsFile(List.of(DonationEntry.builder()
 				.id(1)
@@ -200,7 +200,7 @@ public class FetchDonationsTest {
 		addCharacterTransaction(2, TEST_DONOR_CHARACTER_ID_2, 200_000_000, donationTime.plusMinutes(1));
 
 		putDonationsFile();
-		fetchDonations.runAsync().blockingAwait();
+		fetchDonations.run();
 
 		assertDonationsFile(List.of(
 				DonationEntry.builder()
@@ -254,7 +254,7 @@ public class FetchDonationsTest {
 		addCharacterTransaction(2, TEST_DONOR_CHARACTER_ID_2, 200_000_000, donationTime);
 
 		putDonationsFile();
-		fetchDonations.runAsync().blockingAwait();
+		fetchDonations.run();
 
 		assertDonationsFile(List.of(
 				DonationEntry.builder()
@@ -307,7 +307,7 @@ public class FetchDonationsTest {
 		// No donations on ESI
 
 		putDonationsFile();
-		fetchDonations.runAsync().blockingAwait();
+		fetchDonations.run();
 
 		assertDonationsFile(List.of(DonationEntry.builder()
 				.id(1)
@@ -346,7 +346,7 @@ public class FetchDonationsTest {
 		addCharacterTransaction(3, TEST_DONOR_CHARACTER_ID_1, 300_000_000, donationTime);
 
 		putDonationsFile();
-		fetchDonations.runAsync().blockingAwait();
+		fetchDonations.run();
 
 		var entries = List.of(SummaryEntry.builder()
 				.donorName("Donor Character 1")
@@ -366,7 +366,7 @@ public class FetchDonationsTest {
 		addCharacterTransaction(2, TEST_DONOR_CHARACTER_ID_2, 300_000_000, donationTime);
 
 		putDonationsFile();
-		fetchDonations.runAsync().blockingAwait();
+		fetchDonations.run();
 
 		var entries = List.of(
 				SummaryEntry.builder()
@@ -417,7 +417,7 @@ public class FetchDonationsTest {
 				.build());
 
 		putDonationsFile();
-		fetchDonations.runAsync().blockingAwait();
+		fetchDonations.run();
 
 		assertSummaryFile(SummaryFile.builder()
 				.top(List.of(SummaryEntry.builder()
@@ -447,7 +447,7 @@ public class FetchDonationsTest {
 				.build());
 
 		putDonationsFile();
-		fetchDonations.runAsync().blockingAwait();
+		fetchDonations.run();
 
 		assertSummaryFile(SummaryFile.builder()
 				.top(List.of(SummaryEntry.builder()
@@ -462,14 +462,14 @@ public class FetchDonationsTest {
 	@Test
 	void shouldReplaceWeirdCharactersInDonorNames() {
 		addCharacterTransaction(1, TEST_DONOR_CHARACTER_ID_3, 200, donationTime);
-		fetchDonations.runAsync().blockingAwait();
+		fetchDonations.run();
 		assertDiscordUpdate("**Weird name??_??** donated 200.00 ISK :trophy:");
 	}
 
 	@Test
 	void shouldShortenLargeAmountsOfMoney() {
 		addCharacterTransaction(1, TEST_DONOR_CHARACTER_ID_1, 12345678912L, donationTime);
-		fetchDonations.runAsync().blockingAwait();
+		fetchDonations.run();
 		assertDiscordUpdate("**Donor Character 1** donated 12.35b ISK :money_mouth:");
 	}
 
@@ -499,7 +499,7 @@ public class FetchDonationsTest {
 				1000,
 				donationTime,
 				GetCorporationsCorporationIdWalletsDivisionJournal200Ok.RefTypeEnum.CORPORATION_ACCOUNT_WITHDRAWAL);
-		fetchDonations.runAsync().blockingAwait();
+		fetchDonations.run();
 		assertDiscordUpdate("**Donor Corporation 2** donated 1,000.00 ISK :gift:\n"
 				+ "**Donor Character 2** donated 100.00 ISK :gem:\n"
 				+ "**Donor Corporation 1** donated 10.00 ISK :pound:\n"
@@ -520,7 +520,7 @@ public class FetchDonationsTest {
 				100,
 				donationTime,
 				GetCorporationsCorporationIdWalletsDivisionJournal200Ok.RefTypeEnum.ACCELERATION_GATE_FEE);
-		fetchDonations.runAsync().blockingAwait();
+		fetchDonations.run();
 		assertDonationsFile(List.of());
 		assertSummaryFile(SummaryFile.builder().top(List.of()).recent(List.of()).build());
 		assertNoDiscordUpdate();
@@ -552,7 +552,7 @@ public class FetchDonationsTest {
 				1000,
 				donationTime,
 				GetCorporationsCorporationIdWalletsDivisionJournal200Ok.RefTypeEnum.CORPORATION_ACCOUNT_WITHDRAWAL);
-		fetchDonations.runAsync().blockingAwait();
+		fetchDonations.run();
 		assertDonationsFile(List.of());
 		assertSummaryFile(SummaryFile.builder().top(List.of()).recent(List.of()).build());
 		assertNoDiscordUpdate();

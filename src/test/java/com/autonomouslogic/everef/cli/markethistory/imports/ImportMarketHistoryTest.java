@@ -119,7 +119,7 @@ public class ImportMarketHistoryTest {
 	@SneakyThrows
 	@SetEnvironmentVariable(key = "IMPORT_MARKET_HISTORY_MIN_DATE", value = "2018-01-01")
 	void shouldImportMarketHistory() {
-		importMarketHistory.runAsync().blockingAwait();
+		importMarketHistory.run();
 		assertDailyImports();
 		// assertYearlyImports();
 	}

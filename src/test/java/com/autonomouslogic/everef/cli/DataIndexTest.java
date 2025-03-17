@@ -84,7 +84,7 @@ public class DataIndexTest {
 	@Test
 	@SneakyThrows
 	void shouldGenerateRecursiveIndexPagesFromRoot() {
-		dataIndex.runAsync().blockingAwait();
+		dataIndex.run();
 
 		verifyMainIndex();
 		verifyDir1Index();
@@ -98,7 +98,7 @@ public class DataIndexTest {
 	@Test
 	@SneakyThrows
 	void shouldGenerateNonRecursiveIndexPageAtRoot() {
-		dataIndex.setRecursive(false).runAsync().blockingAwait();
+		dataIndex.setRecursive(false).run();
 
 		verifyMainIndex();
 
@@ -109,7 +109,7 @@ public class DataIndexTest {
 	@Test
 	@SneakyThrows
 	void shouldGenerateRecursiveIndexPagesFromPrefix() {
-		dataIndex.setPrefix("dir/").runAsync().blockingAwait();
+		dataIndex.setPrefix("dir/").run();
 
 		verifyDir1Index();
 		verifyDir1SubIndex();
@@ -121,7 +121,7 @@ public class DataIndexTest {
 	@Test
 	@SneakyThrows
 	void shouldGenerateNonRecursiveIndexPageAtPrefix() {
-		dataIndex.setPrefix("dir/").setRecursive(false).runAsync().blockingAwait();
+		dataIndex.setPrefix("dir/").setRecursive(false).run();
 
 		verifyDir1Index();
 
