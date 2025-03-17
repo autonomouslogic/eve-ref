@@ -150,7 +150,7 @@ public class FetchDonations implements Command {
 		staticUrl = (S3Url) urlParser.parse(Configs.STATIC_PATH.getRequired());
 	}
 
-	public Completable run() {
+	public Completable runAsync() {
 		return Completable.fromAction(() -> {
 			var accessToken = getAccessToken().blockingGet();
 			var verified = esiAuthHelper.verify(accessToken).blockingGet();

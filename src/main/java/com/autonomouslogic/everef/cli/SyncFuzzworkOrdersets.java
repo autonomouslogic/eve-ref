@@ -88,7 +88,7 @@ public class SyncFuzzworkOrdersets implements Command {
 
 	@SneakyThrows
 	@Override
-	public Completable run() {
+	public Completable runAsync() {
 		return getFilesToSync()
 				.flatMapCompletable(
 						file -> downloadFile(file)

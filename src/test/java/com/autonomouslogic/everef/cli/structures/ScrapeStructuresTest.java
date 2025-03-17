@@ -139,7 +139,7 @@ public class ScrapeStructuresTest {
 	@Test
 	void shouldScrapePublicStructures() {
 		publicStructures.put(1000000000001L, Map.of("name", "Test Structure 1"));
-		scrapeStructures.run().blockingAwait();
+		scrapeStructures.runAsync().blockingAwait();
 		verifyScrape(container(publicStructure()));
 	}
 
@@ -148,7 +148,7 @@ public class ScrapeStructuresTest {
 		loadPreviousScrape(container(publicStructure()));
 		publicStructures.put(1000000000001L, Map.of("name", "Test Structure 1 Updated"));
 		time = time.plusDays(1);
-		scrapeStructures.run().blockingAwait();
+		scrapeStructures.runAsync().blockingAwait();
 		verifyScrape(container(publicStructure()
 				.put("name", "Test Structure 1 Updated")
 				.put("last_seen_public_structure", "2021-01-02T00:00:00Z")
@@ -159,7 +159,7 @@ public class ScrapeStructuresTest {
 	void shouldNotPreserveExtraDataFromPreviousScrapes() {
 		loadPreviousScrape(container(publicStructure().put("some_key", "some_value")));
 		publicStructures.put(1000000000001L, Map.of("name", "Test Structure 1"));
-		scrapeStructures.run().blockingAwait();
+		scrapeStructures.runAsync().blockingAwait();
 		verifyScrape(container(publicStructure()));
 	}
 
@@ -168,7 +168,7 @@ public class ScrapeStructuresTest {
 		loadPreviousScrape(container(publicStructure()));
 		nonPublicStructures.put(1000000000001L, Map.of("name", "Test Structure 1 Updated"));
 		time = time.plusDays(1);
-		scrapeStructures.run().blockingAwait();
+		scrapeStructures.runAsync().blockingAwait();
 		verifyScrape(container(publicStructure()
 				.put("name", "Test Structure 1 Updated")
 				.put("is_public_structure", false)
@@ -179,7 +179,7 @@ public class ScrapeStructuresTest {
 	void shouldPreserveStructures() {
 		loadPreviousScrape(container(publicStructure()));
 		time = time.plusDays(1);
-		scrapeStructures.run().blockingAwait();
+		scrapeStructures.runAsync().blockingAwait();
 		verifyScrape(
 				container(publicStructure().put("is_public_structure", false).put("is_gettable_structure", false)));
 	}
@@ -189,7 +189,7 @@ public class ScrapeStructuresTest {
 		publicStructures.put(
 				1000000000001L, Map.of("name", "Test Structure 1", "type_id", EveConstants.KEEPSTAR_TYPE_ID));
 		marketStructures.add(1000000000001L);
-		scrapeStructures.run().blockingAwait();
+		scrapeStructures.runAsync().blockingAwait();
 		verifyScrape(container(publicStructure()
 				.put("type_id", EveConstants.KEEPSTAR_TYPE_ID)
 				.put("is_market_structure", true)
@@ -201,7 +201,7 @@ public class ScrapeStructuresTest {
 		publicStructures.put(
 				1000000000001L, Map.of("name", "Test Structure 1", "type_id", EveConstants.ASTRAHUS_HUB_TYPE_ID));
 		marketStructures.add(1000000000001L); // Will never be called.
-		scrapeStructures.run().blockingAwait();
+		scrapeStructures.runAsync().blockingAwait();
 		verifyScrape(container(publicStructure().put("type_id", EveConstants.ASTRAHUS_HUB_TYPE_ID)));
 	}
 
@@ -212,7 +212,7 @@ public class ScrapeStructuresTest {
 		marketOrders.add(objectMapper.createObjectNode().put(prop, 60000001L));
 		nonPublicStructures.put(1000000000001L, Map.of("name", "Test Structure 1"));
 		nonPublicStructures.put(60000001L, Map.of("name", "Should not be scraped"));
-		scrapeStructures.run().blockingAwait();
+		scrapeStructures.runAsync().blockingAwait();
 		verifyScrape(container(nonPublicStructure()));
 	}
 
@@ -231,7 +231,7 @@ public class ScrapeStructuresTest {
 				.put("region_id", 10000002)
 				.put("constellation_id", 20000002)
 				.put("system_id", 30000002));
-		scrapeStructures.run().blockingAwait();
+		scrapeStructures.runAsync().blockingAwait();
 		verifyScrape(container(hiddenStructureWithLocation()));
 	}
 
@@ -243,7 +243,7 @@ public class ScrapeStructuresTest {
 		publicContracts.add(objectMapper.createObjectNode().put(prop, 60000001L).put("contract_id", 2));
 		nonPublicStructures.put(1000000000001L, Map.of("name", "Test Structure 1"));
 		nonPublicStructures.put(60000001L, Map.of("name", "Should not be scraped"));
-		scrapeStructures.run().blockingAwait();
+		scrapeStructures.runAsync().blockingAwait();
 		verifyScrape(container(nonPublicStructure()));
 	}
 
@@ -264,7 +264,7 @@ public class ScrapeStructuresTest {
 				.put("region_id", 10000002)
 				.put("constellation_id", 20000002)
 				.put("system_id", 30000002));
-		scrapeStructures.run().blockingAwait();
+		scrapeStructures.runAsync().blockingAwait();
 		verifyScrape(container(hiddenStructureWithLocation()));
 	}
 
@@ -279,7 +279,7 @@ public class ScrapeStructuresTest {
 				.put("system_id", 30000001));
 		publicContracts.add(
 				objectMapper.createObjectNode().put("end_location", 60000001L).put("contract_id", 2));
-		scrapeStructures.run().blockingAwait();
+		scrapeStructures.runAsync().blockingAwait();
 		verifyScrape(container(objectMapper
 				.createObjectNode()
 				.put("structure_id", 1000000000001L)
@@ -299,7 +299,7 @@ public class ScrapeStructuresTest {
 						"alliance_id", 1300000001,
 						"solar_system_id", 300000001));
 		nonPublicStructures.put(1000000000001L, Map.of("name", "Should not scrape"));
-		scrapeStructures.run().blockingAwait();
+		scrapeStructures.runAsync().blockingAwait();
 		verifyScrape(noStructures());
 	}
 
@@ -307,7 +307,7 @@ public class ScrapeStructuresTest {
 	void shouldRemoveOldStructures() {
 		loadPreviousScrape(container(oldStructure()));
 		nonPublicStructures.put(1000000000001L, Map.of("name", "Should not scrape"));
-		scrapeStructures.run().blockingAwait();
+		scrapeStructures.runAsync().blockingAwait();
 		verifyScrape(noStructures());
 	}
 
@@ -318,14 +318,14 @@ public class ScrapeStructuresTest {
 				.put("constellation_id", 20000001)
 				.put("system_id", 30000001);
 		loadPreviousScrape(container(structure));
-		scrapeStructures.run().blockingAwait();
+		scrapeStructures.runAsync().blockingAwait();
 		verifyScrape(container(structure.put("is_gettable_structure", false).put("is_public_structure", false)));
 	}
 
 	@Test
 	void shouldPopulateLocations() {
 		publicStructures.put(1000000000001L, Map.of("name", "Test Structure 1", "system_id", 30000001));
-		scrapeStructures.run().blockingAwait();
+		scrapeStructures.runAsync().blockingAwait();
 		verifyScrape(container(publicStructure()
 				.put("region_id", 10000001)
 				.put("constellation_id", 20000001)
@@ -335,7 +335,7 @@ public class ScrapeStructuresTest {
 	@Test
 	void shouldSetFirstSeenOnNewStructures() {
 		publicStructures.put(1000000000001L, Map.of("name", "Test Structure 1"));
-		scrapeStructures.run().blockingAwait();
+		scrapeStructures.runAsync().blockingAwait();
 		verifyScrape(container(publicStructure()));
 	}
 
@@ -344,7 +344,7 @@ public class ScrapeStructuresTest {
 		loadPreviousScrape(container(publicStructure()));
 		previousScrape.withObject("1000000000001").remove("first_seen");
 		publicStructures.put(1000000000001L, Map.of("name", "Test Structure 1"));
-		scrapeStructures.run().blockingAwait();
+		scrapeStructures.runAsync().blockingAwait();
 		assertNull(loadScrape().get("1000000000001").get("first_seen"));
 	}
 
@@ -353,7 +353,7 @@ public class ScrapeStructuresTest {
 		loadPreviousScrape(container(publicStructure()));
 		previousScrape.withObject("1000000000001").put("first_seen", "2000-01-01T00:00:00Z");
 		publicStructures.put(1000000000001L, Map.of("name", "Test Structure 1"));
-		scrapeStructures.run().blockingAwait();
+		scrapeStructures.runAsync().blockingAwait();
 		assertEquals(
 				"2000-01-01T00:00:00Z",
 				loadScrape().get("1000000000001").get("first_seen").textValue());
@@ -364,7 +364,7 @@ public class ScrapeStructuresTest {
 		publicStructures.put(1000000000001L, Map.of("name", "Test Structure 1"));
 		scrapeStructures
 				.setScrapeTime(ZonedDateTime.parse("2020-01-02T03:04:05Z"))
-				.run()
+				.runAsync()
 				.blockingAwait();
 		Mockito.verify(dataIndexHelper)
 				.updateIndex(

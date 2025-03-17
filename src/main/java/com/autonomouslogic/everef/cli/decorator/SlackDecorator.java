@@ -118,10 +118,10 @@ public class SlackDecorator {
 	private class SlackCommand implements Command {
 		private final Command delegate;
 
-		public Completable run() {
+		public Completable runAsync() {
 			return Completable.defer(() -> {
 				var start = Instant.now();
-				return Completable.concatArray(delegate.run(), reportSuccess(delegate.getName(), start))
+				return Completable.concatArray(delegate.runAsync(), reportSuccess(delegate.getName(), start))
 						.onErrorResumeNext(e -> {
 							return reportFailure(delegate.getName(), start, e).andThen(Completable.error(e));
 						});

@@ -30,7 +30,7 @@ public class FlywayMigrateTest {
 
 	@Test
 	void shouldMigrate() {
-		flywayMigrate.run().blockingAwait();
+		flywayMigrate.runAsync().blockingAwait();
 
 		dbAccess.flyway().validate();
 		assertEquals("1", dbAccess.flyway().info().current().getVersion().getVersion());

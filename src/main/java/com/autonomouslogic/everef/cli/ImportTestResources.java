@@ -72,7 +72,7 @@ public class ImportTestResources implements Command {
 	@Inject
 	protected ImportTestResources() {}
 
-	public Completable run() {
+	public Completable runAsync() {
 		if (!new File(TEST_RESOURCES).exists()) {
 			throw new RuntimeException("Test resources directory does not exist");
 		}
@@ -192,7 +192,7 @@ public class ImportTestResources implements Command {
 					.setEsiFile(esiFile)
 					.setHoboleaksFile(hoboleaksFile)
 					.setStopAtUpload(true)
-					.run()
+					.runAsync()
 					.andThen(Completable.defer(() -> {
 						var storeHandler = buildRefData.getStoreHandler();
 						return Completable.concatArray(

@@ -105,7 +105,7 @@ public class ScrapePublicContracts implements Command {
 		dataUrl = (S3Url) urlParser.parse(Configs.DATA_PATH.getRequired());
 	}
 
-	public Completable run() {
+	public Completable runAsync() {
 		return Completable.concatArray(
 						initScrapeTime(),
 						initMvStore(),

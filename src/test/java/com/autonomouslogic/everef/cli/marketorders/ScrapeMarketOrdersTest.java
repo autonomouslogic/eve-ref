@@ -145,7 +145,7 @@ public class ScrapeMarketOrdersTest {
 		// Run.
 		scrapeMarketOrders
 				.setScrapeTime(ZonedDateTime.parse("2020-01-02T03:04:05Z"))
-				.run()
+				.runAsync()
 				.blockingAwait();
 		// Get saved file.
 		var archiveFile = "base/market-orders/history/2020/2020-01-02/market-orders-2020-01-02_03-04-05.v3.csv.bz2";

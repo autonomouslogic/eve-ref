@@ -109,7 +109,7 @@ public class CommandRunner {
 			var name = command.getName();
 			log.info(String.format("Executing command: %s", name));
 			var start = Instant.now();
-			return command.run().andThen(Completable.fromAction(() -> {
+			return command.runAsync().andThen(Completable.fromAction(() -> {
 				var time = Duration.between(start, Instant.now());
 				log.info(String.format("Command %s completed in %s", name, time.truncatedTo(ChronoUnit.SECONDS)));
 			}));

@@ -76,7 +76,7 @@ public class ScrapeMarketOrders implements Command {
 
 	@SneakyThrows
 	@Override
-	public Completable run() {
+	public Completable runAsync() {
 		return Completable.concatArray(
 				initScrapeTime(),
 				initStore(),

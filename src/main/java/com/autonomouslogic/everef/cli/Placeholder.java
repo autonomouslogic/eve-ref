@@ -10,7 +10,7 @@ public class Placeholder implements Command {
 	protected Placeholder() {}
 
 	@Override
-	public Completable run() {
+	public Completable runAsync() {
 		return Completable.fromAction(() -> {
 			log.info("Placeholder command");
 		});

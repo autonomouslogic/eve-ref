@@ -224,7 +224,7 @@ public class BuildRefData implements Command {
 	}
 
 	@Override
-	public Completable run() {
+	public Completable runAsync() {
 		return Completable.concatArray(initMvStore(), latestFiles(), checkAndProcess());
 	}
 

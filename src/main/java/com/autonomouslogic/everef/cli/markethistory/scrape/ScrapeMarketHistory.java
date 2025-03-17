@@ -152,7 +152,7 @@ public class ScrapeMarketHistory implements Command {
 
 	@SneakyThrows
 	@Override
-	public Completable run() {
+	public Completable runAsync() {
 		marketHistoryFetcher.setStats(stats);
 		return Completable.concatArray(
 						initSources(),
