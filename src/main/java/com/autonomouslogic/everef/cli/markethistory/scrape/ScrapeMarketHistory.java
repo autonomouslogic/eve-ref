@@ -153,19 +153,27 @@ public class ScrapeMarketHistory implements Command {
 	@SneakyThrows
 	@Override
 	public Completable runAsync() {
-		marketHistoryFetcher.setStats(stats);
-		return Completable.concatArray(
-						initSources(),
-						initMvStore(),
-						downloadTotalPairs(),
-						loadMarketHistory(),
-						loadPairs().buffer(chunkSize).flatMapCompletable(this::processChunk, false, 1),
-						Completable.fromAction(() -> stats.logStats()))
-				.doFinally(this::closeMvStore)
+		Completable.fromAction(() -> {
+					marketHistoryFetcher.setStats(stats);
+					try {
+						initSources();
+						initMvStore();
+						downloadTotalPairs();
+						loadMarketHistory();
+						loadPairs()
+								.buffer(chunkSize)
+								.flatMapCompletable(this::processChunk, false, 1)
+								.blockingAwait();
+						stats.logStats();
+					} catch (Exception e) {
+						closeMvStore();
+					}
+				})
 				.retry(1, e -> {
 					log.warn("Error scraping market history, retrying from the beginning", e);
 					return true;
-				});
+				})
+				.blockingAwait();
 	}
 
 	@NotNull
@@ -184,29 +192,25 @@ public class ScrapeMarketHistory implements Command {
 		});
 	}
 
-	private Completable initSources() {
-		return Completable.fromAction(() -> {
-			regionTypeSource = compoundRegionTypeSourceProvider.get().setStats(stats);
-			regionTypeSource.addSource(historyRegionTypeSourceProvider.get()); // should probably be first.
-			regionTypeSource.addSource(activeOrdersRegionTypeSourceProvider.get());
-			regionTypeSource.addSource(
-					historicalOrdersRegionTypeSourceProvider.get().setToday(today));
-			regionTypeSource.addSource(topTradedRegionTypeSourceProvider.get());
-			regionTypeSource.addSource(explorerRegionTypeSourceProvider.get().setToday(today));
-			regionTypeSource.addSource(recentRegionTypeRemoverProvider.get()); // must be last.
-		});
+	private void initSources() {
+		regionTypeSource = compoundRegionTypeSourceProvider.get().setStats(stats);
+		regionTypeSource.addSource(historyRegionTypeSourceProvider.get()); // should probably be first.
+		regionTypeSource.addSource(activeOrdersRegionTypeSourceProvider.get());
+		regionTypeSource.addSource(
+				historicalOrdersRegionTypeSourceProvider.get().setToday(today));
+		regionTypeSource.addSource(topTradedRegionTypeSourceProvider.get());
+		regionTypeSource.addSource(explorerRegionTypeSourceProvider.get().setToday(today));
+		regionTypeSource.addSource(recentRegionTypeRemoverProvider.get()); // must be last.
 	}
 
-	private Completable initMvStore() {
-		return Completable.fromAction(() -> {
-			mvStore = mvStoreUtil.createTempStore("market-history");
-			mapSet = storeMapSetProvider.get().setMvStore(mvStore);
-			var date = minDate;
-			while (!date.isAfter(today)) {
-				mapSet.getOrCreateMap(date.toString());
-				date = date.plusDays(1);
-			}
-		});
+	private void initMvStore() {
+		mvStore = mvStoreUtil.createTempStore("market-history");
+		mapSet = storeMapSetProvider.get().setMvStore(mvStore);
+		var date = minDate;
+		while (!date.isAfter(today)) {
+			mapSet.getOrCreateMap(date.toString());
+			date = date.plusDays(1);
+		}
 	}
 
 	private void closeMvStore() {
@@ -217,42 +221,41 @@ public class ScrapeMarketHistory implements Command {
 		}
 	}
 
-	private Completable loadMarketHistory() {
-		return Completable.defer(() -> {
-			final var loader = marketHistoryLoaderProvider.get();
-			return loader.setMinDate(minDate)
-					.load()
-					.doOnNext(p -> {
-						var entry = p.getRight();
-						var id = RegionTypePair.fromHistory(entry).toString();
-						mapSet.put(p.getLeft().toString(), id, entry);
-						regionTypeSource.addHistory(objectMapper.treeToValue(entry, MarketHistoryEntry.class));
-					})
-					.ignoreElements()
-					.andThen(Completable.fromAction(() -> {
-						mapSet.forEachMap((dateString, map) -> {
-							var date = LocalDate.parse(dateString);
-							var entries = map.size();
-							var currentEntries = totals.get(date);
-							log.debug("Loaded entries for {}: {}", date, map.size());
-							if (currentEntries != null && entries < currentEntries) {
-								log.warn(
-										"Entries loaded for {}: {} is less than the current total {} ({})",
-										date,
-										entries,
-										currentEntries,
-										entries - currentEntries);
-							}
-							totals.put(date, map.size());
-							var fileEntries = loader.getFileTotals().get(date);
-							if (fileEntries != null && fileEntries != map.size()) {
-								throw new IllegalStateException(String.format(
-										"File loaded for %s contained %s entries, but %s were loaded",
-										date, fileEntries, map.size()));
-							}
-						});
-					}));
-		});
+	private void loadMarketHistory() {
+		final var loader = marketHistoryLoaderProvider.get();
+		loader.setMinDate(minDate)
+				.load()
+				.doOnNext(p -> {
+					var entry = p.getRight();
+					var id = RegionTypePair.fromHistory(entry).toString();
+					mapSet.put(p.getLeft().toString(), id, entry);
+					regionTypeSource.addHistory(objectMapper.treeToValue(entry, MarketHistoryEntry.class));
+				})
+				.ignoreElements()
+				.andThen(Completable.fromAction(() -> {
+					mapSet.forEachMap((dateString, map) -> {
+						var date = LocalDate.parse(dateString);
+						var entries = map.size();
+						var currentEntries = totals.get(date);
+						log.debug("Loaded entries for {}: {}", date, map.size());
+						if (currentEntries != null && entries < currentEntries) {
+							log.warn(
+									"Entries loaded for {}: {} is less than the current total {} ({})",
+									date,
+									entries,
+									currentEntries,
+									entries - currentEntries);
+						}
+						totals.put(date, map.size());
+						var fileEntries = loader.getFileTotals().get(date);
+						if (fileEntries != null && fileEntries != map.size()) {
+							throw new IllegalStateException(String.format(
+									"File loaded for %s contained %s entries, but %s were loaded",
+									date, fileEntries, map.size()));
+						}
+					});
+				}))
+				.blockingAwait();
 	}
 
 	private Flowable<RegionTypePair> loadPairs() {
@@ -363,9 +366,10 @@ public class ScrapeMarketHistory implements Command {
 				.compose(Rx.offloadCompletable());
 	}
 
-	private Completable downloadTotalPairs() {
-		return marketHistoryUtil
+	private void downloadTotalPairs() {
+		marketHistoryUtil
 				.downloadTotalPairs()
-				.flatMapCompletable(pairs -> Completable.fromAction(() -> totals = pairs));
+				.flatMapCompletable(pairs -> Completable.fromAction(() -> totals = pairs))
+				.blockingAwait();
 	}
 }
