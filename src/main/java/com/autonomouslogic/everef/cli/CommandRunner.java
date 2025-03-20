@@ -99,7 +99,7 @@ public class CommandRunner {
 			throw new IllegalArgumentException("More than one command specified");
 		}
 		final var command = createCommand(args[0]);
-		Sentry.configureScope(scope -> scope.setContexts("command", command.getName()));
+		Sentry.configureScope(scope -> scope.setTag("command", command.getName()));
 		var decoratedCommand = decorateCommand(command);
 		return runCommand(decoratedCommand);
 	}
