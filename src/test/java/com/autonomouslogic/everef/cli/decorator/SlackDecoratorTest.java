@@ -10,6 +10,7 @@ import static org.mockito.Mockito.when;
 import com.autonomouslogic.everef.cli.Command;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.test.TestDataUtil;
+import com.autonomouslogic.everef.util.VirtualThreads;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.reactivex.rxjava3.core.Completable;
@@ -64,7 +65,8 @@ public class SlackDecoratorTest {
 			server.enqueue(new MockResponse().setResponseCode(204));
 		}
 
-		when(testCommand.run()).thenReturn(Completable.timer(1, TimeUnit.SECONDS));
+		when(testCommand.run())
+				.thenReturn(Completable.timer(1, TimeUnit.SECONDS).observeOn(VirtualThreads.SCHEDULER));
 		Mockito.lenient().when(testCommand.getName()).thenReturn("command-name");
 	}
 
@@ -112,6 +114,7 @@ public class SlackDecoratorTest {
 	void shouldReportFailure() {
 		when(testCommand.run())
 				.thenReturn(Completable.timer(1, TimeUnit.SECONDS)
+						.observeOn(VirtualThreads.SCHEDULER)
 						.andThen(Completable.error(new RuntimeException("test error message"))));
 		var error = assertThrows(
 				RuntimeException.class,
