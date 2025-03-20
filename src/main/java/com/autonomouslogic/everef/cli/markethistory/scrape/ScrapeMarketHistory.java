@@ -165,7 +165,7 @@ public class ScrapeMarketHistory implements Command {
 								.flatMapCompletable(this::processChunk, false, 1)
 								.blockingAwait();
 						stats.logStats();
-					} catch (Exception e) {
+					} finally {
 						closeMvStore();
 					}
 				})
