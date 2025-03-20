@@ -3,6 +3,7 @@ package com.autonomouslogic.everef.cli.decorator;
 import com.autonomouslogic.everef.cli.Command;
 import io.reactivex.rxjava3.core.Completable;
 import io.sentry.Sentry;
+import io.sentry.SentryLevel;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.NonNull;
@@ -28,19 +29,13 @@ public class SentryDecorator {
 
 		public Completable runAsync() {
 			return delegate.runAsync().onErrorResumeNext(e -> {
-				captureException(e);
+				Sentry.captureException(e, scope -> scope.setLevel(SentryLevel.ERROR));
 				return Completable.error(e);
 			});
 		}
 
 		public String getName() {
 			return delegate.getName();
-		}
-	}
-
-	public static void captureException(Throwable e) {
-		if (Sentry.isEnabled()) {
-			Sentry.captureException(e);
 		}
 	}
 }
