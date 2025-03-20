@@ -105,15 +105,19 @@ public class ScrapePublicContracts implements Command {
 	}
 
 	public void run() {
-		initScrapeTime();
-		initMvStore();
-		initMeta();
-		loadLatestContracts();
-		fetchAndStoreContracts();
-		deleteOldContracts();
-		var file = buildFile();
-		uploadFiles(file);
-		closeMvStore();
+		try {
+			initScrapeTime();
+			initMvStore();
+			initMeta();
+			loadLatestContracts();
+			fetchAndStoreContracts();
+			deleteOldContracts();
+			var file = buildFile();
+			uploadFiles(file);
+		}
+		finally {
+			closeMvStore();
+		}
 	}
 
 	private void initScrapeTime() {
