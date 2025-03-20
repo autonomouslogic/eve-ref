@@ -1,5 +1,18 @@
 EVE Ref Changelog
 
+## [2.55.13](https://github.com/autonomouslogic/eve-ref/compare/2.55.12...2.55.13) (2025-03-20)
+
+
+### Bug Fixes
+
+* Configure command tag on Sentry ([#742](https://github.com/autonomouslogic/eve-ref/issues/742)) ([c013e1e](https://github.com/autonomouslogic/eve-ref/commit/c013e1e12bf96243f375428717eee96abcd54080))
+
+
+### Code Refactoring
+
+* Switched ref data client to synchronous operation ([#715](https://github.com/autonomouslogic/eve-ref/issues/715)) ([124fdf8](https://github.com/autonomouslogic/eve-ref/commit/124fdf8227deba2937ad85387593992a3425205d))
+* Switched to virtual threads ([#709](https://github.com/autonomouslogic/eve-ref/issues/709)) ([7f0c839](https://github.com/autonomouslogic/eve-ref/commit/7f0c839d326904afa78d261425511d739b267eca))
+
 ## [2.55.12](https://github.com/autonomouslogic/eve-ref/compare/2.55.11...2.55.12) (2025-03-14)
 
 
