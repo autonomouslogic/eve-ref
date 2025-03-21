@@ -45,10 +45,12 @@ public class PublicContractsStructureSource implements StructureSource {
 	}
 
 	private Maybe<File> download() {
-		return dataUtil.downloadLatestPublicContracts().toMaybe().onErrorResumeNext(e -> {
+		try {
+			return Maybe.just(dataUtil.downloadLatestPublicContracts());
+		} catch (Exception e) {
 			log.warn("Failed to download public contracts, ignoring: {}", e.getMessage());
 			return Maybe.empty();
-		});
+		}
 	}
 
 	private Flowable<Long> process(@NonNull File file) {

@@ -3,17 +3,15 @@ package com.autonomouslogic.everef.cli.publiccontracts;
 import com.autonomouslogic.everef.http.OkHttpHelper;
 import com.autonomouslogic.everef.util.DataUtil;
 import com.autonomouslogic.everef.util.JsonNodeCsvReader;
-import com.autonomouslogic.everef.util.Rx;
 import com.autonomouslogic.everef.util.TempFiles;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.reactivex.rxjava3.core.Maybe;
-import io.reactivex.rxjava3.core.Single;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 import javax.inject.Inject;
 import lombok.NonNull;
@@ -79,31 +77,32 @@ public class ContractsFileLoader {
 	@Inject
 	protected ContractsFileLoader() {}
 
-	public Maybe<ContractsScrapeMeta> downloadAndLoad() {
-		return downloadLatestFile().flatMapSingle(this::loadFile);
+	public ContractsScrapeMeta downloadAndLoad() {
+		var file = downloadLatestFile();
+		if (file.isEmpty()) {
+			return null;
+		}
+		return loadFile(file.get());
 	}
 
 	/**
 	 * Downloads the latest contracts file from the EVE Ref data site.
 	 */
-	public Maybe<File> downloadLatestFile() {
-		return Maybe.defer(() -> {
-					log.info("Downloading latest contracts");
-					return dataUtil.downloadLatestPublicContracts().toMaybe();
-				})
-				.onErrorResumeNext(e -> {
-					log.warn("Failed reading latest contracts, ignoring", e);
-					return Maybe.empty();
-				});
+	public Optional<File> downloadLatestFile() {
+		log.info("Downloading latest contracts");
+		try {
+			return Optional.of(dataUtil.downloadLatestPublicContracts());
+		} catch (Exception e) {
+			log.warn("Failed reading latest contracts, ignoring", e);
+			return Optional.empty();
+		}
 	}
 
-	public Single<ContractsScrapeMeta> loadFile(@NonNull File file) {
-		return Single.fromCallable(() -> {
-					try (var in = openFile(file)) {
-						return loadAllEntries(in);
-					}
-				})
-				.compose(Rx.offloadSingle());
+	@SneakyThrows
+	public ContractsScrapeMeta loadFile(@NonNull File file) {
+		try (var in = openFile(file)) {
+			return loadAllEntries(in);
+		}
 	}
 
 	@SneakyThrows

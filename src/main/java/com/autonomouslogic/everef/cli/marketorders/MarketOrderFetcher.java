@@ -57,8 +57,8 @@ public class MarketOrderFetcher {
 	@Inject
 	protected MarketOrderFetcher() {}
 
-	public Completable fetchMarketOrders() {
-		return Flowable.concatArray(fetchPublicOrders(), fetchStructureOrders())
+	public void fetchMarketOrders() {
+		Flowable.concatArray(fetchPublicOrders(), fetchStructureOrders())
 				.parallel(32)
 				.runOn(VirtualThreads.SCHEDULER)
 				.flatMap(order ->
@@ -66,7 +66,8 @@ public class MarketOrderFetcher {
 				.doOnNext(this::verifyOrderLocation)
 				.sequential()
 				.flatMapCompletable(this::saveMarketOrder)
-				.onErrorResumeNext(e -> Completable.error(new RuntimeException("Failed fetching market orders", e)));
+				.onErrorResumeNext(e -> Completable.error(new RuntimeException("Failed fetching market orders", e)))
+				.blockingAwait();
 	}
 
 	private Flowable<ObjectNode> fetchPublicOrders() {

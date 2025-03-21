@@ -61,7 +61,7 @@ public class ImportMarketHistory implements Command {
 	}
 
 	@Override
-	public Completable run() {
+	public Completable runAsync() {
 		return Completable.concatArray(flywayMigrate.autoRun(), runImport());
 	}
 

@@ -24,7 +24,6 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.google.common.collect.Ordering;
 import com.google.common.hash.Hashing;
-import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Maybe;
 import java.io.FileInputStream;
 import java.net.MalformedURLException;
@@ -150,40 +149,39 @@ public class FetchDonations implements Command {
 		staticUrl = (S3Url) urlParser.parse(Configs.STATIC_PATH.getRequired());
 	}
 
-	public Completable run() {
-		return Completable.fromAction(() -> {
-			var accessToken = getAccessToken().blockingGet();
-			var verified = esiAuthHelper.verify(accessToken).blockingGet();
-			var characterId = (int) verified.getCharacterId();
-			var character = getCharacter(characterId);
-			var corporationId = character.getCorporationId();
-			var corporation = getCorporation(corporationId);
-			log.info(
-					"Using character '{}' [{}] of '{}' [{}]",
-					verified.getCharacterName(),
-					characterId,
-					corporation.getName(),
-					corporationId);
+	@SneakyThrows
+	public void run() {
+		var accessToken = getAccessToken().blockingGet();
+		var verified = esiAuthHelper.verify(accessToken).blockingGet();
+		var characterId = (int) verified.getCharacterId();
+		var character = getCharacter(characterId);
+		var corporationId = character.getCorporationId();
+		var corporation = getCorporation(corporationId);
+		log.info(
+				"Using character '{}' [{}] of '{}' [{}]",
+				verified.getCharacterName(),
+				characterId,
+				corporation.getName(),
+				corporationId);
 
-			var previous = downloadFileJsonList(DONATIONS_LIST_FILE, DonationEntry.class);
-			log.info("Loaded {} previous donations", previous.size());
+		var previous = downloadFileJsonList(DONATIONS_LIST_FILE, DonationEntry.class);
+		log.info("Loaded {} previous donations", previous.size());
 
-			var donations = getDonations(characterId, corporationId, accessToken);
-			log.info("Fetched {} donations from ESI", donations.size());
+		var donations = getDonations(characterId, corporationId, accessToken);
+		log.info("Fetched {} donations from ESI", donations.size());
 
-			var newDonations = resolveNewDonations(previous, donations);
-			log.info("Found {} new donations", newDonations.size());
+		var newDonations = resolveNewDonations(previous, donations);
+		log.info("Found {} new donations", newDonations.size());
 
-			var allDonations = Stream.concat(previous.stream(), newDonations.stream())
-					.collect(Collectors.toMap(
-							DonationEntry::getId, donationEntry -> donationEntry, (a, b) -> b, TreeMap::new));
-			uploadFile(objectMapper.writeValueAsBytes(allDonations.values()), DONATIONS_LIST_FILE);
+		var allDonations = Stream.concat(previous.stream(), newDonations.stream())
+				.collect(Collectors.toMap(
+						DonationEntry::getId, donationEntry -> donationEntry, (a, b) -> b, TreeMap::new));
+		uploadFile(objectMapper.writeValueAsBytes(allDonations.values()), DONATIONS_LIST_FILE);
 
-			var summary = buildSummary(allDonations.values());
-			uploadFile(objectMapper.writeValueAsBytes(summary), DONATIONS_SUMMARY_FILE);
+		var summary = buildSummary(allDonations.values());
+		uploadFile(objectMapper.writeValueAsBytes(summary), DONATIONS_SUMMARY_FILE);
 
-			notifyDiscord(newDonations);
-		});
+		notifyDiscord(newDonations);
 	}
 
 	private List<DonationEntry> resolveNewDonations(List<DonationEntry> previous, List<DonationEntry> donations) {

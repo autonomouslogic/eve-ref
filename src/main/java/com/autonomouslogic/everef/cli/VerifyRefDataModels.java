@@ -45,7 +45,7 @@ public class VerifyRefDataModels implements Command {
 
 	@SneakyThrows
 	@Override
-	public Completable run() {
+	public Completable runAsync() {
 		return refDataUtil
 				.downloadLatestReferenceData()
 				.flatMapPublisher(file -> refDataUtil.parseReferenceDataArchive(file))

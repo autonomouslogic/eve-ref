@@ -20,7 +20,7 @@ public class FlywayMigrate implements Command {
 	protected FlywayMigrate() {}
 
 	@Override
-	public Completable run() {
+	public Completable runAsync() {
 		return Completable.fromAction(() -> {
 			log.info("Migrating database");
 			VirtualThreads.offload(() -> dbAccess.flyway().migrate());
@@ -30,7 +30,7 @@ public class FlywayMigrate implements Command {
 	public Completable autoRun() {
 		return Completable.defer(() -> {
 			if (Configs.FLYWAY_AUTO_MIGRATE.getRequired()) {
-				return run();
+				return runAsync();
 			}
 			return Completable.complete();
 		});

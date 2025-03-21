@@ -224,7 +224,7 @@ public class BuildRefData implements Command {
 	}
 
 	@Override
-	public Completable run() {
+	public Completable runAsync() {
 		return Completable.concatArray(initMvStore(), latestFiles(), checkAndProcess());
 	}
 
@@ -415,11 +415,12 @@ public class BuildRefData implements Command {
 	}
 
 	private Single<File> latestEsi() {
-		return esiFile != null
-				? Single.just(esiFile)
-				: dataUtil.downloadLatestEsi().doOnSuccess(file -> {
-					esiFile = file;
-				});
+		if (esiFile != null) {
+			return Single.just(esiFile);
+		}
+		var file = dataUtil.downloadLatestEsi();
+		esiFile = file;
+		return Single.just(file);
 	}
 
 	private Single<File> latestSde() {
@@ -431,11 +432,12 @@ public class BuildRefData implements Command {
 	}
 
 	private Single<File> latestHoboleaks() {
-		return hoboleaksFile != null
-				? Single.just(hoboleaksFile)
-				: dataUtil.downloadLatestHoboleaks().doOnSuccess(file -> {
-					hoboleaksFile = file;
-				});
+		if (hoboleaksFile != null) {
+			return Single.just(hoboleaksFile);
+		}
+		var file = dataUtil.downloadLatestHoboleaks();
+		hoboleaksFile = file;
+		return Single.just(file);
 	}
 
 	private Single<File> latestRefData() {

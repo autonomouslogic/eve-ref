@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -31,7 +32,6 @@ import org.junit.jupiter.api.Timeout;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junitpioneer.jupiter.SetEnvironmentVariable;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
@@ -65,9 +65,10 @@ public class SlackDecoratorTest {
 			server.enqueue(new MockResponse().setResponseCode(204));
 		}
 
-		when(testCommand.run())
+		lenient()
+				.when(testCommand.runAsync())
 				.thenReturn(Completable.timer(1, TimeUnit.SECONDS).observeOn(VirtualThreads.SCHEDULER));
-		Mockito.lenient().when(testCommand.getName()).thenReturn("command-name");
+		lenient().when(testCommand.getName()).thenReturn("command-name");
 	}
 
 	@AfterEach
@@ -79,7 +80,7 @@ public class SlackDecoratorTest {
 	@Test
 	@SneakyThrows
 	void shouldCallDelegateWhenDisabled() {
-		slackDecorator.decorate(testCommand).run().blockingAwait();
+		slackDecorator.decorate(testCommand).run();
 		verify(testCommand).run();
 		testDataUtil.assertNoMoreRequests(server);
 	}
@@ -90,8 +91,8 @@ public class SlackDecoratorTest {
 			key = "SLACK_WEBHOOK_URL",
 			value = "http://localhost:" + TestDataUtil.TEST_PORT + "/webhook?key=val")
 	void shouldReportSuccess() {
-		slackDecorator.decorate(testCommand).run().blockingAwait();
-		verify(testCommand).run();
+		slackDecorator.decorate(testCommand).run();
+		verify(testCommand).runAsync();
 		var request = server.takeRequest();
 		testDataUtil.assertRequest(request, "POST", "/webhook?key=val", body -> {
 			var payload = decodePayload(body);
@@ -112,16 +113,16 @@ public class SlackDecoratorTest {
 			key = "SLACK_WEBHOOK_URL",
 			value = "http://localhost:" + TestDataUtil.TEST_PORT + "/webhook?key=val")
 	void shouldReportFailure() {
-		when(testCommand.run())
+		when(testCommand.runAsync())
 				.thenReturn(Completable.timer(1, TimeUnit.SECONDS)
 						.observeOn(VirtualThreads.SCHEDULER)
 						.andThen(Completable.error(new RuntimeException("test error message"))));
 		var error = assertThrows(
 				RuntimeException.class,
-				() -> slackDecorator.decorate(testCommand).run().blockingAwait());
+				() -> slackDecorator.decorate(testCommand).run());
 		error.printStackTrace();
 		assertEquals("test error message", error.getMessage());
-		verify(testCommand).run();
+		verify(testCommand).runAsync();
 		var request = server.takeRequest();
 		testDataUtil.assertRequest(request, "POST", "/webhook?key=val", body -> {
 			var payload = decodePayload(body);
@@ -148,8 +149,8 @@ public class SlackDecoratorTest {
 			value = "http://localhost:" + TestDataUtil.TEST_PORT + "/webhook?key=val")
 	@SetEnvironmentVariable(key = "SLACK_REPORT_SUCCESS", value = "false")
 	void shouldNotReportSuccessWhenConfiguredNotTo() {
-		slackDecorator.decorate(testCommand).run().blockingAwait();
-		verify(testCommand).run();
+		slackDecorator.decorate(testCommand).run();
+		verify(testCommand).runAsync();
 		testDataUtil.assertNoMoreRequests(server);
 	}
 
@@ -160,12 +161,12 @@ public class SlackDecoratorTest {
 			value = "http://localhost:" + TestDataUtil.TEST_PORT + "/webhook?key=val")
 	@SetEnvironmentVariable(key = "SLACK_REPORT_FAILURE", value = "false")
 	void shouldNotReportFailureWhenConfiguredNotTo() {
-		when(testCommand.run()).thenReturn(Completable.error(new RuntimeException("test error message")));
+		when(testCommand.runAsync()).thenReturn(Completable.error(new RuntimeException("test error message")));
 		var error = assertThrows(
 				RuntimeException.class,
-				() -> slackDecorator.decorate(testCommand).run().blockingAwait());
+				() -> slackDecorator.decorate(testCommand).run());
 		assertEquals("test error message", error.getMessage());
-		verify(testCommand).run();
+		verify(testCommand).runAsync();
 		testDataUtil.assertNoMoreRequests(server);
 	}
 
@@ -176,12 +177,12 @@ public class SlackDecoratorTest {
 			value = "http://localhost:" + TestDataUtil.TEST_PORT + "/webhook?key=val")
 	@SetEnvironmentVariable(key = "SLACK_REPORT_FULL_STACKTRACE", value = "true")
 	void shouldReportFullStacktracesWhenConfigured() {
-		when(testCommand.run()).thenReturn(Completable.error(new RuntimeException("test error message")));
+		when(testCommand.runAsync()).thenReturn(Completable.error(new RuntimeException("test error message")));
 		var error = assertThrows(
 				RuntimeException.class,
-				() -> slackDecorator.decorate(testCommand).run().blockingAwait());
+				() -> slackDecorator.decorate(testCommand).run());
 		assertEquals("test error message", error.getMessage());
-		verify(testCommand).run();
+		verify(testCommand).runAsync();
 		var request = server.takeRequest();
 		testDataUtil.assertRequest(request, "POST", "/webhook?key=val", body -> {
 			var payload = decodePayload(body);

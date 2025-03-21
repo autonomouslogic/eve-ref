@@ -111,8 +111,7 @@ public class ScrapeMarketHistoryTest {
 		scrapeMarketHistory
 				.setMinDate(LocalDate.parse("2023-01-01"))
 				.setToday(LocalDate.parse("2023-01-04"))
-				.run()
-				.blockingAwait();
+				.run();
 
 		assertEquals(
 				List.of(

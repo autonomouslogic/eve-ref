@@ -20,7 +20,7 @@ public class BasicLogin implements Command {
 	@Inject
 	protected BasicLogin() {}
 
-	public Completable run() {
+	public Completable runAsync() {
 		return Completable.fromAction(() -> {
 			//			System.getenv().forEach((k, v) -> log.info(k + " = " + v));
 			Configs.EVE_OAUTH_CLIENT_ID.getRequired();

@@ -39,7 +39,7 @@ public class VirtualThreads {
 		Completable.fromAction(action).subscribeOn(Schedulers.io()).blockingAwait();
 	}
 
-	private static void checkThread() {
+	public static void checkThread() {
 		var thread = Thread.currentThread();
 		if (!thread.isVirtual() && !thread.getName().equals("Test worker")) {
 			throw new RuntimeException(

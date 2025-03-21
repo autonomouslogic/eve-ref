@@ -12,7 +12,6 @@ import com.autonomouslogic.everef.cli.publiccontracts.ScrapePublicContracts;
 import com.autonomouslogic.everef.cli.publishrefdata.PublishRefData;
 import com.autonomouslogic.everef.cli.refdata.BuildRefData;
 import com.autonomouslogic.everef.cli.structures.ScrapeStructures;
-import io.reactivex.rxjava3.core.Completable;
 import io.sentry.Sentry;
 import java.time.Duration;
 import java.time.Instant;
@@ -91,7 +90,7 @@ public class CommandRunner {
 	@Inject
 	protected CommandRunner() {}
 
-	public Completable runCommand(String[] args) {
+	public void runCommand(String[] args) {
 		if (args.length == 0) {
 			throw new IllegalArgumentException("No command specified");
 		}
@@ -101,19 +100,16 @@ public class CommandRunner {
 		final var command = createCommand(args[0]);
 		Sentry.configureScope(scope -> scope.setTag("command", command.getName()));
 		var decoratedCommand = decorateCommand(command);
-		return runCommand(decoratedCommand);
+		runCommand(decoratedCommand);
 	}
 
-	private Completable runCommand(Command command) {
-		return Completable.defer(() -> {
-			var name = command.getName();
-			log.info(String.format("Executing command: %s", name));
-			var start = Instant.now();
-			return command.run().andThen(Completable.fromAction(() -> {
-				var time = Duration.between(start, Instant.now());
-				log.info(String.format("Command %s completed in %s", name, time.truncatedTo(ChronoUnit.SECONDS)));
-			}));
-		});
+	private void runCommand(Command command) {
+		var name = command.getName();
+		log.info(String.format("Executing command: %s", name));
+		var start = Instant.now();
+		command.run();
+		var time = Duration.between(start, Instant.now());
+		log.info(String.format("Command %s completed in %s", name, time.truncatedTo(ChronoUnit.SECONDS)));
 	}
 
 	private Command createCommand(String name) {

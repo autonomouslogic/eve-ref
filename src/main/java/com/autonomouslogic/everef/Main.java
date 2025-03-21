@@ -19,7 +19,7 @@ public class Main {
 	protected Main() {}
 
 	public void start(String[] args) {
-		commandRunner.runCommand(args).blockingAwait();
+		commandRunner.runCommand(args);
 	}
 
 	public static void main(String[] args) {

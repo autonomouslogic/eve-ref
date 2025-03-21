@@ -202,7 +202,7 @@ public class ScrapeStructures implements Command {
 		sovereigntyStructureSource.setStructureStore(structureStore);
 	}
 
-	public Completable run() {
+	public Completable runAsync() {
 		return Completable.concatArray(
 				initLogin(),
 				initScrapeTime(),

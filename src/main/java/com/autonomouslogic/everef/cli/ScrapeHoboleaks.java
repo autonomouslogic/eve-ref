@@ -82,7 +82,7 @@ public class ScrapeHoboleaks implements Command {
 		hoboUrl = (HttpUrl) urlParser.parse(Configs.HOBOLEAKS_SDE_DATA_BASE_URL.getRequired());
 	}
 
-	public Completable run() {
+	public Completable runAsync() {
 		return loadMeta().flatMapCompletable(currentMeta -> {
 			return loadArchiveMeta().flatMapCompletable(archiveMeta -> {
 				if (Arrays.equals(currentMeta, archiveMeta)) {

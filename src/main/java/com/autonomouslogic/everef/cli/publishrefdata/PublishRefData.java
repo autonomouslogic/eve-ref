@@ -135,7 +135,7 @@ public class PublishRefData implements Command {
 
 	@SneakyThrows
 	@Override
-	public Completable run() {
+	public Completable runAsync() {
 		return Completable.mergeArray(loadLatestFile(), loadCurrentMeta()).andThen(Completable.defer(() -> {
 			if (!shouldUpdate()) {
 				log.info("No update needed");
