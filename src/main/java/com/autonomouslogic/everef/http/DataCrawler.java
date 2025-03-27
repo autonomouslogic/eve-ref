@@ -4,13 +4,12 @@ import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.url.DataUrl;
 import com.autonomouslogic.everef.url.UrlParser;
 import com.google.common.base.Strings;
-import io.reactivex.rxjava3.core.Flowable;
-import io.reactivex.rxjava3.core.Maybe;
 import java.net.URI;
 import java.util.List;
 import java.util.stream.Stream;
 import javax.inject.Inject;
 import lombok.Setter;
+import lombok.SneakyThrows;
 import lombok.Value;
 import lombok.extern.log4j.Log4j2;
 import okhttp3.OkHttpClient;
@@ -38,36 +37,32 @@ public class DataCrawler {
 	@Inject
 	protected DataCrawler() {}
 
-	public Flowable<DataUrl> crawl() {
-		return Flowable.defer(() -> {
-			var url = urlParser.parse(dataBaseUrl);
-			if (!url.getProtocol().equals("http")) {
-				throw new RuntimeException(Configs.DATA_BASE_URL.getName() + " must be an HTTP URL");
-			}
-			return crawl(url);
-		});
+	public List<DataUrl> crawl() {
+		var url = urlParser.parse(dataBaseUrl);
+		if (!url.getProtocol().equals("http")) {
+			throw new RuntimeException(Configs.DATA_BASE_URL.getName() + " must be an HTTP URL");
+		}
+		return crawl(url);
 	}
 
-	private Flowable<DataUrl> crawl(DataUrl url) {
-		return Flowable.defer(() -> {
-			return okHttpWrapper
-					.get(url.toString(), okHttpClient)
-					.flatMapMaybe(response -> {
-						if (response.code() != 200) {
-							log.warn("Failed fetching {} - code: {}", url, response.code());
-							return Maybe.empty();
-						}
-						return Maybe.just(response.body().string());
-					})
-					.flatMapPublisher(html -> Flowable.fromIterable(parseEntries(html, url)))
+	@SneakyThrows
+	private List<DataUrl> crawl(DataUrl url) {
+		try (var response = okHttpWrapper.get(url.toString())) {
+			if (response.code() != 200) {
+				log.warn("Failed fetching {} - code: {}", url, response.code());
+				return List.of();
+			}
+			var html = response.body().string();
+			return parseEntries(html, url).stream()
 					.filter(this::filterPrefix)
 					.flatMap(entry -> {
 						if (entry.file) {
-							return Flowable.just(entry.url);
+							return Stream.of(entry.url);
 						}
-						return crawl(entry.url);
-					});
-		});
+						return crawl(entry.url).stream();
+					})
+					.toList();
+		}
 	}
 
 	private List<Entry> parseEntries(String html, DataUrl baseUrl) {
