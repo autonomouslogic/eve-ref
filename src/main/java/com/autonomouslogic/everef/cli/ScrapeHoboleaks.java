@@ -3,7 +3,7 @@ package com.autonomouslogic.everef.cli;
 import static com.autonomouslogic.everef.util.ArchivePathFactory.HOBOLEAKS;
 
 import com.autonomouslogic.everef.config.Configs;
-import com.autonomouslogic.everef.http.OkHttpHelper;
+import com.autonomouslogic.everef.http.OkHttpWrapper;
 import com.autonomouslogic.everef.s3.S3Adapter;
 import com.autonomouslogic.everef.s3.S3Util;
 import com.autonomouslogic.everef.url.HttpUrl;
@@ -57,7 +57,7 @@ public class ScrapeHoboleaks implements Command {
 	protected OkHttpClient okHttpClient;
 
 	@Inject
-	protected OkHttpHelper okHttpHelper;
+	protected OkHttpWrapper okHttpWrapper;
 
 	@Inject
 	protected TempFiles tempFiles;
@@ -102,7 +102,7 @@ public class ScrapeHoboleaks implements Command {
 		return Single.defer(() -> {
 			var file = tempFiles.tempFile("hoboleaks", ".tar.xz").toFile();
 			var url = dataUrl.resolve(HOBOLEAKS.createLatestPath()).toString();
-			return okHttpHelper.download(url, file, okHttpClient).flatMap(response -> {
+			return okHttpWrapper.download(url, file, okHttpClient).flatMap(response -> {
 				if (response.code() == 404) {
 					return Single.just(new byte[0]);
 				}
@@ -157,7 +157,7 @@ public class ScrapeHoboleaks implements Command {
 	private Single<byte[]> download(HttpUrl url) {
 		return Single.defer(() -> {
 			var file = tempFiles.tempFile("hoboleaks", ".json").toFile();
-			return okHttpHelper.download(url.toString(), file, okHttpClient).map(response -> {
+			return okHttpWrapper.download(url.toString(), file, okHttpClient).map(response -> {
 				if (response.code() != 200) {
 					throw new RuntimeException("Failed to download " + url + ": " + response.code());
 				}

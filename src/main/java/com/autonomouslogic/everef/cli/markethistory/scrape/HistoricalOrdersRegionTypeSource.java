@@ -2,7 +2,7 @@ package com.autonomouslogic.everef.cli.markethistory.scrape;
 
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.http.DataCrawler;
-import com.autonomouslogic.everef.http.OkHttpHelper;
+import com.autonomouslogic.everef.http.OkHttpWrapper;
 import com.autonomouslogic.everef.model.RegionTypePair;
 import com.autonomouslogic.everef.url.DataUrl;
 import com.autonomouslogic.everef.util.ArchivePathFactory;
@@ -46,7 +46,7 @@ class HistoricalOrdersRegionTypeSource implements RegionTypeSource {
 	protected OkHttpClient okHttpClient;
 
 	@Inject
-	protected OkHttpHelper okHttpHelper;
+	protected OkHttpWrapper okHttpWrapper;
 
 	@Inject
 	protected CsvMapper csvMapper;
@@ -105,7 +105,7 @@ class HistoricalOrdersRegionTypeSource implements RegionTypeSource {
 			var file = tempFiles
 					.tempFile("market-orders", ArchivePathFactory.MARKET_ORDERS.getSuffix())
 					.toFile();
-			return okHttpHelper.download(url.toString(), file, okHttpClient).flatMapMaybe(response -> {
+			return okHttpWrapper.download(url.toString(), file, okHttpClient).flatMapMaybe(response -> {
 				if (response.code() != 200) {
 					return Maybe.error(
 							new RuntimeException("Failed to download " + url + " with code " + response.code()));

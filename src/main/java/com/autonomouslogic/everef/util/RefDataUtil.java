@@ -5,7 +5,7 @@ import static com.autonomouslogic.everef.util.ArchivePathFactory.REFERENCE_DATA;
 import com.autonomouslogic.commons.ResourceUtil;
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.data.LoadedRefData;
-import com.autonomouslogic.everef.http.OkHttpHelper;
+import com.autonomouslogic.everef.http.OkHttpWrapper;
 import com.autonomouslogic.everef.model.ReferenceEntry;
 import com.autonomouslogic.everef.model.refdata.RefDataConfig;
 import com.autonomouslogic.everef.model.refdata.RefTypeConfig;
@@ -61,7 +61,7 @@ public class RefDataUtil {
 	protected OkHttpClient okHttpClient;
 
 	@Inject
-	protected OkHttpHelper okHttpHelper;
+	protected OkHttpWrapper okHttpWrapper;
 
 	@Inject
 	protected TempFiles tempFiles;
@@ -92,7 +92,7 @@ public class RefDataUtil {
 			var dataBaseUrl = Configs.DATA_BASE_URL.getRequired();
 			var url = dataBaseUrl.resolve(REFERENCE_DATA.createLatestPath());
 			var file = tempFiles.tempFile("refdata", ".tar.xz").toFile();
-			return okHttpHelper.download(url.toString(), file, okHttpClient).flatMap(response -> {
+			return okHttpWrapper.download(url.toString(), file, okHttpClient).flatMap(response -> {
 				if (response.code() != 200) {
 					return Single.error(new RuntimeException("Failed downloading reference data"));
 				}

@@ -28,7 +28,7 @@ public class DataCrawler {
 	protected OkHttpClient okHttpClient;
 
 	@Inject
-	protected OkHttpHelper okHttpHelper;
+	protected OkHttpWrapper okHttpWrapper;
 
 	private final URI dataBaseUrl = Configs.DATA_BASE_URL.getRequired();
 
@@ -50,7 +50,7 @@ public class DataCrawler {
 
 	private Flowable<DataUrl> crawl(DataUrl url) {
 		return Flowable.defer(() -> {
-			return okHttpHelper
+			return okHttpWrapper
 					.get(url.toString(), okHttpClient)
 					.flatMapMaybe(response -> {
 						if (response.code() != 200) {

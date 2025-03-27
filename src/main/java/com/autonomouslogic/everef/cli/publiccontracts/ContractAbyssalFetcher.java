@@ -3,7 +3,7 @@ package com.autonomouslogic.everef.cli.publiccontracts;
 import com.autonomouslogic.everef.esi.EsiHelper;
 import com.autonomouslogic.everef.esi.EsiUrl;
 import com.autonomouslogic.everef.esi.UniverseEsi;
-import com.autonomouslogic.everef.http.OkHttpHelper;
+import com.autonomouslogic.everef.http.OkHttpWrapper;
 import com.autonomouslogic.everef.openapi.refdata.api.RefdataApi;
 import com.autonomouslogic.everef.openapi.refdata.invoker.ApiException;
 import com.autonomouslogic.everef.util.JsonUtil;
@@ -36,7 +36,7 @@ public class ContractAbyssalFetcher {
 	protected EsiHelper esiHelper;
 
 	@Inject
-	protected OkHttpHelper okHttpHelper;
+	protected OkHttpWrapper okHttpWrapper;
 
 	@Inject
 	protected UniverseEsi universeEsi;
@@ -136,7 +136,7 @@ public class ContractAbyssalFetcher {
 					}
 					if (statusCode == 200) {
 						var dynamicItem = (ObjectNode) esiHelper.decodeResponse(response);
-						var lastModified = okHttpHelper
+						var lastModified = okHttpWrapper
 								.getLastModified(response)
 								.map(ZonedDateTime::toInstant)
 								.orElse(null);

@@ -1,7 +1,7 @@
 package com.autonomouslogic.everef.esi;
 
 import com.autonomouslogic.commons.rxjava3.Rx3Util;
-import com.autonomouslogic.everef.http.OkHttpHelper;
+import com.autonomouslogic.everef.http.OkHttpWrapper;
 import com.autonomouslogic.everef.openapi.esi.invoker.ApiResponse;
 import com.autonomouslogic.everef.util.VirtualThreads;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -34,7 +34,7 @@ public class EsiHelper {
 	protected OkHttpClient esiHttpClient;
 
 	@Inject
-	protected OkHttpHelper okHttpHelper;
+	protected OkHttpWrapper okHttpWrapper;
 
 	@Inject
 	protected ObjectMapper objectMapper;
@@ -59,7 +59,7 @@ public class EsiHelper {
 	 * @return
 	 */
 	public Single<Response> fetch(EsiUrl url, Optional<String> accessToken) {
-		return okHttpHelper.get(
+		return okHttpWrapper.get(
 				url.toString(),
 				esiHttpClient,
 				r -> accessToken.ifPresent(token -> r.addHeader("Authorization", "Bearer " + token)));
@@ -218,7 +218,7 @@ public class EsiHelper {
 	 * @return
 	 */
 	public JsonNode populateLastModified(JsonNode entry, Response response) {
-		var lastModified = okHttpHelper.getLastModified(response);
+		var lastModified = okHttpWrapper.getLastModified(response);
 		var obj = (ObjectNode) entry;
 		lastModified.ifPresent(
 				date -> obj.put("http_last_modified", date.toInstant().toString()));

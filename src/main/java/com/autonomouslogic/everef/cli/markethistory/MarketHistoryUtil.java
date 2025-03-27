@@ -5,7 +5,7 @@ import static java.time.ZoneOffset.UTC;
 
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.http.DataCrawler;
-import com.autonomouslogic.everef.http.OkHttpHelper;
+import com.autonomouslogic.everef.http.OkHttpWrapper;
 import com.autonomouslogic.everef.url.HttpUrl;
 import com.autonomouslogic.everef.url.UrlParser;
 import com.autonomouslogic.everef.util.ArchivePathFactory;
@@ -34,7 +34,7 @@ public class MarketHistoryUtil {
 	protected OkHttpClient okHttpClient;
 
 	@Inject
-	protected OkHttpHelper okHttpHelper;
+	protected OkHttpWrapper okHttpWrapper;
 
 	@Inject
 	protected ObjectMapper objectMapper;
@@ -59,7 +59,7 @@ public class MarketHistoryUtil {
 			log.info("Downloading total pairs file");
 			var url = dataBaseUrl.resolve(MARKET_HISTORY.getFolder() + "/").resolve("totals.json");
 			var file = tempFiles.tempFile("market-history-pairs", ".json").toFile();
-			return okHttpHelper.download(url.toString(), file, okHttpClient).flatMap(response -> {
+			return okHttpWrapper.download(url.toString(), file, okHttpClient).flatMap(response -> {
 				log.trace("Pairs file downloaded");
 				if (response.code() == 404) {
 					log.warn("Total pairs file not found");
