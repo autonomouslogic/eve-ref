@@ -114,8 +114,7 @@ public class ScrapePublicContracts implements Command {
 			deleteOldContracts();
 			var file = buildFile();
 			uploadFiles(file);
-		}
-		finally {
+		} finally {
 			closeMvStore();
 		}
 	}
