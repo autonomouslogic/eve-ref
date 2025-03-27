@@ -16,6 +16,7 @@ import io.reactivex.rxjava3.core.Flowable;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -76,14 +77,16 @@ public class ContractFetcher {
 	@Inject
 	protected ContractFetcher() {}
 
-	public Flowable<Long> fetchPublicContracts() {
-		return buildKnownItemIndex()
-				.andThen(universeEsi
-						.getAllRegions()
-						.parallel(3)
-						.runOn(VirtualThreads.SCHEDULER)
-						.flatMap(region -> fetchContractsForRegion(region))
-						.sequential());
+	public List<Long> fetchPublicContracts() {
+		buildKnownItemIndex().blockingAwait();
+		var regionIds = universeEsi.getAllRegions().toList().blockingGet();
+		return Flowable.fromIterable(regionIds)
+				.parallel(3)
+				.runOn(VirtualThreads.SCHEDULER)
+				.flatMap(region -> fetchContractsForRegion(region))
+				.sequential()
+				.toList()
+				.blockingGet();
 	}
 
 	private Flowable<Long> fetchContractsForRegion(GetUniverseRegionsRegionIdOk region) {

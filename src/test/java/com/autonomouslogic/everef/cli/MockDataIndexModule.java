@@ -29,7 +29,7 @@ public class MockDataIndexModule {
 		}
 		if (defaultMock) {
 			var mock = Mockito.mock(DataIndex.class);
-			when(mock.run()).thenReturn(Completable.complete());
+			when(mock.runAsync()).thenReturn(Completable.complete());
 			return mock;
 		}
 		// Fall back to the real thing.

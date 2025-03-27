@@ -77,20 +77,20 @@ public class DataUtil {
 				});
 	}
 
-	public Single<File> downloadLatestEsi() {
-		return download(ESI, "esi", ".tar.xz");
+	public File downloadLatestEsi() {
+		return download(ESI, "esi", ".tar.xz").blockingGet();
 	}
 
-	public Single<File> downloadLatestHoboleaks() {
-		return download(HOBOLEAKS, "hoboleaks", ".tar.xz");
+	public File downloadLatestHoboleaks() {
+		return download(HOBOLEAKS, "hoboleaks", ".tar.xz").blockingGet();
 	}
 
-	public Single<File> downloadLatestPublicContracts() {
-		return download(PUBLIC_CONTRACTS, "public-contracts-latest", ".tar.bz2");
+	public File downloadLatestPublicContracts() {
+		return download(PUBLIC_CONTRACTS, "public-contracts-latest", ".tar.bz2").blockingGet();
 	}
 
-	public Single<File> downloadLatestMarketOrders() {
-		return download(MARKET_ORDERS, "market-orders-latest", ".v3.csv.bz2");
+	public File downloadLatestMarketOrders() {
+		return download(MARKET_ORDERS, "market-orders-latest", ".v3.csv.bz2").blockingGet();
 	}
 
 	public Single<Map<String, Structure>> downloadLatestStructures() {

@@ -93,8 +93,8 @@ public class HealthcheckDecorator {
 	private class HealthcheckCommand implements Command {
 		private final Command delegate;
 
-		public Completable run() {
-			return Completable.concatArray(ping(startUrl), delegate.run(), ping(finishUrl))
+		public Completable runAsync() {
+			return Completable.concatArray(ping(startUrl), delegate.runAsync(), ping(finishUrl))
 					.onErrorResumeNext(e -> Completable.concatArray(
 									ping(logUrl, Optional.of(ExceptionUtils.getStackTrace(e))), ping(failUrl))
 							.andThen(Completable.error(e)));

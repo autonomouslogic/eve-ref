@@ -16,7 +16,7 @@ public class GenerateKeyPair implements Command {
 	@Inject
 	protected GenerateKeyPair() {}
 
-	public Completable run() {
+	public Completable runAsync() {
 		return Completable.fromAction(() -> {
 			var privateKey = keyGenerator.generatePrivateKey();
 			var publicKey = keyGenerator.generatePublicKey(privateKey);

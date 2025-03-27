@@ -73,7 +73,7 @@ public class BuildSearch implements Command {
 		staticUrl = (S3Url) urlParser.parse(Configs.STATIC_PATH.getRequired());
 	}
 
-	public Completable run() {
+	public Completable runAsync() {
 		return refDataUtil
 				.loadLatestRefData()
 				.flatMapPublisher(this::buildSearch)

@@ -3,12 +3,10 @@ package com.autonomouslogic.everef.cli.publiccontracts;
 import com.autonomouslogic.everef.util.CompressUtil;
 import com.autonomouslogic.everef.util.FormatUtil;
 import com.autonomouslogic.everef.util.JsonNodeCsvWriter;
-import com.autonomouslogic.everef.util.Rx;
 import com.autonomouslogic.everef.util.TempFiles;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import io.reactivex.rxjava3.core.Single;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -110,32 +108,26 @@ public class ContractsFileBuilder {
 	/**
 	 * Builds the output file.
 	 */
-	public Single<File> buildFile() {
-		return Single.fromCallable(() -> {
-					log.info("Building final file");
-					var start = Instant.now();
-					var outputFile = tempFiles
-							.tempFile(getClass().getSimpleName(), ".tar")
-							.toFile();
-					log.debug(String.format("Writing output file: %s", outputFile));
-					open(outputFile);
-					writeMeta(contractsScrapeMeta);
-					writeContracts(contractsStore.values());
-					writeItems(itemsStore.values());
-					writeBids(bidsStore.values());
-					writeDynamicItems(dynamicItemsStore.values());
-					writeNonDynamicItems(nonDynamicItemsStore.values());
-					writeDogmaAttributes(dogmaAttributesStore.values());
-					writeDogmaEffects(dogmaEffectsStore.values());
-					close();
-					var compressed = CompressUtil.compressBzip2(outputFile);
-					compressed.deleteOnExit();
-					log.info(String.format(
-							"Final file built in %s",
-							Duration.between(start, Instant.now()).truncatedTo(ChronoUnit.MILLIS)));
-					return compressed;
-				})
-				.compose(Rx.offloadSingle());
+	public File buildFile() {
+		log.info("Building final file");
+		var start = Instant.now();
+		var outputFile = tempFiles.tempFile(getClass().getSimpleName(), ".tar").toFile();
+		log.debug(String.format("Writing output file: %s", outputFile));
+		open(outputFile);
+		writeMeta(contractsScrapeMeta);
+		writeContracts(contractsStore.values());
+		writeItems(itemsStore.values());
+		writeBids(bidsStore.values());
+		writeDynamicItems(dynamicItemsStore.values());
+		writeNonDynamicItems(nonDynamicItemsStore.values());
+		writeDogmaAttributes(dogmaAttributesStore.values());
+		writeDogmaEffects(dogmaEffectsStore.values());
+		close();
+		var compressed = CompressUtil.compressBzip2(outputFile);
+		compressed.deleteOnExit();
+		log.info(String.format(
+				"Final file built in %s", Duration.between(start, Instant.now()).truncatedTo(ChronoUnit.MILLIS)));
+		return compressed;
 	}
 
 	@SneakyThrows

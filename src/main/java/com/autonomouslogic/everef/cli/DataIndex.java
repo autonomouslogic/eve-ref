@@ -77,7 +77,7 @@ public class DataIndex implements Command {
 	}
 
 	@Override
-	public Completable run() {
+	public Completable runAsync() {
 		return listAndIndex()
 				.flatMapCompletable(
 						dirIndex -> {

@@ -67,7 +67,11 @@ public class UniverseEsi {
 	}
 
 	public Flowable<GetUniverseRegionsRegionIdOk> getAllRegions() {
-		return getRegionIds().flatMapMaybe(regionId -> getRegion(regionId));
+		return getRegionIds()
+				.parallel(8)
+				.runOn(VirtualThreads.SCHEDULER)
+				.flatMap(regionId -> getRegion(regionId).toFlowable())
+				.sequential();
 	}
 
 	public Maybe<GetUniverseConstellationsConstellationIdOk> getConstellation(int constellationId) {

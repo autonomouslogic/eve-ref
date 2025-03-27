@@ -42,10 +42,12 @@ public class MarketOrdersStructureSource implements StructureSource {
 	}
 
 	private Maybe<File> download() {
-		return dataUtil.downloadLatestMarketOrders().toMaybe().onErrorResumeNext(e -> {
+		try {
+			return Maybe.just(dataUtil.downloadLatestMarketOrders());
+		} catch (Exception e) {
 			log.warn("Failed to download market orders, ignoring: {}", e.getMessage());
 			return Maybe.empty();
-		});
+		}
 	}
 
 	private Flowable<Long> process(File file) {

@@ -140,8 +140,7 @@ public class ScrapePublicContractsTest {
 	void shouldScrapePublicContracts() {
 		scrapePublicContracts
 				.setScrapeTime(ZonedDateTime.parse("2020-02-03T04:05:06.89Z"))
-				.run()
-				.blockingAwait();
+				.run();
 
 		// Get saved file.
 		var archiveFile =

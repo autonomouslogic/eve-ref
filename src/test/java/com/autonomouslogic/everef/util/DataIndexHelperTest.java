@@ -27,7 +27,7 @@ public class DataIndexHelperTest {
 			var obj = mock(DataIndex.class);
 			when(obj.setRecursive(anyBoolean())).thenReturn(obj);
 			when(obj.setPrefix(anyString())).thenReturn(obj);
-			when(obj.run()).thenReturn(Completable.complete().subscribeOn(VirtualThreads.SCHEDULER));
+			when(obj.runAsync()).thenReturn(Completable.complete().subscribeOn(VirtualThreads.SCHEDULER));
 			return obj;
 		}
 	}
@@ -68,23 +68,23 @@ public class DataIndexHelperTest {
 
 		inOrder.verify(dataIndex).setPrefix("market-orders/");
 		inOrder.verify(dataIndex).setRecursive(false);
-		inOrder.verify(dataIndex).run();
+		inOrder.verify(dataIndex).runAsync();
 
 		inOrder.verify(dataIndex).setPrefix("");
 		inOrder.verify(dataIndex).setRecursive(false);
-		inOrder.verify(dataIndex).run();
+		inOrder.verify(dataIndex).runAsync();
 
 		inOrder.verify(dataIndex).setPrefix("market-orders/history/2023/2023-09-11/");
 		inOrder.verify(dataIndex).setRecursive(false);
-		inOrder.verify(dataIndex).run();
+		inOrder.verify(dataIndex).runAsync();
 
 		inOrder.verify(dataIndex).setPrefix("market-orders/history/2023/");
 		inOrder.verify(dataIndex).setRecursive(false);
-		inOrder.verify(dataIndex).run();
+		inOrder.verify(dataIndex).runAsync();
 
 		inOrder.verify(dataIndex).setPrefix("market-orders/history/");
 		inOrder.verify(dataIndex).setRecursive(false);
-		inOrder.verify(dataIndex).run();
+		inOrder.verify(dataIndex).runAsync();
 
 		inOrder.verifyNoMoreInteractions();
 	}
