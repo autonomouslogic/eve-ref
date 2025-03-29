@@ -9,7 +9,7 @@ import static com.autonomouslogic.everef.util.ArchivePathFactory.STRUCTURES;
 import com.autonomouslogic.commons.ResourceUtil;
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.http.DataCrawler;
-import com.autonomouslogic.everef.http.OkHttpHelper;
+import com.autonomouslogic.everef.http.OkHttpWrapper;
 import com.autonomouslogic.everef.model.Structure;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -38,7 +38,7 @@ public class DataUtil {
 	protected TempFiles tempFiles;
 
 	@Inject
-	protected OkHttpHelper okHttpHelper;
+	protected OkHttpWrapper okHttpWrapper;
 
 	@Inject
 	protected OkHttpClient okHttpClient;
@@ -65,7 +65,7 @@ public class DataUtil {
 				.flatMap(url -> {
 					log.info("Using SDE at: {}", url);
 					var file = tempFiles.tempFile("sde", ".zip").toFile();
-					return okHttpHelper
+					return okHttpWrapper
 							.download(url.toString(), file, okHttpClient)
 							.flatMap(response -> {
 								if (response.code() != 200) {
@@ -106,7 +106,7 @@ public class DataUtil {
 		return Single.defer(() -> {
 			var url = dataBaseUrl + "/" + archive.createLatestPath();
 			var file = tempFiles.tempFile(name, suffix).toFile();
-			return okHttpHelper.download(url, file, okHttpClient).flatMap(response -> {
+			return okHttpWrapper.download(url, file, okHttpClient).flatMap(response -> {
 				if (response.code() != 200) {
 					return Single.error(
 							new RuntimeException(String.format("Failed downloading %s: %s", name, response.code())));

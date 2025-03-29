@@ -17,7 +17,7 @@ import com.autonomouslogic.everef.esi.EsiAuthHelper;
 import com.autonomouslogic.everef.esi.EsiHelper;
 import com.autonomouslogic.everef.esi.EsiUrl;
 import com.autonomouslogic.everef.esi.LocationPopulator;
-import com.autonomouslogic.everef.http.OkHttpHelper;
+import com.autonomouslogic.everef.http.OkHttpWrapper;
 import com.autonomouslogic.everef.mvstore.MVStoreUtil;
 import com.autonomouslogic.everef.openapi.refdata.api.RefdataApi;
 import com.autonomouslogic.everef.s3.S3Adapter;
@@ -118,7 +118,7 @@ public class ScrapeStructures implements Command {
 	protected OkHttpClient okHttpClient;
 
 	@Inject
-	protected OkHttpHelper okHttpHelper;
+	protected OkHttpWrapper okHttpWrapper;
 
 	@Inject
 	protected TempFiles tempFiles;
@@ -263,7 +263,7 @@ public class ScrapeStructures implements Command {
 					var baseUrl = Configs.DATA_BASE_URL.getRequired();
 					var url = baseUrl + "/" + STRUCTURES.createLatestPath();
 					var file = tempFiles.tempFile("structures-latest", ".json").toFile();
-					return okHttpHelper.download(url, file, okHttpClient).flatMapMaybe(response -> {
+					return okHttpWrapper.download(url, file, okHttpClient).flatMapMaybe(response -> {
 						if (response.code() != 200) {
 							log.warn("Failed loading latest structures: HTTP {}, ignoring", response.code());
 							return Maybe.empty();

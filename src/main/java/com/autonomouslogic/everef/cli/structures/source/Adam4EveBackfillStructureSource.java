@@ -6,7 +6,7 @@ import static com.autonomouslogic.everef.cli.structures.ScrapeStructures.LAST_ST
 
 import com.autonomouslogic.everef.cli.structures.StructureStore;
 import com.autonomouslogic.everef.config.Configs;
-import com.autonomouslogic.everef.http.OkHttpHelper;
+import com.autonomouslogic.everef.http.OkHttpWrapper;
 import com.autonomouslogic.everef.util.Rx;
 import com.autonomouslogic.everef.util.TempFiles;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -41,7 +41,7 @@ public class Adam4EveBackfillStructureSource implements StructureSource {
 	protected OkHttpClient okHttpClient;
 
 	@Inject
-	protected OkHttpHelper okHttpHelper;
+	protected OkHttpWrapper okHttpWrapper;
 
 	@Inject
 	protected TempFiles tempFiles;
@@ -146,7 +146,7 @@ public class Adam4EveBackfillStructureSource implements StructureSource {
 		return Single.defer(() -> {
 			var file =
 					tempFiles.tempFile("adam4eve-playerStructure_IDs", ".csv").toFile();
-			return okHttpHelper.download(SOURCE_URL, file, okHttpClient).map(response -> {
+			return okHttpWrapper.download(SOURCE_URL, file, okHttpClient).map(response -> {
 				if (response.code() != 200) {
 					throw new RuntimeException();
 				}

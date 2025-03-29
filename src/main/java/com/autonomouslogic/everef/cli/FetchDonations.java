@@ -4,7 +4,7 @@ import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.esi.EsiAuthHelper;
 import com.autonomouslogic.everef.esi.EsiConstants;
 import com.autonomouslogic.everef.esi.EsiHelper;
-import com.autonomouslogic.everef.http.OkHttpHelper;
+import com.autonomouslogic.everef.http.OkHttpWrapper;
 import com.autonomouslogic.everef.openapi.esi.api.CharacterApi;
 import com.autonomouslogic.everef.openapi.esi.api.CorporationApi;
 import com.autonomouslogic.everef.openapi.esi.api.WalletApi;
@@ -123,7 +123,7 @@ public class FetchDonations implements Command {
 	protected OkHttpClient okHttpClient;
 
 	@Inject
-	protected OkHttpHelper okHttpHelper;
+	protected OkHttpWrapper okHttpWrapper;
 
 	private final String eveRefOwnerHash = Configs.EVE_REF_CHARACTER_OWNER_HASH.getRequired();
 
@@ -365,7 +365,7 @@ public class FetchDonations implements Command {
 		var body = objectMapper.createObjectNode();
 		body.put("content", message);
 		log.trace("Discord notification: {}", body);
-		var response = okHttpHelper
+		var response = okHttpWrapper
 				.post(
 						discordUrl.get().toString(),
 						objectMapper.writeValueAsBytes(body),

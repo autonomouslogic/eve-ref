@@ -7,7 +7,7 @@ import com.autonomouslogic.everef.cli.publishrefdata.bundle.MarketGroupBundleRen
 import com.autonomouslogic.everef.cli.publishrefdata.bundle.RootCategoryBundleRenderer;
 import com.autonomouslogic.everef.cli.publishrefdata.bundle.TypeBundleRenderer;
 import com.autonomouslogic.everef.config.Configs;
-import com.autonomouslogic.everef.http.OkHttpHelper;
+import com.autonomouslogic.everef.http.OkHttpWrapper;
 import com.autonomouslogic.everef.model.ReferenceEntry;
 import com.autonomouslogic.everef.mvstore.MVStoreUtil;
 import com.autonomouslogic.everef.openapi.refdata.api.RefdataApi;
@@ -68,7 +68,7 @@ public class PublishRefData implements Command {
 	protected OkHttpClient okHttpClient;
 
 	@Inject
-	protected OkHttpHelper okHttpHelper;
+	protected OkHttpWrapper okHttpWrapper;
 
 	@Inject
 	protected UrlParser urlParser;

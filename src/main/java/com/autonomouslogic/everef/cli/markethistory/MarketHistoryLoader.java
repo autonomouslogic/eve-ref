@@ -1,7 +1,7 @@
 package com.autonomouslogic.everef.cli.markethistory;
 
 import com.autonomouslogic.commons.rxjava3.Rx3Util;
-import com.autonomouslogic.everef.http.OkHttpHelper;
+import com.autonomouslogic.everef.http.OkHttpWrapper;
 import com.autonomouslogic.everef.model.MarketHistoryEntry;
 import com.autonomouslogic.everef.url.DataUrl;
 import com.autonomouslogic.everef.util.CompressUtil;
@@ -42,7 +42,7 @@ public class MarketHistoryLoader {
 	protected OkHttpClient okHttpClient;
 
 	@Inject
-	protected OkHttpHelper okHttpHelper;
+	protected OkHttpWrapper okHttpWrapper;
 
 	private final CsvSchema schema;
 
@@ -68,7 +68,7 @@ public class MarketHistoryLoader {
 			var file = tempFiles
 					.tempFile("market-history", "-" + FilenameUtils.getName(url.getPath()))
 					.toFile();
-			return okHttpHelper
+			return okHttpWrapper
 					.download(url.toString(), file, okHttpClient)
 					.flatMap(response -> {
 						if (response.code() != 200) {

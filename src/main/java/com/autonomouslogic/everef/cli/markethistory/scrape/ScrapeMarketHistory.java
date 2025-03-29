@@ -5,7 +5,7 @@ import static com.autonomouslogic.everef.util.ArchivePathFactory.MARKET_HISTORY;
 import com.autonomouslogic.everef.cli.Command;
 import com.autonomouslogic.everef.cli.markethistory.MarketHistoryUtil;
 import com.autonomouslogic.everef.config.Configs;
-import com.autonomouslogic.everef.http.OkHttpHelper;
+import com.autonomouslogic.everef.http.OkHttpWrapper;
 import com.autonomouslogic.everef.model.MarketHistoryEntry;
 import com.autonomouslogic.everef.model.RegionTypePair;
 import com.autonomouslogic.everef.mvstore.JsonNodeDataType;
@@ -81,7 +81,7 @@ public class ScrapeMarketHistory implements Command {
 	protected OkHttpClient okHttpClient;
 
 	@Inject
-	protected OkHttpHelper okHttpHelper;
+	protected OkHttpWrapper okHttpWrapper;
 
 	@Inject
 	protected DataIndexHelper dataIndexHelper;

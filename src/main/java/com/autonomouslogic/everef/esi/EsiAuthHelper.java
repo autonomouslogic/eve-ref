@@ -3,7 +3,7 @@ package com.autonomouslogic.everef.esi;
 import com.autonomouslogic.commons.rxjava3.Rx3Util;
 import com.autonomouslogic.dynamomapper.DynamoAsyncMapper;
 import com.autonomouslogic.everef.config.Configs;
-import com.autonomouslogic.everef.http.OkHttpHelper;
+import com.autonomouslogic.everef.http.OkHttpWrapper;
 import com.autonomouslogic.everef.model.CharacterLogin;
 import com.autonomouslogic.everef.util.VirtualThreads;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -53,7 +53,7 @@ public class EsiAuthHelper {
 	protected EsiHelper esiHelper;
 
 	@Inject
-	protected OkHttpHelper okHttpHelper;
+	protected OkHttpWrapper okHttpWrapper;
 
 	@Inject
 	protected ObjectMapper objectMapper;
@@ -99,12 +99,12 @@ public class EsiAuthHelper {
 	public Single<EsiVerifyResponse> verify(@NonNull String token) {
 		return Single.defer(() -> {
 					var url = new URL(Configs.ESI_BASE_URL.getRequired().toURL(), "/verify/");
-					var request = okHttpHelper
+					var request = okHttpWrapper
 							.getRequest(url.toString())
 							.newBuilder()
 							.header("Authorization", "Bearer " + token)
 							.build();
-					return okHttpHelper.execute(request, esiHttpClient);
+					return okHttpWrapper.execute(request, esiHttpClient);
 				})
 				.map(response -> {
 					var verify = objectMapper.readValue(response.body().byteStream(), EsiVerifyResponse.class);

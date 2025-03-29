@@ -4,7 +4,7 @@ import static com.autonomouslogic.everef.util.ArchivePathFactory.PUBLIC_CONTRACT
 
 import com.autonomouslogic.everef.cli.Command;
 import com.autonomouslogic.everef.config.Configs;
-import com.autonomouslogic.everef.http.OkHttpHelper;
+import com.autonomouslogic.everef.http.OkHttpWrapper;
 import com.autonomouslogic.everef.mvstore.MVStoreUtil;
 import com.autonomouslogic.everef.mvstore.MapRemover;
 import com.autonomouslogic.everef.s3.S3Adapter;
@@ -69,7 +69,7 @@ public class ScrapePublicContracts implements Command {
 	protected OkHttpClient okHttpClient;
 
 	@Inject
-	protected OkHttpHelper okHttpHelper;
+	protected OkHttpWrapper okHttpWrapper;
 
 	@Inject
 	protected TempFiles tempFiles;

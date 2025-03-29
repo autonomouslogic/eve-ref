@@ -4,7 +4,7 @@ import static com.autonomouslogic.everef.util.ArchivePathFactory.FUZZWORK_ORDERS
 
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.http.DataCrawler;
-import com.autonomouslogic.everef.http.OkHttpHelper;
+import com.autonomouslogic.everef.http.OkHttpWrapper;
 import com.autonomouslogic.everef.s3.S3Adapter;
 import com.autonomouslogic.everef.s3.S3Util;
 import com.autonomouslogic.everef.url.S3Url;
@@ -63,7 +63,7 @@ public class SyncFuzzworkOrdersets implements Command {
 	protected OkHttpClient okHttpClient;
 
 	@Inject
-	protected OkHttpHelper okHttpHelper;
+	protected OkHttpWrapper okHttpWrapper;
 
 	@Inject
 	protected TempFiles tempFiles;
@@ -101,7 +101,7 @@ public class SyncFuzzworkOrdersets implements Command {
 
 	@SneakyThrows
 	private Flowable<FuzzworkFile> scanFuzzworkFiles() {
-		return okHttpHelper
+		return okHttpWrapper
 				.get(fuzzworkBaseUrl.resolve("/api/").toString(), okHttpClient)
 				.flatMapPublisher(response -> {
 					if (response.code() != 200) {
@@ -167,7 +167,7 @@ public class SyncFuzzworkOrdersets implements Command {
 					var file = tempFiles
 							.tempFile("fuzzwork-orderset-" + fuzz.getId(), ".csv.gz")
 							.toFile();
-					return okHttpHelper
+					return okHttpWrapper
 							.download(fuzz.getUri().toString(), file, okHttpClient)
 							.flatMapMaybe(response -> {
 								if (response.code() == 404) {
@@ -183,7 +183,7 @@ public class SyncFuzzworkOrdersets implements Command {
 								}
 								return Maybe.just(fuzz.toBuilder()
 										.file(file)
-										.lastModified(okHttpHelper
+										.lastModified(okHttpWrapper
 												.getLastModified(response)
 												.orElseThrow()
 												.toInstant())
