@@ -9,7 +9,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.NullNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.reactivex.rxjava3.core.Flowable;
-import io.reactivex.rxjava3.core.Maybe;
 import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.functions.BiFunction;
 import io.reactivex.rxjava3.functions.Function;
@@ -48,7 +47,7 @@ public class EsiHelper {
 	 * @param url
 	 * @return
 	 */
-	public Single<Response> fetch(EsiUrl url) {
+	public Response fetch(EsiUrl url) {
 		return fetch(url, Optional.empty());
 	}
 
@@ -58,24 +57,9 @@ public class EsiHelper {
 	 * @param url
 	 * @return
 	 */
-	public Single<Response> fetch(EsiUrl url, Optional<String> accessToken) {
+	public Response fetch(EsiUrl url, Optional<String> accessToken) {
 		return okHttpWrapper.get(
-				url.toString(),
-				esiHttpClient,
-				r -> accessToken.ifPresent(token -> r.addHeader("Authorization", "Bearer " + token)));
-	}
-
-	/**
-	 * Fetches the requested URL.
-	 * This call does NOT include standard error handling.
-	 * @param url
-	 * @return
-	 */
-	public Single<Response> fetch(EsiUrl url, Maybe<String> accessToken) {
-		return accessToken
-				.map(Optional::of)
-				.switchIfEmpty(Single.just(Optional.empty()))
-				.flatMap(token -> fetch(url, token));
+				url.toString(), r -> accessToken.ifPresent(token -> r.addHeader("Authorization", "Bearer " + token)));
 	}
 
 	/**
@@ -84,26 +68,30 @@ public class EsiHelper {
 	 * @param url
 	 * @return
 	 */
-	protected Flowable<Response> fetchPages(EsiUrl url, Maybe<String> accessToken) {
-		return fetch(url.toBuilder().page(1).build(), accessToken).flatMapPublisher(first -> {
-			var pages = first.header(PAGES_HEADER);
-			if (pages == null || pages.isEmpty()) {
-				return Flowable.just(first);
-			}
-			var pagesInt = Integer.parseInt(pages);
-			if (pagesInt == 1) {
-				return Flowable.just(first);
-			}
-			return Flowable.concatArray(
-					Flowable.just(first),
-					Flowable.range(2, pagesInt - 1)
-							.flatMapSingle(
-									page -> fetch(url.toBuilder().page(page).build(), accessToken), false, 4));
-		});
+	protected List<Response> fetchPages(EsiUrl url, Optional<String> accessToken) {
+		var first = fetch(url.toBuilder().page(1).build(), accessToken);
+		var pages = first.header(PAGES_HEADER);
+		if (pages == null || pages.isEmpty()) {
+			return List.of(first);
+		}
+		var pagesInt = Integer.parseInt(pages);
+		if (pagesInt == 1) {
+			return List.of(first);
+		}
+		return Flowable.concatArray(
+						Flowable.just(first),
+						Flowable.range(2, pagesInt - 1)
+								.flatMapSingle(
+										page -> Single.just(
+												fetch(url.toBuilder().page(page).build(), accessToken)),
+										false,
+										4))
+				.toList()
+				.blockingGet();
 	}
 
-	protected Flowable<Response> fetchPages(EsiUrl url) {
-		return fetchPages(url, Maybe.empty());
+	protected List<Response> fetchPages(EsiUrl url) {
+		return fetchPages(url, Optional.empty());
 	}
 
 	/**
@@ -151,15 +139,17 @@ public class EsiHelper {
 	 * @return
 	 */
 	public Flowable<JsonNode> fetchPagesOfJsonArrays(
-			EsiUrl url, BiFunction<JsonNode, Response, JsonNode> augmenter, Maybe<String> accessToken) {
-		return fetchPages(url, accessToken).compose(standardErrorHandling(url)).flatMap(response -> {
-			var node = decodeResponse(response);
-			return decodeArrayNode(url, node).map(entry -> augmenter.apply(entry, response));
-		});
+			EsiUrl url, BiFunction<JsonNode, Response, JsonNode> augmenter, Optional<String> accessToken) {
+		return Flowable.fromIterable(fetchPages(url, accessToken))
+				.compose(standardErrorHandling(url))
+				.flatMap(response -> {
+					var node = decodeResponse(response);
+					return decodeArrayNode(url, node).map(entry -> augmenter.apply(entry, response));
+				});
 	}
 
 	public Flowable<JsonNode> fetchPagesOfJsonArrays(EsiUrl url, BiFunction<JsonNode, Response, JsonNode> augmenter) {
-		return fetchPagesOfJsonArrays(url, augmenter, Maybe.empty());
+		return fetchPagesOfJsonArrays(url, augmenter, Optional.empty());
 	}
 
 	/**

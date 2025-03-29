@@ -27,7 +27,7 @@ public class OkHttpWrapper {
 		return get(url, r -> {});
 	}
 
-	private Response get(@NonNull String url, @NonNull Consumer<Request.Builder> requestConsumer) {
+	public Response get(@NonNull String url, @NonNull Consumer<Request.Builder> requestConsumer) {
 		var request = getRequest(url, requestConsumer);
 		return execute(request);
 	}
@@ -35,7 +35,7 @@ public class OkHttpWrapper {
 	@SneakyThrows
 	public Response download(@NonNull String url, @NonNull File file) {
 		log.debug("Downloading {} to {}", url, file);
-		try (var response = get(url, client, r -> {})) {
+		try (var response = get(url)) {
 			var lastModified = getLastModified(response);
 			if (response.code() != 200) {
 				return response;
