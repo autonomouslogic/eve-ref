@@ -124,8 +124,9 @@ public class MarketOrderFetcher {
 		return Flowable.defer(() -> {
 					log.info(String.format("Fetching market orders from %s", locationName));
 					var esiUrl = EsiUrl.builder().urlPath(url).build();
+					Optional<String> token = auth ? getAccessToken() : Optional.empty();
 					return esiHelper
-							.fetchPagesOfJsonArrays(esiUrl, esiHelper::populateLastModified, getAccessToken())
+							.fetchPagesOfJsonArrays(esiUrl, esiHelper::populateLastModified, token)
 							.map(entry -> {
 								var n = count.incrementAndGet();
 								if (n % 10_000 == 0) {
