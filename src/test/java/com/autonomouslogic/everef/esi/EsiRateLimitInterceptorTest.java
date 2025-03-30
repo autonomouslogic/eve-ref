@@ -65,7 +65,8 @@ public class EsiRateLimitInterceptorTest {
 		var count = new AtomicInteger(0);
 		var watch = Stopwatch.createStarted();
 		while (watch.elapsed().compareTo(duration) < 0) {
-			esiHelper.fetch(EsiUrl.builder().urlPath("/page").build()).blockingGet();
+			try (var response =
+					esiHelper.fetch(EsiUrl.builder().urlPath("/page").build())) {}
 			count.incrementAndGet();
 		}
 		var time = watch.elapsed().toMillis();
@@ -83,7 +84,8 @@ public class EsiRateLimitInterceptorTest {
 		for (int i = 0; i < 4; i++) {
 			var thread = new Thread(() -> {
 				while (watch.elapsed().compareTo(duration) < 0) {
-					esiHelper.fetch(EsiUrl.builder().urlPath("/page").build()).blockingGet();
+					try (var response =
+							esiHelper.fetch(EsiUrl.builder().urlPath("/page").build())) {}
 					count.incrementAndGet();
 				}
 			});

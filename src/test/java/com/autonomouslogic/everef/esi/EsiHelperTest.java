@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import com.autonomouslogic.everef.cli.MockDataIndexModule;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.test.TestDataUtil;
+import io.reactivex.rxjava3.core.Flowable;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
@@ -57,10 +58,7 @@ public class EsiHelperTest {
 	@SneakyThrows
 	void shouldFetchSinglePage() {
 		server.enqueue(new MockResponse().setResponseCode(200).setBody("page-1").addHeader("X-Pages", "1"));
-		var responses = esiHelper
-				.fetchPages(EsiUrl.builder().urlPath("/pages").build())
-				.toList()
-				.blockingGet();
+		var responses = esiHelper.fetchPages(EsiUrl.builder().urlPath("/pages").build());
 		var bodies = getBodies(responses);
 		assertEquals(List.of("page-1"), bodies);
 		testDataUtil.assertRequest(server.takeRequest(), "/pages?datasource=tranquility&language=en&page=1");
@@ -71,10 +69,7 @@ public class EsiHelperTest {
 	@SneakyThrows
 	void shouldFetchSinglePageWithoutHeader() {
 		server.enqueue(new MockResponse().setResponseCode(200).setBody("page-1"));
-		var responses = esiHelper
-				.fetchPages(EsiUrl.builder().urlPath("/pages").build())
-				.toList()
-				.blockingGet();
+		var responses = esiHelper.fetchPages(EsiUrl.builder().urlPath("/pages").build());
 		var bodies = getBodies(responses);
 		assertEquals(List.of("page-1"), bodies);
 		testDataUtil.assertRequest(server.takeRequest(), "/pages?datasource=tranquility&language=en&page=1");
@@ -87,10 +82,7 @@ public class EsiHelperTest {
 		server.enqueue(new MockResponse().setResponseCode(200).setBody("page-1").addHeader("X-Pages", "3"));
 		server.enqueue(new MockResponse().setResponseCode(200).setBody("page-2").addHeader("X-Pages", "3"));
 		server.enqueue(new MockResponse().setResponseCode(200).setBody("page-3").addHeader("X-Pages", "3"));
-		var responses = esiHelper
-				.fetchPages(EsiUrl.builder().urlPath("/pages").build())
-				.toList()
-				.blockingGet();
+		var responses = esiHelper.fetchPages(EsiUrl.builder().urlPath("/pages").build());
 		var bodies = getBodies(responses);
 		assertEquals(Set.of("page-1", "page-2", "page-3"), new HashSet<>(bodies));
 		var paths = new HashSet<String>();
@@ -112,9 +104,7 @@ public class EsiHelperTest {
 	void shouldHandleNoResponseStatusCodes(int code) {
 		server.enqueue(new MockResponse().setResponseCode(code));
 		var url = EsiUrl.builder().urlPath("/codes").build();
-		var responses = esiHelper
-				.fetch(url)
-				.toFlowable()
+		var responses = Flowable.just(esiHelper.fetch(url))
 				.compose(esiHelper.standardErrorHandling(url))
 				.toList()
 				.blockingGet();
@@ -130,9 +120,7 @@ public class EsiHelperTest {
 		server.enqueue(new MockResponse().setResponseCode(code));
 		var url = EsiUrl.builder().urlPath("/codes").build();
 		var err = assertThrows(RuntimeException.class, () -> {
-			esiHelper
-					.fetch(url)
-					.toFlowable()
+			Flowable.just(esiHelper.fetch(url))
 					.compose(esiHelper.standardErrorHandling(url))
 					.toList()
 					.blockingGet();

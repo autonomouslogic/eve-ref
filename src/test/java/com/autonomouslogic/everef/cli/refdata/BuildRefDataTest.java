@@ -24,11 +24,11 @@ import com.autonomouslogic.everef.util.HashUtil;
 import com.autonomouslogic.everef.util.MockScrapeBuilder;
 import com.autonomouslogic.everef.util.RefDataUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.reactivex.rxjava3.core.Flowable;
 import java.io.File;
 import java.io.FileInputStream;
 import java.time.ZonedDateTime;
 import java.util.LinkedHashSet;
+import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.NonNull;
@@ -108,7 +108,7 @@ public class BuildRefDataTest {
 				.inject(this);
 
 		when(dataCrawler.crawl())
-				.thenReturn(Flowable.just(
+				.thenReturn(List.of(
 						urlParser.parse("http://localhost:" + TEST_PORT + "/ccp/sde/sde-20230315-TRANQUILITY.zip")));
 		when(dataCrawler.setPrefix(any())).thenReturn(dataCrawler);
 
