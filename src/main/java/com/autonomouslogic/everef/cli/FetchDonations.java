@@ -24,7 +24,6 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.google.common.collect.Ordering;
 import com.google.common.hash.Hashing;
-import io.reactivex.rxjava3.core.Maybe;
 import java.io.FileInputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -48,7 +47,6 @@ import lombok.SneakyThrows;
 import lombok.Value;
 import lombok.extern.jackson.Jacksonized;
 import lombok.extern.log4j.Log4j2;
-import okhttp3.OkHttpClient;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.jetbrains.annotations.NotNull;
@@ -120,9 +118,6 @@ public class FetchDonations implements Command {
 	protected S3AsyncClient s3Client;
 
 	@Inject
-	protected OkHttpClient okHttpClient;
-
-	@Inject
 	protected OkHttpWrapper okHttpWrapper;
 
 	private final String eveRefOwnerHash = Configs.EVE_REF_CHARACTER_OWNER_HASH.getRequired();
@@ -151,8 +146,8 @@ public class FetchDonations implements Command {
 
 	@SneakyThrows
 	public void run() {
-		var accessToken = getAccessToken().blockingGet();
-		var verified = esiAuthHelper.verify(accessToken).blockingGet();
+		var accessToken = getAccessToken();
+		var verified = esiAuthHelper.verify(accessToken);
 		var characterId = (int) verified.getCharacterId();
 		var character = getCharacter(characterId);
 		var corporationId = character.getCorporationId();
@@ -247,8 +242,8 @@ public class FetchDonations implements Command {
 		return journals;
 	}
 
-	private Maybe<String> getAccessToken() {
-		return esiAuthHelper.getTokenStringForOwnerHash(eveRefOwnerHash).toMaybe();
+	private String getAccessToken() {
+		return esiAuthHelper.getTokenStringForOwnerHash(eveRefOwnerHash);
 	}
 
 	private void uploadFile(byte[] contents, String name) {
@@ -365,17 +360,15 @@ public class FetchDonations implements Command {
 		var body = objectMapper.createObjectNode();
 		body.put("content", message);
 		log.trace("Discord notification: {}", body);
-		var response = okHttpWrapper
-				.post(
-						discordUrl.get().toString(),
-						objectMapper.writeValueAsBytes(body),
-						okHttpClient,
-						r -> r.header("Content-Type", "application/json"))
-				.blockingGet();
-		if (response.code() < 200 || response.code() >= 300) {
-			log.warn("Error notifying Discord: {}", response);
-		} else {
-			log.debug("Discord notified: {}", response);
+		try (var response = okHttpWrapper.post(
+				discordUrl.get().toString(),
+				objectMapper.writeValueAsBytes(body),
+				r -> r.header("Content-Type", "application/json"))) {
+			if (response.code() < 200 || response.code() >= 300) {
+				log.warn("Error notifying Discord: {}", response);
+			} else {
+				log.debug("Discord notified: {}", response);
+			}
 		}
 	}
 

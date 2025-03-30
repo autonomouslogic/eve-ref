@@ -27,7 +27,6 @@ import javax.inject.Provider;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
-import okhttp3.OkHttpClient;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 
@@ -41,9 +40,6 @@ class HistoricalOrdersRegionTypeSource implements RegionTypeSource {
 
 	@Inject
 	protected TempFiles tempFiles;
-
-	@Inject
-	protected OkHttpClient okHttpClient;
 
 	@Inject
 	protected OkHttpWrapper okHttpWrapper;
@@ -74,10 +70,10 @@ class HistoricalOrdersRegionTypeSource implements RegionTypeSource {
 	@NotNull
 	private Flowable<DataUrl> getSampleFiles() {
 		var minTime = today.atStartOfDay().atZone(ZoneOffset.UTC).minus(maxAge).toInstant();
-		return dataCrawler
-				.get()
-				.setPrefix(ArchivePathFactory.MARKET_ORDERS.getFolder())
-				.crawl()
+		return Flowable.fromIterable(dataCrawler
+						.get()
+						.setPrefix(ArchivePathFactory.MARKET_ORDERS.getFolder())
+						.crawl())
 				.flatMap(url -> {
 					var time = ArchivePathFactory.MARKET_ORDERS.parseArchiveTime(url.getPath());
 					if (time == null || time.isBefore(minTime)) {
@@ -105,13 +101,13 @@ class HistoricalOrdersRegionTypeSource implements RegionTypeSource {
 			var file = tempFiles
 					.tempFile("market-orders", ArchivePathFactory.MARKET_ORDERS.getSuffix())
 					.toFile();
-			return okHttpWrapper.download(url.toString(), file, okHttpClient).flatMapMaybe(response -> {
+			try (var response = okHttpWrapper.download(url.toString(), file)) {
 				if (response.code() != 200) {
 					return Maybe.error(
 							new RuntimeException("Failed to download " + url + " with code " + response.code()));
 				}
 				return Maybe.just(file);
-			});
+			}
 		});
 	}
 

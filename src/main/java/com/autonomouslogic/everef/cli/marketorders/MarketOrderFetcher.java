@@ -18,7 +18,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Flowable;
-import io.reactivex.rxjava3.core.Maybe;
 import java.time.Duration;
 import java.util.Map;
 import java.util.Optional;
@@ -125,9 +124,8 @@ public class MarketOrderFetcher {
 		return Flowable.defer(() -> {
 					log.info(String.format("Fetching market orders from %s", locationName));
 					var esiUrl = EsiUrl.builder().urlPath(url).build();
-					Maybe<String> token = auth ? getAccessToken() : Maybe.empty();
 					return esiHelper
-							.fetchPagesOfJsonArrays(esiUrl, esiHelper::populateLastModified, token)
+							.fetchPagesOfJsonArrays(esiUrl, esiHelper::populateLastModified, getAccessToken())
 							.map(entry -> {
 								var n = count.incrementAndGet();
 								if (n % 10_000 == 0) {
@@ -188,7 +186,7 @@ public class MarketOrderFetcher {
 		//		}
 	}
 
-	private Maybe<String> getAccessToken() {
-		return esiAuthHelper.getTokenStringForOwnerHash(scrapeOwnerHash).toMaybe();
+	private Optional<String> getAccessToken() {
+		return Optional.of(esiAuthHelper.getTokenStringForOwnerHash(scrapeOwnerHash));
 	}
 }

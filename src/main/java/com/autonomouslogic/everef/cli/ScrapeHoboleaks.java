@@ -25,7 +25,6 @@ import java.util.Arrays;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.extern.log4j.Log4j2;
-import okhttp3.OkHttpClient;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
 import org.apache.commons.io.IOUtils;
@@ -52,9 +51,6 @@ public class ScrapeHoboleaks implements Command {
 	@Inject
 	@Named("data")
 	protected S3AsyncClient s3Client;
-
-	@Inject
-	protected OkHttpClient okHttpClient;
 
 	@Inject
 	protected OkHttpWrapper okHttpWrapper;
@@ -102,18 +98,17 @@ public class ScrapeHoboleaks implements Command {
 		return Single.defer(() -> {
 			var file = tempFiles.tempFile("hoboleaks", ".tar.xz").toFile();
 			var url = dataUrl.resolve(HOBOLEAKS.createLatestPath()).toString();
-			return okHttpWrapper.download(url, file, okHttpClient).flatMap(response -> {
-				if (response.code() == 404) {
-					return Single.just(new byte[0]);
-				}
-				if (response.code() != 200) {
-					return Single.error(new RuntimeException("Failed to download " + url + ": " + response.code()));
-				}
-				return CompressUtil.loadArchive(file)
-						.filter(entry -> entry.getLeft().getName().equals("meta.json"))
-						.map(Pair::getRight)
-						.first(new byte[0]);
-			});
+			var response = okHttpWrapper.download(url, file);
+			if (response.code() == 404) {
+				return Single.just(new byte[0]);
+			}
+			if (response.code() != 200) {
+				return Single.error(new RuntimeException("Failed to download " + url + ": " + response.code()));
+			}
+			return CompressUtil.loadArchive(file)
+					.filter(entry -> entry.getLeft().getName().equals("meta.json"))
+					.map(Pair::getRight)
+					.first(new byte[0]);
 		});
 	}
 
@@ -155,14 +150,14 @@ public class ScrapeHoboleaks implements Command {
 	}
 
 	private Single<byte[]> download(HttpUrl url) {
-		return Single.defer(() -> {
+		return Single.fromCallable(() -> {
 			var file = tempFiles.tempFile("hoboleaks", ".json").toFile();
-			return okHttpWrapper.download(url.toString(), file, okHttpClient).map(response -> {
+			try (var response = okHttpWrapper.download(url.toString(), file)) {
 				if (response.code() != 200) {
 					throw new RuntimeException("Failed to download " + url + ": " + response.code());
 				}
 				return IOUtils.toByteArray(new FileInputStream(file));
-			});
+			}
 		});
 	}
 

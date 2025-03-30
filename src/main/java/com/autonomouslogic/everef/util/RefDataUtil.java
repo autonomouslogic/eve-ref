@@ -49,7 +49,6 @@ import javax.inject.Singleton;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
-import okhttp3.OkHttpClient;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.io.FilenameUtils;
@@ -57,9 +56,6 @@ import org.apache.commons.io.FilenameUtils;
 @Singleton
 @Log4j2
 public class RefDataUtil {
-	@Inject
-	protected OkHttpClient okHttpClient;
-
 	@Inject
 	protected OkHttpWrapper okHttpWrapper;
 
@@ -92,12 +88,12 @@ public class RefDataUtil {
 			var dataBaseUrl = Configs.DATA_BASE_URL.getRequired();
 			var url = dataBaseUrl.resolve(REFERENCE_DATA.createLatestPath());
 			var file = tempFiles.tempFile("refdata", ".tar.xz").toFile();
-			return okHttpWrapper.download(url.toString(), file, okHttpClient).flatMap(response -> {
+			try (var response = okHttpWrapper.download(url.toString(), file)) {
 				if (response.code() != 200) {
 					return Single.error(new RuntimeException("Failed downloading reference data"));
 				}
 				return Single.just(file);
-			});
+			}
 		});
 	}
 

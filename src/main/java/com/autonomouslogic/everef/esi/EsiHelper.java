@@ -20,7 +20,6 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
-import okhttp3.OkHttpClient;
 import okhttp3.Response;
 
 @Singleton
@@ -30,9 +29,6 @@ public class EsiHelper {
 
 	@Inject
 	@Named("esi")
-	protected OkHttpClient esiHttpClient;
-
-	@Inject
 	protected OkHttpWrapper okHttpWrapper;
 
 	@Inject

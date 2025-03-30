@@ -52,7 +52,7 @@ public class OkHttpWrapper {
 		}
 	}
 
-	private Response post(
+	public Response post(
 			@NonNull String url, @NonNull byte[] body, @NonNull Consumer<Request.Builder> requestConsumer) {
 		var request = postRequest(url, body, requestConsumer);
 		return execute(request);

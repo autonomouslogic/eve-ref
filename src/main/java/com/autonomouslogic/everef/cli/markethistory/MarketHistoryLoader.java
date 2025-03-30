@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 import lombok.extern.log4j.Log4j2;
-import okhttp3.OkHttpClient;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
@@ -37,9 +36,6 @@ public class MarketHistoryLoader {
 
 	@Inject
 	protected TempFiles tempFiles;
-
-	@Inject
-	protected OkHttpClient okHttpClient;
 
 	@Inject
 	protected OkHttpWrapper okHttpWrapper;
@@ -68,14 +64,14 @@ public class MarketHistoryLoader {
 			var file = tempFiles
 					.tempFile("market-history", "-" + FilenameUtils.getName(url.getPath()))
 					.toFile();
-			return okHttpWrapper
-					.download(url.toString(), file, okHttpClient)
-					.flatMap(response -> {
-						if (response.code() != 200) {
-							return Single.error(new RuntimeException(
-									"Failed to download " + url + " with code " + response.code()));
+			return Single.defer(() -> {
+						try (var response = okHttpWrapper.download(url.toString(), file)) {
+							if (response.code() != 200) {
+								return Single.error(new RuntimeException(
+										"Failed to download " + url + " with code " + response.code()));
+							}
+							return Single.just(file);
 						}
-						return Single.just(file);
 					})
 					.toFlowable()
 					.compose(Rx3Util.retryWithDelayFlowable(2, Duration.ofSeconds(2), e -> {

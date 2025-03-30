@@ -13,6 +13,7 @@ import com.autonomouslogic.everef.http.OkHttpWrapper;
 import com.autonomouslogic.everef.model.Structure;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Single;
 import java.io.File;
 import java.net.URI;
@@ -23,7 +24,6 @@ import javax.inject.Provider;
 import javax.inject.Singleton;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
-import okhttp3.OkHttpClient;
 
 @Singleton
 @Log4j2
@@ -40,9 +40,6 @@ public class DataUtil {
 	@Inject
 	protected OkHttpWrapper okHttpWrapper;
 
-	@Inject
-	protected OkHttpClient okHttpClient;
-
 	private URI dataBaseUrl;
 
 	@Inject
@@ -54,10 +51,8 @@ public class DataUtil {
 	}
 
 	public Single<File> downloadLatestSde() {
-		return dataCrawlerProvider
-				.get()
-				.setPrefix("/ccp/sde")
-				.crawl()
+		return Flowable.fromIterable(
+						dataCrawlerProvider.get().setPrefix("/ccp/sde").crawl())
 				.filter(url -> url.toString().endsWith("-TRANQUILITY.zip"))
 				.sorted()
 				.lastElement()
@@ -65,15 +60,12 @@ public class DataUtil {
 				.flatMap(url -> {
 					log.info("Using SDE at: {}", url);
 					var file = tempFiles.tempFile("sde", ".zip").toFile();
-					return okHttpWrapper
-							.download(url.toString(), file, okHttpClient)
-							.flatMap(response -> {
-								if (response.code() != 200) {
-									return Single.error(
-											new RuntimeException("Failed downloading ESI: " + response.code()));
-								}
-								return Single.just(file);
-							});
+					try (var response = okHttpWrapper.download(url.toString(), file)) {
+						if (response.code() != 200) {
+							return Single.error(new RuntimeException("Failed downloading ESI: " + response.code()));
+						}
+						return Single.just(file);
+					}
 				});
 	}
 
@@ -106,13 +98,13 @@ public class DataUtil {
 		return Single.defer(() -> {
 			var url = dataBaseUrl + "/" + archive.createLatestPath();
 			var file = tempFiles.tempFile(name, suffix).toFile();
-			return okHttpWrapper.download(url, file, okHttpClient).flatMap(response -> {
+			try (var response = okHttpWrapper.download(url, file)) {
 				if (response.code() != 200) {
 					return Single.error(
 							new RuntimeException(String.format("Failed downloading %s: %s", name, response.code())));
 				}
 				return Single.just(file);
-			});
+			}
 		});
 	}
 

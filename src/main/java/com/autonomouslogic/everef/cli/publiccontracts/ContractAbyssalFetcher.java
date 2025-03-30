@@ -118,38 +118,38 @@ public class ContractAbyssalFetcher {
 		var esiUrl = EsiUrl.builder()
 				.urlPath(String.format("/dogma/dynamic/items/%s/%s/", typeId, itemId))
 				.build();
-		return esiHelper
-				.fetch(esiUrl)
-				.toFlowable()
-				.compose(esiHelper.standardErrorHandling(esiUrl))
-				.flatMapCompletable(response -> Completable.fromAction(() -> {
-					int statusCode = response.code();
-					if (statusCode == 520) {
-						var nonDynamicItem = objectMapper
-								.createObjectNode()
-								.put("item_id", itemId)
-								.put("type_id", typeId)
-								.put("contract_id", contractId);
-						nonDynamicItemsStore.put(
-								ContractsFileBuilder.NON_DYNAMIC_ITEM_ID.apply(nonDynamicItem), nonDynamicItem);
-						return;
-					}
-					if (statusCode == 200) {
-						var dynamicItem = (ObjectNode) esiHelper.decodeResponse(response);
-						var lastModified = okHttpWrapper
-								.getLastModified(response)
-								.map(ZonedDateTime::toInstant)
-								.orElse(null);
-						saveDynamicItem(contractId, itemId, dynamicItem, lastModified);
-					} else {
-						log.warn(
-								"Unknown status code seen for contract {} item {} type {}: {}",
-								contractId,
-								itemId,
-								typeId,
-								statusCode);
-					}
-				}));
+		try (var r = esiHelper.fetch(esiUrl)) {
+			return Flowable.just(r)
+					.compose(esiHelper.standardErrorHandling(esiUrl))
+					.flatMapCompletable(response -> Completable.fromAction(() -> {
+						int statusCode = response.code();
+						if (statusCode == 520) {
+							var nonDynamicItem = objectMapper
+									.createObjectNode()
+									.put("item_id", itemId)
+									.put("type_id", typeId)
+									.put("contract_id", contractId);
+							nonDynamicItemsStore.put(
+									ContractsFileBuilder.NON_DYNAMIC_ITEM_ID.apply(nonDynamicItem), nonDynamicItem);
+							return;
+						}
+						if (statusCode == 200) {
+							var dynamicItem = (ObjectNode) esiHelper.decodeResponse(response);
+							var lastModified = okHttpWrapper
+									.getLastModified(response)
+									.map(ZonedDateTime::toInstant)
+									.orElse(null);
+							saveDynamicItem(contractId, itemId, dynamicItem, lastModified);
+						} else {
+							log.warn(
+									"Unknown status code seen for contract {} item {} type {}: {}",
+									contractId,
+									itemId,
+									typeId,
+									statusCode);
+						}
+					}));
+		}
 	}
 
 	private void saveDynamicItem(long contractId, long itemId, ObjectNode dynamicItem, Instant lastModified) {

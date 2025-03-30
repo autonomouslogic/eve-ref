@@ -25,7 +25,6 @@ import javax.inject.Inject;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import lombok.extern.log4j.Log4j2;
-import okhttp3.OkHttpClient;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 
@@ -36,9 +35,6 @@ import org.apache.commons.csv.CSVRecord;
 @Deprecated
 public class Adam4EveBackfillStructureSource implements StructureSource {
 	private static final String SOURCE_URL = "https://static.adam4eve.eu/IDs/playerStructure_extended.csv";
-
-	@Inject
-	protected OkHttpClient okHttpClient;
 
 	@Inject
 	protected OkHttpWrapper okHttpWrapper;
@@ -143,15 +139,15 @@ public class Adam4EveBackfillStructureSource implements StructureSource {
 	}
 
 	private Single<File> download() {
-		return Single.defer(() -> {
+		return Single.fromCallable(() -> {
 			var file =
 					tempFiles.tempFile("adam4eve-playerStructure_IDs", ".csv").toFile();
-			return okHttpWrapper.download(SOURCE_URL, file, okHttpClient).map(response -> {
+			try (var response = okHttpWrapper.download(SOURCE_URL, file)) {
 				if (response.code() != 200) {
 					throw new RuntimeException();
 				}
 				return file;
-			});
+			}
 		});
 	}
 

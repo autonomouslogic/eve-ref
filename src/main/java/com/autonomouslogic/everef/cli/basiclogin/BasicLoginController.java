@@ -43,8 +43,8 @@ public class BasicLoginController {
 	@Produces("text/html")
 	public String callback(@QueryParam("code") String code, @QueryParam("state") String state) {
 		log.debug("Callback code: {}, state: {}", code, state);
-		var token = esiAuthHelper.getAccessToken(code).blockingGet();
-		var verify = esiAuthHelper.verify(token.getAccessToken()).blockingGet();
+		var token = esiAuthHelper.getAccessToken(code);
+		var verify = esiAuthHelper.verify(token.getAccessToken());
 
 		var characterLogin = CharacterLogin.builder()
 				.characterId(verify.getCharacterId())
