@@ -9,7 +9,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.NullNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.reactivex.rxjava3.core.Flowable;
-import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.functions.BiFunction;
 import io.reactivex.rxjava3.functions.Function;
 import java.time.Duration;
@@ -77,11 +76,11 @@ public class EsiHelper {
 		return Flowable.concatArray(
 						Flowable.just(first),
 						Flowable.range(2, pagesInt - 1)
-								.flatMapSingle(
-										page -> Single.just(
-												fetch(url.toBuilder().page(page).build(), accessToken)),
-										false,
-										4))
+								.parallel(4)
+								.runOn(VirtualThreads.SCHEDULER)
+								.flatMap(page -> Flowable.just(
+										fetch(url.toBuilder().page(page).build(), accessToken)))
+								.sequential())
 				.toList()
 				.blockingGet();
 	}
