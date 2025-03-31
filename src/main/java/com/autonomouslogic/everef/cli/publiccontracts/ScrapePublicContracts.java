@@ -31,7 +31,6 @@ import javax.inject.Provider;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
-import okhttp3.OkHttpClient;
 import org.h2.mvstore.MVStore;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 
@@ -64,9 +63,6 @@ public class ScrapePublicContracts implements Command {
 	@Inject
 	@Named("data")
 	protected S3AsyncClient s3Client;
-
-	@Inject
-	protected OkHttpClient okHttpClient;
 
 	@Inject
 	protected OkHttpWrapper okHttpWrapper;

@@ -10,7 +10,6 @@ import com.autonomouslogic.everef.esi.EsiHelper;
 import com.autonomouslogic.everef.esi.EsiUrl;
 import com.autonomouslogic.everef.esi.LocationPopulator;
 import com.autonomouslogic.everef.esi.UniverseEsi;
-import com.autonomouslogic.everef.http.OkHttpWrapper;
 import com.autonomouslogic.everef.util.DataUtil;
 import com.autonomouslogic.everef.util.JsonUtil;
 import com.autonomouslogic.everef.util.VirtualThreads;
@@ -35,9 +34,6 @@ public class MarketOrderFetcher {
 
 	@Inject
 	protected EsiHelper esiHelper;
-
-	@Inject
-	protected OkHttpWrapper okHttpWrapper;
 
 	@Inject
 	protected LocationPopulator locationPopulator;

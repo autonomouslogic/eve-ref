@@ -62,7 +62,6 @@ import lombok.NonNull;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
-import okhttp3.OkHttpClient;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
 import org.apache.commons.io.IOUtils;
@@ -71,9 +70,6 @@ import software.amazon.awssdk.services.s3.S3AsyncClient;
 
 @Log4j2
 public class BuildRefData implements Command {
-	@Inject
-	protected OkHttpClient okHttpClient;
-
 	@Inject
 	protected OkHttpWrapper okHttpWrapper;
 

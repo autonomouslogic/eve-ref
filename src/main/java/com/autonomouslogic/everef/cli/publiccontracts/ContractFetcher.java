@@ -28,7 +28,6 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import okhttp3.OkHttpClient;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -54,11 +53,8 @@ public class ContractFetcher {
 	protected EsiHelper esiHelper;
 
 	@Inject
-	protected OkHttpWrapper okHttpWrapper;
-
-	@Inject
 	@Named("esi")
-	protected OkHttpClient okHttpClient;
+	protected OkHttpWrapper okHttpWrapper;
 
 	@Setter
 	@NonNull

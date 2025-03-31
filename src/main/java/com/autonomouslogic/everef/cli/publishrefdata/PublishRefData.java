@@ -42,7 +42,6 @@ import javax.inject.Provider;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
-import okhttp3.OkHttpClient;
 import org.apache.commons.lang3.tuple.Pair;
 import org.h2.mvstore.MVStore;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
@@ -63,9 +62,6 @@ public class PublishRefData implements Command {
 
 	@Inject
 	protected S3Util s3Util;
-
-	@Inject
-	protected OkHttpClient okHttpClient;
 
 	@Inject
 	protected OkHttpWrapper okHttpWrapper;

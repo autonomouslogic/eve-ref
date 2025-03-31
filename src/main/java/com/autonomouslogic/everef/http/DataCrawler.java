@@ -12,7 +12,6 @@ import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.Value;
 import lombok.extern.log4j.Log4j2;
-import okhttp3.OkHttpClient;
 import org.jsoup.Jsoup;
 
 /**
@@ -22,9 +21,6 @@ import org.jsoup.Jsoup;
 public class DataCrawler {
 	@Inject
 	protected UrlParser urlParser;
-
-	@Inject
-	protected OkHttpClient okHttpClient;
 
 	@Inject
 	protected OkHttpWrapper okHttpWrapper;
