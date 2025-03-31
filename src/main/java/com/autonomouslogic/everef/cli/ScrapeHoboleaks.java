@@ -98,17 +98,18 @@ public class ScrapeHoboleaks implements Command {
 		return Single.defer(() -> {
 			var file = tempFiles.tempFile("hoboleaks", ".tar.xz").toFile();
 			var url = dataUrl.resolve(HOBOLEAKS.createLatestPath()).toString();
-			var response = okHttpWrapper.download(url, file);
-			if (response.code() == 404) {
-				return Single.just(new byte[0]);
+			try (var response = okHttpWrapper.download(url, file)) {
+				if (response.code() == 404) {
+					return Single.just(new byte[0]);
+				}
+				if (response.code() != 200) {
+					return Single.error(new RuntimeException("Failed to download " + url + ": " + response.code()));
+				}
+				return CompressUtil.loadArchive(file)
+						.filter(entry -> entry.getLeft().getName().equals("meta.json"))
+						.map(Pair::getRight)
+						.first(new byte[0]);
 			}
-			if (response.code() != 200) {
-				return Single.error(new RuntimeException("Failed to download " + url + ": " + response.code()));
-			}
-			return CompressUtil.loadArchive(file)
-					.filter(entry -> entry.getLeft().getName().equals("meta.json"))
-					.map(Pair::getRight)
-					.first(new byte[0]);
 		});
 	}
 

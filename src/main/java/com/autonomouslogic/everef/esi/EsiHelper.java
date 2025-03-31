@@ -155,13 +155,15 @@ public class EsiHelper {
 	 */
 	@SneakyThrows
 	public JsonNode decodeResponse(Response response) {
-		if (response.code() == 204 || response.code() == 404) {
-			return NullNode.getInstance();
+		try (response) {
+			if (response.code() == 204 || response.code() == 404) {
+				return NullNode.getInstance();
+			}
+			if (response.code() != 200) {
+				throw new RuntimeException(String.format("Cannot decode non-200 response: %s", response.code()));
+			}
+			return objectMapper.readTree(response.peekBody(Long.MAX_VALUE).byteStream());
 		}
-		if (response.code() != 200) {
-			throw new RuntimeException(String.format("Cannot decode non-200 response: %s", response.code()));
-		}
-		return objectMapper.readTree(response.peekBody(Long.MAX_VALUE).byteStream());
 	}
 
 	/**
