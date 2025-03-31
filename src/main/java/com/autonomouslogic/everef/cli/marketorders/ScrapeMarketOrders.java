@@ -97,10 +97,7 @@ public class ScrapeMarketOrders implements Command {
 	}
 
 	private void initLogin() {
-		esiAuthHelper
-				.getTokenStringForOwnerHash(scrapeOwnerHash)
-				.ignoreElement()
-				.blockingAwait();
+		esiAuthHelper.getTokenStringForOwnerHash(scrapeOwnerHash);
 	}
 
 	private void fetchOrders() {

@@ -4,7 +4,7 @@ import static com.autonomouslogic.everef.util.ArchivePathFactory.PUBLIC_CONTRACT
 
 import com.autonomouslogic.everef.cli.Command;
 import com.autonomouslogic.everef.config.Configs;
-import com.autonomouslogic.everef.http.OkHttpHelper;
+import com.autonomouslogic.everef.http.OkHttpWrapper;
 import com.autonomouslogic.everef.mvstore.MVStoreUtil;
 import com.autonomouslogic.everef.mvstore.MapRemover;
 import com.autonomouslogic.everef.s3.S3Adapter;
@@ -31,7 +31,6 @@ import javax.inject.Provider;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
-import okhttp3.OkHttpClient;
 import org.h2.mvstore.MVStore;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 
@@ -66,10 +65,7 @@ public class ScrapePublicContracts implements Command {
 	protected S3AsyncClient s3Client;
 
 	@Inject
-	protected OkHttpClient okHttpClient;
-
-	@Inject
-	protected OkHttpHelper okHttpHelper;
+	protected OkHttpWrapper okHttpWrapper;
 
 	@Inject
 	protected TempFiles tempFiles;

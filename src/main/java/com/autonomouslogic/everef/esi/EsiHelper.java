@@ -1,7 +1,7 @@
 package com.autonomouslogic.everef.esi;
 
 import com.autonomouslogic.commons.rxjava3.Rx3Util;
-import com.autonomouslogic.everef.http.OkHttpHelper;
+import com.autonomouslogic.everef.http.OkHttpWrapper;
 import com.autonomouslogic.everef.openapi.esi.invoker.ApiResponse;
 import com.autonomouslogic.everef.util.VirtualThreads;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -9,8 +9,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.NullNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.reactivex.rxjava3.core.Flowable;
-import io.reactivex.rxjava3.core.Maybe;
-import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.functions.BiFunction;
 import io.reactivex.rxjava3.functions.Function;
 import java.time.Duration;
@@ -21,7 +19,6 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
-import okhttp3.OkHttpClient;
 import okhttp3.Response;
 
 @Singleton
@@ -31,10 +28,7 @@ public class EsiHelper {
 
 	@Inject
 	@Named("esi")
-	protected OkHttpClient esiHttpClient;
-
-	@Inject
-	protected OkHttpHelper okHttpHelper;
+	protected OkHttpWrapper okHttpWrapper;
 
 	@Inject
 	protected ObjectMapper objectMapper;
@@ -48,7 +42,7 @@ public class EsiHelper {
 	 * @param url
 	 * @return
 	 */
-	public Single<Response> fetch(EsiUrl url) {
+	public Response fetch(EsiUrl url) {
 		return fetch(url, Optional.empty());
 	}
 
@@ -58,24 +52,9 @@ public class EsiHelper {
 	 * @param url
 	 * @return
 	 */
-	public Single<Response> fetch(EsiUrl url, Optional<String> accessToken) {
-		return okHttpHelper.get(
-				url.toString(),
-				esiHttpClient,
-				r -> accessToken.ifPresent(token -> r.addHeader("Authorization", "Bearer " + token)));
-	}
-
-	/**
-	 * Fetches the requested URL.
-	 * This call does NOT include standard error handling.
-	 * @param url
-	 * @return
-	 */
-	public Single<Response> fetch(EsiUrl url, Maybe<String> accessToken) {
-		return accessToken
-				.map(Optional::of)
-				.switchIfEmpty(Single.just(Optional.empty()))
-				.flatMap(token -> fetch(url, token));
+	public Response fetch(EsiUrl url, Optional<String> accessToken) {
+		return okHttpWrapper.get(
+				url.toString(), r -> accessToken.ifPresent(token -> r.addHeader("Authorization", "Bearer " + token)));
 	}
 
 	/**
@@ -84,26 +63,30 @@ public class EsiHelper {
 	 * @param url
 	 * @return
 	 */
-	protected Flowable<Response> fetchPages(EsiUrl url, Maybe<String> accessToken) {
-		return fetch(url.toBuilder().page(1).build(), accessToken).flatMapPublisher(first -> {
-			var pages = first.header(PAGES_HEADER);
-			if (pages == null || pages.isEmpty()) {
-				return Flowable.just(first);
-			}
-			var pagesInt = Integer.parseInt(pages);
-			if (pagesInt == 1) {
-				return Flowable.just(first);
-			}
-			return Flowable.concatArray(
-					Flowable.just(first),
-					Flowable.range(2, pagesInt - 1)
-							.flatMapSingle(
-									page -> fetch(url.toBuilder().page(page).build(), accessToken), false, 4));
-		});
+	protected List<Response> fetchPages(EsiUrl url, Optional<String> accessToken) {
+		var first = fetch(url.toBuilder().page(1).build(), accessToken);
+		var pages = first.header(PAGES_HEADER);
+		if (pages == null || pages.isEmpty()) {
+			return List.of(first);
+		}
+		var pagesInt = Integer.parseInt(pages);
+		if (pagesInt == 1) {
+			return List.of(first);
+		}
+		return Flowable.concatArray(
+						Flowable.just(first),
+						Flowable.range(2, pagesInt - 1)
+								.parallel(4)
+								.runOn(VirtualThreads.SCHEDULER)
+								.flatMap(page -> Flowable.just(
+										fetch(url.toBuilder().page(page).build(), accessToken)))
+								.sequential())
+				.toList()
+				.blockingGet();
 	}
 
-	protected Flowable<Response> fetchPages(EsiUrl url) {
-		return fetchPages(url, Maybe.empty());
+	protected List<Response> fetchPages(EsiUrl url) {
+		return fetchPages(url, Optional.empty());
 	}
 
 	/**
@@ -151,15 +134,17 @@ public class EsiHelper {
 	 * @return
 	 */
 	public Flowable<JsonNode> fetchPagesOfJsonArrays(
-			EsiUrl url, BiFunction<JsonNode, Response, JsonNode> augmenter, Maybe<String> accessToken) {
-		return fetchPages(url, accessToken).compose(standardErrorHandling(url)).flatMap(response -> {
-			var node = decodeResponse(response);
-			return decodeArrayNode(url, node).map(entry -> augmenter.apply(entry, response));
-		});
+			EsiUrl url, BiFunction<JsonNode, Response, JsonNode> augmenter, Optional<String> accessToken) {
+		return Flowable.fromIterable(fetchPages(url, accessToken))
+				.compose(standardErrorHandling(url))
+				.flatMap(response -> {
+					var node = decodeResponse(response);
+					return decodeArrayNode(url, node).map(entry -> augmenter.apply(entry, response));
+				});
 	}
 
 	public Flowable<JsonNode> fetchPagesOfJsonArrays(EsiUrl url, BiFunction<JsonNode, Response, JsonNode> augmenter) {
-		return fetchPagesOfJsonArrays(url, augmenter, Maybe.empty());
+		return fetchPagesOfJsonArrays(url, augmenter, Optional.empty());
 	}
 
 	/**
@@ -169,13 +154,15 @@ public class EsiHelper {
 	 */
 	@SneakyThrows
 	public JsonNode decodeResponse(Response response) {
-		if (response.code() == 204 || response.code() == 404) {
-			return NullNode.getInstance();
+		try (response) {
+			if (response.code() == 204 || response.code() == 404) {
+				return NullNode.getInstance();
+			}
+			if (response.code() != 200) {
+				throw new RuntimeException(String.format("Cannot decode non-200 response: %s", response.code()));
+			}
+			return objectMapper.readTree(response.peekBody(Long.MAX_VALUE).byteStream());
 		}
-		if (response.code() != 200) {
-			throw new RuntimeException(String.format("Cannot decode non-200 response: %s", response.code()));
-		}
-		return objectMapper.readTree(response.peekBody(Long.MAX_VALUE).byteStream());
 	}
 
 	/**
@@ -218,7 +205,7 @@ public class EsiHelper {
 	 * @return
 	 */
 	public JsonNode populateLastModified(JsonNode entry, Response response) {
-		var lastModified = okHttpHelper.getLastModified(response);
+		var lastModified = okHttpWrapper.getLastModified(response);
 		var obj = (ObjectNode) entry;
 		lastModified.ifPresent(
 				date -> obj.put("http_last_modified", date.toInstant().toString()));

@@ -1,7 +1,7 @@
 package com.autonomouslogic.everef.cli.markethistory;
 
 import com.autonomouslogic.commons.rxjava3.Rx3Util;
-import com.autonomouslogic.everef.http.OkHttpHelper;
+import com.autonomouslogic.everef.http.OkHttpWrapper;
 import com.autonomouslogic.everef.model.MarketHistoryEntry;
 import com.autonomouslogic.everef.url.DataUrl;
 import com.autonomouslogic.everef.util.CompressUtil;
@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 import lombok.extern.log4j.Log4j2;
-import okhttp3.OkHttpClient;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
@@ -39,10 +38,7 @@ public class MarketHistoryLoader {
 	protected TempFiles tempFiles;
 
 	@Inject
-	protected OkHttpClient okHttpClient;
-
-	@Inject
-	protected OkHttpHelper okHttpHelper;
+	protected OkHttpWrapper okHttpWrapper;
 
 	private final CsvSchema schema;
 
@@ -68,14 +64,14 @@ public class MarketHistoryLoader {
 			var file = tempFiles
 					.tempFile("market-history", "-" + FilenameUtils.getName(url.getPath()))
 					.toFile();
-			return okHttpHelper
-					.download(url.toString(), file, okHttpClient)
-					.flatMap(response -> {
-						if (response.code() != 200) {
-							return Single.error(new RuntimeException(
-									"Failed to download " + url + " with code " + response.code()));
+			return Single.defer(() -> {
+						try (var response = okHttpWrapper.download(url.toString(), file)) {
+							if (response.code() != 200) {
+								return Single.error(new RuntimeException(
+										"Failed to download " + url + " with code " + response.code()));
+							}
+							return Single.just(file);
 						}
-						return Single.just(file);
 					})
 					.toFlowable()
 					.compose(Rx3Util.retryWithDelayFlowable(2, Duration.ofSeconds(2), e -> {

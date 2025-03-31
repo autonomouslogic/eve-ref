@@ -6,7 +6,7 @@ import static com.autonomouslogic.everef.cli.structures.ScrapeStructures.LAST_ST
 
 import com.autonomouslogic.everef.cli.structures.StructureStore;
 import com.autonomouslogic.everef.config.Configs;
-import com.autonomouslogic.everef.http.OkHttpHelper;
+import com.autonomouslogic.everef.http.OkHttpWrapper;
 import com.autonomouslogic.everef.util.Rx;
 import com.autonomouslogic.everef.util.TempFiles;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -25,7 +25,6 @@ import javax.inject.Inject;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import lombok.extern.log4j.Log4j2;
-import okhttp3.OkHttpClient;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 
@@ -38,10 +37,7 @@ public class Adam4EveBackfillStructureSource implements StructureSource {
 	private static final String SOURCE_URL = "https://static.adam4eve.eu/IDs/playerStructure_extended.csv";
 
 	@Inject
-	protected OkHttpClient okHttpClient;
-
-	@Inject
-	protected OkHttpHelper okHttpHelper;
+	protected OkHttpWrapper okHttpWrapper;
 
 	@Inject
 	protected TempFiles tempFiles;
@@ -143,15 +139,15 @@ public class Adam4EveBackfillStructureSource implements StructureSource {
 	}
 
 	private Single<File> download() {
-		return Single.defer(() -> {
+		return Single.fromCallable(() -> {
 			var file =
 					tempFiles.tempFile("adam4eve-playerStructure_IDs", ".csv").toFile();
-			return okHttpHelper.download(SOURCE_URL, file, okHttpClient).map(response -> {
+			try (var response = okHttpWrapper.download(SOURCE_URL, file)) {
 				if (response.code() != 200) {
 					throw new RuntimeException();
 				}
 				return file;
-			});
+			}
 		});
 	}
 

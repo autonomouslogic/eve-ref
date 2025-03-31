@@ -4,7 +4,7 @@ import static com.autonomouslogic.everef.util.ArchivePathFactory.FUZZWORK_ORDERS
 
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.http.DataCrawler;
-import com.autonomouslogic.everef.http.OkHttpHelper;
+import com.autonomouslogic.everef.http.OkHttpWrapper;
 import com.autonomouslogic.everef.s3.S3Adapter;
 import com.autonomouslogic.everef.s3.S3Util;
 import com.autonomouslogic.everef.url.S3Url;
@@ -31,7 +31,6 @@ import lombok.Builder;
 import lombok.SneakyThrows;
 import lombok.Value;
 import lombok.extern.log4j.Log4j2;
-import okhttp3.OkHttpClient;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -60,10 +59,7 @@ public class SyncFuzzworkOrdersets implements Command {
 	protected S3AsyncClient s3Client;
 
 	@Inject
-	protected OkHttpClient okHttpClient;
-
-	@Inject
-	protected OkHttpHelper okHttpHelper;
+	protected OkHttpWrapper okHttpWrapper;
 
 	@Inject
 	protected TempFiles tempFiles;
@@ -101,53 +97,49 @@ public class SyncFuzzworkOrdersets implements Command {
 
 	@SneakyThrows
 	private Flowable<FuzzworkFile> scanFuzzworkFiles() {
-		return okHttpHelper
-				.get(fuzzworkBaseUrl.resolve("/api/").toString(), okHttpClient)
-				.flatMapPublisher(response -> {
-					if (response.code() != 200) {
-						return Flowable.error(new RuntimeException("Unexpected response code: " + response.code()));
-					}
-					var body =
-							Optional.ofNullable(response.body()).orElseThrow().string();
-					var doc = Jsoup.parse(body);
-					var links = doc.select("a");
-					var books = links.stream()
-							.map(link -> link.attr("href"))
-							.flatMap(href -> {
-								var matcher = ORDERSET_PATTERN.matcher(href);
-								if (!matcher.matches()) {
-									return Stream.empty();
-								}
-								var id = Long.parseLong(matcher.group(1));
-								return Stream.of(FuzzworkFile.builder()
-										.id(id)
-										.uri(fuzzworkBaseUrl.resolve(href))
-										.build());
-							})
-							.toList();
-					return Flowable.fromIterable(books);
-				});
+		try (var response = okHttpWrapper.get(fuzzworkBaseUrl.resolve("/api/").toString())) {
+
+			if (response.code() != 200) {
+				return Flowable.error(new RuntimeException("Unexpected response code: " + response.code()));
+			}
+			var body = Optional.ofNullable(response.body()).orElseThrow().string();
+			var doc = Jsoup.parse(body);
+			var links = doc.select("a");
+			var books = links.stream()
+					.map(link -> link.attr("href"))
+					.flatMap(href -> {
+						var matcher = ORDERSET_PATTERN.matcher(href);
+						if (!matcher.matches()) {
+							return Stream.empty();
+						}
+						var id = Long.parseLong(matcher.group(1));
+						return Stream.of(FuzzworkFile.builder()
+								.id(id)
+								.uri(fuzzworkBaseUrl.resolve(href))
+								.build());
+					})
+					.toList();
+			return Flowable.fromIterable(books);
+		}
 	}
 
 	private Flowable<Long> scanExistingFiles() {
 		return Flowable.defer(() -> {
 			log.trace("Scanning existing files");
-			return dataCrawlerProvider
-					.get()
-					.setPrefix(FUZZWORK_ORDERSET.getFolder() + "/")
-					.crawl()
+			var stream = dataCrawlerProvider.get().setPrefix(FUZZWORK_ORDERSET.getFolder() + "/").crawl().stream()
 					.flatMap(url -> {
 						var path = url.getPath();
 						var basename = FilenameUtils.getBaseName(path);
 						if (!basename.startsWith(FUZZWORK_ORDERSET.getFilename())
 								|| !path.endsWith(FUZZWORK_ORDERSET.getSuffix())) {
-							return Flowable.empty();
+							return Stream.<Long>empty();
 						}
 						var removed = StringUtils.removeStart(basename, FUZZWORK_ORDERSET.getFilename());
 						removed = removed.substring(0, removed.indexOf('-'));
 						var id = Long.parseLong(removed);
-						return Flowable.just(id);
+						return Stream.of(id);
 					});
+			return Flowable.fromStream(stream);
 		});
 	}
 
@@ -167,28 +159,22 @@ public class SyncFuzzworkOrdersets implements Command {
 					var file = tempFiles
 							.tempFile("fuzzwork-orderset-" + fuzz.getId(), ".csv.gz")
 							.toFile();
-					return okHttpHelper
-							.download(fuzz.getUri().toString(), file, okHttpClient)
-							.flatMapMaybe(response -> {
-								if (response.code() == 404) {
-									log.warn(
-											"Failed downloading orderset {} - status: {}",
-											fuzz.getId(),
-											response.code());
-									return Maybe.empty();
-								}
-								if (response.code() != 200) {
-									return Maybe.error(
-											new RuntimeException("Unexpected response code: " + response.code()));
-								}
-								return Maybe.just(fuzz.toBuilder()
-										.file(file)
-										.lastModified(okHttpHelper
-												.getLastModified(response)
-												.orElseThrow()
-												.toInstant())
-										.build());
-							});
+					try (var response = okHttpWrapper.download(fuzz.getUri().toString(), file)) {
+						if (response.code() == 404) {
+							log.warn("Failed downloading orderset {} - status: {}", fuzz.getId(), response.code());
+							return Maybe.empty();
+						}
+						if (response.code() != 200) {
+							return Maybe.error(new RuntimeException("Unexpected response code: " + response.code()));
+						}
+						return Maybe.just(fuzz.toBuilder()
+								.file(file)
+								.lastModified(okHttpWrapper
+										.getLastModified(response)
+										.orElseThrow()
+										.toInstant())
+								.build());
+					}
 				})
 				.switchIfEmpty(Maybe.defer(() -> {
 					log.info("No new data for orderset {}", fuzz.getId());

@@ -96,10 +96,8 @@ public class EsiLimitExceededInterceptorTest {
 			for (int i = 0; i < 4; i++) {
 				var thread = new Thread(() -> {
 					while (!stop.get()) {
-						try {
-							esiHelper
-									.fetch(EsiUrl.builder().urlPath("/page").build())
-									.blockingGet();
+						try (var response = esiHelper.fetch(
+								EsiUrl.builder().urlPath("/page").build())) {
 						} catch (Exception e) {
 							log.warn("Fail", e);
 						}

@@ -52,7 +52,7 @@ public class DataCrawlerTest {
 	@Test
 	@SneakyThrows
 	void shouldCrawlDataSite() {
-		var urls = dataCrawler.crawl().toList().blockingGet();
+		var urls = dataCrawler.crawl();
 		assertEquals(
 				List.of(
 								urlParser.parse("http://localhost:" + TestDataUtil.TEST_PORT + "/data/test.zip"),
@@ -71,7 +71,7 @@ public class DataCrawlerTest {
 	@Test
 	@SneakyThrows
 	void shouldCrawlDataSiteWithPrefix() {
-		var urls = dataCrawler.setPrefix("/test").crawl().toList().blockingGet();
+		var urls = dataCrawler.setPrefix("/test").crawl();
 		assertNotNull(urls);
 		assertEquals(List.of(urlParser.parse("http://localhost:" + TestDataUtil.TEST_PORT + "/data/test.zip")), urls);
 
@@ -82,11 +82,7 @@ public class DataCrawlerTest {
 	@Test
 	@SneakyThrows
 	void shouldCrawlDataSiteWithDeepPrefix() {
-		var urls = dataCrawler
-				.setPrefix("/esi-scrape/eve-ref-esi-scrape-")
-				.crawl()
-				.toList()
-				.blockingGet();
+		var urls = dataCrawler.setPrefix("/esi-scrape/eve-ref-esi-scrape-").crawl();
 		assertNotNull(urls);
 		assertEquals(
 				List.of(urlParser.parse("http://localhost:" + TestDataUtil.TEST_PORT
@@ -102,7 +98,7 @@ public class DataCrawlerTest {
 	@SneakyThrows
 	@SetEnvironmentVariable(key = "DATA_BASE_URL", value = "http://localhost:" + TestDataUtil.TEST_PORT)
 	void shouldCrawlDataSiteWithoutBase() {
-		var urls = dataCrawler.crawl().toList().blockingGet();
+		var urls = dataCrawler.crawl();
 		assertEquals(
 				List.of(
 								urlParser.parse("http://localhost:" + TestDataUtil.TEST_PORT + "/data/test.zip"),
@@ -122,7 +118,7 @@ public class DataCrawlerTest {
 	@SneakyThrows
 	@SetEnvironmentVariable(key = "DATA_BASE_URL", value = "http://localhost:" + TestDataUtil.TEST_PORT)
 	void shouldCrawlDataSiteWithoutBaseAndWithPrefix() {
-		var urls = dataCrawler.setPrefix("/data/").crawl().toList().blockingGet();
+		var urls = dataCrawler.setPrefix("/data/").crawl();
 
 		assertEquals(
 				List.of(

@@ -16,17 +16,17 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class OkHttpHelperTest {
+public class OkHttpWrapperTest {
 	TempFiles tempFiles = new TempFiles();
 	OkHttpClient client;
-	OkHttpHelper helper;
+	OkHttpWrapper helper;
 	MockWebServer server;
 
 	@BeforeEach
 	@SneakyThrows
 	void setup() {
 		client = new OkHttpClient();
-		helper = new OkHttpHelper();
+		helper = new OkHttpWrapper(client);
 		server = new MockWebServer();
 		server.start(TestDataUtil.TEST_PORT);
 	}
@@ -45,12 +45,12 @@ public class OkHttpHelperTest {
 				.setBody("content\n")
 				.addHeader("Last-Modified", "Mon, 06 Jan 2020 00:07:14 GMT"));
 		var file = tempFiles
-				.tempFile(OkHttpHelperTest.class.getSimpleName(), "test")
+				.tempFile(OkHttpWrapperTest.class.getSimpleName(), "test")
 				.toFile();
 		file.delete();
 		var url = String.format("http://localhost:%s/test", server.getPort());
 
-		helper.download(url, file, client).ignoreElement().blockingAwait();
+		try (var response = helper.download(url, file)) {}
 		assertEquals("content\n", IOUtils.toString(file.toURI(), StandardCharsets.UTF_8));
 		assertEquals(
 				Instant.parse("2020-01-06T00:07:14Z"),

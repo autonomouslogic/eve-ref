@@ -10,7 +10,6 @@ import com.autonomouslogic.everef.esi.EsiHelper;
 import com.autonomouslogic.everef.esi.EsiUrl;
 import com.autonomouslogic.everef.esi.LocationPopulator;
 import com.autonomouslogic.everef.esi.UniverseEsi;
-import com.autonomouslogic.everef.http.OkHttpHelper;
 import com.autonomouslogic.everef.util.DataUtil;
 import com.autonomouslogic.everef.util.JsonUtil;
 import com.autonomouslogic.everef.util.VirtualThreads;
@@ -18,7 +17,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Flowable;
-import io.reactivex.rxjava3.core.Maybe;
 import java.time.Duration;
 import java.util.Map;
 import java.util.Optional;
@@ -36,9 +34,6 @@ public class MarketOrderFetcher {
 
 	@Inject
 	protected EsiHelper esiHelper;
-
-	@Inject
-	protected OkHttpHelper okHttpHelper;
 
 	@Inject
 	protected LocationPopulator locationPopulator;
@@ -125,7 +120,7 @@ public class MarketOrderFetcher {
 		return Flowable.defer(() -> {
 					log.info(String.format("Fetching market orders from %s", locationName));
 					var esiUrl = EsiUrl.builder().urlPath(url).build();
-					Maybe<String> token = auth ? getAccessToken() : Maybe.empty();
+					Optional<String> token = auth ? getAccessToken() : Optional.empty();
 					return esiHelper
 							.fetchPagesOfJsonArrays(esiUrl, esiHelper::populateLastModified, token)
 							.map(entry -> {
@@ -188,7 +183,7 @@ public class MarketOrderFetcher {
 		//		}
 	}
 
-	private Maybe<String> getAccessToken() {
-		return esiAuthHelper.getTokenStringForOwnerHash(scrapeOwnerHash).toMaybe();
+	private Optional<String> getAccessToken() {
+		return Optional.of(esiAuthHelper.getTokenStringForOwnerHash(scrapeOwnerHash));
 	}
 }

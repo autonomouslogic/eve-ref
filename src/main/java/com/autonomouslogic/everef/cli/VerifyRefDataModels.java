@@ -1,6 +1,6 @@
 package com.autonomouslogic.everef.cli;
 
-import com.autonomouslogic.everef.http.OkHttpHelper;
+import com.autonomouslogic.everef.http.OkHttpWrapper;
 import com.autonomouslogic.everef.model.ReferenceEntry;
 import com.autonomouslogic.everef.model.refdata.RefDataConfig;
 import com.autonomouslogic.everef.util.RefDataUtil;
@@ -26,7 +26,7 @@ public class VerifyRefDataModels implements Command {
 	protected OkHttpClient okHttpClient;
 
 	@Inject
-	protected OkHttpHelper okHttpHelper;
+	protected OkHttpWrapper okHttpWrapper;
 
 	@Inject
 	protected TempFiles tempFiles;

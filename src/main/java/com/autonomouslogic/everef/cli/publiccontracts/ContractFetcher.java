@@ -5,7 +5,7 @@ import com.autonomouslogic.everef.esi.EsiHelper;
 import com.autonomouslogic.everef.esi.EsiUrl;
 import com.autonomouslogic.everef.esi.LocationPopulator;
 import com.autonomouslogic.everef.esi.UniverseEsi;
-import com.autonomouslogic.everef.http.OkHttpHelper;
+import com.autonomouslogic.everef.http.OkHttpWrapper;
 import com.autonomouslogic.everef.openapi.esi.model.GetUniverseRegionsRegionIdOk;
 import com.autonomouslogic.everef.util.VirtualThreads;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -28,7 +28,6 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import okhttp3.OkHttpClient;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -54,11 +53,8 @@ public class ContractFetcher {
 	protected EsiHelper esiHelper;
 
 	@Inject
-	protected OkHttpHelper okHttpHelper;
-
-	@Inject
 	@Named("esi")
-	protected OkHttpClient okHttpClient;
+	protected OkHttpWrapper okHttpWrapper;
 
 	@Setter
 	@NonNull

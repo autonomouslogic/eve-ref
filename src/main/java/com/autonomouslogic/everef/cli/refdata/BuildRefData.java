@@ -23,7 +23,7 @@ import com.autonomouslogic.everef.cli.refdata.post.TypesDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.VariationsDecorator;
 import com.autonomouslogic.everef.cli.refdata.sde.SdeLoader;
 import com.autonomouslogic.everef.config.Configs;
-import com.autonomouslogic.everef.http.OkHttpHelper;
+import com.autonomouslogic.everef.http.OkHttpWrapper;
 import com.autonomouslogic.everef.model.refdata.RefDataConfig;
 import com.autonomouslogic.everef.mvstore.MVStoreUtil;
 import com.autonomouslogic.everef.refdata.RefDataMeta;
@@ -62,7 +62,6 @@ import lombok.NonNull;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
-import okhttp3.OkHttpClient;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
 import org.apache.commons.io.IOUtils;
@@ -72,10 +71,7 @@ import software.amazon.awssdk.services.s3.S3AsyncClient;
 @Log4j2
 public class BuildRefData implements Command {
 	@Inject
-	protected OkHttpClient okHttpClient;
-
-	@Inject
-	protected OkHttpHelper okHttpHelper;
+	protected OkHttpWrapper okHttpWrapper;
 
 	@Inject
 	protected UrlParser urlParser;

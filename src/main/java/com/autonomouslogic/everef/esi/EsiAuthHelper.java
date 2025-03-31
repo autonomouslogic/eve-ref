@@ -3,7 +3,7 @@ package com.autonomouslogic.everef.esi;
 import com.autonomouslogic.commons.rxjava3.Rx3Util;
 import com.autonomouslogic.dynamomapper.DynamoAsyncMapper;
 import com.autonomouslogic.everef.config.Configs;
-import com.autonomouslogic.everef.http.OkHttpHelper;
+import com.autonomouslogic.everef.http.OkHttpWrapper;
 import com.autonomouslogic.everef.model.CharacterLogin;
 import com.autonomouslogic.everef.util.VirtualThreads;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -13,8 +13,6 @@ import com.github.scribejava.core.oauth.OAuth20Service;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import io.reactivex.rxjava3.core.Completable;
-import io.reactivex.rxjava3.core.Maybe;
-import io.reactivex.rxjava3.core.Single;
 import java.net.URI;
 import java.net.URL;
 import java.security.SecureRandom;
@@ -27,7 +25,6 @@ import javax.inject.Named;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
-import okhttp3.OkHttpClient;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -46,14 +43,11 @@ public class EsiAuthHelper {
 	private static final URL CALLBACK_URL = Configs.OAUTH_CALLBACK_URL.getRequired();
 
 	@Inject
-	@Named("esi")
-	protected OkHttpClient esiHttpClient;
-
-	@Inject
 	protected EsiHelper esiHelper;
 
 	@Inject
-	protected OkHttpHelper okHttpHelper;
+	@Named("esi")
+	protected OkHttpWrapper esiHttpWrapper;
 
 	@Inject
 	protected ObjectMapper objectMapper;
@@ -86,31 +80,27 @@ public class EsiAuthHelper {
 	}
 
 	@SneakyThrows
-	public Single<OAuth2AccessToken> getAccessToken(@NonNull String code) {
-		return Single.fromFuture(service.getAccessTokenAsync(code));
+	public OAuth2AccessToken getAccessToken(@NonNull String code) {
+		return service.getAccessTokenAsync(code).get();
 	}
 
 	@SneakyThrows
-	public Single<OAuth2AccessToken> refreshAccessToken(@NonNull String refreshToken) {
-		return Single.fromFuture(service.refreshAccessTokenAsync(refreshToken));
+	public OAuth2AccessToken refreshAccessToken(@NonNull String refreshToken) {
+		return service.refreshAccessTokenAsync(refreshToken).get();
 	}
 
 	@SneakyThrows
-	public Single<EsiVerifyResponse> verify(@NonNull String token) {
-		return Single.defer(() -> {
-					var url = new URL(Configs.ESI_BASE_URL.getRequired().toURL(), "/verify/");
-					var request = okHttpHelper
-							.getRequest(url.toString())
-							.newBuilder()
-							.header("Authorization", "Bearer " + token)
-							.build();
-					return okHttpHelper.execute(request, esiHttpClient);
-				})
-				.map(response -> {
-					var verify = objectMapper.readValue(response.body().byteStream(), EsiVerifyResponse.class);
-					response.close();
-					return verify;
-				});
+	public EsiVerifyResponse verify(@NonNull String token) {
+		var url = new URL(Configs.ESI_BASE_URL.getRequired().toURL(), "/verify/");
+		var request = esiHttpWrapper
+				.getRequest(url.toString())
+				.newBuilder()
+				.header("Authorization", "Bearer " + token)
+				.build();
+		try (var response = esiHttpWrapper.execute(request)) {
+			var verify = objectMapper.readValue(response.body().byteStream(), EsiVerifyResponse.class);
+			return verify;
+		}
 	}
 
 	@SneakyThrows
@@ -121,37 +111,33 @@ public class EsiAuthHelper {
 	}
 
 	@SneakyThrows
-	public Maybe<CharacterLogin> getCharacterLogin(String ownerHash) {
-		return Rx3Util.toMaybe(dynamoAsyncMapper.getItemFromPrimaryKey(ownerHash, CharacterLogin.class))
-				.observeOn(VirtualThreads.SCHEDULER)
-				.flatMap(r -> Maybe.fromOptional(Optional.ofNullable(r.item())));
+	public Optional<CharacterLogin> getCharacterLogin(String ownerHash) {
+		return Optional.ofNullable(dynamoAsyncMapper
+				.getItemFromPrimaryKey(ownerHash, CharacterLogin.class)
+				.join()
+				.item());
 	}
 
-	public Maybe<OAuth2AccessToken> getTokenForOwnerHash(String ownerHash) {
-		return Maybe.defer(() -> {
-			var cached = tokenCache.getIfPresent(ownerHash);
-			if (cached != null) {
-				var issued = cached.getRight();
-				var expiresIn = cached.getLeft().getExpiresIn();
-				var expiration = issued.plusSeconds(expiresIn).minus(EXPIRATION_BUFFER);
-				if (Instant.now().isBefore(expiration)) {
-					return Maybe.just(cached.getLeft());
-				}
+	public Optional<OAuth2AccessToken> getTokenForOwnerHash(String ownerHash) {
+		var cached = tokenCache.getIfPresent(ownerHash);
+		if (cached != null) {
+			var issued = cached.getRight();
+			var expiresIn = cached.getLeft().getExpiresIn();
+			var expiration = issued.plusSeconds(expiresIn).minus(EXPIRATION_BUFFER);
+			if (Instant.now().isBefore(expiration)) {
+				return Optional.of(cached.getLeft());
 			}
-			log.debug("Refreshing token for ownerHash {}", ownerHash);
-			return getCharacterLogin(ownerHash)
-					.flatMapSingle(login -> refreshAccessToken(login.getRefreshToken()))
-					.doOnSuccess(token -> {
-						tokenCache.put(ownerHash, Pair.of(token, Instant.now()));
-					});
-		});
+		}
+		log.debug("Refreshing token for ownerHash {}", ownerHash);
+		var token = getCharacterLogin(ownerHash).map(login -> refreshAccessToken(login.getRefreshToken()));
+		token.ifPresent(t -> tokenCache.put(ownerHash, Pair.of(t, Instant.now())));
+		return token;
 	}
 
-	public Single<String> getTokenStringForOwnerHash(String ownerHash) {
+	public String getTokenStringForOwnerHash(String ownerHash) {
 		return getTokenForOwnerHash(ownerHash)
 				.map(token -> token.getAccessToken())
-				.switchIfEmpty((Maybe.defer(() -> Maybe.error(
-						new RuntimeException(String.format("Login not found for owner hash: %s", ownerHash))))))
-				.toSingle();
+				.orElseThrow(
+						() -> new RuntimeException(String.format("Login not found for owner hash: %s", ownerHash)));
 	}
 }

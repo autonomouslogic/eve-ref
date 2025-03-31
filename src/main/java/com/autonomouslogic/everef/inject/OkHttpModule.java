@@ -6,6 +6,7 @@ import com.autonomouslogic.everef.http.EsiMarketHistoryRateLimitExceededIntercep
 import com.autonomouslogic.everef.http.EsiRateLimitInterceptor;
 import com.autonomouslogic.everef.http.EsiUserAgentInterceptor;
 import com.autonomouslogic.everef.http.LoggingInterceptor;
+import com.autonomouslogic.everef.http.OkHttpWrapper;
 import com.autonomouslogic.everef.http.UserAgentInterceptor;
 import dagger.Module;
 import dagger.Provides;
@@ -96,5 +97,25 @@ public class OkHttpModule {
 				.writeTimeout(Duration.ofSeconds(5))
 				.callTimeout(Duration.ofSeconds(120))
 				.cache(cache);
+	}
+
+	@Provides
+	@Singleton
+	public OkHttpWrapper mainWrapper(OkHttpClient client) {
+		return new OkHttpWrapper(client);
+	}
+
+	@Provides
+	@Singleton
+	@Named("esi")
+	public OkHttpWrapper esiMainWrapper(@Named("esi") OkHttpClient client) {
+		return new OkHttpWrapper(client);
+	}
+
+	@Provides
+	@Singleton
+	@Named("esi-market-history")
+	public OkHttpWrapper esiMarketHistoryWrapper(@Named("esi-market-history") OkHttpClient client) {
+		return new OkHttpWrapper(client);
 	}
 }

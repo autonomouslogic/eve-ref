@@ -7,8 +7,7 @@ import static org.mockito.Mockito.mock;
 import com.github.scribejava.core.model.OAuth2AccessToken;
 import dagger.Module;
 import dagger.Provides;
-import io.reactivex.rxjava3.core.Maybe;
-import io.reactivex.rxjava3.core.Single;
+import java.util.Optional;
 import javax.inject.Singleton;
 
 @Module
@@ -17,14 +16,14 @@ public class MockEsiAuthHelperModule {
 	@Singleton
 	public EsiAuthHelper esiAuthHelper() {
 		var mock = mock(EsiAuthHelper.class);
-		lenient().when(mock.getTokenForOwnerHash(any())).thenReturn(Maybe.just(new OAuth2AccessToken("oauth2-token")));
-		lenient().when(mock.getTokenStringForOwnerHash(any())).thenReturn(Single.just("oauth2-token"));
+		lenient().when(mock.getTokenForOwnerHash(any())).thenReturn(Optional.of(new OAuth2AccessToken("oauth2-token")));
+		lenient().when(mock.getTokenStringForOwnerHash(any())).thenReturn("oauth2-token");
 		lenient()
 				.when(mock.verify(any()))
-				.thenReturn(Single.just(EsiVerifyResponse.builder()
+				.thenReturn(EsiVerifyResponse.builder()
 						.characterId(1000000000)
 						.characterName("Test Character")
-						.build()));
+						.build());
 		return mock;
 	}
 }

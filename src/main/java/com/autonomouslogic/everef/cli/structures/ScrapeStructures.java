@@ -17,7 +17,7 @@ import com.autonomouslogic.everef.esi.EsiAuthHelper;
 import com.autonomouslogic.everef.esi.EsiHelper;
 import com.autonomouslogic.everef.esi.EsiUrl;
 import com.autonomouslogic.everef.esi.LocationPopulator;
-import com.autonomouslogic.everef.http.OkHttpHelper;
+import com.autonomouslogic.everef.http.OkHttpWrapper;
 import com.autonomouslogic.everef.mvstore.MVStoreUtil;
 import com.autonomouslogic.everef.openapi.refdata.api.RefdataApi;
 import com.autonomouslogic.everef.s3.S3Adapter;
@@ -55,7 +55,6 @@ import lombok.NonNull;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
-import okhttp3.OkHttpClient;
 import org.h2.mvstore.MVStore;
 import org.jetbrains.annotations.NotNull;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
@@ -115,10 +114,7 @@ public class ScrapeStructures implements Command {
 	protected S3AsyncClient s3Client;
 
 	@Inject
-	protected OkHttpClient okHttpClient;
-
-	@Inject
-	protected OkHttpHelper okHttpHelper;
+	protected OkHttpWrapper okHttpWrapper;
 
 	@Inject
 	protected TempFiles tempFiles;
@@ -223,7 +219,9 @@ public class ScrapeStructures implements Command {
 	}
 
 	private Completable initLogin() {
-		return getAccessToken().ignoreElement();
+		return Completable.fromAction(() -> {
+			getAccessToken();
+		});
 	}
 
 	private Completable initScrapeTime() {
@@ -263,13 +261,13 @@ public class ScrapeStructures implements Command {
 					var baseUrl = Configs.DATA_BASE_URL.getRequired();
 					var url = baseUrl + "/" + STRUCTURES.createLatestPath();
 					var file = tempFiles.tempFile("structures-latest", ".json").toFile();
-					return okHttpHelper.download(url, file, okHttpClient).flatMapMaybe(response -> {
+					try (var response = okHttpWrapper.download(url, file)) {
 						if (response.code() != 200) {
 							log.warn("Failed loading latest structures: HTTP {}, ignoring", response.code());
 							return Maybe.empty();
 						}
 						return Maybe.just(file);
-					});
+					}
 				})
 				.flatMapCompletable(file -> {
 					var type = objectMapper
@@ -348,7 +346,7 @@ public class ScrapeStructures implements Command {
 			var esiUrl = EsiUrl.builder()
 					.urlPath(String.format("/universe/structures/%s/", structureId))
 					.build();
-			return esiHelper.fetch(esiUrl, getAccessToken()).flatMapCompletable(response -> {
+			try (var response = esiHelper.fetch(esiUrl, getAccessToken())) {
 				var status = response.code();
 				log.debug("Fetched structure {}: {} response", structureId, status);
 				if (status == 200) {
@@ -362,7 +360,7 @@ public class ScrapeStructures implements Command {
 					structureStore.updateBoolean(structureId, IS_GETTABLE_STRUCTURE, false);
 				}
 				return Completable.complete();
-			});
+			}
 		});
 	}
 
@@ -381,19 +379,19 @@ public class ScrapeStructures implements Command {
 	}
 
 	private Completable fetchMarket(long structureId) {
-		return Completable.defer(() -> {
+		return Completable.fromAction(() -> {
 			var structure = structureStore.getOrInitStructure(structureId);
 			var typeId = JsonUtil.getNonBlankLongField(structure, "type_id");
 			if (typeId.isPresent() && !marketStructureTypeIds.contains(typeId.get())) {
 				structureStore.updateBoolean(structureId, IS_MARKET_STRUCTURE, false);
 				log.trace("Structure {} of type {} cannot have a market", structureId, typeId.get());
-				return Completable.complete();
+				return;
 			}
 			log.trace("Fetching market {}", structureId);
 			var esiUrl = EsiUrl.builder()
 					.urlPath(String.format("/markets/structures/%s/", structureId))
 					.build();
-			return esiHelper.fetch(esiUrl, getAccessToken()).flatMapCompletable(response -> {
+			try (var response = esiHelper.fetch(esiUrl, getAccessToken())) {
 				var status = response.code();
 				log.debug("Fetched market {}: {} response", structureId, status);
 				if (status == 200) {
@@ -404,8 +402,7 @@ public class ScrapeStructures implements Command {
 				} else {
 					structureStore.updateBoolean(structureId, IS_MARKET_STRUCTURE, false);
 				}
-				return Completable.complete();
-			});
+			}
 		});
 	}
 
@@ -477,7 +474,7 @@ public class ScrapeStructures implements Command {
 		});
 	}
 
-	private Maybe<String> getAccessToken() {
-		return esiAuthHelper.getTokenStringForOwnerHash(scrapeOwnerHash).toMaybe();
+	private Optional<String> getAccessToken() {
+		return Optional.of(esiAuthHelper.getTokenStringForOwnerHash(scrapeOwnerHash));
 	}
 }

@@ -5,7 +5,7 @@ import static java.time.ZoneOffset.UTC;
 
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.http.DataCrawler;
-import com.autonomouslogic.everef.http.OkHttpHelper;
+import com.autonomouslogic.everef.http.OkHttpWrapper;
 import com.autonomouslogic.everef.url.HttpUrl;
 import com.autonomouslogic.everef.url.UrlParser;
 import com.autonomouslogic.everef.util.ArchivePathFactory;
@@ -21,7 +21,6 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 import javax.inject.Singleton;
 import lombok.extern.log4j.Log4j2;
-import okhttp3.OkHttpClient;
 import org.apache.commons.lang3.tuple.Pair;
 
 @Singleton
@@ -31,10 +30,7 @@ public class MarketHistoryUtil {
 	protected TempFiles tempFiles;
 
 	@Inject
-	protected OkHttpClient okHttpClient;
-
-	@Inject
-	protected OkHttpHelper okHttpHelper;
+	protected OkHttpWrapper okHttpWrapper;
 
 	@Inject
 	protected ObjectMapper objectMapper;
@@ -59,7 +55,7 @@ public class MarketHistoryUtil {
 			log.info("Downloading total pairs file");
 			var url = dataBaseUrl.resolve(MARKET_HISTORY.getFolder() + "/").resolve("totals.json");
 			var file = tempFiles.tempFile("market-history-pairs", ".json").toFile();
-			return okHttpHelper.download(url.toString(), file, okHttpClient).flatMap(response -> {
+			try (var response = okHttpWrapper.download(url.toString(), file)) {
 				log.trace("Pairs file downloaded");
 				if (response.code() == 404) {
 					log.warn("Total pairs file not found");
@@ -74,7 +70,7 @@ public class MarketHistoryUtil {
 				log.info("Pairs file loaded");
 				file.delete();
 				return Single.just(totals);
-			});
+			}
 		});
 	}
 
@@ -83,10 +79,10 @@ public class MarketHistoryUtil {
 	 * @return
 	 */
 	public Flowable<Pair<LocalDate, HttpUrl>> crawlAvailableFiles() {
-		return dataCrawlerProvider
-				.get()
-				.setPrefix(ArchivePathFactory.MARKET_HISTORY.getFolder())
-				.crawl()
+		return Flowable.fromIterable(dataCrawlerProvider
+						.get()
+						.setPrefix(ArchivePathFactory.MARKET_HISTORY.getFolder())
+						.crawl())
 				.flatMap(url -> {
 					var path = url.getPath();
 					var datestamp = ArchivePathFactory.MARKET_HISTORY.parseArchiveTime(path);

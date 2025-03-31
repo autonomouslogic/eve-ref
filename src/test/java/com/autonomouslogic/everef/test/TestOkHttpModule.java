@@ -5,6 +5,7 @@ import com.autonomouslogic.everef.http.EsiMarketHistoryRateLimitExceededIntercep
 import com.autonomouslogic.everef.http.EsiRateLimitInterceptor;
 import com.autonomouslogic.everef.http.EsiUserAgentInterceptor;
 import com.autonomouslogic.everef.http.LoggingInterceptor;
+import com.autonomouslogic.everef.http.OkHttpWrapper;
 import com.autonomouslogic.everef.http.UserAgentInterceptor;
 import com.autonomouslogic.everef.inject.OkHttpModule;
 import dagger.Module;
@@ -38,7 +39,8 @@ public class TestOkHttpModule {
 	public OkHttpClient esiMarketHistoryHttpClient(
 			@Named("esi") OkHttpClient esiClient,
 			EsiMarketHistoryRateLimitExceededInterceptor esiMarketHistoryRateLimitExceededInterceptor) {
-		return esiClient
+		return new OkHttpModule()
+				.esiMarketHistoryHttpClient(esiClient, esiMarketHistoryRateLimitExceededInterceptor)
 				.newBuilder()
 				.addNetworkInterceptor(esiMarketHistoryRateLimitExceededInterceptor)
 				.build();
@@ -64,5 +66,25 @@ public class TestOkHttpModule {
 			}
 			return chain.proceed(chain.request());
 		}
+	}
+
+	@Provides
+	@Singleton
+	public OkHttpWrapper mainWrapper(OkHttpClient client) {
+		return new OkHttpModule().mainWrapper(client);
+	}
+
+	@Provides
+	@Singleton
+	@Named("esi")
+	public OkHttpWrapper esiMainWrapper(@Named("esi") OkHttpClient client) {
+		return new OkHttpModule().esiMainWrapper(client);
+	}
+
+	@Provides
+	@Singleton
+	@Named("esi-market-history")
+	public OkHttpWrapper esiMarketHistoryWrapper(@Named("esi-market-history") OkHttpClient client) {
+		return new OkHttpModule().esiMarketHistoryWrapper(client);
 	}
 }
