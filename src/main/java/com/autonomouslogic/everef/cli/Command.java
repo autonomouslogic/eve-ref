@@ -6,7 +6,7 @@ import io.reactivex.rxjava3.core.Completable;
 public interface Command extends Runnable {
 	@Deprecated
 	default Completable runAsync() {
-		return Completable.fromRunnable(this);
+		throw new UnsupportedOperationException();
 	}
 
 	default void run() {

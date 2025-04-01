@@ -128,8 +128,10 @@ public class HealthcheckDecoratorTest {
 				request,
 				"POST",
 				"/log?key=val",
-				s -> assertTrue(s.startsWith("java.lang.RuntimeException: test error message\n"
-						+ "\tat com.autonomouslogic.everef.cli.decorator.HealthcheckDecoratorTest")));
+				s -> assertTrue(
+						s.startsWith("java.lang.RuntimeException: test error message\n"
+								+ "\tat com.autonomouslogic.everef.cli.Command.run"),
+						s));
 		testDataUtil.assertNoMoreRequests(server);
 	}
 

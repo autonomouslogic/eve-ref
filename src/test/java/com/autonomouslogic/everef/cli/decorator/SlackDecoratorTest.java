@@ -198,8 +198,8 @@ public class SlackDecoratorTest {
 			assertEquals(1, attachments.size());
 			var text = attachments.get(0).get("text").asText();
 			assertTrue(
-					text.startsWith(
-							"java.lang.RuntimeException: test error message\n\tat com.autonomouslogic.everef.cli.decorator.SlackDecoratorTest"),
+					text.startsWith("java.lang.RuntimeException: test error message\n"
+							+ "\tat com.autonomouslogic.everef.cli.Command.run"),
 					text);
 			assertEquals("", attachments.get(0).get("fallback").asText());
 		});
