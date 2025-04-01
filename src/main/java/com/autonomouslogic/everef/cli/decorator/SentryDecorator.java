@@ -28,7 +28,7 @@ public class SentryDecorator {
 		private final Command delegate;
 
 		public Completable runAsync() {
-			return delegate.runAsync().onErrorResumeNext(e -> {
+			return Completable.fromAction(delegate::run).onErrorResumeNext(e -> {
 				Sentry.captureException(e, scope -> scope.setLevel(SentryLevel.ERROR));
 				return Completable.error(e);
 			});

@@ -3,9 +3,9 @@ package com.autonomouslogic.everef.cli.decorator;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 import com.autonomouslogic.everef.cli.Command;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
@@ -75,7 +75,7 @@ public class HealthcheckDecoratorTest {
 			value = "http://localhost:" + TestDataUtil.TEST_PORT + "/finish?key=val")
 	void shouldCallFinishUrl() {
 		healthcheckDecorator.decorate(testCommand).run();
-		verify(testCommand).runAsync();
+		verify(testCommand).run();
 		var request = server.takeRequest();
 		testDataUtil.assertRequest(request, "POST", "/finish?key=val", null);
 		testDataUtil.assertNoMoreRequests(server);
@@ -88,7 +88,7 @@ public class HealthcheckDecoratorTest {
 			value = "http://localhost:" + TestDataUtil.TEST_PORT + "/start?key=val")
 	void shouldCallStartUrl() {
 		healthcheckDecorator.decorate(testCommand).run();
-		verify(testCommand).runAsync();
+		verify(testCommand).run();
 		var request = server.takeRequest();
 		testDataUtil.assertRequest(request, "POST", "/start?key=val", null);
 		testDataUtil.assertNoMoreRequests(server);
@@ -100,12 +100,12 @@ public class HealthcheckDecoratorTest {
 			key = "HEALTH_CHECK_FAIL_URL",
 			value = "http://localhost:" + TestDataUtil.TEST_PORT + "/fail?key=val")
 	void shouldCallFailUrlOnError() {
-		when(testCommand.runAsync()).thenReturn(Completable.error(new RuntimeException("test error message")));
+		doThrow(new RuntimeException("test error message")).when(testCommand).run();
 		var error = assertThrows(
 				RuntimeException.class,
 				() -> healthcheckDecorator.decorate(testCommand).run());
 		assertEquals("test error message", error.getMessage());
-		verify(testCommand).runAsync();
+		verify(testCommand).run();
 		var request = server.takeRequest();
 		testDataUtil.assertRequest(request, "POST", "/fail?key=val", null);
 		testDataUtil.assertNoMoreRequests(server);
@@ -117,19 +117,21 @@ public class HealthcheckDecoratorTest {
 			key = "HEALTH_CHECK_LOG_URL",
 			value = "http://localhost:" + TestDataUtil.TEST_PORT + "/log?key=val")
 	void shouldCallLogUrlOnError() {
-		when(testCommand.runAsync()).thenReturn(Completable.error(new RuntimeException("test error message")));
+		doThrow(new RuntimeException("test error message")).when(testCommand).run();
 		var error = assertThrows(
 				RuntimeException.class,
 				() -> healthcheckDecorator.decorate(testCommand).run());
 		assertEquals("test error message", error.getMessage());
-		verify(testCommand).runAsync();
+		verify(testCommand).run();
 		var request = server.takeRequest();
 		testDataUtil.assertRequest(
 				request,
 				"POST",
 				"/log?key=val",
-				s -> assertTrue(s.startsWith("java.lang.RuntimeException: test error message\n"
-						+ "\tat com.autonomouslogic.everef.cli.decorator.HealthcheckDecoratorTest")));
+				s -> assertTrue(
+						s.startsWith("java.lang.RuntimeException: test error message\n"
+								+ "\tat com.autonomouslogic.everef.cli.Command.run"),
+						s));
 		testDataUtil.assertNoMoreRequests(server);
 	}
 
@@ -149,7 +151,7 @@ public class HealthcheckDecoratorTest {
 			value = "http://localhost:" + TestDataUtil.TEST_PORT + "/log?key=val")
 	void shouldCallSequenceOnSuccess() {
 		healthcheckDecorator.decorate(testCommand).run();
-		verify(testCommand).runAsync();
+		verify(testCommand).run();
 		var start = server.takeRequest();
 		testDataUtil.assertRequest(start, "POST", "/start?key=val", null);
 		var finish = server.takeRequest();
@@ -172,12 +174,12 @@ public class HealthcheckDecoratorTest {
 			key = "HEALTH_CHECK_LOG_URL",
 			value = "http://localhost:" + TestDataUtil.TEST_PORT + "/log?key=val")
 	void shouldCallSequenceOnError() {
-		when(testCommand.runAsync()).thenReturn(Completable.error(new RuntimeException("test error message")));
+		doThrow(new RuntimeException("test error message")).when(testCommand).run();
 		var error = assertThrows(
 				RuntimeException.class,
 				() -> healthcheckDecorator.decorate(testCommand).run());
 		assertEquals("test error message", error.getMessage());
-		verify(testCommand).runAsync();
+		verify(testCommand).run();
 		var start = server.takeRequest();
 		testDataUtil.assertRequest(start, "POST", "/start?key=val", null);
 		var log = server.takeRequest();
