@@ -1,5 +1,28 @@
 EVE Ref Changelog
 
+## [2.55.14](https://github.com/autonomouslogic/eve-ref/compare/2.55.13...2.55.14) (2025-04-01)
+
+
+### Bug Fixes
+
+* Close HTTP responses ([#745](https://github.com/autonomouslogic/eve-ref/issues/745)) ([4f55671](https://github.com/autonomouslogic/eve-ref/commit/4f55671a0449ae59c6aef7a2a0a231ecd0b9cc80))
+* Correct run syntax for decorators ([#747](https://github.com/autonomouslogic/eve-ref/issues/747)) ([50236fa](https://github.com/autonomouslogic/eve-ref/commit/50236fa2d7fa977248298975b3b3eed7024be2fe))
+
+
+### Documentation
+
+* Scrape market history ([c44d4cd](https://github.com/autonomouslogic/eve-ref/commit/c44d4cd062d91f3150334d5600e32543af272aed))
+
+
+### Code Refactoring
+
+* Removed a lot of reactive code in favour of virtual threads ([#743](https://github.com/autonomouslogic/eve-ref/issues/743)) ([b916815](https://github.com/autonomouslogic/eve-ref/commit/b916815e86ff02903655adfed728753f41c0e519))
+
+
+### Continuous Integration
+
+* Re-enabled releases ([cd2e353](https://github.com/autonomouslogic/eve-ref/commit/cd2e353eab23292f2a4a25ab4f9e977f051fa40c))
+
 ## [2.55.13](https://github.com/autonomouslogic/eve-ref/compare/2.55.12...2.55.13) (2025-03-20)
 
 
