@@ -46,7 +46,7 @@ const motd = computed(() => {
 		} as Motd;
 	}
 
-	if (new Date().getDay() == 5) {
+	if (new Date().getDay() == 4) {
 		return {
 			text: "Win 50x PLEX and 3 Day Omega every Friday",
 			url: "/giveaways",
