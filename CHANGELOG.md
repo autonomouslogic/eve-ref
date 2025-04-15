@@ -1,5 +1,12 @@
 EVE Ref Changelog
 
+## [2.55.16](https://github.com/autonomouslogic/eve-ref/compare/2.55.15...2.55.16) (2025-04-15)
+
+
+### Dependency Updates
+
+* **deps:** update plugin org.danilopianini.git-sensitive-semantic-versioning-gradle-plugin to v5 ([#757](https://github.com/autonomouslogic/eve-ref/issues/757)) ([693667b](https://github.com/autonomouslogic/eve-ref/commit/693667b1a5dd96f7d05b7fb5079c467b99c023f9))
+
 ## [2.55.15](https://github.com/autonomouslogic/eve-ref/compare/2.55.14...2.55.15) (2025-04-07)
 
 
