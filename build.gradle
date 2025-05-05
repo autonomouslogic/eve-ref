@@ -10,7 +10,7 @@ plugins {
 	id "com.diffplug.spotless" version "7.0.2"
 	id "org.openapi.generator" version "7.12.0"
 	id "io.swagger.core.v3.swagger-gradle-plugin" version "2.2.28"
-	id "org.flywaydb.flyway" version "11.6.0" apply false
+	id "org.flywaydb.flyway" version "11.8.0" apply false
 	id "nu.studer.jooq" version "10.0" apply false
 	id "io.micronaut.application" version "4.4.5"
 }
@@ -95,7 +95,7 @@ dependencies {
 
 	implementation "org.jooq:jooq:3.20.1"
 	implementation "org.flywaydb:flyway-core:11.8.0"
-	implementation "org.flywaydb:flyway-database-postgresql:11.6.0"
+	implementation "org.flywaydb:flyway-database-postgresql:11.8.0"
 	implementation "com.h2database:h2:2.3.232"
 	implementation "org.postgresql:postgresql:42.7.5"
 
