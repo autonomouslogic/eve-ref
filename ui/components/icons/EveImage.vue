@@ -1,15 +1,11 @@
 <script setup lang="ts">
-import refdataApi from "~/refdata";
-import {type DogmaAttribute, type Icon} from "~/refdata-openapi";
 import {getTypeIconUrl} from "~/lib/urls";
-
-const ownImageServer = "https://iec.jita.space";
 
 const props = defineProps<{
 	typeId: number
 }>();
 
-const iconUrl = computed(() => props.typeId ? getTypeIconUrl(props.typeId) : "");
+const iconUrl = props.typeId ? await getTypeIconUrl(props.typeId) : "";
 
 </script>
 

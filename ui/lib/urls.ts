@@ -1,3 +1,6 @@
+import refdataApi from "~/refdata";
+import {ANCIENT_RELICS, BLUEPRINT} from "~/lib/categoryConstants";
+
 export const MARKEE_DRAGON_URL = "https://store.markeedragon.com/affiliate.php?id=933&redirect=index.php?cat=4";
 export const EVE_REFERRAL_URL = "https://www.eveonline.com/signup?invc=b28d194d-7181-4bf0-8e3f-72cebbc7ca7d";
 export const HETZNER_REFERAL_URL = "https://hetzner.cloud/?ref=cDNPHOBYSP52";
@@ -12,6 +15,20 @@ export const REAL_DISCORD_URL = "https://discord.gg/fZYPAxFyXG";
 export const GITHUB_URL = "https://github.com/autonomouslogic/eve-ref/";
 export const YOUTUBE_URL = "https://www.youtube.com/@eve-ref";
 
-export function getTypeIconUrl(typeId: number): string {
-    return `https://images.evetech.net/types/${typeId}/icon`;
+export async function getTypeIconUrl(typeId: number, variation?: string): Promise<string> {
+    if (!variation) {
+        const inventoryType = await refdataApi.getType({typeId});
+        switch (inventoryType.categoryId) {
+            case BLUEPRINT:
+                variation = "bp";
+                break;
+            case ANCIENT_RELICS:
+                variation = "relic";
+                break;
+            default:
+                variation = "icon";
+                break;
+        }
+    }
+    return `https://images.evetech.net/types/${typeId}/${variation}`;
 }
