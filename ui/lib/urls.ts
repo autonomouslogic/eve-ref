@@ -1,5 +1,5 @@
 import refdataApi from "~/refdata";
-import {BLUEPRINT} from "~/lib/categoryConstants";
+import {ANCIENT_RELICS, BLUEPRINT} from "~/lib/categoryConstants";
 
 export const MARKEE_DRAGON_URL = "https://store.markeedragon.com/affiliate.php?id=933&redirect=index.php?cat=4";
 export const EVE_REFERRAL_URL = "https://www.eveonline.com/signup?invc=b28d194d-7181-4bf0-8e3f-72cebbc7ca7d";
@@ -21,6 +21,9 @@ export async function getTypeIconUrl(typeId: number, variation?: string): Promis
         switch (inventoryType.categoryId) {
             case BLUEPRINT:
                 variation = "bp";
+                break;
+            case ANCIENT_RELICS:
+                variation = "relic";
                 break;
             default:
                 variation = "icon";
