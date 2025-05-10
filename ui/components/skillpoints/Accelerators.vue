@@ -105,14 +105,16 @@ accelerators.sort((a, b) => a.acceleratedSpOmega - b.acceleratedSpOmega);
 	</p>
 	<table class="table-auto w-full my-3">
 		<thead>
-			<th></th>
-			<th class="text-right">Slot</th>
-			<th class="text-right">Price</th>
-			<th class="text-right">Bonus</th>
-			<th class="text-left">Account</th>
-			<th class="text-right">Accelerated SP</th>
-			<th class="text-right">Max SP/mth</th>
-			<th class="text-right">ISK/SP</th>
+			<tr>
+				<th></th>
+				<th class="text-right">Slot</th>
+				<th class="text-right">Price</th>
+				<th class="text-right">Bonus</th>
+				<th class="text-left">Account</th>
+				<th class="text-right">Accelerated SP</th>
+				<th class="text-right">Max SP/mth</th>
+				<th class="text-right">ISK/SP</th>
+			</tr>
 		</thead>
 
 		<tbody>

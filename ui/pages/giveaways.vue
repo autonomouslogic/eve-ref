@@ -125,10 +125,12 @@ const pastGiveaways = {
 	</p>
 	<table v-else class="standard-table">
 		<thead>
-			<th>Prize</th>
-			<th class="text-right">Value</th>
-			<th class="text-right">Winners</th>
-			<th>Draw time</th>
+			<tr>
+				<th>Prize</th>
+				<th class="text-right">Value</th>
+				<th class="text-right">Winners</th>
+				<th>Draw time</th>
+			</tr>
 		</thead>
 		<tbody>
 			<tr v-for="prize in unrolled" :key="prize.i">
@@ -173,8 +175,10 @@ const pastGiveaways = {
 
 	<table class="standard-table">
 		<thead>
-			<th>Event</th>
-			<th class="text-right">Prizes</th>
+			<tr>
+				<th>Event</th>
+				<th class="text-right">Prizes</th>
+			</tr>
 		</thead>
 		<tbody>
 			<tr v-for="(prizes, name) in pastGiveaways" :key="name">

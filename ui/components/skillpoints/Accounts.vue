@@ -49,12 +49,14 @@ const multiPrice = await getJitaSellPrice(MULTIPLE_PILOT_TRAINING_CERTIFICATE) |
 	</p>
 	<table class="table-auto w-full my-3">
 		<thead>
-			<th class="text-left"></th>
-			<th class="text-left">Account Restriction</th>
-			<th class="text-right">Price</th>
-			<th class="text-left">Attributes</th>
-			<th class="text-right">SP/mth</th>
-			<th class="text-right">ISK/SP</th>
+			<tr>
+				<th class="text-left"></th>
+				<th class="text-left">Account Restriction</th>
+				<th class="text-right">Price</th>
+				<th class="text-left">Attributes</th>
+				<th class="text-right">SP/mth</th>
+				<th class="text-right">ISK/SP</th>
+			</tr>
 		</thead>
 
 		<tbody>

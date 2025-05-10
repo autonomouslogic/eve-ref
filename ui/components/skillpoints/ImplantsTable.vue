@@ -45,15 +45,17 @@ props.sets.forEach(set => {
 <template>
 	<table class="table-auto w-full my-3">
 		<thead>
-			<th class="text-left">Set</th>
-			<th class="text-right">Bonus</th>
-			<th class="text-left">Implant</th>
-			<th class="text-right">Price</th>
-			<th class="text-right">Set Price</th>
-			<th class="text-left">Account</th>
-			<th class="text-right">SP/mth</th>
-			<th class="text-right">Life</th>
-			<th class="text-right">ISK/SP</th>
+			<tr>
+				<th class="text-left">Set</th>
+				<th class="text-right">Bonus</th>
+				<th class="text-left">Implant</th>
+				<th class="text-right">Price</th>
+				<th class="text-right">Set Price</th>
+				<th class="text-left">Account</th>
+				<th class="text-right">SP/mth</th>
+				<th class="text-right">Life</th>
+				<th class="text-right">ISK/SP</th>
+			</tr>
 		</thead>
 
 		<tbody>

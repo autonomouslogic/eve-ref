@@ -24,8 +24,10 @@ const meTime = blueprint?.activities?.research_material?.time;
 			<template v-if="meTime !== undefined">
 				<table class="standard-table">
 					<thead>
-						<th>Material Efficiency</th>
-						<th class="text-right">Total time</th>
+						<tr>
+							<th>Material Efficiency</th>
+							<th class="text-right">Total time</th>
+						</tr>
 					</thead>
 					<tbody>
 						<tr v-for="level in 10" :key="level">
