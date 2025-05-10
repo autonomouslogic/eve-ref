@@ -10,6 +10,8 @@ import {getIntRouteParam} from "~/lib/routeUtils";
 import {tr} from "~/lib/translate";
 import EveImage from "~/components/icons/EveImage.vue";
 import {getTypeIconUrl} from "~/lib/urls";
+import {SHIP} from "~/lib/categoryConstants";
+import ExternalLink from "~/components/helpers/ExternalLink.vue";
 
 const {locale} = useI18n();
 const route = useRoute();
@@ -34,6 +36,8 @@ if (pageDescription.length > 200) {
 	pageDescription = pageDescription.substring(0, 200);
 }
 const typeIconUrl = inventoryType && inventoryType.typeId ? await getTypeIconUrl(inventoryType.typeId) : "";
+const renderUrl = inventoryType && inventoryType.typeId ? await getTypeIconUrl(inventoryType.typeId, "render") : "";
+
 useHead({
 	title: pageTitle
 });
@@ -46,7 +50,10 @@ const inventoryGroup: InventoryGroup = await refdataApi.getGroup({groupId: inven
 </script>
 
 <template>
-	<h1 v-if="inventoryType.name">{{ tr(inventoryType.name, locale) }}</h1>
+	<h1 v-if="inventoryType.name">
+		<EveImage :type-id="inventoryType.typeId || 0" />
+		{{ tr(inventoryType.name, locale) }}
+	</h1>
 	<div class="mb-3">
 		<div v-if="inventoryType.marketGroupId">
 			Market group: <MarketGroupBreadcrumbs :market-group-id="inventoryType.marketGroupId" />
@@ -56,8 +63,9 @@ const inventoryGroup: InventoryGroup = await refdataApi.getGroup({groupId: inven
 			<GroupLink :groupId="inventoryType.groupId"></GroupLink>
 		</div>
 	</div>
-
-	<EveImage :type-id="inventoryType.typeId || 0" />
+	<div v-if="inventoryType.categoryId == SHIP" class="mb-3">
+		<ExternalLink :url="`${renderUrl}?size=1024`">View ship render</ExternalLink>
+	</div>
 
 	<TypeCards :inventory-type="inventoryType" />
 
