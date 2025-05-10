@@ -8,7 +8,7 @@ import TypeCards from "~/components/types/TypeCards.vue";
 import LinkParser from "~/components/helpers/LinkParser.vue";
 import {getIntRouteParam} from "~/lib/routeUtils";
 import {tr} from "~/lib/translate";
-import TypeIcon from "~/components/icons/TypeIcon.vue";
+import EveImage from "~/components/icons/EveImage.vue";
 import {getTypeIconUrl} from "~/lib/urls";
 
 const {locale} = useI18n();
@@ -33,7 +33,7 @@ let pageDescription = tr(inventoryType.description, locale.value) || "";
 if (pageDescription.length > 200) {
 	pageDescription = pageDescription.substring(0, 200);
 }
-const typeIconUrl = inventoryType && inventoryType.typeId ? getTypeIconUrl(inventoryType.typeId) : "";
+const typeIconUrl = inventoryType && inventoryType.typeId ? await getTypeIconUrl(inventoryType.typeId) : "";
 useHead({
 	title: pageTitle
 });
@@ -57,7 +57,7 @@ const inventoryGroup: InventoryGroup = await refdataApi.getGroup({groupId: inven
 		</div>
 	</div>
 
-	<TypeIcon :type-id="inventoryType.typeId || 0" />
+	<EveImage :type-id="inventoryType.typeId || 0" />
 
 	<TypeCards :inventory-type="inventoryType" />
 
