@@ -6,16 +6,17 @@ const props = defineProps<{
 }>();
 
 const iconUrl = props.typeId ? await getTypeIconUrl(props.typeId) : "";
-
 </script>
 
 <template>
-	<img v-if="iconUrl" :src="iconUrl" />
+	<img v-if="iconUrl" :src="`${iconUrl}?size=64`" />
 	<template v-else>&nbsp;</template>
 </template>
 
 <style scoped>
 img {
   display: inline-block;
+  width: 64px;
+  height: 64px;
 }
 </style>
