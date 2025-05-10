@@ -38,12 +38,14 @@ const plexPrice = await getJitaSellPrice(PLEX_TYPE_ID) || 0;
 	<h2>Injectors</h2>
 	<table class="table-auto w-full my-3">
 		<thead>
-			<th class="text-left"></th>
-			<th class="text-left">Account Restriction</th>
-			<th class="text-right">Price</th>
-			<th class="text-right">Injected SP</th>
-			<th class="text-right">Max SP/mth</th>
-			<th class="text-right">ISK/SP</th>
+			<tr>
+				<th class="text-left"></th>
+				<th class="text-left">Account Restriction</th>
+				<th class="text-right">Price</th>
+				<th class="text-right">Injected SP</th>
+				<th class="text-right">Max SP/mth</th>
+				<th class="text-right">ISK/SP</th>
+			</tr>
 		</thead>
 
 		<tr>

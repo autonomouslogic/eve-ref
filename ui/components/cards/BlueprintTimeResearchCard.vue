@@ -24,8 +24,10 @@ const teTime = blueprint?.activities?.research_time?.time;
 			<template v-if="teTime !== undefined">
 				<table class="standard-table">
 					<thead>
-						<th>Time Efficiency</th>
-						<th class="text-right">Total time</th>
+						<tr>
+							<th>Time Efficiency</th>
+							<th class="text-right">Total time</th>
+						</tr>
 					</thead>
 					<tbody>
 						<tr v-for="level in 10" :key="level">

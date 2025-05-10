@@ -11,7 +11,6 @@ export default defineNuxtRouteMiddleware((to, from) => {
     if (pos >= 0) {
         path = path.substring(0, pos);
     }
-    console.log("path", path);
     w.goatcounter.count({
         path,
         referrer: "",
