@@ -61,17 +61,23 @@ public class ImportMarketHistory implements Command {
 	}
 
 	@Override
-	public Completable runAsync() {
-		return Completable.concatArray(flywayMigrate.autoRun(), runImport());
+	public void run() {
+		flywayMigrate.autoRun().blockingAwait();
+		runImport();
 	}
 
-	private Completable runImport() {
-		return resolveFilesToDownload()
+	private void runImport() {
+		resolveFilesToDownload()
 				.parallel(loadConcurrency)
 				.runOn(VirtualThreads.SCHEDULER)
 				.flatMap(availableFile -> loadFile(availableFile))
 				.sequential()
-				.flatMapCompletable(dateList -> insertDayEntries(dateList), false, insertConcurrency);
+				.parallel(insertConcurrency)
+				.runOn(VirtualThreads.SCHEDULER)
+				.flatMap(dateList -> insertDayEntries(dateList).toFlowable())
+				.sequential()
+				.ignoreElements()
+				.blockingAwait();
 	}
 
 	private Flowable<Pair<LocalDate, List<JsonNode>>> loadFile(Pair<LocalDate, HttpUrl> availableFile) {
