@@ -10,7 +10,7 @@ const iconUrl = props.typeId ? await getTypeIconUrl(props.typeId) : "";
 
 <template>
 	<img v-if="iconUrl" :src="`${iconUrl}?size=64`" />
-	<template v-else>&nbsp;</template>
+	<template v-else></template>
 </template>
 
 <style scoped>

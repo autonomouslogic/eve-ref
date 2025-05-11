@@ -1,5 +1,5 @@
 import refdataApi from "~/refdata";
-import {ANCIENT_RELICS, BLUEPRINT} from "~/lib/categoryConstants";
+import {ANCIENT_RELICS, BLUEPRINT, SKINS} from "~/lib/categoryConstants";
 
 export const MARKEE_DRAGON_URL = "https://store.markeedragon.com/affiliate.php?id=933&redirect=index.php?cat=4";
 export const EVE_REFERRAL_URL = "https://www.eveonline.com/signup?invc=b28d194d-7181-4bf0-8e3f-72cebbc7ca7d";
@@ -16,8 +16,11 @@ export const GITHUB_URL = "https://github.com/autonomouslogic/eve-ref/";
 export const YOUTUBE_URL = "https://www.youtube.com/@eve-ref";
 
 export async function getTypeIconUrl(typeId: number, variation?: string): Promise<string> {
+    const inventoryType = await refdataApi.getType({typeId});
+    if (inventoryType.categoryId == SKINS) {
+        return "";
+    }
     if (!variation) {
-        const inventoryType = await refdataApi.getType({typeId});
         switch (inventoryType.categoryId) {
             case BLUEPRINT:
                 variation = "bp";
