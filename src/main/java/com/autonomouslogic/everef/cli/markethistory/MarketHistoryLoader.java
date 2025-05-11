@@ -53,6 +53,7 @@ public class MarketHistoryLoader {
 	}
 
 	public Flowable<Pair<LocalDate, List<JsonNode>>> loadDailyFile(DataUrl url, LocalDate date) {
+		log.debug("Load daily file for {}", date);
 		return downloadFile(url).flatMapPublisher(file -> {
 			file.deleteOnExit();
 			return parseDailyFile(file, date).doFinally(() -> file.delete());
@@ -84,7 +85,7 @@ public class MarketHistoryLoader {
 	}
 
 	private Flowable<Pair<LocalDate, List<JsonNode>>> parseDailyFile(File file, LocalDate date) {
-		return Flowable.defer(() -> VirtualThreads.offload(() -> {
+		return Flowable.defer(() -> {
 			log.trace("Reading market history file: {}", file);
 			List<JsonNode> list;
 			try (var in = CompressUtil.uncompress(file)) {
@@ -92,7 +93,7 @@ public class MarketHistoryLoader {
 			}
 			log.trace("Read {} entries from {}", list.size(), file);
 			return Flowable.just(Pair.of(date, list));
-		}));
+		});
 	}
 
 	@NotNull
