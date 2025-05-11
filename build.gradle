@@ -372,7 +372,7 @@ task importMarketHistory(type: JavaExec) {
 	args "import-market-history"
 	environment envProperties
 	environment "LOG_LEVEL", "debug"
-	environment "DATABASE_URL", "jdbc:h2:file:${buildDir}/everef-data;AUTO_SERVER=true"
+//	environment "DATABASE_URL", "jdbc:h2:file:${buildDir}/everef-data;AUTO_SERVER=true"
 	environment "IMPORT_MARKET_HISTORY_MIN_DATE", LocalDate.now().minusDays(7).toString();
 
 	classpath = sourceSets.main.runtimeClasspath

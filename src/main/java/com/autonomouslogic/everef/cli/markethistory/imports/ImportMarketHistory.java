@@ -73,8 +73,9 @@ public class ImportMarketHistory implements Command {
 				.flatMap(availableFile -> loadFile(availableFile))
 				.sequential()
 				.parallel(insertConcurrency)
-				.runOn(VirtualThreads.SCHEDULER)
-				.flatMap(dateList -> insertDayEntries(dateList).toFlowable())
+				.runOn(VirtualThreads.SCHEDULER, 1)
+				.flatMap(dateList ->
+						Completable.fromAction(() -> insertDayEntries(dateList)).toFlowable())
 				.sequential()
 				.ignoreElements()
 				.blockingAwait();
@@ -84,17 +85,15 @@ public class ImportMarketHistory implements Command {
 		return marketHistoryLoader.loadDailyFile(availableFile.getRight(), availableFile.getLeft());
 	}
 
-	private Completable insertDayEntries(Pair<LocalDate, List<JsonNode>> dateList) {
-		return Completable.fromAction(() -> VirtualThreads.offload(() -> {
-			var date = dateList.getLeft();
-			var nodes = dateList.getRight();
-			log.info("Inserting {} entries for {}", nodes.size(), date);
-			var entries = dateList.getRight().stream()
-					.map(node -> objectMapper.convertValue(node, MarketHistoryEntry.class))
-					.toList();
-			marketHistoryDao.insert(entries);
-			log.debug("Completed {}", date);
-		}));
+	private void insertDayEntries(Pair<LocalDate, List<JsonNode>> dateList) {
+		var date = dateList.getLeft();
+		var nodes = dateList.getRight();
+		log.info("Inserting {} entries for {}", nodes.size(), date);
+		var entries = dateList.getRight().stream()
+				.map(node -> objectMapper.convertValue(node, MarketHistoryEntry.class))
+				.toList();
+		marketHistoryDao.insert(entries);
+		log.debug("Completed {}", date);
 	}
 
 	private Flowable<Pair<LocalDate, HttpUrl>> resolveFilesToDownload() {
