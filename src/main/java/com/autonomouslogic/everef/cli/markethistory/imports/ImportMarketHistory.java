@@ -14,6 +14,7 @@ import com.google.common.collect.Ordering;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Single;
+import java.io.File;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.ZoneOffset;
@@ -61,34 +62,46 @@ public class ImportMarketHistory implements Command {
 	}
 
 	@Override
-	public Completable runAsync() {
-		return Completable.concatArray(flywayMigrate.autoRun(), runImport());
+	public void run() {
+		flywayMigrate.autoRun().blockingAwait();
+		runImport();
 	}
 
-	private Completable runImport() {
-		return resolveFilesToDownload()
+	private void runImport() {
+		resolveFilesToDownload()
 				.parallel(loadConcurrency)
 				.runOn(VirtualThreads.SCHEDULER)
-				.flatMap(availableFile -> loadFile(availableFile))
+				.flatMap(this::downloadFile)
 				.sequential()
-				.flatMapCompletable(dateList -> insertDayEntries(dateList), false, insertConcurrency);
+				.parallel(insertConcurrency)
+				.runOn(VirtualThreads.SCHEDULER, 1)
+				.flatMap(file -> parseFile(file).flatMap(pair -> Completable.fromAction(() -> insertDayEntries(pair))
+						.toFlowable()))
+				.sequential()
+				.ignoreElements()
+				.blockingAwait();
 	}
 
-	private Flowable<Pair<LocalDate, List<JsonNode>>> loadFile(Pair<LocalDate, HttpUrl> availableFile) {
-		return marketHistoryLoader.loadDailyFile(availableFile.getRight(), availableFile.getLeft());
+	private Flowable<Pair<LocalDate, File>> downloadFile(Pair<LocalDate, HttpUrl> availableFile) {
+		return marketHistoryLoader
+				.downloadFile(availableFile.getRight())
+				.map(file -> Pair.of(availableFile.getLeft(), file))
+				.toFlowable();
 	}
 
-	private Completable insertDayEntries(Pair<LocalDate, List<JsonNode>> dateList) {
-		return Completable.fromAction(() -> VirtualThreads.offload(() -> {
-			var date = dateList.getLeft();
-			var nodes = dateList.getRight();
-			log.info("Inserting {} entries for {}", nodes.size(), date);
-			var entries = dateList.getRight().stream()
-					.map(node -> objectMapper.convertValue(node, MarketHistoryEntry.class))
-					.toList();
-			marketHistoryDao.insert(entries);
-			log.debug("Completed {}", date);
-		}));
+	private Flowable<Pair<LocalDate, List<JsonNode>>> parseFile(Pair<LocalDate, File> availableFile) {
+		return marketHistoryLoader.parseDailyFile(availableFile.getRight(), availableFile.getLeft());
+	}
+
+	private void insertDayEntries(Pair<LocalDate, List<JsonNode>> dateList) {
+		var date = dateList.getLeft();
+		var nodes = dateList.getRight();
+		log.info("Inserting {} entries for {}", nodes.size(), date);
+		var entries = dateList.getRight().stream()
+				.map(node -> objectMapper.convertValue(node, MarketHistoryEntry.class))
+				.toList();
+		marketHistoryDao.insert(entries);
+		log.debug("Completed {}", date);
 	}
 
 	private Flowable<Pair<LocalDate, HttpUrl>> resolveFilesToDownload() {
