@@ -6,7 +6,6 @@ import com.autonomouslogic.everef.model.MarketHistoryEntry;
 import com.autonomouslogic.everef.url.DataUrl;
 import com.autonomouslogic.everef.util.CompressUtil;
 import com.autonomouslogic.everef.util.TempFiles;
-import com.autonomouslogic.everef.util.VirtualThreads;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.MappingIterator;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
@@ -52,6 +51,7 @@ public class MarketHistoryLoader {
 				.withColumnReordering(true);
 	}
 
+	@Deprecated
 	public Flowable<Pair<LocalDate, List<JsonNode>>> loadDailyFile(DataUrl url, LocalDate date) {
 		return downloadFile(url).flatMapPublisher(file -> {
 			file.deleteOnExit();
@@ -59,7 +59,7 @@ public class MarketHistoryLoader {
 		});
 	}
 
-	private Single<File> downloadFile(DataUrl url) {
+	public Single<File> downloadFile(DataUrl url) {
 		return Single.defer(() -> {
 			var file = tempFiles
 					.tempFile("market-history", "-" + FilenameUtils.getName(url.getPath()))
@@ -83,8 +83,8 @@ public class MarketHistoryLoader {
 		});
 	}
 
-	private Flowable<Pair<LocalDate, List<JsonNode>>> parseDailyFile(File file, LocalDate date) {
-		return Flowable.defer(() -> VirtualThreads.offload(() -> {
+	public Flowable<Pair<LocalDate, List<JsonNode>>> parseDailyFile(File file, LocalDate date) {
+		return Flowable.defer(() -> {
 			log.trace("Reading market history file: {}", file);
 			List<JsonNode> list;
 			try (var in = CompressUtil.uncompress(file)) {
@@ -92,7 +92,7 @@ public class MarketHistoryLoader {
 			}
 			log.trace("Read {} entries from {}", list.size(), file);
 			return Flowable.just(Pair.of(date, list));
-		}));
+		});
 	}
 
 	@NotNull

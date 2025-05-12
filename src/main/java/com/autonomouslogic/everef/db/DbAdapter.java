@@ -29,9 +29,7 @@ public class DbAdapter {
 
 	public <R extends UpdatableRecord<R>> void insert(DSLContext ctx, Table<R> table, List<R> records) {
 		var stmt = ctx.insertInto(table).columns(table.fields());
-		for (var record : records) {
-			stmt = stmt.values(record);
-		}
+		stmt = stmt.valuesOfRecords(records);
 		stmt.onDuplicateKeyIgnore().execute();
 		log.debug("Inserted {} records into {}", records.size(), table.getName());
 	}
