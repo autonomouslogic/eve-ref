@@ -1,0 +1,79 @@
+openapi: 3.0.1
+paths:
+  /v1/industry/cost:
+    get:
+      operationId: industryCost
+      parameters:
+      - in: query
+        name: product_type_ids
+        schema:
+          type: integer
+          format: int64
+      - in: query
+        name: product_type_ids
+        schema:
+          type: array
+          items:
+            type: string
+          minItems: 1
+          uniqueItems: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/IndustryCost"
+      tags:
+      - industry
+components:
+  schemas:
+    ActivityCost:
+      type: object
+      properties:
+        activity:
+          type: string
+        bill_of_materials:
+          type: object
+          additionalProperties:
+            $ref: "#/components/schemas/MaterialCost"
+        product_type_id:
+          type: integer
+          format: int64
+    IndustryCost:
+      type: object
+      properties:
+        copying_costs:
+          type: object
+          additionalProperties:
+            $ref: "#/components/schemas/ActivityCost"
+        invention_costs:
+          type: object
+          additionalProperties:
+            $ref: "#/components/schemas/ActivityCost"
+        manufacturing_costs:
+          type: object
+          additionalProperties:
+            $ref: "#/components/schemas/ActivityCost"
+        me_research_costs:
+          type: object
+          additionalProperties:
+            $ref: "#/components/schemas/ActivityCost"
+        te_research_costs:
+          type: object
+          additionalProperties:
+            $ref: "#/components/schemas/ActivityCost"
+        type_id:
+          type: integer
+          format: int64
+    MaterialCost:
+      type: object
+      properties:
+        cost:
+          type: integer
+          format: int64
+        material_type_id:
+          type: integer
+          format: int64
+        quantity:
+          type: integer
+          format: int64

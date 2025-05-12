@@ -209,6 +209,25 @@ compileJava.dependsOn(tasks.esiClientGenerate)
 sourcesJar.dependsOn(tasks.esiClientGenerate)
 delombok.dependsOn(tasks.esiClientGenerate)
 
+task apiSpec(type: io.swagger.v3.plugins.gradle.tasks.ResolveTask) {
+	filterClass = "com.autonomouslogic.customspecfilter.CustomSpecFilter"
+	outputFormat = "YAML"
+	prettyPrint = "true"
+	sortOutput = true
+	alwaysResolveAppPath = false
+	skipResolveAppPath = false
+	readAllResources = true
+	encoding = "UTF-8"
+	classpath = sourceSets.main.runtimeClasspath
+	resourcePackages = ["com.autonomouslogic.everef.api"]
+	outputDir = file("spec")
+	outputFileName = "eve-ref-api"
+
+	classpath = sourceSets.main.runtimeClasspath
+	buildClasspath = classpath
+}
+
+
 test {
 	environment "LOG_LEVEL", "trace"
 	environment "DATABASE_URL", "jdbc:h2:file:${buildDir}/db/database-test;AUTO_SERVER=TRUE"
