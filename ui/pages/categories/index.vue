@@ -2,6 +2,7 @@
 import refdataApi, {cacheCategoriesBundle} from "~/refdata";
 import CategoryLink from "~/components/helpers/CategoryLink.vue";
 import {tr} from "~/lib/translate";
+
 const {locale} = useI18n();
 
 useHead({

@@ -2,6 +2,7 @@
 import refdataApi, {cacheRootMarketGroupBundle} from "~/refdata";
 import MarketGroupLink from "~/components/helpers/MarketGroupLink.vue";
 import {tr} from "~/lib/translate";
+
 const {locale} = useI18n();
 
 await cacheRootMarketGroupBundle();

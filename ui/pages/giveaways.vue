@@ -1,26 +1,13 @@
 <script setup lang="ts">
 import ExternalLink from "~/components/helpers/ExternalLink.vue";
-import {
-	DATE_TOVIKOV_CHAR,
-	DISCORD_URL,
-	EVE_REF_CHAR,
-	EVE_REF_CORP,
-	EVE_REFERRAL_URL,
-	EVE_STORE_URL,
-	GITHUB_URL,
-	HETZNER_REFERAL_URL,
-	MARKEE_DRAGON_URL,
-	PATREON_URL
-} from "~/lib/urls";
+import {DISCORD_URL} from "~/lib/urls";
 import {getJitaSellPrice} from "~/lib/marketUtils";
-import {DAILY_ALPHA_INJECTOR, LARGE_SKILL_INJECTOR, PLEX_TYPE_ID} from "~/lib/typeConstants";
+import {PLEX_TYPE_ID} from "~/lib/typeConstants";
 import {DateTime} from "luxon";
-import refdata from "~/refdata";
 import TypeLink from "~/components/helpers/TypeLink.vue";
 import Money from "~/components/dogma/units/Money.vue";
 import Datetime from "~/components/dogma/units/Datetime.vue";
 import InternalLink from "~/components/helpers/InternalLink.vue";
-import Duration from "~/components/dogma/units/Duration.vue";
 import {DAY} from "~/lib/timeUtils";
 
 useHead({
