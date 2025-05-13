@@ -14,39 +14,39 @@
         },
         "57486" : {
           "type_id" : 57486,
-          "quantity" : 100
+          "quantity" : 75
         },
         "57478" : {
           "type_id" : 57478,
-          "quantity" : 200
+          "quantity" : 150
         },
         "40" : {
           "type_id" : 40,
-          "quantity" : 3000
+          "quantity" : 1950
         },
         "39" : {
           "type_id" : 39,
-          "quantity" : 6000
+          "quantity" : 3900
         },
         "38" : {
           "type_id" : 38,
-          "quantity" : 24000
+          "quantity" : 15600
         },
         "37" : {
           "type_id" : 37,
-          "quantity" : 200000
+          "quantity" : 130000
         },
         "36" : {
           "type_id" : 36,
-          "quantity" : 600000
+          "quantity" : 390000
         },
         "35" : {
           "type_id" : 35,
-          "quantity" : 4000000
+          "quantity" : 2600000
         },
         "34" : {
           "type_id" : 34,
-          "quantity" : 8000000
+          "quantity" : 5200000
         }
       },
       "products" : {

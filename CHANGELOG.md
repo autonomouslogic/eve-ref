@@ -1,5 +1,18 @@
 EVE Ref Changelog
 
+## [2.55.18](https://github.com/autonomouslogic/eve-ref/compare/2.55.17...2.55.18) (2025-05-12)
+
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([#753](https://github.com/autonomouslogic/eve-ref/issues/753)) ([474296e](https://github.com/autonomouslogic/eve-ref/commit/474296e4c71d8bc1fbf7ff6c5fd1741f47d5480d))
+* **jobs:** Out of memory in the import market history job ([#785](https://github.com/autonomouslogic/eve-ref/issues/785)) ([a9031d2](https://github.com/autonomouslogic/eve-ref/commit/a9031d2cc5d095882b54b5ac1500220d1c303e9d))
+* **ui:** Don't render SKIN icons ([#784](https://github.com/autonomouslogic/eve-ref/issues/784)) ([0e8b76a](https://github.com/autonomouslogic/eve-ref/commit/0e8b76ae18f01fafea101ae36f3990f5d2272fd6))
+* **ui:** Fixed styling on EVE images ([#781](https://github.com/autonomouslogic/eve-ref/issues/781)) ([df70016](https://github.com/autonomouslogic/eve-ref/commit/df700164570bb14ebd7d36dc5a5c20b9e6d3f7e1))
+* **ui:** HTML errors ([#779](https://github.com/autonomouslogic/eve-ref/issues/779)) ([99654a6](https://github.com/autonomouslogic/eve-ref/commit/99654a6a770bdf9beeddf4ff7b8f58f3c16717aa))
+* **ui:** Moved the type icons to be inline with the page title ([#782](https://github.com/autonomouslogic/eve-ref/issues/782)) ([6d38892](https://github.com/autonomouslogic/eve-ref/commit/6d388924dd55f2835f391a7aec31a30613138ab3))
+* **ui:** Render blueprint icons correctly ([#780](https://github.com/autonomouslogic/eve-ref/issues/780)) ([0d9bd2b](https://github.com/autonomouslogic/eve-ref/commit/0d9bd2bfa07e76320a4af43fb0c957ca043aa8c3))
+
 ## [2.55.17](https://github.com/autonomouslogic/eve-ref/compare/2.55.16...2.55.17) (2025-05-05)
 
 
