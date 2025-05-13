@@ -25,23 +25,23 @@
       materials:
       - quantity: 1
         typeID: 57479
-      - quantity: 100
+      - quantity: 75
         typeID: 57486
-      - quantity: 200
+      - quantity: 150
         typeID: 57478
-      - quantity: 3000
+      - quantity: 1950
         typeID: 40
-      - quantity: 6000
+      - quantity: 3900
         typeID: 39
-      - quantity: 24000
+      - quantity: 15600
         typeID: 38
-      - quantity: 200000
+      - quantity: 130000
         typeID: 37
-      - quantity: 600000
+      - quantity: 390000
         typeID: 36
-      - quantity: 4000000
+      - quantity: 2600000
         typeID: 35
-      - quantity: 8000000
+      - quantity: 5200000
         typeID: 34
       products:
       - quantity: 1

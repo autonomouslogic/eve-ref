@@ -522,31 +522,31 @@
   "type_materials" : {
     "34" : {
       "material_type_id" : 34,
-      "quantity" : 8000000
+      "quantity" : 5200000
     },
     "35" : {
       "material_type_id" : 35,
-      "quantity" : 2581444
+      "quantity" : 2600000
     },
     "36" : {
       "material_type_id" : 36,
-      "quantity" : 600000
+      "quantity" : 390000
     },
     "37" : {
       "material_type_id" : 37,
-      "quantity" : 161433
+      "quantity" : 130000
     },
     "38" : {
       "material_type_id" : 38,
-      "quantity" : 12000
+      "quantity" : 15600
     },
     "39" : {
       "material_type_id" : 39,
-      "quantity" : 6000
+      "quantity" : 3900
     },
     "40" : {
       "material_type_id" : 40,
-      "quantity" : 3000
+      "quantity" : 1950
     }
   },
   "category_id" : 6,
