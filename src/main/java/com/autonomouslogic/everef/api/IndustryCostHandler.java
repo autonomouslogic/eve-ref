@@ -57,7 +57,8 @@ public class IndustryCostHandler implements HttpService, Handler {
 			schema = @Schema(implementation = IndustryCostInput.class),
 			explode = Explode.TRUE)
 	public IndustryCost industryCost(IndustryCostInput input) {
-		return IndustryCost.builder().input(input).build();
+		var cost = IndustryCost.builder().input(input);
+		return cost.build();
 	}
 
 	@Override
