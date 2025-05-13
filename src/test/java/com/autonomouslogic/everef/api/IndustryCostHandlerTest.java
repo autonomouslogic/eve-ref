@@ -50,7 +50,7 @@ public class IndustryCostHandlerTest {
 	@ParameterizedTest
 	@MethodSource("costTests")
 	@SneakyThrows
-	void shouldCalculateCosts(IndustryCostInput input, IndustryCost expected) {
+	void shouldCalculateCosts(String name, IndustryCostInput input, IndustryCost expected) {
 		var res = industryApi.industryCostWithHttpInfo(input);
 		assertEquals(200, res.getStatusCode());
 		var actual = res.getData();

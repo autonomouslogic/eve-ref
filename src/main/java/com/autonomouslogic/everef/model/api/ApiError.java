@@ -6,10 +6,14 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.ToString;
 import lombok.extern.jackson.Jacksonized;
 
 @Getter
+@ToString
+@EqualsAndHashCode
 @Builder(toBuilder = true)
 @Jacksonized
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
