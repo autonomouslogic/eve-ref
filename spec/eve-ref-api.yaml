@@ -98,6 +98,10 @@ components:
         decryptor_type_id:
           type: integer
           format: int64
+        facility_tax_rate:
+          type: number
+        industry_skills:
+          $ref: "#/components/schemas/IndustrySkills"
         invention_rig_tech_level:
           type: string
           enum:
@@ -109,12 +113,6 @@ components:
           - T1
           - T2
         product_type_ids:
-          type: array
-          items:
-            type: integer
-            format: int64
-          uniqueItems: true
-        rig_type_ids:
           type: array
           items:
             type: integer
@@ -143,6 +141,30 @@ components:
           enum:
           - T1
           - T2
+    IndustrySkills:
+      type: object
+      properties:
+        advanced_industry:
+          type: integer
+          format: int32
+        datacore1:
+          type: integer
+          format: int32
+        datacore2:
+          type: integer
+          format: int32
+        industry:
+          type: integer
+          format: int32
+        metallurgy:
+          type: integer
+          format: int32
+        research:
+          type: integer
+          format: int32
+        science:
+          type: integer
+          format: int32
     InventionCost:
       type: object
       properties:

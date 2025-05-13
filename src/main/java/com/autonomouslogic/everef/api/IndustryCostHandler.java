@@ -24,6 +24,7 @@ import java.util.Objects;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import software.amazon.awssdk.core.ClientEndpointProvider;
 
 @Tag(name = "industry")
 @Path("/v1/industry/cost")
@@ -101,12 +102,28 @@ public class IndustryCostHandler implements HttpService, Handler {
 		if ((input.getSystemId() == null) == (input.getSecurityClass() == null)) {
 			throw new ClientException("Exactly one of system ID and system security class must be provided");
 		}
-		if ((input.getRigTypeIds() != null && !input.getRigTypeIds().isEmpty())
-				&& (input.getMeRigTechLevel() != null
-						|| input.getTeRigTechLevel() != null
-						|| input.getInventionRigTechLevel() != null
-						|| input.getCopyingRigTechLevel() != null)) {
-			throw new ClientException("Both rig type IDs and rig tech levels cannot be provided at the same time");
+//		if ((input.getRigTypeIds() != null && !input.getRigTypeIds().isEmpty())
+//				&& (input.getMeRigTechLevel() != null
+//						|| input.getTeRigTechLevel() != null
+//						|| input.getInventionRigTechLevel() != null
+//						|| input.getCopyingRigTechLevel() != null)) {
+//			throw new ClientException("Both rig type IDs and rig tech levels cannot be provided at the same time");
+//		}
+		if (input.getIndustrySkills() == null) {
+			throw new ClientException("INdustry skills must be set");
+		}
+		validateSkill(input.getIndustrySkills().getIndustry(), "Industry");
+		validateSkill(input.getIndustrySkills().getResearch(), "Research");
+		validateSkill(input.getIndustrySkills().getScience(), "Science");
+		validateSkill(input.getIndustrySkills().getAdvancedIndustry(), "Advanced Industry");
+		validateSkill(input.getIndustrySkills().getMetallurgy(), "Metallurgy");
+		validateSkill(input.getIndustrySkills().getDatacore1(), "Datacore #1");
+		validateSkill(input.getIndustrySkills().getDatacore2(), "Datacore #2");
+	}
+
+	private void validateSkill(int level, String name) {
+		if (level < 0 || level > 5) {
+			throw new ClientException(name + " skill level must be between 0 and 5");
 		}
 	}
 

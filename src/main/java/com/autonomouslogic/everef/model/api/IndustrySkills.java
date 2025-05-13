@@ -5,8 +5,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.math.BigDecimal;
-import java.util.Set;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -21,47 +19,32 @@ import lombok.extern.jackson.Jacksonized;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Schema
-public class IndustryCostInput {
+public class IndustrySkills {
 	@JsonProperty
-	Set<Long> productTypeIds;
+	@lombok.Builder.Default
+	int industry = 5;
 
 	@JsonProperty
-	int runs;
+	@lombok.Builder.Default
+	int research = 5;
 
 	@JsonProperty
-	Long decryptorTypeId;
+	@lombok.Builder.Default
+	int science = 5;
 
 	@JsonProperty
-	SecurityClass securityClass;
+	@lombok.Builder.Default
+	int advancedIndustry = 5;
 
 	@JsonProperty
-	Long systemId;
+	@lombok.Builder.Default
+	int metallurgy = 5;
 
 	@JsonProperty
-	BigDecimal systemCostIndex;
+	@lombok.Builder.Default
+	int datacore1 = 5;
 
 	@JsonProperty
-	Long structureTypeId;
-
-//	@JsonProperty
-//	Set<Long> rigTypeIds;
-
-	@JsonProperty
-	TechLevel meRigTechLevel;
-
-	@JsonProperty
-	TechLevel teRigTechLevel;
-
-	@JsonProperty
-	TechLevel inventionRigTechLevel;
-
-	@JsonProperty
-	TechLevel copyingRigTechLevel;
-
-	@JsonProperty
-	BigDecimal facilityTaxRate;
-
-	@JsonProperty
-		@lombok.Builder.Default
-	IndustrySkills industrySkills = IndustrySkills.builder().build();
+	@lombok.Builder.Default
+	int datacore2 = 5;
 }
