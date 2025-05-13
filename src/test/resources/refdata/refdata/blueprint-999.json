@@ -35,39 +35,39 @@
           "type_id" : 57479
         },
         "57486" : {
-          "quantity" : 100,
+          "quantity" : 75,
           "type_id" : 57486
         },
         "57478" : {
-          "quantity" : 200,
+          "quantity" : 150,
           "type_id" : 57478
         },
         "40" : {
-          "quantity" : 3000,
+          "quantity" : 1950,
           "type_id" : 40
         },
         "39" : {
-          "quantity" : 6000,
+          "quantity" : 3900,
           "type_id" : 39
         },
         "38" : {
-          "quantity" : 24000,
+          "quantity" : 15600,
           "type_id" : 38
         },
         "37" : {
-          "quantity" : 200000,
+          "quantity" : 130000,
           "type_id" : 37
         },
         "36" : {
-          "quantity" : 600000,
+          "quantity" : 390000,
           "type_id" : 36
         },
         "35" : {
-          "quantity" : 4000000,
+          "quantity" : 2600000,
           "type_id" : 35
         },
         "34" : {
-          "quantity" : 8000000,
+          "quantity" : 5200000,
           "type_id" : 34
         }
       },
