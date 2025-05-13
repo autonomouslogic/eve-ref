@@ -116,6 +116,7 @@ dependencies {
 }
 
 task refDataSpec(type: io.swagger.v3.plugins.gradle.tasks.ResolveTask) {
+	group = "openapi tools"
 	filterClass = "com.autonomouslogic.customspecfilter.CustomSpecFilter"
 	outputFormat = "YAML"
 	prettyPrint = "true"
@@ -210,6 +211,7 @@ sourcesJar.dependsOn(tasks.esiClientGenerate)
 delombok.dependsOn(tasks.esiClientGenerate)
 
 task apiSpec(type: io.swagger.v3.plugins.gradle.tasks.ResolveTask) {
+	group = "openapi tools"
 	filterClass = "com.autonomouslogic.customspecfilter.CustomSpecFilter"
 	outputFormat = "YAML"
 	prettyPrint = "true"
@@ -227,6 +229,38 @@ task apiSpec(type: io.swagger.v3.plugins.gradle.tasks.ResolveTask) {
 	buildClasspath = classpath
 }
 
+task apiClientGenerate(type: org.openapitools.generator.gradle.plugin.tasks.GenerateTask) {
+	group = "openapi tools"
+	generatorName = "java"
+	library = "native"
+	inputSpec = "$rootDir/spec/eve-ref-api.yaml"
+	outputDir = "$buildDir/generated/openapi/api"
+	apiPackage = "com.autonomouslogic.everef.openapi.api.api"
+	modelPackage = "com.autonomouslogic.everef.openapi.api.model"
+	invokerPackage = "com.autonomouslogic.everef.openapi.api.invoker"
+	configOptions = [
+			serializationLibrary: "jackson",
+			dateLibrary: "java8",
+			asyncNative: "false"
+	]
+	additionalProperties = [
+			supportUrlQuery: "false"
+	]
+	schemaMappings = [
+			"ActivityCost": "com.autonomouslogic.everef.model.api.ActivityCost",
+			"ApiError": "com.autonomouslogic.everef.model.api.ApiError",
+			"IndustryCost": "com.autonomouslogic.everef.model.api.IndustryCost",
+			"IndustryCostInput": "com.autonomouslogic.everef.model.api.IndustryCostInput",
+			"InventionCost": "com.autonomouslogic.everef.model.api.InventionCost",
+			"MaterialCost": "com.autonomouslogic.everef.model.api.MaterialCost",
+	]
+	logToStderr = true
+}
+sourceSets.main.java.srcDirs files("${buildDir}/generated/openapi/api/src/main/java")
+		.builtBy(tasks.apiClientGenerate)
+compileJava.dependsOn(tasks.apiClientGenerate)
+sourcesJar.dependsOn(tasks.apiClientGenerate)
+delombok.dependsOn(tasks.apiClientGenerate)
 
 test {
 	environment "LOG_LEVEL", "trace"

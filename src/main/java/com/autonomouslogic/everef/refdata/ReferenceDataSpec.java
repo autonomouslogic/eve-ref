@@ -28,7 +28,7 @@ import javax.ws.rs.PathParam;
 		externalDocs =
 				@ExternalDocumentation(
 						description = "Reference data",
-						url = "https://github.com/autonomouslogic/eve-ref/blob/main/docs/refdata.md"))
+						url = "https://docs.everef.net/datasets/reference-data.html"))
 @Tag(name = "refdata")
 public interface ReferenceDataSpec {
 	String BASE_URL = "https://ref-data.everef.net";

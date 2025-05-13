@@ -7,37 +7,37 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.Map;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.Singular;
-import lombok.Value;
 import lombok.extern.jackson.Jacksonized;
 
-@Value
-@Builder
+@Getter
+@Builder(toBuilder = true)
 @Jacksonized
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Schema
 public class IndustryCost {
 	@JsonProperty
-	long typeId;
+	IndustryCostInput input;
 
 	@JsonProperty
-	@Singular
-	Map<String, ActivityCost> manufacturingCosts;
+	@Singular("manufacturing")
+	Map<String, ActivityCost> manufacturing;
 
 	@JsonProperty
-	@Singular
-	Map<String, ActivityCost> inventionCosts;
+	@Singular("invention")
+	Map<String, InventionCost> invention;
 
 	@JsonProperty
-	@Singular
-	Map<String, ActivityCost> copyingCosts;
+	@Singular("copying")
+	Map<String, ActivityCost> copying;
 
 	@JsonProperty
-	@Singular
-	Map<String, ActivityCost> meResearchCosts;
+	@Singular("meResearch")
+	Map<String, ActivityCost> meResearch;
 
 	@JsonProperty
-	@Singular
-	Map<String, ActivityCost> teResearchCosts;
+	@Singular("teResearch")
+	Map<String, ActivityCost> teResearch;
 }

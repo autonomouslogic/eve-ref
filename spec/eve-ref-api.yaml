@@ -1,28 +1,43 @@
 openapi: 3.0.1
+info:
+  description: This spec should be considered unstable and subject to change at any
+    time.
+  license:
+    name: MIT-0
+    url: https://github.com/autonomouslogic/eve-ref/blob/main/LICENSE
+  title: EVE Ref API
+  version: dev
+servers:
+- url: https://api.everef.net
 paths:
   /v1/industry/cost:
     get:
       operationId: industryCost
       parameters:
-      - in: query
-        name: product_type_ids
+      - explode: true
+        in: query
+        name: input
         schema:
-          type: integer
-          format: int64
-      - in: query
-        name: product_type_ids
-        schema:
-          type: array
-          items:
-            type: string
-          minItems: 1
-          uniqueItems: true
+          $ref: "#/components/schemas/IndustryCostInput"
       responses:
         "200":
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/IndustryCost"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+          description: Client error
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+          description: Server error
       tags:
       - industry
 components:
@@ -39,38 +54,103 @@ components:
         product_type_id:
           type: integer
           format: int64
+        quantity:
+          type: integer
+          format: int32
+        time:
+          type: string
+    ApiError:
+      type: object
+      properties:
+        message:
+          type: string
     IndustryCost:
       type: object
       properties:
-        copying_costs:
+        copying:
           type: object
           additionalProperties:
             $ref: "#/components/schemas/ActivityCost"
-        invention_costs:
+        input:
+          $ref: "#/components/schemas/IndustryCostInput"
+        invention:
+          type: object
+          additionalProperties:
+            $ref: "#/components/schemas/InventionCost"
+        manufacturing:
           type: object
           additionalProperties:
             $ref: "#/components/schemas/ActivityCost"
-        manufacturing_costs:
+        me_research:
           type: object
           additionalProperties:
             $ref: "#/components/schemas/ActivityCost"
-        me_research_costs:
+        te_research:
           type: object
           additionalProperties:
             $ref: "#/components/schemas/ActivityCost"
-        te_research_costs:
-          type: object
-          additionalProperties:
-            $ref: "#/components/schemas/ActivityCost"
-        type_id:
+    IndustryCostInput:
+      type: object
+      properties:
+        decryptor_type_id:
           type: integer
           format: int64
+        product_type_ids:
+          type: array
+          items:
+            type: integer
+            format: int64
+          uniqueItems: true
+        rig_type_ids:
+          type: array
+          items:
+            type: integer
+            format: int64
+          uniqueItems: true
+        runs:
+          type: integer
+          format: int32
+        structure_type_id:
+          type: integer
+          format: int64
+        system_cost_index:
+          type: number
+        system_id:
+          type: integer
+          format: int64
+    InventionCost:
+      type: object
+      properties:
+        activity:
+          type: string
+        bill_of_materials:
+          type: object
+          additionalProperties:
+            $ref: "#/components/schemas/MaterialCost"
+        bpc_me:
+          type: integer
+          format: int32
+        bpc_runs:
+          type: integer
+          format: int32
+        bpc_te:
+          type: integer
+          format: int32
+        invention_probability:
+          type: number
+        product_type_id:
+          type: integer
+          format: int64
+        quantity:
+          type: integer
+          format: int32
+        time:
+          type: string
     MaterialCost:
       type: object
       properties:
         cost:
-          type: integer
-          format: int64
+          type: number
         material_type_id:
           type: integer
           format: int64
