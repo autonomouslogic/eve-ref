@@ -6,6 +6,7 @@ import com.autonomouslogic.everef.api.ErrorHandler;
 import com.autonomouslogic.everef.api.IndustryCostHandler;
 import com.autonomouslogic.everef.cli.Command;
 import com.autonomouslogic.everef.config.Configs;
+import io.helidon.common.concurrency.limits.AimdLimit;
 import io.helidon.webserver.WebServer;
 import io.helidon.webserver.http.HttpRouting;
 import jakarta.inject.Inject;
@@ -47,6 +48,7 @@ public class ApiRunner implements Command {
 				.port(port)
 				.host("0.0.0.0")
 				.routing(this::routing)
+				.concurrencyLimit(AimdLimit.create())
 				.build();
 		server.start();
 	}

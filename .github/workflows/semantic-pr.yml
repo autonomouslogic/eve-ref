@@ -22,3 +22,4 @@ jobs:
             jobs
             ui
             refdata
+            api
