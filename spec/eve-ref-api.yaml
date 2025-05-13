@@ -45,6 +45,10 @@ components:
     ActivityCost:
       type: object
       properties:
+        estimated_item_value:
+          type: number
+        facility_tax:
+          type: number
         materials:
           type: object
           additionalProperties:
@@ -55,6 +59,10 @@ components:
         quantity:
           type: integer
           format: int32
+        scc_surcharge:
+          type: number
+        system_cost_index:
+          type: number
         time:
           type: string
     ApiError:
@@ -90,35 +98,74 @@ components:
     IndustryCostInput:
       type: object
       properties:
+        advanced_industry_level:
+          type: integer
+          format: int32
+        copying_cost_index:
+          type: number
         copying_rig_tech_level:
           type: string
           enum:
           - T1
           - T2
+        datacore1_level:
+          type: integer
+          format: int32
+        datacore2_level:
+          type: integer
+          format: int32
+        decryption_level:
+          type: integer
+          format: int32
         decryptor_type_id:
           type: integer
           format: int64
         facility_tax_rate:
           type: number
-        industry_skills:
-          $ref: "#/components/schemas/IndustrySkills"
+        industry_level:
+          type: integer
+          format: int32
+        invention_cost_index:
+          type: number
         invention_rig_tech_level:
           type: string
           enum:
           - T1
           - T2
-        me_rig_tech_level:
+        manufacturing_cost_index:
+          type: number
+        material_efficiency:
+          type: integer
+          format: int32
+        material_efficiency_rig_tech_level:
           type: string
           enum:
           - T1
           - T2
+        metallurgy_level:
+          type: integer
+          format: int32
         product_type_ids:
           type: array
           items:
             type: integer
             format: int64
           uniqueItems: true
+        reaction_cost_index:
+          type: number
+        research_level:
+          type: integer
+          format: int32
+        researching_material_efficiency_cost_index:
+          type: number
+        researching_time_efficiency_cost_index:
+          type: number
         runs:
+          type: integer
+          format: int32
+        scc_surcharge_rate:
+          type: number
+        science_level:
           type: integer
           format: int32
         security_class:
@@ -131,50 +178,30 @@ components:
         structure_type_id:
           type: integer
           format: int64
-        system_cost_index:
-          type: number
-        system_id:
+        time_efficiency:
           type: integer
-          format: int64
-        te_rig_tech_level:
+          format: int32
+        time_efficiency_rig_tech_level:
           type: string
           enum:
           - T1
           - T2
-    IndustrySkills:
-      type: object
-      properties:
-        advanced_industry:
-          type: integer
-          format: int32
-        datacore1:
-          type: integer
-          format: int32
-        datacore2:
-          type: integer
-          format: int32
-        industry:
-          type: integer
-          format: int32
-        metallurgy:
-          type: integer
-          format: int32
-        research:
-          type: integer
-          format: int32
-        science:
-          type: integer
-          format: int32
     InventionCost:
       type: object
       properties:
+        estimated_item_value:
+          type: number
+        facility_tax:
+          type: number
+        job_cost_base:
+          type: number
+        material_efficiency:
+          type: integer
+          format: int32
         materials:
           type: object
           additionalProperties:
             $ref: "#/components/schemas/MaterialCost"
-        me:
-          type: integer
-          format: int32
         probability:
           type: number
         product_type_id:
@@ -186,11 +213,15 @@ components:
         runs:
           type: integer
           format: int32
-        te:
-          type: integer
-          format: int32
+        scc_surcharge:
+          type: number
+        system_cost_index:
+          type: number
         time:
           type: string
+        time_efficiency:
+          type: integer
+          format: int32
     MaterialCost:
       type: object
       properties:

@@ -28,8 +28,11 @@ public class InventionCost extends ActivityCost {
 	int runs;
 
 	@JsonProperty
-	int me;
+	int materialEfficiency;
 
 	@JsonProperty
-	int te;
+	int timeEfficiency;
+
+	@JsonProperty
+	BigDecimal jobCostBase;
 }

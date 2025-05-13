@@ -2,13 +2,12 @@ package com.autonomouslogic.everef.service;
 
 import com.autonomouslogic.everef.data.LoadedRefData;
 import com.autonomouslogic.everef.util.RefDataUtil;
-import lombok.Getter;
-import lombok.extern.log4j.Log4j2;
-
-import javax.inject.Inject;
-import javax.inject.Singleton;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import javax.inject.Inject;
+import javax.inject.Singleton;
+import lombok.Getter;
+import lombok.extern.log4j.Log4j2;
 
 @Singleton
 @Log4j2
@@ -23,11 +22,10 @@ public class RefDataService {
 	private LoadedRefData loadedRefData;
 
 	@Inject
-	protected RefDataService(){
-	}
+	protected RefDataService() {}
 
 	@Inject
-	protected void init(){
+	protected void init() {
 		update();
 		scheduler.scheduleWithFixedDelay(this::update, 10, 10, TimeUnit.MINUTES);
 	}
@@ -36,8 +34,7 @@ public class RefDataService {
 		try {
 			log.debug("Updating reference data");
 			loadedRefData = refDataUtil.loadLatestRefData().blockingGet();
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			log.warn("Failed updating reference data", e);
 		}
 	}

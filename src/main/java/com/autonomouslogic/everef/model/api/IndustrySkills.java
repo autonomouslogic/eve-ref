@@ -47,4 +47,8 @@ public class IndustrySkills {
 	@JsonProperty
 	@lombok.Builder.Default
 	int datacore2 = 5;
+
+	@JsonProperty
+	@lombok.Builder.Default
+	int decryption = 5;
 }

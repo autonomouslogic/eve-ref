@@ -29,28 +29,55 @@ public class IndustryCostInput {
 	int runs;
 
 	@JsonProperty
+	int materialEfficiency;
+
+	@JsonProperty
+	int timeEfficiency;
+
+	@JsonProperty
 	Long decryptorTypeId;
 
 	@JsonProperty
 	SecurityClass securityClass;
 
-	@JsonProperty
-	Long systemId;
+	//	@JsonProperty
+	//	Long systemId;
 
 	@JsonProperty
-	BigDecimal systemCostIndex;
+	BigDecimal manufacturingCostIndex;
+
+	@JsonProperty
+	BigDecimal researchingTimeEfficiencyCostIndex;
+
+	@JsonProperty
+	BigDecimal researchingMaterialEfficiencyCostIndex;
+
+	@JsonProperty
+	BigDecimal copyingCostIndex;
+
+	@JsonProperty
+	BigDecimal inventionCostIndex;
+
+	@JsonProperty
+	BigDecimal reactionCostIndex;
+
+	@JsonProperty
+	BigDecimal facilityTaxRate;
+
+	@JsonProperty
+	BigDecimal sccSurchargeRate;
 
 	@JsonProperty
 	Long structureTypeId;
 
-//	@JsonProperty
-//	Set<Long> rigTypeIds;
+	//	@JsonProperty
+	//	Set<Long> rigTypeIds;
 
 	@JsonProperty
-	TechLevel meRigTechLevel;
+	TechLevel materialEfficiencyRigTechLevel;
 
 	@JsonProperty
-	TechLevel teRigTechLevel;
+	TechLevel timeEfficiencyRigTechLevel;
 
 	@JsonProperty
 	TechLevel inventionRigTechLevel;
@@ -59,9 +86,34 @@ public class IndustryCostInput {
 	TechLevel copyingRigTechLevel;
 
 	@JsonProperty
-	BigDecimal facilityTaxRate;
+	@lombok.Builder.Default
+	int industryLevel = 5;
 
 	@JsonProperty
-		@lombok.Builder.Default
-	IndustrySkills industrySkills = IndustrySkills.builder().build();
+	@lombok.Builder.Default
+	int researchLevel = 5;
+
+	@JsonProperty
+	@lombok.Builder.Default
+	int scienceLevel = 5;
+
+	@JsonProperty
+	@lombok.Builder.Default
+	int advancedIndustryLevel = 5;
+
+	@JsonProperty
+	@lombok.Builder.Default
+	int metallurgyLevel = 5;
+
+	@JsonProperty
+	@lombok.Builder.Default
+	int datacore1Level = 5;
+
+	@JsonProperty
+	@lombok.Builder.Default
+	int datacore2Level = 5;
+
+	@JsonProperty
+	@lombok.Builder.Default
+	int decryptionLevel = 5;
 }

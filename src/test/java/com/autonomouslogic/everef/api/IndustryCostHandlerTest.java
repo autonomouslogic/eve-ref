@@ -9,14 +9,18 @@ import com.autonomouslogic.everef.model.api.IndustryCostInput;
 import com.autonomouslogic.everef.openapi.api.api.IndustryApi;
 import com.autonomouslogic.everef.openapi.api.invoker.ApiClient;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import jakarta.inject.Inject;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Stream;
 import lombok.SneakyThrows;
+import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -24,7 +28,8 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 public class IndustryCostHandlerTest {
-	static final List<String> TEST_NAMES = List.of("basic-dominix");
+	static final List<Pair<String, Set<String>>> TEST_NAMES =
+			List.of(Pair.of("basic-dominix", Set.of("manufacturing", "invention")));
 
 	@Inject
 	ApiRunner apiRunner;
@@ -50,7 +55,7 @@ public class IndustryCostHandlerTest {
 	@ParameterizedTest
 	@MethodSource("costTests")
 	@SneakyThrows
-	void shouldCalculateCosts(String name, IndustryCostInput input, IndustryCost expected) {
+	void shouldCalculateCosts(String name, IndustryCostInput input, IndustryCost expected, Set<String> verified) {
 		var res = industryApi.industryCostWithHttpInfo(input);
 		assertEquals(200, res.getStatusCode());
 		var actual = res.getData();
@@ -58,14 +63,16 @@ public class IndustryCostHandlerTest {
 	}
 
 	static Stream<Arguments> costTests() {
-		var mapper = new ObjectMapper();
-		return TEST_NAMES.stream().map(name -> {
+		var mapper = new ObjectMapper()
+				.enable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+				.registerModule(new JavaTimeModule());
+		return TEST_NAMES.stream().map(pair -> {
 			try {
-				var input = mapper.readValue(openTestFile(name, "input"), IndustryCostInput.class);
-				var output = mapper.readValue(openTestFile(name, "output"), IndustryCost.class).toBuilder()
+				var input = mapper.readValue(openTestFile(pair.getLeft(), "input"), IndustryCostInput.class);
+				var output = mapper.readValue(openTestFile(pair.getLeft(), "output"), IndustryCost.class).toBuilder()
 						.input(input)
 						.build();
-				return Arguments.of(name, input, output);
+				return Arguments.of(pair.getLeft(), input, output, pair.getRight());
 			} catch (IOException e) {
 				throw new RuntimeException(e);
 			}

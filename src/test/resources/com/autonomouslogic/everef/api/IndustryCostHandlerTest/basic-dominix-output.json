@@ -1,1 +1,81 @@
-{}
+{
+  "manufacturing": {
+    "645": {
+      "product_type_id": 645,
+      "quantity": 1,
+      "time": "PT2H43M12S",
+      "materials": {
+        "34": {
+          "type_id": 34,
+          "quantity": 4680000
+        },
+        "35": {
+          "type_id": 35,
+          "quantity": 2340000
+        },
+        "36": {
+          "type_id": 36,
+          "quantity": 351000
+        },
+        "37": {
+          "type_id": 37,
+          "quantity": 117000
+        },
+        "38": {
+          "type_id": 38,
+          "quantity": 14040
+        },
+        "39": {
+          "type_id": 39,
+          "quantity": 3510
+        },
+        "40": {
+          "type_id": 40,
+          "quantity": 1755
+        },
+        "57478": {
+          "type_id": 57478,
+          "quantity": 135
+        },
+        "57479": {
+          "type_id": 57479,
+          "quantity": 1
+        },
+        "57486": {
+          "type_id": 57486,
+          "quantity": 68
+        }
+      },
+      "estimated_item_value": 158985500,
+      "system_cost_index": 11624583,
+      "facility_tax": 397464,
+      "scc_surcharge": 6359420
+    }
+  },
+  "invention": {
+    "645": {
+      "product_type_id": 22431,
+      "quantity": 1,
+      "runs": 1,
+      "material_efficiency": 2,
+      "time_efficiency": 4,
+      "time": "PT45H20M00S",
+      "probability": 0.321,
+      "materials": {
+        "20410": {
+          "type_id": 20410,
+          "quantity": 32
+        },
+        "20424": {
+          "type_id": 20424,
+          "quantity": 32
+        }
+      },
+      "estimated_item_value": 774975000,
+      "job_cost_base": 15499500,
+      "system_cost_index": 1716589,
+      "facility_tax": 38749,
+      "scc_surcharge": 619980
+    }
+  }
+}

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.math.BigDecimal;
 import java.time.Duration;
 import java.util.Map;
 import lombok.EqualsAndHashCode;
@@ -30,10 +31,22 @@ public class ActivityCost {
 	Integer quantity;
 
 	@JsonProperty
+	@Schema(implementation = String.class)
+	Duration time;
+
+	@JsonProperty
 	@Singular
 	Map<String, MaterialCost> materials;
 
 	@JsonProperty
-	@Schema(implementation = String.class)
-	Duration time;
+	BigDecimal estimatedItemValue;
+
+	@JsonProperty
+	BigDecimal systemCostIndex;
+
+	@JsonProperty
+	BigDecimal facilityTax;
+
+	@JsonProperty
+	BigDecimal sccSurcharge;
 }

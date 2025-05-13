@@ -12,7 +12,8 @@ import javax.inject.Singleton;
 			DynamoDBModule.class,
 			EsiModule.class,
 			OkHttpModule.class,
-			RefDataApiModule.class
+			RefDataApiModule.class,
+			ExecutorServiceModule.class
 		})
 @Singleton
 public interface MainComponent {
