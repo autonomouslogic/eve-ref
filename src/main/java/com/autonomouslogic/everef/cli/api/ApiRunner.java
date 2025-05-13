@@ -1,5 +1,7 @@
 package com.autonomouslogic.everef.cli.api;
 
+import com.autonomouslogic.everef.api.ClientErrorHandler;
+import com.autonomouslogic.everef.api.ClientException;
 import com.autonomouslogic.everef.api.ErrorHandler;
 import com.autonomouslogic.everef.api.IndustryCostHandler;
 import com.autonomouslogic.everef.cli.Command;
@@ -19,6 +21,9 @@ public class ApiRunner implements Command {
 
 	@Inject
 	protected ErrorHandler errorHandler;
+
+	@Inject
+	protected ClientErrorHandler clientErrorHandler;
 
 	private WebServer server;
 
@@ -51,6 +56,8 @@ public class ApiRunner implements Command {
 	}
 
 	private HttpRouting.Builder routing(HttpRouting.Builder routing) {
-		return routing.register(industryCostHandler).error(Exception.class, errorHandler);
+		return routing.register(industryCostHandler)
+				.error(ClientException.class, clientErrorHandler)
+				.error(Exception.class, errorHandler);
 	}
 }

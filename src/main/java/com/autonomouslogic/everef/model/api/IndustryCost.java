@@ -23,6 +23,7 @@ public class IndustryCost {
 
 	@JsonProperty
 	@Singular("manufacturing")
+	@JsonInclude(JsonInclude.Include.NON_EMPTY)
 	Map<String, ActivityCost> manufacturing;
 
 	@JsonProperty

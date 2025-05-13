@@ -90,9 +90,24 @@ components:
     IndustryCostInput:
       type: object
       properties:
+        copying_rig_tech_level:
+          type: string
+          enum:
+          - T1
+          - T2
         decryptor_type_id:
           type: integer
           format: int64
+        invention_rig_tech_level:
+          type: string
+          enum:
+          - T1
+          - T2
+        me_rig_tech_level:
+          type: string
+          enum:
+          - T1
+          - T2
         product_type_ids:
           type: array
           items:
@@ -116,6 +131,18 @@ components:
         system_id:
           type: integer
           format: int64
+        system_security_class:
+          type: string
+          enum:
+          - HIGH_SEC
+          - LOW_SEC
+          - NULL_SEC
+          - WORMHOLE
+        te_rig_tech_level:
+          type: string
+          enum:
+          - T1
+          - T2
     InventionCost:
       type: object
       properties:

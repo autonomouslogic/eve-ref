@@ -4,8 +4,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.enums.ParameterStyle;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.math.BigDecimal;
 import java.util.Set;
@@ -21,14 +19,16 @@ import lombok.extern.jackson.Jacksonized;
 @Schema
 public class IndustryCostInput {
 	@JsonProperty
-	@Parameter(style = ParameterStyle.FORM)
 	Set<Long> productTypeIds;
 
 	@JsonProperty
-	Integer runs;
+	int runs;
 
 	@JsonProperty
 	Long decryptorTypeId;
+
+	@JsonProperty
+	SecurityClass systemSecurityClass;
 
 	@JsonProperty
 	Long systemId;
@@ -40,6 +40,17 @@ public class IndustryCostInput {
 	Long structureTypeId;
 
 	@JsonProperty
-	@Parameter(style = ParameterStyle.FORM)
 	Set<Long> rigTypeIds;
+
+	@JsonProperty
+	TechLevel meRigTechLevel;
+
+	@JsonProperty
+	TechLevel teRigTechLevel;
+
+	@JsonProperty
+	TechLevel inventionRigTechLevel;
+
+	@JsonProperty
+	TechLevel copyingRigTechLevel;
 }

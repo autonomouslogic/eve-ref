@@ -9,22 +9,22 @@ import jakarta.inject.Inject;
 import javax.inject.Singleton;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 
 @Singleton
 @Log4j2
-public class ErrorHandler implements io.helidon.webserver.http.ErrorHandler<Exception> {
+public class ClientErrorHandler implements io.helidon.webserver.http.ErrorHandler<ClientException> {
 	@Inject
 	protected ObjectMapper objectMapper;
 
 	@Inject
-	protected ErrorHandler() {}
+	protected ClientErrorHandler() {}
 
 	@Override
 	@SneakyThrows
-	public void handle(ServerRequest req, ServerResponse res, Exception e) {
-		log.warn("Error processing request: {}", req.requestedUri().toString(), e);
-		res.status(Status.INTERNAL_SERVER_ERROR_500)
+	public void handle(ServerRequest req, ServerResponse res, ClientException e) {
+		res.status(Status.BAD_REQUEST_400)
 				.send(objectMapper.writeValueAsBytes(
-						ApiError.builder().message("An internal error occurred").build()));
+						ApiError.builder().message(ExceptionUtils.getMessage(e)).build()));
 	}
 }
