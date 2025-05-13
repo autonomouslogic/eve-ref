@@ -6,9 +6,7 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.math.BigDecimal;
-import java.util.Map;
 import lombok.Getter;
-import lombok.Singular;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.jackson.Jacksonized;
 
@@ -20,18 +18,14 @@ import lombok.extern.jackson.Jacksonized;
 @Schema
 public class InventionCost extends ActivityCost {
 	@JsonProperty
-	BigDecimal inventionProbability;
+	BigDecimal probability;
 
 	@JsonProperty
-	int bpcRuns;
+	int runs;
 
 	@JsonProperty
-	int bpcMe;
+	int me;
 
 	@JsonProperty
-	int bpcTe;
-
-	@JsonProperty
-	@Singular
-	Map<String, MaterialCost> billOfMaterials;
+	int te;
 }

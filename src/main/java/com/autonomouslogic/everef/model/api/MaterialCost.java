@@ -18,7 +18,7 @@ import lombok.extern.jackson.Jacksonized;
 @Schema
 public class MaterialCost {
 	@JsonProperty
-	long materialTypeId;
+	long typeId;
 
 	@JsonProperty
 	long quantity;

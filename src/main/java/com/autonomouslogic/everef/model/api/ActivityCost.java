@@ -20,9 +20,6 @@ import lombok.extern.jackson.Jacksonized;
 @Schema
 public class ActivityCost {
 	@JsonProperty
-	String activity;
-
-	@JsonProperty
 	Long productTypeId;
 
 	@JsonProperty
@@ -30,7 +27,7 @@ public class ActivityCost {
 
 	@JsonProperty
 	@Singular
-	Map<String, MaterialCost> billOfMaterials;
+	Map<String, MaterialCost> materials;
 
 	@JsonProperty
 	@Schema(implementation = String.class)

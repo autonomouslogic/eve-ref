@@ -20,24 +20,34 @@ public class ApiRunner implements Command {
 	@Inject
 	protected ErrorHandler errorHandler;
 
+	private WebServer server;
+
 	@Inject
 	protected ApiRunner() {}
 
 	@Override
 	@SneakyThrows
 	public void run() {
+		start();
+		while (true) {
+			Thread.sleep(100);
+		}
+	}
+
+	public void start() {
 		// It's possible for Helidon MP to do all of this via auto-discovery, but I wasn't able to immediately figure
 		// out how to do it. I also want to maintain Dagger for injections and whatnot.
 		// At the time of writing, there's on endpoint. This is good enough.
-		var server = WebServer.builder()
+		server = WebServer.builder()
 				.port(port)
 				.host("0.0.0.0")
 				.routing(this::routing)
 				.build();
 		server.start();
-		while (true) {
-			Thread.sleep(100);
-		}
+	}
+
+	public void stop() {
+		server.stop();
 	}
 
 	private HttpRouting.Builder routing(HttpRouting.Builder routing) {

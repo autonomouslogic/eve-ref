@@ -49,41 +49,6 @@ public class IndustryCostHandler implements HttpService, Handler {
 			name = "input",
 			schema = @Schema(implementation = IndustryCostInput.class),
 			explode = Explode.TRUE)
-	//	@Parameters(
-	//			value = {
-	//				@Parameter(
-	//						in = ParameterIn.QUERY,
-	//						name = "product_type_ids",
-	//						schema = @Schema(implementation = Long.class),
-	//						array = @ArraySchema(minItems = 1, uniqueItems = true)
-	//				),
-	//				@Parameter(
-	//						in = ParameterIn.QUERY,
-	//					schema = @Schema(implementation = Integer.class),
-	//						name = "runs"),
-	//				@Parameter(
-	//						in = ParameterIn.QUERY,
-	//					schema = @Schema(implementation = Long.class),
-	//						name = "decryptor_type_id"),
-	//				@Parameter(
-	//						in = ParameterIn.QUERY,
-	//					schema = @Schema(implementation = Long.class),
-	//						name = "system_id"),
-	//				@Parameter(
-	//						in = ParameterIn.QUERY,
-	//					schema = @Schema(implementation = BigDecimal.class),
-	//						name = "system_cost_index"),
-	//				@Parameter(
-	//						in = ParameterIn.QUERY,
-	//					schema = @Schema(implementation = Long.class),
-	//						name = "structure_type_id"),
-	//				@Parameter(
-	//						in = ParameterIn.QUERY,
-	//					schema = @Schema(implementation = Long.class),
-	//						name = "rig_type_ids",
-	//					array = @ArraySchema(minItems = 1, uniqueItems = true)
-	//				)
-	//			})
 	public IndustryCost industryCost(IndustryCostInput input) {
 		return IndustryCost.builder().build();
 	}
@@ -91,13 +56,21 @@ public class IndustryCostHandler implements HttpService, Handler {
 	@Override
 	public void handle(ServerRequest req, ServerResponse res) throws Exception {
 		try {
-			var result = industryCost(IndustryCostInput.builder().build());
-			res.status(Status.OK_200)
-					.send(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsBytes(result));
+			var input = createInput(req);
+			validateInput(input);
+			var result = industryCost(input);
+			var json = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsBytes(result);
+			res.status(Status.OK_200).send(json);
 		} catch (Exception e) {
 			res.send();
 		}
 	}
+
+	private IndustryCostInput createInput(ServerRequest req) {
+		return IndustryCostInput.builder().build();
+	}
+
+	private void validateInput(IndustryCostInput input) {}
 
 	@Override
 	public void routing(HttpRules rules) {

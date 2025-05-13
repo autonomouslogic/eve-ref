@@ -45,9 +45,7 @@ components:
     ActivityCost:
       type: object
       properties:
-        activity:
-          type: string
-        bill_of_materials:
+        materials:
           type: object
           additionalProperties:
             $ref: "#/components/schemas/MaterialCost"
@@ -121,27 +119,25 @@ components:
     InventionCost:
       type: object
       properties:
-        activity:
-          type: string
-        bill_of_materials:
+        materials:
           type: object
           additionalProperties:
             $ref: "#/components/schemas/MaterialCost"
-        bpc_me:
+        me:
           type: integer
           format: int32
-        bpc_runs:
-          type: integer
-          format: int32
-        bpc_te:
-          type: integer
-          format: int32
-        invention_probability:
+        probability:
           type: number
         product_type_id:
           type: integer
           format: int64
         quantity:
+          type: integer
+          format: int32
+        runs:
+          type: integer
+          format: int32
+        te:
           type: integer
           format: int32
         time:
@@ -151,9 +147,9 @@ components:
       properties:
         cost:
           type: number
-        material_type_id:
+        quantity:
           type: integer
           format: int64
-        quantity:
+        type_id:
           type: integer
           format: int64

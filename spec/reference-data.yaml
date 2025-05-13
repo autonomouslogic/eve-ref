@@ -9,7 +9,7 @@ info:
   version: dev
 externalDocs:
   description: Reference data
-  url: https://github.com/autonomouslogic/eve-ref/blob/main/docs/refdata.md
+  url: https://docs.everef.net/datasets/reference-data.html
 servers:
 - url: https://ref-data.everef.net
 paths:
