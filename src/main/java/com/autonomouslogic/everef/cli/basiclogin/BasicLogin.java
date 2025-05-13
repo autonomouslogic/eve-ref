@@ -15,7 +15,7 @@ public class BasicLogin implements Command {
 	@Inject
 	protected BasicLoginFactory basicLoginFactory;
 
-	private final int micronautPort = Configs.MICRONAUT_PORT.getRequired();
+	private final int micronautPort = Configs.HTTP_PORT.getRequired();
 
 	@Inject
 	protected BasicLogin() {}

@@ -27,17 +27,21 @@ public class IndustryCost {
 
 	@JsonProperty
 	@Singular("invention")
+	@JsonInclude(JsonInclude.Include.NON_EMPTY)
 	Map<String, InventionCost> invention;
 
 	@JsonProperty
 	@Singular("copying")
+	@JsonInclude(JsonInclude.Include.NON_EMPTY)
 	Map<String, ActivityCost> copying;
 
 	@JsonProperty
 	@Singular("meResearch")
+	@JsonInclude(JsonInclude.Include.NON_EMPTY)
 	Map<String, ActivityCost> meResearch;
 
 	@JsonProperty
 	@Singular("teResearch")
+	@JsonInclude(JsonInclude.Include.NON_EMPTY)
 	Map<String, ActivityCost> teResearch;
 }

@@ -106,6 +106,10 @@ dependencies {
 	implementation "io.micronaut.jaxrs:micronaut-jaxrs-server"
 	implementation "io.micronaut:micronaut-management"
 
+	// Helidon
+	implementation "io.helidon.webserver:helidon-webserver:4.2.2"
+	implementation "io.helidon.logging:helidon-logging-slf4j:4.2.2"
+
 	testAnnotationProcessor "com.google.dagger:dagger-compiler:2.56.2"
 	testImplementation "com.google.dagger:dagger:2.56.2"
 	testImplementation "org.junit.jupiter:junit-jupiter:5.12.2"
@@ -472,6 +476,15 @@ task fetchDonations(type: JavaExec) {
 task generateKeyPair(type: JavaExec) {
 	group "application"
 	args "generate-key-pair"
+	environment envProperties
+
+	classpath = sourceSets.main.runtimeClasspath
+	mainClass = mainClassName
+}
+
+task api(type: JavaExec) {
+	group "application"
+	args "api"
 	environment envProperties
 
 	classpath = sourceSets.main.runtimeClasspath
