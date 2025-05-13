@@ -1,5 +1,6 @@
 package com.autonomouslogic.everef.api;
 
+import com.autonomouslogic.everef.industry.IndustryCostCalculator;
 import com.autonomouslogic.everef.model.api.ApiError;
 import com.autonomouslogic.everef.model.api.IndustryCost;
 import com.autonomouslogic.everef.model.api.IndustryCostInput;
@@ -23,6 +24,8 @@ import java.util.HashMap;
 import java.util.Objects;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+
+import jakarta.inject.Provider;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import software.amazon.awssdk.core.ClientEndpointProvider;
 
@@ -31,6 +34,9 @@ import software.amazon.awssdk.core.ClientEndpointProvider;
 public class IndustryCostHandler implements HttpService, Handler {
 	@Inject
 	protected ObjectMapper objectMapper;
+
+	@Inject
+	protected Provider<IndustryCostCalculator> industryCostCalculatorProvider;
 
 	private final ObjectMapper queryStringMapper;
 
@@ -58,8 +64,7 @@ public class IndustryCostHandler implements HttpService, Handler {
 			schema = @Schema(implementation = IndustryCostInput.class),
 			explode = Explode.TRUE)
 	public IndustryCost industryCost(IndustryCostInput input) {
-		var cost = IndustryCost.builder().input(input);
-		return cost.build();
+		return industryCostCalculatorProvider.get().calc(input).toBuilder().input(input).build();
 	}
 
 	@Override
