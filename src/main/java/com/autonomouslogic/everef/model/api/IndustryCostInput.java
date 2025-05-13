@@ -28,7 +28,7 @@ public class IndustryCostInput {
 	Long decryptorTypeId;
 
 	@JsonProperty
-	SecurityClass systemSecurityClass;
+	SecurityClass securityClass;
 
 	@JsonProperty
 	Long systemId;

@@ -98,7 +98,7 @@ public class IndustryCostHandler implements HttpService, Handler {
 		if ((input.getSystemId() == null) == (input.getSystemCostIndex() == null)) {
 			throw new ClientException("Exactly one of system ID and system cost index must be provided");
 		}
-		if ((input.getSystemId() == null) == (input.getSystemSecurityClass() == null)) {
+		if ((input.getSystemId() == null) == (input.getSecurityClass() == null)) {
 			throw new ClientException("Exactly one of system ID and system security class must be provided");
 		}
 		if ((input.getRigTypeIds() != null && !input.getRigTypeIds().isEmpty())

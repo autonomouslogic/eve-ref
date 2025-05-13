@@ -123,6 +123,13 @@ components:
         runs:
           type: integer
           format: int32
+        security_class:
+          type: string
+          enum:
+          - HIGH_SEC
+          - LOW_SEC
+          - NULL_SEC
+          - WORMHOLE
         structure_type_id:
           type: integer
           format: int64
@@ -131,13 +138,6 @@ components:
         system_id:
           type: integer
           format: int64
-        system_security_class:
-          type: string
-          enum:
-          - HIGH_SEC
-          - LOW_SEC
-          - NULL_SEC
-          - WORMHOLE
         te_rig_tech_level:
           type: string
           enum:
