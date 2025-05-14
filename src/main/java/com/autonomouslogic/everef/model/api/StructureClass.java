@@ -2,5 +2,10 @@ package com.autonomouslogic.everef.model.api;
 
 public enum StructureClass {
 	STATION,
-	ENGINEERING_COMPLEX
+	RAITARU,
+	AZBEL,
+	SOTIYO,
+	DRACCOUS_FORTIZAR,
+	HORIZON_FORTIZAR,
+	MOREAU_FORTIZAR
 }
