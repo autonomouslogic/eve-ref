@@ -38,13 +38,22 @@ public class ApiRunner implements Command {
 	@Override
 	@SneakyThrows
 	public void run() {
-		start();
+		startServices();
+		startServer();
 		while (true) {
 			Thread.sleep(100);
 		}
 	}
 
-	public void start() {
+	@SneakyThrows
+	public void startServices() {
+		refDataService.init();
+		while (!refDataService.isReady()) {
+			Thread.sleep(10);
+		}
+	}
+
+	public void startServer() {
 		// It's possible for Helidon MP to do all of this via auto-discovery, but I wasn't able to immediately figure
 		// out how to do it. I also want to maintain Dagger for injections and whatnot.
 		// At the time of writing, there's on endpoint. This is good enough.

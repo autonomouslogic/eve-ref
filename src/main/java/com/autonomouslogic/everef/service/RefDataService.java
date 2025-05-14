@@ -31,8 +31,10 @@ public class RefDataService {
 	private void update() {
 		try {
 			log.debug("Updating reference data");
+			var oldData = loadedRefData;
 			loadedRefData = refDataUtil.loadLatestRefData().blockingGet();
 			log.debug("Reference data updated");
+			oldData.close();
 		} catch (Exception e) {
 			log.warn("Failed updating reference data", e);
 		}

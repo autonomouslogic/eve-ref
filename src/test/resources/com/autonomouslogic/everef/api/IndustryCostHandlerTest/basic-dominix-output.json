@@ -1,7 +1,7 @@
 {
   "manufacturing": {
     "645": {
-      "product_type_id": 645,
+      "product_id": 645,
       "quantity": 1,
       "time": "PT2H43M12S",
       "materials": {

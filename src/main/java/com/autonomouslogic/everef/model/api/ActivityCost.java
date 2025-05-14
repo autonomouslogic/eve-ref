@@ -25,7 +25,7 @@ import lombok.extern.jackson.Jacksonized;
 @Schema
 public class ActivityCost {
 	@JsonProperty
-	Long productTypeId;
+	Long productId;
 
 	@JsonProperty
 	Integer quantity;

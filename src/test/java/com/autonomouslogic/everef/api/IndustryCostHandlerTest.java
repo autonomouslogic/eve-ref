@@ -82,7 +82,7 @@ public class IndustryCostHandlerTest {
 		server.setDispatcher(new TestDispatcher());
 		server.start(TEST_PORT);
 
-		apiRunner.start();
+		apiRunner.startServer();
 		industryApi = new IndustryApi(
 				new ApiClient().setScheme("http").setHost("localhost").setPort(8080));
 
