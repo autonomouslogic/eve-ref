@@ -73,155 +73,175 @@ components:
     IndustryCost:
       type: object
       properties:
-        copying:
-          type: object
-          additionalProperties:
-            $ref: "#/components/schemas/ActivityCost"
         input:
           $ref: "#/components/schemas/IndustryCostInput"
-        invention:
-          type: object
-          additionalProperties:
-            $ref: "#/components/schemas/InventionCost"
         manufacturing:
-          type: object
-          additionalProperties:
-            $ref: "#/components/schemas/ActivityCost"
-        me_research:
-          type: object
-          additionalProperties:
-            $ref: "#/components/schemas/ActivityCost"
-        te_research:
           type: object
           additionalProperties:
             $ref: "#/components/schemas/ActivityCost"
     IndustryCostInput:
       type: object
       properties:
-        advanced_industry_level:
+        advanced_industry:
           type: integer
           format: int32
-        copying_cost_index:
+          default: 5
+          description: The Advanced Industry skill level the installing character
+          maximum: 5
+          minimum: 0
+        copying_cost:
           type: number
-        copying_rig_tech_level:
-          type: string
-          enum:
-          - T1
-          - T2
-        datacore1_level:
+          default: 0
+          description: The copying cost index of the system where the job is installed
+          maximum: 1
+          minimum: 0
+        datacore1:
           type: integer
           format: int32
-        datacore2_level:
+          default: 5
+          description: The level of one of the datacore related skills the installing
+            character
+          maximum: 5
+          minimum: 0
+        datacore2:
           type: integer
           format: int32
-        decryption_level:
+          default: 5
+          description: The level of the other of the datacore related skills the installing
+            character
+          maximum: 5
+          minimum: 0
+        decryption:
           type: integer
           format: int32
-        decryptor_type_id:
+          default: 5
+          description: The level of relevant encryption skills the installing character
+          maximum: 5
+          minimum: 0
+        facility_tax:
+          type: number
+          default: 0
+          description: The facility tax rate of the station or structure where the
+            job is installed
+          maximum: 1
+          minimum: 0
+        industry:
+          type: integer
+          format: int32
+          default: 5
+          description: The Industry skill level the installing character
+          maximum: 5
+          minimum: 0
+        invention_cost:
+          type: number
+          default: 0
+          description: The invention cost index of the system where the job is installed
+          maximum: 1
+          minimum: 0
+        manufacturing_cost:
+          type: number
+          default: 0
+          description: The manufacturing cost index of the system where the job is
+            installed
+          maximum: 1
+          minimum: 0
+        me:
+          type: integer
+          format: int32
+          default: 10
+          description: The material efficiency of the blueprint
+          maximum: 10
+          minimum: 0
+        metallurgy:
+          type: integer
+          format: int32
+          default: 5
+          description: The Metallurgy skill level the installing character
+          maximum: 5
+          minimum: 0
+        product_id:
           type: integer
           format: int64
-        facility_tax_rate:
+          description: The desired product type ID
+          minimum: 1
+        reaction_cost:
           type: number
-        industry_level:
+          default: 0
+          description: The reaction cost index of the system where the job is installed
+          maximum: 1
+          minimum: 0
+        research:
           type: integer
           format: int32
-        invention_cost_index:
+          default: 5
+          description: The Research skill level the installing character
+          maximum: 5
+          minimum: 0
+        researching_me_cost:
           type: number
-        invention_rig_tech_level:
-          type: string
-          enum:
-          - T1
-          - T2
-        manufacturing_cost_index:
+          default: 0
+          description: The researching material efficiency cost index of the system
+            where the job is installed
+          maximum: 1
+          minimum: 0
+        researching_te_cost:
           type: number
-        material_efficiency:
-          type: integer
-          format: int32
-        material_efficiency_rig_tech_level:
-          type: string
-          enum:
-          - T1
-          - T2
-        metallurgy_level:
-          type: integer
-          format: int32
-        product_type_ids:
-          type: array
-          items:
-            type: integer
-            format: int64
-          uniqueItems: true
-        reaction_cost_index:
-          type: number
-        research_level:
-          type: integer
-          format: int32
-        researching_material_efficiency_cost_index:
-          type: number
-        researching_time_efficiency_cost_index:
-          type: number
+          default: 0
+          description: The researching time efficiency cost index of the system where
+            the job is installed
+          maximum: 1
+          minimum: 0
         runs:
           type: integer
           format: int32
-        scc_surcharge_rate:
+          default: 1
+          description: The number of runs
+          minimum: 1
+        scc:
           type: number
-        science_level:
+          default: 0.04
+          description: The SCC surcharge rate
+          maximum: 1
+          minimum: 0
+        science:
           type: integer
           format: int32
-        security_class:
+          default: 5
+          description: The Science skill level the installing character
+          maximum: 5
+          minimum: 0
+        security:
           type: string
+          default: HIGH_SEC
+          description: The security class of the system where the job is installed
           enum:
           - HIGH_SEC
           - LOW_SEC
           - NULL_SEC
           - WORMHOLE
-        structure_type_id:
-          type: integer
-          format: int64
-        time_efficiency:
-          type: integer
-          format: int32
-        time_efficiency_rig_tech_level:
+        structure_class:
           type: string
+          default: STATION
+          description: The type of station or structure where the job is installed
           enum:
-          - T1
-          - T2
-    InventionCost:
-      type: object
-      properties:
-        estimated_item_value:
-          type: number
-        facility_tax:
-          type: number
-        job_cost_base:
-          type: number
-        material_efficiency:
-          type: integer
-          format: int32
-        materials:
-          type: object
-          additionalProperties:
-            $ref: "#/components/schemas/MaterialCost"
-        probability:
-          type: number
-        product_type_id:
-          type: integer
-          format: int64
-        quantity:
-          type: integer
-          format: int32
-        runs:
-          type: integer
-          format: int32
-        scc_surcharge:
-          type: number
-        system_cost_index:
-          type: number
-        time:
+          - STATION
+          - ENGINEERING_COMPLEX
+        structure_size:
           type: string
-        time_efficiency:
+          description: The size of structure where the job is installed
+          enum:
+          - MEDIUM
+          - LARGE
+          - XLARGE
+        te:
           type: integer
           format: int32
+          default: 20
+          description: The time efficiency of the blueprint
+          maximum: 20
+          minimum: 0
+      required:
+      - product_id
     MaterialCost:
       type: object
       properties:

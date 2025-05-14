@@ -9,6 +9,7 @@ import com.autonomouslogic.everef.model.api.IndustryCostInput;
 import com.autonomouslogic.everef.openapi.api.api.IndustryApi;
 import com.autonomouslogic.everef.openapi.api.invoker.ApiClient;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -58,6 +59,12 @@ public class IndustryCostHandlerTest {
 	void shouldCalculateCosts(String name, IndustryCostInput input, IndustryCost expected, Set<String> verified) {
 		var res = industryApi.industryCostWithHttpInfo(input);
 		assertEquals(200, res.getStatusCode());
+		assertEquals(
+				"public, max-age=600, immutable",
+				res.getHeaders().get("Cache-Control").getFirst());
+		assertEquals(
+				"https://github.com/autonomouslogic/eve-ref/blob/industry-api/spec/eve-ref-api.yaml",
+				res.getHeaders().get("X-OpenAPI").getFirst());
 		var actual = res.getData();
 		assertEquals(expected, actual);
 	}
@@ -65,6 +72,7 @@ public class IndustryCostHandlerTest {
 	static Stream<Arguments> costTests() {
 		var mapper = new ObjectMapper()
 				.enable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+				.enable(JsonParser.Feature.ALLOW_COMMENTS)
 				.registerModule(new JavaTimeModule());
 		return TEST_NAMES.stream().map(pair -> {
 			try {

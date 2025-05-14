@@ -4,6 +4,7 @@ import com.autonomouslogic.everef.industry.IndustryCostCalculator;
 import com.autonomouslogic.everef.model.api.ApiError;
 import com.autonomouslogic.everef.model.api.IndustryCost;
 import com.autonomouslogic.everef.model.api.IndustryCostInput;
+import com.autonomouslogic.everef.service.RefDataService;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.helidon.http.Status;
@@ -21,8 +22,11 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.inject.Inject;
 import jakarta.inject.Provider;
+import java.time.Duration;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -30,8 +34,14 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 @Tag(name = "industry")
 @Path("/v1/industry/cost")
 public class IndustryCostHandler implements HttpService, Handler {
+	private static final String cacheControlHeader = String.format(
+			"public, max-age=%d, immutable", Duration.ofMinutes(10).toSeconds());
+
 	@Inject
 	protected ObjectMapper objectMapper;
+
+	@Inject
+	protected RefDataService refDataService;
 
 	@Inject
 	protected Provider<IndustryCostCalculator> industryCostCalculatorProvider;
@@ -62,9 +72,35 @@ public class IndustryCostHandler implements HttpService, Handler {
 			schema = @Schema(implementation = IndustryCostInput.class),
 			explode = Explode.TRUE)
 	public IndustryCost industryCost(IndustryCostInput input) {
-		return industryCostCalculatorProvider.get().calc(input).toBuilder()
-				.input(input)
-				.build();
+		var calculator = industryCostCalculatorProvider.get();
+		var refdata = Objects.requireNonNull(refDataService.getLoadedRefData(), "refdata");
+		var productType = refdata.getType(input.getProductId());
+		if (productType == null) {
+			throw new ClientException(String.format("Product type ID %d not found", input.getProductId()));
+		}
+		calculator.setProductType(productType);
+		var blueprints = Optional.ofNullable(productType.getProducedByBlueprints())
+				.map(Map::values)
+				.filter(c -> !c.isEmpty())
+				.orElseThrow(() -> new ClientException(
+						String.format("Product type ID %d is not produced from a blueprint", input.getProductId())));
+		if (blueprints.size() > 1) {
+			throw new ClientException(String.format(
+					"Product type ID %d can be source from more than one blueprint", input.getProductId()));
+		}
+		var producingBlueprint = blueprints.stream().findFirst().orElseThrow();
+		var activity = producingBlueprint.getBlueprintActivity();
+		if (!activity.equals("manufacturing")) {
+			throw new ClientException(String.format("Only manufacturing is supported, %s seen", activity));
+		}
+		var blueprintTypeId =
+				Optional.ofNullable(producingBlueprint.getBlueprintTypeId()).orElseThrow();
+		var blueprint = refdata.getBlueprint(blueprintTypeId);
+		if (blueprint == null) {
+			throw new ClientException(String.format("Blueprint ID %d not found", blueprintTypeId));
+		}
+		calculator.setBlueprint(blueprint);
+		return calculator.calc().toBuilder().input(input).build();
 	}
 
 	@Override
@@ -73,7 +109,12 @@ public class IndustryCostHandler implements HttpService, Handler {
 		validateInput(input);
 		var result = industryCost(input);
 		var json = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsBytes(result);
-		res.status(Status.OK_200).send(json);
+		res.status(Status.OK_200)
+				.header(
+						"X-OpenAPI",
+						"https://github.com/autonomouslogic/eve-ref/blob/industry-api/spec/eve-ref-api.yaml")
+				.header("Cache-Control", cacheControlHeader)
+				.send(json);
 	}
 
 	private IndustryCostInput createInput(ServerRequest req) {
@@ -95,8 +136,8 @@ public class IndustryCostHandler implements HttpService, Handler {
 	}
 
 	private void validateInput(IndustryCostInput input) {
-		if (input.getProductTypeIds().isEmpty()) {
-			throw new ClientException("At least one product type id must be provided");
+		if (input.getProductId() < 1) {
+			throw new ClientException("Product ID must be provided");
 		}
 		if (input.getRuns() < 1) {
 			throw new ClientException("Runs must be at least 1");
