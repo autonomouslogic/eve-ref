@@ -36,7 +36,7 @@ public class ActivityCost {
 
 	@JsonProperty
 	@Schema(implementation = String.class)
-	Duration timePerRun;
+	Duration timePerUnit;
 
 	@JsonProperty
 	@Singular
@@ -67,5 +67,5 @@ public class ActivityCost {
 	BigDecimal totalCost;
 
 	@JsonProperty
-	BigDecimal totalCostPerRun;
+	BigDecimal totalCostPerUnit;
 }

@@ -47,7 +47,7 @@ public class IndustryCostCalculator {
 		calcManufacturingMaterials(manufacturing, cost);
 		var time = calcManufacturingTime(manufacturing);
 		cost.time(time);
-		cost.timePerRun(time.dividedBy(industryCostInput.getRuns()));
+		cost.timePerUnit(time.dividedBy(industryCostInput.getRuns()));
 
 		var eiv = getEstimatedItemValue(cost.build());
 		return cost.build();

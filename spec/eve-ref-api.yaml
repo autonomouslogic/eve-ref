@@ -67,11 +67,11 @@ components:
           type: number
         time:
           type: string
-        time_per_run:
+        time_per_unit:
           type: string
         total_cost:
           type: number
-        total_cost_per_run:
+        total_cost_per_unit:
           type: number
         total_installation_cost:
           type: number
