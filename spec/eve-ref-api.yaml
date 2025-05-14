@@ -45,6 +45,8 @@ components:
     ActivityCost:
       type: object
       properties:
+        alpha_clone_tax:
+          type: number
         estimated_item_value:
           type: number
         facility_tax:
@@ -65,6 +67,12 @@ components:
           type: number
         time:
           type: string
+        time_per_run:
+          type: string
+        total_cost:
+          type: number
+        total_cost_per_run:
+          type: number
     ApiError:
       type: object
       properties:
@@ -129,6 +137,18 @@ components:
             job is installed
           maximum: 1
           minimum: 0
+        facility_type:
+          type: string
+          default: STATION
+          description: The type of station or structure where the job is installed
+          enum:
+          - STATION
+          - RAITARU
+          - AZBEL
+          - SOTIYO
+          - DRACCOUS_FORTIZAR
+          - HORIZON_FORTIZAR
+          - MOREAU_FORTIZAR
         industry:
           type: integer
           format: int32
@@ -201,12 +221,6 @@ components:
           default: 1
           description: The number of runs
           minimum: 1
-        scc:
-          type: number
-          default: 0.04
-          description: The SCC surcharge rate
-          maximum: 1
-          minimum: 0
         science:
           type: integer
           format: int32
@@ -223,13 +237,6 @@ components:
           - LOW_SEC
           - NULL_SEC
           - WORMHOLE
-        structure_class:
-          type: string
-          default: STATION
-          description: The type of station or structure where the job is installed
-          enum:
-          - STATION
-          - ENGINEERING_COMPLEX
         structure_size:
           type: string
           description: The size of structure where the job is installed

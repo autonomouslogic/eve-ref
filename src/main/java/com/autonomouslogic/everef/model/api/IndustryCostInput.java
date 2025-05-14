@@ -146,20 +146,10 @@ public class IndustryCostInput {
 	@JsonProperty
 	@lombok.Builder.Default
 	@Schema(
-			description = "The SCC surcharge rate",
-			requiredMode = Schema.RequiredMode.NOT_REQUIRED,
-			defaultValue = "0.04",
-			minimum = "0",
-			maximum = "1")
-	BigDecimal scc = new BigDecimal("0.04");
-
-	@JsonProperty
-	@lombok.Builder.Default
-	@Schema(
 			description = "The type of station or structure where the job is installed",
 			requiredMode = Schema.RequiredMode.NOT_REQUIRED,
 			defaultValue = "STATION")
-	StructureClass structureClass = StructureClass.STATION;
+	FacilityType facilityType = FacilityType.STATION;
 
 	@JsonProperty
 	@Schema(
