@@ -10,8 +10,10 @@ import com.autonomouslogic.everef.model.api.IndustryCost;
 import com.autonomouslogic.everef.model.api.IndustryCostInput;
 import com.autonomouslogic.everef.openapi.api.api.IndustryApi;
 import com.autonomouslogic.everef.openapi.api.invoker.ApiClient;
+import com.autonomouslogic.everef.service.MarketPriceService;
 import com.autonomouslogic.everef.service.RefDataService;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
+import com.autonomouslogic.everef.test.TestDataUtil;
 import com.autonomouslogic.everef.util.MockScrapeBuilder;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -22,6 +24,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
@@ -49,6 +52,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 @SetEnvironmentVariable(key = "DATA_BASE_URL", value = "http://localhost:" + TEST_PORT)
 @SetEnvironmentVariable(key = "REFERENCE_DATA_PATH", value = "s3://" + PublishRefDataTest.BUCKET_NAME + "/base/")
+@SetEnvironmentVariable(key = "ESI_USER_AGENT", value = "user-agent")
+@SetEnvironmentVariable(key = "ESI_BASE_URL", value = "http://localhost:" + TestDataUtil.TEST_PORT)
 @Log4j2
 @Timeout(60)
 public class IndustryCostHandlerTest {
@@ -67,9 +72,13 @@ public class IndustryCostHandlerTest {
 	@Inject
 	RefDataService refDataService;
 
+	@Inject
+	MarketPriceService marketPriceService;
+
 	IndustryApi industryApi;
 	MockWebServer server;
 	File refDataFile;
+	String esiMarketPrices;
 
 	@BeforeEach
 	@SneakyThrows
@@ -87,22 +96,25 @@ public class IndustryCostHandlerTest {
 				new ApiClient().setScheme("http").setHost("localhost").setPort(8080));
 
 		refDataService.init();
-		while (!refDataService.isReady()) {
-			Thread.sleep(10);
-		}
 	}
 
 	@AfterEach
 	@SneakyThrows
 	void teardown() {
 		apiRunner.stop();
+		refDataService.stop();
+		marketPriceService.stop();
 		server.shutdown();
 	}
 
 	@ParameterizedTest
 	@MethodSource("costTests")
 	@SneakyThrows
-	void shouldCalculateCosts(String name, IndustryCostInput input, IndustryCost expected, Set<String> verified) {
+	void shouldCalculateCosts(
+			String name, IndustryCostInput input, IndustryCost expected, String esiMarketPrices, Set<String> verified) {
+		this.esiMarketPrices = esiMarketPrices;
+		marketPriceService.init();
+
 		var res = industryApi.industryCostWithHttpInfo(input);
 		assertEquals(200, res.getStatusCode());
 		assertEquals(
@@ -126,7 +138,9 @@ public class IndustryCostHandlerTest {
 				var output = mapper.readValue(openTestFile(pair.getLeft(), "output"), IndustryCost.class).toBuilder()
 						.input(input)
 						.build();
-				return Arguments.of(pair.getLeft(), input, output, pair.getRight());
+				var esiMarketPrices =
+						IOUtils.toString(openTestFile(pair.getLeft(), "esi-market-prices"), StandardCharsets.UTF_8);
+				return Arguments.of(pair.getLeft(), input, output, esiMarketPrices, pair.getRight());
 			} catch (IOException e) {
 				throw new RuntimeException(e);
 			}
@@ -149,6 +163,11 @@ public class IndustryCostHandlerTest {
 						return new MockResponse()
 								.setResponseCode(200)
 								.setBody(new Buffer().write(IOUtils.toByteArray(new FileInputStream(refDataFile))));
+					case "/markets/prices/":
+						return new MockResponse()
+								.setResponseCode(200)
+								.setHeader("ETag", "test")
+								.setBody(esiMarketPrices);
 				}
 				return new MockResponse().setResponseCode(404);
 			} catch (Exception e) {

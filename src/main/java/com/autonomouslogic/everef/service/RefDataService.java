@@ -3,6 +3,7 @@ package com.autonomouslogic.everef.service;
 import com.autonomouslogic.everef.data.LoadedRefData;
 import com.autonomouslogic.everef.util.RefDataUtil;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -21,26 +22,48 @@ public class RefDataService {
 	@Getter
 	private LoadedRefData loadedRefData;
 
+	private ScheduledFuture<?> scheduledFuture;
+
 	@Inject
 	protected RefDataService() {}
 
 	public void init() {
-		scheduler.scheduleWithFixedDelay(this::update, 0, 10, TimeUnit.MINUTES);
+		update();
+		scheduledFuture = scheduler.scheduleWithFixedDelay(
+				() -> {
+					try {
+						update();
+					} catch (Exception e) {
+						log.warn("Failed updating reference data, ignoring", e);
+					}
+				},
+				0,
+				10,
+				TimeUnit.MINUTES);
 	}
 
 	private void update() {
-		try {
-			log.debug("Updating reference data");
-			var oldData = loadedRefData;
-			loadedRefData = refDataUtil.loadLatestRefData().blockingGet();
-			log.debug("Reference data updated");
+		log.debug("Updating reference data");
+		var oldData = loadedRefData;
+		loadedRefData = refDataUtil.loadLatestRefData().blockingGet();
+		log.debug("Reference data updated");
+		if (oldData != null) {
 			oldData.close();
-		} catch (Exception e) {
-			log.warn("Failed updating reference data", e);
 		}
 	}
 
 	public boolean isReady() {
 		return loadedRefData != null;
+	}
+
+	public void stop() {
+		if (scheduledFuture != null) {
+			scheduledFuture.cancel(true);
+			scheduledFuture = null;
+		}
+		if (loadedRefData != null) {
+			loadedRefData.close();
+			loadedRefData = null;
+		}
 	}
 }
