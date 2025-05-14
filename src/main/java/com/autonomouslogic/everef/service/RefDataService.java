@@ -24,16 +24,15 @@ public class RefDataService {
 	@Inject
 	protected RefDataService() {}
 
-	@Inject
-	protected void init() {
-		update();
-		scheduler.scheduleWithFixedDelay(this::update, 10, 10, TimeUnit.MINUTES);
+	public void init() {
+		scheduler.scheduleWithFixedDelay(this::update, 0, 10, TimeUnit.MINUTES);
 	}
 
 	private void update() {
 		try {
 			log.debug("Updating reference data");
 			loadedRefData = refDataUtil.loadLatestRefData().blockingGet();
+			log.debug("Reference data updated");
 		} catch (Exception e) {
 			log.warn("Failed updating reference data", e);
 		}

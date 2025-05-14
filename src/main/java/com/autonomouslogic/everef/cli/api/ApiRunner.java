@@ -6,6 +6,7 @@ import com.autonomouslogic.everef.api.ErrorHandler;
 import com.autonomouslogic.everef.api.IndustryCostHandler;
 import com.autonomouslogic.everef.cli.Command;
 import com.autonomouslogic.everef.config.Configs;
+import com.autonomouslogic.everef.service.RefDataService;
 import io.helidon.common.concurrency.limits.AimdLimit;
 import io.helidon.webserver.WebServer;
 import io.helidon.webserver.http.HttpRouting;
@@ -25,6 +26,9 @@ public class ApiRunner implements Command {
 
 	@Inject
 	protected ClientErrorHandler clientErrorHandler;
+
+	@Inject
+	RefDataService refDataService;
 
 	private WebServer server;
 
