@@ -35,6 +35,10 @@ public class ActivityCost {
 	Duration time;
 
 	@JsonProperty
+	@Schema(implementation = String.class)
+	Duration timePerRun;
+
+	@JsonProperty
 	@Singular
 	Map<String, MaterialCost> materials;
 
@@ -49,4 +53,13 @@ public class ActivityCost {
 
 	@JsonProperty
 	BigDecimal sccSurcharge;
+
+	@JsonProperty
+	BigDecimal alphaCloneTax;
+
+	@JsonProperty
+	BigDecimal totalCost;
+
+	@JsonProperty
+	BigDecimal totalCostPerRun;
 }

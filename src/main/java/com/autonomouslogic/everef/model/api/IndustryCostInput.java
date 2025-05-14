@@ -10,6 +10,7 @@ import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
+import lombok.experimental.Accessors;
 import lombok.extern.jackson.Jacksonized;
 
 @Getter
@@ -264,4 +265,12 @@ public class IndustryCostInput {
 			minimum = "0",
 			maximum = "5")
 	int decryption = 5;
+
+	@JsonProperty
+	@lombok.Builder.Default
+	@Schema(
+			description = "Whether installing character is an alpha clone or not",
+			requiredMode = Schema.RequiredMode.NOT_REQUIRED,
+			defaultValue = "false")
+	Boolean alpha = false;
 }

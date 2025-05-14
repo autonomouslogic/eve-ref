@@ -89,6 +89,10 @@ components:
           description: The Advanced Industry skill level the installing character
           maximum: 5
           minimum: 0
+        alpha:
+          type: boolean
+          default: false
+          description: Whether installing character is an alpha clone or not
         copying_cost:
           type: number
           default: 0

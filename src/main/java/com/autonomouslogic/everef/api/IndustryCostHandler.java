@@ -72,7 +72,7 @@ public class IndustryCostHandler implements HttpService, Handler {
 			schema = @Schema(implementation = IndustryCostInput.class),
 			explode = Explode.TRUE)
 	public IndustryCost industryCost(IndustryCostInput input) {
-		var calculator = industryCostCalculatorProvider.get();
+		var calculator = industryCostCalculatorProvider.get().setIndustryCostInput(input);
 		var refdata = Objects.requireNonNull(refDataService.getLoadedRefData(), "refdata");
 		var productType = refdata.getType(input.getProductId());
 		if (productType == null) {
