@@ -73,6 +73,10 @@ components:
           type: number
         total_cost_per_run:
           type: number
+        total_installation_cost:
+          type: number
+        total_material_cost:
+          type: number
     ApiError:
       type: object
       properties:

@@ -58,6 +58,12 @@ public class ActivityCost {
 	BigDecimal alphaCloneTax;
 
 	@JsonProperty
+	BigDecimal totalInstallationCost;
+
+	@JsonProperty
+	BigDecimal totalMaterialCost;
+
+	@JsonProperty
 	BigDecimal totalCost;
 
 	@JsonProperty
