@@ -11,6 +11,7 @@ import com.autonomouslogic.everef.service.MarketPriceService;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.Duration;
+import java.time.temporal.ChronoUnit;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -50,13 +51,25 @@ public class IndustryCostCalculator {
 	}
 
 	private ActivityCost manufacturingCost(BlueprintActivity manufacturing) {
-		var cost = ActivityCost.builder();
-		cost.materials(manufacturingMaterials(manufacturing));
-		var time = calcManufacturingTime(manufacturing);
-		cost.time(time);
-		cost.timePerUnit(time.dividedBy(industryCostInput.getRuns()));
-		cost.estimatedItemValue(estimatedItemValue(manufacturing));
-		return cost.build();
+		var time = manufacturingTime(manufacturing);
+		var eiv = manufacturingEiv(manufacturing);
+		var quantity = industryCostInput.getRuns();
+		var systemCostIndex = manufacturingSystemCostIndex(eiv);
+		var facilityTax = facilityTax(eiv);
+		var sccSurcharge = sccSurcharge(eiv);
+		var totalJobCost = systemCostIndex.add(facilityTax).add(sccSurcharge);
+		return ActivityCost.builder()
+				.productId(industryCostInput.getProductId())
+				.quantity(quantity)
+				.materials(manufacturingMaterials(manufacturing))
+				.time(time)
+				.timePerUnit(time.dividedBy(quantity).truncatedTo(ChronoUnit.MILLIS))
+				.estimatedItemValue(eiv)
+				.systemCostIndex(systemCostIndex)
+				.facilityTax(facilityTax)
+				.sccSurcharge(sccSurcharge)
+				.totalJobCost(totalJobCost)
+				.build();
 	}
 
 	private Map<String, MaterialCost> manufacturingMaterials(BlueprintActivity manufacturing) {
@@ -78,14 +91,19 @@ public class IndustryCostCalculator {
 		return (long) Math.max(runs, Math.ceil(Math.round(runs * base * meMod * 100.0) / 100.0));
 	}
 
-	private Duration calcManufacturingTime(BlueprintActivity manufacturing) {
+	private Duration manufacturingTime(BlueprintActivity manufacturing) {
 		var baseTime = (double) manufacturing.getTime();
 		var teMod = 1.0 - industryCostInput.getTe() / 100.0;
 		var runs = industryCostInput.getRuns();
-		return Duration.ofSeconds((long) Math.ceil(runs * baseTime * teMod));
+		var industryMod =
+				1.0 - SkillIndustryBonuses.GLOBAL_TIME_BONUSES.get("Industry") * industryCostInput.getIndustry();
+		var advancedIndustryMod = 1.0
+				- SkillIndustryBonuses.GLOBAL_TIME_BONUSES.get("Advanced Industry")
+						* industryCostInput.getAdvancedIndustry();
+		return Duration.ofSeconds((long) Math.ceil(runs * baseTime * teMod * industryMod * advancedIndustryMod));
 	}
 
-	private BigDecimal estimatedItemValue(BlueprintActivity activityCost) {
+	private BigDecimal manufacturingEiv(BlueprintActivity activityCost) {
 		var eiv = BigDecimal.ZERO;
 		for (var material : activityCost.getMaterials().values()) {
 			var adjPrice = marketPriceService.getEsiAdjustedPrice(material.getTypeId());
@@ -96,5 +114,19 @@ public class IndustryCostCalculator {
 					BigDecimal.valueOf(material.getQuantity()).multiply(BigDecimal.valueOf(adjPrice.getAsDouble())));
 		}
 		return eiv.setScale(0, RoundingMode.HALF_UP);
+	}
+
+	private BigDecimal manufacturingSystemCostIndex(BigDecimal eiv) {
+		var index = industryCostInput.getManufacturingCost();
+		var cost = eiv.multiply(index).setScale(0, RoundingMode.HALF_UP);
+		return cost;
+	}
+
+	private BigDecimal sccSurcharge(BigDecimal eiv) {
+		return IndustryConstants.SCC_SURCHARGE_RATE.multiply(eiv).setScale(0, RoundingMode.HALF_UP);
+	}
+
+	private BigDecimal facilityTax(BigDecimal eiv) {
+		return industryCostInput.getFacilityTax().multiply(eiv).setScale(0, RoundingMode.HALF_UP);
 	}
 }

@@ -2,7 +2,10 @@ package com.autonomouslogic.everef.industry;
 
 import com.autonomouslogic.everef.model.api.FacilityType;
 import java.util.Map;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class StructureIndustryBonuses {
 	public static final Map<FacilityType, Double> MATERIAL_BONUSES = Map.of(
 			FacilityType.RAITARU, 0.01,

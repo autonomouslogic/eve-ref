@@ -4,6 +4,7 @@
       "product_id": 645,
       "quantity": 1,
       "time": "PT2H43M12S",
+      "time_per_unit": "PT2H43M12S",
       "materials": {
         "34": {
           "type_id": 34,
@@ -49,7 +50,8 @@
       "estimated_item_value": 158985500,
       "system_cost_index": 11624583,
       "facility_tax": 397464,
-      "scc_surcharge": 6359420
+      "scc_surcharge": 6359420,
+      "total_job_cost": 18381467
     }
   }
 //  "invention": {

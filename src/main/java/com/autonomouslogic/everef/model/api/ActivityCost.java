@@ -25,10 +25,10 @@ import lombok.extern.jackson.Jacksonized;
 @Schema
 public class ActivityCost {
 	@JsonProperty
-	Long productId;
+	long productId;
 
 	@JsonProperty
-	Integer quantity;
+	long quantity;
 
 	@JsonProperty
 	@Schema(implementation = String.class)
@@ -43,22 +43,33 @@ public class ActivityCost {
 	Map<String, MaterialCost> materials;
 
 	@JsonProperty
+	@Schema(description = "The estimated item value (EIV)")
 	BigDecimal estimatedItemValue;
 
 	@JsonProperty
+	@Schema(
+			description =
+					"""
+		The system cost index amount.
+		Note that this will always be a slightly off, as the ESI does not report the full precision of the system cost index rates.
+		See https://github.com/esi/esi-issues/issues/1411""")
 	BigDecimal systemCostIndex;
 
 	@JsonProperty
+	@Schema(description = "The facility amount")
 	BigDecimal facilityTax;
 
 	@JsonProperty
+	@Schema(description = "The SCC surcharge amount")
 	BigDecimal sccSurcharge;
 
 	@JsonProperty
+	@Schema(description = "The alpha clone tax amount")
 	BigDecimal alphaCloneTax;
 
 	@JsonProperty
-	BigDecimal totalInstallationCost;
+	@Schema(description = "The total amount of ISK required to start the job")
+	BigDecimal totalJobCost;
 
 	@JsonProperty
 	BigDecimal totalMaterialCost;
