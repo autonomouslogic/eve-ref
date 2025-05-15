@@ -117,6 +117,7 @@ public class IndustryCostHandlerTest {
 
 		var res = industryApi.industryCostWithHttpInfo(input);
 		assertEquals(200, res.getStatusCode());
+		assertEquals("application/json", res.getHeaders().get("Content-Type").getFirst());
 		assertEquals(
 				"public, max-age=600, immutable",
 				res.getHeaders().get("Cache-Control").getFirst());

@@ -113,6 +113,7 @@ public class IndustryCostHandler implements HttpService, Handler {
 		var json = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsBytes(result);
 		res.status(Status.OK_200)
 				.header("Server", "eve-ref/" + eveRefVersion)
+				.header("Content-Type", "application/json")
 				.header(
 						"X-OpenAPI",
 						"https://github.com/autonomouslogic/eve-ref/blob/industry-api/spec/eve-ref-api.yaml")
