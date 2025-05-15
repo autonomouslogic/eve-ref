@@ -105,6 +105,8 @@ public class IndustryCostCalculator {
 		return Duration.ofSeconds((long) Math.ceil(runs * baseTime * teMod * industryMod * advancedIndustryMod));
 	}
 
+//	private double manufacturingSpecialisedSkillMod(BlueprintActivity manufacturing) {}
+
 	private BigDecimal manufacturingEiv(BlueprintActivity activityCost) {
 		var eiv = BigDecimal.ZERO;
 		for (var material : activityCost.getMaterials().values()) {

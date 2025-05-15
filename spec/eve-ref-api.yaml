@@ -106,6 +106,22 @@ components:
     IndustryCostInput:
       type: object
       properties:
+        advanced_capital_ship_construction:
+          type: integer
+          format: int32
+          default: 5
+          description: The Advanced Capital Ship Construction  skill level the installing
+            character
+          maximum: 5
+          minimum: 0
+        advanced_industrial_ship_construction:
+          type: integer
+          format: int32
+          default: 5
+          description: The Advanced Industrial Ship Construction  skill level the
+            installing character
+          maximum: 5
+          minimum: 0
         advanced_industry:
           type: integer
           format: int32
@@ -113,10 +129,50 @@ components:
           description: The Advanced Industry skill level the installing character
           maximum: 5
           minimum: 0
+        advanced_large_ship_construction:
+          type: integer
+          format: int32
+          default: 5
+          description: The Advanced Large Ship Construction  skill level the installing
+            character
+          maximum: 5
+          minimum: 0
+        advanced_medium_ship_construction:
+          type: integer
+          format: int32
+          default: 5
+          description: The Advanced Medium Ship Construction  skill level the installing
+            character
+          maximum: 5
+          minimum: 0
+        advanced_small_ship_construction:
+          type: integer
+          format: int32
+          default: 5
+          description: The Advanced Small Ship Construction  skill level the installing
+            character
+          maximum: 5
+          minimum: 0
         alpha:
           type: boolean
           default: false
           description: Whether installing character is an alpha clone or not
+        amarr_starship_engineering:
+          type: integer
+          format: int32
+          default: 5
+          description: The Amarr Starship Engineering  skill level the installing
+            character
+          maximum: 5
+          minimum: 0
+        caldari_starship_engineering:
+          type: integer
+          format: int32
+          default: 5
+          description: The Caldari Starship Engineering  skill level the installing
+            character
+          maximum: 5
+          minimum: 0
         copying_cost:
           type: number
           default: 0
@@ -146,6 +202,20 @@ components:
           description: The level of relevant encryption skills the installing character
           maximum: 5
           minimum: 0
+        electromagnetic_physics:
+          type: integer
+          format: int32
+          default: 5
+          description: The Electromagnetic Physics  skill level the installing character
+          maximum: 5
+          minimum: 0
+        electronic_engineering:
+          type: integer
+          format: int32
+          default: 5
+          description: The Electronic Engineering  skill level the installing character
+          maximum: 5
+          minimum: 0
         facility_tax:
           type: number
           default: 0
@@ -166,6 +236,35 @@ components:
           - HORIZON_FORTIZAR
           - MOREAU_FORTIZAR
           - OTHER_STRUCTURE
+        gallente_starship_engineering:
+          type: integer
+          format: int32
+          default: 5
+          description: The Gallente Starship Engineering  skill level the installing
+            character
+          maximum: 5
+          minimum: 0
+        graviton_physics:
+          type: integer
+          format: int32
+          default: 5
+          description: The Graviton Physics  skill level the installing character
+          maximum: 5
+          minimum: 0
+        high_energy_physics:
+          type: integer
+          format: int32
+          default: 5
+          description: The High Energy Physics  skill level the installing character
+          maximum: 5
+          minimum: 0
+        hydromagnetic_physics:
+          type: integer
+          format: int32
+          default: 5
+          description: The Hydromagnetic Physics  skill level the installing character
+          maximum: 5
+          minimum: 0
         industry:
           type: integer
           format: int32
@@ -178,6 +277,13 @@ components:
           default: 0
           description: The invention cost index of the system where the job is installed
           maximum: 1
+          minimum: 0
+        laser_physics:
+          type: integer
+          format: int32
+          default: 5
+          description: The Laser Physics  skill level the installing character
+          maximum: 5
           minimum: 0
         manufacturing_cost:
           type: number
@@ -193,6 +299,13 @@ components:
           description: The material efficiency of the blueprint
           maximum: 10
           minimum: 0
+        mechanical_engineering:
+          type: integer
+          format: int32
+          default: 5
+          description: The Mechanical Engineering  skill level the installing character
+          maximum: 5
+          minimum: 0
         metallurgy:
           type: integer
           format: int32
@@ -200,11 +313,61 @@ components:
           description: The Metallurgy skill level the installing character
           maximum: 5
           minimum: 0
+        minmatar_starship_engineering:
+          type: integer
+          format: int32
+          default: 5
+          description: The Minmatar Starship Engineering  skill level the installing
+            character
+          maximum: 5
+          minimum: 0
+        molecular_engineering:
+          type: integer
+          format: int32
+          default: 5
+          description: The Molecular Engineering  skill level the installing character
+          maximum: 5
+          minimum: 0
+        mutagenic_stabilization:
+          type: integer
+          format: int32
+          default: 5
+          description: The Mutagenic Stabilization  skill level the installing character
+          maximum: 5
+          minimum: 0
+        nanite_engineering:
+          type: integer
+          format: int32
+          default: 5
+          description: The Nanite Engineering  skill level the installing character
+          maximum: 5
+          minimum: 0
+        nuclear_physics:
+          type: integer
+          format: int32
+          default: 5
+          description: The Nuclear Physics  skill level the installing character
+          maximum: 5
+          minimum: 0
+        plasma_physics:
+          type: integer
+          format: int32
+          default: 5
+          description: The Plasma Physics  skill level the installing character
+          maximum: 5
+          minimum: 0
         product_id:
           type: integer
           format: int64
           description: The desired product type ID
           minimum: 1
+        quantum_physics:
+          type: integer
+          format: int32
+          default: 5
+          description: The Quantum Physics  skill level the installing character
+          maximum: 5
+          minimum: 0
         reaction_cost:
           type: number
           default: 0
@@ -231,6 +394,13 @@ components:
           description: The researching time efficiency cost index of the system where
             the job is installed
           maximum: 1
+          minimum: 0
+        rocket_science:
+          type: integer
+          format: int32
+          default: 5
+          description: The Rocket Science  skill level the installing character
+          maximum: 5
           minimum: 0
         runs:
           type: integer
@@ -267,6 +437,22 @@ components:
           default: 20
           description: The time efficiency of the blueprint
           maximum: 20
+          minimum: 0
+        triglavian_quantum_engineering:
+          type: integer
+          format: int32
+          default: 5
+          description: The Triglavian Quantum Engineering  skill level the installing
+            character
+          maximum: 5
+          minimum: 0
+        upwell_starship_engineering:
+          type: integer
+          format: int32
+          default: 5
+          description: The Upwell Starship Engineering  skill level the installing
+            character
+          maximum: 5
           minimum: 0
       required:
       - product_id
