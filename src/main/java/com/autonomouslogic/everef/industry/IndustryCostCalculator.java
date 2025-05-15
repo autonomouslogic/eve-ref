@@ -7,14 +7,21 @@ import com.autonomouslogic.everef.model.api.MaterialCost;
 import com.autonomouslogic.everef.refdata.Blueprint;
 import com.autonomouslogic.everef.refdata.BlueprintActivity;
 import com.autonomouslogic.everef.refdata.InventoryType;
+import com.autonomouslogic.everef.service.MarketPriceService;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.Duration;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Objects;
 import javax.inject.Inject;
 import lombok.NonNull;
 import lombok.Setter;
 
 public class IndustryCostCalculator {
+	@Inject
+	protected MarketPriceService marketPriceService;
+
 	@Setter
 	@NonNull
 	private IndustryCostInput industryCostInput;
@@ -36,32 +43,33 @@ public class IndustryCostCalculator {
 		Objects.requireNonNull(blueprint, "blueprint");
 
 		var manufacturing = blueprint.getActivities().get("manufacturing");
-		var manufacturingCost = calcManufacturing(manufacturing);
+		var manufacturingCost = manufacturingCost(manufacturing);
 		return IndustryCost.builder()
 				.manufacturing(String.valueOf(productType.getTypeId()), manufacturingCost)
 				.build();
 	}
 
-	private ActivityCost calcManufacturing(BlueprintActivity manufacturing) {
+	private ActivityCost manufacturingCost(BlueprintActivity manufacturing) {
 		var cost = ActivityCost.builder();
-		calcManufacturingMaterials(manufacturing, cost);
+		cost.materials(manufacturingMaterials(manufacturing));
 		var time = calcManufacturingTime(manufacturing);
 		cost.time(time);
 		cost.timePerUnit(time.dividedBy(industryCostInput.getRuns()));
-
-		var eiv = getEstimatedItemValue(cost.build());
+		cost.estimatedItemValue(estimatedItemValue(manufacturing));
 		return cost.build();
 	}
 
-	private void calcManufacturingMaterials(BlueprintActivity manufacturing, ActivityCost.Builder cost) {
+	private Map<String, MaterialCost> manufacturingMaterials(BlueprintActivity manufacturing) {
+		var materials = new LinkedHashMap<String, MaterialCost>();
 		for (var material : manufacturing.getMaterials().values()) {
-			cost.material(
+			materials.put(
 					String.valueOf(material.getTypeId()),
 					MaterialCost.builder()
 							.typeId(material.getTypeId())
 							.quantity(manufacturingMaterialQuantity(material.getQuantity()))
 							.build());
 		}
+		return materials;
 	}
 
 	private long manufacturingMaterialQuantity(long base) {
@@ -77,11 +85,16 @@ public class IndustryCostCalculator {
 		return Duration.ofSeconds((long) Math.ceil(runs * baseTime * teMod));
 	}
 
-	private BigDecimal getEstimatedItemValue(ActivityCost activityCost) {
+	private BigDecimal estimatedItemValue(BlueprintActivity activityCost) {
 		var eiv = BigDecimal.ZERO;
 		for (var material : activityCost.getMaterials().values()) {
-			eiv = eiv.add(BigDecimal.valueOf(material.getQuantity())); // @todo
+			var adjPrice = marketPriceService.getEsiAdjustedPrice(material.getTypeId());
+			if (adjPrice.isEmpty()) {
+				throw new RuntimeException("typeId: " + material.getTypeId());
+			}
+			eiv = eiv.add(
+					BigDecimal.valueOf(material.getQuantity()).multiply(BigDecimal.valueOf(adjPrice.getAsDouble())));
 		}
-		return eiv;
+		return eiv.setScale(0, RoundingMode.HALF_UP);
 	}
 }

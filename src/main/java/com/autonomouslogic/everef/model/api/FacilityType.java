@@ -12,7 +12,8 @@ public enum FacilityType {
 	SOTIYO(true),
 	DRACCOUS_FORTIZAR(true),
 	HORIZON_FORTIZAR(true),
-	MOREAU_FORTIZAR(true);
+	MOREAU_FORTIZAR(true),
+	OTHER_STRUCTURE(true);
 
 	private final boolean structure;
 }
