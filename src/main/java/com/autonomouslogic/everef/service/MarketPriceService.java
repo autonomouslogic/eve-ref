@@ -44,7 +44,7 @@ public class MarketPriceService {
 				},
 				10,
 				10,
-				TimeUnit.SECONDS);
+				TimeUnit.MINUTES);
 	}
 
 	@SneakyThrows

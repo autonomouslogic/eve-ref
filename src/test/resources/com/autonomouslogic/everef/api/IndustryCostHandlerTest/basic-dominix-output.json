@@ -51,6 +51,7 @@
       "system_cost_index": 11624583,
       "facility_tax": 397464,
       "scc_surcharge": 6359420,
+      "alpha_clone_tax": 0,
       "total_job_cost": 18381467
     }
   }

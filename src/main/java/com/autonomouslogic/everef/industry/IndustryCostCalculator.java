@@ -57,7 +57,8 @@ public class IndustryCostCalculator {
 		var systemCostIndex = manufacturingSystemCostIndex(eiv);
 		var facilityTax = facilityTax(eiv);
 		var sccSurcharge = sccSurcharge(eiv);
-		var totalJobCost = systemCostIndex.add(facilityTax).add(sccSurcharge);
+		var alphaCloneTax = alphaCloneTax(eiv);
+		var totalJobCost = systemCostIndex.add(facilityTax).add(sccSurcharge).add(alphaCloneTax);
 		return ActivityCost.builder()
 				.productId(industryCostInput.getProductId())
 				.quantity(quantity)
@@ -68,6 +69,7 @@ public class IndustryCostCalculator {
 				.systemCostIndex(systemCostIndex)
 				.facilityTax(facilityTax)
 				.sccSurcharge(sccSurcharge)
+				.alphaCloneTax(alphaCloneTax)
 				.totalJobCost(totalJobCost)
 				.build();
 	}
@@ -124,6 +126,13 @@ public class IndustryCostCalculator {
 
 	private BigDecimal sccSurcharge(BigDecimal eiv) {
 		return IndustryConstants.SCC_SURCHARGE_RATE.multiply(eiv).setScale(0, RoundingMode.HALF_UP);
+	}
+
+	private BigDecimal alphaCloneTax(BigDecimal eiv) {
+		if (industryCostInput.getAlpha()) {
+			return IndustryConstants.ALPHA_CLONE_TAX.multiply(eiv).setScale(0, RoundingMode.HALF_UP);
+		}
+		return BigDecimal.ZERO;
 	}
 
 	private BigDecimal facilityTax(BigDecimal eiv) {
