@@ -1,10 +1,13 @@
 openapi: 3.0.1
 info:
+  contact:
+    name: Kenn
+    url: https://everef.net/discord
   description: This spec should be considered unstable and subject to change at any
     time.
   license:
-    name: MIT-0
-    url: https://github.com/autonomouslogic/eve-ref/blob/main/LICENSE
+    name: CCP
+    url: https://github.com/autonomouslogic/eve-ref/blob/main/LICENSE-CCP
   title: EVE Ref API
   version: dev
 servers:

@@ -1,5 +1,8 @@
 openapi: 3.0.1
 info:
+  contact:
+    name: Kenn
+    url: https://everef.net/discord
   description: This spec should be considered unstable and subject to change at any
     time.
   license:

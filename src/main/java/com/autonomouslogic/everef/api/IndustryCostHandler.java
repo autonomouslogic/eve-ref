@@ -1,5 +1,6 @@
 package com.autonomouslogic.everef.api;
 
+import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.industry.IndustryCostCalculator;
 import com.autonomouslogic.everef.model.api.ApiError;
 import com.autonomouslogic.everef.model.api.IndustryCost;
@@ -36,6 +37,7 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 public class IndustryCostHandler implements HttpService, Handler {
 	private static final String cacheControlHeader = String.format(
 			"public, max-age=%d, immutable", Duration.ofMinutes(10).toSeconds());
+	private final String eveRefVersion = Configs.EVE_REF_VERSION.getRequired();
 
 	@Inject
 	protected ObjectMapper objectMapper;
@@ -110,6 +112,7 @@ public class IndustryCostHandler implements HttpService, Handler {
 		var result = industryCost(input);
 		var json = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsBytes(result);
 		res.status(Status.OK_200)
+				.header("Server", "eve-ref/" + eveRefVersion)
 				.header(
 						"X-OpenAPI",
 						"https://github.com/autonomouslogic/eve-ref/blob/industry-api/spec/eve-ref-api.yaml")
