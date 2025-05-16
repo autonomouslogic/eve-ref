@@ -145,7 +145,7 @@ public class IndustryCostHandlerTest {
 	}
 
 	private static InputStream openTestFile(String name, String type) throws FileNotFoundException {
-		return ResourceUtil.loadContextual(IndustryCostHandlerTest.class, "/" + name + "-" + type + ".json");
+		return ResourceUtil.loadContextual(IndustryCostHandlerTest.class, "/" + name + "/" + type + ".json");
 	}
 
 	class TestDispatcher extends Dispatcher {
