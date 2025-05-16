@@ -47,10 +47,16 @@ public class IndustryCostCalculator {
 		Objects.requireNonNull(blueprint, "blueprint");
 
 		var manufacturing = blueprint.getActivities().get("manufacturing");
+		//		var invention = findInventionActivity();
 		var manufacturingCost = manufacturingCost(manufacturing);
-		return IndustryCost.builder()
+		//		var inventionCost = inventionCost(invention);
+
+		var builder = IndustryCost.builder()
 				.manufacturing(String.valueOf(productType.getTypeId()), manufacturingCost)
+				//				.invention(String.valueOf(productType.getTypeId()), inventionCost)
 				.build();
+
+		return builder;
 	}
 
 	private ActivityCost manufacturingCost(BlueprintActivity manufacturing) {

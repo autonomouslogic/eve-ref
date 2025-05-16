@@ -157,6 +157,14 @@ public class IndustryCostInput {
 			requiredMode = Schema.RequiredMode.NOT_REQUIRED)
 	StructureSize structureSize;
 
+	@JsonProperty
+	@lombok.Builder.Default
+	@Schema(
+			description = "Whether installing character is an alpha clone or not",
+			requiredMode = Schema.RequiredMode.NOT_REQUIRED,
+			defaultValue = "false")
+	Boolean alpha = false;
+
 	//	@JsonProperty
 	//	Long structureTypeId;
 
@@ -478,8 +486,70 @@ public class IndustryCostInput {
 	@JsonProperty
 	@lombok.Builder.Default
 	@Schema(
-			description = "Whether installing character is an alpha clone or not",
+			description = "The Amarr Encryption Methods skill level the installing character",
 			requiredMode = Schema.RequiredMode.NOT_REQUIRED,
-			defaultValue = "false")
-	Boolean alpha = false;
+			defaultValue = "5",
+			minimum = "0",
+			maximum = "5")
+	int amarrEncryptionMethods = 5;
+
+	@JsonProperty
+	@lombok.Builder.Default
+	@Schema(
+			description = "The Caldari Starship Engineering skill level the installing character",
+			requiredMode = Schema.RequiredMode.NOT_REQUIRED,
+			defaultValue = "5",
+			minimum = "0",
+			maximum = "5")
+	int caldariEncryptionMethods = 5;
+
+	@JsonProperty
+	@lombok.Builder.Default
+	@Schema(
+			description = "The Gallente Encryption Methods skill level the installing character",
+			requiredMode = Schema.RequiredMode.NOT_REQUIRED,
+			defaultValue = "5",
+			minimum = "0",
+			maximum = "5")
+	int gallenteEncryptionMethods = 5;
+
+	@JsonProperty
+	@lombok.Builder.Default
+	@Schema(
+			description = "The Minmatar Encryption Methods skill level the installing character",
+			requiredMode = Schema.RequiredMode.NOT_REQUIRED,
+			defaultValue = "5",
+			minimum = "0",
+			maximum = "5")
+	int minmatarEncryptionMethods = 5;
+
+	@JsonProperty
+	@lombok.Builder.Default
+	@Schema(
+			description = "The Sleeper Encryption Methods skill level the installing character",
+			requiredMode = Schema.RequiredMode.NOT_REQUIRED,
+			defaultValue = "5",
+			minimum = "0",
+			maximum = "5")
+	int sleeperEncryptionMethods = 5;
+
+	@JsonProperty
+	@lombok.Builder.Default
+	@Schema(
+			description = "The Triglavian Quantum Engineering skill level the installing character",
+			requiredMode = Schema.RequiredMode.NOT_REQUIRED,
+			defaultValue = "5",
+			minimum = "0",
+			maximum = "5")
+	int triglavianEncryptionMethods = 5;
+
+	@JsonProperty
+	@lombok.Builder.Default
+	@Schema(
+			description = "The Upwell Encryption Methods skill level the installing character",
+			requiredMode = Schema.RequiredMode.NOT_REQUIRED,
+			defaultValue = "5",
+			minimum = "0",
+			maximum = "5")
+	int upwellEncryptionMethods = 5;
 }

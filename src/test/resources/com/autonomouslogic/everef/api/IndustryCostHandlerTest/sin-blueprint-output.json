@@ -1,0 +1,33 @@
+{
+  "invention": {
+    "22431": {
+      "product_id": 22431,
+      "quantity": 1,
+      "time": "PT45H20M00S",
+      "time_per_unit": "PT141H9M56S",
+      "materials": {
+        "20410": {
+          "quantity": 32,
+          "type_id": 20410,
+          "cost" : 3190194.56
+        },
+        "20424": {
+          "quantity": 32,
+          "type_id": 20424,
+          "cost" : 2747990.08
+        }
+      },
+      "probability": 0.32076, // EVE client says 0.321
+      "estimated_item_value": 768684250,
+      "job_cost_base": 15373685,
+      "system_cost_index": 1729158,
+      "facility_tax": 38434,
+      "scc_surcharge": 614947,
+      "alpha_clone_tax": 0,
+      "total_job_cost": 2382539,
+      "total_material_cost" : 5938184.64,
+      "total_cost" : 8320723.64,
+      "total_cost_per_unit" : 25940652.33
+    }
+  }
+}

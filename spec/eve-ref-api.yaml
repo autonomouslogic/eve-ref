@@ -99,6 +99,10 @@ components:
       properties:
         input:
           $ref: "#/components/schemas/IndustryCostInput"
+        invention:
+          type: object
+          additionalProperties:
+            $ref: "#/components/schemas/InventionCost"
         manufacturing:
           type: object
           additionalProperties:
@@ -157,11 +161,26 @@ components:
           type: boolean
           default: false
           description: Whether installing character is an alpha clone or not
+        amarr_encryption_methods:
+          type: integer
+          format: int32
+          default: 5
+          description: The Amarr Encryption Methods skill level the installing character
+          maximum: 5
+          minimum: 0
         amarr_starship_engineering:
           type: integer
           format: int32
           default: 5
           description: The Amarr Starship Engineering  skill level the installing
+            character
+          maximum: 5
+          minimum: 0
+        caldari_encryption_methods:
+          type: integer
+          format: int32
+          default: 5
+          description: The Caldari Starship Engineering skill level the installing
             character
           maximum: 5
           minimum: 0
@@ -213,6 +232,14 @@ components:
           - HORIZON_FORTIZAR
           - MOREAU_FORTIZAR
           - OTHER_STRUCTURE
+        gallente_encryption_methods:
+          type: integer
+          format: int32
+          default: 5
+          description: The Gallente Encryption Methods skill level the installing
+            character
+          maximum: 5
+          minimum: 0
         gallente_starship_engineering:
           type: integer
           format: int32
@@ -288,6 +315,14 @@ components:
           format: int32
           default: 5
           description: The Metallurgy skill level the installing character
+          maximum: 5
+          minimum: 0
+        minmatar_encryption_methods:
+          type: integer
+          format: int32
+          default: 5
+          description: The Minmatar Encryption Methods skill level the installing
+            character
           maximum: 5
           minimum: 0
         minmatar_starship_engineering:
@@ -401,6 +436,13 @@ components:
           - LOW_SEC
           - NULL_SEC
           - WORMHOLE
+        sleeper_encryption_methods:
+          type: integer
+          format: int32
+          default: 5
+          description: The Sleeper Encryption Methods skill level the installing character
+          maximum: 5
+          minimum: 0
         structure_size:
           type: string
           description: The size of structure where the job is installed
@@ -415,12 +457,27 @@ components:
           description: The time efficiency of the blueprint
           maximum: 20
           minimum: 0
+        triglavian_encryption_methods:
+          type: integer
+          format: int32
+          default: 5
+          description: The Triglavian Quantum Engineering skill level the installing
+            character
+          maximum: 5
+          minimum: 0
         triglavian_quantum_engineering:
           type: integer
           format: int32
           default: 5
           description: The Triglavian Quantum Engineering  skill level the installing
             character
+          maximum: 5
+          minimum: 0
+        upwell_encryption_methods:
+          type: integer
+          format: int32
+          default: 5
+          description: The Upwell Encryption Methods skill level the installing character
           maximum: 5
           minimum: 0
         upwell_starship_engineering:
@@ -433,6 +490,63 @@ components:
           minimum: 0
       required:
       - product_id
+    InventionCost:
+      type: object
+      properties:
+        alpha_clone_tax:
+          type: number
+          description: The alpha clone tax amount
+        estimated_item_value:
+          type: number
+          description: The estimated item value (EIV)
+        facility_tax:
+          type: number
+          description: The facility amount
+        job_cost_base:
+          type: number
+        material_efficiency:
+          type: integer
+          format: int32
+        materials:
+          type: object
+          additionalProperties:
+            $ref: "#/components/schemas/MaterialCost"
+        probability:
+          type: number
+        product_id:
+          type: integer
+          format: int64
+        quantity:
+          type: integer
+          format: int64
+        runs:
+          type: integer
+          format: int32
+        scc_surcharge:
+          type: number
+          description: The SCC surcharge amount
+        system_cost_index:
+          type: number
+          description: |-
+            The system cost index amount.
+            Note that this will always be a slightly off, as the ESI does not report the full precision of the system cost index rates.
+            See https://github.com/esi/esi-issues/issues/1411
+        time:
+          type: string
+        time_efficiency:
+          type: integer
+          format: int32
+        time_per_unit:
+          type: string
+        total_cost:
+          type: number
+        total_cost_per_unit:
+          type: number
+        total_job_cost:
+          type: number
+          description: The total amount of ISK required to start the job
+        total_material_cost:
+          type: number
     MaterialCost:
       type: object
       properties:
