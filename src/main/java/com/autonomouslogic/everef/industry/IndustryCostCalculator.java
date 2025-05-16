@@ -62,10 +62,13 @@ public class IndustryCostCalculator {
 		var sccSurcharge = sccSurcharge(eiv);
 		var alphaCloneTax = alphaCloneTax(eiv);
 		var totalJobCost = systemCostIndex.add(facilityTax).add(sccSurcharge).add(alphaCloneTax);
+		var materials = manufacturingMaterials(manufacturing);
+		var totalMaterialCost = totalMaterialCost(materials);
+		var totalCost = totalJobCost.add(totalMaterialCost);
 		return ActivityCost.builder()
 				.productId(industryCostInput.getProductId())
 				.quantity(quantity)
-				.materials(manufacturingMaterials(manufacturing))
+				.materials(materials)
 				.time(time)
 				.timePerUnit(time.dividedBy(quantity).truncatedTo(ChronoUnit.MILLIS))
 				.estimatedItemValue(eiv)
@@ -74,17 +77,27 @@ public class IndustryCostCalculator {
 				.sccSurcharge(sccSurcharge)
 				.alphaCloneTax(alphaCloneTax)
 				.totalJobCost(totalJobCost)
+				.totalMaterialCost(totalMaterialCost)
+				.totalCost(totalCost)
+				.totalCostPerUnit(totalCost.divide(BigDecimal.valueOf(quantity)).setScale(2, RoundingMode.HALF_UP))
 				.build();
 	}
 
 	private Map<String, MaterialCost> manufacturingMaterials(BlueprintActivity manufacturing) {
 		var materials = new LinkedHashMap<String, MaterialCost>();
 		for (var material : manufacturing.getMaterials().values()) {
+			long typeId = material.getTypeId();
+			var price = marketPriceService.getEsiAveragePrice(typeId).orElse(0);
+			var quantity = manufacturingMaterialQuantity(material.getQuantity());
+			var cost = BigDecimal.valueOf(price)
+					.multiply(BigDecimal.valueOf(quantity))
+					.setScale(2, RoundingMode.HALF_UP);
 			materials.put(
-					String.valueOf(material.getTypeId()),
+					String.valueOf(typeId),
 					MaterialCost.builder()
-							.typeId(material.getTypeId())
-							.quantity(manufacturingMaterialQuantity(material.getQuantity()))
+							.typeId(typeId)
+							.quantity(quantity)
+							.cost(cost)
 							.build());
 		}
 		return materials;
@@ -94,6 +107,14 @@ public class IndustryCostCalculator {
 		var runs = industryCostInput.getRuns();
 		var meMod = 1.0 - industryCostInput.getMe() / 100.0;
 		return (long) Math.max(runs, Math.ceil(Math.round(runs * base * meMod * 100.0) / 100.0));
+	}
+
+	private BigDecimal totalMaterialCost(Map<String, MaterialCost> materials) {
+		var total = BigDecimal.ZERO;
+		for (var materialCost : materials.values()) {
+			total = total.add(materialCost.getCost());
+		}
+		return total;
 	}
 
 	private Duration manufacturingTime(BlueprintActivity manufacturing) {

@@ -8,51 +8,63 @@
       "materials": {
         "645": {
           "quantity": 1,
-          "type_id": 645
+          "type_id": 645,
+          "cost" : 236197066.81
         },
         "21025": {
           "quantity": 3,
-          "type_id": 21025
+          "type_id": 21025,
+          "cost" : 85340070.48
         },
         "11478": {
           "quantity": 30,
-          "type_id": 11478
+          "type_id": 11478,
+          "cost" : 25716.90
         },
         "11531": {
           "quantity": 219,
-          "type_id": 11531
+          "type_id": 11531,
+          "cost" : 10120955.79
         },
         "3828": {
           "quantity": 437,
-          "type_id": 3828
+          "type_id": 3828,
+          "cost" : 4756793.07
         },
         "11547": {
           "quantity": 437,
-          "type_id": 11547
+          "type_id": 11547,
+          "cost" : 60627111.97
         },
         "11399": {
           "quantity": 873,
-          "type_id": 11399
+          "type_id": 11399,
+          "cost" : 30903920.64
         },
         "11535": {
           "quantity": 873,
-          "type_id": 11535
+          "type_id": 11535,
+          "cost" : 23604549.39
         },
         "11556": {
           "quantity": 1585,
-          "type_id": 11556
+          "type_id": 11556,
+          "cost" : 76109068.90
         },
         "11553": {
           "quantity": 2183,
-          "type_id": 11553
+          "type_id": 11553,
+          "cost" : 124940752.33
         },
         "11541": {
           "quantity": 6111,
-          "type_id": 11541
+          "type_id": 11541,
+          "cost" : 328443700.41
         },
         "11545": {
           "quantity": 18188,
-          "type_id": 11545
+          "type_id": 11545,
+          "cost" : 144900158.40
         }
       },
       "estimated_item_value": 768684250, // verified in-game via invention screen
@@ -60,7 +72,10 @@
       "facility_tax": 1921711, // not verified in-game
       "scc_surcharge": 30747370, // not verified in-game
       "alpha_clone_tax": 0,
-      "total_job_cost": 32669081 // not verified in-game
+      "total_job_cost": 32669081, // not verified in-game
+      "total_material_cost" : 1125969865.09,
+      "total_cost" : 1158638946.09,
+      "total_cost_per_unit" : 1158638946.09
     }
   }
 }

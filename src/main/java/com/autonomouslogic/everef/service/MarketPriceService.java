@@ -13,6 +13,7 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import lombok.Data;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 
@@ -25,19 +26,19 @@ public class MarketPriceService {
 	@Inject
 	protected ScheduledExecutorService scheduler;
 
-	private String marketPricesEtag;
+	private String esiMarketPricesEtag;
 	private ScheduledFuture<?> marketPricesFuture;
-	private Map<Long, Double> prices = new ConcurrentHashMap<>();
+	private Map<Long, MarketPrice> prices = new ConcurrentHashMap<>();
 
 	@Inject
 	protected MarketPriceService() {}
 
 	public void init() {
-		updateMarketPrices();
+		updateEsiMarketPrices();
 		marketPricesFuture = scheduler.scheduleAtFixedRate(
 				() -> {
 					try {
-						updateMarketPrices();
+						updateEsiMarketPrices();
 					} catch (Exception e) {
 						log.warn("Failed to update market prices, ignoring", e);
 					}
@@ -48,11 +49,11 @@ public class MarketPriceService {
 	}
 
 	@SneakyThrows
-	private void updateMarketPrices() {
+	private void updateEsiMarketPrices() {
 		log.debug("Updating market prices");
 		ApiResponse<List<GetMarketsPrices200Ok>> res;
 		try {
-			res = marketApi.getMarketsPricesWithHttpInfo(null, marketPricesEtag);
+			res = marketApi.getMarketsPricesWithHttpInfo(null, esiMarketPricesEtag);
 		} catch (ApiException e) {
 			if (e.getCode() == 304) {
 				log.debug("No market prices update needed");
@@ -62,9 +63,11 @@ public class MarketPriceService {
 			}
 		}
 		for (GetMarketsPrices200Ok price : res.getData()) {
-			prices.put(price.getTypeId().longValue(), price.getAdjustedPrice());
+			prices.computeIfAbsent(price.getTypeId().longValue(), ignore -> new MarketPrice())
+					.setEsiAdjustedPrice(price.getAdjustedPrice())
+					.setEsiAveragePrice(price.getAveragePrice());
 		}
-		marketPricesEtag = res.getHeaders().get("ETag").getFirst();
+		esiMarketPricesEtag = res.getHeaders().get("ETag").getFirst();
 		log.debug("Finished updating market prices");
 	}
 
@@ -72,7 +75,14 @@ public class MarketPriceService {
 		if (!prices.containsKey(typeId)) {
 			return OptionalDouble.empty();
 		}
-		return OptionalDouble.of(prices.get(typeId));
+		return OptionalDouble.of(prices.get(typeId).getEsiAdjustedPrice());
+	}
+
+	public OptionalDouble getEsiAveragePrice(long typeId) {
+		if (!prices.containsKey(typeId)) {
+			return OptionalDouble.empty();
+		}
+		return OptionalDouble.of(prices.get(typeId).getEsiAveragePrice());
 	}
 
 	public boolean isReady() {
@@ -84,5 +94,11 @@ public class MarketPriceService {
 			marketPricesFuture.cancel(true);
 			marketPricesFuture = null;
 		}
+	}
+
+	@Data
+	private static final class MarketPrice {
+		private double esiAdjustedPrice;
+		private double esiAveragePrice;
 	}
 }

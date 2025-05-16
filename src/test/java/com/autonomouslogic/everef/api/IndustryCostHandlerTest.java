@@ -121,6 +121,7 @@ public class IndustryCostHandlerTest {
 				"https://github.com/autonomouslogic/eve-ref/blob/industry-api/spec/eve-ref-api.yaml",
 				res.getHeaders().get("X-OpenAPI").getFirst());
 		var actual = res.getData();
+		System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(actual));
 		assertEquals(expected, actual);
 	}
 
