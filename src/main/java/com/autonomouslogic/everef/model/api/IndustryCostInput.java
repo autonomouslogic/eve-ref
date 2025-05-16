@@ -478,36 +478,6 @@ public class IndustryCostInput {
 	@JsonProperty
 	@lombok.Builder.Default
 	@Schema(
-			description = "The level of one of the datacore related skills the installing character",
-			requiredMode = Schema.RequiredMode.NOT_REQUIRED,
-			defaultValue = "5",
-			minimum = "0",
-			maximum = "5")
-	int datacore1 = 5;
-
-	@JsonProperty
-	@lombok.Builder.Default
-	@Schema(
-			description = "The level of the other of the datacore related skills the installing character",
-			requiredMode = Schema.RequiredMode.NOT_REQUIRED,
-			defaultValue = "5",
-			minimum = "0",
-			maximum = "5")
-	int datacore2 = 5;
-
-	@JsonProperty
-	@lombok.Builder.Default
-	@Schema(
-			description = "The level of relevant encryption skills the installing character",
-			requiredMode = Schema.RequiredMode.NOT_REQUIRED,
-			defaultValue = "5",
-			minimum = "0",
-			maximum = "5")
-	int decryption = 5;
-
-	@JsonProperty
-	@lombok.Builder.Default
-	@Schema(
 			description = "Whether installing character is an alpha clone or not",
 			requiredMode = Schema.RequiredMode.NOT_REQUIRED,
 			defaultValue = "false")

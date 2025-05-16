@@ -26,7 +26,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Stream;
 import javax.inject.Inject;
 import lombok.SneakyThrows;
@@ -37,7 +36,6 @@ import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 import okio.Buffer;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -57,8 +55,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @Log4j2
 @Timeout(60)
 public class IndustryCostHandlerTest {
-	static final List<Pair<String, Set<String>>> TEST_NAMES =
-			List.of(Pair.of("basic-dominix", Set.of("manufacturing", "invention")));
+	static final List<String> TEST_NAMES = List.of("dominix");
 
 	@Inject
 	ApiRunner apiRunner;
@@ -110,8 +107,7 @@ public class IndustryCostHandlerTest {
 	@ParameterizedTest
 	@MethodSource("costTests")
 	@SneakyThrows
-	void shouldCalculateCosts(
-			String name, IndustryCostInput input, IndustryCost expected, String esiMarketPrices, Set<String> verified) {
+	void shouldCalculateCosts(String name, IndustryCostInput input, IndustryCost expected, String esiMarketPrices) {
 		this.esiMarketPrices = esiMarketPrices;
 		marketPriceService.init();
 
@@ -133,15 +129,14 @@ public class IndustryCostHandlerTest {
 				.enable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
 				.enable(JsonParser.Feature.ALLOW_COMMENTS)
 				.registerModule(new JavaTimeModule());
-		return TEST_NAMES.stream().map(pair -> {
+		return TEST_NAMES.stream().map(name -> {
 			try {
-				var input = mapper.readValue(openTestFile(pair.getLeft(), "input"), IndustryCostInput.class);
-				var output = mapper.readValue(openTestFile(pair.getLeft(), "output"), IndustryCost.class).toBuilder()
+				var input = mapper.readValue(openTestFile(name, "input"), IndustryCostInput.class);
+				var output = mapper.readValue(openTestFile(name, "output"), IndustryCost.class).toBuilder()
 						.input(input)
 						.build();
-				var esiMarketPrices =
-						IOUtils.toString(openTestFile(pair.getLeft(), "esi-market-prices"), StandardCharsets.UTF_8);
-				return Arguments.of(pair.getLeft(), input, output, esiMarketPrices, pair.getRight());
+				var esiMarketPrices = IOUtils.toString(openTestFile(name, "esi-market-prices"), StandardCharsets.UTF_8);
+				return Arguments.of(name, input, output, esiMarketPrices);
 			} catch (IOException e) {
 				throw new RuntimeException(e);
 			}

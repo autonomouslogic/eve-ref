@@ -1,0 +1,20 @@
+{
+  "product_id": 645,
+  "runs": 1,
+  "me": 10,
+  "te": 20,
+  "industry": 5,
+  "research": 5,
+  "science": 5,
+  "advanced_industry": 5,
+  "metallurgy": 5,
+  "facility_type": "STATION",
+  "security": "HIGH_SEC",
+  "manufacturing_cost":  0.07311725283123303698, // ESI reported 0.0731
+  "researching_te_cost": 0.0691,
+  "researching_me_cost": 0.0607,
+  "copying_cost": 0.0811,
+  "invention_cost": 0.1109,
+  "reaction_cost": 0.0014,
+  "facility_tax": 0.0025
+}

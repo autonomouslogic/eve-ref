@@ -179,29 +179,6 @@ components:
           description: The copying cost index of the system where the job is installed
           maximum: 1
           minimum: 0
-        datacore1:
-          type: integer
-          format: int32
-          default: 5
-          description: The level of one of the datacore related skills the installing
-            character
-          maximum: 5
-          minimum: 0
-        datacore2:
-          type: integer
-          format: int32
-          default: 5
-          description: The level of the other of the datacore related skills the installing
-            character
-          maximum: 5
-          minimum: 0
-        decryption:
-          type: integer
-          format: int32
-          default: 5
-          description: The level of relevant encryption skills the installing character
-          maximum: 5
-          minimum: 0
         electromagnetic_physics:
           type: integer
           format: int32
