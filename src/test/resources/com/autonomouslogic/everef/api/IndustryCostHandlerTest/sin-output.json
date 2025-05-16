@@ -23,11 +23,11 @@
           "type_id": 11531
         },
         "3828": {
-          "quantity": 473,
+          "quantity": 437,
           "type_id": 3828
         },
         "11547": {
-          "quantity": 473,
+          "quantity": 437,
           "type_id": 11547
         },
         "11399": {
@@ -55,7 +55,7 @@
           "type_id": 11545
         }
       },
-      "estimated_item_value": 768684254, // not verified in-game
+      "estimated_item_value": 768684250, // verified in-game via invention screen
       "system_cost_index": 0, // not verified in-game
       "facility_tax": 1921711, // not verified in-game
       "scc_surcharge": 30747370, // not verified in-game
