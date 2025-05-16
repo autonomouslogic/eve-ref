@@ -13,5 +13,6 @@
   "stackable" : true,
   "display_name" : {
     "en" : ""
-  }
+  },
+  "defined_on_type_ids" : [ 3336, 33093, 33097, 60377 ]
 }

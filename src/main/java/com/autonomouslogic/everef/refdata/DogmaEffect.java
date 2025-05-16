@@ -99,4 +99,7 @@ public class DogmaEffect {
 
 	@JsonProperty
 	List<ModifierInfo> modifiers;
+
+	@JsonProperty
+	List<Long> definedOnTypeIds;
 }

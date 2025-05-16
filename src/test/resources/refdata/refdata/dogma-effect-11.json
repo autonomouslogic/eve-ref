@@ -32,5 +32,6 @@
     "ru" : "Разъёмы малой мощности",
     "zh" : "低能量"
   },
-  "name" : "loPower"
+  "name" : "loPower",
+  "defined_on_type_ids" : [ 2046, 2048, 52227 ]
 }
