@@ -1,11 +1,14 @@
 package com.autonomouslogic.everef.industry;
 
+import static com.autonomouslogic.everef.industry.IndustryConstants.JOB_COST_BASE_RATE;
 import static com.autonomouslogic.everef.industry.SkillIndustryBonuses.GLOBAL_TIME_BONUSES;
 import static com.autonomouslogic.everef.industry.SkillIndustryBonuses.SPECIAL_TIME_BONUSES;
 
+import com.autonomouslogic.everef.data.LoadedRefData;
 import com.autonomouslogic.everef.model.api.ActivityCost;
 import com.autonomouslogic.everef.model.api.IndustryCost;
 import com.autonomouslogic.everef.model.api.IndustryCostInput;
+import com.autonomouslogic.everef.model.api.InventionCost;
 import com.autonomouslogic.everef.model.api.MaterialCost;
 import com.autonomouslogic.everef.refdata.Blueprint;
 import com.autonomouslogic.everef.refdata.BlueprintActivity;
@@ -18,13 +21,20 @@ import java.time.temporal.ChronoUnit;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.function.Function;
 import javax.inject.Inject;
 import lombok.NonNull;
 import lombok.Setter;
+import org.jetbrains.annotations.NotNull;
 
 public class IndustryCostCalculator {
 	@Inject
 	protected MarketPriceService marketPriceService;
+
+	@Setter
+	@NonNull
+	private LoadedRefData refData;
 
 	@Setter
 	@NonNull
@@ -46,17 +56,17 @@ public class IndustryCostCalculator {
 		Objects.requireNonNull(productType, "productType");
 		Objects.requireNonNull(blueprint, "blueprint");
 
-		var manufacturing = blueprint.getActivities().get("manufacturing");
-		//		var invention = findInventionActivity();
-		var manufacturingCost = manufacturingCost(manufacturing);
-		//		var inventionCost = inventionCost(invention);
-
-		var builder = IndustryCost.builder()
-				.manufacturing(String.valueOf(productType.getTypeId()), manufacturingCost)
-				//				.invention(String.valueOf(productType.getTypeId()), inventionCost)
-				.build();
-
-		return builder;
+		var builder = IndustryCost.builder();
+		if (Optional.ofNullable(productType.getBlueprint()).orElse(false)) {
+			var invention = blueprint.getActivities().get("manufacturing");
+			var inventionCost = inventionCost(invention);
+			builder.invention(String.valueOf(productType.getTypeId()), inventionCost);
+		} else {
+			var manufacturing = blueprint.getActivities().get("manufacturing");
+			var manufacturingCost = manufacturingCost(manufacturing);
+			builder.manufacturing(String.valueOf(productType.getTypeId()), manufacturingCost);
+		}
+		return builder.build();
 	}
 
 	private ActivityCost manufacturingCost(BlueprintActivity manufacturing) {
@@ -90,11 +100,19 @@ public class IndustryCostCalculator {
 	}
 
 	private Map<String, MaterialCost> manufacturingMaterials(BlueprintActivity manufacturing) {
+		return materials(manufacturing, this::manufacturingMaterialQuantity);
+	}
+
+	private Map<String, MaterialCost> inventionMaterials(BlueprintActivity manufacturing) {
+		return materials(manufacturing, Function.identity());
+	}
+
+	private Map<String, MaterialCost> materials(BlueprintActivity manufacturing, Function<Long, Long> quantityMod) {
 		var materials = new LinkedHashMap<String, MaterialCost>();
 		for (var material : manufacturing.getMaterials().values()) {
 			long typeId = material.getTypeId();
 			var price = marketPriceService.getEsiAveragePrice(typeId).orElse(0);
-			var quantity = manufacturingMaterialQuantity(material.getQuantity());
+			var quantity = quantityMod.apply(material.getQuantity());
 			var cost = BigDecimal.valueOf(price)
 					.multiply(BigDecimal.valueOf(quantity))
 					.setScale(2, RoundingMode.HALF_UP);
@@ -268,7 +286,16 @@ public class IndustryCostCalculator {
 
 	private BigDecimal manufacturingSystemCostIndex(BigDecimal eiv) {
 		var index = industryCostInput.getManufacturingCost();
-		var cost = eiv.multiply(index).setScale(0, RoundingMode.HALF_UP);
+		return systemCostIndex(eiv, index);
+	}
+
+	private BigDecimal inventionSystemCostIndex(BigDecimal jcb) {
+		var index = industryCostInput.getInventionCost();
+		return systemCostIndex(jcb, index);
+	}
+
+	private static @NotNull BigDecimal systemCostIndex(BigDecimal value, BigDecimal index) {
+		var cost = value.multiply(index).setScale(0, RoundingMode.HALF_UP);
 		return cost;
 	}
 
@@ -285,5 +312,53 @@ public class IndustryCostCalculator {
 
 	private BigDecimal facilityTax(BigDecimal eiv) {
 		return industryCostInput.getFacilityTax().multiply(eiv).setScale(0, RoundingMode.HALF_UP);
+	}
+
+	private InventionCost inventionCost(BlueprintActivity invention) {
+		var time = inventionTime(invention);
+		var eiv = manufacturingEiv(inventionEivProduct(productType));
+		var jcb = jobCostBase(eiv);
+		var quantity = industryCostInput.getRuns();
+		var systemCostIndex = inventionSystemCostIndex(jcb);
+		var facilityTax = facilityTax(jcb);
+		var sccSurcharge = sccSurcharge(jcb);
+		var alphaCloneTax = alphaCloneTax(jcb);
+		var totalJobCost = systemCostIndex.add(facilityTax).add(sccSurcharge).add(alphaCloneTax);
+		var materials = inventionMaterials(invention);
+		var totalMaterialCost = totalMaterialCost(materials);
+		var totalCost = totalJobCost.add(totalMaterialCost);
+		return InventionCost.builder()
+				.productId(industryCostInput.getProductId())
+				.quantity(quantity)
+				.materials(materials)
+				.time(time)
+				.timePerUnit(time.dividedBy(quantity).truncatedTo(ChronoUnit.MILLIS))
+				.estimatedItemValue(eiv)
+				.systemCostIndex(systemCostIndex)
+				.facilityTax(facilityTax)
+				.sccSurcharge(sccSurcharge)
+				.alphaCloneTax(alphaCloneTax)
+				.totalJobCost(totalJobCost)
+				.totalMaterialCost(totalMaterialCost)
+				.totalCost(totalCost)
+				.totalCostPerUnit(totalCost.divide(BigDecimal.valueOf(quantity)).setScale(2, RoundingMode.HALF_UP))
+				.build();
+	}
+
+	private BlueprintActivity inventionEivProduct(InventoryType product) {
+		if (!Optional.ofNullable(product.getBlueprint()).orElse(false)) {
+			throw new IllegalArgumentException(product.getName().get("en") + "is not a blueprint");
+		}
+		var blueprint = Objects.requireNonNull(refData.getBlueprint(product.getTypeId()));
+		return Optional.ofNullable(blueprint.getActivities().get("manufacturing"))
+				.orElseThrow();
+	}
+
+	private Duration inventionTime(BlueprintActivity invention) {
+		return Duration.ofSeconds(invention.getTime());
+	}
+
+	private BigDecimal jobCostBase(BigDecimal eiv) {
+		return eiv.multiply(JOB_COST_BASE_RATE).setScale(2, RoundingMode.HALF_UP);
 	}
 }

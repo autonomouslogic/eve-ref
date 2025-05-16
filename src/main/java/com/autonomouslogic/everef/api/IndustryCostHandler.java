@@ -74,7 +74,10 @@ public class IndustryCostHandler implements HttpService, Handler {
 			schema = @Schema(implementation = IndustryCostInput.class),
 			explode = Explode.TRUE)
 	public IndustryCost industryCost(IndustryCostInput input) {
-		var calculator = industryCostCalculatorProvider.get().setIndustryCostInput(input);
+		var calculator = industryCostCalculatorProvider
+				.get()
+				.setRefData(refDataService.getLoadedRefData())
+				.setIndustryCostInput(input);
 		var refdata = Objects.requireNonNull(refDataService.getLoadedRefData(), "refdata");
 		var productType = refdata.getType(input.getProductId());
 		if (productType == null) {
@@ -92,8 +95,9 @@ public class IndustryCostHandler implements HttpService, Handler {
 		}
 		var producingBlueprint = blueprints.stream().findFirst().orElseThrow();
 		var activity = producingBlueprint.getBlueprintActivity();
-		if (!activity.equals("manufacturing")) {
-			throw new ClientException(String.format("Only manufacturing is supported, %s seen", activity));
+		if (!activity.equals("manufacturing") && !activity.equals("invention")) {
+			throw new ClientException(
+					String.format("Only manufacturing and invention are supported, %s seen", activity));
 		}
 		var blueprintTypeId =
 				Optional.ofNullable(producingBlueprint.getBlueprintTypeId()).orElseThrow();
