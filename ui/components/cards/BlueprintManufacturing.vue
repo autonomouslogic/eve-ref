@@ -9,6 +9,7 @@ import Duration from "~/components/dogma/units/Duration.vue";
 import {secondsToMilliseconds} from "~/lib/timeUtils";
 import AttributeList from "~/components/attr/AttributeList.vue";
 import AttributeListItem from "~/components/attr/AttributeListItem.vue";
+import RequiredSkillsRow from "~/components/cards/requiredSkills/RequiredSkillsRow.vue";
 
 const props = defineProps<{
 	title: string,
@@ -69,6 +70,20 @@ if (blueprintType?.typeId) {
 					</tr>
 				</tbody>
 			</table>
+
+			<template v-if="manufacturing.requiredSkills">
+				<h3>Required Skills</h3>
+				<div class="grid grid-cols-3">
+					<RequiredSkillsRow
+						v-for="(level, requiredSkillTypeId) in manufacturing.requiredSkills"
+						:key="requiredSkillTypeId"
+						:skill-type-id="parseInt(`${requiredSkillTypeId}`)"
+						:level=level
+						:indent="0"
+						:shown-skills="[]"
+					/>
+				</div>
+			</template>
 
 			<BlueprintManufacturingLinks v-if="blueprint" :blueprint="blueprint" />
 		</CardWrapper>
