@@ -1,0 +1,66 @@
+{
+  "manufacturing": {
+    "22430": {
+      "product_id": 22430,
+      "quantity": 1,
+      "time": "PT60H8M33S",
+      "time_per_unit": "PT60H8M33S",
+      "materials": {
+        "645": {
+          "quantity": 1,
+          "type_id": 645
+        },
+        "21025": {
+          "quantity": 3,
+          "type_id": 21025
+        },
+        "11478": {
+          "quantity": 30,
+          "type_id": 11478
+        },
+        "11531": {
+          "quantity": 219,
+          "type_id": 11531
+        },
+        "3828": {
+          "quantity": 473,
+          "type_id": 3828
+        },
+        "11547": {
+          "quantity": 473,
+          "type_id": 11547
+        },
+        "11399": {
+          "quantity": 873,
+          "type_id": 11399
+        },
+        "11535": {
+          "quantity": 873,
+          "type_id": 11535
+        },
+        "11556": {
+          "quantity": 1585,
+          "type_id": 11556
+        },
+        "11553": {
+          "quantity": 2183,
+          "type_id": 11553
+        },
+        "11541": {
+          "quantity": 6111,
+          "type_id": 11541
+        },
+        "11545": {
+          "quantity": 18188,
+          "type_id": 11545
+        }
+      },
+      "estimated_item_value": 768684254, // not verified in-game
+      "system_cost_index": 0, // not verified in-game
+      "facility_tax": 1921711, // not verified in-game
+      "scc_surcharge": 30747370, // not verified in-game
+      "alpha_clone_tax": 0,
+      "total_job_cost": 32669081 // not verified in-game
+    }
+  }
+}
