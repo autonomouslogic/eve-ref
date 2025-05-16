@@ -35,9 +35,11 @@ const invention = blueprint?.activities?.invention;
 
 			<table class="standard-table" v-if="invention.products">
 				<thead>
-					<td>Output</td>
-					<td class="text-right">Probability</td>
-					<td class="text-right">Quantity</td>
+					<tr>
+						<td>Output</td>
+						<td class="text-right">Probability</td>
+						<td class="text-right">Quantity</td>
+					</tr>
 				</thead>
 				<tbody>
 					<tr v-for="(product, index) in invention.products" :key="index">
