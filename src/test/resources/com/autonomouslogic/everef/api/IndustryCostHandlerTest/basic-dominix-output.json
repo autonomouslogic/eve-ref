@@ -55,30 +55,4 @@
       "total_job_cost": 18381467
     }
   }
-//  "invention": {
-//    "645": {
-//      "product_type_id": 22431,
-//      "quantity": 1,
-//      "runs": 1,
-//      "material_efficiency": 2,
-//      "time_efficiency": 4,
-//      "time": "PT45H20M00S",
-//      "probability": 0.321,
-//      "materials": {
-//        "20410": {
-//          "type_id": 20410,
-//          "quantity": 32
-//        },
-//        "20424": {
-//          "type_id": 20424,
-//          "quantity": 32
-//        }
-//      },
-//      "estimated_item_value": 774975000,
-//      "job_cost_base": 15499500,
-//      "system_cost_index": 1716589,
-//      "facility_tax": 38749,
-//      "scc_surcharge": 619980
-//    }
-//  }
 }
