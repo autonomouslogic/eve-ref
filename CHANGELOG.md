@@ -1,5 +1,30 @@
 EVE Ref Changelog
 
+## [2.56.0](https://github.com/autonomouslogic/eve-ref/compare/2.55.18...2.56.0) (2025-05-17)
+
+
+### Features
+
+* **api:** Industry cost API ([#786](https://github.com/autonomouslogic/eve-ref/issues/786)) ([b003af1](https://github.com/autonomouslogic/eve-ref/commit/b003af16c171eb3375e4884958a64484476cb896))
+
+
+### Bug Fixes
+
+* Configure checksum calculations to be compatible with Backblaze B2 ([#807](https://github.com/autonomouslogic/eve-ref/issues/807)) ([7e40fa3](https://github.com/autonomouslogic/eve-ref/commit/7e40fa3ee491856d000068c65c65b393ae7b0f1c))
+* **ui:** Added more reference data links ([#805](https://github.com/autonomouslogic/eve-ref/issues/805)) ([7817714](https://github.com/autonomouslogic/eve-ref/commit/781771430f92a6565ade58aba1e44d55fd39daa2))
+* **ui:** Added required skill to blueprint manufacturing ([#804](https://github.com/autonomouslogic/eve-ref/issues/804)) ([31e7044](https://github.com/autonomouslogic/eve-ref/commit/31e7044f27668619f8c8f62548533db16cfb238d))
+* Updated test resources [skip release] ([#787](https://github.com/autonomouslogic/eve-ref/issues/787)) ([a736232](https://github.com/autonomouslogic/eve-ref/commit/a736232568058f4c9efb14d89e19f1d71ec911d4))
+
+
+### Miscellaneous Chores
+
+* Script for fetching ESI prices for blueprints ([#821](https://github.com/autonomouslogic/eve-ref/issues/821)) ([e711918](https://github.com/autonomouslogic/eve-ref/commit/e71191890226665bdb38d7fc4bd2df96cb9c09bf))
+
+
+### Code Refactoring
+
+* **api:** Separate cost model for manufacturing ([#820](https://github.com/autonomouslogic/eve-ref/issues/820)) ([ee517bb](https://github.com/autonomouslogic/eve-ref/commit/ee517bb710a30687dc1b7f7f6d40b0d3a2beab03))
+
 ## [2.55.18](https://github.com/autonomouslogic/eve-ref/compare/2.55.17...2.55.18) (2025-05-12)
 
 
