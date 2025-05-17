@@ -10,6 +10,17 @@
     ru: "Корабль"
     zh: "舰船"
   published: true
+"8":
+  name:
+    de: "Ladung"
+    en: "Charge"
+    es: "Carga"
+    fr: "Charge"
+    ja: "チャージ"
+    ko: "차지"
+    ru: "Заряд"
+    zh: "弹药"
+  published: true
 "66":
   name:
     de: "Strukturmodul"

@@ -1,0 +1,26 @@
+[
+  {
+    "activity": "manufacturing",
+    "cost_index": 0.0725
+  },
+  {
+    "activity": "researching_time_efficiency",
+    "cost_index": 0.0705
+  },
+  {
+    "activity": "researching_material_efficiency",
+    "cost_index": 0.0596
+  },
+  {
+    "activity": "copying",
+    "cost_index": 0.0725
+  },
+  {
+    "activity": "invention",
+    "cost_index": 0.1197
+  },
+  {
+    "activity": "reaction",
+    "cost_index": 0.0014
+  }
+]

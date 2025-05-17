@@ -1,0 +1,32 @@
+[
+  {
+    "adjusted_price": 3.1582815355153264,
+    "average_price": 4.06,
+    "type_id": 34
+  },
+  {
+    "adjusted_price": 323.9092640928271,
+    "average_price": 332.3,
+    "type_id": 37
+  },
+  {
+    "adjusted_price": 425.966039068027,
+    "average_price": 645.48,
+    "type_id": 42832
+  },
+  {
+    "adjusted_price": 110.00543317916913,
+    "average_price": 126.37,
+    "type_id": 16272
+  },
+  {
+    "adjusted_price": 459.2659786008053,
+    "average_price": 898.54,
+    "type_id": 16274
+  },
+  {
+    "adjusted_price": 568.8045439544444,
+    "average_price": 781.14,
+    "type_id": 17887
+  }
+]

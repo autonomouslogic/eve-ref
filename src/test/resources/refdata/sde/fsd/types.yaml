@@ -3505,3 +3505,61 @@
   published: true
   radius: 100
   volume: 40
+"42832":
+  basePrice: 1000
+  description:
+    de: "Dieses kompakte Bündel aktiver Naniten kann in ein <a href=showinfo:42526>Panzerungskommandostrahlen</a>-Modul\
+      \ geladen und an verbündete Schiffe verteilt werden, um die Widerstandsfähigkeit\
+      \ der Panzerung zu erhöhen."
+    en: "This compact bundle of active nanites can be loaded into an <a href=showinfo:42526>Armor\
+      \ Command Burst</a> module and dispersed across allied ships to provide increased\
+      \ armor resistances."
+    es: "Este lote compacto de nanobots activos puede cargarse en un módulo de <a\
+      \ href=showinfo:42526>estallido de mando de blindaje</a> y dispersarse por naves\
+      \ aliadas para mejorar las resistencias de blindaje."
+    fr: "Cette masse dense de nanites actives peut être injectée dans une <a href=showinfo:42526>salve\
+      \ commandante de blindage</a> et propulsée vers les vaisseaux alliés pour amé\
+      liorer les résistances de leurs blindages."
+    ja: "この活性ナノマシンの小さな塊を<a href=showinfo:42526>アーマーコマンドバースト</a>に装填して味方艦へ拡散すれば、アーマー\
+      のレジスタンス値を向上させることができる。"
+    ko: "<a href=showinfo:42526>장갑 버스트</a> 모듈에 장착 가능한 나나이트 차지입니다. 동맹 함선의 장갑 저항력을 강\
+      화합니다."
+    ru: "Этот компактный пакет активных нанитов может быть заряжен в <a href=showinfo:42526>и\
+      мпульсную систему координации броневой защиты (Armor Command Burs)</a> и с е\
+      ё помощью распределён по союзным кораблям, обеспечивая повышение сопротивляе\
+      мости их брони."
+    zh: "这种紧凑的纳米机器人集群可以装载到<a href=showinfo:42526>装甲指挥脉冲波</a>装备中，并散布到友方舰船全身，提高其装甲抗性\
+      。"
+  groupID: 1774
+  iconID: 21690
+  marketGroupID: 2298
+  mass: 0.01
+  name:
+    de: "Armor Energizing Charge"
+    en: "Armor Energizing Charge"
+    es: "Carga energizante de blindaje"
+    fr: "Armor Energizing Charge"
+    ja: "アーマー活性化チャージ"
+    ko: "장갑 에너자이징 차지"
+    ru: "Armor Energizing Charge"
+    zh: "装甲电压强化弹药"
+  portionSize: 500
+  published: true
+  volume: 0.01
+"42874":
+  basePrice: 10000000
+  groupID: 1810
+  iconID: 21690
+  marketGroupID: 2291
+  name:
+    de: "Armor Energizing Charge Blueprint"
+    en: "Armor Energizing Charge Blueprint"
+    es: "Plano de carga energizante de blindaje"
+    fr: "Armor Energizing Charge Blueprint"
+    ja: "アーマー活性化チャージブループリント"
+    ko: "장갑 에너자이징 차지 블루프린트"
+    ru: "Armor Energizing Charge Blueprint"
+    zh: "装甲电压强化弹药蓝图"
+  portionSize: 1
+  published: true
+  volume: 0.01

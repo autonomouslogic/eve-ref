@@ -2854,3 +2854,71 @@
   radius: 100
   type_id: 43704
   volume: 40
+"42832":
+  capacity: 0
+  description: "Cette masse dense de nanites actives peut être injectée dans une <a\
+    \ href=showinfo:42526>salve commandante de blindage</a> et propulsée vers les\
+    \ vaisseaux alliés pour améliorer les résistances de leurs blindages."
+  dogma_attributes:
+  - attribute_id: 161
+    value: 0.01
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 2468
+    value: 13
+  - attribute_id: 182
+    value: 20494
+  - attribute_id: 2470
+    value: 0
+  - attribute_id: 2599
+    value: 0
+  - attribute_id: 2472
+    value: 0
+  - attribute_id: 137
+    value: 1770
+  - attribute_id: 2598
+    value: 0
+  - attribute_id: 2536
+    value: 0
+  - attribute_id: 277
+    value: 1
+  - attribute_id: 278
+    value: 1
+  - attribute_id: 183
+    value: 3348
+  - attribute_id: 2596
+    value: -8
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 4
+    value: 0.01
+  - attribute_id: 2597
+    value: 0
+  dogma_effects:
+  - effect_id: 6737
+    is_default: true
+  group_id: 1774
+  icon_id: 21690
+  market_group_id: 2298
+  mass: 0.01
+  name: "Armor Energizing Charge"
+  packaged_volume: 0.01
+  portion_size: 500
+  published: true
+  radius: 1
+  type_id: 42832
+  volume: 0.01
+"42874":
+  capacity: 0
+  description: ""
+  group_id: 1810
+  icon_id: 21690
+  market_group_id: 2291
+  mass: 0
+  name: "Armor Energizing Charge Blueprint"
+  packaged_volume: 0.01
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 42874
+  volume: 0.01

@@ -1,0 +1,9 @@
+Armor Energizing Charge Blueprint	42874
+
+Minerals
+Item	Required	Available	Est. Unit price	typeID
+Tritanium	9900	0	4.06	34
+Isogen	9900	0	332.3	37
+Heavy Water	29700	0	126.37	16272
+Helium Isotopes	9900	0	898.54	16274
+Oxygen Isotopes	9900	0	781.14	17887
