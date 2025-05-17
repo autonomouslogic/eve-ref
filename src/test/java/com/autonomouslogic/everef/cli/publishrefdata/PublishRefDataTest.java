@@ -251,7 +251,7 @@ public class PublishRefDataTest {
 			assertBundle(
 					ExpectedBundleIds.builder()
 							.categoryIds(List.of(6L))
-							.groupIds(List.of(27L, 513L, 941L))
+							.groupIds(List.of(27L, 513L, 898L, 941L))
 							.build(),
 					path);
 		}
