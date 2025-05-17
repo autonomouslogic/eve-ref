@@ -28,15 +28,11 @@ public class ActivityCost {
 	long productId;
 
 	@JsonProperty
-	double quantity;
+	int runs;
 
 	@JsonProperty
 	@Schema(implementation = String.class)
 	Duration time;
-
-	@JsonProperty
-	@Schema(implementation = String.class)
-	Duration timePerUnit;
 
 	@JsonProperty
 	@Singular
@@ -76,7 +72,4 @@ public class ActivityCost {
 
 	@JsonProperty
 	BigDecimal totalCost;
-
-	@JsonProperty
-	BigDecimal totalCostPerUnit;
 }

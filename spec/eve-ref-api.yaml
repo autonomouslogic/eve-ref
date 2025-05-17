@@ -45,51 +45,6 @@ paths:
       - industry
 components:
   schemas:
-    ActivityCost:
-      type: object
-      properties:
-        alpha_clone_tax:
-          type: number
-          description: The alpha clone tax amount
-        estimated_item_value:
-          type: number
-          description: The estimated item value (EIV). This may not be completely
-            accurate.
-        facility_tax:
-          type: number
-          description: The facility amount
-        materials:
-          type: object
-          additionalProperties:
-            $ref: "#/components/schemas/MaterialCost"
-        product_id:
-          type: integer
-          format: int64
-        quantity:
-          type: number
-          format: double
-        scc_surcharge:
-          type: number
-          description: The SCC surcharge amount
-        system_cost_index:
-          type: number
-          description: |-
-            The system cost index amount.
-            Note that this will always be a slightly off, as the ESI does not report the full precision of the system cost index rates.
-            See https://github.com/esi/esi-issues/issues/1411
-        time:
-          type: string
-        time_per_unit:
-          type: string
-        total_cost:
-          type: number
-        total_cost_per_unit:
-          type: number
-        total_job_cost:
-          type: number
-          description: The total amount of ISK required to start the job
-        total_material_cost:
-          type: number
     ApiError:
       type: object
       properties:
@@ -107,7 +62,7 @@ components:
         manufacturing:
           type: object
           additionalProperties:
-            $ref: "#/components/schemas/ActivityCost"
+            $ref: "#/components/schemas/ManufacturingCost"
     IndustryCostInput:
       type: object
       properties:
@@ -502,10 +457,24 @@ components:
         alpha_clone_tax:
           type: number
           description: The alpha clone tax amount
+        avg_cost_per_run:
+          type: number
+        avg_cost_per_unit:
+          type: number
+        avg_time_per_run:
+          type: string
+        avg_time_per_unit:
+          type: string
         estimated_item_value:
           type: number
           description: The estimated item value (EIV). This may not be completely
             accurate.
+        expected_runs:
+          type: number
+          format: double
+        expected_units:
+          type: number
+          format: double
         facility_tax:
           type: number
           description: The facility amount
@@ -525,9 +494,6 @@ components:
         product_id:
           type: integer
           format: int64
-        quantity:
-          type: number
-          format: double
         runs:
           type: integer
           format: int32
@@ -547,9 +513,57 @@ components:
           description: The time efficiency of the invented blueprint
         time:
           type: string
+        total_cost:
+          type: number
+        total_job_cost:
+          type: number
+          description: The total amount of ISK required to start the job
+        total_material_cost:
+          type: number
+        units_per_run:
+          type: integer
+          format: int32
+    ManufacturingCost:
+      type: object
+      properties:
+        alpha_clone_tax:
+          type: number
+          description: The alpha clone tax amount
+        estimated_item_value:
+          type: number
+          description: The estimated item value (EIV). This may not be completely
+            accurate.
+        facility_tax:
+          type: number
+          description: The facility amount
+        materials:
+          type: object
+          additionalProperties:
+            $ref: "#/components/schemas/MaterialCost"
+        product_id:
+          type: integer
+          format: int64
+        runs:
+          type: integer
+          format: int32
+        scc_surcharge:
+          type: number
+          description: The SCC surcharge amount
+        system_cost_index:
+          type: number
+          description: |-
+            The system cost index amount.
+            Note that this will always be a slightly off, as the ESI does not report the full precision of the system cost index rates.
+            See https://github.com/esi/esi-issues/issues/1411
+        time:
+          type: string
+        time_per_run:
+          type: string
         time_per_unit:
           type: string
         total_cost:
+          type: number
+        total_cost_per_run:
           type: number
         total_cost_per_unit:
           type: number
@@ -558,6 +572,14 @@ components:
           description: The total amount of ISK required to start the job
         total_material_cost:
           type: number
+        units:
+          type: integer
+          format: int64
+          description: Total number of item produced
+        units_per_run:
+          type: integer
+          format: int64
+          description: Total number of item produced
     MaterialCost:
       type: object
       properties:
