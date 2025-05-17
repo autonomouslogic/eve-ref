@@ -1,0 +1,25 @@
+{
+  "product_id": 22431,
+  "runs": 1,
+  "me": 3,
+  "te": 2,
+  "industry": 5,
+  "research": 5,
+  "science": 5,
+  "advanced_industry": 5,
+  "metallurgy": 5,
+  "advanced_large_ship_construction": 0,
+  "high_energy_physics": 5,
+  "mechanical_engineering": 5,
+  "gallente_starship_engineering": 5,
+  "gallente_encryption_methods": 5,
+  "facility_type": "STATION",
+  "security": "HIGH_SEC",
+  "manufacturing_cost":  0,
+  "researching_te_cost": 0,
+  "researching_me_cost": 0,
+  "copying_cost": 0,
+  "invention_cost": 0.11247518080408178, // ESI said 0.1125
+  "reaction_cost": 0,
+  "facility_tax": 0.0025
+}

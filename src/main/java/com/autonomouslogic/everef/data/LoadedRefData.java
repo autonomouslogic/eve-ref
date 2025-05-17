@@ -17,14 +17,17 @@ import com.autonomouslogic.everef.refdata.Skill;
 import com.autonomouslogic.everef.refdata.Unit;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.inject.Inject;
+import java.io.File;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Stream;
 import lombok.SneakyThrows;
+import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.tuple.Pair;
 import org.h2.mvstore.MVStore;
 
+@Log4j2
 public class LoadedRefData {
 	@Inject
 	protected ObjectMapper objectMapper;
@@ -263,5 +266,19 @@ public class LoadedRefData {
 	@SneakyThrows
 	private <T> T parse(byte[] bytes, Class<T> clazz) {
 		return objectMapper.readValue(bytes, clazz);
+	}
+
+	public void close() {
+		var filename = mvStore.getFileStore().getFileName();
+		try {
+			mvStore.closeImmediately();
+		} catch (Exception e) {
+			log.warn("Failed closing MVStore, ignoring", e);
+		}
+		try {
+			new File(filename).delete();
+		} catch (Exception e) {
+			log.warn("Failed deleting MVStore file, ignoring", e);
+		}
 	}
 }

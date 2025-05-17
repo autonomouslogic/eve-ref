@@ -11,14 +11,6 @@
         "org.flywaydb.flyway",
         "org.flywaydb:flyway-core"
       ]
-    },
-    {
-      "groupName": "aws",
-      "matchPackageNames": [
-        "software.amazon.awssdk:s3",
-        "software.amazon.awssdk:dynamodb"
-      ],
-      "allowedVersions": "=2.29.52"
     }
   ]
 }

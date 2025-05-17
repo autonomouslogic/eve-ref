@@ -1,5 +1,8 @@
 openapi: 3.0.1
 info:
+  contact:
+    name: Kenn
+    url: https://everef.net/discord
   description: This spec should be considered unstable and subject to change at any
     time.
   license:
@@ -9,7 +12,7 @@ info:
   version: dev
 externalDocs:
   description: Reference data
-  url: https://github.com/autonomouslogic/eve-ref/blob/main/docs/refdata.md
+  url: https://docs.everef.net/datasets/reference-data.html
 servers:
 - url: https://ref-data.everef.net
 paths:

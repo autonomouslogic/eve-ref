@@ -89,7 +89,15 @@ const props = defineProps<{
 				<template v-slot:key>
 					<ExternalLink url="https://docs.everef.net/datasets/reference-data">Reference Data</ExternalLink>:
 				</template>
-				<ExternalLink :url="`https://ref-data.everef.net/types/${inventoryType.typeId}`">View JSON</ExternalLink>
+				<div>
+					<ExternalLink :url="`https://ref-data.everef.net/types/${inventoryType.typeId}`">Type JSON</ExternalLink>
+				</div>
+				<div v-if="inventoryType.isBlueprint" >
+					<ExternalLink :url="`https://ref-data.everef.net/blueprints/${inventoryType.typeId}`">Blueprint JSON</ExternalLink>
+				</div>
+				<div v-if="inventoryType.isSkill">
+					<ExternalLink :url="`https://ref-data.everef.net/skills/${inventoryType.typeId}`">Skill JSON</ExternalLink>
+				</div>
 			</AttributeListItem>
 			<AttributeListItem>
 				<template v-slot:key>
