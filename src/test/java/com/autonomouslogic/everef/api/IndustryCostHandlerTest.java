@@ -56,8 +56,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @Timeout(60)
 public class IndustryCostHandlerTest {
 	static final List<String> TEST_NAMES = List.of(
-//		"dominix", "sin",
-		"sin-blueprint");
+			//		"dominix", "sin",
+			"sin-blueprint");
 
 	@Inject
 	ApiRunner apiRunner;

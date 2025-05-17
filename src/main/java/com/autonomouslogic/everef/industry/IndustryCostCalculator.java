@@ -3,8 +3,6 @@ package com.autonomouslogic.everef.industry;
 import static com.autonomouslogic.everef.industry.IndustryConstants.JOB_COST_BASE_RATE;
 import static com.autonomouslogic.everef.industry.SkillIndustryBonuses.GLOBAL_TIME_BONUSES;
 import static com.autonomouslogic.everef.industry.SkillIndustryBonuses.SPECIAL_TIME_BONUSES;
-import static com.autonomouslogic.everef.util.MathUtil.MATH_CONTEXT;
-import static com.autonomouslogic.everef.util.MathUtil.ROUNDING_MODE;
 
 import com.autonomouslogic.everef.data.LoadedRefData;
 import com.autonomouslogic.everef.model.api.ActivityCost;
@@ -16,9 +14,9 @@ import com.autonomouslogic.everef.refdata.Blueprint;
 import com.autonomouslogic.everef.refdata.BlueprintActivity;
 import com.autonomouslogic.everef.refdata.InventoryType;
 import com.autonomouslogic.everef.service.MarketPriceService;
+import com.autonomouslogic.everef.util.EveConstants;
+import com.autonomouslogic.everef.util.MathUtil;
 import java.math.BigDecimal;
-import java.math.MathContext;
-import java.math.RoundingMode;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 import java.util.LinkedHashMap;
@@ -27,8 +25,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 import javax.inject.Inject;
-
-import com.autonomouslogic.everef.util.EveConstants;
 import lombok.NonNull;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
@@ -100,7 +96,7 @@ public class IndustryCostCalculator {
 				.totalJobCost(totalJobCost)
 				.totalMaterialCost(totalMaterialCost)
 				.totalCost(totalCost)
-				.totalCostPerUnit(totalCost.divide(BigDecimal.valueOf(quantity)).setScale(2, ROUNDING_MODE))
+				.totalCostPerUnit(MathUtil.round(MathUtil.divide(totalCost, quantity), 2))
 				.build();
 	}
 
@@ -118,9 +114,7 @@ public class IndustryCostCalculator {
 			long typeId = material.getTypeId();
 			var price = marketPriceService.getEsiAveragePrice(typeId).orElse(0);
 			var quantity = quantityMod.apply(material.getQuantity());
-			var cost = BigDecimal.valueOf(price)
-					.multiply(BigDecimal.valueOf(quantity))
-					.setScale(2, ROUNDING_MODE);
+			var cost = MathUtil.round(BigDecimal.valueOf(price).multiply(BigDecimal.valueOf(quantity)), 2);
 			materials.put(
 					String.valueOf(typeId),
 					MaterialCost.builder()
@@ -264,9 +258,8 @@ public class IndustryCostCalculator {
 		var baseTime = (double) invention.getTime();
 		var runs = industryCostInput.getRuns();
 		var advancedIndustryMod =
-			1.0 - GLOBAL_TIME_BONUSES.get("Advanced Industry") * industryCostInput.getAdvancedIndustry();
-		return Duration.ofSeconds(
-			(long) Math.round(runs * baseTime * advancedIndustryMod));
+				1.0 - GLOBAL_TIME_BONUSES.get("Advanced Industry") * industryCostInput.getAdvancedIndustry();
+		return Duration.ofSeconds((long) Math.round(runs * baseTime * advancedIndustryMod));
 	}
 
 	private double specialSkillBonus(
@@ -295,11 +288,11 @@ public class IndustryCostCalculator {
 			eiv = eiv.add(
 					BigDecimal.valueOf(material.getQuantity()).multiply(BigDecimal.valueOf(adjPrice.getAsDouble())));
 		}
-		return eiv.setScale(0, ROUNDING_MODE);
+		return MathUtil.round(eiv, 2);
 	}
 
 	private BigDecimal jobCostBase(BigDecimal eiv) {
-		return eiv.multiply(JOB_COST_BASE_RATE).setScale(2, ROUNDING_MODE);
+		return MathUtil.round(eiv.multiply(JOB_COST_BASE_RATE), 2);
 	}
 
 	private BigDecimal manufacturingSystemCostIndex(BigDecimal eiv) {
@@ -313,23 +306,23 @@ public class IndustryCostCalculator {
 	}
 
 	private static @NotNull BigDecimal systemCostIndex(BigDecimal value, BigDecimal index) {
-		var cost = value.multiply(index).setScale(0, ROUNDING_MODE);
+		var cost = MathUtil.round(value.multiply(index));
 		return cost;
 	}
 
 	private BigDecimal sccSurcharge(BigDecimal val) {
-		return IndustryConstants.SCC_SURCHARGE_RATE.multiply(val).setScale(0, ROUNDING_MODE);
+		return MathUtil.round(IndustryConstants.SCC_SURCHARGE_RATE.multiply(val));
 	}
 
 	private BigDecimal alphaCloneTax(BigDecimal val) {
 		if (industryCostInput.getAlpha()) {
-			return IndustryConstants.ALPHA_CLONE_TAX.multiply(val).setScale(0, ROUNDING_MODE);
+			return MathUtil.round(IndustryConstants.ALPHA_CLONE_TAX.multiply(val));
 		}
 		return BigDecimal.ZERO;
 	}
 
 	private BigDecimal facilityTax(BigDecimal val) {
-		return industryCostInput.getFacilityTax().multiply(val).setScale(0, ROUNDING_MODE);
+		return MathUtil.round(industryCostInput.getFacilityTax().multiply(val));
 	}
 
 	private InventionCost inventionCost(BlueprintActivity invention) {
@@ -353,7 +346,7 @@ public class IndustryCostCalculator {
 				.runs(runs)
 				.materials(materials)
 				.time(time)
-				.timePerUnit(Duration.ofMillis((long) (time.toMillis() / quantity)).truncatedTo(ChronoUnit.MILLIS))
+				.timePerUnit(MathUtil.divide(time, quantity).truncatedTo(ChronoUnit.MILLIS))
 				.estimatedItemValue(eiv)
 				.systemCostIndex(systemCostIndex)
 				.facilityTax(facilityTax)
@@ -362,7 +355,7 @@ public class IndustryCostCalculator {
 				.totalJobCost(totalJobCost)
 				.totalMaterialCost(totalMaterialCost)
 				.totalCost(totalCost)
-				.totalCostPerUnit(totalCost.divide(BigDecimal.valueOf(quantity), MATH_CONTEXT).setScale(2, ROUNDING_MODE))
+				.totalCostPerUnit(MathUtil.round(MathUtil.divide(totalCost, quantity), 2))
 				.build();
 	}
 
