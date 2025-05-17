@@ -12,6 +12,7 @@ import javax.inject.Singleton;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import software.amazon.awssdk.auth.credentials.AwsCredentialsProvider;
+import software.amazon.awssdk.core.checksums.RequestChecksumCalculation;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 
@@ -71,6 +72,7 @@ public class S3Module {
 		if (endpoint.isPresent()) {
 			client.endpointOverride(new URI(endpoint.get()));
 		}
+		client.requestChecksumCalculation(RequestChecksumCalculation.WHEN_REQUIRED);
 		return client.build();
 	}
 }
