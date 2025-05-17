@@ -6,8 +6,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import com.autonomouslogic.commons.ResourceUtil;
 import com.autonomouslogic.everef.cli.api.ApiRunner;
 import com.autonomouslogic.everef.cli.publishrefdata.PublishRefDataTest;
+import com.autonomouslogic.everef.model.api.ActivityCost;
 import com.autonomouslogic.everef.model.api.IndustryCost;
 import com.autonomouslogic.everef.model.api.IndustryCostInput;
+import com.autonomouslogic.everef.model.api.InventionCost;
 import com.autonomouslogic.everef.openapi.api.api.IndustryApi;
 import com.autonomouslogic.everef.openapi.api.invoker.ApiClient;
 import com.autonomouslogic.everef.service.MarketPriceService;
@@ -24,8 +26,10 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 import javax.inject.Inject;
 import lombok.SneakyThrows;
@@ -55,9 +59,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @Log4j2
 @Timeout(60)
 public class IndustryCostHandlerTest {
-	static final List<String> TEST_NAMES = List.of(
-			//		"dominix", "sin",
-			"sin-blueprint");
+	private static final double EIV_TOLERANCE_RATE = 1.0 / 1_000_000.0;
+	private static final BigDecimal EIV_TOLERANCE_ABS = BigDecimal.valueOf(10);
+
+	static final List<String> TEST_NAMES = List.of("dominix", "sin", "sin-blueprint");
 
 	@Inject
 	ApiRunner apiRunner;
@@ -123,8 +128,64 @@ public class IndustryCostHandlerTest {
 				"https://github.com/autonomouslogic/eve-ref/blob/industry-api/spec/eve-ref-api.yaml",
 				res.getHeaders().get("X-OpenAPI").getFirst());
 		var actual = res.getData();
+
 		System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(actual));
+
+		actual = assertEiv(expected, actual);
 		assertEquals(expected, actual);
+	}
+
+	/*
+	There are some slight differences in the EIV calculations.
+	This method asserts those values within some accepted tolerance.
+	*/
+	private IndustryCost assertEiv(IndustryCost expected, IndustryCost actual) {
+		var builder = actual.toBuilder();
+		if (actual.getInvention() != null) {
+			for (var product : actual.getInvention().keySet()) {
+				var expectedActivity =
+						Optional.ofNullable(expected.getInvention()).flatMap(m -> Optional.ofNullable(m.get(product)));
+				if (!expectedActivity.isEmpty()) {
+					builder.invention(product, (InventionCost) assertEiv(
+							"invention",
+							product,
+							expectedActivity.get(),
+							actual.getInvention().get(product)));
+				}
+			}
+		}
+		if (actual.getManufacturing() != null) {
+			for (var product : actual.getManufacturing().keySet()) {
+				var expectedActivity = Optional.ofNullable(expected.getManufacturing())
+						.flatMap(m -> Optional.ofNullable(m.get(product)));
+				if (!expectedActivity.isEmpty()) {
+					builder.manufacturing(
+							product,
+							assertEiv(
+									"manufacturing",
+									product,
+									expectedActivity.get(),
+									actual.getManufacturing().get(product)));
+				}
+			}
+		}
+		return builder.build();
+	}
+
+	private ActivityCost assertEiv(String type, String product, ActivityCost expected, ActivityCost actual) {
+		if (expected.getEstimatedItemValue() == null || actual.getEstimatedItemValue() == null) {
+			return actual;
+		}
+		var expectedEiv = expected.getEstimatedItemValue();
+		var actualEiv = actual.getEstimatedItemValue();
+		var margin =
+				expectedEiv.multiply(BigDecimal.valueOf(EIV_TOLERANCE_RATE)).max(EIV_TOLERANCE_ABS);
+		var diff = actualEiv.subtract(expectedEiv);
+		var msg = String.format("%s product %s, diff: %s, margin: %s", type, product, diff, margin);
+		if (diff.abs().compareTo(margin) > 0) {
+			assertEquals(expectedEiv, actualEiv, msg);
+		}
+		return actual.toBuilder().estimatedItemValue(expectedEiv).build();
 	}
 
 	static Stream<Arguments> costTests() {

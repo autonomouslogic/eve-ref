@@ -53,7 +53,8 @@ components:
           description: The alpha clone tax amount
         estimated_item_value:
           type: number
-          description: The estimated item value (EIV)
+          description: The estimated item value (EIV). This may not be completely
+            accurate.
         facility_tax:
           type: number
           description: The facility amount
@@ -503,7 +504,8 @@ components:
           description: The alpha clone tax amount
         estimated_item_value:
           type: number
-          description: The estimated item value (EIV)
+          description: The estimated item value (EIV). This may not be completely
+            accurate.
         facility_tax:
           type: number
           description: The facility amount

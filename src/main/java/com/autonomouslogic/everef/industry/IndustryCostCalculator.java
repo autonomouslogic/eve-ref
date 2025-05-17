@@ -288,8 +288,10 @@ public class IndustryCostCalculator {
 			if (adjPrice.isEmpty()) {
 				throw new RuntimeException("typeId: " + material.getTypeId());
 			}
-			eiv = eiv.add(
-					BigDecimal.valueOf(material.getQuantity()).multiply(BigDecimal.valueOf(adjPrice.getAsDouble())));
+			var quantity = BigDecimal.valueOf(material.getQuantity());
+			var price = BigDecimal.valueOf(adjPrice.getAsDouble());
+			var total = quantity.multiply(price);
+			eiv = eiv.add(total);
 		}
 		return MathUtil.round(eiv);
 	}

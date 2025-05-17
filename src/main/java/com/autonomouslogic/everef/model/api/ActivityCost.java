@@ -43,7 +43,7 @@ public class ActivityCost {
 	Map<String, MaterialCost> materials;
 
 	@JsonProperty
-	@Schema(description = "The estimated item value (EIV)")
+	@Schema(description = "The estimated item value (EIV). This may not be completely accurate.")
 	BigDecimal estimatedItemValue;
 
 	@JsonProperty
