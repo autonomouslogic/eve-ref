@@ -6,6 +6,7 @@ import com.autonomouslogic.everef.openapi.esi.invoker.ApiResponse;
 import com.autonomouslogic.everef.openapi.esi.model.GetMarketsPrices200Ok;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.OptionalDouble;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ScheduledExecutorService;
@@ -64,8 +65,10 @@ public class MarketPriceService {
 		}
 		for (GetMarketsPrices200Ok price : res.getData()) {
 			prices.computeIfAbsent(price.getTypeId().longValue(), ignore -> new MarketPrice())
-					.setEsiAdjustedPrice(price.getAdjustedPrice())
-					.setEsiAveragePrice(price.getAveragePrice());
+					.setEsiAdjustedPrice(
+							Optional.ofNullable(price.getAdjustedPrice()).orElse(0.0))
+					.setEsiAveragePrice(
+							Optional.ofNullable(price.getAveragePrice()).orElse(0.0));
 		}
 		esiMarketPricesEtag = res.getHeaders().get("ETag").getFirst();
 		log.debug("Finished updating market prices");
