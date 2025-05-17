@@ -1,0 +1,97 @@
+{
+  "capacity" : 0,
+  "description" : {
+    "en" : "This compact bundle of active nanites can be loaded into an <a href=showinfo:42526>Armor Command Burst</a> module and dispersed across allied ships to provide increased armor resistances.",
+    "fr" : "Cette masse dense de nanites actives peut être injectée dans une <a href=showinfo:42526>salve commandante de blindage</a> et propulsée vers les vaisseaux alliés pour améliorer les résistances de leurs blindages."
+  },
+  "dogma_attributes" : {
+    "161" : {
+      "attribute_id" : 161,
+      "value" : 0.01
+    },
+    "162" : {
+      "attribute_id" : 162,
+      "value" : 1
+    },
+    "2468" : {
+      "attribute_id" : 2468,
+      "value" : 13
+    },
+    "182" : {
+      "attribute_id" : 182,
+      "value" : 20494
+    },
+    "2470" : {
+      "attribute_id" : 2470,
+      "value" : 0
+    },
+    "2599" : {
+      "attribute_id" : 2599,
+      "value" : 0
+    },
+    "2472" : {
+      "attribute_id" : 2472,
+      "value" : 0
+    },
+    "137" : {
+      "attribute_id" : 137,
+      "value" : 1770
+    },
+    "2598" : {
+      "attribute_id" : 2598,
+      "value" : 0
+    },
+    "2536" : {
+      "attribute_id" : 2536,
+      "value" : 0
+    },
+    "277" : {
+      "attribute_id" : 277,
+      "value" : 1
+    },
+    "278" : {
+      "attribute_id" : 278,
+      "value" : 1
+    },
+    "183" : {
+      "attribute_id" : 183,
+      "value" : 3348
+    },
+    "2596" : {
+      "attribute_id" : 2596,
+      "value" : -8
+    },
+    "38" : {
+      "attribute_id" : 38,
+      "value" : 0
+    },
+    "4" : {
+      "attribute_id" : 4,
+      "value" : 0.01
+    },
+    "2597" : {
+      "attribute_id" : 2597,
+      "value" : 0
+    }
+  },
+  "dogma_effects" : {
+    "6737" : {
+      "effect_id" : 6737,
+      "is_default" : true
+    }
+  },
+  "group_id" : 1774,
+  "icon_id" : 21690,
+  "market_group_id" : 2298,
+  "mass" : 0.01,
+  "name" : {
+    "en" : "Armor Energizing Charge",
+    "fr" : "Armor Energizing Charge"
+  },
+  "packaged_volume" : 0.01,
+  "portion_size" : 500,
+  "published" : true,
+  "radius" : 1,
+  "type_id" : 42832,
+  "volume" : 0.01
+}

@@ -13,6 +13,7 @@ categories:
     filePrefix: category
     ids:
       - 6
+      - 8
       - 66
       - 23
     languages:
@@ -41,6 +42,7 @@ groups:
       - 1869
       - 332
       - 898
+      - 1774
     languages:
       - en-us
 
@@ -129,6 +131,8 @@ types:
       - 43714
       - 37152
       - 43704
+      - 42832
+      - 42874
     languages:
       - en-us
       - fr

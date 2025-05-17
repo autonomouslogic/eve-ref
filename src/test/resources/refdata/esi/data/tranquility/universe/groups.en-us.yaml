@@ -335,3 +335,12 @@
   - 22440
   - 44996
   - 85236
+"1774":
+  category_id: 8
+  group_id: 1774
+  name: "Armor Command Burst Charges"
+  published: true
+  types:
+  - 42832
+  - 42833
+  - 42834
