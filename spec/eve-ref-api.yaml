@@ -180,8 +180,7 @@ components:
           type: integer
           format: int32
           default: 5
-          description: The Caldari Starship Engineering skill level the installing
-            character
+          description: The Caldari Encryption Methods skill level the installing character
           maximum: 5
           minimum: 0
         caldari_starship_engineering:
@@ -296,6 +295,12 @@ components:
             installed
           maximum: 1
           minimum: 0
+        material_prices:
+          type: string
+          default: ESI_AVG_PRICE
+          description: Where to get material prices from
+          enum:
+          - ESI_AVG_PRICE
         me:
           type: integer
           format: int32
@@ -461,7 +466,7 @@ components:
           type: integer
           format: int32
           default: 5
-          description: The Triglavian Quantum Engineering skill level the installing
+          description: The Triglavian Encryption Methods skill level the installing
             character
           maximum: 5
           minimum: 0
@@ -514,6 +519,7 @@ components:
           description: The material efficiency of the invented blueprint
         probability:
           type: number
+          format: double
         product_id:
           type: integer
           format: int64

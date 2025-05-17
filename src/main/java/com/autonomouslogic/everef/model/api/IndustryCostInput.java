@@ -165,6 +165,14 @@ public class IndustryCostInput {
 			defaultValue = "false")
 	Boolean alpha = false;
 
+	@JsonProperty
+	@lombok.Builder.Default
+	@Schema(
+			description = "Where to get material prices from",
+			requiredMode = Schema.RequiredMode.NOT_REQUIRED,
+			defaultValue = "ESI_AVG_PRICE")
+	PriceSource materialPrices = PriceSource.ESI_AVG_PRICE;
+
 	//	@JsonProperty
 	//	Long structureTypeId;
 
