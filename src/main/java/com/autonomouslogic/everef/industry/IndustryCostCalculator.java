@@ -291,7 +291,7 @@ public class IndustryCostCalculator {
 			eiv = eiv.add(
 					BigDecimal.valueOf(material.getQuantity()).multiply(BigDecimal.valueOf(adjPrice.getAsDouble())));
 		}
-		return MathUtil.round(eiv, 2);
+		return MathUtil.round(eiv);
 	}
 
 	private BigDecimal jobCostBase(BigDecimal eiv) {
