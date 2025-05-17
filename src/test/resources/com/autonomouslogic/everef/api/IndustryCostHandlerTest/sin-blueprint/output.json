@@ -2,7 +2,11 @@
   "invention": {
     "22431": {
       "product_id": 22431,
-      "quantity": 1,
+      "probability": 0.32076, // EVE client says 0.321
+      "quantity": 0.32076,
+      "runs": 1,
+      "me": 2,
+      "te": 4,
       "time": "PT45H20M00S",
       "time_per_unit": "PT141H9M56S",
       "materials": {
@@ -17,7 +21,6 @@
           "cost" : 2747990.08
         }
       },
-      "probability": 0.32076, // EVE client says 0.321
       "estimated_item_value": 768684250,
       "job_cost_base": 15373685,
       "system_cost_index": 1729158,

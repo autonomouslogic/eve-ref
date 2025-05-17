@@ -28,7 +28,7 @@ public class ActivityCost {
 	long productId;
 
 	@JsonProperty
-	long quantity;
+	double quantity;
 
 	@JsonProperty
 	@Schema(implementation = String.class)

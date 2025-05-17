@@ -24,14 +24,17 @@ public class InventionCost extends ActivityCost {
 	@JsonProperty
 	BigDecimal probability;
 
+	@Schema(description = "The number of runs on the invented blueprint")
 	@JsonProperty
 	int runs;
 
+	@Schema(description = "The material efficiency of the invented blueprint")
 	@JsonProperty
-	int materialEfficiency;
+	int me;
 
+	@Schema(description = "The time efficiency of the invented blueprint")
 	@JsonProperty
-	int timeEfficiency;
+	int te;
 
 	@JsonProperty
 	BigDecimal jobCostBase;

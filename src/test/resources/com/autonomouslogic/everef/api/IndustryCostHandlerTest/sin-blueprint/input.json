@@ -12,7 +12,7 @@
   "high_energy_physics": 5,
   "mechanical_engineering": 5,
   "gallente_starship_engineering": 5,
-  //"gallente_encryption_metods": 5,
+  "gallente_encryption_metods": 5,
   "facility_type": "STATION",
   "security": "HIGH_SEC",
   "manufacturing_cost":  0,

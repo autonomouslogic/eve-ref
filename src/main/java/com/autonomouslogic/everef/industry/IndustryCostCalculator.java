@@ -3,6 +3,8 @@ package com.autonomouslogic.everef.industry;
 import static com.autonomouslogic.everef.industry.IndustryConstants.JOB_COST_BASE_RATE;
 import static com.autonomouslogic.everef.industry.SkillIndustryBonuses.GLOBAL_TIME_BONUSES;
 import static com.autonomouslogic.everef.industry.SkillIndustryBonuses.SPECIAL_TIME_BONUSES;
+import static com.autonomouslogic.everef.util.MathUtil.MATH_CONTEXT;
+import static com.autonomouslogic.everef.util.MathUtil.ROUNDING_MODE;
 
 import com.autonomouslogic.everef.data.LoadedRefData;
 import com.autonomouslogic.everef.model.api.ActivityCost;
@@ -15,6 +17,7 @@ import com.autonomouslogic.everef.refdata.BlueprintActivity;
 import com.autonomouslogic.everef.refdata.InventoryType;
 import com.autonomouslogic.everef.service.MarketPriceService;
 import java.math.BigDecimal;
+import java.math.MathContext;
 import java.math.RoundingMode;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
@@ -24,6 +27,8 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 import javax.inject.Inject;
+
+import com.autonomouslogic.everef.util.EveConstants;
 import lombok.NonNull;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
@@ -58,7 +63,7 @@ public class IndustryCostCalculator {
 
 		var builder = IndustryCost.builder();
 		if (Optional.ofNullable(productType.getBlueprint()).orElse(false)) {
-			var invention = blueprint.getActivities().get("manufacturing");
+			var invention = blueprint.getActivities().get("invention");
 			var inventionCost = inventionCost(invention);
 			builder.invention(String.valueOf(productType.getTypeId()), inventionCost);
 		} else {
@@ -95,7 +100,7 @@ public class IndustryCostCalculator {
 				.totalJobCost(totalJobCost)
 				.totalMaterialCost(totalMaterialCost)
 				.totalCost(totalCost)
-				.totalCostPerUnit(totalCost.divide(BigDecimal.valueOf(quantity)).setScale(2, RoundingMode.HALF_UP))
+				.totalCostPerUnit(totalCost.divide(BigDecimal.valueOf(quantity)).setScale(2, ROUNDING_MODE))
 				.build();
 	}
 
@@ -103,19 +108,19 @@ public class IndustryCostCalculator {
 		return materials(manufacturing, this::manufacturingMaterialQuantity);
 	}
 
-	private Map<String, MaterialCost> inventionMaterials(BlueprintActivity manufacturing) {
-		return materials(manufacturing, Function.identity());
+	private Map<String, MaterialCost> inventionMaterials(BlueprintActivity invention) {
+		return materials(invention, Function.identity());
 	}
 
-	private Map<String, MaterialCost> materials(BlueprintActivity manufacturing, Function<Long, Long> quantityMod) {
+	private Map<String, MaterialCost> materials(BlueprintActivity activity, Function<Long, Long> quantityMod) {
 		var materials = new LinkedHashMap<String, MaterialCost>();
-		for (var material : manufacturing.getMaterials().values()) {
+		for (var material : activity.getMaterials().values()) {
 			long typeId = material.getTypeId();
 			var price = marketPriceService.getEsiAveragePrice(typeId).orElse(0);
 			var quantity = quantityMod.apply(material.getQuantity());
 			var cost = BigDecimal.valueOf(price)
 					.multiply(BigDecimal.valueOf(quantity))
-					.setScale(2, RoundingMode.HALF_UP);
+					.setScale(2, ROUNDING_MODE);
 			materials.put(
 					String.valueOf(typeId),
 					MaterialCost.builder()
@@ -255,6 +260,15 @@ public class IndustryCostCalculator {
 						industryCostInput.getMutagenicStabilization()));
 	}
 
+	private Duration inventionTime(BlueprintActivity invention) {
+		var baseTime = (double) invention.getTime();
+		var runs = industryCostInput.getRuns();
+		var advancedIndustryMod =
+			1.0 - GLOBAL_TIME_BONUSES.get("Advanced Industry") * industryCostInput.getAdvancedIndustry();
+		return Duration.ofSeconds(
+			(long) Math.round(runs * baseTime * advancedIndustryMod));
+	}
+
 	private double specialSkillBonus(
 			BlueprintActivity manufacturing, SkillIndustryBonuses.SkillBonus bonus, int level) {
 		if (manufacturing.getRequiredSkills().containsKey(bonus.getSkillId())) {
@@ -281,7 +295,11 @@ public class IndustryCostCalculator {
 			eiv = eiv.add(
 					BigDecimal.valueOf(material.getQuantity()).multiply(BigDecimal.valueOf(adjPrice.getAsDouble())));
 		}
-		return eiv.setScale(0, RoundingMode.HALF_UP);
+		return eiv.setScale(0, ROUNDING_MODE);
+	}
+
+	private BigDecimal jobCostBase(BigDecimal eiv) {
+		return eiv.multiply(JOB_COST_BASE_RATE).setScale(2, ROUNDING_MODE);
 	}
 
 	private BigDecimal manufacturingSystemCostIndex(BigDecimal eiv) {
@@ -295,30 +313,32 @@ public class IndustryCostCalculator {
 	}
 
 	private static @NotNull BigDecimal systemCostIndex(BigDecimal value, BigDecimal index) {
-		var cost = value.multiply(index).setScale(0, RoundingMode.HALF_UP);
+		var cost = value.multiply(index).setScale(0, ROUNDING_MODE);
 		return cost;
 	}
 
-	private BigDecimal sccSurcharge(BigDecimal eiv) {
-		return IndustryConstants.SCC_SURCHARGE_RATE.multiply(eiv).setScale(0, RoundingMode.HALF_UP);
+	private BigDecimal sccSurcharge(BigDecimal val) {
+		return IndustryConstants.SCC_SURCHARGE_RATE.multiply(val).setScale(0, ROUNDING_MODE);
 	}
 
-	private BigDecimal alphaCloneTax(BigDecimal eiv) {
+	private BigDecimal alphaCloneTax(BigDecimal val) {
 		if (industryCostInput.getAlpha()) {
-			return IndustryConstants.ALPHA_CLONE_TAX.multiply(eiv).setScale(0, RoundingMode.HALF_UP);
+			return IndustryConstants.ALPHA_CLONE_TAX.multiply(val).setScale(0, ROUNDING_MODE);
 		}
 		return BigDecimal.ZERO;
 	}
 
-	private BigDecimal facilityTax(BigDecimal eiv) {
-		return industryCostInput.getFacilityTax().multiply(eiv).setScale(0, RoundingMode.HALF_UP);
+	private BigDecimal facilityTax(BigDecimal val) {
+		return industryCostInput.getFacilityTax().multiply(val).setScale(0, ROUNDING_MODE);
 	}
 
 	private InventionCost inventionCost(BlueprintActivity invention) {
 		var time = inventionTime(invention);
-		var eiv = manufacturingEiv(inventionEivProduct(productType));
+		var eiv = manufacturingEiv(inventionBlueprintProductActivity(productType));
 		var jcb = jobCostBase(eiv);
-		var quantity = industryCostInput.getRuns();
+		var prob = inventionProbability(invention);
+		var runs = industryCostInput.getRuns() * inventionRuns(inventionBlueprintProductActivity(productType));
+		var quantity = runs * prob;
 		var systemCostIndex = inventionSystemCostIndex(jcb);
 		var facilityTax = facilityTax(jcb);
 		var sccSurcharge = sccSurcharge(jcb);
@@ -330,9 +350,10 @@ public class IndustryCostCalculator {
 		return InventionCost.builder()
 				.productId(industryCostInput.getProductId())
 				.quantity(quantity)
+				.runs(runs)
 				.materials(materials)
 				.time(time)
-				.timePerUnit(time.dividedBy(quantity).truncatedTo(ChronoUnit.MILLIS))
+				.timePerUnit(Duration.ofMillis((long) (time.toMillis() / quantity)).truncatedTo(ChronoUnit.MILLIS))
 				.estimatedItemValue(eiv)
 				.systemCostIndex(systemCostIndex)
 				.facilityTax(facilityTax)
@@ -341,11 +362,29 @@ public class IndustryCostCalculator {
 				.totalJobCost(totalJobCost)
 				.totalMaterialCost(totalMaterialCost)
 				.totalCost(totalCost)
-				.totalCostPerUnit(totalCost.divide(BigDecimal.valueOf(quantity)).setScale(2, RoundingMode.HALF_UP))
+				.totalCostPerUnit(totalCost.divide(BigDecimal.valueOf(quantity), MATH_CONTEXT).setScale(2, ROUNDING_MODE))
 				.build();
 	}
 
-	private BlueprintActivity inventionEivProduct(InventoryType product) {
+	private int inventionRuns(BlueprintActivity blueprintActivity) {
+		var products = blueprintActivity.getProducts();
+		if (products.size() > 1) {
+			throw new IllegalArgumentException();
+		}
+		var productId = products.values().stream().findFirst().orElseThrow().getTypeId();
+		var product = refData.getType(productId);
+		var categoryId = Optional.ofNullable(product.getCategoryId()).orElseThrow();
+		if (categoryId == EveConstants.SHIP_CATEGORY_ID) {
+			return IndustryConstants.INVENTION_BASE_SHIP_AND_RIG_RUNS;
+		}
+		var group = refData.getGroup(product.getGroupId());
+		if (group.getName().get("en").startsWith("Rig ")) {
+			return IndustryConstants.INVENTION_BASE_SHIP_AND_RIG_RUNS;
+		}
+		return IndustryConstants.INVENTION_BASE_RUNS;
+	}
+
+	private BlueprintActivity inventionBlueprintProductActivity(InventoryType product) {
 		if (!Optional.ofNullable(product.getBlueprint()).orElse(false)) {
 			throw new IllegalArgumentException(product.getName().get("en") + "is not a blueprint");
 		}
@@ -354,11 +393,8 @@ public class IndustryCostCalculator {
 				.orElseThrow();
 	}
 
-	private Duration inventionTime(BlueprintActivity invention) {
-		return Duration.ofSeconds(invention.getTime());
-	}
-
-	private BigDecimal jobCostBase(BigDecimal eiv) {
-		return eiv.multiply(JOB_COST_BASE_RATE).setScale(2, RoundingMode.HALF_UP);
+	private double inventionProbability(BlueprintActivity invention) {
+		var baseProb = invention.getProducts().get(productType.getTypeId()).getProbability();
+		return baseProb;
 	}
 }
