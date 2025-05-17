@@ -2,8 +2,11 @@
   "manufacturing": {
     "22430": {
       "product_id": 22430,
-      "quantity": 1,
+      "runs": 1,
+      "units": 1,
+      "units_per_run": 1,
       "time": "PT60H8M33S",
+      "time_per_run": "PT60H8M33S",
       "time_per_unit": "PT60H8M33S",
       "materials": {
         "645": {
@@ -75,6 +78,7 @@
       "total_job_cost": 32669081, // not verified in-game
       "total_material_cost" : 1125969865.09,
       "total_cost" : 1158638946.09,
+      "total_cost_per_run" : 1158638946.09,
       "total_cost_per_unit" : 1158638946.09
     }
   }

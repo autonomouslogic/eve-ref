@@ -10,6 +10,7 @@ import com.autonomouslogic.everef.model.api.ActivityCost;
 import com.autonomouslogic.everef.model.api.IndustryCost;
 import com.autonomouslogic.everef.model.api.IndustryCostInput;
 import com.autonomouslogic.everef.model.api.InventionCost;
+import com.autonomouslogic.everef.model.api.ManufacturingCost;
 import com.autonomouslogic.everef.openapi.api.api.IndustryApi;
 import com.autonomouslogic.everef.openapi.api.invoker.ApiClient;
 import com.autonomouslogic.everef.service.MarketPriceService;
@@ -159,13 +160,11 @@ public class IndustryCostHandlerTest {
 				var expectedActivity = Optional.ofNullable(expected.getManufacturing())
 						.flatMap(m -> Optional.ofNullable(m.get(product)));
 				if (!expectedActivity.isEmpty()) {
-					builder.manufacturing(
+					builder.manufacturing(product, (ManufacturingCost) assertEiv(
+							"manufacturing",
 							product,
-							assertEiv(
-									"manufacturing",
-									product,
-									expectedActivity.get(),
-									actual.getManufacturing().get(product)));
+							expectedActivity.get(),
+							actual.getManufacturing().get(product)));
 				}
 			}
 		}

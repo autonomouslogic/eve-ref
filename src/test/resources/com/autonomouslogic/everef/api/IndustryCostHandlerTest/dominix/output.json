@@ -2,8 +2,11 @@
   "manufacturing": {
     "645": {
       "product_id": 645,
-      "quantity": 1,
+      "runs": 1,
+      "units_per_run": 1,
+      "units": 1,
       "time": "PT2H43M12S",
+      "time_per_run": "PT2H43M12S",
       "time_per_unit": "PT2H43M12S",
       "materials": {
         "34": {
@@ -65,6 +68,7 @@
       "total_job_cost": 18381467,
       "total_material_cost" : 207109197.30,
       "total_cost" : 225490664.30,
+      "total_cost_per_run" : 225490664.30,
       "total_cost_per_unit" : 225490664.30
     }
   }

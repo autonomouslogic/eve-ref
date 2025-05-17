@@ -21,45 +21,26 @@ import lombok.extern.jackson.Jacksonized;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Schema
-public class InventionCost extends ActivityCost {
+public class ManufacturingCost extends ActivityCost {
+	@Schema(description = "Total number of item produced")
 	@JsonProperty
-	double probability;
+	long units;
 
-	@Schema(description = "The number of runs on the invented blueprint")
+	@Schema(description = "Total number of item produced")
 	@JsonProperty
-	int runs;
-
-	@JsonProperty
-	int unitsPerRun;
-
-	@JsonProperty
-	double expectedRuns;
-
-	@JsonProperty
-	double expectedUnits;
-
-	@Schema(description = "The material efficiency of the invented blueprint")
-	@JsonProperty
-	int me;
-
-	@Schema(description = "The time efficiency of the invented blueprint")
-	@JsonProperty
-	int te;
-
-	@JsonProperty
-	BigDecimal jobCostBase;
+	long unitsPerRun;
 
 	@JsonProperty
 	@Schema(implementation = String.class)
-	Duration avgTimePerRun;
+	Duration timePerRun;
 
 	@JsonProperty
 	@Schema(implementation = String.class)
-	Duration avgTimePerUnit;
+	Duration timePerUnit;
 
 	@JsonProperty
-	BigDecimal avgCostPerRun;
+	BigDecimal totalCostPerRun;
 
 	@JsonProperty
-	BigDecimal avgCostPerUnit;
+	BigDecimal totalCostPerUnit;
 }

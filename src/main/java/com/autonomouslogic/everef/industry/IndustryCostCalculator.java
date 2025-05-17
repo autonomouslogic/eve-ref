@@ -6,10 +6,10 @@ import static com.autonomouslogic.everef.industry.IndustrySkills.GLOBAL_TIME_BON
 import static com.autonomouslogic.everef.industry.IndustrySkills.SPECIAL_TIME_BONUSES;
 
 import com.autonomouslogic.everef.data.LoadedRefData;
-import com.autonomouslogic.everef.model.api.ActivityCost;
 import com.autonomouslogic.everef.model.api.IndustryCost;
 import com.autonomouslogic.everef.model.api.IndustryCostInput;
 import com.autonomouslogic.everef.model.api.InventionCost;
+import com.autonomouslogic.everef.model.api.ManufacturingCost;
 import com.autonomouslogic.everef.model.api.MaterialCost;
 import com.autonomouslogic.everef.refdata.Blueprint;
 import com.autonomouslogic.everef.refdata.BlueprintActivity;
@@ -74,10 +74,10 @@ public class IndustryCostCalculator {
 		return builder.build();
 	}
 
-	private ActivityCost manufacturingCost(BlueprintActivity manufacturing) {
+	private ManufacturingCost manufacturingCost(BlueprintActivity manufacturing) {
 		var time = manufacturingTime(manufacturing);
 		var eiv = manufacturingEiv(manufacturing);
-		var quantity = industryCostInput.getRuns();
+		var units = industryCostInput.getRuns();
 		var systemCostIndex = manufacturingSystemCostIndex(eiv);
 		var facilityTax = facilityTax(eiv);
 		var sccSurcharge = sccSurcharge(eiv);
@@ -86,12 +86,15 @@ public class IndustryCostCalculator {
 		var materials = manufacturingMaterials(manufacturing);
 		var totalMaterialCost = totalMaterialCost(materials);
 		var totalCost = totalJobCost.add(totalMaterialCost);
-		return ActivityCost.builder()
+		return ManufacturingCost.builder()
 				.productId(industryCostInput.getProductId())
-				.quantity(quantity)
+				.runs(industryCostInput.getRuns())
+				.units(units)
+				.unitsPerRun(1)
 				.materials(materials)
 				.time(time)
-				.timePerUnit(time.dividedBy(quantity).truncatedTo(ChronoUnit.MILLIS))
+				.timePerRun(time.dividedBy(units).truncatedTo(ChronoUnit.MILLIS))
+				.timePerUnit(time.dividedBy(units).truncatedTo(ChronoUnit.MILLIS))
 				.estimatedItemValue(eiv)
 				.systemCostIndex(systemCostIndex)
 				.facilityTax(facilityTax)
@@ -100,7 +103,8 @@ public class IndustryCostCalculator {
 				.totalJobCost(totalJobCost)
 				.totalMaterialCost(totalMaterialCost)
 				.totalCost(totalCost)
-				.totalCostPerUnit(MathUtil.round(MathUtil.divide(totalCost, quantity), 2))
+				.totalCostPerRun(MathUtil.round(MathUtil.divide(totalCost, units), 2))
+				.totalCostPerUnit(MathUtil.round(MathUtil.divide(totalCost, units), 2))
 				.build();
 	}
 
@@ -336,7 +340,7 @@ public class IndustryCostCalculator {
 		var jcb = jobCostBase(eiv);
 		var prob = inventionProbability(invention);
 		var runs = industryCostInput.getRuns() * inventionRuns(inventionBlueprintProductActivity(productType));
-		var quantity = runs * prob;
+		var units = runs * prob;
 		var systemCostIndex = inventionSystemCostIndex(jcb);
 		var facilityTax = facilityTax(jcb);
 		var sccSurcharge = sccSurcharge(jcb);
@@ -347,14 +351,17 @@ public class IndustryCostCalculator {
 		var totalCost = totalJobCost.add(totalMaterialCost);
 		return InventionCost.builder()
 				.productId(industryCostInput.getProductId())
+				.unitsPerRun(1)
 				.probability(prob)
 				.me(IndustryConstants.INVENTION_BASE_ME)
 				.te(IndustryConstants.INVENTION_BASE_TE)
-				.quantity(quantity)
 				.runs(runs)
+				.expectedRuns(runs * prob)
+				.expectedUnits(runs * prob)
 				.materials(materials)
 				.time(time)
-				.timePerUnit(MathUtil.divide(time, quantity).truncatedTo(ChronoUnit.MILLIS))
+				.avgTimePerRun(MathUtil.divide(time, units).truncatedTo(ChronoUnit.MILLIS))
+				.avgTimePerUnit(MathUtil.divide(time, units).truncatedTo(ChronoUnit.MILLIS))
 				.estimatedItemValue(eiv)
 				.systemCostIndex(systemCostIndex)
 				.jobCostBase(jcb)
@@ -364,7 +371,8 @@ public class IndustryCostCalculator {
 				.totalJobCost(totalJobCost)
 				.totalMaterialCost(totalMaterialCost)
 				.totalCost(totalCost)
-				.totalCostPerUnit(MathUtil.round(MathUtil.divide(totalCost, quantity), 2))
+				.avgCostPerRun(MathUtil.round(MathUtil.divide(totalCost, units), 2))
+				.avgCostPerUnit(MathUtil.round(MathUtil.divide(totalCost, units), 2))
 				.build();
 	}
 
