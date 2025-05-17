@@ -496,7 +496,7 @@ public class IndustryCostInput {
 	@JsonProperty
 	@lombok.Builder.Default
 	@Schema(
-			description = "The Caldari Starship Engineering skill level the installing character",
+			description = "The Caldari Encryption Methods skill level the installing character",
 			requiredMode = Schema.RequiredMode.NOT_REQUIRED,
 			defaultValue = "5",
 			minimum = "0",
@@ -536,7 +536,7 @@ public class IndustryCostInput {
 	@JsonProperty
 	@lombok.Builder.Default
 	@Schema(
-			description = "The Triglavian Quantum Engineering skill level the installing character",
+			description = "The Triglavian Encryption Methods skill level the installing character",
 			requiredMode = Schema.RequiredMode.NOT_REQUIRED,
 			defaultValue = "5",
 			minimum = "0",

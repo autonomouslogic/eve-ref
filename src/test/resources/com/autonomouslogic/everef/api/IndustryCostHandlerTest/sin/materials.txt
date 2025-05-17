@@ -1,0 +1,25 @@
+Sin Blueprint	22431
+
+Components
+Item	Required	Available	Est. Unit price	typeID
+Ion Thruster	219	0	46214.41	11531
+Magnetometric Sensor Cluster	873	0	27038.43	11535
+Photon Microprocessor	6111	0	53746.31	11541
+Crystalline Carbonide Armor Plate	18188	0	7966.8	11545
+Fusion Reactor Unit	437	0	138734.81	11547
+Oscillator Capacitor Unit	2183	0	57233.51	11553
+Pulse Shield Emitter	1585	0	48018.34	11556
+Capital Jump Drive	3	0	28446690.16	21025
+
+Minerals
+Item	Required	Available	Est. Unit price	typeID
+Morphite	873	0	35399.68	11399
+
+Planetary materials
+Item	Required	Available	Est. Unit price	typeID
+Construction Blocks	437	0	10885.11	3828
+
+Items
+Item	Required	Available	Est. Unit price	typeID
+Dominix	1	0	236197066.81	645
+R.A.M.- Starship Tech	30	0	857.23	11478

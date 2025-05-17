@@ -8,9 +8,10 @@ import lombok.NoArgsConstructor;
 import lombok.Value;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class SkillIndustryBonuses {
+public class IndustrySkills {
 	public static final Map<String, Double> GLOBAL_TIME_BONUSES;
 	public static final Map<String, SkillBonus> SPECIAL_TIME_BONUSES;
+	public static final Map<String, Long> ENCRYPTION_SKILLS;
 
 	@Value
 	public static class SkillBonus {
@@ -85,5 +86,15 @@ public class SkillIndustryBonuses {
 		// https://everef.net/types/81896
 		special.put("Mutagenic Stabilization", new SkillBonus(81896, 0.02));
 		SPECIAL_TIME_BONUSES = Collections.unmodifiableMap(special);
+
+		var encryption = new HashMap<String, Long>();
+		encryption.put("Amarr Encryption Methods", 23087L);
+		encryption.put("Caldari Starship Engineering", 21790L);
+		encryption.put("Gallente Encryption Methods", 23121L);
+		encryption.put("Minmatar Encryption Methods", 21791L);
+		encryption.put("Sleeper Encryption Methods", 3408L);
+		encryption.put("Triglavian Quantum Engineering", 52308L);
+		encryption.put("Upwell Encryption Methods", 55025L);
+		ENCRYPTION_SKILLS = Collections.unmodifiableMap(encryption);
 	}
 }

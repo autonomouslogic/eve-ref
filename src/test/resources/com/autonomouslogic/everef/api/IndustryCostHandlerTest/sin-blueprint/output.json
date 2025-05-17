@@ -2,13 +2,13 @@
   "invention": {
     "22431": {
       "product_id": 22431,
-      "probability": 0.32076, // EVE client says 0.321
-      "quantity": 0.32076,
+      "probability": 0.3208333333333333, // EVE client says 0.321
+      "quantity": 0.3208333333333333,
       "runs": 1,
       "me": 2,
       "te": 4,
       "time": "PT45H20M00S",
-      "time_per_unit": "PT141H9M56S",
+      "time_per_unit": "PT141H17M55.324S",
       "materials": {
         "20410": {
           "quantity": 32,
@@ -30,7 +30,7 @@
       "total_job_cost": 2382539,
       "total_material_cost" : 5938184.64,
       "total_cost" : 8320723.64,
-      "total_cost_per_unit" : 25940652.33
+      "total_cost_per_unit" : 25934723.03
     }
   }
 }

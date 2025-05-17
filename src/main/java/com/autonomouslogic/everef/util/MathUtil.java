@@ -27,7 +27,7 @@ public class MathUtil {
 	}
 
 	public static BigDecimal round(BigDecimal val, int scale) {
-		return val.setScale(2, ROUNDING_MODE);
+		return val.setScale(scale, ROUNDING_MODE);
 	}
 
 	public static BigDecimal round(BigDecimal val) {
