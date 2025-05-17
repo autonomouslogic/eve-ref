@@ -765,6 +765,11 @@ components:
         default_value:
           type: number
           format: double
+        defined_on_type_ids:
+          type: array
+          items:
+            type: integer
+            format: int64
         description:
           type: object
           additionalProperties:
@@ -806,6 +811,11 @@ components:
     DogmaEffect:
       type: object
       properties:
+        defined_on_type_ids:
+          type: array
+          items:
+            type: integer
+            format: int64
         description:
           type: object
           additionalProperties:

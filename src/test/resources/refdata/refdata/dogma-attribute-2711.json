@@ -13,5 +13,6 @@
   "unit_id" : 116,
   "display_name" : {
     "en" : ""
-  }
+  },
+  "defined_on_type_ids" : [ 1230, 17470, 17471 ]
 }
