@@ -54,7 +54,7 @@ import software.amazon.awssdk.services.s3.S3AsyncClient;
 @SetEnvironmentVariable(key = "DATA_BASE_URL", value = "http://localhost:" + TEST_PORT)
 @SetEnvironmentVariable(key = "REF_DATA_BASE_URL", value = "http://localhost:" + TEST_PORT)
 public class PublishRefDataTest {
-	static final String BUCKET_NAME = "ref-data-bucket";
+	public static final String BUCKET_NAME = "ref-data-bucket";
 
 	@Inject
 	@Named("refdata")
@@ -251,7 +251,7 @@ public class PublishRefDataTest {
 			assertBundle(
 					ExpectedBundleIds.builder()
 							.categoryIds(List.of(6L))
-							.groupIds(List.of(27L, 513L, 941L))
+							.groupIds(List.of(27L, 513L, 898L, 941L))
 							.build(),
 					path);
 		}

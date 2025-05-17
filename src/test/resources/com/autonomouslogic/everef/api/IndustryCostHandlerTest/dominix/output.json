@@ -1,0 +1,71 @@
+{
+  "manufacturing": {
+    "645": {
+      "product_id": 645,
+      "quantity": 1,
+      "time": "PT2H43M12S",
+      "time_per_unit": "PT2H43M12S",
+      "materials": {
+        "34": {
+          "type_id": 34,
+          "quantity": 4680000,
+          "cost" : 19141200.00
+        },
+        "35": {
+          "type_id": 35,
+          "quantity": 2340000,
+          "cost" : 63133200.00
+        },
+        "36": {
+          "type_id": 36,
+          "quantity": 351000,
+          "cost" : 27213030.00
+        },
+        "37": {
+          "type_id": 37,
+          "quantity": 117000,
+          "cost" : 37631880.00
+        },
+        "38": {
+          "type_id": 38,
+          "quantity": 14040,
+          "cost" : 19074603.60
+        },
+        "39": {
+          "type_id": 39,
+          "quantity": 3510,
+          "cost" : 9572366.70
+        },
+        "40": {
+          "type_id": 40,
+          "quantity": 1755,
+          "cost" : 7579107.90
+        },
+        "57478": {
+          "type_id": 57478,
+          "quantity": 135,
+          "cost" : 9459768.60
+        },
+        "57479": {
+          "type_id": 57479,
+          "quantity": 1,
+          "cost" : 6977767.42
+        },
+        "57486": {
+          "type_id": 57486,
+          "quantity": 68,
+          "cost" : 7326273.08
+        }
+      },
+      "estimated_item_value": 158985500,
+      "system_cost_index": 11624583,
+      "facility_tax": 397464,
+      "scc_surcharge": 6359420,
+      "alpha_clone_tax": 0,
+      "total_job_cost": 18381467,
+      "total_material_cost" : 207109197.30,
+      "total_cost" : 225490664.30,
+      "total_cost_per_unit" : 225490664.30
+    }
+  }
+}

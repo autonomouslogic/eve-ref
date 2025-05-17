@@ -3,6 +3,7 @@ package com.autonomouslogic.everef.refdata;
 import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.info.Contact;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.info.License;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -23,12 +24,13 @@ import javax.ws.rs.PathParam;
 								@License(
 										name = "CCP",
 										url = "https://github.com/autonomouslogic/eve-ref/blob/main/LICENSE-CCP"),
-						version = "dev"),
+						version = "dev",
+						contact = @Contact(name = "Kenn", url = "https://everef.net/discord")),
 		servers = @Server(url = ReferenceDataSpec.BASE_URL),
 		externalDocs =
 				@ExternalDocumentation(
 						description = "Reference data",
-						url = "https://github.com/autonomouslogic/eve-ref/blob/main/docs/refdata.md"))
+						url = "https://docs.everef.net/datasets/reference-data.html"))
 @Tag(name = "refdata")
 public interface ReferenceDataSpec {
 	String BASE_URL = "https://ref-data.everef.net";

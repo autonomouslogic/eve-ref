@@ -94,17 +94,23 @@ dependencies {
 	implementation "org.apache.commons:commons-lang3:3.17.0"
 	implementation "com.google.code.findbugs:jsr305:3.0.2"
 
+	// Jooq, Flyway, H2, Postgresql
 	implementation "org.jooq:jooq:3.20.4"
 	implementation "org.flywaydb:flyway-core:11.8.0"
 	implementation "org.flywaydb:flyway-database-postgresql:11.8.0"
 	implementation "com.h2database:h2:2.3.232"
 	implementation "org.postgresql:postgresql:42.7.5"
 
+	// Micronaut
 	annotationProcessor "io.micronaut.jaxrs:micronaut-jaxrs-processor"
 	implementation "io.micronaut.platform:micronaut-parent:$micronautVersion"
 	implementation "io.micronaut:micronaut-jackson-databind"
 	implementation "io.micronaut.jaxrs:micronaut-jaxrs-server"
 	implementation "io.micronaut:micronaut-management"
+
+	// Helidon
+	implementation "io.helidon.webserver:helidon-webserver:4.2.2"
+	implementation "io.helidon.logging:helidon-logging-slf4j:4.2.2"
 
 	testAnnotationProcessor "com.google.dagger:dagger-compiler:2.56.2"
 	testImplementation "com.google.dagger:dagger:2.56.2"
@@ -116,6 +122,7 @@ dependencies {
 }
 
 task refDataSpec(type: io.swagger.v3.plugins.gradle.tasks.ResolveTask) {
+	group = "openapi tools"
 	filterClass = "com.autonomouslogic.customspecfilter.CustomSpecFilter"
 	outputFormat = "YAML"
 	prettyPrint = "true"
@@ -208,6 +215,58 @@ sourceSets.main.java.srcDirs files("${buildDir}/generated/openapi/esi/src/main/j
 compileJava.dependsOn(tasks.esiClientGenerate)
 sourcesJar.dependsOn(tasks.esiClientGenerate)
 delombok.dependsOn(tasks.esiClientGenerate)
+
+task apiSpec(type: io.swagger.v3.plugins.gradle.tasks.ResolveTask) {
+	group = "openapi tools"
+	filterClass = "com.autonomouslogic.customspecfilter.CustomSpecFilter"
+	outputFormat = "YAML"
+	prettyPrint = "true"
+	sortOutput = true
+	alwaysResolveAppPath = false
+	skipResolveAppPath = false
+	readAllResources = true
+	encoding = "UTF-8"
+	classpath = sourceSets.main.runtimeClasspath
+	resourcePackages = ["com.autonomouslogic.everef.api"]
+	outputDir = file("spec")
+	outputFileName = "eve-ref-api"
+
+	classpath = sourceSets.main.runtimeClasspath
+	buildClasspath = classpath
+}
+
+task apiClientGenerate(type: org.openapitools.generator.gradle.plugin.tasks.GenerateTask) {
+	group = "openapi tools"
+	generatorName = "java"
+	library = "native"
+	inputSpec = "$rootDir/spec/eve-ref-api.yaml"
+	outputDir = "$buildDir/generated/openapi/api"
+	apiPackage = "com.autonomouslogic.everef.openapi.api.api"
+	modelPackage = "com.autonomouslogic.everef.openapi.api.model"
+	invokerPackage = "com.autonomouslogic.everef.openapi.api.invoker"
+	configOptions = [
+			serializationLibrary: "jackson",
+			dateLibrary: "java8",
+			asyncNative: "false"
+	]
+	additionalProperties = [
+			supportUrlQuery: "false"
+	]
+	schemaMappings = [
+			"ActivityCost": "com.autonomouslogic.everef.model.api.ActivityCost",
+			"ApiError": "com.autonomouslogic.everef.model.api.ApiError",
+			"IndustryCost": "com.autonomouslogic.everef.model.api.IndustryCost",
+			"IndustryCostInput": "com.autonomouslogic.everef.model.api.IndustryCostInput",
+			"InventionCost": "com.autonomouslogic.everef.model.api.InventionCost",
+			"MaterialCost": "com.autonomouslogic.everef.model.api.MaterialCost",
+	]
+	logToStderr = true
+}
+sourceSets.main.java.srcDirs files("${buildDir}/generated/openapi/api/src/main/java")
+		.builtBy(tasks.apiClientGenerate)
+compileJava.dependsOn(tasks.apiClientGenerate)
+sourcesJar.dependsOn(tasks.apiClientGenerate)
+delombok.dependsOn(tasks.apiClientGenerate)
 
 test {
 	environment "LOG_LEVEL", "trace"
@@ -419,6 +478,15 @@ task fetchDonations(type: JavaExec) {
 task generateKeyPair(type: JavaExec) {
 	group "application"
 	args "generate-key-pair"
+	environment envProperties
+
+	classpath = sourceSets.main.runtimeClasspath
+	mainClass = mainClassName
+}
+
+task api(type: JavaExec) {
+	group "application"
+	args "api"
 	environment envProperties
 
 	classpath = sourceSets.main.runtimeClasspath

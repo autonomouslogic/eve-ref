@@ -1,5 +1,6 @@
 package com.autonomouslogic.everef.cli;
 
+import com.autonomouslogic.everef.cli.api.ApiRunner;
 import com.autonomouslogic.everef.cli.basiclogin.BasicLogin;
 import com.autonomouslogic.everef.cli.decorator.HealthcheckDecorator;
 import com.autonomouslogic.everef.cli.decorator.SentryDecorator;
@@ -79,6 +80,9 @@ public class CommandRunner {
 	protected Provider<GenerateKeyPair> generateKeyPairProvider;
 
 	@Inject
+	protected Provider<ApiRunner> apiRunnerProvider;
+
+	@Inject
 	protected SentryDecorator sentryDecorator;
 
 	@Inject
@@ -150,6 +154,8 @@ public class CommandRunner {
 				return fetchDonationsProvider.get();
 			case "generate-key-pair":
 				return generateKeyPairProvider.get();
+			case "api":
+				return apiRunnerProvider.get();
 			default:
 				throw new IllegalArgumentException("Unknown command: " + name);
 		}

@@ -30,6 +30,7 @@ format:
 
 specs: generate-database
 	./gradlew refDataSpec --stacktrace
+	./gradlew apiSpec --stacktrace
 	make openapi-ui
 
 openapi-ui:

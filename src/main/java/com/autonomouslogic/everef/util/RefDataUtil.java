@@ -282,6 +282,8 @@ public class RefDataUtil {
 									putToLoadedRefData(refEntry, Schematic.class, loaded::putSchematic);
 									break;
 								case "meta":
+								case "type_materials":
+								case "type_dogma":
 									// ignore.
 									break;
 								default:

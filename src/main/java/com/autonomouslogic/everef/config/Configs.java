@@ -642,8 +642,8 @@ public class Configs {
 	/**
 	 * Port to start HTTP on.
 	 */
-	public static final Config<Integer> MICRONAUT_PORT = Config.<Integer>builder()
-			.name("MICRONAUT_PORT")
+	public static final Config<Integer> HTTP_PORT = Config.<Integer>builder()
+			.name("HTTP_PORT")
 			.defaultValue(8080)
 			.type(Integer.class)
 			.build();

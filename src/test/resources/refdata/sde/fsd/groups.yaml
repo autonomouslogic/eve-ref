@@ -132,3 +132,19 @@
     zh: "工具"
   published: true
   useBasePrice: false
+"898":
+  anchorable: false
+  anchored: false
+  categoryID: 6
+  fittableNonSingleton: false
+  name:
+    de: "Black Ops"
+    en: "Black Ops"
+    es: "Operaciones secretas"
+    fr: "Forces spéciales"
+    ja: "秘密工作艦"
+    ko: "블랙옵스"
+    ru: "Тяжёлый диверсионный корабль"
+    zh: "黑隐特勤舰"
+  published: true
+  useBasePrice: false

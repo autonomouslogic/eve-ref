@@ -1,0 +1,19 @@
+{
+  "anchorable" : false,
+  "anchored" : false,
+  "category_id" : 6,
+  "fittable_non_singleton" : false,
+  "name" : {
+    "de" : "Black Ops",
+    "en" : "Black Ops",
+    "es" : "Operaciones secretas",
+    "fr" : "Forces spéciales",
+    "ja" : "秘密工作艦",
+    "ko" : "블랙옵스",
+    "ru" : "Тяжёлый диверсионный корабль",
+    "zh" : "黑隐特勤舰"
+  },
+  "published" : true,
+  "use_base_price" : false,
+  "group_id" : 898
+}

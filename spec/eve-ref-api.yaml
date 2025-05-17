@@ -1,0 +1,571 @@
+openapi: 3.0.1
+info:
+  contact:
+    name: Kenn
+    url: https://everef.net/discord
+  description: This spec should be considered unstable and subject to change at any
+    time.
+  license:
+    name: CCP
+    url: https://github.com/autonomouslogic/eve-ref/blob/main/LICENSE-CCP
+  title: EVE Ref API
+  version: dev
+servers:
+- url: https://api.everef.net
+paths:
+  /v1/industry/cost:
+    get:
+      operationId: industryCost
+      parameters:
+      - explode: true
+        in: query
+        name: input
+        schema:
+          $ref: "#/components/schemas/IndustryCostInput"
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/IndustryCost"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+          description: Client error
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+          description: Server error
+      tags:
+      - industry
+components:
+  schemas:
+    ActivityCost:
+      type: object
+      properties:
+        alpha_clone_tax:
+          type: number
+          description: The alpha clone tax amount
+        estimated_item_value:
+          type: number
+          description: The estimated item value (EIV). This may not be completely
+            accurate.
+        facility_tax:
+          type: number
+          description: The facility amount
+        materials:
+          type: object
+          additionalProperties:
+            $ref: "#/components/schemas/MaterialCost"
+        product_id:
+          type: integer
+          format: int64
+        quantity:
+          type: number
+          format: double
+        scc_surcharge:
+          type: number
+          description: The SCC surcharge amount
+        system_cost_index:
+          type: number
+          description: |-
+            The system cost index amount.
+            Note that this will always be a slightly off, as the ESI does not report the full precision of the system cost index rates.
+            See https://github.com/esi/esi-issues/issues/1411
+        time:
+          type: string
+        time_per_unit:
+          type: string
+        total_cost:
+          type: number
+        total_cost_per_unit:
+          type: number
+        total_job_cost:
+          type: number
+          description: The total amount of ISK required to start the job
+        total_material_cost:
+          type: number
+    ApiError:
+      type: object
+      properties:
+        message:
+          type: string
+    IndustryCost:
+      type: object
+      properties:
+        input:
+          $ref: "#/components/schemas/IndustryCostInput"
+        invention:
+          type: object
+          additionalProperties:
+            $ref: "#/components/schemas/InventionCost"
+        manufacturing:
+          type: object
+          additionalProperties:
+            $ref: "#/components/schemas/ActivityCost"
+    IndustryCostInput:
+      type: object
+      properties:
+        advanced_capital_ship_construction:
+          type: integer
+          format: int32
+          default: 5
+          description: The Advanced Capital Ship Construction  skill level the installing
+            character
+          maximum: 5
+          minimum: 0
+        advanced_industrial_ship_construction:
+          type: integer
+          format: int32
+          default: 5
+          description: The Advanced Industrial Ship Construction  skill level the
+            installing character
+          maximum: 5
+          minimum: 0
+        advanced_industry:
+          type: integer
+          format: int32
+          default: 5
+          description: The Advanced Industry skill level the installing character
+          maximum: 5
+          minimum: 0
+        advanced_large_ship_construction:
+          type: integer
+          format: int32
+          default: 5
+          description: The Advanced Large Ship Construction  skill level the installing
+            character
+          maximum: 5
+          minimum: 0
+        advanced_medium_ship_construction:
+          type: integer
+          format: int32
+          default: 5
+          description: The Advanced Medium Ship Construction  skill level the installing
+            character
+          maximum: 5
+          minimum: 0
+        advanced_small_ship_construction:
+          type: integer
+          format: int32
+          default: 5
+          description: The Advanced Small Ship Construction  skill level the installing
+            character
+          maximum: 5
+          minimum: 0
+        alpha:
+          type: boolean
+          default: false
+          description: Whether installing character is an alpha clone or not
+        amarr_encryption_methods:
+          type: integer
+          format: int32
+          default: 5
+          description: The Amarr Encryption Methods skill level the installing character
+          maximum: 5
+          minimum: 0
+        amarr_starship_engineering:
+          type: integer
+          format: int32
+          default: 5
+          description: The Amarr Starship Engineering  skill level the installing
+            character
+          maximum: 5
+          minimum: 0
+        caldari_encryption_methods:
+          type: integer
+          format: int32
+          default: 5
+          description: The Caldari Encryption Methods skill level the installing character
+          maximum: 5
+          minimum: 0
+        caldari_starship_engineering:
+          type: integer
+          format: int32
+          default: 5
+          description: The Caldari Starship Engineering  skill level the installing
+            character
+          maximum: 5
+          minimum: 0
+        copying_cost:
+          type: number
+          default: 0
+          description: The copying cost index of the system where the job is installed
+          maximum: 1
+          minimum: 0
+        electromagnetic_physics:
+          type: integer
+          format: int32
+          default: 5
+          description: The Electromagnetic Physics  skill level the installing character
+          maximum: 5
+          minimum: 0
+        electronic_engineering:
+          type: integer
+          format: int32
+          default: 5
+          description: The Electronic Engineering  skill level the installing character
+          maximum: 5
+          minimum: 0
+        facility_tax:
+          type: number
+          default: 0
+          description: The facility tax rate of the station or structure where the
+            job is installed
+          maximum: 1
+          minimum: 0
+        facility_type:
+          type: string
+          default: STATION
+          description: The type of station or structure where the job is installed
+          enum:
+          - STATION
+          - RAITARU
+          - AZBEL
+          - SOTIYO
+          - DRACCOUS_FORTIZAR
+          - HORIZON_FORTIZAR
+          - MOREAU_FORTIZAR
+          - OTHER_STRUCTURE
+        gallente_encryption_methods:
+          type: integer
+          format: int32
+          default: 5
+          description: The Gallente Encryption Methods skill level the installing
+            character
+          maximum: 5
+          minimum: 0
+        gallente_starship_engineering:
+          type: integer
+          format: int32
+          default: 5
+          description: The Gallente Starship Engineering  skill level the installing
+            character
+          maximum: 5
+          minimum: 0
+        graviton_physics:
+          type: integer
+          format: int32
+          default: 5
+          description: The Graviton Physics  skill level the installing character
+          maximum: 5
+          minimum: 0
+        high_energy_physics:
+          type: integer
+          format: int32
+          default: 5
+          description: The High Energy Physics  skill level the installing character
+          maximum: 5
+          minimum: 0
+        hydromagnetic_physics:
+          type: integer
+          format: int32
+          default: 5
+          description: The Hydromagnetic Physics  skill level the installing character
+          maximum: 5
+          minimum: 0
+        industry:
+          type: integer
+          format: int32
+          default: 5
+          description: The Industry skill level the installing character
+          maximum: 5
+          minimum: 0
+        invention_cost:
+          type: number
+          default: 0
+          description: The invention cost index of the system where the job is installed
+          maximum: 1
+          minimum: 0
+        laser_physics:
+          type: integer
+          format: int32
+          default: 5
+          description: The Laser Physics  skill level the installing character
+          maximum: 5
+          minimum: 0
+        manufacturing_cost:
+          type: number
+          default: 0
+          description: The manufacturing cost index of the system where the job is
+            installed
+          maximum: 1
+          minimum: 0
+        material_prices:
+          type: string
+          default: ESI_AVG_PRICE
+          description: Where to get material prices from
+          enum:
+          - ESI_AVG_PRICE
+        me:
+          type: integer
+          format: int32
+          default: 10
+          description: The material efficiency of the blueprint
+          maximum: 10
+          minimum: 0
+        mechanical_engineering:
+          type: integer
+          format: int32
+          default: 5
+          description: The Mechanical Engineering  skill level the installing character
+          maximum: 5
+          minimum: 0
+        metallurgy:
+          type: integer
+          format: int32
+          default: 5
+          description: The Metallurgy skill level the installing character
+          maximum: 5
+          minimum: 0
+        minmatar_encryption_methods:
+          type: integer
+          format: int32
+          default: 5
+          description: The Minmatar Encryption Methods skill level the installing
+            character
+          maximum: 5
+          minimum: 0
+        minmatar_starship_engineering:
+          type: integer
+          format: int32
+          default: 5
+          description: The Minmatar Starship Engineering  skill level the installing
+            character
+          maximum: 5
+          minimum: 0
+        molecular_engineering:
+          type: integer
+          format: int32
+          default: 5
+          description: The Molecular Engineering  skill level the installing character
+          maximum: 5
+          minimum: 0
+        mutagenic_stabilization:
+          type: integer
+          format: int32
+          default: 5
+          description: The Mutagenic Stabilization  skill level the installing character
+          maximum: 5
+          minimum: 0
+        nanite_engineering:
+          type: integer
+          format: int32
+          default: 5
+          description: The Nanite Engineering  skill level the installing character
+          maximum: 5
+          minimum: 0
+        nuclear_physics:
+          type: integer
+          format: int32
+          default: 5
+          description: The Nuclear Physics  skill level the installing character
+          maximum: 5
+          minimum: 0
+        plasma_physics:
+          type: integer
+          format: int32
+          default: 5
+          description: The Plasma Physics  skill level the installing character
+          maximum: 5
+          minimum: 0
+        product_id:
+          type: integer
+          format: int64
+          description: The desired product type ID
+          minimum: 1
+        quantum_physics:
+          type: integer
+          format: int32
+          default: 5
+          description: The Quantum Physics  skill level the installing character
+          maximum: 5
+          minimum: 0
+        reaction_cost:
+          type: number
+          default: 0
+          description: The reaction cost index of the system where the job is installed
+          maximum: 1
+          minimum: 0
+        research:
+          type: integer
+          format: int32
+          default: 5
+          description: The Research skill level the installing character
+          maximum: 5
+          minimum: 0
+        researching_me_cost:
+          type: number
+          default: 0
+          description: The researching material efficiency cost index of the system
+            where the job is installed
+          maximum: 1
+          minimum: 0
+        researching_te_cost:
+          type: number
+          default: 0
+          description: The researching time efficiency cost index of the system where
+            the job is installed
+          maximum: 1
+          minimum: 0
+        rocket_science:
+          type: integer
+          format: int32
+          default: 5
+          description: The Rocket Science  skill level the installing character
+          maximum: 5
+          minimum: 0
+        runs:
+          type: integer
+          format: int32
+          default: 1
+          description: The number of runs
+          minimum: 1
+        science:
+          type: integer
+          format: int32
+          default: 5
+          description: The Science skill level the installing character
+          maximum: 5
+          minimum: 0
+        security:
+          type: string
+          default: HIGH_SEC
+          description: The security class of the system where the job is installed
+          enum:
+          - HIGH_SEC
+          - LOW_SEC
+          - NULL_SEC
+          - WORMHOLE
+        sleeper_encryption_methods:
+          type: integer
+          format: int32
+          default: 5
+          description: The Sleeper Encryption Methods skill level the installing character
+          maximum: 5
+          minimum: 0
+        structure_size:
+          type: string
+          description: The size of structure where the job is installed
+          enum:
+          - MEDIUM
+          - LARGE
+          - XLARGE
+        te:
+          type: integer
+          format: int32
+          default: 20
+          description: The time efficiency of the blueprint
+          maximum: 20
+          minimum: 0
+        triglavian_encryption_methods:
+          type: integer
+          format: int32
+          default: 5
+          description: The Triglavian Encryption Methods skill level the installing
+            character
+          maximum: 5
+          minimum: 0
+        triglavian_quantum_engineering:
+          type: integer
+          format: int32
+          default: 5
+          description: The Triglavian Quantum Engineering  skill level the installing
+            character
+          maximum: 5
+          minimum: 0
+        upwell_encryption_methods:
+          type: integer
+          format: int32
+          default: 5
+          description: The Upwell Encryption Methods skill level the installing character
+          maximum: 5
+          minimum: 0
+        upwell_starship_engineering:
+          type: integer
+          format: int32
+          default: 5
+          description: The Upwell Starship Engineering  skill level the installing
+            character
+          maximum: 5
+          minimum: 0
+      required:
+      - product_id
+    InventionCost:
+      type: object
+      properties:
+        alpha_clone_tax:
+          type: number
+          description: The alpha clone tax amount
+        estimated_item_value:
+          type: number
+          description: The estimated item value (EIV). This may not be completely
+            accurate.
+        facility_tax:
+          type: number
+          description: The facility amount
+        job_cost_base:
+          type: number
+        materials:
+          type: object
+          additionalProperties:
+            $ref: "#/components/schemas/MaterialCost"
+        me:
+          type: integer
+          format: int32
+          description: The material efficiency of the invented blueprint
+        probability:
+          type: number
+          format: double
+        product_id:
+          type: integer
+          format: int64
+        quantity:
+          type: number
+          format: double
+        runs:
+          type: integer
+          format: int32
+          description: The number of runs on the invented blueprint
+        scc_surcharge:
+          type: number
+          description: The SCC surcharge amount
+        system_cost_index:
+          type: number
+          description: |-
+            The system cost index amount.
+            Note that this will always be a slightly off, as the ESI does not report the full precision of the system cost index rates.
+            See https://github.com/esi/esi-issues/issues/1411
+        te:
+          type: integer
+          format: int32
+          description: The time efficiency of the invented blueprint
+        time:
+          type: string
+        time_per_unit:
+          type: string
+        total_cost:
+          type: number
+        total_cost_per_unit:
+          type: number
+        total_job_cost:
+          type: number
+          description: The total amount of ISK required to start the job
+        total_material_cost:
+          type: number
+    MaterialCost:
+      type: object
+      properties:
+        cost:
+          type: number
+        quantity:
+          type: integer
+          format: int64
+        type_id:
+          type: integer
+          format: int64
