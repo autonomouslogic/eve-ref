@@ -1,0 +1,21 @@
+Mjolnir Fury Cruise Missile Blueprint	24536
+
+Components
+Item	Required	Available	Est. Unit price	typeID
+EM Pulse Generator	138	0	21801.82	11694
+
+Planetary materials
+Item	Required	Available	Est. Unit price	typeID
+Rocket Fuel	1265	0	12958.49	9830
+
+Items
+Item	Required	Available	Est. Unit price	typeID
+R.A.M.- Ammunition Tech	10	0	991.41	11476
+
+Minerals
+Item	Required	Available	Est. Unit price	typeID
+Morphite	147	0	35399.68	11399
+
+Reaction materials
+Item	Required	Available	Est. Unit price	typeID
+Phenolic Composites	579	0	1194.31	16680

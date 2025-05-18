@@ -1,0 +1,11 @@
+{
+  "product_id": 24535,
+  "runs": 45,
+  "manufacturing_cost":  0.071,
+  "researching_te_cost": 0.0726,
+  "researching_me_cost": 0.0597,
+  "copying_cost": 0.0722,
+  "invention_cost": 0.1131,
+  "reaction_cost": 0.0014,
+  "facility_tax": 0.0025
+}
