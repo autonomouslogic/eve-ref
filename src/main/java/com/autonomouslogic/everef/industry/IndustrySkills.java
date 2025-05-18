@@ -89,11 +89,11 @@ public class IndustrySkills {
 
 		var encryption = new HashMap<String, Long>();
 		encryption.put("Amarr Encryption Methods", 23087L);
-		encryption.put("Caldari Starship Engineering", 21790L);
+		encryption.put("Caldari Encryption Methods", 21790L);
 		encryption.put("Gallente Encryption Methods", 23121L);
 		encryption.put("Minmatar Encryption Methods", 21791L);
 		encryption.put("Sleeper Encryption Methods", 3408L);
-		encryption.put("Triglavian Quantum Engineering", 52308L);
+		encryption.put("Triglavian Encryption Methods", 52308L);
 		encryption.put("Upwell Encryption Methods", 55025L);
 		ENCRYPTION_SKILLS = Collections.unmodifiableMap(encryption);
 	}

@@ -457,10 +457,14 @@ components:
         alpha_clone_tax:
           type: number
           description: The alpha clone tax amount
+        avg_cost_per_copy:
+          type: number
         avg_cost_per_run:
           type: number
         avg_cost_per_unit:
           type: number
+        avg_time_per_copy:
+          type: string
         avg_time_per_run:
           type: string
         avg_time_per_unit:
@@ -469,6 +473,9 @@ components:
           type: number
           description: The estimated item value (EIV). This may not be completely
             accurate.
+        expected_copies:
+          type: number
+          format: double
         expected_runs:
           type: number
           format: double
@@ -497,7 +504,11 @@ components:
         runs:
           type: integer
           format: int32
-          description: The number of runs on the invented blueprint
+          description: The number of invention runs
+        runs_per_copy:
+          type: integer
+          format: int32
+          description: The number of runs on each successfully invented copy
         scc_surcharge:
           type: number
           description: The SCC surcharge amount

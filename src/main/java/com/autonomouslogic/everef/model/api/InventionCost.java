@@ -25,12 +25,19 @@ public class InventionCost extends ActivityCost {
 	@JsonProperty
 	double probability;
 
-	@Schema(description = "The number of runs on the invented blueprint")
+	@Schema(description = "The number of invention runs")
 	@JsonProperty
 	int runs;
 
+	@Schema(description = "The number of runs on each successfully invented copy")
+	@JsonProperty
+	int runsPerCopy;
+
 	@JsonProperty
 	int unitsPerRun;
+
+	@JsonProperty
+	double expectedCopies;
 
 	@JsonProperty
 	double expectedRuns;
@@ -51,11 +58,18 @@ public class InventionCost extends ActivityCost {
 
 	@JsonProperty
 	@Schema(implementation = String.class)
+	Duration avgTimePerCopy;
+
+	@JsonProperty
+	@Schema(implementation = String.class)
 	Duration avgTimePerRun;
 
 	@JsonProperty
 	@Schema(implementation = String.class)
 	Duration avgTimePerUnit;
+
+	@JsonProperty
+	BigDecimal avgCostPerCopy;
 
 	@JsonProperty
 	BigDecimal avgCostPerRun;
