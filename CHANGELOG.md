@@ -1,5 +1,12 @@
 EVE Ref Changelog
 
+## [2.57.0](https://github.com/autonomouslogic/eve-ref/compare/2.56.0...2.57.0) (2025-05-18)
+
+
+### Features
+
+* **api:** Industry cost API supports blueprints with multiple outputs per run ([#824](https://github.com/autonomouslogic/eve-ref/issues/824)) ([56d04f7](https://github.com/autonomouslogic/eve-ref/commit/56d04f73affcfd39e2ee3c58acbf93e3d87ea98f))
+
 ## [2.56.0](https://github.com/autonomouslogic/eve-ref/compare/2.55.18...2.56.0) (2025-05-17)
 
 
