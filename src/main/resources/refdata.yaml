@@ -321,6 +321,7 @@ blueprints:
     ids:
       - 999
       - 22431
+      - 42874
 
 icons:
   idField: icon_id

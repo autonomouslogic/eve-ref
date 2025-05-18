@@ -12,27 +12,27 @@
         "34": {
           "type_id": 34,
           "quantity": 9900,
-          "cost" : 40194
+          "cost" : 40194.00
         },
         "37": {
           "type_id": 37,
           "quantity": 9900,
-          "cost" : 3289770
+          "cost" : 3289770.00
         },
         "16272": {
           "type_id": 16272,
           "quantity": 29700,
-          "cost" : 3753189
+          "cost" : 3753189.00
         },
         "16274": {
           "type_id": 16274,
           "quantity": 9900,
-          "cost" : 8895546
+          "cost" : 8895546.00
         },
         "17887": {
           "type_id": 17887,
           "quantity": 9900,
-          "cost" : 7733286
+          "cost" : 7733286.00
         }
       },
       "estimated_item_value": 16851544,
@@ -41,8 +41,8 @@
       "scc_surcharge": 674062,
       "alpha_clone_tax": 0,
       "total_job_cost": 1938283,
-      "total_material_cost" : 23711985,
-      "total_cost" : 25650268,
+      "total_material_cost" : 23711985.00,
+      "total_cost" : 25650268.00,
       "total_cost_per_run" : 256502.68,
       "total_cost_per_unit" : 513.01
     }

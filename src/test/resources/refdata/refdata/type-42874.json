@@ -24,5 +24,6 @@
   },
   "mass" : 0,
   "packaged_volume" : 0.01,
-  "radius" : 1
+  "radius" : 1,
+  "is_blueprint" : true
 }

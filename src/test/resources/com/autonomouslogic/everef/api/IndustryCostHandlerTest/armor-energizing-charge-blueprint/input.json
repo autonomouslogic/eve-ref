@@ -5,7 +5,7 @@
   "te": 2,
   "facility_type": "STATION",
   "security": "HIGH_SEC",
-  "manufacturing_cost":  0.0725,
+  "manufacturing_cost":  0.07252106987941283006, // ESI said 0.0725
   "researching_te_cost": 0.0705,
   "researching_me_cost": 0.0596,
   "copying_cost": 0.0725,
