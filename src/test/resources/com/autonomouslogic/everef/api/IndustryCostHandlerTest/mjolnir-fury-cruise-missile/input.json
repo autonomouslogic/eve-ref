@@ -3,7 +3,7 @@
   "runs": 10,
   "me": 2,
   "te": 4,
-  "manufacturing_cost":  0.071,
+  "manufacturing_cost": 0.07109322816312491616, // ESI said 0.071
   "researching_te_cost": 0.0726,
   "researching_me_cost": 0.0597,
   "copying_cost": 0.0722,

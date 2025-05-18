@@ -5,81 +5,46 @@
       "runs": 10,
       "units": 50000,
       "units_per_run": 5000,
-      "time": "PT60H8M33S",
-      "time_per_run": "PT60H8M33S",
-      "time_per_unit": "PT60H8M33S",
+      "time": "PT23H33M58S",
+      "time_per_run": "PT8483.8S",
+      "time_per_unit": "PT1.696S",
       "materials": {
-        "645": {
-          "quantity": 1,
-          "type_id": 645,
-          "cost" : 236197066.81
+        "11694": {
+          "quantity": 138,
+          "type_id": 11694,
+          "cost" : 3008651.16
         },
-        "21025": {
-          "quantity": 3,
-          "type_id": 21025,
-          "cost" : 85340070.48
+        "9830": {
+          "quantity": 1265,
+          "type_id": 9830,
+          "cost" : 16392489.85
         },
-        "11478": {
-          "quantity": 30,
-          "type_id": 11478,
-          "cost" : 25716.90
-        },
-        "11531": {
-          "quantity": 219,
-          "type_id": 11531,
-          "cost" : 10120955.79
-        },
-        "3828": {
-          "quantity": 437,
-          "type_id": 3828,
-          "cost" : 4756793.07
-        },
-        "11547": {
-          "quantity": 437,
-          "type_id": 11547,
-          "cost" : 60627111.97
+        "11476": {
+          "quantity": 10,
+          "type_id": 11476,
+          "cost" : 9914.10
         },
         "11399": {
-          "quantity": 873,
+          "quantity": 147,
           "type_id": 11399,
-          "cost" : 30903920.64
+          "cost" : 5203752.96
         },
-        "11535": {
-          "quantity": 873,
-          "type_id": 11535,
-          "cost" : 23604549.39
-        },
-        "11556": {
-          "quantity": 1585,
-          "type_id": 11556,
-          "cost" : 76109068.90
-        },
-        "11553": {
-          "quantity": 2183,
-          "type_id": 11553,
-          "cost" : 124940752.33
-        },
-        "11541": {
-          "quantity": 6111,
-          "type_id": 11541,
-          "cost" : 328443700.41
-        },
-        "11545": {
-          "quantity": 18188,
-          "type_id": 11545,
-          "cost" : 144900158.40
+        "16680": {
+          "quantity": 579,
+          "type_id": 16680,
+          "cost" : 691505.49
         }
       },
-      "estimated_item_value": 768684250, // verified in-game via invention screen
-      "system_cost_index": 0, // not verified in-game
-      "facility_tax": 1921711, // not verified in-game
-      "scc_surcharge": 30747370, // not verified in-game
+      "estimated_item_value": 17234792,
+      "system_cost_index": 1225277,
+      "facility_tax": 43087,
+      "scc_surcharge": 689392,
       "alpha_clone_tax": 0,
-      "total_job_cost": 32669081, // not verified in-game
-      "total_material_cost" : 1125969865.09,
-      "total_cost" : 1158638946.09,
-      "total_cost_per_run" : 1158638946.09,
-      "total_cost_per_unit" : 1158638946.09
+      "total_job_cost": 1957756,
+      "total_material_cost" : 25306313.56,
+      "total_cost" : 27264069.56,
+      "total_cost_per_run" : 2726406.96,
+      "total_cost_per_unit" : 545.28
     }
   }
 }
