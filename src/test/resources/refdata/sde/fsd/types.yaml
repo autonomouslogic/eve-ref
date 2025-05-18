@@ -3563,3 +3563,138 @@
   portionSize: 1
   published: true
   volume: 0.01
+"202":
+  basePrice: 15000
+  description:
+    de: "Die Mjolnir Cruise Missile – die \"Mutter aller Raketen\" – befördert eine\
+      \ enorme Sprengladung, die dafür sorgt, dass ihre Opfer auf schnelle aber schmerzvolle\
+      \ Weise vor ihren Schöpfer treten."
+    en: "The mother of all missiles, the Mjolnir cruise missile delivers a tremendous\
+      \ payload, guaranteed to get its victims acquainted with their personal god\
+      \ in a quick, but painful manner."
+    es: "El misil de crucero Mjolnir, la madre de todos los misiles, porta una gran\
+      \ carga útil explosiva que garantiza que sus víctimas consigan conocer a su\
+      \ dios particular de forma rápida, aunque dolorosa."
+    fr: "Le nec plus ultra des missiles. Le missile de croisière Mjolnir emporte une\
+      \ charge utile incroyable. Ses cibles sont assurées d'obtenir un rendez-vous\
+      \ rapide et douloureux avec leur créateur."
+    ja: "あらゆるミサイルの母たるミョルニールクルーズミサイルは、巨大な弾頭によって、標的とその信じる神とのすみやかな対面を保証する。多少痛みは伴うが。"
+    ko: "묠니르 크루즈 미사일은 막강한 파괴력을 지닌 무기로 적을 고통스럽지만 신속하게 신의 곁으로 보내줍니다."
+    ru: "Крылатая ракета Mjolnir несет мощнейшую начинку и гарантирует, что ее жер\
+      твы познакомятся со своими богами быстро, но болезненно."
+    zh: "作为所有导弹的鼻祖，雷神巡航导弹载荷巨大，这确保了各类目标能快速而痛苦地去见上帝。"
+  graphicID: 20041
+  groupID: 386
+  iconID: 182
+  marketGroupID: 921
+  mass: 1250
+  metaGroupID: 1
+  name:
+    de: "Mjolnir Cruise Missile"
+    en: "Mjolnir Cruise Missile"
+    es: "Misil de crucero Mjolnir"
+    fr: "Missile de croisière Mjolnir"
+    ja: "ミョルニールクルーズミサイル"
+    ko: "묠니르 크루즈 미사일"
+    ru: "Mjolnir Cruise Missile"
+    zh: "雷神巡航导弹"
+  portionSize: 100
+  published: true
+  radius: 300
+  volume: 0.05
+"24535":
+  basePrice: 837360
+  description:
+    de: "Die Mjolnir Cruise Missile – die \"Mutter aller Lenkwaffen\" – befördert\
+      \ eine enorme Sprengladung, die dafür sorgt, dass ihre Opfer auf schnelle, aber\
+      \ schmerzvolle Weise vor ihren Schöpfer treten.\n\n\n\nEine modifizierte Version\
+      \ der Mjolnir Cruise. Verursacht größeren Schaden als die Vorgängermunition.\
+      \ Die Unberechenbarkeit des Sprengkopfs und das leistungsstarke Abschirmsystem\
+      \ verringern jedoch sowohl Flugzeit als auch Genauigkeit."
+    en: "The mother of all missiles, the Mjolnir cruise missile delivers a tremendous\
+      \ payload, guaranteed to get its victims acquainted with their personal god\
+      \ in a quick, but painful manner.\r\n\r\nA modified version of the Mjolnir cruise.\
+      \ Does more damage than its predecessor but the volatile nature of the warhead,\
+      \ and its powerful containment system, reduce both flight time and precision."
+    es: "El misil de crucero Mjolnir, la madre de todos los misiles, porta una gran\
+      \ carga útil explosiva que garantiza que sus víctimas consigan conocer a su\
+      \ dios particular de forma rápida, aunque dolorosa.\n\nVersión modificada del\
+      \ misil de crucero Mjolnir. Inflige más daño que su predecesor, pero la naturaleza\
+      \ volátil de la ojiva y su potente sistema de contención reducen tanto el tiempo\
+      \ de vuelo como la precisión."
+    fr: "Le nec plus ultra des missiles. Le missile de croisière Mjolnir emporte une\
+      \ charge utile incroyable. Ses cibles sont assurées d'obtenir un rendez-vous\
+      \ rapide et douloureux avec leur créateur.\n\nVersion modifiée du missile de\
+      \ croisière Mjolnir. Il inflige davantage de dégâts que son prédécesseur, mais\
+      \ la nature explosive de l'ogive, combinée à son puissant système de confinement,\
+      \ réduit à la fois le temps de vol et la précision."
+    ja: "あらゆるミサイルの母たるミョルニールクルーズミサイルは、巨大な弾頭によって、標的とその信じる神とのすみやかな対面を保証する。多少痛みは伴うが。\n\
+      \nミョルニールクルーズミサイルの改良版である。従来型より与えるダメージは高いが、不安定な物質を使った弾頭と強化封じ込めシステムのせいで、飛行時間や精度\
+      は劣る。"
+    ko: "묠니르 크루즈 미사일은 막강한 파괴력을 지닌 무기로 적을 고통스럽지만 신속하게 신의 곁으로 보내줍니다. <br><br>개량된 묠니르\
+      \ 크루즈 미사일입니다. 기존 버전보다 파괴력은 뛰어나지만 낮은 탄두 안정성과 고성능 격납시스템의 탑재로 인해 사거리 및 정확도는 상대적\
+      으로 떨어집니다."
+    ru: "Крылатая ракета Mjolnir несет мощнейшую начинку и гарантирует, что ее жер\
+      твы познакомятся со своими богами быстро, но болезненно. \n\nМодификация кры\
+      латой ракеты Mjolnir. Обладает более значительным разрушительным действием,\
+      \ чем базовая модель, но при этом имеет меньшую дальность полета и пониженну\
+      ю эффективность ввиду низкой стабильности боеголовки."
+    zh: "作为所有导弹的鼻祖，雷神巡航导弹载荷巨大，这确保了各类目标能快速而痛苦地去见上帝。这是雷神巡航导弹的一种改良版本，相比其前身具备更强的伤害力，但由\
+      于其强大的密封系统及高度不稳定性，飞行时间和准确性都有所降低。"
+  graphicID: 20041
+  groupID: 656
+  iconID: 182
+  marketGroupID: 925
+  mass: 1250
+  metaGroupID: 2
+  name:
+    de: "Mjolnir Fury Cruise Missile"
+    en: "Mjolnir Fury Cruise Missile"
+    es: "Misil de crucero Mjolnir Fury"
+    fr: "Missile de croisière Mjolnir Fury"
+    ja: "ミョルニールフューリークルーズミサイル"
+    ko: "묠니르 퓨리 크루즈 미사일"
+    ru: "Mjolnir Fury Cruise Missile"
+    zh: "雷神愤怒巡航导弹"
+  portionSize: 5000
+  published: true
+  radius: 300
+  variationParentTypeID: 202
+  volume: 0.05
+"803":
+  basePrice: 5000000
+  groupID: 166
+  iconID: 182
+  marketGroupID: 1526
+  mass: 1
+  name:
+    de: "Mjolnir Cruise Missile Blueprint"
+    en: "Mjolnir Cruise Missile Blueprint"
+    es: "Plano de misil de crucero Mjolnir"
+    fr: "Plan de construction Missile de croisière Mjolnir"
+    ja: "ミョルニールクルーズミサイルブループリント"
+    ko: "묠니르 크루즈 미사일 블루프린트"
+    ru: "Mjolnir Cruise Missile Blueprint"
+    zh: "雷神巡航导弹蓝图"
+  portionSize: 1
+  published: true
+  volume: 0.01
+"24536":
+  basePrice: 10000000000
+  graphicID: 20041
+  groupID: 166
+  iconID: 182
+  mass: 1
+  metaGroupID: 2
+  name:
+    de: "Mjolnir Fury Cruise Missile Blueprint"
+    en: "Mjolnir Fury Cruise Missile Blueprint"
+    es: "Plano de misil de crucero Mjolnir Fury"
+    fr: "Plan de construction Missile de croisière Mjolnir Fury"
+    ja: "ミョルニールフューリークルーズミサイルブループリント"
+    ko: "묠니르 퓨리 크루즈 미사일 블루프린트"
+    ru: "Mjolnir Fury Cruise Missile Blueprint"
+    zh: "雷神愤怒巡航导弹蓝图"
+  portionSize: 1
+  published: true
+  volume: 0.01

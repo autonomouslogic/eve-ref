@@ -32,6 +32,13 @@
   "packaged_volume" : 0.01,
   "radius" : 1,
   "used_in_blueprints" : {
+    "803" : {
+      "manufacturing" : {
+        "material_type_id" : 34,
+        "activity" : "manufacturing",
+        "quantity" : 3084
+      }
+    },
     "999" : {
       "manufacturing" : {
         "material_type_id" : 34,
