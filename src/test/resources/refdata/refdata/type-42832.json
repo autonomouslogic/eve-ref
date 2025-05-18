@@ -1,0 +1,122 @@
+{
+  "base_price" : 1000,
+  "description" : {
+    "de" : "Dieses kompakte Bündel aktiver Naniten kann in ein <a href=showinfo:42526>Panzerungskommandostrahlen</a>-Modul geladen und an verbündete Schiffe verteilt werden, um die Widerstandsfähigkeit der Panzerung zu erhöhen.",
+    "en" : "This compact bundle of active nanites can be loaded into an <a href=showinfo:42526>Armor Command Burst</a> module and dispersed across allied ships to provide increased armor resistances.",
+    "es" : "Este lote compacto de nanobots activos puede cargarse en un módulo de <a href=showinfo:42526>estallido de mando de blindaje</a> y dispersarse por naves aliadas para mejorar las resistencias de blindaje.",
+    "fr" : "Cette masse dense de nanites actives peut être injectée dans une <a href=showinfo:42526>salve commandante de blindage</a> et propulsée vers les vaisseaux alliés pour améliorer les résistances de leurs blindages.",
+    "ja" : "この活性ナノマシンの小さな塊を<a href=showinfo:42526>アーマーコマンドバースト</a>に装填して味方艦へ拡散すれば、アーマーのレジスタンス値を向上させることができる。",
+    "ko" : "<a href=showinfo:42526>장갑 버스트</a> 모듈에 장착 가능한 나나이트 차지입니다. 동맹 함선의 장갑 저항력을 강화합니다.",
+    "ru" : "Этот компактный пакет активных нанитов может быть заряжен в <a href=showinfo:42526>импульсную систему координации броневой защиты (Armor Command Burs)</a> и с её помощью распределён по союзным кораблям, обеспечивая повышение сопротивляемости их брони.",
+    "zh" : "这种紧凑的纳米机器人集群可以装载到<a href=showinfo:42526>装甲指挥脉冲波</a>装备中，并散布到友方舰船全身，提高其装甲抗性。"
+  },
+  "group_id" : 1774,
+  "icon_id" : 21690,
+  "market_group_id" : 2298,
+  "mass" : 0.01,
+  "name" : {
+    "de" : "Armor Energizing Charge",
+    "en" : "Armor Energizing Charge",
+    "es" : "Carga energizante de blindaje",
+    "fr" : "Armor Energizing Charge",
+    "ja" : "アーマー活性化チャージ",
+    "ko" : "장갑 에너자이징 차지",
+    "ru" : "Armor Energizing Charge",
+    "zh" : "装甲电压强化弹药"
+  },
+  "portion_size" : 500,
+  "published" : true,
+  "volume" : 0.01,
+  "type_id" : 42832,
+  "capacity" : 0,
+  "dogma_attributes" : {
+    "161" : {
+      "attribute_id" : 161,
+      "value" : 0.01
+    },
+    "162" : {
+      "attribute_id" : 162,
+      "value" : 1
+    },
+    "2468" : {
+      "attribute_id" : 2468,
+      "value" : 13
+    },
+    "182" : {
+      "attribute_id" : 182,
+      "value" : 20494
+    },
+    "2470" : {
+      "attribute_id" : 2470,
+      "value" : 0
+    },
+    "2599" : {
+      "attribute_id" : 2599,
+      "value" : 0
+    },
+    "2472" : {
+      "attribute_id" : 2472,
+      "value" : 0
+    },
+    "137" : {
+      "attribute_id" : 137,
+      "value" : 1770
+    },
+    "2598" : {
+      "attribute_id" : 2598,
+      "value" : 0
+    },
+    "2536" : {
+      "attribute_id" : 2536,
+      "value" : 0
+    },
+    "277" : {
+      "attribute_id" : 277,
+      "value" : 1
+    },
+    "278" : {
+      "attribute_id" : 278,
+      "value" : 1
+    },
+    "183" : {
+      "attribute_id" : 183,
+      "value" : 3348
+    },
+    "2596" : {
+      "attribute_id" : 2596,
+      "value" : -8
+    },
+    "38" : {
+      "attribute_id" : 38,
+      "value" : 0
+    },
+    "4" : {
+      "attribute_id" : 4,
+      "value" : 0.01
+    },
+    "2597" : {
+      "attribute_id" : 2597,
+      "value" : 0
+    }
+  },
+  "dogma_effects" : {
+    "6737" : {
+      "effect_id" : 6737,
+      "is_default" : true
+    }
+  },
+  "packaged_volume" : 0.01,
+  "radius" : 1,
+  "category_id" : 8,
+  "required_skills" : {
+    "20494" : 1,
+    "3348" : 1
+  },
+  "produced_by_blueprints" : {
+    "42874" : {
+      "blueprint_type_id" : 42874,
+      "blueprint_activity" : "manufacturing"
+    }
+  },
+  "engineering_rig_source_type_ids" : [ 37150, 37151, 37158, 37159, 37164, 37165, 37178, 37179 ]
+}

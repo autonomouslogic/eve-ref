@@ -77,7 +77,10 @@ public class IndustryCostCalculator {
 	private ManufacturingCost manufacturingCost(BlueprintActivity manufacturing) {
 		var time = manufacturingTime(manufacturing);
 		var eiv = manufacturingEiv(manufacturing);
-		var units = industryCostInput.getRuns();
+		var runs = industryCostInput.getRuns();
+		var unitsPerRun =
+				manufacturing.getProducts().get(productType.getTypeId()).getQuantity();
+		var units = runs * unitsPerRun;
 		var systemCostIndex = manufacturingSystemCostIndex(eiv);
 		var facilityTax = facilityTax(eiv);
 		var sccSurcharge = sccSurcharge(eiv);
@@ -88,12 +91,12 @@ public class IndustryCostCalculator {
 		var totalCost = totalJobCost.add(totalMaterialCost);
 		return ManufacturingCost.builder()
 				.productId(industryCostInput.getProductId())
-				.runs(industryCostInput.getRuns())
+				.runs(runs)
 				.units(units)
-				.unitsPerRun(1)
+				.unitsPerRun(unitsPerRun)
 				.materials(materials)
 				.time(time)
-				.timePerRun(time.dividedBy(units).truncatedTo(ChronoUnit.MILLIS))
+				.timePerRun(time.dividedBy(runs).truncatedTo(ChronoUnit.MILLIS))
 				.timePerUnit(time.dividedBy(units).truncatedTo(ChronoUnit.MILLIS))
 				.estimatedItemValue(eiv)
 				.systemCostIndex(systemCostIndex)
@@ -103,7 +106,7 @@ public class IndustryCostCalculator {
 				.totalJobCost(totalJobCost)
 				.totalMaterialCost(totalMaterialCost)
 				.totalCost(totalCost)
-				.totalCostPerRun(MathUtil.round(MathUtil.divide(totalCost, units), 2))
+				.totalCostPerRun(MathUtil.round(MathUtil.divide(totalCost, runs), 2))
 				.totalCostPerUnit(MathUtil.round(MathUtil.divide(totalCost, units), 2))
 				.build();
 	}
@@ -297,7 +300,7 @@ public class IndustryCostCalculator {
 			var total = quantity.multiply(price);
 			eiv = eiv.add(total);
 		}
-		return MathUtil.round(eiv);
+		return MathUtil.round(eiv.multiply(BigDecimal.valueOf(industryCostInput.getRuns())));
 	}
 
 	private BigDecimal jobCostBase(BigDecimal eiv) {
