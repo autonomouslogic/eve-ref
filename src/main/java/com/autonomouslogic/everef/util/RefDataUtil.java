@@ -40,6 +40,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.OptionalDouble;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 import javax.inject.Inject;
@@ -299,5 +300,13 @@ public class RefDataUtil {
 	private <T> void putToLoadedRefData(ReferenceEntry refEntry, Class<T> clazz, BiConsumer<Long, T> putter) {
 		T item = objectMapper.readValue(refEntry.getContent(), clazz);
 		putter.accept(refEntry.getId(), item);
+	}
+
+	public OptionalDouble getTypeDogmaValue(InventoryType type, long dogmaAttributeId) {
+		// @todo this exists in StoreHandlerHelper too
+		var opt = Optional.ofNullable(type.getDogmaAttributes())
+				.flatMap(attrs -> Optional.ofNullable(attrs.get(String.valueOf(dogmaAttributeId))))
+				.flatMap(dogma -> Optional.ofNullable(dogma.getValue()));
+		return opt.map(OptionalDouble::of).orElseGet(OptionalDouble::empty);
 	}
 }

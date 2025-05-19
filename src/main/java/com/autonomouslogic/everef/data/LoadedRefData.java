@@ -281,4 +281,15 @@ public class LoadedRefData {
 			log.warn("Failed deleting MVStore file, ignoring", e);
 		}
 	}
+
+	/////////////////////////////////////////
+
+	public Optional<DogmaAttribute> getDogmaAttribute(String name) {
+		// @todo this exists in StoreHandlerHelper too
+		return getAllDogmaAttributes()
+				.map(p -> p.getRight())
+				.filter(d -> d.getName() != null)
+				.filter(d -> d.getName().equals(name))
+				.findFirst();
+	}
 }

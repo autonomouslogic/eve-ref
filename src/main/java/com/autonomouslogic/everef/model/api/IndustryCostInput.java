@@ -21,9 +21,6 @@ import lombok.extern.jackson.Jacksonized;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Schema
 public class IndustryCostInput {
-	//	@JsonProperty
-	//	Set<Long> productId;
-
 	@JsonProperty
 	@Schema(description = "The desired product type ID", requiredMode = Schema.RequiredMode.REQUIRED, minimum = "1")
 	long productId;
@@ -36,6 +33,10 @@ public class IndustryCostInput {
 			minimum = "1",
 			defaultValue = "1")
 	int runs = 1;
+
+	@JsonProperty
+	@Schema(description = "The decryptor type ID to use", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+	Long decryptorId;
 
 	@JsonProperty
 	@lombok.Builder.Default

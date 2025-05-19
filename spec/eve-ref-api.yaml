@@ -153,6 +153,10 @@ components:
           description: The copying cost index of the system where the job is installed
           maximum: 1
           minimum: 0
+        decryptor_id:
+          type: integer
+          format: int64
+          description: The decryptor type ID to use
         electromagnetic_physics:
           type: integer
           format: int32
