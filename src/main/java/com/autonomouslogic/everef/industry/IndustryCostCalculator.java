@@ -90,6 +90,7 @@ public class IndustryCostCalculator {
 		var totalCost = totalJobCost.add(totalMaterialCost);
 		return ManufacturingCost.builder()
 				.productId(industryCostInput.getProductId())
+				.blueprintId(blueprint.getBlueprintTypeId())
 				.runs(runs)
 				.units(units)
 				.unitsPerRun(unitsPerRun)
@@ -370,6 +371,7 @@ public class IndustryCostCalculator {
 		var totalCost = totalJobCost.add(totalMaterialCost);
 		return InventionCost.builder()
 				.productId(industryCostInput.getProductId())
+				.blueprintId(blueprint.getBlueprintTypeId())
 				.runsPerCopy(runsPerCopy)
 				.unitsPerRun(unitsPerRun)
 				.probability(prob)

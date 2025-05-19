@@ -469,6 +469,10 @@ components:
           type: string
         avg_time_per_unit:
           type: string
+        blueprint_id:
+          type: integer
+          format: int64
+          description: The source blueprint of the invention
         estimated_item_value:
           type: number
           description: The estimated item value (EIV). This may not be completely
@@ -540,6 +544,10 @@ components:
         alpha_clone_tax:
           type: number
           description: The alpha clone tax amount
+        blueprint_id:
+          type: integer
+          format: int64
+          description: The source blueprint of the manufacture
         estimated_item_value:
           type: number
           description: The estimated item value (EIV). This may not be completely

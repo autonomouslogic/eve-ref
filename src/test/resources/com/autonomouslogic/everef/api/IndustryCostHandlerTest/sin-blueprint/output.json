@@ -2,6 +2,7 @@
   "invention": {
     "22431": {
       "product_id": 22431,
+      "blueprint_id": 999,
       "runs": 1,
       "probability": 0.3208333333333333, // EVE client says 0.321
       "runs_per_copy": 1,

@@ -24,7 +24,8 @@ public class ErrorHandler implements io.helidon.webserver.http.ErrorHandler<Exce
 	public void handle(ServerRequest req, ServerResponse res, Exception e) {
 		log.warn("Error processing request: {}", req.requestedUri().toString(), e);
 		res.status(Status.INTERNAL_SERVER_ERROR_500)
-				.send(objectMapper.writeValueAsBytes(
-						ApiError.builder().message("An internal error occurred").build()));
+				.send(objectMapper.writeValueAsString(ApiError.builder()
+								.message("An internal error occurred")
+								.build()) + "\n");
 	}
 }

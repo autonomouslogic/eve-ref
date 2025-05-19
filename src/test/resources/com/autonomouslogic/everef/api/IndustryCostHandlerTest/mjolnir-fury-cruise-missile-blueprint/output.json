@@ -2,6 +2,7 @@
   "invention": {
     "24536": {
       "product_id": 24536,
+      "blueprint_id": 803,
       "runs": 45,
       "runs_per_copy": 10,
       "units_per_run": 5000,

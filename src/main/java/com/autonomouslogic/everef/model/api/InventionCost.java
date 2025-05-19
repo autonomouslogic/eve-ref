@@ -23,6 +23,10 @@ import lombok.extern.jackson.Jacksonized;
 @Schema
 public class InventionCost extends ActivityCost {
 	@JsonProperty
+	@Schema(description = "The source blueprint of the invention")
+	long blueprintId;
+
+	@JsonProperty
 	double probability;
 
 	@Schema(description = "The number of invention runs")
