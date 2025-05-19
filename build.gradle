@@ -417,6 +417,14 @@ task importTestResources(type: JavaExec) {
 	mainClass = mainClassName
 }
 
+task importIndustryResources(type: JavaExec) {
+	group "application"
+	args "import-industry-resources"
+	environment envProperties
+	classpath = sourceSets.main.runtimeClasspath
+	mainClass = mainClassName
+}
+
 task flywayMigrate(type: JavaExec) {
 	group "application"
 	args "flyway-migrate"

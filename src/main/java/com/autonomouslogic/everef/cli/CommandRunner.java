@@ -59,6 +59,9 @@ public class CommandRunner {
 	protected Provider<ImportTestResources> importTestResourcesProvider;
 
 	@Inject
+	protected Provider<ImportIndustryResources> importIndustryResourcesProvider;
+
+	@Inject
 	protected Provider<FlywayMigrate> flywayMigrateProvider;
 
 	@Inject
@@ -140,6 +143,8 @@ public class CommandRunner {
 				return scrapeHoboleaksProvider.get();
 			case "import-test-resources":
 				return importTestResourcesProvider.get();
+			case "import-industry-resources":
+				return importIndustryResourcesProvider.get();
 			case "flyway-migrate":
 				return flywayMigrateProvider.get();
 			case "import-market-history":
