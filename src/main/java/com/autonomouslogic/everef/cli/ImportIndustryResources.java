@@ -14,10 +14,7 @@ import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 
 /**
- * Loads the resources configured in <code>refdata.yaml</code> and imports those resources fro the SDE and ESI.
- * Also prepares the expected outputs by running them through the same processing as for the reference data.
- * This makes it easy to add new resources for testing, while still being able to verify any changes to the output
- * is correct. It also makes it easy to update for new in the input data.
+ * Loads and stores various industry-related constants into CSV files.
  */
 @Log4j2
 public class ImportIndustryResources implements Command {

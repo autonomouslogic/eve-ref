@@ -1,0 +1,10 @@
+Mjolnir Cruise Missile Blueprint	803
+
+Datacores
+Item	Required	Available	Est. Unit price	typeID
+Datacore - Electronic Engineering	45	0	103019.67	20418
+Datacore - Rocket Science	45	0	97349.95	20420
+
+Optional items
+Item	Required	Available	Est. Unit price	typeID
+Optimized Attainment Decryptor	45	1	5824285.06	34207

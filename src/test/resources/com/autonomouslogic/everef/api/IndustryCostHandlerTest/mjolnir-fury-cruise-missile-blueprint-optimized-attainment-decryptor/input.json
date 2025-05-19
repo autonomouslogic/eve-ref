@@ -1,0 +1,12 @@
+{
+  "product_id": 24536,
+  "runs": 45,
+  "decryptor_id": 34207,
+  "manufacturing_cost":  0.0718,
+  "researching_te_cost": 0.0738,
+  "researching_me_cost": 0.0603,
+  "copying_cost": 0.0726,
+  "invention_cost": 0.1126,
+  "reaction_cost": 0.0014,
+  "facility_tax": 0.0025
+}
