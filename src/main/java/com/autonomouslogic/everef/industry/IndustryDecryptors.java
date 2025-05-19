@@ -13,7 +13,7 @@ import lombok.extern.log4j.Log4j2;
 @Singleton
 @Log4j2
 public class IndustryDecryptors {
-	//	private final Map<Long, Map<String, Double>> decryptors;
+	private final Map<Long, Decryptor> decryptors;
 
 	@Inject
 	@SneakyThrows
@@ -27,8 +27,9 @@ public class IndustryDecryptors {
 				.readerFor(Map.class)
 				.with(schema)
 				.readValues(ResourceUtil.loadResource(ImportIndustryResources.DECRYPTORS_CONFIG));
-		iterator.forEachRemaining(entry -> {
-			log.info(entry.toString());
+		decryptors=new HashMap<>();
+		decryptor -> {
+			decryptora.put;
 		});
 	}
 }
