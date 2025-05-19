@@ -6,9 +6,9 @@
       "runs": 45,
       "runs_per_copy": 12,
       "units_per_run": 5000,
-      "probability": 0.94208333333333333333, // EVE client says 0.942,
+      "probability": 0.9420833333333333, // EVE client says 0.942,
       "expected_copies": 42.39375,
-      "expected_runs": 508.725,
+      "expected_runs": 508.72499999999997,
       "expected_units": 2543625,
       "me": 3,
       "te": 2,
@@ -27,10 +27,10 @@
           "type_id": 20420,
           "cost" : 4380747.75
         },
-        "20420": {
+        "34207": {
           "quantity": 45,
           "type_id": 34207,
-          "cost" : 262092827.7
+          "cost" : 262092827.70
         }
       },
       "estimated_item_value": 77556550,
@@ -41,10 +41,10 @@
       "alpha_clone_tax": 0,
       "total_job_cost": 240606,
       "total_material_cost" : 271109460.60,
-      "total_cost" : 542218921.20,
-      "avg_cost_per_copy" : 12790067.43,
-      "avg_cost_per_run" : 1065838.95,
-      "avg_cost_per_unit" : 213.17
+      "total_cost" : 271350066.60,
+      "avg_cost_per_copy" : 6400709.22,
+      "avg_cost_per_run" : 533392.44,
+      "avg_cost_per_unit" : 106.68
     }
   }
 }

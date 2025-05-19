@@ -2,6 +2,7 @@ package com.autonomouslogic.everef.api;
 
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.industry.IndustryCostCalculator;
+import com.autonomouslogic.everef.industry.IndustryDecryptors;
 import com.autonomouslogic.everef.model.api.ApiError;
 import com.autonomouslogic.everef.model.api.IndustryCost;
 import com.autonomouslogic.everef.model.api.IndustryCostInput;
@@ -47,6 +48,9 @@ public class IndustryCostHandler implements HttpService, Handler {
 
 	@Inject
 	protected Provider<IndustryCostCalculator> industryCostCalculatorProvider;
+
+	@Inject
+	protected IndustryDecryptors industryDecryptors;
 
 	private final ObjectMapper queryStringMapper;
 
@@ -106,6 +110,14 @@ public class IndustryCostHandler implements HttpService, Handler {
 			throw new ClientException(String.format("Blueprint ID %d not found", blueprintTypeId));
 		}
 		calculator.setBlueprint(blueprint);
+		var decryptorId = input.getDecryptorId();
+		if (decryptorId != null) {
+			var decryptor = industryDecryptors.getDecryptor(decryptorId);
+			if (decryptor == null) {
+				throw new ClientException(String.format("Decryptor ID %d not found", input.getDecryptorId()));
+			}
+			calculator.setDecryptor(decryptor);
+		}
 		return calculator.calc().toBuilder().input(input).build();
 	}
 

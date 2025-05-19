@@ -6,7 +6,7 @@
   "researching_te_cost": 0.0738,
   "researching_me_cost": 0.0603,
   "copying_cost": 0.0726,
-  "invention_cost": 0.1126,
+  "invention_cost": 0.11261653593410227763, // ESI said 0.1126
   "reaction_cost": 0.0014,
   "facility_tax": 0.0025
 }
