@@ -143,7 +143,7 @@ public class IndustryCostCalculator {
 	}
 
 	private long inventionMaterialQuantity(long base) {
-		return industryCostInput.getRuns();
+		return base * industryCostInput.getRuns();
 	}
 
 	private BigDecimal totalMaterialCost(Map<String, MaterialCost> materials) {
@@ -355,7 +355,8 @@ public class IndustryCostCalculator {
 		var unitsPerRun = manufacturing.getProducts().values().stream()
 				.findFirst()
 				.orElseThrow()
-				.getQuantity();
+				.getQuantity()
+				.intValue();
 		var expectedCopies = runs * prob;
 		var expectedRuns = expectedCopies * runsPerCopy;
 		var expectedUnits = expectedRuns * unitsPerRun;
@@ -369,7 +370,8 @@ public class IndustryCostCalculator {
 		var totalCost = totalJobCost.add(totalMaterialCost);
 		return InventionCost.builder()
 				.productId(industryCostInput.getProductId())
-				.unitsPerRun(1)
+				.runsPerCopy(runsPerCopy)
+				.unitsPerRun(unitsPerRun)
 				.probability(prob)
 				.me(IndustryConstants.INVENTION_BASE_ME)
 				.te(IndustryConstants.INVENTION_BASE_TE)

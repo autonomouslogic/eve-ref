@@ -12,8 +12,9 @@
       "me": 2,
       "te": 4,
       "time": "PT723H33M45S",
-      "avg_time_per_run": "PT116742.857S",
-      "avg_time_per_unit": "PT23.348S",
+      "avg_time_per_copy": "PT116742.857S",
+      "avg_time_per_run": "PT11674.285S",
+      "avg_time_per_unit": "PT2.334S",
       "materials": {
         "20418": {
           "quantity": 45,
@@ -35,8 +36,9 @@
       "total_job_cost": 241242,
       "total_material_cost" : 9016632.90,
       "total_cost" : 9257874.90,
-      "avg_cost_per_run" : 25934723.03,
-      "avg_cost_per_unit" : 25934723.03
+      "avg_cost_per_copy" : 414918.76,
+      "avg_cost_per_run" : 41491.88,
+      "avg_cost_per_unit" : 8.30
     }
   }
 }
