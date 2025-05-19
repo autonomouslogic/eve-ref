@@ -1,5 +1,13 @@
 EVE Ref Changelog
 
+## [2.58.0](https://github.com/autonomouslogic/eve-ref/compare/2.57.0...2.58.0) (2025-05-19)
+
+
+### Features
+
+* **api:** Industry cost API supports inventing blueprints which output multiple items per run and which can be sourced from multiple invention activities ([#827](https://github.com/autonomouslogic/eve-ref/issues/827)) ([78d2f6b](https://github.com/autonomouslogic/eve-ref/commit/78d2f6bc85c268c6830f39d9262a23e98faecc71))
+* **api:** Support for decryptors on industry cost API ([#828](https://github.com/autonomouslogic/eve-ref/issues/828)) ([a294d34](https://github.com/autonomouslogic/eve-ref/commit/a294d346a94fef8f2bca46727ce2fcc5d0bb2753))
+
 ## [2.57.0](https://github.com/autonomouslogic/eve-ref/compare/2.56.0...2.57.0) (2025-05-18)
 
 
