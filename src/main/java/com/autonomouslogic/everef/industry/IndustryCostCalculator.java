@@ -36,6 +36,9 @@ public class IndustryCostCalculator {
 	@Inject
 	protected MarketPriceService marketPriceService;
 
+	@Inject
+	protected IndustryDecryptors decryptors;
+
 	@Setter
 	@NonNull
 	private LoadedRefData refData;

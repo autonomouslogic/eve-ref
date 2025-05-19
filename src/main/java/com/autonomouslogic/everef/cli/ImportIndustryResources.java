@@ -3,12 +3,12 @@ package com.autonomouslogic.everef.cli;
 import static com.autonomouslogic.everef.util.EveConstants.DECRYPTORS_MARKET_GROUP_ID;
 
 import com.autonomouslogic.everef.data.LoadedRefData;
+import com.autonomouslogic.everef.model.Decryptor;
 import com.autonomouslogic.everef.refdata.DogmaAttribute;
 import com.autonomouslogic.everef.util.RefDataUtil;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.google.common.collect.Ordering;
 import java.io.File;
-import java.util.List;
 import javax.inject.Inject;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
@@ -72,30 +72,37 @@ public class ImportIndustryResources implements Command {
 				decryptorTypes.stream().map(t -> t.getTypeId()).toList());
 		var file = new File(RESOURCES_PATH + DECRYPTORS_CONFIG);
 		log.info("Writing decryptors to {}", file);
-		try (var writer = csvMapper.writer().writeValues(file)) {
-			writer.write(List.of(
-					"typeId",
-					"name",
-					"inventionPropabilityMultiplier",
-					"inventionMEModifier",
-					"inventionTEModifier",
-					"inventionMaxRunModifier"));
+		var schema = csvMapper
+				.schemaFor(Decryptor.class)
+				.withHeader()
+				.withStrictHeaders(true)
+				.withColumnReordering(true);
+		try (var writer = csvMapper.writer(schema).writeValues(file)) {
+			//			writer.write(List.of(
+			//					"typeId",
+			//					"name",
+			//					"inventionPropabilityMultiplier",
+			//					"inventionMEModifier",
+			//					"inventionTEModifier",
+			//					"inventionMaxRunModifier"));
 			for (var decryptorType : decryptorTypes) {
-				writer.write(List.of(
-						decryptorType.getTypeId(),
-						decryptorType.getName().get("en"),
-						refDataUtil
+				var decryptor = Decryptor.builder()
+						.typeId(decryptorType.getTypeId())
+						.name(decryptorType.getName().get("en"))
+						.probabilityModifier(refDataUtil
 								.getTypeDogmaValue(decryptorType, inventionPropabilityMultiplier.getAttributeId())
-								.orElseThrow(),
-						refDataUtil
+								.orElseThrow())
+						.meModifier((int) refDataUtil
 								.getTypeDogmaValue(decryptorType, inventionMEModifier.getAttributeId())
-								.orElseThrow(),
-						refDataUtil
+								.orElseThrow())
+						.teModifier((int) refDataUtil
 								.getTypeDogmaValue(decryptorType, inventionTEModifier.getAttributeId())
-								.orElseThrow(),
-						refDataUtil
+								.orElseThrow())
+						.runModifier((int) refDataUtil
 								.getTypeDogmaValue(decryptorType, inventionMaxRunModifier.getAttributeId())
-								.orElseThrow()));
+								.orElseThrow())
+						.build();
+				writer.write(decryptor);
 			}
 		}
 	}
