@@ -1,0 +1,5 @@
+{
+  "type_id" : 45548,
+  "engineering_rig_affected_group_ids" : [ 332, 334, 536, 716, 873, 913, 964, 1136, 4736 ],
+  "engineering_rig_affected_category_ids" : [ 23, 39, 40, 65, 66 ]
+}

@@ -70,7 +70,9 @@ public class IndustryCostHandlerTest {
 			"armor-energizing-charge-blueprint",
 			"mjolnir-fury-cruise-missile",
 			"mjolnir-fury-cruise-missile-blueprint",
-			"mjolnir-fury-cruise-missile-blueprint-optimized-attainment-decryptor");
+			"mjolnir-fury-cruise-missile-blueprint-optimized-attainment-decryptor",
+			"dominix-lowsec-sotiyo-rigs",
+			"sin-blueprint-lowsec-sotiyo-rigs");
 
 	@Inject
 	ApiRunner apiRunner;

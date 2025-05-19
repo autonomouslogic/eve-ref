@@ -1,0 +1,17 @@
+Dominix Blueprint	999
+
+Minerals
+Item	Required	Available	Est. Unit price	typeID
+Tritanium	4457139	0	4.06	34
+Pyerite	2228570	0	28.35	35
+Mexallon	334286	0	77.35	36
+Isogen	111429	0	332.3	37
+Nocxium	13372	0	1298.17	38
+Zydrine	3343	0	2769.23	39
+Megacyte	1672	0	4367.56	40
+
+Components
+Item	Required	Available	Est. Unit price	typeID
+Auto-Integrity Preservation Seal	129	0	69556.01	57478
+Core Temperature Regulator	1	0	6447741.03	57479
+Life Support Backup Unit	65	0	104412.54	57486

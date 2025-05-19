@@ -1,0 +1,10 @@
+Dominix Blueprint	999			
+
+Datacores				
+Item	Required	Available	Est. Unit price	typeID
+Datacore - Gallentean Starship Engineering	32	0	99693.58	20410
+Datacore - Mechanical Engineering	32	0	85874.69	20424
+
+Optional items				
+Item	Required	Available	Est. Unit price	typeID
+No item selected				

@@ -3143,3 +3143,483 @@
   radius: 1
   type_id: 24536
   volume: 0.01
+"45548":
+  capacity: 0
+  description: "Ce module d'optimisation est spécifiquement conçu pour optimiser la\
+    \ navigation en espace de basse sécurité, au détriment des autres zones spatiales.\
+    \ Outre les avantages traditionnels dévolus à la production de composants, structures\
+    \ Upwell, modules de structure, structures de base stellaire et blocs de carburant,\
+    \ le module valorise significativement la productivité des matériaux requis pour\
+    \ la construction de composants de vaisseaux capitaux standards et avancés lorsqu'il\
+    \ est installé en espace de basse sécurité. L'optimisation d'efficience industrielle\
+    \ de la production de structures et de composants 'Standup' thukker XL permet\
+    \ aux opérateurs de structure Upwell d'améliorer la productivité matérielle et\
+    \ horaire des lignes de production de composants, de structures Upwell, de modules\
+    \ de structure, de modules d'optimisation de structure, de structures de base\
+    \ stellaire et de blocs de carburant. La conception de l'installation a été modifié\
+    e par des spécialistes thukker dans l'optique d'exploiter les failles non réglementé\
+    es permettant de délocaliser la construction de composants capitaux en espace\
+    \ de basse sécurité. La technologie brevetée 'Standup' exploite un dispositif\
+    \ autonome de nano-assemblage pour structure Upwell, alliant un logiciel de modé\
+    lisation intégré, une baie de nano-assemblage et une réserve de nanomasse. Une\
+    \ fois insérés dans les emplacements dédiés sur les structures Upwell, les dispositifs\
+    \ 'Standup' lancent directement l'assemblage moléculaire de divers modules de\
+    \ services, modules de structure et optimisations de structure. Remarque : une\
+    \ structure ne peut équiper qu'une seule optimisation du même type, déclinaisons\
+    \ de tech comprises."
+  dogma_attributes:
+  - attribute_id: 1153
+    value: 100
+  - attribute_id: 4
+    value: 200
+  - attribute_id: 1544
+    value: 1
+  - attribute_id: 9
+    value: 40
+  - attribute_id: 1547
+    value: 4
+  - attribute_id: 1298
+    value: 1657
+  - attribute_id: 1299
+    value: 1404
+  - attribute_id: 277
+    value: 1
+  - attribute_id: 1692
+    value: 4
+  - attribute_id: 2334
+    value: 1
+  - attribute_id: 2593
+    value: -20
+  - attribute_id: 2594
+    value: -2
+  - attribute_id: 2595
+    value: 0
+  - attribute_id: 422
+    value: 1
+  - attribute_id: 2355
+    value: 0.1
+  - attribute_id: 2356
+    value: 1.9
+  - attribute_id: 2357
+    value: 0.1
+  - attribute_id: 2358
+    value: 1
+  - attribute_id: 182
+    value: 26252
+  - attribute_id: 161
+    value: 40
+  - attribute_id: 162
+    value: 100
+  - attribute_id: 2653
+    value: -3.7
+  - attribute_id: 38
+    value: 0
+  dogma_effects:
+  - effect_id: 2663
+    is_default: true
+  - effect_id: 6824
+    is_default: false
+  - effect_id: 6825
+    is_default: false
+  - effect_id: 6827
+    is_default: false
+  - effect_id: 6828
+    is_default: false
+  - effect_id: 6829
+    is_default: false
+  - effect_id: 6842
+    is_default: false
+  - effect_id: 6887
+    is_default: false
+  - effect_id: 6889
+    is_default: false
+  - effect_id: 6890
+    is_default: false
+  group_id: 1869
+  icon_id: 21729
+  market_group_id: 2349
+  mass: 200
+  name: "Efficience industrielle de la production de structures et de composants 'Standup'\
+    \ thukker XL"
+  packaged_volume: 40
+  portion_size: 1
+  published: true
+  radius: 100
+  type_id: 45548
+  volume: 40
+"37180":
+  capacity: 0
+  description: "L'optimisation d'efficience industrielle de la production de vaisseaux\
+    \ 'Standup' I XL permet aux opérateurs de structure Upwell d'améliorer la productivité\
+    \ horaire et matérielle des lignes de production de toutes les classes de vaisseaux.\n\
+    \nLa technologie brevetée 'Standup' exploite un dispositif autonome de nano-assemblage\
+    \ pour structure Upwell, alliant un logiciel de modélisation intégré, une baie\
+    \ de nano-assemblage et une réserve de nanomasse. Une fois insérés dans les emplacements\
+    \ dédiés sur les structures Upwell, les dispositifs 'Standup' lancent directement\
+    \ l'assemblage moléculaire de divers modules de services, modules de structure\
+    \ et optimisations de structure.\n\nRemarque : une seule optimisation du même\
+    \ type, y compris les déclinaisons de tech, peut être montée sur une structure\
+    \ à la fois."
+  dogma_attributes:
+  - attribute_id: 1153
+    value: 100
+  - attribute_id: 4
+    value: 200
+  - attribute_id: 1544
+    value: 1
+  - attribute_id: 9
+    value: 40
+  - attribute_id: 1547
+    value: 4
+  - attribute_id: 1298
+    value: 1657
+  - attribute_id: 1299
+    value: 1404
+  - attribute_id: 277
+    value: 1
+  - attribute_id: 2334
+    value: 1
+  - attribute_id: 2593
+    value: -20
+  - attribute_id: 2594
+    value: -2
+  - attribute_id: 2595
+    value: 0
+  - attribute_id: 422
+    value: 1
+  - attribute_id: 2095
+    value: 32
+  - attribute_id: 2096
+    value: 3.2
+  - attribute_id: 2355
+    value: 1
+  - attribute_id: 2356
+    value: 1.9
+  - attribute_id: 2357
+    value: 2.1
+  - attribute_id: 2358
+    value: 1
+  - attribute_id: 182
+    value: 26252
+  - attribute_id: 161
+    value: 40
+  - attribute_id: 162
+    value: 100
+  - attribute_id: 38
+    value: 0
+  dogma_effects:
+  - effect_id: 2663
+    is_default: true
+  - effect_id: 6840
+    is_default: false
+  - effect_id: 6841
+    is_default: false
+  - effect_id: 6842
+    is_default: false
+  group_id: 1868
+  icon_id: 21729
+  market_group_id: 2349
+  mass: 200
+  name: "Efficience industrielle de la production de vaisseaux 'Standup' I XL"
+  packaged_volume: 40
+  portion_size: 1
+  published: true
+  radius: 100
+  type_id: 37180
+  volume: 40
+"37183":
+  capacity: 0
+  description: "L'optimisation de laboratoire 'Standup' I XL permet aux opérateurs\
+    \ de structure Upwell de réduire le coût financier et la durée des tâches d'invention,\
+    \ de copie et de recherche.\n\nLa technologie brevetée 'Standup' exploite un dispositif\
+    \ autonome de nano-assemblage pour structure Upwell, alliant un logiciel de modé\
+    lisation intégré, une baie de nano-assemblage et une réserve de nanomasse. Une\
+    \ fois insérés dans les emplacements dédiés sur les structures Upwell, les dispositifs\
+    \ 'Standup' lancent directement l'assemblage moléculaire de divers modules de\
+    \ services, modules de structure et optimisations de structure.\n\nRemarque :\
+    \ une seule optimisation du même type, y compris les déclinaisons de tech, peut\
+    \ être montée sur une structure à la fois."
+  dogma_attributes:
+  - attribute_id: 1153
+    value: 100
+  - attribute_id: 4
+    value: 200
+  - attribute_id: 1544
+    value: 1
+  - attribute_id: 9
+    value: 40
+  - attribute_id: 1547
+    value: 4
+  - attribute_id: 1298
+    value: 1657
+  - attribute_id: 1299
+    value: 1404
+  - attribute_id: 277
+    value: 1
+  - attribute_id: 2334
+    value: 1
+  - attribute_id: 2593
+    value: -20
+  - attribute_id: 2594
+    value: 0
+  - attribute_id: 2595
+    value: -10
+  - attribute_id: 422
+    value: 1
+  - attribute_id: 2095
+    value: 40
+  - attribute_id: 2096
+    value: 4
+  - attribute_id: 2355
+    value: 1
+  - attribute_id: 2356
+    value: 1.9
+  - attribute_id: 2357
+    value: 2.1
+  - attribute_id: 2358
+    value: 1
+  - attribute_id: 182
+    value: 26252
+  - attribute_id: 161
+    value: 40
+  - attribute_id: 162
+    value: 100
+  - attribute_id: 38
+    value: 0
+  dogma_effects:
+  - effect_id: 2663
+    is_default: true
+  - effect_id: 6830
+    is_default: false
+  - effect_id: 6831
+    is_default: false
+  - effect_id: 6832
+    is_default: false
+  - effect_id: 6833
+    is_default: false
+  - effect_id: 6834
+    is_default: false
+  - effect_id: 6835
+    is_default: false
+  - effect_id: 6836
+    is_default: false
+  - effect_id: 6837
+    is_default: false
+  - effect_id: 6842
+    is_default: false
+  group_id: 1870
+  icon_id: 21729
+  market_group_id: 2349
+  mass: 200
+  name: "Optimisation de laboratoire 'Standup' I XL"
+  packaged_volume: 40
+  portion_size: 1
+  published: true
+  radius: 100
+  type_id: 37183
+  volume: 40
+"35827":
+  capacity: 0
+  description: "Le Sotiyo, du nom d'un des cocréateurs du premier propulseur de warp\
+    \ caldari (le propulseur Sotiyo-Urbaata), sert de site de production et d'assemblage\
+    \ pour une grande variété d'éléments\_: modules, vaisseaux sous-capitaux, et mê\
+    me coques de vaisseaux supercapitaux. Le Sotiyo est un complexe d'ingénierie digne\
+    \ des mégacorporations. Il fait partie de la nouvelle lignée de structures de\
+    \ l'Upwell Consortium, et est capable d'utiliser les modules de service Standup\
+    \ d'Upwell, ce qui lui permet d'offrir une grande flexibilité et personnalisation\
+    \ de ses fonctions. Cette structure industrielle donne aussi accès à la gamme\
+    \ de modules d'optimisation\_XL d'Upwell, conçue pour améliorer la productivité\
+    \ et optimiser plusieurs aspects de la production et de la recherche. La taille\
+    \ particulièrement colossale de ce complexe d'ingénierie permet d'y construire\
+    \ des vaisseaux supercapitaux, grâce au module de service Chantier naval supercapital\
+    \ 'Standup'\_I. Le Sotiyo dispose également de technologies d'accostage, ce qui\
+    \ permet d'y amarrer des vaisseaux capitaux ou plus petits. Le 14\_juin CY\_125,\
+    \ CONCORD a modifié les régulations concernant les structures de capsuliers\_\
+    : l'ancrage de toute nouvelle structure\_XL dans un espace de haute sécurité est\
+    \ désormais interdit. Les structures\_XL ancrées avant cette date ne sont pas\
+    \ concernées par ce changement de régulation à moins d'avoir été désancrées."
+  dogma_attributes:
+  - attribute_id: 1547
+    value: 4
+  - attribute_id: 2112
+    value: 0.00001
+  - attribute_id: 1154
+    value: 3
+  - attribute_id: 4
+    value: 50000000000
+  - attribute_id: 2737
+    value: 5
+  - attribute_id: 263
+    value: 22500000
+  - attribute_id: 136
+    value: 1
+  - attribute_id: 9
+    value: 72000000
+  - attribute_id: 267
+    value: 0.8
+  - attribute_id: 12
+    value: 3
+  - attribute_id: 13
+    value: 4
+  - attribute_id: 14
+    value: 6
+  - attribute_id: 271
+    value: 0.8
+  - attribute_id: 272
+    value: 0.8
+  - attribute_id: 273
+    value: 0.8
+  - attribute_id: 274
+    value: 0.8
+  - attribute_id: 2115
+    value: 0.00001
+  - attribute_id: 2055
+    value: 400000
+  - attribute_id: 2244
+    value: 1
+  - attribute_id: 3354
+    value: 7500
+  - attribute_id: 3355
+    value: 7500
+  - attribute_id: 265
+    value: 18000000
+  - attribute_id: 797
+    value: 490000
+  - attribute_id: 161
+    value: 800000
+  - attribute_id: 162
+    value: 150000
+  - attribute_id: 2339
+    value: -25
+  - attribute_id: 2600
+    value: 0.99
+  - attribute_id: 1137
+    value: 3
+  - attribute_id: 552
+    value: 150000
+  - attribute_id: 2601
+    value: 0.95
+  - attribute_id: 2602
+    value: 0.7
+  - attribute_id: 1927
+    value: 1
+  - attribute_id: 2738
+    value: 4
+  - attribute_id: 3101
+    value: 56208
+  - attribute_id: 48
+    value: 38000
+  - attribute_id: 2056
+    value: 6
+  - attribute_id: 1970
+    value: 1
+  - attribute_id: 2739
+    value: 2
+  - attribute_id: 564
+    value: 45
+  - attribute_id: 3356
+    value: 7500
+  - attribute_id: 55
+    value: 7200000
+  - attribute_id: 2749
+    value: -30
+  - attribute_id: 2750
+    value: 1
+  - attribute_id: 2751
+    value: 1
+  - attribute_id: 192
+    value: 8
+  - attribute_id: 2113
+    value: 0.00001
+  - attribute_id: 11
+    value: 3000000
+  - attribute_id: 2116
+    value: 0.00001
+  - attribute_id: 268
+    value: 0.8
+  - attribute_id: 2743
+    value: 1
+  - attribute_id: 76
+    value: 400000
+  - attribute_id: 2253
+    value: 0.00001
+  - attribute_id: 269
+    value: 0.8
+  - attribute_id: 208
+    value: 500
+  - attribute_id: 209
+    value: 500
+  - attribute_id: 210
+    value: 500
+  - attribute_id: 211
+    value: 500
+  - attribute_id: 270
+    value: 0.8
+  - attribute_id: 2135
+    value: 0.00001
+  - attribute_id: 18
+    value: 0
+  - attribute_id: 2268
+    value: 10000
+  - attribute_id: 479
+    value: 999999999999
+  - attribute_id: 482
+    value: 400000
+  - attribute_id: 484
+    value: 1
+  - attribute_id: 101
+    value: 3
+  - attribute_id: 2790
+    value: 10000
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 1132
+    value: 400
+  - attribute_id: 109
+    value: 0.8
+  - attribute_id: 110
+    value: 0.8
+  - attribute_id: 111
+    value: 0.8
+  - attribute_id: 113
+    value: 0.8
+  - attribute_id: 2034
+    value: 90000000
+  - attribute_id: 2035
+    value: 75000
+  - attribute_id: 2036
+    value: 75000
+  - attribute_id: 2805
+    value: 0
+  - attribute_id: 264
+    value: 0
+  - attribute_id: 2216
+    value: 5
+  - attribute_id: 2045
+    value: 0.00001
+  - attribute_id: 524
+    value: 1
+  - attribute_id: 1919
+    value: 5
+  dogma_effects:
+  - effect_id: 6759
+    is_default: false
+  - effect_id: 7008
+    is_default: false
+  - effect_id: 7030
+    is_default: false
+  - effect_id: 7039
+    is_default: false
+  - effect_id: 7040
+    is_default: false
+  graphic_id: 21406
+  group_id: 1404
+  market_group_id: 2324
+  mass: 50000000000
+  name: "Sotiyo"
+  packaged_volume: 800000
+  portion_size: 1
+  published: true
+  radius: 150000
+  type_id: 35827
+  volume: 800000

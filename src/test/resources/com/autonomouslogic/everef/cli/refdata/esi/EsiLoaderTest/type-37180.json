@@ -1,0 +1,133 @@
+{
+  "capacity" : 0,
+  "description" : {
+    "en" : "The Standup XL-Set Ship Manufacturing Efficiency I rig provides a means for structure operators to decrease both material and time requirements manufacturing any ship in their Upwell structures.\n\nStandup is a proprietary system that uses a Structure Autonomous Nanoassembly Device (Upwell) containing integrated template software, a nanoassembler array and sufficient nanomass to enable the construction of a variety of service modules, structure modules and structure rigs when inserted into the appropriate slots on a structure built with Upwell technology.\n\nNote: Only one rig of the same type, counting tech variations, may be fitted at the same time on a structure.",
+    "fr" : "L'optimisation d'efficience industrielle de la production de vaisseaux 'Standup' I XL permet aux opérateurs de structure Upwell d'améliorer la productivité horaire et matérielle des lignes de production de toutes les classes de vaisseaux.\n\nLa technologie brevetée 'Standup' exploite un dispositif autonome de nano-assemblage pour structure Upwell, alliant un logiciel de modélisation intégré, une baie de nano-assemblage et une réserve de nanomasse. Une fois insérés dans les emplacements dédiés sur les structures Upwell, les dispositifs 'Standup' lancent directement l'assemblage moléculaire de divers modules de services, modules de structure et optimisations de structure.\n\nRemarque : une seule optimisation du même type, y compris les déclinaisons de tech, peut être montée sur une structure à la fois."
+  },
+  "dogma_attributes" : {
+    "1153" : {
+      "attribute_id" : 1153,
+      "value" : 100
+    },
+    "4" : {
+      "attribute_id" : 4,
+      "value" : 200
+    },
+    "1544" : {
+      "attribute_id" : 1544,
+      "value" : 1
+    },
+    "9" : {
+      "attribute_id" : 9,
+      "value" : 40
+    },
+    "1547" : {
+      "attribute_id" : 1547,
+      "value" : 4
+    },
+    "1298" : {
+      "attribute_id" : 1298,
+      "value" : 1657
+    },
+    "1299" : {
+      "attribute_id" : 1299,
+      "value" : 1404
+    },
+    "277" : {
+      "attribute_id" : 277,
+      "value" : 1
+    },
+    "2334" : {
+      "attribute_id" : 2334,
+      "value" : 1
+    },
+    "2593" : {
+      "attribute_id" : 2593,
+      "value" : -20
+    },
+    "2594" : {
+      "attribute_id" : 2594,
+      "value" : -2
+    },
+    "2595" : {
+      "attribute_id" : 2595,
+      "value" : 0
+    },
+    "422" : {
+      "attribute_id" : 422,
+      "value" : 1
+    },
+    "2095" : {
+      "attribute_id" : 2095,
+      "value" : 32
+    },
+    "2096" : {
+      "attribute_id" : 2096,
+      "value" : 3.2
+    },
+    "2355" : {
+      "attribute_id" : 2355,
+      "value" : 1
+    },
+    "2356" : {
+      "attribute_id" : 2356,
+      "value" : 1.9
+    },
+    "2357" : {
+      "attribute_id" : 2357,
+      "value" : 2.1
+    },
+    "2358" : {
+      "attribute_id" : 2358,
+      "value" : 1
+    },
+    "182" : {
+      "attribute_id" : 182,
+      "value" : 26252
+    },
+    "161" : {
+      "attribute_id" : 161,
+      "value" : 40
+    },
+    "162" : {
+      "attribute_id" : 162,
+      "value" : 100
+    },
+    "38" : {
+      "attribute_id" : 38,
+      "value" : 0
+    }
+  },
+  "dogma_effects" : {
+    "2663" : {
+      "effect_id" : 2663,
+      "is_default" : true
+    },
+    "6840" : {
+      "effect_id" : 6840,
+      "is_default" : false
+    },
+    "6841" : {
+      "effect_id" : 6841,
+      "is_default" : false
+    },
+    "6842" : {
+      "effect_id" : 6842,
+      "is_default" : false
+    }
+  },
+  "group_id" : 1868,
+  "icon_id" : 21729,
+  "market_group_id" : 2349,
+  "mass" : 200,
+  "name" : {
+    "en" : "Standup XL-Set Ship Manufacturing Efficiency I",
+    "fr" : "Efficience industrielle de la production de vaisseaux 'Standup' I XL"
+  },
+  "packaged_volume" : 40,
+  "portion_size" : 1,
+  "published" : true,
+  "radius" : 100,
+  "type_id" : 37180,
+  "volume" : 40
+}

@@ -1,0 +1,67 @@
+[
+  {
+    "adjusted_price": 3.1582815355153264,
+    "average_price": 4.06,
+    "type_id": 34
+  },
+  {
+    "adjusted_price": 13.71620754125981,
+    "average_price": 28.35,
+    "type_id": 35
+  },
+  {
+    "adjusted_price": 57.73870895220159,
+    "average_price": 77.35,
+    "type_id": 36
+  },
+  {
+    "adjusted_price": 323.9092640928271,
+    "average_price": 332.3,
+    "type_id": 37
+  },
+  {
+    "adjusted_price": 1165.0984652320872,
+    "average_price": 1298.17,
+    "type_id": 38
+  },
+  {
+    "adjusted_price": 2890.189326344159,
+    "average_price": 2769.23,
+    "type_id": 39
+  },
+  {
+    "adjusted_price": 2730.496905881359,
+    "average_price": 4367.56,
+    "type_id": 40
+  },
+  {
+    "adjusted_price": 140037688.32211792,
+    "average_price": 236197066.81,
+    "type_id": 645
+  },
+  {
+    "adjusted_price": 100271.71551025753,
+    "average_price": 99693.58,
+    "type_id": 20410
+  },
+  {
+    "adjusted_price": 93822.5102909048,
+    "average_price": 85874.69,
+    "type_id": 20424
+  },
+  {
+    "adjusted_price": 10471.19336143108,
+    "average_price": 69556.01,
+    "type_id": 57478
+  },
+  {
+    "adjusted_price": 348856.3350660349,
+    "average_price": 6447741.03,
+    "type_id": 57479
+  },
+  {
+    "adjusted_price": 11783.038367441452,
+    "average_price": 104412.54,
+    "type_id": 57486
+  }
+]

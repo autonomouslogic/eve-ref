@@ -147,6 +147,16 @@ public class IndustryCostInput {
 	@JsonProperty
 	@lombok.Builder.Default
 	@Schema(
+			description = "Faction warfare bonus applied to system cost",
+			requiredMode = Schema.RequiredMode.NOT_REQUIRED,
+			defaultValue = "0",
+			minimum = "0",
+			maximum = "1")
+	BigDecimal fwCostBonus = BigDecimal.ZERO;
+
+	@JsonProperty
+	@lombok.Builder.Default
+	@Schema(
 			description = "The type of station or structure where the job is installed",
 			requiredMode = Schema.RequiredMode.NOT_REQUIRED,
 			defaultValue = "STATION")

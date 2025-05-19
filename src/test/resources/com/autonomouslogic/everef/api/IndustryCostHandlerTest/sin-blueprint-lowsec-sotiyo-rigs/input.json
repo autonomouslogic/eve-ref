@@ -1,0 +1,15 @@
+{
+  "product_id": 22431,
+  "runs": 1,
+  "structure_type": 35827,
+  "rig_id": [45548, 37180, 37183],
+  "fw_cost_bonus": -0.5,
+  "security": "LOW_SEC",
+  "manufacturing_cost": 0.0746,
+  "researching_te_cost": 0.1419,
+  "researching_me_cost": 0.1379,
+  "copying_cost": 0.1145,
+  "invention_cost": 0.10147950865391088734, // ESI said 0.1015
+  "reaction_cost": 0.1109,
+  "facility_tax": 0.02
+}
