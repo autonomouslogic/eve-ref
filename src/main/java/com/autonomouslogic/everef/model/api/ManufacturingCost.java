@@ -22,6 +22,10 @@ import lombok.extern.jackson.Jacksonized;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Schema
 public class ManufacturingCost extends ActivityCost {
+	@JsonProperty
+	@Schema(description = "The source blueprint of the manufacture")
+	long blueprintId;
+
 	@Schema(description = "Total number of item produced")
 	@JsonProperty
 	long units;

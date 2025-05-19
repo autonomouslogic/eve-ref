@@ -1,0 +1,150 @@
+{
+  "capacity" : 0,
+  "description" : {
+    "en" : "The mother of all missiles, the Mjolnir cruise missile delivers a tremendous payload, guaranteed to get its victims acquainted with their personal god in a quick, but painful manner.",
+    "fr" : "Le nec plus ultra des missiles. Le missile de croisière Mjolnir emporte une charge utile incroyable. Ses cibles sont assurées d'obtenir un rendez-vous rapide et douloureux avec leur créateur."
+  },
+  "dogma_attributes" : {
+    "644" : {
+      "attribute_id" : 644,
+      "value" : 1
+    },
+    "9" : {
+      "attribute_id" : 9,
+      "value" : 240
+    },
+    "525" : {
+      "attribute_id" : 525,
+      "value" : 1
+    },
+    "654" : {
+      "attribute_id" : 654,
+      "value" : 330
+    },
+    "655" : {
+      "attribute_id" : 655,
+      "value" : 1500
+    },
+    "277" : {
+      "attribute_id" : 277,
+      "value" : 1
+    },
+    "278" : {
+      "attribute_id" : 278,
+      "value" : 1
+    },
+    "137" : {
+      "attribute_id" : 137,
+      "value" : 506
+    },
+    "281" : {
+      "attribute_id" : 281,
+      "value" : 14000
+    },
+    "161" : {
+      "attribute_id" : 161,
+      "value" : 0.05
+    },
+    "162" : {
+      "attribute_id" : 162,
+      "value" : 300
+    },
+    "37" : {
+      "attribute_id" : 37,
+      "value" : 4700
+    },
+    "422" : {
+      "attribute_id" : 422,
+      "value" : 1
+    },
+    "182" : {
+      "attribute_id" : 182,
+      "value" : 3326
+    },
+    "183" : {
+      "attribute_id" : 183,
+      "value" : 3319
+    },
+    "70" : {
+      "attribute_id" : 70,
+      "value" : 0.00014449800378457667
+    },
+    "1353" : {
+      "attribute_id" : 1353,
+      "value" : 0.882
+    },
+    "653" : {
+      "attribute_id" : 653,
+      "value" : 69
+    },
+    "38" : {
+      "attribute_id" : 38,
+      "value" : 0
+    },
+    "108" : {
+      "attribute_id" : 108,
+      "value" : 35
+    },
+    "109" : {
+      "attribute_id" : 109,
+      "value" : 1
+    },
+    "110" : {
+      "attribute_id" : 110,
+      "value" : 1
+    },
+    "111" : {
+      "attribute_id" : 111,
+      "value" : 1
+    },
+    "113" : {
+      "attribute_id" : 113,
+      "value" : 0.8
+    },
+    "114" : {
+      "attribute_id" : 114,
+      "value" : 375
+    },
+    "116" : {
+      "attribute_id" : 116,
+      "value" : 0
+    },
+    "117" : {
+      "attribute_id" : 117,
+      "value" : 0
+    },
+    "118" : {
+      "attribute_id" : 118,
+      "value" : 0
+    },
+    "633" : {
+      "attribute_id" : 633,
+      "value" : 0
+    },
+    "4" : {
+      "attribute_id" : 4,
+      "value" : 1250
+    }
+  },
+  "dogma_effects" : {
+    "9" : {
+      "effect_id" : 9,
+      "is_default" : true
+    }
+  },
+  "graphic_id" : 20041,
+  "group_id" : 386,
+  "icon_id" : 182,
+  "market_group_id" : 921,
+  "mass" : 1250,
+  "name" : {
+    "en" : "Mjolnir Cruise Missile",
+    "fr" : "Missile de croisière Mjolnir"
+  },
+  "packaged_volume" : 0.05,
+  "portion_size" : 100,
+  "published" : true,
+  "radius" : 300,
+  "type_id" : 202,
+  "volume" : 0.05
+}

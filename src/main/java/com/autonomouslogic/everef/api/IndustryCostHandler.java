@@ -114,7 +114,7 @@ public class IndustryCostHandler implements HttpService, Handler {
 		var input = createInput(req);
 		validateInput(input);
 		var result = industryCost(input);
-		var json = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsBytes(result);
+		var json = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(result) + "\n";
 		res.status(Status.OK_200)
 				.header("Server", "eve-ref/" + eveRefVersion)
 				.header("Content-Type", "application/json")

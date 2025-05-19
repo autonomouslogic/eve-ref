@@ -2922,3 +2922,224 @@
   radius: 1
   type_id: 42874
   volume: 0.01
+"202":
+  capacity: 0
+  description: "Le nec plus ultra des missiles. Le missile de croisière Mjolnir emporte\
+    \ une charge utile incroyable. Ses cibles sont assurées d'obtenir un rendez-vous\
+    \ rapide et douloureux avec leur créateur."
+  dogma_attributes:
+  - attribute_id: 644
+    value: 1
+  - attribute_id: 9
+    value: 240
+  - attribute_id: 525
+    value: 1
+  - attribute_id: 654
+    value: 330
+  - attribute_id: 655
+    value: 1500
+  - attribute_id: 277
+    value: 1
+  - attribute_id: 278
+    value: 1
+  - attribute_id: 137
+    value: 506
+  - attribute_id: 281
+    value: 14000
+  - attribute_id: 161
+    value: 0.05
+  - attribute_id: 162
+    value: 300
+  - attribute_id: 37
+    value: 4700
+  - attribute_id: 422
+    value: 1
+  - attribute_id: 182
+    value: 3326
+  - attribute_id: 183
+    value: 3319
+  - attribute_id: 70
+    value: 0.00014449800378457667
+  - attribute_id: 1353
+    value: 0.882
+  - attribute_id: 653
+    value: 69
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 108
+    value: 35
+  - attribute_id: 109
+    value: 1
+  - attribute_id: 110
+    value: 1
+  - attribute_id: 111
+    value: 1
+  - attribute_id: 113
+    value: 0.8
+  - attribute_id: 114
+    value: 375
+  - attribute_id: 116
+    value: 0
+  - attribute_id: 117
+    value: 0
+  - attribute_id: 118
+    value: 0
+  - attribute_id: 633
+    value: 0
+  - attribute_id: 4
+    value: 1250
+  dogma_effects:
+  - effect_id: 9
+    is_default: true
+  graphic_id: 20041
+  group_id: 386
+  icon_id: 182
+  market_group_id: 921
+  mass: 1250
+  name: "Missile de croisière Mjolnir"
+  packaged_volume: 0.05
+  portion_size: 100
+  published: true
+  radius: 300
+  type_id: 202
+  volume: 0.05
+"24535":
+  capacity: 0
+  description: "Le nec plus ultra des missiles. Le missile de croisière Mjolnir emporte\
+    \ une charge utile incroyable. Ses cibles sont assurées d'obtenir un rendez-vous\
+    \ rapide et douloureux avec leur créateur.\n\nVersion modifiée du missile de croisiè\
+    re Mjolnir. Il inflige davantage de dégâts que son prédécesseur, mais la nature\
+    \ explosive de l'ogive, combinée à son puissant système de confinement, réduit\
+    \ à la fois le temps de vol et la précision."
+  dogma_attributes:
+  - attribute_id: 644
+    value: 1
+  - attribute_id: 9
+    value: 240
+  - attribute_id: 525
+    value: 1
+  - attribute_id: 654
+    value: 567
+  - attribute_id: 655
+    value: 1500
+  - attribute_id: 277
+    value: 1
+  - attribute_id: 278
+    value: 5
+  - attribute_id: 279
+    value: 5
+  - attribute_id: 137
+    value: 506
+  - attribute_id: 281
+    value: 10500
+  - attribute_id: 161
+    value: 0.05
+  - attribute_id: 162
+    value: 300
+  - attribute_id: 37
+    value: 4700
+  - attribute_id: 422
+    value: 2
+  - attribute_id: 182
+    value: 20212
+  - attribute_id: 183
+    value: 3326
+  - attribute_id: 184
+    value: 3319
+  - attribute_id: 70
+    value: 0.00014449800378457667
+  - attribute_id: 1353
+    value: 0.908
+  - attribute_id: 653
+    value: 58
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 108
+    value: 35
+  - attribute_id: 109
+    value: 1
+  - attribute_id: 110
+    value: 1
+  - attribute_id: 111
+    value: 1
+  - attribute_id: 113
+    value: 0.8
+  - attribute_id: 114
+    value: 525
+  - attribute_id: 116
+    value: 0
+  - attribute_id: 117
+    value: 0
+  - attribute_id: 118
+    value: 0
+  - attribute_id: 633
+    value: 5
+  - attribute_id: 4
+    value: 1250
+  dogma_effects:
+  - effect_id: 9
+    is_default: true
+  graphic_id: 20041
+  group_id: 656
+  icon_id: 182
+  market_group_id: 925
+  mass: 1250
+  name: "Missile de croisière Mjolnir Fury"
+  packaged_volume: 0.05
+  portion_size: 5000
+  published: true
+  radius: 300
+  type_id: 24535
+  volume: 0.05
+"803":
+  capacity: 0
+  description: ""
+  dogma_attributes:
+  - attribute_id: 161
+    value: 0.01
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 1955
+    value: 3
+  - attribute_id: 4
+    value: 1
+  - attribute_id: 38
+    value: 0
+  group_id: 166
+  icon_id: 182
+  market_group_id: 1526
+  mass: 1
+  name: "Plan de construction Missile de croisière Mjolnir"
+  packaged_volume: 0.01
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 803
+  volume: 0.01
+"24536":
+  capacity: 0
+  description: ""
+  dogma_attributes:
+  - attribute_id: 161
+    value: 0.01
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 1955
+    value: 4.8
+  - attribute_id: 4
+    value: 1
+  - attribute_id: 422
+    value: 2
+  - attribute_id: 38
+    value: 0
+  graphic_id: 20041
+  group_id: 166
+  icon_id: 182
+  mass: 1
+  name: "Plan de construction Missile de croisière Mjolnir Fury"
+  packaged_volume: 0.01
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 24536
+  volume: 0.01

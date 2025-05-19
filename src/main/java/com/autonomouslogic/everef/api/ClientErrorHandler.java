@@ -24,7 +24,8 @@ public class ClientErrorHandler implements io.helidon.webserver.http.ErrorHandle
 	@SneakyThrows
 	public void handle(ServerRequest req, ServerResponse res, ClientException e) {
 		res.status(Status.BAD_REQUEST_400)
-				.send(objectMapper.writeValueAsBytes(
-						ApiError.builder().message(ExceptionUtils.getMessage(e)).build()));
+				.send(objectMapper.writeValueAsString(ApiError.builder()
+								.message(ExceptionUtils.getMessage(e))
+								.build()) + "\n");
 	}
 }

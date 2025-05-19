@@ -1,0 +1,34 @@
+{
+  "base_price" : 15000,
+  "description" : {
+    "de" : "Die Mjolnir Cruise Missile – die \"Mutter aller Raketen\" – befördert eine enorme Sprengladung, die dafür sorgt, dass ihre Opfer auf schnelle aber schmerzvolle Weise vor ihren Schöpfer treten.",
+    "en" : "The mother of all missiles, the Mjolnir cruise missile delivers a tremendous payload, guaranteed to get its victims acquainted with their personal god in a quick, but painful manner.",
+    "es" : "El misil de crucero Mjolnir, la madre de todos los misiles, porta una gran carga útil explosiva que garantiza que sus víctimas consigan conocer a su dios particular de forma rápida, aunque dolorosa.",
+    "fr" : "Le nec plus ultra des missiles. Le missile de croisière Mjolnir emporte une charge utile incroyable. Ses cibles sont assurées d'obtenir un rendez-vous rapide et douloureux avec leur créateur.",
+    "ja" : "あらゆるミサイルの母たるミョルニールクルーズミサイルは、巨大な弾頭によって、標的とその信じる神とのすみやかな対面を保証する。多少痛みは伴うが。",
+    "ko" : "묠니르 크루즈 미사일은 막강한 파괴력을 지닌 무기로 적을 고통스럽지만 신속하게 신의 곁으로 보내줍니다.",
+    "ru" : "Крылатая ракета Mjolnir несет мощнейшую начинку и гарантирует, что ее жертвы познакомятся со своими богами быстро, но болезненно.",
+    "zh" : "作为所有导弹的鼻祖，雷神巡航导弹载荷巨大，这确保了各类目标能快速而痛苦地去见上帝。"
+  },
+  "graphic_id" : 20041,
+  "group_id" : 386,
+  "icon_id" : 182,
+  "market_group_id" : 921,
+  "mass" : 1250,
+  "meta_group_id" : 1,
+  "name" : {
+    "de" : "Mjolnir Cruise Missile",
+    "en" : "Mjolnir Cruise Missile",
+    "es" : "Misil de crucero Mjolnir",
+    "fr" : "Missile de croisière Mjolnir",
+    "ja" : "ミョルニールクルーズミサイル",
+    "ko" : "묠니르 크루즈 미사일",
+    "ru" : "Mjolnir Cruise Missile",
+    "zh" : "雷神巡航导弹"
+  },
+  "portion_size" : 100,
+  "published" : true,
+  "radius" : 300,
+  "volume" : 0.05,
+  "type_id" : 202
+}

@@ -15,7 +15,6 @@ import com.autonomouslogic.everef.refdata.Blueprint;
 import com.autonomouslogic.everef.refdata.BlueprintActivity;
 import com.autonomouslogic.everef.refdata.InventoryType;
 import com.autonomouslogic.everef.service.MarketPriceService;
-import com.autonomouslogic.everef.util.EveConstants;
 import com.autonomouslogic.everef.util.MathUtil;
 import com.autonomouslogic.everef.util.StreamUtil;
 import java.math.BigDecimal;
@@ -91,6 +90,7 @@ public class IndustryCostCalculator {
 		var totalCost = totalJobCost.add(totalMaterialCost);
 		return ManufacturingCost.builder()
 				.productId(industryCostInput.getProductId())
+				.blueprintId(blueprint.getBlueprintTypeId())
 				.runs(runs)
 				.units(units)
 				.unitsPerRun(unitsPerRun)
@@ -116,7 +116,7 @@ public class IndustryCostCalculator {
 	}
 
 	private Map<String, MaterialCost> inventionMaterials(BlueprintActivity invention) {
-		return materials(invention, Function.identity());
+		return materials(invention, this::inventionMaterialQuantity);
 	}
 
 	private Map<String, MaterialCost> materials(BlueprintActivity activity, Function<Long, Long> quantityMod) {
@@ -141,6 +141,10 @@ public class IndustryCostCalculator {
 		var runs = industryCostInput.getRuns();
 		var meMod = 1.0 - industryCostInput.getMe() / 100.0;
 		return (long) Math.max(runs, Math.ceil(Math.round(runs * base * meMod * 100.0) / 100.0));
+	}
+
+	private long inventionMaterialQuantity(long base) {
+		return base * industryCostInput.getRuns();
 	}
 
 	private BigDecimal totalMaterialCost(Map<String, MaterialCost> materials) {
@@ -338,12 +342,25 @@ public class IndustryCostCalculator {
 	}
 
 	private InventionCost inventionCost(BlueprintActivity invention) {
+		var manufacturing = inventionBlueprintProductActivity(productType);
 		var time = inventionTime(invention);
-		var eiv = manufacturingEiv(inventionBlueprintProductActivity(productType));
+		var eiv = manufacturingEiv(manufacturing);
 		var jcb = jobCostBase(eiv);
+		var runs = industryCostInput.getRuns();
 		var prob = inventionProbability(invention);
-		var runs = industryCostInput.getRuns() * inventionRuns(inventionBlueprintProductActivity(productType));
-		var units = runs * prob;
+		var runsPerCopy = invention
+				.getProducts()
+				.get(productType.getTypeId())
+				.getQuantity()
+				.intValue();
+		var unitsPerRun = manufacturing.getProducts().values().stream()
+				.findFirst()
+				.orElseThrow()
+				.getQuantity()
+				.intValue();
+		var expectedCopies = runs * prob;
+		var expectedRuns = expectedCopies * runsPerCopy;
+		var expectedUnits = expectedRuns * unitsPerRun;
 		var systemCostIndex = inventionSystemCostIndex(jcb);
 		var facilityTax = facilityTax(jcb);
 		var sccSurcharge = sccSurcharge(jcb);
@@ -354,17 +371,21 @@ public class IndustryCostCalculator {
 		var totalCost = totalJobCost.add(totalMaterialCost);
 		return InventionCost.builder()
 				.productId(industryCostInput.getProductId())
-				.unitsPerRun(1)
+				.blueprintId(blueprint.getBlueprintTypeId())
+				.runsPerCopy(runsPerCopy)
+				.unitsPerRun(unitsPerRun)
 				.probability(prob)
 				.me(IndustryConstants.INVENTION_BASE_ME)
 				.te(IndustryConstants.INVENTION_BASE_TE)
 				.runs(runs)
-				.expectedRuns(runs * prob)
-				.expectedUnits(runs * prob)
+				.expectedCopies(expectedCopies)
+				.expectedRuns(expectedRuns)
+				.expectedUnits(expectedUnits)
 				.materials(materials)
 				.time(time)
-				.avgTimePerRun(MathUtil.divide(time, units).truncatedTo(ChronoUnit.MILLIS))
-				.avgTimePerUnit(MathUtil.divide(time, units).truncatedTo(ChronoUnit.MILLIS))
+				.avgTimePerCopy(MathUtil.divide(time, expectedCopies).truncatedTo(ChronoUnit.MILLIS))
+				.avgTimePerRun(MathUtil.divide(time, expectedRuns).truncatedTo(ChronoUnit.MILLIS))
+				.avgTimePerUnit(MathUtil.divide(time, expectedUnits).truncatedTo(ChronoUnit.MILLIS))
 				.estimatedItemValue(eiv)
 				.systemCostIndex(systemCostIndex)
 				.jobCostBase(jcb)
@@ -374,27 +395,10 @@ public class IndustryCostCalculator {
 				.totalJobCost(totalJobCost)
 				.totalMaterialCost(totalMaterialCost)
 				.totalCost(totalCost)
-				.avgCostPerRun(MathUtil.round(MathUtil.divide(totalCost, units), 2))
-				.avgCostPerUnit(MathUtil.round(MathUtil.divide(totalCost, units), 2))
+				.avgCostPerCopy(MathUtil.round(MathUtil.divide(totalCost, expectedCopies), 2))
+				.avgCostPerRun(MathUtil.round(MathUtil.divide(totalCost, expectedRuns), 2))
+				.avgCostPerUnit(MathUtil.round(MathUtil.divide(totalCost, expectedUnits), 2))
 				.build();
-	}
-
-	private int inventionRuns(BlueprintActivity blueprintActivity) {
-		var products = blueprintActivity.getProducts();
-		if (products.size() > 1) {
-			throw new IllegalArgumentException();
-		}
-		var productId = products.values().stream().findFirst().orElseThrow().getTypeId();
-		var product = refData.getType(productId);
-		var categoryId = Optional.ofNullable(product.getCategoryId()).orElseThrow();
-		if (categoryId == EveConstants.SHIP_CATEGORY_ID) {
-			return IndustryConstants.INVENTION_BASE_SHIP_AND_RIG_RUNS;
-		}
-		var group = refData.getGroup(product.getGroupId());
-		if (group.getName().get("en").startsWith("Rig ")) {
-			return IndustryConstants.INVENTION_BASE_SHIP_AND_RIG_RUNS;
-		}
-		return IndustryConstants.INVENTION_BASE_RUNS;
 	}
 
 	private BlueprintActivity inventionBlueprintProductActivity(InventoryType product) {

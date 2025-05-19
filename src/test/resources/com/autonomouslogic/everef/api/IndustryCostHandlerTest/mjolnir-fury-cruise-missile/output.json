@@ -1,0 +1,51 @@
+{
+  "manufacturing": {
+    "24535": {
+      "product_id": 24535,
+      "blueprint_id": 24536,
+      "runs": 10,
+      "units": 50000,
+      "units_per_run": 5000,
+      "time": "PT23H33M58S",
+      "time_per_run": "PT8483.8S",
+      "time_per_unit": "PT1.696S",
+      "materials": {
+        "11694": {
+          "quantity": 138,
+          "type_id": 11694,
+          "cost" : 3008651.16
+        },
+        "9830": {
+          "quantity": 1265,
+          "type_id": 9830,
+          "cost" : 16392489.85
+        },
+        "11476": {
+          "quantity": 10,
+          "type_id": 11476,
+          "cost" : 9914.10
+        },
+        "11399": {
+          "quantity": 147,
+          "type_id": 11399,
+          "cost" : 5203752.96
+        },
+        "16680": {
+          "quantity": 579,
+          "type_id": 16680,
+          "cost" : 691505.49
+        }
+      },
+      "estimated_item_value": 17234792,
+      "system_cost_index": 1225277,
+      "facility_tax": 43087,
+      "scc_surcharge": 689392,
+      "alpha_clone_tax": 0,
+      "total_job_cost": 1957756,
+      "total_material_cost" : 25306313.56,
+      "total_cost" : 27264069.56,
+      "total_cost_per_run" : 2726406.96,
+      "total_cost_per_unit" : 545.28
+    }
+  }
+}

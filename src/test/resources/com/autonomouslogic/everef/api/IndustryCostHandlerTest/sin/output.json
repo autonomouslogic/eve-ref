@@ -2,6 +2,7 @@
   "manufacturing": {
     "22430": {
       "product_id": 22430,
+      "blueprint_id": 22431,
       "runs": 1,
       "units": 1,
       "units_per_run": 1,

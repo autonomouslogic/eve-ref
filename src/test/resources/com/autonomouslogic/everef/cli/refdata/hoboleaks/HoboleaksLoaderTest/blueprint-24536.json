@@ -1,0 +1,104 @@
+{
+  "activities" : {
+    "research_material" : {
+      "materials" : {
+        "11458" : {
+          "type_id" : 11458,
+          "quantity" : 1
+        },
+        "9836" : {
+          "type_id" : 9836,
+          "quantity" : 3
+        },
+        "3814" : {
+          "type_id" : 3814,
+          "quantity" : 4
+        }
+      },
+      "time" : 504,
+      "required_skills" : {
+        "3409" : 5,
+        "11447" : 1,
+        "11449" : 1
+      }
+    },
+    "research_time" : {
+      "materials" : {
+        "11458" : {
+          "type_id" : 11458,
+          "quantity" : 1
+        },
+        "9836" : {
+          "type_id" : 9836,
+          "quantity" : 3
+        },
+        "3814" : {
+          "type_id" : 3814,
+          "quantity" : 4
+        }
+      },
+      "time" : 504,
+      "required_skills" : {
+        "3403" : 5,
+        "11447" : 1,
+        "11449" : 1
+      }
+    },
+    "manufacturing" : {
+      "materials" : {
+        "16680" : {
+          "type_id" : 16680,
+          "quantity" : 59
+        },
+        "11476" : {
+          "type_id" : 11476,
+          "quantity" : 1
+        },
+        "11694" : {
+          "type_id" : 11694,
+          "quantity" : 14
+        },
+        "9830" : {
+          "type_id" : 9830,
+          "quantity" : 129
+        },
+        "11399" : {
+          "type_id" : 11399,
+          "quantity" : 15
+        }
+      },
+      "products" : {
+        "24535" : {
+          "type_id" : 24535,
+          "quantity" : 5000
+        }
+      },
+      "time" : 14400,
+      "required_skills" : {
+        "3380" : 5,
+        "11447" : 1,
+        "11449" : 1
+      }
+    },
+    "copying" : {
+      "materials" : {
+        "11458" : {
+          "type_id" : 11458,
+          "quantity" : 1
+        },
+        "3812" : {
+          "type_id" : 3812,
+          "quantity" : 20
+        }
+      },
+      "time" : 11520,
+      "required_skills" : {
+        "3402" : 5,
+        "11447" : 1,
+        "11449" : 1
+      }
+    }
+  },
+  "blueprint_type_id" : 24536,
+  "max_production_limit" : 10
+}

@@ -1,0 +1,22 @@
+{
+  "base_price" : 10000000000,
+  "graphic_id" : 20041,
+  "group_id" : 166,
+  "icon_id" : 182,
+  "mass" : 1,
+  "meta_group_id" : 2,
+  "name" : {
+    "de" : "Mjolnir Fury Cruise Missile Blueprint",
+    "en" : "Mjolnir Fury Cruise Missile Blueprint",
+    "es" : "Plano de misil de crucero Mjolnir Fury",
+    "fr" : "Plan de construction Missile de croisière Mjolnir Fury",
+    "ja" : "ミョルニールフューリークルーズミサイルブループリント",
+    "ko" : "묠니르 퓨리 크루즈 미사일 블루프린트",
+    "ru" : "Mjolnir Fury Cruise Missile Blueprint",
+    "zh" : "雷神愤怒巡航导弹蓝图"
+  },
+  "portion_size" : 1,
+  "published" : true,
+  "volume" : 0.01,
+  "type_id" : 24536
+}
