@@ -913,6 +913,50 @@ components:
           format: int64
         obsolete:
           type: boolean
+    IndustryModifierActivities:
+      type: object
+      description: "These are the type IDs of the engineering rigs which affect this\
+        \ type in some way, indexed by activity and bonus type. This is added by EVE\
+        \ Ref."
+      properties:
+        copying:
+          $ref: "#/components/schemas/IndustryModifierBonuses"
+        invention:
+          $ref: "#/components/schemas/IndustryModifierBonuses"
+        manufacturing:
+          $ref: "#/components/schemas/IndustryModifierBonuses"
+        research_material:
+          $ref: "#/components/schemas/IndustryModifierBonuses"
+        research_time:
+          $ref: "#/components/schemas/IndustryModifierBonuses"
+    IndustryModifierBonuses:
+      type: object
+      properties:
+        cost:
+          type: array
+          description: List of affected categories or groups when accounting for job
+            cost.
+          items:
+            type: integer
+            format: int64
+            description: List of affected categories or groups when accounting for
+              job cost.
+        material:
+          type: array
+          description: List of affected categories or groups when accounting for materials.
+          items:
+            type: integer
+            format: int64
+            description: List of affected categories or groups when accounting for
+              materials.
+        time:
+          type: array
+          description: List of affected categories or groups when accounting for time.
+          items:
+            type: integer
+            format: int64
+            description: List of affected categories or groups when accounting for
+              time.
     InventoryCategory:
       type: object
       description: An inventory category
@@ -1041,32 +1085,11 @@ components:
             $ref: "#/components/schemas/DogmaTypeEffect"
           description: A map of dogma attributes. The key is the attribute ID
         engineering_rig_affected_category_ids:
-          type: array
-          description: "For structure engineering rigs, these are the category IDs\
-            \ the rig affects in some way. This is added by EVE Ref."
-          items:
-            type: integer
-            format: int64
-            description: "For structure engineering rigs, these are the category IDs\
-              \ the rig affects in some way. This is added by EVE Ref."
+          $ref: "#/components/schemas/IndustryModifierActivities"
         engineering_rig_affected_group_ids:
-          type: array
-          description: "For structure engineering rigs, these are the group IDs the\
-            \ rig affects in some way. This is added by EVE Ref."
-          items:
-            type: integer
-            format: int64
-            description: "For structure engineering rigs, these are the group IDs\
-              \ the rig affects in some way. This is added by EVE Ref."
+          $ref: "#/components/schemas/IndustryModifierActivities"
         engineering_rig_source_type_ids:
-          type: array
-          description: These are the type IDs of the engineering rigs which affect
-            this type in some way. This is added by EVE Ref.
-          items:
-            type: integer
-            format: int64
-            description: These are the type IDs of the engineering rigs which affect
-              this type in some way. This is added by EVE Ref.
+          $ref: "#/components/schemas/IndustryModifierActivities"
         faction_id:
           type: integer
           format: int64

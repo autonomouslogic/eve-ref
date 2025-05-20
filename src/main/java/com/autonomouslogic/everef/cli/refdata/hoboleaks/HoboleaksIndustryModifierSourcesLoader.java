@@ -57,19 +57,19 @@ public class HoboleaksIndustryModifierSourcesLoader {
 			var activity = entry.getKey();
 			var activityDetails = entry.getValue();
 			activityDetails.fields().forEachRemaining(activityEntry -> {
-				var bonusName = activityEntry.getKey();
+				var bonusType = activityEntry.getKey();
 				var array = (ArrayNode) activityEntry.getValue();
 				for (var node : array) {
 					if (node.has("filterID")) {
 						var filterId = node.get("filterID").longValue();
-						processTypeFilter(typeId, filterId);
+						processTypeFilter(typeId, activity, bonusType, filterId);
 					}
 				}
 			});
 		});
 	}
 
-	private void processTypeFilter(long typeId, long filterId) {
+	private void processTypeFilter(long typeId, String activity, String bonusType, long filterId) {
 		var types = storeHandler.getHoboleaksStore("types");
 		var type = types.get(typeId);
 		if (type == null) {
@@ -84,7 +84,9 @@ public class HoboleaksIndustryModifierSourcesLoader {
 					.map(e -> e.asLong())
 					.toList();
 			if (!categoryIds.isEmpty()) {
-				var array = type.withArrayProperty("engineering_rig_affected_category_ids");
+				var array = type.withObjectProperty("engineering_rig_affected_category_ids")
+					.withObjectProperty(activity)
+					.withArrayProperty(bonusType);
 				JsonUtil.addToArraySetSorted(categoryIds, array);
 			}
 		}
@@ -93,7 +95,9 @@ public class HoboleaksIndustryModifierSourcesLoader {
 					.map(e -> e.asLong())
 					.toList();
 			if (!groupIds.isEmpty()) {
-				var array = type.withArrayProperty("engineering_rig_affected_group_ids");
+				var array = type.withObjectProperty("engineering_rig_affected_group_ids")
+					.withObjectProperty(activity)
+					.withArrayProperty(bonusType);
 				JsonUtil.addToArraySetSorted(groupIds, array);
 			}
 		}
