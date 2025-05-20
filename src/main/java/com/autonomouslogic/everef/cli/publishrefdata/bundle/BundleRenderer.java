@@ -5,7 +5,6 @@ import com.autonomouslogic.everef.mvstore.MVStoreUtil;
 import com.autonomouslogic.everef.refdata.DogmaAttribute;
 import com.autonomouslogic.everef.refdata.DogmaTypeAttribute;
 import com.autonomouslogic.everef.refdata.IndustryModifierActivities;
-import com.autonomouslogic.everef.refdata.IndustryModifierBonuses;
 import com.autonomouslogic.everef.refdata.InventoryGroup;
 import com.autonomouslogic.everef.refdata.InventoryType;
 import com.autonomouslogic.everef.refdata.MarketGroup;
@@ -301,19 +300,11 @@ public abstract class BundleRenderer implements RefDataRenderer {
 
 	private Stream<Long> extractEngineeringIds(IndustryModifierActivities activities) {
 		return StreamUtil.concat(
-			Optional.ofNullable(activities.getResearchMaterial()).stream().flatMap(this::extractEngineeringIds),
-			Optional.ofNullable(activities.getResearchTime()).stream().flatMap(this::extractEngineeringIds),
-			Optional.ofNullable(activities.getManufacturing()).stream().flatMap(this::extractEngineeringIds),
-			Optional.ofNullable(activities.getInvention()).stream().flatMap(this::extractEngineeringIds),
-			Optional.ofNullable(activities.getCopying()).stream().flatMap(this::extractEngineeringIds)
-		);
-	}
-
-	private Stream<Long> extractEngineeringIds(IndustryModifierBonuses activities) {
-		return StreamUtil.concat(
-			Optional.ofNullable(activities.getCost()).stream().flatMap(Collection::stream),
-			Optional.ofNullable(activities.getTime()).stream().flatMap(Collection::stream),
-			Optional.ofNullable(activities.getMaterial()).stream().flatMap(Collection::stream)
+			Optional.ofNullable(activities.getResearchMaterial()).stream().flatMap(Collection::stream),
+			Optional.ofNullable(activities.getResearchTime()).stream().flatMap(Collection::stream),
+			Optional.ofNullable(activities.getManufacturing()).stream().flatMap(Collection::stream),
+			Optional.ofNullable(activities.getInvention()).stream().flatMap(Collection::stream),
+			Optional.ofNullable(activities.getCopying()).stream().flatMap(Collection::stream)
 		);
 	}
 

@@ -920,43 +920,44 @@ components:
         \ Ref."
       properties:
         copying:
-          $ref: "#/components/schemas/IndustryModifierBonuses"
+          type: array
+          description: List of affected categories or groups when doing copying.
+          items:
+            type: integer
+            format: int64
+            description: List of affected categories or groups when doing copying.
         invention:
-          $ref: "#/components/schemas/IndustryModifierBonuses"
+          type: array
+          description: List of affected categories or groups when doing invention.
+          items:
+            type: integer
+            format: int64
+            description: List of affected categories or groups when doing invention.
         manufacturing:
-          $ref: "#/components/schemas/IndustryModifierBonuses"
+          type: array
+          description: List of affected categories or groups when doing manufacturing.
+          items:
+            type: integer
+            format: int64
+            description: List of affected categories or groups when doing manufacturing.
         research_material:
-          $ref: "#/components/schemas/IndustryModifierBonuses"
+          type: array
+          description: List of affected categories or groups when doing material efficiency
+            research.
+          items:
+            type: integer
+            format: int64
+            description: List of affected categories or groups when doing material
+              efficiency research.
         research_time:
-          $ref: "#/components/schemas/IndustryModifierBonuses"
-    IndustryModifierBonuses:
-      type: object
-      properties:
-        cost:
           type: array
-          description: List of affected categories or groups when accounting for job
-            cost.
+          description: List of affected categories or groups when doing time efficiency
+            research.
           items:
             type: integer
             format: int64
-            description: List of affected categories or groups when accounting for
-              job cost.
-        material:
-          type: array
-          description: List of affected categories or groups when accounting for materials.
-          items:
-            type: integer
-            format: int64
-            description: List of affected categories or groups when accounting for
-              materials.
-        time:
-          type: array
-          description: List of affected categories or groups when accounting for time.
-          items:
-            type: integer
-            format: int64
-            description: List of affected categories or groups when accounting for
-              time.
+            description: List of affected categories or groups when doing time efficiency
+              research.
     InventoryCategory:
       type: object
       description: An inventory category
