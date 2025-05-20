@@ -6,7 +6,7 @@ import static com.autonomouslogic.everef.industry.IndustrySkills.GLOBAL_TIME_BON
 import static com.autonomouslogic.everef.industry.IndustrySkills.SPECIAL_TIME_BONUSES;
 
 import com.autonomouslogic.everef.data.LoadedRefData;
-import com.autonomouslogic.everef.model.Decryptor;
+import com.autonomouslogic.everef.model.IndustryDecryptor;
 import com.autonomouslogic.everef.model.api.IndustryCost;
 import com.autonomouslogic.everef.model.api.IndustryCostInput;
 import com.autonomouslogic.everef.model.api.InventionCost;
@@ -54,7 +54,7 @@ public class IndustryCostCalculator {
 	private Blueprint blueprint;
 
 	@Setter
-	private Decryptor decryptor;
+	private IndustryDecryptor industryDecryptor;
 
 	@Inject
 	protected IndustryCostCalculator() {}
@@ -121,13 +121,13 @@ public class IndustryCostCalculator {
 
 	private Map<String, MaterialCost> inventionMaterials(BlueprintActivity invention) {
 		var materials = materials(invention, this::inventionMaterialQuantity);
-		if (decryptor != null) {
+		if (industryDecryptor != null) {
 			materials.put(
-					String.valueOf(decryptor.getTypeId()),
+					String.valueOf(industryDecryptor.getTypeId()),
 					MaterialCost.builder()
-							.typeId(decryptor.getTypeId())
+							.typeId(industryDecryptor.getTypeId())
 							.quantity(industryCostInput.getRuns())
-							.cost(materialCost(decryptor.getTypeId(), industryCostInput.getRuns()))
+							.cost(materialCost(industryDecryptor.getTypeId(), industryCostInput.getRuns()))
 							.build());
 		}
 		return materials;
@@ -361,7 +361,7 @@ public class IndustryCostCalculator {
 	}
 
 	private InventionCost inventionCost(BlueprintActivity invention) {
-		var decryptorOpt = Optional.ofNullable(decryptor);
+		var decryptorOpt = Optional.ofNullable(industryDecryptor);
 		var manufacturing = inventionBlueprintProductActivity(productType);
 		var time = inventionTime(invention);
 		var eiv = manufacturingEiv(manufacturing);
@@ -373,7 +373,7 @@ public class IndustryCostCalculator {
 						.get(productType.getTypeId())
 						.getQuantity()
 						.intValue()
-				+ decryptorOpt.map(Decryptor::getRunModifier).orElse(0);
+				+ decryptorOpt.map(IndustryDecryptor::getRunModifier).orElse(0);
 		var unitsPerRun = manufacturing.getProducts().values().stream()
 				.findFirst()
 				.orElseThrow()
@@ -397,9 +397,9 @@ public class IndustryCostCalculator {
 				.unitsPerRun(unitsPerRun)
 				.probability(prob)
 				.me(IndustryConstants.INVENTION_BASE_ME
-						+ decryptorOpt.map(Decryptor::getMeModifier).orElse(0))
+						+ decryptorOpt.map(IndustryDecryptor::getMeModifier).orElse(0))
 				.te(IndustryConstants.INVENTION_BASE_TE
-						+ decryptorOpt.map(Decryptor::getTeModifier).orElse(0))
+						+ decryptorOpt.map(IndustryDecryptor::getTeModifier).orElse(0))
 				.runs(runs)
 				.expectedCopies(expectedCopies)
 				.expectedRuns(expectedRuns)
@@ -437,8 +437,8 @@ public class IndustryCostCalculator {
 		var baseProb = invention.getProducts().get(productType.getTypeId()).getProbability();
 		List<Integer> datacoreSkills = inventionDatacoreSkills(invention);
 		var encryptionSkill = inventionEncryptionSkill(invention);
-		var decryptorMod = Optional.ofNullable(decryptor)
-				.map(Decryptor::getProbabilityModifier)
+		var decryptorMod = Optional.ofNullable(industryDecryptor)
+				.map(IndustryDecryptor::getProbabilityModifier)
 				.orElse(1.0);
 		return baseProb
 				* (1 + ((datacoreSkills.get(0) + datacoreSkills.get(1)) / 30.0) + encryptionSkill / 40.0)

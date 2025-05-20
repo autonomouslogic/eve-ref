@@ -116,7 +116,7 @@ public class IndustryCostHandler implements HttpService, Handler {
 			if (decryptor == null) {
 				throw new ClientException(String.format("Decryptor ID %d not found", input.getDecryptorId()));
 			}
-			calculator.setDecryptor(decryptor);
+			calculator.setIndustryDecryptor(decryptor);
 		}
 		return calculator.calc().toBuilder().input(input).build();
 	}

@@ -15,9 +15,9 @@ import lombok.extern.jackson.Jacksonized;
 @Jacksonized
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"type_id", "name", "probability_modifier", "me_modifier", "te_modifier", "run_modifier"})
+@JsonPropertyOrder({"type_id", "name", "material_modifier", "cost_modifier", "time_modifier"})
 @Schema
-public class Decryptor {
+public class IndustryStructure {
 	@JsonProperty
 	long typeId;
 
@@ -25,14 +25,11 @@ public class Decryptor {
 	String name;
 
 	@JsonProperty
-	double probabilityModifier;
+	double materialModifier;
 
 	@JsonProperty
-	int meModifier;
+	double timeModifier;
 
 	@JsonProperty
-	int teModifier;
-
-	@JsonProperty
-	int runModifier;
+	double costModifier;
 }

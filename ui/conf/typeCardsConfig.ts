@@ -253,8 +253,11 @@ const cards: {[key: string]: any} = {
 					"structureDamageLimit",
 					"structureAoERoFRoleBonus",
 					"structureRoleBonus",
+					"structureFullPowerStateHitpointMultiplier",
 					"structureServiceRoleBonus",
-					"structureFullPowerStateHitpointMultiplier"
+					"strEngMatBonus",
+					"strEngCostBonus",
+					"strEngTimeBonus"
 				]
 		},
 	"probe":

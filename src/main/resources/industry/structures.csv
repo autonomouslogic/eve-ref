@@ -1,0 +1,43 @@
+type_id,name,material_modifier,cost_modifier,time_modifier
+35825,Raitaru,0.99,0.97,0.85
+35826,Azbel,0.99,0.96,0.8
+35827,Sotiyo,0.99,0.95,0.7
+35828,"Medium Laboratory",1.0,1.0,1.0
+35829,"Large Laboratory",1.0,1.0,1.0
+35830,"X-Large Laboratory",1.0,1.0,1.0
+35832,Astrahus,1.0,1.0,1.0
+35833,Fortizar,1.0,1.0,1.0
+35834,Keepstar,1.0,1.0,1.0
+35835,Athanor,1.0,1.0,1.0
+35836,Tatara,1.0,1.0,1.0
+35837,"Custom gate 1",1.0,1.0,1.0
+35838,"Medium Observatory Array",1.0,1.0,1.0
+35839,"Large Observatory Array",1.0,1.0,1.0
+35840,"Pharolux Cyno Beacon",1.0,1.0,1.0
+35841,"Ansiblex Jump Bridge",1.0,1.0,1.0
+35842,"Medium Administration Hub",1.0,1.0,1.0
+35843,"Large Administration Hub",1.0,1.0,1.0
+35844,"X-Large Administration Hub",1.0,1.0,1.0
+35845,"Upwell Monument AM",1.0,1.0,1.0
+37533,"X-Large Observatory Array",1.0,1.0,1.0
+37534,"Tenebrex Cyno Jammer",1.0,1.0,1.0
+37535,"Upwell Simple Advertisement Center",1.0,1.0,1.0
+37536,"Upwell Advanced Advertisement Center",1.0,1.0,1.0
+40340,"Upwell Palatine Keepstar",1.0,1.0,1.0
+45006,"♦ Sotiyo",1.0,1.0,1.0
+46363,"Guristas Pirates Stronghold",1.0,1.0,1.0
+46364,"Blood Raiders Stronghold",1.0,1.0,1.0
+47512,"'Moreau' Fortizar",1.0,0.98,0.9
+47513,"'Draccous' Fortizar",1.0,0.97,0.85
+47514,"'Horizon' Fortizar",1.0,0.97,0.85
+47515,"'Marginis' Fortizar",1.0,1.0,1.0
+47516,"'Prometheus' Fortizar",1.0,1.0,1.0
+49600,"Upwell Monument 1M",1.0,1.0,1.0
+49601,"Upwell Monument 1F",1.0,1.0,1.0
+71116,"Amarr Empire Stronghold",1.0,1.0,1.0
+71117,"Caldari State Stronghold",1.0,1.0,1.0
+71118,"Gallente Federation Stronghold",1.0,1.0,1.0
+71119,"Minmatar Republic Stronghold",1.0,1.0,1.0
+78260,"Angel Cartel FOB",1.0,1.0,1.0
+79172,"Guristas Pirates FOB",1.0,1.0,1.0
+81826,"Metenox Moon Drill",1.0,1.0,1.0
