@@ -62,7 +62,7 @@ public class BlueprintDecorator extends PostDecorator {
 		var productType = (ObjectNode) types.get(productTypeId);
 		if (productType == null) {
 			log.warn(
-					"Could not set type {} as being created by blueprint {}, not found",
+					"Could not set type {} as being created by blueprint {}, type not found",
 					productTypeId,
 					blueprintTypeId);
 			return;
