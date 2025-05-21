@@ -120,7 +120,9 @@
     }
   },
   "packaged_volume" : 10,
-  "engineering_rig_affected_group_ids" : [ 974 ],
+  "engineering_rig_affected_group_ids" : {
+    "reaction" : [ 974 ]
+  },
   "required_skills" : {
     "26252" : 1
   },

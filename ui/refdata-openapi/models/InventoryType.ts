@@ -25,6 +25,12 @@ import {
     DogmaTypeEffectFromJSONTyped,
     DogmaTypeEffectToJSON,
 } from './DogmaTypeEffect';
+import type { IndustryModifierActivities } from './IndustryModifierActivities';
+import {
+    IndustryModifierActivitiesFromJSON,
+    IndustryModifierActivitiesFromJSONTyped,
+    IndustryModifierActivitiesToJSON,
+} from './IndustryModifierActivities';
 import type { InventoryTypeTraits } from './InventoryTypeTraits';
 import {
     InventoryTypeTraitsFromJSON,
@@ -123,23 +129,23 @@ export interface InventoryType {
      */
     dogmaEffects?: { [key: string]: DogmaTypeEffect; };
     /**
-     * For structure engineering rigs, these are the category IDs the rig affects in some way. This is added by EVE Ref.
-     * @type {Array<number>}
+     * 
+     * @type {IndustryModifierActivities}
      * @memberof InventoryType
      */
-    engineeringRigAffectedCategoryIds?: Array<number>;
+    engineeringRigAffectedCategoryIds?: IndustryModifierActivities;
     /**
-     * For structure engineering rigs, these are the group IDs the rig affects in some way. This is added by EVE Ref.
-     * @type {Array<number>}
+     * 
+     * @type {IndustryModifierActivities}
      * @memberof InventoryType
      */
-    engineeringRigAffectedGroupIds?: Array<number>;
+    engineeringRigAffectedGroupIds?: IndustryModifierActivities;
     /**
-     * These are the type IDs of the engineering rigs which affect this type in some way. This is added by EVE Ref.
-     * @type {Array<number>}
+     * 
+     * @type {IndustryModifierActivities}
      * @memberof InventoryType
      */
-    engineeringRigSourceTypeIds?: Array<number>;
+    engineeringRigSourceTypeIds?: IndustryModifierActivities;
     /**
      * 
      * @type {number}
@@ -388,9 +394,9 @@ export function InventoryTypeFromJSONTyped(json: any, ignoreDiscriminator: boole
         'description': !exists(json, 'description') ? undefined : json['description'],
         'dogmaAttributes': !exists(json, 'dogma_attributes') ? undefined : (mapValues(json['dogma_attributes'], DogmaTypeAttributeFromJSON)),
         'dogmaEffects': !exists(json, 'dogma_effects') ? undefined : (mapValues(json['dogma_effects'], DogmaTypeEffectFromJSON)),
-        'engineeringRigAffectedCategoryIds': !exists(json, 'engineering_rig_affected_category_ids') ? undefined : json['engineering_rig_affected_category_ids'],
-        'engineeringRigAffectedGroupIds': !exists(json, 'engineering_rig_affected_group_ids') ? undefined : json['engineering_rig_affected_group_ids'],
-        'engineeringRigSourceTypeIds': !exists(json, 'engineering_rig_source_type_ids') ? undefined : json['engineering_rig_source_type_ids'],
+        'engineeringRigAffectedCategoryIds': !exists(json, 'engineering_rig_affected_category_ids') ? undefined : IndustryModifierActivitiesFromJSON(json['engineering_rig_affected_category_ids']),
+        'engineeringRigAffectedGroupIds': !exists(json, 'engineering_rig_affected_group_ids') ? undefined : IndustryModifierActivitiesFromJSON(json['engineering_rig_affected_group_ids']),
+        'engineeringRigSourceTypeIds': !exists(json, 'engineering_rig_source_type_ids') ? undefined : IndustryModifierActivitiesFromJSON(json['engineering_rig_source_type_ids']),
         'factionId': !exists(json, 'faction_id') ? undefined : json['faction_id'],
         'graphicId': !exists(json, 'graphic_id') ? undefined : json['graphic_id'],
         'groupId': !exists(json, 'group_id') ? undefined : json['group_id'],
@@ -450,9 +456,9 @@ export function InventoryTypeToJSON(value?: InventoryType | null): any {
         'description': value.description,
         'dogma_attributes': value.dogmaAttributes === undefined ? undefined : (mapValues(value.dogmaAttributes, DogmaTypeAttributeToJSON)),
         'dogma_effects': value.dogmaEffects === undefined ? undefined : (mapValues(value.dogmaEffects, DogmaTypeEffectToJSON)),
-        'engineering_rig_affected_category_ids': value.engineeringRigAffectedCategoryIds,
-        'engineering_rig_affected_group_ids': value.engineeringRigAffectedGroupIds,
-        'engineering_rig_source_type_ids': value.engineeringRigSourceTypeIds,
+        'engineering_rig_affected_category_ids': IndustryModifierActivitiesToJSON(value.engineeringRigAffectedCategoryIds),
+        'engineering_rig_affected_group_ids': IndustryModifierActivitiesToJSON(value.engineeringRigAffectedGroupIds),
+        'engineering_rig_source_type_ids': IndustryModifierActivitiesToJSON(value.engineeringRigSourceTypeIds),
         'faction_id': value.factionId,
         'graphic_id': value.graphicId,
         'group_id': value.groupId,

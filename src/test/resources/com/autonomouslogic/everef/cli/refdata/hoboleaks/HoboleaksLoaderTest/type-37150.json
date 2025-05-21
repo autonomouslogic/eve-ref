@@ -1,4 +1,6 @@
 {
   "type_id" : 37150,
-  "engineering_rig_affected_category_ids" : [ 8 ]
+  "engineering_rig_affected_category_ids" : {
+    "manufacturing" : [ 8 ]
+  }
 }

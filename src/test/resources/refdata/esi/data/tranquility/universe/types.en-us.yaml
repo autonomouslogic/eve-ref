@@ -3259,3 +3259,20 @@
   radius: 100
   type_id: 43733
   volume: 10
+"30303":
+  capacity: 0
+  description: "Fulleroferrocene is a rare organometallic compound used to strengthen\
+    \ and supplement other materials. Most commonly, it is used to improve the structural\
+    \ integrity of metal alloys, but research is continuing on its potential applications\
+    \ in nanomechanical devices."
+  group_id: 974
+  icon_id: 3739
+  market_group_id: 1860
+  mass: 0
+  name: "Fulleroferrocene"
+  packaged_volume: 0.1
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 30303
+  volume: 0.1

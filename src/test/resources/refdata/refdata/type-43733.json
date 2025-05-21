@@ -135,7 +135,9 @@
     }
   },
   "packaged_volume" : 10,
-  "engineering_rig_affected_group_ids" : [ 27, 513, 941 ],
+  "engineering_rig_affected_group_ids" : {
+    "manufacturing" : [ 27, 513, 941 ]
+  },
   "required_skills" : {
     "26252" : 1
   }

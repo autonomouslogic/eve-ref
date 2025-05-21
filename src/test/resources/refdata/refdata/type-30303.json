@@ -1,0 +1,43 @@
+{
+  "description" : {
+    "de" : "Fulleroferrocene ist eine seltene organisch-metallische Verbindung, mit der man andere Stoffe härten und festigen kann. In der Regel macht man damit Metalllegierungen stabiler, aber man untersucht gegenwärtig ebenfalls, ob sie nicht möglicherweise im Bereich der Nanomechanik anwendbar ist.",
+    "en" : "Fulleroferrocene is a rare organometallic compound used to strengthen and supplement other materials. Most commonly, it is used to improve the structural integrity of metal alloys, but research is continuing on its potential applications in nanomechanical devices.",
+    "es" : "El fulleroferroceno es un complejo organometálico poco común que sirve para reforzar y complementar otros materiales. Se usa comúnmente para mejorar la integridad estructural de las aleaciones de metal, pero siguen investigándose otras posibles aplicaciones en dispositivos nanomecánicos.",
+    "fr" : "Le fulleroferrocène est un composé organométallique rare utilisé pour renforcer et compléter d'autres matériaux. Plus généralement, il est également utilisé pour améliorer l'intégrité structurelle des alliages de métal, mais la recherche travaille encore sur ses potentielles applications dans les dispositifs nanomécaniques.",
+    "ja" : "フラーロフェロセンは他の物質を強化し補強する、希少な有機金属の化合物である。最も広い用途は合金の構造の補強だが、将来はナノメカニカル装置に応用できるよう研究が進められている。",
+    "ko" : "플레로페로센은 다른 재료를 보강 및 보충하는데 사용되는 희귀한 유기금속 화합물질입니다. 일반적으로 금속 합금의 구조적 특성을 개선하는데 활용되고 있으며 지속적인 연구를 통해 나노기기에 적용할 방법을 모색 중입니다.",
+    "ru" : "Фуллереноферроцен — редкое органо-металлическое вещество, используемое для усиления других материалов. Чаще всего его используют для улучшения структурной целостности металлических сплавов, но исследуются и возможности его применения в наномеханических устройствах.",
+    "zh" : "富勒二茂铁是一种稀有的有机金属，用于加强其和补充他材料的强度。最常见的用途是用来加强合金的整体强度，新近的研究表明这种材料在纳米机械设备方面有着非常有应用潜力。"
+  },
+  "group_id" : 974,
+  "icon_id" : 3739,
+  "market_group_id" : 1860,
+  "name" : {
+    "de" : "Fulleroferrocene",
+    "en" : "Fulleroferrocene",
+    "es" : "Fulleroferroceno",
+    "fr" : "Fulleroferrocène",
+    "ja" : "フラーロフェロセン",
+    "ko" : "플레로페로센",
+    "ru" : "Fulleroferrocene",
+    "zh" : "富勒二茂铁"
+  },
+  "portion_size" : 1,
+  "published" : true,
+  "volume" : 0.1,
+  "type_id" : 30303,
+  "capacity" : 0,
+  "mass" : 0,
+  "packaged_volume" : 0.1,
+  "radius" : 1,
+  "category_id" : 4,
+  "produced_by_blueprints" : {
+    "46158" : {
+      "blueprint_type_id" : 46158,
+      "blueprint_activity" : "reaction"
+    }
+  },
+  "engineering_rig_source_type_ids" : {
+    "reaction" : [ 46488, 46489, 46490, 46491, 46496, 46497 ]
+  }
+}
