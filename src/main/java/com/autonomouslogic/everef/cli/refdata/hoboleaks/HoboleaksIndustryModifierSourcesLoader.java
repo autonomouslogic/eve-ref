@@ -64,6 +64,9 @@ public class HoboleaksIndustryModifierSourcesLoader {
 						var filterId = node.get("filterID").longValue();
 						processTypeFilter(typeId, activity, filterId);
 					}
+					else {
+						processGlobalActivity(typeId, activity);
+					}
 				}
 			});
 		});
@@ -100,5 +103,14 @@ public class HoboleaksIndustryModifierSourcesLoader {
 			}
 		}
 		types.put(typeId, type);
+	}
+
+	private void processGlobalActivity(long typeId, String activity) {
+		var types = storeHandler.getHoboleaksStore("types");
+		var type = types.get(typeId);
+		if (type == null) {
+			type = objectMapper.createObjectNode().put("type_id", typeId);
+		}
+		type.withArrayProperty("test").add(activity);
 	}
 }
