@@ -11,6 +11,7 @@ models/DogmaEffect.ts
 models/DogmaTypeAttribute.ts
 models/DogmaTypeEffect.ts
 models/Icon.ts
+models/IndustryModifierActivities.ts
 models/InventoryCategory.ts
 models/InventoryGroup.ts
 models/InventoryType.ts

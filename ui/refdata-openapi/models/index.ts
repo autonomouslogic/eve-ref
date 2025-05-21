@@ -10,6 +10,7 @@ export * from './DogmaEffect';
 export * from './DogmaTypeAttribute';
 export * from './DogmaTypeEffect';
 export * from './Icon';
+export * from './IndustryModifierActivities';
 export * from './InventoryCategory';
 export * from './InventoryGroup';
 export * from './InventoryType';
