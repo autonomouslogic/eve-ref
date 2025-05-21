@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.Streams;
 import io.reactivex.rxjava3.core.Completable;
+import java.util.Map;
 import javax.inject.Inject;
 import lombok.NonNull;
 import lombok.Setter;
@@ -53,23 +54,30 @@ public class HoboleaksIndustryModifierSourcesLoader {
 	}
 
 	private void processTypeActivities(long typeId, JsonNode activities) {
-		activities.fields().forEachRemaining(entry -> {
+		for (Map.Entry<String, JsonNode> entry : activities.properties()) {
+			var hasBonus = false;
 			var activity = entry.getKey();
 			var activityDetails = entry.getValue();
-			activityDetails.fields().forEachRemaining(activityEntry -> {
-				var bonusType = activityEntry.getKey();
-				var array = (ArrayNode) activityEntry.getValue();
-				for (var node : array) {
-					if (node.has("filterID")) {
-						var filterId = node.get("filterID").longValue();
-						processTypeFilter(typeId, activity, filterId);
-					}
-					else {
-						processGlobalActivity(typeId, activity);
-					}
-				}
-			});
-		});
+			for (Map.Entry<String, JsonNode> activityEntry : activityDetails.properties()) {
+				hasBonus |= processTypeActivity(
+						typeId, activityEntry.getKey(), (ArrayNode) activityEntry.getValue(), activity);
+			}
+			if (!hasBonus) {
+				addGlobalActivity(typeId, activity);
+			}
+		}
+	}
+
+	private boolean processTypeActivity(long typeId, String bonusType, ArrayNode bonuses, String activity) {
+		boolean hasFilter = false;
+		for (var bonusEntry : bonuses) {
+			if (bonusEntry.has("filterID")) {
+				hasFilter = true;
+				var filterId = bonusEntry.get("filterID").longValue();
+				processTypeFilter(typeId, activity, filterId);
+			}
+		}
+		return hasFilter;
 	}
 
 	private void processTypeFilter(long typeId, String activity, long filterId) {
@@ -105,12 +113,13 @@ public class HoboleaksIndustryModifierSourcesLoader {
 		types.put(typeId, type);
 	}
 
-	private void processGlobalActivity(long typeId, String activity) {
+	private void addGlobalActivity(long typeId, String activity) {
 		var types = storeHandler.getHoboleaksStore("types");
 		var type = types.get(typeId);
 		if (type == null) {
 			type = objectMapper.createObjectNode().put("type_id", typeId);
 		}
-		type.withArrayProperty("test").add(activity);
+		type.withArrayProperty("engineering_rig_global_activities").add(activity);
+		types.put(typeId, type);
 	}
 }

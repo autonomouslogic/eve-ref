@@ -135,6 +135,7 @@
     }
   },
   "packaged_volume" : 10,
+  "engineering_rig_global_activities" : [ "copying" ],
   "required_skills" : {
     "26252" : 1
   }

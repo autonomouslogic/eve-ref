@@ -3319,3 +3319,94 @@
   radius: 1
   type_id: 30303
   volume: 0.1
+"37183":
+  capacity: 0
+  description: "L'optimisation de laboratoire 'Standup' I XL permet aux opérateurs\
+    \ de structure Upwell de réduire le coût financier et la durée des tâches d'invention,\
+    \ de copie et de recherche.\n\nLa technologie brevetée 'Standup' exploite un dispositif\
+    \ autonome de nano-assemblage pour structure Upwell, alliant un logiciel de modé\
+    lisation intégré, une baie de nano-assemblage et une réserve de nanomasse. Une\
+    \ fois insérés dans les emplacements dédiés sur les structures Upwell, les dispositifs\
+    \ 'Standup' lancent directement l'assemblage moléculaire de divers modules de\
+    \ services, modules de structure et optimisations de structure.\n\nRemarque :\
+    \ une seule optimisation du même type, y compris les déclinaisons de tech, peut\
+    \ être montée sur une structure à la fois."
+  dogma_attributes:
+  - attribute_id: 1153
+    value: 100
+  - attribute_id: 4
+    value: 200
+  - attribute_id: 1544
+    value: 1
+  - attribute_id: 9
+    value: 40
+  - attribute_id: 1547
+    value: 4
+  - attribute_id: 1298
+    value: 1657
+  - attribute_id: 1299
+    value: 1404
+  - attribute_id: 277
+    value: 1
+  - attribute_id: 2334
+    value: 1
+  - attribute_id: 2593
+    value: -20
+  - attribute_id: 2594
+    value: 0
+  - attribute_id: 2595
+    value: -10
+  - attribute_id: 422
+    value: 1
+  - attribute_id: 2095
+    value: 40
+  - attribute_id: 2096
+    value: 4
+  - attribute_id: 2355
+    value: 1
+  - attribute_id: 2356
+    value: 1.9
+  - attribute_id: 2357
+    value: 2.1
+  - attribute_id: 2358
+    value: 1
+  - attribute_id: 182
+    value: 26252
+  - attribute_id: 161
+    value: 40
+  - attribute_id: 162
+    value: 100
+  - attribute_id: 38
+    value: 0
+  dogma_effects:
+  - effect_id: 2663
+    is_default: true
+  - effect_id: 6830
+    is_default: false
+  - effect_id: 6831
+    is_default: false
+  - effect_id: 6832
+    is_default: false
+  - effect_id: 6833
+    is_default: false
+  - effect_id: 6834
+    is_default: false
+  - effect_id: 6835
+    is_default: false
+  - effect_id: 6836
+    is_default: false
+  - effect_id: 6837
+    is_default: false
+  - effect_id: 6842
+    is_default: false
+  group_id: 1870
+  icon_id: 21729
+  market_group_id: 2349
+  mass: 200
+  name: "Optimisation de laboratoire 'Standup' I XL"
+  packaged_volume: 40
+  portion_size: 1
+  published: true
+  radius: 100
+  type_id: 37183
+  volume: 40

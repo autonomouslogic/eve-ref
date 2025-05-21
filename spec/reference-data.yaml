@@ -1096,6 +1096,14 @@ components:
           $ref: "#/components/schemas/IndustryModifierActivities"
         engineering_rig_affected_group_ids:
           $ref: "#/components/schemas/IndustryModifierActivities"
+        engineering_rig_global_activities:
+          type: array
+          description: The activity types which were defined without any filters.
+            This is added by EVE Ref.
+          items:
+            type: string
+            description: The activity types which were defined without any filters.
+              This is added by EVE Ref.
         engineering_rig_source_type_ids:
           $ref: "#/components/schemas/IndustryModifierActivities"
         faction_id:
