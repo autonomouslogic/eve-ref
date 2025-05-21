@@ -940,6 +940,13 @@ components:
             type: integer
             format: int64
             description: List of affected categories or groups when doing manufacturing.
+        reaction:
+          type: array
+          description: List of affected categories or groups when doing reaction.
+          items:
+            type: integer
+            format: int64
+            description: List of affected categories or groups when doing reaction.
         research_material:
           type: array
           description: List of affected categories or groups when doing material efficiency
