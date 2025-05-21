@@ -2,16 +2,20 @@ package com.autonomouslogic.everef.cli;
 
 import static com.autonomouslogic.everef.util.EveConstants.DECRYPTORS_MARKET_GROUP_ID;
 import static com.autonomouslogic.everef.util.EveConstants.STRUCTURE_CATEGORY_ID;
+import static com.autonomouslogic.everef.util.EveConstants.STRUCTURE_MODULE_CATEGORY_ID;
 
 import com.autonomouslogic.everef.data.LoadedRefData;
 import com.autonomouslogic.everef.model.IndustryDecryptor;
+import com.autonomouslogic.everef.model.IndustryRig;
 import com.autonomouslogic.everef.model.IndustryStructure;
 import com.autonomouslogic.everef.refdata.DogmaAttribute;
+import com.autonomouslogic.everef.refdata.IndustryModifierActivities;
 import com.autonomouslogic.everef.refdata.InventoryType;
 import com.autonomouslogic.everef.util.RefDataUtil;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.google.common.collect.Ordering;
 import java.io.File;
+import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import javax.inject.Inject;
@@ -27,6 +31,7 @@ public class ImportIndustryResources implements Command {
 	private static final String RESOURCES_BASE = "/industry";
 	public static final String DECRYPTORS_CONFIG = RESOURCES_BASE + "/decryptors.csv";
 	public static final String STRUCTURES_CONFIG = RESOURCES_BASE + "/structures.csv";
+	public static final String RIGS_CONFIG = RESOURCES_BASE + "/rigs.csv";
 
 	@Inject
 	protected CsvMapper csvMapper;
@@ -45,6 +50,13 @@ public class ImportIndustryResources implements Command {
 	private DogmaAttribute strEngCostBonus;
 	private DogmaAttribute strEngTimeBonus;
 
+	private DogmaAttribute attributeEngRigTimeBonus;
+	private DogmaAttribute attributeEngRigMatBonus;
+	private DogmaAttribute attributeEngRigCostBonus;
+	private DogmaAttribute hiSecModifier;
+	private DogmaAttribute lowSecModifier;
+	private DogmaAttribute nullSecModifier;
+
 	@Inject
 	protected ImportIndustryResources() {}
 
@@ -57,6 +69,7 @@ public class ImportIndustryResources implements Command {
 		loadDogma();
 		loadDecryptors();
 		loadStructures();
+		loadRigs();
 	}
 
 	private void loadDogma() {
@@ -70,6 +83,16 @@ public class ImportIndustryResources implements Command {
 		strEngMatBonus = refData.getDogmaAttribute("strEngMatBonus").orElseThrow();
 		strEngCostBonus = refData.getDogmaAttribute("strEngCostBonus").orElseThrow();
 		strEngTimeBonus = refData.getDogmaAttribute("strEngTimeBonus").orElseThrow();
+
+		attributeEngRigTimeBonus =
+				refData.getDogmaAttribute("attributeEngRigTimeBonus").orElseThrow();
+		attributeEngRigMatBonus =
+				refData.getDogmaAttribute("attributeEngRigMatBonus").orElseThrow();
+		attributeEngRigCostBonus =
+				refData.getDogmaAttribute("attributeEngRigCostBonus").orElseThrow();
+		hiSecModifier = refData.getDogmaAttribute("hiSecModifier").orElseThrow();
+		lowSecModifier = refData.getDogmaAttribute("lowSecModifier").orElseThrow();
+		nullSecModifier = refData.getDogmaAttribute("nullSecModifier").orElseThrow();
 	}
 
 	@SneakyThrows
@@ -82,6 +105,11 @@ public class ImportIndustryResources implements Command {
 	private void loadStructures() {
 		loadTypes(
 				"structures", STRUCTURES_CONFIG, IndustryStructure.class, this::filterStructure, this::createStructure);
+	}
+
+	@SneakyThrows
+	private void loadRigs() {
+		loadTypes("rigs", RIGS_CONFIG, IndustryRig.class, this::filterRig, this::createRig);
 	}
 
 	@SneakyThrows
@@ -157,5 +185,67 @@ public class ImportIndustryResources implements Command {
 						.getTypeDogmaValue(type, strEngCostBonus.getAttributeId())
 						.orElse(1.0))
 				.build();
+	}
+
+	private boolean filterRig(InventoryType type) {
+		if (type.getCategoryId() == null || type.getCategoryId().intValue() != STRUCTURE_MODULE_CATEGORY_ID) {
+			return false;
+		}
+		return refDataUtil
+						.getTypeDogmaValue(type, attributeEngRigTimeBonus.getAttributeId())
+						.isPresent()
+				|| refDataUtil
+						.getTypeDogmaValue(type, attributeEngRigMatBonus.getAttributeId())
+						.isPresent()
+				|| refDataUtil
+						.getTypeDogmaValue(type, attributeEngRigCostBonus.getAttributeId())
+						.isPresent();
+	}
+
+	private IndustryRig createRig(InventoryType type) {
+		var builder = IndustryRig.builder()
+				.typeId(type.getTypeId())
+				.name(type.getName().get("en"))
+				.timeBonus(refDataUtil
+						.getTypeDogmaValue(type, attributeEngRigTimeBonus.getAttributeId())
+						.orElse(0.0))
+				.materialBonus(refDataUtil
+						.getTypeDogmaValue(type, attributeEngRigMatBonus.getAttributeId())
+						.orElse(0.0))
+				.costBonus(refDataUtil
+						.getTypeDogmaValue(type, attributeEngRigCostBonus.getAttributeId())
+						.orElse(0.0));
+		handleRigCategories(type.getEngineeringRigAffectedCategoryIds(), builder);
+		handleRigGroups(type.getEngineeringRigAffectedGroupIds(), builder);
+		handleRigGlobal(type.getEngineeringRigGlobalActivities(), builder);
+		return builder.build();
+	}
+
+	private void handleRigCategories(IndustryModifierActivities categoryIds, IndustryRig.Builder builder) {}
+
+	private void handleRigGroups(IndustryModifierActivities groupIds, IndustryRig.Builder builder) {}
+
+	private void handleRigGlobal(List<String> activities, IndustryRig.Builder builder) {
+		if (activities == null) {
+			return;
+		}
+		if (activities.contains("manufacturing")) {
+			throw new IllegalArgumentException();
+		}
+		if (activities.contains("reaction")) {
+			throw new IllegalArgumentException();
+		}
+		if (activities.contains("invention")) {
+			builder.invention(true);
+		}
+		if (activities.contains("research_material")) {
+			builder.researchMaterial(true);
+		}
+		if (activities.contains("research_time")) {
+			builder.researchTime(true);
+		}
+		if (activities.contains("copying")) {
+			builder.copying(true);
+		}
 	}
 }
