@@ -1,5 +1,29 @@
 EVE Ref Changelog
 
+## [2.59.0](https://github.com/autonomouslogic/eve-ref/compare/2.58.1...2.59.0) (2025-05-21)
+
+
+### Features
+
+* **refdata:** Global engineering rig activities ([#837](https://github.com/autonomouslogic/eve-ref/issues/837)) ([49c2b50](https://github.com/autonomouslogic/eve-ref/commit/49c2b507711eb345cbd1383b0bbbbf85dc87ed46))
+
+
+### Bug Fixes
+
+* **jobs:** Nullpointer exception on BuildRefData ([#830](https://github.com/autonomouslogic/eve-ref/issues/830)) ([779c312](https://github.com/autonomouslogic/eve-ref/commit/779c3120fa730b97a05d1b3833bc7850f10249d3))
+* **refdata:** Industry modifier sources are now indexed by activity ([#831](https://github.com/autonomouslogic/eve-ref/issues/831)) ([cbc403f](https://github.com/autonomouslogic/eve-ref/commit/cbc403fa1e34a8f9c96166750441f1379255d9ff))
+
+
+### Miscellaneous Chores
+
+* Merge ([db8192a](https://github.com/autonomouslogic/eve-ref/commit/db8192a9a58b5f8b4b0158440e561efa207dfe59))
+* **release:** 2.58.1 [skip ci] ([1d71913](https://github.com/autonomouslogic/eve-ref/commit/1d71913daa2f96565f03aac3ce74f6e2a55d08a3)), closes [#830](https://github.com/autonomouslogic/eve-ref/issues/830)
+
+
+### Tests
+
+* More ref data data test objects ([4167da2](https://github.com/autonomouslogic/eve-ref/commit/4167da2e6cac1cc4214cad78b3b6175acf481ae3))
+
 ## [2.58.1](https://github.com/autonomouslogic/eve-ref/compare/2.58.0...2.58.1) (2025-05-20)
 
 
