@@ -141,6 +141,12 @@ export interface InventoryType {
      */
     engineeringRigAffectedGroupIds?: IndustryModifierActivities;
     /**
+     * The activity types which were defined without any filters. This is added by EVE Ref.
+     * @type {Array<string>}
+     * @memberof InventoryType
+     */
+    engineeringRigGlobalActivities?: Array<string>;
+    /**
      * 
      * @type {IndustryModifierActivities}
      * @memberof InventoryType
@@ -396,6 +402,7 @@ export function InventoryTypeFromJSONTyped(json: any, ignoreDiscriminator: boole
         'dogmaEffects': !exists(json, 'dogma_effects') ? undefined : (mapValues(json['dogma_effects'], DogmaTypeEffectFromJSON)),
         'engineeringRigAffectedCategoryIds': !exists(json, 'engineering_rig_affected_category_ids') ? undefined : IndustryModifierActivitiesFromJSON(json['engineering_rig_affected_category_ids']),
         'engineeringRigAffectedGroupIds': !exists(json, 'engineering_rig_affected_group_ids') ? undefined : IndustryModifierActivitiesFromJSON(json['engineering_rig_affected_group_ids']),
+        'engineeringRigGlobalActivities': !exists(json, 'engineering_rig_global_activities') ? undefined : json['engineering_rig_global_activities'],
         'engineeringRigSourceTypeIds': !exists(json, 'engineering_rig_source_type_ids') ? undefined : IndustryModifierActivitiesFromJSON(json['engineering_rig_source_type_ids']),
         'factionId': !exists(json, 'faction_id') ? undefined : json['faction_id'],
         'graphicId': !exists(json, 'graphic_id') ? undefined : json['graphic_id'],
@@ -458,6 +465,7 @@ export function InventoryTypeToJSON(value?: InventoryType | null): any {
         'dogma_effects': value.dogmaEffects === undefined ? undefined : (mapValues(value.dogmaEffects, DogmaTypeEffectToJSON)),
         'engineering_rig_affected_category_ids': IndustryModifierActivitiesToJSON(value.engineeringRigAffectedCategoryIds),
         'engineering_rig_affected_group_ids': IndustryModifierActivitiesToJSON(value.engineeringRigAffectedGroupIds),
+        'engineering_rig_global_activities': value.engineeringRigGlobalActivities,
         'engineering_rig_source_type_ids': IndustryModifierActivitiesToJSON(value.engineeringRigSourceTypeIds),
         'faction_id': value.factionId,
         'graphic_id': value.graphicId,

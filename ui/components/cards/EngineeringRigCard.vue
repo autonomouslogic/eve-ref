@@ -6,6 +6,8 @@ import AttributeList from "~/components/attr/AttributeList.vue";
 import EngineeringRigCardCategories from "~/components/cards/EngineeringRigCardCategories.vue";
 import EngineeringRigCardGroups from "~/components/cards/EngineeringRigCardGroups.vue";
 import EngineeringRigCardTypes from "~/components/cards/EngineeringRigCardTypes.vue";
+import TypeLink from "~/components/helpers/TypeLink.vue";
+import AttributeListItem from "~/components/attr/AttributeListItem.vue";
 
 const props = defineProps<{
 	title: string,
@@ -59,6 +61,16 @@ var fields = computed(() => {
 			<EngineeringRigCardTypes name="reaction" :types="inventoryType.engineeringRigSourceTypeIds?.reaction" />
 			<EngineeringRigCardTypes name="invention" :types="inventoryType.engineeringRigSourceTypeIds?.invention" />
 			<EngineeringRigCardTypes name="copying" :types="inventoryType.engineeringRigSourceTypeIds?.copying" />
+
+
+			<AttributeListItem v-if="inventoryType.engineeringRigGlobalActivities">
+				<template v-slot:key>
+					Global activites:
+				</template>
+				<div v-for="activity in inventoryType.engineeringRigGlobalActivities" :key="activity">
+					{{ activity }}
+				</div>
+			</AttributeListItem>
 
 		</AttributeList>
 	</CardWrapper>

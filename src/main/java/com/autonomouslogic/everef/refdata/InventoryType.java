@@ -228,4 +228,8 @@ public class InventoryType {
 					+ "indexed by activity and bonus type. "
 					+ "This is added by EVE Ref.")
 	IndustryModifierActivities engineeringRigSourceTypeIds;
+
+	@JsonProperty
+	@Schema(description = "The activity types which were defined without any filters. " + "This is added by EVE Ref.")
+	List<String> engineeringRigGlobalActivities;
 }
