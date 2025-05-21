@@ -67,7 +67,11 @@ public class SimpleStoreLoader {
 			} else {
 				container.fields().forEachRemaining(entry -> {
 					var id = Long.parseLong(entry.getKey());
-					var json = (ObjectNode) entry.getValue();
+					var val = entry.getValue();
+					if (val == null || val.isNull()) {
+						return;
+					}
+					var json = (ObjectNode) val;
 					var transformed = transform(json);
 					writeEntry(transformed, id);
 				});

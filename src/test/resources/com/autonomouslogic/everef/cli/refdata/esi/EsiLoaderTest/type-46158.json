@@ -1,0 +1,21 @@
+{
+  "capacity" : 0,
+  "description" : {
+    "en" : "",
+    "fr" : ""
+  },
+  "group_id" : 1889,
+  "icon_id" : 3739,
+  "market_group_id" : 2404,
+  "mass" : 0,
+  "name" : {
+    "en" : "Fulleroferrocene Reaction Formula",
+    "fr" : "Formule de réaction du fulléro-ferrocène"
+  },
+  "packaged_volume" : 0.01,
+  "portion_size" : 1,
+  "published" : true,
+  "radius" : 1,
+  "type_id" : 46158,
+  "volume" : 0.01
+}

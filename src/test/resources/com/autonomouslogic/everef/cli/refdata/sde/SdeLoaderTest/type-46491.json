@@ -1,0 +1,33 @@
+{
+  "description" : {
+    "de" : "Die Standup-M-Set-Modifikation Materialeffizienz für die Hybrid-Reaktoren II bietet Strukturadministratoren die Möglichkeit, in ihren Upwell-Raffinerie-Strukturen die Materialanforderungen für Tech-3-Hybrid-Reaktionen zu verringern.\n\n\n\nStandup ist ein gesetzlich geschütztes System, welches eine Strukturautonome Nanofertigungseinheit (Upwell) nutzt, das eine integrierte Vorlagensoftware, eine Nanofertigungsanlage und ausreichend Nanomasse enthält, um die Fertigung einer Vielzahl an Dienstmodulen, Strukturmodulen und Strukturmodifikationen zu ermöglichen, wenn es in entsprechende Slots in einer Struktur mit Upwell-Technologie eingebaut wird.\n\n\n\nHinweis: Nur eine Modifikation desselben Typs, inkl. beider Tech-Varianten, kann in eine Struktur eingebaut sein.",
+    "en" : "The Standup M-Set Hybrid Reactor Material Efficiency II rig provides a means for structure operators to decrease material requirements for Tech 3 hybrid reactions in their Upwell Refinery structures.\r\n\r\nStandup is a proprietary system that uses a Structure Autonomous Nanoassembly Device (Upwell) containing integrated template software, a nanoassembler array and sufficient nanomass to enable the construction of a variety of service modules, structure modules and structure rigs when inserted into the appropriate slots on a structure built with Upwell technology.\r\n\r\nNote: Only one rig of the same type, counting both tech variations, may be fitted at the same time on a structure.",
+    "es" : "El complemento Standup mediano de eficiencia de materiales del reactor híbrido II permite a los administradores de estructuras reducir los materiales requeridos para las reacciones híbridas T3 en sus estructuras de refinería de Upwell.\n\n\n\nStandup es un sistema patentado que utiliza un dispositivo de nanoensamblaje autónomo estructural (de Upwell) que contiene una plantilla integrada de software, una matriz de nanoensambladores y suficiente nanomasa como para construir una serie de módulos de servicio, de estructura y complementos de estructura cuando se insertan en las ranuras apropiadas en una estructura construida con la tecnología de Upwell.\n\n\n\nAviso: Solo se puede equipar un complemento del mismo tipo en una estructura, contando ambas variaciones tecnológicas.",
+    "fr" : "L'optimisation de productivité matérielle du réacteur hybride 'Standup' II M permet aux opérateurs de structure d'améliorer la productivité matérielle des réactions hybrides de tech. III dans leurs structures de raffinerie Upwell. La technologie brevetée 'Standup' exploite un dispositif autonome de nano-assemblage pour structure Upwell, alliant un logiciel de modélisation intégré, une baie de nano-assemblage et une réserve de nanomasse. Une fois insérés dans les emplacements dédiés sur les structures Upwell, les dispositifs 'Standup' lancent directement l'assemblage moléculaire de divers modules de services, modules de structure et optimisations de structure. Remarque : une structure ne peut équiper qu'une seule optimisation du même type, déclinaisons de tech comprises.",
+    "ja" : "スタンドアップ中型ハイブリッドリアクター資源効率IIリグを使用することで、ストラクチャオペレーターはアップウェル精錬施設のT3複合反応の必要資源量を減少させることができる。\n\n\n\n「スタンドアップ」は、自律式ナノ集合体ストラクチャデバイス（アップウェル）を利用した独自システムである。アップウェルの技術を利用して建設されたストラクチャの適切なスロットに挿入すると、統合テンプレートソフトウェア、ナノアセンブラー施設、ナノ物質を使い、様々なサービスモジュール、ストラクチャモジュール、ストラクチャリグを作り出すことができる。\n\n\n\n注：異なる技術であっても、1つのストラクチャに同じタイプのリグを同時に複数装備させることはできない。",
+    "ko" : "스탠드업 리그를 장착하면 업웰 구조물의 테크 III 하이브리드 합성의 자원요구치가 감소합니다. <br><br>스탠드업은 자율구조형 나노어셈블러 장치(업웰)를 사용하는 시스템으로 템플릿 소프트웨어가 내장되어 있으며 나노어셈블리 배열, 충분한 양의 나노물질이 탑재돼있습니다. 업웰 기반 구조물에 장착 시 다양한 종류의 서비스 모듈, 구조물 모듈, 구조물 장착형 리그를 제조할 수 있습니다. <br><br>참고: 테크 레벨과 상관없이 동일한 종류의 리그는 한 개 이상 장착할 수 없습니다.",
+    "ru" : "Эта средняя стационар-надстройка второго техноуровня (Standup M-Set Hybrid Reactor Material Efficiency II) позволяет снизить расход материалов при работе над гибридными реакциями третьего техноуровня в сооружениях перерабатывающих комплексов «Апвелл»\n\n\n\nСТАЦИОНАР — это проприетарная система, использующая стационарный автономный наносборщик производства «Апвелл», который и лёг в основу её названия. Он содержит встроенное ПО для создания шаблонов, линию наносборщиков и достаточное количество наномассы для сборки различных модулей технического обслуживания, а также модулей и надстроек для сооружений, сконструированных по проектам консорциума «Апвелл», которые устанавливаются в соответствующие разъёмы.\n\n\n\nВнимание: одновременно сооружение можно оснастить только одним модификатором этого типа, независимо от вариаций техкатегории.",
+    "zh" : "屹立中型混合反应堆材料效率 II 改装件让建筑操作员能够降低在昇威精炼厂建筑中进行三级科技混合反应的材料要求。\n\n\n\n屹立专用系统采用了昇威建筑分控纳米装配装置，由集成模版软件、纳米装配阵列和许多纳米块体构成。安装在采用昇威科技建造的建筑上的专门槽位中可以制造各种服务装备、建筑装备和建筑改装件。\n\n\n\n注：只能同时在一个建筑上装配一件相同类型的改装件，包括衍生型号在内。"
+  },
+  "group_id" : 1936,
+  "icon_id" : 21788,
+  "market_group_id" : 2341,
+  "mass" : 200,
+  "meta_group_id" : 53,
+  "name" : {
+    "de" : "Standup M-Set Hybrid Reactor Material Efficiency II",
+    "en" : "Standup M-Set Hybrid Reactor Material Efficiency II",
+    "es" : "Eficiencia de materiales del reactor híbrido Standup II (M)",
+    "fr" : "Productivité matérielle des réacteurs hybrides Standup II M",
+    "ja" : "スタンドアップ中型ハイブリッドリアクター資源効率II",
+    "ko" : "스탠드업 M-Set 하이브리드 반응로 자원효율성 장치 II",
+    "ru" : "Standup M-Set Hybrid Reactor Material Efficiency II",
+    "zh" : "屹立中型混合反应堆材料效率 II"
+  },
+  "portion_size" : 1,
+  "published" : true,
+  "radius" : 100,
+  "variation_parent_type_id" : 46490,
+  "volume" : 10,
+  "type_id" : 46491
+}

@@ -167,6 +167,7 @@
     }
   },
   "packaged_volume" : 40,
+  "engineering_rig_global_activities" : [ "research_material", "research_time", "invention", "copying" ],
   "required_skills" : {
     "26252" : 1
   }

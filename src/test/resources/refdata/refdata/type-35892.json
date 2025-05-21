@@ -143,5 +143,5 @@
   },
   "packaged_volume" : 32000,
   "radius" : 1,
-  "can_fit_types" : [ 35833 ]
+  "can_fit_types" : [ 35833, 35826 ]
 }

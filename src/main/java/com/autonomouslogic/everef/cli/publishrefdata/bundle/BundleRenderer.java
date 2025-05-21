@@ -4,12 +4,14 @@ import com.autonomouslogic.everef.cli.publishrefdata.RefDataRenderer;
 import com.autonomouslogic.everef.mvstore.MVStoreUtil;
 import com.autonomouslogic.everef.refdata.DogmaAttribute;
 import com.autonomouslogic.everef.refdata.DogmaTypeAttribute;
+import com.autonomouslogic.everef.refdata.IndustryModifierActivities;
 import com.autonomouslogic.everef.refdata.InventoryGroup;
 import com.autonomouslogic.everef.refdata.InventoryType;
 import com.autonomouslogic.everef.refdata.MarketGroup;
 import com.autonomouslogic.everef.refdata.Skill;
 import com.autonomouslogic.everef.refdata.TraitBonus;
 import com.autonomouslogic.everef.util.RefDataUtil;
+import com.autonomouslogic.everef.util.StreamUtil;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -285,14 +287,23 @@ public abstract class BundleRenderer implements RefDataRenderer {
 	protected void bundleEngineeringRigs(
 			InventoryType type, ObjectNode typesJson, ObjectNode categoriesJson, ObjectNode groupsJson) {
 		Optional.ofNullable(type.getEngineeringRigSourceTypeIds()).stream()
-				.flatMap(Collection::stream)
+				.flatMap(this::extractEngineeringIds)
 				.forEach(id -> addTypeToBundle(id, typesJson));
 		Optional.ofNullable(type.getEngineeringRigAffectedCategoryIds()).stream()
-				.flatMap(Collection::stream)
+				.flatMap(this::extractEngineeringIds)
 				.forEach(id -> bundleInventoryCategory(id, categoriesJson));
 		Optional.ofNullable(type.getEngineeringRigAffectedGroupIds()).stream()
-				.flatMap(Collection::stream)
+				.flatMap(this::extractEngineeringIds)
 				.forEach(id -> bundleInventoryGroup(id, groupsJson, null));
+	}
+
+	private Stream<Long> extractEngineeringIds(IndustryModifierActivities activities) {
+		return StreamUtil.concat(
+				Optional.ofNullable(activities.getResearchMaterial()).stream().flatMap(Collection::stream),
+				Optional.ofNullable(activities.getResearchTime()).stream().flatMap(Collection::stream),
+				Optional.ofNullable(activities.getManufacturing()).stream().flatMap(Collection::stream),
+				Optional.ofNullable(activities.getInvention()).stream().flatMap(Collection::stream),
+				Optional.ofNullable(activities.getCopying()).stream().flatMap(Collection::stream));
 	}
 
 	protected void addTypeToBundle(Long typeId, ObjectNode typesJson) {

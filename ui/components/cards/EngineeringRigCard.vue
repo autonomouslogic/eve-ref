@@ -2,17 +2,12 @@
 import {type DogmaAttribute, type InventoryType} from "~/refdata-openapi";
 import CardWrapper from "~/components/cards/CardWrapper.vue";
 import DogmaListItems from "~/components/cards/DogmaListItems.vue";
-import MarketGroupLink from "~/components/helpers/MarketGroupLink.vue";
-import UnitValue from "~/components/dogma/UnitValue.vue";
-import GroupLink from "~/components/helpers/GroupLink.vue";
 import AttributeList from "~/components/attr/AttributeList.vue";
-import AttributeListItem from "~/components/attr/AttributeListItem.vue";
-import {CUBIC_METER, METER, MONEY} from "~/lib/unitConstants";
-import ExternalLink from "~/components/helpers/ExternalLink.vue";
-import DogmaAttributeLink from "~/components/helpers/DogmaAttributeLink.vue";
-import AttributeTypeIcon from "~/components/icons/AttributeTypeIcon.vue";
-import CategoryLink from "~/components/helpers/CategoryLink.vue";
+import EngineeringRigCardCategories from "~/components/cards/EngineeringRigCardCategories.vue";
+import EngineeringRigCardGroups from "~/components/cards/EngineeringRigCardGroups.vue";
+import EngineeringRigCardTypes from "~/components/cards/EngineeringRigCardTypes.vue";
 import TypeLink from "~/components/helpers/TypeLink.vue";
+import AttributeListItem from "~/components/attr/AttributeListItem.vue";
 
 const props = defineProps<{
 	title: string,
@@ -46,30 +41,34 @@ var fields = computed(() => {
 		<AttributeList :elements="dogmaAttributes.length">
 			<DogmaListItems :inventory-type="inventoryType" :dogma-attributes="dogmaAttributes" />
 
-			<AttributeListItem v-if="inventoryType.engineeringRigAffectedCategoryIds">
-				<template v-slot:key>
-					Affected categories:
-				</template>
-				<div v-for="categoryId in inventoryType.engineeringRigAffectedCategoryIds" :key="categoryId">
-					<CategoryLink :category-id="categoryId" />
-				</div>
-			</AttributeListItem>
+			<EngineeringRigCardCategories name="time research" :categories="inventoryType.engineeringRigAffectedCategoryIds?.researchTime" />
+			<EngineeringRigCardCategories name="material research" :categories="inventoryType.engineeringRigAffectedCategoryIds?.researchMaterial" />
+			<EngineeringRigCardCategories name="manufacturing" :categories="inventoryType.engineeringRigAffectedCategoryIds?.manufacturing" />
+			<EngineeringRigCardCategories name="reaction" :categories="inventoryType.engineeringRigAffectedCategoryIds?.reaction" />
+			<EngineeringRigCardCategories name="invention" :categories="inventoryType.engineeringRigAffectedCategoryIds?.invention" />
+			<EngineeringRigCardCategories name="copying" :categories="inventoryType.engineeringRigAffectedCategoryIds?.copying" />
 
-			<AttributeListItem v-if="inventoryType.engineeringRigAffectedGroupIds">
-				<template v-slot:key>
-					Affected groups:
-				</template>
-				<div v-for="groupId in inventoryType.engineeringRigAffectedGroupIds" :key="groupId">
-					<GroupLink :group-id="groupId" />
-				</div>
-			</AttributeListItem>
+			<EngineeringRigCardGroups name="time research" :groups="inventoryType.engineeringRigAffectedGroupIds?.researchTime" />
+			<EngineeringRigCardGroups name="material research" :groups="inventoryType.engineeringRigAffectedGroupIds?.researchMaterial" />
+			<EngineeringRigCardGroups name="manufacturing" :groups="inventoryType.engineeringRigAffectedGroupIds?.manufacturing" />
+			<EngineeringRigCardGroups name="reaction" :groups="inventoryType.engineeringRigAffectedGroupIds?.reaction" />
+			<EngineeringRigCardGroups name="invention" :groups="inventoryType.engineeringRigAffectedGroupIds?.invention" />
+			<EngineeringRigCardGroups name="copying" :groups="inventoryType.engineeringRigAffectedGroupIds?.copying" />
 
-			<AttributeListItem v-if="inventoryType.engineeringRigSourceTypeIds">
+			<EngineeringRigCardTypes name="time research" :types="inventoryType.engineeringRigSourceTypeIds?.researchTime" />
+			<EngineeringRigCardTypes name="material research" :types="inventoryType.engineeringRigSourceTypeIds?.researchMaterial" />
+			<EngineeringRigCardTypes name="manufacturing" :types="inventoryType.engineeringRigSourceTypeIds?.manufacturing" />
+			<EngineeringRigCardTypes name="reaction" :types="inventoryType.engineeringRigSourceTypeIds?.reaction" />
+			<EngineeringRigCardTypes name="invention" :types="inventoryType.engineeringRigSourceTypeIds?.invention" />
+			<EngineeringRigCardTypes name="copying" :types="inventoryType.engineeringRigSourceTypeIds?.copying" />
+
+
+			<AttributeListItem v-if="inventoryType.engineeringRigGlobalActivities">
 				<template v-slot:key>
-					Source rigs:
+					Global activites:
 				</template>
-				<div v-for="typeId in inventoryType.engineeringRigSourceTypeIds" :key="typeId">
-					<TypeLink :type-id="typeId" />
+				<div v-for="activity in inventoryType.engineeringRigGlobalActivities" :key="activity">
+					{{ activity }}
 				</div>
 			</AttributeListItem>
 

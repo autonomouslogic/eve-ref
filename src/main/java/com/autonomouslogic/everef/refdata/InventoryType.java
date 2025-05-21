@@ -210,19 +210,26 @@ public class InventoryType {
 
 	@JsonProperty
 	@Schema(
-			description = "For structure engineering rigs, these are the category IDs the rig affects in some way. "
+			description = "For structure engineering rigs, these are the category IDs the rig affects in some way, "
+					+ "indexed by activity and bonus type. "
 					+ "This is added by EVE Ref.")
-	List<Long> engineeringRigAffectedCategoryIds;
+	IndustryModifierActivities engineeringRigAffectedCategoryIds;
 
 	@JsonProperty
 	@Schema(
-			description = "For structure engineering rigs, these are the group IDs the rig affects in some way. "
+			description = "For structure engineering rigs, these are the group IDs the rig affects in some way, "
+					+ "indexed by activity and bonus type. "
 					+ "This is added by EVE Ref.")
-	List<Long> engineeringRigAffectedGroupIds;
+	IndustryModifierActivities engineeringRigAffectedGroupIds;
 
 	@JsonProperty
 	@Schema(
-			description = "These are the type IDs of the engineering rigs which affect this type in some way. "
+			description = "These are the type IDs of the engineering rigs which affect this type in some way, "
+					+ "indexed by activity and bonus type. "
 					+ "This is added by EVE Ref.")
-	List<Long> engineeringRigSourceTypeIds;
+	IndustryModifierActivities engineeringRigSourceTypeIds;
+
+	@JsonProperty
+	@Schema(description = "The activity types which were defined without any filters. " + "This is added by EVE Ref.")
+	List<String> engineeringRigGlobalActivities;
 }

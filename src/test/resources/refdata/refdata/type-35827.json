@@ -499,5 +499,6 @@
       "is_default" : false
     }
   },
-  "packaged_volume" : 800000
+  "packaged_volume" : 800000,
+  "engineering_rig_global_activities" : [ "research_material", "research_time", "manufacturing", "invention", "copying" ]
 }
