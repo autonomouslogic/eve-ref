@@ -168,5 +168,8 @@
   "category_id" : 66,
   "required_skills" : {
     "26252" : 1
+  },
+  "engineering_rig_source_type_ids" : {
+    "manufacturing" : [ 43704, 43705, 43720, 43721, 43874, 43875, 43876, 43877, 45548 ]
   }
 }

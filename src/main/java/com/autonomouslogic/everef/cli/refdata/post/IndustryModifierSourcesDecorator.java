@@ -6,17 +6,18 @@ import com.autonomouslogic.everef.refdata.InventoryGroup;
 import com.autonomouslogic.everef.refdata.InventoryType;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.reactivex.rxjava3.core.Completable;
-
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.BiConsumer;
 import java.util.stream.Stream;
 import javax.inject.Inject;
-
-import lombok.Value;
 import lombok.extern.log4j.Log4j2;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Populates which standup rigs modifies individual types.
@@ -43,87 +44,107 @@ public class IndustryModifierSourcesDecorator extends PostDecorator {
 			var typeActivites = new HashMap<Long, IndustryModifierActivities.Builder>();
 			types.forEach((rigTypeId, rigTypeJson) -> {
 				var rig = objectMapper.convertValue(rigTypeJson, InventoryType.class);
-
-				var rigCategories = Optional.ofNullable(rig.getEngineeringRigAffectedCategoryIds()).flatMap(l -> Optional.ofNullable(l.getManufacturing()))
-						.stream().flatMap(Collection::stream);
-				var rigGroups = Optional.ofNullable(rig.getEngineeringRigAffectedGroupIds()).flatMap(l -> Optional.ofNullable(l.getManufacturing()))
-						.stream().flatMap(Collection::stream);
-				var typeIds = Stream.concat(
-					rigCategories.flatMap(this::resolveGroups).flatMap(this::resolveTypes),
-					rigGroups.flatMap(this::resolveTypes)
-				);
-				var x = typeIds.toList();
-
-				x.forEach(typeId -> {
-					var activities = typeActivites.computeIfAbsent(typeId, t -> IndustryModifierActivities.builder());
-					activities.manufacturing(rigTypeId);
-				});
+				var affectedCategories = Optional.ofNullable(rig.getEngineeringRigAffectedCategoryIds());
+				var affectedgroups = Optional.ofNullable(rig.getEngineeringRigAffectedGroupIds());
+				setRigOnTypes(
+						rig,
+						affectedCategories.map(c -> c.getResearchMaterial()),
+						affectedgroups.map(c -> c.getResearchMaterial()),
+						typeActivites,
+						IndustryModifierActivities.Builder::researchMaterial);
+				setRigOnTypes(
+						rig,
+						affectedCategories.map(c -> c.getResearchTime()),
+						affectedgroups.map(c -> c.getResearchTime()),
+						typeActivites,
+						IndustryModifierActivities.Builder::researchTime);
+				setRigOnTypes(
+						rig,
+						affectedCategories.map(c -> c.getManufacturing()),
+						affectedgroups.map(c -> c.getManufacturing()),
+						typeActivites,
+						IndustryModifierActivities.Builder::manufacturing);
+				setRigOnTypes(
+						rig,
+						affectedCategories.map(c -> c.getInvention()),
+						affectedgroups.map(c -> c.getInvention()),
+						typeActivites,
+						IndustryModifierActivities.Builder::invention);
+				setRigOnTypes(
+						rig,
+						affectedCategories.map(c -> c.getCopying()),
+						affectedgroups.map(c -> c.getCopying()),
+						typeActivites,
+						IndustryModifierActivities.Builder::copying);
 			});
-			log.info(typeActivites.hashCode());
 
+			typeActivites.forEach((typeId, builder) -> {
+				var typeJson = types.get(typeId);
+				if (typeJson == null) {
+					return;
+				}
+				var activities = builder.build();
+				activities = activities.toBuilder()
+					.clearResearchMaterial()
+						.researchMaterial(sortList(activities.getResearchMaterial()))
+					.clearResearchTime()
+						.researchTime(sortList(activities.getResearchTime()))
+					.clearManufacturing()
+						.manufacturing(sortList(activities.getManufacturing()))
+					.clearInvention()
+						.invention(sortList(activities.getInvention()))
+					.clearCopying()
+						.copying(sortList(activities.getCopying()))
+						.build();
+				var activitiesJson = objectMapper.convertValue(activities, ObjectNode.class);
+				((ObjectNode) typeJson).set("engineering_rig_source_type_ids", activitiesJson);
+				types.put(typeId, typeJson);
+			});
+		});
+	}
 
-//			// Prepare the modifier activities for the types.
-//			var categoryRigs = new HashMap<Long, IndustryModifierActivities>();
-//			var groupRigs = new HashMap<Long, IndustryModifierActivities>();
-//			types.forEach((typeId, typeJson) -> {
-//				var type = objectMapper.convertValue(typeJson, InventoryType.class);
-//				indexAffectedTypes(type.getEngineeringRigAffectedCategoryIds(), typeId, categoryRigs);
-//				indexAffectedTypes(type.getEngineeringRigAffectedGroupIds(), typeId, groupRigs);
-//			});
-//
-//			// Decorate types with the engineering rig sources.
-//			types.forEach((typeId, typeJson) -> {
-//				var type = objectMapper.convertValue(typeJson, InventoryType.class);
-//				var categoryId = type.getCategoryId();
-//				var groupId = type.getGroupId();
-//				var rigIds = Stream.concat(
-//								Optional.ofNullable(categoryRigs.get(categoryId)).orElse(Set.of()).stream(),
-//								Optional.ofNullable(groupRigs.get(groupId)).orElse(Set.of()).stream())
-//						.toList();
-//				if (!rigIds.isEmpty()) {
-//					var array = typeJson.withArrayProperty("engineering_rig_source_type_ids");
-//					JsonUtil.addToArraySetSorted(rigIds, array);
-//				}
-//				types.put(typeId, typeJson);
-//			});
+	private void setRigOnTypes(
+			InventoryType rig,
+			Optional<List<Long>> categories,
+			Optional<List<Long>> groups,
+			Map<Long, IndustryModifierActivities.Builder> typeActivites,
+			BiConsumer<IndustryModifierActivities.Builder, Long> activitiesSetter) {
+		var rigTypeId = rig.getTypeId();
+		var rigCategories = categories.stream().flatMap(Collection::stream);
+		var rigGroups = groups.stream().flatMap(Collection::stream);
+		var typeIds = Stream.concat(
+				rigCategories.flatMap(this::resolveGroups).flatMap(this::resolveTypes),
+				rigGroups.flatMap(this::resolveTypes));
+		typeIds.forEach(typeId -> {
+			var activities = typeActivites.computeIfAbsent(typeId, t -> IndustryModifierActivities.builder());
+			activities.manufacturing(rigTypeId);
+			activitiesSetter.accept(activities, rigTypeId);
 		});
 	}
 
 	private Stream<Long> resolveGroups(long categoryId) {
 		var categoryJson = categories.get(categoryId);
-		if (categoryJson == null) {return Stream.empty();}
+		if (categoryJson == null) {
+			return Stream.empty();
+		}
 		var category = objectMapper.convertValue(categoryJson, InventoryCategory.class);
 		return Optional.ofNullable(category.getGroupIds()).stream().flatMap(Collection::stream);
 	}
 
 	private Stream<Long> resolveTypes(long groupId) {
-		var groupJson = categories.get(groupId);
-		if (groupJson == null) {return Stream.empty();}
+		var groupJson = groups.get(groupId);
+		if (groupJson == null) {
+			return Stream.empty();
+		}
 		var group = objectMapper.convertValue(groupJson, InventoryGroup.class);
 		return Optional.ofNullable(group.getTypeIds()).stream().flatMap(Collection::stream);
 	}
 
-	private void addToBonuses(long rigTypeId, IndustryModifierActivities affectedIds, Map<Long, IndustryModifierActivities.Builder> affectedTypes) {
-		var typeActivities = affectedTypes.computeIfAbsent(rigTypeId, t -> IndustryModifierActivities.builder());
-		affectedIds.getResearchMaterial().forEach(typeActivities::researchMaterial);
-		affectedIds.getResearchTime().forEach(typeActivities::researchTime);
-		affectedIds.getManufacturing().forEach(typeActivities::manufacturing);
-		affectedIds.getInvention().forEach(typeActivities::invention);
-		affectedIds.getCopying().forEach(typeActivities::copying);
-	}
 
-//	private static void indexAffectedTypes(IndustryModifierActivities activities, long typeId, Map<Long, IndustryModifierActivities> index) {
-//		Optional.ofNullable(types)
-//				.ifPresent(categoryIds -> categoryIds.forEach(categoryId -> {
-//					index.computeIfAbsent(categoryId, k -> new HashSet<>()).add(typeId);
-//				}));
-//	}
-
-	@Value
-	private static class ModifierEntry {
-		long affectedTypeId;
-		String activity;
-		String bonusType;
-		long rigId;
+	private static @NotNull List<Long> sortList(List<Long> activities) {
+		return activities.stream()
+			.distinct()
+			.sorted()
+			.toList();
 	}
 }

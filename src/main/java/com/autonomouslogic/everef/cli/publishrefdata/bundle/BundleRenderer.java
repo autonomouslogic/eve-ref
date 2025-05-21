@@ -16,7 +16,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.reactivex.rxjava3.core.Flowable;
-
 import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
@@ -288,24 +287,23 @@ public abstract class BundleRenderer implements RefDataRenderer {
 	protected void bundleEngineeringRigs(
 			InventoryType type, ObjectNode typesJson, ObjectNode categoriesJson, ObjectNode groupsJson) {
 		Optional.ofNullable(type.getEngineeringRigSourceTypeIds()).stream()
-			.flatMap(this::extractEngineeringIds)
+				.flatMap(this::extractEngineeringIds)
 				.forEach(id -> addTypeToBundle(id, typesJson));
 		Optional.ofNullable(type.getEngineeringRigAffectedCategoryIds()).stream()
-			.flatMap(this::extractEngineeringIds)
+				.flatMap(this::extractEngineeringIds)
 				.forEach(id -> bundleInventoryCategory(id, categoriesJson));
 		Optional.ofNullable(type.getEngineeringRigAffectedGroupIds()).stream()
-			.flatMap(this::extractEngineeringIds)
+				.flatMap(this::extractEngineeringIds)
 				.forEach(id -> bundleInventoryGroup(id, groupsJson, null));
 	}
 
 	private Stream<Long> extractEngineeringIds(IndustryModifierActivities activities) {
 		return StreamUtil.concat(
-			Optional.ofNullable(activities.getResearchMaterial()).stream().flatMap(Collection::stream),
-			Optional.ofNullable(activities.getResearchTime()).stream().flatMap(Collection::stream),
-			Optional.ofNullable(activities.getManufacturing()).stream().flatMap(Collection::stream),
-			Optional.ofNullable(activities.getInvention()).stream().flatMap(Collection::stream),
-			Optional.ofNullable(activities.getCopying()).stream().flatMap(Collection::stream)
-		);
+				Optional.ofNullable(activities.getResearchMaterial()).stream().flatMap(Collection::stream),
+				Optional.ofNullable(activities.getResearchTime()).stream().flatMap(Collection::stream),
+				Optional.ofNullable(activities.getManufacturing()).stream().flatMap(Collection::stream),
+				Optional.ofNullable(activities.getInvention()).stream().flatMap(Collection::stream),
+				Optional.ofNullable(activities.getCopying()).stream().flatMap(Collection::stream));
 	}
 
 	protected void addTypeToBundle(Long typeId, ObjectNode typesJson) {

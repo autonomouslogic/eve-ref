@@ -85,7 +85,7 @@ public class HoboleaksIndustryModifierSourcesLoader {
 					.toList();
 			if (!categoryIds.isEmpty()) {
 				var array = type.withObjectProperty("engineering_rig_affected_category_ids")
-					.withArrayProperty(activity);
+						.withArrayProperty(activity);
 				JsonUtil.addToArraySetSorted(categoryIds, array);
 			}
 		}
@@ -95,7 +95,7 @@ public class HoboleaksIndustryModifierSourcesLoader {
 					.toList();
 			if (!groupIds.isEmpty()) {
 				var array = type.withObjectProperty("engineering_rig_affected_group_ids")
-					.withArrayProperty(activity);
+						.withArrayProperty(activity);
 				JsonUtil.addToArraySetSorted(groupIds, array);
 			}
 		}
