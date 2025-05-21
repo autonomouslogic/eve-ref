@@ -1,0 +1,29 @@
+{
+  "base_price" : 15000000,
+  "group_id" : 1889,
+  "icon_id" : 3739,
+  "market_group_id" : 2404,
+  "name" : {
+    "de" : "Fulleroferrocene Reaction Formula",
+    "en" : "Fulleroferrocene Reaction Formula",
+    "es" : "Fórmula reactiva de fulleroferroceno",
+    "fr" : "Formule de réaction du fulléro-ferrocène",
+    "ja" : "フレーロフェロセン反応フォーミュラ",
+    "ko" : "플레로페로센 반응식",
+    "ru" : "Fulleroferrocene Reaction Formula",
+    "zh" : "富勒二茂铁反应配方"
+  },
+  "portion_size" : 1,
+  "published" : true,
+  "volume" : 0.01,
+  "type_id" : 46158,
+  "capacity" : 0,
+  "description" : {
+    "en" : "",
+    "fr" : ""
+  },
+  "mass" : 0,
+  "packaged_volume" : 0.01,
+  "radius" : 1,
+  "is_blueprint" : true
+}
