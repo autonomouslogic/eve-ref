@@ -15,5 +15,6 @@
   },
   "published" : true,
   "use_base_price" : false,
-  "group_id" : 974
+  "group_id" : 974,
+  "type_ids" : [ 30303 ]
 }
