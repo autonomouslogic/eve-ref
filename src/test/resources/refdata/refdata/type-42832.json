@@ -117,6 +117,5 @@
       "blueprint_type_id" : 42874,
       "blueprint_activity" : "manufacturing"
     }
-  },
-  "engineering_rig_source_type_ids" : [ 37150, 37151, 37158, 37159, 37164, 37165, 37178, 37179 ]
+  }
 }

@@ -62,14 +62,14 @@ public class HoboleaksIndustryModifierSourcesLoader {
 				for (var node : array) {
 					if (node.has("filterID")) {
 						var filterId = node.get("filterID").longValue();
-						processTypeFilter(typeId, activity, bonusType, filterId);
+						processTypeFilter(typeId, activity, filterId);
 					}
 				}
 			});
 		});
 	}
 
-	private void processTypeFilter(long typeId, String activity, String bonusType, long filterId) {
+	private void processTypeFilter(long typeId, String activity, long filterId) {
 		var types = storeHandler.getHoboleaksStore("types");
 		var type = types.get(typeId);
 		if (type == null) {

@@ -1,20 +1,17 @@
 package com.autonomouslogic.everef.cli.refdata.post;
 
 import com.autonomouslogic.everef.refdata.IndustryModifierActivities;
+import com.autonomouslogic.everef.refdata.InventoryCategory;
+import com.autonomouslogic.everef.refdata.InventoryGroup;
 import com.autonomouslogic.everef.refdata.InventoryType;
-import com.autonomouslogic.everef.util.JsonUtil;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.Ordering;
 import io.reactivex.rxjava3.core.Completable;
 
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Stream;
 import javax.inject.Inject;
 
@@ -43,14 +40,26 @@ public class IndustryModifierSourcesDecorator extends PostDecorator {
 			groups = storeHandler.getRefStore("groups");
 			types = storeHandler.getRefStore("types");
 
-			// Create a flattened table to bonuses.
-			var bonuses = new ArrayList<ModifierEntry>();
-			types.forEach((typeId, typeJson) -> {
-				var type = objectMapper.convertValue(typeJson, InventoryType.class);
-				addToBonuses(type.getEngineeringRigAffectedCategoryIds(), bonuses);
-				addToBonuses(type.getEngineeringRigAffectedGroupIds(), bonuses);
+			var typeActivites = new HashMap<Long, IndustryModifierActivities.Builder>();
+			types.forEach((rigTypeId, rigTypeJson) -> {
+				var rig = objectMapper.convertValue(rigTypeJson, InventoryType.class);
+
+				var rigCategories = Optional.ofNullable(rig.getEngineeringRigAffectedCategoryIds()).flatMap(l -> Optional.ofNullable(l.getManufacturing()))
+						.stream().flatMap(Collection::stream);
+				var rigGroups = Optional.ofNullable(rig.getEngineeringRigAffectedGroupIds()).flatMap(l -> Optional.ofNullable(l.getManufacturing()))
+						.stream().flatMap(Collection::stream);
+				var typeIds = Stream.concat(
+					rigCategories.flatMap(this::resolveGroups).flatMap(this::resolveTypes),
+					rigGroups.flatMap(this::resolveTypes)
+				);
+				var x = typeIds.toList();
+
+				x.forEach(typeId -> {
+					var activities = typeActivites.computeIfAbsent(typeId, t -> IndustryModifierActivities.builder());
+					activities.manufacturing(rigTypeId);
+				});
 			});
-			bonuses.sort(Ordering.natural().onResultOf(ModifierEntry::getRigId));
+			log.info(typeActivites.hashCode());
 
 
 //			// Prepare the modifier activities for the types.
@@ -80,8 +89,27 @@ public class IndustryModifierSourcesDecorator extends PostDecorator {
 		});
 	}
 
-	private void addToBonuses(IndustryModifierActivities engineeringRigAffectedCategoryIds, List<ModifierEntry> bonuses) {
+	private Stream<Long> resolveGroups(long categoryId) {
+		var categoryJson = categories.get(categoryId);
+		if (categoryJson == null) {return Stream.empty();}
+		var category = objectMapper.convertValue(categoryJson, InventoryCategory.class);
+		return Optional.ofNullable(category.getGroupIds()).stream().flatMap(Collection::stream);
+	}
 
+	private Stream<Long> resolveTypes(long groupId) {
+		var groupJson = categories.get(groupId);
+		if (groupJson == null) {return Stream.empty();}
+		var group = objectMapper.convertValue(groupJson, InventoryGroup.class);
+		return Optional.ofNullable(group.getTypeIds()).stream().flatMap(Collection::stream);
+	}
+
+	private void addToBonuses(long rigTypeId, IndustryModifierActivities affectedIds, Map<Long, IndustryModifierActivities.Builder> affectedTypes) {
+		var typeActivities = affectedTypes.computeIfAbsent(rigTypeId, t -> IndustryModifierActivities.builder());
+		affectedIds.getResearchMaterial().forEach(typeActivities::researchMaterial);
+		affectedIds.getResearchTime().forEach(typeActivities::researchTime);
+		affectedIds.getManufacturing().forEach(typeActivities::manufacturing);
+		affectedIds.getInvention().forEach(typeActivities::invention);
+		affectedIds.getCopying().forEach(typeActivities::copying);
 	}
 
 //	private static void indexAffectedTypes(IndustryModifierActivities activities, long typeId, Map<Long, IndustryModifierActivities> index) {
