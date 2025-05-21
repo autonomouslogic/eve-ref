@@ -36,5 +36,8 @@
       "blueprint_type_id" : 46158,
       "blueprint_activity" : "reaction"
     }
+  },
+  "engineering_rig_source_type_ids" : {
+    "reaction" : [ 46488, 46489, 46490, 46491, 46496, 46497 ]
   }
 }

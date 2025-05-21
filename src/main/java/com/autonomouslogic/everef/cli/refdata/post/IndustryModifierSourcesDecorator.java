@@ -66,6 +66,12 @@ public class IndustryModifierSourcesDecorator extends PostDecorator {
 						IndustryModifierActivities.Builder::manufacturing);
 				setRigOnTypes(
 						rig,
+						affectedCategories.map(c -> c.getReaction()),
+						affectedgroups.map(c -> c.getReaction()),
+						typeActivites,
+						IndustryModifierActivities.Builder::reaction);
+				setRigOnTypes(
+						rig,
 						affectedCategories.map(c -> c.getInvention()),
 						affectedgroups.map(c -> c.getInvention()),
 						typeActivites,
@@ -77,7 +83,6 @@ public class IndustryModifierSourcesDecorator extends PostDecorator {
 						typeActivites,
 						IndustryModifierActivities.Builder::copying);
 			});
-
 			typeActivites.forEach((typeId, builder) -> {
 				var typeJson = types.get(typeId);
 				if (typeJson == null) {
@@ -85,15 +90,17 @@ public class IndustryModifierSourcesDecorator extends PostDecorator {
 				}
 				var activities = builder.build();
 				activities = activities.toBuilder()
-					.clearResearchMaterial()
+						.clearResearchMaterial()
 						.researchMaterial(sortList(activities.getResearchMaterial()))
-					.clearResearchTime()
+						.clearResearchTime()
 						.researchTime(sortList(activities.getResearchTime()))
-					.clearManufacturing()
+						.clearManufacturing()
 						.manufacturing(sortList(activities.getManufacturing()))
-					.clearInvention()
+						.clearReaction()
+						.reaction(sortList(activities.getReaction()))
+						.clearInvention()
 						.invention(sortList(activities.getInvention()))
-					.clearCopying()
+						.clearCopying()
 						.copying(sortList(activities.getCopying()))
 						.build();
 				var activitiesJson = objectMapper.convertValue(activities, ObjectNode.class);
@@ -117,7 +124,6 @@ public class IndustryModifierSourcesDecorator extends PostDecorator {
 				rigGroups.flatMap(this::resolveTypes));
 		typeIds.forEach(typeId -> {
 			var activities = typeActivites.computeIfAbsent(typeId, t -> IndustryModifierActivities.builder());
-			activities.manufacturing(rigTypeId);
 			activitiesSetter.accept(activities, rigTypeId);
 		});
 	}
@@ -140,11 +146,7 @@ public class IndustryModifierSourcesDecorator extends PostDecorator {
 		return Optional.ofNullable(group.getTypeIds()).stream().flatMap(Collection::stream);
 	}
 
-
 	private static @NotNull List<Long> sortList(List<Long> activities) {
-		return activities.stream()
-			.distinct()
-			.sorted()
-			.toList();
+		return activities.stream().distinct().sorted().toList();
 	}
 }

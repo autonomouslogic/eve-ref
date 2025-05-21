@@ -36,6 +36,12 @@ public class IndustryModifierActivities {
 
 	@JsonProperty
 	@JsonInclude(JsonInclude.Include.NON_EMPTY)
+	@Schema(description = "List of affected categories or groups when doing reaction.")
+	@Singular("reaction")
+	List<Long> reaction;
+
+	@JsonProperty
+	@JsonInclude(JsonInclude.Include.NON_EMPTY)
 	@Schema(description = "List of affected categories or groups when doing invention.")
 	@Singular("invention")
 	List<Long> invention;
