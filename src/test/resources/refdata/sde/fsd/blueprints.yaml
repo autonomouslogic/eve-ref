@@ -293,3 +293,24 @@
       time: 504
   blueprintTypeID: 24536
   maxProductionLimit: 10
+"46158":
+  activities:
+    reaction:
+      materials:
+      - quantity: 5
+        typeID: 4312
+      - quantity: 100
+        typeID: 30371
+      - quantity: 200
+        typeID: 30370
+      - quantity: 1000
+        typeID: 34
+      products:
+      - quantity: 1000
+        typeID: 30303
+      skills:
+      - level: 3
+        typeID: 45746
+      time: 10800
+  blueprintTypeID: 46158
+  maxProductionLimit: 1000

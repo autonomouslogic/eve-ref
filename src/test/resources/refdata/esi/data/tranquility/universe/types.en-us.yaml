@@ -3104,3 +3104,158 @@
   radius: 1
   type_id: 24536
   volume: 0.01
+"46491":
+  capacity: 0
+  description: "The Standup M-Set Hybrid Reactor Material Efficiency II rig provides\
+    \ a means for structure operators to decrease material requirements for Tech 3\
+    \ hybrid reactions in their Upwell Refinery structures.\r\n\r\nStandup is a proprietary\
+    \ system that uses a Structure Autonomous Nanoassembly Device (Upwell) containing\
+    \ integrated template software, a nanoassembler array and sufficient nanomass\
+    \ to enable the construction of a variety of service modules, structure modules\
+    \ and structure rigs when inserted into the appropriate slots on a structure built\
+    \ with Upwell technology.\r\n\r\nNote: Only one rig of the same type, counting\
+    \ both tech variations, may be fitted at the same time on a structure."
+  dogma_attributes:
+  - attribute_id: 1153
+    value: 150
+  - attribute_id: 162
+    value: 100
+  - attribute_id: 4
+    value: 200
+  - attribute_id: 2358
+    value: 1
+  - attribute_id: 422
+    value: 2
+  - attribute_id: 161
+    value: 10
+  - attribute_id: 1544
+    value: 1
+  - attribute_id: 9
+    value: 40
+  - attribute_id: 1547
+    value: 2
+  - attribute_id: 1970
+    value: 1
+  - attribute_id: 1300
+    value: 1406
+  - attribute_id: 277
+    value: 1
+  - attribute_id: 182
+    value: 26252
+  - attribute_id: 2356
+    value: 1
+  - attribute_id: 2714
+    value: -2.4
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 2334
+    value: 1
+  - attribute_id: 2357
+    value: 1.1
+  dogma_effects:
+  - effect_id: 2663
+    is_default: true
+  - effect_id: 6970
+    is_default: false
+  - effect_id: 6976
+    is_default: false
+  group_id: 1936
+  icon_id: 21788
+  market_group_id: 2341
+  mass: 200
+  name: "Standup M-Set Hybrid Reactor Material Efficiency II"
+  packaged_volume: 10
+  portion_size: 1
+  published: true
+  radius: 100
+  type_id: 46491
+  volume: 10
+"46158":
+  capacity: 0
+  description: ""
+  group_id: 1889
+  icon_id: 3739
+  market_group_id: 2404
+  mass: 0
+  name: "Fulleroferrocene Reaction Formula"
+  packaged_volume: 0.01
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 46158
+  volume: 0.01
+"43733":
+  capacity: 0
+  description: "The Standup M-Set Basic Large Ship Manufacturing Time Efficiency I\
+    \ rig provides a means for structure operators to decrease time requirements for\
+    \ manufacturing battleships, freighters and industrial command ships in their\
+    \ Upwell structures.\r\n\r\nStandup is a proprietary system that uses a Structure\
+    \ Autonomous Nanoassembly Device (Upwell) containing integrated template software,\
+    \ a nanoassembler array and sufficient nanomass to enable the construction of\
+    \ a variety of service modules, structure modules and structure rigs when inserted\
+    \ into the appropriate slots on a structure built with Upwell technology.\r\n\r\
+    \nNote: Only one rig of the same type, counting both tech variations, may be fitted\
+    \ at the same time on a structure."
+  dogma_attributes:
+  - attribute_id: 1153
+    value: 100
+  - attribute_id: 4
+    value: 200
+  - attribute_id: 1544
+    value: 1
+  - attribute_id: 9
+    value: 40
+  - attribute_id: 1547
+    value: 2
+  - attribute_id: 1298
+    value: 1657
+  - attribute_id: 1299
+    value: 1404
+  - attribute_id: 1300
+    value: 1406
+  - attribute_id: 277
+    value: 1
+  - attribute_id: 2334
+    value: 1
+  - attribute_id: 2593
+    value: -20
+  - attribute_id: 2594
+    value: 0
+  - attribute_id: 2595
+    value: 0
+  - attribute_id: 422
+    value: 1
+  - attribute_id: 2355
+    value: 1
+  - attribute_id: 2356
+    value: 1.9
+  - attribute_id: 2357
+    value: 2.1
+  - attribute_id: 2358
+    value: 1
+  - attribute_id: 182
+    value: 26252
+  - attribute_id: 161
+    value: 10
+  - attribute_id: 162
+    value: 100
+  - attribute_id: 38
+    value: 0
+  dogma_effects:
+  - effect_id: 2663
+    is_default: true
+  - effect_id: 6817
+    is_default: false
+  - effect_id: 6842
+    is_default: false
+  group_id: 1829
+  icon_id: 21729
+  market_group_id: 2347
+  mass: 200
+  name: "Standup M-Set Basic Large Ship Manufacturing Time Efficiency I"
+  packaged_volume: 10
+  portion_size: 1
+  published: true
+  radius: 100
+  type_id: 43733
+  volume: 10

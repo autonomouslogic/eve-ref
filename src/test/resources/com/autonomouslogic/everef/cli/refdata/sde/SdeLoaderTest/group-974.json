@@ -1,0 +1,19 @@
+{
+  "anchorable" : false,
+  "anchored" : false,
+  "category_id" : 4,
+  "fittable_non_singleton" : false,
+  "name" : {
+    "de" : "Hybrid Polymers",
+    "en" : "Hybrid Polymers",
+    "es" : "Polímeros híbridos",
+    "fr" : "Polymères hybrides",
+    "ja" : "ハイブリッド重合体",
+    "ko" : "하이브리드 폴리머",
+    "ru" : "Гибридные полимеры",
+    "zh" : "混合聚合物"
+  },
+  "published" : true,
+  "use_base_price" : false,
+  "group_id" : 974
+}

@@ -1,5 +1,12 @@
 EVE Ref Changelog
 
+## [2.58.1](https://github.com/autonomouslogic/eve-ref/compare/2.58.0...2.58.1) (2025-05-20)
+
+
+### Bug Fixes
+
+* **jobs:** Nullpointer exception on BuildRefData ([#830](https://github.com/autonomouslogic/eve-ref/issues/830)) ([8cac5f6](https://github.com/autonomouslogic/eve-ref/commit/8cac5f6e16121ac7af84d22a0b3d677c7e8f2b00))
+
 ## [2.58.0](https://github.com/autonomouslogic/eve-ref/compare/2.57.0...2.58.0) (2025-05-19)
 
 

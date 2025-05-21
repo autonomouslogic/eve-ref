@@ -43,6 +43,7 @@ groups:
       - 332
       - 898
       - 1774
+      - 974
     languages:
       - en-us
 
@@ -137,6 +138,10 @@ types:
       - 24535
       - 803
       - 24536
+      - 46491
+      - 46158
+      - 46158
+      - 43733
     languages:
       - en-us
       - fr
@@ -328,6 +333,7 @@ blueprints:
       - 42874
       - 803
       - 24536
+      - 46158
 
 icons:
   idField: icon_id

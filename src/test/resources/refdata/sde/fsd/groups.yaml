@@ -164,3 +164,19 @@
     zh: "装甲指挥脉冲波弹药"
   published: true
   useBasePrice: false
+"974":
+  anchorable: false
+  anchored: false
+  categoryID: 4
+  fittableNonSingleton: false
+  name:
+    de: "Hybrid Polymers"
+    en: "Hybrid Polymers"
+    es: "Polímeros híbridos"
+    fr: "Polymères hybrides"
+    ja: "ハイブリッド重合体"
+    ko: "하이브리드 폴리머"
+    ru: "Гибридные полимеры"
+    zh: "混合聚合物"
+  published: true
+  useBasePrice: false

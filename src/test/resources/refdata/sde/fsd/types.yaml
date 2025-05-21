@@ -3698,3 +3698,195 @@
   portionSize: 1
   published: true
   volume: 0.01
+"46491":
+  description:
+    de: "Die Standup-M-Set-Modifikation Materialeffizienz für die Hybrid-Reaktoren\
+      \ II bietet Strukturadministratoren die Möglichkeit, in ihren Upwell-Raffinerie-Strukturen\
+      \ die Materialanforderungen für Tech-3-Hybrid-Reaktionen zu verringern.\n\n\n\
+      \nStandup ist ein gesetzlich geschütztes System, welches eine Strukturautonome\
+      \ Nanofertigungseinheit (Upwell) nutzt, das eine integrierte Vorlagensoftware,\
+      \ eine Nanofertigungsanlage und ausreichend Nanomasse enthält, um die Fertigung\
+      \ einer Vielzahl an Dienstmodulen, Strukturmodulen und Strukturmodifikationen\
+      \ zu ermöglichen, wenn es in entsprechende Slots in einer Struktur mit Upwell-Technologie\
+      \ eingebaut wird.\n\n\n\nHinweis: Nur eine Modifikation desselben Typs, inkl.\
+      \ beider Tech-Varianten, kann in eine Struktur eingebaut sein."
+    en: "The Standup M-Set Hybrid Reactor Material Efficiency II rig provides a means\
+      \ for structure operators to decrease material requirements for Tech 3 hybrid\
+      \ reactions in their Upwell Refinery structures.\r\n\r\nStandup is a proprietary\
+      \ system that uses a Structure Autonomous Nanoassembly Device (Upwell) containing\
+      \ integrated template software, a nanoassembler array and sufficient nanomass\
+      \ to enable the construction of a variety of service modules, structure modules\
+      \ and structure rigs when inserted into the appropriate slots on a structure\
+      \ built with Upwell technology.\r\n\r\nNote: Only one rig of the same type,\
+      \ counting both tech variations, may be fitted at the same time on a structure."
+    es: "El complemento Standup mediano de eficiencia de materiales del reactor hí\
+      brido\_II permite a los administradores de estructuras reducir los materiales\
+      \ requeridos para las reacciones híbridas\_T3 en sus estructuras de refinerí\
+      a de Upwell.\n\n\n\nStandup es un sistema patentado que utiliza un dispositivo\
+      \ de nanoensamblaje autónomo estructural (de Upwell) que contiene una plantilla\
+      \ integrada de software, una matriz de nanoensambladores y suficiente nanomasa\
+      \ como para construir una serie de módulos de servicio, de estructura y complementos\
+      \ de estructura cuando se insertan en las ranuras apropiadas en una estructura\
+      \ construida con la tecnología de Upwell.\n\n\n\nAviso: Solo se puede equipar\
+      \ un complemento del mismo tipo en una estructura, contando ambas variaciones\
+      \ tecnológicas."
+    fr: "L'optimisation de productivité matérielle du réacteur hybride 'Standup' II\
+      \ M permet aux opérateurs de structure d'améliorer la productivité matérielle\
+      \ des réactions hybrides de tech. III dans leurs structures de raffinerie Upwell.\
+      \ La technologie brevetée 'Standup' exploite un dispositif autonome de nano-assemblage\
+      \ pour structure Upwell, alliant un logiciel de modélisation intégré, une baie\
+      \ de nano-assemblage et une réserve de nanomasse. Une fois insérés dans les\
+      \ emplacements dédiés sur les structures Upwell, les dispositifs 'Standup' lancent\
+      \ directement l'assemblage moléculaire de divers modules de services, modules\
+      \ de structure et optimisations de structure. Remarque : une structure ne peut\
+      \ équiper qu'une seule optimisation du même type, déclinaisons de tech comprises."
+    ja: "スタンドアップ中型ハイブリッドリアクター資源効率IIリグを使用することで、ストラクチャオペレーターはアップウェル精錬施設のT3複合反応の必要資源量\
+      を減少させることができる。\n\n\n\n「スタンドアップ」は、自律式ナノ集合体ストラクチャデバイス（アップウェル）を利用した独自システムである。アップ\
+      ウェルの技術を利用して建設されたストラクチャの適切なスロットに挿入すると、統合テンプレートソフトウェア、ナノアセンブラー施設、ナノ物質を使い、様々なサー\
+      ビスモジュール、ストラクチャモジュール、ストラクチャリグを作り出すことができる。\n\n\n\n注：異なる技術であっても、1つのストラクチャに同じタイプ\
+      のリグを同時に複数装備させることはできない。"
+    ko: "스탠드업 리그를 장착하면 업웰 구조물의 테크 III 하이브리드 합성의 자원요구치가 감소합니다. <br><br>스탠드업은 자율구조형\
+      \ 나노어셈블러 장치(업웰)를 사용하는 시스템으로 템플릿 소프트웨어가 내장되어 있으며 나노어셈블리 배열, 충분한 양의 나노물질이 탑재돼있\
+      습니다. 업웰 기반 구조물에 장착 시 다양한 종류의 서비스 모듈, 구조물 모듈, 구조물 장착형 리그를 제조할 수 있습니다. <br><br>참\
+      고: 테크 레벨과 상관없이 동일한 종류의 리그는 한 개 이상 장착할 수 없습니다."
+    ru: "Эта средняя стационар-надстройка второго техноуровня (Standup M-Set Hybrid\
+      \ Reactor Material Efficiency II) позволяет снизить расход материалов при ра\
+      боте над гибридными реакциями третьего техноуровня в сооружениях перерабатыв\
+      ающих комплексов «Апвелл»\n\n\n\nСТАЦИОНАР — это проприетарная система, испо\
+      льзующая стационарный автономный наносборщик производства «Апвелл», который\
+      \ и лёг в основу её названия. Он содержит встроенное ПО для создания шаблоно\
+      в, линию наносборщиков и достаточное количество наномассы для сборки различн\
+      ых модулей технического обслуживания, а также модулей и надстроек для сооруж\
+      ений, сконструированных по проектам консорциума «Апвелл», которые устанавлив\
+      аются в соответствующие разъёмы.\n\n\n\nВнимание: одновременно сооружение мо\
+      жно оснастить только одним модификатором этого типа, независимо от вариаций\
+      \ техкатегории."
+    zh: "屹立中型混合反应堆材料效率 II 改装件让建筑操作员能够降低在昇威精炼厂建筑中进行三级科技混合反应的材料要求。\n\n\n\n屹立专用系统采用了昇\
+      威建筑分控纳米装配装置，由集成模版软件、纳米装配阵列和许多纳米块体构成。安装在采用昇威科技建造的建筑上的专门槽位中可以制造各种服务装备、建筑装备和建筑改\
+      装件。\n\n\n\n注：只能同时在一个建筑上装配一件相同类型的改装件，包括衍生型号在内。"
+  groupID: 1936
+  iconID: 21788
+  marketGroupID: 2341
+  mass: 200
+  metaGroupID: 53
+  name:
+    de: "Standup M-Set Hybrid Reactor Material Efficiency II"
+    en: "Standup M-Set Hybrid Reactor Material Efficiency II"
+    es: "Eficiencia de materiales del reactor híbrido Standup\_II (M)"
+    fr: "Productivité matérielle des réacteurs hybrides Standup II M"
+    ja: "スタンドアップ中型ハイブリッドリアクター資源効率II"
+    ko: "스탠드업 M-Set 하이브리드 반응로 자원효율성 장치 II"
+    ru: "Standup M-Set Hybrid Reactor Material Efficiency II"
+    zh: "屹立中型混合反应堆材料效率 II"
+  portionSize: 1
+  published: true
+  radius: 100
+  variationParentTypeID: 46490
+  volume: 10
+"46158":
+  basePrice: 15000000
+  groupID: 1889
+  iconID: 3739
+  marketGroupID: 2404
+  name:
+    de: "Fulleroferrocene Reaction Formula"
+    en: "Fulleroferrocene Reaction Formula"
+    es: "Fórmula reactiva de fulleroferroceno"
+    fr: "Formule de réaction du fulléro-ferrocène"
+    ja: "フレーロフェロセン反応フォーミュラ"
+    ko: "플레로페로센 반응식"
+    ru: "Fulleroferrocene Reaction Formula"
+    zh: "富勒二茂铁反应配方"
+  portionSize: 1
+  published: true
+  volume: 0.01
+"43733":
+  description:
+    de: "Die Standup-M-Set-Modifikation Zeiteffizienz für die Herstellung von gewö\
+      hnliche große Schiffe I bietet Strukturadministratoren die Möglichkeit, in ihren\
+      \ Upwell-Strukturen Zeitanforderungen für die Herstellung von Schlachtschiffen,\
+      \ Frachtern und Industrie-Kommandoschiffen zu verringern.\n\n\n\nStandup ist\
+      \ ein gesetzlich geschütztes System, welches eine Strukturautonome Nanofertigungseinheit\
+      \ (Upwell) nutzt, das eine integrierte Vorlagensoftware, eine Nanofertigungsanlage\
+      \ und ausreichend Nanomasse enthält, um die Fertigung einer Vielzahl an Dienstmodulen,\
+      \ Strukturmodulen und Strukturmodifikationen zu ermöglichen, wenn es in entsprechende\
+      \ Slots in einer Struktur mit Upwell-Technologie eingebaut wird.\n\n\n\nHinweis:\
+      \ Nur eine Modifikation desselben Typs, inkl. beider Tech-Varianten, kann in\
+      \ eine Struktur eingebaut sein."
+    en: "The Standup M-Set Basic Large Ship Manufacturing Time Efficiency I rig provides\
+      \ a means for structure operators to decrease time requirements for manufacturing\
+      \ battleships, freighters and industrial command ships in their Upwell structures.\r\
+      \n\r\nStandup is a proprietary system that uses a Structure Autonomous Nanoassembly\
+      \ Device (Upwell) containing integrated template software, a nanoassembler array\
+      \ and sufficient nanomass to enable the construction of a variety of service\
+      \ modules, structure modules and structure rigs when inserted into the appropriate\
+      \ slots on a structure built with Upwell technology.\r\n\r\nNote: Only one rig\
+      \ of the same type, counting both tech variations, may be fitted at the same\
+      \ time on a structure."
+    es: "El complemento Standup mediano de eficiencia temporal en la fabricación de\
+      \ naves grandes con tecnología básica\_I permite a los administradores de estructuras\
+      \ reducir el tiempo requerido para la fabricación de acorazados, cargueros y\
+      \ naves de mando industriales en sus estructuras de Upwell.\n\n\n\nStandup es\
+      \ un sistema patentado que utiliza un dispositivo de nanoensamblaje autónomo\
+      \ estructural (de Upwell) que contiene una plantilla integrada de software,\
+      \ una matriz de nanoensambladores y suficiente nanomasa como para construir\
+      \ una serie de módulos de servicio, de estructura y complementos de estructura\
+      \ cuando se insertan en las ranuras apropiadas en una estructura construida\
+      \ con la tecnología de Upwell.\n\n\n\nAviso: Solo se puede equipar un complemento\
+      \ del mismo tipo en una estructura, contando ambas variaciones tecnológicas."
+    fr: "L'optimisation de productivité horaire de la production de grands vaisseaux\
+      \ standards 'Standup'\_I\_M permet aux opérateurs de structure Upwell d'amé\
+      liorer la productivité horaire des lignes de production de cuirassés, de cargos\
+      \ et de vaisseaux de commandement industriel.\n\n\n\nLa technologie breveté\
+      e 'Standup' exploite un dispositif autonome de nano-assemblage pour structure\
+      \ Upwell, alliant un logiciel de modélisation intégré, une baie de nano-assemblage\
+      \ et une réserve de nanomasse. Une fois insérés dans les emplacements dédié\
+      s sur les structures Upwell, les dispositifs 'Standup' lancent directement l'assemblage\
+      \ moléculaire de divers modules de services, modules de structure et optimisations\
+      \ de structure.\n\n\n\nRemarque\_: une structure ne peut équiper qu'une seule\
+      \ optimisation du même type, déclinaisons de tech comprises."
+    ja: "スタンドアップ中型標準中型艦製造時間効率1のリグを使用することで、ストラクチャのオペレーターはアップウェルストラクチャで戦艦、超大型輸送艦、指揮型\
+      輸送艦を製造する際に必要な時間を減少させることができます。スタンドアップは、アップウェルテクノロジーにより建造されたストラクチャの適切なスロットに挿入し\
+      た場合に統合テンプレートソフトウェア、ナノアセンブラー施設、ナノ物質を持つ自立式ナノ集合体ストラクチャデバイス（アップウェル）を使用して、様々なサービス\
+      モジュール、ストラクチャモデル、そしてストラクチャリグを作り出すことができる独自システムである。\n注： Techが両方とも異なるものであっても、1つの\
+      ストラクチャには同じタイプのリグを複数装備することはできない。"
+    ko: "스탠드업 리그를 장착하면 업웰 구조물에서 제작되는 배틀쉽, 프레이터, 인더스트리얼 커맨드쉽의 제조 시간이 감소합니다. <br><br>스\
+      탠드업은 자율구조형 나노어셈블러 장치(업웰)를 사용하는 시스템으로 템플릿 소프트웨어가 내장되어 있으며 나노어셈블리 배열, 충분한 양의 나\
+      노물질이 탑재돼있습니다. 업웰 기반 구조물에 장착 시 다양한 종류의 서비스 모듈, 구조물 모듈, 구조물 장착형 리그를 제조할 수 있습니다\
+      . 참고: 테크 레벨과 상관없이 동일한 종류의 리그는 한 개 이상 장착할 수 없습니다."
+    ru: "Этот стационар-модификатор второй техкатегории позволяет снизить расход в\
+      ремени на производство линкоров, фрейтеров и флагманов буровых флотилий, есл\
+      и сооружение, где ведётся соответствующий проект, разработано консорциумом «\
+      Апвелл» и оснащено этим модулем.\n\n\n\nСТАЦИОНАР — это проприетарная систем\
+      а: её название представляет собой акроним основного компонента системы. Стац\
+      ионарный автономный центральный инженерно-организующий наносборщик «Апвелл»\
+      \ содержит интегрированный шаблон программного обеспечения, линию наносборщи\
+      ков и достаточное количество наномассы для сборки различных модулей техничес\
+      кого обслуживания, модулей и тюнинг-модулей для сооружений, которые устанавл\
+      иваются в подходящие разъёмы на сооружениях, сконструированных по проектам к\
+      онсорциума «Апвелл».\n\n\n\nВнимание: одновременно сооружение можно оснастит\
+      ь только одним модификатором этого типа, независимо от вариаций техкатегории\
+      ."
+    zh: "屹立中型基础大型舰船制造时间效率 I 改装件让建筑操作员能够降低在昇威建筑中制造战列舰、货舰和工业指挥舰的时间要求。\n\n\n\n屹立专用系统采\
+      用了昇威建筑分控纳米装配装置，由集成模版软件、纳米装配阵列和许多纳米块体构成。安装在采用昇威科技建造的建筑上的专门槽位中可以制造各种服务装备、建筑装备和\
+      建筑改装件。\n\n\n\n注：只能同时在一个建筑上装配一件相同类型的改装件，包括衍生型号在内。"
+  groupID: 1829
+  iconID: 21729
+  marketGroupID: 2347
+  mass: 200
+  metaGroupID: 54
+  name:
+    de: "Standup M-Set Basic Large Ship Manufacturing Time Efficiency I"
+    en: "Standup M-Set Basic Large Ship Manufacturing Time Efficiency I"
+    es: "Eficiencia temporal en la fabricación de naves grandes básica Standup\_I\_\
+      (M)"
+    fr: "Productivité horaire de la production de grands vaisseaux standards 'Standup'\
+      \ I M"
+    ja: "スタンドアップ中型標準大型艦製造時間効率I"
+    ko: "스탠드업 M-Set 기본 대형 함선 제작 시간효율성 장치 I"
+    ru: "Standup M-Set Basic Large Ship Manufacturing Time Efficiency I"
+    zh: "屹立中型基础大型舰船制造时间效率 I"
+  portionSize: 1
+  published: true
+  radius: 100
+  volume: 10
