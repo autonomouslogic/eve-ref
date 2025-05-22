@@ -630,9 +630,11 @@ const cards: {[key: string]: any} = {
 			"dogmaAttributes":
 				[
 					"attributeEngRigTimeBonus",
+					"RefRigTimeBonus",
 					"attributeEngRigMatBonus",
+					"RefRigMatBonus",
+					"attributeThukkerEngRigMatBonus",
 					"attributeEngRigCostBonus",
-					"attributeAdvCompManufactureMaterialMultiplier",
 					"hiSecModifier",
 					"lowSecModifier",
 					"nullSecModifier"

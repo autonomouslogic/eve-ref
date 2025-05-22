@@ -52,8 +52,11 @@ public class ImportIndustryResources implements Command {
 	private DogmaAttribute strEngTimeBonus;
 
 	private DogmaAttribute attributeEngRigTimeBonus;
+	private DogmaAttribute RefRigTimeBonus;
 	private DogmaAttribute attributeEngRigMatBonus;
 	private DogmaAttribute attributeEngRigCostBonus;
+	private DogmaAttribute RefRigMatBonus;
+	private DogmaAttribute attributeThukkerEngRigMatBonus;
 	private DogmaAttribute hiSecModifier;
 	private DogmaAttribute lowSecModifier;
 	private DogmaAttribute nullSecModifier;
@@ -84,9 +87,13 @@ public class ImportIndustryResources implements Command {
 		strEngMatBonus = refData.getDogmaAttribute("strEngMatBonus").orElseThrow();
 		strEngCostBonus = refData.getDogmaAttribute("strEngCostBonus").orElseThrow();
 		strEngTimeBonus = refData.getDogmaAttribute("strEngTimeBonus").orElseThrow();
+		RefRigMatBonus = refData.getDogmaAttribute("RefRigMatBonus").orElseThrow();
+		attributeThukkerEngRigMatBonus =
+				refData.getDogmaAttribute("attributeThukkerEngRigMatBonus").orElseThrow();
 
 		attributeEngRigTimeBonus =
 				refData.getDogmaAttribute("attributeEngRigTimeBonus").orElseThrow();
+		RefRigTimeBonus = refData.getDogmaAttribute("RefRigTimeBonus").orElseThrow();
 		attributeEngRigMatBonus =
 				refData.getDogmaAttribute("attributeEngRigMatBonus").orElseThrow();
 		attributeEngRigCostBonus =
@@ -193,14 +200,15 @@ public class ImportIndustryResources implements Command {
 			return false;
 		}
 		return refDataUtil
-						.getTypeDogmaValue(type, attributeEngRigTimeBonus.getAttributeId())
-						.isPresent()
-				|| refDataUtil
-						.getTypeDogmaValue(type, attributeEngRigMatBonus.getAttributeId())
-						.isPresent()
-				|| refDataUtil
-						.getTypeDogmaValue(type, attributeEngRigCostBonus.getAttributeId())
-						.isPresent();
+				.getTypeDogmaFirstValue(
+						type,
+						attributeEngRigTimeBonus.getAttributeId(),
+						RefRigTimeBonus.getAttributeId(),
+						attributeEngRigMatBonus.getAttributeId(),
+						attributeEngRigCostBonus.getAttributeId(),
+						RefRigMatBonus.getAttributeId(),
+						attributeThukkerEngRigMatBonus.getAttributeId())
+				.isPresent();
 	}
 
 	private IndustryRig createRig(InventoryType type) {
@@ -208,17 +216,32 @@ public class ImportIndustryResources implements Command {
 				.typeId(type.getTypeId())
 				.name(type.getName().get("en"))
 				.timeBonus(refDataUtil
-						.getTypeDogmaValue(type, attributeEngRigTimeBonus.getAttributeId())
+						.getTypeDogmaFirstValue(
+								type, attributeEngRigTimeBonus.getAttributeId(), RefRigTimeBonus.getAttributeId())
 						.orElse(0.0))
 				.materialBonus(refDataUtil
-						.getTypeDogmaValue(type, attributeEngRigMatBonus.getAttributeId())
+						.getTypeDogmaFirstValue(
+								type, attributeEngRigMatBonus.getAttributeId(), RefRigMatBonus.getAttributeId())
+						.orElse(0.0))
+				.thukkerMaterialBonus(refDataUtil
+						.getTypeDogmaValue(type, attributeThukkerEngRigMatBonus.getAttributeId())
 						.orElse(0.0))
 				.costBonus(refDataUtil
 						.getTypeDogmaValue(type, attributeEngRigCostBonus.getAttributeId())
-						.orElse(0.0));
+						.orElse(0.0))
+				.highSecMod(refDataUtil
+						.getTypeDogmaValue(type, hiSecModifier.getAttributeId())
+						.orElse(1.0))
+				.lowSecMod(refDataUtil
+						.getTypeDogmaValue(type, lowSecModifier.getAttributeId())
+						.orElse(1.0))
+				.nullSecMod(refDataUtil
+						.getTypeDogmaValue(type, nullSecModifier.getAttributeId())
+						.orElse(1.0));
 		handleRigCategories(type.getEngineeringRigAffectedCategoryIds(), builder);
 		handleRigGroups(type.getEngineeringRigAffectedGroupIds(), builder);
 		handleRigGlobal(type.getEngineeringRigGlobalActivities(), builder);
+
 		return builder.build();
 	}
 
@@ -227,8 +250,12 @@ public class ImportIndustryResources implements Command {
 			return;
 		}
 		Optional.ofNullable(categoryIds.getManufacturing()).ifPresent(builder::manufacturingCategories);
-		Optional.ofNullable(categoryIds.getInvention()).ifPresent(builder::inventionCategories);
+		//		Optional.ofNullable(categoryIds.getInvention()).ifPresent(builder::inventionCategories);
 		Optional.ofNullable(categoryIds.getReaction()).ifPresent(builder::reactionCategories);
+
+		if (categoryIds.getInvention() != null && !categoryIds.getInvention().isEmpty()) {
+			throw new RuntimeException("invention categories supported");
+		}
 	}
 
 	private void handleRigGroups(IndustryModifierActivities groupIds, IndustryRig.Builder builder) {
@@ -236,8 +263,12 @@ public class ImportIndustryResources implements Command {
 			return;
 		}
 		Optional.ofNullable(groupIds.getManufacturing()).ifPresent(builder::manufacturingGroups);
-		Optional.ofNullable(groupIds.getInvention()).ifPresent(builder::inventionGroups);
+		//		Optional.ofNullable(groupIds.getInvention()).ifPresent(builder::inventionGroups);
 		Optional.ofNullable(groupIds.getReaction()).ifPresent(builder::reactionGroups);
+
+		if (groupIds.getInvention() != null && !groupIds.getInvention().isEmpty()) {
+			throw new RuntimeException("invention groups supported");
+		}
 	}
 
 	private void handleRigGlobal(List<String> activities, IndustryRig.Builder builder) {

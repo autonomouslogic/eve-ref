@@ -21,14 +21,16 @@ import lombok.extern.jackson.Jacksonized;
 	"name",
 	"time_bonus",
 	"material_bonus",
+	"thukker_material_bonus",
 	"cost_bonus",
 	"manufacturing_categories",
 	"manufacturing_groups",
 	"reaction_categories",
 	"reaction_groups",
-	"invention_categories",
-	"invention_groups",
-	"global_activities"
+	"global_activities",
+	"high_sec_mod",
+	"low_sec_mod",
+	"null_sec_mod"
 })
 @Schema
 public class IndustryRig {
@@ -43,6 +45,9 @@ public class IndustryRig {
 
 	@JsonProperty
 	double materialBonus;
+
+	@JsonProperty
+	double thukkerMaterialBonus; // @todo unsupported https://github.com/autonomouslogic/eve-ref/issues/839
 
 	@JsonProperty
 	double costBonus;
@@ -64,13 +69,14 @@ public class IndustryRig {
 	List<Long> reactionGroups;
 
 	@JsonProperty
-	@JsonInclude(JsonInclude.Include.NON_EMPTY)
-	List<Long> inventionCategories;
-
-	@JsonProperty
-	@JsonInclude(JsonInclude.Include.NON_EMPTY)
-	List<Long> inventionGroups;
-
-	@JsonProperty
 	List<String> globalActivities;
+
+	@JsonProperty
+	double highSecMod;
+
+	@JsonProperty
+	double lowSecMod;
+
+	@JsonProperty
+	double nullSecMod;
 }
