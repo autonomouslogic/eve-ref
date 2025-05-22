@@ -7,6 +7,8 @@ import static com.autonomouslogic.everef.industry.IndustrySkills.SPECIAL_TIME_BO
 
 import com.autonomouslogic.everef.data.LoadedRefData;
 import com.autonomouslogic.everef.model.IndustryDecryptor;
+import com.autonomouslogic.everef.model.IndustryRig;
+import com.autonomouslogic.everef.model.IndustryStructure;
 import com.autonomouslogic.everef.model.api.IndustryCost;
 import com.autonomouslogic.everef.model.api.IndustryCostInput;
 import com.autonomouslogic.everef.model.api.InventionCost;
@@ -55,6 +57,12 @@ public class IndustryCostCalculator {
 
 	@Setter
 	private IndustryDecryptor industryDecryptor;
+
+	@Setter
+	private IndustryStructure industryStructure;
+
+	@Setter
+	private List<IndustryRig> industryRigs;
 
 	@Inject
 	protected IndustryCostCalculator() {}

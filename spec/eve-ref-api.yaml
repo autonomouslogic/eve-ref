@@ -365,6 +365,15 @@ components:
             the job is installed
           maximum: 1
           minimum: 0
+        rig_id:
+          type: array
+          description: The type IDs of the rigs installed on the sture structure where
+            the job is installed
+          items:
+            type: integer
+            format: int64
+            description: The type IDs of the rigs installed on the sture structure
+              where the job is installed
         rocket_science:
           type: integer
           format: int32
