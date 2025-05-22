@@ -520,6 +520,9 @@ components:
         scc_surcharge:
           type: number
           description: The SCC surcharge amount
+        system_cost_bonuses:
+          type: number
+          description: "Bonuses to system cost from structures, rigs, etc."
         system_cost_index:
           type: number
           description: |-
@@ -572,6 +575,9 @@ components:
         scc_surcharge:
           type: number
           description: The SCC surcharge amount
+        system_cost_bonuses:
+          type: number
+          description: "Bonuses to system cost from structures, rigs, etc."
         system_cost_index:
           type: number
           description: |-

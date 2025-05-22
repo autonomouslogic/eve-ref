@@ -52,6 +52,10 @@ public class ActivityCost {
 	BigDecimal systemCostIndex;
 
 	@JsonProperty
+	@Schema(description = "Bonuses to system cost from structures, rigs, etc.")
+	BigDecimal systemCostBonuses;
+
+	@JsonProperty
 	@Schema(description = "The facility amount")
 	BigDecimal facilityTax;
 
