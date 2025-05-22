@@ -178,19 +178,12 @@ components:
             job is installed
           maximum: 1
           minimum: 0
-        facility_type:
-          type: string
-          default: STATION
-          description: The type of station or structure where the job is installed
-          enum:
-          - STATION
-          - RAITARU
-          - AZBEL
-          - SOTIYO
-          - DRACCOUS_FORTIZAR
-          - HORIZON_FORTIZAR
-          - MOREAU_FORTIZAR
-          - OTHER_STRUCTURE
+        fw_cost_bonus:
+          type: number
+          default: 0
+          description: Faction warfare bonus applied to system cost
+          maximum: 1
+          minimum: 0
         gallente_encryption_methods:
           type: integer
           format: int32
@@ -408,13 +401,11 @@ components:
           description: The Sleeper Encryption Methods skill level the installing character
           maximum: 5
           minimum: 0
-        structure_size:
-          type: string
-          description: The size of structure where the job is installed
-          enum:
-          - MEDIUM
-          - LARGE
-          - XLARGE
+        structure_type_id:
+          type: integer
+          format: int64
+          description: "The type ID of the structure where the job is installed. If\
+            \ not set, an NPC station is assumed."
         te:
           type: integer
           format: int32

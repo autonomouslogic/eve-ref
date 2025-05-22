@@ -157,16 +157,10 @@ public class IndustryCostInput {
 	@JsonProperty
 	@lombok.Builder.Default
 	@Schema(
-			description = "The type of station or structure where the job is installed",
+			description = "The type ID of the structure where the job is installed. If not set, an NPC station is assumed.",
 			requiredMode = Schema.RequiredMode.NOT_REQUIRED,
 			defaultValue = "STATION")
-	FacilityType facilityType = FacilityType.STATION;
-
-	@JsonProperty
-	@Schema(
-			description = "The size of structure where the job is installed",
-			requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-	StructureSize structureSize;
+	Long structureTypeId;
 
 	@JsonProperty
 	@lombok.Builder.Default
