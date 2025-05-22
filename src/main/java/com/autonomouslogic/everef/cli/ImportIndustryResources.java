@@ -16,6 +16,7 @@ import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.google.common.collect.Ordering;
 import java.io.File;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import javax.inject.Inject;
@@ -221,31 +222,28 @@ public class ImportIndustryResources implements Command {
 		return builder.build();
 	}
 
-	private void handleRigCategories(IndustryModifierActivities categoryIds, IndustryRig.Builder builder) {}
+	private void handleRigCategories(IndustryModifierActivities categoryIds, IndustryRig.Builder builder) {
+		if (categoryIds == null) {
+			return;
+		}
+		Optional.ofNullable(categoryIds.getManufacturing()).ifPresent(builder::manufacturingCategories);
+		Optional.ofNullable(categoryIds.getInvention()).ifPresent(builder::inventionCategories);
+		Optional.ofNullable(categoryIds.getReaction()).ifPresent(builder::reactionCategories);
+	}
 
-	private void handleRigGroups(IndustryModifierActivities groupIds, IndustryRig.Builder builder) {}
+	private void handleRigGroups(IndustryModifierActivities groupIds, IndustryRig.Builder builder) {
+		if (groupIds == null) {
+			return;
+		}
+		Optional.ofNullable(groupIds.getManufacturing()).ifPresent(builder::manufacturingGroups);
+		Optional.ofNullable(groupIds.getInvention()).ifPresent(builder::inventionGroups);
+		Optional.ofNullable(groupIds.getReaction()).ifPresent(builder::reactionGroups);
+	}
 
 	private void handleRigGlobal(List<String> activities, IndustryRig.Builder builder) {
 		if (activities == null) {
 			return;
 		}
-		if (activities.contains("manufacturing")) {
-			throw new IllegalArgumentException();
-		}
-		if (activities.contains("reaction")) {
-			throw new IllegalArgumentException();
-		}
-		if (activities.contains("invention")) {
-			builder.invention(true);
-		}
-		if (activities.contains("research_material")) {
-			builder.researchMaterial(true);
-		}
-		if (activities.contains("research_time")) {
-			builder.researchTime(true);
-		}
-		if (activities.contains("copying")) {
-			builder.copying(true);
-		}
+		builder.globalActivities(activities);
 	}
 }

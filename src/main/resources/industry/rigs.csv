@@ -1,129 +1,215 @@
-type_id,name,time_bonus,material_bonus,cost_bonus,manufacturing_categories,manufacturing_groups,reaction_categories,reaction_groups,invention_categories,invention_groups,invention,research_time,copying,research_material
-37146,"Standup M-Set Basic Medium Ship Manufacturing Material Efficiency I",0.0,-2.0,0.0,,,,,,,false,false,false,false
-37147,"Standup M-Set Basic Medium Ship Manufacturing Material Efficiency II",0.0,-2.4,0.0,,,,,,,false,false,false,false
-37148,"Standup M-Set Drone and Fighter Manufacturing Time Efficiency I",-20.0,0.0,0.0,,,,,,,false,false,false,false
-37149,"Standup M-Set Drone and Fighter Manufacturing Time Efficiency II",-24.0,0.0,0.0,,,,,,,false,false,false,false
-37150,"Standup M-Set Ammunition Manufacturing Time Efficiency I",-20.0,0.0,0.0,,,,,,,false,false,false,false
-37151,"Standup M-Set Ammunition Manufacturing Time Efficiency II",-24.0,0.0,0.0,,,,,,,false,false,false,false
-37152,"Standup M-Set Basic Large Ship Manufacturing Material Efficiency II",0.0,-2.4,0.0,,,,,,,false,false,false,false
-37153,"Standup M-Set Basic Medium Ship Manufacturing Time Efficiency II",-24.0,0.0,0.0,,,,,,,false,false,false,false
-37154,"Standup M-Set Basic Small Ship Manufacturing Material Efficiency I",0.0,-2.0,0.0,,,,,,,false,false,false,false
-37155,"Standup M-Set Basic Small Ship Manufacturing Material Efficiency II",0.0,-2.4,0.0,,,,,,,false,false,false,false
-37156,"Standup M-Set Drone and Fighter Manufacturing Material Efficiency I",0.0,-2.0,0.0,,,,,,,false,false,false,false
-37157,"Standup M-Set Drone and Fighter Manufacturing Material Efficiency II",0.0,-2.4,0.0,,,,,,,false,false,false,false
-37158,"Standup M-Set Ammunition Manufacturing Material Efficiency I",0.0,-2.0,0.0,,,,,,,false,false,false,false
-37159,"Standup M-Set Ammunition Manufacturing Material Efficiency II",0.0,-2.4,0.0,,,,,,,false,false,false,false
-37160,"Standup M-Set Equipment Manufacturing Time Efficiency I",-20.0,0.0,0.0,,,,,,,false,false,false,false
-37161,"Standup M-Set Equipment Manufacturing Time Efficiency II",-24.0,0.0,0.0,,,,,,,false,false,false,false
-37162,"Standup M-Set Basic Small Ship Manufacturing Time Efficiency I",-20.0,0.0,0.0,,,,,,,false,false,false,false
-37163,"Standup M-Set Basic Small Ship Manufacturing Time Efficiency II",-24.0,0.0,0.0,,,,,,,false,false,false,false
-37164,"Standup L-Set Ammunition Manufacturing Efficiency I",-20.0,-2.0,0.0,,,,,,,false,false,false,false
-37165,"Standup L-Set Ammunition Manufacturing Efficiency II",-24.0,-2.4,0.0,,,,,,,false,false,false,false
-37166,"Standup L-Set Basic Large Ship Manufacturing Efficiency I",-20.0,-2.0,0.0,,,,,,,false,false,false,false
-37167,"Standup L-Set Basic Large Ship Manufacturing Efficiency II",-24.0,-2.4,0.0,,,,,,,false,false,false,false
-37168,"Standup L-Set Advanced Large Ship Manufacturing Efficiency I",-20.0,-2.0,0.0,,,,,,,false,false,false,false
-37169,"Standup L-Set Advanced Large Ship Manufacturing Efficiency II",-24.0,-2.4,0.0,,,,,,,false,false,false,false
-37170,"Standup L-Set Equipment Manufacturing Efficiency I",-20.0,-2.0,0.0,,,,,,,false,false,false,false
-37171,"Standup L-Set Equipment Manufacturing Efficiency II",-24.0,-2.4,0.0,,,,,,,false,false,false,false
-37172,"Standup L-Set Capital Ship Manufacturing Efficiency II",-24.0,-2.4,0.0,,,,,,,false,false,false,false
-37173,"Standup L-Set Capital Ship Manufacturing Efficiency I",-20.0,-2.0,0.0,,,,,,,false,false,false,false
-37174,"Standup L-Set Advanced Component Manufacturing Efficiency I",-20.0,-2.0,0.0,,,,,,,false,false,false,false
-37175,"Standup L-Set Advanced Component Manufacturing Efficiency II",-24.0,-2.4,0.0,,,,,,,false,false,false,false
-37178,"Standup XL-Set Equipment and Consumable Manufacturing Efficiency I",-20.0,-2.0,0.0,,,,,,,false,false,false,false
-37179,"Standup XL-Set Equipment and Consumable Manufacturing Efficiency II",-24.0,-2.4,0.0,,,,,,,false,false,false,false
-37180,"Standup XL-Set Ship Manufacturing Efficiency I",-20.0,-2.0,0.0,,,,,,,false,false,false,false
-37181,"Standup XL-Set Ship Manufacturing Efficiency II",-24.0,-2.4,0.0,,,,,,,false,false,false,false
-37182,"Standup XL-Set Laboratory Optimization II",-24.0,0.0,-12.0,,,,,,,true,true,true,true
-37183,"Standup XL-Set Laboratory Optimization I",-20.0,0.0,-10.0,,,,,,,true,true,true,true
-43704,"Standup XL-Set Structure and Component Manufacturing Efficiency I",-20.0,-2.0,0.0,,,,,,,false,false,false,false
-43705,"Standup XL-Set Structure and Component Manufacturing Efficiency II",-24.0,-2.4,0.0,,,,,,,false,false,false,false
-43707,"Standup L-Set Advanced Small Ship Manufacturing Efficiency I",-20.0,-2.0,0.0,,,,,,,false,false,false,false
-43708,"Standup L-Set Advanced Small Ship Manufacturing Efficiency II",-24.0,-2.4,0.0,,,,,,,false,false,false,false
-43709,"Standup L-Set Advanced Medium Ship Manufacturing Efficiency I",-20.0,-2.0,0.0,,,,,,,false,false,false,false
-43711,"Standup L-Set Advanced Medium Ship Manufacturing Efficiency II",-24.0,-2.4,0.0,,,,,,,false,false,false,false
-43712,"Standup L-Set Drone and Fighter Manufacturing Efficiency I",-20.0,-2.0,0.0,,,,,,,false,false,false,false
-43713,"Standup L-Set Drone and Fighter Manufacturing Efficiency II",-24.0,-2.4,0.0,,,,,,,false,false,false,false
-43714,"Standup L-Set Basic Small Ship Manufacturing Efficiency I",-20.0,-2.0,0.0,,,,,,,false,false,false,false
-43715,"Standup L-Set Basic Small Ship Manufacturing Efficiency II",-24.0,-2.4,0.0,,,,,,,false,false,false,false
-43716,"Standup L-Set Basic Medium Ship Manufacturing Efficiency I",-20.0,-2.0,0.0,,,,,,,false,false,false,false
-43717,"Standup L-Set Basic Medium Ship Manufacturing Efficiency II",-24.0,-2.4,0.0,,,,,,,false,false,false,false
-43718,"Standup L-Set Basic Capital Component Manufacturing Efficiency I",-20.0,-2.0,0.0,,,,,,,false,false,false,false
-43719,"Standup L-Set Basic Capital Component Manufacturing Efficiency II",-24.0,-2.4,0.0,,,,,,,false,false,false,false
-43720,"Standup L-Set Structure Manufacturing Efficiency I",-20.0,-2.0,0.0,,,,,,,false,false,false,false
-43721,"Standup L-Set Structure Manufacturing Efficiency II",-24.0,-2.4,0.0,,,,,,,false,false,false,false
-43722,"Standup L-Set Invention Optimization I",-20.0,0.0,-10.0,,,,,,,true,false,false,false
-43723,"Standup L-Set Invention Optimization II",-24.0,0.0,-12.0,,,,,,,true,false,false,false
-43724,"Standup L-Set ME Research Optimization I",-20.0,0.0,-10.0,,,,,,,false,false,false,true
-43725,"Standup L-Set ME Research Optimization II",-24.0,0.0,-12.0,,,,,,,false,false,false,true
-43726,"Standup L-Set TE Research Optimization I",-20.0,0.0,-10.0,,,,,,,false,true,false,false
-43727,"Standup L-Set TE Research Optimization II",-24.0,0.0,-12.0,,,,,,,false,true,false,false
-43729,"Standup L-Set Blueprint Copy Optimization I",-20.0,0.0,-10.0,,,,,,,false,false,true,false
-43730,"Standup L-Set Blueprint Copy Optimization II",-24.0,0.0,-12.0,,,,,,,false,false,true,false
-43732,"Standup M-Set Basic Large Ship Manufacturing Material Efficiency I",0.0,-2.0,0.0,,,,,,,false,false,false,false
-43733,"Standup M-Set Basic Large Ship Manufacturing Time Efficiency I",-20.0,0.0,0.0,,,,,,,false,false,false,false
-43734,"Standup M-Set Basic Large Ship Manufacturing Time Efficiency II",-24.0,0.0,0.0,,,,,,,false,false,false,false
-43854,"Standup M-Set Advanced Small Ship Manufacturing Material Efficiency II",0.0,-2.4,0.0,,,,,,,false,false,false,false
-43855,"Standup M-Set Advanced Small Ship Manufacturing Material Efficiency I",0.0,-2.0,0.0,,,,,,,false,false,false,false
-43856,"Standup M-Set Advanced Small Ship Manufacturing Time Efficiency I",-20.0,0.0,0.0,,,,,,,false,false,false,false
-43857,"Standup M-Set Advanced Small Ship Manufacturing Time Efficiency II",-24.0,0.0,0.0,,,,,,,false,false,false,false
-43858,"Standup M-Set Advanced Medium Ship Manufacturing Material Efficiency I",0.0,-2.0,0.0,,,,,,,false,false,false,false
-43859,"Standup M-Set Advanced Medium Ship Manufacturing Material Efficiency II",0.0,-2.4,0.0,,,,,,,false,false,false,false
-43860,"Standup M-Set Advanced Medium Ship Manufacturing Time Efficiency I",-20.0,0.0,0.0,,,,,,,false,false,false,false
-43861,"Standup M-Set Advanced Medium Ship Manufacturing Time Efficiency II",-24.0,0.0,0.0,,,,,,,false,false,false,false
-43862,"Standup M-Set Advanced Large Ship Manufacturing Material Efficiency I",0.0,-2.0,0.0,,,,,,,false,false,false,false
-43863,"Standup M-Set Advanced Large Ship Manufacturing Material Efficiency II",0.0,-2.4,0.0,,,,,,,false,false,false,false
-43864,"Standup M-Set Advanced Large Ship Manufacturing Time Efficiency II",-24.0,0.0,0.0,,,,,,,false,false,false,false
-43865,"Standup M-Set Advanced Large Ship Manufacturing Time Efficiency I",-20.0,0.0,0.0,,,,,,,false,false,false,false
-43866,"Standup M-Set Advanced Component Manufacturing Material Efficiency II",0.0,-2.4,0.0,,,,,,,false,false,false,false
-43867,"Standup M-Set Advanced Component Manufacturing Material Efficiency I",0.0,-2.0,0.0,,,,,,,false,false,false,false
-43868,"Standup M-Set Advanced Component Manufacturing Time Efficiency II",-24.0,0.0,0.0,,,,,,,false,false,false,false
-43869,"Standup M-Set Advanced Component Manufacturing Time Efficiency I",-20.0,0.0,0.0,,,,,,,false,false,false,false
-43870,"Standup M-Set Basic Capital Component Manufacturing Material Efficiency I",0.0,-2.0,0.0,,,,,,,false,false,false,false
-43871,"Standup M-Set Basic Capital Component Manufacturing Material Efficiency II",0.0,-2.4,0.0,,,,,,,false,false,false,false
-43872,"Standup M-Set Basic Capital Component Manufacturing Time Efficiency I",-20.0,0.0,0.0,,,,,,,false,false,false,false
-43873,"Standup M-Set Basic Capital Component Manufacturing Time Efficiency II",-24.0,0.0,0.0,,,,,,,false,false,false,false
-43874,"Standup M-Set Structure Manufacturing Material Efficiency II",0.0,-2.4,0.0,,,,,,,false,false,false,false
-43875,"Standup M-Set Structure Manufacturing Material Efficiency I",0.0,-2.0,0.0,,,,,,,false,false,false,false
-43876,"Standup M-Set Structure Manufacturing Time Efficiency I",-20.0,0.0,0.0,,,,,,,false,false,false,false
-43877,"Standup M-Set Structure Manufacturing Time Efficiency II",-24.0,0.0,0.0,,,,,,,false,false,false,false
-43878,"Standup M-Set Invention Cost Optimization II",0.0,0.0,-12.0,,,,,,,true,false,false,false
-43879,"Standup M-Set Invention Cost Optimization I",0.0,0.0,-10.0,,,,,,,true,false,false,false
-43880,"Standup M-Set Invention Accelerator I",-20.0,0.0,0.0,,,,,,,true,false,false,false
-43881,"Standup M-Set Invention Accelerator II",-24.0,0.0,0.0,,,,,,,true,false,false,false
-43882,"Standup M-Set ME Research Accelerator II",-24.0,0.0,0.0,,,,,,,false,false,false,true
-43883,"Standup M-Set ME Research Accelerator I",-20.0,0.0,0.0,,,,,,,false,false,false,true
-43884,"Standup M-Set ME Research Cost Optimization II",0.0,0.0,-12.0,,,,,,,false,false,false,true
-43885,"Standup M-Set ME Research Cost Optimization I",0.0,0.0,-10.0,,,,,,,false,false,false,true
-43886,"Standup M-Set TE Research Cost Optimization II",0.0,0.0,-12.0,,,,,,,false,true,false,false
-43887,"Standup M-Set TE Research Cost Optimization I",0.0,0.0,-10.0,,,,,,,false,true,false,false
-43888,"Standup M-Set TE Research Accelerator II",-24.0,0.0,0.0,,,,,,,false,true,false,false
-43889,"Standup M-Set TE Research Accelerator I",-20.0,0.0,0.0,,,,,,,false,true,false,false
-43890,"Standup M-Set Blueprint Copy Cost Optimization II",0.0,0.0,-12.0,,,,,,,false,false,true,false
-43891,"Standup M-Set Blueprint Copy Cost Optimization I",0.0,0.0,-10.0,,,,,,,false,false,true,false
-43892,"Standup M-Set Blueprint Copy Accelerator II",-24.0,0.0,0.0,,,,,,,false,false,true,false
-43893,"Standup M-Set Blueprint Copy Accelerator I",-20.0,0.0,0.0,,,,,,,false,false,true,false
-43919,"Standup M-Set Basic Medium Ship Manufacturing Time Efficiency I",-20.0,0.0,0.0,,,,,,,false,false,false,false
-43920,"Standup M-Set Equipment Manufacturing Material Efficiency I",0.0,-2.0,0.0,,,,,,,false,false,false,false
-43921,"Standup M-Set Equipment Manufacturing Material Efficiency II",0.0,-2.4,0.0,,,,,,,false,false,false,false
-45544,"Standup M-Set Thukker Basic Capital Component Manufacturing Material Efficiency",0.0,0.0,0.0,,,,,,,false,false,false,false
-45546,"Standup L-Set Thukker Basic Capital Component Manufacturing Efficiency",-20.0,0.0,0.0,,,,,,,false,false,false,false
-45548,"Standup XL-Set Thukker Structure and Component Manufacturing Efficiency",-20.0,-2.0,0.0,,,,,,,false,false,false,false
-45640,"Standup M-Set Thukker Advanced Component Manufacturing Material Efficiency",0.0,-2.0,0.0,,,,,,,false,false,false,false
-45641,"Standup L-Set Thukker Advanced Component Manufacturing Efficiency",-20.0,-2.0,0.0,,,,,,,false,false,false,false
-47882,"Upwell M1R Outpost Rig",0.0,0.0,0.0,,,,,,,false,false,false,false
-47883,"Upwell A1F Outpost Rig",0.0,-1.0,0.0,,,,,,,false,false,false,false
-47884,"Upwell M2R- Outpost Rig",0.0,0.0,0.0,,,,,,,false,false,false,false
-47979,"Upwell M3R-- Outpost Rig",0.0,0.0,0.0,,,,,,,false,false,false,false
-47980,"Upwell M2RO Outpost Rig",0.0,0.0,0.0,,,,,,,false,false,false,false
-47981,"Upwell A2FP Outpost Rig",0.0,-3.0,0.0,,,,,,,false,false,false,false
-47982,"Upwell A3PFO Outpost Rig",0.0,-5.0,0.0,,,,,,,false,false,false,false
-47983,"Upwell A1O Outpost Rig",0.0,0.0,0.0,,,,,,,false,false,false,false
-47984,"Upwell C1L Outpost Rig",0.0,0.0,0.0,,,,,,,true,true,true,true
-47985,"Upwell A1P Outpost Rig",0.0,-1.0,0.0,,,,,,,false,false,false,false
-47986,"Upwell A3FPO Outpost Rig",0.0,-5.0,0.0,,,,,,,false,false,false,false
-47987,"Upwell A2PF Outpost Rig",0.0,-3.0,0.0,,,,,,,false,false,false,false
-47988,"Upwell G1O Outpost Rig",0.0,0.0,0.0,,,,,,,false,false,false,false
-47989,"Upwell M3R-O Outpost Rig",0.0,0.0,0.0,,,,,,,false,false,false,false
-47990,"Upwell A3FP- Outpost Rig",0.0,-5.0,0.0,,,,,,,false,false,false,false
-47991,"Upwell A2F- Outpost Rig",0.0,-2.0,0.0,,,,,,,false,false,false,false
-47992,"Upwell G1F Outpost Rig",0.0,0.0,0.0,,,,,,,false,false,false,false
+type_id,name,time_bonus,material_bonus,cost_bonus,manufacturing_categories,manufacturing_groups,reaction_categories,reaction_groups,invention_categories,invention_groups,global_activities
+37146,"Standup M-Set Basic Medium Ship Manufacturing Material Efficiency I",0.0,-2.0,0.0,,26;28;419;463;1201,,,,,
+37147,"Standup M-Set Basic Medium Ship Manufacturing Material Efficiency II",0.0,-2.4,0.0,,26;28;419;463;1201,,,,,
+37148,"Standup M-Set Drone and Fighter Manufacturing Time Efficiency I",-20.0,0.0,0.0,18;87,,,,,,
+37149,"Standup M-Set Drone and Fighter Manufacturing Time Efficiency II",-24.0,0.0,0.0,18;87,,,,,,
+37150,"Standup M-Set Ammunition Manufacturing Time Efficiency I",-20.0,0.0,0.0,8,,,,,,
+37151,"Standup M-Set Ammunition Manufacturing Time Efficiency II",-24.0,0.0,0.0,8,,,,,,
+37152,"Standup M-Set Basic Large Ship Manufacturing Material Efficiency II",0.0,-2.4,0.0,,27;513;941,,,,,
+37153,"Standup M-Set Basic Medium Ship Manufacturing Time Efficiency II",-24.0,0.0,0.0,,26;28;419;463;1201,,,,,
+37154,"Standup M-Set Basic Small Ship Manufacturing Material Efficiency I",0.0,-2.0,0.0,,25;31;420,,,,,
+37155,"Standup M-Set Basic Small Ship Manufacturing Material Efficiency II",0.0,-2.4,0.0,,25;31;420,,,,,
+37156,"Standup M-Set Drone and Fighter Manufacturing Material Efficiency I",0.0,-2.0,0.0,18;87,,,,,,
+37157,"Standup M-Set Drone and Fighter Manufacturing Material Efficiency II",0.0,-2.4,0.0,18;87,,,,,,
+37158,"Standup M-Set Ammunition Manufacturing Material Efficiency I",0.0,-2.0,0.0,8,,,,,,
+37159,"Standup M-Set Ammunition Manufacturing Material Efficiency II",0.0,-2.4,0.0,8,,,,,,
+37160,"Standup M-Set Equipment Manufacturing Time Efficiency I",-20.0,0.0,0.0,7;20;22,12;340;448;649,,,,,
+37161,"Standup M-Set Equipment Manufacturing Time Efficiency II",-24.0,0.0,0.0,7;20;22,12;340;448;649,,,,,
+37162,"Standup M-Set Basic Small Ship Manufacturing Time Efficiency I",-20.0,0.0,0.0,,25;31;420,,,,,
+37163,"Standup M-Set Basic Small Ship Manufacturing Time Efficiency II",-24.0,0.0,0.0,,25;31;420,,,,,
+37164,"Standup L-Set Ammunition Manufacturing Efficiency I",-20.0,-2.0,0.0,8,,,,,,
+37165,"Standup L-Set Ammunition Manufacturing Efficiency II",-24.0,-2.4,0.0,8,,,,,,
+37166,"Standup L-Set Basic Large Ship Manufacturing Efficiency I",-20.0,-2.0,0.0,,27;513;941,,,,,
+37167,"Standup L-Set Basic Large Ship Manufacturing Efficiency II",-24.0,-2.4,0.0,,27;513;941,,,,,
+37168,"Standup L-Set Advanced Large Ship Manufacturing Efficiency I",-20.0,-2.0,0.0,,898;900;902,,,,,
+37169,"Standup L-Set Advanced Large Ship Manufacturing Efficiency II",-24.0,-2.4,0.0,,898;900;902,,,,,
+37170,"Standup L-Set Equipment Manufacturing Efficiency I",-20.0,-2.0,0.0,7;20;22,12;340;448;649,,,,,
+37171,"Standup L-Set Equipment Manufacturing Efficiency II",-24.0,-2.4,0.0,7;20;22,12;340;448;649,,,,,
+37172,"Standup L-Set Capital Ship Manufacturing Efficiency II",-24.0,-2.4,0.0,,485;547;883;1538;4594,,,,,
+37173,"Standup L-Set Capital Ship Manufacturing Efficiency I",-20.0,-2.0,0.0,,485;547;883;1538;4594,,,,,
+37174,"Standup L-Set Advanced Component Manufacturing Efficiency I",-20.0,-2.0,0.0,,332;334;716;913;964,,,,,
+37175,"Standup L-Set Advanced Component Manufacturing Efficiency II",-24.0,-2.4,0.0,,332;334;716;913;964,,,,,
+37178,"Standup XL-Set Equipment and Consumable Manufacturing Efficiency I",-20.0,-2.0,0.0,7;8;18;20;22;87,12;340;448;649,,,,,
+37179,"Standup XL-Set Equipment and Consumable Manufacturing Efficiency II",-24.0,-2.4,0.0,7;8;18;20;22;87,12;340;448;649,,,,,
+37180,"Standup XL-Set Ship Manufacturing Efficiency I",-20.0,-2.0,0.0,6;32,,,,,,
+37181,"Standup XL-Set Ship Manufacturing Efficiency II",-24.0,-2.4,0.0,6;32,,,,,,
+37182,"Standup XL-Set Laboratory Optimization II",-24.0,0.0,-12.0,,,,,,,"research_material;research_time;invention;copying"
+37183,"Standup XL-Set Laboratory Optimization I",-20.0,0.0,-10.0,,,,,,,"research_material;research_time;invention;copying"
+43704,"Standup XL-Set Structure and Component Manufacturing Efficiency I",-20.0,-2.0,0.0,23;39;40;65;66,"332;334;536;716;873;913;964;1136;4736",,,,,
+43705,"Standup XL-Set Structure and Component Manufacturing Efficiency II",-24.0,-2.4,0.0,23;39;40;65;66,"332;334;536;716;873;913;964;1136;4736",,,,,
+43707,"Standup L-Set Advanced Small Ship Manufacturing Efficiency I",-20.0,-2.0,0.0,,"324;541;830;831;834;893;1283;1305;1527;1534",,,,,
+43708,"Standup L-Set Advanced Small Ship Manufacturing Efficiency II",-24.0,-2.4,0.0,,"324;541;830;831;834;893;1283;1305;1527;1534",,,,,
+43709,"Standup L-Set Advanced Medium Ship Manufacturing Efficiency I",-20.0,-2.0,0.0,32,"358;380;540;543;832;833;894;906;963;1202;1972",,,,,
+43711,"Standup L-Set Advanced Medium Ship Manufacturing Efficiency II",-24.0,-2.4,0.0,32,"358;380;540;543;832;833;894;906;963;1202;1972",,,,,
+43712,"Standup L-Set Drone and Fighter Manufacturing Efficiency I",-20.0,-2.0,0.0,18;87,,,,,,
+43713,"Standup L-Set Drone and Fighter Manufacturing Efficiency II",-24.0,-2.4,0.0,18;87,,,,,,
+43714,"Standup L-Set Basic Small Ship Manufacturing Efficiency I",-20.0,-2.0,0.0,,25;31;420,,,,,
+43715,"Standup L-Set Basic Small Ship Manufacturing Efficiency II",-24.0,-2.4,0.0,,25;31;420,,,,,
+43716,"Standup L-Set Basic Medium Ship Manufacturing Efficiency I",-20.0,-2.0,0.0,,26;28;419;463;1201,,,,,
+43717,"Standup L-Set Basic Medium Ship Manufacturing Efficiency II",-24.0,-2.4,0.0,,26;28;419;463;1201,,,,,
+43718,"Standup L-Set Basic Capital Component Manufacturing Efficiency I",-20.0,-2.0,0.0,,873,,,,,
+43719,"Standup L-Set Basic Capital Component Manufacturing Efficiency II",-24.0,-2.4,0.0,,873,,,,,
+43720,"Standup L-Set Structure Manufacturing Efficiency I",-20.0,-2.0,0.0,23;39;40;65;66,536;1136;4736,,,,,
+43721,"Standup L-Set Structure Manufacturing Efficiency II",-24.0,-2.4,0.0,23;39;40;65;66,536;1136;4736,,,,,
+43722,"Standup L-Set Invention Optimization I",-20.0,0.0,-10.0,,,,,,,invention
+43723,"Standup L-Set Invention Optimization II",-24.0,0.0,-12.0,,,,,,,invention
+43724,"Standup L-Set ME Research Optimization I",-20.0,0.0,-10.0,,,,,,,research_material
+43725,"Standup L-Set ME Research Optimization II",-24.0,0.0,-12.0,,,,,,,research_material
+43726,"Standup L-Set TE Research Optimization I",-20.0,0.0,-10.0,,,,,,,research_time
+43727,"Standup L-Set TE Research Optimization II",-24.0,0.0,-12.0,,,,,,,research_time
+43729,"Standup L-Set Blueprint Copy Optimization I",-20.0,0.0,-10.0,,,,,,,copying
+43730,"Standup L-Set Blueprint Copy Optimization II",-24.0,0.0,-12.0,,,,,,,copying
+43732,"Standup M-Set Basic Large Ship Manufacturing Material Efficiency I",0.0,-2.0,0.0,,27;513;941,,,,,
+43733,"Standup M-Set Basic Large Ship Manufacturing Time Efficiency I",-20.0,0.0,0.0,,27;513;941,,,,,
+43734,"Standup M-Set Basic Large Ship Manufacturing Time Efficiency II",-24.0,0.0,0.0,,27;513;941,,,,,
+43854,"Standup M-Set Advanced Small Ship Manufacturing Material Efficiency II",0.0,-2.4,0.0,,"324;541;830;831;834;893;1283;1305;1527;1534",,,,,
+43855,"Standup M-Set Advanced Small Ship Manufacturing Material Efficiency I",0.0,-2.0,0.0,,"324;541;830;831;834;893;1283;1305;1527;1534",,,,,
+43856,"Standup M-Set Advanced Small Ship Manufacturing Time Efficiency I",-20.0,0.0,0.0,,"324;541;830;831;834;893;1283;1305;1527;1534",,,,,
+43857,"Standup M-Set Advanced Small Ship Manufacturing Time Efficiency II",-24.0,0.0,0.0,,"324;541;830;831;834;893;1283;1305;1527;1534",,,,,
+43858,"Standup M-Set Advanced Medium Ship Manufacturing Material Efficiency I",0.0,-2.0,0.0,32,"358;380;540;543;832;833;894;906;963;1202;1972",,,,,
+43859,"Standup M-Set Advanced Medium Ship Manufacturing Material Efficiency II",0.0,-2.4,0.0,32,"358;380;540;543;832;833;894;906;963;1202;1972",,,,,
+43860,"Standup M-Set Advanced Medium Ship Manufacturing Time Efficiency I",-20.0,0.0,0.0,32,"358;380;540;543;832;833;894;906;963;1202;1972",,,,,
+43861,"Standup M-Set Advanced Medium Ship Manufacturing Time Efficiency II",-24.0,0.0,0.0,32,"358;380;540;543;832;833;894;906;963;1202;1972",,,,,
+43862,"Standup M-Set Advanced Large Ship Manufacturing Material Efficiency I",0.0,-2.0,0.0,,898;900;902,,,,,
+43863,"Standup M-Set Advanced Large Ship Manufacturing Material Efficiency II",0.0,-2.4,0.0,,898;900;902,,,,,
+43864,"Standup M-Set Advanced Large Ship Manufacturing Time Efficiency II",-24.0,0.0,0.0,,898;900;902,,,,,
+43865,"Standup M-Set Advanced Large Ship Manufacturing Time Efficiency I",-20.0,0.0,0.0,,898;900;902,,,,,
+43866,"Standup M-Set Advanced Component Manufacturing Material Efficiency II",0.0,-2.4,0.0,,332;334;716;913;964,,,,,
+43867,"Standup M-Set Advanced Component Manufacturing Material Efficiency I",0.0,-2.0,0.0,,332;334;716;913;964,,,,,
+43868,"Standup M-Set Advanced Component Manufacturing Time Efficiency II",-24.0,0.0,0.0,,332;334;716;913;964,,,,,
+43869,"Standup M-Set Advanced Component Manufacturing Time Efficiency I",-20.0,0.0,0.0,,332;334;716;913;964,,,,,
+43870,"Standup M-Set Basic Capital Component Manufacturing Material Efficiency I",0.0,-2.0,0.0,,873,,,,,
+43871,"Standup M-Set Basic Capital Component Manufacturing Material Efficiency II",0.0,-2.4,0.0,,873,,,,,
+43872,"Standup M-Set Basic Capital Component Manufacturing Time Efficiency I",-20.0,0.0,0.0,,873,,,,,
+43873,"Standup M-Set Basic Capital Component Manufacturing Time Efficiency II",-24.0,0.0,0.0,,873,,,,,
+43874,"Standup M-Set Structure Manufacturing Material Efficiency II",0.0,-2.4,0.0,23;39;40;65;66,536;1136;4736,,,,,
+43875,"Standup M-Set Structure Manufacturing Material Efficiency I",0.0,-2.0,0.0,23;39;40;65;66,536;1136;4736,,,,,
+43876,"Standup M-Set Structure Manufacturing Time Efficiency I",-20.0,0.0,0.0,23;39;40;65;66,536;1136;4736,,,,,
+43877,"Standup M-Set Structure Manufacturing Time Efficiency II",-24.0,0.0,0.0,23;39;40;65;66,536;1136;4736,,,,,
+43878,"Standup M-Set Invention Cost Optimization II",0.0,0.0,-12.0,,,,,,,invention
+43879,"Standup M-Set Invention Cost Optimization I",0.0,0.0,-10.0,,,,,,,invention
+43880,"Standup M-Set Invention Accelerator I",-20.0,0.0,0.0,,,,,,,invention
+43881,"Standup M-Set Invention Accelerator II",-24.0,0.0,0.0,,,,,,,invention
+43882,"Standup M-Set ME Research Accelerator II",-24.0,0.0,0.0,,,,,,,research_material
+43883,"Standup M-Set ME Research Accelerator I",-20.0,0.0,0.0,,,,,,,research_material
+43884,"Standup M-Set ME Research Cost Optimization II",0.0,0.0,-12.0,,,,,,,research_material
+43885,"Standup M-Set ME Research Cost Optimization I",0.0,0.0,-10.0,,,,,,,research_material
+43886,"Standup M-Set TE Research Cost Optimization II",0.0,0.0,-12.0,,,,,,,research_time
+43887,"Standup M-Set TE Research Cost Optimization I",0.0,0.0,-10.0,,,,,,,research_time
+43888,"Standup M-Set TE Research Accelerator II",-24.0,0.0,0.0,,,,,,,research_time
+43889,"Standup M-Set TE Research Accelerator I",-20.0,0.0,0.0,,,,,,,research_time
+43890,"Standup M-Set Blueprint Copy Cost Optimization II",0.0,0.0,-12.0,,,,,,,copying
+43891,"Standup M-Set Blueprint Copy Cost Optimization I",0.0,0.0,-10.0,,,,,,,copying
+43892,"Standup M-Set Blueprint Copy Accelerator II",-24.0,0.0,0.0,,,,,,,copying
+43893,"Standup M-Set Blueprint Copy Accelerator I",-20.0,0.0,0.0,,,,,,,copying
+43919,"Standup M-Set Basic Medium Ship Manufacturing Time Efficiency I",-20.0,0.0,0.0,,26;28;419;463;1201,,,,,
+43920,"Standup M-Set Equipment Manufacturing Material Efficiency I",0.0,-2.0,0.0,7;20;22,12;340;448;649,,,,,
+43921,"Standup M-Set Equipment Manufacturing Material Efficiency II",0.0,-2.4,0.0,7;20;22,12;340;448;649,,,,,
+45544,"Standup M-Set Thukker Basic Capital Component Manufacturing Material Efficiency",0.0,0.0,0.0,,873,,,,,
+45546,"Standup L-Set Thukker Basic Capital Component Manufacturing Efficiency",-20.0,0.0,0.0,,873,,,,,
+45548,"Standup XL-Set Thukker Structure and Component Manufacturing Efficiency",-20.0,-2.0,0.0,23;39;40;65;66,"332;334;536;716;873;913;964;1136;4736",,,,,
+45640,"Standup M-Set Thukker Advanced Component Manufacturing Material Efficiency",0.0,-2.0,0.0,,332;334;716;913;964,,,,,
+45641,"Standup L-Set Thukker Advanced Component Manufacturing Efficiency",-20.0,-2.0,0.0,,332;334;716;913;964,,,,,
+47882,"Upwell M1R Outpost Rig",0.0,0.0,0.0,,,,,,,
+47883,"Upwell A1F Outpost Rig",0.0,-1.0,0.0,,"25;26;27;28;31;419;420;463;485;513;547;883;941;1201;1538;4594",,,,,
+47884,"Upwell M2R- Outpost Rig",0.0,0.0,0.0,,,,,,,
+47979,"Upwell M3R-- Outpost Rig",0.0,0.0,0.0,,,,,,,
+47980,"Upwell M2RO Outpost Rig",0.0,0.0,0.0,,,,,,,
+47981,"Upwell A2FP Outpost Rig",0.0,-3.0,0.0,32,"25;26;27;28;31;324;358;380;419;420;463;485;513;540;541;543;547;830;831;832;833;834;883;893;894;898;900;902;906;941;963;1201;1202;1283;1305;1527;1534;1538;1972;4594",,,,,
+47982,"Upwell A3PFO Outpost Rig",0.0,-5.0,0.0,32,"25;26;27;28;31;324;358;380;419;420;463;485;513;540;541;543;547;830;831;832;833;834;883;893;894;898;900;902;906;941;963;1201;1202;1283;1305;1527;1534;1538;1972;4594",,,,,
+47983,"Upwell A1O Outpost Rig",0.0,0.0,0.0,,,,,,,
+47984,"Upwell C1L Outpost Rig",0.0,0.0,0.0,,,,,,,"research_material;research_time;invention;copying"
+47985,"Upwell A1P Outpost Rig",0.0,-1.0,0.0,32,"324;358;380;540;541;543;830;831;832;833;834;893;894;898;900;902;906;963;1202;1283;1305;1527;1534;1972",,,,,
+47986,"Upwell A3FPO Outpost Rig",0.0,-5.0,0.0,32,"25;26;27;28;31;324;358;380;419;420;463;485;513;540;541;543;547;830;831;832;833;834;883;893;894;898;900;902;906;941;963;1201;1202;1283;1305;1527;1534;1538;1972;4594",,,,,
+47987,"Upwell A2PF Outpost Rig",0.0,-3.0,0.0,32,"25;26;27;28;31;324;358;380;419;420;463;485;513;540;541;543;547;830;831;832;833;834;883;893;894;898;900;902;906;941;963;1201;1202;1283;1305;1527;1534;1538;1972;4594",,,,,
+47988,"Upwell G1O Outpost Rig",0.0,0.0,0.0,,,,,,,
+47989,"Upwell M3R-O Outpost Rig",0.0,0.0,0.0,,,,,,,
+47990,"Upwell A3FP- Outpost Rig",0.0,-5.0,0.0,32,"25;26;27;28;31;324;358;380;419;420;463;485;513;540;541;543;547;830;831;832;833;834;883;893;894;898;900;902;906;941;963;1201;1202;1283;1305;1527;1534;1538;1972;4594",,,,,
+47991,"Upwell A2F- Outpost Rig",0.0,-2.0,0.0,,"25;26;27;28;31;419;420;463;485;513;547;883;941;1201;1538;4594",,,,,
+47992,"Upwell G1F Outpost Rig",0.0,0.0,0.0,,873,,,,,
+47993,"Upwell M3RPO Outpost Rig",0.0,-2.0,0.0,,,,,,,manufacturing
+47994,"Upwell M3RO- Outpost Rig",0.0,0.0,0.0,,,,,,,
+47995,"Upwell G1R Outpost Rig",0.0,0.0,0.0,,,,,,,
+47996,"Upwell A1R Outpost Rig",0.0,0.0,0.0,,,,,,,
+47997,"Upwell M2RL Outpost Rig",0.0,0.0,0.0,,,,,,,"research_material;research_time;copying"
+47998,"Upwell M2PR Outpost Rig",0.0,-2.0,0.0,,,,,,,manufacturing
+47999,"Upwell C1I Outpost Rig",0.0,0.0,0.0,,,,,,,"research_material;research_time;invention;copying"
+48000,"Upwell M1O Outpost Rig",0.0,0.0,0.0,,,,,,,
+48001,"Upwell C2LI Outpost Rig",0.0,0.0,0.0,,,,,,,"research_material;research_time;invention;copying"
+48002,"Upwell M3R-LO Outpost Rig",0.0,0.0,0.0,,,,,,,"research_material;research_time;copying"
+48003,"Upwell M1L Outpost Rig",0.0,0.0,0.0,,,,,,,"research_material;research_time;copying"
+48004,"Upwell C1R Outpost Rig",0.0,0.0,0.0,,,,,,,
+48005,"Upwell M2-RO Outpost Rig",0.0,0.0,0.0,,,,,,,
+48006,"Upwell M2OR Outpost Rig",0.0,0.0,0.0,,,,,,,
+48007,"Upwell G1P Outpost Rig",0.0,-1.0,0.0,,,,,,,manufacturing
+48008,"Upwell G2FP Outpost Rig",0.0,-1.0,0.0,,873,,,,,
+48009,"Upwell M2-RP Outpost Rig",0.0,-1.0,0.0,,,,,,,manufacturing
+48010,"Upwell M2RP Outpost Rig",0.0,-1.0,0.0,,,,,,,manufacturing
+48011,"Upwell G2PF Outpost Rig",0.0,-2.0,0.0,,873,,,,,
+48012,"Upwell A3PF- Outpost Rig",0.0,-5.0,0.0,32,"25;26;27;28;31;324;358;380;419;420;463;485;513;540;541;543;547;830;831;832;833;834;883;893;894;898;900;902;906;941;963;1201;1202;1283;1305;1527;1534;1538;1972;4594",,,,,
+48013,"Upwell C3LIO Outpost Rig",0.0,0.0,0.0,,,,,,,"research_material;research_time;invention;copying"
+48014,"Upwell C2L- Outpost Rig",0.0,0.0,0.0,,,,,,,"research_material;research_time;invention;copying"
+48015,"Upwell C2IL Outpost Rig",0.0,0.0,0.0,,,,,,,"research_material;research_time;invention;copying"
+48016,"Upwell C3L-IO Outpost Rig",0.0,0.0,0.0,,,,,,,"research_material;research_time;invention;copying"
+48017,"Upwell C3LI- Outpost Rig",0.0,0.0,0.0,,,,,,,"research_material;research_time;invention;copying"
+48018,"Upwell C2IR Outpost Rig",0.0,0.0,0.0,,,,,,,"research_material;research_time;invention;copying"
+48019,"Upwell G1L Outpost Rig",0.0,0.0,0.0,,,,,,,"research_material;research_time;invention;copying"
+48020,"Upwell M3ROL Outpost Rig",0.0,0.0,0.0,,,,,,,"research_material;research_time;copying"
+48021,"Upwell G2O- Outpost Rig",0.0,0.0,0.0,,,,,,,
+48022,"Upwell M3RPF Outpost Rig",0.0,-2.0,0.0,7;20;22,12;340;448;649,,,,,
+48023,"Upwell M3P-RF Outpost Rig",0.0,-3.0,0.0,7;20;22,12;340;448;649,,,,,
+48024,"Upwell M3R-F Outpost Rig",0.0,0.0,0.0,7;20;22,12;340;448;649,,,,,
+48025,"Upwell M3ROF Outpost Rig",0.0,0.0,0.0,7;20;22,12;340;448;649,,,,,
+48026,"Upwell C3FIL Outpost Rig",0.0,-3.0,0.0,,332;334;716;913;964,,,,,"research_material;research_time;invention;copying"
+48027,"Upwell A3FPL Outpost Rig",0.0,-5.0,0.0,32,"25;26;27;28;31;324;358;380;419;420;463;485;513;540;541;543;547;830;831;832;833;834;883;893;894;898;900;902;906;941;963;1201;1202;1283;1305;1527;1534;1538;1972;4594",,,,,"research_material;research_time;copying"
+48028,"Upwell A2-FP Outpost Rig",0.0,-2.0,0.0,32,"25;26;27;28;31;324;358;380;419;420;463;485;513;540;541;543;547;830;831;832;833;834;883;893;894;898;900;902;906;941;963;1201;1202;1283;1305;1527;1534;1538;1972;4594",,,,,
+48029,"Upwell A2-FR Outpost Rig",0.0,-1.0,0.0,,"25;26;27;28;31;419;420;463;485;513;547;883;941;1201;1538;4594",,,,,
+48030,"Upwell A2OF Outpost Rig",0.0,-1.0,0.0,,"25;26;27;28;31;419;420;463;485;513;547;883;941;1201;1538;4594",,,,,
+48031,"Upwell A3FOP Outpost Rig",0.0,-4.0,0.0,32,"25;26;27;28;31;324;358;380;419;420;463;485;513;540;541;543;547;830;831;832;833;834;883;893;894;898;900;902;906;941;963;1201;1202;1283;1305;1527;1534;1538;1972;4594",,,,,
+48032,"Upwell M3ROP Outpost Rig",0.0,-1.0,0.0,,,,,,,manufacturing
+48033,"Upwell A2L- Outpost Rig",0.0,0.0,0.0,,,,,,,"research_material;research_time;copying"
+48034,"Upwell G2OP Outpost Rig",0.0,-1.0,0.0,,,,,,,manufacturing
+48035,"Upwell M1P Outpost Rig",0.0,-1.0,0.0,,,,,,,manufacturing
+48036,"Upwell M3PR- Outpost Rig",0.0,-3.0,0.0,,,,,,,manufacturing
+48037,"Upwell G3FLP Outpost Rig",0.0,-1.0,0.0,,873,,,,,"research_material;research_time;invention;copying"
+48038,"Upwell M3RFO Outpost Rig",0.0,0.0,0.0,7;20;22,12;340;448;649,,,,,
+48039,"Upwell G2PR Outpost Rig",0.0,-2.0,0.0,,,,,,,manufacturing
+48040,"Upwell M3-RPL Outpost Rig",0.0,-2.0,0.0,,,,,,,"research_material;research_time;manufacturing;copying"
+48041,"Upwell M3LPR Outpost Rig",0.0,-2.0,0.0,,,,,,,"research_material;research_time;manufacturing;copying"
+48042,"Upwell A2PO Outpost Rig",0.0,-2.0,0.0,32,"324;358;380;540;541;543;830;831;832;833;834;893;894;898;900;902;906;963;1202;1283;1305;1527;1534;1972",,,,,
+48043,"Upwell A2FO Outpost Rig",0.0,-2.0,0.0,,"25;26;27;28;31;419;420;463;485;513;547;883;941;1201;1538;4594",,,,,
+48044,"Upwell C2LF Outpost Rig",0.0,-1.0,0.0,,332;334;716;913;964,,,,,"research_material;research_time;invention;copying"
+48045,"Upwell C3L-- Outpost Rig",0.0,0.0,0.0,,,,,,,"research_material;research_time;invention;copying"
+48046,"Upwell A3F-- Outpost Rig",0.0,-3.0,0.0,,"25;26;27;28;31;419;420;463;485;513;547;883;941;1201;1538;4594",,,,,
+48047,"Upwell C3LIF Outpost Rig",0.0,-1.0,0.0,,332;334;716;913;964,,,,,"research_material;research_time;invention;copying"
+48048,"Upwell M3L-R Outpost Rig",0.0,0.0,0.0,,,,,,,"research_material;research_time;copying"
+48049,"Upwell C3L-I Outpost Rig",0.0,0.0,0.0,,,,,,,"research_material;research_time;invention;copying"
+48050,"Upwell M3RP- Outpost Rig",0.0,-2.0,0.0,,,,,,,manufacturing
+48051,"Upwell M3R-P Outpost Rig",0.0,-1.0,0.0,,,,,,,manufacturing
+48052,"Upwell M3R-L Outpost Rig",0.0,0.0,0.0,,,,,,,"research_material;research_time;copying"
+48053,"Upwell A2P- Outpost Rig",0.0,-2.0,0.0,32,"324;358;380;540;541;543;830;831;832;833;834;893;894;898;900;902;906;963;1202;1283;1305;1527;1534;1972",,,,,
+48054,"Upwell G3FP- Outpost Rig",0.0,-2.0,0.0,,873,,,,,
+48055,"Upwell M3RPL Outpost Rig",0.0,-2.0,0.0,,,,,,,"research_material;research_time;manufacturing;copying"
+48056,"Upwell A3PFL Outpost Rig",0.0,-5.0,0.0,32,"25;26;27;28;31;324;358;380;419;420;463;485;513;540;541;543;547;830;831;832;833;834;883;893;894;898;900;902;906;941;963;1201;1202;1283;1305;1527;1534;1538;1972;4594",,,,,"research_material;research_time;copying"
+48057,"Upwell M3RL- Outpost Rig",0.0,0.0,0.0,,,,,,,"research_material;research_time;copying"
+48058,"Upwell M3L-- Outpost Rig",0.0,0.0,0.0,,,,,,,"research_material;research_time;copying"
+48059,"Upwell G3L-- Outpost Rig",0.0,0.0,0.0,,,,,,,"research_material;research_time;invention;copying"
+48060,"Upwell M3LRP Outpost Rig",0.0,-1.0,0.0,,,,,,,"research_material;research_time;manufacturing;copying"
+48061,"Upwell C3LF- Outpost Rig",0.0,-2.0,0.0,,332;334;716;913;964,,,,,"research_material;research_time;invention;copying"
+48062,"Upwell C3LFI Outpost Rig",0.0,-2.0,0.0,,332;334;716;913;964,,,,,"research_material;research_time;invention;copying"
+48063,"Upwell C3FLI Outpost Rig",0.0,-3.0,0.0,,332;334;716;913;964,,,,,"research_material;research_time;invention;copying"
+48064,"Upwell A3L-P Outpost Rig",0.0,-1.0,0.0,32,"324;358;380;540;541;543;830;831;832;833;834;893;894;898;900;902;906;963;1202;1283;1305;1527;1534;1972",,,,,"research_material;research_time;copying"
+48065,"Upwell G3LFP Outpost Rig",0.0,-1.0,0.0,,873,,,,,"research_material;research_time;invention;copying"
+48066,"Upwell G2F- Outpost Rig",0.0,0.0,0.0,,873,,,,,
+48067,"Upwell G3FPO Outpost Rig",0.0,-2.0,0.0,,873,,,,,
+48068,"Upwell C3L-F Outpost Rig",0.0,-1.0,0.0,,332;334;716;913;964,,,,,"research_material;research_time;invention;copying"
+48069,"Upwell A3P-F Outpost Rig",0.0,-4.0,0.0,32,"25;26;27;28;31;324;358;380;419;420;463;485;513;540;541;543;547;830;831;832;833;834;883;893;894;898;900;902;906;941;963;1201;1202;1283;1305;1527;1534;1538;1972;4594",,,,,
+48070,"Upwell A3FPR Outpost Rig",0.0,-5.0,0.0,32,"25;26;27;28;31;324;358;380;419;420;463;485;513;540;541;543;547;830;831;832;833;834;883;893;894;898;900;902;906;941;963;1201;1202;1283;1305;1527;1534;1538;1972;4594",,,,,
+48071,"Upwell M2-RL Outpost Rig",0.0,0.0,0.0,,,,,,,"research_material;research_time;copying"
+48072,"Upwell M2LR Outpost Rig",0.0,0.0,0.0,,,,,,,"research_material;research_time;copying"
+48073,"Upwell C3-LI- Outpost Rig",0.0,0.0,0.0,,,,,,,"research_material;research_time;invention;copying"
+48074,"Upwell C3ILR Outpost Rig",0.0,0.0,0.0,,,,,,,"research_material;research_time;invention;copying"
+48075,"Upwell C3L-R Outpost Rig",0.0,0.0,0.0,,,,,,,"research_material;research_time;invention;copying"
+48076,"Upwell G2L- Outpost Rig",0.0,0.0,0.0,,,,,,,"research_material;research_time;invention;copying"
+48077,"Upwell A3L-- Outpost Rig",0.0,0.0,0.0,,,,,,,"research_material;research_time;copying"
+48078,"Upwell M3RLP Outpost Rig",0.0,-1.0,0.0,,,,,,,"research_material;research_time;manufacturing;copying"

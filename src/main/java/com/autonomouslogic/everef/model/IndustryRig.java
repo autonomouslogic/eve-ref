@@ -28,10 +28,7 @@ import lombok.extern.jackson.Jacksonized;
 	"reaction_groups",
 	"invention_categories",
 	"invention_groups",
-	"invention",
-	"research_time",
-	"research_time",
-	"copying"
+	"global_activities"
 })
 @Schema
 public class IndustryRig {
@@ -75,14 +72,5 @@ public class IndustryRig {
 	List<Long> inventionGroups;
 
 	@JsonProperty
-	boolean invention;
-
-	@JsonProperty
-	boolean researchTime;
-
-	@JsonProperty
-	boolean researchMaterial;
-
-	@JsonProperty
-	boolean copying;
+	List<String> globalActivities;
 }
