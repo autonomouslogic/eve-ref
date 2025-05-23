@@ -259,15 +259,15 @@ task apiClientGenerate(type: org.openapitools.generator.gradle.plugin.tasks.Gene
 	additionalProperties = [
 			supportUrlQuery: "false"
 	]
-	schemaMappings = [
-			"ActivityCost": "com.autonomouslogic.everef.model.api.ActivityCost",
-			"ApiError": "com.autonomouslogic.everef.model.api.ApiError",
-			"IndustryCost": "com.autonomouslogic.everef.model.api.IndustryCost",
-			"IndustryCostInput": "com.autonomouslogic.everef.model.api.IndustryCostInput",
-			"ManufacturingCost": "com.autonomouslogic.everef.model.api.ManufacturingCost",
-			"InventionCost": "com.autonomouslogic.everef.model.api.InventionCost",
-			"MaterialCost": "com.autonomouslogic.everef.model.api.MaterialCost",
-	]
+//	schemaMappings = [
+//			"ActivityCost": "com.autonomouslogic.everef.model.api.ActivityCost",
+//			"ApiError": "com.autonomouslogic.everef.model.api.ApiError",
+//			"IndustryCost": "com.autonomouslogic.everef.model.api.IndustryCost",
+//			"IndustryCostInput": "com.autonomouslogic.everef.model.api.IndustryCostInput",
+//			"ManufacturingCost": "com.autonomouslogic.everef.model.api.ManufacturingCost",
+//			"InventionCost": "com.autonomouslogic.everef.model.api.InventionCost",
+//			"MaterialCost": "com.autonomouslogic.everef.model.api.MaterialCost",
+//	]
 	logToStderr = true
 }
 sourceSets.main.java.srcDirs files("${buildDir}/generated/openapi/api/src/main/java")
