@@ -195,8 +195,8 @@ public class PublishRefDataTest {
 			assertBundle(
 					ExpectedBundleIds.builder()
 							.typeIds(List.of(
-									645L, 22430L, 3336L, 3327L, 33097L, 3332L, 33093L, 3328L, 999L, 34L, 37152L,
-									43733L))
+									645L, 22430L, 3336L, 3327L, 33097L, 3332L, 33093L, 3328L, 999L, 34L, 37152L, 43733L,
+									37180L))
 							.attributeIds(List.of(9L, 162L, 182L, 277L, 183L, 278L))
 							.skillIds(List.of(3336L, 3327L, 33097L, 3332L, 33093L, 3328L))
 							.unitIds(List.of(1L, 133L))
@@ -228,7 +228,7 @@ public class PublishRefDataTest {
 		if (id == 43704) {
 			assertBundle(
 					ExpectedBundleIds.builder()
-							.typeIds(List.of(43704L))
+							.typeIds(List.of(43704L, 45548L))
 							.attributeIds(List.of(9L, 162L, 182L, 277L, 2355L))
 							.skillIds(List.of())
 							.unitIds(List.of(1L, 133L))

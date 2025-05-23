@@ -3,7 +3,7 @@
   "runs": 1,
   "structure_type_id": 35827,
   "rig_id": [45548, 37180, 37183],
-  "fw_cost_bonus": -0.5,
+  "system_cost_bonus": -0.5,
   "security": "LOW_SEC",
   "invention_cost": 0.10806409478558892086, // ESI said 0.1081
   "facility_tax": 0.02
