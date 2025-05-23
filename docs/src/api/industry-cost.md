@@ -164,6 +164,20 @@ Example output:
 }
 ```
 
+## Job Costs
+EIV calculations should match exactly, but you might notice that the system cost index can be slightly off.
+That's not a bug, it's just how the data from CCP works.
+The ESI only gives us two decimal places of precision, even though the actual values go deeper.
+
+For example, ESI might say the index is `0.0728`, but behind the scenes it could really be something like `0.0728049422`.
+When you're installing a job, that tiny difference could change the cost by around 800 ISK on an 18 million ISK job installation cost.
+That's just 0.004%.
+When your material costs are over 200 million ISK, that 800 ISK doesn't really matter.
+
+Still, it's good to know this ahead of time, so you don't end up chasing ghosts trying to find out why your numbers are off by a few hundred ISK.
+
+
+
 ## Running Locally
 All data is loaded upon start.
 There is no external database or other dependencies.
@@ -173,7 +187,7 @@ docker run -it --rm autonomouslogic/eve-ref:latest api
 ```
 
 ## Performance
-The API has been tested on my local machine to do over 6,000 req.s at 16 ms per request.
+The API has been tested on my local machine to do over 6,000 req/s at 16 ms per request.
 
 ## References
 * [https://eve-industry.org/export/IndustryFormulas.pdf](https://eve-industry.org/export/IndustryFormulas.pdf)
