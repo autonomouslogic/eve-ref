@@ -38,6 +38,7 @@
       },
       "estimated_item_value": 16851544,
       "system_cost_index": 1222092,
+      "system_cost_bonuses": 0,
       "facility_tax": 42129,
       "scc_surcharge": 674062,
       "alpha_clone_tax": 0,
