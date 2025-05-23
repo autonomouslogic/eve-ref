@@ -168,7 +168,7 @@ public class IndustryCostCalculator {
 		var runs = industryCostInput.getRuns();
 		var meMod = materialEfficiencyModifier();
 		var structureMod = structureManufacturingMaterialModifier();
-		var rigMod = rigManufacturingMaterialModifier();
+		var rigMod = rigModifier(IndustryRig::getMaterialBonus);
 		var quantity = runs * base * meMod * structureMod * rigMod;
 		var rounded = Math.max(runs, Math.ceil(Math.round(quantity * 100.0) / 100.0));
 		return (long) rounded;
@@ -189,23 +189,30 @@ public class IndustryCostCalculator {
 		return structure.getMaterialModifier();
 	}
 
-	private double rigManufacturingMaterialModifier() {
+	private double structureManufacturingTimeModifier() {
+		if (structure == null) {
+			return 1.0;
+		}
+		return structure.getTimeModifier();
+	}
+
+	private double rigModifier(Function<IndustryRig, Double> bonusGetter) {
 		var bonus = 0.0;
 		if (rigs != null) {
 			for (var rig : rigs) {
-				bonus += rigManufacturingMaterialBonus(rig);
+				bonus += rigBonus(rig, bonusGetter);
 			}
 		}
 		return 1.0 + bonus;
 	}
 
-	private double rigManufacturingMaterialBonus(IndustryRig rig) {
+	private double rigBonus(IndustryRig rig, Function<IndustryRig, Double> bonusGetter) {
 		var categories = rig.getManufacturingCategories();
 		var groups = rig.getManufacturingGroups();
 		var category = productType.getCategoryId();
 		var group = productType.getGroupId();
 		if ((categories != null && categories.contains(category)) || (groups != null && groups.contains(group))) {
-			return rig.getMaterialBonus() * getRigSecurityModifier(rig);
+			return bonusGetter.apply(rig) * getRigSecurityModifier(rig);
 		}
 		return 0.0;
 	}
@@ -246,8 +253,12 @@ public class IndustryCostCalculator {
 		var advancedIndustryMod =
 				1.0 - GLOBAL_TIME_BONUSES.get("Advanced Industry") * industryCostInput.getAdvancedIndustry();
 		var specialSkillMod = manufacturingSpecialisedSkillMod(manufacturing);
-		return Duration.ofSeconds(
-				(long) Math.round(runs * baseTime * teMod * industryMod * advancedIndustryMod * specialSkillMod));
+		var structureMod = structureManufacturingTimeModifier();
+		var rigMod = rigModifier(IndustryRig::getTimeBonus);
+		var time =
+				runs * baseTime * teMod * industryMod * advancedIndustryMod * specialSkillMod * structureMod * rigMod;
+		var rounded = Math.round(time);
+		return Duration.ofSeconds(rounded);
 	}
 
 	private double manufacturingSpecialisedSkillMod(BlueprintActivity manufacturing) {
