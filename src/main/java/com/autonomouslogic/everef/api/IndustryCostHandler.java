@@ -37,11 +37,13 @@ import java.util.Objects;
 import java.util.Optional;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.jetbrains.annotations.NotNull;
 
 @Tag(name = "industry")
 @Path("/v1/industry/cost")
+@Log4j2
 public class IndustryCostHandler implements HttpService, Handler {
 	private static final String cacheControlHeader = String.format(
 			"public, max-age=%d, immutable", Duration.ofMinutes(10).toSeconds());
@@ -124,8 +126,10 @@ public class IndustryCostHandler implements HttpService, Handler {
 		var query = req.query();
 		var input = new HashMap<String, Object>();
 		for (var name : query.names()) {
-			var values = query.all(name);
-			if (values.size() == 1) {
+			var values = query.all(name).stream().filter(v -> !v.isEmpty()).toList();
+			if (values.isEmpty()) {
+				// Noop.
+			} else if (values.size() == 1) {
 				input.put(name, values.getFirst());
 			} else {
 				input.put(name, values);
