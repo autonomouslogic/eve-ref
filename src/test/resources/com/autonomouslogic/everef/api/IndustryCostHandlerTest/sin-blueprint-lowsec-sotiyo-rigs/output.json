@@ -2,6 +2,7 @@
   "invention": {
     "22431": {
       "product_id": 22431,
+      "blueprint_id": 999,
       "runs": 1,
       "probability": 0.3208333333333333, // EVE client says 0.321
       "runs_per_copy": 1,
@@ -12,9 +13,9 @@
       "me": 2,
       "te": 4,
       "time": "PT19H40M29S",
-      "avg_time_per_copy": "PT19H40M29S",
-      "avg_time_per_run": "PT19H40M29S",
-      "avg_time_per_unit": "PT19H40M29S",
+      "avg_time_per_copy": "PT220765.714S",
+      "avg_time_per_run": "PT220765.714S",
+      "avg_time_per_unit": "PT220765.714S",
       "materials": {
         "20410": {
           "quantity": 32,
@@ -37,9 +38,9 @@
       "total_job_cost": 1561191,
       "total_material_cost" : 6032523.20,
       "total_cost" : 7593714.20,
-      "avg_cost_per_copy" : 7593714.20,
-      "avg_cost_per_run" : 7593714.20,
-      "avg_cost_per_unit" : 7593714.20
+      "avg_cost_per_copy" : 23668719.58,
+      "avg_cost_per_run" : 23668719.58,
+      "avg_cost_per_unit" : 23668719.58
     }
   }
 }

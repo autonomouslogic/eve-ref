@@ -93,7 +93,7 @@ public class IndustryCostCalculator {
 				manufacturing.getProducts().get(productType.getTypeId()).getQuantity();
 		var units = runs * unitsPerRun;
 		var systemCostIndex = manufacturingSystemCostIndex(eiv);
-		var systemCostBonuses = manufacturingSystemCostBonuses(systemCostIndex);
+		var systemCostBonuses = systemCostBonuses(systemCostIndex, "manufacturing");
 		var facilityTax = facilityTax(eiv);
 		var sccSurcharge = sccSurcharge(eiv);
 		var alphaCloneTax = alphaCloneTax(eiv);
@@ -174,7 +174,7 @@ public class IndustryCostCalculator {
 		var runs = industryCostInput.getRuns();
 		var meMod = materialEfficiencyModifier();
 		var structureMod = structureManufacturingMaterialModifier();
-		var rigMod = rigModifier(IndustryRig::getMaterialBonus);
+		var rigMod = rigModifier(IndustryRig::getMaterialBonus, "manufacturing");
 		var quantity = runs * base * meMod * structureMod * rigMod;
 		var rounded = Math.max(runs, Math.ceil(Math.round(quantity * 100.0) / 100.0));
 		return (long) rounded;
@@ -195,31 +195,36 @@ public class IndustryCostCalculator {
 		return structure.getMaterialModifier();
 	}
 
-	private double structureManufacturingTimeModifier() {
+	private double structureTimeModifier() {
 		if (structure == null) {
 			return 1.0;
 		}
 		return structure.getTimeModifier();
 	}
 
-	private double structureManufacturingCostModifier() {
+	private double structureCostModifier() {
 		if (structure == null) {
 			return 1.0;
 		}
 		return structure.getCostModifier();
 	}
 
-	private double rigModifier(Function<IndustryRig, Double> bonusGetter) {
+	private double rigModifier(Function<IndustryRig, Double> bonusGetter, String activity) {
 		var bonus = 0.0;
 		if (rigs != null) {
 			for (var rig : rigs) {
-				bonus += rigBonus(rig, bonusGetter);
+				bonus += rigBonus(rig, bonusGetter, activity);
 			}
 		}
 		return 1.0 + bonus;
 	}
 
-	private double rigBonus(IndustryRig rig, Function<IndustryRig, Double> bonusGetter) {
+	private double rigBonus(IndustryRig rig, Function<IndustryRig, Double> bonusGetter, String activity) {
+		var globalActivities = rig.getGlobalActivities();
+		if (globalActivities != null && globalActivities.contains(activity)) {
+			return bonusGetter.apply(rig) * getRigSecurityModifier(rig);
+		}
+
 		var categories = rig.getManufacturingCategories();
 		var groups = rig.getManufacturingGroups();
 		var category = productType.getCategoryId();
@@ -227,6 +232,7 @@ public class IndustryCostCalculator {
 		if ((categories != null && categories.contains(category)) || (groups != null && groups.contains(group))) {
 			return bonusGetter.apply(rig) * getRigSecurityModifier(rig);
 		}
+
 		return 0.0;
 	}
 
@@ -266,8 +272,8 @@ public class IndustryCostCalculator {
 		var advancedIndustryMod =
 				1.0 - GLOBAL_TIME_BONUSES.get("Advanced Industry") * industryCostInput.getAdvancedIndustry();
 		var specialSkillMod = manufacturingSpecialisedSkillMod(manufacturing);
-		var structureMod = structureManufacturingTimeModifier();
-		var rigMod = rigModifier(IndustryRig::getTimeBonus);
+		var structureMod = structureTimeModifier();
+		var rigMod = rigModifier(IndustryRig::getTimeBonus, "manufacturing");
 		var time =
 				runs * baseTime * teMod * industryMod * advancedIndustryMod * specialSkillMod * structureMod * rigMod;
 		var rounded = Math.round(time);
@@ -381,7 +387,11 @@ public class IndustryCostCalculator {
 		var runs = industryCostInput.getRuns();
 		var advancedIndustryMod =
 				1.0 - GLOBAL_TIME_BONUSES.get("Advanced Industry") * industryCostInput.getAdvancedIndustry();
-		return Duration.ofSeconds((long) Math.round(runs * baseTime * advancedIndustryMod));
+		var structureMod = structureTimeModifier();
+		var rigMod = rigModifier(IndustryRig::getTimeBonus, "invention");
+		var time = runs * baseTime * advancedIndustryMod * structureMod * rigMod;
+		var rounded = (long) Math.round(time);
+		return Duration.ofSeconds(rounded);
 	}
 
 	private double specialSkillBonus(BlueprintActivity manufacturing, IndustrySkills.SkillBonus bonus, int level) {
@@ -423,9 +433,9 @@ public class IndustryCostCalculator {
 		return systemCostIndex(eiv, index);
 	}
 
-	private BigDecimal manufacturingSystemCostBonuses(BigDecimal systemCostIndex) {
-		var structureMod = structureManufacturingCostModifier();
-		var rigMod = rigModifier(IndustryRig::getCostBonus);
+	private BigDecimal systemCostBonuses(BigDecimal systemCostIndex, String activity) {
+		var structureMod = structureCostModifier();
+		var rigMod = rigModifier(IndustryRig::getCostBonus, activity);
 		var costMod = 1.0 + industryCostInput.getFwCostBonus().doubleValue();
 		var mod = structureMod * rigMod * costMod;
 		var modified = systemCostIndex.multiply(BigDecimal.valueOf(mod), MathUtil.MATH_CONTEXT);
@@ -481,10 +491,15 @@ public class IndustryCostCalculator {
 		var expectedRuns = expectedCopies * runsPerCopy;
 		var expectedUnits = expectedRuns * unitsPerRun;
 		var systemCostIndex = inventionSystemCostIndex(jcb);
+		var systemCostBonuses = systemCostBonuses(systemCostIndex, "invention");
 		var facilityTax = facilityTax(jcb);
 		var sccSurcharge = sccSurcharge(jcb);
 		var alphaCloneTax = alphaCloneTax(jcb);
-		var totalJobCost = systemCostIndex.add(facilityTax).add(sccSurcharge).add(alphaCloneTax);
+		var totalJobCost = systemCostIndex
+				.add(facilityTax)
+				.add(sccSurcharge)
+				.add(alphaCloneTax)
+				.add(systemCostBonuses);
 		var materials = inventionMaterials(invention);
 		var totalMaterialCost = totalMaterialCost(materials);
 		var totalCost = totalJobCost.add(totalMaterialCost);
@@ -509,6 +524,7 @@ public class IndustryCostCalculator {
 				.avgTimePerUnit(MathUtil.divide(time, expectedUnits).truncatedTo(ChronoUnit.MILLIS))
 				.estimatedItemValue(eiv)
 				.systemCostIndex(systemCostIndex)
+				.systemCostBonuses(systemCostBonuses)
 				.jobCostBase(jcb)
 				.facilityTax(facilityTax)
 				.sccSurcharge(sccSurcharge)
