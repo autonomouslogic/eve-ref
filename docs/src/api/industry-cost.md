@@ -3,8 +3,43 @@
 The EVE Ref Industry Cost API aims to be a fully-featured, well-tested, and _fast_ API for calculating manufacturing,
 invention, reactions, copying, and blueprint research.
 
-The API still in development. See [this milestone](https://github.com/autonomouslogic/eve-ref/milestone/8) for details
+**The API still in development.** See [this milestone](https://github.com/autonomouslogic/eve-ref/milestone/8) for details
 on what's missing and currently not supported.
+You can subscribe to individual tickets to be notified when they're updated.
+Join us on [Discord](https://everef.net/discord) to discuss things as they're being put together.
+Your constructive feedback is always appreciated.
+
+The following activities are supported:
+* Manufacture
+* Invention
+
+These activities are _not_ supported yet:
+* Reaction
+* Copying
+* Research ME
+* Research TE
+
+## Motivation
+Industry calculations in EVE Online are boring and meticulous to get right.
+On the forums and various Discord servers, I've seen so many people asking questions about industry calculations.
+Everyone is writing their own code to do it.
+While there's nothing wrong with that, one of the missions of EVE Ref is to provide tools to make EVE developers' lives easier.
+This API aims to do exactly that: to have a single place where this is implemented for everyone to use.
+To be well-tested, the development is based on [evidence](https://github.com/autonomouslogic/eve-ref/tree/main/src/test/resources/com/autonomouslogic/everef/api/IndustryCostHandlerTest) collected from the game and carefully written tests to ensure correctness.
+It's implemented as an API using HTTP and JSON, so it can be used from any language.
+It's designed to be fast and can run locally, so it can be used for bulk lookups.
+The output is designed to be intuitive and extensible.
+You can generate a client directly from the spec and be on your way, getting on with what you really want to build without
+having to worry if your material counts match.
+
+## Usage
+The API lives at `https://api.everef.net/v1/industry/cost` and accepts only GET requests.
+
+* For manufacture, supply the `product_id` parameter of an item.
+* For invention, supply the `product_id` parameter of a the invented blueprint.
+* For manufacture and invention of something which can come from multiple blueprints, set the `blueprint_id` as the source blueprint type ID.
+
+See the spec for full details.
 
 ## Example
 The API call below will return the cost for making 8 [Sins](https://everef.net/types/22430) with ME/TE of 4/4 at a
@@ -60,14 +95,17 @@ An this is an example output, with some material omitted for brevity:
   },
 ```
 
-## Motivation
-Industry calculations in EVE Online are boring and meticulous to get right.
-This API was designed based on [evidence](https://github.com/autonomouslogic/eve-ref/tree/main/src/test/resources/com/autonomouslogic/everef/api/IndustryCostHandlerTest).
+## Running Locally
+All data is loaded upon start.
+There is no external database or other dependencies.
+Simply start it on Docker and you have it available.
+See [API](index.md) for instructions.
 
-## Fair Usage
+## Performance
+The API has been tested on my local machine to do over 6,000 req.s at 16 ms per request.
 
 ## References
-* https://eve-industry.org/export/IndustryFormulas.pdf
-* https://wiki.eveuniversity.org/Manufacturing
-* https://wiki.eveuniversity.org/Invention
-* https://wiki.eveuniversity.org/Reactions
+* [https://eve-industry.org/export/IndustryFormulas.pdf](https://eve-industry.org/export/IndustryFormulas.pdf)
+* [https://wiki.eveuniversity.org/Manufacturing](https://wiki.eveuniversity.org/Manufacturing)
+* [https://wiki.eveuniversity.org/Invention](https://wiki.eveuniversity.org/Invention)
+* [https://wiki.eveuniversity.org/Reactions](https://wiki.eveuniversity.org/Reactions)
