@@ -2,7 +2,6 @@
   "invention": {
     "22431": {
       "product_id": 22431,
-      "blueprint_id": 999,
       "runs": 1,
       "probability": 0.3208333333333333, // EVE client says 0.321
       "runs_per_copy": 1,
@@ -20,27 +19,27 @@
         "20410": {
           "quantity": 32,
           "type_id": 20410,
-          "cost" : 3190194.56
+          "cost" : 3195931.20
         },
         "20424": {
           "quantity": 32,
           "type_id": 20424,
-          "cost" : 3864361.05
+          "cost" : 2836592.00
         }
       },
-      "estimated_item_value": 768684250,
-      "job_cost_base": 15373685,
-      "system_cost_index": 1560114,
-      "system_cost_bonuses": -959860,
-      "facility_tax": 307747,
-      "scc_surcharge": 614947,
+      "estimated_item_value": 768471250,
+      "job_cost_base": 15369425,
+      "system_cost_index": 1660883,
+      "system_cost_bonuses": -1021858,
+      "facility_tax": 307389,
+      "scc_surcharge": 614777,
       "alpha_clone_tax": 0,
-      "total_job_cost": 1522675,
-      "total_material_cost" : 7054555.61,
-      "total_cost" : 8577230.61,
-      "avg_cost_per_copy" : 8577230.61,
-      "avg_cost_per_run" : 8577230.61,
-      "avg_cost_per_unit" : 8577230.61
+      "total_job_cost": 1561191,
+      "total_material_cost" : 6032523.20,
+      "total_cost" : 7593714.20,
+      "avg_cost_per_copy" : 7593714.20,
+      "avg_cost_per_run" : 7593714.20,
+      "avg_cost_per_unit" : 7593714.20
     }
   }
 }
