@@ -31,6 +31,8 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Stream;
 import javax.inject.Inject;
+import javax.inject.Provider;
+
 import lombok.NonNull;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
@@ -38,6 +40,9 @@ import org.jetbrains.annotations.NotNull;
 public class IndustryCostCalculator {
 	@Inject
 	protected MarketPriceService marketPriceService;
+
+	@Inject
+	protected Provider<ManufactureCalculator> manufactureCalculatorProvider;
 
 	@Setter
 	@NonNull
