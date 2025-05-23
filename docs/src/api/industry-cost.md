@@ -30,7 +30,7 @@ It's implemented as an API using HTTP and JSON, so it can be used from any langu
 It's designed to be fast and can run locally, so it can be used for bulk lookups.
 The output is designed to be intuitive and extensible.
 You can generate a client from the spec or use it directly and be on your way, getting on with what you really want to build without
-having to worry if your material counts match.
+having to worry if your material counts or EIV match.
 
 ## Usage
 The API lives at `https://api.everef.net/v1/industry/cost` and accepts only GET requests.
