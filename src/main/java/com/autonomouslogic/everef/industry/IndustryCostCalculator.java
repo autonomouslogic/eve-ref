@@ -56,13 +56,13 @@ public class IndustryCostCalculator {
 	private Blueprint blueprint;
 
 	@Setter
-	private IndustryDecryptor industryDecryptor;
+	private IndustryDecryptor decryptor;
 
 	@Setter
-	private IndustryStructure industryStructure;
+	private IndustryStructure structure;
 
 	@Setter
-	private List<IndustryRig> industryRigs;
+	private List<IndustryRig> rigs;
 
 	@Inject
 	protected IndustryCostCalculator() {}
@@ -129,13 +129,13 @@ public class IndustryCostCalculator {
 
 	private Map<String, MaterialCost> inventionMaterials(BlueprintActivity invention) {
 		var materials = materials(invention, this::inventionMaterialQuantity);
-		if (industryDecryptor != null) {
+		if (decryptor != null) {
 			materials.put(
-					String.valueOf(industryDecryptor.getTypeId()),
+					String.valueOf(decryptor.getTypeId()),
 					MaterialCost.builder()
-							.typeId(industryDecryptor.getTypeId())
+							.typeId(decryptor.getTypeId())
 							.quantity(industryCostInput.getRuns())
-							.cost(materialCost(industryDecryptor.getTypeId(), industryCostInput.getRuns()))
+							.cost(materialCost(decryptor.getTypeId(), industryCostInput.getRuns()))
 							.build());
 		}
 		return materials;
@@ -166,8 +166,64 @@ public class IndustryCostCalculator {
 
 	private long manufacturingMaterialQuantity(long base) {
 		var runs = industryCostInput.getRuns();
-		var meMod = 1.0 - industryCostInput.getMe() / 100.0;
-		return (long) Math.max(runs, Math.ceil(Math.round(runs * base * meMod * 100.0) / 100.0));
+		var meMod = materialEfficiencyModifier();
+		var structureMod = structureManufacturingMaterialModifier();
+		var rigMod = rigManufacturingMaterialModifier();
+		var quantity = runs * base * meMod * structureMod * rigMod;
+		var rounded = Math.max(runs, Math.ceil(Math.round(quantity * 100.0) / 100.0));
+		return (long) rounded;
+	}
+
+	private double materialEfficiencyModifier() {
+		return 1.0 - industryCostInput.getMe() / 100.0;
+	}
+
+	private double timeEfficiencyModifier() {
+		return 1.0 - industryCostInput.getTe() / 100.0;
+	}
+
+	private double structureManufacturingMaterialModifier() {
+		if (structure == null) {
+			return 1.0;
+		}
+		return structure.getMaterialModifier();
+	}
+
+	private double rigManufacturingMaterialModifier() {
+		var bonus = 0.0;
+		if (rigs != null) {
+			for (var rig : rigs) {
+				bonus += rigManufacturingMaterialBonus(rig);
+			}
+		}
+		return 1.0 + bonus;
+	}
+
+	private double rigManufacturingMaterialBonus(IndustryRig rig) {
+		var categories = rig.getManufacturingCategories();
+		var groups = rig.getManufacturingGroups();
+		var category = productType.getCategoryId();
+		var group = productType.getGroupId();
+		if ((categories != null && categories.contains(category)) || (groups != null && groups.contains(group))) {
+			return rig.getMaterialBonus() * getRigSecurityModifier(rig);
+		}
+		return 0.0;
+	}
+
+	private double getRigSecurityModifier(IndustryRig rig) {
+		if (rig == null) {
+			return 1.0;
+		}
+		var sec = industryCostInput.getSecurity();
+		if (sec == null) {
+			return 1.0;
+		}
+		return switch (sec) {
+			case HIGH_SEC -> rig.getHighSecMod();
+			case LOW_SEC -> rig.getLowSecMod();
+			case NULL_SEC, WORMHOLE -> rig.getNullSecMod();
+			default -> throw new RuntimeException("Unknown security: " + sec);
+		};
 	}
 
 	private long inventionMaterialQuantity(long base) {
@@ -184,7 +240,7 @@ public class IndustryCostCalculator {
 
 	private Duration manufacturingTime(BlueprintActivity manufacturing) {
 		var baseTime = (double) manufacturing.getTime();
-		var teMod = 1.0 - industryCostInput.getTe() / 100.0;
+		var teMod = timeEfficiencyModifier();
 		var runs = industryCostInput.getRuns();
 		var industryMod = 1.0 - GLOBAL_TIME_BONUSES.get("Industry") * industryCostInput.getIndustry();
 		var advancedIndustryMod =
@@ -369,7 +425,7 @@ public class IndustryCostCalculator {
 	}
 
 	private InventionCost inventionCost(BlueprintActivity invention) {
-		var decryptorOpt = Optional.ofNullable(industryDecryptor);
+		var decryptorOpt = Optional.ofNullable(decryptor);
 		var manufacturing = inventionBlueprintProductActivity(productType);
 		var time = inventionTime(invention);
 		var eiv = manufacturingEiv(manufacturing);
@@ -445,7 +501,7 @@ public class IndustryCostCalculator {
 		var baseProb = invention.getProducts().get(productType.getTypeId()).getProbability();
 		List<Integer> datacoreSkills = inventionDatacoreSkills(invention);
 		var encryptionSkill = inventionEncryptionSkill(invention);
-		var decryptorMod = Optional.ofNullable(industryDecryptor)
+		var decryptorMod = Optional.ofNullable(decryptor)
 				.map(IndustryDecryptor::getProbabilityModifier)
 				.orElse(1.0);
 		return baseProb

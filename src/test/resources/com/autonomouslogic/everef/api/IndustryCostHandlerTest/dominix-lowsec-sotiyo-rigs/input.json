@@ -4,7 +4,11 @@
   "me": 10,
   "te": 20,
   "structure_type_id": 35827,
-  "rig_id": [45548, 37180, 37183],
+  "rig_id": [
+    45548, // Standup XL-Set Thukker Structure and Component Manufacturing Efficiency,
+    37180, // Standup XL-Set Ship Manufacturing Efficiency I
+    37183 // Standup XL-Set Laboratory Optimization I
+  ],
   "fw_cost_bonus": -0.5,
   "security": "LOW_SEC",
   "manufacturing_cost": 0.07461088416212872945, // ESI said 0.0746,

@@ -216,19 +216,25 @@ public class ImportIndustryResources implements Command {
 				.typeId(type.getTypeId())
 				.name(type.getName().get("en"))
 				.timeBonus(refDataUtil
-						.getTypeDogmaFirstValue(
-								type, attributeEngRigTimeBonus.getAttributeId(), RefRigTimeBonus.getAttributeId())
-						.orElse(0.0))
+								.getTypeDogmaFirstValue(
+										type,
+										attributeEngRigTimeBonus.getAttributeId(),
+										RefRigTimeBonus.getAttributeId())
+								.orElse(0.0)
+						/ 100.0)
 				.materialBonus(refDataUtil
-						.getTypeDogmaFirstValue(
-								type, attributeEngRigMatBonus.getAttributeId(), RefRigMatBonus.getAttributeId())
-						.orElse(0.0))
+								.getTypeDogmaFirstValue(
+										type, attributeEngRigMatBonus.getAttributeId(), RefRigMatBonus.getAttributeId())
+								.orElse(0.0)
+						/ 100.0)
 				.thukkerMaterialBonus(refDataUtil
-						.getTypeDogmaValue(type, attributeThukkerEngRigMatBonus.getAttributeId())
-						.orElse(0.0))
+								.getTypeDogmaValue(type, attributeThukkerEngRigMatBonus.getAttributeId())
+								.orElse(0.0)
+						/ 100.0)
 				.costBonus(refDataUtil
-						.getTypeDogmaValue(type, attributeEngRigCostBonus.getAttributeId())
-						.orElse(0.0))
+								.getTypeDogmaValue(type, attributeEngRigCostBonus.getAttributeId())
+								.orElse(0.0)
+						/ 100.0)
 				.highSecMod(refDataUtil
 						.getTypeDogmaValue(type, hiSecModifier.getAttributeId())
 						.orElse(1.0))

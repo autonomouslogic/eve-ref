@@ -230,7 +230,7 @@ public class IndustryCostHandler implements HttpService, Handler {
 			if (decryptor == null) {
 				throw new ClientException(String.format("Decryptor ID %d not found", decryptorId));
 			}
-			calculator.setIndustryDecryptor(decryptor);
+			calculator.setDecryptor(decryptor);
 		}
 	}
 
@@ -241,7 +241,7 @@ public class IndustryCostHandler implements HttpService, Handler {
 			if (structure == null) {
 				throw new ClientException(String.format("Structure ID %d not found", structureTypeId));
 			}
-			calculator.setIndustryStructure(structure);
+			calculator.setStructure(structure);
 		}
 	}
 
@@ -254,8 +254,9 @@ public class IndustryCostHandler implements HttpService, Handler {
 				if (rig == null) {
 					throw new ClientException(String.format("Rig ID %d not found", rigId));
 				}
+				rigs.add(rig);
 			}
-			calculator.setIndustryRigs(rigs);
+			calculator.setRigs(rigs);
 		}
 	}
 }
