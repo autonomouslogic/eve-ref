@@ -50,6 +50,14 @@ module.exports = {
     sidebar: [
         "/",
         {
+          title: "API",
+          collapsable: false,
+          children: [
+            'api/',
+            'api/industry-cost',
+          ]
+        },
+        {
           title: "Datasets",
           collapsable: false,
           children: [
