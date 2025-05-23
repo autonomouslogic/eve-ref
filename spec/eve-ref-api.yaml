@@ -178,19 +178,6 @@ components:
             job is installed
           maximum: 1
           minimum: 0
-        facility_type:
-          type: string
-          default: STATION
-          description: The type of station or structure where the job is installed
-          enum:
-          - STATION
-          - RAITARU
-          - AZBEL
-          - SOTIYO
-          - DRACCOUS_FORTIZAR
-          - HORIZON_FORTIZAR
-          - MOREAU_FORTIZAR
-          - OTHER_STRUCTURE
         gallente_encryption_methods:
           type: integer
           format: int32
@@ -372,6 +359,15 @@ components:
             the job is installed
           maximum: 1
           minimum: 0
+        rig_id:
+          type: array
+          description: The type IDs of the rigs installed on the sture structure where
+            the job is installed
+          items:
+            type: integer
+            format: int64
+            description: The type IDs of the rigs installed on the sture structure
+              where the job is installed
         rocket_science:
           type: integer
           format: int32
@@ -408,13 +404,19 @@ components:
           description: The Sleeper Encryption Methods skill level the installing character
           maximum: 5
           minimum: 0
-        structure_size:
-          type: string
-          description: The size of structure where the job is installed
-          enum:
-          - MEDIUM
-          - LARGE
-          - XLARGE
+        structure_type_id:
+          type: integer
+          format: int64
+          description: "The type ID of the structure where the job is installed. If\
+            \ not set, an NPC station is assumed."
+        system_cost_bonus:
+          type: number
+          default: 0
+          description: "Bonus to apply to system cost, such as the faction warfare\
+            \ bonus"
+          example: -0.5
+          maximum: 1
+          minimum: 0
         te:
           type: integer
           format: int32
@@ -520,6 +522,9 @@ components:
         scc_surcharge:
           type: number
           description: The SCC surcharge amount
+        system_cost_bonuses:
+          type: number
+          description: "Bonuses to system cost from structures, rigs, etc."
         system_cost_index:
           type: number
           description: |-
@@ -572,6 +577,9 @@ components:
         scc_surcharge:
           type: number
           description: The SCC surcharge amount
+        system_cost_bonuses:
+          type: number
+          description: "Bonuses to system cost from structures, rigs, etc."
         system_cost_index:
           type: number
           description: |-

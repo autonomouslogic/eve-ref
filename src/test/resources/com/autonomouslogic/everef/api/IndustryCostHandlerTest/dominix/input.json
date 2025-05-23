@@ -8,7 +8,6 @@
   "science": 5,
   "advanced_industry": 5,
   "metallurgy": 5,
-  "facility_type": "STATION",
   "security": "HIGH_SEC",
   "manufacturing_cost":  0.07311725283123303698, // ESI reported 0.0731
   "researching_te_cost": 0.0691,

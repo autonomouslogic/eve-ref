@@ -1,0 +1,504 @@
+{
+  "description" : {
+    "de" : "Die nach einem der Entwickler des ersten Caldari-Warpantriebs, dem Sotiyo-Urbaata-Antrieb, benannte Sotiyo dient als Massenproduktionsstätte für alles Erdenkliche von Subcapital-Schiffen und Modulen bis zu Rümpfen für Supercapital-Schiffe. Die Sotiyo ist im Sortiment neuer Strukturen des Upwell Consortiums der Ingenieurskomplex für Megacorporations schlichthin und ist kompatibel mit Upwells Standup-Dienstmodulen, die höchste Flexibilität und funktionale Anpassungsmöglichkeiten garantieren. Diese dedizierte Industriestruktur ermöglicht Zugriff zu den Modifikationen des XL-Set-Sortiments von Upwell. Diese wurden dazu entwickelt, die Produktivität zu erhöhen und verschiedene Aspekte in Sachen Herstellung und Forschung zu optimieren. Aufgrund seiner überdimensionalen Größe bietet dieser Ingenieurskomplex ausreichend Raum für die Anfertigung von Supercapital-Schiffen mithilfe des Dienstmoduls Standup Supercapital-Schiffswerft I. Die Sotiyo beinhaltet Vertäuungstechnologie und besitzt Andockkapazitäten für Schiffe der Capital-Größe und darunter. Am 14. Juni YC125 hat CONCORD die Vorschriften für Strukturen von Kapselpiloten aktualisiert, um die Verankerung neuer XL-Strukturen im Hochsicherheitsraum zu verbieten. XL-Strukturen, die vor diesem Datum verankert wurden, sind von dieser Aktualisierung nicht betroffen, es sei denn, sie sind nicht verankert.",
+    "en" : "Named after one of the co-creators of the first Caldari warp drive, the Sotiyo-Urbaata Drive, the Sotiyo serves as a mega-scale manufacturing and assembly site for everything from subcapital ships and modules, up to supercapital class hulls. \r\n\r\nThe Sotiyo is the Engineering Complex fit for megacorporations in the Upwell Consortium’s new line of structures, and is able to use Upwell's Standup Service modules, allowing flexibility and customization of its functions. This dedicated industrial structure also provides access to Upwell’s XL-Set line of rigs designed to improve productivity and optimization of various aspects of manufacturing and research.\r\n\r\nDue to its extra-large size this engineering complex can accommodate construction of supercapital ships using the Standup Supercapital Shipyard I Service Module.\r\n\r\nThe Sotiyo provides tethering technology and has docking capabilities for capital-size ships and below.\r\n\r\nOn June 14th YC125 CONCORD updated the capsuleer structure regulations to disallow the anchoring of any new XL structures in highsec space. XL structures that were anchored before this date will not be affected by this change unless they are unanchored.",
+    "es" : "Llamado así en honor a uno de los creadores del primer motor de warp caldari, el Sotiyo-Urbaata, este complejo sirve como centro de fabricación y ensamblaje a gran escala de todo tipo de naves y módulos subcapitales, hasta cascos de clase supercapital.     El complejo de ingeniería Sotiyo es uno de los elementos megacorporativos de la nueva línea de estructuras del Consorcio Upwell y es capaz de utilizar los módulos de servicio Standup de Upwell, lo que brinda flexibilidad y permite la personalización de sus funciones. Esta estructura industrial especializada también proporciona acceso a la línea de complementos extragrandes de Upwell, diseñados para mejorar la productividad y la optimización de diversos aspectos de la fabricación o la investigación.    Debido a su tamaño extragrande, este complejo de ingeniería puede albergar la construcción de naves supercapitales utilizando el módulo de servicio del astillero supercapital Standup I.    El Sotiyo proporciona tecnología de amarre y está equipado con instalaciones de acoplamiento para naves capitales o de categoría inferior.    El 14 de junio de 125 CY, CONCORD actualizó las normas de estructuras de capsulistas para desautorizar el anclaje de cualquier nueva estructura XL en espacios de seguridad alta. Las estructuras XL que se anclaron antes de esta fecha no se verán afectadas por este cambio a menos que sean desancladas.",
+    "fr" : "Le Sotiyo, du nom d'un des cocréateurs du premier propulseur de warp caldari (le propulseur Sotiyo-Urbaata), sert de site de production et d'assemblage pour une grande variété d'éléments : modules, vaisseaux sous-capitaux, et même coques de vaisseaux supercapitaux. Le Sotiyo est un complexe d'ingénierie digne des mégacorporations. Il fait partie de la nouvelle lignée de structures de l'Upwell Consortium, et est capable d'utiliser les modules de service Standup d'Upwell, ce qui lui permet d'offrir une grande flexibilité et personnalisation de ses fonctions. Cette structure industrielle donne aussi accès à la gamme de modules d'optimisation XL d'Upwell, conçue pour améliorer la productivité et optimiser plusieurs aspects de la production et de la recherche. La taille particulièrement colossale de ce complexe d'ingénierie permet d'y construire des vaisseaux supercapitaux, grâce au module de service Chantier naval supercapital 'Standup' I. Le Sotiyo dispose également de technologies d'accostage, ce qui permet d'y amarrer des vaisseaux capitaux ou plus petits. Le 14 juin CY 125, CONCORD a modifié les régulations concernant les structures de capsuliers : l'ancrage de toute nouvelle structure XL dans un espace de haute sécurité est désormais interdit. Les structures XL ancrées avant cette date ne sont pas concernées par ce changement de régulation à moins d'avoir été désancrées.",
+    "ja" : "ソティヨは、カルダリ最初のワープドライブ共同開発者の一人であるソティヨ・ウルバータ・ドライブにちなんで名付けられた。副主力艦船やモジュールから大型母艦の船体まで、あらゆるものを製造、組み立てするメガスケールの工場として機能している。     ソティヨは、アップウェル・コンソーシアムの新しいストラクチャラインに属するメガコーポレーション向け電気工学複合施設である。アップウェルのスタンドアップサービスモジュールを使用して、柔軟かつカスタマイズ可能な機能を実現している。さらに、工業用の本ストラクチャは、アップウェルの超大型リグを使用することもできる。超大型リグは、製造及び研究の生産性と効率を様々な側面で向上させるために設計された。    この電気工学複合施設は規模が極めて大きいため、スタンドアップスーパーキャピタル級造船所Iサービスモジュールを使用して、スーパーキャピタル艦の建造に対応することができる。    ソティヨはテザリング技術によって、主力艦に至るまですべての大きさの艦船を入港させることが可能だ。    YC125年6月14日、CONCORDはカプセラのストラクチャ規則を更新し、ハイセキュリティ宙域においてXLサイズのストラクチャを新たに係留することを禁じた。この日付以前に係留されたXLサイズのストラクチャは、係留を解除されるまで変更の影響を受けない。",
+    "ko" : "소티요 엔지니어링 복합시설은 칼다리 최초 워프 드라이브인 '소티요-우르바타 드라이브'의 공동 제작자의 이름을 따 제작된 초대형 규모의 제조공장입니다. 서브캐피탈 함선 및 모듈부터 슈퍼캐피탈급 선체까지 매우 다양한 제품을 제작할 수 있습니다.<br><br>업웰 컨소시엄의 엔지니어링 시설에는 다양한 종류가 있는데, 그중에서 소티요는 업웰 스탠드업 서비스 모듈을 사용할 수 있어 폭넓은 맞춤설정이 가능하다는 특징이 있습니다. 추가로 업웰 컨소시엄의 XL-Set 리그를 장착하여 산업 생산성을 다방면으로 향상하고 제조성능 및 연구개발의 최적화를 이룰 수 있습니다.<br><br>거대한 규모에 걸맞게 스탠드업 슈퍼캐피탈 쉽야드 I 서비스 모듈을 장착하면 슈퍼캐피탈 함선도 건조할 수 있습니다.<br><br>소티요 엔지니어링 복합시설은 테더링 기술을 지원하며 캐피탈급 및 그 이하 함선들도 모두 도킹할 수 있습니다.<br><br>YC 125년 6월 14일, CONCORD는 XL 규모 구조물에 대한 새로운 규제를 시행했습니다. 규제 시행 이후 캡슐리어는 더 이상 신규 XL 규모 구조물을 하이 시큐리티 지역에 위치 고정할 수 없습니다. 규제 시행일 이전에 고정된 기존 구조물에는 소급 적용되지 않습니다. 단, 기존 구조물의 위치 고정을 해제할 경우 해당 규제가 적용됩니다.",
+    "ru" : "Комплекс типа «Сотийо» назван в честь одного из создателей первого калдарского варп-двигателя — двигателя Сотийо-Урбааты. Это гигантская производственная и сборочная площадка, на которой можно производить абсолютно всё: от кораблей стандартного размера и модулей к ним до судов сверхбольшого тоннажа. «Сотийо» — это инженерный комплекс из передовой линейки сооружений консорциума «Апвелл», предназначенный для обслуживания крупных корпораций. Благодаря совместимости со служебными стационар-модулями «Апвелл» его можно адаптировать под различные условия и нужды. Кроме того, это промышленное сооружение поддерживает установку сверхбольших надстроек «Апвелл», повышающих скорость и эффективность как исследовательских, так и производственных работ. Огромные размеры этого инженерного комплекса позволяют осуществлять сборку кораблей сверхбольшого тоннажа при помощи служебного стационар-модуля: верфи для КСБТ 1-го техноуровня. Конструкция «Сотийо» включает оборудование для швартовки, и в доках комплекса могут разместиться корабли большого и стандартного тоннажа. 14 июня 125 года от ю. с. КОНКОРД обновил правила размещения сооружений капсулёров. Теперь установка новых сверхбольших сооружений в системах с высоким уровнем безопасности запрещена. Изменения не коснутся сверхбольших сооружений, поставленных на якорь до этой даты, но затронут станции, которые будут сняты с якоря позднее.",
+    "zh" : "Named after one of the co-creators of the first Caldari warp drive, the Sotiyo-Urbaata Drive, the Sotiyo serves as a mega-scale manufacturing and assembly site for everything from subcapital ships and modules, up to supercapital class hulls.     The Sotiyo is the Engineering Complex fit for megacorporations in the Upwell Consortium’s new line of structures, and is able to use Upwell's Standup Service modules, allowing flexibility and customization of its functions. This dedicated industrial structure also provides access to Upwell’s XL-Set line of rigs designed to improve productivity and optimization of various aspects of manufacturing and research.    Due to its extra-large size this engineering complex can accommodate construction of supercapital ships using the Standup Supercapital Shipyard I Service Module.    The Sotiyo provides tethering technology and has docking capabilities for capital-size ships and below.    On June 14th YC125 CONCORD updated the capsuleer structure regulations to disallow the anchoring of any new XL structures in highsec space. XL structures that were anchored before this date will not be affected by this change unless they are unanchored."
+  },
+  "graphic_id" : 21406,
+  "group_id" : 1404,
+  "market_group_id" : 2324,
+  "mass" : 50000000000,
+  "name" : {
+    "de" : "Sotiyo",
+    "en" : "Sotiyo",
+    "es" : "Sotiyo",
+    "fr" : "Sotiyo",
+    "ja" : "ソティヨ",
+    "ko" : "소티요",
+    "ru" : "Sotiyo",
+    "zh" : "索迪约"
+  },
+  "portion_size" : 1,
+  "published" : true,
+  "radius" : 150000,
+  "sof_faction_name" : "upwell-indy",
+  "sound_id" : 20244,
+  "traits" : {
+    "misc_bonuses" : { },
+    "role_bonuses" : {
+      "6" : {
+        "bonus_text" : {
+          "de" : "Solange diese Struktur über mindestens ein aktives Dienstmodul verfügt, befindet sie sich im Hochenergiemodus und erhält erhöhte Schild- und Panzerungs-HP sowie einen zusätzlichen Verstärkungszyklus.",
+          "en" : "While this structure has at least one online service module it enters full power mode and will gain increased shield and armor hitpoints and an extra reinforcement cycle.",
+          "es" : "Cuando esta estructura tiene al menos un módulo de servicio conectado, entra en el modo de potencia máxima y obtiene más puntos de vida de escudo y blindaje, además de un ciclo de refuerzo adicional.",
+          "fr" : "L’activation d’un seul module de service permet à la structure de passer en mode performance énergétique pour accroître les points de vie de ses boucliers et de son blindage et bénéficier d’un cycle de renforcement supplémentaire.",
+          "ja" : "このストラクチャのサービスモジュールが1つ以上オンラインになると、「フルパワー」モードに入り、シールドとアーマーのヒットポイントが増加し追加の強化サイクルを獲得する。",
+          "ko" : "장착된 모듈이 온라인 상태일 경우 구조물은 최대 전력 모드로 전환되며 실드량 및 장갑 내구도가 증가하고 추가 강화 시간대가 생성됩니다.",
+          "ru" : "Так как у этого сооружения есть по меньшей мере один работающий служебный модуль, оно переходит в режим полной мощности и получает увеличенный запас прочности щитов и брони, а также дополнительный цикл укрепления.",
+          "zh" : "这个建筑启用了至少一个服务装备，已进入全能量运转模式，将会获得额外的护盾和装甲值以及一个额外的增强模式循环。"
+        },
+        "importance" : 6
+      },
+      "7" : {
+        "bonus_text" : {
+          "de" : "Neue Sotiyos dürfen nicht im Hochsicherheitsraum verankert werden.",
+          "en" : "New Sotiyos may not be anchored within highsec space",
+          "es" : "No pueden anclarse nuevos Sotiyo en el espacio de seguridad alta",
+          "fr" : "Les nouveaux Sotiyo ne peuvent pas être ancrés dans un espace de haute sécurité",
+          "ja" : "ハイセキュリティ宙域内でソティヨを新たに係留することはできません",
+          "ko" : "하이 시큐리티 지역에 신규 소티요 구조물을 위치 고정할 수 없음",
+          "ru" : "Новые «Сотийо» нельзя ставить на якорь в системах с высоким ур. безопасности",
+          "zh" : "New Sotiyos may not be anchored within highsec space"
+        },
+        "importance" : 7
+      },
+      "8" : {
+        "bonus_text" : {
+          "de" : "Damit das Verankern abgeschlossen werden kann, muss in dieser Struktur ein <a href=showinfo:56208>Sotiyo-Upwell-Quantumkern</a> installiert werden",
+          "en" : "This structure requires a <a href=showinfo:56208>Sotiyo Upwell Quantum Core</a> to be installed for anchoring to complete",
+          "es" : "Esta estructura requiere un <a href=showinfo:56208>núcleo cuántico Sotiyo de Upwell</a> instalado para completar el anclaje.",
+          "fr" : "Cette structure nécessite un <a href=showinfo:56208>réacteur quantique Upwell Sotiyo</a> pour terminer le processus d'ancrage",
+          "ja" : "このストラクチャの係留を完了するには <a href=showinfo:56208>ソティヨ・アップウェルクアンタムコア</a>を取り付ける必要がある。",
+          "ko" : "해당 구조물을 고정하려면 <a href=showinfo:56208>소티요 업웰 양자코어</a>를 설치해야 합니다.",
+          "ru" : "Для завершения постановки этого сооружения на якорь в него требуется установить <a href=showinfo:56208>квантовое ядро «Сотийо» производства «Апвелл»</a>.",
+          "zh" : "这座建筑需要安装一个<a href=showinfo:56208>索迪约昇威量子芯</a>才能完成锚定。"
+        },
+        "importance" : 8
+      },
+      "1" : {
+        "bonus" : 1,
+        "bonus_text" : {
+          "de" : "Reduzierte Materialanforderungen für Fertigungsaufträge",
+          "en" : "reduction in material requirements for manufacturing jobs",
+          "es" : "de reducción de los requisitos de materiales para los trabajos de fabricación.",
+          "fr" : "de réduction de productivité matérielle pour les tâches de production",
+          "ja" : "製造ジョブの必要資源が減少",
+          "ko" : "제조 작업 자원요구치 감소",
+          "ru" : "уменьшает расход материалов, необходимых для выполнения производственных проектов",
+          "zh" : "生产项目的材料需求降低"
+        },
+        "importance" : 1,
+        "unit_id" : 105
+      },
+      "3" : {
+        "bonus" : 5,
+        "bonus_text" : {
+          "de" : "Reduzierte ISK-Anforderungen für Fertigungs- und Forschungsaufträge",
+          "en" : "reduction in ISK requirements for manufacturing and science jobs",
+          "es" : "de reducción de los requisitos de ISK para los trabajos de fabricación y ciencia.",
+          "fr" : "de réduction d'ISK requis pour les tâches de production et scientifiques",
+          "ja" : "製造ジョブとサイエンスジョブの必要ISKが減少",
+          "ko" : "연구 및 제조 작업 ISK 소모량 감소",
+          "ru" : "уменьшает стоимость (ISK) производственных и научных проектов",
+          "zh" : "生产和科研项目的星币需求降低"
+        },
+        "importance" : 3,
+        "unit_id" : 105
+      },
+      "4" : {
+        "bonus" : 25,
+        "bonus_text" : {
+          "de" : "Reduzierter Treibstoffverbrauch von Industriedienstmodulen",
+          "en" : "reduction in Engineering Service Module fuel consumption",
+          "es" : "de reducción del consumo de combustible de los módulos de servicio de ingeniería.",
+          "fr" : "de réduction de la consommation en carburant des modules de service d'ingénierie",
+          "ja" : "電気工学サービスモジュールの燃料消費が減少",
+          "ko" : "엔지니어링 서비스 모듈 연료 사용량 감소",
+          "ru" : "уменьшает потребление топлива служебными инженерными модулями",
+          "zh" : "工程服务装备的燃料消耗降低"
+        },
+        "importance" : 4,
+        "unit_id" : 105
+      },
+      "2" : {
+        "bonus" : 30,
+        "bonus_text" : {
+          "de" : "Reduzierte Zeitanforderungen für Fertigungs- und Forschungsaufträge",
+          "en" : "reduction in time requirements for manufacturing and science jobs",
+          "es" : "de reducción de los requisitos para los trabajos de fabricación y ciencia.",
+          "fr" : "de réduction de productivité horaire pour les tâches de production et scientifiques",
+          "ja" : "製造ジョブとサイエンスジョブの必要時間が減少",
+          "ko" : "연구 및 제조 작업 시간효율성 증가",
+          "ru" : "уменьшает время, необходимое для производственных и научных проектов",
+          "zh" : "生产和科研项目的时间需求降低"
+        },
+        "importance" : 2,
+        "unit_id" : 105
+      },
+      "5" : {
+        "bonus" : 30,
+        "bonus_text" : {
+          "de" : "Bonus auf die Feuerrate und den Energiespeicherverbrauch von Standup-Pulsprojektoren und Lenkbombenwerfern",
+          "en" : "bonus to the rate of fire and capacitor consumption of Standup Burst Projectors and Guided Bomb Launchers",
+          "es" : "de bonificación a la cadencia de tiro y al consumo del condensador de los proyectores de estallido Standup y los lanzabombas guiados.",
+          "fr" : "de bonus à la cadence de tir et à la consommation du capaciteur des projecteurs à salves et des lanceurs de bombes ciblées Standup",
+          "ja" : "スタンドアップバーストプロジェクターと誘導ボムランチャーの発射間隔とキャパシタ消費効率を改善",
+          "ko" : "스탠드업 버스트 프로젝터 및 유도폭탄 런처 연사속도 및 캐패시터 사용량 감소",
+          "ru" : "бонус к скорострельности и энергопотреблению проекторов объёмных помех и бомбометателей с системой наведения на базе «Стационар»",
+          "zh" : "屹立脉冲波投射器和制导炸弹发射器的射速和电容消耗加成"
+        },
+        "importance" : 5,
+        "unit_id" : 105
+      }
+    },
+    "types" : { }
+  },
+  "volume" : 800000,
+  "type_id" : 35827,
+  "capacity" : 0,
+  "dogma_attributes" : {
+    "1547" : {
+      "attribute_id" : 1547,
+      "value" : 4
+    },
+    "2112" : {
+      "attribute_id" : 2112,
+      "value" : 0.00001
+    },
+    "1154" : {
+      "attribute_id" : 1154,
+      "value" : 3
+    },
+    "4" : {
+      "attribute_id" : 4,
+      "value" : 50000000000
+    },
+    "2737" : {
+      "attribute_id" : 2737,
+      "value" : 5
+    },
+    "263" : {
+      "attribute_id" : 263,
+      "value" : 22500000
+    },
+    "136" : {
+      "attribute_id" : 136,
+      "value" : 1
+    },
+    "9" : {
+      "attribute_id" : 9,
+      "value" : 72000000
+    },
+    "267" : {
+      "attribute_id" : 267,
+      "value" : 0.8
+    },
+    "12" : {
+      "attribute_id" : 12,
+      "value" : 3
+    },
+    "13" : {
+      "attribute_id" : 13,
+      "value" : 4
+    },
+    "14" : {
+      "attribute_id" : 14,
+      "value" : 6
+    },
+    "271" : {
+      "attribute_id" : 271,
+      "value" : 0.8
+    },
+    "272" : {
+      "attribute_id" : 272,
+      "value" : 0.8
+    },
+    "273" : {
+      "attribute_id" : 273,
+      "value" : 0.8
+    },
+    "274" : {
+      "attribute_id" : 274,
+      "value" : 0.8
+    },
+    "2115" : {
+      "attribute_id" : 2115,
+      "value" : 0.00001
+    },
+    "2055" : {
+      "attribute_id" : 2055,
+      "value" : 400000
+    },
+    "2244" : {
+      "attribute_id" : 2244,
+      "value" : 1
+    },
+    "3354" : {
+      "attribute_id" : 3354,
+      "value" : 7500
+    },
+    "3355" : {
+      "attribute_id" : 3355,
+      "value" : 7500
+    },
+    "265" : {
+      "attribute_id" : 265,
+      "value" : 18000000
+    },
+    "797" : {
+      "attribute_id" : 797,
+      "value" : 490000
+    },
+    "161" : {
+      "attribute_id" : 161,
+      "value" : 800000
+    },
+    "162" : {
+      "attribute_id" : 162,
+      "value" : 150000
+    },
+    "2339" : {
+      "attribute_id" : 2339,
+      "value" : -25
+    },
+    "2600" : {
+      "attribute_id" : 2600,
+      "value" : 0.99
+    },
+    "1137" : {
+      "attribute_id" : 1137,
+      "value" : 3
+    },
+    "552" : {
+      "attribute_id" : 552,
+      "value" : 150000
+    },
+    "2601" : {
+      "attribute_id" : 2601,
+      "value" : 0.95
+    },
+    "2602" : {
+      "attribute_id" : 2602,
+      "value" : 0.7
+    },
+    "1927" : {
+      "attribute_id" : 1927,
+      "value" : 1
+    },
+    "2738" : {
+      "attribute_id" : 2738,
+      "value" : 4
+    },
+    "3101" : {
+      "attribute_id" : 3101,
+      "value" : 56208
+    },
+    "48" : {
+      "attribute_id" : 48,
+      "value" : 38000
+    },
+    "2056" : {
+      "attribute_id" : 2056,
+      "value" : 6
+    },
+    "1970" : {
+      "attribute_id" : 1970,
+      "value" : 1
+    },
+    "2739" : {
+      "attribute_id" : 2739,
+      "value" : 2
+    },
+    "564" : {
+      "attribute_id" : 564,
+      "value" : 45
+    },
+    "3356" : {
+      "attribute_id" : 3356,
+      "value" : 7500
+    },
+    "55" : {
+      "attribute_id" : 55,
+      "value" : 7200000
+    },
+    "2749" : {
+      "attribute_id" : 2749,
+      "value" : -30
+    },
+    "2750" : {
+      "attribute_id" : 2750,
+      "value" : 1
+    },
+    "2751" : {
+      "attribute_id" : 2751,
+      "value" : 1
+    },
+    "192" : {
+      "attribute_id" : 192,
+      "value" : 8
+    },
+    "2113" : {
+      "attribute_id" : 2113,
+      "value" : 0.00001
+    },
+    "11" : {
+      "attribute_id" : 11,
+      "value" : 3000000
+    },
+    "2116" : {
+      "attribute_id" : 2116,
+      "value" : 0.00001
+    },
+    "268" : {
+      "attribute_id" : 268,
+      "value" : 0.8
+    },
+    "2743" : {
+      "attribute_id" : 2743,
+      "value" : 1
+    },
+    "76" : {
+      "attribute_id" : 76,
+      "value" : 400000
+    },
+    "2253" : {
+      "attribute_id" : 2253,
+      "value" : 0.00001
+    },
+    "269" : {
+      "attribute_id" : 269,
+      "value" : 0.8
+    },
+    "208" : {
+      "attribute_id" : 208,
+      "value" : 500
+    },
+    "209" : {
+      "attribute_id" : 209,
+      "value" : 500
+    },
+    "210" : {
+      "attribute_id" : 210,
+      "value" : 500
+    },
+    "211" : {
+      "attribute_id" : 211,
+      "value" : 500
+    },
+    "270" : {
+      "attribute_id" : 270,
+      "value" : 0.8
+    },
+    "2135" : {
+      "attribute_id" : 2135,
+      "value" : 0.00001
+    },
+    "18" : {
+      "attribute_id" : 18,
+      "value" : 0
+    },
+    "2268" : {
+      "attribute_id" : 2268,
+      "value" : 10000
+    },
+    "479" : {
+      "attribute_id" : 479,
+      "value" : 999999999999
+    },
+    "482" : {
+      "attribute_id" : 482,
+      "value" : 400000
+    },
+    "484" : {
+      "attribute_id" : 484,
+      "value" : 1
+    },
+    "101" : {
+      "attribute_id" : 101,
+      "value" : 3
+    },
+    "2790" : {
+      "attribute_id" : 2790,
+      "value" : 10000
+    },
+    "38" : {
+      "attribute_id" : 38,
+      "value" : 0
+    },
+    "1132" : {
+      "attribute_id" : 1132,
+      "value" : 400
+    },
+    "109" : {
+      "attribute_id" : 109,
+      "value" : 0.8
+    },
+    "110" : {
+      "attribute_id" : 110,
+      "value" : 0.8
+    },
+    "111" : {
+      "attribute_id" : 111,
+      "value" : 0.8
+    },
+    "113" : {
+      "attribute_id" : 113,
+      "value" : 0.8
+    },
+    "2034" : {
+      "attribute_id" : 2034,
+      "value" : 90000000
+    },
+    "2035" : {
+      "attribute_id" : 2035,
+      "value" : 75000
+    },
+    "2036" : {
+      "attribute_id" : 2036,
+      "value" : 75000
+    },
+    "2805" : {
+      "attribute_id" : 2805,
+      "value" : 0
+    },
+    "264" : {
+      "attribute_id" : 264,
+      "value" : 0
+    },
+    "2216" : {
+      "attribute_id" : 2216,
+      "value" : 5
+    },
+    "2045" : {
+      "attribute_id" : 2045,
+      "value" : 0.00001
+    },
+    "524" : {
+      "attribute_id" : 524,
+      "value" : 1
+    },
+    "1919" : {
+      "attribute_id" : 1919,
+      "value" : 5
+    }
+  },
+  "dogma_effects" : {
+    "6759" : {
+      "effect_id" : 6759,
+      "is_default" : false
+    },
+    "7008" : {
+      "effect_id" : 7008,
+      "is_default" : false
+    },
+    "7030" : {
+      "effect_id" : 7030,
+      "is_default" : false
+    },
+    "7039" : {
+      "effect_id" : 7039,
+      "is_default" : false
+    },
+    "7040" : {
+      "effect_id" : 7040,
+      "is_default" : false
+    }
+  },
+  "packaged_volume" : 800000,
+  "engineering_rig_global_activities" : [ "research_material", "research_time", "manufacturing", "invention", "copying" ]
+}

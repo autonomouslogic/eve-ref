@@ -3104,6 +3104,476 @@
   radius: 1
   type_id: 24536
   volume: 0.01
+"45548":
+  capacity: 0
+  description: "This rig has been optimized for use in low security space and will\
+    \ provide reduced benefits in all other areas of space. When installed in low\
+    \ security space it provides enhanced benefits to the materials required for construction\
+    \ of basic and advanced capital ship components and normal benefits to the construction\
+    \ of other components, Upwell structures, structure modules, structure rigs, starbase\
+    \ structures and fuel blocks.\r\n\r\nThe Standup XL-Set Thukker Structure and\
+    \ Component Manufacturing Efficiency rig provides a means for structure operators\
+    \ to decrease both material and time requirements manufacturing components, Upwell\
+    \ structures, structure modules, structure rigs, starbase structures and fuel\
+    \ blocks in their Upwell structures.\r\n\r\nThis facility design has been modified\
+    \ by Thukker specialists to utilize certain unregulated opportunities for expediting\
+    \ capital ship component construction in low security space.\r\n\r\nStandup is\
+    \ a proprietary system that uses a Structure Autonomous Nanoassembly Device (Upwell)\
+    \ containing integrated template software, a nanoassembler array and sufficient\
+    \ nanomass to enable the construction of a variety of service modules, structure\
+    \ modules and structure rigs when inserted into the appropriate slots on a structure\
+    \ built with Upwell technology.\r\n\r\nNote: Only one rig of the same type, counting\
+    \ both tech variations, may be fitted at the same time on a structure."
+  dogma_attributes:
+  - attribute_id: 1153
+    value: 100
+  - attribute_id: 4
+    value: 200
+  - attribute_id: 1544
+    value: 1
+  - attribute_id: 9
+    value: 40
+  - attribute_id: 1547
+    value: 4
+  - attribute_id: 1298
+    value: 1657
+  - attribute_id: 1299
+    value: 1404
+  - attribute_id: 277
+    value: 1
+  - attribute_id: 1692
+    value: 4
+  - attribute_id: 2334
+    value: 1
+  - attribute_id: 2593
+    value: -20
+  - attribute_id: 2594
+    value: -2
+  - attribute_id: 2595
+    value: 0
+  - attribute_id: 422
+    value: 1
+  - attribute_id: 2355
+    value: 0.1
+  - attribute_id: 2356
+    value: 1.9
+  - attribute_id: 2357
+    value: 0.1
+  - attribute_id: 2358
+    value: 1
+  - attribute_id: 182
+    value: 26252
+  - attribute_id: 161
+    value: 40
+  - attribute_id: 162
+    value: 100
+  - attribute_id: 2653
+    value: -3.7
+  - attribute_id: 38
+    value: 0
+  dogma_effects:
+  - effect_id: 2663
+    is_default: true
+  - effect_id: 6824
+    is_default: false
+  - effect_id: 6825
+    is_default: false
+  - effect_id: 6827
+    is_default: false
+  - effect_id: 6828
+    is_default: false
+  - effect_id: 6829
+    is_default: false
+  - effect_id: 6842
+    is_default: false
+  - effect_id: 6887
+    is_default: false
+  - effect_id: 6889
+    is_default: false
+  - effect_id: 6890
+    is_default: false
+  group_id: 1869
+  icon_id: 21729
+  market_group_id: 2349
+  mass: 200
+  name: "Standup XL-Set Thukker Structure and Component Manufacturing Efficiency"
+  packaged_volume: 40
+  portion_size: 1
+  published: true
+  radius: 100
+  type_id: 45548
+  volume: 40
+"37180":
+  capacity: 0
+  description: "The Standup XL-Set Ship Manufacturing Efficiency I rig provides a\
+    \ means for structure operators to decrease both material and time requirements\
+    \ manufacturing any ship in their Upwell structures.\n\nStandup is a proprietary\
+    \ system that uses a Structure Autonomous Nanoassembly Device (Upwell) containing\
+    \ integrated template software, a nanoassembler array and sufficient nanomass\
+    \ to enable the construction of a variety of service modules, structure modules\
+    \ and structure rigs when inserted into the appropriate slots on a structure built\
+    \ with Upwell technology.\n\nNote: Only one rig of the same type, counting tech\
+    \ variations, may be fitted at the same time on a structure."
+  dogma_attributes:
+  - attribute_id: 1153
+    value: 100
+  - attribute_id: 4
+    value: 200
+  - attribute_id: 1544
+    value: 1
+  - attribute_id: 9
+    value: 40
+  - attribute_id: 1547
+    value: 4
+  - attribute_id: 1298
+    value: 1657
+  - attribute_id: 1299
+    value: 1404
+  - attribute_id: 277
+    value: 1
+  - attribute_id: 2334
+    value: 1
+  - attribute_id: 2593
+    value: -20
+  - attribute_id: 2594
+    value: -2
+  - attribute_id: 2595
+    value: 0
+  - attribute_id: 422
+    value: 1
+  - attribute_id: 2095
+    value: 32
+  - attribute_id: 2096
+    value: 3.2
+  - attribute_id: 2355
+    value: 1
+  - attribute_id: 2356
+    value: 1.9
+  - attribute_id: 2357
+    value: 2.1
+  - attribute_id: 2358
+    value: 1
+  - attribute_id: 182
+    value: 26252
+  - attribute_id: 161
+    value: 40
+  - attribute_id: 162
+    value: 100
+  - attribute_id: 38
+    value: 0
+  dogma_effects:
+  - effect_id: 2663
+    is_default: true
+  - effect_id: 6840
+    is_default: false
+  - effect_id: 6841
+    is_default: false
+  - effect_id: 6842
+    is_default: false
+  group_id: 1868
+  icon_id: 21729
+  market_group_id: 2349
+  mass: 200
+  name: "Standup XL-Set Ship Manufacturing Efficiency I"
+  packaged_volume: 40
+  portion_size: 1
+  published: true
+  radius: 100
+  type_id: 37180
+  volume: 40
+"37183":
+  capacity: 0
+  description: "The Standup XL-Set Laboratory Optimization I rig provides a means\
+    \ for structure operators to decrease both cost and time requirements on invention,\
+    \ copying and research activities in their Upwell structures.\n\nStandup is a\
+    \ proprietary system that uses a Structure Autonomous Nanoassembly Device (Upwell)\
+    \ containing integrated template software, a nanoassembler array and sufficient\
+    \ nanomass to enable the construction of a variety of service modules, structure\
+    \ modules and structure rigs when inserted into the appropriate slots on a structure\
+    \ built with Upwell technology.\n\nNote: Only one rig of the same type, counting\
+    \ tech variations, may be fitted at the same time on a structure."
+  dogma_attributes:
+  - attribute_id: 1153
+    value: 100
+  - attribute_id: 4
+    value: 200
+  - attribute_id: 1544
+    value: 1
+  - attribute_id: 9
+    value: 40
+  - attribute_id: 1547
+    value: 4
+  - attribute_id: 1298
+    value: 1657
+  - attribute_id: 1299
+    value: 1404
+  - attribute_id: 277
+    value: 1
+  - attribute_id: 2334
+    value: 1
+  - attribute_id: 2593
+    value: -20
+  - attribute_id: 2594
+    value: 0
+  - attribute_id: 2595
+    value: -10
+  - attribute_id: 422
+    value: 1
+  - attribute_id: 2095
+    value: 40
+  - attribute_id: 2096
+    value: 4
+  - attribute_id: 2355
+    value: 1
+  - attribute_id: 2356
+    value: 1.9
+  - attribute_id: 2357
+    value: 2.1
+  - attribute_id: 2358
+    value: 1
+  - attribute_id: 182
+    value: 26252
+  - attribute_id: 161
+    value: 40
+  - attribute_id: 162
+    value: 100
+  - attribute_id: 38
+    value: 0
+  dogma_effects:
+  - effect_id: 2663
+    is_default: true
+  - effect_id: 6830
+    is_default: false
+  - effect_id: 6831
+    is_default: false
+  - effect_id: 6832
+    is_default: false
+  - effect_id: 6833
+    is_default: false
+  - effect_id: 6834
+    is_default: false
+  - effect_id: 6835
+    is_default: false
+  - effect_id: 6836
+    is_default: false
+  - effect_id: 6837
+    is_default: false
+  - effect_id: 6842
+    is_default: false
+  group_id: 1870
+  icon_id: 21729
+  market_group_id: 2349
+  mass: 200
+  name: "Standup XL-Set Laboratory Optimization I"
+  packaged_volume: 40
+  portion_size: 1
+  published: true
+  radius: 100
+  type_id: 37183
+  volume: 40
+"35827":
+  capacity: 0
+  description: "Named after one of the co-creators of the first Caldari warp drive,\
+    \ the Sotiyo-Urbaata Drive, the Sotiyo serves as a mega-scale manufacturing and\
+    \ assembly site for everything from subcapital ships and modules, up to supercapital\
+    \ class hulls. \r\n\r\nThe Sotiyo is the Engineering Complex fit for megacorporations\
+    \ in the Upwell Consortium’s new line of structures, and is able to use Upwell's\
+    \ Standup Service modules, allowing flexibility and customization of its functions.\
+    \ This dedicated industrial structure also provides access to Upwell’s XL-Set\
+    \ line of rigs designed to improve productivity and optimization of various aspects\
+    \ of manufacturing and research.\r\n\r\nDue to its extra-large size this engineering\
+    \ complex can accommodate construction of supercapital ships using the Standup\
+    \ Supercapital Shipyard I Service Module.\r\n\r\nThe Sotiyo provides tethering\
+    \ technology and has docking capabilities for capital-size ships and below.\r\n\
+    \r\nOn June 14th YC125 CONCORD updated the capsuleer structure regulations to\
+    \ disallow the anchoring of any new XL structures in highsec space. XL structures\
+    \ that were anchored before this date will not be affected by this change unless\
+    \ they are unanchored."
+  dogma_attributes:
+  - attribute_id: 1547
+    value: 4
+  - attribute_id: 2112
+    value: 0.00001
+  - attribute_id: 1154
+    value: 3
+  - attribute_id: 4
+    value: 50000000000
+  - attribute_id: 2737
+    value: 5
+  - attribute_id: 263
+    value: 22500000
+  - attribute_id: 136
+    value: 1
+  - attribute_id: 9
+    value: 72000000
+  - attribute_id: 267
+    value: 0.8
+  - attribute_id: 12
+    value: 3
+  - attribute_id: 13
+    value: 4
+  - attribute_id: 14
+    value: 6
+  - attribute_id: 271
+    value: 0.8
+  - attribute_id: 272
+    value: 0.8
+  - attribute_id: 273
+    value: 0.8
+  - attribute_id: 274
+    value: 0.8
+  - attribute_id: 2115
+    value: 0.00001
+  - attribute_id: 2055
+    value: 400000
+  - attribute_id: 2244
+    value: 1
+  - attribute_id: 3354
+    value: 7500
+  - attribute_id: 3355
+    value: 7500
+  - attribute_id: 265
+    value: 18000000
+  - attribute_id: 797
+    value: 490000
+  - attribute_id: 161
+    value: 800000
+  - attribute_id: 162
+    value: 150000
+  - attribute_id: 2339
+    value: -25
+  - attribute_id: 2600
+    value: 0.99
+  - attribute_id: 1137
+    value: 3
+  - attribute_id: 552
+    value: 150000
+  - attribute_id: 2601
+    value: 0.95
+  - attribute_id: 2602
+    value: 0.7
+  - attribute_id: 1927
+    value: 1
+  - attribute_id: 2738
+    value: 4
+  - attribute_id: 3101
+    value: 56208
+  - attribute_id: 48
+    value: 38000
+  - attribute_id: 2056
+    value: 6
+  - attribute_id: 1970
+    value: 1
+  - attribute_id: 2739
+    value: 2
+  - attribute_id: 564
+    value: 45
+  - attribute_id: 3356
+    value: 7500
+  - attribute_id: 55
+    value: 7200000
+  - attribute_id: 2749
+    value: -30
+  - attribute_id: 2750
+    value: 1
+  - attribute_id: 2751
+    value: 1
+  - attribute_id: 192
+    value: 8
+  - attribute_id: 2113
+    value: 0.00001
+  - attribute_id: 11
+    value: 3000000
+  - attribute_id: 2116
+    value: 0.00001
+  - attribute_id: 268
+    value: 0.8
+  - attribute_id: 2743
+    value: 1
+  - attribute_id: 76
+    value: 400000
+  - attribute_id: 2253
+    value: 0.00001
+  - attribute_id: 269
+    value: 0.8
+  - attribute_id: 208
+    value: 500
+  - attribute_id: 209
+    value: 500
+  - attribute_id: 210
+    value: 500
+  - attribute_id: 211
+    value: 500
+  - attribute_id: 270
+    value: 0.8
+  - attribute_id: 2135
+    value: 0.00001
+  - attribute_id: 18
+    value: 0
+  - attribute_id: 2268
+    value: 10000
+  - attribute_id: 479
+    value: 999999999999
+  - attribute_id: 482
+    value: 400000
+  - attribute_id: 484
+    value: 1
+  - attribute_id: 101
+    value: 3
+  - attribute_id: 2790
+    value: 10000
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 1132
+    value: 400
+  - attribute_id: 109
+    value: 0.8
+  - attribute_id: 110
+    value: 0.8
+  - attribute_id: 111
+    value: 0.8
+  - attribute_id: 113
+    value: 0.8
+  - attribute_id: 2034
+    value: 90000000
+  - attribute_id: 2035
+    value: 75000
+  - attribute_id: 2036
+    value: 75000
+  - attribute_id: 2805
+    value: 0
+  - attribute_id: 264
+    value: 0
+  - attribute_id: 2216
+    value: 5
+  - attribute_id: 2045
+    value: 0.00001
+  - attribute_id: 524
+    value: 1
+  - attribute_id: 1919
+    value: 5
+  dogma_effects:
+  - effect_id: 6759
+    is_default: false
+  - effect_id: 7008
+    is_default: false
+  - effect_id: 7030
+    is_default: false
+  - effect_id: 7039
+    is_default: false
+  - effect_id: 7040
+    is_default: false
+  graphic_id: 21406
+  group_id: 1404
+  market_group_id: 2324
+  mass: 50000000000
+  name: "Sotiyo"
+  packaged_volume: 800000
+  portion_size: 1
+  published: true
+  radius: 150000
+  type_id: 35827
+  volume: 800000
 "46491":
   capacity: 0
   description: "The Standup M-Set Hybrid Reactor Material Efficiency II rig provides\
@@ -3276,93 +3746,3 @@
   radius: 1
   type_id: 30303
   volume: 0.1
-"37183":
-  capacity: 0
-  description: "The Standup XL-Set Laboratory Optimization I rig provides a means\
-    \ for structure operators to decrease both cost and time requirements on invention,\
-    \ copying and research activities in their Upwell structures.\n\nStandup is a\
-    \ proprietary system that uses a Structure Autonomous Nanoassembly Device (Upwell)\
-    \ containing integrated template software, a nanoassembler array and sufficient\
-    \ nanomass to enable the construction of a variety of service modules, structure\
-    \ modules and structure rigs when inserted into the appropriate slots on a structure\
-    \ built with Upwell technology.\n\nNote: Only one rig of the same type, counting\
-    \ tech variations, may be fitted at the same time on a structure."
-  dogma_attributes:
-  - attribute_id: 1153
-    value: 100
-  - attribute_id: 4
-    value: 200
-  - attribute_id: 1544
-    value: 1
-  - attribute_id: 9
-    value: 40
-  - attribute_id: 1547
-    value: 4
-  - attribute_id: 1298
-    value: 1657
-  - attribute_id: 1299
-    value: 1404
-  - attribute_id: 277
-    value: 1
-  - attribute_id: 2334
-    value: 1
-  - attribute_id: 2593
-    value: -20
-  - attribute_id: 2594
-    value: 0
-  - attribute_id: 2595
-    value: -10
-  - attribute_id: 422
-    value: 1
-  - attribute_id: 2095
-    value: 40
-  - attribute_id: 2096
-    value: 4
-  - attribute_id: 2355
-    value: 1
-  - attribute_id: 2356
-    value: 1.9
-  - attribute_id: 2357
-    value: 2.1
-  - attribute_id: 2358
-    value: 1
-  - attribute_id: 182
-    value: 26252
-  - attribute_id: 161
-    value: 40
-  - attribute_id: 162
-    value: 100
-  - attribute_id: 38
-    value: 0
-  dogma_effects:
-  - effect_id: 2663
-    is_default: true
-  - effect_id: 6830
-    is_default: false
-  - effect_id: 6831
-    is_default: false
-  - effect_id: 6832
-    is_default: false
-  - effect_id: 6833
-    is_default: false
-  - effect_id: 6834
-    is_default: false
-  - effect_id: 6835
-    is_default: false
-  - effect_id: 6836
-    is_default: false
-  - effect_id: 6837
-    is_default: false
-  - effect_id: 6842
-    is_default: false
-  group_id: 1870
-  icon_id: 21729
-  market_group_id: 2349
-  mass: 200
-  name: "Standup XL-Set Laboratory Optimization I"
-  packaged_volume: 40
-  portion_size: 1
-  published: true
-  radius: 100
-  type_id: 37183
-  volume: 40

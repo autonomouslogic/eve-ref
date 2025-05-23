@@ -9,6 +9,8 @@ public class EveConstants {
 	public static final List<String> MARKET_UNIVERSE_IDS = List.of("eve", "wormhole");
 
 	public static final int SHIP_CATEGORY_ID = 6;
+	public static final int STRUCTURE_CATEGORY_ID = 65;
+	public static final int STRUCTURE_MODULE_CATEGORY_ID = 66;
 
 	public static final int CITADELS_MARKET_GROUP_ID = 2199;
 	public static final int ENGINEERING_COMPLEXES_MARKET_GROUP_ID = 2324;

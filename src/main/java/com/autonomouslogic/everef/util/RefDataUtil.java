@@ -309,4 +309,14 @@ public class RefDataUtil {
 				.flatMap(dogma -> Optional.ofNullable(dogma.getValue()));
 		return opt.map(OptionalDouble::of).orElseGet(OptionalDouble::empty);
 	}
+
+	public OptionalDouble getTypeDogmaFirstValue(InventoryType type, long... dogmaAttributeIds) {
+		for (long id : dogmaAttributeIds) {
+			var opt = getTypeDogmaValue(type, id);
+			if (opt.isPresent()) {
+				return opt;
+			}
+		}
+		return OptionalDouble.empty();
+	}
 }

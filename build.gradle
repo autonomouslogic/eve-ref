@@ -158,14 +158,18 @@ task referenceDataClientGenerate(type: org.openapitools.generator.gradle.plugin.
 			supportUrlQuery: "false"
 	]
 	schemaMappings = [
+			"Bundle": "com.autonomouslogic.everef.refdata.Bundle",
 			"Blueprint": "com.autonomouslogic.everef.refdata.Blueprint",
 			"BlueprintActivity": "com.autonomouslogic.everef.refdata.BlueprintActivity",
 			"BlueprintMaterial": "com.autonomouslogic.everef.refdata.BlueprintMaterial",
+			"Coordinate": "com.autonomouslogic.everef.refdata.Coordinate",
 			"DogmaAttribute": "com.autonomouslogic.everef.refdata.DogmaAttribute",
 			"DogmaEffect": "com.autonomouslogic.everef.refdata.DogmaEffect",
 			"DogmaTypeAttribute": "com.autonomouslogic.everef.refdata.DogmaTypeAttribute",
 			"DogmaTypeEffect": "com.autonomouslogic.everef.refdata.DogmaTypeEffect",
 			"Icon": "com.autonomouslogic.everef.refdata.Icon",
+			"IndustryModifierActivities": "com.autonomouslogic.everef.refdata.IndustryModifierActivities",
+			"IndustryModifierBonuses": "com.autonomouslogic.everef.refdata.IndustryModifierBonuses",
 			"InventoryCategory": "com.autonomouslogic.everef.refdata.InventoryCategory",
 			"InventoryGroup": "com.autonomouslogic.everef.refdata.InventoryGroup",
 			"InventoryType": "com.autonomouslogic.everef.refdata.InventoryType",
@@ -179,10 +183,13 @@ task referenceDataClientGenerate(type: org.openapitools.generator.gradle.plugin.
 			"ProducingBlueprint": "com.autonomouslogic.everef.refdata.ProducingBlueprint",
 			"RefDataMeta": "com.autonomouslogic.everef.refdata.RefDataMeta",
 			"RefDataMetaFileInfo": "com.autonomouslogic.everef.refdata.RefDataMetaFileInfo",
+			"Region": "com.autonomouslogic.everef.refdata.Region",
+			"Schematic": "com.autonomouslogic.everef.refdata.Schematic",
 			"Skill": "com.autonomouslogic.everef.refdata.Skill",
 			"TraitBonus": "com.autonomouslogic.everef.refdata.TraitBonus",
 			"TypeMaterial": "com.autonomouslogic.everef.refdata.TypeMaterial",
-			"Unit": "com.autonomouslogic.everef.refdata.Unit"
+			"Unit": "com.autonomouslogic.everef.refdata.Unit",
+			"UsedInBlueprint": "com.autonomouslogic.everef.refdata.UsedInBlueprint"
 	]
 	logToStderr = true
 }
@@ -257,6 +264,7 @@ task apiClientGenerate(type: org.openapitools.generator.gradle.plugin.tasks.Gene
 			"ApiError": "com.autonomouslogic.everef.model.api.ApiError",
 			"IndustryCost": "com.autonomouslogic.everef.model.api.IndustryCost",
 			"IndustryCostInput": "com.autonomouslogic.everef.model.api.IndustryCostInput",
+			"ManufacturingCost": "com.autonomouslogic.everef.model.api.ManufacturingCost",
 			"InventionCost": "com.autonomouslogic.everef.model.api.InventionCost",
 			"MaterialCost": "com.autonomouslogic.everef.model.api.MaterialCost",
 	]

@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.math.BigDecimal;
+import java.util.List;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -147,16 +148,26 @@ public class IndustryCostInput {
 	@JsonProperty
 	@lombok.Builder.Default
 	@Schema(
-			description = "The type of station or structure where the job is installed",
+			description = "Bonus to apply to system cost, such as the faction warfare bonus",
 			requiredMode = Schema.RequiredMode.NOT_REQUIRED,
-			defaultValue = "STATION")
-	FacilityType facilityType = FacilityType.STATION;
+			defaultValue = "0",
+			minimum = "0",
+			maximum = "1",
+			example = "-0.50")
+	BigDecimal systemCostBonus = BigDecimal.ZERO;
 
 	@JsonProperty
 	@Schema(
-			description = "The size of structure where the job is installed",
+			description =
+					"The type ID of the structure where the job is installed. If not set, an NPC station is assumed.",
 			requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-	StructureSize structureSize;
+	Long structureTypeId;
+
+	@JsonProperty
+	@Schema(
+			description = "The type IDs of the rigs installed on the sture structure where the job is installed",
+			requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+	List<Long> rigId;
 
 	@JsonProperty
 	@lombok.Builder.Default

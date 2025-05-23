@@ -6,7 +6,9 @@ import static com.autonomouslogic.everef.industry.IndustrySkills.GLOBAL_TIME_BON
 import static com.autonomouslogic.everef.industry.IndustrySkills.SPECIAL_TIME_BONUSES;
 
 import com.autonomouslogic.everef.data.LoadedRefData;
-import com.autonomouslogic.everef.model.Decryptor;
+import com.autonomouslogic.everef.model.IndustryDecryptor;
+import com.autonomouslogic.everef.model.IndustryRig;
+import com.autonomouslogic.everef.model.IndustryStructure;
 import com.autonomouslogic.everef.model.api.IndustryCost;
 import com.autonomouslogic.everef.model.api.IndustryCostInput;
 import com.autonomouslogic.everef.model.api.InventionCost;
@@ -54,7 +56,13 @@ public class IndustryCostCalculator {
 	private Blueprint blueprint;
 
 	@Setter
-	private Decryptor decryptor;
+	private IndustryDecryptor decryptor;
+
+	@Setter
+	private IndustryStructure structure;
+
+	@Setter
+	private List<IndustryRig> rigs;
 
 	@Inject
 	protected IndustryCostCalculator() {}
@@ -85,10 +93,15 @@ public class IndustryCostCalculator {
 				manufacturing.getProducts().get(productType.getTypeId()).getQuantity();
 		var units = runs * unitsPerRun;
 		var systemCostIndex = manufacturingSystemCostIndex(eiv);
+		var systemCostBonuses = systemCostBonuses(systemCostIndex, "manufacturing");
 		var facilityTax = facilityTax(eiv);
 		var sccSurcharge = sccSurcharge(eiv);
 		var alphaCloneTax = alphaCloneTax(eiv);
-		var totalJobCost = systemCostIndex.add(facilityTax).add(sccSurcharge).add(alphaCloneTax);
+		var totalJobCost = systemCostIndex
+				.add(facilityTax)
+				.add(sccSurcharge)
+				.add(alphaCloneTax)
+				.add(systemCostBonuses);
 		var materials = manufacturingMaterials(manufacturing);
 		var totalMaterialCost = totalMaterialCost(materials);
 		var totalCost = totalJobCost.add(totalMaterialCost);
@@ -104,6 +117,7 @@ public class IndustryCostCalculator {
 				.timePerUnit(time.dividedBy(units).truncatedTo(ChronoUnit.MILLIS))
 				.estimatedItemValue(eiv)
 				.systemCostIndex(systemCostIndex)
+				.systemCostBonuses(systemCostBonuses)
 				.facilityTax(facilityTax)
 				.sccSurcharge(sccSurcharge)
 				.alphaCloneTax(alphaCloneTax)
@@ -158,8 +172,84 @@ public class IndustryCostCalculator {
 
 	private long manufacturingMaterialQuantity(long base) {
 		var runs = industryCostInput.getRuns();
-		var meMod = 1.0 - industryCostInput.getMe() / 100.0;
-		return (long) Math.max(runs, Math.ceil(Math.round(runs * base * meMod * 100.0) / 100.0));
+		var meMod = materialEfficiencyModifier();
+		var structureMod = structureManufacturingMaterialModifier();
+		var rigMod = rigModifier(IndustryRig::getMaterialBonus, "manufacturing");
+		var quantity = runs * base * meMod * structureMod * rigMod;
+		var rounded = Math.max(runs, Math.ceil(Math.round(quantity * 100.0) / 100.0));
+		return (long) rounded;
+	}
+
+	private double materialEfficiencyModifier() {
+		return 1.0 - industryCostInput.getMe() / 100.0;
+	}
+
+	private double timeEfficiencyModifier() {
+		return 1.0 - industryCostInput.getTe() / 100.0;
+	}
+
+	private double structureManufacturingMaterialModifier() {
+		if (structure == null) {
+			return 1.0;
+		}
+		return structure.getMaterialModifier();
+	}
+
+	private double structureTimeModifier() {
+		if (structure == null) {
+			return 1.0;
+		}
+		return structure.getTimeModifier();
+	}
+
+	private double structureCostModifier() {
+		if (structure == null) {
+			return 1.0;
+		}
+		return structure.getCostModifier();
+	}
+
+	private double rigModifier(Function<IndustryRig, Double> bonusGetter, String activity) {
+		var bonus = 0.0;
+		if (rigs != null) {
+			for (var rig : rigs) {
+				bonus += rigBonus(rig, bonusGetter, activity);
+			}
+		}
+		return 1.0 + bonus;
+	}
+
+	private double rigBonus(IndustryRig rig, Function<IndustryRig, Double> bonusGetter, String activity) {
+		var globalActivities = rig.getGlobalActivities();
+		if (globalActivities != null && globalActivities.contains(activity)) {
+			return bonusGetter.apply(rig) * getRigSecurityModifier(rig);
+		}
+
+		var categories = rig.getManufacturingCategories();
+		var groups = rig.getManufacturingGroups();
+		var category = productType.getCategoryId();
+		var group = productType.getGroupId();
+		if ((categories != null && categories.contains(category)) || (groups != null && groups.contains(group))) {
+			return bonusGetter.apply(rig) * getRigSecurityModifier(rig);
+		}
+
+		return 0.0;
+	}
+
+	private double getRigSecurityModifier(IndustryRig rig) {
+		if (rig == null) {
+			return 1.0;
+		}
+		var sec = industryCostInput.getSecurity();
+		if (sec == null) {
+			return 1.0;
+		}
+		return switch (sec) {
+			case HIGH_SEC -> rig.getHighSecMod();
+			case LOW_SEC -> rig.getLowSecMod();
+			case NULL_SEC, WORMHOLE -> rig.getNullSecMod();
+			default -> throw new RuntimeException("Unknown security: " + sec);
+		};
 	}
 
 	private long inventionMaterialQuantity(long base) {
@@ -176,14 +266,18 @@ public class IndustryCostCalculator {
 
 	private Duration manufacturingTime(BlueprintActivity manufacturing) {
 		var baseTime = (double) manufacturing.getTime();
-		var teMod = 1.0 - industryCostInput.getTe() / 100.0;
+		var teMod = timeEfficiencyModifier();
 		var runs = industryCostInput.getRuns();
 		var industryMod = 1.0 - GLOBAL_TIME_BONUSES.get("Industry") * industryCostInput.getIndustry();
 		var advancedIndustryMod =
 				1.0 - GLOBAL_TIME_BONUSES.get("Advanced Industry") * industryCostInput.getAdvancedIndustry();
 		var specialSkillMod = manufacturingSpecialisedSkillMod(manufacturing);
-		return Duration.ofSeconds(
-				(long) Math.round(runs * baseTime * teMod * industryMod * advancedIndustryMod * specialSkillMod));
+		var structureMod = structureTimeModifier();
+		var rigMod = rigModifier(IndustryRig::getTimeBonus, "manufacturing");
+		var time =
+				runs * baseTime * teMod * industryMod * advancedIndustryMod * specialSkillMod * structureMod * rigMod;
+		var rounded = Math.round(time);
+		return Duration.ofSeconds(rounded);
 	}
 
 	private double manufacturingSpecialisedSkillMod(BlueprintActivity manufacturing) {
@@ -293,7 +387,11 @@ public class IndustryCostCalculator {
 		var runs = industryCostInput.getRuns();
 		var advancedIndustryMod =
 				1.0 - GLOBAL_TIME_BONUSES.get("Advanced Industry") * industryCostInput.getAdvancedIndustry();
-		return Duration.ofSeconds((long) Math.round(runs * baseTime * advancedIndustryMod));
+		var structureMod = structureTimeModifier();
+		var rigMod = rigModifier(IndustryRig::getTimeBonus, "invention");
+		var time = runs * baseTime * advancedIndustryMod * structureMod * rigMod;
+		var rounded = (long) Math.round(time);
+		return Duration.ofSeconds(rounded);
 	}
 
 	private double specialSkillBonus(BlueprintActivity manufacturing, IndustrySkills.SkillBonus bonus, int level) {
@@ -335,6 +433,16 @@ public class IndustryCostCalculator {
 		return systemCostIndex(eiv, index);
 	}
 
+	private BigDecimal systemCostBonuses(BigDecimal systemCostIndex, String activity) {
+		var structureMod = structureCostModifier();
+		var rigMod = rigModifier(IndustryRig::getCostBonus, activity);
+		var costMod = 1.0 + industryCostInput.getSystemCostBonus().doubleValue();
+		var mod = structureMod * rigMod * costMod;
+		var modified = systemCostIndex.multiply(BigDecimal.valueOf(mod), MathUtil.MATH_CONTEXT);
+		var bonus = modified.subtract(systemCostIndex);
+		return MathUtil.round(bonus);
+	}
+
 	private BigDecimal inventionSystemCostIndex(BigDecimal jcb) {
 		var index = industryCostInput.getInventionCost();
 		return systemCostIndex(jcb, index);
@@ -373,7 +481,7 @@ public class IndustryCostCalculator {
 						.get(productType.getTypeId())
 						.getQuantity()
 						.intValue()
-				+ decryptorOpt.map(Decryptor::getRunModifier).orElse(0);
+				+ decryptorOpt.map(IndustryDecryptor::getRunModifier).orElse(0);
 		var unitsPerRun = manufacturing.getProducts().values().stream()
 				.findFirst()
 				.orElseThrow()
@@ -383,10 +491,15 @@ public class IndustryCostCalculator {
 		var expectedRuns = expectedCopies * runsPerCopy;
 		var expectedUnits = expectedRuns * unitsPerRun;
 		var systemCostIndex = inventionSystemCostIndex(jcb);
+		var systemCostBonuses = systemCostBonuses(systemCostIndex, "invention");
 		var facilityTax = facilityTax(jcb);
 		var sccSurcharge = sccSurcharge(jcb);
 		var alphaCloneTax = alphaCloneTax(jcb);
-		var totalJobCost = systemCostIndex.add(facilityTax).add(sccSurcharge).add(alphaCloneTax);
+		var totalJobCost = systemCostIndex
+				.add(facilityTax)
+				.add(sccSurcharge)
+				.add(alphaCloneTax)
+				.add(systemCostBonuses);
 		var materials = inventionMaterials(invention);
 		var totalMaterialCost = totalMaterialCost(materials);
 		var totalCost = totalJobCost.add(totalMaterialCost);
@@ -397,9 +510,9 @@ public class IndustryCostCalculator {
 				.unitsPerRun(unitsPerRun)
 				.probability(prob)
 				.me(IndustryConstants.INVENTION_BASE_ME
-						+ decryptorOpt.map(Decryptor::getMeModifier).orElse(0))
+						+ decryptorOpt.map(IndustryDecryptor::getMeModifier).orElse(0))
 				.te(IndustryConstants.INVENTION_BASE_TE
-						+ decryptorOpt.map(Decryptor::getTeModifier).orElse(0))
+						+ decryptorOpt.map(IndustryDecryptor::getTeModifier).orElse(0))
 				.runs(runs)
 				.expectedCopies(expectedCopies)
 				.expectedRuns(expectedRuns)
@@ -411,6 +524,7 @@ public class IndustryCostCalculator {
 				.avgTimePerUnit(MathUtil.divide(time, expectedUnits).truncatedTo(ChronoUnit.MILLIS))
 				.estimatedItemValue(eiv)
 				.systemCostIndex(systemCostIndex)
+				.systemCostBonuses(systemCostBonuses)
 				.jobCostBase(jcb)
 				.facilityTax(facilityTax)
 				.sccSurcharge(sccSurcharge)
@@ -438,7 +552,7 @@ public class IndustryCostCalculator {
 		List<Integer> datacoreSkills = inventionDatacoreSkills(invention);
 		var encryptionSkill = inventionEncryptionSkill(invention);
 		var decryptorMod = Optional.ofNullable(decryptor)
-				.map(Decryptor::getProbabilityModifier)
+				.map(IndustryDecryptor::getProbabilityModifier)
 				.orElse(1.0);
 		return baseProb
 				* (1 + ((datacoreSkills.get(0) + datacoreSkills.get(1)) / 30.0) + encryptionSkill / 40.0)

@@ -73,6 +73,7 @@
       },
       "estimated_item_value": 768684250, // verified in-game via invention screen
       "system_cost_index": 0, // not verified in-game
+      "system_cost_bonuses": 0,
       "facility_tax": 1921711, // not verified in-game
       "scc_surcharge": 30747370, // not verified in-game
       "alpha_clone_tax": 0,

@@ -1,0 +1,77 @@
+{
+  "manufacturing": {
+    "645": {
+      "product_id": 645,
+      "blueprint_id": 999,
+      "runs": 1,
+      "units_per_run": 1,
+      "units": 1,
+      "time": "PT1H10M50S",
+      "time_per_run": "PT1H10M50S",
+      "time_per_unit": "PT1H10M50S",
+      "materials": {
+        "34": {
+          "type_id": 34,
+          "quantity": 4457139,
+          "cost" : 18095984.34
+        },
+        "35": {
+          "type_id": 35,
+          "quantity": 2228570,
+          "cost" : 63179959.50
+        },
+        "36": {
+          "type_id": 36,
+          "quantity": 334286,
+          "cost" : 25857022.10
+        },
+        "37": {
+          "type_id": 37,
+          "quantity": 111429,
+          "cost" : 37027856.70
+        },
+        "38": {
+          "type_id": 38,
+          "quantity": 13372,
+          "cost" : 17359129.24
+        },
+        "39": {
+          "type_id": 39,
+          "quantity": 3343,
+          "cost" : 9257535.89
+        },
+        "40": {
+          "type_id": 40,
+          "quantity": 1672,
+          "cost" : 7302560.32
+        },
+        "57478": {
+          "type_id": 57478,
+          "quantity": 129,
+          "cost" : 8972725.29
+        },
+        "57479": {
+          "type_id": 57479,
+          "quantity": 1,
+          "cost" : 6447741.03
+        },
+        "57486": {
+          "type_id": 57486,
+          "quantity": 65,
+          "cost" : 6786815.10
+        }
+      },
+      "estimated_item_value": 154286511,
+      "system_cost_index": 11511453,
+      "system_cost_bonuses": -6043513,
+      "facility_tax": 3085730,
+      "scc_surcharge": 6171460,
+      "alpha_clone_tax": 0,
+      "total_job_cost": 14725130,
+      "total_material_cost" : 200287329.51,
+      "total_cost" : 215012459.51,
+      "total_cost_per_run" : 215012459.51,
+      "total_cost_per_unit" : 215012459.51
+    }
+  }
+}

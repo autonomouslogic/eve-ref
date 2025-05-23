@@ -3698,6 +3698,600 @@
   portionSize: 1
   published: true
   volume: 0.01
+"45548":
+  description:
+    de: "Diese Modifikation wurde für die Verwendung im Niedersicherheitsraum optimiert\
+      \ und gewährt in allen anderen Regionen des Weltalls verringerte Vorteile. Wird\
+      \ sie im Niedersicherheitsraum installiert, bietet sie erweiterte Vorteile in\
+      \ Bezug auf erforderliche Materialien für die Konstruktion von grundlegenden\
+      \ und erweiterten Capital-Schiffskomponenten und gewöhnliche Vorteile in Bezug\
+      \ auf die Konstruktion anderer Komponenten, Upwell-Strukturen, Strukturmodule,\
+      \ Sternenbasis-Strukturen und Treibstoffblocks.\n\n\n\nDie Standup-XL-Set-Modifikation\
+      \ Herstellungseffizienz für Strukturen und Komponenten der Thukker bietet Strukturadministratoren\
+      \ die Möglichkeit, in ihren Upwell-Strukturen Material- und Zeitanforderungen\
+      \ für die Herstellung von Komponenten, Upwell-Strukturen, Strukturmodulen, Strukturmodifikationen,\
+      \ Sternenbasis-Strukturen und Treibstoffblocks zu verringern.\n\n\n\nDiese Einrichtung\
+      \ wurde von Spezialisten der Thukker modifiziert, um bestimmte nicht regulierte\
+      \ Möglichkeiten für eine beschleunigte Konstruktion von Komponenten für Capital-Schiffe\
+      \ im Niedersicherheitsraum auszunutzen.\n\n\n\nStandup ist ein gesetzlich geschü\
+      tztes System, welches eine Strukturautonome Nanofertigungseinheit (Upwell) nutzt,\
+      \ das eine integrierte Vorlagensoftware, eine Nanofertigungsanlage und ausreichend\
+      \ Nanomasse enthält, um die Fertigung einer Vielzahl an Dienstmodulen, Strukturmodulen\
+      \ und Strukturmodifikationen zu ermöglichen, wenn es in entsprechende Slots\
+      \ in einer Struktur mit Upwell-Technologie eingebaut wird.\n\n\n\nHinweis: Nur\
+      \ eine Modifikation desselben Typs, inkl. beider Tech-Varianten, kann in eine\
+      \ Struktur eingebaut sein."
+    en: "This rig has been optimized for use in low security space and will provide\
+      \ reduced benefits in all other areas of space. When installed in low security\
+      \ space it provides enhanced benefits to the materials required for construction\
+      \ of basic and advanced capital ship components and normal benefits to the construction\
+      \ of other components, Upwell structures, structure modules, structure rigs,\
+      \ starbase structures and fuel blocks.\r\n\r\nThe Standup XL-Set Thukker Structure\
+      \ and Component Manufacturing Efficiency rig provides a means for structure\
+      \ operators to decrease both material and time requirements manufacturing components,\
+      \ Upwell structures, structure modules, structure rigs, starbase structures\
+      \ and fuel blocks in their Upwell structures.\r\n\r\nThis facility design has\
+      \ been modified by Thukker specialists to utilize certain unregulated opportunities\
+      \ for expediting capital ship component construction in low security space.\r\
+      \n\r\nStandup is a proprietary system that uses a Structure Autonomous Nanoassembly\
+      \ Device (Upwell) containing integrated template software, a nanoassembler array\
+      \ and sufficient nanomass to enable the construction of a variety of service\
+      \ modules, structure modules and structure rigs when inserted into the appropriate\
+      \ slots on a structure built with Upwell technology.\r\n\r\nNote: Only one rig\
+      \ of the same type, counting both tech variations, may be fitted at the same\
+      \ time on a structure."
+    es: "Este complemento se ha optimizado para su uso en espacio de seguridad baja\
+      \ y ofrece beneficios reducidos en todos los demás sectores del espacio. Cuando\
+      \ se instala en espacio de seguridad baja, beneficia considerablemente los materiales\
+      \ necesarios para construir componentes de naves capitales con tecnología bá\
+      sica y avanzada y bastante la fabricación de otros componentes, estructuras\
+      \ de Upwell, complementos de estructura, estructuras de base estelar y bloques\
+      \ de combustible.\n\n\n\nEl complemento Standup extragrande de eficiencia en\
+      \ la fabricación de componentes y estructuras thukkers permite a los administradores\
+      \ de estructuras reducir los materiales y el tiempo requeridos para fabricar\
+      \ componentes, estructuras de Upwell, módulos de estructura, complementos de\
+      \ estructura, estructuras de base estelar y bloques de combustible.\n\n\n\n\
+      Este diseño de instalación ha sido modificado por especialistas thukkers para\
+      \ aprovechar ciertas oportunidades no reguladas y agilizar la construcción de\
+      \ componentes para naves capitales en espacio de seguridad baja.\n\n\n\nStandup\
+      \ es un sistema patentado que utiliza un dispositivo de nanoensamblaje autó\
+      nomo estructural (de Upwell) que contiene una plantilla integrada de software,\
+      \ una matriz de nanoensambladores y suficiente nanomasa como para construir\
+      \ una serie de módulos de servicio, de estructura y complementos de estructura\
+      \ cuando se insertan en las ranuras apropiadas en una estructura construida\
+      \ con la tecnología de Upwell.\n\n\n\nAviso: Solo se puede equipar un complemento\
+      \ del mismo tipo en una estructura, contando ambas variaciones tecnológicas."
+    fr: "Ce module d'optimisation est spécifiquement conçu pour optimiser la navigation\
+      \ en espace de basse sécurité, au détriment des autres zones spatiales. Outre\
+      \ les avantages traditionnels dévolus à la production de composants, structures\
+      \ Upwell, modules de structure, structures de base stellaire et blocs de carburant,\
+      \ le module valorise significativement la productivité des matériaux requis\
+      \ pour la construction de composants de vaisseaux capitaux standards et avancé\
+      s lorsqu'il est installé en espace de basse sécurité. L'optimisation d'efficience\
+      \ industrielle de la production de structures et de composants 'Standup' thukker\
+      \ XL permet aux opérateurs de structure Upwell d'améliorer la productivité maté\
+      rielle et horaire des lignes de production de composants, de structures Upwell,\
+      \ de modules de structure, de modules d'optimisation de structure, de structures\
+      \ de base stellaire et de blocs de carburant. La conception de l'installation\
+      \ a été modifiée par des spécialistes thukker dans l'optique d'exploiter les\
+      \ failles non réglementées permettant de délocaliser la construction de composants\
+      \ capitaux en espace de basse sécurité. La technologie brevetée 'Standup' exploite\
+      \ un dispositif autonome de nano-assemblage pour structure Upwell, alliant un\
+      \ logiciel de modélisation intégré, une baie de nano-assemblage et une réserve\
+      \ de nanomasse. Une fois insérés dans les emplacements dédiés sur les structures\
+      \ Upwell, les dispositifs 'Standup' lancent directement l'assemblage moléculaire\
+      \ de divers modules de services, modules de structure et optimisations de structure.\
+      \ Remarque : une structure ne peut équiper qu'une seule optimisation du même\
+      \ type, déclinaisons de tech comprises."
+    ja: "このリグはローセキュリティ宙域での使用に最適化されており、それ以外の全ての宙域ではメリットが低下する。ローセキュリティ宙域に設置した場合、基本及び\
+      高性能な主力艦の部品の製造に必要な資源の量が通常よりも減る。アップウェルストラクチャ、ストラクチャモジュール、ストラクチャリグ、スターベースストラクチャ\
+      、燃料ブロックやその他の部品の製造へのメリットについては、通常と変わらない。\n\n\n\nスタンドアップ超大型サッカー建造物・部品製造効率リグにより、\
+      ストラクチャの経営者は、アップウェルストラクチャで部品製造を行う際に必要な資源と時間の両方を削減できる。対象となるのはアップウェルストラクチャ、ストラク\
+      チャモジュール、ストラクチャリグ、スターベースストラクチャ、燃料ブロックである。\n\n\n\nこの施設の設計にはサッカーの専門家が修正を加えている。ロ\
+      ーセキュリティ宙域のある意味無秩序な状況を利用して、主力艦の部品を製造を効率よく行うためである。\n\n\n\n「スタンドアップ」は、自律式ナノ集合体ス\
+      トラクチャデバイス（アップウェル）を利用した独自システムである。アップウェルの技術を利用して建設されたストラクチャの適切なスロットに挿入すると、統合テン\
+      プレートソフトウェア、ナノアセンブラー施設、ナノ物質を使い、様々なサービスモジュール、ストラクチャモジュール、ストラクチャリグを作り出すことができる。\n\
+      \n\n\n注：異なる技術であっても、1つのストラクチャに同じタイプのリグを同時に複数装備させることはできない。"
+    ko: "로우 서큐리티에 최적화된 리그로 다른 지역에서 활성화 할 경우 효과가 감소합니다. 로우 시큐리티에서 활성화 시 캐피탈 함선의 재료가\
+      \ 되는 기본 및 상급 부품에 대한 추가 혜택이 존재합니다. 그 외에도 업웰 구조물, 구조물 모듈, 구조물 리그, 스타베이스 구조물, 연\
+      료 블록을 포함한 다양한 부품에 대한 일반적인 혜택이 제공됩니다. <br><br>스탠드업 리그를 장착하면 업웰 구조물에서 제작되는 부품\
+      , 업웰 구조물, 구조물 모듈, 구조물 리그, 스타베이스 구조물, 연료 블록의 자원요구치와 제조 시간이 감소합니다. <br><br>해당\
+      \ 기능 디자인은 터커 스페셜리스트들에 의해 개량되었으며 로우 시큐리티 내에서의 신속한 캐피탈 함선 부품 수급을 가능케 만들었습니다. <br><br>스\
+      탠드업은 자율구조형 나노어셈블러 장치(업웰)를 사용하는 시스템으로 템플릿 소프트웨어가 내장되어 있으며 나노어셈블리 배열, 충분한 양의 나\
+      노물질이 탑재돼있습니다. 업웰 기반 구조물에 장착 시 다양한 종류의 서비스 모듈, 구조물 모듈, 구조물 장착형 리그를 제조할 수 있습니다\
+      . <br><br>참고: 테크 레벨과 상관없이 동일한 종류의 리그는 한 개 이상 장착할 수 없습니다."
+    ru: "Этот модификатор оптимизирован для использования в системах с низкой СС;\
+      \ в «нулях» или метрополии он будет сравнительно менее эффективен. Будучи ус\
+      тановлен в планетной системе с низкой, но положительной СС, он обеспечивает\
+      \ дополнительные преимущества в области материалоэффективности производства\
+      \ компонентов КБТ (как базовых, так и усовершенствованных), и, помимо того,\
+      \ обычные преимущества при производстве прочих компонентов, сооружений консо\
+      рциума «Апвелл», модулей для сооружений, модификаторов для сооружений, ПОСов\
+      \ и блоков для ПОСов, а также топливных блоков.\n\n\n\nЭтот стационар-модифи\
+      катор позволяет одновременно повысить материалоэффективность и снизить расхо\
+      д времени на производство компонентов сооружений, самих сооружений, в том чи\
+      сле разработанных консорциумом «Апвелл», а также блоков ПОСов и топливных бл\
+      оков, если сооружение, где ведётся соответствующий проект, разработано консо\
+      рциумом «Апвелл» и оснащено этим модулем.\n\n\n\nПроект был разработан с уча\
+      стием таккерских специалистов и опирается на определённые неурегулированные\
+      \ функции, открывающиеся при постройке компонентов КБТ в планетных системах\
+      \ с низкой СС.\n\n\n\nСТАЦИОНАР — это проприетарная система: её название пре\
+      дставляет собой акроним центрального компонента системы. Стационарный автоно\
+      мный центральный инженерно-организующий наносборщик «Апвелл» содержит интегр\
+      ированный шаблон программного обеспечения, линию наносборщиков и достаточное\
+      \ количество наномассы для сборки различных модулей технического обслуживани\
+      я, модулей и тюнинг-модулей для сооружений, которые устанавливаются в подход\
+      ящие разъёмы на сооружениях, сконструированных по проектам консорциума «Апве\
+      лл».\n\n\n\nВнимание: одновременно сооружение можно оснастить только одним м\
+      одификатором этого типа, независимо от вариаций техкатегории."
+    zh: "这个改装件经过优化，只能在低安星系使用，在任何其它地区提供的加成都会减少。安装在低安全星系，为建造基础和高级旗舰级舰船组件提供强化的材料需求加成，\
+      为建造其它组件、昇威建筑、建筑装备、建筑改装件、母星建筑和燃料块提供普通加成。\n\n\n\n屹立超大型图克尔建筑和组件制造效率改装件让建筑操作员能够降\
+      低在昇威建筑中制造组件、昇威建筑、建筑装备、建筑改装件、母星建筑和燃料块的材料和时间要求。\n\n\n\n该设计经图克尔专家改良，钻了低安全星系因为加速\
+      旗舰组件建造而在某些领域未受管制的空子。\n\n\n\n屹立专用系统采用了昇威建筑分控纳米装配装置，由集成模版软件、纳米装配阵列和许多纳米块体构成。安装\
+      在采用昇威科技建造的建筑上的专门槽位中可以制造各种服务装备、建筑装备和建筑改装件。\n\n\n\n注：只能同时在一个建筑上装配一件相同类型的改装件，包括\
+      衍生型号在内。"
+  groupID: 1869
+  iconID: 21729
+  marketGroupID: 2349
+  mass: 200
+  metaGroupID: 52
+  name:
+    de: "Standup XL-Set Thukker Structure and Component Manufacturing Efficiency"
+    en: "Standup XL-Set Thukker Structure and Component Manufacturing Efficiency"
+    es: "Eficiencia en la fabricación de componentes y estructuras Standup de Thukker\_\
+      II (XL)"
+    fr: "Efficience industrielle de la production de structures et de composants 'Standup'\
+      \ thukker XL"
+    ja: "スタンドアップ超大型サッカー建造物・部品製造効率"
+    ko: "스탠드업 XL-Set 터커 구조물 및 부품 제조 효율성 장치"
+    ru: "Standup XL-Set Thukker Structure and Component Manufacturing Efficiency"
+    zh: "屹立超大型图克尔建筑和组件制造效率"
+  portionSize: 1
+  published: true
+  radius: 100
+  volume: 40
+"37180":
+  description:
+    de: "Die Standup-XL-Set-Modifikation Herstellungseffizienz für Schiffe I bietet\
+      \ Strukturadministratoren die Möglichkeit, in ihren Upwell-Strukturen Material-\
+      \ und Zeitanforderungen für die Herstellung von Schiffen jedes Typs zu verringern.\n\
+      \nStandup ist ein gesetzlich geschütztes System, welches eine Strukturautonome\
+      \ Nanofertigungseinheit (Upwell) nutzt, das eine integrierte Vorlagensoftware,\
+      \ eine Nanofertigungsanlage und ausreichend Nanomasse enthält, um die Fertigung\
+      \ einer Vielzahl an Dienstmodulen, Strukturmodulen und Strukturmodifikationen\
+      \ zu ermöglichen, wenn es in entsprechende Slots in einer Struktur mit Upwell-Technologie\
+      \ eingebaut wird.\n\nHinweis: Nur eine Modifikation desselben Typs, inkl. Tech-Varianten,\
+      \ kann in eine Struktur eingebaut sein."
+    en: "The Standup XL-Set Ship Manufacturing Efficiency I rig provides a means for\
+      \ structure operators to decrease both material and time requirements manufacturing\
+      \ any ship in their Upwell structures.\n\nStandup is a proprietary system that\
+      \ uses a Structure Autonomous Nanoassembly Device (Upwell) containing integrated\
+      \ template software, a nanoassembler array and sufficient nanomass to enable\
+      \ the construction of a variety of service modules, structure modules and structure\
+      \ rigs when inserted into the appropriate slots on a structure built with Upwell\
+      \ technology.\n\nNote: Only one rig of the same type, counting tech variations,\
+      \ may be fitted at the same time on a structure."
+    es: "El complemento Standup extragrande de eficiencia en la fabricación de naves\_\
+      I permite a los administradores de estructuras reducir los materiales y el tiempo\
+      \ requeridos para la fabricación de cualquier nave en sus estructuras de Upwell.\n\
+      \nStandup es un sistema patentado que utiliza un dispositivo de nanoensamblaje\
+      \ autónomo estructural (de Upwell) que contiene una plantilla integrada de software,\
+      \ una matriz de nanoensambladores y suficiente nanomasa como para construir\
+      \ una serie de módulos de servicio, de estructura y complementos de estructura\
+      \ cuando se insertan en las ranuras apropiadas en una estructura construida\
+      \ con la tecnología de Upwell.\n\nAviso: Solo se puede equipar un complemento\
+      \ del mismo tipo en una estructura, contando las variaciones tecnológicas."
+    fr: "L'optimisation d'efficience industrielle de la production de vaisseaux 'Standup'\
+      \ I XL permet aux opérateurs de structure Upwell d'améliorer la productivité\
+      \ horaire et matérielle des lignes de production de toutes les classes de vaisseaux.\n\
+      \nLa technologie brevetée 'Standup' exploite un dispositif autonome de nano-assemblage\
+      \ pour structure Upwell, alliant un logiciel de modélisation intégré, une baie\
+      \ de nano-assemblage et une réserve de nanomasse. Une fois insérés dans les\
+      \ emplacements dédiés sur les structures Upwell, les dispositifs 'Standup' lancent\
+      \ directement l'assemblage moléculaire de divers modules de services, modules\
+      \ de structure et optimisations de structure.\n\nRemarque : une seule optimisation\
+      \ du même type, y compris les déclinaisons de tech, peut être montée sur une\
+      \ structure à la fois."
+    ja: "スタンドアップ超大型艦船製造効率Iリグを使用することで、ストラクチャのオペレーターはアップウェルストラクチャですべての艦船を製造する際に必要な材料\
+      と時間を減少させることができる。\n\n「スタンドアップ」は、自律式ナノ集合体ストラクチャデバイス（アップウェル）を利用した独自システムである。アップウ\
+      ェルの技術を利用して建設されたストラクチャの適切なスロットに挿入すると、統合テンプレートソフトウェア、ナノアセンブラー施設、ナノ物質を使い、様々なサービ\
+      スモジュール、ストラクチャモジュール、ストラクチャリグを作り出すことができる。\n\n注：異なる技術であっても、1つのストラクチャに同じタイプのリグを同\
+      時に複数装備させることはできない。"
+    ko: "스탠드업 리그를 장착하면 업웰 구조물에서 제작되는 모든 함선의 자원요구치와 제조 시간이 감소합니다. <br><br>스탠드업은 자율구\
+      조형 나노어셈블러 장치(업웰)를 사용하는 시스템으로 템플릿 소프트웨어가 내장되어 있으며 나노어셈블리 배열, 충분한 양의 나노물질이 탑재돼\
+      있습니다. 업웰 기반 구조물에 장착 시 다양한 종류의 서비스 모듈, 구조물 모듈, 구조물 장착형 리그를 제조할 수 있습니다. <br><br>참\
+      고: 테크 레벨과 관계없이 동일한 종류의 리그는 한 개 이상 장착할 수 없습니다."
+    ru: "Этот стационар-модификатор первой техкатегории позволяет одновременно пов\
+      ысить материалоэффективность и снизить расход времени на производство любых\
+      \ кораблей, если сооружение, где ведётся соответствующий проект, разработано\
+      \ консорциумом «Апвелл» и оснащено этим модулем.\n\nСТАЦИОНАР — это проприет\
+      арная система: её название представляет собой акроним основного компонента с\
+      истемы. Стационарный автономный центральный инженерно-организующий наносборщ\
+      ик «Апвелл» содержит интегрированный шаблон программного обеспечения, линию\
+      \ наносборщиков и достаточное количество наномассы для сборки различных моду\
+      лей технического обслуживания, модулей и тюнинг-модулей для сооружений, кото\
+      рые устанавливаются в подходящие разъёмы на сооружениях, сконструированных п\
+      о проектам консорциума «Апвелл».\n\nВнимание: одновременно сооружение можно\
+      \ оснастить только одним тюнинг-модулем этого типа, независимо от его техкат\
+      егории."
+    zh: "屹立超大型舰船制造效率 I 改装件让建筑操作员能够降低在昇威建筑中制造任何舰船的材料和时间要求。\n\n屹立专用系统采用了昇威建筑分控纳米装配装置\
+      ，由集成模版软件、纳米装配阵列和许多纳米块体构成。安装在采用昇威科技建造的建筑上的专门槽位中可以制造各种服务装备、建筑装备和建筑改装件。\n\n注：只能\
+      同时在一个建筑上装配一件相同类型的改装件，包括衍生型号在内。"
+  groupID: 1868
+  iconID: 21729
+  marketGroupID: 2349
+  mass: 200
+  metaGroupID: 54
+  name:
+    de: "Standup XL-Set Ship Manufacturing Efficiency I"
+    en: "Standup XL-Set Ship Manufacturing Efficiency I"
+    es: "Eficiencia en la fabricación de naves Standup\_I (XL)"
+    fr: "Efficience industrielle de la production de vaisseaux 'Standup' I XL"
+    ja: "スタンドアップ超大型艦船製造効率I"
+    ko: "스탠드업 XL-Set 함선 제작 효율성 장치 I"
+    ru: "Standup XL-Set Ship Manufacturing Efficiency I"
+    zh: "屹立超大型舰船制造效率 I"
+  portionSize: 1
+  published: true
+  radius: 100
+  volume: 40
+"37183":
+  description:
+    de: "Die Standup-XL-Set-Laboroptimierungs-Modifikation I bietet Strukturadministratoren\
+      \ die Möglichkeit, in ihren Upwell-Strukturen Kosten- und Zeitanforderungen\
+      \ für Erfindungen, Kopien und Forschungsaktivitäten zu verringern.\n\nStandup\
+      \ ist ein gesetzlich geschütztes System, welches eine Strukturautonome Nanofertigungseinheit\
+      \ (Upwell) nutzt, das eine integrierte Vorlagensoftware, eine Nanofertigungsanlage\
+      \ und ausreichend Nanomasse enthält, um die Fertigung einer Vielzahl an Dienstmodulen,\
+      \ Strukturmodulen und Strukturmodifikationen zu ermöglichen, wenn es in entsprechende\
+      \ Slots in einer Struktur mit Upwell-Technologie eingebaut wird.\n\nHinweis:\
+      \ Nur eine Modifikation desselben Typs, inkl. Tech-Varianten, kann in eine Struktur\
+      \ eingebaut sein."
+    en: "The Standup XL-Set Laboratory Optimization I rig provides a means for structure\
+      \ operators to decrease both cost and time requirements on invention, copying\
+      \ and research activities in their Upwell structures.\n\nStandup is a proprietary\
+      \ system that uses a Structure Autonomous Nanoassembly Device (Upwell) containing\
+      \ integrated template software, a nanoassembler array and sufficient nanomass\
+      \ to enable the construction of a variety of service modules, structure modules\
+      \ and structure rigs when inserted into the appropriate slots on a structure\
+      \ built with Upwell technology.\n\nNote: Only one rig of the same type, counting\
+      \ tech variations, may be fitted at the same time on a structure."
+    es: "El complemento Standup extragrande de optimización de laboratorio\_I permite\
+      \ a los administradores de estructuras reducir los costes y el tiempo requeridos\
+      \ para las actividades de invención, copia e investigación en sus estructuras\
+      \ de Upwell.\n\nStandup es un sistema patentado que utiliza un dispositivo de\
+      \ nanoensamblaje autónomo estructural (de Upwell) que contiene una plantilla\
+      \ integrada de software, una matriz de nanoensambladores y suficiente nanomasa\
+      \ como para construir una serie de módulos de servicio, de estructura y complementos\
+      \ de estructura cuando se insertan en las ranuras apropiadas en una estructura\
+      \ construida con la tecnología de Upwell.\n\nAviso: Solo se puede equipar un\
+      \ complemento del mismo tipo en una estructura, contando las variaciones tecnoló\
+      gicas."
+    fr: "L'optimisation de laboratoire 'Standup' I XL permet aux opérateurs de structure\
+      \ Upwell de réduire le coût financier et la durée des tâches d'invention, de\
+      \ copie et de recherche.\n\nLa technologie brevetée 'Standup' exploite un dispositif\
+      \ autonome de nano-assemblage pour structure Upwell, alliant un logiciel de\
+      \ modélisation intégré, une baie de nano-assemblage et une réserve de nanomasse.\
+      \ Une fois insérés dans les emplacements dédiés sur les structures Upwell, les\
+      \ dispositifs 'Standup' lancent directement l'assemblage moléculaire de divers\
+      \ modules de services, modules de structure et optimisations de structure.\n\
+      \nRemarque : une seule optimisation du même type, y compris les déclinaisons\
+      \ de tech, peut être montée sur une structure à la fois."
+    ja: "スタンドアップ超大型研究施設最適化Iリグを使用することで、ストラクチャのオペレーターはアップウェルストラクチャで発明、複製、研究のアクティビティを\
+      行う際に必要なコストと時間を減少させることができる。\n\n「スタンドアップ」は、自律式ナノ集合体ストラクチャデバイス（アップウェル）を利用した独自シス\
+      テムである。アップウェルの技術を利用して建設されたストラクチャの適切なスロットに挿入すると、統合テンプレートソフトウェア、ナノアセンブラー施設、ナノ物質\
+      を使い、様々なサービスモジュール、ストラクチャモジュール、ストラクチャリグを作り出すことができる。\n\n注：異なる技術であっても、1つのストラクチャに\
+      同じタイプのリグを同時に複数装備させることはできない。"
+    ko: "스탠드업 리그를 장착하면 업웰 구조물의 인벤션, 복제, 그리고 연구 기능에 드는 비용과 시간이 감소합니다. <br><br>스탠드업은\
+      \ 자율구조형 나노어셈블러 장치(업웰)를 사용하는 시스템으로 템플릿 소프트웨어가 내장되어 있으며 나노어셈블리 배열, 충분한 양의 나노물질\
+      이 탑재돼있습니다. 업웰 기반 구조물에 장착 시 다양한 종류의 서비스 모듈, 구조물 모듈, 구조물 장착형 리그를 제조할 수 있습니다. <br><br>참\
+      고: 테크 레벨과 관계없이 동일한 종류의 리그는 한 개 이상 장착할 수 없습니다."
+    ru: "Этот стационар-модификатор первой техкатегории повышает эффективность все\
+      х лабораторных задач, а именно позволяет снизить стоимость и расход времени\
+      \ на проекты по повышению материалоэффективности или снижению стоимости прои\
+      зводства, а также на модернизацию или копирование чертежей, если сооружение\
+      , где ведётся соответствующий проект, разработано консорциумом «Апвелл» и ос\
+      нащено этим модулем.\n\nСТАЦИОНАР — это проприетарная система: её название п\
+      редставляет собой акроним основного компонента системы. Стационарный автоном\
+      ный центральный инженерно-организующий наносборщик «Апвелл» содержит интегри\
+      рованный шаблон программного обеспечения, линию наносборщиков и достаточное\
+      \ количество наномассы для сборки различных модулей технического обслуживани\
+      я, модулей и тюнинг-модулей для сооружений, которые устанавливаются в подход\
+      ящие разъёмы на сооружениях, сконструированных по проектам консорциума «Апве\
+      лл».\n\nВнимание: одновременно сооружение можно оснастить только одним тюнин\
+      г-модулем этого типа, независимо от его техкатегории."
+    zh: "屹立超大型发明优化 I 改装件让建筑操作员能够降低在昇威建筑中发明、拷贝和研究的费用和时间需求。\n\n屹立专用系统采用了昇威建筑分控纳米装配装置\
+      ，由集成模版软件、纳米装配阵列和许多纳米块体构成。安装在采用昇威科技建造的建筑上的专门槽位中可以制造各种服务装备、建筑装备和建筑改装件。\n\n注：只能\
+      同时在一个建筑上装配一件相同类型的改装件，包括衍生型号在内。"
+  groupID: 1870
+  iconID: 21729
+  marketGroupID: 2349
+  mass: 200
+  metaGroupID: 54
+  name:
+    de: "Standup XL-Set Laboratory Optimization I"
+    en: "Standup XL-Set Laboratory Optimization I"
+    es: "Optimización de laboratorio Standup\_I (XL)"
+    fr: "Optimisation de laboratoire 'Standup' I XL"
+    ja: "スタンドアップ超大型研究施設最適化I"
+    ko: "스탠드업 XL-Set 연구실 강화 장치 I"
+    ru: "Standup XL-Set Laboratory Optimization I"
+    zh: "屹立超大型实验室优化 I"
+  portionSize: 1
+  published: true
+  radius: 100
+  volume: 40
+"35827":
+  description:
+    de: "Die nach einem der Entwickler des ersten Caldari-Warpantriebs, dem Sotiyo-Urbaata-Antrieb,\
+      \ benannte Sotiyo dient als Massenproduktionsstätte für alles Erdenkliche von\
+      \ Subcapital-Schiffen und Modulen bis zu Rümpfen für Supercapital-Schiffe. Die\
+      \ Sotiyo ist im Sortiment neuer Strukturen des Upwell Consortiums der Ingenieurskomplex\
+      \ für Megacorporations schlichthin und ist kompatibel mit Upwells Standup-Dienstmodulen,\
+      \ die höchste Flexibilität und funktionale Anpassungsmöglichkeiten garantieren.\
+      \ Diese dedizierte Industriestruktur ermöglicht Zugriff zu den Modifikationen\
+      \ des XL-Set-Sortiments von Upwell. Diese wurden dazu entwickelt, die Produktivitä\
+      t zu erhöhen und verschiedene Aspekte in Sachen Herstellung und Forschung zu\
+      \ optimieren. Aufgrund seiner überdimensionalen Größe bietet dieser Ingenieurskomplex\
+      \ ausreichend Raum für die Anfertigung von Supercapital-Schiffen mithilfe des\
+      \ Dienstmoduls Standup Supercapital-Schiffswerft I. Die Sotiyo beinhaltet Vertä\
+      uungstechnologie und besitzt Andockkapazitäten für Schiffe der Capital-Größ\
+      e und darunter. Am 14.\_Juni YC125 hat CONCORD die Vorschriften für Strukturen\
+      \ von Kapselpiloten aktualisiert, um die Verankerung neuer XL-Strukturen im\
+      \ Hochsicherheitsraum zu verbieten. XL-Strukturen, die vor diesem Datum verankert\
+      \ wurden, sind von dieser Aktualisierung nicht betroffen, es sei denn, sie sind\
+      \ nicht verankert."
+    en: "Named after one of the co-creators of the first Caldari warp drive, the Sotiyo-Urbaata\
+      \ Drive, the Sotiyo serves as a mega-scale manufacturing and assembly site for\
+      \ everything from subcapital ships and modules, up to supercapital class hulls.\
+      \ \r\n\r\nThe Sotiyo is the Engineering Complex fit for megacorporations in\
+      \ the Upwell Consortium’s new line of structures, and is able to use Upwell's\
+      \ Standup Service modules, allowing flexibility and customization of its functions.\
+      \ This dedicated industrial structure also provides access to Upwell’s XL-Set\
+      \ line of rigs designed to improve productivity and optimization of various\
+      \ aspects of manufacturing and research.\r\n\r\nDue to its extra-large size\
+      \ this engineering complex can accommodate construction of supercapital ships\
+      \ using the Standup Supercapital Shipyard I Service Module.\r\n\r\nThe Sotiyo\
+      \ provides tethering technology and has docking capabilities for capital-size\
+      \ ships and below.\r\n\r\nOn June 14th YC125 CONCORD updated the capsuleer structure\
+      \ regulations to disallow the anchoring of any new XL structures in highsec\
+      \ space. XL structures that were anchored before this date will not be affected\
+      \ by this change unless they are unanchored."
+    es: "Llamado así en honor a uno de los creadores del primer motor de warp caldari,\
+      \ el Sotiyo-Urbaata, este complejo sirve como centro de fabricación y ensamblaje\
+      \ a gran escala de todo tipo de naves y módulos subcapitales, hasta cascos de\
+      \ clase supercapital.     El complejo de ingeniería Sotiyo es uno de los elementos\
+      \ megacorporativos de la nueva línea de estructuras del Consorcio Upwell y es\
+      \ capaz de utilizar los módulos de servicio Standup de Upwell, lo que brinda\
+      \ flexibilidad y permite la personalización de sus funciones. Esta estructura\
+      \ industrial especializada también proporciona acceso a la línea de complementos\
+      \ extragrandes de Upwell, diseñados para mejorar la productividad y la optimizació\
+      n de diversos aspectos de la fabricación o la investigación.    Debido a su\
+      \ tamaño extragrande, este complejo de ingeniería puede albergar la construcció\
+      n de naves supercapitales utilizando el módulo de servicio del astillero supercapital\
+      \ Standup\_I.    El Sotiyo proporciona tecnología de amarre y está equipado\
+      \ con instalaciones de acoplamiento para naves capitales o de categoría inferior.\
+      \    El 14 de junio de 125\_CY, CONCORD actualizó las normas de estructuras\
+      \ de capsulistas para desautorizar el anclaje de cualquier nueva estructura\
+      \ XL en espacios de seguridad alta. Las estructuras XL que se anclaron antes\
+      \ de esta fecha no se verán afectadas por este cambio a menos que sean desancladas."
+    fr: "Le Sotiyo, du nom d'un des cocréateurs du premier propulseur de warp caldari\
+      \ (le propulseur Sotiyo-Urbaata), sert de site de production et d'assemblage\
+      \ pour une grande variété d'éléments\_: modules, vaisseaux sous-capitaux, et\
+      \ même coques de vaisseaux supercapitaux. Le Sotiyo est un complexe d'ingénierie\
+      \ digne des mégacorporations. Il fait partie de la nouvelle lignée de structures\
+      \ de l'Upwell Consortium, et est capable d'utiliser les modules de service Standup\
+      \ d'Upwell, ce qui lui permet d'offrir une grande flexibilité et personnalisation\
+      \ de ses fonctions. Cette structure industrielle donne aussi accès à la gamme\
+      \ de modules d'optimisation\_XL d'Upwell, conçue pour améliorer la productivité\
+      \ et optimiser plusieurs aspects de la production et de la recherche. La taille\
+      \ particulièrement colossale de ce complexe d'ingénierie permet d'y construire\
+      \ des vaisseaux supercapitaux, grâce au module de service Chantier naval supercapital\
+      \ 'Standup'\_I. Le Sotiyo dispose également de technologies d'accostage, ce\
+      \ qui permet d'y amarrer des vaisseaux capitaux ou plus petits. Le 14\_juin\
+      \ CY\_125, CONCORD a modifié les régulations concernant les structures de capsuliers\_\
+      : l'ancrage de toute nouvelle structure\_XL dans un espace de haute sécurité\
+      \ est désormais interdit. Les structures\_XL ancrées avant cette date ne sont\
+      \ pas concernées par ce changement de régulation à moins d'avoir été désancré\
+      es."
+    ja: "ソティヨは、カルダリ最初のワープドライブ共同開発者の一人であるソティヨ・ウルバータ・ドライブにちなんで名付けられた。副主力艦船やモジュールから大型\
+      母艦の船体まで、あらゆるものを製造、組み立てするメガスケールの工場として機能している。     ソティヨは、アップウェル・コンソーシアムの新しいストラク\
+      チャラインに属するメガコーポレーション向け電気工学複合施設である。アップウェルのスタンドアップサービスモジュールを使用して、柔軟かつカスタマイズ可能な機\
+      能を実現している。さらに、工業用の本ストラクチャは、アップウェルの超大型リグを使用することもできる。超大型リグは、製造及び研究の生産性と効率を様々な側面\
+      で向上させるために設計された。    この電気工学複合施設は規模が極めて大きいため、スタンドアップスーパーキャピタル級造船所Iサービスモジュールを使用し\
+      て、スーパーキャピタル艦の建造に対応することができる。    ソティヨはテザリング技術によって、主力艦に至るまですべての大きさの艦船を入港させることが可\
+      能だ。    YC125年6月14日、CONCORDはカプセラのストラクチャ規則を更新し、ハイセキュリティ宙域においてXLサイズのストラクチャを新たに係\
+      留することを禁じた。この日付以前に係留されたXLサイズのストラクチャは、係留を解除されるまで変更の影響を受けない。"
+    ko: "소티요 엔지니어링 복합시설은 칼다리 최초 워프 드라이브인 '소티요-우르바타 드라이브'의 공동 제작자의 이름을 따 제작된 초대형 규모\
+      의 제조공장입니다. 서브캐피탈 함선 및 모듈부터 슈퍼캐피탈급 선체까지 매우 다양한 제품을 제작할 수 있습니다.<br><br>업웰 컨소시엄\
+      의 엔지니어링 시설에는 다양한 종류가 있는데, 그중에서 소티요는 업웰 스탠드업 서비스 모듈을 사용할 수 있어 폭넓은 맞춤설정이 가능하다는\
+      \ 특징이 있습니다. 추가로 업웰 컨소시엄의 XL-Set 리그를 장착하여 산업 생산성을 다방면으로 향상하고 제조성능 및 연구개발의 최적화\
+      를 이룰 수 있습니다.<br><br>거대한 규모에 걸맞게 스탠드업 슈퍼캐피탈 쉽야드 I 서비스 모듈을 장착하면 슈퍼캐피탈 함선도 건조할\
+      \ 수 있습니다.<br><br>소티요 엔지니어링 복합시설은 테더링 기술을 지원하며 캐피탈급 및 그 이하 함선들도 모두 도킹할 수 있습니다\
+      .<br><br>YC 125년 6월 14일, CONCORD는 XL 규모 구조물에 대한 새로운 규제를 시행했습니다. 규제 시행 이후 캡슐리\
+      어는 더 이상 신규 XL 규모 구조물을 하이 시큐리티 지역에 위치 고정할 수 없습니다. 규제 시행일 이전에 고정된 기존 구조물에는 소급\
+      \ 적용되지 않습니다. 단, 기존 구조물의 위치 고정을 해제할 경우 해당 규제가 적용됩니다."
+    ru: "Комплекс типа «Сотийо» назван в\_честь одного из создателей первого калда\
+      рского варп-двигателя\_— двигателя Сотийо-Урбааты. Это гигантская производст\
+      венная и\_сборочная площадка, на которой можно производить абсолютно всё: от\
+      \ кораблей стандартного размера и\_модулей к\_ним до судов сверхбольшого тон\
+      нажа. «Сотийо»\_— это инженерный комплекс из передовой линейки сооружений ко\
+      нсорциума «Апвелл», предназначенный для обслуживания крупных корпораций. Бла\
+      годаря совместимости со служебными стационар-модулями «Апвелл» его можно ада\
+      птировать под различные условия и\_нужды. Кроме того, это промышленное соору\
+      жение поддерживает установку сверхбольших надстроек «Апвелл», повышающих ско\
+      рость и\_эффективность как исследовательских, так и\_производственных работ\
+      . Огромные размеры этого инженерного комплекса позволяют осуществлять сборку\
+      \ кораблей сверхбольшого тоннажа при помощи служебного стационар-модуля: вер\
+      фи для КСБТ 1-го\_техноуровня. Конструкция «Сотийо» включает оборудование дл\
+      я швартовки, и\_в\_доках комплекса могут разместиться корабли большого и\_ст\
+      андартного тоннажа. 14\_июня 125\_года от\_ю.\_с. КОНКОРД обновил правила ра\
+      змещения сооружений капсулёров. Теперь установка новых сверхбольших сооружен\
+      ий в\_системах с\_высоким уровнем безопасности запрещена. Изменения не косну\
+      тся сверхбольших сооружений, поставленных на якорь до этой даты, но затронут\
+      \ станции, которые будут сняты с\_якоря позднее."
+    zh: "Named after one of the co-creators of the first Caldari warp drive, the Sotiyo-Urbaata\
+      \ Drive, the Sotiyo serves as a mega-scale manufacturing and assembly site for\
+      \ everything from subcapital ships and modules, up to supercapital class hulls.\
+      \     The Sotiyo is the Engineering Complex fit for megacorporations in the\
+      \ Upwell Consortium’s new line of structures, and is able to use Upwell's Standup\
+      \ Service modules, allowing flexibility and customization of its functions.\
+      \ This dedicated industrial structure also provides access to Upwell’s XL-Set\
+      \ line of rigs designed to improve productivity and optimization of various\
+      \ aspects of manufacturing and research.    Due to its extra-large size this\
+      \ engineering complex can accommodate construction of supercapital ships using\
+      \ the Standup Supercapital Shipyard I Service Module.    The Sotiyo provides\
+      \ tethering technology and has docking capabilities for capital-size ships and\
+      \ below.    On June 14th YC125 CONCORD updated the capsuleer structure regulations\
+      \ to disallow the anchoring of any new XL structures in highsec space. XL structures\
+      \ that were anchored before this date will not be affected by this change unless\
+      \ they are unanchored."
+  graphicID: 21406
+  groupID: 1404
+  marketGroupID: 2324
+  mass: 50000000000
+  name:
+    de: "Sotiyo"
+    en: "Sotiyo"
+    es: "Sotiyo"
+    fr: "Sotiyo"
+    ja: "ソティヨ"
+    ko: "소티요"
+    ru: "Sotiyo"
+    zh: "索迪约"
+  portionSize: 1
+  published: true
+  radius: 150000
+  sofFactionName: "upwell-indy"
+  soundID: 20244
+  traits:
+    miscBonuses: []
+    roleBonuses:
+    - bonusText:
+        de: "Solange diese Struktur über mindestens ein aktives Dienstmodul verfü\
+          gt, befindet sie sich im Hochenergiemodus und erhält erhöhte Schild- und\
+          \ Panzerungs-HP sowie einen zusätzlichen Verstärkungszyklus."
+        en: "While this structure has at least one online service module it enters\
+          \ full power mode and will gain increased shield and armor hitpoints and\
+          \ an extra reinforcement cycle."
+        es: "Cuando esta estructura tiene al menos un módulo de servicio conectado,\
+          \ entra en el modo de potencia máxima y obtiene más puntos de vida de escudo\
+          \ y blindaje, además de un ciclo de refuerzo adicional."
+        fr: "L’activation d’un seul module de service permet à la structure de passer\
+          \ en mode performance énergétique pour accroître les points de vie de ses\
+          \ boucliers et de son blindage et bénéficier d’un cycle de renforcement\
+          \ supplémentaire."
+        ja: "このストラクチャのサービスモジュールが1つ以上オンラインになると、「フルパワー」モードに入り、シールドとアーマーのヒットポイントが増加し追\
+          加の強化サイクルを獲得する。"
+        ko: "장착된 모듈이 온라인 상태일 경우 구조물은 최대 전력 모드로 전환되며 실드량 및 장갑 내구도가 증가하고 추가 강화 시간대가\
+          \ 생성됩니다."
+        ru: "Так как у этого сооружения есть по меньшей мере один работающий служе\
+          бный модуль, оно переходит в режим полной мощности и получает увеличенны\
+          й запас прочности щитов и брони, а также дополнительный цикл укрепления."
+        zh: "这个建筑启用了至少一个服务装备，已进入全能量运转模式，将会获得额外的护盾和装甲值以及一个额外的增强模式循环。"
+      importance: 6
+    - bonusText:
+        de: "Neue Sotiyos dürfen nicht im Hochsicherheitsraum verankert werden."
+        en: "New Sotiyos may not be anchored within highsec space"
+        es: "No pueden anclarse nuevos Sotiyo en el espacio de seguridad alta"
+        fr: "Les nouveaux Sotiyo ne peuvent pas être ancrés dans un espace de haute\
+          \ sécurité"
+        ja: "ハイセキュリティ宙域内でソティヨを新たに係留することはできません"
+        ko: "하이 시큐리티 지역에 신규 소티요 구조물을 위치 고정할 수 없음"
+        ru: "Новые «Сотийо» нельзя ставить на якорь в\_системах с\_высоким ур.\_бе\
+          зопасности"
+        zh: "New Sotiyos may not be anchored within highsec space"
+      importance: 7
+    - bonusText:
+        de: "Damit das Verankern abgeschlossen werden kann, muss in dieser Struktur\
+          \ ein <a href=showinfo:56208>Sotiyo-Upwell-Quantumkern</a> installiert werden"
+        en: "This structure requires a <a href=showinfo:56208>Sotiyo Upwell Quantum\
+          \ Core</a> to be installed for anchoring to complete"
+        es: "Esta estructura requiere un <a href=showinfo:56208>núcleo cuántico Sotiyo\
+          \ de Upwell</a> instalado para completar el anclaje."
+        fr: "Cette structure nécessite un <a href=showinfo:56208>réacteur quantique\
+          \ Upwell Sotiyo</a> pour terminer le processus d'ancrage"
+        ja: "このストラクチャの係留を完了するには <a href=showinfo:56208>ソティヨ・アップウェルクアンタムコア</a>を取り付け\
+          る必要がある。"
+        ko: "해당 구조물을 고정하려면 <a href=showinfo:56208>소티요 업웰 양자코어</a>를 설치해야 합니다."
+        ru: "Для завершения постановки этого сооружения на якорь в него требуется\
+          \ установить <a href=showinfo:56208>квантовое ядро «Сотийо» производства\
+          \ «Апвелл»</a>."
+        zh: "这座建筑需要安装一个<a href=showinfo:56208>索迪约昇威量子芯</a>才能完成锚定。"
+      importance: 8
+    - bonus: 1
+      bonusText:
+        de: "Reduzierte Materialanforderungen für Fertigungsaufträge"
+        en: "reduction in material requirements for manufacturing jobs"
+        es: "de reducción de los requisitos de materiales para los trabajos de fabricació\
+          n."
+        fr: "de réduction de productivité matérielle pour les tâches de production"
+        ja: "製造ジョブの必要資源が減少"
+        ko: "제조 작업 자원요구치 감소"
+        ru: "уменьшает расход материалов, необходимых для выполнения производствен\
+          ных проектов"
+        zh: "生产项目的材料需求降低"
+      importance: 1
+      unitID: 105
+    - bonus: 5
+      bonusText:
+        de: "Reduzierte ISK-Anforderungen für Fertigungs- und Forschungsaufträge"
+        en: "reduction in ISK requirements for manufacturing and science jobs"
+        es: "de reducción de los requisitos de ISK para los trabajos de fabricació\
+          n y ciencia."
+        fr: "de réduction d'ISK requis pour les tâches de production et scientifiques"
+        ja: "製造ジョブとサイエンスジョブの必要ISKが減少"
+        ko: "연구 및 제조 작업 ISK 소모량 감소"
+        ru: "уменьшает стоимость (ISK) производственных и научных проектов"
+        zh: "生产和科研项目的星币需求降低"
+      importance: 3
+      unitID: 105
+    - bonus: 25
+      bonusText:
+        de: "Reduzierter Treibstoffverbrauch von Industriedienstmodulen"
+        en: "reduction in Engineering Service Module fuel consumption"
+        es: "de reducción del consumo de combustible de los módulos de servicio de\
+          \ ingeniería."
+        fr: "de réduction de la consommation en carburant des modules de service d'ingé\
+          nierie"
+        ja: "電気工学サービスモジュールの燃料消費が減少"
+        ko: "엔지니어링 서비스 모듈 연료 사용량 감소"
+        ru: "уменьшает потребление топлива служебными инженерными модулями"
+        zh: "工程服务装备的燃料消耗降低"
+      importance: 4
+      unitID: 105
+    - bonus: 30
+      bonusText:
+        de: "Reduzierte Zeitanforderungen für Fertigungs- und Forschungsaufträge"
+        en: "reduction in time requirements for manufacturing and science jobs"
+        es: "de reducción de los requisitos para los trabajos de fabricación y ciencia."
+        fr: "de réduction de productivité horaire pour les tâches de production et\
+          \ scientifiques"
+        ja: "製造ジョブとサイエンスジョブの必要時間が減少"
+        ko: "연구 및 제조 작업 시간효율성 증가"
+        ru: "уменьшает время, необходимое для производственных и научных проектов"
+        zh: "生产和科研项目的时间需求降低"
+      importance: 2
+      unitID: 105
+    - bonus: 30
+      bonusText:
+        de: "Bonus auf die Feuerrate und den Energiespeicherverbrauch von Standup-Pulsprojektoren\
+          \ und Lenkbombenwerfern"
+        en: "bonus to the rate of fire and capacitor consumption of Standup Burst\
+          \ Projectors and Guided Bomb Launchers"
+        es: "de bonificación a la cadencia de tiro y al consumo del condensador de\
+          \ los proyectores de estallido Standup y los lanzabombas guiados."
+        fr: "de bonus à la cadence de tir et à la consommation du capaciteur des projecteurs\
+          \ à salves et des lanceurs de bombes ciblées Standup"
+        ja: "スタンドアップバーストプロジェクターと誘導ボムランチャーの発射間隔とキャパシタ消費効率を改善"
+        ko: "스탠드업 버스트 프로젝터 및 유도폭탄 런처 연사속도 및 캐패시터 사용량 감소"
+        ru: "бонус к скорострельности и энергопотреблению проекторов объёмных поме\
+          х и бомбометателей с системой наведения на базе «Стационар»"
+        zh: "屹立脉冲波投射器和制导炸弹发射器的射速和电容消耗加成"
+      importance: 5
+      unitID: 105
+    types: {}
+  volume: 800000
 "46491":
   description:
     de: "Die Standup-M-Set-Modifikation Materialeffizienz für die Hybrid-Reaktoren\
@@ -3934,89 +4528,3 @@
   portionSize: 1
   published: true
   volume: 0.1
-"37183":
-  description:
-    de: "Die Standup-XL-Set-Laboroptimierungs-Modifikation I bietet Strukturadministratoren\
-      \ die Möglichkeit, in ihren Upwell-Strukturen Kosten- und Zeitanforderungen\
-      \ für Erfindungen, Kopien und Forschungsaktivitäten zu verringern.\n\nStandup\
-      \ ist ein gesetzlich geschütztes System, welches eine Strukturautonome Nanofertigungseinheit\
-      \ (Upwell) nutzt, das eine integrierte Vorlagensoftware, eine Nanofertigungsanlage\
-      \ und ausreichend Nanomasse enthält, um die Fertigung einer Vielzahl an Dienstmodulen,\
-      \ Strukturmodulen und Strukturmodifikationen zu ermöglichen, wenn es in entsprechende\
-      \ Slots in einer Struktur mit Upwell-Technologie eingebaut wird.\n\nHinweis:\
-      \ Nur eine Modifikation desselben Typs, inkl. Tech-Varianten, kann in eine Struktur\
-      \ eingebaut sein."
-    en: "The Standup XL-Set Laboratory Optimization I rig provides a means for structure\
-      \ operators to decrease both cost and time requirements on invention, copying\
-      \ and research activities in their Upwell structures.\n\nStandup is a proprietary\
-      \ system that uses a Structure Autonomous Nanoassembly Device (Upwell) containing\
-      \ integrated template software, a nanoassembler array and sufficient nanomass\
-      \ to enable the construction of a variety of service modules, structure modules\
-      \ and structure rigs when inserted into the appropriate slots on a structure\
-      \ built with Upwell technology.\n\nNote: Only one rig of the same type, counting\
-      \ tech variations, may be fitted at the same time on a structure."
-    es: "El complemento Standup extragrande de optimización de laboratorio\_I permite\
-      \ a los administradores de estructuras reducir los costes y el tiempo requeridos\
-      \ para las actividades de invención, copia e investigación en sus estructuras\
-      \ de Upwell.\n\nStandup es un sistema patentado que utiliza un dispositivo de\
-      \ nanoensamblaje autónomo estructural (de Upwell) que contiene una plantilla\
-      \ integrada de software, una matriz de nanoensambladores y suficiente nanomasa\
-      \ como para construir una serie de módulos de servicio, de estructura y complementos\
-      \ de estructura cuando se insertan en las ranuras apropiadas en una estructura\
-      \ construida con la tecnología de Upwell.\n\nAviso: Solo se puede equipar un\
-      \ complemento del mismo tipo en una estructura, contando las variaciones tecnoló\
-      gicas."
-    fr: "L'optimisation de laboratoire 'Standup' I XL permet aux opérateurs de structure\
-      \ Upwell de réduire le coût financier et la durée des tâches d'invention, de\
-      \ copie et de recherche.\n\nLa technologie brevetée 'Standup' exploite un dispositif\
-      \ autonome de nano-assemblage pour structure Upwell, alliant un logiciel de\
-      \ modélisation intégré, une baie de nano-assemblage et une réserve de nanomasse.\
-      \ Une fois insérés dans les emplacements dédiés sur les structures Upwell, les\
-      \ dispositifs 'Standup' lancent directement l'assemblage moléculaire de divers\
-      \ modules de services, modules de structure et optimisations de structure.\n\
-      \nRemarque : une seule optimisation du même type, y compris les déclinaisons\
-      \ de tech, peut être montée sur une structure à la fois."
-    ja: "スタンドアップ超大型研究施設最適化Iリグを使用することで、ストラクチャのオペレーターはアップウェルストラクチャで発明、複製、研究のアクティビティを\
-      行う際に必要なコストと時間を減少させることができる。\n\n「スタンドアップ」は、自律式ナノ集合体ストラクチャデバイス（アップウェル）を利用した独自シス\
-      テムである。アップウェルの技術を利用して建設されたストラクチャの適切なスロットに挿入すると、統合テンプレートソフトウェア、ナノアセンブラー施設、ナノ物質\
-      を使い、様々なサービスモジュール、ストラクチャモジュール、ストラクチャリグを作り出すことができる。\n\n注：異なる技術であっても、1つのストラクチャに\
-      同じタイプのリグを同時に複数装備させることはできない。"
-    ko: "스탠드업 리그를 장착하면 업웰 구조물의 인벤션, 복제, 그리고 연구 기능에 드는 비용과 시간이 감소합니다. <br><br>스탠드업은\
-      \ 자율구조형 나노어셈블러 장치(업웰)를 사용하는 시스템으로 템플릿 소프트웨어가 내장되어 있으며 나노어셈블리 배열, 충분한 양의 나노물질\
-      이 탑재돼있습니다. 업웰 기반 구조물에 장착 시 다양한 종류의 서비스 모듈, 구조물 모듈, 구조물 장착형 리그를 제조할 수 있습니다. <br><br>참\
-      고: 테크 레벨과 관계없이 동일한 종류의 리그는 한 개 이상 장착할 수 없습니다."
-    ru: "Этот стационар-модификатор первой техкатегории повышает эффективность все\
-      х лабораторных задач, а именно позволяет снизить стоимость и расход времени\
-      \ на проекты по повышению материалоэффективности или снижению стоимости прои\
-      зводства, а также на модернизацию или копирование чертежей, если сооружение\
-      , где ведётся соответствующий проект, разработано консорциумом «Апвелл» и ос\
-      нащено этим модулем.\n\nСТАЦИОНАР — это проприетарная система: её название п\
-      редставляет собой акроним основного компонента системы. Стационарный автоном\
-      ный центральный инженерно-организующий наносборщик «Апвелл» содержит интегри\
-      рованный шаблон программного обеспечения, линию наносборщиков и достаточное\
-      \ количество наномассы для сборки различных модулей технического обслуживани\
-      я, модулей и тюнинг-модулей для сооружений, которые устанавливаются в подход\
-      ящие разъёмы на сооружениях, сконструированных по проектам консорциума «Апве\
-      лл».\n\nВнимание: одновременно сооружение можно оснастить только одним тюнин\
-      г-модулем этого типа, независимо от его техкатегории."
-    zh: "屹立超大型发明优化 I 改装件让建筑操作员能够降低在昇威建筑中发明、拷贝和研究的费用和时间需求。\n\n屹立专用系统采用了昇威建筑分控纳米装配装置\
-      ，由集成模版软件、纳米装配阵列和许多纳米块体构成。安装在采用昇威科技建造的建筑上的专门槽位中可以制造各种服务装备、建筑装备和建筑改装件。\n\n注：只能\
-      同时在一个建筑上装配一件相同类型的改装件，包括衍生型号在内。"
-  groupID: 1870
-  iconID: 21729
-  marketGroupID: 2349
-  mass: 200
-  metaGroupID: 54
-  name:
-    de: "Standup XL-Set Laboratory Optimization I"
-    en: "Standup XL-Set Laboratory Optimization I"
-    es: "Optimización de laboratorio Standup\_I (XL)"
-    fr: "Optimisation de laboratoire 'Standup' I XL"
-    ja: "スタンドアップ超大型研究施設最適化I"
-    ko: "스탠드업 XL-Set 연구실 강화 장치 I"
-    ru: "Standup XL-Set Laboratory Optimization I"
-    zh: "屹立超大型实验室优化 I"
-  portionSize: 1
-  published: true
-  radius: 100
-  volume: 40

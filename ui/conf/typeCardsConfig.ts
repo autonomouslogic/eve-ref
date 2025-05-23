@@ -253,8 +253,11 @@ const cards: {[key: string]: any} = {
 					"structureDamageLimit",
 					"structureAoERoFRoleBonus",
 					"structureRoleBonus",
+					"structureFullPowerStateHitpointMultiplier",
 					"structureServiceRoleBonus",
-					"structureFullPowerStateHitpointMultiplier"
+					"strEngMatBonus",
+					"strEngCostBonus",
+					"strEngTimeBonus"
 				]
 		},
 	"probe":
@@ -627,9 +630,11 @@ const cards: {[key: string]: any} = {
 			"dogmaAttributes":
 				[
 					"attributeEngRigTimeBonus",
+					"RefRigTimeBonus",
 					"attributeEngRigMatBonus",
+					"RefRigMatBonus",
+					"attributeThukkerEngRigMatBonus",
 					"attributeEngRigCostBonus",
-					"attributeAdvCompManufactureMaterialMultiplier",
 					"hiSecModifier",
 					"lowSecModifier",
 					"nullSecModifier"

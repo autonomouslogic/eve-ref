@@ -1,0 +1,183 @@
+{
+  "description" : {
+    "de" : "Diese Modifikation wurde für die Verwendung im Niedersicherheitsraum optimiert und gewährt in allen anderen Regionen des Weltalls verringerte Vorteile. Wird sie im Niedersicherheitsraum installiert, bietet sie erweiterte Vorteile in Bezug auf erforderliche Materialien für die Konstruktion von grundlegenden und erweiterten Capital-Schiffskomponenten und gewöhnliche Vorteile in Bezug auf die Konstruktion anderer Komponenten, Upwell-Strukturen, Strukturmodule, Sternenbasis-Strukturen und Treibstoffblocks.\n\n\n\nDie Standup-XL-Set-Modifikation Herstellungseffizienz für Strukturen und Komponenten der Thukker bietet Strukturadministratoren die Möglichkeit, in ihren Upwell-Strukturen Material- und Zeitanforderungen für die Herstellung von Komponenten, Upwell-Strukturen, Strukturmodulen, Strukturmodifikationen, Sternenbasis-Strukturen und Treibstoffblocks zu verringern.\n\n\n\nDiese Einrichtung wurde von Spezialisten der Thukker modifiziert, um bestimmte nicht regulierte Möglichkeiten für eine beschleunigte Konstruktion von Komponenten für Capital-Schiffe im Niedersicherheitsraum auszunutzen.\n\n\n\nStandup ist ein gesetzlich geschütztes System, welches eine Strukturautonome Nanofertigungseinheit (Upwell) nutzt, das eine integrierte Vorlagensoftware, eine Nanofertigungsanlage und ausreichend Nanomasse enthält, um die Fertigung einer Vielzahl an Dienstmodulen, Strukturmodulen und Strukturmodifikationen zu ermöglichen, wenn es in entsprechende Slots in einer Struktur mit Upwell-Technologie eingebaut wird.\n\n\n\nHinweis: Nur eine Modifikation desselben Typs, inkl. beider Tech-Varianten, kann in eine Struktur eingebaut sein.",
+    "en" : "This rig has been optimized for use in low security space and will provide reduced benefits in all other areas of space. When installed in low security space it provides enhanced benefits to the materials required for construction of basic and advanced capital ship components and normal benefits to the construction of other components, Upwell structures, structure modules, structure rigs, starbase structures and fuel blocks.\r\n\r\nThe Standup XL-Set Thukker Structure and Component Manufacturing Efficiency rig provides a means for structure operators to decrease both material and time requirements manufacturing components, Upwell structures, structure modules, structure rigs, starbase structures and fuel blocks in their Upwell structures.\r\n\r\nThis facility design has been modified by Thukker specialists to utilize certain unregulated opportunities for expediting capital ship component construction in low security space.\r\n\r\nStandup is a proprietary system that uses a Structure Autonomous Nanoassembly Device (Upwell) containing integrated template software, a nanoassembler array and sufficient nanomass to enable the construction of a variety of service modules, structure modules and structure rigs when inserted into the appropriate slots on a structure built with Upwell technology.\r\n\r\nNote: Only one rig of the same type, counting both tech variations, may be fitted at the same time on a structure.",
+    "es" : "Este complemento se ha optimizado para su uso en espacio de seguridad baja y ofrece beneficios reducidos en todos los demás sectores del espacio. Cuando se instala en espacio de seguridad baja, beneficia considerablemente los materiales necesarios para construir componentes de naves capitales con tecnología básica y avanzada y bastante la fabricación de otros componentes, estructuras de Upwell, complementos de estructura, estructuras de base estelar y bloques de combustible.\n\n\n\nEl complemento Standup extragrande de eficiencia en la fabricación de componentes y estructuras thukkers permite a los administradores de estructuras reducir los materiales y el tiempo requeridos para fabricar componentes, estructuras de Upwell, módulos de estructura, complementos de estructura, estructuras de base estelar y bloques de combustible.\n\n\n\nEste diseño de instalación ha sido modificado por especialistas thukkers para aprovechar ciertas oportunidades no reguladas y agilizar la construcción de componentes para naves capitales en espacio de seguridad baja.\n\n\n\nStandup es un sistema patentado que utiliza un dispositivo de nanoensamblaje autónomo estructural (de Upwell) que contiene una plantilla integrada de software, una matriz de nanoensambladores y suficiente nanomasa como para construir una serie de módulos de servicio, de estructura y complementos de estructura cuando se insertan en las ranuras apropiadas en una estructura construida con la tecnología de Upwell.\n\n\n\nAviso: Solo se puede equipar un complemento del mismo tipo en una estructura, contando ambas variaciones tecnológicas.",
+    "fr" : "Ce module d'optimisation est spécifiquement conçu pour optimiser la navigation en espace de basse sécurité, au détriment des autres zones spatiales. Outre les avantages traditionnels dévolus à la production de composants, structures Upwell, modules de structure, structures de base stellaire et blocs de carburant, le module valorise significativement la productivité des matériaux requis pour la construction de composants de vaisseaux capitaux standards et avancés lorsqu'il est installé en espace de basse sécurité. L'optimisation d'efficience industrielle de la production de structures et de composants 'Standup' thukker XL permet aux opérateurs de structure Upwell d'améliorer la productivité matérielle et horaire des lignes de production de composants, de structures Upwell, de modules de structure, de modules d'optimisation de structure, de structures de base stellaire et de blocs de carburant. La conception de l'installation a été modifiée par des spécialistes thukker dans l'optique d'exploiter les failles non réglementées permettant de délocaliser la construction de composants capitaux en espace de basse sécurité. La technologie brevetée 'Standup' exploite un dispositif autonome de nano-assemblage pour structure Upwell, alliant un logiciel de modélisation intégré, une baie de nano-assemblage et une réserve de nanomasse. Une fois insérés dans les emplacements dédiés sur les structures Upwell, les dispositifs 'Standup' lancent directement l'assemblage moléculaire de divers modules de services, modules de structure et optimisations de structure. Remarque : une structure ne peut équiper qu'une seule optimisation du même type, déclinaisons de tech comprises.",
+    "ja" : "このリグはローセキュリティ宙域での使用に最適化されており、それ以外の全ての宙域ではメリットが低下する。ローセキュリティ宙域に設置した場合、基本及び高性能な主力艦の部品の製造に必要な資源の量が通常よりも減る。アップウェルストラクチャ、ストラクチャモジュール、ストラクチャリグ、スターベースストラクチャ、燃料ブロックやその他の部品の製造へのメリットについては、通常と変わらない。\n\n\n\nスタンドアップ超大型サッカー建造物・部品製造効率リグにより、ストラクチャの経営者は、アップウェルストラクチャで部品製造を行う際に必要な資源と時間の両方を削減できる。対象となるのはアップウェルストラクチャ、ストラクチャモジュール、ストラクチャリグ、スターベースストラクチャ、燃料ブロックである。\n\n\n\nこの施設の設計にはサッカーの専門家が修正を加えている。ローセキュリティ宙域のある意味無秩序な状況を利用して、主力艦の部品を製造を効率よく行うためである。\n\n\n\n「スタンドアップ」は、自律式ナノ集合体ストラクチャデバイス（アップウェル）を利用した独自システムである。アップウェルの技術を利用して建設されたストラクチャの適切なスロットに挿入すると、統合テンプレートソフトウェア、ナノアセンブラー施設、ナノ物質を使い、様々なサービスモジュール、ストラクチャモジュール、ストラクチャリグを作り出すことができる。\n\n\n\n注：異なる技術であっても、1つのストラクチャに同じタイプのリグを同時に複数装備させることはできない。",
+    "ko" : "로우 서큐리티에 최적화된 리그로 다른 지역에서 활성화 할 경우 효과가 감소합니다. 로우 시큐리티에서 활성화 시 캐피탈 함선의 재료가 되는 기본 및 상급 부품에 대한 추가 혜택이 존재합니다. 그 외에도 업웰 구조물, 구조물 모듈, 구조물 리그, 스타베이스 구조물, 연료 블록을 포함한 다양한 부품에 대한 일반적인 혜택이 제공됩니다. <br><br>스탠드업 리그를 장착하면 업웰 구조물에서 제작되는 부품, 업웰 구조물, 구조물 모듈, 구조물 리그, 스타베이스 구조물, 연료 블록의 자원요구치와 제조 시간이 감소합니다. <br><br>해당 기능 디자인은 터커 스페셜리스트들에 의해 개량되었으며 로우 시큐리티 내에서의 신속한 캐피탈 함선 부품 수급을 가능케 만들었습니다. <br><br>스탠드업은 자율구조형 나노어셈블러 장치(업웰)를 사용하는 시스템으로 템플릿 소프트웨어가 내장되어 있으며 나노어셈블리 배열, 충분한 양의 나노물질이 탑재돼있습니다. 업웰 기반 구조물에 장착 시 다양한 종류의 서비스 모듈, 구조물 모듈, 구조물 장착형 리그를 제조할 수 있습니다. <br><br>참고: 테크 레벨과 상관없이 동일한 종류의 리그는 한 개 이상 장착할 수 없습니다.",
+    "ru" : "Этот модификатор оптимизирован для использования в системах с низкой СС; в «нулях» или метрополии он будет сравнительно менее эффективен. Будучи установлен в планетной системе с низкой, но положительной СС, он обеспечивает дополнительные преимущества в области материалоэффективности производства компонентов КБТ (как базовых, так и усовершенствованных), и, помимо того, обычные преимущества при производстве прочих компонентов, сооружений консорциума «Апвелл», модулей для сооружений, модификаторов для сооружений, ПОСов и блоков для ПОСов, а также топливных блоков.\n\n\n\nЭтот стационар-модификатор позволяет одновременно повысить материалоэффективность и снизить расход времени на производство компонентов сооружений, самих сооружений, в том числе разработанных консорциумом «Апвелл», а также блоков ПОСов и топливных блоков, если сооружение, где ведётся соответствующий проект, разработано консорциумом «Апвелл» и оснащено этим модулем.\n\n\n\nПроект был разработан с участием таккерских специалистов и опирается на определённые неурегулированные функции, открывающиеся при постройке компонентов КБТ в планетных системах с низкой СС.\n\n\n\nСТАЦИОНАР — это проприетарная система: её название представляет собой акроним центрального компонента системы. Стационарный автономный центральный инженерно-организующий наносборщик «Апвелл» содержит интегрированный шаблон программного обеспечения, линию наносборщиков и достаточное количество наномассы для сборки различных модулей технического обслуживания, модулей и тюнинг-модулей для сооружений, которые устанавливаются в подходящие разъёмы на сооружениях, сконструированных по проектам консорциума «Апвелл».\n\n\n\nВнимание: одновременно сооружение можно оснастить только одним модификатором этого типа, независимо от вариаций техкатегории.",
+    "zh" : "这个改装件经过优化，只能在低安星系使用，在任何其它地区提供的加成都会减少。安装在低安全星系，为建造基础和高级旗舰级舰船组件提供强化的材料需求加成，为建造其它组件、昇威建筑、建筑装备、建筑改装件、母星建筑和燃料块提供普通加成。\n\n\n\n屹立超大型图克尔建筑和组件制造效率改装件让建筑操作员能够降低在昇威建筑中制造组件、昇威建筑、建筑装备、建筑改装件、母星建筑和燃料块的材料和时间要求。\n\n\n\n该设计经图克尔专家改良，钻了低安全星系因为加速旗舰组件建造而在某些领域未受管制的空子。\n\n\n\n屹立专用系统采用了昇威建筑分控纳米装配装置，由集成模版软件、纳米装配阵列和许多纳米块体构成。安装在采用昇威科技建造的建筑上的专门槽位中可以制造各种服务装备、建筑装备和建筑改装件。\n\n\n\n注：只能同时在一个建筑上装配一件相同类型的改装件，包括衍生型号在内。"
+  },
+  "group_id" : 1869,
+  "icon_id" : 21729,
+  "market_group_id" : 2349,
+  "mass" : 200,
+  "meta_group_id" : 52,
+  "name" : {
+    "de" : "Standup XL-Set Thukker Structure and Component Manufacturing Efficiency",
+    "en" : "Standup XL-Set Thukker Structure and Component Manufacturing Efficiency",
+    "es" : "Eficiencia en la fabricación de componentes y estructuras Standup de Thukker II (XL)",
+    "fr" : "Efficience industrielle de la production de structures et de composants 'Standup' thukker XL",
+    "ja" : "スタンドアップ超大型サッカー建造物・部品製造効率",
+    "ko" : "스탠드업 XL-Set 터커 구조물 및 부품 제조 효율성 장치",
+    "ru" : "Standup XL-Set Thukker Structure and Component Manufacturing Efficiency",
+    "zh" : "屹立超大型图克尔建筑和组件制造效率"
+  },
+  "portion_size" : 1,
+  "published" : true,
+  "radius" : 100,
+  "volume" : 40,
+  "type_id" : 45548,
+  "capacity" : 0,
+  "dogma_attributes" : {
+    "1153" : {
+      "attribute_id" : 1153,
+      "value" : 100
+    },
+    "4" : {
+      "attribute_id" : 4,
+      "value" : 200
+    },
+    "1544" : {
+      "attribute_id" : 1544,
+      "value" : 1
+    },
+    "9" : {
+      "attribute_id" : 9,
+      "value" : 40
+    },
+    "1547" : {
+      "attribute_id" : 1547,
+      "value" : 4
+    },
+    "1298" : {
+      "attribute_id" : 1298,
+      "value" : 1657
+    },
+    "1299" : {
+      "attribute_id" : 1299,
+      "value" : 1404
+    },
+    "277" : {
+      "attribute_id" : 277,
+      "value" : 1
+    },
+    "1692" : {
+      "attribute_id" : 1692,
+      "value" : 4
+    },
+    "2334" : {
+      "attribute_id" : 2334,
+      "value" : 1
+    },
+    "2593" : {
+      "attribute_id" : 2593,
+      "value" : -20
+    },
+    "2594" : {
+      "attribute_id" : 2594,
+      "value" : -2
+    },
+    "2595" : {
+      "attribute_id" : 2595,
+      "value" : 0
+    },
+    "422" : {
+      "attribute_id" : 422,
+      "value" : 1
+    },
+    "2355" : {
+      "attribute_id" : 2355,
+      "value" : 0.1
+    },
+    "2356" : {
+      "attribute_id" : 2356,
+      "value" : 1.9
+    },
+    "2357" : {
+      "attribute_id" : 2357,
+      "value" : 0.1
+    },
+    "2358" : {
+      "attribute_id" : 2358,
+      "value" : 1
+    },
+    "182" : {
+      "attribute_id" : 182,
+      "value" : 26252
+    },
+    "161" : {
+      "attribute_id" : 161,
+      "value" : 40
+    },
+    "162" : {
+      "attribute_id" : 162,
+      "value" : 100
+    },
+    "2653" : {
+      "attribute_id" : 2653,
+      "value" : -3.7
+    },
+    "38" : {
+      "attribute_id" : 38,
+      "value" : 0
+    }
+  },
+  "dogma_effects" : {
+    "2663" : {
+      "effect_id" : 2663,
+      "is_default" : true
+    },
+    "6824" : {
+      "effect_id" : 6824,
+      "is_default" : false
+    },
+    "6825" : {
+      "effect_id" : 6825,
+      "is_default" : false
+    },
+    "6827" : {
+      "effect_id" : 6827,
+      "is_default" : false
+    },
+    "6828" : {
+      "effect_id" : 6828,
+      "is_default" : false
+    },
+    "6829" : {
+      "effect_id" : 6829,
+      "is_default" : false
+    },
+    "6842" : {
+      "effect_id" : 6842,
+      "is_default" : false
+    },
+    "6887" : {
+      "effect_id" : 6887,
+      "is_default" : false
+    },
+    "6889" : {
+      "effect_id" : 6889,
+      "is_default" : false
+    },
+    "6890" : {
+      "effect_id" : 6890,
+      "is_default" : false
+    }
+  },
+  "packaged_volume" : 40,
+  "engineering_rig_affected_group_ids" : {
+    "manufacturing" : [ 332, 334, 536, 716, 873, 913, 964, 1136, 4736 ]
+  },
+  "engineering_rig_affected_category_ids" : {
+    "manufacturing" : [ 23, 39, 40, 65, 66 ]
+  },
+  "category_id" : 66,
+  "required_skills" : {
+    "26252" : 1
+  },
+  "engineering_rig_source_type_ids" : {
+    "manufacturing" : [ 43704, 43705, 43720, 43721, 43874, 43875, 43876, 43877, 45548 ]
+  }
+}

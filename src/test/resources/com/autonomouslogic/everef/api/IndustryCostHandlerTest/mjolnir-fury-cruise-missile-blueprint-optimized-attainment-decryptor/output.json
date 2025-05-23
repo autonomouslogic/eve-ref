@@ -36,6 +36,7 @@
       "estimated_item_value": 77556550,
       "job_cost_base": 1551131,
       "system_cost_index": 174683,
+      "system_cost_bonuses": 0,
       "facility_tax": 3878,
       "scc_surcharge": 62045,
       "alpha_clone_tax": 0,
