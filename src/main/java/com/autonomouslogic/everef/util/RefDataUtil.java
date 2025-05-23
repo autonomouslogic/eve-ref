@@ -144,8 +144,15 @@ public class RefDataUtil {
 	}
 
 	public ReferenceEntry createEntryForPath(@NonNull String path, @NonNull byte[] content) {
+		var refDataUrl = (S3Url) urlParser.parse(Configs.REFERENCE_DATA_PATH.getRequired());
 		var md5 = HashUtil.md5(content);
-		return new ReferenceEntry(null, null, path, content, Base64.encodeBase64String(md5), Hex.encodeHexString(md5));
+		return new ReferenceEntry(
+				null,
+				null,
+				refDataUrl.getPath() + path,
+				content,
+				Base64.encodeBase64String(md5),
+				Hex.encodeHexString(md5));
 	}
 
 	public String subPath(@NonNull String type, @NonNull Long id) {
@@ -153,8 +160,7 @@ public class RefDataUtil {
 	}
 
 	public String subPath(@NonNull String type) {
-		var refDataUrl = (S3Url) urlParser.parse(Configs.REFERENCE_DATA_PATH.getRequired());
-		return refDataUrl.getPath() + type;
+		return type;
 	}
 
 	public List<RefDataConfig> loadReferenceDataConfig() {

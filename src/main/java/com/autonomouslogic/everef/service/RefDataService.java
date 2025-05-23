@@ -43,10 +43,10 @@ public class RefDataService {
 	}
 
 	private void update() {
-		log.debug("Updating reference data");
+		log.info("Updating reference data");
 		var oldData = loadedRefData;
 		loadedRefData = refDataUtil.loadLatestRefData().blockingGet();
-		log.debug("Reference data updated");
+		log.info("Reference data updated");
 		if (oldData != null) {
 			oldData.close();
 		}

@@ -70,6 +70,7 @@ public class ApiRunner implements Command {
 				.concurrencyLimit(AimdLimit.create())
 				.build();
 		server.start();
+		log.info("Server started");
 	}
 
 	public void stop() {

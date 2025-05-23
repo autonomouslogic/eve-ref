@@ -51,7 +51,7 @@ public class MarketPriceService {
 
 	@SneakyThrows
 	private void updateEsiMarketPrices() {
-		log.debug("Updating market prices");
+		log.info("Updating market prices");
 		ApiResponse<List<GetMarketsPrices200Ok>> res;
 		try {
 			res = marketApi.getMarketsPricesWithHttpInfo(null, esiMarketPricesEtag);
@@ -71,7 +71,7 @@ public class MarketPriceService {
 							Optional.ofNullable(price.getAveragePrice()).orElse(0.0));
 		}
 		esiMarketPricesEtag = res.getHeaders().get("ETag").getFirst();
-		log.debug("Finished updating market prices");
+		log.info("Finished updating market prices");
 	}
 
 	public OptionalDouble getEsiAdjustedPrice(long typeId) {
