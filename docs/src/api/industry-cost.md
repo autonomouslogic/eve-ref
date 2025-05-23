@@ -29,7 +29,7 @@ To be well-tested, the development is based on [evidence](https://github.com/aut
 It's implemented as an API using HTTP and JSON, so it can be used from any language.
 It's designed to be fast and can run locally, so it can be used for bulk lookups.
 The output is designed to be intuitive and extensible.
-You can generate a client directly from the spec and be on your way, getting on with what you really want to build without
+You can generate a client from the spec or use it directly and be on your way, getting on with what you really want to build without
 having to worry if your material counts match.
 
 ## Usage
