@@ -93,10 +93,15 @@ public class IndustryCostCalculator {
 				manufacturing.getProducts().get(productType.getTypeId()).getQuantity();
 		var units = runs * unitsPerRun;
 		var systemCostIndex = manufacturingSystemCostIndex(eiv);
+		var systemCostBonuses = manufacturingSystemCostBonuses(systemCostIndex);
 		var facilityTax = facilityTax(eiv);
 		var sccSurcharge = sccSurcharge(eiv);
 		var alphaCloneTax = alphaCloneTax(eiv);
-		var totalJobCost = systemCostIndex.add(facilityTax).add(sccSurcharge).add(alphaCloneTax);
+		var totalJobCost = systemCostIndex
+				.add(facilityTax)
+				.add(sccSurcharge)
+				.add(alphaCloneTax)
+				.add(systemCostBonuses);
 		var materials = manufacturingMaterials(manufacturing);
 		var totalMaterialCost = totalMaterialCost(materials);
 		var totalCost = totalJobCost.add(totalMaterialCost);
@@ -112,6 +117,7 @@ public class IndustryCostCalculator {
 				.timePerUnit(time.dividedBy(units).truncatedTo(ChronoUnit.MILLIS))
 				.estimatedItemValue(eiv)
 				.systemCostIndex(systemCostIndex)
+				.systemCostBonuses(systemCostBonuses)
 				.facilityTax(facilityTax)
 				.sccSurcharge(sccSurcharge)
 				.alphaCloneTax(alphaCloneTax)
@@ -194,6 +200,13 @@ public class IndustryCostCalculator {
 			return 1.0;
 		}
 		return structure.getTimeModifier();
+	}
+
+	private double structureManufacturingCostModifier() {
+		if (structure == null) {
+			return 1.0;
+		}
+		return structure.getCostModifier();
 	}
 
 	private double rigModifier(Function<IndustryRig, Double> bonusGetter) {
@@ -408,6 +421,16 @@ public class IndustryCostCalculator {
 	private BigDecimal manufacturingSystemCostIndex(BigDecimal eiv) {
 		var index = industryCostInput.getManufacturingCost();
 		return systemCostIndex(eiv, index);
+	}
+
+	private BigDecimal manufacturingSystemCostBonuses(BigDecimal systemCostIndex) {
+		var structureMod = structureManufacturingCostModifier();
+		var rigMod = rigModifier(IndustryRig::getCostBonus);
+		var costMod = 1.0 + industryCostInput.getFwCostBonus().doubleValue();
+		var mod = structureMod * rigMod * costMod;
+		var modified = systemCostIndex.multiply(BigDecimal.valueOf(mod), MathUtil.MATH_CONTEXT);
+		var bonus = modified.subtract(systemCostIndex);
+		return MathUtil.round(bonus);
 	}
 
 	private BigDecimal inventionSystemCostIndex(BigDecimal jcb) {
