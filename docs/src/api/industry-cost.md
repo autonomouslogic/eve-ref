@@ -165,9 +165,9 @@ Example output:
 ```
 
 ## Job Costs
-EIV calculations should match exactly, but you might notice that the system cost index can be slightly off.
+EIV calculations should match pretty closely, but you might notice that the system cost index can be slightly off.
 That's not a bug, it's just how the data from CCP works.
-The ESI only gives us two decimal places of precision, even though the actual values go deeper.
+The ESI only gives us four decimal places of precision, even though the actual values go deeper.
 
 For example, ESI might say the index is `0.0728`, but behind the scenes it could really be something like `0.0728049422`.
 When you're installing a job, that tiny difference could change the cost by around 800 ISK on an 18 million ISK job installation cost.

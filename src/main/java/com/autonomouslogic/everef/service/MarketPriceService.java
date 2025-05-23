@@ -75,7 +75,7 @@ public class MarketPriceService {
 	}
 
 	public OptionalDouble getEsiAdjustedPrice(long typeId) {
-w		if (!prices.containsKey(typeId)) {
+		if (!prices.containsKey(typeId)) {
 			return OptionalDouble.empty();
 		}
 		return OptionalDouble.of(prices.get(typeId).getEsiAdjustedPrice());
