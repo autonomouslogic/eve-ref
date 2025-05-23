@@ -44,6 +44,9 @@ public class IndustryCostCalculator {
 	@Inject
 	protected Provider<ManufactureCalculator> manufactureCalculatorProvider;
 
+	@Inject
+	protected Provider<IndustryMath> industryMathProvider;
+
 	@Setter
 	@NonNull
 	private LoadedRefData refData;
@@ -69,6 +72,8 @@ public class IndustryCostCalculator {
 	@Setter
 	private List<IndustryRig> rigs;
 
+	private IndustryMath industryMath;
+
 	@Inject
 	protected IndustryCostCalculator() {}
 
@@ -77,61 +82,19 @@ public class IndustryCostCalculator {
 		Objects.requireNonNull(productType, "productType");
 		Objects.requireNonNull(blueprint, "blueprint");
 
+		industryMath = industryMathProvider.get().setIndustryCostInput(industryCostInput);
+
 		var builder = IndustryCost.builder();
 		if (Optional.ofNullable(productType.getBlueprint()).orElse(false)) {
 			var invention = blueprint.getActivities().get("invention");
 			var inventionCost = inventionCost(invention);
 			builder.invention(String.valueOf(productType.getTypeId()), inventionCost);
 		} else {
-			var manufacturing = blueprint.getActivities().get("manufacturing");
-			var manufacturingCost = manufacturingCost(manufacturing);
+			var manufacturingCost = manufactureCalculatorProvider.get().setIndustryMath(industryMath)
+				.setBlueprint(blueprint).setProductType(productType).manufacturingCost();
 			builder.manufacturing(String.valueOf(productType.getTypeId()), manufacturingCost);
 		}
 		return builder.build();
-	}
-
-	private ManufacturingCost manufacturingCost(BlueprintActivity manufacturing) {
-		var time = manufacturingTime(manufacturing);
-		var eiv = manufacturingEiv(manufacturing);
-		var runs = industryCostInput.getRuns();
-		var unitsPerRun =
-				manufacturing.getProducts().get(productType.getTypeId()).getQuantity();
-		var units = runs * unitsPerRun;
-		var systemCostIndex = manufacturingSystemCostIndex(eiv);
-		var systemCostBonuses = systemCostBonuses(systemCostIndex, "manufacturing");
-		var facilityTax = facilityTax(eiv);
-		var sccSurcharge = sccSurcharge(eiv);
-		var alphaCloneTax = alphaCloneTax(eiv);
-		var totalJobCost = systemCostIndex
-				.add(facilityTax)
-				.add(sccSurcharge)
-				.add(alphaCloneTax)
-				.add(systemCostBonuses);
-		var materials = manufacturingMaterials(manufacturing);
-		var totalMaterialCost = totalMaterialCost(materials);
-		var totalCost = totalJobCost.add(totalMaterialCost);
-		return ManufacturingCost.builder()
-				.productId(industryCostInput.getProductId())
-				.blueprintId(blueprint.getBlueprintTypeId())
-				.runs(runs)
-				.units(units)
-				.unitsPerRun(unitsPerRun)
-				.materials(materials)
-				.time(time)
-				.timePerRun(time.dividedBy(runs).truncatedTo(ChronoUnit.MILLIS))
-				.timePerUnit(time.dividedBy(units).truncatedTo(ChronoUnit.MILLIS))
-				.estimatedItemValue(eiv)
-				.systemCostIndex(systemCostIndex)
-				.systemCostBonuses(systemCostBonuses)
-				.facilityTax(facilityTax)
-				.sccSurcharge(sccSurcharge)
-				.alphaCloneTax(alphaCloneTax)
-				.totalJobCost(totalJobCost)
-				.totalMaterialCost(totalMaterialCost)
-				.totalCost(totalCost)
-				.totalCostPerRun(MathUtil.round(MathUtil.divide(totalCost, runs), 2))
-				.totalCostPerUnit(MathUtil.round(MathUtil.divide(totalCost, units), 2))
-				.build();
 	}
 
 	private Map<String, MaterialCost> manufacturingMaterials(BlueprintActivity manufacturing) {
@@ -183,14 +146,6 @@ public class IndustryCostCalculator {
 		var quantity = runs * base * meMod * structureMod * rigMod;
 		var rounded = Math.max(runs, Math.ceil(Math.round(quantity * 100.0) / 100.0));
 		return (long) rounded;
-	}
-
-	private double materialEfficiencyModifier() {
-		return 1.0 - industryCostInput.getMe() / 100.0;
-	}
-
-	private double timeEfficiencyModifier() {
-		return 1.0 - industryCostInput.getTe() / 100.0;
 	}
 
 	private double structureManufacturingMaterialModifier() {
@@ -267,22 +222,6 @@ public class IndustryCostCalculator {
 			total = total.add(materialCost.getCost());
 		}
 		return total;
-	}
-
-	private Duration manufacturingTime(BlueprintActivity manufacturing) {
-		var baseTime = (double) manufacturing.getTime();
-		var teMod = timeEfficiencyModifier();
-		var runs = industryCostInput.getRuns();
-		var industryMod = 1.0 - GLOBAL_TIME_BONUSES.get("Industry") * industryCostInput.getIndustry();
-		var advancedIndustryMod =
-				1.0 - GLOBAL_TIME_BONUSES.get("Advanced Industry") * industryCostInput.getAdvancedIndustry();
-		var specialSkillMod = manufacturingSpecialisedSkillMod(manufacturing);
-		var structureMod = structureTimeModifier();
-		var rigMod = rigModifier(IndustryRig::getTimeBonus, "manufacturing");
-		var time =
-				runs * baseTime * teMod * industryMod * advancedIndustryMod * specialSkillMod * structureMod * rigMod;
-		var rounded = Math.round(time);
-		return Duration.ofSeconds(rounded);
 	}
 
 	private double manufacturingSpecialisedSkillMod(BlueprintActivity manufacturing) {
@@ -414,28 +353,8 @@ public class IndustryCostCalculator {
 		return mod;
 	}
 
-	private BigDecimal manufacturingEiv(BlueprintActivity activityCost) {
-		var eiv = BigDecimal.ZERO;
-		for (var material : activityCost.getMaterials().values()) {
-			var adjPrice = marketPriceService.getEsiAdjustedPrice(material.getTypeId());
-			if (adjPrice.isEmpty()) {
-				throw new RuntimeException("typeId: " + material.getTypeId());
-			}
-			var quantity = BigDecimal.valueOf(material.getQuantity());
-			var price = BigDecimal.valueOf(adjPrice.getAsDouble());
-			var total = quantity.multiply(price);
-			eiv = eiv.add(total);
-		}
-		return MathUtil.round(eiv.multiply(BigDecimal.valueOf(industryCostInput.getRuns())));
-	}
-
 	private BigDecimal jobCostBase(BigDecimal eiv) {
 		return MathUtil.round(eiv.multiply(JOB_COST_BASE_RATE));
-	}
-
-	private BigDecimal manufacturingSystemCostIndex(BigDecimal eiv) {
-		var index = industryCostInput.getManufacturingCost();
-		return systemCostIndex(eiv, index);
 	}
 
 	private BigDecimal systemCostBonuses(BigDecimal systemCostIndex, String activity) {
@@ -446,16 +365,6 @@ public class IndustryCostCalculator {
 		var modified = systemCostIndex.multiply(BigDecimal.valueOf(mod), MathUtil.MATH_CONTEXT);
 		var bonus = modified.subtract(systemCostIndex);
 		return MathUtil.round(bonus);
-	}
-
-	private BigDecimal inventionSystemCostIndex(BigDecimal jcb) {
-		var index = industryCostInput.getInventionCost();
-		return systemCostIndex(jcb, index);
-	}
-
-	private static @NotNull BigDecimal systemCostIndex(BigDecimal value, BigDecimal index) {
-		var cost = MathUtil.round(value.multiply(index));
-		return cost;
 	}
 
 	private BigDecimal sccSurcharge(BigDecimal val) {
