@@ -148,15 +148,15 @@ public class IndustryCostInput {
 	@JsonProperty
 	@lombok.Builder.Default
 	@Schema(
-			description = "Faction warfare bonus applied to system cost",
+			description = "Bonus to apply to system cost, such as the faction warfare bonus",
 			requiredMode = Schema.RequiredMode.NOT_REQUIRED,
 			defaultValue = "0",
 			minimum = "0",
-			maximum = "1")
-	BigDecimal fwCostBonus = BigDecimal.ZERO;
+			maximum = "1",
+			example = "-0.50")
+	BigDecimal systemCostBonus = BigDecimal.ZERO;
 
 	@JsonProperty
-	@lombok.Builder.Default
 	@Schema(
 			description =
 					"The type ID of the structure where the job is installed. If not set, an NPC station is assumed.",
@@ -164,7 +164,6 @@ public class IndustryCostInput {
 	Long structureTypeId;
 
 	@JsonProperty
-	@lombok.Builder.Default
 	@Schema(
 			description = "The type IDs of the rigs installed on the sture structure where the job is installed",
 			requiredMode = Schema.RequiredMode.NOT_REQUIRED)

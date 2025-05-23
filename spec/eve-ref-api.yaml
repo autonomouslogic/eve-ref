@@ -178,12 +178,6 @@ components:
             job is installed
           maximum: 1
           minimum: 0
-        fw_cost_bonus:
-          type: number
-          default: 0
-          description: Faction warfare bonus applied to system cost
-          maximum: 1
-          minimum: 0
         gallente_encryption_methods:
           type: integer
           format: int32
@@ -415,6 +409,14 @@ components:
           format: int64
           description: "The type ID of the structure where the job is installed. If\
             \ not set, an NPC station is assumed."
+        system_cost_bonus:
+          type: number
+          default: 0
+          description: "Bonus to apply to system cost, such as the faction warfare\
+            \ bonus"
+          example: -0.5
+          maximum: 1
+          minimum: 0
         te:
           type: integer
           format: int32

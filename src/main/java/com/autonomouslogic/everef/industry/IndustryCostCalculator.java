@@ -436,7 +436,7 @@ public class IndustryCostCalculator {
 	private BigDecimal systemCostBonuses(BigDecimal systemCostIndex, String activity) {
 		var structureMod = structureCostModifier();
 		var rigMod = rigModifier(IndustryRig::getCostBonus, activity);
-		var costMod = 1.0 + industryCostInput.getFwCostBonus().doubleValue();
+		var costMod = 1.0 + industryCostInput.getSystemCostBonus().doubleValue();
 		var mod = structureMod * rigMod * costMod;
 		var modified = systemCostIndex.multiply(BigDecimal.valueOf(mod), MathUtil.MATH_CONTEXT);
 		var bonus = modified.subtract(systemCostIndex);
