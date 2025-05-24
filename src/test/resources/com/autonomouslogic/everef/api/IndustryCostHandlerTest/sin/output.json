@@ -83,5 +83,50 @@
       "total_cost_per_run" : 1158638946.09,
       "total_cost_per_unit" : 1158638946.09
     }
+  },
+  "invention": {
+    // taken from sin-blueprint test
+    "22431": {
+      "product_id": 22431,
+      "blueprint_id": 999,
+      "runs": 1,
+      "probability": 0.3208333333333333, // EVE client says 0.321
+      "runs_per_copy": 1,
+      "units_per_run": 1,
+      "expected_copies": 0.3208333333333333,
+      "expected_runs": 0.3208333333333333,
+      "expected_units": 0.3208333333333333,
+      "me": 2,
+      "te": 4,
+      "time": "PT45H20M00S",
+      "avg_time_per_copy": "PT141H17M55.324S",
+      "avg_time_per_run": "PT141H17M55.324S",
+      "avg_time_per_unit": "PT141H17M55.324S",
+      "materials": {
+        "20410": {
+          "quantity": 32,
+          "type_id": 20410,
+          "cost" : 3190194.56
+        },
+        "20424": {
+          "quantity": 32,
+          "type_id": 20424,
+          "cost" : 2747990.08
+        }
+      },
+      "estimated_item_value": 768684250,
+      "job_cost_base": 15373685,
+      "system_cost_index": 1729158,
+      "system_cost_bonuses": 0,
+      "facility_tax": 38434,
+      "scc_surcharge": 614947,
+      "alpha_clone_tax": 0,
+      "total_job_cost": 2382539,
+      "total_material_cost" : 5938184.64,
+      "total_cost" : 8320723.64,
+      "avg_cost_per_copy" : 25934723.03,
+      "avg_cost_per_run" : 25934723.03,
+      "avg_cost_per_unit" : 25934723.03
+    }
   }
 }
