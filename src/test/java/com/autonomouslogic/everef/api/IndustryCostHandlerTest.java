@@ -2,6 +2,7 @@ package com.autonomouslogic.everef.api;
 
 import static com.autonomouslogic.everef.test.TestDataUtil.TEST_PORT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import com.autonomouslogic.commons.ResourceUtil;
 import com.autonomouslogic.everef.cli.api.ApiRunner;
@@ -13,22 +14,30 @@ import com.autonomouslogic.everef.model.api.InventionCost;
 import com.autonomouslogic.everef.model.api.ManufacturingCost;
 import com.autonomouslogic.everef.openapi.api.api.IndustryApi;
 import com.autonomouslogic.everef.openapi.api.invoker.ApiClient;
+import com.autonomouslogic.everef.openapi.esi.model.GetMarketsPrices200Ok;
 import com.autonomouslogic.everef.service.MarketPriceService;
 import com.autonomouslogic.everef.service.RefDataService;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.test.TestDataUtil;
 import com.autonomouslogic.everef.util.MockScrapeBuilder;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.google.common.base.CaseFormat;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -44,6 +53,7 @@ import org.apache.commons.io.IOUtils;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -93,6 +103,7 @@ public class IndustryCostHandlerTest {
 	MockWebServer server;
 	File refDataFile;
 	String esiMarketPrices;
+	HttpClient httpClient;
 
 	@BeforeEach
 	@SneakyThrows
@@ -110,6 +121,8 @@ public class IndustryCostHandlerTest {
 				new ApiClient().setScheme("http").setHost("localhost").setPort(8080));
 
 		refDataService.init();
+
+		httpClient = HttpClient.newHttpClient();
 	}
 
 	@AfterEach
@@ -243,5 +256,43 @@ public class IndustryCostHandlerTest {
 				return new MockResponse().setResponseCode(500);
 			}
 		}
+	}
+
+	@Test
+	@SneakyThrows
+	void shouldNotFailOnBlankParameters() {
+		setupBasicEsiPrices();
+
+		var query = new ArrayList<String>();
+		for (var field : IndustryCostInput.class.getDeclaredFields()) {
+			var prop = field.getAnnotation(JsonProperty.class);
+			if (prop != null) {
+				var name = CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, field.getName());
+				if (name.equals("product_id")) {
+					continue;
+				}
+				query.add(name + "=");
+			}
+		}
+
+		var uri = URI.create("http://localhost:8080/v1/industry/cost?product_id=645&" + String.join("&", query));
+		log.info("URI: {}", uri);
+		var req = HttpRequest.newBuilder().GET().uri(uri).build();
+		var res = httpClient.send(req, HttpResponse.BodyHandlers.ofString());
+		log.info("Body: {}", res.body());
+		assertEquals(200, res.statusCode());
+		var output = objectMapper.readValue(res.body(), IndustryCost.class);
+		assertNull(output.getInput().getStructureTypeId());
+		assertNull(output.getInput().getRigId());
+	}
+
+	@SneakyThrows
+	void setupBasicEsiPrices() {
+		var prices = new ArrayList<>();
+		for (int i = 0; i < 100_000; i++) {
+			prices.add(new GetMarketsPrices200Ok().typeId(i).averagePrice(1.0).adjustedPrice(1.0));
+		}
+		esiMarketPrices = objectMapper.writeValueAsString(prices);
+		marketPriceService.init();
 	}
 }

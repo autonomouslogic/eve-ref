@@ -1,5 +1,23 @@
 EVE Ref Changelog
 
+## [2.60.0](https://github.com/autonomouslogic/eve-ref/compare/2.59.0...2.60.0) (2025-05-23)
+
+
+### Features
+
+* **api:** Structure, rig, and faction warfare bonuses on industry cost API ([#829](https://github.com/autonomouslogic/eve-ref/issues/829)) ([d321f26](https://github.com/autonomouslogic/eve-ref/commit/d321f26884ce23a88b843b024ff138b53e390f32))
+
+
+### Bug Fixes
+
+* API server can run without any special configuration ([a93fc67](https://github.com/autonomouslogic/eve-ref/commit/a93fc67679ddb0f17020b4fa8fda1a579a73d629))
+* **api:** Industry cost API can handle blank parameters ([#847](https://github.com/autonomouslogic/eve-ref/issues/847)) ([b6fe489](https://github.com/autonomouslogic/eve-ref/commit/b6fe489b9d25245c1fee8605e0cb87a7f1de3951))
+
+
+### Documentation
+
+* Industry cost API documentation ([#844](https://github.com/autonomouslogic/eve-ref/issues/844)) ([2b057e2](https://github.com/autonomouslogic/eve-ref/commit/2b057e25157d19a9023c966a8c5c65602793a3d6))
+
 ## [2.59.0](https://github.com/autonomouslogic/eve-ref/compare/2.58.1...2.59.0) (2025-05-21)
 
 
