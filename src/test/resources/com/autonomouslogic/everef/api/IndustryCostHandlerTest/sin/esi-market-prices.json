@@ -58,5 +58,15 @@
     "adjusted_price": 13535857.712984534,
     "average_price": 28446690.16,
     "type_id": 21025
+  },
+  {
+    "adjusted_price": 100271.71551025753,
+    "average_price": 99693.58,
+    "type_id": 20410
+  },
+  {
+    "adjusted_price": 93822.5102909048,
+    "average_price": 85874.69,
+    "type_id": 20424
   }
 ]

@@ -155,7 +155,11 @@ public class IndustryCostHandlerTest {
 		System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(actual));
 
 		actual = assertEiv(expected, actual);
-		assertEquals(expected, actual);
+		if (!expected.equals(actual)) {
+			assertEquals(
+					objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(expected),
+					objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(actual));
+		}
 	}
 
 	/*

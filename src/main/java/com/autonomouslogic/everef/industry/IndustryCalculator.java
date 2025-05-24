@@ -16,7 +16,9 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 import lombok.NonNull;
 import lombok.Setter;
+import lombok.extern.log4j.Log4j2;
 
+@Log4j2
 public class IndustryCalculator {
 	@Inject
 	protected MarketPriceService marketPriceService;
@@ -65,27 +67,55 @@ public class IndustryCalculator {
 
 		var builder = IndustryCost.builder();
 		if (Optional.ofNullable(productType.getBlueprint()).orElse(false)) {
-			var inventionCost = inventionCalculatorProvider
-					.get()
-					.setIndustryCostInput(industryCostInput)
-					.setProductType(productType)
-					.setBlueprint(blueprint)
-					.setDecryptor(decryptor)
-					.setStructure(structure)
-					.setRigs(rigs)
-					.calc();
-			builder.invention(String.valueOf(productType.getTypeId()), inventionCost);
+			handleInvention(builder);
 		} else {
-			var manufacturingCost = manufactureCalculatorProvider
-					.get()
-					.setIndustryCostInput(industryCostInput)
-					.setBlueprint(blueprint)
-					.setProductType(productType)
-					.setStructure(structure)
-					.setRigs(rigs)
-					.calc();
-			builder.manufacturing(String.valueOf(productType.getTypeId()), manufacturingCost);
+			handleManufacturing(builder);
+			handleInventionForManufacturing(builder);
 		}
 		return builder.build();
+	}
+
+	private void handleManufacturing(IndustryCost.Builder builder) {
+		var manufacturingCost = manufactureCalculatorProvider
+				.get()
+				.setIndustryCostInput(industryCostInput)
+				.setBlueprint(blueprint)
+				.setProductType(productType)
+				.setStructure(structure)
+				.setRigs(rigs)
+				.calc();
+		builder.manufacturing(String.valueOf(productType.getTypeId()), manufacturingCost);
+	}
+
+	private void handleInvention(IndustryCost.Builder builder) {
+		handleInvention(builder, productType, blueprint);
+	}
+
+	private void handleInvention(IndustryCost.Builder builder, InventoryType productType, Blueprint blueprint) {
+		var inventionCost = inventionCalculatorProvider
+				.get()
+				.setIndustryCostInput(industryCostInput)
+				.setProductType(productType)
+				.setBlueprint(blueprint)
+				.setDecryptor(decryptor)
+				.setStructure(structure)
+				.setRigs(rigs)
+				.calc();
+		builder.invention(String.valueOf(productType.getTypeId()), inventionCost);
+	}
+
+	private void handleInventionForManufacturing(IndustryCost.Builder builder) {
+		var productBlueprintType = refData.getType(blueprint.getBlueprintTypeId());
+		var sourceBlueprint = Optional.ofNullable(refData.getType(blueprint.getBlueprintTypeId()))
+				.flatMap(v -> Optional.ofNullable(v.getProducedByBlueprints()))
+				.stream()
+				.flatMap(v -> v.values().stream())
+				.filter(v -> v.getBlueprintActivity().equals("invention"))
+				.findFirst()
+				.map(v -> refData.getBlueprint(v.getBlueprintTypeId()));
+		if (sourceBlueprint.isEmpty()) {
+			return;
+		}
+		handleInvention(builder, productBlueprintType, sourceBlueprint.get());
 	}
 }

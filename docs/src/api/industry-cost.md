@@ -46,7 +46,8 @@ you can stop worrying about whether your materials or EIV add up and get back to
 The API lives at `https://api.everef.net/v1/industry/cost` and accepts only GET requests.
 
 * For manufacture, supply the `product_id` parameter of an item.
-* For invention, supply the `product_id` parameter of a the invented blueprint.
+* For manufacture of items which require an invented blueprint, the invention will be automatically calculated as well.
+* For invention, supply the `product_id` parameter of the blueprint to be invented.
 * For manufacture and invention of something which can come from multiple blueprints, set the `blueprint_id` as the source blueprint type ID.
 
 See the spec for full details.
