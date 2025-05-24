@@ -48,5 +48,50 @@
       "total_cost_per_run" : 2726406.96,
       "total_cost_per_unit" : 545.28
     }
+  },
+  "invention": {
+    // Take from the mjolnir-fury-cruise-missile-blueprint test
+    "24536": {
+      "product_id": 24536,
+      "blueprint_id": 803,
+      "runs": 45,
+      "runs_per_copy": 10,
+      "units_per_run": 5000,
+      "probability": 0.49583333333333335, // EVE client says 0.496,
+      "expected_copies": 22.31250000000000075,
+      "expected_runs": 223.1250000000000075,
+      "expected_units": 1115625.0000000000375,
+      "me": 2,
+      "te": 4,
+      "time": "PT723H33M45S",
+      "avg_time_per_copy": "PT116742.857S",
+      "avg_time_per_run": "PT11674.285S",
+      "avg_time_per_unit": "PT2.334S",
+      "materials": {
+        "20418": {
+          "quantity": 45,
+          "type_id": 20418,
+          "cost" : 4635885.15
+        },
+        "20420": {
+          "quantity": 45,
+          "type_id": 20420,
+          "cost" : 4380747.75
+        }
+      },
+      "estimated_item_value": 77556550,
+      "job_cost_base": 1551131,
+      "system_cost_index": 175319,
+      "system_cost_bonuses": 0,
+      "facility_tax": 3878,
+      "scc_surcharge": 62045,
+      "alpha_clone_tax": 0,
+      "total_job_cost": 241242,
+      "total_material_cost" : 9016632.90,
+      "total_cost" : 9257874.90,
+      "avg_cost_per_copy" : 414918.76,
+      "avg_cost_per_run" : 41491.88,
+      "avg_cost_per_unit" : 8.30
+    }
   }
 }

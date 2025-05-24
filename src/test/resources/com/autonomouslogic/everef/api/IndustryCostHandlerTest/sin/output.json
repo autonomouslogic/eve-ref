@@ -85,7 +85,7 @@
     }
   },
   "invention": {
-    // taken from sin-blueprint test
+    // taken from the sin-blueprint test
     "22431": {
       "product_id": 22431,
       "blueprint_id": 999,
