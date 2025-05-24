@@ -2,7 +2,7 @@ package com.autonomouslogic.everef.api;
 
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.data.LoadedRefData;
-import com.autonomouslogic.everef.industry.IndustryCostCalculator;
+import com.autonomouslogic.everef.industry.IndustryCalculator;
 import com.autonomouslogic.everef.industry.IndustryDecryptors;
 import com.autonomouslogic.everef.industry.IndustryRigs;
 import com.autonomouslogic.everef.industry.IndustryStructures;
@@ -56,7 +56,7 @@ public class IndustryCostHandler implements HttpService, Handler {
 	protected RefDataService refDataService;
 
 	@Inject
-	protected Provider<IndustryCostCalculator> industryCostCalculatorProvider;
+	protected Provider<IndustryCalculator> industryCostCalculatorProvider;
 
 	@Inject
 	protected IndustryDecryptors industryDecryptors;
@@ -189,7 +189,7 @@ public class IndustryCostHandler implements HttpService, Handler {
 	}
 
 	private static @NotNull InventoryType handleProduct(
-			IndustryCostInput input, LoadedRefData refdata, IndustryCostCalculator calculator) {
+			IndustryCostInput input, LoadedRefData refdata, IndustryCalculator calculator) {
 		var productType = refdata.getType(input.getProductId());
 		if (productType == null) {
 			throw new ClientException(String.format("Product type ID %d not found", input.getProductId()));
@@ -199,10 +199,7 @@ public class IndustryCostHandler implements HttpService, Handler {
 	}
 
 	private void handleBlueprint(
-			IndustryCostInput input,
-			InventoryType productType,
-			LoadedRefData refdata,
-			IndustryCostCalculator calculator) {
+			IndustryCostInput input, InventoryType productType, LoadedRefData refdata, IndustryCalculator calculator) {
 		var blueprints = Optional.ofNullable(productType.getProducedByBlueprints())
 				.map(Map::values)
 				.filter(c -> !c.isEmpty())
@@ -227,7 +224,7 @@ public class IndustryCostHandler implements HttpService, Handler {
 		calculator.setBlueprint(blueprint);
 	}
 
-	private void handleDecryptor(IndustryCostInput input, IndustryCostCalculator calculator) {
+	private void handleDecryptor(IndustryCostInput input, IndustryCalculator calculator) {
 		var decryptorId = input.getDecryptorId();
 		if (decryptorId != null) {
 			var decryptor = industryDecryptors.get(decryptorId);
@@ -238,7 +235,7 @@ public class IndustryCostHandler implements HttpService, Handler {
 		}
 	}
 
-	private void handleStructure(IndustryCostInput input, IndustryCostCalculator calculator) {
+	private void handleStructure(IndustryCostInput input, IndustryCalculator calculator) {
 		var structureTypeId = input.getStructureTypeId();
 		if (structureTypeId != null) {
 			var structure = industryStructures.get(structureTypeId);
@@ -249,7 +246,7 @@ public class IndustryCostHandler implements HttpService, Handler {
 		}
 	}
 
-	private void handleRigs(IndustryCostInput input, IndustryCostCalculator calculator) {
+	private void handleRigs(IndustryCostInput input, IndustryCalculator calculator) {
 		var rigIds = input.getRigId();
 		if (rigIds != null && !rigIds.isEmpty()) {
 			var rigs = new ArrayList<IndustryRig>();
