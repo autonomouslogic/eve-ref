@@ -78,6 +78,7 @@ public class IndustryCalculator {
 		} else {
 			var manufacturingCost = manufactureCalculatorProvider
 					.get()
+					.setIndustryCostInput(industryCostInput)
 					.setBlueprint(blueprint)
 					.setProductType(productType)
 					.setStructure(structure)
