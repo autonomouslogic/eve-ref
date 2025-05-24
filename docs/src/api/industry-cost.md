@@ -20,6 +20,12 @@ These activities are _not_ supported yet:
 * Research ME
 * Research TE
 
+Quick links:
+* [Industry source code](https://github.com/autonomouslogic/eve-ref/tree/main/src/main/java/com/autonomouslogic/everef/industry)
+* [Industry resources](https://github.com/autonomouslogic/eve-ref/tree/main/src/main/resources/industry)
+* [Test code](https://github.com/autonomouslogic/eve-ref/blob/main/src/test/java/com/autonomouslogic/everef/api/IndustryCostHandlerTest.java)
+* [Test fixtures](https://github.com/autonomouslogic/eve-ref/tree/main/src/test/resources/com/autonomouslogic/everef/api/IndustryCostHandlerTest)
+
 ## Motivation
 Let's be honest, industry calculations in EVE Online are tedious and error-prone.
 I kept seeing the same questions pop up on forums and Discords and it's clear that many developers struggle with them.
@@ -28,8 +34,7 @@ That's fine, but it also feels like everyone's reinventing the wheel.
 
 One of the goals of EVE Ref is to make life easier for EVE developers.
 This API was built to solve that exact problem: a single, shared place where accurate industry calculations are already done for you.
-It's backed by [evidence](https://github.com/autonomouslogic/eve-ref/tree/main/src/test/resources/com/autonomouslogic/everef/api/IndustryCostHandlerTest)
-pulled straight from the game and tested thoroughly to make sure the results are solid.
+It's backed by evidence pulled from the game and tested thoroughly to make sure the results are solid.
 
 It's a simple HTTP+JSON API, so you can use it from any language.
 It's fast, runs locally if you want it to, and works great for bulk lookups.

@@ -15,4 +15,25 @@ public class IndustryStructures extends AbstractIndustryService<IndustryStructur
 	protected IndustryStructures(CsvMapper csvMapper) {
 		super(IndustryStructure.class, STRUCTURES_CONFIG, IndustryStructure::getTypeId, csvMapper);
 	}
+
+	public double structureManufacturingMaterialModifier(IndustryStructure structure) {
+		if (structure == null) {
+			return 1.0;
+		}
+		return structure.getMaterialModifier();
+	}
+
+	public double structureTimeModifier(IndustryStructure structure) {
+		if (structure == null) {
+			return 1.0;
+		}
+		return structure.getTimeModifier();
+	}
+
+	public double structureCostModifier(IndustryStructure structure) {
+		if (structure == null) {
+			return 1.0;
+		}
+		return structure.getCostModifier();
+	}
 }
