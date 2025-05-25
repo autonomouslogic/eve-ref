@@ -17,7 +17,8 @@ import io.swagger.v3.oas.annotations.servers.Server;
 										url = "https://github.com/autonomouslogic/eve-ref/blob/main/LICENSE-CCP"),
 						version = "dev",
 						contact = @Contact(name = "Kenn", url = "https://everef.net/discord")),
-		servers = @Server(url = EveRefApiSpec.BASE_URL))
+		servers = @Server(url = EveRefApiSpec.BASE_URL),
+externalDocumentation = @ExternalDocumentation(description="EVE Ref Docs" url="https://docs.everef.net/api/"))
 public interface EveRefApiSpec {
 	String BASE_URL = "https://api.everef.net";
 }
