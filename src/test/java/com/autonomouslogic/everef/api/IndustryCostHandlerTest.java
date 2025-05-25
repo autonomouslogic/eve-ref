@@ -7,11 +7,8 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import com.autonomouslogic.commons.ResourceUtil;
 import com.autonomouslogic.everef.cli.api.ApiRunner;
 import com.autonomouslogic.everef.cli.publishrefdata.PublishRefDataTest;
-import com.autonomouslogic.everef.model.api.ActivityCost;
 import com.autonomouslogic.everef.model.api.IndustryCost;
 import com.autonomouslogic.everef.model.api.IndustryCostInput;
-import com.autonomouslogic.everef.model.api.InventionCost;
-import com.autonomouslogic.everef.model.api.ManufacturingCost;
 import com.autonomouslogic.everef.openapi.api.api.IndustryApi;
 import com.autonomouslogic.everef.openapi.api.invoker.ApiClient;
 import com.autonomouslogic.everef.openapi.esi.model.GetMarketsPrices200Ok;
@@ -39,7 +36,6 @@ import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Stream;
 import javax.inject.Inject;
 import lombok.SneakyThrows;
@@ -154,63 +150,11 @@ public class IndustryCostHandlerTest {
 
 		System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(actual));
 
-		//		actual = assertEiv(expected, actual);
 		if (!expected.equals(actual)) {
 			assertEquals(
 					objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(expected),
 					objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(actual));
 		}
-	}
-
-	/*
-	There are some slight differences in the EIV calculations.
-	This method asserts those values within some accepted tolerance.
-	*/
-	private IndustryCost assertEiv(IndustryCost expected, IndustryCost actual) {
-		var builder = actual.toBuilder();
-		if (actual.getInvention() != null) {
-			for (var product : actual.getInvention().keySet()) {
-				var expectedActivity =
-						Optional.ofNullable(expected.getInvention()).flatMap(m -> Optional.ofNullable(m.get(product)));
-				if (!expectedActivity.isEmpty()) {
-					builder.invention(product, (InventionCost) assertEiv(
-							"invention",
-							product,
-							expectedActivity.get(),
-							actual.getInvention().get(product)));
-				}
-			}
-		}
-		if (actual.getManufacturing() != null) {
-			for (var product : actual.getManufacturing().keySet()) {
-				var expectedActivity = Optional.ofNullable(expected.getManufacturing())
-						.flatMap(m -> Optional.ofNullable(m.get(product)));
-				if (!expectedActivity.isEmpty()) {
-					builder.manufacturing(product, (ManufacturingCost) assertEiv(
-							"manufacturing",
-							product,
-							expectedActivity.get(),
-							actual.getManufacturing().get(product)));
-				}
-			}
-		}
-		return builder.build();
-	}
-
-	private ActivityCost assertEiv(String type, String product, ActivityCost expected, ActivityCost actual) {
-		if (expected.getEstimatedItemValue() == null || actual.getEstimatedItemValue() == null) {
-			return actual;
-		}
-		var expectedEiv = expected.getEstimatedItemValue();
-		var actualEiv = actual.getEstimatedItemValue();
-		var margin =
-				expectedEiv.multiply(BigDecimal.valueOf(EIV_TOLERANCE_RATE)).max(EIV_TOLERANCE_ABS);
-		var diff = actualEiv.subtract(expectedEiv);
-		var msg = String.format("%s product %s, diff: %s, margin: %s", type, product, diff, margin);
-		if (diff.abs().compareTo(margin) > 0) {
-			assertEquals(expectedEiv, actualEiv, msg);
-		}
-		return actual.toBuilder().estimatedItemValue(expectedEiv).build();
 	}
 
 	static Stream<Arguments> costTests() {
