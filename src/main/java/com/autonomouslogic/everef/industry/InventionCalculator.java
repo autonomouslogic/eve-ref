@@ -114,7 +114,7 @@ public class InventionCalculator {
 		var totalMaterialCost = industryMath.totalMaterialCost(materials);
 		var totalCost = totalJobCost.add(totalMaterialCost);
 		return InventionCost.builder()
-				.productId(industryCostInput.getProductId())
+				.productId(productType.getTypeId())
 				.blueprintId(blueprint.getBlueprintTypeId())
 				.runsPerCopy(runsPerCopy)
 				.unitsPerRun(unitsPerRun)

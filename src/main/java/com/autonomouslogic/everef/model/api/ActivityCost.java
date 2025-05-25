@@ -1,5 +1,6 @@
 package com.autonomouslogic.everef.model.api;
 
+import com.autonomouslogic.everef.util.MathUtil;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -28,7 +29,8 @@ public class ActivityCost {
 	long productId;
 
 	@JsonProperty
-	int runs;
+	@Schema(description = "The number of runs")
+	double runs;
 
 	@JsonProperty
 	@Schema(implementation = String.class)
@@ -76,4 +78,20 @@ public class ActivityCost {
 
 	@JsonProperty
 	BigDecimal totalCost;
+
+	protected ActivityCost.Builder<?, ?> multiply(ActivityCost.Builder<?, ?> builder, double mul) {
+		return builder.runs(runs * mul)
+				.time(MathUtil.multiply(time, mul))
+				.clearMaterials()
+				.materials(MaterialCost.multiply(materials, mul))
+				.estimatedItemValue(MathUtil.round(estimatedItemValue.multiply(BigDecimal.valueOf(mul)), 2))
+				.systemCostIndex(MathUtil.round(systemCostIndex.multiply(BigDecimal.valueOf(mul)), 2))
+				.systemCostBonuses(MathUtil.round(systemCostBonuses.multiply(BigDecimal.valueOf(mul)), 2))
+				.facilityTax(MathUtil.round(facilityTax.multiply(BigDecimal.valueOf(mul)), 2))
+				.sccSurcharge(MathUtil.round(sccSurcharge.multiply(BigDecimal.valueOf(mul)), 2))
+				.alphaCloneTax(MathUtil.round(alphaCloneTax.multiply(BigDecimal.valueOf(mul)), 2))
+				.totalJobCost(MathUtil.round(totalJobCost.multiply(BigDecimal.valueOf(mul)), 2))
+				.totalMaterialCost(MathUtil.round(totalMaterialCost.multiply(BigDecimal.valueOf(mul)), 2))
+				.totalCost(MathUtil.round(totalCost.multiply(BigDecimal.valueOf(mul)), 2));
+	}
 }

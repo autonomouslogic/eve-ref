@@ -28,7 +28,7 @@
           "cost" : 2747990.08
         }
       },
-      "estimated_item_value": 768684250,
+      "estimated_item_value": 768684254, // EVE Client says 768684250
       "job_cost_base": 15373685,
       "system_cost_index": 1729158,
       "system_cost_bonuses": 0,

@@ -6,6 +6,8 @@ import com.autonomouslogic.everef.model.IndustryRig;
 import com.autonomouslogic.everef.model.IndustryStructure;
 import com.autonomouslogic.everef.model.api.IndustryCost;
 import com.autonomouslogic.everef.model.api.IndustryCostInput;
+import com.autonomouslogic.everef.model.api.InventionCost;
+import com.autonomouslogic.everef.model.api.ManufacturingCost;
 import com.autonomouslogic.everef.refdata.Blueprint;
 import com.autonomouslogic.everef.refdata.InventoryType;
 import com.autonomouslogic.everef.service.MarketPriceService;
@@ -16,7 +18,9 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 import lombok.NonNull;
 import lombok.Setter;
+import lombok.extern.log4j.Log4j2;
 
+@Log4j2
 public class IndustryCalculator {
 	@Inject
 	protected MarketPriceService marketPriceService;
@@ -55,6 +59,8 @@ public class IndustryCalculator {
 	@Setter
 	private List<IndustryRig> rigs;
 
+	private IndustryCost.Builder cost;
+
 	@Inject
 	protected IndustryCalculator() {}
 
@@ -63,29 +69,84 @@ public class IndustryCalculator {
 		Objects.requireNonNull(productType, "productType");
 		Objects.requireNonNull(blueprint, "blueprint");
 
-		var builder = IndustryCost.builder();
-		if (Optional.ofNullable(productType.getBlueprint()).orElse(false)) {
-			var inventionCost = inventionCalculatorProvider
-					.get()
-					.setIndustryCostInput(industryCostInput)
-					.setProductType(productType)
-					.setBlueprint(blueprint)
-					.setDecryptor(decryptor)
-					.setStructure(structure)
-					.setRigs(rigs)
-					.calc();
-			builder.invention(String.valueOf(productType.getTypeId()), inventionCost);
+		cost = IndustryCost.builder();
+		if (!Optional.ofNullable(productType.getBlueprint()).orElse(false)) {
+			var manufacturingCost = handleManufacturing();
+			handleInventionForManufacturing(manufacturingCost);
 		} else {
-			var manufacturingCost = manufactureCalculatorProvider
-					.get()
-					.setIndustryCostInput(industryCostInput)
-					.setBlueprint(blueprint)
-					.setProductType(productType)
-					.setStructure(structure)
-					.setRigs(rigs)
-					.calc();
-			builder.manufacturing(String.valueOf(productType.getTypeId()), manufacturingCost);
+			handleInvention();
 		}
-		return builder.build();
+		return cost.build();
+	}
+
+	private ManufacturingCost handleManufacturing() {
+		return handleManufacturing(productType, blueprint);
+	}
+
+	private InventionCost handleInvention() {
+		return handleInvention(productType, blueprint);
+	}
+
+	private ManufacturingCost handleManufacturing(InventoryType productType, Blueprint blueprint) {
+		var manufacturingCost = calculateManufacturing(productType, blueprint);
+		cost.manufacturing(String.valueOf(manufacturingCost.getProductId()), manufacturingCost);
+		return manufacturingCost;
+	}
+
+	private InventionCost handleInvention(InventoryType productType, Blueprint blueprint) {
+		var inventionCost = calculateInvention(productType, blueprint);
+		cost.invention(String.valueOf(inventionCost.getProductId()), inventionCost);
+		return inventionCost;
+	}
+
+	private InventionCost handleInventionForManufacturing(ManufacturingCost manufacturingCost) {
+		var productBlueprintTypeId = manufacturingCost.getBlueprintId();
+		var productBlueprintType = refData.getType(productBlueprintTypeId);
+		var sourceBlueprint = Optional.ofNullable(productBlueprintType)
+				.flatMap(v -> Optional.ofNullable(v.getProducedByBlueprints()))
+				.stream()
+				.flatMap(v -> v.values().stream())
+				.filter(v -> v.getBlueprintActivity().equals("invention"))
+				.findFirst()
+				.map(v -> refData.getBlueprint(v.getBlueprintTypeId()));
+		if (sourceBlueprint.isEmpty()) {
+			return null;
+		}
+		var inventionCost = calculateInvention(productBlueprintType, sourceBlueprint.get());
+		var factor = manufacturingCost.getRuns() / inventionCost.getExpectedRuns();
+		inventionCost = inventionCost.multiply(factor);
+		cost.invention(String.valueOf(inventionCost.getProductId()), inventionCost);
+		return inventionCost;
+	}
+
+	private ManufacturingCost calculateManufacturing(InventoryType productType, Blueprint blueprint) {
+		if (Optional.ofNullable(productType.getBlueprint()).orElse(false)) {
+			throw new IllegalStateException("productType is a blueprint");
+		}
+		var manufacturingCost = manufactureCalculatorProvider
+				.get()
+				.setIndustryCostInput(industryCostInput)
+				.setBlueprint(blueprint)
+				.setProductType(productType)
+				.setStructure(structure)
+				.setRigs(rigs)
+				.calc();
+		return manufacturingCost;
+	}
+
+	private InventionCost calculateInvention(InventoryType productType, Blueprint blueprint) {
+		if (!Optional.ofNullable(productType.getBlueprint()).orElse(false)) {
+			throw new IllegalStateException("productType is not a blueprint");
+		}
+		var inventionCost = inventionCalculatorProvider
+				.get()
+				.setIndustryCostInput(industryCostInput)
+				.setProductType(productType)
+				.setBlueprint(blueprint)
+				.setDecryptor(decryptor)
+				.setStructure(structure)
+				.setRigs(rigs)
+				.calc();
+		return inventionCost;
 	}
 }

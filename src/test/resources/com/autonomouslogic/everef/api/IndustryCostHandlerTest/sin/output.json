@@ -71,7 +71,7 @@
           "cost" : 144900158.40
         }
       },
-      "estimated_item_value": 768684250, // verified in-game via invention screen
+      "estimated_item_value": 768684254, // should be 768684250, verified in-game in the test sin-blueprint
       "system_cost_index": 0, // not verified in-game
       "system_cost_bonuses": 0,
       "facility_tax": 1921711, // not verified in-game
@@ -82,6 +82,51 @@
       "total_cost" : 1158638946.09,
       "total_cost_per_run" : 1158638946.09,
       "total_cost_per_unit" : 1158638946.09
+    }
+  },
+  "invention": {
+    // taken from the sin-blueprint test and scaled for probability
+    "22431": {
+      "product_id": 22431,
+      "blueprint_id": 999,
+      "runs": 3.11688311688311720695,
+      "probability": 0.3208333333333333, // EVE client says 0.321
+      "runs_per_copy": 1,
+      "units_per_run": 1,
+      "expected_copies": 1,
+      "expected_runs": 1,
+      "expected_units": 1,
+      "me": 2,
+      "te": 4,
+      "time": "PT508675.324S",
+      "avg_time_per_copy": "PT508675.324S",
+      "avg_time_per_run": "PT508675.324S",
+      "avg_time_per_unit": "PT508675.324S",
+      "materials": {
+        "20410": {
+          "quantity": 99.74025974025975,
+          "type_id": 20410,
+          "cost" : 9943463.56
+        },
+        "20424": {
+          "quantity": 99.74025974025975,
+          "type_id": 20424,
+          "cost" : 8565163.89
+        }
+      },
+      "estimated_item_value": 2395898973.51, // should be 2395898961.04,
+      "job_cost_base": 47917979.22,
+      "system_cost_index": 5389583.38,
+      "system_cost_bonuses": 0.00,
+      "facility_tax": 119794.29,
+      "scc_surcharge": 1916717.92,
+      "alpha_clone_tax": 0.00,
+      "total_job_cost": 7426095.58,
+      "total_material_cost" : 18508627.45,
+      "total_cost" : 25934723.03,
+      "avg_cost_per_copy" : 25934723.03,
+      "avg_cost_per_run" : 25934723.03,
+      "avg_cost_per_unit" : 25934723.03
     }
   }
 }
