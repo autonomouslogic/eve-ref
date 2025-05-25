@@ -512,9 +512,9 @@ components:
           type: integer
           format: int64
         runs:
-          type: integer
-          format: int32
-          description: The number of invention runs
+          type: number
+          format: double
+          description: The number of runs
         runs_per_copy:
           type: integer
           format: int32
@@ -572,8 +572,9 @@ components:
           type: integer
           format: int64
         runs:
-          type: integer
-          format: int32
+          type: number
+          format: double
+          description: The number of runs
         scc_surcharge:
           type: number
           description: The SCC surcharge amount
@@ -617,8 +618,8 @@ components:
         cost:
           type: number
         quantity:
-          type: integer
-          format: int64
+          type: number
+          format: double
         type_id:
           type: integer
           format: int64
