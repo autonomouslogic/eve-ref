@@ -54,43 +54,43 @@
     "24536": {
       "product_id": 24536,
       "blueprint_id": 803,
-      "runs": 45,
+      "runs": 2.016806722689075,
       "runs_per_copy": 10,
       "units_per_run": 5000,
       "probability": 0.49583333333333335, // EVE client says 0.496,
-      "expected_copies": 22.31250000000000075,
-      "expected_runs": 223.1250000000000075,
-      "expected_units": 1115625.0000000000375,
+      "expected_copies": 1,
+      "expected_runs": 10,
+      "expected_units": 50000,
       "me": 2,
       "te": 4,
-      "time": "PT723H33M45S",
+      "time": "PT116742.857S",
       "avg_time_per_copy": "PT116742.857S",
       "avg_time_per_run": "PT11674.285S",
       "avg_time_per_unit": "PT2.334S",
       "materials": {
         "20418": {
-          "quantity": 45,
+          "quantity": 2.016806722689075,
           "type_id": 20418,
-          "cost" : 4635885.15
+          "cost" : 207770.76
         },
         "20420": {
-          "quantity": 45,
+          "quantity": 2.016806722689075,
           "type_id": 20420,
-          "cost" : 4380747.75
+          "cost" : 196336.03
         }
       },
-      "estimated_item_value": 77556550,
-      "job_cost_base": 1551131,
-      "system_cost_index": 175319,
-      "system_cost_bonuses": 0,
-      "facility_tax": 3878,
-      "scc_surcharge": 62045,
-      "alpha_clone_tax": 0,
-      "total_job_cost": 241242,
-      "total_material_cost" : 9016632.90,
-      "total_cost" : 9257874.90,
-      "avg_cost_per_copy" : 414918.76,
-      "avg_cost_per_run" : 41491.88,
+      "estimated_item_value" : 3475924.44,
+      "job_cost_base" : 69518.52,
+      "system_cost_index" : 7857.48,
+      "system_cost_bonuses" : 0.00,
+      "facility_tax" : 173.85,
+      "scc_surcharge" : 2780.77,
+      "alpha_clone_tax": 0.00,
+      "total_job_cost" : 10812.10,
+      "total_material_cost" : 404106.80,
+      "total_cost" : 414918.90,
+      "avg_cost_per_copy" : 414918.90,
+      "avg_cost_per_run" : 41491.89,
       "avg_cost_per_unit" : 8.30
     }
   }

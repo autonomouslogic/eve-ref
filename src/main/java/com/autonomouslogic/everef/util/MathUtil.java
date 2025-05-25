@@ -30,11 +30,16 @@ public class MathUtil {
 		return Duration.ofMillis((long) Math.floor(a.toMillis() / b));
 	}
 
-	public static BigDecimal round(BigDecimal val, int scale) {
-		return val.setScale(scale, ROUNDING_MODE);
+	public static BigDecimal round(BigDecimal val, int decimals) {
+		return val.setScale(decimals, ROUNDING_MODE);
 	}
 
 	public static BigDecimal round(BigDecimal val) {
 		return round(val, 0);
+	}
+
+	public static double round(double val, int decimals) {
+		var p = Math.pow(10, decimals);
+		return Math.round(val * p) / p;
 	}
 }

@@ -80,9 +80,9 @@ public class InventionCost extends ActivityCost {
 
 	public InventionCost multiply(double mul) {
 		return ((Builder<?, ?>) super.multiply(this.toBuilder(), mul))
-				.expectedCopies(expectedCopies * mul)
-				.expectedRuns(expectedRuns * mul)
-				.expectedUnits(expectedUnits * mul)
+				.expectedCopies(MathUtil.round(expectedCopies * mul, 8))
+				.expectedRuns(MathUtil.round(expectedRuns * mul, 8))
+				.expectedUnits(MathUtil.round(expectedUnits * mul, 8))
 				.jobCostBase(MathUtil.round(jobCostBase.multiply(BigDecimal.valueOf(mul)), 2))
 				.build();
 	}
