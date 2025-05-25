@@ -22,6 +22,10 @@ public class MathUtil {
 		return a.divide(b, MATH_CONTEXT);
 	}
 
+	public static Duration multiply(Duration a, double b) {
+		return Duration.ofMillis((long) Math.floor(a.toMillis() * b));
+	}
+
 	public static Duration divide(Duration a, double b) {
 		return Duration.ofMillis((long) Math.floor(a.toMillis() / b));
 	}

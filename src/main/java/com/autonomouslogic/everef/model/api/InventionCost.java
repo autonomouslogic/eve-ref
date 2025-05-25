@@ -1,5 +1,6 @@
 package com.autonomouslogic.everef.model.api;
 
+import com.autonomouslogic.everef.util.MathUtil;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -28,10 +29,6 @@ public class InventionCost extends ActivityCost {
 
 	@JsonProperty
 	double probability;
-
-	@Schema(description = "The number of invention runs")
-	@JsonProperty
-	int runs;
 
 	@Schema(description = "The number of runs on each successfully invented copy")
 	@JsonProperty
@@ -80,4 +77,13 @@ public class InventionCost extends ActivityCost {
 
 	@JsonProperty
 	BigDecimal avgCostPerUnit;
+
+	public InventionCost multiply(double mul) {
+		return ((Builder<?, ?>) super.multiply(this.toBuilder(), mul))
+				.expectedCopies(expectedCopies * mul)
+				.expectedRuns(expectedRuns * mul)
+				.expectedUnits(expectedUnits * mul)
+				.jobCostBase(MathUtil.round(jobCostBase.multiply(BigDecimal.valueOf(mul)), 2))
+				.build();
+	}
 }
