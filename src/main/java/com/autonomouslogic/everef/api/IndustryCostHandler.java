@@ -117,8 +117,9 @@ public class IndustryCostHandler implements HttpService, Handler {
 				.header("Content-Type", "application/json")
 				.header(
 						"X-OpenAPI",
-						"https://github.com/autonomouslogic/eve-ref/blob/industry-api/spec/eve-ref-api.yaml")
-				.header("Cache-Control", cacheControlHeader)
+						"https://github.com/autonomouslogic/eve-ref/blob/main/spec/eve-ref-api.yaml")
+				.header("X-Docs","https://docs.everef.net/api/industry-cost.html")
+			.header("Cache-Control", cacheControlHeader)
 				.send(json);
 	}
 
