@@ -1,5 +1,22 @@
 EVE Ref Changelog
 
+## [2.61.0](https://github.com/autonomouslogic/eve-ref/compare/2.60.0...2.61.0) (2025-05-25)
+
+
+### Features
+
+* **api:** Selecting a T2 product for manufacture includes invention ([#850](https://github.com/autonomouslogic/eve-ref/issues/850)) ([96effef](https://github.com/autonomouslogic/eve-ref/commit/96effef1164e6361adfcac55891602def2c13267))
+
+
+### Bug Fixes
+
+* Explicitly set command on global scope ([40415c1](https://github.com/autonomouslogic/eve-ref/commit/40415c1666ebc3d1de51af0be76d9fb189ebc3fc))
+
+
+### Code Refactoring
+
+* **api:** Split up IndustryCostCalculator ([#849](https://github.com/autonomouslogic/eve-ref/issues/849)) ([00e2579](https://github.com/autonomouslogic/eve-ref/commit/00e2579b4c5dd4d49d8692a7027eb568b352fa75))
+
 ## [2.60.0](https://github.com/autonomouslogic/eve-ref/compare/2.59.0...2.60.0) (2025-05-23)
 
 
