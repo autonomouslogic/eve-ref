@@ -56,6 +56,9 @@ public class InventionCalculator {
 	private Blueprint blueprint;
 
 	@Setter
+	private int runs;
+
+	@Setter
 	private IndustryDecryptor decryptor;
 
 	@Setter
@@ -70,14 +73,20 @@ public class InventionCalculator {
 	}
 
 	public InventionCost calc() {
+		Objects.requireNonNull(industryCostInput, "industryCostInput");
+		Objects.requireNonNull(productType, "productType");
+		Objects.requireNonNull(blueprint, "blueprint");
+		if (runs <= 0) {
+			throw new IllegalArgumentException("Runs must be positive");
+		}
+
 		var invention = blueprint.getActivities().get("invention");
 
 		var decryptorOpt = Optional.ofNullable(decryptor);
 		var manufacturing = inventionBlueprintProductActivity(productType);
 		var time = inventionTime(invention);
-		var eiv = industryMath.eiv(manufacturing, industryCostInput.getRuns());
+		var eiv = industryMath.eiv(manufacturing, runs);
 		var jcb = industryMath.jobCostBase(eiv);
-		var runs = industryCostInput.getRuns();
 		var prob = inventionProbability(invention);
 		var runsPerCopy = invention
 						.getProducts()
@@ -149,7 +158,7 @@ public class InventionCalculator {
 	}
 
 	private long inventionMaterialQuantity(long base) {
-		return base * industryCostInput.getRuns();
+		return base * runs;
 	}
 
 	public Map<String, MaterialCost> inventionMaterials(BlueprintActivity invention) {
@@ -160,9 +169,9 @@ public class InventionCalculator {
 					String.valueOf(decryptor.getTypeId()),
 					MaterialCost.builder()
 							.typeId(decryptor.getTypeId())
-							.quantity(industryCostInput.getRuns())
+							.quantity(runs)
 							.costPerUnit(costPerUnit)
-							.cost(industryMath.materialCost(costPerUnit, industryCostInput.getRuns()))
+							.cost(industryMath.materialCost(costPerUnit, runs))
 							.build());
 		}
 		return materials;
@@ -170,7 +179,6 @@ public class InventionCalculator {
 
 	private Duration inventionTime(BlueprintActivity invention) {
 		var baseTime = (double) invention.getTime();
-		var runs = industryCostInput.getRuns();
 		var advancedIndustryMod =
 				1.0 - GLOBAL_TIME_BONUSES.get("Advanced Industry") * industryCostInput.getAdvancedIndustry();
 		var structureMod = industryStructures.structureTimeModifier(structure);

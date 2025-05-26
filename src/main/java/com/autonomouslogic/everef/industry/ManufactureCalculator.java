@@ -55,6 +55,9 @@ public class ManufactureCalculator {
 	private Blueprint blueprint;
 
 	@Setter
+	private int runs;
+
+	@Setter
 	private IndustryStructure structure;
 
 	@Setter
@@ -66,10 +69,12 @@ public class ManufactureCalculator {
 	}
 
 	public ManufacturingCost calc() {
-		Objects.requireNonNull(industryMath, "industryMath");
 		Objects.requireNonNull(industryCostInput, "industryCostInput");
 		Objects.requireNonNull(productType, "productType");
 		Objects.requireNonNull(blueprint, "blueprint");
+		if (runs <= 0) {
+			throw new IllegalArgumentException("Runs must be positive");
+		}
 
 		var manufacturing = blueprint.getActivities().get("manufacturing");
 		var time = manufacturingTime(manufacturing);
@@ -130,7 +135,6 @@ public class ManufactureCalculator {
 	private Duration manufacturingTime(BlueprintActivity manufacturing) {
 		var baseTime = (double) manufacturing.getTime();
 		var teMod = industryMath.timeEfficiencyModifier(industryCostInput);
-		var runs = industryCostInput.getRuns();
 		var industryMod = 1.0 - GLOBAL_TIME_BONUSES.get("Industry") * industryCostInput.getIndustry();
 		var advancedIndustryMod =
 				1.0 - GLOBAL_TIME_BONUSES.get("Advanced Industry") * industryCostInput.getAdvancedIndustry();
@@ -149,7 +153,6 @@ public class ManufactureCalculator {
 	}
 
 	private long manufacturingMaterialQuantity(long base) {
-		var runs = industryCostInput.getRuns();
 		var meMod = industryMath.materialEfficiencyModifier(industryCostInput);
 		var structureMod = industryStructures.structureManufacturingMaterialModifier(structure);
 		var rigMod = industryRigs.rigModifier(
