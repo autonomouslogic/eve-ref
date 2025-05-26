@@ -112,7 +112,8 @@ public class IndustryCalculator {
 		if (sourceBlueprint.isEmpty()) {
 			return null;
 		}
-		var inventionCost = calculateInvention(productBlueprintType, sourceBlueprint.get(), (int) (manufacturingCost.getRuns() * 10));
+		var inventionCost = calculateInvention(
+				productBlueprintType, sourceBlueprint.get(), (int) (manufacturingCost.getRuns() * 10));
 		var factor = manufacturingCost.getRuns() / inventionCost.getExpectedRuns();
 		inventionCost = inventionCost.multiply(factor);
 		cost.invention(String.valueOf(inventionCost.getProductId()), inventionCost);
@@ -128,7 +129,7 @@ public class IndustryCalculator {
 				.setIndustryCostInput(industryCostInput)
 				.setBlueprint(blueprint)
 				.setProductType(productType)
-			.setRuns(runs)
+				.setRuns(runs)
 				.setStructure(structure)
 				.setRigs(rigs)
 				.calc();
@@ -143,7 +144,7 @@ public class IndustryCalculator {
 				.get()
 				.setIndustryCostInput(industryCostInput)
 				.setProductType(productType)
-			.setRuns(runs)
+				.setRuns(runs)
 				.setBlueprint(blueprint)
 				.setDecryptor(decryptor)
 				.setStructure(structure)
