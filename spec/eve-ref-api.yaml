@@ -10,6 +10,9 @@ info:
     url: https://github.com/autonomouslogic/eve-ref/blob/main/LICENSE-CCP
   title: EVE Ref API
   version: dev
+externalDocs:
+  description: EVE Ref Docs
+  url: https://docs.everef.net/api/
 servers:
 - url: https://api.everef.net
 paths:
@@ -70,7 +73,7 @@ components:
           type: integer
           format: int32
           default: 5
-          description: The Advanced Capital Ship Construction  skill level the installing
+          description: The Advanced Capital Ship Construction skill level the installing
             character
           maximum: 5
           minimum: 0
@@ -78,8 +81,8 @@ components:
           type: integer
           format: int32
           default: 5
-          description: The Advanced Industrial Ship Construction  skill level the
-            installing character
+          description: The Advanced Industrial Ship Construction skill level the installing
+            character
           maximum: 5
           minimum: 0
         advanced_industry:
@@ -93,7 +96,7 @@ components:
           type: integer
           format: int32
           default: 5
-          description: The Advanced Large Ship Construction  skill level the installing
+          description: The Advanced Large Ship Construction skill level the installing
             character
           maximum: 5
           minimum: 0
@@ -101,7 +104,7 @@ components:
           type: integer
           format: int32
           default: 5
-          description: The Advanced Medium Ship Construction  skill level the installing
+          description: The Advanced Medium Ship Construction skill level the installing
             character
           maximum: 5
           minimum: 0
@@ -109,7 +112,7 @@ components:
           type: integer
           format: int32
           default: 5
-          description: The Advanced Small Ship Construction  skill level the installing
+          description: The Advanced Small Ship Construction skill level the installing
             character
           maximum: 5
           minimum: 0
@@ -128,8 +131,7 @@ components:
           type: integer
           format: int32
           default: 5
-          description: The Amarr Starship Engineering  skill level the installing
-            character
+          description: The Amarr Starship Engineering skill level the installing character
           maximum: 5
           minimum: 0
         caldari_encryption_methods:
@@ -143,7 +145,7 @@ components:
           type: integer
           format: int32
           default: 5
-          description: The Caldari Starship Engineering  skill level the installing
+          description: The Caldari Starship Engineering skill level the installing
             character
           maximum: 5
           minimum: 0
@@ -161,14 +163,14 @@ components:
           type: integer
           format: int32
           default: 5
-          description: The Electromagnetic Physics  skill level the installing character
+          description: The Electromagnetic Physics skill level the installing character
           maximum: 5
           minimum: 0
         electronic_engineering:
           type: integer
           format: int32
           default: 5
-          description: The Electronic Engineering  skill level the installing character
+          description: The Electronic Engineering skill level the installing character
           maximum: 5
           minimum: 0
         facility_tax:
@@ -190,7 +192,7 @@ components:
           type: integer
           format: int32
           default: 5
-          description: The Gallente Starship Engineering  skill level the installing
+          description: The Gallente Starship Engineering skill level the installing
             character
           maximum: 5
           minimum: 0
@@ -198,21 +200,21 @@ components:
           type: integer
           format: int32
           default: 5
-          description: The Graviton Physics  skill level the installing character
+          description: The Graviton Physics skill level the installing character
           maximum: 5
           minimum: 0
         high_energy_physics:
           type: integer
           format: int32
           default: 5
-          description: The High Energy Physics  skill level the installing character
+          description: The High Energy Physics skill level the installing character
           maximum: 5
           minimum: 0
         hydromagnetic_physics:
           type: integer
           format: int32
           default: 5
-          description: The Hydromagnetic Physics  skill level the installing character
+          description: The Hydromagnetic Physics skill level the installing character
           maximum: 5
           minimum: 0
         industry:
@@ -232,7 +234,7 @@ components:
           type: integer
           format: int32
           default: 5
-          description: The Laser Physics  skill level the installing character
+          description: The Laser Physics skill level the installing character
           maximum: 5
           minimum: 0
         manufacturing_cost:
@@ -259,7 +261,7 @@ components:
           type: integer
           format: int32
           default: 5
-          description: The Mechanical Engineering  skill level the installing character
+          description: The Mechanical Engineering skill level the installing character
           maximum: 5
           minimum: 0
         metallurgy:
@@ -281,7 +283,7 @@ components:
           type: integer
           format: int32
           default: 5
-          description: The Minmatar Starship Engineering  skill level the installing
+          description: The Minmatar Starship Engineering skill level the installing
             character
           maximum: 5
           minimum: 0
@@ -289,35 +291,35 @@ components:
           type: integer
           format: int32
           default: 5
-          description: The Molecular Engineering  skill level the installing character
+          description: The Molecular Engineering skill level the installing character
           maximum: 5
           minimum: 0
         mutagenic_stabilization:
           type: integer
           format: int32
           default: 5
-          description: The Mutagenic Stabilization  skill level the installing character
+          description: The Mutagenic Stabilization skill level the installing character
           maximum: 5
           minimum: 0
         nanite_engineering:
           type: integer
           format: int32
           default: 5
-          description: The Nanite Engineering  skill level the installing character
+          description: The Nanite Engineering skill level the installing character
           maximum: 5
           minimum: 0
         nuclear_physics:
           type: integer
           format: int32
           default: 5
-          description: The Nuclear Physics  skill level the installing character
+          description: The Nuclear Physics skill level the installing character
           maximum: 5
           minimum: 0
         plasma_physics:
           type: integer
           format: int32
           default: 5
-          description: The Plasma Physics  skill level the installing character
+          description: The Plasma Physics skill level the installing character
           maximum: 5
           minimum: 0
         product_id:
@@ -329,7 +331,7 @@ components:
           type: integer
           format: int32
           default: 5
-          description: The Quantum Physics  skill level the installing character
+          description: The Quantum Physics skill level the installing character
           maximum: 5
           minimum: 0
         reaction_cost:
@@ -372,7 +374,7 @@ components:
           type: integer
           format: int32
           default: 5
-          description: The Rocket Science  skill level the installing character
+          description: The Rocket Science skill level the installing character
           maximum: 5
           minimum: 0
         runs:
@@ -436,7 +438,7 @@ components:
           type: integer
           format: int32
           default: 5
-          description: The Triglavian Quantum Engineering  skill level the installing
+          description: The Triglavian Quantum Engineering skill level the installing
             character
           maximum: 5
           minimum: 0
@@ -451,7 +453,7 @@ components:
           type: integer
           format: int32
           default: 5
-          description: The Upwell Starship Engineering  skill level the installing
+          description: The Upwell Starship Engineering skill level the installing
             character
           maximum: 5
           minimum: 0

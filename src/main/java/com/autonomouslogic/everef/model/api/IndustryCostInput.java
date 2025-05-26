@@ -256,7 +256,7 @@ public class IndustryCostInput {
 	@JsonProperty
 	@lombok.Builder.Default
 	@Schema(
-			description = "The Advanced Small Ship Construction  skill level the installing character",
+			description = "The Advanced Small Ship Construction skill level the installing character",
 			requiredMode = Schema.RequiredMode.NOT_REQUIRED,
 			defaultValue = "5",
 			minimum = "0",
@@ -266,7 +266,7 @@ public class IndustryCostInput {
 	@JsonProperty
 	@lombok.Builder.Default
 	@Schema(
-			description = "The Advanced Industrial Ship Construction  skill level the installing character",
+			description = "The Advanced Industrial Ship Construction skill level the installing character",
 			requiredMode = Schema.RequiredMode.NOT_REQUIRED,
 			defaultValue = "5",
 			minimum = "0",
@@ -276,7 +276,7 @@ public class IndustryCostInput {
 	@JsonProperty
 	@lombok.Builder.Default
 	@Schema(
-			description = "The Advanced Medium Ship Construction  skill level the installing character",
+			description = "The Advanced Medium Ship Construction skill level the installing character",
 			requiredMode = Schema.RequiredMode.NOT_REQUIRED,
 			defaultValue = "5",
 			minimum = "0",
@@ -286,7 +286,7 @@ public class IndustryCostInput {
 	@JsonProperty
 	@lombok.Builder.Default
 	@Schema(
-			description = "The Advanced Large Ship Construction  skill level the installing character",
+			description = "The Advanced Large Ship Construction skill level the installing character",
 			requiredMode = Schema.RequiredMode.NOT_REQUIRED,
 			defaultValue = "5",
 			minimum = "0",
@@ -296,7 +296,7 @@ public class IndustryCostInput {
 	@JsonProperty
 	@lombok.Builder.Default
 	@Schema(
-			description = "The High Energy Physics  skill level the installing character",
+			description = "The High Energy Physics skill level the installing character",
 			requiredMode = Schema.RequiredMode.NOT_REQUIRED,
 			defaultValue = "5",
 			minimum = "0",
@@ -306,7 +306,7 @@ public class IndustryCostInput {
 	@JsonProperty
 	@lombok.Builder.Default
 	@Schema(
-			description = "The Plasma Physics  skill level the installing character",
+			description = "The Plasma Physics skill level the installing character",
 			requiredMode = Schema.RequiredMode.NOT_REQUIRED,
 			defaultValue = "5",
 			minimum = "0",
@@ -316,7 +316,7 @@ public class IndustryCostInput {
 	@JsonProperty
 	@lombok.Builder.Default
 	@Schema(
-			description = "The Nanite Engineering  skill level the installing character",
+			description = "The Nanite Engineering skill level the installing character",
 			requiredMode = Schema.RequiredMode.NOT_REQUIRED,
 			defaultValue = "5",
 			minimum = "0",
@@ -326,7 +326,7 @@ public class IndustryCostInput {
 	@JsonProperty
 	@lombok.Builder.Default
 	@Schema(
-			description = "The Hydromagnetic Physics  skill level the installing character",
+			description = "The Hydromagnetic Physics skill level the installing character",
 			requiredMode = Schema.RequiredMode.NOT_REQUIRED,
 			defaultValue = "5",
 			minimum = "0",
@@ -336,7 +336,7 @@ public class IndustryCostInput {
 	@JsonProperty
 	@lombok.Builder.Default
 	@Schema(
-			description = "The Amarr Starship Engineering  skill level the installing character",
+			description = "The Amarr Starship Engineering skill level the installing character",
 			requiredMode = Schema.RequiredMode.NOT_REQUIRED,
 			defaultValue = "5",
 			minimum = "0",
@@ -346,7 +346,7 @@ public class IndustryCostInput {
 	@JsonProperty
 	@lombok.Builder.Default
 	@Schema(
-			description = "The Minmatar Starship Engineering  skill level the installing character",
+			description = "The Minmatar Starship Engineering skill level the installing character",
 			requiredMode = Schema.RequiredMode.NOT_REQUIRED,
 			defaultValue = "5",
 			minimum = "0",
@@ -356,7 +356,7 @@ public class IndustryCostInput {
 	@JsonProperty
 	@lombok.Builder.Default
 	@Schema(
-			description = "The Graviton Physics  skill level the installing character",
+			description = "The Graviton Physics skill level the installing character",
 			requiredMode = Schema.RequiredMode.NOT_REQUIRED,
 			defaultValue = "5",
 			minimum = "0",
@@ -366,7 +366,7 @@ public class IndustryCostInput {
 	@JsonProperty
 	@lombok.Builder.Default
 	@Schema(
-			description = "The Laser Physics  skill level the installing character",
+			description = "The Laser Physics skill level the installing character",
 			requiredMode = Schema.RequiredMode.NOT_REQUIRED,
 			defaultValue = "5",
 			minimum = "0",
@@ -376,7 +376,7 @@ public class IndustryCostInput {
 	@JsonProperty
 	@lombok.Builder.Default
 	@Schema(
-			description = "The Electromagnetic Physics  skill level the installing character",
+			description = "The Electromagnetic Physics skill level the installing character",
 			requiredMode = Schema.RequiredMode.NOT_REQUIRED,
 			defaultValue = "5",
 			minimum = "0",
@@ -386,7 +386,7 @@ public class IndustryCostInput {
 	@JsonProperty
 	@lombok.Builder.Default
 	@Schema(
-			description = "The Rocket Science  skill level the installing character",
+			description = "The Rocket Science skill level the installing character",
 			requiredMode = Schema.RequiredMode.NOT_REQUIRED,
 			defaultValue = "5",
 			minimum = "0",
@@ -396,7 +396,7 @@ public class IndustryCostInput {
 	@JsonProperty
 	@lombok.Builder.Default
 	@Schema(
-			description = "The Gallente Starship Engineering  skill level the installing character",
+			description = "The Gallente Starship Engineering skill level the installing character",
 			requiredMode = Schema.RequiredMode.NOT_REQUIRED,
 			defaultValue = "5",
 			minimum = "0",
@@ -406,7 +406,7 @@ public class IndustryCostInput {
 	@JsonProperty
 	@lombok.Builder.Default
 	@Schema(
-			description = "The Nuclear Physics  skill level the installing character",
+			description = "The Nuclear Physics skill level the installing character",
 			requiredMode = Schema.RequiredMode.NOT_REQUIRED,
 			defaultValue = "5",
 			minimum = "0",
@@ -416,7 +416,7 @@ public class IndustryCostInput {
 	@JsonProperty
 	@lombok.Builder.Default
 	@Schema(
-			description = "The Mechanical Engineering  skill level the installing character",
+			description = "The Mechanical Engineering skill level the installing character",
 			requiredMode = Schema.RequiredMode.NOT_REQUIRED,
 			defaultValue = "5",
 			minimum = "0",
@@ -426,7 +426,7 @@ public class IndustryCostInput {
 	@JsonProperty
 	@lombok.Builder.Default
 	@Schema(
-			description = "The Electronic Engineering  skill level the installing character",
+			description = "The Electronic Engineering skill level the installing character",
 			requiredMode = Schema.RequiredMode.NOT_REQUIRED,
 			defaultValue = "5",
 			minimum = "0",
@@ -436,7 +436,7 @@ public class IndustryCostInput {
 	@JsonProperty
 	@lombok.Builder.Default
 	@Schema(
-			description = "The Caldari Starship Engineering  skill level the installing character",
+			description = "The Caldari Starship Engineering skill level the installing character",
 			requiredMode = Schema.RequiredMode.NOT_REQUIRED,
 			defaultValue = "5",
 			minimum = "0",
@@ -446,7 +446,7 @@ public class IndustryCostInput {
 	@JsonProperty
 	@lombok.Builder.Default
 	@Schema(
-			description = "The Quantum Physics  skill level the installing character",
+			description = "The Quantum Physics skill level the installing character",
 			requiredMode = Schema.RequiredMode.NOT_REQUIRED,
 			defaultValue = "5",
 			minimum = "0",
@@ -456,7 +456,7 @@ public class IndustryCostInput {
 	@JsonProperty
 	@lombok.Builder.Default
 	@Schema(
-			description = "The Molecular Engineering  skill level the installing character",
+			description = "The Molecular Engineering skill level the installing character",
 			requiredMode = Schema.RequiredMode.NOT_REQUIRED,
 			defaultValue = "5",
 			minimum = "0",
@@ -466,7 +466,7 @@ public class IndustryCostInput {
 	@JsonProperty
 	@lombok.Builder.Default
 	@Schema(
-			description = "The Triglavian Quantum Engineering  skill level the installing character",
+			description = "The Triglavian Quantum Engineering skill level the installing character",
 			requiredMode = Schema.RequiredMode.NOT_REQUIRED,
 			defaultValue = "5",
 			minimum = "0",
@@ -476,7 +476,7 @@ public class IndustryCostInput {
 	@JsonProperty
 	@lombok.Builder.Default
 	@Schema(
-			description = "The Advanced Capital Ship Construction  skill level the installing character",
+			description = "The Advanced Capital Ship Construction skill level the installing character",
 			requiredMode = Schema.RequiredMode.NOT_REQUIRED,
 			defaultValue = "5",
 			minimum = "0",
@@ -486,7 +486,7 @@ public class IndustryCostInput {
 	@JsonProperty
 	@lombok.Builder.Default
 	@Schema(
-			description = "The Upwell Starship Engineering  skill level the installing character",
+			description = "The Upwell Starship Engineering skill level the installing character",
 			requiredMode = Schema.RequiredMode.NOT_REQUIRED,
 			defaultValue = "5",
 			minimum = "0",
@@ -496,7 +496,7 @@ public class IndustryCostInput {
 	@JsonProperty
 	@lombok.Builder.Default
 	@Schema(
-			description = "The Mutagenic Stabilization  skill level the installing character",
+			description = "The Mutagenic Stabilization skill level the installing character",
 			requiredMode = Schema.RequiredMode.NOT_REQUIRED,
 			defaultValue = "5",
 			minimum = "0",

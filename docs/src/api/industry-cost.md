@@ -21,6 +21,8 @@ These activities are _not_ supported yet:
 * Research TE
 
 Quick links:
+* [OpenAPI spec](https://github.com/autonomouslogic/eve-ref/blob/main/spec/eve-ref-api.yaml)
+* [Open issues](https://github.com/autonomouslogic/eve-ref/milestone/8)
 * [Industry source code](https://github.com/autonomouslogic/eve-ref/tree/main/src/main/java/com/autonomouslogic/everef/industry)
 * [Industry resources](https://github.com/autonomouslogic/eve-ref/tree/main/src/main/resources/industry)
 * [Test code](https://github.com/autonomouslogic/eve-ref/blob/main/src/test/java/com/autonomouslogic/everef/api/IndustryCostHandlerTest.java)
@@ -38,7 +40,7 @@ It's backed by evidence pulled from the game and tested thoroughly to make sure 
 
 It's a simple HTTP+JSON API, so you can use it from any language.
 It's fast, runs locally if you want it to, and works great for bulk lookups.
-The JSON easy to read and designed to be extensible.
+The JSON is easy to read and designed to be extensible.
 Whether you generate a client from the spec or just hit it directly,
 you can stop worrying about whether your materials or EIV add up and get back to building the cool stuff you actually care about.
 
@@ -60,7 +62,9 @@ and [Laboratory Optimization](https://everef.net/types/37183) rigs, 1.29% system
 https://api.everef.net/v1/industry/cost?product_id=22430&runs=8&me=4&te=4&structure_type_id=35827&security=LOW_SEC&rig_id=37180&rig_id=37183&system_cost_bonus=-0.5&manufacturing_cost=0.0129&facility_tax=0.02
 ```
 
-An this is an example output, with some material omitted for brevity:
+Below is an example output, with some material omitted for brevity.
+Because a T2 item was requested, it includes an invention step too, which is scaled to show _on average_ how many
+invention runs are needed to provide the requested manufacturing runs.
 ```json
 {
   "manufacturing" : {
@@ -103,7 +107,52 @@ An this is an example output, with some material omitted for brevity:
       "total_cost_per_run" : 1111718533.99,
       "total_cost_per_unit" : 1111718533.99
     }
-  }
+  },
+  "invention" : {
+    "22431" : {
+      "product_id" : 22431,
+      "runs" : 24.935064935064936,
+      "time" : "PT490H35M19.48S",
+      "materials" : {
+        "20410" : {
+          "type_id" : 20410,
+          "quantity" : 797.922077922078,
+          "cost" : 79690752.00
+        },
+        "20424" : {
+          "type_id" : 20424,
+          "quantity" : 797.922077922078,
+          "cost" : 70730605.71
+        }
+      },
+      "estimated_item_value" : 19161880416.62,
+      "system_cost_index" : 0.00,
+      "system_cost_bonuses" : 0.00,
+      "facility_tax" : 7664752.21,
+      "scc_surcharge" : 15329504.42,
+      "alpha_clone_tax" : 0.00,
+      "total_job_cost" : 22994256.62,
+      "total_material_cost" : 150421357.71,
+      "total_cost" : 173415614.34,
+      "blueprint_id" : 999,
+      "probability" : 0.3208333333333333,
+      "runs_per_copy" : 1,
+      "units_per_run" : 1,
+      "expected_copies" : 8.0,
+      "expected_runs" : 8.0,
+      "expected_units" : 8.0,
+      "me" : 2,
+      "te" : 4,
+      "job_cost_base" : 383237607.27,
+      "avg_time_per_copy" : "PT61H19M24.935S",
+      "avg_time_per_run" : "PT61H19M24.935S",
+      "avg_time_per_unit" : "PT61H19M24.935S",
+      "avg_cost_per_copy" : 21676951.79,
+      "avg_cost_per_run" : 21676951.79,
+      "avg_cost_per_unit" : 21676951.79
+    }
+  },
+  [...]
 }
 ```
 
@@ -169,6 +218,74 @@ Example output:
   }
 }
 ```
+
+## Query parameters
+This is a quick reference for query parameters and may not be fully up-to-date.
+See [OpenAPI spec](https://github.com/autonomouslogic/eve-ref/blob/main/spec/eve-ref-api.yaml) for details and formats.
+
+  [//]: # (cat spec/eve-ref-api.yaml | yq -o json | jq -cr '.components.schemas.IndustryCostInput.properties | to_entries | .[] | "* `" + .key + "` - " + .value.description')
+
+* `product_id` - The desired product type ID
+* `me` - The material efficiency of the blueprint
+* `te` - The time efficiency of the blueprint
+* `runs` - The number of runs
+* `decryptor_id` - The decryptor type ID to use
+* `rig_id` - The type IDs of the rigs installed on the sture structure where the job is installed
+* `security` - The security class of the system where the job is installed
+* `structure_type_id` - The type ID of the structure where the job is installed. If not set, an NPC station is assumed.
+
+### System Cost Index
+* `manufacturing_cost` - The manufacturing cost index of the system where the job is installed
+* `invention_cost` - The invention cost index of the system where the job is installed
+* `copying_cost` - The copying cost index of the system where the job is installed
+* `reaction_cost` - The reaction cost index of the system where the job is installed
+* `researching_me_cost` - The researching material efficiency cost index of the system where the job is installed
+* `researching_te_cost` - The researching time efficiency cost index of the system where the job is installed
+
+### Skills
+* `advanced_capital_ship_construction` - The Advanced Capital Ship Construction skill level the installing character
+* `advanced_industrial_ship_construction` - The Advanced Industrial Ship Construction skill level the installing character
+* `advanced_industry` - The Advanced Industry skill level the installing character
+* `advanced_large_ship_construction` - The Advanced Large Ship Construction skill level the installing character
+* `advanced_medium_ship_construction` - The Advanced Medium Ship Construction skill level the installing character
+* `advanced_small_ship_construction` - The Advanced Small Ship Construction skill level the installing character
+* `amarr_encryption_methods` - The Amarr Encryption Methods skill level the installing character
+* `amarr_starship_engineering` - The Amarr Starship Engineering skill level the installing character
+* `caldari_encryption_methods` - The Caldari Encryption Methods skill level the installing character
+* `caldari_starship_engineering` - The Caldari Starship Engineering skill level the installing character
+* `electromagnetic_physics` - The Electromagnetic Physics skill level the installing character
+* `electronic_engineering` - The Electronic Engineering skill level the installing character
+* `gallente_encryption_methods` - The Gallente Encryption Methods skill level the installing character
+* `gallente_starship_engineering` - The Gallente Starship Engineering skill level the installing character
+* `graviton_physics` - The Graviton Physics skill level the installing character
+* `high_energy_physics` - The High Energy Physics skill level the installing character
+* `hydromagnetic_physics` - The Hydromagnetic Physics skill level the installing character
+* `industry` - The Industry skill level the installing character
+* `laser_physics` - The Laser Physics skill level the installing character
+* `mechanical_engineering` - The Mechanical Engineering skill level the installing character
+* `metallurgy` - The Metallurgy skill level the installing character
+* `minmatar_encryption_methods` - The Minmatar Encryption Methods skill level the installing character
+* `minmatar_starship_engineering` - The Minmatar Starship Engineering skill level the installing character
+* `molecular_engineering` - The Molecular Engineering skill level the installing character
+* `mutagenic_stabilization` - The Mutagenic Stabilization skill level the installing character
+* `nanite_engineering` - The Nanite Engineering skill level the installing character
+* `nuclear_physics` - The Nuclear Physics skill level the installing character
+* `plasma_physics` - The Plasma Physics skill level the installing character
+* `quantum_physics` - The Quantum Physics skill level the installing character
+* `research` - The Research skill level the installing character
+* `science` - The Science skill level the installing character
+* `rocket_science` - The Rocket Science skill level the installing character
+* `sleeper_encryption_methods` - The Sleeper Encryption Methods skill level the installing character
+* `triglavian_encryption_methods` - The Triglavian Encryption Methods skill level the installing character
+* `triglavian_quantum_engineering` - The Triglavian Quantum Engineering skill level the installing character
+* `upwell_encryption_methods` - The Upwell Encryption Methods skill level the installing character
+* `upwell_starship_engineering` - The Upwell Starship Engineering skill level the installing character
+
+### Other
+* `alpha` - Whether installing character is an alpha clone or not
+* `facility_tax` - The facility tax rate of the station or structure where the job is installed
+* `material_prices` - Where to get material prices from
+* `system_cost_bonus` - Bonus to apply to system cost, such as the faction warfare bonus
 
 ## Job Costs
 EIV calculations should match pretty closely, but you might notice that the system cost index can be slightly off.
