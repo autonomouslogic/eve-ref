@@ -1,10 +1,13 @@
 package com.autonomouslogic.everef.api;
 
 import com.autonomouslogic.everef.model.api.ApiError;
+import com.autonomouslogic.everef.util.SentryUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.helidon.http.Status;
 import io.helidon.webserver.http.ServerRequest;
 import io.helidon.webserver.http.ServerResponse;
+import io.sentry.Sentry;
+import io.sentry.SentryLevel;
 import jakarta.inject.Inject;
 import javax.inject.Singleton;
 import lombok.SneakyThrows;
@@ -22,7 +25,11 @@ public class ErrorHandler implements io.helidon.webserver.http.ErrorHandler<Exce
 	@Override
 	@SneakyThrows
 	public void handle(ServerRequest req, ServerResponse res, Exception e) {
-		log.warn("Error processing request: {}", req.requestedUri().toString(), e);
+		log.error("Error processing request: {}", req.requestedUri().toString(), e);
+		Sentry.withScope(scope -> {
+			SentryUtil.configureScope(scope, req, res, e);
+			Sentry.captureException(e, s -> s.setLevel(SentryLevel.ERROR));
+		});
 		res.status(Status.INTERNAL_SERVER_ERROR_500)
 				.send(objectMapper.writeValueAsString(ApiError.builder()
 								.message("An internal error occurred")
