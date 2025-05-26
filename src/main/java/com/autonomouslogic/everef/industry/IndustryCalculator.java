@@ -88,13 +88,13 @@ public class IndustryCalculator {
 	}
 
 	private ManufacturingCost handleManufacturing(InventoryType productType, Blueprint blueprint) {
-		var manufacturingCost = calculateManufacturing(productType, blueprint);
+		var manufacturingCost = calculateManufacturing(productType, blueprint, industryCostInput.getRuns());
 		cost.manufacturing(String.valueOf(manufacturingCost.getProductId()), manufacturingCost);
 		return manufacturingCost;
 	}
 
 	private InventionCost handleInvention(InventoryType productType, Blueprint blueprint) {
-		var inventionCost = calculateInvention(productType, blueprint);
+		var inventionCost = calculateInvention(productType, blueprint, industryCostInput.getRuns());
 		cost.invention(String.valueOf(inventionCost.getProductId()), inventionCost);
 		return inventionCost;
 	}
@@ -112,14 +112,14 @@ public class IndustryCalculator {
 		if (sourceBlueprint.isEmpty()) {
 			return null;
 		}
-		var inventionCost = calculateInvention(productBlueprintType, sourceBlueprint.get());
+		var inventionCost = calculateInvention(productBlueprintType, sourceBlueprint.get(), (int) (manufacturingCost.getRuns() * 10));
 		var factor = manufacturingCost.getRuns() / inventionCost.getExpectedRuns();
 		inventionCost = inventionCost.multiply(factor);
 		cost.invention(String.valueOf(inventionCost.getProductId()), inventionCost);
 		return inventionCost;
 	}
 
-	private ManufacturingCost calculateManufacturing(InventoryType productType, Blueprint blueprint) {
+	private ManufacturingCost calculateManufacturing(InventoryType productType, Blueprint blueprint, int runs) {
 		if (Optional.ofNullable(productType.getBlueprint()).orElse(false)) {
 			throw new IllegalStateException("productType is a blueprint");
 		}
@@ -128,13 +128,14 @@ public class IndustryCalculator {
 				.setIndustryCostInput(industryCostInput)
 				.setBlueprint(blueprint)
 				.setProductType(productType)
+			.setRuns(runs)
 				.setStructure(structure)
 				.setRigs(rigs)
 				.calc();
 		return manufacturingCost;
 	}
 
-	private InventionCost calculateInvention(InventoryType productType, Blueprint blueprint) {
+	private InventionCost calculateInvention(InventoryType productType, Blueprint blueprint, int runs) {
 		if (!Optional.ofNullable(productType.getBlueprint()).orElse(false)) {
 			throw new IllegalStateException("productType is not a blueprint");
 		}
@@ -142,6 +143,7 @@ public class IndustryCalculator {
 				.get()
 				.setIndustryCostInput(industryCostInput)
 				.setProductType(productType)
+			.setRuns(runs)
 				.setBlueprint(blueprint)
 				.setDecryptor(decryptor)
 				.setStructure(structure)
