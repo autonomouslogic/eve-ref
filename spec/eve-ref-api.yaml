@@ -619,6 +619,8 @@ components:
       properties:
         cost:
           type: number
+        cost_per_unit:
+          type: number
         quantity:
           type: number
           format: double

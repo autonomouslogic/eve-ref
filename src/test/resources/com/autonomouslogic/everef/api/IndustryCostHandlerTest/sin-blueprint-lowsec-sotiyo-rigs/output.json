@@ -17,14 +17,16 @@
       "avg_time_per_run": "PT220765.714S",
       "avg_time_per_unit": "PT220765.714S",
       "materials": {
-        "20410": {
-          "quantity": 32,
-          "type_id": 20410,
+        "20410" : {
+          "type_id" : 20410,
+          "quantity" : 32.0,
+          "cost_per_unit" : 99872.85,
           "cost" : 3195931.20
         },
-        "20424": {
-          "quantity": 32,
-          "type_id": 20424,
+        "20424" : {
+          "type_id" : 20424,
+          "quantity" : 32.0,
+          "cost_per_unit" : 88643.50,
           "cost" : 2836592.00
         }
       },

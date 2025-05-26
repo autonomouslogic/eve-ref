@@ -17,14 +17,16 @@
       "avg_time_per_run": "PT141H17M55.324S",
       "avg_time_per_unit": "PT141H17M55.324S",
       "materials": {
-        "20410": {
-          "quantity": 32,
-          "type_id": 20410,
+        "20410" : {
+          "type_id" : 20410,
+          "quantity" : 32.0,
+          "cost_per_unit" : 99693.58,
           "cost" : 3190194.56
         },
-        "20424": {
-          "quantity": 32,
-          "type_id": 20424,
+        "20424" : {
+          "type_id" : 20424,
+          "quantity" : 32.0,
+          "cost_per_unit" : 85874.69,
           "cost" : 2747990.08
         }
       },

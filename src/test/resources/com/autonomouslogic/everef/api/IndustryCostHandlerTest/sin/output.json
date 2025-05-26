@@ -10,64 +10,76 @@
       "time_per_run": "PT60H8M33S",
       "time_per_unit": "PT60H8M33S",
       "materials": {
-        "645": {
-          "quantity": 1,
-          "type_id": 645,
+        "645" : {
+          "type_id" : 645,
+          "quantity" : 1.0,
+          "cost_per_unit" : 236197066.81,
           "cost" : 236197066.81
         },
-        "21025": {
-          "quantity": 3,
-          "type_id": 21025,
+        "21025" : {
+          "type_id" : 21025,
+          "quantity" : 3.0,
+          "cost_per_unit" : 28446690.16,
           "cost" : 85340070.48
         },
-        "11478": {
-          "quantity": 30,
-          "type_id": 11478,
+        "11478" : {
+          "type_id" : 11478,
+          "quantity" : 30.0,
+          "cost_per_unit" : 857.23,
           "cost" : 25716.90
         },
-        "11531": {
-          "quantity": 219,
-          "type_id": 11531,
+        "11531" : {
+          "type_id" : 11531,
+          "quantity" : 219.0,
+          "cost_per_unit" : 46214.41,
           "cost" : 10120955.79
         },
-        "3828": {
-          "quantity": 437,
-          "type_id": 3828,
+        "3828" : {
+          "type_id" : 3828,
+          "quantity" : 437.0,
+          "cost_per_unit" : 10885.11,
           "cost" : 4756793.07
         },
-        "11547": {
-          "quantity": 437,
-          "type_id": 11547,
+        "11547" : {
+          "type_id" : 11547,
+          "quantity" : 437.0,
+          "cost_per_unit" : 138734.81,
           "cost" : 60627111.97
         },
-        "11399": {
-          "quantity": 873,
-          "type_id": 11399,
+        "11399" : {
+          "type_id" : 11399,
+          "quantity" : 873.0,
+          "cost_per_unit" : 35399.68,
           "cost" : 30903920.64
         },
-        "11535": {
-          "quantity": 873,
-          "type_id": 11535,
+        "11535" : {
+          "type_id" : 11535,
+          "quantity" : 873.0,
+          "cost_per_unit" : 27038.43,
           "cost" : 23604549.39
         },
-        "11556": {
-          "quantity": 1585,
-          "type_id": 11556,
+        "11556" : {
+          "type_id" : 11556,
+          "quantity" : 1585.0,
+          "cost_per_unit" : 48018.34,
           "cost" : 76109068.90
         },
-        "11553": {
-          "quantity": 2183,
-          "type_id": 11553,
+        "11553" : {
+          "type_id" : 11553,
+          "quantity" : 2183.0,
+          "cost_per_unit" : 57233.51,
           "cost" : 124940752.33
         },
-        "11541": {
-          "quantity": 6111,
-          "type_id": 11541,
+        "11541" : {
+          "type_id" : 11541,
+          "quantity" : 6111.0,
+          "cost_per_unit" : 53746.31,
           "cost" : 328443700.41
         },
-        "11545": {
-          "quantity": 18188,
-          "type_id": 11545,
+        "11545" : {
+          "type_id" : 11545,
+          "quantity" : 18188.0,
+          "cost_per_unit" : 7966.80,
           "cost" : 144900158.40
         }
       },
@@ -103,14 +115,16 @@
       "avg_time_per_run": "PT508675.324S",
       "avg_time_per_unit": "PT508675.324S",
       "materials": {
-        "20410": {
-          "quantity": 99.74025974025975,
-          "type_id": 20410,
+        "20410" : {
+          "type_id" : 20410,
+          "quantity" : 99.74025974025975,
+          "cost_per_unit" : 99693.58,
           "cost" : 9943463.56
         },
-        "20424": {
-          "quantity": 99.74025974025975,
-          "type_id": 20424,
+        "20424" : {
+          "type_id" : 20424,
+          "quantity" : 99.74025974025975,
+          "cost_per_unit" : 85874.69,
           "cost" : 8565163.89
         }
       },

@@ -76,11 +76,13 @@ invention runs are needed to provide the requested manufacturing runs.
         "645" : {
           "type_id" : 645,
           "quantity" : 8,
+          "cost_per_unit" : 239034257.21,
           "cost" : 1912274057.68
         },
         "21025" : {
           "type_id" : 21025,
           "quantity" : 22,
+          "cost_per_unit" : 28393191.87,
           "cost" : 624650221.14
         },
         [...]
@@ -117,11 +119,13 @@ invention runs are needed to provide the requested manufacturing runs.
         "20410" : {
           "type_id" : 20410,
           "quantity" : 797.922077922078,
+          "cost_per_unit" : 99872.85,
           "cost" : 79690752.00
         },
         "20424" : {
           "type_id" : 20424,
           "quantity" : 797.922077922078,
+          "cost_per_unit" : 88643.50,
           "cost" : 70730605.71
         }
       },

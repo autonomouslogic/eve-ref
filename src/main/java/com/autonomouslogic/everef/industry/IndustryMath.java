@@ -72,22 +72,27 @@ public class IndustryMath {
 		for (var material : activity.getMaterials().values()) {
 			long typeId = material.getTypeId();
 			var quantity = quantityMod.apply(material.getQuantity());
-			var cost = materialCost(typeId, quantity);
+			var costPerUnit = materialCostPerUnit(typeId);
+			var cost = materialCost(costPerUnit, quantity);
 			materials.put(
 					String.valueOf(typeId),
 					MaterialCost.builder()
 							.typeId(typeId)
 							.quantity(quantity)
+							.costPerUnit(costPerUnit)
 							.cost(cost)
 							.build());
 		}
 		return materials;
 	}
 
-	public BigDecimal materialCost(long typeId, long quantity) {
-		var price = marketPriceService.getEsiAveragePrice(typeId).orElse(0);
-		var cost = MathUtil.round(BigDecimal.valueOf(price).multiply(BigDecimal.valueOf(quantity)), 2);
-		return cost;
+	public BigDecimal materialCostPerUnit(long typeId) {
+		return MathUtil.round(
+				BigDecimal.valueOf(marketPriceService.getEsiAveragePrice(typeId).orElse(0)), 2);
+	}
+
+	public BigDecimal materialCost(BigDecimal price, long quantity) {
+		return MathUtil.round(price.multiply(BigDecimal.valueOf(quantity)), 2);
 	}
 
 	public BigDecimal jobCostBase(BigDecimal eiv) {
