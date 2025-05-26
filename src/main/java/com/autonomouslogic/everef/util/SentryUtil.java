@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 public class SentryUtil {
 
 	public static void configureScope(IScope scope, ServerRequest req, ServerResponse res) {
-		scope.setContexts("http.path", req.path());
-		scope.setContexts("http.responseCode", res.status().code());
+		scope.setExtra("http.method", req.prologue().method().toString());
+		scope.setExtra("http.uri", req.requestedUri().toUri().toString());
 	}
 }

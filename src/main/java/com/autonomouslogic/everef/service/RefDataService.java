@@ -37,7 +37,7 @@ public class RefDataService {
 						log.warn("Failed updating reference data, ignoring", e);
 					}
 				},
-				0,
+				10,
 				10,
 				TimeUnit.MINUTES);
 	}

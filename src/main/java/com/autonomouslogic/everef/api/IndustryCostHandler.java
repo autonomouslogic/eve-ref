@@ -29,6 +29,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.inject.Inject;
 import jakarta.inject.Provider;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -108,6 +110,9 @@ public class IndustryCostHandler implements HttpService, Handler {
 
 	@Override
 	public void handle(ServerRequest req, ServerResponse res) throws Exception {
+		log.info(
+				"Received request: {}",
+				URLEncoder.encode(req.requestedUri().toUri().toString(), StandardCharsets.UTF_8));
 		var input = createInput(req);
 		validateInput(input);
 		var result = industryCost(input);

@@ -9,6 +9,8 @@ import io.helidon.webserver.http.ServerResponse;
 import io.sentry.Sentry;
 import io.sentry.SentryLevel;
 import jakarta.inject.Inject;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import javax.inject.Singleton;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
@@ -25,10 +27,14 @@ public class ErrorHandler implements io.helidon.webserver.http.ErrorHandler<Exce
 	@Override
 	@SneakyThrows
 	public void handle(ServerRequest req, ServerResponse res, Exception e) {
-		log.error("Error processing request: {}", req.requestedUri().toString(), e);
-		Sentry.withScope(scope -> {
-			SentryUtil.configureScope(scope, req, res, e);
-			Sentry.captureException(e, s -> s.setLevel(SentryLevel.ERROR));
+		log.error(
+				"Error processing request: {} {}",
+				req.prologue().method(),
+				URLEncoder.encode(req.requestedUri().toUri().toString(), StandardCharsets.UTF_8),
+				e);
+		Sentry.captureException(e, scope -> {
+			SentryUtil.configureScope(scope, req, res);
+			scope.setLevel(SentryLevel.ERROR);
 		});
 		res.status(Status.INTERNAL_SERVER_ERROR_500)
 				.send(objectMapper.writeValueAsString(ApiError.builder()

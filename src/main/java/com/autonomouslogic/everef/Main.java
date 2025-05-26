@@ -48,6 +48,8 @@ public class Main {
 			Sentry.init(options -> {
 				options.setDsn(sentryDsn.get().toString());
 				options.setRelease(Configs.EVE_REF_VERSION.getRequired());
+				var env = options.getEnvironment();
+				log.info("");
 			});
 		}
 	}
