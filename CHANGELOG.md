@@ -1,5 +1,23 @@
 EVE Ref Changelog
 
+## [2.62.0](https://github.com/autonomouslogic/eve-ref/compare/2.61.0...2.62.0) (2025-05-26)
+
+
+### Features
+
+* **api:** Added cost per unit to materials on industry cost API ([#859](https://github.com/autonomouslogic/eve-ref/issues/859)) ([33d6427](https://github.com/autonomouslogic/eve-ref/commit/33d642731a3af2cc7c84811bccbb0c62a38034c5))
+
+
+### Bug Fixes
+
+* **api:** Invention for manufacturing uses more runs to avoid rounding errors ([#860](https://github.com/autonomouslogic/eve-ref/issues/860)) ([9eb1c70](https://github.com/autonomouslogic/eve-ref/commit/9eb1c7005129f6c81e6c285897047f52dc0e9f38))
+* Error reporting to Sentry ([#858](https://github.com/autonomouslogic/eve-ref/issues/858)) ([7142511](https://github.com/autonomouslogic/eve-ref/commit/714251132676528a149d6cf1f3a14bbb87bcf467))
+
+
+### Documentation
+
+* More API docs ([#857](https://github.com/autonomouslogic/eve-ref/issues/857)) ([e9b3c66](https://github.com/autonomouslogic/eve-ref/commit/e9b3c661eb8c2c9896aa655d70fedbe8d604b68b))
+
 ## [2.61.0](https://github.com/autonomouslogic/eve-ref/compare/2.60.0...2.61.0) (2025-05-25)
 
 
