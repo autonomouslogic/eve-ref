@@ -10,6 +10,9 @@ info:
     url: https://github.com/autonomouslogic/eve-ref/blob/main/LICENSE-CCP
   title: EVE Ref API
   version: dev
+externalDocs:
+  description: EVE Ref Docs
+  url: https://docs.everef.net/api/
 servers:
 - url: https://api.everef.net
 paths:

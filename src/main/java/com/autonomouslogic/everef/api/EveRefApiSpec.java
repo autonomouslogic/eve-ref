@@ -1,5 +1,6 @@
 package com.autonomouslogic.everef.api;
 
+import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Contact;
 import io.swagger.v3.oas.annotations.info.Info;
@@ -18,7 +19,7 @@ import io.swagger.v3.oas.annotations.servers.Server;
 						version = "dev",
 						contact = @Contact(name = "Kenn", url = "https://everef.net/discord")),
 		servers = @Server(url = EveRefApiSpec.BASE_URL),
-externalDocumentation = @ExternalDocumentation(description="EVE Ref Docs" url="https://docs.everef.net/api/"))
+		externalDocs = @ExternalDocumentation(description = "EVE Ref Docs", url = "https://docs.everef.net/api/"))
 public interface EveRefApiSpec {
 	String BASE_URL = "https://api.everef.net";
 }
