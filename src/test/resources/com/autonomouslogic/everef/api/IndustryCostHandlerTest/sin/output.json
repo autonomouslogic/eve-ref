@@ -135,7 +135,7 @@
       "facility_tax" : 119794.91,
       "scc_surcharge" : 1916719.17,
       "alpha_clone_tax": 0.00,
-      "total_job_cost": 7426095.58,
+      "total_job_cost" : 7426097.45,
       "total_material_cost" : 18508627.45,
       "total_cost" : 25934724.90,
       "avg_cost_per_copy" : 25934724.90,
