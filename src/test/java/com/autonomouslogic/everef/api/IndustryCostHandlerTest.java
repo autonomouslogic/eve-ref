@@ -144,7 +144,7 @@ public class IndustryCostHandlerTest {
 				"public, max-age=600, immutable",
 				res.getHeaders().get("Cache-Control").getFirst());
 		assertEquals(
-				"https://github.com/autonomouslogic/eve-ref/blob/industry-api/spec/eve-ref-api.yaml",
+				"https://github.com/autonomouslogic/eve-ref/blob/main/spec/eve-ref-api.yaml",
 				res.getHeaders().get("X-OpenAPI").getFirst());
 		var actual = res.getData();
 
