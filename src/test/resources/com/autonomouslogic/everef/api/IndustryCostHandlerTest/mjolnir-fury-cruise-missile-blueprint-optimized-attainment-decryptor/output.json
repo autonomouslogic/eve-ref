@@ -17,19 +17,22 @@
       "avg_time_per_run": "PT5120.300S",
       "avg_time_per_unit": "PT1.0240S",
       "materials": {
-        "20418": {
-          "quantity": 45,
-          "type_id": 20418,
+        "20418" : {
+          "type_id" : 20418,
+          "quantity" : 45.0,
+          "cost_per_unit" : 103019.67,
           "cost" : 4635885.15
         },
-        "20420": {
-          "quantity": 45,
-          "type_id": 20420,
+        "20420" : {
+          "type_id" : 20420,
+          "quantity" : 45.0,
+          "cost_per_unit" : 97349.95,
           "cost" : 4380747.75
         },
-        "34207": {
-          "quantity": 45,
-          "type_id": 34207,
+        "34207" : {
+          "type_id" : 34207,
+          "quantity" : 45.0,
+          "cost_per_unit" : 5824285.06,
           "cost" : 262092827.70
         }
       },

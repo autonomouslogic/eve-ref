@@ -10,55 +10,65 @@
       "time_per_run": "PT2H43M12S",
       "time_per_unit": "PT2H43M12S",
       "materials": {
-        "34": {
-          "type_id": 34,
-          "quantity": 4680000,
-          "cost" : 19141200.00
-        },
-        "35": {
-          "type_id": 35,
-          "quantity": 2340000,
-          "cost" : 63133200.00
-        },
-        "36": {
-          "type_id": 36,
-          "quantity": 351000,
-          "cost" : 27213030.00
-        },
-        "37": {
-          "type_id": 37,
-          "quantity": 117000,
-          "cost" : 37631880.00
-        },
-        "38": {
-          "type_id": 38,
-          "quantity": 14040,
-          "cost" : 19074603.60
-        },
-        "39": {
-          "type_id": 39,
-          "quantity": 3510,
-          "cost" : 9572366.70
-        },
-        "40": {
-          "type_id": 40,
-          "quantity": 1755,
-          "cost" : 7579107.90
-        },
-        "57478": {
-          "type_id": 57478,
-          "quantity": 135,
-          "cost" : 9459768.60
-        },
-        "57479": {
-          "type_id": 57479,
-          "quantity": 1,
+        "57479" : {
+          "type_id" : 57479,
+          "quantity" : 1.0,
+          "cost_per_unit" : 6977767.42,
           "cost" : 6977767.42
         },
-        "57486": {
-          "type_id": 57486,
-          "quantity": 68,
+        "57486" : {
+          "type_id" : 57486,
+          "quantity" : 68.0,
+          "cost_per_unit" : 107739.31,
           "cost" : 7326273.08
+        },
+        "57478" : {
+          "type_id" : 57478,
+          "quantity" : 135.0,
+          "cost_per_unit" : 70072.36,
+          "cost" : 9459768.60
+        },
+        "40" : {
+          "type_id" : 40,
+          "quantity" : 1755.0,
+          "cost_per_unit" : 4318.58,
+          "cost" : 7579107.90
+        },
+        "39" : {
+          "type_id" : 39,
+          "quantity" : 3510.0,
+          "cost_per_unit" : 2727.17,
+          "cost" : 9572366.70
+        },
+        "38" : {
+          "type_id" : 38,
+          "quantity" : 14040.0,
+          "cost_per_unit" : 1358.59,
+          "cost" : 19074603.60
+        },
+        "37" : {
+          "type_id" : 37,
+          "quantity" : 117000.0,
+          "cost_per_unit" : 321.64,
+          "cost" : 37631880.00
+        },
+        "36" : {
+          "type_id" : 36,
+          "quantity" : 351000.0,
+          "cost_per_unit" : 77.53,
+          "cost" : 27213030.00
+        },
+        "35" : {
+          "type_id" : 35,
+          "quantity" : 2340000.0,
+          "cost_per_unit" : 26.98,
+          "cost" : 63133200.00
+        },
+        "34" : {
+          "type_id" : 34,
+          "quantity" : 4680000.0,
+          "cost_per_unit" : 4.09,
+          "cost" : 19141200.00
         }
       },
       "estimated_item_value": 158985500,

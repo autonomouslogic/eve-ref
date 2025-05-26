@@ -10,30 +10,35 @@
       "time_per_run": "PT8483.8S",
       "time_per_unit": "PT1.696S",
       "materials": {
-        "11694": {
-          "quantity": 138,
-          "type_id": 11694,
-          "cost" : 3008651.16
+        "16680" : {
+          "type_id" : 16680,
+          "quantity" : 579.0,
+          "cost_per_unit" : 1194.31,
+          "cost" : 691505.49
         },
-        "9830": {
-          "quantity": 1265,
-          "type_id": 9830,
-          "cost" : 16392489.85
-        },
-        "11476": {
-          "quantity": 10,
-          "type_id": 11476,
+        "11476" : {
+          "type_id" : 11476,
+          "quantity" : 10.0,
+          "cost_per_unit" : 991.41,
           "cost" : 9914.10
         },
-        "11399": {
-          "quantity": 147,
-          "type_id": 11399,
-          "cost" : 5203752.96
+        "11694" : {
+          "type_id" : 11694,
+          "quantity" : 138.0,
+          "cost_per_unit" : 21801.82,
+          "cost" : 3008651.16
         },
-        "16680": {
-          "quantity": 579,
-          "type_id": 16680,
-          "cost" : 691505.49
+        "9830" : {
+          "type_id" : 9830,
+          "quantity" : 1265.0,
+          "cost_per_unit" : 12958.49,
+          "cost" : 16392489.85
+        },
+        "11399" : {
+          "type_id" : 11399,
+          "quantity" : 147.0,
+          "cost_per_unit" : 35399.68,
+          "cost" : 5203752.96
         }
       },
       "estimated_item_value": 17234792,
@@ -68,14 +73,16 @@
       "avg_time_per_run": "PT11674.285S",
       "avg_time_per_unit": "PT2.334S",
       "materials": {
-        "20418": {
-          "quantity": 2.016806722689075,
-          "type_id": 20418,
+        "20418" : {
+          "type_id" : 20418,
+          "quantity" : 2.016806722689075,
+          "cost_per_unit" : 103019.67,
           "cost" : 207770.76
         },
-        "20420": {
-          "quantity": 2.016806722689075,
-          "type_id": 20420,
+        "20420" : {
+          "type_id" : 20420,
+          "quantity" : 2.016806722689075,
+          "cost_per_unit" : 97349.95,
           "cost" : 196336.03
         }
       },
