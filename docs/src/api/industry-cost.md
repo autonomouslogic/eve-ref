@@ -38,7 +38,7 @@ It's backed by evidence pulled from the game and tested thoroughly to make sure 
 
 It's a simple HTTP+JSON API, so you can use it from any language.
 It's fast, runs locally if you want it to, and works great for bulk lookups.
-The JSON easy to read and designed to be extensible.
+The JSON is easy to read and designed to be extensible.
 Whether you generate a client from the spec or just hit it directly,
 you can stop worrying about whether your materials or EIV add up and get back to building the cool stuff you actually care about.
 
