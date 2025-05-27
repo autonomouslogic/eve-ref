@@ -253,8 +253,8 @@ components:
         me:
           type: integer
           format: int32
-          default: 10
-          description: The material efficiency of the blueprint
+          description: The material efficiency of the blueprint. Defaults to 10 for
+            T1 products or invention output ME to T2 products
           maximum: 10
           minimum: 0
         mechanical_engineering:
@@ -422,8 +422,8 @@ components:
         te:
           type: integer
           format: int32
-          default: 20
-          description: The time efficiency of the blueprint
+          description: The time efficiency of the blueprint. Defaults to 20 for T1
+            products or invention output TE to T2 products
           maximum: 20
           minimum: 0
         triglavian_encryption_methods:
@@ -570,6 +570,10 @@ components:
           type: object
           additionalProperties:
             $ref: "#/components/schemas/MaterialCost"
+        me:
+          type: integer
+          format: int32
+          description: The material efficiency used
         product_id:
           type: integer
           format: int64
@@ -589,6 +593,10 @@ components:
             The system cost index amount.
             Note that this will always be a slightly off, as the ESI does not report the full precision of the system cost index rates.
             See https://github.com/esi/esi-issues/issues/1411
+        te:
+          type: integer
+          format: int32
+          description: The time efficiency used
         time:
           type: string
         time_per_run:

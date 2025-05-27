@@ -26,6 +26,14 @@ public class ManufacturingCost extends ActivityCost {
 	@Schema(description = "The source blueprint of the manufacture")
 	long blueprintId;
 
+	@Schema(description = "The material efficiency used")
+	@JsonProperty
+	int me;
+
+	@Schema(description = "The time efficiency used")
+	@JsonProperty
+	int te;
+
 	@Schema(description = "Total number of item produced")
 	@JsonProperty
 	long units;
