@@ -58,6 +58,12 @@ public class ManufactureCalculator {
 	private int runs;
 
 	@Setter
+	private int me;
+
+	@Setter
+	private int te;
+
+	@Setter
 	private IndustryStructure structure;
 
 	@Setter

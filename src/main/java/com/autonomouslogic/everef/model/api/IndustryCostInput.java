@@ -40,7 +40,6 @@ public class IndustryCostInput {
 	Long decryptorId;
 
 	@JsonProperty
-	@lombok.Builder.Default
 	@Schema(
 			description =
 					"The material efficiency of the blueprint. Defaults to 10 for T1 products or invention output ME to T2 products",
@@ -50,14 +49,13 @@ public class IndustryCostInput {
 	Integer me;
 
 	@JsonProperty
-	@lombok.Builder.Default
 	@Schema(
 			description =
 					"The time efficiency of the blueprint. Defaults to 20 for T1 products or invention output TE to T2 products",
 			requiredMode = Schema.RequiredMode.NOT_REQUIRED,
 			minimum = "0",
 			maximum = "20")
-	Integer te = 20;
+	Integer te;
 
 	//	@JsonProperty
 	//	@Schema(description = "The decryptor type ID used for invention", requiredMode =

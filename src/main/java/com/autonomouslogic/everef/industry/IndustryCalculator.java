@@ -88,7 +88,7 @@ public class IndustryCalculator {
 	}
 
 	private ManufacturingCost handleManufacturing(InventoryType productType, Blueprint blueprint) {
-		var manufacturingCost = calculateManufacturing(productType, blueprint, industryCostInput.getRuns());
+		var manufacturingCost = calculateManufacturing(productType, blueprint, industryCostInput.getRuns(), industryCostInput.getMe(), industryCostInput.getTe());
 		cost.manufacturing(String.valueOf(manufacturingCost.getProductId()), manufacturingCost);
 		return manufacturingCost;
 	}
@@ -120,7 +120,7 @@ public class IndustryCalculator {
 		return inventionCost;
 	}
 
-	private ManufacturingCost calculateManufacturing(InventoryType productType, Blueprint blueprint, int runs) {
+	private ManufacturingCost calculateManufacturing(InventoryType productType, Blueprint blueprint, int runs, Integer me, Integer te) {
 		if (Optional.ofNullable(productType.getBlueprint()).orElse(false)) {
 			throw new IllegalStateException("productType is a blueprint");
 		}
@@ -130,6 +130,8 @@ public class IndustryCalculator {
 				.setBlueprint(blueprint)
 				.setProductType(productType)
 				.setRuns(runs)
+			.setMe(Optional.ofNullable(me).orElse(10))
+			.setTe(Optional.ofNullable(te).orElse(20))
 				.setStructure(structure)
 				.setRigs(rigs)
 				.calc();

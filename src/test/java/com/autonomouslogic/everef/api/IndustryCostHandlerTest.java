@@ -55,6 +55,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.junitpioneer.jupiter.SetEnvironmentVariable;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -219,6 +220,35 @@ public class IndustryCostHandlerTest {
 		var manufacturing = cost.getManufacturing().get("645");
 		assertEquals(10, manufacturing.getMe());
 		assertEquals(20, manufacturing.getTe());
+	}
+
+	@ParameterizedTest
+	@ValueSource(strings = {"", "34202"})
+	@SneakyThrows
+	void shouldUseInventionEfficienciesForT2Products(String decryptorId) {
+		setupBasicEsiPrices();
+		var builder = IndustryCostInput.builder().productId(22430);
+		if (!decryptorId.isEmpty()) {
+			builder.decryptorId(Long.valueOf(decryptorId));
+		}
+		var input = builder.build();
+		assertNull(input.getMe());
+		assertNull(input.getTe());
+		var cost = industryApi.industryCost(input);
+
+		var invention = cost.getInvention().get("22430");
+		if (decryptorId.isEmpty()) {
+			assertEquals(2, invention.getMe());
+			assertEquals(4, invention.getTe());
+		}
+		else {
+			assertEquals(1, invention.getMe());
+			assertEquals(8, invention.getTe());
+		}
+
+		var manufacturing = cost.getManufacturing().get("22430");
+		assertEquals(invention.getMe(), manufacturing.getMe());
+		assertEquals(invention.getTe(), manufacturing.getTe());
 	}
 
 	// ===========
