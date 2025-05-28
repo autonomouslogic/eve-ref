@@ -49,12 +49,8 @@ public class IndustryMath {
 		return MathUtil.round(eiv.multiply(BigDecimal.valueOf(runs)));
 	}
 
-	public double materialEfficiencyModifier(IndustryCostInput industryCostInput) {
-		return 1.0 - industryCostInput.getMe() / 100.0;
-	}
-
-	public double timeEfficiencyModifier(IndustryCostInput industryCostInput) {
-		return 1.0 - industryCostInput.getTe() / 100.0;
+	public double efficiencyModifier(int score) {
+		return 1.0 - score / 100.0;
 	}
 
 	public BigDecimal inventionSystemCostIndex(IndustryCostInput industryCostInput, BigDecimal jcb) {

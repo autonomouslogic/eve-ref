@@ -236,7 +236,7 @@ public class IndustryCostHandlerTest {
 		assertNull(input.getTe());
 		var cost = industryApi.industryCost(input);
 
-		var invention = cost.getInvention().get("22430");
+		var invention = cost.getInvention().get("22431");
 		if (decryptorId.isEmpty()) {
 			assertEquals(2, invention.getMe());
 			assertEquals(4, invention.getTe());

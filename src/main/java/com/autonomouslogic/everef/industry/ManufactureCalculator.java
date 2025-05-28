@@ -113,6 +113,8 @@ public class ManufactureCalculator {
 				.productId(industryCostInput.getProductId())
 				.blueprintId(blueprint.getBlueprintTypeId())
 				.runs(runs)
+			.me(me)
+			.te(te)
 				.units(units)
 				.unitsPerRun(unitsPerRun)
 				.materials(materials)
@@ -140,7 +142,7 @@ public class ManufactureCalculator {
 
 	private Duration manufacturingTime(BlueprintActivity manufacturing) {
 		var baseTime = (double) manufacturing.getTime();
-		var teMod = industryMath.timeEfficiencyModifier(industryCostInput);
+		var teMod = industryMath.efficiencyModifier(te);
 		var industryMod = 1.0 - GLOBAL_TIME_BONUSES.get("Industry") * industryCostInput.getIndustry();
 		var advancedIndustryMod =
 				1.0 - GLOBAL_TIME_BONUSES.get("Advanced Industry") * industryCostInput.getAdvancedIndustry();
@@ -159,7 +161,7 @@ public class ManufactureCalculator {
 	}
 
 	private long manufacturingMaterialQuantity(long base) {
-		var meMod = industryMath.materialEfficiencyModifier(industryCostInput);
+		var meMod = industryMath.efficiencyModifier(me);
 		var structureMod = industryStructures.structureManufacturingMaterialModifier(structure);
 		var rigMod = industryRigs.rigModifier(
 				rigs, productType, industryCostInput.getSecurity(), IndustryRig::getMaterialBonus, "manufacturing");
