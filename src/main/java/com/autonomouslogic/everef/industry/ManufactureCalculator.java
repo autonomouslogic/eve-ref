@@ -58,6 +58,12 @@ public class ManufactureCalculator {
 	private int runs;
 
 	@Setter
+	private int me;
+
+	@Setter
+	private int te;
+
+	@Setter
 	private IndustryStructure structure;
 
 	@Setter
@@ -75,11 +81,16 @@ public class ManufactureCalculator {
 		if (runs <= 0) {
 			throw new IllegalArgumentException("Runs must be positive");
 		}
+		if (me < 0) {
+			throw new IllegalArgumentException("ME must not be negative");
+		}
+		if (te < 0) {
+			throw new IllegalArgumentException("TE must not be negative");
+		}
 
 		var manufacturing = blueprint.getActivities().get("manufacturing");
 		var time = manufacturingTime(manufacturing);
-		var eiv = industryMath.eiv(manufacturing, industryCostInput.getRuns());
-		var runs = industryCostInput.getRuns();
+		var eiv = industryMath.eiv(manufacturing, runs);
 		var unitsPerRun =
 				manufacturing.getProducts().get(productType.getTypeId()).getQuantity();
 		var units = runs * unitsPerRun;
@@ -107,6 +118,8 @@ public class ManufactureCalculator {
 				.productId(industryCostInput.getProductId())
 				.blueprintId(blueprint.getBlueprintTypeId())
 				.runs(runs)
+				.me(me)
+				.te(te)
 				.units(units)
 				.unitsPerRun(unitsPerRun)
 				.materials(materials)
@@ -134,7 +147,7 @@ public class ManufactureCalculator {
 
 	private Duration manufacturingTime(BlueprintActivity manufacturing) {
 		var baseTime = (double) manufacturing.getTime();
-		var teMod = industryMath.timeEfficiencyModifier(industryCostInput);
+		var teMod = industryMath.efficiencyModifier(te);
 		var industryMod = 1.0 - GLOBAL_TIME_BONUSES.get("Industry") * industryCostInput.getIndustry();
 		var advancedIndustryMod =
 				1.0 - GLOBAL_TIME_BONUSES.get("Advanced Industry") * industryCostInput.getAdvancedIndustry();
@@ -153,7 +166,7 @@ public class ManufactureCalculator {
 	}
 
 	private long manufacturingMaterialQuantity(long base) {
-		var meMod = industryMath.materialEfficiencyModifier(industryCostInput);
+		var meMod = industryMath.efficiencyModifier(me);
 		var structureMod = industryStructures.structureManufacturingMaterialModifier(structure);
 		var rigMod = industryRigs.rigModifier(
 				rigs, productType, industryCostInput.getSecurity(), IndustryRig::getMaterialBonus, "manufacturing");

@@ -41,6 +41,9 @@ public class InventionCalculator {
 	@Inject
 	protected IndustryRigs industryRigs;
 
+	@Inject
+	protected IndustryDecryptors industryDecryptors;
+
 	private final LoadedRefData refData;
 
 	@Setter
@@ -83,6 +86,10 @@ public class InventionCalculator {
 		var invention = blueprint.getActivities().get("invention");
 
 		var decryptorOpt = Optional.ofNullable(decryptor);
+		var me =
+				decryptorOpt.map(d -> industryDecryptors.getBlueprintMe(d)).orElse(IndustryConstants.INVENTION_BASE_ME);
+		var te =
+				decryptorOpt.map(d -> industryDecryptors.getBlueprintTe(d)).orElse(IndustryConstants.INVENTION_BASE_TE);
 		var manufacturing = inventionBlueprintProductActivity(productType);
 		var time = inventionTime(invention);
 		var eiv = industryMath.eiv(manufacturing, runs);
@@ -128,10 +135,8 @@ public class InventionCalculator {
 				.runsPerCopy(runsPerCopy)
 				.unitsPerRun(unitsPerRun)
 				.probability(prob)
-				.me(IndustryConstants.INVENTION_BASE_ME
-						+ decryptorOpt.map(IndustryDecryptor::getMeModifier).orElse(0))
-				.te(IndustryConstants.INVENTION_BASE_TE
-						+ decryptorOpt.map(IndustryDecryptor::getTeModifier).orElse(0))
+				.me(me)
+				.te(te)
 				.runs(runs)
 				.expectedCopies(expectedCopies)
 				.expectedRuns(expectedRuns)

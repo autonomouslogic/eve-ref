@@ -3,6 +3,8 @@
     "24535": {
       "product_id": 24535,
       "blueprint_id": 24536,
+      "me" : 2,
+      "te" : 4,
       "runs": 10,
       "units": 50000,
       "units_per_run": 5000,

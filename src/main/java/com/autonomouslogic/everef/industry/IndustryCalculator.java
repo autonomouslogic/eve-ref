@@ -1,5 +1,8 @@
 package com.autonomouslogic.everef.industry;
 
+import static com.autonomouslogic.everef.industry.IndustryConstants.MAX_ME;
+import static com.autonomouslogic.everef.industry.IndustryConstants.MAX_TE;
+
 import com.autonomouslogic.everef.data.LoadedRefData;
 import com.autonomouslogic.everef.model.IndustryDecryptor;
 import com.autonomouslogic.everef.model.IndustryRig;
@@ -70,58 +73,44 @@ public class IndustryCalculator {
 		Objects.requireNonNull(blueprint, "blueprint");
 
 		cost = IndustryCost.builder();
-		if (!Optional.ofNullable(productType.getBlueprint()).orElse(false)) {
-			var manufacturingCost = handleManufacturing();
-			handleInventionForManufacturing(manufacturingCost);
+		boolean isBlueprint = Optional.ofNullable(productType.getBlueprint()).orElse(false);
+		if (!isBlueprint) {
+			var manufacturingCost = calculateManufacturing();
+			var inventionCost = calculateInventionForManufacturing(manufacturingCost);
+			if (inventionCost != null) {
+				addInvention(inventionCost);
+				var me = Optional.ofNullable(industryCostInput.getMe());
+				var te = Optional.ofNullable(industryCostInput.getTe());
+				if (me.isEmpty() || te.isEmpty()) {
+					manufacturingCost =
+							calculateManufacturing(me.orElse(inventionCost.getMe()), te.orElse(inventionCost.getTe()));
+				}
+			}
+			addManufacturing(manufacturingCost);
 		} else {
-			handleInvention();
+			var inventionCost = calculateInvention();
+			addInvention(inventionCost);
 		}
 		return cost.build();
 	}
 
-	private ManufacturingCost handleManufacturing() {
-		return handleManufacturing(productType, blueprint);
+	private ManufacturingCost calculateManufacturing() {
+		return calculateManufacturing(
+				productType,
+				blueprint,
+				industryCostInput.getRuns(),
+				industryCostInput.getMe(),
+				industryCostInput.getTe());
 	}
 
-	private InventionCost handleInvention() {
-		return handleInvention(productType, blueprint);
+	private ManufacturingCost calculateManufacturing(int me, int te) {
+		return calculateManufacturing(productType, blueprint, industryCostInput.getRuns(), me, te);
 	}
 
-	private ManufacturingCost handleManufacturing(InventoryType productType, Blueprint blueprint) {
-		var manufacturingCost = calculateManufacturing(productType, blueprint, industryCostInput.getRuns());
-		cost.manufacturing(String.valueOf(manufacturingCost.getProductId()), manufacturingCost);
-		return manufacturingCost;
-	}
-
-	private InventionCost handleInvention(InventoryType productType, Blueprint blueprint) {
-		var inventionCost = calculateInvention(productType, blueprint, industryCostInput.getRuns());
-		cost.invention(String.valueOf(inventionCost.getProductId()), inventionCost);
-		return inventionCost;
-	}
-
-	private InventionCost handleInventionForManufacturing(ManufacturingCost manufacturingCost) {
-		var productBlueprintTypeId = manufacturingCost.getBlueprintId();
-		var productBlueprintType = refData.getType(productBlueprintTypeId);
-		var sourceBlueprint = Optional.ofNullable(productBlueprintType)
-				.flatMap(v -> Optional.ofNullable(v.getProducedByBlueprints()))
-				.stream()
-				.flatMap(v -> v.values().stream())
-				.filter(v -> v.getBlueprintActivity().equals("invention"))
-				.findFirst()
-				.map(v -> refData.getBlueprint(v.getBlueprintTypeId()));
-		if (sourceBlueprint.isEmpty()) {
-			return null;
-		}
-		var inventionCost = calculateInvention(
-				productBlueprintType, sourceBlueprint.get(), (int) (manufacturingCost.getRuns() * 10));
-		var factor = manufacturingCost.getRuns() / inventionCost.getExpectedRuns();
-		inventionCost = inventionCost.multiply(factor);
-		cost.invention(String.valueOf(inventionCost.getProductId()), inventionCost);
-		return inventionCost;
-	}
-
-	private ManufacturingCost calculateManufacturing(InventoryType productType, Blueprint blueprint, int runs) {
-		if (Optional.ofNullable(productType.getBlueprint()).orElse(false)) {
+	private ManufacturingCost calculateManufacturing(
+			InventoryType productType, Blueprint blueprint, int runs, Integer me, Integer te) {
+		var isBlueprint = Optional.ofNullable(productType.getBlueprint()).orElse(false);
+		if (isBlueprint) {
 			throw new IllegalStateException("productType is a blueprint");
 		}
 		var manufacturingCost = manufactureCalculatorProvider
@@ -130,10 +119,16 @@ public class IndustryCalculator {
 				.setBlueprint(blueprint)
 				.setProductType(productType)
 				.setRuns(runs)
+				.setMe(Optional.ofNullable(me).orElse(MAX_ME))
+				.setTe(Optional.ofNullable(te).orElse(MAX_TE))
 				.setStructure(structure)
 				.setRigs(rigs)
 				.calc();
 		return manufacturingCost;
+	}
+
+	private InventionCost calculateInvention() {
+		return calculateInvention(productType, blueprint, industryCostInput.getRuns());
 	}
 
 	private InventionCost calculateInvention(InventoryType productType, Blueprint blueprint, int runs) {
@@ -151,5 +146,33 @@ public class IndustryCalculator {
 				.setRigs(rigs)
 				.calc();
 		return inventionCost;
+	}
+
+	private InventionCost calculateInventionForManufacturing(ManufacturingCost manufacturingCost) {
+		var productBlueprintTypeId = manufacturingCost.getBlueprintId();
+		var productBlueprintType = refData.getType(productBlueprintTypeId);
+		var sourceBlueprint = Optional.ofNullable(productBlueprintType)
+				.flatMap(v -> Optional.ofNullable(v.getProducedByBlueprints()))
+				.stream()
+				.flatMap(v -> v.values().stream())
+				.filter(v -> v.getBlueprintActivity().equals("invention"))
+				.findFirst()
+				.map(v -> refData.getBlueprint(v.getBlueprintTypeId()));
+		if (sourceBlueprint.isEmpty()) {
+			return null;
+		}
+		var inventionCost = calculateInvention(
+				productBlueprintType, sourceBlueprint.get(), (int) (manufacturingCost.getRuns() * 10));
+		var factor = manufacturingCost.getRuns() / inventionCost.getExpectedRuns();
+		inventionCost = inventionCost.multiply(factor);
+		return inventionCost;
+	}
+
+	public void addManufacturing(ManufacturingCost manufacturingCost) {
+		cost.manufacturing(String.valueOf(manufacturingCost.getProductId()), manufacturingCost);
+	}
+
+	public void addInvention(InventionCost inventionCost) {
+		cost.invention(String.valueOf(inventionCost.getProductId()), inventionCost);
 	}
 }

@@ -15,4 +15,12 @@ public class IndustryDecryptors extends AbstractIndustryService<IndustryDecrypto
 	protected IndustryDecryptors(CsvMapper csvMapper) {
 		super(IndustryDecryptor.class, DECRYPTORS_CONFIG, IndustryDecryptor::getTypeId, csvMapper);
 	}
+
+	public int getBlueprintMe(IndustryDecryptor decryptor) {
+		return IndustryConstants.INVENTION_BASE_ME + decryptor.getMeModifier();
+	}
+
+	public int getBlueprintTe(IndustryDecryptor decryptor) {
+		return IndustryConstants.INVENTION_BASE_TE + decryptor.getTeModifier();
+	}
 }

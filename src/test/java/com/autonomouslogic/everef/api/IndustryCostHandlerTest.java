@@ -55,6 +55,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.junitpioneer.jupiter.SetEnvironmentVariable;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -180,32 +181,6 @@ public class IndustryCostHandlerTest {
 		return ResourceUtil.loadContextual(IndustryCostHandlerTest.class, "/" + name + "/" + type + ".json");
 	}
 
-	class TestDispatcher extends Dispatcher {
-		@NotNull
-		@Override
-		public MockResponse dispatch(@NotNull RecordedRequest request) throws InterruptedException {
-			try {
-				var path = request.getRequestUrl().encodedPath();
-				log.info("Path: {}", path);
-				switch (path) {
-					case "/reference-data/reference-data-latest.tar.xz":
-						return new MockResponse()
-								.setResponseCode(200)
-								.setBody(new Buffer().write(IOUtils.toByteArray(new FileInputStream(refDataFile))));
-					case "/markets/prices/":
-						return new MockResponse()
-								.setResponseCode(200)
-								.setHeader("ETag", "test")
-								.setBody(esiMarketPrices);
-				}
-				return new MockResponse().setResponseCode(404);
-			} catch (Exception e) {
-				log.error("Error in dispatcher", e);
-				return new MockResponse().setResponseCode(500);
-			}
-		}
-	}
-
 	@Test
 	@SneakyThrows
 	void shouldNotFailOnBlankParameters() {
@@ -234,6 +209,65 @@ public class IndustryCostHandlerTest {
 		assertNull(output.getInput().getRigId());
 	}
 
+	@Test
+	@SneakyThrows
+	void shouldDefaultEfficienciesForT1Products() {
+		setupBasicEsiPrices();
+		var input = IndustryCostInput.builder().productId(645).build();
+		assertNull(input.getMe());
+		assertNull(input.getTe());
+		var cost = industryApi.industryCost(input);
+		var manufacturing = cost.getManufacturing().get("645");
+		assertEquals(10, manufacturing.getMe());
+		assertEquals(20, manufacturing.getTe());
+	}
+
+	@ParameterizedTest
+	@ValueSource(strings = {"", "34202"})
+	@SneakyThrows
+	void shouldUseInventionEfficienciesForT2Products(String decryptorId) {
+		setupBasicEsiPrices();
+		var builder = IndustryCostInput.builder().productId(22430);
+		if (!decryptorId.isEmpty()) {
+			builder.decryptorId(Long.valueOf(decryptorId));
+		}
+		var input = builder.build();
+		assertNull(input.getMe());
+		assertNull(input.getTe());
+		var cost = industryApi.industryCost(input);
+
+		var invention = cost.getInvention().get("22431");
+		if (decryptorId.isEmpty()) {
+			assertEquals(2, invention.getMe());
+			assertEquals(4, invention.getTe());
+		} else {
+			assertEquals(1, invention.getMe());
+			assertEquals(8, invention.getTe());
+		}
+
+		var manufacturing = cost.getManufacturing().get("22430");
+		assertEquals(invention.getMe(), manufacturing.getMe());
+		assertEquals(invention.getTe(), manufacturing.getTe());
+	}
+
+	@Test
+	@SneakyThrows
+	void shouldUseSuppliedEfficienciesForT2Products() {
+		setupBasicEsiPrices();
+		var input = IndustryCostInput.builder().productId(22430).me(0).te(0).build();
+		var cost = industryApi.industryCost(input);
+
+		var invention = cost.getInvention().get("22431");
+		assertEquals(2, invention.getMe());
+		assertEquals(4, invention.getTe());
+
+		var manufacturing = cost.getManufacturing().get("22430");
+		assertEquals(0, manufacturing.getMe());
+		assertEquals(0, manufacturing.getTe());
+	}
+
+	// ===========
+
 	@SneakyThrows
 	void setupBasicEsiPrices() {
 		var prices = new ArrayList<>();
@@ -242,5 +276,31 @@ public class IndustryCostHandlerTest {
 		}
 		esiMarketPrices = objectMapper.writeValueAsString(prices);
 		marketPriceService.init();
+	}
+
+	class TestDispatcher extends Dispatcher {
+		@NotNull
+		@Override
+		public MockResponse dispatch(@NotNull RecordedRequest request) throws InterruptedException {
+			try {
+				var path = request.getRequestUrl().encodedPath();
+				log.info("Path: {}", path);
+				switch (path) {
+					case "/reference-data/reference-data-latest.tar.xz":
+						return new MockResponse()
+								.setResponseCode(200)
+								.setBody(new Buffer().write(IOUtils.toByteArray(new FileInputStream(refDataFile))));
+					case "/markets/prices/":
+						return new MockResponse()
+								.setResponseCode(200)
+								.setHeader("ETag", "test")
+								.setBody(esiMarketPrices);
+				}
+				return new MockResponse().setResponseCode(404);
+			} catch (Exception e) {
+				log.error("Error in dispatcher", e);
+				return new MockResponse().setResponseCode(500);
+			}
+		}
 	}
 }
