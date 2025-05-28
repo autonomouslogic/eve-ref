@@ -240,8 +240,7 @@ public class IndustryCostHandlerTest {
 		if (decryptorId.isEmpty()) {
 			assertEquals(2, invention.getMe());
 			assertEquals(4, invention.getTe());
-		}
-		else {
+		} else {
 			assertEquals(1, invention.getMe());
 			assertEquals(8, invention.getTe());
 		}

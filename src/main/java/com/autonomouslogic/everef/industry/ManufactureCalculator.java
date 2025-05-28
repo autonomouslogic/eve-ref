@@ -81,11 +81,16 @@ public class ManufactureCalculator {
 		if (runs <= 0) {
 			throw new IllegalArgumentException("Runs must be positive");
 		}
+		if (me <= 0) {
+			throw new IllegalArgumentException("ME must be positive");
+		}
+		if (te <= 0) {
+			throw new IllegalArgumentException("TE must be positive");
+		}
 
 		var manufacturing = blueprint.getActivities().get("manufacturing");
 		var time = manufacturingTime(manufacturing);
-		var eiv = industryMath.eiv(manufacturing, industryCostInput.getRuns());
-		var runs = industryCostInput.getRuns();
+		var eiv = industryMath.eiv(manufacturing, runs);
 		var unitsPerRun =
 				manufacturing.getProducts().get(productType.getTypeId()).getQuantity();
 		var units = runs * unitsPerRun;
@@ -113,8 +118,8 @@ public class ManufactureCalculator {
 				.productId(industryCostInput.getProductId())
 				.blueprintId(blueprint.getBlueprintTypeId())
 				.runs(runs)
-			.me(me)
-			.te(te)
+				.me(me)
+				.te(te)
 				.units(units)
 				.unitsPerRun(unitsPerRun)
 				.materials(materials)

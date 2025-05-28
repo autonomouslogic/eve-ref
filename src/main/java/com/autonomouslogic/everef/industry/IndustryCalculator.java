@@ -1,5 +1,8 @@
 package com.autonomouslogic.everef.industry;
 
+import static com.autonomouslogic.everef.industry.IndustryConstants.MAX_ME;
+import static com.autonomouslogic.everef.industry.IndustryConstants.MAX_TE;
+
 import com.autonomouslogic.everef.data.LoadedRefData;
 import com.autonomouslogic.everef.model.IndustryDecryptor;
 import com.autonomouslogic.everef.model.IndustryRig;
@@ -19,9 +22,6 @@ import javax.inject.Provider;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
-
-import static com.autonomouslogic.everef.industry.IndustryConstants.MAX_ME;
-import static com.autonomouslogic.everef.industry.IndustryConstants.MAX_TE;
 
 @Log4j2
 public class IndustryCalculator {
@@ -85,14 +85,20 @@ public class IndustryCalculator {
 	}
 
 	private ManufacturingCost handleManufacturing() {
-		return handleManufacturing(productType, blueprint, industryCostInput.getRuns(), industryCostInput.getMe(), industryCostInput.getTe());
+		return handleManufacturing(
+				productType,
+				blueprint,
+				industryCostInput.getRuns(),
+				industryCostInput.getMe(),
+				industryCostInput.getTe());
 	}
 
 	private InventionCost handleInvention() {
 		return handleInvention(productType, blueprint);
 	}
 
-	private ManufacturingCost handleManufacturing(InventoryType productType, Blueprint blueprint, int runs, Integer me, Integer te) {
+	private ManufacturingCost handleManufacturing(
+			InventoryType productType, Blueprint blueprint, int runs, Integer me, Integer te) {
 		var manufacturingCost = calculateManufacturing(productType, blueprint, runs, me, te);
 		cost.manufacturing(String.valueOf(manufacturingCost.getProductId()), manufacturingCost);
 		return manufacturingCost;
@@ -126,10 +132,16 @@ public class IndustryCalculator {
 	}
 
 	private ManufacturingCost handleManufacturingForInvention(InventionCost inventionCost) {
-		return handleManufacturing(productType, blueprint, (long) Math.round(inventionCost.getExpectedRuns()), inventionCost.getMe(), inventionCost.getTe());
+		return handleManufacturing(
+				productType,
+				blueprint,
+				(long) Math.round(inventionCost.getExpectedRuns()),
+				inventionCost.getMe(),
+				inventionCost.getTe());
 	}
 
-	private ManufacturingCost calculateManufacturing(InventoryType productType, Blueprint blueprint, int runs, Integer me, Integer te) {
+	private ManufacturingCost calculateManufacturing(
+			InventoryType productType, Blueprint blueprint, int runs, Integer me, Integer te) {
 		if (Optional.ofNullable(productType.getBlueprint()).orElse(false)) {
 			throw new IllegalStateException("productType is a blueprint");
 		}
@@ -139,8 +151,8 @@ public class IndustryCalculator {
 				.setBlueprint(blueprint)
 				.setProductType(productType)
 				.setRuns(runs)
-			.setMe(Optional.ofNullable(me).orElse(MAX_ME))
-			.setTe(Optional.ofNullable(te).orElse(MAX_TE))
+				.setMe(Optional.ofNullable(me).orElse(MAX_ME))
+				.setTe(Optional.ofNullable(te).orElse(MAX_TE))
 				.setStructure(structure)
 				.setRigs(rigs)
 				.calc();
