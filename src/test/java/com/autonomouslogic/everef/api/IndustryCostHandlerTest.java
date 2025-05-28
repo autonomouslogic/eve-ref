@@ -250,6 +250,22 @@ public class IndustryCostHandlerTest {
 		assertEquals(invention.getTe(), manufacturing.getTe());
 	}
 
+	@Test
+	@SneakyThrows
+	void shouldUseSuppliedEfficienciesForT2Products() {
+		setupBasicEsiPrices();
+		var input = IndustryCostInput.builder().productId(22430).me(0).te(0).build();
+		var cost = industryApi.industryCost(input);
+
+		var invention = cost.getInvention().get("22431");
+		assertEquals(2, invention.getMe());
+		assertEquals(4, invention.getTe());
+
+		var manufacturing = cost.getManufacturing().get("22430");
+		assertEquals(0, manufacturing.getMe());
+		assertEquals(0, manufacturing.getTe());
+	}
+
 	// ===========
 
 	@SneakyThrows

@@ -81,11 +81,11 @@ public class ManufactureCalculator {
 		if (runs <= 0) {
 			throw new IllegalArgumentException("Runs must be positive");
 		}
-		if (me <= 0) {
-			throw new IllegalArgumentException("ME must be positive");
+		if (me < 0) {
+			throw new IllegalArgumentException("ME must not be negative");
 		}
-		if (te <= 0) {
-			throw new IllegalArgumentException("TE must be positive");
+		if (te < 0) {
+			throw new IllegalArgumentException("TE must not be negative");
 		}
 
 		var manufacturing = blueprint.getActivities().get("manufacturing");

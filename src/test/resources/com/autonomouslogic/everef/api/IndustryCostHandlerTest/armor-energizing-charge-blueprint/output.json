@@ -3,6 +3,8 @@
     "42832": {
       "product_id": 42832,
       "blueprint_id": 42874,
+      "me" : 1,
+      "te" : 2,
       "runs": 100,
       "units_per_run": 500,
       "units": 50000,
