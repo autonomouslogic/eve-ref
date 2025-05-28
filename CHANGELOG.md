@@ -1,5 +1,12 @@
 EVE Ref Changelog
 
+## [2.63.0](https://github.com/autonomouslogic/eve-ref/compare/2.62.0...2.63.0) (2025-05-28)
+
+
+### Features
+
+* **api:** Industry cost API uses ME and TE from invention if a T2 item is being manufactured ([#861](https://github.com/autonomouslogic/eve-ref/issues/861)) ([2dea54e](https://github.com/autonomouslogic/eve-ref/commit/2dea54eaf8aa19fee8448b2b2ac34b4cdaa4c7fa))
+
 ## [2.62.0](https://github.com/autonomouslogic/eve-ref/compare/2.61.0...2.62.0) (2025-05-26)
 
 
