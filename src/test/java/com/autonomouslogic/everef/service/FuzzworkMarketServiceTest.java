@@ -44,6 +44,7 @@ public class FuzzworkMarketServiceTest {
 	@SneakyThrows
 	void shouldGetPrices() {
 		enqueueSuccess(34, new BigDecimal("6.6"));
+
 		var response = marketService.fetchAggregateStationPrices(1, List.of(34L, 35L, 36L));
 		assertEquals(new BigDecimal("6.6"), response.get("34").getSell().getWeightedAverage());
 
@@ -58,8 +59,10 @@ public class FuzzworkMarketServiceTest {
 	void shouldCachePrices() {
 		enqueueSuccess(34, new BigDecimal("6.6"));
 		enqueueSuccess(34, new BigDecimal("6.6"));
+
 		var response1 = marketService.fetchAggregateStationPrices(1, List.of(34L));
 		assertEquals(new BigDecimal("6.6"), response1.get("34").getSell().getWeightedAverage());
+
 		var response2 = marketService.fetchAggregateStationPrices(1, List.of(34L));
 		assertEquals(new BigDecimal("6.6"), response2.get("34").getSell().getWeightedAverage());
 
@@ -67,6 +70,48 @@ public class FuzzworkMarketServiceTest {
 		assertEquals(
 				"http://localhost:30150/aggregates/?station=1&types=34",
 				req.getRequestUrl().url().toString());
+
+		assertNull(server.takeRequest(1, TimeUnit.MILLISECONDS));
+	}
+
+	@Test
+	@SneakyThrows
+	void shouldPartiallyReconstructResponses() {
+		enqueueSuccess(34, new BigDecimal("6.6"));
+		enqueueSuccess(35, new BigDecimal("7.7"));
+		enqueueSuccess(36, new BigDecimal("8.8"));
+
+		var response1 = marketService.fetchAggregateStationPrices(1, List.of(34L));
+		assertEquals(new BigDecimal("6.6"), response1.get("34").getSell().getWeightedAverage());
+
+		var response2 = marketService.fetchAggregateStationPrices(1, List.of(35L));
+		assertEquals(new BigDecimal("7.7"), response2.get("35").getSell().getWeightedAverage());
+
+		var response3 = marketService.fetchAggregateStationPrices(1, List.of(34L, 35L, 36L));
+		assertEquals(new BigDecimal("6.6"), response3.get("34").getSell().getWeightedAverage());
+		assertEquals(new BigDecimal("7.7"), response3.get("35").getSell().getWeightedAverage());
+		assertEquals(new BigDecimal("8.8"), response3.get("36").getSell().getWeightedAverage());
+
+		assertEquals(
+				"http://localhost:30150/aggregates/?station=1&types=34",
+				server.takeRequest(1, TimeUnit.MILLISECONDS)
+						.getRequestUrl()
+						.url()
+						.toString());
+
+		assertEquals(
+				"http://localhost:30150/aggregates/?station=1&types=35",
+				server.takeRequest(1, TimeUnit.MILLISECONDS)
+						.getRequestUrl()
+						.url()
+						.toString());
+
+		assertEquals(
+				"http://localhost:30150/aggregates/?station=1&types=36",
+				server.takeRequest(1, TimeUnit.MILLISECONDS)
+						.getRequestUrl()
+						.url()
+						.toString());
 
 		assertNull(server.takeRequest(1, TimeUnit.MILLISECONDS));
 	}

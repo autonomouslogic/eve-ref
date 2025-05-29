@@ -5,8 +5,13 @@ import com.autonomouslogic.everef.http.OkHttpWrapper;
 import com.autonomouslogic.everef.model.fuzzwork.FuzzworkAggregatedMarketType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.MapType;
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import java.net.URI;
+import java.time.Duration;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -29,6 +34,10 @@ public class FuzzworkMarketService {
 
 	private final URI basePath = Configs.FUZZWORK_MARKET_API_BASE_PATH.getRequired();
 	private final MapType responseType;
+	private final Cache<String, FuzzworkAggregatedMarketType> cache = CacheBuilder.newBuilder()
+			.expireAfterWrite(Duration.ofMinutes(5))
+			.softValues()
+			.build();
 
 	@Inject
 	protected FuzzworkMarketService(ObjectMapper objectMapper) {
@@ -39,6 +48,35 @@ public class FuzzworkMarketService {
 
 	@SneakyThrows
 	public Map<String, FuzzworkAggregatedMarketType> fetchAggregateStationPrices(
+			long stationId, @NonNull List<Long> typeIds) {
+		var result = new LinkedHashMap<String, FuzzworkAggregatedMarketType>();
+		var missingTypeIds = new ArrayList<Long>();
+		for (var typeId : typeIds) {
+			var cached = cache.getIfPresent(stationCacheKey(stationId, typeId));
+			if (cached != null) {
+				result.put(String.valueOf(typeId), cached);
+			} else {
+				missingTypeIds.add(typeId);
+			}
+		}
+		if (!missingTypeIds.isEmpty()) {
+			var response = _fetchAggregateStationPrices(stationId, missingTypeIds);
+			cacheAggregateStationPrices(stationId, response);
+			result.putAll(response);
+		}
+		return result;
+	}
+
+	@SneakyThrows
+	private void cacheAggregateStationPrices(long station, @NonNull Map<String, FuzzworkAggregatedMarketType> types) {
+		types.forEach((typeId, value) -> {
+			var key = stationCacheKey(station, typeId);
+			cache.put(key, value);
+		});
+	}
+
+	@SneakyThrows
+	private Map<String, FuzzworkAggregatedMarketType> _fetchAggregateStationPrices(
 			long station, @NonNull List<Long> typeIds) {
 		var url = basePath + "aggregates/?station=" + station + "&types="
 				+ typeIds.stream().map(String::valueOf).collect(Collectors.joining(","));
@@ -46,5 +84,13 @@ public class FuzzworkMarketService {
 		try (var in = response.body().byteStream()) {
 			return objectMapper.readValue(in, responseType);
 		}
+	}
+
+	private static String stationCacheKey(long stationId, String typeId) {
+		return String.format("%s-%s", stationId, typeId);
+	}
+
+	private static String stationCacheKey(long stationId, long typeId) {
+		return String.format("%s-%s", stationId, typeId);
 	}
 }
