@@ -65,7 +65,7 @@ public class FuzzworkMarketServiceTest {
 
 		var req = server.takeRequest(1, TimeUnit.MILLISECONDS);
 		assertEquals(
-				"http://localhost:30150/aggregates/?station=1&types=34,35,36",
+				"http://localhost:30150/aggregates/?station=1&types=34",
 				req.getRequestUrl().url().toString());
 
 		assertNull(server.takeRequest(1, TimeUnit.MILLISECONDS));
