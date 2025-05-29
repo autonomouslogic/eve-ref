@@ -2,7 +2,7 @@ package com.autonomouslogic.everef.service;
 
 import static com.autonomouslogic.everef.test.TestDataUtil.TEST_PORT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import com.autonomouslogic.everef.test.DaggerTestComponent;
 import java.math.BigDecimal;
@@ -12,6 +12,7 @@ import javax.inject.Inject;
 import lombok.SneakyThrows;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junitpioneer.jupiter.SetEnvironmentVariable;
@@ -33,40 +34,50 @@ public class FuzzworkMarketServiceTest {
 		server.start(TEST_PORT);
 	}
 
-	@Test
+	@AfterEach
 	@SneakyThrows
-	void shouldGetPrices() {
-		enqueueSuccess();
-		var response = marketService.fetchAggregateStationPrices(1, List.of(34L, 35L, 36L));
-		assertNotNull(response);
-		assertEquals(
-				new BigDecimal("6.60015441538"), response.get("34").getSell().getWeightedAverage());
-
-		var req = server.takeRequest(1, TimeUnit.MILLISECONDS);
-		assertEquals("http://localhost:30150/aggregates/?station=1&types=34,35,36", req.getRequestUrl().url().toString());
+	void teardown() {
+		server.shutdown();
 	}
 
 	@Test
 	@SneakyThrows
 	void shouldGetPrices() {
-		enqueueSuccess();
+		enqueueSuccess(34, new BigDecimal("6.6"));
 		var response = marketService.fetchAggregateStationPrices(1, List.of(34L, 35L, 36L));
-		assertNotNull(response);
-		assertEquals(
-				new BigDecimal("6.60015441538"), response.get("34").getSell().getWeightedAverage());
+		assertEquals(new BigDecimal("6.6"), response.get("34").getSell().getWeightedAverage());
 
 		var req = server.takeRequest(1, TimeUnit.MILLISECONDS);
-		assertEquals("http://localhost:30150/aggregates/?station=1&types=34,35,36", req.getRequestUrl().url().toString());
+		assertEquals(
+				"http://localhost:30150/aggregates/?station=1&types=34,35,36",
+				req.getRequestUrl().url().toString());
 	}
 
-	private void enqueueSuccess() {
-		server.enqueue(
-				new MockResponse()
-						.setResponseCode(200)
-						.setBody(
-								"""
+	@Test
+	@SneakyThrows
+	void shouldCachePrices() {
+		enqueueSuccess(34, new BigDecimal("6.6"));
+		enqueueSuccess(34, new BigDecimal("6.6"));
+		var response1 = marketService.fetchAggregateStationPrices(1, List.of(34L));
+		assertEquals(new BigDecimal("6.6"), response1.get("34").getSell().getWeightedAverage());
+		var response2 = marketService.fetchAggregateStationPrices(1, List.of(34L));
+		assertEquals(new BigDecimal("6.6"), response2.get("34").getSell().getWeightedAverage());
+
+		var req = server.takeRequest(1, TimeUnit.MILLISECONDS);
+		assertEquals(
+				"http://localhost:30150/aggregates/?station=1&types=34,35,36",
+				req.getRequestUrl().url().toString());
+
+		assertNull(server.takeRequest(1, TimeUnit.MILLISECONDS));
+	}
+
+	private void enqueueSuccess(long typeId, BigDecimal sellAverage) {
+		server.enqueue(new MockResponse()
+				.setResponseCode(200)
+				.setBody(String.format(
+						"""
 			{
-			"34": {
+			"%s": {
 				"buy": {
 				"weightedAverage": "4.02878502065",
 				"max": "5.95",
@@ -78,7 +89,7 @@ public class FuzzworkMarketServiceTest {
 				"percentile": "5.50168617928"
 			},
 			"sell": {
-				"weightedAverage": "6.60015441538",
+				"weightedAverage": "%s",
 				"max": "2201571.0",
 				"min": "5.01",
 				"stddev": "177420.733866",
@@ -88,6 +99,7 @@ public class FuzzworkMarketServiceTest {
 				"percentile": "5.92257900667"
 				}
 			}
-			}"""));
+			}""",
+						typeId, sellAverage)));
 	}
 }
