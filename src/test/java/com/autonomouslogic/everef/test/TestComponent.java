@@ -41,6 +41,7 @@ import com.autonomouslogic.everef.inject.JacksonModule;
 import com.autonomouslogic.everef.inject.RefDataApiModule;
 import com.autonomouslogic.everef.model.MarketHistoryEntryTest;
 import com.autonomouslogic.everef.mvstore.MVStoreTest;
+import com.autonomouslogic.everef.service.FuzzworkMarketServiceTest;
 import com.autonomouslogic.everef.url.UrlParserTest;
 import com.autonomouslogic.everef.util.RefDataUtilTest;
 import dagger.Component;
@@ -130,4 +131,6 @@ public interface TestComponent {
 	void inject(UrlParserTest test);
 
 	void inject(IndustryCostHandlerTest test);
+
+	void inject(FuzzworkMarketServiceTest test);
 }

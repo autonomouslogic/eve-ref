@@ -780,6 +780,12 @@ public class Configs {
 			.type(String.class)
 			.build();
 
+	public static final Config<URI> FUZZWORK_MARKET_API_BASE_PATH = Config.<URI>builder()
+			.name("FUZZWORK_MARKET_API_BASE_PATH")
+			.type(URI.class)
+			.defaultValue(URI.create("https://market.fuzzwork.co.uk/"))
+			.build();
+
 	@SneakyThrows
 	private static URL url(String url) {
 		return new URL(url);
