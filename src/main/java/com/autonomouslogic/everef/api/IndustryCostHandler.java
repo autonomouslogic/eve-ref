@@ -163,8 +163,28 @@ public class IndustryCostHandler implements HttpService, Handler {
 
 	private IndustryCostInput handleDefaults(IndustryCostInput input) {
 		var builder = input.toBuilder();
-		if (input.getSystemId() == null && input.getSecurity() == null) {
-			builder.security(SystemSecurity.HIGH_SEC);
+		if (input.getSystemId() == null) {
+			if (input.getSecurity() == null) {
+				builder.security(SystemSecurity.HIGH_SEC);
+			}
+			if (input.getManufacturingCost() == null) {
+				builder.manufacturingCost(BigDecimal.ZERO);
+			}
+			if (input.getResearchingTeCost() == null) {
+				builder.researchingTeCost(BigDecimal.ZERO);
+			}
+			if (input.getResearchingMeCost() == null) {
+				builder.researchingMeCost(BigDecimal.ZERO);
+			}
+			if (input.getCopyingCost() == null) {
+				builder.copyingCost(BigDecimal.ZERO);
+			}
+			if (input.getInventionCost() == null) {
+				builder.inventionCost(BigDecimal.ZERO);
+			}
+			if (input.getReactionCost() == null) {
+				builder.reactionCost(BigDecimal.ZERO);
+			}
 		}
 		return builder.build();
 	}
