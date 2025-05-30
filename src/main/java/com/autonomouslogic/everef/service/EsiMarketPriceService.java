@@ -71,7 +71,7 @@ public class EsiMarketPriceService {
 							Optional.ofNullable(price.getAveragePrice()).orElse(0.0));
 		}
 		esiMarketPricesEtag = res.getHeaders().get("ETag").getFirst();
-		log.info("Finished updating market prices");
+		log.debug("Finished updating market prices");
 	}
 
 	public OptionalDouble getEsiAdjustedPrice(long typeId) {

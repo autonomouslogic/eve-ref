@@ -16,6 +16,8 @@ import com.autonomouslogic.everef.openapi.esi.invoker.ApiException;
 import com.autonomouslogic.everef.openapi.esi.model.GetUniverseSystemsSystemIdOk;
 import com.autonomouslogic.everef.refdata.InventoryType;
 import com.autonomouslogic.everef.service.RefDataService;
+import com.autonomouslogic.everef.service.SystemCostIndexService;
+import com.autonomouslogic.everef.util.MathUtil;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.helidon.http.Status;
@@ -33,6 +35,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.inject.Inject;
 import jakarta.inject.Provider;
+import java.math.BigDecimal;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
@@ -75,6 +78,9 @@ public class IndustryCostHandler implements HttpService, Handler {
 
 	@Inject
 	protected UniverseEsi universeEsi;
+
+	@Inject
+	protected SystemCostIndexService systemCostIndexService;
 
 	private final ObjectMapper queryStringMapper;
 
@@ -305,6 +311,28 @@ public class IndustryCostHandler implements HttpService, Handler {
 		var builder = input.toBuilder();
 		if (input.getSecurity() == null) {
 			builder.security(SystemSecurity.forStatus(system.getSecurityStatus()));
+		}
+		var cost = systemCostIndexService.getSystem(systemId);
+		if (cost == null) {
+			throw new ClientException(String.format("System ID %d not found", systemId));
+		}
+		if (input.getManufacturingCost() == null) {
+			builder.manufacturingCost(MathUtil.round(BigDecimal.valueOf(cost.getManufacturing()), 4));
+		}
+		if (input.getResearchingTeCost() == null) {
+			builder.researchingTeCost(MathUtil.round(BigDecimal.valueOf(cost.getResearchingTimeEfficiency()), 4));
+		}
+		if (input.getResearchingMeCost() == null) {
+			builder.researchingMeCost(MathUtil.round(BigDecimal.valueOf(cost.getResearchingMaterialEfficiency()), 4));
+		}
+		if (input.getCopyingCost() == null) {
+			builder.copyingCost(MathUtil.round(BigDecimal.valueOf(cost.getCopying()), 4));
+		}
+		if (input.getInventionCost() == null) {
+			builder.inventionCost(MathUtil.round(BigDecimal.valueOf(cost.getInvention()), 4));
+		}
+		if (input.getReactionCost() == null) {
+			builder.reactionCost(MathUtil.round(BigDecimal.valueOf(cost.getReaction()), 4));
 		}
 		return builder.build();
 	}

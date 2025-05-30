@@ -75,64 +75,52 @@ public class IndustryCostInput {
 	SystemSecurity security;
 
 	@JsonProperty
-	@lombok.Builder.Default
 	@Schema(
 			description = "The manufacturing cost index of the system where the job is installed",
 			requiredMode = Schema.RequiredMode.NOT_REQUIRED,
-			defaultValue = "0",
 			minimum = "0",
 			maximum = "1")
-	BigDecimal manufacturingCost = BigDecimal.ZERO;
+	BigDecimal manufacturingCost;
 
 	@JsonProperty
-	@lombok.Builder.Default
 	@Schema(
 			description = "The researching time efficiency cost index of the system where the job is installed",
 			requiredMode = Schema.RequiredMode.NOT_REQUIRED,
-			defaultValue = "0",
 			minimum = "0",
 			maximum = "1")
-	BigDecimal researchingTeCost = BigDecimal.ZERO;
+	BigDecimal researchingTeCost;
 
 	@JsonProperty
-	@lombok.Builder.Default
 	@Schema(
 			description = "The researching material efficiency cost index of the system where the job is installed",
 			requiredMode = Schema.RequiredMode.NOT_REQUIRED,
-			defaultValue = "0",
 			minimum = "0",
 			maximum = "1")
-	BigDecimal researchingMeCost = BigDecimal.ZERO;
+	BigDecimal researchingMeCost;
 
 	@JsonProperty
-	@lombok.Builder.Default
 	@Schema(
 			description = "The copying cost index of the system where the job is installed",
 			requiredMode = Schema.RequiredMode.NOT_REQUIRED,
-			defaultValue = "0",
 			minimum = "0",
 			maximum = "1")
-	BigDecimal copyingCost = BigDecimal.ZERO;
+	BigDecimal copyingCost;
 
 	@JsonProperty
-	@lombok.Builder.Default
 	@Schema(
 			description = "The invention cost index of the system where the job is installed",
 			requiredMode = Schema.RequiredMode.NOT_REQUIRED,
-			defaultValue = "0",
 			minimum = "0",
 			maximum = "1")
-	BigDecimal inventionCost = BigDecimal.ZERO;
+	BigDecimal inventionCost;
 
 	@JsonProperty
-	@lombok.Builder.Default
 	@Schema(
 			description = "The reaction cost index of the system where the job is installed",
 			requiredMode = Schema.RequiredMode.NOT_REQUIRED,
-			defaultValue = "0",
 			minimum = "0",
 			maximum = "1")
-	BigDecimal reactionCost = BigDecimal.ZERO;
+	BigDecimal reactionCost;
 
 	@JsonProperty
 	@lombok.Builder.Default

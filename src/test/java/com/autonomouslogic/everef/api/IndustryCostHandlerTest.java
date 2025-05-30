@@ -23,6 +23,7 @@ import com.autonomouslogic.everef.openapi.api.invoker.ApiException;
 import com.autonomouslogic.everef.openapi.esi.model.GetMarketsPrices200Ok;
 import com.autonomouslogic.everef.service.EsiMarketPriceService;
 import com.autonomouslogic.everef.service.RefDataService;
+import com.autonomouslogic.everef.service.SystemCostIndexService;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.test.TestDataUtil;
 import com.autonomouslogic.everef.util.MockScrapeBuilder;
@@ -113,6 +114,9 @@ public class IndustryCostHandlerTest {
 	@Inject
 	EsiMarketPriceService esiMarketPriceService;
 
+	@Inject
+	SystemCostIndexService systemCostIndexService;
+
 	IndustryApi industryApi;
 	MockWebServer server;
 	File refDataFile;
@@ -136,6 +140,7 @@ public class IndustryCostHandlerTest {
 				new ApiClient().setScheme("http").setHost("localhost").setPort(8080));
 
 		refDataService.init();
+		systemCostIndexService.init();
 
 		httpClient = HttpClient.newHttpClient();
 	}
@@ -308,7 +313,7 @@ public class IndustryCostHandlerTest {
 
 	@Test
 	@SneakyThrows
-	void shouldResolveSystem() {
+	void shouldResolveSystemSecurityAndCost() {
 		setupBasicPrices();
 		var input =
 				IndustryCostInput.builder().productId(645).systemId(30004839).build();
@@ -316,12 +321,12 @@ public class IndustryCostHandlerTest {
 
 		assertEquals(30004839, cost.getInput().getSystemId());
 		assertEquals(NULL_SEC, cost.getInput().getSecurity());
-		assertEquals(BigDecimal.valueOf(0), cost.getInput().getManufacturingCost());
-		assertEquals(BigDecimal.valueOf(0), cost.getInput().getResearchingTeCost());
-		assertEquals(BigDecimal.valueOf(0), cost.getInput().getResearchingMeCost());
-		assertEquals(BigDecimal.valueOf(0), cost.getInput().getCopyingCost());
-		assertEquals(BigDecimal.valueOf(0), cost.getInput().getInventionCost());
-		assertEquals(BigDecimal.valueOf(0), cost.getInput().getReactionCost());
+		assertEquals(BigDecimal.valueOf(0.0131), cost.getInput().getManufacturingCost());
+		assertEquals(BigDecimal.valueOf(0.0142), cost.getInput().getResearchingTeCost());
+		assertEquals(BigDecimal.valueOf(0.0044), cost.getInput().getResearchingMeCost());
+		assertEquals(BigDecimal.valueOf(0.0055), cost.getInput().getCopyingCost());
+		assertEquals(BigDecimal.valueOf(0.0324), cost.getInput().getInventionCost());
+		assertEquals(BigDecimal.valueOf(0.0014), cost.getInput().getReactionCost());
 
 		var product = cost.getManufacturing().get("645");
 		assertNotEquals(BigDecimal.ZERO, product.getSystemCostIndex());
@@ -397,6 +402,41 @@ public class IndustryCostHandlerTest {
 						return new MockResponse()
 								.setResponseCode(200)
 								.setBody("{\"security_status\": -0.22037343680858612}");
+					case "/industry/systems/":
+						return new MockResponse()
+								.setResponseCode(200)
+								.setHeader("ETag", "test")
+								.setBody(
+										"""
+									[{
+										"cost_indices": [
+										{
+											"activity": "manufacturing",
+											"cost_index": 0.0131
+										},
+										{
+											"activity": "researching_time_efficiency",
+											"cost_index": 0.0142
+										},
+										{
+											"activity": "researching_material_efficiency",
+											"cost_index": 0.0044
+										},
+										{
+											"activity": "copying",
+											"cost_index": 0.0055
+										},
+										{
+											"activity": "invention",
+											"cost_index": 0.0324
+										},
+										{
+											"activity": "reaction",
+											"cost_index": 0.0014
+										}
+										],
+										"solar_system_id": 30004839
+									}]""");
 				}
 				if (path.startsWith("/fuzzwork/aggregates/")) {
 					return new MockResponse().setResponseCode(200).setBody(fuzzworkPrices);

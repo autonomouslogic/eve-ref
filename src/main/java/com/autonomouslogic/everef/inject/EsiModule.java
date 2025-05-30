@@ -4,6 +4,7 @@ import static com.autonomouslogic.everef.config.Configs.ESI_BASE_URL;
 
 import com.autonomouslogic.everef.openapi.esi.api.CharacterApi;
 import com.autonomouslogic.everef.openapi.esi.api.CorporationApi;
+import com.autonomouslogic.everef.openapi.esi.api.IndustryApi;
 import com.autonomouslogic.everef.openapi.esi.api.MarketApi;
 import com.autonomouslogic.everef.openapi.esi.api.SovereigntyApi;
 import com.autonomouslogic.everef.openapi.esi.api.UniverseApi;
@@ -58,5 +59,11 @@ public class EsiModule {
 	@Singleton
 	public CorporationApi corporationApi(ApiClient apiClient) {
 		return new CorporationApi(apiClient);
+	}
+
+	@Provides
+	@Singleton
+	public IndustryApi industryApi(ApiClient apiClient) {
+		return new IndustryApi(apiClient);
 	}
 }
