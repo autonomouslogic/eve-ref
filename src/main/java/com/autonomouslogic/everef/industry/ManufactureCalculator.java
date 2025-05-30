@@ -11,7 +11,7 @@ import com.autonomouslogic.everef.model.api.MaterialCost;
 import com.autonomouslogic.everef.refdata.Blueprint;
 import com.autonomouslogic.everef.refdata.BlueprintActivity;
 import com.autonomouslogic.everef.refdata.InventoryType;
-import com.autonomouslogic.everef.service.MarketPriceService;
+import com.autonomouslogic.everef.service.EsiMarketPriceService;
 import com.autonomouslogic.everef.service.RefDataService;
 import com.autonomouslogic.everef.util.MathUtil;
 import java.math.BigDecimal;
@@ -26,7 +26,7 @@ import lombok.Setter;
 
 public class ManufactureCalculator {
 	@Inject
-	protected MarketPriceService marketPriceService;
+	protected EsiMarketPriceService esiMarketPriceService;
 
 	@Inject
 	protected IndustryMath industryMath;
@@ -162,7 +162,8 @@ public class ManufactureCalculator {
 	}
 
 	private Map<String, MaterialCost> manufacturingMaterials(BlueprintActivity manufacturing) {
-		return industryMath.materials(manufacturing, this::manufacturingMaterialQuantity);
+		return industryMath.materials(
+				manufacturing, this::manufacturingMaterialQuantity, industryCostInput.getMaterialPrices());
 	}
 
 	private long manufacturingMaterialQuantity(long base) {

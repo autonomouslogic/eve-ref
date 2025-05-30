@@ -6,9 +6,11 @@ import com.autonomouslogic.everef.model.IndustryRig;
 import com.autonomouslogic.everef.model.IndustryStructure;
 import com.autonomouslogic.everef.model.api.IndustryCostInput;
 import com.autonomouslogic.everef.model.api.MaterialCost;
+import com.autonomouslogic.everef.model.api.PriceSource;
 import com.autonomouslogic.everef.model.api.SecurityClass;
 import com.autonomouslogic.everef.refdata.BlueprintActivity;
 import com.autonomouslogic.everef.refdata.InventoryType;
+import com.autonomouslogic.everef.service.EsiMarketPriceService;
 import com.autonomouslogic.everef.service.MarketPriceService;
 import com.autonomouslogic.everef.util.MathUtil;
 import java.math.BigDecimal;
@@ -22,6 +24,9 @@ import javax.inject.Singleton;
 
 @Singleton
 public class IndustryMath {
+	@Inject
+	protected EsiMarketPriceService esiMarketPriceService;
+
 	@Inject
 	protected MarketPriceService marketPriceService;
 
@@ -37,7 +42,7 @@ public class IndustryMath {
 	public BigDecimal eiv(BlueprintActivity activity, int runs) {
 		var eiv = BigDecimal.ZERO;
 		for (var material : activity.getMaterials().values()) {
-			var adjPrice = marketPriceService.getEsiAdjustedPrice(material.getTypeId());
+			var adjPrice = esiMarketPriceService.getEsiAdjustedPrice(material.getTypeId());
 			if (adjPrice.isEmpty()) {
 				throw new RuntimeException("typeId: " + material.getTypeId());
 			}
@@ -63,28 +68,18 @@ public class IndustryMath {
 		return cost;
 	}
 
-	public Map<String, MaterialCost> materials(BlueprintActivity activity, Function<Long, Long> quantityMod) {
+	public Map<String, MaterialCost> materials(
+			BlueprintActivity activity, Function<Long, Long> quantityMod, PriceSource priceSource) {
 		var materials = new LinkedHashMap<String, MaterialCost>();
 		for (var material : activity.getMaterials().values()) {
 			long typeId = material.getTypeId();
 			var quantity = quantityMod.apply(material.getQuantity());
-			var costPerUnit = materialCostPerUnit(typeId);
-			var cost = materialCost(costPerUnit, quantity);
 			materials.put(
 					String.valueOf(typeId),
-					MaterialCost.builder()
-							.typeId(typeId)
-							.quantity(quantity)
-							.costPerUnit(costPerUnit)
-							.cost(cost)
-							.build());
+					MaterialCost.builder().typeId(typeId).quantity(quantity).build());
 		}
-		return materials;
-	}
-
-	public BigDecimal materialCostPerUnit(long typeId) {
-		return MathUtil.round(
-				BigDecimal.valueOf(marketPriceService.getEsiAveragePrice(typeId).orElse(0)), 2);
+		var materialsWithCost = marketPriceService.materialCosts(materials, priceSource);
+		return materialsWithCost;
 	}
 
 	public BigDecimal materialCost(BigDecimal price, long quantity) {

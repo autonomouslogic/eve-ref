@@ -14,6 +14,7 @@ import com.autonomouslogic.everef.model.api.MaterialCost;
 import com.autonomouslogic.everef.refdata.Blueprint;
 import com.autonomouslogic.everef.refdata.BlueprintActivity;
 import com.autonomouslogic.everef.refdata.InventoryType;
+import com.autonomouslogic.everef.service.MarketPriceService;
 import com.autonomouslogic.everef.service.RefDataService;
 import com.autonomouslogic.everef.util.MathUtil;
 import com.autonomouslogic.everef.util.StreamUtil;
@@ -43,6 +44,9 @@ public class InventionCalculator {
 
 	@Inject
 	protected IndustryDecryptors industryDecryptors;
+
+	@Inject
+	protected MarketPriceService marketPriceService;
 
 	private final LoadedRefData refData;
 
@@ -167,19 +171,22 @@ public class InventionCalculator {
 	}
 
 	public Map<String, MaterialCost> inventionMaterials(BlueprintActivity invention) {
-		var materials = industryMath.materials(invention, this::inventionMaterialQuantity);
+		var materials = industryMath.materials(
+				invention, this::inventionMaterialQuantity, industryCostInput.getMaterialPrices());
 		if (decryptor != null) {
-			var costPerUnit = industryMath.materialCostPerUnit(decryptor.getTypeId());
+			//			var costPerUnit =
+			//					industryMath.materialCostPerUnit(decryptor.getTypeId(), industryCostInput.getMaterialPrices());
 			materials.put(
 					String.valueOf(decryptor.getTypeId()),
 					MaterialCost.builder()
 							.typeId(decryptor.getTypeId())
 							.quantity(runs)
-							.costPerUnit(costPerUnit)
-							.cost(industryMath.materialCost(costPerUnit, runs))
+							//							.costPerUnit(costPerUnit)
+							//							.cost(industryMath.materialCost(costPerUnit, runs))
 							.build());
 		}
-		return materials;
+		var materialsWithCost = marketPriceService.materialCosts(materials, industryCostInput.getMaterialPrices());
+		return materialsWithCost;
 	}
 
 	private Duration inventionTime(BlueprintActivity invention) {
