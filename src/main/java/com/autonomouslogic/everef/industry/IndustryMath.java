@@ -6,9 +6,11 @@ import com.autonomouslogic.everef.model.IndustryRig;
 import com.autonomouslogic.everef.model.IndustryStructure;
 import com.autonomouslogic.everef.model.api.IndustryCostInput;
 import com.autonomouslogic.everef.model.api.MaterialCost;
+import com.autonomouslogic.everef.model.api.PriceSource;
 import com.autonomouslogic.everef.model.api.SecurityClass;
 import com.autonomouslogic.everef.refdata.BlueprintActivity;
 import com.autonomouslogic.everef.refdata.InventoryType;
+import com.autonomouslogic.everef.service.FuzzworkMarketService;
 import com.autonomouslogic.everef.service.MarketPriceService;
 import com.autonomouslogic.everef.util.MathUtil;
 import java.math.BigDecimal;
@@ -19,11 +21,15 @@ import java.util.Optional;
 import java.util.function.Function;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import lombok.NonNull;
 
 @Singleton
 public class IndustryMath {
 	@Inject
 	protected MarketPriceService marketPriceService;
+
+	@Inject
+	protected FuzzworkMarketService fuzzworkMarketService;
 
 	@Inject
 	protected IndustryStructures industryStructures;
@@ -63,12 +69,13 @@ public class IndustryMath {
 		return cost;
 	}
 
-	public Map<String, MaterialCost> materials(BlueprintActivity activity, Function<Long, Long> quantityMod) {
+	public Map<String, MaterialCost> materials(
+			BlueprintActivity activity, Function<Long, Long> quantityMod, PriceSource priceSource) {
 		var materials = new LinkedHashMap<String, MaterialCost>();
 		for (var material : activity.getMaterials().values()) {
 			long typeId = material.getTypeId();
 			var quantity = quantityMod.apply(material.getQuantity());
-			var costPerUnit = materialCostPerUnit(typeId);
+			var costPerUnit = materialCostPerUnit(typeId, priceSource);
 			var cost = materialCost(costPerUnit, quantity);
 			materials.put(
 					String.valueOf(typeId),
@@ -82,9 +89,30 @@ public class IndustryMath {
 		return materials;
 	}
 
-	public BigDecimal materialCostPerUnit(long typeId) {
-		return MathUtil.round(
-				BigDecimal.valueOf(marketPriceService.getEsiAveragePrice(typeId).orElse(0)), 2);
+	public BigDecimal materialCostPerUnit(long typeId, @NonNull PriceSource priceSource) {
+		if (priceSource.isEsi()) {
+			return MathUtil.round(
+					BigDecimal.valueOf(
+							marketPriceService.getEsiAveragePrice(typeId).orElse(0)),
+					2);
+		} else if (priceSource.isFuzzwork()) {
+			var prices = fuzzworkMarketService.fetchAggregateStationPrices(priceSource.getStationId(), List.of(typeId));
+			return Optional.ofNullable(prices.get(String.valueOf(typeId)))
+					.flatMap(p -> switch (priceSource) {
+						case FUZZWORK_JITA_BUY_AVG, FUZZWORK_JITA_BUY_MAX -> Optional.ofNullable(p.getBuy());
+						case FUZZWORK_JITA_SELL_AVG, FUZZWORK_JITA_SELL_MIN -> Optional.ofNullable(p.getSell());
+						default -> throw new RuntimeException(String.format("Unknown price source: %s", priceSource));
+					})
+					.flatMap(p -> switch (priceSource) {
+						case FUZZWORK_JITA_BUY_AVG, FUZZWORK_JITA_SELL_AVG ->
+							Optional.ofNullable(p.getWeightedAverage());
+						case FUZZWORK_JITA_BUY_MAX -> Optional.ofNullable(p.getMax());
+						case FUZZWORK_JITA_SELL_MIN -> Optional.ofNullable(p.getMin());
+						default -> throw new RuntimeException(String.format("Unknown price source: %s", priceSource));
+					})
+					.orElse(BigDecimal.ZERO);
+		}
+		throw new RuntimeException(String.format("Unknown price source: %s", priceSource));
 	}
 
 	public BigDecimal materialCost(BigDecimal price, long quantity) {

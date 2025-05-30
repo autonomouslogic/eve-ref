@@ -167,9 +167,11 @@ public class InventionCalculator {
 	}
 
 	public Map<String, MaterialCost> inventionMaterials(BlueprintActivity invention) {
-		var materials = industryMath.materials(invention, this::inventionMaterialQuantity);
+		var materials = industryMath.materials(
+				invention, this::inventionMaterialQuantity, industryCostInput.getMaterialPrices());
 		if (decryptor != null) {
-			var costPerUnit = industryMath.materialCostPerUnit(decryptor.getTypeId());
+			var costPerUnit =
+					industryMath.materialCostPerUnit(decryptor.getTypeId(), industryCostInput.getMaterialPrices());
 			materials.put(
 					String.valueOf(decryptor.getTypeId()),
 					MaterialCost.builder()

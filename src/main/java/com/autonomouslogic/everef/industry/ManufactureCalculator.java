@@ -162,7 +162,8 @@ public class ManufactureCalculator {
 	}
 
 	private Map<String, MaterialCost> manufacturingMaterials(BlueprintActivity manufacturing) {
-		return industryMath.materials(manufacturing, this::manufacturingMaterialQuantity);
+		return industryMath.materials(
+				manufacturing, this::manufacturingMaterialQuantity, industryCostInput.getMaterialPrices());
 	}
 
 	private long manufacturingMaterialQuantity(long base) {
