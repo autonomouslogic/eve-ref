@@ -3,7 +3,7 @@ package com.autonomouslogic.everef.industry;
 import static com.autonomouslogic.everef.cli.ImportIndustryResources.RIGS_CONFIG;
 
 import com.autonomouslogic.everef.model.IndustryRig;
-import com.autonomouslogic.everef.model.api.SecurityClass;
+import com.autonomouslogic.everef.model.api.SystemSecurity;
 import com.autonomouslogic.everef.refdata.InventoryType;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import java.util.List;
@@ -23,13 +23,13 @@ public class IndustryRigs extends AbstractIndustryService<IndustryRig> {
 	public double rigModifier(
 			List<IndustryRig> rigs,
 			InventoryType productType,
-			SecurityClass securityClass,
+			SystemSecurity systemSecurity,
 			Function<IndustryRig, Double> bonusGetter,
 			String activity) {
 		var bonus = 0.0;
 		if (rigs != null) {
 			for (var rig : rigs) {
-				bonus += rigBonus(rig, productType, securityClass, bonusGetter, activity);
+				bonus += rigBonus(rig, productType, systemSecurity, bonusGetter, activity);
 			}
 		}
 		return 1.0 + bonus;
@@ -38,12 +38,12 @@ public class IndustryRigs extends AbstractIndustryService<IndustryRig> {
 	public double rigBonus(
 			IndustryRig rig,
 			InventoryType productType,
-			SecurityClass securityClass,
+			SystemSecurity systemSecurity,
 			Function<IndustryRig, Double> bonusGetter,
 			String activity) {
 		var globalActivities = rig.getGlobalActivities();
 		if (globalActivities != null && globalActivities.contains(activity)) {
-			return bonusGetter.apply(rig) * getRigSecurityModifier(rig, securityClass);
+			return bonusGetter.apply(rig) * getRigSecurityModifier(rig, systemSecurity);
 		}
 
 		var categories = rig.getManufacturingCategories();
@@ -51,24 +51,24 @@ public class IndustryRigs extends AbstractIndustryService<IndustryRig> {
 		var category = productType.getCategoryId();
 		var group = productType.getGroupId();
 		if ((categories != null && categories.contains(category)) || (groups != null && groups.contains(group))) {
-			return bonusGetter.apply(rig) * getRigSecurityModifier(rig, securityClass);
+			return bonusGetter.apply(rig) * getRigSecurityModifier(rig, systemSecurity);
 		}
 
 		return 0.0;
 	}
 
-	public double getRigSecurityModifier(IndustryRig rig, SecurityClass securityClass) {
+	public double getRigSecurityModifier(IndustryRig rig, SystemSecurity systemSecurity) {
 		if (rig == null) {
 			return 1.0;
 		}
-		if (securityClass == null) {
+		if (systemSecurity == null) {
 			return 1.0;
 		}
-		return switch (securityClass) {
+		return switch (systemSecurity) {
 			case HIGH_SEC -> rig.getHighSecMod();
 			case LOW_SEC -> rig.getLowSecMod();
-			case NULL_SEC, WORMHOLE -> rig.getNullSecMod();
-			default -> throw new RuntimeException("Unknown security: " + securityClass);
+			case NULL_SEC -> rig.getNullSecMod();
+			default -> throw new RuntimeException("Unknown security: " + systemSecurity);
 		};
 	}
 }

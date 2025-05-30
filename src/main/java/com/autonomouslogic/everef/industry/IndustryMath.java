@@ -7,7 +7,7 @@ import com.autonomouslogic.everef.model.IndustryStructure;
 import com.autonomouslogic.everef.model.api.IndustryCostInput;
 import com.autonomouslogic.everef.model.api.MaterialCost;
 import com.autonomouslogic.everef.model.api.PriceSource;
-import com.autonomouslogic.everef.model.api.SecurityClass;
+import com.autonomouslogic.everef.model.api.SystemSecurity;
 import com.autonomouslogic.everef.refdata.BlueprintActivity;
 import com.autonomouslogic.everef.refdata.InventoryType;
 import com.autonomouslogic.everef.service.EsiMarketPriceService;
@@ -94,12 +94,12 @@ public class IndustryMath {
 			IndustryStructure structure,
 			InventoryType productType,
 			List<IndustryRig> rigs,
-			SecurityClass securityClass,
+			SystemSecurity systemSecurity,
 			BigDecimal systemCostBonus,
 			BigDecimal systemCostIndex,
 			String activity) {
 		var structureMod = industryStructures.structureCostModifier(structure);
-		var rigMod = industryRigs.rigModifier(rigs, productType, securityClass, IndustryRig::getCostBonus, activity);
+		var rigMod = industryRigs.rigModifier(rigs, productType, systemSecurity, IndustryRig::getCostBonus, activity);
 		var costMod = 1.0
 				+ Optional.ofNullable(systemCostBonus).orElse(BigDecimal.ZERO).doubleValue();
 		var mod = structureMod * rigMod * costMod;

@@ -57,20 +57,22 @@ public class IndustryCostInput {
 			maximum = "20")
 	Integer te;
 
+	private static final String highSecIsAssumed = "If neither security nor system is supplied, high sec is assumed";
+
 	@JsonProperty
 	@Schema(
 			description =
-					"The ID of the system where the job is installed. This will resolve security class and cost indices",
+					"The ID of the system where the job is installed. This will resolve security class and cost indices. "
+							+ highSecIsAssumed,
 			requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-	Long systemId;
+	Integer systemId;
 
 	@JsonProperty
 	@lombok.Builder.Default
 	@Schema(
-			description = "The security class of the system where the job is installed",
-			requiredMode = Schema.RequiredMode.NOT_REQUIRED,
-			defaultValue = "HIGH_SEC")
-	SecurityClass security = SecurityClass.HIGH_SEC;
+			description = "The security class of the system where the job is installed. " + highSecIsAssumed,
+			requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+	SystemSecurity security;
 
 	@JsonProperty
 	@lombok.Builder.Default

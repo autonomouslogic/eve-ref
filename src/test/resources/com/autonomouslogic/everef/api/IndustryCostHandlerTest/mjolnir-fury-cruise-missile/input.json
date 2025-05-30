@@ -1,5 +1,6 @@
 {
   "product_id": 24535,
+  "security" : "HIGH_SEC",
   "runs": 10,
   "me": 2,
   "te": 4,

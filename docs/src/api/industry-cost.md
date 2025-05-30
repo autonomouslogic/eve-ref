@@ -324,3 +324,4 @@ The API has been tested on my local machine to do over 6,000 req/s at 16 ms per 
 * [https://wiki.eveuniversity.org/Manufacturing](https://wiki.eveuniversity.org/Manufacturing)
 * [https://wiki.eveuniversity.org/Invention](https://wiki.eveuniversity.org/Invention)
 * [https://wiki.eveuniversity.org/Reactions](https://wiki.eveuniversity.org/Reactions)
+* [https://eve-industry.org/export/CCP_ROUND.pdf](https://eve-industry.org/export/CCP_ROUND.pdf)

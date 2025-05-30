@@ -1,5 +1,6 @@
 {
   "product_id": 24536,
+  "security" : "HIGH_SEC",
   "runs": 45,
   "decryptor_id": 34207,
   "manufacturing_cost":  0.0718,

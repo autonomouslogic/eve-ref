@@ -396,13 +396,12 @@ components:
           minimum: 0
         security:
           type: string
-          default: HIGH_SEC
-          description: The security class of the system where the job is installed
+          description: "The security class of the system where the job is installed.\
+            \ If neither security nor system is supplied, high sec is assumed"
           enum:
           - HIGH_SEC
           - LOW_SEC
           - NULL_SEC
-          - WORMHOLE
         sleeper_encryption_methods:
           type: integer
           format: int32
@@ -425,9 +424,10 @@ components:
           minimum: 0
         system_id:
           type: integer
-          format: int64
-          description: The ID of the system where the job is installed. This will
-            resolve security class and cost indices
+          format: int32
+          description: "The ID of the system where the job is installed. This will\
+            \ resolve security class and cost indices. If neither security nor system\
+            \ is supplied, high sec is assumed"
         te:
           type: integer
           format: int32
