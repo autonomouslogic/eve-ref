@@ -59,6 +59,12 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.junitpioneer.jupiter.SetEnvironmentVariable;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+/**
+ * Full test of all products against the API:
+ * <code>
+ * cat blueprints.json | jq '.[].activities | [.manufacturing, .invention][].products | select(. != null) | .[].type_id' | sort -n | xargs -I{} curl -s -o /dev/null -w "%{http_code} %{url.query}\n" "https://api.everef.net/v1/industry/cost?product_id={}"
+ * </code>
+ */
 @ExtendWith(MockitoExtension.class)
 @SetEnvironmentVariable(key = "DATA_BASE_URL", value = "http://localhost:" + TEST_PORT)
 @SetEnvironmentVariable(key = "REFERENCE_DATA_PATH", value = "s3://" + PublishRefDataTest.BUCKET_NAME + "/base/")
