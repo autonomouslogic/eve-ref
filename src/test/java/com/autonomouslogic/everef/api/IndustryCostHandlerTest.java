@@ -12,7 +12,7 @@ import com.autonomouslogic.everef.model.api.IndustryCostInput;
 import com.autonomouslogic.everef.openapi.api.api.IndustryApi;
 import com.autonomouslogic.everef.openapi.api.invoker.ApiClient;
 import com.autonomouslogic.everef.openapi.esi.model.GetMarketsPrices200Ok;
-import com.autonomouslogic.everef.service.MarketPriceService;
+import com.autonomouslogic.everef.service.EsiMarketPriceService;
 import com.autonomouslogic.everef.service.RefDataService;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.test.TestDataUtil;
@@ -94,7 +94,7 @@ public class IndustryCostHandlerTest {
 	RefDataService refDataService;
 
 	@Inject
-	MarketPriceService marketPriceService;
+	EsiMarketPriceService esiMarketPriceService;
 
 	IndustryApi industryApi;
 	MockWebServer server;
@@ -127,7 +127,7 @@ public class IndustryCostHandlerTest {
 	void teardown() {
 		apiRunner.stop();
 		refDataService.stop();
-		marketPriceService.stop();
+		esiMarketPriceService.stop();
 		server.shutdown();
 	}
 
@@ -136,7 +136,7 @@ public class IndustryCostHandlerTest {
 	@SneakyThrows
 	void shouldCalculateCosts(String name, IndustryCostInput input, IndustryCost expected, String esiMarketPrices) {
 		this.esiMarketPrices = esiMarketPrices;
-		marketPriceService.init();
+		esiMarketPriceService.init();
 
 		var res = industryApi.industryCostWithHttpInfo(input);
 		assertEquals(200, res.getStatusCode());
@@ -275,7 +275,7 @@ public class IndustryCostHandlerTest {
 			prices.add(new GetMarketsPrices200Ok().typeId(i).averagePrice(1.0).adjustedPrice(1.0));
 		}
 		esiMarketPrices = objectMapper.writeValueAsString(prices);
-		marketPriceService.init();
+		esiMarketPriceService.init();
 	}
 
 	class TestDispatcher extends Dispatcher {
