@@ -250,10 +250,10 @@ components:
           description: Where to get material prices from
           enum:
           - ESI_AVG
-          - FUZZWORK_SELL_MIN
-          - FUZZWORK_SELL_AVG
-          - FUZZWORK_BUY_MAX
-          - FUZZWORK_BUY_AVG
+          - FUZZWORK_JITA_SELL_MIN
+          - FUZZWORK_JITA_SELL_AVG
+          - FUZZWORK_JITA_BUY_MAX
+          - FUZZWORK_JITA_BUY_AVG
         me:
           type: integer
           format: int32

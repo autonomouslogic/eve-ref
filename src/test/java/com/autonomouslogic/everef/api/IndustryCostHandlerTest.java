@@ -9,6 +9,9 @@ import com.autonomouslogic.everef.cli.api.ApiRunner;
 import com.autonomouslogic.everef.cli.publishrefdata.PublishRefDataTest;
 import com.autonomouslogic.everef.model.api.IndustryCost;
 import com.autonomouslogic.everef.model.api.IndustryCostInput;
+import com.autonomouslogic.everef.model.api.PriceSource;
+import com.autonomouslogic.everef.model.fuzzwork.FuzzworkAggregatedMarketSegment;
+import com.autonomouslogic.everef.model.fuzzwork.FuzzworkAggregatedMarketType;
 import com.autonomouslogic.everef.openapi.api.api.IndustryApi;
 import com.autonomouslogic.everef.openapi.api.invoker.ApiClient;
 import com.autonomouslogic.everef.openapi.esi.model.GetMarketsPrices200Ok;
@@ -35,6 +38,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Stream;
 import javax.inject.Inject;
@@ -64,6 +68,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @SetEnvironmentVariable(key = "REFERENCE_DATA_PATH", value = "s3://" + PublishRefDataTest.BUCKET_NAME + "/base/")
 @SetEnvironmentVariable(key = "ESI_USER_AGENT", value = "user-agent")
 @SetEnvironmentVariable(key = "ESI_BASE_URL", value = "http://localhost:" + TestDataUtil.TEST_PORT)
+@SetEnvironmentVariable(key = "FUZZWORK_MARKET_BASE_PATH", value = "http://localhost:" + TEST_PORT + "/fuzzwork/")
 @Log4j2
 @Timeout(60)
 public class IndustryCostHandlerTest {
@@ -101,6 +106,7 @@ public class IndustryCostHandlerTest {
 	File refDataFile;
 	String esiMarketPrices;
 	HttpClient httpClient;
+	String fuzzworkPrices;
 
 	@BeforeEach
 	@SneakyThrows
@@ -184,7 +190,7 @@ public class IndustryCostHandlerTest {
 	@Test
 	@SneakyThrows
 	void shouldNotFailOnBlankParameters() {
-		setupBasicEsiPrices();
+		setupBasicPrices();
 
 		var query = new ArrayList<String>();
 		for (var field : IndustryCostInput.class.getDeclaredFields()) {
@@ -212,7 +218,7 @@ public class IndustryCostHandlerTest {
 	@Test
 	@SneakyThrows
 	void shouldDefaultEfficienciesForT1Products() {
-		setupBasicEsiPrices();
+		setupBasicPrices();
 		var input = IndustryCostInput.builder().productId(645).build();
 		assertNull(input.getMe());
 		assertNull(input.getTe());
@@ -226,7 +232,7 @@ public class IndustryCostHandlerTest {
 	@ValueSource(strings = {"", "34202"})
 	@SneakyThrows
 	void shouldUseInventionEfficienciesForT2Products(String decryptorId) {
-		setupBasicEsiPrices();
+		setupBasicPrices();
 		var builder = IndustryCostInput.builder().productId(22430);
 		if (!decryptorId.isEmpty()) {
 			builder.decryptorId(Long.valueOf(decryptorId));
@@ -253,7 +259,7 @@ public class IndustryCostHandlerTest {
 	@Test
 	@SneakyThrows
 	void shouldUseSuppliedEfficienciesForT2Products() {
-		setupBasicEsiPrices();
+		setupBasicPrices();
 		var input = IndustryCostInput.builder().productId(22430).me(0).te(0).build();
 		var cost = industryApi.industryCost(input);
 
@@ -266,16 +272,55 @@ public class IndustryCostHandlerTest {
 		assertEquals(0, manufacturing.getTe());
 	}
 
+	@ParameterizedTest
+	@MethodSource("fuzzworkTests")
+	@SneakyThrows
+	void shouldLookupPricesViaFuzzwork(PriceSource source, int expected) {
+		setupBasicPrices();
+		var input = IndustryCostInput.builder()
+				.productId(645)
+				.materialPrices(source)
+				.build();
+		var cost = industryApi.industryCost(input);
+		var price = cost.getManufacturing().get("645").getMaterials().get("34").getCostPerUnit();
+		assertEquals(BigDecimal.valueOf(expected), price);
+	}
+
+	public static Stream<Arguments> fuzzworkTests() {
+		return Stream.of(
+				Arguments.of(PriceSource.FUZZWORK_JITA_SELL_AVG, 10),
+				Arguments.of(PriceSource.FUZZWORK_JITA_SELL_MIN, 11),
+				Arguments.of(PriceSource.FUZZWORK_JITA_BUY_AVG, 20),
+				Arguments.of(PriceSource.FUZZWORK_JITA_BUY_MAX, 21));
+	}
+
 	// ===========
 
 	@SneakyThrows
-	void setupBasicEsiPrices() {
-		var prices = new ArrayList<>();
+	void setupBasicPrices() {
+		var esiPrices = new ArrayList<>();
+		var fuzzworkPrices = new HashMap<String, FuzzworkAggregatedMarketType>();
 		for (int i = 0; i < 100_000; i++) {
-			prices.add(new GetMarketsPrices200Ok().typeId(i).averagePrice(1.0).adjustedPrice(1.0));
+			esiPrices.add(
+					new GetMarketsPrices200Ok().typeId(i).averagePrice(1.0).adjustedPrice(1.0));
+			fuzzworkPrices.put(
+					String.valueOf(i),
+					FuzzworkAggregatedMarketType.builder()
+							.sell(FuzzworkAggregatedMarketSegment.builder()
+									.weightedAverage(BigDecimal.valueOf(10))
+									.min(BigDecimal.valueOf(11))
+									.build())
+							.buy(FuzzworkAggregatedMarketSegment.builder()
+									.weightedAverage(BigDecimal.valueOf(20))
+									.max(BigDecimal.valueOf(21))
+									.build())
+							.build());
 		}
-		esiMarketPrices = objectMapper.writeValueAsString(prices);
+
+		esiMarketPrices = objectMapper.writeValueAsString(esiPrices);
 		esiMarketPriceService.init();
+
+		this.fuzzworkPrices = objectMapper.writeValueAsString(fuzzworkPrices);
 	}
 
 	class TestDispatcher extends Dispatcher {
@@ -295,6 +340,9 @@ public class IndustryCostHandlerTest {
 								.setResponseCode(200)
 								.setHeader("ETag", "test")
 								.setBody(esiMarketPrices);
+				}
+				if (path.startsWith("/fuzzwork/aggregates/")) {
+					return new MockResponse().setResponseCode(200).setBody(fuzzworkPrices);
 				}
 				return new MockResponse().setResponseCode(404);
 			} catch (Exception e) {
