@@ -57,10 +57,12 @@ public class IndustryCostInput {
 			maximum = "20")
 	Integer te;
 
-	//	@JsonProperty
-	//	@Schema(description = "The decryptor type ID used for invention", requiredMode =
-	// Schema.RequiredMode.NOT_REQUIRED)
-	//	Long decryptorId;
+	@JsonProperty
+	@Schema(
+			description =
+					"The ID of the system where the job is installed. This will resolve security class and cost indices",
+			requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+	Long systemId;
 
 	@JsonProperty
 	@lombok.Builder.Default
@@ -69,9 +71,6 @@ public class IndustryCostInput {
 			requiredMode = Schema.RequiredMode.NOT_REQUIRED,
 			defaultValue = "HIGH_SEC")
 	SecurityClass security = SecurityClass.HIGH_SEC;
-
-	//	@JsonProperty
-	//	Long systemId;
 
 	@JsonProperty
 	@lombok.Builder.Default
@@ -182,24 +181,6 @@ public class IndustryCostInput {
 			requiredMode = Schema.RequiredMode.NOT_REQUIRED,
 			defaultValue = "ESI_AVG")
 	PriceSource materialPrices = PriceSource.ESI_AVG;
-
-	//	@JsonProperty
-	//	Long structureTypeId;
-
-	//	@JsonProperty
-	//	Set<Long> rigTypeIds;
-
-	//	@JsonProperty
-	//	TechLevel materialEfficiencyRigTechLevel;
-
-	//	@JsonProperty
-	//	TechLevel timeEfficiencyRigTechLevel;
-
-	//	@JsonProperty
-	//	TechLevel inventionRigTechLevel;
-
-	//	@JsonProperty
-	//	TechLevel copyingRigTechLevel;
 
 	@JsonProperty
 	@lombok.Builder.Default
