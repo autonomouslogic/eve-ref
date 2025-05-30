@@ -547,15 +547,6 @@ public class Configs {
 			.build();
 
 	/**
-	 * Base path for fuzzwork.co.uk
-	 */
-	public static final Config<URI> FUZZWORK_BASE_URL = Config.<URI>builder()
-			.name("FUZZWORK_BASE_URL")
-			.type(URI.class)
-			.defaultValue(URI.create("https://market.fuzzwork.co.uk/"))
-			.build();
-
-	/**
 	 * Whether to force ref data processing.
 	 */
 	public static final Config<Boolean> FORCE_REF_DATA = Config.<Boolean>builder()
@@ -780,10 +771,22 @@ public class Configs {
 			.type(String.class)
 			.build();
 
-	public static final Config<URI> FUZZWORK_MARKET_API_BASE_PATH = Config.<URI>builder()
-			.name("FUZZWORK_MARKET_API_BASE_PATH")
+	/**
+	 * Base path for fuzzwork.co.uk
+	 */
+	public static final Config<URI> FUZZWORK_MARKET_BASE_PATH = Config.<URI>builder()
+			.name("FUZZWORK_MARKET_BASE_PATH")
 			.type(URI.class)
 			.defaultValue(URI.create("https://market.fuzzwork.co.uk/"))
+			.build();
+
+	/**
+	 * Rate limit to apply for Fuzzwork requests.
+	 */
+	public static final Config<Double> FUZZWORK_RATE_LIMIT_PER_S = Config.<Double>builder()
+			.name("FUZZWORK_RATE_LIMIT_PER_S")
+			.type(Double.class)
+			.defaultValue(50.0)
 			.build();
 
 	@SneakyThrows

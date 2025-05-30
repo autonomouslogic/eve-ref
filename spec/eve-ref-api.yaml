@@ -246,10 +246,14 @@ components:
           minimum: 0
         material_prices:
           type: string
-          default: ESI_AVG_PRICE
+          default: ESI_AVG
           description: Where to get material prices from
           enum:
-          - ESI_AVG_PRICE
+          - ESI_AVG
+          - FUZZWORK_SELL_MIN
+          - FUZZWORK_SELL_AVG
+          - FUZZWORK_BUY_MAX
+          - FUZZWORK_BUY_AVG
         me:
           type: integer
           format: int32

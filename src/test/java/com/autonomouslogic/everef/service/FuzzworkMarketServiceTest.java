@@ -17,7 +17,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junitpioneer.jupiter.SetEnvironmentVariable;
 
-@SetEnvironmentVariable(key = "FUZZWORK_MARKET_API_BASE_PATH", value = "http://localhost:" + TEST_PORT + "/")
+@SetEnvironmentVariable(key = "FUZZWORK_MARKET_BASE_PATH", value = "http://localhost:" + TEST_PORT + "/")
 public class FuzzworkMarketServiceTest {
 	@Inject
 	FuzzworkMarketService marketService;

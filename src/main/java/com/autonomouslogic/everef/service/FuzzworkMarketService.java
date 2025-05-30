@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.MapType;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
+import com.google.common.util.concurrent.RateLimiter;
 import java.net.URI;
 import java.time.Duration;
 import java.util.ArrayList;
@@ -19,9 +20,11 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.NonNull;
 import lombok.SneakyThrows;
+import lombok.extern.log4j.Log4j2;
 import okhttp3.OkHttpClient;
 
 @Singleton
+@Log4j2
 public class FuzzworkMarketService {
 	@Inject
 	protected OkHttpClient httpClient;
@@ -32,7 +35,8 @@ public class FuzzworkMarketService {
 	@Inject
 	protected ObjectMapper objectMapper;
 
-	private final URI basePath = Configs.FUZZWORK_MARKET_API_BASE_PATH.getRequired();
+	private final URI basePath = Configs.FUZZWORK_MARKET_BASE_PATH.getRequired();
+	private final RateLimiter rateLimiter = RateLimiter.create(Configs.FUZZWORK_RATE_LIMIT_PER_S.getRequired());
 	private final MapType responseType;
 	private final Cache<String, FuzzworkAggregatedMarketType> cache = CacheBuilder.newBuilder()
 			.expireAfterWrite(Duration.ofMinutes(5))
@@ -60,7 +64,7 @@ public class FuzzworkMarketService {
 			}
 		}
 		if (!missingTypeIds.isEmpty()) {
-			var response = _fetchAggregateStationPrices(stationId, missingTypeIds);
+			var response = internalFetchAggregateStationPrices(stationId, missingTypeIds);
 			cacheAggregateStationPrices(stationId, response);
 			result.putAll(response);
 		}
@@ -76,10 +80,12 @@ public class FuzzworkMarketService {
 	}
 
 	@SneakyThrows
-	private Map<String, FuzzworkAggregatedMarketType> _fetchAggregateStationPrices(
+	private Map<String, FuzzworkAggregatedMarketType> internalFetchAggregateStationPrices(
 			long station, @NonNull List<Long> typeIds) {
 		var url = basePath + "aggregates/?station=" + station + "&types="
 				+ typeIds.stream().map(String::valueOf).collect(Collectors.joining(","));
+		var waitTime = rateLimiter.acquire();
+		log.debug(String.format("Fetching (waited %.1fs) %s", waitTime, url));
 		var response = httpWrapper.get(url);
 		try (var in = response.body().byteStream()) {
 			return objectMapper.readValue(in, responseType);

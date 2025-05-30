@@ -71,7 +71,7 @@ public class SyncFuzzworkOrdersets implements Command {
 	protected DataIndexHelper dataIndexHelper;
 
 	private S3Url dataPath;
-	private final URI fuzzworkBaseUrl = Configs.FUZZWORK_BASE_URL.getRequired();
+	private final URI fuzzworkBaseUrl = Configs.FUZZWORK_MARKET_BASE_PATH.getRequired();
 	private final Duration archiveCacheTime = Configs.DATA_ARCHIVE_CACHE_CONTROL_MAX_AGE.getRequired();
 
 	@Inject
