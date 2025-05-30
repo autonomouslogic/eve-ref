@@ -6,7 +6,7 @@ import com.autonomouslogic.everef.api.ErrorHandler;
 import com.autonomouslogic.everef.api.IndustryCostHandler;
 import com.autonomouslogic.everef.cli.Command;
 import com.autonomouslogic.everef.config.Configs;
-import com.autonomouslogic.everef.service.MarketPriceService;
+import com.autonomouslogic.everef.service.EsiMarketPriceService;
 import com.autonomouslogic.everef.service.RefDataService;
 import io.helidon.common.concurrency.limits.AimdLimit;
 import io.helidon.webserver.WebServer;
@@ -32,7 +32,7 @@ public class ApiRunner implements Command {
 	protected RefDataService refDataService;
 
 	@Inject
-	protected MarketPriceService marketPriceService;
+	protected EsiMarketPriceService esiMarketPriceService;
 
 	private WebServer server;
 	private volatile boolean stopped = false;
@@ -53,8 +53,8 @@ public class ApiRunner implements Command {
 	@SneakyThrows
 	public void startServices() {
 		refDataService.init();
-		marketPriceService.init();
-		while (!refDataService.isReady() || !marketPriceService.isReady()) {
+		esiMarketPriceService.init();
+		while (!refDataService.isReady() || !esiMarketPriceService.isReady()) {
 			Thread.sleep(10);
 		}
 	}
@@ -77,7 +77,7 @@ public class ApiRunner implements Command {
 		stopped = true;
 		server.stop();
 		refDataService.stop();
-		marketPriceService.stop();
+		esiMarketPriceService.stop();
 	}
 
 	private HttpRouting.Builder routing(HttpRouting.Builder routing) {

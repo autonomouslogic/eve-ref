@@ -13,7 +13,7 @@ import com.autonomouslogic.everef.model.api.InventionCost;
 import com.autonomouslogic.everef.model.api.ManufacturingCost;
 import com.autonomouslogic.everef.refdata.Blueprint;
 import com.autonomouslogic.everef.refdata.InventoryType;
-import com.autonomouslogic.everef.service.MarketPriceService;
+import com.autonomouslogic.everef.service.EsiMarketPriceService;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -26,7 +26,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class IndustryCalculator {
 	@Inject
-	protected MarketPriceService marketPriceService;
+	protected EsiMarketPriceService esiMarketPriceService;
 
 	@Inject
 	protected Provider<ManufactureCalculator> manufactureCalculatorProvider;

@@ -180,8 +180,8 @@ public class IndustryCostInput {
 	@Schema(
 			description = "Where to get material prices from",
 			requiredMode = Schema.RequiredMode.NOT_REQUIRED,
-			defaultValue = "ESI_AVG_PRICE")
-	PriceSource materialPrices = PriceSource.ESI_AVG_PRICE;
+			defaultValue = "ESI_AVG")
+	PriceSource materialPrices = PriceSource.ESI_AVG;
 
 	//	@JsonProperty
 	//	Long structureTypeId;
