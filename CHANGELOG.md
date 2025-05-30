@@ -1,5 +1,17 @@
 EVE Ref Changelog
 
+## [2.64.0](https://github.com/autonomouslogic/eve-ref/compare/2.63.0...2.64.0) (2025-05-30)
+
+
+### Features
+
+* **api:** Material market prices on industry cost API ([#864](https://github.com/autonomouslogic/eve-ref/issues/864)) ([f849113](https://github.com/autonomouslogic/eve-ref/commit/f84911391411e4cf357845c023ccf3a24c5a027c))
+
+
+### Documentation
+
+* Bash for full industry cost API testing ([4806f8b](https://github.com/autonomouslogic/eve-ref/commit/4806f8b801395da919a05fd05aeb689be9847909))
+
 ## [2.63.0](https://github.com/autonomouslogic/eve-ref/compare/2.62.0...2.63.0) (2025-05-28)
 
 
