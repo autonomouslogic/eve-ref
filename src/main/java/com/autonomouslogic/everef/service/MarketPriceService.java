@@ -30,7 +30,7 @@ public class MarketPriceService {
 		if (priceSource.isEsi()) {
 			return getEsiPrices(typeIds);
 		} else if (priceSource.isFuzzwork()) {
-			getFuzzworkPrices(typeIds, priceSource);
+			return getFuzzworkPrices(typeIds, priceSource);
 		}
 		throw new RuntimeException(String.format("Unknown price source: %s", priceSource));
 	}
