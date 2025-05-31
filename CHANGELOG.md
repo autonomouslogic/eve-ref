@@ -1,5 +1,12 @@
 EVE Ref Changelog
 
+## [2.65.0](https://github.com/autonomouslogic/eve-ref/compare/2.64.0...2.65.0) (2025-05-31)
+
+
+### Features
+
+* **api:** System ID lookup for security and cost indices ([#871](https://github.com/autonomouslogic/eve-ref/issues/871)) ([87ded86](https://github.com/autonomouslogic/eve-ref/commit/87ded869b194362734a20c2649dfe2fe4cef8800))
+
 ## [2.64.0](https://github.com/autonomouslogic/eve-ref/compare/2.63.0...2.64.0) (2025-05-30)
 
 
