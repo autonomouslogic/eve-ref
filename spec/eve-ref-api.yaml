@@ -151,7 +151,6 @@ components:
           minimum: 0
         copying_cost:
           type: number
-          default: 0
           description: The copying cost index of the system where the job is installed
           maximum: 1
           minimum: 0
@@ -226,7 +225,6 @@ components:
           minimum: 0
         invention_cost:
           type: number
-          default: 0
           description: The invention cost index of the system where the job is installed
           maximum: 1
           minimum: 0
@@ -239,7 +237,6 @@ components:
           minimum: 0
         manufacturing_cost:
           type: number
-          default: 0
           description: The manufacturing cost index of the system where the job is
             installed
           maximum: 1
@@ -340,7 +337,6 @@ components:
           minimum: 0
         reaction_cost:
           type: number
-          default: 0
           description: The reaction cost index of the system where the job is installed
           maximum: 1
           minimum: 0
@@ -353,14 +349,12 @@ components:
           minimum: 0
         researching_me_cost:
           type: number
-          default: 0
           description: The researching material efficiency cost index of the system
             where the job is installed
           maximum: 1
           minimum: 0
         researching_te_cost:
           type: number
-          default: 0
           description: The researching time efficiency cost index of the system where
             the job is installed
           maximum: 1
@@ -396,13 +390,12 @@ components:
           minimum: 0
         security:
           type: string
-          default: HIGH_SEC
-          description: The security class of the system where the job is installed
+          description: "The security class of the system where the job is installed.\
+            \ If neither security nor system is supplied, high sec is assumed"
           enum:
           - HIGH_SEC
           - LOW_SEC
           - NULL_SEC
-          - WORMHOLE
         sleeper_encryption_methods:
           type: integer
           format: int32
@@ -423,6 +416,12 @@ components:
           example: -0.5
           maximum: 1
           minimum: 0
+        system_id:
+          type: integer
+          format: int32
+          description: "The ID of the system where the job is installed. This will\
+            \ resolve security class and cost indices. If neither security nor system\
+            \ is supplied, high sec is assumed"
         te:
           type: integer
           format: int32

@@ -57,81 +57,70 @@ public class IndustryCostInput {
 			maximum = "20")
 	Integer te;
 
-	//	@JsonProperty
-	//	@Schema(description = "The decryptor type ID used for invention", requiredMode =
-	// Schema.RequiredMode.NOT_REQUIRED)
-	//	Long decryptorId;
+	private static final String highSecIsAssumed = "If neither security nor system is supplied, high sec is assumed";
+
+	@JsonProperty
+	@Schema(
+			description =
+					"The ID of the system where the job is installed. This will resolve security class and cost indices. "
+							+ highSecIsAssumed,
+			requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+	Integer systemId;
 
 	@JsonProperty
 	@lombok.Builder.Default
 	@Schema(
-			description = "The security class of the system where the job is installed",
-			requiredMode = Schema.RequiredMode.NOT_REQUIRED,
-			defaultValue = "HIGH_SEC")
-	SecurityClass security = SecurityClass.HIGH_SEC;
-
-	//	@JsonProperty
-	//	Long systemId;
+			description = "The security class of the system where the job is installed. " + highSecIsAssumed,
+			requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+	SystemSecurity security;
 
 	@JsonProperty
-	@lombok.Builder.Default
 	@Schema(
 			description = "The manufacturing cost index of the system where the job is installed",
 			requiredMode = Schema.RequiredMode.NOT_REQUIRED,
-			defaultValue = "0",
 			minimum = "0",
 			maximum = "1")
-	BigDecimal manufacturingCost = BigDecimal.ZERO;
+	BigDecimal manufacturingCost;
 
 	@JsonProperty
-	@lombok.Builder.Default
 	@Schema(
 			description = "The researching time efficiency cost index of the system where the job is installed",
 			requiredMode = Schema.RequiredMode.NOT_REQUIRED,
-			defaultValue = "0",
 			minimum = "0",
 			maximum = "1")
-	BigDecimal researchingTeCost = BigDecimal.ZERO;
+	BigDecimal researchingTeCost;
 
 	@JsonProperty
-	@lombok.Builder.Default
 	@Schema(
 			description = "The researching material efficiency cost index of the system where the job is installed",
 			requiredMode = Schema.RequiredMode.NOT_REQUIRED,
-			defaultValue = "0",
 			minimum = "0",
 			maximum = "1")
-	BigDecimal researchingMeCost = BigDecimal.ZERO;
+	BigDecimal researchingMeCost;
 
 	@JsonProperty
-	@lombok.Builder.Default
 	@Schema(
 			description = "The copying cost index of the system where the job is installed",
 			requiredMode = Schema.RequiredMode.NOT_REQUIRED,
-			defaultValue = "0",
 			minimum = "0",
 			maximum = "1")
-	BigDecimal copyingCost = BigDecimal.ZERO;
+	BigDecimal copyingCost;
 
 	@JsonProperty
-	@lombok.Builder.Default
 	@Schema(
 			description = "The invention cost index of the system where the job is installed",
 			requiredMode = Schema.RequiredMode.NOT_REQUIRED,
-			defaultValue = "0",
 			minimum = "0",
 			maximum = "1")
-	BigDecimal inventionCost = BigDecimal.ZERO;
+	BigDecimal inventionCost;
 
 	@JsonProperty
-	@lombok.Builder.Default
 	@Schema(
 			description = "The reaction cost index of the system where the job is installed",
 			requiredMode = Schema.RequiredMode.NOT_REQUIRED,
-			defaultValue = "0",
 			minimum = "0",
 			maximum = "1")
-	BigDecimal reactionCost = BigDecimal.ZERO;
+	BigDecimal reactionCost;
 
 	@JsonProperty
 	@lombok.Builder.Default
@@ -182,24 +171,6 @@ public class IndustryCostInput {
 			requiredMode = Schema.RequiredMode.NOT_REQUIRED,
 			defaultValue = "ESI_AVG")
 	PriceSource materialPrices = PriceSource.ESI_AVG;
-
-	//	@JsonProperty
-	//	Long structureTypeId;
-
-	//	@JsonProperty
-	//	Set<Long> rigTypeIds;
-
-	//	@JsonProperty
-	//	TechLevel materialEfficiencyRigTechLevel;
-
-	//	@JsonProperty
-	//	TechLevel timeEfficiencyRigTechLevel;
-
-	//	@JsonProperty
-	//	TechLevel inventionRigTechLevel;
-
-	//	@JsonProperty
-	//	TechLevel copyingRigTechLevel;
 
 	@JsonProperty
 	@lombok.Builder.Default

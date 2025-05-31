@@ -2,6 +2,7 @@ package com.autonomouslogic.everef.api;
 
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.data.LoadedRefData;
+import com.autonomouslogic.everef.esi.UniverseEsi;
 import com.autonomouslogic.everef.industry.IndustryCalculator;
 import com.autonomouslogic.everef.industry.IndustryDecryptors;
 import com.autonomouslogic.everef.industry.IndustryRigs;
@@ -10,8 +11,13 @@ import com.autonomouslogic.everef.model.IndustryRig;
 import com.autonomouslogic.everef.model.api.ApiError;
 import com.autonomouslogic.everef.model.api.IndustryCost;
 import com.autonomouslogic.everef.model.api.IndustryCostInput;
+import com.autonomouslogic.everef.model.api.SystemSecurity;
+import com.autonomouslogic.everef.openapi.esi.invoker.ApiException;
+import com.autonomouslogic.everef.openapi.esi.model.GetUniverseSystemsSystemIdOk;
 import com.autonomouslogic.everef.refdata.InventoryType;
 import com.autonomouslogic.everef.service.RefDataService;
+import com.autonomouslogic.everef.service.SystemCostIndexService;
+import com.autonomouslogic.everef.util.MathUtil;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.helidon.http.Status;
@@ -29,6 +35,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.inject.Inject;
 import jakarta.inject.Provider;
+import java.math.BigDecimal;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
@@ -69,6 +76,12 @@ public class IndustryCostHandler implements HttpService, Handler {
 	@Inject
 	protected IndustryRigs industryRigs;
 
+	@Inject
+	protected UniverseEsi universeEsi;
+
+	@Inject
+	protected SystemCostIndexService systemCostIndexService;
+
 	private final ObjectMapper queryStringMapper;
 
 	@Inject
@@ -95,17 +108,17 @@ public class IndustryCostHandler implements HttpService, Handler {
 			schema = @Schema(implementation = IndustryCostInput.class),
 			explode = Explode.TRUE)
 	public IndustryCost industryCost(IndustryCostInput input) {
-		var calculator = industryCostCalculatorProvider
-				.get()
-				.setRefData(refDataService.getLoadedRefData())
-				.setIndustryCostInput(input);
+		var calculator = industryCostCalculatorProvider.get().setRefData(refDataService.getLoadedRefData());
 		var refdata = Objects.requireNonNull(refDataService.getLoadedRefData(), "refdata");
 		var productType = handleProduct(input, refdata, calculator);
 		handleBlueprint(input, productType, refdata, calculator);
 		handleDecryptor(input, calculator);
 		handleStructure(input, calculator);
 		handleRigs(input, calculator);
-		return calculator.calc().toBuilder().input(input).build();
+		input = handleSystem(input);
+		return calculator.setIndustryCostInput(input).calc().toBuilder()
+				.input(input)
+				.build();
 	}
 
 	@Override
@@ -114,6 +127,7 @@ public class IndustryCostHandler implements HttpService, Handler {
 				"Received request: {}",
 				URLEncoder.encode(req.requestedUri().toUri().toString(), StandardCharsets.UTF_8));
 		var input = createInput(req);
+		input = handleDefaults(input);
 		validateInput(input);
 		var result = industryCost(input);
 		var json = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(result) + "\n";
@@ -147,12 +161,43 @@ public class IndustryCostHandler implements HttpService, Handler {
 		}
 	}
 
+	private IndustryCostInput handleDefaults(IndustryCostInput input) {
+		var builder = input.toBuilder();
+		if (input.getSystemId() == null) {
+			if (input.getSecurity() == null) {
+				builder.security(SystemSecurity.HIGH_SEC);
+			}
+			if (input.getManufacturingCost() == null) {
+				builder.manufacturingCost(BigDecimal.ZERO);
+			}
+			if (input.getResearchingTeCost() == null) {
+				builder.researchingTeCost(BigDecimal.ZERO);
+			}
+			if (input.getResearchingMeCost() == null) {
+				builder.researchingMeCost(BigDecimal.ZERO);
+			}
+			if (input.getCopyingCost() == null) {
+				builder.copyingCost(BigDecimal.ZERO);
+			}
+			if (input.getInventionCost() == null) {
+				builder.inventionCost(BigDecimal.ZERO);
+			}
+			if (input.getReactionCost() == null) {
+				builder.reactionCost(BigDecimal.ZERO);
+			}
+		}
+		return builder.build();
+	}
+
 	private void validateInput(IndustryCostInput input) {
 		if (input.getProductId() < 1) {
 			throw new ClientException("Product ID must be provided");
 		}
 		if (input.getRuns() < 1) {
 			throw new ClientException("Runs must be at least 1");
+		}
+		if (input.getSystemId() != null && input.getSecurity() != null) {
+			throw new ClientException("System ID and security cannot be provided at the same time");
 		}
 		//		if ((input.getSystemId() == null) == (input.getSystemCostIndex() == null)) {
 		//			throw new ClientException("Exactly one of system ID and system cost index must be provided");
@@ -264,5 +309,51 @@ public class IndustryCostHandler implements HttpService, Handler {
 			}
 			calculator.setRigs(rigs);
 		}
+	}
+
+	private IndustryCostInput handleSystem(IndustryCostInput input) {
+		var systemId = input.getSystemId();
+		if (systemId == null) {
+			return input;
+		}
+		GetUniverseSystemsSystemIdOk system;
+		try {
+			system = universeEsi.getSystem(systemId).blockingGet();
+		} catch (Exception e) {
+			var root = ExceptionUtils.getRootCause(e);
+			if (root instanceof ApiException apiException) {
+				if (apiException.getCode() == 404) {
+					throw new ClientException(String.format("System ID %d not found", systemId));
+				}
+			}
+			throw e;
+		}
+		var builder = input.toBuilder();
+		if (input.getSecurity() == null) {
+			builder.security(SystemSecurity.forStatus(system.getSecurityStatus()));
+		}
+		var cost = systemCostIndexService.getSystem(systemId);
+		if (cost == null) {
+			throw new ClientException(String.format("System ID %d not found", systemId));
+		}
+		if (input.getManufacturingCost() == null) {
+			builder.manufacturingCost(MathUtil.round(BigDecimal.valueOf(cost.getManufacturing()), 4));
+		}
+		if (input.getResearchingTeCost() == null) {
+			builder.researchingTeCost(MathUtil.round(BigDecimal.valueOf(cost.getResearchingTimeEfficiency()), 4));
+		}
+		if (input.getResearchingMeCost() == null) {
+			builder.researchingMeCost(MathUtil.round(BigDecimal.valueOf(cost.getResearchingMaterialEfficiency()), 4));
+		}
+		if (input.getCopyingCost() == null) {
+			builder.copyingCost(MathUtil.round(BigDecimal.valueOf(cost.getCopying()), 4));
+		}
+		if (input.getInventionCost() == null) {
+			builder.inventionCost(MathUtil.round(BigDecimal.valueOf(cost.getInvention()), 4));
+		}
+		if (input.getReactionCost() == null) {
+			builder.reactionCost(MathUtil.round(BigDecimal.valueOf(cost.getReaction()), 4));
+		}
+		return builder.build();
 	}
 }

@@ -654,6 +654,17 @@ const cards: {[key: string]: any} = {
 			"name": {"en": "Industry"},
 			"component": "industry"
 		},
+	"decryptor":
+		{
+			"name": {"en": "Decryptor"},
+			"dogmaAttributes":
+				[
+					"inventionPropabilityMultiplier",
+					"inventionMEModifier",
+					"inventionTEModifier",
+					"inventionMaxRunModifier"
+				]
+		},
 	"other":
 		{
 			"name": {"en": "Other"}

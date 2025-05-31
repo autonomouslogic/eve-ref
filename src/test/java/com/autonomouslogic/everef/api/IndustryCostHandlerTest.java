@@ -1,8 +1,12 @@
 package com.autonomouslogic.everef.api;
 
+import static com.autonomouslogic.everef.model.api.SystemSecurity.NULL_SEC;
 import static com.autonomouslogic.everef.test.TestDataUtil.TEST_PORT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.autonomouslogic.commons.ResourceUtil;
 import com.autonomouslogic.everef.cli.api.ApiRunner;
@@ -10,13 +14,16 @@ import com.autonomouslogic.everef.cli.publishrefdata.PublishRefDataTest;
 import com.autonomouslogic.everef.model.api.IndustryCost;
 import com.autonomouslogic.everef.model.api.IndustryCostInput;
 import com.autonomouslogic.everef.model.api.PriceSource;
+import com.autonomouslogic.everef.model.api.SystemSecurity;
 import com.autonomouslogic.everef.model.fuzzwork.FuzzworkAggregatedMarketSegment;
 import com.autonomouslogic.everef.model.fuzzwork.FuzzworkAggregatedMarketType;
 import com.autonomouslogic.everef.openapi.api.api.IndustryApi;
 import com.autonomouslogic.everef.openapi.api.invoker.ApiClient;
+import com.autonomouslogic.everef.openapi.api.invoker.ApiException;
 import com.autonomouslogic.everef.openapi.esi.model.GetMarketsPrices200Ok;
 import com.autonomouslogic.everef.service.EsiMarketPriceService;
 import com.autonomouslogic.everef.service.RefDataService;
+import com.autonomouslogic.everef.service.SystemCostIndexService;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.test.TestDataUtil;
 import com.autonomouslogic.everef.util.MockScrapeBuilder;
@@ -107,6 +114,9 @@ public class IndustryCostHandlerTest {
 	@Inject
 	EsiMarketPriceService esiMarketPriceService;
 
+	@Inject
+	SystemCostIndexService systemCostIndexService;
+
 	IndustryApi industryApi;
 	MockWebServer server;
 	File refDataFile;
@@ -130,6 +140,7 @@ public class IndustryCostHandlerTest {
 				new ApiClient().setScheme("http").setHost("localhost").setPort(8080));
 
 		refDataService.init();
+		systemCostIndexService.init();
 
 		httpClient = HttpClient.newHttpClient();
 	}
@@ -300,6 +311,47 @@ public class IndustryCostHandlerTest {
 				Arguments.of(PriceSource.FUZZWORK_JITA_BUY_MAX, 21));
 	}
 
+	@Test
+	@SneakyThrows
+	void shouldResolveSystemSecurityAndCost() {
+		setupBasicPrices();
+		var input =
+				IndustryCostInput.builder().productId(645).systemId(30004839).build();
+		var cost = industryApi.industryCost(input);
+
+		assertEquals(30004839, cost.getInput().getSystemId());
+		assertEquals(NULL_SEC, cost.getInput().getSecurity());
+		assertEquals(BigDecimal.valueOf(0.0131), cost.getInput().getManufacturingCost());
+		assertEquals(BigDecimal.valueOf(0.0142), cost.getInput().getResearchingTeCost());
+		assertEquals(BigDecimal.valueOf(0.0044), cost.getInput().getResearchingMeCost());
+		assertEquals(BigDecimal.valueOf(0.0055), cost.getInput().getCopyingCost());
+		assertEquals(BigDecimal.valueOf(0.0324), cost.getInput().getInventionCost());
+		assertEquals(BigDecimal.valueOf(0.0014), cost.getInput().getReactionCost());
+
+		var product = cost.getManufacturing().get("645");
+		assertNotEquals(BigDecimal.ZERO, product.getSystemCostIndex());
+	}
+
+	@Test
+	@SneakyThrows
+	void shouldDefaultToHighSecIfNeitherSecurityNorSystemAreSupplied() {
+		setupBasicPrices();
+		var input = IndustryCostInput.builder().productId(645).build();
+		var cost = industryApi.industryCost(input);
+		assertNull(cost.getInput().getSystemId());
+		assertEquals(SystemSecurity.HIGH_SEC, cost.getInput().getSecurity());
+	}
+
+	@Test
+	@SneakyThrows
+	void shouldComplainAboutUnknownSystems() {
+		setupBasicPrices();
+		var input = IndustryCostInput.builder().productId(645).systemId(1).build();
+		var e = assertThrows(ApiException.class, () -> industryApi.industryCost(input));
+		assertEquals(400, e.getCode());
+		assertTrue(e.getResponseBody().contains("System ID 1 not found"), e.getResponseBody());
+	}
+
 	// ===========
 
 	@SneakyThrows
@@ -346,6 +398,45 @@ public class IndustryCostHandlerTest {
 								.setResponseCode(200)
 								.setHeader("ETag", "test")
 								.setBody(esiMarketPrices);
+					case "/universe/systems/30004839/":
+						return new MockResponse()
+								.setResponseCode(200)
+								.setBody("{\"security_status\": -0.22037343680858612}");
+					case "/industry/systems/":
+						return new MockResponse()
+								.setResponseCode(200)
+								.setHeader("ETag", "test")
+								.setBody(
+										"""
+									[{
+										"cost_indices": [
+										{
+											"activity": "manufacturing",
+											"cost_index": 0.0131
+										},
+										{
+											"activity": "researching_time_efficiency",
+											"cost_index": 0.0142
+										},
+										{
+											"activity": "researching_material_efficiency",
+											"cost_index": 0.0044
+										},
+										{
+											"activity": "copying",
+											"cost_index": 0.0055
+										},
+										{
+											"activity": "invention",
+											"cost_index": 0.0324
+										},
+										{
+											"activity": "reaction",
+											"cost_index": 0.0014
+										}
+										],
+										"solar_system_id": 30004839
+									}]""");
 				}
 				if (path.startsWith("/fuzzwork/aggregates/")) {
 					return new MockResponse().setResponseCode(200).setBody(fuzzworkPrices);

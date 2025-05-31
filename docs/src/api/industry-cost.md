@@ -234,11 +234,14 @@ See [OpenAPI spec](https://github.com/autonomouslogic/eve-ref/blob/main/spec/eve
 * `te` - The time efficiency of the blueprint
 * `runs` - The number of runs
 * `decryptor_id` - The decryptor type ID to use
-* `rig_id` - The type IDs of the rigs installed on the sture structure where the job is installed
-* `security` - The security class of the system where the job is installed
-* `structure_type_id` - The type ID of the structure where the job is installed. If not set, an NPC station is assumed.
 
-### System Cost Index
+### Structure
+* `structure_type_id` - The type ID of the structure where the job is installed. If not set, an NPC station is assumed.
+* `rig_id` - The type IDs of the rigs installed on the sture structure where the job is installed
+
+### System
+* `system_id` - The ID of the system where the job is installed. This will resolve security class and cost indices
+* `security` - The security class of the system where the job is installed
 * `manufacturing_cost` - The manufacturing cost index of the system where the job is installed
 * `invention_cost` - The invention cost index of the system where the job is installed
 * `copying_cost` - The copying cost index of the system where the job is installed
@@ -321,3 +324,4 @@ The API has been tested on my local machine to do over 6,000 req/s at 16 ms per 
 * [https://wiki.eveuniversity.org/Manufacturing](https://wiki.eveuniversity.org/Manufacturing)
 * [https://wiki.eveuniversity.org/Invention](https://wiki.eveuniversity.org/Invention)
 * [https://wiki.eveuniversity.org/Reactions](https://wiki.eveuniversity.org/Reactions)
+* [https://eve-industry.org/export/CCP_ROUND.pdf](https://eve-industry.org/export/CCP_ROUND.pdf)
