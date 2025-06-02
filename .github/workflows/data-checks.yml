@@ -4,6 +4,8 @@ on:
   push:
   schedule:
     - cron: "47 12 * * *"
+env:
+  DEV_NOTICES_DISCORD_WEBHOOK_URL: ${{ secrets.DEV_NOTICES_DISCORD_WEBHOOK_URL }}
 jobs:
   test-resources:
     name: Test Resources
