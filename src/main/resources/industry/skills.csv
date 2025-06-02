@@ -1,6 +1,38 @@
-type_id,name,manufacturing_time_bonus,"advanced_industry_skill_industry_job_time_bonus","blueprintmanufacture_time_bonus",copy_speed_bonus,"mineral_need_research_bonus"
-3380,Industry,-4.0,,-4.0,,
-3388,"Advanced Industry",,-3.0,,,
-3402,Science,,,,-5.0,
-3403,Research,,,,,
-3409,Metallurgy,,,,,-5.0
+type_id,name,manufacturing_time_bonus,"blueprintmanufacture_time_bonus",copy_speed_bonus,"advanced_industry_skill_industry_job_time_bonus","mineral_need_research_bonus","manufacture_time_per_level",encryption_methods
+3380,Industry,-4.0,-4.0,,,,,false
+3388,"Advanced Industry",,,,-3.0,,,false
+3395,"Advanced Small Ship Construction",,,,,,-1.0,false
+3396,"Advanced Industrial Ship Construction",,,,,,-1.0,false
+3397,"Advanced Medium Ship Construction",,,,,,-1.0,false
+3398,"Advanced Large Ship Construction",,,,,,-1.0,false
+3402,Science,,,-5.0,,,,false
+3403,Research,,,,,,,false
+3408,"Sleeper Encryption Methods",,,,,,,true
+3409,Metallurgy,,,,,-5.0,,false
+11433,"High Energy Physics",,,,,,-1.0,false
+11441,"Plasma Physics",,,,,,-1.0,false
+11442,"Nanite Engineering",,,,,,-1.0,false
+11443,"Hydromagnetic Physics",,,,,,-1.0,false
+11444,"Amarr Starship Engineering",,,,,,-1.0,false
+11445,"Minmatar Starship Engineering",,,,,,-1.0,false
+11446,"Graviton Physics",,,,,,-1.0,false
+11447,"Laser Physics",,,,,,-1.0,false
+11448,"Electromagnetic Physics",,,,,,-1.0,false
+11449,"Rocket Science",,,,,,-1.0,false
+11450,"Gallente Starship Engineering",,,,,,-1.0,false
+11451,"Nuclear Physics",,,,,,-1.0,false
+11452,"Mechanical Engineering",,,,,,-1.0,false
+11453,"Electronic Engineering",,,,,,-1.0,false
+11454,"Caldari Starship Engineering",,,,,,-1.0,false
+11455,"Quantum Physics",,,,,,-1.0,false
+11529,"Molecular Engineering",,,,,,-1.0,false
+21790,"Caldari Encryption Methods",,,,,,,true
+21791,"Minmatar Encryption Methods",,,,,,,true
+23087,"Amarr Encryption Methods",,,,,,,true
+23121,"Gallente Encryption Methods",,,,,,,true
+52307,"Triglavian Quantum Engineering",,,,,,-1.0,false
+52308,"Triglavian Encryption Methods",,,,,,,true
+55025,"Upwell Encryption Methods",,,,,,,true
+77725,"Advanced Capital Ship Construction",,,,,,-1.0,false
+81050,"Upwell Starship Engineering",,,,,,-1.0,false
+81896,"Mutagenic Stabilization",,,,,,-2.0,false

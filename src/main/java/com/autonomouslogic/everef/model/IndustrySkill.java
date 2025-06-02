@@ -15,7 +15,17 @@ import lombok.extern.jackson.Jacksonized;
 @Jacksonized
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"type_id", "name", "manufacturing_time_bonus"})
+@JsonPropertyOrder({
+	"type_id",
+	"name",
+	"manufacturing_time_bonus",
+	"blueprintmanufacture_time_bonus",
+	"copy_speed_bonus",
+	"advanced_industry_skill_industry_job_time_bonus",
+	"mineral_need_research_bonus",
+	"manufacture_time_per_level",
+	"encryption_methods"
+})
 @Schema
 public class IndustrySkill {
 	@JsonProperty
@@ -38,4 +48,10 @@ public class IndustrySkill {
 
 	@JsonProperty
 	Double mineralNeedResearchBonus;
+
+	@JsonProperty
+	Double manufactureTimePerLevel;
+
+	@JsonProperty
+	boolean encryptionMethods;
 }

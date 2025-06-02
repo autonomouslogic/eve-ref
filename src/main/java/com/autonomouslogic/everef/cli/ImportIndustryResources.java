@@ -36,6 +36,8 @@ public class ImportIndustryResources implements Command {
 	public static final String RIGS_CONFIG = RESOURCES_BASE + "/rigs.csv";
 	public static final String SKILLS_CONFIG = RESOURCES_BASE + "/skills.csv";
 
+	private final String ENCRYPTION_METHODS = "Encryption Methods";
+
 	@Inject
 	protected CsvMapper csvMapper;
 
@@ -68,6 +70,7 @@ public class ImportIndustryResources implements Command {
 	private DogmaAttribute copySpeedBonus;
 	private DogmaAttribute advancedIndustrySkillIndustryJobTimeBonus;
 	private DogmaAttribute mineralNeedResearchBonus;
+	private DogmaAttribute manufactureTimePerLevel;
 
 	@Inject
 	protected ImportIndustryResources() {}
@@ -121,6 +124,8 @@ public class ImportIndustryResources implements Command {
 				.orElseThrow();
 		mineralNeedResearchBonus =
 				refData.getDogmaAttribute("mineralNeedResearchBonus").orElseThrow();
+		manufactureTimePerLevel =
+				refData.getDogmaAttribute("manufactureTimePerLevel").orElseThrow();
 	}
 
 	@SneakyThrows
@@ -312,21 +317,24 @@ public class ImportIndustryResources implements Command {
 		if (!Optional.ofNullable(type.getSkill()).orElse(false)) {
 			return false;
 		}
-		return refDataUtil
-				.getTypeDogmaFirstValue(
-						type,
-						manufacturingTimeBonus.getAttributeId(),
-						blueprintmanufactureTimeBonus.getAttributeId(),
-						copySpeedBonus.getAttributeId(),
-						advancedIndustrySkillIndustryJobTimeBonus.getAttributeId(),
-						mineralNeedResearchBonus.getAttributeId())
-				.isPresent();
+		return type.getName().get("en").endsWith(ENCRYPTION_METHODS)
+				|| refDataUtil
+						.getTypeDogmaFirstValue(
+								type,
+								manufacturingTimeBonus.getAttributeId(),
+								blueprintmanufactureTimeBonus.getAttributeId(),
+								copySpeedBonus.getAttributeId(),
+								advancedIndustrySkillIndustryJobTimeBonus.getAttributeId(),
+								mineralNeedResearchBonus.getAttributeId(),
+								manufactureTimePerLevel.getAttributeId())
+						.isPresent();
 	}
 
 	private IndustrySkill createSkill(InventoryType type) {
+		var name = type.getName().get("en");
 		return IndustrySkill.builder()
 				.typeId(type.getTypeId())
-				.name(type.getName().get("en"))
+				.name(name)
 				.manufacturingTimeBonus(refDataUtil
 						.getTypeDogmaValueBoxed(type, manufacturingTimeBonus.getAttributeId())
 						.orElse(null))
@@ -342,6 +350,10 @@ public class ImportIndustryResources implements Command {
 				.mineralNeedResearchBonus(refDataUtil
 						.getTypeDogmaValueBoxed(type, mineralNeedResearchBonus.getAttributeId())
 						.orElse(null))
+				.manufactureTimePerLevel(refDataUtil
+						.getTypeDogmaValueBoxed(type, manufactureTimePerLevel.getAttributeId())
+						.orElse(null))
+				.encryptionMethods(name.endsWith(ENCRYPTION_METHODS))
 				.build();
 	}
 }
