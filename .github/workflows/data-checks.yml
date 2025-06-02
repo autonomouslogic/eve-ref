@@ -22,6 +22,7 @@ jobs:
 
       - name: Check
         run: |
+          make generate-database
           ./gradlew importTestResources
           if [[ `git status --porcelain` ]]; then
             curl -fsS -m 10 --retry 5 -o /dev/null \
