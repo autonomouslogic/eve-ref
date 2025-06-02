@@ -21,15 +21,7 @@ jobs:
           cache: gradle
 
       - name: Check
-        run: |
-          make generate-database
-          ./gradlew importTestResources
-          if [[ `git status --porcelain` ]]; then
-            curl -fsS -m 10 --retry 5 -o /dev/null \
-            -X POST -H "Content-Type: application/json" \
-            --data '{"content": "Test resources need to be updated"}' \
-            $DEV_NOTICES_DISCORD_WEBHOOK_URL
-          fi
+        run: ./scripts/run-make-and-check-changes.sh import-test-resources $DEV_NOTICES_DISCORD_WEBHOOK_URL
 
   industry-resources:
     name: Industry Resources
@@ -47,12 +39,4 @@ jobs:
           cache: gradle
 
       - name: Check
-        run: |
-          make generate-database
-          ./gradlew importIndustryResources
-          if [[ `git status --porcelain` ]]; then
-            curl -fsS -m 10 --retry 5 -o /dev/null \
-            -X POST -H "Content-Type: application/json" \
-            --data '{"content": "Industry resources need to be updated"}' \
-            $DEV_NOTICES_DISCORD_WEBHOOK_URL
-          fi
+        run: ./scripts/run-make-and-check-changes.sh import-industry-resources $DEV_NOTICES_DISCORD_WEBHOOK_URL
