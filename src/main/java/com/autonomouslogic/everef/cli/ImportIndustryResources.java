@@ -7,6 +7,7 @@ import static com.autonomouslogic.everef.util.EveConstants.STRUCTURE_MODULE_CATE
 import com.autonomouslogic.everef.data.LoadedRefData;
 import com.autonomouslogic.everef.model.IndustryDecryptor;
 import com.autonomouslogic.everef.model.IndustryRig;
+import com.autonomouslogic.everef.model.IndustrySkill;
 import com.autonomouslogic.everef.model.IndustryStructure;
 import com.autonomouslogic.everef.refdata.DogmaAttribute;
 import com.autonomouslogic.everef.refdata.IndustryModifierActivities;
@@ -33,6 +34,7 @@ public class ImportIndustryResources implements Command {
 	public static final String DECRYPTORS_CONFIG = RESOURCES_BASE + "/decryptors.csv";
 	public static final String STRUCTURES_CONFIG = RESOURCES_BASE + "/structures.csv";
 	public static final String RIGS_CONFIG = RESOURCES_BASE + "/rigs.csv";
+	public static final String SKILLS_CONFIG = RESOURCES_BASE + "/skills.csv";
 
 	@Inject
 	protected CsvMapper csvMapper;
@@ -61,6 +63,12 @@ public class ImportIndustryResources implements Command {
 	private DogmaAttribute lowSecModifier;
 	private DogmaAttribute nullSecModifier;
 
+	private DogmaAttribute manufacturingTimeBonus;
+	private DogmaAttribute blueprintmanufactureTimeBonus;
+	private DogmaAttribute copySpeedBonus;
+	private DogmaAttribute advancedIndustrySkillIndustryJobTimeBonus;
+	private DogmaAttribute mineralNeedResearchBonus;
+
 	@Inject
 	protected ImportIndustryResources() {}
 
@@ -74,6 +82,7 @@ public class ImportIndustryResources implements Command {
 		loadDecryptors();
 		loadStructures();
 		loadRigs();
+		loadSkills();
 	}
 
 	private void loadDogma() {
@@ -101,6 +110,17 @@ public class ImportIndustryResources implements Command {
 		hiSecModifier = refData.getDogmaAttribute("hiSecModifier").orElseThrow();
 		lowSecModifier = refData.getDogmaAttribute("lowSecModifier").orElseThrow();
 		nullSecModifier = refData.getDogmaAttribute("nullSecModifier").orElseThrow();
+
+		manufacturingTimeBonus =
+				refData.getDogmaAttribute("manufacturingTimeBonus").orElseThrow();
+		blueprintmanufactureTimeBonus =
+				refData.getDogmaAttribute("blueprintmanufactureTimeBonus").orElseThrow();
+		copySpeedBonus = refData.getDogmaAttribute("copySpeedBonus").orElseThrow();
+		advancedIndustrySkillIndustryJobTimeBonus = refData.getDogmaAttribute(
+						"advancedIndustrySkillIndustryJobTimeBonus")
+				.orElseThrow();
+		mineralNeedResearchBonus =
+				refData.getDogmaAttribute("mineralNeedResearchBonus").orElseThrow();
 	}
 
 	@SneakyThrows
@@ -118,6 +138,11 @@ public class ImportIndustryResources implements Command {
 	@SneakyThrows
 	private void loadRigs() {
 		loadTypes("rigs", RIGS_CONFIG, IndustryRig.class, this::filterRig, this::createRig);
+	}
+
+	@SneakyThrows
+	private void loadSkills() {
+		loadTypes("skills", SKILLS_CONFIG, IndustrySkill.class, this::filterSkill, this::createSkill);
 	}
 
 	@SneakyThrows
@@ -152,7 +177,6 @@ public class ImportIndustryResources implements Command {
 	}
 
 	private boolean filterDecryptor(InventoryType type) {
-
 		return type.getMarketGroupId() != null && type.getMarketGroupId().intValue() == DECRYPTORS_MARKET_GROUP_ID;
 	}
 
@@ -282,5 +306,42 @@ public class ImportIndustryResources implements Command {
 			return;
 		}
 		builder.globalActivities(activities);
+	}
+
+	private boolean filterSkill(InventoryType type) {
+		if (!Optional.ofNullable(type.getSkill()).orElse(false)) {
+			return false;
+		}
+		return refDataUtil
+				.getTypeDogmaFirstValue(
+						type,
+						manufacturingTimeBonus.getAttributeId(),
+						blueprintmanufactureTimeBonus.getAttributeId(),
+						copySpeedBonus.getAttributeId(),
+						advancedIndustrySkillIndustryJobTimeBonus.getAttributeId(),
+						mineralNeedResearchBonus.getAttributeId())
+				.isPresent();
+	}
+
+	private IndustrySkill createSkill(InventoryType type) {
+		return IndustrySkill.builder()
+				.typeId(type.getTypeId())
+				.name(type.getName().get("en"))
+				.manufacturingTimeBonus(refDataUtil
+						.getTypeDogmaValueBoxed(type, manufacturingTimeBonus.getAttributeId())
+						.orElse(null))
+				.blueprintmanufactureTimeBonus(refDataUtil
+						.getTypeDogmaValueBoxed(type, manufacturingTimeBonus.getAttributeId())
+						.orElse(null))
+				.copySpeedBonus(refDataUtil
+						.getTypeDogmaValueBoxed(type, copySpeedBonus.getAttributeId())
+						.orElse(null))
+				.advancedIndustrySkillIndustryJobTimeBonus(refDataUtil
+						.getTypeDogmaValueBoxed(type, advancedIndustrySkillIndustryJobTimeBonus.getAttributeId())
+						.orElse(null))
+				.mineralNeedResearchBonus(refDataUtil
+						.getTypeDogmaValueBoxed(type, mineralNeedResearchBonus.getAttributeId())
+						.orElse(null))
+				.build();
 	}
 }

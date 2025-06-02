@@ -68,7 +68,6 @@ public class IndustryCostInput {
 	Integer systemId;
 
 	@JsonProperty
-	@lombok.Builder.Default
 	@Schema(
 			description = "The security class of the system where the job is installed. " + highSecIsAssumed,
 			requiredMode = Schema.RequiredMode.NOT_REQUIRED)
