@@ -3,14 +3,25 @@ package com.autonomouslogic.everef.industry;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+
+import com.autonomouslogic.everef.model.IndustryRig;
+import com.autonomouslogic.everef.model.IndustrySkill;
+import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.Value;
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class IndustrySkills {
+import javax.inject.Inject;
+
+import static com.autonomouslogic.everef.cli.ImportIndustryResources.RIGS_CONFIG;
+import static com.autonomouslogic.everef.cli.ImportIndustryResources.SKILLS_CONFIG;
+
+public class IndustrySkills extends AbstractIndustryService<IndustrySkill> {
+	@Deprecated
 	public static final Map<String, Double> GLOBAL_TIME_BONUSES;
+	@Deprecated
 	public static final Map<String, SkillBonus> SPECIAL_TIME_BONUSES;
+	@Deprecated
 	public static final Map<String, Long> ENCRYPTION_SKILLS;
 
 	@Value
@@ -96,5 +107,10 @@ public class IndustrySkills {
 		encryption.put("Triglavian Encryption Methods", 52308L);
 		encryption.put("Upwell Encryption Methods", 55025L);
 		ENCRYPTION_SKILLS = Collections.unmodifiableMap(encryption);
+	}
+
+	@Inject
+	protected IndustrySkills(CsvMapper csvMapper){
+		super(IndustrySkill.class, SKILLS_CONFIG, IndustrySkill::getTypeId, csvMapper);
 	}
 }
