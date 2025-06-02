@@ -41,6 +41,7 @@ import com.autonomouslogic.everef.util.Rx;
 import com.autonomouslogic.everef.util.TempFiles;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import dagger.Lazy;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Single;
 import java.io.ByteArrayInputStream;
@@ -84,7 +85,7 @@ public class BuildRefData implements Command {
 
 	@Inject
 	@Named("data")
-	protected S3AsyncClient s3Client;
+	protected Lazy<S3AsyncClient> s3Client;
 
 	@Inject
 	protected MVStoreUtil mvStoreUtil;
@@ -192,7 +193,6 @@ public class BuildRefData implements Command {
 
 	private List<PostDecorator> allDecorators;
 
-	private S3Url dataUrl;
 	private MVStore mvStore;
 
 	@Inject
@@ -200,7 +200,6 @@ public class BuildRefData implements Command {
 
 	@Inject
 	protected void init() {
-		dataUrl = (S3Url) urlParser.parse(Configs.DATA_PATH.getRequired());
 		allDecorators = List.of(
 				categoryIdDecorator,
 				skillDecorator,
@@ -395,6 +394,7 @@ public class BuildRefData implements Command {
 	 */
 	private Completable uploadFiles(File outputFile) {
 		return Completable.defer(() -> {
+			var dataUrl = (S3Url) urlParser.parse(Configs.DATA_PATH.getRequired());
 			var latestPath = dataUrl.resolve(REFERENCE_DATA.createLatestPath());
 			var archivePath = dataUrl.resolve(REFERENCE_DATA.createArchivePath(buildTime));
 			var latestPut = s3Util.putPublicObjectRequest(outputFile.length(), latestPath, latestCacheTime);
@@ -402,9 +402,11 @@ public class BuildRefData implements Command {
 			log.info(String.format("Uploading latest file to %s", latestPath));
 			log.info(String.format("Uploading archive file to %s", archivePath));
 			return Completable.mergeArray(
-							s3Adapter.putObject(latestPut, outputFile, s3Client).ignoreElement(),
 							s3Adapter
-									.putObject(archivePut, outputFile, s3Client)
+									.putObject(latestPut, outputFile, s3Client.get())
+									.ignoreElement(),
+							s3Adapter
+									.putObject(archivePut, outputFile, s3Client.get())
 									.ignoreElement())
 					.andThen(Completable.defer(() -> dataIndexHelper.updateIndex(latestPath, archivePath)));
 		});

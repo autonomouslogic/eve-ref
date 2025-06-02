@@ -105,3 +105,9 @@ postgres-migrate-test:
 	make postgres-start
 	./gradlew postgresMigrate
 	make postgres-stop
+
+import-test-resources: generate-database
+	./gradlew importTestResources --stacktrace
+
+import-industry-resources: generate-database
+	./gradlew importIndustryResources --stacktrace
