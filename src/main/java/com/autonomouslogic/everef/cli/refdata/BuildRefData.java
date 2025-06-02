@@ -193,7 +193,6 @@ public class BuildRefData implements Command {
 
 	private List<PostDecorator> allDecorators;
 
-	private S3Url dataUrl;
 	private MVStore mvStore;
 
 	@Inject
@@ -201,7 +200,6 @@ public class BuildRefData implements Command {
 
 	@Inject
 	protected void init() {
-		dataUrl = (S3Url) urlParser.parse(Configs.DATA_PATH.getRequired());
 		allDecorators = List.of(
 				categoryIdDecorator,
 				skillDecorator,
@@ -396,6 +394,7 @@ public class BuildRefData implements Command {
 	 */
 	private Completable uploadFiles(File outputFile) {
 		return Completable.defer(() -> {
+			var dataUrl = (S3Url) urlParser.parse(Configs.DATA_PATH.getRequired());
 			var latestPath = dataUrl.resolve(REFERENCE_DATA.createLatestPath());
 			var archivePath = dataUrl.resolve(REFERENCE_DATA.createArchivePath(buildTime));
 			var latestPut = s3Util.putPublicObjectRequest(outputFile.length(), latestPath, latestCacheTime);

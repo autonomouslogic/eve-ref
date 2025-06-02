@@ -30,3 +30,29 @@ jobs:
             --data '{"content": "Test resources need to be updated"}' \
             $DEV_NOTICES_DISCORD_WEBHOOK_URL
           fi
+
+  industry-resources:
+    name: Industry Resources
+    timeout-minutes: 30
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+          cache: gradle
+
+      - name: Check
+        run: |
+          make generate-database
+          ./gradlew importIndustryResources
+          if [[ `git status --porcelain` ]]; then
+            curl -fsS -m 10 --retry 5 -o /dev/null \
+            -X POST -H "Content-Type: application/json" \
+            --data '{"content": "Industry resources need to be updated"}' \
+            $DEV_NOTICES_DISCORD_WEBHOOK_URL
+          fi
