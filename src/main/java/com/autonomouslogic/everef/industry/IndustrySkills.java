@@ -1,38 +1,24 @@
 package com.autonomouslogic.everef.industry;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-import java.util.function.BiConsumer;
-import java.util.function.BinaryOperator;
-import java.util.function.Function;
-import java.util.function.ObjIntConsumer;
-import java.util.function.Supplier;
-import java.util.stream.Collector;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
+import static com.autonomouslogic.everef.cli.ImportIndustryResources.SKILLS_CONFIG;
 
-import com.autonomouslogic.everef.model.IndustryRig;
 import com.autonomouslogic.everef.model.IndustrySkill;
 import com.autonomouslogic.everef.model.api.IndustryCostInput;
 import com.autonomouslogic.everef.refdata.BlueprintActivity;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import javax.inject.Inject;
 import lombok.Value;
 import org.apache.commons.lang3.tuple.Pair;
-
-import javax.inject.Inject;
-
-import static com.autonomouslogic.everef.cli.ImportIndustryResources.RIGS_CONFIG;
-import static com.autonomouslogic.everef.cli.ImportIndustryResources.SKILLS_CONFIG;
 
 public class IndustrySkills extends AbstractIndustryService<IndustrySkill> {
 	@Deprecated
 	public static final Map<String, SkillBonus> SPECIAL_TIME_BONUSES;
+
 	@Deprecated
 	public static final Map<String, Long> ENCRYPTION_SKILLS;
 
@@ -109,7 +95,7 @@ public class IndustrySkills extends AbstractIndustryService<IndustrySkill> {
 	}
 
 	@Inject
-	protected IndustrySkills(CsvMapper csvMapper){
+	protected IndustrySkills(CsvMapper csvMapper) {
 		super(IndustrySkill.class, SKILLS_CONFIG, IndustrySkill::getTypeId, csvMapper);
 	}
 
@@ -122,7 +108,10 @@ public class IndustrySkills extends AbstractIndustryService<IndustrySkill> {
 	}
 
 	private double sumBonusMod(IndustryCostInput input, Function<IndustrySkill, Double> bonusGetter) {
-		var skills = stream().filter(skill -> bonusGetter.apply(skill) != null).map(skill -> Pair.of(skill, skillLevel(skill, input))).toList();
+		var skills = stream()
+				.filter(skill -> bonusGetter.apply(skill) != null)
+				.map(skill -> Pair.of(skill, skillLevel(skill, input)))
+				.toList();
 		var mod = 1.0;
 		for (var pair : skills) {
 			var bonus = bonusGetter.apply(pair.getLeft());
@@ -134,9 +123,11 @@ public class IndustrySkills extends AbstractIndustryService<IndustrySkill> {
 	}
 
 	public List<Pair<IndustrySkill, Integer>> datacoreSkills(IndustryCostInput input, BlueprintActivity activity) {
-		return stream().filter(skill -> skill.isDatacore())
-			.filter(skill -> activity.getRequiredSkills().containsKey(skill.getTypeId()))
-			.map(skill -> Pair.of(skill, skillLevel(skill, input))).toList();
+		return stream()
+				.filter(skill -> skill.isDatacore())
+				.filter(skill -> activity.getRequiredSkills().containsKey(skill.getTypeId()))
+				.map(skill -> Pair.of(skill, skillLevel(skill, input)))
+				.toList();
 	}
 
 	private Integer skillLevel(IndustrySkill skill, IndustryCostInput input) {

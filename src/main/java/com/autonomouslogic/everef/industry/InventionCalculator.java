@@ -193,8 +193,7 @@ public class InventionCalculator {
 
 	private Duration inventionTime(BlueprintActivity invention) {
 		var baseTime = (double) invention.getTime();
-		var advancedIndustryMod =
-				industrySkills.advancedIndustrySkillIndustryJobTimeBonusMod(industryCostInput);
+		var advancedIndustryMod = industrySkills.advancedIndustrySkillIndustryJobTimeBonusMod(industryCostInput);
 		var structureMod = industryStructures.structureTimeModifier(structure);
 		var rigMod = industryRigs.rigModifier(
 				rigs, productType, industryCostInput.getSecurity(), IndustryRig::getTimeBonus, "invention");

@@ -1,6 +1,5 @@
 package com.autonomouslogic.everef.industry;
 
-
 import com.autonomouslogic.everef.data.LoadedRefData;
 import com.autonomouslogic.everef.model.IndustryRig;
 import com.autonomouslogic.everef.model.IndustryStructure;

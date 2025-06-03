@@ -354,10 +354,9 @@ public class ImportIndustryResources implements Command {
 						.getTypeDogmaValueBoxed(type, manufactureTimePerLevel.getAttributeId())
 						.orElse(null))
 				.datacore(refDataUtil
-					.getTypeDogmaValueBoxed(type, manufactureTimePerLevel.getAttributeId()).isPresent())
+						.getTypeDogmaValueBoxed(type, manufactureTimePerLevel.getAttributeId())
+						.isPresent())
 				.encryptionMethods(name.endsWith(ENCRYPTION_METHODS))
 				.build();
 	}
-
-
 }
