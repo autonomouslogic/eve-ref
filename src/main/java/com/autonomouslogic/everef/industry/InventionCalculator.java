@@ -46,6 +46,9 @@ public class InventionCalculator {
 	protected IndustryDecryptors industryDecryptors;
 
 	@Inject
+	protected IndustrySkills industrySkills;
+
+	@Inject
 	protected MarketPriceService marketPriceService;
 
 	private final LoadedRefData refData;
@@ -192,7 +195,7 @@ public class InventionCalculator {
 	private Duration inventionTime(BlueprintActivity invention) {
 		var baseTime = (double) invention.getTime();
 		var advancedIndustryMod =
-				1.0 - GLOBAL_TIME_BONUSES.get("Advanced Industry") * industryCostInput.getAdvancedIndustry();
+				industrySkills.advancedIndustrySkillIndustryJobTimeBonusMod(industryCostInput);
 		var structureMod = industryStructures.structureTimeModifier(structure);
 		var rigMod = industryRigs.rigModifier(
 				rigs, productType, industryCostInput.getSecurity(), IndustryRig::getTimeBonus, "invention");
