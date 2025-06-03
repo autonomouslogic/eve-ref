@@ -2,6 +2,7 @@ package com.autonomouslogic.everef.industry;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -17,6 +18,7 @@ import java.util.stream.Stream;
 import com.autonomouslogic.everef.model.IndustryRig;
 import com.autonomouslogic.everef.model.IndustrySkill;
 import com.autonomouslogic.everef.model.api.IndustryCostInput;
+import com.autonomouslogic.everef.refdata.BlueprintActivity;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -30,8 +32,6 @@ import static com.autonomouslogic.everef.cli.ImportIndustryResources.SKILLS_CONF
 
 public class IndustrySkills extends AbstractIndustryService<IndustrySkill> {
 	@Deprecated
-	public static final Map<String, Double> GLOBAL_TIME_BONUSES;
-	@Deprecated
 	public static final Map<String, SkillBonus> SPECIAL_TIME_BONUSES;
 	@Deprecated
 	public static final Map<String, Long> ENCRYPTION_SKILLS;
@@ -44,19 +44,6 @@ public class IndustrySkills extends AbstractIndustryService<IndustrySkill> {
 
 	static {
 		// @todo this can be loaded from Dogma
-		var global = new HashMap<String, Double>();
-		// https://everef.net/types/3380
-		global.put("Industry", 0.04);
-		// https://everef.net/types/3403
-		global.put("Research", 0.05);
-		// https://everef.net/types/3402
-		global.put("Science", 0.05);
-		// https://everef.net/types/3388
-		global.put("Advanced Industry", 0.03);
-		// https://everef.net/types/3409
-		global.put("Metallurgy", 0.05);
-		GLOBAL_TIME_BONUSES = Collections.unmodifiableMap(global);
-
 		var special = new HashMap<String, SkillBonus>();
 		// https://everef.net/types/3395
 		special.put("Advanced Small Ship Construction", new SkillBonus(3395, 0.01));
@@ -146,10 +133,48 @@ public class IndustrySkills extends AbstractIndustryService<IndustrySkill> {
 		return mod;
 	}
 
+	public List<Pair<IndustrySkill, Integer>> datacoreSkills(IndustryCostInput input, BlueprintActivity activity) {
+		return stream().filter(skill -> skill.isDatacore())
+			.filter(skill -> activity.getRequiredSkills().containsKey(skill.getTypeId()))
+			.map(skill -> Pair.of(skill, skillLevel(skill, input))).toList();
+	}
+
 	private Integer skillLevel(IndustrySkill skill, IndustryCostInput input) {
 		return switch (skill.getName()) {
 			case "Industry" -> input.getIndustry();
 			case "Advanced Industry" -> input.getAdvancedIndustry();
+			case "Advanced Small Ship Construction" -> input.getAdvancedSmallShipConstruction();
+			case "Advanced Industrial Ship Construction" -> input.getAdvancedIndustrialShipConstruction();
+			case "Advanced Medium Ship Construction" -> input.getAdvancedMediumShipConstruction();
+			case "Advanced Large Ship Construction" -> input.getAdvancedLargeShipConstruction();
+			case "High Energy Physics" -> input.getHighEnergyPhysics();
+			case "Plasma Physics" -> input.getPlasmaPhysics();
+			case "Nanite Engineering" -> input.getNaniteEngineering();
+			case "Hydromagnetic Physics" -> input.getHydromagneticPhysics();
+			case "Amarr Starship Engineering" -> input.getAmarrStarshipEngineering();
+			case "Minmatar Starship Engineering" -> input.getMinmatarStarshipEngineering();
+			case "Graviton Physics" -> input.getGravitonPhysics();
+			case "Laser Physics" -> input.getLaserPhysics();
+			case "Electromagnetic Physics" -> input.getElectromagneticPhysics();
+			case "Rocket Science" -> input.getRocketScience();
+			case "Gallente Starship Engineering" -> input.getGallenteStarshipEngineering();
+			case "Nuclear Physics" -> input.getNuclearPhysics();
+			case "Mechanical Engineering" -> input.getMechanicalEngineering();
+			case "Electronic Engineering" -> input.getElectronicEngineering();
+			case "Caldari Starship Engineering" -> input.getCaldariStarshipEngineering();
+			case "Quantum Physics" -> input.getQuantumPhysics();
+			case "Molecular Engineering" -> input.getMolecularEngineering();
+			case "Triglavian Quantum Engineering" -> input.getTriglavianQuantumEngineering();
+			case "Advanced Capital Ship Construction" -> input.getAdvancedCapitalShipConstruction();
+			case "Upwell Starship Engineering" -> input.getUpwellStarshipEngineering();
+			case "Mutagenic Stabilization" -> input.getMutagenicStabilization();
+			case "Amarr Encryption Methods" -> input.getAmarrEncryptionMethods();
+			case "Caldari Encryption Methods" -> input.getCaldariEncryptionMethods();
+			case "Gallente Encryption Methods" -> input.getGallenteEncryptionMethods();
+			case "Minmatar Encryption Methods" -> input.getMinmatarEncryptionMethods();
+			case "Sleeper Encryption Methods" -> input.getSleeperEncryptionMethods();
+			case "Triglavian Encryption Methods" -> input.getTriglavianEncryptionMethods();
+			case "Upwell Encryption Methods" -> input.getUpwellEncryptionMethods();
 			default -> throw new RuntimeException("Unhandled skill: " + skill.getName());
 		};
 	}

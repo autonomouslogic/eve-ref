@@ -1,6 +1,5 @@
 package com.autonomouslogic.everef.industry;
 
-import static com.autonomouslogic.everef.industry.IndustrySkills.GLOBAL_TIME_BONUSES;
 
 import com.autonomouslogic.everef.data.LoadedRefData;
 import com.autonomouslogic.everef.model.IndustryRig;

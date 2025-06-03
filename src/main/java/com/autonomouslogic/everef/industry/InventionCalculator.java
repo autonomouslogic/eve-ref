@@ -1,7 +1,6 @@
 package com.autonomouslogic.everef.industry;
 
 import static com.autonomouslogic.everef.industry.IndustrySkills.ENCRYPTION_SKILLS;
-import static com.autonomouslogic.everef.industry.IndustrySkills.GLOBAL_TIME_BONUSES;
 import static com.autonomouslogic.everef.industry.IndustrySkills.SPECIAL_TIME_BONUSES;
 
 import com.autonomouslogic.everef.data.LoadedRefData;
@@ -328,6 +327,7 @@ public class InventionCalculator {
 								SPECIAL_TIME_BONUSES.get("Mutagenic Stabilization"),
 								industryCostInput.getMutagenicStabilization()))
 				.toList();
+		var datacoreSkills = industrySkills.datacoreSkills(industryCostInput, invention);
 		if (skills.size() != 2) {
 			throw new IllegalArgumentException("Invalid skill count for invention: " + skills.size());
 		}
