@@ -40,6 +40,9 @@ public class ManufactureCalculator {
 	@Inject
 	protected IndustryRigs industryRigs;
 
+	@Inject
+	protected IndustrySkills industrySkills;
+
 	private final LoadedRefData refData;
 
 	@Setter
@@ -148,7 +151,8 @@ public class ManufactureCalculator {
 	private Duration manufacturingTime(BlueprintActivity manufacturing) {
 		var baseTime = (double) manufacturing.getTime();
 		var teMod = industryMath.efficiencyModifier(te);
-		var industryMod = 1.0 - GLOBAL_TIME_BONUSES.get("Industry") * industryCostInput.getIndustry();
+//		var industryMod = 1.0 - GLOBAL_TIME_BONUSES.get("Industry") * industryCostInput.getIndustry();
+		var industryMod = industrySkills.manufacturingTimeBonusMod(industryCostInput);
 		var advancedIndustryMod =
 				1.0 - GLOBAL_TIME_BONUSES.get("Advanced Industry") * industryCostInput.getAdvancedIndustry();
 		var specialSkillMod = skillMath.manufacturingSpecialisedSkillMod(manufacturing, industryCostInput);

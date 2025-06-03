@@ -12,6 +12,7 @@ public class SkillMath {
 	@Inject
 	protected SkillMath() {}
 
+	@Deprecated
 	public double manufacturingSpecialisedSkillMod(
 			BlueprintActivity manufacturing, IndustryCostInput industryCostInput) {
 		return sumSkillMod(
@@ -115,6 +116,7 @@ public class SkillMath {
 						industryCostInput.getMutagenicStabilization()));
 	}
 
+	@Deprecated
 	private double specialSkillBonus(BlueprintActivity manufacturing, IndustrySkills.SkillBonus bonus, int level) {
 		if (manufacturing.getRequiredSkills().containsKey(bonus.getSkillId())) {
 			return bonus.getBonus() * level;
@@ -122,6 +124,7 @@ public class SkillMath {
 		return 0.0;
 	}
 
+	@Deprecated
 	private double sumSkillMod(double... bonuses) {
 		var mod = 1.0;
 		for (double bonus : bonuses) {

@@ -3,13 +3,25 @@ package com.autonomouslogic.everef.industry;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.function.BiConsumer;
+import java.util.function.BinaryOperator;
+import java.util.function.Function;
+import java.util.function.ObjIntConsumer;
+import java.util.function.Supplier;
+import java.util.stream.Collector;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 import com.autonomouslogic.everef.model.IndustryRig;
 import com.autonomouslogic.everef.model.IndustrySkill;
+import com.autonomouslogic.everef.model.api.IndustryCostInput;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.Value;
+import org.apache.commons.lang3.tuple.Pair;
 
 import javax.inject.Inject;
 
@@ -112,5 +124,24 @@ public class IndustrySkills extends AbstractIndustryService<IndustrySkill> {
 	@Inject
 	protected IndustrySkills(CsvMapper csvMapper){
 		super(IndustrySkill.class, SKILLS_CONFIG, IndustrySkill::getTypeId, csvMapper);
+	}
+
+	public double manufacturingTimeBonusMod(IndustryCostInput input) {
+		var skills = stream().filter(skill -> skill.getManufacturingTimeBonus() != null).map(skill -> Pair.of(skill, skillLevel(skill, input))).toList();
+		var mod = 1.0;
+		for (var pair : skills) {
+			var bonus = pair.getLeft().getManufacturingTimeBonus();
+			var levelBonus = bonus * pair.getRight();
+			var levelMod = 1.0 + levelBonus / 100.0;
+			mod *= levelMod;
+		}
+		return mod;
+	}
+
+	private Integer skillLevel(IndustrySkill skill, IndustryCostInput input) {
+		return switch (skill.getName()) {
+			case "Industry" -> input.getIndustry();
+			default -> throw new RuntimeException("Unhandled skill: " + skill.getName());
+		};
 	}
 }

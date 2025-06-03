@@ -339,7 +339,7 @@ public class ImportIndustryResources implements Command {
 						.getTypeDogmaValueBoxed(type, manufacturingTimeBonus.getAttributeId())
 						.orElse(null))
 				.blueprintmanufactureTimeBonus(refDataUtil
-						.getTypeDogmaValueBoxed(type, manufacturingTimeBonus.getAttributeId())
+						.getTypeDogmaValueBoxed(type, blueprintmanufactureTimeBonus.getAttributeId())
 						.orElse(null))
 				.copySpeedBonus(refDataUtil
 						.getTypeDogmaValueBoxed(type, copySpeedBonus.getAttributeId())
@@ -356,4 +356,6 @@ public class ImportIndustryResources implements Command {
 				.encryptionMethods(name.endsWith(ENCRYPTION_METHODS))
 				.build();
 	}
+
+
 }

@@ -89,7 +89,8 @@ public class IndustryCostHandlerTest {
 	private static final BigDecimal EIV_TOLERANCE_ABS = BigDecimal.valueOf(10);
 
 	static final List<String> TEST_NAMES = List.of(
-			"dominix",
+			"dominix"
+		,
 			"sin",
 			"sin-blueprint",
 			"armor-energizing-charge-blueprint",
@@ -97,7 +98,8 @@ public class IndustryCostHandlerTest {
 			"mjolnir-fury-cruise-missile-blueprint",
 			"mjolnir-fury-cruise-missile-blueprint-optimized-attainment-decryptor",
 			"dominix-lowsec-sotiyo-rigs",
-			"sin-blueprint-lowsec-sotiyo-rigs");
+			"sin-blueprint-lowsec-sotiyo-rigs"
+	);
 
 	@Inject
 	ApiRunner apiRunner;
