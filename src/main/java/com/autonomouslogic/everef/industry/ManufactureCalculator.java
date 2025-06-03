@@ -30,9 +30,6 @@ public class ManufactureCalculator {
 	protected IndustryMath industryMath;
 
 	@Inject
-	protected SkillMath skillMath;
-
-	@Inject
 	protected IndustryStructures industryStructures;
 
 	@Inject
@@ -151,7 +148,7 @@ public class ManufactureCalculator {
 		var teMod = industryMath.efficiencyModifier(te);
 		var industryMod = industrySkills.manufacturingTimeBonusMod(industryCostInput);
 		var advancedIndustryMod = industrySkills.advancedIndustrySkillIndustryJobTimeBonusMod(industryCostInput);
-		var specialSkillMod = skillMath.manufacturingSpecialisedSkillMod(manufacturing, industryCostInput);
+		var specialSkillMod = industrySkills.manufacturingSpecialisedSkillMod(industryCostInput, manufacturing);
 		var structureMod = industryStructures.structureTimeModifier(structure);
 		var rigMod = industryRigs.rigModifier(
 				rigs, productType, industryCostInput.getSecurity(), IndustryRig::getTimeBonus, "manufacturing");
