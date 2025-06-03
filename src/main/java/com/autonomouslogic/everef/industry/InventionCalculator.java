@@ -1,9 +1,5 @@
 package com.autonomouslogic.everef.industry;
 
-import static com.autonomouslogic.everef.industry.IndustrySkills.ENCRYPTION_SKILLS;
-import static com.autonomouslogic.everef.industry.IndustrySkills.GLOBAL_TIME_BONUSES;
-import static com.autonomouslogic.everef.industry.IndustrySkills.SPECIAL_TIME_BONUSES;
-
 import com.autonomouslogic.everef.data.LoadedRefData;
 import com.autonomouslogic.everef.model.IndustryDecryptor;
 import com.autonomouslogic.everef.model.IndustryRig;
@@ -17,14 +13,12 @@ import com.autonomouslogic.everef.refdata.InventoryType;
 import com.autonomouslogic.everef.service.MarketPriceService;
 import com.autonomouslogic.everef.service.RefDataService;
 import com.autonomouslogic.everef.util.MathUtil;
-import com.autonomouslogic.everef.util.StreamUtil;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Stream;
 import javax.inject.Inject;
 import lombok.NonNull;
 import lombok.Setter;
@@ -34,9 +28,6 @@ public class InventionCalculator {
 	protected IndustryMath industryMath;
 
 	@Inject
-	protected SkillMath skillMath;
-
-	@Inject
 	protected IndustryStructures industryStructures;
 
 	@Inject
@@ -44,6 +35,9 @@ public class InventionCalculator {
 
 	@Inject
 	protected IndustryDecryptors industryDecryptors;
+
+	@Inject
+	protected IndustrySkills industrySkills;
 
 	@Inject
 	protected MarketPriceService marketPriceService;
@@ -191,8 +185,7 @@ public class InventionCalculator {
 
 	private Duration inventionTime(BlueprintActivity invention) {
 		var baseTime = (double) invention.getTime();
-		var advancedIndustryMod =
-				1.0 - GLOBAL_TIME_BONUSES.get("Advanced Industry") * industryCostInput.getAdvancedIndustry();
+		var advancedIndustryMod = industrySkills.advancedIndustrySkillIndustryJobTimeBonusMod(industryCostInput);
 		var structureMod = industryStructures.structureTimeModifier(structure);
 		var rigMod = industryRigs.rigModifier(
 				rigs, productType, industryCostInput.getSecurity(), IndustryRig::getTimeBonus, "invention");
@@ -212,7 +205,7 @@ public class InventionCalculator {
 
 	private double inventionProbability(BlueprintActivity invention) {
 		var baseProb = invention.getProducts().get(productType.getTypeId()).getProbability();
-		List<Integer> datacoreSkills = inventionDatacoreSkills(invention);
+		var datacoreSkills = inventionDatacoreSkills(invention);
 		var encryptionSkill = inventionEncryptionSkill(invention);
 		var decryptorMod = Optional.ofNullable(decryptor)
 				.map(IndustryDecryptor::getProbabilityModifier)
@@ -223,107 +216,8 @@ public class InventionCalculator {
 	}
 
 	private List<Integer> inventionDatacoreSkills(BlueprintActivity invention) {
-		var skills = StreamUtil.concat(
-						datacoreSkill(
-								invention,
-								SPECIAL_TIME_BONUSES.get("Advanced Small Ship Construction"),
-								industryCostInput.getAdvancedSmallShipConstruction()),
-						datacoreSkill(
-								invention,
-								SPECIAL_TIME_BONUSES.get("Advanced Industrial Ship Construction"),
-								industryCostInput.getAdvancedIndustrialShipConstruction()),
-						datacoreSkill(
-								invention,
-								SPECIAL_TIME_BONUSES.get("Advanced Medium Ship Construction"),
-								industryCostInput.getAdvancedMediumShipConstruction()),
-						datacoreSkill(
-								invention,
-								SPECIAL_TIME_BONUSES.get("Advanced Large Ship Construction"),
-								industryCostInput.getAdvancedLargeShipConstruction()),
-						datacoreSkill(
-								invention,
-								SPECIAL_TIME_BONUSES.get("High Energy Physics"),
-								industryCostInput.getHighEnergyPhysics()),
-						datacoreSkill(
-								invention,
-								SPECIAL_TIME_BONUSES.get("Plasma Physics"),
-								industryCostInput.getPlasmaPhysics()),
-						datacoreSkill(
-								invention,
-								SPECIAL_TIME_BONUSES.get("Nanite Engineering"),
-								industryCostInput.getNaniteEngineering()),
-						datacoreSkill(
-								invention,
-								SPECIAL_TIME_BONUSES.get("Hydromagnetic Physics"),
-								industryCostInput.getHydromagneticPhysics()),
-						datacoreSkill(
-								invention,
-								SPECIAL_TIME_BONUSES.get("Amarr Starship Engineering"),
-								industryCostInput.getAmarrStarshipEngineering()),
-						datacoreSkill(
-								invention,
-								SPECIAL_TIME_BONUSES.get("Minmatar Starship Engineering"),
-								industryCostInput.getMinmatarStarshipEngineering()),
-						datacoreSkill(
-								invention,
-								SPECIAL_TIME_BONUSES.get("Graviton Physics"),
-								industryCostInput.getGravitonPhysics()),
-						datacoreSkill(
-								invention,
-								SPECIAL_TIME_BONUSES.get("Laser Physics"),
-								industryCostInput.getLaserPhysics()),
-						datacoreSkill(
-								invention,
-								SPECIAL_TIME_BONUSES.get("Electromagnetic Physics"),
-								industryCostInput.getElectromagneticPhysics()),
-						datacoreSkill(
-								invention,
-								SPECIAL_TIME_BONUSES.get("Rocket Science"),
-								industryCostInput.getRocketScience()),
-						datacoreSkill(
-								invention,
-								SPECIAL_TIME_BONUSES.get("Gallente Starship Engineering"),
-								industryCostInput.getGallenteStarshipEngineering()),
-						datacoreSkill(
-								invention,
-								SPECIAL_TIME_BONUSES.get("Nuclear Physics"),
-								industryCostInput.getNuclearPhysics()),
-						datacoreSkill(
-								invention,
-								SPECIAL_TIME_BONUSES.get("Mechanical Engineering"),
-								industryCostInput.getMechanicalEngineering()),
-						datacoreSkill(
-								invention,
-								SPECIAL_TIME_BONUSES.get("Electronic Engineering"),
-								industryCostInput.getElectronicEngineering()),
-						datacoreSkill(
-								invention,
-								SPECIAL_TIME_BONUSES.get("Caldari Starship Engineering"),
-								industryCostInput.getCaldariStarshipEngineering()),
-						datacoreSkill(
-								invention,
-								SPECIAL_TIME_BONUSES.get("Quantum Physics"),
-								industryCostInput.getQuantumPhysics()),
-						datacoreSkill(
-								invention,
-								SPECIAL_TIME_BONUSES.get("Molecular Engineering"),
-								industryCostInput.getMolecularEngineering()),
-						datacoreSkill(
-								invention,
-								SPECIAL_TIME_BONUSES.get("Triglavian Quantum Engineering"),
-								industryCostInput.getTriglavianQuantumEngineering()),
-						datacoreSkill(
-								invention,
-								SPECIAL_TIME_BONUSES.get("Advanced Capital Ship Construction"),
-								industryCostInput.getAdvancedCapitalShipConstruction()),
-						datacoreSkill(
-								invention,
-								SPECIAL_TIME_BONUSES.get("Upwell Starship Engineering"),
-								industryCostInput.getUpwellStarshipEngineering()),
-						datacoreSkill(
-								invention,
-								SPECIAL_TIME_BONUSES.get("Mutagenic Stabilization"),
-								industryCostInput.getMutagenicStabilization()))
+		var skills = industrySkills.datacoreSkills(industryCostInput, invention).stream()
+				.map(p -> p.getRight())
 				.toList();
 		if (skills.size() != 2) {
 			throw new IllegalArgumentException("Invalid skill count for invention: " + skills.size());
@@ -331,36 +225,11 @@ public class InventionCalculator {
 		return skills;
 	}
 
-	private Stream<Integer> datacoreSkill(BlueprintActivity invention, IndustrySkills.SkillBonus bonus, int level) {
-		if (invention.getRequiredSkills().containsKey(bonus.getSkillId())) {
-			return Stream.of(level);
-		}
-		return Stream.empty();
-	}
-
 	private int inventionEncryptionSkill(BlueprintActivity invention) {
-		var skills = invention.getRequiredSkills().keySet();
-		if (skills.contains(ENCRYPTION_SKILLS.get("Amarr Encryption Methods"))) {
-			return industryCostInput.getAmarrEncryptionMethods();
+		var skills = industrySkills.encryptionSkills(industryCostInput, invention);
+		if (skills.size() != 1) {
+			throw new IllegalArgumentException("Invalid skill count for encryption: " + skills.size());
 		}
-		if (skills.contains(ENCRYPTION_SKILLS.get("Caldari Encryption Methods"))) {
-			return industryCostInput.getCaldariEncryptionMethods();
-		}
-		if (skills.contains(ENCRYPTION_SKILLS.get("Gallente Encryption Methods"))) {
-			return industryCostInput.getGallenteEncryptionMethods();
-		}
-		if (skills.contains(ENCRYPTION_SKILLS.get("Minmatar Encryption Methods"))) {
-			return industryCostInput.getMinmatarEncryptionMethods();
-		}
-		if (skills.contains(ENCRYPTION_SKILLS.get("Sleeper Encryption Methods"))) {
-			return industryCostInput.getSleeperEncryptionMethods();
-		}
-		if (skills.contains(ENCRYPTION_SKILLS.get("Triglavian Encryption Methods"))) {
-			return industryCostInput.getTriglavianEncryptionMethods();
-		}
-		if (skills.contains(ENCRYPTION_SKILLS.get("Upwell Encryption Methods"))) {
-			return industryCostInput.getUpwellEncryptionMethods();
-		}
-		throw new IllegalArgumentException("No encryption skill found");
+		return skills.getFirst().getRight();
 	}
 }

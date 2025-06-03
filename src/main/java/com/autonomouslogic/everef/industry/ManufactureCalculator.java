@@ -1,7 +1,5 @@
 package com.autonomouslogic.everef.industry;
 
-import static com.autonomouslogic.everef.industry.IndustrySkills.GLOBAL_TIME_BONUSES;
-
 import com.autonomouslogic.everef.data.LoadedRefData;
 import com.autonomouslogic.everef.model.IndustryRig;
 import com.autonomouslogic.everef.model.IndustryStructure;
@@ -32,13 +30,13 @@ public class ManufactureCalculator {
 	protected IndustryMath industryMath;
 
 	@Inject
-	protected SkillMath skillMath;
-
-	@Inject
 	protected IndustryStructures industryStructures;
 
 	@Inject
 	protected IndustryRigs industryRigs;
+
+	@Inject
+	protected IndustrySkills industrySkills;
 
 	private final LoadedRefData refData;
 
@@ -148,10 +146,9 @@ public class ManufactureCalculator {
 	private Duration manufacturingTime(BlueprintActivity manufacturing) {
 		var baseTime = (double) manufacturing.getTime();
 		var teMod = industryMath.efficiencyModifier(te);
-		var industryMod = 1.0 - GLOBAL_TIME_BONUSES.get("Industry") * industryCostInput.getIndustry();
-		var advancedIndustryMod =
-				1.0 - GLOBAL_TIME_BONUSES.get("Advanced Industry") * industryCostInput.getAdvancedIndustry();
-		var specialSkillMod = skillMath.manufacturingSpecialisedSkillMod(manufacturing, industryCostInput);
+		var industryMod = industrySkills.manufacturingTimeBonusMod(industryCostInput);
+		var advancedIndustryMod = industrySkills.advancedIndustrySkillIndustryJobTimeBonusMod(industryCostInput);
+		var specialSkillMod = industrySkills.manufacturingSpecialisedSkillMod(industryCostInput, manufacturing);
 		var structureMod = industryStructures.structureTimeModifier(structure);
 		var rigMod = industryRigs.rigModifier(
 				rigs, productType, industryCostInput.getSecurity(), IndustryRig::getTimeBonus, "manufacturing");

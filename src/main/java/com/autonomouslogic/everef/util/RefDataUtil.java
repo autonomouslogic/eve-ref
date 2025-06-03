@@ -316,6 +316,10 @@ public class RefDataUtil {
 		return opt.map(OptionalDouble::of).orElseGet(OptionalDouble::empty);
 	}
 
+	public Optional<Double> getTypeDogmaValueBoxed(InventoryType type, long dogmaAttributeId) {
+		return getTypeDogmaValue(type, dogmaAttributeId).stream().boxed().findFirst();
+	}
+
 	public OptionalDouble getTypeDogmaFirstValue(InventoryType type, long... dogmaAttributeIds) {
 		for (long id : dogmaAttributeIds) {
 			var opt = getTypeDogmaValue(type, id);

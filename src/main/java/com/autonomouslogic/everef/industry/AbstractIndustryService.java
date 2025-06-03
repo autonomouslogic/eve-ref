@@ -6,6 +6,7 @@ import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.stream.Stream;
 import lombok.SneakyThrows;
 
 public abstract class AbstractIndustryService<T> {
@@ -34,5 +35,9 @@ public abstract class AbstractIndustryService<T> {
 
 	public T get(long id) {
 		return entries.get(id);
+	}
+
+	public Stream<T> stream() {
+		return entries.values().stream();
 	}
 }
