@@ -1,5 +1,17 @@
 EVE Ref Changelog
 
+## [2.65.1](https://github.com/autonomouslogic/eve-ref/compare/2.65.0...2.65.1) (2025-06-02)
+
+
+### Bug Fixes
+
+* **deps:** update dependency org.flywaydb:flyway-core to v11.8.2 ([#874](https://github.com/autonomouslogic/eve-ref/issues/874)) ([5a7af2f](https://github.com/autonomouslogic/eve-ref/commit/5a7af2f9191f43c369dd048736e5bc78b1b3c08e))
+
+
+### Miscellaneous Chores
+
+* Test resources check task ([#877](https://github.com/autonomouslogic/eve-ref/issues/877)) ([738557c](https://github.com/autonomouslogic/eve-ref/commit/738557c5cbd832ff8af7cdf0f6c30defc2123362))
+
 ## [2.65.0](https://github.com/autonomouslogic/eve-ref/compare/2.64.0...2.65.0) (2025-05-31)
 
 
