@@ -1,5 +1,19 @@
 EVE Ref Changelog
 
+## [2.65.2](https://github.com/autonomouslogic/eve-ref/compare/2.65.1...2.65.2) (2025-06-03)
+
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([#876](https://github.com/autonomouslogic/eve-ref/issues/876)) ([dad1b95](https://github.com/autonomouslogic/eve-ref/commit/dad1b951d0b2c0cc139a92c5ce8f9e80184620b3))
+* **deps:** update dependency org.flywaydb:flyway-core to v11.9.0 ([#879](https://github.com/autonomouslogic/eve-ref/issues/879)) ([bfbac5a](https://github.com/autonomouslogic/eve-ref/commit/bfbac5abe98887d8cec53afae8cba4a152eef71f))
+* **deps:** update flyway ([#875](https://github.com/autonomouslogic/eve-ref/issues/875)) ([ecd3a87](https://github.com/autonomouslogic/eve-ref/commit/ecd3a87efc8e818817f3a44f8ba7eeb8adb3c00e))
+
+
+### Code Refactoring
+
+* Config for industry skills ([#878](https://github.com/autonomouslogic/eve-ref/issues/878)) ([de3363e](https://github.com/autonomouslogic/eve-ref/commit/de3363eda0ec0bc2f56297c9976d06734e2e4980))
+
 ## [2.65.1](https://github.com/autonomouslogic/eve-ref/compare/2.65.0...2.65.1) (2025-06-02)
 
 
