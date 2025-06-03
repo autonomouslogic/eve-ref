@@ -153,8 +153,9 @@ public class ManufactureCalculator {
 		var teMod = industryMath.efficiencyModifier(te);
 //		var industryMod = 1.0 - GLOBAL_TIME_BONUSES.get("Industry") * industryCostInput.getIndustry();
 		var industryMod = industrySkills.manufacturingTimeBonusMod(industryCostInput);
-		var advancedIndustryMod =
-				1.0 - GLOBAL_TIME_BONUSES.get("Advanced Industry") * industryCostInput.getAdvancedIndustry();
+//		var advancedIndustryMod =
+//				1.0 - GLOBAL_TIME_BONUSES.get("Advanced Industry") * industryCostInput.getAdvancedIndustry();
+		var advancedIndustryMod = industrySkills.advancedIndustrySkillIndustryJobTimeBonusMod(industryCostInput);
 		var specialSkillMod = skillMath.manufacturingSpecialisedSkillMod(manufacturing, industryCostInput);
 		var structureMod = industryStructures.structureTimeModifier(structure);
 		var rigMod = industryRigs.rigModifier(

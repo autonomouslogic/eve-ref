@@ -127,10 +127,18 @@ public class IndustrySkills extends AbstractIndustryService<IndustrySkill> {
 	}
 
 	public double manufacturingTimeBonusMod(IndustryCostInput input) {
-		var skills = stream().filter(skill -> skill.getManufacturingTimeBonus() != null).map(skill -> Pair.of(skill, skillLevel(skill, input))).toList();
+		return sumBonusMod(input, IndustrySkill::getManufacturingTimeBonus);
+	}
+
+	public double advancedIndustrySkillIndustryJobTimeBonusMod(IndustryCostInput input) {
+		return sumBonusMod(input, IndustrySkill::getAdvancedIndustrySkillIndustryJobTimeBonus);
+	}
+
+	private double sumBonusMod(IndustryCostInput input, Function<IndustrySkill, Double> bonusGetter) {
+		var skills = stream().filter(skill -> bonusGetter.apply(skill) != null).map(skill -> Pair.of(skill, skillLevel(skill, input))).toList();
 		var mod = 1.0;
 		for (var pair : skills) {
-			var bonus = pair.getLeft().getManufacturingTimeBonus();
+			var bonus = bonusGetter.apply(pair.getLeft());
 			var levelBonus = bonus * pair.getRight();
 			var levelMod = 1.0 + levelBonus / 100.0;
 			mod *= levelMod;
@@ -141,6 +149,7 @@ public class IndustrySkills extends AbstractIndustryService<IndustrySkill> {
 	private Integer skillLevel(IndustrySkill skill, IndustryCostInput input) {
 		return switch (skill.getName()) {
 			case "Industry" -> input.getIndustry();
+			case "Advanced Industry" -> input.getAdvancedIndustry();
 			default -> throw new RuntimeException("Unhandled skill: " + skill.getName());
 		};
 	}
