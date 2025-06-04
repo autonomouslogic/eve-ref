@@ -25,10 +25,13 @@ public class SystemSecurityTest {
 		return Stream.of(
 				Arguments.of(1.0, HIGH_SEC),
 				Arguments.of(0.45, HIGH_SEC),
+				Arguments.of(0.4996122717857361, HIGH_SEC),
+				Arguments.of(0.4501924216747284, HIGH_SEC),
+				Arguments.of(0.44994357228279114, LOW_SEC),
 				Arguments.of(0.449, LOW_SEC),
 				Arguments.of(0.25, LOW_SEC),
-				Arguments.of(0.01, LOW_SEC),
-				Arguments.of(0.0, NULL_SEC),
+				Arguments.of(0.029147488996386528, LOW_SEC),
+				Arguments.of(-0.0000013443460602502455, NULL_SEC),
 				Arguments.of(-0.1, NULL_SEC),
 				Arguments.of(-1.0, NULL_SEC));
 	}
