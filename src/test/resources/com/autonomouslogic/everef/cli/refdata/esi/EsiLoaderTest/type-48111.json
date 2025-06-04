@@ -1,0 +1,21 @@
+{
+  "capacity" : 0,
+  "description" : {
+    "en" : "",
+    "fr" : ""
+  },
+  "graphic_id" : 1141,
+  "group_id" : 1994,
+  "icon_id" : 21919,
+  "mass" : 0,
+  "name" : {
+    "en" : "Mystic L Blueprint",
+    "fr" : "Plan de construction de mystique L"
+  },
+  "packaged_volume" : 0.01,
+  "portion_size" : 1,
+  "published" : true,
+  "radius" : 1,
+  "type_id" : 48111,
+  "volume" : 0.01
+}

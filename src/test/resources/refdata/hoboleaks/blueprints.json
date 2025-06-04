@@ -519,5 +519,168 @@
     },
     "blueprintTypeID" : 33674,
     "maxProductionLimit" : 1
+  },
+  "48109" : {
+    "activities" : {
+      "research_material" : {
+        "time" : 315
+      },
+      "research_time" : {
+        "time" : 315
+      },
+      "manufacturing" : {
+        "skills" : [ {
+          "typeID" : 3380,
+          "level" : 1
+        } ],
+        "materials" : [ {
+          "typeID" : 47975,
+          "quantity" : 5
+        }, {
+          "typeID" : 48112,
+          "quantity" : 125
+        }, {
+          "typeID" : 34,
+          "quantity" : 458
+        }, {
+          "typeID" : 35,
+          "quantity" : 580
+        } ],
+        "products" : [ {
+          "typeID" : 47933,
+          "quantity" : 5000
+        } ],
+        "time" : 900
+      },
+      "invention" : {
+        "skills" : [ {
+          "typeID" : 11433,
+          "level" : 1
+        }, {
+          "typeID" : 11447,
+          "level" : 1
+        } ],
+        "materials" : [ {
+          "typeID" : 20411,
+          "quantity" : 1
+        }, {
+          "typeID" : 20413,
+          "quantity" : 1
+        } ],
+        "products" : [ {
+          "typeID" : 48111,
+          "probability" : 0.34,
+          "quantity" : 5
+        } ],
+        "time" : 68100
+      },
+      "copying" : {
+        "time" : 720
+      }
+    },
+    "blueprintTypeID" : 48109,
+    "maxProductionLimit" : 200
+  },
+  "48111" : {
+    "activities" : {
+      "research_material" : {
+        "skills" : [ {
+          "typeID" : 11441,
+          "level" : 1
+        }, {
+          "typeID" : 11455,
+          "level" : 1
+        }, {
+          "typeID" : 3409,
+          "level" : 5
+        } ],
+        "materials" : [ {
+          "typeID" : 11467,
+          "quantity" : 1
+        }, {
+          "typeID" : 9836,
+          "quantity" : 3
+        }, {
+          "typeID" : 3814,
+          "quantity" : 5
+        } ],
+        "time" : 504
+      },
+      "research_time" : {
+        "skills" : [ {
+          "typeID" : 11441,
+          "level" : 1
+        }, {
+          "typeID" : 11455,
+          "level" : 1
+        }, {
+          "typeID" : 3403,
+          "level" : 5
+        } ],
+        "materials" : [ {
+          "typeID" : 11467,
+          "quantity" : 1
+        }, {
+          "typeID" : 9836,
+          "quantity" : 3
+        }, {
+          "typeID" : 3814,
+          "quantity" : 5
+        } ],
+        "time" : 504
+      },
+      "manufacturing" : {
+        "skills" : [ {
+          "typeID" : 11441,
+          "level" : 1
+        }, {
+          "typeID" : 11455,
+          "level" : 1
+        }, {
+          "typeID" : 3380,
+          "level" : 5
+        } ],
+        "materials" : [ {
+          "typeID" : 11476,
+          "quantity" : 1
+        }, {
+          "typeID" : 47975,
+          "quantity" : 14
+        }, {
+          "typeID" : 11399,
+          "quantity" : 15
+        }, {
+          "typeID" : 48112,
+          "quantity" : 280
+        }, {
+          "typeID" : 16679,
+          "quantity" : 600
+        } ],
+        "products" : [ {
+          "typeID" : 47935,
+          "quantity" : 5000
+        } ],
+        "time" : 14400
+      },
+      "copying" : {
+        "skills" : [ {
+          "typeID" : 11441,
+          "level" : 1
+        }, {
+          "typeID" : 11455,
+          "level" : 1
+        }, {
+          "typeID" : 3402,
+          "level" : 5
+        } ],
+        "materials" : [ {
+          "typeID" : 11746,
+          "quantity" : 1
+        } ],
+        "time" : 11520
+      }
+    },
+    "blueprintTypeID" : 48111,
+    "maxProductionLimit" : 10
   }
 }
