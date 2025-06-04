@@ -26,7 +26,6 @@ import javax.inject.Inject;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Loads and stores various industry-related constants into CSV files.
@@ -43,13 +42,12 @@ public class ImportIndustryResources implements Command {
 	private final String ENCRYPTION_METHODS = "Encryption Methods";
 	private final String DATACORE_PREFIX = "Datacore - ";
 	private static final Map<String, String> DATACORE_SKILL_RENAMES = Map.ofEntries(
-		Map.entry("Amarrian Starship Engineering", "Amarr Starship Engineering"),
-		Map.entry("Gallentean Starship Engineering", "Gallente Starship Engineering"),
+			Map.entry("Amarrian Starship Engineering", "Amarr Starship Engineering"),
+			Map.entry("Gallentean Starship Engineering", "Gallente Starship Engineering"),
 			Map.entry("Core Subsystems Engineering", "Core Subsystem Technology"),
-				Map.entry("Defensive Subsystems Engineering", "Defensive Subsystem Technology"),
-					Map.entry("Offensive Subsystems Engineering", "Offensive Subsystem Technology"),
-						Map.entry("Propulsion Subsystems Engineering", "Propulsion Subsystem Technology")
-	);
+			Map.entry("Defensive Subsystems Engineering", "Defensive Subsystem Technology"),
+			Map.entry("Offensive Subsystems Engineering", "Offensive Subsystem Technology"),
+			Map.entry("Propulsion Subsystems Engineering", "Propulsion Subsystem Technology"));
 
 	@Inject
 	protected CsvMapper csvMapper;
@@ -161,15 +159,21 @@ public class ImportIndustryResources implements Command {
 	@SneakyThrows
 	private void loadSkills() {
 		var datacoreNames = getDatacoreSkillNames();
-		loadTypes("skills", SKILLS_CONFIG, IndustrySkill.class, type -> filterSkill(type, datacoreNames), type -> createSkill(type, datacoreNames));
+		loadTypes(
+				"skills",
+				SKILLS_CONFIG,
+				IndustrySkill.class,
+				type -> filterSkill(type, datacoreNames),
+				type -> createSkill(type, datacoreNames));
 	}
 
 	private List<String> getDatacoreSkillNames() {
 		var datacoreNames = refData.getMarketGroup(DATACORES_MARKET_GROUP_ID).getTypeIds().stream()
-			.map(typeId -> refData.getType(typeId))
-			.flatMap(type -> Optional.ofNullable(type.getName()).flatMap(c -> Optional.ofNullable(c.get("en"))).stream())
-			.map(s -> StringUtils.removeStart(s, DATACORE_PREFIX))
-			.map(s -> DATACORE_SKILL_RENAMES.getOrDefault(s, s))
+				.map(typeId -> refData.getType(typeId))
+				.flatMap(type ->
+						Optional.ofNullable(type.getName()).flatMap(c -> Optional.ofNullable(c.get("en"))).stream())
+				.map(s -> StringUtils.removeStart(s, DATACORE_PREFIX))
+				.map(s -> DATACORE_SKILL_RENAMES.getOrDefault(s, s))
 				.toList();
 		log.info(datacoreNames);
 		return datacoreNames;
@@ -343,8 +347,8 @@ public class ImportIndustryResources implements Command {
 			return false;
 		}
 		var name = type.getName().get("en");
-		return name.endsWith(ENCRYPTION_METHODS) ||
-			datacoreNames.contains(name)
+		return name.endsWith(ENCRYPTION_METHODS)
+				|| datacoreNames.contains(name)
 				|| refDataUtil
 						.getTypeDogmaFirstValue(
 								type,
