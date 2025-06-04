@@ -66,6 +66,13 @@
         "activity" : "reaction",
         "quantity" : 1000
       }
+    },
+    "48109" : {
+      "manufacturing" : {
+        "material_type_id" : 34,
+        "activity" : "manufacturing",
+        "quantity" : 458
+      }
     }
   }
 }

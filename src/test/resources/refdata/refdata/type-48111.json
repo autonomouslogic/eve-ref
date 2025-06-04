@@ -1,0 +1,36 @@
+{
+  "base_price" : 10000000000,
+  "graphic_id" : 1141,
+  "group_id" : 1994,
+  "icon_id" : 21919,
+  "meta_group_id" : 2,
+  "name" : {
+    "de" : "Mystic L Blueprint",
+    "en" : "Mystic L Blueprint",
+    "es" : "Plano de Mystic (G)",
+    "fr" : "Plan de construction de mystique L",
+    "ja" : "ミスティックL設計図",
+    "ko" : "미스틱 L 블루프린트",
+    "ru" : "Mystic L Blueprint",
+    "zh" : "奥秘蓝图 L"
+  },
+  "portion_size" : 1,
+  "published" : true,
+  "volume" : 0.01,
+  "type_id" : 48111,
+  "capacity" : 0,
+  "description" : {
+    "en" : "",
+    "fr" : ""
+  },
+  "mass" : 0,
+  "packaged_volume" : 0.01,
+  "radius" : 1,
+  "produced_by_blueprints" : {
+    "48109" : {
+      "blueprint_type_id" : 48109,
+      "blueprint_activity" : "invention"
+    }
+  },
+  "is_blueprint" : true
+}

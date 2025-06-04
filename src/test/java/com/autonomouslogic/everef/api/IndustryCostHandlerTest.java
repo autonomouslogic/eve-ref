@@ -4,6 +4,7 @@ import static com.autonomouslogic.everef.model.api.SystemSecurity.NULL_SEC;
 import static com.autonomouslogic.everef.test.TestDataUtil.TEST_PORT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -368,6 +369,18 @@ public class IndustryCostHandlerTest {
 		var input = IndustryCostInput.builder().productId(33673).build();
 		var cost = industryApi.industryCost(input);
 		assertNotEquals(0.0, cost.getManufacturing().get("33673").getTotalCost().doubleValue());
+	}
+
+	@Test
+	@SneakyThrows
+	void shouldNotFailInventionsWithoutEncryptionkills() {
+		// see mystic-l-blueprint-invention.jpg
+		setupBasicPrices();
+		var input = IndustryCostInput.builder().productId(48111).build();
+		var cost = industryApi.industryCost(input);
+		var invention = cost.getInvention().get("48111");
+		assertNotNull(invention);
+		assertEquals(0.4533333, invention.getProbability(), 1e-6); // EVE client says 0.453
 	}
 
 	// ===========

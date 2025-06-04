@@ -227,6 +227,9 @@ public class InventionCalculator {
 
 	private int inventionEncryptionSkill(BlueprintActivity invention) {
 		var skills = industrySkills.encryptionSkills(industryCostInput, invention);
+		if (skills.isEmpty()) {
+			return 0;
+		}
 		if (skills.size() != 1) {
 			throw new IllegalArgumentException("Invalid skill count for encryption: " + skills.size());
 		}

@@ -4026,3 +4026,31 @@
   radius: 1
   type_id: 33674
   volume: 0.01
+"48109":
+  capacity: 0
+  description: ""
+  graphic_id: 1142
+  group_id: 1993
+  icon_id: 21916
+  mass: 0
+  name: "Meson Exotic Plasma L Blueprint"
+  packaged_volume: 0.01
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 48109
+  volume: 0.01
+"48111":
+  capacity: 0
+  description: ""
+  graphic_id: 1141
+  group_id: 1994
+  icon_id: 21919
+  mass: 0
+  name: "Mystic L Blueprint"
+  packaged_volume: 0.01
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 48111
+  volume: 0.01

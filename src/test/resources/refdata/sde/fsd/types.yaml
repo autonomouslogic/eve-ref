@@ -4789,3 +4789,38 @@
   published: true
   sofFactionName: "tournament-xii"
   volume: 0.01
+"48109":
+  basePrice: 400000
+  graphicID: 1142
+  groupID: 1993
+  iconID: 21916
+  name:
+    de: "Meson Exotic Plasma L Blueprint"
+    en: "Meson Exotic Plasma L Blueprint"
+    es: "Plano de plasma exótico de mesones (G)"
+    fr: "Plan de construction de plasma L exotique de type méson"
+    ja: "メソン・エキゾチック・プラズマL設計図"
+    ko: "메손 엑조틱 플라즈마 L 블루프린트"
+    ru: "Meson Exotic Plasma L Blueprint"
+    zh: "介子异种等离子弹蓝图 L"
+  portionSize: 1
+  published: true
+  volume: 0.01
+"48111":
+  basePrice: 10000000000
+  graphicID: 1141
+  groupID: 1994
+  iconID: 21919
+  metaGroupID: 2
+  name:
+    de: "Mystic L Blueprint"
+    en: "Mystic L Blueprint"
+    es: "Plano de Mystic (G)"
+    fr: "Plan de construction de mystique L"
+    ja: "ミスティックL設計図"
+    ko: "미스틱 L 블루프린트"
+    ru: "Mystic L Blueprint"
+    zh: "奥秘蓝图 L"
+  portionSize: 1
+  published: true
+  volume: 0.01

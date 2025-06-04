@@ -1,0 +1,100 @@
+{
+  "activities" : {
+    "research_material" : {
+      "materials" : {
+        "11467" : {
+          "type_id" : 11467,
+          "quantity" : 1
+        },
+        "9836" : {
+          "type_id" : 9836,
+          "quantity" : 3
+        },
+        "3814" : {
+          "type_id" : 3814,
+          "quantity" : 5
+        }
+      },
+      "time" : 504,
+      "required_skills" : {
+        "11441" : 1,
+        "11455" : 1,
+        "3409" : 5
+      }
+    },
+    "research_time" : {
+      "materials" : {
+        "11467" : {
+          "type_id" : 11467,
+          "quantity" : 1
+        },
+        "9836" : {
+          "type_id" : 9836,
+          "quantity" : 3
+        },
+        "3814" : {
+          "type_id" : 3814,
+          "quantity" : 5
+        }
+      },
+      "time" : 504,
+      "required_skills" : {
+        "11441" : 1,
+        "11455" : 1,
+        "3403" : 5
+      }
+    },
+    "manufacturing" : {
+      "materials" : {
+        "11476" : {
+          "type_id" : 11476,
+          "quantity" : 1
+        },
+        "47975" : {
+          "type_id" : 47975,
+          "quantity" : 14
+        },
+        "11399" : {
+          "type_id" : 11399,
+          "quantity" : 15
+        },
+        "48112" : {
+          "type_id" : 48112,
+          "quantity" : 280
+        },
+        "16679" : {
+          "type_id" : 16679,
+          "quantity" : 600
+        }
+      },
+      "products" : {
+        "47935" : {
+          "type_id" : 47935,
+          "quantity" : 5000
+        }
+      },
+      "time" : 14400,
+      "required_skills" : {
+        "11441" : 1,
+        "11455" : 1,
+        "3380" : 5
+      }
+    },
+    "copying" : {
+      "materials" : {
+        "11746" : {
+          "type_id" : 11746,
+          "quantity" : 1
+        }
+      },
+      "time" : 11520,
+      "required_skills" : {
+        "11441" : 1,
+        "11455" : 1,
+        "3402" : 5
+      }
+    }
+  },
+  "blueprint_type_id" : 48111,
+  "max_production_limit" : 10
+}
