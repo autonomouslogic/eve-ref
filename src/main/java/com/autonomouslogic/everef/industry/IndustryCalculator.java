@@ -15,6 +15,7 @@ import com.autonomouslogic.everef.model.api.ManufacturingCost;
 import com.autonomouslogic.everef.refdata.Blueprint;
 import com.autonomouslogic.everef.refdata.InventoryType;
 import com.autonomouslogic.everef.service.EsiMarketPriceService;
+import com.autonomouslogic.everef.util.EveConstants;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -89,7 +90,8 @@ public class IndustryCalculator {
 					manufacturingCost =
 							calculateManufacturing(me.orElse(inventionCost.getMe()), te.orElse(inventionCost.getTe()));
 				}
-			} else {
+			} else if (productType.getMetaGroupId() == null
+					|| productType.getMetaGroupId() == EveConstants.TECH_1_META_GROUP_ID) {
 				var copyingCost = calculateCopying();
 				addCopying(copyingCost);
 			}
