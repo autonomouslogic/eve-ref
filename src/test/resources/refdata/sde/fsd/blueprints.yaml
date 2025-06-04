@@ -314,3 +314,49 @@
       time: 10800
   blueprintTypeID: 46158
   maxProductionLimit: 1000
+"33674":
+  activities:
+    copying:
+      time: 96000
+    manufacturing:
+      materials:
+      - quantity: 56
+        typeID: 11552
+      - quantity: 2443
+        typeID: 34
+      - quantity: 1802
+        typeID: 35
+      - quantity: 184
+        typeID: 36
+      - quantity: 98
+        typeID: 37
+      - quantity: 17
+        typeID: 11558
+      - quantity: 22
+        typeID: 39
+      - quantity: 22
+        typeID: 40
+      - quantity: 6
+        typeID: 11399
+      - quantity: 33
+        typeID: 11533
+      - quantity: 22
+        typeID: 11534
+      - quantity: 11
+        typeID: 3828
+      - quantity: 333
+        typeID: 11544
+      - quantity: 89
+        typeID: 11540
+      - quantity: 3
+        typeID: 11550
+      products:
+      - quantity: 1
+        typeID: 33673
+      time: 120000
+    research_material:
+      time: 42000
+    research_time:
+      time: 42000
+  blueprintTypeID: 33674
+  maxProductionLimit: 1

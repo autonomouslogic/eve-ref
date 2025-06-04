@@ -1,0 +1,86 @@
+{
+  "activities" : {
+    "copying" : {
+      "time" : 96000
+    },
+    "manufacturing" : {
+      "materials" : {
+        "11552" : {
+          "quantity" : 56,
+          "type_id" : 11552
+        },
+        "34" : {
+          "quantity" : 2443,
+          "type_id" : 34
+        },
+        "35" : {
+          "quantity" : 1802,
+          "type_id" : 35
+        },
+        "36" : {
+          "quantity" : 184,
+          "type_id" : 36
+        },
+        "37" : {
+          "quantity" : 98,
+          "type_id" : 37
+        },
+        "11558" : {
+          "quantity" : 17,
+          "type_id" : 11558
+        },
+        "39" : {
+          "quantity" : 22,
+          "type_id" : 39
+        },
+        "40" : {
+          "quantity" : 22,
+          "type_id" : 40
+        },
+        "11399" : {
+          "quantity" : 6,
+          "type_id" : 11399
+        },
+        "11533" : {
+          "quantity" : 33,
+          "type_id" : 11533
+        },
+        "11534" : {
+          "quantity" : 22,
+          "type_id" : 11534
+        },
+        "3828" : {
+          "quantity" : 11,
+          "type_id" : 3828
+        },
+        "11544" : {
+          "quantity" : 333,
+          "type_id" : 11544
+        },
+        "11540" : {
+          "quantity" : 89,
+          "type_id" : 11540
+        },
+        "11550" : {
+          "quantity" : 3,
+          "type_id" : 11550
+        }
+      },
+      "products" : {
+        "33673" : {
+          "quantity" : 1,
+          "type_id" : 33673
+        }
+      },
+      "time" : 120000
+    },
+    "research_material" : {
+      "time" : 42000
+    },
+    "research_time" : {
+      "time" : 42000
+    }
+  },
+  "blueprint_type_id" : 33674,
+  "max_production_limit" : 1
+}

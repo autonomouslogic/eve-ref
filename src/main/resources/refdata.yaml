@@ -146,6 +146,8 @@ types:
       - 46158
       - 43733
       - 30303
+      - 33673
+      - 33674
     languages:
       - en-us
       - fr
@@ -338,6 +340,7 @@ blueprints:
       - 803
       - 24536
       - 46158
+      - 33674
 
 icons:
   idField: icon_id

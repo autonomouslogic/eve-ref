@@ -66,6 +66,7 @@ public class IndustrySkills extends AbstractIndustryService<IndustrySkill> {
 	public double manufacturingSpecialisedSkillMod(IndustryCostInput input, BlueprintActivity activity) {
 		var skills = stream()
 				.filter(skill -> skill.getManufactureTimePerLevel() != null)
+				.filter(skill -> activity.getRequiredSkills() != null)
 				.filter(skill -> activity.getRequiredSkills().containsKey(skill.getTypeId()))
 				.map(skill -> Pair.of(skill, skillLevel(skill, input)))
 				.toList();

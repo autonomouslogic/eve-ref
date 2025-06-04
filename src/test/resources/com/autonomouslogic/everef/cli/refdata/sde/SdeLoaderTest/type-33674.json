@@ -1,0 +1,21 @@
+{
+  "base_price" : 287500,
+  "graphic_id" : 20605,
+  "group_id" : 105,
+  "meta_group_id" : 2,
+  "name" : {
+    "de" : "Whiptail Blueprint",
+    "en" : "Whiptail Blueprint",
+    "es" : "Plano de Whiptail",
+    "fr" : "Plan de construction Whiptail",
+    "ja" : "ウィップテイルブループリント",
+    "ko" : "윕테일 블루프린트",
+    "ru" : "Whiptail Blueprint",
+    "zh" : "长尾蜥级蓝图"
+  },
+  "portion_size" : 1,
+  "published" : true,
+  "sof_faction_name" : "tournament-xii",
+  "volume" : 0.01,
+  "type_id" : 33674
+}
