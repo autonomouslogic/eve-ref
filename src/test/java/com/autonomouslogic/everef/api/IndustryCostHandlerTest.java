@@ -361,6 +361,15 @@ public class IndustryCostHandlerTest {
 		assertEquals(BigDecimal.ZERO, cost.getManufacturing().get("645").getEstimatedItemValue());
 	}
 
+	@Test
+	@SneakyThrows
+	void shouldNotFailOnBlueprintsWithoutRequiredSkills() {
+		setupBasicPrices();
+		var input = IndustryCostInput.builder().productId(33673).build();
+		var cost = industryApi.industryCost(input);
+		assertNotEquals(0.0, cost.getManufacturing().get("33673").getTotalCost().doubleValue());
+	}
+
 	// ===========
 
 	@SneakyThrows

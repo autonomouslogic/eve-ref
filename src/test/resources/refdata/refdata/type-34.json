@@ -46,6 +46,13 @@
         "quantity" : 5200000
       }
     },
+    "33674" : {
+      "manufacturing" : {
+        "material_type_id" : 34,
+        "activity" : "manufacturing",
+        "quantity" : 2443
+      }
+    },
     "42874" : {
       "manufacturing" : {
         "material_type_id" : 34,
