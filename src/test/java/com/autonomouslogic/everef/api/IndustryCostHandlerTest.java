@@ -352,6 +352,15 @@ public class IndustryCostHandlerTest {
 		assertTrue(e.getResponseBody().contains("System ID 1 not found"), e.getResponseBody());
 	}
 
+	@Test
+	@SneakyThrows
+	void shouldNotFailIfEivPricesCantBeResolved() {
+		esiMarketPrices = "[]";
+		var input = IndustryCostInput.builder().productId(645).build();
+		var cost = industryApi.industryCost(input);
+		assertEquals(BigDecimal.ZERO, cost.getManufacturing().get("645").getEstimatedItemValue());
+	}
+
 	// ===========
 
 	@SneakyThrows

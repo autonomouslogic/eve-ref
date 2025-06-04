@@ -13,7 +13,11 @@ import com.autonomouslogic.everef.refdata.InventoryType;
 import com.autonomouslogic.everef.service.EsiMarketPriceService;
 import com.autonomouslogic.everef.service.MarketPriceService;
 import com.autonomouslogic.everef.util.MathUtil;
+import com.google.common.util.concurrent.RateLimiter;
+import io.sentry.Sentry;
+import io.sentry.SentryLevel;
 import java.math.BigDecimal;
+import java.time.Duration;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,8 +25,10 @@ import java.util.Optional;
 import java.util.function.Function;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import lombok.extern.log4j.Log4j2;
 
 @Singleton
+@Log4j2
 public class IndustryMath {
 	@Inject
 	protected EsiMarketPriceService esiMarketPriceService;
@@ -36,6 +42,9 @@ public class IndustryMath {
 	@Inject
 	protected IndustryRigs industryRigs;
 
+	private static final RateLimiter warnLimiter =
+			RateLimiter.create(1.0 / Duration.ofMinutes(1).toMillis());
+
 	@Inject
 	protected IndustryMath() {}
 
@@ -44,7 +53,12 @@ public class IndustryMath {
 		for (var material : activity.getMaterials().values()) {
 			var adjPrice = esiMarketPriceService.getEsiAdjustedPrice(material.getTypeId());
 			if (adjPrice.isEmpty()) {
-				throw new RuntimeException("typeId: " + material.getTypeId());
+				if (warnLimiter.tryAcquire()) {
+					var msg = String.format("Average price for %s not found", material.getTypeId());
+					log.warn(msg);
+					Sentry.captureException(new RuntimeException(msg), scope -> scope.setLevel(SentryLevel.WARNING));
+				}
+				continue;
 			}
 			var quantity = BigDecimal.valueOf(material.getQuantity());
 			var price = BigDecimal.valueOf(adjPrice.getAsDouble());
