@@ -1,5 +1,6 @@
 package com.autonomouslogic.everef.cli;
 
+import static com.autonomouslogic.everef.util.EveConstants.DATACORES_MARKET_GROUP_ID;
 import static com.autonomouslogic.everef.util.EveConstants.DECRYPTORS_MARKET_GROUP_ID;
 import static com.autonomouslogic.everef.util.EveConstants.STRUCTURE_CATEGORY_ID;
 import static com.autonomouslogic.everef.util.EveConstants.STRUCTURE_MODULE_CATEGORY_ID;
@@ -17,12 +18,14 @@ import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.google.common.collect.Ordering;
 import java.io.File;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import javax.inject.Inject;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Loads and stores various industry-related constants into CSV files.
@@ -37,6 +40,14 @@ public class ImportIndustryResources implements Command {
 	public static final String SKILLS_CONFIG = RESOURCES_BASE + "/skills.csv";
 
 	private final String ENCRYPTION_METHODS = "Encryption Methods";
+	private final String DATACORE_PREFIX = "Datacore - ";
+	private static final Map<String, String> DATACORE_SKILL_RENAMES = Map.ofEntries(
+			Map.entry("Amarrian Starship Engineering", "Amarr Starship Engineering"),
+			Map.entry("Gallentean Starship Engineering", "Gallente Starship Engineering"),
+			Map.entry("Core Subsystems Engineering", "Core Subsystem Technology"),
+			Map.entry("Defensive Subsystems Engineering", "Defensive Subsystem Technology"),
+			Map.entry("Offensive Subsystems Engineering", "Offensive Subsystem Technology"),
+			Map.entry("Propulsion Subsystems Engineering", "Propulsion Subsystem Technology"));
 
 	@Inject
 	protected CsvMapper csvMapper;
@@ -147,7 +158,25 @@ public class ImportIndustryResources implements Command {
 
 	@SneakyThrows
 	private void loadSkills() {
-		loadTypes("skills", SKILLS_CONFIG, IndustrySkill.class, this::filterSkill, this::createSkill);
+		var datacoreNames = getDatacoreSkillNames();
+		loadTypes(
+				"skills",
+				SKILLS_CONFIG,
+				IndustrySkill.class,
+				type -> filterSkill(type, datacoreNames),
+				type -> createSkill(type, datacoreNames));
+	}
+
+	private List<String> getDatacoreSkillNames() {
+		var datacoreNames = refData.getMarketGroup(DATACORES_MARKET_GROUP_ID).getTypeIds().stream()
+				.map(typeId -> refData.getType(typeId))
+				.flatMap(type ->
+						Optional.ofNullable(type.getName()).flatMap(c -> Optional.ofNullable(c.get("en"))).stream())
+				.map(s -> StringUtils.removeStart(s, DATACORE_PREFIX))
+				.map(s -> DATACORE_SKILL_RENAMES.getOrDefault(s, s))
+				.toList();
+		log.info(datacoreNames);
+		return datacoreNames;
 	}
 
 	@SneakyThrows
@@ -313,11 +342,13 @@ public class ImportIndustryResources implements Command {
 		builder.globalActivities(activities);
 	}
 
-	private boolean filterSkill(InventoryType type) {
+	private boolean filterSkill(InventoryType type, List<String> datacoreNames) {
 		if (!Optional.ofNullable(type.getSkill()).orElse(false)) {
 			return false;
 		}
-		return type.getName().get("en").endsWith(ENCRYPTION_METHODS)
+		var name = type.getName().get("en");
+		return name.endsWith(ENCRYPTION_METHODS)
+				|| datacoreNames.contains(name)
 				|| refDataUtil
 						.getTypeDogmaFirstValue(
 								type,
@@ -330,7 +361,7 @@ public class ImportIndustryResources implements Command {
 						.isPresent();
 	}
 
-	private IndustrySkill createSkill(InventoryType type) {
+	private IndustrySkill createSkill(InventoryType type, List<String> datacoreNames) {
 		var name = type.getName().get("en");
 		return IndustrySkill.builder()
 				.typeId(type.getTypeId())
@@ -353,9 +384,7 @@ public class ImportIndustryResources implements Command {
 				.manufactureTimePerLevel(refDataUtil
 						.getTypeDogmaValueBoxed(type, manufactureTimePerLevel.getAttributeId())
 						.orElse(null))
-				.datacore(refDataUtil
-						.getTypeDogmaValueBoxed(type, manufactureTimePerLevel.getAttributeId())
-						.isPresent())
+				.datacore(datacoreNames.contains(name))
 				.encryptionMethods(name.endsWith(ENCRYPTION_METHODS))
 				.build();
 	}

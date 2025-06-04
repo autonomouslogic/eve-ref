@@ -474,6 +474,46 @@ public class IndustryCostInput {
 	@JsonProperty
 	@lombok.Builder.Default
 	@Schema(
+			description = "The Core Subsystem Technology skill level the installing character",
+			requiredMode = Schema.RequiredMode.NOT_REQUIRED,
+			defaultValue = "5",
+			minimum = "0",
+			maximum = "5")
+	int coreSubsystemTechnology = 5;
+
+	@JsonProperty
+	@lombok.Builder.Default
+	@Schema(
+			description = "The Defensive Subsystem Technology skill level the installing character",
+			requiredMode = Schema.RequiredMode.NOT_REQUIRED,
+			defaultValue = "5",
+			minimum = "0",
+			maximum = "5")
+	int defensiveSubsystemTechnology = 5;
+
+	@JsonProperty
+	@lombok.Builder.Default
+	@Schema(
+			description = "The Offensive Subsystem Technology skill level the installing character",
+			requiredMode = Schema.RequiredMode.NOT_REQUIRED,
+			defaultValue = "5",
+			minimum = "0",
+			maximum = "5")
+	int offensiveSubsystemTechnology = 5;
+
+	@JsonProperty
+	@lombok.Builder.Default
+	@Schema(
+			description = "The Propulsion Subsystem Technology skill level the installing character",
+			requiredMode = Schema.RequiredMode.NOT_REQUIRED,
+			defaultValue = "5",
+			minimum = "0",
+			maximum = "5")
+	int propulsionSubsystemTechnology = 5;
+
+	@JsonProperty
+	@lombok.Builder.Default
+	@Schema(
 			description = "The Amarr Encryption Methods skill level the installing character",
 			requiredMode = Schema.RequiredMode.NOT_REQUIRED,
 			defaultValue = "5",

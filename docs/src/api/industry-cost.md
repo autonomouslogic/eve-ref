@@ -260,6 +260,8 @@ See [OpenAPI spec](https://github.com/autonomouslogic/eve-ref/blob/main/spec/eve
 * `amarr_starship_engineering` - The Amarr Starship Engineering skill level the installing character
 * `caldari_encryption_methods` - The Caldari Encryption Methods skill level the installing character
 * `caldari_starship_engineering` - The Caldari Starship Engineering skill level the installing character
+* `core_subsystem_technology` - The Core Subsystem Technology skill level the installing character
+* `defensive_subsystem_technology` - The Defensive Subsystem Technology skill level the installing character
 * `electromagnetic_physics` - The Electromagnetic Physics skill level the installing character
 * `electronic_engineering` - The Electronic Engineering skill level the installing character
 * `gallente_encryption_methods` - The Gallente Encryption Methods skill level the installing character
@@ -277,16 +279,19 @@ See [OpenAPI spec](https://github.com/autonomouslogic/eve-ref/blob/main/spec/eve
 * `mutagenic_stabilization` - The Mutagenic Stabilization skill level the installing character
 * `nanite_engineering` - The Nanite Engineering skill level the installing character
 * `nuclear_physics` - The Nuclear Physics skill level the installing character
+* `offensive_subsystem_technology` - The Offensive Subsystem Technology skill level the installing character
 * `plasma_physics` - The Plasma Physics skill level the installing character
+* `propulsion_subsystem_technology` - The Propulsion Subsystem Technology skill level the installing character
 * `quantum_physics` - The Quantum Physics skill level the installing character
 * `research` - The Research skill level the installing character
-* `science` - The Science skill level the installing character
 * `rocket_science` - The Rocket Science skill level the installing character
+* `science` - The Science skill level the installing character
 * `sleeper_encryption_methods` - The Sleeper Encryption Methods skill level the installing character
 * `triglavian_encryption_methods` - The Triglavian Encryption Methods skill level the installing character
 * `triglavian_quantum_engineering` - The Triglavian Quantum Engineering skill level the installing character
 * `upwell_encryption_methods` - The Upwell Encryption Methods skill level the installing character
 * `upwell_starship_engineering` - The Upwell Starship Engineering skill level the installing character
+
 
 ### Other
 * `alpha` - Whether installing character is an alpha clone or not

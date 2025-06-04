@@ -154,10 +154,25 @@ components:
           description: The copying cost index of the system where the job is installed
           maximum: 1
           minimum: 0
+        core_subsystem_technology:
+          type: integer
+          format: int32
+          default: 5
+          description: The Core Subsystem Technology skill level the installing character
+          maximum: 5
+          minimum: 0
         decryptor_id:
           type: integer
           format: int64
           description: The decryptor type ID to use
+        defensive_subsystem_technology:
+          type: integer
+          format: int32
+          default: 5
+          description: The Defensive Subsystem Technology skill level the installing
+            character
+          maximum: 5
+          minimum: 0
         electromagnetic_physics:
           type: integer
           format: int32
@@ -316,6 +331,14 @@ components:
           description: The Nuclear Physics skill level the installing character
           maximum: 5
           minimum: 0
+        offensive_subsystem_technology:
+          type: integer
+          format: int32
+          default: 5
+          description: The Offensive Subsystem Technology skill level the installing
+            character
+          maximum: 5
+          minimum: 0
         plasma_physics:
           type: integer
           format: int32
@@ -328,6 +351,14 @@ components:
           format: int64
           description: The desired product type ID
           minimum: 1
+        propulsion_subsystem_technology:
+          type: integer
+          format: int32
+          default: 5
+          description: The Propulsion Subsystem Technology skill level the installing
+            character
+          maximum: 5
+          minimum: 0
         quantum_physics:
           type: integer
           format: int32
