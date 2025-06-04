@@ -6,6 +6,7 @@ import com.autonomouslogic.everef.model.api.CopyingCost;
 import com.autonomouslogic.everef.model.api.IndustryCostInput;
 import com.autonomouslogic.everef.refdata.Blueprint;
 import com.autonomouslogic.everef.refdata.BlueprintActivity;
+import com.autonomouslogic.everef.util.MathUtil;
 import java.time.Duration;
 import java.util.List;
 import javax.inject.Inject;
@@ -58,6 +59,23 @@ public class CopyingCalculator {
 		}
 		var eiv = industryMath.eiv(manufacturing, runs);
 		var jcb = industryMath.jobCostBase(eiv);
+		var facilityTax = industryMath.facilityTax(industryCostInput, jcb);
+		var sccSurcharge = industryMath.sccSurcharge(jcb);
+		var alphaCloneTax = industryMath.alphaCloneTax(industryCostInput, jcb);
+		var systemCostIndex = industryMath.copyingSystemCostIndex(industryCostInput, jcb);
+		var systemCostBonuses = industryMath.systemCostBonuses(
+				structure,
+				null,
+				rigs,
+				industryCostInput.getSecurity(),
+				industryCostInput.getSystemCostBonus(),
+				systemCostIndex,
+				"copying");
+		var totalJobCost = systemCostIndex
+				.add(facilityTax)
+				.add(sccSurcharge)
+				.add(alphaCloneTax)
+				.add(systemCostBonuses);
 		var time = copyingTime(copying);
 		return CopyingCost.builder()
 				.productId(blueprint.getBlueprintTypeId())
@@ -65,6 +83,14 @@ public class CopyingCalculator {
 				.estimatedItemValue(eiv)
 				.jobCostBase(jcb)
 				.time(time)
+				.systemCostIndex(systemCostIndex)
+				.systemCostBonuses(systemCostBonuses)
+				.facilityTax(facilityTax)
+				.sccSurcharge(sccSurcharge)
+				.alphaCloneTax(alphaCloneTax)
+				.totalJobCost(totalJobCost)
+				.totalCost(totalJobCost)
+				.totalCostPerRun(MathUtil.round(MathUtil.divide(totalJobCost, runs), 2))
 				.build();
 	}
 
