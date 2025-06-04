@@ -38,6 +38,7 @@ public class ActivityCost {
 
 	@JsonProperty
 	@Singular
+	@JsonInclude(JsonInclude.Include.NON_EMPTY)
 	Map<String, MaterialCost> materials;
 
 	@JsonProperty

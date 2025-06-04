@@ -40,7 +40,7 @@ public class IndustryCost {
 	@JsonProperty
 	@Singular("copying")
 	@JsonInclude(JsonInclude.Include.NON_EMPTY)
-	Map<String, ActivityCost> copying;
+	Map<String, CopyingCost> copying;
 
 	//	@JsonProperty
 	//	@Singular("meResearch")

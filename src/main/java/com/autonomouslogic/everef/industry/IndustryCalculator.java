@@ -7,6 +7,7 @@ import com.autonomouslogic.everef.data.LoadedRefData;
 import com.autonomouslogic.everef.model.IndustryDecryptor;
 import com.autonomouslogic.everef.model.IndustryRig;
 import com.autonomouslogic.everef.model.IndustryStructure;
+import com.autonomouslogic.everef.model.api.CopyingCost;
 import com.autonomouslogic.everef.model.api.IndustryCost;
 import com.autonomouslogic.everef.model.api.IndustryCostInput;
 import com.autonomouslogic.everef.model.api.InventionCost;
@@ -33,6 +34,9 @@ public class IndustryCalculator {
 
 	@Inject
 	protected Provider<InventionCalculator> inventionCalculatorProvider;
+
+	@Inject
+	protected Provider<CopyingCalculator> copyingCalculatorProvider;
 
 	@Inject
 	protected IndustryMath industryMath;
@@ -85,6 +89,9 @@ public class IndustryCalculator {
 					manufacturingCost =
 							calculateManufacturing(me.orElse(inventionCost.getMe()), te.orElse(inventionCost.getTe()));
 				}
+			} else {
+				var copyingCost = calculateCopying();
+				addCopying(copyingCost);
 			}
 			addManufacturing(manufacturingCost);
 		} else {
@@ -168,11 +175,26 @@ public class IndustryCalculator {
 		return inventionCost;
 	}
 
+	private CopyingCost calculateCopying() {
+		return copyingCalculatorProvider
+				.get()
+				.setIndustryCostInput(industryCostInput)
+				.setBlueprint(blueprint)
+				.setRuns(industryCostInput.getRuns())
+				.setStructure(structure)
+				.setRigs(rigs)
+				.calc();
+	}
+
 	public void addManufacturing(ManufacturingCost manufacturingCost) {
 		cost.manufacturing(String.valueOf(manufacturingCost.getProductId()), manufacturingCost);
 	}
 
 	public void addInvention(InventionCost inventionCost) {
 		cost.invention(String.valueOf(inventionCost.getProductId()), inventionCost);
+	}
+
+	public void addCopying(CopyingCost copyingCost) {
+		cost.copying(String.valueOf(copyingCost.getProductId()), copyingCost);
 	}
 }

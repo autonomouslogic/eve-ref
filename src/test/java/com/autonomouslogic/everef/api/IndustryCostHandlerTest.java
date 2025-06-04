@@ -88,17 +88,18 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @Timeout(60)
 public class IndustryCostHandlerTest {
 	static final List<String> TEST_NAMES = List.of(
-//			"dominix",
-//			"sin",
-//			"sin-blueprint",
+			//			"dominix"
+			//		,
+			//			"sin",
+			//			"sin-blueprint",
 			"armor-energizing-charge-blueprint"
-//		,
-//			"mjolnir-fury-cruise-missile",
-//			"mjolnir-fury-cruise-missile-blueprint",
-//			"mjolnir-fury-cruise-missile-blueprint-optimized-attainment-decryptor",
-//			"dominix-lowsec-sotiyo-rigs",
-//			"sin-blueprint-lowsec-sotiyo-rigs"
-	);
+			//		,
+			//			"mjolnir-fury-cruise-missile",
+			//			"mjolnir-fury-cruise-missile-blueprint",
+			//			"mjolnir-fury-cruise-missile-blueprint-optimized-attainment-decryptor",
+			//			"dominix-lowsec-sotiyo-rigs",
+			//			"sin-blueprint-lowsec-sotiyo-rigs"
+			);
 
 	@Inject
 	ApiRunner apiRunner;
@@ -394,11 +395,20 @@ public class IndustryCostHandlerTest {
 
 	@Test
 	@SneakyThrows
-	void shouldIncludeBlueprintCopyingT2Products() {
+	void shouldIncludeBlueprintCopyingForT2Products() {
 		setupBasicPrices();
 		var input = IndustryCostInput.builder().productId(22430).build();
 		var cost = industryApi.industryCost(input);
-		assertEquals(Set.of(), cost.getCopying().keySet());
+		assertEquals(Set.of("999"), cost.getCopying().keySet());
+	}
+
+	@Test
+	@SneakyThrows
+	void shouldIncludeBlueprintCopyingForT2Blueprints() {
+		setupBasicPrices();
+		var input = IndustryCostInput.builder().productId(22431).build();
+		var cost = industryApi.industryCost(input);
+		assertEquals(Set.of("999"), cost.getCopying().keySet());
 	}
 
 	@Test
@@ -407,7 +417,7 @@ public class IndustryCostHandlerTest {
 		setupBasicPrices();
 		var input = IndustryCostInput.builder().productId(32307).build();
 		var cost = industryApi.industryCost(input);
-		assertEquals(Set.of("999"), cost.getCopying().keySet());
+		assertEquals(Set.of(), cost.getCopying().keySet());
 	}
 
 	// ===========
