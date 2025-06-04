@@ -1,0 +1,52 @@
+{
+  "base_price" : 625000000,
+  "graphic_id" : 2138,
+  "group_id" : 107,
+  "meta_group_id" : 4,
+  "name" : {
+    "de" : "Dominix Navy Issue Blueprint",
+    "en" : "Dominix Navy Issue Blueprint",
+    "es" : "Plano de Dominix modelo de la Armada",
+    "fr" : "Plan de construction Dominix modèle Navy",
+    "ja" : "ドミニックス海軍仕様ブループリント",
+    "ko" : "도미닉스 해군 에디션 블루프린트",
+    "ru" : "Dominix Navy Issue Blueprint",
+    "zh" : "多米尼克斯级海军型蓝图"
+  },
+  "portion_size" : 1,
+  "published" : true,
+  "sof_faction_name" : "gallentenavy",
+  "volume" : 0.01,
+  "type_id" : 32308,
+  "capacity" : 0,
+  "description" : {
+    "en" : "",
+    "fr" : ""
+  },
+  "dogma_attributes" : {
+    "161" : {
+      "attribute_id" : 161,
+      "value" : 0.01
+    },
+    "162" : {
+      "attribute_id" : 162,
+      "value" : 1
+    },
+    "1955" : {
+      "attribute_id" : 1955,
+      "value" : 60
+    },
+    "4" : {
+      "attribute_id" : 4,
+      "value" : 0
+    },
+    "38" : {
+      "attribute_id" : 38,
+      "value" : 0
+    }
+  },
+  "mass" : 0,
+  "packaged_volume" : 0.01,
+  "radius" : 1,
+  "is_blueprint" : true
+}

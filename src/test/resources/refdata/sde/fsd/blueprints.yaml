@@ -474,3 +474,42 @@
       time: 504
   blueprintTypeID: 48111
   maxProductionLimit: 10
+"32308":
+  activities:
+    copying:
+      time: 14400
+    manufacturing:
+      materials:
+      - quantity: 1
+        typeID: 57479
+      - quantity: 100
+        typeID: 57486
+      - quantity: 200
+        typeID: 57478
+      - quantity: 4000
+        typeID: 40
+      - quantity: 8000
+        typeID: 39
+      - quantity: 30000
+        typeID: 38
+      - quantity: 400000
+        typeID: 37
+      - quantity: 600000
+        typeID: 36
+      - quantity: 4000000
+        typeID: 35
+      - quantity: 8000000
+        typeID: 34
+      products:
+      - quantity: 1
+        typeID: 32307
+      skills:
+      - level: 1
+        typeID: 3380
+      time: 18000
+    research_material:
+      time: 6300
+    research_time:
+      time: 6300
+  blueprintTypeID: 32308
+  maxProductionLimit: 10

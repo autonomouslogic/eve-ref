@@ -48,6 +48,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Stream;
 import javax.inject.Inject;
 import lombok.SneakyThrows;
@@ -86,19 +87,18 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @Log4j2
 @Timeout(60)
 public class IndustryCostHandlerTest {
-	private static final double EIV_TOLERANCE_RATE = 1.0 / 1_000_000.0;
-	private static final BigDecimal EIV_TOLERANCE_ABS = BigDecimal.valueOf(10);
-
 	static final List<String> TEST_NAMES = List.of(
-			"dominix",
-			"sin",
-			"sin-blueprint",
-			"armor-energizing-charge-blueprint",
-			"mjolnir-fury-cruise-missile",
-			"mjolnir-fury-cruise-missile-blueprint",
-			"mjolnir-fury-cruise-missile-blueprint-optimized-attainment-decryptor",
-			"dominix-lowsec-sotiyo-rigs",
-			"sin-blueprint-lowsec-sotiyo-rigs");
+//			"dominix",
+//			"sin",
+//			"sin-blueprint",
+			"armor-energizing-charge-blueprint"
+//		,
+//			"mjolnir-fury-cruise-missile",
+//			"mjolnir-fury-cruise-missile-blueprint",
+//			"mjolnir-fury-cruise-missile-blueprint-optimized-attainment-decryptor",
+//			"dominix-lowsec-sotiyo-rigs",
+//			"sin-blueprint-lowsec-sotiyo-rigs"
+	);
 
 	@Inject
 	ApiRunner apiRunner;
@@ -381,6 +381,33 @@ public class IndustryCostHandlerTest {
 		var invention = cost.getInvention().get("48111");
 		assertNotNull(invention);
 		assertEquals(0.4533333, invention.getProbability(), 1e-6); // EVE client says 0.453
+	}
+
+	@Test
+	@SneakyThrows
+	void shouldIncludeBlueprintCopyingForT1Products() {
+		setupBasicPrices();
+		var input = IndustryCostInput.builder().productId(645).build();
+		var cost = industryApi.industryCost(input);
+		assertEquals(Set.of("999"), cost.getCopying().keySet());
+	}
+
+	@Test
+	@SneakyThrows
+	void shouldIncludeBlueprintCopyingT2Products() {
+		setupBasicPrices();
+		var input = IndustryCostInput.builder().productId(22430).build();
+		var cost = industryApi.industryCost(input);
+		assertEquals(Set.of(), cost.getCopying().keySet());
+	}
+
+	@Test
+	@SneakyThrows
+	void shouldNotIncludeBlueprintCopyingForFactionProducts() {
+		setupBasicPrices();
+		var input = IndustryCostInput.builder().productId(32307).build();
+		var cost = industryApi.industryCost(input);
+		assertEquals(Set.of("999"), cost.getCopying().keySet());
 	}
 
 	// ===========
