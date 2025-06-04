@@ -17,12 +17,12 @@
       "attribute_id" : 162,
       "value" : 1
     },
-    "612" : {
-      "attribute_id" : 612,
-      "value" : 0
+    "4" : {
+      "attribute_id" : 4,
+      "value" : 1
     },
-    "613" : {
-      "attribute_id" : 613,
+    "38" : {
+      "attribute_id" : 38,
       "value" : 0
     },
     "422" : {
@@ -61,17 +61,9 @@
       "attribute_id" : 244,
       "value" : 1.2
     },
-    "38" : {
-      "attribute_id" : 38,
-      "value" : 0
-    },
     "124" : {
       "attribute_id" : 124,
       "value" : 4612441
-    },
-    "4" : {
-      "attribute_id" : 4,
-      "value" : 1
     }
   },
   "dogma_effects" : {

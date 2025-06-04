@@ -8,7 +8,7 @@
     "en" : "Quaternary Skill required"
   },
   "high_is_good" : true,
-  "icon_id" : 0,
+  "icon_id" : 33,
   "name" : "requiredSkill4",
   "published" : true,
   "stackable" : true,

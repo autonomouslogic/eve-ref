@@ -13,9 +13,9 @@
     value: 0.0125
   - attribute_id: 162
     value: 1
-  - attribute_id: 612
-    value: 0
-  - attribute_id: 613
+  - attribute_id: 4
+    value: 1
+  - attribute_id: 38
     value: 0
   - attribute_id: 422
     value: 1
@@ -35,12 +35,8 @@
     value: 1
   - attribute_id: 244
     value: 1.2
-  - attribute_id: 38
-    value: 0
   - attribute_id: 124
     value: 4612441
-  - attribute_id: 4
-    value: 1
   dogma_effects:
   - effect_id: 596
     is_default: false
@@ -159,6 +155,8 @@
     value: 454500
   - attribute_id: 162
     value: 250
+  - attribute_id: 5796
+    value: 2147483647000
   - attribute_id: 113
     value: 0.67
   - attribute_id: 1196
@@ -1110,6 +1108,8 @@
     value: 454500
   - attribute_id: 162
     value: 250
+  - attribute_id: 5796
+    value: 2147483647000
   - attribute_id: 113
     value: 0.67
   - attribute_id: 1196

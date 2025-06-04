@@ -500,6 +500,10 @@
     "3268" : {
       "attribute_id" : 3268,
       "value" : 0.05
+    },
+    "5796" : {
+      "attribute_id" : 5796,
+      "value" : 2147483647000
     }
   },
   "dogma_effects" : {

@@ -21,10 +21,6 @@
     value: 1.2
   - attributeID: 422
     value: 1
-  - attributeID: 612
-    value: 0
-  - attributeID: 613
-    value: 0
   - attributeID: 779
     value: 1
   dogmaEffects:
@@ -208,6 +204,8 @@
     value: 100
   - attributeID: 3268
     value: 0.05
+  - attributeID: 5796
+    value: 2147483647000
   dogmaEffects:
   - effectID: 2186
     isDefault: false

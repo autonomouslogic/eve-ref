@@ -58,7 +58,9 @@
     ko: "1차 스킬 필요"
     ru: "Требуемый первичный навык"
     zh: "主技能需求"
+  displayWhenZero: false
   highIsGood: true
+  iconID: 33
   name: "requiredSkill1"
   published: true
   stackable: true
@@ -88,7 +90,9 @@
     ko: "2차 스킬 필요"
     ru: "Требуемый вторичный навык"
     zh: "副技能需求"
+  displayWhenZero: false
   highIsGood: true
+  iconID: 33
   name: "requiredSkill2"
   published: true
   stackable: true
@@ -118,7 +122,9 @@
     ko: "3차 스킬 필요"
     ru: "Требуемый третичный навык"
     zh: "三级技能需求"
+  displayWhenZero: false
   highIsGood: true
+  iconID: 33
   name: "requiredSkill3"
   published: true
   stackable: true
@@ -148,8 +154,9 @@
     ko: "4차 스킬 필요"
     ru: "Требуемый четвертичный навык"
     zh: "四级技能需求"
+  displayWhenZero: false
   highIsGood: true
-  iconID: 0
+  iconID: 33
   name: "requiredSkill4"
   published: true
   stackable: true

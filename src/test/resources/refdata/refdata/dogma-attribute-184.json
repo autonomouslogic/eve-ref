@@ -6,7 +6,9 @@
   "description" : {
     "en" : "The type ID of the skill that is required."
   },
+  "display_when_zero" : false,
   "high_is_good" : true,
+  "icon_id" : 33,
   "name" : "requiredSkill3",
   "published" : true,
   "stackable" : true,

@@ -307,6 +307,10 @@
       "attribute_id" : 162,
       "value" : 250
     },
+    "5796" : {
+      "attribute_id" : 5796,
+      "value" : 2147483647000
+    },
     "113" : {
       "attribute_id" : 113,
       "value" : 0.67

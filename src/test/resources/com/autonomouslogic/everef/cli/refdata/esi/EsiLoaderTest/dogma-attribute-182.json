@@ -8,6 +8,7 @@
     "en" : "Primary Skill required"
   },
   "high_is_good" : true,
+  "icon_id" : 33,
   "name" : "requiredSkill1",
   "published" : true,
   "stackable" : true,

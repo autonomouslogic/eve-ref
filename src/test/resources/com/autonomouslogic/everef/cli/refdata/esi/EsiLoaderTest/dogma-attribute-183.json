@@ -8,6 +8,7 @@
     "en" : "Secondary Skill required"
   },
   "high_is_good" : true,
+  "icon_id" : 33,
   "name" : "requiredSkill2",
   "published" : true,
   "stackable" : true,
