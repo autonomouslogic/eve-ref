@@ -109,6 +109,10 @@ public class IndustrySkills extends AbstractIndustryService<IndustrySkill> {
 			case "Advanced Capital Ship Construction" -> input.getAdvancedCapitalShipConstruction();
 			case "Upwell Starship Engineering" -> input.getUpwellStarshipEngineering();
 			case "Mutagenic Stabilization" -> input.getMutagenicStabilization();
+			case "Core Subsystem Technology" -> input.getCoreSubsystemTechnology();
+			case "Defensive Subsystem Technology" -> input.getDefensiveSubsystemTechnology();
+			case "Offensive Subsystem Technology" -> input.getOffensiveSubsystemTechnology();
+			case "Propulsion Subsystem Technology" -> input.getPropulsionSubsystemTechnology();
 			case "Amarr Encryption Methods" -> input.getAmarrEncryptionMethods();
 			case "Caldari Encryption Methods" -> input.getCaldariEncryptionMethods();
 			case "Gallente Encryption Methods" -> input.getGallenteEncryptionMethods();
