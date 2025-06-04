@@ -45,6 +45,9 @@ public class IndustryRigs extends AbstractIndustryService<IndustryRig> {
 		if (globalActivities != null && globalActivities.contains(activity)) {
 			return bonusGetter.apply(rig) * getRigSecurityModifier(rig, systemSecurity);
 		}
+		if (!activity.equals("manufacturing") && !activity.equals("reaction")) {
+			return 0.0;
+		}
 
 		var categories = rig.getManufacturingCategories();
 		var groups = rig.getManufacturingGroups();

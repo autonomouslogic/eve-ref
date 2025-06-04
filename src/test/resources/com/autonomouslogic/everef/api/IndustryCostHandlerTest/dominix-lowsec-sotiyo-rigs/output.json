@@ -85,5 +85,23 @@
       "total_cost_per_run" : 215012459.51,
       "total_cost_per_unit" : 215012459.51
     }
+  },
+  "copying" : {
+    "999" : {
+      // Not vrified in-game
+      "product_id" : 999,
+      "runs" : 1.0,
+      "time" : "PT1H6M24S",
+      "estimated_item_value" : 154286511,
+      "system_cost_index" : 353316,
+      "system_cost_bonuses" : -217378,
+      "facility_tax" : 61715,
+      "scc_surcharge" : 123429,
+      "alpha_clone_tax" : 0,
+      "total_job_cost" : 321082,
+      "total_cost" : 321082,
+      "job_cost_base" : 3085730,
+      "total_cost_per_run" : 321082.00
+    }
   }
 }
