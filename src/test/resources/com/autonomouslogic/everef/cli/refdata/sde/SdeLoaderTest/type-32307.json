@@ -1,0 +1,145 @@
+{
+  "base_price" : 219800000,
+  "capacity" : 845,
+  "description" : {
+    "de" : "Die Geschichte der Dominix Navy Issue ist von historischer Bedeutung, da dieses Schiff vor zwei Jahrhunderten zusammen mit dem Orbitalbomber der Dracofeu-Klasse direkt an der Blockade und Bombardierung von Caldari Prime beteiligt gewesen war. Die Dominix Navy Issue ist mit Kapseln kompatibel und wurde für klassische Kampfsituationen neu ausgestattet, daher stellt sie auch heute noch ein höchst leistungsfähiges Schiff dar, das sich besonders in Kämpfen auf kurze und mittlere Distanzen bezahlt macht.",
+    "en" : "The Dominix Navy Issue's past is prominently interwoven with history, as it is known to have directly participated in the blockade and bombardment of Caldari Prime along with the Dracofeu orbital-class bomber two centuries ago. Engineered for capsule compliance, and refitted to serve more traditional combat roles, the Dominix Navy Issue today remains an extremely effective vessel and an invaluable asset in close- to mid-range battle situations.",
+    "es" : "El pasado de la Dominix modelo de la Armada se entrelaza con la historia, ya que se sabe que participó directamente en el bloqueo y el bombardeo de Caldari Prime junto al bombardero de clase orbital Dracofeu hace dos siglos. Se creó para ser compatible con las cápsulas, y se ha reacondicionado para cumplir más funciones de combate tradicionales. Hoy en día, la Dominix modelo de la Armada sigue siendo una nave extremadamente efectiva y un recurso inestimable en situaciones de combate de corto a medio alcance.",
+    "fr" : "Le Dominix modèle Navy fait largement partie de l'histoire, puisqu'il est connu pour avoir directement participé au blocus et au bombardement de Caldari Prime aux côtés du bombardier de classe orbitale Dracofeu il y a deux siècles de cela. Conçu pour s'adapter aux capsules et équipé pour remplir des rôles de combat plus traditionnels, le Dominix modèle Navy reste aujourd'hui un modèle d'efficacité et un atout indéniable pour les combats à courte et moyenne portée.",
+    "ja" : "ドミニックス海軍仕様には特に複雑な歴史がある。200年前にはカルダリプライムの封鎖と爆撃にオービタル級のドラコフュー機と直接参加したことで知られている。現在のドミニックス海軍仕様はカプセルのコンプライアンスに合わせ、従来の戦艦としての役割を果たすように改造されたものの、きわめて効率的な戦艦である点は変わらず、接近戦から中距離戦には欠かせない存在だ。",
+    "ko" : "도미닉스 해군 에디션은 역사가 상당히 긴 함선으로 약 2세기 전 드라코프 궤도 폭격기와 함께 칼다리 프라임에 대한 봉쇄 작전에 참가한 것으로 유명합니다. 현재는 보다 정석적인 전투 수행이 가능하도록 개조가 이루어졌으며 이를 바탕으로 중장거리 교전에서의 효율적인 전투 수행 능력을 발휘합니다.",
+    "ru" : "Имя этого корабля в прямом смысле слова вписано на страницы истории; два века назад линкоры типа «Доминикс-флотский» принимали непосредственное участие в блокаде и бомбардировке Калдари-Прайм совместно с орбитальными бомбардировщиками типа «Дракофе». Пройдя переоснащение в целях обеспечения совместимости с капсулами для решения более стандартных боевых задач, «Доминикс-флотский» остается исключительно эффективным кораблем, незаменимым как в ближнем бою, так и на средних дистанциях.",
+    "zh" : "多米尼克斯级海军型在历史上名声显赫，它因为在两百年前协同火龙级轨道轰炸舰一起执行对加达里首星的封锁和轰炸任务而闻名。此舰按照克隆舱规范设计生产，并根据传统的战斗需求进行了重新装配，多米尼克斯级海军型今天依然是一艘在中近距离上具有极强杀伤力的战舰。"
+  },
+  "faction_id" : 500004,
+  "graphic_id" : 2138,
+  "group_id" : 27,
+  "market_group_id" : 1379,
+  "mass" : 97100000,
+  "masteries" : {
+    "0" : [ 96, 99, 69, 138, 140, 150, 89, 133 ],
+    "1" : [ 96, 99, 69, 138, 140, 150, 89, 133 ],
+    "2" : [ 96, 99, 69, 138, 140, 150, 89, 133 ],
+    "3" : [ 96, 99, 69, 138, 140, 150, 89, 133 ],
+    "4" : [ 96, 99, 69, 138, 140, 117, 150, 89, 133 ]
+  },
+  "meta_group_id" : 4,
+  "name" : {
+    "de" : "Dominix Navy Issue",
+    "en" : "Dominix Navy Issue",
+    "es" : "Dominix modelo de la Armada",
+    "fr" : "Dominix modèle Navy",
+    "ja" : "ドミニックス海軍仕様",
+    "ko" : "도미닉스 해군 에디션",
+    "ru" : "Dominix Navy Issue",
+    "zh" : "多米尼克斯级海军型"
+  },
+  "portion_size" : 1,
+  "published" : true,
+  "race_id" : 8,
+  "radius" : 250,
+  "sof_faction_name" : "gallentenavy",
+  "sound_id" : 20072,
+  "traits" : {
+    "misc_bonuses" : { },
+    "role_bonuses" : {
+      "3" : {
+        "bonus" : 5,
+        "bonus_text" : {
+          "de" : "zusätzlicher Bonus auf HP der <a href=showinfo:3394>Verstärkten Schottwand</a>",
+          "en" : "additional bonus to <a href=showinfo:3394>Reinforced Bulkhead</a> hitpoints",
+          "es" : "de bonificación adicional a los puntos de vida del <a href=showinfo:3394>mamparo reforzado</a>.",
+          "fr" : "de bonus supplémentaire aux points de vie de la <a href=showinfo:3394>cloison renforcée</a>",
+          "ja" : "<a href=showinfo:3394>強化隔壁</a>HPがさらに増加",
+          "ko" : "<a href=showinfo:3394>강화 격벽</a> 내구도 증가",
+          "ru" : "дополнительный бонус к прочности <a href=showinfo:3394>укреплённой переборки</a>",
+          "zh" : "<a href=showinfo:3394>强化舱隔壁</a>结构值加成"
+        },
+        "importance" : 3,
+        "unit_id" : 105
+      },
+      "2" : {
+        "bonus" : 50,
+        "bonus_text" : {
+          "de" : "Bonus auf die HP der <a href=showinfo:3394>Panzerplatte</a>",
+          "en" : "bonus to <a href=showinfo:3394>Armor Plate</a> hitpoints",
+          "es" : "de bonificación a los puntos de vida de las <a href=showinfo:3394>placas de blindaje</a>.",
+          "fr" : "de bonus aux points de vie du <a href=showinfo:3394>revêtement de blindage</a>",
+          "ja" : "<a href=showinfo:3394>アーマープレート</a>HPが増加",
+          "ko" : "<a href=showinfo:3394>장갑 플레이트</a> 내구도 증가",
+          "ru" : "бонус к прочности <a href=showinfo:3394>бронеплиты</a>",
+          "zh" : "<a href=showinfo:3394>装甲附甲板</a>装甲值加成"
+        },
+        "importance" : 2,
+        "unit_id" : 105
+      },
+      "1" : {
+        "bonus" : 100,
+        "bonus_text" : {
+          "de" : "Bonus auf die HP der <a href=showinfo:3425>Schilderweiterung</a>",
+          "en" : "bonus to <a href=showinfo:3425>Shield Extender</a> hitpoints",
+          "es" : "de bonificación a los puntos de vida del <a href=showinfo:3425>extensor de escudo</a>.",
+          "fr" : "de bonus aux points de vie de l'<a href=showinfo:3425>extenseur de bouclier</a>",
+          "ja" : "<a href=showinfo:3425>シールドエクステンダー</a>HPが増加",
+          "ko" : "<a href=showinfo:3425>실드 확장장치</a> 실드량 증가",
+          "ru" : "бонус к прочности <a href=showinfo:3425>расширителя щитов</a>",
+          "zh" : "<a href=showinfo:3425>护盾扩展装置</a>护盾值加成"
+        },
+        "importance" : 1,
+        "unit_id" : 105
+      }
+    },
+    "types" : {
+      "3336" : {
+        "2" : {
+          "bonus" : 7.5,
+          "bonus_text" : {
+            "de" : "Bonus auf den Schaden von <a href=showinfo:3307>großen Hybridgeschütztürmen</a>",
+            "en" : "bonus to <a href=showinfo:3307>Large Hybrid Turret</a> damage",
+            "es" : "de bonificación al daño de la <a href=showinfo:3307>torreta híbrida grande</a>.",
+            "fr" : "de bonus aux dégâts des <a href=showinfo:3307>grandes tourelles hybrides</a>",
+            "ja" : "<a href=showinfo:3307>大型ハイブリッドタレット</a>のダメージが増加",
+            "ko" : "<a href=showinfo:3307>대형 하이브리드 터렛</a> 피해량 증가",
+            "ru" : "увеличивается урон боеприпасов <a href=showinfo:3307>больших гибридных орудий</a>",
+            "zh" : "<a href=\"showinfo:3307\">大型混合炮台</a>伤害加成"
+          },
+          "importance" : 2,
+          "unit_id" : 105
+        },
+        "3" : {
+          "bonus" : 7.5,
+          "bonus_text" : {
+            "de" : "Bonus auf die Reparaturmenge von <a href=showinfo:3393>Panzerungsreparatursystemen</a>",
+            "en" : "bonus to <a href=showinfo:3393>Armor Repairer</a> amount",
+            "es" : "de bonificación a la eficiencia de los <a href=showinfo:3393>reparadores de blindaje</a>.",
+            "fr" : "de bonus à la capacité réparatrice du <a href=showinfo:3393>réparateur de blindage</a>",
+            "ja" : "<a href=showinfo:3393>アーマーリペアラ</a>の回復量増加",
+            "ko" : "<a href=showinfo:3393>장갑수리 장치</a> 수리량 증가",
+            "ru" : "бонус к эффективности <a href=showinfo:3393>установки ремонта брони</a>",
+            "zh" : "<a href=showinfo:3393>装甲维修器</a>维修量加成"
+          },
+          "importance" : 3,
+          "unit_id" : 105
+        },
+        "1" : {
+          "bonus" : 10,
+          "bonus_text" : {
+            "de" : "Bonus auf HP, Schaden und Nachführung von <a href=showinfo:3436>Drohnen</a>",
+            "en" : "bonus to <a href=showinfo:3436>Drone</a> hitpoints, damage and tracking",
+            "es" : "de bonificación al rastreo, el daño y los puntos de vida del <a href=showinfo:3436>dron</a>.",
+            "fr" : "de bonus aux points de vie, aux dégâts et à la poursuite des <a href=showinfo:3436>drones</a>",
+            "ja" : "<a href=showinfo:3436>ドローン</a>のHP、ダメージ、追跡が増加",
+            "ko" : "<a href=showinfo:3436>드론</a> 내구도, 피해량, 트래킹 속도 증가",
+            "ru" : "бонус к запасу прочности, урону и скорости наведения <a href=showinfo:3436>дронов</a>",
+            "zh" : "<a href=showinfo:3436>无人机</a>HP、伤害和跟踪速度加成"
+          },
+          "importance" : 1,
+          "unit_id" : 105
+        }
+      }
+    }
+  },
+  "variation_parent_type_id" : 645,
+  "volume" : 454500,
+  "type_id" : 32307
+}

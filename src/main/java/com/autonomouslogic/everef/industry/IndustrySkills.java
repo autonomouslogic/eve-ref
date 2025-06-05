@@ -32,6 +32,14 @@ public class IndustrySkills extends AbstractIndustryService<IndustrySkill> {
 		return sumBonusMod(input, IndustrySkill::getAdvancedIndustrySkillIndustryJobTimeBonus);
 	}
 
+	public double blueprintmanufactureTimeBonusMod(IndustryCostInput input) {
+		return sumBonusMod(input, IndustrySkill::getBlueprintmanufactureTimeBonus);
+	}
+
+	public double copySpeedBonus(IndustryCostInput input) {
+		return sumBonusMod(input, IndustrySkill::getCopySpeedBonus);
+	}
+
 	private double sumBonusMod(IndustryCostInput input, Function<IndustrySkill, Double> bonusGetter) {
 		var skills = stream()
 				.filter(skill -> bonusGetter.apply(skill) != null)
@@ -84,6 +92,9 @@ public class IndustrySkills extends AbstractIndustryService<IndustrySkill> {
 		return switch (skill.getName()) {
 			case "Industry" -> input.getIndustry();
 			case "Advanced Industry" -> input.getAdvancedIndustry();
+			case "Research" -> input.getResearch();
+			case "Science" -> input.getScience();
+			case "Metallurgy" -> input.getMetallurgy();
 			case "Advanced Small Ship Construction" -> input.getAdvancedSmallShipConstruction();
 			case "Advanced Industrial Ship Construction" -> input.getAdvancedIndustrialShipConstruction();
 			case "Advanced Medium Ship Construction" -> input.getAdvancedMediumShipConstruction();

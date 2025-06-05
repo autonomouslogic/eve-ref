@@ -16,5 +16,5 @@
   "published" : true,
   "use_base_price" : false,
   "group_id" : 27,
-  "type_ids" : [ 645 ]
+  "type_ids" : [ 645, 32307 ]
 }

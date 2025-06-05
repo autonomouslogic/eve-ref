@@ -77,6 +77,11 @@ public class IndustryMath {
 		return systemCostIndex(jcb, index);
 	}
 
+	public BigDecimal copyingSystemCostIndex(IndustryCostInput industryCostInput, BigDecimal jcb) {
+		var index = industryCostInput.getCopyingCost();
+		return systemCostIndex(jcb, index);
+	}
+
 	public BigDecimal systemCostIndex(BigDecimal value, BigDecimal index) {
 		var cost = MathUtil.round(value.multiply(index));
 		return cost;

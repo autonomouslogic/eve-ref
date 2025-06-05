@@ -150,6 +150,8 @@ types:
       - 33674
       - 48109
       - 48111
+      - 32307
+      - 32308
     languages:
       - en-us
       - fr
@@ -345,6 +347,7 @@ blueprints:
       - 33674
       - 48109
       - 48111
+      - 32308
 
 icons:
   idField: icon_id

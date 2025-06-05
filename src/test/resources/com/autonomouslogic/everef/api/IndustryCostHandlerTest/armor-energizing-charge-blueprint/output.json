@@ -55,5 +55,22 @@
       "total_cost_per_run" : 256502.68,
       "total_cost_per_unit" : 513.01
     }
+  },
+  "copying" : {
+    "42874": {
+      "product_id": 42874,
+      "runs": 100,
+      "time": "PT12H45M",
+      "estimated_item_value": 16851544, // extrapolated from 1,685,150 x 10 + adjustment
+      "job_cost_base": 337031, // extrapolated from 33,703 x 10 + adjustment
+      "system_cost_index": 24435, // extrapolated from 2,444 x 10 + adjustment
+      "system_cost_bonuses" : 0,
+      "facility_tax": 843, // extrapolated from 84 x 10 + adjustment
+      "scc_surcharge": 13481, // extrapolated from 1,348 x 10 + adjustment
+      "alpha_clone_tax" : 0,
+      "total_job_cost": 38759, // extrapolated from 3,876 x 10 + adjustment
+      "total_cost" : 38759,
+      "total_cost_per_run" : 387.59
+    }
   }
 }

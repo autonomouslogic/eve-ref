@@ -53,9 +53,62 @@ components:
       properties:
         message:
           type: string
+    CopyingCost:
+      type: object
+      properties:
+        alpha_clone_tax:
+          type: number
+          description: The alpha clone tax amount
+        estimated_item_value:
+          type: number
+          description: The estimated item value (EIV). This may not be completely
+            accurate.
+        facility_tax:
+          type: number
+          description: The facility amount
+        job_cost_base:
+          type: number
+        materials:
+          type: object
+          additionalProperties:
+            $ref: "#/components/schemas/MaterialCost"
+        product_id:
+          type: integer
+          format: int64
+        runs:
+          type: number
+          format: double
+          description: The number of runs
+        scc_surcharge:
+          type: number
+          description: The SCC surcharge amount
+        system_cost_bonuses:
+          type: number
+          description: "Bonuses to system cost from structures, rigs, etc."
+        system_cost_index:
+          type: number
+          description: |-
+            The system cost index amount.
+            Note that this will always be a slightly off, as the ESI does not report the full precision of the system cost index rates.
+            See https://github.com/esi/esi-issues/issues/1411
+        time:
+          type: string
+        total_cost:
+          type: number
+        total_cost_per_run:
+          type: number
+        total_job_cost:
+          type: number
+          description: The total amount of ISK required to start the job
+        total_material_cost:
+          type: number
     IndustryCost:
       type: object
       properties:
+        copying:
+          type: object
+          additionalProperties:
+            $ref: "#/components/schemas/CopyingCost"
         input:
           $ref: "#/components/schemas/IndustryCostInput"
         invention:

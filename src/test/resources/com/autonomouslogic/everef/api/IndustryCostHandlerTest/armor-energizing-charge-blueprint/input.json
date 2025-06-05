@@ -7,7 +7,7 @@
   "manufacturing_cost":  0.07252106987941283006, // ESI said 0.0725
   "researching_te_cost": 0.0705,
   "researching_me_cost": 0.0596,
-  "copying_cost": 0.0725,
+  "copying_cost": 0.0725, // ESI said 0.0725
   "invention_cost": 0.1197,
   "reaction_cost": 0.0014,
   "facility_tax": 0.0025

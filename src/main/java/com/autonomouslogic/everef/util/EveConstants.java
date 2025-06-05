@@ -25,4 +25,6 @@ public class EveConstants {
 	public static final long NPC_STATION_MAX_ID = 100_000_000;
 
 	public static final long JITA_4_4_STATION_ID = 60003760L;
+
+	public static final int TECH_1_META_GROUP_ID = 1;
 }

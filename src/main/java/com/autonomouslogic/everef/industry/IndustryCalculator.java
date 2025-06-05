@@ -7,6 +7,7 @@ import com.autonomouslogic.everef.data.LoadedRefData;
 import com.autonomouslogic.everef.model.IndustryDecryptor;
 import com.autonomouslogic.everef.model.IndustryRig;
 import com.autonomouslogic.everef.model.IndustryStructure;
+import com.autonomouslogic.everef.model.api.CopyingCost;
 import com.autonomouslogic.everef.model.api.IndustryCost;
 import com.autonomouslogic.everef.model.api.IndustryCostInput;
 import com.autonomouslogic.everef.model.api.InventionCost;
@@ -14,6 +15,7 @@ import com.autonomouslogic.everef.model.api.ManufacturingCost;
 import com.autonomouslogic.everef.refdata.Blueprint;
 import com.autonomouslogic.everef.refdata.InventoryType;
 import com.autonomouslogic.everef.service.EsiMarketPriceService;
+import com.autonomouslogic.everef.util.EveConstants;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -33,6 +35,9 @@ public class IndustryCalculator {
 
 	@Inject
 	protected Provider<InventionCalculator> inventionCalculatorProvider;
+
+	@Inject
+	protected Provider<CopyingCalculator> copyingCalculatorProvider;
 
 	@Inject
 	protected IndustryMath industryMath;
@@ -85,11 +90,19 @@ public class IndustryCalculator {
 					manufacturingCost =
 							calculateManufacturing(me.orElse(inventionCost.getMe()), te.orElse(inventionCost.getTe()));
 				}
+				var copyingCost = calculateCopyingForInvention(inventionCost);
+				addCopying(copyingCost);
+			} else if (productType.getMetaGroupId() == null
+					|| productType.getMetaGroupId() == EveConstants.TECH_1_META_GROUP_ID) {
+				var copyingCost = calculateCopying();
+				addCopying(copyingCost);
 			}
 			addManufacturing(manufacturingCost);
 		} else {
 			var inventionCost = calculateInvention();
 			addInvention(inventionCost);
+			var copyingCost = calculateCopyingForInvention(inventionCost);
+			addCopying(copyingCost);
 		}
 		return cost.build();
 	}
@@ -168,11 +181,41 @@ public class IndustryCalculator {
 		return inventionCost;
 	}
 
+	private CopyingCost calculateCopying() {
+		return calculateCopying(blueprint, industryCostInput.getRuns());
+	}
+
+	private CopyingCost calculateCopyingForInvention(InventionCost inventionCost) {
+		var inventingBlueprint = refData.getBlueprint(inventionCost.getBlueprintId());
+		return calculateCopying(inventingBlueprint, inventionCost.getRuns());
+	}
+
+	private CopyingCost calculateCopying(Blueprint blueprint, double runs) {
+		int ceilRuns = (int) Math.ceil(runs);
+		double factor = runs / ceilRuns;
+		var cost = copyingCalculatorProvider
+				.get()
+				.setIndustryCostInput(industryCostInput)
+				.setBlueprint(blueprint)
+				.setRuns(ceilRuns)
+				.setStructure(structure)
+				.setRigs(rigs)
+				.calc();
+		if (factor != 1.0) {
+			cost = cost.multiply(factor);
+		}
+		return cost;
+	}
+
 	public void addManufacturing(ManufacturingCost manufacturingCost) {
 		cost.manufacturing(String.valueOf(manufacturingCost.getProductId()), manufacturingCost);
 	}
 
 	public void addInvention(InventionCost inventionCost) {
 		cost.invention(String.valueOf(inventionCost.getProductId()), inventionCost);
+	}
+
+	public void addCopying(CopyingCost copyingCost) {
+		cost.copying(String.valueOf(copyingCost.getProductId()), copyingCost);
 	}
 }

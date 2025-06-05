@@ -21,7 +21,7 @@ import lombok.extern.jackson.Jacksonized;
 @Jacksonized
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"manufacturing", "invention", "input"})
+@JsonPropertyOrder({"manufacturing", "invention", "copying", "input"})
 @Schema
 public class IndustryCost {
 	@JsonProperty
@@ -37,10 +37,10 @@ public class IndustryCost {
 	@JsonInclude(JsonInclude.Include.NON_EMPTY)
 	Map<String, InventionCost> invention;
 
-	//	@JsonProperty
-	//	@Singular("copying")
-	//	@JsonInclude(JsonInclude.Include.NON_EMPTY)
-	//	Map<String, ActivityCost> copying;
+	@JsonProperty
+	@Singular("copying")
+	@JsonInclude(JsonInclude.Include.NON_EMPTY)
+	Map<String, CopyingCost> copying;
 
 	//	@JsonProperty
 	//	@Singular("meResearch")
