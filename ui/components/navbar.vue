@@ -23,6 +23,9 @@ const localePath = useLocalePath();
 					<InternalLink to="/market-groups">Market Groups</InternalLink>
 				</span>
 				<span>
+					<InternalLink to="/meta-groups">Meta Groups</InternalLink>
+				</span>
+				<span>
 					<InternalLink to="/structures">Structures</InternalLink>
 				</span>
 				<span>

@@ -9,6 +9,7 @@ import AttributeList from "~/components/attr/AttributeList.vue";
 import AttributeListItem from "~/components/attr/AttributeListItem.vue";
 import {CUBIC_METER, METER, MONEY} from "~/lib/unitConstants";
 import ExternalLink from "~/components/helpers/ExternalLink.vue";
+import MetaGroupLink from "~/components/helpers/MetaGroupLink.vue";
 
 const props = defineProps<{
 	title: string,
@@ -55,7 +56,7 @@ const props = defineProps<{
 			</AttributeListItem>
 			<AttributeListItem v-if="inventoryType.metaGroupId">
 				<template v-slot:key>Meta group ID:</template>
-				{{ inventoryType.metaGroupId }}
+				<MetaGroupLink :meta-group-id="inventoryType.metaGroupId" />
 			</AttributeListItem>
 			<AttributeListItem v-if="inventoryType.published">
 				<template v-slot:key>Published:</template>
