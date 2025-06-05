@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import ExternalLink from "~/components/helpers/ExternalLink.vue";
-import {EVE_REFERRAL_URL, MARKEE_DRAGON_URL, PATREON_URL} from "~/lib/urls";
+import {DATASETS_DOCS_URL, EVE_REFERRAL_URL, MARKEE_DRAGON_URL, PATREON_URL} from "~/lib/urls";
 import InternalLink from "~/components/helpers/InternalLink.vue";
 import {useLazyFetch} from "nuxt/app";
 import type {DonationsFile} from "~/lib/donations";
@@ -27,9 +27,19 @@ const motdFallbacks: Motd[] = [
 		urlText: "Become a Patreon"
 	} as Motd,
 	{
+		text: "Servers aren't free",
+		url: PATREON_URL,
+		urlText: "Become a Patreon"
+	} as Motd,
+	{
 		text: "Get 1,000,000 skill points",
 		url: EVE_REFERRAL_URL,
 		urlText: "Play EVE Online"
+	} as Motd,
+	{
+		text: "EVE Ref has over 4 TB of historical EVE data",
+		url: DATASETS_DOCS_URL,
+		urlText: "Explore EVE data"
 	} as Motd,
 ];
 
@@ -38,6 +48,11 @@ const {status: donorsStatus, data: donors} = await useLazyFetch<DonationsFile>("
 });
 
 const motd = computed(() => {
+	const dayOfWeek = new Date().getDay();
+	const time = new Date().getTime();
+	const day = Math.floor(time / DAY);
+	const hour = Math.floor(time / HOUR);
+
 	if (new Date().getTime() < new Date("2025-03-04T23:59:00Z").getTime()) {
 		return {
 			text: "Get 20% off PLEX plus an additional 3% with code \"everef\"",
@@ -46,7 +61,7 @@ const motd = computed(() => {
 		} as Motd;
 	}
 
-	if (new Date().getDay() == 4) {
+	if (dayOfWeek == 4) {
 		return {
 			text: "Win 50x PLEX and 3 Day Omega every Friday",
 			url: "/giveaways",
@@ -66,9 +81,6 @@ const motd = computed(() => {
 		} as Motd;
 	}
 
-	const time = new Date().getTime();
-	const day = Math.floor(time / DAY);
-	const hour = Math.floor(time / HOUR);
 	if (day % 3 == 0) {
 		return null;
 	}
