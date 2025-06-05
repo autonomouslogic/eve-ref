@@ -4,6 +4,7 @@ import CardWrapper from "~/components/cards/CardWrapper.vue";
 import AttributeTypeIcon from "~/components/icons/AttributeTypeIcon.vue";
 import {getIntRouteParam} from "~/lib/routeUtils";
 import {tr} from "~/lib/translate";
+import ExternalLink from "~/components/helpers/ExternalLink.vue";
 
 const route = useRoute();
 const {locale} = useI18n();
@@ -43,6 +44,15 @@ if (attribute.description) {
 					<li>Published: {{ attribute.published }}</li>
 					<li>Stackable: {{ attribute.stackable }}</li>
 					<li>Unit ID: {{ attribute.unitId }}</li>
+					<li>
+						<ExternalLink :url="`https://ref-data.everef.net/dogma_attributes/${attribute.attributeId}`">Reference Data JSON</ExternalLink>
+					</li>
+					<li>
+						<ExternalLink :url="`https://esi.evetech.net/latest/dogma/attributes/${attribute.attributeId}`">ESI JSON</ExternalLink>
+					</li>
+					<li>
+						<ExternalLink :url="`https://sde.jita.space/latest/dogma/attributes/${attribute.attributeId}`">SDE JSON</ExternalLink>
+					</li>
 				</ul>
 			</CardWrapper>
 			<CardWrapper v-if="unit" title="Unit">
