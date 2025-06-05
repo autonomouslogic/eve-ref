@@ -9,7 +9,8 @@ import CardsContainer from "~/components/cards/CardsContainer.vue";
 import CardWrapper from "~/components/cards/CardWrapper.vue";
 import AttributeList from "~/components/attr/AttributeList.vue";
 import AttributeListItem from "~/components/attr/AttributeListItem.vue";
-
+import ExternalLink from "~/components/helpers/ExternalLink.vue";
+	
 const route = useRoute();
 const {locale} = useI18n();
 
@@ -37,6 +38,12 @@ const typeIds = metaGroup.typeIds?.filter((typeId) => typeId !== undefined) || [
 					<li>Icon suffix: {{ metaGroup.iconSuffix }}</li>
 					<li>Color: {{ metaGroup.color }}</li>
 					<li>Types: {{ metaGroup.typeIds?.length || 0 }}</li>
+					<li>
+						<ExternalLink :url="`https://ref-data.everef.net/meta_groups/${metaGroup.metaGroupId}`">Reference Data JSON</ExternalLink>
+					</li>
+					<li>
+						<ExternalLink :url="`https://sde.jita.space/latest/universe/metaGroups/${metaGroup.metaGroupId}`">SDE JSON</ExternalLink>
+					</li>
 				</ul>
 			</CardWrapper>
 		</CardsContainer>
