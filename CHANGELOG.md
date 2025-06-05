@@ -1,5 +1,21 @@
 EVE Ref Changelog
 
+## [2.65.3](https://github.com/autonomouslogic/eve-ref/compare/2.65.2...2.65.3) (2025-06-04)
+
+
+### Bug Fixes
+
+* **api:** Fixed resolution of datacore skills ([#883](https://github.com/autonomouslogic/eve-ref/issues/883)) ([1d683b6](https://github.com/autonomouslogic/eve-ref/commit/1d683b64623499af10fb734c13352ca54461a35e))
+* **api:** Industry Cost API should not fail on blueprints which do not require encryption methods ([#882](https://github.com/autonomouslogic/eve-ref/issues/882)) ([ad61309](https://github.com/autonomouslogic/eve-ref/commit/ad6130943325050a600089dd23d4398fe7d13a04))
+* **api:** Industry Cost API should not fail on blueprints without any required skills ([#881](https://github.com/autonomouslogic/eve-ref/issues/881)) ([caf7481](https://github.com/autonomouslogic/eve-ref/commit/caf74812bc4fa2b6f1c80b881562274a0b38c84f))
+* Industry cost API should not fail if EIV prices can't be resolved ([#880](https://github.com/autonomouslogic/eve-ref/issues/880)) ([6423802](https://github.com/autonomouslogic/eve-ref/commit/64238025db4dc98eb1a6c41fd3fca0e08dbb9894))
+
+
+### Tests
+
+* Added more testing for system security. Closes [#872](https://github.com/autonomouslogic/eve-ref/issues/872) ([0482db1](https://github.com/autonomouslogic/eve-ref/commit/0482db10374c9c9aa168cf9c7cedeffc15a7a053))
+* Updated test resources ([0c57b21](https://github.com/autonomouslogic/eve-ref/commit/0c57b21afeed952fa608ca4958ac16bafff586c3))
+
 ## [2.65.2](https://github.com/autonomouslogic/eve-ref/compare/2.65.1...2.65.2) (2025-06-03)
 
 
