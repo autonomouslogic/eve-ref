@@ -87,6 +87,39 @@ const cards: {[key: string]: any} = {
 					"cargoScanResistance",
 				]
 		},
+	"subsystem":
+		{
+			"name": {"en": "Subsystem"},
+			"dogmaAttributes":
+				[
+					"fitsToShipType",
+					"subSystemSlot",
+					"armorHPBonusAdd",
+					"structureHPBonusAdd",
+					"powerEngineeringOutputBonus",
+					"maxLockedTargetsBonus",
+					"cpuOutputBonus2",
+					"hiSlotModifier",
+					"medSlotModifier",
+					"lowSlotModifier",
+					"turretHardPointModifier",
+					"launcherHardPointModifier",
+					"cargoCapacityAdd",
+					"subsystemBonusMassAddition",
+					"virusStrengthBonus",
+					"subsystemMHTFittingReduction",
+					"roleBonusCommandBurstAoERange",
+					"subsystemMMissileFittingReduction",
+					"subsystemMPTFittingReduction",
+					"subsystemMRARFittingReduction",
+					"subsystemCommandBurstFittingReduction",
+					"remoteArmorRepairerFalloffBonus",
+					"remoteArmorRepairerOptimalBonus",
+					"subsystemMRSBFittingReduction",
+					"remoteShieldBoosterFalloffBonus",
+					"agilityBonusAdd",
+				]
+		},
 	"npc":
 		{
 			"name": {"en": "NPC"},

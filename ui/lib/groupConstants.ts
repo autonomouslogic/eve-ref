@@ -1,1 +1,5 @@
 export const CYBERIMPLANT = 300;
+export const DEFENSIVE_SUBSYSTEM = 954;
+export const CORE_SUBSYSTEM = 958;
+export const OFFENSIVE_SUBSYSTEM = 956;
+export const PROPULSION_SUBSYSTEM = 957;
