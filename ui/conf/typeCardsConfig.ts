@@ -620,10 +620,10 @@ const cards: {[key: string]: any} = {
 					"planetRestriction"
 				]
 		},
-	"typeManufacturing":
+	"producedFrom":
 		{
-			"name": {"en": "Manufacturing"},
-			"component": "typeManufacturing"
+			"name": {"en": "Produced from"},
+			"component": "producedFrom"
 		},
 	"blueprintManufacturing":
 		{
