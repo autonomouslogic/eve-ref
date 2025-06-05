@@ -1,5 +1,26 @@
 EVE Ref Changelog
 
+## [2.66.0](https://github.com/autonomouslogic/eve-ref/compare/2.65.3...2.66.0) (2025-06-05)
+
+
+### Features
+
+* **api:** Blueprint copying on industry cost API ([#884](https://github.com/autonomouslogic/eve-ref/issues/884)) ([4aad7b6](https://github.com/autonomouslogic/eve-ref/commit/4aad7b634671df51ec8bfe70c1bc9377892501dc))
+* **api:** Calculate all blueprint activities if just blueprint_id is supplied ([#886](https://github.com/autonomouslogic/eve-ref/issues/886)) ([a449601](https://github.com/autonomouslogic/eve-ref/commit/a449601a719f9643c03898701cd5abbf36134314))
+* **ui:** Card for subsystems and group comparison tables ([#892](https://github.com/autonomouslogic/eve-ref/issues/892)) ([c4ff438](https://github.com/autonomouslogic/eve-ref/commit/c4ff438b984c009a1cdf4bb7c21a0704be7d5cdb))
+* **ui:** Meta group pages ([#887](https://github.com/autonomouslogic/eve-ref/issues/887)) ([991b829](https://github.com/autonomouslogic/eve-ref/commit/991b829615100986b795243f56f01278c321f55c))
+* **ui:** Show source blueprint for T2 blueprints ([#893](https://github.com/autonomouslogic/eve-ref/issues/893)) ([fd32a81](https://github.com/autonomouslogic/eve-ref/commit/fd32a81b03a531f7d21217c460bfa986e577bb95))
+
+
+### Bug Fixes
+
+* **ui:** Added JSON links to dogma attributes ([#891](https://github.com/autonomouslogic/eve-ref/issues/891)) ([b3ea596](https://github.com/autonomouslogic/eve-ref/commit/b3ea5961924c0d18c6dfcd2bff552c683882ccb5))
+* **ui:** July 2025 giveaways ([64dac7b](https://github.com/autonomouslogic/eve-ref/commit/64dac7b9887ca8571c48c55a0602192ae9f74498))
+* **ui:** June 2025 giveaways ([08eabcd](https://github.com/autonomouslogic/eve-ref/commit/08eabcdd486c3c1430c73ed0b2df379a25caf1f5))
+* **ui:** More giveaways for June 2025 ([0555fe0](https://github.com/autonomouslogic/eve-ref/commit/0555fe07d3679887fca5f348a9654332c756c5df))
+* **ui:** Updated MOTD ([81a166c](https://github.com/autonomouslogic/eve-ref/commit/81a166c867bcafbeadad578e33d298f48a982f96))
+* **ui:** Variations shouldn't link to the current type ([#890](https://github.com/autonomouslogic/eve-ref/issues/890)) ([302b726](https://github.com/autonomouslogic/eve-ref/commit/302b726f9d3445817db0fa3dda7bc6fd72d41507))
+
 ## [2.65.3](https://github.com/autonomouslogic/eve-ref/compare/2.65.2...2.65.3) (2025-06-04)
 
 
