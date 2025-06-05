@@ -23,8 +23,15 @@ import lombok.extern.jackson.Jacksonized;
 @Schema
 public class IndustryCostInput {
 	@JsonProperty
-	@Schema(description = "The desired product type ID", requiredMode = Schema.RequiredMode.REQUIRED, minimum = "1")
-	long productId;
+	@Schema(description = "The desired product type ID", requiredMode = Schema.RequiredMode.NOT_REQUIRED, minimum = "1")
+	Long productId;
+
+	@JsonProperty
+	@Schema(
+			description = "The blueprint ID to calculate",
+			requiredMode = Schema.RequiredMode.NOT_REQUIRED,
+			minimum = "1")
+	Long blueprintId;
 
 	@JsonProperty
 	@lombok.Builder.Default

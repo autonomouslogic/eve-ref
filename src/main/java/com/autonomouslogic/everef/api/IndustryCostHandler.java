@@ -14,6 +14,7 @@ import com.autonomouslogic.everef.model.api.IndustryCostInput;
 import com.autonomouslogic.everef.model.api.SystemSecurity;
 import com.autonomouslogic.everef.openapi.esi.invoker.ApiException;
 import com.autonomouslogic.everef.openapi.esi.model.GetUniverseSystemsSystemIdOk;
+import com.autonomouslogic.everef.refdata.Blueprint;
 import com.autonomouslogic.everef.refdata.InventoryType;
 import com.autonomouslogic.everef.service.RefDataService;
 import com.autonomouslogic.everef.service.SystemCostIndexService;
@@ -48,7 +49,6 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.jetbrains.annotations.NotNull;
 
 @Tag(name = "industry")
 @Path("/v1/industry/cost")
@@ -111,7 +111,10 @@ public class IndustryCostHandler implements HttpService, Handler {
 		var calculator = industryCostCalculatorProvider.get().setRefData(refDataService.getLoadedRefData());
 		var refdata = Objects.requireNonNull(refDataService.getLoadedRefData(), "refdata");
 		var productType = handleProduct(input, refdata, calculator);
-		handleBlueprint(input, productType, refdata, calculator);
+		var blueprint = handleBlueprint(input, productType, refdata, calculator);
+		if (blueprint == null) {
+			handleBlueprintForProduct(input, productType, refdata, calculator);
+		}
 		handleDecryptor(input, calculator);
 		handleStructure(input, calculator);
 		handleRigs(input, calculator);
@@ -190,8 +193,14 @@ public class IndustryCostHandler implements HttpService, Handler {
 	}
 
 	private void validateInput(IndustryCostInput input) {
-		if (input.getProductId() < 1) {
-			throw new ClientException("Product ID must be provided");
+		if (input.getProductId() == null && input.getBlueprintId() == null) {
+			throw new ClientException("Either a product ID or a blueprint ID must be supplied");
+		}
+		if (input.getProductId() != null && input.getProductId() < 1) {
+			throw new ClientException("Product ID must be positive");
+		}
+		if (input.getBlueprintId() != null && input.getBlueprintId() < 1) {
+			throw new ClientException("Blueprint ID must be positive");
 		}
 		if (input.getRuns() < 1) {
 			throw new ClientException("Runs must be at least 1");
@@ -238,8 +247,11 @@ public class IndustryCostHandler implements HttpService, Handler {
 		rules.any(StandardHandlers.HTTP_METHOD_NOT_ALLOWED);
 	}
 
-	private static @NotNull InventoryType handleProduct(
+	private static InventoryType handleProduct(
 			IndustryCostInput input, LoadedRefData refdata, IndustryCalculator calculator) {
+		if (input.getProductId() == null) {
+			return null;
+		}
 		var productType = refdata.getType(input.getProductId());
 		if (productType == null) {
 			throw new ClientException(String.format("Product type ID %d not found", input.getProductId()));
@@ -248,8 +260,31 @@ public class IndustryCostHandler implements HttpService, Handler {
 		return productType;
 	}
 
-	private void handleBlueprint(
+	private static Blueprint handleBlueprint(
 			IndustryCostInput input, InventoryType productType, LoadedRefData refdata, IndustryCalculator calculator) {
+		if (input.getBlueprintId() == null) {
+			return null;
+		}
+		var blueprint = refdata.getBlueprint(input.getBlueprintId());
+		if (blueprint == null) {
+			throw new ClientException(String.format("Blueprint type ID %d not found", input.getBlueprintId()));
+		}
+		calculator.setBlueprint(blueprint);
+		if (productType != null) {
+			if (!productType.getProducedByBlueprints().containsKey(blueprint.getBlueprintTypeId())) {
+				throw new ClientException(String.format(
+						"Product type ID %d is not produced from blueprint ID %d",
+						input.getProductId(), blueprint.getBlueprintTypeId()));
+			}
+		}
+		return blueprint;
+	}
+
+	private void handleBlueprintForProduct(
+			IndustryCostInput input, InventoryType productType, LoadedRefData refdata, IndustryCalculator calculator) {
+		if (productType == null) {
+			return;
+		}
 		var blueprints = Optional.ofNullable(productType.getProducedByBlueprints())
 				.map(Map::values)
 				.filter(c -> !c.isEmpty())

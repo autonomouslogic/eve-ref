@@ -187,6 +187,11 @@ components:
           description: The Amarr Starship Engineering skill level the installing character
           maximum: 5
           minimum: 0
+        blueprint_id:
+          type: integer
+          format: int64
+          description: The blueprint ID to calculate
+          minimum: 1
         caldari_encryption_methods:
           type: integer
           format: int32
@@ -544,8 +549,6 @@ components:
             character
           maximum: 5
           minimum: 0
-      required:
-      - product_id
     InventionCost:
       type: object
       properties:

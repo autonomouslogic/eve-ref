@@ -48,9 +48,10 @@ you can stop worrying about whether your materials or EIV add up and get back to
 The API lives at `https://api.everef.net/v1/industry/cost` and accepts only GET requests.
 
 * For manufacture, supply the `product_id` parameter of an item.
-* For manufacture of items which require an invented blueprint, the invention will be automatically calculated as well.
-* For invention, supply the `product_id` parameter of the blueprint to be invented.
+* For manufacture of items which require an invented blueprint, the invention will be automatically calculated.
+* For invention only, supply the `product_id` parameter of the blueprint to be invented.
 * For manufacture and invention of something which can come from multiple blueprints, set the `blueprint_id` as the source blueprint type ID.
+* To calculate all activities on a specific blueprint, set `blueprint_id`.
 
 See the spec for full details.
 
@@ -230,6 +231,7 @@ See [OpenAPI spec](https://github.com/autonomouslogic/eve-ref/blob/main/spec/eve
   [//]: # (cat spec/eve-ref-api.yaml | yq -o json | jq -cr '.components.schemas.IndustryCostInput.properties | to_entries | .[] | "* `" + .key + "` - " + .value.description')
 
 * `product_id` - The desired product type ID
+* `blueprint_id` - The blueprint ID to calculate
 * `me` - The material efficiency of the blueprint
 * `te` - The time efficiency of the blueprint
 * `runs` - The number of runs

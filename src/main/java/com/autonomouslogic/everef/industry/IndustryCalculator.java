@@ -13,10 +13,12 @@ import com.autonomouslogic.everef.model.api.IndustryCostInput;
 import com.autonomouslogic.everef.model.api.InventionCost;
 import com.autonomouslogic.everef.model.api.ManufacturingCost;
 import com.autonomouslogic.everef.refdata.Blueprint;
+import com.autonomouslogic.everef.refdata.BlueprintMaterial;
 import com.autonomouslogic.everef.refdata.InventoryType;
 import com.autonomouslogic.everef.service.EsiMarketPriceService;
 import com.autonomouslogic.everef.util.EveConstants;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import javax.inject.Inject;
@@ -74,10 +76,17 @@ public class IndustryCalculator {
 
 	public IndustryCost calc() {
 		Objects.requireNonNull(industryCostInput, "industryCostInput");
-		Objects.requireNonNull(productType, "productType");
 		Objects.requireNonNull(blueprint, "blueprint");
 
 		cost = IndustryCost.builder();
+		if (productType != null) {
+			return calculateFromProduct();
+		} else {
+			return calculateFromBlueprint();
+		}
+	}
+
+	private IndustryCost calculateFromProduct() {
 		boolean isBlueprint = Optional.ofNullable(productType.getBlueprint()).orElse(false);
 		if (!isBlueprint) {
 			var manufacturingCost = calculateManufacturing();
@@ -104,6 +113,41 @@ public class IndustryCalculator {
 			var copyingCost = calculateCopyingForInvention(inventionCost);
 			addCopying(copyingCost);
 		}
+		return cost.build();
+	}
+
+	private IndustryCost calculateFromBlueprint() {
+		var manufacturing = blueprint.getActivities().get("manufacturing");
+		if (manufacturing != null) {
+			for (Map.Entry<Long, BlueprintMaterial> entry :
+					manufacturing.getProducts().entrySet()) {
+				var productType = refData.getType(entry.getValue().getTypeId());
+				var manufacturingCost = calculateManufacturing(
+						productType,
+						blueprint,
+						industryCostInput.getRuns(),
+						industryCostInput.getMe(),
+						industryCostInput.getTe());
+				addManufacturing(manufacturingCost);
+			}
+		}
+
+		var invention = blueprint.getActivities().get("invention");
+		if (invention != null) {
+			for (Map.Entry<Long, BlueprintMaterial> entry :
+					invention.getProducts().entrySet()) {
+				var productType = refData.getType(entry.getValue().getTypeId());
+				var inventionCost = calculateInvention(productType, blueprint, industryCostInput.getRuns());
+				addInvention(inventionCost);
+			}
+		}
+
+		var copying = blueprint.getActivities().get("copying");
+		if (copying != null) {
+			var copyingCost = calculateCopying(blueprint, industryCostInput.getRuns());
+			addCopying(copyingCost);
+		}
+
 		return cost.build();
 	}
 
