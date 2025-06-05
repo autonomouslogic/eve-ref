@@ -90,6 +90,8 @@ public class IndustryCalculator {
 					manufacturingCost =
 							calculateManufacturing(me.orElse(inventionCost.getMe()), te.orElse(inventionCost.getTe()));
 				}
+				var copyingCost = calculateCopyingForInvention(inventionCost);
+				addCopying(copyingCost);
 			} else if (productType.getMetaGroupId() == null
 					|| productType.getMetaGroupId() == EveConstants.TECH_1_META_GROUP_ID) {
 				var copyingCost = calculateCopying();
@@ -99,6 +101,8 @@ public class IndustryCalculator {
 		} else {
 			var inventionCost = calculateInvention();
 			addInvention(inventionCost);
+			var copyingCost = calculateCopyingForInvention(inventionCost);
+			addCopying(copyingCost);
 		}
 		return cost.build();
 	}
@@ -178,14 +182,29 @@ public class IndustryCalculator {
 	}
 
 	private CopyingCost calculateCopying() {
-		return copyingCalculatorProvider
+		return calculateCopying(blueprint, industryCostInput.getRuns());
+	}
+
+	private CopyingCost calculateCopyingForInvention(InventionCost inventionCost) {
+		var inventingBlueprint = refData.getBlueprint(inventionCost.getBlueprintId());
+		return calculateCopying(inventingBlueprint, inventionCost.getRuns());
+	}
+
+	private CopyingCost calculateCopying(Blueprint blueprint, double runs) {
+		int ceilRuns = (int) Math.ceil(runs);
+		double factor = runs / ceilRuns;
+		var cost = copyingCalculatorProvider
 				.get()
 				.setIndustryCostInput(industryCostInput)
 				.setBlueprint(blueprint)
-				.setRuns(industryCostInput.getRuns())
+				.setRuns(ceilRuns)
 				.setStructure(structure)
 				.setRigs(rigs)
 				.calc();
+		if (factor != 1.0) {
+			cost = cost.multiply(factor);
+		}
+		return cost;
 	}
 
 	public void addManufacturing(ManufacturingCost manufacturingCost) {

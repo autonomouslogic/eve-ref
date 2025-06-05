@@ -81,7 +81,7 @@ public class ActivityCost {
 	BigDecimal totalCost;
 
 	protected ActivityCost.Builder<?, ?> multiply(ActivityCost.Builder<?, ?> builder, double mul) {
-		return builder.runs(runs * mul)
+		builder = builder.runs(runs * mul)
 				.time(MathUtil.multiply(time, mul))
 				.clearMaterials()
 				.materials(MaterialCost.multiply(materials, mul))
@@ -92,7 +92,10 @@ public class ActivityCost {
 				.sccSurcharge(MathUtil.round(sccSurcharge.multiply(BigDecimal.valueOf(mul)), 2))
 				.alphaCloneTax(MathUtil.round(alphaCloneTax.multiply(BigDecimal.valueOf(mul)), 2))
 				.totalJobCost(MathUtil.round(totalJobCost.multiply(BigDecimal.valueOf(mul)), 2))
-				.totalMaterialCost(MathUtil.round(totalMaterialCost.multiply(BigDecimal.valueOf(mul)), 2))
 				.totalCost(MathUtil.round(totalCost.multiply(BigDecimal.valueOf(mul)), 2));
+		if (totalMaterialCost != null) {
+			builder = builder.totalMaterialCost(MathUtil.round(totalMaterialCost.multiply(BigDecimal.valueOf(mul)), 2));
+		}
+		return builder;
 	}
 }

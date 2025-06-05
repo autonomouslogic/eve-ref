@@ -21,7 +21,7 @@ import lombok.extern.jackson.Jacksonized;
 @Jacksonized
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"manufacturing", "invention", "input"})
+@JsonPropertyOrder({"manufacturing", "invention", "copying", "input"})
 @Schema
 public class IndustryCost {
 	@JsonProperty

@@ -44,5 +44,23 @@
       "avg_cost_per_run" : 41491.88,
       "avg_cost_per_unit" : 8.30
     }
+  },
+  "copying" : {
+    "803" : {
+      // Not verified in-game
+      "product_id" : 803,
+      "runs" : 45.0,
+      "time" : "PT5H44M15S",
+      "estimated_item_value" : 1426553,
+      "system_cost_index" : 2060,
+      "system_cost_bonuses" : 0,
+      "facility_tax" : 71,
+      "scc_surcharge" : 1141,
+      "alpha_clone_tax" : 0,
+      "total_job_cost" : 3272,
+      "total_cost" : 3272,
+      "job_cost_base" : 28531,
+      "total_cost_per_run" : 72.71
+    }
   }
 }
