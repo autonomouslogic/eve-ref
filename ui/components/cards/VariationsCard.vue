@@ -26,6 +26,7 @@ const dogmaAttributes = await getMainDogma(props.inventoryType);
 		<CardWrapper :title="title">
 			<CompareTable
 				:type-ids="variationTypeIds"
+				:current-type-id="inventoryType.typeId"
 				:dogma-attribute-names="dogmaAttributes"
 				direction="vertical"
 				:compact-attribute-names="true"

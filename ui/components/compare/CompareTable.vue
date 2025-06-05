@@ -5,6 +5,7 @@ import {getAttributeByName, loadDogmaAttributesForType} from "~/lib/dogmaUtils";
 
 export interface Props {
 	typeIds: number[],
+	currentTypeId?: number,
 	dogmaAttributeNames: string[],
 	direction?: "vertical" | "horizontal",
 	compactAttributeNames?: boolean,
@@ -54,12 +55,14 @@ function getValue(attr: DogmaAttribute, type: InventoryType): number {
 		<table class="standard-table">
 			<CompareTableHorizontal v-if="direction == 'horizontal'"
 				:inventory-types="types"
+				:current-type-id="currentTypeId"
 				:dogma-attributes="listAttributes"
 				:compact-attribute-names="compactAttributeNames"
 				:show-meta-group="showMetaGroup"
 				:show-market-price="showMarketPrice"/>
 			<CompareTableVertical v-if="direction == 'vertical'"
 				:inventory-types="types"
+				:current-type-id="currentTypeId"
 				:dogma-attributes="listAttributes"
 				:compact-attribute-names="compactAttributeNames"
 				:show-meta-group="showMetaGroup"

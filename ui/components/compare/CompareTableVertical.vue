@@ -6,9 +6,11 @@ import AttributeTypeIcon from "~/components/icons/AttributeTypeIcon.vue";
 import MetaGroupName from "~/components/helpers/MetaGroupName.vue";
 import MarketPrice from "~/components/helpers/MarketPrice.vue";
 import MetaGroupLink from "~/components/helpers/MetaGroupLink.vue";
+import TypeName from "~/components/helpers/TypeName.vue";
 
 export interface Props {
 	inventoryTypes: InventoryType[],
+	currentTypeId?: number,
 	dogmaAttributes: DogmaAttribute[],
 	compactAttributeNames: boolean,
 	showMarketPrice: boolean,
@@ -38,7 +40,10 @@ const props = withDefaults(defineProps<Props>(), {
 	</thead>
 	<tbody>
 		<tr v-for="type in inventoryTypes" :key="type.typeId" class="border-b border-gray-700">
-			<td class="text-left"><type-link :type-id="type.typeId" /></td>
+			<td class="text-left">
+				<TypeName v-if="type.typeId == currentTypeId" :type-id="type.typeId" />
+				<TypeLink v-else :type-id="type.typeId" />
+			</td>
 			<td v-if="showMarketPrice" class="text-right">
 				<MarketPrice v-if="type.typeId" :type-id="type.typeId" />
 			</td>
