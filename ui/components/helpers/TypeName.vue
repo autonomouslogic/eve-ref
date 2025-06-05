@@ -3,7 +3,6 @@ import refdataApi from "~/refdata";
 import {type InventoryType} from "~/refdata-openapi";
 import {tr} from "~/lib/translate";
 import InternalLink from "~/components/helpers/InternalLink.vue";
-import TypeName from "~/components/helpers/TypeName.vue";
 
 const {locale} = useI18n();
 
@@ -21,9 +20,8 @@ const type: InventoryType | undefined = props.typeId ? await refdataApi.getType(
 </script>
 
 <template>
-	<InternalLink
-		v-if="type && type.name"
-		:to="`/types/${props.typeId}`">
-		<TypeName :type-id="typeId" />
-	</InternalLink>
+	<template
+		v-if="type && type.name">
+		{{ tr(type.name, locale) }}
+	</template>
 </template>
