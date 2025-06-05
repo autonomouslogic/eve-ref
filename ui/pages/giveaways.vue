@@ -30,6 +30,7 @@ const VEXOR_SCOPE_SYNDICATION = 56882;
 const LESHAK_SCOPE_SYNDICATION = 61182;
 const RUPTURE_SCOPE_SYNDICATION = 56883;
 const STRATIOS_SCOPE_SYNDICATION = 61186;
+const MALLER_SCOPE_SYNDICATION = 56884;
 const FEDERATION_NAVY_COMET_MEDIA_MIASMA = 84115;
 const NIGHTMARE_MEDIA_MIASMA = 84131;
 
@@ -49,6 +50,28 @@ const prizes: Prize[] = [
 		value: (50 + 500 * 12 / 365 * 3) * plexPrice,
 		dates: fleetPackDates,
 		winners: 2
+	} as Prize,
+	{
+		name: "Astero Scope Syndication YC122 SKIN",
+		value: await getJitaSellPrice(ASTERO_SCOPE_SYNDICATION) || 0,
+		dates: [
+			DateTime.fromISO("2025-06-07T23:00:00Z"),
+			DateTime.fromISO("2025-06-14T23:00:00Z"),
+			DateTime.fromISO("2025-06-21T23:00:00Z"),
+			DateTime.fromISO("2025-06-28T23:00:00Z")
+		],
+		winners: 1
+	} as Prize,
+	{
+		name: "Maller Scope Syndication YC122 SKIN",
+		value: await getJitaSellPrice(MALLER_SCOPE_SYNDICATION) || 0,
+		dates: [
+			DateTime.fromISO("2025-06-08T23:00:00Z"),
+			DateTime.fromISO("2025-06-15T23:00:00Z"),
+			DateTime.fromISO("2025-06-22T23:00:00Z"),
+			DateTime.fromISO("2025-06-29T23:00:00Z")
+		],
+		winners: 1
 	} as Prize,
 ];
 
@@ -85,7 +108,7 @@ const totalWorth = unrolled.reduce((acc, prize) => acc + prize.value * prize.win
 
 const pastGiveaways = {
 	"July 2025": 8 * 620.72e6,
-	"June 2025": 8 * 620.72e6,
+	"June 2025": 8 * 620.72e6 + 4 * 99.99e6 + 4 * 184.00e6,
 	"May 2025": 10 * 629.26e6,
 	"April 2025": 8 * 617.04e6,
 	"March 2025": 4.92e9,
