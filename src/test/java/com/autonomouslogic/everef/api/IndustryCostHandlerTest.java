@@ -235,7 +235,7 @@ public class IndustryCostHandlerTest {
 	@SneakyThrows
 	void shouldDefaultEfficienciesForT1Products() {
 		setupBasicPrices();
-		var input = IndustryCostInput.builder().productId(645).build();
+		var input = IndustryCostInput.builder().productId(645L).build();
 		assertNull(input.getMe());
 		assertNull(input.getTe());
 		var cost = industryApi.industryCost(input);
@@ -249,7 +249,7 @@ public class IndustryCostHandlerTest {
 	@SneakyThrows
 	void shouldUseInventionEfficienciesForT2Products(String decryptorId) {
 		setupBasicPrices();
-		var builder = IndustryCostInput.builder().productId(22430);
+		var builder = IndustryCostInput.builder().productId(22430L);
 		if (!decryptorId.isEmpty()) {
 			builder.decryptorId(Long.valueOf(decryptorId));
 		}
@@ -276,7 +276,7 @@ public class IndustryCostHandlerTest {
 	@SneakyThrows
 	void shouldUseSuppliedEfficienciesForT2Products() {
 		setupBasicPrices();
-		var input = IndustryCostInput.builder().productId(22430).me(0).te(0).build();
+		var input = IndustryCostInput.builder().productId(22430L).me(0).te(0).build();
 		var cost = industryApi.industryCost(input);
 
 		var invention = cost.getInvention().get("22431");
@@ -294,7 +294,7 @@ public class IndustryCostHandlerTest {
 	void shouldLookupPricesViaFuzzwork(PriceSource source, int expected) {
 		setupBasicPrices();
 		var input = IndustryCostInput.builder()
-				.productId(645)
+				.productId(645L)
 				.materialPrices(source)
 				.build();
 		var cost = industryApi.industryCost(input);
@@ -315,7 +315,7 @@ public class IndustryCostHandlerTest {
 	void shouldResolveSystemSecurityAndCost() {
 		setupBasicPrices();
 		var input =
-				IndustryCostInput.builder().productId(645).systemId(30004839).build();
+				IndustryCostInput.builder().productId(645L).systemId(30004839).build();
 		var cost = industryApi.industryCost(input);
 
 		assertEquals(30004839, cost.getInput().getSystemId());
@@ -335,7 +335,7 @@ public class IndustryCostHandlerTest {
 	@SneakyThrows
 	void shouldDefaultToHighSecIfNeitherSecurityNorSystemAreSupplied() {
 		setupBasicPrices();
-		var input = IndustryCostInput.builder().productId(645).build();
+		var input = IndustryCostInput.builder().productId(645L).build();
 		var cost = industryApi.industryCost(input);
 		assertNull(cost.getInput().getSystemId());
 		assertEquals(SystemSecurity.HIGH_SEC, cost.getInput().getSecurity());
@@ -345,7 +345,7 @@ public class IndustryCostHandlerTest {
 	@SneakyThrows
 	void shouldComplainAboutUnknownSystems() {
 		setupBasicPrices();
-		var input = IndustryCostInput.builder().productId(645).systemId(1).build();
+		var input = IndustryCostInput.builder().productId(645L).systemId(1).build();
 		var e = assertThrows(ApiException.class, () -> industryApi.industryCost(input));
 		assertEquals(400, e.getCode());
 		assertTrue(e.getResponseBody().contains("System ID 1 not found"), e.getResponseBody());
@@ -355,7 +355,7 @@ public class IndustryCostHandlerTest {
 	@SneakyThrows
 	void shouldNotFailIfEivPricesCantBeResolved() {
 		esiMarketPrices = "[]";
-		var input = IndustryCostInput.builder().productId(645).build();
+		var input = IndustryCostInput.builder().productId(645L).build();
 		var cost = industryApi.industryCost(input);
 		assertEquals(BigDecimal.ZERO, cost.getManufacturing().get("645").getEstimatedItemValue());
 	}
@@ -364,7 +364,7 @@ public class IndustryCostHandlerTest {
 	@SneakyThrows
 	void shouldNotFailOnBlueprintsWithoutRequiredSkills() {
 		setupBasicPrices();
-		var input = IndustryCostInput.builder().productId(33673).build();
+		var input = IndustryCostInput.builder().productId(33673L).build();
 		var cost = industryApi.industryCost(input);
 		assertNotEquals(0.0, cost.getManufacturing().get("33673").getTotalCost().doubleValue());
 	}
@@ -374,7 +374,7 @@ public class IndustryCostHandlerTest {
 	void shouldNotFailInventionsWithoutEncryptionkills() {
 		// see mystic-l-blueprint-invention.jpg
 		setupBasicPrices();
-		var input = IndustryCostInput.builder().productId(48111).build();
+		var input = IndustryCostInput.builder().productId(48111L).build();
 		var cost = industryApi.industryCost(input);
 		var invention = cost.getInvention().get("48111");
 		assertNotNull(invention);
@@ -385,7 +385,7 @@ public class IndustryCostHandlerTest {
 	@SneakyThrows
 	void shouldIncludeBlueprintCopyingForT1Products() {
 		setupBasicPrices();
-		var input = IndustryCostInput.builder().productId(645).build();
+		var input = IndustryCostInput.builder().productId(645L).build();
 		var cost = industryApi.industryCost(input);
 		assertEquals(Set.of("999"), cost.getCopying().keySet());
 	}
@@ -394,7 +394,7 @@ public class IndustryCostHandlerTest {
 	@SneakyThrows
 	void shouldIncludeBlueprintCopyingForT2Products() {
 		setupBasicPrices();
-		var input = IndustryCostInput.builder().productId(22430).build();
+		var input = IndustryCostInput.builder().productId(22430L).build();
 		var cost = industryApi.industryCost(input);
 		assertEquals(Set.of("999"), cost.getCopying().keySet());
 	}
@@ -403,7 +403,7 @@ public class IndustryCostHandlerTest {
 	@SneakyThrows
 	void shouldIncludeBlueprintCopyingForT2Blueprints() {
 		setupBasicPrices();
-		var input = IndustryCostInput.builder().productId(22431).build();
+		var input = IndustryCostInput.builder().productId(22431L).build();
 		var cost = industryApi.industryCost(input);
 		assertEquals(Set.of("999"), cost.getCopying().keySet());
 	}
@@ -412,9 +412,33 @@ public class IndustryCostHandlerTest {
 	@SneakyThrows
 	void shouldNotIncludeBlueprintCopyingForFactionProducts() {
 		setupBasicPrices();
-		var input = IndustryCostInput.builder().productId(32307).build();
+		var input = IndustryCostInput.builder().productId(32307L).build();
 		var cost = industryApi.industryCost(input);
 		assertEquals(Set.of(), cost.getCopying().keySet());
+	}
+
+	@Test
+	@SneakyThrows
+	void shouldComplainIfSuppliedBlueprintDoesntProduceProduct() {
+		setupBasicPrices();
+		var input =
+				IndustryCostInput.builder().productId(645L).blueprintId(22431L).build();
+		var e = assertThrows(ApiException.class, () -> industryApi.industryCost(input));
+		assertEquals(400, e.getCode());
+		assertTrue(
+				e.getResponseBody().contains("Product type ID 645 is not produced from blueprint ID 22431"),
+				e.getResponseBody());
+	}
+
+	@Test
+	@SneakyThrows
+	void shouldCalculateAllActivitiesOnABlueprint() {
+		setupBasicPrices();
+		var input = IndustryCostInput.builder().blueprintId(999L).build();
+		var cost = industryApi.industryCost(input);
+		assertEquals(Set.of("645"), cost.getManufacturing().keySet());
+		assertEquals(Set.of("22431"), cost.getInvention().keySet());
+		assertEquals(Set.of("999"), cost.getCopying().keySet());
 	}
 
 	// ===========

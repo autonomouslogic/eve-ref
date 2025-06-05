@@ -113,7 +113,7 @@ public class ManufactureCalculator {
 		var totalMaterialCost = industryMath.totalMaterialCost(materials);
 		var totalCost = totalJobCost.add(totalMaterialCost);
 		return ManufacturingCost.builder()
-				.productId(industryCostInput.getProductId())
+				.productId(productType.getTypeId())
 				.blueprintId(blueprint.getBlueprintTypeId())
 				.runs(runs)
 				.me(me)
