@@ -5,7 +5,7 @@ import BasicCard from "~/components/cards/BasicCard.vue";
 import ReprocessingCard from "~/components/cards/ReprocessingCard.vue";
 import VariationsCard from "~/components/cards/VariationsCard.vue";
 import RequiredSkillsCard from "~/components/cards/requiredSkills/RequiredSkillsCard.vue";
-import TypeManufacturing from "~/components/cards/TypeManufacturing.vue";
+import ProducedFrom from "~/components/cards/ProducedFrom.vue";
 import BlueprintManufacturing from "~/components/cards/BlueprintManufacturing.vue";
 import BlueprintCopyingCard from "~/components/cards/BlueprintCopyingCard.vue";
 import BlueprintInventionCard from "~/components/cards/BlueprintInventionCard.vue";
@@ -54,7 +54,7 @@ const props = defineProps<{
 		:title="title"
 		:inventory-type="inventoryType"
 		:dogma-attributes="dogmaAttributes" />
-	<TypeManufacturing v-else-if="component == 'typeManufacturing'"
+	<ProducedFrom v-else-if="component == 'producedFrom'"
 		:title="title"
 		:inventory-type="inventoryType"
 		:dogma-attributes="dogmaAttributes" />
