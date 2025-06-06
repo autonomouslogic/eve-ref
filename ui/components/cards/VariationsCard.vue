@@ -18,7 +18,7 @@ if (props.inventoryType.typeVariations) {
 	}
 }
 
-const dogmaAttributes = await getMainDogma(props.inventoryType);
+const comparisonDogmaAttributes = await getMainDogma(props.inventoryType);
 </script>
 
 <template>
@@ -27,7 +27,7 @@ const dogmaAttributes = await getMainDogma(props.inventoryType);
 			<CompareTable
 				:type-ids="variationTypeIds"
 				:current-type-id="inventoryType.typeId"
-				:dogma-attribute-names="dogmaAttributes"
+				:dogma-attribute-names="comparisonDogmaAttributes"
 				direction="vertical"
 				:compact-attribute-names="true"
 				:show-meta-group="true"
