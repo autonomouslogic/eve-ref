@@ -7,6 +7,7 @@ import MetaGroupName from "~/components/helpers/MetaGroupName.vue";
 import MarketPrice from "~/components/helpers/MarketPrice.vue";
 import MetaGroupLink from "~/components/helpers/MetaGroupLink.vue";
 import TypeName from "~/components/helpers/TypeName.vue";
+import EveImage from "~/components/icons/EveImage.vue";
 
 export interface Props {
 	inventoryTypes: InventoryType[],
@@ -23,6 +24,7 @@ const props = withDefaults(defineProps<Props>(), {
 <template>
 	<thead>
 		<tr>
+			<th class="text-left"></th>
 			<th class="text-left">Type</th>
 			<th v-if="showMarketPrice" class="text-right">
 				<template v-if="!compactAttributeNames">Price</template>
@@ -40,6 +42,9 @@ const props = withDefaults(defineProps<Props>(), {
 	</thead>
 	<tbody>
 		<tr v-for="type in inventoryTypes" :key="type.typeId" class="border-b border-gray-700">
+			<td class="text-left">
+				<EveImage :type-id="type.typeId || 0" />
+			</td>
 			<td class="text-left">
 				<TypeName v-if="type.typeId == currentTypeId" :type-id="type.typeId" />
 				<TypeLink v-else :type-id="type.typeId" />
