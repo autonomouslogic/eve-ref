@@ -3,10 +3,10 @@ import {type DogmaAttribute, type InventoryType} from "~/refdata-openapi";
 import TypeLink from "~/components/helpers/TypeLink.vue";
 import DogmaAttributeLink from "~/components/helpers/DogmaAttributeLink.vue";
 import AttributeTypeIcon from "~/components/icons/AttributeTypeIcon.vue";
-import MetaGroupName from "~/components/helpers/MetaGroupName.vue";
 import MarketPrice from "~/components/helpers/MarketPrice.vue";
 import MetaGroupLink from "~/components/helpers/MetaGroupLink.vue";
 import TypeName from "~/components/helpers/TypeName.vue";
+import EveImage from "~/components/icons/EveImage.vue";
 
 export interface Props {
 	inventoryTypes: InventoryType[],
@@ -23,7 +23,7 @@ const props = withDefaults(defineProps<Props>(), {});
 <template>
 	<thead>
 		<tr>
-			<th>Attribute</th>
+			<th></th>
 			<th v-for="type in inventoryTypes" :key="type.typeId" class="text-right">
 				<h2>
 					<TypeName v-if="type.typeId == currentTypeId" :type-id="type.typeId" />
@@ -33,6 +33,14 @@ const props = withDefaults(defineProps<Props>(), {});
 		</tr>
 	</thead>
 	<tbody>
+		<tr>
+			<td>
+				<template v-if="!compactAttributeNames">Icon</template>
+			</td>
+			<td v-for="type in inventoryTypes" :key="type.typeId" class="text-right px-6">
+				<EveImage v-if="type.typeId" :type-id="type.typeId"/>
+			</td>
+		</tr>
 		<tr v-if="showMarketPrice">
 			<td>
 				<template v-if="!compactAttributeNames">Price</template>

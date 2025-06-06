@@ -11,7 +11,6 @@ useSeoMeta({
 });
 
 let typeIds = await getRecursiveMarketGroupTypeIds(2340);
-console.log("typeIds:", typeIds);
 
 const attrNames = STRUCTURE_RIGS_COMPARISON_ENGINEERING_DOGMA_NAMES;
 </script>
