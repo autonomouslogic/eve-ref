@@ -25,14 +25,21 @@ const sortedCategoryIds = computed(() => categories.sort((a, b) => {
 
 <template>
 	<div>
-		<h1>Categories</h1>
-		<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-			<CategoryLink
-				class="py-2"
-				v-for="categoryId in sortedCategoryIds"
-				:key="categoryId"
-				:categoryId="categoryId">
-			</CategoryLink>
-		</div>
+		<h1 class="mb-3">Categories</h1>
+
+		<table class="standard-table">
+			<thead>
+				<tr>
+					<th>Category</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr v-for="categoryId in sortedCategoryIds" :key="categoryId">
+					<td>
+						<CategoryLink :categoryId="categoryId" />
+					</td>
+				</tr>
+			</tbody>
+		</table>
 	</div>
 </template>
