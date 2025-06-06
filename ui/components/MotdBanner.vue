@@ -41,6 +41,11 @@ const motdFallbacks: Motd[] = [
 		url: DATASETS_DOCS_URL,
 		urlText: "Explore EVE data"
 	} as Motd,
+	{
+		text: "Donate ISK and get your name shown here",
+		url: "/about",
+		urlText: "Support EVE Ref"
+	} as Motd,
 ];
 
 const {status: donorsStatus, data: donors} = await useLazyFetch<DonationsFile>("https://static.everef.net/donations.json", {
