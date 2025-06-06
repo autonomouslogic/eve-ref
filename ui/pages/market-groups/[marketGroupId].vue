@@ -72,6 +72,7 @@ const comparisonDogmaAttributes: string[] = groupIds.length == 1 ? (await getGro
 
 
 		<CompareTable
+			v-if="sortedTypeIds && sortedTypeIds.length > 0"
 			:type-ids="sortedTypeIds"
 			:dogma-attribute-names="comparisonDogmaAttributes"
 			direction="vertical"
