@@ -25,12 +25,11 @@ useHead({
 
 const childIds = marketGroup.childMarketGroupIds?.filter((id) => id !== undefined) || [];
 const childGroups = await Promise.all(childIds.map(async (marketGroupId) => await refdataApi.getMarketGroup({marketGroupId})));
-const sortedChildIds = computed(() => childGroups.sort((a, b) => {
+const sortedChildGroups = computed(() => childGroups.sort((a, b) => {
 	const an = tr(a.name, locale.value) || "";
 	const bn = tr(b.name, locale.value) || "";
 	return an.localeCompare(bn);
-})
-	.map((group) => group.marketGroupId));
+}));
 
 const typeIds = marketGroup.typeIds?.filter((typeId) => typeId !== undefined) || [];
 const types = await Promise.all(typeIds.map(async (typeId) => await refdataApi.getType({typeId})));
@@ -64,12 +63,28 @@ const comparisonDogmaAttributes: string[] = groupIds.length == 1 ? (await getGro
 			</template>
 		</div>
 
-		<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-			<MarketGroupLink class="py-2" v-for="childId in sortedChildIds"
-				:key="childId"
-				:marketGroupId="childId" />
-		</div>
-
+		<table class="standard-table" v-if="sortedChildGroups && sortedChildGroups.length > 1">
+			<thead>
+				<tr>
+					<th>Market group</th>
+					<th class="text-right">Child groups</th>
+					<th class="text-right">Types</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr v-for="group in sortedChildGroups" :key="group.marketGroupId">
+					<td>
+						<MarketGroupLink :marketGroupId="group.marketGroupId" />
+					</td>
+					<td class="text-right">
+						{{ group.childMarketGroupIds?.length || 0 }}
+					</td>
+					<td class="text-right">
+						{{ group.typeIds?.length || 0 }}
+					</td>
+				</tr>
+			</tbody>
+		</table>
 
 		<CompareTable
 			v-if="sortedTypeIds && sortedTypeIds.length > 0"

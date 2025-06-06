@@ -10,7 +10,8 @@ import CardWrapper from "~/components/cards/CardWrapper.vue";
 import AttributeList from "~/components/attr/AttributeList.vue";
 import AttributeListItem from "~/components/attr/AttributeListItem.vue";
 import ExternalLink from "~/components/helpers/ExternalLink.vue";
-	
+import MetaGroupLink from "~/components/helpers/MetaGroupLink.vue";
+
 const route = useRoute();
 const {locale} = useI18n();
 
@@ -28,7 +29,7 @@ const typeIds = metaGroup.typeIds?.filter((typeId) => typeId !== undefined) || [
 
 <template>
 	<div>
-		<h1 v-if="metaGroup.name">{{ tr(metaGroup.name, locale) }}</h1>
+		<h1 v-if="metaGroup.name" class="mb-3">{{ tr(metaGroup.name, locale) }}</h1>
 
 		<CardsContainer>
 			<CardWrapper title="Meta group">
@@ -49,11 +50,24 @@ const typeIds = metaGroup.typeIds?.filter((typeId) => typeId !== undefined) || [
 		</CardsContainer>
 
 		<client-only>
-			<div class="grid grid-cols-1">
-				<div v-for="typeId in typeIds" :key="typeId">
-					<TypeLink class="py-2" :type-id="typeId" /> <MarketPrice :type-id="typeId" order-type="sell" />
-				</div>
-			</div>
+			<table class="standard-table">
+				<thead>
+					<tr>
+						<th>Type</th>
+						<th class="text-right">Price</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr v-for="typeId in typeIds" :key="typeId">
+						<td>
+							<TypeLink :type-id="typeId" />
+						</td>
+						<td class="text-right">
+							<MarketPrice :type-id="typeId" order-type="sell" />
+						</td>
+					</tr>
+				</tbody>
+			</table>
 		</client-only>
 	</div>
 </template>

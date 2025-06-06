@@ -13,26 +13,33 @@ await cacheCategoriesBundle();
 
 const categoryIds: number[] = await refdataApi.getAllCategories();
 const categories = await Promise.all(categoryIds.map(async (categoryId) => await refdataApi.getCategory({categoryId})));
-const sortedCategoryIds = computed(() => categories.sort((a, b) => {
+const sortedCategories = computed(() => categories.sort((a, b) => {
 	const an = tr(a.name, locale.value) || "";
 	const bn = tr(b.name, locale.value) || "";
 	return an.localeCompare(bn);
-})
-	.map((category) => category.categoryId)
-	.filter((categoryId) => categoryId !== undefined));
+}));
 
 </script>
 
 <template>
 	<div>
-		<h1>Categories</h1>
-		<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-			<CategoryLink
-				class="py-2"
-				v-for="categoryId in sortedCategoryIds"
-				:key="categoryId"
-				:categoryId="categoryId">
-			</CategoryLink>
-		</div>
+		<h1 class="mb-3">Categories</h1>
+
+		<table class="standard-table">
+			<thead>
+				<tr>
+					<th>Category</th>
+					<th class="text-right">Groups</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr v-for="category in sortedCategories" :key="category.categoryId">
+					<td>
+						<CategoryLink :categoryId="category.categoryId" />
+					</td>
+					<td class="text-right">{{ category.groupIds?.length || 0 }}</td>
+				</tr>
+			</tbody>
+		</table>
 	</div>
 </template>

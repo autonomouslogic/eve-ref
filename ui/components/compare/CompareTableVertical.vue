@@ -42,7 +42,7 @@ const props = withDefaults(defineProps<Props>(), {
 	</thead>
 	<tbody>
 		<tr v-for="type in inventoryTypes" :key="type.typeId" class="border-b border-gray-700">
-			<td class="text-left">
+			<td class="text-left max-w-fit">
 				<EveImage :type-id="type.typeId || 0" />
 			</td>
 			<td class="text-left">
