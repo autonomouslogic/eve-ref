@@ -26,6 +26,9 @@ const localePath = useLocalePath();
 					<InternalLink to="/meta-groups">Meta Groups</InternalLink>
 				</span>
 				<span>
+					<InternalLink to="/dogma-attributes">Dogma</InternalLink>
+				</span>
+				<span>
 					<InternalLink to="/structures">Structures</InternalLink>
 				</span>
 				<span>
