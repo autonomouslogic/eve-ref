@@ -17,11 +17,17 @@ const showCard = computed(() => {
 
 <template>
 	<CardWrapper :title="title" v-if="showCard">
-		<ul>
+		<ul class="list-disc list-inside">
 			<li>
-				<InternalLink :to="`/types/${inventoryType.typeId}/used-in`">
-					View blueprints
-				</InternalLink>
+				<template v-if="inventoryType.usedInBlueprints && Object.keys(inventoryType.usedInBlueprints).length > 0">
+					<InternalLink
+						:to="`/types/${inventoryType.typeId}/used-in`">
+						View blueprints
+					</InternalLink> ({{ Object.keys(inventoryType.usedInBlueprints).length }})
+				</template>
+				<template v-else>
+					Not used in any blueprints
+				</template>
 			</li>
 			<li>
 				<ExternalLink

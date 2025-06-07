@@ -13,6 +13,7 @@ import {getTypeIconUrl} from "~/lib/urls";
 import {SHIP} from "~/lib/categoryConstants";
 import ExternalLink from "~/components/helpers/ExternalLink.vue";
 import TypeLink from "~/components/helpers/TypeLink.vue";
+import FormattedNumber from "~/components/helpers/FormattedNumber.vue";
 
 const {locale} = useI18n();
 const route = useRoute();
@@ -37,12 +38,12 @@ useHead({
 
 <template>
 	<h1 v-if="inventoryType.name" class="mb-3">
-		Blueprints using {{ tr(inventoryType.name, locale) }}
+		Blueprints using <TypeLink :type-id="inventoryType.typeId" />
 	</h1>
 
 	<ClientOnly>
 		<div v-if="!inventoryType.usedInBlueprints">
-			{{ tr(inventoryType.name, locale) }} isn't used in any blueprints.
+			<TypeLink :type-id="inventoryType.typeId" /> isn't used in any blueprints.
 		</div>
 		<table v-else class="standard-table">
 			<thead>
@@ -53,12 +54,17 @@ useHead({
 				</tr>
 			</thead>
 			<tbody>
-				<tr v-for="(activity, blueprintId) in inventoryType.usedInBlueprints" :key="blueprintId">
-					<td>
-						<TypeLink :type-id="blueprintId" />
-					</td>
-					<td>{{ activity }}</td>
-				</tr>
+				<template v-for="(activityEntry, blueprintId) in inventoryType.usedInBlueprints" :key="blueprintId">
+					<tr v-for="(usedIn, activity) in activityEntry" :key="activity">
+						<td>
+							<TypeLink :type-id="blueprintId" />
+						</td>
+						<td>{{ activity }}</td>
+						<td class="text-right">
+							<FormattedNumber :number="usedIn.quantity" :decimals="0" />
+						</td>
+					</tr>
+				</template>
 			</tbody>
 		</table>
 	</ClientOnly>
