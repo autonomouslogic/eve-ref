@@ -110,6 +110,7 @@
   },
   "copying" : {
     "999" : {
+      // Not vrified in-game
       "product_id" : 999,
       "runs" : 1.0,
       "time" : "PT2H33M",
