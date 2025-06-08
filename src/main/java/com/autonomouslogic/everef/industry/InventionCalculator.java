@@ -9,6 +9,7 @@ import com.autonomouslogic.everef.model.api.InventionCost;
 import com.autonomouslogic.everef.model.api.MaterialCost;
 import com.autonomouslogic.everef.refdata.Blueprint;
 import com.autonomouslogic.everef.refdata.BlueprintActivity;
+import com.autonomouslogic.everef.refdata.BlueprintMaterial;
 import com.autonomouslogic.everef.refdata.InventoryType;
 import com.autonomouslogic.everef.service.MarketPriceService;
 import com.autonomouslogic.everef.service.RefDataService;
@@ -104,6 +105,7 @@ public class InventionCalculator {
 				.orElseThrow()
 				.getQuantity()
 				.intValue();
+		var productVolume = industryMath.typeVolume(productType, runs);
 		var expectedCopies = runs * prob;
 		var expectedRuns = expectedCopies * runsPerCopy;
 		var expectedUnits = expectedRuns * unitsPerRun;
@@ -142,6 +144,7 @@ public class InventionCalculator {
 				.expectedUnits(expectedUnits)
 				.materials(materials)
 				.materialsVolume(materialsVolume)
+				.productVolume(productVolume)
 				.time(time)
 				.avgTimePerCopy(MathUtil.divide(time, expectedCopies).truncatedTo(ChronoUnit.MILLIS))
 				.avgTimePerRun(MathUtil.divide(time, expectedRuns).truncatedTo(ChronoUnit.MILLIS))
@@ -167,20 +170,18 @@ public class InventionCalculator {
 	}
 
 	public Map<String, MaterialCost> inventionMaterials(BlueprintActivity invention) {
+		if (decryptor != null) {
+			invention = invention.toBuilder()
+					.material(
+							decryptor.getTypeId(),
+							BlueprintMaterial.builder()
+									.typeId(decryptor.getTypeId())
+									.quantity((long) runs)
+									.build())
+					.build();
+		}
 		var materials = industryMath.materials(
 				invention, this::inventionMaterialQuantity, industryCostInput.getMaterialPrices());
-		if (decryptor != null) {
-			//			var costPerUnit =
-			//					industryMath.materialCostPerUnit(decryptor.getTypeId(), industryCostInput.getMaterialPrices());
-			materials.put(
-					String.valueOf(decryptor.getTypeId()),
-					MaterialCost.builder()
-							.typeId(decryptor.getTypeId())
-							.quantity(runs)
-							//							.costPerUnit(costPerUnit)
-							//							.cost(industryMath.materialCost(costPerUnit, runs))
-							.build());
-		}
 		var materialsWithCost = marketPriceService.materialCosts(materials, industryCostInput.getMaterialPrices());
 		return materialsWithCost;
 	}

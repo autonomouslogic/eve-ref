@@ -91,8 +91,6 @@ public class ActivityCost {
 				.time(MathUtil.multiply(time, mul))
 				.clearMaterials()
 				.materials(MaterialCost.multiply(materials, mul))
-				.materialsVolume(MathUtil.round(materialsVolume.multiply(BigDecimal.valueOf(mul)), 2))
-				.productVolume(MathUtil.round(productVolume.multiply(BigDecimal.valueOf(mul)), 2))
 				.estimatedItemValue(MathUtil.round(estimatedItemValue.multiply(BigDecimal.valueOf(mul)), 2))
 				.systemCostIndex(MathUtil.round(systemCostIndex.multiply(BigDecimal.valueOf(mul)), 2))
 				.systemCostBonuses(MathUtil.round(systemCostBonuses.multiply(BigDecimal.valueOf(mul)), 2))
@@ -100,9 +98,13 @@ public class ActivityCost {
 				.sccSurcharge(MathUtil.round(sccSurcharge.multiply(BigDecimal.valueOf(mul)), 2))
 				.alphaCloneTax(MathUtil.round(alphaCloneTax.multiply(BigDecimal.valueOf(mul)), 2))
 				.totalJobCost(MathUtil.round(totalJobCost.multiply(BigDecimal.valueOf(mul)), 2))
-				.totalCost(MathUtil.round(totalCost.multiply(BigDecimal.valueOf(mul)), 2))
-				.materialsVolume(MathUtil.round(materialsVolume.multiply(BigDecimal.valueOf(mul)), 2))
-				.productVolume(MathUtil.round(productVolume.multiply(BigDecimal.valueOf(mul)), 2));
+				.totalCost(MathUtil.round(totalCost.multiply(BigDecimal.valueOf(mul)), 2));
+		if (materialsVolume != null) {
+			builder = builder.totalMaterialCost(MathUtil.round(materialsVolume.multiply(BigDecimal.valueOf(mul)), 2));
+		}
+		if (productVolume != null) {
+			builder = builder.totalMaterialCost(MathUtil.round(productVolume.multiply(BigDecimal.valueOf(mul)), 2));
+		}
 		if (totalMaterialCost != null) {
 			builder = builder.totalMaterialCost(MathUtil.round(totalMaterialCost.multiply(BigDecimal.valueOf(mul)), 2));
 		}

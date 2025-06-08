@@ -125,11 +125,11 @@ public class IndustryMath {
 		return materials.values().stream().map(MaterialCost::getVolume).reduce(BigDecimal.ZERO, BigDecimal::add);
 	}
 
-	public BigDecimal productVolume(@NonNull InventoryType productType, long units) {
-		return typeVolume(productType).multiply(BigDecimal.valueOf(units));
+	public BigDecimal typeVolume(@NonNull InventoryType type, long units) {
+		return typeVolume(type).multiply(BigDecimal.valueOf(units));
 	}
 
-	private BigDecimal typeVolume(@NonNull InventoryType type) {
+	public BigDecimal typeVolume(@NonNull InventoryType type) {
 		if (type.getPackagedVolume() != null) {
 			return BigDecimal.valueOf(type.getPackagedVolume());
 		}

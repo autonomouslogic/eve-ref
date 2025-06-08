@@ -92,7 +92,7 @@ public class ManufactureCalculator {
 		var unitsPerRun =
 				manufacturing.getProducts().get(productType.getTypeId()).getQuantity();
 		var units = runs * unitsPerRun;
-		var productVolume = industryMath.productVolume(productType, units);
+		var productVolume = industryMath.typeVolume(productType, units);
 		var systemCostIndex = manufacturingSystemCostIndex(eiv);
 		var systemCostBonuses = industryMath.systemCostBonuses(
 				structure,
