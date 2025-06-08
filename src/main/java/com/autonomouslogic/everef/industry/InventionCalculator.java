@@ -176,7 +176,7 @@ public class InventionCalculator {
 							decryptor.getTypeId(),
 							BlueprintMaterial.builder()
 									.typeId(decryptor.getTypeId())
-									.quantity((long) runs)
+									.quantity(1L)
 									.build())
 					.build();
 		}
