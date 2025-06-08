@@ -1,0 +1,64 @@
+{
+  "base_price" : 2048,
+  "description" : {
+    "de" : "Nur in riesigen Geoden zu finden; Felsen an der Außenseite mit kristallähnlichem Quarz im Inneren. Die seltensten und kostbarsten dieser Geoden sind jene, die das dunkelgrüne Zydrine enthalten. Äußerst selten und sehr kostspielig. Kann durch die Aufbereitung von <a href=showinfo:1223>Bistot</a>-Erz und dessen Varianten gewonnen werden, die in Systemen des Nullsicherheitsraums und Wurmlochsystemen verfügbar sind. Bedeutende Mengen an Zydrine sind auch in seltenen Erzen wie <a href=showinfo:19>Spodumain</a> und <a href=showinfo:52315>Rakovene</a> vorhanden. Es kann in Sternensystemen des Nullsicherheitsraums in <a href=showinfo:82163>Hezorime</a> gefunden werden. Das seltene Erz <a href=showinfo:74529>Eifyrium</a> enthält ebenfalls größere Mengen und ist vor allem Systemen im Niedersicherheitsraum und in W-Raum-Systemen mit A0-Sternen (blauen kleinen Sternen) zu finden. Außerdem kommt es noch in untersuchten Orten an den Grenzen zwischen Imperiums- und Nullsicherheitsraum vor.",
+    "en" : "Only found in huge geodes; rocks on the outside with crystal-like quartz on the inside. The rarest and most precious of these geodes are those that contain the dark green zydrine within. Very rare and very expensive.\r\n\r\nMay be obtained by reprocessing <a href=showinfo:1223>bistot</a> ore and its variations which are available in null security status and wormhole systems.\r\n\r\nSignificant amounts of zydrine are also present in rare ores like <a href=showinfo:19>spodumain</a> and <a href=showinfo:52315>rakovene</a>.\r\n\r\nIt can be found in null security status star systems in <a href=showinfo:82163>hezorime</a>.\r\n\r\nThe rare ore <a href=showinfo:74529>eifyrium</a> also contains significant quantities and is found primarily in nullsec and W-space systems containing A0 (Blue Small) stars, as well as surveyed locations on the borders of empire and nullsec space.",
+    "es" : "Solo se encuentra en geodas enormes, que por fuera parecen rocas, pero contienen cuarzo de aspecto cristalino en su interior. Las geodas menos comunes y más valiosas son las que contienen zidrina de color verde oscuro. Son muy poco comunes y muy caras.\r\n\r\nSe puede obtener mediante el reprocesamiento de la mena de <a href=showinfo:1223>bistotina</a> y sus variaciones, que se encuentran en los sistemas de estado de seguridad nula y agujeros de gusano.\r\n\r\nTambién hay grandes cantidades de zidrina en menas poco comunes como <a href=showinfo:19>espodumain</a> y <a href=showinfo:52315>rakovena</a>.\r\n\r\nSe encuentra en sistemas estelares con estado de seguridad nulo en <a href=showinfo:82163>hezorima</a>.\r\n\r\nLa mena poco común de <a href=showinfo:74529>eifyrium</a> también contiene cantidades significativas y se encuentra principalmente en sistemas de espacio de agujeros de gusano y seguridad nula que contienen estrellas A0 (azules pequeñas), así como en ubicaciones inspeccionadas en las fronteras del imperio y el espacio de seguridad nula.",
+    "fr" : "On ne le trouve que dans de grandes géodes, ces rochers au cœur de quartz. Les géodes les plus rares et les plus précieuses sont celles contenant la zydrine vert foncé. Ce minerai est très rare et très cher. Il peut être obtenu en retraitant du minerai de <a href=showinfo:1223>bistot</a> et ses variations, disponibles dans les systèmes de trou de ver et de sécurité nulle. Des quantités significatives de zydrine sont également présentes dans des minerais rares tels que le <a href=showinfo:19>spodumain</a> et le <a href=showinfo:52315>rakovene</a>. On en trouve aussi dans les systèmes stellaires à statut de sécurité nulle dans le <a href=showinfo:82163>hezorime</a>. Le minerai rare <a href=showinfo:74529>eifyrium</a> en contient également des quantités significatives et se trouve principalement dans les systèmes de sécurité nulle et les systèmes de trous de ver contenant des étoiles A0 (petites bleues), ainsi que dans des sites sondés aux frontières de l'espace impérial et de sécurité nulle.",
+    "ja" : "非常に大きな晶洞石（外側は岩で、内部は水晶のような石英）にのみ含まれる。暗緑色のザイドリンを含む晶洞石は、その中でもきわめて希少で価値が高い。\r\n\r\nゼロセキュリティステータス星系およびワームホールシステムで入手可能な<a href=showinfo:1223>ビストット</a>およびその亜種鉱石を再処理することによって得ることができる。\r\n\r\nザイドリンは<a href=showinfo:19>スポデュメイン</a>や<a href=showinfo:52315>ラコベネ</a>といった希少鉱石の中にも相当量含まれている。\r\n\r\nゼロセキュリティステータスの星系においては、<a href=showinfo:82163>ヘゾライム</a>に含まれる形で見つかる。\r\n\r\nまた、希少鉱石の<a href=showinfo:74529>エイフィリウム</a>に大量に含まれている。エイフィリウムは主に、A0（小型ブルー）恒星が存在するゼロセキュリティ宙域とワームホール宙域のほか、主要大国とゼロセキュリティ宙域の境界にある調査エリアで発見することができる。",
+    "ko" : "대형 수정형 광석에서만 채굴되는 광석입니다. 내부가 진녹색 자이드라인으로 구성된 수정형 광석은 매우 희귀하며 비싼 가격에 거래됩니다.<br><br><a href=showinfo:1223>비스토트</a>를 정제하여 획득할 수 있으며, 널 시큐리티 항성계 및 웜홀에서 채굴되는 특수 비스토트에서도 추출됩니다.<br><br><a href=showinfo:19>스포듀마인</a>과 <a href=showinfo:52315>라코벤</a> 또한 다량의 자이드라인을 함유하고 있습니다.<br><br>널 시큐리티 항성계에서 발견되는 <a href=showinfo:82163>헤조라임</a>에도 함유되어 있습니다.<br><br>희귀 광석 <a href=showinfo:74529>에이피륨</a>에도 다량 함유되어 있습니다. 에이피륨은 널 시큐리티와 웜홀 우주에 있는 A0 청색 왜성 항성계에서 주로 찾을 수 있으며, 4대 국가 영역의 외부 경계에서도 발견됩니다.",
+    "ru" : "Встречается только в очень крупных жеодах — камнях с кристаллоподобным кварцем внутри. Самые редкие и ценные из таких жеод — те, что содержат тёмно-зелёный зидрин. Очень редкий и дорогой минерал. Добывается путём переработки <a href=showinfo:1223>бистота</a> и его разновидностей, которые можно найти в системах с нулевым уровнем безопасности и в системах червоточин. Кроме того, зидрин в больших количествах присутствует в редких рудах, таких как <a href=showinfo:19>сподумейн</a> и <a href=showinfo:52315>раковин</a>, и встречается в системах с нулевым уровнем безопасности в составе <a href=showinfo:82163>гезорима</a>. Редкая руда <a href=showinfo:74529>эйфирий</a> тоже содержит много этого минерала. Найти её можно, как правило, в системах с нулевым уровнем безопасности и w-пространстве, где присутствуют звёзды подкласса А0 (голубые карлики), а также в изученных областях на границах держав и «нулей».",
+    "zh" : "只存在于巨大的晶洞中；它的外层是岩石，而内层是水晶般的石英。在所有晶洞石中，要属内含暗绿色晶状石英核岩的最为稀有和宝贵。它们非常珍贵，价格也十分高昂。可通过提炼<a href=showinfo:1223>双多特石</a>及其变种获得。这些矿石分布于零安全等级星系和虫洞星系中。晶状石英核岩还大量存在于<a href=showinfo:19>灰岩</a>和<a href=showinfo:52315>拉克岩</a>等稀有矿石之中。你可以从零安全等级星系的<a href=showinfo:82163>赫佐利姆</a>中提炼出晶状石英核岩。此外，从<a href=showinfo:74529>艾弗石</a>中也能提炼出相当可观的数量。这种稀有矿石主要分布在零安全等级星系和虫洞星系的A0恒星（蓝色小型），以及帝国和零安全区域边境的已探明地点。"
+  },
+  "group_id" : 18,
+  "icon_id" : 404,
+  "market_group_id" : 1857,
+  "name" : {
+    "de" : "Zydrine",
+    "en" : "Zydrine",
+    "es" : "Zidrina",
+    "fr" : "Zydrine",
+    "ja" : "ザイドリン",
+    "ko" : "자이드라인",
+    "ru" : "Zydrine",
+    "zh" : "晶状石英核岩"
+  },
+  "portion_size" : 1,
+  "published" : true,
+  "volume" : 0.01,
+  "type_id" : 39,
+  "capacity" : 0,
+  "mass" : 0,
+  "packaged_volume" : 0.01,
+  "radius" : 1,
+  "used_in_blueprints" : {
+    "803" : {
+      "manufacturing" : {
+        "material_type_id" : 39,
+        "activity" : "manufacturing",
+        "quantity" : 4
+      }
+    },
+    "999" : {
+      "manufacturing" : {
+        "material_type_id" : 39,
+        "activity" : "manufacturing",
+        "quantity" : 3900
+      }
+    },
+    "32308" : {
+      "manufacturing" : {
+        "material_type_id" : 39,
+        "activity" : "manufacturing",
+        "quantity" : 8000
+      }
+    },
+    "33674" : {
+      "manufacturing" : {
+        "material_type_id" : 39,
+        "activity" : "manufacturing",
+        "quantity" : 22
+      }
+    }
+  }
+}

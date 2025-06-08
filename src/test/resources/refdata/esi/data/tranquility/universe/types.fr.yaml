@@ -2146,6 +2146,173 @@
   radius: 1
   type_id: 34
   volume: 0.01
+"35":
+  capacity: 0
+  description: "Ce minerai lisse comme le cristal dégage une lueur orangée semblable\
+    \ aux flammes. Il est employé dans l'industrie biochimique, ainsi que dans les\
+    \ conduits. On le trouve dans de nombreux minerais récoltés dans les astéroïdes.\
+    \ Peut être obtenu par retraitement des minerais suivants et leurs variantes\_\
+    : Systèmes stellaires de haute sécurité\_: <a href=showinfo:1228>scordite</a>\
+    \ et <a href=showinfo:1224>pyroxeres</a>. Systèmes stellaires de basse sécurité\
+    \_: <a href=showinfo:1224>pyroxeres</a>, <a href=showinfo:1227>omber</a>, <a href=showinfo:21>hedbergite</a>,\
+    \ <a href=showinfo:1229>gneiss</a> et <a href=showinfo:1225>crokite</a>. Systè\
+    mes stellaires de sécurité nulle\_: <a href=showinfo:1224>pyroxeres</a>, <a href=showinfo:1223>bistot</a>,\
+    \ <a href=showinfo:22>arkonor</a>, <a href=showinfo:81900>kylixium</a> et <a href=showinfo:82016>nocxite</a>.\
+    \ Systèmes de trous de ver\_: <a href=showinfo:1224>pyroxeres</a>, <a href=showinfo:1227>omber</a>,\
+    \ <a href=showinfo:1229>gneiss</a>, <a href=showinfo:1223>bistot</a> et <a href=showinfo:22>arkonor</a>.\
+    \ Le minerai rare <a href=showinfo:74521>mordunium</a> en contient également des\
+    \ quantités significatives et se trouve principalement dans les systèmes de sé\
+    curité nulle et les systèmes de trous de ver contenant des étoiles A0 (petites\
+    \ bleues), ainsi que dans des sites sondés aux frontières de l'espace impérial\
+    \ et de sécurité nulle."
+  group_id: 18
+  icon_id: 400
+  market_group_id: 1857
+  mass: 0
+  name: "Pyérite"
+  packaged_volume: 0.01
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 35
+  volume: 0.01
+"36":
+  capacity: 0
+  description: "Il s'agit d'un minerai métallique très souple dont la couleur va du\
+    \ vert argenté mat au vert argenté brillant. Il peut être mélangé avec du <a href=showinfo:34>tritanium</a>\
+    \ pour composer des alliages extrêmement résistants, ou utilisé seul pour diffé\
+    rentes applications. Ce minerai est relativement courant dans la plupart des ré\
+    gions. Peut être obtenu par retraitement des minerais suivants et leurs variantes\_\
+    : Systèmes stellaires de haute sécurité\_: <a href=showinfo:1224>pyroxeres</a>\
+    \ et <a href=showinfo:18>plagioclase</a>. Systèmes stellaires de basse sécurité\
+    \_: <a href=showinfo:1224>pyroxeres</a>, <a href=showinfo:20>kernite</a>, <a href=showinfo:1226>jaspet</a>,\
+    \ <a href=showinfo:1229>gneiss</a>, <a href=showinfo:1232>ochre foncé</a> et <a\
+    \ href=showinfo:1225>crokite</a>. Systèmes stellaires de sécurité nulle\_: <a\
+    \ href=showinfo:1224>pyroxeres</a>, <a href=showinfo:20>kernite</a>, <a href=showinfo:1223>bistot</a>,\
+    \ <a href=showinfo:22>arkonor</a> et <a href=showinfo:81900>kylixium</a>. Systè\
+    mes de trous de ver\_: <a href=showinfo:1224>pyroxeres</a>, <a href=showinfo:20>kernite</a>,\
+    \ <a href=showinfo:1229>gneiss</a>, <a href=showinfo:1223>bistot</a> et <a href=showinfo:22>arkonor</a>."
+  group_id: 18
+  icon_id: 401
+  market_group_id: 1857
+  mass: 0
+  name: "Mexallon"
+  packaged_volume: 0.01
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 36
+  volume: 0.01
+"37":
+  capacity: 0
+  description: "Cristal bleu clair formé par l'extraordinaire pression exercée par\
+    \ les lunes et les grands astéroïdes. Les secteurs de l'électronique et de la\
+    \ fabrication d'armes en font bon usage. Gisements abondants exclusivement localisé\
+    s dans quelques zones de l'espace. Peut être obtenu par retraitement des minerais\
+    \ suivants et leurs variantes\_: Systèmes stellaires de basse sécurité\_: <a href=showinfo:1227>omber</a>,\
+    \ <a href=showinfo:20>kernite</a>, <a href=showinfo:1231>hemorphite</a>, <a href=showinfo:1229>gneiss</a>\
+    \ et <a href=showinfo:1232>ochre foncé</a>. Systèmes stellaires de sécurité nulle\_\
+    : <a href=showinfo:20>kernite</a>, <a href=showinfo:81975>griemeer</a> et <a href=showinfo:82163>hezorime</a>.\
+    \ Systèmes de trou de ver\_: <a href=showinfo:1227>omber</a>, <a href=showinfo:20>kernite</a>\
+    \ et <a href=showinfo:1229>gneiss</a>. Il est aussi présent en grandes quantité\
+    s dans des minerais rares tels que le <a href=showinfo:19>spodumain</a>, le <a\
+    \ href=showinfo:52316>bezdnacine</a> et le <a href=showinfo:52315>rakovene</a>.\
+    \ Le minerai rare <a href=showinfo:74525>ytirium</a> en contient également des\
+    \ quantités significatives et se trouve principalement dans les systèmes de sé\
+    curité nulle et les systèmes de trous de ver contenant des étoiles A0 (petites\
+    \ bleues), ainsi que dans des sites sondés aux frontières de l'espace impérial\
+    \ et de sécurité nulle."
+  group_id: 18
+  icon_id: 402
+  market_group_id: 1857
+  mass: 0
+  name: "Isogène"
+  packaged_volume: 0.01
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 37
+  volume: 0.01
+"38":
+  capacity: 0
+  description: "Ce minerai très volatile ne se forme que lors de la transformation\
+    \ d'une étoile en supernova. Il est donc très rare d'en trouver. Ce produit indispensable\
+    \ à la fabrication des capsules est extrêmement convoité. Il peut être obtenu\
+    \ par retraitement des minerais suivants et de leurs variantes disponibles dans\
+    \ les systèmes stellaires de basse sécurité\_: <a href=showinfo:1226>jaspet</a>,\
+    \ <a href=showinfo:1231>hemorphite</a>, <a href=showinfo:21>hedbergite</a>, <a\
+    \ href=showinfo:1232>ochre foncé</a> et <a href=showinfo:1225>crokite</a>. Il\
+    \ est aussi présent en quantités significatives dans des minerais rares tels que\
+    \ le <a href=showinfo:19>spodumain</a> et la <a href=showinfo:52306>talassonite</a>.\
+    \ Le nocxium peut également être trouvé dans les systèmes stellaires de sécurité\
+    \ nulle dans les minerais <a href=showinfo:81900>kylixium</a>, <a href=showinfo:82016>nocxite</a>,\
+    \ <a href=showinfo:82205>ueganite</a>, <a href=showinfo:82163>hezorime</a> et\
+    \ <a href=showinfo:81975>griemeer</a>."
+  group_id: 18
+  icon_id: 1201
+  market_group_id: 1857
+  mass: 0
+  name: "Nocxium"
+  packaged_volume: 0.01
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 38
+  volume: 0.01
+"39":
+  capacity: 0
+  description: "On ne le trouve que dans de grandes géodes, ces rochers au cœur de\
+    \ quartz. Les géodes les plus rares et les plus précieuses sont celles contenant\
+    \ la zydrine vert foncé. Ce minerai est très rare et très cher. Il peut être obtenu\
+    \ en retraitant du minerai de <a href=showinfo:1223>bistot</a> et ses variations,\
+    \ disponibles dans les systèmes de trou de ver et de sécurité nulle. Des quantité\
+    s significatives de zydrine sont également présentes dans des minerais rares tels\
+    \ que le <a href=showinfo:19>spodumain</a> et le <a href=showinfo:52315>rakovene</a>.\
+    \ On en trouve aussi dans les systèmes stellaires à statut de sécurité nulle dans\
+    \ le <a href=showinfo:82163>hezorime</a>. Le minerai rare <a href=showinfo:74529>eifyrium</a>\
+    \ en contient également des quantités significatives et se trouve principalement\
+    \ dans les systèmes de sécurité nulle et les systèmes de trous de ver contenant\
+    \ des étoiles A0 (petites bleues), ainsi que dans des sites sondés aux frontiè\
+    res de l'espace impérial et de sécurité nulle."
+  group_id: 18
+  icon_id: 404
+  market_group_id: 1857
+  mass: 0
+  name: "Zydrine"
+  packaged_volume: 0.01
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 39
+  volume: 0.01
+"40":
+  capacity: 0
+  description: "Il s'agit d'un minerai extrêmement rare que l'on ne trouve que dans\
+    \ les comètes et, bien plus rarement, dans des astéroïdes ayant traversé des nuages\
+    \ de gaz. Une des caractéristiques qui rend ce minerai très intéressant pour l'industrie\
+    \ de l'armement est son haut pouvoir explosif. Il peut être obtenu en retraitant\
+    \ du minerai d'<a href=showinfo:22>arkonor</a> et ses variations, disponibles\
+    \ dans les systèmes de trou de ver et de sécurité nulle. Des quantités significatives\
+    \ de mégacyte sont également présentes dans des minerais rares tels que le <a\
+    \ href=showinfo:19>spodumain</a>, le <a href=showinfo:52316>bezdnacine</a> et\
+    \ le <a href=showinfo:52306>talassonite</a>. Le minerai rare <a href=showinfo:74533>ducinium</a>\
+    \ en contient également des quantités significatives et se trouve principalement\
+    \ dans les systèmes de sécurité nulle et les systèmes de trous de ver contenant\
+    \ des étoiles A0 (petites bleues), ainsi que dans des sites sondés aux frontiè\
+    res de l'espace impérial et de sécurité nulle. La mégacyte peut également être\
+    \ trouvée dans les systèmes stellaires à statut de sécurité nulle contenant de\
+    \ l'<a href=showinfo:82205>ueganite</a>."
+  group_id: 18
+  icon_id: 405
+  market_group_id: 1857
+  mass: 0
+  name: "Mégacyte"
+  packaged_volume: 0.01
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 40
+  volume: 0.01
 "37158":
   capacity: 0
   description: "L'optimisation de productivité matérielle de la production de munitions\
@@ -4356,3 +4523,74 @@
   radius: 1
   type_id: 32308
   volume: 0.01
+"57479":
+  capacity: 0
+  description: "Les régulateurs de température du noyau sont des systèmes complémentaires\
+    \ standardisés, qui permettent de réguler, atténuer et recycler le surplus d’é\
+    nergie développé par les noyaux des réacteurs des vaisseaux de marine. La modernisation\
+    \ des flottes de marine impériale en réponse aux invasions triglavian a souvent\
+    \ augmenté les besoins énergétiques des vaisseaux, en améliorant ou ajoutant des\
+    \ systèmes défensifs et offensifs, sans pour autant remplacer les noyaux de ré\
+    acteur ni apporter d’amélioration majeure à ces composants complexes et capitaux.\
+    \ Les besoins énergétiques supplémentaires ont imposé de faire fonctionner les\
+    \ modèles de noyau de réacteur plus anciens à une température supérieure, et les\
+    \ régulateurs de température du noyau servent à surveiller, modérer, et là où\
+    \ cela est possible, recycler l’excès de chaleur."
+  group_id: 334
+  icon_id: 24605
+  market_group_id: 2768
+  mass: 0.1
+  name: "Régulateur de température du noyau"
+  packaged_volume: 180
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 57479
+  volume: 180
+"57486":
+  capacity: 0
+  description: "La pression des invasions triglavian sur les effectifs des équipages\
+    \ des vaisseaux et des autres types de personnel militaire menaçait de devenir\
+    \ intenable sans mesures de survie supplémentaires pour réduire les pertes. Les\
+    \ unités de réanimation de secours sont placées dans les zones de survie clés\
+    \ pour améliorer les chances de l’équipage et du reste du personnel à la suite\
+    \ d’un combat."
+  group_id: 334
+  icon_id: 24640
+  market_group_id: 2768
+  mass: 0.1
+  name: "Unité de réanimation de secours"
+  packaged_volume: 45
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 57486
+  volume: 45
+"57478":
+  capacity: 0
+  description: "Les sceaux de préservation d’intégrité automatique sont des composants\
+    \ spécialisés utilisés pour la limitation des dégâts dans les zones clés des vaisseaux,\
+    \ où travaillent l’équipage ainsi que du personnel. Bien que la plupart des vaisseaux\
+    \ prévoient divers champs de force internes, cloisons étanches, sas et autres\
+    \ systèmes semblables dans leur conception initiale, des brèches en tout genre\
+    \ peuvent survenir dans l’intensité du combat spatial. Pour apporter une réponse\
+    \ aux brèches certes mineures, mais potentiellement dangereuses, des champs de\
+    \ force temporaires, des matériaux intelligents ou des nanotechnologies ont fré\
+    quemment été utilisés, mais peuvent présenter un coût énergétique important, ou\
+    \ consommer des ressources précieuses pour d’autres utilisations, comme la colle\
+    \ nanite. La nouvelle technologie d’intégrité automatique reprend les techniques\
+    \ du Collectif Triglavian, et s’inspire des technologies de mutaplasmides pour\
+    \ proposer des composants standards, moins coûteux, qui libèrent des nanobes biotechnologiques\
+    \ conçus pour chercher et réparer les microfractures et autres défauts menaçant\
+    \ l'intégrité physique du compartiment."
+  group_id: 334
+  icon_id: 24638
+  market_group_id: 2768
+  mass: 0.1
+  name: "Sceau de préservation d’intégrité automatique"
+  packaged_volume: 16
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 57478
+  volume: 16

@@ -1,0 +1,21 @@
+{
+  "capacity" : 0,
+  "description" : {
+    "en" : "Auto-Integrity Preservation Seals are specialized components used for automatic damage control in key space vessel zones where crew and other personnel aboard ship are operating. While most ships have a variety of internal forcefields, bulkhead dividers, air-locks and similar systems built into the basic design, breaches of all kinds can occur in the heat of space combat.\r\n\r\nTo address small but potentially dangerous breaches, temporary force-fields, smart materials and nanotechnology have often been used but can be energy intensive or use otherwise valuable resources such as nanite paste.\r\n\r\nThe new auto-integrity technology takes a leaf out of the Triglavian Collective's book and uses mutaplasmid technology as the inspiration for cheaper, standard components that release biotech nanobes tailored to seek and repair microfractures and other defects threatening physical compartment integrity.",
+    "fr" : "Les sceaux de préservation d’intégrité automatique sont des composants spécialisés utilisés pour la limitation des dégâts dans les zones clés des vaisseaux, où travaillent l’équipage ainsi que du personnel. Bien que la plupart des vaisseaux prévoient divers champs de force internes, cloisons étanches, sas et autres systèmes semblables dans leur conception initiale, des brèches en tout genre peuvent survenir dans l’intensité du combat spatial. Pour apporter une réponse aux brèches certes mineures, mais potentiellement dangereuses, des champs de force temporaires, des matériaux intelligents ou des nanotechnologies ont fréquemment été utilisés, mais peuvent présenter un coût énergétique important, ou consommer des ressources précieuses pour d’autres utilisations, comme la colle nanite. La nouvelle technologie d’intégrité automatique reprend les techniques du Collectif Triglavian, et s’inspire des technologies de mutaplasmides pour proposer des composants standards, moins coûteux, qui libèrent des nanobes biotechnologiques conçus pour chercher et réparer les microfractures et autres défauts menaçant l'intégrité physique du compartiment."
+  },
+  "group_id" : 334,
+  "icon_id" : 24638,
+  "market_group_id" : 2768,
+  "mass" : 0.1,
+  "name" : {
+    "en" : "Auto-Integrity Preservation Seal",
+    "fr" : "Sceau de préservation d’intégrité automatique"
+  },
+  "packaged_volume" : 16,
+  "portion_size" : 1,
+  "published" : true,
+  "radius" : 1,
+  "type_id" : 57478,
+  "volume" : 16
+}

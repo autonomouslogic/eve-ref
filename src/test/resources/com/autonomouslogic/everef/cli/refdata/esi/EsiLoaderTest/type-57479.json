@@ -1,0 +1,21 @@
+{
+  "capacity" : 0,
+  "description" : {
+    "en" : "Core Temperature Regulators are standardized, supplementary systems used to regulate, mitigate and recycle surplus heat energy developed by naval ship reactor cores.\r\n\r\nRefits to empire navy fleets in response to the Triglavian Invasions often increased the overall power requirements of vessels, by upgrading or adding defensive and offensive systems, while not replacing reactor cores or carrying out major upgrades on these complex and valuable components.\r\n\r\nAdditional power requirements have entailed running older reactor core designs \"hot\" and core temperature regulators are used to monitor, mitigate and, where practical, recycle surplus heat energy.",
+    "fr" : "Les régulateurs de température du noyau sont des systèmes complémentaires standardisés, qui permettent de réguler, atténuer et recycler le surplus d’énergie développé par les noyaux des réacteurs des vaisseaux de marine. La modernisation des flottes de marine impériale en réponse aux invasions triglavian a souvent augmenté les besoins énergétiques des vaisseaux, en améliorant ou ajoutant des systèmes défensifs et offensifs, sans pour autant remplacer les noyaux de réacteur ni apporter d’amélioration majeure à ces composants complexes et capitaux. Les besoins énergétiques supplémentaires ont imposé de faire fonctionner les modèles de noyau de réacteur plus anciens à une température supérieure, et les régulateurs de température du noyau servent à surveiller, modérer, et là où cela est possible, recycler l’excès de chaleur."
+  },
+  "group_id" : 334,
+  "icon_id" : 24605,
+  "market_group_id" : 2768,
+  "mass" : 0.1,
+  "name" : {
+    "en" : "Core Temperature Regulator",
+    "fr" : "Régulateur de température du noyau"
+  },
+  "packaged_volume" : 180,
+  "portion_size" : 1,
+  "published" : true,
+  "radius" : 1,
+  "type_id" : 57479,
+  "volume" : 180
+}

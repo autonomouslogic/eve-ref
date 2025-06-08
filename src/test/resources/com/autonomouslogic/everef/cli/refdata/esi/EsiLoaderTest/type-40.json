@@ -1,0 +1,21 @@
+{
+  "capacity" : 0,
+  "description" : {
+    "en" : "An extremely rare mineral found in comets and very occasionally in asteroids that have traveled through gas clouds. Has unique explosive traits that make it very valuable in the armaments industry.\r\n\r\nMay be obtained by reprocessing <a href=showinfo:22>arkonor</a> ore and its variations which are available in null security status and wormhole systems.\r\n\r\nSignificant amounts of megacyte are also present in rare ores like <a href=showinfo:19>spodumain</a>, <a href=showinfo:52316>bezdnacine</a>, and <a href=showinfo:52306>talassonite</a>.\r\n\r\nThe rare ore <a href=showinfo:74533>ducinium</a> also contains significant quantities and is found primarily in nullsec and W-space systems containing A0 (Blue Small) stars, as well as surveyed locations on the borders of empire and nullsec space.\r\n\r\nMegacyte can also be found in null security status star systems in <a href=showinfo:82205>ueganite</a>.",
+    "fr" : "Il s'agit d'un minerai extrêmement rare que l'on ne trouve que dans les comètes et, bien plus rarement, dans des astéroïdes ayant traversé des nuages de gaz. Une des caractéristiques qui rend ce minerai très intéressant pour l'industrie de l'armement est son haut pouvoir explosif. Il peut être obtenu en retraitant du minerai d'<a href=showinfo:22>arkonor</a> et ses variations, disponibles dans les systèmes de trou de ver et de sécurité nulle. Des quantités significatives de mégacyte sont également présentes dans des minerais rares tels que le <a href=showinfo:19>spodumain</a>, le <a href=showinfo:52316>bezdnacine</a> et le <a href=showinfo:52306>talassonite</a>. Le minerai rare <a href=showinfo:74533>ducinium</a> en contient également des quantités significatives et se trouve principalement dans les systèmes de sécurité nulle et les systèmes de trous de ver contenant des étoiles A0 (petites bleues), ainsi que dans des sites sondés aux frontières de l'espace impérial et de sécurité nulle. La mégacyte peut également être trouvée dans les systèmes stellaires à statut de sécurité nulle contenant de l'<a href=showinfo:82205>ueganite</a>."
+  },
+  "group_id" : 18,
+  "icon_id" : 405,
+  "market_group_id" : 1857,
+  "mass" : 0,
+  "name" : {
+    "en" : "Megacyte",
+    "fr" : "Mégacyte"
+  },
+  "packaged_volume" : 0.01,
+  "portion_size" : 1,
+  "published" : true,
+  "radius" : 1,
+  "type_id" : 40,
+  "volume" : 0.01
+}

@@ -31,6 +31,12 @@ public class MaterialCost {
 	double quantity;
 
 	@JsonProperty
+	BigDecimal volumePerUnit;
+
+	@JsonProperty
+	BigDecimal volume;
+
+	@JsonProperty
 	BigDecimal costPerUnit;
 
 	@JsonProperty
@@ -38,7 +44,12 @@ public class MaterialCost {
 
 	public MaterialCost multiply(double mul) {
 		return new MaterialCost(
-				typeId, quantity * mul, costPerUnit, MathUtil.round(cost.multiply(new BigDecimal(mul)), 2));
+				typeId,
+				quantity * mul,
+				volumePerUnit,
+				MathUtil.round(volume.multiply(new BigDecimal(mul)), 2),
+				costPerUnit,
+				MathUtil.round(cost.multiply(new BigDecimal(mul)), 2));
 	}
 
 	public static Map<String, MaterialCost> multiply(Map<String, MaterialCost> costs, double mul) {

@@ -1,0 +1,31 @@
+{
+  "base_price" : 10000,
+  "description" : {
+    "de" : "Die Triglavia-Invasionen forderten viele Opfer unter den Raumschiffbesatzungen und dem militärischen Personal. Die Verluste drohten ohne zusätzliche Überlebensmaßnahmen untragbar zu werden. Um die Überlebenschancen der Besatzung und des Personals nach einem Kampfeinsatz zu verbessern, wurden Sicherungs-Lebenserhaltungseinheiten in den für das Überleben wichtigsten Bereichen installiert.",
+    "en" : "The pressure of the Triglavian Invasions on spaceship crew numbers and other military personnel risked becoming unsustainable without additional survival measures to reduce losses. Life Support Backup Units are placed in key survival zones to enhance the survival prospects of crew and other personnel in the aftermath of combat.",
+    "es" : "La presión de las invasiones triglavianas sobre el número de miembros de la tripulación y demás personal militar en las naves espaciales podría llegar a ser insostenible sin medidas de supervivencia adicionales para reducir las bajas. Las unidades de soporte vital se disponen en zonas clave para mejorar las probabilidades de supervivencia de la tripulación y el resto del personal tras el combate.",
+    "fr" : "La pression des invasions triglavian sur les effectifs des équipages des vaisseaux et des autres types de personnel militaire menaçait de devenir intenable sans mesures de survie supplémentaires pour réduire les pertes. Les unités de réanimation de secours sont placées dans les zones de survie clés pour améliorer les chances de l’équipage et du reste du personnel à la suite d’un combat.",
+    "ja" : "宇宙船の搭乗員や、リスク対処に当たる軍事関係者がトリグラビアンの侵攻から受けるプレッシャーは耐えがたいものになりつつあり、損耗を減らすため、生存を目的とした対策の追加は必須である。主要なサバイバリエリアに設置された生命維持用バックアップユニットは、搭乗員らの戦闘後生存率を向上させることができる。",
+    "ko" : "트리글라비안 침공으로 인해 승무원의 희생이 계속되자 생존율을 올리기 위한 조치가 이루어졌습니다. 전투 중 발생하는 각종 인명사고에 대처하기 위해 함내 중요 지점에 보조 생명유지 장치가 설치되어 있습니다.",
+    "ru" : "Вторжения Триглава крайне отрицательно сказались на численности экипажа и персонала военных судов, поэтому возникла необходимость принять дополнительные меры по сокращению потерь. Теперь все ключевые зоны судов оборудованы резервными блоками системы жизнеобеспечения. Это увеличивает шансы команды пережить последствия боя.",
+    "zh" : "三神裔的入侵给船员和军事人员的安危带来了威胁，需要更多的生存措施来降低人员损失。生命保障备份装置放置在舰船的核心生存区域，可以增加船员和其他人员在战斗后的存活几率。"
+  },
+  "group_id" : 334,
+  "icon_id" : 24640,
+  "market_group_id" : 2768,
+  "mass" : 0.1,
+  "name" : {
+    "de" : "Life Support Backup Unit",
+    "en" : "Life Support Backup Unit",
+    "es" : "Unidad de soporte vital",
+    "fr" : "Unité de réanimation de secours",
+    "ja" : "生命維持バックアップユニット",
+    "ko" : "보조 생명유지 장치",
+    "ru" : "Life Support Backup Unit",
+    "zh" : "生命保障备份装置"
+  },
+  "portion_size" : 1,
+  "published" : true,
+  "volume" : 45,
+  "type_id" : 57486
+}

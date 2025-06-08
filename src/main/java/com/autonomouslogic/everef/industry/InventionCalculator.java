@@ -125,6 +125,7 @@ public class InventionCalculator {
 				.add(alphaCloneTax)
 				.add(systemCostBonuses);
 		var materials = inventionMaterials(invention);
+		var materialsVolume = industryMath.materialVolume(materials);
 		var totalMaterialCost = industryMath.totalMaterialCost(materials);
 		var totalCost = totalJobCost.add(totalMaterialCost);
 		return InventionCost.builder()
@@ -140,6 +141,7 @@ public class InventionCalculator {
 				.expectedRuns(expectedRuns)
 				.expectedUnits(expectedUnits)
 				.materials(materials)
+				.materialsVolume(materialsVolume)
 				.time(time)
 				.avgTimePerCopy(MathUtil.divide(time, expectedCopies).truncatedTo(ChronoUnit.MILLIS))
 				.avgTimePerRun(MathUtil.divide(time, expectedRuns).truncatedTo(ChronoUnit.MILLIS))
