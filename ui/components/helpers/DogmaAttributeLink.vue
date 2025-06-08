@@ -23,7 +23,7 @@ const dogmaAttribute = typeof props.attribute === "number" ?
 			<template v-if="dogmaAttribute.displayName && tr(dogmaAttribute.displayName, locale)">
 				{{ tr(dogmaAttribute.displayName, locale) }}
 			</template>
-			<template v-if="dogmaAttribute.name">{{ dogmaAttribute.name }}</template>
+			<template v-else-if="dogmaAttribute.name">{{ dogmaAttribute.name }}</template>
 			<span v-else class="italic">No name</span>
 		</slot>
 	</InternalLink>

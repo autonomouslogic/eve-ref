@@ -1,5 +1,13 @@
 export const CYBERIMPLANT = 300;
+export const CARGO_CONTAINER = 12;
+export const CAPACITOR_BOOST_CHARGE = 87;
+export const SECURE_CARGO_CONTAINER = 340;
+export const MOBILE_WARP_DISRUPTOR = 361;
+export const AUDIT_LOG_SECURE_CONTAINER = 448;
+export const FREIGHT_CONTAINER = 649;
 export const DEFENSIVE_SUBSYSTEM = 954;
 export const CORE_SUBSYSTEM = 958;
 export const OFFENSIVE_SUBSYSTEM = 956;
 export const PROPULSION_SUBSYSTEM = 957;
+export const MOBILE_DEPOT = 1246;
+export const MOBILE_TRACTOR_UNIT = 1250;

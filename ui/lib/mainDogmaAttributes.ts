@@ -1,9 +1,16 @@
 // This file contains the main dogma attributes used for quick comparison in the UI, mainly the VariationsCard.
 
 import type {InventoryType} from "~/refdata-openapi";
-import {CHARGES, SHIP, SUBSYSTEM} from "~/lib/categoryConstants";
+import {CHARGES, DECRYPTORS, DEPLOYABLE, DRONE, IMPLANT, SHIP, SUBSYSTEM} from "~/lib/categoryConstants";
 import refdataApi from "~/refdata";
-import {CORE_SUBSYSTEM, DEFENSIVE_SUBSYSTEM, OFFENSIVE_SUBSYSTEM, PROPULSION_SUBSYSTEM} from "~/lib/groupConstants";
+import {
+    AUDIT_LOG_SECURE_CONTAINER, CAPACITOR_BOOST_CHARGE, CARGO_CONTAINER,
+    CORE_SUBSYSTEM,
+    DEFENSIVE_SUBSYSTEM, FREIGHT_CONTAINER,
+    MOBILE_DEPOT, MOBILE_TRACTOR_UNIT, MOBILE_WARP_DISRUPTOR,
+    OFFENSIVE_SUBSYSTEM,
+    PROPULSION_SUBSYSTEM, SECURE_CARGO_CONTAINER
+} from "~/lib/groupConstants";
 
 const categoryAttributeNames: { [key: string]: string[] } = {};
 categoryAttributeNames[SHIP] = [
@@ -16,11 +23,37 @@ categoryAttributeNames[CHARGES] = [
     "chargeSize",
     "emDamage", "explosiveDamage", "kineticDamage", "thermalDamage",
     "maxVelocity", "maxFOFTargetRange",
-    "specializationAsteroidYieldMultiplier"
+    "specializationAsteroidYieldMultiplier",
+    "trackingSpeedMultiplier",
+    "weaponRangeMultiplier",
+    "fallofMultiplier",
+    "crystalVolatilityChance",
+    "capNeedBonus",
+    "explosionDelay",
+    "aoeCloudSize"
 ];
 categoryAttributeNames[SUBSYSTEM] = [
     "fitsToShipType",
     "hiSlotModifier", "medSlotModifier", "lowSlotModifier"
+];
+categoryAttributeNames[DECRYPTORS] = [
+    "inventionPropabilityMultiplier", "inventionMaxRunModifier", "inventionMEModifier", "inventionTEModifier"
+];
+categoryAttributeNames[DEPLOYABLE] = [
+    "capacity",
+    "scanLadarStrength", "scanMagnetometricStrength", "scanRadarStrength", "scanGravimetricStrength",
+    "signatureRadius",
+    "shieldCapacity", "armorHP", "hp"
+];
+categoryAttributeNames[DRONE] = [
+    "droneBandwidth", "droneBandwidthUsed",
+    "emDamage", "explosiveDamage", "kineticDamage", "thermalDamage",
+    "maxVelocity",
+    "shieldCapacity", "armorHP", "hp",
+    "speed", "trackingSpeed"
+];
+categoryAttributeNames[IMPLANT] = [
+    "implantness"
 ];
 
 const groupAttributeNames: { [key: string]: string[] } = {};
@@ -38,6 +71,27 @@ groupAttributeNames[OFFENSIVE_SUBSYSTEM] = [
 ];
 groupAttributeNames[PROPULSION_SUBSYSTEM] = [
     "agilityBonusAdd"
+];
+groupAttributeNames[CARGO_CONTAINER] = [
+    "capacity"
+];
+groupAttributeNames[FREIGHT_CONTAINER] = [
+    "capacity"
+];
+groupAttributeNames[AUDIT_LOG_SECURE_CONTAINER] = [
+    "capacity"
+];
+groupAttributeNames[SECURE_CARGO_CONTAINER] = [
+    "capacity"
+];
+groupAttributeNames[MOBILE_WARP_DISRUPTOR] = [
+    "warpScrambleRange"
+];
+groupAttributeNames[MOBILE_TRACTOR_UNIT] = [
+    "maxLockedTargets", "maxTargetRange"
+];
+groupAttributeNames[CAPACITOR_BOOST_CHARGE] = [
+    "capacitorBonus"
 ];
 
 export async function getCategoryDogma(categoryId: number | undefined): Promise<string[] | undefined> {

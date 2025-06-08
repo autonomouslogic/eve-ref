@@ -4,6 +4,7 @@ import {getIntRouteParam} from "~/lib/routeUtils";
 import CategoryLink from "~/components/helpers/CategoryLink.vue";
 import {getGroupDogma} from "~/lib/mainDogmaAttributes";
 import {tr} from "~/lib/translate";
+import GroupName from "~/components/helpers/GroupName.vue";
 
 const route = useRoute();
 const {locale} = useI18n();
@@ -32,7 +33,7 @@ const sortedTypeIds = computed(() => types.sort((a, b) => {
 	<div>
 		<h1 v-if="group.name">{{ tr(group.name, locale) }}</h1>
 		<div class="mb-3">
-			Category: <CategoryLink :category-id="group.categoryId" />
+			Category: <CategoryLink :category-id="group.categoryId" /> &gt; <GroupName :group-id="group.groupId" />
 		</div>
 		<CompareTable
 			:type-ids="sortedTypeIds"
