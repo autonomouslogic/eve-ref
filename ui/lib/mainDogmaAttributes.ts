@@ -93,6 +93,11 @@ groupAttributeNames[MOBILE_TRACTOR_UNIT] = [
 groupAttributeNames[CAPACITOR_BOOST_CHARGE] = [
     "capacitorBonus"
 ];
+groupAttributeNames[STRIP_MINER] = [
+    "miningAmount",
+					"miningWastedVolumeMultiplier",
+					"miningWasteProbability"
+    ];
 
 export async function getCategoryDogma(categoryId: number | undefined): Promise<string[] | undefined> {
     const id = `${categoryId}`;
