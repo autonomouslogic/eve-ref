@@ -98,6 +98,7 @@ groupAttributeNames[STRIP_MINER] = [
 					"miningWastedVolumeMultiplier",
 					"miningWasteProbability"
     ];
+groupAttributeNames[MINING_LASER] = groupAttributeNames[STRIP_MINER];
 
 export async function getCategoryDogma(categoryId: number | undefined): Promise<string[] | undefined> {
     const id = `${categoryId}`;
