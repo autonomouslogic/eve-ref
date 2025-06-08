@@ -337,7 +337,8 @@ const cards: {[key: string]: any} = {
 					"chargeRate",
 					"miningAmount",
 					"miningWastedVolumeMultiplier",
-					"miningWasteProbability"
+					"miningWasteProbability",
+					"accessDifficultyBonus",
 					"chargeGroup1",
 					"chargeGroup2",
 					"chargeGroup3",
