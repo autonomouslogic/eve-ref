@@ -335,6 +335,9 @@ const cards: {[key: string]: any} = {
 					"accuracyBonus",
 					"reloadTime",
 					"chargeRate",
+					"miningAmount",
+					"miningWastedVolumeMultiplier",
+					"miningWasteProbability"
 					"chargeGroup1",
 					"chargeGroup2",
 					"chargeGroup3",
