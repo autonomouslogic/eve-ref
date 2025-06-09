@@ -335,9 +335,23 @@ const cards: {[key: string]: any} = {
 					"accuracyBonus",
 					"reloadTime",
 					"chargeRate",
+					"miningAmount",
+					"miningWastedVolumeMultiplier",
+					"miningWasteProbability",
+					"accessDifficultyBonus",
+					"virusCoherence",
+					"virusStrength",
+					"virusElementSlots",
+					"falloffBonus",
+					"maxRangeBonus",
+					"trackingSpeedBonus",
+					"aoeVelocityBonus",
+					"aoeCloudSizeBonus",
 					"chargeGroup1",
 					"chargeGroup2",
-					"chargeGroup3"
+					"chargeGroup3",
+					"chargeGroup4",
+					"chargeGroup5"
 				]
 		},
 	"ammunition":
@@ -356,6 +370,10 @@ const cards: {[key: string]: any} = {
 					"fallofMultiplier",
 					"launcherGroup",
 					"launcherGroup2",
+					"launcherGroup3",
+					"launcherGroup4",
+					"launcherGroup5",
+					"launcherGroup6",
 					"weaponRangeMultiplier",
 					"empFieldRange",
 					"aoeCloudSize",
@@ -373,7 +391,16 @@ const cards: {[key: string]: any} = {
 					"specializationAsteroidDurationMultiplier",
 					"specializationAsteroidTypeList",
 					"unfitCapCost",
-					"capNeedBonus"
+					"capNeedBonus",
+					"aoeVelocity",
+					"aoeDamageReductionFactor",
+					"maxFOFTargetRange",
+					"maxRangeBonusBonus",
+					"trackingSpeedBonusBonus",
+					"falloffBonusBonus",
+					"aoeCloudSizeBonusBonus",
+					"aoeVelocityBonusBonus",
+					"signatureRadiusBonusBonus"
 				]
 		},
 	"navigation":
@@ -401,7 +428,8 @@ const cards: {[key: string]: any} = {
 			"dogmaAttributes":
 				[
 					"droneCapacity",
-					"droneBandwidth"
+					"droneBandwidth",
+					"droneBandwidthUsed"
 				]
 		},
 	"fighters":

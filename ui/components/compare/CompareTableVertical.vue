@@ -33,7 +33,7 @@ const props = withDefaults(defineProps<Props>(), {
 				<template v-if="!compactAttributeNames">Meta group</template>
 			</th>
 			<template v-for="attr in dogmaAttributes" :key="attr.attributeId">
-				<th v-if="attr && attr.attributeId" class="text-right">
+				<th v-if="attr && attr.attributeId" class="text-right" :title="attr.displayName?.en || attr.name">
 					<AttributeTypeIcon :dogma-attribute="attr" :size="25" />
 					<DogmaAttributeLink v-if="!compactAttributeNames" :attribute="attr" />
 				</th>
