@@ -8,6 +8,7 @@ import com.autonomouslogic.everef.cli.refdata.hoboleaks.HoboleaksLoader;
 import com.autonomouslogic.everef.cli.refdata.post.BlueprintDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.CanFitDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.CategoryIdDecorator;
+import com.autonomouslogic.everef.cli.refdata.post.DogmaDefinedOnTypesDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.GroupsDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.IndustryModifierSourcesDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.MarketGroupsDecorator;
@@ -162,6 +163,9 @@ public class BuildRefData implements Command {
 	@Inject
 	protected CategoryIdDecorator categoryIdDecorator;
 
+	@Inject
+	protected DogmaDefinedOnTypesDecorator dogmaDefinedOnTypesDecorator;
+
 	@Setter
 	@NonNull
 	private ZonedDateTime buildTime = ZonedDateTime.now(ZoneOffset.UTC).truncatedTo(ChronoUnit.SECONDS);
@@ -215,7 +219,8 @@ public class BuildRefData implements Command {
 				canFitDecorator,
 				reprocessableTypesDecorator,
 				typeUsedInBlueprintsDecorator,
-				industryModifierSourcesDecorator);
+				industryModifierSourcesDecorator,
+				dogmaDefinedOnTypesDecorator);
 	}
 
 	@Override
