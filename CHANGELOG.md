@@ -1,5 +1,22 @@
 EVE Ref Changelog
 
+## [2.67.0](https://github.com/autonomouslogic/eve-ref/compare/2.66.0...2.67.0) (2025-06-09)
+
+
+### Features
+
+* **api:** Volume information on industry cost API ([#909](https://github.com/autonomouslogic/eve-ref/issues/909)) ([13db7df](https://github.com/autonomouslogic/eve-ref/commit/13db7df9409ef78921a3b7f001e953688f4a585c))
+* **ui:** Dogma attribute index page ([#907](https://github.com/autonomouslogic/eve-ref/issues/907)) ([5de077a](https://github.com/autonomouslogic/eve-ref/commit/5de077abfba39970b89b6d292b3f23846083d806))
+* **ui:** Pages showing which blueprints a given type is used in ([#908](https://github.com/autonomouslogic/eve-ref/issues/908)) ([77090c6](https://github.com/autonomouslogic/eve-ref/commit/77090c664fdd5a89370abd226e94573a33d1d0a2))
+
+
+### Bug Fixes
+
+* **ui:** Converted a number of index pages to tables instead of grids ([#901](https://github.com/autonomouslogic/eve-ref/issues/901)) ([94794d0](https://github.com/autonomouslogic/eve-ref/commit/94794d0e09a1ded7c6bf0bdd80f3e632efe4ff86))
+* **ui:** Detect shared inventory category and group on market groups and render comparison table ([#900](https://github.com/autonomouslogic/eve-ref/issues/900)) ([4d71448](https://github.com/autonomouslogic/eve-ref/commit/4d71448d3c9c3072d580d9ab100fc7bfc23a0a62))
+* **ui:** ISK donation MOTD ([3f93fa9](https://github.com/autonomouslogic/eve-ref/commit/3f93fa9cd2282f9aca96477fee00b377cb49f2ee))
+* **ui:** More Dogma attributes on overviews ([#911](https://github.com/autonomouslogic/eve-ref/issues/911)) ([ce4b138](https://github.com/autonomouslogic/eve-ref/commit/ce4b138f38fa26bd08cb76b509b03928730801c4))
+
 ## [2.66.0](https://github.com/autonomouslogic/eve-ref/compare/2.65.3...2.66.0) (2025-06-05)
 
 
