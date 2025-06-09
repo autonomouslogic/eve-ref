@@ -20,16 +20,22 @@
         "20410" : {
           "type_id" : 20410,
           "quantity" : 32.0,
+          "volume_per_unit" : 0,
+          "volume" : 0,
           "cost_per_unit" : 99693.58,
           "cost" : 3190194.56
         },
         "20424" : {
           "type_id" : 20424,
           "quantity" : 32.0,
+          "volume_per_unit" : 0,
+          "volume" : 0,
           "cost_per_unit" : 85874.69,
           "cost" : 2747990.08
         }
       },
+      "materials_volume" : 0,
+      "product_volume" : 0.01,
       "estimated_item_value": 768684254, // EVE Client says 768684250
       "job_cost_base": 15373685,
       "system_cost_index": 1729158,

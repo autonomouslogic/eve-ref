@@ -15,64 +15,86 @@
         "57479" : {
           "type_id" : 57479,
           "quantity" : 1.0,
+          "volume_per_unit" : 180.0,
+          "volume" : 180.0,
           "cost_per_unit" : 6447741.03,
           "cost" : 6447741.03
         },
         "57486" : {
           "type_id" : 57486,
           "quantity" : 65.0,
+          "volume_per_unit" : 45.0,
+          "volume" : 2925.0,
           "cost_per_unit" : 104412.54,
           "cost" : 6786815.10
         },
         "57478" : {
           "type_id" : 57478,
           "quantity" : 129.0,
+          "volume_per_unit" : 16.0,
+          "volume" : 2064.0,
           "cost_per_unit" : 69556.01,
           "cost" : 8972725.29
         },
         "40" : {
           "type_id" : 40,
           "quantity" : 1672.0,
+          "volume_per_unit" : 0.01,
+          "volume" : 16.72,
           "cost_per_unit" : 4367.56,
           "cost" : 7302560.32
         },
         "39" : {
           "type_id" : 39,
           "quantity" : 3343.0,
+          "volume_per_unit" : 0.01,
+          "volume" : 33.43,
           "cost_per_unit" : 2769.23,
           "cost" : 9257535.89
         },
         "38" : {
           "type_id" : 38,
           "quantity" : 13372.0,
+          "volume_per_unit" : 0.01,
+          "volume" : 133.72,
           "cost_per_unit" : 1298.17,
           "cost" : 17359129.24
         },
         "37" : {
           "type_id" : 37,
           "quantity" : 111429.0,
+          "volume_per_unit" : 0.01,
+          "volume" : 1114.29,
           "cost_per_unit" : 332.30,
           "cost" : 37027856.70
         },
         "36" : {
           "type_id" : 36,
           "quantity" : 334286.0,
+          "volume_per_unit" : 0.01,
+          "volume" : 3342.86,
           "cost_per_unit" : 77.35,
           "cost" : 25857022.10
         },
         "35" : {
           "type_id" : 35,
           "quantity" : 2228570.0,
+          "volume_per_unit" : 0.01,
+          "volume" : 22285.70,
           "cost_per_unit" : 28.35,
           "cost" : 63179959.50
         },
         "34" : {
           "type_id" : 34,
           "quantity" : 4457139.0,
+          "volume_per_unit" : 0.01,
+          "volume" : 44571.39,
           "cost_per_unit" : 4.06,
           "cost" : 18095984.34
         }
       },
+      "materials_volume" : 76667.11,
+      "product_volume" : 50000.0,
       "estimated_item_value": 154286511,
       "system_cost_index": 11511453,
       "system_cost_bonuses": -6043513,

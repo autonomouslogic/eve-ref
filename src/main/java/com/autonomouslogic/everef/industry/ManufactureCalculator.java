@@ -92,6 +92,7 @@ public class ManufactureCalculator {
 		var unitsPerRun =
 				manufacturing.getProducts().get(productType.getTypeId()).getQuantity();
 		var units = runs * unitsPerRun;
+		var productVolume = industryMath.typeVolume(productType, units);
 		var systemCostIndex = manufacturingSystemCostIndex(eiv);
 		var systemCostBonuses = industryMath.systemCostBonuses(
 				structure,
@@ -110,6 +111,7 @@ public class ManufactureCalculator {
 				.add(alphaCloneTax)
 				.add(systemCostBonuses);
 		var materials = manufacturingMaterials(manufacturing);
+		var materialsVolume = industryMath.materialVolume(materials);
 		var totalMaterialCost = industryMath.totalMaterialCost(materials);
 		var totalCost = totalJobCost.add(totalMaterialCost);
 		return ManufacturingCost.builder()
@@ -120,7 +122,9 @@ public class ManufactureCalculator {
 				.te(te)
 				.units(units)
 				.unitsPerRun(unitsPerRun)
+				.productVolume(productVolume)
 				.materials(materials)
+				.materialsVolume(materialsVolume)
 				.time(time)
 				.timePerRun(time.dividedBy(runs).truncatedTo(ChronoUnit.MILLIS))
 				.timePerUnit(time.dividedBy(units).truncatedTo(ChronoUnit.MILLIS))

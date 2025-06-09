@@ -1,0 +1,50 @@
+{
+  "base_price" : 10000,
+  "description" : {
+    "de" : "Auto-Integritäts-Erhaltungssiegel sind spezielle Komponenten, die zur automatischen Schadenskontrolle in den wichtigsten Schiffbereichen, in denen sich die Besatzung und anderes Personal befindet, eingesetzt werden. Obwohl die meisten Schiffe über eine Vielzahl von internen Kraftfeldern, Trennwänden, Luftschleusen und ähnlichen Systemen verfügen, können während eines hektischen Kampfes Schäden aller Art auftreten. Um kleine, aber potenziell gefährliche Schäden zu beheben, wurden in der Vergangenheit häufig temporäre Kraftfelder, intelligente Materialien und Nanotechnologie eingesetzt, die jedoch energieintensiv sein können oder wertvolle Ressourcen wie Nanobot-Reparaturpaste benötigen. Die neue Auto-Integritäts-Technologie nimmt sich ein Beispiel am Triglavia-Kollektiv und nutzt die Mutaplasmid-Technologie als Inspiration für kostengünstigere Standardkomponenten, die Biotech-Nanobots freisetzen, um Mikrofrakturen und andere Defekte, die die Integrität der physischen Abteile bedrohen, zu suchen und zu reparieren.",
+    "en" : "Auto-Integrity Preservation Seals are specialized components used for automatic damage control in key space vessel zones where crew and other personnel aboard ship are operating. While most ships have a variety of internal forcefields, bulkhead dividers, air-locks and similar systems built into the basic design, breaches of all kinds can occur in the heat of space combat.\r\n\r\nTo address small but potentially dangerous breaches, temporary force-fields, smart materials and nanotechnology have often been used but can be energy intensive or use otherwise valuable resources such as nanite paste.\r\n\r\nThe new auto-integrity technology takes a leaf out of the Triglavian Collective's book and uses mutaplasmid technology as the inspiration for cheaper, standard components that release biotech nanobes tailored to seek and repair microfractures and other defects threatening physical compartment integrity.",
+    "es" : "Los sellos de preservación de integridad automática son componentes especializados que se utilizan para el control automático de daños en zonas clave de naves espaciales donde opera la tripulación y otro personal a bordo. Si bien la mayoría de las naves tienen una serie de campos de fuerza internos, divisores de mamparos, esclusas de aire y sistemas similares integrados en el diseño básico, pueden surgir brechas de todo tipo en el fragor del combate espacial.\n\nPara hacer frente a brechas pequeñas pero potencialmente peligrosas, a menudo se han utilizado campos de fuerza temporales, materiales inteligentes y nanotecnología, pero pueden consumir mucha energía o utilizar recursos valiosos, como el fluido de nanobots.\n\nLa nueva tecnología de integridad automática toma una hoja del libro del Colectivo Triglaviano y utiliza la tecnología mutaplásmida como inspiración para componentes estándar más baratos que liberan nanobios biotecnológicos diseñados para buscar y reparar microfracturas y otros defectos que amenazan la integridad del compartimento físico.",
+    "fr" : "Les sceaux de préservation d’intégrité automatique sont des composants spécialisés utilisés pour la limitation des dégâts dans les zones clés des vaisseaux, où travaillent l’équipage ainsi que du personnel. Bien que la plupart des vaisseaux prévoient divers champs de force internes, cloisons étanches, sas et autres systèmes semblables dans leur conception initiale, des brèches en tout genre peuvent survenir dans l’intensité du combat spatial. Pour apporter une réponse aux brèches certes mineures, mais potentiellement dangereuses, des champs de force temporaires, des matériaux intelligents ou des nanotechnologies ont fréquemment été utilisés, mais peuvent présenter un coût énergétique important, ou consommer des ressources précieuses pour d’autres utilisations, comme la colle nanite. La nouvelle technologie d’intégrité automatique reprend les techniques du Collectif Triglavian, et s’inspire des technologies de mutaplasmides pour proposer des composants standards, moins coûteux, qui libèrent des nanobes biotechnologiques conçus pour chercher et réparer les microfractures et autres défauts menaçant l'intégrité physique du compartiment.",
+    "ja" : "オートインテグリティ保護シールは、搭乗員などの乗船者が活動している宇宙船の重要エリアの自動ダメージコントロールに使われる特殊な部品である。ほとんどの船の基礎設計には様々な内蔵フォースフィールドや隔壁、エアロックなどのシステムが組み込まれているが、宇宙での激しい戦闘中、船にはありとあらゆる種類の亀裂が発生する。\n\n\n\n小さいが危険を及ぼす可能性がある亀裂に対処するためには、一時的なフォースフィールドや小型資材、そしてナノテクノロジーが使われることが多い。だが、そういった方法は大量なエネルギー、あるいはナノマシンペーストなどの貴重な資源を消費する場合がある。\n\n\n\nトリグラビアンコレクティブを模倣して生み出されたオートインテグリティテクノロジーは、変異プラスミドに着想を得たより安価な通常素材を使用している。このテクノロジーは、区画の物理的完全性を脅かす微細な穴やその他の損傷を探し出し、修復するよう調整されたバイオ技術を使ったナノーブを放出するものである。",
+    "ko" : "자동 수복 기능이 내장된 특수 장비로 승문원들이 활동하는 주요 함선 시설을 복구하는 데 사용됩니다. 대다수의 함선에는 내부 역장, 격벽, 그리고 에어록 등의 안전 장치가 설치되어 있으나 우주 전투의 특수성으로 인해 다양한 안전 조치가 요구됩니다.<br><br>잠재적 위험에 대응하기 위해 소규모 역장, 스마트 재료, 그리고 나노 기술 등이 적극적으로 도입되었으나 과도한 에너지 소모와 나나이트 페이스트 등의 값비싼 재료가 문제점으로 제기되어 왔습니다.<br><br>자동 수복 기술은 트리글라비안 뮤타플라즈미드를 바탕으로 설계되었으며 기존의 안전 장치에 비해 상대적으로 낮은 운용 비용이 소모됩니다. 내부 손상 발생 시 바이오 기술을 기반으로 제작된 나노 생명체가 훼손 지점을 수리합니다.",
+    "ru" : "Защитные герметичные пломбы — особые компоненты, используемые для автоматического ремонта ключевых секций космического корабля, то есть тех зон, где непосредственно работают члены экипажа и другой персонал. Хотя большинство судов по умолчанию снабжены внутренними силовыми полями, переборками, воздушными шлюзами и другими системами, в пылу битвы корпус всё равно получает повреждения разной глубины и диаметра. Для устранения небольших, но потенциально опасных брешей обычно используются временные силовые поля, нанотехнологичные решения и различные «умные» материалы. Однако такие процедуры нередко оказываются слишком энергоёмкими или требуют траты ценных ресурсов (к примеру, нанитовой пасты). Разработчики нового метода автоматической реконструкции вдохновились технологией биоадаптивных мутаплазмидов Сообщества Триглава и создали куда более дешёвые стандартные компоненты, которые высвобождают особые биотехнологические наночастицы. Эти частицы, в свою очередь, ищут и устраняют микротрещины и другие дефекты, угрожающие физической целостности отсека.",
+    "zh" : "自动修复储藏装置密封是船员和其他人员所在的核心舰船舱室的自动伤害控制专用组件。舰船内部有许多力场、舱室隔壁和类似结构，在激烈的战斗中可能会被破坏。\n\n\n\n定位并修复小的损伤经常用到临时力场、智能材料和纳米技术，不过会消耗本就紧张的能源，或者就要使用珍贵的纳米体粘合剂。\n\n\n\n新的自动修复技术源自三神裔科技，对廉价的标准组件使用突变质体技术，使其放出纳米生物体对可能造成物理结构解体的微小破损或漏洞进行寻找和修复。"
+  },
+  "group_id" : 334,
+  "icon_id" : 24638,
+  "market_group_id" : 2768,
+  "mass" : 0.1,
+  "name" : {
+    "de" : "Auto-Integrity Preservation Seal",
+    "en" : "Auto-Integrity Preservation Seal",
+    "es" : "Sello de preservación de integridad automática",
+    "fr" : "Sceau de préservation d’intégrité automatique",
+    "ja" : "オートインテグリティ保護シール",
+    "ko" : "자동복구 장치",
+    "ru" : "Auto-Integrity Preservation Seal",
+    "zh" : "自动修复储藏装置密封"
+  },
+  "portion_size" : 1,
+  "published" : true,
+  "volume" : 16,
+  "type_id" : 57478,
+  "capacity" : 0,
+  "packaged_volume" : 16,
+  "radius" : 1,
+  "used_in_blueprints" : {
+    "999" : {
+      "manufacturing" : {
+        "material_type_id" : 57478,
+        "activity" : "manufacturing",
+        "quantity" : 150
+      }
+    },
+    "32308" : {
+      "manufacturing" : {
+        "material_type_id" : 57478,
+        "activity" : "manufacturing",
+        "quantity" : 200
+      }
+    }
+  }
+}

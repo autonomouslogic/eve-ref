@@ -42,6 +42,12 @@ public class ActivityCost {
 	Map<String, MaterialCost> materials;
 
 	@JsonProperty
+	BigDecimal materialsVolume;
+
+	@JsonProperty
+	BigDecimal productVolume;
+
+	@JsonProperty
 	@Schema(description = "The estimated item value (EIV). This may not be completely accurate.")
 	BigDecimal estimatedItemValue;
 
@@ -93,6 +99,12 @@ public class ActivityCost {
 				.alphaCloneTax(MathUtil.round(alphaCloneTax.multiply(BigDecimal.valueOf(mul)), 2))
 				.totalJobCost(MathUtil.round(totalJobCost.multiply(BigDecimal.valueOf(mul)), 2))
 				.totalCost(MathUtil.round(totalCost.multiply(BigDecimal.valueOf(mul)), 2));
+		if (materialsVolume != null) {
+			builder = builder.totalMaterialCost(MathUtil.round(materialsVolume.multiply(BigDecimal.valueOf(mul)), 2));
+		}
+		if (productVolume != null) {
+			builder = builder.totalMaterialCost(MathUtil.round(productVolume.multiply(BigDecimal.valueOf(mul)), 2));
+		}
 		if (totalMaterialCost != null) {
 			builder = builder.totalMaterialCost(MathUtil.round(totalMaterialCost.multiply(BigDecimal.valueOf(mul)), 2));
 		}

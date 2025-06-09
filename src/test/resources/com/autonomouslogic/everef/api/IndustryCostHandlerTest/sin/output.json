@@ -15,76 +15,102 @@
         "645" : {
           "type_id" : 645,
           "quantity" : 1.0,
+          "volume_per_unit" : 50000.0,
+          "volume" : 50000.0,
           "cost_per_unit" : 236197066.81,
           "cost" : 236197066.81
         },
         "21025" : {
           "type_id" : 21025,
           "quantity" : 3.0,
+          "volume_per_unit" : 0,
+          "volume" : 0,
           "cost_per_unit" : 28446690.16,
           "cost" : 85340070.48
         },
         "11478" : {
           "type_id" : 11478,
           "quantity" : 30.0,
+          "volume_per_unit" : 0,
+          "volume" : 0,
           "cost_per_unit" : 857.23,
           "cost" : 25716.90
         },
         "11531" : {
           "type_id" : 11531,
           "quantity" : 219.0,
+          "volume_per_unit" : 0,
+          "volume" : 0,
           "cost_per_unit" : 46214.41,
           "cost" : 10120955.79
         },
         "3828" : {
           "type_id" : 3828,
           "quantity" : 437.0,
+          "volume_per_unit" : 0,
+          "volume" : 0,
           "cost_per_unit" : 10885.11,
           "cost" : 4756793.07
         },
         "11547" : {
           "type_id" : 11547,
           "quantity" : 437.0,
+          "volume_per_unit" : 0,
+          "volume" : 0,
           "cost_per_unit" : 138734.81,
           "cost" : 60627111.97
         },
         "11399" : {
           "type_id" : 11399,
           "quantity" : 873.0,
+          "volume_per_unit" : 0,
+          "volume" : 0,
           "cost_per_unit" : 35399.68,
           "cost" : 30903920.64
         },
         "11535" : {
           "type_id" : 11535,
           "quantity" : 873.0,
+          "volume_per_unit" : 0,
+          "volume" : 0,
           "cost_per_unit" : 27038.43,
           "cost" : 23604549.39
         },
         "11556" : {
           "type_id" : 11556,
           "quantity" : 1585.0,
+          "volume_per_unit" : 0,
+          "volume" : 0,
           "cost_per_unit" : 48018.34,
           "cost" : 76109068.90
         },
         "11553" : {
           "type_id" : 11553,
           "quantity" : 2183.0,
+          "volume_per_unit" : 0,
+          "volume" : 0,
           "cost_per_unit" : 57233.51,
           "cost" : 124940752.33
         },
         "11541" : {
           "type_id" : 11541,
           "quantity" : 6111.0,
+          "volume_per_unit" : 0,
+          "volume" : 0,
           "cost_per_unit" : 53746.31,
           "cost" : 328443700.41
         },
         "11545" : {
           "type_id" : 11545,
           "quantity" : 18188.0,
+          "volume_per_unit" : 0,
+          "volume" : 0,
           "cost_per_unit" : 7966.80,
           "cost" : 144900158.40
         }
       },
+      "materials_volume" : 50000.0,
+      "product_volume" : 50000.0,
       "estimated_item_value": 768684254, // should be 768684250, verified in-game in the test sin-blueprint
       "system_cost_index": 0, // not verified in-game
       "system_cost_bonuses": 0,
@@ -120,16 +146,22 @@
         "20410" : {
           "type_id" : 20410,
           "quantity" : 99.74025974025976,
+          "volume_per_unit" : 0,
+          "volume" : 0.00,
           "cost_per_unit" : 99693.58,
           "cost" : 9943463.56
         },
         "20424" : {
           "type_id" : 20424,
           "quantity" : 99.74025974025976,
+          "volume_per_unit" : 0,
+          "volume" : 0.00,
           "cost_per_unit" : 85874.69,
           "cost" : 8565163.89
         }
       },
+      "materials_volume" : 0,
+      "product_volume" : 0.10,
       "estimated_item_value": 2395898972.57, // should be 2395898961.04,
       "job_cost_base" : 47917979.53,
       "system_cost_index": 5389583.38,

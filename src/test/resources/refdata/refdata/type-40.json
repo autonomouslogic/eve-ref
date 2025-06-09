@@ -1,0 +1,57 @@
+{
+  "base_price" : 8192,
+  "description" : {
+    "de" : "Ein äußerst seltenes Mineral, das in Kometen gefunden wird und gelegentlich auf Asteroiden, die durch Gaswolken geflogen sind. Hat einzigartige, hochexplosive Bestandteile, die es in der Waffenindustrie sehr wertvoll machen. Es kann durch die Aufbereitung von <a href=showinfo:22>Arkonor</a>-Erz und dessen Varianten gewonnen werden, die in Systemen des Nullsicherheitsraums und Wurmlochsystemen verfügbar sind. In seltenen Erzen wie <a href=showinfo:19>Spodumain</a>, <a href=showinfo:52316>Bezdnazin</a> und <a href=showinfo:52306>Talassonite</a> sind ebenfalls erhebliche Mengen an Megacyte vorhanden. Das seltene Erz <a href=showinfo:74533>Ducinium</a> enthält ebenfalls größere Mengen und ist vor allem Systemen im Niedersicherheitsraum und in W-Raum-Systemen mit A0-Sternen (blauen kleinen Sternen) zu finden. Außerdem kommt es noch in untersuchten Orten an den Grenzen zwischen Imperiums- und Nullsicherheitsraum vor. Megacyte kann auch in Sternensystemen des Nullsicherheitsraums in <a href=showinfo:82205>Ueganite</a> gefunden werden.",
+    "en" : "An extremely rare mineral found in comets and very occasionally in asteroids that have traveled through gas clouds. Has unique explosive traits that make it very valuable in the armaments industry.\r\n\r\nMay be obtained by reprocessing <a href=showinfo:22>arkonor</a> ore and its variations which are available in null security status and wormhole systems.\r\n\r\nSignificant amounts of megacyte are also present in rare ores like <a href=showinfo:19>spodumain</a>, <a href=showinfo:52316>bezdnacine</a>, and <a href=showinfo:52306>talassonite</a>.\r\n\r\nThe rare ore <a href=showinfo:74533>ducinium</a> also contains significant quantities and is found primarily in nullsec and W-space systems containing A0 (Blue Small) stars, as well as surveyed locations on the borders of empire and nullsec space.\r\n\r\nMegacyte can also be found in null security status star systems in <a href=showinfo:82205>ueganite</a>.",
+    "es" : "Un mineral extremadamente poco común que se encuentra en cometas y muy rara vez en asteroides que han viajado a través de nubes de gas. Tiene características explosivas únicas que lo hacen muy valioso en la industria armamentística.\r\n\r\nSe puede obtener mediante el reprocesamiento de la mena de <a href=showinfo:22>arkonor</a> y sus variaciones, que se encuentran en los sistemas de estado de seguridad nula y agujeros de gusano.\r\n\r\nTambién hay grandes cantidades de megacita en menas poco comunes como <a href=showinfo:19>espodumain</a>, <a href=showinfo:52316>bezdnacina</a> y <a href=showinfo:52306>talasonita</a>.\r\n\r\nLa mena poco común de <a href=showinfo:74533>ducinium</a> también contiene cantidades significativas y se encuentra principalmente en sistemas de espacio de agujeros de gusano y seguridad nula que contienen estrellas A0 (azules pequeñas), así como en ubicaciones inspeccionadas en las fronteras del imperio y el espacio de seguridad nula.\r\n\r\nLa megacita también se puede encontrar en sistemas estelares con estado de seguridad nulo en <a href=showinfo:82205>ueganita</a>.",
+    "fr" : "Il s'agit d'un minerai extrêmement rare que l'on ne trouve que dans les comètes et, bien plus rarement, dans des astéroïdes ayant traversé des nuages de gaz. Une des caractéristiques qui rend ce minerai très intéressant pour l'industrie de l'armement est son haut pouvoir explosif. Il peut être obtenu en retraitant du minerai d'<a href=showinfo:22>arkonor</a> et ses variations, disponibles dans les systèmes de trou de ver et de sécurité nulle. Des quantités significatives de mégacyte sont également présentes dans des minerais rares tels que le <a href=showinfo:19>spodumain</a>, le <a href=showinfo:52316>bezdnacine</a> et le <a href=showinfo:52306>talassonite</a>. Le minerai rare <a href=showinfo:74533>ducinium</a> en contient également des quantités significatives et se trouve principalement dans les systèmes de sécurité nulle et les systèmes de trous de ver contenant des étoiles A0 (petites bleues), ainsi que dans des sites sondés aux frontières de l'espace impérial et de sécurité nulle. La mégacyte peut également être trouvée dans les systèmes stellaires à statut de sécurité nulle contenant de l'<a href=showinfo:82205>ueganite</a>.",
+    "ja" : "彗星の中か、ガス雲の中を通過したアステロイドからごくまれに見つかる、極めて希少な鉱石。特異な爆発特性を持ち、兵器産業において非常に価値がある。\r\n\r\nゼロセキュリティステータス星系およびワームホールシステムで入手可能な<a href=showinfo:22>アーコナー</a>およびその亜種鉱石を再処理することで得ることができる。\r\n\r\nメガサイトは<a href=showinfo:19>スポデュメイン</a>や<a href=showinfo:52316>ベズドナシン</a>、<a href=showinfo:52306>タラソナイト</a>といった希少鉱石の中にも相当量含まれている。\r\n\r\nまた、希少鉱石の<a href=showinfo:74533>ドゥシニウム</a>に大量に含まれている。ドゥシニウムは主に、A0（小型ブルー）恒星が存在するゼロセキュリティ宙域とワームホール宙域のほか、主要大国とゼロセキュリティ宙域の境界にある調査エリアで発見することができる。\r\n\r\nメガサイトはまたゼロセキュリティステータスの星系において、<a href=showinfo:82205>ユイグナイト</a>に含まれる形でも見つかる。",
+    "ko" : "혜성에서 추출되는 희귀 광물로 가스 성운 지역을 지나는 소행성에서도 종종 발견됩니다. 쉽게 폭발하는 성질이 있어 무기 산업에서 상당한 가치를 자랑합니다.<br><br><a href=showinfo:22>아르카노르</a>를 정제하여 획득할 수 있으며, 널 시큐리티 항성계 및 웜홀에서 채굴되는 특수 아르카노르에서도 추출됩니다.<br><br><a href=showinfo:19>스포듀마인</a>, <a href=showinfo:52316>베즈드나신</a>, <a href=showinfo:52306>탈라소나이트</a> 또한 다량의 메가사이트를 함유하고 있습니다.<br><br>희귀 광석 <a href=showinfo:74533>두시늄</a>에도 다량 함유되어 있습니다. 두시늄은 널 시큐리티와 웜홀 우주에 있는 A0 청색 왜성 항성계에서 주로 찾을 수 있으며, 4대 국가 영역의 외부 경계에서도 발견됩니다.<br><br>추가로 널 시큐리티 항성계에서 발견되는 <a href=showinfo:82205>유가나이트</a>에도 메가사이트가 함유되어 있습니다.",
+    "ru" : "Чрезвычайно ценный минерал, иногда встречающийся в кометах и совсем редко — в астероидах, пролетевших через газовые облака. Обладает уникальными взрывными свойствами, благодаря чему очень востребован в военной промышленности. Добывается путём переработки <a href=showinfo:22>арконора</a> и его разновидностей, которые можно найти в системах с нулевым уровнем безопасности и в системах червоточин. Кроме того, мегацит в больших количествах присутствует в редких рудах, таких как <a href=showinfo:19>сподумейн</a>, <a href=showinfo:52316>безднацин</a> и <a href=showinfo:52306>талассонит</a>. Редкая руда <a href=showinfo:74533>дачиний</a> тоже содержит много мегацита. Найти её можно, как правило, в системах с нулевым уровнем безопасности и w-пространстве, где присутствуют звёзды подкласса А0 (голубые карлики), а также в изученных областях на границах держав и «нулей». Наконец, мегацит встречается в системах с нулевым уровнем безопасности в составе <a href=showinfo:82205>уэганита</a>.",
+    "zh" : "一种存在于彗星中的极其稀有的矿物，偶尔也会在穿过了气云的小行星中发现。具有独一无二的爆炸特性，在军工产业中非常有价值。可通过提炼<a href=showinfo:22>艾克诺岩</a>及其变种获得。这些矿石分布于零安全等级星系和虫洞星系中。超噬矿还大量存在于<a href=showinfo:19>灰岩</a>、<a href=showinfo:52316>贝兹岩</a>和<a href=showinfo:52306>塔拉岩</a>等稀有矿石之中。此外，从<a href=showinfo:74533>杜希石</a>中也能提炼出相当可观的数量。这种稀有矿石主要分布在零安全等级星系和虫洞星系的A0恒星（蓝色小型），以及帝国和零安全区域边境的已探明地点。分布在零安全等级星系的<a href=showinfo:82205>尤加石</a>中也含有超噬矿。"
+  },
+  "group_id" : 18,
+  "icon_id" : 405,
+  "market_group_id" : 1857,
+  "name" : {
+    "de" : "Megacyte",
+    "en" : "Megacyte",
+    "es" : "Megacita",
+    "fr" : "Mégacyte",
+    "ja" : "メガサイト",
+    "ko" : "메가사이트",
+    "ru" : "Megacyte",
+    "zh" : "超噬矿"
+  },
+  "portion_size" : 1,
+  "published" : true,
+  "volume" : 0.01,
+  "type_id" : 40,
+  "capacity" : 0,
+  "mass" : 0,
+  "packaged_volume" : 0.01,
+  "radius" : 1,
+  "used_in_blueprints" : {
+    "999" : {
+      "manufacturing" : {
+        "material_type_id" : 40,
+        "activity" : "manufacturing",
+        "quantity" : 1950
+      }
+    },
+    "32308" : {
+      "manufacturing" : {
+        "material_type_id" : 40,
+        "activity" : "manufacturing",
+        "quantity" : 4000
+      }
+    },
+    "33674" : {
+      "manufacturing" : {
+        "material_type_id" : 40,
+        "activity" : "manufacturing",
+        "quantity" : 22
+      }
+    }
+  }
+}

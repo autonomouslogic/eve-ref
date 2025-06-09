@@ -12,6 +12,7 @@ import com.autonomouslogic.everef.refdata.BlueprintActivity;
 import com.autonomouslogic.everef.refdata.InventoryType;
 import com.autonomouslogic.everef.service.EsiMarketPriceService;
 import com.autonomouslogic.everef.service.MarketPriceService;
+import com.autonomouslogic.everef.service.RefDataService;
 import com.autonomouslogic.everef.util.MathUtil;
 import com.google.common.util.concurrent.RateLimiter;
 import io.sentry.Sentry;
@@ -25,11 +26,15 @@ import java.util.Optional;
 import java.util.function.Function;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
 
 @Singleton
 @Log4j2
 public class IndustryMath {
+	@Inject
+	protected RefDataService refdata;
+
 	@Inject
 	protected EsiMarketPriceService esiMarketPriceService;
 
@@ -93,9 +98,20 @@ public class IndustryMath {
 		for (var material : activity.getMaterials().values()) {
 			long typeId = material.getTypeId();
 			var quantity = quantityMod.apply(material.getQuantity());
+			var materialType = refdata.getLoadedRefData().getType(typeId);
+			if (materialType == null) {
+				log.warn("Material type {} not found", typeId);
+			}
+			var volumePerUnit = materialType == null ? BigDecimal.ZERO : typeVolume(materialType);
+			var volume = volumePerUnit.multiply(BigDecimal.valueOf(quantity));
 			materials.put(
 					String.valueOf(typeId),
-					MaterialCost.builder().typeId(typeId).quantity(quantity).build());
+					MaterialCost.builder()
+							.typeId(typeId)
+							.quantity(quantity)
+							.volumePerUnit(volumePerUnit)
+							.volume(volume)
+							.build());
 		}
 		var materialsWithCost = marketPriceService.materialCosts(materials, priceSource);
 		return materialsWithCost;
@@ -103,6 +119,24 @@ public class IndustryMath {
 
 	public BigDecimal materialCost(BigDecimal price, long quantity) {
 		return MathUtil.round(price.multiply(BigDecimal.valueOf(quantity)), 2);
+	}
+
+	public BigDecimal materialVolume(Map<String, MaterialCost> materials) {
+		return materials.values().stream().map(MaterialCost::getVolume).reduce(BigDecimal.ZERO, BigDecimal::add);
+	}
+
+	public BigDecimal typeVolume(@NonNull InventoryType type, long units) {
+		return typeVolume(type).multiply(BigDecimal.valueOf(units));
+	}
+
+	public BigDecimal typeVolume(@NonNull InventoryType type) {
+		if (type.getPackagedVolume() != null) {
+			return BigDecimal.valueOf(type.getPackagedVolume());
+		}
+		if (type.getVolume() != null) {
+			return type.getVolume();
+		}
+		return BigDecimal.ZERO;
 	}
 
 	public BigDecimal jobCostBase(BigDecimal eiv) {

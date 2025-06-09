@@ -1,0 +1,21 @@
+{
+  "capacity" : 0,
+  "description" : {
+    "en" : "The pressure of the Triglavian Invasions on spaceship crew numbers and other military personnel risked becoming unsustainable without additional survival measures to reduce losses. Life Support Backup Units are placed in key survival zones to enhance the survival prospects of crew and other personnel in the aftermath of combat.",
+    "fr" : "La pression des invasions triglavian sur les effectifs des équipages des vaisseaux et des autres types de personnel militaire menaçait de devenir intenable sans mesures de survie supplémentaires pour réduire les pertes. Les unités de réanimation de secours sont placées dans les zones de survie clés pour améliorer les chances de l’équipage et du reste du personnel à la suite d’un combat."
+  },
+  "group_id" : 334,
+  "icon_id" : 24640,
+  "market_group_id" : 2768,
+  "mass" : 0.1,
+  "name" : {
+    "en" : "Life Support Backup Unit",
+    "fr" : "Unité de réanimation de secours"
+  },
+  "packaged_volume" : 45,
+  "portion_size" : 1,
+  "published" : true,
+  "radius" : 1,
+  "type_id" : 57486,
+  "volume" : 45
+}

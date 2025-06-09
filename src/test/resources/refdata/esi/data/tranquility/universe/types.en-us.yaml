@@ -2119,6 +2119,161 @@
   radius: 1
   type_id: 34
   volume: 0.01
+"35":
+  capacity: 0
+  description: "A soft crystal-like mineral with a very distinguishing orange glow\
+    \ as if on fire. Used as conduit and in the bio-chemical industry. Commonly found\
+    \ in many asteroid-ore types.\r\n\r\nMay be obtained by reprocessing the following\
+    \ ores and their variations:\r\n\r\nHigh security status star systems: <a href=showinfo:1228>scordite</a>,\
+    \ and <a href=showinfo:1224>pyroxeres</a>.\r\n\r\nLow security status star systems:\
+    \ <a href=showinfo:1224>pyroxeres</a>, <a href=showinfo:1227>omber</a>, <a href=showinfo:21>hedbergite</a>,\
+    \ <a href=showinfo:1229>gneiss</a>, and <a href=showinfo:1225>crokite</a>.\r\n\
+    \r\nNull security status star systems: <a href=showinfo:1224>pyroxeres</a>, <a\
+    \ href=showinfo:1223>bistot</a>, <a href=showinfo:22>arkonor</a>, <a href=showinfo:81900>kylixium</a>,\
+    \ and <a href=showinfo:82016>nocxite</a>.\r\n\r\nWormhole systems: <a href=showinfo:1224>pyroxeres</a>,\
+    \ <a href=showinfo:1227>omber</a>, <a href=showinfo:1229>gneiss</a>, <a href=showinfo:1223>bistot</a>,\
+    \ and <a href=showinfo:22>arkonor</a>.\r\n\r\nThe rare ore <a href=showinfo:74521>mordunium</a>\
+    \ also contains significant quantities and is found primarily in nullsec and W-space\
+    \ systems containing A0 (Blue Small) stars, as well as surveyed locations on the\
+    \ borders of empire and nullsec space."
+  group_id: 18
+  icon_id: 400
+  market_group_id: 1857
+  mass: 0
+  name: "Pyerite"
+  packaged_volume: 0.01
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 35
+  volume: 0.01
+"36":
+  capacity: 0
+  description: "Very flexible metallic mineral, dull to bright silvery green in color.\
+    \ Can be mixed with <a href=showinfo:34>Tritanium</a> to make extremely hard alloys\
+    \ or it can be used by itself for various purposes. Fairly common in most regions.\r\
+    \n\r\nMay be obtained by reprocessing the following ores and their variations:\r\
+    \n\r\nHigh security status star systems: <a href=showinfo:1224>pyroxeres</a>,\
+    \ and <a href=showinfo:18>plagioclase</a>.\r\n\r\nLow security status star systems:\
+    \ <a href=showinfo:1224>pyroxeres</a>, <a href=showinfo:20>kernite</a>, <a href=showinfo:1226>jaspet</a>,\
+    \ <a href=showinfo:1229>gneiss</a>, <a href=showinfo:1232>dark ochre</a>, and\
+    \ <a href=showinfo:1225>crokite</a>.\r\n\r\nNull security status star systems:\
+    \ <a href=showinfo:1224>pyroxeres</a>, <a href=showinfo:20>kernite</a>, <a href=showinfo:1223>bistot</a>,\
+    \ <a href=showinfo:22>arkonor</a>, and <a href=showinfo:81900>kylixium</a>.\r\n\
+    \r\nWormhole systems: <a href=showinfo:1224>pyroxeres</a>, <a href=showinfo:20>kernite</a>,\
+    \ <a href=showinfo:1229>gneiss</a>, <a href=showinfo:1223>bistot</a>, and <a href=showinfo:22>arkonor</a>."
+  group_id: 18
+  icon_id: 401
+  market_group_id: 1857
+  mass: 0
+  name: "Mexallon"
+  packaged_volume: 0.01
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 36
+  volume: 0.01
+"37":
+  capacity: 0
+  description: "Light-bluish crystal, formed by intense pressure deep within large\
+    \ asteroids and moons. Used in electronic and weapon manufacturing. Only found\
+    \ in abundance in a few areas.\r\n\r\nMay be obtained by reprocessing the following\
+    \ ores and their variations:\r\n\r\nLow security status star systems: <a href=showinfo:1227>omber</a>,\
+    \ <a href=showinfo:20>kernite</a>, <a href=showinfo:1231>hemorphite</a>, <a href=showinfo:1229>gneiss</a>,\
+    \ and <a href=showinfo:1232>dark ochre</a>.\r\n\r\nNull security status star systems:\
+    \ <a href=showinfo:20>kernite</a>, <a href=showinfo:81975>griemeer</a>, and <a\
+    \ href=showinfo:82163>hezorime</a>.\r\n\r\nWormhole systems: <a href=showinfo:1227>omber</a>,\
+    \ <a href=showinfo:20>kernite</a>, and <a href=showinfo:1229>gneiss</a>.\r\n\r\
+    \nIt is also present in huge amounts in rare ores like <a href=showinfo:19>spodumain</a>,\
+    \ <a href=showinfo:52316>bezdnacine</a> and <a href=showinfo:52315>rakovene</a>.\r\
+    \n\r\nThe rare ore <a href=showinfo:74525>ytirium</a> also contains significant\
+    \ quantities and is found primarily in nullsec and W-space systems containing\
+    \ A0 (Blue Small) stars, as well as surveyed locations on the borders of empire\
+    \ and nullsec space."
+  group_id: 18
+  icon_id: 402
+  market_group_id: 1857
+  mass: 0
+  name: "Isogen"
+  packaged_volume: 0.01
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 37
+  volume: 0.01
+"38":
+  capacity: 0
+  description: "A highly volatile mineral only formed during supernovas, thus severely\
+    \ limiting the extent of its distribution. Vital ingredient in capsule production,\
+    \ making it very coveted.\r\n\r\nMay be obtained by reprocessing the following\
+    \ ores and their variations available in low security status star systems: <a\
+    \ href=showinfo:1226>jaspet</a>, <a href=showinfo:1231>hemorphite</a>, <a href=showinfo:21>hedbergite</a>,\
+    \ <a href=showinfo:1232>dark ochre</a>, and <a href=showinfo:1225>crokite</a>.\r\
+    \n\r\nIt is also present in significant amounts in rare ores like <a href=showinfo:19>spodumain</a>\
+    \ and <a href=showinfo:52306>talassonite</a>.\r\n\r\nNocxium can also be found\
+    \ in null security status star systems in <a href=showinfo:81900>kylixium</a>,\
+    \ <a href=showinfo:82016>nocxite</a>, <a href=showinfo:82205>ueganite</a>, <a\
+    \ href=showinfo:82163>hezorime</a>, and <a href=showinfo:81975>griemeer</a>."
+  group_id: 18
+  icon_id: 1201
+  market_group_id: 1857
+  mass: 0
+  name: "Nocxium"
+  packaged_volume: 0.01
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 38
+  volume: 0.01
+"39":
+  capacity: 0
+  description: "Only found in huge geodes; rocks on the outside with crystal-like\
+    \ quartz on the inside. The rarest and most precious of these geodes are those\
+    \ that contain the dark green zydrine within. Very rare and very expensive.\r\n\
+    \r\nMay be obtained by reprocessing <a href=showinfo:1223>bistot</a> ore and its\
+    \ variations which are available in null security status and wormhole systems.\r\
+    \n\r\nSignificant amounts of zydrine are also present in rare ores like <a href=showinfo:19>spodumain</a>\
+    \ and <a href=showinfo:52315>rakovene</a>.\r\n\r\nIt can be found in null security\
+    \ status star systems in <a href=showinfo:82163>hezorime</a>.\r\n\r\nThe rare\
+    \ ore <a href=showinfo:74529>eifyrium</a> also contains significant quantities\
+    \ and is found primarily in nullsec and W-space systems containing A0 (Blue Small)\
+    \ stars, as well as surveyed locations on the borders of empire and nullsec space."
+  group_id: 18
+  icon_id: 404
+  market_group_id: 1857
+  mass: 0
+  name: "Zydrine"
+  packaged_volume: 0.01
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 39
+  volume: 0.01
+"40":
+  capacity: 0
+  description: "An extremely rare mineral found in comets and very occasionally in\
+    \ asteroids that have traveled through gas clouds. Has unique explosive traits\
+    \ that make it very valuable in the armaments industry.\r\n\r\nMay be obtained\
+    \ by reprocessing <a href=showinfo:22>arkonor</a> ore and its variations which\
+    \ are available in null security status and wormhole systems.\r\n\r\nSignificant\
+    \ amounts of megacyte are also present in rare ores like <a href=showinfo:19>spodumain</a>,\
+    \ <a href=showinfo:52316>bezdnacine</a>, and <a href=showinfo:52306>talassonite</a>.\r\
+    \n\r\nThe rare ore <a href=showinfo:74533>ducinium</a> also contains significant\
+    \ quantities and is found primarily in nullsec and W-space systems containing\
+    \ A0 (Blue Small) stars, as well as surveyed locations on the borders of empire\
+    \ and nullsec space.\r\n\r\nMegacyte can also be found in null security status\
+    \ star systems in <a href=showinfo:82205>ueganite</a>."
+  group_id: 18
+  icon_id: 405
+  market_group_id: 1857
+  mass: 0
+  name: "Megacyte"
+  packaged_volume: 0.01
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 40
+  volume: 0.01
 "37158":
   capacity: 0
   description: "The Standup M-Set Ammunition Manufacturing Material Efficiency I rig\
@@ -4301,3 +4456,68 @@
   radius: 1
   type_id: 32308
   volume: 0.01
+"57479":
+  capacity: 0
+  description: "Core Temperature Regulators are standardized, supplementary systems\
+    \ used to regulate, mitigate and recycle surplus heat energy developed by naval\
+    \ ship reactor cores.\r\n\r\nRefits to empire navy fleets in response to the Triglavian\
+    \ Invasions often increased the overall power requirements of vessels, by upgrading\
+    \ or adding defensive and offensive systems, while not replacing reactor cores\
+    \ or carrying out major upgrades on these complex and valuable components.\r\n\
+    \r\nAdditional power requirements have entailed running older reactor core designs\
+    \ \"hot\" and core temperature regulators are used to monitor, mitigate and, where\
+    \ practical, recycle surplus heat energy."
+  group_id: 334
+  icon_id: 24605
+  market_group_id: 2768
+  mass: 0.1
+  name: "Core Temperature Regulator"
+  packaged_volume: 180
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 57479
+  volume: 180
+"57486":
+  capacity: 0
+  description: "The pressure of the Triglavian Invasions on spaceship crew numbers\
+    \ and other military personnel risked becoming unsustainable without additional\
+    \ survival measures to reduce losses. Life Support Backup Units are placed in\
+    \ key survival zones to enhance the survival prospects of crew and other personnel\
+    \ in the aftermath of combat."
+  group_id: 334
+  icon_id: 24640
+  market_group_id: 2768
+  mass: 0.1
+  name: "Life Support Backup Unit"
+  packaged_volume: 45
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 57486
+  volume: 45
+"57478":
+  capacity: 0
+  description: "Auto-Integrity Preservation Seals are specialized components used\
+    \ for automatic damage control in key space vessel zones where crew and other\
+    \ personnel aboard ship are operating. While most ships have a variety of internal\
+    \ forcefields, bulkhead dividers, air-locks and similar systems built into the\
+    \ basic design, breaches of all kinds can occur in the heat of space combat.\r\
+    \n\r\nTo address small but potentially dangerous breaches, temporary force-fields,\
+    \ smart materials and nanotechnology have often been used but can be energy intensive\
+    \ or use otherwise valuable resources such as nanite paste.\r\n\r\nThe new auto-integrity\
+    \ technology takes a leaf out of the Triglavian Collective's book and uses mutaplasmid\
+    \ technology as the inspiration for cheaper, standard components that release\
+    \ biotech nanobes tailored to seek and repair microfractures and other defects\
+    \ threatening physical compartment integrity."
+  group_id: 334
+  icon_id: 24638
+  market_group_id: 2768
+  mass: 0.1
+  name: "Auto-Integrity Preservation Seal"
+  packaged_volume: 16
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 57478
+  volume: 16

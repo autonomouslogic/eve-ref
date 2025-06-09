@@ -1,107 +1,129 @@
 {
-  "manufacturing": {
-    "645": {
-      "product_id": 645,
-      "blueprint_id": 999,
-      "me" : 10,
-      "te" : 20,
-      "runs": 1,
-      "units_per_run": 1,
-      "units": 1,
-      "time": "PT2H43M12S",
-      "time_per_run": "PT2H43M12S",
-      "time_per_unit": "PT2H43M12S",
-      "materials": {
+  "manufacturing" : {
+    "645" : {
+      "product_id" : 645,
+      "runs" : 1.0,
+      "time" : "PT2H43M12S",
+      "materials" : {
         "57479" : {
           "type_id" : 57479,
           "quantity" : 1.0,
+          "volume_per_unit" : 180.0,
+          "volume" : 180.0,
           "cost_per_unit" : 6977767.42,
           "cost" : 6977767.42
         },
         "57486" : {
           "type_id" : 57486,
           "quantity" : 68.0,
+          "volume_per_unit" : 45.0,
+          "volume" : 3060.0,
           "cost_per_unit" : 107739.31,
           "cost" : 7326273.08
         },
         "57478" : {
           "type_id" : 57478,
           "quantity" : 135.0,
+          "volume_per_unit" : 16.0,
+          "volume" : 2160.0,
           "cost_per_unit" : 70072.36,
           "cost" : 9459768.60
         },
         "40" : {
           "type_id" : 40,
           "quantity" : 1755.0,
+          "volume_per_unit" : 0.01,
+          "volume" : 17.55,
           "cost_per_unit" : 4318.58,
           "cost" : 7579107.90
         },
         "39" : {
           "type_id" : 39,
           "quantity" : 3510.0,
+          "volume_per_unit" : 0.01,
+          "volume" : 35.10,
           "cost_per_unit" : 2727.17,
           "cost" : 9572366.70
         },
         "38" : {
           "type_id" : 38,
           "quantity" : 14040.0,
+          "volume_per_unit" : 0.01,
+          "volume" : 140.40,
           "cost_per_unit" : 1358.59,
           "cost" : 19074603.60
         },
         "37" : {
           "type_id" : 37,
           "quantity" : 117000.0,
+          "volume_per_unit" : 0.01,
+          "volume" : 1170.00,
           "cost_per_unit" : 321.64,
           "cost" : 37631880.00
         },
         "36" : {
           "type_id" : 36,
           "quantity" : 351000.0,
+          "volume_per_unit" : 0.01,
+          "volume" : 3510.00,
           "cost_per_unit" : 77.53,
           "cost" : 27213030.00
         },
         "35" : {
           "type_id" : 35,
           "quantity" : 2340000.0,
+          "volume_per_unit" : 0.01,
+          "volume" : 23400.00,
           "cost_per_unit" : 26.98,
           "cost" : 63133200.00
         },
         "34" : {
           "type_id" : 34,
           "quantity" : 4680000.0,
+          "volume_per_unit" : 0.01,
+          "volume" : 46800.00,
           "cost_per_unit" : 4.09,
           "cost" : 19141200.00
         }
       },
-      "estimated_item_value": 158985500,
-      "system_cost_index": 11624583,
-      "system_cost_bonuses": 0,
-      "facility_tax": 397464,
-      "scc_surcharge": 6359420,
-      "alpha_clone_tax": 0,
-      "total_job_cost": 18381467,
+      "materials_volume" : 80473.05,
+      "product_volume" : 50000.0,
+      "estimated_item_value" : 158985500,
+      "system_cost_index" : 11624583,
+      "system_cost_bonuses" : 0,
+      "facility_tax" : 397464,
+      "scc_surcharge" : 6359420,
+      "alpha_clone_tax" : 0,
+      "total_job_cost" : 18381467,
       "total_material_cost" : 207109197.30,
       "total_cost" : 225490664.30,
+      "blueprint_id" : 999,
+      "me" : 10,
+      "te" : 20,
+      "units" : 1,
+      "units_per_run" : 1,
+      "time_per_run" : "PT2H43M12S",
+      "time_per_unit" : "PT2H43M12S",
       "total_cost_per_run" : 225490664.30,
       "total_cost_per_unit" : 225490664.30
     }
   },
   "copying" : {
-    "999": {
+    "999" : {
       // Not vrified in-game
-      "product_id": 999,
-      "runs": 1.0,
-      "time": "PT2H33M",
-      "estimated_item_value": 158985500,
-      "system_cost_index": 257874,
-      "system_cost_bonuses": 0,
-      "facility_tax": 7949,
-      "scc_surcharge": 127188,
-      "alpha_clone_tax": 0,
-      "total_job_cost": 393011,
-      "total_cost": 393011,
-      "job_cost_base": 3179710,
-      "total_cost_per_run": 393011.00
+      "product_id" : 999,
+      "runs" : 1.0,
+      "time" : "PT2H33M",
+      "estimated_item_value" : 158985500,
+      "system_cost_index" : 257874,
+      "system_cost_bonuses" : 0,
+      "facility_tax" : 7949,
+      "scc_surcharge" : 127188,
+      "alpha_clone_tax" : 0,
+      "total_job_cost" : 393011,
+      "total_cost" : 393011,
+      "job_cost_base" : 3179710,
+      "total_cost_per_run" : 393011.00
     }
   }
 }

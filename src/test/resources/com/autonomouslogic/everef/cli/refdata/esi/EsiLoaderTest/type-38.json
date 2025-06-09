@@ -1,0 +1,21 @@
+{
+  "capacity" : 0,
+  "description" : {
+    "en" : "A highly volatile mineral only formed during supernovas, thus severely limiting the extent of its distribution. Vital ingredient in capsule production, making it very coveted.\r\n\r\nMay be obtained by reprocessing the following ores and their variations available in low security status star systems: <a href=showinfo:1226>jaspet</a>, <a href=showinfo:1231>hemorphite</a>, <a href=showinfo:21>hedbergite</a>, <a href=showinfo:1232>dark ochre</a>, and <a href=showinfo:1225>crokite</a>.\r\n\r\nIt is also present in significant amounts in rare ores like <a href=showinfo:19>spodumain</a> and <a href=showinfo:52306>talassonite</a>.\r\n\r\nNocxium can also be found in null security status star systems in <a href=showinfo:81900>kylixium</a>, <a href=showinfo:82016>nocxite</a>, <a href=showinfo:82205>ueganite</a>, <a href=showinfo:82163>hezorime</a>, and <a href=showinfo:81975>griemeer</a>.",
+    "fr" : "Ce minerai très volatile ne se forme que lors de la transformation d'une étoile en supernova. Il est donc très rare d'en trouver. Ce produit indispensable à la fabrication des capsules est extrêmement convoité. Il peut être obtenu par retraitement des minerais suivants et de leurs variantes disponibles dans les systèmes stellaires de basse sécurité : <a href=showinfo:1226>jaspet</a>, <a href=showinfo:1231>hemorphite</a>, <a href=showinfo:21>hedbergite</a>, <a href=showinfo:1232>ochre foncé</a> et <a href=showinfo:1225>crokite</a>. Il est aussi présent en quantités significatives dans des minerais rares tels que le <a href=showinfo:19>spodumain</a> et la <a href=showinfo:52306>talassonite</a>. Le nocxium peut également être trouvé dans les systèmes stellaires de sécurité nulle dans les minerais <a href=showinfo:81900>kylixium</a>, <a href=showinfo:82016>nocxite</a>, <a href=showinfo:82205>ueganite</a>, <a href=showinfo:82163>hezorime</a> et <a href=showinfo:81975>griemeer</a>."
+  },
+  "group_id" : 18,
+  "icon_id" : 1201,
+  "market_group_id" : 1857,
+  "mass" : 0,
+  "name" : {
+    "en" : "Nocxium",
+    "fr" : "Nocxium"
+  },
+  "packaged_volume" : 0.01,
+  "portion_size" : 1,
+  "published" : true,
+  "radius" : 1,
+  "type_id" : 38,
+  "volume" : 0.01
+}

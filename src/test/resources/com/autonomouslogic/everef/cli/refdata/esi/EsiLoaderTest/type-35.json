@@ -1,0 +1,21 @@
+{
+  "capacity" : 0,
+  "description" : {
+    "en" : "A soft crystal-like mineral with a very distinguishing orange glow as if on fire. Used as conduit and in the bio-chemical industry. Commonly found in many asteroid-ore types.\r\n\r\nMay be obtained by reprocessing the following ores and their variations:\r\n\r\nHigh security status star systems: <a href=showinfo:1228>scordite</a>, and <a href=showinfo:1224>pyroxeres</a>.\r\n\r\nLow security status star systems: <a href=showinfo:1224>pyroxeres</a>, <a href=showinfo:1227>omber</a>, <a href=showinfo:21>hedbergite</a>, <a href=showinfo:1229>gneiss</a>, and <a href=showinfo:1225>crokite</a>.\r\n\r\nNull security status star systems: <a href=showinfo:1224>pyroxeres</a>, <a href=showinfo:1223>bistot</a>, <a href=showinfo:22>arkonor</a>, <a href=showinfo:81900>kylixium</a>, and <a href=showinfo:82016>nocxite</a>.\r\n\r\nWormhole systems: <a href=showinfo:1224>pyroxeres</a>, <a href=showinfo:1227>omber</a>, <a href=showinfo:1229>gneiss</a>, <a href=showinfo:1223>bistot</a>, and <a href=showinfo:22>arkonor</a>.\r\n\r\nThe rare ore <a href=showinfo:74521>mordunium</a> also contains significant quantities and is found primarily in nullsec and W-space systems containing A0 (Blue Small) stars, as well as surveyed locations on the borders of empire and nullsec space.",
+    "fr" : "Ce minerai lisse comme le cristal dégage une lueur orangée semblable aux flammes. Il est employé dans l'industrie biochimique, ainsi que dans les conduits. On le trouve dans de nombreux minerais récoltés dans les astéroïdes. Peut être obtenu par retraitement des minerais suivants et leurs variantes : Systèmes stellaires de haute sécurité : <a href=showinfo:1228>scordite</a> et <a href=showinfo:1224>pyroxeres</a>. Systèmes stellaires de basse sécurité : <a href=showinfo:1224>pyroxeres</a>, <a href=showinfo:1227>omber</a>, <a href=showinfo:21>hedbergite</a>, <a href=showinfo:1229>gneiss</a> et <a href=showinfo:1225>crokite</a>. Systèmes stellaires de sécurité nulle : <a href=showinfo:1224>pyroxeres</a>, <a href=showinfo:1223>bistot</a>, <a href=showinfo:22>arkonor</a>, <a href=showinfo:81900>kylixium</a> et <a href=showinfo:82016>nocxite</a>. Systèmes de trous de ver : <a href=showinfo:1224>pyroxeres</a>, <a href=showinfo:1227>omber</a>, <a href=showinfo:1229>gneiss</a>, <a href=showinfo:1223>bistot</a> et <a href=showinfo:22>arkonor</a>. Le minerai rare <a href=showinfo:74521>mordunium</a> en contient également des quantités significatives et se trouve principalement dans les systèmes de sécurité nulle et les systèmes de trous de ver contenant des étoiles A0 (petites bleues), ainsi que dans des sites sondés aux frontières de l'espace impérial et de sécurité nulle."
+  },
+  "group_id" : 18,
+  "icon_id" : 400,
+  "market_group_id" : 1857,
+  "mass" : 0,
+  "name" : {
+    "en" : "Pyerite",
+    "fr" : "Pyérite"
+  },
+  "packaged_volume" : 0.01,
+  "portion_size" : 1,
+  "published" : true,
+  "radius" : 1,
+  "type_id" : 35,
+  "volume" : 0.01
+}

@@ -1,0 +1,21 @@
+{
+  "capacity" : 0,
+  "description" : {
+    "en" : "Light-bluish crystal, formed by intense pressure deep within large asteroids and moons. Used in electronic and weapon manufacturing. Only found in abundance in a few areas.\r\n\r\nMay be obtained by reprocessing the following ores and their variations:\r\n\r\nLow security status star systems: <a href=showinfo:1227>omber</a>, <a href=showinfo:20>kernite</a>, <a href=showinfo:1231>hemorphite</a>, <a href=showinfo:1229>gneiss</a>, and <a href=showinfo:1232>dark ochre</a>.\r\n\r\nNull security status star systems: <a href=showinfo:20>kernite</a>, <a href=showinfo:81975>griemeer</a>, and <a href=showinfo:82163>hezorime</a>.\r\n\r\nWormhole systems: <a href=showinfo:1227>omber</a>, <a href=showinfo:20>kernite</a>, and <a href=showinfo:1229>gneiss</a>.\r\n\r\nIt is also present in huge amounts in rare ores like <a href=showinfo:19>spodumain</a>, <a href=showinfo:52316>bezdnacine</a> and <a href=showinfo:52315>rakovene</a>.\r\n\r\nThe rare ore <a href=showinfo:74525>ytirium</a> also contains significant quantities and is found primarily in nullsec and W-space systems containing A0 (Blue Small) stars, as well as surveyed locations on the borders of empire and nullsec space.",
+    "fr" : "Cristal bleu clair formé par l'extraordinaire pression exercée par les lunes et les grands astéroïdes. Les secteurs de l'électronique et de la fabrication d'armes en font bon usage. Gisements abondants exclusivement localisés dans quelques zones de l'espace. Peut être obtenu par retraitement des minerais suivants et leurs variantes : Systèmes stellaires de basse sécurité : <a href=showinfo:1227>omber</a>, <a href=showinfo:20>kernite</a>, <a href=showinfo:1231>hemorphite</a>, <a href=showinfo:1229>gneiss</a> et <a href=showinfo:1232>ochre foncé</a>. Systèmes stellaires de sécurité nulle : <a href=showinfo:20>kernite</a>, <a href=showinfo:81975>griemeer</a> et <a href=showinfo:82163>hezorime</a>. Systèmes de trou de ver : <a href=showinfo:1227>omber</a>, <a href=showinfo:20>kernite</a> et <a href=showinfo:1229>gneiss</a>. Il est aussi présent en grandes quantités dans des minerais rares tels que le <a href=showinfo:19>spodumain</a>, le <a href=showinfo:52316>bezdnacine</a> et le <a href=showinfo:52315>rakovene</a>. Le minerai rare <a href=showinfo:74525>ytirium</a> en contient également des quantités significatives et se trouve principalement dans les systèmes de sécurité nulle et les systèmes de trous de ver contenant des étoiles A0 (petites bleues), ainsi que dans des sites sondés aux frontières de l'espace impérial et de sécurité nulle."
+  },
+  "group_id" : 18,
+  "icon_id" : 402,
+  "market_group_id" : 1857,
+  "mass" : 0,
+  "name" : {
+    "en" : "Isogen",
+    "fr" : "Isogène"
+  },
+  "packaged_volume" : 0.01,
+  "portion_size" : 1,
+  "published" : true,
+  "radius" : 1,
+  "type_id" : 37,
+  "volume" : 0.01
+}

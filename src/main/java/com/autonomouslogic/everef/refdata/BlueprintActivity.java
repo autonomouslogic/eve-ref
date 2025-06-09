@@ -6,11 +6,12 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.Map;
 import lombok.Builder;
+import lombok.Singular;
 import lombok.Value;
 import lombok.extern.jackson.Jacksonized;
 
 @Value
-@Builder
+@Builder(toBuilder = true)
 @Jacksonized
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @Schema
@@ -19,11 +20,14 @@ public class BlueprintActivity {
 	Long time;
 
 	@JsonProperty
+	@Singular
 	Map<Long, BlueprintMaterial> materials;
 
 	@JsonProperty
+	@Singular
 	Map<Long, BlueprintMaterial> products;
 
 	@JsonProperty
+	@Singular
 	Map<Long, Integer> requiredSkills;
 }

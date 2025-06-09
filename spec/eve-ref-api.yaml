@@ -72,9 +72,13 @@ components:
           type: object
           additionalProperties:
             $ref: "#/components/schemas/MaterialCost"
+        materials_volume:
+          type: number
         product_id:
           type: integer
           format: int64
+        product_volume:
+          type: number
         runs:
           type: number
           format: double
@@ -593,6 +597,8 @@ components:
           type: object
           additionalProperties:
             $ref: "#/components/schemas/MaterialCost"
+        materials_volume:
+          type: number
         me:
           type: integer
           format: int32
@@ -603,6 +609,8 @@ components:
         product_id:
           type: integer
           format: int64
+        product_volume:
+          type: number
         runs:
           type: number
           format: double
@@ -660,6 +668,8 @@ components:
           type: object
           additionalProperties:
             $ref: "#/components/schemas/MaterialCost"
+        materials_volume:
+          type: number
         me:
           type: integer
           format: int32
@@ -667,6 +677,8 @@ components:
         product_id:
           type: integer
           format: int64
+        product_volume:
+          type: number
         runs:
           type: number
           format: double
@@ -725,3 +737,7 @@ components:
         type_id:
           type: integer
           format: int64
+        volume:
+          type: number
+        volume_per_unit:
+          type: number

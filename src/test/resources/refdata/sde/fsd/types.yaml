@@ -2731,6 +2731,701 @@
   portionSize: 1
   published: true
   volume: 0.01
+"35":
+  basePrice: 8
+  description:
+    de: "Ein weiches, kristallähnliches Mineral, das in einem charakteristischen Orange\
+      \ glüht, als würde es brennen. Es wird als Halbleiter und in der biochemischen\
+      \ Industrie verwendet. Kommt in recht vielen Asteroidenerz-Typen vor. Kann durch\
+      \ die Aufbereitung von folgenden Erzen und ihren Varianten erhalten werden:\
+      \ Sonnensysteme im Hochsicherheitsraum: <a href=showinfo:1228>Scordite</a> und\
+      \ <a href=showinfo:1224>Pyroxeres</a> Sonnensysteme im Niedersicherheitsraum:\
+      \ <a href=showinfo:1224>Pyroxeres</a>, <a href=showinfo:1227>Omber</a>, <a href=showinfo:21>Hedbergite</a>,\
+      \ <a href=showinfo:1229>Gneiss</a> und <a href=showinfo:1225>Crokite</a> Sonnensysteme\
+      \ im Nullsicherheitsraum: <a href=showinfo:1224>Pyroxeres</a>, <a href=showinfo:1223>Bistot</a>,\
+      \ <a href=showinfo:22>Arkonor</a>, <a href=showinfo:81900>Kylixium</a> und <a\
+      \ href=showinfo:82016>Nocxite</a>. Wurmlochsysteme: <a href=showinfo:1224>Pyroxeres</a>,\
+      \ <a href=showinfo:1227>Omber</a>, <a href=showinfo:1229>Gneiss</a>, <a href=showinfo:1223>Bistot</a>\
+      \ und <a href=showinfo:22>Arkonor</a>. Das seltene Erz <a href=showinfo:74521>Mordunium</a>\
+      \ enthält ebenfalls größere Mengen und ist vor allem Systemen im Niedersicherheitsraum\
+      \ und in W-Raum-Systemen mit A0-Sternen (blauen kleinen Sternen) zu finden.\
+      \ Außerdem kommt es noch in untersuchten Orten an den Grenzen zwischen Imperiums-\
+      \ und Nullsicherheitsraum vor."
+    en: "A soft crystal-like mineral with a very distinguishing orange glow as if\
+      \ on fire. Used as conduit and in the bio-chemical industry. Commonly found\
+      \ in many asteroid-ore types.\r\n\r\nMay be obtained by reprocessing the following\
+      \ ores and their variations:\r\n\r\nHigh security status star systems: <a href=showinfo:1228>scordite</a>,\
+      \ and <a href=showinfo:1224>pyroxeres</a>.\r\n\r\nLow security status star systems:\
+      \ <a href=showinfo:1224>pyroxeres</a>, <a href=showinfo:1227>omber</a>, <a href=showinfo:21>hedbergite</a>,\
+      \ <a href=showinfo:1229>gneiss</a>, and <a href=showinfo:1225>crokite</a>.\r\
+      \n\r\nNull security status star systems: <a href=showinfo:1224>pyroxeres</a>,\
+      \ <a href=showinfo:1223>bistot</a>, <a href=showinfo:22>arkonor</a>, <a href=showinfo:81900>kylixium</a>,\
+      \ and <a href=showinfo:82016>nocxite</a>.\r\n\r\nWormhole systems: <a href=showinfo:1224>pyroxeres</a>,\
+      \ <a href=showinfo:1227>omber</a>, <a href=showinfo:1229>gneiss</a>, <a href=showinfo:1223>bistot</a>,\
+      \ and <a href=showinfo:22>arkonor</a>.\r\n\r\nThe rare ore <a href=showinfo:74521>mordunium</a>\
+      \ also contains significant quantities and is found primarily in nullsec and\
+      \ W-space systems containing A0 (Blue Small) stars, as well as surveyed locations\
+      \ on the borders of empire and nullsec space."
+    es: "Mineral blando de aspecto cristalino con un brillo anaranjado característico\
+      \ de las llamas. Se usa como conducto y también en la industria bioquímica.\
+      \ Se encuentra comúnmente en muchos tipos de menas de asteroides.\r\n\r\nPuede\
+      \ obtenerse mediante el reprocesamiento de las siguientes menas y sus variaciones:\r\
+      \n\r\nSistemas estelares con estado de seguridad alto: <a href=showinfo:1228>escordita</a>\
+      \ y <a href=showinfo:1224>piroxeno</a>.\r\n\r\nSistemas estelares con estado\
+      \ de seguridad bajo: <a href=showinfo:1224>piroxeno</a>, <a href=showinfo:1227>ó\
+      mber</a>, <a href=showinfo:21>hedbergita</a>, <a href=showinfo:1229>gneiss</a>\
+      \ y <a href=showinfo:1225>crokitio</a>.\r\n\r\nSistemas estelares con estado\
+      \ de seguridad nulo: <a href=showinfo:1224>piroxeno</a>, <a href=showinfo:1223>bistotina</a>,\
+      \ <a href=showinfo:22>arkonor</a>, <a href=showinfo:81900>kylixium</a> y <a\
+      \ href=showinfo:82016>nocxita</a>.\r\n\r\nSistemas de agujeros de gusano: <a\
+      \ href=showinfo:1224>piroxeno</a>, <a href=showinfo:1227>ómber</a>, <a href=showinfo:1229>gneiss</a>,\
+      \ <a href=showinfo:1223>bistotina</a> y <a href=showinfo:22>arkonor</a>.\r\n\
+      \r\nLa mena poco común de <a href=showinfo:74521>mordunium</a> también contiene\
+      \ cantidades significativas y se encuentra principalmente en sistemas de espacio\
+      \ de agujeros de gusano y seguridad nula que contienen estrellas A0 (azules\
+      \ pequeñas), así como en ubicaciones inspeccionadas en las fronteras del imperio\
+      \ y el espacio de seguridad nula."
+    fr: "Ce minerai lisse comme le cristal dégage une lueur orangée semblable aux\
+      \ flammes. Il est employé dans l'industrie biochimique, ainsi que dans les conduits.\
+      \ On le trouve dans de nombreux minerais récoltés dans les astéroïdes. Peut\
+      \ être obtenu par retraitement des minerais suivants et leurs variantes\_: Systè\
+      mes stellaires de haute sécurité\_: <a href=showinfo:1228>scordite</a> et <a\
+      \ href=showinfo:1224>pyroxeres</a>. Systèmes stellaires de basse sécurité\_\
+      : <a href=showinfo:1224>pyroxeres</a>, <a href=showinfo:1227>omber</a>, <a href=showinfo:21>hedbergite</a>,\
+      \ <a href=showinfo:1229>gneiss</a> et <a href=showinfo:1225>crokite</a>. Systè\
+      mes stellaires de sécurité nulle\_: <a href=showinfo:1224>pyroxeres</a>, <a\
+      \ href=showinfo:1223>bistot</a>, <a href=showinfo:22>arkonor</a>, <a href=showinfo:81900>kylixium</a>\
+      \ et <a href=showinfo:82016>nocxite</a>. Systèmes de trous de ver\_: <a href=showinfo:1224>pyroxeres</a>,\
+      \ <a href=showinfo:1227>omber</a>, <a href=showinfo:1229>gneiss</a>, <a href=showinfo:1223>bistot</a>\
+      \ et <a href=showinfo:22>arkonor</a>. Le minerai rare <a href=showinfo:74521>mordunium</a>\
+      \ en contient également des quantités significatives et se trouve principalement\
+      \ dans les systèmes de sécurité nulle et les systèmes de trous de ver contenant\
+      \ des étoiles A0 (petites bleues), ainsi que dans des sites sondés aux frontiè\
+      res de l'espace impérial et de sécurité nulle."
+    ja: "炎のように明るいオレンジ色に光る、柔らかい水晶のような鉱石。導管として、またバイオ化学産業でも使用される。多くのタイプのアステロイド鉱石に含まれて\
+      いる。\r\n\r\n以下の鉱石とその種類を再処理することによって得ることができる。\r\n\r\nハイセキュリティ宙域のスターシステム：<a href=showinfo:1228>ス\
+      コダイト</a>と<a href=showinfo:1224>パイロゼリーズ</a>。\r\n\r\nローセキュリティ宙域のスターシステム：<a href=showinfo:1224>パ\
+      イロゼリーズ</a>、<a href=showinfo:1227>オンバー</a>、<a href=showinfo:21>ヘッドバーガイト</a>、\
+      <a href=showinfo:1229>ナエス</a>、<a href=showinfo:1225>クロカイト</a>。\r\n\r\nゼロセキュリ\
+      ティ宙域のスターシステム：<a href=showinfo:1224>パイロゼリーズ</a>、<a href=showinfo:1223>ビストット</a>、\
+      <a href=showinfo:22>アーコナー</a>、<a href=showinfo:81900>キリクシウム</a>、<a href=showinfo:82016>ノ\
+      キサイト</a>。\r\n\r\nワームホール宙域のシステム：<a href=showinfo:1224>パイロゼリーズ</a>、<a href=showinfo:1227>オ\
+      ンバー</a>、<a href=showinfo:1229>ナエス</a>、<a href=showinfo:1223>ビストット</a>、<a href=showinfo:22>ア\
+      ーコナー</a>。\r\n\r\nまた、希少鉱石の<a href=showinfo:74521>モードゥニウム</a>に大量に含まれている。モードゥニウ\
+      ムは主に、A0（小型ブルー）恒星が存在するゼロセキュリティ宙域とワームホール宙域のほか、主要大国とゼロセキュリティ宙域の境界にある調査エリアで発見するこ\
+      とができる。"
+    ko: "주황색 불꽃처럼 생긴 결정 형태의 광물로 소행성 광석에서 주로 추출됩니다. 도관 제작 및 생화학 산업에 사용됩니다.\r\n\r\n다\
+      음 광석을 정제하여 획득할 수 있습니다:\r\n\r\n하이 시큐리티 항성계: <a href=showinfo:1228>스코다이트</a>,\
+      \ <a href=showinfo:1224>파이로제레스</a>\r\n\r\n로우 시큐리티 항성계: <a href=showinfo:1224>파\
+      이로제레스</a>, <a href=showinfo:1227>옴버</a>, <a href=showinfo:21>헤버자이트</a>, <a href=showinfo:1229>니\
+      스</a>, <a href=showinfo:1225>크로카이트</a>\r\n\r\n널 시큐리티 항성계: <a href=showinfo:1224>파\
+      이로제레스</a>, <a href=showinfo:1223>비스토트</a>, <a href=showinfo:22>아르카노르</a>, <a\
+      \ href=showinfo:81900>카일릭슘</a>, <a href=showinfo:82016>녹사이트</a>\r\n\r\n웜홀: <a\
+      \ href=showinfo:1224>파이로제레스</a>, <a href=showinfo:1227>옴버</a>, <a href=showinfo:1229>니\
+      스</a>, <a href=showinfo:1223>비스토트</a>, <a href=showinfo:22>아르카노르</a>\r\n\r\n\
+      희귀 광석 <a href=showinfo:74521>모르두늄</a>에도 다량 함유되어 있습니다. 모르두늄은 널 시큐리티와 웜홀 우주에 있\
+      는 A0 청색 왜성 항성계에서 주로 찾을 수 있으며, 4대 국가 영역의 외부 경계에서도 발견됩니다."
+    ru: "Мягкий минерал кристаллической формы. Светится оранжевым, словно внутри п\
+      ылает огонь. Используется в качестве проводника, а также в биохимической про\
+      мышленности. Встречается во многих видах астероидных руд. Добывается путём п\
+      ереработки следующих руд и\_их разновидностей. Системы с\_высоким уровнем бе\
+      зопасности: <a href=showinfo:1228>скордит</a> и <a href=showinfo:1224>пирокс\
+      ер</a>. Системы с\_низким уровнем безопасности: <a href=showinfo:1224>пирокс\
+      ер</a>, <a href=showinfo:1227>омбер</a>, <a href=showinfo:21>хедбергит</a>,\
+      \ <a href=showinfo:1229>гнейсс</a> и <a href=showinfo:1225>крокит</a>. Систе\
+      мы с\_нулевым уровнем безопасности: <a href=showinfo:1224>пироксер</a>, <a href=showinfo:1223>б\
+      истот</a>, <a href=showinfo:22>арконор</a>, <a href=showinfo:81900>килиций</a>\
+      \ и <a href=showinfo:82016>нокцит</a>. Системы червоточин: <a href=showinfo:1224>п\
+      ироксер</a>, <a href=showinfo:1227>омбер</a>, <a href=showinfo:1229>гнейсс</a>,\
+      \ <a href=showinfo:1223>бистот</a> и <a href=showinfo:22>арконор</a>. Редкая\
+      \ руда <a href=showinfo:74521>мордуний</a> тоже содержит много этого минерал\
+      а. Найти её можно, как правило, в\_системах с\_нулевым уровнем безопасности\
+      \ и\_w-пространстве, где присутствуют звёзды подкласса А0 (голубые карлики),\
+      \ а\_также в\_изученных областях на границах держав и\_«нулей»."
+    zh: "一种类水晶的柔软矿物，有着非常易辨认的桔黄光辉，仿佛是在燃烧一样。用于导管和生化工业。可以在多种小行星矿石中找到。可以从下列矿石及其变种中提炼获得\
+      ：高安全等级星系：<a href=showinfo:1228>灼烧岩</a>和<a href=showinfo:1224>干焦岩</a>。低安全等级星系\
+      ：<a href=showinfo:1224>干焦岩</a>、<a href=showinfo:1227>奥贝尔石</a>、<a href=showinfo:21>同\
+      位原矿</a>、<a href=showinfo:1229>片麻岩</a>和<a href=showinfo:1225>克洛基石</a>。零安全等级星系\
+      ：<a href=showinfo:1224>干焦岩</a>、<a href=showinfo:1223>双多特石</a>、<a href=showinfo:22>艾\
+      克诺岩</a>、<a href=showinfo:81900>克里石</a>和<a href=showinfo:82016>诺克希特</a>。虫洞星系：\
+      <a href=showinfo:1224>干焦岩</a>、<a href=showinfo:1227>奥贝尔石</a>、<a href=showinfo:1229>片\
+      麻岩</a>、<a href=showinfo:1223>双多特石</a>，以及<a href=showinfo:22>艾克诺岩</a>。此外，从<a\
+      \ href=showinfo:74521>摩多石</a>中也能提炼出相当可观的数量。这种稀有矿石主要分布在零安全等级星系和虫洞星系的A0恒星（蓝色小型\
+      ），以及帝国和零安全区域边境的已探明地点。"
+  groupID: 18
+  iconID: 400
+  marketGroupID: 1857
+  name:
+    de: "Pyerite"
+    en: "Pyerite"
+    es: "Pierita"
+    fr: "Pyérite"
+    ja: "パイライト"
+    ko: "파이어라이트"
+    ru: "Pyerite"
+    zh: "类晶体胶矿"
+  portionSize: 1
+  published: true
+  volume: 0.01
+"36":
+  basePrice: 32
+  description:
+    de: "Ein sehr vielseitiges, metallisches Mineral, das matt bis hell silbrig-grü\
+      n gefärbt ist. Es kann zusammen mit <a href=showinfo:34>Tritanium</a> zu extrem\
+      \ harten Legierungen vermischt oder für verschiedene Zwecke allein verwendet\
+      \ werden. Kommt in den meisten Regionen vor. Kann durch die Aufbereitung der\
+      \ folgenden Erze und ihrer Varianten gewonnen werden: Sonnensysteme des Hochsicherheitsraums:\
+      \ <a href=showinfo:1224>Pyroxeres</a> und <a href=showinfo:18>Plagioclase</a>.\
+      \ Sonnensysteme des Niedersicherheitsraums: <a href=showinfo:1224>Pyroxeres</a>,\
+      \ <a href=showinfo:20>Kernit</a>, <a href=showinfo:1226>Jaspet</a>, <a href=showinfo:1229>Gneiss</a>,\
+      \ <a href=showinfo:1232>Dunkles Ochre</a> und <a href=showinfo:1225>Crokite</a>.\
+      \ Sonnensysteme des Nullsicherheitsraums: <a href=showinfo:1224>Pyroxeres</a>,\
+      \ <a href=showinfo:20>Kernit</a>, <a href=showinfo:1223>Bistot</a>, <a href=showinfo:22>Arkonor</a>\
+      \ und <a href=showinfo:81900>Kylixium</a>. Wurmlochsysteme: <a href=showinfo:1224>Pyroxeres</a>,\
+      \ <a href=showinfo:20>Kernit</a>, <a href=showinfo:1229>Gneiss</a>, <a href=showinfo:1223>Bistot</a>\
+      \ und <a href=showinfo:22>Arkonor</a>."
+    en: "Very flexible metallic mineral, dull to bright silvery green in color. Can\
+      \ be mixed with <a href=showinfo:34>Tritanium</a> to make extremely hard alloys\
+      \ or it can be used by itself for various purposes. Fairly common in most regions.\r\
+      \n\r\nMay be obtained by reprocessing the following ores and their variations:\r\
+      \n\r\nHigh security status star systems: <a href=showinfo:1224>pyroxeres</a>,\
+      \ and <a href=showinfo:18>plagioclase</a>.\r\n\r\nLow security status star systems:\
+      \ <a href=showinfo:1224>pyroxeres</a>, <a href=showinfo:20>kernite</a>, <a href=showinfo:1226>jaspet</a>,\
+      \ <a href=showinfo:1229>gneiss</a>, <a href=showinfo:1232>dark ochre</a>, and\
+      \ <a href=showinfo:1225>crokite</a>.\r\n\r\nNull security status star systems:\
+      \ <a href=showinfo:1224>pyroxeres</a>, <a href=showinfo:20>kernite</a>, <a href=showinfo:1223>bistot</a>,\
+      \ <a href=showinfo:22>arkonor</a>, and <a href=showinfo:81900>kylixium</a>.\r\
+      \n\r\nWormhole systems: <a href=showinfo:1224>pyroxeres</a>, <a href=showinfo:20>kernite</a>,\
+      \ <a href=showinfo:1229>gneiss</a>, <a href=showinfo:1223>bistot</a>, and <a\
+      \ href=showinfo:22>arkonor</a>."
+    es: "Mineral metálico muy flexible y con un color de verde plateado opaco a brillante.\
+      \ Puede mezclarse con <a href=showinfo:34>tritanio</a> para hacer aleaciones\
+      \ extremadamente duras o usarse por sí solo para diversos fines. Bastante comú\
+      n en la mayoría de las regiones.\r\n\r\nPuede obtenerse mediante el reprocesamiento\
+      \ de las siguientes menas y sus variaciones:\r\n\r\nSistemas estelares con estado\
+      \ de seguridad alto: <a href=showinfo:1224>piroxeno</a> y <a href=showinfo:18>plagioclasa</a>.\r\
+      \n\r\nSistemas estelares con estado de seguridad bajo: <a href=showinfo:1224>piroxeno</a>,\
+      \ <a href=showinfo:20>kernita</a>, <a href=showinfo:1226>jaspetita</a>, <a href=showinfo:1229>gneiss</a>,\
+      \ <a href=showinfo:1232>ocre oscuro</a> y <a href=showinfo:1225>crokitio</a>.\r\
+      \n\r\nSistemas estelares con estado de seguridad nulo: <a href=showinfo:1224>piroxeno</a>,\
+      \ <a href=showinfo:20>kernita</a>, <a href=showinfo:1223>bistotina</a>, <a href=showinfo:22>arkonor</a>\
+      \ y <a href=showinfo:81900>kylixium</a>.\r\n\r\nSistemas de agujeros de gusano:\
+      \ <a href=showinfo:1224>piroxeno</a>, <a href=showinfo:20>kernita</a>, <a href=showinfo:1229>gneiss</a>,\
+      \ <a href=showinfo:1223>bistotina</a> y <a href=showinfo:22>arkonor</a>."
+    fr: "Il s'agit d'un minerai métallique très souple dont la couleur va du vert\
+      \ argenté mat au vert argenté brillant. Il peut être mélangé avec du <a href=showinfo:34>tritanium</a>\
+      \ pour composer des alliages extrêmement résistants, ou utilisé seul pour diffé\
+      rentes applications. Ce minerai est relativement courant dans la plupart des\
+      \ régions. Peut être obtenu par retraitement des minerais suivants et leurs\
+      \ variantes\_: Systèmes stellaires de haute sécurité\_: <a href=showinfo:1224>pyroxeres</a>\
+      \ et <a href=showinfo:18>plagioclase</a>. Systèmes stellaires de basse sécurité\
+      \_: <a href=showinfo:1224>pyroxeres</a>, <a href=showinfo:20>kernite</a>, <a\
+      \ href=showinfo:1226>jaspet</a>, <a href=showinfo:1229>gneiss</a>, <a href=showinfo:1232>ochre\
+      \ foncé</a> et <a href=showinfo:1225>crokite</a>. Systèmes stellaires de sé\
+      curité nulle\_: <a href=showinfo:1224>pyroxeres</a>, <a href=showinfo:20>kernite</a>,\
+      \ <a href=showinfo:1223>bistot</a>, <a href=showinfo:22>arkonor</a> et <a href=showinfo:81900>kylixium</a>.\
+      \ Systèmes de trous de ver\_: <a href=showinfo:1224>pyroxeres</a>, <a href=showinfo:20>kernite</a>,\
+      \ <a href=showinfo:1229>gneiss</a>, <a href=showinfo:1223>bistot</a> et <a href=showinfo:22>arkonor</a>."
+    ja: "非常に柔軟性の高い金属鉱石。色は、鈍い緑から明るいメタリックな緑。<a href=showinfo:34>トリタニウム</a>と混ぜ合わせて非常に\
+      硬度の高い合金を作ることも、この鉱石だけで様々な用途に使用することもできる。多くのリージョンで広く産出される。\r\n\r\n以下の鉱石とその種類を再処\
+      理することによって得ることができる。\r\n\r\nハイセキュリティ宙域のスターシステム：<a href=showinfo:1224>パイロゼリーズ</a>と\
+      <a href=showinfo:18>プラジオクレイス</a>。\r\n\r\nローセキュリティ宙域のスターシステム：<a href=showinfo:1224>パ\
+      イロゼリーズ</a>、<a href=showinfo:20>ケルナイト</a>、<a href=showinfo:1226>ジャスペット</a>、<a\
+      \ href=showinfo:1229>ナエス</a>、<a href=showinfo:1232>ダークオークル</a>、<a href=showinfo:1225>ク\
+      ロカイト</a>。\r\n\r\nゼロセキュリティ宙域のスターシステム：<a href=showinfo:1224>パイロゼリーズ</a>、<a href=showinfo:20>ケ\
+      ルナイト</a>、<a href=showinfo:1223>ビストット</a>、<a href=showinfo:22>アーコナー</a>、<a href=showinfo:81900>キ\
+      リクシウム</a>。\r\n\r\nワームホール宙域のシステム：<a href=showinfo:1224>パイロゼリーズ</a>、<a href=showinfo:20>ケ\
+      ルナイト</a>、<a href=showinfo:1229>ナエス</a>、<a href=showinfo:1223>ビストット</a>、<a href=showinfo:22>ア\
+      ーコナー</a>。"
+    ko: "유연한 금속성 광물로 은빛이 도는 녹색을 띄고 있습니다. 주로 단독으로 사용되지만 간혹 경질합금 제작을 위해 <a href=showinfo:34>트\
+      리타늄</a>과 혼합하여 사용하기도 합니다. 우주 전역에서 발견됩니다.\r\n\r\n아래의 광석을 정제하여 획득할 수 있습니다:\r\n\r\
+      \n하이 시큐리티 항성계: <a href=showinfo:1224>파이로제레스</a>, <a href=showinfo:18>플레지오클레이\
+      스</a>\r\n\r\n로우 시큐리티 항성계: <a href=showinfo:1224>파이로제레스</a>, <a href=showinfo:20>커\
+      나이트</a>, <a href=showinfo:1226>자스페트</a>, <a href=showinfo:1229>니스</a>, <a href=showinfo:1232>다\
+      크 오커</a>, <a href=showinfo:1225>크로카이트</a>\r\n\r\n널 시큐리티 항성계: <a href=showinfo:1224>파\
+      이로제레스</a>, <a href=showinfo:20>커나이트</a>, <a href=showinfo:1223>비스토트</a>, <a\
+      \ href=showinfo:22>아르카노르</a>, <a href=showinfo:81900>카일릭슘</a>\r\n\r\n웜홀: <a\
+      \ href=showinfo:1224>파이로제레스</a>, <a href=showinfo:20>커나이트</a>, <a href=showinfo:1229>니\
+      스</a>, <a href=showinfo:1223>비스토트</a>, <a href=showinfo:22>아르카노르</a>"
+    ru: "Эластичный металлический минерал серебристо-зелёного цвета. Яркость варьи\
+      руется. Применяется в самых разных целях. Нередко сочетается с <a href=showinfo:34>т\
+      ританием</a> для получения особо прочных сплавов. Достаточно распространён в\
+      \ большинстве секторов. Добывается путём переработки следующих руд и\_их раз\
+      новидностей. Системы с\_высоким уровнем безопасности: <a href=showinfo:1224>п\
+      ироксер</a> и <a href=showinfo:18>плагиоклаз</a>. Системы с\_низким уровнем\
+      \ безопасности: <a href=showinfo:1224>пироксер</a>, <a href=showinfo:20>керн\
+      ит</a>, <a href=showinfo:1226>джаспет</a>, <a href=showinfo:1229>гнейсс</a>,\
+      \ <a href=showinfo:1232>тёмная охра</a> и <a href=showinfo:1225>крокит</a>.\
+      \ Системы с\_нулевым уровнем безопасности: <a href=showinfo:1224>пироксер</a>,\
+      \ <a href=showinfo:20>кернит</a>, <a href=showinfo:1223>бистот</a>, <a href=showinfo:22>а\
+      рконор</a> и <a href=showinfo:81900>килиций</a>. Системы червоточин: <a href=showinfo:1224>п\
+      ироксер</a>, <a href=showinfo:20>кернит</a>, <a href=showinfo:1229>гнейсс</a>,\
+      \ <a href=showinfo:1223>бистот</a> и <a href=showinfo:22>арконор</a>."
+    zh: "非常有韧性的金属矿物，颜色为暗沉至明亮的银绿色。它可以和<a href=showinfo:34>三钛合金</a>混合制作极其坚硬的合金，其本身也具\
+      有多种用途。在大多数星域非常常见。可以从下列矿石及其变种中提炼获得：高安全等级星系：<a href=showinfo:1224>干焦岩</a>和<a href=showinfo:18>斜\
+      长岩</a>。低安全等级星系：<a href=showinfo:1224>干焦岩</a>、<a href=showinfo:20>水硼砂</a>、<a\
+      \ href=showinfo:1226>杰斯贝矿</a>、<a href=showinfo:1229>片麻岩</a>、<a href=showinfo:1232>黑\
+      赭石</a>和<a href=showinfo:1225>克洛基石</a>。零安全等级星系：<a href=showinfo:1224>干焦岩</a>、\
+      <a href=showinfo:20>水硼砂</a>、<a href=showinfo:1223>双多特石</a>、<a href=showinfo:22>艾\
+      克诺岩</a>和<a href=showinfo:81900>克里石</a>。虫洞星系：<a href=showinfo:1224>干焦岩</a>、<a\
+      \ href=showinfo:20>水硼砂</a>、<a href=showinfo:1229>片麻岩</a>、<a href=showinfo:1223>双\
+      多特石</a>和<a href=showinfo:22>艾克诺岩</a>。"
+  groupID: 18
+  iconID: 401
+  marketGroupID: 1857
+  name:
+    de: "Mexallon"
+    en: "Mexallon"
+    es: "Mexalón"
+    fr: "Mexallon"
+    ja: "メクサロン"
+    ko: "멕살론"
+    ru: "Mexallon"
+    zh: "类银超金属"
+  portionSize: 1
+  published: true
+  volume: 0.01
+"37":
+  basePrice: 128
+  description:
+    de: "Ein hellbläulicher Kristall, der durch den intensiven Druck im tiefen Inneren\
+      \ von großen Asteroiden und Monden geformt wurde. Wird bei der Produktion von\
+      \ Elektronik und Waffen verwendet. Große Mengen lassen sich nur in wenigen Gebieten\
+      \ finden. Kann durch die Aufbereitung der folgenden Erze und ihrer Varianten\
+      \ gewonnen werden: Sternensysteme des Niedersicherheitsraums: <a href=showinfo:1227>Omber</a>,\
+      \ <a href=showinfo:20>Kernit</a>, <a href=showinfo:1231>Hemorphite</a>, <a href=showinfo:1229>Gneiss</a>\
+      \ und <a href=showinfo:1232>Dunkles Ochre</a>. Sternensysteme des Nullsicherheitsraums:\
+      \ <a href=showinfo:20>Kernit</a>, <a href=showinfo:81975>Griemeer</a> und <a\
+      \ href=showinfo:82163>Hezorime</a>. Wurmlochsysteme: <a href=showinfo:1227>Omber</a>,\
+      \ <a href=showinfo:20>Kernit</a> und <a href=showinfo:1229>Gneiss</a>. Es ist\
+      \ auch in großen Mengen in seltenen Erzen wie <a href=showinfo:19>Spodumain</a>,\
+      \ <a href=showinfo:52316>Bezdnazin</a> und <a href=showinfo:52315>Rakovene</a>\
+      \ vorhanden. Das seltene Erz <a href=showinfo:74525>Ytirium</a> enthält ebenfalls\
+      \ größere Mengen und ist vor allem in Systemen im Nullsicherheitsraum und in\
+      \ W-Raum-Systemen mit A0-Sternen (blauen kleinen Sternen) zu finden. Außerdem\
+      \ kommt es noch in untersuchten Orten an den Grenzen zwischen Imperiums- und\
+      \ dem Nullsicherheitsraum vor."
+    en: "Light-bluish crystal, formed by intense pressure deep within large asteroids\
+      \ and moons. Used in electronic and weapon manufacturing. Only found in abundance\
+      \ in a few areas.\r\n\r\nMay be obtained by reprocessing the following ores\
+      \ and their variations:\r\n\r\nLow security status star systems: <a href=showinfo:1227>omber</a>,\
+      \ <a href=showinfo:20>kernite</a>, <a href=showinfo:1231>hemorphite</a>, <a\
+      \ href=showinfo:1229>gneiss</a>, and <a href=showinfo:1232>dark ochre</a>.\r\
+      \n\r\nNull security status star systems: <a href=showinfo:20>kernite</a>, <a\
+      \ href=showinfo:81975>griemeer</a>, and <a href=showinfo:82163>hezorime</a>.\r\
+      \n\r\nWormhole systems: <a href=showinfo:1227>omber</a>, <a href=showinfo:20>kernite</a>,\
+      \ and <a href=showinfo:1229>gneiss</a>.\r\n\r\nIt is also present in huge amounts\
+      \ in rare ores like <a href=showinfo:19>spodumain</a>, <a href=showinfo:52316>bezdnacine</a>\
+      \ and <a href=showinfo:52315>rakovene</a>.\r\n\r\nThe rare ore <a href=showinfo:74525>ytirium</a>\
+      \ also contains significant quantities and is found primarily in nullsec and\
+      \ W-space systems containing A0 (Blue Small) stars, as well as surveyed locations\
+      \ on the borders of empire and nullsec space."
+    es: "Cristal azulado claro formado por una intensa presión en las profundidades\
+      \ de grandes asteroides y lunas. Se usa en la fabricación de electrónica y de\
+      \ armas. Solo se encuentra en abundancia en algunas zonas.\r\n\r\nPuede obtenerse\
+      \ mediante el reprocesamiento de las siguientes menas y sus variaciones:\r\n\
+      \r\nSistemas estelares con estado de seguridad bajo: <a href=showinfo:1227>ó\
+      mber</a>, <a href=showinfo:20>kernita</a>, <a href=showinfo:1231>hemorfita</a>,\
+      \ <a href=showinfo:1229>gneiss</a> y <a href=showinfo:1232>ocre oscuro</a>.\r\
+      \n\r\nSistemas estelares con estado de seguridad nulo: <a href=showinfo:20>kernita</a>,\
+      \ <a href=showinfo:81975>griemeer</a> y <a href=showinfo:82163>hezorima</a>.\r\
+      \n\r\nSistemas de agujeros de gusano: <a href=showinfo:1227>ómber</a>, <a href=showinfo:20>kernita</a>\
+      \ y <a href=showinfo:1229>gneiss</a>.\r\n\r\nTambién está presente en enormes\
+      \ cantidades en menas poco comunes como <a href=showinfo:19>espodumain</a>,\
+      \ <a href=showinfo:52316>bezdnacina</a> y <a href=showinfo:52315>rakovena</a>.\r\
+      \n\r\nLa mena poco común de <a href=showinfo:74525>ytirium</a> también contiene\
+      \ cantidades significativas y se encuentra principalmente en sistemas de espacio\
+      \ de agujeros de gusano y seguridad nula que contienen estrellas A0 (azules\
+      \ pequeñas), así como en ubicaciones inspeccionadas en las fronteras del imperio\
+      \ y el espacio de seguridad nula."
+    fr: "Cristal bleu clair formé par l'extraordinaire pression exercée par les lunes\
+      \ et les grands astéroïdes. Les secteurs de l'électronique et de la fabrication\
+      \ d'armes en font bon usage. Gisements abondants exclusivement localisés dans\
+      \ quelques zones de l'espace. Peut être obtenu par retraitement des minerais\
+      \ suivants et leurs variantes\_: Systèmes stellaires de basse sécurité\_: <a\
+      \ href=showinfo:1227>omber</a>, <a href=showinfo:20>kernite</a>, <a href=showinfo:1231>hemorphite</a>,\
+      \ <a href=showinfo:1229>gneiss</a> et <a href=showinfo:1232>ochre foncé</a>.\
+      \ Systèmes stellaires de sécurité nulle\_: <a href=showinfo:20>kernite</a>,\
+      \ <a href=showinfo:81975>griemeer</a> et <a href=showinfo:82163>hezorime</a>.\
+      \ Systèmes de trou de ver\_: <a href=showinfo:1227>omber</a>, <a href=showinfo:20>kernite</a>\
+      \ et <a href=showinfo:1229>gneiss</a>. Il est aussi présent en grandes quantité\
+      s dans des minerais rares tels que le <a href=showinfo:19>spodumain</a>, le\
+      \ <a href=showinfo:52316>bezdnacine</a> et le <a href=showinfo:52315>rakovene</a>.\
+      \ Le minerai rare <a href=showinfo:74525>ytirium</a> en contient également des\
+      \ quantités significatives et se trouve principalement dans les systèmes de\
+      \ sécurité nulle et les systèmes de trous de ver contenant des étoiles A0 (petites\
+      \ bleues), ainsi que dans des sites sondés aux frontières de l'espace impérial\
+      \ et de sécurité nulle."
+    ja: "淡く青みがかった水晶。大型のアステロイドや衛星の地中で強い圧力が加わることによって生成される。電子機器や武器の製造に使用される。大量に産出できるエ\
+      リアはごくわずかな場所に限られる。\r\n\r\n以下の鉱石とその種類を再処理することによって得ることができる。\r\n\r\nローセキュリティ宙域のス\
+      ターシステム：<a href=showinfo:1227>オンバー</a>、<a href=showinfo:20>ケルナイト</a>、<a href=showinfo:1231>ヘ\
+      モファイト</a>、<a href=showinfo:1229>ナエス</a>、<a href=showinfo:1232>ダークオークル</a>。\r\
+      \n\r\nゼロセキュリティ宙域のスターシステム：<a href=showinfo:20>ケルナイト</a>、<a href=showinfo:81975>グ\
+      リーミーア</a>、<a href=showinfo:82163>ヘゾライム</a>。\r\n\r\nワームホール宙域のシステム：<a href=showinfo:1227>オ\
+      ンバー</a>、<a href=showinfo:20>ケルナイト</a>、<a href=showinfo:1229>ナエス</a>。\r\n\r\n\
+      <a href=showinfo:19>スポデュメイン</a>や<a href=showinfo:52316>ベズドナシン</a>、<a href=showinfo:52315>ラ\
+      コベネ</a>といった希少鉱石の中にも相当量含まれている。\r\n\r\nまた、希少鉱石の<a href=showinfo:74525>イティリウム</a>に\
+      大量に含まれている。イティリウムは主に、A0（小型ブルー）恒星が存在するゼロセキュリティ宙域とワームホール宙域のほか、主要大国とゼロセキュリティ宙域の境\
+      界にある調査エリアで発見することができる。"
+    ko: "강한 압력을 통해 변성된 연푸른 광석으로 대형 소행성 및 위성에서 주로 채굴됩니다. 전자 장치 및 무기 생산에 주로 사용되며 몇몇\
+      \ 지역에서 대량으로 매장된 지역은 드뭅니다.\r\n\r\n다음 광석을 정제하여 획득할 수 있습니다:\r\n\r\n로우 시큐리티 항성계\
+      : <a href=showinfo:1227>옴버</a>, <a href=showinfo:20>커나이트</a>, <a href=showinfo:1231>헤\
+      모르파이트</a>, <a href=showinfo:1229>니스</a>, <a href=showinfo:1232>다크 오커</a>\r\n\
+      \r\n널 시큐리티 항성계: <a href=showinfo:20>커나이트</a>, <a href=showinfo:81975>그리미어</a>,\
+      \ <a href=showinfo:82163>헤조라임</a>\r\n\r\n웜홀: <a href=showinfo:1227>옴버</a>, <a\
+      \ href=showinfo:20>커나이트</a>, <a href=showinfo:1229>니스</a>\r\n\r\n추가로 <a href=showinfo:19>스\
+      포듀마인</a>, <a href=showinfo:52316>베즈드나신</a>, <a href=showinfo:52315>라코벤</a>과\
+      \ 같은 희귀 광석에서도 추출됩니다.\r\n\r\n희귀 광석 <a href=showinfo:74525>이티륨</a>에도 다량 함유되어 있\
+      습니다. 이티륨은 널 시큐리티와 웜홀 우주에 있는 A0 청색 왜성 항성계에서 주로 찾을 수 있으며, 4대 국가 영역의 외부 경계에서도 발\
+      견됩니다."
+    ru: "Голубой кристалл, образующийся в результате сильного давления в недрах сп\
+      утников и крупных астероидов. Используется в производстве электроники и оруд\
+      ий. В изобилии встречается лишь в некоторых районах. Добывается путём перера\
+      ботки следующих руд и\_их разновидностей. Системы с\_низким уровнем безопасн\
+      ости: <a href=showinfo:1227>омбер</a>, <a href=showinfo:20>кернит</a>, <a href=showinfo:1231>х\
+      еморфит</a>, <a href=showinfo:1229>гнейсс</a> и <a href=showinfo:1232>тёмная\
+      \ охра</a>. Системы с\_нулевым уровнем безопасности: <a href=showinfo:20>кер\
+      нит</a>, <a href=showinfo:81975>гримир</a> и <a href=showinfo:82163>гезорим\
+      </a>. Системы червоточин: <a href=showinfo:1227>омбер</a>, <a href=showinfo:20>к\
+      ернит</a> и <a href=showinfo:1229>гнейсс</a>. Кроме того, в огромных количес\
+      твах присутствует в редких рудах, таких как <a href=showinfo:19>сподумейн</a>,\
+      \ <a href=showinfo:52316>безднацин</a> и <a href=showinfo:52315>раковин</a>.\
+      \ Редкая руда <a href=showinfo:74525>ютирий</a> тоже содержит много этого ми\
+      нерала. Найти её можно, как правило, в\_системах с\_нулевым уровнем безопасн\
+      ости и\_w-пространстве, где присутствуют звёзды подкласса А0 (голубые карлик\
+      и), а\_также в\_изученных областях на границах держав и\_«нулей»."
+    zh: "在大型小行星和卫星内部高压环境中形成的淡蓝色晶体，用于电子和军火制造。只在几个区域有丰富储量。可以从下列矿石及其变种中提炼获得：低安全等级星系：\
+      <a href=showinfo:1227>奥贝尔石</a>、<a href=showinfo:20>水硼砂</a>、<a href=showinfo:1231>希\
+      莫非特</a>、<a href=showinfo:1229>片麻岩</a>和<a href=showinfo:1232>黑赭石</a>。零安全等级星系：\
+      <a href=showinfo:20>水硼砂</a>、<a href=showinfo:81975>格里米尔</a>和<a href=showinfo:82163>赫\
+      佐利姆</a>。虫洞星系：<a href=showinfo:1227>奥贝尔石</a>、<a href=showinfo:20>水硼砂</a>和<a href=showinfo:1229>片\
+      麻岩</a>。它还大量存在于多种稀有矿石之中，例如<a href=showinfo:19>灰岩</a>、<a href=showinfo:52316>贝\
+      兹岩</a>和<a href=showinfo:52315>拉克岩</a>。此外，从<a href=showinfo:74525>钇岩</a>中也能提炼\
+      出相当可观的数量。这种稀有矿石主要分布在零安全等级星系和虫洞星系的A0恒星（蓝色小型），以及帝国和零安全区域边境的已探明地点。"
+  groupID: 18
+  iconID: 402
+  marketGroupID: 1857
+  name:
+    de: "Isogen"
+    en: "Isogen"
+    es: "Isogen"
+    fr: "Isogène"
+    ja: "アイソゲン"
+    ko: "이소젠"
+    ru: "Isogen"
+    zh: "同位聚合体"
+  portionSize: 1
+  published: true
+  volume: 0.01
+"38":
+  basePrice: 512
+  description:
+    de: "Ein hoch flüchtiges Mineral, das nur während einer Supernova gebildet wird\
+      \ und folglich das Ausmaß seiner Verbreitung stark einschränkt. Es ist ein unverzichtbarer\
+      \ Bestandteil in der Kapselherstellung, was es sehr begehrt macht. Es kann durch\
+      \ die Aufbereitung der folgenden Erze und ihrer Varianten in Sonnensystemen\
+      \ des Niedersicherheitsraums gewonnen werden: <a href=showinfo:1226>Jaspet</a>,\
+      \ <a href=showinfo:1231>Hemorphite</a>, <a href=showinfo:21>Hedbergite</a>,\
+      \ <a href=showinfo:1232>Dunkles Ochre</a> und <a href=showinfo:1225>Crokite</a>.\
+      \ Es ist auch in erheblichen Mengen in seltenen Erzen wie <a href=showinfo:19>Spodumain</a>\
+      \ und <a href=showinfo:52306>Talassonit</a> vorhanden. Nocxium kann auch in\
+      \ Sonnensystemen des des Nullsicherheitsraums in <a href=showinfo:81900>Kylixium</a>,\
+      \ <a href=showinfo:82016>Nocxite</a>, <a href=showinfo:82205>Ueganite</a>, <a\
+      \ href=showinfo:82163>Hezorim</a> und <a href=showinfo:81975>Griemeer</a> gefunden\
+      \ werden."
+    en: "A highly volatile mineral only formed during supernovas, thus severely limiting\
+      \ the extent of its distribution. Vital ingredient in capsule production, making\
+      \ it very coveted.\r\n\r\nMay be obtained by reprocessing the following ores\
+      \ and their variations available in low security status star systems: <a href=showinfo:1226>jaspet</a>,\
+      \ <a href=showinfo:1231>hemorphite</a>, <a href=showinfo:21>hedbergite</a>,\
+      \ <a href=showinfo:1232>dark ochre</a>, and <a href=showinfo:1225>crokite</a>.\r\
+      \n\r\nIt is also present in significant amounts in rare ores like <a href=showinfo:19>spodumain</a>\
+      \ and <a href=showinfo:52306>talassonite</a>.\r\n\r\nNocxium can also be found\
+      \ in null security status star systems in <a href=showinfo:81900>kylixium</a>,\
+      \ <a href=showinfo:82016>nocxite</a>, <a href=showinfo:82205>ueganite</a>, <a\
+      \ href=showinfo:82163>hezorime</a>, and <a href=showinfo:81975>griemeer</a>."
+    es: "Un mineral muy volátil que solo se forma durante las supernovas, lo que limita\
+      \ mucho su distribución. Es un elemento vital en la producción de cápsulas,\
+      \ por lo que es muy codiciado.\r\n\r\nPuede obtenerse mediante el reprocesamiento\
+      \ de las siguientes menas y sus variaciones disponibles en sistemas estelares\
+      \ con estado de seguridad bajo: <a href=showinfo:1226>jaspetita</a>, <a href=showinfo:1231>hemorfita</a>,\
+      \ <a href=showinfo:21>hedbergita</a>, <a href=showinfo:1232>ocre oscuro</a>\
+      \ y <a href=showinfo:1225>crokitio</a>.\r\n\r\nTambién está presente en enormes\
+      \ cantidades en menas poco comunes como <a href=showinfo:19>espodumain</a> y\
+      \ <a href=showinfo:52306>talasonita</a>.\r\n\r\nEl nocxium también se puede\
+      \ encontrar en sistemas estelares con estado de seguridad nulo en <a href=showinfo:81900>kylixium</a>,\
+      \ <a href=showinfo:82016>nocxita</a>, <a href=showinfo:82205>ueganita</a>, <a\
+      \ href=showinfo:82163>hezorima</a> y <a href=showinfo:81975>griemeer</a>."
+    fr: "Ce minerai très volatile ne se forme que lors de la transformation d'une\
+      \ étoile en supernova. Il est donc très rare d'en trouver. Ce produit indispensable\
+      \ à la fabrication des capsules est extrêmement convoité. Il peut être obtenu\
+      \ par retraitement des minerais suivants et de leurs variantes disponibles dans\
+      \ les systèmes stellaires de basse sécurité\_: <a href=showinfo:1226>jaspet</a>,\
+      \ <a href=showinfo:1231>hemorphite</a>, <a href=showinfo:21>hedbergite</a>,\
+      \ <a href=showinfo:1232>ochre foncé</a> et <a href=showinfo:1225>crokite</a>.\
+      \ Il est aussi présent en quantités significatives dans des minerais rares tels\
+      \ que le <a href=showinfo:19>spodumain</a> et la <a href=showinfo:52306>talassonite</a>.\
+      \ Le nocxium peut également être trouvé dans les systèmes stellaires de sécurité\
+      \ nulle dans les minerais <a href=showinfo:81900>kylixium</a>, <a href=showinfo:82016>nocxite</a>,\
+      \ <a href=showinfo:82205>ueganite</a>, <a href=showinfo:82163>hezorime</a> et\
+      \ <a href=showinfo:81975>griemeer</a>."
+    ja: "揮発性の高い鉱石で、超新星爆発によってのみ生成される。そのため、流通は極めて限られている。カプセル生産に欠かせない原料で、非常に需要が高い。\r\n\
+      \r\nローセキュリティステータス星系で入手可能な、次の鉱石やその亜種を再処理することによって得ることができる。<a href=showinfo:1226>ジ\
+      ャスペット</a>、<a href=showinfo:1231>ヘモファイト</a>、<a href=showinfo:21>ヘッドバーガイト</a>、\
+      <a href=showinfo:1232>ダークオークル</a>、<a href=showinfo:1225>クロカイト</a>\r\n\r\n<a\
+      \ href=showinfo:19>スポデュメイン</a>や<a href=showinfo:52306>タラソナイト</a>といった希少鉱石の中にも\
+      相当量含まれている。\r\n\r\nノキシウムはまた、ゼロセキュリティステータスの星系において<a href=showinfo:81900>キリクシウム\
+      </a>、<a href=showinfo:82016>ノキサイト</a>、<a href=showinfo:82205>ユイグナイト</a>、<a href=showinfo:82163>ヘ\
+      ゾライム</a>、そして<a href=showinfo:81975>グリーミーア</a>に含まれる形でも見つかる。"
+    ko: "불안정한 구조를 지닌 광물로 초신성 폭발을 통해 생성됩니다. 상당히 희귀한 재료이며 캡슐 제작, 그 중에서도 은폐장의 제작에 주로\
+      \ 투입됩니다.\r\n\r\n아래의 광석을 정제하여 획득할 수 있습니다: <a href=showinfo:1226>자스페트</a>, <a\
+      \ href=showinfo:1231>헤모르파이트</a>, <a href=showinfo:21>헤버자이트</a>, <a href=showinfo:1232>다\
+      크 오커</a>, <a href=showinfo:1225>크로카이트</a>\r\n\r\n<a href=showinfo:19>스포듀마인</a>과\
+      \ <a href=showinfo:52306>탈라소나이트</a>와 같은 희귀 광물에도 다량 함유되어 있습니다.</a>\r\n\r\n추가로\
+      \ 널 시큐리티 항성계에서 발견되는 광석인 <a href=showinfo:81900>카일릭슘</a>, <a href=showinfo:82016>녹\
+      사이트</a>, <a href=showinfo:82205>유가나이트</a>, <a href=showinfo:82163>헤조라임</a>,\
+      \ <a href=showinfo:81975>그리미어</a>에도 녹시움이 함유되어 있습니다."
+    ru: "Крайне нестабильный минерал. Он образуется исключительно при вспышке свер\
+      хновой, так что отыскать его весьма непросто. Очень высоко ценится на рынке\
+      , поскольку является ключевым элементом в производстве капсул. Добывается пу\
+      тём переработки следующих руд и их разновидностей в системах с\_низким уровн\
+      ем безопасности: <a href=showinfo:1226>джаспет</a>, <a href=showinfo:1231>хе\
+      морфит</a>, <a href=showinfo:21>хедбергит</a>, <a href=showinfo:1232>тёмная\
+      \ охра</a> и <a href=showinfo:1225>крокит</a>. Кроме того, в огромных количе\
+      ствах присутствует в редких рудах, таких как <a href=showinfo:19>сподумейн</a>\
+      \ и <a href=showinfo:52306>талассонит</a>. Наконец, ноксий встречается в\_си\
+      стемах с\_нулевым уровнем безопасности в составе <a href=showinfo:81900>кили\
+      ция</a>, <a href=showinfo:82016>нокцита</a>, <a href=showinfo:82205>уэганита\
+      </a>, <a href=showinfo:82163>гезорима</a> и <a href=showinfo:81975>гримира</a>."
+    zh: "一种只有在超新星中才能形成的极不稳定矿物，这在很大程度上限制了它的分布。它是太空舱生产中重要的材料，因此被许多人觊觎。可以从下列分布在低安全等级星\
+      系的矿石及其变种中提炼获得：<a href=showinfo:1226>杰斯贝矿</a>、<a href=showinfo:1231>希莫非特</a>、\
+      <a href=showinfo:21>同位原矿</a>、<a href=showinfo:1232>黑赭石</a>和<a href=showinfo:1225>克\
+      洛基石</a>。它还大量存在于多种稀有矿石之中，例如<a href=showinfo:19>灰岩</a>和<a href=showinfo:52306>塔\
+      拉岩</a>。分布在零安全等级星系的<a href=showinfo:81900>克里石</a>、<a href=showinfo:82016>诺克希特\
+      </a>、<a href=showinfo:82205>尤加石</a>、<a href=showinfo:82163>赫佐利姆</a>和<a href=showinfo:81975>格\
+      里米尔</a>中也含有超新星诺克石。"
+  groupID: 18
+  iconID: 1201
+  marketGroupID: 1857
+  name:
+    de: "Nocxium"
+    en: "Nocxium"
+    es: "Nocxium"
+    fr: "Nocxium"
+    ja: "ノキシウム"
+    ko: "녹시움"
+    ru: "Nocxium"
+    zh: "超新星诺克石"
+  portionSize: 1
+  published: true
+  volume: 0.01
+"39":
+  basePrice: 2048
+  description:
+    de: "Nur in riesigen Geoden zu finden; Felsen an der Außenseite mit kristallä\
+      hnlichem Quarz im Inneren. Die seltensten und kostbarsten dieser Geoden sind\
+      \ jene, die das dunkelgrüne Zydrine enthalten. Äußerst selten und sehr kostspielig.\
+      \ Kann durch die Aufbereitung von <a href=showinfo:1223>Bistot</a>-Erz und dessen\
+      \ Varianten gewonnen werden, die in Systemen des Nullsicherheitsraums und Wurmlochsystemen\
+      \ verfügbar sind. Bedeutende Mengen an Zydrine sind auch in seltenen Erzen wie\
+      \ <a href=showinfo:19>Spodumain</a> und <a href=showinfo:52315>Rakovene</a>\
+      \ vorhanden. Es kann in Sternensystemen des Nullsicherheitsraums in <a href=showinfo:82163>Hezorime</a>\
+      \ gefunden werden. Das seltene Erz <a href=showinfo:74529>Eifyrium</a> enthä\
+      lt ebenfalls größere Mengen und ist vor allem Systemen im Niedersicherheitsraum\
+      \ und in W-Raum-Systemen mit A0-Sternen (blauen kleinen Sternen) zu finden.\
+      \ Außerdem kommt es noch in untersuchten Orten an den Grenzen zwischen Imperiums-\
+      \ und Nullsicherheitsraum vor."
+    en: "Only found in huge geodes; rocks on the outside with crystal-like quartz\
+      \ on the inside. The rarest and most precious of these geodes are those that\
+      \ contain the dark green zydrine within. Very rare and very expensive.\r\n\r\
+      \nMay be obtained by reprocessing <a href=showinfo:1223>bistot</a> ore and its\
+      \ variations which are available in null security status and wormhole systems.\r\
+      \n\r\nSignificant amounts of zydrine are also present in rare ores like <a href=showinfo:19>spodumain</a>\
+      \ and <a href=showinfo:52315>rakovene</a>.\r\n\r\nIt can be found in null security\
+      \ status star systems in <a href=showinfo:82163>hezorime</a>.\r\n\r\nThe rare\
+      \ ore <a href=showinfo:74529>eifyrium</a> also contains significant quantities\
+      \ and is found primarily in nullsec and W-space systems containing A0 (Blue\
+      \ Small) stars, as well as surveyed locations on the borders of empire and nullsec\
+      \ space."
+    es: "Solo se encuentra en geodas enormes, que por fuera parecen rocas, pero contienen\
+      \ cuarzo de aspecto cristalino en su interior. Las geodas menos comunes y má\
+      s valiosas son las que contienen zidrina de color verde oscuro. Son muy poco\
+      \ comunes y muy caras.\r\n\r\nSe puede obtener mediante el reprocesamiento de\
+      \ la mena de <a href=showinfo:1223>bistotina</a> y sus variaciones, que se encuentran\
+      \ en los sistemas de estado de seguridad nula y agujeros de gusano.\r\n\r\n\
+      También hay grandes cantidades de zidrina en menas poco comunes como <a href=showinfo:19>espodumain</a>\
+      \ y <a href=showinfo:52315>rakovena</a>.\r\n\r\nSe encuentra en sistemas estelares\
+      \ con estado de seguridad nulo en <a href=showinfo:82163>hezorima</a>.\r\n\r\
+      \nLa mena poco común de <a href=showinfo:74529>eifyrium</a> también contiene\
+      \ cantidades significativas y se encuentra principalmente en sistemas de espacio\
+      \ de agujeros de gusano y seguridad nula que contienen estrellas A0 (azules\
+      \ pequeñas), así como en ubicaciones inspeccionadas en las fronteras del imperio\
+      \ y el espacio de seguridad nula."
+    fr: "On ne le trouve que dans de grandes géodes, ces rochers au cœur de quartz.\
+      \ Les géodes les plus rares et les plus précieuses sont celles contenant la\
+      \ zydrine vert foncé. Ce minerai est très rare et très cher. Il peut être obtenu\
+      \ en retraitant du minerai de <a href=showinfo:1223>bistot</a> et ses variations,\
+      \ disponibles dans les systèmes de trou de ver et de sécurité nulle. Des quantité\
+      s significatives de zydrine sont également présentes dans des minerais rares\
+      \ tels que le <a href=showinfo:19>spodumain</a> et le <a href=showinfo:52315>rakovene</a>.\
+      \ On en trouve aussi dans les systèmes stellaires à statut de sécurité nulle\
+      \ dans le <a href=showinfo:82163>hezorime</a>. Le minerai rare <a href=showinfo:74529>eifyrium</a>\
+      \ en contient également des quantités significatives et se trouve principalement\
+      \ dans les systèmes de sécurité nulle et les systèmes de trous de ver contenant\
+      \ des étoiles A0 (petites bleues), ainsi que dans des sites sondés aux frontiè\
+      res de l'espace impérial et de sécurité nulle."
+    ja: "非常に大きな晶洞石（外側は岩で、内部は水晶のような石英）にのみ含まれる。暗緑色のザイドリンを含む晶洞石は、その中でもきわめて希少で価値が高い。\r\
+      \n\r\nゼロセキュリティステータス星系およびワームホールシステムで入手可能な<a href=showinfo:1223>ビストット</a>およびその\
+      亜種鉱石を再処理することによって得ることができる。\r\n\r\nザイドリンは<a href=showinfo:19>スポデュメイン</a>や<a href=showinfo:52315>ラ\
+      コベネ</a>といった希少鉱石の中にも相当量含まれている。\r\n\r\nゼロセキュリティステータスの星系においては、<a href=showinfo:82163>ヘ\
+      ゾライム</a>に含まれる形で見つかる。\r\n\r\nまた、希少鉱石の<a href=showinfo:74529>エイフィリウム</a>に大量に含ま\
+      れている。エイフィリウムは主に、A0（小型ブルー）恒星が存在するゼロセキュリティ宙域とワームホール宙域のほか、主要大国とゼロセキュリティ宙域の境界にある\
+      調査エリアで発見することができる。"
+    ko: "대형 수정형 광석에서만 채굴되는 광석입니다. 내부가 진녹색 자이드라인으로 구성된 수정형 광석은 매우 희귀하며 비싼 가격에 거래됩니다\
+      .<br><br><a href=showinfo:1223>비스토트</a>를 정제하여 획득할 수 있으며, 널 시큐리티 항성계 및 웜홀에서 채\
+      굴되는 특수 비스토트에서도 추출됩니다.<br><br><a href=showinfo:19>스포듀마인</a>과 <a href=showinfo:52315>라\
+      코벤</a> 또한 다량의 자이드라인을 함유하고 있습니다.<br><br>널 시큐리티 항성계에서 발견되는 <a href=showinfo:82163>헤\
+      조라임</a>에도 함유되어 있습니다.<br><br>희귀 광석 <a href=showinfo:74529>에이피륨</a>에도 다량 함유되어\
+      \ 있습니다. 에이피륨은 널 시큐리티와 웜홀 우주에 있는 A0 청색 왜성 항성계에서 주로 찾을 수 있으며, 4대 국가 영역의 외부 경계에\
+      서도 발견됩니다."
+    ru: "Встречается только в очень крупных жеодах\_— камнях с кристаллоподобным к\
+      варцем внутри. Самые редкие и ценные из таких жеод\_— те, что содержат тёмно\
+      -зелёный зидрин. Очень редкий и дорогой минерал. Добывается путём переработк\
+      и <a href=showinfo:1223>бистота</a> и его разновидностей, которые можно найт\
+      и в системах с нулевым уровнем безопасности и в системах червоточин. Кроме т\
+      ого, зидрин в больших количествах присутствует в редких рудах, таких как <a\
+      \ href=showinfo:19>сподумейн</a> и <a href=showinfo:52315>раковин</a>, и вст\
+      речается в системах с нулевым уровнем безопасности в составе <a href=showinfo:82163>г\
+      езорима</a>. Редкая руда <a href=showinfo:74529>эйфирий</a> тоже содержит мн\
+      ого этого минерала. Найти её можно, как правило, в\_системах с\_нулевым уров\
+      нем безопасности и\_w-пространстве, где присутствуют звёзды подкласса А0 (го\
+      лубые карлики), а\_также в\_изученных областях на границах держав и\_«нулей»\
+      ."
+    zh: "只存在于巨大的晶洞中；它的外层是岩石，而内层是水晶般的石英。在所有晶洞石中，要属内含暗绿色晶状石英核岩的最为稀有和宝贵。它们非常珍贵，价格也十分高\
+      昂。可通过提炼<a href=showinfo:1223>双多特石</a>及其变种获得。这些矿石分布于零安全等级星系和虫洞星系中。晶状石英核岩还大量存在\
+      于<a href=showinfo:19>灰岩</a>和<a href=showinfo:52315>拉克岩</a>等稀有矿石之中。你可以从零安全等级星\
+      系的<a href=showinfo:82163>赫佐利姆</a>中提炼出晶状石英核岩。此外，从<a href=showinfo:74529>艾弗石</a>中\
+      也能提炼出相当可观的数量。这种稀有矿石主要分布在零安全等级星系和虫洞星系的A0恒星（蓝色小型），以及帝国和零安全区域边境的已探明地点。"
+  groupID: 18
+  iconID: 404
+  marketGroupID: 1857
+  name:
+    de: "Zydrine"
+    en: "Zydrine"
+    es: "Zidrina"
+    fr: "Zydrine"
+    ja: "ザイドリン"
+    ko: "자이드라인"
+    ru: "Zydrine"
+    zh: "晶状石英核岩"
+  portionSize: 1
+  published: true
+  volume: 0.01
+"40":
+  basePrice: 8192
+  description:
+    de: "Ein äußerst seltenes Mineral, das in Kometen gefunden wird und gelegentlich\
+      \ auf Asteroiden, die durch Gaswolken geflogen sind. Hat einzigartige, hochexplosive\
+      \ Bestandteile, die es in der Waffenindustrie sehr wertvoll machen. Es kann\
+      \ durch die Aufbereitung von <a href=showinfo:22>Arkonor</a>-Erz und dessen\
+      \ Varianten gewonnen werden, die in Systemen des Nullsicherheitsraums und Wurmlochsystemen\
+      \ verfügbar sind. In seltenen Erzen wie <a href=showinfo:19>Spodumain</a>, <a\
+      \ href=showinfo:52316>Bezdnazin</a> und <a href=showinfo:52306>Talassonite</a>\
+      \ sind ebenfalls erhebliche Mengen an Megacyte vorhanden. Das seltene Erz <a\
+      \ href=showinfo:74533>Ducinium</a> enthält ebenfalls größere Mengen und ist\
+      \ vor allem Systemen im Niedersicherheitsraum und in W-Raum-Systemen mit A0-Sternen\
+      \ (blauen kleinen Sternen) zu finden. Außerdem kommt es noch in untersuchten\
+      \ Orten an den Grenzen zwischen Imperiums- und Nullsicherheitsraum vor. Megacyte\
+      \ kann auch in Sternensystemen des Nullsicherheitsraums in <a href=showinfo:82205>Ueganite</a>\
+      \ gefunden werden."
+    en: "An extremely rare mineral found in comets and very occasionally in asteroids\
+      \ that have traveled through gas clouds. Has unique explosive traits that make\
+      \ it very valuable in the armaments industry.\r\n\r\nMay be obtained by reprocessing\
+      \ <a href=showinfo:22>arkonor</a> ore and its variations which are available\
+      \ in null security status and wormhole systems.\r\n\r\nSignificant amounts of\
+      \ megacyte are also present in rare ores like <a href=showinfo:19>spodumain</a>,\
+      \ <a href=showinfo:52316>bezdnacine</a>, and <a href=showinfo:52306>talassonite</a>.\r\
+      \n\r\nThe rare ore <a href=showinfo:74533>ducinium</a> also contains significant\
+      \ quantities and is found primarily in nullsec and W-space systems containing\
+      \ A0 (Blue Small) stars, as well as surveyed locations on the borders of empire\
+      \ and nullsec space.\r\n\r\nMegacyte can also be found in null security status\
+      \ star systems in <a href=showinfo:82205>ueganite</a>."
+    es: "Un mineral extremadamente poco común que se encuentra en cometas y muy rara\
+      \ vez en asteroides que han viajado a través de nubes de gas. Tiene caracterí\
+      sticas explosivas únicas que lo hacen muy valioso en la industria armamentí\
+      stica.\r\n\r\nSe puede obtener mediante el reprocesamiento de la mena de <a\
+      \ href=showinfo:22>arkonor</a> y sus variaciones, que se encuentran en los sistemas\
+      \ de estado de seguridad nula y agujeros de gusano.\r\n\r\nTambién hay grandes\
+      \ cantidades de megacita en menas poco comunes como <a href=showinfo:19>espodumain</a>,\
+      \ <a href=showinfo:52316>bezdnacina</a> y <a href=showinfo:52306>talasonita</a>.\r\
+      \n\r\nLa mena poco común de <a href=showinfo:74533>ducinium</a> también contiene\
+      \ cantidades significativas y se encuentra principalmente en sistemas de espacio\
+      \ de agujeros de gusano y seguridad nula que contienen estrellas A0 (azules\
+      \ pequeñas), así como en ubicaciones inspeccionadas en las fronteras del imperio\
+      \ y el espacio de seguridad nula.\r\n\r\nLa megacita también se puede encontrar\
+      \ en sistemas estelares con estado de seguridad nulo en <a href=showinfo:82205>ueganita</a>."
+    fr: "Il s'agit d'un minerai extrêmement rare que l'on ne trouve que dans les comè\
+      tes et, bien plus rarement, dans des astéroïdes ayant traversé des nuages de\
+      \ gaz. Une des caractéristiques qui rend ce minerai très intéressant pour l'industrie\
+      \ de l'armement est son haut pouvoir explosif. Il peut être obtenu en retraitant\
+      \ du minerai d'<a href=showinfo:22>arkonor</a> et ses variations, disponibles\
+      \ dans les systèmes de trou de ver et de sécurité nulle. Des quantités significatives\
+      \ de mégacyte sont également présentes dans des minerais rares tels que le <a\
+      \ href=showinfo:19>spodumain</a>, le <a href=showinfo:52316>bezdnacine</a> et\
+      \ le <a href=showinfo:52306>talassonite</a>. Le minerai rare <a href=showinfo:74533>ducinium</a>\
+      \ en contient également des quantités significatives et se trouve principalement\
+      \ dans les systèmes de sécurité nulle et les systèmes de trous de ver contenant\
+      \ des étoiles A0 (petites bleues), ainsi que dans des sites sondés aux frontiè\
+      res de l'espace impérial et de sécurité nulle. La mégacyte peut également ê\
+      tre trouvée dans les systèmes stellaires à statut de sécurité nulle contenant\
+      \ de l'<a href=showinfo:82205>ueganite</a>."
+    ja: "彗星の中か、ガス雲の中を通過したアステロイドからごくまれに見つかる、極めて希少な鉱石。特異な爆発特性を持ち、兵器産業において非常に価値がある。\r\
+      \n\r\nゼロセキュリティステータス星系およびワームホールシステムで入手可能な<a href=showinfo:22>アーコナー</a>およびその亜種\
+      鉱石を再処理することで得ることができる。\r\n\r\nメガサイトは<a href=showinfo:19>スポデュメイン</a>や<a href=showinfo:52316>ベ\
+      ズドナシン</a>、<a href=showinfo:52306>タラソナイト</a>といった希少鉱石の中にも相当量含まれている。\r\n\r\nまた、\
+      希少鉱石の<a href=showinfo:74533>ドゥシニウム</a>に大量に含まれている。ドゥシニウムは主に、A0（小型ブルー）恒星が存在するゼ\
+      ロセキュリティ宙域とワームホール宙域のほか、主要大国とゼロセキュリティ宙域の境界にある調査エリアで発見することができる。\r\n\r\nメガサイトはまた\
+      ゼロセキュリティステータスの星系において、<a href=showinfo:82205>ユイグナイト</a>に含まれる形でも見つかる。"
+    ko: "혜성에서 추출되는 희귀 광물로 가스 성운 지역을 지나는 소행성에서도 종종 발견됩니다. 쉽게 폭발하는 성질이 있어 무기 산업에서 상당\
+      한 가치를 자랑합니다.<br><br><a href=showinfo:22>아르카노르</a>를 정제하여 획득할 수 있으며, 널 시큐리티 항성\
+      계 및 웜홀에서 채굴되는 특수 아르카노르에서도 추출됩니다.<br><br><a href=showinfo:19>스포듀마인</a>, <a href=showinfo:52316>베\
+      즈드나신</a>, <a href=showinfo:52306>탈라소나이트</a> 또한 다량의 메가사이트를 함유하고 있습니다.<br><br>희\
+      귀 광석 <a href=showinfo:74533>두시늄</a>에도 다량 함유되어 있습니다. 두시늄은 널 시큐리티와 웜홀 우주에 있는 A0\
+      \ 청색 왜성 항성계에서 주로 찾을 수 있으며, 4대 국가 영역의 외부 경계에서도 발견됩니다.<br><br>추가로 널 시큐리티 항성계에서\
+      \ 발견되는 <a href=showinfo:82205>유가나이트</a>에도 메가사이트가 함유되어 있습니다."
+    ru: "Чрезвычайно ценный минерал, иногда встречающийся в кометах и совсем редко\
+      \_— в астероидах, пролетевших через газовые облака. Обладает уникальными взр\
+      ывными свойствами, благодаря чему очень востребован в военной промышленности\
+      . Добывается путём переработки <a href=showinfo:22>арконора</a> и его разнов\
+      идностей, которые можно найти в системах с нулевым уровнем безопасности и в\
+      \ системах червоточин. Кроме того, мегацит в больших количествах присутствуе\
+      т в редких рудах, таких как <a href=showinfo:19>сподумейн</a>, <a href=showinfo:52316>б\
+      езднацин</a> и <a href=showinfo:52306>талассонит</a>. Редкая руда <a href=showinfo:74533>д\
+      ачиний</a> тоже содержит много мегацита. Найти её можно, как правило, в\_сис\
+      темах с\_нулевым уровнем безопасности и\_w-пространстве, где присутствуют зв\
+      ёзды подкласса А0 (голубые карлики), а\_также в\_изученных областях на грани\
+      цах держав и\_«нулей». Наконец, мегацит встречается в системах с нулевым уро\
+      внем безопасности в составе <a href=showinfo:82205>уэганита</a>."
+    zh: "一种存在于彗星中的极其稀有的矿物，偶尔也会在穿过了气云的小行星中发现。具有独一无二的爆炸特性，在军工产业中非常有价值。可通过提炼<a href=showinfo:22>艾\
+      克诺岩</a>及其变种获得。这些矿石分布于零安全等级星系和虫洞星系中。超噬矿还大量存在于<a href=showinfo:19>灰岩</a>、<a href=showinfo:52316>贝\
+      兹岩</a>和<a href=showinfo:52306>塔拉岩</a>等稀有矿石之中。此外，从<a href=showinfo:74533>杜希石\
+      </a>中也能提炼出相当可观的数量。这种稀有矿石主要分布在零安全等级星系和虫洞星系的A0恒星（蓝色小型），以及帝国和零安全区域边境的已探明地点。分布在零\
+      安全等级星系的<a href=showinfo:82205>尤加石</a>中也含有超噬矿。"
+  groupID: 18
+  iconID: 405
+  marketGroupID: 1857
+  name:
+    de: "Megacyte"
+    en: "Megacyte"
+    es: "Megacita"
+    fr: "Mégacyte"
+    ja: "メガサイト"
+    ko: "메가사이트"
+    ru: "Megacyte"
+    zh: "超噬矿"
+  portionSize: 1
+  published: true
+  volume: 0.01
 "37158":
   description:
     de: "Die Standup-M-Set-Modifikation Materialeffizienz für die Herstellung von\
@@ -5047,3 +5742,241 @@
   published: true
   sofFactionName: "gallentenavy"
   volume: 0.01
+"57479":
+  basePrice: 500000
+  description:
+    de: "Kerntemperatur-Regulatoren sind standardisierte Zusatzsysteme zur Regelung,\
+      \ Reduzierung und Wiederverwertung überschüssiger Wärmeenergie, die von den\
+      \ Reaktorkernen der Schiffe ausgeht. Die Flotten des Imperiums wurden als Reaktion\
+      \ auf die Triglavia-Invasionen oft nachgerüstet, wobei die Energieanforderungen\
+      \ der Schiffe durch die hinzugefügten Defensiv- und Offensivsysteme anstieg,\
+      \ ohne dass dabei größere Upgrades an diesen komplexen und wertvollen Komponenten\
+      \ vorgenommen oder die Reaktorkerne ausgetauscht wurden. Zusätzliche Leistungsanforderungen\
+      \ führten dazu, dass ältere Reaktorkerndesigns überhitzten, und Kerntemperatur-Regulatoren\
+      \ wurden eingesetzt, um die überschüssige Wärmeenergie zu kontrollieren, zu\
+      \ reduzieren und, wenn möglich, wiederzuverwerten."
+    en: "Core Temperature Regulators are standardized, supplementary systems used\
+      \ to regulate, mitigate and recycle surplus heat energy developed by naval ship\
+      \ reactor cores.\r\n\r\nRefits to empire navy fleets in response to the Triglavian\
+      \ Invasions often increased the overall power requirements of vessels, by upgrading\
+      \ or adding defensive and offensive systems, while not replacing reactor cores\
+      \ or carrying out major upgrades on these complex and valuable components.\r\
+      \n\r\nAdditional power requirements have entailed running older reactor core\
+      \ designs \"hot\" and core temperature regulators are used to monitor, mitigate\
+      \ and, where practical, recycle surplus heat energy."
+    es: "Los reguladores de temperatura nucleares son sistemas suplementarios estandarizados\
+      \ que se usan para regular, mitigar y reciclar la energía térmica excedente\
+      \ generada por los núcleos de reactor de naves.\n\nCon frecuencia, reequipar\
+      \ las flotas de las armadas imperiales en respuesta a las invasiones triglavianas\
+      \ exigía incrementar los requisitos de potencia de las naves, mejorando o añ\
+      adiendo sistemas defensivos y ofensivos, sin reemplazar los núcleos de reactor\
+      \ ni efectuar mejoras considerables en estos componentes tan complejos y valiosos.\n\
+      \nLos requisitos adicionales de potencia han supuesto el sobrecalentamiento\
+      \ de los diseños de núcleos de reactor más antiguos y los reguladores de temperatura\
+      \ de núcleo se usan para supervisar, mitigar y, siempre que sea práctico, reciclar\
+      \ el excedente de energía térmica."
+    fr: "Les régulateurs de température du noyau sont des systèmes complémentaires\
+      \ standardisés, qui permettent de réguler, atténuer et recycler le surplus d’\
+      énergie développé par les noyaux des réacteurs des vaisseaux de marine. La modernisation\
+      \ des flottes de marine impériale en réponse aux invasions triglavian a souvent\
+      \ augmenté les besoins énergétiques des vaisseaux, en améliorant ou ajoutant\
+      \ des systèmes défensifs et offensifs, sans pour autant remplacer les noyaux\
+      \ de réacteur ni apporter d’amélioration majeure à ces composants complexes\
+      \ et capitaux. Les besoins énergétiques supplémentaires ont imposé de faire\
+      \ fonctionner les modèles de noyau de réacteur plus anciens à une température\
+      \ supérieure, et les régulateurs de température du noyau servent à surveiller,\
+      \ modérer, et là où cela est possible, recycler l’excès de chaleur."
+    ja: "コア温度レギュレーターは規格化された追加システムで、海軍艦の炉心が生み出す余剰熱エネルギーを制御、軽減、再利用するために使われる。\n\n\n\n\
+      トリグラビアンの侵攻に対応し、各国は海軍フリートの改装を行った。防衛・攻撃システムのアップグレードや追加により、艦船の全体的な出力要求が上昇することが多\
+      かったが、にも関わらず、炉心の交換や大規模なアップグレード、その他貴重な部品の上位グレードへの換装は行われなかった。\n\n\n\n出力要求の増大により\
+      旧式の炉心の稼働温度が上昇したため、コア温度レギュレーターは余剰熱エネルギーの監視、軽減、そして可能であれば再利用を行うために使われている。"
+    ko: "반응로 코어에서 발생하는 잔여 열 에너지를 제어 또는 재활용하는 보조 시스템입니다.<br><br>트리글라비안 침공 이후 다수의 함선\
+      이 개조되었으며 공격 및 방어용 시스템을 추가하는 과정에서 에너지 사용이 대폭 증가했습니다. 이에 대한 대책으로 반응로를 교체 또는 개조\
+      하는 대신 발열을 낮출 수 있는 온도제어장치가 도입되었습니다.<br><br>온도제어장치는 반응로 코어의 온도를 관찰 및 제어하고 필요하다\
+      고 판단되는 경우 열 에너지를 재활용합니다."
+    ru: "Регуляторы температуры реактора\_— стандартные вспомогательные системы, к\
+      оторые контролируют выделение тепловой энергии из реакторов корабля и управл\
+      яют переработкой её излишков. В ответ на вторжения Триглава четыре державы п\
+      ровели переоснастку своих военных кораблей. В\_первую очередь речь шла об ус\
+      тановке новых или модернизации старых оборонительных и наступательных систем\
+      . Подобные манипуляции зачастую приводили к увеличению общих требований к мо\
+      щности судов. При этом замена и усовершенствование таких сложных и ценных ко\
+      мпонентов, как реакторы, как правило, не проводились. Реакторы старых моделе\
+      й, не рассчитанные на такую нагрузку, начали сильно перегреваться. Впрочем,\
+      \ регуляторы температуры реактора успешно справляются с этой проблемой: они\
+      \ следят за выделением тепловой энергии, снижают её объёмы и, если это целес\
+      ообразно, перерабатывают её в другие виды энергии."
+    zh: "核心温度调节器是一种标准辅助系统，用来调节和回收由海军舰船反应堆核心产生的多余的热能。\n\n\n\n为应对三神裔入侵，舰船需要更大的能量输出，帝\
+      国海军舰队为此进行了装配改良，包括升级或加装防御和攻击系统，但并没有对反应堆核心这种复杂而高价值的组件进行替换或升级。\n\n\n\n额外的能量需求使得\
+      老旧的反应堆核心不堪重负，核心温度调节器正是用来监控、调节和回收多余的热能的。"
+  groupID: 334
+  iconID: 24605
+  marketGroupID: 2768
+  mass: 0.1
+  name:
+    de: "Core Temperature Regulator"
+    en: "Core Temperature Regulator"
+    es: "Regulador de temperatura nuclear"
+    fr: "Régulateur de température du noyau"
+    ja: "コア温度レギュレーター"
+    ko: "코어 온도제어장치"
+    ru: "Core Temperature Regulator"
+    zh: "核心温度调节器"
+  portionSize: 1
+  published: true
+  volume: 180
+"57486":
+  basePrice: 10000
+  description:
+    de: "Die Triglavia-Invasionen forderten viele Opfer unter den Raumschiffbesatzungen\
+      \ und dem militärischen Personal. Die Verluste drohten ohne zusätzliche Überlebensmaß\
+      nahmen untragbar zu werden. Um die Überlebenschancen der Besatzung und des Personals\
+      \ nach einem Kampfeinsatz zu verbessern, wurden Sicherungs-Lebenserhaltungseinheiten\
+      \ in den für das Überleben wichtigsten Bereichen installiert."
+    en: "The pressure of the Triglavian Invasions on spaceship crew numbers and other\
+      \ military personnel risked becoming unsustainable without additional survival\
+      \ measures to reduce losses. Life Support Backup Units are placed in key survival\
+      \ zones to enhance the survival prospects of crew and other personnel in the\
+      \ aftermath of combat."
+    es: "La presión de las invasiones triglavianas sobre el número de miembros de\
+      \ la tripulación y demás personal militar en las naves espaciales podría llegar\
+      \ a ser insostenible sin medidas de supervivencia adicionales para reducir las\
+      \ bajas. Las unidades de soporte vital se disponen en zonas clave para mejorar\
+      \ las probabilidades de supervivencia de la tripulación y el resto del personal\
+      \ tras el combate."
+    fr: "La pression des invasions triglavian sur les effectifs des équipages des\
+      \ vaisseaux et des autres types de personnel militaire menaçait de devenir intenable\
+      \ sans mesures de survie supplémentaires pour réduire les pertes. Les unité\
+      s de réanimation de secours sont placées dans les zones de survie clés pour\
+      \ améliorer les chances de l’équipage et du reste du personnel à la suite d’\
+      un combat."
+    ja: "宇宙船の搭乗員や、リスク対処に当たる軍事関係者がトリグラビアンの侵攻から受けるプレッシャーは耐えがたいものになりつつあり、損耗を減らすため、生存を\
+      目的とした対策の追加は必須である。主要なサバイバリエリアに設置された生命維持用バックアップユニットは、搭乗員らの戦闘後生存率を向上させることができる。"
+    ko: "트리글라비안 침공으로 인해 승무원의 희생이 계속되자 생존율을 올리기 위한 조치가 이루어졌습니다. 전투 중 발생하는 각종 인명사고에\
+      \ 대처하기 위해 함내 중요 지점에 보조 생명유지 장치가 설치되어 있습니다."
+    ru: "Вторжения Триглава крайне отрицательно сказались на численности экипажа и\
+      \ персонала военных судов, поэтому возникла необходимость принять дополнител\
+      ьные меры по сокращению потерь. Теперь все ключевые зоны судов оборудованы р\
+      езервными блоками системы жизнеобеспечения. Это увеличивает шансы команды пе\
+      режить последствия боя."
+    zh: "三神裔的入侵给船员和军事人员的安危带来了威胁，需要更多的生存措施来降低人员损失。生命保障备份装置放置在舰船的核心生存区域，可以增加船员和其他人员在\
+      战斗后的存活几率。"
+  groupID: 334
+  iconID: 24640
+  marketGroupID: 2768
+  mass: 0.1
+  name:
+    de: "Life Support Backup Unit"
+    en: "Life Support Backup Unit"
+    es: "Unidad de soporte vital"
+    fr: "Unité de réanimation de secours"
+    ja: "生命維持バックアップユニット"
+    ko: "보조 생명유지 장치"
+    ru: "Life Support Backup Unit"
+    zh: "生命保障备份装置"
+  portionSize: 1
+  published: true
+  volume: 45
+"57478":
+  basePrice: 10000
+  description:
+    de: "Auto-Integritäts-Erhaltungssiegel sind spezielle Komponenten, die zur automatischen\
+      \ Schadenskontrolle in den wichtigsten Schiffbereichen, in denen sich die Besatzung\
+      \ und anderes Personal befindet, eingesetzt werden. Obwohl die meisten Schiffe\
+      \ über eine Vielzahl von internen Kraftfeldern, Trennwänden, Luftschleusen und\
+      \ ähnlichen Systemen verfügen, können während eines hektischen Kampfes Schä\
+      den aller Art auftreten. Um kleine, aber potenziell gefährliche Schäden zu beheben,\
+      \ wurden in der Vergangenheit häufig temporäre Kraftfelder, intelligente Materialien\
+      \ und Nanotechnologie eingesetzt, die jedoch energieintensiv sein können oder\
+      \ wertvolle Ressourcen wie Nanobot-Reparaturpaste benötigen. Die neue Auto-Integritä\
+      ts-Technologie nimmt sich ein Beispiel am Triglavia-Kollektiv und nutzt die\
+      \ Mutaplasmid-Technologie als Inspiration für kostengünstigere Standardkomponenten,\
+      \ die Biotech-Nanobots freisetzen, um Mikrofrakturen und andere Defekte, die\
+      \ die Integrität der physischen Abteile bedrohen, zu suchen und zu reparieren."
+    en: "Auto-Integrity Preservation Seals are specialized components used for automatic\
+      \ damage control in key space vessel zones where crew and other personnel aboard\
+      \ ship are operating. While most ships have a variety of internal forcefields,\
+      \ bulkhead dividers, air-locks and similar systems built into the basic design,\
+      \ breaches of all kinds can occur in the heat of space combat.\r\n\r\nTo address\
+      \ small but potentially dangerous breaches, temporary force-fields, smart materials\
+      \ and nanotechnology have often been used but can be energy intensive or use\
+      \ otherwise valuable resources such as nanite paste.\r\n\r\nThe new auto-integrity\
+      \ technology takes a leaf out of the Triglavian Collective's book and uses mutaplasmid\
+      \ technology as the inspiration for cheaper, standard components that release\
+      \ biotech nanobes tailored to seek and repair microfractures and other defects\
+      \ threatening physical compartment integrity."
+    es: "Los sellos de preservación de integridad automática son componentes especializados\
+      \ que se utilizan para el control automático de daños en zonas clave de naves\
+      \ espaciales donde opera la tripulación y otro personal a bordo. Si bien la\
+      \ mayoría de las naves tienen una serie de campos de fuerza internos, divisores\
+      \ de mamparos, esclusas de aire y sistemas similares integrados en el diseñ\
+      o básico, pueden surgir brechas de todo tipo en el fragor del combate espacial.\n\
+      \nPara hacer frente a brechas pequeñas pero potencialmente peligrosas, a menudo\
+      \ se han utilizado campos de fuerza temporales, materiales inteligentes y nanotecnologí\
+      a, pero pueden consumir mucha energía o utilizar recursos valiosos, como el\
+      \ fluido de nanobots.\n\nLa nueva tecnología de integridad automática toma una\
+      \ hoja del libro del Colectivo Triglaviano y utiliza la tecnología mutaplásmida\
+      \ como inspiración para componentes estándar más baratos que liberan nanobios\
+      \ biotecnológicos diseñados para buscar y reparar microfracturas y otros defectos\
+      \ que amenazan la integridad del compartimento físico."
+    fr: "Les sceaux de préservation d’intégrité automatique sont des composants spé\
+      cialisés utilisés pour la limitation des dégâts dans les zones clés des vaisseaux,\
+      \ où travaillent l’équipage ainsi que du personnel. Bien que la plupart des\
+      \ vaisseaux prévoient divers champs de force internes, cloisons étanches, sas\
+      \ et autres systèmes semblables dans leur conception initiale, des brèches en\
+      \ tout genre peuvent survenir dans l’intensité du combat spatial. Pour apporter\
+      \ une réponse aux brèches certes mineures, mais potentiellement dangereuses,\
+      \ des champs de force temporaires, des matériaux intelligents ou des nanotechnologies\
+      \ ont fréquemment été utilisés, mais peuvent présenter un coût énergétique important,\
+      \ ou consommer des ressources précieuses pour d’autres utilisations, comme la\
+      \ colle nanite. La nouvelle technologie d’intégrité automatique reprend les\
+      \ techniques du Collectif Triglavian, et s’inspire des technologies de mutaplasmides\
+      \ pour proposer des composants standards, moins coûteux, qui libèrent des nanobes\
+      \ biotechnologiques conçus pour chercher et réparer les microfractures et autres\
+      \ défauts menaçant l'intégrité physique du compartiment."
+    ja: "オートインテグリティ保護シールは、搭乗員などの乗船者が活動している宇宙船の重要エリアの自動ダメージコントロールに使われる特殊な部品である。ほとんど\
+      の船の基礎設計には様々な内蔵フォースフィールドや隔壁、エアロックなどのシステムが組み込まれているが、宇宙での激しい戦闘中、船にはありとあらゆる種類の亀裂\
+      が発生する。\n\n\n\n小さいが危険を及ぼす可能性がある亀裂に対処するためには、一時的なフォースフィールドや小型資材、そしてナノテクノロジーが使われ\
+      ることが多い。だが、そういった方法は大量なエネルギー、あるいはナノマシンペーストなどの貴重な資源を消費する場合がある。\n\n\n\nトリグラビアンコレ\
+      クティブを模倣して生み出されたオートインテグリティテクノロジーは、変異プラスミドに着想を得たより安価な通常素材を使用している。このテクノロジーは、区画の\
+      物理的完全性を脅かす微細な穴やその他の損傷を探し出し、修復するよう調整されたバイオ技術を使ったナノーブを放出するものである。"
+    ko: "자동 수복 기능이 내장된 특수 장비로 승문원들이 활동하는 주요 함선 시설을 복구하는 데 사용됩니다. 대다수의 함선에는 내부 역장,\
+      \ 격벽, 그리고 에어록 등의 안전 장치가 설치되어 있으나 우주 전투의 특수성으로 인해 다양한 안전 조치가 요구됩니다.<br><br>잠재\
+      적 위험에 대응하기 위해 소규모 역장, 스마트 재료, 그리고 나노 기술 등이 적극적으로 도입되었으나 과도한 에너지 소모와 나나이트 페이스\
+      트 등의 값비싼 재료가 문제점으로 제기되어 왔습니다.<br><br>자동 수복 기술은 트리글라비안 뮤타플라즈미드를 바탕으로 설계되었으며 기\
+      존의 안전 장치에 비해 상대적으로 낮은 운용 비용이 소모됩니다. 내부 손상 발생 시 바이오 기술을 기반으로 제작된 나노 생명체가 훼손 지\
+      점을 수리합니다."
+    ru: "Защитные герметичные пломбы\_— особые компоненты, используемые для автома\
+      тического ремонта ключевых секций космического корабля, то есть тех зон, где\
+      \ непосредственно работают члены экипажа и другой персонал. Хотя большинство\
+      \ судов по умолчанию снабжены внутренними силовыми полями, переборками, возд\
+      ушными шлюзами и другими системами, в пылу битвы корпус всё равно получает п\
+      овреждения разной глубины и диаметра. Для устранения небольших, но потенциал\
+      ьно опасных брешей обычно используются временные силовые поля, нанотехнологи\
+      чные решения и различные «умные» материалы. Однако такие процедуры нередко о\
+      казываются слишком энергоёмкими или требуют траты ценных ресурсов (к\_пример\
+      у, нанитовой пасты). Разработчики нового метода автоматической реконструкции\
+      \ вдохновились технологией биоадаптивных мутаплазмидов Сообщества Триглава и\
+      \ создали куда более дешёвые стандартные компоненты, которые высвобождают ос\
+      обые биотехнологические наночастицы. Эти частицы, в свою очередь, ищут и уст\
+      раняют микротрещины и другие дефекты, угрожающие физической целостности отсе\
+      ка."
+    zh: "自动修复储藏装置密封是船员和其他人员所在的核心舰船舱室的自动伤害控制专用组件。舰船内部有许多力场、舱室隔壁和类似结构，在激烈的战斗中可能会被破坏。\
+      \n\n\n\n定位并修复小的损伤经常用到临时力场、智能材料和纳米技术，不过会消耗本就紧张的能源，或者就要使用珍贵的纳米体粘合剂。\n\n\n\n新的自\
+      动修复技术源自三神裔科技，对廉价的标准组件使用突变质体技术，使其放出纳米生物体对可能造成物理结构解体的微小破损或漏洞进行寻找和修复。"
+  groupID: 334
+  iconID: 24638
+  marketGroupID: 2768
+  mass: 0.1
+  name:
+    de: "Auto-Integrity Preservation Seal"
+    en: "Auto-Integrity Preservation Seal"
+    es: "Sello de preservación de integridad automática"
+    fr: "Sceau de préservation d’intégrité automatique"
+    ja: "オートインテグリティ保護シール"
+    ko: "자동복구 장치"
+    ru: "Auto-Integrity Preservation Seal"
+    zh: "自动修复储藏装置密封"
+  portionSize: 1
+  published: true
+  volume: 16
