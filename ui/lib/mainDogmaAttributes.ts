@@ -1,15 +1,15 @@
 // This file contains the main dogma attributes used for quick comparison in the UI, mainly the VariationsCard.
 
 import type {InventoryType} from "~/refdata-openapi";
-import {CHARGES, DECRYPTORS, DEPLOYABLE, DRONE, IMPLANT, SHIP, SUBSYSTEM} from "~/lib/categoryConstants";
+import {CHARGES, DECRYPTORS, DEPLOYABLE, DRONE, IMPLANT, MODULE, SHIP, SUBSYSTEM} from "~/lib/categoryConstants";
 import refdataApi from "~/refdata";
 import {
     AUDIT_LOG_SECURE_CONTAINER, CAPACITOR_BOOST_CHARGE, CARGO_CONTAINER,
-    CORE_SUBSYSTEM,
-    DEFENSIVE_SUBSYSTEM, FREIGHT_CONTAINER,
+    CORE_SUBSYSTEM, DATA_MINERS,
+    DEFENSIVE_SUBSYSTEM, FREIGHT_CONTAINER, FREQUENCY_MINING_LASER, GAS_CLOUD_HARVESTERS, MINING_LASER,
     MOBILE_DEPOT, MOBILE_TRACTOR_UNIT, MOBILE_WARP_DISRUPTOR,
     OFFENSIVE_SUBSYSTEM,
-    PROPULSION_SUBSYSTEM, SECURE_CARGO_CONTAINER
+    PROPULSION_SUBSYSTEM, SALVAGER, SECURE_CARGO_CONTAINER, STRIP_MINER
 } from "~/lib/groupConstants";
 
 const categoryAttributeNames: { [key: string]: string[] } = {};
@@ -55,6 +55,12 @@ categoryAttributeNames[DRONE] = [
 categoryAttributeNames[IMPLANT] = [
     "implantness"
 ];
+categoryAttributeNames[MODULE] = [
+    "cpu", "power", "duration", "maxRange",
+    "miningAmount",
+    "miningWastedVolumeMultiplier",
+    "miningWasteProbability"
+];
 
 const groupAttributeNames: { [key: string]: string[] } = {};
 groupAttributeNames[CORE_SUBSYSTEM] = [
@@ -93,13 +99,10 @@ groupAttributeNames[MOBILE_TRACTOR_UNIT] = [
 groupAttributeNames[CAPACITOR_BOOST_CHARGE] = [
     "capacitorBonus"
 ];
-groupAttributeNames[STRIP_MINER] = [
-    "miningAmount",
-					"miningWastedVolumeMultiplier",
-					"miningWasteProbability"
-    ];
-groupAttributeNames[MINING_LASER] = groupAttributeNames[STRIP_MINER];
 groupAttributeNames[SALVAGER] = ["accessDifficultyBonus"];
+groupAttributeNames[DATA_MINERS] = [
+    "accessDifficultyBonus", "virusCoherence", "virusStrength", "virusElementSlots"
+];
 
 export async function getCategoryDogma(categoryId: number | undefined): Promise<string[] | undefined> {
     const id = `${categoryId}`;

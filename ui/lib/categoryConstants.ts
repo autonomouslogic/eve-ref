@@ -1,6 +1,7 @@
 export const SHIP = 6;
-export const BLUEPRINT = 9
+export const MODULE = 7;
 export const CHARGES = 8;
+export const BLUEPRINT = 9
 export const ENTITY = 11;
 export const DRONE = 18;
 export const IMPLANT = 20;
