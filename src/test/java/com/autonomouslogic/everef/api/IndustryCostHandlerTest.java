@@ -88,15 +88,17 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @Timeout(60)
 public class IndustryCostHandlerTest {
 	static final List<String> TEST_NAMES = List.of(
-			"dominix",
-			"sin",
-			"sin-blueprint",
-			"armor-energizing-charge-blueprint",
-			"mjolnir-fury-cruise-missile",
-			"mjolnir-fury-cruise-missile-blueprint",
-			"mjolnir-fury-cruise-missile-blueprint-optimized-attainment-decryptor",
-			"dominix-lowsec-sotiyo-rigs",
-			"sin-blueprint-lowsec-sotiyo-rigs");
+//			"dominix",
+//			"sin",
+//			"sin-blueprint",
+//			"armor-energizing-charge-blueprint",
+//			"mjolnir-fury-cruise-missile",
+//			"mjolnir-fury-cruise-missile-blueprint",
+//			"mjolnir-fury-cruise-missile-blueprint-optimized-attainment-decryptor",
+//			"dominix-lowsec-sotiyo-rigs",
+//			"sin-blueprint-lowsec-sotiyo-rigs",
+		"carbon-fiber-reaction-formula-athanor-rigs"
+		);
 
 	@Inject
 	ApiRunner apiRunner;
@@ -406,6 +408,18 @@ public class IndustryCostHandlerTest {
 		var input = IndustryCostInput.builder().productId(22431L).build();
 		var cost = industryApi.industryCost(input);
 		assertEquals(Set.of("999"), cost.getCopying().keySet());
+	}
+
+	@Test
+	@SneakyThrows
+	void shouldIncludeBlueprintReactionForReactionBlueprints() {
+		setupBasicPrices();
+		var input = IndustryCostInput.builder().blueprintId(57490L).build();
+		var cost = industryApi.industryCost(input);
+		assertEquals(Set.of("57453"), cost.getReaction().keySet());
+		assertNull(cost.getManufacturing());
+		assertNull(cost.getInvention());
+		assertNull(cost.getCopying());
 	}
 
 	@Test

@@ -1,0 +1,40 @@
+{
+  "base_price" : 100000,
+  "description" : {
+    "de" : "Basiskohlefasern sind kostengünstig und können aus reichlich vorhandenen Ressourcen hergestellt werden. Ihre Einsatzmöglichkeiten sind nahezu unbegrenzt. Sie eignen sich besonders für die Raumfahrtindustrie, wenn sie zusätzlich mit Polymeren verstärkt werden.",
+    "en" : "Cheap and formed from abundant resources, basic carbon fiber is a material with almost unlimited applications. It is particularly useful in the space industries when reinforced with additional polymers.",
+    "es" : "La fibra de carbono básica es barata y está compuesta por abundantes recursos. Sus aplicaciones son prácticamente infinitas. Es especialmente útil en las industrias espaciales al reforzarla con polímeros adicionales.",
+    "fr" : "Bon marché et formée à partir de ressources abondantes, la fibre de carbone de base est un matériau aux applications quasi illimitées. Elle est particulièrement utile dans l’industrie spatiale, une fois renforcée par des polymères supplémentaires.",
+    "ja" : "安価で原材料も豊富な基礎カーボンファイバーは、無限に近い用途を持つ資源であり、他のポリマーで強化されることで、特に宇宙産業において有効活用することができる。",
+    "ko" : "탄소 섬유는 다양한 자원에서 추출되는 기본 재료로 높은 효용성을 자랑합니다. 우주 산업 분야에서 주로 활용되며 고분자를 통해 구조를 강화할 경우 상당한 효과를 얻을 수 있습니다.",
+    "ru" : "Простое углеродное волокно — дешёвый материал с практически неограниченной областью применения, получить который можно из самых разных ресурсов. Наиболее часто такое волокно укрепляют другими полимерами и используют в космической промышленности.",
+    "zh" : "碳纤维成本低廉，可从多种资源中合成，有着几乎无限的应用前景。用其他聚合物加以强化后，它在太空工业中的应用极其广泛。"
+  },
+  "group_id" : 428,
+  "icon_id" : 2664,
+  "market_group_id" : 500,
+  "name" : {
+    "de" : "Carbon Fiber",
+    "en" : "Carbon Fiber",
+    "es" : "Fibra de carbono",
+    "fr" : "Fibre de carbone",
+    "ja" : "カーボンファイバー",
+    "ko" : "탄소 섬유",
+    "ru" : "Carbon Fiber",
+    "zh" : "碳纤维"
+  },
+  "portion_size" : 1,
+  "published" : true,
+  "volume" : 0.2,
+  "type_id" : 57453,
+  "capacity" : 0,
+  "mass" : 0,
+  "packaged_volume" : 0.2,
+  "radius" : 1,
+  "produced_by_blueprints" : {
+    "57490" : {
+      "blueprint_type_id" : 57490,
+      "blueprint_activity" : "reaction"
+    }
+  }
+}

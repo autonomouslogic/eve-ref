@@ -123,6 +123,10 @@ components:
           type: object
           additionalProperties:
             $ref: "#/components/schemas/ManufacturingCost"
+        reaction:
+          type: object
+          additionalProperties:
+            $ref: "#/components/schemas/ManufacturingCost"
     IndustryCostInput:
       type: object
       properties:

@@ -5980,3 +5980,62 @@
   portionSize: 1
   published: true
   volume: 16
+"57490":
+  basePrice: 10000000
+  groupID: 1888
+  iconID: 2664
+  marketGroupID: 2403
+  metaGroupID: 1
+  name:
+    de: "Carbon Fiber Reaction Formula"
+    en: "Carbon Fiber Reaction Formula"
+    es: "Fórmula reactiva de fibra de carbono"
+    fr: "Formule de réaction Fibre de carbone"
+    ja: "カーボンファイバー反応フォーミュラ"
+    ko: "탄소 섬유 반응식"
+    ru: "Carbon Fiber Reaction Formula"
+    zh: "碳纤维反应配方"
+  portionSize: 1
+  published: true
+  volume: 0.01
+"57453":
+  basePrice: 100000
+  description:
+    de: "Basiskohlefasern sind kostengünstig und können aus reichlich vorhandenen\
+      \ Ressourcen hergestellt werden. Ihre Einsatzmöglichkeiten sind nahezu unbegrenzt.\
+      \ Sie eignen sich besonders für die Raumfahrtindustrie, wenn sie zusätzlich\
+      \ mit Polymeren verstärkt werden."
+    en: "Cheap and formed from abundant resources, basic carbon fiber is a material\
+      \ with almost unlimited applications. It is particularly useful in the space\
+      \ industries when reinforced with additional polymers."
+    es: "La fibra de carbono básica es barata y está compuesta por abundantes recursos.\
+      \ Sus aplicaciones son prácticamente infinitas. Es especialmente útil en las\
+      \ industrias espaciales al reforzarla con polímeros adicionales."
+    fr: "Bon marché et formée à partir de ressources abondantes, la fibre de carbone\
+      \ de base est un matériau aux applications quasi illimitées. Elle est particuliè\
+      rement utile dans l’industrie spatiale, une fois renforcée par des polymères\
+      \ supplémentaires."
+    ja: "安価で原材料も豊富な基礎カーボンファイバーは、無限に近い用途を持つ資源であり、他のポリマーで強化されることで、特に宇宙産業において有効活用すること\
+      ができる。"
+    ko: "탄소 섬유는 다양한 자원에서 추출되는 기본 재료로 높은 효용성을 자랑합니다. 우주 산업 분야에서 주로 활용되며 고분자를 통해 구조를\
+      \ 강화할 경우 상당한 효과를 얻을 수 있습니다."
+    ru: "Простое углеродное волокно\_— дешёвый материал с практически неограниченн\
+      ой областью применения, получить который можно из самых разных ресурсов. Наи\
+      более часто такое волокно укрепляют другими полимерами и используют в космич\
+      еской промышленности."
+    zh: "碳纤维成本低廉，可从多种资源中合成，有着几乎无限的应用前景。用其他聚合物加以强化后，它在太空工业中的应用极其广泛。"
+  groupID: 428
+  iconID: 2664
+  marketGroupID: 500
+  name:
+    de: "Carbon Fiber"
+    en: "Carbon Fiber"
+    es: "Fibra de carbono"
+    fr: "Fibre de carbone"
+    ja: "カーボンファイバー"
+    ko: "탄소 섬유"
+    ru: "Carbon Fiber"
+    zh: "碳纤维"
+  portionSize: 1
+  published: true
+  volume: 0.2

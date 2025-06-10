@@ -4521,3 +4521,33 @@
   radius: 1
   type_id: 57478
   volume: 16
+"57490":
+  capacity: 0
+  description: ""
+  group_id: 1888
+  icon_id: 2664
+  market_group_id: 2403
+  mass: 0
+  name: "Carbon Fiber Reaction Formula"
+  packaged_volume: 0.01
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 57490
+  volume: 0.01
+"57453":
+  capacity: 0
+  description: "Cheap and formed from abundant resources, basic carbon fiber is a\
+    \ material with almost unlimited applications. It is particularly useful in the\
+    \ space industries when reinforced with additional polymers."
+  group_id: 428
+  icon_id: 2664
+  market_group_id: 500
+  mass: 0
+  name: "Carbon Fiber"
+  packaged_volume: 0.2
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 57453
+  volume: 0.2
