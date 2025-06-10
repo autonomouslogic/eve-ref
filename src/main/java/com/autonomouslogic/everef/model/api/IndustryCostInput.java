@@ -191,6 +191,16 @@ public class IndustryCostInput {
 	@JsonProperty
 	@lombok.Builder.Default
 	@Schema(
+			description = "The Reactions skill level the installing character",
+			requiredMode = Schema.RequiredMode.NOT_REQUIRED,
+			defaultValue = "5",
+			minimum = "0",
+			maximum = "5")
+	int reactions = 5;
+
+	@JsonProperty
+	@lombok.Builder.Default
+	@Schema(
 			description = "The Research skill level the installing character",
 			requiredMode = Schema.RequiredMode.NOT_REQUIRED,
 			defaultValue = "5",

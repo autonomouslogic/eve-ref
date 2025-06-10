@@ -1,36 +1,36 @@
 {
   "reaction" : {
-    "47453" : {
-      "product_id": 47453,
+    "57453" : {
+      "product_id": 57453,
       "runs": 10,
       "time": "PT19H09M07S",
       "materials": {
+        "4246": {
+          "type_id": 4246,
+          "quantity": 49.0,
+          "volume_per_unit": 0,
+          "volume": 0,
+          "cost_per_unit": 21179.94,
+          "cost": 1037817.06
+        },
         "16633": {
           "type_id": 16633,
           "quantity": 976,
-          "volume_per_unit": 0.0,
-          "volume": 0.0,
+          "volume_per_unit": 0,
+          "volume": 0,
           "cost_per_unit": 793.34,
           "cost": 774299.84
         },
         "16635": {
           "type_id": 16635,
           "quantity": 976,
-          "volume_per_unit": 0.0,
-          "volume": 0.0,
+          "volume_per_unit": 0,
+          "volume": 0,
           "cost_per_unit": 518.06,
           "cost": 505626.56
-        },
-        "4246": {
-          "type_id": 4246,
-          "quantity": 49.0,
-          "volume_per_unit": 0.0,
-          "volume": 0.0,
-          "cost_per_unit": 21179.94,
-          "cost": 1037817.06
         }
       },
-      "materials_volume": 0.0,
+      "materials_volume": 0,
       "product_volume": 400.0,
       "estimated_item_value": 1413901,
       "system_cost_index": 83558,
@@ -47,7 +47,7 @@
       "units": 2000,
       "units_per_run": 200,
       "time_per_run": "PT6894.7S",
-      "time_per_unit": "PT34.474S",
+      "time_per_unit": "PT34.473S",
       "total_cost_per_run": 247906.65,
       "total_cost_per_unit": 1239.53
     }

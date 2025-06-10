@@ -28,6 +28,10 @@ public class IndustrySkills extends AbstractIndustryService<IndustrySkill> {
 		return sumBonusMod(input, IndustrySkill::getManufacturingTimeBonus);
 	}
 
+	public double reactionTimeBonusMod(IndustryCostInput input) {
+		return sumBonusMod(input, IndustrySkill::getReactionTimeBonus);
+	}
+
 	public double advancedIndustrySkillIndustryJobTimeBonusMod(IndustryCostInput input) {
 		return sumBonusMod(input, IndustrySkill::getAdvancedIndustrySkillIndustryJobTimeBonus);
 	}
@@ -91,6 +95,7 @@ public class IndustrySkills extends AbstractIndustryService<IndustrySkill> {
 	private Integer skillLevel(IndustrySkill skill, IndustryCostInput input) {
 		return switch (skill.getName()) {
 			case "Industry" -> input.getIndustry();
+			case "Reactions" -> input.getReactions();
 			case "Advanced Industry" -> input.getAdvancedIndustry();
 			case "Research" -> input.getResearch();
 			case "Science" -> input.getScience();

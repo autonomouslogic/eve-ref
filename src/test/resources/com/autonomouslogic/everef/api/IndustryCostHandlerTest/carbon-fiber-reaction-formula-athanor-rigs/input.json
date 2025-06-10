@@ -2,8 +2,14 @@
   "product_id": 57453,
   "runs": 10,
   "security": "LOW_SEC",
-  "structure_id": 35835,
+  "structure_type_id": 35835,
   "rig_id": [ 46487, 46485 ],
   "reaction_cost": 0.05909748985254271692, // ESI reported 0.0591
-  "facility_tax": 0.0150
+  "manufacturing_cost" : 0,
+  "researching_te_cost" : 0,
+  "researching_me_cost" : 0,
+  "copying_cost" : 0,
+  "invention_cost" : 0,
+  "facility_tax": 0.0150,
+  "reactions": 4
 }

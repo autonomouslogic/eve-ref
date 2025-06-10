@@ -82,6 +82,7 @@ public class ImportIndustryResources implements Command {
 	private DogmaAttribute advancedIndustrySkillIndustryJobTimeBonus;
 	private DogmaAttribute mineralNeedResearchBonus;
 	private DogmaAttribute manufactureTimePerLevel;
+	private DogmaAttribute reactionTimeBonus;
 
 	@Inject
 	protected ImportIndustryResources() {}
@@ -137,6 +138,7 @@ public class ImportIndustryResources implements Command {
 				refData.getDogmaAttribute("mineralNeedResearchBonus").orElseThrow();
 		manufactureTimePerLevel =
 				refData.getDogmaAttribute("manufactureTimePerLevel").orElseThrow();
+		reactionTimeBonus = refData.getDogmaAttribute("reactionTimeBonus").orElseThrow();
 	}
 
 	@SneakyThrows
@@ -357,7 +359,8 @@ public class ImportIndustryResources implements Command {
 								copySpeedBonus.getAttributeId(),
 								advancedIndustrySkillIndustryJobTimeBonus.getAttributeId(),
 								mineralNeedResearchBonus.getAttributeId(),
-								manufactureTimePerLevel.getAttributeId())
+								manufactureTimePerLevel.getAttributeId(),
+								reactionTimeBonus.getAttributeId())
 						.isPresent();
 	}
 
@@ -383,6 +386,9 @@ public class ImportIndustryResources implements Command {
 						.orElse(null))
 				.manufactureTimePerLevel(refDataUtil
 						.getTypeDogmaValueBoxed(type, manufactureTimePerLevel.getAttributeId())
+						.orElse(null))
+				.reactionTimeBonus(refDataUtil
+						.getTypeDogmaValueBoxed(type, reactionTimeBonus.getAttributeId())
 						.orElse(null))
 				.datacore(datacoreNames.contains(name))
 				.encryptionMethods(name.endsWith(ENCRYPTION_METHODS))

@@ -89,24 +89,29 @@ public class IndustryCalculator {
 	private IndustryCost calculateFromProduct() {
 		boolean isBlueprint = Optional.ofNullable(productType.getBlueprint()).orElse(false);
 		if (!isBlueprint) {
-			var manufacturingCost = calculateManufacturing();
-			var inventionCost = calculateInventionForManufacturing(manufacturingCost);
-			if (inventionCost != null) {
-				addInvention(inventionCost);
-				var me = Optional.ofNullable(industryCostInput.getMe());
-				var te = Optional.ofNullable(industryCostInput.getTe());
-				if (me.isEmpty() || te.isEmpty()) {
-					manufacturingCost =
-							calculateManufacturing(me.orElse(inventionCost.getMe()), te.orElse(inventionCost.getTe()));
+			if (blueprint.getActivities().containsKey("manufacturing")) {
+				var manufacturingCost = calculateManufacturing();
+				var inventionCost = calculateInventionForManufacturing(manufacturingCost);
+				if (inventionCost != null) {
+					addInvention(inventionCost);
+					var me = Optional.ofNullable(industryCostInput.getMe());
+					var te = Optional.ofNullable(industryCostInput.getTe());
+					if (me.isEmpty() || te.isEmpty()) {
+						manufacturingCost = calculateManufacturing(
+								me.orElse(inventionCost.getMe()), te.orElse(inventionCost.getTe()));
+					}
+					var copyingCost = calculateCopyingForInvention(inventionCost);
+					addCopying(copyingCost);
+				} else if (productType.getMetaGroupId() == null
+						|| productType.getMetaGroupId() == EveConstants.TECH_1_META_GROUP_ID) {
+					var copyingCost = calculateCopying();
+					addCopying(copyingCost);
 				}
-				var copyingCost = calculateCopyingForInvention(inventionCost);
-				addCopying(copyingCost);
-			} else if (productType.getMetaGroupId() == null
-					|| productType.getMetaGroupId() == EveConstants.TECH_1_META_GROUP_ID) {
-				var copyingCost = calculateCopying();
-				addCopying(copyingCost);
+				addManufacturing(manufacturingCost);
+			} else if (blueprint.getActivities().containsKey("reaction")) {
+				var reactionCost = calculateReaction();
+				addReaction(reactionCost);
 			}
-			addManufacturing(manufacturingCost);
 		} else {
 			var inventionCost = calculateInvention();
 			addInvention(inventionCost);
@@ -123,6 +128,7 @@ public class IndustryCalculator {
 					manufacturing.getProducts().entrySet()) {
 				var productType = refData.getType(entry.getValue().getTypeId());
 				var manufacturingCost = calculateManufacturing(
+						"manufacturing",
 						productType,
 						blueprint,
 						industryCostInput.getRuns(),
@@ -153,6 +159,7 @@ public class IndustryCalculator {
 
 	private ManufacturingCost calculateManufacturing() {
 		return calculateManufacturing(
+				"manufacturing",
 				productType,
 				blueprint,
 				industryCostInput.getRuns(),
@@ -161,17 +168,18 @@ public class IndustryCalculator {
 	}
 
 	private ManufacturingCost calculateManufacturing(int me, int te) {
-		return calculateManufacturing(productType, blueprint, industryCostInput.getRuns(), me, te);
+		return calculateManufacturing("manufacturing", productType, blueprint, industryCostInput.getRuns(), me, te);
 	}
 
 	private ManufacturingCost calculateManufacturing(
-			InventoryType productType, Blueprint blueprint, int runs, Integer me, Integer te) {
+			String activity, InventoryType productType, Blueprint blueprint, int runs, Integer me, Integer te) {
 		var isBlueprint = Optional.ofNullable(productType.getBlueprint()).orElse(false);
 		if (isBlueprint) {
 			throw new IllegalStateException("productType is a blueprint");
 		}
 		var manufacturingCost = manufactureCalculatorProvider
 				.get()
+				.setActivity(activity)
 				.setIndustryCostInput(industryCostInput)
 				.setBlueprint(blueprint)
 				.setProductType(productType)
@@ -182,6 +190,10 @@ public class IndustryCalculator {
 				.setRigs(rigs)
 				.calc();
 		return manufacturingCost;
+	}
+
+	private ManufacturingCost calculateReaction() {
+		return calculateManufacturing("reaction", productType, blueprint, industryCostInput.getRuns(), 0, 0);
 	}
 
 	private InventionCost calculateInvention() {
@@ -253,6 +265,10 @@ public class IndustryCalculator {
 
 	public void addManufacturing(ManufacturingCost manufacturingCost) {
 		cost.manufacturing(String.valueOf(manufacturingCost.getProductId()), manufacturingCost);
+	}
+
+	private void addReaction(ManufacturingCost reactionCost) {
+		cost.reaction(String.valueOf(reactionCost.getProductId()), reactionCost);
 	}
 
 	public void addInvention(InventionCost inventionCost) {

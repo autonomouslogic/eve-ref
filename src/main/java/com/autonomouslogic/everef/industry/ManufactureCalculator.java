@@ -42,6 +42,10 @@ public class ManufactureCalculator {
 
 	@Setter
 	@NonNull
+	private String activity;
+
+	@Setter
+	@NonNull
 	private IndustryCostInput industryCostInput;
 
 	@Setter
@@ -76,6 +80,10 @@ public class ManufactureCalculator {
 		Objects.requireNonNull(industryCostInput, "industryCostInput");
 		Objects.requireNonNull(productType, "productType");
 		Objects.requireNonNull(blueprint, "blueprint");
+		Objects.requireNonNull(activity, "activity");
+		if (!activity.equals("manufacturing") && !activity.equals("reaction")) {
+			throw new IllegalArgumentException("Unknown activity: " + activity);
+		}
 		if (runs <= 0) {
 			throw new IllegalArgumentException("Runs must be positive");
 		}
@@ -86,14 +94,14 @@ public class ManufactureCalculator {
 			throw new IllegalArgumentException("TE must not be negative");
 		}
 
-		var manufacturing = blueprint.getActivities().get("manufacturing");
-		var time = manufacturingTime(manufacturing);
-		var eiv = industryMath.eiv(manufacturing, runs);
+		var blueprintActivity = blueprint.getActivities().get(activity);
+		var time = activityTime(blueprintActivity);
+		var eiv = industryMath.eiv(blueprintActivity, runs);
 		var unitsPerRun =
-				manufacturing.getProducts().get(productType.getTypeId()).getQuantity();
+				blueprintActivity.getProducts().get(productType.getTypeId()).getQuantity();
 		var units = runs * unitsPerRun;
 		var productVolume = industryMath.typeVolume(productType, units);
-		var systemCostIndex = manufacturingSystemCostIndex(eiv);
+		var systemCostIndex = systemCostIndex(eiv);
 		var systemCostBonuses = industryMath.systemCostBonuses(
 				structure,
 				productType,
@@ -101,7 +109,7 @@ public class ManufactureCalculator {
 				industryCostInput.getSecurity(),
 				industryCostInput.getSystemCostBonus(),
 				systemCostIndex,
-				"manufacturing");
+				activity);
 		var facilityTax = industryMath.facilityTax(industryCostInput, eiv);
 		var sccSurcharge = industryMath.sccSurcharge(eiv);
 		var alphaCloneTax = industryMath.alphaCloneTax(industryCostInput, eiv);
@@ -110,7 +118,7 @@ public class ManufactureCalculator {
 				.add(sccSurcharge)
 				.add(alphaCloneTax)
 				.add(systemCostBonuses);
-		var materials = manufacturingMaterials(manufacturing);
+		var materials = manufacturingMaterials(blueprintActivity);
 		var materialsVolume = industryMath.materialVolume(materials);
 		var totalMaterialCost = industryMath.totalMaterialCost(materials);
 		var totalCost = totalJobCost.add(totalMaterialCost);
@@ -142,36 +150,59 @@ public class ManufactureCalculator {
 				.build();
 	}
 
-	public BigDecimal manufacturingSystemCostIndex(BigDecimal eiv) {
-		var index = industryCostInput.getManufacturingCost();
+	public BigDecimal systemCostIndex(BigDecimal eiv) {
+		var index =
+				switch (activity) {
+					case "manufacturing" -> industryCostInput.getManufacturingCost();
+					case "reaction" -> industryCostInput.getReactionCost();
+					default -> throw new IllegalStateException(activity);
+				};
 		return industryMath.systemCostIndex(eiv, index);
 	}
 
-	private Duration manufacturingTime(BlueprintActivity manufacturing) {
-		var baseTime = (double) manufacturing.getTime();
+	private Duration activityTime(BlueprintActivity blueprintActivity) {
+		var baseTime = (double) blueprintActivity.getTime();
 		var teMod = industryMath.efficiencyModifier(te);
-		var industryMod = industrySkills.manufacturingTimeBonusMod(industryCostInput);
-		var advancedIndustryMod = industrySkills.advancedIndustrySkillIndustryJobTimeBonusMod(industryCostInput);
-		var specialSkillMod = industrySkills.manufacturingSpecialisedSkillMod(industryCostInput, manufacturing);
+		var skillMod = skillMod(blueprintActivity);
 		var structureMod = industryStructures.structureTimeModifier(structure);
 		var rigMod = industryRigs.rigModifier(
-				rigs, productType, industryCostInput.getSecurity(), IndustryRig::getTimeBonus, "manufacturing");
-		var time =
-				runs * baseTime * teMod * industryMod * advancedIndustryMod * specialSkillMod * structureMod * rigMod;
+				rigs, productType, industryCostInput.getSecurity(), IndustryRig::getTimeBonus, activity);
+		var time = runs * baseTime * teMod * skillMod * structureMod * rigMod;
 		var rounded = Math.round(time);
 		return Duration.ofSeconds(rounded);
 	}
 
-	private Map<String, MaterialCost> manufacturingMaterials(BlueprintActivity manufacturing) {
-		return industryMath.materials(
-				manufacturing, this::manufacturingMaterialQuantity, industryCostInput.getMaterialPrices());
+	private double skillMod(BlueprintActivity blueprintActivity) {
+		return switch (activity) {
+			case "manufacturing" -> manufacturingSkillMod(blueprintActivity);
+			case "reaction" -> reactionSkillMod();
+			default -> throw new IllegalStateException(activity);
+		};
 	}
 
-	private long manufacturingMaterialQuantity(long base) {
+	private double manufacturingSkillMod(BlueprintActivity blueprintActivity) {
+		var industryMod = industrySkills.manufacturingTimeBonusMod(industryCostInput);
+		var advancedIndustryMod = industrySkills.advancedIndustrySkillIndustryJobTimeBonusMod(industryCostInput);
+		var specialSkillMod = industrySkills.manufacturingSpecialisedSkillMod(industryCostInput, blueprintActivity);
+		return industryMod * advancedIndustryMod * specialSkillMod;
+	}
+
+	private double reactionSkillMod() {
+		var reactionsMod = industrySkills.reactionTimeBonusMod(industryCostInput);
+		return reactionsMod;
+	}
+
+	private Map<String, MaterialCost> manufacturingMaterials(BlueprintActivity manufacturing) {
+		return industryMath.materials(manufacturing, this::materialQuantity, industryCostInput.getMaterialPrices());
+	}
+
+	private long materialQuantity(long base) {
 		var meMod = industryMath.efficiencyModifier(me);
-		var structureMod = industryStructures.structureManufacturingMaterialModifier(structure);
+		var structureMod = activity.equals("manufacturing")
+				? industryStructures.structureManufacturingMaterialModifier(structure)
+				: 1.0;
 		var rigMod = industryRigs.rigModifier(
-				rigs, productType, industryCostInput.getSecurity(), IndustryRig::getMaterialBonus, "manufacturing");
+				rigs, productType, industryCostInput.getSecurity(), IndustryRig::getMaterialBonus, activity);
 		var quantity = runs * base * meMod * structureMod * rigMod;
 		var rounded = Math.max(runs, Math.ceil(Math.round(quantity * 100.0) / 100.0));
 		return (long) rounded;

@@ -437,6 +437,13 @@ components:
           description: The reaction cost index of the system where the job is installed
           maximum: 1
           minimum: 0
+        reactions:
+          type: integer
+          format: int32
+          default: 5
+          description: The Reactions skill level the installing character
+          maximum: 5
+          minimum: 0
         research:
           type: integer
           format: int32

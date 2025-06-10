@@ -296,9 +296,9 @@ public class IndustryCostHandler implements HttpService, Handler {
 		}
 		var producingBlueprint = blueprints.stream().findFirst().orElseThrow();
 		var activity = producingBlueprint.getBlueprintActivity();
-		if (!activity.equals("manufacturing") && !activity.equals("invention")) {
+		if (!activity.equals("manufacturing") && !activity.equals("reaction") && !activity.equals("invention")) {
 			throw new ClientException(
-					String.format("Only manufacturing and invention are supported, %s seen", activity));
+					String.format("Only manufacturing, reaction, and invention are supported, %s seen", activity));
 		}
 		var blueprintTypeId =
 				Optional.ofNullable(producingBlueprint.getBlueprintTypeId()).orElseThrow();

@@ -49,8 +49,20 @@ public class IndustryRigs extends AbstractIndustryService<IndustryRig> {
 			return 0.0;
 		}
 
-		var categories = rig.getManufacturingCategories();
-		var groups = rig.getManufacturingGroups();
+		List<Long> categories;
+		List<Long> groups;
+		switch (activity) {
+			case "manufacturing":
+				categories = rig.getManufacturingCategories();
+				groups = rig.getManufacturingGroups();
+				break;
+			case "reaction":
+				categories = rig.getReactionCategories();
+				groups = rig.getReactionGroups();
+				break;
+			default:
+				throw new IllegalStateException(activity);
+		}
 		var category = productType.getCategoryId();
 		var group = productType.getGroupId();
 		if ((categories != null && categories.contains(category)) || (groups != null && groups.contains(group))) {

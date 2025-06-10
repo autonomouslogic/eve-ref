@@ -24,6 +24,7 @@ import lombok.extern.jackson.Jacksonized;
 	"advanced_industry_skill_industry_job_time_bonus",
 	"mineral_need_research_bonus",
 	"manufacture_time_per_level",
+	"reaction_time_bonus",
 	"datacore",
 	"encryption_methods"
 })
@@ -52,6 +53,9 @@ public class IndustrySkill {
 
 	@JsonProperty
 	Double manufactureTimePerLevel;
+
+	@JsonProperty
+	Double reactionTimeBonus;
 
 	@JsonProperty
 	boolean datacore;
