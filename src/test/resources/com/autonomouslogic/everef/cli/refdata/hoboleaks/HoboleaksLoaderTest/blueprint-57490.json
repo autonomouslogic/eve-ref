@@ -1,0 +1,32 @@
+{
+  "activities" : {
+    "reaction" : {
+      "materials" : {
+        "4246" : {
+          "type_id" : 4246,
+          "quantity" : 5
+        },
+        "16633" : {
+          "type_id" : 16633,
+          "quantity" : 100
+        },
+        "16635" : {
+          "type_id" : 16635,
+          "quantity" : 100
+        }
+      },
+      "products" : {
+        "57453" : {
+          "type_id" : 57453,
+          "quantity" : 200
+        }
+      },
+      "time" : 10800,
+      "required_skills" : {
+        "45746" : 1
+      }
+    }
+  },
+  "blueprint_type_id" : 57490,
+  "max_production_limit" : 1000
+}

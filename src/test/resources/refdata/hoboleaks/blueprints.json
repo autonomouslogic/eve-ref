@@ -739,5 +739,32 @@
     },
     "blueprintTypeID" : 32308,
     "maxProductionLimit" : 10
+  },
+  "57490" : {
+    "activities" : {
+      "reaction" : {
+        "skills" : [ {
+          "typeID" : 45746,
+          "level" : 1
+        } ],
+        "materials" : [ {
+          "typeID" : 4246,
+          "quantity" : 5
+        }, {
+          "typeID" : 16633,
+          "quantity" : 100
+        }, {
+          "typeID" : 16635,
+          "quantity" : 100
+        } ],
+        "products" : [ {
+          "typeID" : 57453,
+          "quantity" : 200
+        } ],
+        "time" : 10800
+      }
+    },
+    "blueprintTypeID" : 57490,
+    "maxProductionLimit" : 1000
   }
 }

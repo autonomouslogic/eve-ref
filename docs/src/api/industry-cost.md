@@ -11,14 +11,14 @@ Join us on [Discord](https://everef.net/discord) to discuss things as they're be
 Your constructive feedback is always appreciated.
 
 The following activities are supported:
-* Manufacture
+* Manufacturing
 * Invention
-
-These activities are _not_ supported yet:
 * Reaction
 * Copying
-* Research ME
-* Research TE
+
+These activities are _not_ supported yet:
+* Research ME ([#796](https://github.com/autonomouslogic/eve-ref/issues/796))
+* Research TE ([#795](https://github.com/autonomouslogic/eve-ref/issues/795))
 
 Quick links:
 * [OpenAPI spec](https://github.com/autonomouslogic/eve-ref/blob/main/spec/eve-ref-api.yaml)
@@ -285,6 +285,7 @@ See [OpenAPI spec](https://github.com/autonomouslogic/eve-ref/blob/main/spec/eve
 * `plasma_physics` - The Plasma Physics skill level the installing character
 * `propulsion_subsystem_technology` - The Propulsion Subsystem Technology skill level the installing character
 * `quantum_physics` - The Quantum Physics skill level the installing character
+* `reactions` - The Reactions skill level the installing character
 * `research` - The Research skill level the installing character
 * `rocket_science` - The Rocket Science skill level the installing character
 * `science` - The Science skill level the installing character

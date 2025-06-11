@@ -9,4 +9,5 @@ export const DEPLOYABLE = 22;
 export const SUBSYSTEM = 32;
 export const ANCIENT_RELICS = 34;
 export const DECRYPTORS = 35;
+export const STRUCTURE_MODULE = 66;
 export const SKINS = 91;

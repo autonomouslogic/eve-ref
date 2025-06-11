@@ -554,11 +554,14 @@ const cards: {[key: string]: any} = {
 			"dogmaAttributes":
 				[
 					"hp",
+					"structureRequiresDeedType",
 					"structureUniformity",
 					"emDamageResonance",
 					"thermalDamageResonance",
 					"kineticDamageResonance",
 					"explosiveDamageResonance",
+					"strRefiningYieldBonus",
+					"structureGasDecompressionEfficiencyBonus",
 				]
 		},
 	"commandBurst":

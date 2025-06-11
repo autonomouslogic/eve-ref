@@ -1,0 +1,21 @@
+{
+  "capacity" : 0,
+  "description" : {
+    "en" : "",
+    "fr" : ""
+  },
+  "group_id" : 1888,
+  "icon_id" : 2664,
+  "market_group_id" : 2403,
+  "mass" : 0,
+  "name" : {
+    "en" : "Carbon Fiber Reaction Formula",
+    "fr" : "Formule de réaction Fibre de carbone"
+  },
+  "packaged_volume" : 0.01,
+  "portion_size" : 1,
+  "published" : true,
+  "radius" : 1,
+  "type_id" : 57490,
+  "volume" : 0.01
+}

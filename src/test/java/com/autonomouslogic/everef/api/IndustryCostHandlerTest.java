@@ -48,6 +48,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Stream;
 import javax.inject.Inject;
@@ -96,7 +97,8 @@ public class IndustryCostHandlerTest {
 			"mjolnir-fury-cruise-missile-blueprint",
 			"mjolnir-fury-cruise-missile-blueprint-optimized-attainment-decryptor",
 			"dominix-lowsec-sotiyo-rigs",
-			"sin-blueprint-lowsec-sotiyo-rigs");
+			"sin-blueprint-lowsec-sotiyo-rigs",
+			"carbon-fiber-reaction-formula-athanor-rigs");
 
 	@Inject
 	ApiRunner apiRunner;
@@ -406,6 +408,18 @@ public class IndustryCostHandlerTest {
 		var input = IndustryCostInput.builder().productId(22431L).build();
 		var cost = industryApi.industryCost(input);
 		assertEquals(Set.of("999"), cost.getCopying().keySet());
+	}
+
+	@Test
+	@SneakyThrows
+	void shouldIncludeBlueprintReactionForReactionBlueprints() {
+		setupBasicPrices();
+		var input = IndustryCostInput.builder().blueprintId(57490L).build();
+		var cost = industryApi.industryCost(input);
+		assertEquals(Set.of("57453"), cost.getReaction().keySet());
+		assertEquals(Map.of(), cost.getManufacturing());
+		assertEquals(Map.of(), cost.getInvention());
+		assertEquals(Map.of(), cost.getCopying());
 	}
 
 	@Test

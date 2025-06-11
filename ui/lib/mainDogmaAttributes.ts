@@ -1,7 +1,17 @@
 // This file contains the main dogma attributes used for quick comparison in the UI, mainly the VariationsCard.
 
 import type {InventoryType} from "~/refdata-openapi";
-import {CHARGES, DECRYPTORS, DEPLOYABLE, DRONE, IMPLANT, MODULE, SHIP, SUBSYSTEM} from "~/lib/categoryConstants";
+import {
+    CHARGES,
+    DECRYPTORS,
+    DEPLOYABLE,
+    DRONE,
+    IMPLANT,
+    MODULE,
+    SHIP,
+    STRUCTURE_MODULE,
+    SUBSYSTEM
+} from "~/lib/categoryConstants";
 import refdataApi from "~/refdata";
 import {
     AUDIT_LOG_SECURE_CONTAINER, CAPACITOR_BOOST_CHARGE, CARGO_CONTAINER,
@@ -60,6 +70,9 @@ categoryAttributeNames[MODULE] = [
     "miningAmount",
     "miningWastedVolumeMultiplier",
     "miningWasteProbability"
+];
+categoryAttributeNames[STRUCTURE_MODULE] = [
+    "RefRigMatBonus", "RefRigTimeBonus"
 ];
 
 const groupAttributeNames: { [key: string]: string[] } = {};
