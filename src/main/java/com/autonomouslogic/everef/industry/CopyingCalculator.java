@@ -50,8 +50,7 @@ public class CopyingCalculator {
 		var copying = blueprint.getActivities().get("copying");
 		var manufacturing = blueprint.getActivities().get("manufacturing");
 		if (copying == null) {
-			throw new RuntimeException(
-					String.format("Blueprint %s doesn't have a copying activity", blueprint.getBlueprintTypeId()));
+			return null;
 		}
 		if (manufacturing == null) {
 			throw new RuntimeException(String.format(

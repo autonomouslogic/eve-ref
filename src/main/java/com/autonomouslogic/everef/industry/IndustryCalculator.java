@@ -267,7 +267,7 @@ public class IndustryCalculator {
 	private CopyingCost calculateCopying(Blueprint blueprint, double runs) {
 		int ceilRuns = (int) Math.ceil(runs);
 		double factor = runs / ceilRuns;
-		var cost = copyingCalculatorProvider
+		var copyingCost = copyingCalculatorProvider
 				.get()
 				.setIndustryCostInput(industryCostInput)
 				.setBlueprint(blueprint)
@@ -275,10 +275,13 @@ public class IndustryCalculator {
 				.setStructure(structure)
 				.setRigs(rigs)
 				.calc();
-		if (factor != 1.0) {
-			cost = cost.multiply(factor);
+		if (copyingCost == null) {
+			return null;
 		}
-		return cost;
+		if (factor != 1.0) {
+			copyingCost = copyingCost.multiply(factor);
+		}
+		return copyingCost;
 	}
 
 	public void addManufacturing(ProductionCost productionCost) {
@@ -294,6 +297,8 @@ public class IndustryCalculator {
 	}
 
 	public void addCopying(CopyingCost copyingCost) {
-		cost.copying(String.valueOf(copyingCost.getProductId()), copyingCost);
+		if (copyingCost != null) {
+			cost.copying(String.valueOf(copyingCost.getProductId()), copyingCost);
+		}
 	}
 }

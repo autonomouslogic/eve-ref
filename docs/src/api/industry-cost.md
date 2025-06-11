@@ -19,6 +19,7 @@ The following activities are supported:
 These activities are _not_ supported yet:
 * Research ME ([#796](https://github.com/autonomouslogic/eve-ref/issues/796))
 * Research TE ([#795](https://github.com/autonomouslogic/eve-ref/issues/795))
+* T3 items ([#823](https://github.com/autonomouslogic/eve-ref/issues/823))
 
 Quick links:
 * [OpenAPI spec](https://github.com/autonomouslogic/eve-ref/blob/main/spec/eve-ref-api.yaml)
