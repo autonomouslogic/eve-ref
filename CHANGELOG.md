@@ -1,5 +1,18 @@
 EVE Ref Changelog
 
+## [2.68.0](https://github.com/autonomouslogic/eve-ref/compare/2.67.0...2.68.0) (2025-06-11)
+
+
+### Features
+
+* **api:** Reactions on industry cost API ([#912](https://github.com/autonomouslogic/eve-ref/issues/912)) ([12fa687](https://github.com/autonomouslogic/eve-ref/commit/12fa68708bc8944e7bcdc9f6df8b2f7adf2bb41e))
+
+
+### Bug Fixes
+
+* **api:** Error when trying to copy blueprints for T3 products. See [#823](https://github.com/autonomouslogic/eve-ref/issues/823) ([c016974](https://github.com/autonomouslogic/eve-ref/commit/c016974ca006e9b8cd11215fff545f0b8e4e4320))
+* **api:** Industry cost API complain about blueprints without products ([7e8de88](https://github.com/autonomouslogic/eve-ref/commit/7e8de887e6e1fd0dfdbecdf57d91d91478071395))
+
 ## [2.67.0](https://github.com/autonomouslogic/eve-ref/compare/2.66.0...2.67.0) (2025-06-09)
 
 
