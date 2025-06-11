@@ -11,7 +11,7 @@ import com.autonomouslogic.everef.model.api.CopyingCost;
 import com.autonomouslogic.everef.model.api.IndustryCost;
 import com.autonomouslogic.everef.model.api.IndustryCostInput;
 import com.autonomouslogic.everef.model.api.InventionCost;
-import com.autonomouslogic.everef.model.api.ManufacturingCost;
+import com.autonomouslogic.everef.model.api.ProductionCost;
 import com.autonomouslogic.everef.refdata.Blueprint;
 import com.autonomouslogic.everef.refdata.BlueprintMaterial;
 import com.autonomouslogic.everef.refdata.InventoryType;
@@ -166,7 +166,7 @@ public class IndustryCalculator {
 		return cost.build();
 	}
 
-	private ManufacturingCost calculateProduction(
+	private ProductionCost calculateProduction(
 			String activity, InventoryType productType, Blueprint blueprint, int runs, Integer me, Integer te) {
 		var isBlueprint = Optional.ofNullable(productType.getBlueprint()).orElse(false);
 		if (isBlueprint) {
@@ -187,12 +187,12 @@ public class IndustryCalculator {
 		return manufacturingCost;
 	}
 
-	private ManufacturingCost calculateManufacturing(
+	private ProductionCost calculateManufacturing(
 			InventoryType productType, Blueprint blueprint, int runs, Integer me, Integer te) {
 		return calculateProduction("manufacturing", productType, blueprint, runs, me, te);
 	}
 
-	private ManufacturingCost calculateManufacturing() {
+	private ProductionCost calculateManufacturing() {
 		return calculateProduction(
 				"manufacturing",
 				productType,
@@ -202,15 +202,15 @@ public class IndustryCalculator {
 				industryCostInput.getTe());
 	}
 
-	private ManufacturingCost calculateManufacturing(int me, int te) {
+	private ProductionCost calculateManufacturing(int me, int te) {
 		return calculateProduction("manufacturing", productType, blueprint, industryCostInput.getRuns(), me, te);
 	}
 
-	private ManufacturingCost calculateReaction() {
+	private ProductionCost calculateReaction() {
 		return calculateReaction(productType, blueprint, industryCostInput.getRuns());
 	}
 
-	private ManufacturingCost calculateReaction(InventoryType productType, Blueprint blueprint, int runs) {
+	private ProductionCost calculateReaction(InventoryType productType, Blueprint blueprint, int runs) {
 		return calculateProduction("reaction", productType, blueprint, runs, 0, 0);
 	}
 
@@ -235,8 +235,8 @@ public class IndustryCalculator {
 		return inventionCost;
 	}
 
-	private InventionCost calculateInventionForManufacturing(ManufacturingCost manufacturingCost) {
-		var productBlueprintTypeId = manufacturingCost.getBlueprintId();
+	private InventionCost calculateInventionForManufacturing(ProductionCost productionCost) {
+		var productBlueprintTypeId = productionCost.getBlueprintId();
 		var productBlueprintType = refData.getType(productBlueprintTypeId);
 		var sourceBlueprint = Optional.ofNullable(productBlueprintType)
 				.flatMap(v -> Optional.ofNullable(v.getProducedByBlueprints()))
@@ -248,9 +248,9 @@ public class IndustryCalculator {
 		if (sourceBlueprint.isEmpty()) {
 			return null;
 		}
-		var inventionCost = calculateInvention(
-				productBlueprintType, sourceBlueprint.get(), (int) (manufacturingCost.getRuns() * 10));
-		var factor = manufacturingCost.getRuns() / inventionCost.getExpectedRuns();
+		var inventionCost =
+				calculateInvention(productBlueprintType, sourceBlueprint.get(), (int) (productionCost.getRuns() * 10));
+		var factor = productionCost.getRuns() / inventionCost.getExpectedRuns();
 		inventionCost = inventionCost.multiply(factor);
 		return inventionCost;
 	}
@@ -281,11 +281,11 @@ public class IndustryCalculator {
 		return cost;
 	}
 
-	public void addManufacturing(ManufacturingCost manufacturingCost) {
-		cost.manufacturing(String.valueOf(manufacturingCost.getProductId()), manufacturingCost);
+	public void addManufacturing(ProductionCost productionCost) {
+		cost.manufacturing(String.valueOf(productionCost.getProductId()), productionCost);
 	}
 
-	private void addReaction(ManufacturingCost reactionCost) {
+	private void addReaction(ProductionCost reactionCost) {
 		cost.reaction(String.valueOf(reactionCost.getProductId()), reactionCost);
 	}
 

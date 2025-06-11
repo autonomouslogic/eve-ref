@@ -4,8 +4,8 @@ import com.autonomouslogic.everef.data.LoadedRefData;
 import com.autonomouslogic.everef.model.IndustryRig;
 import com.autonomouslogic.everef.model.IndustryStructure;
 import com.autonomouslogic.everef.model.api.IndustryCostInput;
-import com.autonomouslogic.everef.model.api.ManufacturingCost;
 import com.autonomouslogic.everef.model.api.MaterialCost;
+import com.autonomouslogic.everef.model.api.ProductionCost;
 import com.autonomouslogic.everef.refdata.Blueprint;
 import com.autonomouslogic.everef.refdata.BlueprintActivity;
 import com.autonomouslogic.everef.refdata.InventoryType;
@@ -76,7 +76,7 @@ public class ManufactureCalculator {
 		refData = refDataService.getLoadedRefData();
 	}
 
-	public ManufacturingCost calc() {
+	public ProductionCost calc() {
 		Objects.requireNonNull(industryCostInput, "industryCostInput");
 		Objects.requireNonNull(productType, "productType");
 		Objects.requireNonNull(blueprint, "blueprint");
@@ -122,7 +122,7 @@ public class ManufactureCalculator {
 		var materialsVolume = industryMath.materialVolume(materials);
 		var totalMaterialCost = industryMath.totalMaterialCost(materials);
 		var totalCost = totalJobCost.add(totalMaterialCost);
-		return ManufacturingCost.builder()
+		return ProductionCost.builder()
 				.productId(productType.getTypeId())
 				.blueprintId(blueprint.getBlueprintTypeId())
 				.runs(runs)

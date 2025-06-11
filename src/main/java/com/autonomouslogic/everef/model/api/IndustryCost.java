@@ -30,12 +30,12 @@ public class IndustryCost {
 	@JsonProperty
 	@Singular("manufacturing")
 	@JsonInclude(JsonInclude.Include.NON_EMPTY)
-	Map<String, ManufacturingCost> manufacturing;
+	Map<String, ProductionCost> manufacturing;
 
 	@JsonProperty
 	@Singular("reaction")
 	@JsonInclude(JsonInclude.Include.NON_EMPTY)
-	Map<String, ManufacturingCost> reaction;
+	Map<String, ProductionCost> reaction;
 
 	@JsonProperty
 	@Singular("invention")
