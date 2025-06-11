@@ -122,11 +122,11 @@ components:
         manufacturing:
           type: object
           additionalProperties:
-            $ref: "#/components/schemas/ManufacturingCost"
+            $ref: "#/components/schemas/ProductionCost"
         reaction:
           type: object
           additionalProperties:
-            $ref: "#/components/schemas/ManufacturingCost"
+            $ref: "#/components/schemas/ProductionCost"
     IndustryCostInput:
       type: object
       properties:
@@ -658,7 +658,24 @@ components:
         units_per_run:
           type: integer
           format: int32
-    ManufacturingCost:
+    MaterialCost:
+      type: object
+      properties:
+        cost:
+          type: number
+        cost_per_unit:
+          type: number
+        quantity:
+          type: number
+          format: double
+        type_id:
+          type: integer
+          format: int64
+        volume:
+          type: number
+        volume_per_unit:
+          type: number
+    ProductionCost:
       type: object
       properties:
         alpha_clone_tax:
@@ -735,20 +752,3 @@ components:
           type: integer
           format: int64
           description: Total number of item produced
-    MaterialCost:
-      type: object
-      properties:
-        cost:
-          type: number
-        cost_per_unit:
-          type: number
-        quantity:
-          type: number
-          format: double
-        type_id:
-          type: integer
-          format: int64
-        volume:
-          type: number
-        volume_per_unit:
-          type: number
