@@ -48,6 +48,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Stream;
 import javax.inject.Inject;
@@ -416,9 +417,9 @@ public class IndustryCostHandlerTest {
 		var input = IndustryCostInput.builder().blueprintId(57490L).build();
 		var cost = industryApi.industryCost(input);
 		assertEquals(Set.of("57453"), cost.getReaction().keySet());
-		assertNull(cost.getManufacturing());
-		assertNull(cost.getInvention());
-		assertNull(cost.getCopying());
+		assertEquals(Map.of(), cost.getManufacturing());
+		assertEquals(Map.of(), cost.getInvention());
+		assertEquals(Map.of(), cost.getCopying());
 	}
 
 	@Test

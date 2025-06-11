@@ -128,13 +128,22 @@ public class IndustryCalculator {
 					manufacturing.getProducts().entrySet()) {
 				var productType = refData.getType(entry.getValue().getTypeId());
 				var manufacturingCost = calculateManufacturing(
-						"manufacturing",
 						productType,
 						blueprint,
 						industryCostInput.getRuns(),
 						industryCostInput.getMe(),
 						industryCostInput.getTe());
 				addManufacturing(manufacturingCost);
+			}
+		}
+
+		var reaction = blueprint.getActivities().get("reaction");
+		if (reaction != null) {
+			for (Map.Entry<Long, BlueprintMaterial> entry :
+					reaction.getProducts().entrySet()) {
+				var productType = refData.getType(entry.getValue().getTypeId());
+				var manufacturingCost = calculateReaction(productType, blueprint, industryCostInput.getRuns());
+				addReaction(manufacturingCost);
 			}
 		}
 
@@ -157,21 +166,7 @@ public class IndustryCalculator {
 		return cost.build();
 	}
 
-	private ManufacturingCost calculateManufacturing() {
-		return calculateManufacturing(
-				"manufacturing",
-				productType,
-				blueprint,
-				industryCostInput.getRuns(),
-				industryCostInput.getMe(),
-				industryCostInput.getTe());
-	}
-
-	private ManufacturingCost calculateManufacturing(int me, int te) {
-		return calculateManufacturing("manufacturing", productType, blueprint, industryCostInput.getRuns(), me, te);
-	}
-
-	private ManufacturingCost calculateManufacturing(
+	private ManufacturingCost calculateProduction(
 			String activity, InventoryType productType, Blueprint blueprint, int runs, Integer me, Integer te) {
 		var isBlueprint = Optional.ofNullable(productType.getBlueprint()).orElse(false);
 		if (isBlueprint) {
@@ -192,8 +187,31 @@ public class IndustryCalculator {
 		return manufacturingCost;
 	}
 
+	private ManufacturingCost calculateManufacturing(
+			InventoryType productType, Blueprint blueprint, int runs, Integer me, Integer te) {
+		return calculateProduction("manufacturing", productType, blueprint, runs, me, te);
+	}
+
+	private ManufacturingCost calculateManufacturing() {
+		return calculateProduction(
+				"manufacturing",
+				productType,
+				blueprint,
+				industryCostInput.getRuns(),
+				industryCostInput.getMe(),
+				industryCostInput.getTe());
+	}
+
+	private ManufacturingCost calculateManufacturing(int me, int te) {
+		return calculateProduction("manufacturing", productType, blueprint, industryCostInput.getRuns(), me, te);
+	}
+
 	private ManufacturingCost calculateReaction() {
-		return calculateManufacturing("reaction", productType, blueprint, industryCostInput.getRuns(), 0, 0);
+		return calculateReaction(productType, blueprint, industryCostInput.getRuns());
+	}
+
+	private ManufacturingCost calculateReaction(InventoryType productType, Blueprint blueprint, int runs) {
+		return calculateProduction("reaction", productType, blueprint, runs, 0, 0);
 	}
 
 	private InventionCost calculateInvention() {
