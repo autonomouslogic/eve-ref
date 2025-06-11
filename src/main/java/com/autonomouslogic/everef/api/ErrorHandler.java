@@ -37,6 +37,7 @@ public class ErrorHandler implements io.helidon.webserver.http.ErrorHandler<Exce
 			scope.setLevel(SentryLevel.ERROR);
 		});
 		res.status(Status.INTERNAL_SERVER_ERROR_500)
+				.header("Content-Type", "application/json")
 				.send(objectMapper.writeValueAsString(ApiError.builder()
 								.message("An internal error occurred")
 								.build()) + "\n");

@@ -76,7 +76,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 /**
  * Full test of all products against the API:
  * <code>
- * cat blueprints.json | jq '.[].activities | [.manufacturing, .invention][].products | select(. != null) | .[].type_id' | sort -n | xargs -I{} curl -s -o /dev/null -w "%{http_code} %{url.query}\n" "https://api.everef.net/v1/industry/cost?product_id={}"
+ * cat blueprints.json | jq '.[].activities | [.manufacturing, .reaction, .invention][].products | select(. != null) | .[].type_id' | sort -n | uniq | xargs -I{} -P 8 curl -s -o /dev/null -w "%{http_code} %{url.query}\n" "https://api.everef.net/v1/industry/cost?product_id={}"
  * </code>
  */
 @ExtendWith(MockitoExtension.class)

@@ -1,5 +1,6 @@
 package com.autonomouslogic.everef.industry;
 
+import com.autonomouslogic.everef.api.ClientException;
 import com.autonomouslogic.everef.data.LoadedRefData;
 import com.autonomouslogic.everef.model.IndustryDecryptor;
 import com.autonomouslogic.everef.model.IndustryRig;
@@ -102,7 +103,8 @@ public class InventionCalculator {
 				+ decryptorOpt.map(IndustryDecryptor::getRunModifier).orElse(0);
 		var unitsPerRun = manufacturing.getProducts().values().stream()
 				.findFirst()
-				.orElseThrow()
+				.orElseThrow(() -> new ClientException(
+						String.format("Blueprint %d has no product", blueprint.getBlueprintTypeId())))
 				.getQuantity()
 				.intValue();
 		var productVolume = industryMath.typeVolume(productType, runs);
@@ -199,7 +201,7 @@ public class InventionCalculator {
 
 	private BlueprintActivity inventionBlueprintProductActivity(InventoryType product) {
 		if (!Optional.ofNullable(product.getBlueprint()).orElse(false)) {
-			throw new IllegalArgumentException(product.getName().get("en") + "is not a blueprint");
+			throw new IllegalArgumentException(product.getName().get("en") + " is not a blueprint");
 		}
 		var blueprint = Objects.requireNonNull(refData.getBlueprint(product.getTypeId()));
 		return Optional.ofNullable(blueprint.getActivities().get("manufacturing"))
