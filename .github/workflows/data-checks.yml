@@ -41,3 +41,21 @@ jobs:
 
       - name: Check
         run: ./scripts/run-make-and-check-changes.sh import-industry-resources $DEV_NOTICES_DISCORD_WEBHOOK_URL
+
+  verify-ref-data-models:
+    name: Verify Reference Data Models
+    timeout-minutes: 30
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+          cache: gradle
+
+      - name: Check
+        run: ./scripts/verify-ref-data-models.sh $DEV_NOTICES_DISCORD_WEBHOOK_URL
