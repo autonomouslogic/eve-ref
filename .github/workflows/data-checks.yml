@@ -1,7 +1,6 @@
 name: Data Checks
 on:
   workflow_dispatch:
-  push:
   schedule:
     - cron: "47 12 * * *"
 env:
