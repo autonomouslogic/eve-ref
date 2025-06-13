@@ -111,3 +111,6 @@ import-test-resources: generate-database
 
 import-industry-resources: generate-database
 	./gradlew importIndustryResources --stacktrace
+
+verify-ref-data-models: generate-database
+	./gradlew verifyRefDataModels --stacktrace

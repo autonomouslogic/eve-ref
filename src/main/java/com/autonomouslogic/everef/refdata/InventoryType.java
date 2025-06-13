@@ -23,8 +23,8 @@ public class InventoryType {
 	@JsonProperty
 	BigDecimal basePrice;
 
-	@JsonProperty
-	Double capacity;
+//	@JsonProperty
+//	Double capacity;
 
 	@JsonProperty
 	@Schema(description = "The key is the language code.")
