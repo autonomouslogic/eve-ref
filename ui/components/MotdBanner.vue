@@ -58,11 +58,11 @@ const motd = computed(() => {
 	const day = Math.floor(time / DAY);
 	const hour = Math.floor(time / HOUR);
 
-	if (new Date().getTime() < new Date("2025-03-04T23:59:00Z").getTime()) {
+	if (new Date().getTime() < new Date("2025-06-18T23:59:00Z").getTime()) {
 		return {
-			text: "Get 20% off PLEX plus an additional 3% with code \"everef\"",
-			url: MARKEE_DRAGON_URL,
-			urlText: "Markee Dragon"
+			text: "Get a chance to win 2,500 PLEX",
+			url: "https://eu.surveymonkey.com/r/NSRPC7Y?it=MTEzMDM4NzQ%3D&lang=EN",
+			urlText: "Complete Survey"
 		} as Motd;
 	}
 
