@@ -23,24 +23,13 @@ import okhttp3.OkHttpClient;
 @Log4j2
 public class VerifyRefDataModels implements Command {
 	@Inject
-	protected OkHttpClient okHttpClient;
-
-	@Inject
-	protected OkHttpWrapper okHttpWrapper;
-
-	@Inject
-	protected TempFiles tempFiles;
-
-	@Inject
 	protected RefDataUtil refDataUtil;
 
 	private final ObjectMapper objectMapper;
-	private final CollectionType listOfInts;
 
 	@Inject
 	protected VerifyRefDataModels(ObjectMapper objectMapper) {
 		this.objectMapper = objectMapper.copy().enable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-		listOfInts = this.objectMapper.getTypeFactory().constructCollectionType(List.class, Integer.class);
 	}
 
 	@SneakyThrows

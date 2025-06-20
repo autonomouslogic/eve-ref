@@ -78,12 +78,6 @@ public class ScrapeMarketHistory implements Command {
 	protected TempFiles tempFiles;
 
 	@Inject
-	protected OkHttpClient okHttpClient;
-
-	@Inject
-	protected OkHttpWrapper okHttpWrapper;
-
-	@Inject
 	protected DataIndexHelper dataIndexHelper;
 
 	@Inject
