@@ -1,10 +1,10 @@
 package com.autonomouslogic.everef.esi;
 
-import com.autonomouslogic.commons.rxjava3.Rx3Util;
 import com.autonomouslogic.dynamomapper.DynamoAsyncMapper;
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.http.OkHttpWrapper;
 import com.autonomouslogic.everef.model.CharacterLogin;
+import com.autonomouslogic.everef.util.Rx;
 import com.autonomouslogic.everef.util.VirtualThreads;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.scribejava.core.builder.ServiceBuilder;
@@ -105,7 +105,7 @@ public class EsiAuthHelper {
 
 	@SneakyThrows
 	public Completable putCharacterLogin(CharacterLogin characterLogin) {
-		return Completable.defer(() -> Rx3Util.toSingle(dynamoAsyncMapper.putItemFromKeyObject(characterLogin))
+		return Completable.defer(() -> Rx.toSingle(dynamoAsyncMapper.putItemFromKeyObject(characterLogin))
 				.observeOn(VirtualThreads.SCHEDULER)
 				.ignoreElement());
 	}
