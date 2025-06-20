@@ -1,6 +1,7 @@
 package com.autonomouslogic.everef.s3;
 
 import com.autonomouslogic.commons.rxjava3.Rx3Util;
+import com.autonomouslogic.everef.util.Rx;
 import com.autonomouslogic.everef.util.VirtualThreads;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.FlowableTransformer;
@@ -51,7 +52,7 @@ class HeadObjectFlowableTransformer implements FlowableTransformer<ListedS3Objec
 					.bucket(obj.getUrl().getBucket())
 					.key(obj.getUrl().getPath())
 					.build();
-			return Rx3Util.toMaybe(client.headObject(req))
+			return Rx.toMaybe(client.headObject(req))
 					.observeOn(VirtualThreads.SCHEDULER)
 					.flatMap(head -> processResponse(obj, head))
 					.switchIfEmpty(Single.just(obj));
