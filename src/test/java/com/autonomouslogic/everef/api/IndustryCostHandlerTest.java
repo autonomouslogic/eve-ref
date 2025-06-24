@@ -14,6 +14,7 @@ import com.autonomouslogic.everef.cli.api.ApiRunner;
 import com.autonomouslogic.everef.cli.publishrefdata.PublishRefDataTest;
 import com.autonomouslogic.everef.model.api.IndustryCost;
 import com.autonomouslogic.everef.model.api.IndustryCostInput;
+import com.autonomouslogic.everef.model.api.IndustryPrices;
 import com.autonomouslogic.everef.model.api.PriceSource;
 import com.autonomouslogic.everef.model.api.SystemSecurity;
 import com.autonomouslogic.everef.model.fuzzwork.FuzzworkAggregatedMarketSegment;
@@ -460,7 +461,7 @@ public class IndustryCostHandlerTest {
 	void shouldUseCustomPricesForManufacturing() {
 		setupBasicPrices();
 		var input = IndustryCostInput.builder().productId(645L).build();
-		var prices = new HashMap<String, Object>();
+		var prices = new IndustryPrices();
 		prices.put("34", BigDecimal.valueOf(100));
 		prices.put("35", BigDecimal.valueOf(101));
 		var cost = industryApi.industryCost(input, prices);

@@ -26,11 +26,10 @@ public class IndustryPrices {
 
 		var joiner = new StringJoiner("&");
 		for (var entry : entrySet()) {
-			var key = entry.getKey();
+			var key = String.format("%s[%s]", prefix, entry.getKey());
 			var value = entry.getValue().toString();
 			joiner.add(String.format(
-					"%s[%s]=%s",
-					prefix,
+					"%s=%s",
 					ApiClient.urlEncode(ApiClient.valueToString(key)),
 					ApiClient.urlEncode(ApiClient.valueToString(value))));
 		}
