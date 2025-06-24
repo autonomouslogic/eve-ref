@@ -1,5 +1,24 @@
 EVE Ref Changelog
 
+## [2.68.1](https://github.com/autonomouslogic/eve-ref/compare/2.68.0...2.68.1) (2025-06-24)
+
+
+### Bug Fixes
+
+* Re-enabled auto-compaction on temporary MVStores ([c90db77](https://github.com/autonomouslogic/eve-ref/commit/c90db7700eaa42ccb4437a70d62d6e4051b19797))
+* Remove temporary reference data files ([0a67e1c](https://github.com/autonomouslogic/eve-ref/commit/0a67e1cbc91493a0260038f5985e019a76203cb5))
+* **ui:** CCP Legion survey ([286a960](https://github.com/autonomouslogic/eve-ref/commit/286a9602d26a8e70a1a4a331683fb89ca9dd0380))
+
+
+### Code Refactoring
+
+* Use Future.get when on virtual threads ([#916](https://github.com/autonomouslogic/eve-ref/issues/916)) ([7c32e06](https://github.com/autonomouslogic/eve-ref/commit/7c32e06b8ffb1dfaa73925e03760af2ad2615351))
+
+
+### Continuous Integration
+
+* Reference data models check ([#914](https://github.com/autonomouslogic/eve-ref/issues/914)) ([39ea5f9](https://github.com/autonomouslogic/eve-ref/commit/39ea5f92257624c53cd71de4d01f8c769ca4398e))
+
 ## [2.68.0](https://github.com/autonomouslogic/eve-ref/compare/2.67.0...2.68.0) (2025-06-11)
 
 
