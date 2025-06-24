@@ -264,6 +264,7 @@ task apiClientGenerate(type: org.openapitools.generator.gradle.plugin.tasks.Gene
 			"ApiError": "com.autonomouslogic.everef.model.api.ApiError",
 			"IndustryCost": "com.autonomouslogic.everef.model.api.IndustryCost",
 			"IndustryCostInput": "com.autonomouslogic.everef.model.api.IndustryCostInput",
+			"IndustryPrices": "com.autonomouslogic.everef.model.api.IndustryPrices",
 			"CopyingCost": "com.autonomouslogic.everef.model.api.CopyingCost",
 			"ProductionCost": "com.autonomouslogic.everef.model.api.ProductionCost",
 			"InventionCost": "com.autonomouslogic.everef.model.api.InventionCost",

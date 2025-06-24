@@ -573,9 +573,7 @@ components:
           minimum: 0
     IndustryPrices:
       type: object
-      properties:
-        empty:
-          type: boolean
+      additionalProperties: true
     InventionCost:
       type: object
       properties:

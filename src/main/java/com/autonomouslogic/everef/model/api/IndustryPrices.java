@@ -4,4 +4,7 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 
 public class IndustryPrices extends HashMap<Long, BigDecimal> {
+	public String toUrlQueryString(String prefix) {
+		return "";
+	}
 }

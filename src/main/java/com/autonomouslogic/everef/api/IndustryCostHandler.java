@@ -34,6 +34,7 @@ import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.enums.ParameterStyle;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.media.SchemaProperty;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.inject.Inject;
@@ -113,9 +114,11 @@ public class IndustryCostHandler implements HttpService, Handler {
 	@Parameter(
 			in = ParameterIn.QUERY,
 			name = "prices",
-			schema = @Schema(implementation = IndustryPrices.class),
+//			schema = @Schema(implementation = IndustryPrices.class),
 //			schema = @Schema(implementation = Map.class),
 //			schema = @Schema(type = "object"),
+			schema = @Schema(additionalProperties = Schema.AdditionalPropertiesValue.USE_ADDITIONAL_PROPERTIES_ANNOTATION),
+			content = @Content(additionalPropertiesSchema = @Schema(implementation = BigDecimal.class)),
 			explode = Explode.TRUE,
 			style = ParameterStyle.DEEPOBJECT)
 	public IndustryCost industryCost(IndustryCostInput input, Map<Long, BigDecimal> prices) {
