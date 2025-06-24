@@ -30,9 +30,7 @@ paths:
         in: query
         name: prices
         schema:
-          type: object
-          additionalProperties:
-            type: object
+          $ref: "#/components/schemas/IndustryPrices"
         style: deepObject
       responses:
         "200":
@@ -573,6 +571,11 @@ components:
             character
           maximum: 5
           minimum: 0
+    IndustryPrices:
+      type: object
+      properties:
+        empty:
+          type: boolean
     InventionCost:
       type: object
       properties:

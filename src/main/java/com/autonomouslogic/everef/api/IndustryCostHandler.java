@@ -11,6 +11,7 @@ import com.autonomouslogic.everef.model.IndustryRig;
 import com.autonomouslogic.everef.model.api.ApiError;
 import com.autonomouslogic.everef.model.api.IndustryCost;
 import com.autonomouslogic.everef.model.api.IndustryCostInput;
+import com.autonomouslogic.everef.model.api.IndustryPrices;
 import com.autonomouslogic.everef.model.api.SystemSecurity;
 import com.autonomouslogic.everef.openapi.esi.invoker.ApiException;
 import com.autonomouslogic.everef.openapi.esi.model.GetUniverseSystemsSystemIdOk;
@@ -112,11 +113,12 @@ public class IndustryCostHandler implements HttpService, Handler {
 	@Parameter(
 			in = ParameterIn.QUERY,
 			name = "prices",
-			schema = @Schema(implementation = Map.class),
+			schema = @Schema(implementation = IndustryPrices.class),
+//			schema = @Schema(implementation = Map.class),
+//			schema = @Schema(type = "object"),
 			explode = Explode.TRUE,
 			style = ParameterStyle.DEEPOBJECT)
 	public IndustryCost industryCost(IndustryCostInput input, Map<Long, BigDecimal> prices) {
-
 		var calculator = industryCostCalculatorProvider.get().setRefData(refDataService.getLoadedRefData());
 		var refdata = Objects.requireNonNull(refDataService.getLoadedRefData(), "refdata");
 		var productType = handleProduct(input, refdata, calculator);

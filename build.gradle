@@ -257,7 +257,7 @@ task apiClientGenerate(type: org.openapitools.generator.gradle.plugin.tasks.Gene
 			asyncNative: "false"
 	]
 	additionalProperties = [
-			supportUrlQuery: "false"
+			supportUrlQuery: "true"
 	]
 	schemaMappings = [
 			"ActivityCost": "com.autonomouslogic.everef.model.api.ActivityCost",
