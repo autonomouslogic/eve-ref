@@ -106,29 +106,31 @@ public class RefDataUtil {
 	}
 
 	public Flowable<ReferenceEntry> parseReferenceDataArchive(@NonNull File file) {
-		return CompressUtil.loadArchive(file).flatMap(pair -> {
-			var filename = pair.getKey().getName();
-			var type = FilenameUtils.getBaseName(filename);
-			if (!filename.endsWith(".json")) {
-				log.debug("Skipping non-JSON file {}", filename);
-				return Flowable.empty();
-			}
-			log.debug("Parsing {}", filename);
-			if (filename.equals("meta.json")) {
-				return Flowable.just(createEntry(type, pair.getRight()));
-			}
-			var json = (ObjectNode) objectMapper.readTree(pair.getRight());
-			var index = new ArrayList<Long>();
-			var fileEntries = Flowable.fromIterable(() -> json.fields())
-					.map(entry -> {
-						var id = Long.parseLong(entry.getKey());
-						index.add(id);
-						var content = objectMapper.writeValueAsBytes(entry.getValue());
-						return createEntry(type, id, content);
-					})
-					.doOnComplete(() -> log.debug("Finished parsing {}", filename));
-			return fileEntries;
-		});
+		return CompressUtil.loadArchive(file)
+				.flatMap(pair -> {
+					var filename = pair.getKey().getName();
+					var type = FilenameUtils.getBaseName(filename);
+					if (!filename.endsWith(".json")) {
+						log.debug("Skipping non-JSON file {}", filename);
+						return Flowable.empty();
+					}
+					log.debug("Parsing {}", filename);
+					if (filename.equals("meta.json")) {
+						return Flowable.just(createEntry(type, pair.getRight()));
+					}
+					var json = (ObjectNode) objectMapper.readTree(pair.getRight());
+					var index = new ArrayList<Long>();
+					var fileEntries = Flowable.fromIterable(() -> json.fields())
+							.map(entry -> {
+								var id = Long.parseLong(entry.getKey());
+								index.add(id);
+								var content = objectMapper.writeValueAsBytes(entry.getValue());
+								return createEntry(type, id, content);
+							})
+							.doOnComplete(() -> log.debug("Finished parsing {}", filename));
+					return fileEntries;
+				})
+				.doFinally(() -> file.delete());
 	}
 
 	public ReferenceEntry createEntry(@NonNull String type, @NonNull Long id, @NonNull byte[] content) {
