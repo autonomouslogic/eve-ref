@@ -114,11 +114,9 @@ public class IndustryCostHandler implements HttpService, Handler {
 			name = "prices",
 			schema = @Schema(implementation = Map.class),
 			explode = Explode.TRUE,
-	style = ParameterStyle.DEEPOBJECT)
-	public IndustryCost industryCost(IndustryCostInput input,
-		Map<Long, BigDecimal> prices
+			style = ParameterStyle.DEEPOBJECT)
+	public IndustryCost industryCost(IndustryCostInput input, Map<Long, BigDecimal> prices) {
 
-		) {
 		var calculator = industryCostCalculatorProvider.get().setRefData(refDataService.getLoadedRefData());
 		var refdata = Objects.requireNonNull(refDataService.getLoadedRefData(), "refdata");
 		var productType = handleProduct(input, refdata, calculator);
