@@ -2,16 +2,13 @@ package com.autonomouslogic.everef.model.api;
 
 import com.autonomouslogic.everef.openapi.api.invoker.ApiClient;
 import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.media.SchemaProperties;
-import lombok.experimental.Delegate;
-import lombok.NonNull;
-import org.apache.commons.lang3.StringUtils;
-
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringJoiner;
+import lombok.NonNull;
+import org.apache.commons.lang3.StringUtils;
 
 @Schema
 public class IndustryPrices {
@@ -31,12 +28,11 @@ public class IndustryPrices {
 		for (var entry : entrySet()) {
 			var key = entry.getKey();
 			var value = entry.getValue().toString();
-			joiner.add(String.format("%s[%s]=%s", prefix,
-
-				ApiClient.urlEncode(ApiClient.valueToString(key)),
-				ApiClient.urlEncode(ApiClient.valueToString(value))
-
-			));
+			joiner.add(String.format(
+					"%s[%s]=%s",
+					prefix,
+					ApiClient.urlEncode(ApiClient.valueToString(key)),
+					ApiClient.urlEncode(ApiClient.valueToString(value))));
 		}
 
 		return joiner.toString();
