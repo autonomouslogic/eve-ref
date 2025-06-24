@@ -23,8 +23,17 @@ paths:
       - explode: true
         in: query
         name: input
+        required: true
         schema:
           $ref: "#/components/schemas/IndustryCostInput"
+      - explode: true
+        in: query
+        name: prices
+        schema:
+          type: object
+          additionalProperties:
+            type: object
+        style: deepObject
       responses:
         "200":
           content:
