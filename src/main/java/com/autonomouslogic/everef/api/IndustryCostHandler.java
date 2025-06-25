@@ -11,6 +11,7 @@ import com.autonomouslogic.everef.model.IndustryRig;
 import com.autonomouslogic.everef.model.api.ApiError;
 import com.autonomouslogic.everef.model.api.IndustryCost;
 import com.autonomouslogic.everef.model.api.IndustryCostInput;
+import com.autonomouslogic.everef.model.api.IndustryPrices;
 import com.autonomouslogic.everef.model.api.SystemSecurity;
 import com.autonomouslogic.everef.openapi.esi.invoker.ApiException;
 import com.autonomouslogic.everef.openapi.esi.model.GetUniverseSystemsSystemIdOk;
@@ -30,6 +31,7 @@ import io.helidon.webserver.http.ServerResponse;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.Explode;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.enums.ParameterStyle;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -105,9 +107,20 @@ public class IndustryCostHandler implements HttpService, Handler {
 	@Parameter(
 			in = ParameterIn.QUERY,
 			name = "input",
+			required = true,
 			schema = @Schema(implementation = IndustryCostInput.class),
-			explode = Explode.TRUE)
-	public IndustryCost industryCost(IndustryCostInput input) {
+			explode = Explode.TRUE,
+			style = ParameterStyle.FORM)
+	@Parameter(
+			in = ParameterIn.QUERY,
+			name = "prices",
+			schema =
+					@Schema(
+							additionalProperties = Schema.AdditionalPropertiesValue.TRUE,
+							implementation = IndustryPrices.class),
+			explode = Explode.TRUE,
+			style = ParameterStyle.DEEPOBJECT)
+	public IndustryCost industryCost(IndustryCostInput input, Map<Long, BigDecimal> prices) {
 		var calculator = industryCostCalculatorProvider.get().setRefData(refDataService.getLoadedRefData());
 		var refdata = Objects.requireNonNull(refDataService.getLoadedRefData(), "refdata");
 		var productType = handleProduct(input, refdata, calculator);
@@ -132,7 +145,7 @@ public class IndustryCostHandler implements HttpService, Handler {
 		var input = createInput(req);
 		input = handleDefaults(input);
 		validateInput(input);
-		var result = industryCost(input);
+		var result = industryCost(input, null);
 		var json = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(result) + "\n";
 		res.status(Status.OK_200)
 				.header("Server", "eve-ref/" + eveRefVersion)
