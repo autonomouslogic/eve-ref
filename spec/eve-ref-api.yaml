@@ -26,6 +26,7 @@ paths:
         required: true
         schema:
           $ref: "#/components/schemas/IndustryCostInput"
+        style: form
       - explode: true
         in: query
         name: prices

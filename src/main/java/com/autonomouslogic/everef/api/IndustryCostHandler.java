@@ -109,7 +109,8 @@ public class IndustryCostHandler implements HttpService, Handler {
 			name = "input",
 			required = true,
 			schema = @Schema(implementation = IndustryCostInput.class),
-			explode = Explode.TRUE)
+			explode = Explode.TRUE,
+			style = ParameterStyle.FORM)
 	@Parameter(
 			in = ParameterIn.QUERY,
 			name = "prices",
