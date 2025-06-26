@@ -66,14 +66,6 @@ const motd = computed(() => {
 		} as Motd;
 	}
 
-	if (dayOfWeek == 4) {
-		return {
-			text: "Win 50x PLEX and 3 Day Omega every Friday",
-			url: "/giveaways",
-			urlText: "Giveaways"
-		} as Motd;
-	}
-
 	// Recent donors.
 	if (donorsStatus.value == "success" && donors?.value?.recent?.length && donors.value.recent.length > 0) {
 		const donorsText = donors.value.recent.map(donor => {
@@ -83,6 +75,14 @@ const motd = computed(() => {
 			text: `${donorsText}`,
 			url: "/about",
 			urlText: "Donate ISK"
+		} as Motd;
+	}
+
+	if (dayOfWeek == 4) {
+		return {
+			text: "Win 50x PLEX and 3 Day Omega every Friday",
+			url: "/giveaways",
+			urlText: "Giveaways"
 		} as Motd;
 	}
 
