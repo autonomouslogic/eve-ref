@@ -256,7 +256,7 @@
   attribute_id: 1302
   default_value: 0
   description: ""
-  display_name: "Can be fitted to"
+  display_name: "Can only be fitted to"
   high_is_good: true
   icon_id: 1443
   name: "canFitShipType1"
