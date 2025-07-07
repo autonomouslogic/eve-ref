@@ -1,5 +1,19 @@
 EVE Ref Changelog
 
+## [2.68.2](https://github.com/autonomouslogic/eve-ref/compare/2.68.1...2.68.2) (2025-07-07)
+
+
+### Bug Fixes
+
+* **deps:** update dependency org.flywaydb:flyway-core to v11.10.1 ([#922](https://github.com/autonomouslogic/eve-ref/issues/922)) ([9330ff1](https://github.com/autonomouslogic/eve-ref/commit/9330ff1fb4cee6cefee54f0168155e99b32b489b))
+* **deps:** update flyway to v11.10.1 ([#923](https://github.com/autonomouslogic/eve-ref/issues/923)) ([c6f3fec](https://github.com/autonomouslogic/eve-ref/commit/c6f3fec22901be5ea8990810090b0e5c998dd888))
+* **ui:** Always diplay donors in MOTD ([2191689](https://github.com/autonomouslogic/eve-ref/commit/219168925bf332da668be49529415b8a56f7d27d))
+
+
+### Tests
+
+* Updated test resources ([e5a2d23](https://github.com/autonomouslogic/eve-ref/commit/e5a2d235d0ee86adae7930b4308edd6e08cfc58f))
+
 ## [2.68.1](https://github.com/autonomouslogic/eve-ref/compare/2.68.0...2.68.1) (2025-06-24)
 
 
