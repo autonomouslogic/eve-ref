@@ -468,7 +468,7 @@
   description: ""
   displayNameID:
     de: "Kann eingebaut werden in"
-    en: "Can be fitted to"
+    en: "Can only be fitted to"
     es: "Se puede equipar en"
     fr: "Peut être équipé sur"
     ja: "装着可能対象"
