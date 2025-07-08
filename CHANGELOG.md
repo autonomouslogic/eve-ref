@@ -1,5 +1,17 @@
 EVE Ref Changelog
 
+## [2.68.3](https://github.com/autonomouslogic/eve-ref/compare/2.68.2...2.68.3) (2025-07-08)
+
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([#921](https://github.com/autonomouslogic/eve-ref/issues/921)) ([19362ef](https://github.com/autonomouslogic/eve-ref/commit/19362ef4c93920de05ee0a1dcfe89b17e27cc695))
+
+
+### Miscellaneous Chores
+
+* Updated test resources ([dfc30df](https://github.com/autonomouslogic/eve-ref/commit/dfc30df5dab144646e87a0e40bb701db3a0c17fb))
+
 ## [2.68.2](https://github.com/autonomouslogic/eve-ref/compare/2.68.1...2.68.2) (2025-07-07)
 
 
