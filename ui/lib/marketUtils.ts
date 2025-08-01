@@ -1,12 +1,22 @@
-import {GetMarketsRegionIdOrdersDatasourceEnum, GetMarketsRegionIdOrdersOrderTypeEnum} from "~/esi-openapi";
+import {
+    type GetMarketsRegionIdOrders200Ok,
+    GetMarketsRegionIdOrdersDatasourceEnum,
+    GetMarketsRegionIdOrdersOrderTypeEnum
+} from "~/esi-openapi";
 import {marketApi} from "~/esi";
-import {DOMAIN, HEIMATAR, METROPOLIS, SINQ_LAISON, THE_FORGE} from "~/lib/regionConstants";
+import {DOMAIN, HEIMATAR, METROPOLIS, GPMR_01, SINQ_LAISON, THE_FORGE} from "~/lib/regionConstants";
+import {PLEX_TYPE_ID} from "~/lib/typeConstants";
 
 export interface HubStation {
     systemName: string,
-    stationId: number,
-    regionId: number
+    regionId: number,
+    stationId: number | undefined
 }
+
+export const PLEX_REGION_HUB_STATION = {
+    systemName: "GPMR-01",
+    regionId: GPMR_01
+} as HubStation;
 
 export const HUB_STATIONS = new Map<string, HubStation>();
 // Jita IV - Moon 4 - Caldari Navy Assembly Plant
@@ -55,13 +65,29 @@ export async function getOrders(orderType: GetMarketsRegionIdOrdersOrderTypeEnum
     });
 }
 
+/**
+ * Returns the Jita sell price for the supplied type.
+ * If the request type is PLEX, the PLEX market region is automatically used.
+ * @param typeId
+ */
 export async function getJitaSellPrice(typeId: number) {
-    const jitaHub = HUB_STATIONS.get("Jita");
-    if (jitaHub == undefined) {
+    var regionId: number | undefined = undefined;
+    var hub: HubStation | undefined = undefined;
+    if (typeId = PLEX_TYPE_ID) {
+        regionId = GPMR_01;
+    }
+    else {
+        hub = HUB_STATIONS.get("Jita");
+        regionId = hub?.regionId;
+    }
+    if (regionId == undefined) {
         return undefined;
     }
-    const sellPrice = (await getOrders(GetMarketsRegionIdOrdersOrderTypeEnum.Sell, typeId, jitaHub.regionId))
-        .filter(e => e.locationId == jitaHub?.stationId)
+    var orders  = (await getOrders(GetMarketsRegionIdOrdersOrderTypeEnum.Sell, typeId, regionId));
+    if (hub != undefined) {
+        orders = orders.filter(e => e.locationId == hub?.stationId)
+    }
+        const sellPrice = orders
         .map(e => e.price)
         .sort((a, b) => a - b)
         .shift();
