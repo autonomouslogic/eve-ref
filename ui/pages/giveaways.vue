@@ -40,7 +40,7 @@ const plexPrice = await getJitaSellPrice(PLEX_TYPE_ID) || 0;
 
 const firstFleetPack = DateTime.fromISO("2025-08-01T14:00:00Z");
 const fleetPackDates = [];
-for (let i = 0; i < 5; i++) {
+for (let i = 0; i < 5+4+5; i++) {
 	fleetPackDates.push(firstFleetPack.plus({days: i * 7}));
 }
 
@@ -107,7 +107,9 @@ unrolled.sort((a, b) => a.dates[0].toMillis() - b.dates[0].toMillis());
 const totalWorth = unrolled.reduce((acc, prize) => acc + prize.value * prize.winners, 0);
 
 const pastGiveaways = {
-	"August 2025": 10 * 604.13e6,
+	"October 2025": 10 * 602.94e6,
+	"September 2025": 8 * 602.94e6,
+	"August 2025": 10 * 602.94e6,
 	"July 2025": 8 * 620.72e6,
 	"June 2025": 8 * 620.72e6 + 4 * 99.99e6 + 4 * 184.00e6,
 	"May 2025": 10 * 629.26e6,
