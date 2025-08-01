@@ -1,3 +1,4 @@
+export const GPMR_01 = 19000001;
 export const DERELIK = 10000001;
 export const THE_FORGE = 10000002;
 export const VALE_OF_THE_SILENT = 10000003;
