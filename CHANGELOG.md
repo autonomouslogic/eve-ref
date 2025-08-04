@@ -1,5 +1,14 @@
 EVE Ref Changelog
 
+## [2.68.4](https://github.com/autonomouslogic/eve-ref/compare/2.68.3...2.68.4) (2025-08-04)
+
+
+### Bug Fixes
+
+* **deps:** update dependency org.flywaydb:flyway-core to v11.10.5 ([#933](https://github.com/autonomouslogic/eve-ref/issues/933)) ([7d8cc73](https://github.com/autonomouslogic/eve-ref/commit/7d8cc73444e5342b541c007be7b2436886cd4663))
+* **deps:** update flyway to v11.10.5 ([#934](https://github.com/autonomouslogic/eve-ref/issues/934)) ([1532db0](https://github.com/autonomouslogic/eve-ref/commit/1532db08a02ba5c8c3ce0f8f4d78ebe2ba4dc0ee))
+* **ui:** PLEX prices and August giveaways ([#931](https://github.com/autonomouslogic/eve-ref/issues/931)) ([5b37aaa](https://github.com/autonomouslogic/eve-ref/commit/5b37aaa5589e545cd72c1feb9df385c9cdbedd50))
+
 ## [2.68.3](https://github.com/autonomouslogic/eve-ref/compare/2.68.2...2.68.3) (2025-07-08)
 
 
