@@ -1,5 +1,13 @@
 EVE Ref Changelog
 
+## [2.68.5](https://github.com/autonomouslogic/eve-ref/compare/2.68.4...2.68.5) (2025-08-05)
+
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([#932](https://github.com/autonomouslogic/eve-ref/issues/932)) ([db0ca88](https://github.com/autonomouslogic/eve-ref/commit/db0ca8827d2536c2fd3708d1bd383f6838d4ab21))
+* **deps:** update dependency @fortawesome/vue-fontawesome to v3.1.1 ([#935](https://github.com/autonomouslogic/eve-ref/issues/935)) ([669f065](https://github.com/autonomouslogic/eve-ref/commit/669f065b4fd679dd6329830c0ed01eb18f8a9dd6))
+
 ## [2.68.4](https://github.com/autonomouslogic/eve-ref/compare/2.68.3...2.68.4) (2025-08-04)
 
 
