@@ -75,7 +75,7 @@ dependencies {
 	implementation "org.apache.commons:commons-compress:1.28.0"
 	implementation "org.tukaani:xz:1.10"
 	implementation "com.h2database:h2-mvstore:2.3.232"
-	implementation "com.squareup.okhttp3:okhttp:4.12.0"
+	implementation "com.squareup.okhttp3:okhttp:5.1.0"
 	implementation "org.apache.commons:commons-csv:1.14.1"
 	implementation "net.gpedro.integrations.slack:slack-webhook:1.4.0"
 	implementation "org.jsoup:jsoup:1.21.1"
@@ -118,7 +118,7 @@ dependencies {
 	testImplementation "org.junit.jupiter:junit-jupiter-params:5.13.4"
 	testImplementation "org.junit-pioneer:junit-pioneer:2.3.0"
 	testImplementation "org.mockito:mockito-junit-jupiter:5.18.0"
-	testImplementation "com.squareup.okhttp3:mockwebserver:4.12.0"
+	testImplementation "com.squareup.okhttp3:mockwebserver:5.1.0"
 }
 
 task refDataSpec(type: io.swagger.v3.plugins.gradle.tasks.ResolveTask) {
