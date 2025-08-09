@@ -48,3 +48,22 @@ export const SOCIAL_ADAPTATION_CHIP_STANDARD = 10225;
 export const SOCIAL_ADAPTATION_CHIP_IMPROVED = 10226;
 export const SOCIAL_ADAPTATION_CHIP_ADVANCED = 10227;
 export const SOCIAL_ADAPTATION_CHIP_BASIC = 9956;
+
+export const VELDSPAR = 1230;
+export const SCORDITE = 1228;
+export const PYROXERES = 1224;
+export const PLAGIOCLASE = 18;
+export const KERNITE = 20;
+export const OMBER = 1227;
+export const JASPET = 1226;
+export const HEMORPHITE = 1231;
+export const HEDBERGITE = 21;
+export const ARKONOR = 22;
+export const BISTOT = 1223;
+export const MERCOXIT = 11396;
+
+export const TRITANIUM = 34;
+export const PYERITE = 35;
+export const MEXALLON = 36;
+export const ISOGEN = 37;
+export const NOCXIUM = 38;
