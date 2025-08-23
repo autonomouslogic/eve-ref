@@ -59,25 +59,29 @@ class ScrapeMarketHistoryBatchLoader {
 		}
 		return f.sorted(Ordering.natural().onResultOf(Pair::getLeft))
 				.switchIfEmpty(Flowable.error(new RuntimeException("No market history files found.")))
-				.parallel(downloadConcurrency)
-				.runOn(VirtualThreads.SCHEDULER)
-				.flatMap(p -> {
-					return marketHistoryLoader
-							.loadDailyFile(p.getRight(), p.getLeft())
-							.flatMap(entry -> Flowable.fromIterable(entry.getRight()))
-							.map(entry -> {
-								totalEntries.incrementAndGet();
-								return Pair.of(p.getLeft(), entry);
-							})
-							.toList()
-							.flatMapPublisher(entries -> {
-								synchronized (fileTotals) {
-									fileTotals.put(p.getLeft(), entries.size());
-								}
-								return Flowable.fromIterable(entries);
-							});
-				})
-				.sequential()
+				//				.parallel(downloadConcurrency)
+				//				.runOn(VirtualThreads.SCHEDULER)
+				.flatMap(
+						p -> {
+							return marketHistoryLoader
+									.loadDailyFile(p.getRight(), p.getLeft())
+									.subscribeOn(VirtualThreads.SCHEDULER)
+									.flatMap(entry -> Flowable.fromIterable(entry.getRight()))
+									.map(entry -> {
+										totalEntries.incrementAndGet();
+										return Pair.of(p.getLeft(), entry);
+									})
+									.toList()
+									.flatMapPublisher(entries -> {
+										synchronized (fileTotals) {
+											fileTotals.put(p.getLeft(), entries.size());
+										}
+										return Flowable.fromIterable(entries);
+									});
+						},
+						false,
+						downloadConcurrency)
+				//				.sequential()
 				.doOnComplete(() -> log.info("Loaded {} market history entries", totalEntries.get()))
 				.switchIfEmpty(Flowable.error(new RuntimeException("No market data found in history files.")));
 	}
