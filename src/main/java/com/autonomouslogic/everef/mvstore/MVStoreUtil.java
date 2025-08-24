@@ -4,7 +4,6 @@ import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.util.TempFiles;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.io.File;
 import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -48,17 +47,5 @@ public class MVStoreUtil {
 	public <K> Map<K, JsonNode> openJsonMap(@NonNull MVStore mvStore, @NonNull String name, @NonNull Class<K> keyType) {
 		MVMap<K, byte[]> map = mvStore.openMap(name);
 		return new JsonNodeMap<K>(map, objectMapper);
-	}
-
-	public void compact(MVStore mvStore) {
-		var file = new File(mvStore.getFileStore().getFileName());
-		var size = file.length();
-		log.debug(String.format("Compacting %s, current size: %.2f MiB", file, size / 1024.0 / 1024.0));
-		mvStore.compactFile(30_000);
-		var newSize = file.length();
-		var reduction = 1.0 - (double) newSize / (double) size;
-		log.debug(String.format(
-				"Compacted %s, new size: %.2f MiB - reduction: %.1f%%",
-				file, size / 1024.0 / 1024.0, reduction * 100.0));
 	}
 }

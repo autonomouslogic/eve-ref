@@ -159,14 +159,9 @@ public class ScrapeMarketHistory implements Command {
 						initMvStore();
 						downloadTotalPairs();
 						loadMarketHistory();
-						mvStoreUtil.compact(mvStore);
 						loadPairs()
 								.buffer(chunkSize)
-								.flatMapCompletable(
-										chunk -> processChunk(chunk)
-												.andThen(Completable.fromAction(() -> mvStoreUtil.compact(mvStore))),
-										false,
-										1)
+								.flatMapCompletable(this::processChunk, false, 1)
 								.blockingAwait();
 						stats.logStats();
 					} finally {
