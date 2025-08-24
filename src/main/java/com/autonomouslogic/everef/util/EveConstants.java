@@ -21,6 +21,7 @@ public class EveConstants {
 	public static final long STANDARD_MARKET_HUB_I_TYPE_ID = 35892;
 	public static final long ASTRAHUS_HUB_TYPE_ID = 35832;
 	public static final long KEEPSTAR_TYPE_ID = 35834;
+	public static final long PLEX_TYPE_ID = 44992;
 
 	public static final long NPC_STATION_MAX_ID = 100_000_000;
 
