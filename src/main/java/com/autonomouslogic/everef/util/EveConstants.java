@@ -21,10 +21,13 @@ public class EveConstants {
 	public static final long STANDARD_MARKET_HUB_I_TYPE_ID = 35892;
 	public static final long ASTRAHUS_HUB_TYPE_ID = 35832;
 	public static final long KEEPSTAR_TYPE_ID = 35834;
+	public static final long PLEX_TYPE_ID = 44992;
 
 	public static final long NPC_STATION_MAX_ID = 100_000_000;
 
 	public static final long JITA_4_4_STATION_ID = 60003760L;
 
 	public static final int TECH_1_META_GROUP_ID = 1;
+
+	public static final int GPMR_01_REGION_ID = 19000001;
 }

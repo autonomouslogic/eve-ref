@@ -14,6 +14,7 @@ import com.autonomouslogic.everef.test.TestDataUtil;
 import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.util.ArchivePathFactory;
 import com.autonomouslogic.everef.util.DataIndexHelper;
+import com.autonomouslogic.everef.util.EveConstants;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.ByteArrayInputStream;
@@ -153,6 +154,16 @@ public class ScrapeMarketHistoryTest {
 		assertTrue(requestedPairs.contains(new RegionTypePair(11000031, 74216)));
 		// Present in ref data, added by ExplorerRegionTypeSource.
 		assertTrue(requestedPairs.contains(new RegionTypePair(10000100, 999)));
+		// PLEX should only be requested in the PLEX region.
+		// One exists in the recent market orders, it should be removed from the search.
+		assertTrue(requestedPairs.contains(
+				new RegionTypePair(EveConstants.GPMR_01_REGION_ID, (int) EveConstants.PLEX_TYPE_ID)));
+		assertEquals(
+				List.of(),
+				requestedPairs.stream()
+						.filter(t -> t.getTypeId() == EveConstants.PLEX_TYPE_ID)
+						.filter(t -> t.getRegionId() != EveConstants.GPMR_01_REGION_ID)
+						.toList());
 
 		// Assert data index.
 		Mockito.verify(dataIndexHelper)
@@ -318,6 +329,11 @@ public class ScrapeMarketHistoryTest {
 								Region.builder()
 										.regionId(10000100L)
 										.universeId("eve")
+										.build(),
+								EveConstants.GPMR_01_REGION_ID,
+								Region.builder()
+										.regionId((long) EveConstants.GPMR_01_REGION_ID)
+										.universeId("hidden")
 										.build())),
 				"types.json",
 						objectMapper.writeValueAsBytes(Map.of(
