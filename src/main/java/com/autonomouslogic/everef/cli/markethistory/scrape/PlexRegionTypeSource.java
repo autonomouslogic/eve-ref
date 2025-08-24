@@ -21,10 +21,9 @@ class PlexRegionTypeSource implements RegionTypeSource {
 		var filtered = currentPairs.stream()
 				.filter(pair -> (pair.getRegionId() == EveConstants.GPMR_01_REGION_ID)
 						== (pair.getTypeId() == EveConstants.PLEX_TYPE_ID));
-		var list = Stream.concat(
-						Stream.of(new RegionTypePair(EveConstants.GPMR_01_REGION_ID, (int) EveConstants.PLEX_TYPE_ID)),
-						filtered)
-				.toList();
-		return Flowable.fromIterable(list);
+		var concat = Stream.concat(
+				Stream.of(new RegionTypePair(EveConstants.GPMR_01_REGION_ID, (int) EveConstants.PLEX_TYPE_ID)),
+				filtered);
+		return Flowable.fromStream(concat);
 	}
 }
