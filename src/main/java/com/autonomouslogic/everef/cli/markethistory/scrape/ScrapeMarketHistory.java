@@ -23,7 +23,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.reactivex.rxjava3.core.Completable;
-import io.reactivex.rxjava3.core.CompletableSource;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Maybe;
 import java.io.FileOutputStream;
@@ -177,7 +176,7 @@ public class ScrapeMarketHistory implements Command {
 	}
 
 	@NotNull
-	private CompletableSource processChunk(List<RegionTypePair> chunk) {
+	private Completable processChunk(List<RegionTypePair> chunk) {
 		return Completable.defer(() -> {
 			log.info("Processing chunk of {} pairs", chunk.size());
 			return Completable.concatArray(

@@ -40,8 +40,9 @@ public class MVStoreUtil {
 		log.debug("MVStore '{}' opened at {}", name, file.getAbsolutePath());
 		var builder = new MVStore.Builder()
 				.fileName(file.getAbsolutePath())
+				.cacheSize(cacheSize)
 				.compress()
-				.cacheSize(cacheSize);
+				.autoCompactFillRate(50);
 		var store = builder.open();
 		store.setVersionsToKeep(0);
 		return store;

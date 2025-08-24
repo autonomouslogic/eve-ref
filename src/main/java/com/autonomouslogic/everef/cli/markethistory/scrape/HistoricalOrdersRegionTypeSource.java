@@ -16,9 +16,12 @@ import com.google.common.collect.Ordering;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Maybe;
 import java.io.File;
+import java.time.Duration;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.ZoneOffset;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -49,6 +52,8 @@ class HistoricalOrdersRegionTypeSource implements RegionTypeSource {
 
 	private Period maxAge = Configs.ESI_MARKET_HISTORY_SNAPSHOT_LOOKBACK.getRequired();
 
+	private final int downloadConcurrency = Configs.MARKET_HISTORY_LOAD_CONCURRENCY.getRequired();
+
 	@Setter
 	@NonNull
 	private LocalDate today;
@@ -59,7 +64,7 @@ class HistoricalOrdersRegionTypeSource implements RegionTypeSource {
 	@Override
 	public Flowable<RegionTypePair> sourcePairs(Collection<RegionTypePair> currentPairs) {
 		return getSampleFiles()
-				.flatMap(f -> downloadFile(f).toFlowable())
+				.flatMap(f -> downloadFile(f).toFlowable(), false, downloadConcurrency)
 				.flatMap(this::parseFile)
 				.onErrorResumeNext(e -> {
 					log.warn("Failed fetching historical region orders, ignoring", e);
@@ -68,19 +73,30 @@ class HistoricalOrdersRegionTypeSource implements RegionTypeSource {
 	}
 
 	@NotNull
+	private Flowable<Pair<Instant, DataUrl>> resolveSampleFiles() {
+		var maxTime = today.atStartOfDay().atZone(ZoneOffset.UTC).toInstant();
+		var minTime = maxTime.minus(maxAge);
+		var days = new ArrayList<Instant>();
+		for (var t = minTime; !t.isAfter(maxTime); t = t.plus(Duration.ofDays(1))) {
+			days.add(t);
+		}
+		return Flowable.fromIterable(days).flatMap(day -> {
+			var prefix = ArchivePathFactory.MARKET_ORDERS.createArchivePath(day);
+			var dateFolder = new File(prefix).getParent();
+			return Flowable.fromIterable(dataCrawler.get().setPrefix(dateFolder).crawl())
+					.flatMap(url -> {
+						var time = ArchivePathFactory.MARKET_ORDERS.parseArchiveTime(url.getPath());
+						if (time == null || time.isBefore(minTime)) {
+							return Flowable.empty();
+						}
+						return Flowable.just(Pair.of(time, url));
+					});
+		});
+	}
+
+	@NotNull
 	private Flowable<DataUrl> getSampleFiles() {
-		var minTime = today.atStartOfDay().atZone(ZoneOffset.UTC).minus(maxAge).toInstant();
-		return Flowable.fromIterable(dataCrawler
-						.get()
-						.setPrefix(ArchivePathFactory.MARKET_ORDERS.getFolder())
-						.crawl())
-				.flatMap(url -> {
-					var time = ArchivePathFactory.MARKET_ORDERS.parseArchiveTime(url.getPath());
-					if (time == null || time.isBefore(minTime)) {
-						return Flowable.empty();
-					}
-					return Flowable.just(Pair.of(time, url));
-				})
+		return resolveSampleFiles()
 				.groupBy(pair -> pair.getLeft().atZone(ZoneOffset.UTC).toLocalDate(), Pair::getRight)
 				.flatMap(group -> group.sorted(Ordering.natural().onResultOf(DataUrl::getPath))
 						.toList()
@@ -98,17 +114,18 @@ class HistoricalOrdersRegionTypeSource implements RegionTypeSource {
 
 	private Maybe<File> downloadFile(DataUrl url) {
 		return Maybe.defer(() -> {
-			var file = tempFiles
-					.tempFile("market-orders", ArchivePathFactory.MARKET_ORDERS.getSuffix())
-					.toFile();
-			try (var response = okHttpWrapper.download(url.toString(), file)) {
-				if (response.code() != 200) {
-					return Maybe.error(
-							new RuntimeException("Failed to download " + url + " with code " + response.code()));
-				}
-				return Maybe.just(file);
-			}
-		});
+					var file = tempFiles
+							.tempFile("market-orders", ArchivePathFactory.MARKET_ORDERS.getSuffix())
+							.toFile();
+					try (var response = okHttpWrapper.download(url.toString(), file)) {
+						if (response.code() != 200) {
+							return Maybe.error(new RuntimeException(
+									"Failed to download " + url + " with code " + response.code()));
+						}
+						return Maybe.just(file);
+					}
+				})
+				.observeOn(VirtualThreads.SCHEDULER);
 	}
 
 	private Flowable<RegionTypePair> parseFile(File file) {
