@@ -1,5 +1,27 @@
 EVE Ref Changelog
 
+## [2.68.6](https://github.com/autonomouslogic/eve-ref/compare/2.68.5...2.68.6) (2025-08-24)
+
+
+### Bug Fixes
+
+* **deps:** update font awesome to v7 (major) ([#929](https://github.com/autonomouslogic/eve-ref/issues/929)) ([511edce](https://github.com/autonomouslogic/eve-ref/commit/511edce84a44b9bbc0d051598e21c9dd4777d90c))
+* **deps:** update okhttp monorepo to v5 (major) ([#919](https://github.com/autonomouslogic/eve-ref/issues/919)) ([803cf57](https://github.com/autonomouslogic/eve-ref/commit/803cf57c21a09651c3611d4a5f8345e874c1a76c))
+* Fixed closed responses on market history scrape ([#943](https://github.com/autonomouslogic/eve-ref/issues/943)) ([d7487af](https://github.com/autonomouslogic/eve-ref/commit/d7487affd0c75747c1cfed6804f3373a94cfa494))
+* PLEX market region handling on market history scrape ([#945](https://github.com/autonomouslogic/eve-ref/issues/945)) ([9c0662b](https://github.com/autonomouslogic/eve-ref/commit/9c0662b5a5b02f8ac319f8115fead2b910fe4123))
+* Temporarily disabled parallel streams on market history and used concurrent flatMap instead ([#942](https://github.com/autonomouslogic/eve-ref/issues/942)) ([e994466](https://github.com/autonomouslogic/eve-ref/commit/e9944664ba8f0ff6ab2470cfb1d26fdff12cd793))
+* Various market history fixes ([#944](https://github.com/autonomouslogic/eve-ref/issues/944)) ([3a14344](https://github.com/autonomouslogic/eve-ref/commit/3a143449db4ff8ea073883b11fac4123ffb3b734))
+
+
+### Dependency Updates
+
+* **deps:** update actions/checkout action to v5 ([#937](https://github.com/autonomouslogic/eve-ref/issues/937)) ([27cd44d](https://github.com/autonomouslogic/eve-ref/commit/27cd44d408c25377b4c33db1ca6d979ad400b265))
+* **deps:** update actions/setup-java action to v5 ([#941](https://github.com/autonomouslogic/eve-ref/issues/941)) ([63fa5d9](https://github.com/autonomouslogic/eve-ref/commit/63fa5d9e22acea32d9b0a9ac9f84d9e55697f44a))
+* **deps:** update amannn/action-semantic-pull-request action to v6 ([#939](https://github.com/autonomouslogic/eve-ref/issues/939)) ([9b521e5](https://github.com/autonomouslogic/eve-ref/commit/9b521e541db6ba1171e6c4be785145b56e5a3b0e))
+* **deps:** update dependency node to v22 ([#936](https://github.com/autonomouslogic/eve-ref/issues/936)) ([0da84e0](https://github.com/autonomouslogic/eve-ref/commit/0da84e08d48911e011fc122e3c8f3d5fbfaf9e50))
+* **deps:** update dependency vue-tsc to v3 ([#918](https://github.com/autonomouslogic/eve-ref/issues/918)) ([611a972](https://github.com/autonomouslogic/eve-ref/commit/611a972112aa93ff9480b415bcef6fbacfc431ec))
+* **deps:** update plugin org.danilopianini.git-sensitive-semantic-versioning-gradle-plugin to v7 ([#940](https://github.com/autonomouslogic/eve-ref/issues/940)) ([67d0469](https://github.com/autonomouslogic/eve-ref/commit/67d0469db234856742be644a94fcb6612fb983e8))
+
 ## [2.68.5](https://github.com/autonomouslogic/eve-ref/compare/2.68.4...2.68.5) (2025-08-05)
 
 
