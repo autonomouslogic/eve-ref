@@ -19,14 +19,14 @@ import org.junit.jupiter.api.Test;
 public class OkHttpWrapperTest {
 	TempFiles tempFiles = new TempFiles();
 	OkHttpClient client;
-	OkHttpWrapper helper;
+	OkHttpWrapper wrapper;
 	MockWebServer server;
 
 	@BeforeEach
 	@SneakyThrows
 	void setup() {
 		client = new OkHttpClient();
-		helper = new OkHttpWrapper(client);
+		wrapper = new OkHttpWrapper(client);
 		server = new MockWebServer();
 		server.start(TestDataUtil.TEST_PORT);
 	}
@@ -50,7 +50,7 @@ public class OkHttpWrapperTest {
 		file.delete();
 		var url = String.format("http://localhost:%s/test", server.getPort());
 
-		try (var response = helper.download(url, file)) {}
+		try (var response = wrapper.download(url, file)) {}
 		assertEquals("content\n", IOUtils.toString(file.toURI(), StandardCharsets.UTF_8));
 		assertEquals(
 				Instant.parse("2020-01-06T00:07:14Z"),
