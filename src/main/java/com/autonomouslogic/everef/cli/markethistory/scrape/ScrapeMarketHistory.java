@@ -113,7 +113,7 @@ public class ScrapeMarketHistory implements Command {
 	protected Provider<ExplorerRegionTypeSource> explorerRegionTypeSourceProvider;
 
 	@Inject
-	protected Provider<PlexRegionTypeSource> plexRegionTypeSourceProvider;
+	protected Provider<PlexRegionTypeRemover> plexRegionTypeRemoverProvider;
 
 	@Inject
 	protected Provider<RecentRegionTypeRemover> recentRegionTypeRemoverProvider;
@@ -202,8 +202,8 @@ public class ScrapeMarketHistory implements Command {
 				historicalOrdersRegionTypeSourceProvider.get().setToday(today));
 		regionTypeSource.addSource(topTradedRegionTypeSourceProvider.get());
 		regionTypeSource.addSource(explorerRegionTypeSourceProvider.get().setToday(today));
-		regionTypeSource.addSource(plexRegionTypeSourceProvider.get()); // must be next-to-last.
-		regionTypeSource.addSource(recentRegionTypeRemoverProvider.get()); // must be last.
+		regionTypeSource.addSource(plexRegionTypeRemoverProvider.get()); // must be at the end.
+		regionTypeSource.addSource(recentRegionTypeRemoverProvider.get()); // must be at the end.
 	}
 
 	private void initMvStore() {

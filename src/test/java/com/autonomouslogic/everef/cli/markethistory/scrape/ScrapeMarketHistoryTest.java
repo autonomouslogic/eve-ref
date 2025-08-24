@@ -155,6 +155,7 @@ public class ScrapeMarketHistoryTest {
 		// Present in ref data, added by ExplorerRegionTypeSource.
 		assertTrue(requestedPairs.contains(new RegionTypePair(10000100, 999)));
 		// PLEX should only be requested in the PLEX region.
+		// One exists in the recent market orders, it should be removed from the search.
 		assertTrue(requestedPairs.contains(
 				new RegionTypePair(EveConstants.GPMR_01_REGION_ID, (int) EveConstants.PLEX_TYPE_ID)));
 		assertEquals(
