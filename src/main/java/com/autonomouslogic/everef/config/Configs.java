@@ -7,6 +7,7 @@ import java.net.URL;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.Optional;
 import lombok.SneakyThrows;
 
 public class Configs {
@@ -370,8 +371,13 @@ public class Configs {
 	/**
 	 * User agent string to provide to the ESI.
 	 */
-	public static final Config<String> ESI_USER_AGENT =
-			Config.<String>builder().name("ESI_USER_AGENT").type(String.class).build();
+	public static final Config<String> ESI_USER_AGENT = Config.<String>builder()
+			.name("ESI_USER_AGENT")
+			.type(String.class)
+			.defaultMethod(() -> {
+				return Configs.HTTP_USER_AGENT.get();
+			})
+			.build();
 
 	/**
 	 * Rate limit to apply for ESI requests.
@@ -406,7 +412,15 @@ public class Configs {
 	public static final Config<String> HTTP_USER_AGENT = Config.<String>builder()
 			.name("HTTP_USER_AGENT")
 			.type(String.class)
-			.defaultValue("everef.net")
+			.defaultMethod(() -> {
+				var userAgent = "everef.net";
+				var version = Configs.EVE_REF_VERSION.get();
+				if (version.isPresent()) {
+					userAgent += "/" + version.get();
+				}
+				userAgent += " (+https://github.com/autonomouslogic/eve-ref/)";
+				return Optional.of(userAgent);
+			})
 			.build();
 
 	/**
