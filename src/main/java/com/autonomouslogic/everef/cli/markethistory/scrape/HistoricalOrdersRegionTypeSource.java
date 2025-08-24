@@ -49,6 +49,8 @@ class HistoricalOrdersRegionTypeSource implements RegionTypeSource {
 
 	private Period maxAge = Configs.ESI_MARKET_HISTORY_SNAPSHOT_LOOKBACK.getRequired();
 
+	private final int downloadConcurrency = Configs.MARKET_HISTORY_LOAD_CONCURRENCY.getRequired();
+
 	@Setter
 	@NonNull
 	private LocalDate today;
@@ -59,7 +61,7 @@ class HistoricalOrdersRegionTypeSource implements RegionTypeSource {
 	@Override
 	public Flowable<RegionTypePair> sourcePairs(Collection<RegionTypePair> currentPairs) {
 		return getSampleFiles()
-				.flatMap(f -> downloadFile(f).toFlowable())
+				.flatMap(f -> downloadFile(f).toFlowable(), false, downloadConcurrency)
 				.flatMap(this::parseFile)
 				.onErrorResumeNext(e -> {
 					log.warn("Failed fetching historical region orders, ignoring", e);
@@ -72,7 +74,8 @@ class HistoricalOrdersRegionTypeSource implements RegionTypeSource {
 		var minTime = today.atStartOfDay().atZone(ZoneOffset.UTC).minus(maxAge).toInstant();
 		return Flowable.fromIterable(dataCrawler
 						.get()
-						.setPrefix(ArchivePathFactory.MARKET_ORDERS.getFolder())
+						.setPrefix(ArchivePathFactory.MARKET_ORDERS.getFolder() + "/history/"
+								+ LocalDate.now().getYear() + "/")
 						.crawl())
 				.flatMap(url -> {
 					var time = ArchivePathFactory.MARKET_ORDERS.parseArchiveTime(url.getPath());
