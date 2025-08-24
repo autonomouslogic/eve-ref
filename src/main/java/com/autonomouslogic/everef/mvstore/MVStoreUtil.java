@@ -38,7 +38,11 @@ public class MVStoreUtil {
 		log.debug("Creating temporary MVStore '{}' with {} MiB cache", name, cacheSize);
 		var file = tempFiles.tempFile(name, ".mvstore").toFile();
 		log.debug("MVStore '{}' opened at {}", name, file.getAbsolutePath());
-		var builder = new MVStore.Builder().fileName(file.getAbsolutePath()).cacheSize(cacheSize);
+		var builder = new MVStore.Builder()
+				.fileName(file.getAbsolutePath())
+				.cacheSize(cacheSize)
+				.compress()
+				.autoCompactFillRate(0);
 		var store = builder.open();
 		store.setVersionsToKeep(0);
 		return store;
