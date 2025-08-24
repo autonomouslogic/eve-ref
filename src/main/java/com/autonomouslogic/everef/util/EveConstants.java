@@ -27,4 +27,6 @@ public class EveConstants {
 	public static final long JITA_4_4_STATION_ID = 60003760L;
 
 	public static final int TECH_1_META_GROUP_ID = 1;
+
+	public static final int GPMR_01_REGION_ID = 19000001;
 }

@@ -61,3 +61,8 @@
   - 24000005
   name: "VR-01"
   region_id: 14000001
+"19000001":
+  constellations:
+  - 26000001
+  name: "GPMR-01"
+  region_id: 19000001
