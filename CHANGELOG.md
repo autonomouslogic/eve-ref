@@ -1,5 +1,13 @@
 EVE Ref Changelog
 
+## [2.68.7](https://github.com/autonomouslogic/eve-ref/compare/2.68.6...2.68.7) (2025-09-01)
+
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([#948](https://github.com/autonomouslogic/eve-ref/issues/948)) ([24283f0](https://github.com/autonomouslogic/eve-ref/commit/24283f0bdd24397433c2fbb24bf05aae6efdfe17))
+* **deps:** update flyway to v11.11.2 ([#950](https://github.com/autonomouslogic/eve-ref/issues/950)) ([fa1657b](https://github.com/autonomouslogic/eve-ref/commit/fa1657beaff01061f4e2f60c61953c9da8bb46b2))
+
 ## [2.68.6](https://github.com/autonomouslogic/eve-ref/compare/2.68.5...2.68.6) (2025-08-24)
 
 
