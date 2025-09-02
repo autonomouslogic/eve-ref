@@ -1,5 +1,17 @@
 EVE Ref Changelog
 
+## [2.68.8](https://github.com/autonomouslogic/eve-ref/compare/2.68.7...2.68.8) (2025-09-02)
+
+
+### Bug Fixes
+
+* **deps:** update dependency org.flywaydb:flyway-core to v11.11.2 ([#949](https://github.com/autonomouslogic/eve-ref/issues/949)) ([882c1ae](https://github.com/autonomouslogic/eve-ref/commit/882c1ae4fa83fe603364ad285af7f8ddcbbd49fa))
+
+
+### Dependency Updates
+
+* **deps:** update plugin org.openapi.generator to v7.15.0 ([#951](https://github.com/autonomouslogic/eve-ref/issues/951)) ([ef21bfc](https://github.com/autonomouslogic/eve-ref/commit/ef21bfc2b72bcd3eeea3513347b30ee2e76bb11c))
+
 ## [2.68.7](https://github.com/autonomouslogic/eve-ref/compare/2.68.6...2.68.7) (2025-09-01)
 
 
