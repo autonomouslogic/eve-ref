@@ -107,8 +107,8 @@ unrolled.sort((a, b) => a.dates[0].toMillis() - b.dates[0].toMillis());
 const totalWorth = unrolled.reduce((acc, prize) => acc + prize.value * prize.winners, 0);
 
 const pastGiveaways = {
-	"October 2025": 10 * 602.94e6,
-	"September 2025": 8 * 602.94e6,
+	"October 2025": 10 * 556.16e6,
+	"September 2025": 8 * 556.16e6,
 	"August 2025": 10 * 602.94e6,
 	"July 2025": 8 * 620.72e6,
 	"June 2025": 8 * 620.72e6 + 4 * 99.99e6 + 4 * 184.00e6,
