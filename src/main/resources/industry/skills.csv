@@ -5,6 +5,7 @@ type_id,name,manufacturing_time_bonus,"blueprintmanufacture_time_bonus",copy_spe
 3396,"Advanced Industrial Ship Construction",,,,,,-1.0,,false,false
 3397,"Advanced Medium Ship Construction",,,,,,-1.0,,false,false
 3398,"Advanced Large Ship Construction",,,,,,-1.0,,false,false
+3400,"Outpost Construction",,,,,,-1.0,,false,false
 3402,Science,,,-5.0,,,,,false,false
 3403,Research,,-5.0,,,,,,false,false
 3408,"Sleeper Encryption Methods",,,,,,,,false,true

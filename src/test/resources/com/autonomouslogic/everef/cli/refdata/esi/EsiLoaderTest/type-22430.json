@@ -73,6 +73,10 @@
       "attribute_id" : 561,
       "value" : 10
     },
+    "2627" : {
+      "attribute_id" : 2627,
+      "value" : 1
+    },
     "564" : {
       "attribute_id" : 564,
       "value" : 185
@@ -503,16 +507,20 @@
       "effect_id" : 8151,
       "is_default" : false
     },
-    "8153" : {
-      "effect_id" : 8153,
-      "is_default" : false
-    },
     "8154" : {
       "effect_id" : 8154,
       "is_default" : false
     },
     "8377" : {
       "effect_id" : 8377,
+      "is_default" : false
+    },
+    "12568" : {
+      "effect_id" : 12568,
+      "is_default" : false
+    },
+    "12569" : {
+      "effect_id" : 12569,
       "is_default" : false
     }
   },
