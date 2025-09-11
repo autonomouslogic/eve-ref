@@ -1033,6 +1033,8 @@
     value: 600
   - attribute_id: 561
     value: 10
+  - attribute_id: 2627
+    value: 1
   - attribute_id: 564
     value: 185
   - attribute_id: 55
@@ -1248,11 +1250,13 @@
     is_default: false
   - effect_id: 8151
     is_default: false
-  - effect_id: 8153
-    is_default: false
   - effect_id: 8154
     is_default: false
   - effect_id: 8377
+    is_default: false
+  - effect_id: 12568
+    is_default: false
+  - effect_id: 12569
     is_default: false
   graphic_id: 3350
   group_id: 898
