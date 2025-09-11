@@ -1,5 +1,13 @@
 EVE Ref Changelog
 
+## [2.68.9](https://github.com/autonomouslogic/eve-ref/compare/2.68.8...2.68.9) (2025-09-11)
+
+
+### Bug Fixes
+
+* **ui:** Adjustment for giveaways ([b52098b](https://github.com/autonomouslogic/eve-ref/commit/b52098b4a7f5a06a5d83a90b9b22fe3793d1de91))
+* Updated industry and test resources ([#953](https://github.com/autonomouslogic/eve-ref/issues/953)) ([03cf236](https://github.com/autonomouslogic/eve-ref/commit/03cf23614777f344396c2a4bb62eb2c7877ceda8))
+
 ## [2.68.8](https://github.com/autonomouslogic/eve-ref/compare/2.68.7...2.68.8) (2025-09-02)
 
 
