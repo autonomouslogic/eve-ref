@@ -11,16 +11,15 @@ import com.autonomouslogic.everef.url.UrlParser;
 import com.autonomouslogic.everef.util.DataIndexHelper;
 import com.autonomouslogic.everef.util.TempFiles;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.Iterators;
 import io.reactivex.rxjava3.core.Completable;
 import java.io.File;
 import java.net.URI;
 import java.net.URL;
 import java.time.Duration;
 import java.time.Instant;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.StreamSupport;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.SneakyThrows;
@@ -87,11 +86,15 @@ public class UpdateStaticData implements Command {
 			if (response.code() != 200) {
 				throw new RuntimeException("Failed to fetch " + staticDataUrl + ": " + response.code());
 			}
-			var latest = objectMapper.readValue(
-					response.body().byteStream(), Map.class);
-			if (latest == null || !latest.containsKey("_key") || !latest.get("_key").equals("sde")) {
+			var latest = objectMapper.readValue(response.body().byteStream(), Map.class);
+			if (latest == null
+					|| !latest.containsKey("_key")
+					|| !latest.get("_key").equals("sde")) {
 				throw new RuntimeException("Unable to find latest static-data file");
 			}
+			var buildNumber = Integer.parseInt(latest.get("buildNumber").toString());
+			var releaseDate =
+					ZonedDateTime.parse((String) latest.get("releaseDate")).toInstant();
 			return null;
 		}
 	}
