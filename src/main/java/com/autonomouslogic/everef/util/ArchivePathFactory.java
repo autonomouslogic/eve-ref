@@ -77,6 +77,24 @@ public class ArchivePathFactory {
 			.suffix("-TRANQUILITY.zip")
 			.build();
 
+	public static final ArchivePathFactory STATIC_DATA_JSONL = ArchivePathFactory.builder()
+			.folder("ccp/static-data")
+			.historyFolder(false)
+			.yearFolder(false)
+			.dateFolder(false)
+			.filename("eve-online-static-data-")
+			.suffix("-jsonl.zip")
+			.build();
+
+	public static final ArchivePathFactory STATIC_DATA_YAML = ArchivePathFactory.builder()
+			.folder("ccp/static-data")
+			.historyFolder(false)
+			.yearFolder(false)
+			.dateFolder(false)
+			.filename("eve-online-static-data-")
+			.suffix("-yaml.zip")
+			.build();
+
 	public static final ArchivePathFactory ESI = ArchivePathFactory.builder()
 			.folder("esi-scrape")
 			.filename("eve-ref-esi-scrape")

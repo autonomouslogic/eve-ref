@@ -789,6 +789,15 @@ public class Configs {
 			.defaultValue(50.0)
 			.build();
 
+	/**
+	 * URL for downloading static data.
+	 */
+	public static final Config<URI> STATIC_DATA_URL = Config.<URI>builder()
+			.name("STATIC_DATA_URL")
+			.type(URI.class)
+			.defaultValue(URI.create("https://developers.eveonline.com/static-data/tranquility/latest.jsonl"))
+			.build();
+
 	@SneakyThrows
 	private static URL url(String url) {
 		return new URL(url);
