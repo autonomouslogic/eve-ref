@@ -1,25 +1,21 @@
 package com.autonomouslogic.everef.cli;
 
-import static com.autonomouslogic.everef.util.ArchivePathFactory.HOBOLEAKS;
-
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.http.OkHttpWrapper;
+import com.autonomouslogic.everef.model.StaticDataMeta;
 import com.autonomouslogic.everef.s3.S3Adapter;
 import com.autonomouslogic.everef.s3.S3Util;
 import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.url.UrlParser;
+import com.autonomouslogic.everef.util.ArchivePathFactory;
 import com.autonomouslogic.everef.util.DataIndexHelper;
 import com.autonomouslogic.everef.util.TempFiles;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.reactivex.rxjava3.core.Completable;
 import java.io.File;
 import java.net.URI;
-import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.attribute.FileTime;
 import java.time.Duration;
-import java.time.Instant;
-import java.time.ZonedDateTime;
-import java.util.List;
-import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.SneakyThrows;
@@ -61,7 +57,8 @@ public class UpdateStaticData implements Command {
 
 	private S3Url dataPath;
 	//	private HttpUrl dataUrl;
-	private final URI staticDataUrl = Configs.STATIC_DATA_URL.getRequired();
+	private final URI staticDataUrl =
+			URI.create("https://developers.eveonline.com/static-data/tranquility/latest.jsonl");
 
 	@Inject
 	protected UpdateStaticData() {}
@@ -74,53 +71,61 @@ public class UpdateStaticData implements Command {
 
 	@Override
 	public void run() {
-		var files = loadLatestFiles();
-		for (var file : files) {
-			syncFile(file);
-		}
+		var latest = loadLatestFiles();
+		syncFile(latest, ArchivePathFactory.STATIC_DATA_JSONL, "jsonl");
+		syncFile(latest, ArchivePathFactory.STATIC_DATA_YAML, "yaml");
 	}
 
 	@SneakyThrows
-	private List<URL> loadLatestFiles() {
+	private StaticDataMeta loadLatestFiles() {
 		try (var response = okHttpWrapper.get(staticDataUrl.toString())) {
 			if (response.code() != 200) {
 				throw new RuntimeException("Failed to fetch " + staticDataUrl + ": " + response.code());
 			}
-			var latest = objectMapper.readValue(response.body().byteStream(), Map.class);
-			if (latest == null
-					|| !latest.containsKey("_key")
-					|| !latest.get("_key").equals("sde")) {
+			var latest = objectMapper.readValue(response.body().byteStream(), StaticDataMeta.class);
+			if (latest == null || latest.getKey() == null || !latest.getKey().equals("sde")) {
 				throw new RuntimeException("Unable to find latest static-data file");
 			}
-			var buildNumber = Integer.parseInt(latest.get("buildNumber").toString());
-			var releaseDate =
-					ZonedDateTime.parse((String) latest.get("releaseDate")).toInstant();
-			return null;
+			return latest;
 		}
 	}
 
-	private void syncFile(URL file) {
-		log.info("Syncing file: {}", file);
+	@SneakyThrows
+	private void syncFile(StaticDataMeta latest, ArchivePathFactory type, String variant) {
+		var latestUri = dataUrl(latest.getBuildNumber(), variant);
+		var file = tempFiles.tempFile("sde-" + variant, ".zip").toFile();
+		var response = okHttpWrapper.download(latestUri.toString(), file);
+		if (response.code() != 200) {
+			throw new RuntimeException("Failed to download " + latestUri + ": " + response.code());
+		}
+		Files.setLastModifiedTime(file.toPath(), FileTime.from(latest.getReleaseDate()));
+		uploadFile(file, type, latest.getBuildNumber());
 	}
 
 	/**
 	 * Uploads the final file to S3.
 	 * @return
 	 */
-	private Completable uploadFiles(File outputFile) {
-		return Completable.defer(() -> {
-			var latestPath = dataPath.resolve(HOBOLEAKS.createLatestPath());
-			var archivePath = dataPath.resolve(HOBOLEAKS.createArchivePath(Instant.now()));
-			var latestPut = s3Util.putPublicObjectRequest(outputFile.length(), latestPath, latestCacheTime);
-			var archivePut = s3Util.putPublicObjectRequest(outputFile.length(), archivePath, archiveCacheTime);
-			log.info(String.format("Uploading latest file to %s", latestPath));
-			log.info(String.format("Uploading archive file to %s", archivePath));
-			return Completable.mergeArray(
-							s3Adapter.putObject(latestPut, outputFile, s3Client).ignoreElement(),
-							s3Adapter
-									.putObject(archivePut, outputFile, s3Client)
-									.ignoreElement())
-					.andThen(Completable.defer(() -> dataIndexHelper.updateIndex(latestPath, archivePath)));
-		});
+	@SneakyThrows
+	private void uploadFile(File outputFile, ArchivePathFactory type, int buildNumber) {
+		var latestPath = dataPath.resolve(type.createLatestPath());
+		var archivePathBase = type.createArchivePath(
+				Files.getLastModifiedTime(outputFile.toPath()).toInstant());
+		archivePathBase =
+				archivePathBase.replace("eve-online-static-data-", "eve-online-static-data-" + buildNumber + "-");
+		var archivePath = dataPath.resolve(archivePathBase);
+		var latestPut = s3Util.putPublicObjectRequest(outputFile.length(), latestPath, latestCacheTime);
+		var archivePut = s3Util.putPublicObjectRequest(outputFile.length(), archivePath, archiveCacheTime);
+		log.info(String.format("Uploading latest file to %s", latestPath));
+		log.info(String.format("Uploading archive file to %s", archivePath));
+		s3Adapter.putObject(latestPut, outputFile, s3Client).blockingGet();
+		s3Adapter.putObject(archivePut, outputFile, s3Client).blockingGet();
+		dataIndexHelper.updateIndex(latestPath, archivePath).blockingAwait();
+	}
+
+	private URI dataUrl(int buildNumber, String variant) {
+		return URI.create(String.format(
+				"https://developers.eveonline.com/static-data/tranquility/eve-online-static-data-%s-%s.zip",
+				buildNumber, variant));
 	}
 }

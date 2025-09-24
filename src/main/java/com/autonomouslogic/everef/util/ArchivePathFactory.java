@@ -71,27 +71,29 @@ public class ArchivePathFactory {
 			.folder("ccp/sde")
 			.filename("sde")
 			.historyFolder(false)
-			.yearFolder(false)
+			.yearFolder(true)
 			.dateFolder(false)
 			.fileDateTimeFormatter(COMPACT_DATE_PATTERN)
 			.suffix("-TRANQUILITY.zip")
 			.build();
 
 	public static final ArchivePathFactory STATIC_DATA_JSONL = ArchivePathFactory.builder()
-			.folder("ccp/static-data")
+			.folder("ccp/sde")
 			.historyFolder(false)
-			.yearFolder(false)
+			.yearFolder(true)
 			.dateFolder(false)
-			.filename("eve-online-static-data-")
+			.filename("eve-online-static-data")
+			.fileDateTimeFormatter(null)
 			.suffix("-jsonl.zip")
 			.build();
 
 	public static final ArchivePathFactory STATIC_DATA_YAML = ArchivePathFactory.builder()
-			.folder("ccp/static-data")
+			.folder("ccp/sde")
 			.historyFolder(false)
-			.yearFolder(false)
+			.yearFolder(true)
 			.dateFolder(false)
-			.filename("eve-online-static-data-")
+			.filename("eve-online-static-data")
+			.fileDateTimeFormatter(null)
 			.suffix("-yaml.zip")
 			.build();
 
@@ -200,7 +202,10 @@ public class ArchivePathFactory {
 		if (dateFolder) {
 			builder.appendLiteral("/").append(DATE_PATTERN);
 		}
-		builder.appendLiteral("/").appendLiteral(filename).appendLiteral("-").append(fileDateTimeFormatter);
+		builder.appendLiteral("/").appendLiteral(filename);
+		if (fileDateTimeFormatter != null) {
+			builder.appendLiteral("-").append(fileDateTimeFormatter);
+		}
 		builder.appendLiteral(suffix);
 		return builder.toFormatter().withZone(ZoneOffset.UTC);
 	}
