@@ -7,7 +7,7 @@ RUN tar -x --strip-components=1 -f /eve-ref.tar -C /eve-ref
 RUN unzip /eve-ref/lib/eve-ref-${EVE_REF_VERSION}.jar pug/* -d /eve-ref/
 COPY docker/entry.sh /eve-ref/
 
-FROM eclipse-temurin:21.0.8_9-jre-alpine
+FROM eclipse-temurin:25-jre-alpine
 ARG EVE_REF_VERSION
 ENV EVE_REF_VERSION=${EVE_REF_VERSION}
 COPY --from=build /eve-ref /eve-ref
