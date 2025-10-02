@@ -483,9 +483,9 @@ task buildSearch(type: JavaExec) {
 	mainClass = mainClassName
 }
 
-task fetchDonations(type: JavaExec) {
+task syncStaticData(type: JavaExec) {
 	group "application"
-	args "fetch-donations"
+	args "sync-static-data"
 	environment envProperties
 
 	classpath = sourceSets.main.runtimeClasspath
