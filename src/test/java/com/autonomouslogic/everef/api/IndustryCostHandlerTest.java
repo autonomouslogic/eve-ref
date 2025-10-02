@@ -226,7 +226,8 @@ public class IndustryCostHandlerTest {
 			}
 		}
 
-		var uri = URI.create("http://localhost:8080/v1/industry/cost?product_id=645&" + String.join("&", query));
+		var uri = URI.create(
+				"http://localhost:" + API_TEST_PORT + "/v1/industry/cost?product_id=645&" + String.join("&", query));
 		log.info("URI: {}", uri);
 		var req = HttpRequest.newBuilder().GET().uri(uri).build();
 		var res = httpClient.send(req, HttpResponse.BodyHandlers.ofString());
