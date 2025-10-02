@@ -1,5 +1,31 @@
 EVE Ref Changelog
 
+## [2.69.0](https://github.com/autonomouslogic/eve-ref/compare/2.68.9...2.69.0) (2025-10-02)
+
+
+### Features
+
+* Sync new static data file to the data site ([#955](https://github.com/autonomouslogic/eve-ref/issues/955)) ([eacad51](https://github.com/autonomouslogic/eve-ref/commit/eacad51429924ca187d4c1cbaff8ce13331efa26))
+
+
+### Bug Fixes
+
+* **deps:** update junit-framework monorepo to v6 (major) ([#960](https://github.com/autonomouslogic/eve-ref/issues/960)) ([fe0ab82](https://github.com/autonomouslogic/eve-ref/commit/fe0ab82d9485f2e85662f853ea7753d495c39bdf))
+* **ui:** Updated for September giveaways ([ec5aad4](https://github.com/autonomouslogic/eve-ref/commit/ec5aad47e370c57d5fdef3e1b3ecb8e476b736b1))
+
+
+### Dependency Updates
+
+* **deps:** update actions/setup-node action to v5 ([#952](https://github.com/autonomouslogic/eve-ref/issues/952)) ([98db14e](https://github.com/autonomouslogic/eve-ref/commit/98db14e486036c6fe53ab46cd96e5251b50f5b39))
+* **deps:** update gradle to v9 ([#930](https://github.com/autonomouslogic/eve-ref/issues/930)) ([e63b3c3](https://github.com/autonomouslogic/eve-ref/commit/e63b3c3d6d7b55cc9e92d0bb95219ce632132333))
+* **deps:** update plugin com.diffplug.spotless to v8 ([#957](https://github.com/autonomouslogic/eve-ref/issues/957)) ([78dd49d](https://github.com/autonomouslogic/eve-ref/commit/78dd49dc880035cf7bf40d6cc2913f863c3bfefb))
+* **deps:** update plugin io.freefair.lombok to v9 ([#959](https://github.com/autonomouslogic/eve-ref/issues/959)) ([0071c94](https://github.com/autonomouslogic/eve-ref/commit/0071c943f9f85fc9719bdf1d0b84383ea716c701))
+
+
+### Tests
+
+* Added config for API test port ([#961](https://github.com/autonomouslogic/eve-ref/issues/961)) ([3d5e3af](https://github.com/autonomouslogic/eve-ref/commit/3d5e3af63933b9b8f851737677f50dee5a871f0c))
+
 ## [2.68.9](https://github.com/autonomouslogic/eve-ref/compare/2.68.8...2.68.9) (2025-09-11)
 
 
