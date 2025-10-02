@@ -6,7 +6,7 @@ plugins {
 	id "application"
 	id "jacoco"
 	id "org.danilopianini.git-sensitive-semantic-versioning-gradle-plugin" version "7.0.2"
-	id "io.freefair.lombok" version "8.14.2"
+	id "io.freefair.lombok" version "9.0.0"
 	id "com.diffplug.spotless" version "8.0.0"
 	id "org.openapi.generator" version "7.15.0"
 	id "io.swagger.core.v3.swagger-gradle-plugin" version "2.2.36"
@@ -114,8 +114,8 @@ dependencies {
 
 	testAnnotationProcessor "com.google.dagger:dagger-compiler:2.57.1"
 	testImplementation "com.google.dagger:dagger:2.57.1"
-	testImplementation "org.junit.jupiter:junit-jupiter:5.13.4"
-	testImplementation "org.junit.jupiter:junit-jupiter-params:5.13.4"
+	testImplementation "org.junit.jupiter:junit-jupiter:6.0.0"
+	testImplementation "org.junit.jupiter:junit-jupiter-params:6.0.0"
 	testImplementation "org.junit-pioneer:junit-pioneer:2.3.0"
 	testImplementation "org.mockito:mockito-junit-jupiter:5.19.0"
 	testImplementation "com.squareup.okhttp3:mockwebserver:5.1.0"
@@ -483,9 +483,9 @@ task buildSearch(type: JavaExec) {
 	mainClass = mainClassName
 }
 
-task fetchDonations(type: JavaExec) {
+task syncStaticData(type: JavaExec) {
 	group "application"
-	args "fetch-donations"
+	args "sync-static-data"
 	environment envProperties
 
 	classpath = sourceSets.main.runtimeClasspath
