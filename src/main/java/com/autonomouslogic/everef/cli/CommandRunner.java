@@ -86,7 +86,7 @@ public class CommandRunner {
 	protected Provider<ApiRunner> apiRunnerProvider;
 
 	@Inject
-	protected Provider<UpdateStaticData> updateStaticDataProvider;
+	protected Provider<SyncStaticData> updateStaticDataProvider;
 
 	@Inject
 	protected SentryDecorator sentryDecorator;
@@ -162,7 +162,7 @@ public class CommandRunner {
 				return fetchDonationsProvider.get();
 			case "generate-key-pair":
 				return generateKeyPairProvider.get();
-			case "update-static-data":
+			case "sync-static-data":
 				return updateStaticDataProvider.get();
 			case "api":
 				return apiRunnerProvider.get();

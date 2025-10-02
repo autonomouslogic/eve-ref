@@ -29,7 +29,7 @@ import software.amazon.awssdk.services.s3.S3AsyncClient;
  * Fetches and stores all public contracts.
  */
 @Log4j2
-public class UpdateStaticData implements Command {
+public class SyncStaticData implements Command {
 	@Inject
 	protected UrlParser urlParser;
 
@@ -65,7 +65,7 @@ public class UpdateStaticData implements Command {
 			URI.create("https://developers.eveonline.com/static-data/tranquility/schema-changelog.yaml");
 
 	@Inject
-	protected UpdateStaticData() {}
+	protected SyncStaticData() {}
 
 	@Inject
 	protected void init() {
