@@ -184,6 +184,20 @@ typeMaterials:
     ids:
       - 645
 
+typeBonus:
+  outputStore: types
+  dedicatedOutput: false
+  sde:
+    file: typeBonus.yaml
+#    renames:
+#      materials: type_materials
+#    arrayToObjects:
+#      type_materials: material_type_id
+  test:
+    filePrefix: type
+    ids:
+      - 645
+
 typeDogma:
   outputStore: types
   dedicatedOutput: false
