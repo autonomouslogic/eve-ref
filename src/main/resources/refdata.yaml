@@ -297,7 +297,7 @@ mutaplasmids:
     file: dynamicitemattributes.json
     renames:
       input_output_mapping: type_mappings
-      attribute_i_ds: dogma_modifications
+      attribute_ids: dogma_modifications
   test:
     filePrefix: mutaplasmid
     ids:

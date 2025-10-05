@@ -28,6 +28,9 @@ public class FieldRenamer implements SimpleTransformer {
 		if (field.endsWith("ID")) {
 			field = field.substring(0, field.length() - 2) + "Id";
 		}
+		else if (field.endsWith("IDs")) {
+			field = field.substring(0, field.length() - 3) + "Ids";
+		}
 		return CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, field);
 	}
 
