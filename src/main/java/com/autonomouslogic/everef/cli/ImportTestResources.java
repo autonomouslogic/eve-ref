@@ -77,7 +77,7 @@ public class ImportTestResources implements Command {
 			throw new RuntimeException("Test resources directory does not exist");
 		}
 
-		var sdeFile = dataUtil.downloadLatestSde().blockingGet();
+		var sdeFile = dataUtil.downloadLatestSde();
 		loadSdeResources(sdeFile).blockingAwait();
 
 		var esiFile = dataUtil.downloadLatestEsi();

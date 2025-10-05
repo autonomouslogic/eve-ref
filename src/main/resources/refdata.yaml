@@ -2,7 +2,7 @@ categories:
   idField: category_id
   model: InventoryCategory
   sde:
-    file: fsd/categories.yaml
+    file: categories.yaml
   esi:
     file: universe/categories
     languageAttributes:
@@ -23,7 +23,7 @@ groups:
   idField: group_id
   model: InventoryGroup
   sde:
-    file: fsd/groups.yaml
+    file: groups.yaml
   esi:
     file: universe/groups
     languageAttributes:
@@ -51,7 +51,7 @@ marketGroups:
   idField: market_group_id
   model: MarketGroup
   sde:
-    file: fsd/marketGroups.yaml
+    file: marketGroups.yaml
     renames:
       name_id: name
       description_id: description
@@ -76,7 +76,7 @@ types:
   idField: type_id
   model: InventoryType
   sde:
-    file: fsd/types.yaml
+    file: types.yaml
   esi:
     file: universe/types
     languageAttributes:
@@ -171,7 +171,7 @@ typeMaterials:
   outputStore: types
   dedicatedOutput: false
   sde:
-    file: fsd/typeMaterials.yaml
+    file: typeMaterials.yaml
     renames:
       materials: type_materials
     arrayToObjects:
@@ -191,7 +191,7 @@ typeDogma:
   outputStore: types
   dedicatedOutput: false
   sde:
-    file: fsd/typeDogma.yaml
+    file: typeDogma.yaml
     arrayToObjects:
       dogma_attributes: attribute_id
       dogma_effects: effect_id
@@ -205,7 +205,7 @@ dogmaAttributes:
   idField: attribute_id
   model: DogmaAttribute
   sde:
-    file: fsd/dogmaAttributes.yaml
+    file: dogmaAttributes.yaml
     renames:
       display_name_id: display_name
       tooltip_title_id: tooltip_title
@@ -256,7 +256,7 @@ dogmaEffects:
   idField: effect_id
   model: DogmaEffect
   sde:
-    file: fsd/dogmaEffects.yaml
+    file: dogmaEffects.yaml
     renames:
       description_id: description
       display_name_id: display_name
@@ -286,7 +286,7 @@ metaGroups:
   idField: meta_group_id
   model: MetaGroup
   sde:
-    file: fsd/metaGroups.yaml
+    file: metaGroups.yaml
     renames:
       name_id: name
       description_id: description
@@ -343,7 +343,7 @@ blueprints:
   idField: blueprint_type_id
   model: Blueprint
   sde:
-    file: fsd/blueprints.yaml
+    file: blueprints.yaml
   hoboleaks:
     file: blueprints.json
   test:
@@ -365,7 +365,7 @@ icons:
   idField: icon_id
   model: Icon
   sde:
-    file: fsd/iconIDs.yaml
+    file: icons.yaml
   test:
     filePrefix: icon
     ids:
@@ -384,8 +384,7 @@ regions:
     removes:
       - constellations
   sde:
-    fileRegex: ^universe\/(?<universeId>[a-zA-Z0-9-]+)\/[a-zA-Z0-9-]+\/region\.yaml$
-    individualFiles: true
+    file: mapRegions.yaml
     renames:
       nebula: nebula_id
   test:
@@ -410,7 +409,7 @@ schematics:
     languageAttributes:
       - name
   sde:
-    file: fsd/planetSchematics.yaml
+    file: planetSchematics.yaml
     renames:
       name_id: name
   test:

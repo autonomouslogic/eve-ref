@@ -422,11 +422,12 @@ public class BuildRefData implements Command {
 	}
 
 	private Single<File> latestSde() {
-		return sdeFile != null
-				? Single.just(sdeFile)
-				: dataUtil.downloadLatestSde().doOnSuccess(file -> {
-					sdeFile = file;
-				});
+		return Single.fromCallable(() -> {
+			if (sdeFile == null) {
+				sdeFile = dataUtil.downloadLatestSde();
+			}
+			return sdeFile;
+		});
 	}
 
 	private Single<File> latestHoboleaks() {

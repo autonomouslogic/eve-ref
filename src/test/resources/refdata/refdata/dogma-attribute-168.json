@@ -1,17 +1,10 @@
 {
-  "attribute_id" : 168,
-  "category_id" : 7,
+  "attribute_category_id" : 7,
   "data_type" : 4,
   "default_value" : 0,
   "description" : {
     "en" : "The willpower of a character."
   },
-  "high_is_good" : true,
-  "icon_id" : 1379,
-  "name" : "willpower",
-  "published" : true,
-  "stackable" : true,
-  "unit_id" : 120,
   "display_name" : {
     "de" : "Willenskraft",
     "en" : "Willpower",
@@ -21,5 +14,13 @@
     "ko" : "정신력",
     "ru" : "«Сила воли»",
     "zh" : "毅力"
-  }
+  },
+  "display_when_zero" : false,
+  "high_is_good" : true,
+  "icon_id" : 1379,
+  "name" : "willpower",
+  "published" : true,
+  "stackable" : true,
+  "unit_id" : 120,
+  "attribute_id" : 168
 }

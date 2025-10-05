@@ -3,19 +3,18 @@
   disallowAutoRepeat: false
   dischargeAttributeID: 6
   durationAttributeID: 73
-  effectCategory: 1
-  effectID: 4
-  effectName: "shieldBoosting"
+  effectCategoryID: 1
   electronicChance: false
   guid: "effects.ShieldBoosting"
   isAssistance: false
   isOffensive: false
   isWarpSafe: true
+  name: "shieldBoosting"
   propulsionChance: false
   published: false
   rangeChance: false
 "11":
-  descriptionID:
+  description:
     de: "Benötigt einen Low Power Slot"
     en: "Requires a low power slot"
     es: "Requiere una ranura de potencia inferior."
@@ -25,7 +24,7 @@
     ru: "Требуется разъём малой мощности"
     zh: "需要低能量槽"
   disallowAutoRepeat: false
-  displayNameID:
+  displayName:
     de: "Low power"
     en: "Low power"
     es: "Baja potencia"
@@ -34,15 +33,14 @@
     ko: "로우 슬롯"
     ru: "Разъёмы малой мощности"
     zh: "低能量"
-  effectCategory: 0
-  effectID: 11
-  effectName: "loPower"
+  effectCategoryID: 0
   electronicChance: false
   guid: ""
   iconID: 295
   isAssistance: false
   isOffensive: false
   isWarpSafe: false
+  name: "loPower"
   propulsionChance: false
   published: true
   rangeChance: false
@@ -51,23 +49,20 @@
   dischargeAttributeID: 6
   distribution: 1
   durationAttributeID: 73
-  effectCategory: 2
-  effectID: 18
-  effectName: "shieldTransfer"
+  effectCategoryID: 2
   electronicChance: false
   guid: "effects.ShieldTransfer"
   isAssistance: true
   isOffensive: false
   isWarpSafe: false
+  name: "shieldTransfer"
   propulsionChance: false
   published: false
   rangeAttributeID: 87
   rangeChance: false
 "21":
   disallowAutoRepeat: false
-  effectCategory: 4
-  effectID: 21
-  effectName: "shieldCapacityBonusOnline"
+  effectCategoryID: 4
   electronicChance: false
   guid: ""
   isAssistance: false
@@ -79,6 +74,7 @@
     modifiedAttributeID: 263
     modifyingAttributeID: 72
     operation: 2
+  name: "shieldCapacityBonusOnline"
   propulsionChance: false
   published: false
   rangeChance: false
@@ -87,15 +83,14 @@
   dischargeAttributeID: 6
   distribution: 2
   durationAttributeID: 51
-  effectCategory: 2
-  effectID: 34
-  effectName: "projectileFired"
+  effectCategoryID: 2
   electronicChance: false
   falloffAttributeID: 158
   guid: "effects.ProjectileFired"
   isAssistance: false
   isOffensive: true
   isWarpSafe: false
+  name: "projectileFired"
   propulsionChance: false
   published: false
   rangeAttributeID: 54
@@ -105,24 +100,20 @@
   disallowAutoRepeat: false
   dischargeAttributeID: 6
   durationAttributeID: 73
-  effectCategory: 2
-  effectID: 47
-  effectName: "cargoScan"
+  effectCategoryID: 2
   electronicChance: false
   guid: "effects.CargoScan"
   isAssistance: false
   isOffensive: false
   isWarpSafe: false
+  name: "cargoScan"
   propulsionChance: false
   published: false
   rangeAttributeID: 126
   rangeChance: false
-  sfxName: "None"
 "157":
   disallowAutoRepeat: false
-  effectCategory: 0
-  effectID: 157
-  effectName: "largeHybridTurretDamageMultiplierBonusPostPercentDamageMultiplierLocationShipModulesRequiringLargeHybridTurret"
+  effectCategoryID: 0
   electronicChance: false
   guid: ""
   iconID: 0
@@ -136,11 +127,12 @@
     modifyingAttributeID: 292
     operation: 6
     skillTypeID: 3307
+  name: "largeHybridTurretDamageMultiplierBonusPostPercentDamageMultiplierLocationShipModulesRequiringLargeHybridTurret"
   propulsionChance: false
   published: false
   rangeChance: false
 "563":
-  descriptionID:
+  description:
     de: "Versucht, das Ziel vom Warpen abzuhalten."
     en: "Attempts to prevent the target from warping."
     es: "Intenta impedir que el objetivo warpee."
@@ -151,7 +143,7 @@
     zh: "阻止目标进行跃迁。"
   disallowAutoRepeat: false
   dischargeAttributeID: 6
-  displayNameID:
+  displayName:
     de: "Warp Scramble"
     en: "Warp Scramble"
     es: "Distorsión de warp"
@@ -162,9 +154,7 @@
     zh: "跃迁干扰"
   distribution: 1
   durationAttributeID: 505
-  effectCategory: 2
-  effectID: 563
-  effectName: "warpScrambleForEntity"
+  effectCategoryID: 2
   electronicChance: false
   guid: "effects.WarpScramble"
   isAssistance: false
@@ -176,6 +166,7 @@
     modifiedAttributeID: 104
     modifyingAttributeID: 105
     operation: 2
+  name: "warpScrambleForEntity"
   npcUsageChanceAttributeID: 504
   propulsionChance: false
   published: true
@@ -185,9 +176,7 @@
   disallowAutoRepeat: false
   distribution: 1
   durationAttributeID: 943
-  effectCategory: 2
-  effectID: 1878
-  effectName: "entitySensorDampen"
+  effectCategoryID: 2
   electronicChance: false
   falloffAttributeID: 950
   guid: "effects.ElectronicAttributeModifyTarget"
@@ -215,13 +204,14 @@
     modifiedAttributeID: 564
     modifyingAttributeID: 565
     operation: 0
+  name: "entitySensorDampen"
   npcActivationChanceAttributeID: 932
   propulsionChance: false
   published: false
   rangeAttributeID: 938
   rangeChance: true
 "2735":
-  descriptionID:
+  description:
     de: "Automatisch generierter Effekt"
     en: "Automatically generated effect"
     es: "Efecto generado automáticamente."
@@ -231,7 +221,7 @@
     ru: "Automatically generated effect"
     zh: "自动生成效果"
   disallowAutoRepeat: false
-  displayNameID:
+  displayName:
     de: "Armor Hitpoint Penalty"
     en: "Armor Hitpoint Penalty"
     es: "Penalización de puntos de vida del blindaje"
@@ -240,9 +230,7 @@
     ko: "장갑 내구도 페널티"
     ru: "Armor Hitpoint Penalty"
     zh: "装甲强度值惩罚"
-  effectCategory: 0
-  effectID: 2735
-  effectName: "boosterArmorHpPenalty"
+  effectCategoryID: 0
   electronicChance: false
   fittingUsageChanceAttributeID: 1091
   guid: "None"
@@ -256,14 +244,14 @@
     modifiedAttributeID: 265
     modifyingAttributeID: 1141
     operation: 6
+  name: "boosterArmorHpPenalty"
   propulsionChance: false
   published: true
   rangeChance: false
-  sfxName: "None"
 "5928":
   disallowAutoRepeat: false
   dischargeAttributeID: 6
-  displayNameID:
+  displayName:
     de: "Warpunterbrechung"
     en: "Warp Scramble"
     es: "Distorsión de warp"
@@ -274,9 +262,7 @@
     zh: "跃迁干扰"
   distribution: 1
   durationAttributeID: 505
-  effectCategory: 2
-  effectID: 5928
-  effectName: "warpScrambleTargetMWDBlockActivationForEntity"
+  effectCategoryID: 2
   electronicChance: false
   guid: "effects.WarpScramble"
   isAssistance: false
@@ -306,6 +292,7 @@
     modifyingAttributeID: 1350
     operation: 2
     skillTypeID: 4385
+  name: "warpScrambleTargetMWDBlockActivationForEntity"
   npcUsageChanceAttributeID: 504
   propulsionChance: false
   published: true
@@ -315,15 +302,14 @@
   disallowAutoRepeat: false
   dischargeAttributeID: 6
   durationAttributeID: 73
-  effectCategory: 2
-  effectID: 6184
-  effectName: "shipModuleRemoteCapacitorTransmitter"
+  effectCategoryID: 2
   electronicChance: false
   falloffAttributeID: 2044
   guid: "effects.EnergyTransfer"
   isAssistance: true
   isOffensive: false
   isWarpSafe: false
+  name: "shipModuleRemoteCapacitorTransmitter"
   propulsionChance: false
   published: false
   rangeAttributeID: 54

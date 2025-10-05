@@ -43,9 +43,6 @@ public class SdeLoader {
 	protected Provider<SdeDogmaEffectTransformer> sdeDogmaEffectTransformerProvider;
 
 	@Inject
-	protected Provider<SdeRegionTransformer> sdeRegionTransformerProvider;
-
-	@Inject
 	protected Provider<SchematicTransformer> schematicTransformerProvider;
 
 	@Setter
@@ -82,14 +79,6 @@ public class SdeLoader {
 									break;
 								case "schematics":
 									transformer = TransformUtil.concat(transformer, schematicTransformerProvider.get());
-									break;
-								case "regions":
-									transformer = TransformUtil.concat(
-											transformer,
-											sdeRegionTransformerProvider
-													.get()
-													.setTypeConfig(config.getSde())
-													.setFilename(pair.getLeft().getName()));
 									break;
 							}
 							storeLoader.setTransformer(TransformUtil.concat(fieldRenamer, transformer));

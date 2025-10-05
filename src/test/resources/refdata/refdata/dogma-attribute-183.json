@@ -1,18 +1,10 @@
 {
-  "attribute_id" : 183,
-  "category_id" : 8,
+  "attribute_category_id" : 8,
   "data_type" : 11,
   "default_value" : 0,
   "description" : {
     "en" : "The type ID of the skill that is required."
   },
-  "display_when_zero" : false,
-  "high_is_good" : true,
-  "icon_id" : 33,
-  "name" : "requiredSkill2",
-  "published" : true,
-  "stackable" : true,
-  "unit_id" : 116,
   "display_name" : {
     "de" : "Sekundärer Skill benötigt",
     "en" : "Secondary Skill required",
@@ -22,5 +14,13 @@
     "ko" : "2차 스킬 필요",
     "ru" : "Требуемый вторичный навык",
     "zh" : "副技能需求"
-  }
+  },
+  "display_when_zero" : false,
+  "high_is_good" : true,
+  "icon_id" : 33,
+  "name" : "requiredSkill2",
+  "published" : true,
+  "stackable" : true,
+  "unit_id" : 116,
+  "attribute_id" : 183
 }

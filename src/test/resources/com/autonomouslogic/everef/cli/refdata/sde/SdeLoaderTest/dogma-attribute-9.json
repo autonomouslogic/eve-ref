@@ -1,17 +1,10 @@
 {
-  "attribute_id" : 9,
-  "category_id" : 4,
+  "attribute_category_id" : 4,
   "data_type" : 4,
   "default_value" : 0,
   "description" : {
     "en" : "The maximum hitpoints of an object."
   },
-  "high_is_good" : true,
-  "icon_id" : 67,
-  "name" : "hp",
-  "published" : true,
-  "stackable" : true,
-  "unit_id" : 113,
   "display_name" : {
     "de" : "HP der Struktur",
     "en" : "Structure Hitpoints",
@@ -21,6 +14,22 @@
     "ko" : "내구도",
     "ru" : "Запас прочности корпуса",
     "zh" : "结构值"
+  },
+  "display_when_zero" : false,
+  "high_is_good" : true,
+  "icon_id" : 67,
+  "name" : "hp",
+  "published" : true,
+  "stackable" : true,
+  "tooltip_description" : {
+    "de" : "Die HP der Struktur regeneriert sich nicht von alleine, kann aber von Modulen oder Stationsdiensten repariert werden",
+    "en" : "Structure hitpoints do not regenerate naturally but can be repaired by modules or station services",
+    "es" : "Los puntos de vida de la estructura no se regeneran automáticamente, sino mediante módulos o servicios de la estación.",
+    "fr" : "Les PV de la structure ne se régénèrent pas automatiquement, mais peuvent être réparés par des modules ou des stations.",
+    "ja" : "自動的には回復せず、モジュールやステーションサービスで修復されます",
+    "ko" : "내구도는 자동으로 재생되지 않으며 모듈이나 정거장 서비스를 이용해 수리할 수 있습니다.",
+    "ru" : "Запас прочности корпуса не восстанавливается естественным образом, но его можно восстановить с помощью модулей или станционных служб",
+    "zh" : "结构不会自动恢复，不过可以用装备或空间站维修服务进行修理"
   },
   "tooltip_title" : {
     "de" : "HP der Struktur",
@@ -32,14 +41,6 @@
     "ru" : "Запас прочности корпуса",
     "zh" : "结构值"
   },
-  "tooltip_description" : {
-    "de" : "Die HP der Struktur regeneriert sich nicht von alleine, kann aber von Modulen oder Stationsdiensten repariert werden",
-    "en" : "Structure hitpoints do not regenerate naturally but can be repaired by modules or station services",
-    "es" : "Los puntos de vida de la estructura no se regeneran automáticamente, sino mediante módulos o servicios de la estación.",
-    "fr" : "Les PV de la structure ne se régénèrent pas automatiquement, mais peuvent être réparés par des modules ou des stations.",
-    "ja" : "自動的には回復せず、モジュールやステーションサービスで修復されます",
-    "ko" : "내구도는 자동으로 재생되지 않으며 모듈이나 정거장 서비스를 이용해 수리할 수 있습니다.",
-    "ru" : "Запас прочности корпуса не восстанавливается естественным образом, но его можно восстановить с помощью модулей или станционных служб",
-    "zh" : "结构不会自动恢复，不过可以用装备或空间站维修服务进行修理"
-  }
+  "unit_id" : 113,
+  "attribute_id" : 9
 }
