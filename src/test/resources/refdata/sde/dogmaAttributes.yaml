@@ -1,11 +1,10 @@
 ---
 "9":
-  attributeID: 9
-  categoryID: 4
+  attributeCategoryID: 4
   dataType: 4
   defaultValue: 0
   description: "The maximum hitpoints of an object."
-  displayNameID:
+  displayName:
     de: "HP der Struktur"
     en: "Structure Hitpoints"
     es: "Vida estructura"
@@ -14,12 +13,13 @@
     ko: "내구도"
     ru: "Запас прочности корпуса"
     zh: "结构值"
+  displayWhenZero: false
   highIsGood: true
   iconID: 67
   name: "hp"
   published: true
   stackable: true
-  tooltipDescriptionID:
+  tooltipDescription:
     de: "Die HP der Struktur regeneriert sich nicht von alleine, kann aber von Modulen\
       \ oder Stationsdiensten repariert werden"
     en: "Structure hitpoints do not regenerate naturally but can be repaired by modules\
@@ -33,7 +33,7 @@
     ru: "Запас прочности корпуса не восстанавливается естественным образом, но его\
       \ можно восстановить с помощью модулей или станционных служб"
     zh: "结构不会自动恢复，不过可以用装备或空间站维修服务进行修理"
-  tooltipTitleID:
+  tooltipTitle:
     de: "HP der Struktur"
     en: "Structure Hitpoints"
     es: "Puntos de vida de la estructura"
@@ -44,12 +44,11 @@
     zh: "结构值"
   unitID: 113
 "182":
-  attributeID: 182
-  categoryID: 8
+  attributeCategoryID: 8
   dataType: 11
   defaultValue: 0
   description: "The type ID of the skill that is required."
-  displayNameID:
+  displayName:
     de: "Primärer Skill benötigt"
     en: "Primary Skill required"
     es: "Habilidad principal necesaria"
@@ -66,22 +65,21 @@
   stackable: true
   unitID: 116
 "277":
-  attributeID: 277
-  categoryID: 8
+  attributeCategoryID: 8
   dataType: 4
   defaultValue: 0
   description: "Required skill level for skill 1"
+  displayWhenZero: false
   highIsGood: true
   name: "requiredSkill1Level"
   published: false
   stackable: true
 "183":
-  attributeID: 183
-  categoryID: 8
+  attributeCategoryID: 8
   dataType: 11
   defaultValue: 0
   description: "The type ID of the skill that is required."
-  displayNameID:
+  displayName:
     de: "Sekundärer Skill benötigt"
     en: "Secondary Skill required"
     es: "Habilidad secundaria necesaria"
@@ -98,22 +96,21 @@
   stackable: true
   unitID: 116
 "278":
-  attributeID: 278
-  categoryID: 8
+  attributeCategoryID: 8
   dataType: 4
   defaultValue: 0
   description: "Required skill level for skill 2"
+  displayWhenZero: false
   highIsGood: true
   name: "requiredSkill2Level"
   published: false
   stackable: true
 "184":
-  attributeID: 184
-  categoryID: 8
+  attributeCategoryID: 8
   dataType: 11
   defaultValue: 0
   description: "The type ID of the skill that is required."
-  displayNameID:
+  displayName:
     de: "Tertiärer Skill benötigt"
     en: "Tertiary Skill required"
     es: "Habilidad terciaria necesaria"
@@ -130,22 +127,21 @@
   stackable: true
   unitID: 116
 "279":
-  attributeID: 279
-  categoryID: 8
+  attributeCategoryID: 8
   dataType: 4
   defaultValue: 0
   description: "Required skill level for skill 3"
+  displayWhenZero: false
   highIsGood: true
   name: "requiredSkill3Level"
   published: false
   stackable: true
 "1285":
-  attributeID: 1285
-  categoryID: 8
+  attributeCategoryID: 8
   dataType: 11
   defaultValue: 0
   description: "The type ID of the skill that is required."
-  displayNameID:
+  displayName:
     de: "Quaternary-Skill benötigt"
     en: "Quaternary Skill required"
     es: "Habilidad cuaternaria necesaria"
@@ -162,12 +158,11 @@
   stackable: true
   unitID: 116
 "1286":
-  attributeID: 1286
-  categoryID: 8
+  attributeCategoryID: 8
   dataType: 4
   defaultValue: 0
   description: "Required skill level for skill 4"
-  displayNameID:
+  displayName:
     de: "Benötigter Skill 5 Level"
     en: "Level 5 required"
     es: "Nivel 5 necesario"
@@ -176,18 +171,18 @@
     ko: "레벨 5 요구"
     ru: "Необходимые навыки 5 уровня"
     zh: "所需技能等级"
+  displayWhenZero: false
   highIsGood: true
   iconID: 0
   name: "requiredSkill4Level"
   published: false
   stackable: true
 "1289":
-  attributeID: 1289
-  categoryID: 8
+  attributeCategoryID: 8
   dataType: 11
   defaultValue: 0
   description: "The type ID of the skill that is required."
-  displayNameID:
+  displayName:
     de: "Quinary-Skill benötigt"
     en: "Quinary Skill required"
     es: "Habilidad quinaria necesaria"
@@ -196,6 +191,7 @@
     ko: "5차 스킬 필요"
     ru: "Требуемый пятеричный навык"
     zh: "五级技能需求"
+  displayWhenZero: false
   highIsGood: true
   iconID: 0
   name: "requiredSkill5"
@@ -203,23 +199,22 @@
   stackable: true
   unitID: 116
 "1287":
-  attributeID: 1287
-  categoryID: 8
+  attributeCategoryID: 8
   dataType: 4
   defaultValue: 0
   description: "Required skill level for skill 5"
+  displayWhenZero: false
   highIsGood: true
   iconID: 0
   name: "requiredSkill5Level"
   published: false
   stackable: true
 "1290":
-  attributeID: 1290
-  categoryID: 8
+  attributeCategoryID: 8
   dataType: 11
   defaultValue: 0
   description: "The type ID of the skill that is required."
-  displayNameID:
+  displayName:
     de: "Senary-Skill benötigt"
     en: "Senary Skill required"
     es: "Habilidad senaria necesaria"
@@ -228,6 +223,7 @@
     ko: "6차 스킬 필요"
     ru: "Требуемый шестеричный навык"
     zh: "六级技能需求"
+  displayWhenZero: false
   highIsGood: true
   iconID: 0
   name: "requiredSkill6"
@@ -235,23 +231,22 @@
   stackable: true
   unitID: 116
 "1288":
-  attributeID: 1288
-  categoryID: 8
+  attributeCategoryID: 8
   dataType: 4
   defaultValue: 0
   description: "Required skill level for skill 6"
+  displayWhenZero: false
   highIsGood: true
   iconID: 0
   name: "requiredSkill6Level"
   published: false
   stackable: true
 "180":
-  attributeID: 180
-  categoryID: 7
+  attributeCategoryID: 7
   dataType: 10
   defaultValue: 0
   description: "Only refers to another dogma attribute."
-  displayNameID:
+  displayName:
     de: "Primäres Attribut"
     en: "Primary attribute"
     es: "Atributo principal"
@@ -260,18 +255,18 @@
     ko: "1차 특성"
     ru: "Первичная характеристика"
     zh: "主属性"
+  displayWhenZero: false
   highIsGood: true
   name: "primaryAttribute"
   published: true
   stackable: true
   unitID: 119
 "181":
-  attributeID: 181
-  categoryID: 7
+  attributeCategoryID: 7
   dataType: 10
   defaultValue: 0
   description: "Only refers to another dogma attribute."
-  displayNameID:
+  displayName:
     de: "Sekundäres Attribut"
     en: "Secondary attribute"
     es: "Atributo secundario"
@@ -280,20 +275,20 @@
     ko: "2차 특성"
     ru: "Вторичная характеристика"
     zh: "副属性"
+  displayWhenZero: false
   highIsGood: true
   name: "secondaryAttribute"
   published: true
   stackable: true
   unitID: 119
 "275":
-  attributeID: 275
-  categoryID: 7
+  attributeCategoryID: 7
   dataType: 5
   defaultValue: 0
   description: "This attribute is a multiplier to the number of skill points required\
     \ to train. Skill points required to train a skill = 250 * skillTimeConstant *\
     \ sqrt(32)^(skillLevel - 1)"
-  displayNameID:
+  displayName:
     de: "Trainingszeit-Multiplikator"
     en: "Training time multiplier"
     es: "Multiplicador de tiempo de desarrollo"
@@ -302,6 +297,7 @@
     ko: "훈련시간 배수"
     ru: "Множитель"
     zh: "训练时间倍增系数"
+  displayWhenZero: false
   highIsGood: true
   iconID: 1392
   name: "skillTimeConstant"
@@ -309,12 +305,11 @@
   stackable: true
   unitID: 104
 "164":
-  attributeID: 164
-  categoryID: 7
+  attributeCategoryID: 7
   dataType: 4
   defaultValue: 0
   description: "The charisma of a character."
-  displayNameID:
+  displayName:
     de: "Ausstrahlung"
     en: "Charisma"
     es: "Carisma"
@@ -323,6 +318,7 @@
     ko: "카리스마"
     ru: "«Харизма»"
     zh: "魅力"
+  displayWhenZero: false
   highIsGood: true
   iconID: 1378
   name: "charisma"
@@ -330,12 +326,11 @@
   stackable: true
   unitID: 120
 "165":
-  attributeID: 165
-  categoryID: 7
+  attributeCategoryID: 7
   dataType: 4
   defaultValue: 0
   description: "The intelligence of a character."
-  displayNameID:
+  displayName:
     de: "Intelligenz"
     en: "Intelligence"
     es: "Inteligencia"
@@ -344,6 +339,7 @@
     ko: "지능"
     ru: "«Интеллект»"
     zh: "智力"
+  displayWhenZero: false
   highIsGood: true
   iconID: 1380
   name: "intelligence"
@@ -351,12 +347,11 @@
   stackable: true
   unitID: 120
 "166":
-  attributeID: 166
-  categoryID: 7
+  attributeCategoryID: 7
   dataType: 4
   defaultValue: 0
   description: "The memory of a character."
-  displayNameID:
+  displayName:
     de: "Gedächtnis"
     en: "Memory"
     es: "Memoria"
@@ -365,6 +360,7 @@
     ko: "기억력"
     ru: "«Память»"
     zh: "记忆"
+  displayWhenZero: false
   highIsGood: true
   iconID: 1381
   name: "memory"
@@ -372,12 +368,11 @@
   stackable: true
   unitID: 120
 "167":
-  attributeID: 167
-  categoryID: 9
+  attributeCategoryID: 9
   dataType: 4
   defaultValue: 0
   description: "The perception of a character."
-  displayNameID:
+  displayName:
     de: "Auffassungsgabe"
     en: "Perception"
     es: "Percepción"
@@ -386,6 +381,7 @@
     ko: "지각력"
     ru: "«Восприятие»"
     zh: "感知"
+  displayWhenZero: false
   highIsGood: true
   iconID: 1382
   name: "perception"
@@ -393,12 +389,11 @@
   stackable: true
   unitID: 120
 "168":
-  attributeID: 168
-  categoryID: 7
+  attributeCategoryID: 7
   dataType: 4
   defaultValue: 0
   description: "The willpower of a character."
-  displayNameID:
+  displayName:
     de: "Willenskraft"
     en: "Willpower"
     es: "Voluntad"
@@ -407,6 +402,7 @@
     ko: "정신력"
     ru: "«Сила воли»"
     zh: "毅力"
+  displayWhenZero: false
   highIsGood: true
   iconID: 1379
   name: "willpower"
@@ -414,67 +410,67 @@
   stackable: true
   unitID: 120
 "1047":
-  attributeID: 1047
-  categoryID: 9
+  attributeCategoryID: 9
   dataType: 3
   defaultValue: 1
   description: "If set to 1 then this skill can not be trained on accounts that are\
     \ marked as Alpha Clone. Any other value (although you should probably use 0)\
     \ will result in all accounts being able to train this skill."
+  displayWhenZero: false
   highIsGood: true
   iconID: 0
   name: "canNotBeTrainedOnTrial"
   published: false
   stackable: true
 "2699":
-  attributeID: 2699
-  categoryID: 7
+  attributeCategoryID: 7
   dataType: 5
   defaultValue: 0
   description: "0: Mission/NPE Ore\r\n1: Standard Ore/Ice\r\n2: +5% Ore\r\n3: +10%\
     \ Ore\r\n4: High Quality Ice or Extracted Ore\r\n5: Jackpot Moon Ore"
+  displayWhenZero: false
   highIsGood: true
   name: "asteroidMetaLevel"
   published: false
   stackable: true
 "2711":
-  attributeID: 2711
-  categoryID: 7
+  attributeCategoryID: 7
   dataType: 11
   defaultValue: 0
   description: "Reference for grouping ores in visual displays. All variants of one\
     \ ore should have the same BasicType ID"
+  displayWhenZero: false
   highIsGood: false
   name: "oreBasicType"
   published: false
   stackable: false
   unitID: 116
 "162":
-  attributeID: 162
-  categoryID: 9
+  attributeCategoryID: 9
   dataType: 9
   defaultValue: 0
   description: "Radius of an object in meters"
+  displayWhenZero: false
   highIsGood: true
   iconID: 1390
   name: "radius"
   published: false
   stackable: true
 "1302":
-  attributeID: 1302
-  categoryID: 1
+  attributeCategoryID: 1
   dataType: 11
   defaultValue: 0
   description: ""
-  displayNameID:
-    de: "Kann eingebaut werden in"
+  displayName:
+    de: "Kann nur eingebaut werden"
     en: "Can only be fitted to"
-    es: "Se puede equipar en"
-    fr: "Peut être équipé sur"
-    ja: "装着可能対象"
-    ko: "피팅 가능한 대상:"
-    ru: "Устанавливается на"
-    zh: "可装配至"
+    es: "Solo se puede equipar en"
+    fr: "Montage uniquement possible sur"
+    ja: "装着可能対象："
+    ko: "피팅 가능한 대상"
+    ru: "Можно оснастить только:"
+    zh: "只能装配在"
+  displayWhenZero: false
   highIsGood: true
   iconID: 1443
   name: "canFitShipType1"
@@ -482,12 +478,11 @@
   stackable: true
   unitID: 116
 "1303":
-  attributeID: 1303
-  categoryID: 1
+  attributeCategoryID: 1
   dataType: 11
   defaultValue: 0
   description: ""
-  displayNameID:
+  displayName:
     de: "Kann eingebaut werden in"
     en: "Can be fitted to"
     es: "Se puede equipar en"
@@ -496,6 +491,7 @@
     ko: "피팅 가능한 대상:"
     ru: "Устанавливается на"
     zh: "可装配至"
+  displayWhenZero: false
   highIsGood: true
   iconID: 1443
   name: "canFitShipType2"
@@ -503,12 +499,11 @@
   stackable: true
   unitID: 116
 "1304":
-  attributeID: 1304
-  categoryID: 1
+  attributeCategoryID: 1
   dataType: 11
   defaultValue: 0
   description: ""
-  displayNameID:
+  displayName:
     de: "Kann eingebaut werden in"
     en: "Can be fitted to"
     es: "Se puede equipar en"
@@ -517,6 +512,7 @@
     ko: "피팅 가능한 대상:"
     ru: "Устанавливается на"
     zh: "可装配至"
+  displayWhenZero: false
   highIsGood: true
   iconID: 1443
   name: "canFitShipType3"
@@ -524,12 +520,11 @@
   stackable: true
   unitID: 116
 "1305":
-  attributeID: 1305
-  categoryID: 1
+  attributeCategoryID: 1
   dataType: 11
   defaultValue: 0
   description: ""
-  displayNameID:
+  displayName:
     de: "Kann eingebaut werden in"
     en: "Can be fitted to"
     es: "Se puede equipar en"
@@ -538,6 +533,7 @@
     ko: "피팅 가능한 대상:"
     ru: "Устанавливается на"
     zh: "可装配至"
+  displayWhenZero: false
   highIsGood: true
   iconID: 1443
   name: "canFitShipType4"
@@ -545,12 +541,11 @@
   stackable: true
   unitID: 116
 "790":
-  attributeID: 790
-  categoryID: 7
+  attributeCategoryID: 7
   dataType: 11
   defaultValue: 0
   description: "The skill required to reprocess this ore type."
-  displayNameID:
+  displayName:
     de: "Aufbereitung-Skill"
     en: "Reprocessing Skill"
     es: "Habilidad de reprocesamiento"
@@ -559,6 +554,7 @@
     ko: "재처리 스킬"
     ru: "Навык переработки"
     zh: "回收再生技能"
+  displayWhenZero: false
   highIsGood: true
   iconID: 0
   name: "reprocessingSkillType"
@@ -566,12 +562,11 @@
   stackable: true
   unitID: 116
 "2355":
-  attributeID: 2355
-  categoryID: 37
+  attributeCategoryID: 37
   dataType: 5
   defaultValue: 1
   description: ""
-  displayNameID:
+  displayName:
     de: "Hochsicherheits-Bonusmultiplikator"
     en: "High Security Bonus Multiplier"
     es: "Multiplicador de bonificación de seguridad alta"
@@ -580,6 +575,7 @@
     ko: "하이 시큐리티 보너스 배수"
     ru: "Изменение влияния в планетных системах метрополии («хай-сек»)"
     zh: "高安加成系数"
+  displayWhenZero: false
   highIsGood: true
   name: "hiSecModifier"
   published: true

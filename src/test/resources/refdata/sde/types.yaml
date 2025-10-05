@@ -8,8 +8,8 @@
       \ zusätzlichen Zehe auf der Stirn aufwachen!\n\n20% Nachführungsgeschwindigkeit-Bonus."
     en: "Medium Projectile Ammo. Very commonly used by Minmatar pilots, this ammo\
       \ is incendiary and also has great penetration. Just be careful handling it\
-      \ unless you want to wake up with an extra toe on your forehead.\r\n\r\n20%\
-      \ tracking speed bonus."
+      \ unless you want to wake up with an extra toe on your forehead.\n\n20% tracking\
+      \ speed bonus."
     es: "Munición de proyectiles de medio calibre. Esta munición, muy habitual entre\
       \ los pilotos minmatarianos, es incendiaria y de gran penetración. Ten cuidado\
       \ al manejarla, a menos que quieras despertarte con un cuerno en la frente.\n\
@@ -88,43 +88,6 @@
   groupID: 27
   marketGroupID: 81
   mass: 100250000
-  masteries:
-    "0":
-    - 96
-    - 99
-    - 133
-    - 138
-    - 140
-    - 89
-    "1":
-    - 96
-    - 99
-    - 133
-    - 138
-    - 140
-    - 89
-    "2":
-    - 96
-    - 99
-    - 133
-    - 138
-    - 140
-    - 89
-    "3":
-    - 96
-    - 99
-    - 133
-    - 138
-    - 140
-    - 89
-    "4":
-    - 96
-    - 99
-    - 133
-    - 138
-    - 140
-    - 117
-    - 89
   metaGroupID: 1
   name:
     de: "Dominix"
@@ -139,83 +102,7 @@
   published: true
   raceID: 8
   radius: 250
-  sofFactionName: "gallentebase"
   soundID: 20072
-  traits:
-    miscBonuses: []
-    roleBonuses:
-    - bonus: 5
-      bonusText:
-        de: "zusätzlicher Bonus auf HP der <a href=showinfo:3394>Verstärkten Schottwand</a>"
-        en: "additional bonus to <a href=showinfo:3394>Reinforced Bulkhead</a> hitpoints"
-        es: "de bonificación adicional a los puntos de vida del <a href=showinfo:3394>mamparo\
-          \ reforzado</a>."
-        fr: "de bonus supplémentaire aux points de vie de la <a href=showinfo:3394>cloison\
-          \ renforcée</a>"
-        ja: "<a href=showinfo:3394>強化隔壁</a>HPがさらに増加"
-        ko: "<a href=showinfo:3394>강화 격벽</a> 내구도 증가"
-        ru: "дополнительный бонус к\_прочности <a href=showinfo:3394>укреплённой п\
-          ереборки</a>"
-        zh: "<a href=showinfo:3394>强化舱隔壁</a>结构值加成"
-      importance: 3
-      unitID: 105
-    - bonus: 50
-      bonusText:
-        de: "Bonus auf die HP der <a href=showinfo:3394>Panzerplatte</a>"
-        en: "bonus to <a href=showinfo:3394>Armor Plate</a> hitpoints"
-        es: "de bonificación a los puntos de vida de las <a href=showinfo:3394>placas\
-          \ de blindaje</a>."
-        fr: "de bonus aux points de vie du <a href=showinfo:3394>revêtement de blindage</a>"
-        ja: "<a href=showinfo:3394>アーマープレート</a>HPが増加"
-        ko: "<a href=showinfo:3394>장갑 플레이트</a> 내구도 증가"
-        ru: "бонус к\_прочности <a href=showinfo:3394>бронеплиты</a>"
-        zh: "<a href=showinfo:3394>装甲附甲板</a>装甲值加成"
-      importance: 2
-      unitID: 105
-    - bonus: 100
-      bonusText:
-        de: "Bonus auf die HP der <a href=showinfo:3425>Schilderweiterung</a>"
-        en: "bonus to <a href=showinfo:3425>Shield Extender</a> hitpoints"
-        es: "de bonificación a los puntos de vida del <a href=showinfo:3425>extensor\
-          \ de escudo</a>."
-        fr: "de bonus aux points de vie de l'<a href=showinfo:3425>extenseur de bouclier</a>"
-        ja: "<a href=showinfo:3425>シールドエクステンダー</a>HPが増加"
-        ko: "<a href=showinfo:3425>실드 확장장치</a> 실드량 증가"
-        ru: "бонус к\_прочности <a href=showinfo:3425>расширителя щитов</a>"
-        zh: "<a href=showinfo:3425>护盾扩展装置</a>护盾值加成"
-      importance: 1
-      unitID: 105
-    types:
-      "3336":
-      - bonus: 7.5
-        bonusText:
-          de: "Bonus auf die optimale Reichweite und Nachführungsgeschwindigkeit von\
-            \ <a href=showinfo:3436>Drohnen</a>"
-          en: "bonus to <a href=showinfo:3436>Drone</a> optimal range and tracking\
-            \ speed"
-          es: "de bonificación a la velocidad de rastreo y el alcance óptimo de los\
-            \ <a href=showinfo:3436>drones</a>."
-          fr: "de bonus à la portée optimale et à la vitesse de poursuite du <a href=showinfo:3436>drone</a>"
-          ja: "<a href=showinfo:3436>ドローン</a>の最適射程距離と追跡速度が増加"
-          ko: "<a href=showinfo:3436>드론</a> 최적사거리 및 트래킹 속도 증가"
-          ru: "повышается скорость наводки на цель бортового оружия <a href=showinfo:3436>д\
-            ронов</a>, увеличивается оптимальная дальность его действия"
-          zh: "<a href=\"showinfo:3436\">无人机</a>最佳射程和跟踪速度加成"
-        importance: 2
-        unitID: 105
-      - bonus: 10
-        bonusText:
-          de: "Bonus auf die HP und den Schaden von <a href=showinfo:3436>Drohnen</a>"
-          en: "bonus to <a href=showinfo:3436>Drone</a> hitpoints and damage"
-          es: "de bonificación a los puntos de vida y el daño de los <a href=showinfo:3436>drones</a>."
-          fr: "de bonus aux dégâts et aux PV des <a href=showinfo:3436>drones</a>"
-          ja: "<a href=showinfo:3436>ドローン</a>のヒットポイントとダメージが増加"
-          ko: "<a href=showinfo:3436>드론</a> 내구도 및 피해량 증가"
-          ru: "увеличивается урон бортового оружия <a href=showinfo:3436>дронов</a>;\
-            \ увеличивается запас их прочности"
-          zh: "<a href=\"showinfo:3436\">无人机</a>伤害和HP加成"
-        importance: 1
-        unitID: 105
   volume: 454500
 "3336":
   basePrice: 7500000
@@ -248,8 +135,8 @@
 "3327":
   basePrice: 30000
   description:
-    de: "Die grundsätzliche Fertigkeit, ein Raumschiff zu bedienen.\r\n\r\n2% Bonus\
-      \ auf die Wendigkeit eines Schiffes je Skillstufe."
+    de: "Die grundsätzliche Fertigkeit, ein Raumschiff zu bedienen.\n\n2% Bonus auf\
+      \ die Wendigkeit eines Schiffes je Skillstufe."
     en: "The basic operation of spaceships. 2% improved ship agility for all ships\
       \ per skill level."
     es: "Operación básica de naves espaciales. +2\_% de bonificación a la agilidad\
@@ -411,17 +298,17 @@
     en: "This bioadaptive mutaplasmid tool is designed to interface with and alter\
       \ devices that mitigate the impact of critical system damage. As such this mutaplasmid\
       \ could be used to mutate the performance characteristics of standard damage\
-      \ control modules.\r\n\r\nTriglavian bioadaptive technology makes extensive\
-      \ use of engineered colonies of extremophilic bacteria, that are used to grow,\
-      \ harvest and adapt various resources found in Abyssal Deadspace. Artificial\
-      \ colonizing plasmids integrated into specialist tools used for direct adaptation\
-      \ of technology can be found in Triglavian caches in various stages of development.\
-      \ These mutaplasmids can be used to alter the characteristics of a wide variety\
-      \ of equipment types, depending on the strain and the bioadaptive tool with\
-      \ which they are integrated.\r\n\r\nThe mutaplasmid colony integrated into this\
-      \ bioadaptive tool appears to be mature and reproducing at a healthy rate. The\
-      \ mutational benefits and risks of using this mutaplasmid are within relatively\
-      \ balanced bounds."
+      \ control modules.\n\nTriglavian bioadaptive technology makes extensive use\
+      \ of engineered colonies of extremophilic bacteria, that are used to grow, harvest\
+      \ and adapt various resources found in Abyssal Deadspace. Artificial colonizing\
+      \ plasmids integrated into specialist tools used for direct adaptation of technology\
+      \ can be found in Triglavian caches in various stages of development. These\
+      \ mutaplasmids can be used to alter the characteristics of a wide variety of\
+      \ equipment types, depending on the strain and the bioadaptive tool with which\
+      \ they are integrated.\n\nThe mutaplasmid colony integrated into this bioadaptive\
+      \ tool appears to be mature and reproducing at a healthy rate. The mutational\
+      \ benefits and risks of using this mutaplasmid are within relatively balanced\
+      \ bounds."
     es: "Esta herramienta mutaplásmida bioadaptativa está diseñada para alterar e\
       \ interactuar con dispositivos que mitigan el impacto de los daños críticos\
       \ del sistema. Por tanto, este mutaplásmido se puede usar para mutar las caracterí\
@@ -454,12 +341,12 @@
       \ et les risques de mutation lorsqu'on utilise ce mutaplasmide sont relativement\
       \ équilibrés."
     ja: "この生物学的適応性のある変異プラスミドツールは、重要なシステム損傷の影響を緩和するデバイスとのインターフェースおよび変更のために設計された。つまり\
-      、この変異プラスミドは、標準的なダメージ制御モジュールの性能特性を変異させるために使用することができる。\r\n\nトリグラビアンの生物適応技術は、極限\
-      環境バクテリアの培養コロニーを広範囲に利用している。このバクテリアはアビサルデッドスペースで発見されたもので、様々な資源を成長、収穫、適応させるために使\
-      用されている。技術の直接取得に使用される専門ツールに統合された人工コロニー形成プラスミドは、発達の様々な段階にあるトリグラビアンのキャッシュで見つけるこ\
-      とができる。これらの変異プラスミドは、統合されたバクテリア株や生物適応ツールに応じて、様々な種類の機器の特性を変化させるために使用することができる。\r\
-      \n\nこの生物適応ツールに統合された変異プラスミドツールのコロニーは成熟し、健康的な速度で繁殖しているように見える。この変異プラスミドツールを使用する\
-      ことによる突然変異の利点とリスクは、比較的バランスのとれた範囲内にある。"
+      、この変異プラスミドは、標準的なダメージ制御モジュールの性能特性を変異させるために使用することができる。\n\nトリグラビアンの生物適応技術は、極限環境\
+      バクテリアの培養コロニーを広範囲に利用している。このバクテリアはアビサルデッドスペースで発見されたもので、様々な資源を成長、収穫、適応させるために使用さ\
+      れている。技術の直接取得に使用される専門ツールに統合された人工コロニー形成プラスミドは、発達の様々な段階にあるトリグラビアンのキャッシュで見つけることが\
+      できる。これらの変異プラスミドは、統合されたバクテリア株や生物適応ツールに応じて、様々な種類の機器の特性を変化させるために使用することができる。\n\n\
+      この生物適応ツールに統合された変異プラスミドツールのコロニーは成熟し、健康的な速度で繁殖しているように見える。この変異プラスミドツールを使用することによ\
+      る突然変異の利点とリスクは、比較的バランスのとれた範囲内にある。"
     ko: "이 바이오적응형 뮤타플라즈미드 도구는 시스템을 치명적인 피해로부터 보호하는 장치인 데미지 컨트롤 모듈의 특성을 조정합니다. <br><br>극\
       한성 생물균은 트리글라비안 바이오적응형 기술 분야에서 광범위하게 활용되는 재료로, 각종 어비설 데드스페이스 자원을 생산 또는 조정하는 데\
       \ 사용됩니다. 특수 도구와 통합이 가능한 인공 플라스미드 군집은 어비설 데드스페이스 내의 트리글라비안 저장고에서 입수할 수 있습니다.\
@@ -508,9 +395,9 @@
       \ Bonus auf die Widerstandsfähigkeit von Schild, Panzerung und Rumpf. Es kann\
       \ zeitgleich immer nur ein Schadenskontroll-System ausgerüstet werden."
     en: "Utilizes a combination of containment field emitters and redundancy systems\
-      \ to mitigate the impact of critical system damage. \r\n\r\nGrants a bonus to\
-      \ resistance for shield, armor and hull.\r\n\r\nOnly one Damage Control can\
-      \ be fit at a given time."
+      \ to mitigate the impact of critical system damage. \n\nGrants a bonus to resistance\
+      \ for shield, armor and hull.\n\nOnly one Damage Control can be fit at a given\
+      \ time."
     es: "Usa una combinación de emisores de campo de contención y sistemas redundantes\
       \ para mitigar el impacto de daños críticos al sistema. \n\nOtorga una bonificació\
       n de resistencia de escudo, blindaje y casco.\n\nSolo se puede equipar un control\
@@ -519,8 +406,8 @@
       \ d'atténuer l'impact des dégâts critiques infligés aux systèmes. Donne un bonus\
       \ de résistance aux boucliers, au blindage et à la coque. Un seul contrôle des\
       \ dégâts peut être installé à la fois."
-    ja: "コンテインメントフィールドエミッターと冗長システムを組み合わせて使用することで、システムへの致命的なダメージの衝撃を回避する。\r\n\nシールド\
-      、アーマー、船体の耐性が増大する。\r\n\n複数のダメージ制御を同時に装備することはできない。"
+    ja: "コンテインメントフィールドエミッターと冗長システムを組み合わせて使用することで、システムへの致命的なダメージの衝撃を回避する。\n\nシールド、ア\
+      ーマー、船体の耐性が増大する。\n\n複数のダメージ制御を同時に装備することはできない。"
     ko: "집속 필드 생성기와 비상 시스템을 사용하여 시스템에 가해지는 피해를 감소합니다. <br><br>실드, 장갑, 그리고 선체 저항력이\
       \ 증가합니다. <br><br>데미지 컨트롤 모듈은 한 개만 장착할 수 있습니다."
     ru: "Эффективное сочетание излучателей сдерживающего поля и резервных блоков п\
@@ -552,9 +439,9 @@
       \n\n\nEs kann immer nur ein Schadenskontroll-System zu einem festgelegten Zeitpunkt\
       \ eingebaut werden."
     en: "Utilizes a combination of containment field emitters and redundancy systems\
-      \ to mitigate the impact of critical system damage. \r\n\r\nGrants a bonus to\
-      \ resistance for shield, armor and hull.\r\n\r\nOnly one Damage Control can\
-      \ be fit at a given time."
+      \ to mitigate the impact of critical system damage. \n\nGrants a bonus to resistance\
+      \ for shield, armor and hull.\n\nOnly one Damage Control can be fit at a given\
+      \ time."
     es: "Usa una combinación de emisores de campo de contención y sistemas redundantes\
       \ para mitigar el impacto de daños críticos al sistema. \n\n\n\nOtorga una bonificació\
       n de resistencia de escudo, blindaje y casco.\n\n\n\nSolo se puede equipar un\
@@ -599,9 +486,9 @@
       \n\n\nEs kann immer nur ein Schadenskontroll-System zu einem festgelegten Zeitpunkt\
       \ eingebaut werden."
     en: "Utilizes a combination of containment field emitters and redundancy systems\
-      \ to mitigate the impact of critical system damage. \r\n\r\nGrants a bonus to\
-      \ resistance for shield, armor and hull.\r\n\r\nOnly one Damage Control can\
-      \ be fit at a given time."
+      \ to mitigate the impact of critical system damage. \n\nGrants a bonus to resistance\
+      \ for shield, armor and hull.\n\nOnly one Damage Control can be fit at a given\
+      \ time."
     es: "Usa una combinación de emisores de campo de contención y sistemas redundantes\
       \ para mitigar el impacto de daños críticos al sistema. \n\n\n\nOtorga una bonificació\
       n de resistencia de escudo, blindaje y casco.\n\n\n\nSolo se puede equipar un\
@@ -719,79 +606,6 @@
   portionSize: 1
   published: true
   raceID: 4
-  sofFactionName: "amarrbase"
-  traits:
-    miscBonuses: []
-    roleBonuses:
-    - bonusText:
-        de: "<b><u>Zusätzliche Basiswerte</b></u>"
-        en: "<b><u>Additional Base Stats</b></u>"
-        es: "<b><u>Estadísticas básicas adicionales</b></u>"
-        fr: "<b><u>Stats de base supplémentaires</b></u>"
-        ja: "<b><u>追加ベース統計</b></u>"
-        ko: "<b><u>추가 기본 능력치</b></u>"
-        ru: "<b><u>Кроме того:</b></u>"
-        zh: "<b><u>附加基础数值</b></u>"
-      importance: 2
-    - bonusText:
-        de: "+1 Mid Slot, +3 Low Slots"
-        en: "+1 Mid Slot, +3 Low Slots"
-        es: "+1 ranura intermedia, +3 ranuras inferiores"
-        fr: "+1 Emplacement intermédiaire, +3 Emplacements inférieurs"
-        ja: "ミッドスロット+1、ロースロット+3"
-        ko: "미드 슬롯 +1, 로우 슬롯 +3"
-        ru: "+1 разъём средней мощности, +3 разъёма малой мощности"
-        zh: "中槽+1，低槽+3"
-      importance: 3
-    - bonusText:
-        de: "+50 GJ Energiespeicherkapazität"
-        en: "+50GJ Capacitor Capacity"
-        es: "+50\_GJ de capacidad del condensador"
-        fr: "Charge de capaciteur +50 GJ"
-        ja: "キャパシタ容量+50GJ"
-        ko: "캐패시터 용량 +50 GJ"
-        ru: "+50 ГДж ёмкости накопителя"
-        zh: "电容器电容量+50GJ"
-      importance: 4
-    - bonus: 20
-      bonusText:
-        de: "Bonus auf die Stromleistung des Schiffes"
-        en: "bonus to ship power output"
-        es: "de bonificación a la potencia de salida de la nave."
-        fr: "de bonus à la puissance du réseau d'alimentation du vaisseau"
-        ja: "艦船のパワー出力が上昇"
-        ko: "함선 출력 증가"
-        ru: "повышается мощность реактора корабля"
-        zh: "舰船能量栅格输出加成"
-      importance: 1
-      unitID: 105
-    types:
-      "30539":
-      - bonus: 3
-        bonusText:
-          de: "Bonus auf die Resistenz gegen Energiekriegsführung"
-          en: "bonus to energy warfare resistance"
-          es: "de bonificación a la resistencia a la guerra de energía."
-          fr: "de bonus à la résistance aux énergies de guerre"
-          ja: "エネルギー戦耐性が増加"
-          ko: "에너지 관련 공격 저항력 증가"
-          ru: "увеличивается сопротивляемость вражескому воздействию на накопитель\
-            \ энергии"
-          zh: "能量战抗性加成"
-        importance: 2
-        unitID: 105
-      - bonus: 5
-        bonusText:
-          de: "Bonus auf die Energiespeicherkapazität"
-          en: "bonus to capacitor capacity"
-          es: "de bonificación a la capacidad del condensador"
-          fr: "de bonus à la charge de capaciteur"
-          ja: "キャパシタ容量が増加"
-          ko: "캐패시터 용량 증가"
-          ru: "увеличивается ёмкость накопителя энергии"
-          zh: "电容器电容器量加成"
-        importance: 1
-        unitID: 105
   volume: 40
 "45622":
   description:
@@ -850,78 +664,6 @@
   portionSize: 1
   published: true
   raceID: 4
-  sofFactionName: "amarrbase"
-  traits:
-    miscBonuses: []
-    roleBonuses:
-    - bonusText:
-        de: "<b><u>Zusätzliche Basiswerte</b></u>"
-        en: "<b><u>Additional Base Stats</b></u>"
-        es: "<b><u>Estadísticas básicas adicionales</b></u>"
-        fr: "<b><u>Stats de base supplémentaires</b></u>"
-        ja: "<b><u>追加ベース統計</b></u>"
-        ko: "<b><u>추가 기본 능력치</b></u>"
-        ru: "<b><u>Кроме того:</b></u>"
-        zh: "<b><u>附加基础数值</b></u>"
-      importance: 1
-    - bonusText:
-        de: "+2 Mid Slots, +2 Low Slots"
-        en: "+2 Mid Slots, +2 Low Slots"
-        es: "+2\_ranuras intermedias, +2\_ranuras inferiores"
-        fr: "+2 Emplacements intermédiaires, +2 Emplacements inférieurs"
-        ja: "ミッドスロット+2、ロースロット+2"
-        ko: "미드 슬롯 +2, 로우 슬롯 +2"
-        ru: "+2 разъёма средней мощности, +2 разъёма малой мощности"
-        zh: "中槽+2，低槽+2"
-      importance: 2
-    - bonusText:
-        de: "+1 max. aufgeschaltetes Ziel"
-        en: "+1 max locked target"
-        es: "+1 objetivo fijado máximo"
-        fr: "+1 Cible verrouillée max"
-        ja: "最大ロックターゲット数+1"
-        ko: "최대 타겟팅 수 +1"
-        ru: "+1 к максимуму захваченных целей"
-        zh: "目标锁定数上限+1"
-      importance: 3
-    types:
-      "30539":
-      - bonus: 5
-        bonusText:
-          de: "Bonus auf die maximale Zielerfassungsreichweite"
-          en: "bonus to max targeting range"
-          es: "de bonificación a la distancia-objetivo máxima."
-          fr: "de bonus à la portée maximale du système de ciblage"
-          ja: "最大ターゲット範囲が拡大"
-          ko: "최대 타겟팅 거리 증가"
-          ru: "увеличивается максимальная дальность захвата целей"
-          zh: "最大锁定距离加成"
-        importance: 2
-        unitID: 105
-      - bonus: 15
-        bonusText:
-          de: "Bonus auf die Sensorstärke des Schiffs"
-          en: "bonus to ship sensor strength"
-          es: "de bonificación a la intensidad de los sensores de la nave."
-          fr: "de bonus à la puissance de détection du vaisseau"
-          ja: "艦船のセンサー強度が増加"
-          ko: "센서 강도 증가"
-          ru: "повышается эффективность системы захвата целей"
-          zh: "舰船感应强度加成"
-        importance: 1
-        unitID: 105
-      - bonus: 15
-        bonusText:
-          de: "Bonus auf die Scanauflösung"
-          en: "bonus to scan resolution"
-          es: "de bonificación a la resolución de escaneo."
-          fr: "de bonus à la résolution du balayage"
-          ja: "スキャン分解能にボーナス"
-          ko: "스캔 정밀도 향상"
-          ru: "увеличивается разрешающая способность системы захвата целей"
-          zh: "扫描分辨率加成"
-        importance: 3
-        unitID: 105
   variationParentTypeID: 45623
   volume: 40
 "45624":
@@ -1004,117 +746,6 @@
   portionSize: 1
   published: true
   raceID: 4
-  sofFactionName: "amarrbase"
-  traits:
-    miscBonuses: []
-    roleBonuses:
-    - bonusText:
-        de: "<b><u>Zusätzliche Basiswerte</b></u>"
-        en: "<b><u>Additional Base Stats</b></u>"
-        es: "<b><u>Estadísticas básicas adicionales</b></u>"
-        fr: "<b><u>Stats de base supplémentaires</b></u>"
-        ja: "<b><u>追加ベース統計</b></u>"
-        ko: "<b><u>추가 기본 능력치</b></u>"
-        ru: "<b><u>Кроме того:</b></u>"
-        zh: "<b><u>附加基础数值</b></u>"
-      importance: 2
-    - bonusText:
-        de: "+2 Mid Slots, +2 Low Slots"
-        en: "+2 Mid Slots, +2 Low Slots"
-        es: "+2\_ranuras intermedias, +2\_ranuras inferiores"
-        fr: "+2 Emplacements intermédiaires, +2 Emplacements inférieurs"
-        ja: "ミッドスロット+2、ロースロット+2"
-        ko: "미드 슬롯 +2, 로우 슬롯 +2"
-        ru: "+2 разъёма средней мощности, +2 разъёма малой мощности"
-        zh: "中槽+2，低槽+2"
-      importance: 3
-    - bonusText:
-        de: "+50 GJ Energiespeicherkapazität"
-        en: "+50GJ Capacitor Capacity"
-        es: "+50\_GJ de capacidad del condensador"
-        fr: "Charge de capaciteur +50 GJ"
-        ja: "キャパシタ容量+50GJ"
-        ko: "캐패시터 용량 +50 GJ"
-        ru: "+50 ГДж ёмкости накопителя"
-        zh: "电容器电容量+50GJ"
-      importance: 4
-    - bonus: 50
-      bonusText:
-        de: "Reduktion des CPU- und Strombedarfs von <a href=showinfo:3423>Energie-Nosferatu-</a>\
-          \ und <a href=showinfo:3423>Energieneutralisierer-</a>Modulen"
-        en: "reduction in the PWG and CPU requirements for <a href=showinfo:3423>Energy\
-          \ Nosferatu</a> and <a href=showinfo:3423>Energy Neutralizer</a> modules"
-        es: "de reducción de los requisitos de SP y CPU para los módulos de <a href=showinfo:3423>nosferatu\
-          \ de energía</a> y <a href=showinfo:3423>neutralizador energético</a>."
-        fr: "de réduction des prérequis du PWG et du CPU des modules <a href=showinfo:3423>Nosferatu\
-          \ à énergie</a> et <a href=showinfo:3423>neutraliseur d'énergie</a>"
-        ja: "<a href=showinfo:3423>エネルギーノスフェラトゥ</a>と<a href=showinfo:3423>エネルギーニュー\
-          トラライザー</a>モジュールの必要PWGとCPUが減少"
-        ko: "<a href=showinfo:3423>에너지 노스페라투</a> 및 <a href=showinfo:3423>에너지 뉴트럴라이\
-          저</a> 모듈 파워그리드 및 CPU 사용량 감소"
-        ru: "снижается потребность <a href=showinfo:3423>дистанционных нейтрализат\
-          оров заряда</a> и <a href=showinfo:3423>устройств паразитной подзарядки\
-          \ накопителя</a> в мощностях ЦПУ и реактора"
-        zh: "<a href=showinfo:3423>掠能器</a>和<a href=showinfo:3423>能量中和器</a>能量栅格和CPU需\
-          求降低"
-      importance: 1
-      unitID: 105
-    types:
-      "30539":
-      - bonus: 5
-        bonusText:
-          de: "Verringerung des Modulschadens durch Überhitzung"
-          en: "reduction in module damage from overheating"
-          es: "de reducción del daño del módulo por sobrecalentamiento."
-          fr: "de réduction de la détérioration du module suite à la surchauffe"
-          ja: "オーバーヒート時のモジュールダメージを軽減"
-          ko: "과부하로 인한 모듈 손상 감소"
-          ru: "уменьшается объём повреждений модулей, получаемых ими при перегрузк\
-            е"
-          zh: "装备过载损伤降低"
-        importance: 3
-        unitID: 105
-      - bonus: 10
-        bonusText:
-          de: "Bonus auf die Transfermenge von <a href=showinfo:3423>Nosferatu-</a>\
-            \ und <a href=showinfo:3423>Energieneutralisierer</a>-Modulen"
-          en: "bonus to <a href=showinfo:3423>Energy Nosferatu</a> and <a href=showinfo:3423>Energy\
-            \ Neutralizer</a> drain amount"
-          es: "de bonificación a la cantidad drenada por el <a href=showinfo:3423>nosferatu\
-            \ de energía</a> y el <a href=showinfo:3423>neutralizador energético</a>."
-          fr: "de bonus au volume d'énergie drainée par les <a href=showinfo:3423>Nosferatu\
-            \ à énergie</a> et les <a href=showinfo:3423>neutraliseurs d'énergie</a>"
-          ja: "<a href=showinfo:3423>エネルギーノスフェラトゥ</a>と<a href=showinfo:3423>エネルギーニ\
-            ュートラライザー</a>の吸収量が増加"
-          ko: "<a href=showinfo:3423>에너지 노스페라투</a> 및 <a href=showinfo:3423>에너지 뉴트럴\
-            라이저</a> 흡수량 증가"
-          ru: "увеличивается пропускная способность <a href=showinfo:3423>устройст\
-            в паразитной подзарядки накопителя</a> и <a href=showinfo:3423>дистанц\
-            ионных нейтрализаторов заряда</a>"
-          zh: "<a href=showinfo:3423>掠能器</a>和<a href=showinfo:3423>能量中和器</a>吸取量加成"
-        importance: 1
-        unitID: 105
-      - bonus: 10
-        bonusText:
-          de: "Bonus auf den Nutzen der Überhitzung von <a href=showinfo:3423>Energie-Nosferatu-</a>\
-            \ und <a href=showinfo:3423>Energieneutralisierer-</a>Modulen"
-          en: "bonus to the benefits of overheating <a href=showinfo:3423>Energy Nosferatu</a>\
-            \ and <a href=showinfo:3423>Energy Neutralizer</a> modules"
-          es: "de bonificación a los beneficios de sobrecalentar los módulos de <a\
-            \ href=showinfo:3423>nosferatu de energía</a> y <a href=showinfo:3423>neutralizador\
-            \ energético</a>."
-          fr: "de bonus aux avantages de la surchauffe des modules <a href=showinfo:3423>Nosferatu\
-            \ à énergie</a> et les <a href=showinfo:3423>neutraliseurs d'énergie</a>"
-          ja: "オーバーヒートした<a href=showinfo:3423>エネルギーノスフェラトゥ</a>と<a href=showinfo:3423>エ\
-            ネルギーニュートラライザー</a>の恩恵にボーナス"
-          ko: "<a href=showinfo:3423>에너지 노스페라투</a> 및 <a href=showinfo:3423>에너지 뉴트럴\
-            라이저</a> 모듈 과부하 시 보너스 효과 증가"
-          ru: "усиливается влияние перегрузки на параметры <a href=showinfo:3423>д\
-            истанционных нейтрализаторов заряда</a> и <a href=showinfo:3423>устрой\
-            ств паразитной подзарядки накопителя</a>"
-          zh: "<a href=showinfo:3423>掠能器</a>和<a href=showinfo:3423>能量中和器</a>过载效果加成"
-        importance: 2
-        unitID: 105
   variationParentTypeID: 45623
   volume: 40
 "22430":
@@ -1135,23 +766,23 @@
       \ enemy lines. With the use of a jump drive and portal generator, they are capable\
       \ of making a special type of jump portal usable only by covert ops vessels.\
       \ This enables them to stealthily plant reconnaissance and espionage forces\
-      \ in enemy territory. For the final word in clandestine maneuvers, look no further.\r\
-      \n\r\nAs the largest drone developer and manufacturer in space, CreoDron has\
-      \ a vested interest in drone carriers. While sacrificing relatively little in\
-      \ the way of defensive capability, the Sin can chew its way through surprisingly\
-      \ strong opponents - provided, of course, that the pilot uses top-of-the-line\
-      \ CreoDron drones."
+      \ in enemy territory. For the final word in clandestine maneuvers, look no further.\n\
+      \nAs the largest drone developer and manufacturer in space, CreoDron has a vested\
+      \ interest in drone carriers. While sacrificing relatively little in the way\
+      \ of defensive capability, the Sin can chew its way through surprisingly strong\
+      \ opponents - provided, of course, that the pilot uses top-of-the-line CreoDron\
+      \ drones."
     es: "Los acorazados de operaciones secretas están diseñados para la infiltració\
       n y el espionaje tras las líneas enemigas. Con un motor de salto y un generador\
       \ de portales, son capaces de hacer un tipo especial de portal de salto que\
       \ solo pueden usar las naves de operaciones encubiertas. Esto les permite plantar\
       \ sigilosamente fuerzas de reconocimiento y espionaje en territorio enemigo.\
-      \ Si buscas lo último en maniobras clandestinas, lo has encontrado.\r\n\r\n\
-      CreoDron, el mayor desarrollador y fabricante de drones del espacio, tiene un\
-      \ gran interés en los portadrones. Sacrificando relativamente poco en cuanto\
-      \ a la capacidad defensiva, la Sin puede hacer trizas a oponentes sorprendentemente\
-      \ fuertes (por supuesto, siempre y cuando el piloto use drones de CreoDron de\
-      \ última generación)."
+      \ Si buscas lo último en maniobras clandestinas, lo has encontrado.\n\nCreoDron,\
+      \ el mayor desarrollador y fabricante de drones del espacio, tiene un gran interé\
+      s en los portadrones. Sacrificando relativamente poco en cuanto a la capacidad\
+      \ defensiva, la Sin puede hacer trizas a oponentes sorprendentemente fuertes\
+      \ (por supuesto, siempre y cuando el piloto use drones de CreoDron de última\
+      \ generación)."
     fr: "Les cuirassés des forces spéciales sont conçus pour les missions d'infiltration\
       \ et d'espionnage derrière les lignes ennemies. Grâce à l'utilisation d'un propulseur\
       \ interstellaire et d'un générateur de portail, ils peuvent créer un portail\
@@ -1164,14 +795,14 @@
       \ le Sin se fraye habilement un chemin parmi ses adversaires, à condition, bien\
       \ entendu, que le pilote utilise des drones CreoDron ultra-perfectionnés."
     ja: "光学迷彩型戦艦は敵地への潜入と諜報活動のために設計されている。ジャンプドライブとポータルジェネレーターを使って、光学迷彩艦だけが通過できる特殊なジ\
-      ャンプポータルを生成する機能を持つ。これにより、偵察隊や諜報部隊を密かに敵の領内に潜り込ませることが可能になる。潜入作戦ならば、この船一択であろう。\r\
-      \n\r\n宇宙最大手のドローン開発製造企業であるクレオドロンは、ドローン母船の分野に強い関心を持っている。防衛能力は若干犠牲にされているものの、驚くほ\
-      ど強大な敵にも抵抗できる。ただし、それには最高級のクレオドロンドローンの使用が前提となる。"
+      ャンプポータルを生成する機能を持つ。これにより、偵察隊や諜報部隊を密かに敵の領内に潜り込ませることが可能になる。潜入作戦ならば、この船一択であろう。\n\
+      \n宇宙最大手のドローン開発製造企業であるクレオドロンは、ドローン母船の分野に強い関心を持っている。防衛能力は若干犠牲にされているものの、驚くほど強大な\
+      敵にも抵抗できる。ただし、それには最高級のクレオドロンドローンの使用が前提となる。"
     ko: "블랙옵스 배틀쉽은 잠입 및 유격에 특화된 함선입니다. 함선에 장착된 점프 드라이브와 포탈 생성기를 통해 코버트 옵스 전용 점프 포탈\
       을 생성할 수 있습니다. 이를 이용하여 정찰부대 또는 간첩부대를 은밀하게 적지에 보낼 수 있습니다. 비밀 임무에 한해 이보다 더 좋은 함\
-      선은 없을 것입니다.\r\n\r\n가장 큰 규모의 드론 개발사이자 제조사인 크레오드론은 드론 캐리어에 큰 흥미를 가지고 있습니다. 방어\
-      \ 능력이 크게 약하지 않은 함선임에도 불구하고 급이 더 높은 함선까지도 쉽게 파괴할 수 있습니다. 물론 파일럿이 최상급 크레오 드론을\
-      \ 운용하는 경우에 말입니다."
+      선은 없을 것입니다.\n\n가장 큰 규모의 드론 개발사이자 제조사인 크레오드론은 드론 캐리어에 큰 흥미를 가지고 있습니다. 방어 능력이\
+      \ 크게 약하지 않은 함선임에도 불구하고 급이 더 높은 함선까지도 쉽게 파괴할 수 있습니다. 물론 파일럿이 최상급 크레오 드론을 운용하는\
+      \ 경우에 말입니다."
     ru: "Тяжёлые диверсионные линкоры предназначены для проникновения в тыл врага\
       \ и шпионажа. Они снабжены гипердвигателем и генератором гиперпорталов и спо\
       собны создавать особые каналы, проходить через которые могут только диверсио\
@@ -1190,63 +821,6 @@
   groupID: 898
   marketGroupID: 1078
   mass: 141700000
-  masteries:
-    "0":
-    - 96
-    - 99
-    - 69
-    - 108
-    - 138
-    - 140
-    - 145
-    - 150
-    - 89
-    - 133
-    "1":
-    - 96
-    - 99
-    - 69
-    - 108
-    - 138
-    - 140
-    - 145
-    - 150
-    - 89
-    - 133
-    "2":
-    - 96
-    - 99
-    - 69
-    - 108
-    - 138
-    - 140
-    - 145
-    - 150
-    - 89
-    - 133
-    "3":
-    - 96
-    - 99
-    - 69
-    - 108
-    - 138
-    - 140
-    - 145
-    - 150
-    - 89
-    - 133
-    "4":
-    - 96
-    - 99
-    - 69
-    - 108
-    - 138
-    - 140
-    - 145
-    - 117
-    - 150
-    - 89
-    - 133
   metaGroupID: 2
   name:
     de: "Sin"
@@ -1261,213 +835,7 @@
   published: true
   raceID: 8
   radius: 250
-  sofFactionName: "creodron"
   soundID: 20072
-  traits:
-    miscBonuses: []
-    roleBonuses:
-    - bonusText:
-        de: "Kann Module für <a href=showinfo:21096>Anziehungsfeldgenerator</a>, <a\
-          \ href=showinfo:28646>getarnten Anziehungsfeldgenerator</a> und <a href=showinfo:28652>getarnten\
-          \ Sprungtorgenerator</a> ausrüsten"
-        en: "Can fit <a href=showinfo:21096>Cynosural Field Generator</a>, <a href=showinfo:28646>Covert\
-          \ Cynosural Field Generator</a>, and <a href=showinfo:28652>Covert Jump\
-          \ Portal Generator</a> modules"
-        es: "Es posible equipar módulos de <a href=showinfo:21096>generador de campo\
-          \ cinosural</a>,  <a href=showinfo:28646>generador de campo cinosural encubierto</a>\
-          \ y <a href=showinfo:28652>generador de portales de salto encubierto</a>."
-        fr: "Peut équiper des modules <a href=showinfo:21096>générateur de champ cynosural</a>,\
-          \ <a href=showinfo:28646>générateur de champ cynosural furtif</a> et <a\
-          \ href=showinfo:28652>générateur de portail interstellaire furtif</a>"
-        ja: "<a href=showinfo:21096>サイノシュラルフィールドジェネレーター</a>、<a href=showinfo:28646>潜\
-          伏用サイノシュラルフィールドジェネレーター</a>、そして<a href=showinfo:28652>潜伏用ジャンプポータルジェネレーター</a>を\
-          装備可能"
-        ko: "<a href=showinfo:21096>사이노슈럴 필드 생성기</a>, <a href=showinfo:28646>코버트 사\
-          이노슈럴 필드 생성기</a>, <a href=showinfo:28652>코버트 점프 포탈 생성기</a> 장착 가능"
-        ru: "Возможно оснащение <a href=showinfo:21096>приводным маяком</a>, <a href=showinfo:28646>п\
-          риводным маяком скрытого действия</a> и\_<a href=showinfo:28652>диверсио\
-          нным генератором гиперпорталов</a>"
-        zh: "可以装配<a href=showinfo:21096>诱导力场发生器</a>、<a href=showinfo:28646>隐秘诱导力场发\
-          生器</a>和<a href=showinfo:28652>隐秘跳跃通道发生器</a>装备"
-      importance: 1
-    - bonusText:
-        de: "Keine Verzögerung bei der Zielaufschaltung nach der Deaktivierung von\
-          \ <a href=showinfo:11579>Tarnmodulen</a>"
-        en: "No targeting delay after <a href=showinfo:11579>Cloaking Device</a> deactivation"
-        es: "No hay demora en la adquisición de objetivos tras la desactivación del\
-          \ <a href=showinfo:11579>dispositivo de camuflaje</a>."
-        fr: "Aucun délai de ciblage après la désactivation des <a href=showinfo:11579>dispositifs\
-          \ de camouflage</a>"
-        ja: "<a href=showinfo:11579>遮蔽装置</a>を停止した後のターゲット遅延なし"
-        ko: "<a href=showinfo:11579>클로킹 장치</a> 비활성화 후 타겟팅 딜레이 없음"
-        ru: "На кораблях этого типа устранена задержка включения систем захвата це\
-          лей, вызываемая отключением <a href=showinfo:11579>систем маскировки</a>"
-        zh: "重新启动<a href=\"showinfo:11579\">隐形装置</a>后不遭受锁定延时副作用"
-      importance: 2
-    - bonusText:
-        de: "Die Verzögerung bei Reaktivierung von <a href=showinfo:11579>Tarnmodulen</a>\
-          \ wird auf 5 Sekunden reduziert."
-        en: "<a href=showinfo:11579>Cloak</a> reactivation delay reduced to 5 seconds"
-        es: "Reducción de la demora de reactivación del <a href=showinfo:11579>camuflaje</a>\
-          \ a 5\_segundos."
-        fr: "Délai de réactivation du <a href=showinfo:11579>camouflage</a> réduit\
-          \ à 5 secondes"
-        ja: "<a href=showinfo:11579>遮蔽装置</a>の再起動遅延が5秒に短縮"
-        ko: "<a href=showinfo:11579>클로킹</a> 재가동 지연 시간 5초로 감소"
-        ru: "Задержка повторного включения <a href=showinfo:11579>систем маскировк\
-          и</a> сокращена до 5 секунд"
-        zh: "<a href=\"showinfo:11579\">隐形装置</a>重启延时降到5秒"
-      importance: 3
-    - bonus: 75
-      bonusText:
-        de: "Reduktion der effektiv zurückgelegten Distanz für die Sprungerschöpfung"
-        en: "reduction to effective distance traveled for jump fatigue"
-        es: "de reducción de la distancia efectiva hasta sufrir fatiga de salto."
-        fr: "de réduction de la distance effectuée pour l'épuisement de saut"
-        ja: "ジャンプによる疲弊が飛行距離に及ぼす影響を低減"
-        ko: "이동 거리에 따른 점프 피로도 감소"
-        ru: "медленнее накапливается усталость от гиперпереходов"
-        zh: "减少跳跃距离对产生跳跃疲劳的影响"
-      importance: 4
-      unitID: 105
-    - bonus: 50
-      bonusText:
-        de: "Reduktion der Dauer von <a href=showinfo:21096>Anziehungsfeldgeneratoren</a>\
-          \ und <a href=showinfo:28646>getarnten Anziehungsfeldgeneratoren</a>"
-        en: "reduction in <a href=showinfo:21096>Cynosural Field Generator</a> and\
-          \ <a href=showinfo:28646>Covert Cynosural Field Generator</a> duration"
-        es: "de reducción de la duración del <a href=showinfo:21096>generador de campo\
-          \ cinosural</a> y el <a href=showinfo:28646>generador de campo cinosural\
-          \ encubierto</a>."
-        fr: "de réduction de la durée du <a href=showinfo:21096>générateur de champ\
-          \ cynosural</a> et du <a href=showinfo:28646>générateur de champ cynosural\
-          \ furtif</a>"
-        ja: "<a href=showinfo:21096>サイノシュラルフィールドジェネレーター</a>と<a href=showinfo:28646>潜\
-          伏用サイノシュラルフィールドジェネレーター</a>の持続時間が減少"
-        ko: "<a href=showinfo:21096>사이노슈럴 필드 생성기</a> 및 <a href=showinfo:28646>코버트\
-          \ 사이노슈럴 필드 생성기</a> 지속시간 감소"
-        ru: "сокращение времени работы <a href=showinfo:21096>приводного маяка</a>\
-          \ и\_<a href=showinfo:28646>приводного маяка скрытого действия</a>"
-        zh: "<a href=showinfo:21096>诱导力场发生器</a>和<a href=showinfo:28646>隐秘诱导力场发生器</a>的\
-          持续时间缩短"
-      importance: 5
-      unitID: 105
-    - bonus: 650
-      bonusText:
-        de: "Bonus auf die maximale Geschwindigkeit des Schiffs beim Einsatz von <a\
-          \ href=showinfo:11579>Tarnvorrichtungen</a>"
-        en: "bonus to ship max velocity when using <a href=showinfo:11579>Cloaking\
-          \ Devices</a>"
-        es: "de bonificación a la velocidad máxima de la nave al utilizar <a href=showinfo:11579>dispositivos\
-          \ de camuflaje</a>."
-        fr: "de bonus à la vitesse maximale d'un vaisseau lorsqu'équipé d'un <a href=showinfo:11579>dispositif\
-          \ de camouflage</a> actif"
-        ja: "<a href=showinfo:11579>遮蔽装置</a>使用時の艦船の最高速度が上昇"
-        ko: "<a href=showinfo:11579>클로킹 장치</a> 사용 시 함선 최대 속도 증가"
-        ru: "бонус к максимальной скорости хода при использовании <a href=showinfo:11579>у\
-          стройств маскировки</a>"
-        zh: "使用<a href=showinfo:11579>隐形装置</a>时舰船的最大速度加成"
-      importance: 6
-      unitID: 105
-    - bonus: 100
-      bonusText:
-        de: "Bonus auf die HP der <a href=showinfo:3425>Schilderweiterung</a>"
-        en: "bonus to <a href=showinfo:3425>Shield Extender</a> hitpoints"
-        es: "de bonificación a los puntos de vida del <a href=showinfo:3425>extensor\
-          \ de escudo</a>."
-        fr: "de bonus aux points de vie de l'<a href=showinfo:3425>extenseur de bouclier</a>"
-        ja: "<a href=showinfo:3425>シールドエクステンダー</a>HPが増加"
-        ko: "<a href=showinfo:3425>실드 확장장치</a> 실드량 증가"
-        ru: "бонус к\_прочности <a href=showinfo:3425>расширителя щитов</a>"
-        zh: "<a href=showinfo:3425>护盾扩展装置</a>护盾值加成"
-      importance: 7
-      unitID: 105
-    - bonus: 50
-      bonusText:
-        de: "Bonus auf die HP der <a href=showinfo:3394>Panzerplatte</a>"
-        en: "bonus to <a href=showinfo:3394>Armor Plate</a> hitpoints"
-        es: "de bonificación a los puntos de vida de las <a href=showinfo:3394>placas\
-          \ de blindaje</a>."
-        fr: "de bonus aux points de vie du <a href=showinfo:3394>revêtement de blindage</a>"
-        ja: "<a href=showinfo:3394>アーマープレート</a>HPが増加"
-        ko: "<a href=showinfo:3394>장갑 플레이트</a> 내구도 증가"
-        ru: "бонус к\_прочности <a href=showinfo:3394>бронеплиты</a>"
-        zh: "<a href=showinfo:3394>装甲附甲板</a>装甲值加成"
-      importance: 8
-      unitID: 105
-    - bonus: 5
-      bonusText:
-        de: "zusätzlicher Bonus auf HP der <a href=showinfo:3394>Verstärkten Schottwand</a>"
-        en: "additional bonus to <a href=showinfo:3394>Reinforced Bulkhead</a> hitpoints"
-        es: "de bonificación adicional a los puntos de vida del <a href=showinfo:3394>mamparo\
-          \ reforzado</a>."
-        fr: "de bonus supplémentaire aux points de vie de la <a href=showinfo:3394>cloison\
-          \ renforcée</a>"
-        ja: "<a href=showinfo:3394>強化隔壁</a>HPがさらに増加"
-        ko: "<a href=showinfo:3394>강화 격벽</a> 내구도 증가"
-        ru: "дополнительный бонус к\_прочности <a href=showinfo:3394>укреплённой п\
-          ереборки</a>"
-        zh: "<a href=showinfo:3394>强化舱隔壁</a>结构值加成"
-      importance: 9
-      unitID: 105
-    types:
-      "3336":
-      - bonus: 10
-        bonusText:
-          de: "Bonus auf den Schaden von <a href=showinfo:3307>großen Hybridgeschü\
-            tztürmen</a>"
-          en: "bonus to <a href=showinfo:3307>Large Hybrid Turret</a> damage"
-          es: "de bonificación al daño de la <a href=showinfo:3307>torreta híbrida\
-            \ grande</a>."
-          fr: "de bonus aux dégâts des <a href=showinfo:3307>grandes tourelles hybrides</a>"
-          ja: "<a href=showinfo:3307>大型ハイブリッドタレット</a>のダメージが増加"
-          ko: "<a href=showinfo:3307>대형 하이브리드 터렛</a> 피해량 증가"
-          ru: "увеличивается урон боеприпасов <a href=showinfo:3307>больших гибрид\
-            ных орудий</a>"
-          zh: "<a href=\"showinfo:3307\">大型混合炮台</a>伤害加成"
-        importance: 1
-        unitID: 105
-      - bonus: 10
-        bonusText:
-          de: "Bonus auf die HP und den Schaden von <a href=showinfo:3436>Drohnen</a>"
-          en: "bonus to <a href=showinfo:3436>Drone</a> hitpoints and damage"
-          es: "de bonificación a los puntos de vida y el daño de los <a href=showinfo:3436>drones</a>."
-          fr: "de bonus aux dégâts et aux PV des <a href=showinfo:3436>drones</a>"
-          ja: "<a href=showinfo:3436>ドローン</a>のヒットポイントとダメージが増加"
-          ko: "<a href=showinfo:3436>드론</a> 내구도 및 피해량 증가"
-          ru: "увеличивается урон бортового оружия <a href=showinfo:3436>дронов</a>;\
-            \ увеличивается запас их прочности"
-          zh: "<a href=\"showinfo:3436\">无人机</a>伤害和HP加成"
-        importance: 2
-        unitID: 105
-      "28656":
-      - bonus: 10
-        bonusText:
-          de: "Bonus auf die Transfermenge von <a href=showinfo:3439>Versorgungsdrohnen</a>"
-          en: "bonus to <a href=showinfo:3439>Logistic Drone</a> transfer amount"
-          es: "de bonificación a la cantidad de transferencia de los <a href=showinfo:3439>drones\
-            \ logísticos</a>."
-          fr: "de bonus à la capacité de transport des <a href=showinfo:3439>drones\
-            \ logistiques</a>"
-          ja: "<a href=showinfo:3439>支援専門ドローン</a>転送量にボーナス"
-          ko: "<a href=showinfo:3439>로지스틱스 드론</a> 수리량 증가"
-          ru: "бонус к производительности <a href=showinfo:3439>дронов снабжения</a>"
-          zh: "<a href=showinfo:3439>后勤无人机</a>维修量加成"
-        importance: 1
-        unitID: 105
-      - bonus: 7.5
-        bonusText:
-          de: "Bonus auf die Nachführung und optimale Reichweite von <a href=showinfo:3436>Drohnen</a>"
-          en: "bonus to <a href=showinfo:3436>Drone</a> tracking and optimal range"
-          es: "de bonificación al alcance óptimo y al rastreo de los <a href=showinfo:3436>drones</a>."
-          fr: "bonus à la poursuite et portée optimale des <a href=showinfo:3436>drones</a>"
-          ja: "<a href=showinfo:3436>ドローン</a>のトラッキング能力および最適射程距離が増加"
-          ko: "<a href=showinfo:3436>드론</a> 트래킹 성능 및 최적사거리 증가"
-          ru: "бонус к скорости наведения и оптимальной дальности <a href=showinfo:3436>д\
-            ронов</a>"
-          zh: "<a href=showinfo:3436>无人机</a>跟踪速度和最佳射程加成"
-        importance: 2
-        unitID: 105
   variationParentTypeID: 645
   volume: 454500
 "999":
@@ -1486,7 +854,6 @@
     zh: "多米尼克斯级蓝图"
   portionSize: 1
   published: true
-  sofFactionName: "gallentebase"
   volume: 0.01
 "22431":
   graphicID: 3350
@@ -1503,7 +870,6 @@
     zh: "罪恶级蓝图"
   portionSize: 1
   published: true
-  sofFactionName: "creodron"
   volume: 0.01
 "1230":
   basePrice: 2000
@@ -1514,7 +880,7 @@
       \ ständige Nachfrage. Vorwiegend verfügbar in Sonnensystemen des Hochsicherheitsraums."
     en: "Veldspar is the most common ore type in the central regions of known universe.\
       \ It is still in constant demand as it holds a large portion of the much-used\
-      \ <a href=showinfo:34>Tritanium</a> mineral.\r\n\r\nAvailable primarily in high\
+      \ <a href=showinfo:34>Tritanium</a> mineral.\n\nAvailable primarily in high\
       \ security status star systems."
     es: "El veldspar es el tipo de mena más común en las regiones centrales del universo\
       \ conocido. Su demanda es constante, ya que contiene una gran parte de <a href=showinfo:34>tritanio</a>,\
@@ -1526,7 +892,7 @@
       s de l'amas. Ce minerai est essentiellement disponible dans les systèmes stellaires\
       \ de haute sécurité."
     ja: "ベルドスパーは既知宇宙の中心宙域に最も普及している鉱石で、どこに行っても見つけることができる。しかし用途の広い無機物である<a href=showinfo:34>ト\
-      リタニウム</a>を多く含むため、需要は絶えない。\r\n\n主にハイセキュリティ星系で発見可能。"
+      リタニウム</a>を多く含むため、需要は絶えない。\n\n主にハイセキュリティ星系で発見可能。"
     ko: "벨드스파는 뉴에덴의 중심부에서 발견되는 흔한 광석 가운데 하나로 <a href=showinfo:34>트리타늄</a>의 주요 공급원입\
       니다.<br><br>하이 시큐리티 항성계에서 주로 채굴됩니다."
     ru: "Вельдспар\_— самая распространённая руда в центральных секторах известной\
@@ -1563,10 +929,10 @@
       \ enthält, besteht noch immer eine ständige Nachfrage. Vorwiegend verfügbar\
       \ in Sonnensystemen des Hochsicherheitsraums."
     en: "Clusters of veldspar with 5% higher yield, called concentrated veldspar,\
-      \ are sometimes found in areas where normal veldspar is already in abundance.\r\
-      \n\r\nVeldspar is the most common ore type in the central regions of known universe.\
+      \ are sometimes found in areas where normal veldspar is already in abundance.\n\
+      \nVeldspar is the most common ore type in the central regions of known universe.\
       \ It is still in constant demand as it holds a large portion of the much-used\
-      \ <a href=showinfo:34>Tritanium</a> mineral.\r\n\r\nAvailable primarily in high\
+      \ <a href=showinfo:34>Tritanium</a> mineral.\n\nAvailable primarily in high\
       \ security status star systems."
     es: "Los cúmulos de veldspar con un 5\_% más de rendimiento, llamados veldspar\
       \ concentrados, a veces se encuentran en áreas donde el veldspar normal ya abunda.\n\
@@ -1581,9 +947,9 @@
       \ jamais car il contient du <a href=showinfo:34>tritanium</a>, l'un des miné\
       raux les plus exploités de l'amas. Ce minerai est essentiellement disponible\
       \ dans les systèmes stellaires de haute sécurité."
-    ja: "通常のベルドスパーがすでに豊富に存在する地域では、収量が5%以上のベルドスパーのクラスターが高濃度ベルドスパーと呼ばれることがある。\r\n\nベ\
-      ルドスパーは既知宇宙の中心宙域に最も普及している鉱石で、どこに行っても見つけることができる。しかし用途の広い無機物である<a href=showinfo:34>ト\
-      リタニウム</a>を多く含むため、需要は絶えない。\r\n\n主にハイセキュリティ星系で発見可能。"
+    ja: "通常のベルドスパーがすでに豊富に存在する地域では、収量が5%以上のベルドスパーのクラスターが高濃度ベルドスパーと呼ばれることがある。\n\nベルド\
+      スパーは既知宇宙の中心宙域に最も普及している鉱石で、どこに行っても見つけることができる。しかし用途の広い無機物である<a href=showinfo:34>ト\
+      リタニウム</a>を多く含むため、需要は絶えない。\n\n主にハイセキュリティ星系で発見可能。"
     ko: "벨드스파 매장량이 풍부한 지역에서 발견되는 광석으로 일반적인 벨드스파에 비해 산출량이 5% 더 높습니다.<br><br>벨드스파는 뉴\
       에덴의 중심부에서 발견되는 흔한 광석 가운데 하나로 <a href=showinfo:34>트리타늄</a>의 주요 공급원입니다.<br><br>하\
       이 시큐리티 항성계에서 주로 채굴됩니다."
@@ -1622,11 +988,10 @@
       \ immer eine ständige Nachfrage. Vorwiegend verfügbar in Sonnensystemen des\
       \ Hochsicherheitsraums."
     en: "In asteroids above average size, the intense pressure can weld normal veldspar\
-      \ into what is known as dense veldspar, increasing the yield by 10%. \r\n\r\n\
-      Veldspar is the most common ore type in the central regions of known universe.\
-      \ It is still in constant demand as it holds a large portion of the much-used\
-      \ <a href=showinfo:34>Tritanium</a> mineral.\r\n\r\nAvailable primarily in high\
-      \ security status star systems."
+      \ into what is known as dense veldspar, increasing the yield by 10%. \n\nVeldspar\
+      \ is the most common ore type in the central regions of known universe. It is\
+      \ still in constant demand as it holds a large portion of the much-used <a href=showinfo:34>Tritanium</a>\
+      \ mineral.\n\nAvailable primarily in high security status star systems."
     es: "En los asteroides con un tamaño superior a la media, la intensa presión puede\
       \ convertir el veldspar normal en lo que se conoce como veldspar denso, lo que\
       \ aumenta el rendimiento un 10\_%.\n\nEl veldspar es el tipo de mena más comú\
@@ -1642,8 +1007,8 @@
       \ exploités de l'amas. Ce minerai est essentiellement disponible dans les systè\
       mes stellaires de haute sécurité."
     ja: "比較的大型のアステロイドにおいて、通常のベルドスパーに地中で強い圧力が加わって生成されるのが高密度ベルドスパーと呼ばれるもので、鉱石産出量が10%増\
-      える。\r\n\nベルドスパーは既知宇宙の中心宙域に最も普及している鉱石で、どこに行っても見つけることができる。しかし用途の広い無機物である<a href=showinfo:34>ト\
-      リタニウム</a>を多く含むため、需要は絶えない。\r\n\n主にハイセキュリティ星系で発見可能。"
+      える。\n\nベルドスパーは既知宇宙の中心宙域に最も普及している鉱石で、どこに行っても見つけることができる。しかし用途の広い無機物である<a href=showinfo:34>ト\
+      リタニウム</a>を多く含むため、需要は絶えない。\n\n主にハイセキュリティ星系で発見可能。"
     ko: "대형 소행성에서 벨드스파가 압축되면 생성되는 광석으로 일반적인 벨드스파에 비해 산출량이 10% 더 많습니다. <br><br>벨드스파\
       는 뉴에덴의 중심부에서 발견되는 흔한 광석 가운데 하나로 <a href=showinfo:34>트리타늄</a>의 주요 공급원입니다.<br><br>하\
       이 시큐리티 항성계에서 주로 채굴됩니다."
@@ -1688,14 +1053,14 @@
       \ in einer Struktur mit Upwell-Technologie eingebaut wird."
     en: "The Standup Market Hub is a service module that allows the use of an SCC-approved\
       \ market transaction and administration hub when installed into an Upwell technology\
-      \ structure.\r\n\r\nWhile an Upwell Structure has at least one service module\
-      \ online, it will enter \"full power\" mode and gain significantly increased\
-      \ shield and armor hitpoints and an extra reinforcement cycle.\r\n\r\nStandup\
-      \ is a proprietary system that uses a Structure Autonomous Nanoassembly Device\
-      \ (Upwell) containing integrated template software, a nanoassembler array and\
-      \ sufficient nanomass to enable the construction of a variety of service modules,\
-      \ structure modules and structure rigs when inserted into the appropriate slots\
-      \ on a structure built with Upwell technology."
+      \ structure.\n\nWhile an Upwell Structure has at least one service module online,\
+      \ it will enter \"full power\" mode and gain significantly increased shield\
+      \ and armor hitpoints and an extra reinforcement cycle.\n\nStandup is a proprietary\
+      \ system that uses a Structure Autonomous Nanoassembly Device (Upwell) containing\
+      \ integrated template software, a nanoassembler array and sufficient nanomass\
+      \ to enable the construction of a variety of service modules, structure modules\
+      \ and structure rigs when inserted into the appropriate slots on a structure\
+      \ built with Upwell technology."
     es: "El centro mercantil Standup es un módulo de servicio que permite el uso de\
       \ un centro de administración y de transacciones comerciales aprobado por la\
       \ CCS cuando se instala en una estructura con tecnología Upwell.\n\nCuando una\
@@ -1721,11 +1086,10 @@
       \ moléculaire de divers modules de services, modules de structure et optimisations\
       \ de structure."
     ja: "スタンドアップマーケットハブは、アップウェル技術ストラクチャに設置すると、SCC承認の市場取引および管理ハブの使用を可能にするサービスモジュールで\
-      ある。\r\n\nアップウェルストラクチャが少なくとも1つのサービスモジュールをオンラインにしている間、「フルパワー」モードに入り、大幅に増加したシール\
-      ドとアーマーのヒットポイントと追加の強化サイクルを得る。\r\n\nスタンドアップは、自動ナノアセンブリーストラクチャデバイス（アップウェル）を使用して\
-      、様々なサービスモジュール、ストラクチャモジュール、そしてストラクチャリグを作り出すことができるプロプライエタリシステムである。アップウェルテクノロジー\
-      で建造されたストラクチャの適切なスロットに挿入して使う。アップウェルには統合テンプレートソフトウェア、ナノアセンブラー配列と、十分なナノ物質が含まれてい\
-      る。"
+      ある。\n\nアップウェルストラクチャが少なくとも1つのサービスモジュールをオンラインにしている間、「フルパワー」モードに入り、大幅に増加したシールドと\
+      アーマーのヒットポイントと追加の強化サイクルを得る。\n\nスタンドアップは、自動ナノアセンブリーストラクチャデバイス（アップウェル）を使用して、様々な\
+      サービスモジュール、ストラクチャモジュール、そしてストラクチャリグを作り出すことができるプロプライエタリシステムである。アップウェルテクノロジーで建造さ\
+      れたストラクチャの適切なスロットに挿入して使う。アップウェルには統合テンプレートソフトウェア、ナノアセンブラー配列と、十分なナノ物質が含まれている。"
     ko: "서비스 모듈로 분류되며 업웰 구조물에 설치 시 안전무역위원회(SCC) 공인 거래소와 행정 구역이 개방됩니다. <br><br>서비스\
       \ 모듈이 온라인 상태일 경우 업웰 구조물은 최대 전력 모드로 전환되며 실드량 및 장갑 내구도가 증가하고 추가 강화 시간대가 생성됩니다\
       . <br><br>스탠드업은 자율구조형 나노어셈블러 장치(업웰)를 사용하는 시스템으로 템플릿 소프트웨어가 내장되어 있으며 나노어셈블리 배\
@@ -1784,8 +1148,8 @@
     en: "Conceived as a good balance of capability and investment in the Upwell Consortium's\
       \ Citadel range of space stations, the Fortizar has been designed for large-scale\
       \ operations in space, such as providing a well-equipped home for large corporations\
-      \ and small alliances, or as a border or trade post for larger alliances.\r\n\
-      \r\nThe Fortizar has been built with new spaceship tethering technology as standard,\
+      \ and small alliances, or as a border or trade post for larger alliances.\n\n\
+      The Fortizar has been built with new spaceship tethering technology as standard,\
       \ and will readily accommodate most ships, including freighters and even capital\
       \ ships, in its internal docking bays. While the docks are unable to service\
       \ 'supercapital' level vessels, the defensive capabilities of the Fortizar are\
@@ -1827,11 +1191,11 @@
       s."
     ja: "フォータイザーは、アップウェル・コンソーシアムの要塞クラス宇宙ステーションの中でも能力と費用のバランスが取れたモデルと位置づけられている。大企業や\
       小規模なアライアンスにとっては設備が整った活動拠点、大規模アライアンスにとっては検問所や交易所としての使用など、宇宙空間で行われる大規模な活動を想定して\
-      設計されている。\r\n\nフォータイザーには新しい宇宙船テザリング技術が標準装備されているため、内部のドッキングベイには超大型輸送艦、さらには主力艦全\
-      までも含めたほとんどの艦船を受け入れることが可能である。ドックに「スーパーキャピタル」艦を収容することはできないものの、フォータイザーの防御能力はかなり\
-      強力で、特にセキュリティーの低い星系ではエリア攻撃能力のある兵装が有効である。フォータイザーはアップウェルのスタンドアップブランドのサービス及びストラク\
-      チャモジュールで構成を変更できるため、ストラクチャオペレーターの特定のニーズに応えることが可能である。フォータイザーのさらなるハードウェア調整はスタンド\
-      アップL-セットリグで行うことができ、それにより城塞のようなこの艦船を特定の役割に最適化させられる。"
+      設計されている。\n\nフォータイザーには新しい宇宙船テザリング技術が標準装備されているため、内部のドッキングベイには超大型輸送艦、さらには主力艦全まで\
+      も含めたほとんどの艦船を受け入れることが可能である。ドックに「スーパーキャピタル」艦を収容することはできないものの、フォータイザーの防御能力はかなり強力\
+      で、特にセキュリティーの低い星系ではエリア攻撃能力のある兵装が有効である。フォータイザーはアップウェルのスタンドアップブランドのサービス及びストラクチャ\
+      モジュールで構成を変更できるため、ストラクチャオペレーターの特定のニーズに応えることが可能である。フォータイザーのさらなるハードウェア調整はスタンドアッ\
+      プL-セットリグで行うことができ、それにより城塞のようなこの艦船を特定の役割に最適化させられる。"
     ko: "포티자는 대규모 작전 수행을 위한 시타델로 업웰 컨소시엄 기술력의 집합체입니다. 대형 코퍼레이션부터 소형 얼라이언스가 주둔하기 적합\
       하며 큰 규모의 얼라이언스에게는 중간 경계기지이자 무역거점으로 활용되고 있습니다. <br><br>포티자는 최신식 함선 테더링 기술이 적용\
       되어 프레이터와 캐피탈 함선을 포함한 대부분의 함선들을 내부 도킹베이에 수용할 수 있습니다. 비록 슈퍼캐피탈급 함선은 도킹할 수 없지만\
@@ -1873,95 +1237,7 @@
   portionSize: 1
   published: true
   radius: 85000
-  sofFactionName: "upwell"
   soundID: 20232
-  traits:
-    miscBonuses: []
-    roleBonuses:
-    - bonusText:
-        de: "Verfügt diese Struktur über mindestens ein aktives Dienstmodul, schaltet\
-          \ sie in den Modus „Volle Leistung“ und erhält dadurch erhöhte Trefferpunkte\
-          \ für Schild und Panzerung sowie einen zusätzlichen Verstärkungszyklus"
-        en: "While this structure has at least one online service module it enters\
-          \ full power mode and will gain increased shield and armor hitpoints and\
-          \ an extra reinforcement cycle"
-        es: "Cuando esta estructura tiene al menos un módulo de servicio conectado,\
-          \ entra en el modo de potencia máxima y obtiene más puntos de vida de escudo\
-          \ y blindaje, además de un ciclo de refuerzo adicional."
-        fr: "Lorsque cette structure dispose d'au moins un module de service fonctionnel,\
-          \ elle entre en mode pleine puissance. Elle bénéficie alors d'une augmentation\
-          \ des points de vie des boucliers et du blindage, ainsi que d'un cycle de\
-          \ renfort de blindage additionnel"
-        ja: "このストラクチャのサービスモジュールが1つ以上オンラインになると、「フルパワー」モードに入り、シールドとアーマーのヒットポイントが増加し追\
-          加の強化サイクルを獲得する。"
-        ko: "장착된 모듈이 온라인 상태일 경우 구조물은 최대 전력 모드로 전환되며 실드량 및 장갑 내구도가 증가하고 추가 강화 시간대가\
-          \ 생성됩니다."
-        ru: "Так как у этого сооружения есть по меньшей мере один работающий служе\
-          бный модуль, оно переходит в режим полной мощности и получает увеличенны\
-          й запас прочности щитов и брони, а также дополнительный цикл укрепления"
-        zh: "这个建筑启用了至少一个服务装备，已进入全能量运转模式，将会获得额外的护盾和装甲值以及一个额外的增强模式循环"
-      importance: 4
-    - bonusText:
-        de: "Damit das Verankern abgeschlossen werden kann, muss in dieser Struktur\
-          \ ein <a href=showinfo:56204>Fortizar-Upwell-Quantumkern</a> installiert\
-          \ werden"
-        en: "This structure requires a <a href=showinfo:56204>Fortizar Upwell Quantum\
-          \ Core</a> to be installed for anchoring to complete"
-        es: "Esta estructura requiere un <a href=showinfo:56204>núcleo cuántico Fortizar\
-          \ de Upwell</a> instalado para completar el anclaje."
-        fr: "Cette structure nécessite un <a href=showinfo:56204>réacteur quantique\
-          \ Upwell Fortizar</a> pour terminer le processus d'ancrage"
-        ja: "このストラクチャの係留を完了するには <a href=showinfo:56204>フォータイザー・アップウェルクアンタムコア</a>を取\
-          り付ける必要がある。"
-        ko: "해당 구조물을 고정하려면 <a href=showinfo:56204>포티자 업웰 양자코어</a>를 설치해야 합니다."
-        ru: "Для завершения постановки этого сооружения на якорь в него требуется\
-          \ установить <a href=showinfo:56204>квантовое ядро «Фортизар» производст\
-          ва «Апвелл»</a>."
-        zh: "这座建筑需要安装一个<a href=showinfo:56204>铁壁昇威量子芯</a>才能完成锚定。"
-      importance: 5
-    - bonus: 20
-      bonusText:
-        de: "Bonus auf die Feuerrate und den Energiespeicherverbrauch von Standup-Pulsprojektoren\
-          \ und Lenkbombenwerfern"
-        en: "bonus to the rate of fire and capacitor consumption of Standup Burst\
-          \ Projectors and Guided Bomb Launchers"
-        es: "de bonificación a la cadencia de tiro y al consumo del condensador de\
-          \ los proyectores de estallido Standup y los lanzabombas guiados."
-        fr: "de bonus à la cadence de tir et à la consommation du capaciteur des projecteurs\
-          \ à salves et des lanceurs de bombes ciblées Standup"
-        ja: "スタンドアップバーストプロジェクターと誘導ボムランチャーの発射間隔とキャパシタ消費効率を改善"
-        ko: "스탠드업 버스트 프로젝터 및 유도폭탄 런처 연사속도 및 캐패시터 사용량 감소"
-        ru: "бонус к скорострельности и энергопотреблению проекторов объёмных поме\
-          х и бомбометателей с системой наведения на базе «Стационар»"
-        zh: "屹立脉冲波投射器和制导炸弹发射器的射速和电容消耗加成"
-      importance: 3
-      unitID: 105
-    - bonus: 25
-      bonusText:
-        de: "Bonus auf alle Effekte von Struktur-Kampfmodifikationen"
-        en: "bonus to all structure combat rig effects"
-        es: "de bonificación a todos los efectos de complementos de combate para estructuras."
-        fr: "de bonus à tous les effets d'amélioration des combats de structures"
-        ja: "全てのストラクチャ戦闘リグの効果が増大"
-        ko: "구조물 전용 전투 리그 효과 증가"
-        ru: "бонус к эффективности всех боевых надстроек"
-        zh: "所有建筑战斗改装件效果加成"
-      importance: 1
-      unitID: 105
-    - bonus: 25
-      bonusText:
-        de: "Reduzierter Treibstoffverbrauch von Zitadellen-Dienstmodulen"
-        en: "reduction in citadel service module fuel consumption"
-        es: "de reducción del consumo de combustible del módulo de servicio de ciudadela."
-        fr: "de réduction de la consommation de carburant des modules de service de\
-          \ citadelle"
-        ja: "城塞サービスモジュールの燃料消費をが減少"
-        ko: "시타델 서비스 모듈 연료 사용량 감소"
-        ru: "уменьшает потребление топлива служебными модулями цитаделей"
-        zh: "堡垒服务装备的燃料消耗降低"
-      importance: 2
-      unitID: 105
-    types: {}
   volume: 80000
 "9838":
   basePrice: 850
@@ -2580,9 +1856,9 @@
       \ zu bedienen. 2\_% Bonus auf den Aufbereitungsertrag für die folgenden einfachen\
       \ Erztypen je Skillstufe: Plagioclase, Pyroxeres, Scordite, Veldspar und Mordunium"
     en: "Specialization in Simple Ore reprocessing. Allows a skilled individual to\
-      \ utilize reprocessing facilities at considerably greater efficiency.\r\n\r\n\
-      2% bonus to reprocessing yield per skill level for the following Simple Ore\
-      \ types:\r\nPlagioclase\r\nPyroxeres\r\nScordite\r\nVeldspar\r\nMordunium"
+      \ utilize reprocessing facilities at considerably greater efficiency.\n\n2%\
+      \ bonus to reprocessing yield per skill level for the following Simple Ore types:\n\
+      Plagioclase\nPyroxeres\nScordite\nVeldspar\nMordunium"
     es: "Especialización en el reprocesamiento de menas simples. Permite a un individuo\
       \ capacitado utilizar instalaciones de reprocesamiento de forma considerablemente\
       \ más eficiente.\n\n2\_% de bonificación al rendimiento del reprocesamiento\
@@ -2637,28 +1913,27 @@
       \ <a href=showinfo:81975>Griemeer</a> gefunden werden, jedoch nur in Spuren."
     en: "The main building block in space structures. A very hard, yet bendable metal.\
       \ Cannot be used in human habitats due to its instability at atmospheric temperatures.\
-      \ Very common throughout the central regions of known universe.\r\n\r\nMay be\
-      \ obtained by reprocessing the following ores and their variations available\
-      \ in high security status star systems: <a href=showinfo:1230>veldspar</a>,\
-      \ <a href=showinfo:1228>scordite</a>, and <a href=showinfo:18>plagioclase</a>.\r\
-      \n\r\nIt is also present in huge amounts in rare ores such as <a href=showinfo:19>spodumain</a>,\
-      \ <a href=showinfo:52316>bezdnacine</a>, <a href=showinfo:52315>rakovene</a>\
-      \ and <a href=showinfo:52306>talassonite</a>.\r\n\r\nTritanium can also be found\
-      \ in null security status star systems in <a href=showinfo:81900>kylixium</a>,\
+      \ Very common throughout the central regions of known universe.\n\nMay be obtained\
+      \ by reprocessing the following ores and their variations available in high\
+      \ security status star systems: <a href=showinfo:1230>veldspar</a>, <a href=showinfo:1228>scordite</a>,\
+      \ and <a href=showinfo:18>plagioclase</a>.\n\nIt is also present in huge amounts\
+      \ in rare ores such as <a href=showinfo:19>spodumain</a>, <a href=showinfo:52316>bezdnacine</a>,\
+      \ <a href=showinfo:52315>rakovene</a> and <a href=showinfo:52306>talassonite</a>.\n\
+      \nTritanium can also be found in null security status star systems in <a href=showinfo:81900>kylixium</a>,\
       \ <a href=showinfo:82016>nocxite</a>, <a href=showinfo:82205>ueganite</a>, <a\
       \ href=showinfo:82163>hezorime</a>, and <a href=showinfo:81975>griemeer</a>,\
       \ but only in trace quantities."
     es: "El bloque de construcción principal en las estructuras espaciales. Un metal\
       \ muy duro pero flexible. No se puede utilizar en hábitats humanos debido a\
       \ su inestabilidad a las temperaturas atmosféricas. Es muy común en las regiones\
-      \ centrales del universo conocido.\r\n\r\nPuede obtenerse mediante el reprocesamiento\
+      \ centrales del universo conocido.\n\nPuede obtenerse mediante el reprocesamiento\
       \ de las siguientes menas y sus variaciones disponibles en sistemas estelares\
       \ con estado de seguridad alto: <a href=showinfo:1230>veldspar</a>, <a href=showinfo:1228>escordita</a>\
-      \ y <a href=showinfo:18>plagioclasa</a>.\r\n\r\nTambién está presente en enormes\
+      \ y <a href=showinfo:18>plagioclasa</a>.\n\nTambién está presente en enormes\
       \ cantidades en menas poco comunes como <a href=showinfo:19>espodumain</a>,\
       \ <a href=showinfo:52316>bezdnacina</a>, <a href=showinfo:52315>rakovena</a>\
-      \ y <a href=showinfo:52306>talasonita</a>.\r\n\r\nEl tritanio también se puede\
-      \ encontrar en sistemas estelares con estado de seguridad nulo en <a href=showinfo:81900>kylixium</a>,\
+      \ y <a href=showinfo:52306>talasonita</a>.\n\nEl tritanio también se puede encontrar\
+      \ en sistemas estelares con estado de seguridad nulo en <a href=showinfo:81900>kylixium</a>,\
       \ <a href=showinfo:82016>nocxita</a>, <a href=showinfo:82205>ueganita</a>, <a\
       \ href=showinfo:82163>hezorima</a> y <a href=showinfo:81975>griemeer</a>, pero\
       \ solo en pequeñas cantidades."
@@ -2678,23 +1953,21 @@
       \ href=showinfo:82205>ueganite</a>, <a href=showinfo:82163>hezorime</a> et <a\
       \ href=showinfo:81975>griemeer</a>, mais seulement en quantités infimes."
     ja: "宇宙建造物の主要な建築素材。高い硬度を持ちながら、曲げることも可能な金属。大気温度の中では不安定であるため、人間の住居には使用できない。既知宙域の\
-      中央リージョン全域に存在する。\r\n\r\nハイセキュリティステータス星系で入手可能な、次の鉱石やその亜種を再処理することによって得ることができる：\
-      <a href=showinfo:1230>ベルドスパー</a>、<a href=showinfo:1228>スコダイト</a>、そして<a href=showinfo:18>プ\
-      ラジオクレイス</a>。\r\n\r\n<a href=showinfo:19>スポデュメイン</a>や<a href=showinfo:52316>ベ\
-      ズドナシン</a>、<a href=showinfo:52315>ラコベネ</a>、<a href=showinfo:52306>タラソナイト</a>と\
-      いった希少鉱石の中にも相当量含まれている。\r\n\r\nトリタニウムはまた微量ながら、ゼロセキュリティステータスの星系において<a href=showinfo:81900>キ\
-      リクシウム</a>、<a href=showinfo:82016>ノキサイト</a>、<a href=showinfo:82205>ユイグナイト</a>、\
-      <a href=showinfo:82163>ヘゾライム</a>、そして<a href=showinfo:81975>グリーミーア</a>に含まれる形で\
-      も見つかる。"
+      中央リージョン全域に存在する。\n\nハイセキュリティステータス星系で入手可能な、次の鉱石やその亜種を再処理することによって得ることができる：<a href=showinfo:1230>ベ\
+      ルドスパー</a>、<a href=showinfo:1228>スコダイト</a>、そして<a href=showinfo:18>プラジオクレイス</a>。\
+      \n\n<a href=showinfo:19>スポデュメイン</a>や<a href=showinfo:52316>ベズドナシン</a>、<a href=showinfo:52315>ラ\
+      コベネ</a>、<a href=showinfo:52306>タラソナイト</a>といった希少鉱石の中にも相当量含まれている。\n\nトリタニウムはまた\
+      微量ながら、ゼロセキュリティステータスの星系において<a href=showinfo:81900>キリクシウム</a>、<a href=showinfo:82016>ノ\
+      キサイト</a>、<a href=showinfo:82205>ユイグナイト</a>、<a href=showinfo:82163>ヘゾライム</a>、\
+      そして<a href=showinfo:81975>グリーミーア</a>に含まれる形でも見つかる。"
     ko: "구조물 건설에 사용되는 핵심 재료로 탄성이 강하고 단단한 특성을 갖고 있습니다. 실온에서의 구조적 불안정성으로 인해 거주 지역에서\
-      \ 사용할 수 없습니다. 뉴에덴 중심부에서 흔히 발견됩니다.\r\n\r\n아래의 광석을 정제하여 획득할 수 있습니다. 하이 시큐리티 항성\
-      계: <a href=showinfo:1230>벨드스파</a>, <a href=showinfo:1228>스코다이트</a>, <a href=showinfo:18>플\
-      레지오클레이스</a>\r\n\r\n또한 <a href=showinfo:19>스포듀마인</a>, <a href=showinfo:52316>베\
-      즈드나신</a>, <a href=showinfo:52315>라코벤</a>, <a href=showinfo:52306>탈라소나이트</a>에\
-      도 다량 함유되어 있습니다.\r\n\r\n추가로 널 시큐리티 항성계에서 발견되는 광석인 <a href=showinfo:81900>카일릭슘\
-      </a>, <a href=showinfo:82016>녹사이트</a>, <a href=showinfo:82205>유가나이트</a>, <a\
-      \ href=showinfo:82163>헤조라임</a>, 그리고 <a href=showinfo:81975>그리미어</a>에도 소량의 트리\
-      타늄이 함유되어 있습니다."
+      \ 사용할 수 없습니다. 뉴에덴 중심부에서 흔히 발견됩니다.\n\n아래의 광석을 정제하여 획득할 수 있습니다. 하이 시큐리티 항성계: <a\
+      \ href=showinfo:1230>벨드스파</a>, <a href=showinfo:1228>스코다이트</a>, <a href=showinfo:18>플\
+      레지오클레이스</a>\n\n또한 <a href=showinfo:19>스포듀마인</a>, <a href=showinfo:52316>베즈드나\
+      신</a>, <a href=showinfo:52315>라코벤</a>, <a href=showinfo:52306>탈라소나이트</a>에도 다\
+      량 함유되어 있습니다.\n\n추가로 널 시큐리티 항성계에서 발견되는 광석인 <a href=showinfo:81900>카일릭슘</a>, <a\
+      \ href=showinfo:82016>녹사이트</a>, <a href=showinfo:82205>유가나이트</a>, <a href=showinfo:82163>헤\
+      조라임</a>, 그리고 <a href=showinfo:81975>그리미어</a>에도 소량의 트리타늄이 함유되어 있습니다."
     ru: "Основной материал для строительства космических сооружений. Очень твёрдый\
       \ металл, который отлично гнётся. В атмосфере становится неустойчивым, поэто\
       му непригоден для использования в местах обитания человека. Широко распростр\
@@ -2753,38 +2026,37 @@
       \ und Nullsicherheitsraum vor."
     en: "A soft crystal-like mineral with a very distinguishing orange glow as if\
       \ on fire. Used as conduit and in the bio-chemical industry. Commonly found\
-      \ in many asteroid-ore types.\r\n\r\nMay be obtained by reprocessing the following\
-      \ ores and their variations:\r\n\r\nHigh security status star systems: <a href=showinfo:1228>scordite</a>,\
-      \ and <a href=showinfo:1224>pyroxeres</a>.\r\n\r\nLow security status star systems:\
+      \ in many asteroid-ore types.\n\nMay be obtained by reprocessing the following\
+      \ ores and their variations:\n\nHigh security status star systems: <a href=showinfo:1228>scordite</a>,\
+      \ and <a href=showinfo:1224>pyroxeres</a>.\n\nLow security status star systems:\
       \ <a href=showinfo:1224>pyroxeres</a>, <a href=showinfo:1227>omber</a>, <a href=showinfo:21>hedbergite</a>,\
-      \ <a href=showinfo:1229>gneiss</a>, and <a href=showinfo:1225>crokite</a>.\r\
-      \n\r\nNull security status star systems: <a href=showinfo:1224>pyroxeres</a>,\
-      \ <a href=showinfo:1223>bistot</a>, <a href=showinfo:22>arkonor</a>, <a href=showinfo:81900>kylixium</a>,\
-      \ and <a href=showinfo:82016>nocxite</a>.\r\n\r\nWormhole systems: <a href=showinfo:1224>pyroxeres</a>,\
+      \ <a href=showinfo:1229>gneiss</a>, and <a href=showinfo:1225>crokite</a>.\n\
+      \nNull security status star systems: <a href=showinfo:1224>pyroxeres</a>, <a\
+      \ href=showinfo:1223>bistot</a>, <a href=showinfo:22>arkonor</a>, <a href=showinfo:81900>kylixium</a>,\
+      \ and <a href=showinfo:82016>nocxite</a>.\n\nWormhole systems: <a href=showinfo:1224>pyroxeres</a>,\
       \ <a href=showinfo:1227>omber</a>, <a href=showinfo:1229>gneiss</a>, <a href=showinfo:1223>bistot</a>,\
-      \ and <a href=showinfo:22>arkonor</a>.\r\n\r\nThe rare ore <a href=showinfo:74521>mordunium</a>\
+      \ and <a href=showinfo:22>arkonor</a>.\n\nThe rare ore <a href=showinfo:74521>mordunium</a>\
       \ also contains significant quantities and is found primarily in nullsec and\
       \ W-space systems containing A0 (Blue Small) stars, as well as surveyed locations\
       \ on the borders of empire and nullsec space."
     es: "Mineral blando de aspecto cristalino con un brillo anaranjado característico\
       \ de las llamas. Se usa como conducto y también en la industria bioquímica.\
-      \ Se encuentra comúnmente en muchos tipos de menas de asteroides.\r\n\r\nPuede\
-      \ obtenerse mediante el reprocesamiento de las siguientes menas y sus variaciones:\r\
-      \n\r\nSistemas estelares con estado de seguridad alto: <a href=showinfo:1228>escordita</a>\
-      \ y <a href=showinfo:1224>piroxeno</a>.\r\n\r\nSistemas estelares con estado\
-      \ de seguridad bajo: <a href=showinfo:1224>piroxeno</a>, <a href=showinfo:1227>ó\
+      \ Se encuentra comúnmente en muchos tipos de menas de asteroides.\n\nPuede obtenerse\
+      \ mediante el reprocesamiento de las siguientes menas y sus variaciones:\n\n\
+      Sistemas estelares con estado de seguridad alto: <a href=showinfo:1228>escordita</a>\
+      \ y <a href=showinfo:1224>piroxeno</a>.\n\nSistemas estelares con estado de\
+      \ seguridad bajo: <a href=showinfo:1224>piroxeno</a>, <a href=showinfo:1227>ó\
       mber</a>, <a href=showinfo:21>hedbergita</a>, <a href=showinfo:1229>gneiss</a>\
-      \ y <a href=showinfo:1225>crokitio</a>.\r\n\r\nSistemas estelares con estado\
-      \ de seguridad nulo: <a href=showinfo:1224>piroxeno</a>, <a href=showinfo:1223>bistotina</a>,\
+      \ y <a href=showinfo:1225>crokitio</a>.\n\nSistemas estelares con estado de\
+      \ seguridad nulo: <a href=showinfo:1224>piroxeno</a>, <a href=showinfo:1223>bistotina</a>,\
       \ <a href=showinfo:22>arkonor</a>, <a href=showinfo:81900>kylixium</a> y <a\
-      \ href=showinfo:82016>nocxita</a>.\r\n\r\nSistemas de agujeros de gusano: <a\
-      \ href=showinfo:1224>piroxeno</a>, <a href=showinfo:1227>ómber</a>, <a href=showinfo:1229>gneiss</a>,\
-      \ <a href=showinfo:1223>bistotina</a> y <a href=showinfo:22>arkonor</a>.\r\n\
-      \r\nLa mena poco común de <a href=showinfo:74521>mordunium</a> también contiene\
-      \ cantidades significativas y se encuentra principalmente en sistemas de espacio\
-      \ de agujeros de gusano y seguridad nula que contienen estrellas A0 (azules\
-      \ pequeñas), así como en ubicaciones inspeccionadas en las fronteras del imperio\
-      \ y el espacio de seguridad nula."
+      \ href=showinfo:82016>nocxita</a>.\n\nSistemas de agujeros de gusano: <a href=showinfo:1224>piroxeno</a>,\
+      \ <a href=showinfo:1227>ómber</a>, <a href=showinfo:1229>gneiss</a>, <a href=showinfo:1223>bistotina</a>\
+      \ y <a href=showinfo:22>arkonor</a>.\n\nLa mena poco común de <a href=showinfo:74521>mordunium</a>\
+      \ también contiene cantidades significativas y se encuentra principalmente en\
+      \ sistemas de espacio de agujeros de gusano y seguridad nula que contienen estrellas\
+      \ A0 (azules pequeñas), así como en ubicaciones inspeccionadas en las fronteras\
+      \ del imperio y el espacio de seguridad nula."
     fr: "Ce minerai lisse comme le cristal dégage une lueur orangée semblable aux\
       \ flammes. Il est employé dans l'industrie biochimique, ainsi que dans les conduits.\
       \ On le trouve dans de nombreux minerais récoltés dans les astéroïdes. Peut\
@@ -2803,28 +2075,27 @@
       \ des étoiles A0 (petites bleues), ainsi que dans des sites sondés aux frontiè\
       res de l'espace impérial et de sécurité nulle."
     ja: "炎のように明るいオレンジ色に光る、柔らかい水晶のような鉱石。導管として、またバイオ化学産業でも使用される。多くのタイプのアステロイド鉱石に含まれて\
-      いる。\r\n\r\n以下の鉱石とその種類を再処理することによって得ることができる。\r\n\r\nハイセキュリティ宙域のスターシステム：<a href=showinfo:1228>ス\
-      コダイト</a>と<a href=showinfo:1224>パイロゼリーズ</a>。\r\n\r\nローセキュリティ宙域のスターシステム：<a href=showinfo:1224>パ\
+      いる。\n\n以下の鉱石とその種類を再処理することによって得ることができる。\n\nハイセキュリティ宙域のスターシステム：<a href=showinfo:1228>ス\
+      コダイト</a>と<a href=showinfo:1224>パイロゼリーズ</a>。\n\nローセキュリティ宙域のスターシステム：<a href=showinfo:1224>パ\
       イロゼリーズ</a>、<a href=showinfo:1227>オンバー</a>、<a href=showinfo:21>ヘッドバーガイト</a>、\
-      <a href=showinfo:1229>ナエス</a>、<a href=showinfo:1225>クロカイト</a>。\r\n\r\nゼロセキュリ\
-      ティ宙域のスターシステム：<a href=showinfo:1224>パイロゼリーズ</a>、<a href=showinfo:1223>ビストット</a>、\
+      <a href=showinfo:1229>ナエス</a>、<a href=showinfo:1225>クロカイト</a>。\n\nゼロセキュリティ宙域\
+      のスターシステム：<a href=showinfo:1224>パイロゼリーズ</a>、<a href=showinfo:1223>ビストット</a>、\
       <a href=showinfo:22>アーコナー</a>、<a href=showinfo:81900>キリクシウム</a>、<a href=showinfo:82016>ノ\
-      キサイト</a>。\r\n\r\nワームホール宙域のシステム：<a href=showinfo:1224>パイロゼリーズ</a>、<a href=showinfo:1227>オ\
+      キサイト</a>。\n\nワームホール宙域のシステム：<a href=showinfo:1224>パイロゼリーズ</a>、<a href=showinfo:1227>オ\
       ンバー</a>、<a href=showinfo:1229>ナエス</a>、<a href=showinfo:1223>ビストット</a>、<a href=showinfo:22>ア\
-      ーコナー</a>。\r\n\r\nまた、希少鉱石の<a href=showinfo:74521>モードゥニウム</a>に大量に含まれている。モードゥニウ\
-      ムは主に、A0（小型ブルー）恒星が存在するゼロセキュリティ宙域とワームホール宙域のほか、主要大国とゼロセキュリティ宙域の境界にある調査エリアで発見するこ\
-      とができる。"
-    ko: "주황색 불꽃처럼 생긴 결정 형태의 광물로 소행성 광석에서 주로 추출됩니다. 도관 제작 및 생화학 산업에 사용됩니다.\r\n\r\n다\
-      음 광석을 정제하여 획득할 수 있습니다:\r\n\r\n하이 시큐리티 항성계: <a href=showinfo:1228>스코다이트</a>,\
-      \ <a href=showinfo:1224>파이로제레스</a>\r\n\r\n로우 시큐리티 항성계: <a href=showinfo:1224>파\
-      이로제레스</a>, <a href=showinfo:1227>옴버</a>, <a href=showinfo:21>헤버자이트</a>, <a href=showinfo:1229>니\
-      스</a>, <a href=showinfo:1225>크로카이트</a>\r\n\r\n널 시큐리티 항성계: <a href=showinfo:1224>파\
-      이로제레스</a>, <a href=showinfo:1223>비스토트</a>, <a href=showinfo:22>아르카노르</a>, <a\
-      \ href=showinfo:81900>카일릭슘</a>, <a href=showinfo:82016>녹사이트</a>\r\n\r\n웜홀: <a\
-      \ href=showinfo:1224>파이로제레스</a>, <a href=showinfo:1227>옴버</a>, <a href=showinfo:1229>니\
-      스</a>, <a href=showinfo:1223>비스토트</a>, <a href=showinfo:22>아르카노르</a>\r\n\r\n\
-      희귀 광석 <a href=showinfo:74521>모르두늄</a>에도 다량 함유되어 있습니다. 모르두늄은 널 시큐리티와 웜홀 우주에 있\
-      는 A0 청색 왜성 항성계에서 주로 찾을 수 있으며, 4대 국가 영역의 외부 경계에서도 발견됩니다."
+      ーコナー</a>。\n\nまた、希少鉱石の<a href=showinfo:74521>モードゥニウム</a>に大量に含まれている。モードゥニウムは主に\
+      、A0（小型ブルー）恒星が存在するゼロセキュリティ宙域とワームホール宙域のほか、主要大国とゼロセキュリティ宙域の境界にある調査エリアで発見することができ\
+      る。"
+    ko: "주황색 불꽃처럼 생긴 결정 형태의 광물로 소행성 광석에서 주로 추출됩니다. 도관 제작 및 생화학 산업에 사용됩니다.\n\n다음 광석\
+      을 정제하여 획득할 수 있습니다:\n\n하이 시큐리티 항성계: <a href=showinfo:1228>스코다이트</a>, <a href=showinfo:1224>파\
+      이로제레스</a>\n\n로우 시큐리티 항성계: <a href=showinfo:1224>파이로제레스</a>, <a href=showinfo:1227>옴\
+      버</a>, <a href=showinfo:21>헤버자이트</a>, <a href=showinfo:1229>니스</a>, <a href=showinfo:1225>크\
+      로카이트</a>\n\n널 시큐리티 항성계: <a href=showinfo:1224>파이로제레스</a>, <a href=showinfo:1223>비\
+      스토트</a>, <a href=showinfo:22>아르카노르</a>, <a href=showinfo:81900>카일릭슘</a>, <a\
+      \ href=showinfo:82016>녹사이트</a>\n\n웜홀: <a href=showinfo:1224>파이로제레스</a>, <a href=showinfo:1227>옴\
+      버</a>, <a href=showinfo:1229>니스</a>, <a href=showinfo:1223>비스토트</a>, <a href=showinfo:22>아\
+      르카노르</a>\n\n희귀 광석 <a href=showinfo:74521>모르두늄</a>에도 다량 함유되어 있습니다. 모르두늄은 널 시큐\
+      리티와 웜홀 우주에 있는 A0 청색 왜성 항성계에서 주로 찾을 수 있으며, 4대 국가 영역의 외부 경계에서도 발견됩니다."
     ru: "Мягкий минерал кристаллической формы. Светится оранжевым, словно внутри п\
       ылает огонь. Используется в качестве проводника, а также в биохимической про\
       мышленности. Встречается во многих видах астероидных руд. Добывается путём п\
@@ -2886,30 +2157,30 @@
       \ und <a href=showinfo:22>Arkonor</a>."
     en: "Very flexible metallic mineral, dull to bright silvery green in color. Can\
       \ be mixed with <a href=showinfo:34>Tritanium</a> to make extremely hard alloys\
-      \ or it can be used by itself for various purposes. Fairly common in most regions.\r\
-      \n\r\nMay be obtained by reprocessing the following ores and their variations:\r\
-      \n\r\nHigh security status star systems: <a href=showinfo:1224>pyroxeres</a>,\
-      \ and <a href=showinfo:18>plagioclase</a>.\r\n\r\nLow security status star systems:\
+      \ or it can be used by itself for various purposes. Fairly common in most regions.\n\
+      \nMay be obtained by reprocessing the following ores and their variations:\n\
+      \nHigh security status star systems: <a href=showinfo:1224>pyroxeres</a>, and\
+      \ <a href=showinfo:18>plagioclase</a>.\n\nLow security status star systems:\
       \ <a href=showinfo:1224>pyroxeres</a>, <a href=showinfo:20>kernite</a>, <a href=showinfo:1226>jaspet</a>,\
       \ <a href=showinfo:1229>gneiss</a>, <a href=showinfo:1232>dark ochre</a>, and\
-      \ <a href=showinfo:1225>crokite</a>.\r\n\r\nNull security status star systems:\
-      \ <a href=showinfo:1224>pyroxeres</a>, <a href=showinfo:20>kernite</a>, <a href=showinfo:1223>bistot</a>,\
-      \ <a href=showinfo:22>arkonor</a>, and <a href=showinfo:81900>kylixium</a>.\r\
-      \n\r\nWormhole systems: <a href=showinfo:1224>pyroxeres</a>, <a href=showinfo:20>kernite</a>,\
+      \ <a href=showinfo:1225>crokite</a>.\n\nNull security status star systems: <a\
+      \ href=showinfo:1224>pyroxeres</a>, <a href=showinfo:20>kernite</a>, <a href=showinfo:1223>bistot</a>,\
+      \ <a href=showinfo:22>arkonor</a>, and <a href=showinfo:81900>kylixium</a>.\n\
+      \nWormhole systems: <a href=showinfo:1224>pyroxeres</a>, <a href=showinfo:20>kernite</a>,\
       \ <a href=showinfo:1229>gneiss</a>, <a href=showinfo:1223>bistot</a>, and <a\
       \ href=showinfo:22>arkonor</a>."
     es: "Mineral metálico muy flexible y con un color de verde plateado opaco a brillante.\
       \ Puede mezclarse con <a href=showinfo:34>tritanio</a> para hacer aleaciones\
       \ extremadamente duras o usarse por sí solo para diversos fines. Bastante comú\
-      n en la mayoría de las regiones.\r\n\r\nPuede obtenerse mediante el reprocesamiento\
-      \ de las siguientes menas y sus variaciones:\r\n\r\nSistemas estelares con estado\
-      \ de seguridad alto: <a href=showinfo:1224>piroxeno</a> y <a href=showinfo:18>plagioclasa</a>.\r\
-      \n\r\nSistemas estelares con estado de seguridad bajo: <a href=showinfo:1224>piroxeno</a>,\
+      n en la mayoría de las regiones.\n\nPuede obtenerse mediante el reprocesamiento\
+      \ de las siguientes menas y sus variaciones:\n\nSistemas estelares con estado\
+      \ de seguridad alto: <a href=showinfo:1224>piroxeno</a> y <a href=showinfo:18>plagioclasa</a>.\n\
+      \nSistemas estelares con estado de seguridad bajo: <a href=showinfo:1224>piroxeno</a>,\
       \ <a href=showinfo:20>kernita</a>, <a href=showinfo:1226>jaspetita</a>, <a href=showinfo:1229>gneiss</a>,\
-      \ <a href=showinfo:1232>ocre oscuro</a> y <a href=showinfo:1225>crokitio</a>.\r\
-      \n\r\nSistemas estelares con estado de seguridad nulo: <a href=showinfo:1224>piroxeno</a>,\
+      \ <a href=showinfo:1232>ocre oscuro</a> y <a href=showinfo:1225>crokitio</a>.\n\
+      \nSistemas estelares con estado de seguridad nulo: <a href=showinfo:1224>piroxeno</a>,\
       \ <a href=showinfo:20>kernita</a>, <a href=showinfo:1223>bistotina</a>, <a href=showinfo:22>arkonor</a>\
-      \ y <a href=showinfo:81900>kylixium</a>.\r\n\r\nSistemas de agujeros de gusano:\
+      \ y <a href=showinfo:81900>kylixium</a>.\n\nSistemas de agujeros de gusano:\
       \ <a href=showinfo:1224>piroxeno</a>, <a href=showinfo:20>kernita</a>, <a href=showinfo:1229>gneiss</a>,\
       \ <a href=showinfo:1223>bistotina</a> y <a href=showinfo:22>arkonor</a>."
     fr: "Il s'agit d'un minerai métallique très souple dont la couleur va du vert\
@@ -2927,26 +2198,25 @@
       \ Systèmes de trous de ver\_: <a href=showinfo:1224>pyroxeres</a>, <a href=showinfo:20>kernite</a>,\
       \ <a href=showinfo:1229>gneiss</a>, <a href=showinfo:1223>bistot</a> et <a href=showinfo:22>arkonor</a>."
     ja: "非常に柔軟性の高い金属鉱石。色は、鈍い緑から明るいメタリックな緑。<a href=showinfo:34>トリタニウム</a>と混ぜ合わせて非常に\
-      硬度の高い合金を作ることも、この鉱石だけで様々な用途に使用することもできる。多くのリージョンで広く産出される。\r\n\r\n以下の鉱石とその種類を再処\
-      理することによって得ることができる。\r\n\r\nハイセキュリティ宙域のスターシステム：<a href=showinfo:1224>パイロゼリーズ</a>と\
-      <a href=showinfo:18>プラジオクレイス</a>。\r\n\r\nローセキュリティ宙域のスターシステム：<a href=showinfo:1224>パ\
-      イロゼリーズ</a>、<a href=showinfo:20>ケルナイト</a>、<a href=showinfo:1226>ジャスペット</a>、<a\
-      \ href=showinfo:1229>ナエス</a>、<a href=showinfo:1232>ダークオークル</a>、<a href=showinfo:1225>ク\
-      ロカイト</a>。\r\n\r\nゼロセキュリティ宙域のスターシステム：<a href=showinfo:1224>パイロゼリーズ</a>、<a href=showinfo:20>ケ\
-      ルナイト</a>、<a href=showinfo:1223>ビストット</a>、<a href=showinfo:22>アーコナー</a>、<a href=showinfo:81900>キ\
-      リクシウム</a>。\r\n\r\nワームホール宙域のシステム：<a href=showinfo:1224>パイロゼリーズ</a>、<a href=showinfo:20>ケ\
-      ルナイト</a>、<a href=showinfo:1229>ナエス</a>、<a href=showinfo:1223>ビストット</a>、<a href=showinfo:22>ア\
-      ーコナー</a>。"
+      硬度の高い合金を作ることも、この鉱石だけで様々な用途に使用することもできる。多くのリージョンで広く産出される。\n\n以下の鉱石とその種類を再処理するこ\
+      とによって得ることができる。\n\nハイセキュリティ宙域のスターシステム：<a href=showinfo:1224>パイロゼリーズ</a>と<a href=showinfo:18>プ\
+      ラジオクレイス</a>。\n\nローセキュリティ宙域のスターシステム：<a href=showinfo:1224>パイロゼリーズ</a>、<a href=showinfo:20>ケ\
+      ルナイト</a>、<a href=showinfo:1226>ジャスペット</a>、<a href=showinfo:1229>ナエス</a>、<a href=showinfo:1232>ダ\
+      ークオークル</a>、<a href=showinfo:1225>クロカイト</a>。\n\nゼロセキュリティ宙域のスターシステム：<a href=showinfo:1224>パ\
+      イロゼリーズ</a>、<a href=showinfo:20>ケルナイト</a>、<a href=showinfo:1223>ビストット</a>、<a\
+      \ href=showinfo:22>アーコナー</a>、<a href=showinfo:81900>キリクシウム</a>。\n\nワームホール宙域の\
+      システム：<a href=showinfo:1224>パイロゼリーズ</a>、<a href=showinfo:20>ケルナイト</a>、<a href=showinfo:1229>ナ\
+      エス</a>、<a href=showinfo:1223>ビストット</a>、<a href=showinfo:22>アーコナー</a>。"
     ko: "유연한 금속성 광물로 은빛이 도는 녹색을 띄고 있습니다. 주로 단독으로 사용되지만 간혹 경질합금 제작을 위해 <a href=showinfo:34>트\
-      리타늄</a>과 혼합하여 사용하기도 합니다. 우주 전역에서 발견됩니다.\r\n\r\n아래의 광석을 정제하여 획득할 수 있습니다:\r\n\r\
-      \n하이 시큐리티 항성계: <a href=showinfo:1224>파이로제레스</a>, <a href=showinfo:18>플레지오클레이\
-      스</a>\r\n\r\n로우 시큐리티 항성계: <a href=showinfo:1224>파이로제레스</a>, <a href=showinfo:20>커\
-      나이트</a>, <a href=showinfo:1226>자스페트</a>, <a href=showinfo:1229>니스</a>, <a href=showinfo:1232>다\
-      크 오커</a>, <a href=showinfo:1225>크로카이트</a>\r\n\r\n널 시큐리티 항성계: <a href=showinfo:1224>파\
+      리타늄</a>과 혼합하여 사용하기도 합니다. 우주 전역에서 발견됩니다.\n\n아래의 광석을 정제하여 획득할 수 있습니다:\n\n하이 시큐\
+      리티 항성계: <a href=showinfo:1224>파이로제레스</a>, <a href=showinfo:18>플레지오클레이스</a>\n\
+      \n로우 시큐리티 항성계: <a href=showinfo:1224>파이로제레스</a>, <a href=showinfo:20>커나이트</a>,\
+      \ <a href=showinfo:1226>자스페트</a>, <a href=showinfo:1229>니스</a>, <a href=showinfo:1232>다\
+      크 오커</a>, <a href=showinfo:1225>크로카이트</a>\n\n널 시큐리티 항성계: <a href=showinfo:1224>파\
       이로제레스</a>, <a href=showinfo:20>커나이트</a>, <a href=showinfo:1223>비스토트</a>, <a\
-      \ href=showinfo:22>아르카노르</a>, <a href=showinfo:81900>카일릭슘</a>\r\n\r\n웜홀: <a\
-      \ href=showinfo:1224>파이로제레스</a>, <a href=showinfo:20>커나이트</a>, <a href=showinfo:1229>니\
-      스</a>, <a href=showinfo:1223>비스토트</a>, <a href=showinfo:22>아르카노르</a>"
+      \ href=showinfo:22>아르카노르</a>, <a href=showinfo:81900>카일릭슘</a>\n\n웜홀: <a href=showinfo:1224>파\
+      이로제레스</a>, <a href=showinfo:20>커나이트</a>, <a href=showinfo:1229>니스</a>, <a href=showinfo:1223>비\
+      스토트</a>, <a href=showinfo:22>아르카노르</a>"
     ru: "Эластичный металлический минерал серебристо-зелёного цвета. Яркость варьи\
       руется. Применяется в самых разных целях. Нередко сочетается с <a href=showinfo:34>т\
       ританием</a> для получения особо прочных сплавов. Достаточно распространён в\
@@ -3007,37 +2277,36 @@
       \ dem Nullsicherheitsraum vor."
     en: "Light-bluish crystal, formed by intense pressure deep within large asteroids\
       \ and moons. Used in electronic and weapon manufacturing. Only found in abundance\
-      \ in a few areas.\r\n\r\nMay be obtained by reprocessing the following ores\
-      \ and their variations:\r\n\r\nLow security status star systems: <a href=showinfo:1227>omber</a>,\
+      \ in a few areas.\n\nMay be obtained by reprocessing the following ores and\
+      \ their variations:\n\nLow security status star systems: <a href=showinfo:1227>omber</a>,\
       \ <a href=showinfo:20>kernite</a>, <a href=showinfo:1231>hemorphite</a>, <a\
-      \ href=showinfo:1229>gneiss</a>, and <a href=showinfo:1232>dark ochre</a>.\r\
-      \n\r\nNull security status star systems: <a href=showinfo:20>kernite</a>, <a\
-      \ href=showinfo:81975>griemeer</a>, and <a href=showinfo:82163>hezorime</a>.\r\
-      \n\r\nWormhole systems: <a href=showinfo:1227>omber</a>, <a href=showinfo:20>kernite</a>,\
-      \ and <a href=showinfo:1229>gneiss</a>.\r\n\r\nIt is also present in huge amounts\
-      \ in rare ores like <a href=showinfo:19>spodumain</a>, <a href=showinfo:52316>bezdnacine</a>\
-      \ and <a href=showinfo:52315>rakovene</a>.\r\n\r\nThe rare ore <a href=showinfo:74525>ytirium</a>\
-      \ also contains significant quantities and is found primarily in nullsec and\
-      \ W-space systems containing A0 (Blue Small) stars, as well as surveyed locations\
-      \ on the borders of empire and nullsec space."
+      \ href=showinfo:1229>gneiss</a>, and <a href=showinfo:1232>dark ochre</a>.\n\
+      \nNull security status star systems: <a href=showinfo:20>kernite</a>, <a href=showinfo:81975>griemeer</a>,\
+      \ and <a href=showinfo:82163>hezorime</a>.\n\nWormhole systems: <a href=showinfo:1227>omber</a>,\
+      \ <a href=showinfo:20>kernite</a>, and <a href=showinfo:1229>gneiss</a>.\n\n\
+      It is also present in huge amounts in rare ores like <a href=showinfo:19>spodumain</a>,\
+      \ <a href=showinfo:52316>bezdnacine</a> and <a href=showinfo:52315>rakovene</a>.\n\
+      \nThe rare ore <a href=showinfo:74525>ytirium</a> also contains significant\
+      \ quantities and is found primarily in nullsec and W-space systems containing\
+      \ A0 (Blue Small) stars, as well as surveyed locations on the borders of empire\
+      \ and nullsec space."
     es: "Cristal azulado claro formado por una intensa presión en las profundidades\
       \ de grandes asteroides y lunas. Se usa en la fabricación de electrónica y de\
-      \ armas. Solo se encuentra en abundancia en algunas zonas.\r\n\r\nPuede obtenerse\
-      \ mediante el reprocesamiento de las siguientes menas y sus variaciones:\r\n\
-      \r\nSistemas estelares con estado de seguridad bajo: <a href=showinfo:1227>ó\
-      mber</a>, <a href=showinfo:20>kernita</a>, <a href=showinfo:1231>hemorfita</a>,\
-      \ <a href=showinfo:1229>gneiss</a> y <a href=showinfo:1232>ocre oscuro</a>.\r\
-      \n\r\nSistemas estelares con estado de seguridad nulo: <a href=showinfo:20>kernita</a>,\
-      \ <a href=showinfo:81975>griemeer</a> y <a href=showinfo:82163>hezorima</a>.\r\
-      \n\r\nSistemas de agujeros de gusano: <a href=showinfo:1227>ómber</a>, <a href=showinfo:20>kernita</a>\
-      \ y <a href=showinfo:1229>gneiss</a>.\r\n\r\nTambién está presente en enormes\
-      \ cantidades en menas poco comunes como <a href=showinfo:19>espodumain</a>,\
-      \ <a href=showinfo:52316>bezdnacina</a> y <a href=showinfo:52315>rakovena</a>.\r\
-      \n\r\nLa mena poco común de <a href=showinfo:74525>ytirium</a> también contiene\
-      \ cantidades significativas y se encuentra principalmente en sistemas de espacio\
-      \ de agujeros de gusano y seguridad nula que contienen estrellas A0 (azules\
-      \ pequeñas), así como en ubicaciones inspeccionadas en las fronteras del imperio\
-      \ y el espacio de seguridad nula."
+      \ armas. Solo se encuentra en abundancia en algunas zonas.\n\nPuede obtenerse\
+      \ mediante el reprocesamiento de las siguientes menas y sus variaciones:\n\n\
+      Sistemas estelares con estado de seguridad bajo: <a href=showinfo:1227>ómber</a>,\
+      \ <a href=showinfo:20>kernita</a>, <a href=showinfo:1231>hemorfita</a>, <a href=showinfo:1229>gneiss</a>\
+      \ y <a href=showinfo:1232>ocre oscuro</a>.\n\nSistemas estelares con estado\
+      \ de seguridad nulo: <a href=showinfo:20>kernita</a>, <a href=showinfo:81975>griemeer</a>\
+      \ y <a href=showinfo:82163>hezorima</a>.\n\nSistemas de agujeros de gusano:\
+      \ <a href=showinfo:1227>ómber</a>, <a href=showinfo:20>kernita</a> y <a href=showinfo:1229>gneiss</a>.\n\
+      \nTambién está presente en enormes cantidades en menas poco comunes como <a\
+      \ href=showinfo:19>espodumain</a>, <a href=showinfo:52316>bezdnacina</a> y <a\
+      \ href=showinfo:52315>rakovena</a>.\n\nLa mena poco común de <a href=showinfo:74525>ytirium</a>\
+      \ también contiene cantidades significativas y se encuentra principalmente en\
+      \ sistemas de espacio de agujeros de gusano y seguridad nula que contienen estrellas\
+      \ A0 (azules pequeñas), así como en ubicaciones inspeccionadas en las fronteras\
+      \ del imperio y el espacio de seguridad nula."
     fr: "Cristal bleu clair formé par l'extraordinaire pression exercée par les lunes\
       \ et les grands astéroïdes. Les secteurs de l'électronique et de la fabrication\
       \ d'armes en font bon usage. Gisements abondants exclusivement localisés dans\
@@ -3057,27 +2326,26 @@
       \ bleues), ainsi que dans des sites sondés aux frontières de l'espace impérial\
       \ et de sécurité nulle."
     ja: "淡く青みがかった水晶。大型のアステロイドや衛星の地中で強い圧力が加わることによって生成される。電子機器や武器の製造に使用される。大量に産出できるエ\
-      リアはごくわずかな場所に限られる。\r\n\r\n以下の鉱石とその種類を再処理することによって得ることができる。\r\n\r\nローセキュリティ宙域のス\
-      ターシステム：<a href=showinfo:1227>オンバー</a>、<a href=showinfo:20>ケルナイト</a>、<a href=showinfo:1231>ヘ\
-      モファイト</a>、<a href=showinfo:1229>ナエス</a>、<a href=showinfo:1232>ダークオークル</a>。\r\
-      \n\r\nゼロセキュリティ宙域のスターシステム：<a href=showinfo:20>ケルナイト</a>、<a href=showinfo:81975>グ\
-      リーミーア</a>、<a href=showinfo:82163>ヘゾライム</a>。\r\n\r\nワームホール宙域のシステム：<a href=showinfo:1227>オ\
-      ンバー</a>、<a href=showinfo:20>ケルナイト</a>、<a href=showinfo:1229>ナエス</a>。\r\n\r\n\
-      <a href=showinfo:19>スポデュメイン</a>や<a href=showinfo:52316>ベズドナシン</a>、<a href=showinfo:52315>ラ\
-      コベネ</a>といった希少鉱石の中にも相当量含まれている。\r\n\r\nまた、希少鉱石の<a href=showinfo:74525>イティリウム</a>に\
-      大量に含まれている。イティリウムは主に、A0（小型ブルー）恒星が存在するゼロセキュリティ宙域とワームホール宙域のほか、主要大国とゼロセキュリティ宙域の境\
-      界にある調査エリアで発見することができる。"
+      リアはごくわずかな場所に限られる。\n\n以下の鉱石とその種類を再処理することによって得ることができる。\n\nローセキュリティ宙域のスターシステム：\
+      <a href=showinfo:1227>オンバー</a>、<a href=showinfo:20>ケルナイト</a>、<a href=showinfo:1231>ヘ\
+      モファイト</a>、<a href=showinfo:1229>ナエス</a>、<a href=showinfo:1232>ダークオークル</a>。\n\
+      \nゼロセキュリティ宙域のスターシステム：<a href=showinfo:20>ケルナイト</a>、<a href=showinfo:81975>グリ\
+      ーミーア</a>、<a href=showinfo:82163>ヘゾライム</a>。\n\nワームホール宙域のシステム：<a href=showinfo:1227>オ\
+      ンバー</a>、<a href=showinfo:20>ケルナイト</a>、<a href=showinfo:1229>ナエス</a>。\n\n<a href=showinfo:19>ス\
+      ポデュメイン</a>や<a href=showinfo:52316>ベズドナシン</a>、<a href=showinfo:52315>ラコベネ</a>と\
+      いった希少鉱石の中にも相当量含まれている。\n\nまた、希少鉱石の<a href=showinfo:74525>イティリウム</a>に大量に含まれている\
+      。イティリウムは主に、A0（小型ブルー）恒星が存在するゼロセキュリティ宙域とワームホール宙域のほか、主要大国とゼロセキュリティ宙域の境界にある調査エリア\
+      で発見することができる。"
     ko: "강한 압력을 통해 변성된 연푸른 광석으로 대형 소행성 및 위성에서 주로 채굴됩니다. 전자 장치 및 무기 생산에 주로 사용되며 몇몇\
-      \ 지역에서 대량으로 매장된 지역은 드뭅니다.\r\n\r\n다음 광석을 정제하여 획득할 수 있습니다:\r\n\r\n로우 시큐리티 항성계\
-      : <a href=showinfo:1227>옴버</a>, <a href=showinfo:20>커나이트</a>, <a href=showinfo:1231>헤\
-      모르파이트</a>, <a href=showinfo:1229>니스</a>, <a href=showinfo:1232>다크 오커</a>\r\n\
-      \r\n널 시큐리티 항성계: <a href=showinfo:20>커나이트</a>, <a href=showinfo:81975>그리미어</a>,\
-      \ <a href=showinfo:82163>헤조라임</a>\r\n\r\n웜홀: <a href=showinfo:1227>옴버</a>, <a\
-      \ href=showinfo:20>커나이트</a>, <a href=showinfo:1229>니스</a>\r\n\r\n추가로 <a href=showinfo:19>스\
-      포듀마인</a>, <a href=showinfo:52316>베즈드나신</a>, <a href=showinfo:52315>라코벤</a>과\
-      \ 같은 희귀 광석에서도 추출됩니다.\r\n\r\n희귀 광석 <a href=showinfo:74525>이티륨</a>에도 다량 함유되어 있\
-      습니다. 이티륨은 널 시큐리티와 웜홀 우주에 있는 A0 청색 왜성 항성계에서 주로 찾을 수 있으며, 4대 국가 영역의 외부 경계에서도 발\
-      견됩니다."
+      \ 지역에서 대량으로 매장된 지역은 드뭅니다.\n\n다음 광석을 정제하여 획득할 수 있습니다:\n\n로우 시큐리티 항성계: <a href=showinfo:1227>옴\
+      버</a>, <a href=showinfo:20>커나이트</a>, <a href=showinfo:1231>헤모르파이트</a>, <a href=showinfo:1229>니\
+      스</a>, <a href=showinfo:1232>다크 오커</a>\n\n널 시큐리티 항성계: <a href=showinfo:20>커나\
+      이트</a>, <a href=showinfo:81975>그리미어</a>, <a href=showinfo:82163>헤조라임</a>\n\n\
+      웜홀: <a href=showinfo:1227>옴버</a>, <a href=showinfo:20>커나이트</a>, <a href=showinfo:1229>니\
+      스</a>\n\n추가로 <a href=showinfo:19>스포듀마인</a>, <a href=showinfo:52316>베즈드나신</a>,\
+      \ <a href=showinfo:52315>라코벤</a>과 같은 희귀 광석에서도 추출됩니다.\n\n희귀 광석 <a href=showinfo:74525>이\
+      티륨</a>에도 다량 함유되어 있습니다. 이티륨은 널 시큐리티와 웜홀 우주에 있는 A0 청색 왜성 항성계에서 주로 찾을 수 있으며, 4대\
+      \ 국가 영역의 외부 경계에서도 발견됩니다."
     ru: "Голубой кристалл, образующийся в результате сильного давления в недрах сп\
       утников и крупных астероидов. Используется в производстве электроники и оруд\
       ий. В изобилии встречается лишь в некоторых районах. Добывается путём перера\
@@ -3135,25 +2403,25 @@
       \ werden."
     en: "A highly volatile mineral only formed during supernovas, thus severely limiting\
       \ the extent of its distribution. Vital ingredient in capsule production, making\
-      \ it very coveted.\r\n\r\nMay be obtained by reprocessing the following ores\
-      \ and their variations available in low security status star systems: <a href=showinfo:1226>jaspet</a>,\
+      \ it very coveted.\n\nMay be obtained by reprocessing the following ores and\
+      \ their variations available in low security status star systems: <a href=showinfo:1226>jaspet</a>,\
       \ <a href=showinfo:1231>hemorphite</a>, <a href=showinfo:21>hedbergite</a>,\
-      \ <a href=showinfo:1232>dark ochre</a>, and <a href=showinfo:1225>crokite</a>.\r\
-      \n\r\nIt is also present in significant amounts in rare ores like <a href=showinfo:19>spodumain</a>\
-      \ and <a href=showinfo:52306>talassonite</a>.\r\n\r\nNocxium can also be found\
-      \ in null security status star systems in <a href=showinfo:81900>kylixium</a>,\
+      \ <a href=showinfo:1232>dark ochre</a>, and <a href=showinfo:1225>crokite</a>.\n\
+      \nIt is also present in significant amounts in rare ores like <a href=showinfo:19>spodumain</a>\
+      \ and <a href=showinfo:52306>talassonite</a>.\n\nNocxium can also be found in\
+      \ null security status star systems in <a href=showinfo:81900>kylixium</a>,\
       \ <a href=showinfo:82016>nocxite</a>, <a href=showinfo:82205>ueganite</a>, <a\
       \ href=showinfo:82163>hezorime</a>, and <a href=showinfo:81975>griemeer</a>."
     es: "Un mineral muy volátil que solo se forma durante las supernovas, lo que limita\
       \ mucho su distribución. Es un elemento vital en la producción de cápsulas,\
-      \ por lo que es muy codiciado.\r\n\r\nPuede obtenerse mediante el reprocesamiento\
+      \ por lo que es muy codiciado.\n\nPuede obtenerse mediante el reprocesamiento\
       \ de las siguientes menas y sus variaciones disponibles en sistemas estelares\
       \ con estado de seguridad bajo: <a href=showinfo:1226>jaspetita</a>, <a href=showinfo:1231>hemorfita</a>,\
       \ <a href=showinfo:21>hedbergita</a>, <a href=showinfo:1232>ocre oscuro</a>\
-      \ y <a href=showinfo:1225>crokitio</a>.\r\n\r\nTambién está presente en enormes\
+      \ y <a href=showinfo:1225>crokitio</a>.\n\nTambién está presente en enormes\
       \ cantidades en menas poco comunes como <a href=showinfo:19>espodumain</a> y\
-      \ <a href=showinfo:52306>talasonita</a>.\r\n\r\nEl nocxium también se puede\
-      \ encontrar en sistemas estelares con estado de seguridad nulo en <a href=showinfo:81900>kylixium</a>,\
+      \ <a href=showinfo:52306>talasonita</a>.\n\nEl nocxium también se puede encontrar\
+      \ en sistemas estelares con estado de seguridad nulo en <a href=showinfo:81900>kylixium</a>,\
       \ <a href=showinfo:82016>nocxita</a>, <a href=showinfo:82205>ueganita</a>, <a\
       \ href=showinfo:82163>hezorima</a> y <a href=showinfo:81975>griemeer</a>."
     fr: "Ce minerai très volatile ne se forme que lors de la transformation d'une\
@@ -3169,22 +2437,22 @@
       \ nulle dans les minerais <a href=showinfo:81900>kylixium</a>, <a href=showinfo:82016>nocxite</a>,\
       \ <a href=showinfo:82205>ueganite</a>, <a href=showinfo:82163>hezorime</a> et\
       \ <a href=showinfo:81975>griemeer</a>."
-    ja: "揮発性の高い鉱石で、超新星爆発によってのみ生成される。そのため、流通は極めて限られている。カプセル生産に欠かせない原料で、非常に需要が高い。\r\n\
-      \r\nローセキュリティステータス星系で入手可能な、次の鉱石やその亜種を再処理することによって得ることができる。<a href=showinfo:1226>ジ\
-      ャスペット</a>、<a href=showinfo:1231>ヘモファイト</a>、<a href=showinfo:21>ヘッドバーガイト</a>、\
-      <a href=showinfo:1232>ダークオークル</a>、<a href=showinfo:1225>クロカイト</a>\r\n\r\n<a\
-      \ href=showinfo:19>スポデュメイン</a>や<a href=showinfo:52306>タラソナイト</a>といった希少鉱石の中にも\
-      相当量含まれている。\r\n\r\nノキシウムはまた、ゼロセキュリティステータスの星系において<a href=showinfo:81900>キリクシウム\
-      </a>、<a href=showinfo:82016>ノキサイト</a>、<a href=showinfo:82205>ユイグナイト</a>、<a href=showinfo:82163>ヘ\
-      ゾライム</a>、そして<a href=showinfo:81975>グリーミーア</a>に含まれる形でも見つかる。"
+    ja: "揮発性の高い鉱石で、超新星爆発によってのみ生成される。そのため、流通は極めて限られている。カプセル生産に欠かせない原料で、非常に需要が高い。\n\n\
+      ローセキュリティステータス星系で入手可能な、次の鉱石やその亜種を再処理することによって得ることができる。<a href=showinfo:1226>ジャ\
+      スペット</a>、<a href=showinfo:1231>ヘモファイト</a>、<a href=showinfo:21>ヘッドバーガイト</a>、\
+      <a href=showinfo:1232>ダークオークル</a>、<a href=showinfo:1225>クロカイト</a>\n\n<a href=showinfo:19>ス\
+      ポデュメイン</a>や<a href=showinfo:52306>タラソナイト</a>といった希少鉱石の中にも相当量含まれている。\n\nノキシウムは\
+      また、ゼロセキュリティステータスの星系において<a href=showinfo:81900>キリクシウム</a>、<a href=showinfo:82016>ノ\
+      キサイト</a>、<a href=showinfo:82205>ユイグナイト</a>、<a href=showinfo:82163>ヘゾライム</a>、\
+      そして<a href=showinfo:81975>グリーミーア</a>に含まれる形でも見つかる。"
     ko: "불안정한 구조를 지닌 광물로 초신성 폭발을 통해 생성됩니다. 상당히 희귀한 재료이며 캡슐 제작, 그 중에서도 은폐장의 제작에 주로\
-      \ 투입됩니다.\r\n\r\n아래의 광석을 정제하여 획득할 수 있습니다: <a href=showinfo:1226>자스페트</a>, <a\
-      \ href=showinfo:1231>헤모르파이트</a>, <a href=showinfo:21>헤버자이트</a>, <a href=showinfo:1232>다\
-      크 오커</a>, <a href=showinfo:1225>크로카이트</a>\r\n\r\n<a href=showinfo:19>스포듀마인</a>과\
-      \ <a href=showinfo:52306>탈라소나이트</a>와 같은 희귀 광물에도 다량 함유되어 있습니다.</a>\r\n\r\n추가로\
-      \ 널 시큐리티 항성계에서 발견되는 광석인 <a href=showinfo:81900>카일릭슘</a>, <a href=showinfo:82016>녹\
-      사이트</a>, <a href=showinfo:82205>유가나이트</a>, <a href=showinfo:82163>헤조라임</a>,\
-      \ <a href=showinfo:81975>그리미어</a>에도 녹시움이 함유되어 있습니다."
+      \ 투입됩니다.\n\n아래의 광석을 정제하여 획득할 수 있습니다: <a href=showinfo:1226>자스페트</a>, <a href=showinfo:1231>헤\
+      모르파이트</a>, <a href=showinfo:21>헤버자이트</a>, <a href=showinfo:1232>다크 오커</a>, <a\
+      \ href=showinfo:1225>크로카이트</a>\n\n<a href=showinfo:19>스포듀마인</a>과 <a href=showinfo:52306>탈\
+      라소나이트</a>와 같은 희귀 광물에도 다량 함유되어 있습니다.</a>\n\n추가로 널 시큐리티 항성계에서 발견되는 광석인 <a href=showinfo:81900>카\
+      일릭슘</a>, <a href=showinfo:82016>녹사이트</a>, <a href=showinfo:82205>유가나이트</a>,\
+      \ <a href=showinfo:82163>헤조라임</a>, <a href=showinfo:81975>그리미어</a>에도 녹시움이 함유\
+      되어 있습니다."
     ru: "Крайне нестабильный минерал. Он образуется исключительно при вспышке свер\
       хновой, так что отыскать его весьма непросто. Очень высоко ценится на рынке\
       , поскольку является ключевым элементом в производстве капсул. Добывается пу\
@@ -3237,30 +2505,30 @@
       \ und Nullsicherheitsraum vor."
     en: "Only found in huge geodes; rocks on the outside with crystal-like quartz\
       \ on the inside. The rarest and most precious of these geodes are those that\
-      \ contain the dark green zydrine within. Very rare and very expensive.\r\n\r\
-      \nMay be obtained by reprocessing <a href=showinfo:1223>bistot</a> ore and its\
-      \ variations which are available in null security status and wormhole systems.\r\
-      \n\r\nSignificant amounts of zydrine are also present in rare ores like <a href=showinfo:19>spodumain</a>\
-      \ and <a href=showinfo:52315>rakovene</a>.\r\n\r\nIt can be found in null security\
-      \ status star systems in <a href=showinfo:82163>hezorime</a>.\r\n\r\nThe rare\
-      \ ore <a href=showinfo:74529>eifyrium</a> also contains significant quantities\
-      \ and is found primarily in nullsec and W-space systems containing A0 (Blue\
-      \ Small) stars, as well as surveyed locations on the borders of empire and nullsec\
+      \ contain the dark green zydrine within. Very rare and very expensive.\n\nMay\
+      \ be obtained by reprocessing <a href=showinfo:1223>bistot</a> ore and its variations\
+      \ which are available in null security status and wormhole systems.\n\nSignificant\
+      \ amounts of zydrine are also present in rare ores like <a href=showinfo:19>spodumain</a>\
+      \ and <a href=showinfo:52315>rakovene</a>.\n\nIt can be found in null security\
+      \ status star systems in <a href=showinfo:82163>hezorime</a>.\n\nThe rare ore\
+      \ <a href=showinfo:74529>eifyrium</a> also contains significant quantities and\
+      \ is found primarily in nullsec and W-space systems containing A0 (Blue Small)\
+      \ stars, as well as surveyed locations on the borders of empire and nullsec\
       \ space."
     es: "Solo se encuentra en geodas enormes, que por fuera parecen rocas, pero contienen\
       \ cuarzo de aspecto cristalino en su interior. Las geodas menos comunes y má\
       s valiosas son las que contienen zidrina de color verde oscuro. Son muy poco\
-      \ comunes y muy caras.\r\n\r\nSe puede obtener mediante el reprocesamiento de\
-      \ la mena de <a href=showinfo:1223>bistotina</a> y sus variaciones, que se encuentran\
-      \ en los sistemas de estado de seguridad nula y agujeros de gusano.\r\n\r\n\
-      También hay grandes cantidades de zidrina en menas poco comunes como <a href=showinfo:19>espodumain</a>\
-      \ y <a href=showinfo:52315>rakovena</a>.\r\n\r\nSe encuentra en sistemas estelares\
-      \ con estado de seguridad nulo en <a href=showinfo:82163>hezorima</a>.\r\n\r\
-      \nLa mena poco común de <a href=showinfo:74529>eifyrium</a> también contiene\
-      \ cantidades significativas y se encuentra principalmente en sistemas de espacio\
-      \ de agujeros de gusano y seguridad nula que contienen estrellas A0 (azules\
-      \ pequeñas), así como en ubicaciones inspeccionadas en las fronteras del imperio\
-      \ y el espacio de seguridad nula."
+      \ comunes y muy caras.\n\nSe puede obtener mediante el reprocesamiento de la\
+      \ mena de <a href=showinfo:1223>bistotina</a> y sus variaciones, que se encuentran\
+      \ en los sistemas de estado de seguridad nula y agujeros de gusano.\n\nTambié\
+      n hay grandes cantidades de zidrina en menas poco comunes como <a href=showinfo:19>espodumain</a>\
+      \ y <a href=showinfo:52315>rakovena</a>.\n\nSe encuentra en sistemas estelares\
+      \ con estado de seguridad nulo en <a href=showinfo:82163>hezorima</a>.\n\nLa\
+      \ mena poco común de <a href=showinfo:74529>eifyrium</a> también contiene cantidades\
+      \ significativas y se encuentra principalmente en sistemas de espacio de agujeros\
+      \ de gusano y seguridad nula que contienen estrellas A0 (azules pequeñas), así\
+      \ como en ubicaciones inspeccionadas en las fronteras del imperio y el espacio\
+      \ de seguridad nula."
     fr: "On ne le trouve que dans de grandes géodes, ces rochers au cœur de quartz.\
       \ Les géodes les plus rares et les plus précieuses sont celles contenant la\
       \ zydrine vert foncé. Ce minerai est très rare et très cher. Il peut être obtenu\
@@ -3274,13 +2542,13 @@
       \ dans les systèmes de sécurité nulle et les systèmes de trous de ver contenant\
       \ des étoiles A0 (petites bleues), ainsi que dans des sites sondés aux frontiè\
       res de l'espace impérial et de sécurité nulle."
-    ja: "非常に大きな晶洞石（外側は岩で、内部は水晶のような石英）にのみ含まれる。暗緑色のザイドリンを含む晶洞石は、その中でもきわめて希少で価値が高い。\r\
-      \n\r\nゼロセキュリティステータス星系およびワームホールシステムで入手可能な<a href=showinfo:1223>ビストット</a>およびその\
-      亜種鉱石を再処理することによって得ることができる。\r\n\r\nザイドリンは<a href=showinfo:19>スポデュメイン</a>や<a href=showinfo:52315>ラ\
-      コベネ</a>といった希少鉱石の中にも相当量含まれている。\r\n\r\nゼロセキュリティステータスの星系においては、<a href=showinfo:82163>ヘ\
-      ゾライム</a>に含まれる形で見つかる。\r\n\r\nまた、希少鉱石の<a href=showinfo:74529>エイフィリウム</a>に大量に含ま\
-      れている。エイフィリウムは主に、A0（小型ブルー）恒星が存在するゼロセキュリティ宙域とワームホール宙域のほか、主要大国とゼロセキュリティ宙域の境界にある\
-      調査エリアで発見することができる。"
+    ja: "非常に大きな晶洞石（外側は岩で、内部は水晶のような石英）にのみ含まれる。暗緑色のザイドリンを含む晶洞石は、その中でもきわめて希少で価値が高い。\n\
+      \nゼロセキュリティステータス星系およびワームホールシステムで入手可能な<a href=showinfo:1223>ビストット</a>およびその亜種鉱石\
+      を再処理することによって得ることができる。\n\nザイドリンは<a href=showinfo:19>スポデュメイン</a>や<a href=showinfo:52315>ラ\
+      コベネ</a>といった希少鉱石の中にも相当量含まれている。\n\nゼロセキュリティステータスの星系においては、<a href=showinfo:82163>ヘ\
+      ゾライム</a>に含まれる形で見つかる。\n\nまた、希少鉱石の<a href=showinfo:74529>エイフィリウム</a>に大量に含まれている\
+      。エイフィリウムは主に、A0（小型ブルー）恒星が存在するゼロセキュリティ宙域とワームホール宙域のほか、主要大国とゼロセキュリティ宙域の境界にある調査エリ\
+      アで発見することができる。"
     ko: "대형 수정형 광석에서만 채굴되는 광석입니다. 내부가 진녹색 자이드라인으로 구성된 수정형 광석은 매우 희귀하며 비싼 가격에 거래됩니다\
       .<br><br><a href=showinfo:1223>비스토트</a>를 정제하여 획득할 수 있으며, 널 시큐리티 항성계 및 웜홀에서 채\
       굴되는 특수 비스토트에서도 추출됩니다.<br><br><a href=showinfo:19>스포듀마인</a>과 <a href=showinfo:52315>라\
@@ -3340,30 +2608,28 @@
       \ gefunden werden."
     en: "An extremely rare mineral found in comets and very occasionally in asteroids\
       \ that have traveled through gas clouds. Has unique explosive traits that make\
-      \ it very valuable in the armaments industry.\r\n\r\nMay be obtained by reprocessing\
+      \ it very valuable in the armaments industry.\n\nMay be obtained by reprocessing\
       \ <a href=showinfo:22>arkonor</a> ore and its variations which are available\
-      \ in null security status and wormhole systems.\r\n\r\nSignificant amounts of\
-      \ megacyte are also present in rare ores like <a href=showinfo:19>spodumain</a>,\
-      \ <a href=showinfo:52316>bezdnacine</a>, and <a href=showinfo:52306>talassonite</a>.\r\
-      \n\r\nThe rare ore <a href=showinfo:74533>ducinium</a> also contains significant\
-      \ quantities and is found primarily in nullsec and W-space systems containing\
-      \ A0 (Blue Small) stars, as well as surveyed locations on the borders of empire\
-      \ and nullsec space.\r\n\r\nMegacyte can also be found in null security status\
-      \ star systems in <a href=showinfo:82205>ueganite</a>."
+      \ in null security status and wormhole systems.\n\nSignificant amounts of megacyte\
+      \ are also present in rare ores like <a href=showinfo:19>spodumain</a>, <a href=showinfo:52316>bezdnacine</a>,\
+      \ and <a href=showinfo:52306>talassonite</a>.\n\nThe rare ore <a href=showinfo:74533>ducinium</a>\
+      \ also contains significant quantities and is found primarily in nullsec and\
+      \ W-space systems containing A0 (Blue Small) stars, as well as surveyed locations\
+      \ on the borders of empire and nullsec space.\n\nMegacyte can also be found\
+      \ in null security status star systems in <a href=showinfo:82205>ueganite</a>."
     es: "Un mineral extremadamente poco común que se encuentra en cometas y muy rara\
       \ vez en asteroides que han viajado a través de nubes de gas. Tiene caracterí\
       sticas explosivas únicas que lo hacen muy valioso en la industria armamentí\
-      stica.\r\n\r\nSe puede obtener mediante el reprocesamiento de la mena de <a\
-      \ href=showinfo:22>arkonor</a> y sus variaciones, que se encuentran en los sistemas\
-      \ de estado de seguridad nula y agujeros de gusano.\r\n\r\nTambién hay grandes\
-      \ cantidades de megacita en menas poco comunes como <a href=showinfo:19>espodumain</a>,\
-      \ <a href=showinfo:52316>bezdnacina</a> y <a href=showinfo:52306>talasonita</a>.\r\
-      \n\r\nLa mena poco común de <a href=showinfo:74533>ducinium</a> también contiene\
-      \ cantidades significativas y se encuentra principalmente en sistemas de espacio\
-      \ de agujeros de gusano y seguridad nula que contienen estrellas A0 (azules\
-      \ pequeñas), así como en ubicaciones inspeccionadas en las fronteras del imperio\
-      \ y el espacio de seguridad nula.\r\n\r\nLa megacita también se puede encontrar\
-      \ en sistemas estelares con estado de seguridad nulo en <a href=showinfo:82205>ueganita</a>."
+      stica.\n\nSe puede obtener mediante el reprocesamiento de la mena de <a href=showinfo:22>arkonor</a>\
+      \ y sus variaciones, que se encuentran en los sistemas de estado de seguridad\
+      \ nula y agujeros de gusano.\n\nTambién hay grandes cantidades de megacita en\
+      \ menas poco comunes como <a href=showinfo:19>espodumain</a>, <a href=showinfo:52316>bezdnacina</a>\
+      \ y <a href=showinfo:52306>talasonita</a>.\n\nLa mena poco común de <a href=showinfo:74533>ducinium</a>\
+      \ también contiene cantidades significativas y se encuentra principalmente en\
+      \ sistemas de espacio de agujeros de gusano y seguridad nula que contienen estrellas\
+      \ A0 (azules pequeñas), así como en ubicaciones inspeccionadas en las fronteras\
+      \ del imperio y el espacio de seguridad nula.\n\nLa megacita también se puede\
+      \ encontrar en sistemas estelares con estado de seguridad nulo en <a href=showinfo:82205>ueganita</a>."
     fr: "Il s'agit d'un minerai extrêmement rare que l'on ne trouve que dans les comè\
       tes et, bien plus rarement, dans des astéroïdes ayant traversé des nuages de\
       \ gaz. Une des caractéristiques qui rend ce minerai très intéressant pour l'industrie\
@@ -3379,13 +2645,13 @@
       res de l'espace impérial et de sécurité nulle. La mégacyte peut également ê\
       tre trouvée dans les systèmes stellaires à statut de sécurité nulle contenant\
       \ de l'<a href=showinfo:82205>ueganite</a>."
-    ja: "彗星の中か、ガス雲の中を通過したアステロイドからごくまれに見つかる、極めて希少な鉱石。特異な爆発特性を持ち、兵器産業において非常に価値がある。\r\
-      \n\r\nゼロセキュリティステータス星系およびワームホールシステムで入手可能な<a href=showinfo:22>アーコナー</a>およびその亜種\
-      鉱石を再処理することで得ることができる。\r\n\r\nメガサイトは<a href=showinfo:19>スポデュメイン</a>や<a href=showinfo:52316>ベ\
-      ズドナシン</a>、<a href=showinfo:52306>タラソナイト</a>といった希少鉱石の中にも相当量含まれている。\r\n\r\nまた、\
-      希少鉱石の<a href=showinfo:74533>ドゥシニウム</a>に大量に含まれている。ドゥシニウムは主に、A0（小型ブルー）恒星が存在するゼ\
-      ロセキュリティ宙域とワームホール宙域のほか、主要大国とゼロセキュリティ宙域の境界にある調査エリアで発見することができる。\r\n\r\nメガサイトはまた\
-      ゼロセキュリティステータスの星系において、<a href=showinfo:82205>ユイグナイト</a>に含まれる形でも見つかる。"
+    ja: "彗星の中か、ガス雲の中を通過したアステロイドからごくまれに見つかる、極めて希少な鉱石。特異な爆発特性を持ち、兵器産業において非常に価値がある。\n\
+      \nゼロセキュリティステータス星系およびワームホールシステムで入手可能な<a href=showinfo:22>アーコナー</a>およびその亜種鉱石を再\
+      処理することで得ることができる。\n\nメガサイトは<a href=showinfo:19>スポデュメイン</a>や<a href=showinfo:52316>ベ\
+      ズドナシン</a>、<a href=showinfo:52306>タラソナイト</a>といった希少鉱石の中にも相当量含まれている。\n\nまた、希少鉱石\
+      の<a href=showinfo:74533>ドゥシニウム</a>に大量に含まれている。ドゥシニウムは主に、A0（小型ブルー）恒星が存在するゼロセキュ\
+      リティ宙域とワームホール宙域のほか、主要大国とゼロセキュリティ宙域の境界にある調査エリアで発見することができる。\n\nメガサイトはまたゼロセキュリティ\
+      ステータスの星系において、<a href=showinfo:82205>ユイグナイト</a>に含まれる形でも見つかる。"
     ko: "혜성에서 추출되는 희귀 광물로 가스 성운 지역을 지나는 소행성에서도 종종 발견됩니다. 쉽게 폭발하는 성질이 있어 무기 산업에서 상당\
       한 가치를 자랑합니다.<br><br><a href=showinfo:22>아르카노르</a>를 정제하여 획득할 수 있으며, 널 시큐리티 항성\
       계 및 웜홀에서 채굴되는 특수 아르카노르에서도 추출됩니다.<br><br><a href=showinfo:19>스포듀마인</a>, <a href=showinfo:52316>베\
@@ -3440,14 +2706,14 @@
       \ beider Tech-Varianten, kann in eine Struktur eingebaut sein."
     en: "The Standup M-Set Ammunition Manufacturing Material Efficiency I rig provides\
       \ a means for structure operators to decrease material requirements manufacturing\
-      \ ammunition, charges and scripts in their Upwell structures.\r\n\r\nStandup\
-      \ is a proprietary system that uses a Structure Autonomous Nanoassembly Device\
+      \ ammunition, charges and scripts in their Upwell structures.\n\nStandup is\
+      \ a proprietary system that uses a Structure Autonomous Nanoassembly Device\
       \ (Upwell) containing integrated template software, a nanoassembler array and\
       \ sufficient nanomass to enable the construction of a variety of service modules,\
       \ structure modules and structure rigs when inserted into the appropriate slots\
-      \ on a structure built with Upwell technology.\r\n\r\nNote: Only one rig of\
-      \ the same type, counting both tech variations, may be fitted at the same time\
-      \ on a structure."
+      \ on a structure built with Upwell technology.\n\nNote: Only one rig of the\
+      \ same type, counting both tech variations, may be fitted at the same time on\
+      \ a structure."
     es: "El complemento Standup mediano de eficiencia de materiales en la fabricació\
       n de munición\_I permite a los administradores de estructuras reducir los materiales\
       \ requeridos para fabricar munición, cargas y scripts en las estructuras de\
@@ -3525,14 +2791,14 @@
       \ beider Tech-Varianten, kann in eine Struktur eingebaut sein."
     en: "The Standup M-Set Ammunition Manufacturing Time Efficiency I rig provides\
       \ a means for structure operators to decrease time requirements manufacturing\
-      \ ammunition, charges and scripts in their Upwell structures.\r\n\r\nStandup\
-      \ is a proprietary system that uses a Structure Autonomous Nanoassembly Device\
+      \ ammunition, charges and scripts in their Upwell structures.\n\nStandup is\
+      \ a proprietary system that uses a Structure Autonomous Nanoassembly Device\
       \ (Upwell) containing integrated template software, a nanoassembler array and\
       \ sufficient nanomass to enable the construction of a variety of service modules,\
       \ structure modules and structure rigs when inserted into the appropriate slots\
-      \ on a structure built with Upwell technology.\r\n\r\nNote: Only one rig of\
-      \ the same type, counting both tech variations, may be fitted at the same time\
-      \ on a structure."
+      \ on a structure built with Upwell technology.\n\nNote: Only one rig of the\
+      \ same type, counting both tech variations, may be fitted at the same time on\
+      \ a structure."
     es: "El complemento Standup mediano de eficiencia temporal en la fabricación de\
       \ munición\_I permite a los administradores de estructuras reducir el tiempo\
       \ requerido para fabricar munición, cargas y scripts en las estructuras de Upwell.\n\
@@ -3610,13 +2876,13 @@
       \ beider Tech-Varianten, kann in eine Struktur eingebaut sein."
     en: "The Standup M-Set Invention Accelerator I rig provides a means for structure\
       \ operators to decrease time requirements when performing invention in their\
-      \ Upwell structures.\r\n\r\nStandup is a proprietary system that uses a Structure\
+      \ Upwell structures.\n\nStandup is a proprietary system that uses a Structure\
       \ Autonomous Nanoassembly Device (Upwell) containing integrated template software,\
       \ a nanoassembler array and sufficient nanomass to enable the construction of\
       \ a variety of service modules, structure modules and structure rigs when inserted\
-      \ into the appropriate slots on a structure built with Upwell technology.\r\n\
-      \r\nNote: Only one rig of the same type, counting both tech variations, may\
-      \ be fitted at the same time on a structure."
+      \ into the appropriate slots on a structure built with Upwell technology.\n\n\
+      Note: Only one rig of the same type, counting both tech variations, may be fitted\
+      \ at the same time on a structure."
     es: "El complemento Standup mediano de acelerador de invención\_I permite a los\
       \ administradores de estructuras reducir el tiempo requerido para realizar invenciones\
       \ en sus estructuras de Upwell.\n\n\n\nStandup es un sistema patentado que utiliza\
@@ -3693,13 +2959,13 @@
       \ Struktur eingebaut sein."
     en: "The Standup M-Set Invention Cost Optimization I rig provides a means for\
       \ structure operators to decrease cost requirements when performing invention\
-      \ in their Upwell structures.\r\n\r\nStandup is a proprietary system that uses\
-      \ a Structure Autonomous Nanoassembly Device (Upwell) containing integrated\
-      \ template software, a nanoassembler array and sufficient nanomass to enable\
-      \ the construction of a variety of service modules, structure modules and structure\
-      \ rigs when inserted into the appropriate slots on a structure built with Upwell\
-      \ technology.\r\n\r\nNote: Only one rig of the same type, counting both tech\
-      \ variations, may be fitted at the same time on a structure."
+      \ in their Upwell structures.\n\nStandup is a proprietary system that uses a\
+      \ Structure Autonomous Nanoassembly Device (Upwell) containing integrated template\
+      \ software, a nanoassembler array and sufficient nanomass to enable the construction\
+      \ of a variety of service modules, structure modules and structure rigs when\
+      \ inserted into the appropriate slots on a structure built with Upwell technology.\n\
+      \nNote: Only one rig of the same type, counting both tech variations, may be\
+      \ fitted at the same time on a structure."
     es: "El complemento Standup mediano de optimización del coste de invención\_I\
       \ permite a los administradores de estructuras reducir los costes requeridos\
       \ para realizar invenciones en sus estructuras de Upwell.\n\nStandup es un sistema\
@@ -3776,13 +3042,13 @@
       \ beider Tech-Varianten, kann in eine Struktur eingebaut sein."
     en: "The Standup L-Set Blueprint Copy Optimization I rig provides a means for\
       \ structure operators to decrease both cost and time requirements for copying\
-      \ blueprints in their Upwell structures.\r\n\r\nStandup is a proprietary system\
+      \ blueprints in their Upwell structures.\n\nStandup is a proprietary system\
       \ that uses a Structure Autonomous Nanoassembly Device (Upwell) containing integrated\
       \ template software, a nanoassembler array and sufficient nanomass to enable\
       \ the construction of a variety of service modules, structure modules and structure\
       \ rigs when inserted into the appropriate slots on a structure built with Upwell\
-      \ technology.\r\n\r\nNote: Only one rig of the same type, counting both tech\
-      \ variations, may be fitted at the same time on a structure."
+      \ technology.\n\nNote: Only one rig of the same type, counting both tech variations,\
+      \ may be fitted at the same time on a structure."
     es: "El complemento Standup grande de optimización de copia de planos\_I permite\
       \ a los administradores de estructuras reducir los costes y el tiempo requeridos\
       \ para copiar planos en sus estructuras de Upwell.\n\n\n\nStandup es un sistema\
@@ -3859,13 +3125,13 @@
       \ Struktur eingebaut sein."
     en: "The Standup M-Set Blueprint Copy Cost Optimization I rig provides a means\
       \ for structure operators to decrease cost requirements when copying in their\
-      \ Upwell structures.\r\n\r\nStandup is a proprietary system that uses a Structure\
+      \ Upwell structures.\n\nStandup is a proprietary system that uses a Structure\
       \ Autonomous Nanoassembly Device (Upwell) containing integrated template software,\
       \ a nanoassembler array and sufficient nanomass to enable the construction of\
       \ a variety of service modules, structure modules and structure rigs when inserted\
-      \ into the appropriate slots on a structure built with Upwell technology.\r\n\
-      \r\nNote: Only one rig of the same type, counting both tech variations, may\
-      \ be fitted at the same time on a structure."
+      \ into the appropriate slots on a structure built with Upwell technology.\n\n\
+      Note: Only one rig of the same type, counting both tech variations, may be fitted\
+      \ at the same time on a structure."
     es: "El complemento Standup mediano de optimización de coste de copia de planos\_\
       I permite a los administradores de estructuras disminuir el tiempo requerido\
       \ para copiar sus estructuras de Upwell.\n\n\n\nStandup es un sistema patentado\
@@ -3943,14 +3209,14 @@
       \ Struktur eingebaut sein."
     en: "The Standup L-Set Basic Small Ship Manufacturing Efficiency I rig provides\
       \ a means for structure operators to decrease both material and time requirements\
-      \ for manufacturing frigates, destroyers and shuttles in their Upwell structures.\r\
-      \n\r\nStandup is a proprietary system that uses a Structure Autonomous Nanoassembly\
+      \ for manufacturing frigates, destroyers and shuttles in their Upwell structures.\n\
+      \nStandup is a proprietary system that uses a Structure Autonomous Nanoassembly\
       \ Device (Upwell) containing integrated template software, a nanoassembler array\
       \ and sufficient nanomass to enable the construction of a variety of service\
       \ modules, structure modules and structure rigs when inserted into the appropriate\
-      \ slots on a structure built with Upwell technology.\r\n\r\nNote: Only one rig\
-      \ of the same type, counting both tech variations, may be fitted at the same\
-      \ time on a structure."
+      \ slots on a structure built with Upwell technology.\n\nNote: Only one rig of\
+      \ the same type, counting both tech variations, may be fitted at the same time\
+      \ on a structure."
     es: "El complemento Standup grande de eficiencia en la fabricación de naves pequeñ\
       as con tecnología básica\_I permite a los administradores de estructuras reducir\
       \ los materiales y el tiempo requeridos para la fabricación de fragatas, destructores\
@@ -4033,13 +3299,13 @@
     en: "The Standup M-Set Basic Large Ship Manufacturing Material Efficiency II rig\
       \ provides a means for structure operators to decrease material requirements\
       \ for manufacturing battleships, freighters and industrial command ships in\
-      \ their Upwell structures.\r\n\r\nStandup is a proprietary system that uses\
-      \ a Structure Autonomous Nanoassembly Device (Upwell) containing integrated\
-      \ template software, a nanoassembler array and sufficient nanomass to enable\
-      \ the construction of a variety of service modules, structure modules and structure\
-      \ rigs when inserted into the appropriate slots on a structure built with Upwell\
-      \ technology.\r\n\r\nNote: Only one rig of the same type, counting both tech\
-      \ variations, may be fitted at the same time on a structure."
+      \ their Upwell structures.\n\nStandup is a proprietary system that uses a Structure\
+      \ Autonomous Nanoassembly Device (Upwell) containing integrated template software,\
+      \ a nanoassembler array and sufficient nanomass to enable the construction of\
+      \ a variety of service modules, structure modules and structure rigs when inserted\
+      \ into the appropriate slots on a structure built with Upwell technology.\n\n\
+      Note: Only one rig of the same type, counting both tech variations, may be fitted\
+      \ at the same time on a structure."
     es: "El complemento Standup mediano de eficiencia de materiales en la fabricació\
       n de naves grandes con tecnología básica\_II permite a los administradores de\
       \ estructuras reducir los materiales requeridos para la fabricación de acorazados,\
@@ -4308,7 +3574,7 @@
       \ verringern jedoch sowohl Flugzeit als auch Genauigkeit."
     en: "The mother of all missiles, the Mjolnir cruise missile delivers a tremendous\
       \ payload, guaranteed to get its victims acquainted with their personal god\
-      \ in a quick, but painful manner.\r\n\r\nA modified version of the Mjolnir cruise.\
+      \ in a quick, but painful manner.\n\nA modified version of the Mjolnir cruise.\
       \ Does more damage than its predecessor but the volatile nature of the warhead,\
       \ and its powerful containment system, reduce both flight time and precision."
     es: "El misil de crucero Mjolnir, la madre de todos los misiles, porta una gran\
@@ -4421,20 +3687,20 @@
       \ space it provides enhanced benefits to the materials required for construction\
       \ of basic and advanced capital ship components and normal benefits to the construction\
       \ of other components, Upwell structures, structure modules, structure rigs,\
-      \ starbase structures and fuel blocks.\r\n\r\nThe Standup XL-Set Thukker Structure\
+      \ starbase structures and fuel blocks.\n\nThe Standup XL-Set Thukker Structure\
       \ and Component Manufacturing Efficiency rig provides a means for structure\
       \ operators to decrease both material and time requirements manufacturing components,\
       \ Upwell structures, structure modules, structure rigs, starbase structures\
-      \ and fuel blocks in their Upwell structures.\r\n\r\nThis facility design has\
-      \ been modified by Thukker specialists to utilize certain unregulated opportunities\
-      \ for expediting capital ship component construction in low security space.\r\
-      \n\r\nStandup is a proprietary system that uses a Structure Autonomous Nanoassembly\
+      \ and fuel blocks in their Upwell structures.\n\nThis facility design has been\
+      \ modified by Thukker specialists to utilize certain unregulated opportunities\
+      \ for expediting capital ship component construction in low security space.\n\
+      \nStandup is a proprietary system that uses a Structure Autonomous Nanoassembly\
       \ Device (Upwell) containing integrated template software, a nanoassembler array\
       \ and sufficient nanomass to enable the construction of a variety of service\
       \ modules, structure modules and structure rigs when inserted into the appropriate\
-      \ slots on a structure built with Upwell technology.\r\n\r\nNote: Only one rig\
-      \ of the same type, counting both tech variations, may be fitted at the same\
-      \ time on a structure."
+      \ slots on a structure built with Upwell technology.\n\nNote: Only one rig of\
+      \ the same type, counting both tech variations, may be fitted at the same time\
+      \ on a structure."
     es: "Este complemento se ha optimizado para su uso en espacio de seguridad baja\
       \ y ofrece beneficios reducidos en todos los demás sectores del espacio. Cuando\
       \ se instala en espacio de seguridad baja, beneficia considerablemente los materiales\
@@ -4739,19 +4005,19 @@
     en: "Named after one of the co-creators of the first Caldari warp drive, the Sotiyo-Urbaata\
       \ Drive, the Sotiyo serves as a mega-scale manufacturing and assembly site for\
       \ everything from subcapital ships and modules, up to supercapital class hulls.\
-      \ \r\n\r\nThe Sotiyo is the Engineering Complex fit for megacorporations in\
-      \ the Upwell Consortium’s new line of structures, and is able to use Upwell's\
-      \ Standup Service modules, allowing flexibility and customization of its functions.\
+      \ \n\nThe Sotiyo is the Engineering Complex fit for megacorporations in the\
+      \ Upwell Consortium’s new line of structures, and is able to use Upwell's Standup\
+      \ Service modules, allowing flexibility and customization of its functions.\
       \ This dedicated industrial structure also provides access to Upwell’s XL-Set\
       \ line of rigs designed to improve productivity and optimization of various\
-      \ aspects of manufacturing and research.\r\n\r\nDue to its extra-large size\
-      \ this engineering complex can accommodate construction of supercapital ships\
-      \ using the Standup Supercapital Shipyard I Service Module.\r\n\r\nThe Sotiyo\
-      \ provides tethering technology and has docking capabilities for capital-size\
-      \ ships and below.\r\n\r\nOn June 14th YC125 CONCORD updated the capsuleer structure\
-      \ regulations to disallow the anchoring of any new XL structures in highsec\
-      \ space. XL structures that were anchored before this date will not be affected\
-      \ by this change unless they are unanchored."
+      \ aspects of manufacturing and research.\n\nDue to its extra-large size this\
+      \ engineering complex can accommodate construction of supercapital ships using\
+      \ the Standup Supercapital Shipyard I Service Module.\n\nThe Sotiyo provides\
+      \ tethering technology and has docking capabilities for capital-size ships and\
+      \ below.\n\nOn June 14th YC125 CONCORD updated the capsuleer structure regulations\
+      \ to disallow the anchoring of any new XL structures in highsec space. XL structures\
+      \ that were anchored before this date will not be affected by this change unless\
+      \ they are unanchored."
     es: "Llamado así en honor a uno de los creadores del primer motor de warp caldari,\
       \ el Sotiyo-Urbaata, este complejo sirve como centro de fabricación y ensamblaje\
       \ a gran escala de todo tipo de naves y módulos subcapitales, hasta cascos de\
@@ -4857,135 +4123,7 @@
   portionSize: 1
   published: true
   radius: 150000
-  sofFactionName: "upwell-indy"
   soundID: 20244
-  traits:
-    miscBonuses: []
-    roleBonuses:
-    - bonusText:
-        de: "Solange diese Struktur über mindestens ein aktives Dienstmodul verfü\
-          gt, befindet sie sich im Hochenergiemodus und erhält erhöhte Schild- und\
-          \ Panzerungs-HP sowie einen zusätzlichen Verstärkungszyklus."
-        en: "While this structure has at least one online service module it enters\
-          \ full power mode and will gain increased shield and armor hitpoints and\
-          \ an extra reinforcement cycle."
-        es: "Cuando esta estructura tiene al menos un módulo de servicio conectado,\
-          \ entra en el modo de potencia máxima y obtiene más puntos de vida de escudo\
-          \ y blindaje, además de un ciclo de refuerzo adicional."
-        fr: "L’activation d’un seul module de service permet à la structure de passer\
-          \ en mode performance énergétique pour accroître les points de vie de ses\
-          \ boucliers et de son blindage et bénéficier d’un cycle de renforcement\
-          \ supplémentaire."
-        ja: "このストラクチャのサービスモジュールが1つ以上オンラインになると、「フルパワー」モードに入り、シールドとアーマーのヒットポイントが増加し追\
-          加の強化サイクルを獲得する。"
-        ko: "장착된 모듈이 온라인 상태일 경우 구조물은 최대 전력 모드로 전환되며 실드량 및 장갑 내구도가 증가하고 추가 강화 시간대가\
-          \ 생성됩니다."
-        ru: "Так как у этого сооружения есть по меньшей мере один работающий служе\
-          бный модуль, оно переходит в режим полной мощности и получает увеличенны\
-          й запас прочности щитов и брони, а также дополнительный цикл укрепления."
-        zh: "这个建筑启用了至少一个服务装备，已进入全能量运转模式，将会获得额外的护盾和装甲值以及一个额外的增强模式循环。"
-      importance: 6
-    - bonusText:
-        de: "Neue Sotiyos dürfen nicht im Hochsicherheitsraum verankert werden."
-        en: "New Sotiyos may not be anchored within highsec space"
-        es: "No pueden anclarse nuevos Sotiyo en el espacio de seguridad alta"
-        fr: "Les nouveaux Sotiyo ne peuvent pas être ancrés dans un espace de haute\
-          \ sécurité"
-        ja: "ハイセキュリティ宙域内でソティヨを新たに係留することはできません"
-        ko: "하이 시큐리티 지역에 신규 소티요 구조물을 위치 고정할 수 없음"
-        ru: "Новые «Сотийо» нельзя ставить на якорь в\_системах с\_высоким ур.\_бе\
-          зопасности"
-        zh: "New Sotiyos may not be anchored within highsec space"
-      importance: 7
-    - bonusText:
-        de: "Damit das Verankern abgeschlossen werden kann, muss in dieser Struktur\
-          \ ein <a href=showinfo:56208>Sotiyo-Upwell-Quantumkern</a> installiert werden"
-        en: "This structure requires a <a href=showinfo:56208>Sotiyo Upwell Quantum\
-          \ Core</a> to be installed for anchoring to complete"
-        es: "Esta estructura requiere un <a href=showinfo:56208>núcleo cuántico Sotiyo\
-          \ de Upwell</a> instalado para completar el anclaje."
-        fr: "Cette structure nécessite un <a href=showinfo:56208>réacteur quantique\
-          \ Upwell Sotiyo</a> pour terminer le processus d'ancrage"
-        ja: "このストラクチャの係留を完了するには <a href=showinfo:56208>ソティヨ・アップウェルクアンタムコア</a>を取り付け\
-          る必要がある。"
-        ko: "해당 구조물을 고정하려면 <a href=showinfo:56208>소티요 업웰 양자코어</a>를 설치해야 합니다."
-        ru: "Для завершения постановки этого сооружения на якорь в него требуется\
-          \ установить <a href=showinfo:56208>квантовое ядро «Сотийо» производства\
-          \ «Апвелл»</a>."
-        zh: "这座建筑需要安装一个<a href=showinfo:56208>索迪约昇威量子芯</a>才能完成锚定。"
-      importance: 8
-    - bonus: 1
-      bonusText:
-        de: "Reduzierte Materialanforderungen für Fertigungsaufträge"
-        en: "reduction in material requirements for manufacturing jobs"
-        es: "de reducción de los requisitos de materiales para los trabajos de fabricació\
-          n."
-        fr: "de réduction de productivité matérielle pour les tâches de production"
-        ja: "製造ジョブの必要資源が減少"
-        ko: "제조 작업 자원요구치 감소"
-        ru: "уменьшает расход материалов, необходимых для выполнения производствен\
-          ных проектов"
-        zh: "生产项目的材料需求降低"
-      importance: 1
-      unitID: 105
-    - bonus: 5
-      bonusText:
-        de: "Reduzierte ISK-Anforderungen für Fertigungs- und Forschungsaufträge"
-        en: "reduction in ISK requirements for manufacturing and science jobs"
-        es: "de reducción de los requisitos de ISK para los trabajos de fabricació\
-          n y ciencia."
-        fr: "de réduction d'ISK requis pour les tâches de production et scientifiques"
-        ja: "製造ジョブとサイエンスジョブの必要ISKが減少"
-        ko: "연구 및 제조 작업 ISK 소모량 감소"
-        ru: "уменьшает стоимость (ISK) производственных и научных проектов"
-        zh: "生产和科研项目的星币需求降低"
-      importance: 3
-      unitID: 105
-    - bonus: 25
-      bonusText:
-        de: "Reduzierter Treibstoffverbrauch von Industriedienstmodulen"
-        en: "reduction in Engineering Service Module fuel consumption"
-        es: "de reducción del consumo de combustible de los módulos de servicio de\
-          \ ingeniería."
-        fr: "de réduction de la consommation en carburant des modules de service d'ingé\
-          nierie"
-        ja: "電気工学サービスモジュールの燃料消費が減少"
-        ko: "엔지니어링 서비스 모듈 연료 사용량 감소"
-        ru: "уменьшает потребление топлива служебными инженерными модулями"
-        zh: "工程服务装备的燃料消耗降低"
-      importance: 4
-      unitID: 105
-    - bonus: 30
-      bonusText:
-        de: "Reduzierte Zeitanforderungen für Fertigungs- und Forschungsaufträge"
-        en: "reduction in time requirements for manufacturing and science jobs"
-        es: "de reducción de los requisitos para los trabajos de fabricación y ciencia."
-        fr: "de réduction de productivité horaire pour les tâches de production et\
-          \ scientifiques"
-        ja: "製造ジョブとサイエンスジョブの必要時間が減少"
-        ko: "연구 및 제조 작업 시간효율성 증가"
-        ru: "уменьшает время, необходимое для производственных и научных проектов"
-        zh: "生产和科研项目的时间需求降低"
-      importance: 2
-      unitID: 105
-    - bonus: 30
-      bonusText:
-        de: "Bonus auf die Feuerrate und den Energiespeicherverbrauch von Standup-Pulsprojektoren\
-          \ und Lenkbombenwerfern"
-        en: "bonus to the rate of fire and capacitor consumption of Standup Burst\
-          \ Projectors and Guided Bomb Launchers"
-        es: "de bonificación a la cadencia de tiro y al consumo del condensador de\
-          \ los proyectores de estallido Standup y los lanzabombas guiados."
-        fr: "de bonus à la cadence de tir et à la consommation du capaciteur des projecteurs\
-          \ à salves et des lanceurs de bombes ciblées Standup"
-        ja: "スタンドアップバーストプロジェクターと誘導ボムランチャーの発射間隔とキャパシタ消費効率を改善"
-        ko: "스탠드업 버스트 프로젝터 및 유도폭탄 런처 연사속도 및 캐패시터 사용량 감소"
-        ru: "бонус к скорострельности и энергопотреблению проекторов объёмных поме\
-          х и бомбометателей с системой наведения на базе «Стационар»"
-        zh: "屹立脉冲波投射器和制导炸弹发射器的射速和电容消耗加成"
-      importance: 5
-      unitID: 105
-    types: {}
   volume: 800000
 "46491":
   description:
@@ -5001,13 +4139,13 @@
       \ beider Tech-Varianten, kann in eine Struktur eingebaut sein."
     en: "The Standup M-Set Hybrid Reactor Material Efficiency II rig provides a means\
       \ for structure operators to decrease material requirements for Tech 3 hybrid\
-      \ reactions in their Upwell Refinery structures.\r\n\r\nStandup is a proprietary\
+      \ reactions in their Upwell Refinery structures.\n\nStandup is a proprietary\
       \ system that uses a Structure Autonomous Nanoassembly Device (Upwell) containing\
       \ integrated template software, a nanoassembler array and sufficient nanomass\
       \ to enable the construction of a variety of service modules, structure modules\
       \ and structure rigs when inserted into the appropriate slots on a structure\
-      \ built with Upwell technology.\r\n\r\nNote: Only one rig of the same type,\
-      \ counting both tech variations, may be fitted at the same time on a structure."
+      \ built with Upwell technology.\n\nNote: Only one rig of the same type, counting\
+      \ both tech variations, may be fitted at the same time on a structure."
     es: "El complemento Standup mediano de eficiencia de materiales del reactor hí\
       brido\_II permite a los administradores de estructuras reducir los materiales\
       \ requeridos para las reacciones híbridas\_T3 en sus estructuras de refinerí\
@@ -5104,14 +4242,14 @@
       \ eine Struktur eingebaut sein."
     en: "The Standup M-Set Basic Large Ship Manufacturing Time Efficiency I rig provides\
       \ a means for structure operators to decrease time requirements for manufacturing\
-      \ battleships, freighters and industrial command ships in their Upwell structures.\r\
-      \n\r\nStandup is a proprietary system that uses a Structure Autonomous Nanoassembly\
+      \ battleships, freighters and industrial command ships in their Upwell structures.\n\
+      \nStandup is a proprietary system that uses a Structure Autonomous Nanoassembly\
       \ Device (Upwell) containing integrated template software, a nanoassembler array\
       \ and sufficient nanomass to enable the construction of a variety of service\
       \ modules, structure modules and structure rigs when inserted into the appropriate\
-      \ slots on a structure built with Upwell technology.\r\n\r\nNote: Only one rig\
-      \ of the same type, counting both tech variations, may be fitted at the same\
-      \ time on a structure."
+      \ slots on a structure built with Upwell technology.\n\nNote: Only one rig of\
+      \ the same type, counting both tech variations, may be fitted at the same time\
+      \ on a structure."
     es: "El complemento Standup mediano de eficiencia temporal en la fabricación de\
       \ naves grandes con tecnología básica\_I permite a los administradores de estructuras\
       \ reducir el tiempo requerido para la fabricación de acorazados, cargueros y\
@@ -5233,7 +4371,7 @@
       \ sah sie als persönliche Herausforderung."
     en: "When The Scope ran a headline in late YC115 asking \"<i>Has Kaalakiota built\
       \ the perfect Interceptor?</i>\" most observers viewed it as a provocative ploy\
-      \ to increase readership. \r\n\r\nThe Rabbit viewed it as a personal challenge."
+      \ to increase readership. \n\nThe Rabbit viewed it as a personal challenge."
     es: "Cuando a finales de 115\_CY The Scope publicó el titular «<i>¿Ha construido\
       \ Kaalakiota el interceptor perfecto?</i>», muchos observadores se lo tomaron\
       \ como una artimaña para ganar lectores. \n\n\n\nSin embargo, «El Conejo» se\
@@ -5258,53 +4396,6 @@
   groupID: 831
   marketGroupID: 1932
   mass: 1000000
-  masteries:
-    "0":
-    - 96
-    - 99
-    - 164
-    - 150
-    - 75
-    - 139
-    - 85
-    - 94
-    "1":
-    - 96
-    - 99
-    - 164
-    - 150
-    - 75
-    - 139
-    - 85
-    - 94
-    "2":
-    - 96
-    - 99
-    - 164
-    - 150
-    - 75
-    - 139
-    - 85
-    - 94
-    "3":
-    - 96
-    - 99
-    - 164
-    - 150
-    - 75
-    - 139
-    - 85
-    - 94
-    "4":
-    - 96
-    - 99
-    - 164
-    - 150
-    - 75
-    - 139
-    - 85
-    - 118
-    - 94
   metaGroupID: 2
   name:
     de: "Whiptail"
@@ -5319,152 +4410,7 @@
   published: true
   raceID: 1
   radius: 33
-  sofFactionName: "tournament-xii"
   soundID: 20070
-  traits:
-    miscBonuses: []
-    roleBonuses:
-    - bonus: 60
-      bonusText:
-        de: "Bonus auf die Warpgeschwindigkeit und Warpbeschleunigung"
-        en: "bonus to warp speed and warp acceleration"
-        es: "de bonificación a la velocidad y la aceleración de warp."
-        fr: "de bonus à la vitesse de warp et à l'accélération de warp"
-        ja: "ワープ速度とワープ加速度が上昇"
-        ko: "워프 속도 및 워프 가속도 증가"
-        ru: "бонус к\_разгону и\_скорости хода (в\_варп-режиме)"
-        zh: "跃迁速度和跃迁加速加成"
-      importance: 5
-      unitID: 105
-    - bonus: 80
-      bonusText:
-        de: "Reduktion der Aktivierungskosten von <a href=showinfo:3435>Antriebsblockern</a>"
-        en: "reduction in <a href=showinfo:3435>Propulsion Jamming</a> systems activation\
-          \ cost"
-        es: "de reducción en el coste de activación de los sistemas <a href=showinfo:3435>perturbadores\
-          \ de propulsión</a>."
-        fr: "réduction du coût d'activation des systèmes de <a href=showinfo:3435>brouillage\
-          \ de propulsion</a>"
-        ja: "<a href=showinfo:3435>推進力ジャミング</a>システムの起動コストが軽減"
-        ko: "<a href=showinfo:3435>추진기 재밍</a> 시스템 활성화 비용 감소"
-        ru: "сокращается потребление энергии <a href=showinfo:3435>средствами огра\
-          ничения подвижности кораблей</a>"
-        zh: "<a href=showinfo:3435>推进抑制</a>系统启动消耗加成"
-      importance: 2
-      unitID: 105
-    - bonus: 80
-      bonusText:
-        de: "Reduktion in der Reaktivierungsverzögerung des <a href=showinfo:58919>Anti-Unterbrechers</a>\
-          \ und max. Erfassungsreichweitenabzug"
-        en: "reduction in <a href=showinfo:58919>Interdiction Nullifier</a> reactivation\
-          \ delay and max lock range penalty"
-        es: "de reducción de la demora de reactivación y de penalización al alcance\
-          \ de fijación máximo del <a href=showinfo:58919>anulador de interdicció\
-          n</a>."
-        fr: "de réduction au délai de réactivation de la <a href=showinfo:58919>contremesure\
-          \ d’interdiction</a> et à la pénalité de portée de verrouillage maximale"
-        ja: "<a href=showinfo:58919>インターディクション無効化</a>の再起動遅延と最大ロック射程のペナルティ減少"
-        ko: "<a href=showinfo:58919>인터딕션 무효화 장치</a> 재활성화 대기시간 및 최대 타겟팅 거리 페널티 감소"
-        ru: "уменьшение задержки повторного включения <a href=showinfo:58919>нейтр\
-          ализатора варп-заграждений</a> и штрафа к максимальной дальности захвата\
-          \ цели"
-        zh: "<a href=showinfo:58919>拦截失效装置</a>重启延迟和最大锁定距离惩罚降低"
-      importance: 3
-      unitID: 105
-    - bonus: 100
-      bonusText:
-        de: "Bonus auf die Dauer des <a href=showinfo:58919>Anti-Unterbrechers</a>"
-        en: "bonus to <a href=showinfo:58919>Interdiction Nullifier</a> duration"
-        es: "de bonificación a la duración del <a href=showinfo:58919>anulador de\
-          \ interdicción</a>."
-        fr: "de bonus à la durée de la <a href=showinfo:58919>contremesure d’interdiction</a>"
-        ja: "<a href=showinfo:58919>インターディクション無効化</a>の持続時間にボーナス"
-        ko: "<a href=showinfo:58919>인터딕션 무효화 장치</a> 지속시간 보너스"
-        ru: "бонус к длительности действия <a href=showinfo:58919>нейтрализатора в\
-          арп-заграждений</a>"
-        zh: "<a href=showinfo:58919>拦截失效装置</a>持续时间加成"
-      importance: 4
-      unitID: 105
-    - bonus: 375
-      bonusText:
-        de: "Bonus auf die HP und den Schaden von <a href=showinfo:24241>Leichten\
-          \ Kampfdrohnen</a>"
-        en: "bonus to <a href=showinfo:24241>Light Combat Drone</a> damage and hitpoints"
-        es: "de bonificación al daño y los puntos de vida de los <a href=showinfo:24241>drones\
-          \ de combate ligeros</a>."
-        fr: "bonus aux dégâts et aux points de vie du <a href=showinfo:24241>drone\
-          \ de combat léger</a>"
-        ja: "<a href=showinfo:24241>戦闘用ライトドローン</a>のダメージとヒットポイントが増加"
-        ko: "<a href=showinfo:24241>라이트 공격 드론</a> 피해량 및 내구도 증가"
-        ru: "увеличивается урон бортового оружия <a href=showinfo:24241>лёгких бое\
-          вых дронов</a>; увеличивается запас их прочности"
-        zh: "<a href=showinfo:24241>轻型战斗无人机</a>伤害和HP加成"
-      importance: 1
-      unitID: 105
-    types:
-      "3328":
-      - bonus: 10
-        bonusText:
-          de: "Bonus auf den Kinetik- und Thermalschaden von Lenkwaffen"
-          en: "bonus to kinetic and thermal missile damage"
-          es: "de bonificación al daño cinético y térmico de los misiles."
-          fr: "bonus aux dégâts des missiles de type cinétique et thermique"
-          ja: "ミサイルのキネティックダメージおよびサーマルダメージが増加"
-          ko: "미사일 키네틱 및 열 피해 증가"
-          ru: "увеличивается урон кинетических и термических БЧ ракет"
-          zh: "动能和热能导弹伤害加成"
-        importance: 1
-        unitID: 105
-      "3330":
-      - bonus: 4
-        bonusText:
-          de: "Bonus auf alle Schildresistenzen"
-          en: "bonus to all shield resistances"
-          es: "de bonificación a todas las resistencias de escudo."
-          fr: "bonus à toutes les résistances de bouclier"
-          ja: "全てのシールドレジスタンスが増加"
-          ko: "모든 실드 저항력 증가"
-          ru: "повышается сопротивляемость щитов корабля всем видам воздействия"
-          zh: "护盾抗性加成"
-        importance: 1
-        unitID: 105
-      "12092":
-      - bonus: 5
-        bonusText:
-          de: "Bonus auf die optimale Reichweite von <a href=showinfo:447>Warpunterbrechern</a>\
-            \ und <a href=showinfo:3242>Warpstörern</a>"
-          en: "bonus to <a href=showinfo:447>Warp Scrambler</a> and <a href=showinfo:3242>Warp\
-            \ Disruptor</a> optimal range"
-          es: "de bonificación al alcance óptimo del <a href=showinfo:447>distorsionador\
-            \ de warp</a> y el <a href=showinfo:3242>disruptor de warp</a>."
-          fr: "bonus à la portée optimale de <a href=showinfo:447>l'inhibiteur de\
-            \ warp</a>, et du <a href=showinfo:3242>perturbateur de warp</a>"
-          ja: "<a href=showinfo:447>ワープスクランブラー</a>と<a href=showinfo:3242>ワープ妨害器</a>の\
-            最適射程距離が拡大"
-          ko: "<a href=showinfo:447>워프 스크램블러</a> 및 <a href=showinfo:3242>워프 디스럽터</a>\
-            \ 최적사거리 증가"
-          ru: "увеличивается оптимальная дальность действия <a href=showinfo:447>в\
-            арп-глушителей</a> и <a href=showinfo:3242>варп-подавителей</a>"
-          zh: "<a href=showinfo:447>跃迁扰频器</a>和<a href=showinfo:3242>跃迁扰断器</a>有效距离加\
-            成"
-        importance: 2
-        unitID: 105
-      - bonus: 15
-        bonusText:
-          de: "Reduktion des <a href=showinfo:3454>Mikrowarpantrieb</a>-Signaturradius"
-          en: "reduction in <a href=showinfo:3454>Microwarpdrive</a> signature radius\
-            \ penalty"
-          es: "de reducción de la penalización de radio de la señal del <a href=showinfo:3454>motor\
-            \ de microwarp</a>."
-          fr: "réduction de la pénalité du rayon de signature du <a href=showinfo:3454>propulseur\
-            \ de microwarp</a>"
-          ja: "<a href=showinfo:3454>マイクロワープドライブ</a>のシグネチャ半径ペナルティが軽減"
-          ko: "<a href=showinfo:3454>마이크로 워프 드라이브</a> 시그니처 반경 페널티 감소"
-          ru: "уменьшается влияние <a href=showinfo:3454>микроварп-ускорителей</a>\
-            \ на размер сигнатуры корабля"
-          zh: "<a href=showinfo:3454>微型跃迁推进器</a>的信号半径惩罚加成"
-        importance: 1
-        unitID: 105
   volume: 18000
 "33674":
   basePrice: 287500
@@ -5482,7 +4428,6 @@
     zh: "长尾蜥级蓝图"
   portionSize: 1
   published: true
-  sofFactionName: "tournament-xii"
   volume: 0.01
 "48109":
   basePrice: 400000
@@ -5570,53 +4515,6 @@
   groupID: 27
   marketGroupID: 1379
   mass: 97100000
-  masteries:
-    "0":
-    - 96
-    - 99
-    - 69
-    - 138
-    - 140
-    - 150
-    - 89
-    - 133
-    "1":
-    - 96
-    - 99
-    - 69
-    - 138
-    - 140
-    - 150
-    - 89
-    - 133
-    "2":
-    - 96
-    - 99
-    - 69
-    - 138
-    - 140
-    - 150
-    - 89
-    - 133
-    "3":
-    - 96
-    - 99
-    - 69
-    - 138
-    - 140
-    - 150
-    - 89
-    - 133
-    "4":
-    - 96
-    - 99
-    - 69
-    - 138
-    - 140
-    - 117
-    - 150
-    - 89
-    - 133
   metaGroupID: 4
   name:
     de: "Dominix Navy Issue"
@@ -5631,97 +4529,7 @@
   published: true
   raceID: 8
   radius: 250
-  sofFactionName: "gallentenavy"
   soundID: 20072
-  traits:
-    miscBonuses: []
-    roleBonuses:
-    - bonus: 5
-      bonusText:
-        de: "zusätzlicher Bonus auf HP der <a href=showinfo:3394>Verstärkten Schottwand</a>"
-        en: "additional bonus to <a href=showinfo:3394>Reinforced Bulkhead</a> hitpoints"
-        es: "de bonificación adicional a los puntos de vida del <a href=showinfo:3394>mamparo\
-          \ reforzado</a>."
-        fr: "de bonus supplémentaire aux points de vie de la <a href=showinfo:3394>cloison\
-          \ renforcée</a>"
-        ja: "<a href=showinfo:3394>強化隔壁</a>HPがさらに増加"
-        ko: "<a href=showinfo:3394>강화 격벽</a> 내구도 증가"
-        ru: "дополнительный бонус к\_прочности <a href=showinfo:3394>укреплённой п\
-          ереборки</a>"
-        zh: "<a href=showinfo:3394>强化舱隔壁</a>结构值加成"
-      importance: 3
-      unitID: 105
-    - bonus: 50
-      bonusText:
-        de: "Bonus auf die HP der <a href=showinfo:3394>Panzerplatte</a>"
-        en: "bonus to <a href=showinfo:3394>Armor Plate</a> hitpoints"
-        es: "de bonificación a los puntos de vida de las <a href=showinfo:3394>placas\
-          \ de blindaje</a>."
-        fr: "de bonus aux points de vie du <a href=showinfo:3394>revêtement de blindage</a>"
-        ja: "<a href=showinfo:3394>アーマープレート</a>HPが増加"
-        ko: "<a href=showinfo:3394>장갑 플레이트</a> 내구도 증가"
-        ru: "бонус к\_прочности <a href=showinfo:3394>бронеплиты</a>"
-        zh: "<a href=showinfo:3394>装甲附甲板</a>装甲值加成"
-      importance: 2
-      unitID: 105
-    - bonus: 100
-      bonusText:
-        de: "Bonus auf die HP der <a href=showinfo:3425>Schilderweiterung</a>"
-        en: "bonus to <a href=showinfo:3425>Shield Extender</a> hitpoints"
-        es: "de bonificación a los puntos de vida del <a href=showinfo:3425>extensor\
-          \ de escudo</a>."
-        fr: "de bonus aux points de vie de l'<a href=showinfo:3425>extenseur de bouclier</a>"
-        ja: "<a href=showinfo:3425>シールドエクステンダー</a>HPが増加"
-        ko: "<a href=showinfo:3425>실드 확장장치</a> 실드량 증가"
-        ru: "бонус к\_прочности <a href=showinfo:3425>расширителя щитов</a>"
-        zh: "<a href=showinfo:3425>护盾扩展装置</a>护盾值加成"
-      importance: 1
-      unitID: 105
-    types:
-      "3336":
-      - bonus: 7.5
-        bonusText:
-          de: "Bonus auf den Schaden von <a href=showinfo:3307>großen Hybridgeschü\
-            tztürmen</a>"
-          en: "bonus to <a href=showinfo:3307>Large Hybrid Turret</a> damage"
-          es: "de bonificación al daño de la <a href=showinfo:3307>torreta híbrida\
-            \ grande</a>."
-          fr: "de bonus aux dégâts des <a href=showinfo:3307>grandes tourelles hybrides</a>"
-          ja: "<a href=showinfo:3307>大型ハイブリッドタレット</a>のダメージが増加"
-          ko: "<a href=showinfo:3307>대형 하이브리드 터렛</a> 피해량 증가"
-          ru: "увеличивается урон боеприпасов <a href=showinfo:3307>больших гибрид\
-            ных орудий</a>"
-          zh: "<a href=\"showinfo:3307\">大型混合炮台</a>伤害加成"
-        importance: 2
-        unitID: 105
-      - bonus: 7.5
-        bonusText:
-          de: "Bonus auf die Reparaturmenge von <a href=showinfo:3393>Panzerungsreparatursystemen</a>"
-          en: "bonus to <a href=showinfo:3393>Armor Repairer</a> amount"
-          es: "de bonificación a la eficiencia de los <a href=showinfo:3393>reparadores\
-            \ de blindaje</a>."
-          fr: "de bonus à la capacité réparatrice du <a href=showinfo:3393>réparateur\
-            \ de blindage</a>"
-          ja: "<a href=showinfo:3393>アーマーリペアラ</a>の回復量増加"
-          ko: "<a href=showinfo:3393>장갑수리 장치</a> 수리량 증가"
-          ru: "бонус к\_эффективности <a href=showinfo:3393>установки ремонта брон\
-            и</a>"
-          zh: "<a href=showinfo:3393>装甲维修器</a>维修量加成"
-        importance: 3
-        unitID: 105
-      - bonus: 10
-        bonusText:
-          de: "Bonus auf HP, Schaden und Nachführung von <a href=showinfo:3436>Drohnen</a>"
-          en: "bonus to <a href=showinfo:3436>Drone</a> hitpoints, damage and tracking"
-          es: "de bonificación al rastreo, el daño y los puntos de vida del <a href=showinfo:3436>dron</a>."
-          fr: "de bonus aux points de vie, aux dégâts et à la poursuite des <a href=showinfo:3436>drones</a>"
-          ja: "<a href=showinfo:3436>ドローン</a>のHP、ダメージ、追跡が増加"
-          ko: "<a href=showinfo:3436>드론</a> 내구도, 피해량, 트래킹 속도 증가"
-          ru: "бонус к запасу прочности, урону и скорости наведения <a href=showinfo:3436>д\
-            ронов</a>"
-          zh: "<a href=showinfo:3436>无人机</a>HP、伤害和跟踪速度加成"
-        importance: 1
-        unitID: 105
   variationParentTypeID: 645
   volume: 454500
 "32308":
@@ -5740,7 +4548,6 @@
     zh: "多米尼克斯级海军型蓝图"
   portionSize: 1
   published: true
-  sofFactionName: "gallentenavy"
   volume: 0.01
 "57479":
   basePrice: 500000
@@ -5757,13 +4564,13 @@
       \ reduzieren und, wenn möglich, wiederzuverwerten."
     en: "Core Temperature Regulators are standardized, supplementary systems used\
       \ to regulate, mitigate and recycle surplus heat energy developed by naval ship\
-      \ reactor cores.\r\n\r\nRefits to empire navy fleets in response to the Triglavian\
+      \ reactor cores.\n\nRefits to empire navy fleets in response to the Triglavian\
       \ Invasions often increased the overall power requirements of vessels, by upgrading\
       \ or adding defensive and offensive systems, while not replacing reactor cores\
-      \ or carrying out major upgrades on these complex and valuable components.\r\
-      \n\r\nAdditional power requirements have entailed running older reactor core\
-      \ designs \"hot\" and core temperature regulators are used to monitor, mitigate\
-      \ and, where practical, recycle surplus heat energy."
+      \ or carrying out major upgrades on these complex and valuable components.\n\
+      \nAdditional power requirements have entailed running older reactor core designs\
+      \ \"hot\" and core temperature regulators are used to monitor, mitigate and,\
+      \ where practical, recycle surplus heat energy."
     es: "Los reguladores de temperatura nucleares son sistemas suplementarios estandarizados\
       \ que se usan para regular, mitigar y reciclar la energía térmica excedente\
       \ generada por los núcleos de reactor de naves.\n\nCon frecuencia, reequipar\
@@ -5897,10 +4704,10 @@
       \ damage control in key space vessel zones where crew and other personnel aboard\
       \ ship are operating. While most ships have a variety of internal forcefields,\
       \ bulkhead dividers, air-locks and similar systems built into the basic design,\
-      \ breaches of all kinds can occur in the heat of space combat.\r\n\r\nTo address\
+      \ breaches of all kinds can occur in the heat of space combat.\n\nTo address\
       \ small but potentially dangerous breaches, temporary force-fields, smart materials\
       \ and nanotechnology have often been used but can be energy intensive or use\
-      \ otherwise valuable resources such as nanite paste.\r\n\r\nThe new auto-integrity\
+      \ otherwise valuable resources such as nanite paste.\n\nThe new auto-integrity\
       \ technology takes a leaf out of the Triglavian Collective's book and uses mutaplasmid\
       \ technology as the inspiration for cheaper, standard components that release\
       \ biotech nanobes tailored to seek and repair microfractures and other defects\
