@@ -45,6 +45,9 @@ public class SdeLoader {
 	@Inject
 	protected Provider<TypeBonusSdeTransformer> typeBonusSdeTransformerProvider;
 
+	@Inject
+	protected Provider<MasteriesSdeTransformer> masteriesSdeTransformerProvider;
+
 	@Setter
 	@NonNull
 	private StoreHandler storeHandler;
@@ -80,6 +83,10 @@ public class SdeLoader {
 								case "typeBonus":
 									transformer =
 											TransformUtil.concat(transformer, typeBonusSdeTransformerProvider.get());
+									break;
+								case "masteries":
+									transformer =
+											TransformUtil.concat(transformer, masteriesSdeTransformerProvider.get());
 									break;
 							}
 							storeLoader.setTransformer(TransformUtil.concat(fieldRenamer, transformer));

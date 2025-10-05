@@ -202,6 +202,19 @@ typeBonus:
       - 45623
       - 45624
 
+masteries:
+  outputStore: types
+  dedicatedOutput: false
+  sde:
+    file: masteries.yaml
+  test:
+    filePrefix: type
+    ids:
+      - 645
+      - 22430
+      - 32307
+      - 33673
+
 typeDogma:
   outputStore: types
   dedicatedOutput: false
