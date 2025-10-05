@@ -26,6 +26,8 @@ Some example paths:
 * <https://ref-data.everef.net/dogma_effects/11>
 * <https://ref-data.everef.net/groups>
 * <https://ref-data.everef.net/groups/18>
+* <https://ref-data.everef.net/icons>
+* <https://ref-data.everef.net/icons/67>
 * <https://ref-data.everef.net/market_groups>
 * <https://ref-data.everef.net/market_groups/1857>
 * <https://ref-data.everef.net/meta_groups>
@@ -89,7 +91,7 @@ This table show the available data and where to get it.
 | Factions                      |                     | `fsd/factions.yaml`                  | `universe/factions.yaml`       |                                     |
 | Graphic material sets         |                     |                                      |                                | `graphicmaterialsets.json`          |
 | Graphics                      |                     | `fsd/graphicIDs.yaml`                | `universe/graphics.yaml`       |                                     |
-| Icons                         |                     | `fsd/iconIDs.yaml`                   |                                |                                     |
+| Icons                         | `/icons`            | `fsd/iconIDs.yaml`                   |                                |                                     |
 | Industry activities           |                     |                                      |                                | `industryactivities.json`           |
 | Industry assembly lines       |                     |                                      |                                | `industryassemblylines.json`        |
 | Industry installation types   |                     |                                      |                                | `industryinstallationtypes.json`    |
