@@ -77,7 +77,7 @@ public class ArchivePathFactory {
 			.suffix("-TRANQUILITY.zip")
 			.build();
 
-	public static final ArchivePathFactory STATIC_DATA_JSONL = ArchivePathFactory.builder()
+	public static final ArchivePathFactory SDE_V2_JSONL = ArchivePathFactory.builder()
 			.folder("ccp/sde")
 			.historyFolder(false)
 			.yearFolder(true)
@@ -87,7 +87,7 @@ public class ArchivePathFactory {
 			.suffix("-jsonl.zip")
 			.build();
 
-	public static final ArchivePathFactory STATIC_DATA_YAML = ArchivePathFactory.builder()
+	public static final ArchivePathFactory SDE_V2_YAML = ArchivePathFactory.builder()
 			.folder("ccp/sde")
 			.historyFolder(false)
 			.yearFolder(true)

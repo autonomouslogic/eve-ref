@@ -76,8 +76,8 @@ public class SyncStaticData implements Command {
 	@Override
 	public void run() {
 		var latest = loadLatestFiles();
-		syncFile(latest, ArchivePathFactory.STATIC_DATA_JSONL, "jsonl");
-		syncFile(latest, ArchivePathFactory.STATIC_DATA_YAML, "yaml");
+		syncFile(latest, ArchivePathFactory.SDE_V2_JSONL, "jsonl");
+		syncFile(latest, ArchivePathFactory.SDE_V2_YAML, "yaml");
 		syncSchema();
 	}
 
@@ -155,7 +155,7 @@ public class SyncStaticData implements Command {
 			throw new RuntimeException("Failed to download " + schemaUrl + ": " + response.code());
 		}
 		var name = FilenameUtils.getName(schemaUrl.getPath());
-		var folder = ArchivePathFactory.STATIC_DATA_JSONL.getFolder();
+		var folder = ArchivePathFactory.SDE_V2_JSONL.getFolder();
 		var s3Url = dataPath.resolve(folder + "/" + name);
 		var latestPut = s3Util.putPublicObjectRequest(file.length(), s3Url, latestCacheTime);
 		s3Adapter.putObject(latestPut, file, s3Client).blockingGet();

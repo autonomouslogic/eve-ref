@@ -4,6 +4,7 @@ import static com.autonomouslogic.everef.util.ArchivePathFactory.ESI;
 import static com.autonomouslogic.everef.util.ArchivePathFactory.HOBOLEAKS;
 import static com.autonomouslogic.everef.util.ArchivePathFactory.MARKET_ORDERS;
 import static com.autonomouslogic.everef.util.ArchivePathFactory.PUBLIC_CONTRACTS;
+import static com.autonomouslogic.everef.util.ArchivePathFactory.SDE_V2_YAML;
 import static com.autonomouslogic.everef.util.ArchivePathFactory.STRUCTURES;
 
 import com.autonomouslogic.commons.ResourceUtil;
@@ -50,23 +51,8 @@ public class DataUtil {
 		dataBaseUrl = Configs.DATA_BASE_URL.getRequired();
 	}
 
-	public Single<File> downloadLatestSde() {
-		return Flowable.fromIterable(
-						dataCrawlerProvider.get().setPrefix("/ccp/sde").crawl())
-				.filter(url -> url.toString().endsWith("-TRANQUILITY.zip"))
-				.sorted()
-				.lastElement()
-				.switchIfEmpty(Single.error(new RuntimeException("No SDE found")))
-				.flatMap(url -> {
-					log.info("Using SDE at: {}", url);
-					var file = tempFiles.tempFile("sde", ".zip").toFile();
-					try (var response = okHttpWrapper.download(url.toString(), file)) {
-						if (response.code() != 200) {
-							return Single.error(new RuntimeException("Failed downloading ESI: " + response.code()));
-						}
-						return Single.just(file);
-					}
-				});
+	public File downloadLatestSde() {
+		return download(SDE_V2_YAML, "sde", ".zip").blockingGet();
 	}
 
 	public File downloadLatestEsi() {
