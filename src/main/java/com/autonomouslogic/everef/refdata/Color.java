@@ -1,6 +1,5 @@
 package com.autonomouslogic.everef.refdata;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -13,13 +12,8 @@ import lombok.extern.jackson.Jacksonized;
 @Jacksonized
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @Schema
-public class Icon {
-	@JsonProperty
-	Long iconId;
-
-	@JsonProperty
-	String iconFile;
-
-	@JsonProperty
-	boolean obsolete;
+public class Color {
+	double r;
+	double g;
+	double b;
 }

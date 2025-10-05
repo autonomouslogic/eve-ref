@@ -13,6 +13,13 @@
  */
 
 import { exists, mapValues } from '../runtime';
+import type { Color } from './Color';
+import {
+    ColorFromJSON,
+    ColorFromJSONTyped,
+    ColorToJSON,
+} from './Color';
+
 /**
  * A meta group
  * @export
@@ -21,10 +28,10 @@ import { exists, mapValues } from '../runtime';
 export interface MetaGroup {
     /**
      * 
-     * @type {Array<number>}
+     * @type {Color}
      * @memberof MetaGroup
      */
-    color?: Array<number>;
+    color?: Color;
     /**
      * 
      * @type {{ [key: string]: string; }}
@@ -82,7 +89,7 @@ export function MetaGroupFromJSONTyped(json: any, ignoreDiscriminator: boolean):
     }
     return {
         
-        'color': !exists(json, 'color') ? undefined : json['color'],
+        'color': !exists(json, 'color') ? undefined : ColorFromJSON(json['color']),
         'description': !exists(json, 'description') ? undefined : json['description'],
         'iconId': !exists(json, 'icon_id') ? undefined : json['icon_id'],
         'iconSuffix': !exists(json, 'icon_suffix') ? undefined : json['icon_suffix'],
@@ -101,7 +108,7 @@ export function MetaGroupToJSON(value?: MetaGroup | null): any {
     }
     return {
         
-        'color': value.color,
+        'color': ColorToJSON(value.color),
         'description': value.description,
         'icon_id': value.iconId,
         'icon_suffix': value.iconSuffix,

@@ -5,6 +5,7 @@ models/Blueprint.ts
 models/BlueprintActivity.ts
 models/BlueprintMaterial.ts
 models/Bundle.ts
+models/Color.ts
 models/Coordinate.ts
 models/DogmaAttribute.ts
 models/DogmaEffect.ts

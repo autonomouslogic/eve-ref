@@ -737,6 +737,18 @@ components:
           additionalProperties:
             $ref: "#/components/schemas/Unit"
           description: A map of units. The key is the unit ID.
+    Color:
+      type: object
+      properties:
+        b:
+          type: number
+          format: double
+        g:
+          type: number
+          format: double
+        r:
+          type: number
+          format: double
     Coordinate:
       type: object
       properties:
@@ -904,8 +916,6 @@ components:
       type: object
       description: A map of icons. The key is the icon ID.
       properties:
-        description:
-          type: string
         icon_file:
           type: string
         icon_id:
@@ -1364,10 +1374,7 @@ components:
       description: A meta group
       properties:
         color:
-          type: array
-          items:
-            type: number
-            format: double
+          $ref: "#/components/schemas/Color"
         description:
           type: object
           additionalProperties:
@@ -1490,8 +1497,6 @@ components:
     Region:
       type: object
       properties:
-        center:
-          $ref: "#/components/schemas/Coordinate"
         description:
           type: object
           additionalProperties:
@@ -1504,10 +1509,6 @@ components:
         faction_id:
           type: integer
           format: int64
-        max:
-          $ref: "#/components/schemas/Coordinate"
-        min:
-          $ref: "#/components/schemas/Coordinate"
         name:
           type: object
           additionalProperties:
@@ -1520,6 +1521,8 @@ components:
         nebula_id:
           type: integer
           format: int64
+        position:
+          $ref: "#/components/schemas/Coordinate"
         region_id:
           type: integer
           format: int64
