@@ -34,9 +34,6 @@ public class SdeLoader {
 	protected Provider<SimpleStoreLoader> simpleLoaderProvider;
 
 	@Inject
-	protected Provider<SdeTypeTransformer> sdeTypeTransformerProvider;
-
-	@Inject
 	protected Provider<BlueprintTransformer> blueprintTransformerProvider;
 
 	@Inject
@@ -44,6 +41,9 @@ public class SdeLoader {
 
 	@Inject
 	protected Provider<SchematicTransformer> schematicTransformerProvider;
+
+	@Inject
+	protected Provider<TypeBonusSdeTransformer> typeBonusSdeTransformerProvider;
 
 	@Setter
 	@NonNull
@@ -67,9 +67,6 @@ public class SdeLoader {
 									.setIdFieldName(config.getIdField())
 									.setOutput(storeHandler.getSdeStore(config.getId()));
 							switch (config.getId()) {
-								case "types":
-									transformer = TransformUtil.concat(transformer, sdeTypeTransformerProvider.get());
-									break;
 								case "blueprints":
 									transformer = TransformUtil.concat(transformer, blueprintTransformerProvider.get());
 									break;
@@ -79,6 +76,10 @@ public class SdeLoader {
 									break;
 								case "schematics":
 									transformer = TransformUtil.concat(transformer, schematicTransformerProvider.get());
+									break;
+								case "typeBonus":
+									transformer =
+											TransformUtil.concat(transformer, typeBonusSdeTransformerProvider.get());
 									break;
 							}
 							storeLoader.setTransformer(TransformUtil.concat(fieldRenamer, transformer));

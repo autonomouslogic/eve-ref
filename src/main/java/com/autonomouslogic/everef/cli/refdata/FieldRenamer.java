@@ -27,8 +27,7 @@ public class FieldRenamer implements SimpleTransformer {
 	public String fieldRenameFromSde(String field) {
 		if (field.endsWith("ID")) {
 			field = field.substring(0, field.length() - 2) + "Id";
-		}
-		else if (field.endsWith("IDs")) {
+		} else if (field.endsWith("IDs")) {
 			field = field.substring(0, field.length() - 3) + "Ids";
 		}
 		return CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, field);

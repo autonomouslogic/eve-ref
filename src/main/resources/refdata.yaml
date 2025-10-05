@@ -189,10 +189,6 @@ typeBonus:
   dedicatedOutput: false
   sde:
     file: typeBonus.yaml
-#    renames:
-#      materials: type_materials
-#    arrayToObjects:
-#      type_materials: material_type_id
   test:
     filePrefix: type
     ids:
