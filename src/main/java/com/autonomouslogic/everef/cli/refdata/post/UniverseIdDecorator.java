@@ -1,8 +1,6 @@
 package com.autonomouslogic.everef.cli.refdata.post;
 
-import com.autonomouslogic.everef.cli.refdata.StoreDataHelper;
 import com.autonomouslogic.everef.ids.IdRanges;
-import com.autonomouslogic.everef.refdata.DogmaAttribute;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -20,9 +18,6 @@ public class UniverseIdDecorator extends PostDecorator {
 	protected ObjectMapper objectMapper;
 
 	private Map<Long, JsonNode> regions;
-	private StoreDataHelper helper;
-	private DogmaAttribute oreBasicType;
-	private DogmaAttribute asteroidMetaLevel;
 
 	@Inject
 	protected UniverseIdDecorator() {}
@@ -30,7 +25,6 @@ public class UniverseIdDecorator extends PostDecorator {
 	public Completable create() {
 		return Completable.fromAction(() -> {
 			log.info("Populating universe IDs on regions");
-			helper = new StoreDataHelper(storeHandler, objectMapper);
 			regions = storeHandler.getRefStore("regions");
 			for (var entry : regions.entrySet()) {
 				long id = entry.getKey();
