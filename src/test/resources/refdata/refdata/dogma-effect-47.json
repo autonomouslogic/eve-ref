@@ -12,7 +12,7 @@
   "range_attribute_id" : 126,
   "range_chance" : false,
   "effect_category" : 2,
-  "effectName" : "cargoScan",
+  "effect_name" : "cargoScan",
   "effect_id" : 47,
   "description" : {
     "en" : ""

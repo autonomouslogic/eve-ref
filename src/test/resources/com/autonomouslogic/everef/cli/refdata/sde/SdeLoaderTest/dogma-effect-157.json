@@ -18,6 +18,6 @@
     "skill_type_id" : 3307,
     "operator" : 6
   } ],
-  "effectName" : "largeHybridTurretDamageMultiplierBonusPostPercentDamageMultiplierLocationShipModulesRequiringLargeHybridTurret",
+  "effect_name" : "largeHybridTurretDamageMultiplierBonusPostPercentDamageMultiplierLocationShipModulesRequiringLargeHybridTurret",
   "effect_id" : 157
 }

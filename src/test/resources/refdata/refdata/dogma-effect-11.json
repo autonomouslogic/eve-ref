@@ -30,7 +30,7 @@
   "published" : true,
   "range_chance" : false,
   "effect_category" : 0,
-  "effectName" : "loPower",
+  "effect_name" : "loPower",
   "effect_id" : 11,
   "name" : "loPower"
 }

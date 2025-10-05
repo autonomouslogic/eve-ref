@@ -14,7 +14,7 @@
   "range_chance" : false,
   "resistance_attribute_id" : 2116,
   "effect_category" : 2,
-  "effectName" : "shipModuleRemoteCapacitorTransmitter",
+  "effect_name" : "shipModuleRemoteCapacitorTransmitter",
   "effect_id" : 6184,
   "description" : {
     "en" : ""

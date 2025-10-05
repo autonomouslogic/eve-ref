@@ -11,7 +11,7 @@
   "published" : false,
   "range_chance" : false,
   "effect_category" : 1,
-  "effectName" : "shieldBoosting",
+  "effect_name" : "shieldBoosting",
   "effect_id" : 4,
   "description" : {
     "en" : ""

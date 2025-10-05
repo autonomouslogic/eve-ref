@@ -24,7 +24,7 @@
     "modifying_attribute_id" : 292,
     "operator" : 6
   } ],
-  "effectName" : "largeHybridTurretDamageMultiplierBonusPostPercentDamageMultiplierLocationShipModulesRequiringLargeHybridTurret",
+  "effect_name" : "largeHybridTurretDamageMultiplierBonusPostPercentDamageMultiplierLocationShipModulesRequiringLargeHybridTurret",
   "effect_id" : 157,
   "description" : {
     "en" : ""

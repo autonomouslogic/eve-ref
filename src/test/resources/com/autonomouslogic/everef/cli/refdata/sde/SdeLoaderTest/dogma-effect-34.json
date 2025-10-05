@@ -15,6 +15,6 @@
   "range_chance" : false,
   "tracking_speed_attribute_id" : 160,
   "effect_category" : 2,
-  "effectName" : "projectileFired",
+  "effect_name" : "projectileFired",
   "effect_id" : 34
 }

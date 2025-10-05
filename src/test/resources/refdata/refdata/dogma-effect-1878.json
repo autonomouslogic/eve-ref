@@ -39,7 +39,7 @@
     "modifying_attribute_id" : 565,
     "operator" : 0
   } ],
-  "effectName" : "entitySensorDampen",
+  "effect_name" : "entitySensorDampen",
   "effect_id" : 1878,
   "description" : {
     "en" : ""

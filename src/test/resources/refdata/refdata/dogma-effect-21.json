@@ -16,7 +16,7 @@
     "modifying_attribute_id" : 72,
     "operator" : 2
   } ],
-  "effectName" : "shieldCapacityBonusOnline",
+  "effect_name" : "shieldCapacityBonusOnline",
   "effect_id" : 21,
   "description" : {
     "en" : ""

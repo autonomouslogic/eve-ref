@@ -38,7 +38,7 @@
     "modifying_attribute_id" : 1141,
     "operator" : 6
   } ],
-  "effectName" : "boosterArmorHpPenalty",
+  "effect_name" : "boosterArmorHpPenalty",
   "effect_id" : 2735,
   "name" : "boosterArmorHpPenalty"
 }

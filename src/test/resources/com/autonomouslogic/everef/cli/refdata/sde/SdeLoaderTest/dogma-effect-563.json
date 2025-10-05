@@ -41,6 +41,6 @@
     "modifying_attribute_id" : 105,
     "operator" : 2
   } ],
-  "effectName" : "warpScrambleForEntity",
+  "effect_name" : "warpScrambleForEntity",
   "effect_id" : 563
 }

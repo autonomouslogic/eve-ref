@@ -53,6 +53,6 @@
     "skill_type_id" : 4385,
     "operator" : 2
   } ],
-  "effectName" : "warpScrambleTargetMWDBlockActivationForEntity",
+  "effect_name" : "warpScrambleTargetMWDBlockActivationForEntity",
   "effect_id" : 5928
 }

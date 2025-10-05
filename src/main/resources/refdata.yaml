@@ -256,7 +256,7 @@ dogmaEffects:
     renames:
       effect_category_id: effect_category
       modifier_info: modifiers
-      name: effectName
+      name: effect_name
   esi:
     file: dogma/effects
     languageAttributes:

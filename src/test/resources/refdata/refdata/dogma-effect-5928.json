@@ -59,7 +59,7 @@
     "modifying_attribute_id" : 1350,
     "operator" : 2
   } ],
-  "effectName" : "warpScrambleTargetMWDBlockActivationForEntity",
+  "effect_name" : "warpScrambleTargetMWDBlockActivationForEntity",
   "effect_id" : 5928,
   "description" : {
     "en" : ""

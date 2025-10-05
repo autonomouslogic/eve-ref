@@ -13,7 +13,7 @@
   "range_attribute_id" : 87,
   "range_chance" : false,
   "effect_category" : 2,
-  "effectName" : "shieldTransfer",
+  "effect_name" : "shieldTransfer",
   "effect_id" : 18,
   "description" : {
     "en" : ""
