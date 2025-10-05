@@ -384,5 +384,80 @@
     }
   },
   "packaged_volume" : 80000,
+  "traits" : {
+    "role_bonuses" : {
+      "4" : {
+        "bonus_text" : {
+          "de" : "Verfügt diese Struktur über mindestens ein aktives Dienstmodul, schaltet sie in den Modus „Volle Leistung“ und erhält dadurch erhöhte Trefferpunkte für Schild und Panzerung sowie einen zusätzlichen Verstärkungszyklus",
+          "en" : "While this structure has at least one online service module it enters full power mode and will gain increased shield and armor hitpoints and an extra reinforcement cycle",
+          "es" : "Cuando esta estructura tiene al menos un módulo de servicio conectado, entra en el modo de potencia máxima y obtiene más puntos de vida de escudo y blindaje, además de un ciclo de refuerzo adicional.",
+          "fr" : "Lorsque cette structure dispose d'au moins un module de service fonctionnel, elle entre en mode pleine puissance. Elle bénéficie alors d'une augmentation des points de vie des boucliers et du blindage, ainsi que d'un cycle de renfort de blindage additionnel",
+          "ja" : "このストラクチャのサービスモジュールが1つ以上オンラインになると、「フルパワー」モードに入り、シールドとアーマーのヒットポイントが増加し追加の強化サイクルを獲得する。",
+          "ko" : "장착된 모듈이 온라인 상태일 경우 구조물은 최대 전력 모드로 전환되며 실드량 및 장갑 내구도가 증가하고 추가 강화 시간대가 생성됩니다.",
+          "ru" : "Так как у этого сооружения есть по меньшей мере один работающий служебный модуль, оно переходит в режим полной мощности и получает увеличенный запас прочности щитов и брони, а также дополнительный цикл укрепления",
+          "zh" : "这个建筑启用了至少一个服务装备，已进入全能量运转模式，将会获得额外的护盾和装甲值以及一个额外的增强模式循环"
+        },
+        "importance" : 4
+      },
+      "5" : {
+        "bonus_text" : {
+          "de" : "Damit das Verankern abgeschlossen werden kann, muss in dieser Struktur ein <a href=showinfo:56204>Fortizar-Upwell-Quantumkern</a> installiert werden",
+          "en" : "This structure requires a <a href=showinfo:56204>Fortizar Upwell Quantum Core</a> to be installed for anchoring to complete",
+          "es" : "Esta estructura requiere un <a href=showinfo:56204>núcleo cuántico Fortizar de Upwell</a> instalado para completar el anclaje.",
+          "fr" : "Cette structure nécessite un <a href=showinfo:56204>réacteur quantique Upwell Fortizar</a> pour terminer le processus d'ancrage",
+          "ja" : "このストラクチャの係留を完了するには <a href=showinfo:56204>フォータイザー・アップウェルクアンタムコア</a>を取り付ける必要がある。",
+          "ko" : "해당 구조물을 고정하려면 <a href=showinfo:56204>포티자 업웰 양자코어</a>를 설치해야 합니다.",
+          "ru" : "Для завершения постановки этого сооружения на якорь в него требуется установить <a href=showinfo:56204>квантовое ядро «Фортизар» производства «Апвелл»</a>.",
+          "zh" : "这座建筑需要安装一个<a href=showinfo:56204>铁壁昇威量子芯</a>才能完成锚定。"
+        },
+        "importance" : 5
+      },
+      "3" : {
+        "bonus" : 20,
+        "bonus_text" : {
+          "de" : "Bonus auf die Feuerrate und den Energiespeicherverbrauch von Standup-Pulsprojektoren und Lenkbombenwerfern",
+          "en" : "bonus to the rate of fire and capacitor consumption of Standup Burst Projectors and Guided Bomb Launchers",
+          "es" : "de bonificación a la cadencia de tiro y al consumo del condensador de los proyectores de estallido Standup y los lanzabombas guiados.",
+          "fr" : "de bonus à la cadence de tir et à la consommation du capaciteur des projecteurs à salves et des lanceurs de bombes ciblées Standup",
+          "ja" : "スタンドアップバーストプロジェクターと誘導ボムランチャーの発射間隔とキャパシタ消費効率を改善",
+          "ko" : "스탠드업 버스트 프로젝터 및 유도폭탄 런처 연사속도 및 캐패시터 사용량 감소",
+          "ru" : "бонус к скорострельности и энергопотреблению проекторов объёмных помех и бомбометателей с системой наведения на базе «Стационар»",
+          "zh" : "屹立脉冲波投射器和制导炸弹发射器的射速和电容消耗加成"
+        },
+        "importance" : 3,
+        "unit_id" : 105
+      },
+      "1" : {
+        "bonus" : 25,
+        "bonus_text" : {
+          "de" : "Bonus auf alle Effekte von Struktur-Kampfmodifikationen",
+          "en" : "bonus to all structure combat rig effects",
+          "es" : "de bonificación a todos los efectos de complementos de combate para estructuras.",
+          "fr" : "de bonus à tous les effets d'amélioration des combats de structures",
+          "ja" : "全てのストラクチャ戦闘リグの効果が増大",
+          "ko" : "구조물 전용 전투 리그 효과 증가",
+          "ru" : "бонус к эффективности всех боевых надстроек",
+          "zh" : "所有建筑战斗改装件效果加成"
+        },
+        "importance" : 1,
+        "unit_id" : 105
+      },
+      "2" : {
+        "bonus" : 25,
+        "bonus_text" : {
+          "de" : "Reduzierter Treibstoffverbrauch von Zitadellen-Dienstmodulen",
+          "en" : "reduction in citadel service module fuel consumption",
+          "es" : "de reducción del consumo de combustible del módulo de servicio de ciudadela.",
+          "fr" : "de réduction de la consommation de carburant des modules de service de citadelle",
+          "ja" : "城塞サービスモジュールの燃料消費をが減少",
+          "ko" : "시타델 서비스 모듈 연료 사용량 감소",
+          "ru" : "уменьшает потребление топлива служебными модулями цитаделей",
+          "zh" : "堡垒服务装备的燃料消耗降低"
+        },
+        "importance" : 2,
+        "unit_id" : 105
+      }
+    }
+  },
   "can_be_fitted_with_types" : [ 35892 ]
 }

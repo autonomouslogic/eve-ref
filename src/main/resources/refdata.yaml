@@ -193,6 +193,14 @@ typeBonus:
     filePrefix: type
     ids:
       - 645
+      - 22430
+      - 32307
+      - 33673
+      - 35827
+      - 35833
+      - 45622
+      - 45623
+      - 45624
 
 typeDogma:
   outputStore: types

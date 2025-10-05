@@ -515,6 +515,153 @@
     }
   },
   "packaged_volume" : 2500,
+  "traits" : {
+    "role_bonuses" : {
+      "5" : {
+        "bonus" : 60,
+        "bonus_text" : {
+          "de" : "Bonus auf die Warpgeschwindigkeit und Warpbeschleunigung",
+          "en" : "bonus to warp speed and warp acceleration",
+          "es" : "de bonificación a la velocidad y la aceleración de warp.",
+          "fr" : "de bonus à la vitesse de warp et à l'accélération de warp",
+          "ja" : "ワープ速度とワープ加速度が上昇",
+          "ko" : "워프 속도 및 워프 가속도 증가",
+          "ru" : "бонус к разгону и скорости хода (в варп-режиме)",
+          "zh" : "跃迁速度和跃迁加速加成"
+        },
+        "importance" : 5,
+        "unit_id" : 105
+      },
+      "2" : {
+        "bonus" : 80,
+        "bonus_text" : {
+          "de" : "Reduktion der Aktivierungskosten von <a href=showinfo:3435>Antriebsblockern</a>",
+          "en" : "reduction in <a href=showinfo:3435>Propulsion Jamming</a> systems activation cost",
+          "es" : "de reducción en el coste de activación de los sistemas <a href=showinfo:3435>perturbadores de propulsión</a>.",
+          "fr" : "réduction du coût d'activation des systèmes de <a href=showinfo:3435>brouillage de propulsion</a>",
+          "ja" : "<a href=showinfo:3435>推進力ジャミング</a>システムの起動コストが軽減",
+          "ko" : "<a href=showinfo:3435>추진기 재밍</a> 시스템 활성화 비용 감소",
+          "ru" : "сокращается потребление энергии <a href=showinfo:3435>средствами ограничения подвижности кораблей</a>",
+          "zh" : "<a href=showinfo:3435>推进抑制</a>系统启动消耗加成"
+        },
+        "importance" : 2,
+        "unit_id" : 105
+      },
+      "3" : {
+        "bonus" : 80,
+        "bonus_text" : {
+          "de" : "Reduktion in der Reaktivierungsverzögerung des <a href=showinfo:58919>Anti-Unterbrechers</a> und max. Erfassungsreichweitenabzug",
+          "en" : "reduction in <a href=showinfo:58919>Interdiction Nullifier</a> reactivation delay and max lock range penalty",
+          "es" : "de reducción de la demora de reactivación y de penalización al alcance de fijación máximo del <a href=showinfo:58919>anulador de interdicción</a>.",
+          "fr" : "de réduction au délai de réactivation de la <a href=showinfo:58919>contremesure d’interdiction</a> et à la pénalité de portée de verrouillage maximale",
+          "ja" : "<a href=showinfo:58919>インターディクション無効化</a>の再起動遅延と最大ロック射程のペナルティ減少",
+          "ko" : "<a href=showinfo:58919>인터딕션 무효화 장치</a> 재활성화 대기시간 및 최대 타겟팅 거리 페널티 감소",
+          "ru" : "уменьшение задержки повторного включения <a href=showinfo:58919>нейтрализатора варп-заграждений</a> и штрафа к максимальной дальности захвата цели",
+          "zh" : "<a href=showinfo:58919>拦截失效装置</a>重启延迟和最大锁定距离惩罚降低"
+        },
+        "importance" : 3,
+        "unit_id" : 105
+      },
+      "4" : {
+        "bonus" : 100,
+        "bonus_text" : {
+          "de" : "Bonus auf die Dauer des <a href=showinfo:58919>Anti-Unterbrechers</a>",
+          "en" : "bonus to <a href=showinfo:58919>Interdiction Nullifier</a> duration",
+          "es" : "de bonificación a la duración del <a href=showinfo:58919>anulador de interdicción</a>.",
+          "fr" : "de bonus à la durée de la <a href=showinfo:58919>contremesure d’interdiction</a>",
+          "ja" : "<a href=showinfo:58919>インターディクション無効化</a>の持続時間にボーナス",
+          "ko" : "<a href=showinfo:58919>인터딕션 무효화 장치</a> 지속시간 보너스",
+          "ru" : "бонус к длительности действия <a href=showinfo:58919>нейтрализатора варп-заграждений</a>",
+          "zh" : "<a href=showinfo:58919>拦截失效装置</a>持续时间加成"
+        },
+        "importance" : 4,
+        "unit_id" : 105
+      },
+      "1" : {
+        "bonus" : 375,
+        "bonus_text" : {
+          "de" : "Bonus auf die HP und den Schaden von <a href=showinfo:24241>Leichten Kampfdrohnen</a>",
+          "en" : "bonus to <a href=showinfo:24241>Light Combat Drone</a> damage and hitpoints",
+          "es" : "de bonificación al daño y los puntos de vida de los <a href=showinfo:24241>drones de combate ligeros</a>.",
+          "fr" : "bonus aux dégâts et aux points de vie du <a href=showinfo:24241>drone de combat léger</a>",
+          "ja" : "<a href=showinfo:24241>戦闘用ライトドローン</a>のダメージとヒットポイントが増加",
+          "ko" : "<a href=showinfo:24241>라이트 공격 드론</a> 피해량 및 내구도 증가",
+          "ru" : "увеличивается урон бортового оружия <a href=showinfo:24241>лёгких боевых дронов</a>; увеличивается запас их прочности",
+          "zh" : "<a href=showinfo:24241>轻型战斗无人机</a>伤害和HP加成"
+        },
+        "importance" : 1,
+        "unit_id" : 105
+      }
+    },
+    "types" : {
+      "3328" : {
+        "1" : {
+          "bonus" : 10,
+          "bonus_text" : {
+            "de" : "Bonus auf den Kinetik- und Thermalschaden von Lenkwaffen",
+            "en" : "bonus to kinetic and thermal missile damage",
+            "es" : "de bonificación al daño cinético y térmico de los misiles.",
+            "fr" : "bonus aux dégâts des missiles de type cinétique et thermique",
+            "ja" : "ミサイルのキネティックダメージおよびサーマルダメージが増加",
+            "ko" : "미사일 키네틱 및 열 피해 증가",
+            "ru" : "увеличивается урон кинетических и термических БЧ ракет",
+            "zh" : "动能和热能导弹伤害加成"
+          },
+          "importance" : 1,
+          "unit_id" : 105
+        }
+      },
+      "3330" : {
+        "1" : {
+          "bonus" : 4,
+          "bonus_text" : {
+            "de" : "Bonus auf alle Schildresistenzen",
+            "en" : "bonus to all shield resistances",
+            "es" : "de bonificación a todas las resistencias de escudo.",
+            "fr" : "bonus à toutes les résistances de bouclier",
+            "ja" : "全てのシールドレジスタンスが増加",
+            "ko" : "모든 실드 저항력 증가",
+            "ru" : "повышается сопротивляемость щитов корабля всем видам воздействия",
+            "zh" : "护盾抗性加成"
+          },
+          "importance" : 1,
+          "unit_id" : 105
+        }
+      },
+      "12092" : {
+        "2" : {
+          "bonus" : 5,
+          "bonus_text" : {
+            "de" : "Bonus auf die optimale Reichweite von <a href=showinfo:447>Warpunterbrechern</a> und <a href=showinfo:3242>Warpstörern</a>",
+            "en" : "bonus to <a href=showinfo:447>Warp Scrambler</a> and <a href=showinfo:3242>Warp Disruptor</a> optimal range",
+            "es" : "de bonificación al alcance óptimo del <a href=showinfo:447>distorsionador de warp</a> y el <a href=showinfo:3242>disruptor de warp</a>.",
+            "fr" : "bonus à la portée optimale de <a href=showinfo:447>l'inhibiteur de warp</a>, et du <a href=showinfo:3242>perturbateur de warp</a>",
+            "ja" : "<a href=showinfo:447>ワープスクランブラー</a>と<a href=showinfo:3242>ワープ妨害器</a>の最適射程距離が拡大",
+            "ko" : "<a href=showinfo:447>워프 스크램블러</a> 및 <a href=showinfo:3242>워프 디스럽터</a> 최적사거리 증가",
+            "ru" : "увеличивается оптимальная дальность действия <a href=showinfo:447>варп-глушителей</a> и <a href=showinfo:3242>варп-подавителей</a>",
+            "zh" : "<a href=showinfo:447>跃迁扰频器</a>和<a href=showinfo:3242>跃迁扰断器</a>有效距离加成"
+          },
+          "importance" : 2,
+          "unit_id" : 105
+        },
+        "1" : {
+          "bonus" : 15,
+          "bonus_text" : {
+            "de" : "Reduktion des <a href=showinfo:3454>Mikrowarpantrieb</a>-Signaturradius",
+            "en" : "reduction in <a href=showinfo:3454>Microwarpdrive</a> signature radius penalty",
+            "es" : "de reducción de la penalización de radio de la señal del <a href=showinfo:3454>motor de microwarp</a>.",
+            "fr" : "réduction de la pénalité du rayon de signature du <a href=showinfo:3454>propulseur de microwarp</a>",
+            "ja" : "<a href=showinfo:3454>マイクロワープドライブ</a>のシグネチャ半径ペナルティが軽減",
+            "ko" : "<a href=showinfo:3454>마이크로 워프 드라이브</a> 시그니처 반경 페널티 감소",
+            "ru" : "уменьшается влияние <a href=showinfo:3454>микроварп-ускорителей</a> на размер сигнатуры корабля",
+            "zh" : "<a href=showinfo:3454>微型跃迁推进器</a>的信号半径惩罚加成"
+          },
+          "importance" : 1,
+          "unit_id" : 105
+        }
+      }
+    }
+  },
   "required_skills" : {
     "3330" : 5,
     "3328" : 5,
