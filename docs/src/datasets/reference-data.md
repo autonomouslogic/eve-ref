@@ -59,51 +59,50 @@ This table show the available data and where to get it.
 | Data                          | Reference data      | SDE                                  | ESI                            | Hoboleaks                           |
 |-------------------------------|---------------------|--------------------------------------|--------------------------------|-------------------------------------|
 | Accounting entry types        |                     |                                      |                                | `accountingentrytypes.json`         |
-| Agent                         |                     | `fsd/agents.yaml`                    |                                |                                     |
-| Agent in space                |                     | `fsd/agentsInSpace.yaml`             |                                |                                     |
-| Agent types                   |                     |                                      |                                | `agenttypes.json`                   |
-| Ancestors                     |                     | `fsd/ancestries.yaml`                | `universe/ancestries.yaml`     |                                     |
-| Asteroid belts                |                     | `fsd/universe`                       | `universe/asteroid_belts.yaml` |                                     |
-| Bloodlines                    |                     | `fsd/bloodlines.yaml`                | `universe/bloodlines.yaml`     |                                     |
+| Agent                         |                     | `npcCharacters.yaml`                 |                                |                                     |
+| Agent in space                |                     | `agentsInSpace.yaml`                 |                                |                                     |
+| Agent types                   |                     | `agentTypes.yaml`                    |                                | `agenttypes.json`                   |
+| Ancestors                     |                     | `ancestries.yaml`                    | `universe/ancestries.yaml`     |                                     |
+| Asteroid belts                |                     | `mapAsteroidBelts.yaml`              | `universe/asteroid_belts.yaml` |                                     |
+| Bloodlines                    |                     | `bloodlines.yaml`                    | `universe/bloodlines.yaml`     |                                     |
 | Blueprints                    | `/blueprints`       | `fsd/blueprints.yaml`                |                                | `blueprints.json`                   |
-| Certificates                  |                     | `fsd/certificates.yaml`              |                                |                                     |
-| Character attributes          |                     | `fsd/characterAttributes.yaml`       |                                |                                     |
+| Certificates                  |                     | `certificates.yaml`                  |                                |                                     |
+| Character attributes          |                     | `characterAttributes.yaml`           |                                |                                     |
 | Clone states                  |                     |                                      |                                | `clonestates.json`                  |
 | Compressible types            |                     |                                      |                                | `compressibletypes.json`            |
-| Constellations                |                     | `fsd/universe`                       | `universe/constellations.yaml` |                                     |
-| Contraband types              |                     | `fsd/contrabandTypes.yaml`           |                                |                                     |
-| Control tower resources       |                     | `fsd/controlTowerResources.yaml`     |                                |                                     |
-| Corporation activities        |                     | `fsd/corporationActivities.yaml`     |                                |                                     |
-| Dbuffs                        |                     |                                      |                                | `dbuffs.json`                       |
+| Constellations                |                     | `mapConstellations.yaml`             | `universe/constellations.yaml` |                                     |
+| Contraband types              |                     | `contrabandTypes.yaml`               |                                |                                     |
+| Control tower resources       |                     | `controlTowerResources.yaml`         |                                |                                     |
+| Corporation activities        |                     | `corporationActivities.yaml`         |                                |                                     |
+| Dbuffs                        |                     | `dbuffCollections.yaml`              |                                | `dbuffs.json`                       |
 | Dogma attributes              | `/dogma_attributes` | `fsd/dogmaAttributes.yaml`           | `dogma/attributes.yaml`        | `localization_dgmattributes.json`   |
-| Dogma attributes categories   |                     | `fsd/dogmaAttributeCategories.yaml`  |                                |                                     |
+| Dogma attributes categories   |                     | `dogmaAttributeCategories.yaml`      |                                |                                     |
 | Dogma effects                 | `/dogma_effects`    | `fsd/dogmaEffects.yaml`              | `dogma/effects.yaml`           |                                     |
 | Dogma expressions             |                     |                                      |                                |                                     |
 | Dogma type attributes         | `/types`            | `fsd/typeDogma.yaml`                 | `universe/types.yaml`          |                                     |
-| Dogma type effects            |                     | `fsd/typeDogma.yaml`                 | `universe/types.yaml`          |                                     |
+| Dogma type effects            |                     | `dogmaEffects.yaml`                  | `universe/types.yaml`          |                                     |
 |                               |                     |                                      |                                | `dogmaeffectcategories.json`        |
 |                               |                     |                                      |                                | `attributeorders.json`              |
-| Dogma units                   |                     |                                      |                                | `dogmaunits.json`                   |
+| Dogma units                   |                     | `dogmaUnits.yaml`                    |                                | `dogmaunits.json`                   |
 | Dynamic attributes            | `/mutaplasmids`     |                                      |                                | `dynamicitemattributes.json`        |
 | Expert systems                |                     |                                      |                                | `expertsystems.json`                |
-| Factions                      |                     | `fsd/factions.yaml`                  | `universe/factions.yaml`       |                                     |
+| Factions                      |                     | `factions.yaml`                      | `universe/factions.yaml`       |                                     |
 | Graphic material sets         |                     |                                      |                                | `graphicmaterialsets.json`          |
-| Graphics                      |                     | `fsd/graphicIDs.yaml`                | `universe/graphics.yaml`       |                                     |
-| Icons                         |                     | `fsd/iconIDs.yaml`                   |                                |                                     |
+| Graphics                      |                     | `graphics.yaml`                      | `universe/graphics.yaml`       |                                     |
+| Icons                         |                     | `icons.yaml`                         |                                |                                     |
 | Industry activities           |                     |                                      |                                | `industryactivities.json`           |
 | Industry assembly lines       |                     |                                      |                                | `industryassemblylines.json`        |
 | Industry installation types   |                     |                                      |                                | `industryinstallationtypes.json`    |
 | Industry modifier sources     |                     |                                      |                                | `industrymodifiersources.json`      |
 | Industry target filters       |                     |                                      |                                | `industrytargetfilters.json`        |
 | Inventory categories          | `/categories`       | `fsd/categories.yaml`                | `universe/categories.yaml`     |                                     |
-| Inventory flags               |                     | `bsd/invFlags.yaml`                  |                                |                                     |
+| Inventory flags               |                     | `bsd/invFlags.yaml` in old files     |                                |                                     |
 | Inventory groups              | `/groups`           | `fsd/groups.yaml`                    | `universe/groups.yaml`         |                                     |
-| Inventory items               |                     | `bsd/invItems.yaml`                  |                                |                                     |
-| Inventory names               |                     | `bsd/invNames.yaml`                  |                                |                                     |
-| Inventory positions           |                     | `bsd/invPositions.yaml`              |                                |                                     |
-| Inventory type masteries      | `/types`            |                                      | `universe/types.yaml`          |                                     |
-| Inventory type traits         | `/types`            |                                      | `universe/types.yaml`          |                                     |
-| Inventory types               | `/types`            | `fsd/types.yaml` - masteries, traits | `universe/types.yaml`          | Adds `repackagedvolumes.json`       |
+| Inventory items               |                     | `bsd/invItems.yaml` in old files     |                                |                                     |
+| Inventory names               |                     | `bsd/invNames.yaml` in old files     |                                |                                     |
+| Inventory type masteries      | `/types`            | `masteries.yaml`                     | `universe/types.yaml`          |                                     |
+| Inventory type traits         | `/types`            | `typeBonus.yaml`                     | `universe/types.yaml`          |                                     |
+| Inventory types               | `/types`            | `types.yaml`                         | `universe/types.yaml`          | Adds `repackagedvolumes.json`       |
 | Inventory unique names        |                     | `bsd/invUniqueNames.yaml`            |                                |                                     |
 | Landmarks                     |                     | `fsd/landmarks/landmarks.staticdata` |                                |                                     |
 | Languages                     |                     | `fsd/translationLanguages.yaml`      | _Yes, indirectly_              | `localization_languages.json`       |
