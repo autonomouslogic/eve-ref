@@ -1,5 +1,8 @@
 package com.autonomouslogic.everef.ids;
 
+/**
+ * https://developers.eveonline.com/docs/guides/id-ranges/
+ */
 public class IdRanges {
 	public static final IdRangeList REGION_IDS = new IdRangeList(
 			new IdRange("eve", 10_000_000, 10_999_999),
