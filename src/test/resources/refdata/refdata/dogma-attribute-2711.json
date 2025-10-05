@@ -1,5 +1,4 @@
 {
-  "attribute_category_id" : 7,
   "data_type" : 11,
   "default_value" : 0,
   "description" : {
@@ -11,6 +10,7 @@
   "published" : false,
   "stackable" : false,
   "unit_id" : 116,
+  "category_id" : 7,
   "attribute_id" : 2711,
   "display_name" : {
     "en" : ""

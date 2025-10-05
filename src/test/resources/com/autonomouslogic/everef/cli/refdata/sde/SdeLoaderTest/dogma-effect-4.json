@@ -2,15 +2,15 @@
   "disallow_auto_repeat" : false,
   "discharge_attribute_id" : 6,
   "duration_attribute_id" : 73,
-  "effect_category_id" : 1,
   "electronic_chance" : false,
   "guid" : "effects.ShieldBoosting",
   "is_assistance" : false,
   "is_offensive" : false,
   "is_warp_safe" : true,
-  "name" : "shieldBoosting",
   "propulsion_chance" : false,
   "published" : false,
   "range_chance" : false,
+  "effect_category" : 1,
+  "effectName" : "shieldBoosting",
   "effect_id" : 4
 }

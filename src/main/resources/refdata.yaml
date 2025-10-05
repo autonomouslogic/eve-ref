@@ -52,9 +52,6 @@ marketGroups:
   model: MarketGroup
   sde:
     file: marketGroups.yaml
-    renames:
-      name_id: name
-      description_id: description
   esi:
     file: markets/groups
     languageAttributes:
@@ -207,9 +204,8 @@ dogmaAttributes:
   sde:
     file: dogmaAttributes.yaml
     renames:
-      display_name_id: display_name
       tooltip_title_id: tooltip_title
-      tooltip_description_id: tooltip_description
+      attribute_category_id: category_id
     languageAttributes:
       - description
   esi:
@@ -258,9 +254,9 @@ dogmaEffects:
   sde:
     file: dogmaEffects.yaml
     renames:
-      description_id: description
-      display_name_id: display_name
+      effect_category_id: effect_category
       modifier_info: modifiers
+      name: effectName
   esi:
     file: dogma/effects
     languageAttributes:
@@ -287,9 +283,6 @@ metaGroups:
   model: MetaGroup
   sde:
     file: metaGroups.yaml
-    renames:
-      name_id: name
-      description_id: description
   test:
     filePrefix: meta-group
     ids:
@@ -387,6 +380,8 @@ regions:
     file: mapRegions.yaml
     renames:
       nebula: nebula_id
+    removes:
+      - constellation_ids
   test:
     filePrefix: region
     ids:
@@ -410,8 +405,6 @@ schematics:
       - name
   sde:
     file: planetSchematics.yaml
-    renames:
-      name_id: name
   test:
     filePrefix: schematic
     ids:

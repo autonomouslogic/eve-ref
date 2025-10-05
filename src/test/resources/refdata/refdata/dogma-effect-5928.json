@@ -13,18 +13,17 @@
   },
   "distribution" : 1,
   "duration_attribute_id" : 505,
-  "effect_category_id" : 2,
   "electronic_chance" : false,
   "guid" : "effects.WarpScramble",
   "is_assistance" : false,
   "is_offensive" : true,
   "is_warp_safe" : false,
-  "name" : "warpScrambleTargetMWDBlockActivationForEntity",
   "npc_usage_chance_attribute_id" : 504,
   "propulsion_chance" : false,
   "published" : true,
   "range_attribute_id" : 103,
   "range_chance" : false,
+  "effect_category" : 2,
   "modifiers" : [ {
     "domain" : "targetID",
     "func" : "ItemModifier",
@@ -60,9 +59,10 @@
     "modifying_attribute_id" : 1350,
     "operator" : 2
   } ],
+  "effectName" : "warpScrambleTargetMWDBlockActivationForEntity",
   "effect_id" : 5928,
   "description" : {
     "en" : ""
   },
-  "effect_category" : 2
+  "name" : "warpScrambleTargetMWDBlockActivationForEntity"
 }

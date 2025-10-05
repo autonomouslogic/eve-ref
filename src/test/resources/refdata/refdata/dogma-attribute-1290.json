@@ -1,5 +1,4 @@
 {
-  "attribute_category_id" : 8,
   "data_type" : 11,
   "default_value" : 0,
   "description" : {
@@ -22,5 +21,6 @@
   "published" : true,
   "stackable" : true,
   "unit_id" : 116,
+  "category_id" : 8,
   "attribute_id" : 1290
 }

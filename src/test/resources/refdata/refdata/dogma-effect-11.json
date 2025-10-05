@@ -20,17 +20,17 @@
     "ru" : "Разъёмы малой мощности",
     "zh" : "低能量"
   },
-  "effect_category_id" : 0,
   "electronic_chance" : false,
   "guid" : "",
   "icon_id" : 295,
   "is_assistance" : false,
   "is_offensive" : false,
   "is_warp_safe" : false,
-  "name" : "loPower",
   "propulsion_chance" : false,
   "published" : true,
   "range_chance" : false,
+  "effect_category" : 0,
+  "effectName" : "loPower",
   "effect_id" : 11,
-  "effect_category" : 0
+  "name" : "loPower"
 }

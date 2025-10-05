@@ -1,5 +1,4 @@
 {
-  "attribute_category_id" : 9,
   "data_type" : 3,
   "default_value" : 1,
   "description" : {
@@ -11,6 +10,7 @@
   "name" : "canNotBeTrainedOnTrial",
   "published" : false,
   "stackable" : true,
+  "category_id" : 9,
   "attribute_id" : 1047,
   "display_name" : {
     "en" : ""

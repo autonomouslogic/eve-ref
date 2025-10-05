@@ -1,5 +1,4 @@
 {
-  "attribute_category_id" : 7,
   "data_type" : 5,
   "default_value" : 0,
   "description" : {
@@ -10,5 +9,6 @@
   "name" : "asteroidMetaLevel",
   "published" : false,
   "stackable" : true,
+  "category_id" : 7,
   "attribute_id" : 2699
 }

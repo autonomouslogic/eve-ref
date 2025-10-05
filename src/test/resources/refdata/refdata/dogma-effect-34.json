@@ -3,19 +3,19 @@
   "discharge_attribute_id" : 6,
   "distribution" : 2,
   "duration_attribute_id" : 51,
-  "effect_category_id" : 2,
   "electronic_chance" : false,
   "falloff_attribute_id" : 158,
   "guid" : "effects.ProjectileFired",
   "is_assistance" : false,
   "is_offensive" : true,
   "is_warp_safe" : false,
-  "name" : "projectileFired",
   "propulsion_chance" : false,
   "published" : false,
   "range_attribute_id" : 54,
   "range_chance" : false,
   "tracking_speed_attribute_id" : 160,
+  "effect_category" : 2,
+  "effectName" : "projectileFired",
   "effect_id" : 34,
   "description" : {
     "en" : ""
@@ -23,5 +23,5 @@
   "display_name" : {
     "en" : ""
   },
-  "effect_category" : 2
+  "name" : "projectileFired"
 }

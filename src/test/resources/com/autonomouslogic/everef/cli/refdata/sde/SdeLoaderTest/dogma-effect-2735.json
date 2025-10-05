@@ -20,7 +20,6 @@
     "ru" : "Armor Hitpoint Penalty",
     "zh" : "装甲强度值惩罚"
   },
-  "effect_category_id" : 0,
   "electronic_chance" : false,
   "fitting_usage_chance_attribute_id" : 1091,
   "guid" : "None",
@@ -28,10 +27,10 @@
   "is_assistance" : false,
   "is_offensive" : false,
   "is_warp_safe" : false,
-  "name" : "boosterArmorHpPenalty",
   "propulsion_chance" : false,
   "published" : true,
   "range_chance" : false,
+  "effect_category" : 0,
   "modifiers" : [ {
     "domain" : "shipID",
     "func" : "ItemModifier",
@@ -39,5 +38,6 @@
     "modifying_attribute_id" : 1141,
     "operator" : 6
   } ],
+  "effectName" : "boosterArmorHpPenalty",
   "effect_id" : 2735
 }

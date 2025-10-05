@@ -1,5 +1,4 @@
 {
-  "attribute_category_id" : 4,
   "data_type" : 4,
   "default_value" : 0,
   "description" : {
@@ -42,5 +41,6 @@
     "zh" : "结构值"
   },
   "unit_id" : 113,
+  "category_id" : 4,
   "attribute_id" : 9
 }
