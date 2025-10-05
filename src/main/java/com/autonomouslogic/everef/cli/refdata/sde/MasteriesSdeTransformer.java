@@ -4,7 +4,6 @@ import com.autonomouslogic.everef.cli.refdata.SimpleTransformer;
 import com.autonomouslogic.everef.cli.refdata.TransformUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-
 import javax.inject.Inject;
 
 public class MasteriesSdeTransformer implements SimpleTransformer {

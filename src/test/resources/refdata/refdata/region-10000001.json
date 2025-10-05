@@ -27,5 +27,6 @@
     "z" : -64433101266115400
   },
   "wormhole_class_id" : 7,
-  "region_id" : 10000001
+  "region_id" : 10000001,
+  "universe_id" : "eve"
 }

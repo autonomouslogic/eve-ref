@@ -20,5 +20,6 @@
   "description" : {
     "en" : null,
     "ja" : null
-  }
+  },
+  "universe_id" : "wormhole"
 }
