@@ -888,8 +888,6 @@ components:
         resistance_attribute_id:
           type: integer
           format: int64
-        sfx_name:
-          type: string
         tracking_speed_attribute_id:
           type: integer
           format: int64
