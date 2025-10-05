@@ -1,7 +1,7 @@
 {
   "description" : {
     "de" : "Verwendet eine Kombination aus Dämpfungsfeldemittern und Redundanzystemen um die Auswirkungen von kritischen Systemschäden zu verhindern. \n\n\n\nVerleiht einen Bonus auf die Widerstandsfähigkeit von Schild, Panzerung und Schiffsstruktur.\n\n\n\nEs kann immer nur ein Schadenskontroll-System zu einem festgelegten Zeitpunkt eingebaut werden.",
-    "en" : "Utilizes a combination of containment field emitters and redundancy systems to mitigate the impact of critical system damage. \r\n\r\nGrants a bonus to resistance for shield, armor and hull.\r\n\r\nOnly one Damage Control can be fit at a given time.",
+    "en" : "Utilizes a combination of containment field emitters and redundancy systems to mitigate the impact of critical system damage. \n\nGrants a bonus to resistance for shield, armor and hull.\n\nOnly one Damage Control can be fit at a given time.",
     "es" : "Usa una combinación de emisores de campo de contención y sistemas redundantes para mitigar el impacto de daños críticos al sistema. \n\n\n\nOtorga una bonificación de resistencia de escudo, blindaje y casco.\n\n\n\nSolo se puede equipar un control de daños a la vez.",
     "fr" : "Ce module combine des émetteurs de champ de confinement et des systèmes de redondance voués à mitiger l'impact dévastateur de dégâts critiques sur le système. \n\n\n\nOffre un bonus de résistance aux boucliers, au blindage et à la coque.\n\n\n\nUn seul régulateur de dégâts peut être équipé à la fois.",
     "ja" : "格納型電界エミッターと冗長システムを組み合わせることにより、システムが深刻なダメージを受けた場合の影響を軽減する。シールド、アーマー、船体レジスタンスが向上する。ダメージコントロールは一度に一つしか装備できない。",

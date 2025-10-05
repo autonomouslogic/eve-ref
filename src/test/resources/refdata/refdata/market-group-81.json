@@ -1,17 +1,4 @@
 {
-  "has_types" : true,
-  "icon_id" : 20967,
-  "parent_group_id" : 7,
-  "name" : {
-    "de" : "Gallente",
-    "en" : "Gallente",
-    "es" : "Gallente",
-    "fr" : "Gallente",
-    "ja" : "ガレンテ",
-    "ko" : "갈란테",
-    "ru" : "Галлентские",
-    "zh" : "盖伦特"
-  },
   "description" : {
     "de" : "Gallente-Schlachtschiff-Designs.",
     "en" : "Gallente battleship designs.",
@@ -22,6 +9,19 @@
     "ru" : "Линейные корабли разработки Федерации Gallente.",
     "zh" : "盖伦特战列舰设计"
   },
+  "has_types" : true,
+  "icon_id" : 20967,
+  "name" : {
+    "de" : "Gallente",
+    "en" : "Gallente",
+    "es" : "Gallente",
+    "fr" : "Gallente",
+    "ja" : "ガレンテ",
+    "ko" : "갈란테",
+    "ru" : "Галлентские",
+    "zh" : "盖伦特"
+  },
+  "parent_group_id" : 7,
   "market_group_id" : 81,
   "type_ids" : [ 645 ]
 }

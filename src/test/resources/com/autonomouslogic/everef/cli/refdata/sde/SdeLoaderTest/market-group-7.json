@@ -1,17 +1,4 @@
 {
-  "has_types" : false,
-  "icon_id" : 1443,
-  "parent_group_id" : 1376,
-  "name" : {
-    "de" : "Standardschlachtschiffe",
-    "en" : "Standard Battleships",
-    "es" : "Acorazados estándar",
-    "fr" : "Cuirassés standards",
-    "ja" : "標準型戦艦",
-    "ko" : "일반 배틀쉽",
-    "ru" : "Типовые",
-    "zh" : "标准战列舰"
-  },
   "description" : {
     "de" : "Der Grundstein einer jeden respektablen Streitmacht.",
     "en" : "The foundations of any respectable fighting force.",
@@ -22,5 +9,18 @@
     "ru" : "Это ― основа любого уважающего себя флота.",
     "zh" : "任何一支令人生畏的舰队中最根本的中流砥柱。"
   },
+  "has_types" : false,
+  "icon_id" : 1443,
+  "name" : {
+    "de" : "Standardschlachtschiffe",
+    "en" : "Standard Battleships",
+    "es" : "Acorazados estándar",
+    "fr" : "Cuirassés standards",
+    "ja" : "標準型戦艦",
+    "ko" : "일반 배틀쉽",
+    "ru" : "Типовые",
+    "zh" : "标准战列舰"
+  },
+  "parent_group_id" : 1376,
   "market_group_id" : 7
 }

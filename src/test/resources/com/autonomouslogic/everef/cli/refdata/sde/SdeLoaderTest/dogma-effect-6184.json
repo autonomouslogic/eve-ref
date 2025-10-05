@@ -2,18 +2,18 @@
   "disallow_auto_repeat" : false,
   "discharge_attribute_id" : 6,
   "duration_attribute_id" : 73,
-  "effect_category" : 2,
-  "effect_id" : 6184,
-  "effect_name" : "shipModuleRemoteCapacitorTransmitter",
+  "effect_category_id" : 2,
   "electronic_chance" : false,
   "falloff_attribute_id" : 2044,
   "guid" : "effects.EnergyTransfer",
   "is_assistance" : true,
   "is_offensive" : false,
   "is_warp_safe" : false,
+  "name" : "shipModuleRemoteCapacitorTransmitter",
   "propulsion_chance" : false,
   "published" : false,
   "range_attribute_id" : 54,
   "range_chance" : false,
-  "resistance_attribute_id" : 2116
+  "resistance_attribute_id" : 2116,
+  "effect_id" : 6184
 }

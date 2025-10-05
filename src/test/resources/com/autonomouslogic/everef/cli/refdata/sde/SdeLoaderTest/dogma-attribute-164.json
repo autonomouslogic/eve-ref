@@ -1,17 +1,10 @@
 {
-  "attribute_id" : 164,
-  "category_id" : 7,
+  "attribute_category_id" : 7,
   "data_type" : 4,
   "default_value" : 0,
   "description" : {
     "en" : "The charisma of a character."
   },
-  "high_is_good" : true,
-  "icon_id" : 1378,
-  "name" : "charisma",
-  "published" : true,
-  "stackable" : true,
-  "unit_id" : 120,
   "display_name" : {
     "de" : "Ausstrahlung",
     "en" : "Charisma",
@@ -21,5 +14,13 @@
     "ko" : "카리스마",
     "ru" : "«Харизма»",
     "zh" : "魅力"
-  }
+  },
+  "display_when_zero" : false,
+  "high_is_good" : true,
+  "icon_id" : 1378,
+  "name" : "charisma",
+  "published" : true,
+  "stackable" : true,
+  "unit_id" : 120,
+  "attribute_id" : 164
 }

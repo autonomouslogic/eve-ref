@@ -1,32 +1,32 @@
 {
-  "center" : {
+  "constellation_i_ds" : [ 20000001, 20000002, 20000003, 20000004, 20000005, 20000006, 20000007, 20000008, 20000009, 20000010, 20000011, 20000012, 20000013, 20000014, 20000015, 20000016 ],
+  "description" : {
+    "de" : "Die Derelik-Region, Sitz des Ammatar Mandate, wurde im Laufe der Minmatar Rebellion zum Schild der Amarr-Flanke. In Derelik kam es zu zahlreichen Auseinandersetzungen zwischen den Amarr und den Streitkräften der Rebellen, als diese versuchten, tiefer in das Territorium ihrer ehemaligen Gebieter einzudringen. Die Stellung konnte gehalten werde, nicht zuletzt dank der Kriegsbemühungen der Ammatar, und daher belohnten die Amarr die Ammatar mit einer eigenen Provinz. Allerdings ist dieser Teil des Alls, der zwischen der Grenze der sich neu formenden Republik Minmatar und dem Imperium liegt, eine dunkle, von Feinden umgegebene Insel. \n\nWeil es keine sicheren, nach außerhalb führenden Routen gab, war das Überleben der lokale Wirtschaft dieser Region im Wesentlichen vom Handel mit den Amarr abhängig. Die Ammatar hielten mehrere Jahrzehnte wirtschaftlicher Stagnation mit einer begrenzten Anzahl von Handelspartner durch. Ihre Entschlossenheit wurde in den letzten Jahren mit einem Anstieg des wirtschaftlichen Wohlstands belohnt. Dieser harte Werdegang ist der Stolz eines jeden, der sich Ammatar nennt und ihr Vertrauen in die Amarr wurde dadurch bis ins Unermessliche gestärkt.",
+    "en" : "The Derelik region, sovereign seat of the Ammatar Mandate, became the shield to the Amarrian flank in the wake of the Minmatar Rebellion. Derelik witnessed many hostile exchanges between the Amarr and rebel forces as the latter tried to push deeper into the territory of their former masters. Having held their ground, thanks in no small part to the Ammatars' military efforts, the Amarr awarded the Ammatar with their own province. However, this portion of space shared borders with the newly forming Minmatar Republic as well as the Empire, and thus came to be situated in a dark recess surrounded by hostiles. \n\nGiven the lack of safe routes elsewhere, the local economies of this region were dependent on trade with the Amarr as their primary means of survival. The Ammatar persevered over many decades of economic stagnation and limited trade partners, and their determination has in recent decades been rewarded with an increase in economic prosperity. This harsh trail is a point of pride for all who call themselves Ammatar, and it has bolstered their faith in the Amarrian way to no end.",
+    "es" : "La región de Derelik, sede soberana del Mandato Ammatar, se convirtió en el escudo del flanco amarriano tras la Rebelión de Minmatar. Fue testigo de muchos intercambios hostiles entre Amarr y las fuerzas rebeldes cuando estas últimas intentaban adentrarse en el territorio de sus antiguos amos. Tras haberse mantenido firme, gracias en gran parte a los esfuerzos militares de los ammatarianos, Amarr otorgó a Ammatar su propia provincia. Sin embargo, esa parte del espacio compartía fronteras con la recién formada República Minmatar y el Imperio, y por tanto se emplazaba en un oscuro reducto rodeado de hostiles. \n\nDebido a la falta de rutas seguras hacia el exterior, la economía local de esta región dependía del comercio con Amarr como principal medio de supervivencia. Ammatar perseveró durante muchas décadas de estancamiento económico y socios comerciales limitados, hasta que su determinación ha sido recompensada en las últimas décadas con un aumento de la prosperidad económica. Ese duro camino es motivo de orgullo para quienes se consideran ammatarianos y ha reforzado hasta el infinito su fe en el estilo amarriano.",
+    "fr" : "Siège de la souveraineté du Mandat ammatar, la région de Derelik est devenue le garde-fou du flan amarr face à la rébellion minmatar. Le secteur a été le théâtre de nombreuses escarmouches entre les Amarr et les forces rebelles déterminées à s'introduire toujours plus loin au sein du territoire de leurs anciens maîtres. Après avoir tenu leurs positions grâce au soutien militaire ammatar, les Amarr ont offert une province autonome à ces alliés providentiels. Cependant, en raison de ses frontières communes avec la République minmatar émergente d'une part et avec l'Empire d'autre part, ce secteur spatial se trouve confiné dans une enclave cernée par les forces hostiles. \n\nÀ défaut d'autres voies navigables sécurisées, l'économie locale est devenue entièrement dépendante du négoce avec les Amarr. En butte à une stagnation économique et à des partenariats commerciaux très limités, les Ammatar ont malgré tout persévéré pendant des décennies, et leur détermination a fini par s'avérer payante. Aujourd'hui, l'économie régionale est florissante. Motif de fierté pour tous les Ammatar, ce chemin de croix finalement couronné de succès a galvanisé leur foi en l'idéologie amarr.",
+    "ja" : "アマターマンデートの統治下にあるディレリックリージョンは、ミンマター反乱勢力の影響力に対してアマーの側面を固める盾の役割を果たしている。ディレリックでは、反乱軍がかつての領主であるアマーの支配地域に対して奥深くまで侵攻を試みた結果、両者の間に多くの対立が生じた。自らの地歩を固める一方、アマターの軍事的努力にも少なからず助けられたアマーは、アマターに自治州を与えた。しかし、この宙域はアマー帝国だけでなく新興のミンマター共和国とも境を接しており、周囲を敵に囲まれていわば袋のネズミ状態にある。他に安全な航路がないため、このリージョンの経済はもっぱらアマーとの交易のおかげで存続している。アマターは停滞した経済と交易対象の少なさに長らく苦しんできたが、粘り強い努力が近年ついに報われ、経済的発展を見せはじめている。アマター人にとって苦難を乗り越えたことは誇りであり、アマーの教えに対する信仰心は高まる一方である。",
+    "ko" : "디어릭 지역은 아마타 자치령의 통치 지역으로, 민마타 대항쟁이 일어난 후, 아마르 측면을 방어하는 역할을 맡게 되었다. 디어릭에서는 반란 세력들이 자신들의 이전 주인의 영토를 더욱더 깊숙이 뚫고 들어가려 하면서 이들과 아마르 군대와의 잦은 교전이 일어났다. 아마타 군대가 적지 않은 도움을 준 덕분에 아마르는 영토를 지킬 수 있었고, 아마르는 아마타에게 그들의 영토의 통치권을 내어주는 것으로 보상해 주었다. 하지만, 해당 우주 지역은 새롭게 형성되고 있는 민마타 공화국은 물론 제국과도 국경을 나란히 했기 때문에, 적국들에게 둘러싸인 채, 어둡고 후미진 곳에 자리 잡은 꼴이었다. <br><br>안전한 경로가 따로 없었던지라, 디어릭의 지역 경제는 생존을 위한 최선책으로 아마르와 진행하는 무역에 의지해야 했다. 아마타는 수십 년간 경기침체와 한정된 무역 상대라는 어려움에도 굴하지 않고 버텨냈으며, 이들의 의지는 최근 몇십 년 동안 경기 번영으로 보상받는 중이다. 아마타인이라면 누구든 이 험난한 시기의 발자취를 자랑스럽게 여기며, 이 사건으로 아마타인이 아마르인 방식에 품고 있던 신뢰는 더욱더 굳건해졌다.",
+    "ru" : "Регион Derelik, суверенное владение Мандата Амматар, находился на фланге пространства Амарр во время Восстания Минматар. В этом регионе произошло немало сражений между войсками Амарр и мятежников, когда последние пытались продвинуться вглубь владений своих прежних хозяев. Империи Амарр удалось устоять, и не в последнюю очередь — благодаря помощи воинов Амматар. За это империя Амарр подарило народу Амматар собственную провинцию. Впрочем, этот регион граничил не только с империей, но и с новообразованной Республикой Минматар, и находился, таким образом, между двух яростных противников.\n\nПоскольку других безопасных торговых путей не существовало, экономика региона по большей части зависела от торговли с Амарр. Народу Амматар пришлось пережить десятки лет экономического застоя, но упорный труд в прошедшие десятилетия дал свои плоды: начался экономический расцвет. Этим достижениям по праву годятся все, кто относят себя к народу Амматар. Они верят в дружбу с Амарр до конца.",
+    "zh" : "德里克星域——艾玛达特统区的主权统治区，在米玛塔尔起义发生后成为了艾玛军队侧翼的保护地。随着起义军力量不断试图深入他们昔日主人的领地，德里克见证了艾玛和起义军之间许多惨烈的对抗。艾玛后来终于守住了阵地，这大部分要归功于艾玛达人的军事协助，因此艾玛人奖励给了艾玛达人一片属于他们自己的领地。不过，这块空间与新成立的米玛塔尔共和国以及艾玛帝国接壤，因此可谓处于列强环伺之下。 \n\n由于没有通往别处的安全路径，该星域的当地经济曾依赖与艾玛人的贸易作为其主要生存手段。艾玛达人数十年来在经济萧条和贸易伙伴稀少的状况下坚持着，不过在近几十年来，他们的坚韧不拔终于换来了经济的繁荣。这条艰难的道路令所有艾玛达人感到自豪，而且极大地巩固了他们的艾玛信仰。"
+  },
+  "faction_id" : 500007,
+  "name" : {
+    "de" : "Derelik",
+    "en" : "Derelik",
+    "es" : "Derelik",
+    "fr" : "Derelik",
+    "ja" : "ディレリック",
+    "ko" : "디어릭",
+    "ru" : "Derelik",
+    "zh" : "德里克"
+  },
+  "nebula_id" : 11799,
+  "position" : {
     "x" : -77361951922776930,
     "y" : 50878032664301930,
     "z" : -64433101266115400
   },
-  "description_id" : 267685,
-  "faction_id" : 500007,
-  "max" : {
-    "x" : -49173916281705740,
-    "y" : 74627511451559840,
-    "z" : 102442842021202130
-  },
-  "min" : {
-    "x" : -105549987563848110,
-    "y" : 27128553877044016,
-    "z" : 26423360511028670
-  },
-  "name_id" : 267684,
-  "region_id" : 10000001,
   "wormhole_class_id" : 7,
-  "nebula_id" : 11799,
-  "universe_id" : "eve",
-  "description" : {
-    "en" : "The Derelik region, sovereign seat of the Ammatar Mandate, became the shield to the Amarrian flank in the wake of the Minmatar Rebellion. Derelik witnessed many hostile exchanges between the Amarr and rebel forces as the latter tried to push deeper into the territory of their former masters. Having held their ground, thanks in no small part to the Ammatars' military efforts, the Amarr awarded the Ammatar with their own province. However, this portion of space shared borders with the newly forming Minmatar Republic as well as the Empire, and thus came to be situated in a dark recess surrounded by hostiles. \n\nGiven the lack of safe routes elsewhere, the local economies of this region were dependent on trade with the Amarr as their primary means of survival. The Ammatar persevered over many decades of economic stagnation and limited trade partners, and their determination has in recent decades been rewarded with an increase in economic prosperity. This harsh trail is a point of pride for all who call themselves Ammatar, and it has bolstered their faith in the Amarrian way to no end.",
-    "ja" : "アマターマンデートの統治下にあるディレリックリージョンは、ミンマター反乱勢力の影響力に対してアマーの側面を固める盾の役割を果たしている。ディレリックでは、反乱軍がかつての領主であるアマーの支配地域に対して奥深くまで侵攻を試みた結果、両者の間に多くの対立が生じた。自らの地歩を固める一方、アマターの軍事的努力にも少なからず助けられたアマーは、アマターに自治州を与えた。しかし、この宙域はアマー帝国だけでなく新興のミンマター共和国とも境を接しており、周囲を敵に囲まれていわば袋のネズミ状態にある。他に安全な航路がないため、このリージョンの経済はもっぱらアマーとの交易のおかげで存続している。アマターは停滞した経済と交易対象の少なさに長らく苦しんできたが、粘り強い努力が近年ついに報われ、経済的発展を見せはじめている。アマター人にとって苦難を乗り越えたことは誇りであり、アマーの教えに対する信仰心は高まる一方である。"
-  },
-  "name" : {
-    "en" : "Derelik",
-    "ja" : "ディレリック"
-  }
+  "region_id" : 10000001
 }

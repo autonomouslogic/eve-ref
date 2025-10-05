@@ -1,7 +1,7 @@
 {
   "base_price" : 30000,
   "description" : {
-    "de" : "Die grundsätzliche Fertigkeit, ein Raumschiff zu bedienen.\r\n\r\n2% Bonus auf die Wendigkeit eines Schiffes je Skillstufe.",
+    "de" : "Die grundsätzliche Fertigkeit, ein Raumschiff zu bedienen.\n\n2% Bonus auf die Wendigkeit eines Schiffes je Skillstufe.",
     "en" : "The basic operation of spaceships. 2% improved ship agility for all ships per skill level.",
     "es" : "Operación básica de naves espaciales. +2 % de bonificación a la agilidad de todas las naves por nivel de habilidad.",
     "fr" : "Pilotage de base des vaisseaux. Augmente de 2 % par niveau de compétence la maniabilité de tous les vaisseaux.",

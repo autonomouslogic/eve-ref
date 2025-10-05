@@ -1,17 +1,10 @@
 {
-  "attribute_id" : 165,
-  "category_id" : 7,
+  "attribute_category_id" : 7,
   "data_type" : 4,
   "default_value" : 0,
   "description" : {
     "en" : "The intelligence of a character."
   },
-  "high_is_good" : true,
-  "icon_id" : 1380,
-  "name" : "intelligence",
-  "published" : true,
-  "stackable" : true,
-  "unit_id" : 120,
   "display_name" : {
     "de" : "Intelligenz",
     "en" : "Intelligence",
@@ -21,5 +14,13 @@
     "ko" : "지능",
     "ru" : "«Интеллект»",
     "zh" : "智力"
-  }
+  },
+  "display_when_zero" : false,
+  "high_is_good" : true,
+  "icon_id" : 1380,
+  "name" : "intelligence",
+  "published" : true,
+  "stackable" : true,
+  "unit_id" : 120,
+  "attribute_id" : 165
 }
