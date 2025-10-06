@@ -737,6 +737,18 @@ components:
           additionalProperties:
             $ref: "#/components/schemas/Unit"
           description: A map of units. The key is the unit ID.
+    Color:
+      type: object
+      properties:
+        b:
+          type: number
+          format: double
+        g:
+          type: number
+          format: double
+        r:
+          type: number
+          format: double
     Coordinate:
       type: object
       properties:
@@ -876,8 +888,6 @@ components:
         resistance_attribute_id:
           type: integer
           format: int64
-        sfx_name:
-          type: string
         tracking_speed_attribute_id:
           type: integer
           format: int64
@@ -904,15 +914,11 @@ components:
       type: object
       description: A map of icons. The key is the icon ID.
       properties:
-        description:
-          type: string
         icon_file:
           type: string
         icon_id:
           type: integer
           format: int64
-        obsolete:
-          type: boolean
     IndustryModifierActivities:
       type: object
       description: "These are the type IDs of the engineering rigs which affect this\
@@ -1233,11 +1239,6 @@ components:
           description: The skills required for this type. The key is the skill type
             ID and the value is the level. This is added by EVE Ref and derived from
             dogma attributes.
-        sof_faction_name:
-          type: string
-        sof_material_set_id:
-          type: integer
-          format: int64
         sound_id:
           type: integer
           format: int64
@@ -1364,10 +1365,7 @@ components:
       description: A meta group
       properties:
         color:
-          type: array
-          items:
-            type: number
-            format: double
+          $ref: "#/components/schemas/Color"
         description:
           type: object
           additionalProperties:
@@ -1490,8 +1488,6 @@ components:
     Region:
       type: object
       properties:
-        center:
-          $ref: "#/components/schemas/Coordinate"
         description:
           type: object
           additionalProperties:
@@ -1504,10 +1500,6 @@ components:
         faction_id:
           type: integer
           format: int64
-        max:
-          $ref: "#/components/schemas/Coordinate"
-        min:
-          $ref: "#/components/schemas/Coordinate"
         name:
           type: object
           additionalProperties:
@@ -1520,6 +1512,8 @@ components:
         nebula_id:
           type: integer
           format: int64
+        position:
+          $ref: "#/components/schemas/Coordinate"
         region_id:
           type: integer
           format: int64

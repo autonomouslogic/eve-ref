@@ -1,21 +1,6 @@
 {
   "disallow_auto_repeat" : false,
   "discharge_attribute_id" : 6,
-  "distribution" : 1,
-  "duration_attribute_id" : 505,
-  "effect_category" : 2,
-  "effect_id" : 5928,
-  "effect_name" : "warpScrambleTargetMWDBlockActivationForEntity",
-  "electronic_chance" : false,
-  "guid" : "effects.WarpScramble",
-  "is_assistance" : false,
-  "is_offensive" : true,
-  "is_warp_safe" : false,
-  "npc_usage_chance_attribute_id" : 504,
-  "propulsion_chance" : false,
-  "published" : true,
-  "range_attribute_id" : 103,
-  "range_chance" : false,
   "display_name" : {
     "de" : "Warpunterbrechung",
     "en" : "Warp Scramble",
@@ -26,6 +11,19 @@
     "ru" : "Глушение варп-двигателя",
     "zh" : "跃迁干扰"
   },
+  "distribution" : 1,
+  "duration_attribute_id" : 505,
+  "electronic_chance" : false,
+  "guid" : "effects.WarpScramble",
+  "is_assistance" : false,
+  "is_offensive" : true,
+  "is_warp_safe" : false,
+  "npc_usage_chance_attribute_id" : 504,
+  "propulsion_chance" : false,
+  "published" : true,
+  "range_attribute_id" : 103,
+  "range_chance" : false,
+  "effect_category" : 2,
   "modifiers" : [ {
     "domain" : "targetID",
     "func" : "ItemModifier",
@@ -61,6 +59,8 @@
     "modifying_attribute_id" : 1350,
     "operator" : 2
   } ],
+  "effect_name" : "warpScrambleTargetMWDBlockActivationForEntity",
+  "effect_id" : 5928,
   "description" : {
     "en" : ""
   },

@@ -3,9 +3,6 @@
   "discharge_attribute_id" : 6,
   "distribution" : 1,
   "duration_attribute_id" : 73,
-  "effect_category" : 2,
-  "effect_id" : 18,
-  "effect_name" : "shieldTransfer",
   "electronic_chance" : false,
   "guid" : "effects.ShieldTransfer",
   "is_assistance" : true,
@@ -14,5 +11,8 @@
   "propulsion_chance" : false,
   "published" : false,
   "range_attribute_id" : 87,
-  "range_chance" : false
+  "range_chance" : false,
+  "effect_category" : 2,
+  "effect_name" : "shieldTransfer",
+  "effect_id" : 18
 }

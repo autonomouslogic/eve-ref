@@ -24,12 +24,6 @@ export interface Icon {
      * @type {string}
      * @memberof Icon
      */
-    description?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Icon
-     */
     iconFile?: string;
     /**
      * 
@@ -37,12 +31,6 @@ export interface Icon {
      * @memberof Icon
      */
     iconId?: number;
-    /**
-     * 
-     * @type {boolean}
-     * @memberof Icon
-     */
-    obsolete?: boolean;
 }
 
 /**
@@ -64,10 +52,8 @@ export function IconFromJSONTyped(json: any, ignoreDiscriminator: boolean): Icon
     }
     return {
         
-        'description': !exists(json, 'description') ? undefined : json['description'],
         'iconFile': !exists(json, 'icon_file') ? undefined : json['icon_file'],
         'iconId': !exists(json, 'icon_id') ? undefined : json['icon_id'],
-        'obsolete': !exists(json, 'obsolete') ? undefined : json['obsolete'],
     };
 }
 
@@ -80,10 +66,8 @@ export function IconToJSON(value?: Icon | null): any {
     }
     return {
         
-        'description': value.description,
         'icon_file': value.iconFile,
         'icon_id': value.iconId,
-        'obsolete': value.obsolete,
     };
 }
 

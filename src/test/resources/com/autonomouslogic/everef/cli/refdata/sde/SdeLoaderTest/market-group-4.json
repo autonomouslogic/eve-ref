@@ -1,4 +1,14 @@
 {
+  "description" : {
+    "de" : "Raumschiffe aller Größen und Funktionen für Kapselpiloten. Dazu gehören fortschrittliche und Fraktionsvarianten von vielen Rumpftypen.",
+    "en" : "Capsuleer spaceships of all sizes and roles, including advanced and faction variants of many hull types",
+    "es" : "Pilota naves para capsulistas de todos los tamaños y funciones, incluidos modelos faccionarios avanzados de muchos tipos de casco.",
+    "fr" : "Vaisseaux spatiaux de capsulier de tout rôle et de toute taille, y compris les variantes avancées et spécifiques à certaines factions avec plusieurs types de coques",
+    "ja" : "カプセラの宇宙船の全サイズおよび機能（性能別、各勢力仕様別船体タイプなど）",
+    "ko" : "캡슐리어가 탑승할 수 있는 모든 종류의 함선입니다. (상급 및 팩션 함선 포함)",
+    "ru" : "Капсулёрские корабли всех назначений, классов, типов и размеров, включая корабли усовершенствованных проектов и корабли из арсеналов сверхдержав и независимых организаций",
+    "zh" : "各种型号和用途的太空飞船，涵盖了高级和势力衍生型号"
+  },
   "has_types" : false,
   "icon_id" : 1443,
   "name" : {
@@ -10,16 +20,6 @@
     "ko" : "함선",
     "ru" : "Корабли",
     "zh" : "舰船"
-  },
-  "description" : {
-    "de" : "Raumschiffe aller Größen und Funktionen für Kapselpiloten. Dazu gehören fortschrittliche und Fraktionsvarianten von vielen Rumpftypen.",
-    "en" : "Capsuleer spaceships of all sizes and roles, including advanced and faction variants of many hull types",
-    "es" : "Pilota naves para capsulistas de todos los tamaños y funciones, incluidos modelos faccionarios avanzados de muchos tipos de casco.",
-    "fr" : "Vaisseaux spatiaux de capsulier de tout rôle et de toute taille, y compris les variantes avancées et spécifiques à certaines factions avec plusieurs types de coques",
-    "ja" : "カプセラの宇宙船の全サイズおよび機能（性能別、各勢力仕様別船体タイプなど）",
-    "ko" : "캡슐리어가 탑승할 수 있는 모든 종류의 함선입니다. (상급 및 팩션 함선 포함)",
-    "ru" : "Капсулёрские корабли всех назначений, классов, типов и размеров, включая корабли усовершенствованных проектов и корабли из арсеналов сверхдержав и независимых организаций",
-    "zh" : "各种型号和用途的太空飞船，涵盖了高级和势力衍生型号"
   },
   "market_group_id" : 4
 }

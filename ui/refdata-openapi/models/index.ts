@@ -4,6 +4,7 @@ export * from './Blueprint';
 export * from './BlueprintActivity';
 export * from './BlueprintMaterial';
 export * from './Bundle';
+export * from './Color';
 export * from './Coordinate';
 export * from './DogmaAttribute';
 export * from './DogmaEffect';

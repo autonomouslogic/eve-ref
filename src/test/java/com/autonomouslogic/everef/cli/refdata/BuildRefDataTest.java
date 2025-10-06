@@ -4,13 +4,8 @@ import static com.autonomouslogic.everef.test.TestDataUtil.TEST_PORT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 import com.autonomouslogic.commons.ResourceUtil;
-import com.autonomouslogic.everef.http.DataCrawler;
-import com.autonomouslogic.everef.http.MockDataCrawlerModule;
 import com.autonomouslogic.everef.model.refdata.RefDataConfig;
 import com.autonomouslogic.everef.refdata.RefDataMeta;
 import com.autonomouslogic.everef.refdata.RefDataMetaFileInfo;
@@ -28,7 +23,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.time.ZonedDateTime;
 import java.util.LinkedHashSet;
-import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.NonNull;
@@ -100,17 +94,7 @@ public class BuildRefDataTest {
 	@BeforeEach
 	@SneakyThrows
 	void before() {
-		var dataCrawler = mock(DataCrawler.class);
-
-		DaggerTestComponent.builder()
-				.mockDataCrawlerModule(new MockDataCrawlerModule().setDataCrawler(dataCrawler))
-				.build()
-				.inject(this);
-
-		when(dataCrawler.crawl())
-				.thenReturn(List.of(
-						urlParser.parse("http://localhost:" + TEST_PORT + "/ccp/sde/sde-20230315-TRANQUILITY.zip")));
-		when(dataCrawler.setPrefix(any())).thenReturn(dataCrawler);
+		DaggerTestComponent.builder().build().inject(this);
 
 		sdeFile = mockScrapeBuilder.createTestSde();
 		esiFile = mockScrapeBuilder.createTestEsiDump();
@@ -225,7 +209,7 @@ public class BuildRefDataTest {
 				var path = request.getRequestUrl().encodedPath();
 				log.info("Path: {}", path);
 				switch (path) {
-					case "/ccp/sde/sde-20230315-TRANQUILITY.zip":
+					case "/ccp/sde/eve-online-static-data-latest-yaml.zip":
 						return new MockResponse()
 								.setResponseCode(200)
 								.setBody(new Buffer().write(IOUtils.toByteArray(new FileInputStream(sdeFile))));

@@ -1,8 +1,5 @@
 {
   "disallow_auto_repeat" : false,
-  "effect_category" : 0,
-  "effect_id" : 157,
-  "effect_name" : "largeHybridTurretDamageMultiplierBonusPostPercentDamageMultiplierLocationShipModulesRequiringLargeHybridTurret",
   "electronic_chance" : false,
   "guid" : "",
   "icon_id" : 0,
@@ -12,6 +9,7 @@
   "propulsion_chance" : false,
   "published" : false,
   "range_chance" : false,
+  "effect_category" : 0,
   "modifiers" : [ {
     "domain" : "shipID",
     "func" : "LocationRequiredSkillModifier",
@@ -26,6 +24,8 @@
     "modifying_attribute_id" : 292,
     "operator" : 6
   } ],
+  "effect_name" : "largeHybridTurretDamageMultiplierBonusPostPercentDamageMultiplierLocationShipModulesRequiringLargeHybridTurret",
+  "effect_id" : 157,
   "description" : {
     "en" : ""
   },

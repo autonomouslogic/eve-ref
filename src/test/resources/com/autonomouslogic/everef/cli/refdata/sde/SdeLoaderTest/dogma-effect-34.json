@@ -3,9 +3,6 @@
   "discharge_attribute_id" : 6,
   "distribution" : 2,
   "duration_attribute_id" : 51,
-  "effect_category" : 2,
-  "effect_id" : 34,
-  "effect_name" : "projectileFired",
   "electronic_chance" : false,
   "falloff_attribute_id" : 158,
   "guid" : "effects.ProjectileFired",
@@ -16,5 +13,8 @@
   "published" : false,
   "range_attribute_id" : 54,
   "range_chance" : false,
-  "tracking_speed_attribute_id" : 160
+  "tracking_speed_attribute_id" : 160,
+  "effect_category" : 2,
+  "effect_name" : "projectileFired",
+  "effect_id" : 34
 }

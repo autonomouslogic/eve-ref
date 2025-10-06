@@ -64,7 +64,7 @@ public class ArchivePathFactoryTest {
 
 	@Test
 	void shouldGenerateStaticDataJsonlNames() {
-		var factory = ArchivePathFactory.STATIC_DATA_JSONL;
+		var factory = ArchivePathFactory.SDE_V2_JSONL;
 		testExpectedPaths(
 				factory,
 				Instant.parse("2023-01-01T00:00:00Z"),
@@ -74,7 +74,7 @@ public class ArchivePathFactoryTest {
 
 	@Test
 	void shouldGenerateStaticDataYamlNames() {
-		var factory = ArchivePathFactory.STATIC_DATA_YAML;
+		var factory = ArchivePathFactory.SDE_V2_YAML;
 		testExpectedPaths(
 				factory,
 				Instant.parse("2023-01-01T00:00:00Z"),

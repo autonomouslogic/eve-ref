@@ -1,8 +1,5 @@
 {
   "disallow_auto_repeat" : false,
-  "effect_category" : 4,
-  "effect_id" : 21,
-  "effect_name" : "shieldCapacityBonusOnline",
   "electronic_chance" : false,
   "guid" : "",
   "is_assistance" : false,
@@ -11,11 +8,14 @@
   "propulsion_chance" : false,
   "published" : false,
   "range_chance" : false,
+  "effect_category" : 4,
   "modifiers" : [ {
     "domain" : "shipID",
     "func" : "ItemModifier",
     "modified_attribute_id" : 263,
     "modifying_attribute_id" : 72,
     "operator" : 2
-  } ]
+  } ],
+  "effect_name" : "shieldCapacityBonusOnline",
+  "effect_id" : 21
 }

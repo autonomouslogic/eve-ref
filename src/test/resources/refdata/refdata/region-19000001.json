@@ -1,30 +1,25 @@
 {
-  "center" : {
+  "name" : {
+    "de" : "GPMR-01",
+    "en" : "GPMR-01",
+    "es" : "GPMR-01",
+    "fr" : "GPMR-01",
+    "ja" : "GPMR-01",
+    "ko" : "GPMR-01",
+    "ru" : "GPMR-01",
+    "zh" : "GPMR-01"
+  },
+  "nebula_id" : 11806,
+  "position" : {
     "x" : 1,
     "y" : 1,
     "z" : 1
   },
-  "max" : {
-    "x" : 300000,
-    "y" : 300000,
-    "z" : 300000
-  },
-  "min" : {
-    "x" : -300000,
-    "y" : -300000,
-    "z" : -300000
-  },
-  "name_id" : 1016205,
-  "region_id" : 19000001,
   "wormhole_class_id" : 7,
-  "nebula_id" : 11806,
-  "universe_id" : "hidden",
-  "name" : {
-    "en" : "GPMR-01",
-    "ja" : "GPMR-01"
-  },
+  "region_id" : 19000001,
   "description" : {
     "en" : null,
     "ja" : null
-  }
+  },
+  "universe_id" : "hidden"
 }

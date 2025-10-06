@@ -33,7 +33,6 @@ import com.autonomouslogic.everef.esi.LocationPopulatorTest;
 import com.autonomouslogic.everef.esi.MockEsiAuthHelperModule;
 import com.autonomouslogic.everef.esi.MockLocationPopulatorModule;
 import com.autonomouslogic.everef.http.DataCrawlerTest;
-import com.autonomouslogic.everef.http.MockDataCrawlerModule;
 import com.autonomouslogic.everef.inject.AwsModule;
 import com.autonomouslogic.everef.inject.EsiModule;
 import com.autonomouslogic.everef.inject.ExecutorServiceModule;
@@ -56,7 +55,6 @@ import javax.inject.Singleton;
 			TestOkHttpModule.class,
 			MockDataIndexModule.class,
 			MockLocationPopulatorModule.class,
-			MockDataCrawlerModule.class,
 			RefDataApiModule.class,
 			GenericMockModule.class,
 			MockEsiAuthHelperModule.class,

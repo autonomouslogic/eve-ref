@@ -1,6 +1,6 @@
 ---
 "4":
-  descriptionID:
+  description:
     de: "Raumschiffe aller Größen und Funktionen für Kapselpiloten. Dazu gehören fortschrittliche\
       \ und Fraktionsvarianten von vielen Rumpftypen."
     en: "Capsuleer spaceships of all sizes and roles, including advanced and faction\
@@ -18,7 +18,7 @@
     zh: "各种型号和用途的太空飞船，涵盖了高级和势力衍生型号"
   hasTypes: false
   iconID: 1443
-  nameID:
+  name:
     de: "Schiffe"
     en: "Ships"
     es: "Naves"
@@ -28,7 +28,7 @@
     ru: "Корабли"
     zh: "舰船"
 "7":
-  descriptionID:
+  description:
     de: "Der Grundstein einer jeden respektablen Streitmacht."
     en: "The foundations of any respectable fighting force."
     es: "Los cimientos de cualquier fuerza bélica respetable."
@@ -39,7 +39,7 @@
     zh: "任何一支令人生畏的舰队中最根本的中流砥柱。"
   hasTypes: false
   iconID: 1443
-  nameID:
+  name:
     de: "Standardschlachtschiffe"
     en: "Standard Battleships"
     es: "Acorazados estándar"
@@ -50,7 +50,7 @@
     zh: "标准战列舰"
   parentGroupID: 1376
 "81":
-  descriptionID:
+  description:
     de: "Gallente-Schlachtschiff-Designs."
     en: "Gallente battleship designs."
     es: "Diseños de acorazados gallentes."
@@ -61,7 +61,7 @@
     zh: "盖伦特战列舰设计"
   hasTypes: true
   iconID: 20967
-  nameID:
+  name:
     de: "Gallente"
     en: "Gallente"
     es: "Gallente"
@@ -72,7 +72,7 @@
     zh: "盖伦特"
   parentGroupID: 7
 "1376":
-  descriptionID:
+  description:
     de: "Große Raumschiffe mit ausreichend offensiven und defensiven Möglichkeiten,\
       \ um alle Probleme - bis auf die größten - in Agriff zu nehmen"
     en: "Large-sized spaceships with enough offensive and defensive capabilities to\
@@ -89,7 +89,7 @@
     zh: "大型舰船，攻防能力出色，足以应对大多数局面"
   hasTypes: false
   iconID: 1443
-  nameID:
+  name:
     de: "Schlachtschiffe"
     en: "Battleships"
     es: "Acorazados"

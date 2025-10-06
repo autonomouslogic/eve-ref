@@ -86,12 +86,6 @@ public class InventoryType {
 	Double radius;
 
 	@JsonProperty
-	String sofFactionName;
-
-	@JsonProperty
-	Long sofMaterialSetId;
-
-	@JsonProperty
 	Long soundId;
 
 	@JsonProperty

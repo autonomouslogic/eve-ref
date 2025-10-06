@@ -184,12 +184,6 @@ export interface DogmaEffect {
     resistanceAttributeId?: number;
     /**
      * 
-     * @type {string}
-     * @memberof DogmaEffect
-     */
-    sfxName?: string;
-    /**
-     * 
      * @type {number}
      * @memberof DogmaEffect
      */
@@ -241,7 +235,6 @@ export function DogmaEffectFromJSONTyped(json: any, ignoreDiscriminator: boolean
         'rangeAttributeId': !exists(json, 'range_attribute_id') ? undefined : json['range_attribute_id'],
         'rangeChance': !exists(json, 'range_chance') ? undefined : json['range_chance'],
         'resistanceAttributeId': !exists(json, 'resistance_attribute_id') ? undefined : json['resistance_attribute_id'],
-        'sfxName': !exists(json, 'sfx_name') ? undefined : json['sfx_name'],
         'trackingSpeedAttributeId': !exists(json, 'tracking_speed_attribute_id') ? undefined : json['tracking_speed_attribute_id'],
     };
 }
@@ -281,7 +274,6 @@ export function DogmaEffectToJSON(value?: DogmaEffect | null): any {
         'range_attribute_id': value.rangeAttributeId,
         'range_chance': value.rangeChance,
         'resistance_attribute_id': value.resistanceAttributeId,
-        'sfx_name': value.sfxName,
         'tracking_speed_attribute_id': value.trackingSpeedAttributeId,
     };
 }

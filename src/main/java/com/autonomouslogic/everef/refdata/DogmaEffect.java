@@ -95,8 +95,5 @@ public class DogmaEffect {
 	Boolean rangeChance;
 
 	@JsonProperty
-	String sfxName;
-
-	@JsonProperty
 	List<ModifierInfo> modifiers;
 }

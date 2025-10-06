@@ -26,128 +26,7 @@
   "portion_size" : 1,
   "published" : true,
   "radius" : 150000,
-  "sof_faction_name" : "upwell-indy",
   "sound_id" : 20244,
-  "traits" : {
-    "misc_bonuses" : { },
-    "role_bonuses" : {
-      "6" : {
-        "bonus_text" : {
-          "de" : "Solange diese Struktur über mindestens ein aktives Dienstmodul verfügt, befindet sie sich im Hochenergiemodus und erhält erhöhte Schild- und Panzerungs-HP sowie einen zusätzlichen Verstärkungszyklus.",
-          "en" : "While this structure has at least one online service module it enters full power mode and will gain increased shield and armor hitpoints and an extra reinforcement cycle.",
-          "es" : "Cuando esta estructura tiene al menos un módulo de servicio conectado, entra en el modo de potencia máxima y obtiene más puntos de vida de escudo y blindaje, además de un ciclo de refuerzo adicional.",
-          "fr" : "L’activation d’un seul module de service permet à la structure de passer en mode performance énergétique pour accroître les points de vie de ses boucliers et de son blindage et bénéficier d’un cycle de renforcement supplémentaire.",
-          "ja" : "このストラクチャのサービスモジュールが1つ以上オンラインになると、「フルパワー」モードに入り、シールドとアーマーのヒットポイントが増加し追加の強化サイクルを獲得する。",
-          "ko" : "장착된 모듈이 온라인 상태일 경우 구조물은 최대 전력 모드로 전환되며 실드량 및 장갑 내구도가 증가하고 추가 강화 시간대가 생성됩니다.",
-          "ru" : "Так как у этого сооружения есть по меньшей мере один работающий служебный модуль, оно переходит в режим полной мощности и получает увеличенный запас прочности щитов и брони, а также дополнительный цикл укрепления.",
-          "zh" : "这个建筑启用了至少一个服务装备，已进入全能量运转模式，将会获得额外的护盾和装甲值以及一个额外的增强模式循环。"
-        },
-        "importance" : 6
-      },
-      "7" : {
-        "bonus_text" : {
-          "de" : "Neue Sotiyos dürfen nicht im Hochsicherheitsraum verankert werden.",
-          "en" : "New Sotiyos may not be anchored within highsec space",
-          "es" : "No pueden anclarse nuevos Sotiyo en el espacio de seguridad alta",
-          "fr" : "Les nouveaux Sotiyo ne peuvent pas être ancrés dans un espace de haute sécurité",
-          "ja" : "ハイセキュリティ宙域内でソティヨを新たに係留することはできません",
-          "ko" : "하이 시큐리티 지역에 신규 소티요 구조물을 위치 고정할 수 없음",
-          "ru" : "Новые «Сотийо» нельзя ставить на якорь в системах с высоким ур. безопасности",
-          "zh" : "New Sotiyos may not be anchored within highsec space"
-        },
-        "importance" : 7
-      },
-      "8" : {
-        "bonus_text" : {
-          "de" : "Damit das Verankern abgeschlossen werden kann, muss in dieser Struktur ein <a href=showinfo:56208>Sotiyo-Upwell-Quantumkern</a> installiert werden",
-          "en" : "This structure requires a <a href=showinfo:56208>Sotiyo Upwell Quantum Core</a> to be installed for anchoring to complete",
-          "es" : "Esta estructura requiere un <a href=showinfo:56208>núcleo cuántico Sotiyo de Upwell</a> instalado para completar el anclaje.",
-          "fr" : "Cette structure nécessite un <a href=showinfo:56208>réacteur quantique Upwell Sotiyo</a> pour terminer le processus d'ancrage",
-          "ja" : "このストラクチャの係留を完了するには <a href=showinfo:56208>ソティヨ・アップウェルクアンタムコア</a>を取り付ける必要がある。",
-          "ko" : "해당 구조물을 고정하려면 <a href=showinfo:56208>소티요 업웰 양자코어</a>를 설치해야 합니다.",
-          "ru" : "Для завершения постановки этого сооружения на якорь в него требуется установить <a href=showinfo:56208>квантовое ядро «Сотийо» производства «Апвелл»</a>.",
-          "zh" : "这座建筑需要安装一个<a href=showinfo:56208>索迪约昇威量子芯</a>才能完成锚定。"
-        },
-        "importance" : 8
-      },
-      "1" : {
-        "bonus" : 1,
-        "bonus_text" : {
-          "de" : "Reduzierte Materialanforderungen für Fertigungsaufträge",
-          "en" : "reduction in material requirements for manufacturing jobs",
-          "es" : "de reducción de los requisitos de materiales para los trabajos de fabricación.",
-          "fr" : "de réduction de productivité matérielle pour les tâches de production",
-          "ja" : "製造ジョブの必要資源が減少",
-          "ko" : "제조 작업 자원요구치 감소",
-          "ru" : "уменьшает расход материалов, необходимых для выполнения производственных проектов",
-          "zh" : "生产项目的材料需求降低"
-        },
-        "importance" : 1,
-        "unit_id" : 105
-      },
-      "3" : {
-        "bonus" : 5,
-        "bonus_text" : {
-          "de" : "Reduzierte ISK-Anforderungen für Fertigungs- und Forschungsaufträge",
-          "en" : "reduction in ISK requirements for manufacturing and science jobs",
-          "es" : "de reducción de los requisitos de ISK para los trabajos de fabricación y ciencia.",
-          "fr" : "de réduction d'ISK requis pour les tâches de production et scientifiques",
-          "ja" : "製造ジョブとサイエンスジョブの必要ISKが減少",
-          "ko" : "연구 및 제조 작업 ISK 소모량 감소",
-          "ru" : "уменьшает стоимость (ISK) производственных и научных проектов",
-          "zh" : "生产和科研项目的星币需求降低"
-        },
-        "importance" : 3,
-        "unit_id" : 105
-      },
-      "4" : {
-        "bonus" : 25,
-        "bonus_text" : {
-          "de" : "Reduzierter Treibstoffverbrauch von Industriedienstmodulen",
-          "en" : "reduction in Engineering Service Module fuel consumption",
-          "es" : "de reducción del consumo de combustible de los módulos de servicio de ingeniería.",
-          "fr" : "de réduction de la consommation en carburant des modules de service d'ingénierie",
-          "ja" : "電気工学サービスモジュールの燃料消費が減少",
-          "ko" : "엔지니어링 서비스 모듈 연료 사용량 감소",
-          "ru" : "уменьшает потребление топлива служебными инженерными модулями",
-          "zh" : "工程服务装备的燃料消耗降低"
-        },
-        "importance" : 4,
-        "unit_id" : 105
-      },
-      "2" : {
-        "bonus" : 30,
-        "bonus_text" : {
-          "de" : "Reduzierte Zeitanforderungen für Fertigungs- und Forschungsaufträge",
-          "en" : "reduction in time requirements for manufacturing and science jobs",
-          "es" : "de reducción de los requisitos para los trabajos de fabricación y ciencia.",
-          "fr" : "de réduction de productivité horaire pour les tâches de production et scientifiques",
-          "ja" : "製造ジョブとサイエンスジョブの必要時間が減少",
-          "ko" : "연구 및 제조 작업 시간효율성 증가",
-          "ru" : "уменьшает время, необходимое для производственных и научных проектов",
-          "zh" : "生产和科研项目的时间需求降低"
-        },
-        "importance" : 2,
-        "unit_id" : 105
-      },
-      "5" : {
-        "bonus" : 30,
-        "bonus_text" : {
-          "de" : "Bonus auf die Feuerrate und den Energiespeicherverbrauch von Standup-Pulsprojektoren und Lenkbombenwerfern",
-          "en" : "bonus to the rate of fire and capacitor consumption of Standup Burst Projectors and Guided Bomb Launchers",
-          "es" : "de bonificación a la cadencia de tiro y al consumo del condensador de los proyectores de estallido Standup y los lanzabombas guiados.",
-          "fr" : "de bonus à la cadence de tir et à la consommation du capaciteur des projecteurs à salves et des lanceurs de bombes ciblées Standup",
-          "ja" : "スタンドアップバーストプロジェクターと誘導ボムランチャーの発射間隔とキャパシタ消費効率を改善",
-          "ko" : "스탠드업 버스트 프로젝터 및 유도폭탄 런처 연사속도 및 캐패시터 사용량 감소",
-          "ru" : "бонус к скорострельности и энергопотреблению проекторов объёмных помех и бомбометателей с системой наведения на базе «Стационар»",
-          "zh" : "屹立脉冲波投射器和制导炸弹发射器的射速和电容消耗加成"
-        },
-        "importance" : 5,
-        "unit_id" : 105
-      }
-    },
-    "types" : { }
-  },
   "volume" : 800000,
   "type_id" : 35827,
   "capacity" : 0,
@@ -500,5 +379,123 @@
     }
   },
   "packaged_volume" : 800000,
-  "engineering_rig_global_activities" : [ "research_material", "research_time", "manufacturing", "invention", "copying" ]
+  "engineering_rig_global_activities" : [ "research_material", "research_time", "manufacturing", "invention", "copying" ],
+  "traits" : {
+    "role_bonuses" : {
+      "6" : {
+        "bonus_text" : {
+          "de" : "Solange diese Struktur über mindestens ein aktives Dienstmodul verfügt, befindet sie sich im Hochenergiemodus und erhält erhöhte Schild- und Panzerungs-HP sowie einen zusätzlichen Verstärkungszyklus.",
+          "en" : "While this structure has at least one online service module it enters full power mode and will gain increased shield and armor hitpoints and an extra reinforcement cycle.",
+          "es" : "Cuando esta estructura tiene al menos un módulo de servicio conectado, entra en el modo de potencia máxima y obtiene más puntos de vida de escudo y blindaje, además de un ciclo de refuerzo adicional.",
+          "fr" : "L’activation d’un seul module de service permet à la structure de passer en mode performance énergétique pour accroître les points de vie de ses boucliers et de son blindage et bénéficier d’un cycle de renforcement supplémentaire.",
+          "ja" : "このストラクチャのサービスモジュールが1つ以上オンラインになると、「フルパワー」モードに入り、シールドとアーマーのヒットポイントが増加し追加の強化サイクルを獲得する。",
+          "ko" : "장착된 모듈이 온라인 상태일 경우 구조물은 최대 전력 모드로 전환되며 실드량 및 장갑 내구도가 증가하고 추가 강화 시간대가 생성됩니다.",
+          "ru" : "Так как у этого сооружения есть по меньшей мере один работающий служебный модуль, оно переходит в режим полной мощности и получает увеличенный запас прочности щитов и брони, а также дополнительный цикл укрепления.",
+          "zh" : "这个建筑启用了至少一个服务装备，已进入全能量运转模式，将会获得额外的护盾和装甲值以及一个额外的增强模式循环。"
+        },
+        "importance" : 6
+      },
+      "7" : {
+        "bonus_text" : {
+          "de" : "Neue Sotiyos dürfen nicht im Hochsicherheitsraum verankert werden.",
+          "en" : "New Sotiyos may not be anchored within highsec space",
+          "es" : "No pueden anclarse nuevos Sotiyo en el espacio de seguridad alta",
+          "fr" : "Les nouveaux Sotiyo ne peuvent pas être ancrés dans un espace de haute sécurité",
+          "ja" : "ハイセキュリティ宙域内でソティヨを新たに係留することはできません",
+          "ko" : "하이 시큐리티 지역에 신규 소티요 구조물을 위치 고정할 수 없음",
+          "ru" : "Новые «Сотийо» нельзя ставить на якорь в системах с высоким ур. безопасности",
+          "zh" : "New Sotiyos may not be anchored within highsec space"
+        },
+        "importance" : 7
+      },
+      "8" : {
+        "bonus_text" : {
+          "de" : "Damit das Verankern abgeschlossen werden kann, muss in dieser Struktur ein <a href=showinfo:56208>Sotiyo-Upwell-Quantumkern</a> installiert werden",
+          "en" : "This structure requires a <a href=showinfo:56208>Sotiyo Upwell Quantum Core</a> to be installed for anchoring to complete",
+          "es" : "Esta estructura requiere un <a href=showinfo:56208>núcleo cuántico Sotiyo de Upwell</a> instalado para completar el anclaje.",
+          "fr" : "Cette structure nécessite un <a href=showinfo:56208>réacteur quantique Upwell Sotiyo</a> pour terminer le processus d'ancrage",
+          "ja" : "このストラクチャの係留を完了するには <a href=showinfo:56208>ソティヨ・アップウェルクアンタムコア</a>を取り付ける必要がある。",
+          "ko" : "해당 구조물을 고정하려면 <a href=showinfo:56208>소티요 업웰 양자코어</a>를 설치해야 합니다.",
+          "ru" : "Для завершения постановки этого сооружения на якорь в него требуется установить <a href=showinfo:56208>квантовое ядро «Сотийо» производства «Апвелл»</a>.",
+          "zh" : "这座建筑需要安装一个<a href=showinfo:56208>索迪约昇威量子芯</a>才能完成锚定。"
+        },
+        "importance" : 8
+      },
+      "1" : {
+        "bonus" : 1,
+        "bonus_text" : {
+          "de" : "Reduzierte Materialanforderungen für Fertigungsaufträge",
+          "en" : "reduction in material requirements for manufacturing jobs",
+          "es" : "de reducción de los requisitos de materiales para los trabajos de fabricación.",
+          "fr" : "de réduction de productivité matérielle pour les tâches de production",
+          "ja" : "製造ジョブの必要資源が減少",
+          "ko" : "제조 작업 자원요구치 감소",
+          "ru" : "уменьшает расход материалов, необходимых для выполнения производственных проектов",
+          "zh" : "生产项目的材料需求降低"
+        },
+        "importance" : 1,
+        "unit_id" : 105
+      },
+      "3" : {
+        "bonus" : 5,
+        "bonus_text" : {
+          "de" : "Reduzierte ISK-Anforderungen für Fertigungs- und Forschungsaufträge",
+          "en" : "reduction in ISK requirements for manufacturing and science jobs",
+          "es" : "de reducción de los requisitos de ISK para los trabajos de fabricación y ciencia.",
+          "fr" : "de réduction d'ISK requis pour les tâches de production et scientifiques",
+          "ja" : "製造ジョブとサイエンスジョブの必要ISKが減少",
+          "ko" : "연구 및 제조 작업 ISK 소모량 감소",
+          "ru" : "уменьшает стоимость (ISK) производственных и научных проектов",
+          "zh" : "生产和科研项目的星币需求降低"
+        },
+        "importance" : 3,
+        "unit_id" : 105
+      },
+      "4" : {
+        "bonus" : 25,
+        "bonus_text" : {
+          "de" : "Reduzierter Treibstoffverbrauch von Industriedienstmodulen",
+          "en" : "reduction in Engineering Service Module fuel consumption",
+          "es" : "de reducción del consumo de combustible de los módulos de servicio de ingeniería.",
+          "fr" : "de réduction de la consommation en carburant des modules de service d'ingénierie",
+          "ja" : "電気工学サービスモジュールの燃料消費が減少",
+          "ko" : "엔지니어링 서비스 모듈 연료 사용량 감소",
+          "ru" : "уменьшает потребление топлива служебными инженерными модулями",
+          "zh" : "工程服务装备的燃料消耗降低"
+        },
+        "importance" : 4,
+        "unit_id" : 105
+      },
+      "2" : {
+        "bonus" : 30,
+        "bonus_text" : {
+          "de" : "Reduzierte Zeitanforderungen für Fertigungs- und Forschungsaufträge",
+          "en" : "reduction in time requirements for manufacturing and science jobs",
+          "es" : "de reducción de los requisitos para los trabajos de fabricación y ciencia.",
+          "fr" : "de réduction de productivité horaire pour les tâches de production et scientifiques",
+          "ja" : "製造ジョブとサイエンスジョブの必要時間が減少",
+          "ko" : "연구 및 제조 작업 시간효율성 증가",
+          "ru" : "уменьшает время, необходимое для производственных и научных проектов",
+          "zh" : "生产和科研项目的时间需求降低"
+        },
+        "importance" : 2,
+        "unit_id" : 105
+      },
+      "5" : {
+        "bonus" : 30,
+        "bonus_text" : {
+          "de" : "Bonus auf die Feuerrate und den Energiespeicherverbrauch von Standup-Pulsprojektoren und Lenkbombenwerfern",
+          "en" : "bonus to the rate of fire and capacitor consumption of Standup Burst Projectors and Guided Bomb Launchers",
+          "es" : "de bonificación a la cadencia de tiro y al consumo del condensador de los proyectores de estallido Standup y los lanzabombas guiados.",
+          "fr" : "de bonus à la cadence de tir et à la consommation du capaciteur des projecteurs à salves et des lanceurs de bombes ciblées Standup",
+          "ja" : "スタンドアップバーストプロジェクターと誘導ボムランチャーの発射間隔とキャパシタ消費効率を改善",
+          "ko" : "스탠드업 버스트 프로젝터 및 유도폭탄 런처 연사속도 및 캐패시터 사용량 감소",
+          "ru" : "бонус к скорострельности и энергопотреблению проекторов объёмных помех и бомбометателей с системой наведения на базе «Стационар»",
+          "zh" : "屹立脉冲波投射器和制导炸弹发射器的射速和电容消耗加成"
+        },
+        "importance" : 5,
+        "unit_id" : 105
+      }
+    }
+  }
 }

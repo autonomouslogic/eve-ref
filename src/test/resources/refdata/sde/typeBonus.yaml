@@ -1,0 +1,966 @@
+---
+"645":
+  roleBonuses:
+  - bonus: 5
+    bonusText:
+      de: "zusätzlicher Bonus auf HP der <a href=showinfo:3394>Verstärkten Schottwand</a>"
+      en: "additional bonus to <a href=showinfo:3394>Reinforced Bulkhead</a> hitpoints"
+      es: "de bonificación adicional a los puntos de vida del <a href=showinfo:3394>mamparo\
+        \ reforzado</a>."
+      fr: "de bonus supplémentaire aux points de vie de la <a href=showinfo:3394>cloison\
+        \ renforcée</a>"
+      ja: "<a href=showinfo:3394>強化隔壁</a>HPがさらに増加"
+      ko: "<a href=showinfo:3394>강화 격벽</a> 내구도 증가"
+      ru: "дополнительный бонус к\_прочности <a href=showinfo:3394>укреплённой пер\
+        еборки</a>"
+      zh: "<a href=showinfo:3394>强化舱隔壁</a>结构值加成"
+    importance: 3
+    unitID: 105
+  - bonus: 50
+    bonusText:
+      de: "Bonus auf die HP der <a href=showinfo:3394>Panzerplatte</a>"
+      en: "bonus to <a href=showinfo:3394>Armor Plate</a> hitpoints"
+      es: "de bonificación a los puntos de vida de las <a href=showinfo:3394>placas\
+        \ de blindaje</a>."
+      fr: "de bonus aux points de vie du <a href=showinfo:3394>revêtement de blindage</a>"
+      ja: "<a href=showinfo:3394>アーマープレート</a>HPが増加"
+      ko: "<a href=showinfo:3394>장갑 플레이트</a> 내구도 증가"
+      ru: "бонус к\_прочности <a href=showinfo:3394>бронеплиты</a>"
+      zh: "<a href=showinfo:3394>装甲附甲板</a>装甲值加成"
+    importance: 2
+    unitID: 105
+  - bonus: 100
+    bonusText:
+      de: "Bonus auf die HP der <a href=showinfo:3425>Schilderweiterung</a>"
+      en: "bonus to <a href=showinfo:3425>Shield Extender</a> hitpoints"
+      es: "de bonificación a los puntos de vida del <a href=showinfo:3425>extensor\
+        \ de escudo</a>."
+      fr: "de bonus aux points de vie de l'<a href=showinfo:3425>extenseur de bouclier</a>"
+      ja: "<a href=showinfo:3425>シールドエクステンダー</a>HPが増加"
+      ko: "<a href=showinfo:3425>실드 확장장치</a> 실드량 증가"
+      ru: "бонус к\_прочности <a href=showinfo:3425>расширителя щитов</a>"
+      zh: "<a href=showinfo:3425>护盾扩展装置</a>护盾值加成"
+    importance: 1
+    unitID: 105
+  types:
+    "3336":
+    - bonus: 7.5
+      bonusText:
+        de: "Bonus auf die optimale Reichweite und Nachführungsgeschwindigkeit von\
+          \ <a href=showinfo:3436>Drohnen</a>"
+        en: "bonus to <a href=showinfo:3436>Drone</a> optimal range and tracking speed"
+        es: "de bonificación a la velocidad de rastreo y el alcance óptimo de los\
+          \ <a href=showinfo:3436>drones</a>."
+        fr: "de bonus à la portée optimale et à la vitesse de poursuite du <a href=showinfo:3436>drone</a>"
+        ja: "<a href=showinfo:3436>ドローン</a>の最適射程距離と追跡速度が増加"
+        ko: "<a href=showinfo:3436>드론</a> 최적사거리 및 트래킹 속도 증가"
+        ru: "повышается скорость наводки на цель бортового оружия <a href=showinfo:3436>д\
+          ронов</a>, увеличивается оптимальная дальность его действия"
+        zh: "<a href=\"showinfo:3436\">无人机</a>最佳射程和跟踪速度加成"
+      importance: 2
+      unitID: 105
+    - bonus: 10
+      bonusText:
+        de: "Bonus auf die HP und den Schaden von <a href=showinfo:3436>Drohnen</a>"
+        en: "bonus to <a href=showinfo:3436>Drone</a> hitpoints and damage"
+        es: "de bonificación a los puntos de vida y el daño de los <a href=showinfo:3436>drones</a>."
+        fr: "de bonus aux dégâts et aux PV des <a href=showinfo:3436>drones</a>"
+        ja: "<a href=showinfo:3436>ドローン</a>のヒットポイントとダメージが増加"
+        ko: "<a href=showinfo:3436>드론</a> 내구도 및 피해량 증가"
+        ru: "увеличивается урон бортового оружия <a href=showinfo:3436>дронов</a>;\
+          \ увеличивается запас их прочности"
+        zh: "<a href=\"showinfo:3436\">无人机</a>伤害和HP加成"
+      importance: 1
+      unitID: 105
+"22430":
+  roleBonuses:
+  - bonusText:
+      de: "Kann Module für <a href=showinfo:21096>Anziehungsfeldgenerator</a>, <a\
+        \ href=showinfo:28646>getarnten Anziehungsfeldgenerator</a> und <a href=showinfo:28652>getarnten\
+        \ Sprungtorgenerator</a> ausrüsten"
+      en: "Can fit <a href=showinfo:21096>Cynosural Field Generator</a>, <a href=showinfo:28646>Covert\
+        \ Cynosural Field Generator</a>, and <a href=showinfo:28652>Covert Jump Portal\
+        \ Generator</a> modules"
+      es: "Es posible equipar módulos de <a href=showinfo:21096>generador de campo\
+        \ cinosural</a>,  <a href=showinfo:28646>generador de campo cinosural encubierto</a>\
+        \ y <a href=showinfo:28652>generador de portales de salto encubierto</a>."
+      fr: "Peut équiper des modules <a href=showinfo:21096>générateur de champ cynosural</a>,\
+        \ <a href=showinfo:28646>générateur de champ cynosural furtif</a> et <a href=showinfo:28652>gé\
+        nérateur de portail interstellaire furtif</a>"
+      ja: "<a href=showinfo:21096>サイノシュラルフィールドジェネレーター</a>、<a href=showinfo:28646>潜\
+        伏用サイノシュラルフィールドジェネレーター</a>、そして<a href=showinfo:28652>潜伏用ジャンプポータルジェネレーター</a>を\
+        装備可能"
+      ko: "<a href=showinfo:21096>사이노슈럴 필드 생성기</a>, <a href=showinfo:28646>코버트 사이노\
+        슈럴 필드 생성기</a>, <a href=showinfo:28652>코버트 점프 포탈 생성기</a> 장착 가능"
+      ru: "Возможно оснащение <a href=showinfo:21096>приводным маяком</a>, <a href=showinfo:28646>п\
+        риводным маяком скрытого действия</a> и\_<a href=showinfo:28652>диверсионн\
+        ым генератором гиперпорталов</a>"
+      zh: "可以装配<a href=showinfo:21096>诱导力场发生器</a>、<a href=showinfo:28646>隐秘诱导力场发生器\
+        </a>和<a href=showinfo:28652>隐秘跳跃通道发生器</a>装备"
+    importance: 1
+  - bonusText:
+      de: "Keine Verzögerung bei der Zielaufschaltung nach der Deaktivierung von <a\
+        \ href=showinfo:11579>Tarnmodulen</a>"
+      en: "No targeting delay after <a href=showinfo:11579>Cloaking Device</a> deactivation"
+      es: "No hay demora en la adquisición de objetivos tras la desactivación del\
+        \ <a href=showinfo:11579>dispositivo de camuflaje</a>."
+      fr: "Aucun délai de ciblage après la désactivation des <a href=showinfo:11579>dispositifs\
+        \ de camouflage</a>"
+      ja: "<a href=showinfo:11579>遮蔽装置</a>を停止した後のターゲット遅延なし"
+      ko: "<a href=showinfo:11579>클로킹 장치</a> 비활성화 후 타겟팅 딜레이 없음"
+      ru: "На кораблях этого типа устранена задержка включения систем захвата целе\
+        й, вызываемая отключением <a href=showinfo:11579>систем маскировки</a>"
+      zh: "重新启动<a href=\"showinfo:11579\">隐形装置</a>后不遭受锁定延时副作用"
+    importance: 2
+  - bonusText:
+      de: "Die Verzögerung bei Reaktivierung von <a href=showinfo:11579>Tarnmodulen</a>\
+        \ wird auf 5 Sekunden reduziert."
+      en: "<a href=showinfo:11579>Cloak</a> reactivation delay reduced to 5 seconds"
+      es: "Reducción de la demora de reactivación del <a href=showinfo:11579>camuflaje</a>\
+        \ a 5\_segundos."
+      fr: "Délai de réactivation du <a href=showinfo:11579>camouflage</a> réduit à\
+        \ 5 secondes"
+      ja: "<a href=showinfo:11579>遮蔽装置</a>の再起動遅延が5秒に短縮"
+      ko: "<a href=showinfo:11579>클로킹</a> 재가동 지연 시간 5초로 감소"
+      ru: "Задержка повторного включения <a href=showinfo:11579>систем маскировки\
+        </a> сокращена до 5 секунд"
+      zh: "<a href=\"showinfo:11579\">隐形装置</a>重启延时降到5秒"
+    importance: 3
+  - bonus: 75
+    bonusText:
+      de: "Reduktion der effektiv zurückgelegten Distanz für die Sprungerschöpfung"
+      en: "reduction to effective distance traveled for jump fatigue"
+      es: "de reducción de la distancia efectiva hasta sufrir fatiga de salto."
+      fr: "de réduction de la distance effectuée pour l'épuisement de saut"
+      ja: "ジャンプによる疲弊が飛行距離に及ぼす影響を低減"
+      ko: "이동 거리에 따른 점프 피로도 감소"
+      ru: "медленнее накапливается усталость от гиперпереходов"
+      zh: "减少跳跃距离对产生跳跃疲劳的影响"
+    importance: 4
+    unitID: 105
+  - bonus: 50
+    bonusText:
+      de: "Reduktion der Dauer von <a href=showinfo:21096>Anziehungsfeldgeneratoren</a>\
+        \ und <a href=showinfo:28646>getarnten Anziehungsfeldgeneratoren</a>"
+      en: "reduction in <a href=showinfo:21096>Cynosural Field Generator</a> and <a\
+        \ href=showinfo:28646>Covert Cynosural Field Generator</a> duration"
+      es: "de reducción de la duración del <a href=showinfo:21096>generador de campo\
+        \ cinosural</a> y el <a href=showinfo:28646>generador de campo cinosural encubierto</a>."
+      fr: "de réduction de la durée du <a href=showinfo:21096>générateur de champ\
+        \ cynosural</a> et du <a href=showinfo:28646>générateur de champ cynosural\
+        \ furtif</a>"
+      ja: "<a href=showinfo:21096>サイノシュラルフィールドジェネレーター</a>と<a href=showinfo:28646>潜\
+        伏用サイノシュラルフィールドジェネレーター</a>の持続時間が減少"
+      ko: "<a href=showinfo:21096>사이노슈럴 필드 생성기</a> 및 <a href=showinfo:28646>코버트 사이\
+        노슈럴 필드 생성기</a> 지속시간 감소"
+      ru: "сокращение времени работы <a href=showinfo:21096>приводного маяка</a> и\
+        \_<a href=showinfo:28646>приводного маяка скрытого действия</a>"
+      zh: "<a href=showinfo:21096>诱导力场发生器</a>和<a href=showinfo:28646>隐秘诱导力场发生器</a>的\
+        持续时间缩短"
+    importance: 5
+    unitID: 105
+  - bonus: 650
+    bonusText:
+      de: "Bonus auf die maximale Geschwindigkeit des Schiffs beim Einsatz von <a\
+        \ href=showinfo:11579>Tarnvorrichtungen</a>"
+      en: "bonus to ship max velocity when using <a href=showinfo:11579>Cloaking Devices</a>"
+      es: "de bonificación a la velocidad máxima de la nave al utilizar <a href=showinfo:11579>dispositivos\
+        \ de camuflaje</a>."
+      fr: "de bonus à la vitesse maximale d'un vaisseau lorsqu'équipé d'un <a href=showinfo:11579>dispositif\
+        \ de camouflage</a> actif"
+      ja: "<a href=showinfo:11579>遮蔽装置</a>使用時の艦船の最高速度が上昇"
+      ko: "<a href=showinfo:11579>클로킹 장치</a> 사용 시 함선 최대 속도 증가"
+      ru: "бонус к максимальной скорости хода при использовании <a href=showinfo:11579>у\
+        стройств маскировки</a>"
+      zh: "使用<a href=showinfo:11579>隐形装置</a>时舰船的最大速度加成"
+    importance: 6
+    unitID: 105
+  - bonus: 100
+    bonusText:
+      de: "Bonus auf die HP der <a href=showinfo:3425>Schilderweiterung</a>"
+      en: "bonus to <a href=showinfo:3425>Shield Extender</a> hitpoints"
+      es: "de bonificación a los puntos de vida del <a href=showinfo:3425>extensor\
+        \ de escudo</a>."
+      fr: "de bonus aux points de vie de l'<a href=showinfo:3425>extenseur de bouclier</a>"
+      ja: "<a href=showinfo:3425>シールドエクステンダー</a>HPが増加"
+      ko: "<a href=showinfo:3425>실드 확장장치</a> 실드량 증가"
+      ru: "бонус к\_прочности <a href=showinfo:3425>расширителя щитов</a>"
+      zh: "<a href=showinfo:3425>护盾扩展装置</a>护盾值加成"
+    importance: 7
+    unitID: 105
+  - bonus: 50
+    bonusText:
+      de: "Bonus auf die HP der <a href=showinfo:3394>Panzerplatte</a>"
+      en: "bonus to <a href=showinfo:3394>Armor Plate</a> hitpoints"
+      es: "de bonificación a los puntos de vida de las <a href=showinfo:3394>placas\
+        \ de blindaje</a>."
+      fr: "de bonus aux points de vie du <a href=showinfo:3394>revêtement de blindage</a>"
+      ja: "<a href=showinfo:3394>アーマープレート</a>HPが増加"
+      ko: "<a href=showinfo:3394>장갑 플레이트</a> 내구도 증가"
+      ru: "бонус к\_прочности <a href=showinfo:3394>бронеплиты</a>"
+      zh: "<a href=showinfo:3394>装甲附甲板</a>装甲值加成"
+    importance: 8
+    unitID: 105
+  - bonus: 5
+    bonusText:
+      de: "zusätzlicher Bonus auf HP der <a href=showinfo:3394>Verstärkten Schottwand</a>"
+      en: "additional bonus to <a href=showinfo:3394>Reinforced Bulkhead</a> hitpoints"
+      es: "de bonificación adicional a los puntos de vida del <a href=showinfo:3394>mamparo\
+        \ reforzado</a>."
+      fr: "de bonus supplémentaire aux points de vie de la <a href=showinfo:3394>cloison\
+        \ renforcée</a>"
+      ja: "<a href=showinfo:3394>強化隔壁</a>HPがさらに増加"
+      ko: "<a href=showinfo:3394>강화 격벽</a> 내구도 증가"
+      ru: "дополнительный бонус к\_прочности <a href=showinfo:3394>укреплённой пер\
+        еборки</a>"
+      zh: "<a href=showinfo:3394>强化舱隔壁</a>结构值加成"
+    importance: 9
+    unitID: 105
+  - bonusText:
+      en: "Sin bonuses do not apply to <a href=showinfo:3242>Warp Disruptors</a>"
+    importance: 10
+  types:
+    "3336":
+    - bonus: 10
+      bonusText:
+        de: "Bonus auf den Schaden von <a href=showinfo:3307>großen Hybridgeschütztü\
+          rmen</a>"
+        en: "bonus to <a href=showinfo:3307>Large Hybrid Turret</a> damage"
+        es: "de bonificación al daño de la <a href=showinfo:3307>torreta híbrida grande</a>."
+        fr: "de bonus aux dégâts des <a href=showinfo:3307>grandes tourelles hybrides</a>"
+        ja: "<a href=showinfo:3307>大型ハイブリッドタレット</a>のダメージが増加"
+        ko: "<a href=showinfo:3307>대형 하이브리드 터렛</a> 피해량 증가"
+        ru: "увеличивается урон боеприпасов <a href=showinfo:3307>больших гибридны\
+          х орудий</a>"
+        zh: "<a href=\"showinfo:3307\">大型混合炮台</a>伤害加成"
+      importance: 1
+      unitID: 105
+    - bonus: 10
+      bonusText:
+        de: "Bonus auf die HP und den Schaden von <a href=showinfo:3436>Drohnen</a>"
+        en: "bonus to <a href=showinfo:3436>Drone</a> hitpoints and damage"
+        es: "de bonificación a los puntos de vida y el daño de los <a href=showinfo:3436>drones</a>."
+        fr: "de bonus aux dégâts et aux PV des <a href=showinfo:3436>drones</a>"
+        ja: "<a href=showinfo:3436>ドローン</a>のヒットポイントとダメージが増加"
+        ko: "<a href=showinfo:3436>드론</a> 내구도 및 피해량 증가"
+        ru: "увеличивается урон бортового оружия <a href=showinfo:3436>дронов</a>;\
+          \ увеличивается запас их прочности"
+        zh: "<a href=\"showinfo:3436\">无人机</a>伤害和HP加成"
+      importance: 2
+      unitID: 105
+    "28656":
+    - bonus: 10
+      bonusText:
+        de: "Bonus auf die Transfermenge von <a href=showinfo:3439>Versorgungsdrohnen</a>"
+        en: "bonus to <a href=showinfo:3436>Warp Scrambler</a> range"
+        es: "de bonificación a la cantidad de transferencia de los <a href=showinfo:3439>drones\
+          \ logísticos</a>."
+        fr: "de bonus à la capacité de transport des <a href=showinfo:3439>drones\
+          \ logistiques</a>"
+        ja: "<a href=showinfo:3439>支援専門ドローン</a>転送量にボーナス"
+        ko: "<a href=showinfo:3439>로지스틱스 드론</a> 수리량 증가"
+        ru: "бонус к производительности <a href=showinfo:3439>дронов снабжения</a>"
+        zh: "<a href=showinfo:3439>后勤无人机</a>维修量加成"
+      importance: 1
+      unitID: 105
+    - bonus: 7.5
+      bonusText:
+        de: "Bonus auf die Nachführung und optimale Reichweite von <a href=showinfo:3436>Drohnen</a>"
+        en: "bonus to <a href=showinfo:3436>Drone</a> tracking and optimal range"
+        es: "de bonificación al alcance óptimo y al rastreo de los <a href=showinfo:3436>drones</a>."
+        fr: "bonus à la poursuite et portée optimale des <a href=showinfo:3436>drones</a>"
+        ja: "<a href=showinfo:3436>ドローン</a>のトラッキング能力および最適射程距離が増加"
+        ko: "<a href=showinfo:3436>드론</a> 트래킹 성능 및 최적사거리 증가"
+        ru: "бонус к скорости наведения и оптимальной дальности <a href=showinfo:3436>д\
+          ронов</a>"
+        zh: "<a href=showinfo:3436>无人机</a>跟踪速度和最佳射程加成"
+      importance: 2
+      unitID: 105
+    - bonus: 1
+      bonusText:
+        en: "scramble strength to all <a href=showinfo:447>Warp Scramblers</a>"
+      importance: 3
+      unitID: 139
+"32307":
+  roleBonuses:
+  - bonus: 5
+    bonusText:
+      de: "zusätzlicher Bonus auf HP der <a href=showinfo:3394>Verstärkten Schottwand</a>"
+      en: "additional bonus to <a href=showinfo:3394>Reinforced Bulkhead</a> hitpoints"
+      es: "de bonificación adicional a los puntos de vida del <a href=showinfo:3394>mamparo\
+        \ reforzado</a>."
+      fr: "de bonus supplémentaire aux points de vie de la <a href=showinfo:3394>cloison\
+        \ renforcée</a>"
+      ja: "<a href=showinfo:3394>強化隔壁</a>HPがさらに増加"
+      ko: "<a href=showinfo:3394>강화 격벽</a> 내구도 증가"
+      ru: "дополнительный бонус к\_прочности <a href=showinfo:3394>укреплённой пер\
+        еборки</a>"
+      zh: "<a href=showinfo:3394>强化舱隔壁</a>结构值加成"
+    importance: 3
+    unitID: 105
+  - bonus: 50
+    bonusText:
+      de: "Bonus auf die HP der <a href=showinfo:3394>Panzerplatte</a>"
+      en: "bonus to <a href=showinfo:3394>Armor Plate</a> hitpoints"
+      es: "de bonificación a los puntos de vida de las <a href=showinfo:3394>placas\
+        \ de blindaje</a>."
+      fr: "de bonus aux points de vie du <a href=showinfo:3394>revêtement de blindage</a>"
+      ja: "<a href=showinfo:3394>アーマープレート</a>HPが増加"
+      ko: "<a href=showinfo:3394>장갑 플레이트</a> 내구도 증가"
+      ru: "бонус к\_прочности <a href=showinfo:3394>бронеплиты</a>"
+      zh: "<a href=showinfo:3394>装甲附甲板</a>装甲值加成"
+    importance: 2
+    unitID: 105
+  - bonus: 100
+    bonusText:
+      de: "Bonus auf die HP der <a href=showinfo:3425>Schilderweiterung</a>"
+      en: "bonus to <a href=showinfo:3425>Shield Extender</a> hitpoints"
+      es: "de bonificación a los puntos de vida del <a href=showinfo:3425>extensor\
+        \ de escudo</a>."
+      fr: "de bonus aux points de vie de l'<a href=showinfo:3425>extenseur de bouclier</a>"
+      ja: "<a href=showinfo:3425>シールドエクステンダー</a>HPが増加"
+      ko: "<a href=showinfo:3425>실드 확장장치</a> 실드량 증가"
+      ru: "бонус к\_прочности <a href=showinfo:3425>расширителя щитов</a>"
+      zh: "<a href=showinfo:3425>护盾扩展装置</a>护盾值加成"
+    importance: 1
+    unitID: 105
+  types:
+    "3336":
+    - bonus: 7.5
+      bonusText:
+        de: "Bonus auf den Schaden von <a href=showinfo:3307>großen Hybridgeschütztü\
+          rmen</a>"
+        en: "bonus to <a href=showinfo:3307>Large Hybrid Turret</a> damage"
+        es: "de bonificación al daño de la <a href=showinfo:3307>torreta híbrida grande</a>."
+        fr: "de bonus aux dégâts des <a href=showinfo:3307>grandes tourelles hybrides</a>"
+        ja: "<a href=showinfo:3307>大型ハイブリッドタレット</a>のダメージが増加"
+        ko: "<a href=showinfo:3307>대형 하이브리드 터렛</a> 피해량 증가"
+        ru: "увеличивается урон боеприпасов <a href=showinfo:3307>больших гибридны\
+          х орудий</a>"
+        zh: "<a href=\"showinfo:3307\">大型混合炮台</a>伤害加成"
+      importance: 2
+      unitID: 105
+    - bonus: 7.5
+      bonusText:
+        de: "Bonus auf die Reparaturmenge von <a href=showinfo:3393>Panzerungsreparatursystemen</a>"
+        en: "bonus to <a href=showinfo:3393>Armor Repairer</a> amount"
+        es: "de bonificación a la eficiencia de los <a href=showinfo:3393>reparadores\
+          \ de blindaje</a>."
+        fr: "de bonus à la capacité réparatrice du <a href=showinfo:3393>réparateur\
+          \ de blindage</a>"
+        ja: "<a href=showinfo:3393>アーマーリペアラ</a>の回復量増加"
+        ko: "<a href=showinfo:3393>장갑수리 장치</a> 수리량 증가"
+        ru: "бонус к\_эффективности <a href=showinfo:3393>установки ремонта брони\
+          </a>"
+        zh: "<a href=showinfo:3393>装甲维修器</a>维修量加成"
+      importance: 3
+      unitID: 105
+    - bonus: 10
+      bonusText:
+        de: "Bonus auf HP, Schaden und Nachführung von <a href=showinfo:3436>Drohnen</a>"
+        en: "bonus to <a href=showinfo:3436>Drone</a> hitpoints, damage and tracking"
+        es: "de bonificación al rastreo, el daño y los puntos de vida del <a href=showinfo:3436>dron</a>."
+        fr: "de bonus aux points de vie, aux dégâts et à la poursuite des <a href=showinfo:3436>drones</a>"
+        ja: "<a href=showinfo:3436>ドローン</a>のHP、ダメージ、追跡が増加"
+        ko: "<a href=showinfo:3436>드론</a> 내구도, 피해량, 트래킹 속도 증가"
+        ru: "бонус к запасу прочности, урону и скорости наведения <a href=showinfo:3436>д\
+          ронов</a>"
+        zh: "<a href=showinfo:3436>无人机</a>HP、伤害和跟踪速度加成"
+      importance: 1
+      unitID: 105
+"33673":
+  roleBonuses:
+  - bonus: 60
+    bonusText:
+      de: "Bonus auf die Warpgeschwindigkeit und Warpbeschleunigung"
+      en: "bonus to warp speed and warp acceleration"
+      es: "de bonificación a la velocidad y la aceleración de warp."
+      fr: "de bonus à la vitesse de warp et à l'accélération de warp"
+      ja: "ワープ速度とワープ加速度が上昇"
+      ko: "워프 속도 및 워프 가속도 증가"
+      ru: "бонус к\_разгону и\_скорости хода (в\_варп-режиме)"
+      zh: "跃迁速度和跃迁加速加成"
+    importance: 5
+    unitID: 105
+  - bonus: 80
+    bonusText:
+      de: "Reduktion der Aktivierungskosten von <a href=showinfo:3435>Antriebsblockern</a>"
+      en: "reduction in <a href=showinfo:3435>Propulsion Jamming</a> systems activation\
+        \ cost"
+      es: "de reducción en el coste de activación de los sistemas <a href=showinfo:3435>perturbadores\
+        \ de propulsión</a>."
+      fr: "réduction du coût d'activation des systèmes de <a href=showinfo:3435>brouillage\
+        \ de propulsion</a>"
+      ja: "<a href=showinfo:3435>推進力ジャミング</a>システムの起動コストが軽減"
+      ko: "<a href=showinfo:3435>추진기 재밍</a> 시스템 활성화 비용 감소"
+      ru: "сокращается потребление энергии <a href=showinfo:3435>средствами ограни\
+        чения подвижности кораблей</a>"
+      zh: "<a href=showinfo:3435>推进抑制</a>系统启动消耗加成"
+    importance: 2
+    unitID: 105
+  - bonus: 80
+    bonusText:
+      de: "Reduktion in der Reaktivierungsverzögerung des <a href=showinfo:58919>Anti-Unterbrechers</a>\
+        \ und max. Erfassungsreichweitenabzug"
+      en: "reduction in <a href=showinfo:58919>Interdiction Nullifier</a> reactivation\
+        \ delay and max lock range penalty"
+      es: "de reducción de la demora de reactivación y de penalización al alcance\
+        \ de fijación máximo del <a href=showinfo:58919>anulador de interdicción</a>."
+      fr: "de réduction au délai de réactivation de la <a href=showinfo:58919>contremesure\
+        \ d’interdiction</a> et à la pénalité de portée de verrouillage maximale"
+      ja: "<a href=showinfo:58919>インターディクション無効化</a>の再起動遅延と最大ロック射程のペナルティ減少"
+      ko: "<a href=showinfo:58919>인터딕션 무효화 장치</a> 재활성화 대기시간 및 최대 타겟팅 거리 페널티 감소"
+      ru: "уменьшение задержки повторного включения <a href=showinfo:58919>нейтрал\
+        изатора варп-заграждений</a> и штрафа к максимальной дальности захвата цел\
+        и"
+      zh: "<a href=showinfo:58919>拦截失效装置</a>重启延迟和最大锁定距离惩罚降低"
+    importance: 3
+    unitID: 105
+  - bonus: 100
+    bonusText:
+      de: "Bonus auf die Dauer des <a href=showinfo:58919>Anti-Unterbrechers</a>"
+      en: "bonus to <a href=showinfo:58919>Interdiction Nullifier</a> duration"
+      es: "de bonificación a la duración del <a href=showinfo:58919>anulador de interdicció\
+        n</a>."
+      fr: "de bonus à la durée de la <a href=showinfo:58919>contremesure d’interdiction</a>"
+      ja: "<a href=showinfo:58919>インターディクション無効化</a>の持続時間にボーナス"
+      ko: "<a href=showinfo:58919>인터딕션 무효화 장치</a> 지속시간 보너스"
+      ru: "бонус к длительности действия <a href=showinfo:58919>нейтрализатора вар\
+        п-заграждений</a>"
+      zh: "<a href=showinfo:58919>拦截失效装置</a>持续时间加成"
+    importance: 4
+    unitID: 105
+  - bonus: 375
+    bonusText:
+      de: "Bonus auf die HP und den Schaden von <a href=showinfo:24241>Leichten Kampfdrohnen</a>"
+      en: "bonus to <a href=showinfo:24241>Light Combat Drone</a> damage and hitpoints"
+      es: "de bonificación al daño y los puntos de vida de los <a href=showinfo:24241>drones\
+        \ de combate ligeros</a>."
+      fr: "bonus aux dégâts et aux points de vie du <a href=showinfo:24241>drone de\
+        \ combat léger</a>"
+      ja: "<a href=showinfo:24241>戦闘用ライトドローン</a>のダメージとヒットポイントが増加"
+      ko: "<a href=showinfo:24241>라이트 공격 드론</a> 피해량 및 내구도 증가"
+      ru: "увеличивается урон бортового оружия <a href=showinfo:24241>лёгких боевы\
+        х дронов</a>; увеличивается запас их прочности"
+      zh: "<a href=showinfo:24241>轻型战斗无人机</a>伤害和HP加成"
+    importance: 1
+    unitID: 105
+  types:
+    "3328":
+    - bonus: 10
+      bonusText:
+        de: "Bonus auf den Kinetik- und Thermalschaden von Lenkwaffen"
+        en: "bonus to kinetic and thermal missile damage"
+        es: "de bonificación al daño cinético y térmico de los misiles."
+        fr: "bonus aux dégâts des missiles de type cinétique et thermique"
+        ja: "ミサイルのキネティックダメージおよびサーマルダメージが増加"
+        ko: "미사일 키네틱 및 열 피해 증가"
+        ru: "увеличивается урон кинетических и термических БЧ ракет"
+        zh: "动能和热能导弹伤害加成"
+      importance: 1
+      unitID: 105
+    "3330":
+    - bonus: 4
+      bonusText:
+        de: "Bonus auf alle Schildresistenzen"
+        en: "bonus to all shield resistances"
+        es: "de bonificación a todas las resistencias de escudo."
+        fr: "bonus à toutes les résistances de bouclier"
+        ja: "全てのシールドレジスタンスが増加"
+        ko: "모든 실드 저항력 증가"
+        ru: "повышается сопротивляемость щитов корабля всем видам воздействия"
+        zh: "护盾抗性加成"
+      importance: 1
+      unitID: 105
+    "12092":
+    - bonus: 5
+      bonusText:
+        de: "Bonus auf die optimale Reichweite von <a href=showinfo:447>Warpunterbrechern</a>\
+          \ und <a href=showinfo:3242>Warpstörern</a>"
+        en: "bonus to <a href=showinfo:447>Warp Scrambler</a> and <a href=showinfo:3242>Warp\
+          \ Disruptor</a> optimal range"
+        es: "de bonificación al alcance óptimo del <a href=showinfo:447>distorsionador\
+          \ de warp</a> y el <a href=showinfo:3242>disruptor de warp</a>."
+        fr: "bonus à la portée optimale de <a href=showinfo:447>l'inhibiteur de warp</a>,\
+          \ et du <a href=showinfo:3242>perturbateur de warp</a>"
+        ja: "<a href=showinfo:447>ワープスクランブラー</a>と<a href=showinfo:3242>ワープ妨害器</a>の\
+          最適射程距離が拡大"
+        ko: "<a href=showinfo:447>워프 스크램블러</a> 및 <a href=showinfo:3242>워프 디스럽터</a>\
+          \ 최적사거리 증가"
+        ru: "увеличивается оптимальная дальность действия <a href=showinfo:447>вар\
+          п-глушителей</a> и <a href=showinfo:3242>варп-подавителей</a>"
+        zh: "<a href=showinfo:447>跃迁扰频器</a>和<a href=showinfo:3242>跃迁扰断器</a>有效距离加成"
+      importance: 2
+      unitID: 105
+    - bonus: 15
+      bonusText:
+        de: "Reduktion des <a href=showinfo:3454>Mikrowarpantrieb</a>-Signaturradius"
+        en: "reduction in <a href=showinfo:3454>Microwarpdrive</a> signature radius\
+          \ penalty"
+        es: "de reducción de la penalización de radio de la señal del <a href=showinfo:3454>motor\
+          \ de microwarp</a>."
+        fr: "réduction de la pénalité du rayon de signature du <a href=showinfo:3454>propulseur\
+          \ de microwarp</a>"
+        ja: "<a href=showinfo:3454>マイクロワープドライブ</a>のシグネチャ半径ペナルティが軽減"
+        ko: "<a href=showinfo:3454>마이크로 워프 드라이브</a> 시그니처 반경 페널티 감소"
+        ru: "уменьшается влияние <a href=showinfo:3454>микроварп-ускорителей</a> н\
+          а размер сигнатуры корабля"
+        zh: "<a href=showinfo:3454>微型跃迁推进器</a>的信号半径惩罚加成"
+      importance: 1
+      unitID: 105
+"35827":
+  roleBonuses:
+  - bonusText:
+      de: "Solange diese Struktur über mindestens ein aktives Dienstmodul verfügt,\
+        \ befindet sie sich im Hochenergiemodus und erhält erhöhte Schild- und Panzerungs-HP\
+        \ sowie einen zusätzlichen Verstärkungszyklus."
+      en: "While this structure has at least one online service module it enters full\
+        \ power mode and will gain increased shield and armor hitpoints and an extra\
+        \ reinforcement cycle."
+      es: "Cuando esta estructura tiene al menos un módulo de servicio conectado,\
+        \ entra en el modo de potencia máxima y obtiene más puntos de vida de escudo\
+        \ y blindaje, además de un ciclo de refuerzo adicional."
+      fr: "L’activation d’un seul module de service permet à la structure de passer\
+        \ en mode performance énergétique pour accroître les points de vie de ses\
+        \ boucliers et de son blindage et bénéficier d’un cycle de renforcement supplé\
+        mentaire."
+      ja: "このストラクチャのサービスモジュールが1つ以上オンラインになると、「フルパワー」モードに入り、シールドとアーマーのヒットポイントが増加し追加の\
+        強化サイクルを獲得する。"
+      ko: "장착된 모듈이 온라인 상태일 경우 구조물은 최대 전력 모드로 전환되며 실드량 및 장갑 내구도가 증가하고 추가 강화 시간대가 생성\
+        됩니다."
+      ru: "Так как у этого сооружения есть по меньшей мере один работающий служебн\
+        ый модуль, оно переходит в режим полной мощности и получает увеличенный за\
+        пас прочности щитов и брони, а также дополнительный цикл укрепления."
+      zh: "这个建筑启用了至少一个服务装备，已进入全能量运转模式，将会获得额外的护盾和装甲值以及一个额外的增强模式循环。"
+    importance: 6
+  - bonusText:
+      de: "Neue Sotiyos dürfen nicht im Hochsicherheitsraum verankert werden."
+      en: "New Sotiyos may not be anchored within highsec space"
+      es: "No pueden anclarse nuevos Sotiyo en el espacio de seguridad alta"
+      fr: "Les nouveaux Sotiyo ne peuvent pas être ancrés dans un espace de haute\
+        \ sécurité"
+      ja: "ハイセキュリティ宙域内でソティヨを新たに係留することはできません"
+      ko: "하이 시큐리티 지역에 신규 소티요 구조물을 위치 고정할 수 없음"
+      ru: "Новые «Сотийо» нельзя ставить на якорь в\_системах с\_высоким ур.\_безо\
+        пасности"
+      zh: "New Sotiyos may not be anchored within highsec space"
+    importance: 7
+  - bonusText:
+      de: "Damit das Verankern abgeschlossen werden kann, muss in dieser Struktur\
+        \ ein <a href=showinfo:56208>Sotiyo-Upwell-Quantumkern</a> installiert werden"
+      en: "This structure requires a <a href=showinfo:56208>Sotiyo Upwell Quantum\
+        \ Core</a> to be installed for anchoring to complete"
+      es: "Esta estructura requiere un <a href=showinfo:56208>núcleo cuántico Sotiyo\
+        \ de Upwell</a> instalado para completar el anclaje."
+      fr: "Cette structure nécessite un <a href=showinfo:56208>réacteur quantique\
+        \ Upwell Sotiyo</a> pour terminer le processus d'ancrage"
+      ja: "このストラクチャの係留を完了するには <a href=showinfo:56208>ソティヨ・アップウェルクアンタムコア</a>を取り付ける必\
+        要がある。"
+      ko: "해당 구조물을 고정하려면 <a href=showinfo:56208>소티요 업웰 양자코어</a>를 설치해야 합니다."
+      ru: "Для завершения постановки этого сооружения на якорь в него требуется ус\
+        тановить <a href=showinfo:56208>квантовое ядро «Сотийо» производства «Апве\
+        лл»</a>."
+      zh: "这座建筑需要安装一个<a href=showinfo:56208>索迪约昇威量子芯</a>才能完成锚定。"
+    importance: 8
+  - bonus: 1
+    bonusText:
+      de: "Reduzierte Materialanforderungen für Fertigungsaufträge"
+      en: "reduction in material requirements for manufacturing jobs"
+      es: "de reducción de los requisitos de materiales para los trabajos de fabricació\
+        n."
+      fr: "de réduction de productivité matérielle pour les tâches de production"
+      ja: "製造ジョブの必要資源が減少"
+      ko: "제조 작업 자원요구치 감소"
+      ru: "уменьшает расход материалов, необходимых для выполнения производственны\
+        х проектов"
+      zh: "生产项目的材料需求降低"
+    importance: 1
+    unitID: 105
+  - bonus: 5
+    bonusText:
+      de: "Reduzierte ISK-Anforderungen für Fertigungs- und Forschungsaufträge"
+      en: "reduction in ISK requirements for manufacturing and science jobs"
+      es: "de reducción de los requisitos de ISK para los trabajos de fabricación\
+        \ y ciencia."
+      fr: "de réduction d'ISK requis pour les tâches de production et scientifiques"
+      ja: "製造ジョブとサイエンスジョブの必要ISKが減少"
+      ko: "연구 및 제조 작업 ISK 소모량 감소"
+      ru: "уменьшает стоимость (ISK) производственных и научных проектов"
+      zh: "生产和科研项目的星币需求降低"
+    importance: 3
+    unitID: 105
+  - bonus: 25
+    bonusText:
+      de: "Reduzierter Treibstoffverbrauch von Industriedienstmodulen"
+      en: "reduction in Engineering Service Module fuel consumption"
+      es: "de reducción del consumo de combustible de los módulos de servicio de ingenierí\
+        a."
+      fr: "de réduction de la consommation en carburant des modules de service d'ingé\
+        nierie"
+      ja: "電気工学サービスモジュールの燃料消費が減少"
+      ko: "엔지니어링 서비스 모듈 연료 사용량 감소"
+      ru: "уменьшает потребление топлива служебными инженерными модулями"
+      zh: "工程服务装备的燃料消耗降低"
+    importance: 4
+    unitID: 105
+  - bonus: 30
+    bonusText:
+      de: "Reduzierte Zeitanforderungen für Fertigungs- und Forschungsaufträge"
+      en: "reduction in time requirements for manufacturing and science jobs"
+      es: "de reducción de los requisitos para los trabajos de fabricación y ciencia."
+      fr: "de réduction de productivité horaire pour les tâches de production et scientifiques"
+      ja: "製造ジョブとサイエンスジョブの必要時間が減少"
+      ko: "연구 및 제조 작업 시간효율성 증가"
+      ru: "уменьшает время, необходимое для производственных и научных проектов"
+      zh: "生产和科研项目的时间需求降低"
+    importance: 2
+    unitID: 105
+  - bonus: 30
+    bonusText:
+      de: "Bonus auf die Feuerrate und den Energiespeicherverbrauch von Standup-Pulsprojektoren\
+        \ und Lenkbombenwerfern"
+      en: "bonus to the rate of fire and capacitor consumption of Standup Burst Projectors\
+        \ and Guided Bomb Launchers"
+      es: "de bonificación a la cadencia de tiro y al consumo del condensador de los\
+        \ proyectores de estallido Standup y los lanzabombas guiados."
+      fr: "de bonus à la cadence de tir et à la consommation du capaciteur des projecteurs\
+        \ à salves et des lanceurs de bombes ciblées Standup"
+      ja: "スタンドアップバーストプロジェクターと誘導ボムランチャーの発射間隔とキャパシタ消費効率を改善"
+      ko: "스탠드업 버스트 프로젝터 및 유도폭탄 런처 연사속도 및 캐패시터 사용량 감소"
+      ru: "бонус к скорострельности и энергопотреблению проекторов объёмных помех\
+        \ и бомбометателей с системой наведения на базе «Стационар»"
+      zh: "屹立脉冲波投射器和制导炸弹发射器的射速和电容消耗加成"
+    importance: 5
+    unitID: 105
+"35833":
+  roleBonuses:
+  - bonusText:
+      de: "Verfügt diese Struktur über mindestens ein aktives Dienstmodul, schaltet\
+        \ sie in den Modus „Volle Leistung“ und erhält dadurch erhöhte Trefferpunkte\
+        \ für Schild und Panzerung sowie einen zusätzlichen Verstärkungszyklus"
+      en: "While this structure has at least one online service module it enters full\
+        \ power mode and will gain increased shield and armor hitpoints and an extra\
+        \ reinforcement cycle"
+      es: "Cuando esta estructura tiene al menos un módulo de servicio conectado,\
+        \ entra en el modo de potencia máxima y obtiene más puntos de vida de escudo\
+        \ y blindaje, además de un ciclo de refuerzo adicional."
+      fr: "Lorsque cette structure dispose d'au moins un module de service fonctionnel,\
+        \ elle entre en mode pleine puissance. Elle bénéficie alors d'une augmentation\
+        \ des points de vie des boucliers et du blindage, ainsi que d'un cycle de\
+        \ renfort de blindage additionnel"
+      ja: "このストラクチャのサービスモジュールが1つ以上オンラインになると、「フルパワー」モードに入り、シールドとアーマーのヒットポイントが増加し追加の\
+        強化サイクルを獲得する。"
+      ko: "장착된 모듈이 온라인 상태일 경우 구조물은 최대 전력 모드로 전환되며 실드량 및 장갑 내구도가 증가하고 추가 강화 시간대가 생성\
+        됩니다."
+      ru: "Так как у этого сооружения есть по меньшей мере один работающий служебн\
+        ый модуль, оно переходит в режим полной мощности и получает увеличенный за\
+        пас прочности щитов и брони, а также дополнительный цикл укрепления"
+      zh: "这个建筑启用了至少一个服务装备，已进入全能量运转模式，将会获得额外的护盾和装甲值以及一个额外的增强模式循环"
+    importance: 4
+  - bonusText:
+      de: "Damit das Verankern abgeschlossen werden kann, muss in dieser Struktur\
+        \ ein <a href=showinfo:56204>Fortizar-Upwell-Quantumkern</a> installiert werden"
+      en: "This structure requires a <a href=showinfo:56204>Fortizar Upwell Quantum\
+        \ Core</a> to be installed for anchoring to complete"
+      es: "Esta estructura requiere un <a href=showinfo:56204>núcleo cuántico Fortizar\
+        \ de Upwell</a> instalado para completar el anclaje."
+      fr: "Cette structure nécessite un <a href=showinfo:56204>réacteur quantique\
+        \ Upwell Fortizar</a> pour terminer le processus d'ancrage"
+      ja: "このストラクチャの係留を完了するには <a href=showinfo:56204>フォータイザー・アップウェルクアンタムコア</a>を取り付\
+        ける必要がある。"
+      ko: "해당 구조물을 고정하려면 <a href=showinfo:56204>포티자 업웰 양자코어</a>를 설치해야 합니다."
+      ru: "Для завершения постановки этого сооружения на якорь в него требуется ус\
+        тановить <a href=showinfo:56204>квантовое ядро «Фортизар» производства «Ап\
+        велл»</a>."
+      zh: "这座建筑需要安装一个<a href=showinfo:56204>铁壁昇威量子芯</a>才能完成锚定。"
+    importance: 5
+  - bonus: 20
+    bonusText:
+      de: "Bonus auf die Feuerrate und den Energiespeicherverbrauch von Standup-Pulsprojektoren\
+        \ und Lenkbombenwerfern"
+      en: "bonus to the rate of fire and capacitor consumption of Standup Burst Projectors\
+        \ and Guided Bomb Launchers"
+      es: "de bonificación a la cadencia de tiro y al consumo del condensador de los\
+        \ proyectores de estallido Standup y los lanzabombas guiados."
+      fr: "de bonus à la cadence de tir et à la consommation du capaciteur des projecteurs\
+        \ à salves et des lanceurs de bombes ciblées Standup"
+      ja: "スタンドアップバーストプロジェクターと誘導ボムランチャーの発射間隔とキャパシタ消費効率を改善"
+      ko: "스탠드업 버스트 프로젝터 및 유도폭탄 런처 연사속도 및 캐패시터 사용량 감소"
+      ru: "бонус к скорострельности и энергопотреблению проекторов объёмных помех\
+        \ и бомбометателей с системой наведения на базе «Стационар»"
+      zh: "屹立脉冲波投射器和制导炸弹发射器的射速和电容消耗加成"
+    importance: 3
+    unitID: 105
+  - bonus: 25
+    bonusText:
+      de: "Bonus auf alle Effekte von Struktur-Kampfmodifikationen"
+      en: "bonus to all structure combat rig effects"
+      es: "de bonificación a todos los efectos de complementos de combate para estructuras."
+      fr: "de bonus à tous les effets d'amélioration des combats de structures"
+      ja: "全てのストラクチャ戦闘リグの効果が増大"
+      ko: "구조물 전용 전투 리그 효과 증가"
+      ru: "бонус к эффективности всех боевых надстроек"
+      zh: "所有建筑战斗改装件效果加成"
+    importance: 1
+    unitID: 105
+  - bonus: 25
+    bonusText:
+      de: "Reduzierter Treibstoffverbrauch von Zitadellen-Dienstmodulen"
+      en: "reduction in citadel service module fuel consumption"
+      es: "de reducción del consumo de combustible del módulo de servicio de ciudadela."
+      fr: "de réduction de la consommation de carburant des modules de service de\
+        \ citadelle"
+      ja: "城塞サービスモジュールの燃料消費をが減少"
+      ko: "시타델 서비스 모듈 연료 사용량 감소"
+      ru: "уменьшает потребление топлива служебными модулями цитаделей"
+      zh: "堡垒服务装备的燃料消耗降低"
+    importance: 2
+    unitID: 105
+"45622":
+  roleBonuses:
+  - bonusText:
+      de: "<b><u>Zusätzliche Basiswerte</b></u>"
+      en: "<b><u>Additional Base Stats</b></u>"
+      es: "<b><u>Estadísticas básicas adicionales</b></u>"
+      fr: "<b><u>Stats de base supplémentaires</b></u>"
+      ja: "<b><u>追加ベース統計</b></u>"
+      ko: "<b><u>추가 기본 능력치</b></u>"
+      ru: "<b><u>Кроме того:</b></u>"
+      zh: "<b><u>附加基础数值</b></u>"
+    importance: 1
+  - bonusText:
+      de: "+2 Mid Slots, +2 Low Slots"
+      en: "+2 Mid Slots, +2 Low Slots"
+      es: "+2\_ranuras intermedias, +2\_ranuras inferiores"
+      fr: "+2 Emplacements intermédiaires, +2 Emplacements inférieurs"
+      ja: "ミッドスロット+2、ロースロット+2"
+      ko: "미드 슬롯 +2, 로우 슬롯 +2"
+      ru: "+2 разъёма средней мощности, +2 разъёма малой мощности"
+      zh: "中槽+2，低槽+2"
+    importance: 2
+  - bonusText:
+      de: "+1 max. aufgeschaltetes Ziel"
+      en: "+1 max locked target"
+      es: "+1 objetivo fijado máximo"
+      fr: "+1 Cible verrouillée max"
+      ja: "最大ロックターゲット数+1"
+      ko: "최대 타겟팅 수 +1"
+      ru: "+1 к максимуму захваченных целей"
+      zh: "目标锁定数上限+1"
+    importance: 3
+  types:
+    "30539":
+    - bonus: 5
+      bonusText:
+        de: "Bonus auf die maximale Zielerfassungsreichweite"
+        en: "bonus to max targeting range"
+        es: "de bonificación a la distancia-objetivo máxima."
+        fr: "de bonus à la portée maximale du système de ciblage"
+        ja: "最大ターゲット範囲が拡大"
+        ko: "최대 타겟팅 거리 증가"
+        ru: "увеличивается максимальная дальность захвата целей"
+        zh: "最大锁定距离加成"
+      importance: 2
+      unitID: 105
+    - bonus: 15
+      bonusText:
+        de: "Bonus auf die Sensorstärke des Schiffs"
+        en: "bonus to ship sensor strength"
+        es: "de bonificación a la intensidad de los sensores de la nave."
+        fr: "de bonus à la puissance de détection du vaisseau"
+        ja: "艦船のセンサー強度が増加"
+        ko: "센서 강도 증가"
+        ru: "повышается эффективность системы захвата целей"
+        zh: "舰船感应强度加成"
+      importance: 1
+      unitID: 105
+    - bonus: 15
+      bonusText:
+        de: "Bonus auf die Scanauflösung"
+        en: "bonus to scan resolution"
+        es: "de bonificación a la resolución de escaneo."
+        fr: "de bonus à la résolution du balayage"
+        ja: "スキャン分解能にボーナス"
+        ko: "스캔 정밀도 향상"
+        ru: "увеличивается разрешающая способность системы захвата целей"
+        zh: "扫描分辨率加成"
+      importance: 3
+      unitID: 105
+"45623":
+  roleBonuses:
+  - bonusText:
+      de: "<b><u>Zusätzliche Basiswerte</b></u>"
+      en: "<b><u>Additional Base Stats</b></u>"
+      es: "<b><u>Estadísticas básicas adicionales</b></u>"
+      fr: "<b><u>Stats de base supplémentaires</b></u>"
+      ja: "<b><u>追加ベース統計</b></u>"
+      ko: "<b><u>추가 기본 능력치</b></u>"
+      ru: "<b><u>Кроме того:</b></u>"
+      zh: "<b><u>附加基础数值</b></u>"
+    importance: 2
+  - bonusText:
+      de: "+1 Mid Slot, +3 Low Slots"
+      en: "+1 Mid Slot, +3 Low Slots"
+      es: "+1 ranura intermedia, +3 ranuras inferiores"
+      fr: "+1 Emplacement intermédiaire, +3 Emplacements inférieurs"
+      ja: "ミッドスロット+1、ロースロット+3"
+      ko: "미드 슬롯 +1, 로우 슬롯 +3"
+      ru: "+1 разъём средней мощности, +3 разъёма малой мощности"
+      zh: "中槽+1，低槽+3"
+    importance: 3
+  - bonusText:
+      de: "+50 GJ Energiespeicherkapazität"
+      en: "+50GJ Capacitor Capacity"
+      es: "+50\_GJ de capacidad del condensador"
+      fr: "Charge de capaciteur +50 GJ"
+      ja: "キャパシタ容量+50GJ"
+      ko: "캐패시터 용량 +50 GJ"
+      ru: "+50 ГДж ёмкости накопителя"
+      zh: "电容器电容量+50GJ"
+    importance: 4
+  - bonus: 20
+    bonusText:
+      de: "Bonus auf die Stromleistung des Schiffes"
+      en: "bonus to ship power output"
+      es: "de bonificación a la potencia de salida de la nave."
+      fr: "de bonus à la puissance du réseau d'alimentation du vaisseau"
+      ja: "艦船のパワー出力が上昇"
+      ko: "함선 출력 증가"
+      ru: "повышается мощность реактора корабля"
+      zh: "舰船能量栅格输出加成"
+    importance: 1
+    unitID: 105
+  types:
+    "30539":
+    - bonus: 3
+      bonusText:
+        de: "Bonus auf die Resistenz gegen Energiekriegsführung"
+        en: "bonus to energy warfare resistance"
+        es: "de bonificación a la resistencia a la guerra de energía."
+        fr: "de bonus à la résistance aux énergies de guerre"
+        ja: "エネルギー戦耐性が増加"
+        ko: "에너지 관련 공격 저항력 증가"
+        ru: "увеличивается сопротивляемость вражескому воздействию на накопитель э\
+          нергии"
+        zh: "能量战抗性加成"
+      importance: 2
+      unitID: 105
+    - bonus: 5
+      bonusText:
+        de: "Bonus auf die Energiespeicherkapazität"
+        en: "bonus to capacitor capacity"
+        es: "de bonificación a la capacidad del condensador"
+        fr: "de bonus à la charge de capaciteur"
+        ja: "キャパシタ容量が増加"
+        ko: "캐패시터 용량 증가"
+        ru: "увеличивается ёмкость накопителя энергии"
+        zh: "电容器电容器量加成"
+      importance: 1
+      unitID: 105
+"45624":
+  roleBonuses:
+  - bonusText:
+      de: "<b><u>Zusätzliche Basiswerte</b></u>"
+      en: "<b><u>Additional Base Stats</b></u>"
+      es: "<b><u>Estadísticas básicas adicionales</b></u>"
+      fr: "<b><u>Stats de base supplémentaires</b></u>"
+      ja: "<b><u>追加ベース統計</b></u>"
+      ko: "<b><u>추가 기본 능력치</b></u>"
+      ru: "<b><u>Кроме того:</b></u>"
+      zh: "<b><u>附加基础数值</b></u>"
+    importance: 2
+  - bonusText:
+      de: "+2 Mid Slots, +2 Low Slots"
+      en: "+2 Mid Slots, +2 Low Slots"
+      es: "+2\_ranuras intermedias, +2\_ranuras inferiores"
+      fr: "+2 Emplacements intermédiaires, +2 Emplacements inférieurs"
+      ja: "ミッドスロット+2、ロースロット+2"
+      ko: "미드 슬롯 +2, 로우 슬롯 +2"
+      ru: "+2 разъёма средней мощности, +2 разъёма малой мощности"
+      zh: "中槽+2，低槽+2"
+    importance: 3
+  - bonusText:
+      de: "+50 GJ Energiespeicherkapazität"
+      en: "+50GJ Capacitor Capacity"
+      es: "+50\_GJ de capacidad del condensador"
+      fr: "Charge de capaciteur +50 GJ"
+      ja: "キャパシタ容量+50GJ"
+      ko: "캐패시터 용량 +50 GJ"
+      ru: "+50 ГДж ёмкости накопителя"
+      zh: "电容器电容量+50GJ"
+    importance: 4
+  - bonus: 50
+    bonusText:
+      de: "Reduktion des CPU- und Strombedarfs von <a href=showinfo:3423>Energie-Nosferatu-</a>\
+        \ und <a href=showinfo:3423>Energieneutralisierer-</a>Modulen"
+      en: "reduction in the PWG and CPU requirements for <a href=showinfo:3423>Energy\
+        \ Nosferatu</a> and <a href=showinfo:3423>Energy Neutralizer</a> modules"
+      es: "de reducción de los requisitos de SP y CPU para los módulos de <a href=showinfo:3423>nosferatu\
+        \ de energía</a> y <a href=showinfo:3423>neutralizador energético</a>."
+      fr: "de réduction des prérequis du PWG et du CPU des modules <a href=showinfo:3423>Nosferatu\
+        \ à énergie</a> et <a href=showinfo:3423>neutraliseur d'énergie</a>"
+      ja: "<a href=showinfo:3423>エネルギーノスフェラトゥ</a>と<a href=showinfo:3423>エネルギーニュートラ\
+        ライザー</a>モジュールの必要PWGとCPUが減少"
+      ko: "<a href=showinfo:3423>에너지 노스페라투</a> 및 <a href=showinfo:3423>에너지 뉴트럴라이저\
+        </a> 모듈 파워그리드 및 CPU 사용량 감소"
+      ru: "снижается потребность <a href=showinfo:3423>дистанционных нейтрализатор\
+        ов заряда</a> и <a href=showinfo:3423>устройств паразитной подзарядки нако\
+        пителя</a> в мощностях ЦПУ и реактора"
+      zh: "<a href=showinfo:3423>掠能器</a>和<a href=showinfo:3423>能量中和器</a>能量栅格和CPU需求\
+        降低"
+    importance: 1
+    unitID: 105
+  types:
+    "30539":
+    - bonus: 5
+      bonusText:
+        de: "Verringerung des Modulschadens durch Überhitzung"
+        en: "reduction in module damage from overheating"
+        es: "de reducción del daño del módulo por sobrecalentamiento."
+        fr: "de réduction de la détérioration du module suite à la surchauffe"
+        ja: "オーバーヒート時のモジュールダメージを軽減"
+        ko: "과부하로 인한 모듈 손상 감소"
+        ru: "уменьшается объём повреждений модулей, получаемых ими при перегрузке"
+        zh: "装备过载损伤降低"
+      importance: 3
+      unitID: 105
+    - bonus: 10
+      bonusText:
+        de: "Bonus auf die Transfermenge von <a href=showinfo:3423>Nosferatu-</a>\
+          \ und <a href=showinfo:3423>Energieneutralisierer</a>-Modulen"
+        en: "bonus to <a href=showinfo:3423>Energy Nosferatu</a> and <a href=showinfo:3423>Energy\
+          \ Neutralizer</a> drain amount"
+        es: "de bonificación a la cantidad drenada por el <a href=showinfo:3423>nosferatu\
+          \ de energía</a> y el <a href=showinfo:3423>neutralizador energético</a>."
+        fr: "de bonus au volume d'énergie drainée par les <a href=showinfo:3423>Nosferatu\
+          \ à énergie</a> et les <a href=showinfo:3423>neutraliseurs d'énergie</a>"
+        ja: "<a href=showinfo:3423>エネルギーノスフェラトゥ</a>と<a href=showinfo:3423>エネルギーニュー\
+          トラライザー</a>の吸収量が増加"
+        ko: "<a href=showinfo:3423>에너지 노스페라투</a> 및 <a href=showinfo:3423>에너지 뉴트럴라이\
+          저</a> 흡수량 증가"
+        ru: "увеличивается пропускная способность <a href=showinfo:3423>устройств\
+          \ паразитной подзарядки накопителя</a> и <a href=showinfo:3423>дистанцио\
+          нных нейтрализаторов заряда</a>"
+        zh: "<a href=showinfo:3423>掠能器</a>和<a href=showinfo:3423>能量中和器</a>吸取量加成"
+      importance: 1
+      unitID: 105
+    - bonus: 10
+      bonusText:
+        de: "Bonus auf den Nutzen der Überhitzung von <a href=showinfo:3423>Energie-Nosferatu-</a>\
+          \ und <a href=showinfo:3423>Energieneutralisierer-</a>Modulen"
+        en: "bonus to the benefits of overheating <a href=showinfo:3423>Energy Nosferatu</a>\
+          \ and <a href=showinfo:3423>Energy Neutralizer</a> modules"
+        es: "de bonificación a los beneficios de sobrecalentar los módulos de <a href=showinfo:3423>nosferatu\
+          \ de energía</a> y <a href=showinfo:3423>neutralizador energético</a>."
+        fr: "de bonus aux avantages de la surchauffe des modules <a href=showinfo:3423>Nosferatu\
+          \ à énergie</a> et les <a href=showinfo:3423>neutraliseurs d'énergie</a>"
+        ja: "オーバーヒートした<a href=showinfo:3423>エネルギーノスフェラトゥ</a>と<a href=showinfo:3423>エ\
+          ネルギーニュートラライザー</a>の恩恵にボーナス"
+        ko: "<a href=showinfo:3423>에너지 노스페라투</a> 및 <a href=showinfo:3423>에너지 뉴트럴라이\
+          저</a> 모듈 과부하 시 보너스 효과 증가"
+        ru: "усиливается влияние перегрузки на параметры <a href=showinfo:3423>дис\
+          танционных нейтрализаторов заряда</a> и <a href=showinfo:3423>устройств\
+          \ паразитной подзарядки накопителя</a>"
+        zh: "<a href=showinfo:3423>掠能器</a>和<a href=showinfo:3423>能量中和器</a>过载效果加成"
+      importance: 2
+      unitID: 105

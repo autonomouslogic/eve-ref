@@ -28,9 +28,10 @@
   "portion_size" : 1,
   "published" : true,
   "race_id" : 4,
-  "sof_faction_name" : "amarrbase",
+  "variation_parent_type_id" : 45623,
+  "volume" : 40,
+  "type_id" : 45622,
   "traits" : {
-    "misc_bonuses" : { },
     "role_bonuses" : {
       "1" : {
         "bonus_text" : {
@@ -121,8 +122,5 @@
         }
       }
     }
-  },
-  "variation_parent_type_id" : 45623,
-  "volume" : 40,
-  "type_id" : 45622
+  }
 }

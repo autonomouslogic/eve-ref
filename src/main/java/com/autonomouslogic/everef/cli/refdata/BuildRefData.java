@@ -20,6 +20,7 @@ import com.autonomouslogic.everef.cli.refdata.post.SchematicDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.SkillDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.TypeUsedInBlueprintsDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.TypesDecorator;
+import com.autonomouslogic.everef.cli.refdata.post.UniverseIdDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.VariationsDecorator;
 import com.autonomouslogic.everef.cli.refdata.sde.SdeLoader;
 import com.autonomouslogic.everef.config.Configs;
@@ -162,6 +163,9 @@ public class BuildRefData implements Command {
 	@Inject
 	protected CategoryIdDecorator categoryIdDecorator;
 
+	@Inject
+	protected UniverseIdDecorator universeIdDecorator;
+
 	@Setter
 	@NonNull
 	private ZonedDateTime buildTime = ZonedDateTime.now(ZoneOffset.UTC).truncatedTo(ChronoUnit.SECONDS);
@@ -215,7 +219,8 @@ public class BuildRefData implements Command {
 				canFitDecorator,
 				reprocessableTypesDecorator,
 				typeUsedInBlueprintsDecorator,
-				industryModifierSourcesDecorator);
+				industryModifierSourcesDecorator,
+				universeIdDecorator);
 	}
 
 	@Override
@@ -422,11 +427,12 @@ public class BuildRefData implements Command {
 	}
 
 	private Single<File> latestSde() {
-		return sdeFile != null
-				? Single.just(sdeFile)
-				: dataUtil.downloadLatestSde().doOnSuccess(file -> {
-					sdeFile = file;
-				});
+		return Single.fromCallable(() -> {
+			if (sdeFile == null) {
+				sdeFile = dataUtil.downloadLatestSde();
+			}
+			return sdeFile;
+		});
 	}
 
 	private Single<File> latestHoboleaks() {

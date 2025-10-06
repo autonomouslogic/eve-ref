@@ -16,13 +16,6 @@
   "group_id" : 27,
   "market_group_id" : 81,
   "mass" : 100250000,
-  "masteries" : {
-    "0" : [ 96, 99, 133, 138, 140, 89 ],
-    "1" : [ 96, 99, 133, 138, 140, 89 ],
-    "2" : [ 96, 99, 133, 138, 140, 89 ],
-    "3" : [ 96, 99, 133, 138, 140, 89 ],
-    "4" : [ 96, 99, 133, 138, 140, 117, 89 ]
-  },
   "meta_group_id" : 1,
   "name" : {
     "de" : "Dominix",
@@ -38,10 +31,40 @@
   "published" : true,
   "race_id" : 8,
   "radius" : 250,
-  "sof_faction_name" : "gallentebase",
   "sound_id" : 20072,
+  "volume" : 454500,
+  "type_id" : 645,
+  "type_materials" : {
+    "34" : {
+      "material_type_id" : 34,
+      "quantity" : 5200000
+    },
+    "35" : {
+      "material_type_id" : 35,
+      "quantity" : 2600000
+    },
+    "36" : {
+      "material_type_id" : 36,
+      "quantity" : 390000
+    },
+    "37" : {
+      "material_type_id" : 37,
+      "quantity" : 130000
+    },
+    "38" : {
+      "material_type_id" : 38,
+      "quantity" : 15600
+    },
+    "39" : {
+      "material_type_id" : 39,
+      "quantity" : 3900
+    },
+    "40" : {
+      "material_type_id" : 40,
+      "quantity" : 1950
+    }
+  },
   "traits" : {
-    "misc_bonuses" : { },
     "role_bonuses" : {
       "3" : {
         "bonus" : 5,
@@ -124,37 +147,12 @@
       }
     }
   },
-  "volume" : 454500,
-  "type_id" : 645,
-  "type_materials" : {
-    "34" : {
-      "material_type_id" : 34,
-      "quantity" : 5200000
-    },
-    "35" : {
-      "material_type_id" : 35,
-      "quantity" : 2600000
-    },
-    "36" : {
-      "material_type_id" : 36,
-      "quantity" : 390000
-    },
-    "37" : {
-      "material_type_id" : 37,
-      "quantity" : 130000
-    },
-    "38" : {
-      "material_type_id" : 38,
-      "quantity" : 15600
-    },
-    "39" : {
-      "material_type_id" : 39,
-      "quantity" : 3900
-    },
-    "40" : {
-      "material_type_id" : 40,
-      "quantity" : 1950
-    }
+  "masteries" : {
+    "0" : [ 96, 99, 133, 138, 140, 89 ],
+    "1" : [ 96, 99, 133, 138, 140, 89 ],
+    "2" : [ 96, 99, 133, 138, 140, 89 ],
+    "3" : [ 96, 99, 133, 138, 140, 89 ],
+    "4" : [ 96, 99, 133, 138, 140, 117, 89 ]
   },
   "dogma_attributes" : {
     "3" : {
