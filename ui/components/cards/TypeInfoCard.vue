@@ -21,7 +21,7 @@ const props = defineProps<{
 <template>
 	<CardWrapper title="Type Info">
 
-		<AttributeList :elements="17 + dogmaAttributes.length">
+		<AttributeList :elements="15 + dogmaAttributes.length">
 			<AttributeListItem v-if="inventoryType.typeId">
 				<template v-slot:key>Type ID:</template>
 				{{ inventoryType.typeId }}
@@ -69,14 +69,6 @@ const props = defineProps<{
 			<AttributeListItem v-if="inventoryType.radius">
 				<template v-slot:key>Radius:</template>
 				<UnitValue :unit-id="METER" :value="inventoryType.radius" />
-			</AttributeListItem>
-			<AttributeListItem v-if="inventoryType.sofFactionName">
-				<template v-slot:key>Sof faction name:</template>
-				{{ inventoryType.sofFactionName }}
-			</AttributeListItem>
-			<AttributeListItem v-if="inventoryType.sofMaterialSetId">
-				<template v-slot:key>Sof material set ID:</template>
-				{{ inventoryType.sofMaterialSetId }}
 			</AttributeListItem>
 			<AttributeListItem v-if="inventoryType.soundId">
 				<template v-slot:key>Sound ID:</template>
