@@ -327,7 +327,6 @@ public class FetchDonations implements Command {
 
 	private void notifyDiscord(List<DonationEntry> donations) {
 		if (donations.isEmpty()) {
-			discordNotifier.notifyDiscord("Test");
 			return;
 		}
 		var totals = summarise(donations);
