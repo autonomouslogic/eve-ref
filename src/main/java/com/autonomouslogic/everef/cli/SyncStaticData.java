@@ -9,6 +9,7 @@ import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.url.UrlParser;
 import com.autonomouslogic.everef.util.ArchivePathFactory;
 import com.autonomouslogic.everef.util.DataIndexHelper;
+import com.autonomouslogic.everef.util.DiscordNotifier;
 import com.autonomouslogic.everef.util.TempFiles;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
@@ -54,6 +55,9 @@ public class SyncStaticData implements Command {
 
 	@Inject
 	protected DataIndexHelper dataIndexHelper;
+
+	@Inject
+	protected DiscordNotifier discordNotifier;
 
 	private final Duration latestCacheTime = Configs.DATA_LATEST_CACHE_CONTROL_MAX_AGE.getRequired();
 	private final Duration archiveCacheTime = Configs.DATA_ARCHIVE_CACHE_CONTROL_MAX_AGE.getRequired();
@@ -114,6 +118,7 @@ public class SyncStaticData implements Command {
 		}
 		Files.setLastModifiedTime(file.toPath(), FileTime.from(latest.getReleaseDate()));
 		uploadFile(file, type, latest.getBuildNumber());
+		discordNotifier.notifyDiscord(String.format("New SDE released: %s", latest.getBuildNumber()));
 	}
 
 	/**

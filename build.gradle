@@ -483,6 +483,15 @@ task buildSearch(type: JavaExec) {
 	mainClass = mainClassName
 }
 
+task fetchDonations(type: JavaExec) {
+	group "application"
+	args "fetch-donations"
+	environment envProperties
+
+	classpath = sourceSets.main.runtimeClasspath
+	mainClass = mainClassName
+}
+
 task syncStaticData(type: JavaExec) {
 	group "application"
 	args "sync-static-data"

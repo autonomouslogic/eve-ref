@@ -764,12 +764,10 @@ public class Configs {
 			.build();
 
 	/**
-	 * URL for Discord donation notifications.
+	 * URL for Discord notifications.
 	 */
-	public static final Config<String> DONATIONS_DISCORD_WEBHOOK_URL = Config.<String>builder()
-			.name("DONATIONS_DISCORD_WEBHOOK_URL")
-			.type(String.class)
-			.build();
+	public static final Config<URI> DISCORD_WEBHOOK_URL =
+			Config.<URI>builder().name("DISCORD_WEBHOOK_URL").type(URI.class).build();
 
 	/**
 	 * Base path for fuzzwork.co.uk
