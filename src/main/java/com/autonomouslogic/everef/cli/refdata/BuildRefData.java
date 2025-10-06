@@ -36,6 +36,7 @@ import com.autonomouslogic.everef.url.UrlParser;
 import com.autonomouslogic.everef.util.CompressUtil;
 import com.autonomouslogic.everef.util.DataIndexHelper;
 import com.autonomouslogic.everef.util.DataUtil;
+import com.autonomouslogic.everef.util.DiscordNotifier;
 import com.autonomouslogic.everef.util.HashUtil;
 import com.autonomouslogic.everef.util.RefDataUtil;
 import com.autonomouslogic.everef.util.Rx;
@@ -120,6 +121,9 @@ public class BuildRefData implements Command {
 
 	@Inject
 	protected SkillDecorator skillDecorator;
+
+	@Inject
+	protected DiscordNotifier discordNotifier;
 
 	@Inject
 	protected MutaplasmidDecorator mutaplasmidDecorator;
@@ -283,7 +287,7 @@ public class BuildRefData implements Command {
 						return Completable.complete();
 					}
 					return Completable.concatArray(
-							buildOutputFile().flatMapCompletable(this::uploadFiles), closeMvStore());
+							buildOutputFile().flatMapCompletable(this::uploadFiles), closeMvStore(), notifyDiscord());
 				}));
 	}
 
@@ -458,5 +462,11 @@ public class BuildRefData implements Command {
 				.map(e -> objectMapper.readValue(e.getValue(), RefDataMeta.class))
 				.first(RefDataMeta.builder().build())
 				.doOnSuccess(meta -> latestRefDataMeta = meta));
+	}
+
+	private Completable notifyDiscord() {
+		return Completable.fromAction(() -> {
+			discordNotifier.notifyDiscord("New reference data uploaded");
+		});
 	}
 }
