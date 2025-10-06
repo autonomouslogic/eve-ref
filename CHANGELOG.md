@@ -1,5 +1,15 @@
 EVE Ref Changelog
 
+## [2.69.1](https://github.com/autonomouslogic/eve-ref/compare/2.69.0...2.69.1) (2025-10-06)
+
+
+### Bug Fixes
+
+* Added Discord notifications to data update jobs ([#964](https://github.com/autonomouslogic/eve-ref/issues/964)) ([acf70be](https://github.com/autonomouslogic/eve-ref/commit/acf70be74c3ef94ae0fc0b9376d8832259054cbf))
+* Build reference data from the new SDE ([#962](https://github.com/autonomouslogic/eve-ref/issues/962)) ([9a54cfd](https://github.com/autonomouslogic/eve-ref/commit/9a54cfd0e4ad61f1ec68dfa028338dfe2856f4e1))
+* **deps:** update all non-major dependencies ([#965](https://github.com/autonomouslogic/eve-ref/issues/965)) ([0bfe60a](https://github.com/autonomouslogic/eve-ref/commit/0bfe60a21d303d6d4baa12837c1b68d65eba222b))
+* Forced naming on Color ([1b8cb2c](https://github.com/autonomouslogic/eve-ref/commit/1b8cb2ccd1810cfa0ad8d6d22cdccb6c2405ed99))
+
 ## [2.69.0](https://github.com/autonomouslogic/eve-ref/compare/2.68.9...2.69.0) (2025-10-02)
 
 
