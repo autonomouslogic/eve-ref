@@ -1,5 +1,7 @@
 package com.autonomouslogic.everef.refdata;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -10,10 +12,15 @@ import lombok.extern.jackson.Jacksonized;
 @Value
 @Builder
 @Jacksonized
-@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @Schema
+@JsonPropertyOrder({"r", "g", "b"})
 public class Color {
+	@JsonProperty("r")
 	double r;
+
+	@JsonProperty("g")
 	double g;
+
+	@JsonProperty("b")
 	double b;
 }
