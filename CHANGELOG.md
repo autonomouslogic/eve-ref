@@ -1,5 +1,13 @@
 EVE Ref Changelog
 
+## [2.69.2](https://github.com/autonomouslogic/eve-ref/compare/2.69.1...2.69.2) (2025-10-07)
+
+
+### Bug Fixes
+
+* **deps:** update dependency org.flywaydb:flyway-core to v11.13.3 ([#966](https://github.com/autonomouslogic/eve-ref/issues/966)) ([0de60f1](https://github.com/autonomouslogic/eve-ref/commit/0de60f1f007a27137f7088689bad9c9cb4c431ec))
+* Only send a single Discord notification when new static data is available ([28d7d1f](https://github.com/autonomouslogic/eve-ref/commit/28d7d1f92f8ff51e2a813aa3e9b281fa20616657))
+
 ## [2.69.1](https://github.com/autonomouslogic/eve-ref/compare/2.69.0...2.69.1) (2025-10-06)
 
 
