@@ -80,8 +80,12 @@ public class SyncStaticData implements Command {
 	@Override
 	public void run() {
 		var latest = loadLatestFiles();
-		syncFile(latest, ArchivePathFactory.SDE_V2_JSONL, "jsonl");
-		syncFile(latest, ArchivePathFactory.SDE_V2_YAML, "yaml");
+		var newFile = false;
+		newFile |= syncFile(latest, ArchivePathFactory.SDE_V2_JSONL, "jsonl");
+		newFile |= syncFile(latest, ArchivePathFactory.SDE_V2_YAML, "yaml");
+		if (newFile) {
+			discordNotifier.notifyDiscord(String.format("New SDE released: %s", latest.getBuildNumber()));
+		}
 		syncSchema();
 	}
 
@@ -100,7 +104,7 @@ public class SyncStaticData implements Command {
 	}
 
 	@SneakyThrows
-	private void syncFile(StaticDataMeta latest, ArchivePathFactory type, String variant) {
+	private boolean syncFile(StaticDataMeta latest, ArchivePathFactory type, String variant) {
 		var latestUri = dataUrl(latest.getBuildNumber(), variant);
 
 		var latestPath = getArchivePath(latest.getReleaseDate(), type, latest.getBuildNumber());
@@ -108,7 +112,7 @@ public class SyncStaticData implements Command {
 				s3Adapter.listObjects(latestPath, false, s3Client).toList().blockingGet();
 		if (!existing.isEmpty()) {
 			log.info(String.format("Latest file already exists at %s", latestPath));
-			return;
+			return false;
 		}
 
 		var file = tempFiles.tempFile("sde-" + variant, ".zip").toFile();
@@ -118,7 +122,7 @@ public class SyncStaticData implements Command {
 		}
 		Files.setLastModifiedTime(file.toPath(), FileTime.from(latest.getReleaseDate()));
 		uploadFile(file, type, latest.getBuildNumber());
-		discordNotifier.notifyDiscord(String.format("New SDE released: %s", latest.getBuildNumber()));
+		return true;
 	}
 
 	/**
