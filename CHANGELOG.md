@@ -1,5 +1,18 @@
 EVE Ref Changelog
 
+## [2.69.3](https://github.com/autonomouslogic/eve-ref/compare/2.69.2...2.69.3) (2025-10-08)
+
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([#969](https://github.com/autonomouslogic/eve-ref/issues/969)) ([082039f](https://github.com/autonomouslogic/eve-ref/commit/082039fa3a78c310854bf47b0346fb2c1bbd1a6d))
+* **deps:** update font awesome ([#968](https://github.com/autonomouslogic/eve-ref/issues/968)) ([e9de9d0](https://github.com/autonomouslogic/eve-ref/commit/e9de9d03373296c89ad87d7f166ffe57728a2084))
+
+
+### Documentation
+
+* Update Reference Data docs to reflect new SDE ([#970](https://github.com/autonomouslogic/eve-ref/issues/970)) ([a60f1ac](https://github.com/autonomouslogic/eve-ref/commit/a60f1ac4605264d975c86e01ebd4752d5e5f0ffc))
+
 ## [2.69.2](https://github.com/autonomouslogic/eve-ref/compare/2.69.1...2.69.2) (2025-10-07)
 
 
