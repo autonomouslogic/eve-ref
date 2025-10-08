@@ -26,6 +26,8 @@ Some example paths:
 * <https://ref-data.everef.net/dogma_effects/11>
 * <https://ref-data.everef.net/groups>
 * <https://ref-data.everef.net/groups/18>
+* <https://ref-data.everef.net/icons>
+* <https://ref-data.everef.net/icons/67>
 * <https://ref-data.everef.net/market_groups>
 * <https://ref-data.everef.net/market_groups/1857>
 * <https://ref-data.everef.net/meta_groups>
@@ -137,7 +139,6 @@ This table show the available data and where to get it.
 | Stations                      |                     | `pcStations.yaml`                          | `universe/stations.yaml`       |                                     |
 | Systems                       |                     | `mapSolarSystems.yaml`                     | `universe/systems.yaml`        |                                     |
 | Tournament rule sets          |                     | `fsd/tournamentRuleSets.yaml` in old files |                                |                                     |
-| Universes                     |                     | `fsd/universe`                             |                                |                                     |
 
 * _The ESI filenames refer to the names in the ESI scrape, minus the language suffix._
 
