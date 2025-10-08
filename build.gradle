@@ -61,8 +61,8 @@ dependencies {
 		exclude group: "org.graalvm.tools"
 		exclude group: "com.vladsch.flexmark"
 	}
-	implementation "software.amazon.awssdk:s3:2.35.0"
-	implementation "software.amazon.awssdk:dynamodb:2.35.0"
+	implementation "software.amazon.awssdk:s3:2.35.2"
+	implementation "software.amazon.awssdk:dynamodb:2.35.2"
 	implementation "com.autonomouslogic.dynamomapper:dynamo-mapper:2.1.18"
 	implementation "com.fasterxml.jackson.core:jackson-annotations:2.20"
 	implementation "com.fasterxml.jackson.core:jackson-core:2.20.0"
@@ -75,7 +75,7 @@ dependencies {
 	implementation "org.apache.commons:commons-compress:1.28.0"
 	implementation "org.tukaani:xz:1.10"
 	implementation "com.h2database:h2-mvstore:2.4.240"
-	implementation "com.squareup.okhttp3:okhttp:5.1.0"
+	implementation "com.squareup.okhttp3:okhttp:5.2.0"
 	implementation "org.apache.commons:commons-csv:1.14.1"
 	implementation "net.gpedro.integrations.slack:slack-webhook:1.4.0"
 	implementation "org.jsoup:jsoup:1.21.2"
@@ -118,7 +118,7 @@ dependencies {
 	testImplementation "org.junit.jupiter:junit-jupiter-params:6.0.0"
 	testImplementation "org.junit-pioneer:junit-pioneer:2.3.0"
 	testImplementation "org.mockito:mockito-junit-jupiter:5.20.0"
-	testImplementation "com.squareup.okhttp3:mockwebserver:5.1.0"
+	testImplementation "com.squareup.okhttp3:mockwebserver:5.2.0"
 }
 
 task refDataSpec(type: io.swagger.v3.plugins.gradle.tasks.ResolveTask) {
