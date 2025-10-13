@@ -1,7 +1,7 @@
 package com.autonomouslogic.everef.s3;
 
 import com.autonomouslogic.commons.rxjava3.Rx3Util;
-import com.autonomouslogic.everef.util.Rx;
+import com.autonomouslogic.everef.util.ParallelUtil;
 import com.autonomouslogic.everef.util.VirtualThreads;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.FlowableTransformer;
@@ -32,17 +32,23 @@ class HeadObjectFlowableTransformer implements FlowableTransformer<ListedS3Objec
 
 	@Override
 	public Publisher<ListedS3Object> apply(@NonNull Flowable<ListedS3Object> upstream) {
-		return upstream.parallel(32)
-				.runOn(VirtualThreads.SCHEDULER)
-				.flatMap(obj -> {
-					if (obj.isDirectory()) {
-						return Flowable.just(obj);
-					}
+		return upstream.buffer(32).flatMap(batch -> {
+			var processedBatch = ParallelUtil.processInParallel(batch, 32, obj -> {
+				if (obj.isDirectory()) {
+					return obj;
+				}
+				try {
 					return headObject(obj)
 							.toFlowable()
-							.compose(Rx3Util.retryWithDelayFlowable(2, Duration.ofSeconds(5)));
-				})
-				.sequential();
+							.compose(Rx3Util.retryWithDelayFlowable(2, Duration.ofSeconds(5)))
+							.blockingFirst();
+				} catch (Exception e) {
+					log.error("Error heading object: " + obj.getUrl(), e);
+					return obj;
+				}
+			});
+			return Flowable.fromIterable(processedBatch);
+		});
 	}
 
 	@NotNull
@@ -52,7 +58,7 @@ class HeadObjectFlowableTransformer implements FlowableTransformer<ListedS3Objec
 					.bucket(obj.getUrl().getBucket())
 					.key(obj.getUrl().getPath())
 					.build();
-			return Rx.toMaybe(client.headObject(req))
+			return Maybe.fromCompletionStage(client.headObject(req))
 					.observeOn(VirtualThreads.SCHEDULER)
 					.flatMap(head -> processResponse(obj, head))
 					.switchIfEmpty(Single.just(obj));
