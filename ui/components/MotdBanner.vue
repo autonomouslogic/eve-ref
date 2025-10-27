@@ -58,14 +58,6 @@ const motd = computed(() => {
 	const day = Math.floor(time / DAY);
 	const hour = Math.floor(time / HOUR);
 
-	if (new Date().getTime() < new Date("2025-06-18T23:59:00Z").getTime()) {
-		return {
-			text: "Get a chance to win 2,500 PLEX",
-			url: "https://eu.surveymonkey.com/r/NSRPC7Y?it=MTEzMDM4NzQ%3D&lang=EN",
-			urlText: "Complete Survey"
-		} as Motd;
-	}
-
 	// Recent donors.
 	if (donorsStatus.value == "success" && donors?.value?.recent?.length && donors.value.recent.length > 0) {
 		const donorsText = donors.value.recent.map(donor => {
@@ -78,18 +70,29 @@ const motd = computed(() => {
 		} as Motd;
 	}
 
+	// Priority.
+	if (new Date().getTime() < new Date("2025-11-10T23:59:59Z").getTime()) {
+		return {
+			text: "Ariel Rin for CSM",
+			url: "https://www.eveonline.com/news/view/csm-20-candidate-announcements",
+			urlText: "View Candidates"
+		} as Motd;
+	}
+
 	if (dayOfWeek == 4) {
 		return {
-			text: "Win 50x PLEX and 3 Day Omega every Friday",
+			text: "Win 50 PLEX and 3 Day Omega every Friday",
 			url: "/giveaways",
 			urlText: "Giveaways"
 		} as Motd;
 	}
 
-	if (day % 3 == 0) {
-		return null;
-	}
-	return motdFallbacks[hour % motdFallbacks.length];
+	return null;
+
+	// if (day % 3 == 0) {
+	// 	return null;
+	// }
+	// return motdFallbacks[hour % motdFallbacks.length];
 });
 
 </script>
@@ -101,7 +104,7 @@ const motd = computed(() => {
 				<p class="font-extrabold mx-3 tracking-tight">
 					<span v-html="motd.text"></span>
 				</p>
-				<ExternalLink :url="motd.url" class="mx-3 font-normal">{{motd.urlText}} &raquo;</ExternalLink>
+				<ExternalLink v-if="motd.url" :url="motd.url" class="mx-3 font-normal">{{motd.urlText}} &raquo;</ExternalLink>
 			</div>
 		</section>
 	</div>
