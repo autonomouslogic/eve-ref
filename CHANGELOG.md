@@ -1,5 +1,17 @@
 EVE Ref Changelog
 
+## [2.69.5](https://github.com/autonomouslogic/eve-ref/compare/2.69.4...2.69.5) (2025-10-27)
+
+
+### Bug Fixes
+
+* CSM 20 banner ([8cb9c0f](https://github.com/autonomouslogic/eve-ref/commit/8cb9c0f063ad206e0910727ceb2d05221e586857))
+
+
+### Tests
+
+* Updated test resources ([775e3b8](https://github.com/autonomouslogic/eve-ref/commit/775e3b8db7829fb8e903e014bdebe6888df413b2))
+
 ## [2.69.4](https://github.com/autonomouslogic/eve-ref/compare/2.69.3...2.69.4) (2025-10-09)
 
 
