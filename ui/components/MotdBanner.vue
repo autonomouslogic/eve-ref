@@ -5,7 +5,7 @@ import InternalLink from "~/components/helpers/InternalLink.vue";
 import {useLazyFetch} from "nuxt/app";
 import type {DonationsFile} from "~/lib/donations";
 import {formatMoney} from "~/lib/money";
-import {DAY, HOUR} from "~/lib/timeUtils";
+import {DAY, HOUR, MINUTE} from "~/lib/timeUtils";
 
 const route = useRoute();
 
@@ -71,9 +71,28 @@ const motd = computed(() => {
 	}
 
 	// Priority.
-	if (new Date().getTime() < new Date("2025-11-10T23:59:59Z").getTime()) {
+	const csmEnds = new Date("2025-11-10T11:00:00Z");
+	const timeLeft = csmEnds.getTime() - new Date().getTime();
+	if (timeLeft > 0) {
+		const daysLeft = Math.floor(timeLeft / DAY);
+		const hoursLeft = Math.floor(timeLeft / HOUR);
+		const minutesLeft = Math.floor(timeLeft / MINUTE);
+		var msg = "Ariel Rin for CSM";
+		if (hoursLeft < 8) {
+			if (minutesLeft < 60) {
+				msg = `CSM VOTING CLOSES IN ${minutesLeft} MINUTE${minutesLeft == 1 ? "" : "S"}`;
+			}
+			else {
+				msg = `CSM VOTING CLOSES IN ${hoursLeft} HOUR${hoursLeft == 1 ? "" : "S"}`;
+			}
+		}
+		else if (hoursLeft < 24) {
+			msg += ` - only ${hoursLeft} hour${hoursLeft == 1 ? "" : "s"} left`;
+		} else if (daysLeft < 4) {
+			msg += ` - only ${daysLeft} day${daysLeft == 1 ? "" : "s"} left`;
+		}
 		return {
-			text: "Ariel Rin for CSM",
+			text: msg,
 			url: "https://www.eveonline.com/news/view/csm-20-cast-your-vote-now",
 			urlText: "Vote now"
 		} as Motd;
