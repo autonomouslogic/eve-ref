@@ -1,5 +1,14 @@
 EVE Ref Changelog
 
+## [2.69.6](https://github.com/autonomouslogic/eve-ref/compare/2.69.5...2.69.6) (2025-10-28)
+
+
+### Bug Fixes
+
+* CSM countdown ([3d3c9be](https://github.com/autonomouslogic/eve-ref/commit/3d3c9be9a394838c6148bdf8d185bceadbad8e75))
+* **ui:** Fixed message on no donations ([8993a7a](https://github.com/autonomouslogic/eve-ref/commit/8993a7ab86dac1ee36d190d35a044fd834e69dd6))
+* Vote link in the MOTD banner ([1c75981](https://github.com/autonomouslogic/eve-ref/commit/1c759816ebcd51b17842fcf99cfd449eedd5cd7a))
+
 ## [2.69.5](https://github.com/autonomouslogic/eve-ref/compare/2.69.4...2.69.5) (2025-10-27)
 
 
