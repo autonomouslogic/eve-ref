@@ -74,8 +74,8 @@ const motd = computed(() => {
 	if (new Date().getTime() < new Date("2025-11-10T23:59:59Z").getTime()) {
 		return {
 			text: "Ariel Rin for CSM",
-			url: "https://www.eveonline.com/news/view/csm-20-candidate-announcements",
-			urlText: "View Candidates"
+			url: "https://www.eveonline.com/news/view/csm-20-cast-your-vote-now",
+			urlText: "Vote now"
 		} as Motd;
 	}
 
