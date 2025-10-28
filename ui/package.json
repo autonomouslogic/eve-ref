@@ -20,7 +20,7 @@
     "@nuxtjs/tailwindcss": "6.14.0",
     "@openapitools/openapi-generator-cli": "2.24.0",
     "@types/luxon": "3.7.1",
-    "@types/node": "22.18.8",
+    "@types/node": "24.9.2",
     "@typescript-eslint/eslint-plugin": "8.46.0",
     "@typescript-eslint/parser": "8.46.0",
     "eslint": "8.57.1",
