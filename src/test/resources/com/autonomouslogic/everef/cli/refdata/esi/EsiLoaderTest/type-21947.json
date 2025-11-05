@@ -1,0 +1,43 @@
+{
+  "capacity" : 0,
+  "description" : {
+    "en" : "Assorted parts of metal, textiles, composite fabrics and miscellaneous machinery - the basic building blocks for the assembly and operation of a space outpost.",
+    "fr" : "Assortiment de pièces métalliques, de textiles, de tissus composites et d'équipements divers servant de blocs de construction de base pour le montage et le fonctionnement d'un avant-poste spatial."
+  },
+  "dogma_attributes" : {
+    "161" : {
+      "attribute_id" : 161,
+      "value" : 3000
+    },
+    "162" : {
+      "attribute_id" : 162,
+      "value" : 1
+    },
+    "4" : {
+      "attribute_id" : 4,
+      "value" : 10000
+    },
+    "38" : {
+      "attribute_id" : 38,
+      "value" : 0
+    },
+    "726" : {
+      "attribute_id" : 726,
+      "value" : 100
+    }
+  },
+  "group_id" : 536,
+  "icon_id" : 2875,
+  "market_group_id" : 1865,
+  "mass" : 10000,
+  "name" : {
+    "en" : "Structure Construction Parts",
+    "fr" : "Pièces de construction de structure"
+  },
+  "packaged_volume" : 3000,
+  "portion_size" : 1,
+  "published" : true,
+  "radius" : 1,
+  "type_id" : 21947,
+  "volume" : 3000
+}

@@ -1,0 +1,21 @@
+{
+  "capacity" : 0,
+  "description" : {
+    "en" : "",
+    "fr" : ""
+  },
+  "graphic_id" : 21137,
+  "group_id" : 1462,
+  "market_group_id" : 2156,
+  "mass" : 0,
+  "name" : {
+    "en" : "Astrahus Blueprint",
+    "fr" : "Plan de construction Astrahus"
+  },
+  "packaged_volume" : 0.01,
+  "portion_size" : 1,
+  "published" : true,
+  "radius" : 1,
+  "type_id" : 36966,
+  "volume" : 0.01
+}

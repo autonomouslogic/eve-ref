@@ -1,0 +1,384 @@
+{
+  "description" : {
+    "de" : "Als Einstiegsmodel in die Zitadellen-Reihe der Weltraumstationen des Upwell Consortiums wurde die Astrahus als eine ökonomische Möglichkeit für mittelgroße Operationen im Weltraum entworfen, als Operationsbasis für kleine bis mittelgroße Corporations oder als Außenposten für größere Corporations oder sogar kleinen Allianzen.\n\n\n\nDie Astrahus wurde standardmäßig mit der neuen Raumschiffvertäuungstechnologie gebaut und wird in ihren internen Andockbuchten freudig alle Schiffsklassen unterhalb der Capital-Größe und sogar Schiff der Frachter-Klasse aufnehmen. Die Astrahus kann durch Dienste und Strukturmodule von Upwells \"Standup\"-Marke konfiguriert werden, damit sie die speziellen Bedürfnissen der Strukturadministratoren bedienen kann. Weitere Anpassungen der Astrahus-Hardware können durch die Installierung der Standup-M-Set-Modifikationen erreicht werden, um die besondere Aufgabe der Zitadelle noch weiter zu optimieren.",
+    "en" : "As the entry-level product in the Upwell Consortium's Citadel range of space stations, the Astrahus has been designed as an economical option for medium-scale operations in space, such as serving as a base of operations for a small- to medium-sized corporation, or as an outpost for larger corporations or even small alliances.\r\n\r\nThe Astrahus has been built with new spaceship tethering technology as standard, and will happily accommodate ships under capital size, and even freighter-class hulls, in its internal docking bays. The Astrahus can be configured using Upwell's Standup brand service and structure modules so as to serve the specific needs of the structure operator. Further adjustment of the hardware of the Astrahus can be achieved by installed Standup M-Set rigs to optimize the specific role of the citadel.",
+    "es" : "La Astrahus, el producto básico en las estaciones espaciales de tipo ciudadela del Consorcio Upwell, se ha diseñado como una opción económica para operaciones de media escala en el espacio; por ejemplo: servir como base de operaciones para una corporación de tamaño pequeño a mediano, o como puesto avanzado para corporaciones más grandes o incluso alianzas pequeñas.\n\n\n\nLa Astrahus ha sido construida con una nueva tecnología de amarre espacial y albergará de buen grado naves por debajo del tamaño capital, e incluso cascos de clase carguero, en sus plataformas de acoplamiento internas. La Astrahus se puede configurar con los módulos de servicio y estructura Standup de Upwell para dar respuesta a las necesidades específicas del operador de la estructura. Su hardware se puede ajustar para optimizar la función específica de la ciudadela instalando complementos Standup medianos.",
+    "fr" : "La citadelle Astrahus est la station spatiale d'entrée de gamme proposée aux capsuliers par le consortium Upwell. Cette modeste base d'opérations, essentiellement destinée aux petites et moyennes corporations, peut également faire office d'avant-poste pour les expéditions reculées des grandes corporations, ou même des alliances. L'Astrahus accueille tous les vaisseaux sous-capitaux dans ses baies d'amarrage traditionnelles, et jusqu'aux vaisseaux de classe cargo grâce à ses technologies d'arrimage innovantes. La citadelle Astrahus peut être configurée avec la gamme de modules dédiée 'Standup' intégrant la technologie Upwell, au profit de la synchronisation parfaite des manœuvres des opérateurs de structure. Les sets d'optimisation 'Standup' M permettent également de parachever la spécialisation de l'Astrahus grâce à leurs paramétrages sophistiqués.",
+    "ja" : "アシュトラハスは、アップウェル・コンソーシアムの宇宙ステーションのシタデルレンジのエントリーレベルの製品として、中小コーポレーションの活動拠点として、あるいは大企業や小規模なアライアンスの前哨基地としての役割を果たすなど、宇宙での中規模な活動のための経済的なオプションとして設計されている。\n\nアシュトラハスには宇宙艦テザリング技術が標準装備されているため、内部のドッキングベイには主力艦以下の、超大型輸送艦までも含めたほとんどの艦船を受け入れ可能である。アシュトラハスはアップウェルのスタンドアップブランドのサービス及びストラクチャモジュールで構成を変更できるため、ストラクチャオペレーターの特定のニーズに応えることが可能である。スタンドアッ中型セットリグを使用するとアシュトラハスのハードウェアをさらに調整することができ、それにより城塞のようなこの艦船を特定の役割に最適化させられる。",
+    "ko" : "업웰 컨소시엄에 의해 설계된 시타델급 기본 모델은 가격이 저렴하게 디자인된 중형 규모의 작전본부입니다. 소형 및 중형 기업이나 대기업의 전초기지, 또는 소규모 얼라이언스 주둔지로 사용됩니다. <br><br>아스트라허스는 최신식 함선 테더링 기술이 적용되어 프레이터급 선체를 포함한 캐피탈급 규모 이하의 우주선들을 내부 도킹베이에 수용할 수 있습니다. 아스트라허스는 업웰 컨소시엄의 스탠드업 서비스 및 구조물 모듈을 장착하여 운영자의 취향에 맞게 설정될 수 있습니다. 아스트라허스 추가 개조를 원할 시 스탠드업 M-Set 리그를 통해 시타델의 구체적인 기능을 더욱 특화할 수 있습니다.",
+    "ru" : "Будучи младшей моделью в ряду цитаделей, спроектированных консорциумом «Апвелл», цитадель типа «Астрагус» была разработана в качестве экономичного варианта для проведения операций среднего масштаба, например для создания космической базы небольших корпораций или аванпоста для корпораций больших размеров или даже некрупных альянсов.\n\n\n\n«Астрагус» создана по стандартам новейших космических технологий и сможет с лёгкостью разместить в своём доке корабли стандартного тоннажа и даже фрейтеры. «Астрагус» может быть укомплектована стационар-модулями, разработанными консорциумом «Апвелл». Аппаратную часть цитадели можно перенастроить согласно своим нуждам, используя стационар-тюнинг-модули.",
+    "zh" : "作为昇威财团的堡垒建筑系列的入门级产品，空堡是在太空中进行中等规模活动的经济之选，能作为中小型军团的大本营，或作为大型军团或小型联盟的根据地之一。\n\n\n\n空堡建筑采用了最新的舰船驻留科技而建造，能够容留旗舰级别以下的舰船停泊，货舰也不例外。空堡可以使用昇威的屹立专用服务和建筑装备，以满足建筑使用者的需求。将屹立中型改装件安装在空堡上可以进一步细化它的职能。"
+  },
+  "graphic_id" : 21137,
+  "group_id" : 1657,
+  "market_group_id" : 2201,
+  "mass" : 3000000000,
+  "name" : {
+    "de" : "Astrahus",
+    "en" : "Astrahus",
+    "es" : "Astrahus",
+    "fr" : "Astrahus",
+    "ja" : "アシュトラハス",
+    "ko" : "아스트라허스",
+    "ru" : "Astrahus",
+    "zh" : "空堡"
+  },
+  "portion_size" : 1,
+  "published" : true,
+  "radius" : 45000,
+  "sound_id" : 20231,
+  "volume" : 8000,
+  "type_id" : 35832,
+  "capacity" : 0,
+  "dogma_attributes" : {
+    "1547" : {
+      "attribute_id" : 1547,
+      "value" : 2
+    },
+    "2112" : {
+      "attribute_id" : 2112,
+      "value" : 0.00001
+    },
+    "1154" : {
+      "attribute_id" : 1154,
+      "value" : 3
+    },
+    "4" : {
+      "attribute_id" : 4,
+      "value" : 3000000000
+    },
+    "2737" : {
+      "attribute_id" : 2737,
+      "value" : 3
+    },
+    "263" : {
+      "attribute_id" : 263,
+      "value" : 3600000
+    },
+    "136" : {
+      "attribute_id" : 136,
+      "value" : 1
+    },
+    "9" : {
+      "attribute_id" : 9,
+      "value" : 1800000
+    },
+    "11" : {
+      "attribute_id" : 11,
+      "value" : 1500000
+    },
+    "12" : {
+      "attribute_id" : 12,
+      "value" : 3
+    },
+    "13" : {
+      "attribute_id" : 13,
+      "value" : 4
+    },
+    "14" : {
+      "attribute_id" : 14,
+      "value" : 4
+    },
+    "271" : {
+      "attribute_id" : 271,
+      "value" : 0.8
+    },
+    "272" : {
+      "attribute_id" : 272,
+      "value" : 0.8
+    },
+    "273" : {
+      "attribute_id" : 273,
+      "value" : 0.8
+    },
+    "274" : {
+      "attribute_id" : 274,
+      "value" : 0.8
+    },
+    "2115" : {
+      "attribute_id" : 2115,
+      "value" : 0.00001
+    },
+    "269" : {
+      "attribute_id" : 269,
+      "value" : 0.8
+    },
+    "2055" : {
+      "attribute_id" : 2055,
+      "value" : 200000
+    },
+    "2244" : {
+      "attribute_id" : 2244,
+      "value" : 1
+    },
+    "3354" : {
+      "attribute_id" : 3354,
+      "value" : 500
+    },
+    "3355" : {
+      "attribute_id" : 3355,
+      "value" : 500
+    },
+    "265" : {
+      "attribute_id" : 265,
+      "value" : 1800000
+    },
+    "797" : {
+      "attribute_id" : 797,
+      "value" : 490000
+    },
+    "3101" : {
+      "attribute_id" : 3101,
+      "value" : 56201
+    },
+    "161" : {
+      "attribute_id" : 161,
+      "value" : 8000
+    },
+    "162" : {
+      "attribute_id" : 162,
+      "value" : 45000
+    },
+    "2339" : {
+      "attribute_id" : 2339,
+      "value" : -25
+    },
+    "38" : {
+      "attribute_id" : 38,
+      "value" : 0
+    },
+    "1137" : {
+      "attribute_id" : 1137,
+      "value" : 3
+    },
+    "552" : {
+      "attribute_id" : 552,
+      "value" : 50000
+    },
+    "3356" : {
+      "attribute_id" : 3356,
+      "value" : 500
+    },
+    "1927" : {
+      "attribute_id" : 1927,
+      "value" : 1
+    },
+    "2333" : {
+      "attribute_id" : 2333,
+      "value" : 25
+    },
+    "48" : {
+      "attribute_id" : 48,
+      "value" : 24000
+    },
+    "2056" : {
+      "attribute_id" : 2056,
+      "value" : 3
+    },
+    "2738" : {
+      "attribute_id" : 2738,
+      "value" : 1
+    },
+    "2739" : {
+      "attribute_id" : 2739,
+      "value" : 0
+    },
+    "564" : {
+      "attribute_id" : 564,
+      "value" : 40
+    },
+    "55" : {
+      "attribute_id" : 55,
+      "value" : 3600000
+    },
+    "2750" : {
+      "attribute_id" : 2750,
+      "value" : 1
+    },
+    "2751" : {
+      "attribute_id" : 2751,
+      "value" : 1
+    },
+    "192" : {
+      "attribute_id" : 192,
+      "value" : 7
+    },
+    "2113" : {
+      "attribute_id" : 2113,
+      "value" : 0.00001
+    },
+    "525" : {
+      "attribute_id" : 525,
+      "value" : 1
+    },
+    "267" : {
+      "attribute_id" : 267,
+      "value" : 0.8
+    },
+    "2116" : {
+      "attribute_id" : 2116,
+      "value" : 0.00001
+    },
+    "268" : {
+      "attribute_id" : 268,
+      "value" : 0.8
+    },
+    "2743" : {
+      "attribute_id" : 2743,
+      "value" : 1
+    },
+    "76" : {
+      "attribute_id" : 76,
+      "value" : 350000
+    },
+    "2253" : {
+      "attribute_id" : 2253,
+      "value" : 0.00001
+    },
+    "79" : {
+      "attribute_id" : 79,
+      "value" : 2500
+    },
+    "208" : {
+      "attribute_id" : 208,
+      "value" : 500
+    },
+    "209" : {
+      "attribute_id" : 209,
+      "value" : 500
+    },
+    "210" : {
+      "attribute_id" : 210,
+      "value" : 500
+    },
+    "211" : {
+      "attribute_id" : 211,
+      "value" : 500
+    },
+    "270" : {
+      "attribute_id" : 270,
+      "value" : 0.8
+    },
+    "2135" : {
+      "attribute_id" : 2135,
+      "value" : 0.00001
+    },
+    "18" : {
+      "attribute_id" : 18,
+      "value" : 0
+    },
+    "2268" : {
+      "attribute_id" : 2268,
+      "value" : 10000
+    },
+    "479" : {
+      "attribute_id" : 479,
+      "value" : 999999999999
+    },
+    "482" : {
+      "attribute_id" : 482,
+      "value" : 200000
+    },
+    "484" : {
+      "attribute_id" : 484,
+      "value" : 1
+    },
+    "101" : {
+      "attribute_id" : 101,
+      "value" : 2
+    },
+    "2790" : {
+      "attribute_id" : 2790,
+      "value" : 10000
+    },
+    "1132" : {
+      "attribute_id" : 1132,
+      "value" : 400
+    },
+    "109" : {
+      "attribute_id" : 109,
+      "value" : 0.8
+    },
+    "110" : {
+      "attribute_id" : 110,
+      "value" : 0.8
+    },
+    "111" : {
+      "attribute_id" : 111,
+      "value" : 0.8
+    },
+    "2433" : {
+      "attribute_id" : 2433,
+      "value" : 1
+    },
+    "113" : {
+      "attribute_id" : 113,
+      "value" : 0.8
+    },
+    "2034" : {
+      "attribute_id" : 2034,
+      "value" : 14400000
+    },
+    "2035" : {
+      "attribute_id" : 2035,
+      "value" : 5000
+    },
+    "2036" : {
+      "attribute_id" : 2036,
+      "value" : 5000
+    },
+    "2805" : {
+      "attribute_id" : 2805,
+      "value" : 0
+    },
+    "264" : {
+      "attribute_id" : 264,
+      "value" : 0
+    },
+    "2216" : {
+      "attribute_id" : 2216,
+      "value" : 3
+    },
+    "2045" : {
+      "attribute_id" : 2045,
+      "value" : 0.00001
+    },
+    "524" : {
+      "attribute_id" : 524,
+      "value" : 1
+    },
+    "1919" : {
+      "attribute_id" : 1919,
+      "value" : 3
+    }
+  },
+  "dogma_effects" : {
+    "6565" : {
+      "effect_id" : 6565,
+      "is_default" : false
+    },
+    "6568" : {
+      "effect_id" : 6568,
+      "is_default" : false
+    },
+    "7008" : {
+      "effect_id" : 7008,
+      "is_default" : false
+    },
+    "7039" : {
+      "effect_id" : 7039,
+      "is_default" : false
+    },
+    "7040" : {
+      "effect_id" : 7040,
+      "is_default" : false
+    }
+  },
+  "packaged_volume" : 8000,
+  "produced_by_blueprints" : {
+    "36966" : {
+      "blueprint_type_id" : 36966,
+      "blueprint_activity" : "manufacturing"
+    }
+  }
+}

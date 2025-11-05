@@ -102,7 +102,8 @@ public class IndustryCostHandlerTest {
 			"mjolnir-fury-cruise-missile-blueprint-optimized-attainment-decryptor",
 			"dominix-lowsec-sotiyo-rigs",
 			"sin-blueprint-lowsec-sotiyo-rigs",
-			"carbon-fiber-reaction-formula-athanor-rigs");
+			"carbon-fiber-reaction-formula-athanor-rigs",
+			"astrahus");
 
 	@Inject
 	ApiRunner apiRunner;

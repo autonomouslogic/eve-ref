@@ -405,6 +405,13 @@ components:
             character
           maximum: 5
           minimum: 0
+        outpost_construction:
+          type: integer
+          format: int32
+          default: 5
+          description: The Outpost Construction skill level the installing character
+          maximum: 5
+          minimum: 0
         plasma_physics:
           type: integer
           format: int32

@@ -4846,3 +4846,372 @@
   portionSize: 1
   published: true
   volume: 0.2
+"35832":
+  description:
+    de: "Als Einstiegsmodel in die Zitadellen-Reihe der Weltraumstationen des Upwell\
+      \ Consortiums wurde die Astrahus als eine ökonomische Möglichkeit für mittelgroß\
+      e Operationen im Weltraum entworfen, als Operationsbasis für kleine bis mittelgroß\
+      e Corporations oder als Außenposten für größere Corporations oder sogar kleinen\
+      \ Allianzen.\n\n\n\nDie Astrahus wurde standardmäßig mit der neuen Raumschiffvertä\
+      uungstechnologie gebaut und wird in ihren internen Andockbuchten freudig alle\
+      \ Schiffsklassen unterhalb der Capital-Größe und sogar Schiff der Frachter-Klasse\
+      \ aufnehmen. Die Astrahus kann durch Dienste und Strukturmodule von Upwells\
+      \ \"Standup\"-Marke konfiguriert werden, damit sie die speziellen Bedürfnissen\
+      \ der Strukturadministratoren bedienen kann. Weitere Anpassungen der Astrahus-Hardware\
+      \ können durch die Installierung der Standup-M-Set-Modifikationen erreicht werden,\
+      \ um die besondere Aufgabe der Zitadelle noch weiter zu optimieren."
+    en: "As the entry-level product in the Upwell Consortium's Citadel range of space\
+      \ stations, the Astrahus has been designed as an economical option for medium-scale\
+      \ operations in space, such as serving as a base of operations for a small-\
+      \ to medium-sized corporation, or as an outpost for larger corporations or even\
+      \ small alliances.\n\nThe Astrahus has been built with new spaceship tethering\
+      \ technology as standard, and will happily accommodate ships under capital size,\
+      \ and even freighter-class hulls, in its internal docking bays. The Astrahus\
+      \ can be configured using Upwell's Standup brand service and structure modules\
+      \ so as to serve the specific needs of the structure operator. Further adjustment\
+      \ of the hardware of the Astrahus can be achieved by installed Standup M-Set\
+      \ rigs to optimize the specific role of the citadel."
+    es: "La Astrahus, el producto básico en las estaciones espaciales de tipo ciudadela\
+      \ del Consorcio Upwell, se ha diseñado como una opción económica para operaciones\
+      \ de media escala en el espacio; por ejemplo: servir como base de operaciones\
+      \ para una corporación de tamaño pequeño a mediano, o como puesto avanzado para\
+      \ corporaciones más grandes o incluso alianzas pequeñas.\n\n\n\nLa Astrahus\
+      \ ha sido construida con una nueva tecnología de amarre espacial y albergará\
+      \ de buen grado naves por debajo del tamaño capital, e incluso cascos de clase\
+      \ carguero, en sus plataformas de acoplamiento internas. La Astrahus se puede\
+      \ configurar con los módulos de servicio y estructura Standup de Upwell para\
+      \ dar respuesta a las necesidades específicas del operador de la estructura.\
+      \ Su hardware se puede ajustar para optimizar la función específica de la ciudadela\
+      \ instalando complementos Standup medianos."
+    fr: "La citadelle Astrahus est la station spatiale d'entrée de gamme proposée\
+      \ aux capsuliers par le consortium Upwell. Cette modeste base d'opérations,\
+      \ essentiellement destinée aux petites et moyennes corporations, peut également\
+      \ faire office d'avant-poste pour les expéditions reculées des grandes corporations,\
+      \ ou même des alliances. L'Astrahus accueille tous les vaisseaux sous-capitaux\
+      \ dans ses baies d'amarrage traditionnelles, et jusqu'aux vaisseaux de classe\
+      \ cargo grâce à ses technologies d'arrimage innovantes. La citadelle Astrahus\
+      \ peut être configurée avec la gamme de modules dédiée 'Standup' intégrant la\
+      \ technologie Upwell, au profit de la synchronisation parfaite des manœuvres\
+      \ des opérateurs de structure. Les sets d'optimisation 'Standup'\_M permettent\
+      \ également de parachever la spécialisation de l'Astrahus grâce à leurs paramé\
+      trages sophistiqués."
+    ja: "アシュトラハスは、アップウェル・コンソーシアムの宇宙ステーションのシタデルレンジのエントリーレベルの製品として、中小コーポレーションの活動拠点とし\
+      て、あるいは大企業や小規模なアライアンスの前哨基地としての役割を果たすなど、宇宙での中規模な活動のための経済的なオプションとして設計されている。\n\n\
+      アシュトラハスには宇宙艦テザリング技術が標準装備されているため、内部のドッキングベイには主力艦以下の、超大型輸送艦までも含めたほとんどの艦船を受け入れ可\
+      能である。アシュトラハスはアップウェルのスタンドアップブランドのサービス及びストラクチャモジュールで構成を変更できるため、ストラクチャオペレーターの特定\
+      のニーズに応えることが可能である。スタンドアッ中型セットリグを使用するとアシュトラハスのハードウェアをさらに調整することができ、それにより城塞のようなこ\
+      の艦船を特定の役割に最適化させられる。"
+    ko: "업웰 컨소시엄에 의해 설계된 시타델급 기본 모델은 가격이 저렴하게 디자인된 중형 규모의 작전본부입니다. 소형 및 중형 기업이나 대기\
+      업의 전초기지, 또는 소규모 얼라이언스 주둔지로 사용됩니다. <br><br>아스트라허스는 최신식 함선 테더링 기술이 적용되어 프레이터급\
+      \ 선체를 포함한 캐피탈급 규모 이하의 우주선들을 내부 도킹베이에 수용할 수 있습니다. 아스트라허스는 업웰 컨소시엄의 스탠드업 서비스 및\
+      \ 구조물 모듈을 장착하여 운영자의 취향에 맞게 설정될 수 있습니다. 아스트라허스 추가 개조를 원할 시 스탠드업 M-Set 리그를 통해\
+      \ 시타델의 구체적인 기능을 더욱 특화할 수 있습니다."
+    ru: "Будучи младшей моделью в ряду цитаделей, спроектированных консорциумом «А\
+      пвелл», цитадель типа «Астрагус» была разработана в качестве экономичного ва\
+      рианта для проведения операций среднего масштаба, например для создания косм\
+      ической базы небольших корпораций или аванпоста для корпораций больших разме\
+      ров или даже некрупных альянсов.\n\n\n\n«Астрагус» создана по стандартам нов\
+      ейших космических технологий и сможет с лёгкостью разместить в своём доке ко\
+      рабли стандартного тоннажа и даже фрейтеры. «Астрагус» может быть укомплекто\
+      вана стационар-модулями, разработанными консорциумом «Апвелл». Аппаратную ча\
+      сть цитадели можно перенастроить согласно своим нуждам, используя стационар\
+      -тюнинг-модули."
+    zh: "作为昇威财团的堡垒建筑系列的入门级产品，空堡是在太空中进行中等规模活动的经济之选，能作为中小型军团的大本营，或作为大型军团或小型联盟的根据地之一。\
+      \n\n\n\n空堡建筑采用了最新的舰船驻留科技而建造，能够容留旗舰级别以下的舰船停泊，货舰也不例外。空堡可以使用昇威的屹立专用服务和建筑装备，以满足建\
+      筑使用者的需求。将屹立中型改装件安装在空堡上可以进一步细化它的职能。"
+  graphicID: 21137
+  groupID: 1657
+  marketGroupID: 2201
+  mass: 3000000000
+  name:
+    de: "Astrahus"
+    en: "Astrahus"
+    es: "Astrahus"
+    fr: "Astrahus"
+    ja: "アシュトラハス"
+    ko: "아스트라허스"
+    ru: "Astrahus"
+    zh: "空堡"
+  portionSize: 1
+  published: true
+  radius: 45000
+  soundID: 20231
+  volume: 8000
+"36966":
+  basePrice: 6000000000
+  graphicID: 21137
+  groupID: 1462
+  marketGroupID: 2156
+  name:
+    de: "Astrahus Blueprint"
+    en: "Astrahus Blueprint"
+    es: "Plano de Astrahus"
+    fr: "Plan de construction Astrahus"
+    ja: "アシュトラハスのブループリント"
+    ko: "아스트라허스 블루프린트"
+    ru: "Astrahus Blueprint"
+    zh: "空堡蓝图"
+  portionSize: 1
+  published: true
+  volume: 0.01
+"21947":
+  basePrice: 22500000
+  description:
+    de: "Ein Sortiment aus Metallteilen, Textilien, Verbundstoffen und verschiedenen\
+      \ Maschinen. Dies sind die grundlegenden Bestandteile für den Zusammenbau und\
+      \ den Betrieb eines Außenpostens im All."
+    en: "Assorted parts of metal, textiles, composite fabrics and miscellaneous machinery\
+      \ - the basic building blocks for the assembly and operation of a space outpost."
+    es: "Todo tipo de piezas de metal, tejidos, tejidos compuestos y maquinaria de\
+      \ toda clase, los elementos básicos para construir, ensamblar y poner en funcionamiento\
+      \ un puesto avanzado espacial."
+    fr: "Assortiment de pièces métalliques, de textiles, de tissus composites et d'é\
+      quipements divers servant de blocs de construction de base pour le montage et\
+      \ le fonctionnement d'un avant-poste spatial."
+    ja: "金属材、布地、合成繊維、その他様々な機械類など、アウトポストの組み立てと運営に必要な建築素材の詰め合わせ。"
+    ko: "금속, 직물, 합성 섬유, 그리고 잡다한 기계들 - 우주의 전초기지를 구성하는 건축 자재들입니다."
+    ru: "Разнообразные металлические части, ткани, композитные материалы и всевозм\
+      ожные механизмы ― основные средства для сборки и функционирования космически\
+      х станций."
+    zh: "金属、纺织品、合成织物和各种机械的分类部件—空间哨站安装和运作的基本建筑块。"
+  groupID: 536
+  iconID: 2875
+  marketGroupID: 1865
+  mass: 10000
+  name:
+    de: "Structure Construction Parts"
+    en: "Structure Construction Parts"
+    es: "Piezas de construcción de estructuras"
+    fr: "Pièces de construction de structure"
+    ja: "ストラクチャ 建造パーツ"
+    ko: "구조물 건축 부품"
+    ru: "Structure Construction Parts"
+    zh: "建筑建造组件"
+  portionSize: 1
+  published: true
+  volume: 3000
+"21949":
+  basePrice: 39375000
+  description:
+    de: "Bestandteile für den Bau von individuellen Schiffs- und Modulhangars für\
+      \ Außenposten im All."
+    en: "Components for the construction of individualized ship and module hangars\
+      \ in space outposts."
+    es: "Componentes de construcción de naves y hangares de módulos individuales en\
+      \ puestos avanzados espaciales."
+    fr: "Composants destinés à la construction de vaisseaux individualisés et de modules\
+      \ de hangars sur les avant-postes spatiaux."
+    ja: "アウトポストに設置する、艦船およびモジュール用のハンガー建設に必要な建築材。"
+    ko: "우주 전초기지에서 개별 함선 및 모듈형 격납고를 제작하기 위한 부품입니다."
+    ru: "Составные части для сооружения личных ангаров для кораблей и предметов на\
+      \ космических станциях."
+    zh: "建造空间哨站个人飞船和机库所需的部件。"
+  groupID: 536
+  iconID: 2876
+  marketGroupID: 1865
+  mass: 10000
+  name:
+    de: "Structure Hangar Array"
+    en: "Structure Hangar Array"
+    es: "Dársena de hangares de estructura"
+    fr: "Module de hangar de la structure"
+    ja: "ストラクチャ ハンガー施設"
+    ko: "구조물 공용창고 시설"
+    ru: "Structure Hangar Array"
+    zh: "建筑机库阵列"
+  portionSize: 1
+  published: true
+  volume: 3000
+"21951":
+  basePrice: 22500000
+  description:
+    de: "Eines von unzähligen Bauteilen, die für den Bau eines Außenpostens im All\
+      \ erforderlich sind."
+    en: "One of the myriad construction components required for the building of space\
+      \ outposts."
+    es: "Uno de los innumerables componentes necesarios para la construcción de puestos\
+      \ avanzados espaciales."
+    fr: "Un des nombreux composants nécessaires à la construction des avant-postes\
+      \ spatiaux."
+    ja: "アウトポスト建設に必要な、各種建設資材の一つ。"
+    ko: "우주 전초기지를 건설하는데 필요한 여러 건설 자재들 중 하나입니다."
+    ru: "Один из множества строительных компонентов, необходимых для строительства\
+      \ космических станций."
+    zh: "建造空间站所需的无数建筑部件中的一种。"
+  groupID: 536
+  iconID: 2877
+  marketGroupID: 1865
+  mass: 10000
+  name:
+    de: "Structure Storage Bay"
+    en: "Structure Storage Bay"
+    es: "Muelle de almacenamiento de estructuras"
+    fr: "Baie de stockage de la structure"
+    ja: "ストラクチャ ストレージベイ"
+    ko: "구조물 저장고"
+    ru: "Structure Storage Bay"
+    zh: "建筑贮藏舱"
+  portionSize: 1
+  published: true
+  volume: 3000
+"21957":
+  basePrice: 95625000
+  description:
+    de: "Holzplanken, Schleifmaschinen, Nietgeräte, Haspeln und verschiedene andere\
+      \ Maschinenteile, die für den Betrieb einer Werkstattseinrichtung auf einem\
+      \ Außenposten erforderlich sind."
+    en: "Lathes, grinders, riveting machines, uncoilers, and various other pieces\
+      \ of machinery required for the operation of an outpost repair facility."
+    es: "Tornos, prensas, remachadoras, desenrolladoras y otras piezas de maquinaria\
+      \ necesarias para el funcionamiento de un puesto avanzado como centro de reparació\
+      n."
+    fr: "Tours, meuleuses, riveteuses, dérouleuses et diverses autres machines né\
+      cessaires au fonctionnement de la structure de réparation d'un avant-poste."
+    ja: "旋盤、研磨機、リベッター、アンコイラーなど、アウトポストに設置する修理ターミナルに必要な様々な機械部品。"
+    ko: "제어선반, 그라인더, 리벳장치, 코일 장치 및 정비기지에 요구되는 장비들입니다."
+    ru: "Токарные, шлифовальные, заклепочные станки, разматыватели, а также другие\
+      \ виды оборудования, необходимые для проведения ремонтных работ на станции."
+    zh: "空间站修理设施的运作所需的车床、磨床、铆接机、开卷机和不同其他类型的机械。"
+  groupID: 536
+  iconID: 2880
+  marketGroupID: 1865
+  mass: 10000
+  name:
+    de: "Structure Repair Facility"
+    en: "Structure Repair Facility"
+    es: "Centro de reparación de estructura"
+    fr: "Installation de réparation de la structure"
+    ja: "ストラクチャ リペア施設"
+    ko: "구조물 수리시설"
+    ru: "Structure Repair Facility"
+    zh: "建筑维修设施"
+  portionSize: 1
+  published: true
+  volume: 3000
+"21961":
+  basePrice: 84375000
+  description:
+    de: "Mechanische Bauteile, die für den Bau einer Andockbucht eines Außenpostens\
+      \ erforderlich sind."
+    en: "Mechanical components required for the construction of an outpost docking\
+      \ bay."
+    es: "Componentes mecánicos necesarios para la construcción de una plataforma de\
+      \ acoplamiento en un puesto avanzado."
+    fr: "Composants mécaniques nécessaires à la construction d'une baie d'amarrage\
+      \ sur un avant-poste spatial."
+    ja: "アウトポストに設置するドッキングベイの建設に必要な機械部品。"
+    ko: "전초기지 도킹 베이 건설을 위해 필요한 기계 부품들입니다."
+    ru: "Механические компоненты, необходимые для сооружения доков станции."
+    zh: "建造空间站船坞所需的机械部件。"
+  groupID: 536
+  iconID: 2882
+  marketGroupID: 1865
+  mass: 10000
+  name:
+    de: "Structure Docking Bay"
+    en: "Structure Docking Bay"
+    es: "Plataforma de acoplamiento de estructura"
+    fr: "Baie d'amarrage de la structure"
+    ja: "ストラクチャ ドッキングベイ"
+    ko: "구조물 도킹 베이"
+    ru: "Structure Docking Bay"
+    zh: "建筑停泊港"
+  portionSize: 1
+  published: true
+  volume: 3000
+"21965":
+  basePrice: 56250000
+  description:
+    de: "Medizin, Narkosemittel, chirurgische Nachschubmaterialien und komplette Kloningstationen\
+      \ für Außenposten im All."
+    en: "Medicine, anaesthetics, surgical supplies and complete cloning facilities\
+      \ for space outposts."
+    es: "Medicamentos, anestésicos, suministros quirúrgicos e instalaciones de clonació\
+      n completas para puestos avanzados espaciales."
+    fr: "Médicaments, anesthésiants, matériel chirurgical et complexes de clonage\
+      \ pour les avant-postes spatiaux."
+    ja: "アウトポスト用の医薬品、麻酔、手術用具および全機能を完備したクローン作成施設。"
+    ko: "치료, 마취, 수술 장비, 완벽한 클론 기술을 보유한 우주 전초기지용 시설입니다."
+    ru: "Лекарства, анестетики, хирургическое оборудование и весь спектр традицион\
+      ных средств для космических станций."
+    zh: "空间站的药品、麻醉剂、手术设备和完整的克隆设备。"
+  groupID: 536
+  iconID: 2884
+  marketGroupID: 1865
+  mass: 10000
+  name:
+    de: "Structure Medical Center"
+    en: "Structure Medical Center"
+    es: "Centro médico de estructura"
+    fr: "Centre médical de la structure"
+    ja: "ストラクチャ 医療センター"
+    ko: "구조물 의료 시설"
+    ru: "Structure Medical Center"
+    zh: "建筑医疗中心"
+  portionSize: 1
+  published: true
+  volume: 3000
+"21967":
+  basePrice: 88750000
+  description:
+    de: "Materialien für die Konstruktion Dutzender Büros, sowie Computersysteme und\
+      \ die Hilfsstoffe, die für den tagtäglichen Betrieb erforderlich sind."
+    en: "Materials for the construction of dozens of offices, as well as computer\
+      \ systems and supplies needed for their day-to-day running."
+    es: "Materiales para la construcción de decenas de oficinas, además de sistemas\
+      \ informáticos y los suministros necesarios para su funcionamiento diario."
+    fr: "Matériel permettant la construction de douzaines de bureaux, systèmes informatiques\
+      \ et fournitures nécessaires à leur fonctionnement quotidien."
+    ja: "多数のオフィスの建設に必要な建築資源、およびそこでの日常業務に必要なコンピュータシステムや備品。"
+    ko: "여러 개의 사무실을 지을 수 있는 자재입니다. 사무실 운영에 필요한 컴퓨터와 각종 사무용품까지도 제작이 가능합니다."
+    ru: "Материалы для строительства десятков офисов, наряду с компьютерными систе\
+      мами и обеспечением, необходимыми для их непрерывной работы."
+    zh: "建造许多办公室所需的建材以及每天运作所需的电脑系统和必需品。"
+  groupID: 536
+  iconID: 2874
+  marketGroupID: 1865
+  mass: 10000
+  name:
+    de: "Structure Office Center"
+    en: "Structure Office Center"
+    es: "Centro de oficinas de estructuras"
+    fr: "Site des bureaux de la structure"
+    ja: "ストラクチャ オフィスセンター"
+    ko: "구조물 사무 센터"
+    ru: "Structure Office Center"
+    zh: "建筑办公室中心"
+  portionSize: 1
+  published: true
+  volume: 3000
+"21963":
+  basePrice: 142500000
+  description:
+    de: "Elektronische Marktzugangsausrüstung und gesicherte Lagerraum-Einrichtungen\
+      \ von marktgängigen Waren für Außenposten im All."
+    en: "Market access electronics and secure storage facilities of market goods for\
+      \ space outposts."
+    es: "Electrónica de acceso al mercado e instalaciones de almacenamiento seguras\
+      \ de mercancías para los puestos avanzados espaciales."
+    fr: "Systèmes électroniques permettant d'accéder aux marchés et sites de stockage\
+      \ sécurisés pour les marchandises sur les avant-postes spatiaux."
+    ja: "アウトポストに設置する、マーケットアクセスターミナルと商品保管用のセキュリティ付き倉庫。"
+    ko: "우주 전초기지용 시장 접속 권한 기기와 안전하게 관리된 물품 저장시설입니다."
+    ru: "Компоненты электронной системы управления рынком, а также сооружения для\
+      \ хранения товаров на космических станциях."
+    zh: "空间站市场货物的市场访问电子部件和安全储藏设施。"
+  groupID: 536
+  iconID: 2883
+  marketGroupID: 1865
+  mass: 10000
+  name:
+    de: "Structure Market Network"
+    en: "Structure Market Network"
+    es: "Red de mercado de estructuras"
+    fr: "Réseau des marchés de structure"
+    ja: "ストラクチャ マーケットネットワーク"
+    ko: "구조물 거래소 네트워크 시설"
+    ru: "Structure Market Network"
+    zh: "建筑市场网络"
+  portionSize: 1
+  published: true
+  volume: 3000
