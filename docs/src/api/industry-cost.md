@@ -295,7 +295,7 @@ See [OpenAPI spec](https://github.com/autonomouslogic/eve-ref/blob/main/spec/eve
 * `triglavian_quantum_engineering` - The Triglavian Quantum Engineering skill level the installing character
 * `upwell_encryption_methods` - The Upwell Encryption Methods skill level the installing character
 * `upwell_starship_engineering` - The Upwell Starship Engineering skill level the installing character
-
+* `outpost_construction` - The Outpost Construction skill level the installing character
 
 ### Other
 * `alpha` - Whether installing character is an alpha clone or not
