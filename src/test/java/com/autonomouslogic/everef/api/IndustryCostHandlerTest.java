@@ -93,16 +93,16 @@ public class IndustryCostHandlerTest {
 	public static final int API_TEST_PORT = 29216;
 
 	static final List<String> TEST_NAMES = List.of(
-//			"dominix",
-//			"sin",
-//			"sin-blueprint",
-//			"armor-energizing-charge-blueprint",
-//			"mjolnir-fury-cruise-missile",
-//			"mjolnir-fury-cruise-missile-blueprint",
-//			"mjolnir-fury-cruise-missile-blueprint-optimized-attainment-decryptor",
-//			"dominix-lowsec-sotiyo-rigs",
-//			"sin-blueprint-lowsec-sotiyo-rigs",
-//			"carbon-fiber-reaction-formula-athanor-rigs",
+			"dominix",
+			"sin",
+			"sin-blueprint",
+			"armor-energizing-charge-blueprint",
+			"mjolnir-fury-cruise-missile",
+			"mjolnir-fury-cruise-missile-blueprint",
+			"mjolnir-fury-cruise-missile-blueprint-optimized-attainment-decryptor",
+			"dominix-lowsec-sotiyo-rigs",
+			"sin-blueprint-lowsec-sotiyo-rigs",
+			"carbon-fiber-reaction-formula-athanor-rigs",
 			"astrahus");
 
 	@Inject

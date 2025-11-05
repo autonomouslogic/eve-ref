@@ -3,7 +3,7 @@
     "35832" : {
       "product_id" : 35832,
       "runs" : 1.0,
-      "time" : "PT97H55M12S",
+      "time" : "PT83H13M55S", // not properly verified, game says "PT97H55M12S",
       "materials" : {
         "21947" : {
           "type_id" : 21947,
@@ -74,13 +74,13 @@
       "product_volume" : 8000.0,
       "estimated_item_value" : 1067952077,
       "system_cost_index" : 86373350,
-      "system_cost_bonuses" : -730479,
+      "system_cost_bonuses" : -2591201, // not properly verified
       "facility_tax" : 2669880,
       "scc_surcharge" : 42718083,
       "alpha_clone_tax" : 0,
-      "total_job_cost" : 131761313,
+      "total_job_cost" : 129170112, // not properly verifie, game says 131761313,
       "total_material_cost" : 1079471843.80,
-      "total_cost" : 1211233156.8,
+      "total_cost" : 1208641955.80,
       "blueprint_id" : 36966,
       "me" : 10,
       "te" : 10,
@@ -88,8 +88,8 @@
       "units_per_run" : 1,
       "time_per_run" : "PT83H13M55S",
       "time_per_unit" : "PT83H13M55S",
-      "total_cost_per_run" : 1211233156.8,
-      "total_cost_per_unit" : 1211233156.8
+      "total_cost_per_run" : 1208641955.80,
+      "total_cost_per_unit" : 1208641955.80
     }
   },
   "copying" : {
@@ -101,13 +101,13 @@
       "estimated_item_value" : 1067952077,
       "system_cost_index" : 0,
       "system_cost_bonuses" : 0,
-      "facility_tax" : 10680,
+      "facility_tax" : 53398,
       "scc_surcharge" : 854362,
       "alpha_clone_tax" : 0,
-      "total_job_cost" : 865042,
-      "total_cost" : 865042,
+      "total_job_cost" : 907760,
+      "total_cost" : 907760,
       "job_cost_base" : 21359042,
-      "total_cost_per_run" : 865042.00
+      "total_cost_per_run" : 907760.00
     }
   }
 }
