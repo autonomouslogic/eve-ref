@@ -1,0 +1,65 @@
+{
+  "base_price" : 56250000,
+  "description" : {
+    "de" : "Medizin, Narkosemittel, chirurgische Nachschubmaterialien und komplette Kloningstationen für Außenposten im All.",
+    "en" : "Medicine, anaesthetics, surgical supplies and complete cloning facilities for space outposts.",
+    "es" : "Medicamentos, anestésicos, suministros quirúrgicos e instalaciones de clonación completas para puestos avanzados espaciales.",
+    "fr" : "Médicaments, anesthésiants, matériel chirurgical et complexes de clonage pour les avant-postes spatiaux.",
+    "ja" : "アウトポスト用の医薬品、麻酔、手術用具および全機能を完備したクローン作成施設。",
+    "ko" : "치료, 마취, 수술 장비, 완벽한 클론 기술을 보유한 우주 전초기지용 시설입니다.",
+    "ru" : "Лекарства, анестетики, хирургическое оборудование и весь спектр традиционных средств для космических станций.",
+    "zh" : "空间站的药品、麻醉剂、手术设备和完整的克隆设备。"
+  },
+  "group_id" : 536,
+  "icon_id" : 2884,
+  "market_group_id" : 1865,
+  "mass" : 10000,
+  "name" : {
+    "de" : "Structure Medical Center",
+    "en" : "Structure Medical Center",
+    "es" : "Centro médico de estructura",
+    "fr" : "Centre médical de la structure",
+    "ja" : "ストラクチャ 医療センター",
+    "ko" : "구조물 의료 시설",
+    "ru" : "Structure Medical Center",
+    "zh" : "建筑医疗中心"
+  },
+  "portion_size" : 1,
+  "published" : true,
+  "volume" : 3000,
+  "type_id" : 21965,
+  "capacity" : 0,
+  "dogma_attributes" : {
+    "161" : {
+      "attribute_id" : 161,
+      "value" : 3000
+    },
+    "162" : {
+      "attribute_id" : 162,
+      "value" : 1
+    },
+    "4" : {
+      "attribute_id" : 4,
+      "value" : 10000
+    },
+    "38" : {
+      "attribute_id" : 38,
+      "value" : 0
+    },
+    "726" : {
+      "attribute_id" : 726,
+      "value" : 100
+    }
+  },
+  "packaged_volume" : 3000,
+  "radius" : 1,
+  "used_in_blueprints" : {
+    "36966" : {
+      "manufacturing" : {
+        "material_type_id" : 21965,
+        "activity" : "manufacturing",
+        "quantity" : 1
+      }
+    }
+  }
+}

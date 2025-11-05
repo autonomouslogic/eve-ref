@@ -16,4 +16,5 @@ done
 joined=$(printf " or %s" "${query[@]}")
 joined=${joined:4}
 
-curl -sS --fail https://esi.evetech.net/latest/markets/prices/ | jq "[.[] | select($joined)]"
+#curl -sS --fail https://esi.evetech.net/latest/markets/prices/ | jq "[.[] | select($joined)]"
+cat ~/Downloads/markets-prices-2025-11-04_06-27-01.json | jq "[.[] | select($joined)]"

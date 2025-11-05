@@ -1,0 +1,20 @@
+{
+  "base_price" : 6000000000,
+  "graphic_id" : 21137,
+  "group_id" : 1462,
+  "market_group_id" : 2156,
+  "name" : {
+    "de" : "Astrahus Blueprint",
+    "en" : "Astrahus Blueprint",
+    "es" : "Plano de Astrahus",
+    "fr" : "Plan de construction Astrahus",
+    "ja" : "アシュトラハスのブループリント",
+    "ko" : "아스트라허스 블루프린트",
+    "ru" : "Astrahus Blueprint",
+    "zh" : "空堡蓝图"
+  },
+  "portion_size" : 1,
+  "published" : true,
+  "volume" : 0.01,
+  "type_id" : 36966
+}

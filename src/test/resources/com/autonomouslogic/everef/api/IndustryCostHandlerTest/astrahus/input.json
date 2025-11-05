@@ -1,0 +1,12 @@
+{
+  "product_id": 35832,
+  "runs": 1,
+  "me": 10,
+  "te": 10,
+  "industry": 5,
+  "outpost_construction": 4,
+  "security": "NULL_SEC",
+  "manufacturing_cost":  0.0228,
+  "structure_type_id": 35825,
+  "facility_tax": 0.0005
+}

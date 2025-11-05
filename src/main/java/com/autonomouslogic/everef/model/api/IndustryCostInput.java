@@ -597,4 +597,14 @@ public class IndustryCostInput {
 			minimum = "0",
 			maximum = "5")
 	int upwellEncryptionMethods = 5;
+
+	@JsonProperty
+	@lombok.Builder.Default
+	@Schema(
+			description = "The Outpost Construction skill level the installing character",
+			requiredMode = Schema.RequiredMode.NOT_REQUIRED,
+			defaultValue = "5",
+			minimum = "0",
+			maximum = "5")
+	int outpostConstruction = 5;
 }

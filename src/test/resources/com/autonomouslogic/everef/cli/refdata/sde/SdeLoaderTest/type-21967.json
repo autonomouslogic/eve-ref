@@ -1,0 +1,31 @@
+{
+  "base_price" : 88750000,
+  "description" : {
+    "de" : "Materialien für die Konstruktion Dutzender Büros, sowie Computersysteme und die Hilfsstoffe, die für den tagtäglichen Betrieb erforderlich sind.",
+    "en" : "Materials for the construction of dozens of offices, as well as computer systems and supplies needed for their day-to-day running.",
+    "es" : "Materiales para la construcción de decenas de oficinas, además de sistemas informáticos y los suministros necesarios para su funcionamiento diario.",
+    "fr" : "Matériel permettant la construction de douzaines de bureaux, systèmes informatiques et fournitures nécessaires à leur fonctionnement quotidien.",
+    "ja" : "多数のオフィスの建設に必要な建築資源、およびそこでの日常業務に必要なコンピュータシステムや備品。",
+    "ko" : "여러 개의 사무실을 지을 수 있는 자재입니다. 사무실 운영에 필요한 컴퓨터와 각종 사무용품까지도 제작이 가능합니다.",
+    "ru" : "Материалы для строительства десятков офисов, наряду с компьютерными системами и обеспечением, необходимыми для их непрерывной работы.",
+    "zh" : "建造许多办公室所需的建材以及每天运作所需的电脑系统和必需品。"
+  },
+  "group_id" : 536,
+  "icon_id" : 2874,
+  "market_group_id" : 1865,
+  "mass" : 10000,
+  "name" : {
+    "de" : "Structure Office Center",
+    "en" : "Structure Office Center",
+    "es" : "Centro de oficinas de estructuras",
+    "fr" : "Site des bureaux de la structure",
+    "ja" : "ストラクチャ オフィスセンター",
+    "ko" : "구조물 사무 센터",
+    "ru" : "Structure Office Center",
+    "zh" : "建筑办公室中心"
+  },
+  "portion_size" : 1,
+  "published" : true,
+  "volume" : 3000,
+  "type_id" : 21967
+}
