@@ -1,5 +1,17 @@
 EVE Ref Changelog
 
+## [2.70.0](https://github.com/autonomouslogic/eve-ref/compare/2.69.8...2.70.0) (2025-11-05)
+
+
+### Features
+
+* Suppot for Outpost Construction on Industry Cost API ([#979](https://github.com/autonomouslogic/eve-ref/issues/979)) ([ee0a3db](https://github.com/autonomouslogic/eve-ref/commit/ee0a3db7427d425394282f5c6aa911fde984b35a))
+
+
+### Documentation
+
+* Outpost Construction ([1636865](https://github.com/autonomouslogic/eve-ref/commit/1636865964340b53a0884ccc2817565af1a78118))
+
 ## [2.69.8](https://github.com/autonomouslogic/eve-ref/compare/2.69.7...2.69.8) (2025-11-04)
 
 
