@@ -100,7 +100,7 @@ const motd = computed(() => {
 
 	if (dayOfWeek == 4) {
 		return {
-			text: "Win 50 PLEX and 3 Day Omega every Friday",
+			text: "Win 3 Days of Omega and 50 PLEX every Friday",
 			url: "/giveaways",
 			urlText: "Giveaways"
 		} as Motd;
