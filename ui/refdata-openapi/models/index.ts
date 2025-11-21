@@ -23,6 +23,7 @@ export * from './Mutaplasmid';
 export * from './MutaplasmidDogmaModifications';
 export * from './MutaplasmidTypeMapping';
 export * from './ProducingBlueprint';
+export * from './RandomizedMaterial';
 export * from './RefDataMeta';
 export * from './RefDataMetaFileInfo';
 export * from './Region';

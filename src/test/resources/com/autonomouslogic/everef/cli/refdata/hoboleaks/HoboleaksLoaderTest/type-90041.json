@@ -1,0 +1,45 @@
+{
+  "randomized_materials" : {
+    "34" : {
+      "quantity_max" : 496800,
+      "material_type_id" : 34,
+      "quantity_min" : 368000
+    },
+    "35" : {
+      "quantity_max" : 111830,
+      "material_type_id" : 35,
+      "quantity_min" : 89464
+    },
+    "36" : {
+      "quantity_max" : 45540,
+      "material_type_id" : 36,
+      "quantity_min" : 35420
+    },
+    "37" : {
+      "quantity_max" : 31280,
+      "material_type_id" : 37,
+      "quantity_min" : 23920
+    },
+    "38" : {
+      "quantity_max" : 4025,
+      "material_type_id" : 38,
+      "quantity_min" : 2875
+    },
+    "39" : {
+      "quantity_max" : 1528,
+      "material_type_id" : 39,
+      "quantity_min" : 1299
+    },
+    "40" : {
+      "quantity_max" : 830,
+      "material_type_id" : 40,
+      "quantity_min" : 634
+    },
+    "11399" : {
+      "quantity_max" : 624,
+      "material_type_id" : 11399,
+      "quantity_min" : 312
+    }
+  },
+  "type_materials" : { }
+}

@@ -5051,3 +5051,49 @@
   radius: 1
   type_id: 21963
   volume: 3000
+"90041":
+  capacity: 0
+  description: "La prismaticite est un minerai erratique. Une fois retraité, il s'effondrera\
+    \ pour former <b>un de différents minéraux</b>. La prismaticite doit être comprimé\
+    e sous la forme de <a href=showinfo:90307>prismaticite compressée</a> pour être\
+    \ utilisée dans les réactions. Les propriétés uniques de ce minerai résultent\
+    \ de son instabilité dimensionnelle fondamentale. Elle a été façonnée dans un\
+    \ environnement supradimensionnel inconcevable."
+  dogma_attributes:
+  - attribute_id: 161
+    value: 40
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 2115
+    value: 0
+  - attribute_id: 3236
+    value: 0
+  - attribute_id: 182
+    value: 3386
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 2699
+    value: 1
+  - attribute_id: 277
+    value: 1
+  - attribute_id: 790
+    value: 90040
+  - attribute_id: 2711
+    value: 90041
+  - attribute_id: 4
+    value: 0
+  - attribute_id: 1980
+    value: 0.425
+  - attribute_id: 1981
+    value: 600
+  group_id: 4915
+  icon_id: 27139
+  market_group_id: 3776
+  mass: 0
+  name: "Prismaticite"
+  packaged_volume: 40
+  portion_size: 100
+  published: true
+  radius: 1
+  type_id: 90041
+  volume: 40

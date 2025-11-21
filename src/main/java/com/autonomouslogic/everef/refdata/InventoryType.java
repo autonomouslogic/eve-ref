@@ -162,10 +162,7 @@ public class InventoryType {
 	Map<Long, TypeMaterial> typeMaterials;
 
 	@JsonProperty
-	@Schema(
-		description =
-			"The schematic IDs which can be installed into this planetary processor. This is added by EVE Ref.")
-	List<Long> randomizedMaterials;
+	Map<Long, RandomizedMaterial> randomizedMaterials;
 
 	@JsonProperty
 	@Schema(description = "Types this can be fitted to. This is added by EVE Ref.")

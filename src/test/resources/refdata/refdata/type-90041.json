@@ -1,0 +1,139 @@
+{
+  "base_price" : 1000,
+  "description" : {
+    "de" : "Prismatizit ist ein unberechenbares erratisches Erz. Sobald es aufbereitet wurde, wird es in <b>eins von verschiedenen Mineralien</b> zerfallen. Prismatizit muss in Form von <a href=showinfo:90307>komprimiertem Prismatizit</a> verdichtet werden, um in Reaktionen verwendet zu werden. Die einzigartigen Eigenschaften dieses Erzes sind das Ergebnis seiner fundamentalen dimensionalen Instabilität. Es wurde in einer unbegreiflichen höherdimensionalen Umgebung geformt.",
+    "en" : "Prismaticite is an Erratic Ore. Once reprocessed, it will collapse into <b>one of a number of different minerals</b>.\r\n\r\nPrismaticite must be compressed in the form of <a href=showinfo:90307>Compressed Prismaticite</a> to be used in reactions.\r\n\r\nThe unique properties of this ore are a result of its fundamental dimensional instability. It was shaped in an unknowable higher-dimensional environment.",
+    "es" : "La prismaticita es una mena errática. Una vez reprocesada, se colapsa en <b>uno de los distintos minerales</b>.\n\nLa prismaticita debe comprimirse en su forma de <a href=showinfo:90307>prismaticita comprimida</a> para poder utilizarse en reacciones.\n\nLas propiedades únicas de esta mena son el resultado de su inestabilidad dimensional fundamental. Se formó en un entorno de dimensiones superiores, imposible de comprender.",
+    "fr" : "La prismaticite est un minerai erratique. Une fois retraité, il s'effondrera pour former <b>un de différents minéraux</b>. La prismaticite doit être comprimée sous la forme de <a href=showinfo:90307>prismaticite compressée</a> pour être utilisée dans les réactions. Les propriétés uniques de ce minerai résultent de son instabilité dimensionnelle fondamentale. Elle a été façonnée dans un environnement supradimensionnel inconcevable.",
+    "ja" : "プリズマティサイトは不安定鉱石の一種である。再処理すると<b>いずれか1種類の無機物</b>に分解される。\n\nプリズマティサイトを化学反応で利用するには、圧縮して<a href=showinfo:90307>圧縮プリズマティサイト</a>にする必要がある。\n\nこの独特な性質は、プリズマティサイトが不可知の高次元環境で形成されるため、我々の次元では存在が根本的に不安定なことに由来している。",
+    "ko" : "프리즈마티사이트는 불안정한 광물입니다. 정제하면 붕괴되어 <b>다양한 미네랄</b>로 변형합니다.\n\n프리즈마티사이트는 반드시 <a href=showinfo:90307>압축된 프리즈마티사이트</a> 상태로 정제 작업을 시작해야 합니다.\n\n광물의 특이한 성질 때문에 차원 위상이 불안정합니다. 아직 정체가 알려지지 않은 고차원 환경에서 생성된 것으로 추정됩니다.",
+    "ru" : "Призматицит — это неустойчивая руда. В результате переработки из него получают <b>случайные минералы</b>. Чтобы подвергнуть призматицит химическим реакциям, его нужно преобразовать в <a href=showinfo:90307>сжатый призматицит</a>. Уникальные свойства этой руды — результат её выраженной пространственной нестабильности. Призматицит сформировался в ином измерении, непостижимом для человечества.",
+    "zh" : "棱柱石是一种漂砾矿石。经过重新处理后，它将坍缩成<b>多种不同矿物之一</b>。棱柱岩必须压缩成<a href=showinfo:90307>高密度棱柱岩</a>才能用于反应。这种矿石的独特属性源于基础维度的不稳定性。它是在一个不可知的高维环境中形成的。"
+  },
+  "group_id" : 4915,
+  "icon_id" : 27139,
+  "market_group_id" : 3776,
+  "name" : {
+    "de" : "Prismaticite",
+    "en" : "Prismaticite",
+    "es" : "Prismaticita",
+    "fr" : "Prismaticite",
+    "ja" : "プリズマティサイト",
+    "ko" : "프리즈마티사이트",
+    "ru" : "Prismaticite",
+    "zh" : "棱柱石"
+  },
+  "portion_size" : 100,
+  "published" : true,
+  "race_id" : 4,
+  "volume" : 40,
+  "type_id" : 90041,
+  "capacity" : 0,
+  "dogma_attributes" : {
+    "161" : {
+      "attribute_id" : 161,
+      "value" : 40
+    },
+    "162" : {
+      "attribute_id" : 162,
+      "value" : 1
+    },
+    "2115" : {
+      "attribute_id" : 2115,
+      "value" : 0
+    },
+    "3236" : {
+      "attribute_id" : 3236,
+      "value" : 0
+    },
+    "182" : {
+      "attribute_id" : 182,
+      "value" : 3386
+    },
+    "38" : {
+      "attribute_id" : 38,
+      "value" : 0
+    },
+    "2699" : {
+      "attribute_id" : 2699,
+      "value" : 1
+    },
+    "277" : {
+      "attribute_id" : 277,
+      "value" : 1
+    },
+    "790" : {
+      "attribute_id" : 790,
+      "value" : 90040
+    },
+    "2711" : {
+      "attribute_id" : 2711,
+      "value" : 90041
+    },
+    "4" : {
+      "attribute_id" : 4,
+      "value" : 0
+    },
+    "1980" : {
+      "attribute_id" : 1980,
+      "value" : 0.425
+    },
+    "1981" : {
+      "attribute_id" : 1981,
+      "value" : 600
+    }
+  },
+  "mass" : 0,
+  "packaged_volume" : 40,
+  "radius" : 1,
+  "randomized_materials" : {
+    "34" : {
+      "material_type_id" : 34,
+      "quantity_max" : 496800,
+      "quantity_min" : 368000
+    },
+    "35" : {
+      "material_type_id" : 35,
+      "quantity_max" : 111830,
+      "quantity_min" : 89464
+    },
+    "36" : {
+      "material_type_id" : 36,
+      "quantity_max" : 45540,
+      "quantity_min" : 35420
+    },
+    "37" : {
+      "material_type_id" : 37,
+      "quantity_max" : 31280,
+      "quantity_min" : 23920
+    },
+    "38" : {
+      "material_type_id" : 38,
+      "quantity_max" : 4025,
+      "quantity_min" : 2875
+    },
+    "39" : {
+      "material_type_id" : 39,
+      "quantity_max" : 1528,
+      "quantity_min" : 1299
+    },
+    "40" : {
+      "material_type_id" : 40,
+      "quantity_max" : 830,
+      "quantity_min" : 634
+    },
+    "11399" : {
+      "material_type_id" : 11399,
+      "quantity_max" : 624,
+      "quantity_min" : 312
+    }
+  },
+  "type_materials" : { },
+  "required_skills" : {
+    "3386" : 1
+  },
+  "ore_variations" : {
+    "1" : [ 90041 ]
+  },
+  "is_ore" : true
+}

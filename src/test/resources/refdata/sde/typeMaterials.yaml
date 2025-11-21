@@ -15,3 +15,29 @@
     quantity: 3900
   - materialTypeID: 40
     quantity: 1950
+"90041":
+  randomizedMaterials:
+  - materialTypeID: 34
+    quantityMax: 496800
+    quantityMin: 368000
+  - materialTypeID: 35
+    quantityMax: 111830
+    quantityMin: 89464
+  - materialTypeID: 36
+    quantityMax: 45540
+    quantityMin: 35420
+  - materialTypeID: 37
+    quantityMax: 31280
+    quantityMin: 23920
+  - materialTypeID: 38
+    quantityMax: 4025
+    quantityMin: 2875
+  - materialTypeID: 39
+    quantityMax: 1528
+    quantityMin: 1299
+  - materialTypeID: 40
+    quantityMax: 830
+    quantityMin: 634
+  - materialTypeID: 11399
+    quantityMax: 624
+    quantityMin: 312

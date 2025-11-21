@@ -170,6 +170,7 @@ types:
       - 21965
       - 21967
       - 21963
+      - 90041
     languages:
       - en-us
       - fr
@@ -183,16 +184,19 @@ typeMaterials:
       materials: type_materials
     arrayToObjects:
       type_materials: material_type_id
+      randomized_materials: material_type_id
   hoboleaks:
     file: typematerials.json
     renames:
       materials: type_materials
     arrayToObjects:
       type_materials: material_type_id
+      randomized_materials: material_type_id
   test:
     filePrefix: type
     ids:
       - 645
+      - 90041
 
 typeBonus:
   outputStore: types
