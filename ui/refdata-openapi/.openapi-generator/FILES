@@ -24,6 +24,7 @@ models/Mutaplasmid.ts
 models/MutaplasmidDogmaModifications.ts
 models/MutaplasmidTypeMapping.ts
 models/ProducingBlueprint.ts
+models/RandomizedTypeMaterial.ts
 models/RefDataMeta.ts
 models/RefDataMetaFileInfo.ts
 models/Region.ts

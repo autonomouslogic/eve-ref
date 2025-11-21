@@ -5083,3 +5083,60 @@
   portionSize: 1
   published: true
   volume: 3000
+"90041":
+  basePrice: 1000
+  description:
+    de: "Prismatizit ist ein unberechenbares erratisches Erz. Sobald es aufbereitet\
+      \ wurde, wird es in <b>eins von verschiedenen Mineralien</b> zerfallen. Prismatizit\
+      \ muss in Form von <a href=showinfo:90307>komprimiertem Prismatizit</a> verdichtet\
+      \ werden, um in Reaktionen verwendet zu werden. Die einzigartigen Eigenschaften\
+      \ dieses Erzes sind das Ergebnis seiner fundamentalen dimensionalen Instabilitä\
+      t. Es wurde in einer unbegreiflichen höherdimensionalen Umgebung geformt."
+    en: "Prismaticite is an Erratic Ore. Once reprocessed, it will collapse into <b>one\
+      \ of a number of different minerals</b>.\n\nPrismaticite must be compressed\
+      \ in the form of <a href=showinfo:90307>Compressed Prismaticite</a> to be used\
+      \ in reactions.\n\nThe unique properties of this ore are a result of its fundamental\
+      \ dimensional instability. It was shaped in an unknowable higher-dimensional\
+      \ environment."
+    es: "La prismaticita es una mena errática. Una vez reprocesada, se colapsa en\
+      \ <b>uno de los distintos minerales</b>.\n\nLa prismaticita debe comprimirse\
+      \ en su forma de <a href=showinfo:90307>prismaticita comprimida</a> para poder\
+      \ utilizarse en reacciones.\n\nLas propiedades únicas de esta mena son el resultado\
+      \ de su inestabilidad dimensional fundamental. Se formó en un entorno de dimensiones\
+      \ superiores, imposible de comprender."
+    fr: "La prismaticite est un minerai erratique. Une fois retraité, il s'effondrera\
+      \ pour former <b>un de différents minéraux</b>. La prismaticite doit être comprimé\
+      e sous la forme de <a href=showinfo:90307>prismaticite compressée</a> pour ê\
+      tre utilisée dans les réactions. Les propriétés uniques de ce minerai résultent\
+      \ de son instabilité dimensionnelle fondamentale. Elle a été façonnée dans un\
+      \ environnement supradimensionnel inconcevable."
+    ja: "プリズマティサイトは不安定鉱石の一種である。再処理すると<b>いずれか1種類の無機物</b>に分解される。\n\nプリズマティサイトを化学反応で利\
+      用するには、圧縮して<a href=showinfo:90307>圧縮プリズマティサイト</a>にする必要がある。\n\nこの独特な性質は、プリズマティ\
+      サイトが不可知の高次元環境で形成されるため、我々の次元では存在が根本的に不安定なことに由来している。"
+    ko: "프리즈마티사이트는 불안정한 광물입니다. 정제하면 붕괴되어 <b>다양한 미네랄</b>로 변형합니다.\n\n프리즈마티사이트는 반드시 <a\
+      \ href=showinfo:90307>압축된 프리즈마티사이트</a> 상태로 정제 작업을 시작해야 합니다.\n\n광물의 특이한 성질 때문\
+      에 차원 위상이 불안정합니다. 아직 정체가 알려지지 않은 고차원 환경에서 생성된 것으로 추정됩니다."
+    ru: "Призматицит\_— это неустойчивая руда. В\_результате переработки из\_него\
+      \ получают <b>случайные минералы</b>. Чтобы подвергнуть призматицит химическ\
+      им реакциям, его нужно преобразовать в\_<a href=showinfo:90307>сжатый призма\
+      тицит</a>. Уникальные свойства этой руды\_— результат её выраженной простран\
+      ственной нестабильности. Призматицит сформировался в\_ином измерении, непост\
+      ижимом для\_человечества."
+    zh: "棱柱石是一种漂砾矿石。经过重新处理后，它将坍缩成<b>多种不同矿物之一</b>。棱柱岩必须压缩成<a href=showinfo:90307>高密\
+      度棱柱岩</a>才能用于反应。这种矿石的独特属性源于基础维度的不稳定性。它是在一个不可知的高维环境中形成的。"
+  groupID: 4915
+  iconID: 27139
+  marketGroupID: 3776
+  name:
+    de: "Prismaticite"
+    en: "Prismaticite"
+    es: "Prismaticita"
+    fr: "Prismaticite"
+    ja: "プリズマティサイト"
+    ko: "프리즈마티사이트"
+    ru: "Prismaticite"
+    zh: "棱柱石"
+  portionSize: 100
+  published: true
+  raceID: 4
+  volume: 40

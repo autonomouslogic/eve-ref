@@ -43,6 +43,12 @@ import {
     ProducingBlueprintFromJSONTyped,
     ProducingBlueprintToJSON,
 } from './ProducingBlueprint';
+import type { RandomizedTypeMaterial } from './RandomizedTypeMaterial';
+import {
+    RandomizedTypeMaterialFromJSON,
+    RandomizedTypeMaterialFromJSONTyped,
+    RandomizedTypeMaterialToJSON,
+} from './RandomizedTypeMaterial';
 import type { TypeMaterial } from './TypeMaterial';
 import {
     TypeMaterialFromJSON,
@@ -297,6 +303,12 @@ export interface InventoryType {
      */
     radius?: number;
     /**
+     * 
+     * @type {{ [key: string]: RandomizedTypeMaterial; }}
+     * @memberof InventoryType
+     */
+    randomizedTypeMaterials?: { [key: string]: RandomizedTypeMaterial; };
+    /**
      * The skills required for this type. The key is the skill type ID and the value is the level. This is added by EVE Ref and derived from dogma attributes.
      * @type {{ [key: string]: number; }}
      * @memberof InventoryType
@@ -416,6 +428,7 @@ export function InventoryTypeFromJSONTyped(json: any, ignoreDiscriminator: boole
         'published': !exists(json, 'published') ? undefined : json['published'],
         'raceId': !exists(json, 'race_id') ? undefined : json['race_id'],
         'radius': !exists(json, 'radius') ? undefined : json['radius'],
+        'randomizedTypeMaterials': !exists(json, 'randomized_type_materials') ? undefined : (mapValues(json['randomized_type_materials'], RandomizedTypeMaterialFromJSON)),
         'requiredSkills': !exists(json, 'required_skills') ? undefined : json['required_skills'],
         'soundId': !exists(json, 'sound_id') ? undefined : json['sound_id'],
         'traits': !exists(json, 'traits') ? undefined : InventoryTypeTraitsFromJSON(json['traits']),
@@ -477,6 +490,7 @@ export function InventoryTypeToJSON(value?: InventoryType | null): any {
         'published': value.published,
         'race_id': value.raceId,
         'radius': value.radius,
+        'randomized_type_materials': value.randomizedTypeMaterials === undefined ? undefined : (mapValues(value.randomizedTypeMaterials, RandomizedTypeMaterialToJSON)),
         'required_skills': value.requiredSkills,
         'sound_id': value.soundId,
         'traits': InventoryTypeTraitsToJSON(value.traits),

@@ -1228,6 +1228,10 @@ components:
         radius:
           type: number
           format: double
+        randomized_type_materials:
+          type: object
+          additionalProperties:
+            $ref: "#/components/schemas/RandomizedTypeMaterial"
         required_skills:
           type: object
           additionalProperties:
@@ -1466,6 +1470,18 @@ components:
         blueprint_activity:
           type: string
         blueprint_type_id:
+          type: integer
+          format: int64
+    RandomizedTypeMaterial:
+      type: object
+      properties:
+        material_type_id:
+          type: integer
+          format: int64
+        quantity_max:
+          type: integer
+          format: int64
+        quantity_min:
           type: integer
           format: int64
     RefDataMeta:
