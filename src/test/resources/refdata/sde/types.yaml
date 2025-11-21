@@ -874,167 +874,52 @@
 "1230":
   basePrice: 2000
   description:
-    de: "Veldspar ist die am häufigsten vorkommende Erzart in den zentralen Regionen\
-      \ des bekannten Universums. Da Veldspar eine große Menge des häufig gebrauchten\
-      \ Minerals <a href=showinfo:34>Tritanium</a> enthält, besteht noch immer eine\
-      \ ständige Nachfrage. Vorwiegend verfügbar in Sonnensystemen des Hochsicherheitsraums."
     en: "Veldspar is the most common ore type in the central regions of known universe.\
       \ It is still in constant demand as it holds a large portion of the much-used\
       \ <a href=showinfo:34>Tritanium</a> mineral.\n\nAvailable primarily in high\
       \ security status star systems."
-    es: "El veldspar es el tipo de mena más común en las regiones centrales del universo\
-      \ conocido. Su demanda es constante, ya que contiene una gran parte de <a href=showinfo:34>tritanio</a>,\
-      \ un mineral muy utilizado.\n\n\n\nSe encuentra principalmente en sistemas estelares\
-      \ de seguridad alta."
-    fr: "Le veldspar est l'un des minerais les plus courants dans les régions centrales\
-      \ de l'univers connu. La demande en veldspar ne faiblit jamais car il contient\
-      \ du <a href=showinfo:34>tritanium</a>, l'un des minéraux les plus exploité\
-      s de l'amas. Ce minerai est essentiellement disponible dans les systèmes stellaires\
-      \ de haute sécurité."
-    ja: "ベルドスパーは既知宇宙の中心宙域に最も普及している鉱石で、どこに行っても見つけることができる。しかし用途の広い無機物である<a href=showinfo:34>ト\
-      リタニウム</a>を多く含むため、需要は絶えない。\n\n主にハイセキュリティ星系で発見可能。"
-    ko: "벨드스파는 뉴에덴의 중심부에서 발견되는 흔한 광석 가운데 하나로 <a href=showinfo:34>트리타늄</a>의 주요 공급원입\
-      니다.<br><br>하이 시큐리티 항성계에서 주로 채굴됩니다."
-    ru: "Вельдспар\_— самая распространённая руда в центральных секторах известной\
-      \ части вселенной. Вельдспар содержит большое количество повсеместно использ\
-      уемого <a href=showinfo:34>тритания</a>, поэтому спрос на него никогда не па\
-      дает. Встречается в основном в звёздных системах с высоким уровнем безопасно\
-      сти."
-    zh: "凡晶石是已知空间的核心星域中最为常见的矿石。它富含人们大量使用的<a href=showinfo:34>三钛合金</a>，因此需求仍然十分稳定。\n\
-      \n\n\n主要分布于高安全等级星系。"
   groupID: 462
   iconID: 232
   marketGroupID: 518
   mass: 4000
   name:
-    de: "Veldspar"
     en: "Veldspar"
-    es: "Veldspar"
-    fr: "Veldspar"
-    ja: "ベルドスパー"
-    ko: "벨드스파"
-    ru: "Veldspar"
-    zh: "凡晶石"
   portionSize: 100
   published: true
   volume: 0.1
 "17470":
   basePrice: 2100
   description:
-    de: "Anhäufungen von Veldspar mit einer 5% höheren Ausbeute, auch konzentriertes\
-      \ Veldspar genannt, werden häufig in Regionen gefunden, in denen es normales\
-      \ Veldspar bereits im Überfluss gibt. Veldspar ist die am häufigsten vorkommende\
-      \ Erzart in den zentralen Regionen des bekannten Universums. Da Veldspar eine\
-      \ große Menge des häufig gebrauchten Minerals <a href=showinfo:34>Tritanium</a>\
-      \ enthält, besteht noch immer eine ständige Nachfrage. Vorwiegend verfügbar\
-      \ in Sonnensystemen des Hochsicherheitsraums."
-    en: "Clusters of veldspar with 5% higher yield, called concentrated veldspar,\
-      \ are sometimes found in areas where normal veldspar is already in abundance.\n\
-      \nVeldspar is the most common ore type in the central regions of known universe.\
-      \ It is still in constant demand as it holds a large portion of the much-used\
-      \ <a href=showinfo:34>Tritanium</a> mineral.\n\nAvailable primarily in high\
-      \ security status star systems."
-    es: "Los cúmulos de veldspar con un 5\_% más de rendimiento, llamados veldspar\
-      \ concentrados, a veces se encuentran en áreas donde el veldspar normal ya abunda.\n\
-      \n\n\nEl veldspar es el tipo de mena más común en las regiones centrales del\
-      \ universo conocido. Su demanda es constante, ya que contiene una gran parte\
-      \ de <a href=showinfo:34>tritanio</a>, un mineral muy utilizado.\n\n\n\nSe encuentra\
-      \ principalmente en sistemas estelares de seguridad alta."
-    fr: "Il est possible de trouver des blocs de veldspar concentré dont le rendement\
-      \ est supérieur de 5\_% à celui du veldspar standard dans les zones où celui-ci\
-      \ est très abondant. Le veldspar est l'un des minerais les plus courants dans\
-      \ les régions centrales de l'univers connu. La demande en veldspar ne faiblit\
-      \ jamais car il contient du <a href=showinfo:34>tritanium</a>, l'un des miné\
-      raux les plus exploités de l'amas. Ce minerai est essentiellement disponible\
-      \ dans les systèmes stellaires de haute sécurité."
-    ja: "通常のベルドスパーがすでに豊富に存在する地域では、収量が5%以上のベルドスパーのクラスターが高濃度ベルドスパーと呼ばれることがある。\n\nベルド\
-      スパーは既知宇宙の中心宙域に最も普及している鉱石で、どこに行っても見つけることができる。しかし用途の広い無機物である<a href=showinfo:34>ト\
-      リタニウム</a>を多く含むため、需要は絶えない。\n\n主にハイセキュリティ星系で発見可能。"
-    ko: "벨드스파 매장량이 풍부한 지역에서 발견되는 광석으로 일반적인 벨드스파에 비해 산출량이 5% 더 높습니다.<br><br>벨드스파는 뉴\
-      에덴의 중심부에서 발견되는 흔한 광석 가운데 하나로 <a href=showinfo:34>트리타늄</a>의 주요 공급원입니다.<br><br>하\
-      이 시큐리티 항성계에서 주로 채굴됩니다."
-    ru: "В областях, изобилующих вельдспаром, иногда встречаются залежи концентрир\
-      ованного вельдспара\_— в\_нём на 5% больше полезных минералов. Вельдспар\_—\
-      \ самая распространённая руда в центральных секторах известной части вселенн\
-      ой. Вельдспар содержит большое количество повсеместно используемого <a href=showinfo:34>т\
-      ритания</a>, поэтому спрос на него никогда не падает. Встречается в основном\
-      \ в звёздных системах с высоким уровнем безопасности."
-    zh: "凡晶石的集束被称为富凡晶石，矿物含量高5%，有时存在于遍布普通凡晶石的地方。\n\n\n\n凡晶石是已知空间的核心星域中最为常见的矿石。它富含人们\
-      大量使用的<a href=showinfo:34>三钛合金</a>，因此需求仍然十分稳定。\n\n\n\n主要分布于高安全等级星系。"
+    en: "Clusters of veldspar with 5% higher yield, called II-Grade or concentrated\
+      \ veldspar, are sometimes found in areas where normal veldspar is already in\
+      \ abundance.\n\nVeldspar is the most common ore type in the central regions\
+      \ of known universe. It is still in constant demand as it holds a large portion\
+      \ of the much-used <a href=showinfo:34>Tritanium</a> mineral.\n\nAvailable primarily\
+      \ in high security status star systems."
   groupID: 462
   iconID: 232
   marketGroupID: 518
   mass: 4000
   name:
-    de: "Concentrated Veldspar"
-    en: "Concentrated Veldspar"
-    es: "Veldspar concentrado"
-    fr: "Veldspar concentré"
-    ja: "高濃度ベルドスパー"
-    ko: "밀집 벨드스파"
-    ru: "Concentrated Veldspar"
-    zh: "富凡晶石"
+    en: "Veldspar II-Grade"
   portionSize: 100
   published: true
   volume: 0.1
 "17471":
   basePrice: 2200
   description:
-    de: "In Asteroiden von überdurchschnittlicher Größe kann der immense Druck normales\
-      \ Veldspar in sogenanntes „dichtes Veldspar“ umwandeln und dabei die Mineralausbeute\
-      \ um 10% erhöhen. Veldspar ist die am häufigsten vorkommende Erzart in den zentralen\
-      \ Regionen des bekannten Universums. Da Veldspar eine große Menge des häufig\
-      \ gebrauchten Minerals <a href=showinfo:34>Tritanium</a> enthält, besteht noch\
-      \ immer eine ständige Nachfrage. Vorwiegend verfügbar in Sonnensystemen des\
-      \ Hochsicherheitsraums."
     en: "In asteroids above average size, the intense pressure can weld normal veldspar\
-      \ into what is known as dense veldspar, increasing the yield by 10%. \n\nVeldspar\
-      \ is the most common ore type in the central regions of known universe. It is\
-      \ still in constant demand as it holds a large portion of the much-used <a href=showinfo:34>Tritanium</a>\
-      \ mineral.\n\nAvailable primarily in high security status star systems."
-    es: "En los asteroides con un tamaño superior a la media, la intensa presión puede\
-      \ convertir el veldspar normal en lo que se conoce como veldspar denso, lo que\
-      \ aumenta el rendimiento un 10\_%.\n\nEl veldspar es el tipo de mena más comú\
-      n en las regiones centrales del universo conocido. Su demanda es constante,\
-      \ ya que contiene grandes cantidades de <a href=showinfo:34>tritanio</a>, un\
-      \ mineral muy utilizado.\n\nSe encuentra principalmente en sistemas estelares\
-      \ con estado de seguridad alto."
-    fr: "Sur les astéroïdes de grande taille, la pression intense peut transformer\
-      \ le veldspar classique en veldspar dense, dont le rendement est supérieur de\
-      \ 10\_%. Le veldspar est l'un des minerais les plus courants dans les régions\
-      \ centrales de l'univers connu. La demande en veldspar ne faiblit jamais car\
-      \ il contient du <a href=showinfo:34>tritanium</a>, l'un des minéraux les plus\
-      \ exploités de l'amas. Ce minerai est essentiellement disponible dans les systè\
-      mes stellaires de haute sécurité."
-    ja: "比較的大型のアステロイドにおいて、通常のベルドスパーに地中で強い圧力が加わって生成されるのが高密度ベルドスパーと呼ばれるもので、鉱石産出量が10%増\
-      える。\n\nベルドスパーは既知宇宙の中心宙域に最も普及している鉱石で、どこに行っても見つけることができる。しかし用途の広い無機物である<a href=showinfo:34>ト\
-      リタニウム</a>を多く含むため、需要は絶えない。\n\n主にハイセキュリティ星系で発見可能。"
-    ko: "대형 소행성에서 벨드스파가 압축되면 생성되는 광석으로 일반적인 벨드스파에 비해 산출량이 10% 더 많습니다. <br><br>벨드스파\
-      는 뉴에덴의 중심부에서 발견되는 흔한 광석 가운데 하나로 <a href=showinfo:34>트리타늄</a>의 주요 공급원입니다.<br><br>하\
-      이 시큐리티 항성계에서 주로 채굴됩니다."
-    ru: "В астероидах размером выше среднего обычный вельдспар под воздействием да\
-      вления превращается в так называемый плотный вельдспар. В\_последнем на 10%\
-      \ больше полезных минералов. Вельдспар\_— самая распространённая руда в цент\
-      ральных секторах известной части вселенной. Вельдспар содержит большое колич\
-      ество повсеместно используемого <a href=showinfo:34>тритания</a>, поэтому сп\
-      рос на него никогда не падает. Встречается в основном в звёздных системах с\
-      \ высоким уровнем безопасности."
-    zh: "在中等尺寸以上的小行星中，巨大的压力会使普通的凡晶石凝结成人们所知的厚质凡晶石，也使其矿物含量提高了10%。 \n\n\n\n凡晶石是已知空间的核\
-      心星域中最为常见的矿石。它富含人们大量使用的<a href=showinfo:34>三钛合金</a>，因此需求仍然十分稳定。\n\n\n\n主要分布于高\
-      安全等级星系。"
+      \ into what is known as III-Grade or dense veldspar, increasing the yield by\
+      \ 10%. \n\nVeldspar is the most common ore type in the central regions of known\
+      \ universe. It is still in constant demand as it holds a large portion of the\
+      \ much-used <a href=showinfo:34>Tritanium</a> mineral.\n\nAvailable primarily\
+      \ in high security status star systems."
   groupID: 462
   iconID: 232
   marketGroupID: 518
   mass: 4000
   name:
-    de: "Dense Veldspar"
-    en: "Dense Veldspar"
-    es: "Veldspar denso"
-    fr: "Veldspar dense"
-    ja: "高密度ベルドスパー"
-    ko: "응축 벨드스파"
-    ru: "Dense Veldspar"
-    zh: "厚质凡晶石"
+    en: "Veldspar III-Grade"
   portionSize: 100
   published: true
   volume: 0.1
@@ -2388,19 +2273,16 @@
 "38":
   basePrice: 512
   description:
-    de: "Ein hoch flüchtiges Mineral, das nur während einer Supernova gebildet wird\
-      \ und folglich das Ausmaß seiner Verbreitung stark einschränkt. Es ist ein unverzichtbarer\
-      \ Bestandteil in der Kapselherstellung, was es sehr begehrt macht. Es kann durch\
+    de: "Ein hoch flüchtiges Mineral, das nur während einer Supernova gebildet wird,\
+      \ wodurch das Ausmaß seiner Verbreitung stark einschränkt wird. Ein unverzichtbarer\
+      \ Bestandteil in der Kapselherstellung, was es sehr begehrt macht. Kann durch\
       \ die Aufbereitung der folgenden Erze und ihrer Varianten in Sonnensystemen\
-      \ des Niedersicherheitsraums gewonnen werden: <a href=showinfo:1226>Jaspet</a>,\
+      \ mit Niedersicherheitsraumstatus erhalten werden: <a href=showinfo:1226>Jaspet</a>,\
       \ <a href=showinfo:1231>Hemorphite</a>, <a href=showinfo:21>Hedbergite</a>,\
       \ <a href=showinfo:1232>Dunkles Ochre</a> und <a href=showinfo:1225>Crokite</a>.\
-      \ Es ist auch in erheblichen Mengen in seltenen Erzen wie <a href=showinfo:19>Spodumain</a>\
-      \ und <a href=showinfo:52306>Talassonit</a> vorhanden. Nocxium kann auch in\
-      \ Sonnensystemen des des Nullsicherheitsraums in <a href=showinfo:81900>Kylixium</a>,\
-      \ <a href=showinfo:82016>Nocxite</a>, <a href=showinfo:82205>Ueganite</a>, <a\
-      \ href=showinfo:82163>Hezorim</a> und <a href=showinfo:81975>Griemeer</a> gefunden\
-      \ werden."
+      \ Es kommt außerdem in sehr großen Mengen in seltenen Erzen wie <a href=showinfo:19>Spodumain</a>\
+      \ und <a href=showinfo:52306>Talassonit</a> vor. Nocxium kann auch in Sonnensystemen\
+      \ des Nullsicherheitsraums in <a href=showinfo:82016>Nocxite</a> gefunden werden."
     en: "A highly volatile mineral only formed during supernovas, thus severely limiting\
       \ the extent of its distribution. Vital ingredient in capsule production, making\
       \ it very coveted.\n\nMay be obtained by reprocessing the following ores and\
@@ -2409,9 +2291,7 @@
       \ <a href=showinfo:1232>dark ochre</a>, and <a href=showinfo:1225>crokite</a>.\n\
       \nIt is also present in significant amounts in rare ores like <a href=showinfo:19>spodumain</a>\
       \ and <a href=showinfo:52306>talassonite</a>.\n\nNocxium can also be found in\
-      \ null security status star systems in <a href=showinfo:81900>kylixium</a>,\
-      \ <a href=showinfo:82016>nocxite</a>, <a href=showinfo:82205>ueganite</a>, <a\
-      \ href=showinfo:82163>hezorime</a>, and <a href=showinfo:81975>griemeer</a>."
+      \ null security status star systems in <a href=showinfo:82016>nocxite</a>."
     es: "Un mineral muy volátil que solo se forma durante las supernovas, lo que limita\
       \ mucho su distribución. Es un elemento vital en la producción de cápsulas,\
       \ por lo que es muy codiciado.\n\nPuede obtenerse mediante el reprocesamiento\
@@ -2421,9 +2301,7 @@
       \ y <a href=showinfo:1225>crokitio</a>.\n\nTambién está presente en enormes\
       \ cantidades en menas poco comunes como <a href=showinfo:19>espodumain</a> y\
       \ <a href=showinfo:52306>talasonita</a>.\n\nEl nocxium también se puede encontrar\
-      \ en sistemas estelares con estado de seguridad nulo en <a href=showinfo:81900>kylixium</a>,\
-      \ <a href=showinfo:82016>nocxita</a>, <a href=showinfo:82205>ueganita</a>, <a\
-      \ href=showinfo:82163>hezorima</a> y <a href=showinfo:81975>griemeer</a>."
+      \ en sistemas estelares con estado de seguridad nulo en <a href=showinfo:82016>nocxita</a>."
     fr: "Ce minerai très volatile ne se forme que lors de la transformation d'une\
       \ étoile en supernova. Il est donc très rare d'en trouver. Ce produit indispensable\
       \ à la fabrication des capsules est extrêmement convoité. Il peut être obtenu\
@@ -2433,45 +2311,35 @@
       \ <a href=showinfo:1232>ochre foncé</a> et <a href=showinfo:1225>crokite</a>.\
       \ Il est aussi présent en quantités significatives dans des minerais rares tels\
       \ que le <a href=showinfo:19>spodumain</a> et la <a href=showinfo:52306>talassonite</a>.\
-      \ Le nocxium peut également être trouvé dans les systèmes stellaires de sécurité\
-      \ nulle dans les minerais <a href=showinfo:81900>kylixium</a>, <a href=showinfo:82016>nocxite</a>,\
-      \ <a href=showinfo:82205>ueganite</a>, <a href=showinfo:82163>hezorime</a> et\
-      \ <a href=showinfo:81975>griemeer</a>."
+      \ Le nocxium peut également être trouvé dans les systèmes stellaires à statut\
+      \ de sécurité nulle contenant du <a href=showinfo:82016>nocxite</a>."
     ja: "揮発性の高い鉱石で、超新星爆発によってのみ生成される。そのため、流通は極めて限られている。カプセル生産に欠かせない原料で、非常に需要が高い。\n\n\
-      ローセキュリティステータス星系で入手可能な、次の鉱石やその亜種を再処理することによって得ることができる。<a href=showinfo:1226>ジャ\
+      ローセキュリティステータス星系で入手可能な、次の鉱石やその亜種を再処理することによって得ることができる：<a href=showinfo:1226>ジャ\
       スペット</a>、<a href=showinfo:1231>ヘモファイト</a>、<a href=showinfo:21>ヘッドバーガイト</a>、\
       <a href=showinfo:1232>ダークオークル</a>、<a href=showinfo:1225>クロカイト</a>\n\n<a href=showinfo:19>ス\
       ポデュメイン</a>や<a href=showinfo:52306>タラソナイト</a>といった希少鉱石の中にも相当量含まれている。\n\nノキシウムは\
-      また、ゼロセキュリティステータスの星系において<a href=showinfo:81900>キリクシウム</a>、<a href=showinfo:82016>ノ\
-      キサイト</a>、<a href=showinfo:82205>ユイグナイト</a>、<a href=showinfo:82163>ヘゾライム</a>、\
-      そして<a href=showinfo:81975>グリーミーア</a>に含まれる形でも見つかる。"
+      またゼロセキュリティステータスの星系において、<a href=showinfo:82016>ノキサイト</a>に含まれる形でも見つかる。"
     ko: "불안정한 구조를 지닌 광물로 초신성 폭발을 통해 생성됩니다. 상당히 희귀한 재료이며 캡슐 제작, 그 중에서도 은폐장의 제작에 주로\
       \ 투입됩니다.\n\n아래의 광석을 정제하여 획득할 수 있습니다: <a href=showinfo:1226>자스페트</a>, <a href=showinfo:1231>헤\
       모르파이트</a>, <a href=showinfo:21>헤버자이트</a>, <a href=showinfo:1232>다크 오커</a>, <a\
       \ href=showinfo:1225>크로카이트</a>\n\n<a href=showinfo:19>스포듀마인</a>과 <a href=showinfo:52306>탈\
-      라소나이트</a>와 같은 희귀 광물에도 다량 함유되어 있습니다.</a>\n\n추가로 널 시큐리티 항성계에서 발견되는 광석인 <a href=showinfo:81900>카\
-      일릭슘</a>, <a href=showinfo:82016>녹사이트</a>, <a href=showinfo:82205>유가나이트</a>,\
-      \ <a href=showinfo:82163>헤조라임</a>, <a href=showinfo:81975>그리미어</a>에도 녹시움이 함유\
-      되어 있습니다."
-    ru: "Крайне нестабильный минерал. Он образуется исключительно при вспышке свер\
-      хновой, так что отыскать его весьма непросто. Очень высоко ценится на рынке\
-      , поскольку является ключевым элементом в производстве капсул. Добывается пу\
-      тём переработки следующих руд и их разновидностей в системах с\_низким уровн\
-      ем безопасности: <a href=showinfo:1226>джаспет</a>, <a href=showinfo:1231>хе\
-      морфит</a>, <a href=showinfo:21>хедбергит</a>, <a href=showinfo:1232>тёмная\
-      \ охра</a> и <a href=showinfo:1225>крокит</a>. Кроме того, в огромных количе\
-      ствах присутствует в редких рудах, таких как <a href=showinfo:19>сподумейн</a>\
-      \ и <a href=showinfo:52306>талассонит</a>. Наконец, ноксий встречается в\_си\
-      стемах с\_нулевым уровнем безопасности в составе <a href=showinfo:81900>кили\
-      ция</a>, <a href=showinfo:82016>нокцита</a>, <a href=showinfo:82205>уэганита\
-      </a>, <a href=showinfo:82163>гезорима</a> и <a href=showinfo:81975>гримира</a>."
+      라소나이트</a>와 같은 희귀 광물에도 다량 함유되어 있습니다.\n\n추가로 널 시큐리티 항성계에서 발견되는 광석인 <a href=showinfo:82016>녹\
+      사이트</a>에도 녹시움이 함유되어 있습니다."
+    ru: "Этот легколетучий минерал образуется только при взрыве сверхновых звёзд и\
+      \ считается очень редким. Он является важнейшим элементом производства капсу\
+      л и поэтому ценится очень высоко. Добывается путём переработки нижеперечисле\
+      нных руд и\_их разновидностей в\_системах с\_низким уровнем безопасности: <a\
+      \ href=showinfo:1226>джаспет</a>, <a href=showinfo:1231>хеморфит</a>, <a href=showinfo:21>х\
+      едбергит</a>, <a href=showinfo:1232>тёмная охра</a> и\_<a href=showinfo:1225>к\
+      рокит</a>. Кроме того, в\_значительных объёмах присутствует в\_редких рудах\
+      , таких как <a href=showinfo:19>сподумейн</a> и\_<a href=showinfo:52306>тала\
+      ссонит</a>. Наконец, ноксий встречается в\_системах с\_нулевым уровнем безоп\
+      асности в\_составе <a href=showinfo:82016>нокцита</a>."
     zh: "一种只有在超新星中才能形成的极不稳定矿物，这在很大程度上限制了它的分布。它是太空舱生产中重要的材料，因此被许多人觊觎。可以从下列分布在低安全等级星\
       系的矿石及其变种中提炼获得：<a href=showinfo:1226>杰斯贝矿</a>、<a href=showinfo:1231>希莫非特</a>、\
       <a href=showinfo:21>同位原矿</a>、<a href=showinfo:1232>黑赭石</a>和<a href=showinfo:1225>克\
       洛基石</a>。它还大量存在于多种稀有矿石之中，例如<a href=showinfo:19>灰岩</a>和<a href=showinfo:52306>塔\
-      拉岩</a>。分布在零安全等级星系的<a href=showinfo:81900>克里石</a>、<a href=showinfo:82016>诺克希特\
-      </a>、<a href=showinfo:82205>尤加石</a>、<a href=showinfo:82163>赫佐利姆</a>和<a href=showinfo:81975>格\
-      里米尔</a>中也含有超新星诺克石。"
+      拉岩</a>。分布在零安全等级星系的<a href=showinfo:82016>诺克希特</a>中也含有超新星诺克石。"
   groupID: 18
   iconID: 1201
   marketGroupID: 1857

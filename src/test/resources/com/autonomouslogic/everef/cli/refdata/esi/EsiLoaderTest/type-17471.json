@@ -1,8 +1,8 @@
 {
   "capacity" : 0,
   "description" : {
-    "en" : "In asteroids above average size, the intense pressure can weld normal veldspar into what is known as dense veldspar, increasing the yield by 10%. \r\n\r\nVeldspar is the most common ore type in the central regions of known universe. It is still in constant demand as it holds a large portion of the much-used <a href=showinfo:34>Tritanium</a> mineral.\r\n\r\nAvailable primarily in high security status star systems.",
-    "fr" : "Sur les astéroïdes de grande taille, la pression intense peut transformer le veldspar classique en veldspar dense, dont le rendement est supérieur de 10 %. Le veldspar est l'un des minerais les plus courants dans les régions centrales de l'univers connu. La demande en veldspar ne faiblit jamais car il contient du <a href=showinfo:34>tritanium</a>, l'un des minéraux les plus exploités de l'amas. Ce minerai est essentiellement disponible dans les systèmes stellaires de haute sécurité."
+    "en" : "In asteroids above average size, the intense pressure can weld normal veldspar into what is known as III-Grade or dense veldspar, increasing the yield by 10%. \r\n\r\nVeldspar is the most common ore type in the central regions of known universe. It is still in constant demand as it holds a large portion of the much-used <a href=showinfo:34>Tritanium</a> mineral.\r\n\r\nAvailable primarily in high security status star systems.",
+    "fr" : "In asteroids above average size, the intense pressure can weld normal veldspar into what is known as III-Grade or dense veldspar, increasing the yield by 10%. \r\n\r\nVeldspar is the most common ore type in the central regions of known universe. It is still in constant demand as it holds a large portion of the much-used <a href=showinfo:34>Tritanium</a> mineral.\r\n\r\nAvailable primarily in high security status star systems."
   },
   "dogma_attributes" : {
     "161" : {
@@ -55,8 +55,8 @@
   "market_group_id" : 518,
   "mass" : 4000,
   "name" : {
-    "en" : "Dense Veldspar",
-    "fr" : "Veldspar dense"
+    "en" : "Veldspar III-Grade",
+    "fr" : "Veldspar III-Grade"
   },
   "packaged_volume" : 0.1,
   "portion_size" : 100,

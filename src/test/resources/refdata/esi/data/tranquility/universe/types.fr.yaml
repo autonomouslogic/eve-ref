@@ -101,6 +101,8 @@
     value: 117
   - attribute_id: 55
     value: 1100000
+  - attribute_id: 2112
+    value: 1
   - attribute_id: 2113
     value: 1
   - attribute_id: 11
@@ -1054,6 +1056,8 @@
     value: 1000
   - attribute_id: 3133
     value: 30
+  - attribute_id: 2112
+    value: 1
   - attribute_id: 2113
     value: 1
   - attribute_id: 66
@@ -1333,11 +1337,10 @@
   volume: 0.01
 "1230":
   capacity: 0
-  description: "Le veldspar est l'un des minerais les plus courants dans les régions\
-    \ centrales de l'univers connu. La demande en veldspar ne faiblit jamais car il\
-    \ contient du <a href=showinfo:34>tritanium</a>, l'un des minéraux les plus exploité\
-    s de l'amas. Ce minerai est essentiellement disponible dans les systèmes stellaires\
-    \ de haute sécurité."
+  description: "Veldspar is the most common ore type in the central regions of known\
+    \ universe. It is still in constant demand as it holds a large portion of the\
+    \ much-used <a href=showinfo:34>Tritanium</a> mineral.\r\n\r\nAvailable primarily\
+    \ in high security status star systems."
   dogma_attributes:
   - attribute_id: 161
     value: 0.1
@@ -1374,13 +1377,12 @@
   volume: 0.1
 "17470":
   capacity: 0
-  description: "Il est possible de trouver des blocs de veldspar concentré dont le\
-    \ rendement est supérieur de 5\_% à celui du veldspar standard dans les zones\
-    \ où celui-ci est très abondant. Le veldspar est l'un des minerais les plus courants\
-    \ dans les régions centrales de l'univers connu. La demande en veldspar ne faiblit\
-    \ jamais car il contient du <a href=showinfo:34>tritanium</a>, l'un des minéraux\
-    \ les plus exploités de l'amas. Ce minerai est essentiellement disponible dans\
-    \ les systèmes stellaires de haute sécurité."
+  description: "Clusters of veldspar with 5% higher yield, called II-Grade or concentrated\
+    \ veldspar, are sometimes found in areas where normal veldspar is already in abundance.\r\
+    \n\r\nVeldspar is the most common ore type in the central regions of known universe.\
+    \ It is still in constant demand as it holds a large portion of the much-used\
+    \ <a href=showinfo:34>Tritanium</a> mineral.\r\n\r\nAvailable primarily in high\
+    \ security status star systems."
   dogma_attributes:
   - attribute_id: 161
     value: 0.1
@@ -1408,7 +1410,7 @@
   icon_id: 232
   market_group_id: 518
   mass: 4000
-  name: "Veldspar concentré"
+  name: "Veldspar II-Grade"
   packaged_volume: 0.1
   portion_size: 100
   published: true
@@ -1417,13 +1419,12 @@
   volume: 0.1
 "17471":
   capacity: 0
-  description: "Sur les astéroïdes de grande taille, la pression intense peut transformer\
-    \ le veldspar classique en veldspar dense, dont le rendement est supérieur de\
-    \ 10\_%. Le veldspar est l'un des minerais les plus courants dans les régions\
-    \ centrales de l'univers connu. La demande en veldspar ne faiblit jamais car il\
-    \ contient du <a href=showinfo:34>tritanium</a>, l'un des minéraux les plus exploité\
-    s de l'amas. Ce minerai est essentiellement disponible dans les systèmes stellaires\
-    \ de haute sécurité."
+  description: "In asteroids above average size, the intense pressure can weld normal\
+    \ veldspar into what is known as III-Grade or dense veldspar, increasing the yield\
+    \ by 10%. \r\n\r\nVeldspar is the most common ore type in the central regions\
+    \ of known universe. It is still in constant demand as it holds a large portion\
+    \ of the much-used <a href=showinfo:34>Tritanium</a> mineral.\r\n\r\nAvailable\
+    \ primarily in high security status star systems."
   dogma_attributes:
   - attribute_id: 161
     value: 0.1
@@ -1451,7 +1452,7 @@
   icon_id: 232
   market_group_id: 518
   mass: 4000
-  name: "Veldspar dense"
+  name: "Veldspar III-Grade"
   packaged_volume: 0.1
   portion_size: 100
   published: true
@@ -2248,10 +2249,8 @@
     \ href=showinfo:1232>ochre foncé</a> et <a href=showinfo:1225>crokite</a>. Il\
     \ est aussi présent en quantités significatives dans des minerais rares tels que\
     \ le <a href=showinfo:19>spodumain</a> et la <a href=showinfo:52306>talassonite</a>.\
-    \ Le nocxium peut également être trouvé dans les systèmes stellaires de sécurité\
-    \ nulle dans les minerais <a href=showinfo:81900>kylixium</a>, <a href=showinfo:82016>nocxite</a>,\
-    \ <a href=showinfo:82205>ueganite</a>, <a href=showinfo:82163>hezorime</a> et\
-    \ <a href=showinfo:81975>griemeer</a>."
+    \ Le nocxium peut également être trouvé dans les systèmes stellaires à statut\
+    \ de sécurité nulle contenant du <a href=showinfo:82016>nocxite</a>."
   group_id: 18
   icon_id: 1201
   market_group_id: 1857
@@ -4017,6 +4016,8 @@
     value: 266250
   - attribute_id: 568
     value: -15
+  - attribute_id: 2112
+    value: 1
   - attribute_id: 2113
     value: 1
   - attribute_id: 1547
@@ -4325,6 +4326,8 @@
     value: 117
   - attribute_id: 55
     value: 1100000
+  - attribute_id: 2112
+    value: 1
   - attribute_id: 2113
     value: 1
   - attribute_id: 11

@@ -108,6 +108,10 @@
       "attribute_id" : 55,
       "value" : 1100000
     },
+    "2112" : {
+      "attribute_id" : 2112,
+      "value" : 1
+    },
     "2113" : {
       "attribute_id" : 2113,
       "value" : 1
