@@ -98,6 +98,8 @@
     value: 117
   - attribute_id: 55
     value: 1100000
+  - attribute_id: 2112
+    value: 1
   - attribute_id: 2113
     value: 1
   - attribute_id: 11
@@ -1043,6 +1045,8 @@
     value: 1000
   - attribute_id: 3133
     value: 30
+  - attribute_id: 2112
+    value: 1
   - attribute_id: 2113
     value: 1
   - attribute_id: 66
@@ -1362,8 +1366,8 @@
   volume: 0.1
 "17470":
   capacity: 0
-  description: "Clusters of veldspar with 5% higher yield, called concentrated veldspar,\
-    \ are sometimes found in areas where normal veldspar is already in abundance.\r\
+  description: "Clusters of veldspar with 5% higher yield, called II-Grade or concentrated\
+    \ veldspar, are sometimes found in areas where normal veldspar is already in abundance.\r\
     \n\r\nVeldspar is the most common ore type in the central regions of known universe.\
     \ It is still in constant demand as it holds a large portion of the much-used\
     \ <a href=showinfo:34>Tritanium</a> mineral.\r\n\r\nAvailable primarily in high\
@@ -1395,7 +1399,7 @@
   icon_id: 232
   market_group_id: 518
   mass: 4000
-  name: "Concentrated Veldspar"
+  name: "Veldspar II-Grade"
   packaged_volume: 0.1
   portion_size: 100
   published: true
@@ -1405,11 +1409,11 @@
 "17471":
   capacity: 0
   description: "In asteroids above average size, the intense pressure can weld normal\
-    \ veldspar into what is known as dense veldspar, increasing the yield by 10%.\
-    \ \r\n\r\nVeldspar is the most common ore type in the central regions of known\
-    \ universe. It is still in constant demand as it holds a large portion of the\
-    \ much-used <a href=showinfo:34>Tritanium</a> mineral.\r\n\r\nAvailable primarily\
-    \ in high security status star systems."
+    \ veldspar into what is known as III-Grade or dense veldspar, increasing the yield\
+    \ by 10%. \r\n\r\nVeldspar is the most common ore type in the central regions\
+    \ of known universe. It is still in constant demand as it holds a large portion\
+    \ of the much-used <a href=showinfo:34>Tritanium</a> mineral.\r\n\r\nAvailable\
+    \ primarily in high security status star systems."
   dogma_attributes:
   - attribute_id: 161
     value: 0.1
@@ -1437,7 +1441,7 @@
   icon_id: 232
   market_group_id: 518
   mass: 4000
-  name: "Dense Veldspar"
+  name: "Veldspar III-Grade"
   packaged_volume: 0.1
   portion_size: 100
   published: true
@@ -2215,9 +2219,7 @@
     \ <a href=showinfo:1232>dark ochre</a>, and <a href=showinfo:1225>crokite</a>.\r\
     \n\r\nIt is also present in significant amounts in rare ores like <a href=showinfo:19>spodumain</a>\
     \ and <a href=showinfo:52306>talassonite</a>.\r\n\r\nNocxium can also be found\
-    \ in null security status star systems in <a href=showinfo:81900>kylixium</a>,\
-    \ <a href=showinfo:82016>nocxite</a>, <a href=showinfo:82205>ueganite</a>, <a\
-    \ href=showinfo:82163>hezorime</a>, and <a href=showinfo:81975>griemeer</a>."
+    \ in null security status star systems in <a href=showinfo:82016>nocxite</a>."
   group_id: 18
   icon_id: 1201
   market_group_id: 1857
@@ -3951,6 +3953,8 @@
     value: 266250
   - attribute_id: 568
     value: -15
+  - attribute_id: 2112
+    value: 1
   - attribute_id: 2113
     value: 1
   - attribute_id: 1547
@@ -4258,6 +4262,8 @@
     value: 117
   - attribute_id: 55
     value: 1100000
+  - attribute_id: 2112
+    value: 1
   - attribute_id: 2113
     value: 1
   - attribute_id: 11

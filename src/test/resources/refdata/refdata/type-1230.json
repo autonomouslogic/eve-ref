@@ -1,28 +1,16 @@
 {
   "base_price" : 2000,
   "description" : {
-    "de" : "Veldspar ist die am häufigsten vorkommende Erzart in den zentralen Regionen des bekannten Universums. Da Veldspar eine große Menge des häufig gebrauchten Minerals <a href=showinfo:34>Tritanium</a> enthält, besteht noch immer eine ständige Nachfrage. Vorwiegend verfügbar in Sonnensystemen des Hochsicherheitsraums.",
     "en" : "Veldspar is the most common ore type in the central regions of known universe. It is still in constant demand as it holds a large portion of the much-used <a href=showinfo:34>Tritanium</a> mineral.\r\n\r\nAvailable primarily in high security status star systems.",
-    "es" : "El veldspar es el tipo de mena más común en las regiones centrales del universo conocido. Su demanda es constante, ya que contiene una gran parte de <a href=showinfo:34>tritanio</a>, un mineral muy utilizado.\n\n\n\nSe encuentra principalmente en sistemas estelares de seguridad alta.",
-    "fr" : "Le veldspar est l'un des minerais les plus courants dans les régions centrales de l'univers connu. La demande en veldspar ne faiblit jamais car il contient du <a href=showinfo:34>tritanium</a>, l'un des minéraux les plus exploités de l'amas. Ce minerai est essentiellement disponible dans les systèmes stellaires de haute sécurité.",
-    "ja" : "ベルドスパーは既知宇宙の中心宙域に最も普及している鉱石で、どこに行っても見つけることができる。しかし用途の広い無機物である<a href=showinfo:34>トリタニウム</a>を多く含むため、需要は絶えない。\n\n主にハイセキュリティ星系で発見可能。",
-    "ko" : "벨드스파는 뉴에덴의 중심부에서 발견되는 흔한 광석 가운데 하나로 <a href=showinfo:34>트리타늄</a>의 주요 공급원입니다.<br><br>하이 시큐리티 항성계에서 주로 채굴됩니다.",
-    "ru" : "Вельдспар — самая распространённая руда в центральных секторах известной части вселенной. Вельдспар содержит большое количество повсеместно используемого <a href=showinfo:34>тритания</a>, поэтому спрос на него никогда не падает. Встречается в основном в звёздных системах с высоким уровнем безопасности.",
-    "zh" : "凡晶石是已知空间的核心星域中最为常见的矿石。它富含人们大量使用的<a href=showinfo:34>三钛合金</a>，因此需求仍然十分稳定。\n\n\n\n主要分布于高安全等级星系。"
+    "fr" : "Veldspar is the most common ore type in the central regions of known universe. It is still in constant demand as it holds a large portion of the much-used <a href=showinfo:34>Tritanium</a> mineral.\r\n\r\nAvailable primarily in high security status star systems."
   },
   "group_id" : 462,
   "icon_id" : 232,
   "market_group_id" : 518,
   "mass" : 4000,
   "name" : {
-    "de" : "Veldspar",
     "en" : "Veldspar",
-    "es" : "Veldspar",
-    "fr" : "Veldspar",
-    "ja" : "ベルドスパー",
-    "ko" : "벨드스파",
-    "ru" : "Veldspar",
-    "zh" : "凡晶石"
+    "fr" : "Veldspar"
   },
   "portion_size" : 100,
   "published" : true,
