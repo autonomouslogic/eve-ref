@@ -13,7 +13,7 @@ import lombok.extern.jackson.Jacksonized;
 @Jacksonized
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @Schema
-public class RandomizedMaterial {
+public class RandomizedTypeMaterial {
 	@JsonProperty
 	Long materialTypeId;
 

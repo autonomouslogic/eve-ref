@@ -1,3 +1,4 @@
+.openapi-generator-ignore
 apis/RefdataApi.ts
 apis/index.ts
 index.ts
@@ -24,7 +25,7 @@ models/Mutaplasmid.ts
 models/MutaplasmidDogmaModifications.ts
 models/MutaplasmidTypeMapping.ts
 models/ProducingBlueprint.ts
-models/RandomizedMaterial.ts
+models/RandomizedTypeMaterial.ts
 models/RefDataMeta.ts
 models/RefDataMetaFileInfo.ts
 models/Region.ts

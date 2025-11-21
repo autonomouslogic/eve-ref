@@ -16,43 +16,43 @@ import { exists, mapValues } from '../runtime';
 /**
  * 
  * @export
- * @interface RandomizedMaterial
+ * @interface RandomizedTypeMaterial
  */
-export interface RandomizedMaterial {
+export interface RandomizedTypeMaterial {
     /**
      * 
      * @type {number}
-     * @memberof RandomizedMaterial
+     * @memberof RandomizedTypeMaterial
      */
     materialTypeId?: number;
     /**
      * 
      * @type {number}
-     * @memberof RandomizedMaterial
+     * @memberof RandomizedTypeMaterial
      */
     quantityMax?: number;
     /**
      * 
      * @type {number}
-     * @memberof RandomizedMaterial
+     * @memberof RandomizedTypeMaterial
      */
     quantityMin?: number;
 }
 
 /**
- * Check if a given object implements the RandomizedMaterial interface.
+ * Check if a given object implements the RandomizedTypeMaterial interface.
  */
-export function instanceOfRandomizedMaterial(value: object): boolean {
+export function instanceOfRandomizedTypeMaterial(value: object): boolean {
     let isInstance = true;
 
     return isInstance;
 }
 
-export function RandomizedMaterialFromJSON(json: any): RandomizedMaterial {
-    return RandomizedMaterialFromJSONTyped(json, false);
+export function RandomizedTypeMaterialFromJSON(json: any): RandomizedTypeMaterial {
+    return RandomizedTypeMaterialFromJSONTyped(json, false);
 }
 
-export function RandomizedMaterialFromJSONTyped(json: any, ignoreDiscriminator: boolean): RandomizedMaterial {
+export function RandomizedTypeMaterialFromJSONTyped(json: any, ignoreDiscriminator: boolean): RandomizedTypeMaterial {
     if ((json === undefined) || (json === null)) {
         return json;
     }
@@ -64,7 +64,7 @@ export function RandomizedMaterialFromJSONTyped(json: any, ignoreDiscriminator: 
     };
 }
 
-export function RandomizedMaterialToJSON(value?: RandomizedMaterial | null): any {
+export function RandomizedTypeMaterialToJSON(value?: RandomizedTypeMaterial | null): any {
     if (value === undefined) {
         return undefined;
     }

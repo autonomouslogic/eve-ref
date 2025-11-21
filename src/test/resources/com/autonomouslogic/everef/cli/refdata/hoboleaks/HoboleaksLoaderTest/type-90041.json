@@ -1,5 +1,6 @@
 {
-  "randomized_materials" : {
+  "type_materials" : { },
+  "randomized_type_materials" : {
     "34" : {
       "quantity_max" : 496800,
       "material_type_id" : 34,
@@ -40,6 +41,5 @@
       "material_type_id" : 11399,
       "quantity_min" : 312
     }
-  },
-  "type_materials" : { }
+  }
 }

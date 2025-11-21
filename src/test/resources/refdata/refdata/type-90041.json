@@ -86,7 +86,7 @@
   "mass" : 0,
   "packaged_volume" : 40,
   "radius" : 1,
-  "randomized_materials" : {
+  "randomized_type_materials" : {
     "34" : {
       "material_type_id" : 34,
       "quantity_max" : 496800,
