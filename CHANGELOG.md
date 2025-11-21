@@ -1,5 +1,23 @@
 EVE Ref Changelog
 
+## [2.71.0](https://github.com/autonomouslogic/eve-ref/compare/2.70.0...2.71.0) (2025-11-21)
+
+
+### Features
+
+* Added randomized_type_materials to inventory types ([#982](https://github.com/autonomouslogic/eve-ref/issues/982)) ([549c018](https://github.com/autonomouslogic/eve-ref/commit/549c0180c4a80e0c9e1b1b23d424bc5478c82143))
+
+
+### Bug Fixes
+
+* **ui:** November 2025 giveaways ([ab17b3c](https://github.com/autonomouslogic/eve-ref/commit/ab17b3cb41cb121d24a0b9324144b00a725719e0))
+* Updated industry resources ([ed2d1b3](https://github.com/autonomouslogic/eve-ref/commit/ed2d1b3254a165dd449225e124daa66762ef5a58))
+
+
+### Tests
+
+* Updated test resources ([d13f7ae](https://github.com/autonomouslogic/eve-ref/commit/d13f7aeafa972b954af6f68c04fe91f381cb7fab))
+
 ## [2.70.0](https://github.com/autonomouslogic/eve-ref/compare/2.69.8...2.70.0) (2025-11-05)
 
 
