@@ -59,6 +59,15 @@ const motd = computed(() => {
 	const hour = Math.floor(time / HOUR);
 
 	// Recent donors.
+	if (new Date("2025-12-03T23:50:00Z").getTime() > new Date().getTime()) {
+		return {
+			text: "Black Friday 25% Off - extra 3% with code \"everef\" at checkout",
+			url: MARKEE_DRAGON_URL,
+			urlText: "Markee Dragon"
+		} as Motd;
+	}
+
+	// Recent donors.
 	if (donorsStatus.value == "success" && donors?.value?.recent?.length && donors.value.recent.length > 0) {
 		const donorsText = donors.value.recent.map(donor => {
 			return `${donor.donor_name} donated ${formatMoney(donor.amount)}`;
