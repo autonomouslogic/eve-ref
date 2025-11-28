@@ -244,7 +244,6 @@ public class IndustryCostHandler implements HttpService, Handler {
 		var path = Objects.requireNonNull(IndustryCostHandler.class.getAnnotation(Path.class))
 				.value();
 		rules.get(path, this);
-		rules.any(StandardHandlers.HTTP_METHOD_NOT_ALLOWED);
 	}
 
 	private static InventoryType handleProduct(
