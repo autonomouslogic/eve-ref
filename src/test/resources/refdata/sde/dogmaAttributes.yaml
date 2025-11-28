@@ -1,0 +1,583 @@
+---
+"9":
+  attributeCategoryID: 4
+  dataType: 4
+  defaultValue: 0
+  description: "The maximum hitpoints of an object."
+  displayName:
+    de: "HP der Struktur"
+    en: "Structure Hitpoints"
+    es: "Vida estructura"
+    fr: "PV de la structure"
+    ja: "ストラクチャのヒットポイント"
+    ko: "내구도"
+    ru: "Запас прочности корпуса"
+    zh: "结构值"
+  displayWhenZero: false
+  highIsGood: true
+  iconID: 67
+  name: "hp"
+  published: true
+  stackable: true
+  tooltipDescription:
+    de: "Die HP der Struktur regeneriert sich nicht von alleine, kann aber von Modulen\
+      \ oder Stationsdiensten repariert werden"
+    en: "Structure hitpoints do not regenerate naturally but can be repaired by modules\
+      \ or station services"
+    es: "Los puntos de vida de la estructura no se regeneran automáticamente, sino\
+      \ mediante módulos o servicios de la estación."
+    fr: "Les PV de la structure ne se régénèrent pas automatiquement, mais peuvent\
+      \ être réparés par des modules ou des stations."
+    ja: "自動的には回復せず、モジュールやステーションサービスで修復されます"
+    ko: "내구도는 자동으로 재생되지 않으며 모듈이나 정거장 서비스를 이용해 수리할 수 있습니다."
+    ru: "Запас прочности корпуса не восстанавливается естественным образом, но его\
+      \ можно восстановить с помощью модулей или станционных служб"
+    zh: "结构不会自动恢复，不过可以用装备或空间站维修服务进行修理"
+  tooltipTitle:
+    de: "HP der Struktur"
+    en: "Structure Hitpoints"
+    es: "Puntos de vida de la estructura"
+    fr: "PV de la structure"
+    ja: "ストラクチャのヒットポイント"
+    ko: "내구도"
+    ru: "Запас прочности корпуса"
+    zh: "结构值"
+  unitID: 113
+"182":
+  attributeCategoryID: 8
+  dataType: 11
+  defaultValue: 0
+  description: "The type ID of the skill that is required."
+  displayName:
+    de: "Primärer Skill benötigt"
+    en: "Primary Skill required"
+    es: "Habilidad principal necesaria"
+    fr: "Compétence principale requise"
+    ja: "第一必須スキル"
+    ko: "1차 스킬 필요"
+    ru: "Требуемый первичный навык"
+    zh: "主技能需求"
+  displayWhenZero: false
+  highIsGood: true
+  iconID: 33
+  name: "requiredSkill1"
+  published: true
+  stackable: true
+  unitID: 116
+"277":
+  attributeCategoryID: 8
+  dataType: 4
+  defaultValue: 0
+  description: "Required skill level for skill 1"
+  displayWhenZero: false
+  highIsGood: true
+  name: "requiredSkill1Level"
+  published: false
+  stackable: true
+"183":
+  attributeCategoryID: 8
+  dataType: 11
+  defaultValue: 0
+  description: "The type ID of the skill that is required."
+  displayName:
+    de: "Sekundärer Skill benötigt"
+    en: "Secondary Skill required"
+    es: "Habilidad secundaria necesaria"
+    fr: "Compétence secondaire requise"
+    ja: "第二必須スキル"
+    ko: "2차 스킬 필요"
+    ru: "Требуемый вторичный навык"
+    zh: "副技能需求"
+  displayWhenZero: false
+  highIsGood: true
+  iconID: 33
+  name: "requiredSkill2"
+  published: true
+  stackable: true
+  unitID: 116
+"278":
+  attributeCategoryID: 8
+  dataType: 4
+  defaultValue: 0
+  description: "Required skill level for skill 2"
+  displayWhenZero: false
+  highIsGood: true
+  name: "requiredSkill2Level"
+  published: false
+  stackable: true
+"184":
+  attributeCategoryID: 8
+  dataType: 11
+  defaultValue: 0
+  description: "The type ID of the skill that is required."
+  displayName:
+    de: "Tertiärer Skill benötigt"
+    en: "Tertiary Skill required"
+    es: "Habilidad terciaria necesaria"
+    fr: "Compétence tertiaire requise"
+    ja: "第三必須スキル"
+    ko: "3차 스킬 필요"
+    ru: "Требуемый третичный навык"
+    zh: "三级技能需求"
+  displayWhenZero: false
+  highIsGood: true
+  iconID: 33
+  name: "requiredSkill3"
+  published: true
+  stackable: true
+  unitID: 116
+"279":
+  attributeCategoryID: 8
+  dataType: 4
+  defaultValue: 0
+  description: "Required skill level for skill 3"
+  displayWhenZero: false
+  highIsGood: true
+  name: "requiredSkill3Level"
+  published: false
+  stackable: true
+"1285":
+  attributeCategoryID: 8
+  dataType: 11
+  defaultValue: 0
+  description: "The type ID of the skill that is required."
+  displayName:
+    de: "Quaternary-Skill benötigt"
+    en: "Quaternary Skill required"
+    es: "Habilidad cuaternaria necesaria"
+    fr: "Compétence quaternaire requise"
+    ja: "第四必須スキル"
+    ko: "4차 스킬 필요"
+    ru: "Требуемый четвертичный навык"
+    zh: "四级技能需求"
+  displayWhenZero: false
+  highIsGood: true
+  iconID: 33
+  name: "requiredSkill4"
+  published: true
+  stackable: true
+  unitID: 116
+"1286":
+  attributeCategoryID: 8
+  dataType: 4
+  defaultValue: 0
+  description: "Required skill level for skill 4"
+  displayName:
+    de: "Benötigter Skill 5 Level"
+    en: "Level 5 required"
+    es: "Nivel 5 necesario"
+    fr: "compNiv5Requise"
+    ja: "第五必須スキルレベル"
+    ko: "레벨 5 요구"
+    ru: "Необходимые навыки 5 уровня"
+    zh: "所需技能等级"
+  displayWhenZero: false
+  highIsGood: true
+  iconID: 0
+  name: "requiredSkill4Level"
+  published: false
+  stackable: true
+"1289":
+  attributeCategoryID: 8
+  dataType: 11
+  defaultValue: 0
+  description: "The type ID of the skill that is required."
+  displayName:
+    de: "Quinary-Skill benötigt"
+    en: "Quinary Skill required"
+    es: "Habilidad quinaria necesaria"
+    fr: "Compétence quinaire requise"
+    ja: "第五必須スキル"
+    ko: "5차 스킬 필요"
+    ru: "Требуемый пятеричный навык"
+    zh: "五级技能需求"
+  displayWhenZero: false
+  highIsGood: true
+  iconID: 0
+  name: "requiredSkill5"
+  published: true
+  stackable: true
+  unitID: 116
+"1287":
+  attributeCategoryID: 8
+  dataType: 4
+  defaultValue: 0
+  description: "Required skill level for skill 5"
+  displayWhenZero: false
+  highIsGood: true
+  iconID: 0
+  name: "requiredSkill5Level"
+  published: false
+  stackable: true
+"1290":
+  attributeCategoryID: 8
+  dataType: 11
+  defaultValue: 0
+  description: "The type ID of the skill that is required."
+  displayName:
+    de: "Senary-Skill benötigt"
+    en: "Senary Skill required"
+    es: "Habilidad senaria necesaria"
+    fr: "Compétence sénaire requise"
+    ja: "第六必須スキル"
+    ko: "6차 스킬 필요"
+    ru: "Требуемый шестеричный навык"
+    zh: "六级技能需求"
+  displayWhenZero: false
+  highIsGood: true
+  iconID: 0
+  name: "requiredSkill6"
+  published: true
+  stackable: true
+  unitID: 116
+"1288":
+  attributeCategoryID: 8
+  dataType: 4
+  defaultValue: 0
+  description: "Required skill level for skill 6"
+  displayWhenZero: false
+  highIsGood: true
+  iconID: 0
+  name: "requiredSkill6Level"
+  published: false
+  stackable: true
+"180":
+  attributeCategoryID: 7
+  dataType: 10
+  defaultValue: 0
+  description: "Only refers to another dogma attribute."
+  displayName:
+    de: "Primäres Attribut"
+    en: "Primary attribute"
+    es: "Atributo principal"
+    fr: "Attribut principal"
+    ja: "第1次属性"
+    ko: "1차 특성"
+    ru: "Первичная характеристика"
+    zh: "主属性"
+  displayWhenZero: false
+  highIsGood: true
+  name: "primaryAttribute"
+  published: true
+  stackable: true
+  unitID: 119
+"181":
+  attributeCategoryID: 7
+  dataType: 10
+  defaultValue: 0
+  description: "Only refers to another dogma attribute."
+  displayName:
+    de: "Sekundäres Attribut"
+    en: "Secondary attribute"
+    es: "Atributo secundario"
+    fr: "Attribut secondaire"
+    ja: "第2次属性"
+    ko: "2차 특성"
+    ru: "Вторичная характеристика"
+    zh: "副属性"
+  displayWhenZero: false
+  highIsGood: true
+  name: "secondaryAttribute"
+  published: true
+  stackable: true
+  unitID: 119
+"275":
+  attributeCategoryID: 7
+  dataType: 5
+  defaultValue: 0
+  description: "This attribute is a multiplier to the number of skill points required\
+    \ to train. Skill points required to train a skill = 250 * skillTimeConstant *\
+    \ sqrt(32)^(skillLevel - 1)"
+  displayName:
+    de: "Trainingszeit-Multiplikator"
+    en: "Training time multiplier"
+    es: "Multiplicador de tiempo de desarrollo"
+    fr: "Multiplicateur du temps de formation"
+    ja: "トレーニング時間乗数"
+    ko: "훈련시간 배수"
+    ru: "Множитель"
+    zh: "训练时间倍增系数"
+  displayWhenZero: false
+  highIsGood: true
+  iconID: 1392
+  name: "skillTimeConstant"
+  published: true
+  stackable: true
+  unitID: 104
+"164":
+  attributeCategoryID: 7
+  dataType: 4
+  defaultValue: 0
+  description: "The charisma of a character."
+  displayName:
+    de: "Ausstrahlung"
+    en: "Charisma"
+    es: "Carisma"
+    fr: "Charisme"
+    ja: "カリスマ"
+    ko: "카리스마"
+    ru: "«Харизма»"
+    zh: "魅力"
+  displayWhenZero: false
+  highIsGood: true
+  iconID: 1378
+  name: "charisma"
+  published: true
+  stackable: true
+  unitID: 120
+"165":
+  attributeCategoryID: 7
+  dataType: 4
+  defaultValue: 0
+  description: "The intelligence of a character."
+  displayName:
+    de: "Intelligenz"
+    en: "Intelligence"
+    es: "Inteligencia"
+    fr: "Intelligence"
+    ja: "知性"
+    ko: "지능"
+    ru: "«Интеллект»"
+    zh: "智力"
+  displayWhenZero: false
+  highIsGood: true
+  iconID: 1380
+  name: "intelligence"
+  published: true
+  stackable: true
+  unitID: 120
+"166":
+  attributeCategoryID: 7
+  dataType: 4
+  defaultValue: 0
+  description: "The memory of a character."
+  displayName:
+    de: "Gedächtnis"
+    en: "Memory"
+    es: "Memoria"
+    fr: "Mémoire"
+    ja: "記憶力"
+    ko: "기억력"
+    ru: "«Память»"
+    zh: "记忆"
+  displayWhenZero: false
+  highIsGood: true
+  iconID: 1381
+  name: "memory"
+  published: true
+  stackable: true
+  unitID: 120
+"167":
+  attributeCategoryID: 9
+  dataType: 4
+  defaultValue: 0
+  description: "The perception of a character."
+  displayName:
+    de: "Auffassungsgabe"
+    en: "Perception"
+    es: "Percepción"
+    fr: "Perception"
+    ja: "知覚"
+    ko: "지각력"
+    ru: "«Восприятие»"
+    zh: "感知"
+  displayWhenZero: false
+  highIsGood: true
+  iconID: 1382
+  name: "perception"
+  published: true
+  stackable: true
+  unitID: 120
+"168":
+  attributeCategoryID: 7
+  dataType: 4
+  defaultValue: 0
+  description: "The willpower of a character."
+  displayName:
+    de: "Willenskraft"
+    en: "Willpower"
+    es: "Voluntad"
+    fr: "Volonté"
+    ja: "精神力"
+    ko: "정신력"
+    ru: "«Сила воли»"
+    zh: "毅力"
+  displayWhenZero: false
+  highIsGood: true
+  iconID: 1379
+  name: "willpower"
+  published: true
+  stackable: true
+  unitID: 120
+"1047":
+  attributeCategoryID: 9
+  dataType: 3
+  defaultValue: 1
+  description: "If set to 1 then this skill can not be trained on accounts that are\
+    \ marked as Alpha Clone. Any other value (although you should probably use 0)\
+    \ will result in all accounts being able to train this skill."
+  displayWhenZero: false
+  highIsGood: true
+  iconID: 0
+  name: "canNotBeTrainedOnTrial"
+  published: false
+  stackable: true
+"2699":
+  attributeCategoryID: 7
+  dataType: 5
+  defaultValue: 0
+  description: "0: Mission/NPE Ore\r\n1: Standard Ore/Ice\r\n2: +5% Ore\r\n3: +10%\
+    \ Ore\r\n4: High Quality Ice or Extracted Ore\r\n5: Jackpot Moon Ore"
+  displayWhenZero: false
+  highIsGood: true
+  name: "asteroidMetaLevel"
+  published: false
+  stackable: true
+"2711":
+  attributeCategoryID: 7
+  dataType: 11
+  defaultValue: 0
+  description: "Reference for grouping ores in visual displays. All variants of one\
+    \ ore should have the same BasicType ID"
+  displayWhenZero: false
+  highIsGood: false
+  name: "oreBasicType"
+  published: false
+  stackable: false
+  unitID: 116
+"162":
+  attributeCategoryID: 9
+  dataType: 9
+  defaultValue: 0
+  description: "Radius of an object in meters"
+  displayWhenZero: false
+  highIsGood: true
+  iconID: 1390
+  name: "radius"
+  published: false
+  stackable: true
+"1302":
+  attributeCategoryID: 1
+  dataType: 11
+  defaultValue: 0
+  description: ""
+  displayName:
+    de: "Kann nur eingebaut werden"
+    en: "Can only be fitted to"
+    es: "Solo se puede equipar en"
+    fr: "Montage uniquement possible sur"
+    ja: "装着可能対象："
+    ko: "피팅 가능한 대상"
+    ru: "Можно оснастить только:"
+    zh: "只能装配在"
+  displayWhenZero: false
+  highIsGood: true
+  iconID: 1443
+  name: "canFitShipType1"
+  published: true
+  stackable: true
+  unitID: 116
+"1303":
+  attributeCategoryID: 1
+  dataType: 11
+  defaultValue: 0
+  description: ""
+  displayName:
+    de: "Kann eingebaut werden in"
+    en: "Can be fitted to"
+    es: "Se puede equipar en"
+    fr: "Peut être équipé sur"
+    ja: "装着可能対象"
+    ko: "피팅 가능한 대상:"
+    ru: "Устанавливается на"
+    zh: "可装配至"
+  displayWhenZero: false
+  highIsGood: true
+  iconID: 1443
+  name: "canFitShipType2"
+  published: true
+  stackable: true
+  unitID: 116
+"1304":
+  attributeCategoryID: 1
+  dataType: 11
+  defaultValue: 0
+  description: ""
+  displayName:
+    de: "Kann eingebaut werden in"
+    en: "Can be fitted to"
+    es: "Se puede equipar en"
+    fr: "Peut être équipé sur"
+    ja: "装着可能対象"
+    ko: "피팅 가능한 대상:"
+    ru: "Устанавливается на"
+    zh: "可装配至"
+  displayWhenZero: false
+  highIsGood: true
+  iconID: 1443
+  name: "canFitShipType3"
+  published: true
+  stackable: true
+  unitID: 116
+"1305":
+  attributeCategoryID: 1
+  dataType: 11
+  defaultValue: 0
+  description: ""
+  displayName:
+    de: "Kann eingebaut werden in"
+    en: "Can be fitted to"
+    es: "Se puede equipar en"
+    fr: "Peut être équipé sur"
+    ja: "装着可能対象"
+    ko: "피팅 가능한 대상:"
+    ru: "Устанавливается на"
+    zh: "可装配至"
+  displayWhenZero: false
+  highIsGood: true
+  iconID: 1443
+  name: "canFitShipType4"
+  published: true
+  stackable: true
+  unitID: 116
+"790":
+  attributeCategoryID: 7
+  dataType: 11
+  defaultValue: 0
+  description: "The skill required to reprocess this ore type."
+  displayName:
+    de: "Aufbereitung-Skill"
+    en: "Reprocessing Skill"
+    es: "Habilidad de reprocesamiento"
+    fr: "Compétence de retraitement"
+    ja: "再処理スキル"
+    ko: "재처리 스킬"
+    ru: "Навык переработки"
+    zh: "回收再生技能"
+  displayWhenZero: false
+  highIsGood: true
+  iconID: 0
+  name: "reprocessingSkillType"
+  published: true
+  stackable: true
+  unitID: 116
+"2355":
+  attributeCategoryID: 37
+  dataType: 5
+  defaultValue: 1
+  description: ""
+  displayName:
+    de: "Hochsicherheits-Bonusmultiplikator"
+    en: "High Security Bonus Multiplier"
+    es: "Multiplicador de bonificación de seguridad alta"
+    fr: "High Security Bonus Multiplier"
+    ja: "高セキュリティボーナス乗数"
+    ko: "하이 시큐리티 보너스 배수"
+    ru: "Изменение влияния в планетных системах метрополии («хай-сек»)"
+    zh: "高安加成系数"
+  displayWhenZero: false
+  highIsGood: true
+  name: "hiSecModifier"
+  published: true
+  stackable: true
+  unitID: 104

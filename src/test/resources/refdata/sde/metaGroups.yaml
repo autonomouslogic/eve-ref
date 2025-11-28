@@ -1,0 +1,47 @@
+---
+"1":
+  color:
+    b: 0.043137
+    g: 0.666667
+    r: 0.780392
+  name:
+    de: "Tech I"
+    en: "Tech I"
+    es: "T1"
+    fr: "Tech I"
+    ja: "T1"
+    ko: "테크 I"
+    ru: "Tech I"
+    zh: "一级科技"
+"2":
+  color:
+    b: 0.003922
+    g: 0.380392
+    r: 0.619608
+  iconID: 24150
+  iconSuffix: "t2"
+  name:
+    de: "Tech II"
+    en: "Tech II"
+    es: "T2"
+    fr: "Tech II"
+    ja: "T2"
+    ko: "테크 II"
+    ru: "Tech II"
+    zh: "二级科技"
+"15":
+  color:
+    b: 0.12549
+    g: 0.12549
+    r: 0.529412
+  iconID: 24152
+  iconSuffix: "abyssal"
+  name:
+    de: "Abgrund"
+    en: "Abyssal"
+    es: "Abisal"
+    fr: "Abîme"
+    ja: "アビサル"
+    ko: "어비설"
+    ru: "Бездна"
+    zh: "深渊"

@@ -58,8 +58,28 @@ public class ArchivePathFactoryTest {
 		testExpectedPaths(
 				factory,
 				Instant.parse("2023-03-15T00:00:00Z"),
-				"ccp/sde/sde-20230315-TRANQUILITY.zip",
+				"ccp/sde/2023/sde-20230315-TRANQUILITY.zip",
 				"ccp/sde/sde-latest-TRANQUILITY.zip");
+	}
+
+	@Test
+	void shouldGenerateStaticDataJsonlNames() {
+		var factory = ArchivePathFactory.SDE_V2_JSONL;
+		testExpectedPaths(
+				factory,
+				Instant.parse("2023-01-01T00:00:00Z"),
+				"ccp/sde/2023/eve-online-static-data-jsonl.zip",
+				"ccp/sde/eve-online-static-data-latest-jsonl.zip");
+	}
+
+	@Test
+	void shouldGenerateStaticDataYamlNames() {
+		var factory = ArchivePathFactory.SDE_V2_YAML;
+		testExpectedPaths(
+				factory,
+				Instant.parse("2023-01-01T00:00:00Z"),
+				"ccp/sde/2023/eve-online-static-data-yaml.zip",
+				"ccp/sde/eve-online-static-data-latest-yaml.zip");
 	}
 
 	@Test

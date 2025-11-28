@@ -293,6 +293,8 @@ public class RefDataUtil {
 								case "meta":
 								case "type_materials":
 								case "type_dogma":
+								case "masteries":
+								case "type_bonus":
 									// ignore.
 									break;
 								default:

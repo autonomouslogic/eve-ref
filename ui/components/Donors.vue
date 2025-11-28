@@ -13,7 +13,7 @@ const {status, data: donors} = await useLazyFetch<DonationsFile>("https://static
 </script>
 
 <template>
-	<template v-if="status == 'success' && donors && donors.top">
+	<template v-if="status == 'success' && donors && donors.top && donors.top.length > 0">
 		<table class="standard-table">
 			<tr v-for="donor in donors.top" :key="donor.donor_name">
 				<td class="font-bold">
@@ -29,7 +29,7 @@ const {status, data: donors} = await useLazyFetch<DonationsFile>("https://static
 			</tr>
 		</table>
 	</template>
-	<p v-else>No recent donations</p>
+	<p v-else><span class="italic">No recent donations</span> 😢</p>
 	<div class="w-full text-right">
 		<InternalLink to="/about">Donate ISK</InternalLink>
 	</div>

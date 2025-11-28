@@ -1,16 +1,9 @@
 {
-  "attribute_id" : 2355,
-  "category_id" : 37,
   "data_type" : 5,
   "default_value" : 1,
   "description" : {
     "en" : ""
   },
-  "high_is_good" : true,
-  "name" : "hiSecModifier",
-  "published" : true,
-  "stackable" : true,
-  "unit_id" : 104,
   "display_name" : {
     "de" : "Hochsicherheits-Bonusmultiplikator",
     "en" : "High Security Bonus Multiplier",
@@ -20,5 +13,13 @@
     "ko" : "하이 시큐리티 보너스 배수",
     "ru" : "Изменение влияния в планетных системах метрополии («хай-сек»)",
     "zh" : "高安加成系数"
-  }
+  },
+  "display_when_zero" : false,
+  "high_is_good" : true,
+  "name" : "hiSecModifier",
+  "published" : true,
+  "stackable" : true,
+  "unit_id" : 104,
+  "category_id" : 37,
+  "attribute_id" : 2355
 }

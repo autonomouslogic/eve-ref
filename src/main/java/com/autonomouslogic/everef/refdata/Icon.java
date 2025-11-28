@@ -18,11 +18,5 @@ public class Icon {
 	Long iconId;
 
 	@JsonProperty
-	String description;
-
-	@JsonProperty
 	String iconFile;
-
-	@JsonProperty
-	boolean obsolete;
 }

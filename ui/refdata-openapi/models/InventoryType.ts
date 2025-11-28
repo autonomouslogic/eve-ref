@@ -43,6 +43,12 @@ import {
     ProducingBlueprintFromJSONTyped,
     ProducingBlueprintToJSON,
 } from './ProducingBlueprint';
+import type { RandomizedTypeMaterial } from './RandomizedTypeMaterial';
+import {
+    RandomizedTypeMaterialFromJSON,
+    RandomizedTypeMaterialFromJSONTyped,
+    RandomizedTypeMaterialToJSON,
+} from './RandomizedTypeMaterial';
 import type { TypeMaterial } from './TypeMaterial';
 import {
     TypeMaterialFromJSON,
@@ -297,23 +303,17 @@ export interface InventoryType {
      */
     radius?: number;
     /**
+     * 
+     * @type {{ [key: string]: RandomizedTypeMaterial; }}
+     * @memberof InventoryType
+     */
+    randomizedTypeMaterials?: { [key: string]: RandomizedTypeMaterial; };
+    /**
      * The skills required for this type. The key is the skill type ID and the value is the level. This is added by EVE Ref and derived from dogma attributes.
      * @type {{ [key: string]: number; }}
      * @memberof InventoryType
      */
     requiredSkills?: { [key: string]: number; };
-    /**
-     * 
-     * @type {string}
-     * @memberof InventoryType
-     */
-    sofFactionName?: string;
-    /**
-     * 
-     * @type {number}
-     * @memberof InventoryType
-     */
-    sofMaterialSetId?: number;
     /**
      * 
      * @type {number}
@@ -428,9 +428,8 @@ export function InventoryTypeFromJSONTyped(json: any, ignoreDiscriminator: boole
         'published': !exists(json, 'published') ? undefined : json['published'],
         'raceId': !exists(json, 'race_id') ? undefined : json['race_id'],
         'radius': !exists(json, 'radius') ? undefined : json['radius'],
+        'randomizedTypeMaterials': !exists(json, 'randomized_type_materials') ? undefined : (mapValues(json['randomized_type_materials'], RandomizedTypeMaterialFromJSON)),
         'requiredSkills': !exists(json, 'required_skills') ? undefined : json['required_skills'],
-        'sofFactionName': !exists(json, 'sof_faction_name') ? undefined : json['sof_faction_name'],
-        'sofMaterialSetId': !exists(json, 'sof_material_set_id') ? undefined : json['sof_material_set_id'],
         'soundId': !exists(json, 'sound_id') ? undefined : json['sound_id'],
         'traits': !exists(json, 'traits') ? undefined : InventoryTypeTraitsFromJSON(json['traits']),
         'typeId': !exists(json, 'type_id') ? undefined : json['type_id'],
@@ -491,9 +490,8 @@ export function InventoryTypeToJSON(value?: InventoryType | null): any {
         'published': value.published,
         'race_id': value.raceId,
         'radius': value.radius,
+        'randomized_type_materials': value.randomizedTypeMaterials === undefined ? undefined : (mapValues(value.randomizedTypeMaterials, RandomizedTypeMaterialToJSON)),
         'required_skills': value.requiredSkills,
-        'sof_faction_name': value.sofFactionName,
-        'sof_material_set_id': value.sofMaterialSetId,
         'sound_id': value.soundId,
         'traits': InventoryTypeTraitsToJSON(value.traits),
         'type_id': value.typeId,

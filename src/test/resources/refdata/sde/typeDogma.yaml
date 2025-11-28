@@ -1,0 +1,221 @@
+---
+"189":
+  dogmaAttributes:
+  - attributeID: 114
+    value: 0
+  - attributeID: 116
+    value: 6
+  - attributeID: 117
+    value: 4
+  - attributeID: 118
+    value: 6
+  - attributeID: 120
+    value: 1
+  - attributeID: 124
+    value: 4612441
+  - attributeID: 128
+    value: 2
+  - attributeID: 137
+    value: 55
+  - attributeID: 244
+    value: 1.2
+  - attributeID: 422
+    value: 1
+  - attributeID: 779
+    value: 1
+  dogmaEffects:
+  - effectID: 596
+    isDefault: false
+  - effectID: 600
+    isDefault: false
+  - effectID: 1173
+    isDefault: false
+"645":
+  dogmaAttributes:
+  - attributeID: 3
+    value: 0
+  - attributeID: 9
+    value: 9350
+  - attributeID: 11
+    value: 10000
+  - attributeID: 12
+    value: 7
+  - attributeID: 13
+    value: 5
+  - attributeID: 14
+    value: 6
+  - attributeID: 15
+    value: 0
+  - attributeID: 19
+    value: 1
+  - attributeID: 21
+    value: 0
+  - attributeID: 37
+    value: 109
+  - attributeID: 48
+    value: 600
+  - attributeID: 49
+    value: 0
+  - attributeID: 55
+    value: 1100000
+  - attributeID: 70
+    value: 0.1254
+  - attributeID: 76
+    value: 84000
+  - attributeID: 79
+    value: 8250
+  - attributeID: 101
+    value: 0
+  - attributeID: 102
+    value: 6
+  - attributeID: 109
+    value: 0.67
+  - attributeID: 110
+    value: 0.67
+  - attributeID: 111
+    value: 0.67
+  - attributeID: 113
+    value: 0.67
+  - attributeID: 124
+    value: 16777215
+  - attributeID: 129
+    value: 1000
+  - attributeID: 136
+    value: 1
+  - attributeID: 153
+    value: 0.000000138
+  - attributeID: 182
+    value: 3336
+  - attributeID: 188
+    value: 0
+  - attributeID: 192
+    value: 7
+  - attributeID: 208
+    value: 0
+  - attributeID: 209
+    value: 0
+  - attributeID: 210
+    value: 22
+  - attributeID: 211
+    value: 0
+  - attributeID: 217
+    value: 395
+  - attributeID: 246
+    value: 395
+  - attributeID: 263
+    value: 7920
+  - attributeID: 265
+    value: 8800
+  - attributeID: 267
+    value: 0.5
+  - attributeID: 268
+    value: 0.9
+  - attributeID: 269
+    value: 0.65
+  - attributeID: 270
+    value: 0.65
+  - attributeID: 271
+    value: 1
+  - attributeID: 272
+    value: 0.5
+  - attributeID: 273
+    value: 0.6
+  - attributeID: 274
+    value: 0.8
+  - attributeID: 277
+    value: 1
+  - attributeID: 283
+    value: 375
+  - attributeID: 422
+    value: 1
+  - attributeID: 479
+    value: 2500000
+  - attributeID: 482
+    value: 6000
+  - attributeID: 484
+    value: 0.75
+  - attributeID: 500
+    value: 7.5
+  - attributeID: 524
+    value: 0.75
+  - attributeID: 525
+    value: 1
+  - attributeID: 552
+    value: 465
+  - attributeID: 561
+    value: 10
+  - attributeID: 564
+    value: 117
+  - attributeID: 600
+    value: 3
+  - attributeID: 633
+    value: 0
+  - attributeID: 661
+    value: 1000
+  - attributeID: 662
+    value: 0.5
+  - attributeID: 1132
+    value: 400
+  - attributeID: 1137
+    value: 3
+  - attributeID: 1154
+    value: 3
+  - attributeID: 1178
+    value: 100
+  - attributeID: 1179
+    value: 0.01
+  - attributeID: 1196
+    value: 0.01
+  - attributeID: 1198
+    value: 0.01
+  - attributeID: 1199
+    value: 100
+  - attributeID: 1200
+    value: 100
+  - attributeID: 1224
+    value: 0.5
+  - attributeID: 1259
+    value: 0.76
+  - attributeID: 1261
+    value: 0.71
+  - attributeID: 1262
+    value: 0.79
+  - attributeID: 1271
+    value: 125
+  - attributeID: 1281
+    value: 1
+  - attributeID: 1547
+    value: 3
+  - attributeID: 1555
+    value: 500
+  - attributeID: 1768
+    value: 11331
+  - attributeID: 2045
+    value: 1
+  - attributeID: 2112
+    value: 1
+  - attributeID: 2113
+    value: 1
+  - attributeID: 2115
+    value: 1
+  - attributeID: 3020
+    value: 1
+  - attributeID: 3266
+    value: 50
+  - attributeID: 3267
+    value: 100
+  - attributeID: 3268
+    value: 0.05
+  - attributeID: 5796
+    value: 2147483647000
+  dogmaEffects:
+  - effectID: 2186
+    isDefault: false
+  - effectID: 2187
+    isDefault: false
+  - effectID: 5427
+    isDefault: false
+  - effectID: 5428
+    isDefault: false
+  - effectID: 8377
+    isDefault: false

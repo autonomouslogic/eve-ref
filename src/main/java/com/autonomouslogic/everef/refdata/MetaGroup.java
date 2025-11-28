@@ -36,5 +36,5 @@ public class MetaGroup {
 	List<Long> typeIds;
 
 	@JsonProperty
-	List<Double> color;
+	Color color;
 }

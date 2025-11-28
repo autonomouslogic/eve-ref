@@ -136,6 +136,7 @@ public class IndustrySkills extends AbstractIndustryService<IndustrySkill> {
 			case "Sleeper Encryption Methods" -> input.getSleeperEncryptionMethods();
 			case "Triglavian Encryption Methods" -> input.getTriglavianEncryptionMethods();
 			case "Upwell Encryption Methods" -> input.getUpwellEncryptionMethods();
+			case "Outpost Construction" -> input.getOutpostConstruction();
 			default -> throw new RuntimeException("Unhandled skill: " + skill.getName());
 		};
 	}

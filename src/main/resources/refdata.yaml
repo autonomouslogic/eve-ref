@@ -2,7 +2,7 @@ categories:
   idField: category_id
   model: InventoryCategory
   sde:
-    file: fsd/categories.yaml
+    file: categories.yaml
   esi:
     file: universe/categories
     languageAttributes:
@@ -23,7 +23,7 @@ groups:
   idField: group_id
   model: InventoryGroup
   sde:
-    file: fsd/groups.yaml
+    file: groups.yaml
   esi:
     file: universe/groups
     languageAttributes:
@@ -51,10 +51,7 @@ marketGroups:
   idField: market_group_id
   model: MarketGroup
   sde:
-    file: fsd/marketGroups.yaml
-    renames:
-      name_id: name
-      description_id: description
+    file: marketGroups.yaml
   esi:
     file: markets/groups
     languageAttributes:
@@ -76,7 +73,7 @@ types:
   idField: type_id
   model: InventoryType
   sde:
-    file: fsd/types.yaml
+    file: types.yaml
   esi:
     file: universe/types
     languageAttributes:
@@ -163,6 +160,17 @@ types:
       - 57478
       - 57490
       - 57453
+      - 35832
+      - 36966
+      - 21947
+      - 21949
+      - 21951
+      - 21957
+      - 21961
+      - 21965
+      - 21967
+      - 21963
+      - 90041
     languages:
       - en-us
       - fr
@@ -171,27 +179,63 @@ typeMaterials:
   outputStore: types
   dedicatedOutput: false
   sde:
-    file: fsd/typeMaterials.yaml
+    file: typeMaterials.yaml
     renames:
       materials: type_materials
+      randomized_materials: randomized_type_materials
     arrayToObjects:
       type_materials: material_type_id
+      randomized_type_materials: material_type_id
   hoboleaks:
     file: typematerials.json
     renames:
       materials: type_materials
+      randomized_materials: randomized_type_materials
     arrayToObjects:
       type_materials: material_type_id
+      randomized_type_materials: material_type_id
   test:
     filePrefix: type
     ids:
       - 645
+      - 90041
+
+typeBonus:
+  outputStore: types
+  dedicatedOutput: false
+  sde:
+    file: typeBonus.yaml
+  test:
+    filePrefix: type
+    ids:
+      - 645
+      - 22430
+      - 32307
+      - 33673
+      - 35827
+      - 35833
+      - 45622
+      - 45623
+      - 45624
+
+masteries:
+  outputStore: types
+  dedicatedOutput: false
+  sde:
+    file: masteries.yaml
+  test:
+    filePrefix: type
+    ids:
+      - 645
+      - 22430
+      - 32307
+      - 33673
 
 typeDogma:
   outputStore: types
   dedicatedOutput: false
   sde:
-    file: fsd/typeDogma.yaml
+    file: typeDogma.yaml
     arrayToObjects:
       dogma_attributes: attribute_id
       dogma_effects: effect_id
@@ -205,11 +249,10 @@ dogmaAttributes:
   idField: attribute_id
   model: DogmaAttribute
   sde:
-    file: fsd/dogmaAttributes.yaml
+    file: dogmaAttributes.yaml
     renames:
-      display_name_id: display_name
       tooltip_title_id: tooltip_title
-      tooltip_description_id: tooltip_description
+      attribute_category_id: category_id
     languageAttributes:
       - description
   esi:
@@ -256,11 +299,11 @@ dogmaEffects:
   idField: effect_id
   model: DogmaEffect
   sde:
-    file: fsd/dogmaEffects.yaml
+    file: dogmaEffects.yaml
     renames:
-      description_id: description
-      display_name_id: display_name
+      effect_category_id: effect_category
       modifier_info: modifiers
+      name: effect_name
   esi:
     file: dogma/effects
     languageAttributes:
@@ -286,10 +329,7 @@ metaGroups:
   idField: meta_group_id
   model: MetaGroup
   sde:
-    file: fsd/metaGroups.yaml
-    renames:
-      name_id: name
-      description_id: description
+    file: metaGroups.yaml
   test:
     filePrefix: meta-group
     ids:
@@ -304,7 +344,7 @@ mutaplasmids:
     file: dynamicitemattributes.json
     renames:
       input_output_mapping: type_mappings
-      attribute_i_ds: dogma_modifications
+      attribute_ids: dogma_modifications
   test:
     filePrefix: mutaplasmid
     ids:
@@ -343,7 +383,7 @@ blueprints:
   idField: blueprint_type_id
   model: Blueprint
   sde:
-    file: fsd/blueprints.yaml
+    file: blueprints.yaml
   hoboleaks:
     file: blueprints.json
   test:
@@ -360,12 +400,13 @@ blueprints:
       - 48111
       - 32308
       - 57490
+      - 36966
 
 icons:
   idField: icon_id
   model: Icon
   sde:
-    file: fsd/iconIDs.yaml
+    file: icons.yaml
   test:
     filePrefix: icon
     ids:
@@ -384,10 +425,11 @@ regions:
     removes:
       - constellations
   sde:
-    fileRegex: ^universe\/(?<universeId>[a-zA-Z0-9-]+)\/[a-zA-Z0-9-]+\/region\.yaml$
-    individualFiles: true
+    file: mapRegions.yaml
     renames:
       nebula: nebula_id
+    removes:
+      - constellation_ids
   test:
     filePrefix: region
     ids:
@@ -410,9 +452,7 @@ schematics:
     languageAttributes:
       - name
   sde:
-    file: fsd/planetSchematics.yaml
-    renames:
-      name_id: name
+    file: planetSchematics.yaml
   test:
     filePrefix: schematic
     ids:

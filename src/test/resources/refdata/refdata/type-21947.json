@@ -1,0 +1,65 @@
+{
+  "base_price" : 22500000,
+  "description" : {
+    "de" : "Ein Sortiment aus Metallteilen, Textilien, Verbundstoffen und verschiedenen Maschinen. Dies sind die grundlegenden Bestandteile für den Zusammenbau und den Betrieb eines Außenpostens im All.",
+    "en" : "Assorted parts of metal, textiles, composite fabrics and miscellaneous machinery - the basic building blocks for the assembly and operation of a space outpost.",
+    "es" : "Todo tipo de piezas de metal, tejidos, tejidos compuestos y maquinaria de toda clase, los elementos básicos para construir, ensamblar y poner en funcionamiento un puesto avanzado espacial.",
+    "fr" : "Assortiment de pièces métalliques, de textiles, de tissus composites et d'équipements divers servant de blocs de construction de base pour le montage et le fonctionnement d'un avant-poste spatial.",
+    "ja" : "金属材、布地、合成繊維、その他様々な機械類など、アウトポストの組み立てと運営に必要な建築素材の詰め合わせ。",
+    "ko" : "금속, 직물, 합성 섬유, 그리고 잡다한 기계들 - 우주의 전초기지를 구성하는 건축 자재들입니다.",
+    "ru" : "Разнообразные металлические части, ткани, композитные материалы и всевозможные механизмы ― основные средства для сборки и функционирования космических станций.",
+    "zh" : "金属、纺织品、合成织物和各种机械的分类部件—空间哨站安装和运作的基本建筑块。"
+  },
+  "group_id" : 536,
+  "icon_id" : 2875,
+  "market_group_id" : 1865,
+  "mass" : 10000,
+  "name" : {
+    "de" : "Structure Construction Parts",
+    "en" : "Structure Construction Parts",
+    "es" : "Piezas de construcción de estructuras",
+    "fr" : "Pièces de construction de structure",
+    "ja" : "ストラクチャ 建造パーツ",
+    "ko" : "구조물 건축 부품",
+    "ru" : "Structure Construction Parts",
+    "zh" : "建筑建造组件"
+  },
+  "portion_size" : 1,
+  "published" : true,
+  "volume" : 3000,
+  "type_id" : 21947,
+  "capacity" : 0,
+  "dogma_attributes" : {
+    "161" : {
+      "attribute_id" : 161,
+      "value" : 3000
+    },
+    "162" : {
+      "attribute_id" : 162,
+      "value" : 1
+    },
+    "4" : {
+      "attribute_id" : 4,
+      "value" : 10000
+    },
+    "38" : {
+      "attribute_id" : 38,
+      "value" : 0
+    },
+    "726" : {
+      "attribute_id" : 726,
+      "value" : 100
+    }
+  },
+  "packaged_volume" : 3000,
+  "radius" : 1,
+  "used_in_blueprints" : {
+    "36966" : {
+      "manufacturing" : {
+        "material_type_id" : 21947,
+        "activity" : "manufacturing",
+        "quantity" : 1
+      }
+    }
+  }
+}

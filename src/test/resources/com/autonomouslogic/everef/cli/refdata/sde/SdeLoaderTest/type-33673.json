@@ -3,7 +3,7 @@
   "capacity" : 150,
   "description" : {
     "de" : "Als die Scope Ende YC 115 eine Schlagzeile mit der Frage \"<i>Hat Kaalakiota den perfekten Abfangjäger gebaut?</i>\" veröffentlichte, sahen sie die meisten Beobachter als provokativen Werbetrick um mehr Leser zu gewinnen. \"The Rabbit\" sah sie als persönliche Herausforderung.",
-    "en" : "When The Scope ran a headline in late YC115 asking \"<i>Has Kaalakiota built the perfect Interceptor?</i>\" most observers viewed it as a provocative ploy to increase readership. \r\n\r\nThe Rabbit viewed it as a personal challenge.",
+    "en" : "When The Scope ran a headline in late YC115 asking \"<i>Has Kaalakiota built the perfect Interceptor?</i>\" most observers viewed it as a provocative ploy to increase readership. \n\nThe Rabbit viewed it as a personal challenge.",
     "es" : "Cuando a finales de 115 CY The Scope publicó el titular «<i>¿Ha construido Kaalakiota el interceptor perfecto?</i>», muchos observadores se lo tomaron como una artimaña para ganar lectores. \n\n\n\nSin embargo, «El Conejo» se lo tomó como un desafío personal.",
     "fr" : "En YC 115, quand The Scope a publié l'article « <i>La Kaalakiota Corporation a-t-elle mis au point l'Intercepteur ultime ?</i> », la plupart des observateurs n'y ont vu qu'une provocation pour augmenter leur tirage. \n\nLe Lapin a vu cela comme un défi personnel.",
     "ja" : "スコープがYC115後半にヘッドラインを実行した時、「<i>カアラキオタが完璧な要撃型フリゲートを建設したのか？</i>」ほとんどのオブザーバーはリーダーシップを高める挑戦的な策略としてそれを見る。ラビットは個人的なチャレンジとして見ている。",
@@ -16,13 +16,6 @@
   "group_id" : 831,
   "market_group_id" : 1932,
   "mass" : 1000000,
-  "masteries" : {
-    "0" : [ 96, 99, 164, 150, 75, 139, 85, 94 ],
-    "1" : [ 96, 99, 164, 150, 75, 139, 85, 94 ],
-    "2" : [ 96, 99, 164, 150, 75, 139, 85, 94 ],
-    "3" : [ 96, 99, 164, 150, 75, 139, 85, 94 ],
-    "4" : [ 96, 99, 164, 150, 75, 139, 85, 118, 94 ]
-  },
   "meta_group_id" : 2,
   "name" : {
     "de" : "Whiptail",
@@ -38,10 +31,10 @@
   "published" : true,
   "race_id" : 1,
   "radius" : 33,
-  "sof_faction_name" : "tournament-xii",
   "sound_id" : 20070,
+  "volume" : 18000,
+  "type_id" : 33673,
   "traits" : {
-    "misc_bonuses" : { },
     "role_bonuses" : {
       "5" : {
         "bonus" : 60,
@@ -188,6 +181,11 @@
       }
     }
   },
-  "volume" : 18000,
-  "type_id" : 33673
+  "masteries" : {
+    "0" : [ 96, 99, 164, 150, 75, 139, 85, 94 ],
+    "1" : [ 96, 99, 164, 150, 75, 139, 85, 94 ],
+    "2" : [ 96, 99, 164, 150, 75, 139, 85, 94 ],
+    "3" : [ 96, 99, 164, 150, 75, 139, 85, 94 ],
+    "4" : [ 96, 99, 164, 150, 75, 139, 85, 118, 94 ]
+  }
 }

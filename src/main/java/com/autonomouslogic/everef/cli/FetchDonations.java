@@ -16,6 +16,7 @@ import com.autonomouslogic.everef.s3.S3Adapter;
 import com.autonomouslogic.everef.s3.S3Util;
 import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.url.UrlParser;
+import com.autonomouslogic.everef.util.DiscordNotifier;
 import com.autonomouslogic.everef.util.VirtualThreads;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -25,8 +26,6 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.google.common.collect.Ordering;
 import com.google.common.hash.Hashing;
 import java.io.FileInputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.Instant;
@@ -34,7 +33,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
 import java.util.TreeMap;
 import java.util.concurrent.CompletionException;
 import java.util.regex.Pattern;
@@ -120,24 +118,17 @@ public class FetchDonations implements Command {
 	@Inject
 	protected OkHttpWrapper okHttpWrapper;
 
+	@Inject
+	protected DiscordNotifier discordNotifier;
+
 	private final String eveRefOwnerHash = Configs.EVE_REF_CHARACTER_OWNER_HASH.getRequired();
 
 	private S3Url staticUrl;
 
 	private final Duration cacheControlMaxAge = Configs.STATIC_CACHE_CONTROL_MAX_AGE.getRequired();
 
-	private final Optional<URL> discordUrl;
-
 	@Inject
-	protected FetchDonations() {
-		discordUrl = Configs.DONATIONS_DISCORD_WEBHOOK_URL.get().map(spec -> {
-			try {
-				return new URL(spec);
-			} catch (MalformedURLException e) {
-				throw new RuntimeException(e);
-			}
-		});
-	}
+	protected FetchDonations() {}
 
 	@Inject
 	protected void init() {
@@ -347,29 +338,7 @@ public class FetchDonations implements Command {
 						NumberFormats.formatMoney(d.getAmount()),
 						emoji(d)))
 				.collect(Collectors.joining("\n"));
-		notifyDiscord(summary);
-	}
-
-	@SneakyThrows
-	private void notifyDiscord(String message) {
-		if (discordUrl.isEmpty()) {
-			log.debug("No Discord webhook URL configured");
-			return;
-		}
-		log.debug("Notifying Discord");
-		var body = objectMapper.createObjectNode();
-		body.put("content", message);
-		log.trace("Discord notification: {}", body);
-		try (var response = okHttpWrapper.post(
-				discordUrl.get().toString(),
-				objectMapper.writeValueAsBytes(body),
-				r -> r.header("Content-Type", "application/json"))) {
-			if (response.code() < 200 || response.code() >= 300) {
-				log.warn("Error notifying Discord: {}", response);
-			} else {
-				log.debug("Discord notified: {}", response);
-			}
-		}
+		discordNotifier.notifyDiscord(summary);
 	}
 
 	@SneakyThrows

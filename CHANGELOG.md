@@ -1,5 +1,190 @@
 EVE Ref Changelog
 
+## [2.71.0](https://github.com/autonomouslogic/eve-ref/compare/2.70.0...2.71.0) (2025-11-21)
+
+
+### Features
+
+* Added randomized_type_materials to inventory types ([#982](https://github.com/autonomouslogic/eve-ref/issues/982)) ([549c018](https://github.com/autonomouslogic/eve-ref/commit/549c0180c4a80e0c9e1b1b23d424bc5478c82143))
+
+
+### Bug Fixes
+
+* **ui:** November 2025 giveaways ([ab17b3c](https://github.com/autonomouslogic/eve-ref/commit/ab17b3cb41cb121d24a0b9324144b00a725719e0))
+* Updated industry resources ([ed2d1b3](https://github.com/autonomouslogic/eve-ref/commit/ed2d1b3254a165dd449225e124daa66762ef5a58))
+
+
+### Tests
+
+* Updated test resources ([d13f7ae](https://github.com/autonomouslogic/eve-ref/commit/d13f7aeafa972b954af6f68c04fe91f381cb7fab))
+
+## [2.70.0](https://github.com/autonomouslogic/eve-ref/compare/2.69.8...2.70.0) (2025-11-05)
+
+
+### Features
+
+* Suppot for Outpost Construction on Industry Cost API ([#979](https://github.com/autonomouslogic/eve-ref/issues/979)) ([ee0a3db](https://github.com/autonomouslogic/eve-ref/commit/ee0a3db7427d425394282f5c6aa911fde984b35a))
+
+
+### Documentation
+
+* Outpost Construction ([1636865](https://github.com/autonomouslogic/eve-ref/commit/1636865964340b53a0884ccc2817565af1a78118))
+
+## [2.69.8](https://github.com/autonomouslogic/eve-ref/compare/2.69.7...2.69.8) (2025-11-04)
+
+
+### Bug Fixes
+
+* **deps:** update dependency org.flywaydb:flyway-core to v11.15.0 ([#976](https://github.com/autonomouslogic/eve-ref/issues/976)) ([3ae595e](https://github.com/autonomouslogic/eve-ref/commit/3ae595e0f8f6c50bc06257aa36612d8464bd4470))
+
+
+### Dependency Updates
+
+* **deps:** update all non-major dependencies to v8.46.3 ([#978](https://github.com/autonomouslogic/eve-ref/issues/978)) ([8b7de28](https://github.com/autonomouslogic/eve-ref/commit/8b7de2898bfb7462d847f32aabcc6d78db11a002))
+
+## [2.69.7](https://github.com/autonomouslogic/eve-ref/compare/2.69.6...2.69.7) (2025-11-03)
+
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([#975](https://github.com/autonomouslogic/eve-ref/issues/975)) ([d44dc01](https://github.com/autonomouslogic/eve-ref/commit/d44dc01354e67a12f40815e473b6ca630e8460eb))
+* **deps:** update flyway to v11.15.0 ([#977](https://github.com/autonomouslogic/eve-ref/issues/977)) ([9bfec4b](https://github.com/autonomouslogic/eve-ref/commit/9bfec4b250964085c161ae307ad6d2583b093aed))
+
+## [2.69.6](https://github.com/autonomouslogic/eve-ref/compare/2.69.5...2.69.6) (2025-10-28)
+
+
+### Bug Fixes
+
+* CSM countdown ([3d3c9be](https://github.com/autonomouslogic/eve-ref/commit/3d3c9be9a394838c6148bdf8d185bceadbad8e75))
+* **ui:** Fixed message on no donations ([8993a7a](https://github.com/autonomouslogic/eve-ref/commit/8993a7ab86dac1ee36d190d35a044fd834e69dd6))
+* Vote link in the MOTD banner ([1c75981](https://github.com/autonomouslogic/eve-ref/commit/1c759816ebcd51b17842fcf99cfd449eedd5cd7a))
+
+## [2.69.5](https://github.com/autonomouslogic/eve-ref/compare/2.69.4...2.69.5) (2025-10-27)
+
+
+### Bug Fixes
+
+* CSM 20 banner ([8cb9c0f](https://github.com/autonomouslogic/eve-ref/commit/8cb9c0f063ad206e0910727ceb2d05221e586857))
+
+
+### Tests
+
+* Updated test resources ([775e3b8](https://github.com/autonomouslogic/eve-ref/commit/775e3b8db7829fb8e903e014bdebe6888df413b2))
+
+## [2.69.4](https://github.com/autonomouslogic/eve-ref/compare/2.69.3...2.69.4) (2025-10-09)
+
+
+### Bug Fixes
+
+* **deps:** update flyway to v11.13.3 ([#967](https://github.com/autonomouslogic/eve-ref/issues/967)) ([e41e800](https://github.com/autonomouslogic/eve-ref/commit/e41e80082c53253bf93cf1430d673a88ef5bf464))
+
+## [2.69.3](https://github.com/autonomouslogic/eve-ref/compare/2.69.2...2.69.3) (2025-10-08)
+
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([#969](https://github.com/autonomouslogic/eve-ref/issues/969)) ([082039f](https://github.com/autonomouslogic/eve-ref/commit/082039fa3a78c310854bf47b0346fb2c1bbd1a6d))
+* **deps:** update font awesome ([#968](https://github.com/autonomouslogic/eve-ref/issues/968)) ([e9de9d0](https://github.com/autonomouslogic/eve-ref/commit/e9de9d03373296c89ad87d7f166ffe57728a2084))
+
+
+### Documentation
+
+* Update Reference Data docs to reflect new SDE ([#970](https://github.com/autonomouslogic/eve-ref/issues/970)) ([a60f1ac](https://github.com/autonomouslogic/eve-ref/commit/a60f1ac4605264d975c86e01ebd4752d5e5f0ffc))
+
+## [2.69.2](https://github.com/autonomouslogic/eve-ref/compare/2.69.1...2.69.2) (2025-10-07)
+
+
+### Bug Fixes
+
+* **deps:** update dependency org.flywaydb:flyway-core to v11.13.3 ([#966](https://github.com/autonomouslogic/eve-ref/issues/966)) ([0de60f1](https://github.com/autonomouslogic/eve-ref/commit/0de60f1f007a27137f7088689bad9c9cb4c431ec))
+* Only send a single Discord notification when new static data is available ([28d7d1f](https://github.com/autonomouslogic/eve-ref/commit/28d7d1f92f8ff51e2a813aa3e9b281fa20616657))
+
+## [2.69.1](https://github.com/autonomouslogic/eve-ref/compare/2.69.0...2.69.1) (2025-10-06)
+
+
+### Bug Fixes
+
+* Added Discord notifications to data update jobs ([#964](https://github.com/autonomouslogic/eve-ref/issues/964)) ([acf70be](https://github.com/autonomouslogic/eve-ref/commit/acf70be74c3ef94ae0fc0b9376d8832259054cbf))
+* Build reference data from the new SDE ([#962](https://github.com/autonomouslogic/eve-ref/issues/962)) ([9a54cfd](https://github.com/autonomouslogic/eve-ref/commit/9a54cfd0e4ad61f1ec68dfa028338dfe2856f4e1))
+* **deps:** update all non-major dependencies ([#965](https://github.com/autonomouslogic/eve-ref/issues/965)) ([0bfe60a](https://github.com/autonomouslogic/eve-ref/commit/0bfe60a21d303d6d4baa12837c1b68d65eba222b))
+* Forced naming on Color ([1b8cb2c](https://github.com/autonomouslogic/eve-ref/commit/1b8cb2ccd1810cfa0ad8d6d22cdccb6c2405ed99))
+
+## [2.69.0](https://github.com/autonomouslogic/eve-ref/compare/2.68.9...2.69.0) (2025-10-02)
+
+
+### Features
+
+* Sync new static data file to the data site ([#955](https://github.com/autonomouslogic/eve-ref/issues/955)) ([eacad51](https://github.com/autonomouslogic/eve-ref/commit/eacad51429924ca187d4c1cbaff8ce13331efa26))
+
+
+### Bug Fixes
+
+* **deps:** update junit-framework monorepo to v6 (major) ([#960](https://github.com/autonomouslogic/eve-ref/issues/960)) ([fe0ab82](https://github.com/autonomouslogic/eve-ref/commit/fe0ab82d9485f2e85662f853ea7753d495c39bdf))
+* **ui:** Updated for September giveaways ([ec5aad4](https://github.com/autonomouslogic/eve-ref/commit/ec5aad47e370c57d5fdef3e1b3ecb8e476b736b1))
+
+
+### Dependency Updates
+
+* **deps:** update actions/setup-node action to v5 ([#952](https://github.com/autonomouslogic/eve-ref/issues/952)) ([98db14e](https://github.com/autonomouslogic/eve-ref/commit/98db14e486036c6fe53ab46cd96e5251b50f5b39))
+* **deps:** update gradle to v9 ([#930](https://github.com/autonomouslogic/eve-ref/issues/930)) ([e63b3c3](https://github.com/autonomouslogic/eve-ref/commit/e63b3c3d6d7b55cc9e92d0bb95219ce632132333))
+* **deps:** update plugin com.diffplug.spotless to v8 ([#957](https://github.com/autonomouslogic/eve-ref/issues/957)) ([78dd49d](https://github.com/autonomouslogic/eve-ref/commit/78dd49dc880035cf7bf40d6cc2913f863c3bfefb))
+* **deps:** update plugin io.freefair.lombok to v9 ([#959](https://github.com/autonomouslogic/eve-ref/issues/959)) ([0071c94](https://github.com/autonomouslogic/eve-ref/commit/0071c943f9f85fc9719bdf1d0b84383ea716c701))
+
+
+### Tests
+
+* Added config for API test port ([#961](https://github.com/autonomouslogic/eve-ref/issues/961)) ([3d5e3af](https://github.com/autonomouslogic/eve-ref/commit/3d5e3af63933b9b8f851737677f50dee5a871f0c))
+
+## [2.68.9](https://github.com/autonomouslogic/eve-ref/compare/2.68.8...2.68.9) (2025-09-11)
+
+
+### Bug Fixes
+
+* **ui:** Adjustment for giveaways ([b52098b](https://github.com/autonomouslogic/eve-ref/commit/b52098b4a7f5a06a5d83a90b9b22fe3793d1de91))
+* Updated industry and test resources ([#953](https://github.com/autonomouslogic/eve-ref/issues/953)) ([03cf236](https://github.com/autonomouslogic/eve-ref/commit/03cf23614777f344396c2a4bb62eb2c7877ceda8))
+
+## [2.68.8](https://github.com/autonomouslogic/eve-ref/compare/2.68.7...2.68.8) (2025-09-02)
+
+
+### Bug Fixes
+
+* **deps:** update dependency org.flywaydb:flyway-core to v11.11.2 ([#949](https://github.com/autonomouslogic/eve-ref/issues/949)) ([882c1ae](https://github.com/autonomouslogic/eve-ref/commit/882c1ae4fa83fe603364ad285af7f8ddcbbd49fa))
+
+
+### Dependency Updates
+
+* **deps:** update plugin org.openapi.generator to v7.15.0 ([#951](https://github.com/autonomouslogic/eve-ref/issues/951)) ([ef21bfc](https://github.com/autonomouslogic/eve-ref/commit/ef21bfc2b72bcd3eeea3513347b30ee2e76bb11c))
+
+## [2.68.7](https://github.com/autonomouslogic/eve-ref/compare/2.68.6...2.68.7) (2025-09-01)
+
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([#948](https://github.com/autonomouslogic/eve-ref/issues/948)) ([24283f0](https://github.com/autonomouslogic/eve-ref/commit/24283f0bdd24397433c2fbb24bf05aae6efdfe17))
+* **deps:** update flyway to v11.11.2 ([#950](https://github.com/autonomouslogic/eve-ref/issues/950)) ([fa1657b](https://github.com/autonomouslogic/eve-ref/commit/fa1657beaff01061f4e2f60c61953c9da8bb46b2))
+
+## [2.68.6](https://github.com/autonomouslogic/eve-ref/compare/2.68.5...2.68.6) (2025-08-24)
+
+
+### Bug Fixes
+
+* **deps:** update font awesome to v7 (major) ([#929](https://github.com/autonomouslogic/eve-ref/issues/929)) ([511edce](https://github.com/autonomouslogic/eve-ref/commit/511edce84a44b9bbc0d051598e21c9dd4777d90c))
+* **deps:** update okhttp monorepo to v5 (major) ([#919](https://github.com/autonomouslogic/eve-ref/issues/919)) ([803cf57](https://github.com/autonomouslogic/eve-ref/commit/803cf57c21a09651c3611d4a5f8345e874c1a76c))
+* Fixed closed responses on market history scrape ([#943](https://github.com/autonomouslogic/eve-ref/issues/943)) ([d7487af](https://github.com/autonomouslogic/eve-ref/commit/d7487affd0c75747c1cfed6804f3373a94cfa494))
+* PLEX market region handling on market history scrape ([#945](https://github.com/autonomouslogic/eve-ref/issues/945)) ([9c0662b](https://github.com/autonomouslogic/eve-ref/commit/9c0662b5a5b02f8ac319f8115fead2b910fe4123))
+* Temporarily disabled parallel streams on market history and used concurrent flatMap instead ([#942](https://github.com/autonomouslogic/eve-ref/issues/942)) ([e994466](https://github.com/autonomouslogic/eve-ref/commit/e9944664ba8f0ff6ab2470cfb1d26fdff12cd793))
+* Various market history fixes ([#944](https://github.com/autonomouslogic/eve-ref/issues/944)) ([3a14344](https://github.com/autonomouslogic/eve-ref/commit/3a143449db4ff8ea073883b11fac4123ffb3b734))
+
+
+### Dependency Updates
+
+* **deps:** update actions/checkout action to v5 ([#937](https://github.com/autonomouslogic/eve-ref/issues/937)) ([27cd44d](https://github.com/autonomouslogic/eve-ref/commit/27cd44d408c25377b4c33db1ca6d979ad400b265))
+* **deps:** update actions/setup-java action to v5 ([#941](https://github.com/autonomouslogic/eve-ref/issues/941)) ([63fa5d9](https://github.com/autonomouslogic/eve-ref/commit/63fa5d9e22acea32d9b0a9ac9f84d9e55697f44a))
+* **deps:** update amannn/action-semantic-pull-request action to v6 ([#939](https://github.com/autonomouslogic/eve-ref/issues/939)) ([9b521e5](https://github.com/autonomouslogic/eve-ref/commit/9b521e541db6ba1171e6c4be785145b56e5a3b0e))
+* **deps:** update dependency node to v22 ([#936](https://github.com/autonomouslogic/eve-ref/issues/936)) ([0da84e0](https://github.com/autonomouslogic/eve-ref/commit/0da84e08d48911e011fc122e3c8f3d5fbfaf9e50))
+* **deps:** update dependency vue-tsc to v3 ([#918](https://github.com/autonomouslogic/eve-ref/issues/918)) ([611a972](https://github.com/autonomouslogic/eve-ref/commit/611a972112aa93ff9480b415bcef6fbacfc431ec))
+* **deps:** update plugin org.danilopianini.git-sensitive-semantic-versioning-gradle-plugin to v7 ([#940](https://github.com/autonomouslogic/eve-ref/issues/940)) ([67d0469](https://github.com/autonomouslogic/eve-ref/commit/67d0469db234856742be644a94fcb6612fb983e8))
+
 ## [2.68.5](https://github.com/autonomouslogic/eve-ref/compare/2.68.4...2.68.5) (2025-08-05)
 
 

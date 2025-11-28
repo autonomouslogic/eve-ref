@@ -1,0 +1,31 @@
+{
+  "base_price" : 95625000,
+  "description" : {
+    "de" : "Holzplanken, Schleifmaschinen, Nietgeräte, Haspeln und verschiedene andere Maschinenteile, die für den Betrieb einer Werkstattseinrichtung auf einem Außenposten erforderlich sind.",
+    "en" : "Lathes, grinders, riveting machines, uncoilers, and various other pieces of machinery required for the operation of an outpost repair facility.",
+    "es" : "Tornos, prensas, remachadoras, desenrolladoras y otras piezas de maquinaria necesarias para el funcionamiento de un puesto avanzado como centro de reparación.",
+    "fr" : "Tours, meuleuses, riveteuses, dérouleuses et diverses autres machines nécessaires au fonctionnement de la structure de réparation d'un avant-poste.",
+    "ja" : "旋盤、研磨機、リベッター、アンコイラーなど、アウトポストに設置する修理ターミナルに必要な様々な機械部品。",
+    "ko" : "제어선반, 그라인더, 리벳장치, 코일 장치 및 정비기지에 요구되는 장비들입니다.",
+    "ru" : "Токарные, шлифовальные, заклепочные станки, разматыватели, а также другие виды оборудования, необходимые для проведения ремонтных работ на станции.",
+    "zh" : "空间站修理设施的运作所需的车床、磨床、铆接机、开卷机和不同其他类型的机械。"
+  },
+  "group_id" : 536,
+  "icon_id" : 2880,
+  "market_group_id" : 1865,
+  "mass" : 10000,
+  "name" : {
+    "de" : "Structure Repair Facility",
+    "en" : "Structure Repair Facility",
+    "es" : "Centro de reparación de estructura",
+    "fr" : "Installation de réparation de la structure",
+    "ja" : "ストラクチャ リペア施設",
+    "ko" : "구조물 수리시설",
+    "ru" : "Structure Repair Facility",
+    "zh" : "建筑维修设施"
+  },
+  "portion_size" : 1,
+  "published" : true,
+  "volume" : 3000,
+  "type_id" : 21957
+}

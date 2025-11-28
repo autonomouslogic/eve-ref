@@ -86,12 +86,6 @@ public class InventoryType {
 	Double radius;
 
 	@JsonProperty
-	String sofFactionName;
-
-	@JsonProperty
-	Long sofMaterialSetId;
-
-	@JsonProperty
 	Long soundId;
 
 	@JsonProperty
@@ -166,6 +160,9 @@ public class InventoryType {
 
 	@JsonProperty
 	Map<Long, TypeMaterial> typeMaterials;
+
+	@JsonProperty
+	Map<Long, RandomizedTypeMaterial> randomizedTypeMaterials;
 
 	@JsonProperty
 	@Schema(description = "Types this can be fitted to. This is added by EVE Ref.")

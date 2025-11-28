@@ -22,5 +22,41 @@
       "materialTypeID" : 40,
       "quantity" : 1950
     } ]
+  },
+  "90041" : {
+    "materials" : [ ],
+    "randomizedMaterials" : [ {
+      "quantityMax" : 496800,
+      "materialTypeID" : 34,
+      "quantityMin" : 368000
+    }, {
+      "quantityMax" : 111830,
+      "materialTypeID" : 35,
+      "quantityMin" : 89464
+    }, {
+      "quantityMax" : 45540,
+      "materialTypeID" : 36,
+      "quantityMin" : 35420
+    }, {
+      "quantityMax" : 31280,
+      "materialTypeID" : 37,
+      "quantityMin" : 23920
+    }, {
+      "quantityMax" : 4025,
+      "materialTypeID" : 38,
+      "quantityMin" : 2875
+    }, {
+      "quantityMax" : 1528,
+      "materialTypeID" : 39,
+      "quantityMin" : 1299
+    }, {
+      "quantityMax" : 830,
+      "materialTypeID" : 40,
+      "quantityMin" : 634
+    }, {
+      "quantityMax" : 624,
+      "materialTypeID" : 11399,
+      "quantityMin" : 312
+    } ]
   }
 }

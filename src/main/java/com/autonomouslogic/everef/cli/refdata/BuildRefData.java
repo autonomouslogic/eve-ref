@@ -20,6 +20,7 @@ import com.autonomouslogic.everef.cli.refdata.post.SchematicDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.SkillDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.TypeUsedInBlueprintsDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.TypesDecorator;
+import com.autonomouslogic.everef.cli.refdata.post.UniverseIdDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.VariationsDecorator;
 import com.autonomouslogic.everef.cli.refdata.sde.SdeLoader;
 import com.autonomouslogic.everef.config.Configs;
@@ -35,6 +36,7 @@ import com.autonomouslogic.everef.url.UrlParser;
 import com.autonomouslogic.everef.util.CompressUtil;
 import com.autonomouslogic.everef.util.DataIndexHelper;
 import com.autonomouslogic.everef.util.DataUtil;
+import com.autonomouslogic.everef.util.DiscordNotifier;
 import com.autonomouslogic.everef.util.HashUtil;
 import com.autonomouslogic.everef.util.RefDataUtil;
 import com.autonomouslogic.everef.util.Rx;
@@ -121,6 +123,9 @@ public class BuildRefData implements Command {
 	protected SkillDecorator skillDecorator;
 
 	@Inject
+	protected DiscordNotifier discordNotifier;
+
+	@Inject
 	protected MutaplasmidDecorator mutaplasmidDecorator;
 
 	@Inject
@@ -161,6 +166,9 @@ public class BuildRefData implements Command {
 
 	@Inject
 	protected CategoryIdDecorator categoryIdDecorator;
+
+	@Inject
+	protected UniverseIdDecorator universeIdDecorator;
 
 	@Setter
 	@NonNull
@@ -215,7 +223,8 @@ public class BuildRefData implements Command {
 				canFitDecorator,
 				reprocessableTypesDecorator,
 				typeUsedInBlueprintsDecorator,
-				industryModifierSourcesDecorator);
+				industryModifierSourcesDecorator,
+				universeIdDecorator);
 	}
 
 	@Override
@@ -278,7 +287,7 @@ public class BuildRefData implements Command {
 						return Completable.complete();
 					}
 					return Completable.concatArray(
-							buildOutputFile().flatMapCompletable(this::uploadFiles), closeMvStore());
+							buildOutputFile().flatMapCompletable(this::uploadFiles), closeMvStore(), notifyDiscord());
 				}));
 	}
 
@@ -422,11 +431,12 @@ public class BuildRefData implements Command {
 	}
 
 	private Single<File> latestSde() {
-		return sdeFile != null
-				? Single.just(sdeFile)
-				: dataUtil.downloadLatestSde().doOnSuccess(file -> {
-					sdeFile = file;
-				});
+		return Single.fromCallable(() -> {
+			if (sdeFile == null) {
+				sdeFile = dataUtil.downloadLatestSde();
+			}
+			return sdeFile;
+		});
 	}
 
 	private Single<File> latestHoboleaks() {
@@ -452,5 +462,11 @@ public class BuildRefData implements Command {
 				.map(e -> objectMapper.readValue(e.getValue(), RefDataMeta.class))
 				.first(RefDataMeta.builder().build())
 				.doOnSuccess(meta -> latestRefDataMeta = meta));
+	}
+
+	private Completable notifyDiscord() {
+		return Completable.fromAction(() -> {
+			discordNotifier.notifyDiscord("New reference data uploaded");
+		});
 	}
 }

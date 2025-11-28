@@ -1,0 +1,31 @@
+{
+  "base_price" : 142500000,
+  "description" : {
+    "de" : "Elektronische Marktzugangsausrüstung und gesicherte Lagerraum-Einrichtungen von marktgängigen Waren für Außenposten im All.",
+    "en" : "Market access electronics and secure storage facilities of market goods for space outposts.",
+    "es" : "Electrónica de acceso al mercado e instalaciones de almacenamiento seguras de mercancías para los puestos avanzados espaciales.",
+    "fr" : "Systèmes électroniques permettant d'accéder aux marchés et sites de stockage sécurisés pour les marchandises sur les avant-postes spatiaux.",
+    "ja" : "アウトポストに設置する、マーケットアクセスターミナルと商品保管用のセキュリティ付き倉庫。",
+    "ko" : "우주 전초기지용 시장 접속 권한 기기와 안전하게 관리된 물품 저장시설입니다.",
+    "ru" : "Компоненты электронной системы управления рынком, а также сооружения для хранения товаров на космических станциях.",
+    "zh" : "空间站市场货物的市场访问电子部件和安全储藏设施。"
+  },
+  "group_id" : 536,
+  "icon_id" : 2883,
+  "market_group_id" : 1865,
+  "mass" : 10000,
+  "name" : {
+    "de" : "Structure Market Network",
+    "en" : "Structure Market Network",
+    "es" : "Red de mercado de estructuras",
+    "fr" : "Réseau des marchés de structure",
+    "ja" : "ストラクチャ マーケットネットワーク",
+    "ko" : "구조물 거래소 네트워크 시설",
+    "ru" : "Structure Market Network",
+    "zh" : "建筑市场网络"
+  },
+  "portion_size" : 1,
+  "published" : true,
+  "volume" : 3000,
+  "type_id" : 21963
+}

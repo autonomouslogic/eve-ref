@@ -45,11 +45,5 @@ public class Region {
 	Map<String, String> description;
 
 	@JsonProperty
-	Coordinate center;
-
-	@JsonProperty
-	Coordinate max;
-
-	@JsonProperty
-	Coordinate min;
+	Coordinate position;
 }

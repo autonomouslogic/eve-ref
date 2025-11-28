@@ -57,7 +57,6 @@ import javax.inject.Singleton;
 			TestOkHttpModule.class,
 			MockDataIndexModule.class,
 			MockLocationPopulatorModule.class,
-			MockDataCrawlerModule.class,
 			RefDataApiModule.class,
 			GenericMockModule.class,
 			MockEsiAuthHelperModule.class,

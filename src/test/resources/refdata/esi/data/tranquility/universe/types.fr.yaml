@@ -101,6 +101,8 @@
     value: 117
   - attribute_id: 55
     value: 1100000
+  - attribute_id: 2112
+    value: 1
   - attribute_id: 2113
     value: 1
   - attribute_id: 11
@@ -1044,6 +1046,8 @@
     value: 600
   - attribute_id: 561
     value: 10
+  - attribute_id: 2627
+    value: 1
   - attribute_id: 564
     value: 185
   - attribute_id: 55
@@ -1052,6 +1056,8 @@
     value: 1000
   - attribute_id: 3133
     value: 30
+  - attribute_id: 2112
+    value: 1
   - attribute_id: 2113
     value: 1
   - attribute_id: 66
@@ -1259,11 +1265,13 @@
     is_default: false
   - effect_id: 8151
     is_default: false
-  - effect_id: 8153
-    is_default: false
   - effect_id: 8154
     is_default: false
   - effect_id: 8377
+    is_default: false
+  - effect_id: 12568
+    is_default: false
+  - effect_id: 12569
     is_default: false
   graphic_id: 3350
   group_id: 898
@@ -1329,11 +1337,10 @@
   volume: 0.01
 "1230":
   capacity: 0
-  description: "Le veldspar est l'un des minerais les plus courants dans les régions\
-    \ centrales de l'univers connu. La demande en veldspar ne faiblit jamais car il\
-    \ contient du <a href=showinfo:34>tritanium</a>, l'un des minéraux les plus exploité\
-    s de l'amas. Ce minerai est essentiellement disponible dans les systèmes stellaires\
-    \ de haute sécurité."
+  description: "Veldspar is the most common ore type in the central regions of known\
+    \ universe. It is still in constant demand as it holds a large portion of the\
+    \ much-used <a href=showinfo:34>Tritanium</a> mineral.\r\n\r\nAvailable primarily\
+    \ in high security status star systems."
   dogma_attributes:
   - attribute_id: 161
     value: 0.1
@@ -1370,13 +1377,12 @@
   volume: 0.1
 "17470":
   capacity: 0
-  description: "Il est possible de trouver des blocs de veldspar concentré dont le\
-    \ rendement est supérieur de 5\_% à celui du veldspar standard dans les zones\
-    \ où celui-ci est très abondant. Le veldspar est l'un des minerais les plus courants\
-    \ dans les régions centrales de l'univers connu. La demande en veldspar ne faiblit\
-    \ jamais car il contient du <a href=showinfo:34>tritanium</a>, l'un des minéraux\
-    \ les plus exploités de l'amas. Ce minerai est essentiellement disponible dans\
-    \ les systèmes stellaires de haute sécurité."
+  description: "Clusters of veldspar with 5% higher yield, called II-Grade or concentrated\
+    \ veldspar, are sometimes found in areas where normal veldspar is already in abundance.\r\
+    \n\r\nVeldspar is the most common ore type in the central regions of known universe.\
+    \ It is still in constant demand as it holds a large portion of the much-used\
+    \ <a href=showinfo:34>Tritanium</a> mineral.\r\n\r\nAvailable primarily in high\
+    \ security status star systems."
   dogma_attributes:
   - attribute_id: 161
     value: 0.1
@@ -1404,7 +1410,7 @@
   icon_id: 232
   market_group_id: 518
   mass: 4000
-  name: "Veldspar concentré"
+  name: "Veldspar II-Grade"
   packaged_volume: 0.1
   portion_size: 100
   published: true
@@ -1413,13 +1419,12 @@
   volume: 0.1
 "17471":
   capacity: 0
-  description: "Sur les astéroïdes de grande taille, la pression intense peut transformer\
-    \ le veldspar classique en veldspar dense, dont le rendement est supérieur de\
-    \ 10\_%. Le veldspar est l'un des minerais les plus courants dans les régions\
-    \ centrales de l'univers connu. La demande en veldspar ne faiblit jamais car il\
-    \ contient du <a href=showinfo:34>tritanium</a>, l'un des minéraux les plus exploité\
-    s de l'amas. Ce minerai est essentiellement disponible dans les systèmes stellaires\
-    \ de haute sécurité."
+  description: "In asteroids above average size, the intense pressure can weld normal\
+    \ veldspar into what is known as III-Grade or dense veldspar, increasing the yield\
+    \ by 10%. \r\n\r\nVeldspar is the most common ore type in the central regions\
+    \ of known universe. It is still in constant demand as it holds a large portion\
+    \ of the much-used <a href=showinfo:34>Tritanium</a> mineral.\r\n\r\nAvailable\
+    \ primarily in high security status star systems."
   dogma_attributes:
   - attribute_id: 161
     value: 0.1
@@ -1447,7 +1452,7 @@
   icon_id: 232
   market_group_id: 518
   mass: 4000
-  name: "Veldspar dense"
+  name: "Veldspar III-Grade"
   packaged_volume: 0.1
   portion_size: 100
   published: true
@@ -2244,10 +2249,8 @@
     \ href=showinfo:1232>ochre foncé</a> et <a href=showinfo:1225>crokite</a>. Il\
     \ est aussi présent en quantités significatives dans des minerais rares tels que\
     \ le <a href=showinfo:19>spodumain</a> et la <a href=showinfo:52306>talassonite</a>.\
-    \ Le nocxium peut également être trouvé dans les systèmes stellaires de sécurité\
-    \ nulle dans les minerais <a href=showinfo:81900>kylixium</a>, <a href=showinfo:82016>nocxite</a>,\
-    \ <a href=showinfo:82205>ueganite</a>, <a href=showinfo:82163>hezorime</a> et\
-    \ <a href=showinfo:81975>griemeer</a>."
+    \ Le nocxium peut également être trouvé dans les systèmes stellaires à statut\
+    \ de sécurité nulle contenant du <a href=showinfo:82016>nocxite</a>."
   group_id: 18
   icon_id: 1201
   market_group_id: 1857
@@ -4013,6 +4016,8 @@
     value: 266250
   - attribute_id: 568
     value: -15
+  - attribute_id: 2112
+    value: 1
   - attribute_id: 2113
     value: 1
   - attribute_id: 1547
@@ -4321,6 +4326,8 @@
     value: 117
   - attribute_id: 55
     value: 1100000
+  - attribute_id: 2112
+    value: 1
   - attribute_id: 2113
     value: 1
   - attribute_id: 11
@@ -4625,3 +4632,468 @@
   radius: 1
   type_id: 57453
   volume: 0.2
+"35832":
+  capacity: 0
+  description: "La citadelle Astrahus est la station spatiale d'entrée de gamme proposé\
+    e aux capsuliers par le consortium Upwell. Cette modeste base d'opérations, essentiellement\
+    \ destinée aux petites et moyennes corporations, peut également faire office d'avant-poste\
+    \ pour les expéditions reculées des grandes corporations, ou même des alliances.\
+    \ L'Astrahus accueille tous les vaisseaux sous-capitaux dans ses baies d'amarrage\
+    \ traditionnelles, et jusqu'aux vaisseaux de classe cargo grâce à ses technologies\
+    \ d'arrimage innovantes. La citadelle Astrahus peut être configurée avec la gamme\
+    \ de modules dédiée 'Standup' intégrant la technologie Upwell, au profit de la\
+    \ synchronisation parfaite des manœuvres des opérateurs de structure. Les sets\
+    \ d'optimisation 'Standup'\_M permettent également de parachever la spécialisation\
+    \ de l'Astrahus grâce à leurs paramétrages sophistiqués."
+  dogma_attributes:
+  - attribute_id: 1547
+    value: 2
+  - attribute_id: 2112
+    value: 0.00001
+  - attribute_id: 1154
+    value: 3
+  - attribute_id: 4
+    value: 3000000000
+  - attribute_id: 2737
+    value: 3
+  - attribute_id: 263
+    value: 3600000
+  - attribute_id: 136
+    value: 1
+  - attribute_id: 9
+    value: 1800000
+  - attribute_id: 11
+    value: 1500000
+  - attribute_id: 12
+    value: 3
+  - attribute_id: 13
+    value: 4
+  - attribute_id: 14
+    value: 4
+  - attribute_id: 271
+    value: 0.8
+  - attribute_id: 272
+    value: 0.8
+  - attribute_id: 273
+    value: 0.8
+  - attribute_id: 274
+    value: 0.8
+  - attribute_id: 2115
+    value: 0.00001
+  - attribute_id: 269
+    value: 0.8
+  - attribute_id: 2055
+    value: 200000
+  - attribute_id: 2244
+    value: 1
+  - attribute_id: 3354
+    value: 500
+  - attribute_id: 3355
+    value: 500
+  - attribute_id: 265
+    value: 1800000
+  - attribute_id: 797
+    value: 490000
+  - attribute_id: 3101
+    value: 56201
+  - attribute_id: 161
+    value: 8000
+  - attribute_id: 162
+    value: 45000
+  - attribute_id: 2339
+    value: -25
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 1137
+    value: 3
+  - attribute_id: 552
+    value: 50000
+  - attribute_id: 3356
+    value: 500
+  - attribute_id: 1927
+    value: 1
+  - attribute_id: 2333
+    value: 25
+  - attribute_id: 48
+    value: 24000
+  - attribute_id: 2056
+    value: 3
+  - attribute_id: 2738
+    value: 1
+  - attribute_id: 2739
+    value: 0
+  - attribute_id: 564
+    value: 40
+  - attribute_id: 55
+    value: 3600000
+  - attribute_id: 2750
+    value: 1
+  - attribute_id: 2751
+    value: 1
+  - attribute_id: 192
+    value: 7
+  - attribute_id: 2113
+    value: 0.00001
+  - attribute_id: 525
+    value: 1
+  - attribute_id: 267
+    value: 0.8
+  - attribute_id: 2116
+    value: 0.00001
+  - attribute_id: 268
+    value: 0.8
+  - attribute_id: 2743
+    value: 1
+  - attribute_id: 76
+    value: 350000
+  - attribute_id: 2253
+    value: 0.00001
+  - attribute_id: 79
+    value: 2500
+  - attribute_id: 208
+    value: 500
+  - attribute_id: 209
+    value: 500
+  - attribute_id: 210
+    value: 500
+  - attribute_id: 211
+    value: 500
+  - attribute_id: 270
+    value: 0.8
+  - attribute_id: 2135
+    value: 0.00001
+  - attribute_id: 18
+    value: 0
+  - attribute_id: 2268
+    value: 10000
+  - attribute_id: 479
+    value: 999999999999
+  - attribute_id: 482
+    value: 200000
+  - attribute_id: 484
+    value: 1
+  - attribute_id: 101
+    value: 2
+  - attribute_id: 2790
+    value: 10000
+  - attribute_id: 1132
+    value: 400
+  - attribute_id: 109
+    value: 0.8
+  - attribute_id: 110
+    value: 0.8
+  - attribute_id: 111
+    value: 0.8
+  - attribute_id: 2433
+    value: 1
+  - attribute_id: 113
+    value: 0.8
+  - attribute_id: 2034
+    value: 14400000
+  - attribute_id: 2035
+    value: 5000
+  - attribute_id: 2036
+    value: 5000
+  - attribute_id: 2805
+    value: 0
+  - attribute_id: 264
+    value: 0
+  - attribute_id: 2216
+    value: 3
+  - attribute_id: 2045
+    value: 0.00001
+  - attribute_id: 524
+    value: 1
+  - attribute_id: 1919
+    value: 3
+  dogma_effects:
+  - effect_id: 6565
+    is_default: false
+  - effect_id: 6568
+    is_default: false
+  - effect_id: 7008
+    is_default: false
+  - effect_id: 7039
+    is_default: false
+  - effect_id: 7040
+    is_default: false
+  graphic_id: 21137
+  group_id: 1657
+  market_group_id: 2201
+  mass: 3000000000
+  name: "Astrahus"
+  packaged_volume: 8000
+  portion_size: 1
+  published: true
+  radius: 45000
+  type_id: 35832
+  volume: 8000
+"36966":
+  capacity: 0
+  description: ""
+  graphic_id: 21137
+  group_id: 1462
+  market_group_id: 2156
+  mass: 0
+  name: "Plan de construction Astrahus"
+  packaged_volume: 0.01
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 36966
+  volume: 0.01
+"21947":
+  capacity: 0
+  description: "Assortiment de pièces métalliques, de textiles, de tissus composites\
+    \ et d'équipements divers servant de blocs de construction de base pour le montage\
+    \ et le fonctionnement d'un avant-poste spatial."
+  dogma_attributes:
+  - attribute_id: 161
+    value: 3000
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 4
+    value: 10000
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 726
+    value: 100
+  group_id: 536
+  icon_id: 2875
+  market_group_id: 1865
+  mass: 10000
+  name: "Pièces de construction de structure"
+  packaged_volume: 3000
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 21947
+  volume: 3000
+"21949":
+  capacity: 0
+  description: "Composants destinés à la construction de vaisseaux individualisés\
+    \ et de modules de hangars sur les avant-postes spatiaux."
+  dogma_attributes:
+  - attribute_id: 161
+    value: 3000
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 4
+    value: 10000
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 726
+    value: 100
+  group_id: 536
+  icon_id: 2876
+  market_group_id: 1865
+  mass: 10000
+  name: "Module de hangar de la structure"
+  packaged_volume: 3000
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 21949
+  volume: 3000
+"21951":
+  capacity: 0
+  description: "Un des nombreux composants nécessaires à la construction des avant-postes\
+    \ spatiaux."
+  dogma_attributes:
+  - attribute_id: 161
+    value: 3000
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 4
+    value: 10000
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 726
+    value: 100
+  group_id: 536
+  icon_id: 2877
+  market_group_id: 1865
+  mass: 10000
+  name: "Baie de stockage de la structure"
+  packaged_volume: 3000
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 21951
+  volume: 3000
+"21957":
+  capacity: 0
+  description: "Tours, meuleuses, riveteuses, dérouleuses et diverses autres machines\
+    \ nécessaires au fonctionnement de la structure de réparation d'un avant-poste."
+  dogma_attributes:
+  - attribute_id: 161
+    value: 3000
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 4
+    value: 10000
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 726
+    value: 100
+  group_id: 536
+  icon_id: 2880
+  market_group_id: 1865
+  mass: 10000
+  name: "Installation de réparation de la structure"
+  packaged_volume: 3000
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 21957
+  volume: 3000
+"21961":
+  capacity: 0
+  description: "Composants mécaniques nécessaires à la construction d'une baie d'amarrage\
+    \ sur un avant-poste spatial."
+  dogma_attributes:
+  - attribute_id: 161
+    value: 3000
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 4
+    value: 10000
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 726
+    value: 100
+  group_id: 536
+  icon_id: 2882
+  market_group_id: 1865
+  mass: 10000
+  name: "Baie d'amarrage de la structure"
+  packaged_volume: 3000
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 21961
+  volume: 3000
+"21965":
+  capacity: 0
+  description: "Médicaments, anesthésiants, matériel chirurgical et complexes de clonage\
+    \ pour les avant-postes spatiaux."
+  dogma_attributes:
+  - attribute_id: 161
+    value: 3000
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 4
+    value: 10000
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 726
+    value: 100
+  group_id: 536
+  icon_id: 2884
+  market_group_id: 1865
+  mass: 10000
+  name: "Centre médical de la structure"
+  packaged_volume: 3000
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 21965
+  volume: 3000
+"21967":
+  capacity: 0
+  description: "Matériel permettant la construction de douzaines de bureaux, systè\
+    mes informatiques et fournitures nécessaires à leur fonctionnement quotidien."
+  dogma_attributes:
+  - attribute_id: 161
+    value: 3000
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 4
+    value: 10000
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 726
+    value: 100
+  group_id: 536
+  icon_id: 2874
+  market_group_id: 1865
+  mass: 10000
+  name: "Site des bureaux de la structure"
+  packaged_volume: 3000
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 21967
+  volume: 3000
+"21963":
+  capacity: 0
+  description: "Systèmes électroniques permettant d'accéder aux marchés et sites de\
+    \ stockage sécurisés pour les marchandises sur les avant-postes spatiaux."
+  dogma_attributes:
+  - attribute_id: 161
+    value: 3000
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 4
+    value: 10000
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 726
+    value: 100
+  group_id: 536
+  icon_id: 2883
+  market_group_id: 1865
+  mass: 10000
+  name: "Réseau des marchés de structure"
+  packaged_volume: 3000
+  portion_size: 1
+  published: true
+  radius: 1
+  type_id: 21963
+  volume: 3000
+"90041":
+  capacity: 0
+  description: "La prismaticite est un minerai erratique. Une fois retraité, il s'effondrera\
+    \ pour former <b>un de différents minéraux</b>. La prismaticite doit être comprimé\
+    e sous la forme de <a href=showinfo:90307>prismaticite compressée</a> pour être\
+    \ utilisée dans les réactions. Les propriétés uniques de ce minerai résultent\
+    \ de son instabilité dimensionnelle fondamentale. Elle a été façonnée dans un\
+    \ environnement supradimensionnel inconcevable."
+  dogma_attributes:
+  - attribute_id: 161
+    value: 40
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 2115
+    value: 0
+  - attribute_id: 3236
+    value: 0
+  - attribute_id: 182
+    value: 3386
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 2699
+    value: 1
+  - attribute_id: 277
+    value: 1
+  - attribute_id: 790
+    value: 90040
+  - attribute_id: 2711
+    value: 90041
+  - attribute_id: 4
+    value: 0
+  - attribute_id: 1980
+    value: 0.425
+  - attribute_id: 1981
+    value: 600
+  group_id: 4915
+  icon_id: 27139
+  market_group_id: 3776
+  mass: 0
+  name: "Prismaticite"
+  packaged_volume: 40
+  portion_size: 100
+  published: true
+  radius: 1
+  type_id: 90041
+  volume: 40

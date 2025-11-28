@@ -34,19 +34,19 @@ public class SdeLoader {
 	protected Provider<SimpleStoreLoader> simpleLoaderProvider;
 
 	@Inject
-	protected Provider<SdeTypeTransformer> sdeTypeTransformerProvider;
-
-	@Inject
 	protected Provider<BlueprintTransformer> blueprintTransformerProvider;
 
 	@Inject
 	protected Provider<SdeDogmaEffectTransformer> sdeDogmaEffectTransformerProvider;
 
 	@Inject
-	protected Provider<SdeRegionTransformer> sdeRegionTransformerProvider;
+	protected Provider<SchematicTransformer> schematicTransformerProvider;
 
 	@Inject
-	protected Provider<SchematicTransformer> schematicTransformerProvider;
+	protected Provider<TypeBonusSdeTransformer> typeBonusSdeTransformerProvider;
+
+	@Inject
+	protected Provider<MasteriesSdeTransformer> masteriesSdeTransformerProvider;
 
 	@Setter
 	@NonNull
@@ -70,9 +70,6 @@ public class SdeLoader {
 									.setIdFieldName(config.getIdField())
 									.setOutput(storeHandler.getSdeStore(config.getId()));
 							switch (config.getId()) {
-								case "types":
-									transformer = TransformUtil.concat(transformer, sdeTypeTransformerProvider.get());
-									break;
 								case "blueprints":
 									transformer = TransformUtil.concat(transformer, blueprintTransformerProvider.get());
 									break;
@@ -83,13 +80,13 @@ public class SdeLoader {
 								case "schematics":
 									transformer = TransformUtil.concat(transformer, schematicTransformerProvider.get());
 									break;
-								case "regions":
-									transformer = TransformUtil.concat(
-											transformer,
-											sdeRegionTransformerProvider
-													.get()
-													.setTypeConfig(config.getSde())
-													.setFilename(pair.getLeft().getName()));
+								case "typeBonus":
+									transformer =
+											TransformUtil.concat(transformer, typeBonusSdeTransformerProvider.get());
+									break;
+								case "masteries":
+									transformer =
+											TransformUtil.concat(transformer, masteriesSdeTransformerProvider.get());
 									break;
 							}
 							storeLoader.setTransformer(TransformUtil.concat(fieldRenamer, transformer));

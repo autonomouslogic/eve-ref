@@ -2,9 +2,6 @@
   "disallow_auto_repeat" : false,
   "distribution" : 1,
   "duration_attribute_id" : 943,
-  "effect_category" : 2,
-  "effect_id" : 1878,
-  "effect_name" : "entitySensorDampen",
   "electronic_chance" : false,
   "falloff_attribute_id" : 950,
   "guid" : "effects.ElectronicAttributeModifyTarget",
@@ -16,6 +13,7 @@
   "published" : false,
   "range_attribute_id" : 938,
   "range_chance" : true,
+  "effect_category" : 2,
   "modifiers" : [ {
     "domain" : "targetID",
     "func" : "ItemModifier",
@@ -41,6 +39,8 @@
     "modifying_attribute_id" : 565,
     "operator" : 0
   } ],
+  "effect_name" : "entitySensorDampen",
+  "effect_id" : 1878,
   "description" : {
     "en" : ""
   },

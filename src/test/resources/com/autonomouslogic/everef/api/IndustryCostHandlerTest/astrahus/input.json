@@ -1,0 +1,17 @@
+{
+  "product_id": 35832,
+  "runs": 1,
+  "me": 10,
+  "te": 10,
+  "industry": 5,
+  "outpost_construction": 4,
+  "security": "NULL_SEC",
+  "manufacturing_cost":  0.08087755233608670626,
+  "researching_te_cost" : 0,
+  "researching_me_cost" : 0,
+  "copying_cost" : 0,
+  "invention_cost" : 0,
+  "reaction_cost" : 0,
+  "structure_type_id": 35825,
+  "facility_tax": 0.0025
+}

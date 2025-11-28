@@ -43,9 +43,7 @@ import software.amazon.awssdk.services.s3.S3AsyncClient;
 @ExtendWith(MockitoExtension.class)
 @Log4j2
 @SetEnvironmentVariable(key = "ESI_BASE_URL", value = "http://localhost:" + TestDataUtil.TEST_PORT)
-@SetEnvironmentVariable(
-		key = "DONATIONS_DISCORD_WEBHOOK_URL",
-		value = "http://localhost:" + TestDataUtil.TEST_PORT + "/discord")
+@SetEnvironmentVariable(key = "DISCORD_WEBHOOK_URL", value = "http://localhost:" + TestDataUtil.TEST_PORT + "/discord")
 @SetEnvironmentVariable(key = "ESI_USER_AGENT", value = "test@example.com")
 @SetEnvironmentVariable(key = "EVE_REF_CHARACTER_OWNER_HASH", value = "ownerhash")
 @SetEnvironmentVariable(key = "STATIC_PATH", value = "s3://static/")

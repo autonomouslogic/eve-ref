@@ -1,5 +1,6 @@
 package com.autonomouslogic.everef.api;
 
+import static com.autonomouslogic.everef.api.IndustryCostHandlerTest.API_TEST_PORT;
 import static com.autonomouslogic.everef.model.api.SystemSecurity.NULL_SEC;
 import static com.autonomouslogic.everef.test.TestDataUtil.TEST_PORT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -85,9 +86,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @SetEnvironmentVariable(key = "ESI_USER_AGENT", value = "user-agent")
 @SetEnvironmentVariable(key = "ESI_BASE_URL", value = "http://localhost:" + TestDataUtil.TEST_PORT)
 @SetEnvironmentVariable(key = "FUZZWORK_MARKET_BASE_PATH", value = "http://localhost:" + TEST_PORT + "/fuzzwork/")
+@SetEnvironmentVariable(key = "HTTP_PORT", value = "" + API_TEST_PORT)
 @Log4j2
 @Timeout(60)
 public class IndustryCostHandlerTest {
+	public static final int API_TEST_PORT = 29216;
+
 	static final List<String> TEST_NAMES = List.of(
 			"dominix",
 			"sin",
@@ -98,7 +102,8 @@ public class IndustryCostHandlerTest {
 			"mjolnir-fury-cruise-missile-blueprint-optimized-attainment-decryptor",
 			"dominix-lowsec-sotiyo-rigs",
 			"sin-blueprint-lowsec-sotiyo-rigs",
-			"carbon-fiber-reaction-formula-athanor-rigs");
+			"carbon-fiber-reaction-formula-athanor-rigs",
+			"astrahus");
 
 	@Inject
 	ApiRunner apiRunner;
@@ -138,7 +143,7 @@ public class IndustryCostHandlerTest {
 
 		apiRunner.startServer();
 		industryApi = new IndustryApi(
-				new ApiClient().setScheme("http").setHost("localhost").setPort(8080));
+				new ApiClient().setScheme("http").setHost("localhost").setPort(API_TEST_PORT));
 
 		refDataService.init();
 		systemCostIndexService.init();
@@ -222,7 +227,8 @@ public class IndustryCostHandlerTest {
 			}
 		}
 
-		var uri = URI.create("http://localhost:8080/v1/industry/cost?product_id=645&" + String.join("&", query));
+		var uri = URI.create(
+				"http://localhost:" + API_TEST_PORT + "/v1/industry/cost?product_id=645&" + String.join("&", query));
 		log.info("URI: {}", uri);
 		var req = HttpRequest.newBuilder().GET().uri(uri).build();
 		var res = httpClient.send(req, HttpResponse.BodyHandlers.ofString());

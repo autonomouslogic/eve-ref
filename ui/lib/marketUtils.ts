@@ -73,7 +73,7 @@ export async function getOrders(orderType: GetMarketsRegionIdOrdersOrderTypeEnum
 export async function getJitaSellPrice(typeId: number) {
     var regionId: number | undefined = undefined;
     var hub: HubStation | undefined = undefined;
-    if (typeId = PLEX_TYPE_ID) {
+    if (typeId == PLEX_TYPE_ID) {
         regionId = GPMR_01;
     }
     else {

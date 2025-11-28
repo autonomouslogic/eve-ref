@@ -5,7 +5,7 @@ import InternalLink from "~/components/helpers/InternalLink.vue";
 import {useLazyFetch} from "nuxt/app";
 import type {DonationsFile} from "~/lib/donations";
 import {formatMoney} from "~/lib/money";
-import {DAY, HOUR} from "~/lib/timeUtils";
+import {DAY, HOUR, MINUTE} from "~/lib/timeUtils";
 
 const route = useRoute();
 
@@ -58,14 +58,6 @@ const motd = computed(() => {
 	const day = Math.floor(time / DAY);
 	const hour = Math.floor(time / HOUR);
 
-	if (new Date().getTime() < new Date("2025-06-18T23:59:00Z").getTime()) {
-		return {
-			text: "Get a chance to win 2,500 PLEX",
-			url: "https://eu.surveymonkey.com/r/NSRPC7Y?it=MTEzMDM4NzQ%3D&lang=EN",
-			urlText: "Complete Survey"
-		} as Motd;
-	}
-
 	// Recent donors.
 	if (donorsStatus.value == "success" && donors?.value?.recent?.length && donors.value.recent.length > 0) {
 		const donorsText = donors.value.recent.map(donor => {
@@ -78,18 +70,48 @@ const motd = computed(() => {
 		} as Motd;
 	}
 
+	// Priority.
+	const csmEnds = new Date("2025-11-10T11:00:00Z");
+	const timeLeft = csmEnds.getTime() - new Date().getTime();
+	if (timeLeft > 0) {
+		const daysLeft = Math.floor(timeLeft / DAY);
+		const hoursLeft = Math.floor(timeLeft / HOUR);
+		const minutesLeft = Math.floor(timeLeft / MINUTE);
+		var msg = "Ariel Rin for CSM";
+		if (hoursLeft < 8) {
+			if (minutesLeft < 60) {
+				msg = `CSM VOTING CLOSES IN ${minutesLeft} MINUTE${minutesLeft == 1 ? "" : "S"}`;
+			}
+			else {
+				msg = `CSM VOTING CLOSES IN ${hoursLeft} HOUR${hoursLeft == 1 ? "" : "S"}`;
+			}
+		}
+		else if (hoursLeft < 24) {
+			msg += ` - only ${hoursLeft} hour${hoursLeft == 1 ? "" : "s"} left`;
+		} else if (daysLeft < 4) {
+			msg += ` - only ${daysLeft} day${daysLeft == 1 ? "" : "s"} left`;
+		}
+		return {
+			text: msg,
+			url: "https://www.eveonline.com/news/view/csm-20-cast-your-vote-now",
+			urlText: "Vote now"
+		} as Motd;
+	}
+
 	if (dayOfWeek == 4) {
 		return {
-			text: "Win 50x PLEX and 3 Day Omega every Friday",
+			text: "Win 3 Days of Omega and 50 PLEX every Friday",
 			url: "/giveaways",
 			urlText: "Giveaways"
 		} as Motd;
 	}
 
-	if (day % 3 == 0) {
-		return null;
-	}
-	return motdFallbacks[hour % motdFallbacks.length];
+	return null;
+
+	// if (day % 3 == 0) {
+	// 	return null;
+	// }
+	// return motdFallbacks[hour % motdFallbacks.length];
 });
 
 </script>
@@ -101,7 +123,7 @@ const motd = computed(() => {
 				<p class="font-extrabold mx-3 tracking-tight">
 					<span v-html="motd.text"></span>
 				</p>
-				<ExternalLink :url="motd.url" class="mx-3 font-normal">{{motd.urlText}} &raquo;</ExternalLink>
+				<ExternalLink v-if="motd.url" :url="motd.url" class="mx-3 font-normal">{{motd.urlText}} &raquo;</ExternalLink>
 			</div>
 		</section>
 	</div>
