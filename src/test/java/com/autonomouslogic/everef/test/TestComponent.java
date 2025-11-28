@@ -34,7 +34,6 @@ import com.autonomouslogic.everef.esi.MockEsiAuthHelperModule;
 import com.autonomouslogic.everef.esi.MockLocationPopulatorModule;
 import com.autonomouslogic.everef.http.DataCrawlerTest;
 import com.autonomouslogic.everef.http.EsiHttpWrapperTest;
-import com.autonomouslogic.everef.http.MockDataCrawlerModule;
 import com.autonomouslogic.everef.inject.AwsModule;
 import com.autonomouslogic.everef.inject.EsiModule;
 import com.autonomouslogic.everef.inject.ExecutorServiceModule;
