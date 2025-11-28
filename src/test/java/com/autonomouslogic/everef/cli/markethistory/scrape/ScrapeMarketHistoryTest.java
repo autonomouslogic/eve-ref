@@ -60,12 +60,15 @@ import software.amazon.awssdk.services.s3.S3AsyncClient;
 @ExtendWith(MockitoExtension.class)
 @Log4j2
 @SetEnvironmentVariable(key = "DATA_PATH", value = "s3://" + ScrapeMarketHistoryTest.BUCKET_NAME + "/data/")
-@SetEnvironmentVariable(key = "DATA_BASE_URL", value = "http://localhost:" + TestDataUtil.TEST_PORT + "/data/")
+@SetEnvironmentVariable(
+		key = "DATA_BASE_URL",
+		value = "http://localhost:" + ScrapeMarketHistoryTest.TEST_PORT + "/data/")
 @SetEnvironmentVariable(key = "ESI_USER_AGENT", value = "user-agent")
-@SetEnvironmentVariable(key = "ESI_BASE_URL", value = "http://localhost:" + TestDataUtil.TEST_PORT + "/esi")
+@SetEnvironmentVariable(key = "ESI_BASE_URL", value = "http://localhost:" + ScrapeMarketHistoryTest.TEST_PORT + "/esi")
 @SetEnvironmentVariable(key = "ESI_MARKET_HISTORY_EXPLORATION_GROUPS", value = "1")
 public class ScrapeMarketHistoryTest {
 	static final String BUCKET_NAME = "data-bucket";
+	static final int TEST_PORT = 30151; // Different port from TestDataUtil.TEST_PORT to avoid conflicts
 
 	@Inject
 	ScrapeMarketHistory scrapeMarketHistory;
@@ -97,7 +100,7 @@ public class ScrapeMarketHistoryTest {
 
 		server = new MockWebServer();
 		server.setDispatcher(new TestDispatcher());
-		server.start(TestDataUtil.TEST_PORT);
+		server.start(TEST_PORT);
 	}
 
 	@AfterEach
