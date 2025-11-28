@@ -413,7 +413,7 @@ public class Configs {
 			.name("HTTP_USER_AGENT")
 			.type(String.class)
 			.defaultMethod(() -> {
-				var userAgent = "everef.net";
+				var userAgent = "EveRef";
 				var version = Configs.EVE_REF_VERSION.get();
 				if (version.isPresent()) {
 					userAgent += "/" + version.get();

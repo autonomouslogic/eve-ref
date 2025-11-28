@@ -41,6 +41,6 @@ public class EsiHttpWrapperTest {
 		server.enqueue(new MockResponse().setResponseCode(204));
 		wrapper.get(String.format("http://localhost:%s/test", server.getPort()));
 		var request = server.takeRequest(0, TimeUnit.SECONDS);
-		assertEquals("everef.net/dev (+https://github.com/autonomouslogic/eve-ref/)", request.getHeader("User-Agent"));
+		assertEquals("EveRef/dev (+https://github.com/autonomouslogic/eve-ref/)", request.getHeader("User-Agent"));
 	}
 }
