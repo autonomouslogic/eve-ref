@@ -34,7 +34,7 @@ public class TypeSearchService {
 
     }
 
-    public List<InventoryType> searchType(String q, List<Long> categories) {
+    public List<InventoryType> searchType(String q) {
         if (q == null || q.trim().isEmpty()) {
             return List.of();
         }
@@ -42,12 +42,6 @@ public class TypeSearchService {
         Stream<Pair<Long, InventoryType>> inventoryTypeStream = loadedRefData.getAllTypes()
                 .filter(Objects::nonNull)
                 .filter(type -> type.getValue().getPublished());
-
-        if (categories != null && !categories.isEmpty()) {
-            inventoryTypeStream = inventoryTypeStream.filter(type -> {
-                return categories.contains(type.getValue().getCategoryId());
-            });
-        }
 
         return inventoryTypeStream.filter(type -> {
                     String typeNameEn = type.getValue().getName().get("en");
@@ -57,7 +51,5 @@ public class TypeSearchService {
                     return searchPatter.matcher(typeNameEn).find();
                 }).map(Pair::getValue)
                 .collect(Collectors.toList());
-
-
     }
 }

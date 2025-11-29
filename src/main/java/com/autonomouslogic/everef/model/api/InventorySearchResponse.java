@@ -1,4 +1,4 @@
-package com.autonomouslogic.everef.model.api.search;
+package com.autonomouslogic.everef.model.api;
 
 import com.autonomouslogic.everef.refdata.InventoryType;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -26,6 +26,6 @@ public class InventorySearchResponse {
     @Schema(description = "List of matching inventoryType")
     @JsonProperty("inventory_type")
     @Singular("inventoryType")
-    List<SearchInventoryType> searchInventoryTypes;
+    List<InventoryType> inventoryTypes;
 
 }
