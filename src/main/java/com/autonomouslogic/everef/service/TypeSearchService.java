@@ -34,7 +34,7 @@ public class TypeSearchService {
 
     }
 
-    public List<InventoryType> searchType(String q) {
+    public List<Long> searchType(String q) {
         if (q == null || q.trim().isEmpty()) {
             return List.of();
         }
@@ -49,7 +49,7 @@ public class TypeSearchService {
                         return false;
                     }
                     return searchPatter.matcher(typeNameEn).find();
-                }).map(Pair::getValue)
+                }).map(Pair::getKey)
                 .collect(Collectors.toList());
     }
 }

@@ -26,6 +26,6 @@ public class InventorySearchResponse {
     @Schema(description = "List of matching inventoryType")
     @JsonProperty("inventory_type")
     @Singular("inventoryType")
-    List<InventoryType> inventoryTypes;
+    List<Long> inventoryTypes;
 
 }
