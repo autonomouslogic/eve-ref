@@ -6,7 +6,12 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.List;
 
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Singular;
+import lombok.ToString;
 import lombok.extern.jackson.Jacksonized;
 
 @Getter
