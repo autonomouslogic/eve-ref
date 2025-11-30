@@ -46,6 +46,38 @@ paths:
           description: Server error
       tags:
       - industry
+  /v1/search:
+    get:
+      description: Search for EVE Online inventory types by name
+      operationId: search
+      parameters:
+      - description: Search query (minimum 3 characters)
+        in: query
+        name: q
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InventorySearchResponse"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+          description: Client error
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+          description: Server error
+      summary: Search for inventory types
+      tags:
+      - search
 components:
   schemas:
     ApiError:
@@ -665,6 +697,17 @@ components:
         units_per_run:
           type: integer
           format: int32
+    InventorySearchResponse:
+      type: object
+      properties:
+        input:
+          type: string
+          description: The original search input provided by the user
+        inventory_type:
+          type: array
+          description: List of matching inventoryType
+          items:
+            $ref: "#/components/schemas/SearchInventoryType"
     MaterialCost:
       type: object
       properties:
@@ -759,3 +802,17 @@ components:
           type: integer
           format: int64
           description: Total number of item produced
+    SearchInventoryType:
+      type: object
+      description: List of matching inventoryType
+      properties:
+        name_en:
+          type: string
+        root_market_group:
+          type: string
+        root_market_group_id:
+          type: integer
+          format: int64
+        type_id:
+          type: integer
+          format: int64

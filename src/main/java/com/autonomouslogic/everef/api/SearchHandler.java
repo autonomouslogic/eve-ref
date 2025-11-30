@@ -1,6 +1,7 @@
 package com.autonomouslogic.everef.api;
 
 import com.autonomouslogic.everef.data.LoadedRefData;
+import com.autonomouslogic.everef.model.api.ApiError;
 import com.autonomouslogic.everef.model.api.search.InventorySearchResponse;
 import com.autonomouslogic.everef.model.api.search.SearchInventoryType;
 import com.autonomouslogic.everef.refdata.InventoryType;
@@ -10,11 +11,18 @@ import com.autonomouslogic.everef.service.SearchService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.helidon.http.Status;
 import io.helidon.webserver.http.*;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.log4j.Log4j2;
 
 import jakarta.inject.Inject;
 
+import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import java.time.Duration;
 import java.util.List;
@@ -41,7 +49,28 @@ public class SearchHandler implements HttpService, Handler {
     public SearchHandler() {
     }
 
-    protected InventorySearchResponse search(String q) {
+    @GET
+    @Operation(summary = "Search for inventory types", description = "Search for EVE Online inventory types by name")
+    @ApiResponse(
+            responseCode = "200",
+            description = "Success",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = InventorySearchResponse.class)))
+    @ApiResponse(
+            responseCode = "400",
+            description = "Client error",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class)))
+    @ApiResponse(
+            responseCode = "500",
+            description = "Server error",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class)))
+    @Parameter(
+            in = ParameterIn.QUERY,
+            name = "q",
+            description = "Search query (minimum 3 characters)",
+            required = false,
+            schema = @Schema(type = "string"))
+    public InventorySearchResponse search(
+            @Parameter(hidden = true) String q) {
         if (q == null || q.length() < 3) {
             return InventorySearchResponse.builder()
                     .input(q != null ? q : "")
