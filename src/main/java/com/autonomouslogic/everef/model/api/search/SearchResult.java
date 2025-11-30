@@ -5,22 +5,17 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.List;
-import lombok.AccessLevel;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.Singular;
-import lombok.ToString;
+import lombok.Value;
 import lombok.extern.jackson.Jacksonized;
 
-@Getter
-@ToString
-@EqualsAndHashCode
-@Builder(toBuilder = true, access = AccessLevel.PUBLIC)
+@Value
+@Builder(toBuilder = true)
 @Jacksonized
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @Schema
-public class SearchResponse {
+public class SearchResult {
 
 	@Schema(description = "The original search input provided by the user")
 	@JsonProperty

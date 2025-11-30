@@ -1,13 +1,8 @@
 package com.autonomouslogic.everef.api;
 
 import com.autonomouslogic.everef.model.api.ApiError;
-import com.autonomouslogic.everef.model.api.search.SearchInventoryType;
-import com.autonomouslogic.everef.model.api.search.SearchResponse;
-import com.autonomouslogic.everef.refdata.InventoryType;
-import com.autonomouslogic.everef.refdata.MarketGroup;
-import com.autonomouslogic.everef.service.RefDataService;
+import com.autonomouslogic.everef.model.api.search.SearchResult;
 import com.autonomouslogic.everef.service.SearchService;
-import com.autonomouslogic.everef.util.MarketGroupHelper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.helidon.http.Status;
 import io.helidon.webserver.http.Handler;
@@ -24,9 +19,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.inject.Inject;
 import java.time.Duration;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import lombok.extern.log4j.Log4j2;
@@ -37,9 +29,6 @@ import lombok.extern.log4j.Log4j2;
 public class SearchHandler implements HttpService, Handler {
 	@Inject
 	protected ObjectMapper objectMapper;
-
-	@Inject
-	protected RefDataService refDataService;
 
 	@Inject
 	protected SearchService searchService;
@@ -58,7 +47,7 @@ public class SearchHandler implements HttpService, Handler {
 			content =
 					@Content(
 							mediaType = "application/json",
-							schema = @Schema(implementation = SearchResponse.class)))
+							schema = @Schema(implementation = SearchResult.class)))
 	@ApiResponse(
 			responseCode = "400",
 			description = "Client error",
@@ -73,33 +62,8 @@ public class SearchHandler implements HttpService, Handler {
 			description = "Search query (minimum 3 characters)",
 			required = false,
 			schema = @Schema(type = "string"))
-	public SearchResponse search(@Parameter(hidden = true) String q) {
-		if (q == null || q.length() < 3) {
-			return SearchResponse.builder().input(q != null ? q : "").build();
-		}
-
-		var searchResults = searchService.searchType(q);
-
-		return SearchResponse.builder()
-				.input(q)
-				.searchInventoryType(searchResults.stream()
-						.map(item -> {
-							var marketGroup =
-									MarketGroupHelper.getRootMarketGroup(item, refDataService.getLoadedRefData());
-							return SearchInventoryType.builder()
-									.typeId(item.getTypeId())
-									.nameEn(item.getName().get("en"))
-									.rootMarketGroup(Optional.ofNullable(marketGroup)
-											.flatMap(g -> Optional.ofNullable(
-													g.getName().get("en")))
-											.orElse("Inventory type"))
-									.rootMarketGroupId(Optional.ofNullable(marketGroup)
-											.flatMap(g -> Optional.ofNullable(g.getMarketGroupId()))
-											.orElse(null))
-									.build();
-						})
-						.collect(Collectors.toList()))
-				.build();
+	public SearchResult search(@Parameter(hidden = true) String q) {
+		return searchService.search(q);
 	}
 
 	@Override
@@ -118,7 +82,7 @@ public class SearchHandler implements HttpService, Handler {
 		sendResponse(req, res, result);
 	}
 
-	public void sendResponse(ServerRequest req, ServerResponse res, SearchResponse result) {
+	public void sendResponse(ServerRequest req, ServerResponse res, SearchResult result) {
 		try {
 			var json = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(result) + "\n";
 			res.status(Status.OK_200);
