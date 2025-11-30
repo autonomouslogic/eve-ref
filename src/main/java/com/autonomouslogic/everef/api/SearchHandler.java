@@ -8,6 +8,7 @@ import com.autonomouslogic.everef.refdata.InventoryType;
 import com.autonomouslogic.everef.refdata.MarketGroup;
 import com.autonomouslogic.everef.service.RefDataService;
 import com.autonomouslogic.everef.service.SearchService;
+import com.autonomouslogic.everef.util.MarketGroupHelper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.helidon.http.Status;
 import io.helidon.webserver.http.Handler;
@@ -87,7 +88,7 @@ public class SearchHandler implements HttpService, Handler {
                 .input(q)
                 .searchInventoryType(
                         searchResults.stream().map(item -> {
-                            MarketGroup marketGroup = getRootMarketGroup(item, refDataService.getLoadedRefData());
+                            MarketGroup marketGroup = MarketGroupHelper.getRootMarketGroup(item, refDataService.getLoadedRefData());
                             return SearchInventoryType.builder()
                                     .typeId(item.getTypeId())
                                     .nameEn(item.getName().get("en"))
@@ -125,26 +126,5 @@ public class SearchHandler implements HttpService, Handler {
             log.error("Error serializing search response", e);
             res.status(Status.INTERNAL_SERVER_ERROR_500).send();
         }
-    }
-    private MarketGroup getRootMarketGroup(InventoryType type, LoadedRefData loadedRefData) {
-        if (type.getMarketGroupId() == null) {
-            return null;
-        }
-        var marketGroup = loadedRefData.getMarketGroup(type.getMarketGroupId());
-        if (marketGroup == null) {
-            return null;
-        }
-        return getRootMarketGroup(marketGroup, loadedRefData);
-    }
-
-    private MarketGroup getRootMarketGroup(MarketGroup marketGroup, LoadedRefData loadedRefData) {
-        if (marketGroup.getParentGroupId() == null) {
-            return marketGroup;
-        }
-        var parentGroup = loadedRefData.getMarketGroup(marketGroup.getParentGroupId());
-        if (parentGroup == null) {
-            return marketGroup;
-        }
-        return getRootMarketGroup(parentGroup, loadedRefData);
     }
 }
