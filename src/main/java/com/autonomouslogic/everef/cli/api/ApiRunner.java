@@ -24,8 +24,8 @@ public class ApiRunner implements Command {
 	@Inject
 	protected IndustryCostHandler industryCostHandler;
 
-    @Inject
-    protected SearchHandler searchHandler;
+	@Inject
+	protected SearchHandler searchHandler;
 
 	@Inject
 	protected ErrorHandler errorHandler;
@@ -91,7 +91,7 @@ public class ApiRunner implements Command {
 
 	private HttpRouting.Builder routing(HttpRouting.Builder routing) {
 		return routing.register(industryCostHandler)
-                .register("/v1/search", searchHandler)
+				.register("/v1/search", searchHandler)
 				.error(ClientException.class, clientErrorHandler)
 				.error(Exception.class, errorHandler);
 	}

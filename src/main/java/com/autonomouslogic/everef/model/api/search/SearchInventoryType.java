@@ -11,27 +11,24 @@ import lombok.Getter;
 import lombok.ToString;
 import lombok.extern.jackson.Jacksonized;
 
-import java.util.List;
-
 @Getter
 @ToString
 @EqualsAndHashCode
-@Builder(toBuilder = true,  access = AccessLevel.PUBLIC)
+@Builder(toBuilder = true, access = AccessLevel.PUBLIC)
 @Jacksonized
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @Schema
 public class SearchInventoryType {
 
-    @JsonProperty
-    Long typeId;
+	@JsonProperty
+	Long typeId;
 
-    @JsonProperty
-    String nameEn;
+	@JsonProperty
+	String nameEn;
 
-    @JsonProperty
-    Long rootMarketGroupId;
+	@JsonProperty
+	Long rootMarketGroupId;
 
-    @JsonProperty
-    String rootMarketGroup;
-
+	@JsonProperty
+	String rootMarketGroup;
 }

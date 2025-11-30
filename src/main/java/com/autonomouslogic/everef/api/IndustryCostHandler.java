@@ -1,6 +1,5 @@
 package com.autonomouslogic.everef.api;
 
-import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.data.LoadedRefData;
 import com.autonomouslogic.everef.esi.UniverseEsi;
 import com.autonomouslogic.everef.industry.IndustryCalculator;
@@ -134,7 +133,8 @@ public class IndustryCostHandler implements HttpService, Handler {
 		var result = industryCost(input);
 		var json = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(result) + "\n";
 		res.status(Status.OK_200);
-		apiResponseUtil.setStandardHeaders(res, Duration.ofSeconds(10), "https://docs.everef.net/api/industry-cost.html");
+		apiResponseUtil.setStandardHeaders(
+				res, Duration.ofSeconds(10), "https://docs.everef.net/api/industry-cost.html");
 		res.send(json);
 	}
 

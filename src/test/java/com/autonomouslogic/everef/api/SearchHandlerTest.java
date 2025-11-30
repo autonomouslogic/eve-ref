@@ -13,6 +13,9 @@ import com.autonomouslogic.everef.openapi.api.invoker.ApiClient;
 import com.autonomouslogic.everef.service.RefDataService;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.util.MockScrapeBuilder;
+import java.io.File;
+import java.io.FileInputStream;
+import javax.inject.Inject;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import okhttp3.mockwebserver.Dispatcher;
@@ -20,7 +23,6 @@ import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 import okio.Buffer;
-import org.apache.commons.io.IOUtils;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,10 +31,6 @@ import org.junit.jupiter.api.Timeout;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junitpioneer.jupiter.SetEnvironmentVariable;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import javax.inject.Inject;
-import java.io.File;
-import java.io.FileInputStream;
 
 @ExtendWith(MockitoExtension.class)
 @SetEnvironmentVariable(key = "DATA_BASE_URL", value = "http://localhost:" + TEST_PORT)
@@ -112,8 +110,7 @@ public class SearchHandlerTest {
 		assertEquals("Trit", result.getInput());
 		assertNotNull(result.getInventoryType());
 		assertTrue(result.getInventoryType().size() > 0);
-		assertTrue(result.getInventoryType().stream()
-				.anyMatch(t -> "Tritanium".equals(t.getNameEn())));
+		assertTrue(result.getInventoryType().stream().anyMatch(t -> "Tritanium".equals(t.getNameEn())));
 	}
 
 	@Test

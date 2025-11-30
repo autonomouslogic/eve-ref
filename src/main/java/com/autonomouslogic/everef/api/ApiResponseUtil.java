@@ -2,10 +2,9 @@ package com.autonomouslogic.everef.api;
 
 import com.autonomouslogic.everef.config.Configs;
 import io.helidon.webserver.http.ServerResponse;
-
+import java.time.Duration;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.time.Duration;
 
 @Singleton
 public class ApiResponseUtil {
@@ -21,8 +20,7 @@ public class ApiResponseUtil {
 	}
 
 	public void setStandardHeaders(ServerResponse res, Duration cacheDuration, String docsUrl) {
-		String cacheControlHeader = String.format(
-				"public, max-age=%d, immutable", cacheDuration.toSeconds());
+		String cacheControlHeader = String.format("public, max-age=%d, immutable", cacheDuration.toSeconds());
 		res.header("Server", "eve-ref/" + eveRefVersion)
 				.header("Content-Type", "application/json")
 				.header("X-Discord", "https://everef.net/discord")

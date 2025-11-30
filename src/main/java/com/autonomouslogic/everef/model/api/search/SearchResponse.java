@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.List;
-
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
@@ -17,19 +16,18 @@ import lombok.extern.jackson.Jacksonized;
 @Getter
 @ToString
 @EqualsAndHashCode
-@Builder(toBuilder = true,  access = AccessLevel.PUBLIC)
+@Builder(toBuilder = true, access = AccessLevel.PUBLIC)
 @Jacksonized
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @Schema
-public class InventorySearchResponse {
+public class SearchResponse {
 
-    @Schema(description = "The original search input provided by the user")
-    @JsonProperty
-    String input;
+	@Schema(description = "The original search input provided by the user")
+	@JsonProperty
+	String input;
 
-    @Schema(description = "List of matching inventoryType")
-    @JsonProperty("inventory_type")
-    @Singular("inventoryType")
-    List<SearchInventoryType> searchInventoryType;
-
+	@Schema(description = "List of matching inventoryType")
+	@JsonProperty("inventory_type")
+	@Singular("inventoryType")
+	List<SearchInventoryType> searchInventoryType;
 }
