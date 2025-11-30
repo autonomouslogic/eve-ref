@@ -48,9 +48,7 @@ public class SearchHandler implements HttpService, Handler {
                     .build();
         }
 
-        List<InventoryType> searchResults = searchService
-                .setRefData(refDataService.getLoadedRefData())
-                .searchType(q);
+        List<InventoryType> searchResults = searchService.searchType(q);
 
         return InventorySearchResponse.builder()
                 .input(q)

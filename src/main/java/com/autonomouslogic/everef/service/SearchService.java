@@ -1,6 +1,5 @@
 package com.autonomouslogic.everef.service;
 
-import com.autonomouslogic.everef.data.LoadedRefData;
 import com.autonomouslogic.everef.refdata.InventoryType;
 import jakarta.inject.Inject;
 import lombok.extern.log4j.Log4j2;
@@ -16,15 +15,11 @@ import java.util.stream.Stream;
 @Log4j2
 public class SearchService {
 
-    private LoadedRefData loadedRefData;
+    @Inject
+    protected RefDataService refDataService;
 
     @Inject
     public SearchService() {
-    }
-
-    public SearchService setRefData(LoadedRefData loadedRefData) {
-        this.loadedRefData = loadedRefData;
-        return this;
     }
 
     protected Pattern getSearchPatter(String q) {
@@ -39,7 +34,7 @@ public class SearchService {
             return List.of();
         }
         Pattern searchPatter = getSearchPatter(q);
-        Stream<Pair<Long, InventoryType>> inventoryTypeStream = loadedRefData.getAllTypes()
+        Stream<Pair<Long, InventoryType>> inventoryTypeStream = refDataService.getLoadedRefData().getAllTypes()
                 .filter(Objects::nonNull)
                 .filter(type -> type.getValue().getPublished());
 
