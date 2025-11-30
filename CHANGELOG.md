@@ -1,5 +1,19 @@
 EVE Ref Changelog
 
+## [2.71.1](https://github.com/autonomouslogic/eve-ref/compare/2.71.0...2.71.1) (2025-11-28)
+
+
+### Bug Fixes
+
+* Changed default user agent to match recommended format and added test for it too ([#947](https://github.com/autonomouslogic/eve-ref/issues/947)) ([109ef0d](https://github.com/autonomouslogic/eve-ref/commit/109ef0dae825d77df149da3028e865d42a7edfdc))
+* **ui:** Black Friday MOTD ([42518b4](https://github.com/autonomouslogic/eve-ref/commit/42518b441688d5a14465288d5540be0c70ae78de))
+* **ui:** Fixed Jita sell price lookup ([#984](https://github.com/autonomouslogic/eve-ref/issues/984)) ([dc705ff](https://github.com/autonomouslogic/eve-ref/commit/dc705ffa135fe59b7718f4178ae77db241f7f7a0))
+
+
+### Tests
+
+* Attempt to fix intermittent test failure ([7609244](https://github.com/autonomouslogic/eve-ref/commit/76092446084bfdffa391aaadd7fa1b73960aa85d))
+
 ## [2.71.0](https://github.com/autonomouslogic/eve-ref/compare/2.70.0...2.71.0) (2025-11-21)
 
 
