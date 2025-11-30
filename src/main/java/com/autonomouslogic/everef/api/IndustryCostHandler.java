@@ -39,7 +39,6 @@ import jakarta.inject.Provider;
 import java.math.BigDecimal;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -54,10 +53,6 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 @Path("/v1/industry/cost")
 @Log4j2
 public class IndustryCostHandler implements HttpService, Handler {
-	private static final String cacheControlHeader = String.format(
-			"public, max-age=%d, immutable", Duration.ofMinutes(10).toSeconds());
-	private final String eveRefVersion = Configs.EVE_REF_VERSION.getRequired();
-
 	@Inject
 	protected ObjectMapper objectMapper;
 
@@ -81,6 +76,9 @@ public class IndustryCostHandler implements HttpService, Handler {
 
 	@Inject
 	protected SystemCostIndexService systemCostIndexService;
+
+	@Inject
+	protected ApiResponseUtil apiResponseUtil;
 
 	private final ObjectMapper queryStringMapper;
 
@@ -134,14 +132,9 @@ public class IndustryCostHandler implements HttpService, Handler {
 		validateInput(input);
 		var result = industryCost(input);
 		var json = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(result) + "\n";
-		res.status(Status.OK_200)
-				.header("Server", "eve-ref/" + eveRefVersion)
-				.header("Content-Type", "application/json")
-				.header("X-Discord", "https://everef.net/discord")
-				.header("X-OpenAPI", "https://github.com/autonomouslogic/eve-ref/blob/main/spec/eve-ref-api.yaml")
-				.header("X-Docs", "https://docs.everef.net/api/industry-cost.html")
-				.header("Cache-Control", cacheControlHeader)
-				.send(json);
+		res.status(Status.OK_200);
+		apiResponseUtil.setStandardHeaders(res, "https://docs.everef.net/api/industry-cost.html");
+		res.send(json);
 	}
 
 	private IndustryCostInput createInput(ServerRequest req) {

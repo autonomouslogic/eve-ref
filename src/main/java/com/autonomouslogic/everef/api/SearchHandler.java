@@ -1,6 +1,5 @@
 package com.autonomouslogic.everef.api;
 
-import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.data.LoadedRefData;
 import com.autonomouslogic.everef.model.api.search.InventorySearchResponse;
 import com.autonomouslogic.everef.model.api.search.SearchInventoryType;
@@ -17,7 +16,6 @@ import lombok.extern.log4j.Log4j2;
 import jakarta.inject.Inject;
 
 import javax.ws.rs.Path;
-import java.time.Duration;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -26,10 +24,6 @@ import java.util.stream.Collectors;
 @Path("/v1/search")
 @Log4j2
 public class SearchHandler implements HttpService, Handler {
-    private static final String cacheControlHeader = String.format(
-            "public, max-age=%d, immutable", Duration.ofMinutes(10).toSeconds());
-    private final String eveRefVersion = Configs.EVE_REF_VERSION.getRequired();
-
     @Inject
     protected ObjectMapper objectMapper;
 
@@ -38,6 +32,9 @@ public class SearchHandler implements HttpService, Handler {
 
     @Inject
     protected TypeSearchService typeSearchService;
+
+    @Inject
+    protected ApiResponseUtil apiResponseUtil;
 
     @Inject
     public SearchHandler() {
@@ -89,16 +86,10 @@ public class SearchHandler implements HttpService, Handler {
     public void sendResponse(ServerRequest req, ServerResponse res, InventorySearchResponse result) {
         try {
             var json = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(result) + "\n";
-            res.status(Status.OK_200)
-                    .header("Server", "eve-ref/" + eveRefVersion)
-                    .header("Content-Type", "application/json")
-                    .header("X-Discord", "https://everef.net/discord")
-                    .header("X-OpenAPI", "https://github.com/autonomouslogic/eve-ref/blob/main/spec/eve-ref-api.yaml")
-//                    .header("X-Docs", "https://docs.everef.net/api/search.html")
-                    .header("Cache-Control", cacheControlHeader)
-                    .send(json);
+            res.status(Status.OK_200);
+            apiResponseUtil.setStandardHeaders(res);
+            res.send(json);
         } catch (Exception e) {
-            // Basic error handling for serialization failure
             log.error("Error serializing search response", e);
             res.status(Status.INTERNAL_SERVER_ERROR_500).send();
         }
