@@ -61,7 +61,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/InventorySearchResponse"
+                $ref: "#/components/schemas/SearchResponse"
           description: Success
         "400":
           content:
@@ -697,17 +697,6 @@ components:
         units_per_run:
           type: integer
           format: int32
-    InventorySearchResponse:
-      type: object
-      properties:
-        input:
-          type: string
-          description: The original search input provided by the user
-        inventory_type:
-          type: array
-          description: List of matching inventoryType
-          items:
-            $ref: "#/components/schemas/SearchInventoryType"
     MaterialCost:
       type: object
       properties:
@@ -816,3 +805,14 @@ components:
         type_id:
           type: integer
           format: int64
+    SearchResponse:
+      type: object
+      properties:
+        input:
+          type: string
+          description: The original search input provided by the user
+        inventory_type:
+          type: array
+          description: List of matching inventoryType
+          items:
+            $ref: "#/components/schemas/SearchInventoryType"

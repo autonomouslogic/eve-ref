@@ -78,13 +78,13 @@ public class SearchHandler implements HttpService, Handler {
 			return SearchResponse.builder().input(q != null ? q : "").build();
 		}
 
-		List<InventoryType> searchResults = searchService.searchType(q);
+		var searchResults = searchService.searchType(q);
 
 		return SearchResponse.builder()
 				.input(q)
 				.searchInventoryType(searchResults.stream()
 						.map(item -> {
-							MarketGroup marketGroup =
+							var marketGroup =
 									MarketGroupHelper.getRootMarketGroup(item, refDataService.getLoadedRefData());
 							return SearchInventoryType.builder()
 									.typeId(item.getTypeId())
@@ -109,8 +109,12 @@ public class SearchHandler implements HttpService, Handler {
 
 	@Override
 	public void handle(ServerRequest req, ServerResponse res) {
-		String q = req.query().first("q").orElse(null);
-		SearchResponse result = this.search(q);
+		var q = req.query().first("q").orElse(null);
+		if (q == null || q.length() < 3) {
+			sendError(res, Status.BAD_REQUEST_400, "Search query must be at least 3 characters");
+			return;
+		}
+		var result = this.search(q);
 		sendResponse(req, res, result);
 	}
 
@@ -122,6 +126,19 @@ public class SearchHandler implements HttpService, Handler {
 			res.send(json);
 		} catch (Exception e) {
 			log.error("Error serializing search response", e);
+			res.status(Status.INTERNAL_SERVER_ERROR_500).send();
+		}
+	}
+
+	public void sendError(ServerResponse res, Status status, String message) {
+		try {
+			var error = ApiError.builder().message(message).build();
+			var json = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(error) + "\n";
+			res.status(status);
+			res.header("Content-Type", "application/json");
+			res.send(json);
+		} catch (Exception e) {
+			log.error("Error serializing error response", e);
 			res.status(Status.INTERNAL_SERVER_ERROR_500).send();
 		}
 	}

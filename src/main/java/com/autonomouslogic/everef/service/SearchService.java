@@ -22,8 +22,8 @@ public class SearchService {
 	public SearchService() {}
 
 	protected Pattern getSearchPatter(String q) {
-		String[] queryParts = q.trim().split("\\s+");
-		String regexString = String.join(".*", queryParts);
+		var queryParts = q.trim().split("\\s+");
+		var regexString = String.join(".*", queryParts);
 		return Pattern.compile(regexString, Pattern.CASE_INSENSITIVE);
 	}
 
@@ -31,8 +31,8 @@ public class SearchService {
 		if (q == null || q.trim().isEmpty()) {
 			return List.of();
 		}
-		Pattern searchPatter = getSearchPatter(q);
-		Stream<Pair<Long, InventoryType>> inventoryTypeStream = refDataService
+		var searchPatter = getSearchPatter(q);
+		var inventoryTypeStream = refDataService
 				.getLoadedRefData()
 				.getAllTypes()
 				.filter(Objects::nonNull)
@@ -40,7 +40,7 @@ public class SearchService {
 
 		return inventoryTypeStream
 				.filter(type -> {
-					String typeNameEn = type.getValue().getName().get("en");
+					var typeNameEn = type.getValue().getName().get("en");
 					if (typeNameEn == null) {
 						return false;
 					}

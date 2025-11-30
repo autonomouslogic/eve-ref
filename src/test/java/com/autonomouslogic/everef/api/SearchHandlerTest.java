@@ -4,12 +4,14 @@ import static com.autonomouslogic.everef.api.SearchHandlerTest.API_TEST_PORT;
 import static com.autonomouslogic.everef.test.TestDataUtil.TEST_PORT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.autonomouslogic.everef.cli.api.ApiRunner;
 import com.autonomouslogic.everef.cli.publishrefdata.PublishRefDataTest;
 import com.autonomouslogic.everef.openapi.api.api.SearchApi;
 import com.autonomouslogic.everef.openapi.api.invoker.ApiClient;
+import com.autonomouslogic.everef.openapi.api.invoker.ApiException;
 import com.autonomouslogic.everef.service.RefDataService;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.util.MockScrapeBuilder;
@@ -126,22 +128,18 @@ public class SearchHandlerTest {
 
 	@Test
 	@SneakyThrows
-	void shouldReturnEmptyForShortQuery() {
-		var result = searchApi.search("Tr");
-		assertNotNull(result);
-		assertEquals("Tr", result.getInput());
-		assertNotNull(result.getInventoryType());
-		assertEquals(0, result.getInventoryType().size());
+	void shouldReturn400ForShortQuery() {
+		var exception = assertThrows(ApiException.class, () -> searchApi.search("Tr"));
+		assertEquals(400, exception.getCode());
+		assertTrue(exception.getResponseBody().contains("Search query must be at least 3 characters"));
 	}
 
 	@Test
 	@SneakyThrows
-	void shouldReturnEmptyForNull() {
-		var result = searchApi.search(null);
-		assertNotNull(result);
-		assertEquals("", result.getInput());
-		assertNotNull(result.getInventoryType());
-		assertEquals(0, result.getInventoryType().size());
+	void shouldReturn400ForNull() {
+		var exception = assertThrows(ApiException.class, () -> searchApi.search(null));
+		assertEquals(400, exception.getCode());
+		assertTrue(exception.getResponseBody().contains("Search query must be at least 3 characters"));
 	}
 
 	@Test
