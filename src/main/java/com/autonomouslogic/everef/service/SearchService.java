@@ -14,15 +14,15 @@ import java.util.stream.Stream;
 
 @Singleton
 @Log4j2
-public class TypeSearchService {
+public class SearchService {
 
     private LoadedRefData loadedRefData;
 
     @Inject
-    public TypeSearchService() {
+    public SearchService() {
     }
 
-    public TypeSearchService setRefData(LoadedRefData loadedRefData) {
+    public SearchService setRefData(LoadedRefData loadedRefData) {
         this.loadedRefData = loadedRefData;
         return this;
     }

@@ -6,7 +6,7 @@ import com.autonomouslogic.everef.model.api.search.SearchInventoryType;
 import com.autonomouslogic.everef.refdata.InventoryType;
 import com.autonomouslogic.everef.refdata.MarketGroup;
 import com.autonomouslogic.everef.service.RefDataService;
-import com.autonomouslogic.everef.service.TypeSearchService;
+import com.autonomouslogic.everef.service.SearchService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.helidon.http.Status;
 import io.helidon.webserver.http.*;
@@ -32,7 +32,7 @@ public class SearchHandler implements HttpService, Handler {
     protected RefDataService refDataService;
 
     @Inject
-    protected TypeSearchService typeSearchService;
+    protected SearchService searchService;
 
     @Inject
     protected ApiResponseUtil apiResponseUtil;
@@ -48,7 +48,7 @@ public class SearchHandler implements HttpService, Handler {
                     .build();
         }
 
-        List<InventoryType> searchResults = typeSearchService
+        List<InventoryType> searchResults = searchService
                 .setRefData(refDataService.getLoadedRefData())
                 .searchType(q);
 
