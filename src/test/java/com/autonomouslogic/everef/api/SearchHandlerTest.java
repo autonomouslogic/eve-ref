@@ -128,18 +128,27 @@ public class SearchHandlerTest {
 
 	@Test
 	@SneakyThrows
-	void shouldReturn400ForShortQuery() {
-		var exception = assertThrows(ApiException.class, () -> searchApi.search("Tr"));
-		assertEquals(400, exception.getCode());
-		assertTrue(exception.getResponseBody().contains("Search query must be at least 3 characters"));
+	void shouldReturnEmptyForShortQuery() {
+		var result = searchApi.search("Tr");
+		assertNotNull(result);
+		assertEquals("Tr", result.getInput());
+		assertNotNull(result.getInventoryType());
+		assertEquals(0, result.getInventoryType().size());
 	}
 
 	@Test
-	@SneakyThrows
-	void shouldReturn400ForNull() {
-		var exception = assertThrows(ApiException.class, () -> searchApi.search(null));
-		assertEquals(400, exception.getCode());
-		assertTrue(exception.getResponseBody().contains("Search query must be at least 3 characters"));
+	void shouldThrowForNull() {
+		assertThrows(ApiException.class, () -> searchApi.search(null));
+	}
+
+	@Test
+	void shouldThrowForEmpty() {
+		assertThrows(ApiException.class, () -> searchApi.search(""));
+	}
+
+	@Test
+	void shouldThrowForWhitespace() {
+		assertThrows(ApiException.class, () -> searchApi.search("   "));
 	}
 
 	@Test

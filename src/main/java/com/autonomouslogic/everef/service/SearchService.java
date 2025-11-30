@@ -36,7 +36,10 @@ public class SearchService {
 
 	public SearchResult search(String q) {
 		if (q == null || q.trim().isEmpty()) {
-			return SearchResult.builder().input(q != null ? q : "").build();
+			throw new IllegalArgumentException("Query cannot be null or empty");
+		}
+		if (q.length() < 3) {
+			return SearchResult.builder().input(q).build();
 		}
 
 		var searchPattern = getSearchPattern(q);

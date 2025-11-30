@@ -1,6 +1,5 @@
 package com.autonomouslogic.everef.api;
 
-import com.autonomouslogic.everef.model.api.ApiError;
 import com.autonomouslogic.everef.model.api.search.SearchResult;
 import com.autonomouslogic.everef.service.SearchService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -48,14 +47,6 @@ public class SearchHandler implements HttpService, Handler {
 					@Content(
 							mediaType = "application/json",
 							schema = @Schema(implementation = SearchResult.class)))
-	@ApiResponse(
-			responseCode = "400",
-			description = "Client error",
-			content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class)))
-	@ApiResponse(
-			responseCode = "500",
-			description = "Server error",
-			content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class)))
 	@Parameter(
 			in = ParameterIn.QUERY,
 			name = "q",
@@ -74,10 +65,6 @@ public class SearchHandler implements HttpService, Handler {
 	@Override
 	public void handle(ServerRequest req, ServerResponse res) {
 		var q = req.query().first("q").orElse(null);
-		if (q == null || q.length() < 3) {
-			sendError(res, Status.BAD_REQUEST_400, "Search query must be at least 3 characters");
-			return;
-		}
 		var result = this.search(q);
 		sendResponse(req, res, result);
 	}
@@ -90,19 +77,6 @@ public class SearchHandler implements HttpService, Handler {
 			res.send(json);
 		} catch (Exception e) {
 			log.error("Error serializing search response", e);
-			res.status(Status.INTERNAL_SERVER_ERROR_500).send();
-		}
-	}
-
-	public void sendError(ServerResponse res, Status status, String message) {
-		try {
-			var error = ApiError.builder().message(message).build();
-			var json = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(error) + "\n";
-			res.status(status);
-			res.header("Content-Type", "application/json");
-			res.send(json);
-		} catch (Exception e) {
-			log.error("Error serializing error response", e);
 			res.status(Status.INTERNAL_SERVER_ERROR_500).send();
 		}
 	}
