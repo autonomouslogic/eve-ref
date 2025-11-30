@@ -39,6 +39,7 @@ import jakarta.inject.Provider;
 import java.math.BigDecimal;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -133,7 +134,7 @@ public class IndustryCostHandler implements HttpService, Handler {
 		var result = industryCost(input);
 		var json = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(result) + "\n";
 		res.status(Status.OK_200);
-		apiResponseUtil.setStandardHeaders(res, "https://docs.everef.net/api/industry-cost.html");
+		apiResponseUtil.setStandardHeaders(res, Duration.ofSeconds(10), "https://docs.everef.net/api/industry-cost.html");
 		res.send(json);
 	}
 

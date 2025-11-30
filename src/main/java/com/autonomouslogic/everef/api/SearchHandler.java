@@ -16,6 +16,7 @@ import lombok.extern.log4j.Log4j2;
 import jakarta.inject.Inject;
 
 import javax.ws.rs.Path;
+import java.time.Duration;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -87,7 +88,7 @@ public class SearchHandler implements HttpService, Handler {
         try {
             var json = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(result) + "\n";
             res.status(Status.OK_200);
-            apiResponseUtil.setStandardHeaders(res);
+            apiResponseUtil.setStandardHeaders(res, Duration.ofMinutes(10));
             res.send(json);
         } catch (Exception e) {
             log.error("Error serializing search response", e);

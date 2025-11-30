@@ -9,9 +9,6 @@ import java.time.Duration;
 
 @Singleton
 public class ApiResponseUtil {
-	private static final String CACHE_CONTROL_HEADER = String.format(
-			"public, max-age=%d, immutable", Duration.ofMinutes(10).toSeconds());
-
 	private final String eveRefVersion;
 
 	@Inject
@@ -19,16 +16,18 @@ public class ApiResponseUtil {
 		this.eveRefVersion = Configs.EVE_REF_VERSION.getRequired();
 	}
 
-	public void setStandardHeaders(ServerResponse res) {
-		setStandardHeaders(res, null);
+	public void setStandardHeaders(ServerResponse res, Duration cacheDuration) {
+		setStandardHeaders(res, cacheDuration, null);
 	}
 
-	public void setStandardHeaders(ServerResponse res, String docsUrl) {
+	public void setStandardHeaders(ServerResponse res, Duration cacheDuration, String docsUrl) {
+		String cacheControlHeader = String.format(
+				"public, max-age=%d, immutable", cacheDuration.toSeconds());
 		res.header("Server", "eve-ref/" + eveRefVersion)
 				.header("Content-Type", "application/json")
 				.header("X-Discord", "https://everef.net/discord")
 				.header("X-OpenAPI", "https://github.com/autonomouslogic/eve-ref/blob/main/spec/eve-ref-api.yaml")
-				.header("Cache-Control", CACHE_CONTROL_HEADER);
+				.header("Cache-Control", cacheControlHeader);
 		if (docsUrl != null) {
 			res.header("X-Docs", docsUrl);
 		}
