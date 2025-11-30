@@ -1,14 +1,13 @@
-package com.autonomouslogic.everef.model.api;
+package com.autonomouslogic.everef.model.api.search;
 
-import com.autonomouslogic.everef.refdata.InventoryType;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.util.List;
-
 import lombok.*;
 import lombok.extern.jackson.Jacksonized;
+
+import java.util.List;
 
 @Getter
 @ToString
@@ -17,15 +16,18 @@ import lombok.extern.jackson.Jacksonized;
 @Jacksonized
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @Schema
-public class InventorySearchResponse {
+public class SearchInventoryType {
 
-    @Schema(description = "The original search input provided by the user")
     @JsonProperty
-    String input;
+    Long typeId;
 
-    @Schema(description = "List of matching inventoryType")
-    @JsonProperty("inventory_type")
-    @Singular("inventoryType")
-    List<Long> inventoryTypes;
+    @JsonProperty
+    String nameEn;
+
+    @JsonProperty
+    Long rootMarketGroupId;
+
+    @JsonProperty
+    String rootMarketGroup;
 
 }

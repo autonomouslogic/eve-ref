@@ -1,8 +1,11 @@
 package com.autonomouslogic.everef.api;
 
 import com.autonomouslogic.everef.config.Configs;
-import com.autonomouslogic.everef.model.api.InventorySearchResponse;
+import com.autonomouslogic.everef.data.LoadedRefData;
+import com.autonomouslogic.everef.model.api.search.InventorySearchResponse;
+import com.autonomouslogic.everef.model.api.search.SearchInventoryType;
 import com.autonomouslogic.everef.refdata.InventoryType;
+import com.autonomouslogic.everef.refdata.MarketGroup;
 import com.autonomouslogic.everef.service.RefDataService;
 import com.autonomouslogic.everef.service.TypeSearchService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -16,6 +19,8 @@ import jakarta.inject.Inject;
 import javax.ws.rs.Path;
 import java.time.Duration;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Tag(name = "search")
 @Path("/v1/search")
@@ -45,13 +50,27 @@ public class SearchHandler implements HttpService, Handler {
                     .build();
         }
 
-        List<Long> searchResults = typeSearchService
+        List<InventoryType> searchResults = typeSearchService
                 .setRefData(refDataService.getLoadedRefData())
                 .searchType(q);
 
         return InventorySearchResponse.builder()
                 .input(q)
-                .inventoryTypes(searchResults)
+                .searchInventoryType(
+                        searchResults.stream().map(item -> {
+                            MarketGroup marketGroup = getRootMarketGroup(item, refDataService.getLoadedRefData());
+                            return SearchInventoryType.builder()
+                                    .typeId(item.getTypeId())
+                                    .nameEn(item.getName().get("en"))
+                                    .rootMarketGroup(Optional.ofNullable(marketGroup)
+                                            .flatMap(g -> Optional.ofNullable(g.getName().get("en")))
+                                            .orElse("Inventory type"))
+                                    .rootMarketGroupId(Optional.ofNullable(marketGroup)
+                                            .flatMap(g -> Optional.ofNullable(g.getMarketGroupId()))
+                                            .orElse(null))
+                                    .build();
+                        }).collect(Collectors.toList())
+                )
                 .build();
     }
 
@@ -83,5 +102,26 @@ public class SearchHandler implements HttpService, Handler {
             log.error("Error serializing search response", e);
             res.status(Status.INTERNAL_SERVER_ERROR_500).send();
         }
+    }
+    private MarketGroup getRootMarketGroup(InventoryType type, LoadedRefData loadedRefData) {
+        if (type.getMarketGroupId() == null) {
+            return null;
+        }
+        var marketGroup = loadedRefData.getMarketGroup(type.getMarketGroupId());
+        if (marketGroup == null) {
+            return null;
+        }
+        return getRootMarketGroup(marketGroup, loadedRefData);
+    }
+
+    private MarketGroup getRootMarketGroup(MarketGroup marketGroup, LoadedRefData loadedRefData) {
+        if (marketGroup.getParentGroupId() == null) {
+            return marketGroup;
+        }
+        var parentGroup = loadedRefData.getMarketGroup(marketGroup.getParentGroupId());
+        if (parentGroup == null) {
+            return marketGroup;
+        }
+        return getRootMarketGroup(parentGroup, loadedRefData);
     }
 }
