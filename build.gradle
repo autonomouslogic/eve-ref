@@ -96,7 +96,7 @@ dependencies {
 
 	// Jooq, Flyway, H2, Postgresql
 	implementation "org.jooq:jooq:3.20.8"
-	implementation "org.flywaydb:flyway-core:11.15.0"
+	implementation "org.flywaydb:flyway-core:11.18.0"
 	implementation "org.flywaydb:flyway-database-postgresql:11.18.0"
 	implementation "com.h2database:h2:2.4.240"
 	implementation "org.postgresql:postgresql:42.7.8"
