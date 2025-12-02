@@ -5,6 +5,14 @@ export const MINUTE = 60 * SECOND;
 export const HOUR = 60 * MINUTE;
 export const DAY = 24 * HOUR;
 
+export const MONDAY = 1;
+export const TUESDAY = 2;
+export const WEDNESDAY = 3;
+export const THURSDAY = 4;
+export const FRIDAY = 5;
+export const SATURDAY = 6;
+export const SUNDAY = 7;
+
 export function formatDuration(milliseconds: number): string {
     let formatted = Duration.fromMillis(milliseconds).toFormat("d'd' h'h' m'm' s.SSS's'");
     // Remove extra fractional milliseconds.
