@@ -38,7 +38,7 @@ const weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Satur
 
 const plexPrice = await getJitaSellPrice(PLEX_TYPE_ID) || 0;
 
-const firstFleetPack = DateTime.fromISO("2025-10-03T14:00:00Z");
+const firstFleetPack = DateTime.fromISO("2025-12-05T14:00:00Z");
 const fleetPackDates = [];
 for (let i = 0; i < 5; i++) {
 	fleetPackDates.push(firstFleetPack.plus({days: i * 7}));
@@ -48,21 +48,9 @@ const prizes: Prize[] = [
 	{
 		name: "Weekend Fleet Pack (50x PLEX, 3 Day Omega)",
 		value: (50 + 500 * 12 / 365 * 3) * plexPrice,
-		dates: [DateTime.fromISO("2025-11-21T14:00:00Z")],
-		winners: 5
+		dates: fleetPackDates,
+		winners: 2
 	} as Prize,
-	{
-		name: "Weekend Fleet Pack (50x PLEX, 3 Day Omega)",
-		value: (50 + 500 * 12 / 365 * 3) * plexPrice,
-		dates: [DateTime.fromISO("2025-11-28T14:00:00Z")],
-		winners: 3
-	} as Prize,
-	// {
-	// 	name: "Weekend Fleet Pack (50x PLEX, 3 Day Omega)",
-	// 	value: (50 + 500 * 12 / 365 * 3) * plexPrice,
-	// 	dates: fleetPackDates,
-	// 	winners: 2
-	// } as Prize,
 	// {
 	// 	name: "Astero Scope Syndication YC122 SKIN",
 	// 	value: await getJitaSellPrice(ASTERO_SCOPE_SYNDICATION) || 0,
@@ -119,6 +107,7 @@ unrolled.sort((a, b) => a.dates[0].toMillis() - b.dates[0].toMillis());
 const totalWorth = unrolled.reduce((acc, prize) => acc + prize.value * prize.winners, 0);
 
 const pastGiveaways = {
+	"December 2025": 8 * 486.64e6,
 	"November 2025": 8 * 500.55e6,
 	"October 2025": 10 * 552.29e6,
 	"September 2025": 8 * 556.16e6,
