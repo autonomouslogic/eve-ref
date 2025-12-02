@@ -58,7 +58,6 @@ const motd = computed(() => {
 	// const date = DateTime.fromISO("2025-12-04T14:00:00Z").toJSDate();
 	const dayOfWeek = date.getUTCDay();
 	const hourOfDay = date.getUTCHours();
-	console.log(dayOfWeek, hourOfDay);
 	const time = date.getTime();
 	const day = Math.floor(time / DAY);
 	const hour = Math.floor(time / HOUR);
