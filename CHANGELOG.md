@@ -1,5 +1,20 @@
 EVE Ref Changelog
 
+## [2.71.3](https://github.com/autonomouslogic/eve-ref/compare/2.71.2...2.71.3) (2025-12-03)
+
+
+### Bug Fixes
+
+* **ui:** December 2025 giveaways ([b97c9c8](https://github.com/autonomouslogic/eve-ref/commit/b97c9c8438f679d116c791e8109b588fb5a6a867))
+* **ui:** More December 2025 giveaways ([18a0f5f](https://github.com/autonomouslogic/eve-ref/commit/18a0f5f934c59f6a4536805a586e7a58a72795a4))
+* **ui:** MOTD banner ([b6930e4](https://github.com/autonomouslogic/eve-ref/commit/b6930e4cdc281aaf50a76764ae60acd06c1d9d49))
+* **ui:** Updated sale end time ([f8b6d77](https://github.com/autonomouslogic/eve-ref/commit/f8b6d77792ae0bef505666fe51c7199d28b83582))
+
+
+### Dependency Updates
+
+* **deps:** Updated ESI spec ([#989](https://github.com/autonomouslogic/eve-ref/issues/989)) ([28905a2](https://github.com/autonomouslogic/eve-ref/commit/28905a28ce66962ee29f72799f48a896c9971613))
+
 ## [2.71.2](https://github.com/autonomouslogic/eve-ref/compare/2.71.1...2.71.2) (2025-12-01)
 
 
