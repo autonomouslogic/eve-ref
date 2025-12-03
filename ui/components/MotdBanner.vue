@@ -112,6 +112,15 @@ const motd = computed(() => {
 		} as Motd;
 	}
 
+	// Giveaway event.
+	if (time < new Date("2025-12-31T10:50:00Z").getTime()) {
+		return {
+			text: "Win 22 billion ISK in December",
+			url: "/giveaways",
+			urlText: "Giveaways"
+		} as Motd;
+	}
+
 	// Giveaway.
 	const giveawayDay = FRIDAY;
 	const giveawayHour = 14;
