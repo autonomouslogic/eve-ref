@@ -115,7 +115,7 @@
   "info": {
     "description": "An OpenAPI for EVE Online",
     "title": "EVE Swagger Interface",
-    "version": "1.25"
+    "version": "1.36"
   },
   "parameters": {
     "Accept-Language": {
@@ -1139,7 +1139,7 @@
     },
     "/alliances/{alliance_id}/icons/": {
       "get": {
-        "description": "Get the icon urls for a alliance\n\n---\nAlternate route: `/legacy/alliances/{alliance_id}/icons/`\n\nAlternate route: `/v1/alliances/{alliance_id}/icons/`\n\n---\nThis route expires daily at 11:05\n\n---\n[Diff of the upcoming changes](https://esi.evetech.net/diff/latest/dev/#GET-/alliances/{alliance_id}/icons/)",
+        "description": "Get the icon urls for a alliance\n\n---\nAlternate route: `/dev/alliances/{alliance_id}/icons/`\n\nAlternate route: `/legacy/alliances/{alliance_id}/icons/`\n\nAlternate route: `/v1/alliances/{alliance_id}/icons/`\n\nAlternate route: `/v2/alliances/{alliance_id}/icons/`\n\n---\nThis route expires daily at 11:05",
         "operationId": "get_alliances_alliance_id_icons",
         "parameters": [
           {
@@ -1157,8 +1157,8 @@
             "description": "Icon URLs for the given alliance id and server",
             "examples": {
               "application/json": {
-                "px128x128": "https://images.evetech.net/Alliance/503818424_128.png",
-                "px64x64": "https://images.evetech.net/Alliance/503818424_64.png"
+                "px128x128": "https://images.evetech.net/alliances/503818424/logo?tenant=tranquility&size=128",
+                "px64x64": "https://images.evetech.net/alliances/503818424/logo?tenant=tranquility&size=64"
               }
             },
             "headers": {
@@ -1299,14 +1299,16 @@
           "Alliance"
         ],
         "x-alternate-versions": [
+          "dev",
           "legacy",
-          "v1"
+          "v1",
+          "v2"
         ]
       }
     },
     "/characters/affiliation/": {
       "post": {
-        "description": "Bulk lookup of character IDs to corporation, alliance and faction\n\n---\nAlternate route: `/dev/characters/affiliation/`\n\nAlternate route: `/v2/characters/affiliation/`\n\n---\nThis route is cached for up to 3600 seconds",
+        "description": "Bulk lookup of character IDs to corporation, alliance and faction\n\n---\nAlternate route: `/dev/characters/affiliation/`\n\nAlternate route: `/legacy/characters/affiliation/`\n\nAlternate route: `/v1/characters/affiliation/`\n\nAlternate route: `/v2/characters/affiliation/`\n\n---\nThis route is cached for up to 3600 seconds",
         "operationId": "post_characters_affiliation",
         "parameters": [
           {
@@ -1449,6 +1451,8 @@
         ],
         "x-alternate-versions": [
           "dev",
+          "legacy",
+          "v1",
           "v2"
         ],
         "x-cached-seconds": 3600
@@ -1697,7 +1701,7 @@
     },
     "/characters/{character_id}/agents_research/": {
       "get": {
-        "description": "Return a list of agents research information for a character. The formula for finding the current research points with an agent is: currentPoints = remainderPoints + pointsPerDay * days(currentTime - researchStartDate)\n\n---\nAlternate route: `/dev/characters/{character_id}/agents_research/`\n\nAlternate route: `/v2/characters/{character_id}/agents_research/`\n\n---\nThis route is cached for up to 3600 seconds",
+        "description": "Return a list of agents research information for a character. The formula for finding the current research points with an agent is: currentPoints = remainderPoints + pointsPerDay * days(currentTime - researchStartDate)\n\n---\nAlternate route: `/dev/characters/{character_id}/agents_research/`\n\nAlternate route: `/legacy/characters/{character_id}/agents_research/`\n\nAlternate route: `/v1/characters/{character_id}/agents_research/`\n\nAlternate route: `/v2/characters/{character_id}/agents_research/`\n\n---\nThis route is cached for up to 3600 seconds",
         "operationId": "get_characters_character_id_agents_research",
         "parameters": [
           {
@@ -1908,6 +1912,8 @@
         ],
         "x-alternate-versions": [
           "dev",
+          "legacy",
+          "v1",
           "v2"
         ],
         "x-cached-seconds": 3600
@@ -1915,7 +1921,7 @@
     },
     "/characters/{character_id}/assets/": {
       "get": {
-        "description": "Return a list of the characters assets\n\n---\nAlternate route: `/dev/characters/{character_id}/assets/`\n\nAlternate route: `/v5/characters/{character_id}/assets/`\n\n---\nThis route is cached for up to 3600 seconds",
+        "description": "Return a list of the characters assets\n\n---\nAlternate route: `/dev/characters/{character_id}/assets/`\n\nAlternate route: `/legacy/characters/{character_id}/assets/`\n\nAlternate route: `/v4/characters/{character_id}/assets/`\n\nAlternate route: `/v5/characters/{character_id}/assets/`\n\n---\nThis route is cached for up to 3600 seconds",
         "operationId": "get_characters_character_id_assets",
         "parameters": [
           {
@@ -2002,6 +2008,7 @@
                       "AssetSafety",
                       "AutoFit",
                       "BoosterBay",
+                      "CapsuleerDeliveries",
                       "Cargo",
                       "CorporationGoalDeliveries",
                       "CorpseBay",
@@ -2269,6 +2276,8 @@
         ],
         "x-alternate-versions": [
           "dev",
+          "legacy",
+          "v4",
           "v5"
         ],
         "x-cached-seconds": 3600
@@ -2875,7 +2884,7 @@
     },
     "/characters/{character_id}/blueprints/": {
       "get": {
-        "description": "Return a list of blueprints the character owns\n\n---\nAlternate route: `/dev/characters/{character_id}/blueprints/`\n\nAlternate route: `/v3/characters/{character_id}/blueprints/`\n\n---\nThis route is cached for up to 3600 seconds",
+        "description": "Return a list of blueprints the character owns\n\n---\nAlternate route: `/dev/characters/{character_id}/blueprints/`\n\nAlternate route: `/legacy/characters/{character_id}/blueprints/`\n\nAlternate route: `/v2/characters/{character_id}/blueprints/`\n\nAlternate route: `/v3/characters/{character_id}/blueprints/`\n\n---\nThis route is cached for up to 3600 seconds",
         "operationId": "get_characters_character_id_blueprints",
         "parameters": [
           {
@@ -3202,520 +3211,9 @@
         ],
         "x-alternate-versions": [
           "dev",
+          "legacy",
+          "v2",
           "v3"
-        ],
-        "x-cached-seconds": 3600
-      }
-    },
-    "/characters/{character_id}/bookmarks/": {
-      "get": {
-        "description": "A list of your character's personal bookmarks\n\n---\nAlternate route: `/dev/characters/{character_id}/bookmarks/`\n\nAlternate route: `/v2/characters/{character_id}/bookmarks/`\n\n---\nThis route is cached for up to 3600 seconds",
-        "operationId": "get_characters_character_id_bookmarks",
-        "parameters": [
-          {
-            "$ref": "#/parameters/character_id"
-          },
-          {
-            "$ref": "#/parameters/datasource"
-          },
-          {
-            "$ref": "#/parameters/If-None-Match"
-          },
-          {
-            "$ref": "#/parameters/page"
-          },
-          {
-            "$ref": "#/parameters/token"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "A list of bookmarks",
-            "examples": {
-              "application/json": [
-                {
-                  "bookmark_id": 4,
-                  "created": "2016-08-09T11:57:47Z",
-                  "creator_id": 2112625428,
-                  "folder_id": 5,
-                  "item": {
-                    "item_id": 50006722,
-                    "type_id": 29633
-                  },
-                  "label": "Stargate",
-                  "location_id": 30003430,
-                  "notes": "This is a stargate"
-                },
-                {
-                  "bookmark_id": 5,
-                  "coordinates": {
-                    "x": -2958928814000,
-                    "y": -338367275823,
-                    "z": 2114538075090
-                  },
-                  "created": "2016-08-09T11:57:47Z",
-                  "creator_id": 2112625428,
-                  "folder_id": 5,
-                  "label": "Random location",
-                  "location_id": 30003430,
-                  "notes": "This is a random location in space"
-                }
-              ]
-            },
-            "headers": {
-              "Cache-Control": {
-                "description": "The caching mechanism used",
-                "type": "string"
-              },
-              "ETag": {
-                "description": "RFC7232 compliant entity tag",
-                "type": "string"
-              },
-              "Expires": {
-                "description": "RFC7231 formatted datetime string",
-                "type": "string"
-              },
-              "Last-Modified": {
-                "description": "RFC7231 formatted datetime string",
-                "type": "string"
-              },
-              "X-Pages": {
-                "default": 1,
-                "description": "Maximum page number",
-                "format": "int32",
-                "type": "integer"
-              }
-            },
-            "schema": {
-              "description": "200 ok array",
-              "items": {
-                "description": "200 ok object",
-                "properties": {
-                  "bookmark_id": {
-                    "description": "bookmark_id integer",
-                    "format": "int32",
-                    "title": "get_characters_character_id_bookmarks_bookmark_id",
-                    "type": "integer"
-                  },
-                  "coordinates": {
-                    "description": "Optional object that is returned if a bookmark was made on a planet or a random location in space.",
-                    "properties": {
-                      "x": {
-                        "description": "x number",
-                        "format": "double",
-                        "title": "get_characters_character_id_bookmarks_x",
-                        "type": "number"
-                      },
-                      "y": {
-                        "description": "y number",
-                        "format": "double",
-                        "title": "get_characters_character_id_bookmarks_y",
-                        "type": "number"
-                      },
-                      "z": {
-                        "description": "z number",
-                        "format": "double",
-                        "title": "get_characters_character_id_bookmarks_z",
-                        "type": "number"
-                      }
-                    },
-                    "required": [
-                      "x",
-                      "y",
-                      "z"
-                    ],
-                    "title": "get_characters_character_id_bookmarks_coordinates",
-                    "type": "object"
-                  },
-                  "created": {
-                    "description": "created string",
-                    "format": "date-time",
-                    "title": "get_characters_character_id_bookmarks_created",
-                    "type": "string"
-                  },
-                  "creator_id": {
-                    "description": "creator_id integer",
-                    "format": "int32",
-                    "title": "get_characters_character_id_bookmarks_creator_id",
-                    "type": "integer"
-                  },
-                  "folder_id": {
-                    "description": "folder_id integer",
-                    "format": "int32",
-                    "title": "get_characters_character_id_bookmarks_folder_id",
-                    "type": "integer"
-                  },
-                  "item": {
-                    "description": "Optional object that is returned if a bookmark was made on a particular item.",
-                    "properties": {
-                      "item_id": {
-                        "description": "item_id integer",
-                        "format": "int64",
-                        "title": "get_characters_character_id_bookmarks_item_id",
-                        "type": "integer"
-                      },
-                      "type_id": {
-                        "description": "type_id integer",
-                        "format": "int32",
-                        "title": "get_characters_character_id_bookmarks_type_id",
-                        "type": "integer"
-                      }
-                    },
-                    "required": [
-                      "item_id",
-                      "type_id"
-                    ],
-                    "title": "get_characters_character_id_bookmarks_item",
-                    "type": "object"
-                  },
-                  "label": {
-                    "description": "label string",
-                    "title": "get_characters_character_id_bookmarks_label",
-                    "type": "string"
-                  },
-                  "location_id": {
-                    "description": "location_id integer",
-                    "format": "int32",
-                    "title": "get_characters_character_id_bookmarks_location_id",
-                    "type": "integer"
-                  },
-                  "notes": {
-                    "description": "notes string",
-                    "title": "get_characters_character_id_bookmarks_notes",
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "bookmark_id",
-                  "created",
-                  "label",
-                  "notes",
-                  "location_id",
-                  "creator_id"
-                ],
-                "title": "get_characters_character_id_bookmarks_200_ok",
-                "type": "object"
-              },
-              "maxItems": 1000,
-              "title": "get_characters_character_id_bookmarks_ok",
-              "type": "array"
-            }
-          },
-          "304": {
-            "description": "Not modified",
-            "headers": {
-              "Cache-Control": {
-                "description": "The caching mechanism used",
-                "type": "string"
-              },
-              "ETag": {
-                "description": "RFC7232 compliant entity tag",
-                "type": "string"
-              },
-              "Expires": {
-                "description": "RFC7231 formatted datetime string",
-                "type": "string"
-              },
-              "Last-Modified": {
-                "description": "RFC7231 formatted datetime string",
-                "type": "string"
-              }
-            }
-          },
-          "400": {
-            "description": "Bad request",
-            "examples": {
-              "application/json": {
-                "error": "Bad request message"
-              }
-            },
-            "schema": {
-              "$ref": "#/definitions/bad_request"
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "examples": {
-              "application/json": {
-                "error": "Unauthorized message"
-              }
-            },
-            "schema": {
-              "$ref": "#/definitions/unauthorized"
-            }
-          },
-          "403": {
-            "description": "Forbidden",
-            "examples": {
-              "application/json": {
-                "error": "Forbidden message"
-              }
-            },
-            "schema": {
-              "$ref": "#/definitions/forbidden"
-            }
-          },
-          "420": {
-            "description": "Error limited",
-            "examples": {
-              "application/json": {
-                "error": "Error limited message"
-              }
-            },
-            "schema": {
-              "$ref": "#/definitions/error_limited"
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "examples": {
-              "application/json": {
-                "error": "Internal server error message"
-              }
-            },
-            "schema": {
-              "$ref": "#/definitions/internal_server_error"
-            }
-          },
-          "503": {
-            "description": "Service unavailable",
-            "examples": {
-              "application/json": {
-                "error": "Service unavailable message"
-              }
-            },
-            "schema": {
-              "$ref": "#/definitions/service_unavailable"
-            }
-          },
-          "504": {
-            "description": "Gateway timeout",
-            "examples": {
-              "application/json": {
-                "error": "Gateway timeout message"
-              }
-            },
-            "schema": {
-              "$ref": "#/definitions/gateway_timeout"
-            }
-          }
-        },
-        "security": [
-          {
-            "evesso": [
-              "esi-bookmarks.read_character_bookmarks.v1"
-            ]
-          }
-        ],
-        "summary": "List bookmarks",
-        "tags": [
-          "Bookmarks"
-        ],
-        "x-alternate-versions": [
-          "dev",
-          "v2"
-        ],
-        "x-cached-seconds": 3600
-      }
-    },
-    "/characters/{character_id}/bookmarks/folders/": {
-      "get": {
-        "description": "A list of your character's personal bookmark folders\n\n---\nAlternate route: `/dev/characters/{character_id}/bookmarks/folders/`\n\nAlternate route: `/v2/characters/{character_id}/bookmarks/folders/`\n\n---\nThis route is cached for up to 3600 seconds",
-        "operationId": "get_characters_character_id_bookmarks_folders",
-        "parameters": [
-          {
-            "$ref": "#/parameters/character_id"
-          },
-          {
-            "$ref": "#/parameters/datasource"
-          },
-          {
-            "$ref": "#/parameters/If-None-Match"
-          },
-          {
-            "$ref": "#/parameters/page"
-          },
-          {
-            "$ref": "#/parameters/token"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "List of bookmark folders",
-            "examples": {
-              "application/json": [
-                {
-                  "folder_id": 5,
-                  "name": "Icecream"
-                }
-              ]
-            },
-            "headers": {
-              "Cache-Control": {
-                "description": "The caching mechanism used",
-                "type": "string"
-              },
-              "ETag": {
-                "description": "RFC7232 compliant entity tag",
-                "type": "string"
-              },
-              "Expires": {
-                "description": "RFC7231 formatted datetime string",
-                "type": "string"
-              },
-              "Last-Modified": {
-                "description": "RFC7231 formatted datetime string",
-                "type": "string"
-              },
-              "X-Pages": {
-                "default": 1,
-                "description": "Maximum page number",
-                "format": "int32",
-                "type": "integer"
-              }
-            },
-            "schema": {
-              "description": "200 ok array",
-              "items": {
-                "description": "200 ok object",
-                "properties": {
-                  "folder_id": {
-                    "description": "folder_id integer",
-                    "format": "int32",
-                    "title": "get_characters_character_id_bookmarks_folders_folder_id",
-                    "type": "integer"
-                  },
-                  "name": {
-                    "description": "name string",
-                    "title": "get_characters_character_id_bookmarks_folders_name",
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "folder_id",
-                  "name"
-                ],
-                "title": "get_characters_character_id_bookmarks_folders_200_ok",
-                "type": "object"
-              },
-              "maxItems": 1000,
-              "title": "get_characters_character_id_bookmarks_folders_ok",
-              "type": "array"
-            }
-          },
-          "304": {
-            "description": "Not modified",
-            "headers": {
-              "Cache-Control": {
-                "description": "The caching mechanism used",
-                "type": "string"
-              },
-              "ETag": {
-                "description": "RFC7232 compliant entity tag",
-                "type": "string"
-              },
-              "Expires": {
-                "description": "RFC7231 formatted datetime string",
-                "type": "string"
-              },
-              "Last-Modified": {
-                "description": "RFC7231 formatted datetime string",
-                "type": "string"
-              }
-            }
-          },
-          "400": {
-            "description": "Bad request",
-            "examples": {
-              "application/json": {
-                "error": "Bad request message"
-              }
-            },
-            "schema": {
-              "$ref": "#/definitions/bad_request"
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "examples": {
-              "application/json": {
-                "error": "Unauthorized message"
-              }
-            },
-            "schema": {
-              "$ref": "#/definitions/unauthorized"
-            }
-          },
-          "403": {
-            "description": "Forbidden",
-            "examples": {
-              "application/json": {
-                "error": "Forbidden message"
-              }
-            },
-            "schema": {
-              "$ref": "#/definitions/forbidden"
-            }
-          },
-          "420": {
-            "description": "Error limited",
-            "examples": {
-              "application/json": {
-                "error": "Error limited message"
-              }
-            },
-            "schema": {
-              "$ref": "#/definitions/error_limited"
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "examples": {
-              "application/json": {
-                "error": "Internal server error message"
-              }
-            },
-            "schema": {
-              "$ref": "#/definitions/internal_server_error"
-            }
-          },
-          "503": {
-            "description": "Service unavailable",
-            "examples": {
-              "application/json": {
-                "error": "Service unavailable message"
-              }
-            },
-            "schema": {
-              "$ref": "#/definitions/service_unavailable"
-            }
-          },
-          "504": {
-            "description": "Gateway timeout",
-            "examples": {
-              "application/json": {
-                "error": "Gateway timeout message"
-              }
-            },
-            "schema": {
-              "$ref": "#/definitions/gateway_timeout"
-            }
-          }
-        },
-        "security": [
-          {
-            "evesso": [
-              "esi-bookmarks.read_character_bookmarks.v1"
-            ]
-          }
-        ],
-        "summary": "List bookmark folders",
-        "tags": [
-          "Bookmarks"
-        ],
-        "x-alternate-versions": [
-          "dev",
-          "v2"
         ],
         "x-cached-seconds": 3600
       }
@@ -4607,7 +4105,7 @@
     },
     "/characters/{character_id}/clones/": {
       "get": {
-        "description": "A list of the character's clones\n\n---\nAlternate route: `/dev/characters/{character_id}/clones/`\n\nAlternate route: `/v3/characters/{character_id}/clones/`\n\nAlternate route: `/v4/characters/{character_id}/clones/`\n\n---\nThis route is cached for up to 120 seconds",
+        "description": "A list of the character's clones\n\n---\nAlternate route: `/dev/characters/{character_id}/clones/`\n\nAlternate route: `/legacy/characters/{character_id}/clones/`\n\nAlternate route: `/v2/characters/{character_id}/clones/`\n\nAlternate route: `/v3/characters/{character_id}/clones/`\n\nAlternate route: `/v4/characters/{character_id}/clones/`\n\n---\nThis route is cached for up to 120 seconds",
         "operationId": "get_characters_character_id_clones",
         "parameters": [
           {
@@ -4876,6 +4374,8 @@
         ],
         "x-alternate-versions": [
           "dev",
+          "legacy",
+          "v2",
           "v3",
           "v4"
         ],
@@ -4884,7 +4384,7 @@
     },
     "/characters/{character_id}/contacts/": {
       "delete": {
-        "description": "Bulk delete contacts\n\n---\nAlternate route: `/dev/characters/{character_id}/contacts/`\n\nAlternate route: `/v2/characters/{character_id}/contacts/`\n",
+        "description": "Bulk delete contacts\n\n---\nAlternate route: `/dev/characters/{character_id}/contacts/`\n\nAlternate route: `/legacy/characters/{character_id}/contacts/`\n\nAlternate route: `/v1/characters/{character_id}/contacts/`\n\nAlternate route: `/v2/characters/{character_id}/contacts/`\n",
         "operationId": "delete_characters_character_id_contacts",
         "parameters": [
           {
@@ -5005,6 +4505,8 @@
         ],
         "x-alternate-versions": [
           "dev",
+          "legacy",
+          "v1",
           "v2"
         ]
       },
@@ -6664,7 +6166,7 @@
     },
     "/characters/{character_id}/corporationhistory/": {
       "get": {
-        "description": "Get a list of all the corporations a character has been a member of\n\n---\nAlternate route: `/dev/characters/{character_id}/corporationhistory/`\n\nAlternate route: `/v2/characters/{character_id}/corporationhistory/`\n\n---\nThis route is cached for up to 86400 seconds",
+        "description": "Get a list of all the corporations a character has been a member of\n\n---\nAlternate route: `/dev/characters/{character_id}/corporationhistory/`\n\nAlternate route: `/legacy/characters/{character_id}/corporationhistory/`\n\nAlternate route: `/v1/characters/{character_id}/corporationhistory/`\n\nAlternate route: `/v2/characters/{character_id}/corporationhistory/`\n\n---\nThis route is cached for up to 86400 seconds",
         "operationId": "get_characters_character_id_corporationhistory",
         "parameters": [
           {
@@ -6838,6 +6340,8 @@
         ],
         "x-alternate-versions": [
           "dev",
+          "legacy",
+          "v1",
           "v2"
         ],
         "x-cached-seconds": 86400
@@ -6845,7 +6349,7 @@
     },
     "/characters/{character_id}/cspa/": {
       "post": {
-        "description": "Takes a source character ID in the url and a set of target character ID's in the body, returns a CSPA charge cost\n\n---\nAlternate route: `/dev/characters/{character_id}/cspa/`\n\nAlternate route: `/v5/characters/{character_id}/cspa/`\n",
+        "description": "Takes a source character ID in the url and a set of target character ID's in the body, returns a CSPA charge cost\n\n---\nAlternate route: `/dev/characters/{character_id}/cspa/`\n\nAlternate route: `/legacy/characters/{character_id}/cspa/`\n\nAlternate route: `/v4/characters/{character_id}/cspa/`\n\nAlternate route: `/v5/characters/{character_id}/cspa/`\n",
         "operationId": "post_characters_character_id_cspa",
         "parameters": [
           {
@@ -6982,13 +6486,15 @@
         ],
         "x-alternate-versions": [
           "dev",
+          "legacy",
+          "v4",
           "v5"
         ]
       }
     },
     "/characters/{character_id}/fatigue/": {
       "get": {
-        "description": "Return a character's jump activation and fatigue information\n\n---\nAlternate route: `/dev/characters/{character_id}/fatigue/`\n\nAlternate route: `/v2/characters/{character_id}/fatigue/`\n\n---\nThis route is cached for up to 300 seconds",
+        "description": "Return a character's jump activation and fatigue information\n\n---\nAlternate route: `/dev/characters/{character_id}/fatigue/`\n\nAlternate route: `/legacy/characters/{character_id}/fatigue/`\n\nAlternate route: `/v1/characters/{character_id}/fatigue/`\n\nAlternate route: `/v2/characters/{character_id}/fatigue/`\n\n---\nThis route is cached for up to 300 seconds",
         "operationId": "get_characters_character_id_fatigue",
         "parameters": [
           {
@@ -7170,6 +6676,8 @@
         ],
         "x-alternate-versions": [
           "dev",
+          "legacy",
+          "v1",
           "v2"
         ],
         "x-cached-seconds": 300
@@ -7471,7 +6979,7 @@
         "x-cached-seconds": 300
       },
       "post": {
-        "description": "Save a new fitting for a character\n\n---\nAlternate route: `/dev/characters/{character_id}/fittings/`\n\nAlternate route: `/v2/characters/{character_id}/fittings/`\n",
+        "description": "Save a new fitting for a character\n\n---\nAlternate route: `/dev/characters/{character_id}/fittings/`\n\nAlternate route: `/legacy/characters/{character_id}/fittings/`\n\nAlternate route: `/v1/characters/{character_id}/fittings/`\n\nAlternate route: `/v2/characters/{character_id}/fittings/`\n",
         "operationId": "post_characters_character_id_fittings",
         "parameters": [
           {
@@ -7720,6 +7228,8 @@
         ],
         "x-alternate-versions": [
           "dev",
+          "legacy",
+          "v1",
           "v2"
         ]
       }
@@ -7849,7 +7359,7 @@
     },
     "/characters/{character_id}/fleet/": {
       "get": {
-        "description": "Return the fleet ID the character is in, if any.\n\n---\nAlternate route: `/legacy/characters/{character_id}/fleet/`\n\nAlternate route: `/v1/characters/{character_id}/fleet/`\n\n---\nThis route is cached for up to 60 seconds\n\n---\nWarning: This route has an upgrade available\n\n---\n[Diff of the upcoming changes](https://esi.evetech.net/diff/latest/dev/#GET-/characters/{character_id}/fleet/)",
+        "description": "Return the fleet ID the character is in, if any.\n\n---\nAlternate route: `/dev/characters/{character_id}/fleet/`\n\nAlternate route: `/legacy/characters/{character_id}/fleet/`\n\nAlternate route: `/v1/characters/{character_id}/fleet/`\n\nAlternate route: `/v2/characters/{character_id}/fleet/`\n\n---\nThis route is cached for up to 60 seconds",
         "operationId": "get_characters_character_id_fleet",
         "parameters": [
           {
@@ -7870,6 +7380,7 @@
             "description": "Details about the character's fleet",
             "examples": {
               "application/json": {
+                "fleet_boss_id": 2112000001,
                 "fleet_id": 1234567890,
                 "role": "fleet_commander",
                 "squad_id": -1,
@@ -7897,6 +7408,12 @@
             "schema": {
               "description": "200 ok object",
               "properties": {
+                "fleet_boss_id": {
+                  "description": "Character ID of the current fleet boss",
+                  "format": "int64",
+                  "title": "get_characters_character_id_fleet_fleet_boss_id",
+                  "type": "integer"
+                },
                 "fleet_id": {
                   "description": "The character's current fleet ID",
                   "format": "int64",
@@ -7931,7 +7448,8 @@
                 "fleet_id",
                 "wing_id",
                 "squad_id",
-                "role"
+                "role",
+                "fleet_boss_id"
               ],
               "title": "get_characters_character_id_fleet_ok",
               "type": "object"
@@ -8068,8 +7586,10 @@
           "Fleets"
         ],
         "x-alternate-versions": [
+          "dev",
           "legacy",
-          "v1"
+          "v1",
+          "v2"
         ],
         "x-cached-seconds": 60
       }
@@ -11296,7 +10816,7 @@
     },
     "/characters/{character_id}/medals/": {
       "get": {
-        "description": "Return a list of medals the character has\n\n---\nAlternate route: `/dev/characters/{character_id}/medals/`\n\nAlternate route: `/v2/characters/{character_id}/medals/`\n\n---\nThis route is cached for up to 3600 seconds",
+        "description": "Return a list of medals the character has\n\n---\nAlternate route: `/dev/characters/{character_id}/medals/`\n\nAlternate route: `/legacy/characters/{character_id}/medals/`\n\nAlternate route: `/v1/characters/{character_id}/medals/`\n\nAlternate route: `/v2/characters/{character_id}/medals/`\n\n---\nThis route is cached for up to 3600 seconds",
         "operationId": "get_characters_character_id_medals",
         "parameters": [
           {
@@ -11594,6 +11114,8 @@
         ],
         "x-alternate-versions": [
           "dev",
+          "legacy",
+          "v1",
           "v2"
         ],
         "x-cached-seconds": 3600
@@ -11827,7 +11349,7 @@
     },
     "/characters/{character_id}/notifications/": {
       "get": {
-        "description": "Return character notifications\n\n---\nAlternate route: `/dev/characters/{character_id}/notifications/`\n\nAlternate route: `/v5/characters/{character_id}/notifications/`\n\nAlternate route: `/v6/characters/{character_id}/notifications/`\n\n---\nThis route is cached for up to 600 seconds",
+        "description": "Return character notifications\n\n---\nAlternate route: `/dev/characters/{character_id}/notifications/`\n\nAlternate route: `/legacy/characters/{character_id}/notifications/`\n\nAlternate route: `/v4/characters/{character_id}/notifications/`\n\nAlternate route: `/v5/characters/{character_id}/notifications/`\n\nAlternate route: `/v6/characters/{character_id}/notifications/`\n\n---\nThis route is cached for up to 600 seconds",
         "operationId": "get_characters_character_id_notifications",
         "parameters": [
           {
@@ -12001,9 +11523,12 @@
                       "CorporationGoalClosed",
                       "CorporationGoalCompleted",
                       "CorporationGoalCreated",
+                      "CorporationGoalExpired",
+                      "CorporationGoalLimitReached",
                       "CorporationGoalNameChange",
                       "CorporationLeft",
                       "CustomsMsg",
+                      "DailyItemRewardAutoClaimed",
                       "DeclareWar",
                       "DistrictAttacked",
                       "DustAppAcceptedMsg",
@@ -12029,6 +11554,12 @@
                       "FacWarLPDisqualifiedKill",
                       "FacWarLPPayoutEvent",
                       "FacWarLPPayoutKill",
+                      "FreelanceProjectClosed",
+                      "FreelanceProjectCompleted",
+                      "FreelanceProjectCreated",
+                      "FreelanceProjectExpired",
+                      "FreelanceProjectLimitReached",
+                      "FreelanceProjectParticipantKicked",
                       "GameTimeAdded",
                       "GameTimeReceived",
                       "GameTimeSent",
@@ -12062,6 +11593,9 @@
                       "MadeWarMutual",
                       "MercOfferRetractedMsg",
                       "MercOfferedNegotiationMsg",
+                      "MercenaryDenAttacked",
+                      "MercenaryDenNewMTO",
+                      "MercenaryDenReinforced",
                       "MissionCanceledTriglavian",
                       "MissionOfferExpirationMsg",
                       "MissionTimeoutMsg",
@@ -12291,6 +11825,8 @@
         ],
         "x-alternate-versions": [
           "dev",
+          "legacy",
+          "v4",
           "v5",
           "v6"
         ],
@@ -12299,7 +11835,7 @@
     },
     "/characters/{character_id}/notifications/contacts/": {
       "get": {
-        "description": "Return notifications about having been added to someone's contact list\n\n---\nAlternate route: `/dev/characters/{character_id}/notifications/contacts/`\n\nAlternate route: `/v2/characters/{character_id}/notifications/contacts/`\n\n---\nThis route is cached for up to 600 seconds",
+        "description": "Return notifications about having been added to someone's contact list\n\n---\nAlternate route: `/dev/characters/{character_id}/notifications/contacts/`\n\nAlternate route: `/legacy/characters/{character_id}/notifications/contacts/`\n\nAlternate route: `/v1/characters/{character_id}/notifications/contacts/`\n\nAlternate route: `/v2/characters/{character_id}/notifications/contacts/`\n\n---\nThis route is cached for up to 600 seconds",
         "operationId": "get_characters_character_id_notifications_contacts",
         "parameters": [
           {
@@ -12359,7 +11895,7 @@
                   },
                   "notification_id": {
                     "description": "notification_id integer",
-                    "format": "int32",
+                    "format": "int64",
                     "title": "get_characters_character_id_notifications_contacts_notification_id",
                     "type": "integer"
                   },
@@ -12509,6 +12045,8 @@
         ],
         "x-alternate-versions": [
           "dev",
+          "legacy",
+          "v1",
           "v2"
         ],
         "x-cached-seconds": 600
@@ -12711,201 +12249,6 @@
           "v3"
         ],
         "x-cached-seconds": 60
-      }
-    },
-    "/characters/{character_id}/opportunities/": {
-      "get": {
-        "description": "Return a list of tasks finished by a character\n\n---\nAlternate route: `/dev/characters/{character_id}/opportunities/`\n\nAlternate route: `/legacy/characters/{character_id}/opportunities/`\n\nAlternate route: `/v1/characters/{character_id}/opportunities/`\n\n---\nThis route is cached for up to 3600 seconds",
-        "operationId": "get_characters_character_id_opportunities",
-        "parameters": [
-          {
-            "$ref": "#/parameters/character_id"
-          },
-          {
-            "$ref": "#/parameters/datasource"
-          },
-          {
-            "$ref": "#/parameters/If-None-Match"
-          },
-          {
-            "$ref": "#/parameters/token"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "A list of opportunities task ids",
-            "examples": {
-              "application/json": [
-                {
-                  "completed_at": "2016-04-29T12:34:56Z",
-                  "task_id": 1
-                }
-              ]
-            },
-            "headers": {
-              "Cache-Control": {
-                "description": "The caching mechanism used",
-                "type": "string"
-              },
-              "ETag": {
-                "description": "RFC7232 compliant entity tag",
-                "type": "string"
-              },
-              "Expires": {
-                "description": "RFC7231 formatted datetime string",
-                "type": "string"
-              },
-              "Last-Modified": {
-                "description": "RFC7231 formatted datetime string",
-                "type": "string"
-              }
-            },
-            "schema": {
-              "description": "200 ok array",
-              "items": {
-                "description": "200 ok object",
-                "properties": {
-                  "completed_at": {
-                    "description": "completed_at string",
-                    "format": "date-time",
-                    "title": "get_characters_character_id_opportunities_completed_at",
-                    "type": "string"
-                  },
-                  "task_id": {
-                    "description": "task_id integer",
-                    "format": "int32",
-                    "title": "get_characters_character_id_opportunities_task_id",
-                    "type": "integer"
-                  }
-                },
-                "required": [
-                  "task_id",
-                  "completed_at"
-                ],
-                "title": "get_characters_character_id_opportunities_200_ok",
-                "type": "object"
-              },
-              "maxItems": 100,
-              "title": "get_characters_character_id_opportunities_ok",
-              "type": "array"
-            }
-          },
-          "304": {
-            "description": "Not modified",
-            "headers": {
-              "Cache-Control": {
-                "description": "The caching mechanism used",
-                "type": "string"
-              },
-              "ETag": {
-                "description": "RFC7232 compliant entity tag",
-                "type": "string"
-              },
-              "Expires": {
-                "description": "RFC7231 formatted datetime string",
-                "type": "string"
-              },
-              "Last-Modified": {
-                "description": "RFC7231 formatted datetime string",
-                "type": "string"
-              }
-            }
-          },
-          "400": {
-            "description": "Bad request",
-            "examples": {
-              "application/json": {
-                "error": "Bad request message"
-              }
-            },
-            "schema": {
-              "$ref": "#/definitions/bad_request"
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "examples": {
-              "application/json": {
-                "error": "Unauthorized message"
-              }
-            },
-            "schema": {
-              "$ref": "#/definitions/unauthorized"
-            }
-          },
-          "403": {
-            "description": "Forbidden",
-            "examples": {
-              "application/json": {
-                "error": "Forbidden message"
-              }
-            },
-            "schema": {
-              "$ref": "#/definitions/forbidden"
-            }
-          },
-          "420": {
-            "description": "Error limited",
-            "examples": {
-              "application/json": {
-                "error": "Error limited message"
-              }
-            },
-            "schema": {
-              "$ref": "#/definitions/error_limited"
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "examples": {
-              "application/json": {
-                "error": "Internal server error message"
-              }
-            },
-            "schema": {
-              "$ref": "#/definitions/internal_server_error"
-            }
-          },
-          "503": {
-            "description": "Service unavailable",
-            "examples": {
-              "application/json": {
-                "error": "Service unavailable message"
-              }
-            },
-            "schema": {
-              "$ref": "#/definitions/service_unavailable"
-            }
-          },
-          "504": {
-            "description": "Gateway timeout",
-            "examples": {
-              "application/json": {
-                "error": "Gateway timeout message"
-              }
-            },
-            "schema": {
-              "$ref": "#/definitions/gateway_timeout"
-            }
-          }
-        },
-        "security": [
-          {
-            "evesso": [
-              "esi-characters.read_opportunities.v1"
-            ]
-          }
-        ],
-        "summary": "Get a character's completed tasks",
-        "tags": [
-          "Opportunities"
-        ],
-        "x-alternate-versions": [
-          "dev",
-          "legacy",
-          "v1"
-        ],
-        "x-cached-seconds": 3600
       }
     },
     "/characters/{character_id}/orders/": {
@@ -14435,7 +13778,7 @@
     },
     "/characters/{character_id}/roles/": {
       "get": {
-        "description": "Returns a character's corporation roles\n\n---\nAlternate route: `/dev/characters/{character_id}/roles/`\n\nAlternate route: `/v3/characters/{character_id}/roles/`\n\n---\nThis route is cached for up to 3600 seconds",
+        "description": "Returns a character's corporation roles\n\n---\nAlternate route: `/dev/characters/{character_id}/roles/`\n\nAlternate route: `/legacy/characters/{character_id}/roles/`\n\nAlternate route: `/v2/characters/{character_id}/roles/`\n\nAlternate route: `/v3/characters/{character_id}/roles/`\n\n---\nThis route is cached for up to 3600 seconds",
         "operationId": "get_characters_character_id_roles",
         "parameters": [
           {
@@ -14872,6 +14215,8 @@
         ],
         "x-alternate-versions": [
           "dev",
+          "legacy",
+          "v2",
           "v3"
         ],
         "x-cached-seconds": 3600
@@ -15574,7 +14919,7 @@
                 "title": "get_characters_character_id_skillqueue_200_ok",
                 "type": "object"
               },
-              "maxItems": 150,
+              "maxItems": 200,
               "title": "get_characters_character_id_skillqueue_ok",
               "type": "array"
             }
@@ -15941,7 +15286,7 @@
     },
     "/characters/{character_id}/standings/": {
       "get": {
-        "description": "Return character standings from agents, NPC corporations, and factions\n\n---\nAlternate route: `/dev/characters/{character_id}/standings/`\n\nAlternate route: `/v2/characters/{character_id}/standings/`\n\n---\nThis route is cached for up to 3600 seconds",
+        "description": "Return character standings from agents, NPC corporations, and factions\n\n---\nAlternate route: `/dev/characters/{character_id}/standings/`\n\nAlternate route: `/legacy/characters/{character_id}/standings/`\n\nAlternate route: `/v1/characters/{character_id}/standings/`\n\nAlternate route: `/v2/characters/{character_id}/standings/`\n\n---\nThis route is cached for up to 3600 seconds",
         "operationId": "get_characters_character_id_standings",
         "parameters": [
           {
@@ -16150,6 +15495,8 @@
         ],
         "x-alternate-versions": [
           "dev",
+          "legacy",
+          "v1",
           "v2"
         ],
         "x-cached-seconds": 3600
@@ -16157,7 +15504,7 @@
     },
     "/characters/{character_id}/titles/": {
       "get": {
-        "description": "Returns a character's titles\n\n---\nAlternate route: `/dev/characters/{character_id}/titles/`\n\nAlternate route: `/v2/characters/{character_id}/titles/`\n\n---\nThis route is cached for up to 3600 seconds",
+        "description": "Returns a character's titles\n\n---\nAlternate route: `/dev/characters/{character_id}/titles/`\n\nAlternate route: `/legacy/characters/{character_id}/titles/`\n\nAlternate route: `/v1/characters/{character_id}/titles/`\n\nAlternate route: `/v2/characters/{character_id}/titles/`\n\n---\nThis route is cached for up to 3600 seconds",
         "operationId": "get_characters_character_id_titles",
         "parameters": [
           {
@@ -16339,6 +15686,8 @@
         ],
         "x-alternate-versions": [
           "dev",
+          "legacy",
+          "v1",
           "v2"
         ],
         "x-cached-seconds": 3600
@@ -16512,7 +15861,7 @@
     },
     "/characters/{character_id}/wallet/journal/": {
       "get": {
-        "description": "Retrieve the given character's wallet journal going 30 days back\n\n---\nAlternate route: `/dev/characters/{character_id}/wallet/journal/`\n\nAlternate route: `/v6/characters/{character_id}/wallet/journal/`\n\n---\nThis route is cached for up to 3600 seconds",
+        "description": "Retrieve the given character's wallet journal going 30 days back\n\n---\nAlternate route: `/dev/characters/{character_id}/wallet/journal/`\n\nAlternate route: `/legacy/characters/{character_id}/wallet/journal/`\n\nAlternate route: `/v5/characters/{character_id}/wallet/journal/`\n\nAlternate route: `/v6/characters/{character_id}/wallet/journal/`\n\n---\nThis route is cached for up to 3600 seconds",
         "operationId": "get_characters_character_id_wallet_journal",
         "parameters": [
           {
@@ -16661,6 +16010,7 @@
                       "agent_security_services",
                       "agent_services_rendered",
                       "agents_preward",
+                      "air_career_program_reward",
                       "alliance_maintainance_fee",
                       "alliance_registration_fee",
                       "allignment_based_gate_toll",
@@ -16734,7 +16084,14 @@
                       "flux_tax",
                       "flux_ticket_repayment",
                       "flux_ticket_sale",
+                      "freelance_jobs_broadcasting_fee",
+                      "freelance_jobs_duration_fee",
+                      "freelance_jobs_escrow_refund",
+                      "freelance_jobs_reward",
+                      "freelance_jobs_reward_corporation_tax",
+                      "freelance_jobs_reward_escrow",
                       "gm_cash_transfer",
+                      "gm_plex_fee_refund",
                       "industry_job_tax",
                       "infrastructure_hub_maintenance",
                       "inheritance",
@@ -16783,6 +16140,7 @@
                       "security_processing_fee",
                       "shares",
                       "skill_purchase",
+                      "skyhook_claim_fee",
                       "sovereignity_bill",
                       "store_purchase",
                       "store_purchase_refund",
@@ -16942,6 +16300,8 @@
         ],
         "x-alternate-versions": [
           "dev",
+          "legacy",
+          "v5",
           "v6"
         ],
         "x-cached-seconds": 3600
@@ -18736,7 +18096,7 @@
     },
     "/corporations/npccorps/": {
       "get": {
-        "description": "Get a list of npc corporations\n\n---\nAlternate route: `/dev/corporations/npccorps/`\n\nAlternate route: `/v2/corporations/npccorps/`\n\n---\nThis route expires daily at 11:05",
+        "description": "Get a list of npc corporations\n\n---\nAlternate route: `/dev/corporations/npccorps/`\n\nAlternate route: `/legacy/corporations/npccorps/`\n\nAlternate route: `/v1/corporations/npccorps/`\n\nAlternate route: `/v2/corporations/npccorps/`\n\n---\nThis route expires daily at 11:05",
         "operationId": "get_corporations_npccorps",
         "parameters": [
           {
@@ -18870,13 +18230,15 @@
         ],
         "x-alternate-versions": [
           "dev",
+          "legacy",
+          "v1",
           "v2"
         ]
       }
     },
     "/corporations/{corporation_id}/": {
       "get": {
-        "description": "Public information about a corporation\n\n---\nAlternate route: `/dev/corporations/{corporation_id}/`\n\nAlternate route: `/v5/corporations/{corporation_id}/`\n\n---\nThis route is cached for up to 3600 seconds",
+        "description": "Public information about a corporation\n\n---\nAlternate route: `/dev/corporations/{corporation_id}/`\n\nAlternate route: `/legacy/corporations/{corporation_id}/`\n\nAlternate route: `/v4/corporations/{corporation_id}/`\n\nAlternate route: `/v5/corporations/{corporation_id}/`\n\n---\nThis route is cached for up to 3600 seconds",
         "operationId": "get_corporations_corporation_id",
         "parameters": [
           {
@@ -19124,6 +18486,8 @@
         ],
         "x-alternate-versions": [
           "dev",
+          "legacy",
+          "v4",
           "v5"
         ],
         "x-cached-seconds": 3600
@@ -19131,7 +18495,7 @@
     },
     "/corporations/{corporation_id}/alliancehistory/": {
       "get": {
-        "description": "Get a list of all the alliances a corporation has been a member of\n\n---\nAlternate route: `/dev/corporations/{corporation_id}/alliancehistory/`\n\nAlternate route: `/v3/corporations/{corporation_id}/alliancehistory/`\n\n---\nThis route is cached for up to 3600 seconds",
+        "description": "Get a list of all the alliances a corporation has been a member of\n\n---\nAlternate route: `/dev/corporations/{corporation_id}/alliancehistory/`\n\nAlternate route: `/legacy/corporations/{corporation_id}/alliancehistory/`\n\nAlternate route: `/v2/corporations/{corporation_id}/alliancehistory/`\n\nAlternate route: `/v3/corporations/{corporation_id}/alliancehistory/`\n\n---\nThis route is cached for up to 3600 seconds",
         "operationId": "get_corporations_corporation_id_alliancehistory",
         "parameters": [
           {
@@ -19303,6 +18667,8 @@
         ],
         "x-alternate-versions": [
           "dev",
+          "legacy",
+          "v2",
           "v3"
         ],
         "x-cached-seconds": 3600
@@ -19310,7 +18676,7 @@
     },
     "/corporations/{corporation_id}/assets/": {
       "get": {
-        "description": "Return a list of the corporation assets\n\n---\nAlternate route: `/dev/corporations/{corporation_id}/assets/`\n\nAlternate route: `/v5/corporations/{corporation_id}/assets/`\n\n---\nThis route is cached for up to 3600 seconds\n\n---\nRequires one of the following EVE corporation role(s): Director\n",
+        "description": "Return a list of the corporation assets\n\n---\nAlternate route: `/dev/corporations/{corporation_id}/assets/`\n\nAlternate route: `/legacy/corporations/{corporation_id}/assets/`\n\nAlternate route: `/v4/corporations/{corporation_id}/assets/`\n\nAlternate route: `/v5/corporations/{corporation_id}/assets/`\n\n---\nThis route is cached for up to 3600 seconds\n\n---\nRequires one of the following EVE corporation role(s): Director\n",
         "operationId": "get_corporations_corporation_id_assets",
         "parameters": [
           {
@@ -19400,6 +18766,7 @@
                       "Booster",
                       "BoosterBay",
                       "Capsule",
+                      "CapsuleerDeliveries",
                       "Cargo",
                       "CorpDeliveries",
                       "CorpSAG1",
@@ -19680,6 +19047,8 @@
         ],
         "x-alternate-versions": [
           "dev",
+          "legacy",
+          "v4",
           "v5"
         ],
         "x-cached-seconds": 3600,
@@ -20106,7 +19475,7 @@
     },
     "/corporations/{corporation_id}/blueprints/": {
       "get": {
-        "description": "Returns a list of blueprints the corporation owns\n\n---\nAlternate route: `/dev/corporations/{corporation_id}/blueprints/`\n\nAlternate route: `/v3/corporations/{corporation_id}/blueprints/`\n\n---\nThis route is cached for up to 3600 seconds\n\n---\nRequires one of the following EVE corporation role(s): Director\n",
+        "description": "Returns a list of blueprints the corporation owns\n\n---\nAlternate route: `/dev/corporations/{corporation_id}/blueprints/`\n\nAlternate route: `/legacy/corporations/{corporation_id}/blueprints/`\n\nAlternate route: `/v2/corporations/{corporation_id}/blueprints/`\n\nAlternate route: `/v3/corporations/{corporation_id}/blueprints/`\n\n---\nThis route is cached for up to 3600 seconds\n\n---\nRequires one of the following EVE corporation role(s): Director\n",
         "operationId": "get_corporations_corporation_id_blueprints",
         "parameters": [
           {
@@ -20186,6 +19555,7 @@
                       "Booster",
                       "BoosterBay",
                       "Capsule",
+                      "CapsuleerDeliveries",
                       "Cargo",
                       "CorpDeliveries",
                       "CorpSAG1",
@@ -20195,6 +19565,7 @@
                       "CorpSAG5",
                       "CorpSAG6",
                       "CorpSAG7",
+                      "CorporationGoalDeliveries",
                       "CrateLoot",
                       "Deliveries",
                       "DroneBay",
@@ -20221,6 +19592,7 @@
                       "HiddenModifiers",
                       "Implant",
                       "Impounded",
+                      "InfrastructureHangar",
                       "JunkyardReprocessed",
                       "JunkyardTrashed",
                       "LoSlot0",
@@ -20240,6 +19612,8 @@
                       "MedSlot5",
                       "MedSlot6",
                       "MedSlot7",
+                      "MobileDepotHold",
+                      "MoonMaterialBay",
                       "OfficeFolder",
                       "Pilot",
                       "PlanetSurface",
@@ -20268,9 +19642,11 @@
                       "Skill",
                       "SkillInTraining",
                       "SpecializedAmmoHold",
+                      "SpecializedAsteroidHold",
                       "SpecializedCommandCenterHold",
                       "SpecializedFuelBay",
                       "SpecializedGasHold",
+                      "SpecializedIceHold",
                       "SpecializedIndustrialShipHold",
                       "SpecializedLargeShipHold",
                       "SpecializedMaterialBay",
@@ -20474,533 +19850,14 @@
         ],
         "x-alternate-versions": [
           "dev",
+          "legacy",
+          "v2",
           "v3"
         ],
         "x-cached-seconds": 3600,
         "x-required-roles": [
           "Director"
         ]
-      }
-    },
-    "/corporations/{corporation_id}/bookmarks/": {
-      "get": {
-        "description": "A list of your corporation's bookmarks\n\n---\nAlternate route: `/dev/corporations/{corporation_id}/bookmarks/`\n\nAlternate route: `/legacy/corporations/{corporation_id}/bookmarks/`\n\nAlternate route: `/v1/corporations/{corporation_id}/bookmarks/`\n\n---\nThis route is cached for up to 3600 seconds",
-        "operationId": "get_corporations_corporation_id_bookmarks",
-        "parameters": [
-          {
-            "$ref": "#/parameters/corporation_id"
-          },
-          {
-            "$ref": "#/parameters/datasource"
-          },
-          {
-            "$ref": "#/parameters/If-None-Match"
-          },
-          {
-            "$ref": "#/parameters/page"
-          },
-          {
-            "$ref": "#/parameters/token"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "List of corporation owned bookmarks",
-            "examples": {
-              "application/json": [
-                {
-                  "bookmark_id": 4,
-                  "created": "2016-08-09T11:57:47Z",
-                  "creator_id": 2112625428,
-                  "folder_id": 5,
-                  "item": {
-                    "item_id": 50006722,
-                    "type_id": 29633
-                  },
-                  "label": "Stargate",
-                  "location_id": 30003430,
-                  "notes": "This is a stargate"
-                },
-                {
-                  "bookmark_id": 5,
-                  "coordinates": {
-                    "x": -2958928814000,
-                    "y": -338367275823,
-                    "z": 2114538075090
-                  },
-                  "created": "2016-08-09T11:57:47Z",
-                  "creator_id": 2112625428,
-                  "folder_id": 5,
-                  "label": "Random location",
-                  "location_id": 30003430,
-                  "notes": "This is a random location in space"
-                }
-              ]
-            },
-            "headers": {
-              "Cache-Control": {
-                "description": "The caching mechanism used",
-                "type": "string"
-              },
-              "ETag": {
-                "description": "RFC7232 compliant entity tag",
-                "type": "string"
-              },
-              "Expires": {
-                "description": "RFC7231 formatted datetime string",
-                "type": "string"
-              },
-              "Last-Modified": {
-                "description": "RFC7231 formatted datetime string",
-                "type": "string"
-              },
-              "X-Pages": {
-                "default": 1,
-                "description": "Maximum page number",
-                "format": "int32",
-                "type": "integer"
-              }
-            },
-            "schema": {
-              "description": "200 ok array",
-              "items": {
-                "description": "200 ok object",
-                "properties": {
-                  "bookmark_id": {
-                    "description": "bookmark_id integer",
-                    "format": "int32",
-                    "title": "get_corporations_corporation_id_bookmarks_bookmark_id",
-                    "type": "integer"
-                  },
-                  "coordinates": {
-                    "description": "Optional object that is returned if a bookmark was made on a planet or a random location in space.",
-                    "properties": {
-                      "x": {
-                        "description": "x number",
-                        "format": "double",
-                        "title": "get_corporations_corporation_id_bookmarks_x",
-                        "type": "number"
-                      },
-                      "y": {
-                        "description": "y number",
-                        "format": "double",
-                        "title": "get_corporations_corporation_id_bookmarks_y",
-                        "type": "number"
-                      },
-                      "z": {
-                        "description": "z number",
-                        "format": "double",
-                        "title": "get_corporations_corporation_id_bookmarks_z",
-                        "type": "number"
-                      }
-                    },
-                    "required": [
-                      "x",
-                      "y",
-                      "z"
-                    ],
-                    "title": "get_corporations_corporation_id_bookmarks_coordinates",
-                    "type": "object"
-                  },
-                  "created": {
-                    "description": "created string",
-                    "format": "date-time",
-                    "title": "get_corporations_corporation_id_bookmarks_created",
-                    "type": "string"
-                  },
-                  "creator_id": {
-                    "description": "creator_id integer",
-                    "format": "int32",
-                    "title": "get_corporations_corporation_id_bookmarks_creator_id",
-                    "type": "integer"
-                  },
-                  "folder_id": {
-                    "description": "folder_id integer",
-                    "format": "int32",
-                    "title": "get_corporations_corporation_id_bookmarks_folder_id",
-                    "type": "integer"
-                  },
-                  "item": {
-                    "description": "Optional object that is returned if a bookmark was made on a particular item.",
-                    "properties": {
-                      "item_id": {
-                        "description": "item_id integer",
-                        "format": "int64",
-                        "title": "get_corporations_corporation_id_bookmarks_item_id",
-                        "type": "integer"
-                      },
-                      "type_id": {
-                        "description": "type_id integer",
-                        "format": "int32",
-                        "title": "get_corporations_corporation_id_bookmarks_type_id",
-                        "type": "integer"
-                      }
-                    },
-                    "required": [
-                      "item_id",
-                      "type_id"
-                    ],
-                    "title": "get_corporations_corporation_id_bookmarks_item",
-                    "type": "object"
-                  },
-                  "label": {
-                    "description": "label string",
-                    "title": "get_corporations_corporation_id_bookmarks_label",
-                    "type": "string"
-                  },
-                  "location_id": {
-                    "description": "location_id integer",
-                    "format": "int32",
-                    "title": "get_corporations_corporation_id_bookmarks_location_id",
-                    "type": "integer"
-                  },
-                  "notes": {
-                    "description": "notes string",
-                    "title": "get_corporations_corporation_id_bookmarks_notes",
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "bookmark_id",
-                  "creator_id",
-                  "created",
-                  "label",
-                  "notes",
-                  "location_id"
-                ],
-                "title": "get_corporations_corporation_id_bookmarks_200_ok",
-                "type": "object"
-              },
-              "maxItems": 1000,
-              "title": "get_corporations_corporation_id_bookmarks_ok",
-              "type": "array"
-            }
-          },
-          "304": {
-            "description": "Not modified",
-            "headers": {
-              "Cache-Control": {
-                "description": "The caching mechanism used",
-                "type": "string"
-              },
-              "ETag": {
-                "description": "RFC7232 compliant entity tag",
-                "type": "string"
-              },
-              "Expires": {
-                "description": "RFC7231 formatted datetime string",
-                "type": "string"
-              },
-              "Last-Modified": {
-                "description": "RFC7231 formatted datetime string",
-                "type": "string"
-              }
-            }
-          },
-          "400": {
-            "description": "Bad request",
-            "examples": {
-              "application/json": {
-                "error": "Bad request message"
-              }
-            },
-            "schema": {
-              "$ref": "#/definitions/bad_request"
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "examples": {
-              "application/json": {
-                "error": "Unauthorized message"
-              }
-            },
-            "schema": {
-              "$ref": "#/definitions/unauthorized"
-            }
-          },
-          "403": {
-            "description": "Forbidden",
-            "examples": {
-              "application/json": {
-                "error": "Forbidden message"
-              }
-            },
-            "schema": {
-              "$ref": "#/definitions/forbidden"
-            }
-          },
-          "420": {
-            "description": "Error limited",
-            "examples": {
-              "application/json": {
-                "error": "Error limited message"
-              }
-            },
-            "schema": {
-              "$ref": "#/definitions/error_limited"
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "examples": {
-              "application/json": {
-                "error": "Internal server error message"
-              }
-            },
-            "schema": {
-              "$ref": "#/definitions/internal_server_error"
-            }
-          },
-          "503": {
-            "description": "Service unavailable",
-            "examples": {
-              "application/json": {
-                "error": "Service unavailable message"
-              }
-            },
-            "schema": {
-              "$ref": "#/definitions/service_unavailable"
-            }
-          },
-          "504": {
-            "description": "Gateway timeout",
-            "examples": {
-              "application/json": {
-                "error": "Gateway timeout message"
-              }
-            },
-            "schema": {
-              "$ref": "#/definitions/gateway_timeout"
-            }
-          }
-        },
-        "security": [
-          {
-            "evesso": [
-              "esi-bookmarks.read_corporation_bookmarks.v1"
-            ]
-          }
-        ],
-        "summary": "List corporation bookmarks",
-        "tags": [
-          "Bookmarks"
-        ],
-        "x-alternate-versions": [
-          "dev",
-          "legacy",
-          "v1"
-        ],
-        "x-cached-seconds": 3600
-      }
-    },
-    "/corporations/{corporation_id}/bookmarks/folders/": {
-      "get": {
-        "description": "A list of your corporation's bookmark folders\n\n---\nAlternate route: `/dev/corporations/{corporation_id}/bookmarks/folders/`\n\nAlternate route: `/legacy/corporations/{corporation_id}/bookmarks/folders/`\n\nAlternate route: `/v1/corporations/{corporation_id}/bookmarks/folders/`\n\n---\nThis route is cached for up to 3600 seconds",
-        "operationId": "get_corporations_corporation_id_bookmarks_folders",
-        "parameters": [
-          {
-            "$ref": "#/parameters/corporation_id"
-          },
-          {
-            "$ref": "#/parameters/datasource"
-          },
-          {
-            "$ref": "#/parameters/If-None-Match"
-          },
-          {
-            "$ref": "#/parameters/page"
-          },
-          {
-            "$ref": "#/parameters/token"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "List of corporation owned bookmark folders",
-            "examples": {
-              "application/json": [
-                {
-                  "folder_id": 5,
-                  "name": "Important Locations"
-                }
-              ]
-            },
-            "headers": {
-              "Cache-Control": {
-                "description": "The caching mechanism used",
-                "type": "string"
-              },
-              "ETag": {
-                "description": "RFC7232 compliant entity tag",
-                "type": "string"
-              },
-              "Expires": {
-                "description": "RFC7231 formatted datetime string",
-                "type": "string"
-              },
-              "Last-Modified": {
-                "description": "RFC7231 formatted datetime string",
-                "type": "string"
-              },
-              "X-Pages": {
-                "default": 1,
-                "description": "Maximum page number",
-                "format": "int32",
-                "type": "integer"
-              }
-            },
-            "schema": {
-              "description": "200 ok array",
-              "items": {
-                "description": "200 ok object",
-                "properties": {
-                  "creator_id": {
-                    "description": "creator_id integer",
-                    "format": "int32",
-                    "title": "get_corporations_corporation_id_bookmarks_folders_creator_id",
-                    "type": "integer"
-                  },
-                  "folder_id": {
-                    "description": "folder_id integer",
-                    "format": "int32",
-                    "title": "get_corporations_corporation_id_bookmarks_folders_folder_id",
-                    "type": "integer"
-                  },
-                  "name": {
-                    "description": "name string",
-                    "title": "get_corporations_corporation_id_bookmarks_folders_name",
-                    "type": "string"
-                  }
-                },
-                "required": [
-                  "folder_id",
-                  "name"
-                ],
-                "title": "get_corporations_corporation_id_bookmarks_folders_200_ok",
-                "type": "object"
-              },
-              "maxItems": 1000,
-              "title": "get_corporations_corporation_id_bookmarks_folders_ok",
-              "type": "array"
-            }
-          },
-          "304": {
-            "description": "Not modified",
-            "headers": {
-              "Cache-Control": {
-                "description": "The caching mechanism used",
-                "type": "string"
-              },
-              "ETag": {
-                "description": "RFC7232 compliant entity tag",
-                "type": "string"
-              },
-              "Expires": {
-                "description": "RFC7231 formatted datetime string",
-                "type": "string"
-              },
-              "Last-Modified": {
-                "description": "RFC7231 formatted datetime string",
-                "type": "string"
-              }
-            }
-          },
-          "400": {
-            "description": "Bad request",
-            "examples": {
-              "application/json": {
-                "error": "Bad request message"
-              }
-            },
-            "schema": {
-              "$ref": "#/definitions/bad_request"
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "examples": {
-              "application/json": {
-                "error": "Unauthorized message"
-              }
-            },
-            "schema": {
-              "$ref": "#/definitions/unauthorized"
-            }
-          },
-          "403": {
-            "description": "Forbidden",
-            "examples": {
-              "application/json": {
-                "error": "Forbidden message"
-              }
-            },
-            "schema": {
-              "$ref": "#/definitions/forbidden"
-            }
-          },
-          "420": {
-            "description": "Error limited",
-            "examples": {
-              "application/json": {
-                "error": "Error limited message"
-              }
-            },
-            "schema": {
-              "$ref": "#/definitions/error_limited"
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "examples": {
-              "application/json": {
-                "error": "Internal server error message"
-              }
-            },
-            "schema": {
-              "$ref": "#/definitions/internal_server_error"
-            }
-          },
-          "503": {
-            "description": "Service unavailable",
-            "examples": {
-              "application/json": {
-                "error": "Service unavailable message"
-              }
-            },
-            "schema": {
-              "$ref": "#/definitions/service_unavailable"
-            }
-          },
-          "504": {
-            "description": "Gateway timeout",
-            "examples": {
-              "application/json": {
-                "error": "Gateway timeout message"
-              }
-            },
-            "schema": {
-              "$ref": "#/definitions/gateway_timeout"
-            }
-          }
-        },
-        "security": [
-          {
-            "evesso": [
-              "esi-bookmarks.read_corporation_bookmarks.v1"
-            ]
-          }
-        ],
-        "summary": "List corporation bookmark folders",
-        "tags": [
-          "Bookmarks"
-        ],
-        "x-alternate-versions": [
-          "dev",
-          "legacy",
-          "v1"
-        ],
-        "x-cached-seconds": 3600
       }
     },
     "/corporations/{corporation_id}/contacts/": {
@@ -21435,7 +20292,7 @@
     },
     "/corporations/{corporation_id}/containers/logs/": {
       "get": {
-        "description": "Returns logs recorded in the past seven days from all audit log secure containers (ALSC) owned by a given corporation\n\n---\nAlternate route: `/dev/corporations/{corporation_id}/containers/logs/`\n\nAlternate route: `/v3/corporations/{corporation_id}/containers/logs/`\n\n---\nThis route is cached for up to 600 seconds\n\n---\nRequires one of the following EVE corporation role(s): Director\n",
+        "description": "Returns logs recorded in the past seven days from all audit log secure containers (ALSC) owned by a given corporation\n\n---\nAlternate route: `/dev/corporations/{corporation_id}/containers/logs/`\n\nAlternate route: `/legacy/corporations/{corporation_id}/containers/logs/`\n\nAlternate route: `/v2/corporations/{corporation_id}/containers/logs/`\n\nAlternate route: `/v3/corporations/{corporation_id}/containers/logs/`\n\n---\nThis route is cached for up to 600 seconds\n\n---\nRequires one of the following EVE corporation role(s): Director\n",
         "operationId": "get_corporations_corporation_id_containers_logs",
         "parameters": [
           {
@@ -21566,6 +20423,7 @@
                       "Booster",
                       "BoosterBay",
                       "Capsule",
+                      "CapsuleerDeliveries",
                       "Cargo",
                       "CorpDeliveries",
                       "CorpSAG1",
@@ -21575,6 +20433,7 @@
                       "CorpSAG5",
                       "CorpSAG6",
                       "CorpSAG7",
+                      "CorporationGoalDeliveries",
                       "CrateLoot",
                       "Deliveries",
                       "DroneBay",
@@ -21601,6 +20460,7 @@
                       "HiddenModifiers",
                       "Implant",
                       "Impounded",
+                      "InfrastructureHangar",
                       "JunkyardReprocessed",
                       "JunkyardTrashed",
                       "LoSlot0",
@@ -21620,6 +20480,8 @@
                       "MedSlot5",
                       "MedSlot6",
                       "MedSlot7",
+                      "MobileDepotHold",
+                      "MoonMaterialBay",
                       "OfficeFolder",
                       "Pilot",
                       "PlanetSurface",
@@ -21648,9 +20510,11 @@
                       "Skill",
                       "SkillInTraining",
                       "SpecializedAmmoHold",
+                      "SpecializedAsteroidHold",
                       "SpecializedCommandCenterHold",
                       "SpecializedFuelBay",
                       "SpecializedGasHold",
+                      "SpecializedIceHold",
                       "SpecializedIndustrialShipHold",
                       "SpecializedLargeShipHold",
                       "SpecializedMaterialBay",
@@ -21856,6 +20720,8 @@
         ],
         "x-alternate-versions": [
           "dev",
+          "legacy",
+          "v2",
           "v3"
         ],
         "x-cached-seconds": 600,
@@ -23058,7 +21924,7 @@
     },
     "/corporations/{corporation_id}/divisions/": {
       "get": {
-        "description": "Return corporation hangar and wallet division names, only show if a division is not using the default name\n\n---\nAlternate route: `/dev/corporations/{corporation_id}/divisions/`\n\nAlternate route: `/v2/corporations/{corporation_id}/divisions/`\n\n---\nThis route is cached for up to 3600 seconds\n\n---\nRequires one of the following EVE corporation role(s): Director\n",
+        "description": "Return corporation hangar and wallet division names, only show if a division is not using the default name\n\n---\nAlternate route: `/dev/corporations/{corporation_id}/divisions/`\n\nAlternate route: `/legacy/corporations/{corporation_id}/divisions/`\n\nAlternate route: `/v1/corporations/{corporation_id}/divisions/`\n\nAlternate route: `/v2/corporations/{corporation_id}/divisions/`\n\n---\nThis route is cached for up to 3600 seconds\n\n---\nRequires one of the following EVE corporation role(s): Director\n",
         "operationId": "get_corporations_corporation_id_divisions",
         "parameters": [
           {
@@ -23285,6 +22151,8 @@
         ],
         "x-alternate-versions": [
           "dev",
+          "legacy",
+          "v1",
           "v2"
         ],
         "x-cached-seconds": 3600,
@@ -23295,7 +22163,7 @@
     },
     "/corporations/{corporation_id}/facilities/": {
       "get": {
-        "description": "Return a corporation's facilities\n\n---\nAlternate route: `/dev/corporations/{corporation_id}/facilities/`\n\nAlternate route: `/v2/corporations/{corporation_id}/facilities/`\n\n---\nThis route is cached for up to 3600 seconds\n\n---\nRequires one of the following EVE corporation role(s): Factory_Manager\n",
+        "description": "Return a corporation's facilities\n\n---\nAlternate route: `/dev/corporations/{corporation_id}/facilities/`\n\nAlternate route: `/legacy/corporations/{corporation_id}/facilities/`\n\nAlternate route: `/v1/corporations/{corporation_id}/facilities/`\n\nAlternate route: `/v2/corporations/{corporation_id}/facilities/`\n\n---\nThis route is cached for up to 3600 seconds\n\n---\nRequires one of the following EVE corporation role(s): Factory_Manager\n",
         "operationId": "get_corporations_corporation_id_facilities",
         "parameters": [
           {
@@ -23490,6 +22358,8 @@
         ],
         "x-alternate-versions": [
           "dev",
+          "legacy",
+          "v1",
           "v2"
         ],
         "x-cached-seconds": 3600,
@@ -23764,7 +22634,7 @@
     },
     "/corporations/{corporation_id}/icons/": {
       "get": {
-        "description": "Get the icon urls for a corporation\n\n---\nAlternate route: `/dev/corporations/{corporation_id}/icons/`\n\nAlternate route: `/v2/corporations/{corporation_id}/icons/`\n\n---\nThis route is cached for up to 3600 seconds",
+        "description": "Get the icon urls for a corporation\n\n---\nAlternate route: `/dev/corporations/{corporation_id}/icons/`\n\nAlternate route: `/legacy/corporations/{corporation_id}/icons/`\n\nAlternate route: `/v1/corporations/{corporation_id}/icons/`\n\nAlternate route: `/v2/corporations/{corporation_id}/icons/`\n\n---\nThis route is cached for up to 3600 seconds",
         "operationId": "get_corporations_corporation_id_icons",
         "parameters": [
           {
@@ -23931,6 +22801,8 @@
         ],
         "x-alternate-versions": [
           "dev",
+          "legacy",
+          "v1",
           "v2"
         ],
         "x-cached-seconds": 3600
@@ -24516,7 +23388,7 @@
     },
     "/corporations/{corporation_id}/medals/": {
       "get": {
-        "description": "Returns a corporation's medals\n\n---\nAlternate route: `/dev/corporations/{corporation_id}/medals/`\n\nAlternate route: `/v2/corporations/{corporation_id}/medals/`\n\n---\nThis route is cached for up to 3600 seconds",
+        "description": "Returns a corporation's medals\n\n---\nAlternate route: `/dev/corporations/{corporation_id}/medals/`\n\nAlternate route: `/legacy/corporations/{corporation_id}/medals/`\n\nAlternate route: `/v1/corporations/{corporation_id}/medals/`\n\nAlternate route: `/v2/corporations/{corporation_id}/medals/`\n\n---\nThis route is cached for up to 3600 seconds",
         "operationId": "get_corporations_corporation_id_medals",
         "parameters": [
           {
@@ -24736,6 +23608,8 @@
         ],
         "x-alternate-versions": [
           "dev",
+          "legacy",
+          "v1",
           "v2"
         ],
         "x-cached-seconds": 3600,
@@ -24744,7 +23618,7 @@
     },
     "/corporations/{corporation_id}/medals/issued/": {
       "get": {
-        "description": "Returns medals issued by a corporation\n\n---\nAlternate route: `/dev/corporations/{corporation_id}/medals/issued/`\n\nAlternate route: `/v2/corporations/{corporation_id}/medals/issued/`\n\n---\nThis route is cached for up to 3600 seconds\n\n---\nRequires one of the following EVE corporation role(s): Director\n",
+        "description": "Returns medals issued by a corporation\n\n---\nAlternate route: `/dev/corporations/{corporation_id}/medals/issued/`\n\nAlternate route: `/legacy/corporations/{corporation_id}/medals/issued/`\n\nAlternate route: `/v1/corporations/{corporation_id}/medals/issued/`\n\nAlternate route: `/v2/corporations/{corporation_id}/medals/issued/`\n\n---\nThis route is cached for up to 3600 seconds\n\n---\nRequires one of the following EVE corporation role(s): Director\n",
         "operationId": "get_corporations_corporation_id_medals_issued",
         "parameters": [
           {
@@ -24975,6 +23849,8 @@
         ],
         "x-alternate-versions": [
           "dev",
+          "legacy",
+          "v1",
           "v2"
         ],
         "x-cached-seconds": 3600,
@@ -24985,7 +23861,7 @@
     },
     "/corporations/{corporation_id}/members/": {
       "get": {
-        "description": "Return the current member list of a corporation, the token's character need to be a member of the corporation.\n\n---\nAlternate route: `/dev/corporations/{corporation_id}/members/`\n\nAlternate route: `/v4/corporations/{corporation_id}/members/`\n\n---\nThis route is cached for up to 3600 seconds",
+        "description": "Return the current member list of a corporation, the token's character need to be a member of the corporation.\n\n---\nAlternate route: `/dev/corporations/{corporation_id}/members/`\n\nAlternate route: `/legacy/corporations/{corporation_id}/members/`\n\nAlternate route: `/v3/corporations/{corporation_id}/members/`\n\nAlternate route: `/v4/corporations/{corporation_id}/members/`\n\n---\nThis route is cached for up to 3600 seconds",
         "operationId": "get_corporations_corporation_id_members",
         "parameters": [
           {
@@ -25153,6 +24029,8 @@
         ],
         "x-alternate-versions": [
           "dev",
+          "legacy",
+          "v3",
           "v4"
         ],
         "x-cached-seconds": 3600
@@ -25160,7 +24038,7 @@
     },
     "/corporations/{corporation_id}/members/limit/": {
       "get": {
-        "description": "Return a corporation's member limit, not including CEO himself\n\n---\nAlternate route: `/dev/corporations/{corporation_id}/members/limit/`\n\nAlternate route: `/v2/corporations/{corporation_id}/members/limit/`\n\n---\nThis route is cached for up to 3600 seconds\n\n---\nRequires one of the following EVE corporation role(s): Director\n",
+        "description": "Return a corporation's member limit, not including CEO himself\n\n---\nAlternate route: `/dev/corporations/{corporation_id}/members/limit/`\n\nAlternate route: `/legacy/corporations/{corporation_id}/members/limit/`\n\nAlternate route: `/v1/corporations/{corporation_id}/members/limit/`\n\nAlternate route: `/v2/corporations/{corporation_id}/members/limit/`\n\n---\nThis route is cached for up to 3600 seconds\n\n---\nRequires one of the following EVE corporation role(s): Director\n",
         "operationId": "get_corporations_corporation_id_members_limit",
         "parameters": [
           {
@@ -25319,6 +24197,8 @@
         ],
         "x-alternate-versions": [
           "dev",
+          "legacy",
+          "v1",
           "v2"
         ],
         "x-cached-seconds": 3600,
@@ -25329,7 +24209,7 @@
     },
     "/corporations/{corporation_id}/members/titles/": {
       "get": {
-        "description": "Returns a corporation's members' titles\n\n---\nAlternate route: `/dev/corporations/{corporation_id}/members/titles/`\n\nAlternate route: `/v2/corporations/{corporation_id}/members/titles/`\n\n---\nThis route is cached for up to 3600 seconds\n\n---\nRequires one of the following EVE corporation role(s): Director\n",
+        "description": "Returns a corporation's members' titles\n\n---\nAlternate route: `/dev/corporations/{corporation_id}/members/titles/`\n\nAlternate route: `/legacy/corporations/{corporation_id}/members/titles/`\n\nAlternate route: `/v1/corporations/{corporation_id}/members/titles/`\n\nAlternate route: `/v2/corporations/{corporation_id}/members/titles/`\n\n---\nThis route is cached for up to 3600 seconds\n\n---\nRequires one of the following EVE corporation role(s): Director\n",
         "operationId": "get_corporations_corporation_id_members_titles",
         "parameters": [
           {
@@ -25522,6 +24402,8 @@
         ],
         "x-alternate-versions": [
           "dev",
+          "legacy",
+          "v1",
           "v2"
         ],
         "x-cached-seconds": 3600,
@@ -25532,7 +24414,7 @@
     },
     "/corporations/{corporation_id}/membertracking/": {
       "get": {
-        "description": "Returns additional information about a corporation's members which helps tracking their activities\n\n---\nAlternate route: `/dev/corporations/{corporation_id}/membertracking/`\n\nAlternate route: `/v2/corporations/{corporation_id}/membertracking/`\n\n---\nThis route is cached for up to 3600 seconds\n\n---\nRequires one of the following EVE corporation role(s): Director\n",
+        "description": "Returns additional information about a corporation's members which helps tracking their activities\n\n---\nAlternate route: `/dev/corporations/{corporation_id}/membertracking/`\n\nAlternate route: `/legacy/corporations/{corporation_id}/membertracking/`\n\nAlternate route: `/v1/corporations/{corporation_id}/membertracking/`\n\nAlternate route: `/v2/corporations/{corporation_id}/membertracking/`\n\n---\nThis route is cached for up to 3600 seconds\n\n---\nRequires one of the following EVE corporation role(s): Director\n",
         "operationId": "get_corporations_corporation_id_membertracking",
         "parameters": [
           {
@@ -25760,6 +24642,8 @@
         ],
         "x-alternate-versions": [
           "dev",
+          "legacy",
+          "v1",
           "v2"
         ],
         "x-cached-seconds": 3600,
@@ -25770,7 +24654,7 @@
     },
     "/corporations/{corporation_id}/orders/": {
       "get": {
-        "description": "List open market orders placed on behalf of a corporation\n\n---\nAlternate route: `/dev/corporations/{corporation_id}/orders/`\n\nAlternate route: `/v3/corporations/{corporation_id}/orders/`\n\n---\nThis route is cached for up to 1200 seconds\n\n---\nRequires one of the following EVE corporation role(s): Accountant, Trader\n",
+        "description": "List open market orders placed on behalf of a corporation\n\n---\nAlternate route: `/dev/corporations/{corporation_id}/orders/`\n\nAlternate route: `/legacy/corporations/{corporation_id}/orders/`\n\nAlternate route: `/v2/corporations/{corporation_id}/orders/`\n\nAlternate route: `/v3/corporations/{corporation_id}/orders/`\n\n---\nThis route is cached for up to 1200 seconds\n\n---\nRequires one of the following EVE corporation role(s): Accountant, Trader\n",
         "operationId": "get_corporations_corporation_id_orders",
         "parameters": [
           {
@@ -26081,6 +24965,8 @@
         ],
         "x-alternate-versions": [
           "dev",
+          "legacy",
+          "v2",
           "v3"
         ],
         "x-cached-seconds": 1200,
@@ -26092,7 +24978,7 @@
     },
     "/corporations/{corporation_id}/orders/history/": {
       "get": {
-        "description": "List cancelled and expired market orders placed on behalf of a corporation up to 90 days in the past.\n\n---\nAlternate route: `/dev/corporations/{corporation_id}/orders/history/`\n\nAlternate route: `/v2/corporations/{corporation_id}/orders/history/`\n\n---\nThis route is cached for up to 3600 seconds\n\n---\nRequires one of the following EVE corporation role(s): Accountant, Trader\n",
+        "description": "List cancelled and expired market orders placed on behalf of a corporation up to 90 days in the past.\n\n---\nAlternate route: `/dev/corporations/{corporation_id}/orders/history/`\n\nAlternate route: `/legacy/corporations/{corporation_id}/orders/history/`\n\nAlternate route: `/v1/corporations/{corporation_id}/orders/history/`\n\nAlternate route: `/v2/corporations/{corporation_id}/orders/history/`\n\n---\nThis route is cached for up to 3600 seconds\n\n---\nRequires one of the following EVE corporation role(s): Accountant, Trader\n",
         "operationId": "get_corporations_corporation_id_orders_history",
         "parameters": [
           {
@@ -26413,6 +25299,8 @@
         ],
         "x-alternate-versions": [
           "dev",
+          "legacy",
+          "v1",
           "v2"
         ],
         "x-cached-seconds": 3600,
@@ -26424,7 +25312,7 @@
     },
     "/corporations/{corporation_id}/roles/": {
       "get": {
-        "description": "Return the roles of all members if the character has the personnel manager role or any grantable role.\n\n---\nAlternate route: `/dev/corporations/{corporation_id}/roles/`\n\nAlternate route: `/v2/corporations/{corporation_id}/roles/`\n\n---\nThis route is cached for up to 3600 seconds",
+        "description": "Return the roles of all members if the character has the personnel manager role or any grantable role.\n\n---\nAlternate route: `/dev/corporations/{corporation_id}/roles/`\n\nAlternate route: `/legacy/corporations/{corporation_id}/roles/`\n\nAlternate route: `/v1/corporations/{corporation_id}/roles/`\n\nAlternate route: `/v2/corporations/{corporation_id}/roles/`\n\n---\nThis route is cached for up to 3600 seconds",
         "operationId": "get_corporations_corporation_id_roles",
         "parameters": [
           {
@@ -27151,6 +26039,8 @@
         ],
         "x-alternate-versions": [
           "dev",
+          "legacy",
+          "v1",
           "v2"
         ],
         "x-cached-seconds": 3600
@@ -27158,7 +26048,7 @@
     },
     "/corporations/{corporation_id}/roles/history/": {
       "get": {
-        "description": "Return how roles have changed for a coporation's members, up to a month\n\n---\nAlternate route: `/dev/corporations/{corporation_id}/roles/history/`\n\nAlternate route: `/v2/corporations/{corporation_id}/roles/history/`\n\n---\nThis route is cached for up to 3600 seconds\n\n---\nRequires one of the following EVE corporation role(s): Director\n",
+        "description": "Return how roles have changed for a coporation's members, up to a month\n\n---\nAlternate route: `/dev/corporations/{corporation_id}/roles/history/`\n\nAlternate route: `/legacy/corporations/{corporation_id}/roles/history/`\n\nAlternate route: `/v1/corporations/{corporation_id}/roles/history/`\n\nAlternate route: `/v2/corporations/{corporation_id}/roles/history/`\n\n---\nThis route is cached for up to 3600 seconds\n\n---\nRequires one of the following EVE corporation role(s): Director\n",
         "operationId": "get_corporations_corporation_id_roles_history",
         "parameters": [
           {
@@ -27523,6 +26413,8 @@
         ],
         "x-alternate-versions": [
           "dev",
+          "legacy",
+          "v1",
           "v2"
         ],
         "x-cached-seconds": 3600,
@@ -27766,7 +26658,7 @@
     },
     "/corporations/{corporation_id}/standings/": {
       "get": {
-        "description": "Return corporation standings from agents, NPC corporations, and factions\n\n---\nAlternate route: `/dev/corporations/{corporation_id}/standings/`\n\nAlternate route: `/v2/corporations/{corporation_id}/standings/`\n\n---\nThis route is cached for up to 3600 seconds",
+        "description": "Return corporation standings from agents, NPC corporations, and factions\n\n---\nAlternate route: `/dev/corporations/{corporation_id}/standings/`\n\nAlternate route: `/legacy/corporations/{corporation_id}/standings/`\n\nAlternate route: `/v1/corporations/{corporation_id}/standings/`\n\nAlternate route: `/v2/corporations/{corporation_id}/standings/`\n\n---\nThis route is cached for up to 3600 seconds",
         "operationId": "get_corporations_corporation_id_standings",
         "parameters": [
           {
@@ -27984,6 +26876,8 @@
         ],
         "x-alternate-versions": [
           "dev",
+          "legacy",
+          "v1",
           "v2"
         ],
         "x-cached-seconds": 3600,
@@ -27992,7 +26886,7 @@
     },
     "/corporations/{corporation_id}/starbases/": {
       "get": {
-        "description": "Returns list of corporation starbases (POSes)\n\n---\nAlternate route: `/dev/corporations/{corporation_id}/starbases/`\n\nAlternate route: `/v2/corporations/{corporation_id}/starbases/`\n\n---\nThis route is cached for up to 3600 seconds\n\n---\nRequires one of the following EVE corporation role(s): Director\n",
+        "description": "Returns list of corporation starbases (POSes)\n\n---\nAlternate route: `/dev/corporations/{corporation_id}/starbases/`\n\nAlternate route: `/legacy/corporations/{corporation_id}/starbases/`\n\nAlternate route: `/v1/corporations/{corporation_id}/starbases/`\n\nAlternate route: `/v2/corporations/{corporation_id}/starbases/`\n\n---\nThis route is cached for up to 3600 seconds\n\n---\nRequires one of the following EVE corporation role(s): Director\n",
         "operationId": "get_corporations_corporation_id_starbases",
         "parameters": [
           {
@@ -28232,6 +27126,8 @@
         ],
         "x-alternate-versions": [
           "dev",
+          "legacy",
+          "v1",
           "v2"
         ],
         "x-cached-seconds": 3600,
@@ -28242,7 +27138,7 @@
     },
     "/corporations/{corporation_id}/starbases/{starbase_id}/": {
       "get": {
-        "description": "Returns various settings and fuels of a starbase (POS)\n\n---\nAlternate route: `/dev/corporations/{corporation_id}/starbases/{starbase_id}/`\n\nAlternate route: `/v2/corporations/{corporation_id}/starbases/{starbase_id}/`\n\n---\nThis route is cached for up to 3600 seconds\n\n---\nRequires one of the following EVE corporation role(s): Director\n",
+        "description": "Returns various settings and fuels of a starbase (POS)\n\n---\nAlternate route: `/dev/corporations/{corporation_id}/starbases/{starbase_id}/`\n\nAlternate route: `/legacy/corporations/{corporation_id}/starbases/{starbase_id}/`\n\nAlternate route: `/v1/corporations/{corporation_id}/starbases/{starbase_id}/`\n\nAlternate route: `/v2/corporations/{corporation_id}/starbases/{starbase_id}/`\n\n---\nThis route is cached for up to 3600 seconds\n\n---\nRequires one of the following EVE corporation role(s): Director\n",
         "operationId": "get_corporations_corporation_id_starbases_starbase_id",
         "parameters": [
           {
@@ -28575,6 +27471,8 @@
         ],
         "x-alternate-versions": [
           "dev",
+          "legacy",
+          "v1",
           "v2"
         ],
         "x-cached-seconds": 3600,
@@ -28942,7 +27840,7 @@
     },
     "/corporations/{corporation_id}/titles/": {
       "get": {
-        "description": "Returns a corporation's titles\n\n---\nAlternate route: `/dev/corporations/{corporation_id}/titles/`\n\nAlternate route: `/v2/corporations/{corporation_id}/titles/`\n\n---\nThis route is cached for up to 3600 seconds\n\n---\nRequires one of the following EVE corporation role(s): Director\n",
+        "description": "Returns a corporation's titles\n\n---\nAlternate route: `/dev/corporations/{corporation_id}/titles/`\n\nAlternate route: `/legacy/corporations/{corporation_id}/titles/`\n\nAlternate route: `/v1/corporations/{corporation_id}/titles/`\n\nAlternate route: `/v2/corporations/{corporation_id}/titles/`\n\n---\nThis route is cached for up to 3600 seconds\n\n---\nRequires one of the following EVE corporation role(s): Director\n",
         "operationId": "get_corporations_corporation_id_titles",
         "parameters": [
           {
@@ -29672,6 +28570,8 @@
         ],
         "x-alternate-versions": [
           "dev",
+          "legacy",
+          "v1",
           "v2"
         ],
         "x-cached-seconds": 3600,
@@ -29907,7 +28807,7 @@
     },
     "/corporations/{corporation_id}/wallets/{division}/journal/": {
       "get": {
-        "description": "Retrieve the given corporation's wallet journal for the given division going 30 days back\n\n---\nAlternate route: `/dev/corporations/{corporation_id}/wallets/{division}/journal/`\n\nAlternate route: `/v4/corporations/{corporation_id}/wallets/{division}/journal/`\n\n---\nThis route is cached for up to 3600 seconds\n\n---\nRequires one of the following EVE corporation role(s): Accountant, Junior_Accountant\n",
+        "description": "Retrieve the given corporation's wallet journal for the given division going 30 days back\n\n---\nAlternate route: `/dev/corporations/{corporation_id}/wallets/{division}/journal/`\n\nAlternate route: `/legacy/corporations/{corporation_id}/wallets/{division}/journal/`\n\nAlternate route: `/v3/corporations/{corporation_id}/wallets/{division}/journal/`\n\nAlternate route: `/v4/corporations/{corporation_id}/wallets/{division}/journal/`\n\n---\nThis route is cached for up to 3600 seconds\n\n---\nRequires one of the following EVE corporation role(s): Accountant, Junior_Accountant\n",
         "operationId": "get_corporations_corporation_id_wallets_division_journal",
         "parameters": [
           {
@@ -30066,6 +28966,7 @@
                       "agent_security_services",
                       "agent_services_rendered",
                       "agents_preward",
+                      "air_career_program_reward",
                       "alliance_maintainance_fee",
                       "alliance_registration_fee",
                       "allignment_based_gate_toll",
@@ -30139,7 +29040,14 @@
                       "flux_tax",
                       "flux_ticket_repayment",
                       "flux_ticket_sale",
+                      "freelance_jobs_broadcasting_fee",
+                      "freelance_jobs_duration_fee",
+                      "freelance_jobs_escrow_refund",
+                      "freelance_jobs_reward",
+                      "freelance_jobs_reward_corporation_tax",
+                      "freelance_jobs_reward_escrow",
                       "gm_cash_transfer",
+                      "gm_plex_fee_refund",
                       "industry_job_tax",
                       "infrastructure_hub_maintenance",
                       "inheritance",
@@ -30188,6 +29096,7 @@
                       "security_processing_fee",
                       "shares",
                       "skill_purchase",
+                      "skyhook_claim_fee",
                       "sovereignity_bill",
                       "store_purchase",
                       "store_purchase_refund",
@@ -30347,6 +29256,8 @@
         ],
         "x-alternate-versions": [
           "dev",
+          "legacy",
+          "v3",
           "v4"
         ],
         "x-cached-seconds": 3600,
@@ -39123,686 +38034,6 @@
         "x-cached-seconds": 600
       }
     },
-    "/opportunities/groups/": {
-      "get": {
-        "description": "Return a list of opportunities groups\n\n---\nAlternate route: `/dev/opportunities/groups/`\n\nAlternate route: `/legacy/opportunities/groups/`\n\nAlternate route: `/v1/opportunities/groups/`\n\n---\nThis route expires daily at 11:05",
-        "operationId": "get_opportunities_groups",
-        "parameters": [
-          {
-            "$ref": "#/parameters/datasource"
-          },
-          {
-            "$ref": "#/parameters/If-None-Match"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "A list of opportunities group ids",
-            "examples": {
-              "application/json": [
-                100,
-                101,
-                102,
-                103
-              ]
-            },
-            "headers": {
-              "Cache-Control": {
-                "description": "The caching mechanism used",
-                "type": "string"
-              },
-              "ETag": {
-                "description": "RFC7232 compliant entity tag",
-                "type": "string"
-              },
-              "Expires": {
-                "description": "RFC7231 formatted datetime string",
-                "type": "string"
-              },
-              "Last-Modified": {
-                "description": "RFC7231 formatted datetime string",
-                "type": "string"
-              }
-            },
-            "schema": {
-              "description": "200 ok array",
-              "items": {
-                "description": "200 ok integer",
-                "format": "int32",
-                "title": "get_opportunities_groups_200_ok",
-                "type": "integer"
-              },
-              "maxItems": 50,
-              "title": "get_opportunities_groups_ok",
-              "type": "array"
-            }
-          },
-          "304": {
-            "description": "Not modified",
-            "headers": {
-              "Cache-Control": {
-                "description": "The caching mechanism used",
-                "type": "string"
-              },
-              "ETag": {
-                "description": "RFC7232 compliant entity tag",
-                "type": "string"
-              },
-              "Expires": {
-                "description": "RFC7231 formatted datetime string",
-                "type": "string"
-              },
-              "Last-Modified": {
-                "description": "RFC7231 formatted datetime string",
-                "type": "string"
-              }
-            }
-          },
-          "400": {
-            "description": "Bad request",
-            "examples": {
-              "application/json": {
-                "error": "Bad request message"
-              }
-            },
-            "schema": {
-              "$ref": "#/definitions/bad_request"
-            }
-          },
-          "420": {
-            "description": "Error limited",
-            "examples": {
-              "application/json": {
-                "error": "Error limited message"
-              }
-            },
-            "schema": {
-              "$ref": "#/definitions/error_limited"
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "examples": {
-              "application/json": {
-                "error": "Internal server error message"
-              }
-            },
-            "schema": {
-              "$ref": "#/definitions/internal_server_error"
-            }
-          },
-          "503": {
-            "description": "Service unavailable",
-            "examples": {
-              "application/json": {
-                "error": "Service unavailable message"
-              }
-            },
-            "schema": {
-              "$ref": "#/definitions/service_unavailable"
-            }
-          },
-          "504": {
-            "description": "Gateway timeout",
-            "examples": {
-              "application/json": {
-                "error": "Gateway timeout message"
-              }
-            },
-            "schema": {
-              "$ref": "#/definitions/gateway_timeout"
-            }
-          }
-        },
-        "summary": "Get opportunities groups",
-        "tags": [
-          "Opportunities"
-        ],
-        "x-alternate-versions": [
-          "dev",
-          "legacy",
-          "v1"
-        ]
-      }
-    },
-    "/opportunities/groups/{group_id}/": {
-      "get": {
-        "description": "Return information of an opportunities group\n\n---\nAlternate route: `/dev/opportunities/groups/{group_id}/`\n\nAlternate route: `/legacy/opportunities/groups/{group_id}/`\n\nAlternate route: `/v1/opportunities/groups/{group_id}/`\n\n---\nThis route expires daily at 11:05",
-        "operationId": "get_opportunities_groups_group_id",
-        "parameters": [
-          {
-            "$ref": "#/parameters/Accept-Language"
-          },
-          {
-            "$ref": "#/parameters/datasource"
-          },
-          {
-            "description": "ID of an opportunities group",
-            "format": "int32",
-            "in": "path",
-            "name": "group_id",
-            "required": true,
-            "type": "integer"
-          },
-          {
-            "$ref": "#/parameters/If-None-Match"
-          },
-          {
-            "$ref": "#/parameters/language"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Details of an opportunities group",
-            "examples": {
-              "application/json": {
-                "connected_groups": [
-                  100
-                ],
-                "description": "As a capsuleer...",
-                "group_id": 103,
-                "name": "Welcome to New Eden",
-                "notification": "Completed:<br>Welcome to New Eden",
-                "required_tasks": [
-                  19
-                ]
-              }
-            },
-            "headers": {
-              "Cache-Control": {
-                "description": "The caching mechanism used",
-                "type": "string"
-              },
-              "Content-Language": {
-                "description": "The language used in the response",
-                "enum": [
-                  "en",
-                  "de",
-                  "fr",
-                  "ja",
-                  "ru",
-                  "zh",
-                  "ko",
-                  "es"
-                ],
-                "type": "string"
-              },
-              "ETag": {
-                "description": "RFC7232 compliant entity tag",
-                "type": "string"
-              },
-              "Expires": {
-                "description": "RFC7231 formatted datetime string",
-                "type": "string"
-              },
-              "Last-Modified": {
-                "description": "RFC7231 formatted datetime string",
-                "type": "string"
-              }
-            },
-            "schema": {
-              "description": "200 ok object",
-              "properties": {
-                "connected_groups": {
-                  "description": "The groups that are connected to this group on the opportunities map",
-                  "items": {
-                    "description": "connected_group integer",
-                    "format": "int32",
-                    "title": "get_opportunities_groups_group_id_connected_group",
-                    "type": "integer"
-                  },
-                  "maxItems": 50,
-                  "title": "get_opportunities_groups_group_id_connected_groups",
-                  "type": "array"
-                },
-                "description": {
-                  "description": "description string",
-                  "title": "get_opportunities_groups_group_id_description",
-                  "type": "string"
-                },
-                "group_id": {
-                  "description": "group_id integer",
-                  "format": "int32",
-                  "title": "get_opportunities_groups_group_id_group_id",
-                  "type": "integer"
-                },
-                "name": {
-                  "description": "name string",
-                  "title": "get_opportunities_groups_group_id_name",
-                  "type": "string"
-                },
-                "notification": {
-                  "description": "notification string",
-                  "title": "get_opportunities_groups_group_id_notification",
-                  "type": "string"
-                },
-                "required_tasks": {
-                  "description": "Tasks need to complete for this group",
-                  "items": {
-                    "description": "required_task integer",
-                    "format": "int32",
-                    "title": "get_opportunities_groups_group_id_required_task",
-                    "type": "integer"
-                  },
-                  "maxItems": 100,
-                  "title": "get_opportunities_groups_group_id_required_tasks",
-                  "type": "array"
-                }
-              },
-              "required": [
-                "group_id",
-                "name",
-                "description",
-                "notification",
-                "required_tasks",
-                "connected_groups"
-              ],
-              "title": "get_opportunities_groups_group_id_ok",
-              "type": "object"
-            }
-          },
-          "304": {
-            "description": "Not modified",
-            "headers": {
-              "Cache-Control": {
-                "description": "The caching mechanism used",
-                "type": "string"
-              },
-              "ETag": {
-                "description": "RFC7232 compliant entity tag",
-                "type": "string"
-              },
-              "Expires": {
-                "description": "RFC7231 formatted datetime string",
-                "type": "string"
-              },
-              "Last-Modified": {
-                "description": "RFC7231 formatted datetime string",
-                "type": "string"
-              }
-            }
-          },
-          "400": {
-            "description": "Bad request",
-            "examples": {
-              "application/json": {
-                "error": "Bad request message"
-              }
-            },
-            "schema": {
-              "$ref": "#/definitions/bad_request"
-            }
-          },
-          "420": {
-            "description": "Error limited",
-            "examples": {
-              "application/json": {
-                "error": "Error limited message"
-              }
-            },
-            "schema": {
-              "$ref": "#/definitions/error_limited"
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "examples": {
-              "application/json": {
-                "error": "Internal server error message"
-              }
-            },
-            "schema": {
-              "$ref": "#/definitions/internal_server_error"
-            }
-          },
-          "503": {
-            "description": "Service unavailable",
-            "examples": {
-              "application/json": {
-                "error": "Service unavailable message"
-              }
-            },
-            "schema": {
-              "$ref": "#/definitions/service_unavailable"
-            }
-          },
-          "504": {
-            "description": "Gateway timeout",
-            "examples": {
-              "application/json": {
-                "error": "Gateway timeout message"
-              }
-            },
-            "schema": {
-              "$ref": "#/definitions/gateway_timeout"
-            }
-          }
-        },
-        "summary": "Get opportunities group",
-        "tags": [
-          "Opportunities"
-        ],
-        "x-alternate-versions": [
-          "dev",
-          "legacy",
-          "v1"
-        ]
-      }
-    },
-    "/opportunities/tasks/": {
-      "get": {
-        "description": "Return a list of opportunities tasks\n\n---\nAlternate route: `/dev/opportunities/tasks/`\n\nAlternate route: `/legacy/opportunities/tasks/`\n\nAlternate route: `/v1/opportunities/tasks/`\n\n---\nThis route expires daily at 11:05",
-        "operationId": "get_opportunities_tasks",
-        "parameters": [
-          {
-            "$ref": "#/parameters/datasource"
-          },
-          {
-            "$ref": "#/parameters/If-None-Match"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "A list of opportunities task ids",
-            "examples": {
-              "application/json": [
-                1,
-                2,
-                3,
-                4
-              ]
-            },
-            "headers": {
-              "Cache-Control": {
-                "description": "The caching mechanism used",
-                "type": "string"
-              },
-              "ETag": {
-                "description": "RFC7232 compliant entity tag",
-                "type": "string"
-              },
-              "Expires": {
-                "description": "RFC7231 formatted datetime string",
-                "type": "string"
-              },
-              "Last-Modified": {
-                "description": "RFC7231 formatted datetime string",
-                "type": "string"
-              }
-            },
-            "schema": {
-              "description": "200 ok array",
-              "items": {
-                "description": "200 ok integer",
-                "format": "int32",
-                "title": "get_opportunities_tasks_200_ok",
-                "type": "integer"
-              },
-              "maxItems": 100,
-              "title": "get_opportunities_tasks_ok",
-              "type": "array"
-            }
-          },
-          "304": {
-            "description": "Not modified",
-            "headers": {
-              "Cache-Control": {
-                "description": "The caching mechanism used",
-                "type": "string"
-              },
-              "ETag": {
-                "description": "RFC7232 compliant entity tag",
-                "type": "string"
-              },
-              "Expires": {
-                "description": "RFC7231 formatted datetime string",
-                "type": "string"
-              },
-              "Last-Modified": {
-                "description": "RFC7231 formatted datetime string",
-                "type": "string"
-              }
-            }
-          },
-          "400": {
-            "description": "Bad request",
-            "examples": {
-              "application/json": {
-                "error": "Bad request message"
-              }
-            },
-            "schema": {
-              "$ref": "#/definitions/bad_request"
-            }
-          },
-          "420": {
-            "description": "Error limited",
-            "examples": {
-              "application/json": {
-                "error": "Error limited message"
-              }
-            },
-            "schema": {
-              "$ref": "#/definitions/error_limited"
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "examples": {
-              "application/json": {
-                "error": "Internal server error message"
-              }
-            },
-            "schema": {
-              "$ref": "#/definitions/internal_server_error"
-            }
-          },
-          "503": {
-            "description": "Service unavailable",
-            "examples": {
-              "application/json": {
-                "error": "Service unavailable message"
-              }
-            },
-            "schema": {
-              "$ref": "#/definitions/service_unavailable"
-            }
-          },
-          "504": {
-            "description": "Gateway timeout",
-            "examples": {
-              "application/json": {
-                "error": "Gateway timeout message"
-              }
-            },
-            "schema": {
-              "$ref": "#/definitions/gateway_timeout"
-            }
-          }
-        },
-        "summary": "Get opportunities tasks",
-        "tags": [
-          "Opportunities"
-        ],
-        "x-alternate-versions": [
-          "dev",
-          "legacy",
-          "v1"
-        ]
-      }
-    },
-    "/opportunities/tasks/{task_id}/": {
-      "get": {
-        "description": "Return information of an opportunities task\n\n---\nAlternate route: `/dev/opportunities/tasks/{task_id}/`\n\nAlternate route: `/legacy/opportunities/tasks/{task_id}/`\n\nAlternate route: `/v1/opportunities/tasks/{task_id}/`\n\n---\nThis route expires daily at 11:05",
-        "operationId": "get_opportunities_tasks_task_id",
-        "parameters": [
-          {
-            "$ref": "#/parameters/datasource"
-          },
-          {
-            "$ref": "#/parameters/If-None-Match"
-          },
-          {
-            "description": "ID of an opportunities task",
-            "format": "int32",
-            "in": "path",
-            "name": "task_id",
-            "required": true,
-            "type": "integer"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Details of an opportunities task",
-            "examples": {
-              "application/json": {
-                "description": "To use station services...",
-                "name": "Dock in the station",
-                "notification": "Completed:<br>Docked in a station!",
-                "task_id": 10
-              }
-            },
-            "headers": {
-              "Cache-Control": {
-                "description": "The caching mechanism used",
-                "type": "string"
-              },
-              "ETag": {
-                "description": "RFC7232 compliant entity tag",
-                "type": "string"
-              },
-              "Expires": {
-                "description": "RFC7231 formatted datetime string",
-                "type": "string"
-              },
-              "Last-Modified": {
-                "description": "RFC7231 formatted datetime string",
-                "type": "string"
-              }
-            },
-            "schema": {
-              "description": "200 ok object",
-              "properties": {
-                "description": {
-                  "description": "description string",
-                  "title": "get_opportunities_tasks_task_id_description",
-                  "type": "string"
-                },
-                "name": {
-                  "description": "name string",
-                  "title": "get_opportunities_tasks_task_id_name",
-                  "type": "string"
-                },
-                "notification": {
-                  "description": "notification string",
-                  "title": "get_opportunities_tasks_task_id_notification",
-                  "type": "string"
-                },
-                "task_id": {
-                  "description": "task_id integer",
-                  "format": "int32",
-                  "title": "get_opportunities_tasks_task_id_task_id",
-                  "type": "integer"
-                }
-              },
-              "required": [
-                "task_id",
-                "name",
-                "description",
-                "notification"
-              ],
-              "title": "get_opportunities_tasks_task_id_ok",
-              "type": "object"
-            }
-          },
-          "304": {
-            "description": "Not modified",
-            "headers": {
-              "Cache-Control": {
-                "description": "The caching mechanism used",
-                "type": "string"
-              },
-              "ETag": {
-                "description": "RFC7232 compliant entity tag",
-                "type": "string"
-              },
-              "Expires": {
-                "description": "RFC7231 formatted datetime string",
-                "type": "string"
-              },
-              "Last-Modified": {
-                "description": "RFC7231 formatted datetime string",
-                "type": "string"
-              }
-            }
-          },
-          "400": {
-            "description": "Bad request",
-            "examples": {
-              "application/json": {
-                "error": "Bad request message"
-              }
-            },
-            "schema": {
-              "$ref": "#/definitions/bad_request"
-            }
-          },
-          "420": {
-            "description": "Error limited",
-            "examples": {
-              "application/json": {
-                "error": "Error limited message"
-              }
-            },
-            "schema": {
-              "$ref": "#/definitions/error_limited"
-            }
-          },
-          "500": {
-            "description": "Internal server error",
-            "examples": {
-              "application/json": {
-                "error": "Internal server error message"
-              }
-            },
-            "schema": {
-              "$ref": "#/definitions/internal_server_error"
-            }
-          },
-          "503": {
-            "description": "Service unavailable",
-            "examples": {
-              "application/json": {
-                "error": "Service unavailable message"
-              }
-            },
-            "schema": {
-              "$ref": "#/definitions/service_unavailable"
-            }
-          },
-          "504": {
-            "description": "Gateway timeout",
-            "examples": {
-              "application/json": {
-                "error": "Gateway timeout message"
-              }
-            },
-            "schema": {
-              "$ref": "#/definitions/gateway_timeout"
-            }
-          }
-        },
-        "summary": "Get opportunities task",
-        "tags": [
-          "Opportunities"
-        ],
-        "x-alternate-versions": [
-          "dev",
-          "legacy",
-          "v1"
-        ]
-      }
-    },
     "/route/{origin}/{destination}/": {
       "get": {
         "description": "Get the systems between origin and destination\n\n---\nAlternate route: `/dev/route/{origin}/{destination}/`\n\nAlternate route: `/legacy/route/{origin}/{destination}/`\n\nAlternate route: `/v1/route/{origin}/{destination}/`\n\n---\nThis route is cached for up to 86400 seconds",
@@ -44489,7 +42720,7 @@
     },
     "/universe/names/": {
       "post": {
-        "description": "Resolve a set of IDs to names and categories. Supported ID's for resolving are: Characters, Corporations, Alliances, Stations, Solar Systems, Constellations, Regions, Types, Factions\n\n---\nAlternate route: `/dev/universe/names/`\n\nAlternate route: `/v3/universe/names/`\n",
+        "description": "Resolve a set of IDs to names and categories. Supported ID's for resolving are: Characters, Corporations, Alliances, Stations, Solar Systems, Constellations, Regions, Types, Factions\n\n---\nAlternate route: `/dev/universe/names/`\n\nAlternate route: `/legacy/universe/names/`\n\nAlternate route: `/v2/universe/names/`\n\nAlternate route: `/v3/universe/names/`\n",
         "operationId": "post_universe_names",
         "parameters": [
           {
@@ -44665,6 +42896,8 @@
         ],
         "x-alternate-versions": [
           "dev",
+          "legacy",
+          "v2",
           "v3"
         ]
       }
@@ -46667,7 +44900,7 @@
     },
     "/universe/structures/{structure_id}/": {
       "get": {
-        "description": "Returns information on requested structure if you are on the ACL. Otherwise, returns \"Forbidden\" for all inputs.\n\n---\nAlternate route: `/v2/universe/structures/{structure_id}/`\n\n---\nThis route is cached for up to 3600 seconds",
+        "description": "Returns information on requested structure if you are on the ACL. Otherwise, returns \"Forbidden\" for all inputs.\n\n---\nAlternate route: `/legacy/universe/structures/{structure_id}/`\n\nAlternate route: `/v1/universe/structures/{structure_id}/`\n\nAlternate route: `/v2/universe/structures/{structure_id}/`\n\n---\nThis route is cached for up to 3600 seconds",
         "operationId": "get_universe_structures_structure_id",
         "parameters": [
           {
@@ -46913,6 +45146,8 @@
           "Universe"
         ],
         "x-alternate-versions": [
+          "legacy",
+          "v1",
           "v2"
         ],
         "x-cached-seconds": 3600
@@ -47888,7 +46123,7 @@
     },
     "/universe/types/{type_id}/": {
       "get": {
-        "description": "Get information on a type\n\n---\nAlternate route: `/dev/universe/types/{type_id}/`\n\nAlternate route: `/v3/universe/types/{type_id}/`\n\n---\nThis route expires daily at 11:05",
+        "description": "Get information on a type\n\n---\nAlternate route: `/dev/universe/types/{type_id}/`\n\nAlternate route: `/legacy/universe/types/{type_id}/`\n\nAlternate route: `/v2/universe/types/{type_id}/`\n\nAlternate route: `/v3/universe/types/{type_id}/`\n\n---\nThis route expires daily at 11:05",
         "operationId": "get_universe_types_type_id",
         "parameters": [
           {
@@ -48212,6 +46447,8 @@
         ],
         "x-alternate-versions": [
           "dev",
+          "legacy",
+          "v2",
           "v3"
         ]
       }
@@ -48902,8 +47139,6 @@
         "esi-alliances.read_contacts.v1": "EVE SSO scope esi-alliances.read_contacts.v1",
         "esi-assets.read_assets.v1": "EVE SSO scope esi-assets.read_assets.v1",
         "esi-assets.read_corporation_assets.v1": "EVE SSO scope esi-assets.read_corporation_assets.v1",
-        "esi-bookmarks.read_character_bookmarks.v1": "EVE SSO scope esi-bookmarks.read_character_bookmarks.v1",
-        "esi-bookmarks.read_corporation_bookmarks.v1": "EVE SSO scope esi-bookmarks.read_corporation_bookmarks.v1",
         "esi-calendar.read_calendar_events.v1": "EVE SSO scope esi-calendar.read_calendar_events.v1",
         "esi-calendar.respond_calendar_events.v1": "EVE SSO scope esi-calendar.respond_calendar_events.v1",
         "esi-characters.read_agents_research.v1": "EVE SSO scope esi-characters.read_agents_research.v1",
@@ -48915,7 +47150,6 @@
         "esi-characters.read_loyalty.v1": "EVE SSO scope esi-characters.read_loyalty.v1",
         "esi-characters.read_medals.v1": "EVE SSO scope esi-characters.read_medals.v1",
         "esi-characters.read_notifications.v1": "EVE SSO scope esi-characters.read_notifications.v1",
-        "esi-characters.read_opportunities.v1": "EVE SSO scope esi-characters.read_opportunities.v1",
         "esi-characters.read_standings.v1": "EVE SSO scope esi-characters.read_standings.v1",
         "esi-characters.read_titles.v1": "EVE SSO scope esi-characters.read_titles.v1",
         "esi-characters.write_contacts.v1": "EVE SSO scope esi-characters.write_contacts.v1",
