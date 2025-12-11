@@ -83,7 +83,7 @@ dev-docs:
 	cd docs ; npm run dev
 
 update-esi-swagger:
-	curl -s https://esi.evetech.net/latest/swagger.json | jq . > spec/esi-swagger.json
+	curl -s https://esi.evetech.net/meta/openapi.json | jq . > spec/esi-swagger.json
 
 generate-database:
 	./gradlew database:compileJava
