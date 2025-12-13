@@ -1,5 +1,6 @@
 package com.autonomouslogic.everef.api;
 
+import com.autonomouslogic.everef.model.api.ApiError;
 import com.autonomouslogic.everef.model.api.search.SearchResult;
 import com.autonomouslogic.everef.service.SearchService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -20,6 +21,7 @@ import jakarta.inject.Inject;
 import java.time.Duration;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 
 @Tag(name = "search")
@@ -44,13 +46,21 @@ public class SearchHandler implements HttpService, Handler {
 			responseCode = "200",
 			description = "Success",
 			content = @Content(mediaType = "application/json", schema = @Schema(implementation = SearchResult.class)))
+	@ApiResponse(
+			responseCode = "400",
+			description = "Client error",
+			content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class)))
+	@ApiResponse(
+			responseCode = "500",
+			description = "Server error",
+			content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class)))
 	@Parameter(
 			in = ParameterIn.QUERY,
 			name = "q",
 			description = "Search query (minimum 3 characters)",
 			required = false,
 			schema = @Schema(type = "string"))
-	public SearchResult search(@Parameter(hidden = true) String q) {
+	public SearchResult search(@Parameter String q) {
 		return searchService.search(q);
 	}
 
@@ -60,21 +70,18 @@ public class SearchHandler implements HttpService, Handler {
 	}
 
 	@Override
+	@SneakyThrows
 	public void handle(ServerRequest req, ServerResponse res) {
 		var q = req.query().first("q").orElse(null);
-		var result = this.search(q);
-		sendResponse(req, res, result);
-	}
-
-	public void sendResponse(ServerRequest req, ServerResponse res, SearchResult result) {
+		SearchResult result;
 		try {
-			var json = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(result) + "\n";
-			res.status(Status.OK_200);
-			apiUtil.setStandardHeaders(res, Duration.ofMinutes(10));
-			res.send(json);
-		} catch (Exception e) {
-			log.error("Error serializing search response", e);
-			res.status(Status.INTERNAL_SERVER_ERROR_500).send();
+			result = search(q);
+		} catch (IllegalArgumentException e) {
+			throw new ClientException(e.getMessage());
 		}
+		var json = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(result) + "\n";
+		res.status(Status.OK_200);
+		apiUtil.setStandardHeaders(res, Duration.ofMinutes(10));
+		res.send(json);
 	}
 }

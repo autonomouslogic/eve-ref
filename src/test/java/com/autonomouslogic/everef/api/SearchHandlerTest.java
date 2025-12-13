@@ -138,17 +138,23 @@ public class SearchHandlerTest {
 
 	@Test
 	void shouldThrowForNull() {
-		assertThrows(ApiException.class, () -> searchApi.search(null));
+		var ex = assertThrows(ApiException.class, () -> searchApi.search(null));
+		ex.printStackTrace();
+		assertEquals(400, ex.getCode());
 	}
 
 	@Test
 	void shouldThrowForEmpty() {
-		assertThrows(ApiException.class, () -> searchApi.search(""));
+		var ex = assertThrows(ApiException.class, () -> searchApi.search(""));
+		ex.printStackTrace();
+		assertEquals(400, ex.getCode());
 	}
 
 	@Test
 	void shouldThrowForWhitespace() {
-		assertThrows(ApiException.class, () -> searchApi.search("   "));
+		var ex = assertThrows(ApiException.class, () -> searchApi.search("   "));
+		ex.printStackTrace();
+		assertEquals(400, ex.getCode());
 	}
 
 	@Test
