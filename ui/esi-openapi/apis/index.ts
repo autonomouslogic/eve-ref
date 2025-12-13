@@ -2,7 +2,6 @@
 /* eslint-disable */
 export * from './AllianceApi';
 export * from './AssetsApi';
-export * from './BookmarksApi';
 export * from './CalendarApi';
 export * from './CharacterApi';
 export * from './ClonesApi';
@@ -21,7 +20,6 @@ export * from './LocationApi';
 export * from './LoyaltyApi';
 export * from './MailApi';
 export * from './MarketApi';
-export * from './OpportunitiesApi';
 export * from './PlanetaryInteractionApi';
 export * from './RoutesApi';
 export * from './SearchApi';

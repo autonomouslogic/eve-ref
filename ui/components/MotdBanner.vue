@@ -5,7 +5,8 @@ import InternalLink from "~/components/helpers/InternalLink.vue";
 import {useLazyFetch} from "nuxt/app";
 import type {DonationsFile} from "~/lib/donations";
 import {formatMoney} from "~/lib/money";
-import {DAY, HOUR, MINUTE} from "~/lib/timeUtils";
+import {DAY, FRIDAY, HOUR, MINUTE, SATURDAY, THURSDAY} from "~/lib/timeUtils";
+import {DateTime} from "luxon";
 
 const route = useRoute();
 
@@ -53,15 +54,18 @@ const {status: donorsStatus, data: donors} = await useLazyFetch<DonationsFile>("
 });
 
 const motd = computed(() => {
-	const dayOfWeek = new Date().getDay();
-	const time = new Date().getTime();
+	const date = new Date();
+	// const date = DateTime.fromISO("2025-12-04T14:00:00Z").toJSDate();
+	const dayOfWeek = date.getUTCDay();
+	const hourOfDay = date.getUTCHours();
+	const time = date.getTime();
 	const day = Math.floor(time / DAY);
 	const hour = Math.floor(time / HOUR);
 
-	// Recent donors.
-	if (new Date("2025-12-03T23:50:00Z").getTime() > new Date().getTime()) {
+	// Sale.
+	if (time < new Date("2025-12-03T10:50:00Z").getTime()) {
 		return {
-			text: "Black Friday 25% Off - extra 3% with code \"everef\" at checkout",
+			text: "Black Friday 25% off - extra 3% with code \"everef\" at checkout",
 			url: MARKEE_DRAGON_URL,
 			urlText: "Markee Dragon"
 		} as Motd;
@@ -79,9 +83,9 @@ const motd = computed(() => {
 		} as Motd;
 	}
 
-	// Priority.
+	// CSM.
 	const csmEnds = new Date("2025-11-10T11:00:00Z");
-	const timeLeft = csmEnds.getTime() - new Date().getTime();
+	const timeLeft = csmEnds.getTime() - time;
 	if (timeLeft > 0) {
 		const daysLeft = Math.floor(timeLeft / DAY);
 		const hoursLeft = Math.floor(timeLeft / HOUR);
@@ -107,11 +111,32 @@ const motd = computed(() => {
 		} as Motd;
 	}
 
-	if (dayOfWeek == 4) {
+	// Giveaway event.
+	if (time < new Date("2025-12-31T10:50:00Z").getTime()) {
+		return {
+			text: "Win 22 billion ISK in December",
+			url: "/giveaways",
+			urlText: "Giveaways"
+		} as Motd;
+	}
+
+	// Giveaway.
+	const giveawayDay = FRIDAY;
+	const giveawayHour = 14;
+	if ((dayOfWeek == giveawayDay - 1 && hourOfDay >= giveawayHour) || (dayOfWeek == giveawayDay && hourOfDay < giveawayHour)) {
 		return {
 			text: "Win 3 Days of Omega and 50 PLEX every Friday",
 			url: "/giveaways",
 			urlText: "Giveaways"
+		} as Motd;
+	}
+
+	// Affiliate.
+	if (dayOfWeek == FRIDAY || dayOfWeek == SATURDAY) {
+		return {
+			text: "Save 3% with code \"everef\" at checkout",
+			url: MARKEE_DRAGON_URL,
+			urlText: "Markee Dragon"
 		} as Motd;
 	}
 
