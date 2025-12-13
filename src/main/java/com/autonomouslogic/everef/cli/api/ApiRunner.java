@@ -1,10 +1,12 @@
 package com.autonomouslogic.everef.cli.api;
 
+import com.autonomouslogic.everef.api.ApiUtil;
 import com.autonomouslogic.everef.api.ClientErrorHandler;
 import com.autonomouslogic.everef.api.ClientException;
 import com.autonomouslogic.everef.api.ErrorHandler;
 import com.autonomouslogic.everef.api.IndustryCostHandler;
 import com.autonomouslogic.everef.api.SearchHandler;
+import com.autonomouslogic.everef.api.StandardHandlers;
 import com.autonomouslogic.everef.cli.Command;
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.service.EsiMarketPriceService;
@@ -13,6 +15,7 @@ import com.autonomouslogic.everef.service.SystemCostIndexService;
 import io.helidon.common.concurrency.limits.AimdLimit;
 import io.helidon.webserver.WebServer;
 import io.helidon.webserver.http.HttpRouting;
+import io.helidon.webserver.http.HttpService;
 import jakarta.inject.Inject;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
@@ -41,6 +44,9 @@ public class ApiRunner implements Command {
 
 	@Inject
 	protected SystemCostIndexService systemCostIndexService;
+
+	@Inject
+	protected ApiUtil apiUtil;
 
 	private WebServer server;
 	private volatile boolean stopped = false;
@@ -90,9 +96,17 @@ public class ApiRunner implements Command {
 	}
 
 	private HttpRouting.Builder routing(HttpRouting.Builder routing) {
-		return routing.register(industryCostHandler)
-				.register("/v1/search", searchHandler)
-				.error(ClientException.class, clientErrorHandler)
-				.error(Exception.class, errorHandler);
+		routing = serviceRouting(routing, industryCostHandler);
+		routing = serviceRouting(routing, searchHandler);
+		routing = routing.error(ClientException.class, clientErrorHandler);
+		routing = routing.error(Exception.class, errorHandler);
+		return routing;
+	}
+
+	private HttpRouting.Builder serviceRouting(HttpRouting.Builder routing, HttpService service) {
+		var path = apiUtil.getApiPath(service.getClass());
+		routing = routing.register(path, service);
+		routing = routing.any(path, StandardHandlers.HTTP_METHOD_NOT_ALLOWED);
+		return routing;
 	}
 }

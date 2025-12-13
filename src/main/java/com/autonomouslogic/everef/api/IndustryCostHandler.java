@@ -78,7 +78,7 @@ public class IndustryCostHandler implements HttpService, Handler {
 	protected SystemCostIndexService systemCostIndexService;
 
 	@Inject
-	protected ApiResponseUtil apiResponseUtil;
+	protected ApiUtil apiUtil;
 
 	private final ObjectMapper queryStringMapper;
 
@@ -133,8 +133,7 @@ public class IndustryCostHandler implements HttpService, Handler {
 		var result = industryCost(input);
 		var json = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(result) + "\n";
 		res.status(Status.OK_200);
-		apiResponseUtil.setStandardHeaders(
-				res, Duration.ofSeconds(10), "https://docs.everef.net/api/industry-cost.html");
+		apiUtil.setStandardHeaders(res, Duration.ofSeconds(10), "https://docs.everef.net/api/industry-cost.html");
 		res.send(json);
 	}
 
@@ -235,9 +234,7 @@ public class IndustryCostHandler implements HttpService, Handler {
 
 	@Override
 	public void routing(HttpRules rules) {
-		var path = Objects.requireNonNull(IndustryCostHandler.class.getAnnotation(Path.class))
-				.value();
-		rules.get(path, this);
+		rules.get(this);
 	}
 
 	private static InventoryType handleProduct(

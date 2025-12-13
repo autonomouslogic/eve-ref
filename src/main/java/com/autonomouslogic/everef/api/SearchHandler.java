@@ -33,7 +33,7 @@ public class SearchHandler implements HttpService, Handler {
 	protected SearchService searchService;
 
 	@Inject
-	protected ApiResponseUtil apiResponseUtil;
+	protected ApiUtil apiUtil;
 
 	@Inject
 	public SearchHandler() {}
@@ -43,10 +43,7 @@ public class SearchHandler implements HttpService, Handler {
 	@ApiResponse(
 			responseCode = "200",
 			description = "Success",
-			content =
-					@Content(
-							mediaType = "application/json",
-							schema = @Schema(implementation = SearchResult.class)))
+			content = @Content(mediaType = "application/json", schema = @Schema(implementation = SearchResult.class)))
 	@Parameter(
 			in = ParameterIn.QUERY,
 			name = "q",
@@ -73,7 +70,7 @@ public class SearchHandler implements HttpService, Handler {
 		try {
 			var json = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(result) + "\n";
 			res.status(Status.OK_200);
-			apiResponseUtil.setStandardHeaders(res, Duration.ofMinutes(10));
+			apiUtil.setStandardHeaders(res, Duration.ofMinutes(10));
 			res.send(json);
 		} catch (Exception e) {
 			log.error("Error serializing search response", e);

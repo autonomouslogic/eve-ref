@@ -2,15 +2,12 @@ package com.autonomouslogic.everef.service;
 
 import com.autonomouslogic.everef.model.api.search.SearchInventoryType;
 import com.autonomouslogic.everef.model.api.search.SearchResult;
-import com.autonomouslogic.everef.refdata.InventoryType;
 import com.autonomouslogic.everef.util.MarketGroupHelper;
 import jakarta.inject.Inject;
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import javax.inject.Singleton;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.tuple.Pair;
@@ -69,7 +66,8 @@ public class SearchService {
 									.typeId(item.getTypeId())
 									.nameEn(item.getName().get("en"))
 									.rootMarketGroup(Optional.ofNullable(marketGroup)
-											.flatMap(g -> Optional.ofNullable(g.getName().get("en")))
+											.flatMap(g -> Optional.ofNullable(
+													g.getName().get("en")))
 											.orElse("Inventory type"))
 									.rootMarketGroupId(Optional.ofNullable(marketGroup)
 											.flatMap(g -> Optional.ofNullable(g.getMarketGroupId()))

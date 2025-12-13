@@ -3,15 +3,17 @@ package com.autonomouslogic.everef.api;
 import com.autonomouslogic.everef.config.Configs;
 import io.helidon.webserver.http.ServerResponse;
 import java.time.Duration;
+import java.util.Objects;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import javax.ws.rs.Path;
 
 @Singleton
-public class ApiResponseUtil {
+public class ApiUtil {
 	private final String eveRefVersion;
 
 	@Inject
-	public ApiResponseUtil() {
+	public ApiUtil() {
 		this.eveRefVersion = Configs.EVE_REF_VERSION.getRequired();
 	}
 
@@ -29,5 +31,10 @@ public class ApiResponseUtil {
 		if (docsUrl != null) {
 			res.header("X-Docs", docsUrl);
 		}
+	}
+
+	public String getApiPath(Class<?> clazz) {
+		return Objects.requireNonNull(clazz.getAnnotation(Path.class), clazz + " is missing @Path annotation")
+				.value();
 	}
 }
