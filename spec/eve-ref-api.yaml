@@ -800,6 +800,10 @@ components:
           format: int64
         language:
           type: string
+        relevance:
+          type: integer
+          format: int64
+          description: Relevance score of the search result. Lower is better.
         title:
           type: string
         type:
