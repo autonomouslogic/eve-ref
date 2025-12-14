@@ -110,7 +110,15 @@ public class SearchHandlerTest {
 				result.getEntries().size() > 0,
 				Long.toString(result.getEntries().size()));
 		assertEquals(
-				new SearchEntry().id(34L).title("Tritanium"),
+				new SearchEntry()
+						.id(34L)
+						.title("Tritanium")
+						.language("en")
+						.type(SearchEntry.TypeEnum.INVENTORY_TYPE)
+						.typeName("Inventory type")
+						.urls(new SearchEntryUrls()
+								.everef("https://everef.net/types/34")
+								.referenceData("https://ref-data.everef.net/types/34")),
 				result.getEntries().getFirst());
 	}
 
@@ -120,7 +128,15 @@ public class SearchHandlerTest {
 		var result = searchApi.search("tritanium");
 		assertEquals(1, result.getEntries().size());
 		assertEquals(
-				new SearchEntry().id(34L).title("Tritanium"),
+				new SearchEntry()
+						.id(34L)
+						.title("Tritanium")
+						.language("en")
+						.type(SearchEntry.TypeEnum.INVENTORY_TYPE)
+						.typeName("Inventory type")
+						.urls(new SearchEntryUrls()
+								.everef("https://everef.net/types/34")
+								.referenceData("https://ref-data.everef.net/types/34")),
 				result.getEntries().getFirst());
 	}
 
@@ -132,7 +148,15 @@ public class SearchHandlerTest {
 				result.getEntries().size() > 0,
 				Long.toString(result.getEntries().size()));
 		assertEquals(
-				new SearchEntry().id(34L).title("Tritanium"),
+				new SearchEntry()
+						.id(24535L)
+						.title("Mjolnir Fury Cruise Missile")
+						.language("en")
+						.type(SearchEntry.TypeEnum.INVENTORY_TYPE)
+						.typeName("Inventory type")
+						.urls(new SearchEntryUrls()
+								.everef("https://everef.net/types/24535")
+								.referenceData("https://ref-data.everef.net/types/24535")),
 				result.getEntries().getFirst());
 	}
 
