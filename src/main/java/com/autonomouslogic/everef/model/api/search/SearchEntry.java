@@ -36,5 +36,9 @@ public class SearchEntry {
 
 	@JsonIgnore
 	@Hidden
+	String query;
+
+	@JsonIgnore
+	@Hidden
 	long relevance;
 }

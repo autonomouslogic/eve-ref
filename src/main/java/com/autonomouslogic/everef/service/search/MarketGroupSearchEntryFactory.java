@@ -38,6 +38,7 @@ public class MarketGroupSearchEntryFactory implements SearchEntryFactory {
 
 		return Stream.of(SearchEntry.builder()
 				.title(title)
+				.query(name)
 				.language("en")
 				.id(group.getMarketGroupId())
 				.type(SearchEntryType.MARKET_GROUP)
