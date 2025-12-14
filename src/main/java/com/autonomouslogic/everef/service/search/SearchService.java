@@ -31,6 +31,15 @@ public class SearchService {
 	protected InventoryTypeSearchEntryFactory inventoryTypeSearchEntryFactory;
 
 	@Inject
+	protected MarketGroupSearchEntryFactory marketGroupSearchEntryFactory;
+
+	@Inject
+	protected CategorySearchEntryFactory categorySearchEntryFactory;
+
+	@Inject
+	protected GroupSearchEntryFactory groupSearchEntryFactory;
+
+	@Inject
 	public SearchService() {}
 
 	public SearchResult search(@NonNull String q) {
@@ -42,7 +51,12 @@ public class SearchService {
 	}
 
 	private Stream<SearchEntry> getSearchEntries() {
-		return inventoryTypeSearchEntryFactory.createEntries();
+		return Stream.of(
+						inventoryTypeSearchEntryFactory.createEntries(),
+						marketGroupSearchEntryFactory.createEntries(),
+						categorySearchEntryFactory.createEntries(),
+						groupSearchEntryFactory.createEntries())
+				.flatMap(stream -> stream);
 	}
 
 	private void validateQuery(String q) {

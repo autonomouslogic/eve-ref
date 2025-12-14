@@ -10,7 +10,13 @@ import lombok.Getter;
 @Getter
 public enum SearchEntryType {
 	@JsonProperty("inventory_type")
-	INVENTORY_TYPE("types", "types");
+	INVENTORY_TYPE("types", "types"),
+	@JsonProperty("market_group")
+	MARKET_GROUP("market-groups", "market_groups"),
+	@JsonProperty("category")
+	CATEGORY("categories", "categories"),
+	@JsonProperty("group")
+	GROUP("groups", "groups");
 
 	private final String eveRefType;
 	private final String refDataType;
