@@ -217,6 +217,25 @@ public class SearchHandlerTest {
 
 	@Test
 	@SneakyThrows
+	void shouldSearchForIds() {
+		var result = searchApi.search("34");
+		var entries = result.getEntries();
+		assertEquals(1, entries.size(), entries.toString());
+		assertEquals(
+				new SearchEntry()
+						.id(34L)
+						.title("Tritanium")
+						.language("en")
+						.type(SearchEntry.TypeEnum.INVENTORY_TYPE)
+						.typeName("Inventory type")
+						.urls(new SearchEntryUrls()
+								.everef("https://everef.net/types/34")
+								.referenceData("https://ref-data.everef.net/types/34")),
+				entries.getFirst());
+	}
+
+	@Test
+	@SneakyThrows
 	void shouldThrowOnShortQuery() {
 		var ex = assertThrows(ApiException.class, () -> searchApi.search("Tr"));
 		assertEquals(400, ex.getCode());

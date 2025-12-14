@@ -38,7 +38,7 @@ public class SearchEntry {
 	@Hidden
 	String query;
 
-	@JsonIgnore
-	@Hidden
+	@Schema(description = "Relevance score of the search result. Lower is better.")
+	@JsonProperty
 	long relevance;
 }

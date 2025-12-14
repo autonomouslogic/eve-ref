@@ -4,7 +4,6 @@ import com.autonomouslogic.everef.model.api.search.SearchEntry;
 import com.autonomouslogic.everef.model.api.search.SearchResult;
 import com.autonomouslogic.everef.model.api.search.Searcher;
 import com.autonomouslogic.everef.service.RefDataService;
-import com.autonomouslogic.everef.util.MarketGroupHelper;
 import com.google.common.collect.Ordering;
 import jakarta.inject.Inject;
 import java.util.Comparator;
@@ -18,14 +17,12 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class SearchService {
 	private static final Pattern SPLIT_PATTERN = Pattern.compile("\\s+");
-	private static final Comparator<SearchEntry> ENTRY_COMPARATOR =
-			Ordering.natural().reverse().onResultOf(SearchEntry::getRelevance);
+
+	private static final Comparator<SearchEntry> RELEVANCE_COMPARATOR =
+			Ordering.natural().onResultOf(SearchEntry::getRelevance);
 
 	@Inject
 	protected RefDataService refDataService;
-
-	@Inject
-	protected MarketGroupHelper marketGroupHelper;
 
 	@Inject
 	protected InventoryTypeSearchEntryFactory inventoryTypeSearchEntryFactory;
@@ -46,7 +43,7 @@ public class SearchService {
 		validateQuery(q);
 		var searchPattern = buildSearchPattern(q);
 		var searcher = new Searcher(searchPattern);
-		var matches = searcher.apply(getSearchEntries()).sorted(ENTRY_COMPARATOR);
+		var matches = searcher.apply(getSearchEntries()).sorted(RELEVANCE_COMPARATOR);
 		return SearchResult.builder().entries(matches.toList()).build();
 	}
 
