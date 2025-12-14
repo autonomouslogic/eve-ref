@@ -133,7 +133,7 @@ public class IndustryCostHandler implements HttpService, Handler {
 		var result = industryCost(input);
 		var json = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(result) + "\n";
 		res.status(Status.OK_200);
-		apiUtil.setStandardHeaders(res, Duration.ofSeconds(10), "https://docs.everef.net/api/industry-cost.html");
+		apiUtil.setStandardHeaders(res, Duration.ofMinutes(10), "https://docs.everef.net/api/industry-cost.html");
 		res.send(json);
 	}
 
