@@ -18,6 +18,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.inject.Inject;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -73,6 +75,9 @@ public class SearchHandler implements HttpService, Handler {
 	@Override
 	@SneakyThrows
 	public void handle(ServerRequest req, ServerResponse res) {
+		log.info(
+				"Received request: {}",
+				URLEncoder.encode(req.requestedUri().toUri().toString(), StandardCharsets.UTF_8));
 		var q = req.query().first("q").orElse(null);
 		SearchResult result;
 		try {

@@ -104,7 +104,7 @@ public class SearchHandlerTest {
 						.urls(new SearchEntryUrls()
 								.everef("https://everef.net/types/34")
 								.referenceData("https://ref-data.everef.net/types/34")),
-				entries.getFirst());
+				entries.getFirst().relevance(null));
 	}
 
 	@Test
@@ -124,7 +124,7 @@ public class SearchHandlerTest {
 						.urls(new SearchEntryUrls()
 								.everef("https://everef.net/market-groups/1376")
 								.referenceData("https://ref-data.everef.net/market_groups/1376")),
-				entries.getFirst());
+				entries.getFirst().relevance(null));
 	}
 
 	@Test
@@ -144,7 +144,7 @@ public class SearchHandlerTest {
 						.urls(new SearchEntryUrls()
 								.everef("https://everef.net/categories/23")
 								.referenceData("https://ref-data.everef.net/categories/23")),
-				entries.getFirst());
+				entries.getFirst().relevance(null));
 	}
 
 	@Test
@@ -164,7 +164,7 @@ public class SearchHandlerTest {
 						.urls(new SearchEntryUrls()
 								.everef("https://everef.net/groups/27")
 								.referenceData("https://ref-data.everef.net/groups/27")),
-				entries.getFirst());
+				entries.getFirst().relevance(null));
 	}
 
 	@Test
@@ -183,7 +183,7 @@ public class SearchHandlerTest {
 						.urls(new SearchEntryUrls()
 								.everef("https://everef.net/types/34")
 								.referenceData("https://ref-data.everef.net/types/34")),
-				result.getEntries().getFirst());
+				result.getEntries().getFirst().relevance(null));
 	}
 
 	@Test
@@ -201,7 +201,7 @@ public class SearchHandlerTest {
 						.urls(new SearchEntryUrls()
 								.everef("https://everef.net/types/34")
 								.referenceData("https://ref-data.everef.net/types/34")),
-				result.getEntries().getFirst());
+				result.getEntries().getFirst().relevance(null));
 	}
 
 	@Test
@@ -221,7 +221,7 @@ public class SearchHandlerTest {
 						.urls(new SearchEntryUrls()
 								.everef("https://everef.net/types/24535")
 								.referenceData("https://ref-data.everef.net/types/24535")),
-				result.getEntries().getFirst());
+				result.getEntries().getFirst().relevance(null));
 	}
 
 	@Test
@@ -240,7 +240,7 @@ public class SearchHandlerTest {
 						.urls(new SearchEntryUrls()
 								.everef("https://everef.net/types/34")
 								.referenceData("https://ref-data.everef.net/types/34")),
-				entries.getFirst());
+				entries.getFirst().relevance(null));
 	}
 
 	@Test
