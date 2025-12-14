@@ -12,8 +12,6 @@ import javax.inject.Singleton;
 
 @Singleton
 public class CategorySearchEntryFactory implements SearchEntryFactory {
-	public static final String DEFAULT_TYPE_NAME = "Inventory category";
-
 	@Inject
 	protected RefDataService refDataService;
 
@@ -40,7 +38,7 @@ public class CategorySearchEntryFactory implements SearchEntryFactory {
 				.language("en")
 				.id(category.getCategoryId())
 				.type(SearchEntryType.CATEGORY)
-				.typeName(DEFAULT_TYPE_NAME)
+				.typeName("Inventory category")
 				.urls(searchHelper.urls(SearchEntryType.CATEGORY, category.getCategoryId()))
 				.build());
 	}

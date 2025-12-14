@@ -12,8 +12,6 @@ import javax.inject.Singleton;
 
 @Singleton
 public class GroupSearchEntryFactory implements SearchEntryFactory {
-	public static final String DEFAULT_TYPE_NAME = "Inventory group";
-
 	@Inject
 	protected RefDataService refDataService;
 
@@ -40,7 +38,7 @@ public class GroupSearchEntryFactory implements SearchEntryFactory {
 				.language("en")
 				.id(group.getGroupId())
 				.type(SearchEntryType.GROUP)
-				.typeName(DEFAULT_TYPE_NAME)
+				.typeName("Inventory group")
 				.urls(searchHelper.urls(SearchEntryType.GROUP, group.getGroupId()))
 				.build());
 	}

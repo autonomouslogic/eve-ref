@@ -806,6 +806,9 @@ components:
           type: string
           enum:
           - inventory_type
+          - market_group
+          - category
+          - group
         type_name:
           type: string
         urls:

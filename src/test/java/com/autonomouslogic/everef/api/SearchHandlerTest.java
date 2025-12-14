@@ -85,10 +85,10 @@ public class SearchHandlerTest {
 
 	@Test
 	@SneakyThrows
-	void shouldSearchByExactName() {
+	void shouldSearchForInventoryTypes() {
 		var result = searchApi.search("Tritanium");
 		var entries = result.getEntries();
-		assertEquals(1, entries.size());
+		assertEquals(1, entries.size(), entries.toString());
 		assertEquals(
 				new SearchEntry()
 						.id(34L)
@@ -104,11 +104,66 @@ public class SearchHandlerTest {
 
 	@Test
 	@SneakyThrows
+	void shouldSearchForMarketGroups() {
+		var result = searchApi.search("Battleship");
+		var entries = result.getEntries();
+		assertTrue(result.getEntries().size() > 0);
+		assertEquals(
+				new SearchEntry()
+						.id(1736L)
+						.title("Ships > Battleships")
+						.language("en")
+						.type(SearchEntry.TypeEnum.MARKET_GROUP)
+						.typeName("Market group")
+						.urls(new SearchEntryUrls()
+								.everef("https://everef.net/market-groups/1376")
+								.referenceData("https://ref-data.everef.net/market_groups/1376")),
+				entries.getFirst());
+	}
+
+	@Test
+	@SneakyThrows
+	void shouldSearchForCategories() {
+		var result = searchApi.search("Starbase");
+		var entries = result.getEntries();
+		assertEquals(1, entries.size(), entries.toString());
+		assertEquals(
+				new SearchEntry()
+						.id(23L)
+						.title("Starbase")
+						.language("en")
+						.type(SearchEntry.TypeEnum.CATEGORY)
+						.typeName("Inventory category")
+						.urls(new SearchEntryUrls()
+								.everef("https://everef.net/categories/23")
+								.referenceData("https://ref-data.everef.net/categories/23")),
+				entries.getFirst());
+	}
+
+	@Test
+	@SneakyThrows
+	void shouldSearchForInventoryGroups() {
+		var result = searchApi.search("Battleship");
+		var entries = result.getEntries();
+		assertTrue(result.getEntries().size() > 0);
+		assertEquals(
+				new SearchEntry()
+						.id(27L)
+						.title("Battleship")
+						.language("en")
+						.type(SearchEntry.TypeEnum.GROUP)
+						.typeName("Inventory group")
+						.urls(new SearchEntryUrls()
+								.everef("https://everef.net/groups/34")
+								.referenceData("https://ref-data.everef.net/groups/34")),
+				entries.getFirst());
+	}
+
+	@Test
+	@SneakyThrows
 	void shouldSearchByPartialName() {
 		var result = searchApi.search("Trit");
-		assertTrue(
-				result.getEntries().size() > 0,
-				Long.toString(result.getEntries().size()));
+		assertTrue(result.getEntries().size() > 0);
 		assertEquals(
 				new SearchEntry()
 						.id(34L)

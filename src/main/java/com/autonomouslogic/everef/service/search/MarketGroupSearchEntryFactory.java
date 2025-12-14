@@ -13,8 +13,6 @@ import javax.inject.Singleton;
 
 @Singleton
 public class MarketGroupSearchEntryFactory implements SearchEntryFactory {
-	public static final String DEFAULT_TYPE_NAME = "Market group";
-
 	@Inject
 	protected RefDataService refDataService;
 
@@ -43,7 +41,7 @@ public class MarketGroupSearchEntryFactory implements SearchEntryFactory {
 				.language("en")
 				.id(group.getMarketGroupId())
 				.type(SearchEntryType.MARKET_GROUP)
-				.typeName(DEFAULT_TYPE_NAME)
+				.typeName("Market group")
 				.urls(searchHelper.urls(SearchEntryType.MARKET_GROUP, group.getMarketGroupId()))
 				.build());
 	}
