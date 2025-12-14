@@ -1,17 +1,41 @@
 package com.autonomouslogic.everef.model.api.search;
 
+import com.autonomouslogic.everef.service.search.SearchService;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
-import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor
 public class Searcher {
 	private final Pattern queryPattern;
+	private final Long searchId;
+	private final boolean textSearch;
+
+	public Searcher(Pattern queryPattern) {
+		this.queryPattern = queryPattern;
+		this.searchId = parseIdFromPattern(queryPattern);
+		textSearch = searchId == null || Long.toString(searchId).length() >= SearchService.MIN_SEARCH_LENGTH;
+	}
+
+	private Long parseIdFromPattern(Pattern pattern) {
+		String patternString = pattern.pattern();
+		try {
+			return Long.parseLong(patternString);
+		} catch (NumberFormatException e) {
+			return null;
+		}
+	}
 
 	public Stream<SearchEntry> apply(Stream<SearchEntry> stream) {
 		return stream.flatMap(entry -> {
+			if (searchId != null && entry.getId() == searchId) {
+				return Stream.of(entry.toBuilder().relevance(0L).build());
+			}
+
+			if (!textSearch) {
+				return Stream.empty();
+			}
+
 			var q = queryable(entry);
 			if (q.isEmpty()) {
 				return Stream.empty();

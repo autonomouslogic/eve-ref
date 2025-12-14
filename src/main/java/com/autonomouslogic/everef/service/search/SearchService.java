@@ -16,6 +16,7 @@ import lombok.extern.log4j.Log4j2;
 @Singleton
 @Log4j2
 public class SearchService {
+	public static int MIN_SEARCH_LENGTH = 3;
 	private static final Pattern SPLIT_PATTERN = Pattern.compile("\\s+");
 
 	private static final Comparator<SearchEntry> RELEVANCE_COMPARATOR =
@@ -57,13 +58,22 @@ public class SearchService {
 	}
 
 	private void validateQuery(String q) {
+		var trimmed = q.trim();
+		try {
+			Long.parseLong(trimmed);
+			return;
+		} catch (NumberFormatException e) {
+			// Not a number
+		}
+
 		var nonSpace = SPLIT_PATTERN
 				.splitAsStream(q)
 				.filter(s -> !s.isBlank())
 				.mapToInt(String::length)
 				.sum();
-		if (nonSpace < 3) {
-			throw new IllegalArgumentException("Query must contain at least three non-whitespace characters");
+		if (nonSpace < MIN_SEARCH_LENGTH) {
+			throw new IllegalArgumentException(
+					String.format("Query must contain at least %s non-whitespace characters", MIN_SEARCH_LENGTH));
 		}
 	}
 
