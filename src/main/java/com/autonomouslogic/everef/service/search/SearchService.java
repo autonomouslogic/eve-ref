@@ -22,39 +22,30 @@ public class SearchService {
 	private static final Comparator<SearchEntry> RELEVANCE_COMPARATOR =
 			Ordering.natural().onResultOf(SearchEntry::getRelevance);
 
-	@Inject
-	protected RefDataService refDataService;
+	private final SearchEntryFactory entryFactory;
 
 	@Inject
-	protected InventoryTypeSearchEntryFactory inventoryTypeSearchEntryFactory;
-
-	@Inject
-	protected MarketGroupSearchEntryFactory marketGroupSearchEntryFactory;
-
-	@Inject
-	protected CategorySearchEntryFactory categorySearchEntryFactory;
-
-	@Inject
-	protected GroupSearchEntryFactory groupSearchEntryFactory;
-
-	@Inject
-	public SearchService() {}
-
-	public SearchResult search(@NonNull String q) {
-		validateQuery(q);
-		var searchPattern = buildSearchPattern(q);
-		var searcher = new Searcher(searchPattern);
-		var matches = searcher.apply(getSearchEntries()).sorted(RELEVANCE_COMPARATOR);
-		return SearchResult.builder().entries(matches.toList()).build();
-	}
-
-	private Stream<SearchEntry> getSearchEntries() {
-		return Stream.of(
+	public SearchService(
+			RefDataService refDataService,
+			InventoryTypeSearchEntryFactory inventoryTypeSearchEntryFactory,
+			MarketGroupSearchEntryFactory marketGroupSearchEntryFactory,
+			CategorySearchEntryFactory categorySearchEntryFactory,
+			GroupSearchEntryFactory groupSearchEntryFactory) {
+		SearchEntryFactory compound = () -> Stream.of(
 						inventoryTypeSearchEntryFactory.createEntries(),
 						marketGroupSearchEntryFactory.createEntries(),
 						categorySearchEntryFactory.createEntries(),
 						groupSearchEntryFactory.createEntries())
 				.flatMap(stream -> stream);
+		entryFactory = new CachedSearchEntryFactory(compound, refDataService);
+	}
+
+	public SearchResult search(@NonNull String q) {
+		validateQuery(q);
+		var searchPattern = buildSearchPattern(q);
+		var searcher = new Searcher(searchPattern);
+		var matches = searcher.apply(entryFactory.createEntries()).sorted(RELEVANCE_COMPARATOR);
+		return SearchResult.builder().entries(matches.toList()).build();
 	}
 
 	private void validateQuery(String q) {
