@@ -1,6 +1,5 @@
 package com.autonomouslogic.everef.api;
 
-import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.data.LoadedRefData;
 import com.autonomouslogic.everef.esi.UniverseEsi;
 import com.autonomouslogic.everef.industry.IndustryCalculator;
@@ -54,10 +53,6 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 @Path("/v1/industry/cost")
 @Log4j2
 public class IndustryCostHandler implements HttpService, Handler {
-	private static final String cacheControlHeader = String.format(
-			"public, max-age=%d, immutable", Duration.ofMinutes(10).toSeconds());
-	private final String eveRefVersion = Configs.EVE_REF_VERSION.getRequired();
-
 	@Inject
 	protected ObjectMapper objectMapper;
 
@@ -81,6 +76,9 @@ public class IndustryCostHandler implements HttpService, Handler {
 
 	@Inject
 	protected SystemCostIndexService systemCostIndexService;
+
+	@Inject
+	protected ApiUtil apiUtil;
 
 	private final ObjectMapper queryStringMapper;
 
@@ -134,14 +132,9 @@ public class IndustryCostHandler implements HttpService, Handler {
 		validateInput(input);
 		var result = industryCost(input);
 		var json = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(result) + "\n";
-		res.status(Status.OK_200)
-				.header("Server", "eve-ref/" + eveRefVersion)
-				.header("Content-Type", "application/json")
-				.header("X-Discord", "https://everef.net/discord")
-				.header("X-OpenAPI", "https://github.com/autonomouslogic/eve-ref/blob/main/spec/eve-ref-api.yaml")
-				.header("X-Docs", "https://docs.everef.net/api/industry-cost.html")
-				.header("Cache-Control", cacheControlHeader)
-				.send(json);
+		res.status(Status.OK_200);
+		apiUtil.setStandardHeaders(res, Duration.ofMinutes(10), "https://docs.everef.net/api/industry-cost.html");
+		res.send(json);
 	}
 
 	private IndustryCostInput createInput(ServerRequest req) {
@@ -241,10 +234,7 @@ public class IndustryCostHandler implements HttpService, Handler {
 
 	@Override
 	public void routing(HttpRules rules) {
-		var path = Objects.requireNonNull(IndustryCostHandler.class.getAnnotation(Path.class))
-				.value();
-		rules.get(path, this);
-		rules.any(StandardHandlers.HTTP_METHOD_NOT_ALLOWED);
+		rules.get(this);
 	}
 
 	private static InventoryType handleProduct(
