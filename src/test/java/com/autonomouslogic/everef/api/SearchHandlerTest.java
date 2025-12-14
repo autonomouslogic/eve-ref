@@ -3,7 +3,6 @@ package com.autonomouslogic.everef.api;
 import static com.autonomouslogic.everef.api.SearchHandlerTest.API_TEST_PORT;
 import static com.autonomouslogic.everef.test.TestDataUtil.TEST_PORT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -12,6 +11,8 @@ import com.autonomouslogic.everef.cli.publishrefdata.PublishRefDataTest;
 import com.autonomouslogic.everef.openapi.api.api.SearchApi;
 import com.autonomouslogic.everef.openapi.api.invoker.ApiClient;
 import com.autonomouslogic.everef.openapi.api.invoker.ApiException;
+import com.autonomouslogic.everef.openapi.api.model.SearchEntry;
+import com.autonomouslogic.everef.openapi.api.model.SearchEntryUrls;
 import com.autonomouslogic.everef.service.RefDataService;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.util.MockScrapeBuilder;
@@ -85,6 +86,91 @@ public class SearchHandlerTest {
 	@Test
 	@SneakyThrows
 	void shouldSearchByExactName() {
+		var result = searchApi.search("Tritanium");
+		var entries = result.getEntries();
+		assertEquals(1, entries.size());
+		assertEquals(
+				new SearchEntry()
+						.id(34L)
+						.title("Tritanium")
+						.language("en")
+						.type(SearchEntry.TypeEnum.INVENTORY_TYPE)
+						.typeName("Inventory type")
+						.urls(new SearchEntryUrls()
+								.everef("https://everef.net/types/34")
+								.referenceData("https://ref-data.everef.net/types/34")),
+				entries.getFirst());
+	}
+
+	@Test
+	@SneakyThrows
+	void shouldSearchByPartialName() {
+		var result = searchApi.search("Trit");
+		assertTrue(
+				result.getEntries().size() > 0,
+				Long.toString(result.getEntries().size()));
+		assertEquals(
+				new SearchEntry().id(34L).title("Tritanium"),
+				result.getEntries().getFirst());
+	}
+
+	@Test
+	@SneakyThrows
+	void shouldSearchCaseInsensitive() {
+		var result = searchApi.search("tritanium");
+		assertEquals(1, result.getEntries().size());
+		assertEquals(
+				new SearchEntry().id(34L).title("Tritanium"),
+				result.getEntries().getFirst());
+	}
+
+	@Test
+	@SneakyThrows
+	void shouldSearchMultipleWords() {
+		var result = searchApi.search("Mjolnir Fury");
+		assertTrue(
+				result.getEntries().size() > 0,
+				Long.toString(result.getEntries().size()));
+		assertEquals(
+				new SearchEntry().id(34L).title("Tritanium"),
+				result.getEntries().getFirst());
+	}
+
+	@Test
+	@SneakyThrows
+	void shouldThrowOnShortQuery() {
+		var ex = assertThrows(ApiException.class, () -> searchApi.search("Tr"));
+		assertEquals(400, ex.getCode());
+	}
+
+	@Test
+	@SneakyThrows
+	void shouldThrowOnShortQueryWithWhitespace() {
+		var ex = assertThrows(ApiException.class, () -> searchApi.search("   T      r     \t\n\r"));
+		assertEquals(400, ex.getCode());
+	}
+
+	@Test
+	void shouldThrowForNull() {
+		var ex = assertThrows(ApiException.class, () -> searchApi.search(null));
+		assertEquals(400, ex.getCode());
+	}
+
+	@Test
+	void shouldThrowForEmpty() {
+		var ex = assertThrows(ApiException.class, () -> searchApi.search(""));
+		assertEquals(400, ex.getCode());
+	}
+
+	@Test
+	void shouldThrowForWhitespace() {
+		var ex = assertThrows(ApiException.class, () -> searchApi.search("   "));
+		assertEquals(400, ex.getCode());
+	}
+
+	@Test
+	@SneakyThrows
+	void shouldSetHeaders() {
 		var res = searchApi.searchWithHttpInfo("Tritanium");
 		assertEquals(200, res.getStatusCode());
 		assertEquals("application/json", res.getHeaders().get("Content-Type").getFirst());
@@ -94,81 +180,6 @@ public class SearchHandlerTest {
 		assertEquals(
 				"https://github.com/autonomouslogic/eve-ref/blob/main/spec/eve-ref-api.yaml",
 				res.getHeaders().get("X-OpenAPI").getFirst());
-
-		var result = res.getData();
-		assertNotNull(result);
-		assertEquals("Tritanium", result.getInput());
-		assertNotNull(result.getInventoryType());
-		assertEquals(1, result.getInventoryType().size());
-		assertEquals("Tritanium", result.getInventoryType().get(0).getNameEn());
-		assertEquals(34L, result.getInventoryType().get(0).getTypeId());
-	}
-
-	@Test
-	@SneakyThrows
-	void shouldSearchByPartialName() {
-		var result = searchApi.search("Trit");
-		assertNotNull(result);
-		assertEquals("Trit", result.getInput());
-		assertNotNull(result.getInventoryType());
-		assertTrue(result.getInventoryType().size() > 0);
-		assertTrue(result.getInventoryType().stream().anyMatch(t -> "Tritanium".equals(t.getNameEn())));
-	}
-
-	@Test
-	@SneakyThrows
-	void shouldSearchCaseInsensitive() {
-		var result = searchApi.search("tritanium");
-		assertNotNull(result);
-		assertEquals("tritanium", result.getInput());
-		assertNotNull(result.getInventoryType());
-		assertEquals(1, result.getInventoryType().size());
-		assertEquals("Tritanium", result.getInventoryType().get(0).getNameEn());
-	}
-
-	@Test
-	@SneakyThrows
-	void shouldReturnEmptyForShortQuery() {
-		var result = searchApi.search("Tr");
-		assertNotNull(result);
-		assertEquals("Tr", result.getInput());
-		assertNotNull(result.getInventoryType());
-		assertEquals(0, result.getInventoryType().size());
-	}
-
-	@Test
-	void shouldThrowForNull() {
-		var ex = assertThrows(ApiException.class, () -> searchApi.search(null));
-		ex.printStackTrace();
-		assertEquals(400, ex.getCode());
-	}
-
-	@Test
-	void shouldThrowForEmpty() {
-		var ex = assertThrows(ApiException.class, () -> searchApi.search(""));
-		ex.printStackTrace();
-		assertEquals(400, ex.getCode());
-	}
-
-	@Test
-	void shouldThrowForWhitespace() {
-		var ex = assertThrows(ApiException.class, () -> searchApi.search("   "));
-		ex.printStackTrace();
-		assertEquals(400, ex.getCode());
-	}
-
-	@Test
-	@SneakyThrows
-	void shouldSearchMultipleWords() {
-		var result = searchApi.search("Mjolnir Fury");
-		assertNotNull(result);
-		assertEquals("Mjolnir Fury", result.getInput());
-		assertNotNull(result.getInventoryType());
-		assertTrue(result.getInventoryType().size() > 0);
-		assertTrue(result.getInventoryType().stream()
-				.anyMatch(t -> t.getNameEn() != null
-						&& t.getNameEn().contains("Mjolnir")
-						&& t.getNameEn().contains("Fury")));
 	}
 
 	class TestDispatcher extends Dispatcher {

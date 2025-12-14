@@ -54,6 +54,7 @@ paths:
       - description: Search query (minimum 3 characters)
         in: query
         name: q
+        required: true
         schema:
           type: string
       responses:
@@ -791,28 +792,35 @@ components:
           type: integer
           format: int64
           description: Total number of item produced
-    SearchInventoryType:
+    SearchEntry:
       type: object
-      description: List of matching inventoryType
       properties:
-        name_en:
-          type: string
-        root_market_group:
-          type: string
-        root_market_group_id:
+        id:
           type: integer
           format: int64
-        type_id:
-          type: integer
-          format: int64
+        language:
+          type: string
+        title:
+          type: string
+        type:
+          type: string
+          enum:
+          - inventory_type
+        type_name:
+          type: string
+        urls:
+          $ref: "#/components/schemas/SearchEntryUrls"
+    SearchEntryUrls:
+      type: object
+      properties:
+        everef:
+          type: string
+        reference_data:
+          type: string
     SearchResult:
       type: object
       properties:
-        input:
-          type: string
-          description: The original search input provided by the user
-        inventory_type:
+        entries:
           type: array
-          description: List of matching inventoryType
           items:
-            $ref: "#/components/schemas/SearchInventoryType"
+            $ref: "#/components/schemas/SearchEntry"

@@ -2,7 +2,7 @@ package com.autonomouslogic.everef.api;
 
 import com.autonomouslogic.everef.model.api.ApiError;
 import com.autonomouslogic.everef.model.api.search.SearchResult;
-import com.autonomouslogic.everef.service.SearchService;
+import com.autonomouslogic.everef.service.search.SearchService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.helidon.http.Status;
 import io.helidon.webserver.http.Handler;
@@ -54,13 +54,14 @@ public class SearchHandler implements HttpService, Handler {
 			responseCode = "500",
 			description = "Server error",
 			content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiError.class)))
-	@Parameter(
-			in = ParameterIn.QUERY,
-			name = "q",
-			description = "Search query (minimum 3 characters)",
-			required = false,
-			schema = @Schema(type = "string"))
-	public SearchResult search(@Parameter String q) {
+	public SearchResult search(
+			@Parameter(
+							in = ParameterIn.QUERY,
+							name = "q",
+							description = "Search query (minimum 3 characters)",
+							required = true,
+							schema = @Schema(type = "string"))
+					String q) {
 		return searchService.search(q);
 	}
 
