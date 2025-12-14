@@ -16,6 +16,7 @@ import com.autonomouslogic.everef.openapi.api.model.SearchEntryUrls;
 import com.autonomouslogic.everef.service.RefDataService;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.util.MockScrapeBuilder;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.FileInputStream;
 import javax.inject.Inject;
@@ -53,6 +54,9 @@ public class SearchHandlerTest {
 	@Inject
 	RefDataService refDataService;
 
+	@Inject
+	ObjectMapper objectMapper;
+
 	SearchApi searchApi;
 	MockWebServer server;
 	File refDataFile;
@@ -87,6 +91,7 @@ public class SearchHandlerTest {
 	@SneakyThrows
 	void shouldSearchForInventoryTypes() {
 		var result = searchApi.search("Tritanium");
+		log.info("Result: {}", objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(result));
 		var entries = result.getEntries();
 		assertEquals(1, entries.size(), entries.toString());
 		assertEquals(
@@ -105,12 +110,13 @@ public class SearchHandlerTest {
 	@Test
 	@SneakyThrows
 	void shouldSearchForMarketGroups() {
-		var result = searchApi.search("Battleship");
+		var result = searchApi.search("Battleships");
+		log.info("Result: {}", objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(result));
 		var entries = result.getEntries();
 		assertTrue(result.getEntries().size() > 0);
 		assertEquals(
 				new SearchEntry()
-						.id(1736L)
+						.id(1376L)
 						.title("Ships > Battleships")
 						.language("en")
 						.type(SearchEntry.TypeEnum.MARKET_GROUP)
@@ -125,6 +131,7 @@ public class SearchHandlerTest {
 	@SneakyThrows
 	void shouldSearchForCategories() {
 		var result = searchApi.search("Starbase");
+		log.info("Result: {}", objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(result));
 		var entries = result.getEntries();
 		assertEquals(1, entries.size(), entries.toString());
 		assertEquals(
@@ -144,6 +151,7 @@ public class SearchHandlerTest {
 	@SneakyThrows
 	void shouldSearchForInventoryGroups() {
 		var result = searchApi.search("Battleship");
+		log.info("Result: {}", objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(result));
 		var entries = result.getEntries();
 		assertTrue(result.getEntries().size() > 0);
 		assertEquals(
@@ -154,8 +162,8 @@ public class SearchHandlerTest {
 						.type(SearchEntry.TypeEnum.GROUP)
 						.typeName("Inventory group")
 						.urls(new SearchEntryUrls()
-								.everef("https://everef.net/groups/34")
-								.referenceData("https://ref-data.everef.net/groups/34")),
+								.everef("https://everef.net/groups/27")
+								.referenceData("https://ref-data.everef.net/groups/27")),
 				entries.getFirst());
 	}
 
@@ -163,6 +171,7 @@ public class SearchHandlerTest {
 	@SneakyThrows
 	void shouldSearchByPartialName() {
 		var result = searchApi.search("Trit");
+		log.info("Result: {}", objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(result));
 		assertTrue(result.getEntries().size() > 0);
 		assertEquals(
 				new SearchEntry()
