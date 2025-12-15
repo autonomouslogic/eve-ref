@@ -1,5 +1,12 @@
 EVE Ref Changelog
 
+## [2.72.0](https://github.com/autonomouslogic/eve-ref/compare/2.71.3...2.72.0) (2025-12-14)
+
+
+### Features
+
+* Search API endpoint ([#985](https://github.com/autonomouslogic/eve-ref/issues/985)) ([94bcc72](https://github.com/autonomouslogic/eve-ref/commit/94bcc72db7b06cf051add166aec6d9492e6ef236))
+
 ## [2.71.3](https://github.com/autonomouslogic/eve-ref/compare/2.71.2...2.71.3) (2025-12-03)
 
 

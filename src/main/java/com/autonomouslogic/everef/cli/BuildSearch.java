@@ -11,6 +11,7 @@ import com.autonomouslogic.everef.s3.S3Adapter;
 import com.autonomouslogic.everef.s3.S3Util;
 import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.url.UrlParser;
+import com.autonomouslogic.everef.util.MarketGroupHelper;
 import com.autonomouslogic.everef.util.RefDataUtil;
 import com.autonomouslogic.everef.util.TempFiles;
 import com.fasterxml.jackson.core.JsonEncoding;
@@ -61,6 +62,9 @@ public class BuildSearch implements Command {
 	@Inject
 	protected TempFiles tempFiles;
 
+	@Inject
+	protected MarketGroupHelper marketGroupHelper;
+
 	private S3Url staticUrl;
 
 	private final Duration cacheControlMaxAge = Configs.STATIC_CACHE_CONTROL_MAX_AGE.getRequired();
@@ -98,12 +102,12 @@ public class BuildSearch implements Command {
 
 		String typeName;
 		if (type.getMarketGroupId() != null) {
-			typeName = Optional.ofNullable(getRootMarketGroup(type, loadedRefData))
+			typeName = Optional.ofNullable(marketGroupHelper.getRootMarketGroup(type))
 					.flatMap(g -> Optional.ofNullable(g.getName().get("en")))
 					.orElse("Inventory type");
 		} else if (type.getGroupId() != null) {
 			loadedRefData.getGroup(type.getGroupId()).getName().get("en");
-			typeName = Optional.ofNullable(getRootMarketGroup(type, loadedRefData))
+			typeName = Optional.ofNullable(marketGroupHelper.getRootMarketGroup(type))
 					.flatMap(g -> Optional.ofNullable(g.getName().get("en")))
 					.orElse("Inventory type");
 		} else {
@@ -118,28 +122,6 @@ public class BuildSearch implements Command {
 				.filter(lang -> lang.equals("en")) // only English for now, otherwise the search file becomes massive
 				.map(lang ->
 						searchEntry.toBuilder().text(type.getName().get(lang)).build());
-	}
-
-	private MarketGroup getRootMarketGroup(InventoryType type, LoadedRefData loadedRefData) {
-		if (type.getMarketGroupId() == null) {
-			return null;
-		}
-		var marketGroup = loadedRefData.getMarketGroup(type.getMarketGroupId());
-		if (marketGroup == null) {
-			return null;
-		}
-		return getRootMarketGroup(marketGroup, loadedRefData);
-	}
-
-	private MarketGroup getRootMarketGroup(MarketGroup marketGroup, LoadedRefData loadedRefData) {
-		if (marketGroup.getParentGroupId() == null) {
-			return marketGroup;
-		}
-		var parentGroup = loadedRefData.getMarketGroup(marketGroup.getParentGroupId());
-		if (parentGroup == null) {
-			return marketGroup;
-		}
-		return getRootMarketGroup(parentGroup, loadedRefData);
 	}
 
 	private Stream<SearchJsonEntry> marketGroup(MarketGroup group, LoadedRefData loadedRefData) {

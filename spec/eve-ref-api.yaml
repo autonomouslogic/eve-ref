@@ -46,6 +46,39 @@ paths:
           description: Server error
       tags:
       - industry
+  /v1/search:
+    get:
+      description: Search for EVE Online inventory types by name
+      operationId: search
+      parameters:
+      - description: Search query (minimum 3 characters)
+        in: query
+        name: q
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SearchResult"
+          description: Success
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+          description: Client error
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiError"
+          description: Server error
+      summary: Search for inventory types
+      tags:
+      - search
 components:
   schemas:
     ApiError:
@@ -759,3 +792,42 @@ components:
           type: integer
           format: int64
           description: Total number of item produced
+    SearchEntry:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        language:
+          type: string
+        relevance:
+          type: integer
+          format: int64
+          description: Relevance score of the search result. Lower is better.
+        title:
+          type: string
+        type:
+          type: string
+          enum:
+          - inventory_type
+          - market_group
+          - category
+          - group
+        type_name:
+          type: string
+        urls:
+          $ref: "#/components/schemas/SearchEntryUrls"
+    SearchEntryUrls:
+      type: object
+      properties:
+        everef:
+          type: string
+        reference_data:
+          type: string
+    SearchResult:
+      type: object
+      properties:
+        entries:
+          type: array
+          items:
+            $ref: "#/components/schemas/SearchEntry"

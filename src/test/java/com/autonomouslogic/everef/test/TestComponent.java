@@ -1,6 +1,7 @@
 package com.autonomouslogic.everef.test;
 
 import com.autonomouslogic.everef.api.IndustryCostHandlerTest;
+import com.autonomouslogic.everef.api.SearchHandlerTest;
 import com.autonomouslogic.everef.cli.DataIndexTest;
 import com.autonomouslogic.everef.cli.FetchDonationsTest;
 import com.autonomouslogic.everef.cli.MockDataIndexModule;
@@ -120,6 +121,8 @@ public interface TestComponent {
 	void inject(ScrapeStructuresTest test);
 
 	void inject(SdeLoaderTest test);
+
+	void inject(SearchHandlerTest test);
 
 	void inject(SlackDecoratorTest test);
 
