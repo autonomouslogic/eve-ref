@@ -54,8 +54,7 @@ public class FieldRenamerTest {
 	@Test
 	@SneakyThrows
 	void shouldRenameObjectsRecursively() {
-		var input =
-				"""
+		var input = """
 			{
 				"var": 1,
 				"anotherVar": 2,
@@ -64,8 +63,7 @@ public class FieldRenamerTest {
 					"anotherVar": 4
 				}
 			}""";
-		var expected =
-				"""
+		var expected = """
 			{
 				"var": 1,
 				"another_var": 2,
