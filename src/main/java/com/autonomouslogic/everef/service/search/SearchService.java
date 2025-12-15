@@ -3,12 +3,10 @@ package com.autonomouslogic.everef.service.search;
 import com.autonomouslogic.everef.model.api.search.SearchEntry;
 import com.autonomouslogic.everef.model.api.search.SearchResult;
 import com.autonomouslogic.everef.model.api.search.Searcher;
-import com.autonomouslogic.everef.service.RefDataService;
 import com.google.common.collect.Ordering;
 import jakarta.inject.Inject;
 import java.util.Comparator;
 import java.util.regex.Pattern;
-import java.util.stream.Stream;
 import javax.inject.Singleton;
 import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
@@ -22,23 +20,11 @@ public class SearchService {
 	private static final Comparator<SearchEntry> RELEVANCE_COMPARATOR =
 			Ordering.natural().onResultOf(SearchEntry::getRelevance);
 
-	private final SearchEntryFactory entryFactory;
+	@Inject
+	protected CachedSearchEntryFactory entryFactory;
 
 	@Inject
-	public SearchService(
-			RefDataService refDataService,
-			InventoryTypeSearchEntryFactory inventoryTypeSearchEntryFactory,
-			MarketGroupSearchEntryFactory marketGroupSearchEntryFactory,
-			CategorySearchEntryFactory categorySearchEntryFactory,
-			GroupSearchEntryFactory groupSearchEntryFactory) {
-		SearchEntryFactory compound = () -> Stream.of(
-						inventoryTypeSearchEntryFactory.createEntries(),
-						marketGroupSearchEntryFactory.createEntries(),
-						categorySearchEntryFactory.createEntries(),
-						groupSearchEntryFactory.createEntries())
-				.flatMap(stream -> stream);
-		entryFactory = new CachedSearchEntryFactory(compound, refDataService);
-	}
+	protected SearchService() {}
 
 	public SearchResult search(@NonNull String q) {
 		validateQuery(q);

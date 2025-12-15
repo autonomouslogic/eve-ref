@@ -2,31 +2,43 @@ package com.autonomouslogic.everef.service.search;
 
 import com.autonomouslogic.everef.model.api.search.SearchEntry;
 import com.autonomouslogic.everef.service.RefDataService;
+import jakarta.inject.Inject;
 import java.util.List;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.stream.Stream;
-import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
+import javax.inject.Singleton;
 import lombok.extern.log4j.Log4j2;
 
-@RequiredArgsConstructor
+@Singleton
 @Log4j2
 public class CachedSearchEntryFactory implements SearchEntryFactory {
-	@NonNull
-	private final SearchEntryFactory delegate;
+	@Inject
+	protected RefDataService refDataService;
 
-	@NonNull
-	private final RefDataService refDataService;
+	@Inject
+	protected CompoundSearchEntryFactory entryFactory;
 
-	private List<SearchEntry> cached;
-	private int lastCode = 0;
+	private volatile List<SearchEntry> cached;
+	private final ReentrantReadWriteLock.WriteLock cacheLock = new ReentrantReadWriteLock().writeLock();
+	private volatile int lastCode = 0;
+
+	@Inject
+	public CachedSearchEntryFactory() {}
 
 	@Override
 	public Stream<SearchEntry> createEntries() {
 		var hashCode = System.identityHashCode(refDataService.getLoadedRefData());
 		if (!isCacheValid(hashCode)) {
-			log.debug("Creating cached search entries");
-			cached = delegate.createEntries().toList();
-			lastCode = hashCode;
+			try {
+				cacheLock.lock();
+				if (!isCacheValid(hashCode)) {
+					log.debug("Creating cached search entries");
+					cached = entryFactory.createEntries().toList();
+					lastCode = hashCode;
+				}
+			} finally {
+				cacheLock.unlock();
+			}
 		}
 		return cached.stream();
 	}
