@@ -515,8 +515,7 @@ public class IndustryCostHandlerTest {
 						return new MockResponse()
 								.setResponseCode(200)
 								.setHeader("ETag", "test")
-								.setBody(
-										"""
+								.setBody("""
 									[{
 										"cost_indices": [
 										{

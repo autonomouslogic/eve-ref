@@ -26,8 +26,7 @@ public class MarketHistoryEntryTest {
 	@Test
 	@SneakyThrows
 	void shouldParseCsv() {
-		var csv =
-				"""
+		var csv = """
 			average,date,highest,lowest,order_count,volume,region_id,type_id,http_last_modified
 			50.05,2022-05-11,50.05,50.05,2,190,10000001,20,2022-05-12T11:05:40Z
 			""";
