@@ -3,7 +3,6 @@ package com.autonomouslogic.everef.service.search;
 import com.autonomouslogic.everef.model.api.search.SearchEntry;
 import com.autonomouslogic.everef.service.RefDataService;
 import jakarta.inject.Inject;
-import java.lang.ref.SoftReference;
 import java.util.List;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.stream.Stream;
@@ -19,7 +18,7 @@ public class CachedSearchEntryFactory implements SearchEntryFactory {
 	@Inject
 	protected CompoundSearchEntryFactory entryFactory;
 
-	private SoftReference<List<SearchEntry>> cached;
+	private volatile List<SearchEntry> cached;
 	private final ReentrantReadWriteLock.WriteLock cacheLock = new ReentrantReadWriteLock().writeLock();
 	private volatile int lastCode = 0;
 
@@ -34,18 +33,18 @@ public class CachedSearchEntryFactory implements SearchEntryFactory {
 				cacheLock.lock();
 				if (!isCacheValid(hashCode)) {
 					log.debug("Creating cached search entries");
-					cached = new SoftReference<>(entryFactory.createEntries().toList());
+					cached = entryFactory.createEntries().toList();
 					lastCode = hashCode;
 				}
 			} finally {
 				cacheLock.unlock();
 			}
 		}
-		return cached.get().stream();
+		return cached.stream();
 	}
 
 	private boolean isCacheValid(int hashCode) {
-		if (cached == null || cached.get() == null) {
+		if (cached == null) {
 			return false;
 		}
 		return lastCode == hashCode;
