@@ -2,7 +2,6 @@ package com.autonomouslogic.everef.cli;
 
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.esi.EsiAuthHelper;
-import com.autonomouslogic.everef.esi.EsiConstants;
 import com.autonomouslogic.everef.esi.EsiHelper;
 import com.autonomouslogic.everef.http.OkHttpWrapper;
 import com.autonomouslogic.everef.openapi.esi.api.CharacterApi;

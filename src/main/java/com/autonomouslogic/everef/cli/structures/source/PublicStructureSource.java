@@ -5,7 +5,6 @@ import static com.autonomouslogic.everef.cli.structures.ScrapeStructures.LAST_SE
 
 import com.autonomouslogic.everef.cli.structures.StructureScrapeHelper;
 import com.autonomouslogic.everef.cli.structures.StructureStore;
-import com.autonomouslogic.everef.esi.EsiConstants;
 import com.autonomouslogic.everef.esi.EsiHelper;
 import com.autonomouslogic.everef.openapi.esi.api.UniverseApi;
 import com.autonomouslogic.everef.util.VirtualThreads;

@@ -82,8 +82,9 @@ renovate-validate:
 dev-docs:
 	cd docs ; npm run dev
 
-update-esi-swagger:
+update-esi-spec:
 	curl -s https://esi.evetech.net/meta/openapi.json | jq . > spec/esi-swagger.json
+	date -uI > src/main/resources/esi-compatibility-date
 
 generate-database:
 	./gradlew database:compileJava

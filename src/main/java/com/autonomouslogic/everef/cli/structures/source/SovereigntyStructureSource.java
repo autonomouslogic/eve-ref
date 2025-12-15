@@ -5,7 +5,6 @@ import static com.autonomouslogic.everef.cli.structures.ScrapeStructures.LAST_SE
 
 import com.autonomouslogic.everef.cli.structures.StructureScrapeHelper;
 import com.autonomouslogic.everef.cli.structures.StructureStore;
-import com.autonomouslogic.everef.esi.EsiConstants;
 import com.autonomouslogic.everef.openapi.esi.api.SovereigntyApi;
 import com.autonomouslogic.everef.util.VirtualThreads;
 import io.reactivex.rxjava3.core.Flowable;

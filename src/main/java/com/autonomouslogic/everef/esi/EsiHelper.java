@@ -1,5 +1,6 @@
 package com.autonomouslogic.everef.esi;
 
+import com.autonomouslogic.commons.ResourceUtil;
 import com.autonomouslogic.commons.rxjava3.Rx3Util;
 import com.autonomouslogic.everef.http.OkHttpWrapper;
 import com.autonomouslogic.everef.openapi.esi.invoker.ApiResponse;
@@ -11,15 +12,19 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.functions.BiFunction;
 import io.reactivex.rxjava3.functions.Function;
+import java.nio.charset.StandardCharsets;
 import java.time.Duration;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
+import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import okhttp3.Response;
+import org.apache.commons.io.IOUtils;
 
 @Singleton
 @Log4j2
@@ -33,8 +38,16 @@ public class EsiHelper {
 	@Inject
 	protected ObjectMapper objectMapper;
 
+	@Getter
+	private final LocalDate compatibilityDate;
+
 	@Inject
-	protected EsiHelper() {}
+	@SneakyThrows
+	protected EsiHelper() {
+		try (var in = ResourceUtil.loadResource("/esi-compatibility-date")) {
+			compatibilityDate = LocalDate.parse(IOUtils.toString(in, StandardCharsets.UTF_8));
+		}
+	}
 
 	/**
 	 * Fetches the requested URL.
