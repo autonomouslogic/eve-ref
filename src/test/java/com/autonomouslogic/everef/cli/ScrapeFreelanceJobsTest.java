@@ -3,16 +3,19 @@ package com.autonomouslogic.everef.cli;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.mockito.Mockito.verify;
 
 import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.test.MockS3Adapter;
 import com.autonomouslogic.everef.test.TestDataUtil;
 import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.util.DataIndexHelper;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -20,7 +23,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.NonNull;
@@ -40,7 +42,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junitpioneer.jupiter.SetEnvironmentVariable;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 
@@ -70,10 +71,9 @@ public class ScrapeFreelanceJobsTest {
 	DataIndexHelper dataIndexHelper;
 
 	MockWebServer server;
-	AtomicInteger counter = new AtomicInteger();
 
-	List<ObjectNode> freelanceJobs;
-	Map<String, ObjectNode> freelanceJobsById;
+	List<ObjectNode> jobsIndex;
+	Map<String, ObjectNode> jobsDetail;
 	byte[] existingLatestFile;
 
 	@Inject
@@ -84,8 +84,8 @@ public class ScrapeFreelanceJobsTest {
 	void before() {
 		DaggerTestComponent.builder().build().inject(this);
 
-		freelanceJobs = new ArrayList<>();
-		freelanceJobsById = new HashMap<>();
+		jobsIndex = new ArrayList<>();
+		jobsDetail = new HashMap<>();
 		existingLatestFile = null;
 
 		server = new MockWebServer();
@@ -109,7 +109,9 @@ public class ScrapeFreelanceJobsTest {
 		scrapeFreelanceJobs.run();
 
 		var latestRequest = server.takeRequest();
-		assertEquals("/freelance-jobs/freelance-jobs-latest.json.bz2", latestRequest.getRequestUrl().encodedPath());
+		assertEquals(
+				"/freelance-jobs/freelance-jobs-latest.json.bz2",
+				latestRequest.getRequestUrl().encodedPath());
 
 		var indexRequest = server.takeRequest();
 		assertEquals("/freelance-jobs", indexRequest.getRequestUrl().encodedPath());
@@ -118,63 +120,36 @@ public class ScrapeFreelanceJobsTest {
 	@Test
 	@SneakyThrows
 	void shouldFetchJobsDetail() {
-		createFreelanceJob(Instant.now());
-		createFreelanceJob(Instant.now());
+		createFreelanceJob(1, Instant.now());
+		createFreelanceJob(2, Instant.now());
 
 		scrapeFreelanceJobs.run();
 
 		var latestRequest = server.takeRequest();
-		assertEquals("/freelance-jobs/freelance-jobs-latest.json.bz2", latestRequest.getRequestUrl().encodedPath());
+		assertEquals(
+				"/freelance-jobs/freelance-jobs-latest.json.bz2",
+				latestRequest.getRequestUrl().encodedPath());
 
 		var indexRequest = server.takeRequest();
 		assertEquals("/freelance-jobs", indexRequest.getRequestUrl().encodedPath());
 
-		var detail1Request = server.takeRequest();
-		assertEquals("/freelance-jobs/id-1", detail1Request.getRequestUrl().encodedPath());
+		var job1request = server.takeRequest();
+		assertEquals("/freelance-jobs/id-1", job1request.getRequestUrl().encodedPath());
 
-		var detail2Request = server.takeRequest();
-		assertEquals("/freelance-jobs/id-2", detail2Request.getRequestUrl().encodedPath());
+		var job2request = server.takeRequest();
+		assertEquals("/freelance-jobs/id-2", job2request.getRequestUrl().encodedPath());
 	}
 
 	@Test
 	@SneakyThrows
-	void shouldUploadJsonFile() {
-		createFreelanceJob(Instant.now());
-		createFreelanceJob(Instant.now());
-
-		scrapeFreelanceJobs.run();
-
-		// Consume all requests
-		server.takeRequest(); // latest file download (404)
-		server.takeRequest(); // index
-		server.takeRequest(); // detail 1
-		server.takeRequest(); // detail 2
-
-		var latestFile = "base/freelance-jobs/freelance-jobs-latest.json.bz2";
-		var compressedBytes =
-				mockS3Adapter.getTestObject(BUCKET_NAME, latestFile, dataClient).orElseThrow();
-
-		// Decompress the bz2 file
-		try (var decompressed = new BZip2CompressorInputStream(new ByteArrayInputStream(compressedBytes))) {
-			var latestJson = (ObjectNode) objectMapper.readTree(decompressed);
-			assertNotNull(latestJson.get("id-1"));
-			assertNotNull(latestJson.get("id-2"));
-			assertEquals("name-1", latestJson.get("id-1").get("name").asText());
-			assertEquals("name-2", latestJson.get("id-2").get("name").asText());
-		}
-	}
-
-	@Test
-	@SneakyThrows
-	void shouldUploadArchiveFile() {
-		var job1 = createFreelanceJob(Instant.now());
-		var job2 = createFreelanceJob(Instant.now());
+	void shouldUploadArchiveFiles() {
+		var job1 = createFreelanceJob(1, Instant.now());
+		var job2 = createFreelanceJob(2, Instant.now());
 
 		var time = ZonedDateTime.parse("2020-01-02T03:04:05Z");
 		scrapeFreelanceJobs.setScrapeTime(time);
 		scrapeFreelanceJobs.run();
 
-		// Consume all requests
 		server.takeRequest(); // latest file download (404)
 		server.takeRequest(); // index
 		server.takeRequest(); // detail 1
@@ -186,41 +161,34 @@ public class ScrapeFreelanceJobsTest {
 				.orElseThrow();
 
 		var latestFile = "base/freelance-jobs/freelance-jobs-latest.json.bz2";
-		var latestBytes = mockS3Adapter
-				.getTestObject(BUCKET_NAME, latestFile, dataClient)
-				.orElseThrow();
+		var latestBytes =
+				mockS3Adapter.getTestObject(BUCKET_NAME, latestFile, dataClient).orElseThrow();
 
-		// Both files should contain the same JSON content when decompressed
 		var expected = objectMapper.createObjectNode();
 		expected.put(job1.job().get("id").asText(), job1.detail());
 		expected.put(job2.job().get("id").asText(), job2.detail());
 
-		try (var decompressed = new BZip2CompressorInputStream(new ByteArrayInputStream(archiveBytes))) {
-			var archiveJson = (ObjectNode) objectMapper.readTree(decompressed);
-			assertEquals(expected, archiveJson);
-		}
+		var archiveJson = decompressArchive(archiveBytes);
+		assertEquals(expected, archiveJson);
 
-		try (var decompressed = new BZip2CompressorInputStream(new ByteArrayInputStream(latestBytes))) {
-			var latestJson = (ObjectNode) objectMapper.readTree(decompressed);
-			assertEquals(expected, latestJson);
-		}
+		var latestJson = decompressArchive(latestBytes);
+		assertEquals(expected, latestJson);
 	}
 
 	@Test
 	@SneakyThrows
 	void shouldExecuteDataIndex() {
-		createFreelanceJob(Instant.now());
+		createFreelanceJob(1, Instant.now());
 
 		scrapeFreelanceJobs
 				.setScrapeTime(ZonedDateTime.parse("2020-01-02T03:04:05Z"))
 				.run();
 
-		// Consume all requests
 		server.takeRequest(); // latest file download (404)
 		server.takeRequest(); // index
 		server.takeRequest(); // detail 1
 
-		Mockito.verify(dataIndexHelper)
+		verify(dataIndexHelper)
 				.updateIndex(
 						S3Url.builder()
 								.bucket("data-bucket")
@@ -236,50 +204,31 @@ public class ScrapeFreelanceJobsTest {
 	@Test
 	@SneakyThrows
 	void shouldMergeExistingJobs() {
-		// Create an existing job and compress it for HTTP download
-		var existingJob = objectMapper
-				.createObjectNode()
-				.put("id", "existing-job-1")
-				.put("name", "Existing Job")
-				.put("last_modified", "2020-01-01T00:00:00Z");
-		var existingJobs = objectMapper.createObjectNode();
-		existingJobs.set("existing-job-1", existingJob);
+		var existingJob = createFreelanceJob(1, Instant.parse("2020-01-01T00:00:00Z"), false);
+		var existingJobs =
+				objectMapper.createObjectNode().set(existingJob.job().get("id").asText(), existingJob.job());
+		createExistingJobs(existingJobs);
 
-		// Compress the existing jobs data
-		var uncompressed = objectMapper.writeValueAsBytes(existingJobs);
-		var compressed = new ByteArrayOutputStream();
-		try (var out = new BZip2CompressorOutputStream(compressed)) {
-			IOUtils.write(uncompressed, out);
-		}
-		existingLatestFile = compressed.toByteArray();
-
-		// Create new jobs from ESI
-		createFreelanceJob(Instant.now());
-		createFreelanceJob(Instant.now());
+		var job2 = createFreelanceJob(2, Instant.now());
+		var job3 = createFreelanceJob(3, Instant.now());
 
 		scrapeFreelanceJobs.run();
 
-		// Consume all requests
 		server.takeRequest(); // latest file download (200)
 		server.takeRequest(); // index
 		server.takeRequest(); // detail 1
 		server.takeRequest(); // detail 2
 
-		// Verify the latest file contains both existing and new jobs
+		var expected = objectMapper.createObjectNode();
+		expected.set(existingJob.job().get("id").asText(), existingJob.job());
+		expected.set(job2.job().get("id").asText(), existingJob.job());
+		expected.set(job3.job().get("id").asText(), existingJob.job());
+
 		var latestFile = "base/freelance-jobs/freelance-jobs-latest.json.bz2";
 		var compressedBytes =
 				mockS3Adapter.getTestObject(BUCKET_NAME, latestFile, dataClient).orElseThrow();
-
-		// Decompress and verify
-		try (var decompressed = new BZip2CompressorInputStream(new ByteArrayInputStream(compressedBytes))) {
-			var latestJson = (ObjectNode) objectMapper.readTree(decompressed);
-			assertNotNull(latestJson.get("existing-job-1"));
-			assertNotNull(latestJson.get("id-1"));
-			assertNotNull(latestJson.get("id-2"));
-			assertEquals("Existing Job", latestJson.get("existing-job-1").get("name").asText());
-			assertEquals("name-1", latestJson.get("id-1").get("name").asText());
-			assertEquals("name-2", latestJson.get("id-2").get("name").asText());
-		}
+		var latestJson = decompressArchive(compressedBytes);
+		assertEquals(expected, latestJson);
 	}
 
 	@Test
@@ -288,27 +237,23 @@ public class ScrapeFreelanceJobsTest {
 		var lastModified = Instant.parse("2020-01-01T00:00:00Z");
 
 		// Create an existing job with a specific last_modified
-		var existingJob = objectMapper
-				.createObjectNode()
-				.put("id", "id-1")
-				.put("name", "Existing Job")
-				.put("last_modified", lastModified.toString());
 		var existingJobs = objectMapper.createObjectNode();
-		existingJobs.set("id-1", existingJob);
+		existingJobs.set(
+				"id-1",
+				objectMapper
+						.createObjectNode()
+						.put("id", "id-1")
+						.put("name", "Existing Job")
+						.put("last_modified", lastModified.toString()));
 
 		// Compress the existing jobs data
-		var uncompressed = objectMapper.writeValueAsBytes(existingJobs);
-		var compressed = new ByteArrayOutputStream();
-		try (var out = new BZip2CompressorOutputStream(compressed)) {
-			IOUtils.write(uncompressed, out);
-		}
-		existingLatestFile = compressed.toByteArray();
+		createExistingJobs(existingJobs);
 
 		// Create a job with the same last_modified (should be skipped)
-		createFreelanceJob(lastModified);
+		createFreelanceJob(1, lastModified);
 
 		// Create a new job with a newer last_modified (should be fetched)
-		createFreelanceJob(Instant.parse("2020-01-02T00:00:00Z"));
+		createFreelanceJob(2, Instant.parse("2020-01-02T00:00:00Z"));
 
 		scrapeFreelanceJobs.run();
 
@@ -326,18 +271,18 @@ public class ScrapeFreelanceJobsTest {
 		var compressedBytes =
 				mockS3Adapter.getTestObject(BUCKET_NAME, latestFile, dataClient).orElseThrow();
 
-		// Decompress and verify
-		try (var decompressed = new BZip2CompressorInputStream(new ByteArrayInputStream(compressedBytes))) {
-			var latestJson = (ObjectNode) objectMapper.readTree(decompressed);
-			assertNotNull(latestJson.get("id-1"));
-			assertNotNull(latestJson.get("id-2"));
-			assertEquals("Existing Job", latestJson.get("id-1").get("name").asText());
-			assertEquals("name-2", latestJson.get("id-2").get("name").asText());
-		}
+		var latestJson = decompressArchive(compressedBytes);
+		assertNotNull(latestJson.get("id-1"));
+		assertNotNull(latestJson.get("id-2"));
+		assertEquals("Existing Job", latestJson.get("id-1").get("name").asText());
+		assertEquals("name-2", latestJson.get("id-2").get("name").asText());
 	}
 
-	private JobJson createFreelanceJob(@NonNull Instant lastModified) {
-		var id = counter.incrementAndGet();
+	private JobJson createFreelanceJob(int id, @NonNull Instant lastModified) {
+		return createFreelanceJob(id, lastModified, true);
+	}
+
+	private JobJson createFreelanceJob(int id, @NonNull Instant lastModified, boolean add) {
 		var jobId = "id-" + id;
 
 		var job = objectMapper
@@ -350,12 +295,16 @@ public class ScrapeFreelanceJobsTest {
 		var progress = objectMapper.createObjectNode().put("current", "979900").put("desired", "999999999999999999");
 		job.set("progress", progress);
 
-		freelanceJobs.add(job);
+		if (add) {
+			jobsIndex.add(job);
+		}
 
 		var detail = job.deepCopy();
 		detail.put("details", objectMapper.createObjectNode().put("description", "System Mining Boost"));
 
-		freelanceJobsById.put(jobId, detail);
+		if (add) {
+			jobsDetail.put(jobId, detail);
+		}
 
 		return new JobJson(job, detail);
 	}
@@ -369,12 +318,27 @@ public class ScrapeFreelanceJobsTest {
 		response.set("cursor", cursor);
 
 		var jobsArray = objectMapper.createArrayNode();
-		for (var job : freelanceJobs) {
+		for (var job : jobsIndex) {
 			jobsArray.add(job);
 		}
 		response.set("freelance_jobs", jobsArray);
 
 		return objectMapper.writeValueAsString(response);
+	}
+
+	private void createExistingJobs(@NonNull JsonNode existingJobs) throws IOException {
+		var uncompressed = objectMapper.writeValueAsBytes(existingJobs);
+		var compressed = new ByteArrayOutputStream();
+		try (var out = new BZip2CompressorOutputStream(compressed)) {
+			IOUtils.write(uncompressed, out);
+		}
+		existingLatestFile = compressed.toByteArray();
+	}
+
+	private ObjectNode decompressArchive(byte[] archiveBytes) throws IOException {
+		try (var decompressed = new BZip2CompressorInputStream(new ByteArrayInputStream(archiveBytes))) {
+			return (ObjectNode) objectMapper.readTree(decompressed);
+		}
 	}
 
 	class TestDispatcher extends Dispatcher {
@@ -397,7 +361,7 @@ public class ScrapeFreelanceJobsTest {
 
 				if (path.startsWith("/freelance-jobs/")) {
 					var jobId = path.substring("/freelance-jobs/".length());
-					var job = freelanceJobsById.get(jobId);
+					var job = jobsDetail.get(jobId);
 					if (job != null) {
 						return new MockResponse().setBody(objectMapper.writeValueAsString(job));
 					}

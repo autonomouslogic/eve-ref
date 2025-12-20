@@ -15,6 +15,7 @@ import com.autonomouslogic.everef.util.DataIndexHelper;
 import com.autonomouslogic.everef.util.TempFiles;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.io.File;
 import java.io.FileInputStream;
 import java.net.URI;
@@ -125,8 +126,7 @@ public class ScrapeFreelanceJobs implements Command {
 		return jobsArray;
 	}
 
-	private void fetchJobDetail(
-			JsonNode job, Map<String, JsonNode> existingJobs, Map<String, JsonNode> detailedJobs) {
+	private void fetchJobDetail(JsonNode job, Map<String, JsonNode> existingJobs, Map<String, JsonNode> detailedJobs) {
 		var jobId = job.get("id");
 		if (jobId == null || jobId.isNull()) {
 			log.warn("Job entry missing ID, skipping");
@@ -191,7 +191,7 @@ public class ScrapeFreelanceJobs implements Command {
 	private void uploadFiles(@NonNull File outputFile) {
 		log.info("Uploading files");
 		var compressedFile = CompressUtil.compressBzip2(outputFile);
-		var latestPath = dataPath.resolve(FREELANCE_JOBS.createLatestPath() + ".bz2");
+		var latestPath = dataPath.resolve(FREELANCE_JOBS.createLatestPath());
 		var archivePath = dataPath.resolve(FREELANCE_JOBS.createArchivePath(scrapeTime));
 		var latestPut = s3Util.putPublicObjectRequest(compressedFile.length(), latestPath, latestCacheTime);
 		var archivePut = s3Util.putPublicObjectRequest(compressedFile.length(), archivePath, archiveCacheTime);
@@ -209,7 +209,7 @@ public class ScrapeFreelanceJobs implements Command {
 	 */
 	@SneakyThrows
 	private Map<String, JsonNode> downloadExistingJobs() {
-		var url = dataBaseUrl + FREELANCE_JOBS.createLatestPath() + ".bz2";
+		var url = dataBaseUrl.resolve(FREELANCE_JOBS.createLatestPath()).toString();
 		var file = tempFiles.tempFile("freelance-jobs-existing", ".json.bz2").toFile();
 		log.debug("Downloading existing jobs from {}", url);
 
@@ -219,16 +219,14 @@ public class ScrapeFreelanceJobs implements Command {
 				return new HashMap<>();
 			}
 			if (response.code() != 200) {
-				throw new RuntimeException(
-						String.format("Failed downloading existing jobs: HTTP %d", response.code()));
+				throw new RuntimeException(String.format("Failed downloading existing jobs: HTTP %d", response.code()));
 			}
 
 			// Decompress and parse the bz2 file
-			try (var fis = new FileInputStream(file);
-					var decompressed = new BZip2CompressorInputStream(fis)) {
+			try (var in = new BZip2CompressorInputStream(new FileInputStream(file))) {
 				return objectMapper.readValue(
-						decompressed,
-						objectMapper.getTypeFactory().constructMapType(HashMap.class, String.class, JsonNode.class));
+						in,
+						objectMapper.getTypeFactory().constructMapType(HashMap.class, String.class, ObjectNode.class));
 			} finally {
 				file.delete();
 			}
@@ -239,8 +237,7 @@ public class ScrapeFreelanceJobs implements Command {
 	 * Merges existing jobs with newly fetched jobs.
 	 * New jobs overwrite existing ones with the same ID.
 	 */
-	private Map<String, JsonNode> mergeJobs(
-			Map<String, JsonNode> existingJobs, Map<String, JsonNode> newJobs) {
+	private Map<String, JsonNode> mergeJobs(Map<String, JsonNode> existingJobs, Map<String, JsonNode> newJobs) {
 		var merged = new HashMap<>(existingJobs);
 		merged.putAll(newJobs);
 		return merged;

@@ -53,7 +53,7 @@ public class ArchivePathFactory {
 			.folder("freelance-jobs")
 			.filename("freelance-jobs")
 			.suffix(".json.bz2")
-			.latestSuffix(".json")
+			.latestSuffix(".json.bz2")
 			.build();
 
 	public static final ArchivePathFactory KILLMAILS = ArchivePathFactory.builder()
