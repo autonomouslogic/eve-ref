@@ -7,10 +7,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.HashMap;
 import java.util.Map;
 import javax.inject.Inject;
-
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Scrapes freelance jobs from the ESI API.
@@ -66,7 +64,7 @@ public class ScrapeFreelanceJobs implements Command {
 
 		var jobIdString = jobId.asText();
 		var detailUrl =
-			EsiUrl.builder().urlPath("/freelance-jobs/" + jobIdString).build();
+				EsiUrl.modern().urlPath("/freelance-jobs/" + jobIdString).build();
 		var detailResponse = esiHelper.fetch(detailUrl);
 		var detailData = esiHelper.decodeResponse(detailResponse);
 
