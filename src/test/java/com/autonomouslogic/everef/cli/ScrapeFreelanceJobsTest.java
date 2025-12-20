@@ -167,18 +167,21 @@ public class ScrapeFreelanceJobsTest {
 				.getTestObject(BUCKET_NAME, archiveFile, dataClient)
 				.orElseThrow();
 
-		var latestFile = "base/freelance-jobs/freelance-jobs-latest.json.bz2";
-		var latestCompressedBytes = mockS3Adapter
+		var latestFile = "base/freelance-jobs/freelance-jobs-latest.json";
+		var latestBytes = mockS3Adapter
 				.getTestObject(BUCKET_NAME, latestFile, dataClient)
 				.orElseThrow();
-		assertEquals(compressedBytes, latestCompressedBytes);
 
-		// Decompress the bz2 file
+		// Verify the latest file (uncompressed)
+		var latestJson = (ObjectNode) objectMapper.readTree(latestBytes);
+		var expected = objectMapper.createObjectNode();
+		expected.put(job1.job().get("id").asText(), job1.detail());
+		expected.put(job2.job().get("id").asText(), job2.detail());
+		assertEquals(expected, latestJson);
+
+		// Decompress the bz2 archive file and verify it has the same content as latest
 		try (var decompressed = new BZip2CompressorInputStream(new ByteArrayInputStream(compressedBytes))) {
 			var archiveJson = (ObjectNode) objectMapper.readTree(decompressed);
-			var expected = objectMapper.createObjectNode();
-			expected.put(job1.job().get("id").asText(), job1.detail());
-			expected.put(job2.job().get("id").asText(), job2.detail());
 			assertEquals(expected, archiveJson);
 		}
 	}
@@ -207,6 +210,45 @@ public class ScrapeFreelanceJobsTest {
 								.path(
 										"base/freelance-jobs/history/2020/2020-01-02/freelance-jobs-2020-01-02_03-04-05.json.bz2")
 								.build());
+	}
+
+	@Test
+	@SneakyThrows
+	void shouldMergeExistingJobs() {
+		// Create an existing job and upload it to S3
+		var existingJob = objectMapper
+				.createObjectNode()
+				.put("id", "existing-job-1")
+				.put("name", "Existing Job");
+		var existingJobs = objectMapper.createObjectNode();
+		existingJobs.set("existing-job-1", existingJob);
+
+		var latestFile = "base/freelance-jobs/freelance-jobs-latest.json";
+		var existingBytes = objectMapper.writeValueAsBytes(existingJobs);
+		mockS3Adapter.putTestObject(BUCKET_NAME, latestFile, existingBytes, dataClient);
+
+		// Create new jobs from ESI
+		createFreelanceJob(Instant.now());
+		createFreelanceJob(Instant.now());
+
+		scrapeFreelanceJobs.run();
+
+		// Consume all requests
+		server.takeRequest(); // index
+		server.takeRequest(); // detail 1
+		server.takeRequest(); // detail 2
+
+		// Verify the latest file contains both existing and new jobs
+		var latestBytes =
+				mockS3Adapter.getTestObject(BUCKET_NAME, latestFile, dataClient).orElseThrow();
+		var latestJson = (ObjectNode) objectMapper.readTree(latestBytes);
+
+		assertNotNull(latestJson.get("existing-job-1"));
+		assertNotNull(latestJson.get("id-1"));
+		assertNotNull(latestJson.get("id-2"));
+		assertEquals("Existing Job", latestJson.get("existing-job-1").get("name").asText());
+		assertEquals("name-1", latestJson.get("id-1").get("name").asText());
+		assertEquals("name-2", latestJson.get("id-2").get("name").asText());
 	}
 
 	private JobJson createFreelanceJob(@NonNull Instant lastModified) {

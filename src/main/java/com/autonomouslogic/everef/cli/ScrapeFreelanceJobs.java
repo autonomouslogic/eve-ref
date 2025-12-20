@@ -15,19 +15,23 @@ import com.autonomouslogic.everef.util.TempFiles;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
+import java.io.FileInputStream;
 import java.time.Duration;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.CompletionException;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
+import org.apache.commons.io.IOUtils;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
+import software.amazon.awssdk.services.s3.model.NoSuchKeyException;
 
 /**
  * Scrapes freelance jobs from the ESI API.
@@ -83,6 +87,9 @@ public class ScrapeFreelanceJobs implements Command {
 
 		log.info("Starting freelance jobs scrape");
 
+		var existingJobs = downloadExistingJobs();
+		log.info("Downloaded {} existing jobs", existingJobs.size());
+
 		var jobs = fetchIndex();
 
 		var detailedJobs = new HashMap<String, JsonNode>();
@@ -90,9 +97,12 @@ public class ScrapeFreelanceJobs implements Command {
 			fetchJobDetail(job, detailedJobs);
 		}
 
-		log.info("Retrieved {} jobs", detailedJobs.size());
+		log.info("Retrieved {} jobs from ESI", detailedJobs.size());
 
-		var outputFile = buildOutput(detailedJobs);
+		var mergedJobs = mergeJobs(existingJobs, detailedJobs);
+		log.info("Total jobs after merge: {}", mergedJobs.size());
+
+		var outputFile = buildOutput(mergedJobs);
 		uploadFiles(outputFile);
 	}
 
@@ -151,5 +161,40 @@ public class ScrapeFreelanceJobs implements Command {
 		s3Adapter.putObject(latestPut, outputFile, s3Client).blockingGet();
 		s3Adapter.putObject(archivePut, archiveFile, s3Client).blockingGet();
 		dataIndexHelper.updateIndex(latestPath, archivePath).blockingAwait();
+	}
+
+	/**
+	 * Downloads the existing latest freelance jobs file from S3.
+	 * Returns an empty map if the file doesn't exist yet.
+	 */
+	@SneakyThrows
+	private Map<String, JsonNode> downloadExistingJobs() {
+		try {
+			var latestPath = dataPath.resolve(FREELANCE_JOBS.createLatestPath());
+			var get = s3Util.getObjectRequest(latestPath);
+			log.debug("Downloading existing jobs from {}", latestPath);
+			var result = s3Adapter.getObject(get, s3Client).blockingGet();
+			var bytes = IOUtils.toByteArray(new FileInputStream(result.getRight().toFile()));
+			result.getRight().toFile().delete();
+			return objectMapper.readValue(
+					bytes, objectMapper.getTypeFactory().constructMapType(HashMap.class, String.class, JsonNode.class));
+		} catch (CompletionException e) {
+			if (e.getCause() instanceof NoSuchKeyException) {
+				log.info("No existing freelance jobs file found, starting fresh");
+				return new HashMap<>();
+			}
+			throw e;
+		}
+	}
+
+	/**
+	 * Merges existing jobs with newly fetched jobs.
+	 * New jobs overwrite existing ones with the same ID.
+	 */
+	private Map<String, JsonNode> mergeJobs(
+			Map<String, JsonNode> existingJobs, Map<String, JsonNode> newJobs) {
+		var merged = new HashMap<>(existingJobs);
+		merged.putAll(newJobs);
+		return merged;
 	}
 }
