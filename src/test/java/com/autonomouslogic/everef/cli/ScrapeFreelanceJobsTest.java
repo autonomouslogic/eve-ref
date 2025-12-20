@@ -167,6 +167,12 @@ public class ScrapeFreelanceJobsTest {
 				.getTestObject(BUCKET_NAME, archiveFile, dataClient)
 				.orElseThrow();
 
+		var latestFile = "base/freelance-jobs/freelance-jobs-latest.json.bz2";
+		var latestCompressedBytes = mockS3Adapter
+				.getTestObject(BUCKET_NAME, latestFile, dataClient)
+				.orElseThrow();
+		assertEquals(compressedBytes, latestCompressedBytes);
+
 		// Decompress the bz2 file
 		try (var decompressed = new BZip2CompressorInputStream(new ByteArrayInputStream(compressedBytes))) {
 			var archiveJson = (ObjectNode) objectMapper.readTree(decompressed);
