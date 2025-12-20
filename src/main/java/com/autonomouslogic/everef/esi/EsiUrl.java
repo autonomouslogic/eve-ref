@@ -1,6 +1,8 @@
 package com.autonomouslogic.everef.esi;
 
 import com.autonomouslogic.everef.config.Configs;
+
+import java.net.URI;
 import java.util.Objects;
 import lombok.Builder;
 import lombok.NonNull;
@@ -15,28 +17,33 @@ public class EsiUrl {
 	@NonNull
 	String urlPath;
 
-	@NonNull
 	@lombok.Builder.Default
 	String datasource = "tranquility";
 
-	@NonNull
 	@lombok.Builder.Default
 	String language = "en";
+
+	@lombok.Builder.Default
+	String basePath = "latest";
 
 	Integer page;
 
 	public String toString() {
-		StringBuilder sb = new StringBuilder();
+		var sb = new StringBuilder();
 		sb.append(Configs.ESI_BASE_URL.getRequired());
+		if (basePath != null) {
+			sb.append(basePath);
+		}
 		Objects.requireNonNull(urlPath);
 		sb.append(urlPath);
-		Objects.requireNonNull(datasource);
 		if (!urlPath.contains("?")) {
 			sb.append("?");
 		} else {
 			sb.append("&");
 		}
-		sb.append("datasource=").append(datasource);
+		if (datasource != null) {
+			sb.append("datasource=").append(datasource);
+		}
 		if (language != null) {
 			sb.append("&language=").append(language);
 		}
@@ -47,5 +54,9 @@ public class EsiUrl {
 			sb.append("&page=").append(page);
 		}
 		return sb.toString();
+	}
+
+	public static EsiUrl.Builder modern() {
+		return EsiUrl.builder().datasource(null).language(null).basePath(null);
 	}
 }

@@ -49,6 +49,12 @@ public class ArchivePathFactory {
 			.suffix(".v2.tar.bz2")
 			.build();
 
+	public static final ArchivePathFactory FREELANCE_JOBS = ArchivePathFactory.builder()
+			.folder("freelance-jobs")
+			.filename("freelance-jobs")
+			.suffix(".json.bz2")
+			.build();
+
 	public static final ArchivePathFactory KILLMAILS = ArchivePathFactory.builder()
 			.folder("killmails")
 			.filename("killmails")

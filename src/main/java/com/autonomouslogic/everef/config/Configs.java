@@ -130,7 +130,7 @@ public class Configs {
 	 */
 	public static final Config<URI> ESI_BASE_URL = Config.<URI>builder()
 			.name("ESI_BASE_URL")
-			.defaultValue(URI.create("https://esi.evetech.net/latest"))
+			.defaultValue(URI.create("https://esi.evetech.net/"))
 			.type(URI.class)
 			.build();
 
