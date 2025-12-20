@@ -45,6 +45,7 @@ import software.amazon.awssdk.services.s3.S3AsyncClient;
 @SetEnvironmentVariable(key = "ESI_BASE_URL", value = "http://localhost:" + TestDataUtil.TEST_PORT + "/")
 @SetEnvironmentVariable(key = "ESI_USER_AGENT", value = "test@example.com")
 @SetEnvironmentVariable(key = "DATA_PATH", value = "s3://" + ScrapeFreelanceJobsTest.BUCKET_NAME + "/base/")
+@SetEnvironmentVariable(key = "DATA_BASE_URL", value = "http://localhost:" + TestDataUtil.TEST_PORT + "/")
 public class ScrapeFreelanceJobsTest {
 	static final String BUCKET_NAME = "data-bucket";
 
@@ -69,6 +70,7 @@ public class ScrapeFreelanceJobsTest {
 
 	List<ObjectNode> freelanceJobs;
 	Map<String, ObjectNode> freelanceJobsById;
+	byte[] existingLatestFile;
 
 	@Inject
 	protected ScrapeFreelanceJobsTest() {}
@@ -80,6 +82,7 @@ public class ScrapeFreelanceJobsTest {
 
 		freelanceJobs = new ArrayList<>();
 		freelanceJobsById = new HashMap<>();
+		existingLatestFile = null;
 
 		server = new MockWebServer();
 		server.setDispatcher(new TestDispatcher());
@@ -132,19 +135,23 @@ public class ScrapeFreelanceJobsTest {
 		scrapeFreelanceJobs.run();
 
 		// Consume all requests
+		server.takeRequest(); // latest file download (404)
 		server.takeRequest(); // index
 		server.takeRequest(); // detail 1
 		server.takeRequest(); // detail 2
 
-		var latestFile = "base/freelance-jobs/freelance-jobs-latest.json";
-		var latestBytes =
+		var latestFile = "base/freelance-jobs/freelance-jobs-latest.json.bz2";
+		var compressedBytes =
 				mockS3Adapter.getTestObject(BUCKET_NAME, latestFile, dataClient).orElseThrow();
 
-		var latestJson = (ObjectNode) objectMapper.readTree(latestBytes);
-		assertNotNull(latestJson.get("id-1"));
-		assertNotNull(latestJson.get("id-2"));
-		assertEquals("name-1", latestJson.get("id-1").get("name").asText());
-		assertEquals("name-2", latestJson.get("id-2").get("name").asText());
+		// Decompress the bz2 file
+		try (var decompressed = new BZip2CompressorInputStream(new ByteArrayInputStream(compressedBytes))) {
+			var latestJson = (ObjectNode) objectMapper.readTree(decompressed);
+			assertNotNull(latestJson.get("id-1"));
+			assertNotNull(latestJson.get("id-2"));
+			assertEquals("name-1", latestJson.get("id-1").get("name").asText());
+			assertEquals("name-2", latestJson.get("id-2").get("name").asText());
+		}
 	}
 
 	@Test
@@ -301,6 +308,13 @@ public class ScrapeFreelanceJobsTest {
 
 				if (path.equals("/freelance-jobs")) {
 					return new MockResponse().setBody(buildJobsIndexResponse());
+				}
+
+				if (path.equals("/freelance-jobs/freelance-jobs-latest.json.bz2")) {
+					if (existingLatestFile == null) {
+						return new MockResponse().setResponseCode(404);
+					}
+					return new MockResponse().setBody(okio.ByteString.of(existingLatestFile, 0, existingLatestFile.length));
 				}
 
 				if (path.startsWith("/freelance-jobs/")) {

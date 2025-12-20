@@ -5,6 +5,7 @@ import static com.autonomouslogic.everef.util.ArchivePathFactory.FREELANCE_JOBS;
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.esi.EsiHelper;
 import com.autonomouslogic.everef.esi.EsiUrl;
+import com.autonomouslogic.everef.http.OkHttpWrapper;
 import com.autonomouslogic.everef.s3.S3Adapter;
 import com.autonomouslogic.everef.s3.S3Util;
 import com.autonomouslogic.everef.url.S3Url;
@@ -16,22 +17,21 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.FileInputStream;
+import java.net.URI;
 import java.time.Duration;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.CompletionException;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
-import org.apache.commons.io.IOUtils;
+import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
-import software.amazon.awssdk.services.s3.model.NoSuchKeyException;
 
 /**
  * Scrapes freelance jobs from the ESI API.
@@ -63,12 +63,16 @@ public class ScrapeFreelanceJobs implements Command {
 	@Inject
 	protected DataIndexHelper dataIndexHelper;
 
+	@Inject
+	protected OkHttpWrapper okHttpWrapper;
+
 	@Setter
 	private ZonedDateTime scrapeTime;
 
 	private final Duration latestCacheTime = Configs.DATA_LATEST_CACHE_CONTROL_MAX_AGE.getRequired();
 	private final Duration archiveCacheTime = Configs.DATA_ARCHIVE_CACHE_CONTROL_MAX_AGE.getRequired();
 	private S3Url dataPath;
+	private URI dataBaseUrl;
 
 	@Inject
 	protected ScrapeFreelanceJobs() {}
@@ -76,6 +80,7 @@ public class ScrapeFreelanceJobs implements Command {
 	@Inject
 	protected void init() {
 		dataPath = (S3Url) urlParser.parse(Configs.DATA_PATH.getRequired());
+		dataBaseUrl = Configs.DATA_BASE_URL.getRequired();
 	}
 
 	@Override
@@ -150,40 +155,48 @@ public class ScrapeFreelanceJobs implements Command {
 	@SneakyThrows
 	private void uploadFiles(@NonNull File outputFile) {
 		log.info("Uploading files");
-		var archiveFile = CompressUtil.compressBzip2(outputFile);
-		var latestPath = dataPath.resolve(FREELANCE_JOBS.createLatestPath());
+		var compressedFile = CompressUtil.compressBzip2(outputFile);
+		var latestPath = dataPath.resolve(FREELANCE_JOBS.createLatestPath() + ".bz2");
 		var archivePath = dataPath.resolve(FREELANCE_JOBS.createArchivePath(scrapeTime));
-		var latestPut = s3Util.putPublicObjectRequest(outputFile.length(), latestPath, latestCacheTime);
-		var archivePut = s3Util.putPublicObjectRequest(archiveFile.length(), archivePath, archiveCacheTime);
+		var latestPut = s3Util.putPublicObjectRequest(compressedFile.length(), latestPath, latestCacheTime);
+		var archivePut = s3Util.putPublicObjectRequest(compressedFile.length(), archivePath, archiveCacheTime);
 		log.info(String.format("Uploading latest file to %s", latestPath));
 		log.info(String.format("Uploading archive file to %s", archivePath));
 
-		s3Adapter.putObject(latestPut, outputFile, s3Client).blockingGet();
-		s3Adapter.putObject(archivePut, archiveFile, s3Client).blockingGet();
+		s3Adapter.putObject(latestPut, compressedFile, s3Client).blockingGet();
+		s3Adapter.putObject(archivePut, compressedFile, s3Client).blockingGet();
 		dataIndexHelper.updateIndex(latestPath, archivePath).blockingAwait();
 	}
 
 	/**
-	 * Downloads the existing latest freelance jobs file from S3.
+	 * Downloads the existing latest freelance jobs file from the data site over HTTP.
 	 * Returns an empty map if the file doesn't exist yet.
 	 */
 	@SneakyThrows
 	private Map<String, JsonNode> downloadExistingJobs() {
-		try {
-			var latestPath = dataPath.resolve(FREELANCE_JOBS.createLatestPath());
-			var get = s3Util.getObjectRequest(latestPath);
-			log.debug("Downloading existing jobs from {}", latestPath);
-			var result = s3Adapter.getObject(get, s3Client).blockingGet();
-			var bytes = IOUtils.toByteArray(new FileInputStream(result.getRight().toFile()));
-			result.getRight().toFile().delete();
-			return objectMapper.readValue(
-					bytes, objectMapper.getTypeFactory().constructMapType(HashMap.class, String.class, JsonNode.class));
-		} catch (CompletionException e) {
-			if (e.getCause() instanceof NoSuchKeyException) {
+		var url = dataBaseUrl + "/" + FREELANCE_JOBS.createLatestPath() + ".bz2";
+		var file = tempFiles.tempFile("freelance-jobs-existing", ".json.bz2").toFile();
+		log.debug("Downloading existing jobs from {}", url);
+
+		try (var response = okHttpWrapper.download(url, file)) {
+			if (response.code() == 404) {
 				log.info("No existing freelance jobs file found, starting fresh");
 				return new HashMap<>();
 			}
-			throw e;
+			if (response.code() != 200) {
+				throw new RuntimeException(
+						String.format("Failed downloading existing jobs: HTTP %d", response.code()));
+			}
+
+			// Decompress and parse the bz2 file
+			try (var fis = new FileInputStream(file);
+					var decompressed = new BZip2CompressorInputStream(fis)) {
+				return objectMapper.readValue(
+						decompressed,
+						objectMapper.getTypeFactory().constructMapType(HashMap.class, String.class, JsonNode.class));
+			} finally {
+				file.delete();
+			}
 		}
 	}
 
