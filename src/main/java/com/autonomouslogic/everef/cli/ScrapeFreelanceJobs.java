@@ -99,10 +99,10 @@ public class ScrapeFreelanceJobs implements Command {
 
 		var detailedJobs = new HashMap<String, JsonNode>();
 		for (var job : jobs) {
-			fetchJobDetail(job, detailedJobs);
+			fetchJobDetail(job, existingJobs, detailedJobs);
 		}
 
-		log.info("Retrieved {} jobs from ESI", detailedJobs.size());
+		log.info("Retrieved {} new/updated jobs from ESI", detailedJobs.size());
 
 		var mergedJobs = mergeJobs(existingJobs, detailedJobs);
 		log.info("Total jobs after merge: {}", mergedJobs.size());
@@ -125,7 +125,8 @@ public class ScrapeFreelanceJobs implements Command {
 		return jobsArray;
 	}
 
-	private void fetchJobDetail(JsonNode job, Map<String, JsonNode> detailedJobs) {
+	private void fetchJobDetail(
+			JsonNode job, Map<String, JsonNode> existingJobs, Map<String, JsonNode> detailedJobs) {
 		var jobId = job.get("id");
 		if (jobId == null || jobId.isNull()) {
 			log.warn("Job entry missing ID, skipping");
@@ -133,12 +134,46 @@ public class ScrapeFreelanceJobs implements Command {
 		}
 
 		var jobIdString = jobId.asText();
+
+		// Check if we already have this job and if it needs updating
+		var existingJob = existingJobs.get(jobIdString);
+		if (existingJob != null && !shouldUpdateJob(job, existingJob)) {
+			log.debug("Job {} has not been modified, skipping fetch", jobIdString);
+			return;
+		}
+
+		log.debug("Fetching details for job {}", jobIdString);
 		var detailUrl =
 				EsiUrl.modern().urlPath("/freelance-jobs/" + jobIdString).build();
 		var detailResponse = esiHelper.fetch(detailUrl);
 		var detailData = esiHelper.decodeResponse(detailResponse);
 
 		detailedJobs.put(jobIdString, detailData);
+	}
+
+	/**
+	 * Determines if a job needs to be updated based on last_modified timestamp.
+	 * Returns true if the job from the index has a newer last_modified than the existing job.
+	 */
+	private boolean shouldUpdateJob(JsonNode indexJob, JsonNode existingJob) {
+		var indexLastModified = indexJob.get("last_modified");
+		var existingLastModified = existingJob.get("last_modified");
+
+		if (indexLastModified == null || indexLastModified.isNull()) {
+			log.warn("Job in index missing last_modified, will update");
+			return true;
+		}
+
+		if (existingLastModified == null || existingLastModified.isNull()) {
+			log.warn("Existing job missing last_modified, will update");
+			return true;
+		}
+
+		var indexTime = indexLastModified.asText();
+		var existingTime = existingLastModified.asText();
+
+		// Compare timestamps as strings (ISO 8601 format is lexicographically comparable)
+		return indexTime.compareTo(existingTime) > 0;
 	}
 
 	@SneakyThrows

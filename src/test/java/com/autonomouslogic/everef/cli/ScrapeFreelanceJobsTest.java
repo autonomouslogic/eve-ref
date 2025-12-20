@@ -240,7 +240,8 @@ public class ScrapeFreelanceJobsTest {
 		var existingJob = objectMapper
 				.createObjectNode()
 				.put("id", "existing-job-1")
-				.put("name", "Existing Job");
+				.put("name", "Existing Job")
+				.put("last_modified", "2020-01-01T00:00:00Z");
 		var existingJobs = objectMapper.createObjectNode();
 		existingJobs.set("existing-job-1", existingJob);
 
@@ -277,6 +278,60 @@ public class ScrapeFreelanceJobsTest {
 			assertNotNull(latestJson.get("id-2"));
 			assertEquals("Existing Job", latestJson.get("existing-job-1").get("name").asText());
 			assertEquals("name-1", latestJson.get("id-1").get("name").asText());
+			assertEquals("name-2", latestJson.get("id-2").get("name").asText());
+		}
+	}
+
+	@Test
+	@SneakyThrows
+	void shouldSkipUnmodifiedJobs() {
+		var lastModified = Instant.parse("2020-01-01T00:00:00Z");
+
+		// Create an existing job with a specific last_modified
+		var existingJob = objectMapper
+				.createObjectNode()
+				.put("id", "id-1")
+				.put("name", "Existing Job")
+				.put("last_modified", lastModified.toString());
+		var existingJobs = objectMapper.createObjectNode();
+		existingJobs.set("id-1", existingJob);
+
+		// Compress the existing jobs data
+		var uncompressed = objectMapper.writeValueAsBytes(existingJobs);
+		var compressed = new ByteArrayOutputStream();
+		try (var out = new BZip2CompressorOutputStream(compressed)) {
+			IOUtils.write(uncompressed, out);
+		}
+		existingLatestFile = compressed.toByteArray();
+
+		// Create a job with the same last_modified (should be skipped)
+		createFreelanceJob(lastModified);
+
+		// Create a new job with a newer last_modified (should be fetched)
+		createFreelanceJob(Instant.parse("2020-01-02T00:00:00Z"));
+
+		scrapeFreelanceJobs.run();
+
+		// Consume all requests
+		server.takeRequest(); // latest file download (200)
+		server.takeRequest(); // index
+		// Note: No request for id-1 detail since it hasn't been modified
+		server.takeRequest(); // detail for id-2 only
+
+		// Verify no more requests were made
+		assertNull(server.takeRequest(1, TimeUnit.MILLISECONDS));
+
+		// Verify the latest file contains both jobs
+		var latestFile = "base/freelance-jobs/freelance-jobs-latest.json.bz2";
+		var compressedBytes =
+				mockS3Adapter.getTestObject(BUCKET_NAME, latestFile, dataClient).orElseThrow();
+
+		// Decompress and verify
+		try (var decompressed = new BZip2CompressorInputStream(new ByteArrayInputStream(compressedBytes))) {
+			var latestJson = (ObjectNode) objectMapper.readTree(decompressed);
+			assertNotNull(latestJson.get("id-1"));
+			assertNotNull(latestJson.get("id-2"));
+			assertEquals("Existing Job", latestJson.get("id-1").get("name").asText());
 			assertEquals("name-2", latestJson.get("id-2").get("name").asText());
 		}
 	}
