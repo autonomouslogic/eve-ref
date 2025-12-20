@@ -174,7 +174,7 @@ public class ScrapeFreelanceJobs implements Command {
 	 */
 	@SneakyThrows
 	private Map<String, JsonNode> downloadExistingJobs() {
-		var url = dataBaseUrl + "/" + FREELANCE_JOBS.createLatestPath() + ".bz2";
+		var url = dataBaseUrl + FREELANCE_JOBS.createLatestPath() + ".bz2";
 		var file = tempFiles.tempFile("freelance-jobs-existing", ".json.bz2").toFile();
 		log.debug("Downloading existing jobs from {}", url);
 
