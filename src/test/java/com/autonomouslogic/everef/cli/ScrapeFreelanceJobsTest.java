@@ -1,13 +1,19 @@
 package com.autonomouslogic.everef.cli;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 import com.autonomouslogic.everef.test.DaggerTestComponent;
+import com.autonomouslogic.everef.test.MockS3Adapter;
 import com.autonomouslogic.everef.test.TestDataUtil;
+import com.autonomouslogic.everef.url.S3Url;
+import com.autonomouslogic.everef.util.DataIndexHelper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import java.io.ByteArrayInputStream;
 import java.time.Instant;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -15,6 +21,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.inject.Inject;
+import javax.inject.Named;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
@@ -22,24 +29,40 @@ import okhttp3.mockwebserver.Dispatcher;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
+import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junitpioneer.jupiter.SetEnvironmentVariable;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import software.amazon.awssdk.services.s3.S3AsyncClient;
 
 @ExtendWith(MockitoExtension.class)
 @Log4j2
 @SetEnvironmentVariable(key = "ESI_BASE_URL", value = "http://localhost:" + TestDataUtil.TEST_PORT + "/")
 @SetEnvironmentVariable(key = "ESI_USER_AGENT", value = "test@example.com")
+@SetEnvironmentVariable(key = "DATA_PATH", value = "s3://" + ScrapeFreelanceJobsTest.BUCKET_NAME + "/base/")
 public class ScrapeFreelanceJobsTest {
+	static final String BUCKET_NAME = "data-bucket";
+
 	@Inject
 	ScrapeFreelanceJobs scrapeFreelanceJobs;
 
 	@Inject
 	ObjectMapper objectMapper;
+
+	@Inject
+	MockS3Adapter mockS3Adapter;
+
+	@Inject
+	@Named("data")
+	S3AsyncClient dataClient;
+
+	@Inject
+	DataIndexHelper dataIndexHelper;
 
 	MockWebServer server;
 	AtomicInteger counter = new AtomicInteger();
@@ -98,6 +121,86 @@ public class ScrapeFreelanceJobsTest {
 
 		var detail2Request = server.takeRequest();
 		assertEquals("/freelance-jobs/id-2", detail2Request.getRequestUrl().encodedPath());
+	}
+
+	@Test
+	@SneakyThrows
+	void shouldUploadJsonFile() {
+		createFreelanceJob(Instant.now());
+		createFreelanceJob(Instant.now());
+
+		scrapeFreelanceJobs.run();
+
+		// Consume all requests
+		server.takeRequest(); // index
+		server.takeRequest(); // detail 1
+		server.takeRequest(); // detail 2
+
+		var latestFile = "base/freelance-jobs/freelance-jobs-latest.json";
+		var latestBytes =
+				mockS3Adapter.getTestObject(BUCKET_NAME, latestFile, dataClient).orElseThrow();
+
+		var latestJson = (ObjectNode) objectMapper.readTree(latestBytes);
+		assertNotNull(latestJson.get("id-1"));
+		assertNotNull(latestJson.get("id-2"));
+		assertEquals("name-1", latestJson.get("id-1").get("name").asText());
+		assertEquals("name-2", latestJson.get("id-2").get("name").asText());
+	}
+
+	@Test
+	@SneakyThrows
+	void shouldUploadArchiveFile() {
+		var job1 = createFreelanceJob(Instant.now());
+		var job2 = createFreelanceJob(Instant.now());
+
+		var time = ZonedDateTime.parse("2020-01-02T03:04:05Z");
+		scrapeFreelanceJobs.setScrapeTime(time);
+		scrapeFreelanceJobs.run();
+
+		// Consume all requests
+		server.takeRequest(); // index
+		server.takeRequest(); // detail 1
+		server.takeRequest(); // detail 2
+
+		var archiveFile = "base/freelance-jobs/history/2020/2020-01-02/freelance-jobs-2020-01-02_03-04-05.json.bz2";
+		var compressedBytes = mockS3Adapter
+				.getTestObject(BUCKET_NAME, archiveFile, dataClient)
+				.orElseThrow();
+
+		// Decompress the bz2 file
+		try (var decompressed = new BZip2CompressorInputStream(new ByteArrayInputStream(compressedBytes))) {
+			var archiveJson = (ObjectNode) objectMapper.readTree(decompressed);
+			var expected = objectMapper.createObjectNode();
+			expected.put(job1.job().get("id").asText(), job1.detail());
+			expected.put(job2.job().get("id").asText(), job2.detail());
+			assertEquals(expected, archiveJson);
+		}
+	}
+
+	@Test
+	@SneakyThrows
+	void shouldExecuteDataIndex() {
+		createFreelanceJob(Instant.now());
+
+		scrapeFreelanceJobs
+				.setScrapeTime(ZonedDateTime.parse("2020-01-02T03:04:05Z"))
+				.run();
+
+		// Consume all requests
+		server.takeRequest(); // index
+		server.takeRequest(); // detail 1
+
+		Mockito.verify(dataIndexHelper)
+				.updateIndex(
+						S3Url.builder()
+								.bucket("data-bucket")
+								.path("base/freelance-jobs/freelance-jobs-latest.json")
+								.build(),
+						S3Url.builder()
+								.bucket("data-bucket")
+								.path(
+										"base/freelance-jobs/history/2020/2020-01-02/freelance-jobs-2020-01-02_03-04-05.json.bz2")
+								.build());
 	}
 
 	private JobJson createFreelanceJob(@NonNull Instant lastModified) {
@@ -170,5 +273,5 @@ public class ScrapeFreelanceJobsTest {
 		}
 	}
 
-	record JobJson(ObjectNode job, ObjectNode jsonNodes) {}
+	record JobJson(ObjectNode job, ObjectNode detail) {}
 }
