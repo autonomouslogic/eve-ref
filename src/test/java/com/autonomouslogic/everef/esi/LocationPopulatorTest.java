@@ -67,13 +67,13 @@ public class LocationPopulatorTest {
 			@Override
 			public MockResponse dispatch(@NotNull RecordedRequest recordedRequest) throws InterruptedException {
 				return switch (recordedRequest.getPath()) {
-					case "/universe/regions/100/?datasource=tranquility" ->
+					case "/universe/regions/100" ->
 						new MockResponse().setResponseCode(200).setBody(region);
-					case "/universe/constellations/200/?datasource=tranquility" ->
+					case "/universe/constellations/200" ->
 						new MockResponse().setResponseCode(200).setBody(constellation);
-					case "/universe/systems/300/?datasource=tranquility" ->
+					case "/universe/systems/300" ->
 						new MockResponse().setResponseCode(200).setBody(system);
-					case "/universe/stations/400/?datasource=tranquility" ->
+					case "/universe/stations/400" ->
 						new MockResponse().setResponseCode(200).setBody(station);
 					default -> new MockResponse().setResponseCode(404);
 				};

@@ -54,7 +54,7 @@ public class EsiModuleTest {
 	private void runTest(String prefix) throws InterruptedException {
 		universeEsi.getRegionIds().blockingSubscribe();
 		var request = server.takeRequest();
-		assertEquals(prefix + "/universe/regions/?datasource=tranquility", request.getPath());
+		assertEquals(prefix + "/universe/regions", request.getPath());
 	}
 
 	@Test
