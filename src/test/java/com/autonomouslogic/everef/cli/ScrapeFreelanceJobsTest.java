@@ -10,7 +10,6 @@ import com.autonomouslogic.everef.test.MockS3Adapter;
 import com.autonomouslogic.everef.test.TestDataUtil;
 import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.util.DataIndexHelper;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.io.ByteArrayInputStream;
@@ -207,8 +206,8 @@ public class ScrapeFreelanceJobsTest {
 	@SneakyThrows
 	void shouldRemoveOldExistingJobs() {
 		var job1 = createFreelanceJob(1, Instant.parse("2020-01-01T00:00:00Z"), false);
-		var existingJobs =
-				objectMapper.createObjectNode().set(job1.job().get("id").asText(), job1.detail());
+		var existingJobs = objectMapper.createObjectNode();
+		existingJobs.set(job1.job().get("id").asText(), job1.detail());
 		createExistingJobs(existingJobs);
 
 		var job2 = createFreelanceJob(2, Instant.now());
@@ -360,7 +359,7 @@ public class ScrapeFreelanceJobsTest {
 		return objectMapper.writeValueAsString(response);
 	}
 
-	private void createExistingJobs(@NonNull JsonNode existingJobs) throws IOException {
+	private void createExistingJobs(@NonNull ObjectNode existingJobs) throws IOException {
 		var uncompressed = objectMapper.writeValueAsBytes(existingJobs);
 		var compressed = new ByteArrayOutputStream();
 		try (var out = new BZip2CompressorOutputStream(compressed)) {
