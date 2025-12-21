@@ -40,7 +40,6 @@ import org.apache.commons.io.IOUtils;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junitpioneer.jupiter.RetryingTest;
 import org.junitpioneer.jupiter.SetEnvironmentVariable;
@@ -218,13 +217,16 @@ public class ScrapeMarketHistoryTest {
 						"/data/market-orders/history/2023/2023-01-01/market-orders-2023-01-01_00-16-34.v3.csv.bz2")) {
 					return mockOrderDate(LocalDate.parse("2023-01-01"));
 				}
-				if (path.equals("/esi/latest/markets/10000001/types/")) {
+				if (path.equals("/esi/markets/10000001/types/")) {
 					return mockResponse("[20,21,1000]");
 				}
-				if (path.equals("/esi/latest/markets/10000002/types/")) {
+				if (path.equals("/esi/markets/10000002/types/")) {
 					return mockResponse("[20,21]");
 				}
-				if (path.equals("/esi/latest/markets/10000100/types/")) {
+				if (path.equals("/esi/markets/10000100/types/")) {
+					return mockResponse("[]");
+				}
+				if (path.equals("/esi/markets/19000001/types/")) {
 					return mockResponse("[]");
 				}
 				if (path.startsWith("/esi/latest/markets/") && segments.get(4).equals("history")) {
