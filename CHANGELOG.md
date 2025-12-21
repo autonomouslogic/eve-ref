@@ -1,5 +1,24 @@
 EVE Ref Changelog
 
+## [2.73.0](https://github.com/autonomouslogic/eve-ref/compare/2.72.1...2.73.0) (2025-12-21)
+
+
+### Features
+
+* Scrape freelance jobs ([#996](https://github.com/autonomouslogic/eve-ref/issues/996)) ([12a015d](https://github.com/autonomouslogic/eve-ref/commit/12a015d2e1eb144d18ba91744b89b57c58f32a52))
+
+
+### Bug Fixes
+
+* Account for duplicate job entries ([#1000](https://github.com/autonomouslogic/eve-ref/issues/1000)) ([2db0952](https://github.com/autonomouslogic/eve-ref/commit/2db0952ccec6a0602bf07482d45177a1915002c9))
+* Fix base URL handling for the ESI client ([#997](https://github.com/autonomouslogic/eve-ref/issues/997)) ([7eef100](https://github.com/autonomouslogic/eve-ref/commit/7eef1005765c1a616836f51351c55a699cbe89a6))
+* Trailing slashes on EsiUrl ([#998](https://github.com/autonomouslogic/eve-ref/issues/998)) ([c7c2ecc](https://github.com/autonomouslogic/eve-ref/commit/c7c2ecc6b28553e95b0ba88b444d396570b140e9))
+
+
+### Dependency Updates
+
+* **deps:** update actions/setup-node action to v6 ([#972](https://github.com/autonomouslogic/eve-ref/issues/972)) ([a2e6133](https://github.com/autonomouslogic/eve-ref/commit/a2e613306daeedaeb7c41a3ab0a23c2f80aa9df6))
+
 ## [2.72.1](https://github.com/autonomouslogic/eve-ref/compare/2.72.0...2.72.1) (2025-12-15)
 
 
