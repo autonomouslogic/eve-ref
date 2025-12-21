@@ -1,9 +1,10 @@
 package com.autonomouslogic.everef.service;
 
+import com.autonomouslogic.everef.esi.EsiHelper;
 import com.autonomouslogic.everef.openapi.esi.api.MarketApi;
 import com.autonomouslogic.everef.openapi.esi.invoker.ApiException;
 import com.autonomouslogic.everef.openapi.esi.invoker.ApiResponse;
-import com.autonomouslogic.everef.openapi.esi.model.GetMarketsPrices200Ok;
+import com.autonomouslogic.everef.openapi.esi.model.MarketsPricesGetInner;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -23,6 +24,9 @@ import lombok.extern.log4j.Log4j2;
 public class EsiMarketPriceService {
 	@Inject
 	protected MarketApi marketApi;
+
+	@Inject
+	protected EsiHelper esiHelper;
 
 	@Inject
 	protected ScheduledExecutorService scheduler;
@@ -52,9 +56,9 @@ public class EsiMarketPriceService {
 	@SneakyThrows
 	private void updateEsiMarketPrices() {
 		log.info("Updating market prices");
-		ApiResponse<List<GetMarketsPrices200Ok>> res;
+		ApiResponse<List<MarketsPricesGetInner>> res;
 		try {
-			res = marketApi.getMarketsPricesWithHttpInfo(null, esiMarketPricesEtag);
+			res = marketApi.getMarketsPricesWithHttpInfo(esiHelper.getCompatibilityDate(), null, esiMarketPricesEtag, null);
 		} catch (ApiException e) {
 			if (e.getCode() == 304) {
 				log.debug("No market prices update needed");
@@ -63,7 +67,7 @@ public class EsiMarketPriceService {
 				throw e;
 			}
 		}
-		for (GetMarketsPrices200Ok price : res.getData()) {
+		for (MarketsPricesGetInner price : res.getData()) {
 			prices.computeIfAbsent(price.getTypeId().longValue(), ignore -> new MarketPrice())
 					.setEsiAdjustedPrice(
 							Optional.ofNullable(price.getAdjustedPrice()).orElse(0.0))

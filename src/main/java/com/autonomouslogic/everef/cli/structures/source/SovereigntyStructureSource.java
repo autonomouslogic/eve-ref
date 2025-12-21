@@ -5,6 +5,7 @@ import static com.autonomouslogic.everef.cli.structures.ScrapeStructures.LAST_SE
 
 import com.autonomouslogic.everef.cli.structures.StructureScrapeHelper;
 import com.autonomouslogic.everef.cli.structures.StructureStore;
+import com.autonomouslogic.everef.esi.EsiHelper;
 import com.autonomouslogic.everef.openapi.esi.api.SovereigntyApi;
 import com.autonomouslogic.everef.util.VirtualThreads;
 import io.reactivex.rxjava3.core.Flowable;
@@ -23,6 +24,9 @@ public class SovereigntyStructureSource implements StructureSource {
 	@Inject
 	protected StructureScrapeHelper structureScrapeHelper;
 
+	@Inject
+	protected EsiHelper esiHelper;
+
 	@Setter
 	@Accessors(chain = false)
 	private StructureStore structureStore;
@@ -37,7 +41,7 @@ public class SovereigntyStructureSource implements StructureSource {
 	public Flowable<Long> getStructures() {
 		return Flowable.defer(() -> {
 			var response = VirtualThreads.offload(() -> sovereigntyApi.getSovereigntyStructuresWithHttpInfo(
-					EsiConstants.Datasource.tranquility.toString(), null));
+					esiHelper.getCompatibilityDate(), null, null, null));
 			if (response.getStatusCode() != 200) {
 				return Flowable.error(new RuntimeException(
 						String.format("Failed to fetch sovereignty structure ids: %s", response.getStatusCode())));
