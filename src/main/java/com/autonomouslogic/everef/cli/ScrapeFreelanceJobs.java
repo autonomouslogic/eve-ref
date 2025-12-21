@@ -13,7 +13,6 @@ import com.autonomouslogic.everef.url.UrlParser;
 import com.autonomouslogic.everef.util.CompressUtil;
 import com.autonomouslogic.everef.util.DataIndexHelper;
 import com.autonomouslogic.everef.util.TempFiles;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.io.File;
@@ -23,7 +22,9 @@ import java.time.Duration;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -98,7 +99,7 @@ public class ScrapeFreelanceJobs implements Command {
 
 		var jobs = fetchIndex();
 
-		var detailedJobs = new HashMap<String, JsonNode>();
+		var detailedJobs = new HashMap<String, ObjectNode>();
 		for (var job : jobs) {
 			fetchJobDetail(job, existingJobs, detailedJobs);
 		}
@@ -112,7 +113,7 @@ public class ScrapeFreelanceJobs implements Command {
 		uploadFiles(outputFile);
 	}
 
-	private JsonNode fetchIndex() {
+	private List<ObjectNode> fetchIndex() {
 		var indexUrl = EsiUrl.modern().urlPath("/freelance-jobs?limit=100").build();
 		var indexResponse = esiHelper.fetch(indexUrl);
 		var indexData = esiHelper.decodeResponse(indexResponse);
@@ -121,15 +122,22 @@ public class ScrapeFreelanceJobs implements Command {
 		if (jobsArray == null || !jobsArray.isArray()) {
 			throw new IllegalStateException("No freelance_jobs array found in response");
 		}
+		var list = new ArrayList<ObjectNode>(jobsArray.size());
+		jobsArray.forEach(e -> list.add((ObjectNode) e));
 
 		log.debug("Retrieved {} jobs from index", jobsArray.size());
-		return jobsArray;
+		return list;
 	}
 
-	private void fetchJobDetail(JsonNode job, Map<String, JsonNode> existingJobs, Map<String, JsonNode> detailedJobs) {
+	private void fetchJobDetail(
+			ObjectNode job, Map<String, ObjectNode> existingJobs, Map<String, ObjectNode> detailedJobs) {
 		var jobId = job.get("id");
 		if (jobId == null || jobId.isNull()) {
 			log.warn("Job entry missing ID, skipping");
+			return;
+		}
+		if (detailedJobs.containsKey(jobId.asText())) {
+			log.trace("Skipping already fetched job ID: {}", jobId.asText());
 			return;
 		}
 
@@ -145,12 +153,12 @@ public class ScrapeFreelanceJobs implements Command {
 		var detailUrl =
 				EsiUrl.modern().urlPath("/freelance-jobs/" + jobIdString).build();
 		var detailResponse = esiHelper.fetch(detailUrl);
-		var detailData = esiHelper.decodeResponse(detailResponse);
+		var detailData = (ObjectNode) esiHelper.decodeResponse(detailResponse);
 
 		detailedJobs.put(jobIdString, detailData);
 	}
 
-	private boolean shouldUpdateJob(JsonNode indexJob, JsonNode existingJob) {
+	private boolean shouldUpdateJob(ObjectNode indexJob, ObjectNode existingJob) {
 		var indexLastModified = indexJob.get("last_modified");
 		var existingLastModified = existingJob.get("last_modified");
 
@@ -171,7 +179,7 @@ public class ScrapeFreelanceJobs implements Command {
 	}
 
 	@SneakyThrows
-	private File buildOutput(Map<String, JsonNode> jobs) {
+	private File buildOutput(Map<String, ObjectNode> jobs) {
 		var file = tempFiles.tempFile("freelance-jobs", ".json").toFile();
 		log.debug("Writing output file to {}", file);
 		objectMapper.writeValue(file, jobs);
@@ -202,7 +210,7 @@ public class ScrapeFreelanceJobs implements Command {
 	 * Returns an empty map if the file doesn't exist yet.
 	 */
 	@SneakyThrows
-	private Map<String, JsonNode> downloadExistingJobs() {
+	private Map<String, ObjectNode> downloadExistingJobs() {
 		var url = dataBaseUrl.resolve(FREELANCE_JOBS.createLatestPath()).toString();
 		var file = tempFiles.tempFile("freelance-jobs-existing", ".json.bz2").toFile();
 		log.debug("Downloading existing jobs from {}", url);
@@ -232,9 +240,9 @@ public class ScrapeFreelanceJobs implements Command {
 	 * New jobs overwrite existing ones with the same ID.
 	 * Jobs not in the current index are excluded.
 	 */
-	private Map<String, JsonNode> mergeJobs(
-			Map<String, JsonNode> existingJobs, Map<String, JsonNode> newJobs, JsonNode indexJobs) {
-		var merged = new HashMap<String, JsonNode>();
+	private Map<String, ObjectNode> mergeJobs(
+			Map<String, ObjectNode> existingJobs, Map<String, ObjectNode> newJobs, List<ObjectNode> indexJobs) {
+		var merged = new HashMap<String, ObjectNode>();
 
 		// Only include existing jobs that are still in the current index
 		for (var indexJob : indexJobs) {

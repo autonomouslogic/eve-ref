@@ -10,12 +10,12 @@ import com.autonomouslogic.everef.test.MockS3Adapter;
 import com.autonomouslogic.everef.test.TestDataUtil;
 import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.util.DataIndexHelper;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.time.Duration;
 import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
@@ -206,8 +206,8 @@ public class ScrapeFreelanceJobsTest {
 	@SneakyThrows
 	void shouldRemoveOldExistingJobs() {
 		var job1 = createFreelanceJob(1, Instant.parse("2020-01-01T00:00:00Z"), false);
-		var existingJobs =
-				objectMapper.createObjectNode().set(job1.job().get("id").asText(), job1.detail());
+		var existingJobs = objectMapper.createObjectNode();
+		existingJobs.set(job1.job().get("id").asText(), job1.detail());
 		createExistingJobs(existingJobs);
 
 		var job2 = createFreelanceJob(2, Instant.now());
@@ -269,6 +269,46 @@ public class ScrapeFreelanceJobsTest {
 		assertEquals("name-2", latestJson.get("id-2").get("name").asText());
 	}
 
+	@Test
+	@SneakyThrows
+	void shouldUseFirstOccurrenceWhenJobAppearsMultipleTimes() {
+		// It's possible for two jobs with the same ID to appear in the index response twice.
+		// This is because of cursor pagination, and then the proxy merges it all into the same array.
+		// According to CCP, this second occurrence will always be older.
+		// The timestamps below are contrived in that the timestamp for the second one is before the existing.
+		// This is to test that the first timestamp is the one used to determine if an update is needed.
+
+		var existingModified = Instant.parse("2020-01-01T00:00:00Z");
+		var firstModified = existingModified.plus(Duration.ofDays(1));
+		var secondModified = existingModified.minus(Duration.ofDays(1));
+
+		var existingJobs = objectMapper.createObjectNode();
+		existingJobs.set(
+				"id-1",
+				objectMapper
+						.createObjectNode()
+						.put("id", "id-1")
+						.put("name", "Existing Job")
+						.put("last_modified", existingModified.toString()));
+		createExistingJobs(existingJobs);
+
+		// Add the same job twice to the index with different last_modified times
+		// First occurrence has earlier timestamp
+		var firstJob = createFreelanceJob(1, firstModified);
+		// Second occurrence has later timestamp - manually add to index
+		var secondJob = firstJob.job().deepCopy().put("last_modified", secondModified.toString());
+		jobsIndex.add(secondJob);
+
+		scrapeFreelanceJobs.run();
+
+		server.takeRequest(); // latest file download (200)
+		server.takeRequest(); // index
+		var req =
+				server.takeRequest(); // detail for id-1 - if the second timestamp was used, this request wouldn't have
+		// happened.
+		assertEquals("/freelance-jobs/id-1", req.getRequestUrl().encodedPath());
+	}
+
 	private JobJson createFreelanceJob(int id, @NonNull Instant lastModified) {
 		return createFreelanceJob(id, lastModified, true);
 	}
@@ -319,7 +359,7 @@ public class ScrapeFreelanceJobsTest {
 		return objectMapper.writeValueAsString(response);
 	}
 
-	private void createExistingJobs(@NonNull JsonNode existingJobs) throws IOException {
+	private void createExistingJobs(@NonNull ObjectNode existingJobs) throws IOException {
 		var uncompressed = objectMapper.writeValueAsBytes(existingJobs);
 		var compressed = new ByteArrayOutputStream();
 		try (var out = new BZip2CompressorOutputStream(compressed)) {
