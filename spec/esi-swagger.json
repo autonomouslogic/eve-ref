@@ -63,7 +63,7 @@
         "required": true,
         "schema": {
           "enum": [
-            "2020-01-01"
+            "2025-12-16"
           ],
           "format": "date",
           "type": "string"
@@ -3762,6 +3762,66 @@
           "type": "object"
         },
         "type": "array"
+      },
+      "CharactersFreelanceJobsListing": {
+        "properties": {
+          "freelance_jobs": {
+            "description": "List of freelance jobs",
+            "items": {
+              "$ref": "#/components/schemas/FreelanceJobsDetailFreelancejob"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "freelance_jobs"
+        ],
+        "type": "object"
+      },
+      "CharactersFreelanceJobsParticipation": {
+        "properties": {
+          "contributed": {
+            "description": "Your contribution",
+            "examples": [
+              100
+            ],
+            "format": "int64",
+            "type": "integer"
+          },
+          "last_modified": {
+            "description": "Moment this information was last modified",
+            "examples": [
+              "2025-11-01T00:00:00Z"
+            ],
+            "format": "date-time",
+            "type": "string"
+          },
+          "state": {
+            "description": "Your participation status",
+            "enum": [
+              "Unspecified",
+              "Committed",
+              "Kicked",
+              "Resigned"
+            ],
+            "examples": [
+              "Committed"
+            ],
+            "type": "string",
+            "x-enum-descriptions": [
+              "An unspecified state",
+              "Active and accepting contributions",
+              "Kicked from the project",
+              "Resigned from the project"
+            ]
+          }
+        },
+        "required": [
+          "state",
+          "contributed",
+          "last_modified"
+        ],
+        "type": "object"
       },
       "CompatibilityDate": {
         "examples": [
@@ -7779,12 +7839,1955 @@
         },
         "type": "array"
       },
+      "CorporationsFreelanceJobsListing": {
+        "properties": {
+          "cursor": {
+            "$ref": "#/components/schemas/Cursor"
+          },
+          "freelance_jobs": {
+            "description": "List of freelance jobs",
+            "items": {
+              "$ref": "#/components/schemas/FreelanceJobsDetailFreelancejob"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "freelance_jobs"
+        ],
+        "type": "object"
+      },
+      "CorporationsFreelanceJobsParticipants": {
+        "properties": {
+          "cursor": {
+            "$ref": "#/components/schemas/Cursor"
+          },
+          "participants": {
+            "description": "List of participants",
+            "items": {
+              "$ref": "#/components/schemas/CorporationsFreelanceJobsParticipantsParticipant"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "participants"
+        ],
+        "type": "object"
+      },
+      "CorporationsFreelanceJobsParticipantsParticipant": {
+        "properties": {
+          "contributed": {
+            "description": "Participant's contributed progress",
+            "examples": [
+              100
+            ],
+            "format": "int64",
+            "type": "integer"
+          },
+          "id": {
+            "$ref": "#/components/schemas/CharacterID",
+            "description": "Participant's character ID"
+          },
+          "name": {
+            "description": "Participant's name",
+            "examples": [
+              "Participant Name"
+            ],
+            "type": "string"
+          },
+          "state": {
+            "description": "Participant's state",
+            "enum": [
+              "Unspecified",
+              "Committed",
+              "Kicked",
+              "Resigned"
+            ],
+            "examples": [
+              "Committed"
+            ],
+            "type": "string",
+            "x-enum-descriptions": [
+              "An unspecified state",
+              "Active and accepting contributions",
+              "Kicked from the project",
+              "Resigned from the project"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "state",
+          "contributed"
+        ],
+        "type": "object"
+      },
       "CorporationsNpccorpsGet": {
         "items": {
           "format": "int64",
           "type": "integer"
         },
         "type": "array"
+      },
+      "CorporationsProjectsContribution": {
+        "properties": {
+          "contributed": {
+            "description": "Your contribution",
+            "examples": [
+              10
+            ],
+            "format": "int64",
+            "type": "integer"
+          },
+          "last_modified": {
+            "description": "Moment this information was last modified",
+            "examples": [
+              "2025-08-26T00:00:00Z"
+            ],
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "contributed"
+        ],
+        "type": "object"
+      },
+      "CorporationsProjectsContributors": {
+        "properties": {
+          "contributors": {
+            "description": "List of contributors",
+            "items": {
+              "$ref": "#/components/schemas/CorporationsProjectsContributorsContributor"
+            },
+            "type": "array"
+          },
+          "cursor": {
+            "$ref": "#/components/schemas/Cursor"
+          }
+        },
+        "required": [
+          "contributors"
+        ],
+        "type": "object"
+      },
+      "CorporationsProjectsContributorsContributor": {
+        "properties": {
+          "contributed": {
+            "description": "Contributor's contributed progress",
+            "examples": [
+              10
+            ],
+            "format": "int64",
+            "type": "integer"
+          },
+          "id": {
+            "$ref": "#/components/schemas/CharacterID",
+            "description": "Contributor's character ID"
+          },
+          "name": {
+            "description": "Contributor's name",
+            "examples": [
+              "Contributor Name"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "contributed"
+        ],
+        "type": "object"
+      },
+      "CorporationsProjectsDetail": {
+        "properties": {
+          "configuration": {
+            "description": "Project's configuration",
+            "oneOf": [
+              {
+                "properties": {
+                  "capture_fw_complex": {
+                    "$ref": "#/components/schemas/CorporationsProjectsDetailConfigurationcapturefwcomplex",
+                    "description": "Capture factional warfare complex"
+                  }
+                },
+                "title": "capture_fw_complex",
+                "type": "object"
+              },
+              {
+                "properties": {
+                  "damage_ship": {
+                    "$ref": "#/components/schemas/CorporationsProjectsDetailConfigurationdamageship",
+                    "description": "Damage ship"
+                  }
+                },
+                "title": "damage_ship",
+                "type": "object"
+              },
+              {
+                "properties": {
+                  "defend_fw_complex": {
+                    "$ref": "#/components/schemas/CorporationsProjectsDetailConfigurationdefendfwcomplex",
+                    "description": "Defend factional warfare complex"
+                  }
+                },
+                "title": "defend_fw_complex",
+                "type": "object"
+              },
+              {
+                "properties": {
+                  "deliver_item": {
+                    "$ref": "#/components/schemas/CorporationsProjectsDetailConfigurationdeliveritem",
+                    "description": "Deliver item"
+                  }
+                },
+                "title": "deliver_item",
+                "type": "object"
+              },
+              {
+                "properties": {
+                  "destroy_npc": {
+                    "$ref": "#/components/schemas/CorporationsProjectsDetailConfigurationdestroynpc",
+                    "description": "Destroy NPC"
+                  }
+                },
+                "title": "destroy_npc",
+                "type": "object"
+              },
+              {
+                "properties": {
+                  "destroy_ship": {
+                    "$ref": "#/components/schemas/CorporationsProjectsDetailConfigurationdestroyship",
+                    "description": "Destroy ship"
+                  }
+                },
+                "title": "destroy_ship",
+                "type": "object"
+              },
+              {
+                "properties": {
+                  "earn_loyalty_point": {
+                    "$ref": "#/components/schemas/CorporationsProjectsDetailConfigurationearnloyaltypoints",
+                    "description": "Earn loyalty point"
+                  }
+                },
+                "title": "earn_loyalty_point",
+                "type": "object"
+              },
+              {
+                "properties": {
+                  "lost_ship": {
+                    "$ref": "#/components/schemas/CorporationsProjectsDetailConfigurationlostship",
+                    "description": "Lost ship"
+                  }
+                },
+                "title": "lost_ship",
+                "type": "object"
+              },
+              {
+                "properties": {
+                  "manual": {
+                    "$ref": "#/components/schemas/CorporationsProjectsDetailConfigurationmanual",
+                    "description": "Manual contribution"
+                  }
+                },
+                "title": "manual",
+                "type": "object"
+              },
+              {
+                "properties": {
+                  "manufacture_item": {
+                    "$ref": "#/components/schemas/CorporationsProjectsDetailConfigurationmanufactureitem",
+                    "description": "Manufacture item"
+                  }
+                },
+                "title": "manufacture_item",
+                "type": "object"
+              },
+              {
+                "properties": {
+                  "mine_material": {
+                    "$ref": "#/components/schemas/CorporationsProjectsDetailConfigurationminematerial",
+                    "description": "Mine material"
+                  }
+                },
+                "title": "mine_material",
+                "type": "object"
+              },
+              {
+                "properties": {
+                  "remote_boost_shield": {
+                    "$ref": "#/components/schemas/CorporationsProjectsDetailConfigurationremoteboostshield",
+                    "description": "Remote boost shield"
+                  }
+                },
+                "title": "remote_boost_shield",
+                "type": "object"
+              },
+              {
+                "properties": {
+                  "remote_repair_armor": {
+                    "$ref": "#/components/schemas/CorporationsProjectsDetailConfigurationremoterepairarmor",
+                    "description": "Remote repair armor"
+                  }
+                },
+                "title": "remote_repair_armor",
+                "type": "object"
+              },
+              {
+                "properties": {
+                  "salvage_wreck": {
+                    "$ref": "#/components/schemas/CorporationsProjectsDetailConfigurationsalvagewreck",
+                    "description": "Salvage wreck"
+                  }
+                },
+                "title": "salvage_wreck",
+                "type": "object"
+              },
+              {
+                "properties": {
+                  "scan_signature": {
+                    "$ref": "#/components/schemas/CorporationsProjectsDetailConfigurationscansignature",
+                    "description": "Scan signature"
+                  }
+                },
+                "title": "scan_signature",
+                "type": "object"
+              },
+              {
+                "properties": {
+                  "ship_insurance": {
+                    "$ref": "#/components/schemas/CorporationsProjectsDetailConfigurationshipinsurance",
+                    "description": "Ship insurance"
+                  }
+                },
+                "title": "ship_insurance",
+                "type": "object"
+              },
+              {
+                "properties": {
+                  "unknown": {
+                    "$ref": "#/components/schemas/CorporationsProjectsDetailConfigurationunknown",
+                    "description": "Unknown"
+                  }
+                },
+                "title": "unknown",
+                "type": "object"
+              }
+            ]
+          },
+          "contribution": {
+            "$ref": "#/components/schemas/CorporationsProjectsDetailContribution",
+            "description": "Project's contribution settings"
+          },
+          "creator": {
+            "$ref": "#/components/schemas/CorporationsProjectsDetailCreator",
+            "description": "Project's creator"
+          },
+          "details": {
+            "$ref": "#/components/schemas/CorporationsProjectsDetailDetails",
+            "description": "Project's details"
+          },
+          "id": {
+            "$ref": "#/components/schemas/UUID",
+            "description": "Project's ID"
+          },
+          "last_modified": {
+            "description": "Moment this project was last modified. Project contributions also count as a modification",
+            "examples": [
+              "2025-06-01T00:00:00Z"
+            ],
+            "format": "date-time",
+            "type": "string"
+          },
+          "name": {
+            "description": "Project's name",
+            "examples": [
+              "Project Name"
+            ],
+            "type": "string"
+          },
+          "progress": {
+            "$ref": "#/components/schemas/CorporationsProjectsDetailProgress",
+            "description": "Project's progress"
+          },
+          "reward": {
+            "$ref": "#/components/schemas/CorporationsProjectsDetailReward",
+            "description": "Project's reward"
+          },
+          "state": {
+            "description": "Project's current state",
+            "enum": [
+              "Unspecified",
+              "Active",
+              "Closed",
+              "Completed",
+              "Expired",
+              "Deleted"
+            ],
+            "examples": [
+              "Active"
+            ],
+            "type": "string",
+            "x-enum-descriptions": [
+              "An unspecified state",
+              "Active and accepting contributions",
+              "Closed by the corporation",
+              "Completed",
+              "Expired",
+              "Deleted and the details are no longer available"
+            ]
+          }
+        },
+        "required": [
+          "details",
+          "creator",
+          "configuration",
+          "id",
+          "name",
+          "state",
+          "last_modified",
+          "progress"
+        ],
+        "type": "object"
+      },
+      "CorporationsProjectsDetailConfigurationcapturefwcomplex": {
+        "properties": {
+          "archetypes": {
+            "description": "Archetype of complex",
+            "items": {
+              "$ref": "#/components/schemas/CorporationsProjectsDetailConfigurationmatcherarchetype"
+            },
+            "type": "array"
+          },
+          "factions": {
+            "description": "Faction to capture for",
+            "items": {
+              "$ref": "#/components/schemas/CorporationsProjectsDetailConfigurationmatcherfaction"
+            },
+            "type": "array"
+          },
+          "locations": {
+            "description": "Location of complex",
+            "items": {
+              "oneOf": [
+                {
+                  "properties": {
+                    "solar_system_id": {
+                      "$ref": "#/components/schemas/SolarSystemID",
+                      "description": "Solar system's ID"
+                    }
+                  },
+                  "title": "solar_system_id",
+                  "type": "object"
+                },
+                {
+                  "properties": {
+                    "constellation_id": {
+                      "$ref": "#/components/schemas/ConstellationID",
+                      "description": "Constellation's ID"
+                    }
+                  },
+                  "title": "constellation_id",
+                  "type": "object"
+                },
+                {
+                  "properties": {
+                    "region_id": {
+                      "$ref": "#/components/schemas/RegionID",
+                      "description": "Region's ID"
+                    }
+                  },
+                  "title": "region_id",
+                  "type": "object"
+                }
+              ]
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "CorporationsProjectsDetailConfigurationdamageship": {
+        "properties": {
+          "identities": {
+            "description": "Identity of capsuleer",
+            "items": {
+              "oneOf": [
+                {
+                  "properties": {
+                    "character_id": {
+                      "$ref": "#/components/schemas/CharacterID",
+                      "description": "Character's ID"
+                    }
+                  },
+                  "title": "character_id",
+                  "type": "object"
+                },
+                {
+                  "properties": {
+                    "corporation_id": {
+                      "$ref": "#/components/schemas/CorporationID",
+                      "description": "Corporation's ID"
+                    }
+                  },
+                  "title": "corporation_id",
+                  "type": "object"
+                },
+                {
+                  "properties": {
+                    "alliance_id": {
+                      "$ref": "#/components/schemas/AllianceID",
+                      "description": "Alliance's ID"
+                    }
+                  },
+                  "title": "alliance_id",
+                  "type": "object"
+                },
+                {
+                  "properties": {
+                    "faction_id": {
+                      "$ref": "#/components/schemas/FactionID",
+                      "description": "Faction's ID"
+                    }
+                  },
+                  "title": "faction_id",
+                  "type": "object"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "locations": {
+            "description": "Location of capsuleer's ship",
+            "items": {
+              "oneOf": [
+                {
+                  "properties": {
+                    "solar_system_id": {
+                      "$ref": "#/components/schemas/SolarSystemID",
+                      "description": "Solar system's ID"
+                    }
+                  },
+                  "title": "solar_system_id",
+                  "type": "object"
+                },
+                {
+                  "properties": {
+                    "constellation_id": {
+                      "$ref": "#/components/schemas/ConstellationID",
+                      "description": "Constellation's ID"
+                    }
+                  },
+                  "title": "constellation_id",
+                  "type": "object"
+                },
+                {
+                  "properties": {
+                    "region_id": {
+                      "$ref": "#/components/schemas/RegionID",
+                      "description": "Region's ID"
+                    }
+                  },
+                  "title": "region_id",
+                  "type": "object"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "ships": {
+            "description": "Ship-type of capsuleer's ship",
+            "items": {
+              "oneOf": [
+                {
+                  "properties": {
+                    "type_id": {
+                      "$ref": "#/components/schemas/TypeID",
+                      "description": "Ship's type ID"
+                    }
+                  },
+                  "title": "type_id",
+                  "type": "object"
+                },
+                {
+                  "properties": {
+                    "group_id": {
+                      "$ref": "#/components/schemas/ShipTreeGroupID",
+                      "description": "Ship's ship tree group ID"
+                    }
+                  },
+                  "title": "group_id",
+                  "type": "object"
+                }
+              ]
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "CorporationsProjectsDetailConfigurationdefendfwcomplex": {
+        "properties": {
+          "archetypes": {
+            "description": "Archetype of complex",
+            "items": {
+              "$ref": "#/components/schemas/CorporationsProjectsDetailConfigurationmatcherarchetype"
+            },
+            "type": "array"
+          },
+          "factions": {
+            "description": "Faction to defend for",
+            "items": {
+              "$ref": "#/components/schemas/CorporationsProjectsDetailConfigurationmatcherfaction"
+            },
+            "type": "array"
+          },
+          "locations": {
+            "description": "Location of complex",
+            "items": {
+              "oneOf": [
+                {
+                  "properties": {
+                    "solar_system_id": {
+                      "$ref": "#/components/schemas/SolarSystemID",
+                      "description": "Solar system's ID"
+                    }
+                  },
+                  "title": "solar_system_id",
+                  "type": "object"
+                },
+                {
+                  "properties": {
+                    "constellation_id": {
+                      "$ref": "#/components/schemas/ConstellationID",
+                      "description": "Constellation's ID"
+                    }
+                  },
+                  "title": "constellation_id",
+                  "type": "object"
+                },
+                {
+                  "properties": {
+                    "region_id": {
+                      "$ref": "#/components/schemas/RegionID",
+                      "description": "Region's ID"
+                    }
+                  },
+                  "title": "region_id",
+                  "type": "object"
+                }
+              ]
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "CorporationsProjectsDetailConfigurationdeliveritem": {
+        "properties": {
+          "docking_locations": {
+            "description": "Docking location to deliver to",
+            "items": {
+              "oneOf": [
+                {
+                  "properties": {
+                    "structure_id": {
+                      "$ref": "#/components/schemas/ItemID",
+                      "description": "Structure's ID"
+                    }
+                  },
+                  "title": "structure_id",
+                  "type": "object"
+                },
+                {
+                  "properties": {
+                    "station_id": {
+                      "$ref": "#/components/schemas/StationID",
+                      "description": "Station's ID"
+                    }
+                  },
+                  "title": "station_id",
+                  "type": "object"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "items": {
+            "description": "Item to deliver",
+            "items": {
+              "oneOf": [
+                {
+                  "properties": {
+                    "type_id": {
+                      "$ref": "#/components/schemas/TypeID",
+                      "description": "Item's type ID"
+                    }
+                  },
+                  "title": "type_id",
+                  "type": "object"
+                },
+                {
+                  "properties": {
+                    "group_id": {
+                      "$ref": "#/components/schemas/GroupID",
+                      "description": "Item's group ID"
+                    }
+                  },
+                  "title": "group_id",
+                  "type": "object"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "office_id": {
+            "$ref": "#/components/schemas/ItemID",
+            "description": "Office to deliver to"
+          }
+        },
+        "type": "object"
+      },
+      "CorporationsProjectsDetailConfigurationdestroynpc": {
+        "properties": {
+          "locations": {
+            "description": "Location of non-capsuleer",
+            "items": {
+              "oneOf": [
+                {
+                  "properties": {
+                    "solar_system_id": {
+                      "$ref": "#/components/schemas/SolarSystemID",
+                      "description": "Solar system's ID"
+                    }
+                  },
+                  "title": "solar_system_id",
+                  "type": "object"
+                },
+                {
+                  "properties": {
+                    "constellation_id": {
+                      "$ref": "#/components/schemas/ConstellationID",
+                      "description": "Constellation's ID"
+                    }
+                  },
+                  "title": "constellation_id",
+                  "type": "object"
+                },
+                {
+                  "properties": {
+                    "region_id": {
+                      "$ref": "#/components/schemas/RegionID",
+                      "description": "Region's ID"
+                    }
+                  },
+                  "title": "region_id",
+                  "type": "object"
+                }
+              ]
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "CorporationsProjectsDetailConfigurationdestroyship": {
+        "properties": {
+          "identities": {
+            "description": "Identity of capsuleer",
+            "items": {
+              "oneOf": [
+                {
+                  "properties": {
+                    "character_id": {
+                      "$ref": "#/components/schemas/CharacterID",
+                      "description": "Character's ID"
+                    }
+                  },
+                  "title": "character_id",
+                  "type": "object"
+                },
+                {
+                  "properties": {
+                    "corporation_id": {
+                      "$ref": "#/components/schemas/CorporationID",
+                      "description": "Corporation's ID"
+                    }
+                  },
+                  "title": "corporation_id",
+                  "type": "object"
+                },
+                {
+                  "properties": {
+                    "alliance_id": {
+                      "$ref": "#/components/schemas/AllianceID",
+                      "description": "Alliance's ID"
+                    }
+                  },
+                  "title": "alliance_id",
+                  "type": "object"
+                },
+                {
+                  "properties": {
+                    "faction_id": {
+                      "$ref": "#/components/schemas/FactionID",
+                      "description": "Faction's ID"
+                    }
+                  },
+                  "title": "faction_id",
+                  "type": "object"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "locations": {
+            "description": "Location of capsuleer's ship",
+            "items": {
+              "oneOf": [
+                {
+                  "properties": {
+                    "solar_system_id": {
+                      "$ref": "#/components/schemas/SolarSystemID",
+                      "description": "Solar system's ID"
+                    }
+                  },
+                  "title": "solar_system_id",
+                  "type": "object"
+                },
+                {
+                  "properties": {
+                    "constellation_id": {
+                      "$ref": "#/components/schemas/ConstellationID",
+                      "description": "Constellation's ID"
+                    }
+                  },
+                  "title": "constellation_id",
+                  "type": "object"
+                },
+                {
+                  "properties": {
+                    "region_id": {
+                      "$ref": "#/components/schemas/RegionID",
+                      "description": "Region's ID"
+                    }
+                  },
+                  "title": "region_id",
+                  "type": "object"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "ships": {
+            "description": "Ship-type of capsuleer's ship",
+            "items": {
+              "oneOf": [
+                {
+                  "properties": {
+                    "type_id": {
+                      "$ref": "#/components/schemas/TypeID",
+                      "description": "Ship's type ID"
+                    }
+                  },
+                  "title": "type_id",
+                  "type": "object"
+                },
+                {
+                  "properties": {
+                    "group_id": {
+                      "$ref": "#/components/schemas/ShipTreeGroupID",
+                      "description": "Ship's ship tree group ID"
+                    }
+                  },
+                  "title": "group_id",
+                  "type": "object"
+                }
+              ]
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "CorporationsProjectsDetailConfigurationearnloyaltypoints": {
+        "properties": {
+          "corporations": {
+            "description": "Corporation issuing loyalty points",
+            "items": {
+              "$ref": "#/components/schemas/CorporationsProjectsDetailConfigurationmatchercorporation"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "CorporationsProjectsDetailConfigurationlostship": {
+        "properties": {
+          "identities": {
+            "description": "Identity of killer",
+            "items": {
+              "oneOf": [
+                {
+                  "properties": {
+                    "character_id": {
+                      "$ref": "#/components/schemas/CharacterID",
+                      "description": "Character's ID"
+                    }
+                  },
+                  "title": "character_id",
+                  "type": "object"
+                },
+                {
+                  "properties": {
+                    "corporation_id": {
+                      "$ref": "#/components/schemas/CorporationID",
+                      "description": "Corporation's ID"
+                    }
+                  },
+                  "title": "corporation_id",
+                  "type": "object"
+                },
+                {
+                  "properties": {
+                    "alliance_id": {
+                      "$ref": "#/components/schemas/AllianceID",
+                      "description": "Alliance's ID"
+                    }
+                  },
+                  "title": "alliance_id",
+                  "type": "object"
+                },
+                {
+                  "properties": {
+                    "faction_id": {
+                      "$ref": "#/components/schemas/FactionID",
+                      "description": "Faction's ID"
+                    }
+                  },
+                  "title": "faction_id",
+                  "type": "object"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "locations": {
+            "description": "Location of lost ship",
+            "items": {
+              "oneOf": [
+                {
+                  "properties": {
+                    "solar_system_id": {
+                      "$ref": "#/components/schemas/SolarSystemID",
+                      "description": "Solar system's ID"
+                    }
+                  },
+                  "title": "solar_system_id",
+                  "type": "object"
+                },
+                {
+                  "properties": {
+                    "constellation_id": {
+                      "$ref": "#/components/schemas/ConstellationID",
+                      "description": "Constellation's ID"
+                    }
+                  },
+                  "title": "constellation_id",
+                  "type": "object"
+                },
+                {
+                  "properties": {
+                    "region_id": {
+                      "$ref": "#/components/schemas/RegionID",
+                      "description": "Region's ID"
+                    }
+                  },
+                  "title": "region_id",
+                  "type": "object"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "ships": {
+            "description": "Ship-type of lost ship",
+            "items": {
+              "oneOf": [
+                {
+                  "properties": {
+                    "type_id": {
+                      "$ref": "#/components/schemas/TypeID",
+                      "description": "Ship's type ID"
+                    }
+                  },
+                  "title": "type_id",
+                  "type": "object"
+                },
+                {
+                  "properties": {
+                    "group_id": {
+                      "$ref": "#/components/schemas/ShipTreeGroupID",
+                      "description": "Ship's ship tree group ID"
+                    }
+                  },
+                  "title": "group_id",
+                  "type": "object"
+                }
+              ]
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "CorporationsProjectsDetailConfigurationmanual": {
+        "type": "object"
+      },
+      "CorporationsProjectsDetailConfigurationmanufactureitem": {
+        "properties": {
+          "docking_locations": {
+            "description": "Station / structure to manufacture in",
+            "items": {
+              "oneOf": [
+                {
+                  "properties": {
+                    "structure_id": {
+                      "$ref": "#/components/schemas/ItemID",
+                      "description": "Structure's ID"
+                    }
+                  },
+                  "title": "structure_id",
+                  "type": "object"
+                },
+                {
+                  "properties": {
+                    "station_id": {
+                      "$ref": "#/components/schemas/StationID",
+                      "description": "Station's ID"
+                    }
+                  },
+                  "title": "station_id",
+                  "type": "object"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "items": {
+            "description": "Item to manufacture",
+            "items": {
+              "oneOf": [
+                {
+                  "properties": {
+                    "type_id": {
+                      "$ref": "#/components/schemas/TypeID",
+                      "description": "Item's type ID"
+                    }
+                  },
+                  "title": "type_id",
+                  "type": "object"
+                },
+                {
+                  "properties": {
+                    "group_id": {
+                      "$ref": "#/components/schemas/GroupID",
+                      "description": "Item's group ID"
+                    }
+                  },
+                  "title": "group_id",
+                  "type": "object"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "owner": {
+            "description": "Manufacture for",
+            "enum": [
+              "Any",
+              "Corporation",
+              "Character"
+            ],
+            "type": "string",
+            "x-enum-descriptions": [
+              "Either a corporation or a character",
+              "A corporation",
+              "A character"
+            ]
+          }
+        },
+        "required": [
+          "owner"
+        ],
+        "type": "object"
+      },
+      "CorporationsProjectsDetailConfigurationmatcherarchetype": {
+        "properties": {
+          "archetype_id": {
+            "$ref": "#/components/schemas/ArchetypeID",
+            "description": "Archetype's ID"
+          }
+        },
+        "type": "object"
+      },
+      "CorporationsProjectsDetailConfigurationmatchercorporation": {
+        "properties": {
+          "corporation_id": {
+            "$ref": "#/components/schemas/CorporationID",
+            "description": "Corporation's ID"
+          }
+        },
+        "type": "object"
+      },
+      "CorporationsProjectsDetailConfigurationmatcherfaction": {
+        "properties": {
+          "faction_id": {
+            "$ref": "#/components/schemas/FactionID",
+            "description": "Faction's ID"
+          }
+        },
+        "type": "object"
+      },
+      "CorporationsProjectsDetailConfigurationmatchersignature": {
+        "properties": {
+          "signature_type_id": {
+            "$ref": "#/components/schemas/AttributeID",
+            "description": "Signature type's ID"
+          }
+        },
+        "type": "object"
+      },
+      "CorporationsProjectsDetailConfigurationminematerial": {
+        "properties": {
+          "locations": {
+            "description": "Location to mine",
+            "items": {
+              "oneOf": [
+                {
+                  "properties": {
+                    "solar_system_id": {
+                      "$ref": "#/components/schemas/SolarSystemID",
+                      "description": "Solar system's ID"
+                    }
+                  },
+                  "title": "solar_system_id",
+                  "type": "object"
+                },
+                {
+                  "properties": {
+                    "constellation_id": {
+                      "$ref": "#/components/schemas/ConstellationID",
+                      "description": "Constellation's ID"
+                    }
+                  },
+                  "title": "constellation_id",
+                  "type": "object"
+                },
+                {
+                  "properties": {
+                    "region_id": {
+                      "$ref": "#/components/schemas/RegionID",
+                      "description": "Region's ID"
+                    }
+                  },
+                  "title": "region_id",
+                  "type": "object"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "materials": {
+            "description": "Materials to mine",
+            "items": {
+              "oneOf": [
+                {
+                  "properties": {
+                    "type_id": {
+                      "$ref": "#/components/schemas/TypeID",
+                      "description": "Ore's type ID"
+                    }
+                  },
+                  "title": "type_id",
+                  "type": "object"
+                },
+                {
+                  "properties": {
+                    "group_id": {
+                      "$ref": "#/components/schemas/GroupID",
+                      "description": "Ore's group ID"
+                    }
+                  },
+                  "title": "group_id",
+                  "type": "object"
+                }
+              ]
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "CorporationsProjectsDetailConfigurationremoteboostshield": {
+        "properties": {
+          "identities": {
+            "description": "Identity of capsuleer to boost",
+            "items": {
+              "oneOf": [
+                {
+                  "properties": {
+                    "character_id": {
+                      "$ref": "#/components/schemas/CharacterID",
+                      "description": "Character's ID"
+                    }
+                  },
+                  "title": "character_id",
+                  "type": "object"
+                },
+                {
+                  "properties": {
+                    "corporation_id": {
+                      "$ref": "#/components/schemas/CorporationID",
+                      "description": "Corporation's ID"
+                    }
+                  },
+                  "title": "corporation_id",
+                  "type": "object"
+                },
+                {
+                  "properties": {
+                    "alliance_id": {
+                      "$ref": "#/components/schemas/AllianceID",
+                      "description": "Alliance's ID"
+                    }
+                  },
+                  "title": "alliance_id",
+                  "type": "object"
+                },
+                {
+                  "properties": {
+                    "faction_id": {
+                      "$ref": "#/components/schemas/FactionID",
+                      "description": "Faction's ID"
+                    }
+                  },
+                  "title": "faction_id",
+                  "type": "object"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "locations": {
+            "description": "Location of capsuleer's ship to boost",
+            "items": {
+              "oneOf": [
+                {
+                  "properties": {
+                    "solar_system_id": {
+                      "$ref": "#/components/schemas/SolarSystemID",
+                      "description": "Solar system's ID"
+                    }
+                  },
+                  "title": "solar_system_id",
+                  "type": "object"
+                },
+                {
+                  "properties": {
+                    "constellation_id": {
+                      "$ref": "#/components/schemas/ConstellationID",
+                      "description": "Constellation's ID"
+                    }
+                  },
+                  "title": "constellation_id",
+                  "type": "object"
+                },
+                {
+                  "properties": {
+                    "region_id": {
+                      "$ref": "#/components/schemas/RegionID",
+                      "description": "Region's ID"
+                    }
+                  },
+                  "title": "region_id",
+                  "type": "object"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "ships": {
+            "description": "Ship-type of capsuleer's ship to boost",
+            "items": {
+              "oneOf": [
+                {
+                  "properties": {
+                    "type_id": {
+                      "$ref": "#/components/schemas/TypeID",
+                      "description": "Ship's type ID"
+                    }
+                  },
+                  "title": "type_id",
+                  "type": "object"
+                },
+                {
+                  "properties": {
+                    "group_id": {
+                      "$ref": "#/components/schemas/ShipTreeGroupID",
+                      "description": "Ship's ship tree group ID"
+                    }
+                  },
+                  "title": "group_id",
+                  "type": "object"
+                }
+              ]
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "CorporationsProjectsDetailConfigurationremoterepairarmor": {
+        "properties": {
+          "identities": {
+            "description": "Identity of capsuleer to repair",
+            "items": {
+              "oneOf": [
+                {
+                  "properties": {
+                    "character_id": {
+                      "$ref": "#/components/schemas/CharacterID",
+                      "description": "Character's ID"
+                    }
+                  },
+                  "title": "character_id",
+                  "type": "object"
+                },
+                {
+                  "properties": {
+                    "corporation_id": {
+                      "$ref": "#/components/schemas/CorporationID",
+                      "description": "Corporation's ID"
+                    }
+                  },
+                  "title": "corporation_id",
+                  "type": "object"
+                },
+                {
+                  "properties": {
+                    "alliance_id": {
+                      "$ref": "#/components/schemas/AllianceID",
+                      "description": "Alliance's ID"
+                    }
+                  },
+                  "title": "alliance_id",
+                  "type": "object"
+                },
+                {
+                  "properties": {
+                    "faction_id": {
+                      "$ref": "#/components/schemas/FactionID",
+                      "description": "Faction's ID"
+                    }
+                  },
+                  "title": "faction_id",
+                  "type": "object"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "locations": {
+            "description": "Location of capsuleer's ship to repair",
+            "items": {
+              "oneOf": [
+                {
+                  "properties": {
+                    "solar_system_id": {
+                      "$ref": "#/components/schemas/SolarSystemID",
+                      "description": "Solar system's ID"
+                    }
+                  },
+                  "title": "solar_system_id",
+                  "type": "object"
+                },
+                {
+                  "properties": {
+                    "constellation_id": {
+                      "$ref": "#/components/schemas/ConstellationID",
+                      "description": "Constellation's ID"
+                    }
+                  },
+                  "title": "constellation_id",
+                  "type": "object"
+                },
+                {
+                  "properties": {
+                    "region_id": {
+                      "$ref": "#/components/schemas/RegionID",
+                      "description": "Region's ID"
+                    }
+                  },
+                  "title": "region_id",
+                  "type": "object"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "ships": {
+            "description": "Ship-type of capsuleer's ship to repair",
+            "items": {
+              "oneOf": [
+                {
+                  "properties": {
+                    "type_id": {
+                      "$ref": "#/components/schemas/TypeID",
+                      "description": "Ship's type ID"
+                    }
+                  },
+                  "title": "type_id",
+                  "type": "object"
+                },
+                {
+                  "properties": {
+                    "group_id": {
+                      "$ref": "#/components/schemas/ShipTreeGroupID",
+                      "description": "Ship's ship tree group ID"
+                    }
+                  },
+                  "title": "group_id",
+                  "type": "object"
+                }
+              ]
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "CorporationsProjectsDetailConfigurationsalvagewreck": {
+        "properties": {
+          "locations": {
+            "description": "Location of wreck",
+            "items": {
+              "oneOf": [
+                {
+                  "properties": {
+                    "solar_system_id": {
+                      "$ref": "#/components/schemas/SolarSystemID",
+                      "description": "Solar system's ID"
+                    }
+                  },
+                  "title": "solar_system_id",
+                  "type": "object"
+                },
+                {
+                  "properties": {
+                    "constellation_id": {
+                      "$ref": "#/components/schemas/ConstellationID",
+                      "description": "Constellation's ID"
+                    }
+                  },
+                  "title": "constellation_id",
+                  "type": "object"
+                },
+                {
+                  "properties": {
+                    "region_id": {
+                      "$ref": "#/components/schemas/RegionID",
+                      "description": "Region's ID"
+                    }
+                  },
+                  "title": "region_id",
+                  "type": "object"
+                }
+              ]
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "CorporationsProjectsDetailConfigurationscansignature": {
+        "properties": {
+          "locations": {
+            "description": "Locations of signatures",
+            "items": {
+              "oneOf": [
+                {
+                  "properties": {
+                    "solar_system_id": {
+                      "$ref": "#/components/schemas/SolarSystemID",
+                      "description": "Solar system's ID"
+                    }
+                  },
+                  "title": "solar_system_id",
+                  "type": "object"
+                },
+                {
+                  "properties": {
+                    "constellation_id": {
+                      "$ref": "#/components/schemas/ConstellationID",
+                      "description": "Constellation's ID"
+                    }
+                  },
+                  "title": "constellation_id",
+                  "type": "object"
+                },
+                {
+                  "properties": {
+                    "region_id": {
+                      "$ref": "#/components/schemas/RegionID",
+                      "description": "Region's ID"
+                    }
+                  },
+                  "title": "region_id",
+                  "type": "object"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "signatures": {
+            "description": "Signatures to scan",
+            "items": {
+              "$ref": "#/components/schemas/CorporationsProjectsDetailConfigurationmatchersignature"
+            },
+            "type": "array"
+          }
+        },
+        "type": "object"
+      },
+      "CorporationsProjectsDetailConfigurationshipinsurance": {
+        "properties": {
+          "conflict_type": {
+            "description": "Conflict type",
+            "enum": [
+              "Any",
+              "Pvp",
+              "Pve"
+            ],
+            "type": "string",
+            "x-enum-descriptions": [
+              "Either PvP or PvE",
+              "Player vs Player",
+              "Player vs Environment"
+            ]
+          },
+          "identities": {
+            "description": "Identity of killer",
+            "items": {
+              "oneOf": [
+                {
+                  "properties": {
+                    "character_id": {
+                      "$ref": "#/components/schemas/CharacterID",
+                      "description": "Character's ID"
+                    }
+                  },
+                  "title": "character_id",
+                  "type": "object"
+                },
+                {
+                  "properties": {
+                    "corporation_id": {
+                      "$ref": "#/components/schemas/CorporationID",
+                      "description": "Corporation's ID"
+                    }
+                  },
+                  "title": "corporation_id",
+                  "type": "object"
+                },
+                {
+                  "properties": {
+                    "alliance_id": {
+                      "$ref": "#/components/schemas/AllianceID",
+                      "description": "Alliance's ID"
+                    }
+                  },
+                  "title": "alliance_id",
+                  "type": "object"
+                },
+                {
+                  "properties": {
+                    "faction_id": {
+                      "$ref": "#/components/schemas/FactionID",
+                      "description": "Faction's ID"
+                    }
+                  },
+                  "title": "faction_id",
+                  "type": "object"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "locations": {
+            "description": "Location of lost ship",
+            "items": {
+              "oneOf": [
+                {
+                  "properties": {
+                    "solar_system_id": {
+                      "$ref": "#/components/schemas/SolarSystemID",
+                      "description": "Solar system's ID"
+                    }
+                  },
+                  "title": "solar_system_id",
+                  "type": "object"
+                },
+                {
+                  "properties": {
+                    "constellation_id": {
+                      "$ref": "#/components/schemas/ConstellationID",
+                      "description": "Constellation's ID"
+                    }
+                  },
+                  "title": "constellation_id",
+                  "type": "object"
+                },
+                {
+                  "properties": {
+                    "region_id": {
+                      "$ref": "#/components/schemas/RegionID",
+                      "description": "Region's ID"
+                    }
+                  },
+                  "title": "region_id",
+                  "type": "object"
+                }
+              ]
+            },
+            "type": "array"
+          },
+          "reimburse_implants": {
+            "description": "Reimburse implants",
+            "type": "boolean"
+          },
+          "ships": {
+            "description": "Ship-type of lost ship",
+            "items": {
+              "oneOf": [
+                {
+                  "properties": {
+                    "type_id": {
+                      "$ref": "#/components/schemas/TypeID",
+                      "description": "Ship's type ID"
+                    }
+                  },
+                  "title": "type_id",
+                  "type": "object"
+                },
+                {
+                  "properties": {
+                    "group_id": {
+                      "$ref": "#/components/schemas/ShipTreeGroupID",
+                      "description": "Ship's ship tree group ID"
+                    }
+                  },
+                  "title": "group_id",
+                  "type": "object"
+                }
+              ]
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "conflict_type",
+          "reimburse_implants"
+        ],
+        "type": "object"
+      },
+      "CorporationsProjectsDetailConfigurationunknown": {
+        "properties": {
+          "data": {
+            "description": "JSON-encoded configuration",
+            "examples": [
+              {}
+            ]
+          },
+          "type": {
+            "description": "Configuration type",
+            "examples": [
+              "projectType"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "data",
+          "type"
+        ],
+        "type": "object"
+      },
+      "CorporationsProjectsDetailContribution": {
+        "properties": {
+          "participation_limit": {
+            "description": "Limit on the contribution of the individual participant",
+            "examples": [
+              1000
+            ],
+            "format": "int64",
+            "type": "integer"
+          },
+          "reward_per_contribution": {
+            "description": "ISK reward per contribution",
+            "examples": [
+              123.5
+            ],
+            "format": "double",
+            "type": "number"
+          },
+          "submission_limit": {
+            "description": "Limit on amount of contribution per submission",
+            "examples": [
+              100
+            ],
+            "format": "int64",
+            "type": "integer"
+          },
+          "submission_multiplier": {
+            "description": "Multiplier towards progress per contribution",
+            "examples": [
+              1.5
+            ],
+            "format": "double",
+            "type": "number"
+          }
+        },
+        "type": "object"
+      },
+      "CorporationsProjectsDetailCreator": {
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/CharacterID",
+            "description": "Creator's character ID"
+          },
+          "name": {
+            "description": "Creator's name",
+            "examples": [
+              "Creator Name"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name"
+        ],
+        "type": "object"
+      },
+      "CorporationsProjectsDetailDetails": {
+        "properties": {
+          "career": {
+            "description": "Assigned career path",
+            "enum": [
+              "Unspecified",
+              "Explorer",
+              "Industrialist",
+              "Enforcer",
+              "Soldier of Fortune"
+            ],
+            "examples": [
+              "Explorer"
+            ],
+            "type": "string",
+            "x-enum-descriptions": [
+              "An unspecified career",
+              "Explorer career",
+              "Industrialist career",
+              "Enforcer career",
+              "Soldier of Fortune career"
+            ]
+          },
+          "created": {
+            "description": "Moment this project was created",
+            "examples": [
+              "2025-06-01T00:00:00Z"
+            ],
+            "format": "date-time",
+            "type": "string"
+          },
+          "description": {
+            "description": "Description",
+            "examples": [
+              "Project Description"
+            ],
+            "type": "string"
+          },
+          "expires": {
+            "description": "Moment this project expires",
+            "examples": [
+              "2025-06-01T00:01:00Z"
+            ],
+            "format": "date-time",
+            "type": "string"
+          },
+          "finished": {
+            "description": "Moment this project transitioned to a non-active state.",
+            "examples": [
+              "2025-06-01T00:00:00Z"
+            ],
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "description",
+          "career",
+          "created"
+        ],
+        "type": "object"
+      },
+      "CorporationsProjectsDetailProgress": {
+        "properties": {
+          "current": {
+            "description": "Current progress",
+            "examples": [
+              50
+            ],
+            "format": "int64",
+            "type": "integer"
+          },
+          "desired": {
+            "description": "Desired progress",
+            "examples": [
+              100
+            ],
+            "format": "int64",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "current",
+          "desired"
+        ],
+        "type": "object"
+      },
+      "CorporationsProjectsDetailProject": {
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/UUID",
+            "description": "Project's ID"
+          },
+          "last_modified": {
+            "description": "Moment this project was last modified. Project contributions also count as a modification",
+            "examples": [
+              "2025-06-01T00:00:00Z"
+            ],
+            "format": "date-time",
+            "type": "string"
+          },
+          "name": {
+            "description": "Project's name",
+            "examples": [
+              "Project Name"
+            ],
+            "type": "string"
+          },
+          "progress": {
+            "$ref": "#/components/schemas/CorporationsProjectsDetailProgress",
+            "description": "Project's progress"
+          },
+          "reward": {
+            "$ref": "#/components/schemas/CorporationsProjectsDetailReward",
+            "description": "Project's reward"
+          },
+          "state": {
+            "description": "Project's current state",
+            "enum": [
+              "Unspecified",
+              "Active",
+              "Closed",
+              "Completed",
+              "Expired",
+              "Deleted"
+            ],
+            "examples": [
+              "Active"
+            ],
+            "type": "string",
+            "x-enum-descriptions": [
+              "An unspecified state",
+              "Active and accepting contributions",
+              "Closed by the corporation",
+              "Completed",
+              "Expired",
+              "Deleted and the details are no longer available"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "state",
+          "last_modified",
+          "progress"
+        ],
+        "type": "object"
+      },
+      "CorporationsProjectsDetailReward": {
+        "properties": {
+          "initial": {
+            "description": "Original amount of ISK that was reserved for this project",
+            "examples": [
+              12345.5
+            ],
+            "format": "double",
+            "type": "number"
+          },
+          "remaining": {
+            "description": "Remaining ISK to be awarded",
+            "examples": [
+              5432.1
+            ],
+            "format": "double",
+            "type": "number"
+          }
+        },
+        "required": [
+          "initial",
+          "remaining"
+        ],
+        "type": "object"
+      },
+      "CorporationsProjectsListing": {
+        "properties": {
+          "cursor": {
+            "$ref": "#/components/schemas/Cursor"
+          },
+          "projects": {
+            "description": "List of projects",
+            "items": {
+              "$ref": "#/components/schemas/CorporationsProjectsDetailProject"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "projects"
+        ],
+        "type": "object"
+      },
+      "Cursor": {
+        "properties": {
+          "after": {
+            "description": "Cursor to use as 'after' in your next request, to continue walking forwards in time.",
+            "type": "string"
+          },
+          "before": {
+            "description": "Cursor to use as 'before' in your next request, to continue walking backwards in time.",
+            "type": "string"
+          }
+        },
+        "type": "object"
       },
       "DogmaAttributesAttributeIdGet": {
         "properties": {
@@ -8226,6 +10229,625 @@
         },
         "required": [
           "squad_id"
+        ],
+        "type": "object"
+      },
+      "FreelanceJobsDetail": {
+        "properties": {
+          "access_and_visibility": {
+            "$ref": "#/components/schemas/FreelanceJobsDetailAccessandvisibility",
+            "description": "Job's access and visibility"
+          },
+          "configuration": {
+            "$ref": "#/components/schemas/FreelanceJobsDetailConfiguration",
+            "description": "Job's configuration"
+          },
+          "contribution": {
+            "$ref": "#/components/schemas/FreelanceJobsDetailContribution",
+            "description": "Job's contribution settings"
+          },
+          "details": {
+            "$ref": "#/components/schemas/FreelanceJobsDetailDetails",
+            "description": "Job's details"
+          },
+          "id": {
+            "$ref": "#/components/schemas/UUID",
+            "description": "Job's ID"
+          },
+          "last_modified": {
+            "description": "Job's last modified",
+            "examples": [
+              "2025-11-01T00:00:00Z"
+            ],
+            "format": "date-time",
+            "type": "string"
+          },
+          "name": {
+            "description": "Job's name",
+            "examples": [
+              "Freelance Job Name"
+            ],
+            "type": "string"
+          },
+          "progress": {
+            "$ref": "#/components/schemas/FreelanceJobsDetailProgress",
+            "description": "Job's progress"
+          },
+          "reward": {
+            "$ref": "#/components/schemas/FreelanceJobsDetailReward",
+            "description": "Job's reward"
+          },
+          "state": {
+            "description": "Job's state",
+            "enum": [
+              "Unspecified",
+              "Active",
+              "Closed",
+              "Completed",
+              "Expired",
+              "Deleted"
+            ],
+            "examples": [
+              "Active"
+            ],
+            "type": "string",
+            "x-enum-descriptions": [
+              "An unspecified state",
+              "Active and accepting contributions",
+              "Closed",
+              "Completed",
+              "Expired",
+              "Deleted and the details are no longer available"
+            ]
+          }
+        },
+        "required": [
+          "details",
+          "configuration",
+          "access_and_visibility",
+          "id",
+          "name",
+          "state",
+          "last_modified",
+          "progress"
+        ],
+        "type": "object"
+      },
+      "FreelanceJobsDetailAccessandvisibility": {
+        "properties": {
+          "acl_protected": {
+            "description": "Whether the job is protected by an ACL",
+            "examples": [
+              false
+            ],
+            "type": "boolean"
+          },
+          "broadcast_locations": {
+            "description": "Solar systems where the job is broadcast",
+            "items": {
+              "$ref": "#/components/schemas/FreelanceJobsDetailBroadcastlocations"
+            },
+            "type": "array"
+          },
+          "restrictions": {
+            "$ref": "#/components/schemas/FreelanceJobsDetailRestrictions",
+            "description": "Restrictions on who can participate"
+          }
+        },
+        "required": [
+          "acl_protected"
+        ],
+        "type": "object"
+      },
+      "FreelanceJobsDetailBroadcastlocations": {
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/SolarSystemID",
+            "description": "Solar system ID"
+          },
+          "name": {
+            "description": "Solar system name",
+            "examples": [
+              "Jita"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name"
+        ],
+        "type": "object"
+      },
+      "FreelanceJobsDetailConfiguration": {
+        "properties": {
+          "method": {
+            "description": "Contribution method (see SDE for valid values)",
+            "examples": [
+              "BoostShield"
+            ],
+            "type": "string"
+          },
+          "parameters": {
+            "additionalProperties": {
+              "oneOf": [
+                {
+                  "properties": {
+                    "matcher": {
+                      "$ref": "#/components/schemas/FreelanceJobsDetailParametermatcher",
+                      "description": "Parameter that matches a type"
+                    }
+                  },
+                  "title": "matcher",
+                  "type": "object"
+                },
+                {
+                  "properties": {
+                    "options": {
+                      "$ref": "#/components/schemas/FreelanceJobsDetailParameteroptions",
+                      "description": "Parameter that has one or more selected values"
+                    }
+                  },
+                  "title": "options",
+                  "type": "object"
+                },
+                {
+                  "properties": {
+                    "boolean": {
+                      "$ref": "#/components/schemas/FreelanceJobsDetailParameterboolean",
+                      "description": "Parameter that can be toggled"
+                    }
+                  },
+                  "title": "boolean",
+                  "type": "object"
+                },
+                {
+                  "properties": {
+                    "corporation_item_delivery": {
+                      "$ref": "#/components/schemas/FreelanceJobsDetailParametercorporationitemdelivery",
+                      "description": "Parameter for delivering items to a corporation"
+                    }
+                  },
+                  "title": "corporation_item_delivery",
+                  "type": "object"
+                }
+              ]
+            },
+            "description": "Parameter values (see SDE for parameter definition)",
+            "type": "object"
+          },
+          "version": {
+            "description": "Version of parameter definition used",
+            "examples": [
+              1
+            ],
+            "format": "int64",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "version",
+          "parameters",
+          "method"
+        ],
+        "type": "object"
+      },
+      "FreelanceJobsDetailContribution": {
+        "properties": {
+          "contribution_per_participant_limit": {
+            "description": "Limit on the contribution of the individual participant",
+            "examples": [
+              1000
+            ],
+            "format": "int64",
+            "type": "integer"
+          },
+          "max_committed_participants": {
+            "description": "Maximum number of participants that can commit to this job",
+            "examples": [
+              10000
+            ],
+            "format": "int64",
+            "type": "integer"
+          },
+          "reward_per_contribution": {
+            "description": "ISK reward per contribution",
+            "examples": [
+              123.5
+            ],
+            "format": "double",
+            "type": "number"
+          },
+          "submission_limit": {
+            "description": "Limit on amount of contribution per submission",
+            "examples": [
+              100
+            ],
+            "format": "int64",
+            "type": "integer"
+          },
+          "submission_multiplier": {
+            "description": "Multiplier towards progress per contribution",
+            "examples": [
+              1.5
+            ],
+            "format": "double",
+            "type": "number"
+          }
+        },
+        "required": [
+          "max_committed_participants"
+        ],
+        "type": "object"
+      },
+      "FreelanceJobsDetailCreator": {
+        "properties": {
+          "character": {
+            "$ref": "#/components/schemas/FreelanceJobsDetailCreatorcharacter",
+            "description": "Character that created the job"
+          },
+          "corporation": {
+            "$ref": "#/components/schemas/FreelanceJobsDetailCreatorcorporation",
+            "description": "Corporation that created the job"
+          }
+        },
+        "required": [
+          "character",
+          "corporation"
+        ],
+        "type": "object"
+      },
+      "FreelanceJobsDetailCreatorcharacter": {
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/CharacterID",
+            "description": "Character ID"
+          },
+          "name": {
+            "description": "Character name",
+            "examples": [
+              "Creator Name"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name"
+        ],
+        "type": "object"
+      },
+      "FreelanceJobsDetailCreatorcorporation": {
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/CorporationID",
+            "description": "Corporation ID"
+          },
+          "name": {
+            "description": "Corporation name",
+            "examples": [
+              "Creator Corporation"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name"
+        ],
+        "type": "object"
+      },
+      "FreelanceJobsDetailDetails": {
+        "properties": {
+          "career": {
+            "description": "Assigned career path",
+            "enum": [
+              "Unspecified",
+              "Explorer",
+              "Industrialist",
+              "Enforcer",
+              "Soldier of Fortune"
+            ],
+            "examples": [
+              "Explorer"
+            ],
+            "type": "string",
+            "x-enum-descriptions": [
+              "An unspecified career",
+              "Explorer career",
+              "Industrialist career",
+              "Enforcer career",
+              "Soldier of Fortune career"
+            ]
+          },
+          "created": {
+            "description": "Moment this freelance job was created",
+            "examples": [
+              "2025-11-01T00:00:00Z"
+            ],
+            "format": "date-time",
+            "type": "string"
+          },
+          "creator": {
+            "$ref": "#/components/schemas/FreelanceJobsDetailCreator",
+            "description": "Creator"
+          },
+          "description": {
+            "description": "Description",
+            "examples": [
+              "Freelance Job Description"
+            ],
+            "type": "string"
+          },
+          "expires": {
+            "description": "Moment this freelance job expires",
+            "examples": [
+              "2025-11-01T00:01:00Z"
+            ],
+            "format": "date-time",
+            "type": "string"
+          },
+          "finished": {
+            "description": "Moment this freelance job transitioned to a non-active state",
+            "examples": [
+              "2025-11-01T00:00:00Z"
+            ],
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "description",
+          "career",
+          "created",
+          "creator"
+        ],
+        "type": "object"
+      },
+      "FreelanceJobsDetailFreelancejob": {
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/UUID",
+            "description": "Job's ID"
+          },
+          "last_modified": {
+            "description": "Job's last modified",
+            "examples": [
+              "2025-11-01T00:00:00Z"
+            ],
+            "format": "date-time",
+            "type": "string"
+          },
+          "name": {
+            "description": "Job's name",
+            "examples": [
+              "Freelance Job Name"
+            ],
+            "type": "string"
+          },
+          "progress": {
+            "$ref": "#/components/schemas/FreelanceJobsDetailProgress",
+            "description": "Job's progress"
+          },
+          "reward": {
+            "$ref": "#/components/schemas/FreelanceJobsDetailReward",
+            "description": "Job's reward"
+          },
+          "state": {
+            "description": "Job's state",
+            "enum": [
+              "Unspecified",
+              "Active",
+              "Closed",
+              "Completed",
+              "Expired",
+              "Deleted"
+            ],
+            "examples": [
+              "Active"
+            ],
+            "type": "string",
+            "x-enum-descriptions": [
+              "An unspecified state",
+              "Active and accepting contributions",
+              "Closed",
+              "Completed",
+              "Expired",
+              "Deleted and the details are no longer available"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "state",
+          "last_modified",
+          "progress"
+        ],
+        "type": "object"
+      },
+      "FreelanceJobsDetailParameterboolean": {
+        "properties": {
+          "value": {
+            "description": "Boolean value",
+            "examples": [
+              true
+            ],
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "value"
+        ],
+        "type": "object"
+      },
+      "FreelanceJobsDetailParametercorporationitemdelivery": {
+        "properties": {
+          "corporation_office_location": {
+            "$ref": "#/components/schemas/FreelanceJobsDetailParametermatcher",
+            "description": "Location for delivery"
+          },
+          "item_type": {
+            "$ref": "#/components/schemas/FreelanceJobsDetailParametermatcher",
+            "description": "Item(s) to be delivered"
+          }
+        },
+        "required": [
+          "item_type",
+          "corporation_office_location"
+        ],
+        "type": "object"
+      },
+      "FreelanceJobsDetailParametermatcher": {
+        "properties": {
+          "values": {
+            "description": "Value type(s) and their value(s)",
+            "items": {
+              "$ref": "#/components/schemas/FreelanceJobsDetailParametermatchervalue"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "values"
+        ],
+        "type": "object"
+      },
+      "FreelanceJobsDetailParametermatchervalue": {
+        "properties": {
+          "value_type": {
+            "description": "Type of the value(s)",
+            "examples": [
+              "solarsystem"
+            ],
+            "type": "string"
+          },
+          "values": {
+            "description": "Value(s) of this type",
+            "examples": [
+              [
+                "30001401"
+              ]
+            ],
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "value_type",
+          "values"
+        ],
+        "type": "object"
+      },
+      "FreelanceJobsDetailParameteroptions": {
+        "properties": {
+          "selected": {
+            "description": "Selected value(s)",
+            "examples": [
+              [
+                "self",
+                "corporation"
+              ]
+            ],
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "selected"
+        ],
+        "type": "object"
+      },
+      "FreelanceJobsDetailProgress": {
+        "properties": {
+          "current": {
+            "description": "Current progress",
+            "examples": [
+              50
+            ],
+            "format": "int64",
+            "type": "integer"
+          },
+          "desired": {
+            "description": "Desired progress",
+            "examples": [
+              100
+            ],
+            "format": "int64",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "current",
+          "desired"
+        ],
+        "type": "object"
+      },
+      "FreelanceJobsDetailRestrictions": {
+        "properties": {
+          "maximum_age": {
+            "description": "Maximum age of the participant, in days",
+            "examples": [
+              100
+            ],
+            "format": "int64",
+            "type": "integer"
+          },
+          "minimum_age": {
+            "description": "Minimum age of the participant, in days",
+            "examples": [
+              10
+            ],
+            "format": "int64",
+            "type": "integer"
+          }
+        },
+        "type": "object"
+      },
+      "FreelanceJobsDetailReward": {
+        "properties": {
+          "initial": {
+            "description": "Original amount of ISK that was reserved for this freelance job",
+            "examples": [
+              12345.5
+            ],
+            "format": "double",
+            "type": "number"
+          },
+          "remaining": {
+            "description": "Remaining ISK to be awarded",
+            "examples": [
+              5432.1
+            ],
+            "format": "double",
+            "type": "number"
+          }
+        },
+        "required": [
+          "initial",
+          "remaining"
+        ],
+        "type": "object"
+      },
+      "FreelanceJobsListing": {
+        "properties": {
+          "cursor": {
+            "$ref": "#/components/schemas/Cursor"
+          },
+          "freelance_jobs": {
+            "description": "List of freelance jobs",
+            "items": {
+              "$ref": "#/components/schemas/FreelanceJobsDetailFreelancejob"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "freelance_jobs"
         ],
         "type": "object"
       },
@@ -9613,13 +12235,6 @@
             ],
             "type": "string"
           },
-          "is_breaking": {
-            "description": "Whether this is a breaking change",
-            "examples": [
-              false
-            ],
-            "type": "boolean"
-          },
           "method": {
             "description": "HTTP method of the route",
             "enum": [
@@ -9645,13 +12260,32 @@
               "/meta/changelog"
             ],
             "type": "string"
+          },
+          "type": {
+            "description": "Type of the change",
+            "enum": [
+              "breaking",
+              "changed",
+              "new",
+              "removed"
+            ],
+            "examples": [
+              "breaking"
+            ],
+            "type": "string",
+            "x-enum-descriptions": [
+              "Breaking change",
+              "Non-breaking change",
+              "New route",
+              "Removed route"
+            ]
           }
         },
         "required": [
           "method",
           "path",
           "compatibility_date",
-          "is_breaking",
+          "type",
           "description"
         ],
         "type": "object"
@@ -9671,6 +12305,69 @@
         ],
         "type": "object"
       },
+      "MetaStatus": {
+        "properties": {
+          "routes": {
+            "description": "List of all API routes and their health status",
+            "items": {
+              "$ref": "#/components/schemas/MetaStatusRoutestatus"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "routes"
+        ],
+        "type": "object"
+      },
+      "MetaStatusRoutestatus": {
+        "properties": {
+          "method": {
+            "description": "Route's HTTP method",
+            "enum": [
+              "GET",
+              "POST",
+              "PUT",
+              "DELETE"
+            ],
+            "type": "string",
+            "x-enum-descriptions": [
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          "path": {
+            "description": "Route's HTTP path",
+            "type": "string"
+          },
+          "status": {
+            "description": "Route's health status",
+            "enum": [
+              "Unknown",
+              "OK",
+              "Degraded",
+              "Down",
+              "Recovering"
+            ],
+            "type": "string",
+            "x-enum-descriptions": [
+              "Unknown status",
+              "Route is working as expected",
+              "Route is working, but with degraded performance",
+              "Route is not working",
+              "Route is recovering"
+            ]
+          }
+        },
+        "required": [
+          "method",
+          "path",
+          "status"
+        ],
+        "type": "object"
+      },
       "RegionID": {
         "examples": [
           10000001
@@ -9679,14 +12376,82 @@
         "type": "integer",
         "x-common-model": "true"
       },
-      "RouteOriginDestinationGet": {
-        "description": "Solar systems in route",
-        "items": {
-          "description": "Solar system in route",
-          "format": "int64",
-          "type": "integer"
+      "Route": {
+        "properties": {
+          "route": {
+            "description": "The route between the origin and destination systems",
+            "items": {
+              "$ref": "#/components/schemas/SolarSystemID"
+            },
+            "type": "array"
+          }
         },
-        "type": "array"
+        "required": [
+          "route"
+        ],
+        "type": "object"
+      },
+      "RouteConnection": {
+        "properties": {
+          "from": {
+            "$ref": "#/components/schemas/SolarSystemID",
+            "description": "From which system"
+          },
+          "to": {
+            "$ref": "#/components/schemas/SolarSystemID",
+            "description": "To which system"
+          }
+        },
+        "required": [
+          "from",
+          "to"
+        ],
+        "type": "object"
+      },
+      "RouteRequestBody": {
+        "properties": {
+          "avoid_systems": {
+            "description": "Systems to avoid",
+            "items": {
+              "$ref": "#/components/schemas/SolarSystemID"
+            },
+            "maxItems": 1000,
+            "type": "array",
+            "uniqueItems": true
+          },
+          "connections": {
+            "description": "Additional one-way connections (like Jump Bridges) between systems",
+            "items": {
+              "$ref": "#/components/schemas/RouteConnection"
+            },
+            "maxItems": 1000,
+            "type": "array"
+          },
+          "preference": {
+            "default": "Shorter",
+            "description": "Preference for the route",
+            "enum": [
+              "Shorter",
+              "Safer",
+              "LessSecure"
+            ],
+            "type": "string",
+            "x-enum-descriptions": [
+              "Shorter routes",
+              "Safer routes",
+              "Less secure routes"
+            ]
+          },
+          "security_penalty": {
+            "default": 50,
+            "description": "Strictness of the path preference",
+            "format": "int64",
+            "maximum": 100,
+            "minimum": 0,
+            "type": "integer"
+          }
+        },
+        "type": "object"
       },
       "ShipTreeGroupID": {
         "description": "Ship tree group identifier.",
@@ -11572,7 +14337,7 @@
     },
     "termsOfService": "https://support.eveonline.com/hc/en-us/articles/8414770561948-EVE-Online-Terms-of-Service",
     "title": "EVE Stable Infrastructure (ESI) - tranquility",
-    "version": "2020-01-01"
+    "version": "2025-12-16"
   },
   "openapi": "3.1.0",
   "paths": {
@@ -14609,6 +17374,198 @@
         "x-rate-limit": {
           "group": "fleet",
           "max-tokens": 1800,
+          "window-size": "15m"
+        }
+      }
+    },
+    "/characters/{character_id}/freelance-jobs": {
+      "get": {
+        "description": "Listing of all freelance jobs you are actively participating in.",
+        "operationId": "GetCharactersFreelanceJobsListing",
+        "parameters": [
+          {
+            "description": "The ID of the character",
+            "in": "path",
+            "name": "character_id",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/CharacterID",
+              "description": "The ID of the character"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/AcceptLanguage"
+          },
+          {
+            "$ref": "#/components/parameters/IfNoneMatch"
+          },
+          {
+            "$ref": "#/components/parameters/CompatibilityDate"
+          },
+          {
+            "$ref": "#/components/parameters/Tenant"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CharactersFreelanceJobsListing"
+                }
+              }
+            },
+            "description": "OK",
+            "headers": {
+              "Cache-Control": {
+                "$ref": "#/components/headers/CacheControl"
+              },
+              "ETag": {
+                "$ref": "#/components/headers/ETag"
+              },
+              "Last-Modified": {
+                "$ref": "#/components/headers/LastModified"
+              }
+            }
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Error",
+            "headers": {
+              "Cache-Control": {
+                "$ref": "#/components/headers/CacheControl"
+              },
+              "ETag": {
+                "$ref": "#/components/headers/ETag"
+              },
+              "Last-Modified": {
+                "$ref": "#/components/headers/LastModified"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2": [
+              "esi-characters.read_freelance_jobs.v1"
+            ]
+          }
+        ],
+        "summary": "List character freelance jobs",
+        "tags": [
+          "Freelance Jobs"
+        ],
+        "x-compatibility-date": "2025-12-16",
+        "x-rate-limit": {
+          "group": "char-freelance-job",
+          "max-tokens": 300,
+          "window-size": "15m"
+        }
+      }
+    },
+    "/characters/{character_id}/freelance-jobs/{job_id}/participation": {
+      "get": {
+        "description": "Show your participation in a freelance job.",
+        "operationId": "GetCharactersFreelanceJobsParticipation",
+        "parameters": [
+          {
+            "description": "The ID of the character",
+            "in": "path",
+            "name": "character_id",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/CharacterID",
+              "description": "The ID of the character"
+            }
+          },
+          {
+            "description": "The ID of the freelance job",
+            "in": "path",
+            "name": "job_id",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/UUID",
+              "description": "The ID of the freelance job"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/AcceptLanguage"
+          },
+          {
+            "$ref": "#/components/parameters/IfNoneMatch"
+          },
+          {
+            "$ref": "#/components/parameters/CompatibilityDate"
+          },
+          {
+            "$ref": "#/components/parameters/Tenant"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CharactersFreelanceJobsParticipation"
+                }
+              }
+            },
+            "description": "OK",
+            "headers": {
+              "Cache-Control": {
+                "$ref": "#/components/headers/CacheControl"
+              },
+              "ETag": {
+                "$ref": "#/components/headers/ETag"
+              },
+              "Last-Modified": {
+                "$ref": "#/components/headers/LastModified"
+              }
+            }
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Error",
+            "headers": {
+              "Cache-Control": {
+                "$ref": "#/components/headers/CacheControl"
+              },
+              "ETag": {
+                "$ref": "#/components/headers/ETag"
+              },
+              "Last-Modified": {
+                "$ref": "#/components/headers/LastModified"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2": [
+              "esi-characters.read_freelance_jobs.v1"
+            ]
+          }
+        ],
+        "summary": "Get character freelance job participation",
+        "tags": [
+          "Freelance Jobs"
+        ],
+        "x-compatibility-date": "2025-12-16",
+        "x-rate-limit": {
+          "group": "char-freelance-job",
+          "max-tokens": 300,
           "window-size": "15m"
         }
       }
@@ -19701,6 +22658,276 @@
         ]
       }
     },
+    "/corporations/{corporation_id}/freelance-jobs": {
+      "get": {
+        "description": "Listing of all freelance jobs for your corporation.",
+        "operationId": "GetCorporationsFreelanceJobsListing",
+        "parameters": [
+          {
+            "description": "Return records from after this cursor (mutual exclusive with 'before'). '0' to start from the beginning.",
+            "explode": false,
+            "in": "query",
+            "name": "after",
+            "schema": {
+              "description": "Return records from after this cursor (mutual exclusive with 'before'). '0' to start from the beginning.",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Return records from before this cursor (mutual exclusive with 'after'). '0' to start from the end.",
+            "explode": false,
+            "in": "query",
+            "name": "before",
+            "schema": {
+              "description": "Return records from before this cursor (mutual exclusive with 'after'). '0' to start from the end.",
+              "type": "string"
+            }
+          },
+          {
+            "description": "The amount of records to retrieve per request.",
+            "explode": false,
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "default": 10,
+              "description": "The amount of records to retrieve per request.",
+              "format": "int64",
+              "maximum": 100,
+              "minimum": 10,
+              "type": "integer"
+            }
+          },
+          {
+            "description": "The ID of the corporation",
+            "in": "path",
+            "name": "corporation_id",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/CorporationID",
+              "description": "The ID of the corporation"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/AcceptLanguage"
+          },
+          {
+            "$ref": "#/components/parameters/IfNoneMatch"
+          },
+          {
+            "$ref": "#/components/parameters/CompatibilityDate"
+          },
+          {
+            "$ref": "#/components/parameters/Tenant"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CorporationsFreelanceJobsListing"
+                }
+              }
+            },
+            "description": "OK",
+            "headers": {
+              "Cache-Control": {
+                "$ref": "#/components/headers/CacheControl"
+              },
+              "ETag": {
+                "$ref": "#/components/headers/ETag"
+              },
+              "Last-Modified": {
+                "$ref": "#/components/headers/LastModified"
+              }
+            }
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Error",
+            "headers": {
+              "Cache-Control": {
+                "$ref": "#/components/headers/CacheControl"
+              },
+              "ETag": {
+                "$ref": "#/components/headers/ETag"
+              },
+              "Last-Modified": {
+                "$ref": "#/components/headers/LastModified"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2": [
+              "esi-corporations.read_freelance_jobs.v1"
+            ]
+          }
+        ],
+        "summary": "List corporation freelance jobs",
+        "tags": [
+          "Freelance Jobs"
+        ],
+        "x-cache-age": 31536000,
+        "x-compatibility-date": "2025-12-16",
+        "x-pagination": "cursor",
+        "x-rate-limit": {
+          "group": "corp-freelance-job",
+          "max-tokens": 300,
+          "window-size": "15m"
+        },
+        "x-required-roles": [
+          "Project_Manager"
+        ]
+      }
+    },
+    "/corporations/{corporation_id}/freelance-jobs/{job_id}/participants": {
+      "get": {
+        "description": "Listing of all participants of a freelance job.",
+        "operationId": "GetCorporationsFreelanceJobsParticipants",
+        "parameters": [
+          {
+            "description": "Return records from after this cursor (mutual exclusive with 'before'). '0' to start from the beginning.",
+            "explode": false,
+            "in": "query",
+            "name": "after",
+            "schema": {
+              "description": "Return records from after this cursor (mutual exclusive with 'before'). '0' to start from the beginning.",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Return records from before this cursor (mutual exclusive with 'after'). '0' to start from the end.",
+            "explode": false,
+            "in": "query",
+            "name": "before",
+            "schema": {
+              "description": "Return records from before this cursor (mutual exclusive with 'after'). '0' to start from the end.",
+              "type": "string"
+            }
+          },
+          {
+            "description": "The amount of records to retrieve per request.",
+            "explode": false,
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "default": 10,
+              "description": "The amount of records to retrieve per request.",
+              "format": "int64",
+              "maximum": 100,
+              "minimum": 10,
+              "type": "integer"
+            }
+          },
+          {
+            "description": "The ID of the corporation",
+            "in": "path",
+            "name": "corporation_id",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/CorporationID",
+              "description": "The ID of the corporation"
+            }
+          },
+          {
+            "description": "The ID of the job",
+            "in": "path",
+            "name": "job_id",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/UUID",
+              "description": "The ID of the job"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/AcceptLanguage"
+          },
+          {
+            "$ref": "#/components/parameters/IfNoneMatch"
+          },
+          {
+            "$ref": "#/components/parameters/CompatibilityDate"
+          },
+          {
+            "$ref": "#/components/parameters/Tenant"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CorporationsFreelanceJobsParticipants"
+                }
+              }
+            },
+            "description": "OK",
+            "headers": {
+              "Cache-Control": {
+                "$ref": "#/components/headers/CacheControl"
+              },
+              "ETag": {
+                "$ref": "#/components/headers/ETag"
+              },
+              "Last-Modified": {
+                "$ref": "#/components/headers/LastModified"
+              }
+            }
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Error",
+            "headers": {
+              "Cache-Control": {
+                "$ref": "#/components/headers/CacheControl"
+              },
+              "ETag": {
+                "$ref": "#/components/headers/ETag"
+              },
+              "Last-Modified": {
+                "$ref": "#/components/headers/LastModified"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2": [
+              "esi-corporations.read_freelance_jobs.v1"
+            ]
+          }
+        ],
+        "summary": "List participants of a freelance job",
+        "tags": [
+          "Freelance Jobs"
+        ],
+        "x-cache-age": 31536000,
+        "x-compatibility-date": "2025-12-16",
+        "x-pagination": "cursor",
+        "x-rate-limit": {
+          "group": "corp-freelance-job",
+          "max-tokens": 300,
+          "window-size": "15m"
+        },
+        "x-required-roles": [
+          "Project_Manager"
+        ]
+      }
+    },
     "/corporations/{corporation_id}/fw/stats": {
       "get": {
         "description": "Statistics about a corporation involved in faction warfare\n\nThis route expires daily at 11:05",
@@ -20772,6 +23999,512 @@
         "x-required-roles": [
           "Accountant",
           "Trader"
+        ]
+      }
+    },
+    "/corporations/{corporation_id}/projects": {
+      "get": {
+        "description": "Listing of all (active) corporation projects.",
+        "operationId": "GetCorporationsProjectsListing",
+        "parameters": [
+          {
+            "description": "Return records from after this cursor (mutual exclusive with 'before'). '0' to start from the beginning.",
+            "explode": false,
+            "in": "query",
+            "name": "after",
+            "schema": {
+              "description": "Return records from after this cursor (mutual exclusive with 'before'). '0' to start from the beginning.",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Return records from before this cursor (mutual exclusive with 'after'). '0' to start from the end.",
+            "explode": false,
+            "in": "query",
+            "name": "before",
+            "schema": {
+              "description": "Return records from before this cursor (mutual exclusive with 'after'). '0' to start from the end.",
+              "type": "string"
+            }
+          },
+          {
+            "description": "The amount of records to retrieve per request.",
+            "explode": false,
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "default": 10,
+              "description": "The amount of records to retrieve per request.",
+              "format": "int64",
+              "maximum": 100,
+              "minimum": 10,
+              "type": "integer"
+            }
+          },
+          {
+            "description": "The ID of the corporation",
+            "in": "path",
+            "name": "corporation_id",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/CorporationID",
+              "description": "The ID of the corporation"
+            }
+          },
+          {
+            "description": "Filter by state",
+            "explode": false,
+            "in": "query",
+            "name": "state",
+            "schema": {
+              "default": "Active",
+              "description": "Filter by state",
+              "enum": [
+                "All",
+                "Active"
+              ],
+              "type": "string",
+              "x-enum-descriptions": [
+                "All states",
+                "Active projects only"
+              ]
+            }
+          },
+          {
+            "$ref": "#/components/parameters/AcceptLanguage"
+          },
+          {
+            "$ref": "#/components/parameters/IfNoneMatch"
+          },
+          {
+            "$ref": "#/components/parameters/CompatibilityDate"
+          },
+          {
+            "$ref": "#/components/parameters/Tenant"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CorporationsProjectsListing"
+                }
+              }
+            },
+            "description": "OK",
+            "headers": {
+              "Cache-Control": {
+                "$ref": "#/components/headers/CacheControl"
+              },
+              "ETag": {
+                "$ref": "#/components/headers/ETag"
+              },
+              "Last-Modified": {
+                "$ref": "#/components/headers/LastModified"
+              }
+            }
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Error",
+            "headers": {
+              "Cache-Control": {
+                "$ref": "#/components/headers/CacheControl"
+              },
+              "ETag": {
+                "$ref": "#/components/headers/ETag"
+              },
+              "Last-Modified": {
+                "$ref": "#/components/headers/LastModified"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2": [
+              "esi-corporations.read_projects.v1"
+            ]
+          }
+        ],
+        "summary": "List corporation projects",
+        "tags": [
+          "Corporation Projects"
+        ],
+        "x-cache-age": 31536000,
+        "x-compatibility-date": "2025-08-26",
+        "x-pagination": "cursor",
+        "x-rate-limit": {
+          "group": "corp-project",
+          "max-tokens": 600,
+          "window-size": "15m"
+        }
+      }
+    },
+    "/corporations/{corporation_id}/projects/{project_id}": {
+      "get": {
+        "description": "Get the details of a corporation project.",
+        "operationId": "GetCorporationsProjectsDetail",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/IfModifiedSince"
+          },
+          {
+            "description": "The ID of the corporation",
+            "in": "path",
+            "name": "corporation_id",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/CorporationID",
+              "description": "The ID of the corporation"
+            }
+          },
+          {
+            "description": "The ID of the project",
+            "in": "path",
+            "name": "project_id",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/UUID",
+              "description": "The ID of the project"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/AcceptLanguage"
+          },
+          {
+            "$ref": "#/components/parameters/IfNoneMatch"
+          },
+          {
+            "$ref": "#/components/parameters/CompatibilityDate"
+          },
+          {
+            "$ref": "#/components/parameters/Tenant"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CorporationsProjectsDetail"
+                }
+              }
+            },
+            "description": "OK",
+            "headers": {
+              "Cache-Control": {
+                "$ref": "#/components/headers/CacheControl"
+              },
+              "ETag": {
+                "$ref": "#/components/headers/ETag"
+              },
+              "Last-Modified": {
+                "$ref": "#/components/headers/LastModified"
+              }
+            }
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Error",
+            "headers": {
+              "Cache-Control": {
+                "$ref": "#/components/headers/CacheControl"
+              },
+              "ETag": {
+                "$ref": "#/components/headers/ETag"
+              },
+              "Last-Modified": {
+                "$ref": "#/components/headers/LastModified"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2": [
+              "esi-corporations.read_projects.v1"
+            ]
+          }
+        ],
+        "summary": "Get project details",
+        "tags": [
+          "Corporation Projects"
+        ],
+        "x-cache-age": 600,
+        "x-compatibility-date": "2025-08-26",
+        "x-rate-limit": {
+          "group": "corp-project",
+          "max-tokens": 600,
+          "window-size": "15m"
+        }
+      }
+    },
+    "/corporations/{corporation_id}/projects/{project_id}/contribution/{character_id}": {
+      "get": {
+        "description": "Show your contribution to a corporation project.",
+        "operationId": "GetCorporationsProjectsContribution",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/IfModifiedSince"
+          },
+          {
+            "description": "The ID of the corporation",
+            "in": "path",
+            "name": "corporation_id",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/CorporationID",
+              "description": "The ID of the corporation"
+            }
+          },
+          {
+            "description": "The ID of the project",
+            "in": "path",
+            "name": "project_id",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/UUID",
+              "description": "The ID of the project"
+            }
+          },
+          {
+            "description": "The ID of the character",
+            "in": "path",
+            "name": "character_id",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/CharacterID",
+              "description": "The ID of the character"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/AcceptLanguage"
+          },
+          {
+            "$ref": "#/components/parameters/IfNoneMatch"
+          },
+          {
+            "$ref": "#/components/parameters/CompatibilityDate"
+          },
+          {
+            "$ref": "#/components/parameters/Tenant"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CorporationsProjectsContribution"
+                }
+              }
+            },
+            "description": "OK",
+            "headers": {
+              "Cache-Control": {
+                "$ref": "#/components/headers/CacheControl"
+              },
+              "ETag": {
+                "$ref": "#/components/headers/ETag"
+              },
+              "Last-Modified": {
+                "$ref": "#/components/headers/LastModified"
+              }
+            }
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Error",
+            "headers": {
+              "Cache-Control": {
+                "$ref": "#/components/headers/CacheControl"
+              },
+              "ETag": {
+                "$ref": "#/components/headers/ETag"
+              },
+              "Last-Modified": {
+                "$ref": "#/components/headers/LastModified"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2": [
+              "esi-corporations.read_projects.v1"
+            ]
+          }
+        ],
+        "summary": "Get your project contribution",
+        "tags": [
+          "Corporation Projects"
+        ],
+        "x-cache-age": 600,
+        "x-compatibility-date": "2025-08-26",
+        "x-rate-limit": {
+          "group": "corp-project",
+          "max-tokens": 600,
+          "window-size": "15m"
+        }
+      }
+    },
+    "/corporations/{corporation_id}/projects/{project_id}/contributors": {
+      "get": {
+        "description": "Listing of all contributors to a corporation project.",
+        "operationId": "GetCorporationsProjectsContributors",
+        "parameters": [
+          {
+            "description": "Return records from after this cursor (mutual exclusive with 'before'). '0' to start from the beginning.",
+            "explode": false,
+            "in": "query",
+            "name": "after",
+            "schema": {
+              "description": "Return records from after this cursor (mutual exclusive with 'before'). '0' to start from the beginning.",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Return records from before this cursor (mutual exclusive with 'after'). '0' to start from the end.",
+            "explode": false,
+            "in": "query",
+            "name": "before",
+            "schema": {
+              "description": "Return records from before this cursor (mutual exclusive with 'after'). '0' to start from the end.",
+              "type": "string"
+            }
+          },
+          {
+            "description": "The amount of records to retrieve per request.",
+            "explode": false,
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "default": 10,
+              "description": "The amount of records to retrieve per request.",
+              "format": "int64",
+              "maximum": 100,
+              "minimum": 10,
+              "type": "integer"
+            }
+          },
+          {
+            "description": "The ID of the corporation",
+            "in": "path",
+            "name": "corporation_id",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/CorporationID",
+              "description": "The ID of the corporation"
+            }
+          },
+          {
+            "description": "The ID of the project",
+            "in": "path",
+            "name": "project_id",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/UUID",
+              "description": "The ID of the project"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/AcceptLanguage"
+          },
+          {
+            "$ref": "#/components/parameters/IfNoneMatch"
+          },
+          {
+            "$ref": "#/components/parameters/CompatibilityDate"
+          },
+          {
+            "$ref": "#/components/parameters/Tenant"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CorporationsProjectsContributors"
+                }
+              }
+            },
+            "description": "OK",
+            "headers": {
+              "Cache-Control": {
+                "$ref": "#/components/headers/CacheControl"
+              },
+              "ETag": {
+                "$ref": "#/components/headers/ETag"
+              },
+              "Last-Modified": {
+                "$ref": "#/components/headers/LastModified"
+              }
+            }
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Error",
+            "headers": {
+              "Cache-Control": {
+                "$ref": "#/components/headers/CacheControl"
+              },
+              "ETag": {
+                "$ref": "#/components/headers/ETag"
+              },
+              "Last-Modified": {
+                "$ref": "#/components/headers/LastModified"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2": [
+              "esi-corporations.read_projects.v1"
+            ]
+          }
+        ],
+        "summary": "List project contributors",
+        "tags": [
+          "Corporation Projects"
+        ],
+        "x-cache-age": 31536000,
+        "x-compatibility-date": "2025-08-26",
+        "x-pagination": "cursor",
+        "x-rate-limit": {
+          "group": "corp-project",
+          "max-tokens": 600,
+          "window-size": "15m"
+        },
+        "x-required-roles": [
+          "Project_Manager"
         ]
       }
     },
@@ -23333,6 +27066,214 @@
         }
       }
     },
+    "/freelance-jobs": {
+      "get": {
+        "description": "Listing of all public freelance jobs.",
+        "operationId": "GetFreelanceJobsListing",
+        "parameters": [
+          {
+            "description": "Return records from after this cursor (mutual exclusive with 'before'). '0' to start from the beginning.",
+            "explode": false,
+            "in": "query",
+            "name": "after",
+            "schema": {
+              "description": "Return records from after this cursor (mutual exclusive with 'before'). '0' to start from the beginning.",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Return records from before this cursor (mutual exclusive with 'after'). '0' to start from the end.",
+            "explode": false,
+            "in": "query",
+            "name": "before",
+            "schema": {
+              "description": "Return records from before this cursor (mutual exclusive with 'after'). '0' to start from the end.",
+              "type": "string"
+            }
+          },
+          {
+            "description": "The amount of records to retrieve per request.",
+            "explode": false,
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "default": 10,
+              "description": "The amount of records to retrieve per request.",
+              "format": "int64",
+              "maximum": 100,
+              "minimum": 10,
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Filter on corporation ID",
+            "explode": false,
+            "in": "query",
+            "name": "corporation_id",
+            "schema": {
+              "$ref": "#/components/schemas/CorporationID",
+              "description": "Filter on corporation ID"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/AcceptLanguage"
+          },
+          {
+            "$ref": "#/components/parameters/IfNoneMatch"
+          },
+          {
+            "$ref": "#/components/parameters/CompatibilityDate"
+          },
+          {
+            "$ref": "#/components/parameters/Tenant"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FreelanceJobsListing"
+                }
+              }
+            },
+            "description": "OK",
+            "headers": {
+              "Cache-Control": {
+                "$ref": "#/components/headers/CacheControl"
+              },
+              "ETag": {
+                "$ref": "#/components/headers/ETag"
+              },
+              "Last-Modified": {
+                "$ref": "#/components/headers/LastModified"
+              }
+            }
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Error",
+            "headers": {
+              "Cache-Control": {
+                "$ref": "#/components/headers/CacheControl"
+              },
+              "ETag": {
+                "$ref": "#/components/headers/ETag"
+              },
+              "Last-Modified": {
+                "$ref": "#/components/headers/LastModified"
+              }
+            }
+          }
+        },
+        "summary": "List freelance jobs",
+        "tags": [
+          "Freelance Jobs"
+        ],
+        "x-cache-age": 31536000,
+        "x-compatibility-date": "2025-12-16",
+        "x-pagination": "cursor",
+        "x-rate-limit": {
+          "group": "freelance-job",
+          "max-tokens": 900,
+          "window-size": "15m"
+        }
+      }
+    },
+    "/freelance-jobs/{job_id}": {
+      "get": {
+        "description": "Get the details of a freelance job.\n\nJobs without an ACL (public jobs) does not require authentication.\n\nJobs with an ACL requires authentication, and requires that the character is:\n- An active participant of the job, or\n- A freelance job manager for the corporation that owns the job.",
+        "operationId": "GetFreelanceJobsDetail",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/IfModifiedSince"
+          },
+          {
+            "description": "The ID of the freelance job",
+            "in": "path",
+            "name": "job_id",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/UUID",
+              "description": "The ID of the freelance job"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/AcceptLanguage"
+          },
+          {
+            "$ref": "#/components/parameters/IfNoneMatch"
+          },
+          {
+            "$ref": "#/components/parameters/CompatibilityDate"
+          },
+          {
+            "$ref": "#/components/parameters/Tenant"
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FreelanceJobsDetail"
+                }
+              }
+            },
+            "description": "OK",
+            "headers": {
+              "Cache-Control": {
+                "$ref": "#/components/headers/CacheControl"
+              },
+              "ETag": {
+                "$ref": "#/components/headers/ETag"
+              },
+              "Last-Modified": {
+                "$ref": "#/components/headers/LastModified"
+              }
+            }
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Error",
+            "headers": {
+              "Cache-Control": {
+                "$ref": "#/components/headers/CacheControl"
+              },
+              "ETag": {
+                "$ref": "#/components/headers/ETag"
+              },
+              "Last-Modified": {
+                "$ref": "#/components/headers/LastModified"
+              }
+            }
+          }
+        },
+        "summary": "Get freelance job details",
+        "tags": [
+          "Freelance Jobs"
+        ],
+        "x-cache-age": 600,
+        "x-compatibility-date": "2025-12-16",
+        "x-rate-limit": {
+          "group": "freelance-job",
+          "max-tokens": 900,
+          "window-size": "15m"
+        }
+      }
+    },
     "/fw/leaderboards": {
       "get": {
         "description": "Top 4 leaderboard of factions for kills and victory points separated by total, last week and yesterday\n\nThis route expires daily at 11:05",
@@ -24742,7 +28683,7 @@
         "tags": [
           "Meta"
         ],
-        "x-compatibility-date": "2020-01-01",
+        "x-compatibility-date": "2025-09-26",
         "x-rate-limit": {
           "group": "meta",
           "max-tokens": 150,
@@ -24824,78 +28765,11 @@
         }
       }
     },
-    "/route/{origin}/{destination}": {
+    "/meta/status": {
       "get": {
-        "description": "Get the systems between origin and destination",
-        "operationId": "GetRouteOriginDestination",
+        "description": "Get the health status of each API route.",
+        "operationId": "GetMetaStatus",
         "parameters": [
-          {
-            "in": "query",
-            "name": "avoid",
-            "schema": {
-              "description": "avoid solar system ID(s)",
-              "items": {
-                "format": "int64",
-                "type": "integer"
-              },
-              "maxItems": 100,
-              "type": "array",
-              "uniqueItems": true
-            }
-          },
-          {
-            "in": "query",
-            "name": "connections",
-            "schema": {
-              "description": "connected solar system pairs",
-              "items": {
-                "items": {
-                  "format": "int64",
-                  "type": "integer"
-                },
-                "maxItems": 2,
-                "minItems": 2,
-                "type": "array"
-              },
-              "maxItems": 100,
-              "type": "array",
-              "uniqueItems": true
-            }
-          },
-          {
-            "in": "path",
-            "name": "destination",
-            "required": true,
-            "schema": {
-              "description": "destination solar system ID",
-              "format": "int64",
-              "type": "integer"
-            }
-          },
-          {
-            "in": "query",
-            "name": "flag",
-            "schema": {
-              "default": "shortest",
-              "description": "route security preference",
-              "enum": [
-                "shortest",
-                "secure",
-                "insecure"
-              ],
-              "type": "string"
-            }
-          },
-          {
-            "in": "path",
-            "name": "origin",
-            "required": true,
-            "schema": {
-              "description": "origin solar system ID",
-              "format": "int64",
-              "type": "integer"
-            }
-          },
           {
             "$ref": "#/components/parameters/AcceptLanguage"
           },
@@ -24914,7 +28788,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/RouteOriginDestinationGet"
+                  "$ref": "#/components/schemas/MetaStatus"
                 }
               }
             },
@@ -24939,15 +28813,129 @@
                 }
               }
             },
-            "description": "Error"
+            "description": "Error",
+            "headers": {
+              "Cache-Control": {
+                "$ref": "#/components/headers/CacheControl"
+              },
+              "ETag": {
+                "$ref": "#/components/headers/ETag"
+              },
+              "Last-Modified": {
+                "$ref": "#/components/headers/LastModified"
+              }
+            }
           }
         },
-        "summary": "Get route",
+        "summary": "Get health status",
+        "tags": [
+          "Meta"
+        ],
+        "x-compatibility-date": "2025-11-06",
+        "x-rate-limit": {
+          "group": "meta",
+          "max-tokens": 150,
+          "window-size": "15m"
+        }
+      }
+    },
+    "/route/{origin_system_id}/{destination_system_id}": {
+      "post": {
+        "description": "Calculate the systems between the given origin and destination.",
+        "operationId": "PostRoute",
+        "parameters": [
+          {
+            "description": "Origin system",
+            "in": "path",
+            "name": "origin_system_id",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/SolarSystemID",
+              "description": "Origin system"
+            }
+          },
+          {
+            "description": "Destination system",
+            "in": "path",
+            "name": "destination_system_id",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/SolarSystemID",
+              "description": "Destination system"
+            }
+          },
+          {
+            "$ref": "#/components/parameters/AcceptLanguage"
+          },
+          {
+            "$ref": "#/components/parameters/IfNoneMatch"
+          },
+          {
+            "$ref": "#/components/parameters/CompatibilityDate"
+          },
+          {
+            "$ref": "#/components/parameters/Tenant"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RouteRequestBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Route"
+                }
+              }
+            },
+            "description": "OK",
+            "headers": {
+              "Cache-Control": {
+                "$ref": "#/components/headers/CacheControl"
+              },
+              "ETag": {
+                "$ref": "#/components/headers/ETag"
+              },
+              "Last-Modified": {
+                "$ref": "#/components/headers/LastModified"
+              }
+            }
+          },
+          "default": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            },
+            "description": "Error",
+            "headers": {
+              "Cache-Control": {
+                "$ref": "#/components/headers/CacheControl"
+              },
+              "ETag": {
+                "$ref": "#/components/headers/ETag"
+              },
+              "Last-Modified": {
+                "$ref": "#/components/headers/LastModified"
+              }
+            }
+          }
+        },
+        "summary": "Get route between two systems",
         "tags": [
           "Routes"
         ],
-        "x-cache-age": 86400,
-        "x-compatibility-date": "2020-01-01",
+        "x-compatibility-date": "2025-09-30",
         "x-rate-limit": {
           "group": "routes",
           "max-tokens": 3600,
@@ -27966,6 +31954,9 @@
       "name": "Corporation"
     },
     {
+      "name": "Corporation Projects"
+    },
+    {
       "name": "Dogma"
     },
     {
@@ -27976,6 +31967,9 @@
     },
     {
       "name": "Fleets"
+    },
+    {
+      "name": "Freelance Jobs"
     },
     {
       "name": "Incursions"

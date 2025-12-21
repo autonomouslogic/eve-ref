@@ -83,7 +83,7 @@ dev-docs:
 	cd docs ; npm run dev
 
 update-esi-spec:
-	curl -s https://esi.evetech.net/meta/openapi.json | jq . > spec/esi-swagger.json
+	curl -s -H "X-Compatibility-Date: $(shell date -uI)" https://esi.evetech.net/meta/openapi.json | jq . > spec/esi-swagger.json
 	date -uI > src/main/resources/esi-compatibility-date
 
 generate-database:
