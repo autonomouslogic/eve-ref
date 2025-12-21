@@ -132,6 +132,10 @@ public class ScrapeFreelanceJobs implements Command {
 			log.warn("Job entry missing ID, skipping");
 			return;
 		}
+		if (detailedJobs.containsKey(jobId.asText())) {
+			log.trace("Skipping already fetched job ID: {}", jobId.asText());
+			return;
+		}
 
 		var jobIdString = jobId.asText();
 
