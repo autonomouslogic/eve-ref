@@ -32,13 +32,14 @@ public class EsiUrl {
 
 	public String toString() {
 		var sb = new StringBuilder();
-		String baseUrl = Configs.ESI_BASE_URL.getRequired().toString();
+		var baseUrl = Configs.ESI_BASE_URL.getRequired().toString();
 		sb.append(baseUrl);
 
 		if (basePath != null) {
-			// Add separator between baseUrl and basePath if needed
+			// Add a separator between baseUrl and basePath if needed
 			if (!baseUrl.endsWith("/") && !basePath.startsWith("/")) {
 				sb.append("/");
+				sb.append(basePath);
 			} else if (baseUrl.endsWith("/") && basePath.startsWith("/")) {
 				sb.append(basePath.substring(1));
 			} else {
