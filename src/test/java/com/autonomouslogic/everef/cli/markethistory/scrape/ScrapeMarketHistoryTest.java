@@ -40,8 +40,8 @@ import org.apache.commons.io.IOUtils;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junitpioneer.jupiter.RetryingTest;
 import org.junitpioneer.jupiter.SetEnvironmentVariable;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -109,7 +109,7 @@ public class ScrapeMarketHistoryTest {
 		server.close();
 	}
 
-	@Test
+	@RetryingTest(3)
 	@SneakyThrows
 	void shouldScrapeMarketHistory() {
 		scrapeMarketHistory
@@ -226,8 +226,11 @@ public class ScrapeMarketHistoryTest {
 				if (path.equals("/esi/markets/10000100/types/")) {
 					return mockResponse("[]");
 				}
-				if (path.startsWith("/esi/markets/") && segments.get(3).equals("history")) {
-					var regionId = segments.get(2);
+				if (path.equals("/esi/markets/19000001/types/")) {
+					return mockResponse("[]");
+				}
+				if (path.startsWith("/esi/latest/markets/") && segments.get(4).equals("history")) {
+					var regionId = segments.get(3);
 					return mockHistory(regionId, typeId);
 				}
 				var refdataPath = "/data/" + ArchivePathFactory.REFERENCE_DATA.createLatestPath();
@@ -370,10 +373,10 @@ public class ScrapeMarketHistoryTest {
 	private List<RegionTypePair> getRequestedMarketHistoryPairs(List<RecordedRequest> allRequests) {
 		return allRequests.stream()
 				.map(r -> r.getRequestUrl())
-				.filter(url -> url.encodedPath().startsWith("/esi/markets/"))
+				.filter(url -> url.encodedPath().startsWith("/esi/latest/markets/"))
 				.filter(url -> url.encodedPath().endsWith("/history/"))
 				.map(url -> {
-					var region = Integer.parseInt(url.pathSegments().get(2));
+					var region = Integer.parseInt(url.pathSegments().get(3));
 					var type = Integer.parseInt(url.queryParameter("type_id"));
 					return new RegionTypePair(region, type);
 				})

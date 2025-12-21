@@ -417,14 +417,16 @@ public class ScrapeStructuresTest {
 					}
 				}
 
-				if (path.equals("/universe/structures/")) {
+				// Handle both /universe/structures/ and /latest/universe/structures/
+				if (path.equals("/universe/structures/") || path.equals("/latest/universe/structures/")) {
 					return new MockResponse()
 							.setBody(objectMapper.writeValueAsString(publicStructures.keySet()))
 							.addHeader("Last-Modified", lastModified);
 				}
 
-				if (path.startsWith("/universe/structures/")) {
-					var id = Long.parseLong(segments.get(2));
+				if (path.startsWith("/universe/structures/") || path.startsWith("/latest/universe/structures/")) {
+					var segmentIndex = segments.contains("latest") ? 3 : 2;
+					var id = Long.parseLong(segments.get(segmentIndex));
 					var structure = publicStructures.get(id);
 					if (structure == null) {
 						structure = nonPublicStructures.get(id);
@@ -438,8 +440,9 @@ public class ScrapeStructuresTest {
 					}
 				}
 
-				if (path.startsWith("/markets/structures/")) {
-					var id = Long.parseLong(segments.get(2));
+				if (path.startsWith("/markets/structures/") || path.startsWith("/latest/markets/structures/")) {
+					var segmentIndex = segments.contains("latest") ? 3 : 2;
+					var id = Long.parseLong(segments.get(segmentIndex));
 					if (marketStructures.contains(id)) {
 						return new MockResponse().setBody("[]").addHeader("Last-Modified", lastModified);
 					} else {
@@ -447,7 +450,7 @@ public class ScrapeStructuresTest {
 					}
 				}
 
-				if (path.equals("/sovereignty/structures/")) {
+				if (path.equals("/sovereignty/structures/") || path.equals("/latest/sovereignty/structures/")) {
 					return new MockResponse()
 							.setBody(objectMapper.writeValueAsString(sovereigntyStructures.values()))
 							.addHeader("Last-Modified", lastModified);

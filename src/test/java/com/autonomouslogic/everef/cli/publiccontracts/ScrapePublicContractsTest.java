@@ -176,27 +176,27 @@ public class ScrapePublicContractsTest {
 				.toList(); // @todo remove distinct()
 		assertEquals(
 				List.of(
-						"/contracts/public/10000001?datasource=tranquility&language=en&page=1",
-						"/contracts/public/10000001?datasource=tranquility&language=en&page=2",
-						"/contracts/public/10000002?datasource=tranquility&language=en&page=1",
-						"/contracts/public/10000002?datasource=tranquility&language=en&page=2",
-						"/contracts/public/bids/190319637?datasource=tranquility&language=en&page=1",
-						"/contracts/public/bids/190442405?datasource=tranquility&language=en&page=1",
-						"/contracts/public/bids/5000?datasource=tranquility&language=en&page=1",
-						"/contracts/public/bids/7000?datasource=tranquility&language=en&page=1",
-						"/contracts/public/items/189863474?datasource=tranquility&language=en&page=1",
-						"/contracts/public/items/190123693?datasource=tranquility&language=en&page=1",
-						"/contracts/public/items/190123973?datasource=tranquility&language=en&page=1",
-						"/contracts/public/items/190124106?datasource=tranquility&language=en&page=1",
-						"/contracts/public/items/190160355?datasource=tranquility&language=en&page=1",
-						"/contracts/public/items/190319637?datasource=tranquility&language=en&page=1",
-						"/contracts/public/items/190442405?datasource=tranquility&language=en&page=1",
-						"/contracts/public/items/190753200?datasource=tranquility&language=en&page=1",
-						"/contracts/public/items/3000?datasource=tranquility&language=en&page=1",
-						"/contracts/public/items/6000?datasource=tranquility&language=en&page=1",
-						"/dogma/dynamic/items/47804/1027826381003/?datasource=tranquility&language=en",
-						"/dogma/dynamic/items/47804/2000/?datasource=tranquility&language=en",
-						"/dogma/dynamic/items/49734/1040731418725/?datasource=tranquility&language=en",
+						"/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
+						"/latest/contracts/public/10000001?datasource=tranquility&language=en&page=2",
+						"/latest/contracts/public/10000002?datasource=tranquility&language=en&page=1",
+						"/latest/contracts/public/10000002?datasource=tranquility&language=en&page=2",
+						"/latest/contracts/public/bids/190319637?datasource=tranquility&language=en&page=1",
+						"/latest/contracts/public/bids/190442405?datasource=tranquility&language=en&page=1",
+						"/latest/contracts/public/bids/5000?datasource=tranquility&language=en&page=1",
+						"/latest/contracts/public/bids/7000?datasource=tranquility&language=en&page=1",
+						"/latest/contracts/public/items/189863474?datasource=tranquility&language=en&page=1",
+						"/latest/contracts/public/items/190123693?datasource=tranquility&language=en&page=1",
+						"/latest/contracts/public/items/190123973?datasource=tranquility&language=en&page=1",
+						"/latest/contracts/public/items/190124106?datasource=tranquility&language=en&page=1",
+						"/latest/contracts/public/items/190160355?datasource=tranquility&language=en&page=1",
+						"/latest/contracts/public/items/190319637?datasource=tranquility&language=en&page=1",
+						"/latest/contracts/public/items/190442405?datasource=tranquility&language=en&page=1",
+						"/latest/contracts/public/items/190753200?datasource=tranquility&language=en&page=1",
+						"/latest/contracts/public/items/3000?datasource=tranquility&language=en&page=1",
+						"/latest/contracts/public/items/6000?datasource=tranquility&language=en&page=1",
+						"/latest/dogma/dynamic/items/47804/1027826381003/?datasource=tranquility&language=en",
+						"/latest/dogma/dynamic/items/47804/2000/?datasource=tranquility&language=en",
+						"/latest/dogma/dynamic/items/49734/1040731418725/?datasource=tranquility&language=en",
 						"/meta_groups/15",
 						"/public-contracts/public-contracts-latest.v2.tar.bz2",
 						"/universe/regions/10000001/?datasource=tranquility",
@@ -343,11 +343,11 @@ public class ScrapePublicContractsTest {
 				var segments = request.getRequestUrl().pathSegments();
 
 				switch (path) {
-					case "/universe/regions/":
+					case "/universe/regions/", "/latest/universe/regions/":
 						return mockResponse("[10000001,10000002]");
-					case "/universe/regions/10000001/":
+					case "/universe/regions/10000001/", "/latest/universe/regions/10000001/":
 						return mockResponse("{\"region_id\":10000001,\"name\":\"Derelik\",\"constellations\":[]}");
-					case "/universe/regions/10000002/":
+					case "/universe/regions/10000002/", "/latest/universe/regions/10000002/":
 						return mockResponse("{\"region_id\":10000002,\"name\":\"The Forge\",\"constellations\":[]}");
 					case "/meta_groups/15":
 						return metaGroup15();
@@ -357,27 +357,31 @@ public class ScrapePublicContractsTest {
 				var page = Optional.ofNullable(request.getRequestUrl().queryParameter("page"))
 						.map(Integer::parseInt)
 						.orElse(1);
-				if (path.startsWith("/contracts/public/items/")) {
-					var contractId = Long.parseLong(segments.get(3));
+				if (path.startsWith("/contracts/public/items/") || path.startsWith("/latest/contracts/public/items/")) {
+					var segmentIndex = segments.contains("latest") ? 4 : 3;
+					var contractId = Long.parseLong(segments.get(segmentIndex));
 					return mockResponse(loadContractItems(contractId));
 				}
-				if (path.startsWith("/contracts/public/bids/")) {
-					var contractId = Long.parseLong(segments.get(3));
+				if (path.startsWith("/contracts/public/bids/") || path.startsWith("/latest/contracts/public/bids/")) {
+					var segmentIndex = segments.contains("latest") ? 4 : 3;
+					var contractId = Long.parseLong(segments.get(segmentIndex));
 					if (contractId == 7000) {
 						return new MockResponse().setResponseCode(404);
 					}
 					return mockResponse(loadContractBids(contractId));
 				}
-				if (path.startsWith("/contracts/public/")) {
-					var contractId = Long.parseLong(segments.get(2));
+				if (path.startsWith("/contracts/public/") || path.startsWith("/latest/contracts/public/")) {
+					var segmentIndex = segments.contains("latest") ? 3 : 2;
+					var contractId = Long.parseLong(segments.get(segmentIndex));
 					return mockResponse(loadRegionContracts(contractId, page)).addHeader("x-pages", "2");
 				}
-				if (path.startsWith("/universe/types/")) {
+				if (path.startsWith("/universe/types/") || path.startsWith("/latest/universe/types/")) {
 					return mockResponse(objectMapper.writeValueAsString(type));
 				}
-				if (path.startsWith("/dogma/dynamic/items/")) {
-					var typeId = Long.parseLong(segments.get(3));
-					var itemId = Long.parseLong(segments.get(4));
+				if (path.startsWith("/dogma/dynamic/items/") || path.startsWith("/latest/dogma/dynamic/items/")) {
+					var segmentIndex = segments.contains("latest") ? 4 : 3;
+					var typeId = Long.parseLong(segments.get(segmentIndex));
+					var itemId = Long.parseLong(segments.get(segmentIndex + 1));
 					if (itemId == 2000L) {
 						return new MockResponse().setResponseCode(520);
 					}
