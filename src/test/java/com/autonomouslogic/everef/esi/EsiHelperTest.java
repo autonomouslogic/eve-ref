@@ -126,7 +126,8 @@ public class EsiHelperTest {
 					.blockingGet();
 		});
 		assertEquals(
-				String.format("Received %s for http://localhost:30150/latest/codes?datasource=tranquility&language=en", code),
+				String.format(
+						"Received %s for http://localhost:30150/latest/codes?datasource=tranquility&language=en", code),
 				err.getMessage());
 		testDataUtil.assertRequest(server.takeRequest(), "/latest/codes?datasource=tranquility&language=en");
 		testDataUtil.assertNoMoreRequests(server);

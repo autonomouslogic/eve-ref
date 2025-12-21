@@ -104,14 +104,13 @@ public class EsiUrlTest {
 	void shouldBuildBasicUrlWithNoTrailingSlash() {
 		var url = EsiUrl.builder().urlPath("/universe/types/").build();
 		assertEquals(
-			"https://esi.evetech.net/latest/universe/types/?datasource=tranquility&language=en", url.toString());
+				"https://esi.evetech.net/latest/universe/types/?datasource=tranquility&language=en", url.toString());
 	}
 
 	@Test
 	@SetEnvironmentVariable(key = "ESI_BASE_URL", value = "https://esi.evetech.net")
 	void shouldBuildModernUrlWithNoTrailingSlash() {
 		var url = EsiUrl.modern().urlPath("/universe/types/").build();
-		assertEquals(
-			"https://esi.evetech.net/universe/types/", url.toString());
+		assertEquals("https://esi.evetech.net/universe/types/", url.toString());
 	}
 }
