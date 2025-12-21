@@ -52,27 +52,7 @@ public class EsiLimitExceededInterceptorTest {
 		DaggerTestComponent.builder().build().inject(this);
 		isLimited = false;
 		server = new MockWebServer();
-		server.setDispatcher(new Dispatcher() {
-			@NotNull
-			@Override
-			public MockResponse dispatch(@NotNull RecordedRequest recordedRequest) throws InterruptedException {
-				if (isLimited) {
-					var response = new MockResponse().setResponseCode(limitStatus);
-					if (limitBody != null) {
-						response.setBody(limitBody);
-					}
-					if (limitResetTime != null) {
-						response.setHeader(
-								EsiLimitExceededInterceptor.RESET_TIME_HEADER,
-								Duration.between(Instant.now(), limitResetTime)
-										.truncatedTo(ChronoUnit.SECONDS)
-										.toSeconds());
-					}
-					return response;
-				}
-				return new MockResponse().setResponseCode(200);
-			}
-		});
+		server.setDispatcher(new TestDispatcher());
 		server.start(TestDataUtil.TEST_PORT);
 
 		// testDataUtil.mockResponse("https://esi.evetech.net/latest/page?datasource=tranquility&language=en");
@@ -149,6 +129,28 @@ public class EsiLimitExceededInterceptorTest {
 					log.warn("Failed to stop thread", e);
 				}
 			});
+		}
+	}
+
+	private class TestDispatcher extends Dispatcher {
+		@NotNull
+		@Override
+		public MockResponse dispatch(@NotNull RecordedRequest recordedRequest) throws InterruptedException {
+			if (isLimited) {
+				var response = new MockResponse().setResponseCode(limitStatus);
+				if (limitBody != null) {
+					response.setBody(limitBody);
+				}
+				if (limitResetTime != null) {
+					response.setHeader(
+							EsiLimitExceededInterceptor.RESET_TIME_HEADER,
+							Duration.between(Instant.now(), limitResetTime)
+									.truncatedTo(ChronoUnit.SECONDS)
+									.toSeconds());
+				}
+				return response;
+			}
+			return new MockResponse().setResponseCode(200);
 		}
 	}
 }

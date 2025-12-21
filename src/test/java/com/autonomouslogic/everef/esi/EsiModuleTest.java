@@ -31,16 +31,7 @@ public class EsiModuleTest {
 	void before() {
 		DaggerTestComponent.builder().build().inject(this);
 		server = new MockWebServer();
-		server.setDispatcher(new Dispatcher() {
-			@NotNull
-			@Override
-			public MockResponse dispatch(@NotNull RecordedRequest recordedRequest) throws InterruptedException {
-				return new MockResponse()
-						.setResponseCode(200)
-						.setBody("[10000001, 10000002, 10000003]")
-						.addHeader("Content-Type", "application/json");
-			}
-		});
+		server.setDispatcher(new TestDispatcher());
 		server.start(TestDataUtil.TEST_PORT);
 	}
 
@@ -83,5 +74,16 @@ public class EsiModuleTest {
 	@SetEnvironmentVariable(key = "ESI_BASE_URL", value = "http://localhost:" + TestDataUtil.TEST_PORT + "/base/")
 	void shouldGetRegionsWithTrailingSlashOnDBasePath() {
 		runTest("/base");
+	}
+
+	private static class TestDispatcher extends Dispatcher {
+		@NotNull
+		@Override
+		public MockResponse dispatch(@NotNull RecordedRequest recordedRequest) throws InterruptedException {
+			return new MockResponse()
+					.setResponseCode(200)
+					.setBody("[10000001, 10000002, 10000003]")
+					.addHeader("Content-Type", "application/json");
+		}
 	}
 }
