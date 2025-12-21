@@ -217,17 +217,17 @@ public class ScrapeMarketHistoryTest {
 						"/data/market-orders/history/2023/2023-01-01/market-orders-2023-01-01_00-16-34.v3.csv.bz2")) {
 					return mockOrderDate(LocalDate.parse("2023-01-01"));
 				}
-				if (path.equals("/esi/markets/10000001/types/")) {
+				if (path.equals("/esi/latest/markets/10000001/types/")) {
 					return mockResponse("[20,21,1000]");
 				}
-				if (path.equals("/esi/markets/10000002/types/")) {
+				if (path.equals("/esi/latest/markets/10000002/types/")) {
 					return mockResponse("[20,21]");
 				}
-				if (path.equals("/esi/markets/10000100/types/")) {
+				if (path.equals("/esi/latest/markets/10000100/types/")) {
 					return mockResponse("[]");
 				}
-				if (path.startsWith("/esi/markets/") && segments.get(3).equals("history")) {
-					var regionId = segments.get(2);
+				if (path.startsWith("/esi/latest/markets/") && segments.get(4).equals("history")) {
+					var regionId = segments.get(3);
 					return mockHistory(regionId, typeId);
 				}
 				var refdataPath = "/data/" + ArchivePathFactory.REFERENCE_DATA.createLatestPath();
@@ -370,7 +370,7 @@ public class ScrapeMarketHistoryTest {
 	private List<RegionTypePair> getRequestedMarketHistoryPairs(List<RecordedRequest> allRequests) {
 		return allRequests.stream()
 				.map(r -> r.getRequestUrl())
-				.filter(url -> url.encodedPath().startsWith("/esi/markets/"))
+				.filter(url -> url.encodedPath().startsWith("/esi/latest/markets/"))
 				.filter(url -> url.encodedPath().endsWith("/history/"))
 				.map(url -> {
 					var region = Integer.parseInt(url.pathSegments().get(2));

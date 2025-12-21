@@ -406,10 +406,6 @@ public class ScrapeStructuresTest {
 		public MockResponse dispatch(@NotNull RecordedRequest request) throws InterruptedException {
 			try {
 				var path = request.getRequestUrl().encodedPath();
-				// Remove /latest/ prefix if present to match expected paths
-				if (path.startsWith("/latest/")) {
-					path = path.substring(7); // Remove "/latest"
-				}
 				var segments = request.getRequestUrl().pathSegments();
 				var lastModified = DateTimeFormatter.RFC_1123_DATE_TIME.format(time);
 
@@ -421,15 +417,14 @@ public class ScrapeStructuresTest {
 					}
 				}
 
-				if (path.equals("/universe/structures/")) {
+				if (path.equals("/latest/universe/structures/")) {
 					return new MockResponse()
 							.setBody(objectMapper.writeValueAsString(publicStructures.keySet()))
 							.addHeader("Last-Modified", lastModified);
 				}
 
-				if (path.startsWith("/universe/structures/")) {
-					var segmentIndex = segments.contains("latest") ? 3 : 2;
-					var id = Long.parseLong(segments.get(segmentIndex));
+				if (path.startsWith("/latest/universe/structures/")) {
+					var id = Long.parseLong(segments.get(3));
 					var structure = publicStructures.get(id);
 					if (structure == null) {
 						structure = nonPublicStructures.get(id);
@@ -443,9 +438,8 @@ public class ScrapeStructuresTest {
 					}
 				}
 
-				if (path.startsWith("/markets/structures/")) {
-					var segmentIndex = segments.contains("latest") ? 3 : 2;
-					var id = Long.parseLong(segments.get(segmentIndex));
+				if (path.startsWith("/latest/markets/structures/")) {
+					var id = Long.parseLong(segments.get(3));
 					if (marketStructures.contains(id)) {
 						return new MockResponse().setBody("[]").addHeader("Last-Modified", lastModified);
 					} else {
@@ -453,7 +447,7 @@ public class ScrapeStructuresTest {
 					}
 				}
 
-				if (path.equals("/sovereignty/structures/")) {
+				if (path.equals("/latest/sovereignty/structures/")) {
 					return new MockResponse()
 							.setBody(objectMapper.writeValueAsString(sovereigntyStructures.values()))
 							.addHeader("Last-Modified", lastModified);
