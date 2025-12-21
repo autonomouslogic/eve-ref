@@ -343,11 +343,11 @@ public class ScrapePublicContractsTest {
 				var segments = request.getRequestUrl().pathSegments();
 
 				switch (path) {
-					case "/universe/regions/":
+					case "/latest/universe/regions/":
 						return mockResponse("[10000001,10000002]");
-					case "/universe/regions/10000001/":
+					case "/latest/universe/regions/10000001/":
 						return mockResponse("{\"region_id\":10000001,\"name\":\"Derelik\",\"constellations\":[]}");
-					case "/universe/regions/10000002/":
+					case "/latest/universe/regions/10000002/":
 						return mockResponse("{\"region_id\":10000002,\"name\":\"The Forge\",\"constellations\":[]}");
 					case "/meta_groups/15":
 						return metaGroup15();
@@ -357,27 +357,27 @@ public class ScrapePublicContractsTest {
 				var page = Optional.ofNullable(request.getRequestUrl().queryParameter("page"))
 						.map(Integer::parseInt)
 						.orElse(1);
-				if (path.startsWith("/contracts/public/items/")) {
-					var contractId = Long.parseLong(segments.get(3));
+				if (path.startsWith("/latest/contracts/public/items/")) {
+					var contractId = Long.parseLong(segments.get(4));
 					return mockResponse(loadContractItems(contractId));
 				}
-				if (path.startsWith("/contracts/public/bids/")) {
-					var contractId = Long.parseLong(segments.get(3));
+				if (path.startsWith("/latest/contracts/public/bids/")) {
+					var contractId = Long.parseLong(segments.get(4));
 					if (contractId == 7000) {
 						return new MockResponse().setResponseCode(404);
 					}
 					return mockResponse(loadContractBids(contractId));
 				}
-				if (path.startsWith("/contracts/public/")) {
-					var contractId = Long.parseLong(segments.get(2));
+				if (path.startsWith("/latest/contracts/public/")) {
+					var contractId = Long.parseLong(segments.get(3));
 					return mockResponse(loadRegionContracts(contractId, page)).addHeader("x-pages", "2");
 				}
-				if (path.startsWith("/universe/types/")) {
+				if (path.startsWith("/latest/universe/types/")) {
 					return mockResponse(objectMapper.writeValueAsString(type));
 				}
-				if (path.startsWith("/dogma/dynamic/items/")) {
-					var typeId = Long.parseLong(segments.get(3));
-					var itemId = Long.parseLong(segments.get(4));
+				if (path.startsWith("/latest/dogma/dynamic/items/")) {
+					var typeId = Long.parseLong(segments.get(4));
+					var itemId = Long.parseLong(segments.get(5));
 					if (itemId == 2000L) {
 						return new MockResponse().setResponseCode(520);
 					}

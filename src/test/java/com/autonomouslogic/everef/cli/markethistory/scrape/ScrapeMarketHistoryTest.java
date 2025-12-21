@@ -373,7 +373,7 @@ public class ScrapeMarketHistoryTest {
 				.filter(url -> url.encodedPath().startsWith("/esi/latest/markets/"))
 				.filter(url -> url.encodedPath().endsWith("/history/"))
 				.map(url -> {
-					var region = Integer.parseInt(url.pathSegments().get(2));
+					var region = Integer.parseInt(url.pathSegments().get(3));
 					var type = Integer.parseInt(url.queryParameter("type_id"));
 					return new RegionTypePair(region, type);
 				})
