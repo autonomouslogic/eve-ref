@@ -113,7 +113,7 @@ public class ScrapeFreelanceJobs implements Command {
 	}
 
 	private JsonNode fetchIndex() {
-		var indexUrl = EsiUrl.modern().urlPath("/freelance-jobs").build();
+		var indexUrl = EsiUrl.modern().urlPath("/freelance-jobs?limit=100").build();
 		var indexResponse = esiHelper.fetch(indexUrl);
 		var indexData = esiHelper.decodeResponse(indexResponse);
 
