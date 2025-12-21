@@ -15,6 +15,7 @@ import io.reactivex.rxjava3.functions.Function;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.LocalDate;
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Optional;
 import javax.inject.Inject;
@@ -30,6 +31,7 @@ import org.apache.commons.io.IOUtils;
 @Log4j2
 public class EsiHelper {
 	private static final String PAGES_HEADER = "X-Pages";
+	private static final String COMPATIBILITY_DATE_HEADER = "X-Compatibility-Date";
 
 	@Inject
 	@Named("esi")
@@ -66,8 +68,10 @@ public class EsiHelper {
 	 * @return
 	 */
 	public Response fetch(EsiUrl url, Optional<String> accessToken) {
-		return okHttpWrapper.get(
-				url.toString(), r -> accessToken.ifPresent(token -> r.addHeader("Authorization", "Bearer " + token)));
+		return okHttpWrapper.get(url.toString(), r -> {
+			accessToken.ifPresent(token -> r.addHeader("Authorization", "Bearer " + token));
+			r.addHeader(COMPATIBILITY_DATE_HEADER, LocalDate.now(ZoneOffset.UTC).toString());
+		});
 	}
 
 	/**
@@ -168,7 +172,11 @@ public class EsiHelper {
 	@SneakyThrows
 	public JsonNode decodeResponse(Response response) {
 		try (response) {
-			if (response.code() == 204 || response.code() == 404) {
+			if (response.code() == 204) {
+				return NullNode.getInstance();
+			}
+			if (response.code() == 404) {
+				log.warn("404 response from {}", response.request().url());
 				return NullNode.getInstance();
 			}
 			if (response.code() != 200) {

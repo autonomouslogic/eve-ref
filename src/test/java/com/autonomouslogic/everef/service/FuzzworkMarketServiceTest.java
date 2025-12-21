@@ -117,10 +117,7 @@ public class FuzzworkMarketServiceTest {
 	}
 
 	private void enqueueSuccess(long typeId, BigDecimal sellAverage) {
-		server.enqueue(new MockResponse()
-				.setResponseCode(200)
-				.setBody(String.format(
-						"""
+		server.enqueue(new MockResponse().setResponseCode(200).setBody(String.format("""
 			{
 			"%s": {
 				"buy": {
@@ -144,7 +141,6 @@ public class FuzzworkMarketServiceTest {
 				"percentile": "5.92257900667"
 				}
 			}
-			}""",
-						typeId, sellAverage)));
+			}""", typeId, sellAverage)));
 	}
 }

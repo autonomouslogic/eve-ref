@@ -55,27 +55,21 @@ public class ObjectMergerTest {
 	@Test
 	@SneakyThrows
 	void shouldMergeObjectsRecursively() {
-		var input = new ObjectNode[] {
-			(ObjectNode) objectMapper.readTree(
-					"""
+		var input = new ObjectNode[] {(ObjectNode) objectMapper.readTree("""
 				{
 					"var1": 1,
 					"child": {
 						"var2": 1,
 						"var3": 1
 					}
-				}"""),
-			(ObjectNode)
-					objectMapper.readTree("""
+				}"""), (ObjectNode) objectMapper.readTree("""
 				{
 					"child": {
 						"var1": 2,
 						"var2": 2
 					}
-				}""")
-		};
-		var expected = objectMapper.readTree(
-				"""
+				}""")};
+		var expected = objectMapper.readTree("""
 			{
 				"var1": 1,
 				"child": {
@@ -91,16 +85,13 @@ public class ObjectMergerTest {
 	@Test
 	@SneakyThrows
 	void shouldMergeArrays() {
-		var input = new ObjectNode[] {
-			(ObjectNode) objectMapper.readTree("""
+		var input = new ObjectNode[] {(ObjectNode) objectMapper.readTree("""
 				{
 					"var1": [1, 2, 3]
-				}"""),
-			(ObjectNode) objectMapper.readTree("""
+				}"""), (ObjectNode) objectMapper.readTree("""
 				{
 					"var1": [4, 5, 6]
-				}""")
-		};
+				}""")};
 		var expected = objectMapper.readTree("""
 			{
 				"var1": [1, 2, 3, 4, 5, 6]
@@ -112,16 +103,13 @@ public class ObjectMergerTest {
 	@Test
 	@SneakyThrows
 	void shouldNotReplaceWithNullValues() {
-		var input = new ObjectNode[] {
-			(ObjectNode) objectMapper.readTree("""
+		var input = new ObjectNode[] {(ObjectNode) objectMapper.readTree("""
 				{
 					"var1": "Text"
-				}"""),
-			(ObjectNode) objectMapper.readTree("""
+				}"""), (ObjectNode) objectMapper.readTree("""
 				{
 					"var1": null
-				}""")
-		};
+				}""")};
 		var expected = objectMapper.readTree("""
 			{
 				"var1": "Text"
@@ -133,16 +121,13 @@ public class ObjectMergerTest {
 	@Test
 	@SneakyThrows
 	void shouldNotReplaceWithEmptyStrings() {
-		var input = new ObjectNode[] {
-			(ObjectNode) objectMapper.readTree("""
+		var input = new ObjectNode[] {(ObjectNode) objectMapper.readTree("""
 				{
 					"var1": "Text"
-				}"""),
-			(ObjectNode) objectMapper.readTree("""
+				}"""), (ObjectNode) objectMapper.readTree("""
 				{
 					"var1": ""
-				}""")
-		};
+				}""")};
 		var expected = objectMapper.readTree("""
 			{
 				"var1": "Text"

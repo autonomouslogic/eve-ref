@@ -1,5 +1,18 @@
 EVE Ref Changelog
 
+## [2.72.1](https://github.com/autonomouslogic/eve-ref/compare/2.72.0...2.72.1) (2025-12-15)
+
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([#986](https://github.com/autonomouslogic/eve-ref/issues/986)) ([ac88e40](https://github.com/autonomouslogic/eve-ref/commit/ac88e404a5aa27dc98dd460d7001de62d257391c))
+* Removed SoftReference from CachedSearchEntryFactory ([0eaf6d8](https://github.com/autonomouslogic/eve-ref/commit/0eaf6d8fe2ac374b4ff13dbe9c8e8f8375fa2a3f))
+
+
+### Code Refactoring
+
+* Split out search functionality into different classes ([#991](https://github.com/autonomouslogic/eve-ref/issues/991)) ([8a99b3f](https://github.com/autonomouslogic/eve-ref/commit/8a99b3f144efe2c29ecdc25e1e804024a37ad997))
+
 ## [2.72.0](https://github.com/autonomouslogic/eve-ref/compare/2.71.3...2.72.0) (2025-12-14)
 
 

@@ -52,9 +52,7 @@ public class ActivityCost {
 	BigDecimal estimatedItemValue;
 
 	@JsonProperty
-	@Schema(
-			description =
-					"""
+	@Schema(description = """
 		The system cost index amount.
 		Note that this will always be a slightly off, as the ESI does not report the full precision of the system cost index rates.
 		See https://github.com/esi/esi-issues/issues/1411""")
