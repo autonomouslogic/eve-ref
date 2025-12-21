@@ -660,62 +660,66 @@ public class FetchDonationsTest {
 		public MockResponse dispatch(@NotNull RecordedRequest request) throws InterruptedException {
 			try {
 				var path = request.getRequestUrl().encodedPath();
+				// Remove trailing slash for consistency
+				if (path.endsWith("/")) {
+					path = path.substring(0, path.length() - 1);
+				}
 				var segments = request.getRequestUrl().pathSegments();
 
-				if (path.equals("/characters/" + TEST_CHARACTER_ID + "/")) {
+				if (path.equals("/characters/" + TEST_CHARACTER_ID)) {
 					return new MockResponse()
 							.setBody(objectMapper.writeValueAsString(new CharactersCharacterIdGet()
 									.corporationId(TEST_CORPORATION_ID)
 									.name("Test Character")));
 				}
 
-				if (path.equals("/corporations/" + TEST_CORPORATION_ID + "/")) {
+				if (path.equals("/corporations/" + TEST_CORPORATION_ID)) {
 					return new MockResponse()
 							.setBody(objectMapper.writeValueAsString(
 									new CorporationsCorporationIdGet().name("Test Corporation")));
 				}
 
-				if (path.equals("/characters/" + TEST_DONOR_CHARACTER_ID_1 + "/")) {
+				if (path.equals("/characters/" + TEST_DONOR_CHARACTER_ID_1)) {
 					return new MockResponse()
 							.setBody(objectMapper.writeValueAsString(
 									new CharactersCharacterIdGet().name("Donor Character 1")));
 				}
 
-				if (path.equals("/characters/" + TEST_DONOR_CHARACTER_ID_2 + "/")) {
+				if (path.equals("/characters/" + TEST_DONOR_CHARACTER_ID_2)) {
 					return new MockResponse()
 							.setBody(objectMapper.writeValueAsString(
 									new CharactersCharacterIdGet().name("Donor Character 2")));
 				}
 
-				if (path.equals("/characters/" + TEST_DONOR_CHARACTER_ID_3 + "/")) {
+				if (path.equals("/characters/" + TEST_DONOR_CHARACTER_ID_3)) {
 					return new MockResponse()
 							.setBody(objectMapper.writeValueAsString(
 									new CharactersCharacterIdGet().name("Weird name!+_&\\")));
 				}
 
-				if (path.equals("/corporations/" + TEST_DONOR_CORPORATION_ID_1 + "/")) {
+				if (path.equals("/corporations/" + TEST_DONOR_CORPORATION_ID_1)) {
 					return new MockResponse()
 							.setBody(objectMapper.writeValueAsString(
 									new CorporationsCorporationIdGet().name("Donor Corporation 1")));
 				}
 
-				if (path.equals("/corporations/" + TEST_DONOR_CORPORATION_ID_2 + "/")) {
+				if (path.equals("/corporations/" + TEST_DONOR_CORPORATION_ID_2)) {
 					return new MockResponse()
 							.setBody(objectMapper.writeValueAsString(
 									new CorporationsCorporationIdGet().name("Donor Corporation 2")));
 				}
 
-				if (path.equals("/corporations/" + TEST_DONOR_CORPORATION_ID_3 + "/")) {
+				if (path.equals("/corporations/" + TEST_DONOR_CORPORATION_ID_3)) {
 					return new MockResponse()
 							.setBody(objectMapper.writeValueAsString(
 									new CorporationsCorporationIdGet().name("Weird name!+_&\\")));
 				}
 
-				if (path.equals("/characters/" + TEST_CHARACTER_ID + "/wallet/journal/")) {
+				if (path.equals("/characters/" + TEST_CHARACTER_ID + "/wallet/journal")) {
 					return new MockResponse().setBody(objectMapper.writeValueAsString(characterJournal));
 				}
 
-				if (path.equals("/corporations/" + TEST_CORPORATION_ID + "/wallets/1/journal/")) {
+				if (path.equals("/corporations/" + TEST_CORPORATION_ID + "/wallets/1/journal")) {
 					return new MockResponse().setBody(objectMapper.writeValueAsString(corporationJournal));
 				}
 
