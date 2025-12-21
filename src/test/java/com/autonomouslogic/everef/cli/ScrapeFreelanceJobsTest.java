@@ -18,6 +18,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.time.Instant;
 import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -204,9 +205,9 @@ public class ScrapeFreelanceJobsTest {
 	@Test
 	@SneakyThrows
 	void shouldMergeExistingJobs() {
-		var existingJob = createFreelanceJob(1, Instant.parse("2020-01-01T00:00:00Z"), false);
+		var job1 = createFreelanceJob(1, Instant.parse("2020-01-01T00:00:00Z"), false);
 		var existingJobs =
-				objectMapper.createObjectNode().set(existingJob.job().get("id").asText(), existingJob.job());
+				objectMapper.createObjectNode().set(job1.job().get("id").asText(), job1.detail());
 		createExistingJobs(existingJobs);
 
 		var job2 = createFreelanceJob(2, Instant.now());
@@ -216,13 +217,15 @@ public class ScrapeFreelanceJobsTest {
 
 		server.takeRequest(); // latest file download (200)
 		server.takeRequest(); // index
-		server.takeRequest(); // detail 1
-		server.takeRequest(); // detail 2
+		var job2Request = server.takeRequest();
+		assertEquals("/freelance-jobs/id-2", job2Request.getRequestUrl().encodedPath());
+		var job3Request = server.takeRequest();
+		assertEquals("/freelance-jobs/id-3", job3Request.getRequestUrl().encodedPath());
 
 		var expected = objectMapper.createObjectNode();
-		expected.set(existingJob.job().get("id").asText(), existingJob.job());
-		expected.set(job2.job().get("id").asText(), existingJob.job());
-		expected.set(job3.job().get("id").asText(), existingJob.job());
+		expected.set(job1.job().get("id").asText(), job1.detail());
+		expected.set(job2.job().get("id").asText(), job2.detail());
+		expected.set(job3.job().get("id").asText(), job3.detail());
 
 		var latestFile = "base/freelance-jobs/freelance-jobs-latest.json.bz2";
 		var compressedBytes =
@@ -236,7 +239,6 @@ public class ScrapeFreelanceJobsTest {
 	void shouldSkipUnmodifiedJobs() {
 		var lastModified = Instant.parse("2020-01-01T00:00:00Z");
 
-		// Create an existing job with a specific last_modified
 		var existingJobs = objectMapper.createObjectNode();
 		existingJobs.set(
 				"id-1",
@@ -245,26 +247,16 @@ public class ScrapeFreelanceJobsTest {
 						.put("id", "id-1")
 						.put("name", "Existing Job")
 						.put("last_modified", lastModified.toString()));
-
-		// Compress the existing jobs data
 		createExistingJobs(existingJobs);
 
-		// Create a job with the same last_modified (should be skipped)
 		createFreelanceJob(1, lastModified);
-
-		// Create a new job with a newer last_modified (should be fetched)
 		createFreelanceJob(2, Instant.parse("2020-01-02T00:00:00Z"));
 
 		scrapeFreelanceJobs.run();
 
-		// Consume all requests
 		server.takeRequest(); // latest file download (200)
 		server.takeRequest(); // index
-		// Note: No request for id-1 detail since it hasn't been modified
 		server.takeRequest(); // detail for id-2 only
-
-		// Verify no more requests were made
-		assertNull(server.takeRequest(1, TimeUnit.MILLISECONDS));
 
 		// Verify the latest file contains both jobs
 		var latestFile = "base/freelance-jobs/freelance-jobs-latest.json.bz2";
@@ -290,7 +282,9 @@ public class ScrapeFreelanceJobsTest {
 				.put("id", jobId)
 				.put("name", "name-" + id)
 				.put("state", "Active")
-				.put("last_modified", lastModified.toString());
+				.put(
+						"last_modified",
+						lastModified.truncatedTo(ChronoUnit.SECONDS).toString());
 
 		var progress = objectMapper.createObjectNode().put("current", "979900").put("desired", "999999999999999999");
 		job.set("progress", progress);

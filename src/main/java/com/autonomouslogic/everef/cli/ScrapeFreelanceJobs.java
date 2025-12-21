@@ -151,10 +151,6 @@ public class ScrapeFreelanceJobs implements Command {
 		detailedJobs.put(jobIdString, detailData);
 	}
 
-	/**
-	 * Determines if a job needs to be updated based on last_modified timestamp.
-	 * Returns true if the job from the index has a newer last_modified than the existing job.
-	 */
 	private boolean shouldUpdateJob(JsonNode indexJob, JsonNode existingJob) {
 		var indexLastModified = indexJob.get("last_modified");
 		var existingLastModified = existingJob.get("last_modified");
@@ -169,11 +165,10 @@ public class ScrapeFreelanceJobs implements Command {
 			return true;
 		}
 
-		var indexTime = indexLastModified.asText();
-		var existingTime = existingLastModified.asText();
+		var indexTime = ZonedDateTime.parse(indexLastModified.asText());
+		var existingTime = ZonedDateTime.parse(existingLastModified.asText());
 
-		// Compare timestamps as strings (ISO 8601 format is lexicographically comparable)
-		return indexTime.compareTo(existingTime) > 0;
+		return existingTime.isBefore(indexTime);
 	}
 
 	@SneakyThrows
