@@ -105,7 +105,7 @@ public class ScrapeFreelanceJobs implements Command {
 
 		log.info("Retrieved {} new/updated jobs from ESI", detailedJobs.size());
 
-		var mergedJobs = mergeJobs(existingJobs, detailedJobs);
+		var mergedJobs = mergeJobs(existingJobs, detailedJobs, jobs);
 		log.info("Total jobs after merge: {}", mergedJobs.size());
 
 		var outputFile = buildOutput(mergedJobs);
@@ -231,9 +231,25 @@ public class ScrapeFreelanceJobs implements Command {
 	/**
 	 * Merges existing jobs with newly fetched jobs.
 	 * New jobs overwrite existing ones with the same ID.
+	 * Jobs not in the current index are excluded.
 	 */
-	private Map<String, JsonNode> mergeJobs(Map<String, JsonNode> existingJobs, Map<String, JsonNode> newJobs) {
-		var merged = new HashMap<>(existingJobs);
+	private Map<String, JsonNode> mergeJobs(
+			Map<String, JsonNode> existingJobs, Map<String, JsonNode> newJobs, JsonNode indexJobs) {
+		var merged = new HashMap<String, JsonNode>();
+
+		// Only include existing jobs that are still in the current index
+		for (var indexJob : indexJobs) {
+			var jobId = indexJob.get("id");
+			if (jobId != null && !jobId.isNull()) {
+				var jobIdString = jobId.asText();
+				var existingJob = existingJobs.get(jobIdString);
+				if (existingJob != null) {
+					merged.put(jobIdString, existingJob);
+				}
+			}
+		}
+
+		// Overwrite with newly fetched jobs
 		merged.putAll(newJobs);
 		return merged;
 	}

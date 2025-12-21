@@ -204,7 +204,7 @@ public class ScrapeFreelanceJobsTest {
 
 	@Test
 	@SneakyThrows
-	void shouldMergeExistingJobs() {
+	void shouldRemoveOldExistingJobs() {
 		var job1 = createFreelanceJob(1, Instant.parse("2020-01-01T00:00:00Z"), false);
 		var existingJobs =
 				objectMapper.createObjectNode().set(job1.job().get("id").asText(), job1.detail());
@@ -223,7 +223,6 @@ public class ScrapeFreelanceJobsTest {
 		assertEquals("/freelance-jobs/id-3", job3Request.getRequestUrl().encodedPath());
 
 		var expected = objectMapper.createObjectNode();
-		expected.set(job1.job().get("id").asText(), job1.detail());
 		expected.set(job2.job().get("id").asText(), job2.detail());
 		expected.set(job3.job().get("id").asText(), job3.detail());
 
