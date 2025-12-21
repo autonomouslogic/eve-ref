@@ -83,68 +83,7 @@ public class ScrapeMarketOrdersTest {
 	void before() {
 		DaggerTestComponent.create().inject(this);
 		server = new MockWebServer();
-		server.setDispatcher(new Dispatcher() {
-			@NotNull
-			@Override
-			@SneakyThrows
-			public MockResponse dispatch(@NotNull RecordedRequest recordedRequest) throws InterruptedException {
-				return switch (recordedRequest.getPath()) {
-					case "/universe/regions/?datasource=tranquility",
-							"/latest/universe/regions/?datasource=tranquility" ->
-						new MockResponse().setResponseCode(200).setBody("[10000001,10000002]");
-					case "/universe/systems/30000001/?datasource=tranquility",
-							"/latest/universe/systems/30000001/?datasource=tranquility" ->
-						new MockResponse()
-								.setResponseCode(200)
-								.setBody(objectMapper.writeValueAsString(new GetUniverseSystemsSystemIdOk()
-										.name("test")
-										.systemId(30000001)
-										.constellationId(20000001)));
-					case "/universe/regions/10000001/?datasource=tranquility",
-							"/latest/universe/regions/10000001/?datasource=tranquility" ->
-						new MockResponse()
-								.setResponseCode(200)
-								.setBody("{\"region_id\":10000001,\"name\":\"Derelik\",\"constellations\":[]}");
-					case "/universe/regions/10000002/?datasource=tranquility",
-							"/latest/universe/regions/10000002/?datasource=tranquility" ->
-						new MockResponse()
-								.setResponseCode(200)
-								.setBody("{\"region_id\":10000002,\"name\":\"The Forge\",\"constellations\":[]}");
-					case "/markets/10000001/orders?order_type=all&datasource=tranquility&language=en&page=1",
-							"/latest/markets/10000001/orders?order_type=all&datasource=tranquility&language=en&page=1" ->
-						mockRegionOrders(recordedRequest, 10000001, 1, 2);
-					case "/markets/10000001/orders?order_type=all&datasource=tranquility&language=en&page=2",
-							"/latest/markets/10000001/orders?order_type=all&datasource=tranquility&language=en&page=2" ->
-						mockRegionOrders(recordedRequest, 10000001, 2, 2);
-					case "/markets/10000002/orders?order_type=all&datasource=tranquility&language=en&page=1",
-							"/latest/markets/10000002/orders?order_type=all&datasource=tranquility&language=en&page=1" ->
-						mockRegionOrders(recordedRequest, 10000002, 1, 2);
-					case "/markets/10000002/orders?order_type=all&datasource=tranquility&language=en&page=2",
-							"/latest/markets/10000002/orders?order_type=all&datasource=tranquility&language=en&page=2" ->
-						mockRegionOrders(recordedRequest, 10000002, 2, 2);
-					case "/base/structures/structures-latest.v2.json" -> mockStructures();
-					case "/markets/structures/1000000000001/?datasource=tranquility&language=en&page=1",
-							"/latest/markets/structures/1000000000001/?datasource=tranquility&language=en&page=1" ->
-						mockStructureOrders(recordedRequest, 1000000000001L, 1, 2);
-					case "/markets/structures/1000000000001/?datasource=tranquility&language=en&page=2",
-							"/latest/markets/structures/1000000000001/?datasource=tranquility&language=en&page=2" ->
-						mockStructureOrders(recordedRequest, 1000000000001L, 2, 2);
-					case "/markets/structures/1000000000002/?datasource=tranquility&language=en",
-							"/latest/markets/structures/1000000000002/?datasource=tranquility&language=en" ->
-						throw new RuntimeException("Fetch non-market structure");
-					case "/markets/structures/1000000000003/?datasource=tranquility&language=en",
-							"/latest/markets/structures/1000000000003/?datasource=tranquility&language=en" ->
-						new MockResponse().setResponseCode(403);
-					case "/markets/structures/1000000000004/?datasource=tranquility&language=en&page=1",
-							"/latest/markets/structures/1000000000004/?datasource=tranquility&language=en&page=1" ->
-						mockStructureOrders(recordedRequest, 1000000000004L, 1, 1);
-					default -> {
-						log.error("Unaccounted for URL: {}", recordedRequest.getPath());
-						yield new MockResponse().setResponseCode(404);
-					}
-				};
-			}
-		});
+		server.setDispatcher(new TestDispatcher());
 		server.start(TestDataUtil.TEST_PORT);
 	}
 
@@ -341,5 +280,55 @@ public class ScrapeMarketOrdersTest {
 		return Ordering.natural()
 				.nullsLast()
 				.onResultOf(m -> StringUtils.isNotBlank(m.get(fieldName)) ? Long.parseLong(m.get(fieldName)) : null);
+	}
+
+	private class TestDispatcher extends Dispatcher {
+		@NotNull
+		@Override
+		@SneakyThrows
+		public MockResponse dispatch(@NotNull RecordedRequest recordedRequest) throws InterruptedException {
+			return switch (recordedRequest.getPath()) {
+				case "/universe/regions", "/latest/universe/regions" ->
+					new MockResponse().setResponseCode(200).setBody("[10000001,10000002]");
+				case "/universe/systems/30000001", "/latest/universe/systems/30000001" ->
+					new MockResponse()
+							.setResponseCode(200)
+							.setBody(objectMapper.writeValueAsString(new GetUniverseSystemsSystemIdOk()
+									.name("test")
+									.systemId(30000001)
+									.constellationId(20000001)));
+				case "/universe/regions/10000001", "/latest/universe/regions/10000001" ->
+					new MockResponse()
+							.setResponseCode(200)
+							.setBody("{\"region_id\":10000001,\"name\":\"Derelik\",\"constellations\":[]}");
+				case "/universe/regions/10000002", "/latest/universe/regions/10000002" ->
+					new MockResponse()
+							.setResponseCode(200)
+							.setBody("{\"region_id\":10000002,\"name\":\"The Forge\",\"constellations\":[]}");
+				case "/latest/markets/10000001/orders?order_type=all&datasource=tranquility&language=en&page=1" ->
+					mockRegionOrders(recordedRequest, 10000001, 1, 2);
+				case "/markets/10000001/orders?order_type=all&page=2" ->
+					mockRegionOrders(recordedRequest, 10000001, 2, 2);
+				case "/latest/markets/10000002/orders?order_type=all&datasource=tranquility&language=en&page=1" ->
+					mockRegionOrders(recordedRequest, 10000002, 1, 2);
+				case "/markets/10000002/orders?order_type=all&page=2" ->
+					mockRegionOrders(recordedRequest, 10000002, 2, 2);
+				case "/base/structures/structures-latest.v2.json" -> mockStructures();
+				case "/latest/markets/structures/1000000000001/?datasource=tranquility&language=en&page=1" ->
+					mockStructureOrders(recordedRequest, 1000000000001L, 1, 2);
+				case "/latest/markets/structures/1000000000001/?datasource=tranquility&language=en&page=2" ->
+					mockStructureOrders(recordedRequest, 1000000000001L, 2, 2);
+				case "/latest/markets/structures/1000000000002/?datasource=tranquility&language=en&page=1" ->
+					throw new RuntimeException("Fetch non-market structure");
+				case "/latest/markets/structures/1000000000003/?datasource=tranquility&language=en&page=1" ->
+					new MockResponse().setResponseCode(403);
+				case "/latest/markets/structures/1000000000004/?datasource=tranquility&language=en&page=1" ->
+					mockStructureOrders(recordedRequest, 1000000000004L, 1, 1);
+				default -> {
+					log.warn("Unaccounted for URL: {}", recordedRequest.getPath());
+					yield new MockResponse().setResponseCode(404);
+				}
+			};
+		}
 	}
 }

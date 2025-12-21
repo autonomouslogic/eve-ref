@@ -47,7 +47,8 @@ public class EsiHelper {
 	@SneakyThrows
 	protected EsiHelper() {
 		try (var in = ResourceUtil.loadResource("/esi-compatibility-date")) {
-			compatibilityDate = LocalDate.parse(IOUtils.toString(in, StandardCharsets.UTF_8).trim());
+			compatibilityDate =
+					LocalDate.parse(IOUtils.toString(in, StandardCharsets.UTF_8).trim());
 		}
 	}
 
