@@ -192,7 +192,13 @@ public class FetchDonations implements Command {
 		var journals = esiHelper
 				.fetchPages(page ->
 						VirtualThreads.offload(() -> walletApi.getCharactersCharacterIdWalletJournalWithHttpInfo(
-								characterId, esiHelper.getCompatibilityDate(), page, null, null, null, java.util.Map.of("Authorization", "Bearer " + accessToken))))
+								characterId,
+								esiHelper.getCompatibilityDate(),
+								page,
+								null,
+								null,
+								null,
+								java.util.Map.of("Authorization", "Bearer " + accessToken))))
 				.doOnNext(e -> log.debug("Character journal: {}", e))
 				.filter(e -> DONATION_REF_TYPES.contains(e.getRefType().toString()))
 				.map(e -> DonationEntry.builder()
@@ -278,8 +284,8 @@ public class FetchDonations implements Command {
 
 	@SneakyThrows
 	private @NotNull CharactersCharacterIdGet getCharacter(long characterId) throws ApiException {
-		return VirtualThreads.offload(() -> characterApi.getCharactersCharacterId(
-				characterId, esiHelper.getCompatibilityDate(), null, null, null));
+		return VirtualThreads.offload(() ->
+				characterApi.getCharactersCharacterId(characterId, esiHelper.getCompatibilityDate(), null, null, null));
 	}
 
 	private static @NotNull SummaryFile buildSummary(Collection<DonationEntry> donations) {

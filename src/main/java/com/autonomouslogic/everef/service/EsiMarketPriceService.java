@@ -58,7 +58,8 @@ public class EsiMarketPriceService {
 		log.info("Updating market prices");
 		ApiResponse<List<MarketsPricesGetInner>> res;
 		try {
-			res = marketApi.getMarketsPricesWithHttpInfo(esiHelper.getCompatibilityDate(), null, esiMarketPricesEtag, null);
+			res = marketApi.getMarketsPricesWithHttpInfo(
+					esiHelper.getCompatibilityDate(), null, esiMarketPricesEtag, null);
 		} catch (ApiException e) {
 			if (e.getCode() == 304) {
 				log.debug("No market prices update needed");
