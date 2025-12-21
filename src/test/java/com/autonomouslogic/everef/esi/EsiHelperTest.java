@@ -61,7 +61,7 @@ public class EsiHelperTest {
 		var responses = esiHelper.fetchPages(EsiUrl.builder().urlPath("/pages").build());
 		var bodies = getBodies(responses);
 		assertEquals(List.of("page-1"), bodies);
-		testDataUtil.assertRequest(server.takeRequest(), "/pages?datasource=tranquility&language=en&page=1");
+		testDataUtil.assertRequest(server.takeRequest(), "/latest/pages?datasource=tranquility&language=en&page=1");
 		testDataUtil.assertNoMoreRequests(server);
 	}
 
@@ -72,7 +72,7 @@ public class EsiHelperTest {
 		var responses = esiHelper.fetchPages(EsiUrl.builder().urlPath("/pages").build());
 		var bodies = getBodies(responses);
 		assertEquals(List.of("page-1"), bodies);
-		testDataUtil.assertRequest(server.takeRequest(), "/pages?datasource=tranquility&language=en&page=1");
+		testDataUtil.assertRequest(server.takeRequest(), "/latest/pages?datasource=tranquility&language=en&page=1");
 		testDataUtil.assertNoMoreRequests(server);
 	}
 
@@ -91,9 +91,9 @@ public class EsiHelperTest {
 		}
 		assertEquals(
 				Set.of(
-						"/pages?datasource=tranquility&language=en&page=1",
-						"/pages?datasource=tranquility&language=en&page=2",
-						"/pages?datasource=tranquility&language=en&page=3"),
+						"/latest/pages?datasource=tranquility&language=en&page=1",
+						"/latest/pages?datasource=tranquility&language=en&page=2",
+						"/latest/pages?datasource=tranquility&language=en&page=3"),
 				paths);
 		testDataUtil.assertNoMoreRequests(server);
 	}
@@ -109,7 +109,7 @@ public class EsiHelperTest {
 				.toList()
 				.blockingGet();
 		assertEquals(List.of(), responses);
-		testDataUtil.assertRequest(server.takeRequest(), "/codes?datasource=tranquility&language=en");
+		testDataUtil.assertRequest(server.takeRequest(), "/latest/codes?datasource=tranquility&language=en");
 		testDataUtil.assertNoMoreRequests(server);
 	}
 
@@ -126,9 +126,9 @@ public class EsiHelperTest {
 					.blockingGet();
 		});
 		assertEquals(
-				String.format("Received %s for http://localhost:30150/codes?datasource=tranquility&language=en", code),
+				String.format("Received %s for http://localhost:30150/latest/codes?datasource=tranquility&language=en", code),
 				err.getMessage());
-		testDataUtil.assertRequest(server.takeRequest(), "/codes?datasource=tranquility&language=en");
+		testDataUtil.assertRequest(server.takeRequest(), "/latest/codes?datasource=tranquility&language=en");
 		testDataUtil.assertNoMoreRequests(server);
 	}
 

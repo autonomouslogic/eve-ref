@@ -406,6 +406,10 @@ public class ScrapeStructuresTest {
 		public MockResponse dispatch(@NotNull RecordedRequest request) throws InterruptedException {
 			try {
 				var path = request.getRequestUrl().encodedPath();
+				// Remove /latest/ prefix if present to match expected paths
+				if (path.startsWith("/latest/")) {
+					path = path.substring(7); // Remove "/latest"
+				}
 				var segments = request.getRequestUrl().pathSegments();
 				var lastModified = DateTimeFormatter.RFC_1123_DATE_TIME.format(time);
 
@@ -424,7 +428,8 @@ public class ScrapeStructuresTest {
 				}
 
 				if (path.startsWith("/universe/structures/")) {
-					var id = Long.parseLong(segments.get(2));
+					var segmentIndex = segments.contains("latest") ? 3 : 2;
+					var id = Long.parseLong(segments.get(segmentIndex));
 					var structure = publicStructures.get(id);
 					if (structure == null) {
 						structure = nonPublicStructures.get(id);
@@ -439,7 +444,8 @@ public class ScrapeStructuresTest {
 				}
 
 				if (path.startsWith("/markets/structures/")) {
-					var id = Long.parseLong(segments.get(2));
+					var segmentIndex = segments.contains("latest") ? 3 : 2;
+					var id = Long.parseLong(segments.get(segmentIndex));
 					if (marketStructures.contains(id)) {
 						return new MockResponse().setBody("[]").addHeader("Last-Modified", lastModified);
 					} else {
