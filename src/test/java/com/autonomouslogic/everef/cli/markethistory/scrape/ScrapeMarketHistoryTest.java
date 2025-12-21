@@ -110,7 +110,6 @@ public class ScrapeMarketHistoryTest {
 		server.close();
 	}
 
-	@Test
 	@RetryingTest(3)
 	@SneakyThrows
 	void shouldScrapeMarketHistory() {

@@ -197,13 +197,13 @@ public class ScrapePublicContractsTest {
 						"/latest/dogma/dynamic/items/47804/1027826381003/?datasource=tranquility&language=en",
 						"/latest/dogma/dynamic/items/47804/2000/?datasource=tranquility&language=en",
 						"/latest/dogma/dynamic/items/49734/1040731418725/?datasource=tranquility&language=en",
-						"/latest/meta_groups/15",
-						"/latest/public-contracts/public-contracts-latest.v2.tar.bz2",
-						"/latest/universe/regions/10000001/?datasource=tranquility",
-						"/latest/universe/regions/10000002/?datasource=tranquility",
-						"/latest/universe/regions/?datasource=tranquility",
-						"/latest/universe/types/47804/?datasource=tranquility",
-						"/latest/universe/types/49734/?datasource=tranquility"),
+						"/meta_groups/15",
+						"/public-contracts/public-contracts-latest.v2.tar.bz2",
+						"/universe/regions/10000001/?datasource=tranquility",
+						"/universe/regions/10000002/?datasource=tranquility",
+						"/universe/regions/?datasource=tranquility",
+						"/universe/types/47804/?datasource=tranquility",
+						"/universe/types/49734/?datasource=tranquility"),
 				requestPaths);
 
 		// Assert data index.
