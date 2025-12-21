@@ -29,6 +29,7 @@ import com.autonomouslogic.everef.db.DbAdapterTest;
 import com.autonomouslogic.everef.db.MarketHistoryDaoTest;
 import com.autonomouslogic.everef.esi.EsiHelperTest;
 import com.autonomouslogic.everef.esi.EsiLimitExceededInterceptorTest;
+import com.autonomouslogic.everef.esi.EsiModuleTest;
 import com.autonomouslogic.everef.esi.EsiRateLimitInterceptorTest;
 import com.autonomouslogic.everef.esi.EsiVerifyResponseTest;
 import com.autonomouslogic.everef.esi.LocationPopulatorTest;
@@ -140,4 +141,6 @@ public interface TestComponent {
 	void inject(FuzzworkMarketServiceTest test);
 
 	void inject(EsiHttpWrapperTest test);
+
+	void inject(EsiModuleTest test);
 }

@@ -19,9 +19,12 @@ public class EsiModule {
 	@Provides
 	@Singleton
 	public ApiClient apiClient() {
-		var base = ESI_BASE_URL.getRequired();
+		var base = ESI_BASE_URL.getRequired().toString();
+		while (base.endsWith("/")) {
+			base = base.substring(0, base.length() - 1);
+		}
 		var api = new ApiClient();
-		api.updateBaseUri(base.toString());
+		api.updateBaseUri(base);
 		return api;
 	}
 
