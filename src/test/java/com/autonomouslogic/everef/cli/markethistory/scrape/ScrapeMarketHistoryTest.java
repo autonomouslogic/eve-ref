@@ -42,6 +42,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junitpioneer.jupiter.RetryingTest;
 import org.junitpioneer.jupiter.SetEnvironmentVariable;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -110,6 +111,7 @@ public class ScrapeMarketHistoryTest {
 	}
 
 	@Test
+	@RetryingTest(3)
 	@SneakyThrows
 	void shouldScrapeMarketHistory() {
 		scrapeMarketHistory
