@@ -122,7 +122,7 @@ public class ScrapeFreelanceJobs implements Command {
 			throw new IllegalStateException("No freelance_jobs array found in response");
 		}
 
-		log.info("Retrieved {} jobs from index", jobsArray.size());
+		log.debug("Retrieved {} jobs from index", jobsArray.size());
 		return jobsArray;
 	}
 
@@ -138,11 +138,10 @@ public class ScrapeFreelanceJobs implements Command {
 		// Check if we already have this job and if it needs updating
 		var existingJob = existingJobs.get(jobIdString);
 		if (existingJob != null && !shouldUpdateJob(job, existingJob)) {
-			log.debug("Job {} has not been modified, skipping fetch", jobIdString);
 			return;
 		}
 
-		log.debug("Fetching details for job {}", jobIdString);
+		log.trace("Fetching details for job {}", jobIdString);
 		var detailUrl =
 				EsiUrl.modern().urlPath("/freelance-jobs/" + jobIdString).build();
 		var detailResponse = esiHelper.fetch(detailUrl);
@@ -174,7 +173,7 @@ public class ScrapeFreelanceJobs implements Command {
 	@SneakyThrows
 	private File buildOutput(Map<String, JsonNode> jobs) {
 		var file = tempFiles.tempFile("freelance-jobs", ".json").toFile();
-		log.info("Writing output file to {}", file);
+		log.debug("Writing output file to {}", file);
 		objectMapper.writeValue(file, jobs);
 		return file;
 	}
@@ -190,8 +189,8 @@ public class ScrapeFreelanceJobs implements Command {
 		var archivePath = dataPath.resolve(FREELANCE_JOBS.createArchivePath(scrapeTime));
 		var latestPut = s3Util.putPublicObjectRequest(compressedFile.length(), latestPath, latestCacheTime);
 		var archivePut = s3Util.putPublicObjectRequest(compressedFile.length(), archivePath, archiveCacheTime);
-		log.info(String.format("Uploading latest file to %s", latestPath));
-		log.info(String.format("Uploading archive file to %s", archivePath));
+		log.debug(String.format("Uploading latest file to %s", latestPath));
+		log.debug(String.format("Uploading archive file to %s", archivePath));
 
 		s3Adapter.putObject(latestPut, compressedFile, s3Client).blockingGet();
 		s3Adapter.putObject(archivePut, compressedFile, s3Client).blockingGet();
@@ -210,7 +209,7 @@ public class ScrapeFreelanceJobs implements Command {
 
 		try (var response = okHttpWrapper.download(url, file)) {
 			if (response.code() == 404) {
-				log.info("No existing freelance jobs file found, starting fresh");
+				log.warn("No existing freelance jobs file found, starting fresh");
 				return new HashMap<>();
 			}
 			if (response.code() != 200) {
