@@ -12,19 +12,21 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
-import type { MutaplasmidDogmaModifications } from './MutaplasmidDogmaModifications';
-import {
-    MutaplasmidDogmaModificationsFromJSON,
-    MutaplasmidDogmaModificationsFromJSONTyped,
-    MutaplasmidDogmaModificationsToJSON,
-} from './MutaplasmidDogmaModifications';
+import { mapValues } from '../runtime';
 import type { MutaplasmidTypeMapping } from './MutaplasmidTypeMapping';
 import {
     MutaplasmidTypeMappingFromJSON,
     MutaplasmidTypeMappingFromJSONTyped,
     MutaplasmidTypeMappingToJSON,
+    MutaplasmidTypeMappingToJSONTyped,
 } from './MutaplasmidTypeMapping';
+import type { MutaplasmidDogmaModifications } from './MutaplasmidDogmaModifications';
+import {
+    MutaplasmidDogmaModificationsFromJSON,
+    MutaplasmidDogmaModificationsFromJSONTyped,
+    MutaplasmidDogmaModificationsToJSON,
+    MutaplasmidDogmaModificationsToJSONTyped,
+} from './MutaplasmidDogmaModifications';
 
 /**
  * Details about a mutaplasmid. These are created by EVE Ref and derived from Hoboleaks.
@@ -55,10 +57,8 @@ export interface Mutaplasmid {
 /**
  * Check if a given object implements the Mutaplasmid interface.
  */
-export function instanceOfMutaplasmid(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+export function instanceOfMutaplasmid(value: object): value is Mutaplasmid {
+    return true;
 }
 
 export function MutaplasmidFromJSON(json: any): Mutaplasmid {
@@ -66,29 +66,31 @@ export function MutaplasmidFromJSON(json: any): Mutaplasmid {
 }
 
 export function MutaplasmidFromJSONTyped(json: any, ignoreDiscriminator: boolean): Mutaplasmid {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'dogmaModifications': !exists(json, 'dogma_modifications') ? undefined : (mapValues(json['dogma_modifications'], MutaplasmidDogmaModificationsFromJSON)),
-        'typeId': !exists(json, 'type_id') ? undefined : json['type_id'],
-        'typeMappings': !exists(json, 'type_mappings') ? undefined : (mapValues(json['type_mappings'], MutaplasmidTypeMappingFromJSON)),
+        'dogmaModifications': json['dogma_modifications'] == null ? undefined : (mapValues(json['dogma_modifications'], MutaplasmidDogmaModificationsFromJSON)),
+        'typeId': json['type_id'] == null ? undefined : json['type_id'],
+        'typeMappings': json['type_mappings'] == null ? undefined : (mapValues(json['type_mappings'], MutaplasmidTypeMappingFromJSON)),
     };
 }
 
-export function MutaplasmidToJSON(value?: Mutaplasmid | null): any {
-    if (value === undefined) {
-        return undefined;
+export function MutaplasmidToJSON(json: any): Mutaplasmid {
+    return MutaplasmidToJSONTyped(json, false);
+}
+
+export function MutaplasmidToJSONTyped(value?: Mutaplasmid | null, ignoreDiscriminator: boolean = false): any {
+    if (value == null) {
+        return value;
     }
-    if (value === null) {
-        return null;
-    }
+
     return {
         
-        'dogma_modifications': value.dogmaModifications === undefined ? undefined : (mapValues(value.dogmaModifications, MutaplasmidDogmaModificationsToJSON)),
-        'type_id': value.typeId,
-        'type_mappings': value.typeMappings === undefined ? undefined : (mapValues(value.typeMappings, MutaplasmidTypeMappingToJSON)),
+        'dogma_modifications': value['dogmaModifications'] == null ? undefined : (mapValues(value['dogmaModifications'], MutaplasmidDogmaModificationsToJSON)),
+        'type_id': value['typeId'],
+        'type_mappings': value['typeMappings'] == null ? undefined : (mapValues(value['typeMappings'], MutaplasmidTypeMappingToJSON)),
     };
 }
 

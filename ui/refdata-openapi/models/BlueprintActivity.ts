@@ -12,12 +12,13 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 import type { BlueprintMaterial } from './BlueprintMaterial';
 import {
     BlueprintMaterialFromJSON,
     BlueprintMaterialFromJSONTyped,
     BlueprintMaterialToJSON,
+    BlueprintMaterialToJSONTyped,
 } from './BlueprintMaterial';
 
 /**
@@ -55,10 +56,8 @@ export interface BlueprintActivity {
 /**
  * Check if a given object implements the BlueprintActivity interface.
  */
-export function instanceOfBlueprintActivity(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+export function instanceOfBlueprintActivity(value: object): value is BlueprintActivity {
+    return true;
 }
 
 export function BlueprintActivityFromJSON(json: any): BlueprintActivity {
@@ -66,31 +65,33 @@ export function BlueprintActivityFromJSON(json: any): BlueprintActivity {
 }
 
 export function BlueprintActivityFromJSONTyped(json: any, ignoreDiscriminator: boolean): BlueprintActivity {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'materials': !exists(json, 'materials') ? undefined : (mapValues(json['materials'], BlueprintMaterialFromJSON)),
-        'products': !exists(json, 'products') ? undefined : (mapValues(json['products'], BlueprintMaterialFromJSON)),
-        'requiredSkills': !exists(json, 'required_skills') ? undefined : json['required_skills'],
-        'time': !exists(json, 'time') ? undefined : json['time'],
+        'materials': json['materials'] == null ? undefined : (mapValues(json['materials'], BlueprintMaterialFromJSON)),
+        'products': json['products'] == null ? undefined : (mapValues(json['products'], BlueprintMaterialFromJSON)),
+        'requiredSkills': json['required_skills'] == null ? undefined : json['required_skills'],
+        'time': json['time'] == null ? undefined : json['time'],
     };
 }
 
-export function BlueprintActivityToJSON(value?: BlueprintActivity | null): any {
-    if (value === undefined) {
-        return undefined;
+export function BlueprintActivityToJSON(json: any): BlueprintActivity {
+    return BlueprintActivityToJSONTyped(json, false);
+}
+
+export function BlueprintActivityToJSONTyped(value?: BlueprintActivity | null, ignoreDiscriminator: boolean = false): any {
+    if (value == null) {
+        return value;
     }
-    if (value === null) {
-        return null;
-    }
+
     return {
         
-        'materials': value.materials === undefined ? undefined : (mapValues(value.materials, BlueprintMaterialToJSON)),
-        'products': value.products === undefined ? undefined : (mapValues(value.products, BlueprintMaterialToJSON)),
-        'required_skills': value.requiredSkills,
-        'time': value.time,
+        'materials': value['materials'] == null ? undefined : (mapValues(value['materials'], BlueprintMaterialToJSON)),
+        'products': value['products'] == null ? undefined : (mapValues(value['products'], BlueprintMaterialToJSON)),
+        'required_skills': value['requiredSkills'],
+        'time': value['time'],
     };
 }
 

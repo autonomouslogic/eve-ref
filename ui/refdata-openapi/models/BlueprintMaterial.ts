@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 /**
  * 
  * @export
@@ -42,10 +42,8 @@ export interface BlueprintMaterial {
 /**
  * Check if a given object implements the BlueprintMaterial interface.
  */
-export function instanceOfBlueprintMaterial(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+export function instanceOfBlueprintMaterial(value: object): value is BlueprintMaterial {
+    return true;
 }
 
 export function BlueprintMaterialFromJSON(json: any): BlueprintMaterial {
@@ -53,29 +51,31 @@ export function BlueprintMaterialFromJSON(json: any): BlueprintMaterial {
 }
 
 export function BlueprintMaterialFromJSONTyped(json: any, ignoreDiscriminator: boolean): BlueprintMaterial {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'probability': !exists(json, 'probability') ? undefined : json['probability'],
-        'quantity': !exists(json, 'quantity') ? undefined : json['quantity'],
-        'typeId': !exists(json, 'type_id') ? undefined : json['type_id'],
+        'probability': json['probability'] == null ? undefined : json['probability'],
+        'quantity': json['quantity'] == null ? undefined : json['quantity'],
+        'typeId': json['type_id'] == null ? undefined : json['type_id'],
     };
 }
 
-export function BlueprintMaterialToJSON(value?: BlueprintMaterial | null): any {
-    if (value === undefined) {
-        return undefined;
+export function BlueprintMaterialToJSON(json: any): BlueprintMaterial {
+    return BlueprintMaterialToJSONTyped(json, false);
+}
+
+export function BlueprintMaterialToJSONTyped(value?: BlueprintMaterial | null, ignoreDiscriminator: boolean = false): any {
+    if (value == null) {
+        return value;
     }
-    if (value === null) {
-        return null;
-    }
+
     return {
         
-        'probability': value.probability,
-        'quantity': value.quantity,
-        'type_id': value.typeId,
+        'probability': value['probability'],
+        'quantity': value['quantity'],
+        'type_id': value['typeId'],
     };
 }
 

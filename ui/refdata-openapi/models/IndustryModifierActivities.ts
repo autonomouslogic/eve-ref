@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 /**
  * These are the type IDs of the engineering rigs which affect this type in some way, indexed by activity and bonus type. This is added by EVE Ref.
  * @export
@@ -60,10 +60,8 @@ export interface IndustryModifierActivities {
 /**
  * Check if a given object implements the IndustryModifierActivities interface.
  */
-export function instanceOfIndustryModifierActivities(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+export function instanceOfIndustryModifierActivities(value: object): value is IndustryModifierActivities {
+    return true;
 }
 
 export function IndustryModifierActivitiesFromJSON(json: any): IndustryModifierActivities {
@@ -71,35 +69,37 @@ export function IndustryModifierActivitiesFromJSON(json: any): IndustryModifierA
 }
 
 export function IndustryModifierActivitiesFromJSONTyped(json: any, ignoreDiscriminator: boolean): IndustryModifierActivities {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'copying': !exists(json, 'copying') ? undefined : json['copying'],
-        'invention': !exists(json, 'invention') ? undefined : json['invention'],
-        'manufacturing': !exists(json, 'manufacturing') ? undefined : json['manufacturing'],
-        'reaction': !exists(json, 'reaction') ? undefined : json['reaction'],
-        'researchMaterial': !exists(json, 'research_material') ? undefined : json['research_material'],
-        'researchTime': !exists(json, 'research_time') ? undefined : json['research_time'],
+        'copying': json['copying'] == null ? undefined : json['copying'],
+        'invention': json['invention'] == null ? undefined : json['invention'],
+        'manufacturing': json['manufacturing'] == null ? undefined : json['manufacturing'],
+        'reaction': json['reaction'] == null ? undefined : json['reaction'],
+        'researchMaterial': json['research_material'] == null ? undefined : json['research_material'],
+        'researchTime': json['research_time'] == null ? undefined : json['research_time'],
     };
 }
 
-export function IndustryModifierActivitiesToJSON(value?: IndustryModifierActivities | null): any {
-    if (value === undefined) {
-        return undefined;
+export function IndustryModifierActivitiesToJSON(json: any): IndustryModifierActivities {
+    return IndustryModifierActivitiesToJSONTyped(json, false);
+}
+
+export function IndustryModifierActivitiesToJSONTyped(value?: IndustryModifierActivities | null, ignoreDiscriminator: boolean = false): any {
+    if (value == null) {
+        return value;
     }
-    if (value === null) {
-        return null;
-    }
+
     return {
         
-        'copying': value.copying,
-        'invention': value.invention,
-        'manufacturing': value.manufacturing,
-        'reaction': value.reaction,
-        'research_material': value.researchMaterial,
-        'research_time': value.researchTime,
+        'copying': value['copying'],
+        'invention': value['invention'],
+        'manufacturing': value['manufacturing'],
+        'reaction': value['reaction'],
+        'research_material': value['researchMaterial'],
+        'research_time': value['researchTime'],
     };
 }
 

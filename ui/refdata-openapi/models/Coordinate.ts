@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 /**
  * 
  * @export
@@ -42,10 +42,8 @@ export interface Coordinate {
 /**
  * Check if a given object implements the Coordinate interface.
  */
-export function instanceOfCoordinate(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+export function instanceOfCoordinate(value: object): value is Coordinate {
+    return true;
 }
 
 export function CoordinateFromJSON(json: any): Coordinate {
@@ -53,29 +51,31 @@ export function CoordinateFromJSON(json: any): Coordinate {
 }
 
 export function CoordinateFromJSONTyped(json: any, ignoreDiscriminator: boolean): Coordinate {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'x': !exists(json, 'x') ? undefined : json['x'],
-        'y': !exists(json, 'y') ? undefined : json['y'],
-        'z': !exists(json, 'z') ? undefined : json['z'],
+        'x': json['x'] == null ? undefined : json['x'],
+        'y': json['y'] == null ? undefined : json['y'],
+        'z': json['z'] == null ? undefined : json['z'],
     };
 }
 
-export function CoordinateToJSON(value?: Coordinate | null): any {
-    if (value === undefined) {
-        return undefined;
+export function CoordinateToJSON(json: any): Coordinate {
+    return CoordinateToJSONTyped(json, false);
+}
+
+export function CoordinateToJSONTyped(value?: Coordinate | null, ignoreDiscriminator: boolean = false): any {
+    if (value == null) {
+        return value;
     }
-    if (value === null) {
-        return null;
-    }
+
     return {
         
-        'x': value.x,
-        'y': value.y,
-        'z': value.z,
+        'x': value['x'],
+        'y': value['y'],
+        'z': value['z'],
     };
 }
 
