@@ -1,11 +1,12 @@
-import {
-    type GetMarketsRegionIdOrders200Ok,
-    GetMarketsRegionIdOrdersDatasourceEnum,
-    GetMarketsRegionIdOrdersOrderTypeEnum
-} from "~/esi-openapi";
+
 import {marketApi} from "~/esi";
 import {DOMAIN, HEIMATAR, METROPOLIS, GPMR_01, SINQ_LAISON, THE_FORGE} from "~/lib/regionConstants";
 import {PLEX_TYPE_ID} from "~/lib/typeConstants";
+import {
+    GetMarketsRegionIdOrdersOrderTypeEnum,
+    type GetMarketsRegionIdOrdersRequest,
+    type MarketsRegionIdOrdersGetInner
+} from "~/esi-openapi";
 
 export interface HubStation {
     systemName: string,
@@ -56,13 +57,12 @@ HUB_STATIONS.set("Misaba", {
     regionId: DOMAIN
 } as HubStation);
 
-export async function getOrders(orderType: GetMarketsRegionIdOrdersOrderTypeEnum, typeId: number, regionId: number) {
+export async function getOrders(orderType: GetMarketsRegionIdOrdersOrderTypeEnum, typeId: number, regionId: number): Promise<Array<MarketsRegionIdOrdersGetInner>> {
     return marketApi.getMarketsRegionIdOrders({
         typeId: typeId,
         regionId: regionId,
-        orderType,
-        datasource: GetMarketsRegionIdOrdersDatasourceEnum.Tranquility
-    });
+        orderType
+    } as GetMarketsRegionIdOrdersRequest);
 }
 
 /**
