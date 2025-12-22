@@ -173,7 +173,7 @@ public class ScrapePublicContractsTest {
 				.map(RecordedRequest::getPath)
 				.sorted()
 				.distinct()
-				.toList(); // @todo remove distinct()
+				.toList();
 		assertEquals(
 				List.of(
 						"/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
@@ -199,11 +199,11 @@ public class ScrapePublicContractsTest {
 						"/latest/dogma/dynamic/items/49734/1040731418725/?datasource=tranquility&language=en",
 						"/meta_groups/15",
 						"/public-contracts/public-contracts-latest.v2.tar.bz2",
-						"/universe/regions/10000001/?datasource=tranquility",
-						"/universe/regions/10000002/?datasource=tranquility",
-						"/universe/regions/?datasource=tranquility",
-						"/universe/types/47804/?datasource=tranquility",
-						"/universe/types/49734/?datasource=tranquility"),
+						"/universe/regions",
+						"/universe/regions/10000001",
+						"/universe/regions/10000002",
+						"/universe/types/47804",
+						"/universe/types/49734"),
 				requestPaths);
 
 		// Assert data index.
@@ -343,11 +343,11 @@ public class ScrapePublicContractsTest {
 				var segments = request.getRequestUrl().pathSegments();
 
 				switch (path) {
-					case "/universe/regions/", "/latest/universe/regions/":
+					case "/universe/regions":
 						return mockResponse("[10000001,10000002]");
-					case "/universe/regions/10000001/", "/latest/universe/regions/10000001/":
+					case "/universe/regions/10000001":
 						return mockResponse("{\"region_id\":10000001,\"name\":\"Derelik\",\"constellations\":[]}");
-					case "/universe/regions/10000002/", "/latest/universe/regions/10000002/":
+					case "/universe/regions/10000002":
 						return mockResponse("{\"region_id\":10000002,\"name\":\"The Forge\",\"constellations\":[]}");
 					case "/meta_groups/15":
 						return metaGroup15();

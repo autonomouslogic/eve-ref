@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 /**
  * Details a material used in a blueprint. This is added by EVE Ref.
  * @export
@@ -42,10 +42,8 @@ export interface UsedInBlueprint {
 /**
  * Check if a given object implements the UsedInBlueprint interface.
  */
-export function instanceOfUsedInBlueprint(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+export function instanceOfUsedInBlueprint(value: object): value is UsedInBlueprint {
+    return true;
 }
 
 export function UsedInBlueprintFromJSON(json: any): UsedInBlueprint {
@@ -53,29 +51,31 @@ export function UsedInBlueprintFromJSON(json: any): UsedInBlueprint {
 }
 
 export function UsedInBlueprintFromJSONTyped(json: any, ignoreDiscriminator: boolean): UsedInBlueprint {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'activity': !exists(json, 'activity') ? undefined : json['activity'],
-        'materialTypeId': !exists(json, 'material_type_id') ? undefined : json['material_type_id'],
-        'quantity': !exists(json, 'quantity') ? undefined : json['quantity'],
+        'activity': json['activity'] == null ? undefined : json['activity'],
+        'materialTypeId': json['material_type_id'] == null ? undefined : json['material_type_id'],
+        'quantity': json['quantity'] == null ? undefined : json['quantity'],
     };
 }
 
-export function UsedInBlueprintToJSON(value?: UsedInBlueprint | null): any {
-    if (value === undefined) {
-        return undefined;
+export function UsedInBlueprintToJSON(json: any): UsedInBlueprint {
+    return UsedInBlueprintToJSONTyped(json, false);
+}
+
+export function UsedInBlueprintToJSONTyped(value?: UsedInBlueprint | null, ignoreDiscriminator: boolean = false): any {
+    if (value == null) {
+        return value;
     }
-    if (value === null) {
-        return null;
-    }
+
     return {
         
-        'activity': value.activity,
-        'material_type_id': value.materialTypeId,
-        'quantity': value.quantity,
+        'activity': value['activity'],
+        'material_type_id': value['materialTypeId'],
+        'quantity': value['quantity'],
     };
 }
 

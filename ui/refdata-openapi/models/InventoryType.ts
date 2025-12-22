@@ -12,54 +12,62 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
-import type { DogmaTypeAttribute } from './DogmaTypeAttribute';
-import {
-    DogmaTypeAttributeFromJSON,
-    DogmaTypeAttributeFromJSONTyped,
-    DogmaTypeAttributeToJSON,
-} from './DogmaTypeAttribute';
+import { mapValues } from '../runtime';
 import type { DogmaTypeEffect } from './DogmaTypeEffect';
 import {
     DogmaTypeEffectFromJSON,
     DogmaTypeEffectFromJSONTyped,
     DogmaTypeEffectToJSON,
+    DogmaTypeEffectToJSONTyped,
 } from './DogmaTypeEffect';
-import type { IndustryModifierActivities } from './IndustryModifierActivities';
-import {
-    IndustryModifierActivitiesFromJSON,
-    IndustryModifierActivitiesFromJSONTyped,
-    IndustryModifierActivitiesToJSON,
-} from './IndustryModifierActivities';
-import type { InventoryTypeTraits } from './InventoryTypeTraits';
-import {
-    InventoryTypeTraitsFromJSON,
-    InventoryTypeTraitsFromJSONTyped,
-    InventoryTypeTraitsToJSON,
-} from './InventoryTypeTraits';
-import type { ProducingBlueprint } from './ProducingBlueprint';
-import {
-    ProducingBlueprintFromJSON,
-    ProducingBlueprintFromJSONTyped,
-    ProducingBlueprintToJSON,
-} from './ProducingBlueprint';
-import type { RandomizedTypeMaterial } from './RandomizedTypeMaterial';
-import {
-    RandomizedTypeMaterialFromJSON,
-    RandomizedTypeMaterialFromJSONTyped,
-    RandomizedTypeMaterialToJSON,
-} from './RandomizedTypeMaterial';
 import type { TypeMaterial } from './TypeMaterial';
 import {
     TypeMaterialFromJSON,
     TypeMaterialFromJSONTyped,
     TypeMaterialToJSON,
+    TypeMaterialToJSONTyped,
 } from './TypeMaterial';
+import type { InventoryTypeTraits } from './InventoryTypeTraits';
+import {
+    InventoryTypeTraitsFromJSON,
+    InventoryTypeTraitsFromJSONTyped,
+    InventoryTypeTraitsToJSON,
+    InventoryTypeTraitsToJSONTyped,
+} from './InventoryTypeTraits';
+import type { DogmaTypeAttribute } from './DogmaTypeAttribute';
+import {
+    DogmaTypeAttributeFromJSON,
+    DogmaTypeAttributeFromJSONTyped,
+    DogmaTypeAttributeToJSON,
+    DogmaTypeAttributeToJSONTyped,
+} from './DogmaTypeAttribute';
+import type { IndustryModifierActivities } from './IndustryModifierActivities';
+import {
+    IndustryModifierActivitiesFromJSON,
+    IndustryModifierActivitiesFromJSONTyped,
+    IndustryModifierActivitiesToJSON,
+    IndustryModifierActivitiesToJSONTyped,
+} from './IndustryModifierActivities';
+import type { RandomizedTypeMaterial } from './RandomizedTypeMaterial';
+import {
+    RandomizedTypeMaterialFromJSON,
+    RandomizedTypeMaterialFromJSONTyped,
+    RandomizedTypeMaterialToJSON,
+    RandomizedTypeMaterialToJSONTyped,
+} from './RandomizedTypeMaterial';
+import type { ProducingBlueprint } from './ProducingBlueprint';
+import {
+    ProducingBlueprintFromJSON,
+    ProducingBlueprintFromJSONTyped,
+    ProducingBlueprintToJSON,
+    ProducingBlueprintToJSONTyped,
+} from './ProducingBlueprint';
 import type { UsedInBlueprint } from './UsedInBlueprint';
 import {
     UsedInBlueprintFromJSON,
     UsedInBlueprintFromJSONTyped,
     UsedInBlueprintToJSON,
+    UsedInBlueprintToJSONTyped,
 } from './UsedInBlueprint';
 
 /**
@@ -373,10 +381,8 @@ export interface InventoryType {
 /**
  * Check if a given object implements the InventoryType interface.
  */
-export function instanceOfInventoryType(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+export function instanceOfInventoryType(value: object): value is InventoryType {
+    return true;
 }
 
 export function InventoryTypeFromJSON(json: any): InventoryType {
@@ -384,123 +390,125 @@ export function InventoryTypeFromJSON(json: any): InventoryType {
 }
 
 export function InventoryTypeFromJSONTyped(json: any, ignoreDiscriminator: boolean): InventoryType {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'applicableMutaplasmidTypeIds': !exists(json, 'applicable_mutaplasmid_type_ids') ? undefined : json['applicable_mutaplasmid_type_ids'],
-        'basePrice': !exists(json, 'base_price') ? undefined : json['base_price'],
-        'buildablePinTypeIds': !exists(json, 'buildable_pin_type_ids') ? undefined : json['buildable_pin_type_ids'],
-        'canBeFittedWithTypes': !exists(json, 'can_be_fitted_with_types') ? undefined : json['can_be_fitted_with_types'],
-        'canFitTypes': !exists(json, 'can_fit_types') ? undefined : json['can_fit_types'],
-        'capacity': !exists(json, 'capacity') ? undefined : json['capacity'],
-        'categoryId': !exists(json, 'category_id') ? undefined : json['category_id'],
-        'creatingMutaplasmidTypeIds': !exists(json, 'creating_mutaplasmid_type_ids') ? undefined : json['creating_mutaplasmid_type_ids'],
-        'description': !exists(json, 'description') ? undefined : json['description'],
-        'dogmaAttributes': !exists(json, 'dogma_attributes') ? undefined : (mapValues(json['dogma_attributes'], DogmaTypeAttributeFromJSON)),
-        'dogmaEffects': !exists(json, 'dogma_effects') ? undefined : (mapValues(json['dogma_effects'], DogmaTypeEffectFromJSON)),
-        'engineeringRigAffectedCategoryIds': !exists(json, 'engineering_rig_affected_category_ids') ? undefined : IndustryModifierActivitiesFromJSON(json['engineering_rig_affected_category_ids']),
-        'engineeringRigAffectedGroupIds': !exists(json, 'engineering_rig_affected_group_ids') ? undefined : IndustryModifierActivitiesFromJSON(json['engineering_rig_affected_group_ids']),
-        'engineeringRigGlobalActivities': !exists(json, 'engineering_rig_global_activities') ? undefined : json['engineering_rig_global_activities'],
-        'engineeringRigSourceTypeIds': !exists(json, 'engineering_rig_source_type_ids') ? undefined : IndustryModifierActivitiesFromJSON(json['engineering_rig_source_type_ids']),
-        'factionId': !exists(json, 'faction_id') ? undefined : json['faction_id'],
-        'graphicId': !exists(json, 'graphic_id') ? undefined : json['graphic_id'],
-        'groupId': !exists(json, 'group_id') ? undefined : json['group_id'],
-        'harvestedByPinTypeIds': !exists(json, 'harvested_by_pin_type_ids') ? undefined : json['harvested_by_pin_type_ids'],
-        'iconId': !exists(json, 'icon_id') ? undefined : json['icon_id'],
-        'installableSchematicIds': !exists(json, 'installable_schematic_ids') ? undefined : json['installable_schematic_ids'],
-        'isBlueprint': !exists(json, 'is_blueprint') ? undefined : json['is_blueprint'],
-        'isDynamicItem': !exists(json, 'is_dynamic_item') ? undefined : json['is_dynamic_item'],
-        'isMutaplasmid': !exists(json, 'is_mutaplasmid') ? undefined : json['is_mutaplasmid'],
-        'isOre': !exists(json, 'is_ore') ? undefined : json['is_ore'],
-        'isSkill': !exists(json, 'is_skill') ? undefined : json['is_skill'],
-        'marketGroupId': !exists(json, 'market_group_id') ? undefined : json['market_group_id'],
-        'mass': !exists(json, 'mass') ? undefined : json['mass'],
-        'masteries': !exists(json, 'masteries') ? undefined : json['masteries'],
-        'metaGroupId': !exists(json, 'meta_group_id') ? undefined : json['meta_group_id'],
-        'name': !exists(json, 'name') ? undefined : json['name'],
-        'oreVariations': !exists(json, 'ore_variations') ? undefined : json['ore_variations'],
-        'packagedVolume': !exists(json, 'packaged_volume') ? undefined : json['packaged_volume'],
-        'portionSize': !exists(json, 'portion_size') ? undefined : json['portion_size'],
-        'producedByBlueprints': !exists(json, 'produced_by_blueprints') ? undefined : (mapValues(json['produced_by_blueprints'], ProducingBlueprintFromJSON)),
-        'producedBySchematicIds': !exists(json, 'produced_by_schematic_ids') ? undefined : json['produced_by_schematic_ids'],
-        'published': !exists(json, 'published') ? undefined : json['published'],
-        'raceId': !exists(json, 'race_id') ? undefined : json['race_id'],
-        'radius': !exists(json, 'radius') ? undefined : json['radius'],
-        'randomizedTypeMaterials': !exists(json, 'randomized_type_materials') ? undefined : (mapValues(json['randomized_type_materials'], RandomizedTypeMaterialFromJSON)),
-        'requiredSkills': !exists(json, 'required_skills') ? undefined : json['required_skills'],
-        'soundId': !exists(json, 'sound_id') ? undefined : json['sound_id'],
-        'traits': !exists(json, 'traits') ? undefined : InventoryTypeTraitsFromJSON(json['traits']),
-        'typeId': !exists(json, 'type_id') ? undefined : json['type_id'],
-        'typeMaterials': !exists(json, 'type_materials') ? undefined : (mapValues(json['type_materials'], TypeMaterialFromJSON)),
-        'typeVariations': !exists(json, 'type_variations') ? undefined : json['type_variations'],
-        'usedBySchematicIds': !exists(json, 'used_by_schematic_ids') ? undefined : json['used_by_schematic_ids'],
-        'usedInBlueprints': !exists(json, 'used_in_blueprints') ? undefined : json['used_in_blueprints'],
-        'variationParentTypeId': !exists(json, 'variation_parent_type_id') ? undefined : json['variation_parent_type_id'],
-        'volume': !exists(json, 'volume') ? undefined : json['volume'],
+        'applicableMutaplasmidTypeIds': json['applicable_mutaplasmid_type_ids'] == null ? undefined : json['applicable_mutaplasmid_type_ids'],
+        'basePrice': json['base_price'] == null ? undefined : json['base_price'],
+        'buildablePinTypeIds': json['buildable_pin_type_ids'] == null ? undefined : json['buildable_pin_type_ids'],
+        'canBeFittedWithTypes': json['can_be_fitted_with_types'] == null ? undefined : json['can_be_fitted_with_types'],
+        'canFitTypes': json['can_fit_types'] == null ? undefined : json['can_fit_types'],
+        'capacity': json['capacity'] == null ? undefined : json['capacity'],
+        'categoryId': json['category_id'] == null ? undefined : json['category_id'],
+        'creatingMutaplasmidTypeIds': json['creating_mutaplasmid_type_ids'] == null ? undefined : json['creating_mutaplasmid_type_ids'],
+        'description': json['description'] == null ? undefined : json['description'],
+        'dogmaAttributes': json['dogma_attributes'] == null ? undefined : (mapValues(json['dogma_attributes'], DogmaTypeAttributeFromJSON)),
+        'dogmaEffects': json['dogma_effects'] == null ? undefined : (mapValues(json['dogma_effects'], DogmaTypeEffectFromJSON)),
+        'engineeringRigAffectedCategoryIds': json['engineering_rig_affected_category_ids'] == null ? undefined : IndustryModifierActivitiesFromJSON(json['engineering_rig_affected_category_ids']),
+        'engineeringRigAffectedGroupIds': json['engineering_rig_affected_group_ids'] == null ? undefined : IndustryModifierActivitiesFromJSON(json['engineering_rig_affected_group_ids']),
+        'engineeringRigGlobalActivities': json['engineering_rig_global_activities'] == null ? undefined : json['engineering_rig_global_activities'],
+        'engineeringRigSourceTypeIds': json['engineering_rig_source_type_ids'] == null ? undefined : IndustryModifierActivitiesFromJSON(json['engineering_rig_source_type_ids']),
+        'factionId': json['faction_id'] == null ? undefined : json['faction_id'],
+        'graphicId': json['graphic_id'] == null ? undefined : json['graphic_id'],
+        'groupId': json['group_id'] == null ? undefined : json['group_id'],
+        'harvestedByPinTypeIds': json['harvested_by_pin_type_ids'] == null ? undefined : json['harvested_by_pin_type_ids'],
+        'iconId': json['icon_id'] == null ? undefined : json['icon_id'],
+        'installableSchematicIds': json['installable_schematic_ids'] == null ? undefined : json['installable_schematic_ids'],
+        'isBlueprint': json['is_blueprint'] == null ? undefined : json['is_blueprint'],
+        'isDynamicItem': json['is_dynamic_item'] == null ? undefined : json['is_dynamic_item'],
+        'isMutaplasmid': json['is_mutaplasmid'] == null ? undefined : json['is_mutaplasmid'],
+        'isOre': json['is_ore'] == null ? undefined : json['is_ore'],
+        'isSkill': json['is_skill'] == null ? undefined : json['is_skill'],
+        'marketGroupId': json['market_group_id'] == null ? undefined : json['market_group_id'],
+        'mass': json['mass'] == null ? undefined : json['mass'],
+        'masteries': json['masteries'] == null ? undefined : json['masteries'],
+        'metaGroupId': json['meta_group_id'] == null ? undefined : json['meta_group_id'],
+        'name': json['name'] == null ? undefined : json['name'],
+        'oreVariations': json['ore_variations'] == null ? undefined : json['ore_variations'],
+        'packagedVolume': json['packaged_volume'] == null ? undefined : json['packaged_volume'],
+        'portionSize': json['portion_size'] == null ? undefined : json['portion_size'],
+        'producedByBlueprints': json['produced_by_blueprints'] == null ? undefined : (mapValues(json['produced_by_blueprints'], ProducingBlueprintFromJSON)),
+        'producedBySchematicIds': json['produced_by_schematic_ids'] == null ? undefined : json['produced_by_schematic_ids'],
+        'published': json['published'] == null ? undefined : json['published'],
+        'raceId': json['race_id'] == null ? undefined : json['race_id'],
+        'radius': json['radius'] == null ? undefined : json['radius'],
+        'randomizedTypeMaterials': json['randomized_type_materials'] == null ? undefined : (mapValues(json['randomized_type_materials'], RandomizedTypeMaterialFromJSON)),
+        'requiredSkills': json['required_skills'] == null ? undefined : json['required_skills'],
+        'soundId': json['sound_id'] == null ? undefined : json['sound_id'],
+        'traits': json['traits'] == null ? undefined : InventoryTypeTraitsFromJSON(json['traits']),
+        'typeId': json['type_id'] == null ? undefined : json['type_id'],
+        'typeMaterials': json['type_materials'] == null ? undefined : (mapValues(json['type_materials'], TypeMaterialFromJSON)),
+        'typeVariations': json['type_variations'] == null ? undefined : json['type_variations'],
+        'usedBySchematicIds': json['used_by_schematic_ids'] == null ? undefined : json['used_by_schematic_ids'],
+        'usedInBlueprints': json['used_in_blueprints'] == null ? undefined : json['used_in_blueprints'],
+        'variationParentTypeId': json['variation_parent_type_id'] == null ? undefined : json['variation_parent_type_id'],
+        'volume': json['volume'] == null ? undefined : json['volume'],
     };
 }
 
-export function InventoryTypeToJSON(value?: InventoryType | null): any {
-    if (value === undefined) {
-        return undefined;
+export function InventoryTypeToJSON(json: any): InventoryType {
+    return InventoryTypeToJSONTyped(json, false);
+}
+
+export function InventoryTypeToJSONTyped(value?: InventoryType | null, ignoreDiscriminator: boolean = false): any {
+    if (value == null) {
+        return value;
     }
-    if (value === null) {
-        return null;
-    }
+
     return {
         
-        'applicable_mutaplasmid_type_ids': value.applicableMutaplasmidTypeIds,
-        'base_price': value.basePrice,
-        'buildable_pin_type_ids': value.buildablePinTypeIds,
-        'can_be_fitted_with_types': value.canBeFittedWithTypes,
-        'can_fit_types': value.canFitTypes,
-        'capacity': value.capacity,
-        'category_id': value.categoryId,
-        'creating_mutaplasmid_type_ids': value.creatingMutaplasmidTypeIds,
-        'description': value.description,
-        'dogma_attributes': value.dogmaAttributes === undefined ? undefined : (mapValues(value.dogmaAttributes, DogmaTypeAttributeToJSON)),
-        'dogma_effects': value.dogmaEffects === undefined ? undefined : (mapValues(value.dogmaEffects, DogmaTypeEffectToJSON)),
-        'engineering_rig_affected_category_ids': IndustryModifierActivitiesToJSON(value.engineeringRigAffectedCategoryIds),
-        'engineering_rig_affected_group_ids': IndustryModifierActivitiesToJSON(value.engineeringRigAffectedGroupIds),
-        'engineering_rig_global_activities': value.engineeringRigGlobalActivities,
-        'engineering_rig_source_type_ids': IndustryModifierActivitiesToJSON(value.engineeringRigSourceTypeIds),
-        'faction_id': value.factionId,
-        'graphic_id': value.graphicId,
-        'group_id': value.groupId,
-        'harvested_by_pin_type_ids': value.harvestedByPinTypeIds,
-        'icon_id': value.iconId,
-        'installable_schematic_ids': value.installableSchematicIds,
-        'is_blueprint': value.isBlueprint,
-        'is_dynamic_item': value.isDynamicItem,
-        'is_mutaplasmid': value.isMutaplasmid,
-        'is_ore': value.isOre,
-        'is_skill': value.isSkill,
-        'market_group_id': value.marketGroupId,
-        'mass': value.mass,
-        'masteries': value.masteries,
-        'meta_group_id': value.metaGroupId,
-        'name': value.name,
-        'ore_variations': value.oreVariations,
-        'packaged_volume': value.packagedVolume,
-        'portion_size': value.portionSize,
-        'produced_by_blueprints': value.producedByBlueprints === undefined ? undefined : (mapValues(value.producedByBlueprints, ProducingBlueprintToJSON)),
-        'produced_by_schematic_ids': value.producedBySchematicIds,
-        'published': value.published,
-        'race_id': value.raceId,
-        'radius': value.radius,
-        'randomized_type_materials': value.randomizedTypeMaterials === undefined ? undefined : (mapValues(value.randomizedTypeMaterials, RandomizedTypeMaterialToJSON)),
-        'required_skills': value.requiredSkills,
-        'sound_id': value.soundId,
-        'traits': InventoryTypeTraitsToJSON(value.traits),
-        'type_id': value.typeId,
-        'type_materials': value.typeMaterials === undefined ? undefined : (mapValues(value.typeMaterials, TypeMaterialToJSON)),
-        'type_variations': value.typeVariations,
-        'used_by_schematic_ids': value.usedBySchematicIds,
-        'used_in_blueprints': value.usedInBlueprints,
-        'variation_parent_type_id': value.variationParentTypeId,
-        'volume': value.volume,
+        'applicable_mutaplasmid_type_ids': value['applicableMutaplasmidTypeIds'],
+        'base_price': value['basePrice'],
+        'buildable_pin_type_ids': value['buildablePinTypeIds'],
+        'can_be_fitted_with_types': value['canBeFittedWithTypes'],
+        'can_fit_types': value['canFitTypes'],
+        'capacity': value['capacity'],
+        'category_id': value['categoryId'],
+        'creating_mutaplasmid_type_ids': value['creatingMutaplasmidTypeIds'],
+        'description': value['description'],
+        'dogma_attributes': value['dogmaAttributes'] == null ? undefined : (mapValues(value['dogmaAttributes'], DogmaTypeAttributeToJSON)),
+        'dogma_effects': value['dogmaEffects'] == null ? undefined : (mapValues(value['dogmaEffects'], DogmaTypeEffectToJSON)),
+        'engineering_rig_affected_category_ids': IndustryModifierActivitiesToJSON(value['engineeringRigAffectedCategoryIds']),
+        'engineering_rig_affected_group_ids': IndustryModifierActivitiesToJSON(value['engineeringRigAffectedGroupIds']),
+        'engineering_rig_global_activities': value['engineeringRigGlobalActivities'],
+        'engineering_rig_source_type_ids': IndustryModifierActivitiesToJSON(value['engineeringRigSourceTypeIds']),
+        'faction_id': value['factionId'],
+        'graphic_id': value['graphicId'],
+        'group_id': value['groupId'],
+        'harvested_by_pin_type_ids': value['harvestedByPinTypeIds'],
+        'icon_id': value['iconId'],
+        'installable_schematic_ids': value['installableSchematicIds'],
+        'is_blueprint': value['isBlueprint'],
+        'is_dynamic_item': value['isDynamicItem'],
+        'is_mutaplasmid': value['isMutaplasmid'],
+        'is_ore': value['isOre'],
+        'is_skill': value['isSkill'],
+        'market_group_id': value['marketGroupId'],
+        'mass': value['mass'],
+        'masteries': value['masteries'],
+        'meta_group_id': value['metaGroupId'],
+        'name': value['name'],
+        'ore_variations': value['oreVariations'],
+        'packaged_volume': value['packagedVolume'],
+        'portion_size': value['portionSize'],
+        'produced_by_blueprints': value['producedByBlueprints'] == null ? undefined : (mapValues(value['producedByBlueprints'], ProducingBlueprintToJSON)),
+        'produced_by_schematic_ids': value['producedBySchematicIds'],
+        'published': value['published'],
+        'race_id': value['raceId'],
+        'radius': value['radius'],
+        'randomized_type_materials': value['randomizedTypeMaterials'] == null ? undefined : (mapValues(value['randomizedTypeMaterials'], RandomizedTypeMaterialToJSON)),
+        'required_skills': value['requiredSkills'],
+        'sound_id': value['soundId'],
+        'traits': InventoryTypeTraitsToJSON(value['traits']),
+        'type_id': value['typeId'],
+        'type_materials': value['typeMaterials'] == null ? undefined : (mapValues(value['typeMaterials'], TypeMaterialToJSON)),
+        'type_variations': value['typeVariations'],
+        'used_by_schematic_ids': value['usedBySchematicIds'],
+        'used_in_blueprints': value['usedInBlueprints'],
+        'variation_parent_type_id': value['variationParentTypeId'],
+        'volume': value['volume'],
     };
 }
 

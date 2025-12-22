@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 /**
  * 
  * @export
@@ -30,10 +30,8 @@ export interface RefDataMetaFileInfo {
 /**
  * Check if a given object implements the RefDataMetaFileInfo interface.
  */
-export function instanceOfRefDataMetaFileInfo(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+export function instanceOfRefDataMetaFileInfo(value: object): value is RefDataMetaFileInfo {
+    return true;
 }
 
 export function RefDataMetaFileInfoFromJSON(json: any): RefDataMetaFileInfo {
@@ -41,25 +39,27 @@ export function RefDataMetaFileInfoFromJSON(json: any): RefDataMetaFileInfo {
 }
 
 export function RefDataMetaFileInfoFromJSONTyped(json: any, ignoreDiscriminator: boolean): RefDataMetaFileInfo {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'sha256': !exists(json, 'sha256') ? undefined : json['sha256'],
+        'sha256': json['sha256'] == null ? undefined : json['sha256'],
     };
 }
 
-export function RefDataMetaFileInfoToJSON(value?: RefDataMetaFileInfo | null): any {
-    if (value === undefined) {
-        return undefined;
+export function RefDataMetaFileInfoToJSON(json: any): RefDataMetaFileInfo {
+    return RefDataMetaFileInfoToJSONTyped(json, false);
+}
+
+export function RefDataMetaFileInfoToJSONTyped(value?: RefDataMetaFileInfo | null, ignoreDiscriminator: boolean = false): any {
+    if (value == null) {
+        return value;
     }
-    if (value === null) {
-        return null;
-    }
+
     return {
         
-        'sha256': value.sha256,
+        'sha256': value['sha256'],
     };
 }
 

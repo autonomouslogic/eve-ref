@@ -12,12 +12,13 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 import type { Color } from './Color';
 import {
     ColorFromJSON,
     ColorFromJSONTyped,
     ColorToJSON,
+    ColorToJSONTyped,
 } from './Color';
 
 /**
@@ -73,10 +74,8 @@ export interface MetaGroup {
 /**
  * Check if a given object implements the MetaGroup interface.
  */
-export function instanceOfMetaGroup(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+export function instanceOfMetaGroup(value: object): value is MetaGroup {
+    return true;
 }
 
 export function MetaGroupFromJSON(json: any): MetaGroup {
@@ -84,37 +83,39 @@ export function MetaGroupFromJSON(json: any): MetaGroup {
 }
 
 export function MetaGroupFromJSONTyped(json: any, ignoreDiscriminator: boolean): MetaGroup {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'color': !exists(json, 'color') ? undefined : ColorFromJSON(json['color']),
-        'description': !exists(json, 'description') ? undefined : json['description'],
-        'iconId': !exists(json, 'icon_id') ? undefined : json['icon_id'],
-        'iconSuffix': !exists(json, 'icon_suffix') ? undefined : json['icon_suffix'],
-        'metaGroupId': !exists(json, 'meta_group_id') ? undefined : json['meta_group_id'],
-        'name': !exists(json, 'name') ? undefined : json['name'],
-        'typeIds': !exists(json, 'type_ids') ? undefined : json['type_ids'],
+        'color': json['color'] == null ? undefined : ColorFromJSON(json['color']),
+        'description': json['description'] == null ? undefined : json['description'],
+        'iconId': json['icon_id'] == null ? undefined : json['icon_id'],
+        'iconSuffix': json['icon_suffix'] == null ? undefined : json['icon_suffix'],
+        'metaGroupId': json['meta_group_id'] == null ? undefined : json['meta_group_id'],
+        'name': json['name'] == null ? undefined : json['name'],
+        'typeIds': json['type_ids'] == null ? undefined : json['type_ids'],
     };
 }
 
-export function MetaGroupToJSON(value?: MetaGroup | null): any {
-    if (value === undefined) {
-        return undefined;
+export function MetaGroupToJSON(json: any): MetaGroup {
+    return MetaGroupToJSONTyped(json, false);
+}
+
+export function MetaGroupToJSONTyped(value?: MetaGroup | null, ignoreDiscriminator: boolean = false): any {
+    if (value == null) {
+        return value;
     }
-    if (value === null) {
-        return null;
-    }
+
     return {
         
-        'color': ColorToJSON(value.color),
-        'description': value.description,
-        'icon_id': value.iconId,
-        'icon_suffix': value.iconSuffix,
-        'meta_group_id': value.metaGroupId,
-        'name': value.name,
-        'type_ids': value.typeIds,
+        'color': ColorToJSON(value['color']),
+        'description': value['description'],
+        'icon_id': value['iconId'],
+        'icon_suffix': value['iconSuffix'],
+        'meta_group_id': value['metaGroupId'],
+        'name': value['name'],
+        'type_ids': value['typeIds'],
     };
 }
 

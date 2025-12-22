@@ -12,12 +12,13 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 import type { BlueprintActivity } from './BlueprintActivity';
 import {
     BlueprintActivityFromJSON,
     BlueprintActivityFromJSONTyped,
     BlueprintActivityToJSON,
+    BlueprintActivityToJSONTyped,
 } from './BlueprintActivity';
 
 /**
@@ -49,10 +50,8 @@ export interface Blueprint {
 /**
  * Check if a given object implements the Blueprint interface.
  */
-export function instanceOfBlueprint(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+export function instanceOfBlueprint(value: object): value is Blueprint {
+    return true;
 }
 
 export function BlueprintFromJSON(json: any): Blueprint {
@@ -60,29 +59,31 @@ export function BlueprintFromJSON(json: any): Blueprint {
 }
 
 export function BlueprintFromJSONTyped(json: any, ignoreDiscriminator: boolean): Blueprint {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'activities': !exists(json, 'activities') ? undefined : (mapValues(json['activities'], BlueprintActivityFromJSON)),
-        'blueprintTypeId': !exists(json, 'blueprint_type_id') ? undefined : json['blueprint_type_id'],
-        'maxProductionLimit': !exists(json, 'max_production_limit') ? undefined : json['max_production_limit'],
+        'activities': json['activities'] == null ? undefined : (mapValues(json['activities'], BlueprintActivityFromJSON)),
+        'blueprintTypeId': json['blueprint_type_id'] == null ? undefined : json['blueprint_type_id'],
+        'maxProductionLimit': json['max_production_limit'] == null ? undefined : json['max_production_limit'],
     };
 }
 
-export function BlueprintToJSON(value?: Blueprint | null): any {
-    if (value === undefined) {
-        return undefined;
+export function BlueprintToJSON(json: any): Blueprint {
+    return BlueprintToJSONTyped(json, false);
+}
+
+export function BlueprintToJSONTyped(value?: Blueprint | null, ignoreDiscriminator: boolean = false): any {
+    if (value == null) {
+        return value;
     }
-    if (value === null) {
-        return null;
-    }
+
     return {
         
-        'activities': value.activities === undefined ? undefined : (mapValues(value.activities, BlueprintActivityToJSON)),
-        'blueprint_type_id': value.blueprintTypeId,
-        'max_production_limit': value.maxProductionLimit,
+        'activities': value['activities'] == null ? undefined : (mapValues(value['activities'], BlueprintActivityToJSON)),
+        'blueprint_type_id': value['blueprintTypeId'],
+        'max_production_limit': value['maxProductionLimit'],
     };
 }
 

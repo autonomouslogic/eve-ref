@@ -203,7 +203,7 @@ task esiClientGenerate(type: org.openapitools.generator.gradle.plugin.tasks.Gene
 	group = "openapi tools"
 	generatorName = "java"
 	library = "native"
-	inputSpec = "$rootDir/spec/esi-swagger.json"
+	inputSpec = "$rootDir/spec/esi.json"
 	outputDir = "$buildDir/generated/openapi/esi"
 	apiPackage = "com.autonomouslogic.everef.openapi.esi.api"
 	modelPackage = "com.autonomouslogic.everef.openapi.esi.model"
