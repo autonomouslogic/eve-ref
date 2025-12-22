@@ -17,7 +17,7 @@
       },
       "esi": {
         "generatorName": "typescript-fetch",
-        "inputSpec": "../spec/esi-swagger.json",
+        "inputSpec": "../spec/esi.json",
         "output": "./esi-openapi",
         "additionalProperties": {
           "enumPropertyNaming": "PascalCase",
