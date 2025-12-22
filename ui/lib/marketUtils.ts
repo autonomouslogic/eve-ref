@@ -5,7 +5,7 @@ import {PLEX_TYPE_ID} from "~/lib/typeConstants";
 import {
     GetMarketsRegionIdOrdersOrderTypeEnum,
     type GetMarketsRegionIdOrdersRequest,
-    type MarketsRegionIdOrdersGetInner
+    type EsiMarketsRegionIdOrdersGetInner
 } from "~/esi-openapi";
 
 export interface HubStation {
@@ -83,7 +83,7 @@ export async function getJitaSellPrice(typeId: number) {
     if (regionId == undefined) {
         return undefined;
     }
-    var orders  = (await getOrders(GetMarketsRegionIdOrdersOrderTypeEnum.Sell, typeId, regionId));
+    var orders  = (await getOrders(EsiGetMarketsRegionIdOrdersOrderTypeEnum.Sell, typeId, regionId));
     if (hub != undefined) {
         orders = orders.filter(e => e.locationId == hub?.stationId)
     }
