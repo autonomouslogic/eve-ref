@@ -1,6 +1,5 @@
 package com.autonomouslogic.everef.cli.publiccontracts;
 
-import com.autonomouslogic.commons.rxjava3.Rx3Util;
 import com.autonomouslogic.everef.esi.EsiHelper;
 import com.autonomouslogic.everef.esi.EsiUrl;
 import com.autonomouslogic.everef.esi.LocationPopulator;
@@ -13,7 +12,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Flowable;
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -102,10 +100,10 @@ public class ContractFetcher {
 								}
 							});
 				})
-				.compose(Rx3Util.retryWithDelayFlowable(60 / 5, Duration.ofSeconds(5), e -> {
+				.retry(2, e -> {
 					log.warn("Retrying public contracts for {}: {}", region.getName(), ExceptionUtils.getMessage(e));
 					return true;
-				}))
+				})
 				.doOnComplete(() ->
 						log.info(String.format("Fetched %d public contracts from %s", count.get(), region.getName())))
 				.onErrorResumeNext(e -> Flowable.error(new RuntimeException("Failed fetching public contracts", e)));

@@ -2,7 +2,6 @@ package com.autonomouslogic.everef.cli.marketorders;
 
 import static com.autonomouslogic.everef.util.EveConstants.NPC_STATION_MAX_ID;
 
-import com.autonomouslogic.commons.rxjava3.Rx3Util;
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.esi.EsiAuthHelper;
 import com.autonomouslogic.everef.esi.EsiException;
@@ -17,7 +16,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Flowable;
-import java.time.Duration;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -133,7 +131,7 @@ public class MarketOrderFetcher {
 				})
 				.doOnComplete(
 						() -> log.info(String.format("Fetched %d market orders from %s", count.get(), locationName)))
-				.compose(Rx3Util.retryWithDelayFlowable(2, Duration.ofSeconds(2), e -> {
+				.retry(2, e -> {
 					if (e instanceof EsiException) {
 						var code = ((EsiException) e).getCode();
 						if (code == 403) {
@@ -143,7 +141,7 @@ public class MarketOrderFetcher {
 					}
 					log.warn("Retrying {}: {}", locationName, ExceptionUtils.getMessage(e));
 					return true;
-				}))
+				})
 				.onErrorResumeNext(e -> {
 					if (e instanceof EsiException) {
 						var code = ((EsiException) e).getCode();
