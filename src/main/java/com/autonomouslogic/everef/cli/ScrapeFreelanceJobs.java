@@ -13,6 +13,7 @@ import com.autonomouslogic.everef.url.UrlParser;
 import com.autonomouslogic.everef.util.CompressUtil;
 import com.autonomouslogic.everef.util.DataIndexHelper;
 import com.autonomouslogic.everef.util.TempFiles;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.io.File;
@@ -115,8 +116,10 @@ public class ScrapeFreelanceJobs implements Command {
 
 	private List<ObjectNode> fetchIndex() {
 		var indexUrl = EsiUrl.modern().urlPath("/freelance-jobs?limit=100").build();
-		var indexResponse = esiHelper.fetch(indexUrl);
-		var indexData = esiHelper.decodeResponse(indexResponse);
+		JsonNode indexData;
+		try (var indexResponse = esiHelper.fetch(indexUrl)) {
+			indexData = esiHelper.decodeResponse(indexResponse);
+		}
 
 		var jobsArray = indexData.get("freelance_jobs");
 		if (jobsArray == null || !jobsArray.isArray()) {
@@ -152,8 +155,10 @@ public class ScrapeFreelanceJobs implements Command {
 		log.trace("Fetching details for job {}", jobIdString);
 		var detailUrl =
 				EsiUrl.modern().urlPath("/freelance-jobs/" + jobIdString).build();
-		var detailResponse = esiHelper.fetch(detailUrl);
-		var detailData = (ObjectNode) esiHelper.decodeResponse(detailResponse);
+		ObjectNode detailData;
+		try (var detailResponse = esiHelper.fetch(detailUrl)) {
+			detailData = (ObjectNode) esiHelper.decodeResponse(detailResponse);
+		}
 
 		detailedJobs.put(jobIdString, detailData);
 	}

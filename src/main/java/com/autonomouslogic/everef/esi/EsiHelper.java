@@ -140,11 +140,17 @@ public class EsiHelper {
 	 */
 	public Flowable<JsonNode> fetchPagesOfJsonArrays(
 			EsiUrl url, BiFunction<JsonNode, Response, JsonNode> augmenter, Optional<String> accessToken) {
-		return Flowable.fromIterable(fetchPages(url, accessToken))
+		var responses = fetchPages(url, accessToken);
+		return Flowable.fromIterable(responses)
 				.compose(standardErrorHandling(url))
 				.flatMap(response -> {
 					var node = decodeResponse(response);
 					return decodeArrayNode(url, node).map(entry -> augmenter.apply(entry, response));
+				})
+				.doFinally(() -> {
+					for (var response : responses) {
+						response.close();
+					}
 				});
 	}
 
