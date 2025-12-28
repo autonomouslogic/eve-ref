@@ -1,5 +1,14 @@
 EVE Ref Changelog
 
+## [2.73.1](https://github.com/autonomouslogic/eve-ref/compare/2.73.0...2.73.1) (2025-12-28)
+
+
+### Bug Fixes
+
+* Closing responses ([732ab83](https://github.com/autonomouslogic/eve-ref/commit/732ab8332d25be4f4d8e102617c15fb41676cf5f))
+* Removed retryWithDelayFlowable to see if it fixes exception leaks on timeouts ([85f2378](https://github.com/autonomouslogic/eve-ref/commit/85f237824c5014dcd5197e2630c1c6a08c644ab3))
+* **ui:** Extra prizes fro December ([e7858a9](https://github.com/autonomouslogic/eve-ref/commit/e7858a99618d6bdbaf6483fc6fe0016db9b067a7))
+
 ## [2.73.0](https://github.com/autonomouslogic/eve-ref/compare/2.72.1...2.73.0) (2025-12-21)
 
 
