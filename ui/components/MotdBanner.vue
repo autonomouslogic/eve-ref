@@ -112,9 +112,9 @@ const motd = computed(() => {
 	}
 
 	// Giveaway event.
-	if (time < new Date("2025-12-31T10:50:00Z").getTime()) {
+	if (time < new Date("2026-01-01T01:00:00Z").getTime()) {
 		return {
-			text: "Win 28 billion ISK in December - 6 billion donated by Loiso Vinneve 💜",
+			text: "Win 22 billion ISK TONIGHT!",
 			url: "/giveaways",
 			urlText: "Giveaways"
 		} as Motd;

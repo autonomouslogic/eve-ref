@@ -125,6 +125,54 @@ const prizes: Prize[] = [
 		],
 		winners: 5,
 	} as Prize,
+	{
+		name: "Weekend Fleet Pack (50x PLEX, 3 Day Omega) 1 HOUR ONLY",
+		value: fleetPackPrice,
+		dates: [
+			DateTime.fromISO("2025-12-31T15:00:00Z"),
+		],
+		winners: 5,
+	} as Prize,
+	{
+		name: "Weekend Fleet Pack (50x PLEX, 3 Day Omega) 1 HOUR ONLY",
+		value: fleetPackPrice,
+		dates: [
+			DateTime.fromISO("2025-12-31T17:00:00Z"),
+		],
+		winners: 5,
+	} as Prize,
+	{
+		name: "Weekend Fleet Pack (50x PLEX, 3 Day Omega) 1 HOUR ONLY",
+		value: fleetPackPrice,
+		dates: [
+			DateTime.fromISO("2025-12-31T19:00:00Z"),
+		],
+		winners: 5,
+	} as Prize,
+	{
+		name: "Weekend Fleet Pack (50x PLEX, 3 Day Omega) 1 HOUR ONLY",
+		value: fleetPackPrice,
+		dates: [
+			DateTime.fromISO("2025-12-31T21:00:00Z"),
+		],
+		winners: 5,
+	} as Prize,
+	{
+		name: "Weekend Fleet Pack (50x PLEX, 3 Day Omega) 1 HOUR ONLY",
+		value: fleetPackPrice,
+		dates: [
+			DateTime.fromISO("2025-12-31T23:00:00Z"),
+		],
+		winners: 5,
+	} as Prize,
+	{
+		name: "Weekend Fleet Pack (50x PLEX, 3 Day Omega) 1 HOUR ONLY",
+		value: fleetPackPrice,
+		dates: [
+			DateTime.fromISO("2026-01-01T01:00:00Z"),
+		],
+		winners: 5,
+	} as Prize,
 ];
 
 var i = 0;
@@ -160,7 +208,7 @@ const totalWorth = unrolled.reduce((acc, prize) => acc + prize.value * prize.win
 
 const pastGiveaways = {
 	"January 2026": 10 * 489.13e6,
-	"December 2025": (8 + 15) * 486.64e6 + 5 * 319.40e6 + 5 * 170.00e6 + 5 * 128.80e6 + 5 * 174.00e6 + 5 * 650.00e6 + 5 * 779.90e6 + 6e9,
+	"December 2025": 8 * 486.64e6 + 45 * 501.34e6 + 5 * 319.40e6 + 5 * 170.00e6 + 5 * 128.80e6 + 5 * 174.00e6 + 5 * 650.00e6 + 5 * 779.90e6 + 6e9,
 	"November 2025": 8 * 500.55e6,
 	"October 2025": 10 * 552.29e6,
 	"September 2025": 8 * 556.16e6,
