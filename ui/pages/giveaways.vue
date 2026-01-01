@@ -40,9 +40,9 @@ const weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Satur
 const plexPrice = await getJitaSellPrice(PLEX_TYPE_ID) || 0;
 const fleetPackPrice = (50 + 500 * 12 / 365 * 3) * plexPrice;
 
-const firstFleetPack = DateTime.fromISO("2025-12-05T14:00:00Z");
+const firstFleetPack = DateTime.fromISO("2026-01-02T14:00:00Z");
 const fleetPackDates = [];
-for (let i = 0; i < 9; i++) {
+for (let i = 0; i < 5; i++) {
 	fleetPackDates.push(firstFleetPack.plus({days: i * 7}));
 }
 
@@ -52,126 +52,6 @@ const prizes: Prize[] = [
 		value: fleetPackPrice,
 		dates: fleetPackDates,
 		winners: 2
-	} as Prize,
-	{
-		name: "Astero Scope Syndication YC122 SKIN",
-		value: await getJitaSellPrice(ASTERO_SCOPE_SYNDICATION) || 0,
-		dates: [
-			DateTime.fromISO("2025-12-25T00:00:00Z"),
-		],
-		winners: 5,
-	} as Prize,
-	{
-		name: "Vexor Scope Syndication YC122 SKIN",
-		value: await getJitaSellPrice(VEXOR_SCOPE_SYNDICATION) || 0,
-		dates: [
-			DateTime.fromISO("2025-12-24T00:00:00Z"),
-		],
-		winners: 5,
-	} as Prize,
-	{
-		name: "Rupture Scope Syndication YC122 SKIN",
-		value: await getJitaSellPrice(RUPTURE_SCOPE_SYNDICATION) || 0,
-		dates: [
-			DateTime.fromISO("2025-12-23T00:00:00Z"),
-		],
-		winners: 5,
-	} as Prize,
-	{
-		name: "Maller Scope Syndication YC122 SKIN",
-		value: await getJitaSellPrice(MALLER_SCOPE_SYNDICATION) || 0,
-		dates: [
-			DateTime.fromISO("2025-12-22T00:00:00Z"),
-		],
-		winners: 5,
-	} as Prize,
-	{
-		name: "Obelisk Scope Syndication YC122 SKIN",
-		value: await getJitaSellPrice(OBELISK_SCOPE_SYNDICATION) || 0,
-		dates: [
-			DateTime.fromISO("2025-12-21T00:00:00Z"),
-		],
-		winners: 5,
-	} as Prize,
-	{
-		name: "Nightmare Media Miasma SKIN (sponsored by https://jita.space)",
-		value: await getJitaSellPrice(NIGHTMARE_MEDIA_MIASMA) || 0,
-		dates: [
-			DateTime.fromISO("2025-12-20T00:00:00Z"),
-		],
-		winners: 5,
-	} as Prize,
-	{
-		name: "Weekend Fleet Pack (50x PLEX, 3 Day Omega) 1 HOUR ONLY",
-		value: fleetPackPrice,
-		dates: [
-			DateTime.fromISO("2025-12-31T09:00:00Z"),
-		],
-		winners: 5,
-	} as Prize,
-	{
-		name: "Weekend Fleet Pack (50x PLEX, 3 Day Omega) 1 HOUR ONLY",
-		value: fleetPackPrice,
-		dates: [
-			DateTime.fromISO("2025-12-31T11:00:00Z"),
-		],
-		winners: 5,
-	} as Prize,
-	{
-		name: "Weekend Fleet Pack (50x PLEX, 3 Day Omega) 1 HOUR ONLY",
-		value: fleetPackPrice,
-		dates: [
-			DateTime.fromISO("2025-12-31T13:00:00Z"),
-		],
-		winners: 5,
-	} as Prize,
-	{
-		name: "Weekend Fleet Pack (50x PLEX, 3 Day Omega) 1 HOUR ONLY",
-		value: fleetPackPrice,
-		dates: [
-			DateTime.fromISO("2025-12-31T15:00:00Z"),
-		],
-		winners: 5,
-	} as Prize,
-	{
-		name: "Weekend Fleet Pack (50x PLEX, 3 Day Omega) 1 HOUR ONLY",
-		value: fleetPackPrice,
-		dates: [
-			DateTime.fromISO("2025-12-31T17:00:00Z"),
-		],
-		winners: 5,
-	} as Prize,
-	{
-		name: "Weekend Fleet Pack (50x PLEX, 3 Day Omega) 1 HOUR ONLY",
-		value: fleetPackPrice,
-		dates: [
-			DateTime.fromISO("2025-12-31T19:00:00Z"),
-		],
-		winners: 5,
-	} as Prize,
-	{
-		name: "Weekend Fleet Pack (50x PLEX, 3 Day Omega) 1 HOUR ONLY",
-		value: fleetPackPrice,
-		dates: [
-			DateTime.fromISO("2025-12-31T21:00:00Z"),
-		],
-		winners: 5,
-	} as Prize,
-	{
-		name: "Weekend Fleet Pack (50x PLEX, 3 Day Omega) 1 HOUR ONLY",
-		value: fleetPackPrice,
-		dates: [
-			DateTime.fromISO("2025-12-31T23:00:00Z"),
-		],
-		winners: 5,
-	} as Prize,
-	{
-		name: "Weekend Fleet Pack (50x PLEX, 3 Day Omega) 1 HOUR ONLY",
-		value: fleetPackPrice,
-		dates: [
-			DateTime.fromISO("2026-01-01T01:00:00Z"),
-		],
-		winners: 5,
 	} as Prize,
 ];
 
@@ -207,7 +87,7 @@ unrolled.sort((a, b) => a.dates[0].toMillis() - b.dates[0].toMillis());
 const totalWorth = unrolled.reduce((acc, prize) => acc + prize.value * prize.winners, 0);
 
 const pastGiveaways = {
-	"January 2026": 10 * 489.13e6,
+	"January 2026": 10 * 496.48e6,
 	"December 2025": 8 * 486.64e6 + 45 * 501.34e6 + 5 * 319.40e6 + 5 * 170.00e6 + 5 * 128.80e6 + 5 * 174.00e6 + 5 * 650.00e6 + 5 * 779.90e6 + 6e9,
 	"November 2025": 8 * 500.55e6,
 	"October 2025": 10 * 552.29e6,
