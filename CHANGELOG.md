@@ -1,5 +1,21 @@
 EVE Ref Changelog
 
+## [2.73.2](https://github.com/autonomouslogic/eve-ref/compare/2.73.1...2.73.2) (2026-01-05)
+
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([#1001](https://github.com/autonomouslogic/eve-ref/issues/1001)) ([aa1cd18](https://github.com/autonomouslogic/eve-ref/commit/aa1cd18e28f432508a978592f224b8aabb2d57d5))
+* **deps:** update dependency org.flywaydb:flyway-core to v11.20.0 ([#1002](https://github.com/autonomouslogic/eve-ref/issues/1002)) ([8a1531c](https://github.com/autonomouslogic/eve-ref/commit/8a1531ce6ba21799fbcf50b0eff6657260b77b23))
+* **deps:** update flyway to v11.20.0 ([#1003](https://github.com/autonomouslogic/eve-ref/issues/1003)) ([275eb8f](https://github.com/autonomouslogic/eve-ref/commit/275eb8f9c96d9c0370f9afdd78ae60d9ad3beb86))
+* **ui:** More new years giveaways ([0a06a7c](https://github.com/autonomouslogic/eve-ref/commit/0a06a7c951760a3f44231a771a2c7dc5a8873f5c))
+* **ui:** Removed December giveaways ([71dfd59](https://github.com/autonomouslogic/eve-ref/commit/71dfd592ce00d10836ab4e8478bf3176f2103714))
+
+
+### Dependency Updates
+
+* **deps:** update all non-major dependencies to v8.52.0 ([#1004](https://github.com/autonomouslogic/eve-ref/issues/1004)) ([67f465f](https://github.com/autonomouslogic/eve-ref/commit/67f465f7ca1b06c5f0677d125bc7dbd91567ab54))
+
 ## [2.73.1](https://github.com/autonomouslogic/eve-ref/compare/2.73.0...2.73.1) (2025-12-28)
 
 
