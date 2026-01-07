@@ -1,13 +1,18 @@
 {
   "name" : {
-    "de" : "GPMR-01",
     "en" : "GPMR-01",
+    "ja" : "GPMR-01",
+    "de" : "GPMR-01",
     "es" : "GPMR-01",
     "fr" : "GPMR-01",
-    "ja" : "GPMR-01",
     "ko" : "GPMR-01",
     "ru" : "GPMR-01",
     "zh" : "GPMR-01"
+  },
+  "region_id" : 19000001,
+  "description" : {
+    "en" : null,
+    "ja" : null
   },
   "nebula_id" : 11806,
   "position" : {
@@ -16,10 +21,5 @@
     "z" : 1
   },
   "wormhole_class_id" : 7,
-  "region_id" : 19000001,
-  "description" : {
-    "en" : null,
-    "ja" : null
-  },
   "universe_id" : "hidden"
 }

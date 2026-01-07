@@ -1,23 +1,4 @@
 {
-  "base_price" : 5000000,
-  "group_id" : 166,
-  "icon_id" : 182,
-  "market_group_id" : 1526,
-  "mass" : 1,
-  "name" : {
-    "de" : "Mjolnir Cruise Missile Blueprint",
-    "en" : "Mjolnir Cruise Missile Blueprint",
-    "es" : "Plano de misil de crucero Mjolnir",
-    "fr" : "Plan de construction Missile de croisière Mjolnir",
-    "ja" : "ミョルニールクルーズミサイルブループリント",
-    "ko" : "묠니르 크루즈 미사일 블루프린트",
-    "ru" : "Mjolnir Cruise Missile Blueprint",
-    "zh" : "雷神巡航导弹蓝图"
-  },
-  "portion_size" : 1,
-  "published" : true,
-  "volume" : 0.01,
-  "type_id" : 803,
   "capacity" : 0,
   "description" : {
     "en" : "",
@@ -45,7 +26,26 @@
       "value" : 0
     }
   },
+  "group_id" : 166,
+  "icon_id" : 182,
+  "market_group_id" : 1526,
+  "mass" : 1,
+  "name" : {
+    "en" : "Mjolnir Cruise Missile Blueprint",
+    "fr" : "Plan de construction Missile de croisière Mjolnir",
+    "de" : "Mjolnir Cruise Missile Blueprint",
+    "es" : "Plano de misil de crucero Mjolnir",
+    "ja" : "ミョルニールクルーズミサイルブループリント",
+    "ko" : "묠니르 크루즈 미사일 블루프린트",
+    "ru" : "Mjolnir Cruise Missile Blueprint",
+    "zh" : "雷神巡航导弹蓝图"
+  },
   "packaged_volume" : 0.01,
+  "portion_size" : 1,
+  "published" : true,
   "radius" : 1,
+  "type_id" : 803,
+  "volume" : 0.01,
+  "base_price" : 5000000,
   "is_blueprint" : true
 }

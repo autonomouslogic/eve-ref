@@ -1,12 +1,12 @@
 {
-  "data_type" : 11,
+  "attribute_id" : 1289,
   "default_value" : 0,
   "description" : {
     "en" : "The type ID of the skill that is required."
   },
   "display_name" : {
-    "de" : "Quinary-Skill benötigt",
     "en" : "Quinary Skill required",
+    "de" : "Quinary-Skill benötigt",
     "es" : "Habilidad quinaria necesaria",
     "fr" : "Compétence quinaire requise",
     "ja" : "第五必須スキル",
@@ -14,13 +14,13 @@
     "ru" : "Требуемый пятеричный навык",
     "zh" : "五级技能需求"
   },
-  "display_when_zero" : false,
   "high_is_good" : true,
   "icon_id" : 0,
   "name" : "requiredSkill5",
   "published" : true,
   "stackable" : true,
   "unit_id" : 116,
-  "category_id" : 8,
-  "attribute_id" : 1289
+  "data_type" : 11,
+  "display_when_zero" : false,
+  "category_id" : 8
 }

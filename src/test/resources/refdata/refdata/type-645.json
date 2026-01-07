@@ -1,39 +1,15 @@
 {
-  "base_price" : 153900000,
   "capacity" : 750,
   "description" : {
-    "de" : "Die Dominix ist eines der alten Schlachtrösser, die noch aus der Zeit des Kriegs zwischen Gallente und Caldari stammen. Sie wird zwar nicht mehr als eines der besten Schlachtschiffe angesehen, aber das heißt nicht, dass sie überflüssig wäre. Mit ihrem robusten Rumpf und dem starken Drohnenarsenal können sich nur die neuesten und größten Schlachtschiffe mit ihr messen.",
     "en" : "The Dominix is one of the old warhorses dating back to the Gallente-Caldari War. While no longer regarded as the king of the hill, it is by no means obsolete. Its formidable hulk and powerful drone arsenal means that anyone not in the largest and latest battleships will regret ever locking horns with it.",
-    "es" : "La Dominix es una de las veteranas que se remonta a la guerra Gallente-Caldari. Aunque ya no es lo que era, eso no quiere decir que se haya quedado obsoleta. Gracias a su formidable casco y a su potente arsenal de drones, cualquiera que no esté en el acorazado más grande y moderno lamentará haberse cruzado con ella.",
     "fr" : "Le Dominix est un vétéran du front, qui déjà s'illustrait à l'époque de la guerre Gallente-Caldari. S'il n'est plus considéré comme le parangon des champs de bataille, ce cuirassé est loin d’être obsolète. Doté d'une coque massive et d'un puissant arsenal de drones, le Dominix est un adversaire redoutable, capable de pulvériser tous les vaisseaux de l'amas, à l'exception des cuirassés de pointe les plus modernes.",
+    "de" : "Die Dominix ist eines der alten Schlachtrösser, die noch aus der Zeit des Kriegs zwischen Gallente und Caldari stammen. Sie wird zwar nicht mehr als eines der besten Schlachtschiffe angesehen, aber das heißt nicht, dass sie überflüssig wäre. Mit ihrem robusten Rumpf und dem starken Drohnenarsenal können sich nur die neuesten und größten Schlachtschiffe mit ihr messen.",
+    "es" : "La Dominix es una de las veteranas que se remonta a la guerra Gallente-Caldari. Aunque ya no es lo que era, eso no quiere decir que se haya quedado obsoleta. Gracias a su formidable casco y a su potente arsenal de drones, cualquiera que no esté en el acorazado más grande y moderno lamentará haberse cruzado con ella.",
     "ja" : "ドミニックスは、ガレンテ-カルダリ戦争時代からある、古い軍艦の一つだ。もはや戦場の王者とは呼べないが、決して役立たずの骨董品ではない。頑丈な船体と強力なドローン運用システムを備えており、最新最大の戦艦に乗っているのでもないかぎり、うかつに手を出せば後悔することになるだろう。",
     "ko" : "도미닉스는 갈란테-칼다리 전쟁 당시 활약했던 초창기 함선입니다. 전성기 시절의 위상에는 미치지 못하지만 여전히 위력적인 모습입니다. 가공할 선체 방어력과 강력한 무기 체계를 지녀 최신예 배틀쉽을 제외하면 마땅한 적수가 없습니다.",
     "ru" : "«Доминикс» — заслуженный ветеран космоса, находящийся в строю со времен галлентско-калдарской войны. Этот корабль уже не считается передовым, но его ни в коей мере нельзя назвать устаревшим. Обломав зубы о прочную «шкуру» этого увальня и пострадав от роя выпущенных им дронов, о принятом решении пожалеет любой капитан, ввязавшийся с ним в схватку — разве что кроме пилотов самых крупных и современных линкоров.",
     "zh" : "多米尼克斯级战列舰是久经沙场的老将，其服役期可以追溯到盖伦特-加达里战争时期。尽管现在它不再是战场上的王者，但也绝对没有过时。它拥有强大的舰体和威猛的无人机武器，如果你没有最大最新型的战列舰的话，最好就不要在它面前卖弄风骚。"
   },
-  "faction_id" : 500004,
-  "graphic_id" : 318,
-  "group_id" : 27,
-  "market_group_id" : 81,
-  "mass" : 100250000,
-  "meta_group_id" : 1,
-  "name" : {
-    "de" : "Dominix",
-    "en" : "Dominix",
-    "es" : "Dominix",
-    "fr" : "Dominix",
-    "ja" : "ドミニックス",
-    "ko" : "도미닉스",
-    "ru" : "Dominix",
-    "zh" : "多米尼克斯级"
-  },
-  "portion_size" : 1,
-  "published" : true,
-  "race_id" : 8,
-  "radius" : 250,
-  "sound_id" : 20072,
-  "volume" : 454500,
-  "type_id" : 645,
   "dogma_attributes" : {
     "3" : {
       "attribute_id" : 3,
@@ -434,7 +410,31 @@
       "is_default" : false
     }
   },
+  "graphic_id" : 318,
+  "group_id" : 27,
+  "market_group_id" : 81,
+  "mass" : 100250000,
+  "name" : {
+    "en" : "Dominix",
+    "fr" : "Dominix",
+    "de" : "Dominix",
+    "es" : "Dominix",
+    "ja" : "ドミニックス",
+    "ko" : "도미닉스",
+    "ru" : "Dominix",
+    "zh" : "多米尼克斯级"
+  },
   "packaged_volume" : 50000,
+  "portion_size" : 1,
+  "published" : true,
+  "radius" : 250,
+  "type_id" : 645,
+  "volume" : 454500,
+  "base_price" : 153900000,
+  "faction_id" : 500004,
+  "meta_group_id" : 1,
+  "race_id" : 8,
+  "sound_id" : 20072,
   "type_materials" : {
     "34" : {
       "material_type_id" : 34,

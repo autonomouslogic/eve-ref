@@ -1,11 +1,9 @@
 {
-  "anchorable" : false,
-  "anchored" : false,
   "category_id" : 66,
-  "fittable_non_singleton" : false,
+  "group_id" : 1869,
   "name" : {
-    "de" : "Struktur: Ingenieursanlage XL - Ausrüstungs- und Komponenteneffizienz",
     "en" : "Structure Engineering Rig XL - Structure and Component Efficiency",
+    "de" : "Struktur: Ingenieursanlage XL - Ausrüstungs- und Komponenteneffizienz",
     "es" : "Complemento de ingeniería para estructuras (XL): eficiencia de componente y estructura",
     "fr" : "Optimisation d'ingénierie XL (Structure) – Efficience industrielle structures et composants",
     "ja" : "ストラクチャエンジニアリングリグXL - ストラクチャとコンポーネント効率",
@@ -14,7 +12,9 @@
     "zh" : "建筑工程超大型改装件 - 建筑和组件效率"
   },
   "published" : true,
+  "anchorable" : false,
+  "anchored" : false,
+  "fittable_non_singleton" : false,
   "use_base_price" : false,
-  "group_id" : 1869,
   "type_ids" : [ 43704, 45548 ]
 }

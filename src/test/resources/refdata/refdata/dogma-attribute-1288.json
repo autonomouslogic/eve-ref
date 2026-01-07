@@ -1,18 +1,18 @@
 {
-  "data_type" : 4,
+  "attribute_id" : 1288,
   "default_value" : 0,
   "description" : {
     "en" : "Required skill level for skill 6"
   },
-  "display_when_zero" : false,
+  "display_name" : {
+    "en" : ""
+  },
   "high_is_good" : true,
   "icon_id" : 0,
   "name" : "requiredSkill6Level",
-  "published" : false,
   "stackable" : true,
-  "category_id" : 8,
-  "attribute_id" : 1288,
-  "display_name" : {
-    "en" : ""
-  }
+  "data_type" : 4,
+  "display_when_zero" : false,
+  "published" : false,
+  "category_id" : 8
 }

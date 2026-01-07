@@ -1,32 +1,15 @@
 {
+  "capacity" : 0,
   "description" : {
-    "de" : "Verwendet eine Kombination aus Dämpfungsfeldemittern und Redundanzsystemen, um die Auswirkungen von kritischen Systemschäden zu verhindern. Verleiht einen Bonus auf die Widerstandsfähigkeit von Schild, Panzerung und Rumpf. Es kann zeitgleich immer nur ein Schadenskontroll-System ausgerüstet werden.",
-    "en" : "Utilizes a combination of containment field emitters and redundancy systems to mitigate the impact of critical system damage. \r\n\r\nGrants a bonus to resistance for shield, armor and hull.\r\n\r\nOnly one Damage Control can be fit at a given time.",
-    "es" : "Usa una combinación de emisores de campo de contención y sistemas redundantes para mitigar el impacto de daños críticos al sistema. \n\nOtorga una bonificación de resistencia de escudo, blindaje y casco.\n\nSolo se puede equipar un control de daños a la vez.",
+    "en" : "Utilizes a combination of containment field emitters and redundancy systems to mitigate the impact of critical system damage. \n\nGrants a bonus to resistance for shield, armor and hull.\n\nOnly one Damage Control can be fit at a given time.",
     "fr" : "Des émetteurs de champ de confinement et des systèmes redondants permettent d'atténuer l'impact des dégâts critiques infligés aux systèmes. Donne un bonus de résistance aux boucliers, au blindage et à la coque. Un seul contrôle des dégâts peut être installé à la fois.",
+    "de" : "Verwendet eine Kombination aus Dämpfungsfeldemittern und Redundanzsystemen, um die Auswirkungen von kritischen Systemschäden zu verhindern. Verleiht einen Bonus auf die Widerstandsfähigkeit von Schild, Panzerung und Rumpf. Es kann zeitgleich immer nur ein Schadenskontroll-System ausgerüstet werden.",
+    "es" : "Usa una combinación de emisores de campo de contención y sistemas redundantes para mitigar el impacto de daños críticos al sistema. \n\nOtorga una bonificación de resistencia de escudo, blindaje y casco.\n\nSolo se puede equipar un control de daños a la vez.",
     "ja" : "コンテインメントフィールドエミッターと冗長システムを組み合わせて使用することで、システムへの致命的なダメージの衝撃を回避する。\n\nシールド、アーマー、船体の耐性が増大する。\n\n複数のダメージ制御を同時に装備することはできない。",
     "ko" : "집속 필드 생성기와 비상 시스템을 사용하여 시스템에 가해지는 피해를 감소합니다. <br><br>실드, 장갑, 그리고 선체 저항력이 증가합니다. <br><br>데미지 컨트롤 모듈은 한 개만 장착할 수 있습니다.",
     "ru" : "Эффективное сочетание излучателей сдерживающего поля и резервных блоков позволяет смягчить результат критического повреждения систем. Даёт бонус к сопротивлению щитов, брони и корпуса. Одновременно можно установить только один модуль боевой живучести.",
     "zh" : "将围场发射器和冗余系统结合使用，减轻由严重系统性损坏造成的影响。 \n\n\n\n提高护盾、装甲和结构的抗性。\n\n\n\n只能同时装配一个损伤控制。"
   },
-  "group_id" : 60,
-  "icon_id" : 77,
-  "meta_group_id" : 15,
-  "name" : {
-    "de" : "Abyssal Damage Control",
-    "en" : "Abyssal Damage Control",
-    "es" : "Control de daños abisal",
-    "fr" : "Contrôle des dégâts abyssaux",
-    "ja" : "アビサル・ダメージ制御",
-    "ko" : "어비설 데미지 컨트롤",
-    "ru" : "Abyssal Damage Control",
-    "zh" : "深渊损伤控制"
-  },
-  "portion_size" : 1,
-  "published" : true,
-  "volume" : 5,
-  "type_id" : 52227,
-  "capacity" : 0,
   "dogma_attributes" : {
     "161" : {
       "attribute_id" : 161,
@@ -71,9 +54,26 @@
       "is_default" : false
     }
   },
+  "group_id" : 60,
+  "icon_id" : 77,
   "mass" : 0,
+  "name" : {
+    "en" : "Abyssal Damage Control",
+    "fr" : "Contrôle des dégâts abyssaux",
+    "de" : "Abyssal Damage Control",
+    "es" : "Control de daños abisal",
+    "ja" : "アビサル・ダメージ制御",
+    "ko" : "어비설 데미지 컨트롤",
+    "ru" : "Abyssal Damage Control",
+    "zh" : "深渊损伤控制"
+  },
   "packaged_volume" : 5,
+  "portion_size" : 1,
+  "published" : true,
   "radius" : 1,
+  "type_id" : 52227,
+  "volume" : 5,
+  "meta_group_id" : 15,
   "required_skills" : {
     "3394" : 4
   },

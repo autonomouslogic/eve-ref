@@ -1,7 +1,7 @@
 {
   "description" : {
-    "de" : "Raumschiffe aller Größen und Funktionen für Kapselpiloten. Dazu gehören fortschrittliche und Fraktionsvarianten von vielen Rumpftypen.",
     "en" : "Capsuleer spaceships of all sizes and roles, including advanced and faction variants of many hull types",
+    "de" : "Raumschiffe aller Größen und Funktionen für Kapselpiloten. Dazu gehören fortschrittliche und Fraktionsvarianten von vielen Rumpftypen.",
     "es" : "Pilota naves para capsulistas de todos los tamaños y funciones, incluidos modelos faccionarios avanzados de muchos tipos de casco.",
     "fr" : "Vaisseaux spatiaux de capsulier de tout rôle et de toute taille, y compris les variantes avancées et spécifiques à certaines factions avec plusieurs types de coques",
     "ja" : "カプセラの宇宙船の全サイズおよび機能（性能別、各勢力仕様別船体タイプなど）",
@@ -9,11 +9,10 @@
     "ru" : "Капсулёрские корабли всех назначений, классов, типов и размеров, включая корабли усовершенствованных проектов и корабли из арсеналов сверхдержав и независимых организаций",
     "zh" : "各种型号和用途的太空飞船，涵盖了高级和势力衍生型号"
   },
-  "has_types" : false,
-  "icon_id" : 1443,
+  "market_group_id" : 4,
   "name" : {
-    "de" : "Schiffe",
     "en" : "Ships",
+    "de" : "Schiffe",
     "es" : "Naves",
     "fr" : "Vaisseaux",
     "ja" : "艦船",
@@ -21,6 +20,7 @@
     "ru" : "Корабли",
     "zh" : "舰船"
   },
-  "market_group_id" : 4,
+  "has_types" : false,
+  "icon_id" : 1443,
   "child_market_group_ids" : [ 1376 ]
 }

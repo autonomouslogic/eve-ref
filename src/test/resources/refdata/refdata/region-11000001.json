@@ -1,13 +1,18 @@
 {
   "name" : {
-    "de" : "A-R00001",
     "en" : "A-R00001",
+    "ja" : "A-R00001",
+    "de" : "A-R00001",
     "es" : "A-R00001",
     "fr" : "A-R00001",
-    "ja" : "A-R00001",
     "ko" : "A-R00001",
     "ru" : "A-R00001",
     "zh" : "A-R00001"
+  },
+  "region_id" : 11000001,
+  "description" : {
+    "en" : null,
+    "ja" : null
   },
   "nebula_id" : 11781,
   "position" : {
@@ -16,10 +21,5 @@
     "z" : -9497611206336487000
   },
   "wormhole_class_id" : 1,
-  "region_id" : 11000001,
-  "description" : {
-    "en" : null,
-    "ja" : null
-  },
   "universe_id" : "wormhole"
 }

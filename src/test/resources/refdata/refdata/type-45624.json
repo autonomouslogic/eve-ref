@@ -1,37 +1,15 @@
 {
+  "capacity" : 0,
   "description" : {
-    "de" : "Während einer der ersten Konflikte mit ihnen bemerkten Amarr-Ingenieure eine bemerkenswerte Eigenheit der Sleeper-Drohnentechnologie: Die Möglichkeit, Energie untereinander ohne spezielle Ausrüstung zu übertragen. Diese Technologie schien jeder Drohne in gewisser Weise eigen zu sein und obwohl die Ingenieure dieses System nicht für moderne Raumschiffe reproduzieren konnten, waren sie zumindest in der Lage, sie für modulare Geräte von Typ Tech III zu adaptieren. Der parasitäre Energiekomplex stellt die Erfindung der Sleeper jedoch auf den Kopf, denn er verwandelt den Energieübertrag von einer symbiotischen Funktion zu einer vampirischen indem er Energieneutralisierer und Energie-Nosferatus verstärkt.",
     "en" : "During some of the first conflicts with them, Amarr engineers noticed a remarkable feature in Sleeper drone technology: the ability of drones to transfer power between one another without the need for specialized equipment. This technology seemed to be innate to every drone in some capacity, and while the engineers could not reproduce this system in modern space vessels, they were able to adapt the technology into modular Tech III designs. The energy parasitic complex turns the Sleeper tech on its head, changing the energy transfer from a symbiotic function to a vampiric one by providing a boost to energy neutralizer and energy nosferatu equipment.",
-    "es" : "Durante algunos de los primeros conflictos con ellos, los ingenieros amarrianos se percataron de una característica notable en la tecnología de drones sleepers: la capacidad de los drones para transmitirse potencia entre ellos sin necesidad de ningún equipamiento especializado. Esta tecnología parecía inherente a todos los drones y, aunque los ingenieros no podían reproducir este sistema en naves espaciales modernas, lograron adaptar la tecnología a los diseños de tecnología modular T3. El complejo parasitario de energía da la vuelta a la tecnología de los sleepers, lo que cambia la transferencia de energía de una función simbiótica a una función vampírica, brindando una mejora al neutralizador energético y nosferatu de energía.",
     "fr" : "Au cours des premiers conflits qui les ont opposés, les ingénieurs amarr ont remarqué une caractéristique intéressante de la technologie des drones sleeper : la capacité des drones à transférer l'énergie entre eux sans équipement particulier. Cette technologie semblait innée à tous les drones, et si les ingénieurs ne sont pas parvenus à reproduire ce système dans les vaisseaux spatiaux modernes, ils ont néanmoins réussi à l'adapter aux modèles modulaires Tech III. Ce complexe parasite d'énergie inverse la technologie de transfert d'énergie sleeper, en transposant sa vocation symbiotique en fonction vampirique, grâce à l'amplification des capacités d'absorption des neutraliseurs d'énergie et des nosferatu énergétiques.",
+    "de" : "Während einer der ersten Konflikte mit ihnen bemerkten Amarr-Ingenieure eine bemerkenswerte Eigenheit der Sleeper-Drohnentechnologie: Die Möglichkeit, Energie untereinander ohne spezielle Ausrüstung zu übertragen. Diese Technologie schien jeder Drohne in gewisser Weise eigen zu sein und obwohl die Ingenieure dieses System nicht für moderne Raumschiffe reproduzieren konnten, waren sie zumindest in der Lage, sie für modulare Geräte von Typ Tech III zu adaptieren. Der parasitäre Energiekomplex stellt die Erfindung der Sleeper jedoch auf den Kopf, denn er verwandelt den Energieübertrag von einer symbiotischen Funktion zu einer vampirischen indem er Energieneutralisierer und Energie-Nosferatus verstärkt.",
+    "es" : "Durante algunos de los primeros conflictos con ellos, los ingenieros amarrianos se percataron de una característica notable en la tecnología de drones sleepers: la capacidad de los drones para transmitirse potencia entre ellos sin necesidad de ningún equipamiento especializado. Esta tecnología parecía inherente a todos los drones y, aunque los ingenieros no podían reproducir este sistema en naves espaciales modernas, lograron adaptar la tecnología a los diseños de tecnología modular T3. El complejo parasitario de energía da la vuelta a la tecnología de los sleepers, lo que cambia la transferencia de energía de una función simbiótica a una función vampírica, brindando una mejora al neutralizador energético y nosferatu de energía.",
     "ja" : "スリーパードローンとの抗争の初期段階において、特殊な装置を用いることなくドローン間で動力を転送し合うという驚異の技術にアマーのエンジニア達は注目していた。この技術はあらゆるドローンにある程度備わっているようだった。技術者たちはこの技術を現行の宇宙船で再現することはできなかったものの、T3のモジュール設計に応用することに成功した。このエネルギー吸収複合体はスリーパー技術を逆利用したものであり、エネルギーニュートラライザーとエネルギーノスフェラトゥ装備を強化したことで、共生のためのエネルギー転送はエネルギー吸引に姿を変えている。",
     "ko" : "슬리퍼 드론과의 초기 교전 당시 아마르 엔지니어들은 드론에게서 놀라운 기술적 특징을 발견했습니다. 슬리퍼 드론은 놀랍게도 특수한 장비의 도움 없이 전력 교환을 할 수 있었습니다. 성능상의 차이는 존재했지만 전력 교환 기능은 드론이라면 기본적으로 탑재하고 있던 일종의 보편적인 시스템이었습니다. 엔지니어들은 해당 기능을 우주선에 적용하려고 시도했으나 빈번히 실패했고, 결국 차선책으로 테크 3 모듈에 기능을 통합하기로 결정했습니다. 에너지 패러사이트 컴플렉스는 슬리퍼 기술을 역전환하여 에너지 교환 기능을 에너지 흡수로 변환하고 에너지 뉴트럴라이저 및 노스페라투 장비 효과를 향상합니다.",
     "ru" : "В ходе первых столкновений с дронами Спящих амаррские инженеры отметили одну из их особенностей: способность ретранслировать энергию друг другу без использования специализированного оборудования. Эта возможность была в той или иной мере доступна всем дронам; инженерам не удалось воспроизвести её в современных кораблях, но соответствующий аппаратный комплекс был, тем не менее, адаптирован для сменных подсистем кораблей третьей техкатегории. Паразитический комплекс ставит технологии Спящих с ног на голову: вместо обеспечения энергетического «симбиоза» он повышает эффективность устройств паразитной подзарядки и дистанционных нейтрализаторов заряда.",
     "zh" : "早在最初对冬眠者无人机的几次研究中，艾玛工程师就注意到了它们身上的一项非凡的技术：它们能够在没有专门设备帮助的情况下相互之间传输能量。这种技术似乎在所有的无人机上都存在，只有量上的区别。尽管工程技术人员没法在现在的普通舰船上重新构造这个系统，但是他们却想出办法将其整合进模块化的三级科技舰船中。能量寄取复合体完全改变了冬眠者的科技，它通过提升能量中和设备和能量吸取设备的效果，使能量传输方式由共生转变成吸血。"
   },
-  "graphic_id" : 21509,
-  "group_id" : 958,
-  "icon_id" : 3636,
-  "market_group_id" : 1122,
-  "mass" : 1200000,
-  "meta_group_id" : 14,
-  "name" : {
-    "de" : "Legion Core - Energy Parasitic Complex",
-    "en" : "Legion Core - Energy Parasitic Complex",
-    "es" : "Núcleo de la Legión: complejo parasitario de energía",
-    "fr" : "Legion Nucléus – Complexe énergétique parasite",
-    "ja" : "レギオンコア - エネルギーパラスティック複合施設",
-    "ko" : "레기온 코어 시스템 - 에너지 패러사이트 컴플렉스",
-    "ru" : "Legion Core - Energy Parasitic Complex",
-    "zh" : "圣卒核心 - 能量寄取集成体"
-  },
-  "portion_size" : 1,
-  "published" : true,
-  "race_id" : 4,
-  "variation_parent_type_id" : 45623,
-  "volume" : 40,
-  "type_id" : 45624,
-  "capacity" : 0,
   "dogma_attributes" : {
     "1376" : {
       "attribute_id" : 1376,
@@ -144,8 +122,30 @@
       "is_default" : false
     }
   },
+  "graphic_id" : 21509,
+  "group_id" : 958,
+  "icon_id" : 3636,
+  "market_group_id" : 1122,
+  "mass" : 1200000,
+  "name" : {
+    "en" : "Legion Core - Energy Parasitic Complex",
+    "fr" : "Legion Nucléus – Complexe énergétique parasite",
+    "de" : "Legion Core - Energy Parasitic Complex",
+    "es" : "Núcleo de la Legión: complejo parasitario de energía",
+    "ja" : "レギオンコア - エネルギーパラスティック複合施設",
+    "ko" : "레기온 코어 시스템 - 에너지 패러사이트 컴플렉스",
+    "ru" : "Legion Core - Energy Parasitic Complex",
+    "zh" : "圣卒核心 - 能量寄取集成体"
+  },
   "packaged_volume" : 40,
+  "portion_size" : 1,
+  "published" : true,
   "radius" : 1,
+  "type_id" : 45624,
+  "volume" : 40,
+  "meta_group_id" : 14,
+  "race_id" : 4,
+  "variation_parent_type_id" : 45623,
   "traits" : {
     "role_bonuses" : {
       "2" : {

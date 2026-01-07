@@ -1,39 +1,15 @@
 {
-  "base_price" : 12500000,
   "capacity" : 150,
   "description" : {
-    "de" : "Als die Scope Ende YC 115 eine Schlagzeile mit der Frage \"<i>Hat Kaalakiota den perfekten Abfangjäger gebaut?</i>\" veröffentlichte, sahen sie die meisten Beobachter als provokativen Werbetrick um mehr Leser zu gewinnen. \"The Rabbit\" sah sie als persönliche Herausforderung.",
-    "en" : "When The Scope ran a headline in late YC115 asking \"<i>Has Kaalakiota built the perfect Interceptor?</i>\" most observers viewed it as a provocative ploy to increase readership. \r\n\r\nThe Rabbit viewed it as a personal challenge.",
-    "es" : "Cuando a finales de 115 CY The Scope publicó el titular «<i>¿Ha construido Kaalakiota el interceptor perfecto?</i>», muchos observadores se lo tomaron como una artimaña para ganar lectores. \n\n\n\nSin embargo, «El Conejo» se lo tomó como un desafío personal.",
+    "en" : "When The Scope ran a headline in late YC115 asking \"<i>Has Kaalakiota built the perfect Interceptor?</i>\" most observers viewed it as a provocative ploy to increase readership. \n\nThe Rabbit viewed it as a personal challenge.",
     "fr" : "En YC 115, quand The Scope a publié l'article « <i>La Kaalakiota Corporation a-t-elle mis au point l'Intercepteur ultime ?</i> », la plupart des observateurs n'y ont vu qu'une provocation pour augmenter leur tirage. \n\nLe Lapin a vu cela comme un défi personnel.",
+    "de" : "Als die Scope Ende YC 115 eine Schlagzeile mit der Frage \"<i>Hat Kaalakiota den perfekten Abfangjäger gebaut?</i>\" veröffentlichte, sahen sie die meisten Beobachter als provokativen Werbetrick um mehr Leser zu gewinnen. \"The Rabbit\" sah sie als persönliche Herausforderung.",
+    "es" : "Cuando a finales de 115 CY The Scope publicó el titular «<i>¿Ha construido Kaalakiota el interceptor perfecto?</i>», muchos observadores se lo tomaron como una artimaña para ganar lectores. \n\n\n\nSin embargo, «El Conejo» se lo tomó como un desafío personal.",
     "ja" : "スコープがYC115後半にヘッドラインを実行した時、「<i>カアラキオタが完璧な要撃型フリゲートを建設したのか？</i>」ほとんどのオブザーバーはリーダーシップを高める挑戦的な策略としてそれを見る。ラビットは個人的なチャレンジとして見ている。",
     "ko" : "YC115년 말 스코프 신문사의 헤드라인, \"<i>칼라키오타가 최고의 인터셉터를 개발하다!</i>\" 에 대해 대중은 조회수를 늘리기 위한 자극적인 주제라고 생각했습니다. <br><br>그에 비해 \"래빗\"은 이를 도전으로 받아들였습니다.",
     "ru" : "В конце 115 года по юлайскому летоисчислению новостное агентство «Скоуп» опубликовало сюжет под заголовком <i>«Корпорация „Каалакиота“ выпустила идеальный перехватчик?»</i>. Большинство обозревателей посчитало этот заголовок игрой со зрителем в стремлении добиться большего охвата аудитории. «Кролик» принял его как личный вызов.",
     "zh" : "YC115年底，《视角》使用了这样一条标题“<i>卡拉吉塔集团生产的截击舰是宇宙中最好的吗？</i>”大多数读者都把这当成是一次吸引人气的炒作罢了。 \n\n“野兔”卡萨加米却把这视为了一种自我挑战。"
   },
-  "faction_id" : 500010,
-  "graphic_id" : 20605,
-  "group_id" : 831,
-  "market_group_id" : 1932,
-  "mass" : 1000000,
-  "meta_group_id" : 2,
-  "name" : {
-    "de" : "Whiptail",
-    "en" : "Whiptail",
-    "es" : "Whiptail",
-    "fr" : "Whiptail",
-    "ja" : "ウィップテイル",
-    "ko" : "윕테일",
-    "ru" : "Whiptail",
-    "zh" : "长尾蜥级"
-  },
-  "portion_size" : 1,
-  "published" : true,
-  "race_id" : 1,
-  "radius" : 33,
-  "sound_id" : 20070,
-  "volume" : 18000,
-  "type_id" : 33673,
   "dogma_attributes" : {
     "1538" : {
       "attribute_id" : 1538,
@@ -518,7 +494,31 @@
       "is_default" : false
     }
   },
+  "graphic_id" : 20605,
+  "group_id" : 831,
+  "market_group_id" : 1932,
+  "mass" : 1000000,
+  "name" : {
+    "en" : "Whiptail",
+    "fr" : "Whiptail",
+    "de" : "Whiptail",
+    "es" : "Whiptail",
+    "ja" : "ウィップテイル",
+    "ko" : "윕테일",
+    "ru" : "Whiptail",
+    "zh" : "长尾蜥级"
+  },
   "packaged_volume" : 2500,
+  "portion_size" : 1,
+  "published" : true,
+  "radius" : 33,
+  "type_id" : 33673,
+  "volume" : 18000,
+  "base_price" : 12500000,
+  "faction_id" : 500010,
+  "meta_group_id" : 2,
+  "race_id" : 1,
+  "sound_id" : 20070,
   "traits" : {
     "role_bonuses" : {
       "5" : {

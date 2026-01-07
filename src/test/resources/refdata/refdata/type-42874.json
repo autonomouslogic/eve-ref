@@ -1,29 +1,29 @@
 {
-  "base_price" : 10000000,
-  "group_id" : 1810,
-  "icon_id" : 21690,
-  "market_group_id" : 2291,
-  "name" : {
-    "de" : "Armor Energizing Charge Blueprint",
-    "en" : "Armor Energizing Charge Blueprint",
-    "es" : "Plano de carga energizante de blindaje",
-    "fr" : "Armor Energizing Charge Blueprint",
-    "ja" : "アーマー活性化チャージブループリント",
-    "ko" : "장갑 에너자이징 차지 블루프린트",
-    "ru" : "Armor Energizing Charge Blueprint",
-    "zh" : "装甲电压强化弹药蓝图"
-  },
-  "portion_size" : 1,
-  "published" : true,
-  "volume" : 0.01,
-  "type_id" : 42874,
   "capacity" : 0,
   "description" : {
     "en" : "",
     "fr" : ""
   },
+  "group_id" : 1810,
+  "icon_id" : 21690,
+  "market_group_id" : 2291,
   "mass" : 0,
+  "name" : {
+    "en" : "Armor Energizing Charge Blueprint",
+    "fr" : "Armor Energizing Charge Blueprint",
+    "de" : "Armor Energizing Charge Blueprint",
+    "es" : "Plano de carga energizante de blindaje",
+    "ja" : "アーマー活性化チャージブループリント",
+    "ko" : "장갑 에너자이징 차지 블루프린트",
+    "ru" : "Armor Energizing Charge Blueprint",
+    "zh" : "装甲电压强化弹药蓝图"
+  },
   "packaged_volume" : 0.01,
+  "portion_size" : 1,
+  "published" : true,
   "radius" : 1,
+  "type_id" : 42874,
+  "volume" : 0.01,
+  "base_price" : 10000000,
   "is_blueprint" : true
 }

@@ -1,32 +1,15 @@
 {
+  "capacity" : 0,
   "description" : {
-    "de" : "Die Fülle an Wasser auf terrestrischen Planeten ist oftmals eine Illusion: Was viele spontan als \"Wasser\" bezeichnen, ist häufig eine Verbindung aus vielen Flüssigkeiten, mikroskopischen Partikeln und gesättigten Komponenten, kombiniert mit Wasser und weiteren Flüssigkeiten. Wässrige Flüssigkeiten verkörpern die Art von Flüssigkeit, aus der pures Wasser leicht von Abfall und gefährlichen Partikeln getrennt werden kann. Aber nur bei der Verwendung der richtigen Ausrüstung.",
     "en" : "The abundance of water on terrestrial planets is often a misconception: What many refer to offhandedly as \"water\" is often an amalgamation of many liquids, microscopic particles, and saturated compounds combined with water and other liquids. Aqueous liquids represent those liquids from which pure water can be separated easily from waste or hazardous particles, but only using the proper equipment.",
-    "es" : "La abundancia de agua en los planetas terrestres es, por lo general, un engaño: lo que muchos llaman «agua» suele ser una amalgama de muchos líquidos, partículas microscópicas y compuestos saturados combinados con agua y otros fluidos. Los líquidos acuosos son aquellos de los que el agua pura se puede separar fácilmente de los residuos o las partículas tóxicas, pero solo con el equipo adecuado.",
     "fr" : "L'abondance d'eau sur les planètes terrestres n'est souvent qu'une idée reçue. En effet, ce que beaucoup désignent comme de l'eau n'est souvent qu'une association de plusieurs liquides avec des particules microscopiques et des composés saturés gorgés d'eau et d'autres liquides. Les liquides aqueux sont des liquides à partir desquels l'eau pure peut aisément être séparée des déchets et des particules dangereuses, à condition de disposer du matériel approprié.",
+    "de" : "Die Fülle an Wasser auf terrestrischen Planeten ist oftmals eine Illusion: Was viele spontan als \"Wasser\" bezeichnen, ist häufig eine Verbindung aus vielen Flüssigkeiten, mikroskopischen Partikeln und gesättigten Komponenten, kombiniert mit Wasser und weiteren Flüssigkeiten. Wässrige Flüssigkeiten verkörpern die Art von Flüssigkeit, aus der pures Wasser leicht von Abfall und gefährlichen Partikeln getrennt werden kann. Aber nur bei der Verwendung der richtigen Ausrüstung.",
+    "es" : "La abundancia de agua en los planetas terrestres es, por lo general, un engaño: lo que muchos llaman «agua» suele ser una amalgama de muchos líquidos, partículas microscópicas y compuestos saturados combinados con agua y otros fluidos. Los líquidos acuosos son aquellos de los que el agua pura se puede separar fácilmente de los residuos o las partículas tóxicas, pero solo con el equipo adecuado.",
     "ja" : "陸地型惑星には水が大量にあるというのは、多くの場合、誤解である。多くの人が何気なく使用する「水」という言葉は、大量の液体、微粒子、および水と他の液体が融合した飽和化合物が混合したものを指すことが多い。水性液体とは、適切な装置を使用すれば、無駄な粒子や有害な粒子から純水を簡単に分離できる液体を指す。",
     "ko" : "지구형 행성에 물이 풍부할 것이라는 생각은 흔한 편견입니다. \"물\"은 각종 액체, 미세 입자, 그리고 포화 화합물이 섞인 물질을 일컫습니다. 그 가운데 수성 액체는 특수한 장비를 통해 유독 성분과 오염 물질을 걸러낸 정제수를 의미합니다.",
     "ru" : "Представление о том, что на планетах земного типа много воды, является ошибочным. То, что мы неточно называем «водой», на самом деле представляет собой объединение множества разных жидкостей, микроскопических частиц и насыщенных соединений в сочетании с водой и другими жидкостями. Водные жидкости – это жидкости, в которых можно легко отделить чистую воду от примесей и загрязняющих частиц, но только с применением соответствующего оборудования.",
     "zh" : "有人说类地行星上水资源丰富实际上是一种错误的认识：那些通常被误认作是水的东西实际上是由很多物质混合起来的。水基液体所指的是，通过使用专门的设备，这些液体中的纯水能轻易地同其他杂质和污物微粒完全分离开来。"
   },
-  "group_id" : 1033,
-  "icon_id" : 10012,
-  "market_group_id" : 1333,
-  "name" : {
-    "de" : "Aqueous Liquids",
-    "en" : "Aqueous Liquids",
-    "es" : "Líquido acuoso",
-    "fr" : "Liquides aqueux",
-    "ja" : "水性液体",
-    "ko" : "수성 액체",
-    "ru" : "Aqueous Liquids",
-    "zh" : "水基液体"
-  },
-  "portion_size" : 1,
-  "published" : true,
-  "volume" : 0.005,
-  "type_id" : 2268,
-  "capacity" : 0,
   "dogma_attributes" : {
     "161" : {
       "attribute_id" : 161,
@@ -53,8 +36,25 @@
       "value" : 5
     }
   },
+  "group_id" : 1033,
+  "icon_id" : 10012,
+  "market_group_id" : 1333,
   "mass" : 0,
+  "name" : {
+    "en" : "Aqueous Liquids",
+    "fr" : "Liquides aqueux",
+    "de" : "Aqueous Liquids",
+    "es" : "Líquido acuoso",
+    "ja" : "水性液体",
+    "ko" : "수성 액체",
+    "ru" : "Aqueous Liquids",
+    "zh" : "水基液体"
+  },
   "packaged_volume" : 0.005,
+  "portion_size" : 1,
+  "published" : true,
   "radius" : 1,
+  "type_id" : 2268,
+  "volume" : 0.005,
   "harvested_by_pin_type_ids" : [ 2409, 2412 ]
 }

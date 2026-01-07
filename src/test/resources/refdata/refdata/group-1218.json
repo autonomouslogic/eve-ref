@@ -1,11 +1,9 @@
 {
-  "anchorable" : false,
-  "anchored" : false,
   "category_id" : 16,
-  "fittable_non_singleton" : false,
+  "group_id" : 1218,
   "name" : {
-    "de" : "Ressourcenverarbeitung",
     "en" : "Resource Processing",
+    "de" : "Ressourcenverarbeitung",
     "es" : "Procesamiento de recursos",
     "fr" : "Traitement des ressources",
     "ja" : "資源加工",
@@ -14,7 +12,9 @@
     "zh" : "资源处理"
   },
   "published" : true,
+  "anchorable" : false,
+  "anchored" : false,
+  "fittable_non_singleton" : false,
   "use_base_price" : true,
-  "group_id" : 1218,
   "type_ids" : [ 60377 ]
 }
