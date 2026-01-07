@@ -1,5 +1,12 @@
 EVE Ref Changelog
 
+## [2.73.4](https://github.com/autonomouslogic/eve-ref/compare/2.73.3...2.73.4) (2026-01-07)
+
+
+### Bug Fixes
+
+* Updated BuildRefData to make SDE take precedence over ESI ([#1008](https://github.com/autonomouslogic/eve-ref/issues/1008)) ([31e718d](https://github.com/autonomouslogic/eve-ref/commit/31e718d2feacd88f3a53404e8c8918e72dd26a04))
+
 ## [2.73.3](https://github.com/autonomouslogic/eve-ref/compare/2.73.2...2.73.3) (2026-01-06)
 
 
