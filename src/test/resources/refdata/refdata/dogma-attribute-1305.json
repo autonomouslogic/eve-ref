@@ -1,12 +1,12 @@
 {
-  "data_type" : 11,
+  "attribute_id" : 1305,
   "default_value" : 0,
   "description" : {
     "en" : ""
   },
   "display_name" : {
-    "de" : "Kann eingebaut werden in",
     "en" : "Can be fitted to",
+    "de" : "Kann eingebaut werden in",
     "es" : "Se puede equipar en",
     "fr" : "Peut être équipé sur",
     "ja" : "装着可能対象",
@@ -14,13 +14,13 @@
     "ru" : "Устанавливается на",
     "zh" : "可装配至"
   },
-  "display_when_zero" : false,
   "high_is_good" : true,
   "icon_id" : 1443,
   "name" : "canFitShipType4",
   "published" : true,
   "stackable" : true,
   "unit_id" : 116,
-  "category_id" : 1,
-  "attribute_id" : 1305
+  "data_type" : 11,
+  "display_when_zero" : false,
+  "category_id" : 1
 }

@@ -1,27 +1,27 @@
 {
-  "disallow_auto_repeat" : false,
-  "discharge_attribute_id" : 6,
-  "distribution" : 2,
-  "duration_attribute_id" : 51,
-  "electronic_chance" : false,
-  "falloff_attribute_id" : 158,
-  "guid" : "effects.ProjectileFired",
-  "is_assistance" : false,
-  "is_offensive" : true,
-  "is_warp_safe" : false,
-  "propulsion_chance" : false,
-  "published" : false,
-  "range_attribute_id" : 54,
-  "range_chance" : false,
-  "tracking_speed_attribute_id" : 160,
-  "effect_category" : 2,
-  "effect_name" : "projectileFired",
-  "effect_id" : 34,
   "description" : {
     "en" : ""
   },
+  "discharge_attribute_id" : 6,
   "display_name" : {
     "en" : ""
   },
-  "name" : "projectileFired"
+  "duration_attribute_id" : 51,
+  "effect_category" : 2,
+  "effect_id" : 34,
+  "falloff_attribute_id" : 158,
+  "is_offensive" : true,
+  "name" : "projectileFired",
+  "range_attribute_id" : 54,
+  "tracking_speed_attribute_id" : 160,
+  "disallow_auto_repeat" : false,
+  "distribution" : 2,
+  "electronic_chance" : false,
+  "guid" : "effects.ProjectileFired",
+  "is_assistance" : false,
+  "is_warp_safe" : false,
+  "propulsion_chance" : false,
+  "published" : false,
+  "range_chance" : false,
+  "effect_name" : "projectileFired"
 }

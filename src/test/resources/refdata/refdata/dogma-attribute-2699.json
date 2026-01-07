@@ -1,17 +1,17 @@
 {
-  "data_type" : 5,
+  "attribute_id" : 2699,
   "default_value" : 0,
   "description" : {
     "en" : "0: Mission/NPE Ore\r\n1: Standard Ore/Ice\r\n2: +5% Ore\r\n3: +10% Ore\r\n4: High Quality Ice or Extracted Ore\r\n5: Jackpot Moon Ore"
   },
-  "display_when_zero" : false,
-  "high_is_good" : true,
-  "name" : "asteroidMetaLevel",
-  "published" : false,
-  "stackable" : true,
-  "category_id" : 7,
-  "attribute_id" : 2699,
   "display_name" : {
     "en" : ""
-  }
+  },
+  "high_is_good" : true,
+  "name" : "asteroidMetaLevel",
+  "stackable" : true,
+  "data_type" : 5,
+  "display_when_zero" : false,
+  "published" : false,
+  "category_id" : 7
 }

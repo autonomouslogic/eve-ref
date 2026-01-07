@@ -61,7 +61,7 @@ public class RefDataMerger {
 			var esi = esiStore.get(id);
 			var hobo = hoboleaksStore.get(id);
 			var existing = refStore.get(id);
-			var ref = merge(existing, sde, esi, hobo);
+			var ref = merge(existing, esi, sde, hobo);
 			refStore.put(id, ref);
 		} catch (Exception e) {
 			throw new IllegalStateException(String.format("Failed merging %s [%d]", name, id), e);

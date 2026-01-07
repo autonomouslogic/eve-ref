@@ -1,12 +1,12 @@
 {
-  "data_type" : 4,
+  "attribute_id" : 167,
   "default_value" : 0,
   "description" : {
     "en" : "The perception of a character."
   },
   "display_name" : {
-    "de" : "Auffassungsgabe",
     "en" : "Perception",
+    "de" : "Auffassungsgabe",
     "es" : "Percepción",
     "fr" : "Perception",
     "ja" : "知覚",
@@ -14,13 +14,13 @@
     "ru" : "«Восприятие»",
     "zh" : "感知"
   },
-  "display_when_zero" : false,
   "high_is_good" : true,
   "icon_id" : 1382,
   "name" : "perception",
   "published" : true,
   "stackable" : true,
   "unit_id" : 120,
-  "category_id" : 9,
-  "attribute_id" : 167
+  "data_type" : 4,
+  "display_when_zero" : false,
+  "category_id" : 9
 }

@@ -1,22 +1,9 @@
 {
-  "base_price" : 2000,
+  "capacity" : 0,
   "description" : {
-    "en" : "Veldspar is the most common ore type in the central regions of known universe. It is still in constant demand as it holds a large portion of the much-used <a href=showinfo:34>Tritanium</a> mineral.\r\n\r\nAvailable primarily in high security status star systems.",
+    "en" : "Veldspar is the most common ore type in the central regions of known universe. It is still in constant demand as it holds a large portion of the much-used <a href=showinfo:34>Tritanium</a> mineral.\n\nAvailable primarily in high security status star systems.",
     "fr" : "Veldspar is the most common ore type in the central regions of known universe. It is still in constant demand as it holds a large portion of the much-used <a href=showinfo:34>Tritanium</a> mineral.\r\n\r\nAvailable primarily in high security status star systems."
   },
-  "group_id" : 462,
-  "icon_id" : 232,
-  "market_group_id" : 518,
-  "mass" : 4000,
-  "name" : {
-    "en" : "Veldspar",
-    "fr" : "Veldspar"
-  },
-  "portion_size" : 100,
-  "published" : true,
-  "volume" : 0.1,
-  "type_id" : 1230,
-  "capacity" : 0,
   "dogma_attributes" : {
     "161" : {
       "attribute_id" : 161,
@@ -63,8 +50,21 @@
       "value" : 0.5
     }
   },
+  "group_id" : 462,
+  "icon_id" : 232,
+  "market_group_id" : 518,
+  "mass" : 4000,
+  "name" : {
+    "en" : "Veldspar",
+    "fr" : "Veldspar"
+  },
   "packaged_volume" : 0.1,
+  "portion_size" : 100,
+  "published" : true,
   "radius" : 1,
+  "type_id" : 1230,
+  "volume" : 0.1,
+  "base_price" : 2000,
   "required_skills" : {
     "3386" : 1
   },

@@ -1,22 +1,9 @@
 {
-  "base_price" : 2200,
+  "capacity" : 0,
   "description" : {
-    "en" : "In asteroids above average size, the intense pressure can weld normal veldspar into what is known as III-Grade or dense veldspar, increasing the yield by 10%. \r\n\r\nVeldspar is the most common ore type in the central regions of known universe. It is still in constant demand as it holds a large portion of the much-used <a href=showinfo:34>Tritanium</a> mineral.\r\n\r\nAvailable primarily in high security status star systems.",
+    "en" : "In asteroids above average size, the intense pressure can weld normal veldspar into what is known as III-Grade or dense veldspar, increasing the yield by 10%. \n\nVeldspar is the most common ore type in the central regions of known universe. It is still in constant demand as it holds a large portion of the much-used <a href=showinfo:34>Tritanium</a> mineral.\n\nAvailable primarily in high security status star systems.",
     "fr" : "In asteroids above average size, the intense pressure can weld normal veldspar into what is known as III-Grade or dense veldspar, increasing the yield by 10%. \r\n\r\nVeldspar is the most common ore type in the central regions of known universe. It is still in constant demand as it holds a large portion of the much-used <a href=showinfo:34>Tritanium</a> mineral.\r\n\r\nAvailable primarily in high security status star systems."
   },
-  "group_id" : 462,
-  "icon_id" : 232,
-  "market_group_id" : 518,
-  "mass" : 4000,
-  "name" : {
-    "en" : "Veldspar III-Grade",
-    "fr" : "Veldspar III-Grade"
-  },
-  "portion_size" : 100,
-  "published" : true,
-  "volume" : 0.1,
-  "type_id" : 17471,
-  "capacity" : 0,
   "dogma_attributes" : {
     "161" : {
       "attribute_id" : 161,
@@ -63,8 +50,21 @@
       "value" : 0.5
     }
   },
+  "group_id" : 462,
+  "icon_id" : 232,
+  "market_group_id" : 518,
+  "mass" : 4000,
+  "name" : {
+    "en" : "Veldspar III-Grade",
+    "fr" : "Veldspar III-Grade"
+  },
   "packaged_volume" : 0.1,
+  "portion_size" : 100,
+  "published" : true,
   "radius" : 1,
+  "type_id" : 17471,
+  "volume" : 0.1,
+  "base_price" : 2200,
   "required_skills" : {
     "3386" : 1
   },

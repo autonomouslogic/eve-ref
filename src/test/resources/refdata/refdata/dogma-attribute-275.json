@@ -1,12 +1,12 @@
 {
-  "data_type" : 5,
+  "attribute_id" : 275,
   "default_value" : 0,
   "description" : {
     "en" : "This attribute is a multiplier to the number of skill points required to train. Skill points required to train a skill = 250 * skillTimeConstant * sqrt(32)^(skillLevel - 1)"
   },
   "display_name" : {
-    "de" : "Trainingszeit-Multiplikator",
     "en" : "Training time multiplier",
+    "de" : "Trainingszeit-Multiplikator",
     "es" : "Multiplicador de tiempo de desarrollo",
     "fr" : "Multiplicateur du temps de formation",
     "ja" : "トレーニング時間乗数",
@@ -14,13 +14,13 @@
     "ru" : "Множитель",
     "zh" : "训练时间倍增系数"
   },
-  "display_when_zero" : false,
   "high_is_good" : true,
   "icon_id" : 1392,
   "name" : "skillTimeConstant",
   "published" : true,
   "stackable" : true,
   "unit_id" : 104,
-  "category_id" : 7,
-  "attribute_id" : 275
+  "data_type" : 5,
+  "display_when_zero" : false,
+  "category_id" : 7
 }
