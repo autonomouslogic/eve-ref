@@ -2,7 +2,13 @@
   "capacity" : 0,
   "description" : {
     "en" : "Clusters of veldspar with 5% higher yield, called II-Grade or concentrated veldspar, are sometimes found in areas where normal veldspar is already in abundance.\n\nVeldspar is the most common ore type in the central regions of known universe. It is still in constant demand as it holds a large portion of the much-used <a href=showinfo:34>Tritanium</a> mineral.\n\nAvailable primarily in high security status star systems.",
-    "fr" : "Clusters of veldspar with 5% higher yield, called II-Grade or concentrated veldspar, are sometimes found in areas where normal veldspar is already in abundance.\r\n\r\nVeldspar is the most common ore type in the central regions of known universe. It is still in constant demand as it holds a large portion of the much-used <a href=showinfo:34>Tritanium</a> mineral.\r\n\r\nAvailable primarily in high security status star systems."
+    "fr" : "Il est possible de trouver des blocs de veldspar de catégorie II, qualifié de veldspar concentré, dont le rendement est supérieur de 5 % à celui du veldspar standard dans les zones où celui-ci est très abondant. Le veldspar est l'un des minerais les plus courants dans les régions centrales de l'univers connu. La demande en veldspar ne faiblit jamais car il contient du <a href=showinfo:34>tritanium</a>, l'un des minéraux les plus exploités. Ce minerai est essentiellement disponible dans les systèmes stellaires de haute sécurité.",
+    "de" : "Anhäufungen von Veldspar mit einer 5 % höheren Ausbeute, auch II.-Grad-Veldsar oder konzentriertes Veldspar genannt, werden häufig in Regionen gefunden, in denen es normales Veldspar bereits im Überfluss gibt. Veldspar ist die am häufigsten vorkommende Erzart in den zentralen Regionen des bekannten Universums. Da Veldspar eine große Menge des häufig gebrauchten Minerals <a href=showinfo:34>Tritanium</a> enthält, besteht noch immer eine ständige Nachfrage. Vorwiegend verfügbar in Sonnensystemen des Hochsicherheitsraums.",
+    "es" : "Los cúmulos de veldspar con un 5 % más de rendimiento, llamados veldspar concentrados o de grado II, a veces se encuentran en áreas donde el veldspar normal ya abunda.\n\nEl veldspar es el tipo de mena más común en las regiones centrales del universo conocido. Su demanda es constante, ya que contiene grandes cantidades de <a href=showinfo:34>tritanio</a>, un mineral muy utilizado.\n\nSe encuentra principalmente en sistemas estelares con estado de seguridad alto.",
+    "ja" : "グレードIIベルドスパー、別名高濃度ベルドスパーはベルドスパーが凝集して塊になったもので、無機物の含有量が5%多い。通常のベルドスパーが豊富な宙域で時折発見される。\n\nベルドスパーは既知宇宙の中心宙域に最も普及している鉱石で、どこに行っても見つけることができる。しかし用途の広い無機物である<a href=showinfo:34>トリタニウム</a>を多く含むため、需要は絶えない。\n\n主にハイセキュリティ星系で発見可能。",
+    "ko" : "벨드스파 매장량이 풍부한 지역에서 발견되는 광석으로 일반적인 벨드스파에 비해 산출량이 5% 더 높습니다.\n\n벨드스파는 뉴에덴의 중심부에서 발견되는 흔한 광석 가운데 하나로 <a href=showinfo:34>트리타늄</a>의 주요 공급원입니다.\n\n하이 시큐리티 항성계에서 주로 채굴됩니다.",
+    "ru" : "В областях, изобилующих вельдспаром, иногда встречаются залежи вельдспара 2-го уровня, который в народе называют концентрированным. В такой руде на 5% больше полезных минералов. Вельдспар — самая распространённая руда в центральных секторах известной части вселенной. Вельдспар содержит большое количество повсеместно используемого <a href=showinfo:34>тритания</a>, поэтому спрос на него никогда не падает. Встречается в основном в звёздных системах с высоким уровнем безопасности.",
+    "zh" : "凡晶石的集束被称为富凡晶石，矿物含量高5%，有时存在于遍布普通凡晶石的地方。凡晶石是已知空间的核心星域中最为常见的矿石。它富含人们大量使用的<a href=showinfo:34>三钛合金</a>，因此需求仍然十分稳定。主要分布于高安全等级星系。"
   },
   "dogma_attributes" : {
     "161" : {
@@ -56,7 +62,13 @@
   "mass" : 4000,
   "name" : {
     "en" : "Veldspar II-Grade",
-    "fr" : "Veldspar II-Grade"
+    "fr" : "Veldspar de catégorie II",
+    "de" : "Veldspar II-Grade",
+    "es" : "Veldspar de grado II",
+    "ja" : "ベルドスパー（グレードII）",
+    "ko" : "2급 벨드스파",
+    "ru" : "Veldspar II-Grade",
+    "zh" : "凡晶石（2级）"
   },
   "packaged_volume" : 0.1,
   "portion_size" : 100,
