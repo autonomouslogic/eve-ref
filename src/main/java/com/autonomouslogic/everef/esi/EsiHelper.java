@@ -3,7 +3,7 @@ package com.autonomouslogic.everef.esi;
 import com.autonomouslogic.commons.rxjava3.Rx3Util;
 import com.autonomouslogic.everef.http.OkHttpWrapper;
 import com.autonomouslogic.everef.openapi.esi.invoker.ApiResponse;
-import com.autonomouslogic.everef.util.VirtualThreads;
+import com.autonomouslogic.everef.util.ParallelUtil;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.NullNode;
@@ -78,16 +78,17 @@ public class EsiHelper {
 		if (pagesInt == 1) {
 			return List.of(first);
 		}
-		return Flowable.concatArray(
-						Flowable.just(first),
-						Flowable.range(2, pagesInt - 1)
-								.parallel(4)
-								.runOn(VirtualThreads.SCHEDULER)
-								.flatMap(page -> Flowable.just(
-										fetch(url.toBuilder().page(page).build(), accessToken)))
-								.sequential())
-				.toList()
-				.blockingGet();
+		// Fetch remaining pages in parallel (pages 2 through N)
+		var pageNumbers =
+				java.util.stream.IntStream.range(2, pagesInt + 1).boxed().toList();
+		var remainingPages = ParallelUtil.processInParallel(
+				pageNumbers, 4, page -> fetch(url.toBuilder().page(page).build(), accessToken));
+
+		// Concatenate first page with remaining pages
+		var allPages = new java.util.ArrayList<Response>();
+		allPages.add(first);
+		allPages.addAll(remainingPages);
+		return allPages;
 	}
 
 	protected List<Response> fetchPages(EsiUrl url) {
@@ -112,13 +113,23 @@ public class EsiHelper {
 					if (pages == 1) {
 						return Flowable.fromIterable(firstResult);
 					}
-					return Flowable.concatArray(
-							Flowable.fromIterable(firstResult),
-							Flowable.range(2, pages - 1)
-									.parallel(4)
-									.runOn(VirtualThreads.SCHEDULER)
-									.flatMap(page -> Flowable.fromIterable(decodeResponse(fetcher.apply(page))))
-									.sequential());
+					// Fetch remaining pages in parallel (pages 2 through N)
+					var pageNumbers = java.util.stream.IntStream.range(2, pages + 1)
+							.boxed()
+							.toList();
+					var remainingResults = ParallelUtil.processInParallel(pageNumbers, 4, page -> {
+						try {
+							return decodeResponse(fetcher.apply(page));
+						} catch (Throwable e) {
+							throw new RuntimeException("Error fetching page " + page, e);
+						}
+					});
+
+					// Concatenate first result with remaining results
+					var allResults = new java.util.ArrayList<T>();
+					allResults.addAll(firstResult);
+					remainingResults.forEach(allResults::addAll);
+					return Flowable.fromIterable(allResults);
 				})
 				.compose(Rx3Util.retryWithDelayFlowable(2, Duration.ofSeconds(1)));
 	}
