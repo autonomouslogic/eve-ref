@@ -22,11 +22,11 @@ public class MarketEsi {
 	@Inject
 	protected MarketEsi() {}
 
-	public Flowable<Integer> getActiveMarketOrderTypes(int regionId) {
+	public Flowable<Long> getActiveMarketOrderTypes(long regionId) {
 		return Flowable.defer(() -> {
-					var source = EsiConstants.Datasource.valueOf(datasource);
-					return esiHelper.fetchPages(page -> VirtualThreads.offload(() ->
-							marketApi.getMarketsRegionIdTypesWithHttpInfo(regionId, source.toString(), null, page)));
+					return esiHelper.fetchPages(
+							page -> VirtualThreads.offload(() -> marketApi.getMarketsRegionIdTypesWithHttpInfo(
+									regionId, esiHelper.getCompatibilityDate(), page, null, null, datasource)));
 				})
 				.onErrorResumeNext(e -> {
 					// Had problems with UndeliverableExceptions being thrown.

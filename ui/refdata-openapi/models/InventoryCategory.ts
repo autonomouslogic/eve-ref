@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 /**
  * An inventory category
  * @export
@@ -54,10 +54,8 @@ export interface InventoryCategory {
 /**
  * Check if a given object implements the InventoryCategory interface.
  */
-export function instanceOfInventoryCategory(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+export function instanceOfInventoryCategory(value: object): value is InventoryCategory {
+    return true;
 }
 
 export function InventoryCategoryFromJSON(json: any): InventoryCategory {
@@ -65,33 +63,35 @@ export function InventoryCategoryFromJSON(json: any): InventoryCategory {
 }
 
 export function InventoryCategoryFromJSONTyped(json: any, ignoreDiscriminator: boolean): InventoryCategory {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'categoryId': !exists(json, 'category_id') ? undefined : json['category_id'],
-        'groupIds': !exists(json, 'group_ids') ? undefined : json['group_ids'],
-        'iconId': !exists(json, 'icon_id') ? undefined : json['icon_id'],
-        'name': !exists(json, 'name') ? undefined : json['name'],
-        'published': !exists(json, 'published') ? undefined : json['published'],
+        'categoryId': json['category_id'] == null ? undefined : json['category_id'],
+        'groupIds': json['group_ids'] == null ? undefined : json['group_ids'],
+        'iconId': json['icon_id'] == null ? undefined : json['icon_id'],
+        'name': json['name'] == null ? undefined : json['name'],
+        'published': json['published'] == null ? undefined : json['published'],
     };
 }
 
-export function InventoryCategoryToJSON(value?: InventoryCategory | null): any {
-    if (value === undefined) {
-        return undefined;
+export function InventoryCategoryToJSON(json: any): InventoryCategory {
+    return InventoryCategoryToJSONTyped(json, false);
+}
+
+export function InventoryCategoryToJSONTyped(value?: InventoryCategory | null, ignoreDiscriminator: boolean = false): any {
+    if (value == null) {
+        return value;
     }
-    if (value === null) {
-        return null;
-    }
+
     return {
         
-        'category_id': value.categoryId,
-        'group_ids': value.groupIds,
-        'icon_id': value.iconId,
-        'name': value.name,
-        'published': value.published,
+        'category_id': value['categoryId'],
+        'group_ids': value['groupIds'],
+        'icon_id': value['iconId'],
+        'name': value['name'],
+        'published': value['published'],
     };
 }
 

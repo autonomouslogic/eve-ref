@@ -7,10 +7,10 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import com.autonomouslogic.everef.cli.FetchDonations.DonationEntry;
 import com.autonomouslogic.everef.cli.FetchDonations.SummaryEntry;
 import com.autonomouslogic.everef.cli.FetchDonations.SummaryFile;
-import com.autonomouslogic.everef.openapi.esi.model.GetCharactersCharacterIdOk;
-import com.autonomouslogic.everef.openapi.esi.model.GetCharactersCharacterIdWalletJournal200Ok;
-import com.autonomouslogic.everef.openapi.esi.model.GetCorporationsCorporationIdOk;
-import com.autonomouslogic.everef.openapi.esi.model.GetCorporationsCorporationIdWalletsDivisionJournal200Ok;
+import com.autonomouslogic.everef.openapi.esi.model.CharactersCharacterIdGet;
+import com.autonomouslogic.everef.openapi.esi.model.CharactersCharacterIdWalletJournalGetInner;
+import com.autonomouslogic.everef.openapi.esi.model.CorporationsCorporationIdGet;
+import com.autonomouslogic.everef.openapi.esi.model.CorporationsCorporationIdWalletsDivisionJournalGetInner;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.test.MockS3Adapter;
 import com.autonomouslogic.everef.test.TestDataUtil;
@@ -48,14 +48,14 @@ import software.amazon.awssdk.services.s3.S3AsyncClient;
 @SetEnvironmentVariable(key = "EVE_REF_CHARACTER_OWNER_HASH", value = "ownerhash")
 @SetEnvironmentVariable(key = "STATIC_PATH", value = "s3://static/")
 public class FetchDonationsTest {
-	private static final int TEST_CHARACTER_ID = 1000000000;
-	private static final int TEST_CORPORATION_ID = 2000000000;
-	private static final int TEST_DONOR_CHARACTER_ID_1 = 1000000001;
-	private static final int TEST_DONOR_CHARACTER_ID_2 = 1000000002;
-	private static final int TEST_DONOR_CHARACTER_ID_3 = 1000000003;
-	private static final int TEST_DONOR_CORPORATION_ID_1 = 2000000001;
-	private static final int TEST_DONOR_CORPORATION_ID_2 = 2000000002;
-	private static final int TEST_DONOR_CORPORATION_ID_3 = 2000000003;
+	private static final long TEST_CHARACTER_ID = 1000000000L;
+	private static final long TEST_CORPORATION_ID = 2000000000L;
+	private static final long TEST_DONOR_CHARACTER_ID_1 = 1000000001L;
+	private static final long TEST_DONOR_CHARACTER_ID_2 = 1000000002L;
+	private static final long TEST_DONOR_CHARACTER_ID_3 = 1000000003L;
+	private static final long TEST_DONOR_CORPORATION_ID_1 = 2000000001L;
+	private static final long TEST_DONOR_CORPORATION_ID_2 = 2000000002L;
+	private static final long TEST_DONOR_CORPORATION_ID_3 = 2000000003L;
 
 	@Inject
 	FetchDonations fetchDonations;
@@ -76,8 +76,8 @@ public class FetchDonationsTest {
 
 	ObjectNode discordCall;
 
-	List<GetCharactersCharacterIdWalletJournal200Ok> characterJournal;
-	List<GetCorporationsCorporationIdWalletsDivisionJournal200Ok> corporationJournal;
+	List<CharactersCharacterIdWalletJournalGetInner> characterJournal;
+	List<CorporationsCorporationIdWalletsDivisionJournalGetInner> corporationJournal;
 	List<DonationEntry> existingDonations;
 
 	@Inject
@@ -478,25 +478,25 @@ public class FetchDonationsTest {
 				TEST_DONOR_CHARACTER_ID_1,
 				1,
 				donationTime,
-				GetCharactersCharacterIdWalletJournal200Ok.RefTypeEnum.PLAYER_DONATION);
+				CharactersCharacterIdWalletJournalGetInner.RefTypeEnum.PLAYER_DONATION);
 		addCharacterTransaction(
 				2,
 				TEST_DONOR_CORPORATION_ID_1,
 				10,
 				donationTime,
-				GetCharactersCharacterIdWalletJournal200Ok.RefTypeEnum.CORPORATION_ACCOUNT_WITHDRAWAL);
+				CharactersCharacterIdWalletJournalGetInner.RefTypeEnum.CORPORATION_ACCOUNT_WITHDRAWAL);
 		addCorporationTransaction(
 				1,
 				TEST_DONOR_CHARACTER_ID_2,
 				100,
 				donationTime,
-				GetCorporationsCorporationIdWalletsDivisionJournal200Ok.RefTypeEnum.PLAYER_DONATION);
+				CorporationsCorporationIdWalletsDivisionJournalGetInner.RefTypeEnum.PLAYER_DONATION);
 		addCorporationTransaction(
 				2,
 				TEST_DONOR_CORPORATION_ID_2,
 				1000,
 				donationTime,
-				GetCorporationsCorporationIdWalletsDivisionJournal200Ok.RefTypeEnum.CORPORATION_ACCOUNT_WITHDRAWAL);
+				CorporationsCorporationIdWalletsDivisionJournalGetInner.RefTypeEnum.CORPORATION_ACCOUNT_WITHDRAWAL);
 		fetchDonations.run();
 		assertDiscordUpdate("**Donor Corporation 2** donated 1,000.00 ISK :gift:\n"
 				+ "**Donor Character 2** donated 100.00 ISK :gem:\n"
@@ -511,13 +511,13 @@ public class FetchDonationsTest {
 				TEST_DONOR_CHARACTER_ID_1,
 				1,
 				donationTime,
-				GetCharactersCharacterIdWalletJournal200Ok.RefTypeEnum.AGENT_DONATION);
+				CharactersCharacterIdWalletJournalGetInner.RefTypeEnum.AGENT_DONATION);
 		addCorporationTransaction(
 				1,
 				TEST_DONOR_CORPORATION_ID_1,
 				100,
 				donationTime,
-				GetCorporationsCorporationIdWalletsDivisionJournal200Ok.RefTypeEnum.ACCELERATION_GATE_FEE);
+				CorporationsCorporationIdWalletsDivisionJournalGetInner.RefTypeEnum.ACCELERATION_GATE_FEE);
 		fetchDonations.run();
 		assertDonationsFile(List.of());
 		assertSummaryFile(SummaryFile.builder().top(List.of()).recent(List.of()).build());
@@ -531,25 +531,25 @@ public class FetchDonationsTest {
 				TEST_CHARACTER_ID,
 				1,
 				donationTime,
-				GetCharactersCharacterIdWalletJournal200Ok.RefTypeEnum.PLAYER_DONATION);
+				CharactersCharacterIdWalletJournalGetInner.RefTypeEnum.PLAYER_DONATION);
 		addCharacterTransaction(
 				1,
 				TEST_CORPORATION_ID,
 				10,
 				donationTime,
-				GetCharactersCharacterIdWalletJournal200Ok.RefTypeEnum.CORPORATION_ACCOUNT_WITHDRAWAL);
+				CharactersCharacterIdWalletJournalGetInner.RefTypeEnum.CORPORATION_ACCOUNT_WITHDRAWAL);
 		addCorporationTransaction(
 				1,
 				TEST_CHARACTER_ID,
 				100,
 				donationTime,
-				GetCorporationsCorporationIdWalletsDivisionJournal200Ok.RefTypeEnum.PLAYER_DONATION);
+				CorporationsCorporationIdWalletsDivisionJournalGetInner.RefTypeEnum.PLAYER_DONATION);
 		addCorporationTransaction(
 				1,
 				TEST_CORPORATION_ID,
 				1000,
 				donationTime,
-				GetCorporationsCorporationIdWalletsDivisionJournal200Ok.RefTypeEnum.CORPORATION_ACCOUNT_WITHDRAWAL);
+				CorporationsCorporationIdWalletsDivisionJournalGetInner.RefTypeEnum.CORPORATION_ACCOUNT_WITHDRAWAL);
 		fetchDonations.run();
 		assertDonationsFile(List.of());
 		assertSummaryFile(SummaryFile.builder().top(List.of()).recent(List.of()).build());
@@ -601,18 +601,18 @@ public class FetchDonationsTest {
 		assertEquals(message, discordCall.get("content").asText());
 	}
 
-	private void addCharacterTransaction(int id, int donorId, double amount, OffsetDateTime time) {
+	private void addCharacterTransaction(int id, long donorId, double amount, OffsetDateTime time) {
 		addCharacterTransaction(
-				id, donorId, amount, time, GetCharactersCharacterIdWalletJournal200Ok.RefTypeEnum.PLAYER_DONATION);
+				id, donorId, amount, time, CharactersCharacterIdWalletJournalGetInner.RefTypeEnum.PLAYER_DONATION);
 	}
 
 	private void addCharacterTransaction(
 			int id,
-			int donorId,
+			long donorId,
 			double amount,
 			OffsetDateTime time,
-			GetCharactersCharacterIdWalletJournal200Ok.RefTypeEnum refType) {
-		characterJournal.add(new GetCharactersCharacterIdWalletJournal200Ok()
+			CharactersCharacterIdWalletJournalGetInner.RefTypeEnum refType) {
+		characterJournal.add(new CharactersCharacterIdWalletJournalGetInner()
 				.date(time)
 				.id((long) id)
 				.refType(refType)
@@ -621,22 +621,22 @@ public class FetchDonationsTest {
 				.secondPartyId(TEST_CHARACTER_ID));
 	}
 
-	private void addCorporationTransaction(int id, int donorId, double amount, OffsetDateTime time) {
+	private void addCorporationTransaction(int id, long donorId, double amount, OffsetDateTime time) {
 		addCorporationTransaction(
 				id,
 				donorId,
 				amount,
 				time,
-				GetCorporationsCorporationIdWalletsDivisionJournal200Ok.RefTypeEnum.CORPORATION_ACCOUNT_WITHDRAWAL);
+				CorporationsCorporationIdWalletsDivisionJournalGetInner.RefTypeEnum.CORPORATION_ACCOUNT_WITHDRAWAL);
 	}
 
 	private void addCorporationTransaction(
 			int id,
-			int donorId,
+			long donorId,
 			double amount,
 			OffsetDateTime time,
-			GetCorporationsCorporationIdWalletsDivisionJournal200Ok.RefTypeEnum refType) {
-		corporationJournal.add(new GetCorporationsCorporationIdWalletsDivisionJournal200Ok()
+			CorporationsCorporationIdWalletsDivisionJournalGetInner.RefTypeEnum refType) {
+		corporationJournal.add(new CorporationsCorporationIdWalletsDivisionJournalGetInner()
 				.date(time)
 				.id((long) id)
 				.amount(amount)
@@ -660,62 +660,66 @@ public class FetchDonationsTest {
 		public MockResponse dispatch(@NotNull RecordedRequest request) throws InterruptedException {
 			try {
 				var path = request.getRequestUrl().encodedPath();
+				// Remove trailing slash for consistency
+				if (path.endsWith("/")) {
+					path = path.substring(0, path.length() - 1);
+				}
 				var segments = request.getRequestUrl().pathSegments();
 
-				if (path.equals("/characters/" + TEST_CHARACTER_ID + "/")) {
+				if (path.equals("/characters/" + TEST_CHARACTER_ID)) {
 					return new MockResponse()
-							.setBody(objectMapper.writeValueAsString(new GetCharactersCharacterIdOk()
+							.setBody(objectMapper.writeValueAsString(new CharactersCharacterIdGet()
 									.corporationId(TEST_CORPORATION_ID)
 									.name("Test Character")));
 				}
 
-				if (path.equals("/corporations/" + TEST_CORPORATION_ID + "/")) {
+				if (path.equals("/corporations/" + TEST_CORPORATION_ID)) {
 					return new MockResponse()
 							.setBody(objectMapper.writeValueAsString(
-									new GetCorporationsCorporationIdOk().name("Test Corporation")));
+									new CorporationsCorporationIdGet().name("Test Corporation")));
 				}
 
-				if (path.equals("/characters/" + TEST_DONOR_CHARACTER_ID_1 + "/")) {
+				if (path.equals("/characters/" + TEST_DONOR_CHARACTER_ID_1)) {
 					return new MockResponse()
 							.setBody(objectMapper.writeValueAsString(
-									new GetCharactersCharacterIdOk().name("Donor Character 1")));
+									new CharactersCharacterIdGet().name("Donor Character 1")));
 				}
 
-				if (path.equals("/characters/" + TEST_DONOR_CHARACTER_ID_2 + "/")) {
+				if (path.equals("/characters/" + TEST_DONOR_CHARACTER_ID_2)) {
 					return new MockResponse()
 							.setBody(objectMapper.writeValueAsString(
-									new GetCharactersCharacterIdOk().name("Donor Character 2")));
+									new CharactersCharacterIdGet().name("Donor Character 2")));
 				}
 
-				if (path.equals("/characters/" + TEST_DONOR_CHARACTER_ID_3 + "/")) {
+				if (path.equals("/characters/" + TEST_DONOR_CHARACTER_ID_3)) {
 					return new MockResponse()
 							.setBody(objectMapper.writeValueAsString(
-									new GetCharactersCharacterIdOk().name("Weird name!+_&\\")));
+									new CharactersCharacterIdGet().name("Weird name!+_&\\")));
 				}
 
-				if (path.equals("/corporations/" + TEST_DONOR_CORPORATION_ID_1 + "/")) {
+				if (path.equals("/corporations/" + TEST_DONOR_CORPORATION_ID_1)) {
 					return new MockResponse()
 							.setBody(objectMapper.writeValueAsString(
-									new GetCorporationsCorporationIdOk().name("Donor Corporation 1")));
+									new CorporationsCorporationIdGet().name("Donor Corporation 1")));
 				}
 
-				if (path.equals("/corporations/" + TEST_DONOR_CORPORATION_ID_2 + "/")) {
+				if (path.equals("/corporations/" + TEST_DONOR_CORPORATION_ID_2)) {
 					return new MockResponse()
 							.setBody(objectMapper.writeValueAsString(
-									new GetCorporationsCorporationIdOk().name("Donor Corporation 2")));
+									new CorporationsCorporationIdGet().name("Donor Corporation 2")));
 				}
 
-				if (path.equals("/corporations/" + TEST_DONOR_CORPORATION_ID_3 + "/")) {
+				if (path.equals("/corporations/" + TEST_DONOR_CORPORATION_ID_3)) {
 					return new MockResponse()
 							.setBody(objectMapper.writeValueAsString(
-									new GetCorporationsCorporationIdOk().name("Weird name!+_&\\")));
+									new CorporationsCorporationIdGet().name("Weird name!+_&\\")));
 				}
 
-				if (path.equals("/characters/" + TEST_CHARACTER_ID + "/wallet/journal/")) {
+				if (path.equals("/characters/" + TEST_CHARACTER_ID + "/wallet/journal")) {
 					return new MockResponse().setBody(objectMapper.writeValueAsString(characterJournal));
 				}
 
-				if (path.equals("/corporations/" + TEST_CORPORATION_ID + "/wallets/1/journal/")) {
+				if (path.equals("/corporations/" + TEST_CORPORATION_ID + "/wallets/1/journal")) {
 					return new MockResponse().setBody(objectMapper.writeValueAsString(corporationJournal));
 				}
 

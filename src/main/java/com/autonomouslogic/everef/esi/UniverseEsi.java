@@ -4,11 +4,11 @@ import static com.autonomouslogic.everef.util.EveConstants.NPC_STATION_MAX_ID;
 
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.openapi.esi.api.UniverseApi;
-import com.autonomouslogic.everef.openapi.esi.model.GetUniverseConstellationsConstellationIdOk;
-import com.autonomouslogic.everef.openapi.esi.model.GetUniverseRegionsRegionIdOk;
-import com.autonomouslogic.everef.openapi.esi.model.GetUniverseStationsStationIdOk;
-import com.autonomouslogic.everef.openapi.esi.model.GetUniverseSystemsSystemIdOk;
-import com.autonomouslogic.everef.openapi.esi.model.GetUniverseTypesTypeIdOk;
+import com.autonomouslogic.everef.openapi.esi.model.UniverseConstellationsConstellationIdGet;
+import com.autonomouslogic.everef.openapi.esi.model.UniverseRegionsRegionIdGet;
+import com.autonomouslogic.everef.openapi.esi.model.UniverseStationsStationIdGet;
+import com.autonomouslogic.everef.openapi.esi.model.UniverseSystemsSystemIdGet;
+import com.autonomouslogic.everef.openapi.esi.model.UniverseTypesTypeIdGet;
 import com.autonomouslogic.everef.util.VirtualThreads;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Maybe;
@@ -29,29 +29,31 @@ public class UniverseEsi {
 	@Inject
 	protected UniverseApi universeApi;
 
-	private final EsiConstants.Datasource datasource =
-			EsiConstants.Datasource.valueOf(Configs.ESI_DATASOURCE.getRequired());
+	@Inject
+	protected EsiHelper esiHelper;
 
-	private List<Integer> regionIds;
-	private final Map<Integer, Optional<GetUniverseRegionsRegionIdOk>> regions = new ConcurrentHashMap<>();
-	private final Map<Integer, Optional<GetUniverseConstellationsConstellationIdOk>> constellations =
+	private final String datasource = Configs.ESI_DATASOURCE.getRequired();
+
+	private List<Long> regionIds;
+	private final Map<Long, Optional<UniverseRegionsRegionIdGet>> regions = new ConcurrentHashMap<>();
+	private final Map<Long, Optional<UniverseConstellationsConstellationIdGet>> constellations =
 			new ConcurrentHashMap<>();
-	private final Map<Integer, Optional<GetUniverseSystemsSystemIdOk>> systems = new ConcurrentHashMap<>();
-	private final Map<Integer, Optional<GetUniverseStationsStationIdOk>> stations = new ConcurrentHashMap<>();
-	private final Map<Integer, Optional<GetUniverseTypesTypeIdOk>> types = new ConcurrentHashMap<>();
+	private final Map<Long, Optional<UniverseSystemsSystemIdGet>> systems = new ConcurrentHashMap<>();
+	private final Map<Long, Optional<UniverseStationsStationIdGet>> stations = new ConcurrentHashMap<>();
+	private final Map<Long, Optional<UniverseTypesTypeIdGet>> types = new ConcurrentHashMap<>();
 
 	@Inject
 	protected UniverseEsi() {}
 
-	public Flowable<Integer> getRegionIds() {
+	public Flowable<Long> getRegionIds() {
 		return Flowable.defer(() -> {
 					if (regionIds != null) {
 						return Flowable.fromIterable(regionIds);
 					}
 					return Flowable.defer(() -> {
 						log.trace("Fetching region ids");
-						var regions = VirtualThreads.offload(
-								() -> universeApi.getUniverseRegions(datasource.toString(), null));
+						var regions = VirtualThreads.offload(() -> universeApi.getUniverseRegions(
+								esiHelper.getCompatibilityDate(), null, null, datasource));
 						regionIds = regions;
 						return Flowable.fromIterable(regions);
 					});
@@ -59,14 +61,14 @@ public class UniverseEsi {
 				.observeOn(VirtualThreads.SCHEDULER);
 	}
 
-	public Maybe<GetUniverseRegionsRegionIdOk> getRegion(int regionId) {
-		return getFromCacheOrFetch("region", GetUniverseRegionsRegionIdOk.class, regions, regionId, () -> {
-			return VirtualThreads.offload(
-					() -> universeApi.getUniverseRegionsRegionId(regionId, null, datasource.toString(), null, null));
+	public Maybe<UniverseRegionsRegionIdGet> getRegion(long regionId) {
+		return getFromCacheOrFetch("region", UniverseRegionsRegionIdGet.class, regions, regionId, () -> {
+			return VirtualThreads.offload(() -> universeApi.getUniverseRegionsRegionId(
+					regionId, esiHelper.getCompatibilityDate(), null, null, datasource));
 		});
 	}
 
-	public Flowable<GetUniverseRegionsRegionIdOk> getAllRegions() {
+	public Flowable<UniverseRegionsRegionIdGet> getAllRegions() {
 		return getRegionIds()
 				.parallel(8)
 				.runOn(VirtualThreads.SCHEDULER)
@@ -74,47 +76,46 @@ public class UniverseEsi {
 				.sequential();
 	}
 
-	public Maybe<GetUniverseConstellationsConstellationIdOk> getConstellation(int constellationId) {
+	public Maybe<UniverseConstellationsConstellationIdGet> getConstellation(long constellationId) {
 		return getFromCacheOrFetch(
 				"constellation",
-				GetUniverseConstellationsConstellationIdOk.class,
+				UniverseConstellationsConstellationIdGet.class,
 				constellations,
 				constellationId,
 				() -> {
 					return VirtualThreads.offload(() -> universeApi.getUniverseConstellationsConstellationId(
-							constellationId, null, datasource.toString(), null, null));
+							constellationId, esiHelper.getCompatibilityDate(), null, null, datasource));
 				});
 	}
 
-	public Maybe<GetUniverseSystemsSystemIdOk> getSystem(int systemId) {
-		return getFromCacheOrFetch("system", GetUniverseSystemsSystemIdOk.class, systems, systemId, () -> {
-			return VirtualThreads.offload(
-					() -> universeApi.getUniverseSystemsSystemId(systemId, null, datasource.toString(), null, null));
+	public Maybe<UniverseSystemsSystemIdGet> getSystem(long systemId) {
+		return getFromCacheOrFetch("system", UniverseSystemsSystemIdGet.class, systems, systemId, () -> {
+			return VirtualThreads.offload(() -> universeApi.getUniverseSystemsSystemId(
+					systemId, esiHelper.getCompatibilityDate(), null, null, datasource));
 		});
 	}
 
-	public Maybe<GetUniverseStationsStationIdOk> getNpcStation(long stationId) {
+	public Maybe<UniverseStationsStationIdGet> getNpcStation(long stationId) {
 		if (stationId > NPC_STATION_MAX_ID) {
 			log.trace(String.format("Ignoring request for non-NPC station %s", stationId));
 			return Maybe.empty();
 		}
-		var intId = (int) stationId;
-		return getFromCacheOrFetch("station", GetUniverseStationsStationIdOk.class, stations, intId, () -> {
-			return VirtualThreads.offload(
-					() -> universeApi.getUniverseStationsStationId(intId, datasource.toString(), null));
+		return getFromCacheOrFetch("station", UniverseStationsStationIdGet.class, stations, stationId, () -> {
+			return VirtualThreads.offload(() -> universeApi.getUniverseStationsStationId(
+					stationId, esiHelper.getCompatibilityDate(), null, null, datasource));
 		});
 	}
 
-	public Maybe<GetUniverseTypesTypeIdOk> getType(int typeId) {
-		return getFromCacheOrFetch("type", GetUniverseTypesTypeIdOk.class, types, typeId, () -> {
-			return VirtualThreads.offload(
-					() -> universeApi.getUniverseTypesTypeId(typeId, null, datasource.toString(), null, null));
+	public Maybe<UniverseTypesTypeIdGet> getType(long typeId) {
+		return getFromCacheOrFetch("type", UniverseTypesTypeIdGet.class, types, typeId, () -> {
+			return VirtualThreads.offload(() -> universeApi.getUniverseTypesTypeId(
+					typeId, esiHelper.getCompatibilityDate(), null, null, datasource));
 		});
 	}
 
 	@NotNull
 	private <T> Maybe<T> getFromCacheOrFetch(
-			String name, Class<T> type, Map<Integer, Optional<T>> cache, int id, Supplier<T> fetcher) {
+			String name, Class<T> type, Map<Long, Optional<T>> cache, long id, Supplier<T> fetcher) {
 		return Maybe.defer(() -> {
 			if (cache.containsKey(id)) {
 				return Maybe.fromOptional(cache.get(id));
