@@ -1,5 +1,23 @@
 EVE Ref Changelog
 
+## [2.73.5](https://github.com/autonomouslogic/eve-ref/compare/2.73.4...2.73.5) (2026-02-02)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @fortawesome/vue-fontawesome to v3.1.3 ([#1012](https://github.com/autonomouslogic/eve-ref/issues/1012)) ([534ad95](https://github.com/autonomouslogic/eve-ref/commit/534ad95720f954c2e7c72be29e7b1da77b8879f2))
+* **deps:** update dependency org.flywaydb:flyway-core to v11.20.3 ([#1013](https://github.com/autonomouslogic/eve-ref/issues/1013)) ([b7c7ce5](https://github.com/autonomouslogic/eve-ref/commit/b7c7ce52439a461be21e1f9157152f600e23277a))
+
+
+### Documentation
+
+* Fixed meta groups link on reference data ([eabf08b](https://github.com/autonomouslogic/eve-ref/commit/eabf08b1dd4cbd9730253c9e215551d745b50bb6))
+
+
+### Tests
+
+* Updated test resources ([39ed42e](https://github.com/autonomouslogic/eve-ref/commit/39ed42e56a3fb69d4bed3fa259f88357c1deba16))
+
 ## [2.73.4](https://github.com/autonomouslogic/eve-ref/compare/2.73.3...2.73.4) (2026-01-07)
 
 
