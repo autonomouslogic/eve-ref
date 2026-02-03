@@ -1,5 +1,12 @@
 EVE Ref Changelog
 
+## [2.73.6](https://github.com/autonomouslogic/eve-ref/compare/2.73.5...2.73.6) (2026-02-03)
+
+
+### Bug Fixes
+
+* **deps:** update flyway to v11.20.3 ([#1014](https://github.com/autonomouslogic/eve-ref/issues/1014)) ([6fe9404](https://github.com/autonomouslogic/eve-ref/commit/6fe9404e2672b759a6d9c5a9c1b872eb0b9dd7c1))
+
 ## [2.73.5](https://github.com/autonomouslogic/eve-ref/compare/2.73.4...2.73.5) (2026-02-02)
 
 
