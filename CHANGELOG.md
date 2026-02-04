@@ -1,5 +1,12 @@
 EVE Ref Changelog
 
+## [2.73.7](https://github.com/autonomouslogic/eve-ref/compare/2.73.6...2.73.7) (2026-02-04)
+
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([#1015](https://github.com/autonomouslogic/eve-ref/issues/1015)) ([9d57a19](https://github.com/autonomouslogic/eve-ref/commit/9d57a192e0abefcbfdfaba1806cbfdb604bd6687))
+
 ## [2.73.6](https://github.com/autonomouslogic/eve-ref/compare/2.73.5...2.73.6) (2026-02-03)
 
 
