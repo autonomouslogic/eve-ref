@@ -34,23 +34,43 @@ const MALLER_SCOPE_SYNDICATION = 56884;
 const OBELISK_SCOPE_SYNDICATION = 61188;
 const FEDERATION_NAVY_COMET_MEDIA_MIASMA = 84115;
 const NIGHTMARE_MEDIA_MIASMA = 84131;
+const VEDMAK_SCOPE_SYNDICATION_YC122_SKIN = 56890;
 
 const weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
 const plexPrice = await getJitaSellPrice(PLEX_TYPE_ID) || 0;
 const fleetPackPrice = (50 + 500 * 12 / 365 * 3) * plexPrice;
 
-const firstFleetPack = DateTime.fromISO("2026-01-02T14:00:00Z");
+const firstFleetPack = DateTime.fromISO("2026-02-13T14:00:00Z");
 const fleetPackDates = [];
-for (let i = 0; i < 5; i++) {
+for (let i = 0; i < 3; i++) {
 	fleetPackDates.push(firstFleetPack.plus({days: i * 7}));
 }
+fleetPackDates.push(DateTime.fromISO("2026-02-07T20:04:00+09:00"));
 
 const prizes: Prize[] = [
 	{
 		name: "Weekend Fleet Pack (50x PLEX, 3 Day Omega)",
 		value: fleetPackPrice,
 		dates: fleetPackDates,
+		winners: 2
+	} as Prize,
+	{
+		name: "Maller Scope Syndication YC122 SKIN",
+		value: await getJitaSellPrice(MALLER_SCOPE_SYNDICATION) || 0,
+		dates: [DateTime.fromISO("2026-02-07T10:05:00+09:00")],
+		winners: 3
+	} as Prize,
+	{
+		name: "Obelisk Scope Syndication YC122 SKIN",
+		value: await getJitaSellPrice(OBELISK_SCOPE_SYNDICATION) || 0,
+		dates: [DateTime.fromISO("2026-02-07T12:07:00+09:00")],
+		winners: 1
+	} as Prize,
+	{
+		name: "Vedmak Scope Syndication YC122 SKIN",
+		value: await getJitaSellPrice(VEDMAK_SCOPE_SYNDICATION_YC122_SKIN) || 0,
+		dates: [DateTime.fromISO("2026-02-07T14:08:00+09:00")],
 		winners: 2
 	} as Prize,
 ];
@@ -87,6 +107,7 @@ unrolled.sort((a, b) => a.dates[0].toMillis() - b.dates[0].toMillis());
 const totalWorth = unrolled.reduce((acc, prize) => acc + prize.value * prize.winners, 0);
 
 const pastGiveaways = {
+	"February 2026": 8 * 452.88e6 + 2 * 167.50e6 + 1 * 598.80e6 + 2 * 325.00,
 	"January 2026": 10 * 496.48e6,
 	"December 2025": 8 * 486.64e6 + 45 * 501.34e6 + 5 * 319.40e6 + 5 * 170.00e6 + 5 * 128.80e6 + 5 * 174.00e6 + 5 * 650.00e6 + 5 * 779.90e6 + 6e9,
 	"November 2025": 8 * 500.55e6,
