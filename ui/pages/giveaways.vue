@@ -109,7 +109,7 @@ const totalWorth = unrolled.reduce((acc, prize) => acc + prize.value * prize.win
 const pastGiveaways = {
 	"February 2026": 8 * 452.88e6 + 2 * 167.50e6 + 1 * 598.80e6 + 2 * 325.00,
 	"January 2026": 10 * 496.48e6,
-	"December 2025": 8 * 486.64e6 + 45 * 501.34e6 + 5 * 319.40e6 + 5 * 170.00e6 + 5 * 128.80e6 + 5 * 174.00e6 + 5 * 650.00e6 + 5 * 779.90e6 + 6e9,
+	"December 2025 🍾": 8 * 486.64e6 + 45 * 501.34e6 + 5 * 319.40e6 + 5 * 170.00e6 + 5 * 128.80e6 + 5 * 174.00e6 + 5 * 650.00e6 + 5 * 779.90e6 + 6e9,
 	"November 2025": 8 * 500.55e6,
 	"October 2025": 10 * 552.29e6,
 	"September 2025": 8 * 556.16e6,
@@ -121,7 +121,7 @@ const pastGiveaways = {
 	"March 2025": 4.92e9,
 	"February 2025": 15727787671,
 	"January 2025": 610787671,
-	"December 2024": 33.52e9,
+	"December 2024 🍻": 33.52e9,
 };
 
 const totalPastPrizes = Object.values(pastGiveaways).reduce(
