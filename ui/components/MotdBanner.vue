@@ -16,6 +16,8 @@ interface Motd {
 	urlText: string
 }
 
+const eveatonActive = new Date().getTime() < new Date("2026-11-10T11:00:00Z").getTime();
+
 const motdFallbacks: Motd[] = [
 	{
 		text: "Save 3% on PLEX and Omega with code \"everef\" at checkout",
@@ -151,6 +153,22 @@ const motd = computed(() => {
 </script>
 
 <template>
+	<div v-if="eveatonActive" class="motd">
+		<section class="flex">
+			<div class="py-4 px-2 mx-auto max-w-screen-xl text-center flex flex-row text-xl">
+				<p class="font-extrabold mx-3 tracking-tight">
+          <img src="~/assets/girls_source_b_128.png" class="h-20" alt="EVEathon Logo" />
+				</p>
+        <p class="my-auto">
+          EVEathon on Twitch this weekend
+          <br/>
+          <ExternalLink url="https://r3dlabs.com/events/eveathon" class="mx-3 font-normal">Twitch &raquo;</ExternalLink>
+          <ExternalLink url="https://tilt.fyi/hAAtwSSvO9" class="mx-3 font-normal">Donate &raquo;</ExternalLink>
+        </p>
+			</div>
+		</section>
+	</div>
+  <div v-else>Nope</div>
 	<div v-if="motd" class="motd">
 		<section class="flex">
 			<div class="py-4 px-2 mx-auto max-w-screen-xl text-center flex flex-col md:flex-row text-xl">
