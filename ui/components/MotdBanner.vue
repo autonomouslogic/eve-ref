@@ -120,6 +120,15 @@ const motd = computed(() => {
 		} as Motd;
 	}
 
+	// EVE Creator Awards.
+	if (time < new Date("2026-02-15T00:00:00Z").getTime()) {
+		return {
+			text: "Nominate your favourite EVE Creator",
+			url: "https://www.eveonline.com/news/view/eve-creator-awards",
+			urlText: "EVE Creator Awards"
+		} as Motd;
+	}
+
 	// Giveaway.
 	const giveawayDay = FRIDAY;
 	const giveawayHour = 14;
