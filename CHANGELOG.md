@@ -1,5 +1,16 @@
 EVE Ref Changelog
 
+## [2.73.8](https://github.com/autonomouslogic/eve-ref/compare/2.73.7...2.73.8) (2026-02-19)
+
+
+### Bug Fixes
+
+* Temporarily set compatibility date to work on UTC-11 ([516288f](https://github.com/autonomouslogic/eve-ref/commit/516288f4038a09ab2ae4393d57180b1a00831e2e))
+* **ui:** EVE Creator Awards MOTD ([47a68b3](https://github.com/autonomouslogic/eve-ref/commit/47a68b3ca4796107a28296098c0cf532e59d0eb9))
+* **ui:** EVEathon banner ([#1017](https://github.com/autonomouslogic/eve-ref/issues/1017)) ([bcd01e5](https://github.com/autonomouslogic/eve-ref/commit/bcd01e5329863fd204501bc5119512a0fd9c1755))
+* **ui:** February 2026 giveaways ([c53de7e](https://github.com/autonomouslogic/eve-ref/commit/c53de7edef610f91745a6e6c955b1d1060a35485))
+* **ui:** Giveaways styling ([3e30b7f](https://github.com/autonomouslogic/eve-ref/commit/3e30b7f87b1ca1d0e0fa878381fcd36dbf993273))
+
 ## [2.73.7](https://github.com/autonomouslogic/eve-ref/compare/2.73.6...2.73.7) (2026-02-04)
 
 
