@@ -1,5 +1,12 @@
 EVE Ref Changelog
 
+## [2.73.9](https://github.com/autonomouslogic/eve-ref/compare/2.73.8...2.73.9) (2026-02-23)
+
+
+### Bug Fixes
+
+* **test:** Updated test resources ([58ef16f](https://github.com/autonomouslogic/eve-ref/commit/58ef16f0fbb954b69d8178b4bb957883bbdaaab4))
+
 ## [2.73.8](https://github.com/autonomouslogic/eve-ref/compare/2.73.7...2.73.8) (2026-02-19)
 
 
