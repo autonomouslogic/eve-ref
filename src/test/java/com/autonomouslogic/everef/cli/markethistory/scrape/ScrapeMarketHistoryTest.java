@@ -141,9 +141,9 @@ public class ScrapeMarketHistoryTest {
 		var allPaths =
 				allRequests.stream().map(r -> r.getRequestUrl().encodedPath()).toList();
 		// Requested by ActiveOrdersRegionTypeSource.
-		assertTrue(allPaths.contains("/esi/markets/10000001/types/"));
-		assertTrue(allPaths.contains("/esi/markets/10000002/types/"));
-		assertTrue(allPaths.contains("/esi/markets/10000100/types/"));
+		assertTrue(allPaths.contains("/esi/markets/10000001/types"));
+		assertTrue(allPaths.contains("/esi/markets/10000002/types"));
+		assertTrue(allPaths.contains("/esi/markets/10000100/types"));
 
 		var requestedPairs = getRequestedMarketHistoryPairs(allRequests);
 		// Present in previous files.
@@ -217,19 +217,19 @@ public class ScrapeMarketHistoryTest {
 						"/data/market-orders/history/2023/2023-01-01/market-orders-2023-01-01_00-16-34.v3.csv.bz2")) {
 					return mockOrderDate(LocalDate.parse("2023-01-01"));
 				}
-				if (path.equals("/esi/markets/10000001/types/")) {
+				if (path.equals("/esi/markets/10000001/types")) {
 					return mockResponse("[20,21,1000]");
 				}
-				if (path.equals("/esi/markets/10000002/types/")) {
+				if (path.equals("/esi/markets/10000002/types")) {
 					return mockResponse("[20,21]");
 				}
-				if (path.equals("/esi/markets/10000100/types/")) {
+				if (path.equals("/esi/markets/10000100/types")) {
 					return mockResponse("[]");
 				}
-				if (path.equals("/esi/markets/19000001/types/")) {
+				if (path.equals("/esi/markets/19000001/types")) {
 					return mockResponse("[]");
 				}
-				if (path.startsWith("/esi/latest/markets/") && segments.get(4).equals("history")) {
+				if (path.startsWith("/esi/latest/markets") && segments.get(4).equals("history")) {
 					var regionId = segments.get(3);
 					return mockHistory(regionId, typeId);
 				}

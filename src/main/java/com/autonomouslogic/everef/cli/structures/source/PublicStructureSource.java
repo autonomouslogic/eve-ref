@@ -5,7 +5,6 @@ import static com.autonomouslogic.everef.cli.structures.ScrapeStructures.LAST_SE
 
 import com.autonomouslogic.everef.cli.structures.StructureScrapeHelper;
 import com.autonomouslogic.everef.cli.structures.StructureStore;
-import com.autonomouslogic.everef.esi.EsiConstants;
 import com.autonomouslogic.everef.esi.EsiHelper;
 import com.autonomouslogic.everef.openapi.esi.api.UniverseApi;
 import com.autonomouslogic.everef.util.VirtualThreads;
@@ -46,7 +45,7 @@ public class PublicStructureSource implements StructureSource {
 		return Flowable.defer(() -> {
 			log.info("Fetching public structure ids");
 			var response = VirtualThreads.offload(() -> universeApi.getUniverseStructuresWithHttpInfo(
-					EsiConstants.Datasource.tranquility.toString(), null, null));
+					esiHelper.getCompatibilityDate(), null, null, null, null));
 			if (response.getStatusCode() != 200) {
 				return Flowable.error(new RuntimeException(
 						String.format("Failed to fetch public structure ids: %s", response.getStatusCode())));

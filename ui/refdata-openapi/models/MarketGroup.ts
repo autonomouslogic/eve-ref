@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 /**
  * A market group
  * @export
@@ -72,10 +72,8 @@ export interface MarketGroup {
 /**
  * Check if a given object implements the MarketGroup interface.
  */
-export function instanceOfMarketGroup(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+export function instanceOfMarketGroup(value: object): value is MarketGroup {
+    return true;
 }
 
 export function MarketGroupFromJSON(json: any): MarketGroup {
@@ -83,39 +81,41 @@ export function MarketGroupFromJSON(json: any): MarketGroup {
 }
 
 export function MarketGroupFromJSONTyped(json: any, ignoreDiscriminator: boolean): MarketGroup {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'childMarketGroupIds': !exists(json, 'child_market_group_ids') ? undefined : json['child_market_group_ids'],
-        'description': !exists(json, 'description') ? undefined : json['description'],
-        'hasTypes': !exists(json, 'has_types') ? undefined : json['has_types'],
-        'iconId': !exists(json, 'icon_id') ? undefined : json['icon_id'],
-        'marketGroupId': !exists(json, 'market_group_id') ? undefined : json['market_group_id'],
-        'name': !exists(json, 'name') ? undefined : json['name'],
-        'parentGroupId': !exists(json, 'parent_group_id') ? undefined : json['parent_group_id'],
-        'typeIds': !exists(json, 'type_ids') ? undefined : json['type_ids'],
+        'childMarketGroupIds': json['child_market_group_ids'] == null ? undefined : json['child_market_group_ids'],
+        'description': json['description'] == null ? undefined : json['description'],
+        'hasTypes': json['has_types'] == null ? undefined : json['has_types'],
+        'iconId': json['icon_id'] == null ? undefined : json['icon_id'],
+        'marketGroupId': json['market_group_id'] == null ? undefined : json['market_group_id'],
+        'name': json['name'] == null ? undefined : json['name'],
+        'parentGroupId': json['parent_group_id'] == null ? undefined : json['parent_group_id'],
+        'typeIds': json['type_ids'] == null ? undefined : json['type_ids'],
     };
 }
 
-export function MarketGroupToJSON(value?: MarketGroup | null): any {
-    if (value === undefined) {
-        return undefined;
+export function MarketGroupToJSON(json: any): MarketGroup {
+    return MarketGroupToJSONTyped(json, false);
+}
+
+export function MarketGroupToJSONTyped(value?: MarketGroup | null, ignoreDiscriminator: boolean = false): any {
+    if (value == null) {
+        return value;
     }
-    if (value === null) {
-        return null;
-    }
+
     return {
         
-        'child_market_group_ids': value.childMarketGroupIds,
-        'description': value.description,
-        'has_types': value.hasTypes,
-        'icon_id': value.iconId,
-        'market_group_id': value.marketGroupId,
-        'name': value.name,
-        'parent_group_id': value.parentGroupId,
-        'type_ids': value.typeIds,
+        'child_market_group_ids': value['childMarketGroupIds'],
+        'description': value['description'],
+        'has_types': value['hasTypes'],
+        'icon_id': value['iconId'],
+        'market_group_id': value['marketGroupId'],
+        'name': value['name'],
+        'parent_group_id': value['parentGroupId'],
+        'type_ids': value['typeIds'],
     };
 }
 

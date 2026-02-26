@@ -5,12 +5,13 @@ import UnitValue from "~/components/dogma/UnitValue.vue";
 import FormattedNumber from "~/components/helpers/FormattedNumber.vue";
 import {getJitaSellPrice} from "~/lib/marketUtils";
 import {MONEY} from "~/lib/unitConstants";
+import type {GetInsurancePricesRequest} from "~/esi-openapi";
 
 const props = defineProps<{
 	inventoryType: InventoryType
 }>();
 
-const prices = (await insuranceApi.getInsurancePrices())
+const prices = (await insuranceApi.getInsurancePrices({} as GetInsurancePricesRequest))
 	.filter(e => e.typeId == props.inventoryType.typeId)
 	.pop();
 const marketPrice = props.inventoryType.typeId ? await getJitaSellPrice(props.inventoryType.typeId) : undefined;

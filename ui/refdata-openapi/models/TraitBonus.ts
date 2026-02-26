@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 /**
  * Type traits. First key is type ID granting the bonus. Second key is the `important` from the original array. This is represented as an array in the SDE, but EVE Ref converts it to a map.
  * @export
@@ -54,10 +54,8 @@ export interface TraitBonus {
 /**
  * Check if a given object implements the TraitBonus interface.
  */
-export function instanceOfTraitBonus(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+export function instanceOfTraitBonus(value: object): value is TraitBonus {
+    return true;
 }
 
 export function TraitBonusFromJSON(json: any): TraitBonus {
@@ -65,33 +63,35 @@ export function TraitBonusFromJSON(json: any): TraitBonus {
 }
 
 export function TraitBonusFromJSONTyped(json: any, ignoreDiscriminator: boolean): TraitBonus {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'bonus': !exists(json, 'bonus') ? undefined : json['bonus'],
-        'bonusText': !exists(json, 'bonus_text') ? undefined : json['bonus_text'],
-        'importance': !exists(json, 'importance') ? undefined : json['importance'],
-        'isPositive': !exists(json, 'is_positive') ? undefined : json['is_positive'],
-        'unitId': !exists(json, 'unit_id') ? undefined : json['unit_id'],
+        'bonus': json['bonus'] == null ? undefined : json['bonus'],
+        'bonusText': json['bonus_text'] == null ? undefined : json['bonus_text'],
+        'importance': json['importance'] == null ? undefined : json['importance'],
+        'isPositive': json['is_positive'] == null ? undefined : json['is_positive'],
+        'unitId': json['unit_id'] == null ? undefined : json['unit_id'],
     };
 }
 
-export function TraitBonusToJSON(value?: TraitBonus | null): any {
-    if (value === undefined) {
-        return undefined;
+export function TraitBonusToJSON(json: any): TraitBonus {
+    return TraitBonusToJSONTyped(json, false);
+}
+
+export function TraitBonusToJSONTyped(value?: TraitBonus | null, ignoreDiscriminator: boolean = false): any {
+    if (value == null) {
+        return value;
     }
-    if (value === null) {
-        return null;
-    }
+
     return {
         
-        'bonus': value.bonus,
-        'bonus_text': value.bonusText,
-        'importance': value.importance,
-        'is_positive': value.isPositive,
-        'unit_id': value.unitId,
+        'bonus': value['bonus'],
+        'bonus_text': value['bonusText'],
+        'importance': value['importance'],
+        'is_positive': value['isPositive'],
+        'unit_id': value['unitId'],
     };
 }
 

@@ -2,7 +2,7 @@
   "$schema": "./node_modules/@openapitools/openapi-generator-cli/config.schema.json",
   "spaces": 2,
   "generator-cli": {
-    "version": "6.6.0",
+    "version": "7.14.0",
     "generators": {
       "refdata": {
         "generatorName": "typescript-fetch",
@@ -17,8 +17,12 @@
       },
       "esi": {
         "generatorName": "typescript-fetch",
-        "inputSpec": "../spec/esi-swagger.json",
+        "inputSpec": "../spec/esi.json",
         "output": "./esi-openapi",
+        "modelNamePrefix": "Esi",
+        "parameterNameMappings": {
+          "boolean" : "esiBoolean"
+        },
         "additionalProperties": {
           "enumPropertyNaming": "PascalCase",
           "modelPropertyNaming": "camelCase",

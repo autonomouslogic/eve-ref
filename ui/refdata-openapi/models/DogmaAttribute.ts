@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 /**
  * A map of dogma attributes. The key is the attribute ID.
  * @export
@@ -132,10 +132,8 @@ export interface DogmaAttribute {
 /**
  * Check if a given object implements the DogmaAttribute interface.
  */
-export function instanceOfDogmaAttribute(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+export function instanceOfDogmaAttribute(value: object): value is DogmaAttribute {
+    return true;
 }
 
 export function DogmaAttributeFromJSON(json: any): DogmaAttribute {
@@ -143,59 +141,61 @@ export function DogmaAttributeFromJSON(json: any): DogmaAttribute {
 }
 
 export function DogmaAttributeFromJSONTyped(json: any, ignoreDiscriminator: boolean): DogmaAttribute {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'attributeId': !exists(json, 'attribute_id') ? undefined : json['attribute_id'],
-        'categoryId': !exists(json, 'category_id') ? undefined : json['category_id'],
-        'chargeRechargeTimeId': !exists(json, 'charge_recharge_time_id') ? undefined : json['charge_recharge_time_id'],
-        'dataType': !exists(json, 'data_type') ? undefined : json['data_type'],
-        'defaultValue': !exists(json, 'default_value') ? undefined : json['default_value'],
-        'description': !exists(json, 'description') ? undefined : json['description'],
-        'displayName': !exists(json, 'display_name') ? undefined : json['display_name'],
-        'displayWhenZero': !exists(json, 'display_when_zero') ? undefined : json['display_when_zero'],
-        'highIsGood': !exists(json, 'high_is_good') ? undefined : json['high_is_good'],
-        'iconId': !exists(json, 'icon_id') ? undefined : json['icon_id'],
-        'maxAttributeId': !exists(json, 'max_attribute_id') ? undefined : json['max_attribute_id'],
-        'minAttributeId': !exists(json, 'min_attribute_id') ? undefined : json['min_attribute_id'],
-        'name': !exists(json, 'name') ? undefined : json['name'],
-        'published': !exists(json, 'published') ? undefined : json['published'],
-        'stackable': !exists(json, 'stackable') ? undefined : json['stackable'],
-        'tooltipDescription': !exists(json, 'tooltip_description') ? undefined : json['tooltip_description'],
-        'tooltipTitle': !exists(json, 'tooltip_title') ? undefined : json['tooltip_title'],
-        'unitId': !exists(json, 'unit_id') ? undefined : json['unit_id'],
+        'attributeId': json['attribute_id'] == null ? undefined : json['attribute_id'],
+        'categoryId': json['category_id'] == null ? undefined : json['category_id'],
+        'chargeRechargeTimeId': json['charge_recharge_time_id'] == null ? undefined : json['charge_recharge_time_id'],
+        'dataType': json['data_type'] == null ? undefined : json['data_type'],
+        'defaultValue': json['default_value'] == null ? undefined : json['default_value'],
+        'description': json['description'] == null ? undefined : json['description'],
+        'displayName': json['display_name'] == null ? undefined : json['display_name'],
+        'displayWhenZero': json['display_when_zero'] == null ? undefined : json['display_when_zero'],
+        'highIsGood': json['high_is_good'] == null ? undefined : json['high_is_good'],
+        'iconId': json['icon_id'] == null ? undefined : json['icon_id'],
+        'maxAttributeId': json['max_attribute_id'] == null ? undefined : json['max_attribute_id'],
+        'minAttributeId': json['min_attribute_id'] == null ? undefined : json['min_attribute_id'],
+        'name': json['name'] == null ? undefined : json['name'],
+        'published': json['published'] == null ? undefined : json['published'],
+        'stackable': json['stackable'] == null ? undefined : json['stackable'],
+        'tooltipDescription': json['tooltip_description'] == null ? undefined : json['tooltip_description'],
+        'tooltipTitle': json['tooltip_title'] == null ? undefined : json['tooltip_title'],
+        'unitId': json['unit_id'] == null ? undefined : json['unit_id'],
     };
 }
 
-export function DogmaAttributeToJSON(value?: DogmaAttribute | null): any {
-    if (value === undefined) {
-        return undefined;
+export function DogmaAttributeToJSON(json: any): DogmaAttribute {
+    return DogmaAttributeToJSONTyped(json, false);
+}
+
+export function DogmaAttributeToJSONTyped(value?: DogmaAttribute | null, ignoreDiscriminator: boolean = false): any {
+    if (value == null) {
+        return value;
     }
-    if (value === null) {
-        return null;
-    }
+
     return {
         
-        'attribute_id': value.attributeId,
-        'category_id': value.categoryId,
-        'charge_recharge_time_id': value.chargeRechargeTimeId,
-        'data_type': value.dataType,
-        'default_value': value.defaultValue,
-        'description': value.description,
-        'display_name': value.displayName,
-        'display_when_zero': value.displayWhenZero,
-        'high_is_good': value.highIsGood,
-        'icon_id': value.iconId,
-        'max_attribute_id': value.maxAttributeId,
-        'min_attribute_id': value.minAttributeId,
-        'name': value.name,
-        'published': value.published,
-        'stackable': value.stackable,
-        'tooltip_description': value.tooltipDescription,
-        'tooltip_title': value.tooltipTitle,
-        'unit_id': value.unitId,
+        'attribute_id': value['attributeId'],
+        'category_id': value['categoryId'],
+        'charge_recharge_time_id': value['chargeRechargeTimeId'],
+        'data_type': value['dataType'],
+        'default_value': value['defaultValue'],
+        'description': value['description'],
+        'display_name': value['displayName'],
+        'display_when_zero': value['displayWhenZero'],
+        'high_is_good': value['highIsGood'],
+        'icon_id': value['iconId'],
+        'max_attribute_id': value['maxAttributeId'],
+        'min_attribute_id': value['minAttributeId'],
+        'name': value['name'],
+        'published': value['published'],
+        'stackable': value['stackable'],
+        'tooltip_description': value['tooltipDescription'],
+        'tooltip_title': value['tooltipTitle'],
+        'unit_id': value['unitId'],
     };
 }
 

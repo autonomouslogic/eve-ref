@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 /**
  * The blueprints producing this type. The key is the blueprint type ID. This is added by EVE Ref.
  * @export
@@ -36,10 +36,8 @@ export interface ProducingBlueprint {
 /**
  * Check if a given object implements the ProducingBlueprint interface.
  */
-export function instanceOfProducingBlueprint(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+export function instanceOfProducingBlueprint(value: object): value is ProducingBlueprint {
+    return true;
 }
 
 export function ProducingBlueprintFromJSON(json: any): ProducingBlueprint {
@@ -47,27 +45,29 @@ export function ProducingBlueprintFromJSON(json: any): ProducingBlueprint {
 }
 
 export function ProducingBlueprintFromJSONTyped(json: any, ignoreDiscriminator: boolean): ProducingBlueprint {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'blueprintActivity': !exists(json, 'blueprint_activity') ? undefined : json['blueprint_activity'],
-        'blueprintTypeId': !exists(json, 'blueprint_type_id') ? undefined : json['blueprint_type_id'],
+        'blueprintActivity': json['blueprint_activity'] == null ? undefined : json['blueprint_activity'],
+        'blueprintTypeId': json['blueprint_type_id'] == null ? undefined : json['blueprint_type_id'],
     };
 }
 
-export function ProducingBlueprintToJSON(value?: ProducingBlueprint | null): any {
-    if (value === undefined) {
-        return undefined;
+export function ProducingBlueprintToJSON(json: any): ProducingBlueprint {
+    return ProducingBlueprintToJSONTyped(json, false);
+}
+
+export function ProducingBlueprintToJSONTyped(value?: ProducingBlueprint | null, ignoreDiscriminator: boolean = false): any {
+    if (value == null) {
+        return value;
     }
-    if (value === null) {
-        return null;
-    }
+
     return {
         
-        'blueprint_activity': value.blueprintActivity,
-        'blueprint_type_id': value.blueprintTypeId,
+        'blueprint_activity': value['blueprintActivity'],
+        'blueprint_type_id': value['blueprintTypeId'],
     };
 }
 
