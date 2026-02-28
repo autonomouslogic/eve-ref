@@ -7,7 +7,7 @@ DOCKER_TAG_LATEST = $(DOCKER_TAG_BASE):latest
 init: init-ui
 
 init-ui:
-ifeq ($(GITHUB_ACTIONS),true)
+ifeq ($(GITHUB_ACTIONS), true)
 	cd ui ; npm install
 else
 	docker run $(DOCKER_IT) --rm \
@@ -31,7 +31,7 @@ dev-ui: specs
 		bash -c "npm run dev"
 
 build-ui: specs test-ui
-ifeq ($(GITHUB_ACTIONS), "true")
+ifeq ($(GITHUB_ACTIONS), true)
 	cd ui ; npm run build
 else
 	docker run it --rm \
