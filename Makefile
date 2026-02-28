@@ -3,7 +3,7 @@ EVE_REF_VERSION = $(shell ./gradlew properties | grep 'version:' | cut -d' ' -f 
 DOCKER_TAG_BASE = autonomouslogic/eve-ref
 DOCKER_TAG = $(DOCKER_TAG_BASE):$(EVE_REF_VERSION)
 DOCKER_TAG_LATEST = $(DOCKER_TAG_BASE):latest
-DOCKER_IT = $(shell test -z "$PS1" || echo "-it")
+DOCKER_IT = $(shell test -z "$GITHUB_ACTIONS" || echo "-it")
 
 init: init-ui
 
