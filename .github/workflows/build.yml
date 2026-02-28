@@ -49,7 +49,7 @@ jobs:
           cache: gradle
 
       - name: Env
-        run: test -z "$GITHUB_ACTIONS" || echo "GITHUB_ACTIONS set"
+        run: test "$GITHUB_ACTIONS" = "true" && echo "GITHUB_ACTIONS set"
 
       - name: Init
         run: make init-ui
