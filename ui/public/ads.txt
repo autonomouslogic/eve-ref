@@ -1,0 +1,2 @@
+# Google AdSense ads.txt file
+google.com, ca-pub-2850842519709578, DIRECT, f08c47fec0942fa0
