@@ -7,12 +7,25 @@ export default defineNuxtConfig({
       head: {
           charset: 'utf-8',
           viewport: 'width=device-width, initial-scale=1',
-      }
+
+          scripts: {
+              globals: {
+                  ucLoader: {
+                      src: "https://web.cmp.usercentrics.eu/ui/loader.js",
+                      type: "application/javascript",
+                      id: "usercentrics-cmp",
+                      "data-settings-id": "YcvKrzeCLM-3xB",
+                      async: true,
+                  },
+              },
+          },
+      },
   },
 
   modules: [
       '@nuxtjs/i18n',
       '@nuxtjs/tailwindcss',
+      '@nuxtjs/google-adsense',
   ],
 
   build: {
@@ -31,9 +44,13 @@ export default defineNuxtConfig({
   css: [
       '@fortawesome/fontawesome-svg-core/styles.css'
   ],
-  
+
   typescript: {
       typeCheck: true,
+  },
+
+  googleAdsense: {
+      id: "ca-pub-2850842519709578",
   },
 
   compatibilityDate: "2024-09-24"
