@@ -15,6 +15,11 @@ jobs:
           java-version: 21
           cache: gradle
 
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+
       - name: Check generated specs
         run: |
           echo "Run 'make specs' to generate specs"
