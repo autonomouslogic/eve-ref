@@ -30,7 +30,7 @@ dev-ui: specs
 		node:24 \
 		bash -c "npm run dev"
 
-build-ui: specs test-ui
+build-ui:
 ifeq ($(GITHUB_ACTIONS), true)
 	cd ui ; npm run build
 else

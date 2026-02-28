@@ -11,6 +11,10 @@ import {
 	YOUTUBE_URL
 } from "~/lib/urls";
 import InternalLink from "~/components/helpers/InternalLink.vue";
+
+const showPrivacySettings = () => {
+	(window as any).__ucCmp?.showSecondLayer();
+};
 </script>
 
 <template>
@@ -28,7 +32,7 @@ import InternalLink from "~/components/helpers/InternalLink.vue";
 					<li><ExternalLink url="https://docs.everef.net/">Docs</ExternalLink></li>
 					<li><ExternalLink url="https://docs.everef.net/datasets/">Data</ExternalLink></li>
 					<li><InternalLink to="/privacy">Privacy</InternalLink></li>
-					<li><a href="#" onClick="__ucCmp.showSecondLayer();">Privacy Settings</a></li>
+					<li><a href="#" @click="showPrivacySettings">Privacy Settings</a></li>
 					<li>
 						<LocaleSwitcher/>
 					</li>
