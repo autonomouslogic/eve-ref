@@ -8,6 +8,8 @@ DOCKER_IT = $(shell test "$GITHUB_ACTIONS" = "true" || echo "-it")
 init: init-ui
 
 init-ui:
+	echo $(GITHUB_ACTIONS)
+	echo $(DOCKER_IT)
 	docker run $(DOCKER_IT) --rm \
 		-u $(shell id -u):$(shell id -g) \
 		-v ./ui:/app \
