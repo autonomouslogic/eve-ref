@@ -3,11 +3,37 @@ EVE_REF_VERSION = $(shell ./gradlew properties | grep 'version:' | cut -d' ' -f 
 DOCKER_TAG_BASE = autonomouslogic/eve-ref
 DOCKER_TAG = $(DOCKER_TAG_BASE):$(EVE_REF_VERSION)
 DOCKER_TAG_LATEST = $(DOCKER_TAG_BASE):latest
+DOCKER_IT = $(shell test -z "$PS1" || echo "-it")
 
 init: init-ui
 
 init-ui:
-	cd ui ; npm install
+	docker run $(DOCKER_IT) --rm \
+		-u $(shell id -u):$(shell id -g) \
+		-v ./ui:/app \
+		-w /app \
+		node:24 \
+		bash -c "npm install"
+
+openapi-ui:
+	cd ui ; npm run generate-api
+
+dev-ui: specs
+	docker run $(DOCKER_IT) --rm \
+		-u $(shell id -u):$(shell id -g) \
+		-v ./ui:/app \
+		-w /app \
+		-p 3000:3000 \
+		node:24 \
+		bash -c "npm run dev"
+
+build-ui: specs test-ui
+	docker run $(DOCKER_IT) --rm \
+		-u $(shell id -u):$(shell id -g) \
+		-v ./ui:/app \
+		-w /app \
+		node:24 \
+		bash -c "npm run build"
 
 dist: generate-database
 	./gradlew distTar --stacktrace
@@ -32,15 +58,6 @@ specs: generate-database
 	./gradlew refDataSpec --stacktrace
 	./gradlew apiSpec --stacktrace
 	make openapi-ui
-
-openapi-ui:
-	cd ui ; npm run generate-api
-
-dev-ui: specs
-	cd ui ; npm run dev
-
-build-ui: specs test-ui
-	cd ui ; npm run build
 
 docker: dist
 	docker build \
