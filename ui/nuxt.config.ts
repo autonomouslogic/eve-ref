@@ -23,9 +23,10 @@ export default defineNuxtConfig({
   },
 
   modules: [
-      '@nuxtjs/i18n',
-      '@nuxtjs/tailwindcss',
-      '@nuxtjs/google-adsense',
+    '@nuxtjs/i18n',
+    '@nuxtjs/tailwindcss',
+    '@nuxtjs/google-adsense',
+    "@nuxt/scripts"
   ],
 
   build: {
