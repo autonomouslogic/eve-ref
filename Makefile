@@ -10,7 +10,7 @@ init-ui:
 ifeq ($(GITHUB_ACTIONS), true)
 	cd ui ; npm install
 else
-	docker run $(DOCKER_IT) --rm \
+	docker run -it --rm \
 		-u $(shell id -u):$(shell id -g) \
 		-v ./ui:/app \
 		-w /app \
@@ -22,7 +22,7 @@ openapi-ui:
 	cd ui ; npm run generate-api
 
 dev-ui: specs
-	docker run it --rm \
+	docker run -it --rm \
 		-u $(shell id -u):$(shell id -g) \
 		-v ./ui:/app \
 		-w /app \
