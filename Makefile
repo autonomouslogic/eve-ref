@@ -4,11 +4,13 @@ DOCKER_TAG_BASE = autonomouslogic/eve-ref
 DOCKER_TAG = $(DOCKER_TAG_BASE):$(EVE_REF_VERSION)
 DOCKER_TAG_LATEST = $(DOCKER_TAG_BASE):latest
 DOCKER_IT = $(shell test "$$GITHUB_ACTIONS" = "true" || echo "-it")
+DOCKER_U = $(shell test "$$GITHUB_ACTIONS" = "true" || echo "-u $(shell id -u):$(shell id -g)")
 
 init: init-ui
 
 init-ui:
 	docker run $(DOCKER_IT) --rm \
+		$(DOCKER_U) \
 		-v ./ui:/app \
 		-w /app \
 		node:24 \
@@ -19,7 +21,7 @@ openapi-ui:
 
 dev-ui: specs
 	docker run $(DOCKER_IT) --rm \
-		-u $(shell id -u):$(shell id -g) \
+		$(DOCKER_U) \
 		-v ./ui:/app \
 		-w /app \
 		-p 3000:3000 \
@@ -28,7 +30,7 @@ dev-ui: specs
 
 build-ui: specs test-ui
 	docker run $(DOCKER_IT) --rm \
-		-u $(shell id -u):$(shell id -g) \
+		$(DOCKER_U) \
 		-v ./ui:/app \
 		-w /app \
 		node:24 \
