@@ -10,8 +10,8 @@ init-ui:
 ifeq ($(GITHUB_ACTIONS), true)
 	cd ui ; npm install
 else
-	docker run $(DOCKER_IT) --rm \
-		$(DOCKER_U) \
+	docker run -it --rm \
+		-u $(shell id -u):$(shell id -g) \
 		-v ./ui:/app \
 		-w /app \
 		node:24 \
@@ -22,8 +22,8 @@ openapi-ui:
 	cd ui ; npm run generate-api
 
 dev-ui: specs
-	docker run it --rm \
-		$(shell id -u):$(shell id -g) \
+	docker run -it --rm \
+		-u $(shell id -u):$(shell id -g) \
 		-v ./ui:/app \
 		-w /app \
 		-p 3000:3000 \
@@ -34,8 +34,8 @@ build-ui: specs test-ui
 ifeq ($(GITHUB_ACTIONS), true)
 	cd ui ; npm run build
 else
-	docker run it --rm \
-		$(shell id -u):$(shell id -g) \
+	docker run -it --rm \
+		-u $(shell id -u):$(shell id -g) \
 		-v ./ui:/app \
 		-w /app \
 		node:24 \
