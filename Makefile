@@ -9,7 +9,7 @@ init: init-ui
 
 init-ui:
 	docker run $(DOCKER_IT) --rm \
-		-u $(shell id -u):$(shell id -g) \
+		-u 1000:1000 \
 		-v ./ui:/app \
 		-w /app \
 		node:24 \
