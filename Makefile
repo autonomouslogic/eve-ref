@@ -34,7 +34,7 @@ build-ui: specs test-ui
 ifeq ($(GITHUB_ACTIONS), true)
 	cd ui ; npm run build
 else
-	docker run it --rm \
+	docker run -it --rm \
 		-u $(shell id -u):$(shell id -g) \
 		-v ./ui:/app \
 		-w /app \
