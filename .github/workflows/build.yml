@@ -48,6 +48,9 @@ jobs:
           java-version: 21
           cache: gradle
 
+      - name: Env
+        run: env
+
       - name: Init
         run: make init-ui
 
