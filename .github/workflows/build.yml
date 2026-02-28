@@ -48,9 +48,6 @@ jobs:
           java-version: 21
           cache: gradle
 
-      - name: Env
-        run: test "$GITHUB_ACTIONS" = "true" && echo "GITHUB_ACTIONS set"
-
       - name: Init
         run: make init-ui
 
