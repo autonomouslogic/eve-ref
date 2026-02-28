@@ -1,5 +1,38 @@
 EVE Ref Changelog
 
+## [2.74.0](https://github.com/autonomouslogic/eve-ref/compare/2.73.9...2.74.0) (2026-02-28)
+
+
+### Features
+
+* Ads and cookie consent ([#1022](https://github.com/autonomouslogic/eve-ref/issues/1022)) ([8efcf5d](https://github.com/autonomouslogic/eve-ref/commit/8efcf5df7b8f74aaac68f19e055ee381515bb0cb))
+
+
+### Bug Fixes
+
+* **ui:** Added privacy settings link for Usercentric ([0f3d852](https://github.com/autonomouslogic/eve-ref/commit/0f3d852be7f240d604053d835f28b06b4aca1011))
+* **ui:** Added privacy settings link for Usercentric ([19b2643](https://github.com/autonomouslogic/eve-ref/commit/19b26432d4bc51e585d4a2bd22cf568e55bb643d))
+* **ui:** Disabled usercentrics ([a56205a](https://github.com/autonomouslogic/eve-ref/commit/a56205a531312c60642bd8b0f8be695092174b98))
+* **ui:** Set up a banner ad [#1019](https://github.com/autonomouslogic/eve-ref/issues/1019) ([defdfd1](https://github.com/autonomouslogic/eve-ref/commit/defdfd1c57f5b922059c9d1f396b9f94ed49467f))
+* **ui:** Updated ads.txt ([34de4f2](https://github.com/autonomouslogic/eve-ref/commit/34de4f2d47f0238cd03634f623ca9258ea9efcd8))
+
+
+### Dependency Updates
+
+* **deps:** update dependency nuxt to v3.19.0 [security] ([#744](https://github.com/autonomouslogic/eve-ref/issues/744)) ([11811db](https://github.com/autonomouslogic/eve-ref/commit/11811dba7191f202dcf056f2d85a467c57fd1d31))
+
+
+### Code Refactoring
+
+* Format ([1551de5](https://github.com/autonomouslogic/eve-ref/commit/1551de5037efe2e2c0f17d6eb5a6b8c76efab925))
+
+
+### Continuous Integration
+
+* Docker on Github Actions ([#1023](https://github.com/autonomouslogic/eve-ref/issues/1023)) ([309ed7c](https://github.com/autonomouslogic/eve-ref/commit/309ed7c524147ce9b8a75f663014af3f3b287c9f))
+* Logging data checks ([ad9c073](https://github.com/autonomouslogic/eve-ref/commit/ad9c073a7099b60e75aed12150e111aae67530b9))
+* Set up Node to run through Docker ([a2e67c3](https://github.com/autonomouslogic/eve-ref/commit/a2e67c32acd5b4c4767001a0dd1222ab2a27e444))
+
 ## [2.73.9](https://github.com/autonomouslogic/eve-ref/compare/2.73.8...2.73.9) (2026-02-23)
 
 
