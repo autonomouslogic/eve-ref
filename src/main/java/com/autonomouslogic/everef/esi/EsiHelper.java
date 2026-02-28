@@ -58,7 +58,9 @@ public class EsiHelper {
 	public Response fetch(EsiUrl url, Optional<String> accessToken) {
 		return okHttpWrapper.get(url.toString(), r -> {
 			accessToken.ifPresent(token -> r.addHeader("Authorization", "Bearer " + token));
-			r.addHeader(COMPATIBILITY_DATE_HEADER, LocalDate.now(ZoneOffset.ofHours(-11)).toString());
+			r.addHeader(
+					COMPATIBILITY_DATE_HEADER,
+					LocalDate.now(ZoneOffset.ofHours(-11)).toString());
 		});
 	}
 

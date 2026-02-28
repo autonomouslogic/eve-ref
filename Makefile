@@ -7,7 +7,40 @@ DOCKER_TAG_LATEST = $(DOCKER_TAG_BASE):latest
 init: init-ui
 
 init-ui:
+ifeq ($(GITHUB_ACTIONS), true)
 	cd ui ; npm install
+else
+	docker run $(DOCKER_IT) --rm \
+		-u $(shell id -u):$(shell id -g) \
+		-v ./ui:/app \
+		-w /app \
+		node:24 \
+		bash -c "npm install"
+endif
+
+openapi-ui:
+	cd ui ; npm run generate-api
+
+dev-ui: specs
+	docker run it --rm \
+		-u $(shell id -u):$(shell id -g) \
+		-v ./ui:/app \
+		-w /app \
+		-p 3000:3000 \
+		node:24 \
+		bash -c "npm run dev"
+
+build-ui: specs test-ui
+ifeq ($(GITHUB_ACTIONS), true)
+	cd ui ; npm run build
+else
+	docker run it --rm \
+		-u $(shell id -u):$(shell id -g) \
+		-v ./ui:/app \
+		-w /app \
+		node:24 \
+		bash -c "npm run build"
+endif
 
 dist: generate-database
 	./gradlew distTar --stacktrace
@@ -32,15 +65,6 @@ specs: generate-database
 	./gradlew refDataSpec --stacktrace
 	./gradlew apiSpec --stacktrace
 	make openapi-ui
-
-openapi-ui:
-	cd ui ; npm run generate-api
-
-dev-ui: specs
-	cd ui ; npm run dev
-
-build-ui: specs test-ui
-	cd ui ; npm run build
 
 docker: dist
 	docker build \
