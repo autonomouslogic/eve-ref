@@ -8,7 +8,7 @@ init: init-ui
 
 init-ui:
 ifeq ($(GITHUB_ACTIONS),true)
-	cd ui ; make install
+	cd ui ; npm install
 else
 	docker run $(DOCKER_IT) --rm \
 		$(DOCKER_U) \
