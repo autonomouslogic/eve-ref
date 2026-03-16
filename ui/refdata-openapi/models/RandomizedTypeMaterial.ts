@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 /**
  * 
  * @export
@@ -42,10 +42,8 @@ export interface RandomizedTypeMaterial {
 /**
  * Check if a given object implements the RandomizedTypeMaterial interface.
  */
-export function instanceOfRandomizedTypeMaterial(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+export function instanceOfRandomizedTypeMaterial(value: object): value is RandomizedTypeMaterial {
+    return true;
 }
 
 export function RandomizedTypeMaterialFromJSON(json: any): RandomizedTypeMaterial {
@@ -53,29 +51,31 @@ export function RandomizedTypeMaterialFromJSON(json: any): RandomizedTypeMateria
 }
 
 export function RandomizedTypeMaterialFromJSONTyped(json: any, ignoreDiscriminator: boolean): RandomizedTypeMaterial {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'materialTypeId': !exists(json, 'material_type_id') ? undefined : json['material_type_id'],
-        'quantityMax': !exists(json, 'quantity_max') ? undefined : json['quantity_max'],
-        'quantityMin': !exists(json, 'quantity_min') ? undefined : json['quantity_min'],
+        'materialTypeId': json['material_type_id'] == null ? undefined : json['material_type_id'],
+        'quantityMax': json['quantity_max'] == null ? undefined : json['quantity_max'],
+        'quantityMin': json['quantity_min'] == null ? undefined : json['quantity_min'],
     };
 }
 
-export function RandomizedTypeMaterialToJSON(value?: RandomizedTypeMaterial | null): any {
-    if (value === undefined) {
-        return undefined;
+export function RandomizedTypeMaterialToJSON(json: any): RandomizedTypeMaterial {
+    return RandomizedTypeMaterialToJSONTyped(json, false);
+}
+
+export function RandomizedTypeMaterialToJSONTyped(value?: RandomizedTypeMaterial | null, ignoreDiscriminator: boolean = false): any {
+    if (value == null) {
+        return value;
     }
-    if (value === null) {
-        return null;
-    }
+
     return {
         
-        'material_type_id': value.materialTypeId,
-        'quantity_max': value.quantityMax,
-        'quantity_min': value.quantityMin,
+        'material_type_id': value['materialTypeId'],
+        'quantity_max': value['quantityMax'],
+        'quantity_min': value['quantityMin'],
     };
 }
 

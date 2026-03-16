@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 /**
  * Details about which types a mutaplasmid can be applied to to create another type. These are created by EVE Ref and derived from Hoboleaks.
  * @export
@@ -36,10 +36,8 @@ export interface MutaplasmidTypeMapping {
 /**
  * Check if a given object implements the MutaplasmidTypeMapping interface.
  */
-export function instanceOfMutaplasmidTypeMapping(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+export function instanceOfMutaplasmidTypeMapping(value: object): value is MutaplasmidTypeMapping {
+    return true;
 }
 
 export function MutaplasmidTypeMappingFromJSON(json: any): MutaplasmidTypeMapping {
@@ -47,27 +45,29 @@ export function MutaplasmidTypeMappingFromJSON(json: any): MutaplasmidTypeMappin
 }
 
 export function MutaplasmidTypeMappingFromJSONTyped(json: any, ignoreDiscriminator: boolean): MutaplasmidTypeMapping {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'applicableTypeIds': !exists(json, 'applicable_type_ids') ? undefined : json['applicable_type_ids'],
-        'resultingTypeId': !exists(json, 'resulting_type_id') ? undefined : json['resulting_type_id'],
+        'applicableTypeIds': json['applicable_type_ids'] == null ? undefined : json['applicable_type_ids'],
+        'resultingTypeId': json['resulting_type_id'] == null ? undefined : json['resulting_type_id'],
     };
 }
 
-export function MutaplasmidTypeMappingToJSON(value?: MutaplasmidTypeMapping | null): any {
-    if (value === undefined) {
-        return undefined;
+export function MutaplasmidTypeMappingToJSON(json: any): MutaplasmidTypeMapping {
+    return MutaplasmidTypeMappingToJSONTyped(json, false);
+}
+
+export function MutaplasmidTypeMappingToJSONTyped(value?: MutaplasmidTypeMapping | null, ignoreDiscriminator: boolean = false): any {
+    if (value == null) {
+        return value;
     }
-    if (value === null) {
-        return null;
-    }
+
     return {
         
-        'applicable_type_ids': value.applicableTypeIds,
-        'resulting_type_id': value.resultingTypeId,
+        'applicable_type_ids': value['applicableTypeIds'],
+        'resulting_type_id': value['resultingTypeId'],
     };
 }
 

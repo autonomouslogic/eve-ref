@@ -2,15 +2,14 @@ package com.autonomouslogic.everef.cli;
 
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.esi.EsiAuthHelper;
-import com.autonomouslogic.everef.esi.EsiConstants;
 import com.autonomouslogic.everef.esi.EsiHelper;
 import com.autonomouslogic.everef.http.OkHttpWrapper;
 import com.autonomouslogic.everef.openapi.esi.api.CharacterApi;
 import com.autonomouslogic.everef.openapi.esi.api.CorporationApi;
 import com.autonomouslogic.everef.openapi.esi.api.WalletApi;
 import com.autonomouslogic.everef.openapi.esi.invoker.ApiException;
-import com.autonomouslogic.everef.openapi.esi.model.GetCharactersCharacterIdOk;
-import com.autonomouslogic.everef.openapi.esi.model.GetCorporationsCorporationIdOk;
+import com.autonomouslogic.everef.openapi.esi.model.CharactersCharacterIdGet;
+import com.autonomouslogic.everef.openapi.esi.model.CorporationsCorporationIdGet;
 import com.autonomouslogic.everef.pug.NumberFormats;
 import com.autonomouslogic.everef.s3.S3Adapter;
 import com.autonomouslogic.everef.s3.S3Util;
@@ -139,7 +138,7 @@ public class FetchDonations implements Command {
 	public void run() {
 		var accessToken = getAccessToken();
 		var verified = esiAuthHelper.verify(accessToken);
-		var characterId = (int) verified.getCharacterId();
+		var characterId = verified.getCharacterId();
 		var character = getCharacter(characterId);
 		var corporationId = character.getCorporationId();
 		var corporation = getCorporation(corporationId);
@@ -175,7 +174,7 @@ public class FetchDonations implements Command {
 		return donations.stream().filter(d -> !previousIds.contains(d.getId())).toList();
 	}
 
-	private List<DonationEntry> getDonations(int characterId, int corporationId, String accessToken) {
+	private List<DonationEntry> getDonations(long characterId, long corporationId, String accessToken) {
 		return Stream.concat(
 						getCharacterDonations(characterId, accessToken).stream(),
 						getCorporationDonations(corporationId, accessToken).stream())
@@ -189,11 +188,17 @@ public class FetchDonations implements Command {
 	}
 
 	@SneakyThrows
-	private List<DonationEntry> getCharacterDonations(int characterId, String accessToken) {
+	private List<DonationEntry> getCharacterDonations(long characterId, String accessToken) {
 		var journals = esiHelper
 				.fetchPages(page ->
 						VirtualThreads.offload(() -> walletApi.getCharactersCharacterIdWalletJournalWithHttpInfo(
-								characterId, EsiConstants.Datasource.tranquility.toString(), null, page, accessToken)))
+								characterId,
+								esiHelper.getCompatibilityDate(),
+								page,
+								null,
+								null,
+								null,
+								java.util.Map.of("Authorization", "Bearer " + accessToken))))
 				.doOnNext(e -> log.debug("Character journal: {}", e))
 				.filter(e -> DONATION_REF_TYPES.contains(e.getRefType().toString()))
 				.map(e -> DonationEntry.builder()
@@ -209,16 +214,18 @@ public class FetchDonations implements Command {
 	}
 
 	@SneakyThrows
-	private List<DonationEntry> getCorporationDonations(int corporationId, String accessToken) {
+	private List<DonationEntry> getCorporationDonations(long corporationId, String accessToken) {
 		var journals = esiHelper
 				.fetchPages(page -> VirtualThreads.offload(
 						() -> walletApi.getCorporationsCorporationIdWalletsDivisionJournalWithHttpInfo(
 								corporationId,
-								1,
-								EsiConstants.Datasource.tranquility.toString(),
-								null,
+								1L,
+								esiHelper.getCompatibilityDate(),
 								page,
-								accessToken)))
+								null,
+								null,
+								null,
+								java.util.Map.of("Authorization", "Bearer " + accessToken))))
 				.doOnNext(e -> log.debug("Corporation journal: {}", e))
 				.filter(e -> DONATION_REF_TYPES.contains(e.getRefType().toString()))
 				.map(e -> DonationEntry.builder()
@@ -270,15 +277,15 @@ public class FetchDonations implements Command {
 	}
 
 	@SneakyThrows
-	private @NotNull GetCorporationsCorporationIdOk getCorporation(int corporationId) throws ApiException {
+	private @NotNull CorporationsCorporationIdGet getCorporation(long corporationId) throws ApiException {
 		return VirtualThreads.offload(() -> corporationApi.getCorporationsCorporationId(
-				corporationId, EsiConstants.Datasource.tranquility.toString(), null));
+				corporationId, esiHelper.getCompatibilityDate(), null, null, null));
 	}
 
 	@SneakyThrows
-	private @NotNull GetCharactersCharacterIdOk getCharacter(int characterId) throws ApiException {
-		return VirtualThreads.offload(() -> characterApi.getCharactersCharacterId(
-				characterId, EsiConstants.Datasource.tranquility.toString(), null));
+	private @NotNull CharactersCharacterIdGet getCharacter(long characterId) throws ApiException {
+		return VirtualThreads.offload(() ->
+				characterApi.getCharactersCharacterId(characterId, esiHelper.getCompatibilityDate(), null, null, null));
 	}
 
 	private static @NotNull SummaryFile buildSummary(Collection<DonationEntry> donations) {
@@ -395,16 +402,16 @@ public class FetchDonations implements Command {
 		Instant date;
 
 		@JsonProperty
-		Integer firstPartyId;
+		Long firstPartyId;
 
 		@JsonProperty
-		Integer secondPartyId;
+		Long secondPartyId;
 
 		@JsonProperty
-		Integer characterId;
+		Long characterId;
 
 		@JsonProperty
-		Integer corporationId;
+		Long corporationId;
 
 		@JsonProperty
 		String donorName;
@@ -439,9 +446,9 @@ public class FetchDonations implements Command {
 		double amount;
 
 		@JsonProperty
-		Integer characterId;
+		Long characterId;
 
 		@JsonProperty
-		Integer corporationId;
+		Long corporationId;
 	}
 }

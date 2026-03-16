@@ -417,16 +417,14 @@ public class ScrapeStructuresTest {
 					}
 				}
 
-				// Handle both /universe/structures/ and /latest/universe/structures/
-				if (path.equals("/universe/structures/") || path.equals("/latest/universe/structures/")) {
+				if (path.equals("/universe/structures")) {
 					return new MockResponse()
 							.setBody(objectMapper.writeValueAsString(publicStructures.keySet()))
 							.addHeader("Last-Modified", lastModified);
 				}
 
-				if (path.startsWith("/universe/structures/") || path.startsWith("/latest/universe/structures/")) {
-					var segmentIndex = segments.contains("latest") ? 3 : 2;
-					var id = Long.parseLong(segments.get(segmentIndex));
+				if (path.startsWith("/latest/universe/structures/")) {
+					var id = Long.parseLong(segments.get(3));
 					var structure = publicStructures.get(id);
 					if (structure == null) {
 						structure = nonPublicStructures.get(id);
@@ -440,9 +438,8 @@ public class ScrapeStructuresTest {
 					}
 				}
 
-				if (path.startsWith("/markets/structures/") || path.startsWith("/latest/markets/structures/")) {
-					var segmentIndex = segments.contains("latest") ? 3 : 2;
-					var id = Long.parseLong(segments.get(segmentIndex));
+				if (path.startsWith("/latest/markets/structures/")) {
+					var id = Long.parseLong(segments.get(3));
 					if (marketStructures.contains(id)) {
 						return new MockResponse().setBody("[]").addHeader("Last-Modified", lastModified);
 					} else {
@@ -450,7 +447,7 @@ public class ScrapeStructuresTest {
 					}
 				}
 
-				if (path.equals("/sovereignty/structures/") || path.equals("/latest/sovereignty/structures/")) {
+				if (path.equals("/sovereignty/structures")) {
 					return new MockResponse()
 							.setBody(objectMapper.writeValueAsString(sovereigntyStructures.values()))
 							.addHeader("Last-Modified", lastModified);
@@ -495,7 +492,7 @@ public class ScrapeStructuresTest {
 					return new MockResponse().setBody(objectMapper.writeValueAsString(obj));
 				}
 
-				if (path.equals("/universe/systems/30000001/")) {
+				if (path.equals("/universe/systems/30000001")) {
 					var obj = new GetUniverseSystemsSystemIdOk()
 							.systemId(30000001)
 							.constellationId(20000001)
@@ -503,7 +500,7 @@ public class ScrapeStructuresTest {
 					return new MockResponse().setBody(objectMapper.writeValueAsString(obj));
 				}
 
-				if (path.equals("/universe/constellations/20000001/")) {
+				if (path.equals("/universe/constellations/20000001")) {
 					var obj = new GetUniverseConstellationsConstellationIdOk()
 							.constellationId(20000001)
 							.name("Constellation")

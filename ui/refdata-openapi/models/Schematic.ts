@@ -12,12 +12,13 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 import type { BlueprintMaterial } from './BlueprintMaterial';
 import {
     BlueprintMaterialFromJSON,
     BlueprintMaterialFromJSONTyped,
     BlueprintMaterialToJSON,
+    BlueprintMaterialToJSONTyped,
 } from './BlueprintMaterial';
 
 /**
@@ -67,10 +68,8 @@ export interface Schematic {
 /**
  * Check if a given object implements the Schematic interface.
  */
-export function instanceOfSchematic(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+export function instanceOfSchematic(value: object): value is Schematic {
+    return true;
 }
 
 export function SchematicFromJSON(json: any): Schematic {
@@ -78,35 +77,37 @@ export function SchematicFromJSON(json: any): Schematic {
 }
 
 export function SchematicFromJSONTyped(json: any, ignoreDiscriminator: boolean): Schematic {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'cycleTime': !exists(json, 'cycle_time') ? undefined : json['cycle_time'],
-        'materials': !exists(json, 'materials') ? undefined : (mapValues(json['materials'], BlueprintMaterialFromJSON)),
-        'name': !exists(json, 'name') ? undefined : json['name'],
-        'pinTypeIds': !exists(json, 'pin_type_ids') ? undefined : json['pin_type_ids'],
-        'products': !exists(json, 'products') ? undefined : (mapValues(json['products'], BlueprintMaterialFromJSON)),
-        'schematicId': !exists(json, 'schematic_id') ? undefined : json['schematic_id'],
+        'cycleTime': json['cycle_time'] == null ? undefined : json['cycle_time'],
+        'materials': json['materials'] == null ? undefined : (mapValues(json['materials'], BlueprintMaterialFromJSON)),
+        'name': json['name'] == null ? undefined : json['name'],
+        'pinTypeIds': json['pin_type_ids'] == null ? undefined : json['pin_type_ids'],
+        'products': json['products'] == null ? undefined : (mapValues(json['products'], BlueprintMaterialFromJSON)),
+        'schematicId': json['schematic_id'] == null ? undefined : json['schematic_id'],
     };
 }
 
-export function SchematicToJSON(value?: Schematic | null): any {
-    if (value === undefined) {
-        return undefined;
+export function SchematicToJSON(json: any): Schematic {
+    return SchematicToJSONTyped(json, false);
+}
+
+export function SchematicToJSONTyped(value?: Schematic | null, ignoreDiscriminator: boolean = false): any {
+    if (value == null) {
+        return value;
     }
-    if (value === null) {
-        return null;
-    }
+
     return {
         
-        'cycle_time': value.cycleTime,
-        'materials': value.materials === undefined ? undefined : (mapValues(value.materials, BlueprintMaterialToJSON)),
-        'name': value.name,
-        'pin_type_ids': value.pinTypeIds,
-        'products': value.products === undefined ? undefined : (mapValues(value.products, BlueprintMaterialToJSON)),
-        'schematic_id': value.schematicId,
+        'cycle_time': value['cycleTime'],
+        'materials': value['materials'] == null ? undefined : (mapValues(value['materials'], BlueprintMaterialToJSON)),
+        'name': value['name'],
+        'pin_type_ids': value['pinTypeIds'],
+        'products': value['products'] == null ? undefined : (mapValues(value['products'], BlueprintMaterialToJSON)),
+        'schematic_id': value['schematicId'],
     };
 }
 
