@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 /**
  * 
  * @export
@@ -42,10 +42,8 @@ export interface Color {
 /**
  * Check if a given object implements the Color interface.
  */
-export function instanceOfColor(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+export function instanceOfColor(value: object): value is Color {
+    return true;
 }
 
 export function ColorFromJSON(json: any): Color {
@@ -53,29 +51,31 @@ export function ColorFromJSON(json: any): Color {
 }
 
 export function ColorFromJSONTyped(json: any, ignoreDiscriminator: boolean): Color {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'b': !exists(json, 'b') ? undefined : json['b'],
-        'g': !exists(json, 'g') ? undefined : json['g'],
-        'r': !exists(json, 'r') ? undefined : json['r'],
+        'b': json['b'] == null ? undefined : json['b'],
+        'g': json['g'] == null ? undefined : json['g'],
+        'r': json['r'] == null ? undefined : json['r'],
     };
 }
 
-export function ColorToJSON(value?: Color | null): any {
-    if (value === undefined) {
-        return undefined;
+export function ColorToJSON(json: any): Color {
+    return ColorToJSONTyped(json, false);
+}
+
+export function ColorToJSONTyped(value?: Color | null, ignoreDiscriminator: boolean = false): any {
+    if (value == null) {
+        return value;
     }
-    if (value === null) {
-        return null;
-    }
+
     return {
         
-        'b': value.b,
-        'g': value.g,
-        'r': value.r,
+        'b': value['b'],
+        'g': value['g'],
+        'r': value['r'],
     };
 }
 

@@ -502,16 +502,16 @@ public class IndustryCostHandlerTest {
 						return new MockResponse()
 								.setResponseCode(200)
 								.setBody(new Buffer().write(IOUtils.toByteArray(new FileInputStream(refDataFile))));
-					case "/markets/prices/":
+					case "/markets/prices":
 						return new MockResponse()
 								.setResponseCode(200)
 								.setHeader("ETag", "test")
 								.setBody(esiMarketPrices);
-					case "/universe/systems/30004839/":
+					case "/universe/systems/30004839":
 						return new MockResponse()
 								.setResponseCode(200)
 								.setBody("{\"security_status\": -0.22037343680858612}");
-					case "/industry/systems/":
+					case "/industry/systems":
 						return new MockResponse()
 								.setResponseCode(200)
 								.setHeader("ETag", "test")
@@ -549,6 +549,7 @@ public class IndustryCostHandlerTest {
 				if (path.startsWith("/fuzzwork/aggregates/")) {
 					return new MockResponse().setResponseCode(200).setBody(fuzzworkPrices);
 				}
+				log.warn("Unaccounted for URL: {}", path);
 				return new MockResponse().setResponseCode(404);
 			} catch (Exception e) {
 				log.error("Error in dispatcher", e);

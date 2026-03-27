@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 /**
  * A map of icons. The key is the icon ID.
  * @export
@@ -36,10 +36,8 @@ export interface Icon {
 /**
  * Check if a given object implements the Icon interface.
  */
-export function instanceOfIcon(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+export function instanceOfIcon(value: object): value is Icon {
+    return true;
 }
 
 export function IconFromJSON(json: any): Icon {
@@ -47,27 +45,29 @@ export function IconFromJSON(json: any): Icon {
 }
 
 export function IconFromJSONTyped(json: any, ignoreDiscriminator: boolean): Icon {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'iconFile': !exists(json, 'icon_file') ? undefined : json['icon_file'],
-        'iconId': !exists(json, 'icon_id') ? undefined : json['icon_id'],
+        'iconFile': json['icon_file'] == null ? undefined : json['icon_file'],
+        'iconId': json['icon_id'] == null ? undefined : json['icon_id'],
     };
 }
 
-export function IconToJSON(value?: Icon | null): any {
-    if (value === undefined) {
-        return undefined;
+export function IconToJSON(json: any): Icon {
+    return IconToJSONTyped(json, false);
+}
+
+export function IconToJSONTyped(value?: Icon | null, ignoreDiscriminator: boolean = false): any {
+    if (value == null) {
+        return value;
     }
-    if (value === null) {
-        return null;
-    }
+
     return {
         
-        'icon_file': value.iconFile,
-        'icon_id': value.iconId,
+        'icon_file': value['iconFile'],
+        'icon_id': value['iconId'],
     };
 }
 

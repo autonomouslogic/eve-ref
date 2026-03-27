@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 /**
  * Details about how much a dogma attribute can be modified by a mutaplasmid. These are created by EVE Ref and derived from Hoboleaks.
  * @export
@@ -42,10 +42,8 @@ export interface MutaplasmidDogmaModifications {
 /**
  * Check if a given object implements the MutaplasmidDogmaModifications interface.
  */
-export function instanceOfMutaplasmidDogmaModifications(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+export function instanceOfMutaplasmidDogmaModifications(value: object): value is MutaplasmidDogmaModifications {
+    return true;
 }
 
 export function MutaplasmidDogmaModificationsFromJSON(json: any): MutaplasmidDogmaModifications {
@@ -53,29 +51,31 @@ export function MutaplasmidDogmaModificationsFromJSON(json: any): MutaplasmidDog
 }
 
 export function MutaplasmidDogmaModificationsFromJSONTyped(json: any, ignoreDiscriminator: boolean): MutaplasmidDogmaModifications {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'highIsGood': !exists(json, 'high_is_good') ? undefined : json['high_is_good'],
-        'max': !exists(json, 'max') ? undefined : json['max'],
-        'min': !exists(json, 'min') ? undefined : json['min'],
+        'highIsGood': json['high_is_good'] == null ? undefined : json['high_is_good'],
+        'max': json['max'] == null ? undefined : json['max'],
+        'min': json['min'] == null ? undefined : json['min'],
     };
 }
 
-export function MutaplasmidDogmaModificationsToJSON(value?: MutaplasmidDogmaModifications | null): any {
-    if (value === undefined) {
-        return undefined;
+export function MutaplasmidDogmaModificationsToJSON(json: any): MutaplasmidDogmaModifications {
+    return MutaplasmidDogmaModificationsToJSONTyped(json, false);
+}
+
+export function MutaplasmidDogmaModificationsToJSONTyped(value?: MutaplasmidDogmaModifications | null, ignoreDiscriminator: boolean = false): any {
+    if (value == null) {
+        return value;
     }
-    if (value === null) {
-        return null;
-    }
+
     return {
         
-        'high_is_good': value.highIsGood,
-        'max': value.max,
-        'min': value.min,
+        'high_is_good': value['highIsGood'],
+        'max': value['max'],
+        'min': value['min'],
     };
 }
 

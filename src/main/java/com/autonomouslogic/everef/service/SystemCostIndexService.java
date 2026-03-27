@@ -1,9 +1,10 @@
 package com.autonomouslogic.everef.service;
 
+import com.autonomouslogic.everef.esi.EsiHelper;
 import com.autonomouslogic.everef.openapi.esi.api.IndustryApi;
 import com.autonomouslogic.everef.openapi.esi.invoker.ApiException;
 import com.autonomouslogic.everef.openapi.esi.invoker.ApiResponse;
-import com.autonomouslogic.everef.openapi.esi.model.GetIndustrySystems200Ok;
+import com.autonomouslogic.everef.openapi.esi.model.IndustrySystemsGetInner;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -24,11 +25,14 @@ public class SystemCostIndexService {
 	protected IndustryApi industryApi;
 
 	@Inject
+	protected EsiHelper esiHelper;
+
+	@Inject
 	protected ScheduledExecutorService scheduler;
 
 	private String etag;
 	private ScheduledFuture<?> future;
-	private Map<Integer, SystemCostIndex> cached = new ConcurrentHashMap<>();
+	private Map<Long, SystemCostIndex> cached = new ConcurrentHashMap<>();
 
 	@Inject
 	protected SystemCostIndexService() {}
@@ -51,9 +55,9 @@ public class SystemCostIndexService {
 	@SneakyThrows
 	private void update() {
 		log.info("Updating industry systems");
-		ApiResponse<List<GetIndustrySystems200Ok>> res;
+		ApiResponse<List<IndustrySystemsGetInner>> res;
 		try {
-			res = industryApi.getIndustrySystemsWithHttpInfo(null, etag);
+			res = industryApi.getIndustrySystemsWithHttpInfo(esiHelper.getCompatibilityDate(), null, etag, null);
 		} catch (ApiException e) {
 			if (e.getCode() == 304) {
 				log.debug("No industry systems update needed");
@@ -62,14 +66,14 @@ public class SystemCostIndexService {
 				throw e;
 			}
 		}
-		for (GetIndustrySystems200Ok system : res.getData()) {
+		for (IndustrySystemsGetInner system : res.getData()) {
 			cached.put(system.getSolarSystemId(), convert(system));
 		}
 		etag = res.getHeaders().get("ETag").getFirst();
 		log.debug("Finished updating industry systems");
 	}
 
-	private SystemCostIndex convert(GetIndustrySystems200Ok system) {
+	private SystemCostIndex convert(IndustrySystemsGetInner system) {
 		var cost = SystemCostIndex.builder();
 		for (var costIndex : system.getCostIndices()) {
 			switch (costIndex.getActivity()) {
@@ -84,7 +88,7 @@ public class SystemCostIndexService {
 		return cost.build();
 	}
 
-	public SystemCostIndex getSystem(int systemId) {
+	public SystemCostIndex getSystem(long systemId) {
 		return cached.get(systemId);
 	}
 

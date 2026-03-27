@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 /**
  * A specific value for a dogma attribute
  * @export
@@ -36,10 +36,8 @@ export interface DogmaTypeAttribute {
 /**
  * Check if a given object implements the DogmaTypeAttribute interface.
  */
-export function instanceOfDogmaTypeAttribute(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+export function instanceOfDogmaTypeAttribute(value: object): value is DogmaTypeAttribute {
+    return true;
 }
 
 export function DogmaTypeAttributeFromJSON(json: any): DogmaTypeAttribute {
@@ -47,27 +45,29 @@ export function DogmaTypeAttributeFromJSON(json: any): DogmaTypeAttribute {
 }
 
 export function DogmaTypeAttributeFromJSONTyped(json: any, ignoreDiscriminator: boolean): DogmaTypeAttribute {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'attributeId': !exists(json, 'attribute_id') ? undefined : json['attribute_id'],
-        'value': !exists(json, 'value') ? undefined : json['value'],
+        'attributeId': json['attribute_id'] == null ? undefined : json['attribute_id'],
+        'value': json['value'] == null ? undefined : json['value'],
     };
 }
 
-export function DogmaTypeAttributeToJSON(value?: DogmaTypeAttribute | null): any {
-    if (value === undefined) {
-        return undefined;
+export function DogmaTypeAttributeToJSON(json: any): DogmaTypeAttribute {
+    return DogmaTypeAttributeToJSONTyped(json, false);
+}
+
+export function DogmaTypeAttributeToJSONTyped(value?: DogmaTypeAttribute | null, ignoreDiscriminator: boolean = false): any {
+    if (value == null) {
+        return value;
     }
-    if (value === null) {
-        return null;
-    }
+
     return {
         
-        'attribute_id': value.attributeId,
-        'value': value.value,
+        'attribute_id': value['attributeId'],
+        'value': value['value'],
     };
 }
 
