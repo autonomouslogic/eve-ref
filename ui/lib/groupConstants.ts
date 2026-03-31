@@ -17,3 +17,4 @@ export const SALVAGER = 1122;
 export const MOBILE_DEPOT = 1246;
 export const MOBILE_TRACTOR_UNIT = 1250;
 export const GAS_CLOUD_HARVESTERS = 4138;
+export const EXPANDED_CARGOHOLD = 765;

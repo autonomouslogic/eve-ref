@@ -16,7 +16,8 @@ import refdataApi from "~/refdata";
 import {
     AUDIT_LOG_SECURE_CONTAINER, CAPACITOR_BOOST_CHARGE, CARGO_CONTAINER,
     CORE_SUBSYSTEM, DATA_MINERS,
-    DEFENSIVE_SUBSYSTEM, FREIGHT_CONTAINER, FREQUENCY_MINING_LASER, GAS_CLOUD_HARVESTERS, MINING_LASER,
+    DEFENSIVE_SUBSYSTEM,
+    EXPANDED_CARGOHOLD, FREIGHT_CONTAINER, FREQUENCY_MINING_LASER, GAS_CLOUD_HARVESTERS, MINING_LASER,
     MOBILE_DEPOT, MOBILE_TRACTOR_UNIT, MOBILE_WARP_DISRUPTOR,
     OFFENSIVE_SUBSYSTEM,
     PROPULSION_SUBSYSTEM, SALVAGER, SECURE_CARGO_CONTAINER, STRIP_MINER
@@ -116,6 +117,7 @@ groupAttributeNames[SALVAGER] = ["accessDifficultyBonus"];
 groupAttributeNames[DATA_MINERS] = [
     "accessDifficultyBonus", "virusCoherence", "virusStrength", "virusElementSlots"
 ];
+groupAttributeNames[EXPANDED_CARGOHOLD] = ["cargoCapacityMultiplier"];
 
 export async function getCategoryDogma(categoryId: number | undefined): Promise<string[] | undefined> {
     const id = `${categoryId}`;
