@@ -17,8 +17,9 @@ import {
     AUDIT_LOG_SECURE_CONTAINER, CAPACITOR_BOOST_CHARGE, CARGO_CONTAINER,
     CORE_SUBSYSTEM, DATA_MINERS,
     DEFENSIVE_SUBSYSTEM,
-    EXPANDED_CARGOHOLD, FREIGHT_CONTAINER, FREQUENCY_MINING_LASER, GAS_CLOUD_HARVESTERS, MINING_LASER,
-    MOBILE_DEPOT, MOBILE_TRACTOR_UNIT, MOBILE_WARP_DISRUPTOR,
+    EXPANDED_CARGOHOLD, FREIGHT_CONTAINER, FREQUENCY_MINING_LASER, GAS_CLOUD_HARVESTERS,
+    INTERTIAL_STABILIZERS, MINING_LASER,
+    MOBILE_DEPOT, MOBILE_TRACTOR_UNIT, MOBILE_WARP_DISRUPTOR, NANOFIBER_INTERNAL_STRUCTURE,
     OFFENSIVE_SUBSYSTEM,
     PROPULSION_SUBSYSTEM, SALVAGER, SECURE_CARGO_CONTAINER, STRIP_MINER
 } from "~/lib/groupConstants";
@@ -118,6 +119,8 @@ groupAttributeNames[DATA_MINERS] = [
     "accessDifficultyBonus", "virusCoherence", "virusStrength", "virusElementSlots"
 ];
 groupAttributeNames[EXPANDED_CARGOHOLD] = ["cargoCapacityMultiplier"];
+groupAttributeNames[NANOFIBER_INTERNAL_STRUCTURE] = ["agilityMultiplier", "implantBonusVelocity", "structureHPMultiplier"];
+groupAttributeNames[INTERTIAL_STABILIZERS] = ["agilityMultiplier", "signatureRadiusBonus"];
 
 export async function getCategoryDogma(categoryId: number | undefined): Promise<string[] | undefined> {
     const id = `${categoryId}`;
