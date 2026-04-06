@@ -4,7 +4,7 @@ This website (docs.everef.net) is created and managed by [Kenneth Jørgensen](ht
 It does not, by itself, use or store any cookies nor does it or I collect any personal information.
 However, the following services are used to host this website.
 Please refer to their respective privacy policies to see how they affect you and your privacy:
-* [Amazon S3](https://aws.amazon.com/privacy/)
+* [Amazon Web Services](https://aws.amazon.com/privacy/)
 * [Backblaze](https://www.backblaze.com/company/policy/privacy)
 * [Cloudflare](https://www.cloudflare.com/privacypolicy/)
 * [Goatcounter](https://www.goatcounter.com/help/privacy)

@@ -1,4 +1,20 @@
 {
+  "description" : {
+    "en" : ""
+  },
+  "display_name" : {
+    "en" : ""
+  },
+  "effect_category" : 4,
+  "effect_id" : 21,
+  "modifiers" : [ {
+    "domain" : "shipID",
+    "func" : "ItemModifier",
+    "modified_attribute_id" : 263,
+    "modifying_attribute_id" : 72,
+    "operator" : 2
+  } ],
+  "name" : "shieldCapacityBonusOnline",
   "disallow_auto_repeat" : false,
   "electronic_chance" : false,
   "guid" : "",
@@ -8,21 +24,5 @@
   "propulsion_chance" : false,
   "published" : false,
   "range_chance" : false,
-  "effect_category" : 4,
-  "modifiers" : [ {
-    "domain" : "shipID",
-    "func" : "ItemModifier",
-    "modified_attribute_id" : 263,
-    "modifying_attribute_id" : 72,
-    "operator" : 2
-  } ],
-  "effect_name" : "shieldCapacityBonusOnline",
-  "effect_id" : 21,
-  "description" : {
-    "en" : ""
-  },
-  "display_name" : {
-    "en" : ""
-  },
-  "name" : "shieldCapacityBonusOnline"
+  "effect_name" : "shieldCapacityBonusOnline"
 }

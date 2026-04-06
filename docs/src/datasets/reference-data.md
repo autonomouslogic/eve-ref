@@ -31,7 +31,7 @@ Some example paths:
 * <https://ref-data.everef.net/market_groups>
 * <https://ref-data.everef.net/market_groups/1857>
 * <https://ref-data.everef.net/meta_groups>
-* <https://ref-data.everef.net/meta_group/6>
+* <https://ref-data.everef.net/meta_groups/6>
 * <https://ref-data.everef.net/mutaplasmids>
 * <https://ref-data.everef.net/mutaplasmids/52225>
 * <https://ref-data.everef.net/regions>

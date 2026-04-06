@@ -1,7 +1,7 @@
 {
   "description" : {
-    "de" : "Gallente-Schlachtschiff-Designs.",
     "en" : "Gallente battleship designs.",
+    "de" : "Gallente-Schlachtschiff-Designs.",
     "es" : "Diseños de acorazados gallentes.",
     "fr" : "Modèles de cuirassés gallente.",
     "ja" : "ガレンテ戦艦設計図。",
@@ -9,11 +9,10 @@
     "ru" : "Линейные корабли разработки Федерации Gallente.",
     "zh" : "盖伦特战列舰设计"
   },
-  "has_types" : true,
-  "icon_id" : 20967,
+  "market_group_id" : 81,
   "name" : {
-    "de" : "Gallente",
     "en" : "Gallente",
+    "de" : "Gallente",
     "es" : "Gallente",
     "fr" : "Gallente",
     "ja" : "ガレンテ",
@@ -22,6 +21,7 @@
     "zh" : "盖伦特"
   },
   "parent_group_id" : 7,
-  "market_group_id" : 81,
+  "has_types" : true,
+  "icon_id" : 20967,
   "type_ids" : [ 645 ]
 }

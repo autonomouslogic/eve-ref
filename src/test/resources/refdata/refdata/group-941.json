@@ -1,11 +1,9 @@
 {
-  "anchorable" : false,
-  "anchored" : false,
   "category_id" : 6,
-  "fittable_non_singleton" : false,
+  "group_id" : 941,
   "name" : {
-    "de" : "Industrial-Kommandoschiff",
     "en" : "Industrial Command Ship",
+    "de" : "Industrial-Kommandoschiff",
     "es" : "Nave de mando industrial",
     "fr" : "Vaisseau de commandement industriel",
     "ja" : "指揮型輸送艦",
@@ -14,6 +12,8 @@
     "zh" : "工业指挥舰"
   },
   "published" : true,
-  "use_base_price" : false,
-  "group_id" : 941
+  "anchorable" : false,
+  "anchored" : false,
+  "fittable_non_singleton" : false,
+  "use_base_price" : false
 }

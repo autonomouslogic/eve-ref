@@ -1,12 +1,12 @@
 {
-  "data_type" : 4,
+  "attribute_id" : 1286,
   "default_value" : 0,
   "description" : {
     "en" : "Required skill level for skill 4"
   },
   "display_name" : {
-    "de" : "Benötigter Skill 5 Level",
     "en" : "Level 5 required",
+    "de" : "Benötigter Skill 5 Level",
     "es" : "Nivel 5 necesario",
     "fr" : "compNiv5Requise",
     "ja" : "第五必須スキルレベル",
@@ -14,12 +14,12 @@
     "ru" : "Необходимые навыки 5 уровня",
     "zh" : "所需技能等级"
   },
-  "display_when_zero" : false,
   "high_is_good" : true,
   "icon_id" : 0,
   "name" : "requiredSkill4Level",
-  "published" : false,
   "stackable" : true,
-  "category_id" : 8,
-  "attribute_id" : 1286
+  "data_type" : 4,
+  "display_when_zero" : false,
+  "published" : false,
+  "category_id" : 8
 }

@@ -1,5 +1,146 @@
 EVE Ref Changelog
 
+## [2.74.0](https://github.com/autonomouslogic/eve-ref/compare/2.73.9...2.74.0) (2026-02-28)
+
+
+### Features
+
+* Ads and cookie consent ([#1022](https://github.com/autonomouslogic/eve-ref/issues/1022)) ([8efcf5d](https://github.com/autonomouslogic/eve-ref/commit/8efcf5df7b8f74aaac68f19e055ee381515bb0cb))
+
+
+### Bug Fixes
+
+* **ui:** Added privacy settings link for Usercentric ([0f3d852](https://github.com/autonomouslogic/eve-ref/commit/0f3d852be7f240d604053d835f28b06b4aca1011))
+* **ui:** Added privacy settings link for Usercentric ([19b2643](https://github.com/autonomouslogic/eve-ref/commit/19b26432d4bc51e585d4a2bd22cf568e55bb643d))
+* **ui:** Disabled usercentrics ([a56205a](https://github.com/autonomouslogic/eve-ref/commit/a56205a531312c60642bd8b0f8be695092174b98))
+* **ui:** Set up a banner ad [#1019](https://github.com/autonomouslogic/eve-ref/issues/1019) ([defdfd1](https://github.com/autonomouslogic/eve-ref/commit/defdfd1c57f5b922059c9d1f396b9f94ed49467f))
+* **ui:** Updated ads.txt ([34de4f2](https://github.com/autonomouslogic/eve-ref/commit/34de4f2d47f0238cd03634f623ca9258ea9efcd8))
+
+
+### Dependency Updates
+
+* **deps:** update dependency nuxt to v3.19.0 [security] ([#744](https://github.com/autonomouslogic/eve-ref/issues/744)) ([11811db](https://github.com/autonomouslogic/eve-ref/commit/11811dba7191f202dcf056f2d85a467c57fd1d31))
+
+
+### Code Refactoring
+
+* Format ([1551de5](https://github.com/autonomouslogic/eve-ref/commit/1551de5037efe2e2c0f17d6eb5a6b8c76efab925))
+
+
+### Continuous Integration
+
+* Docker on Github Actions ([#1023](https://github.com/autonomouslogic/eve-ref/issues/1023)) ([309ed7c](https://github.com/autonomouslogic/eve-ref/commit/309ed7c524147ce9b8a75f663014af3f3b287c9f))
+* Logging data checks ([ad9c073](https://github.com/autonomouslogic/eve-ref/commit/ad9c073a7099b60e75aed12150e111aae67530b9))
+* Set up Node to run through Docker ([a2e67c3](https://github.com/autonomouslogic/eve-ref/commit/a2e67c32acd5b4c4767001a0dd1222ab2a27e444))
+
+## [2.73.9](https://github.com/autonomouslogic/eve-ref/compare/2.73.8...2.73.9) (2026-02-23)
+
+
+### Bug Fixes
+
+* **test:** Updated test resources ([58ef16f](https://github.com/autonomouslogic/eve-ref/commit/58ef16f0fbb954b69d8178b4bb957883bbdaaab4))
+
+## [2.73.8](https://github.com/autonomouslogic/eve-ref/compare/2.73.7...2.73.8) (2026-02-19)
+
+
+### Bug Fixes
+
+* Temporarily set compatibility date to work on UTC-11 ([516288f](https://github.com/autonomouslogic/eve-ref/commit/516288f4038a09ab2ae4393d57180b1a00831e2e))
+* **ui:** EVE Creator Awards MOTD ([47a68b3](https://github.com/autonomouslogic/eve-ref/commit/47a68b3ca4796107a28296098c0cf532e59d0eb9))
+* **ui:** EVEathon banner ([#1017](https://github.com/autonomouslogic/eve-ref/issues/1017)) ([bcd01e5](https://github.com/autonomouslogic/eve-ref/commit/bcd01e5329863fd204501bc5119512a0fd9c1755))
+* **ui:** February 2026 giveaways ([c53de7e](https://github.com/autonomouslogic/eve-ref/commit/c53de7edef610f91745a6e6c955b1d1060a35485))
+* **ui:** Giveaways styling ([3e30b7f](https://github.com/autonomouslogic/eve-ref/commit/3e30b7f87b1ca1d0e0fa878381fcd36dbf993273))
+
+## [2.73.7](https://github.com/autonomouslogic/eve-ref/compare/2.73.6...2.73.7) (2026-02-04)
+
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([#1015](https://github.com/autonomouslogic/eve-ref/issues/1015)) ([9d57a19](https://github.com/autonomouslogic/eve-ref/commit/9d57a192e0abefcbfdfaba1806cbfdb604bd6687))
+
+## [2.73.6](https://github.com/autonomouslogic/eve-ref/compare/2.73.5...2.73.6) (2026-02-03)
+
+
+### Bug Fixes
+
+* **deps:** update flyway to v11.20.3 ([#1014](https://github.com/autonomouslogic/eve-ref/issues/1014)) ([6fe9404](https://github.com/autonomouslogic/eve-ref/commit/6fe9404e2672b759a6d9c5a9c1b872eb0b9dd7c1))
+
+## [2.73.5](https://github.com/autonomouslogic/eve-ref/compare/2.73.4...2.73.5) (2026-02-02)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @fortawesome/vue-fontawesome to v3.1.3 ([#1012](https://github.com/autonomouslogic/eve-ref/issues/1012)) ([534ad95](https://github.com/autonomouslogic/eve-ref/commit/534ad95720f954c2e7c72be29e7b1da77b8879f2))
+* **deps:** update dependency org.flywaydb:flyway-core to v11.20.3 ([#1013](https://github.com/autonomouslogic/eve-ref/issues/1013)) ([b7c7ce5](https://github.com/autonomouslogic/eve-ref/commit/b7c7ce52439a461be21e1f9157152f600e23277a))
+
+
+### Documentation
+
+* Fixed meta groups link on reference data ([eabf08b](https://github.com/autonomouslogic/eve-ref/commit/eabf08b1dd4cbd9730253c9e215551d745b50bb6))
+
+
+### Tests
+
+* Updated test resources ([39ed42e](https://github.com/autonomouslogic/eve-ref/commit/39ed42e56a3fb69d4bed3fa259f88357c1deba16))
+
+## [2.73.4](https://github.com/autonomouslogic/eve-ref/compare/2.73.3...2.73.4) (2026-01-07)
+
+
+### Bug Fixes
+
+* Updated BuildRefData to make SDE take precedence over ESI ([#1008](https://github.com/autonomouslogic/eve-ref/issues/1008)) ([31e718d](https://github.com/autonomouslogic/eve-ref/commit/31e718d2feacd88f3a53404e8c8918e72dd26a04))
+
+## [2.73.3](https://github.com/autonomouslogic/eve-ref/compare/2.73.2...2.73.3) (2026-01-06)
+
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([#1005](https://github.com/autonomouslogic/eve-ref/issues/1005)) ([feec605](https://github.com/autonomouslogic/eve-ref/commit/feec60559e443e9c0ce385440c7f267efd2421c3))
+
+## [2.73.2](https://github.com/autonomouslogic/eve-ref/compare/2.73.1...2.73.2) (2026-01-05)
+
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([#1001](https://github.com/autonomouslogic/eve-ref/issues/1001)) ([aa1cd18](https://github.com/autonomouslogic/eve-ref/commit/aa1cd18e28f432508a978592f224b8aabb2d57d5))
+* **deps:** update dependency org.flywaydb:flyway-core to v11.20.0 ([#1002](https://github.com/autonomouslogic/eve-ref/issues/1002)) ([8a1531c](https://github.com/autonomouslogic/eve-ref/commit/8a1531ce6ba21799fbcf50b0eff6657260b77b23))
+* **deps:** update flyway to v11.20.0 ([#1003](https://github.com/autonomouslogic/eve-ref/issues/1003)) ([275eb8f](https://github.com/autonomouslogic/eve-ref/commit/275eb8f9c96d9c0370f9afdd78ae60d9ad3beb86))
+* **ui:** More new years giveaways ([0a06a7c](https://github.com/autonomouslogic/eve-ref/commit/0a06a7c951760a3f44231a771a2c7dc5a8873f5c))
+* **ui:** Removed December giveaways ([71dfd59](https://github.com/autonomouslogic/eve-ref/commit/71dfd592ce00d10836ab4e8478bf3176f2103714))
+
+
+### Dependency Updates
+
+* **deps:** update all non-major dependencies to v8.52.0 ([#1004](https://github.com/autonomouslogic/eve-ref/issues/1004)) ([67f465f](https://github.com/autonomouslogic/eve-ref/commit/67f465f7ca1b06c5f0677d125bc7dbd91567ab54))
+
+## [2.73.1](https://github.com/autonomouslogic/eve-ref/compare/2.73.0...2.73.1) (2025-12-28)
+
+
+### Bug Fixes
+
+* Closing responses ([732ab83](https://github.com/autonomouslogic/eve-ref/commit/732ab8332d25be4f4d8e102617c15fb41676cf5f))
+* Removed retryWithDelayFlowable to see if it fixes exception leaks on timeouts ([85f2378](https://github.com/autonomouslogic/eve-ref/commit/85f237824c5014dcd5197e2630c1c6a08c644ab3))
+* **ui:** Extra prizes fro December ([e7858a9](https://github.com/autonomouslogic/eve-ref/commit/e7858a99618d6bdbaf6483fc6fe0016db9b067a7))
+
+## [2.73.0](https://github.com/autonomouslogic/eve-ref/compare/2.72.1...2.73.0) (2025-12-21)
+
+
+### Features
+
+* Scrape freelance jobs ([#996](https://github.com/autonomouslogic/eve-ref/issues/996)) ([12a015d](https://github.com/autonomouslogic/eve-ref/commit/12a015d2e1eb144d18ba91744b89b57c58f32a52))
+
+
+### Bug Fixes
+
+* Account for duplicate job entries ([#1000](https://github.com/autonomouslogic/eve-ref/issues/1000)) ([2db0952](https://github.com/autonomouslogic/eve-ref/commit/2db0952ccec6a0602bf07482d45177a1915002c9))
+* Fix base URL handling for the ESI client ([#997](https://github.com/autonomouslogic/eve-ref/issues/997)) ([7eef100](https://github.com/autonomouslogic/eve-ref/commit/7eef1005765c1a616836f51351c55a699cbe89a6))
+* Trailing slashes on EsiUrl ([#998](https://github.com/autonomouslogic/eve-ref/issues/998)) ([c7c2ecc](https://github.com/autonomouslogic/eve-ref/commit/c7c2ecc6b28553e95b0ba88b444d396570b140e9))
+
+
+### Dependency Updates
+
+* **deps:** update actions/setup-node action to v6 ([#972](https://github.com/autonomouslogic/eve-ref/issues/972)) ([a2e6133](https://github.com/autonomouslogic/eve-ref/commit/a2e613306daeedaeb7c41a3ab0a23c2f80aa9df6))
+
 ## [2.72.1](https://github.com/autonomouslogic/eve-ref/compare/2.72.0...2.72.1) (2025-12-15)
 
 

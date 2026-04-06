@@ -1,10 +1,10 @@
 {
-  "base_price" : 500000,
+  "capacity" : 0,
   "description" : {
-    "de" : "Kerntemperatur-Regulatoren sind standardisierte Zusatzsysteme zur Regelung, Reduzierung und Wiederverwertung überschüssiger Wärmeenergie, die von den Reaktorkernen der Schiffe ausgeht. Die Flotten des Imperiums wurden als Reaktion auf die Triglavia-Invasionen oft nachgerüstet, wobei die Energieanforderungen der Schiffe durch die hinzugefügten Defensiv- und Offensivsysteme anstieg, ohne dass dabei größere Upgrades an diesen komplexen und wertvollen Komponenten vorgenommen oder die Reaktorkerne ausgetauscht wurden. Zusätzliche Leistungsanforderungen führten dazu, dass ältere Reaktorkerndesigns überhitzten, und Kerntemperatur-Regulatoren wurden eingesetzt, um die überschüssige Wärmeenergie zu kontrollieren, zu reduzieren und, wenn möglich, wiederzuverwerten.",
-    "en" : "Core Temperature Regulators are standardized, supplementary systems used to regulate, mitigate and recycle surplus heat energy developed by naval ship reactor cores.\r\n\r\nRefits to empire navy fleets in response to the Triglavian Invasions often increased the overall power requirements of vessels, by upgrading or adding defensive and offensive systems, while not replacing reactor cores or carrying out major upgrades on these complex and valuable components.\r\n\r\nAdditional power requirements have entailed running older reactor core designs \"hot\" and core temperature regulators are used to monitor, mitigate and, where practical, recycle surplus heat energy.",
-    "es" : "Los reguladores de temperatura nucleares son sistemas suplementarios estandarizados que se usan para regular, mitigar y reciclar la energía térmica excedente generada por los núcleos de reactor de naves.\n\nCon frecuencia, reequipar las flotas de las armadas imperiales en respuesta a las invasiones triglavianas exigía incrementar los requisitos de potencia de las naves, mejorando o añadiendo sistemas defensivos y ofensivos, sin reemplazar los núcleos de reactor ni efectuar mejoras considerables en estos componentes tan complejos y valiosos.\n\nLos requisitos adicionales de potencia han supuesto el sobrecalentamiento de los diseños de núcleos de reactor más antiguos y los reguladores de temperatura de núcleo se usan para supervisar, mitigar y, siempre que sea práctico, reciclar el excedente de energía térmica.",
+    "en" : "Core Temperature Regulators are standardized, supplementary systems used to regulate, mitigate and recycle surplus heat energy developed by naval ship reactor cores.\n\nRefits to empire navy fleets in response to the Triglavian Invasions often increased the overall power requirements of vessels, by upgrading or adding defensive and offensive systems, while not replacing reactor cores or carrying out major upgrades on these complex and valuable components.\n\nAdditional power requirements have entailed running older reactor core designs \"hot\" and core temperature regulators are used to monitor, mitigate and, where practical, recycle surplus heat energy.",
     "fr" : "Les régulateurs de température du noyau sont des systèmes complémentaires standardisés, qui permettent de réguler, atténuer et recycler le surplus d’énergie développé par les noyaux des réacteurs des vaisseaux de marine. La modernisation des flottes de marine impériale en réponse aux invasions triglavian a souvent augmenté les besoins énergétiques des vaisseaux, en améliorant ou ajoutant des systèmes défensifs et offensifs, sans pour autant remplacer les noyaux de réacteur ni apporter d’amélioration majeure à ces composants complexes et capitaux. Les besoins énergétiques supplémentaires ont imposé de faire fonctionner les modèles de noyau de réacteur plus anciens à une température supérieure, et les régulateurs de température du noyau servent à surveiller, modérer, et là où cela est possible, recycler l’excès de chaleur.",
+    "de" : "Kerntemperatur-Regulatoren sind standardisierte Zusatzsysteme zur Regelung, Reduzierung und Wiederverwertung überschüssiger Wärmeenergie, die von den Reaktorkernen der Schiffe ausgeht. Die Flotten des Imperiums wurden als Reaktion auf die Triglavia-Invasionen oft nachgerüstet, wobei die Energieanforderungen der Schiffe durch die hinzugefügten Defensiv- und Offensivsysteme anstieg, ohne dass dabei größere Upgrades an diesen komplexen und wertvollen Komponenten vorgenommen oder die Reaktorkerne ausgetauscht wurden. Zusätzliche Leistungsanforderungen führten dazu, dass ältere Reaktorkerndesigns überhitzten, und Kerntemperatur-Regulatoren wurden eingesetzt, um die überschüssige Wärmeenergie zu kontrollieren, zu reduzieren und, wenn möglich, wiederzuverwerten.",
+    "es" : "Los reguladores de temperatura nucleares son sistemas suplementarios estandarizados que se usan para regular, mitigar y reciclar la energía térmica excedente generada por los núcleos de reactor de naves.\n\nCon frecuencia, reequipar las flotas de las armadas imperiales en respuesta a las invasiones triglavianas exigía incrementar los requisitos de potencia de las naves, mejorando o añadiendo sistemas defensivos y ofensivos, sin reemplazar los núcleos de reactor ni efectuar mejoras considerables en estos componentes tan complejos y valiosos.\n\nLos requisitos adicionales de potencia han supuesto el sobrecalentamiento de los diseños de núcleos de reactor más antiguos y los reguladores de temperatura de núcleo se usan para supervisar, mitigar y, siempre que sea práctico, reciclar el excedente de energía térmica.",
     "ja" : "コア温度レギュレーターは規格化された追加システムで、海軍艦の炉心が生み出す余剰熱エネルギーを制御、軽減、再利用するために使われる。\n\n\n\nトリグラビアンの侵攻に対応し、各国は海軍フリートの改装を行った。防衛・攻撃システムのアップグレードや追加により、艦船の全体的な出力要求が上昇することが多かったが、にも関わらず、炉心の交換や大規模なアップグレード、その他貴重な部品の上位グレードへの換装は行われなかった。\n\n\n\n出力要求の増大により旧式の炉心の稼働温度が上昇したため、コア温度レギュレーターは余剰熱エネルギーの監視、軽減、そして可能であれば再利用を行うために使われている。",
     "ko" : "반응로 코어에서 발생하는 잔여 열 에너지를 제어 또는 재활용하는 보조 시스템입니다.<br><br>트리글라비안 침공 이후 다수의 함선이 개조되었으며 공격 및 방어용 시스템을 추가하는 과정에서 에너지 사용이 대폭 증가했습니다. 이에 대한 대책으로 반응로를 교체 또는 개조하는 대신 발열을 낮출 수 있는 온도제어장치가 도입되었습니다.<br><br>온도제어장치는 반응로 코어의 온도를 관찰 및 제어하고 필요하다고 판단되는 경우 열 에너지를 재활용합니다.",
     "ru" : "Регуляторы температуры реактора — стандартные вспомогательные системы, которые контролируют выделение тепловой энергии из реакторов корабля и управляют переработкой её излишков. В ответ на вторжения Триглава четыре державы провели переоснастку своих военных кораблей. В первую очередь речь шла об установке новых или модернизации старых оборонительных и наступательных систем. Подобные манипуляции зачастую приводили к увеличению общих требований к мощности судов. При этом замена и усовершенствование таких сложных и ценных компонентов, как реакторы, как правило, не проводились. Реакторы старых моделей, не рассчитанные на такую нагрузку, начали сильно перегреваться. Впрочем, регуляторы температуры реактора успешно справляются с этой проблемой: они следят за выделением тепловой энергии, снижают её объёмы и, если это целесообразно, перерабатывают её в другие виды энергии.",
@@ -15,22 +15,22 @@
   "market_group_id" : 2768,
   "mass" : 0.1,
   "name" : {
-    "de" : "Core Temperature Regulator",
     "en" : "Core Temperature Regulator",
-    "es" : "Regulador de temperatura nuclear",
     "fr" : "Régulateur de température du noyau",
+    "de" : "Core Temperature Regulator",
+    "es" : "Regulador de temperatura nuclear",
     "ja" : "コア温度レギュレーター",
     "ko" : "코어 온도제어장치",
     "ru" : "Core Temperature Regulator",
     "zh" : "核心温度调节器"
   },
+  "packaged_volume" : 180,
   "portion_size" : 1,
   "published" : true,
-  "volume" : 180,
-  "type_id" : 57479,
-  "capacity" : 0,
-  "packaged_volume" : 180,
   "radius" : 1,
+  "type_id" : 57479,
+  "volume" : 180,
+  "base_price" : 500000,
   "used_in_blueprints" : {
     "999" : {
       "manufacturing" : {

@@ -1,34 +1,15 @@
 {
-  "base_price" : 2500000,
+  "capacity" : 0,
   "description" : {
-    "de" : "Skill zur Bedienung von Gallente-Schlachtkreuzern.",
     "en" : "Skill at operating Gallente battlecruisers.",
-    "es" : "Habilidad en el manejo de cruceros de combate gallentes.",
     "fr" : "Compétence liée au pilotage des croiseurs de bataille gallente. Formation impossible sur les comptes d'évaluation.",
+    "de" : "Skill zur Bedienung von Gallente-Schlachtkreuzern.",
+    "es" : "Habilidad en el manejo de cruceros de combate gallentes.",
     "ja" : "ガレンテ巡洋戦艦を操作するスキル。",
     "ko" : "갈란테 배틀크루저를 운용하기 위한 스킬입니다.",
     "ru" : "Освоив этот навык, пилот получит допуск к выполнению полётов на линейных крейсерах производства Галлентской Федерации.",
     "zh" : "操作盖伦特战列巡洋舰的技能。"
   },
-  "group_id" : 257,
-  "icon_id" : 33,
-  "market_group_id" : 377,
-  "name" : {
-    "de" : "Gallente Battlecruiser",
-    "en" : "Gallente Battlecruiser",
-    "es" : "Crucero de combate gallente",
-    "fr" : "Croiseur de bataille gallente",
-    "ja" : "ガレンテ巡洋戦艦",
-    "ko" : "갈란테 배틀크루저",
-    "ru" : "Галлентские линейные крейсеры",
-    "zh" : "盖伦特战列巡洋舰操作"
-  },
-  "portion_size" : 1,
-  "published" : true,
-  "race_id" : 8,
-  "volume" : 0.01,
-  "type_id" : 33097,
-  "capacity" : 0,
   "dogma_attributes" : {
     "161" : {
       "attribute_id" : 161,
@@ -101,9 +82,28 @@
       "is_default" : false
     }
   },
+  "group_id" : 257,
+  "icon_id" : 33,
+  "market_group_id" : 377,
   "mass" : 0,
+  "name" : {
+    "en" : "Gallente Battlecruiser",
+    "fr" : "Croiseur de bataille gallente",
+    "de" : "Gallente Battlecruiser",
+    "es" : "Crucero de combate gallente",
+    "ja" : "ガレンテ巡洋戦艦",
+    "ko" : "갈란테 배틀크루저",
+    "ru" : "Галлентские линейные крейсеры",
+    "zh" : "盖伦特战列巡洋舰操作"
+  },
   "packaged_volume" : 0.01,
+  "portion_size" : 1,
+  "published" : true,
   "radius" : 1,
+  "type_id" : 33097,
+  "volume" : 0.01,
+  "base_price" : 2500000,
+  "race_id" : 8,
   "category_id" : 16,
   "is_skill" : true,
   "required_skills" : {

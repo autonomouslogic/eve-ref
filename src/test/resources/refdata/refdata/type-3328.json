@@ -1,34 +1,15 @@
 {
-  "base_price" : 50000,
+  "capacity" : 0,
   "description" : {
-    "de" : "Fertigkeit, Fregatten der Gallente zu bedienen.",
     "en" : "Skill at operating Gallente frigates.",
-    "es" : "Habilidad en el manejo de fragatas gallentes.",
     "fr" : "Compétence liée au pilotage des frégates gallente.",
+    "de" : "Fertigkeit, Fregatten der Gallente zu bedienen.",
+    "es" : "Habilidad en el manejo de fragatas gallentes.",
     "ja" : "ガレンテフリゲートを操作するためのスキル。",
     "ko" : "갈란테 프리깃을 운용하기 위한 스킬입니다.",
     "ru" : "Освоив этот навык, пилот получит допуск к выполнению полётов на фрегатах производства Галлентской Федерации.",
     "zh" : "操作盖伦特护卫舰的技能。"
   },
-  "group_id" : 257,
-  "icon_id" : 33,
-  "market_group_id" : 377,
-  "name" : {
-    "de" : "Gallente Frigate",
-    "en" : "Gallente Frigate",
-    "es" : "Fragata gallente",
-    "fr" : "Frégate gallente",
-    "ja" : "ガレンテフリゲート",
-    "ko" : "갈란테 프리깃",
-    "ru" : "Галлентские фрегаты",
-    "zh" : "盖伦特护卫舰操作"
-  },
-  "portion_size" : 1,
-  "published" : true,
-  "race_id" : 8,
-  "volume" : 0.01,
-  "type_id" : 3328,
-  "capacity" : 0,
   "dogma_attributes" : {
     "161" : {
       "attribute_id" : 161,
@@ -89,9 +70,28 @@
       "is_default" : false
     }
   },
+  "group_id" : 257,
+  "icon_id" : 33,
+  "market_group_id" : 377,
   "mass" : 0,
+  "name" : {
+    "en" : "Gallente Frigate",
+    "fr" : "Frégate gallente",
+    "de" : "Gallente Frigate",
+    "es" : "Fragata gallente",
+    "ja" : "ガレンテフリゲート",
+    "ko" : "갈란테 프리깃",
+    "ru" : "Галлентские фрегаты",
+    "zh" : "盖伦特护卫舰操作"
+  },
   "packaged_volume" : 0.01,
+  "portion_size" : 1,
+  "published" : true,
   "radius" : 1,
+  "type_id" : 3328,
+  "volume" : 0.01,
+  "base_price" : 50000,
+  "race_id" : 8,
   "category_id" : 16,
   "is_skill" : true,
   "required_skills" : {

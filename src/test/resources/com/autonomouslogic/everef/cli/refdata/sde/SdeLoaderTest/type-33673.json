@@ -17,6 +17,7 @@
   "market_group_id" : 1932,
   "mass" : 1000000,
   "meta_group_id" : 2,
+  "meta_level" : 5,
   "name" : {
     "de" : "Whiptail",
     "en" : "Whiptail",

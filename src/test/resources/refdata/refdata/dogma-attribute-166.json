@@ -1,12 +1,12 @@
 {
-  "data_type" : 4,
+  "attribute_id" : 166,
   "default_value" : 0,
   "description" : {
     "en" : "The memory of a character."
   },
   "display_name" : {
-    "de" : "Gedächtnis",
     "en" : "Memory",
+    "de" : "Gedächtnis",
     "es" : "Memoria",
     "fr" : "Mémoire",
     "ja" : "記憶力",
@@ -14,13 +14,13 @@
     "ru" : "«Память»",
     "zh" : "记忆"
   },
-  "display_when_zero" : false,
   "high_is_good" : true,
   "icon_id" : 1381,
   "name" : "memory",
   "published" : true,
   "stackable" : true,
   "unit_id" : 120,
-  "category_id" : 7,
-  "attribute_id" : 166
+  "data_type" : 4,
+  "display_when_zero" : false,
+  "category_id" : 7
 }

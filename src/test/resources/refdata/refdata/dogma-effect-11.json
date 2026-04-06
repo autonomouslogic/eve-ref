@@ -1,7 +1,7 @@
 {
   "description" : {
-    "de" : "Benötigt einen Low Power Slot",
     "en" : "Requires a low power slot",
+    "de" : "Benötigt einen Low Power Slot",
     "es" : "Requiere una ranura de potencia inferior.",
     "fr" : "Nécessite un emplacement basse puissance",
     "ja" : "ローパワースロットが必要",
@@ -9,10 +9,9 @@
     "ru" : "Требуется разъём малой мощности",
     "zh" : "需要低能量槽"
   },
-  "disallow_auto_repeat" : false,
   "display_name" : {
-    "de" : "Low power",
     "en" : "Low power",
+    "de" : "Low power",
     "es" : "Baja potencia",
     "fr" : "Basse puissance",
     "ja" : "ローパワー",
@@ -20,17 +19,18 @@
     "ru" : "Разъёмы малой мощности",
     "zh" : "低能量"
   },
+  "effect_category" : 0,
+  "effect_id" : 11,
+  "icon_id" : 295,
+  "name" : "loPower",
+  "published" : true,
+  "disallow_auto_repeat" : false,
   "electronic_chance" : false,
   "guid" : "",
-  "icon_id" : 295,
   "is_assistance" : false,
   "is_offensive" : false,
   "is_warp_safe" : false,
   "propulsion_chance" : false,
-  "published" : true,
   "range_chance" : false,
-  "effect_category" : 0,
-  "effect_name" : "loPower",
-  "effect_id" : 11,
-  "name" : "loPower"
+  "effect_name" : "loPower"
 }

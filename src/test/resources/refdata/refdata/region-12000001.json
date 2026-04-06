@@ -1,13 +1,18 @@
 {
   "name" : {
-    "de" : "ADR01",
     "en" : "ADR01",
+    "ja" : "ADR01",
+    "de" : "ADR01",
     "es" : "ADR01",
     "fr" : "ADR01",
-    "ja" : "ADR01",
     "ko" : "ADR01",
     "ru" : "ADR01",
     "zh" : "ADR01"
+  },
+  "region_id" : 12000001,
+  "description" : {
+    "en" : null,
+    "ja" : null
   },
   "nebula_id" : 22041,
   "position" : {
@@ -16,10 +21,5 @@
     "z" : -8324663071957517000
   },
   "wormhole_class_id" : 19,
-  "region_id" : 12000001,
-  "description" : {
-    "en" : null,
-    "ja" : null
-  },
   "universe_id" : "abyssal"
 }

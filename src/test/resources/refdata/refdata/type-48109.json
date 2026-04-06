@@ -1,29 +1,29 @@
 {
-  "base_price" : 400000,
-  "graphic_id" : 1142,
-  "group_id" : 1993,
-  "icon_id" : 21916,
-  "name" : {
-    "de" : "Meson Exotic Plasma L Blueprint",
-    "en" : "Meson Exotic Plasma L Blueprint",
-    "es" : "Plano de plasma exótico de mesones (G)",
-    "fr" : "Plan de construction de plasma L exotique de type méson",
-    "ja" : "メソン・エキゾチック・プラズマL設計図",
-    "ko" : "메손 엑조틱 플라즈마 L 블루프린트",
-    "ru" : "Meson Exotic Plasma L Blueprint",
-    "zh" : "介子异种等离子弹蓝图 L"
-  },
-  "portion_size" : 1,
-  "published" : true,
-  "volume" : 0.01,
-  "type_id" : 48109,
   "capacity" : 0,
   "description" : {
     "en" : "",
     "fr" : ""
   },
+  "graphic_id" : 1142,
+  "group_id" : 1993,
+  "icon_id" : 21916,
   "mass" : 0,
+  "name" : {
+    "en" : "Meson Exotic Plasma L Blueprint",
+    "fr" : "Plan de construction de plasma L exotique de type méson",
+    "de" : "Meson Exotic Plasma L Blueprint",
+    "es" : "Plano de plasma exótico de mesones (G)",
+    "ja" : "メソン・エキゾチック・プラズマL設計図",
+    "ko" : "메손 엑조틱 플라즈마 L 블루프린트",
+    "ru" : "Meson Exotic Plasma L Blueprint",
+    "zh" : "介子异种等离子弹蓝图 L"
+  },
   "packaged_volume" : 0.01,
+  "portion_size" : 1,
+  "published" : true,
   "radius" : 1,
+  "type_id" : 48109,
+  "volume" : 0.01,
+  "base_price" : 400000,
   "is_blueprint" : true
 }

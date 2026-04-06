@@ -1,12 +1,12 @@
 {
-  "data_type" : 11,
+  "attribute_id" : 1302,
   "default_value" : 0,
   "description" : {
     "en" : ""
   },
   "display_name" : {
-    "de" : "Kann nur eingebaut werden",
     "en" : "Can only be fitted to",
+    "de" : "Kann nur eingebaut werden",
     "es" : "Solo se puede equipar en",
     "fr" : "Montage uniquement possible sur",
     "ja" : "装着可能対象：",
@@ -14,13 +14,13 @@
     "ru" : "Можно оснастить только:",
     "zh" : "只能装配在"
   },
-  "display_when_zero" : false,
   "high_is_good" : true,
   "icon_id" : 1443,
   "name" : "canFitShipType1",
   "published" : true,
   "stackable" : true,
   "unit_id" : 116,
-  "category_id" : 1,
-  "attribute_id" : 1302
+  "data_type" : 11,
+  "display_when_zero" : false,
+  "category_id" : 1
 }

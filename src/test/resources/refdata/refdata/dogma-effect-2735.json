@@ -1,7 +1,7 @@
 {
   "description" : {
-    "de" : "Automatisch generierter Effekt",
     "en" : "Automatically generated effect",
+    "de" : "Automatisch generierter Effekt",
     "es" : "Efecto generado automáticamente.",
     "fr" : "Effet généré automatiquement",
     "ja" : "自動生成効果",
@@ -9,10 +9,9 @@
     "ru" : "Automatically generated effect",
     "zh" : "自动生成效果"
   },
-  "disallow_auto_repeat" : false,
   "display_name" : {
-    "de" : "Armor Hitpoint Penalty",
     "en" : "Armor Hitpoint Penalty",
+    "de" : "Armor Hitpoint Penalty",
     "es" : "Penalización de puntos de vida del blindaje",
     "fr" : "Pénalité de PV du blindage",
     "ja" : "アーマーヒットポイントペナルティ",
@@ -20,17 +19,9 @@
     "ru" : "Armor Hitpoint Penalty",
     "zh" : "装甲强度值惩罚"
   },
-  "electronic_chance" : false,
-  "fitting_usage_chance_attribute_id" : 1091,
-  "guid" : "None",
-  "icon_id" : 1383,
-  "is_assistance" : false,
-  "is_offensive" : false,
-  "is_warp_safe" : false,
-  "propulsion_chance" : false,
-  "published" : true,
-  "range_chance" : false,
   "effect_category" : 0,
+  "effect_id" : 2735,
+  "icon_id" : 1383,
   "modifiers" : [ {
     "domain" : "shipID",
     "func" : "ItemModifier",
@@ -38,7 +29,16 @@
     "modifying_attribute_id" : 1141,
     "operator" : 6
   } ],
-  "effect_name" : "boosterArmorHpPenalty",
-  "effect_id" : 2735,
-  "name" : "boosterArmorHpPenalty"
+  "name" : "boosterArmorHpPenalty",
+  "published" : true,
+  "disallow_auto_repeat" : false,
+  "electronic_chance" : false,
+  "fitting_usage_chance_attribute_id" : 1091,
+  "guid" : "None",
+  "is_assistance" : false,
+  "is_offensive" : false,
+  "is_warp_safe" : false,
+  "propulsion_chance" : false,
+  "range_chance" : false,
+  "effect_name" : "boosterArmorHpPenalty"
 }

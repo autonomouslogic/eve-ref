@@ -1,35 +1,15 @@
 {
+  "capacity" : 0,
   "description" : {
-    "de" : "Die Standup-XL-Set-Laboroptimierungs-Modifikation I bietet Strukturadministratoren die Möglichkeit, in ihren Upwell-Strukturen Kosten- und Zeitanforderungen für Erfindungen, Kopien und Forschungsaktivitäten zu verringern.\n\nStandup ist ein gesetzlich geschütztes System, welches eine Strukturautonome Nanofertigungseinheit (Upwell) nutzt, das eine integrierte Vorlagensoftware, eine Nanofertigungsanlage und ausreichend Nanomasse enthält, um die Fertigung einer Vielzahl an Dienstmodulen, Strukturmodulen und Strukturmodifikationen zu ermöglichen, wenn es in entsprechende Slots in einer Struktur mit Upwell-Technologie eingebaut wird.\n\nHinweis: Nur eine Modifikation desselben Typs, inkl. Tech-Varianten, kann in eine Struktur eingebaut sein.",
     "en" : "The Standup XL-Set Laboratory Optimization I rig provides a means for structure operators to decrease both cost and time requirements on invention, copying and research activities in their Upwell structures.\n\nStandup is a proprietary system that uses a Structure Autonomous Nanoassembly Device (Upwell) containing integrated template software, a nanoassembler array and sufficient nanomass to enable the construction of a variety of service modules, structure modules and structure rigs when inserted into the appropriate slots on a structure built with Upwell technology.\n\nNote: Only one rig of the same type, counting tech variations, may be fitted at the same time on a structure.",
-    "es" : "El complemento Standup extragrande de optimización de laboratorio I permite a los administradores de estructuras reducir los costes y el tiempo requeridos para las actividades de invención, copia e investigación en sus estructuras de Upwell.\n\nStandup es un sistema patentado que utiliza un dispositivo de nanoensamblaje autónomo estructural (de Upwell) que contiene una plantilla integrada de software, una matriz de nanoensambladores y suficiente nanomasa como para construir una serie de módulos de servicio, de estructura y complementos de estructura cuando se insertan en las ranuras apropiadas en una estructura construida con la tecnología de Upwell.\n\nAviso: Solo se puede equipar un complemento del mismo tipo en una estructura, contando las variaciones tecnológicas.",
     "fr" : "L'optimisation de laboratoire 'Standup' I XL permet aux opérateurs de structure Upwell de réduire le coût financier et la durée des tâches d'invention, de copie et de recherche.\n\nLa technologie brevetée 'Standup' exploite un dispositif autonome de nano-assemblage pour structure Upwell, alliant un logiciel de modélisation intégré, une baie de nano-assemblage et une réserve de nanomasse. Une fois insérés dans les emplacements dédiés sur les structures Upwell, les dispositifs 'Standup' lancent directement l'assemblage moléculaire de divers modules de services, modules de structure et optimisations de structure.\n\nRemarque : une seule optimisation du même type, y compris les déclinaisons de tech, peut être montée sur une structure à la fois.",
+    "de" : "Die Standup-XL-Set-Laboroptimierungs-Modifikation I bietet Strukturadministratoren die Möglichkeit, in ihren Upwell-Strukturen Kosten- und Zeitanforderungen für Erfindungen, Kopien und Forschungsaktivitäten zu verringern.\n\nStandup ist ein gesetzlich geschütztes System, welches eine Strukturautonome Nanofertigungseinheit (Upwell) nutzt, das eine integrierte Vorlagensoftware, eine Nanofertigungsanlage und ausreichend Nanomasse enthält, um die Fertigung einer Vielzahl an Dienstmodulen, Strukturmodulen und Strukturmodifikationen zu ermöglichen, wenn es in entsprechende Slots in einer Struktur mit Upwell-Technologie eingebaut wird.\n\nHinweis: Nur eine Modifikation desselben Typs, inkl. Tech-Varianten, kann in eine Struktur eingebaut sein.",
+    "es" : "El complemento Standup extragrande de optimización de laboratorio I permite a los administradores de estructuras reducir los costes y el tiempo requeridos para las actividades de invención, copia e investigación en sus estructuras de Upwell.\n\nStandup es un sistema patentado que utiliza un dispositivo de nanoensamblaje autónomo estructural (de Upwell) que contiene una plantilla integrada de software, una matriz de nanoensambladores y suficiente nanomasa como para construir una serie de módulos de servicio, de estructura y complementos de estructura cuando se insertan en las ranuras apropiadas en una estructura construida con la tecnología de Upwell.\n\nAviso: Solo se puede equipar un complemento del mismo tipo en una estructura, contando las variaciones tecnológicas.",
     "ja" : "スタンドアップ超大型研究施設最適化Iリグを使用することで、ストラクチャのオペレーターはアップウェルストラクチャで発明、複製、研究のアクティビティを行う際に必要なコストと時間を減少させることができる。\n\n「スタンドアップ」は、自律式ナノ集合体ストラクチャデバイス（アップウェル）を利用した独自システムである。アップウェルの技術を利用して建設されたストラクチャの適切なスロットに挿入すると、統合テンプレートソフトウェア、ナノアセンブラー施設、ナノ物質を使い、様々なサービスモジュール、ストラクチャモジュール、ストラクチャリグを作り出すことができる。\n\n注：異なる技術であっても、1つのストラクチャに同じタイプのリグを同時に複数装備させることはできない。",
     "ko" : "스탠드업 리그를 장착하면 업웰 구조물의 인벤션, 복제, 그리고 연구 기능에 드는 비용과 시간이 감소합니다. <br><br>스탠드업은 자율구조형 나노어셈블러 장치(업웰)를 사용하는 시스템으로 템플릿 소프트웨어가 내장되어 있으며 나노어셈블리 배열, 충분한 양의 나노물질이 탑재돼있습니다. 업웰 기반 구조물에 장착 시 다양한 종류의 서비스 모듈, 구조물 모듈, 구조물 장착형 리그를 제조할 수 있습니다. <br><br>참고: 테크 레벨과 관계없이 동일한 종류의 리그는 한 개 이상 장착할 수 없습니다.",
     "ru" : "Этот стационар-модификатор первой техкатегории повышает эффективность всех лабораторных задач, а именно позволяет снизить стоимость и расход времени на проекты по повышению материалоэффективности или снижению стоимости производства, а также на модернизацию или копирование чертежей, если сооружение, где ведётся соответствующий проект, разработано консорциумом «Апвелл» и оснащено этим модулем.\n\nСТАЦИОНАР — это проприетарная система: её название представляет собой акроним основного компонента системы. Стационарный автономный центральный инженерно-организующий наносборщик «Апвелл» содержит интегрированный шаблон программного обеспечения, линию наносборщиков и достаточное количество наномассы для сборки различных модулей технического обслуживания, модулей и тюнинг-модулей для сооружений, которые устанавливаются в подходящие разъёмы на сооружениях, сконструированных по проектам консорциума «Апвелл».\n\nВнимание: одновременно сооружение можно оснастить только одним тюнинг-модулем этого типа, независимо от его техкатегории.",
     "zh" : "屹立超大型发明优化 I 改装件让建筑操作员能够降低在昇威建筑中发明、拷贝和研究的费用和时间需求。\n\n屹立专用系统采用了昇威建筑分控纳米装配装置，由集成模版软件、纳米装配阵列和许多纳米块体构成。安装在采用昇威科技建造的建筑上的专门槽位中可以制造各种服务装备、建筑装备和建筑改装件。\n\n注：只能同时在一个建筑上装配一件相同类型的改装件，包括衍生型号在内。"
   },
-  "group_id" : 1870,
-  "icon_id" : 21729,
-  "market_group_id" : 2349,
-  "mass" : 200,
-  "meta_group_id" : 54,
-  "name" : {
-    "de" : "Standup XL-Set Laboratory Optimization I",
-    "en" : "Standup XL-Set Laboratory Optimization I",
-    "es" : "Optimización de laboratorio Standup I (XL)",
-    "fr" : "Optimisation de laboratoire 'Standup' I XL",
-    "ja" : "スタンドアップ超大型研究施設最適化I",
-    "ko" : "스탠드업 XL-Set 연구실 강화 장치 I",
-    "ru" : "Standup XL-Set Laboratory Optimization I",
-    "zh" : "屹立超大型实验室优化 I"
-  },
-  "portion_size" : 1,
-  "published" : true,
-  "radius" : 100,
-  "volume" : 40,
-  "type_id" : 37183,
-  "capacity" : 0,
   "dogma_attributes" : {
     "1153" : {
       "attribute_id" : 1153,
@@ -166,7 +146,27 @@
       "is_default" : false
     }
   },
+  "group_id" : 1870,
+  "icon_id" : 21729,
+  "market_group_id" : 2349,
+  "mass" : 200,
+  "name" : {
+    "en" : "Standup XL-Set Laboratory Optimization I",
+    "fr" : "Optimisation de laboratoire 'Standup' I XL",
+    "de" : "Standup XL-Set Laboratory Optimization I",
+    "es" : "Optimización de laboratorio Standup I (XL)",
+    "ja" : "スタンドアップ超大型研究施設最適化I",
+    "ko" : "스탠드업 XL-Set 연구실 강화 장치 I",
+    "ru" : "Standup XL-Set Laboratory Optimization I",
+    "zh" : "屹立超大型实验室优化 I"
+  },
   "packaged_volume" : 40,
+  "portion_size" : 1,
+  "published" : true,
+  "radius" : 100,
+  "type_id" : 37183,
+  "volume" : 40,
+  "meta_group_id" : 54,
   "engineering_rig_global_activities" : [ "research_material", "research_time", "invention", "copying" ],
   "required_skills" : {
     "26252" : 1
