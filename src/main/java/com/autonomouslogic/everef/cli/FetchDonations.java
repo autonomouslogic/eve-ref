@@ -8,8 +8,6 @@ import com.autonomouslogic.everef.openapi.esi.api.CharacterApi;
 import com.autonomouslogic.everef.openapi.esi.api.CorporationApi;
 import com.autonomouslogic.everef.openapi.esi.api.WalletApi;
 import com.autonomouslogic.everef.openapi.esi.invoker.ApiException;
-import com.autonomouslogic.everef.openapi.esi.model.CharactersCharacterIdWalletJournalGetInner;
-import com.autonomouslogic.everef.openapi.esi.model.CorporationsCorporationIdWalletsDivisionJournalGetInner;
 import com.autonomouslogic.everef.openapi.esi.model.CharactersDetail;
 import com.autonomouslogic.everef.openapi.esi.model.CorporationsDetail;
 import com.autonomouslogic.everef.pug.NumberFormats;
@@ -288,8 +286,8 @@ public class FetchDonations implements Command {
 
 	@SneakyThrows
 	private @NotNull CharactersDetail getCharacter(long characterId) throws ApiException {
-		return VirtualThreads.offload(() ->
-				characterApi.getCharactersCharacterId(characterId, esiHelper.getCompatibilityDate(), null, null, null, null));
+		return VirtualThreads.offload(() -> characterApi.getCharactersCharacterId(
+				characterId, esiHelper.getCompatibilityDate(), null, null, null, null));
 	}
 
 	private static @NotNull SummaryFile buildSummary(Collection<DonationEntry> donations) {

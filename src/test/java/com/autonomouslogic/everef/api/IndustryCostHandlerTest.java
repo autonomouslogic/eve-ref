@@ -468,8 +468,10 @@ public class IndustryCostHandlerTest {
 		var esiPrices = new ArrayList<>();
 		var fuzzworkPrices = new HashMap<String, FuzzworkAggregatedMarketType>();
 		for (int i = 0; i < 100_000; i++) {
-			esiPrices.add(
-					new GetMarketsPrices200Ok().typeId(i).averagePrice(1.0).adjustedPrice(1.0));
+			esiPrices.add(new MarketsPricesGetInner()
+					.typeId((long) i)
+					.averagePrice(1.0)
+					.adjustedPrice(1.0));
 			fuzzworkPrices.put(
 					String.valueOf(i),
 					FuzzworkAggregatedMarketType.builder()

@@ -7,10 +7,10 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import com.autonomouslogic.everef.cli.FetchDonations.DonationEntry;
 import com.autonomouslogic.everef.cli.FetchDonations.SummaryEntry;
 import com.autonomouslogic.everef.cli.FetchDonations.SummaryFile;
-import com.autonomouslogic.everef.openapi.esi.model.CharactersDetail;
 import com.autonomouslogic.everef.openapi.esi.model.CharactersCharacterIdWalletJournalGetInner;
-import com.autonomouslogic.everef.openapi.esi.model.CorporationsDetail;
+import com.autonomouslogic.everef.openapi.esi.model.CharactersDetail;
 import com.autonomouslogic.everef.openapi.esi.model.CorporationsCorporationIdWalletsDivisionJournalGetInner;
+import com.autonomouslogic.everef.openapi.esi.model.CorporationsDetail;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.test.MockS3Adapter;
 import com.autonomouslogic.everef.test.TestDataUtil;
@@ -668,51 +668,48 @@ public class FetchDonationsTest {
 
 				if (path.equals("/characters/" + TEST_CHARACTER_ID)) {
 					return new MockResponse()
-							.setBody(objectMapper.writeValueAsString(new CharactersCharacterIdGet()
+							.setBody(objectMapper.writeValueAsString(new CharactersDetail()
 									.corporationId(TEST_CORPORATION_ID)
 									.name("Test Character")));
 				}
 
 				if (path.equals("/corporations/" + TEST_CORPORATION_ID)) {
 					return new MockResponse()
-							.setBody(objectMapper.writeValueAsString(
-									new CorporationsCorporationIdGet().name("Test Corporation")));
+							.setBody(
+									objectMapper.writeValueAsString(new CorporationsDetail().name("Test Corporation")));
 				}
 
 				if (path.equals("/characters/" + TEST_DONOR_CHARACTER_ID_1)) {
 					return new MockResponse()
-							.setBody(objectMapper.writeValueAsString(
-									new CharactersCharacterIdGet().name("Donor Character 1")));
+							.setBody(objectMapper.writeValueAsString(new CharactersDetail().name("Donor Character 1")));
 				}
 
 				if (path.equals("/characters/" + TEST_DONOR_CHARACTER_ID_2)) {
 					return new MockResponse()
-							.setBody(objectMapper.writeValueAsString(
-									new CharactersCharacterIdGet().name("Donor Character 2")));
+							.setBody(objectMapper.writeValueAsString(new CharactersDetail().name("Donor Character 2")));
 				}
 
 				if (path.equals("/characters/" + TEST_DONOR_CHARACTER_ID_3)) {
 					return new MockResponse()
-							.setBody(objectMapper.writeValueAsString(
-									new CharactersCharacterIdGet().name("Weird name!+_&\\")));
+							.setBody(objectMapper.writeValueAsString(new CharactersDetail().name("Weird name!+_&\\")));
 				}
 
 				if (path.equals("/corporations/" + TEST_DONOR_CORPORATION_ID_1)) {
 					return new MockResponse()
 							.setBody(objectMapper.writeValueAsString(
-									new CorporationsCorporationIdGet().name("Donor Corporation 1")));
+									new CorporationsDetail().name("Donor Corporation 1")));
 				}
 
 				if (path.equals("/corporations/" + TEST_DONOR_CORPORATION_ID_2)) {
 					return new MockResponse()
 							.setBody(objectMapper.writeValueAsString(
-									new CorporationsCorporationIdGet().name("Donor Corporation 2")));
+									new CorporationsDetail().name("Donor Corporation 2")));
 				}
 
 				if (path.equals("/corporations/" + TEST_DONOR_CORPORATION_ID_3)) {
 					return new MockResponse()
-							.setBody(objectMapper.writeValueAsString(
-									new CorporationsCorporationIdGet().name("Weird name!+_&\\")));
+							.setBody(
+									objectMapper.writeValueAsString(new CorporationsDetail().name("Weird name!+_&\\")));
 				}
 
 				if (path.equals("/characters/" + TEST_CHARACTER_ID + "/wallet/journal")) {

@@ -494,17 +494,17 @@ public class ScrapeStructuresTest {
 
 				if (path.equals("/universe/systems/30000001")) {
 					var obj = new UniverseSystemsSystemIdGet()
-							.systemId(30000001)
-							.constellationId(20000001)
+							.systemId(30000001L)
+							.constellationId(20000001L)
 							.name("System");
 					return new MockResponse().setBody(objectMapper.writeValueAsString(obj));
 				}
 
 				if (path.equals("/universe/constellations/20000001")) {
-					var obj = new GetUniverseConstellationsConstellationIdOk()
-							.constellationId(20000001)
+					var obj = new UniverseConstellationsConstellationIdGet()
+							.constellationId(20000001L)
 							.name("Constellation")
-							.regionId(10000001);
+							.regionId(10000001L);
 					return new MockResponse().setBody(objectMapper.writeValueAsString(obj));
 				}
 

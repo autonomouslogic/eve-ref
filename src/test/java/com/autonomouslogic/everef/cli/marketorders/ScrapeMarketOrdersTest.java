@@ -293,10 +293,10 @@ public class ScrapeMarketOrdersTest {
 				case "/universe/systems/30000001" ->
 					new MockResponse()
 							.setResponseCode(200)
-							.setBody(objectMapper.writeValueAsString(new GetUniverseSystemsSystemIdOk()
+							.setBody(objectMapper.writeValueAsString(new UniverseSystemsSystemIdGet()
 									.name("test")
-									.systemId(30000001)
-									.constellationId(20000001)));
+									.systemId(30000001L)
+									.constellationId(20000001L)));
 				case "/universe/regions/10000001" ->
 					new MockResponse()
 							.setResponseCode(200)
