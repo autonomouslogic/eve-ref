@@ -5,7 +5,7 @@
 		<Adsbygoogle
 			ad-slot="2103102198"
 			ad-format="auto"
-			hide-unfilled="true"
+			:hide-unfilled="true"
 		/>
 		<main class="container mb-auto px-4"><slot/></main>
 		<footer class="mt-4"><Footer/></footer>
