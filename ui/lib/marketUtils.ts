@@ -3,9 +3,9 @@ import {marketApi} from "~/esi";
 import {DOMAIN, HEIMATAR, METROPOLIS, GPMR_01, SINQ_LAISON, THE_FORGE} from "~/lib/regionConstants";
 import {PLEX_TYPE_ID} from "~/lib/typeConstants";
 import {
+    type MarketsRegionIdOrdersGetInner,
     GetMarketsRegionIdOrdersOrderTypeEnum,
-    type GetMarketsRegionIdOrdersRequest,
-    type EsiMarketsRegionIdOrdersGetInner
+    type GetMarketsRegionIdOrdersRequest
 } from "~/esi-openapi";
 
 export interface HubStation {
@@ -61,7 +61,8 @@ export async function getOrders(orderType: GetMarketsRegionIdOrdersOrderTypeEnum
     return marketApi.getMarketsRegionIdOrders({
         typeId: typeId,
         regionId: regionId,
-        orderType
+        orderType,
+        xCompatibilityDate: '2025-12-16'
     } as GetMarketsRegionIdOrdersRequest);
 }
 
@@ -83,7 +84,7 @@ export async function getJitaSellPrice(typeId: number) {
     if (regionId == undefined) {
         return undefined;
     }
-    var orders  = (await getOrders(EsiGetMarketsRegionIdOrdersOrderTypeEnum.Sell, typeId, regionId));
+    var orders  = (await getOrders(GetMarketsRegionIdOrdersOrderTypeEnum.Sell, typeId, regionId));
     if (hub != undefined) {
         orders = orders.filter(e => e.locationId == hub?.stationId)
     }
