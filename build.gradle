@@ -61,8 +61,8 @@ dependencies {
 		exclude group: "org.graalvm.tools"
 		exclude group: "com.vladsch.flexmark"
 	}
-	implementation "software.amazon.awssdk:s3:2.42.28"
-	implementation "software.amazon.awssdk:dynamodb:2.42.28"
+	implementation "software.amazon.awssdk:s3:2.42.29"
+	implementation "software.amazon.awssdk:dynamodb:2.42.29"
 	implementation "com.autonomouslogic.dynamomapper:dynamo-mapper:2.1.18"
 	implementation "com.fasterxml.jackson.core:jackson-annotations:2.21"
 	implementation "com.fasterxml.jackson.core:jackson-core:2.21.2"
