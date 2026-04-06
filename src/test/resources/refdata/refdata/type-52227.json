@@ -74,6 +74,7 @@
   "type_id" : 52227,
   "volume" : 5,
   "meta_group_id" : 15,
+  "meta_level" : 10,
   "required_skills" : {
     "3394" : 4
   },

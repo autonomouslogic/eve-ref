@@ -132,6 +132,7 @@
   "type_id" : 45623,
   "volume" : 40,
   "meta_group_id" : 14,
+  "meta_level" : 1,
   "race_id" : 4,
   "traits" : {
     "role_bonuses" : {

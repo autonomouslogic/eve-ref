@@ -169,6 +169,7 @@
   "volume" : 0.05,
   "base_price" : 837360,
   "meta_group_id" : 2,
+  "meta_level" : 5,
   "variation_parent_type_id" : 202,
   "required_skills" : {
     "20212" : 1,

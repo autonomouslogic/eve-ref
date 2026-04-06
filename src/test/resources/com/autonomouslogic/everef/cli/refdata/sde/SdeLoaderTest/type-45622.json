@@ -15,6 +15,7 @@
   "market_group_id" : 1122,
   "mass" : 1200000,
   "meta_group_id" : 14,
+  "meta_level" : 1,
   "name" : {
     "de" : "Legion Core - Dissolution Sequencer",
     "en" : "Legion Core - Dissolution Sequencer",
