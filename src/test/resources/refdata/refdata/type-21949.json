@@ -1,34 +1,15 @@
 {
-  "base_price" : 39375000,
+  "capacity" : 0,
   "description" : {
-    "de" : "Bestandteile für den Bau von individuellen Schiffs- und Modulhangars für Außenposten im All.",
     "en" : "Components for the construction of individualized ship and module hangars in space outposts.",
-    "es" : "Componentes de construcción de naves y hangares de módulos individuales en puestos avanzados espaciales.",
     "fr" : "Composants destinés à la construction de vaisseaux individualisés et de modules de hangars sur les avant-postes spatiaux.",
+    "de" : "Bestandteile für den Bau von individuellen Schiffs- und Modulhangars für Außenposten im All.",
+    "es" : "Componentes de construcción de naves y hangares de módulos individuales en puestos avanzados espaciales.",
     "ja" : "アウトポストに設置する、艦船およびモジュール用のハンガー建設に必要な建築材。",
     "ko" : "우주 전초기지에서 개별 함선 및 모듈형 격납고를 제작하기 위한 부품입니다.",
     "ru" : "Составные части для сооружения личных ангаров для кораблей и предметов на космических станциях.",
     "zh" : "建造空间哨站个人飞船和机库所需的部件。"
   },
-  "group_id" : 536,
-  "icon_id" : 2876,
-  "market_group_id" : 1865,
-  "mass" : 10000,
-  "name" : {
-    "de" : "Structure Hangar Array",
-    "en" : "Structure Hangar Array",
-    "es" : "Dársena de hangares de estructura",
-    "fr" : "Module de hangar de la structure",
-    "ja" : "ストラクチャ ハンガー施設",
-    "ko" : "구조물 공용창고 시설",
-    "ru" : "Structure Hangar Array",
-    "zh" : "建筑机库阵列"
-  },
-  "portion_size" : 1,
-  "published" : true,
-  "volume" : 3000,
-  "type_id" : 21949,
-  "capacity" : 0,
   "dogma_attributes" : {
     "161" : {
       "attribute_id" : 161,
@@ -51,8 +32,27 @@
       "value" : 100
     }
   },
+  "group_id" : 536,
+  "icon_id" : 2876,
+  "market_group_id" : 1865,
+  "mass" : 10000,
+  "name" : {
+    "en" : "Structure Hangar Array",
+    "fr" : "Module de hangar de la structure",
+    "de" : "Structure Hangar Array",
+    "es" : "Dársena de hangares de estructura",
+    "ja" : "ストラクチャ ハンガー施設",
+    "ko" : "구조물 공용창고 시설",
+    "ru" : "Structure Hangar Array",
+    "zh" : "建筑机库阵列"
+  },
   "packaged_volume" : 3000,
+  "portion_size" : 1,
+  "published" : true,
   "radius" : 1,
+  "type_id" : 21949,
+  "volume" : 3000,
+  "base_price" : 39375000,
   "used_in_blueprints" : {
     "36966" : {
       "manufacturing" : {

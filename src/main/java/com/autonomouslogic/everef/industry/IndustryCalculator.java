@@ -222,17 +222,24 @@ public class IndustryCalculator {
 		if (!Optional.ofNullable(productType.getBlueprint()).orElse(false)) {
 			throw new IllegalStateException("productType is not a blueprint");
 		}
-		var inventionCost = inventionCalculatorProvider
-				.get()
-				.setIndustryCostInput(industryCostInput)
-				.setProductType(productType)
-				.setRuns(runs)
-				.setBlueprint(blueprint)
-				.setDecryptor(decryptor)
-				.setStructure(structure)
-				.setRigs(rigs)
-				.calc();
-		return inventionCost;
+		try {
+			return inventionCalculatorProvider
+					.get()
+					.setIndustryCostInput(industryCostInput)
+					.setProductType(productType)
+					.setRuns(runs)
+					.setBlueprint(blueprint)
+					.setDecryptor(decryptor)
+					.setStructure(structure)
+					.setRigs(rigs)
+					.calc();
+		} catch (Exception e) {
+			throw new RuntimeException(
+					String.format(
+							"Error calculating invention cost for blueprint %s and product %s",
+							blueprint.getBlueprintTypeId(), productType.getTypeId()),
+					e);
+		}
 	}
 
 	private InventionCost calculateInventionForManufacturing(ProductionCost productionCost) {

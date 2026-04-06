@@ -1,34 +1,15 @@
 {
-  "base_price" : 22500000,
+  "capacity" : 0,
   "description" : {
-    "de" : "Eines von unzähligen Bauteilen, die für den Bau eines Außenpostens im All erforderlich sind.",
     "en" : "One of the myriad construction components required for the building of space outposts.",
-    "es" : "Uno de los innumerables componentes necesarios para la construcción de puestos avanzados espaciales.",
     "fr" : "Un des nombreux composants nécessaires à la construction des avant-postes spatiaux.",
+    "de" : "Eines von unzähligen Bauteilen, die für den Bau eines Außenpostens im All erforderlich sind.",
+    "es" : "Uno de los innumerables componentes necesarios para la construcción de puestos avanzados espaciales.",
     "ja" : "アウトポスト建設に必要な、各種建設資材の一つ。",
     "ko" : "우주 전초기지를 건설하는데 필요한 여러 건설 자재들 중 하나입니다.",
     "ru" : "Один из множества строительных компонентов, необходимых для строительства космических станций.",
     "zh" : "建造空间站所需的无数建筑部件中的一种。"
   },
-  "group_id" : 536,
-  "icon_id" : 2877,
-  "market_group_id" : 1865,
-  "mass" : 10000,
-  "name" : {
-    "de" : "Structure Storage Bay",
-    "en" : "Structure Storage Bay",
-    "es" : "Muelle de almacenamiento de estructuras",
-    "fr" : "Baie de stockage de la structure",
-    "ja" : "ストラクチャ ストレージベイ",
-    "ko" : "구조물 저장고",
-    "ru" : "Structure Storage Bay",
-    "zh" : "建筑贮藏舱"
-  },
-  "portion_size" : 1,
-  "published" : true,
-  "volume" : 3000,
-  "type_id" : 21951,
-  "capacity" : 0,
   "dogma_attributes" : {
     "161" : {
       "attribute_id" : 161,
@@ -51,8 +32,27 @@
       "value" : 100
     }
   },
+  "group_id" : 536,
+  "icon_id" : 2877,
+  "market_group_id" : 1865,
+  "mass" : 10000,
+  "name" : {
+    "en" : "Structure Storage Bay",
+    "fr" : "Baie de stockage de la structure",
+    "de" : "Structure Storage Bay",
+    "es" : "Muelle de almacenamiento de estructuras",
+    "ja" : "ストラクチャ ストレージベイ",
+    "ko" : "구조물 저장고",
+    "ru" : "Structure Storage Bay",
+    "zh" : "建筑贮藏舱"
+  },
   "packaged_volume" : 3000,
+  "portion_size" : 1,
+  "published" : true,
   "radius" : 1,
+  "type_id" : 21951,
+  "volume" : 3000,
+  "base_price" : 22500000,
   "used_in_blueprints" : {
     "36966" : {
       "manufacturing" : {

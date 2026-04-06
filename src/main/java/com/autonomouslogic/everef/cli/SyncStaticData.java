@@ -116,13 +116,14 @@ public class SyncStaticData implements Command {
 		}
 
 		var file = tempFiles.tempFile("sde-" + variant, ".zip").toFile();
-		var response = okHttpWrapper.download(latestUri.toString(), file);
-		if (response.code() != 200) {
-			throw new RuntimeException("Failed to download " + latestUri + ": " + response.code());
+		try (var response = okHttpWrapper.download(latestUri.toString(), file)) {
+			if (response.code() != 200) {
+				throw new RuntimeException("Failed to download " + latestUri + ": " + response.code());
+			}
+			Files.setLastModifiedTime(file.toPath(), FileTime.from(latest.getReleaseDate()));
+			uploadFile(file, type, latest.getBuildNumber());
+			return true;
 		}
-		Files.setLastModifiedTime(file.toPath(), FileTime.from(latest.getReleaseDate()));
-		uploadFile(file, type, latest.getBuildNumber());
-		return true;
 	}
 
 	/**
@@ -159,15 +160,16 @@ public class SyncStaticData implements Command {
 
 	private void syncSchema() {
 		var file = tempFiles.tempFile("schema", ".yaml").toFile();
-		var response = okHttpWrapper.download(schemaUrl.toString(), file);
-		if (response.code() != 200) {
-			throw new RuntimeException("Failed to download " + schemaUrl + ": " + response.code());
+		try (var response = okHttpWrapper.download(schemaUrl.toString(), file)) {
+			if (response.code() != 200) {
+				throw new RuntimeException("Failed to download " + schemaUrl + ": " + response.code());
+			}
+			var name = FilenameUtils.getName(schemaUrl.getPath());
+			var folder = ArchivePathFactory.SDE_V2_JSONL.getFolder();
+			var s3Url = dataPath.resolve(folder + "/" + name);
+			var latestPut = s3Util.putPublicObjectRequest(file.length(), s3Url, latestCacheTime);
+			s3Adapter.putObject(latestPut, file, s3Client).blockingGet();
+			dataIndexHelper.updateIndex(s3Url, s3Url).blockingAwait();
 		}
-		var name = FilenameUtils.getName(schemaUrl.getPath());
-		var folder = ArchivePathFactory.SDE_V2_JSONL.getFolder();
-		var s3Url = dataPath.resolve(folder + "/" + name);
-		var latestPut = s3Util.putPublicObjectRequest(file.length(), s3Url, latestCacheTime);
-		s3Adapter.putObject(latestPut, file, s3Client).blockingGet();
-		dataIndexHelper.updateIndex(s3Url, s3Url).blockingAwait();
 	}
 }

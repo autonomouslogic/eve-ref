@@ -1,30 +1,30 @@
 {
-  "base_price" : 10000000,
-  "group_id" : 1888,
-  "icon_id" : 2664,
-  "market_group_id" : 2403,
-  "meta_group_id" : 1,
-  "name" : {
-    "de" : "Carbon Fiber Reaction Formula",
-    "en" : "Carbon Fiber Reaction Formula",
-    "es" : "Fórmula reactiva de fibra de carbono",
-    "fr" : "Formule de réaction Fibre de carbone",
-    "ja" : "カーボンファイバー反応フォーミュラ",
-    "ko" : "탄소 섬유 반응식",
-    "ru" : "Carbon Fiber Reaction Formula",
-    "zh" : "碳纤维反应配方"
-  },
-  "portion_size" : 1,
-  "published" : true,
-  "volume" : 0.01,
-  "type_id" : 57490,
   "capacity" : 0,
   "description" : {
     "en" : "",
     "fr" : ""
   },
+  "group_id" : 1888,
+  "icon_id" : 2664,
+  "market_group_id" : 2403,
   "mass" : 0,
+  "name" : {
+    "en" : "Carbon Fiber Reaction Formula",
+    "fr" : "Formule de réaction Fibre de carbone",
+    "de" : "Carbon Fiber Reaction Formula",
+    "es" : "Fórmula reactiva de fibra de carbono",
+    "ja" : "カーボンファイバー反応フォーミュラ",
+    "ko" : "탄소 섬유 반응식",
+    "ru" : "Carbon Fiber Reaction Formula",
+    "zh" : "碳纤维反应配方"
+  },
   "packaged_volume" : 0.01,
+  "portion_size" : 1,
+  "published" : true,
   "radius" : 1,
+  "type_id" : 57490,
+  "volume" : 0.01,
+  "base_price" : 10000000,
+  "meta_group_id" : 1,
   "is_blueprint" : true
 }

@@ -1,25 +1,25 @@
 {
-  "disallow_auto_repeat" : false,
+  "description" : {
+    "en" : ""
+  },
   "discharge_attribute_id" : 6,
-  "distribution" : 1,
+  "display_name" : {
+    "en" : ""
+  },
   "duration_attribute_id" : 73,
+  "effect_category" : 2,
+  "effect_id" : 18,
+  "is_assistance" : true,
+  "name" : "shieldTransfer",
+  "range_attribute_id" : 87,
+  "disallow_auto_repeat" : false,
+  "distribution" : 1,
   "electronic_chance" : false,
   "guid" : "effects.ShieldTransfer",
-  "is_assistance" : true,
   "is_offensive" : false,
   "is_warp_safe" : false,
   "propulsion_chance" : false,
   "published" : false,
-  "range_attribute_id" : 87,
   "range_chance" : false,
-  "effect_category" : 2,
-  "effect_name" : "shieldTransfer",
-  "effect_id" : 18,
-  "description" : {
-    "en" : ""
-  },
-  "display_name" : {
-    "en" : ""
-  },
-  "name" : "shieldTransfer"
+  "effect_name" : "shieldTransfer"
 }

@@ -1,36 +1,15 @@
 {
+  "capacity" : 0,
   "description" : {
-    "de" : "Als gutes Mittel zwischen Preis und Leistung in der Zitadellen-Reihe der Weltraumstationen des Upwell Consortiums wurde die Fortizar für umfangreiche Operationen im Weltraum entworfen, wie die Bereitstellung eines gut ausgerüsteten Zuhauses für große Corporations und kleinen Allianzen oder als Grenz- oder Handelsposten für größere Allianzen.\n\n\n\nDie Fortizar wurde standardmäßig mit der neuen Raumschiffvertäuungstechnologie gebaut und wird in ihren internen Andockbuchten bereitwillig die meisten Schiffe aufnehmen, inklusive Frachter und sogar Capital-Schiffe. Auch wenn die Docks nicht in der Lage sind, \"Supercapital\"-Schiffe zu bedienen, sind die Verteidigungsmöglichkeiten der Fortizar beträchtlich, und durch die Möglichkeit, Flächeneffekt-Waffen zu montieren im Niedersicherheitsraum noch weiter verbessert. Die Fortizar kann durch Dienste und Strukturmodule von Upwells \"Standup\"-Marke konfiguriert werden, damit sie die speziellen Bedürfnissen der Strukturadministratoren bedienen kann. Weitere Anpassungen der Fortizar-Hardware können durch die Installierung der Standup-L-Set-Modifikationen erreicht werden, um die besondere Aufgabe der Zitadelle noch weiter zu optimieren.",
-    "en" : "Conceived as a good balance of capability and investment in the Upwell Consortium's Citadel range of space stations, the Fortizar has been designed for large-scale operations in space, such as providing a well-equipped home for large corporations and small alliances, or as a border or trade post for larger alliances.\r\n\r\nThe Fortizar has been built with new spaceship tethering technology as standard, and will readily accommodate most ships, including freighters and even capital ships, in its internal docking bays. While the docks are unable to service 'supercapital' level vessels, the defensive capabilities of the Fortizar are considerably enhanced in lower security star systems with the ability to mount area effect weapons. The Fortizar can be configured using Upwell's Standup brand service and structure modules so as to serve the specific needs of the structure operator. Further adjustment of the hardware of the Fortizar can be achieved by installed Standup L-Set rigs to optimize the specific role of the citadel.",
-    "es" : "La Fortizar, concebida como un buen equilibrio entre capacidad e inversión dentro de la gama de estaciones espaciales de tipo ciudadela del Consorcio Upwell, ha sido diseñada para realizar operaciones a gran escala en el espacio, como proporcionar una sede bien equipada para corporaciones grandes y alianzas pequeñas o servir como puesto fronterizo o comercial para alianzas más grandes.\n\nLa Fortizar ha sido construida con una nueva tecnología de amarre espacial y puede alojar fácilmente la mayoría de las naves, incluidos los cargueros e incluso las naves capitales, en sus plataformas de acoplamiento internas. Aunque estas plataformas no aceptan naves de nivel supercapital, las capacidades defensivas de la Fortizar mejoran considerablemente en sistemas estelares de seguridad baja, pues permite montar armas de radio de acción. La Fortizar se puede configurar con los módulos de servicio y estructura Standup de Upwell para dar respuesta a las necesidades específicas del operador de la estructura. Su hardware se puede ajustar para optimizar la función específica de la ciudadela instalando complementos Standup grandes.",
+    "en" : "Conceived as a good balance of capability and investment in the Upwell Consortium's Citadel range of space stations, the Fortizar has been designed for large-scale operations in space, such as providing a well-equipped home for large corporations and small alliances, or as a border or trade post for larger alliances.\n\nThe Fortizar has been built with new spaceship tethering technology as standard, and will readily accommodate most ships, including freighters and even capital ships, in its internal docking bays. While the docks are unable to service 'supercapital' level vessels, the defensive capabilities of the Fortizar are considerably enhanced in lower security star systems with the ability to mount area effect weapons. The Fortizar can be configured using Upwell's Standup brand service and structure modules so as to serve the specific needs of the structure operator. Further adjustment of the hardware of the Fortizar can be achieved by installed Standup L-Set rigs to optimize the specific role of the citadel.",
     "fr" : "Grâce à ses nombreux services de structure, la citadelle Fortizar du consortium Upwell représente la base d'opérations idéale des grandes corporations ou des petites alliances capsulières en quête de territoire, ou encore une solide plate-forme commerciale pour les grandes alliances. La Fortizar accueille tous les vaisseaux sous-capitaux dans ses baies d'amarrage traditionnelles, et jusqu'aux vaisseaux de classe cargo et capital grâce à ses technologies d'arrimage innovantes. Bien que la Fortizar ne dispose d'aucune baie capable d'amarrer les vaisseaux supercapitaux, la citadelle est parée de systèmes défensifs avancés particulièrement redoutables en espace de basse sécurité, où elle se hérisse d'armes à effet de zone dissuasives. La citadelle Fortizar se configure avec la gamme de modules dédiée 'Standup' intégrant la technologie Upwell, au profit de la synchronisation parfaite des manœuvres des opérateurs de structure. Les sets d'optimisation 'Standup' L permettent également de parachever la spécialisation de la Fortizar grâce à leurs paramétrages sophistiqués.",
+    "de" : "Als gutes Mittel zwischen Preis und Leistung in der Zitadellen-Reihe der Weltraumstationen des Upwell Consortiums wurde die Fortizar für umfangreiche Operationen im Weltraum entworfen, wie die Bereitstellung eines gut ausgerüsteten Zuhauses für große Corporations und kleinen Allianzen oder als Grenz- oder Handelsposten für größere Allianzen.\n\n\n\nDie Fortizar wurde standardmäßig mit der neuen Raumschiffvertäuungstechnologie gebaut und wird in ihren internen Andockbuchten bereitwillig die meisten Schiffe aufnehmen, inklusive Frachter und sogar Capital-Schiffe. Auch wenn die Docks nicht in der Lage sind, \"Supercapital\"-Schiffe zu bedienen, sind die Verteidigungsmöglichkeiten der Fortizar beträchtlich, und durch die Möglichkeit, Flächeneffekt-Waffen zu montieren im Niedersicherheitsraum noch weiter verbessert. Die Fortizar kann durch Dienste und Strukturmodule von Upwells \"Standup\"-Marke konfiguriert werden, damit sie die speziellen Bedürfnissen der Strukturadministratoren bedienen kann. Weitere Anpassungen der Fortizar-Hardware können durch die Installierung der Standup-L-Set-Modifikationen erreicht werden, um die besondere Aufgabe der Zitadelle noch weiter zu optimieren.",
+    "es" : "La Fortizar, concebida como un buen equilibrio entre capacidad e inversión dentro de la gama de estaciones espaciales de tipo ciudadela del Consorcio Upwell, ha sido diseñada para realizar operaciones a gran escala en el espacio, como proporcionar una sede bien equipada para corporaciones grandes y alianzas pequeñas o servir como puesto fronterizo o comercial para alianzas más grandes.\n\nLa Fortizar ha sido construida con una nueva tecnología de amarre espacial y puede alojar fácilmente la mayoría de las naves, incluidos los cargueros e incluso las naves capitales, en sus plataformas de acoplamiento internas. Aunque estas plataformas no aceptan naves de nivel supercapital, las capacidades defensivas de la Fortizar mejoran considerablemente en sistemas estelares de seguridad baja, pues permite montar armas de radio de acción. La Fortizar se puede configurar con los módulos de servicio y estructura Standup de Upwell para dar respuesta a las necesidades específicas del operador de la estructura. Su hardware se puede ajustar para optimizar la función específica de la ciudadela instalando complementos Standup grandes.",
     "ja" : "フォータイザーは、アップウェル・コンソーシアムの要塞クラス宇宙ステーションの中でも能力と費用のバランスが取れたモデルと位置づけられている。大企業や小規模なアライアンスにとっては設備が整った活動拠点、大規模アライアンスにとっては検問所や交易所としての使用など、宇宙空間で行われる大規模な活動を想定して設計されている。\n\nフォータイザーには新しい宇宙船テザリング技術が標準装備されているため、内部のドッキングベイには超大型輸送艦、さらには主力艦全までも含めたほとんどの艦船を受け入れることが可能である。ドックに「スーパーキャピタル」艦を収容することはできないものの、フォータイザーの防御能力はかなり強力で、特にセキュリティーの低い星系ではエリア攻撃能力のある兵装が有効である。フォータイザーはアップウェルのスタンドアップブランドのサービス及びストラクチャモジュールで構成を変更できるため、ストラクチャオペレーターの特定のニーズに応えることが可能である。フォータイザーのさらなるハードウェア調整はスタンドアップL-セットリグで行うことができ、それにより城塞のようなこの艦船を特定の役割に最適化させられる。",
     "ko" : "포티자는 대규모 작전 수행을 위한 시타델로 업웰 컨소시엄 기술력의 집합체입니다. 대형 코퍼레이션부터 소형 얼라이언스가 주둔하기 적합하며 큰 규모의 얼라이언스에게는 중간 경계기지이자 무역거점으로 활용되고 있습니다. <br><br>포티자는 최신식 함선 테더링 기술이 적용되어 프레이터와 캐피탈 함선을 포함한 대부분의 함선들을 내부 도킹베이에 수용할 수 있습니다. 비록 슈퍼캐피탈급 함선은 도킹할 수 없지만 광역 타격이 가능한 방어시설들로 무장되어 로우 시큐리티 항성계 내 포티자가 지닌 방어능력이 상대적으로 크게 향상되었습니다. 포티자는 업웰 컨소시엄의 스탠드업 서비스 및 구조물 모듈을 장착하여 운영자의 취향에 맞게 설정될 수 있습니다. 포티자 추가 개조를 원할 시 스탠드업 L-Set 리그를 통해 시타델의 구체적인 기능을 더욱 특화할 수 있습니다.",
     "ru" : "Разрабатывавшаяся в качестве «золотой середины» между доступными возможностями и стоимостью проекта, цитадель типа «Фортизар» спроектирована для развёртывания в ходе крупномасштабных космических операций; она может использоваться в качестве базы большими корпорациями и некрупными альянсами, а также как пограничный или торговый пост, если речь идёт о больших альянсах.\n\n\n\n«Фортизар» создана по стандартам новейших космических технологий и сможет с лёгкостью разместить в своём доке большинство из существующих типов кораблей, включая фрейтеры и даже КБТ. Хотя доки цитадели не могут принять корабли сверхбольшого тоннажа, «Фортизар» обладает внушительными оборонительными возможностями, которые становятся значительно эффективнее в системах с нулевой степенью соответствия нормам КОНКОРДа — на неё можно установить модули объёмного поражающего действия. «Фортизар» может быть укомплектована стационар-модулями, разработанными консорциумом «Апвелл». Аппаратную часть цитадели можно перенастроить согласно своим нуждам, используя стационар-тюнинг-модули.",
     "zh" : "作为昇威财团堡垒建筑中性价比较均衡的典型，铁壁专为太空中的大规模活动而设计，可以作为大型军团和小型联盟的装备精良的基地，也可以作为大型联盟的边境和贸易哨站。\n\n\n\n空堡建筑采用了最新的舰船驻留科技而建造，能够容留大多数舰船停泊，货舰甚至旗舰也不例外。虽然不能接纳超级旗舰停泊，但借助范围性武器，铁壁在低安星系的防御能力有了很大提升。铁壁可以使用昇威的屹立专用服务和建筑装备，以满足建筑使用者的需求。将屹立大型改装件安装在铁壁上可以进一步细化它的职能。"
   },
-  "graphic_id" : 21138,
-  "group_id" : 1657,
-  "market_group_id" : 2201,
-  "mass" : 10000000000,
-  "meta_group_id" : 1,
-  "name" : {
-    "de" : "Fortizar",
-    "en" : "Fortizar",
-    "es" : "Fortizar",
-    "fr" : "Fortizar",
-    "ja" : "フォータイザー",
-    "ko" : "포티자",
-    "ru" : "Fortizar",
-    "zh" : "铁壁"
-  },
-  "portion_size" : 1,
-  "published" : true,
-  "radius" : 85000,
-  "sound_id" : 20232,
-  "volume" : 80000,
-  "type_id" : 35833,
-  "capacity" : 0,
   "dogma_attributes" : {
     "1547" : {
       "attribute_id" : 1547,
@@ -383,7 +362,28 @@
       "is_default" : false
     }
   },
+  "graphic_id" : 21138,
+  "group_id" : 1657,
+  "market_group_id" : 2201,
+  "mass" : 10000000000,
+  "name" : {
+    "en" : "Fortizar",
+    "fr" : "Fortizar",
+    "de" : "Fortizar",
+    "es" : "Fortizar",
+    "ja" : "フォータイザー",
+    "ko" : "포티자",
+    "ru" : "Fortizar",
+    "zh" : "铁壁"
+  },
   "packaged_volume" : 80000,
+  "portion_size" : 1,
+  "published" : true,
+  "radius" : 85000,
+  "type_id" : 35833,
+  "volume" : 80000,
+  "meta_group_id" : 1,
+  "sound_id" : 20232,
   "traits" : {
     "role_bonuses" : {
       "4" : {

@@ -7,6 +7,7 @@ import com.autonomouslogic.everef.http.EsiRateLimitInterceptor;
 import com.autonomouslogic.everef.http.EsiUserAgentInterceptor;
 import com.autonomouslogic.everef.http.LoggingInterceptor;
 import com.autonomouslogic.everef.http.OkHttpWrapper;
+import com.autonomouslogic.everef.http.SocketErrorRetryInterceptor;
 import com.autonomouslogic.everef.http.UserAgentInterceptor;
 import dagger.Module;
 import dagger.Provides;
@@ -59,10 +60,12 @@ public class OkHttpModule {
 			Cache cache,
 			EsiUserAgentInterceptor userAgentInterceptor,
 			EsiRateLimitInterceptor rateLimitInterceptor,
+			SocketErrorRetryInterceptor socketErrorRetryInterceptor,
 			EsiLimitExceededInterceptor limitExceededInterceptor,
 			LoggingInterceptor loggingInterceptor) {
 		var builder = new OkHttpClient.Builder()
 				.addInterceptor(userAgentInterceptor)
+				.addInterceptor(socketErrorRetryInterceptor)
 				.addInterceptor(limitExceededInterceptor)
 				.addInterceptor(loggingInterceptor)
 				.addNetworkInterceptor(rateLimitInterceptor);

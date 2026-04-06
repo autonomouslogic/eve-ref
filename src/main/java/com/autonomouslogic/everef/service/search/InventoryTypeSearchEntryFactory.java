@@ -46,11 +46,11 @@ public class InventoryTypeSearchEntryFactory implements SearchEntryFactory {
 
 		String typeName;
 		if (type.getMarketGroupId() != null) {
-			typeName = Optional.ofNullable(marketGroupHelper.getRootMarketGroup(type))
+			typeName = Optional.ofNullable(marketGroupHelper.getRootMarketGroup(type, loadedRefData))
 					.flatMap(g -> Optional.ofNullable(g.getName().get("en")))
 					.orElse(DEFAULT_TYPE_NAME);
 		} else if (type.getGroupId() != null) {
-			typeName = Optional.ofNullable(marketGroupHelper.getRootMarketGroup(type))
+			typeName = Optional.ofNullable(marketGroupHelper.getRootMarketGroup(type, loadedRefData))
 					.flatMap(g -> {
 						return Optional.ofNullable(g.getName()).flatMap(m -> Optional.ofNullable(m.get("en")));
 					})

@@ -98,6 +98,37 @@ public class EsiAuthHelper {
 				.header("Authorization", "Bearer " + token)
 				.build();
 		try (var response = esiHttpWrapper.execute(request)) {
+			var status = response.code();
+
+			// Handle authentication failures as hard errors
+			if (status == 401) {
+				log.warn("Token verification returned 401 - token may be expired or invalid");
+				throw new EsiException(
+						status,
+						String.format(
+								"Token verification failed: Unauthorized (401) - token may be expired or invalid"));
+			}
+			if (status == 403) {
+				log.warn("Token verification returned 403 - insufficient permissions");
+				throw new EsiException(
+						status, String.format("Token verification failed: Forbidden (403) - insufficient permissions"));
+			}
+
+			// Handle server errors
+			if (status / 100 == 5) {
+				log.warn("Token verification returned server error: {}", status);
+				throw new EsiException(
+						status, String.format("Token verification failed: ESI server error (%d)", status));
+			}
+
+			// Handle other non-success responses
+			if (status != 200) {
+				log.warn("Token verification returned unexpected status: {}", status);
+				throw new EsiException(
+						status, String.format("Token verification failed: Unexpected response code %d", status));
+			}
+
+			// Only parse JSON for successful responses
 			var verify = objectMapper.readValue(response.body().byteStream(), EsiVerifyResponse.class);
 			return verify;
 		}

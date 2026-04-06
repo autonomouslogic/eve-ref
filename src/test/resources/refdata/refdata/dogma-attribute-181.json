@@ -1,12 +1,12 @@
 {
-  "data_type" : 10,
+  "attribute_id" : 181,
   "default_value" : 0,
   "description" : {
     "en" : "Only refers to another dogma attribute."
   },
   "display_name" : {
-    "de" : "Sekundäres Attribut",
     "en" : "Secondary attribute",
+    "de" : "Sekundäres Attribut",
     "es" : "Atributo secundario",
     "fr" : "Attribut secondaire",
     "ja" : "第2次属性",
@@ -14,12 +14,12 @@
     "ru" : "Вторичная характеристика",
     "zh" : "副属性"
   },
-  "display_when_zero" : false,
   "high_is_good" : true,
   "name" : "secondaryAttribute",
   "published" : true,
   "stackable" : true,
   "unit_id" : 119,
-  "category_id" : 7,
-  "attribute_id" : 181
+  "data_type" : 10,
+  "display_when_zero" : false,
+  "category_id" : 7
 }

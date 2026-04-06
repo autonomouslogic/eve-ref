@@ -1,8 +1,8 @@
 {
-  "icon_id" : 0,
+  "category_id" : 23,
   "name" : {
-    "de" : "Sternenbasis",
     "en" : "Starbase",
+    "de" : "Sternenbasis",
     "es" : "Base estelar",
     "fr" : "Base stellaire",
     "ja" : "スターベース",
@@ -11,5 +11,5 @@
     "zh" : "母星"
   },
   "published" : true,
-  "category_id" : 23
+  "icon_id" : 0
 }

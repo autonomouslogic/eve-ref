@@ -1,7 +1,7 @@
 {
   "description" : {
-    "de" : "Große Raumschiffe mit ausreichend offensiven und defensiven Möglichkeiten, um alle Probleme - bis auf die größten - in Agriff zu nehmen",
     "en" : "Large-sized spaceships with enough offensive and defensive capabilities to tackle all but the biggest problems",
+    "de" : "Große Raumschiffe mit ausreichend offensiven und defensiven Möglichkeiten, um alle Probleme - bis auf die größten - in Agriff zu nehmen",
     "es" : "Naves de tamaño grande con suficientes capacidades ofensivas y defensivas para enfrentarse a cualquier problema... excepto a los más gordos.",
     "fr" : "Vaisseaux spatiaux de grande taille disposant de suffisamment de capacités offensives et défensives pour s'attaquer à toutes les cibles hormis les plus grandes",
     "ja" : "大抵の敵艦に立ち向かえるだけの攻撃力・防御力を誇る大型戦艦",
@@ -9,11 +9,10 @@
     "ru" : "Корабли большого тоннажа, обладающие достаточными защитой и вооружением, чтобы справиться даже с самыми крупными неприятностями",
     "zh" : "大型舰船，攻防能力出色，足以应对大多数局面"
   },
-  "has_types" : false,
-  "icon_id" : 1443,
+  "market_group_id" : 1376,
   "name" : {
-    "de" : "Schlachtschiffe",
     "en" : "Battleships",
+    "de" : "Schlachtschiffe",
     "es" : "Acorazados",
     "fr" : "Cuirassés",
     "ja" : "戦艦",
@@ -22,6 +21,7 @@
     "zh" : "战列舰"
   },
   "parent_group_id" : 4,
-  "market_group_id" : 1376,
+  "has_types" : false,
+  "icon_id" : 1443,
   "child_market_group_ids" : [ 7 ]
 }

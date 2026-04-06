@@ -102,7 +102,7 @@ public class ContractFetcher {
 								}
 							});
 				})
-				.compose(Rx3Util.retryWithDelayFlowable(60 / 5, Duration.ofSeconds(5), e -> {
+				.compose(Rx3Util.retryWithDelayFlowable(12, Duration.ofSeconds(5), e -> {
 					log.warn("Retrying public contracts for {}: {}", region.getName(), ExceptionUtils.getMessage(e));
 					return true;
 				}))

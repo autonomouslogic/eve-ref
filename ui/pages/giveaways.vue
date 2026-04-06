@@ -34,15 +34,16 @@ const MALLER_SCOPE_SYNDICATION = 56884;
 const OBELISK_SCOPE_SYNDICATION = 61188;
 const FEDERATION_NAVY_COMET_MEDIA_MIASMA = 84115;
 const NIGHTMARE_MEDIA_MIASMA = 84131;
+const VEDMAK_SCOPE_SYNDICATION_YC122_SKIN = 56890;
 
 const weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
 const plexPrice = await getJitaSellPrice(PLEX_TYPE_ID) || 0;
 const fleetPackPrice = (50 + 500 * 12 / 365 * 3) * plexPrice;
 
-const firstFleetPack = DateTime.fromISO("2025-12-05T14:00:00Z");
+const firstFleetPack = DateTime.fromISO("2026-04-03T14:00:00Z");
 const fleetPackDates = [];
-for (let i = 0; i < 9; i++) {
+for (let i = 0; i < 4; i++) {
 	fleetPackDates.push(firstFleetPack.plus({days: i * 7}));
 }
 
@@ -54,77 +55,29 @@ const prizes: Prize[] = [
 		winners: 2
 	} as Prize,
 	{
-		name: "Astero Scope Syndication YC122 SKIN",
-		value: await getJitaSellPrice(ASTERO_SCOPE_SYNDICATION) || 0,
-		dates: [
-			DateTime.fromISO("2025-12-25T00:00:00Z"),
-		],
-		winners: 5,
-	} as Prize,
-	{
-		name: "Vexor Scope Syndication YC122 SKIN",
-		value: await getJitaSellPrice(VEXOR_SCOPE_SYNDICATION) || 0,
-		dates: [
-			DateTime.fromISO("2025-12-24T00:00:00Z"),
-		],
-		winners: 5,
-	} as Prize,
-	{
-		name: "Rupture Scope Syndication YC122 SKIN",
-		value: await getJitaSellPrice(RUPTURE_SCOPE_SYNDICATION) || 0,
-		dates: [
-			DateTime.fromISO("2025-12-23T00:00:00Z"),
-		],
-		winners: 5,
-	} as Prize,
-	{
-		name: "Maller Scope Syndication YC122 SKIN",
-		value: await getJitaSellPrice(MALLER_SCOPE_SYNDICATION) || 0,
-		dates: [
-			DateTime.fromISO("2025-12-22T00:00:00Z"),
-		],
-		winners: 5,
-	} as Prize,
-	{
-		name: "Obelisk Scope Syndication YC122 SKIN",
-		value: await getJitaSellPrice(OBELISK_SCOPE_SYNDICATION) || 0,
-		dates: [
-			DateTime.fromISO("2025-12-21T00:00:00Z"),
-		],
-		winners: 5,
-	} as Prize,
-	{
-		name: "Nightmare Media Miasma SKIN (sponsored by https://jita.space)",
-		value: await getJitaSellPrice(NIGHTMARE_MEDIA_MIASMA) || 0,
-		dates: [
-			DateTime.fromISO("2025-12-20T00:00:00Z"),
-		],
-		winners: 5,
-	} as Prize,
-	{
-		name: "Weekend Fleet Pack (50x PLEX, 3 Day Omega) 1 HOUR ONLY",
+		name: "Weekend Fleet Pack (50x PLEX, 3 Day Omega)",
 		value: fleetPackPrice,
-		dates: [
-			DateTime.fromISO("2025-12-31T09:00:00Z"),
-		],
-		winners: 5,
+		dates: [DateTime.fromISO("2026-03-29T03:34:00+09:00")],
+		winners: 10
 	} as Prize,
-	{
-		name: "Weekend Fleet Pack (50x PLEX, 3 Day Omega) 1 HOUR ONLY",
-		value: fleetPackPrice,
-		dates: [
-			DateTime.fromISO("2025-12-31T11:00:00Z"),
-		],
-		winners: 5,
-	} as Prize,
-	{
-		name: "Weekend Fleet Pack (50x PLEX, 3 Day Omega) 1 HOUR ONLY",
-		value: fleetPackPrice,
-		dates: [
-			DateTime.fromISO("2025-12-31T13:00:00Z"),
-		],
-		winners: 5,
-	} as Prize,
+	// {
+	// 	name: "Maller Scope Syndication YC122 SKIN",
+	// 	value: await getJitaSellPrice(MALLER_SCOPE_SYNDICATION) || 0,
+	// 	dates: [DateTime.fromISO("2026-02-07T10:05:00+09:00")],
+	// 	winners: 3
+	// } as Prize,
+	// {
+	// 	name: "Obelisk Scope Syndication YC122 SKIN",
+	// 	value: await getJitaSellPrice(OBELISK_SCOPE_SYNDICATION) || 0,
+	// 	dates: [DateTime.fromISO("2026-02-07T12:07:00+09:00")],
+	// 	winners: 1
+	// } as Prize,
+	// {
+	// 	name: "Vedmak Scope Syndication YC122 SKIN",
+	// 	value: await getJitaSellPrice(VEDMAK_SCOPE_SYNDICATION_YC122_SKIN) || 0,
+	// 	dates: [DateTime.fromISO("2026-02-07T14:08:00+09:00")],
+	// 	winners: 2
+	// } as Prize,
 ];
 
 var i = 0;
@@ -159,8 +112,11 @@ unrolled.sort((a, b) => a.dates[0].toMillis() - b.dates[0].toMillis());
 const totalWorth = unrolled.reduce((acc, prize) => acc + prize.value * prize.winners, 0);
 
 const pastGiveaways = {
-	"January 2026": 10 * 489.13e6,
-	"December 2025": (8 + 15) * 486.64e6 + 5 * 319.40e6 + 5 * 170.00e6 + 5 * 128.80e6 + 5 * 174.00e6 + 5 * 650.00e6 + 5 * 779.90e6,
+	"April 2026": 8 * 441.95e6,
+	"March 2026": 10 * 441.95e6,
+	"February 2026": 8 * 452.88e6 + 2 * 167.50e6 + 1 * 598.80e6 + 2 * 325.00,
+	"January 2026": 10 * 496.48e6,
+	"December 2025 🍾": 8 * 486.64e6 + 45 * 501.34e6 + 5 * 319.40e6 + 5 * 170.00e6 + 5 * 128.80e6 + 5 * 174.00e6 + 5 * 650.00e6 + 5 * 779.90e6 + 6e9,
 	"November 2025": 8 * 500.55e6,
 	"October 2025": 10 * 552.29e6,
 	"September 2025": 8 * 556.16e6,
@@ -172,7 +128,7 @@ const pastGiveaways = {
 	"March 2025": 4.92e9,
 	"February 2025": 15727787671,
 	"January 2025": 610787671,
-	"December 2024": 33.52e9,
+	"December 2024 🍻": 33.52e9,
 };
 
 const totalPastPrizes = Object.values(pastGiveaways).reduce(
@@ -230,11 +186,11 @@ const totalPastPrizes = Object.values(pastGiveaways).reduce(
 				<td>
 					<template v-if="prize.dates[0].toMillis() > DateTime.now().toMillis()">
 						<Datetime :millisecond-epoch="prize.dates[0].toMillis()" />
-						<template v-if="prize.dates[0].toMillis() - DateTime.now().toMillis() < DAY">
+						<template v-if="prize.dates[0].toUTC().day == DateTime.now().toUTC().day">
 							(today)
 						</template>
 						<template v-else-if="prize.dates[0].toMillis() - DateTime.now().toMillis() < 8 * DAY">
-							(next {{weekdays[prize.dates[0].weekday - 1]}})
+							(next {{weekdays[prize.dates[0].toUTC().weekday - 1]}})
 						</template>
 					</template>
 					<template v-else>

@@ -86,9 +86,10 @@ public class FuzzworkMarketService {
 				+ typeIds.stream().map(String::valueOf).collect(Collectors.joining(","));
 		var waitTime = rateLimiter.acquire();
 		log.debug(String.format("Fetching (waited %.1fs) %s", waitTime, url));
-		var response = httpWrapper.get(url);
-		try (var in = response.body().byteStream()) {
-			return objectMapper.readValue(in, responseType);
+		try (var response = httpWrapper.get(url)) {
+			try (var in = response.body().byteStream()) {
+				return objectMapper.readValue(in, responseType);
+			}
 		}
 	}
 

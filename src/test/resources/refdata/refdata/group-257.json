@@ -1,11 +1,9 @@
 {
-  "anchorable" : false,
-  "anchored" : false,
   "category_id" : 16,
-  "fittable_non_singleton" : false,
+  "group_id" : 257,
   "name" : {
-    "de" : "Raumschiff-Kommando",
     "en" : "Spaceship Command",
+    "de" : "Raumschiff-Kommando",
     "es" : "Manejo de naves espaciales",
     "fr" : "Pilotage de vaisseau",
     "ja" : "宇宙船操作",
@@ -14,7 +12,9 @@
     "zh" : "飞船操控学"
   },
   "published" : true,
+  "anchorable" : false,
+  "anchored" : false,
+  "fittable_non_singleton" : false,
   "use_base_price" : true,
-  "group_id" : 257,
   "type_ids" : [ 3327, 3328, 3332, 3336, 33093, 33097 ]
 }

@@ -1,18 +1,18 @@
 {
-  "data_type" : 11,
+  "attribute_id" : 2711,
   "default_value" : 0,
   "description" : {
     "en" : "Reference for grouping ores in visual displays. All variants of one ore should have the same BasicType ID"
   },
-  "display_when_zero" : false,
-  "high_is_good" : false,
-  "name" : "oreBasicType",
-  "published" : false,
-  "stackable" : false,
-  "unit_id" : 116,
-  "category_id" : 7,
-  "attribute_id" : 2711,
   "display_name" : {
     "en" : ""
-  }
+  },
+  "name" : "oreBasicType",
+  "unit_id" : 116,
+  "data_type" : 11,
+  "display_when_zero" : false,
+  "high_is_good" : false,
+  "published" : false,
+  "stackable" : false,
+  "category_id" : 7
 }

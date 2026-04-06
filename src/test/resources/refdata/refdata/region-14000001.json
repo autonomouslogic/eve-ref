@@ -1,13 +1,18 @@
 {
   "name" : {
-    "de" : "VR-01",
     "en" : "VR-01",
+    "ja" : "VR-01",
+    "de" : "VR-01",
     "es" : "VR-01",
     "fr" : "VR-01",
-    "ja" : "VR-01",
     "ko" : "VR-01",
     "ru" : "VR-01",
     "zh" : "VR-01"
+  },
+  "region_id" : 14000001,
+  "description" : {
+    "en" : null,
+    "ja" : null
   },
   "nebula_id" : 11821,
   "position" : {
@@ -16,10 +21,5 @@
     "z" : -8266927768219926000
   },
   "wormhole_class_id" : 19,
-  "region_id" : 14000001,
-  "description" : {
-    "en" : null,
-    "ja" : null
-  },
   "universe_id" : "void"
 }

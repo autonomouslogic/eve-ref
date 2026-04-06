@@ -6,6 +6,7 @@ import com.autonomouslogic.everef.http.EsiRateLimitInterceptor;
 import com.autonomouslogic.everef.http.EsiUserAgentInterceptor;
 import com.autonomouslogic.everef.http.LoggingInterceptor;
 import com.autonomouslogic.everef.http.OkHttpWrapper;
+import com.autonomouslogic.everef.http.SocketErrorRetryInterceptor;
 import com.autonomouslogic.everef.http.UserAgentInterceptor;
 import com.autonomouslogic.everef.inject.OkHttpModule;
 import dagger.Module;
@@ -23,11 +24,17 @@ public class TestOkHttpModule {
 	public OkHttpClient esiHttpClient(
 			EsiUserAgentInterceptor userAgentInterceptor,
 			EsiRateLimitInterceptor rateLimitInterceptor,
+			SocketErrorRetryInterceptor socketErrorRetryInterceptor,
 			EsiLimitExceededInterceptor limitExceededInterceptor,
 			LoggingInterceptor loggingInterceptor) {
 		return new OkHttpModule()
 				.esiHttpClient(
-						null, userAgentInterceptor, rateLimitInterceptor, limitExceededInterceptor, loggingInterceptor)
+						null,
+						userAgentInterceptor,
+						rateLimitInterceptor,
+						socketErrorRetryInterceptor,
+						limitExceededInterceptor,
+						loggingInterceptor)
 				.newBuilder()
 				.addInterceptor(new NonLocalhostBlockingInterceptor())
 				.build();

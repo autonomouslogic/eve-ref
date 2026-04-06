@@ -1,12 +1,12 @@
 {
-  "data_type" : 10,
+  "attribute_id" : 180,
   "default_value" : 0,
   "description" : {
     "en" : "Only refers to another dogma attribute."
   },
   "display_name" : {
-    "de" : "Primäres Attribut",
     "en" : "Primary attribute",
+    "de" : "Primäres Attribut",
     "es" : "Atributo principal",
     "fr" : "Attribut principal",
     "ja" : "第1次属性",
@@ -14,12 +14,12 @@
     "ru" : "Первичная характеристика",
     "zh" : "主属性"
   },
-  "display_when_zero" : false,
   "high_is_good" : true,
   "name" : "primaryAttribute",
   "published" : true,
   "stackable" : true,
   "unit_id" : 119,
-  "category_id" : 7,
-  "attribute_id" : 180
+  "data_type" : 10,
+  "display_when_zero" : false,
+  "category_id" : 7
 }

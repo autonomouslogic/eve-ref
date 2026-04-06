@@ -7,7 +7,7 @@ const route = useRoute();
 function onLocaleChanged(event: Event) {
 	const target = event.target as HTMLInputElement;
 	router.push({
-		path: switchLocalePath(target.value),
+		path: switchLocalePath(target.value as any),
 		query: {
 			...route.query
 		},

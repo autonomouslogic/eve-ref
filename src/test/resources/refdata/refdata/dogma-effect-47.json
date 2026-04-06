@@ -1,7 +1,17 @@
 {
-  "disallow_auto_repeat" : false,
+  "description" : {
+    "en" : ""
+  },
   "discharge_attribute_id" : 6,
+  "display_name" : {
+    "en" : ""
+  },
   "duration_attribute_id" : 73,
+  "effect_category" : 2,
+  "effect_id" : 47,
+  "name" : "cargoScan",
+  "range_attribute_id" : 126,
+  "disallow_auto_repeat" : false,
   "electronic_chance" : false,
   "guid" : "effects.CargoScan",
   "is_assistance" : false,
@@ -9,16 +19,6 @@
   "is_warp_safe" : false,
   "propulsion_chance" : false,
   "published" : false,
-  "range_attribute_id" : 126,
   "range_chance" : false,
-  "effect_category" : 2,
-  "effect_name" : "cargoScan",
-  "effect_id" : 47,
-  "description" : {
-    "en" : ""
-  },
-  "display_name" : {
-    "en" : ""
-  },
-  "name" : "cargoScan"
+  "effect_name" : "cargoScan"
 }
