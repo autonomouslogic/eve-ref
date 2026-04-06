@@ -26,7 +26,7 @@ public class MarketEsi {
 		return Flowable.defer(() -> {
 					return esiHelper.fetchPages(
 							page -> VirtualThreads.offload(() -> marketApi.getMarketsRegionIdTypesWithHttpInfo(
-									regionId, esiHelper.getCompatibilityDate(), page, null, null, datasource)));
+									regionId, esiHelper.getCompatibilityDate(), page, null, null, datasource, null)));
 				})
 				.onErrorResumeNext(e -> {
 					// Had problems with UndeliverableExceptions being thrown.

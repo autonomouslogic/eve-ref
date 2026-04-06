@@ -2,10 +2,10 @@ package com.autonomouslogic.everef.esi;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import com.autonomouslogic.everef.openapi.esi.model.GetUniverseConstellationsConstellationIdOk;
-import com.autonomouslogic.everef.openapi.esi.model.GetUniverseRegionsRegionIdOk;
-import com.autonomouslogic.everef.openapi.esi.model.GetUniverseStationsStationIdOk;
-import com.autonomouslogic.everef.openapi.esi.model.GetUniverseSystemsSystemIdOk;
+import com.autonomouslogic.everef.openapi.esi.model.UniverseConstellationsConstellationIdGet;
+import com.autonomouslogic.everef.openapi.esi.model.UniverseRegionsRegionIdGet;
+import com.autonomouslogic.everef.openapi.esi.model.UniverseStationsStationIdGet;
+import com.autonomouslogic.everef.openapi.esi.model.UniverseSystemsSystemIdGet;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.test.TestDataUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -48,18 +48,18 @@ public class LocationPopulatorTest {
 		server = new MockWebServer();
 
 		region = objectMapper.writeValueAsString(
-				new GetUniverseRegionsRegionIdOk().regionId(100).name("Region"));
-		constellation = objectMapper.writeValueAsString(new GetUniverseConstellationsConstellationIdOk()
-				.constellationId(200)
-				.regionId(100)
+				new UniverseRegionsRegionIdGet().regionId(100L).name("Region"));
+		constellation = objectMapper.writeValueAsString(new UniverseConstellationsConstellationIdGet()
+				.constellationId(200L)
+				.regionId(100L)
 				.name("Constellation"));
-		system = objectMapper.writeValueAsString(new GetUniverseSystemsSystemIdOk()
-				.constellationId(200)
-				.systemId(300)
+		system = objectMapper.writeValueAsString(new UniverseSystemsSystemIdGet()
+				.constellationId(200L)
+				.systemId(300L)
 				.name("System"));
-		station = objectMapper.writeValueAsString(new GetUniverseStationsStationIdOk()
-				.stationId(400)
-				.systemId(300)
+		station = objectMapper.writeValueAsString(new UniverseStationsStationIdGet()
+				.stationId(400L)
+				.systemId(300L)
 				.name("Station"));
 
 		server.setDispatcher(new TestDispatcher());

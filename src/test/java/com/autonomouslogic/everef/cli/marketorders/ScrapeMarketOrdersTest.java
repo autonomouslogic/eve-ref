@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import com.autonomouslogic.commons.ListUtil;
 import com.autonomouslogic.commons.ResourceUtil;
 import com.autonomouslogic.everef.esi.LocationPopulator;
-import com.autonomouslogic.everef.openapi.esi.model.GetUniverseSystemsSystemIdOk;
+import com.autonomouslogic.everef.openapi.esi.model.UniverseSystemsSystemIdGet;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.test.MockS3Adapter;
 import com.autonomouslogic.everef.test.TestDataUtil;

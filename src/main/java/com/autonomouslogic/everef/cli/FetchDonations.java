@@ -8,8 +8,10 @@ import com.autonomouslogic.everef.openapi.esi.api.CharacterApi;
 import com.autonomouslogic.everef.openapi.esi.api.CorporationApi;
 import com.autonomouslogic.everef.openapi.esi.api.WalletApi;
 import com.autonomouslogic.everef.openapi.esi.invoker.ApiException;
-import com.autonomouslogic.everef.openapi.esi.model.CharactersCharacterIdGet;
-import com.autonomouslogic.everef.openapi.esi.model.CorporationsCorporationIdGet;
+import com.autonomouslogic.everef.openapi.esi.model.CharactersCharacterIdWalletJournalGetInner;
+import com.autonomouslogic.everef.openapi.esi.model.CorporationsCorporationIdWalletsDivisionJournalGetInner;
+import com.autonomouslogic.everef.openapi.esi.model.CharactersDetail;
+import com.autonomouslogic.everef.openapi.esi.model.CorporationsDetail;
 import com.autonomouslogic.everef.pug.NumberFormats;
 import com.autonomouslogic.everef.s3.S3Adapter;
 import com.autonomouslogic.everef.s3.S3Util;
@@ -198,6 +200,7 @@ public class FetchDonations implements Command {
 								null,
 								null,
 								null,
+								null,
 								java.util.Map.of("Authorization", "Bearer " + accessToken))))
 				.doOnNext(e -> log.debug("Character journal: {}", e))
 				.filter(e -> DONATION_REF_TYPES.contains(e.getRefType().toString()))
@@ -222,6 +225,7 @@ public class FetchDonations implements Command {
 								1L,
 								esiHelper.getCompatibilityDate(),
 								page,
+								null,
 								null,
 								null,
 								null,
@@ -277,15 +281,15 @@ public class FetchDonations implements Command {
 	}
 
 	@SneakyThrows
-	private @NotNull CorporationsCorporationIdGet getCorporation(long corporationId) throws ApiException {
+	private @NotNull CorporationsDetail getCorporation(long corporationId) throws ApiException {
 		return VirtualThreads.offload(() -> corporationApi.getCorporationsCorporationId(
-				corporationId, esiHelper.getCompatibilityDate(), null, null, null));
+				corporationId, esiHelper.getCompatibilityDate(), null, null, null, null));
 	}
 
 	@SneakyThrows
-	private @NotNull CharactersCharacterIdGet getCharacter(long characterId) throws ApiException {
+	private @NotNull CharactersDetail getCharacter(long characterId) throws ApiException {
 		return VirtualThreads.offload(() ->
-				characterApi.getCharactersCharacterId(characterId, esiHelper.getCompatibilityDate(), null, null, null));
+				characterApi.getCharactersCharacterId(characterId, esiHelper.getCompatibilityDate(), null, null, null, null));
 	}
 
 	private static @NotNull SummaryFile buildSummary(Collection<DonationEntry> donations) {

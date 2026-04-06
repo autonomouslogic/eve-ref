@@ -6,8 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import com.autonomouslogic.everef.cli.publiccontracts.ContractsFileBuilder;
 import com.autonomouslogic.everef.cli.publiccontracts.ContractsScrapeMeta;
 import com.autonomouslogic.everef.esi.LocationPopulator;
-import com.autonomouslogic.everef.openapi.esi.model.GetUniverseConstellationsConstellationIdOk;
-import com.autonomouslogic.everef.openapi.esi.model.GetUniverseSystemsSystemIdOk;
+import com.autonomouslogic.everef.openapi.esi.model.UniverseConstellationsConstellationIdGet;
+import com.autonomouslogic.everef.openapi.esi.model.UniverseSystemsSystemIdGet;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.test.MockS3Adapter;
 import com.autonomouslogic.everef.test.TestDataUtil;
@@ -493,7 +493,7 @@ public class ScrapeStructuresTest {
 				}
 
 				if (path.equals("/universe/systems/30000001")) {
-					var obj = new GetUniverseSystemsSystemIdOk()
+					var obj = new UniverseSystemsSystemIdGet()
 							.systemId(30000001)
 							.constellationId(20000001)
 							.name("System");

@@ -41,7 +41,7 @@ public class SovereigntyStructureSource implements StructureSource {
 	public Flowable<Long> getStructures() {
 		return Flowable.defer(() -> {
 			var response = VirtualThreads.offload(() -> sovereigntyApi.getSovereigntyStructuresWithHttpInfo(
-					esiHelper.getCompatibilityDate(), null, null, null));
+					esiHelper.getCompatibilityDate(), null, null, null, null));
 			if (response.getStatusCode() != 200) {
 				return Flowable.error(new RuntimeException(
 						String.format("Failed to fetch sovereignty structure ids: %s", response.getStatusCode())));

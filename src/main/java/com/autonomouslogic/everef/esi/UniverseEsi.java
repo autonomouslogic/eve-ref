@@ -53,7 +53,7 @@ public class UniverseEsi {
 					return Flowable.defer(() -> {
 						log.trace("Fetching region ids");
 						var regions = VirtualThreads.offload(() -> universeApi.getUniverseRegions(
-								esiHelper.getCompatibilityDate(), null, null, datasource));
+								esiHelper.getCompatibilityDate(), null, null, datasource, null));
 						regionIds = regions;
 						return Flowable.fromIterable(regions);
 					});
@@ -64,7 +64,7 @@ public class UniverseEsi {
 	public Maybe<UniverseRegionsRegionIdGet> getRegion(long regionId) {
 		return getFromCacheOrFetch("region", UniverseRegionsRegionIdGet.class, regions, regionId, () -> {
 			return VirtualThreads.offload(() -> universeApi.getUniverseRegionsRegionId(
-					regionId, esiHelper.getCompatibilityDate(), null, null, datasource));
+					regionId, esiHelper.getCompatibilityDate(), null, null, datasource, null));
 		});
 	}
 
@@ -84,14 +84,14 @@ public class UniverseEsi {
 				constellationId,
 				() -> {
 					return VirtualThreads.offload(() -> universeApi.getUniverseConstellationsConstellationId(
-							constellationId, esiHelper.getCompatibilityDate(), null, null, datasource));
+							constellationId, esiHelper.getCompatibilityDate(), null, null, datasource, null));
 				});
 	}
 
 	public Maybe<UniverseSystemsSystemIdGet> getSystem(long systemId) {
 		return getFromCacheOrFetch("system", UniverseSystemsSystemIdGet.class, systems, systemId, () -> {
 			return VirtualThreads.offload(() -> universeApi.getUniverseSystemsSystemId(
-					systemId, esiHelper.getCompatibilityDate(), null, null, datasource));
+					systemId, esiHelper.getCompatibilityDate(), null, null, datasource, null));
 		});
 	}
 
@@ -102,14 +102,14 @@ public class UniverseEsi {
 		}
 		return getFromCacheOrFetch("station", UniverseStationsStationIdGet.class, stations, stationId, () -> {
 			return VirtualThreads.offload(() -> universeApi.getUniverseStationsStationId(
-					stationId, esiHelper.getCompatibilityDate(), null, null, datasource));
+					stationId, esiHelper.getCompatibilityDate(), null, null, datasource, null));
 		});
 	}
 
 	public Maybe<UniverseTypesTypeIdGet> getType(long typeId) {
 		return getFromCacheOrFetch("type", UniverseTypesTypeIdGet.class, types, typeId, () -> {
 			return VirtualThreads.offload(() -> universeApi.getUniverseTypesTypeId(
-					typeId, esiHelper.getCompatibilityDate(), null, null, datasource));
+					typeId, esiHelper.getCompatibilityDate(), null, null, datasource, null));
 		});
 	}
 

@@ -57,7 +57,7 @@ public class SystemCostIndexService {
 		log.info("Updating industry systems");
 		ApiResponse<List<IndustrySystemsGetInner>> res;
 		try {
-			res = industryApi.getIndustrySystemsWithHttpInfo(esiHelper.getCompatibilityDate(), null, etag, null);
+			res = industryApi.getIndustrySystemsWithHttpInfo(esiHelper.getCompatibilityDate(), null, etag, null, null);
 		} catch (ApiException e) {
 			if (e.getCode() == 304) {
 				log.debug("No industry systems update needed");

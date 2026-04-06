@@ -22,7 +22,7 @@ import com.autonomouslogic.everef.model.fuzzwork.FuzzworkAggregatedMarketType;
 import com.autonomouslogic.everef.openapi.api.api.IndustryApi;
 import com.autonomouslogic.everef.openapi.api.invoker.ApiClient;
 import com.autonomouslogic.everef.openapi.api.invoker.ApiException;
-import com.autonomouslogic.everef.openapi.esi.model.GetMarketsPrices200Ok;
+import com.autonomouslogic.everef.openapi.esi.model.MarketsPricesGetInner;
 import com.autonomouslogic.everef.service.EsiMarketPriceService;
 import com.autonomouslogic.everef.service.RefDataService;
 import com.autonomouslogic.everef.service.SystemCostIndexService;
