@@ -9,6 +9,7 @@ import io.sentry.Sentry;
 import io.sentry.SentryLevel;
 import javax.inject.Inject;
 import lombok.extern.log4j.Log4j2;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 
 @Log4j2
 public class Main {
@@ -26,6 +27,16 @@ public class Main {
 		log.info(String.format("EVE Ref version %s", Configs.EVE_REF_VERSION.getRequired()));
 		initSentry();
 		RxJavaPlugins.setErrorHandler(e -> {
+			// Check if this is a network error that slipped through retry logic
+			var rootCause = ExceptionUtils.getRootCause(e);
+			if (isNetworkError(rootCause)) {
+				log.error("Unhandled network error in RxJava stream (should have been retried)", e);
+				Sentry.captureException(e, scope -> scope.setLevel(SentryLevel.ERROR));
+				// Don't exit - log and continue
+				return;
+			}
+
+			// For other errors, this is likely a bug - exit
 			log.fatal("RxJava error", e);
 			Sentry.captureException(e, scope -> scope.setLevel(SentryLevel.FATAL));
 			System.exit(1);
@@ -39,6 +50,17 @@ public class Main {
 			System.exit(1);
 		}
 		System.exit(0);
+	}
+
+	private static boolean isNetworkError(Throwable e) {
+		if (e instanceof java.net.SocketException) return true;
+		if (e instanceof java.net.SocketTimeoutException) return true;
+		if (e instanceof java.io.IOException) {
+			var msg = e.getMessage();
+			return msg != null
+					&& (msg.contains("Socket") || msg.contains("timeout") || msg.contains("Connection reset"));
+		}
+		return false;
 	}
 
 	private static void initSentry() {
