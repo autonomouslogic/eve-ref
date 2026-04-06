@@ -1,5 +1,40 @@
 EVE Ref Changelog
 
+## [2.74.1](https://github.com/autonomouslogic/eve-ref/compare/2.74.0...2.74.1) (2026-04-06)
+
+
+### Bug Fixes
+
+* Better exceptions in IndustryCalculator ([46e0c59](https://github.com/autonomouslogic/eve-ref/commit/46e0c5908f185d6090bc1e06e18d4881d6869df1))
+* Better socket error handling ([#1032](https://github.com/autonomouslogic/eve-ref/issues/1032)) ([d142cbb](https://github.com/autonomouslogic/eve-ref/commit/d142cbbc8823bd8aeea0ae64199d2cff33cd0408))
+* Check error status on auth verify ([#1030](https://github.com/autonomouslogic/eve-ref/issues/1030)) ([4e530a4](https://github.com/autonomouslogic/eve-ref/commit/4e530a4255102e99daf91ab40d1456899d9d5dbf))
+* **deps:** update all non-major dependencies ([#1025](https://github.com/autonomouslogic/eve-ref/issues/1025)) ([26d890d](https://github.com/autonomouslogic/eve-ref/commit/26d890d3f6f88ccaf44c18d71d8beaf45bb1be4f))
+* **deps:** update font awesome to v7.2.0 ([#1026](https://github.com/autonomouslogic/eve-ref/issues/1026)) ([3b988be](https://github.com/autonomouslogic/eve-ref/commit/3b988be43c90668fabaaaf20d5fef6180ff7656c))
+* Merge remote-tracking branch 'refs/remotes/origin/main' ([fc16818](https://github.com/autonomouslogic/eve-ref/commit/fc16818b61ea1ca7726cb0890f55629196396e6f))
+* Nullpointer on BuildSearch ([#1031](https://github.com/autonomouslogic/eve-ref/issues/1031)) ([ffcda63](https://github.com/autonomouslogic/eve-ref/commit/ffcda63c973de194afcf3cc16106e9f1e5f1a333))
+* **ui:** Added cargoCapacityMultiplier to EXPANDED_CARGOHOLD ([b881019](https://github.com/autonomouslogic/eve-ref/commit/b88101971f0c74f69d26ecc9cdefcbcefe251dee))
+* **ui:** April 2026 giveaways ([e2a1328](https://github.com/autonomouslogic/eve-ref/commit/e2a1328bd499fbb40d870bdb425d400209544283))
+* **ui:** March 2026 giveaways ([d391ad1](https://github.com/autonomouslogic/eve-ref/commit/d391ad10e0aaef76e2de0de8883265c3d4c36d55))
+* **ui:** More dogma overviews ([4f88794](https://github.com/autonomouslogic/eve-ref/commit/4f88794c42055be055affb521c91875a8e664dfe))
+* **ui:** Re-enabled Usercentrics, reverting commit a56205a ([21d5e77](https://github.com/autonomouslogic/eve-ref/commit/21d5e778076c74252e90cc32f93da113aa332165))
+* **ui:** Updated privacy policies ([6f76e5f](https://github.com/autonomouslogic/eve-ref/commit/6f76e5f4d0d17d9d6a1bbd3e7a7826b22de3d820))
+* Updated Node package lock ([138fd89](https://github.com/autonomouslogic/eve-ref/commit/138fd890736a1c43849487393c1206b4cdcb3f0b))
+
+
+### Dependency Updates
+
+* **deps:** update codecov/codecov-action action to v6 ([#1029](https://github.com/autonomouslogic/eve-ref/issues/1029)) ([6d66183](https://github.com/autonomouslogic/eve-ref/commit/6d6618317942f5238981a8bd6199c58ed6f8f281))
+
+
+### Tests
+
+* Updated test resources ([2e800b1](https://github.com/autonomouslogic/eve-ref/commit/2e800b1abc2dbd3c2e1139148e42c57bfeb02738))
+
+
+### Continuous Integration
+
+* Updated Node version for format workflow ([5648528](https://github.com/autonomouslogic/eve-ref/commit/5648528e6e7f1a5867afa2e4250be75aff3d1228))
+
 ## [2.74.0](https://github.com/autonomouslogic/eve-ref/compare/2.73.9...2.74.0) (2026-02-28)
 
 
