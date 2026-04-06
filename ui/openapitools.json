@@ -20,9 +20,6 @@
         "inputSpec": "../spec/esi.json",
         "output": "./esi-openapi",
         "modelNamePrefix": "Esi",
-        "parameterNameMappings": {
-          "boolean" : "esiBoolean"
-        },
         "additionalProperties": {
           "enumPropertyNaming": "PascalCase",
           "modelPropertyNaming": "camelCase",

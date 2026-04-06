@@ -39,7 +39,7 @@ import {
  * 
  * @export
  */
-export type EsiFreelanceJobsDetailConfigurationParametersValue = EsiBoolean | EsiCorporationItemDelivery | EsiMatcher | EsiOptions;
+export type EsiFreelanceJobsDetailConfigurationParametersValue = boolean | EsiCorporationItemDelivery | EsiMatcher | EsiOptions;
 
 export function EsiFreelanceJobsDetailConfigurationParametersValueFromJSON(json: any): EsiFreelanceJobsDetailConfigurationParametersValue {
     return EsiFreelanceJobsDetailConfigurationParametersValueFromJSONTyped(json, false);
@@ -61,8 +61,8 @@ export function EsiFreelanceJobsDetailConfigurationParametersValueFromJSONTyped(
     if (instanceOfEsiOptions(json)) {
         return EsiOptionsFromJSONTyped(json, true);
     }
-    if (instanceOfboolean(json)) {
-        return booleanFromJSONTyped(json, true);
+    if (typeof json === 'boolean') {
+        return json;
     }
 
     return {} as any;
@@ -88,8 +88,8 @@ export function EsiFreelanceJobsDetailConfigurationParametersValueToJSONTyped(va
     if (instanceOfEsiOptions(value)) {
         return EsiOptionsToJSON(value as EsiOptions);
     }
-    if (instanceOfboolean(value)) {
-        return booleanToJSON(value as boolean);
+    if (typeof value === 'boolean') {
+        return value;
     }
 
     return {};

@@ -3,7 +3,7 @@ import {marketApi} from "~/esi";
 import {DOMAIN, HEIMATAR, METROPOLIS, GPMR_01, SINQ_LAISON, THE_FORGE} from "~/lib/regionConstants";
 import {PLEX_TYPE_ID} from "~/lib/typeConstants";
 import {
-    type MarketsRegionIdOrdersGetInner,
+    type EsiMarketsRegionIdOrdersGetInner,
     GetMarketsRegionIdOrdersOrderTypeEnum,
     type GetMarketsRegionIdOrdersRequest
 } from "~/esi-openapi";
@@ -57,7 +57,7 @@ HUB_STATIONS.set("Misaba", {
     regionId: DOMAIN
 } as HubStation);
 
-export async function getOrders(orderType: GetMarketsRegionIdOrdersOrderTypeEnum, typeId: number, regionId: number): Promise<Array<MarketsRegionIdOrdersGetInner>> {
+export async function getOrders(orderType: GetMarketsRegionIdOrdersOrderTypeEnum, typeId: number, regionId: number): Promise<Array<EsiMarketsRegionIdOrdersGetInner>> {
     return marketApi.getMarketsRegionIdOrders({
         typeId: typeId,
         regionId: regionId,
