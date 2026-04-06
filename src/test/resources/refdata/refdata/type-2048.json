@@ -147,6 +147,7 @@
   "type_id" : 2048,
   "volume" : 5,
   "meta_group_id" : 2,
+  "meta_level" : 5,
   "variation_parent_type_id" : 2046,
   "required_skills" : {
     "3394" : 4

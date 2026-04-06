@@ -31,5 +31,6 @@
   "type_id" : 52225,
   "volume" : 1,
   "base_price" : 1000,
+  "meta_level" : 0,
   "is_mutaplasmid" : true
 }
