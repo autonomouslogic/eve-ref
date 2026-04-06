@@ -43,7 +43,7 @@
     ja: "劣化ウラン弾M"
     ko: "열화 우라늄탄 M"
     ru: "Depleted Uranium M"
-    zh: "硬铀弹 M"
+    zh: "贫铀弹 M"
   portionSize: 100
   published: true
   volume: 0.0125
@@ -89,6 +89,7 @@
   marketGroupID: 81
   mass: 100250000
   metaGroupID: 1
+  metaLevel: 0
   name:
     de: "Dominix"
     en: "Dominix"
@@ -376,6 +377,7 @@
   iconID: 24131
   marketGroupID: 2533
   mass: 1
+  metaLevel: 0
   name:
     de: "Gravid Damage Control Mutaplasmid"
     en: "Gravid Damage Control Mutaplasmid"
@@ -419,6 +421,7 @@
   groupID: 60
   iconID: 77
   metaGroupID: 15
+  metaLevel: 10
   name:
     de: "Abyssal Damage Control"
     en: "Abyssal Damage Control"
@@ -466,6 +469,7 @@
   marketGroupID: 615
   mass: 5000
   metaGroupID: 1
+  metaLevel: 0
   name:
     de: "Damage Control I"
     en: "Damage Control I"
@@ -513,6 +517,7 @@
   marketGroupID: 615
   mass: 5000
   metaGroupID: 2
+  metaLevel: 5
   name:
     de: "Damage Control II"
     en: "Damage Control II"
@@ -594,6 +599,7 @@
   marketGroupID: 1122
   mass: 1200000
   metaGroupID: 14
+  metaLevel: 1
   name:
     de: "Legion Core - Augmented Antimatter Reactor"
     en: "Legion Core - Augmented Antimatter Reactor"
@@ -652,6 +658,7 @@
   marketGroupID: 1122
   mass: 1200000
   metaGroupID: 14
+  metaLevel: 1
   name:
     de: "Legion Core - Dissolution Sequencer"
     en: "Legion Core - Dissolution Sequencer"
@@ -734,6 +741,7 @@
   marketGroupID: 1122
   mass: 1200000
   metaGroupID: 14
+  metaLevel: 1
   name:
     de: "Legion Core - Energy Parasitic Complex"
     en: "Legion Core - Energy Parasitic Complex"
@@ -822,6 +830,7 @@
   marketGroupID: 1078
   mass: 141700000
   metaGroupID: 2
+  metaLevel: 5
   name:
     de: "Sin"
     en: "Sin"
@@ -1880,8 +1889,8 @@
       ктивностью. +2% к\_эффективности переработки за каждую степень освоения навы\
       ка при работе со следующими простыми рудами: плагиоклаз пироксер скордит вел\
       ьдспар мордуний"
-    zh: "提炼普通矿石的专业技能。可以大大提高技能熟练者使用提炼设备时的效率。每升一级，下列普通矿石的提炼产出提高2%：斜长岩、干焦岩、灼烧岩、凡晶石、摩多\
-      石"
+    zh: "提炼普通矿石的专业技能。可以大大提高技能熟练者使用提炼设备时的效率。每升一级，下列普通矿石的提炼产出提高2%：斜长岩、干焦岩、灼烧岩、凡晶石、莫德\
+      合金"
   groupID: 1218
   iconID: 33
   marketGroupID: 1323
@@ -2123,8 +2132,8 @@
       克诺岩</a>、<a href=showinfo:81900>克里石</a>和<a href=showinfo:82016>诺克希特</a>。虫洞星系：\
       <a href=showinfo:1224>干焦岩</a>、<a href=showinfo:1227>奥贝尔石</a>、<a href=showinfo:1229>片\
       麻岩</a>、<a href=showinfo:1223>双多特石</a>，以及<a href=showinfo:22>艾克诺岩</a>。此外，从<a\
-      \ href=showinfo:74521>摩多石</a>中也能提炼出相当可观的数量。这种稀有矿石主要分布在零安全等级星系和虫洞星系的A0恒星（蓝色小型\
-      ），以及帝国和零安全区域边境的已探明地点。"
+      \ href=showinfo:74521>莫德合金</a>中也能提炼出相当可观的数量。这种稀有矿石主要分布在零安全等级星系和虫洞星系的A0恒星（蓝色小\
+      型），以及帝国和零安全区域边境的已探明地点。"
   groupID: 18
   iconID: 400
   marketGroupID: 1857
@@ -2370,8 +2379,8 @@
       <a href=showinfo:20>水硼砂</a>、<a href=showinfo:81975>格里米尔</a>和<a href=showinfo:82163>赫\
       佐利姆</a>。虫洞星系：<a href=showinfo:1227>奥贝尔石</a>、<a href=showinfo:20>水硼砂</a>和<a href=showinfo:1229>片\
       麻岩</a>。它还大量存在于多种稀有矿石之中，例如<a href=showinfo:19>灰岩</a>、<a href=showinfo:52316>贝\
-      兹岩</a>和<a href=showinfo:52315>拉克岩</a>。此外，从<a href=showinfo:74525>钇岩</a>中也能提炼\
-      出相当可观的数量。这种稀有矿石主要分布在零安全等级星系和虫洞星系的A0恒星（蓝色小型），以及帝国和零安全区域边境的已探明地点。"
+      兹岩</a>和<a href=showinfo:52315>拉克岩</a>。此外，从<a href=showinfo:74525>耶利合金</a>中也能\
+      提炼出相当可观的数量。这种稀有矿石主要分布在零安全等级星系和虫洞星系的A0恒星（蓝色小型），以及帝国和零安全区域边境的已探明地点。"
   groupID: 18
   iconID: 402
   marketGroupID: 1857
@@ -2557,8 +2566,8 @@
     zh: "只存在于巨大的晶洞中；它的外层是岩石，而内层是水晶般的石英。在所有晶洞石中，要属内含暗绿色晶状石英核岩的最为稀有和宝贵。它们非常珍贵，价格也十分高\
       昂。可通过提炼<a href=showinfo:1223>双多特石</a>及其变种获得。这些矿石分布于零安全等级星系和虫洞星系中。晶状石英核岩还大量存在\
       于<a href=showinfo:19>灰岩</a>和<a href=showinfo:52315>拉克岩</a>等稀有矿石之中。你可以从零安全等级星\
-      系的<a href=showinfo:82163>赫佐利姆</a>中提炼出晶状石英核岩。此外，从<a href=showinfo:74529>艾弗石</a>中\
-      也能提炼出相当可观的数量。这种稀有矿石主要分布在零安全等级星系和虫洞星系的A0恒星（蓝色小型），以及帝国和零安全区域边境的已探明地点。"
+      系的<a href=showinfo:82163>赫佐利姆</a>中提炼出晶状石英核岩。此外，从<a href=showinfo:74529>埃菲尔合金\
+      </a>中也能提炼出相当可观的数量。这种稀有矿石主要分布在零安全等级星系和虫洞星系的A0恒星（蓝色小型），以及帝国和零安全区域边境的已探明地点。"
   groupID: 18
   iconID: 404
   marketGroupID: 1857
@@ -2659,7 +2668,7 @@
       внем безопасности в составе <a href=showinfo:82205>уэганита</a>."
     zh: "一种存在于彗星中的极其稀有的矿物，偶尔也会在穿过了气云的小行星中发现。具有独一无二的爆炸特性，在军工产业中非常有价值。可通过提炼<a href=showinfo:22>艾\
       克诺岩</a>及其变种获得。这些矿石分布于零安全等级星系和虫洞星系中。超噬矿还大量存在于<a href=showinfo:19>灰岩</a>、<a href=showinfo:52316>贝\
-      兹岩</a>和<a href=showinfo:52306>塔拉岩</a>等稀有矿石之中。此外，从<a href=showinfo:74533>杜希石\
+      兹岩</a>和<a href=showinfo:52306>塔拉岩</a>等稀有矿石之中。此外，从<a href=showinfo:74533>杜厦合金\
       </a>中也能提炼出相当可观的数量。这种稀有矿石主要分布在零安全等级星系和虫洞星系的A0恒星（蓝色小型），以及帝国和零安全区域边境的已探明地点。分布在零\
       安全等级星系的<a href=showinfo:82205>尤加石</a>中也含有超噬矿。"
   groupID: 18
@@ -3535,6 +3544,7 @@
   marketGroupID: 921
   mass: 1250
   metaGroupID: 1
+  metaLevel: 0
   name:
     de: "Mjolnir Cruise Missile"
     en: "Mjolnir Cruise Missile"
@@ -3593,6 +3603,7 @@
   marketGroupID: 925
   mass: 1250
   metaGroupID: 2
+  metaLevel: 5
   name:
     de: "Mjolnir Fury Cruise Missile"
     en: "Mjolnir Fury Cruise Missile"
@@ -4076,22 +4087,11 @@
       ий в\_системах с\_высоким уровнем безопасности запрещена. Изменения не косну\
       тся сверхбольших сооружений, поставленных на якорь до этой даты, но затронут\
       \ станции, которые будут сняты с\_якоря позднее."
-    zh: "Named after one of the co-creators of the first Caldari warp drive, the Sotiyo-Urbaata\
-      \ Drive, the Sotiyo serves as a mega-scale manufacturing and assembly site for\
-      \ everything from subcapital ships and modules, up to supercapital class hulls.\
-      \     The Sotiyo is the Engineering Complex fit for megacorporations in the\
-      \ Upwell Consortium’s new line of structures, and is able to use Upwell's Standup\
-      \ Service modules, allowing flexibility and customization of its functions.\
-      \ This dedicated industrial structure also provides access to Upwell’s XL-Set\
-      \ line of rigs designed to improve productivity and optimization of various\
-      \ aspects of manufacturing and research.    Due to its extra-large size this\
-      \ engineering complex can accommodate construction of supercapital ships using\
-      \ the Standup Supercapital Shipyard I Service Module.    The Sotiyo provides\
-      \ tethering technology and has docking capabilities for capital-size ships and\
-      \ below.    On June 14th YC125 CONCORD updated the capsuleer structure regulations\
-      \ to disallow the anchoring of any new XL structures in highsec space. XL structures\
-      \ that were anchored before this date will not be affected by this change unless\
-      \ they are unanchored."
+    zh: "以加达里第一架跃迁引擎的发明人之一索迪约·厄尔巴塔命名，这座索迪约超大型建筑可用于从非旗舰级舰船和装备到旗舰级舰船的生产和组装。\n\n索迪约是昇\
+      威财团的全新系列建筑中适用于超大型军团的工业复合体，还能使用昇威的屹立服务装备，从而实现更灵活且可定制的功能。这座专门的工业建筑还可以加装昇威超大型改装\
+      件，以提高生产率并从多方面改善制造和研究的效率。\n\n鉴于这座工程复合体的庞大体积，它还能在使用屹立超级旗舰船坞 I 服务装备后实现建造超级旗舰的功能\
+      。\n\n索迪约工程复合体还为旗舰及其以下的舰船提供驻留和停靠功能。\n\nYC125年6月14日，统合部更新了克隆飞行员建筑使用条例，高安星系不再可以\
+      锚定任何超大型建筑。在此日期之前已锚定的超大型建筑除非解锚，否则不受此规定影响。"
   graphicID: 21406
   groupID: 1404
   marketGroupID: 2324
@@ -4382,6 +4382,7 @@
   marketGroupID: 1932
   mass: 1000000
   metaGroupID: 2
+  metaLevel: 5
   name:
     de: "Whiptail"
     en: "Whiptail"
@@ -4501,6 +4502,7 @@
   marketGroupID: 1379
   mass: 97100000
   metaGroupID: 4
+  metaLevel: 7
   name:
     de: "Dominix Navy Issue"
     en: "Dominix Navy Issue"

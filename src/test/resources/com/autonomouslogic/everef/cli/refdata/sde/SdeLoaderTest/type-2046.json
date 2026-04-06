@@ -14,6 +14,7 @@
   "market_group_id" : 615,
   "mass" : 5000,
   "meta_group_id" : 1,
+  "meta_level" : 0,
   "name" : {
     "de" : "Damage Control I",
     "en" : "Damage Control I",

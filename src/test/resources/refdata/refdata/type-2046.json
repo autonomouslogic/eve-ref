@@ -147,6 +147,7 @@
   "type_id" : 2046,
   "volume" : 5,
   "meta_group_id" : 1,
+  "meta_level" : 0,
   "required_skills" : {
     "3394" : 1
   },

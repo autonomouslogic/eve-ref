@@ -433,6 +433,7 @@
   "base_price" : 153900000,
   "faction_id" : 500004,
   "meta_group_id" : 1,
+  "meta_level" : 0,
   "race_id" : 8,
   "sound_id" : 20072,
   "type_materials" : {

@@ -517,6 +517,7 @@
   "base_price" : 12500000,
   "faction_id" : 500010,
   "meta_group_id" : 2,
+  "meta_level" : 5,
   "race_id" : 1,
   "sound_id" : 20070,
   "traits" : {

@@ -161,6 +161,7 @@
   "volume" : 0.05,
   "base_price" : 15000,
   "meta_group_id" : 1,
+  "meta_level" : 0,
   "required_skills" : {
     "3326" : 1,
     "3319" : 1

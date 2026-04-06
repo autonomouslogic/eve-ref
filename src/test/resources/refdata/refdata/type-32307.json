@@ -445,6 +445,7 @@
   "base_price" : 219800000,
   "faction_id" : 500004,
   "meta_group_id" : 4,
+  "meta_level" : 7,
   "race_id" : 8,
   "sound_id" : 20072,
   "variation_parent_type_id" : 645,
