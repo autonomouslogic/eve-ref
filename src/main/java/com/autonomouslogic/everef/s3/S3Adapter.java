@@ -1,7 +1,6 @@
 package com.autonomouslogic.everef.s3;
 
 import com.autonomouslogic.everef.url.S3Url;
-import com.autonomouslogic.everef.util.Rx;
 import com.autonomouslogic.everef.util.TempFiles;
 import com.autonomouslogic.everef.util.VirtualThreads;
 import io.reactivex.rxjava3.core.Flowable;
@@ -86,12 +85,12 @@ public class S3Adapter {
 	}
 
 	public Single<GetObjectResponse> getObject(GetObjectRequest get, Path destination, S3AsyncClient s3Client) {
-		return Rx.toSingle(s3Client.getObject(get, destination)).observeOn(VirtualThreads.SCHEDULER);
+		return Single.fromCompletionStage(s3Client.getObject(get, destination)).observeOn(VirtualThreads.SCHEDULER);
 	}
 
 	public Single<PutObjectResponse> putObject(
 			@NonNull PutObjectRequest req, @NonNull AsyncRequestBody body, @NonNull S3AsyncClient client) {
-		return Rx.toSingle(client.putObject(req, body))
+		return Single.fromCompletionStage(client.putObject(req, body))
 				.timeout(120, TimeUnit.SECONDS)
 				.retry(3, e -> {
 					log.warn(String.format("Retrying put to %s", req.key()), e);
@@ -132,7 +131,7 @@ public class S3Adapter {
 	}
 
 	public Single<DeleteObjectResponse> deleteObject(@NonNull DeleteObjectRequest req, @NonNull S3AsyncClient client) {
-		return Rx.toSingle(client.deleteObject(req))
+		return Single.fromCompletionStage(client.deleteObject(req))
 				.timeout(120, TimeUnit.SECONDS)
 				.retry(3, e -> {
 					log.warn(String.format("Retrying delete to %s", req.key()), e);

@@ -1,42 +1,54 @@
 package com.autonomouslogic.everef.util;
 
-import io.reactivex.rxjava3.core.Completable;
-import io.reactivex.rxjava3.core.Maybe;
 import io.reactivex.rxjava3.core.Scheduler;
-import io.reactivex.rxjava3.functions.Action;
-import io.reactivex.rxjava3.functions.Supplier;
 import io.reactivex.rxjava3.schedulers.Schedulers;
-import java.util.Optional;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 public class VirtualThreads {
 	public static final ExecutorService EXECUTOR = Executors.newThreadPerTaskExecutor(
 			Thread.ofVirtual().name("virtual").factory());
 	public static final Scheduler SCHEDULER = Schedulers.from(EXECUTOR);
 
+	// Separate executor for offloading blocking I/O operations
+	private static final ExecutorService IO_EXECUTOR = Executors.newCachedThreadPool();
+
 	/**
-	 * Offloads an action to the RxJava IO thread pool.
-	 * @param supplier
-	 * @return
-	 * @param <T>
+	 * Offloads a task to a separate IO thread pool.
+	 * @param supplier the task to execute
+	 * @return the result of the task
+	 * @param <T> the return type
 	 */
-	public static <T> T offload(Supplier<T> supplier) {
+	public static <T> T offload(Callable<T> supplier) {
 		checkThread();
-		return Maybe.defer(() -> Maybe.fromOptional(Optional.ofNullable(supplier.get())))
-				.subscribeOn(Schedulers.io())
-				.blockingGet();
+		try {
+			Future<T> future = IO_EXECUTOR.submit(supplier);
+			return future.get();
+		} catch (Exception e) {
+			if (e instanceof InterruptedException) {
+				Thread.currentThread().interrupt();
+			}
+			throw new RuntimeException("Error during offload execution", e);
+		}
 	}
 
 	/**
-	 * Offloads an action to the RxJava IO thread pool.
-	 * @param action
-	 * @return
-	 * @param <T>
+	 * Offloads a task to a separate IO thread pool.
+	 * @param action the action to execute
 	 */
-	public static void offload(Action action) {
+	public static void offload(Runnable action) {
 		checkThread();
-		Completable.fromAction(action).subscribeOn(Schedulers.io()).blockingAwait();
+		try {
+			Future<?> future = IO_EXECUTOR.submit(action);
+			future.get();
+		} catch (Exception e) {
+			if (e instanceof InterruptedException) {
+				Thread.currentThread().interrupt();
+			}
+			throw new RuntimeException("Error during offload execution", e);
+		}
 	}
 
 	public static void checkThread() {
