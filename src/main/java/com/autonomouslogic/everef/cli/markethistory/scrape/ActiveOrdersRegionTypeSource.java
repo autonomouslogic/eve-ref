@@ -30,7 +30,7 @@ class ActiveOrdersRegionTypeSource implements RegionTypeSource {
 					var regionId = region.getRegionId().intValue();
 					return marketEsi
 							.getActiveMarketOrderTypes(regionId)
-							.map(typeId -> new RegionTypePair(regionId, typeId));
+							.map(typeId -> new RegionTypePair(regionId, typeId.intValue()));
 				})
 				.onErrorResumeNext(e -> {
 					log.warn("Failed fetching active market order types, ignoring", e);

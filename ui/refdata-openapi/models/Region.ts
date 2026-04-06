@@ -12,12 +12,13 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 import type { Coordinate } from './Coordinate';
 import {
     CoordinateFromJSON,
     CoordinateFromJSONTyped,
     CoordinateToJSON,
+    CoordinateToJSONTyped,
 } from './Coordinate';
 
 /**
@@ -91,10 +92,8 @@ export interface Region {
 /**
  * Check if a given object implements the Region interface.
  */
-export function instanceOfRegion(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+export function instanceOfRegion(value: object): value is Region {
+    return true;
 }
 
 export function RegionFromJSON(json: any): Region {
@@ -102,43 +101,45 @@ export function RegionFromJSON(json: any): Region {
 }
 
 export function RegionFromJSONTyped(json: any, ignoreDiscriminator: boolean): Region {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'description': !exists(json, 'description') ? undefined : json['description'],
-        'descriptionId': !exists(json, 'description_id') ? undefined : json['description_id'],
-        'factionId': !exists(json, 'faction_id') ? undefined : json['faction_id'],
-        'name': !exists(json, 'name') ? undefined : json['name'],
-        'nameId': !exists(json, 'name_id') ? undefined : json['name_id'],
-        'nebulaId': !exists(json, 'nebula_id') ? undefined : json['nebula_id'],
-        'position': !exists(json, 'position') ? undefined : CoordinateFromJSON(json['position']),
-        'regionId': !exists(json, 'region_id') ? undefined : json['region_id'],
-        'universeId': !exists(json, 'universe_id') ? undefined : json['universe_id'],
-        'wormholeClassId': !exists(json, 'wormhole_class_id') ? undefined : json['wormhole_class_id'],
+        'description': json['description'] == null ? undefined : json['description'],
+        'descriptionId': json['description_id'] == null ? undefined : json['description_id'],
+        'factionId': json['faction_id'] == null ? undefined : json['faction_id'],
+        'name': json['name'] == null ? undefined : json['name'],
+        'nameId': json['name_id'] == null ? undefined : json['name_id'],
+        'nebulaId': json['nebula_id'] == null ? undefined : json['nebula_id'],
+        'position': json['position'] == null ? undefined : CoordinateFromJSON(json['position']),
+        'regionId': json['region_id'] == null ? undefined : json['region_id'],
+        'universeId': json['universe_id'] == null ? undefined : json['universe_id'],
+        'wormholeClassId': json['wormhole_class_id'] == null ? undefined : json['wormhole_class_id'],
     };
 }
 
-export function RegionToJSON(value?: Region | null): any {
-    if (value === undefined) {
-        return undefined;
+export function RegionToJSON(json: any): Region {
+    return RegionToJSONTyped(json, false);
+}
+
+export function RegionToJSONTyped(value?: Region | null, ignoreDiscriminator: boolean = false): any {
+    if (value == null) {
+        return value;
     }
-    if (value === null) {
-        return null;
-    }
+
     return {
         
-        'description': value.description,
-        'description_id': value.descriptionId,
-        'faction_id': value.factionId,
-        'name': value.name,
-        'name_id': value.nameId,
-        'nebula_id': value.nebulaId,
-        'position': CoordinateToJSON(value.position),
-        'region_id': value.regionId,
-        'universe_id': value.universeId,
-        'wormhole_class_id': value.wormholeClassId,
+        'description': value['description'],
+        'description_id': value['descriptionId'],
+        'faction_id': value['factionId'],
+        'name': value['name'],
+        'name_id': value['nameId'],
+        'nebula_id': value['nebulaId'],
+        'position': CoordinateToJSON(value['position']),
+        'region_id': value['regionId'],
+        'universe_id': value['universeId'],
+        'wormhole_class_id': value['wormholeClassId'],
     };
 }
 

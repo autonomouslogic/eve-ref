@@ -12,66 +12,76 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
-import type { Blueprint } from './Blueprint';
+import { mapValues } from '../runtime';
+import type { Skill } from './Skill';
 import {
-    BlueprintFromJSON,
-    BlueprintFromJSONTyped,
-    BlueprintToJSON,
-} from './Blueprint';
-import type { DogmaAttribute } from './DogmaAttribute';
-import {
-    DogmaAttributeFromJSON,
-    DogmaAttributeFromJSONTyped,
-    DogmaAttributeToJSON,
-} from './DogmaAttribute';
-import type { Icon } from './Icon';
-import {
-    IconFromJSON,
-    IconFromJSONTyped,
-    IconToJSON,
-} from './Icon';
-import type { InventoryCategory } from './InventoryCategory';
-import {
-    InventoryCategoryFromJSON,
-    InventoryCategoryFromJSONTyped,
-    InventoryCategoryToJSON,
-} from './InventoryCategory';
-import type { InventoryGroup } from './InventoryGroup';
-import {
-    InventoryGroupFromJSON,
-    InventoryGroupFromJSONTyped,
-    InventoryGroupToJSON,
-} from './InventoryGroup';
+    SkillFromJSON,
+    SkillFromJSONTyped,
+    SkillToJSON,
+    SkillToJSONTyped,
+} from './Skill';
 import type { InventoryType } from './InventoryType';
 import {
     InventoryTypeFromJSON,
     InventoryTypeFromJSONTyped,
     InventoryTypeToJSON,
+    InventoryTypeToJSONTyped,
 } from './InventoryType';
+import type { Blueprint } from './Blueprint';
+import {
+    BlueprintFromJSON,
+    BlueprintFromJSONTyped,
+    BlueprintToJSON,
+    BlueprintToJSONTyped,
+} from './Blueprint';
+import type { InventoryGroup } from './InventoryGroup';
+import {
+    InventoryGroupFromJSON,
+    InventoryGroupFromJSONTyped,
+    InventoryGroupToJSON,
+    InventoryGroupToJSONTyped,
+} from './InventoryGroup';
 import type { MarketGroup } from './MarketGroup';
 import {
     MarketGroupFromJSON,
     MarketGroupFromJSONTyped,
     MarketGroupToJSON,
+    MarketGroupToJSONTyped,
 } from './MarketGroup';
 import type { MetaGroup } from './MetaGroup';
 import {
     MetaGroupFromJSON,
     MetaGroupFromJSONTyped,
     MetaGroupToJSON,
+    MetaGroupToJSONTyped,
 } from './MetaGroup';
-import type { Skill } from './Skill';
+import type { InventoryCategory } from './InventoryCategory';
 import {
-    SkillFromJSON,
-    SkillFromJSONTyped,
-    SkillToJSON,
-} from './Skill';
+    InventoryCategoryFromJSON,
+    InventoryCategoryFromJSONTyped,
+    InventoryCategoryToJSON,
+    InventoryCategoryToJSONTyped,
+} from './InventoryCategory';
+import type { Icon } from './Icon';
+import {
+    IconFromJSON,
+    IconFromJSONTyped,
+    IconToJSON,
+    IconToJSONTyped,
+} from './Icon';
+import type { DogmaAttribute } from './DogmaAttribute';
+import {
+    DogmaAttributeFromJSON,
+    DogmaAttributeFromJSONTyped,
+    DogmaAttributeToJSON,
+    DogmaAttributeToJSONTyped,
+} from './DogmaAttribute';
 import type { Unit } from './Unit';
 import {
     UnitFromJSON,
     UnitFromJSONTyped,
     UnitToJSON,
+    UnitToJSONTyped,
 } from './Unit';
 
 /**
@@ -145,10 +155,8 @@ export interface Bundle {
 /**
  * Check if a given object implements the Bundle interface.
  */
-export function instanceOfBundle(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+export function instanceOfBundle(value: object): value is Bundle {
+    return true;
 }
 
 export function BundleFromJSON(json: any): Bundle {
@@ -156,43 +164,45 @@ export function BundleFromJSON(json: any): Bundle {
 }
 
 export function BundleFromJSONTyped(json: any, ignoreDiscriminator: boolean): Bundle {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'blueprints': !exists(json, 'blueprints') ? undefined : (mapValues(json['blueprints'], BlueprintFromJSON)),
-        'categories': !exists(json, 'categories') ? undefined : (mapValues(json['categories'], InventoryCategoryFromJSON)),
-        'dogmaAttributes': !exists(json, 'dogma_attributes') ? undefined : (mapValues(json['dogma_attributes'], DogmaAttributeFromJSON)),
-        'groups': !exists(json, 'groups') ? undefined : (mapValues(json['groups'], InventoryGroupFromJSON)),
-        'icons': !exists(json, 'icons') ? undefined : (mapValues(json['icons'], IconFromJSON)),
-        'marketGroups': !exists(json, 'market_groups') ? undefined : (mapValues(json['market_groups'], MarketGroupFromJSON)),
-        'metaGroups': !exists(json, 'meta_groups') ? undefined : (mapValues(json['meta_groups'], MetaGroupFromJSON)),
-        'skills': !exists(json, 'skills') ? undefined : (mapValues(json['skills'], SkillFromJSON)),
-        'types': !exists(json, 'types') ? undefined : (mapValues(json['types'], InventoryTypeFromJSON)),
-        'units': !exists(json, 'units') ? undefined : (mapValues(json['units'], UnitFromJSON)),
+        'blueprints': json['blueprints'] == null ? undefined : (mapValues(json['blueprints'], BlueprintFromJSON)),
+        'categories': json['categories'] == null ? undefined : (mapValues(json['categories'], InventoryCategoryFromJSON)),
+        'dogmaAttributes': json['dogma_attributes'] == null ? undefined : (mapValues(json['dogma_attributes'], DogmaAttributeFromJSON)),
+        'groups': json['groups'] == null ? undefined : (mapValues(json['groups'], InventoryGroupFromJSON)),
+        'icons': json['icons'] == null ? undefined : (mapValues(json['icons'], IconFromJSON)),
+        'marketGroups': json['market_groups'] == null ? undefined : (mapValues(json['market_groups'], MarketGroupFromJSON)),
+        'metaGroups': json['meta_groups'] == null ? undefined : (mapValues(json['meta_groups'], MetaGroupFromJSON)),
+        'skills': json['skills'] == null ? undefined : (mapValues(json['skills'], SkillFromJSON)),
+        'types': json['types'] == null ? undefined : (mapValues(json['types'], InventoryTypeFromJSON)),
+        'units': json['units'] == null ? undefined : (mapValues(json['units'], UnitFromJSON)),
     };
 }
 
-export function BundleToJSON(value?: Bundle | null): any {
-    if (value === undefined) {
-        return undefined;
+export function BundleToJSON(json: any): Bundle {
+    return BundleToJSONTyped(json, false);
+}
+
+export function BundleToJSONTyped(value?: Bundle | null, ignoreDiscriminator: boolean = false): any {
+    if (value == null) {
+        return value;
     }
-    if (value === null) {
-        return null;
-    }
+
     return {
         
-        'blueprints': value.blueprints === undefined ? undefined : (mapValues(value.blueprints, BlueprintToJSON)),
-        'categories': value.categories === undefined ? undefined : (mapValues(value.categories, InventoryCategoryToJSON)),
-        'dogma_attributes': value.dogmaAttributes === undefined ? undefined : (mapValues(value.dogmaAttributes, DogmaAttributeToJSON)),
-        'groups': value.groups === undefined ? undefined : (mapValues(value.groups, InventoryGroupToJSON)),
-        'icons': value.icons === undefined ? undefined : (mapValues(value.icons, IconToJSON)),
-        'market_groups': value.marketGroups === undefined ? undefined : (mapValues(value.marketGroups, MarketGroupToJSON)),
-        'meta_groups': value.metaGroups === undefined ? undefined : (mapValues(value.metaGroups, MetaGroupToJSON)),
-        'skills': value.skills === undefined ? undefined : (mapValues(value.skills, SkillToJSON)),
-        'types': value.types === undefined ? undefined : (mapValues(value.types, InventoryTypeToJSON)),
-        'units': value.units === undefined ? undefined : (mapValues(value.units, UnitToJSON)),
+        'blueprints': value['blueprints'] == null ? undefined : (mapValues(value['blueprints'], BlueprintToJSON)),
+        'categories': value['categories'] == null ? undefined : (mapValues(value['categories'], InventoryCategoryToJSON)),
+        'dogma_attributes': value['dogmaAttributes'] == null ? undefined : (mapValues(value['dogmaAttributes'], DogmaAttributeToJSON)),
+        'groups': value['groups'] == null ? undefined : (mapValues(value['groups'], InventoryGroupToJSON)),
+        'icons': value['icons'] == null ? undefined : (mapValues(value['icons'], IconToJSON)),
+        'market_groups': value['marketGroups'] == null ? undefined : (mapValues(value['marketGroups'], MarketGroupToJSON)),
+        'meta_groups': value['metaGroups'] == null ? undefined : (mapValues(value['metaGroups'], MetaGroupToJSON)),
+        'skills': value['skills'] == null ? undefined : (mapValues(value['skills'], SkillToJSON)),
+        'types': value['types'] == null ? undefined : (mapValues(value['types'], InventoryTypeToJSON)),
+        'units': value['units'] == null ? undefined : (mapValues(value['units'], UnitToJSON)),
     };
 }
 

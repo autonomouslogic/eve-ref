@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 /**
  * 
  * @export
@@ -48,10 +48,8 @@ export interface Unit {
 /**
  * Check if a given object implements the Unit interface.
  */
-export function instanceOfUnit(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+export function instanceOfUnit(value: object): value is Unit {
+    return true;
 }
 
 export function UnitFromJSON(json: any): Unit {
@@ -59,31 +57,33 @@ export function UnitFromJSON(json: any): Unit {
 }
 
 export function UnitFromJSONTyped(json: any, ignoreDiscriminator: boolean): Unit {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'description': !exists(json, 'description') ? undefined : json['description'],
-        'displayName': !exists(json, 'display_name') ? undefined : json['display_name'],
-        'name': !exists(json, 'name') ? undefined : json['name'],
-        'unitId': !exists(json, 'unit_id') ? undefined : json['unit_id'],
+        'description': json['description'] == null ? undefined : json['description'],
+        'displayName': json['display_name'] == null ? undefined : json['display_name'],
+        'name': json['name'] == null ? undefined : json['name'],
+        'unitId': json['unit_id'] == null ? undefined : json['unit_id'],
     };
 }
 
-export function UnitToJSON(value?: Unit | null): any {
-    if (value === undefined) {
-        return undefined;
+export function UnitToJSON(json: any): Unit {
+    return UnitToJSONTyped(json, false);
+}
+
+export function UnitToJSONTyped(value?: Unit | null, ignoreDiscriminator: boolean = false): any {
+    if (value == null) {
+        return value;
     }
-    if (value === null) {
-        return null;
-    }
+
     return {
         
-        'description': value.description,
-        'display_name': value.displayName,
-        'name': value.name,
-        'unit_id': value.unitId,
+        'description': value['description'],
+        'display_name': value['displayName'],
+        'name': value['name'],
+        'unit_id': value['unitId'],
     };
 }
 

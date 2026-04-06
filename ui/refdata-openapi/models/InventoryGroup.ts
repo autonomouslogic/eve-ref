@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 /**
  * An inventory group
  * @export
@@ -84,10 +84,8 @@ export interface InventoryGroup {
 /**
  * Check if a given object implements the InventoryGroup interface.
  */
-export function instanceOfInventoryGroup(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+export function instanceOfInventoryGroup(value: object): value is InventoryGroup {
+    return true;
 }
 
 export function InventoryGroupFromJSON(json: any): InventoryGroup {
@@ -95,43 +93,45 @@ export function InventoryGroupFromJSON(json: any): InventoryGroup {
 }
 
 export function InventoryGroupFromJSONTyped(json: any, ignoreDiscriminator: boolean): InventoryGroup {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'anchorable': !exists(json, 'anchorable') ? undefined : json['anchorable'],
-        'anchored': !exists(json, 'anchored') ? undefined : json['anchored'],
-        'categoryId': !exists(json, 'category_id') ? undefined : json['category_id'],
-        'fittableNonSingleton': !exists(json, 'fittable_non_singleton') ? undefined : json['fittable_non_singleton'],
-        'groupId': !exists(json, 'group_id') ? undefined : json['group_id'],
-        'iconId': !exists(json, 'icon_id') ? undefined : json['icon_id'],
-        'name': !exists(json, 'name') ? undefined : json['name'],
-        'published': !exists(json, 'published') ? undefined : json['published'],
-        'typeIds': !exists(json, 'type_ids') ? undefined : json['type_ids'],
-        'useBasePrice': !exists(json, 'use_base_price') ? undefined : json['use_base_price'],
+        'anchorable': json['anchorable'] == null ? undefined : json['anchorable'],
+        'anchored': json['anchored'] == null ? undefined : json['anchored'],
+        'categoryId': json['category_id'] == null ? undefined : json['category_id'],
+        'fittableNonSingleton': json['fittable_non_singleton'] == null ? undefined : json['fittable_non_singleton'],
+        'groupId': json['group_id'] == null ? undefined : json['group_id'],
+        'iconId': json['icon_id'] == null ? undefined : json['icon_id'],
+        'name': json['name'] == null ? undefined : json['name'],
+        'published': json['published'] == null ? undefined : json['published'],
+        'typeIds': json['type_ids'] == null ? undefined : json['type_ids'],
+        'useBasePrice': json['use_base_price'] == null ? undefined : json['use_base_price'],
     };
 }
 
-export function InventoryGroupToJSON(value?: InventoryGroup | null): any {
-    if (value === undefined) {
-        return undefined;
+export function InventoryGroupToJSON(json: any): InventoryGroup {
+    return InventoryGroupToJSONTyped(json, false);
+}
+
+export function InventoryGroupToJSONTyped(value?: InventoryGroup | null, ignoreDiscriminator: boolean = false): any {
+    if (value == null) {
+        return value;
     }
-    if (value === null) {
-        return null;
-    }
+
     return {
         
-        'anchorable': value.anchorable,
-        'anchored': value.anchored,
-        'category_id': value.categoryId,
-        'fittable_non_singleton': value.fittableNonSingleton,
-        'group_id': value.groupId,
-        'icon_id': value.iconId,
-        'name': value.name,
-        'published': value.published,
-        'type_ids': value.typeIds,
-        'use_base_price': value.useBasePrice,
+        'anchorable': value['anchorable'],
+        'anchored': value['anchored'],
+        'category_id': value['categoryId'],
+        'fittable_non_singleton': value['fittableNonSingleton'],
+        'group_id': value['groupId'],
+        'icon_id': value['iconId'],
+        'name': value['name'],
+        'published': value['published'],
+        'type_ids': value['typeIds'],
+        'use_base_price': value['useBasePrice'],
     };
 }
 

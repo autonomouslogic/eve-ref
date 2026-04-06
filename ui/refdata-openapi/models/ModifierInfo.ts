@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 /**
  * 
  * @export
@@ -72,10 +72,8 @@ export interface ModifierInfo {
 /**
  * Check if a given object implements the ModifierInfo interface.
  */
-export function instanceOfModifierInfo(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+export function instanceOfModifierInfo(value: object): value is ModifierInfo {
+    return true;
 }
 
 export function ModifierInfoFromJSON(json: any): ModifierInfo {
@@ -83,39 +81,41 @@ export function ModifierInfoFromJSON(json: any): ModifierInfo {
 }
 
 export function ModifierInfoFromJSONTyped(json: any, ignoreDiscriminator: boolean): ModifierInfo {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'domain': !exists(json, 'domain') ? undefined : json['domain'],
-        'effectId': !exists(json, 'effect_id') ? undefined : json['effect_id'],
-        'func': !exists(json, 'func') ? undefined : json['func'],
-        'groupId': !exists(json, 'group_id') ? undefined : json['group_id'],
-        'modifiedAttributeId': !exists(json, 'modified_attribute_id') ? undefined : json['modified_attribute_id'],
-        'modifyingAttributeId': !exists(json, 'modifying_attribute_id') ? undefined : json['modifying_attribute_id'],
-        'operator': !exists(json, 'operator') ? undefined : json['operator'],
-        'skillTypeId': !exists(json, 'skill_type_id') ? undefined : json['skill_type_id'],
+        'domain': json['domain'] == null ? undefined : json['domain'],
+        'effectId': json['effect_id'] == null ? undefined : json['effect_id'],
+        'func': json['func'] == null ? undefined : json['func'],
+        'groupId': json['group_id'] == null ? undefined : json['group_id'],
+        'modifiedAttributeId': json['modified_attribute_id'] == null ? undefined : json['modified_attribute_id'],
+        'modifyingAttributeId': json['modifying_attribute_id'] == null ? undefined : json['modifying_attribute_id'],
+        'operator': json['operator'] == null ? undefined : json['operator'],
+        'skillTypeId': json['skill_type_id'] == null ? undefined : json['skill_type_id'],
     };
 }
 
-export function ModifierInfoToJSON(value?: ModifierInfo | null): any {
-    if (value === undefined) {
-        return undefined;
+export function ModifierInfoToJSON(json: any): ModifierInfo {
+    return ModifierInfoToJSONTyped(json, false);
+}
+
+export function ModifierInfoToJSONTyped(value?: ModifierInfo | null, ignoreDiscriminator: boolean = false): any {
+    if (value == null) {
+        return value;
     }
-    if (value === null) {
-        return null;
-    }
+
     return {
         
-        'domain': value.domain,
-        'effect_id': value.effectId,
-        'func': value.func,
-        'group_id': value.groupId,
-        'modified_attribute_id': value.modifiedAttributeId,
-        'modifying_attribute_id': value.modifyingAttributeId,
-        'operator': value.operator,
-        'skill_type_id': value.skillTypeId,
+        'domain': value['domain'],
+        'effect_id': value['effectId'],
+        'func': value['func'],
+        'group_id': value['groupId'],
+        'modified_attribute_id': value['modifiedAttributeId'],
+        'modifying_attribute_id': value['modifyingAttributeId'],
+        'operator': value['operator'],
+        'skill_type_id': value['skillTypeId'],
     };
 }
 

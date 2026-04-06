@@ -12,12 +12,13 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 import type { RefDataMetaFileInfo } from './RefDataMetaFileInfo';
 import {
     RefDataMetaFileInfoFromJSON,
     RefDataMetaFileInfoFromJSONTyped,
     RefDataMetaFileInfoToJSON,
+    RefDataMetaFileInfoToJSONTyped,
 } from './RefDataMetaFileInfo';
 
 /**
@@ -55,10 +56,8 @@ export interface RefDataMeta {
 /**
  * Check if a given object implements the RefDataMeta interface.
  */
-export function instanceOfRefDataMeta(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+export function instanceOfRefDataMeta(value: object): value is RefDataMeta {
+    return true;
 }
 
 export function RefDataMetaFromJSON(json: any): RefDataMeta {
@@ -66,31 +65,33 @@ export function RefDataMetaFromJSON(json: any): RefDataMeta {
 }
 
 export function RefDataMetaFromJSONTyped(json: any, ignoreDiscriminator: boolean): RefDataMeta {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'buildTime': !exists(json, 'build_time') ? undefined : (new Date(json['build_time'])),
-        'esi': !exists(json, 'esi') ? undefined : RefDataMetaFileInfoFromJSON(json['esi']),
-        'hoboleaks': !exists(json, 'hoboleaks') ? undefined : RefDataMetaFileInfoFromJSON(json['hoboleaks']),
-        'sde': !exists(json, 'sde') ? undefined : RefDataMetaFileInfoFromJSON(json['sde']),
+        'buildTime': json['build_time'] == null ? undefined : (new Date(json['build_time'])),
+        'esi': json['esi'] == null ? undefined : RefDataMetaFileInfoFromJSON(json['esi']),
+        'hoboleaks': json['hoboleaks'] == null ? undefined : RefDataMetaFileInfoFromJSON(json['hoboleaks']),
+        'sde': json['sde'] == null ? undefined : RefDataMetaFileInfoFromJSON(json['sde']),
     };
 }
 
-export function RefDataMetaToJSON(value?: RefDataMeta | null): any {
-    if (value === undefined) {
-        return undefined;
+export function RefDataMetaToJSON(json: any): RefDataMeta {
+    return RefDataMetaToJSONTyped(json, false);
+}
+
+export function RefDataMetaToJSONTyped(value?: RefDataMeta | null, ignoreDiscriminator: boolean = false): any {
+    if (value == null) {
+        return value;
     }
-    if (value === null) {
-        return null;
-    }
+
     return {
         
-        'build_time': value.buildTime === undefined ? undefined : (value.buildTime.toISOString()),
-        'esi': RefDataMetaFileInfoToJSON(value.esi),
-        'hoboleaks': RefDataMetaFileInfoToJSON(value.hoboleaks),
-        'sde': RefDataMetaFileInfoToJSON(value.sde),
+        'build_time': value['buildTime'] == null ? undefined : ((value['buildTime']).toISOString()),
+        'esi': RefDataMetaFileInfoToJSON(value['esi']),
+        'hoboleaks': RefDataMetaFileInfoToJSON(value['hoboleaks']),
+        'sde': RefDataMetaFileInfoToJSON(value['sde']),
     };
 }
 

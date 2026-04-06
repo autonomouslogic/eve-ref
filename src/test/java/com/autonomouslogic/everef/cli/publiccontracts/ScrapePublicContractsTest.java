@@ -9,7 +9,7 @@ import com.autonomouslogic.commons.ListUtil;
 import com.autonomouslogic.commons.ResourceUtil;
 import com.autonomouslogic.everef.esi.LocationPopulator;
 import com.autonomouslogic.everef.esi.MockLocationPopulatorModule;
-import com.autonomouslogic.everef.openapi.esi.model.GetUniverseTypesTypeIdOk;
+import com.autonomouslogic.everef.openapi.esi.model.UniverseTypesTypeIdGet;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.test.MockS3Adapter;
 import com.autonomouslogic.everef.test.TestDataUtil;
@@ -110,7 +110,7 @@ public class ScrapePublicContractsTest {
 
 	final String lastModified = "Mon, 03 Apr 2023 03:47:30 GMT";
 	final Instant lastModifiedInstant = Instant.parse("2023-04-03T03:47:30Z");
-	final GetUniverseTypesTypeIdOk type = new GetUniverseTypesTypeIdOk();
+	final UniverseTypesTypeIdGet type = new UniverseTypesTypeIdGet();
 	//			"", 0, "", true, 0, 0.0f, List.of(), List.of(), 0, 0, 0, 0.0f, 0.0f, 0, 0.0f, 0.0f);
 
 	MockWebServer server;
@@ -173,7 +173,7 @@ public class ScrapePublicContractsTest {
 				.map(RecordedRequest::getPath)
 				.sorted()
 				.distinct()
-				.toList(); // @todo remove distinct()
+				.toList();
 		assertEquals(
 				List.of(
 						"/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
@@ -199,11 +199,11 @@ public class ScrapePublicContractsTest {
 						"/latest/dogma/dynamic/items/49734/1040731418725/?datasource=tranquility&language=en",
 						"/meta_groups/15",
 						"/public-contracts/public-contracts-latest.v2.tar.bz2",
-						"/universe/regions/10000001/?datasource=tranquility",
-						"/universe/regions/10000002/?datasource=tranquility",
-						"/universe/regions/?datasource=tranquility",
-						"/universe/types/47804/?datasource=tranquility",
-						"/universe/types/49734/?datasource=tranquility"),
+						"/universe/regions",
+						"/universe/regions/10000001",
+						"/universe/regions/10000002",
+						"/universe/types/47804",
+						"/universe/types/49734"),
 				requestPaths);
 
 		// Assert data index.
@@ -343,11 +343,11 @@ public class ScrapePublicContractsTest {
 				var segments = request.getRequestUrl().pathSegments();
 
 				switch (path) {
-					case "/universe/regions/", "/latest/universe/regions/":
+					case "/universe/regions":
 						return mockResponse("[10000001,10000002]");
-					case "/universe/regions/10000001/", "/latest/universe/regions/10000001/":
+					case "/universe/regions/10000001":
 						return mockResponse("{\"region_id\":10000001,\"name\":\"Derelik\",\"constellations\":[]}");
-					case "/universe/regions/10000002/", "/latest/universe/regions/10000002/":
+					case "/universe/regions/10000002":
 						return mockResponse("{\"region_id\":10000002,\"name\":\"The Forge\",\"constellations\":[]}");
 					case "/meta_groups/15":
 						return metaGroup15();

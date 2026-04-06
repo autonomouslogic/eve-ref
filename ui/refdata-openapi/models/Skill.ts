@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 /**
  * Details about skill types. These are created entirely by EVE Ref.
  * @export
@@ -78,10 +78,8 @@ export interface Skill {
 /**
  * Check if a given object implements the Skill interface.
  */
-export function instanceOfSkill(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+export function instanceOfSkill(value: object): value is Skill {
+    return true;
 }
 
 export function SkillFromJSON(json: any): Skill {
@@ -89,41 +87,43 @@ export function SkillFromJSON(json: any): Skill {
 }
 
 export function SkillFromJSONTyped(json: any, ignoreDiscriminator: boolean): Skill {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'canNotBeTrainedOnTrial': !exists(json, 'can_not_be_trained_on_trial') ? undefined : json['can_not_be_trained_on_trial'],
-        'primaryCharacterAttributeId': !exists(json, 'primary_character_attribute_id') ? undefined : json['primary_character_attribute_id'],
-        'primaryDogmaAttributeId': !exists(json, 'primary_dogma_attribute_id') ? undefined : json['primary_dogma_attribute_id'],
-        'reprocessableTypeIds': !exists(json, 'reprocessable_type_ids') ? undefined : json['reprocessable_type_ids'],
-        'requiredSkills': !exists(json, 'required_skills') ? undefined : json['required_skills'],
-        'secondaryCharacterAttributeId': !exists(json, 'secondary_character_attribute_id') ? undefined : json['secondary_character_attribute_id'],
-        'secondaryDogmaAttributeId': !exists(json, 'secondary_dogma_attribute_id') ? undefined : json['secondary_dogma_attribute_id'],
-        'trainingTimeMultiplier': !exists(json, 'training_time_multiplier') ? undefined : json['training_time_multiplier'],
-        'typeId': !exists(json, 'type_id') ? undefined : json['type_id'],
+        'canNotBeTrainedOnTrial': json['can_not_be_trained_on_trial'] == null ? undefined : json['can_not_be_trained_on_trial'],
+        'primaryCharacterAttributeId': json['primary_character_attribute_id'] == null ? undefined : json['primary_character_attribute_id'],
+        'primaryDogmaAttributeId': json['primary_dogma_attribute_id'] == null ? undefined : json['primary_dogma_attribute_id'],
+        'reprocessableTypeIds': json['reprocessable_type_ids'] == null ? undefined : json['reprocessable_type_ids'],
+        'requiredSkills': json['required_skills'] == null ? undefined : json['required_skills'],
+        'secondaryCharacterAttributeId': json['secondary_character_attribute_id'] == null ? undefined : json['secondary_character_attribute_id'],
+        'secondaryDogmaAttributeId': json['secondary_dogma_attribute_id'] == null ? undefined : json['secondary_dogma_attribute_id'],
+        'trainingTimeMultiplier': json['training_time_multiplier'] == null ? undefined : json['training_time_multiplier'],
+        'typeId': json['type_id'] == null ? undefined : json['type_id'],
     };
 }
 
-export function SkillToJSON(value?: Skill | null): any {
-    if (value === undefined) {
-        return undefined;
+export function SkillToJSON(json: any): Skill {
+    return SkillToJSONTyped(json, false);
+}
+
+export function SkillToJSONTyped(value?: Skill | null, ignoreDiscriminator: boolean = false): any {
+    if (value == null) {
+        return value;
     }
-    if (value === null) {
-        return null;
-    }
+
     return {
         
-        'can_not_be_trained_on_trial': value.canNotBeTrainedOnTrial,
-        'primary_character_attribute_id': value.primaryCharacterAttributeId,
-        'primary_dogma_attribute_id': value.primaryDogmaAttributeId,
-        'reprocessable_type_ids': value.reprocessableTypeIds,
-        'required_skills': value.requiredSkills,
-        'secondary_character_attribute_id': value.secondaryCharacterAttributeId,
-        'secondary_dogma_attribute_id': value.secondaryDogmaAttributeId,
-        'training_time_multiplier': value.trainingTimeMultiplier,
-        'type_id': value.typeId,
+        'can_not_be_trained_on_trial': value['canNotBeTrainedOnTrial'],
+        'primary_character_attribute_id': value['primaryCharacterAttributeId'],
+        'primary_dogma_attribute_id': value['primaryDogmaAttributeId'],
+        'reprocessable_type_ids': value['reprocessableTypeIds'],
+        'required_skills': value['requiredSkills'],
+        'secondary_character_attribute_id': value['secondaryCharacterAttributeId'],
+        'secondary_dogma_attribute_id': value['secondaryDogmaAttributeId'],
+        'training_time_multiplier': value['trainingTimeMultiplier'],
+        'type_id': value['typeId'],
     };
 }
 

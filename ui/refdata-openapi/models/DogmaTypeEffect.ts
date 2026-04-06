@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 /**
  * A specific value for a dogma effect.
  * @export
@@ -36,10 +36,8 @@ export interface DogmaTypeEffect {
 /**
  * Check if a given object implements the DogmaTypeEffect interface.
  */
-export function instanceOfDogmaTypeEffect(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+export function instanceOfDogmaTypeEffect(value: object): value is DogmaTypeEffect {
+    return true;
 }
 
 export function DogmaTypeEffectFromJSON(json: any): DogmaTypeEffect {
@@ -47,27 +45,29 @@ export function DogmaTypeEffectFromJSON(json: any): DogmaTypeEffect {
 }
 
 export function DogmaTypeEffectFromJSONTyped(json: any, ignoreDiscriminator: boolean): DogmaTypeEffect {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'effectId': !exists(json, 'effect_id') ? undefined : json['effect_id'],
-        'isDefault': !exists(json, 'is_default') ? undefined : json['is_default'],
+        'effectId': json['effect_id'] == null ? undefined : json['effect_id'],
+        'isDefault': json['is_default'] == null ? undefined : json['is_default'],
     };
 }
 
-export function DogmaTypeEffectToJSON(value?: DogmaTypeEffect | null): any {
-    if (value === undefined) {
-        return undefined;
+export function DogmaTypeEffectToJSON(json: any): DogmaTypeEffect {
+    return DogmaTypeEffectToJSONTyped(json, false);
+}
+
+export function DogmaTypeEffectToJSONTyped(value?: DogmaTypeEffect | null, ignoreDiscriminator: boolean = false): any {
+    if (value == null) {
+        return value;
     }
-    if (value === null) {
-        return null;
-    }
+
     return {
         
-        'effect_id': value.effectId,
-        'is_default': value.isDefault,
+        'effect_id': value['effectId'],
+        'is_default': value['isDefault'],
     };
 }
 

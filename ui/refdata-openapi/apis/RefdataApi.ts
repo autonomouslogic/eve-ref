@@ -31,7 +31,7 @@ import type {
   Schematic,
   Skill,
   Unit,
-} from '../models';
+} from '../models/index';
 import {
     BlueprintFromJSON,
     BlueprintToJSON,
@@ -65,7 +65,7 @@ import {
     SkillToJSON,
     UnitFromJSON,
     UnitToJSON,
-} from '../models';
+} from '../models/index';
 
 export interface GetBlueprintRequest {
     blueprintTypeId: number;
@@ -152,8 +152,11 @@ export class RefdataApi extends runtime.BaseAPI {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+
+        let urlPath = `/blueprints`;
+
         const response = await this.request({
-            path: `/blueprints`,
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -178,8 +181,11 @@ export class RefdataApi extends runtime.BaseAPI {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+
+        let urlPath = `/categories`;
+
         const response = await this.request({
-            path: `/categories`,
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -204,8 +210,11 @@ export class RefdataApi extends runtime.BaseAPI {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+
+        let urlPath = `/dogma_attributes`;
+
         const response = await this.request({
-            path: `/dogma_attributes`,
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -230,8 +239,11 @@ export class RefdataApi extends runtime.BaseAPI {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+
+        let urlPath = `/dogma_effects`;
+
         const response = await this.request({
-            path: `/dogma_effects`,
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -256,8 +268,11 @@ export class RefdataApi extends runtime.BaseAPI {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+
+        let urlPath = `/groups`;
+
         const response = await this.request({
-            path: `/groups`,
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -282,8 +297,11 @@ export class RefdataApi extends runtime.BaseAPI {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+
+        let urlPath = `/icons`;
+
         const response = await this.request({
-            path: `/icons`,
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -308,8 +326,11 @@ export class RefdataApi extends runtime.BaseAPI {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+
+        let urlPath = `/market_groups`;
+
         const response = await this.request({
-            path: `/market_groups`,
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -334,8 +355,11 @@ export class RefdataApi extends runtime.BaseAPI {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+
+        let urlPath = `/meta_groups`;
+
         const response = await this.request({
-            path: `/meta_groups`,
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -360,8 +384,11 @@ export class RefdataApi extends runtime.BaseAPI {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+
+        let urlPath = `/mutaplasmids`;
+
         const response = await this.request({
-            path: `/mutaplasmids`,
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -386,8 +413,11 @@ export class RefdataApi extends runtime.BaseAPI {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+
+        let urlPath = `/regions`;
+
         const response = await this.request({
-            path: `/regions`,
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -412,8 +442,11 @@ export class RefdataApi extends runtime.BaseAPI {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+
+        let urlPath = `/schematics`;
+
         const response = await this.request({
-            path: `/schematics`,
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -438,8 +471,11 @@ export class RefdataApi extends runtime.BaseAPI {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+
+        let urlPath = `/skills`;
+
         const response = await this.request({
-            path: `/skills`,
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -464,8 +500,11 @@ export class RefdataApi extends runtime.BaseAPI {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+
+        let urlPath = `/types`;
+
         const response = await this.request({
-            path: `/types`,
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -490,8 +529,11 @@ export class RefdataApi extends runtime.BaseAPI {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+
+        let urlPath = `/units`;
+
         const response = await this.request({
-            path: `/units`,
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -511,16 +553,23 @@ export class RefdataApi extends runtime.BaseAPI {
     /**
      */
     async getBlueprintRaw(requestParameters: GetBlueprintRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Blueprint>> {
-        if (requestParameters.blueprintTypeId === null || requestParameters.blueprintTypeId === undefined) {
-            throw new runtime.RequiredError('blueprintTypeId','Required parameter requestParameters.blueprintTypeId was null or undefined when calling getBlueprint.');
+        if (requestParameters['blueprintTypeId'] == null) {
+            throw new runtime.RequiredError(
+                'blueprintTypeId',
+                'Required parameter "blueprintTypeId" was null or undefined when calling getBlueprint().'
+            );
         }
 
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+
+        let urlPath = `/blueprints/{blueprint_type_id}`;
+        urlPath = urlPath.replace(`{${"blueprint_type_id"}}`, encodeURIComponent(String(requestParameters['blueprintTypeId'])));
+
         const response = await this.request({
-            path: `/blueprints/{blueprint_type_id}`.replace(`{${"blueprint_type_id"}}`, encodeURIComponent(String(requestParameters.blueprintTypeId))),
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -543,8 +592,11 @@ export class RefdataApi extends runtime.BaseAPI {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+
+        let urlPath = `/categories/bundle`;
+
         const response = await this.request({
-            path: `/categories/bundle`,
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -563,16 +615,23 @@ export class RefdataApi extends runtime.BaseAPI {
     /**
      */
     async getCategoryRaw(requestParameters: GetCategoryRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<InventoryCategory>> {
-        if (requestParameters.categoryId === null || requestParameters.categoryId === undefined) {
-            throw new runtime.RequiredError('categoryId','Required parameter requestParameters.categoryId was null or undefined when calling getCategory.');
+        if (requestParameters['categoryId'] == null) {
+            throw new runtime.RequiredError(
+                'categoryId',
+                'Required parameter "categoryId" was null or undefined when calling getCategory().'
+            );
         }
 
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+
+        let urlPath = `/categories/{category_id}`;
+        urlPath = urlPath.replace(`{${"category_id"}}`, encodeURIComponent(String(requestParameters['categoryId'])));
+
         const response = await this.request({
-            path: `/categories/{category_id}`.replace(`{${"category_id"}}`, encodeURIComponent(String(requestParameters.categoryId))),
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -591,16 +650,23 @@ export class RefdataApi extends runtime.BaseAPI {
     /**
      */
     async getCategoryBundleRaw(requestParameters: GetCategoryBundleRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Bundle>> {
-        if (requestParameters.categoryId === null || requestParameters.categoryId === undefined) {
-            throw new runtime.RequiredError('categoryId','Required parameter requestParameters.categoryId was null or undefined when calling getCategoryBundle.');
+        if (requestParameters['categoryId'] == null) {
+            throw new runtime.RequiredError(
+                'categoryId',
+                'Required parameter "categoryId" was null or undefined when calling getCategoryBundle().'
+            );
         }
 
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+
+        let urlPath = `/categories/{category_id}/bundle`;
+        urlPath = urlPath.replace(`{${"category_id"}}`, encodeURIComponent(String(requestParameters['categoryId'])));
+
         const response = await this.request({
-            path: `/categories/{category_id}/bundle`.replace(`{${"category_id"}}`, encodeURIComponent(String(requestParameters.categoryId))),
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -619,16 +685,23 @@ export class RefdataApi extends runtime.BaseAPI {
     /**
      */
     async getDogmaAttributeRaw(requestParameters: GetDogmaAttributeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DogmaAttribute>> {
-        if (requestParameters.attributeId === null || requestParameters.attributeId === undefined) {
-            throw new runtime.RequiredError('attributeId','Required parameter requestParameters.attributeId was null or undefined when calling getDogmaAttribute.');
+        if (requestParameters['attributeId'] == null) {
+            throw new runtime.RequiredError(
+                'attributeId',
+                'Required parameter "attributeId" was null or undefined when calling getDogmaAttribute().'
+            );
         }
 
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+
+        let urlPath = `/dogma_attributes/{attribute_id}`;
+        urlPath = urlPath.replace(`{${"attribute_id"}}`, encodeURIComponent(String(requestParameters['attributeId'])));
+
         const response = await this.request({
-            path: `/dogma_attributes/{attribute_id}`.replace(`{${"attribute_id"}}`, encodeURIComponent(String(requestParameters.attributeId))),
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -647,16 +720,23 @@ export class RefdataApi extends runtime.BaseAPI {
     /**
      */
     async getDogmaEffectRaw(requestParameters: GetDogmaEffectRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DogmaEffect>> {
-        if (requestParameters.effectId === null || requestParameters.effectId === undefined) {
-            throw new runtime.RequiredError('effectId','Required parameter requestParameters.effectId was null or undefined when calling getDogmaEffect.');
+        if (requestParameters['effectId'] == null) {
+            throw new runtime.RequiredError(
+                'effectId',
+                'Required parameter "effectId" was null or undefined when calling getDogmaEffect().'
+            );
         }
 
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+
+        let urlPath = `/dogma_effects/{effect_id}`;
+        urlPath = urlPath.replace(`{${"effect_id"}}`, encodeURIComponent(String(requestParameters['effectId'])));
+
         const response = await this.request({
-            path: `/dogma_effects/{effect_id}`.replace(`{${"effect_id"}}`, encodeURIComponent(String(requestParameters.effectId))),
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -675,16 +755,23 @@ export class RefdataApi extends runtime.BaseAPI {
     /**
      */
     async getGroupRaw(requestParameters: GetGroupRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<InventoryGroup>> {
-        if (requestParameters.groupId === null || requestParameters.groupId === undefined) {
-            throw new runtime.RequiredError('groupId','Required parameter requestParameters.groupId was null or undefined when calling getGroup.');
+        if (requestParameters['groupId'] == null) {
+            throw new runtime.RequiredError(
+                'groupId',
+                'Required parameter "groupId" was null or undefined when calling getGroup().'
+            );
         }
 
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+
+        let urlPath = `/groups/{group_id}`;
+        urlPath = urlPath.replace(`{${"group_id"}}`, encodeURIComponent(String(requestParameters['groupId'])));
+
         const response = await this.request({
-            path: `/groups/{group_id}`.replace(`{${"group_id"}}`, encodeURIComponent(String(requestParameters.groupId))),
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -703,16 +790,23 @@ export class RefdataApi extends runtime.BaseAPI {
     /**
      */
     async getGroupBundleRaw(requestParameters: GetGroupBundleRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Bundle>> {
-        if (requestParameters.groupId === null || requestParameters.groupId === undefined) {
-            throw new runtime.RequiredError('groupId','Required parameter requestParameters.groupId was null or undefined when calling getGroupBundle.');
+        if (requestParameters['groupId'] == null) {
+            throw new runtime.RequiredError(
+                'groupId',
+                'Required parameter "groupId" was null or undefined when calling getGroupBundle().'
+            );
         }
 
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+
+        let urlPath = `/groups/{group_id}/bundle`;
+        urlPath = urlPath.replace(`{${"group_id"}}`, encodeURIComponent(String(requestParameters['groupId'])));
+
         const response = await this.request({
-            path: `/groups/{group_id}/bundle`.replace(`{${"group_id"}}`, encodeURIComponent(String(requestParameters.groupId))),
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -731,16 +825,23 @@ export class RefdataApi extends runtime.BaseAPI {
     /**
      */
     async getIconRaw(requestParameters: GetIconRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Icon>> {
-        if (requestParameters.iconId === null || requestParameters.iconId === undefined) {
-            throw new runtime.RequiredError('iconId','Required parameter requestParameters.iconId was null or undefined when calling getIcon.');
+        if (requestParameters['iconId'] == null) {
+            throw new runtime.RequiredError(
+                'iconId',
+                'Required parameter "iconId" was null or undefined when calling getIcon().'
+            );
         }
 
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+
+        let urlPath = `/icons/{icon_id}`;
+        urlPath = urlPath.replace(`{${"icon_id"}}`, encodeURIComponent(String(requestParameters['iconId'])));
+
         const response = await this.request({
-            path: `/icons/{icon_id}`.replace(`{${"icon_id"}}`, encodeURIComponent(String(requestParameters.iconId))),
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -759,16 +860,23 @@ export class RefdataApi extends runtime.BaseAPI {
     /**
      */
     async getMarketGroupRaw(requestParameters: GetMarketGroupRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<MarketGroup>> {
-        if (requestParameters.marketGroupId === null || requestParameters.marketGroupId === undefined) {
-            throw new runtime.RequiredError('marketGroupId','Required parameter requestParameters.marketGroupId was null or undefined when calling getMarketGroup.');
+        if (requestParameters['marketGroupId'] == null) {
+            throw new runtime.RequiredError(
+                'marketGroupId',
+                'Required parameter "marketGroupId" was null or undefined when calling getMarketGroup().'
+            );
         }
 
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+
+        let urlPath = `/market_groups/{market_group_id}`;
+        urlPath = urlPath.replace(`{${"market_group_id"}}`, encodeURIComponent(String(requestParameters['marketGroupId'])));
+
         const response = await this.request({
-            path: `/market_groups/{market_group_id}`.replace(`{${"market_group_id"}}`, encodeURIComponent(String(requestParameters.marketGroupId))),
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -787,16 +895,23 @@ export class RefdataApi extends runtime.BaseAPI {
     /**
      */
     async getMarketGroupBundleRaw(requestParameters: GetMarketGroupBundleRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Bundle>> {
-        if (requestParameters.marketGroupId === null || requestParameters.marketGroupId === undefined) {
-            throw new runtime.RequiredError('marketGroupId','Required parameter requestParameters.marketGroupId was null or undefined when calling getMarketGroupBundle.');
+        if (requestParameters['marketGroupId'] == null) {
+            throw new runtime.RequiredError(
+                'marketGroupId',
+                'Required parameter "marketGroupId" was null or undefined when calling getMarketGroupBundle().'
+            );
         }
 
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+
+        let urlPath = `/market_groups/{market_group_id}/bundle`;
+        urlPath = urlPath.replace(`{${"market_group_id"}}`, encodeURIComponent(String(requestParameters['marketGroupId'])));
+
         const response = await this.request({
-            path: `/market_groups/{market_group_id}/bundle`.replace(`{${"market_group_id"}}`, encodeURIComponent(String(requestParameters.marketGroupId))),
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -820,8 +935,11 @@ export class RefdataApi extends runtime.BaseAPI {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+
+        let urlPath = `/meta`;
+
         const response = await this.request({
-            path: `/meta`,
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -841,16 +959,23 @@ export class RefdataApi extends runtime.BaseAPI {
     /**
      */
     async getMetaGroupRaw(requestParameters: GetMetaGroupRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<MetaGroup>> {
-        if (requestParameters.metaGroupId === null || requestParameters.metaGroupId === undefined) {
-            throw new runtime.RequiredError('metaGroupId','Required parameter requestParameters.metaGroupId was null or undefined when calling getMetaGroup.');
+        if (requestParameters['metaGroupId'] == null) {
+            throw new runtime.RequiredError(
+                'metaGroupId',
+                'Required parameter "metaGroupId" was null or undefined when calling getMetaGroup().'
+            );
         }
 
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+
+        let urlPath = `/meta_groups/{meta_group_id}`;
+        urlPath = urlPath.replace(`{${"meta_group_id"}}`, encodeURIComponent(String(requestParameters['metaGroupId'])));
+
         const response = await this.request({
-            path: `/meta_groups/{meta_group_id}`.replace(`{${"meta_group_id"}}`, encodeURIComponent(String(requestParameters.metaGroupId))),
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -869,16 +994,23 @@ export class RefdataApi extends runtime.BaseAPI {
     /**
      */
     async getMutaplasmidRaw(requestParameters: GetMutaplasmidRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Mutaplasmid>> {
-        if (requestParameters.mutaplasmidTypeId === null || requestParameters.mutaplasmidTypeId === undefined) {
-            throw new runtime.RequiredError('mutaplasmidTypeId','Required parameter requestParameters.mutaplasmidTypeId was null or undefined when calling getMutaplasmid.');
+        if (requestParameters['mutaplasmidTypeId'] == null) {
+            throw new runtime.RequiredError(
+                'mutaplasmidTypeId',
+                'Required parameter "mutaplasmidTypeId" was null or undefined when calling getMutaplasmid().'
+            );
         }
 
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+
+        let urlPath = `/mutaplasmids/{mutaplasmid_type_id}`;
+        urlPath = urlPath.replace(`{${"mutaplasmid_type_id"}}`, encodeURIComponent(String(requestParameters['mutaplasmidTypeId'])));
+
         const response = await this.request({
-            path: `/mutaplasmids/{mutaplasmid_type_id}`.replace(`{${"mutaplasmid_type_id"}}`, encodeURIComponent(String(requestParameters.mutaplasmidTypeId))),
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -898,16 +1030,23 @@ export class RefdataApi extends runtime.BaseAPI {
      * Get a region.
      */
     async getRegionRaw(requestParameters: GetRegionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Region>> {
-        if (requestParameters.regionId === null || requestParameters.regionId === undefined) {
-            throw new runtime.RequiredError('regionId','Required parameter requestParameters.regionId was null or undefined when calling getRegion.');
+        if (requestParameters['regionId'] == null) {
+            throw new runtime.RequiredError(
+                'regionId',
+                'Required parameter "regionId" was null or undefined when calling getRegion().'
+            );
         }
 
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+
+        let urlPath = `/regions/{region_id}`;
+        urlPath = urlPath.replace(`{${"region_id"}}`, encodeURIComponent(String(requestParameters['regionId'])));
+
         const response = await this.request({
-            path: `/regions/{region_id}`.replace(`{${"region_id"}}`, encodeURIComponent(String(requestParameters.regionId))),
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -932,8 +1071,11 @@ export class RefdataApi extends runtime.BaseAPI {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+
+        let urlPath = `/market_groups/root`;
+
         const response = await this.request({
-            path: `/market_groups/root`,
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -958,8 +1100,11 @@ export class RefdataApi extends runtime.BaseAPI {
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+
+        let urlPath = `/market_groups/root/bundle`;
+
         const response = await this.request({
-            path: `/market_groups/root/bundle`,
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -979,16 +1124,23 @@ export class RefdataApi extends runtime.BaseAPI {
     /**
      */
     async getSchematicRaw(requestParameters: GetSchematicRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Schematic>> {
-        if (requestParameters.schematicId === null || requestParameters.schematicId === undefined) {
-            throw new runtime.RequiredError('schematicId','Required parameter requestParameters.schematicId was null or undefined when calling getSchematic.');
+        if (requestParameters['schematicId'] == null) {
+            throw new runtime.RequiredError(
+                'schematicId',
+                'Required parameter "schematicId" was null or undefined when calling getSchematic().'
+            );
         }
 
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+
+        let urlPath = `/schematics/{schematic_id}`;
+        urlPath = urlPath.replace(`{${"schematic_id"}}`, encodeURIComponent(String(requestParameters['schematicId'])));
+
         const response = await this.request({
-            path: `/schematics/{schematic_id}`.replace(`{${"schematic_id"}}`, encodeURIComponent(String(requestParameters.schematicId))),
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -1007,16 +1159,23 @@ export class RefdataApi extends runtime.BaseAPI {
     /**
      */
     async getSkillRaw(requestParameters: GetSkillRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Skill>> {
-        if (requestParameters.skillTypeId === null || requestParameters.skillTypeId === undefined) {
-            throw new runtime.RequiredError('skillTypeId','Required parameter requestParameters.skillTypeId was null or undefined when calling getSkill.');
+        if (requestParameters['skillTypeId'] == null) {
+            throw new runtime.RequiredError(
+                'skillTypeId',
+                'Required parameter "skillTypeId" was null or undefined when calling getSkill().'
+            );
         }
 
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+
+        let urlPath = `/skills/{skill_type_id}`;
+        urlPath = urlPath.replace(`{${"skill_type_id"}}`, encodeURIComponent(String(requestParameters['skillTypeId'])));
+
         const response = await this.request({
-            path: `/skills/{skill_type_id}`.replace(`{${"skill_type_id"}}`, encodeURIComponent(String(requestParameters.skillTypeId))),
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -1035,16 +1194,23 @@ export class RefdataApi extends runtime.BaseAPI {
     /**
      */
     async getTypeRaw(requestParameters: GetTypeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<InventoryType>> {
-        if (requestParameters.typeId === null || requestParameters.typeId === undefined) {
-            throw new runtime.RequiredError('typeId','Required parameter requestParameters.typeId was null or undefined when calling getType.');
+        if (requestParameters['typeId'] == null) {
+            throw new runtime.RequiredError(
+                'typeId',
+                'Required parameter "typeId" was null or undefined when calling getType().'
+            );
         }
 
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+
+        let urlPath = `/types/{type_id}`;
+        urlPath = urlPath.replace(`{${"type_id"}}`, encodeURIComponent(String(requestParameters['typeId'])));
+
         const response = await this.request({
-            path: `/types/{type_id}`.replace(`{${"type_id"}}`, encodeURIComponent(String(requestParameters.typeId))),
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -1063,16 +1229,23 @@ export class RefdataApi extends runtime.BaseAPI {
     /**
      */
     async getTypeBundleRaw(requestParameters: GetTypeBundleRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Bundle>> {
-        if (requestParameters.typeId === null || requestParameters.typeId === undefined) {
-            throw new runtime.RequiredError('typeId','Required parameter requestParameters.typeId was null or undefined when calling getTypeBundle.');
+        if (requestParameters['typeId'] == null) {
+            throw new runtime.RequiredError(
+                'typeId',
+                'Required parameter "typeId" was null or undefined when calling getTypeBundle().'
+            );
         }
 
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+
+        let urlPath = `/types/{type_id}/bundle`;
+        urlPath = urlPath.replace(`{${"type_id"}}`, encodeURIComponent(String(requestParameters['typeId'])));
+
         const response = await this.request({
-            path: `/types/{type_id}/bundle`.replace(`{${"type_id"}}`, encodeURIComponent(String(requestParameters.typeId))),
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,
@@ -1091,16 +1264,23 @@ export class RefdataApi extends runtime.BaseAPI {
     /**
      */
     async getUnitRaw(requestParameters: GetUnitRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Unit>> {
-        if (requestParameters.unitId === null || requestParameters.unitId === undefined) {
-            throw new runtime.RequiredError('unitId','Required parameter requestParameters.unitId was null or undefined when calling getUnit.');
+        if (requestParameters['unitId'] == null) {
+            throw new runtime.RequiredError(
+                'unitId',
+                'Required parameter "unitId" was null or undefined when calling getUnit().'
+            );
         }
 
         const queryParameters: any = {};
 
         const headerParameters: runtime.HTTPHeaders = {};
 
+
+        let urlPath = `/units/{unit_id}`;
+        urlPath = urlPath.replace(`{${"unit_id"}}`, encodeURIComponent(String(requestParameters['unitId'])));
+
         const response = await this.request({
-            path: `/units/{unit_id}`.replace(`{${"unit_id"}}`, encodeURIComponent(String(requestParameters.unitId))),
+            path: urlPath,
             method: 'GET',
             headers: headerParameters,
             query: queryParameters,

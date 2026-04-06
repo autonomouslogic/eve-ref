@@ -6,7 +6,7 @@ import com.autonomouslogic.everef.esi.EsiUrl;
 import com.autonomouslogic.everef.esi.LocationPopulator;
 import com.autonomouslogic.everef.esi.UniverseEsi;
 import com.autonomouslogic.everef.http.OkHttpWrapper;
-import com.autonomouslogic.everef.openapi.esi.model.GetUniverseRegionsRegionIdOk;
+import com.autonomouslogic.everef.openapi.esi.model.UniverseRegionsRegionIdGet;
 import com.autonomouslogic.everef.util.VirtualThreads;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -85,7 +85,7 @@ public class ContractFetcher {
 				.blockingGet();
 	}
 
-	private Flowable<Long> fetchContractsForRegion(GetUniverseRegionsRegionIdOk region) {
+	private Flowable<Long> fetchContractsForRegion(UniverseRegionsRegionIdGet region) {
 		var count = new AtomicInteger();
 		return Flowable.defer(() -> {
 					log.info(String.format("Fetching public contracts from %s", region.getName()));
@@ -111,7 +111,7 @@ public class ContractFetcher {
 				.onErrorResumeNext(e -> Flowable.error(new RuntimeException("Failed fetching public contracts", e)));
 	}
 
-	private Flowable<ObjectNode> fetchContractsFromEsi(GetUniverseRegionsRegionIdOk region) {
+	private Flowable<ObjectNode> fetchContractsFromEsi(UniverseRegionsRegionIdGet region) {
 		return Flowable.defer(() -> {
 			var esiUrl = EsiUrl.builder()
 					.urlPath(String.format("/contracts/public/%s", region.getRegionId()))
@@ -123,7 +123,7 @@ public class ContractFetcher {
 	}
 
 	@NotNull
-	private Flowable<Long> populateLocation(GetUniverseRegionsRegionIdOk region, ObjectNode entry) {
+	private Flowable<Long> populateLocation(UniverseRegionsRegionIdGet region, ObjectNode entry) {
 		var obj = entry;
 		var contractId = obj.get("contract_id").asLong();
 		obj.put("region_id", region.getRegionId());

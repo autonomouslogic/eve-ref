@@ -12,12 +12,13 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 import type { TraitBonus } from './TraitBonus';
 import {
     TraitBonusFromJSON,
     TraitBonusFromJSONTyped,
     TraitBonusToJSON,
+    TraitBonusToJSONTyped,
 } from './TraitBonus';
 
 /**
@@ -55,10 +56,8 @@ export interface InventoryTypeTraits {
 /**
  * Check if a given object implements the InventoryTypeTraits interface.
  */
-export function instanceOfInventoryTypeTraits(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+export function instanceOfInventoryTypeTraits(value: object): value is InventoryTypeTraits {
+    return true;
 }
 
 export function InventoryTypeTraitsFromJSON(json: any): InventoryTypeTraits {
@@ -66,31 +65,33 @@ export function InventoryTypeTraitsFromJSON(json: any): InventoryTypeTraits {
 }
 
 export function InventoryTypeTraitsFromJSONTyped(json: any, ignoreDiscriminator: boolean): InventoryTypeTraits {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'iconId': !exists(json, 'icon_id') ? undefined : json['icon_id'],
-        'miscBonuses': !exists(json, 'misc_bonuses') ? undefined : (mapValues(json['misc_bonuses'], TraitBonusFromJSON)),
-        'roleBonuses': !exists(json, 'role_bonuses') ? undefined : (mapValues(json['role_bonuses'], TraitBonusFromJSON)),
-        'types': !exists(json, 'types') ? undefined : json['types'],
+        'iconId': json['icon_id'] == null ? undefined : json['icon_id'],
+        'miscBonuses': json['misc_bonuses'] == null ? undefined : (mapValues(json['misc_bonuses'], TraitBonusFromJSON)),
+        'roleBonuses': json['role_bonuses'] == null ? undefined : (mapValues(json['role_bonuses'], TraitBonusFromJSON)),
+        'types': json['types'] == null ? undefined : json['types'],
     };
 }
 
-export function InventoryTypeTraitsToJSON(value?: InventoryTypeTraits | null): any {
-    if (value === undefined) {
-        return undefined;
+export function InventoryTypeTraitsToJSON(json: any): InventoryTypeTraits {
+    return InventoryTypeTraitsToJSONTyped(json, false);
+}
+
+export function InventoryTypeTraitsToJSONTyped(value?: InventoryTypeTraits | null, ignoreDiscriminator: boolean = false): any {
+    if (value == null) {
+        return value;
     }
-    if (value === null) {
-        return null;
-    }
+
     return {
         
-        'icon_id': value.iconId,
-        'misc_bonuses': value.miscBonuses === undefined ? undefined : (mapValues(value.miscBonuses, TraitBonusToJSON)),
-        'role_bonuses': value.roleBonuses === undefined ? undefined : (mapValues(value.roleBonuses, TraitBonusToJSON)),
-        'types': value.types,
+        'icon_id': value['iconId'],
+        'misc_bonuses': value['miscBonuses'] == null ? undefined : (mapValues(value['miscBonuses'], TraitBonusToJSON)),
+        'role_bonuses': value['roleBonuses'] == null ? undefined : (mapValues(value['roleBonuses'], TraitBonusToJSON)),
+        'types': value['types'],
     };
 }
 

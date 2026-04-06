@@ -12,7 +12,7 @@ import com.autonomouslogic.everef.model.api.IndustryCost;
 import com.autonomouslogic.everef.model.api.IndustryCostInput;
 import com.autonomouslogic.everef.model.api.SystemSecurity;
 import com.autonomouslogic.everef.openapi.esi.invoker.ApiException;
-import com.autonomouslogic.everef.openapi.esi.model.GetUniverseSystemsSystemIdOk;
+import com.autonomouslogic.everef.openapi.esi.model.UniverseSystemsSystemIdGet;
 import com.autonomouslogic.everef.refdata.Blueprint;
 import com.autonomouslogic.everef.refdata.InventoryType;
 import com.autonomouslogic.everef.service.RefDataService;
@@ -341,7 +341,7 @@ public class IndustryCostHandler implements HttpService, Handler {
 		if (systemId == null) {
 			return input;
 		}
-		GetUniverseSystemsSystemIdOk system;
+		UniverseSystemsSystemIdGet system;
 		try {
 			system = universeEsi.getSystem(systemId).blockingGet();
 		} catch (Exception e) {

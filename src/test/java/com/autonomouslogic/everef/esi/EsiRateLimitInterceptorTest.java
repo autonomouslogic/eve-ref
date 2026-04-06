@@ -41,13 +41,7 @@ public class EsiRateLimitInterceptorTest {
 	void before() {
 		DaggerTestComponent.builder().build().inject(this);
 		server = new MockWebServer();
-		server.setDispatcher(new Dispatcher() {
-			@NotNull
-			@Override
-			public MockResponse dispatch(@NotNull RecordedRequest recordedRequest) throws InterruptedException {
-				return new MockResponse().setResponseCode(200);
-			}
-		});
+		server.setDispatcher(new TestDispatcher());
 		server.start(TestDataUtil.TEST_PORT);
 
 		// testDataUtil.mockResponse("https://esi.evetech.net/latest/page?datasource=tranquility&language=en");
@@ -99,5 +93,13 @@ public class EsiRateLimitInterceptorTest {
 		var rate = count.get() / (time / 1000.0);
 		log.info(String.format("Requests: %s, time: %s, rate: %.2f/s", count.get(), watch.elapsed(), rate));
 		assertEquals(5.0, rate, 1.0);
+	}
+
+	private static class TestDispatcher extends Dispatcher {
+		@NotNull
+		@Override
+		public MockResponse dispatch(@NotNull RecordedRequest recordedRequest) throws InterruptedException {
+			return new MockResponse().setResponseCode(200);
+		}
 	}
 }

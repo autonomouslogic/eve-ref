@@ -12,7 +12,7 @@
  * Do not edit the class manually.
  */
 
-import { exists, mapValues } from '../runtime';
+import { mapValues } from '../runtime';
 /**
  * 
  * @export
@@ -36,10 +36,8 @@ export interface TypeMaterial {
 /**
  * Check if a given object implements the TypeMaterial interface.
  */
-export function instanceOfTypeMaterial(value: object): boolean {
-    let isInstance = true;
-
-    return isInstance;
+export function instanceOfTypeMaterial(value: object): value is TypeMaterial {
+    return true;
 }
 
 export function TypeMaterialFromJSON(json: any): TypeMaterial {
@@ -47,27 +45,29 @@ export function TypeMaterialFromJSON(json: any): TypeMaterial {
 }
 
 export function TypeMaterialFromJSONTyped(json: any, ignoreDiscriminator: boolean): TypeMaterial {
-    if ((json === undefined) || (json === null)) {
+    if (json == null) {
         return json;
     }
     return {
         
-        'materialTypeId': !exists(json, 'material_type_id') ? undefined : json['material_type_id'],
-        'quantity': !exists(json, 'quantity') ? undefined : json['quantity'],
+        'materialTypeId': json['material_type_id'] == null ? undefined : json['material_type_id'],
+        'quantity': json['quantity'] == null ? undefined : json['quantity'],
     };
 }
 
-export function TypeMaterialToJSON(value?: TypeMaterial | null): any {
-    if (value === undefined) {
-        return undefined;
+export function TypeMaterialToJSON(json: any): TypeMaterial {
+    return TypeMaterialToJSONTyped(json, false);
+}
+
+export function TypeMaterialToJSONTyped(value?: TypeMaterial | null, ignoreDiscriminator: boolean = false): any {
+    if (value == null) {
+        return value;
     }
-    if (value === null) {
-        return null;
-    }
+
     return {
         
-        'material_type_id': value.materialTypeId,
-        'quantity': value.quantity,
+        'material_type_id': value['materialTypeId'],
+        'quantity': value['quantity'],
     };
 }
 
