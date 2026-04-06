@@ -102,12 +102,12 @@ public class BuildSearch implements Command {
 
 		String typeName;
 		if (type.getMarketGroupId() != null) {
-			typeName = Optional.ofNullable(marketGroupHelper.getRootMarketGroup(type))
+			typeName = Optional.ofNullable(marketGroupHelper.getRootMarketGroup(type, loadedRefData))
 					.flatMap(g -> Optional.ofNullable(g.getName().get("en")))
 					.orElse("Inventory type");
 		} else if (type.getGroupId() != null) {
 			loadedRefData.getGroup(type.getGroupId()).getName().get("en");
-			typeName = Optional.ofNullable(marketGroupHelper.getRootMarketGroup(type))
+			typeName = Optional.ofNullable(marketGroupHelper.getRootMarketGroup(type, loadedRefData))
 					.flatMap(g -> Optional.ofNullable(g.getName().get("en")))
 					.orElse("Inventory type");
 		} else {
