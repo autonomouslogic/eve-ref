@@ -23,6 +23,7 @@ import javax.inject.Singleton;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import okhttp3.Response;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 
 @Singleton
 @Log4j2
@@ -86,8 +87,17 @@ public class EsiHelper {
 						Flowable.range(2, pagesInt - 1)
 								.parallel(4)
 								.runOn(VirtualThreads.SCHEDULER)
-								.flatMap(page -> Flowable.just(
-										fetch(url.toBuilder().page(page).build(), accessToken)))
+								.flatMap(page -> {
+									var esiUrl = url.toBuilder().page(page).build();
+									return Flowable.fromCallable(() -> fetch(esiUrl, accessToken))
+											.compose(Rx3Util.retryWithDelayFlowable(2, Duration.ofSeconds(2), e -> {
+												if (e instanceof EsiException) {
+													throw e;
+												}
+												log.warn("Retrying {}: {}", esiUrl, ExceptionUtils.getMessage(e));
+												return true;
+											}));
+								})
 								.sequential())
 				.toList()
 				.blockingGet();
