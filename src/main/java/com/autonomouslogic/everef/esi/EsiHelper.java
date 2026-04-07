@@ -145,10 +145,10 @@ public class EsiHelper {
 		var responses = fetchPages(url, accessToken);
 		return Flowable.fromIterable(responses)
 				.compose(standardErrorHandling(url))
-				.flatMap(response -> {
-					var node = decodeResponse(response);
-					return decodeArrayNode(url, node).map(entry -> augmenter.apply(entry, response));
-				});
+				.flatMap(response -> decodeResponseKeepingOpen(response)
+						.flatMap(node -> decodeArrayNode(url, node))
+						.map(entry -> augmenter.apply(entry, response))
+						.doFinally(response::close));
 	}
 
 	public Flowable<JsonNode> fetchPagesOfJsonArrays(EsiUrl url, BiFunction<JsonNode, Response, JsonNode> augmenter) {
@@ -175,6 +175,27 @@ public class EsiHelper {
 			}
 			return objectMapper.readTree(response.peekBody(Long.MAX_VALUE).byteStream());
 		}
+	}
+
+	/**
+	 * Decodes a JsonNode from a response WITHOUT closing it. Use with doFinally() to ensure closure.
+	 * @param response
+	 * @return
+	 */
+	@SneakyThrows
+	private Flowable<JsonNode> decodeResponseKeepingOpen(Response response) {
+		if (response.code() == 204) {
+			return Flowable.just(NullNode.getInstance());
+		}
+		if (response.code() == 404) {
+			log.warn("404 response from {}", response.request().url());
+			return Flowable.just(NullNode.getInstance());
+		}
+		if (response.code() != 200) {
+			throw new RuntimeException(String.format("Cannot decode non-200 response: %s", response.code()));
+		}
+		return Flowable.just(
+				objectMapper.readTree(response.peekBody(Long.MAX_VALUE).byteStream()));
 	}
 
 	/**
