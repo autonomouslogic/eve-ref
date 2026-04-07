@@ -7,9 +7,6 @@ import io.reactivex.rxjava3.core.Completable;
 import javax.inject.Inject;
 import lombok.extern.log4j.Log4j2;
 
-/**
- * Fetches and stores all public contracts.
- */
 @Log4j2
 public class BasicLogin implements Command {
 	@Inject

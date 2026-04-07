@@ -81,7 +81,10 @@ public class EsiAuthHelper {
 
 	@SneakyThrows
 	public OAuth2AccessToken getAccessToken(@NonNull String code) {
-		return service.getAccessTokenAsync(code).get();
+		log.trace("Requesting access token for code: {}", code);
+		var accessToken = service.getAccessTokenAsync(code).get();
+		log.trace("Received access token: {}", accessToken);
+		return accessToken;
 	}
 
 	@SneakyThrows
@@ -91,14 +94,16 @@ public class EsiAuthHelper {
 
 	@SneakyThrows
 	public EsiVerifyResponse verify(@NonNull String token) {
-		var url = new URL(Configs.ESI_BASE_URL.getRequired().toURL(), "/verify/");
+		log.trace("Verifying access token: {}", token);
 		var request = esiHttpWrapper
-				.getRequest(url.toString())
+				.getRequest(Configs.EVE_OAUTH_VERIFY_URL.getRequired().toString())
 				.newBuilder()
 				.header("Authorization", "Bearer " + token)
 				.build();
 		try (var response = esiHttpWrapper.execute(request)) {
 			var status = response.code();
+			var body = response.body().string();
+			log.trace("Verify response: {} - {}", status, body);
 
 			// Handle authentication failures as hard errors
 			if (status == 401) {
@@ -129,7 +134,7 @@ public class EsiAuthHelper {
 			}
 
 			// Only parse JSON for successful responses
-			var verify = objectMapper.readValue(response.body().byteStream(), EsiVerifyResponse.class);
+			var verify = objectMapper.readValue(body, EsiVerifyResponse.class);
 			return verify;
 		}
 	}

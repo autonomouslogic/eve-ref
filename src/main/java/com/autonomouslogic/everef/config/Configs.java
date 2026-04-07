@@ -688,6 +688,15 @@ public class Configs {
 			.build();
 
 	/**
+	 * Verify URL for OAuth2 against EVE Online.
+	 */
+	public static final Config<URL> EVE_OAUTH_VERIFY_URL = Config.<URL>builder()
+			.name("EVE_OAUTH_VERIFY_URL")
+			.defaultValue(url("https://login.eveonline.com/v2/oauth/verify"))
+			.type(URL.class)
+			.build();
+
+	/**
 	 * Token URL for OAuth2 against EVE Online.
 	 */
 	public static final Config<URL> OAUTH_CALLBACK_URL = Config.<URL>builder()
