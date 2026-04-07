@@ -249,6 +249,12 @@ export interface InventoryType {
      */
     metaGroupId?: number;
     /**
+     * 
+     * @type {number}
+     * @memberof InventoryType
+     */
+    metaLevel?: number;
+    /**
      * The key is the language code.
      * @type {{ [key: string]: string; }}
      * @memberof InventoryType
@@ -419,6 +425,7 @@ export function InventoryTypeFromJSONTyped(json: any, ignoreDiscriminator: boole
         'mass': !exists(json, 'mass') ? undefined : json['mass'],
         'masteries': !exists(json, 'masteries') ? undefined : json['masteries'],
         'metaGroupId': !exists(json, 'meta_group_id') ? undefined : json['meta_group_id'],
+        'metaLevel': !exists(json, 'meta_level') ? undefined : json['meta_level'],
         'name': !exists(json, 'name') ? undefined : json['name'],
         'oreVariations': !exists(json, 'ore_variations') ? undefined : json['ore_variations'],
         'packagedVolume': !exists(json, 'packaged_volume') ? undefined : json['packaged_volume'],
@@ -481,6 +488,7 @@ export function InventoryTypeToJSON(value?: InventoryType | null): any {
         'mass': value.mass,
         'masteries': value.masteries,
         'meta_group_id': value.metaGroupId,
+        'meta_level': value.metaLevel,
         'name': value.name,
         'ore_variations': value.oreVariations,
         'packaged_volume': value.packagedVolume,

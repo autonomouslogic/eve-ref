@@ -1179,6 +1179,9 @@ components:
         meta_group_id:
           type: integer
           format: int64
+        meta_level:
+          type: integer
+          format: int32
         name:
           type: object
           additionalProperties:

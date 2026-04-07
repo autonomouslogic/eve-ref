@@ -58,6 +58,10 @@ const props = defineProps<{
 				<template v-slot:key>Meta group ID:</template>
 				<MetaGroupLink :meta-group-id="inventoryType.metaGroupId" />
 			</AttributeListItem>
+			<AttributeListItem v-if="inventoryType.metaLevel">
+				<template v-slot:key>Meta level:</template>
+				{{ inventoryType.metaLevel }}
+			</AttributeListItem>
 			<AttributeListItem v-if="inventoryType.published">
 				<template v-slot:key>Published:</template>
 				{{ inventoryType.published }}
