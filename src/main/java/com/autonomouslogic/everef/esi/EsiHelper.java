@@ -15,6 +15,7 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -143,12 +144,24 @@ public class EsiHelper {
 	public Flowable<JsonNode> fetchPagesOfJsonArrays(
 			EsiUrl url, BiFunction<JsonNode, Response, JsonNode> augmenter, Optional<String> accessToken) {
 		var responses = fetchPages(url, accessToken);
-		return Flowable.fromIterable(responses)
+		// Apply error handling and decode all responses immediately to avoid holding sockets open during async
+		// processing
+		var decodedResponses = Flowable.fromIterable(responses)
 				.compose(standardErrorHandling(url))
-				.flatMap(response -> decodeResponseKeepingOpen(response)
-						.flatMap(node -> decodeArrayNode(url, node))
-						.map(entry -> augmenter.apply(entry, response))
-						.doFinally(response::close));
+				.map(response -> {
+					var node = decodeResponse(response);
+					return Map.entry(node, response);
+				})
+				.blockingStream()
+				.map(Optional::ofNullable)
+				.flatMap(opt -> opt.stream())
+				.toList();
+
+		return Flowable.fromIterable(decodedResponses).flatMap(entry -> {
+			var node = entry.getKey();
+			var response = entry.getValue();
+			return decodeArrayNode(url, node).map(arrayEntry -> augmenter.apply(arrayEntry, response));
+		});
 	}
 
 	public Flowable<JsonNode> fetchPagesOfJsonArrays(EsiUrl url, BiFunction<JsonNode, Response, JsonNode> augmenter) {
@@ -175,27 +188,6 @@ public class EsiHelper {
 			}
 			return objectMapper.readTree(response.peekBody(Long.MAX_VALUE).byteStream());
 		}
-	}
-
-	/**
-	 * Decodes a JsonNode from a response WITHOUT closing it. Use with doFinally() to ensure closure.
-	 * @param response
-	 * @return
-	 */
-	@SneakyThrows
-	private Flowable<JsonNode> decodeResponseKeepingOpen(Response response) {
-		if (response.code() == 204) {
-			return Flowable.just(NullNode.getInstance());
-		}
-		if (response.code() == 404) {
-			log.warn("404 response from {}", response.request().url());
-			return Flowable.just(NullNode.getInstance());
-		}
-		if (response.code() != 200) {
-			throw new RuntimeException(String.format("Cannot decode non-200 response: %s", response.code()));
-		}
-		return Flowable.just(
-				objectMapper.readTree(response.peekBody(Long.MAX_VALUE).byteStream()));
 	}
 
 	/**
