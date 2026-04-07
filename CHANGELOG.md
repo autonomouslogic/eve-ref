@@ -1,5 +1,18 @@
 EVE Ref Changelog
 
+## [2.74.2](https://github.com/autonomouslogic/eve-ref/compare/2.74.1...2.74.2) (2026-04-07)
+
+
+### Bug Fixes
+
+* Added metaLevel to InventoryType ([e5f26b8](https://github.com/autonomouslogic/eve-ref/commit/e5f26b8598be1e0a794b9f46705f2ef8e3d5c52c))
+* **deps:** update all non-major dependencies to v2.42.29 ([#1033](https://github.com/autonomouslogic/eve-ref/issues/1033)) ([b919abf](https://github.com/autonomouslogic/eve-ref/commit/b919abf7ba6a4ed9da1bac142e85648874e1c574))
+* Fixed OAuth verify URL ([bc91ea8](https://github.com/autonomouslogic/eve-ref/commit/bc91ea82470f8413ae30b5d301dd7ab9f4e35ccb))
+* Reading closed HTTP responses ([a78e8c4](https://github.com/autonomouslogic/eve-ref/commit/a78e8c456f803d61188cb954a534eee72247afd7))
+* Removed double closing of HTTP responses ([fef6d1b](https://github.com/autonomouslogic/eve-ref/commit/fef6d1b405cd44779589a232b381e37734523045))
+* Socket closed ([674edee](https://github.com/autonomouslogic/eve-ref/commit/674edee55bfe3ddafea773f8002cff044283fef7))
+* SocketErrorRetryInterceptor handles some IOExceptions ([bc285ed](https://github.com/autonomouslogic/eve-ref/commit/bc285ed6c7bc36d2e3ec86e01601924bda48a3cf))
+
 ## [2.74.1](https://github.com/autonomouslogic/eve-ref/compare/2.74.0...2.74.1) (2026-04-06)
 
 
