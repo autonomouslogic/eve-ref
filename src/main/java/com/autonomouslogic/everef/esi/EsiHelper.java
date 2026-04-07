@@ -148,11 +148,6 @@ public class EsiHelper {
 				.flatMap(response -> {
 					var node = decodeResponse(response);
 					return decodeArrayNode(url, node).map(entry -> augmenter.apply(entry, response));
-				})
-				.doFinally(() -> {
-					for (var response : responses) {
-						response.close();
-					}
 				});
 	}
 
