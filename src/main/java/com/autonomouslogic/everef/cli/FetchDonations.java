@@ -82,7 +82,8 @@ public class FetchDonations implements Command {
 			":person_bowing:",
 			":partying_face:",
 			":beers:",
-			":thumbsup:");
+			":thumbsup:",
+			":skull:");
 
 	@Inject
 	protected EsiAuthHelper esiAuthHelper;

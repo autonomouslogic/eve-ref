@@ -140,7 +140,7 @@ public class FetchDonationsTest {
 				.build());
 		assertSummaryFile(SummaryFile.builder().top(entries).recent(entries).build());
 
-		assertDiscordUpdate("**Donor Character 1** donated 100.00m ISK :gift:");
+		assertDiscordUpdate("**Donor Character 1** donated 100.00m ISK :sunglasses:");
 	}
 
 	@Test
@@ -233,7 +233,7 @@ public class FetchDonationsTest {
 						.build());
 		assertSummaryFile(SummaryFile.builder().top(entries).recent(entries).build());
 
-		assertDiscordUpdate("**Donor Character 2** donated 200.00m ISK :thumbsup:");
+		assertDiscordUpdate("**Donor Character 2** donated 200.00m ISK :gift:");
 	}
 
 	@Test
@@ -287,7 +287,7 @@ public class FetchDonationsTest {
 						.build());
 		assertSummaryFile(SummaryFile.builder().top(entries).recent(entries).build());
 
-		assertDiscordUpdate("**Donor Character 2** donated 200.00m ISK :thumbsup:");
+		assertDiscordUpdate("**Donor Character 2** donated 200.00m ISK :gift:");
 	}
 
 	@Test
@@ -353,7 +353,7 @@ public class FetchDonationsTest {
 				.build());
 		assertSummaryFile(SummaryFile.builder().top(entries).recent(entries).build());
 
-		assertDiscordUpdate("**Donor Character 1** donated 500.00m ISK :money_with_wings:");
+		assertDiscordUpdate("**Donor Character 1** donated 500.00m ISK :sunglasses:");
 	}
 
 	@Test
@@ -379,7 +379,7 @@ public class FetchDonationsTest {
 						.build());
 		assertSummaryFile(SummaryFile.builder().top(entries).recent(entries).build());
 
-		assertDiscordUpdate("**Donor Character 2** donated 300.00m ISK :atm:\n"
+		assertDiscordUpdate("**Donor Character 2** donated 300.00m ISK :partying_face:\n"
 				+ "**Donor Character 1** donated 200.00m ISK :money_mouth:");
 	}
 
@@ -461,7 +461,7 @@ public class FetchDonationsTest {
 	void shouldReplaceWeirdCharactersInDonorNames() {
 		addCharacterTransaction(1, TEST_DONOR_CHARACTER_ID_3, 200, donationTime);
 		fetchDonations.run();
-		assertDiscordUpdate("**Weird name??_??** donated 200.00 ISK :trophy:");
+		assertDiscordUpdate("**Weird name??_??** donated 200.00 ISK :sunglasses:");
 	}
 
 	@Test
@@ -498,10 +498,10 @@ public class FetchDonationsTest {
 				donationTime,
 				GetCorporationsCorporationIdWalletsDivisionJournal200Ok.RefTypeEnum.CORPORATION_ACCOUNT_WITHDRAWAL);
 		fetchDonations.run();
-		assertDiscordUpdate("**Donor Corporation 2** donated 1,000.00 ISK :gift:\n"
-				+ "**Donor Character 2** donated 100.00 ISK :gem:\n"
-				+ "**Donor Corporation 1** donated 10.00 ISK :pound:\n"
-				+ "**Donor Character 1** donated 1.00 ISK :trophy:");
+		assertDiscordUpdate("**Donor Corporation 2** donated 1,000.00 ISK :partying_face:\n"
+				+ "**Donor Character 2** donated 100.00 ISK :thumbsup:\n"
+				+ "**Donor Corporation 1** donated 10.00 ISK :money_mouth:\n"
+				+ "**Donor Character 1** donated 1.00 ISK :atm:");
 	}
 
 	@Test
