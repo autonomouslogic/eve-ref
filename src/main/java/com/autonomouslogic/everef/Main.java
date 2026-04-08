@@ -7,8 +7,11 @@ import com.autonomouslogic.everef.util.VirtualThreads;
 import io.reactivex.rxjava3.plugins.RxJavaPlugins;
 import io.sentry.Sentry;
 import io.sentry.SentryLevel;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.inject.Inject;
 import lombok.extern.log4j.Log4j2;
+import okhttp3.OkHttpClient;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 
 @Log4j2
@@ -25,6 +28,7 @@ public class Main {
 
 	public static void main(String[] args) {
 		log.info(String.format("EVE Ref version %s", Configs.EVE_REF_VERSION.getRequired()));
+		okhttpFineLogging();
 		initSentry();
 		RxJavaPlugins.setErrorHandler(e -> {
 			// Check if this is a network error that slipped through retry logic
@@ -71,6 +75,12 @@ public class Main {
 				options.setDsn(sentryDsn.get().toString());
 				options.setRelease(Configs.EVE_REF_VERSION.getRequired());
 			});
+		}
+	}
+
+	private static void okhttpFineLogging() {
+		if (Configs.OKHTTP_FINE_LOGGING_ENABLED.getRequired()) {
+			Logger.getLogger(OkHttpClient.class.getName()).setLevel(Level.FINE);
 		}
 	}
 }

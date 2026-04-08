@@ -810,6 +810,15 @@ public class Configs {
 			.defaultValue(50.0)
 			.build();
 
+	/**
+	 * Whether to enable fine logging on OkHtttp.
+	 */
+	public static final Config<Boolean> OKHTTP_FINE_LOGGING_ENABLED = Config.<Boolean>builder()
+			.name("OKHTTP_FINE_LOGGING_ENABLED")
+			.type(Boolean.class)
+			.defaultValue(false)
+			.build();
+
 	@SneakyThrows
 	private static URL url(String url) {
 		return new URL(url);

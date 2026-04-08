@@ -95,7 +95,7 @@ public class MarketOrderFetcher {
 					.flatMap(structure -> {
 						return fetchOrders(
 										String.format("/markets/structures/%s/", structure.getStructureId()),
-										Long.toString(structure.getStructureId()),
+										String.format("structure %s", structure.getStructureId()),
 										true)
 								.map(order -> {
 									Optional.ofNullable(structure.getSolarSystemId())
