@@ -13,6 +13,7 @@ import lombok.Setter;
 import lombok.SneakyThrows;
 import software.amazon.awssdk.auth.credentials.AwsCredentialsProvider;
 import software.amazon.awssdk.core.checksums.RequestChecksumCalculation;
+import software.amazon.awssdk.http.nio.netty.NettyNioAsyncHttpClient;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 
@@ -66,7 +67,9 @@ public class S3Module {
 	private static S3AsyncClient createClient(
 			AwsCredentialsProvider credentialsProvider, Optional<Region> region, Config<String> endpointUrl)
 			throws URISyntaxException {
-		var client = S3AsyncClient.builder().credentialsProvider(credentialsProvider);
+		var httpClient = NettyNioAsyncHttpClient.builder().maxConcurrency(256).build();
+		var client =
+				S3AsyncClient.builder().credentialsProvider(credentialsProvider).httpClient(httpClient);
 		region.ifPresent(client::region);
 		var endpoint = endpointUrl.get();
 		if (endpoint.isPresent()) {
