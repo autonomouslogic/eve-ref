@@ -1,5 +1,15 @@
 EVE Ref Changelog
 
+## [2.74.3](https://github.com/autonomouslogic/eve-ref/compare/2.74.2...2.74.3) (2026-04-08)
+
+
+### Bug Fixes
+
+* Added retries to individual pages from ESI ([ca81abf](https://github.com/autonomouslogic/eve-ref/commit/ca81abf3cb4eb4a98049a210783a8c9391d338f5))
+* Added skull to FetchDonations ([d5a6ee5](https://github.com/autonomouslogic/eve-ref/commit/d5a6ee5a06b058f73c3b4322866ed3835041f752))
+* Increased S3 client from 50 to 256 max connections ([758cd81](https://github.com/autonomouslogic/eve-ref/commit/758cd81b7acb11fbfc5ca18639498259e6f05279))
+* OkHttp fine logging ([b8a5b75](https://github.com/autonomouslogic/eve-ref/commit/b8a5b7531e2a30da5eaa1d4c5b3f5957031dffc3))
+
 ## [2.74.2](https://github.com/autonomouslogic/eve-ref/compare/2.74.1...2.74.2) (2026-04-07)
 
 
