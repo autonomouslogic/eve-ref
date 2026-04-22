@@ -9,6 +9,9 @@ export default defineNuxtConfig({
           viewport: 'width=device-width, initial-scale=1',
           script: [
               {
+                  src: "https://web.cmp.usercentrics.eu/modules/autoblocker.js",
+              },
+              {
                   src: "https://web.cmp.usercentrics.eu/ui/loader.js",
                   type: "application/javascript",
                   id: "usercentrics-cmp",
