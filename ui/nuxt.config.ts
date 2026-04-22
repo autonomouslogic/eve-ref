@@ -16,6 +16,7 @@ export default defineNuxtConfig({
                   type: "application/javascript",
                   id: "usercentrics-cmp",
                   "data-settings-id": "YcvKrzeCLM-3xB",
+                  "data-draft": "true",
                   async: true,
               }
           ]
