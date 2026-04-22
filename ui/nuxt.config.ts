@@ -6,17 +6,7 @@ export default defineNuxtConfig({
   app: {
       head: {
           charset: 'utf-8',
-          viewport: 'width=device-width, initial-scale=1',
-          script: [
-              {
-                  src: "https://web.cmp.usercentrics.eu/ui/loader.js",
-                  type: "application/javascript",
-                  id: "usercentrics-cmp",
-                  "data-settings-id": "YcvKrzeCLM-3xB",
-                  "data-draft": "true",
-                  async: true,
-              }
-          ]
+          viewport: 'width=device-width, initial-scale=1'
       },
   },
 
