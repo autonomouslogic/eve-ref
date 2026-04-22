@@ -4,6 +4,7 @@ import ExternalLink from "~/components/helpers/ExternalLink.vue";
 useHead({
 	title: "Privacy Policy"
 });
+
 </script>
 
 <template>
@@ -15,13 +16,27 @@ useHead({
 			However, the following services are used:
 		</p>
 		<ul class="list-disc list-inside">
-			<li><ExternalLink url="https://aws.amazon.com/privacy/">Amazon Web Services</ExternalLink></li>
-			<li><ExternalLink url="https://www.backblaze.com/company/policy/privacy">Backblaze</ExternalLink></li>
-			<li><ExternalLink url="https://www.cloudflare.com/privacypolicy/">Cloudflare</ExternalLink></li>
-			<li><ExternalLink url="https://www.goatcounter.com/help/privacy">Goatcounter</ExternalLink></li>
-			<li><ExternalLink url="https://www.hetzner.com/privacy-policy-notice">Hetzner</ExternalLink></li>
-			<li><ExternalLink url="https://support.google.com/adsense/answer/1348695">Google AdSense</ExternalLink> (displays ads and uses Google's tracking technologies)</li>
-			<li><ExternalLink url="https://usercentrics.com/privacy-policy/">Usercentrics</ExternalLink> (manages your consent preferences)</li>
+			<li>
+				<ExternalLink url="https://aws.amazon.com/privacy/">Amazon Web Services</ExternalLink>
+			</li>
+			<li>
+				<ExternalLink url="https://www.backblaze.com/company/policy/privacy">Backblaze</ExternalLink>
+			</li>
+			<li>
+				<ExternalLink url="https://www.cloudflare.com/privacypolicy/">Cloudflare</ExternalLink>
+			</li>
+			<li>
+				<ExternalLink url="https://www.goatcounter.com/help/privacy">Goatcounter</ExternalLink>
+			</li>
+			<li>
+				<ExternalLink url="https://www.hetzner.com/privacy-policy-notice">Hetzner</ExternalLink>
+			</li>
+			<li>
+				<ExternalLink url="https://support.google.com/adsense/answer/1348695">Google AdSense</ExternalLink> (displays ads and uses Google's tracking technologies)
+			</li>
+			<li>
+				<ExternalLink url="https://usercentrics.com/privacy-policy/">Usercentrics</ExternalLink> (manages your consent preferences)
+			</li>
 		</ul>
 		<p>
 			To the best of my knowledge, this website is fully compliant with laws such as GDPR, EPD, and CCPA.

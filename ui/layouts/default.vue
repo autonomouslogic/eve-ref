@@ -1,14 +1,18 @@
 <template>
 	<NuxtLoadingIndicator :height="8" />
 	<div class="flex flex-col h-screen justify-between">
-		<header><navbar /></header>
+		<header>
+			<navbar />
+		</header>
 		<Adsbygoogle
 			ad-slot="2103102198"
 			ad-format="auto"
 			:hide-unfilled="true"
 		/>
 		<main class="container mb-auto px-4"><slot/></main>
-		<footer class="mt-4"><Footer/></footer>
+		<footer class="mt-4">
+			<Footer/>
+		</footer>
 	</div>
 </template>
 
