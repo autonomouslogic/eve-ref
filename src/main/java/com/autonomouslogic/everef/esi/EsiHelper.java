@@ -138,6 +138,7 @@ public class EsiHelper {
 	 * @return
 	 * @param <T>
 	 */
+	@SneakyThrows
 	public <T> List<T> fetchPages(Function<Integer, ApiResponse<List<T>>> fetcher) {
 		var first = fetchWithRetry(fetcher, 1);
 		var pages = Optional.ofNullable(first.getHeaders().get("X-Pages")).stream()
@@ -166,6 +167,7 @@ public class EsiHelper {
 	/**
 	 * Fetches API response with automatic retry.
 	 */
+	@SneakyThrows
 	private <T> ApiResponse<List<T>> fetchWithRetry(Function<Integer, ApiResponse<List<T>>> fetcher, int page) {
 		var attempt = 0;
 		while (attempt < 3) {
@@ -202,6 +204,7 @@ public class EsiHelper {
 	 * @param url
 	 * @return
 	 */
+	@SneakyThrows
 	public Flowable<JsonNode> fetchPagesOfJsonArrays(
 			EsiUrl url, BiFunction<JsonNode, Response, JsonNode> augmenter, Optional<String> accessToken) {
 		var responses = fetchPages(url, accessToken);
