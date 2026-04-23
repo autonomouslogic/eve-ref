@@ -191,11 +191,11 @@ public class FetchDonations implements Command {
 
 	@SneakyThrows
 	private List<DonationEntry> getCharacterDonations(int characterId, String accessToken) {
-		var journals = esiHelper
-				.fetchPages(page ->
-						VirtualThreads.offload(() -> walletApi.getCharactersCharacterIdWalletJournalWithHttpInfo(
-								characterId, EsiConstants.Datasource.tranquility.toString(), null, page, accessToken)))
-				.doOnNext(e -> log.debug("Character journal: {}", e))
+		var entries = esiHelper.fetchPages(
+				page -> VirtualThreads.offload(() -> walletApi.getCharactersCharacterIdWalletJournalWithHttpInfo(
+						characterId, EsiConstants.Datasource.tranquility.toString(), null, page, accessToken)));
+		return entries.stream()
+				.peek(e -> log.debug("Character journal: {}", e))
 				.filter(e -> DONATION_REF_TYPES.contains(e.getRefType().toString()))
 				.map(e -> DonationEntry.builder()
 						.id(e.getId())
@@ -204,23 +204,16 @@ public class FetchDonations implements Command {
 						.secondPartyId(e.getSecondPartyId())
 						.amount(e.getAmount())
 						.build())
-				.toList()
-				.blockingGet();
-		return journals;
+				.toList();
 	}
 
 	@SneakyThrows
 	private List<DonationEntry> getCorporationDonations(int corporationId, String accessToken) {
-		var journals = esiHelper
-				.fetchPages(page -> VirtualThreads.offload(
-						() -> walletApi.getCorporationsCorporationIdWalletsDivisionJournalWithHttpInfo(
-								corporationId,
-								1,
-								EsiConstants.Datasource.tranquility.toString(),
-								null,
-								page,
-								accessToken)))
-				.doOnNext(e -> log.debug("Corporation journal: {}", e))
+		var entries = esiHelper.fetchPages(page ->
+				VirtualThreads.offload(() -> walletApi.getCorporationsCorporationIdWalletsDivisionJournalWithHttpInfo(
+						corporationId, 1, EsiConstants.Datasource.tranquility.toString(), null, page, accessToken)));
+		return entries.stream()
+				.peek(e -> log.debug("Corporation journal: {}", e))
 				.filter(e -> DONATION_REF_TYPES.contains(e.getRefType().toString()))
 				.map(e -> DonationEntry.builder()
 						.id(e.getId())
@@ -229,9 +222,7 @@ public class FetchDonations implements Command {
 						.secondPartyId(e.getSecondPartyId())
 						.amount(e.getAmount())
 						.build())
-				.toList()
-				.blockingGet();
-		return journals;
+				.toList();
 	}
 
 	private String getAccessToken() {

@@ -6,16 +6,7 @@ export default defineNuxtConfig({
   app: {
       head: {
           charset: 'utf-8',
-          viewport: 'width=device-width, initial-scale=1',
-          script: [
-              {
-                  src: "https://web.cmp.usercentrics.eu/ui/loader.js",
-                  type: "application/javascript",
-                  id: "usercentrics-cmp",
-                  "data-settings-id": "YcvKrzeCLM-3xB",
-                  async: true,
-              }
-          ]
+          viewport: 'width=device-width, initial-scale=1'
       },
   },
 
@@ -49,6 +40,7 @@ export default defineNuxtConfig({
 
   googleAdsense: {
       id: "ca-pub-2850842519709578",
+      onPageLoad: true
   },
 
   compatibilityDate: "2024-09-24"
