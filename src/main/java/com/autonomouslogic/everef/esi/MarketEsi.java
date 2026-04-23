@@ -25,8 +25,9 @@ public class MarketEsi {
 	public Flowable<Integer> getActiveMarketOrderTypes(int regionId) {
 		return Flowable.defer(() -> {
 					var source = EsiConstants.Datasource.valueOf(datasource);
-					return esiHelper.fetchPages(page -> VirtualThreads.offload(() ->
+					var types = esiHelper.fetchPages(page -> VirtualThreads.offload(() ->
 							marketApi.getMarketsRegionIdTypesWithHttpInfo(regionId, source.toString(), null, page)));
+					return Flowable.fromIterable(types);
 				})
 				.onErrorResumeNext(e -> {
 					// Had problems with UndeliverableExceptions being thrown.

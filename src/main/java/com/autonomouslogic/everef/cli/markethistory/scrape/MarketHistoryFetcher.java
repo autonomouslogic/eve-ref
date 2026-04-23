@@ -41,8 +41,8 @@ class MarketHistoryFetcher {
 					.flatMap(response -> {
 						int statusCode = response.code();
 						if (statusCode == 200) {
-							return esiHelper
-									.decodeArrayNode(esiUrl, esiHelper.decodeResponse(response))
+							var arrayNodes = esiHelper.decodeArrayNode(esiUrl, esiHelper.decodeResponse(response));
+							return Flowable.fromIterable(arrayNodes)
 									.map(e -> esiHelper.populateLastModified(e, response))
 									.doOnNext(e -> stats.hit(pair));
 						} else {
