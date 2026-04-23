@@ -2,6 +2,7 @@ package com.autonomouslogic.everef.esi;
 
 import com.autonomouslogic.everef.http.OkHttpWrapper;
 import com.autonomouslogic.everef.openapi.esi.invoker.ApiResponse;
+import com.autonomouslogic.everef.util.VirtualThreads;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.NullNode;
@@ -9,6 +10,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.functions.BiFunction;
 import io.reactivex.rxjava3.functions.Function;
+import io.reactivex.rxjava3.functions.Supplier;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
@@ -70,6 +72,7 @@ public class EsiHelper {
 	 * @param url
 	 * @return
 	 */
+	@SneakyThrows
 	protected List<Response> fetchPages(EsiUrl url, Optional<String> accessToken) {
 		var first = fetch(url.toBuilder().page(1).build(), accessToken);
 		var pages = first.header(PAGES_HEADER);
@@ -89,14 +92,17 @@ public class EsiHelper {
 			pageNumbers.add(i);
 		}
 
-		var remainingPages = pageNumbers.parallelStream()
-				.map(page -> {
+		var tasks = pageNumbers.stream()
+				.map(page -> (Supplier<Response>) () -> {
 					var esiUrl = url.toBuilder().page(page).build();
 					return fetchWithRetry(esiUrl, accessToken);
 				})
 				.toList();
 
+		var remainingPages = VirtualThreads.offloadAll(tasks);
+
 		allResponses.addAll(remainingPages);
+
 		return allResponses;
 	}
 
@@ -154,8 +160,13 @@ public class EsiHelper {
 				pageNumbers.add(i);
 			}
 
-			var remainingPages = pageNumbers.parallelStream()
-					.flatMap(page -> decodeResponse(fetchWithRetry(fetcher, page)).stream())
+			var tasks = pageNumbers.stream()
+					.map(page -> (io.reactivex.rxjava3.functions.Supplier<List<T>>)
+							() -> decodeResponse(fetchWithRetry(fetcher, page)))
+					.toList();
+
+			var remainingPages = VirtualThreads.offloadAll(tasks).stream()
+					.flatMap(List::stream)
 					.toList();
 
 			result.addAll(remainingPages);
