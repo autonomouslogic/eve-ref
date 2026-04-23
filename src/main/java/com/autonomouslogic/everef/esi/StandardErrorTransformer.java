@@ -8,8 +8,12 @@ import lombok.extern.log4j.Log4j2;
 import okhttp3.Response;
 import org.reactivestreams.Publisher;
 
+/**
+ * @deprecated Use {@link EsiHelper#filterResponsesByErrorStatus(List, EsiUrl)} instead for blocking error handling.
+ */
 @RequiredArgsConstructor
 @Log4j2
+@Deprecated(since = "refactored", forRemoval = true)
 public class StandardErrorTransformer implements FlowableTransformer<Response, Response> {
 	private final EsiUrl url;
 

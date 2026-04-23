@@ -1,9 +1,7 @@
 package com.autonomouslogic.everef.esi;
 
-import com.autonomouslogic.commons.rxjava3.Rx3Util;
 import com.autonomouslogic.everef.http.OkHttpWrapper;
 import com.autonomouslogic.everef.openapi.esi.invoker.ApiResponse;
-import com.autonomouslogic.everef.util.VirtualThreads;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.NullNode;
@@ -14,8 +12,8 @@ import io.reactivex.rxjava3.functions.Function;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -82,25 +80,52 @@ public class EsiHelper {
 		if (pagesInt == 1) {
 			return List.of(first);
 		}
-		return Flowable.concatArray(
-						Flowable.just(first),
-						Flowable.range(2, pagesInt - 1)
-								.parallel(4)
-								.runOn(VirtualThreads.SCHEDULER)
-								.flatMap(page -> {
-									var esiUrl = url.toBuilder().page(page).build();
-									return Flowable.fromCallable(() -> fetch(esiUrl, accessToken))
-											.compose(Rx3Util.retryWithDelayFlowable(2, Duration.ofSeconds(2), e -> {
-												if (e instanceof EsiException) {
-													throw e;
-												}
-												log.warn("Retrying {}: {}", esiUrl, ExceptionUtils.getMessage(e));
-												return true;
-											}));
-								})
-								.sequential())
-				.toList()
-				.blockingGet();
+		var allResponses = new ArrayList<Response>();
+		allResponses.add(first);
+
+		// Fetch remaining pages in parallel using virtual threads
+		var pageNumbers = new ArrayList<Integer>();
+		for (int i = 2; i <= pagesInt; i++) {
+			pageNumbers.add(i);
+		}
+
+		var remainingPages = pageNumbers.parallelStream()
+				.map(page -> {
+					var esiUrl = url.toBuilder().page(page).build();
+					return fetchWithRetry(esiUrl, accessToken);
+				})
+				.toList();
+
+		allResponses.addAll(remainingPages);
+		return allResponses;
+	}
+
+	/**
+	 * Fetches a URL with automatic retry on failure.
+	 */
+	private Response fetchWithRetry(EsiUrl url, Optional<String> accessToken) {
+		var attempt = 0;
+		while (attempt < 3) {
+			try {
+				return fetch(url, accessToken);
+			} catch (Exception e) {
+				if (e instanceof EsiException) {
+					throw e;
+				}
+				attempt++;
+				if (attempt >= 3) {
+					log.warn("Failed to fetch {} after retries: {}", url, ExceptionUtils.getMessage(e));
+					throw new RuntimeException(String.format("Failed to fetch %s", url), e);
+				}
+				try {
+					Thread.sleep(Duration.ofSeconds(2).toMillis());
+				} catch (InterruptedException ie) {
+					Thread.currentThread().interrupt();
+					throw new RuntimeException("Interrupted while retrying fetch", ie);
+				}
+			}
+		}
+		throw new RuntimeException("Unexpected state in fetchWithRetry");
 	}
 
 	protected List<Response> fetchPages(EsiUrl url) {
@@ -113,27 +138,53 @@ public class EsiHelper {
 	 * @return
 	 * @param <T>
 	 */
-	public <T> Flowable<T> fetchPages(Function<Integer, ApiResponse<List<T>>> fetcher) {
-		return Flowable.defer(() -> Flowable.just(fetcher.apply(1)))
-				.flatMap(first -> {
-					var pages = Optional.ofNullable(first.getHeaders().get("X-Pages")).stream()
-							.flatMap(List::stream)
-							.mapToInt(Integer::valueOf)
-							.findFirst()
-							.orElse(1);
-					var firstResult = decodeResponse(first);
-					if (pages == 1) {
-						return Flowable.fromIterable(firstResult);
-					}
-					return Flowable.concatArray(
-							Flowable.fromIterable(firstResult),
-							Flowable.range(2, pages - 1)
-									.parallel(4)
-									.runOn(VirtualThreads.SCHEDULER)
-									.flatMap(page -> Flowable.fromIterable(decodeResponse(fetcher.apply(page))))
-									.sequential());
-				})
-				.compose(Rx3Util.retryWithDelayFlowable(2, Duration.ofSeconds(1)));
+	public <T> List<T> fetchPages(Function<Integer, ApiResponse<List<T>>> fetcher) {
+		var first = fetchWithRetry(fetcher, 1);
+		var pages = Optional.ofNullable(first.getHeaders().get("X-Pages")).stream()
+				.flatMap(List::stream)
+				.mapToInt(Integer::valueOf)
+				.findFirst()
+				.orElse(1);
+		var result = new ArrayList<>(decodeResponse(first));
+
+		if (pages > 1) {
+			var pageNumbers = new ArrayList<Integer>();
+			for (int i = 2; i <= pages; i++) {
+				pageNumbers.add(i);
+			}
+
+			var remainingPages = pageNumbers.parallelStream()
+					.flatMap(page -> decodeResponse(fetchWithRetry(fetcher, page)).stream())
+					.toList();
+
+			result.addAll(remainingPages);
+		}
+
+		return result;
+	}
+
+	/**
+	 * Fetches API response with automatic retry.
+	 */
+	private <T> ApiResponse<List<T>> fetchWithRetry(Function<Integer, ApiResponse<List<T>>> fetcher, int page) {
+		var attempt = 0;
+		while (attempt < 3) {
+			try {
+				return fetcher.apply(page);
+			} catch (Exception e) {
+				attempt++;
+				if (attempt >= 3) {
+					throw new RuntimeException(String.format("Failed to fetch page %d after retries", page), e);
+				}
+				try {
+					Thread.sleep(Duration.ofSeconds(1).toMillis());
+				} catch (InterruptedException ie) {
+					Thread.currentThread().interrupt();
+					throw new RuntimeException("Interrupted while retrying fetch", ie);
+				}
+			}
+		}
+		throw new RuntimeException("Unexpected state in fetchWithRetry");
 	}
 
 	/**
@@ -156,22 +207,18 @@ public class EsiHelper {
 		var responses = fetchPages(url, accessToken);
 		// Apply error handling and decode all responses immediately to avoid holding sockets open during async
 		// processing
-		var decodedResponses = Flowable.fromIterable(responses)
-				.compose(standardErrorHandling(url))
-				.map(response -> {
-					var node = decodeResponse(response);
-					return Map.entry(node, response);
-				})
-				.blockingStream()
-				.map(Optional::ofNullable)
-				.flatMap(opt -> opt.stream())
-				.toList();
+		var filteredResponses = filterResponsesByErrorStatus(responses, url);
+		var allEntries = new ArrayList<JsonNode>();
 
-		return Flowable.fromIterable(decodedResponses).flatMap(entry -> {
-			var node = entry.getKey();
-			var response = entry.getValue();
-			return decodeArrayNode(url, node).map(arrayEntry -> augmenter.apply(arrayEntry, response));
-		});
+		for (var response : filteredResponses) {
+			var node = decodeResponse(response);
+			var arrayEntries = decodeArrayNode(url, node);
+			for (var arrayEntry : arrayEntries) {
+				allEntries.add(augmenter.apply(arrayEntry, response));
+			}
+		}
+
+		return Flowable.fromIterable(allEntries);
 	}
 
 	public Flowable<JsonNode> fetchPagesOfJsonArrays(EsiUrl url, BiFunction<JsonNode, Response, JsonNode> augmenter) {
@@ -201,21 +248,49 @@ public class EsiHelper {
 	}
 
 	/**
-	 * Dismantles the elements from an json array.
+	 * Dismantles the elements from a JSON array.
 	 * @param url
 	 * @param node
 	 * @return
 	 */
-	public Flowable<JsonNode> decodeArrayNode(EsiUrl url, JsonNode node) {
+	public List<JsonNode> decodeArrayNode(EsiUrl url, JsonNode node) {
 		if (node == null || node.isNull() || node.isMissingNode()) {
 			log.warn("Empty response from {}", url);
-			return Flowable.empty();
+			return List.of();
 		}
 		if (!node.isArray()) {
-			return Flowable.error(
-					new RuntimeException(String.format("Expected array, got %s - %s", node.getNodeType(), url)));
+			throw new RuntimeException(String.format("Expected array, got %s - %s", node.getNodeType(), url));
 		}
-		return Flowable.fromIterable(node);
+		var result = new ArrayList<JsonNode>();
+		node.forEach(result::add);
+		return result;
+	}
+
+	/**
+	 * Filters responses by error status, applying standard error handling.
+	 * Throws EsiException for 401/403 responses.
+	 * Skips 204, 404, 5xx (except 520), and other 4xx responses.
+	 * @param responses
+	 * @param url
+	 * @return
+	 */
+	private List<Response> filterResponsesByErrorStatus(List<Response> responses, EsiUrl url) {
+		var filtered = new ArrayList<Response>();
+		for (var response : responses) {
+			var status = response.code();
+			if (status == 401 || status == 403) {
+				throw new EsiException(status, String.format("Received %s for %s", status, url));
+			}
+			if (status == 204 || status == 404 || (status / 100 == 5 && status != 520)) {
+				log.debug("Ignoring {} response received for {}", status, url);
+				continue;
+			} else if (status / 100 == 4) {
+				log.warn("Ignoring {} response received for {}", status, url);
+				continue;
+			}
+			filtered.add(response);
+		}
+		return filtered;
 	}
 
 	/**
