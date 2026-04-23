@@ -62,6 +62,32 @@ public class VirtualThreads {
 				.blockingGet();
 	}
 
+	/**
+	 * Executes a task on a virtual thread. Can be called from any thread context.
+	 * @param task The supplier task to execute
+	 * @return The result of the task
+	 * @param <T> The return type of the task
+	 */
+	public static <T> T onVirtual(Supplier<T> task) {
+		var future = EXECUTOR.submit(() -> {
+			try {
+				return task.get();
+			} catch (Throwable e) {
+				throw new RuntimeException("Task execution failed", e);
+			}
+		});
+
+		try {
+			return future.get();
+		} catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
+			throw new RuntimeException("Interrupted while executing task on virtual thread", e);
+		} catch (java.util.concurrent.ExecutionException e) {
+			throw new RuntimeException(
+					"Failed to execute task on virtual thread", e.getCause() != null ? e.getCause() : e);
+		}
+	}
+
 	public static void checkThread() {
 		var thread = Thread.currentThread();
 		if (!thread.isVirtual() && !thread.getName().equals("Test worker")) {

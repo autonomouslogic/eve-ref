@@ -99,7 +99,7 @@ public class EsiHelper {
 				})
 				.toList();
 
-		var remainingPages = VirtualThreads.offloadAll(tasks);
+		var remainingPages = VirtualThreads.onVirtual(() -> VirtualThreads.offloadAll(tasks));
 
 		allResponses.addAll(remainingPages);
 
@@ -164,7 +164,7 @@ public class EsiHelper {
 					.map(page -> (Supplier<List<T>>) () -> decodeResponse(fetchWithRetry(fetcher, page)))
 					.toList();
 
-			var remainingPages = VirtualThreads.offloadAll(tasks).stream()
+			var remainingPages = VirtualThreads.onVirtual(() -> VirtualThreads.offloadAll(tasks)).stream()
 					.flatMap(List::stream)
 					.toList();
 
