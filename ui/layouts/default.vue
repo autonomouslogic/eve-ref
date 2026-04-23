@@ -7,24 +7,28 @@
 		</header>
 
 		<!-- EVE Ref header -->
-		<Adsbygoogle
-			ad-slot="2103102198"
-			ad-format="auto"
-			:hide-unfilled="true"
-			:ad-full-width-responsive="true"
-		/>
+		<div style="text-align: center;">
+			<Adsbygoogle
+				ad-slot="2103102198"
+				ad-format="auto"
+				:hide-unfilled="true"
+				:ad-full-width-responsive="true"
+			/>
+		</div>
 
 		<main class="container mb-auto px-4">
 			<slot/>
 		</main>
 
 		<!-- EVE Ref footer -->
-		<Adsbygoogle
-			ad-slot="7711774562"
-			ad-format="auto"
-			:hide-unfilled="true"
-			:ad-full-width-responsive="true"
-		/>
+		<div style="text-align: center;">
+			<Adsbygoogle
+				ad-slot="7711774562"
+				ad-format="auto"
+				:hide-unfilled="true"
+				:ad-full-width-responsive="true"
+			/>
+		</div>
 
 		<footer class="mt-4">
 			<Footer/>
