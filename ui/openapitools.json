@@ -24,6 +24,16 @@
           "modelPropertyNaming": "camelCase",
           "paramNaming": "camelCase"
         }
+      },
+      "api": {
+        "generatorName": "typescript-axios",
+        "inputSpec": "../spec/eve-ref-api.yaml",
+        "output": "./api-openapi",
+        "additionalProperties": {
+          "enumPropertyNaming": "PascalCase",
+          "modelPropertyNaming": "camelCase",
+          "paramNaming": "camelCase"
+        }
       }
     }
   }
