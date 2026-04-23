@@ -8,13 +8,13 @@ import com.autonomouslogic.everef.util.TempFiles;
 import com.google.common.base.Strings;
 import com.google.common.hash.Hashing;
 import io.reactivex.rxjava3.core.Flowable;
-import io.reactivex.rxjava3.core.Single;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.nio.file.Path;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -93,85 +93,79 @@ public class MockS3Adapter extends S3Adapter {
 
 	@Override
 	@SneakyThrows
-	public Single<GetObjectResponse> getObject(GetObjectRequest get, Path destination, S3AsyncClient s3Client) {
-		return Single.fromCallable(() -> {
-			var bytes = getTestObject(get.bucket(), get.key(), s3Client);
-			if (bytes.isEmpty()) {
-				// @todo I think this is correct
-				throw new CompletionException(NoSuchKeyException.builder().build());
+	public GetObjectResponse getObject(GetObjectRequest get, Path destination, S3AsyncClient s3Client) {
+		var bytes = getTestObject(get.bucket(), get.key(), s3Client);
+		if (bytes.isEmpty()) {
+			// @todo I think this is correct
+			throw new CompletionException(NoSuchKeyException.builder().build());
+		}
+		try (var in = new ByteArrayInputStream(bytes.get());
+				var out = new FileOutputStream(destination.toFile())) {
+			IOUtils.copy(in, out);
+		}
+		return GetObjectResponse.builder().build();
+	}
+
+	@Override
+	public List<ListedS3Object> listObjects(S3Url url, boolean recursive, S3AsyncClient client) {
+		var result = new ArrayList<ListedS3Object>();
+		var stream = data.entrySet().stream()
+				.filter(entry -> entry.getKey().getClient() == client)
+				.filter(entry -> entry.getKey().getBucket().equals(url.getBucket()));
+		if (!Strings.isNullOrEmpty(url.getPath())) {
+			stream = stream.filter(entry -> entry.getKey().getKey().startsWith(url.getPath()));
+		}
+		var prefix = url.getPath();
+		stream.forEach(entry -> {
+			var prefixRelative = StringUtils.removeStart(entry.getKey().getKey(), prefix);
+			if (!recursive && prefixRelative.contains("/")) {
+				result.add(ListedS3Object.create(
+						CommonPrefix.builder()
+								.prefix(entry.getKey().getKey() + "/")
+								.build(),
+						url.getBucket()));
+			} else {
+				result.add(ListedS3Object.create(
+						S3Object.builder()
+								.key(entry.getKey().getKey())
+								.size((long) entry.getValue().length)
+								.eTag("\"" + Hex.encodeHexString(HashUtil.md5(entry.getValue())) + "\"")
+								.lastModified(entry.getKey().getLastModified())
+								.build(),
+						entry.getKey().getBucket()));
 			}
-			try (var in = new ByteArrayInputStream(bytes.get());
-					var out = new FileOutputStream(destination.toFile())) {
-				IOUtils.copy(in, out);
-			}
-			return GetObjectResponse.builder().build();
 		});
+		return result;
 	}
 
 	@Override
-	public Flowable<ListedS3Object> listObjects(S3Url url, boolean recursive, S3AsyncClient client) {
-		return Flowable.defer(() -> {
-			var stream = data.entrySet().stream()
-					.filter(entry -> entry.getKey().getClient() == client)
-					.filter(entry -> entry.getKey().getBucket().equals(url.getBucket()));
-			if (!Strings.isNullOrEmpty(url.getPath())) {
-				stream = stream.filter(entry -> entry.getKey().getKey().startsWith(url.getPath()));
-			}
-			var prefix = url.getPath();
-			return Flowable.fromStream(stream).map(entry -> {
-				var prefixRelative = StringUtils.removeStart(entry.getKey().getKey(), prefix);
-				if (!recursive && prefixRelative.contains("/")) {
-					return ListedS3Object.create(
-							CommonPrefix.builder()
-									.prefix(entry.getKey().getKey() + "/")
-									.build(),
-							url.getBucket());
-				} else {
-					return ListedS3Object.create(
-							S3Object.builder()
-									.key(entry.getKey().getKey())
-									.size((long) entry.getValue().length)
-									.eTag("\"" + Hex.encodeHexString(HashUtil.md5(entry.getValue())) + "\"")
-									.lastModified(entry.getKey().getLastModified())
-									.build(),
-							entry.getKey().getBucket());
-				}
-			});
-		});
+	@SneakyThrows
+	public PutObjectResponse putObject(PutObjectRequest req, byte[] bytes, S3AsyncClient client) {
+		var entry = new Entry(req.bucket(), req.key(), client, Instant.now());
+		data.put(entry, bytes);
+		putKeys.add(entry);
+		putDirectory(req.bucket(), req.key(), client);
+		return PutObjectResponse.builder().build();
 	}
 
 	@Override
-	public Single<PutObjectResponse> putObject(PutObjectRequest req, byte[] bytes, S3AsyncClient client) {
-		return Single.defer(() -> {
-			var entry = new Entry(req.bucket(), req.key(), client, Instant.now());
-			data.put(entry, bytes);
-			putKeys.add(entry);
-			putDirectory(req.bucket(), req.key(), client);
-			return Single.just(PutObjectResponse.builder().build());
-		});
+	@SneakyThrows
+	public PutObjectResponse putObject(PutObjectRequest req, AsyncRequestBody body, S3AsyncClient client) {
+		var bytes = Flowable.fromPublisher(body)
+				.reduce(new byte[0], (a, b) -> {
+					var result = new byte[a.length + b.remaining()];
+					System.arraycopy(a, 0, result, 0, a.length);
+					b.get(result, a.length, b.remaining());
+					return result;
+				})
+				.blockingGet();
+		return putObject(req, bytes, client);
 	}
 
 	@Override
-	public Single<PutObjectResponse> putObject(PutObjectRequest req, AsyncRequestBody body, S3AsyncClient client) {
-		return Single.defer(() -> {
-			return Flowable.fromPublisher(body)
-					.reduce(new byte[0], (a, b) -> {
-						var result = new byte[a.length + b.remaining()];
-						System.arraycopy(a, 0, result, 0, a.length);
-						b.get(result, a.length, b.remaining());
-						return result;
-					})
-					.flatMap(buffer -> {
-						return putObject(req, buffer, client);
-					});
-		});
-	}
-
-	@Override
-	public Single<PutObjectResponse> putObject(PutObjectRequest req, File file, S3AsyncClient client) {
-		return Single.defer(() -> {
-			return putObject(req, IOUtils.toByteArray(new FileInputStream(file)), client);
-		});
+	@SneakyThrows
+	public PutObjectResponse putObject(PutObjectRequest req, File file, S3AsyncClient client) {
+		return putObject(req, IOUtils.toByteArray(new FileInputStream(file)), client);
 	}
 
 	/**
@@ -192,12 +186,10 @@ public class MockS3Adapter extends S3Adapter {
 	}
 
 	@Override
-	public Single<DeleteObjectResponse> deleteObject(DeleteObjectRequest req, S3AsyncClient client) {
-		return Single.defer(() -> {
-			var entry = new Entry(req.bucket(), req.key(), client, null);
-			deleteKeys.add(entry);
-			return Single.just(DeleteObjectResponse.builder().build());
-		});
+	public DeleteObjectResponse deleteObject(DeleteObjectRequest req, S3AsyncClient client) {
+		var entry = new Entry(req.bucket(), req.key(), client, null);
+		deleteKeys.add(entry);
+		return DeleteObjectResponse.builder().build();
 	}
 
 	public List<String> getAllPutKeys(String bucket, S3AsyncClient client) {

@@ -108,8 +108,7 @@ public class SyncStaticData implements Command {
 		var latestUri = dataUrl(latest.getBuildNumber(), variant);
 
 		var latestPath = getArchivePath(latest.getReleaseDate(), type, latest.getBuildNumber());
-		var existing =
-				s3Adapter.listObjects(latestPath, false, s3Client).toList().blockingGet();
+		var existing = s3Adapter.listObjects(latestPath, false, s3Client);
 		if (!existing.isEmpty()) {
 			log.info(String.format("Latest file already exists at %s", latestPath));
 			return false;
@@ -139,8 +138,8 @@ public class SyncStaticData implements Command {
 		var archivePut = s3Util.putPublicObjectRequest(outputFile.length(), archivePath, archiveCacheTime);
 		log.info(String.format("Uploading latest file to %s", latestPath));
 		log.info(String.format("Uploading archive file to %s", archivePath));
-		s3Adapter.putObject(latestPut, outputFile, s3Client).blockingGet();
-		s3Adapter.putObject(archivePut, outputFile, s3Client).blockingGet();
+		s3Adapter.putObject(latestPut, outputFile, s3Client);
+		s3Adapter.putObject(archivePut, outputFile, s3Client);
 		dataIndexHelper.updateIndex(latestPath, archivePath).blockingAwait();
 	}
 
@@ -168,7 +167,7 @@ public class SyncStaticData implements Command {
 			var folder = ArchivePathFactory.SDE_V2_JSONL.getFolder();
 			var s3Url = dataPath.resolve(folder + "/" + name);
 			var latestPut = s3Util.putPublicObjectRequest(file.length(), s3Url, latestCacheTime);
-			s3Adapter.putObject(latestPut, file, s3Client).blockingGet();
+			s3Adapter.putObject(latestPut, file, s3Client);
 			dataIndexHelper.updateIndex(s3Url, s3Url).blockingAwait();
 		}
 	}

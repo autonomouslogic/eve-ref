@@ -11,7 +11,6 @@ import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.url.UrlParser;
 import com.autonomouslogic.everef.util.DataIndexHelper;
 import com.fasterxml.jackson.databind.JsonNode;
-import io.reactivex.rxjava3.core.Completable;
 import java.io.File;
 import java.time.Duration;
 import java.time.ZoneOffset;
@@ -114,6 +113,7 @@ public class ScrapeMarketOrders implements Command {
 		return marketOrdersWriter.writeOrders();
 	}
 
+	@SneakyThrows
 	private void uploadFile(File outputFile) {
 		log.debug(String.format("Uploading completed file from %s", outputFile));
 		var latestPath = dataUrl.resolve(MARKET_ORDERS.createLatestPath());
@@ -124,10 +124,8 @@ public class ScrapeMarketOrders implements Command {
 				outputFile.length(), archivePath, "application/x-bzip2", archiveCacheTime);
 		log.info(String.format("Uploading latest file to %s", latestPath));
 		log.info(String.format("Uploading archive file to %s", archivePath));
-		Completable.mergeArray(
-						s3Adapter.putObject(latestPut, outputFile, s3Client).ignoreElement(),
-						s3Adapter.putObject(archivePut, outputFile, s3Client).ignoreElement())
-				.blockingAwait();
+		s3Adapter.putObject(latestPut, outputFile, s3Client);
+		s3Adapter.putObject(archivePut, outputFile, s3Client);
 		dataIndexHelper.updateIndex(latestPath, archivePath).blockingAwait();
 	}
 }

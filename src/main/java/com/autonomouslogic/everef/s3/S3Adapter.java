@@ -1,31 +1,32 @@
 package com.autonomouslogic.everef.s3;
 
 import com.autonomouslogic.everef.url.S3Url;
-import com.autonomouslogic.everef.util.Rx;
 import com.autonomouslogic.everef.util.TempFiles;
-import com.autonomouslogic.everef.util.VirtualThreads;
-import io.reactivex.rxjava3.core.Flowable;
-import io.reactivex.rxjava3.core.FlowableTransformer;
-import io.reactivex.rxjava3.core.Single;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.Instant;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicReference;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.tuple.Pair;
+import org.reactivestreams.Subscriber;
+import org.reactivestreams.Subscription;
 import software.amazon.awssdk.core.async.AsyncRequestBody;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.DeleteObjectResponse;
 import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 import software.amazon.awssdk.services.s3.model.GetObjectResponse;
+import software.amazon.awssdk.services.s3.model.HeadObjectRequest;
 import software.amazon.awssdk.services.s3.model.ListObjectsV2Request;
 import software.amazon.awssdk.services.s3.model.ListObjectsV2Response;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
@@ -40,83 +41,141 @@ public class S3Adapter {
 	@Inject
 	protected S3Adapter() {}
 
-	public Flowable<ListedS3Object> listObjects(@NonNull S3Url url, boolean recursive, @NonNull S3AsyncClient client) {
-		return Flowable.defer(() -> {
-			var builder = ListObjectsV2Request.builder().bucket(url.getBucket()).prefix(url.getPath());
-			if (!recursive) {
-				builder = builder.delimiter("/");
-			}
-			return listObjects(builder.build(), client).flatMap(response -> {
-				Flowable<ListedS3Object> commons = response.commonPrefixes() == null
-						? Flowable.empty()
-						: Flowable.fromIterable(response.commonPrefixes())
-								.map(common -> ListedS3Object.create(common, url.getBucket()));
-				Flowable<ListedS3Object> contents = response.contents() == null
-						? Flowable.empty()
-						: Flowable.fromIterable(response.contents())
-								.filter(obj -> obj.size() != null
-										&& obj.size() > 0) // S3 doesn't list directories, but Backblaze does.
-								.map(obj -> ListedS3Object.create(obj, url.getBucket()));
-				return Flowable.concatArray(commons, contents);
-			});
-		});
+	@SneakyThrows
+	public List<ListedS3Object> listObjects(@NonNull S3Url url, boolean recursive, @NonNull S3AsyncClient client) {
+		var builder = ListObjectsV2Request.builder().bucket(url.getBucket()).prefix(url.getPath());
+		if (!recursive) {
+			builder = builder.delimiter("/");
+		}
+		return listObjects(builder.build(), client);
 	}
 
-	private Flowable<ListObjectsV2Response> listObjects(
-			@NonNull ListObjectsV2Request req, @NonNull S3AsyncClient client) {
+	@SneakyThrows
+	private List<ListedS3Object> listObjects(@NonNull ListObjectsV2Request req, @NonNull S3AsyncClient client) {
 		var s3Url =
 				S3Url.builder().bucket(req.bucket()).path(req.prefix()).build().toString();
-		var count = new AtomicInteger();
-		return Flowable.fromPublisher(client.listObjectsV2Paginator(req))
-				.observeOn(VirtualThreads.SCHEDULER)
-				.onErrorResumeNext(e -> Flowable.error(new RuntimeException(
-						String.format("Error listing bucket %s at prefix %s", req.bucket(), req.prefix()), e)))
-				.doOnNext(response -> {
-					var n = response.contents().size();
-					var total = count.getAndAdd(n);
-					log.debug(String.format("Listing %s: %s+%s objects", s3Url, total, n));
-				});
+		var result = new ArrayList<ListedS3Object>();
+		var latch = new CountDownLatch(1);
+		var errorRef = new AtomicReference<Exception>();
+
+		try {
+			var paginator = client.listObjectsV2Paginator(req);
+			var count = new int[] {0};
+
+			paginator.subscribe(new Subscriber<ListObjectsV2Response>() {
+				@Override
+				public void onSubscribe(Subscription subscription) {
+					subscription.request(Long.MAX_VALUE);
+				}
+
+				@Override
+				public void onNext(ListObjectsV2Response response) {
+					if (response.commonPrefixes() != null) {
+						for (var common : response.commonPrefixes()) {
+							result.add(ListedS3Object.create(common, req.bucket()));
+						}
+					}
+					if (response.contents() != null) {
+						for (var obj : response.contents()) {
+							if (obj.size() != null && obj.size() > 0) {
+								result.add(ListedS3Object.create(obj, req.bucket()));
+							}
+						}
+					}
+					var n = (response.contents() != null ? response.contents().size() : 0);
+					count[0] += n;
+					log.debug("Listing {}: {} objects", s3Url, count[0]);
+				}
+
+				@Override
+				public void onError(Throwable throwable) {
+					errorRef.set(new RuntimeException(
+							String.format("Error listing bucket %s at prefix %s", req.bucket(), req.prefix()),
+							throwable));
+					latch.countDown();
+				}
+
+				@Override
+				public void onComplete() {
+					latch.countDown();
+				}
+			});
+
+			latch.await();
+			if (errorRef.get() != null) {
+				throw errorRef.get();
+			}
+		} catch (Exception e) {
+			if (e instanceof RuntimeException && e.getMessage().contains("Error listing bucket")) {
+				throw e;
+			}
+			throw new RuntimeException(
+					String.format("Error listing bucket %s at prefix %s", req.bucket(), req.prefix()), e);
+		}
+		return result;
 	}
 
-	public Single<Pair<GetObjectResponse, Path>> getObject(GetObjectRequest get, S3AsyncClient s3Client) {
-		return Single.defer(() -> {
-			var destination = tempFiles.tempFile("s3", ".tmp");
-			return getObject(get, destination, s3Client).map(response -> Pair.of(response, destination));
-		});
+	@SneakyThrows
+	public Pair<GetObjectResponse, Path> getObject(GetObjectRequest get, S3AsyncClient s3Client) {
+		var destination = tempFiles.tempFile("s3", ".tmp");
+		var response = getObject(get, destination, s3Client);
+		return Pair.of(response, destination);
 	}
 
-	public Single<GetObjectResponse> getObject(GetObjectRequest get, Path destination, S3AsyncClient s3Client) {
-		return Rx.toSingle(s3Client.getObject(get, destination)).observeOn(VirtualThreads.SCHEDULER);
+	@SneakyThrows
+	public GetObjectResponse getObject(GetObjectRequest get, Path destination, S3AsyncClient s3Client) {
+		try {
+			return s3Client.getObject(get, destination).get();
+		} catch (Exception e) {
+			throw new RuntimeException("Error getting object from s3://" + get.bucket() + "/" + get.key(), e);
+		}
 	}
 
-	public Single<PutObjectResponse> putObject(
+	@SneakyThrows
+	public PutObjectResponse putObject(
 			@NonNull PutObjectRequest req, @NonNull AsyncRequestBody body, @NonNull S3AsyncClient client) {
-		return Rx.toSingle(client.putObject(req, body))
-				.timeout(120, TimeUnit.SECONDS)
-				.retry(3, e -> {
-					log.warn(String.format("Retrying put to %s", req.key()), e);
-					return true;
-				})
-				.observeOn(VirtualThreads.SCHEDULER)
-				.onErrorResumeNext(e -> Single.error(new RuntimeException(
-						String.format("Error putting object to s3://%s/%s", req.bucket(), req.key()), e)));
+		var maxRetries = 3;
+		var lastException = (Exception) null;
+
+		for (var attempt = 1; attempt <= maxRetries; attempt++) {
+			try {
+				var future = client.putObject(req, body);
+				var response = future.get();
+				return response;
+			} catch (Exception e) {
+				lastException = e;
+				if (attempt < maxRetries) {
+					log.warn("Retrying put to {} (attempt {}/{})", req.key(), attempt, maxRetries, e);
+					Thread.sleep(1000); // Brief delay before retry
+				}
+			}
+		}
+
+		throw new RuntimeException(
+				String.format(
+						"Error putting object to s3://%s/%s after %d attempts", req.bucket(), req.key(), maxRetries),
+				lastException);
 	}
 
-	public Single<PutObjectResponse> putObject(
+	@SneakyThrows
+	public PutObjectResponse putObject(
 			@NonNull PutObjectRequest req, @NonNull byte[] bytes, @NonNull S3AsyncClient client) {
 		return putObject(req, AsyncRequestBody.fromBytes(bytes), client);
 	}
 
-	public Single<PutObjectResponse> putObject(
+	@SneakyThrows
+	public PutObjectResponse putObject(
 			@NonNull PutObjectRequest req, @NonNull File file, @NonNull S3AsyncClient client) {
 		req = populateLastModified(req, file);
-		var bucket = req.bucket();
-		var key = req.key();
-		return putObject(req, AsyncRequestBody.fromFile(file), client)
-				.onErrorResumeNext(e -> Single.error(new RuntimeException(
-						String.format(
-								"Error putting object from file %s to s3://%s/%s", file.getAbsolutePath(), bucket, key),
-						e)));
+		try {
+			return putObject(req, AsyncRequestBody.fromFile(file), client);
+		} catch (Exception e) {
+			throw new RuntimeException(
+					String.format(
+							"Error putting object from file %s to s3://%s/%s",
+							file.getAbsolutePath(), req.bucket(), req.key()),
+					e);
+		}
 	}
 
 	@SneakyThrows
@@ -131,19 +190,79 @@ public class S3Adapter {
 		return req.toBuilder().metadata(meta).build();
 	}
 
-	public Single<DeleteObjectResponse> deleteObject(@NonNull DeleteObjectRequest req, @NonNull S3AsyncClient client) {
-		return Rx.toSingle(client.deleteObject(req))
-				.timeout(120, TimeUnit.SECONDS)
-				.retry(3, e -> {
-					log.warn(String.format("Retrying delete to %s", req.key()), e);
-					return true;
-				})
-				.observeOn(VirtualThreads.SCHEDULER)
-				.onErrorResumeNext(e -> Single.error(new RuntimeException(
-						String.format("Error deleting object to s3://%s/%s", req.bucket(), req.key()), e)));
+	@SneakyThrows
+	public DeleteObjectResponse deleteObject(@NonNull DeleteObjectRequest req, @NonNull S3AsyncClient client) {
+		var maxRetries = 3;
+		var lastException = (Exception) null;
+
+		for (var attempt = 1; attempt <= maxRetries; attempt++) {
+			try {
+				var future = client.deleteObject(req);
+				var response = future.get();
+				return response;
+			} catch (Exception e) {
+				lastException = e;
+				if (attempt < maxRetries) {
+					log.warn("Retrying delete to {} (attempt {}/{})", req.key(), attempt, maxRetries, e);
+					Thread.sleep(1000);
+				}
+			}
+		}
+
+		throw new RuntimeException(
+				String.format(
+						"Error deleting object to s3://%s/%s after %d attempts", req.bucket(), req.key(), maxRetries),
+				lastException);
 	}
 
-	public FlowableTransformer<ListedS3Object, ListedS3Object> headLastModified(@NonNull S3AsyncClient client) {
-		return new HeadObjectFlowableTransformer(client);
+	@SneakyThrows
+	public List<ListedS3Object> headLastModified(@NonNull List<ListedS3Object> objects, @NonNull S3AsyncClient client) {
+		var result = new ArrayList<ListedS3Object>();
+
+		for (var obj : objects) {
+			if (obj.isDirectory()) {
+				result.add(obj);
+				continue;
+			}
+
+			var lastModified = getObjectLastModified(obj, client);
+			if (lastModified.isPresent()) {
+				result.add(obj.toBuilder().lastModified(lastModified.get()).build());
+			} else {
+				result.add(obj);
+			}
+		}
+
+		return result;
+	}
+
+	@SneakyThrows
+	private Optional<Instant> getObjectLastModified(@NonNull ListedS3Object obj, @NonNull S3AsyncClient client) {
+		try {
+			var req = HeadObjectRequest.builder()
+					.bucket(obj.getUrl().getBucket())
+					.key(obj.getUrl().getPath())
+					.build();
+			var response = client.headObject(req).get();
+
+			if (response == null || !response.hasMetadata()) {
+				return Optional.empty();
+			}
+
+			var metadata = response.metadata();
+
+			// rclone header
+			var srcLastModifiedMillis = Optional.ofNullable(metadata.get(S3HeaderNames.SRC_LAST_MODIFIED_MILLIS))
+					.map(Long::parseLong)
+					.map(Instant::ofEpochMilli);
+
+			// S3 header
+			var lastModified = Optional.ofNullable(obj.getLastModified());
+
+			return srcLastModifiedMillis.isPresent() ? srcLastModifiedMillis : lastModified;
+		} catch (Exception e) {
+			log.warn("Failed to head object {}", obj.getUrl(), e);
+			return Optional.empty();
+		}
 	}
 }

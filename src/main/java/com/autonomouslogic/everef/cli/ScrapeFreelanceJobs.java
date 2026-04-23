@@ -205,8 +205,8 @@ public class ScrapeFreelanceJobs implements Command {
 		log.debug(String.format("Uploading latest file to %s", latestPath));
 		log.debug(String.format("Uploading archive file to %s", archivePath));
 
-		s3Adapter.putObject(latestPut, compressedFile, s3Client).blockingGet();
-		s3Adapter.putObject(archivePut, compressedFile, s3Client).blockingGet();
+		s3Adapter.putObject(latestPut, compressedFile, s3Client);
+		s3Adapter.putObject(archivePut, compressedFile, s3Client);
 		dataIndexHelper.updateIndex(latestPath, archivePath).blockingAwait();
 	}
 

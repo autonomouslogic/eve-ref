@@ -336,9 +336,7 @@ public class ScrapeMarketHistory implements Command {
 					var archivePut = s3Util.putPublicObjectRequest(
 							archive.length(), archivePath, "application/x-bzip2", latestCacheTime);
 					log.info(String.format("Uploading archive for %s", date));
-					return s3Adapter
-							.putObject(archivePut, archive, s3Client)
-							.ignoreElement()
+					return Completable.fromAction(() -> s3Adapter.putObject(archivePut, archive, s3Client))
 							.andThen(Completable.fromAction(() -> {
 								log.debug("Uploaded archive for {}", date);
 								archive.delete();
@@ -361,9 +359,7 @@ public class ScrapeMarketHistory implements Command {
 					var archivePut = s3Util.putPublicObjectRequest(
 							file.length(), archivePath, "application/json", latestCacheTime);
 					log.info("Uploading total pairs file");
-					return s3Adapter
-							.putObject(archivePut, file, s3Client)
-							.ignoreElement()
+					return Completable.fromAction(() -> s3Adapter.putObject(archivePut, file, s3Client))
 							.andThen(Completable.fromAction(() -> file.delete()));
 				})
 				.compose(Rx.offloadCompletable());

@@ -183,7 +183,7 @@ public class SyncFuzzworkOrdersets implements Command {
 	}
 
 	private Completable uploadFile(FuzzworkFile fuzz) {
-		return Completable.defer(() -> {
+		return Completable.fromAction(() -> {
 			var relativePath = FUZZWORK_ORDERSET.toBuilder()
 					.filename(FUZZWORK_ORDERSET.getFilename() + fuzz.getId())
 					.build()
@@ -191,7 +191,7 @@ public class SyncFuzzworkOrdersets implements Command {
 			var archivePath = dataPath.resolve(relativePath);
 			var archivePut = s3Util.putPublicObjectRequest(fuzz.getFile().length(), archivePath, archiveCacheTime);
 			log.info("Uploading orderset {} from {} to {}", fuzz.getId(), fuzz.getFile(), archivePath);
-			return s3Adapter.putObject(archivePut, fuzz.getFile(), s3Client).ignoreElement();
+			s3Adapter.putObject(archivePut, fuzz.getFile(), s3Client);
 		});
 	}
 
