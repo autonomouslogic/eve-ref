@@ -9,7 +9,8 @@
       "matchPackageNames": [
         "flyway",
         "org.flywaydb.flyway",
-        "org.flywaydb:flyway-core"
+        "org.flywaydb:flyway-core",
+        "org.flywaydb:flyway-database-postgresql"
       ]
     }
   ]
