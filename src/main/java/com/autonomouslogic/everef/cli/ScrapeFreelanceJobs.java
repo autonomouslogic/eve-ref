@@ -6,12 +6,10 @@ import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.esi.EsiHelper;
 import com.autonomouslogic.everef.esi.EsiUrl;
 import com.autonomouslogic.everef.http.OkHttpWrapper;
-import com.autonomouslogic.everef.s3.S3Adapter;
 import com.autonomouslogic.everef.s3.S3Util;
 import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.url.UrlParser;
 import com.autonomouslogic.everef.util.CompressUtil;
-import com.autonomouslogic.everef.util.DataIndexHelper;
 import com.autonomouslogic.everef.util.TempFiles;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -19,7 +17,6 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.io.File;
 import java.io.FileInputStream;
 import java.net.URI;
-import java.time.Duration;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
@@ -51,9 +48,6 @@ public class ScrapeFreelanceJobs implements Command {
 	protected UrlParser urlParser;
 
 	@Inject
-	protected S3Adapter s3Adapter;
-
-	@Inject
 	protected S3Util s3Util;
 
 	@Inject
@@ -64,16 +58,11 @@ public class ScrapeFreelanceJobs implements Command {
 	protected TempFiles tempFiles;
 
 	@Inject
-	protected DataIndexHelper dataIndexHelper;
-
-	@Inject
 	protected OkHttpWrapper okHttpWrapper;
 
 	@Setter
 	private ZonedDateTime scrapeTime;
 
-	private final Duration latestCacheTime = Configs.DATA_LATEST_CACHE_CONTROL_MAX_AGE.getRequired();
-	private final Duration archiveCacheTime = Configs.DATA_ARCHIVE_CACHE_CONTROL_MAX_AGE.getRequired();
 	private S3Url dataPath;
 	private URI dataBaseUrl;
 
@@ -198,16 +187,8 @@ public class ScrapeFreelanceJobs implements Command {
 	private void uploadFiles(@NonNull File outputFile) {
 		log.info("Uploading files");
 		var compressedFile = CompressUtil.compressBzip2(outputFile);
-		var latestPath = dataPath.resolve(FREELANCE_JOBS.createLatestPath());
-		var archivePath = dataPath.resolve(FREELANCE_JOBS.createArchivePath(scrapeTime));
-		var latestPut = s3Util.putPublicObjectRequest(compressedFile.length(), latestPath, latestCacheTime);
-		var archivePut = s3Util.putPublicObjectRequest(compressedFile.length(), archivePath, archiveCacheTime);
-		log.debug(String.format("Uploading latest file to %s", latestPath));
-		log.debug(String.format("Uploading archive file to %s", archivePath));
-
-		s3Adapter.putObject(latestPut, compressedFile, s3Client);
-		s3Adapter.putObject(archivePut, compressedFile, s3Client);
-		dataIndexHelper.updateIndex(latestPath, archivePath).blockingAwait();
+		s3Util.uploadLatestAndArchive(
+				compressedFile, dataPath, FREELANCE_JOBS, scrapeTime, "application/x-bzip2", s3Client);
 	}
 
 	/**
