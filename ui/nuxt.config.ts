@@ -40,7 +40,6 @@ export default defineNuxtConfig({
 
   googleAdsense: {
       id: "ca-pub-2850842519709578",
-      pauseOnLoad: true,
       onPageLoad: true
   },
 
