@@ -161,8 +161,7 @@ public class EsiHelper {
 			}
 
 			var tasks = pageNumbers.stream()
-					.map(page -> (Supplier<List<T>>)
-							() -> decodeResponse(fetchWithRetry(fetcher, page)))
+					.map(page -> (Supplier<List<T>>) () -> decodeResponse(fetchWithRetry(fetcher, page)))
 					.toList();
 
 			var remainingPages = VirtualThreads.offloadAll(tasks).stream()
