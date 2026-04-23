@@ -23,7 +23,7 @@ public class FlywayMigrate implements Command {
 	public Completable runAsync() {
 		return Completable.fromAction(() -> {
 			log.info("Migrating database");
-			VirtualThreads.offload(() -> dbAccess.flyway().migrate());
+			VirtualThreads.run(() -> dbAccess.flyway().migrate());
 		});
 	}
 

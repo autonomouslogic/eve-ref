@@ -230,7 +230,7 @@ public class RefDataUtil {
 	@SneakyThrows
 	public Flowable<Long> getAllTypeIdsForMarketGroup(long marketGroupId) {
 		return Flowable.defer(() -> {
-					var marketGroup = VirtualThreads.offload(() -> refdataApi.getMarketGroup(marketGroupId));
+					var marketGroup = VirtualThreads.run(() -> refdataApi.getMarketGroup(marketGroupId));
 					var types = Optional.ofNullable(marketGroup.getTypeIds()).orElse(List.of());
 					var children = Optional.ofNullable(marketGroup.getChildMarketGroupIds())
 							.orElse(List.of());

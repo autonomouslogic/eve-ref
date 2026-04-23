@@ -59,7 +59,7 @@ public class HealthcheckDecorator {
 			return Completable.complete();
 		}
 		return Completable.fromAction(() -> {
-					VirtualThreads.offload(() -> executeCall(url.get(), body));
+					VirtualThreads.run(() -> executeCall(url.get(), body));
 				})
 				.retry(2, e -> {
 					log.warn(String.format("Healthcheck \"%s\" retrying: %s", url.get(), ExceptionUtils.getMessage(e)));

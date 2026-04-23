@@ -157,7 +157,7 @@ public class PublishRefData implements Command {
 	@SneakyThrows
 	private Completable loadCurrentMeta() {
 		return Completable.fromAction(() -> {
-			currentMeta = VirtualThreads.offload(() -> refdataApi.getMeta());
+			currentMeta = VirtualThreads.run(() -> refdataApi.getMeta());
 		});
 	}
 

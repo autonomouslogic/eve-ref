@@ -192,7 +192,7 @@ public class FetchDonations implements Command {
 	@SneakyThrows
 	private List<DonationEntry> getCharacterDonations(int characterId, String accessToken) {
 		var entries = esiHelper.fetchPages(
-				page -> VirtualThreads.offload(() -> walletApi.getCharactersCharacterIdWalletJournalWithHttpInfo(
+				page -> VirtualThreads.run(() -> walletApi.getCharactersCharacterIdWalletJournalWithHttpInfo(
 						characterId, EsiConstants.Datasource.tranquility.toString(), null, page, accessToken)));
 		return entries.stream()
 				.peek(e -> log.debug("Character journal: {}", e))
@@ -210,7 +210,7 @@ public class FetchDonations implements Command {
 	@SneakyThrows
 	private List<DonationEntry> getCorporationDonations(int corporationId, String accessToken) {
 		var entries = esiHelper.fetchPages(page ->
-				VirtualThreads.offload(() -> walletApi.getCorporationsCorporationIdWalletsDivisionJournalWithHttpInfo(
+				VirtualThreads.run(() -> walletApi.getCorporationsCorporationIdWalletsDivisionJournalWithHttpInfo(
 						corporationId, 1, EsiConstants.Datasource.tranquility.toString(), null, page, accessToken)));
 		return entries.stream()
 				.peek(e -> log.debug("Corporation journal: {}", e))
@@ -264,13 +264,13 @@ public class FetchDonations implements Command {
 
 	@SneakyThrows
 	private @NotNull GetCorporationsCorporationIdOk getCorporation(int corporationId) throws ApiException {
-		return VirtualThreads.offload(() -> corporationApi.getCorporationsCorporationId(
+		return VirtualThreads.run(() -> corporationApi.getCorporationsCorporationId(
 				corporationId, EsiConstants.Datasource.tranquility.toString(), null));
 	}
 
 	@SneakyThrows
 	private @NotNull GetCharactersCharacterIdOk getCharacter(int characterId) throws ApiException {
-		return VirtualThreads.offload(() -> characterApi.getCharactersCharacterId(
+		return VirtualThreads.run(() -> characterApi.getCharactersCharacterId(
 				characterId, EsiConstants.Datasource.tranquility.toString(), null));
 	}
 
