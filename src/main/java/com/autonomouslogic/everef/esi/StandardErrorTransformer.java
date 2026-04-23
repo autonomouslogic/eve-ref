@@ -13,7 +13,7 @@ import org.reactivestreams.Publisher;
  */
 @RequiredArgsConstructor
 @Log4j2
-@Deprecated(since = "refactored", forRemoval = true)
+@Deprecated(forRemoval = true)
 public class StandardErrorTransformer implements FlowableTransformer<Response, Response> {
 	private final EsiUrl url;
 

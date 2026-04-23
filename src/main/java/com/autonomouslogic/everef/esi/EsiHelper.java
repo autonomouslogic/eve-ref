@@ -335,6 +335,12 @@ public class EsiHelper {
 		return obj;
 	}
 
+	/**
+	 * @deprecated Use {@link EsiHelper#filterResponsesByErrorStatus(List, EsiUrl)} instead for blocking error handling.
+	 * @param url
+	 * @return
+	 */
+	@Deprecated(forRemoval = true)
 	public StandardErrorTransformer standardErrorHandling(EsiUrl url) {
 		return new StandardErrorTransformer(url);
 	}
