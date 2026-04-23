@@ -161,7 +161,7 @@ public class EsiHelper {
 			}
 
 			var tasks = pageNumbers.stream()
-					.map(page -> (io.reactivex.rxjava3.functions.Supplier<List<T>>)
+					.map(page -> (Supplier<List<T>>)
 							() -> decodeResponse(fetchWithRetry(fetcher, page)))
 					.toList();
 
