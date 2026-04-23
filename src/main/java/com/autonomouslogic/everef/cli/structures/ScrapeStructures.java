@@ -466,10 +466,8 @@ public class ScrapeStructures implements Command {
 			log.info(String.format("Uploading latest file to %s", latestPath));
 			log.info(String.format("Uploading archive file to %s", archivePath));
 			return Completable.mergeArray(
-							s3Adapter.putObject(latestPut, outputFile, s3Client).ignoreElement(),
-							s3Adapter
-									.putObject(archivePut, archiveFile, s3Client)
-									.ignoreElement())
+							Completable.fromAction(() -> s3Adapter.putObject(latestPut, outputFile, s3Client)),
+							Completable.fromAction(() -> s3Adapter.putObject(archivePut, archiveFile, s3Client)))
 					.andThen(Completable.defer(() -> dataIndexHelper.updateIndex(latestPath, archivePath)));
 		});
 	}

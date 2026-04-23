@@ -14,7 +14,6 @@ import com.autonomouslogic.everef.url.UrlParser;
 import com.autonomouslogic.everef.util.DataIndexHelper;
 import com.autonomouslogic.everef.util.TempFiles;
 import com.fasterxml.jackson.databind.JsonNode;
-import io.reactivex.rxjava3.core.Completable;
 import java.io.File;
 import java.time.Duration;
 import java.time.Instant;
@@ -252,6 +251,7 @@ public class ScrapePublicContracts implements Command {
 	 * Uploads the final file to S3.
 	 * @return
 	 */
+	@SneakyThrows
 	private void uploadFiles(File outputFile) {
 		var latestPath = dataUrl.resolve(PUBLIC_CONTRACTS.createLatestPath());
 		var archivePath = dataUrl.resolve(PUBLIC_CONTRACTS.createArchivePath(scrapeTime));
@@ -261,10 +261,8 @@ public class ScrapePublicContracts implements Command {
 				outputFile.length(), archivePath, "application/x-bzip2", archiveCacheTime);
 		log.info(String.format("Uploading latest file to %s", latestPath));
 		log.info(String.format("Uploading archive file to %s", archivePath));
-		Completable.mergeArray(
-						s3Adapter.putObject(latestPut, outputFile, s3Client).ignoreElement(),
-						s3Adapter.putObject(archivePut, outputFile, s3Client).ignoreElement())
-				.blockingAwait();
+		s3Adapter.putObject(latestPut, outputFile, s3Client);
+		s3Adapter.putObject(archivePut, outputFile, s3Client);
 		dataIndexHelper.updateIndex(latestPath, archivePath).blockingAwait();
 	}
 }

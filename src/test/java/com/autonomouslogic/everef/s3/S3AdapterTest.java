@@ -53,9 +53,7 @@ public class S3AdapterTest {
 								.eTag("etag1")
 								.build())
 				.build()));
-		var objs = adapter.listObjects(S3Url.builder().bucket("bucket").build(), true, client)
-				.toList()
-				.blockingGet();
+		var objs = adapter.listObjects(S3Url.builder().bucket("bucket").build(), true, client);
 		assertEquals(
 				List.of(ListedS3Object.create(
 						S3Object.builder()
@@ -85,9 +83,7 @@ public class S3AdapterTest {
 								.build())
 				.build()));
 		var objs = adapter.listObjects(
-						S3Url.builder().bucket("bucket").path("prefix/").build(), true, client)
-				.toList()
-				.blockingGet();
+				S3Url.builder().bucket("bucket").path("prefix/").build(), true, client);
 		assertEquals(
 				List.of(
 						ListedS3Object.create(
@@ -123,9 +119,7 @@ public class S3AdapterTest {
 								.build())
 				.commonPrefixes(List.of(CommonPrefix.builder().prefix("dir/").build()))
 				.build()));
-		var objs = adapter.listObjects(S3Url.builder().bucket("bucket").build(), false, client)
-				.toList()
-				.blockingGet();
+		var objs = adapter.listObjects(S3Url.builder().bucket("bucket").build(), false, client);
 		assertEquals(
 				List.of(
 						ListedS3Object.create(
@@ -156,9 +150,7 @@ public class S3AdapterTest {
 						List.of(CommonPrefix.builder().prefix("prefix/dir/").build()))
 				.build()));
 		var objs = adapter.listObjects(
-						S3Url.builder().bucket("bucket").path("prefix/").build(), false, client)
-				.toList()
-				.blockingGet();
+				S3Url.builder().bucket("bucket").path("prefix/").build(), false, client);
 		assertEquals(
 				List.of(
 						ListedS3Object.create(
@@ -211,12 +203,7 @@ public class S3AdapterTest {
 		var file = tempFiles.tempFile(S3AdapterTest.class.getSimpleName(), ".test");
 		Files.setLastModifiedTime(file, FileTime.from(lastModified));
 		adapter.putObject(
-						PutObjectRequest.builder()
-								.metadata(Map.of("foo", "bar"))
-								.build(),
-						file.toFile(),
-						client)
-				.blockingGet();
+				PutObjectRequest.builder().metadata(Map.of("foo", "bar")).build(), file.toFile(), client);
 		var captor = ArgumentCaptor.forClass(PutObjectRequest.class);
 		verify(client).putObject(captor.capture(), Mockito.any(AsyncRequestBody.class));
 		var req = captor.getValue();

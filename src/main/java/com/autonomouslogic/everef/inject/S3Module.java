@@ -6,6 +6,7 @@ import dagger.Module;
 import dagger.Provides;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.Duration;
 import java.util.Optional;
 import javax.inject.Named;
 import javax.inject.Singleton;
@@ -67,7 +68,10 @@ public class S3Module {
 	private static S3AsyncClient createClient(
 			AwsCredentialsProvider credentialsProvider, Optional<Region> region, Config<String> endpointUrl)
 			throws URISyntaxException {
-		var httpClient = NettyNioAsyncHttpClient.builder().maxConcurrency(256).build();
+		var httpClient = NettyNioAsyncHttpClient.builder()
+				.maxConcurrency(256)
+				.connectionAcquisitionTimeout(Duration.ofSeconds(60))
+				.build();
 		var client =
 				S3AsyncClient.builder().credentialsProvider(credentialsProvider).httpClient(httpClient);
 		region.ifPresent(client::region);

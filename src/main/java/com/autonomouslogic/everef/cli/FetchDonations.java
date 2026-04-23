@@ -229,11 +229,12 @@ public class FetchDonations implements Command {
 		return esiAuthHelper.getTokenStringForOwnerHash(eveRefOwnerHash);
 	}
 
+	@SneakyThrows
 	private void uploadFile(byte[] contents, String name) {
 		var path = staticUrl.resolve(name);
 		var put = s3Util.putObjectRequest(contents.length, path, "application/json", cacheControlMaxAge);
 		log.debug(String.format("Uploading %s to %s", name, path));
-		s3Adapter.putObject(put, contents, s3Client).ignoreElement().blockingAwait();
+		s3Adapter.putObject(put, contents, s3Client);
 	}
 
 	@SneakyThrows
@@ -241,7 +242,7 @@ public class FetchDonations implements Command {
 		var path = staticUrl.resolve(name);
 		var get = s3Util.getObjectRequest(path);
 		log.debug(String.format("Downloading %s", path));
-		var p = s3Adapter.getObject(get, s3Client).blockingGet();
+		var p = s3Adapter.getObject(get, s3Client);
 		var b = IOUtils.toByteArray(new FileInputStream(p.getRight().toFile()));
 		p.getRight().toFile().delete();
 		return b;

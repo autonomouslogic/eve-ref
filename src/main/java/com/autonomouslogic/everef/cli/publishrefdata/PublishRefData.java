@@ -172,18 +172,15 @@ public class PublishRefData implements Command {
 	}
 
 	private Single<Map<String, ListedS3Object>> listBucketContents() {
-		return Flowable.defer(() -> {
-					log.info("Listing existing contents");
-					return s3Adapter
-							.listObjects(refDataUrl, true, s3Client)
-							.filter(obj -> !(obj.getUrl().getPath().endsWith("index.html")));
-				})
-				.toList()
-				.map(objects -> {
-					log.info("Listed {} objects", objects.size());
-					return objects.stream()
-							.collect(Collectors.toMap(o -> o.getUrl().getPath(), Function.identity()));
-				});
+		return Single.defer(() -> {
+			log.info("Listing existing contents");
+			var objects = s3Adapter.listObjects(refDataUrl, true, s3Client);
+			var filtered = objects.stream()
+					.filter(obj -> !(obj.getUrl().getPath().endsWith("index.html")))
+					.collect(Collectors.toMap(o -> o.getUrl().getPath(), Function.identity()));
+			log.info("Listed {} objects", filtered.size());
+			return Single.just(filtered);
+		});
 	}
 
 	private Completable initMvStore() {
@@ -287,9 +284,7 @@ public class PublishRefData implements Command {
 					.toBuilder()
 					.contentMD5(entry.getMd5B64())
 					.build();
-			return s3Adapter
-					.putObject(latestPut, entry.getContent(), s3Client)
-					.ignoreElement()
+			return Completable.fromAction(() -> s3Adapter.putObject(latestPut, entry.getContent(), s3Client))
 					.andThen(Completable.fromAction(() -> {
 						var uploads = uploadCounter.incrementAndGet();
 						if (uploads % 10000 == 0) {
@@ -322,9 +317,7 @@ public class PublishRefData implements Command {
 										var delete = s3Util.deleteObjectRequest(refDataUrl.toBuilder()
 												.path(entry)
 												.build());
-										return s3Adapter
-												.deleteObject(delete, s3Client)
-												.ignoreElement();
+										return Completable.fromAction(() -> s3Adapter.deleteObject(delete, s3Client));
 									},
 									false,
 									UPLOAD_CONCURRENCY);

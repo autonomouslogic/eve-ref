@@ -119,10 +119,12 @@ public class DataIndex implements Command {
 					}
 					log.debug("Listing contents at {}", url);
 					var dir = new VirtualDirectory();
-					return s3Adapter
-							.listObjects(url, recursive, s3)
+					var objects = s3Adapter.listObjects(url, recursive, s3);
+					var filtered = objects.stream()
 							.filter(obj -> !(obj.getUrl().getPath().endsWith("index.html")))
-							.compose(s3Adapter.headLastModified(s3))
+							.toList();
+					var withLastModified = s3Adapter.headLastModified(filtered, s3);
+					return Flowable.fromIterable(withLastModified)
 							.doOnNext(obj -> {
 								if (obj.isDirectory()) {
 									dir.add(FileEntry.directory(obj.getUrl().getPath()));
@@ -167,7 +169,7 @@ public class DataIndex implements Command {
 
 	@NotNull
 	private Completable uploadIndexPage(@NotNull String prefix, @NotNull byte[] rendered) {
-		return Completable.defer(() -> {
+		return Completable.fromAction(() -> {
 			// Upload index page.
 			var target = S3Url.builder()
 					.bucket(dataUrl.getBucket())
@@ -175,9 +177,7 @@ public class DataIndex implements Command {
 					.build();
 			log.debug(String.format("Uploading index page: %s", target));
 			var putObjectRequest = s3Util.putPublicObjectRequest(rendered.length, target, "text/html", indexCacheTime);
-			return s3Adapter
-					.putObject(putObjectRequest, AsyncRequestBody.fromBytes(rendered), s3)
-					.ignoreElement();
+			s3Adapter.putObject(putObjectRequest, AsyncRequestBody.fromBytes(rendered), s3);
 		});
 	}
 
