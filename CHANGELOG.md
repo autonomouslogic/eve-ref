@@ -1,5 +1,34 @@
 EVE Ref Changelog
 
+## [2.74.4](https://github.com/autonomouslogic/eve-ref/compare/2.74.3...2.74.4) (2026-04-23)
+
+
+### Bug Fixes
+
+* **deps:** update dependency org.flywaydb:flyway-core to v12 ([#1010](https://github.com/autonomouslogic/eve-ref/issues/1010)) ([89c1003](https://github.com/autonomouslogic/eve-ref/commit/89c1003566d5a0be054c1b47043406df0d69f1fe))
+* **deps:** update flyway to v12 (major) ([#1011](https://github.com/autonomouslogic/eve-ref/issues/1011)) ([2be5c70](https://github.com/autonomouslogic/eve-ref/commit/2be5c7074f19b9f86f5fff2e1880d232bdf9956d))
+* Fixed virtual thread execution ([3743b8e](https://github.com/autonomouslogic/eve-ref/commit/3743b8ef6a0ae1931da75361e0e2b515cc1dd840))
+* Removed more RxJava ([#1035](https://github.com/autonomouslogic/eve-ref/issues/1035)) ([a5f729a](https://github.com/autonomouslogic/eve-ref/commit/a5f729a68f3a3e0b6698f5af0d7c0dcc90ff7ef3))
+* Removed RxJava for S3Adapter ([#1036](https://github.com/autonomouslogic/eve-ref/issues/1036)) ([748abff](https://github.com/autonomouslogic/eve-ref/commit/748abff7b30d875e1fb05c19bdf5c92b6d6f4a10))
+* **ui:** Added data-draft to Usercentrics script ([c1a114f](https://github.com/autonomouslogic/eve-ref/commit/c1a114f4735f51aafd85e8746cf34e07bb0e4bd4))
+* **ui:** Added Usercentrics autoblocker script ([20c2b80](https://github.com/autonomouslogic/eve-ref/commit/20c2b800424d758a331f5b4f1ba924a991e5a804))
+* **ui:** Center align wrapper for ads ([9c8275a](https://github.com/autonomouslogic/eve-ref/commit/9c8275a0c589d75867b1aedd72458933bd7830da))
+* **ui:** Centered ads ([3a8f517](https://github.com/autonomouslogic/eve-ref/commit/3a8f517d07716fbfdf667c496f4e33fdbb5b33a3))
+* **ui:** Disabled adsesne pauseOnLoad ([13398a8](https://github.com/autonomouslogic/eve-ref/commit/13398a856b65ca725505193f966488d42fc9dbce))
+* **ui:** Fixing ads ([c82899d](https://github.com/autonomouslogic/eve-ref/commit/c82899daecb2634a3c289a2ee40d2e909df14790))
+* **ui:** Load adsense after page load ([04a254c](https://github.com/autonomouslogic/eve-ref/commit/04a254c27f93e6b6b221cb20c1bdc000e98141df))
+* **ui:** Minor formatting ([c89d8db](https://github.com/autonomouslogic/eve-ref/commit/c89d8dbda8cc651c5a66dfe0cae7ee65494654fa))
+* **ui:** Removed container blocks for ads ([c78dde5](https://github.com/autonomouslogic/eve-ref/commit/c78dde50fb2f38eb83e0aa2e1a1a784ef95f8936))
+* **ui:** Removed fixed ad slot ([29b7a1e](https://github.com/autonomouslogic/eve-ref/commit/29b7a1ed92cd5b3852b37e79ba282bd4ef96e6d6))
+* **ui:** Removed Usercentrics ([e4ac220](https://github.com/autonomouslogic/eve-ref/commit/e4ac2206ade6eb661fe1dc69cd26f8b1525fc928))
+* **ui:** Removed Usercentrics auto-blocker ([7779883](https://github.com/autonomouslogic/eve-ref/commit/77798836eb37853c9ac370ab014bc13b2afba2a0))
+* **ui:** Removed Usercentrics settings ([1d41273](https://github.com/autonomouslogic/eve-ref/commit/1d412739cc6175d269b12b1d76c68bd786e66bc0))
+
+
+### Dependency Updates
+
+* **deps:** update actions/checkout action to v6 ([#981](https://github.com/autonomouslogic/eve-ref/issues/981)) ([93942f2](https://github.com/autonomouslogic/eve-ref/commit/93942f20e08a6cce0d7ccace1d90bcadb41fbca5))
+
 ## [2.74.3](https://github.com/autonomouslogic/eve-ref/compare/2.74.2...2.74.3) (2026-04-08)
 
 
