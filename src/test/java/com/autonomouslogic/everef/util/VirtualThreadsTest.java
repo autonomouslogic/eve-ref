@@ -13,21 +13,19 @@ class VirtualThreadsTest {
 	@Test
 	@SneakyThrows
 	void shouldExecuteParallelTasksConcurrently() {
-		// Test that parallel tasks run concurrently (not sequentially)
-		int taskCount = 4;
-		long taskDuration = 500; // ms
+		var count = 4;
+		var duration = 500;
 
 		var timestamps = new ArrayList<Long>();
-		var lock = new Object();
 
 		var tasks = new ArrayList<Callable<Void>>();
-		for (int i = 0; i < taskCount; i++) {
+		for (int i = 0; i < count; i++) {
 			tasks.add(() -> {
-				synchronized (lock) {
+				synchronized (timestamps) {
 					timestamps.add(System.currentTimeMillis());
 				}
 				try {
-					Thread.sleep(taskDuration);
+					Thread.sleep(duration);
 				} catch (InterruptedException e) {
 					Thread.currentThread().interrupt();
 					throw new RuntimeException(e);
@@ -36,36 +34,33 @@ class VirtualThreadsTest {
 			});
 		}
 
-		long startTime = System.currentTimeMillis();
-		VirtualThreads.parallel(tasks, taskCount);
-		long totalTime = System.currentTimeMillis() - startTime;
+		long start = System.currentTimeMillis();
+		VirtualThreads.parallel(tasks, count);
+		long time = System.currentTimeMillis() - start;
 
-		// If tasks run sequentially: total time ≈ taskCount * taskDuration
-		// If tasks run in parallel: total time ≈ taskDuration
-		long sequentialTime = taskCount * taskDuration;
-		long maxConcurrentTime = taskDuration * 2; // Allow some overhead
+		// If tasks run sequentially: total time = taskCount * taskDuration
+		long sequentialTime = count * duration;
 
 		// With concurrency, total time should be significantly less than sequential
 		assertTrue(
-				totalTime < sequentialTime * 0.8,
-				"Tasks appear to be running sequentially. Total time: " + totalTime + "ms, expected < "
+				time < sequentialTime * 0.8,
+				"Tasks appear to be running sequentially. Total time: " + time + "ms, expected < "
 						+ (sequentialTime * 0.8) + "ms");
 	}
 
 	@Test
 	@SneakyThrows
 	void shouldRespectConcurrencyLimit() {
-		// Test that concurrency semaphore limits concurrent execution
-		int taskCount = 8;
+		int count = 8;
 		int concurrency = 2;
-		long taskDuration = 200; // ms
+		long duration = 200; // ms
 
 		var activeCount = new AtomicInteger(0);
 		var maxConcurrentSeen = new AtomicInteger(0);
 		var lock = new Object();
 
 		var tasks = new ArrayList<Callable<Void>>();
-		for (int i = 0; i < taskCount; i++) {
+		for (int i = 0; i < count; i++) {
 			tasks.add(() -> {
 				int current = activeCount.incrementAndGet();
 				synchronized (lock) {
@@ -75,7 +70,7 @@ class VirtualThreadsTest {
 				}
 
 				try {
-					Thread.sleep(taskDuration);
+					Thread.sleep(duration);
 				} catch (InterruptedException e) {
 					Thread.currentThread().interrupt();
 					throw new RuntimeException(e);
@@ -86,20 +81,18 @@ class VirtualThreadsTest {
 			});
 		}
 
-		long startTime = System.currentTimeMillis();
+		long start = System.currentTimeMillis();
 		VirtualThreads.parallel(tasks, concurrency);
-		long totalTime = System.currentTimeMillis() - startTime;
+		long time = System.currentTimeMillis() - start;
 
-		// Max concurrent should be at most the concurrency limit
 		assertTrue(
 				maxConcurrentSeen.get() <= concurrency,
 				"Concurrency exceeded limit. Max seen: " + maxConcurrentSeen.get() + ", limit: " + concurrency);
 
-		// Time should reflect concurrency limit: roughly (taskCount / concurrency) * taskDuration
-		long expectedMinTime = (taskCount / concurrency) * taskDuration;
+		long expectedMinTime = (count / concurrency) * duration;
 		assertTrue(
-				totalTime >= expectedMinTime * 0.8,
-				"Total time doesn't reflect concurrency limit. Total: " + totalTime + "ms, expected >= "
+				time >= expectedMinTime * 0.8,
+				"Total time doesn't reflect concurrency limit. Total: " + time + "ms, expected >= "
 						+ (expectedMinTime * 0.8) + "ms");
 	}
 
@@ -132,14 +125,14 @@ class VirtualThreadsTest {
 	@Test
 	void shouldUseProcessorCountByDefault() {
 		// Test that default parallel() uses processor count as concurrency
-		int processorCount = Runtime.getRuntime().availableProcessors();
+		int processors = Runtime.getRuntime().availableProcessors();
 		var activeCount = new AtomicInteger(0);
 		var maxConcurrentSeen = new AtomicInteger(0);
 		var lock = new Object();
 
 		var tasks = new ArrayList<Callable<Void>>();
 		// Create many tasks to properly test concurrency
-		for (int i = 0; i < processorCount * 4; i++) {
+		for (int i = 0; i < processors * 4; i++) {
 			tasks.add(() -> {
 				int current = activeCount.incrementAndGet();
 				synchronized (lock) {
@@ -164,8 +157,8 @@ class VirtualThreadsTest {
 
 		// Should use processor count as concurrency limit
 		assertTrue(
-				maxConcurrentSeen.get() <= processorCount + 1, // Allow 1 extra for timing variance
+				maxConcurrentSeen.get() <= processors + 1, // Allow 1 extra for timing variance
 				"Default concurrency should match processor count. Max seen: " + maxConcurrentSeen.get()
-						+ ", processors: " + processorCount);
+						+ ", processors: " + processors);
 	}
 }
