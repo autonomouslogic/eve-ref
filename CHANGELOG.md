@@ -1,5 +1,12 @@
 EVE Ref Changelog
 
+## [2.74.5](https://github.com/autonomouslogic/eve-ref/compare/2.74.4...2.74.5) (2026-04-25)
+
+
+### Bug Fixes
+
+* Refactored VirtualThreads to actually use virtual threads ([#1037](https://github.com/autonomouslogic/eve-ref/issues/1037)) ([aa97b47](https://github.com/autonomouslogic/eve-ref/commit/aa97b4793d8edbe45b9255b586ef10007642da34))
+
 ## [2.74.4](https://github.com/autonomouslogic/eve-ref/compare/2.74.3...2.74.4) (2026-04-23)
 
 
