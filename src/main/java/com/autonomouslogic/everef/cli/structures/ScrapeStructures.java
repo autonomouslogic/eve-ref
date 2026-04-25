@@ -20,13 +20,11 @@ import com.autonomouslogic.everef.esi.LocationPopulator;
 import com.autonomouslogic.everef.http.OkHttpWrapper;
 import com.autonomouslogic.everef.mvstore.MVStoreUtil;
 import com.autonomouslogic.everef.openapi.refdata.api.RefdataApi;
-import com.autonomouslogic.everef.s3.S3Adapter;
 import com.autonomouslogic.everef.s3.S3Util;
 import com.autonomouslogic.everef.url.HttpUrl;
 import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.url.UrlParser;
 import com.autonomouslogic.everef.util.CompressUtil;
-import com.autonomouslogic.everef.util.DataIndexHelper;
 import com.autonomouslogic.everef.util.JsonUtil;
 import com.autonomouslogic.everef.util.ProgressReporter;
 import com.autonomouslogic.everef.util.TempFiles;
@@ -104,9 +102,6 @@ public class ScrapeStructures implements Command {
 	protected ObjectMapper objectMapper;
 
 	@Inject
-	protected S3Adapter s3Adapter;
-
-	@Inject
 	protected S3Util s3Util;
 
 	@Inject
@@ -118,9 +113,6 @@ public class ScrapeStructures implements Command {
 
 	@Inject
 	protected TempFiles tempFiles;
-
-	@Inject
-	protected DataIndexHelper dataIndexHelper;
 
 	@Inject
 	protected MVStoreUtil mvStoreUtil;
@@ -170,8 +162,6 @@ public class ScrapeStructures implements Command {
 	@Setter
 	private ZonedDateTime scrapeTime;
 
-	private final Duration latestCacheTime = Configs.DATA_LATEST_CACHE_CONTROL_MAX_AGE.getRequired();
-	private final Duration archiveCacheTime = Configs.DATA_ARCHIVE_CACHE_CONTROL_MAX_AGE.getRequired();
 	private final String scrapeOwnerHash = Configs.SCRAPE_CHARACTER_OWNER_HASH.getRequired();
 	private final Duration structureTimeout = Configs.STRUCTURE_TIMEOUT.getRequired();
 	private S3Url dataPath;
@@ -456,19 +446,18 @@ public class ScrapeStructures implements Command {
 	 * @return
 	 */
 	private Completable uploadFiles(@NonNull File outputFile) {
-		return Completable.defer(() -> {
+		return Completable.fromAction(() -> {
 			log.info("Uploading files");
 			var archiveFile = CompressUtil.compressBzip2(outputFile);
-			var latestPath = dataPath.resolve(STRUCTURES.createLatestPath());
-			var archivePath = dataPath.resolve(STRUCTURES.createArchivePath(scrapeTime));
-			var latestPut = s3Util.putPublicObjectRequest(outputFile.length(), latestPath, latestCacheTime);
-			var archivePut = s3Util.putPublicObjectRequest(archiveFile.length(), archivePath, archiveCacheTime);
-			log.info(String.format("Uploading latest file to %s", latestPath));
-			log.info(String.format("Uploading archive file to %s", archivePath));
-			return Completable.mergeArray(
-							Completable.fromAction(() -> s3Adapter.putObject(latestPut, outputFile, s3Client)),
-							Completable.fromAction(() -> s3Adapter.putObject(archivePut, archiveFile, s3Client)))
-					.andThen(Completable.defer(() -> dataIndexHelper.updateIndex(latestPath, archivePath)));
+			s3Util.uploadLatestAndArchive(
+					outputFile,
+					archiveFile,
+					dataPath,
+					STRUCTURES,
+					scrapeTime,
+					"application/json",
+					"application/x-bzip2",
+					s3Client);
 		});
 	}
 

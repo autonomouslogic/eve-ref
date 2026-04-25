@@ -115,20 +115,46 @@ public class S3Util {
 			@NonNull ZonedDateTime archiveTime,
 			@NonNull String contentType,
 			@NonNull S3AsyncClient s3Client) {
+		uploadLatestAndArchive(file, file, baseUrl, pathFactory, archiveTime, contentType, contentType, s3Client);
+	}
+
+	/**
+	 * Uploads different files to latest and archive paths in S3, then updates the data index.
+	 * This supports cases where the latest and archive files have different content or compression.
+	 *
+	 * @param latestFile the file to upload to the latest path
+	 * @param archiveFile the file to upload to the archive path
+	 * @param baseUrl the base S3 URL to resolve paths from
+	 * @param pathFactory the factory for creating latest and archive paths
+	 * @param archiveTime the timestamp to use in the archive path
+	 * @param latestContentType the MIME type for the latest file
+	 * @param archiveContentType the MIME type for the archive file
+	 * @param s3Client the S3 async client to use for uploads
+	 */
+	public void uploadLatestAndArchive(
+			@NonNull File latestFile,
+			@NonNull File archiveFile,
+			@NonNull S3Url baseUrl,
+			@NonNull ArchivePathFactory pathFactory,
+			@NonNull ZonedDateTime archiveTime,
+			@NonNull String latestContentType,
+			@NonNull String archiveContentType,
+			@NonNull S3AsyncClient s3Client) {
 		var latestCacheTime = Configs.DATA_LATEST_CACHE_CONTROL_MAX_AGE.getRequired();
 		var archiveCacheTime = Configs.DATA_ARCHIVE_CACHE_CONTROL_MAX_AGE.getRequired();
 
 		var latestPath = baseUrl.resolve(pathFactory.createLatestPath());
 		var archivePath = baseUrl.resolve(pathFactory.createArchivePath(archiveTime));
 
-		var latestPut = putPublicObjectRequest(file.length(), latestPath, contentType, latestCacheTime);
-		var archivePut = putPublicObjectRequest(file.length(), archivePath, contentType, archiveCacheTime);
+		var latestPut = putPublicObjectRequest(latestFile.length(), latestPath, latestContentType, latestCacheTime);
+		var archivePut =
+				putPublicObjectRequest(archiveFile.length(), archivePath, archiveContentType, archiveCacheTime);
 
 		log.info("Uploading latest file to {}", latestPath);
 		log.info("Uploading archive file to {}", archivePath);
 
-		s3Adapter.putObject(latestPut, file, s3Client);
-		s3Adapter.putObject(archivePut, file, s3Client);
+		s3Adapter.putObject(latestPut, latestFile, s3Client);
+		s3Adapter.putObject(archivePut, archiveFile, s3Client);
 
 		dataIndexHelper.updateIndex(latestPath, archivePath).blockingAwait();
 	}
