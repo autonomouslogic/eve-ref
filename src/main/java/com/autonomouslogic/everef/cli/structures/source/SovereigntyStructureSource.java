@@ -37,7 +37,7 @@ public class SovereigntyStructureSource implements StructureSource {
 	@Override
 	public Flowable<Long> getStructures() {
 		return Flowable.defer(() -> {
-			var response = VirtualThreads.offload(() -> sovereigntyApi.getSovereigntyStructuresWithHttpInfo(
+			var response = VirtualThreads.run(() -> sovereigntyApi.getSovereigntyStructuresWithHttpInfo(
 					EsiConstants.Datasource.tranquility.toString(), null));
 			if (response.getStatusCode() != 200) {
 				return Flowable.error(new RuntimeException(

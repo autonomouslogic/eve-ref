@@ -1,16 +1,15 @@
 package com.autonomouslogic.everef.util;
 
-import io.reactivex.rxjava3.core.Completable;
-import io.reactivex.rxjava3.core.Flowable;
-import io.reactivex.rxjava3.core.Maybe;
 import io.reactivex.rxjava3.core.Scheduler;
-import io.reactivex.rxjava3.functions.Action;
-import io.reactivex.rxjava3.functions.Supplier;
 import io.reactivex.rxjava3.schedulers.Schedulers;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+import java.util.concurrent.Callable;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Semaphore;
+import java.util.stream.Collectors;
 
 public class VirtualThreads {
 	public static final ExecutorService EXECUTOR = Executors.newThreadPerTaskExecutor(
@@ -18,60 +17,119 @@ public class VirtualThreads {
 	public static final Scheduler SCHEDULER = Schedulers.from(EXECUTOR);
 
 	/**
-	 * Offloads an action to the RxJava IO thread pool.
-	 * @param supplier
-	 * @return
-	 * @param <T>
+	 * Runs a task on the virtual thread pool.
+	 * @param callable The callable task to execute
+	 * @return The result of the task
+	 * @param <T> The return type of the task
 	 */
-	public static <T> T offload(Supplier<T> supplier) {
+	public static <T> T run(Callable<T> callable) {
 		checkThread();
-		return Maybe.defer(() -> Maybe.fromOptional(Optional.ofNullable(supplier.get())))
-				.subscribeOn(Schedulers.io())
-				.blockingGet();
+		var future = EXECUTOR.submit(() -> {
+			try {
+				return callable.call();
+			} catch (Throwable e) {
+				throw new RuntimeException("Task execution failed", e);
+			}
+		});
+
+		try {
+			return future.get();
+		} catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
+			throw new RuntimeException("Interrupted while executing task on virtual thread", e);
+		} catch (java.util.concurrent.ExecutionException e) {
+			throw new RuntimeException(
+					"Failed to execute task on virtual thread", e.getCause() != null ? e.getCause() : e);
+		}
 	}
 
 	/**
-	 * Offloads an action to the RxJava IO thread pool.
-	 * @param action
-	 * @return
-	 * @param <T>
+	 * Runs a runnable on the virtual thread pool.
+	 * @param runnable The runnable to execute
 	 */
-	public static void offload(Action action) {
+	public static void run(Runnable runnable) {
 		checkThread();
-		Completable.fromAction(action).subscribeOn(Schedulers.io()).blockingAwait();
+		var future = EXECUTOR.submit(() -> {
+			try {
+				runnable.run();
+			} catch (Throwable e) {
+				throw new RuntimeException("Task execution failed", e);
+			}
+		});
+
+		try {
+			future.get();
+		} catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
+			throw new RuntimeException("Interrupted while executing task on virtual thread", e);
+		} catch (java.util.concurrent.ExecutionException e) {
+			throw new RuntimeException(
+					"Failed to execute task on virtual thread", e.getCause() != null ? e.getCause() : e);
+		}
 	}
 
 	/**
-	 * Offloads multiple tasks to the IO thread pool and waits for all to complete.
-	 * @param tasks List of supplier tasks to execute in parallel
+	 * Executes multiple tasks in parallel on the virtual thread pool with the default
+	 * concurrency level (number of available processors).
+	 * @param tasks List of callable tasks to execute in parallel
 	 * @return List of results in the same order as the input tasks
 	 * @param <T> The return type of the tasks
 	 */
-	public static <T> List<T> offloadAll(List<? extends Supplier<T>> tasks) {
+	public static <T> List<T> parallel(List<? extends Callable<T>> tasks) {
+		return parallel(tasks, Runtime.getRuntime().availableProcessors());
+	}
+
+	/**
+	 * Executes multiple tasks in parallel on the virtual thread pool with controlled concurrency.
+	 * @param tasks List of callable tasks to execute in parallel
+	 * @param concurrency Maximum number of tasks to execute concurrently
+	 * @return List of results in the same order as the input tasks
+	 * @param <T> The return type of the tasks
+	 */
+	public static <T> List<T> parallel(List<? extends Callable<T>> tasks, int concurrency) {
 		checkThread();
 		if (tasks.isEmpty()) {
 			return List.of();
 		}
 
-		return Flowable.defer(() -> Flowable.fromIterable(tasks)
-						.parallel(Math.min(tasks.size(), 4))
-						.runOn(Schedulers.io())
-						.flatMap(task -> Flowable.defer(() -> Flowable.fromOptional(Optional.ofNullable(task.get()))))
-						.sequential())
-				.toList()
-				.blockingGet();
+		var semaphore = new Semaphore(concurrency);
+		var futures = new ArrayList<CompletableFuture<T>>(tasks.size());
+
+		for (var task : tasks) {
+			var future = CompletableFuture.supplyAsync(
+					() -> {
+						try {
+							semaphore.acquire();
+							try {
+								return task.call();
+							} finally {
+								semaphore.release();
+							}
+						} catch (InterruptedException e) {
+							Thread.currentThread().interrupt();
+							throw new RuntimeException("Interrupted while executing parallel task", e);
+						} catch (Throwable e) {
+							throw new RuntimeException("Failed to execute parallel task", e);
+						}
+					},
+					EXECUTOR);
+			futures.add(future);
+		}
+
+		return futures.stream().map(CompletableFuture::join).collect(Collectors.toList());
 	}
 
 	/**
 	 * Executes a task on a virtual thread. Can be called from any thread context.
-	 * @param task The supplier task to execute
+	 * @param task The callable task to execute
 	 * @return The result of the task
 	 * @param <T> The return type of the task
 	 */
-	public static <T> T onVirtual(Supplier<T> task) {
+	@Deprecated(forRemoval = true)
+	public static <T> T onVirtual(Callable<T> task) {
 		var future = EXECUTOR.submit(() -> {
 			try {
-				return task.get();
+				return task.call();
 			} catch (Throwable e) {
 				throw new RuntimeException("Task execution failed", e);
 			}

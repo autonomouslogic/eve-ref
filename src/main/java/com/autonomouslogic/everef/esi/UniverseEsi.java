@@ -50,8 +50,8 @@ public class UniverseEsi {
 					}
 					return Flowable.defer(() -> {
 						log.trace("Fetching region ids");
-						var regions = VirtualThreads.offload(
-								() -> universeApi.getUniverseRegions(datasource.toString(), null));
+						var regions =
+								VirtualThreads.run(() -> universeApi.getUniverseRegions(datasource.toString(), null));
 						regionIds = regions;
 						return Flowable.fromIterable(regions);
 					});
@@ -61,7 +61,7 @@ public class UniverseEsi {
 
 	public Maybe<GetUniverseRegionsRegionIdOk> getRegion(int regionId) {
 		return getFromCacheOrFetch("region", GetUniverseRegionsRegionIdOk.class, regions, regionId, () -> {
-			return VirtualThreads.offload(
+			return VirtualThreads.run(
 					() -> universeApi.getUniverseRegionsRegionId(regionId, null, datasource.toString(), null, null));
 		});
 	}
@@ -81,14 +81,14 @@ public class UniverseEsi {
 				constellations,
 				constellationId,
 				() -> {
-					return VirtualThreads.offload(() -> universeApi.getUniverseConstellationsConstellationId(
+					return VirtualThreads.run(() -> universeApi.getUniverseConstellationsConstellationId(
 							constellationId, null, datasource.toString(), null, null));
 				});
 	}
 
 	public Maybe<GetUniverseSystemsSystemIdOk> getSystem(int systemId) {
 		return getFromCacheOrFetch("system", GetUniverseSystemsSystemIdOk.class, systems, systemId, () -> {
-			return VirtualThreads.offload(
+			return VirtualThreads.run(
 					() -> universeApi.getUniverseSystemsSystemId(systemId, null, datasource.toString(), null, null));
 		});
 	}
@@ -100,14 +100,14 @@ public class UniverseEsi {
 		}
 		var intId = (int) stationId;
 		return getFromCacheOrFetch("station", GetUniverseStationsStationIdOk.class, stations, intId, () -> {
-			return VirtualThreads.offload(
+			return VirtualThreads.run(
 					() -> universeApi.getUniverseStationsStationId(intId, datasource.toString(), null));
 		});
 	}
 
 	public Maybe<GetUniverseTypesTypeIdOk> getType(int typeId) {
 		return getFromCacheOrFetch("type", GetUniverseTypesTypeIdOk.class, types, typeId, () -> {
-			return VirtualThreads.offload(
+			return VirtualThreads.run(
 					() -> universeApi.getUniverseTypesTypeId(typeId, null, datasource.toString(), null, null));
 		});
 	}

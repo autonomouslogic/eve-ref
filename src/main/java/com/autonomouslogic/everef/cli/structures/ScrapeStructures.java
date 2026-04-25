@@ -249,7 +249,7 @@ public class ScrapeStructures implements Command {
 	@SneakyThrows
 	private Completable initMarketStructures() {
 		return Completable.fromAction(() -> {
-			var marketHub = VirtualThreads.offload(() -> refdataApi.getType(STANDARD_MARKET_HUB_I_TYPE_ID));
+			var marketHub = VirtualThreads.run(() -> refdataApi.getType(STANDARD_MARKET_HUB_I_TYPE_ID));
 			marketStructureTypeIds = marketHub.getCanFitTypes();
 			log.info("Prepared {} market structure type IDs", marketStructureTypeIds.size());
 		});

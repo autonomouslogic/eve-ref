@@ -45,7 +45,7 @@ public class PublicStructureSource implements StructureSource {
 	public Flowable<Long> getStructures() {
 		return Flowable.defer(() -> {
 			log.info("Fetching public structure ids");
-			var response = VirtualThreads.offload(() -> universeApi.getUniverseStructuresWithHttpInfo(
+			var response = VirtualThreads.run(() -> universeApi.getUniverseStructuresWithHttpInfo(
 					EsiConstants.Datasource.tranquility.toString(), null, null));
 			if (response.getStatusCode() != 200) {
 				return Flowable.error(new RuntimeException(
