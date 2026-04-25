@@ -129,7 +129,7 @@ class HistoricalOrdersRegionTypeSource implements RegionTypeSource {
 	}
 
 	private Flowable<RegionTypePair> parseFile(File file) {
-		return Flowable.fromIterable(VirtualThreads.offload(() -> {
+		return Flowable.fromIterable(VirtualThreads.run(() -> {
 			log.trace("Reading market order file {}", file);
 			var in = CompressUtil.uncompress(file);
 			var schema = csvMapper

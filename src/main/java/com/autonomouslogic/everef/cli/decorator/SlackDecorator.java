@@ -54,7 +54,7 @@ public class SlackDecorator {
 						return;
 					}
 					log.trace("Sending Slack message");
-					VirtualThreads.offload(() -> new SlackApi(url.get()).call(message));
+					VirtualThreads.run(() -> new SlackApi(url.get()).call(message));
 				})
 				.retry(2, e -> {
 					log.warn(String.format("Slack \"%s\" retrying: %s", url.get(), ExceptionUtils.getMessage(e)));
