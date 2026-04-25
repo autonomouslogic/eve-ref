@@ -1,11 +1,10 @@
 package com.autonomouslogic.everef.util;
 
 import io.reactivex.rxjava3.core.Scheduler;
-import io.reactivex.rxjava3.functions.Action;
-import io.reactivex.rxjava3.functions.Supplier;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -19,15 +18,15 @@ public class VirtualThreads {
 
 	/**
 	 * Runs a task on the virtual thread pool.
-	 * @param supplier The supplier task to execute
+	 * @param callable The callable task to execute
 	 * @return The result of the task
 	 * @param <T> The return type of the task
 	 */
-	public static <T> T run(Supplier<T> supplier) {
+	public static <T> T run(Callable<T> callable) {
 		checkThread();
 		var future = EXECUTOR.submit(() -> {
 			try {
-				return supplier.get();
+				return callable.call();
 			} catch (Throwable e) {
 				throw new RuntimeException("Task execution failed", e);
 			}
@@ -45,14 +44,14 @@ public class VirtualThreads {
 	}
 
 	/**
-	 * Runs an action on the virtual thread pool.
-	 * @param action The action to execute
+	 * Runs a runnable on the virtual thread pool.
+	 * @param runnable The runnable to execute
 	 */
-	public static void run(Action action) {
+	public static void run(Runnable runnable) {
 		checkThread();
 		var future = EXECUTOR.submit(() -> {
 			try {
-				action.run();
+				runnable.run();
 			} catch (Throwable e) {
 				throw new RuntimeException("Task execution failed", e);
 			}
@@ -72,22 +71,22 @@ public class VirtualThreads {
 	/**
 	 * Executes multiple tasks in parallel on the virtual thread pool with the default
 	 * concurrency level (number of available processors).
-	 * @param tasks List of supplier tasks to execute in parallel
+	 * @param tasks List of callable tasks to execute in parallel
 	 * @return List of results in the same order as the input tasks
 	 * @param <T> The return type of the tasks
 	 */
-	public static <T> List<T> parallel(List<? extends Supplier<T>> tasks) {
+	public static <T> List<T> parallel(List<? extends Callable<T>> tasks) {
 		return parallel(tasks, Runtime.getRuntime().availableProcessors());
 	}
 
 	/**
 	 * Executes multiple tasks in parallel on the virtual thread pool with controlled concurrency.
-	 * @param tasks List of supplier tasks to execute in parallel
+	 * @param tasks List of callable tasks to execute in parallel
 	 * @param concurrency Maximum number of tasks to execute concurrently
 	 * @return List of results in the same order as the input tasks
 	 * @param <T> The return type of the tasks
 	 */
-	public static <T> List<T> parallel(List<? extends Supplier<T>> tasks, int concurrency) {
+	public static <T> List<T> parallel(List<? extends Callable<T>> tasks, int concurrency) {
 		checkThread();
 		if (tasks.isEmpty()) {
 			return List.of();
@@ -102,7 +101,7 @@ public class VirtualThreads {
 						try {
 							semaphore.acquire();
 							try {
-								return task.get();
+								return task.call();
 							} finally {
 								semaphore.release();
 							}
@@ -122,15 +121,15 @@ public class VirtualThreads {
 
 	/**
 	 * Executes a task on a virtual thread. Can be called from any thread context.
-	 * @param task The supplier task to execute
+	 * @param task The callable task to execute
 	 * @return The result of the task
 	 * @param <T> The return type of the task
 	 */
 	@Deprecated(forRemoval = true)
-	public static <T> T onVirtual(Supplier<T> task) {
+	public static <T> T onVirtual(Callable<T> task) {
 		var future = EXECUTOR.submit(() -> {
 			try {
-				return task.get();
+				return task.call();
 			} catch (Throwable e) {
 				throw new RuntimeException("Task execution failed", e);
 			}

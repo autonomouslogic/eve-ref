@@ -3,8 +3,8 @@ package com.autonomouslogic.everef.util;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import io.reactivex.rxjava3.functions.Supplier;
 import java.util.ArrayList;
+import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicInteger;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
@@ -20,7 +20,7 @@ class VirtualThreadsTest {
 		var timestamps = new ArrayList<Long>();
 		var lock = new Object();
 
-		var tasks = new ArrayList<Supplier<Void>>();
+		var tasks = new ArrayList<Callable<Void>>();
 		for (int i = 0; i < taskCount; i++) {
 			tasks.add(() -> {
 				synchronized (lock) {
@@ -64,7 +64,7 @@ class VirtualThreadsTest {
 		var maxConcurrentSeen = new AtomicInteger(0);
 		var lock = new Object();
 
-		var tasks = new ArrayList<Supplier<Void>>();
+		var tasks = new ArrayList<Callable<Void>>();
 		for (int i = 0; i < taskCount; i++) {
 			tasks.add(() -> {
 				int current = activeCount.incrementAndGet();
@@ -106,7 +106,7 @@ class VirtualThreadsTest {
 	@Test
 	void shouldMaintainResultOrder() {
 		// Test that results are returned in the same order as input
-		var tasks = new ArrayList<Supplier<String>>();
+		var tasks = new ArrayList<Callable<String>>();
 		tasks.add(() -> "first");
 		tasks.add(() -> "second");
 		tasks.add(() -> "third");
@@ -123,7 +123,7 @@ class VirtualThreadsTest {
 
 	@Test
 	void shouldHandleEmptyTaskList() {
-		var tasks = new ArrayList<Supplier<String>>();
+		var tasks = new ArrayList<Callable<String>>();
 		var results = VirtualThreads.parallel(tasks);
 
 		assertEquals(0, results.size());
@@ -137,7 +137,7 @@ class VirtualThreadsTest {
 		var maxConcurrentSeen = new AtomicInteger(0);
 		var lock = new Object();
 
-		var tasks = new ArrayList<Supplier<Void>>();
+		var tasks = new ArrayList<Callable<Void>>();
 		// Create many tasks to properly test concurrency
 		for (int i = 0; i < processorCount * 4; i++) {
 			tasks.add(() -> {

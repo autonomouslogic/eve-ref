@@ -10,13 +10,13 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.functions.BiFunction;
 import io.reactivex.rxjava3.functions.Function;
-import io.reactivex.rxjava3.functions.Supplier;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.Callable;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
@@ -93,7 +93,7 @@ public class EsiHelper {
 		}
 
 		var tasks = pageNumbers.stream()
-				.map(page -> (Supplier<Response>) () -> {
+				.map(page -> (Callable<Response>) () -> {
 					var esiUrl = url.toBuilder().page(page).build();
 					return fetchWithRetry(esiUrl, accessToken);
 				})
@@ -161,7 +161,7 @@ public class EsiHelper {
 			}
 
 			var tasks = pageNumbers.stream()
-					.map(page -> (Supplier<List<T>>) () -> decodeResponse(fetchWithRetry(fetcher, page)))
+					.map(page -> (Callable<List<T>>) () -> decodeResponse(fetchWithRetry(fetcher, page)))
 					.toList();
 
 			var remainingPages = VirtualThreads.onVirtual(() -> VirtualThreads.parallel(tasks)).stream()
