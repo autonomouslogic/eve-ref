@@ -37,18 +37,18 @@ class ScrapeSovereigntyTest {
 
 		verify(genericHistoryScraper)
 				.fetchAndUpload(
-						"https://esi.evetech.net/latest/sovereignty/map/?datasource=tranquility",
-						SOVEREIGNTY_MAP,
+						eq("https://esi.evetech.net/latest/sovereignty/map/?datasource=tranquility"),
+						eq(SOVEREIGNTY_MAP),
 						any(ZonedDateTime.class));
 		verify(genericHistoryScraper)
 				.fetchAndUpload(
-						"https://esi.evetech.net/latest/sovereignty/structures/?datasource=tranquility",
-						SOVEREIGNTY_STRUCTURES,
+						eq("https://esi.evetech.net/latest/sovereignty/structures/?datasource=tranquility"),
+						eq(SOVEREIGNTY_STRUCTURES),
 						any(ZonedDateTime.class));
 		verify(genericHistoryScraper)
 				.fetchAndUpload(
-						"https://esi.evetech.net/latest/sovereignty/campaigns/?datasource=tranquility",
-						SOVEREIGNTY_CAMPAIGNS,
+						eq("https://esi.evetech.net/latest/sovereignty/campaigns/?datasource=tranquility"),
+						eq(SOVEREIGNTY_CAMPAIGNS),
 						any(ZonedDateTime.class));
 	}
 }

@@ -37,13 +37,13 @@ class ScrapeIndustryTest {
 
 		verify(genericHistoryScraper)
 				.fetchAndUpload(
-						"https://esi.evetech.net/latest/industry/systems/?datasource=tranquility",
-						INDUSTRY_SYSTEMS,
+						eq("https://esi.evetech.net/latest/industry/systems/?datasource=tranquility"),
+						eq(INDUSTRY_SYSTEMS),
 						any(ZonedDateTime.class));
 		verify(genericHistoryScraper)
 				.fetchAndUpload(
-						"https://esi.evetech.net/latest/industry/facilities/?datasource=tranquility",
-						INDUSTRY_FACILITIES,
+						eq("https://esi.evetech.net/latest/industry/facilities/?datasource=tranquility"),
+						eq(INDUSTRY_FACILITIES),
 						any(ZonedDateTime.class));
 	}
 }

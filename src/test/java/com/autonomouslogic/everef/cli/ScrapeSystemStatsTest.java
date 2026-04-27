@@ -37,13 +37,13 @@ class ScrapeSystemStatsTest {
 
 		verify(genericHistoryScraper)
 				.fetchAndUpload(
-						"https://esi.evetech.net/latest/universe/system_jumps/?datasource=tranquility",
-						SYSTEM_JUMPS,
+						eq("https://esi.evetech.net/latest/universe/system_jumps/?datasource=tranquility"),
+						eq(SYSTEM_JUMPS),
 						any(ZonedDateTime.class));
 		verify(genericHistoryScraper)
 				.fetchAndUpload(
-						"https://esi.evetech.net/latest/universe/system_kills/?datasource=tranquility",
-						SYSTEM_KILLS,
+						eq("https://esi.evetech.net/latest/universe/system_kills/?datasource=tranquility"),
+						eq(SYSTEM_KILLS),
 						any(ZonedDateTime.class));
 	}
 }
