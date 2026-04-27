@@ -1,6 +1,5 @@
 package com.autonomouslogic.everef.cli.publiccontracts;
 
-import com.autonomouslogic.commons.rxjava3.Rx3Util;
 import com.autonomouslogic.everef.esi.EsiHelper;
 import com.autonomouslogic.everef.esi.EsiUrl;
 import com.autonomouslogic.everef.esi.LocationPopulator;
@@ -11,17 +10,17 @@ import com.autonomouslogic.everef.util.VirtualThreads;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Flowable;
 import java.time.Duration;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.Getter;
@@ -29,7 +28,6 @@ import lombok.NonNull;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.jetbrains.annotations.NotNull;
 
 /**
  * Fetches all the public contracts for all the regions.
@@ -74,129 +72,153 @@ public class ContractFetcher {
 	protected ContractFetcher() {}
 
 	public List<Long> fetchPublicContracts() {
-		buildKnownItemIndex().blockingAwait();
+		buildKnownItemIndex();
 		var regions = universeEsi.getAllRegions();
-		return Flowable.fromIterable(regions)
-				.parallel(3)
-				.runOn(VirtualThreads.SCHEDULER)
-				.flatMap(region -> fetchContractsForRegion(region))
-				.sequential()
+
+		// Process regions in parallel (3 at a time)
+		var tasks = regions.stream()
+				.map(region -> (Callable<List<Long>>) () -> fetchContractsForRegion(region))
+				.toList();
+
+		var allContractIds = VirtualThreads.parallel(tasks, 3);
+
+		// Flatten the list of lists
+		return allContractIds.stream().flatMap(List::stream).toList();
+	}
+
+	private List<Long> fetchContractsForRegion(GetUniverseRegionsRegionIdOk region) {
+		return fetchWithRetry(
+				"public contracts for " + region.getName(),
+				() -> fetchContractsForRegionInner(region),
+				12,
+				Duration.ofSeconds(5));
+	}
+
+	private List<Long> fetchContractsForRegionInner(GetUniverseRegionsRegionIdOk region) {
+		var count = new AtomicInteger();
+		log.info("Fetching public contracts from {}", region.getName());
+
+		// Fetch all contracts from ESI
+		var contracts = fetchContractsFromEsi(region);
+
+		// Process contracts in parallel (32 at a time)
+		var tasks = contracts.stream()
+				.map(contract -> (Callable<Long>) () -> {
+					var contractId = populateLocation(region, contract);
+					var n = count.incrementAndGet();
+					if (n % 1_000 == 0) {
+						log.debug("Fetched {} public contracts from {}", n, region.getName());
+					}
+					return contractId;
+				})
+				.toList();
+
+		var contractIds = VirtualThreads.parallel(tasks, 32);
+
+		log.info("Fetched {} public contracts from {}", count.get(), region.getName());
+		return contractIds;
+	}
+
+	private List<ObjectNode> fetchContractsFromEsi(GetUniverseRegionsRegionIdOk region) {
+		var esiUrl = EsiUrl.builder()
+				.urlPath(String.format("/contracts/public/%s", region.getRegionId()))
+				.build();
+		return esiHelper
+				.fetchPagesOfJsonArrays(esiUrl, esiHelper::populateLastModified)
+				.map(obj -> (ObjectNode) obj)
 				.toList()
 				.blockingGet();
 	}
 
-	private Flowable<Long> fetchContractsForRegion(GetUniverseRegionsRegionIdOk region) {
-		var count = new AtomicInteger();
-		return Flowable.defer(() -> {
-					log.info(String.format("Fetching public contracts from %s", region.getName()));
-					return fetchContractsFromEsi(region)
-							.parallel(32)
-							.runOn(VirtualThreads.SCHEDULER)
-							.flatMap(contract -> populateLocation(region, contract))
-							.sequential()
-							.doOnNext(ignore -> {
-								var n = count.incrementAndGet();
-								if (n % 1_000 == 0) {
-									log.debug(
-											String.format("Fetched %d public contracts from %s", n, region.getName()));
-								}
-							});
-				})
-				.compose(Rx3Util.retryWithDelayFlowable(12, Duration.ofSeconds(5), e -> {
-					log.warn("Retrying public contracts for {}: {}", region.getName(), ExceptionUtils.getMessage(e));
-					return true;
-				}))
-				.doOnComplete(() ->
-						log.info(String.format("Fetched %d public contracts from %s", count.get(), region.getName())))
-				.onErrorResumeNext(e -> Flowable.error(new RuntimeException("Failed fetching public contracts", e)));
+	private Long populateLocation(GetUniverseRegionsRegionIdOk region, ObjectNode entry) {
+		var contractId = entry.get("contract_id").asLong();
+		entry.put("region_id", region.getRegionId());
+
+		locationPopulator.populate(entry, "start_location_id").blockingAwait();
+		contractsStore.put(ContractsFileBuilder.CONTRACT_ID.apply(entry), entry);
+		resolveItemsAndBids(entry);
+
+		return contractId;
 	}
 
-	private Flowable<ObjectNode> fetchContractsFromEsi(GetUniverseRegionsRegionIdOk region) {
-		return Flowable.defer(() -> {
-			var esiUrl = EsiUrl.builder()
-					.urlPath(String.format("/contracts/public/%s", region.getRegionId()))
-					.build();
-			return esiHelper
-					.fetchPagesOfJsonArrays(esiUrl, esiHelper::populateLastModified)
-					.map(obj -> (ObjectNode) obj);
-		});
+	private void resolveItemsAndBids(ObjectNode contract) {
+		var contractId = contract.get("contract_id").longValue();
+		var type = contract.get("type").textValue();
+
+		if ("item_exchange".equals(type) || "auction".equals(type)) {
+			fetchContractItems(contractId);
+		}
+		if ("auction".equals(type)) {
+			fetchContractBids(contractId);
+		}
 	}
 
-	@NotNull
-	private Flowable<Long> populateLocation(GetUniverseRegionsRegionIdOk region, ObjectNode entry) {
-		var obj = entry;
-		var contractId = obj.get("contract_id").asLong();
-		obj.put("region_id", region.getRegionId());
-		return locationPopulator
-				.populate(obj, "start_location_id")
-				.andThen(Completable.fromAction(
-						() -> contractsStore.put(ContractsFileBuilder.CONTRACT_ID.apply(obj), obj)))
-				.andThen(resolveItemsAndBids(obj))
-				.andThen(Flowable.just(contractId));
+	private void fetchContractItems(long contractId) {
+		if (contractsWithItems.contains(contractId)) {
+			return;
+		}
+		var items = fetchContractSub("items", ContractsFileBuilder.ITEM_ID, itemsStore, contractId);
+		contractAbyssalFetcher.apply(contractId, Flowable.fromIterable(items)).blockingAwait();
 	}
 
-	private Completable resolveItemsAndBids(ObjectNode contract) {
-		return Completable.defer(() -> {
-			var contractId = contract.get("contract_id").longValue();
-			var type = contract.get("type").textValue();
-			var tasks = new ArrayList<Completable>();
-			if (("item_exchange".equals(type) || "auction".equals(type))) {
-				tasks.add(fetchContractItems(contractId));
-			}
-			if ("auction".equals(type)) {
-				tasks.add(fetchContractBids(contractId));
-			}
-			return tasks.isEmpty() ? Completable.complete() : Completable.merge(tasks);
-		});
+	private void fetchContractBids(long contractId) {
+		fetchContractSub("bids", ContractsFileBuilder.BID_ID, bidsStore, contractId);
 	}
 
-	private Completable fetchContractItems(long contractId) {
-		return Completable.defer(() -> {
-			if (contractsWithItems.contains(contractId)) {
-				return Completable.complete();
-			}
-			var subs = fetchContractSub("items", ContractsFileBuilder.ITEM_ID, itemsStore, contractId);
-			return contractAbyssalFetcher.apply(contractId, subs);
-		});
-	}
-
-	private Completable fetchContractBids(long contractId) {
-		return fetchContractSub("bids", ContractsFileBuilder.BID_ID, bidsStore, contractId)
-				.ignoreElements();
-	}
-
-	private Flowable<ObjectNode> fetchContractSub(
+	private List<ObjectNode> fetchContractSub(
 			String sub, Function<JsonNode, Long> idExtractor, Map<Long, JsonNode> mapStore, long contractId) {
 		var esiUrl = EsiUrl.builder()
 				.urlPath(String.format("/contracts/public/%s/%s", sub, contractId))
 				.build();
-		return esiHelper
+
+		var results = esiHelper
 				.fetchPagesOfJsonArrays(esiUrl, esiHelper::populateLastModified)
-				.switchIfEmpty(Flowable.defer(() -> {
-					log.info(String.format(
-							"Public contract %s did not return anything for contract %s", sub, contractId));
-					return Flowable.empty();
-				}))
-				.map(entry -> {
-					var obj = (ObjectNode) entry;
-					obj.put("contract_id", contractId);
-					mapStore.put(idExtractor.apply(obj), obj);
-					return obj;
-				});
+				.toList()
+				.blockingGet();
+
+		if (results.isEmpty()) {
+			log.info("Public contract {} did not return anything for contract {}", sub, contractId);
+		}
+
+		results.forEach(entry -> {
+			var obj = (ObjectNode) entry;
+			obj.put("contract_id", contractId);
+			mapStore.put(idExtractor.apply(obj), obj);
+		});
+
+		return results.stream().map(node -> (ObjectNode) node).toList();
 	}
 
 	/**
 	 * Builds a list of contracts where the items are already known.
 	 * This is used to avoid fetching items for contracts where we already have them.
 	 */
-	private Completable buildKnownItemIndex() {
-		return Completable.fromAction(() -> {
-			log.debug("Building item contract index.");
-			itemsStore
-					.values()
-					.forEach(item ->
-							contractsWithItems.add(item.get("contract_id").asLong()));
-			log.debug(String.format("Built list of %s known contracts with items.", contractsWithItems.size()));
-		});
+	private void buildKnownItemIndex() {
+		log.debug("Building item contract index.");
+		itemsStore
+				.values()
+				.forEach(item -> contractsWithItems.add(item.get("contract_id").asLong()));
+		log.debug("Built list of {} known contracts with items.", contractsWithItems.size());
+	}
+
+	private <T> T fetchWithRetry(String description, Supplier<T> fetcher, int maxRetries, Duration delay) {
+		Exception lastException = null;
+		for (int attempt = 0; attempt <= maxRetries; attempt++) {
+			try {
+				return fetcher.get();
+			} catch (Exception e) {
+				lastException = e;
+				if (attempt < maxRetries) {
+					log.warn("Retrying {}: {}", description, ExceptionUtils.getMessage(e));
+					try {
+						Thread.sleep(delay.toMillis());
+					} catch (InterruptedException ie) {
+						Thread.currentThread().interrupt();
+						throw new RuntimeException("Interrupted during retry", ie);
+					}
+				}
+			}
+		}
+		throw new RuntimeException("Failed " + description + " after " + maxRetries + " retries", lastException);
 	}
 }
