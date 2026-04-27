@@ -92,6 +92,42 @@ public class CommandRunner {
 	protected Provider<ScrapeFreelanceJobs> scrapeFreelanceJobsProvider;
 
 	@Inject
+	protected Provider<ScrapeSovereignty> scrapeSovereigntyProvider;
+
+	@Inject
+	protected Provider<ScrapeIndustry> scrapeIndustryProvider;
+
+	@Inject
+	protected Provider<ScrapeSystemStats> scrapeSystemStatsProvider;
+
+	@Inject
+	protected Provider<ScrapeWarzone> scrapeWarzoneProvider;
+
+	@Inject
+	protected Provider<ScrapeWarzoneInsurgency> scrapeWarzoneInsurgencyProvider;
+
+	@Inject
+	protected Provider<ScrapeInsurance> scrapeInsuranceProvider;
+
+	@Inject
+	protected Provider<ScrapeUniverseStructures> scrapeUniverseStructuresProvider;
+
+	@Inject
+	protected Provider<ScrapeFactionWarfare> scrapeFactionWarfareProvider;
+
+	@Inject
+	protected Provider<ScrapeFactionWarfareSystems> scrapeFactionWarfareSystemsProvider;
+
+	@Inject
+	protected Provider<ScrapeShadowWarArcGoals> scrapeShadowWarArcGoalsProvider;
+
+	@Inject
+	protected Provider<ScrapeIncursions> scrapeIncursionsProvider;
+
+	@Inject
+	protected Provider<ScrapeMarketsPrices> scrapeMarketsPricesProvider;
+
+	@Inject
 	protected SentryDecorator sentryDecorator;
 
 	@Inject
@@ -169,6 +205,30 @@ public class CommandRunner {
 				return updateStaticDataProvider.get();
 			case "scrape-freelance-jobs":
 				return scrapeFreelanceJobsProvider.get();
+			case "scrape-sovereignty":
+				return scrapeSovereigntyProvider.get();
+			case "scrape-industry":
+				return scrapeIndustryProvider.get();
+			case "scrape-system-stats":
+				return scrapeSystemStatsProvider.get();
+			case "scrape-warzone":
+				return scrapeWarzoneProvider.get();
+			case "scrape-warzone-insurgency":
+				return scrapeWarzoneInsurgencyProvider.get();
+			case "scrape-insurance":
+				return scrapeInsuranceProvider.get();
+			case "scrape-universe-structures":
+				return scrapeUniverseStructuresProvider.get();
+			case "scrape-faction-warfare":
+				return scrapeFactionWarfareProvider.get();
+			case "scrape-faction-warfare-systems":
+				return scrapeFactionWarfareSystemsProvider.get();
+			case "scrape-shadow-war-arc-goals":
+				return scrapeShadowWarArcGoalsProvider.get();
+			case "scrape-incursions":
+				return scrapeIncursionsProvider.get();
+			case "scrape-markets-prices":
+				return scrapeMarketsPricesProvider.get();
 			case "api":
 				return apiRunnerProvider.get();
 			default:
