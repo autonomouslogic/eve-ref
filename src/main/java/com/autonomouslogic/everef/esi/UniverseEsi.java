@@ -40,6 +40,8 @@ public class UniverseEsi {
 	private final Map<Integer, Optional<GetUniverseStationsStationIdOk>> stations = new ConcurrentHashMap<>();
 	private final Map<Integer, Optional<GetUniverseTypesTypeIdOk>> types = new ConcurrentHashMap<>();
 
+	private final Semaphore semaphore = new Semaphore(32);
+
 	@Inject
 	protected UniverseEsi() {}
 
@@ -118,8 +120,6 @@ public class UniverseEsi {
 		return fetchWithRetry(name, id, fetcher, cache);
 	}
 
-	private final Semaphore semaphore = new Semaphore(32);
-
 	private <T> Optional<T> fetchWithRetry(
 			String name, int id, Supplier<T> fetcher, final Map<Integer, Optional<T>> cache) {
 		int maxRetries = 2;
@@ -127,10 +127,6 @@ public class UniverseEsi {
 
 		for (int attempt = 0; attempt <= maxRetries; attempt++) {
 			try {
-				if (cache.containsKey(id)) {
-					return cache.get(id);
-				}
-				log.info("Available permits: {}", semaphore.availablePermits());
 				semaphore.acquire();
 				if (cache.containsKey(id)) {
 					return cache.get(id);
