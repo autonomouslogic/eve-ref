@@ -13,7 +13,9 @@ import com.autonomouslogic.everef.util.VirtualThreads;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Semaphore;
 import java.util.function.Supplier;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -31,7 +33,7 @@ public class UniverseEsi {
 			EsiConstants.Datasource.valueOf(Configs.ESI_DATASOURCE.getRequired());
 
 	private List<Integer> regionIds;
-	private final Map<Integer, Optional<GetUniverseRegionsRegionIdOk>> regions = new ConcurrentHashMap<>();
+	private final Map<Integer, Optional<GetUniverseRegionsRegionIdOk>> regions = createMap(GetUniverseRegionsRegionIdOk.class);
 	private final Map<Integer, Optional<GetUniverseConstellationsConstellationIdOk>> constellations =
 			new ConcurrentHashMap<>();
 	private final Map<Integer, Optional<GetUniverseSystemsSystemIdOk>> systems = new ConcurrentHashMap<>();
@@ -58,11 +60,16 @@ public class UniverseEsi {
 	}
 
 	public List<GetUniverseRegionsRegionIdOk> getAllRegions() {
-		return getRegionIds().stream()
-				.map(this::getRegion)
+		return VirtualThreads.parallel(getRegionIds().stream()
+			.map(id -> (Callable<Optional<GetUniverseRegionsRegionIdOk>>) () -> getRegion(id)).toList(), 8)
+			.stream()
 				.filter(Optional::isPresent)
-				.map(Optional::get)
-				.toList();
+				.map(Optional::get).toList();
+//		return getRegionIds().stream()
+//				.map(this::getRegion)
+//				.filter(Optional::isPresent)
+//				.map(Optional::get)
+//				.toList();
 	}
 
 	public Optional<GetUniverseConstellationsConstellationIdOk> getConstellation(int constellationId) {
@@ -106,11 +113,11 @@ public class UniverseEsi {
 	@NotNull
 	private <T> Optional<T> getFromCacheOrFetch(
 			String name, Class<T> type, Map<Integer, Optional<T>> cache, int id, Supplier<T> fetcher) {
-		if (cache.containsKey(id)) {
-			return cache.get(id);
-		}
 		return fetchWithRetry(name, id, fetcher, cache);
+//		return cache.computeIfAbsent(id, ignore -> fetchWithRetry(name, id, fetcher, cache));
 	}
+
+//	private static final Semaphore semaphore = new Semaphore(32);
 
 	private <T> Optional<T> fetchWithRetry(
 			String name, int id, Supplier<T> fetcher, final Map<Integer, Optional<T>> cache) {
@@ -122,7 +129,9 @@ public class UniverseEsi {
 				if (cache.containsKey(id)) {
 					return cache.get(id);
 				}
-				synchronized (cache) {
+//				semaphore.acquire();
+//				log.info("Available permits: {}", semaphore.availablePermits());
+//				synchronized (cache) {
 					if (cache.containsKey(id)) {
 						return cache.get(id);
 					}
@@ -131,15 +140,22 @@ public class UniverseEsi {
 					var optional = Optional.ofNullable(obj);
 					cache.put(id, optional);
 					return optional;
-				}
+//				}
 			} catch (Exception e) {
 				lastException = e;
 				if (attempt < maxRetries) {
 					log.warn("Retrying {} {}: {}", name, id, ExceptionUtils.getRootCauseMessage(e));
 				}
 			}
+//			finally {
+//				semaphore.release();
+//			}
 		}
 
 		throw new RuntimeException(String.format("Failed fetching %s %s", name, id), lastException);
+	}
+
+	private static <T> Map<Integer, Optional<T>> createMap(Class<T> type) {
+		return new ConcurrentHashMap<>(16, 0.75f, 8);
 	}
 }
