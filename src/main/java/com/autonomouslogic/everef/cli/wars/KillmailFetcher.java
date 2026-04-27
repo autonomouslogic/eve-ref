@@ -83,15 +83,13 @@ public class KillmailFetcher {
 			// Fetch the list of killmails for this war
 			var killmailList = esiHelper.fetchPages(
 					page -> warsApi.getWarsWarIdKillmailsWithHttpInfo(Math.toIntExact(warId), null, null, page));
-			var killmailIds =
-					killmailList.stream().map(km -> (long) km.getKillmailId()).toList();
 
-			log.debug("Found {} killmails for war {}", killmailIds.size(), warId);
+			log.debug("Found {} killmails for war {}", killmailList.size(), warId);
 
 			// Process killmail details in parallel (4 at a time)
-			var tasks = killmailIds.stream()
-					.map(kmId -> (Callable<Void>) () -> {
-						fetchKillmailDetail(warId, kmId);
+			var tasks = killmailList.stream()
+					.map(km -> (Callable<Void>) () -> {
+						fetchKillmailDetail(warId, km.getKillmailId(), km.getKillmailHash());
 						return null;
 					})
 					.toList();
@@ -106,7 +104,7 @@ public class KillmailFetcher {
 		}
 	}
 
-	private void fetchKillmailDetail(long warId, long killmailId) {
+	private void fetchKillmailDetail(long warId, long killmailId, String hash) {
 		// Skip if already fetched
 		if (killmailsMap.containsKey(killmailId)) {
 			return;
@@ -116,22 +114,6 @@ public class KillmailFetcher {
 				"killmail " + killmailId,
 				() -> {
 					try {
-						// First, get the killmail hash from the war killmails endpoint
-						var kmResponse =
-								warsApi.getWarsWarIdKillmailsWithHttpInfo(Math.toIntExact(warId), null, null, 1);
-						String hash = null;
-						for (var km : kmResponse.getData()) {
-							if (km.getKillmailId() == killmailId) {
-								hash = km.getKillmailHash();
-								break;
-							}
-						}
-
-						if (hash == null) {
-							log.debug("Could not find hash for killmail {}", killmailId);
-							return null;
-						}
-
 						try {
 							var kmDetail = killmailsApi.getKillmailsKillmailIdKillmailHash(
 									hash, Math.toIntExact(killmailId), null, null);
@@ -146,7 +128,7 @@ public class KillmailFetcher {
 							log.debug("Fetched killmail {} for war {}", killmailId, warId);
 						} catch (ApiException e) {
 							if (e.getCode() == 422) {
-								// Try to correct the hash
+								// Try to correct the hash via Zkillboard
 								var corrected = zkillboardHashCorrector.correctHash(killmailId, hash);
 								if (corrected.isPresent()) {
 									var correctedHash = corrected.get();

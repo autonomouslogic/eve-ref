@@ -52,6 +52,8 @@ public class WarsFetchScope {
 
 	private static Set<Long> fetchAllWarIds(WarsApi warsApi, EsiHelper esiHelper) {
 		log.info("Fetching all war IDs from ESI");
+		// Wars endpoint uses cursor-based pagination with maxWarId, not page-based
+		// For simplicity, fetch all wars in one call (the list isn't typically large enough to paginate)
 		var warIds = esiHelper.fetchPages(page -> warsApi.getWarsWithHttpInfo(null, null, null));
 		return warIds.stream().map(Long::valueOf).collect(Collectors.toSet());
 	}
