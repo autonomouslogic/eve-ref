@@ -33,7 +33,7 @@ public class UniverseEsi {
 			EsiConstants.Datasource.valueOf(Configs.ESI_DATASOURCE.getRequired());
 
 	private List<Integer> regionIds;
-	private final Map<Integer, Optional<GetUniverseRegionsRegionIdOk>> regions = createMap(GetUniverseRegionsRegionIdOk.class);
+	private final Map<Integer, Optional<GetUniverseRegionsRegionIdOk>> regions = new ConcurrentHashMap<>();
 	private final Map<Integer, Optional<GetUniverseConstellationsConstellationIdOk>> constellations =
 			new ConcurrentHashMap<>();
 	private final Map<Integer, Optional<GetUniverseSystemsSystemIdOk>> systems = new ConcurrentHashMap<>();
@@ -60,16 +60,15 @@ public class UniverseEsi {
 	}
 
 	public List<GetUniverseRegionsRegionIdOk> getAllRegions() {
-		return VirtualThreads.parallel(getRegionIds().stream()
-			.map(id -> (Callable<Optional<GetUniverseRegionsRegionIdOk>>) () -> getRegion(id)).toList(), 8)
-			.stream()
+		return VirtualThreads.parallel(
+						getRegionIds().stream()
+								.map(id -> (Callable<Optional<GetUniverseRegionsRegionIdOk>>) () -> getRegion(id))
+								.toList(),
+						8)
+				.stream()
 				.filter(Optional::isPresent)
-				.map(Optional::get).toList();
-//		return getRegionIds().stream()
-//				.map(this::getRegion)
-//				.filter(Optional::isPresent)
-//				.map(Optional::get)
-//				.toList();
+				.map(Optional::get)
+				.toList();
 	}
 
 	public Optional<GetUniverseConstellationsConstellationIdOk> getConstellation(int constellationId) {
@@ -113,11 +112,13 @@ public class UniverseEsi {
 	@NotNull
 	private <T> Optional<T> getFromCacheOrFetch(
 			String name, Class<T> type, Map<Integer, Optional<T>> cache, int id, Supplier<T> fetcher) {
+		if (cache.containsKey(id)) {
+			return cache.get(id);
+		}
 		return fetchWithRetry(name, id, fetcher, cache);
-//		return cache.computeIfAbsent(id, ignore -> fetchWithRetry(name, id, fetcher, cache));
 	}
 
-//	private static final Semaphore semaphore = new Semaphore(32);
+	private final Semaphore semaphore = new Semaphore(32);
 
 	private <T> Optional<T> fetchWithRetry(
 			String name, int id, Supplier<T> fetcher, final Map<Integer, Optional<T>> cache) {
@@ -129,33 +130,26 @@ public class UniverseEsi {
 				if (cache.containsKey(id)) {
 					return cache.get(id);
 				}
-//				semaphore.acquire();
-//				log.info("Available permits: {}", semaphore.availablePermits());
-//				synchronized (cache) {
-					if (cache.containsKey(id)) {
-						return cache.get(id);
-					}
-					log.trace("Fetching {} {}", name, id);
-					var obj = fetcher.get();
-					var optional = Optional.ofNullable(obj);
-					cache.put(id, optional);
-					return optional;
-//				}
+				log.info("Available permits: {}", semaphore.availablePermits());
+				semaphore.acquire();
+				if (cache.containsKey(id)) {
+					return cache.get(id);
+				}
+				log.trace("Fetching {} {}", name, id);
+				var obj = fetcher.get();
+				var optional = Optional.ofNullable(obj);
+				cache.put(id, optional);
+				return optional;
 			} catch (Exception e) {
 				lastException = e;
 				if (attempt < maxRetries) {
 					log.warn("Retrying {} {}: {}", name, id, ExceptionUtils.getRootCauseMessage(e));
 				}
+			} finally {
+				semaphore.release();
 			}
-//			finally {
-//				semaphore.release();
-//			}
 		}
 
 		throw new RuntimeException(String.format("Failed fetching %s %s", name, id), lastException);
-	}
-
-	private static <T> Map<Integer, Optional<T>> createMap(Class<T> type) {
-		return new ConcurrentHashMap<>(16, 0.75f, 8);
 	}
 }
