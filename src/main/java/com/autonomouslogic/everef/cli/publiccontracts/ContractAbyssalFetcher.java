@@ -102,7 +102,8 @@ public class ContractAbyssalFetcher {
 
 	private Single<Boolean> verifyType(ObjectNode item) {
 		var typeId = item.get("type_id").asInt();
-		return universeEsi.getType(typeId).isEmpty().map(empty -> !empty);
+		var typeOpt = universeEsi.getType(typeId);
+		return Single.just(typeOpt.isPresent());
 	}
 
 	private boolean isItemNotSeen(ObjectNode item) {

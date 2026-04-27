@@ -7,11 +7,9 @@ import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.http.OkHttpWrapper;
 import com.autonomouslogic.everef.mvstore.MVStoreUtil;
 import com.autonomouslogic.everef.mvstore.MapRemover;
-import com.autonomouslogic.everef.s3.S3Adapter;
 import com.autonomouslogic.everef.s3.S3Util;
 import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.url.UrlParser;
-import com.autonomouslogic.everef.util.DataIndexHelper;
 import com.autonomouslogic.everef.util.TempFiles;
 import com.fasterxml.jackson.databind.JsonNode;
 import java.io.File;
@@ -54,9 +52,6 @@ public class ScrapePublicContracts implements Command {
 	protected MVStoreUtil mvStoreUtil;
 
 	@Inject
-	protected S3Adapter s3Adapter;
-
-	@Inject
 	protected S3Util s3Util;
 
 	@Inject
@@ -69,14 +64,8 @@ public class ScrapePublicContracts implements Command {
 	@Inject
 	protected TempFiles tempFiles;
 
-	@Inject
-	protected DataIndexHelper dataIndexHelper;
-
 	@Setter
 	private ZonedDateTime scrapeTime;
-
-	private final Duration latestCacheTime = Configs.DATA_LATEST_CACHE_CONTROL_MAX_AGE.getRequired();
-	private final Duration archiveCacheTime = Configs.DATA_ARCHIVE_CACHE_CONTROL_MAX_AGE.getRequired();
 
 	private S3Url dataUrl;
 	private MVStore mvStore;
@@ -253,16 +242,7 @@ public class ScrapePublicContracts implements Command {
 	 */
 	@SneakyThrows
 	private void uploadFiles(File outputFile) {
-		var latestPath = dataUrl.resolve(PUBLIC_CONTRACTS.createLatestPath());
-		var archivePath = dataUrl.resolve(PUBLIC_CONTRACTS.createArchivePath(scrapeTime));
-		var latestPut =
-				s3Util.putPublicObjectRequest(outputFile.length(), latestPath, "application/x-bzip2", latestCacheTime);
-		var archivePut = s3Util.putPublicObjectRequest(
-				outputFile.length(), archivePath, "application/x-bzip2", archiveCacheTime);
-		log.info(String.format("Uploading latest file to %s", latestPath));
-		log.info(String.format("Uploading archive file to %s", archivePath));
-		s3Adapter.putObject(latestPut, outputFile, s3Client);
-		s3Adapter.putObject(archivePut, outputFile, s3Client);
-		dataIndexHelper.updateIndex(latestPath, archivePath).blockingAwait();
+		s3Util.uploadLatestAndArchive(
+				outputFile, dataUrl, PUBLIC_CONTRACTS, scrapeTime, "application/x-bzip2", s3Client);
 	}
 }

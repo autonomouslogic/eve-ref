@@ -343,7 +343,13 @@ public class IndustryCostHandler implements HttpService, Handler {
 		}
 		GetUniverseSystemsSystemIdOk system;
 		try {
-			system = universeEsi.getSystem(systemId).blockingGet();
+			var systemOpt = universeEsi.getSystem(systemId);
+			if (systemOpt.isEmpty()) {
+				throw new ClientException(String.format("System ID %d not found", systemId));
+			}
+			system = systemOpt.get();
+		} catch (ClientException e) {
+			throw e;
 		} catch (Exception e) {
 			var root = ExceptionUtils.getRootCause(e);
 			if (root instanceof ApiException apiException) {

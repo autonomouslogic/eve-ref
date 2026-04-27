@@ -29,12 +29,10 @@ import com.autonomouslogic.everef.model.refdata.RefDataConfig;
 import com.autonomouslogic.everef.mvstore.MVStoreUtil;
 import com.autonomouslogic.everef.refdata.RefDataMeta;
 import com.autonomouslogic.everef.refdata.RefDataMetaFileInfo;
-import com.autonomouslogic.everef.s3.S3Adapter;
 import com.autonomouslogic.everef.s3.S3Util;
 import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.url.UrlParser;
 import com.autonomouslogic.everef.util.CompressUtil;
-import com.autonomouslogic.everef.util.DataIndexHelper;
 import com.autonomouslogic.everef.util.DataUtil;
 import com.autonomouslogic.everef.util.DiscordNotifier;
 import com.autonomouslogic.everef.util.HashUtil;
@@ -80,9 +78,6 @@ public class BuildRefData implements Command {
 	protected UrlParser urlParser;
 
 	@Inject
-	protected S3Adapter s3Adapter;
-
-	@Inject
 	protected S3Util s3Util;
 
 	@Inject
@@ -112,9 +107,6 @@ public class BuildRefData implements Command {
 
 	@Inject
 	protected DataUtil dataUtil;
-
-	@Inject
-	protected DataIndexHelper dataIndexHelper;
 
 	@Inject
 	protected Provider<RefDataMerger> refDataMergerProvider;
@@ -192,9 +184,6 @@ public class BuildRefData implements Command {
 
 	@Setter
 	private boolean stopAtUpload = false;
-
-	private final Duration latestCacheTime = Configs.DATA_LATEST_CACHE_CONTROL_MAX_AGE.getRequired();
-	private final Duration archiveCacheTime = Configs.DATA_ARCHIVE_CACHE_CONTROL_MAX_AGE.getRequired();
 
 	@Getter
 	private StoreHandler storeHandler;
@@ -402,18 +391,10 @@ public class BuildRefData implements Command {
 	 * @return
 	 */
 	private Completable uploadFiles(File outputFile) {
-		return Completable.defer(() -> {
+		return Completable.fromAction(() -> {
 			var dataUrl = (S3Url) urlParser.parse(Configs.DATA_PATH.getRequired());
-			var latestPath = dataUrl.resolve(REFERENCE_DATA.createLatestPath());
-			var archivePath = dataUrl.resolve(REFERENCE_DATA.createArchivePath(buildTime));
-			var latestPut = s3Util.putPublicObjectRequest(outputFile.length(), latestPath, latestCacheTime);
-			var archivePut = s3Util.putPublicObjectRequest(outputFile.length(), archivePath, archiveCacheTime);
-			log.info(String.format("Uploading latest file to %s", latestPath));
-			log.info(String.format("Uploading archive file to %s", archivePath));
-			return Completable.mergeArray(
-							Completable.fromAction(() -> s3Adapter.putObject(latestPut, outputFile, s3Client.get())),
-							Completable.fromAction(() -> s3Adapter.putObject(archivePut, outputFile, s3Client.get())))
-					.andThen(Completable.defer(() -> dataIndexHelper.updateIndex(latestPath, archivePath)));
+			s3Util.uploadLatestAndArchive(
+					outputFile, dataUrl, REFERENCE_DATA, buildTime, "application/x-xz", s3Client.get());
 		});
 	}
 

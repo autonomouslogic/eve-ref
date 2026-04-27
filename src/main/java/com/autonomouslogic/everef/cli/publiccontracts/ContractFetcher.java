@@ -75,8 +75,8 @@ public class ContractFetcher {
 
 	public List<Long> fetchPublicContracts() {
 		buildKnownItemIndex().blockingAwait();
-		var regionIds = universeEsi.getAllRegions().toList().blockingGet();
-		return Flowable.fromIterable(regionIds)
+		var regions = universeEsi.getAllRegions();
+		return Flowable.fromIterable(regions)
 				.parallel(3)
 				.runOn(VirtualThreads.SCHEDULER)
 				.flatMap(region -> fetchContractsForRegion(region))

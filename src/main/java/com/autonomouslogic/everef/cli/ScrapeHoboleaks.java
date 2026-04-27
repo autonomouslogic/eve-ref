@@ -4,13 +4,11 @@ import static com.autonomouslogic.everef.util.ArchivePathFactory.HOBOLEAKS;
 
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.http.OkHttpWrapper;
-import com.autonomouslogic.everef.s3.S3Adapter;
 import com.autonomouslogic.everef.s3.S3Util;
 import com.autonomouslogic.everef.url.HttpUrl;
 import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.url.UrlParser;
 import com.autonomouslogic.everef.util.CompressUtil;
-import com.autonomouslogic.everef.util.DataIndexHelper;
 import com.autonomouslogic.everef.util.TempFiles;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.reactivex.rxjava3.core.Completable;
@@ -19,8 +17,8 @@ import io.reactivex.rxjava3.core.Single;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.time.Duration;
-import java.time.Instant;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.Arrays;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -43,9 +41,6 @@ public class ScrapeHoboleaks implements Command {
 	protected ObjectMapper objectMapper;
 
 	@Inject
-	protected S3Adapter s3Adapter;
-
-	@Inject
 	protected S3Util s3Util;
 
 	@Inject
@@ -57,12 +52,6 @@ public class ScrapeHoboleaks implements Command {
 
 	@Inject
 	protected TempFiles tempFiles;
-
-	@Inject
-	protected DataIndexHelper dataIndexHelper;
-
-	private final Duration latestCacheTime = Configs.DATA_LATEST_CACHE_CONTROL_MAX_AGE.getRequired();
-	private final Duration archiveCacheTime = Configs.DATA_ARCHIVE_CACHE_CONTROL_MAX_AGE.getRequired();
 
 	private S3Url dataPath;
 	private HttpUrl dataUrl;
@@ -167,17 +156,9 @@ public class ScrapeHoboleaks implements Command {
 	 * @return
 	 */
 	private Completable uploadFiles(File outputFile) {
-		return Completable.defer(() -> {
-			var latestPath = dataPath.resolve(HOBOLEAKS.createLatestPath());
-			var archivePath = dataPath.resolve(HOBOLEAKS.createArchivePath(Instant.now()));
-			var latestPut = s3Util.putPublicObjectRequest(outputFile.length(), latestPath, latestCacheTime);
-			var archivePut = s3Util.putPublicObjectRequest(outputFile.length(), archivePath, archiveCacheTime);
-			log.info(String.format("Uploading latest file to %s", latestPath));
-			log.info(String.format("Uploading archive file to %s", archivePath));
-			return Completable.mergeArray(
-							Completable.fromAction(() -> s3Adapter.putObject(latestPut, outputFile, s3Client)),
-							Completable.fromAction(() -> s3Adapter.putObject(archivePut, outputFile, s3Client)))
-					.andThen(Completable.defer(() -> dataIndexHelper.updateIndex(latestPath, archivePath)));
+		return Completable.fromAction(() -> {
+			var scrapeTime = ZonedDateTime.now(ZoneOffset.UTC);
+			s3Util.uploadLatestAndArchive(outputFile, dataPath, HOBOLEAKS, scrapeTime, "application/x-xz", s3Client);
 		});
 	}
 }

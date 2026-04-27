@@ -66,8 +66,8 @@ public class MarketOrderFetcher {
 	}
 
 	private Flowable<ObjectNode> fetchPublicOrders() {
-		return universeEsi
-				.getAllRegions()
+		var regions = universeEsi.getAllRegions();
+		return Flowable.fromIterable(regions)
 				.parallel(4)
 				.runOn(VirtualThreads.SCHEDULER)
 				.flatMap(region -> {
