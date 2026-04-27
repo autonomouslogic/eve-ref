@@ -819,6 +819,89 @@ public class Configs {
 			.defaultValue(false)
 			.build();
 
+	// Wars database storage configuration
+	/**
+	 * S3 path for wars MVStore database (e.g., s3://bucket-name/db/wars.mvstore)
+	 */
+	public static final Config<String> WARS_DB_PATH =
+			Config.<String>builder().name("WARS_DB_PATH").type(String.class).build();
+
+	/**
+	 * Endpoint override for wars database S3 client
+	 */
+	public static final Config<String> WARS_DB_S3_ENDPOINT_URL = Config.<String>builder()
+			.name("WARS_DB_S3_ENDPOINT_URL")
+			.type(String.class)
+			.build();
+
+	/**
+	 * AWS region for wars database bucket
+	 */
+	public static final Config<String> WARS_DB_AWS_REGION = Config.<String>builder()
+			.name("WARS_DB_AWS_REGION")
+			.type(String.class)
+			.build();
+
+	/**
+	 * AWS profile for wars database bucket
+	 */
+	public static final Config<String> WARS_DB_AWS_PROFILE = Config.<String>builder()
+			.name("WARS_DB_AWS_PROFILE")
+			.type(String.class)
+			.build();
+
+	/**
+	 * Access key for the wars database S3 client
+	 */
+	public static final Config<String> WARS_DB_AWS_ACCESS_KEY_ID = Config.<String>builder()
+			.name("WARS_DB_AWS_ACCESS_KEY_ID")
+			.type(String.class)
+			.build();
+
+	/**
+	 * Secret key for the wars database S3 client
+	 */
+	public static final Config<String> WARS_DB_AWS_SECRET_ACCESS_KEY = Config.<String>builder()
+			.name("WARS_DB_AWS_SECRET_ACCESS_KEY")
+			.type(String.class)
+			.build();
+
+	/**
+	 * How long to retain old wars data
+	 */
+	public static final Config<Duration> WARS_DATA_RETENTION = Config.<Duration>builder()
+			.name("WARS_DATA_RETENTION")
+			.defaultValue(Duration.ofDays(365))
+			.type(Duration.class)
+			.build();
+
+	/**
+	 * Concurrency for fetching wars
+	 */
+	public static final Config<Integer> WARS_FETCH_CONCURRENCY = Config.<Integer>builder()
+			.name("WARS_FETCH_CONCURRENCY")
+			.defaultValue(32)
+			.type(Integer.class)
+			.build();
+
+	/**
+	 * Concurrency for fetching killmail lists
+	 */
+	public static final Config<Integer> KILLMAIL_LIST_CONCURRENCY = Config.<Integer>builder()
+			.name("KILLMAIL_LIST_CONCURRENCY")
+			.defaultValue(2)
+			.type(Integer.class)
+			.build();
+
+	/**
+	 * Concurrency for fetching killmail details
+	 */
+	public static final Config<Integer> KILLMAIL_DETAIL_CONCURRENCY = Config.<Integer>builder()
+			.name("KILLMAIL_DETAIL_CONCURRENCY")
+			.defaultValue(4)
+			.type(Integer.class)
+			.build();
+
 	@SneakyThrows
 	private static URL url(String url) {
 		return new URL(url);
