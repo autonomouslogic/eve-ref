@@ -134,6 +134,156 @@ public class ArchivePathFactory {
 			.latestSuffix(".v2.json")
 			.build();
 
+	// Sovereignty (3)
+	public static final ArchivePathFactory SOVEREIGNTY_MAP = builder()
+			.folder("sovereignty-map")
+			.filename("sovereignty-map")
+			.suffix(".json.bz2")
+			.latestSuffix(".json")
+			.build();
+
+	public static final ArchivePathFactory SOVEREIGNTY_STRUCTURES = builder()
+			.folder("sovereignty-structures")
+			.filename("sovereignty-structures")
+			.suffix(".json.bz2")
+			.latestSuffix(".json")
+			.build();
+
+	public static final ArchivePathFactory SOVEREIGNTY_CAMPAIGNS = builder()
+			.folder("sovereignty-campaigns")
+			.filename("sovereignty-campaigns")
+			.suffix(".json.bz2")
+			.latestSuffix(".json")
+			.build();
+
+	// Industry (2)
+	public static final ArchivePathFactory INDUSTRY_SYSTEMS = builder()
+			.folder("industry-systems")
+			.filename("industry-systems")
+			.suffix(".json.bz2")
+			.latestSuffix(".json")
+			.build();
+
+	public static final ArchivePathFactory INDUSTRY_FACILITIES = builder()
+			.folder("industry-facilities")
+			.filename("industry-facilities")
+			.suffix(".json.bz2")
+			.latestSuffix(".json")
+			.build();
+
+	// System Stats (2)
+	public static final ArchivePathFactory SYSTEM_JUMPS = builder()
+			.folder("system-jumps")
+			.filename("system-jumps")
+			.suffix(".json.bz2")
+			.latestSuffix(".json")
+			.build();
+
+	public static final ArchivePathFactory SYSTEM_KILLS = builder()
+			.folder("system-kills")
+			.filename("system-kills")
+			.suffix(".json.bz2")
+			.latestSuffix(".json")
+			.build();
+
+	// Warzone (2)
+	public static final ArchivePathFactory WARZONE = builder()
+			.folder("warzone")
+			.filename("warzone")
+			.suffix(".json.bz2")
+			.latestSuffix(".json")
+			.build();
+
+	public static final ArchivePathFactory WARZONE_INSURGENCY = builder()
+			.folder("warzone-insurgency")
+			.filename("warzone-insurgency")
+			.suffix(".json.bz2")
+			.latestSuffix(".json")
+			.build();
+
+	// Insurance (1)
+	public static final ArchivePathFactory INSURANCE_PRICES = builder()
+			.folder("insurance-prices")
+			.filename("insurance-prices")
+			.suffix(".json.bz2")
+			.latestSuffix(".json")
+			.build();
+
+	// Universe Structures (1) - note: different from existing STRUCTURES
+	public static final ArchivePathFactory UNIVERSE_STRUCTURES = builder()
+			.folder("universe-structures")
+			.filename("universe-structures")
+			.suffix(".json.bz2")
+			.latestSuffix(".json")
+			.build();
+
+	// Faction Warfare (6)
+	public static final ArchivePathFactory FACTION_WARFARE_STATS = builder()
+			.folder("faction-warfare-stats")
+			.filename("faction-warfare-stats")
+			.suffix(".json.bz2")
+			.latestSuffix(".json")
+			.build();
+
+	public static final ArchivePathFactory FACTION_WARFARE_WARS = builder()
+			.folder("faction-warfare-wars")
+			.filename("faction-warfare-wars")
+			.suffix(".json.bz2")
+			.latestSuffix(".json")
+			.build();
+
+	public static final ArchivePathFactory FACTION_WARFARE_LEADERBOARDS = builder()
+			.folder("faction-warfare-leaderboards")
+			.filename("faction-warfare-leaderboards")
+			.suffix(".json.bz2")
+			.latestSuffix(".json")
+			.build();
+
+	public static final ArchivePathFactory FACTION_WARFARE_LEADERBOARDS_CHARACTERS = builder()
+			.folder("faction-warfare-leaderboards-characters")
+			.filename("faction-warfare-leaderboards-characters")
+			.suffix(".json.bz2")
+			.latestSuffix(".json")
+			.build();
+
+	public static final ArchivePathFactory FACTION_WARFARE_LEADERBOARDS_CORPORATIONS = builder()
+			.folder("faction-warfare-leaderboards-corporations")
+			.filename("faction-warfare-leaderboards-corporations")
+			.suffix(".json.bz2")
+			.latestSuffix(".json")
+			.build();
+
+	public static final ArchivePathFactory FACTION_WARFARE_SYSTEMS = builder()
+			.folder("faction-warfare-systems")
+			.filename("faction-warfare-systems")
+			.suffix(".json.bz2")
+			.latestSuffix(".json")
+			.build();
+
+	// Shadow War (1)
+	public static final ArchivePathFactory SHADOW_WAR_ARC_GOALS = builder()
+			.folder("shadow-war-arc-goals")
+			.filename("shadow-war-arc-goals")
+			.suffix(".json.bz2")
+			.latestSuffix(".json")
+			.build();
+
+	// Incursions (1)
+	public static final ArchivePathFactory INCURSIONS = builder()
+			.folder("incursions")
+			.filename("incursions")
+			.suffix(".json.bz2")
+			.latestSuffix(".json")
+			.build();
+
+	// Markets Prices (1)
+	public static final ArchivePathFactory MARKETS_PRICES = builder()
+			.folder("markets-prices")
+			.filename("markets-prices")
+			.suffix(".json.bz2")
+			.latestSuffix(".json")
+			.build();
+
 	@NonNull
 	String folder;
 
