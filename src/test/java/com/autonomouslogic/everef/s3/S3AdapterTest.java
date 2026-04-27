@@ -201,6 +201,7 @@ public class S3AdapterTest {
 				.thenReturn(CompletableFuture.completedFuture(
 						PutObjectResponse.builder().build()));
 		var file = tempFiles.tempFile(S3AdapterTest.class.getSimpleName(), ".test");
+		Files.createFile(file);
 		Files.setLastModifiedTime(file, FileTime.from(lastModified));
 		adapter.putObject(
 				PutObjectRequest.builder().metadata(Map.of("foo", "bar")).build(), file.toFile(), client);

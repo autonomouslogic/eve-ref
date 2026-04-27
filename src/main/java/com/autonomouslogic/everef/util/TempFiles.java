@@ -14,6 +14,7 @@ public class TempFiles {
 	@SneakyThrows
 	public Path tempFile(String prefix, String suffix) {
 		var path = Files.createTempFile(prefix + "-", suffix);
+		Files.delete(path);
 		path.toFile().deleteOnExit();
 		return path;
 	}
