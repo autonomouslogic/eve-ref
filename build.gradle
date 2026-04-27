@@ -511,6 +511,114 @@ task scrapeFreelanceJobs(type: JavaExec) {
 	mainClass = mainClassName
 }
 
+task scrapeSovereignty(type: JavaExec) {
+	group "application"
+	args "scrape-sovereignty"
+	environment envProperties
+
+	classpath = sourceSets.main.runtimeClasspath
+	mainClass = mainClassName
+}
+
+task scrapeIndustry(type: JavaExec) {
+	group "application"
+	args "scrape-industry"
+	environment envProperties
+
+	classpath = sourceSets.main.runtimeClasspath
+	mainClass = mainClassName
+}
+
+task scrapeSystemStats(type: JavaExec) {
+	group "application"
+	args "scrape-system-stats"
+	environment envProperties
+
+	classpath = sourceSets.main.runtimeClasspath
+	mainClass = mainClassName
+}
+
+task scrapeWarzone(type: JavaExec) {
+	group "application"
+	args "scrape-warzone"
+	environment envProperties
+
+	classpath = sourceSets.main.runtimeClasspath
+	mainClass = mainClassName
+}
+
+task scrapeWarzoneInsurgency(type: JavaExec) {
+	group "application"
+	args "scrape-warzone-insurgency"
+	environment envProperties
+
+	classpath = sourceSets.main.runtimeClasspath
+	mainClass = mainClassName
+}
+
+task scrapeInsurance(type: JavaExec) {
+	group "application"
+	args "scrape-insurance"
+	environment envProperties
+
+	classpath = sourceSets.main.runtimeClasspath
+	mainClass = mainClassName
+}
+
+task scrapeUniverseStructures(type: JavaExec) {
+	group "application"
+	args "scrape-universe-structures"
+	environment envProperties
+
+	classpath = sourceSets.main.runtimeClasspath
+	mainClass = mainClassName
+}
+
+task scrapeFactionWarfare(type: JavaExec) {
+	group "application"
+	args "scrape-faction-warfare"
+	environment envProperties
+
+	classpath = sourceSets.main.runtimeClasspath
+	mainClass = mainClassName
+}
+
+task scrapeFactionWarfareSystems(type: JavaExec) {
+	group "application"
+	args "scrape-faction-warfare-systems"
+	environment envProperties
+
+	classpath = sourceSets.main.runtimeClasspath
+	mainClass = mainClassName
+}
+
+task scrapeShadowWarArcGoals(type: JavaExec) {
+	group "application"
+	args "scrape-shadow-war-arc-goals"
+	environment envProperties
+
+	classpath = sourceSets.main.runtimeClasspath
+	mainClass = mainClassName
+}
+
+task scrapeIncursions(type: JavaExec) {
+	group "application"
+	args "scrape-incursions"
+	environment envProperties
+
+	classpath = sourceSets.main.runtimeClasspath
+	mainClass = mainClassName
+}
+
+task scrapeMarketsPrices(type: JavaExec) {
+	group "application"
+	args "scrape-markets-prices"
+	environment envProperties
+
+	classpath = sourceSets.main.runtimeClasspath
+	mainClass = mainClassName
+}
+
 task generateKeyPair(type: JavaExec) {
 	group "application"
 	args "generate-key-pair"
