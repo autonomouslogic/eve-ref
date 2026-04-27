@@ -22,6 +22,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
+import java.util.stream.StreamSupport;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.Getter;
@@ -75,14 +76,11 @@ public class ContractFetcher {
 
 	public List<Long> fetchPublicContracts() {
 		buildKnownItemIndex().blockingAwait();
-		var regionIds = universeEsi.getAllRegions().toList().blockingGet();
-		return Flowable.fromIterable(regionIds)
-				.parallel(3)
-				.runOn(VirtualThreads.SCHEDULER)
-				.flatMap(region -> fetchContractsForRegion(region))
-				.sequential()
-				.toList()
-				.blockingGet();
+		var regions = universeEsi.getAllRegions();
+		return regions.parallelStream()
+				.flatMap(region -> StreamSupport.stream(
+						fetchContractsForRegion(region).blockingIterable().spliterator(), true))
+				.toList();
 	}
 
 	private Flowable<Long> fetchContractsForRegion(GetUniverseRegionsRegionIdOk region) {

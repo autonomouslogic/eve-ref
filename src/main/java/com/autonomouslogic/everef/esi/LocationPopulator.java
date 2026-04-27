@@ -55,11 +55,11 @@ public class LocationPopulator {
 			if (JsonUtil.isNullOrEmpty(stationId)) {
 				return Completable.complete();
 			}
-			return universeEsi
-					.getNpcStation(stationId.asLong())
-					.flatMapCompletable(station -> Completable.fromAction(() -> {
-						record.put("system_id", station.getSystemId());
-					}));
+			var station = universeEsi.getNpcStation(stationId.asLong());
+			if (station.isPresent()) {
+				record.put("system_id", station.get().getSystemId());
+			}
+			return Completable.complete();
 		});
 	}
 
@@ -75,11 +75,11 @@ public class LocationPopulator {
 			if (JsonUtil.isNullOrEmpty(systemId)) {
 				return Completable.complete();
 			}
-			return universeEsi
-					.getSystem(systemId.asInt())
-					.flatMapCompletable(system -> Completable.fromAction(() -> {
-						record.put("constellation_id", system.getConstellationId());
-					}));
+			var system = universeEsi.getSystem(systemId.asInt());
+			if (system.isPresent()) {
+				record.put("constellation_id", system.get().getConstellationId());
+			}
+			return Completable.complete();
 		});
 	}
 
@@ -92,11 +92,11 @@ public class LocationPopulator {
 			if (JsonUtil.isNullOrEmpty(constellationId)) {
 				return Completable.complete();
 			}
-			return universeEsi
-					.getConstellation(constellationId.asInt())
-					.flatMapCompletable(constellation -> Completable.fromAction(() -> {
-						record.put("region_id", constellation.getRegionId());
-					}));
+			var constellation = universeEsi.getConstellation(constellationId.asInt());
+			if (constellation.isPresent()) {
+				record.put("region_id", constellation.get().getRegionId());
+			}
+			return Completable.complete();
 		});
 	}
 }

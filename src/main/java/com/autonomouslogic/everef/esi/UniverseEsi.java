@@ -10,13 +10,11 @@ import com.autonomouslogic.everef.openapi.esi.model.GetUniverseStationsStationId
 import com.autonomouslogic.everef.openapi.esi.model.GetUniverseSystemsSystemIdOk;
 import com.autonomouslogic.everef.openapi.esi.model.GetUniverseTypesTypeIdOk;
 import com.autonomouslogic.everef.util.VirtualThreads;
-import io.reactivex.rxjava3.core.Flowable;
-import io.reactivex.rxjava3.core.Maybe;
-import io.reactivex.rxjava3.functions.Supplier;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Supplier;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.extern.log4j.Log4j2;
@@ -43,38 +41,31 @@ public class UniverseEsi {
 	@Inject
 	protected UniverseEsi() {}
 
-	public Flowable<Integer> getRegionIds() {
-		return Flowable.defer(() -> {
-					if (regionIds != null) {
-						return Flowable.fromIterable(regionIds);
-					}
-					return Flowable.defer(() -> {
-						log.trace("Fetching region ids");
-						var regions =
-								VirtualThreads.run(() -> universeApi.getUniverseRegions(datasource.toString(), null));
-						regionIds = regions;
-						return Flowable.fromIterable(regions);
-					});
-				})
-				.observeOn(VirtualThreads.SCHEDULER);
+	public List<Integer> getRegionIds() {
+		if (regionIds != null) {
+			return regionIds;
+		}
+		log.trace("Fetching region ids");
+		regionIds = VirtualThreads.run(() -> universeApi.getUniverseRegions(datasource.toString(), null));
+		return regionIds;
 	}
 
-	public Maybe<GetUniverseRegionsRegionIdOk> getRegion(int regionId) {
+	public Optional<GetUniverseRegionsRegionIdOk> getRegion(int regionId) {
 		return getFromCacheOrFetch("region", GetUniverseRegionsRegionIdOk.class, regions, regionId, () -> {
 			return VirtualThreads.run(
 					() -> universeApi.getUniverseRegionsRegionId(regionId, null, datasource.toString(), null, null));
 		});
 	}
 
-	public Flowable<GetUniverseRegionsRegionIdOk> getAllRegions() {
-		return getRegionIds()
-				.parallel(8)
-				.runOn(VirtualThreads.SCHEDULER)
-				.flatMap(regionId -> getRegion(regionId).toFlowable())
-				.sequential();
+	public List<GetUniverseRegionsRegionIdOk> getAllRegions() {
+		return getRegionIds().parallelStream()
+				.map(this::getRegion)
+				.filter(Optional::isPresent)
+				.map(Optional::get)
+				.toList();
 	}
 
-	public Maybe<GetUniverseConstellationsConstellationIdOk> getConstellation(int constellationId) {
+	public Optional<GetUniverseConstellationsConstellationIdOk> getConstellation(int constellationId) {
 		return getFromCacheOrFetch(
 				"constellation",
 				GetUniverseConstellationsConstellationIdOk.class,
@@ -86,17 +77,17 @@ public class UniverseEsi {
 				});
 	}
 
-	public Maybe<GetUniverseSystemsSystemIdOk> getSystem(int systemId) {
+	public Optional<GetUniverseSystemsSystemIdOk> getSystem(int systemId) {
 		return getFromCacheOrFetch("system", GetUniverseSystemsSystemIdOk.class, systems, systemId, () -> {
 			return VirtualThreads.run(
 					() -> universeApi.getUniverseSystemsSystemId(systemId, null, datasource.toString(), null, null));
 		});
 	}
 
-	public Maybe<GetUniverseStationsStationIdOk> getNpcStation(long stationId) {
+	public Optional<GetUniverseStationsStationIdOk> getNpcStation(long stationId) {
 		if (stationId > NPC_STATION_MAX_ID) {
 			log.trace(String.format("Ignoring request for non-NPC station %s", stationId));
-			return Maybe.empty();
+			return Optional.empty();
 		}
 		var intId = (int) stationId;
 		return getFromCacheOrFetch("station", GetUniverseStationsStationIdOk.class, stations, intId, () -> {
@@ -105,7 +96,7 @@ public class UniverseEsi {
 		});
 	}
 
-	public Maybe<GetUniverseTypesTypeIdOk> getType(int typeId) {
+	public Optional<GetUniverseTypesTypeIdOk> getType(int typeId) {
 		return getFromCacheOrFetch("type", GetUniverseTypesTypeIdOk.class, types, typeId, () -> {
 			return VirtualThreads.run(
 					() -> universeApi.getUniverseTypesTypeId(typeId, null, datasource.toString(), null, null));
@@ -113,29 +104,42 @@ public class UniverseEsi {
 	}
 
 	@NotNull
-	private <T> Maybe<T> getFromCacheOrFetch(
+	private <T> Optional<T> getFromCacheOrFetch(
 			String name, Class<T> type, Map<Integer, Optional<T>> cache, int id, Supplier<T> fetcher) {
-		return Maybe.defer(() -> {
-			if (cache.containsKey(id)) {
-				return Maybe.fromOptional(cache.get(id));
+		if (cache.containsKey(id)) {
+			return cache.get(id);
+		}
+		return fetchWithRetry(name, id, fetcher, cache);
+	}
+
+	private <T> Optional<T> fetchWithRetry(
+			String name, int id, Supplier<T> fetcher, final Map<Integer, Optional<T>> cache) {
+		int maxRetries = 2;
+		Exception lastException = null;
+
+		for (int attempt = 0; attempt <= maxRetries; attempt++) {
+			try {
+				if (cache.containsKey(id)) {
+					return cache.get(id);
+				}
+				synchronized (cache) {
+					if (cache.containsKey(id)) {
+						return cache.get(id);
+					}
+					log.trace("Fetching {} {}", name, id);
+					var obj = fetcher.get();
+					var optional = Optional.ofNullable(obj);
+					cache.put(id, optional);
+					return optional;
+				}
+			} catch (Exception e) {
+				lastException = e;
+				if (attempt < maxRetries) {
+					log.warn("Retrying {} {}: {}", name, id, ExceptionUtils.getRootCauseMessage(e));
+				}
 			}
-			return Maybe.defer(() -> {
-						if (cache.containsKey(id)) {
-							return Maybe.fromOptional(cache.get(id));
-						}
-						log.trace("Fetching {} {}", name, id);
-						var obj = fetcher.get();
-						var optional = Optional.ofNullable(obj);
-						cache.put(id, optional);
-						return Maybe.fromOptional(optional);
-					})
-					.retry(2, e -> {
-						log.warn("Retrying {} {}: {}", name, id, ExceptionUtils.getRootCauseMessage(e));
-						return true;
-					})
-					.observeOn(VirtualThreads.SCHEDULER)
-					.onErrorResumeNext(e ->
-							Maybe.error(new RuntimeException(String.format("Failed fetching %s %s", name, id), e)));
-		});
+		}
+
+		throw new RuntimeException(String.format("Failed fetching %s %s", name, id), lastException);
 	}
 }
