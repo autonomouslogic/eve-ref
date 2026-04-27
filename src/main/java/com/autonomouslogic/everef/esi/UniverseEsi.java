@@ -58,7 +58,7 @@ public class UniverseEsi {
 	}
 
 	public List<GetUniverseRegionsRegionIdOk> getAllRegions() {
-		return getRegionIds().parallelStream()
+		return getRegionIds().stream()
 				.map(this::getRegion)
 				.filter(Optional::isPresent)
 				.map(Optional::get)

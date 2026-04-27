@@ -52,7 +52,7 @@ public class EsiModuleTest {
 
 	@SneakyThrows
 	private void runTest(String prefix) throws InterruptedException {
-		universeEsi.getRegionIds().blockingSubscribe();
+		universeEsi.getRegionIds();
 		var request = server.takeRequest();
 		assertEquals(prefix + "/universe/regions/?datasource=tranquility", request.getPath());
 	}
