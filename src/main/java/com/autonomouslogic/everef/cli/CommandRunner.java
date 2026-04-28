@@ -119,9 +119,6 @@ public class CommandRunner {
 	protected Provider<ScrapeFactionWarfareSystems> scrapeFactionWarfareSystemsProvider;
 
 	@Inject
-	protected Provider<ScrapeShadowWarArcGoals> scrapeShadowWarArcGoalsProvider;
-
-	@Inject
 	protected Provider<ScrapeIncursions> scrapeIncursionsProvider;
 
 	@Inject
@@ -223,8 +220,6 @@ public class CommandRunner {
 				return scrapeFactionWarfareProvider.get();
 			case "scrape-faction-warfare-systems":
 				return scrapeFactionWarfareSystemsProvider.get();
-			case "scrape-shadow-war-arc-goals":
-				return scrapeShadowWarArcGoalsProvider.get();
 			case "scrape-incursions":
 				return scrapeIncursionsProvider.get();
 			case "scrape-markets-prices":
