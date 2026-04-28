@@ -1,5 +1,23 @@
 EVE Ref Changelog
 
+## [2.75.0](https://github.com/autonomouslogic/eve-ref/compare/2.74.5...2.75.0) (2026-04-27)
+
+
+### Features
+
+* Migrated all the simple scrape jobs from the legacy code ([#1040](https://github.com/autonomouslogic/eve-ref/issues/1040)) ([5b51e39](https://github.com/autonomouslogic/eve-ref/commit/5b51e39471ff1e0fb149a5bdcededf400e2aded8))
+
+
+### Bug Fixes
+
+* Delete temporary files after creation ([3edc24b](https://github.com/autonomouslogic/eve-ref/commit/3edc24bf7057aa9c9221c64496e512f8a03ebcf7))
+* Removed RxJava from ContractFetcher ([dd44b53](https://github.com/autonomouslogic/eve-ref/commit/dd44b53a4e4771c7d650779524eb9fcb5012ec8c))
+
+
+### Code Refactoring
+
+* Deduplicated file uploads ([#1038](https://github.com/autonomouslogic/eve-ref/issues/1038)) ([6dbb0b1](https://github.com/autonomouslogic/eve-ref/commit/6dbb0b1dfd08390ddabd67678b2513981407f27f))
+
 ## [2.74.5](https://github.com/autonomouslogic/eve-ref/compare/2.74.4...2.74.5) (2026-04-25)
 
 
