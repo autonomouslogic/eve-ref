@@ -40,6 +40,10 @@ public class ScrapeFactionWarfare implements Command {
 				"https://esi.evetech.net/latest/fw/leaderboards/corporations/?datasource=tranquility",
 				FACTION_WARFARE_LEADERBOARDS_CORPORATIONS,
 				scrapeTime);
+		genericHistoryScraper.fetchAndUpload(
+				"https://esi.evetech.net/latest/fw/systems/?datasource=tranquility",
+				FACTION_WARFARE_SYSTEMS,
+				scrapeTime);
 
 		log.info("Completed faction warfare scrape");
 	}
