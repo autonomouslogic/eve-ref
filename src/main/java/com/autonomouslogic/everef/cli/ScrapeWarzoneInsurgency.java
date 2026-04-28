@@ -25,7 +25,7 @@ public class ScrapeWarzoneInsurgency implements Command {
 		log.info("Starting warzone insurgency scrape");
 
 		genericHistoryScraper.fetchAndUpload(
-				"https://esi.evetech.net/latest/wars/season/?datasource=tranquility", WARZONE_INSURGENCY, scrapeTime);
+				"https://www.eveonline.com/api/warzone/insurgency", WARZONE_INSURGENCY, scrapeTime);
 
 		log.info("Completed warzone insurgency scrape");
 	}

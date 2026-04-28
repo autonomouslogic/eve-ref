@@ -819,6 +819,15 @@ public class Configs {
 			.defaultValue(false)
 			.build();
 
+	/**
+	 * The interval at which to log memory statistics.
+	 * If not set, memory statistics logging is disabled.
+	 */
+	public static final Config<Duration> MEMORY_STATS_INTERVAL = Config.<Duration>builder()
+			.name("MEMORY_STATS_INTERVAL")
+			.type(Duration.class)
+			.build();
+
 	// Wars database storage configuration
 	/**
 	 * S3 path for wars MVStore database (e.g., s3://bucket-name/db/wars.mvstore)

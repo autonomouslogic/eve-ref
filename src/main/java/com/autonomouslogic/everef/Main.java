@@ -3,6 +3,7 @@ package com.autonomouslogic.everef;
 import com.autonomouslogic.everef.cli.CommandRunner;
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.inject.MainComponent;
+import com.autonomouslogic.everef.util.MemoryStatsLogger;
 import com.autonomouslogic.everef.util.VirtualThreads;
 import io.reactivex.rxjava3.plugins.RxJavaPlugins;
 import io.sentry.Sentry;
@@ -30,6 +31,7 @@ public class Main {
 		log.info(String.format("EVE Ref version %s", Configs.EVE_REF_VERSION.getRequired()));
 		okhttpFineLogging();
 		initSentry();
+		MemoryStatsLogger.startIfEnabled();
 		RxJavaPlugins.setErrorHandler(e -> {
 			// Check if this is a network error that slipped through retry logic
 			var rootCause = ExceptionUtils.getRootCause(e);

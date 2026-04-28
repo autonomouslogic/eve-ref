@@ -134,7 +134,6 @@ public class ArchivePathFactory {
 			.latestSuffix(".v2.json")
 			.build();
 
-	// Sovereignty (3)
 	public static final ArchivePathFactory SOVEREIGNTY_MAP = builder()
 			.folder("sovereignty-map")
 			.filename("sovereignty-map")
@@ -156,7 +155,6 @@ public class ArchivePathFactory {
 			.latestSuffix(".json")
 			.build();
 
-	// Industry (2)
 	public static final ArchivePathFactory INDUSTRY_SYSTEMS = builder()
 			.folder("industry-systems")
 			.filename("industry-systems")
@@ -186,7 +184,6 @@ public class ArchivePathFactory {
 			.latestSuffix(".json")
 			.build();
 
-	// Warzone (2)
 	public static final ArchivePathFactory WARZONE = builder()
 			.folder("warzone")
 			.filename("warzone")
@@ -201,7 +198,6 @@ public class ArchivePathFactory {
 			.latestSuffix(".json")
 			.build();
 
-	// Insurance (1)
 	public static final ArchivePathFactory INSURANCE_PRICES = builder()
 			.folder("insurance-prices")
 			.filename("insurance-prices")
@@ -209,7 +205,6 @@ public class ArchivePathFactory {
 			.latestSuffix(".json")
 			.build();
 
-	// Universe Structures (1) - note: different from existing STRUCTURES
 	public static final ArchivePathFactory UNIVERSE_STRUCTURES = builder()
 			.folder("universe-structures")
 			.filename("universe-structures")
@@ -217,7 +212,6 @@ public class ArchivePathFactory {
 			.latestSuffix(".json")
 			.build();
 
-	// Faction Warfare (6)
 	public static final ArchivePathFactory FACTION_WARFARE_STATS = builder()
 			.folder("faction-warfare-stats")
 			.filename("faction-warfare-stats")
@@ -260,15 +254,6 @@ public class ArchivePathFactory {
 			.latestSuffix(".json")
 			.build();
 
-	// Shadow War (1)
-	public static final ArchivePathFactory SHADOW_WAR_ARC_GOALS = builder()
-			.folder("shadow-war-arc-goals")
-			.filename("shadow-war-arc-goals")
-			.suffix(".json.bz2")
-			.latestSuffix(".json")
-			.build();
-
-	// Incursions (1)
 	public static final ArchivePathFactory INCURSIONS = builder()
 			.folder("incursions")
 			.filename("incursions")
@@ -276,7 +261,6 @@ public class ArchivePathFactory {
 			.latestSuffix(".json")
 			.build();
 
-	// Markets Prices (1)
 	public static final ArchivePathFactory MARKETS_PRICES = builder()
 			.folder("markets-prices")
 			.filename("markets-prices")

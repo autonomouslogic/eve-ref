@@ -27,7 +27,7 @@ class ScrapeFactionWarfareTest {
 	@Test
 	void shouldCallGenericScraperForAllDatasets() {
 		command.run();
-		verify(genericHistoryScraper, times(5))
+		verify(genericHistoryScraper, times(6))
 				.fetchAndUpload(anyString(), any(ArchivePathFactory.class), any(ZonedDateTime.class));
 	}
 }
