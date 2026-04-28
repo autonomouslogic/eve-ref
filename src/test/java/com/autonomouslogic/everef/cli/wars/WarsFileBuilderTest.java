@@ -7,7 +7,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import com.autonomouslogic.everef.util.CompressUtil;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.time.Instant;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -30,28 +29,23 @@ public class WarsFileBuilderTest {
 	private ObjectMapper objectMapper;
 	private WarsFileBuilder fileBuilder;
 	private Map<Long, JsonNode> warsMap;
-	private Map<Long, JsonNode> killmailsMap;
-	private Map<Long, Boolean> pendingKillmailsMap;
 
 	@BeforeEach
 	void setup() {
 		objectMapper = new com.fasterxml.jackson.databind.ObjectMapper();
 
 		warsMap = new HashMap<>();
-		killmailsMap = new HashMap<>();
-		pendingKillmailsMap = new HashMap<>();
 
 		fileBuilder = new WarsFileBuilder();
 		fileBuilder.objectMapper = objectMapper;
 		fileBuilder.setWarsMap(warsMap);
-		fileBuilder.setKillmailsMap(killmailsMap);
-		fileBuilder.setPendingKillmailsMap(pendingKillmailsMap);
 	}
 
 	@Test
 	@SneakyThrows
 	void shouldBuildEmptyArchive() {
-		var file = fileBuilder.buildIncrementalExport(Instant.now());
+		var killmailsMap = new HashMap<Long, JsonNode>();
+		var file = fileBuilder.buildIncrementalExport(killmailsMap);
 
 		assertNotNull(file);
 		assertTrue(file.exists());
@@ -66,10 +60,11 @@ public class WarsFileBuilderTest {
 		var war = createMockWar(warId);
 		warsMap.put(warId, war);
 
-		var file = fileBuilder.buildIncrementalExport(Instant.parse("2020-01-01T00:00:00Z"));
+		var killmailsMap = new HashMap<Long, JsonNode>();
+		var file = fileBuilder.buildIncrementalExport(killmailsMap);
 
 		var entries = extractTarEntries(file);
-		assertTrue(entries.contains("wars/1000.json"));
+		assertTrue(entries.isEmpty()); // No killmails to export
 
 		file.delete();
 	}
@@ -81,83 +76,15 @@ public class WarsFileBuilderTest {
 		var war = createMockWar(warId);
 		warsMap.put(warId, war);
 
-		var km1 = createMockKillmail(100L, warId, Instant.parse("2020-01-02T00:00:00Z"));
+		var killmailsMap = new HashMap<Long, JsonNode>();
+		var km1 = createMockKillmail(100L, warId);
 		killmailsMap.put(100L, km1);
-		pendingKillmailsMap.put(100L, true);
 
-		var file = fileBuilder.buildIncrementalExport(Instant.parse("2020-01-01T00:00:00Z"));
+		var file = fileBuilder.buildIncrementalExport(killmailsMap);
 
 		var entries = extractTarEntries(file);
 		assertTrue(entries.contains("wars/1000.json"));
 		assertTrue(entries.contains("wars/1000/killmails/100.json"));
-
-		file.delete();
-	}
-
-	@Test
-	@SneakyThrows
-	void shouldFilterKillmailsByTime() {
-		var warId = 1000L;
-		var war = createMockWar(warId);
-		warsMap.put(warId, war);
-
-		// Old killmail
-		var oldKm = createMockKillmail(100L, warId, Instant.parse("2020-01-01T00:00:00Z"));
-		killmailsMap.put(100L, oldKm);
-
-		// New killmail
-		var newKm = createMockKillmail(101L, warId, Instant.parse("2020-01-03T00:00:00Z"));
-		killmailsMap.put(101L, newKm);
-
-		var exportTime = Instant.parse("2020-01-02T00:00:00Z");
-		var file = fileBuilder.buildIncrementalExport(exportTime);
-
-		var entries = extractTarEntries(file);
-		// Old killmail shouldn't be included
-		assertTrue(!entries.contains("wars/1000/killmails/100.json"));
-		// New killmail should be included
-		assertTrue(entries.contains("wars/1000/killmails/101.json"));
-
-		file.delete();
-	}
-
-	@Test
-	@SneakyThrows
-	void shouldIncludePendingKillmails() {
-		var warId = 1000L;
-		var war = createMockWar(warId);
-		warsMap.put(warId, war);
-
-		// Old killmail but pending
-		var oldKm = createMockKillmail(100L, warId, Instant.parse("2020-01-01T00:00:00Z"));
-		killmailsMap.put(100L, oldKm);
-		pendingKillmailsMap.put(100L, true);
-
-		var exportTime = Instant.parse("2020-01-02T00:00:00Z");
-		var file = fileBuilder.buildIncrementalExport(exportTime);
-
-		var entries = extractTarEntries(file);
-		// Pending killmail should be included even if old
-		assertTrue(entries.contains("wars/1000/killmails/100.json"));
-
-		file.delete();
-	}
-
-	@Test
-	@SneakyThrows
-	void shouldBuildCurrentWarsJson() {
-		var unfinishedWar = createMockWar(1000L);
-		warsMap.put(1000L, unfinishedWar);
-
-		var finishedWar = createMockWar(1001L);
-		((com.fasterxml.jackson.databind.node.ObjectNode) finishedWar)
-				.put("finished", Instant.now().toString());
-		warsMap.put(1001L, finishedWar);
-
-		var file = fileBuilder.buildCurrentWarsJson();
-
-		assertNotNull(file);
-		assertTrue(file.exists());
 
 		file.delete();
 	}
@@ -170,14 +97,41 @@ public class WarsFileBuilderTest {
 		warsMap.put(1000L, war1);
 		warsMap.put(1001L, war2);
 
-		var file = fileBuilder.buildIncrementalExport(Instant.parse("2020-01-01T00:00:00Z"));
+		var killmailsMap = new HashMap<Long, JsonNode>();
+		var km1 = createMockKillmail(100L, 1000L);
+		var km2 = createMockKillmail(101L, 1001L);
+		killmailsMap.put(100L, km1);
+		killmailsMap.put(101L, km2);
+
+		var file = fileBuilder.buildIncrementalExport(killmailsMap);
 
 		var entries = extractTarEntries(file);
 		assertEquals(
-				2,
-				entries.stream()
-						.filter(e -> e.startsWith("wars/") && e.endsWith(".json"))
-						.count());
+				2, entries.stream().filter(e -> e.matches("wars/\\d+\\.json")).count());
+
+		file.delete();
+	}
+
+	@Test
+	@SneakyThrows
+	void shouldBuildCurrentWarsJson() {
+		var unfinishedWar = createMockWar(1000L);
+		warsMap.put(1000L, unfinishedWar);
+
+		var finishedWar = createMockWar(1001L);
+		((com.fasterxml.jackson.databind.node.ObjectNode) finishedWar)
+				.put("finished", java.time.Instant.now().toString());
+		warsMap.put(1001L, finishedWar);
+
+		var file = fileBuilder.buildCurrentWarsJson();
+
+		assertNotNull(file);
+		assertTrue(file.exists());
+
+		// Verify it only contains unfinished war
+		var content = objectMapper.readTree(file);
+		assertTrue(content.has("1000"));
+		assertTrue(!content.has("1001")); // Finished war should not be included
 
 		file.delete();
 	}
@@ -188,19 +142,18 @@ public class WarsFileBuilderTest {
 	private com.fasterxml.jackson.databind.node.ObjectNode createMockWar(long warId) {
 		var war = objectMapper.createObjectNode();
 		war.put("id", warId);
-		war.put("declared", Instant.parse("2020-01-01T00:00:00Z").toString());
+		war.put("declared", java.time.Instant.parse("2020-01-01T00:00:00Z").toString());
 		return war;
 	}
 
 	/**
 	 * Creates a mock killmail JsonNode.
 	 */
-	private com.fasterxml.jackson.databind.node.ObjectNode createMockKillmail(
-			long killmailId, long warId, Instant time) {
+	private com.fasterxml.jackson.databind.node.ObjectNode createMockKillmail(long killmailId, long warId) {
 		var km = objectMapper.createObjectNode();
 		km.put("killmail_id", killmailId);
 		km.put("war_id", warId);
-		km.put("killmail_time", time.toString());
+		km.put("killmail_time", java.time.Instant.now().toString());
 		return km;
 	}
 

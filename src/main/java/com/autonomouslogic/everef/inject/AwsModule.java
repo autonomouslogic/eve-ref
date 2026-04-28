@@ -84,21 +84,6 @@ public class AwsModule {
 		return Configs.DYNAMODB_AWS_REGION.get().map(Region::of);
 	}
 
-	@Provides
-	@Singleton
-	@Named("wars-db")
-	public AwsCredentialsProvider warsDbCredentialsProvider() {
-		return createProviderChain(
-				Configs.WARS_DB_AWS_ACCESS_KEY_ID, Configs.WARS_DB_AWS_SECRET_ACCESS_KEY, Configs.WARS_DB_AWS_PROFILE);
-	}
-
-	@Provides
-	@Singleton
-	@Named("wars-db")
-	public Optional<Region> warsDbRegion() {
-		return Configs.WARS_DB_AWS_REGION.get().map(Region::of);
-	}
-
 	private static AwsCredentialsProviderChain createProviderChain(
 			Config<String> accessKeyConfig, Config<String> secretKeyConfig, Config<String> profileConfig) {
 		var builder = AwsCredentialsProviderChain.builder();

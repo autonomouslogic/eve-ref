@@ -828,53 +828,6 @@ public class Configs {
 			.type(Duration.class)
 			.build();
 
-	// Wars database storage configuration
-	/**
-	 * S3 path for wars MVStore database (e.g., s3://bucket-name/db/wars.mvstore)
-	 */
-	public static final Config<String> WARS_DB_PATH =
-			Config.<String>builder().name("WARS_DB_PATH").type(String.class).build();
-
-	/**
-	 * Endpoint override for wars database S3 client
-	 */
-	public static final Config<String> WARS_DB_S3_ENDPOINT_URL = Config.<String>builder()
-			.name("WARS_DB_S3_ENDPOINT_URL")
-			.type(String.class)
-			.build();
-
-	/**
-	 * AWS region for wars database bucket
-	 */
-	public static final Config<String> WARS_DB_AWS_REGION = Config.<String>builder()
-			.name("WARS_DB_AWS_REGION")
-			.type(String.class)
-			.build();
-
-	/**
-	 * AWS profile for wars database bucket
-	 */
-	public static final Config<String> WARS_DB_AWS_PROFILE = Config.<String>builder()
-			.name("WARS_DB_AWS_PROFILE")
-			.type(String.class)
-			.build();
-
-	/**
-	 * Access key for the wars database S3 client
-	 */
-	public static final Config<String> WARS_DB_AWS_ACCESS_KEY_ID = Config.<String>builder()
-			.name("WARS_DB_AWS_ACCESS_KEY_ID")
-			.type(String.class)
-			.build();
-
-	/**
-	 * Secret key for the wars database S3 client
-	 */
-	public static final Config<String> WARS_DB_AWS_SECRET_ACCESS_KEY = Config.<String>builder()
-			.name("WARS_DB_AWS_SECRET_ACCESS_KEY")
-			.type(String.class)
-			.build();
-
 	/**
 	 * How long to retain old wars data
 	 */

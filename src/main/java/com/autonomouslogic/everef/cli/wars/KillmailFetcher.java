@@ -10,12 +10,13 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.time.Duration;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.function.Supplier;
 import javax.inject.Inject;
-import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -42,11 +43,7 @@ public class KillmailFetcher {
 	@Inject
 	protected ZkillboardHashCorrector zkillboardHashCorrector;
 
-	@Setter
-	private Map<Long, JsonNode> killmailsMap;
-
-	@Setter
-	private Map<Long, Boolean> pendingKillmailsMap;
+	private Map<Long, JsonNode> killmailsCache = new HashMap<>();
 
 	@Inject
 	protected KillmailFetcher() {}
@@ -104,9 +101,9 @@ public class KillmailFetcher {
 		}
 	}
 
-	private void fetchKillmailDetail(long warId, long killmailId, String hash) {
+	public void fetchKillmailDetail(long warId, long killmailId, String hash) {
 		// Skip if already fetched
-		if (killmailsMap.containsKey(killmailId)) {
+		if (killmailsCache.containsKey(killmailId)) {
 			return;
 		}
 
@@ -123,8 +120,7 @@ public class KillmailFetcher {
 							((ObjectNode) kmNode).put("war_id", warId);
 							((ObjectNode) kmNode).put("killmail_hash", hash);
 
-							killmailsMap.put(killmailId, kmNode);
-							pendingKillmailsMap.put(killmailId, true);
+							killmailsCache.put(killmailId, kmNode);
 							log.debug("Fetched killmail {} for war {}", killmailId, warId);
 						} catch (ApiException e) {
 							if (e.getCode() == 422) {
@@ -138,8 +134,7 @@ public class KillmailFetcher {
 									var kmNode = objectMapper.valueToTree(kmDetail);
 									((ObjectNode) kmNode).put("war_id", warId);
 									((ObjectNode) kmNode).put("killmail_hash", correctedHash);
-									killmailsMap.put(killmailId, kmNode);
-									pendingKillmailsMap.put(killmailId, true);
+									killmailsCache.put(killmailId, kmNode);
 									log.debug("Fetched killmail {} with corrected hash", killmailId);
 								} else {
 									log.debug("Could not correct hash for killmail {}", killmailId);
@@ -162,6 +157,32 @@ public class KillmailFetcher {
 	}
 
 	/**
+	 * Get a cached killmail if available.
+	 *
+	 * @param killmailId the killmail ID
+	 * @return the killmail data if cached, empty otherwise
+	 */
+	public Optional<JsonNode> getKillmail(long killmailId) {
+		return Optional.ofNullable(killmailsCache.get(killmailId));
+	}
+
+	/**
+	 * Clear the killmail cache.
+	 */
+	public void clearCache() {
+		killmailsCache.clear();
+	}
+
+	/**
+	 * Get all cached killmails.
+	 *
+	 * @return map of killmail ID to killmail data
+	 */
+	public Map<Long, JsonNode> getAllCachedKillmails() {
+		return new HashMap<>(killmailsCache);
+	}
+
+	/**
 	 * Retry a supplier with exponential backoff.
 	 *
 	 * @param description description of what's being retried
@@ -170,7 +191,7 @@ public class KillmailFetcher {
 	 * @param delay delay between retries
 	 * @return the result of the supplier
 	 */
-	protected <T> T fetchWithRetry(String description, Supplier<T> supplier, int maxRetries, Duration delay) {
+	public <T> T fetchWithRetry(String description, Supplier<T> supplier, int maxRetries, Duration delay) {
 		int attempts = 0;
 		while (true) {
 			try {

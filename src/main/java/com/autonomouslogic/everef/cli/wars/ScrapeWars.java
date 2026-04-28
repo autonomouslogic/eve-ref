@@ -5,29 +5,29 @@ import static com.autonomouslogic.everef.util.ArchivePathFactory.WARS;
 import com.autonomouslogic.everef.cli.Command;
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.esi.EsiHelper;
-import com.autonomouslogic.everef.openapi.esi.api.KillmailsApi;
 import com.autonomouslogic.everef.openapi.esi.api.WarsApi;
 import com.autonomouslogic.everef.s3.S3Adapter;
 import com.autonomouslogic.everef.s3.S3Util;
 import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.url.UrlParser;
 import com.fasterxml.jackson.databind.JsonNode;
-import java.io.File;
-import java.time.Instant;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
-import org.h2.mvstore.MVMap;
-import org.h2.mvstore.MVStore;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 
 /**
  * Main orchestrator for wars scraping.
- * Manages the MVStore database, fetches wars and killmails from ESI,
+ * Loads state from wars-current.json, fetches wars and killmails from ESI,
  * builds incremental exports, and uploads them to S3.
  */
 @Log4j2
@@ -37,14 +37,7 @@ public class ScrapeWars implements Command {
 	protected S3AsyncClient dataS3Client;
 
 	@Inject
-	@Named("wars-db")
-	protected S3AsyncClient warsDbS3Client;
-
-	@Inject
 	protected WarsApi warsApi;
-
-	@Inject
-	protected KillmailsApi killmailsApi;
 
 	@Inject
 	protected S3Util s3Util;
@@ -67,18 +60,15 @@ public class ScrapeWars implements Command {
 	@Inject
 	protected EsiHelper esiHelper;
 
+	@Inject
+	protected WarsStateLoader stateLoader;
+
 	@Setter
 	private ZonedDateTime scrapeTime;
 
-	private MVStore mvStore;
-	private MVMap<Long, JsonNode> warsMap;
-	private MVMap<Long, JsonNode> killmailsMap;
-	private MVMap<Long, Boolean> pendingKillmailsMap;
-	private MVMap<String, String> metaMap;
-	private String mvStoreFileName;
+	private Map<Long, JsonNode> warsMap = new HashMap<>();
 
 	private S3Url dataUrl;
-	private S3Url warsDbUrl;
 
 	@Inject
 	protected ScrapeWars() {}
@@ -86,8 +76,6 @@ public class ScrapeWars implements Command {
 	@Inject
 	protected void init() {
 		dataUrl = (S3Url) urlParser.parse(Configs.DATA_PATH.getRequired());
-		var warsDbPath = Configs.WARS_DB_PATH.getRequired();
-		warsDbUrl = (S3Url) urlParser.parse(warsDbPath);
 	}
 
 	@SneakyThrows
@@ -97,66 +85,30 @@ public class ScrapeWars implements Command {
 			scrapeTime = ZonedDateTime.now(ZoneOffset.UTC);
 		}
 
-		downloadDatabase();
-		initializeMaps();
+		// Load state from wars-current.json
+		warsMap = stateLoader.loadState();
 
 		try {
 			var scope = calculateFetchScope();
 			fetchWars(scope);
-			fetchKillmails(scope);
-			buildAndUploadExports();
-			updateMetadata();
+
+			// Fetch killmails and build export
+			var killmailsByWar = fetchKillmailsForExport(scope.getWarIds());
+
+			// Build and upload exports
+			buildAndUploadExports(killmailsByWar);
+
+			// Update last_killmail_id for each war
+			updateWarKillmailIds(killmailsByWar);
+
+			// Upload updated wars-current.json
+			uploadWarsCurrentJson();
+
+			// Cleanup old data
 			cleanupOldData();
 		} finally {
-			compactAndClose();
-			uploadDatabase();
+			killmailFetcher.clearCache();
 		}
-	}
-
-	@SneakyThrows
-	private void downloadDatabase() {
-		log.info("Downloading wars database from S3");
-		try {
-			var dbFile = File.createTempFile("wars", ".mvstore");
-			dbFile.deleteOnExit();
-
-			// Download the database file
-			var request = s3Util.getObjectRequest(warsDbUrl);
-
-			try {
-				s3Adapter.getObject(request, dbFile.toPath(), warsDbS3Client);
-				openMVStore(dbFile);
-			} catch (Exception e) {
-				log.info("Database does not exist on S3, creating new one");
-				createNewMVStore();
-			}
-		} catch (Exception e) {
-			log.error("Failed to download database", e);
-			throw e;
-		}
-	}
-
-	@SneakyThrows
-	private void openMVStore(File dbFile) {
-		mvStoreFileName = dbFile.getAbsolutePath();
-		mvStore = new MVStore.Builder().fileName(mvStoreFileName).open();
-		log.info("Opened existing MVStore database");
-	}
-
-	private void createNewMVStore() {
-		var tempFile = new File(System.getProperty("java.io.tmpdir"), "wars-" + System.nanoTime() + ".mvstore");
-		mvStoreFileName = tempFile.getAbsolutePath();
-		mvStore = new MVStore.Builder().fileName(mvStoreFileName).open();
-		log.info("Created new MVStore database");
-	}
-
-	private void initializeMaps() {
-		warsMap = mvStore.openMap("wars");
-		killmailsMap = mvStore.openMap("kill_mails");
-		pendingKillmailsMap = mvStore.openMap("pending_killmails");
-		metaMap = mvStore.openMap("meta");
-
-		log.info("Initialized MVStore maps");
 	}
 
 	private WarsFetchScope calculateFetchScope() {
@@ -170,44 +122,102 @@ public class ScrapeWars implements Command {
 		warsFetcher.fetchWars(scope.getWarIds());
 	}
 
-	private void fetchKillmails(WarsFetchScope scope) {
-		log.info("Fetching killmails for {} wars", scope.getWarIds().size());
-		killmailFetcher.setKillmailsMap(killmailsMap);
-		killmailFetcher.setPendingKillmailsMap(pendingKillmailsMap);
-		killmailFetcher.fetchKillmails(scope.getWarIds());
+	private Map<Long, Long> fetchKillmailsForExport(Set<Long> warIds) {
+		log.info("Fetching killmails for {} wars", warIds.size());
+
+		Map<Long, Long> maxKillmailIds = new HashMap<>();
+
+		for (Long warId : warIds) {
+			var war = warsMap.get(warId);
+			if (war == null) {
+				continue;
+			}
+
+			long lastKillmailId =
+					war.has("last_killmail_id") ? war.get("last_killmail_id").asLong(0L) : 0L;
+
+			try {
+				// Fetch killmail list from ESI
+				var killmailList = esiHelper.fetchPages(
+						page -> warsApi.getWarsWarIdKillmailsWithHttpInfo(Math.toIntExact(warId), null, null, page));
+
+				log.debug("Found {} killmails for war {}", killmailList.size(), warId);
+
+				long maxId = lastKillmailId;
+				for (var km : killmailList) {
+					long kmId = km.getKillmailId();
+					if (kmId > lastKillmailId) {
+						// This is a new killmail, fetch details
+						try {
+							fetchAndStoreKillmailDetail(warId, kmId, km.getKillmailHash());
+							maxId = Math.max(maxId, kmId);
+						} catch (Exception e) {
+							log.error("Failed to fetch killmail {} for war {}: {}", kmId, warId, e.getMessage());
+						}
+					}
+				}
+
+				if (maxId > lastKillmailId) {
+					maxKillmailIds.put(warId, maxId);
+				}
+			} catch (Exception e) {
+				log.error("Failed to fetch killmails for war {}: {}", warId, e.getMessage());
+			}
+		}
+
+		return maxKillmailIds;
+	}
+
+	private void fetchAndStoreKillmailDetail(long warId, long killmailId, String hash) {
+		// Use killmailFetcher's retry logic
+		killmailFetcher.fetchWithRetry(
+				"killmail " + killmailId,
+				() -> {
+					killmailFetcher.fetchKillmailDetail(warId, killmailId, hash);
+					return null;
+				},
+				12,
+				java.time.Duration.ofSeconds(5));
 	}
 
 	@SneakyThrows
-	private void buildAndUploadExports() {
+	private void buildAndUploadExports(Map<Long, Long> maxKillmailIds) {
 		log.info("Building and uploading exports");
 
-		var lastExportStr = metaMap.get("last_export");
-		var lastExportTime = lastExportStr != null ? Instant.parse(lastExportStr) : Instant.EPOCH;
-
-		// Build incremental TAR.BZ2 archive
-		var incrementalFile = fileBuilder.buildIncrementalExport(lastExportTime);
+		// Build incremental TAR.BZ2 archive with newly fetched killmails
+		fileBuilder.setWarsMap(warsMap);
+		var incrementalFile = fileBuilder.buildIncrementalExport(killmailFetcher.getAllCachedKillmails());
 		s3Util.uploadLatestAndArchive(incrementalFile, dataUrl, WARS, scrapeTime, "application/x-bzip2", dataS3Client);
 
-		// Build and upload current wars JSON
+		incrementalFile.delete();
+	}
+
+	@SneakyThrows
+	private void uploadWarsCurrentJson() {
+		log.info("Uploading wars-current.json");
+		fileBuilder.setWarsMap(warsMap);
 		var currentWarsFile = fileBuilder.buildCurrentWarsJson();
-		var currentPath = dataUrl.resolve("wars/wars-current.json");
-		var currentRequest = s3Util.putPublicObjectRequest(
+
+		var putRequest = s3Util.putPublicObjectRequest(
 				currentWarsFile.length(),
-				currentPath,
+				dataUrl.resolve("wars/wars-current.json"),
 				"application/json",
 				Configs.DATA_LATEST_CACHE_CONTROL_MAX_AGE.getRequired());
 
-		s3Adapter.putObject(currentRequest, currentWarsFile, dataS3Client);
-
-		// Cleanup temp files
-		incrementalFile.delete();
+		s3Adapter.putObject(putRequest, currentWarsFile, dataS3Client);
 		currentWarsFile.delete();
 	}
 
-	private void updateMetadata() {
-		log.info("Updating metadata");
-		metaMap.put("last_export", scrapeTime.toInstant().toString());
-		pendingKillmailsMap.clear();
+	private void updateWarKillmailIds(Map<Long, Long> maxKillmailIds) {
+		log.info("Updating killmail IDs for {} wars", maxKillmailIds.size());
+		for (var entry : maxKillmailIds.entrySet()) {
+			var warId = entry.getKey();
+			var maxKillmailId = entry.getValue();
+			var war = (ObjectNode) warsMap.get(warId);
+			if (war != null) {
+				war.put("last_killmail_id", maxKillmailId);
+			}
+		}
 	}
 
 	private void cleanupOldData() {
@@ -215,88 +225,28 @@ public class ScrapeWars implements Command {
 		var retention = Configs.WARS_DATA_RETENTION.getRequired();
 		var cutoff = scrapeTime.toInstant().minus(retention);
 
-		// Find wars to delete
-		var warsToDelete = new java.util.ArrayList<Long>();
-		for (var entry : warsMap.entrySet()) {
-			if (isWarBeforeCutoff(entry.getValue(), cutoff)) {
-				warsToDelete.add(entry.getKey());
-			}
-		}
-
-		log.info("Deleting {} old wars", warsToDelete.size());
-		for (var warId : warsToDelete) {
-			warsMap.remove(warId);
-		}
-
-		// Delete orphaned killmails
-		var killmailsToDelete = new java.util.ArrayList<Long>();
-		for (var entry : killmailsMap.entrySet()) {
-			var km = entry.getValue();
-			var warId = km.get("war_id");
-			if (warId != null && !warsMap.containsKey(warId.asLong())) {
-				// Only delete if not pending
-				if (!pendingKillmailsMap.containsKey(entry.getKey())) {
-					killmailsToDelete.add(entry.getKey());
-				}
-			}
-		}
-
-		log.info("Deleting {} orphaned killmails", killmailsToDelete.size());
-		for (var kmId : killmailsToDelete) {
-			killmailsMap.remove(kmId);
-		}
-	}
-
-	private void compactAndClose() {
-		if (mvStore == null) {
-			return;
-		}
-
-		log.info("Compacting and closing MVStore");
-		mvStore.commit();
-		// Compact step - MVStore uses internal compaction mechanisms
-		mvStore.close();
-	}
-
-	@SneakyThrows
-	private void uploadDatabase() {
-		if (mvStore != null && mvStoreFileName != null) {
-			log.info("Uploading wars database to S3");
-			var dbFile = new File(mvStoreFileName);
-			if (dbFile.exists()) {
-				var request = s3Util.putObjectRequest(dbFile.length(), warsDbUrl, "application/octet-stream");
-
-				s3Adapter.putObject(request, dbFile, warsDbS3Client);
-
-				log.info("Uploaded wars database");
-			}
-		}
-	}
-
-	private boolean isWarBeforeCutoff(JsonNode war, Instant cutoff) {
-		// Check all timestamp fields
-		var timestamps = new String[] {"declared", "started", "retracted", "finished"};
-		var hasAnyTimestamp = false;
-
-		for (var field : timestamps) {
-			var timestamp = war.get(field);
-			if (timestamp != null && !timestamp.isNull()) {
-				hasAnyTimestamp = true;
-				try {
-					var instant = Instant.parse(timestamp.asText());
-					if (instant.isBefore(cutoff)) {
-						continue;
-					} else {
-						// At least one timestamp is after cutoff
+		// Remove old finished wars from warsMap
+		var toRemove = warsMap.entrySet().stream()
+				.filter(entry -> {
+					var war = entry.getValue();
+					// Skip unfinished wars
+					if (!war.has("finished") || war.get("finished").isNull()) {
 						return false;
 					}
-				} catch (Exception e) {
-					log.warn("Failed to parse timestamp {}: {}", field, timestamp);
-				}
-			}
-		}
+					try {
+						var finishedTime = ZonedDateTime.parse(
+										war.get("finished").asText())
+								.toInstant();
+						return finishedTime.isBefore(cutoff);
+					} catch (Exception e) {
+						log.warn("Failed to parse finished time for war {}: {}", entry.getKey(), e.getMessage());
+						return false;
+					}
+				})
+				.map(Map.Entry::getKey)
+				.collect(Collectors.toList());
 
-		// All timestamps are before cutoff (or all are missing)
-		return hasAnyTimestamp;
+		log.info("Removing {} old finished wars", toRemove.size());
+		toRemove.forEach(warsMap::remove);
 	}
 }

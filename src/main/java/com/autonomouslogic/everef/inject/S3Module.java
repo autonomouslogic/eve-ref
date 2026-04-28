@@ -67,18 +67,6 @@ public class S3Module {
 		return createClient(credentialsProvider, region, Configs.STATIC_S3_ENDPOINT_URL);
 	}
 
-	@Provides
-	@Named("wars-db")
-	@Singleton
-	@SneakyThrows
-	public S3AsyncClient warsDbClient(
-			@Named("wars-db") AwsCredentialsProvider credentialsProvider, @Named("wars-db") Optional<Region> region) {
-		if (warsDbClient != null) {
-			return warsDbClient;
-		}
-		return createClient(credentialsProvider, region, Configs.WARS_DB_S3_ENDPOINT_URL);
-	}
-
 	private static S3AsyncClient createClient(
 			AwsCredentialsProvider credentialsProvider, Optional<Region> region, Config<String> endpointUrl)
 			throws URISyntaxException {

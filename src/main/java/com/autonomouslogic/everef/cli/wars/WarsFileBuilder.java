@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -32,22 +31,16 @@ public class WarsFileBuilder {
 	@Setter
 	private Map<Long, JsonNode> warsMap;
 
-	@Setter
-	private Map<Long, JsonNode> killmailsMap;
-
-	@Setter
-	private Map<Long, Boolean> pendingKillmailsMap;
-
 	/**
 	 * Build an incremental export TAR archive containing wars and killmails.
 	 *
-	 * @param lastExportTime the timestamp of the last export (to filter killmails)
+	 * @param killmailsMap map of killmail ID to killmail data
 	 * @return the compressed TAR.BZ2 file
 	 */
 	@SneakyThrows
-	public File buildIncrementalExport(Instant lastExportTime) {
-		var warsToExport = collectWarsToExport(lastExportTime);
-		var killmailsByWar = collectKillmailsToExport(warsToExport, lastExportTime);
+	public File buildIncrementalExport(Map<Long, JsonNode> killmailsMap) {
+		var warsToExport = collectWarsToExport(killmailsMap);
+		var killmailsByWar = collectKillmailsToExport(warsToExport, killmailsMap);
 
 		var tarFile = File.createTempFile("wars", ".tar");
 		tarFile.deleteOnExit();
@@ -114,41 +107,33 @@ public class WarsFileBuilder {
 		return jsonFile;
 	}
 
-	private Set<Long> collectWarsToExport(Instant lastExportTime) {
+	private Set<Long> collectWarsToExport(Map<Long, JsonNode> killmailsMap) {
 		var warsToExport = new TreeSet<Long>();
 
 		for (var entry : killmailsMap.entrySet()) {
-			var kmId = entry.getKey();
 			var km = entry.getValue();
-
-			// Check if killmail should be exported
-			if (shouldExportKillmail(km, lastExportTime, kmId)) {
-				var warId = km.get("war_id");
-				if (warId != null) {
-					warsToExport.add(warId.asLong());
-				}
+			var warId = km.get("war_id");
+			if (warId != null) {
+				warsToExport.add(warId.asLong());
 			}
 		}
 
 		return warsToExport;
 	}
 
-	private Map<Long, List<Long>> collectKillmailsToExport(Set<Long> warsToExport, Instant lastExportTime) {
+	private Map<Long, List<Long>> collectKillmailsToExport(Set<Long> warsToExport, Map<Long, JsonNode> killmailsMap) {
 		var killmailsByWar = new java.util.TreeMap<Long, List<Long>>();
 
 		for (var entry : killmailsMap.entrySet()) {
 			var kmId = entry.getKey();
 			var km = entry.getValue();
-
-			if (shouldExportKillmail(km, lastExportTime, kmId)) {
-				var warId = km.get("war_id");
-				if (warId != null) {
-					var wid = warId.asLong();
-					if (warsToExport.contains(wid)) {
-						killmailsByWar
-								.computeIfAbsent(wid, k -> new java.util.ArrayList<>())
-								.add(kmId);
-					}
+			var warId = km.get("war_id");
+			if (warId != null) {
+				var wid = warId.asLong();
+				if (warsToExport.contains(wid)) {
+					killmailsByWar
+							.computeIfAbsent(wid, k -> new java.util.ArrayList<>())
+							.add(kmId);
 				}
 			}
 		}
@@ -157,28 +142,6 @@ public class WarsFileBuilder {
 		killmailsByWar.forEach((k, v) -> v.sort(Long::compareTo));
 
 		return killmailsByWar;
-	}
-
-	private boolean shouldExportKillmail(JsonNode km, Instant lastExportTime, long kmId) {
-		// Check if it's in pending set
-		if (pendingKillmailsMap.containsKey(kmId)) {
-			return true;
-		}
-
-		// Check if killmail_time is after lastExportTime
-		var kmTime = km.get("killmail_time");
-		if (kmTime != null && kmTime.isTextual()) {
-			try {
-				var instant = Instant.parse(kmTime.asText());
-				if (instant.isAfter(lastExportTime)) {
-					return true;
-				}
-			} catch (Exception e) {
-				log.warn("Failed to parse killmail_time for {}: {}", kmId, kmTime);
-			}
-		}
-
-		return false;
 	}
 
 	@SneakyThrows

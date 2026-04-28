@@ -62,8 +62,6 @@ public class KillmailFetcherTest {
 		killmailFetcher.esiHelper = esiHelper;
 		killmailFetcher.zkillboardHashCorrector = new ZkillboardHashCorrector();
 		killmailFetcher.zkillboardHashCorrector.objectMapper = objectMapper;
-		killmailFetcher.setKillmailsMap(killmailsMap);
-		killmailFetcher.setPendingKillmailsMap(pendingKillmailsMap);
 
 		server = new MockWebServer();
 		server.setDispatcher(new TestDispatcher());
@@ -82,7 +80,7 @@ public class KillmailFetcherTest {
 		var warId = 100000L; // < 149786 and not in special list
 		killmailFetcher.fetchKillmails(Set.of(warId));
 
-		assertTrue(killmailsMap.isEmpty());
+		assertTrue(killmailFetcher.getAllCachedKillmails().isEmpty());
 	}
 
 	@Test
@@ -136,7 +134,7 @@ public class KillmailFetcherTest {
 	@SneakyThrows
 	void shouldHandleEmptyWarIdSet() {
 		killmailFetcher.fetchKillmails(Set.of());
-		assertTrue(killmailsMap.isEmpty());
+		assertTrue(killmailFetcher.getAllCachedKillmails().isEmpty());
 	}
 
 	/**
