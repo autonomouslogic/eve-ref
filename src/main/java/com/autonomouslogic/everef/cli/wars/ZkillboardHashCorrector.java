@@ -76,14 +76,19 @@ public class ZkillboardHashCorrector {
 	 * @return a map of killmail ID to hash
 	 */
 	private Map<Long, String> fetchHashesForDate(LocalDate date) {
-		return hashCache.computeIfAbsent(date, d -> {
-			try {
-				var dateStr = d.format(DATE_FORMATTER);
-				var url = ZKILLBOARD_BASE_URL + dateStr + ".json";
+		// Check if already cached
+		if (hashCache.containsKey(date)) {
+			return hashCache.get(date);
+		}
 
-				var response = okHttpWrapper.get(url);
+		try {
+			var dateStr = date.format(DATE_FORMATTER);
+			var url = ZKILLBOARD_BASE_URL + dateStr + ".json";
+
+			try (var response = okHttpWrapper.get(url)) {
 				var body = response.body();
 				if (body == null) {
+					// Don't cache failures - return empty and let next call retry
 					return new HashMap<>();
 				}
 				var json = objectMapper.readTree(body.string());
@@ -102,11 +107,16 @@ public class ZkillboardHashCorrector {
 						}
 					}
 				}
+				// Only cache non-empty results
+				if (!hashes.isEmpty()) {
+					hashCache.put(date, hashes);
+				}
 				return hashes;
-			} catch (Exception e) {
-				log.debug("Failed to fetch Zkillboard data for {}: {}", date, e.getMessage());
-				return new HashMap<>();
 			}
-		});
+		} catch (Exception e) {
+			log.debug("Failed to fetch Zkillboard data for {}: {}", date, e.getMessage());
+			// Don't cache failures - return empty and let next call retry
+			return new HashMap<>();
+		}
 	}
 }

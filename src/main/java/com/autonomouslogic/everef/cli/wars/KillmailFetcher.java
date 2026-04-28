@@ -2,6 +2,7 @@ package com.autonomouslogic.everef.cli.wars;
 
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.esi.EsiHelper;
+import com.autonomouslogic.everef.esi.EsiRetryUtil;
 import com.autonomouslogic.everef.openapi.esi.api.KillmailsApi;
 import com.autonomouslogic.everef.openapi.esi.api.WarsApi;
 import com.autonomouslogic.everef.openapi.esi.invoker.ApiException;
@@ -15,7 +16,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.Callable;
-import java.util.function.Supplier;
+import java.util.concurrent.ConcurrentHashMap;
 import javax.inject.Inject;
 import lombok.extern.log4j.Log4j2;
 
@@ -43,7 +44,7 @@ public class KillmailFetcher {
 	@Inject
 	protected ZkillboardHashCorrector zkillboardHashCorrector;
 
-	private Map<Long, JsonNode> killmailsCache = new HashMap<>();
+	private Map<Long, JsonNode> killmailsCache = new ConcurrentHashMap<>();
 
 	@Inject
 	protected KillmailFetcher() {}
@@ -102,58 +103,67 @@ public class KillmailFetcher {
 	}
 
 	public void fetchKillmailDetail(long warId, long killmailId, String hash) {
-		// Skip if already fetched
-		if (killmailsCache.containsKey(killmailId)) {
-			return;
-		}
+		// Use computeIfAbsent for atomic check-and-fetch
+		killmailsCache.computeIfAbsent(killmailId, id -> {
+			try {
+				return fetchKillmailWithRetry(warId, killmailId, hash);
+			} catch (Exception e) {
+				// Return null if fetch fails - entry won't be cached
+				log.debug("Failed to fetch killmail {}: {}", killmailId, e.getMessage());
+				return null;
+			}
+		});
+	}
 
-		fetchWithRetry(
-				"killmail " + killmailId,
-				() -> {
-					try {
+	private JsonNode fetchKillmailWithRetry(long warId, long killmailId, String hash) {
+		try {
+			return EsiRetryUtil.fetchWithRetry(
+					"killmail " + killmailId,
+					() -> {
 						try {
-							var kmDetail = killmailsApi.getKillmailsKillmailIdKillmailHash(
-									hash, Math.toIntExact(killmailId), null, null);
-							var kmNode = objectMapper.valueToTree(kmDetail);
+							try {
+								var kmDetail = killmailsApi.getKillmailsKillmailIdKillmailHash(
+										hash, Math.toIntExact(killmailId), null, null);
+								var kmNode = objectMapper.valueToTree(kmDetail);
 
-							// Add war_id and hash to the killmail
-							((ObjectNode) kmNode).put("war_id", warId);
-							((ObjectNode) kmNode).put("killmail_hash", hash);
+								// Add war_id and hash to the killmail
+								((ObjectNode) kmNode).put("war_id", warId);
+								((ObjectNode) kmNode).put("killmail_hash", hash);
 
-							killmailsCache.put(killmailId, kmNode);
-							log.debug("Fetched killmail {} for war {}", killmailId, warId);
-						} catch (ApiException e) {
-							if (e.getCode() == 422) {
-								// Try to correct the hash via Zkillboard
-								var corrected = zkillboardHashCorrector.correctHash(killmailId, hash);
-								if (corrected.isPresent()) {
-									var correctedHash = corrected.get();
-									log.debug("Retrying killmail {} with corrected hash", killmailId);
-									var kmDetail = killmailsApi.getKillmailsKillmailIdKillmailHash(
-											correctedHash, Math.toIntExact(killmailId), null, null);
-									var kmNode = objectMapper.valueToTree(kmDetail);
-									((ObjectNode) kmNode).put("war_id", warId);
-									((ObjectNode) kmNode).put("killmail_hash", correctedHash);
-									killmailsCache.put(killmailId, kmNode);
-									log.debug("Fetched killmail {} with corrected hash", killmailId);
+								log.debug("Fetched killmail {} for war {}", killmailId, warId);
+								return kmNode;
+							} catch (ApiException e) {
+								if (e.getCode() == 422) {
+									// Try to correct the hash via Zkillboard
+									var corrected = zkillboardHashCorrector.correctHash(killmailId, hash);
+									if (corrected.isPresent()) {
+										var correctedHash = corrected.get();
+										log.debug("Retrying killmail {} with corrected hash", killmailId);
+										// Recursively call to get retry logic for corrected hash
+										return fetchKillmailWithRetry(warId, killmailId, correctedHash);
+									} else {
+										log.debug("Could not correct hash for killmail {}", killmailId);
+										return null;
+									}
 								} else {
-									log.debug("Could not correct hash for killmail {}", killmailId);
+									throw e;
 								}
+							}
+						} catch (ApiException e) {
+							if (e.getCode() == 404) {
+								log.debug("Killmail {} not found", killmailId);
+								return null;
 							} else {
-								throw e;
+								throw new RuntimeException(e);
 							}
 						}
-					} catch (ApiException e) {
-						if (e.getCode() == 404) {
-							log.debug("Killmail {} not found", killmailId);
-						} else {
-							throw new RuntimeException(e);
-						}
-					}
-					return null;
-				},
-				12,
-				Duration.ofSeconds(5));
+					},
+					12,
+					Duration.ofSeconds(5));
+		} catch (ApiException e) {
+			log.debug("Failed to fetch killmail {} after retries: {}", killmailId, e.getMessage());
+			return null;
+		}
 	}
 
 	/**
@@ -180,50 +190,5 @@ public class KillmailFetcher {
 	 */
 	public Map<Long, JsonNode> getAllCachedKillmails() {
 		return new HashMap<>(killmailsCache);
-	}
-
-	/**
-	 * Retry a supplier with exponential backoff.
-	 *
-	 * @param description description of what's being retried
-	 * @param supplier the supplier to retry
-	 * @param maxRetries maximum number of retries
-	 * @param delay delay between retries
-	 * @return the result of the supplier
-	 */
-	public <T> T fetchWithRetry(String description, Supplier<T> supplier, int maxRetries, Duration delay) {
-		int attempts = 0;
-		while (true) {
-			try {
-				attempts++;
-				return supplier.get();
-			} catch (Exception e) {
-				if (e instanceof ApiException) {
-					var apiException = (ApiException) e;
-					if (apiException.getCode() >= 500 || apiException.getCode() == 429) {
-						if (attempts >= maxRetries) {
-							log.error("Max retries exceeded for {}", description);
-							throw new RuntimeException(e);
-						}
-						log.debug(
-								"Retry {}/{} for {} (code: {})",
-								attempts,
-								maxRetries,
-								description,
-								apiException.getCode());
-						try {
-							Thread.sleep(delay.toMillis());
-						} catch (InterruptedException ie) {
-							Thread.currentThread().interrupt();
-							throw new RuntimeException(ie);
-						}
-					} else {
-						throw new RuntimeException(e);
-					}
-				} else {
-					throw new RuntimeException(e);
-				}
-			}
-		}
 	}
 }

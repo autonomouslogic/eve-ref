@@ -5,7 +5,9 @@ import static com.autonomouslogic.everef.util.ArchivePathFactory.WARS;
 import com.autonomouslogic.everef.cli.Command;
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.esi.EsiHelper;
+import com.autonomouslogic.everef.esi.EsiRetryUtil;
 import com.autonomouslogic.everef.openapi.esi.api.WarsApi;
+import com.autonomouslogic.everef.openapi.esi.invoker.ApiException;
 import com.autonomouslogic.everef.s3.S3Adapter;
 import com.autonomouslogic.everef.s3.S3Util;
 import com.autonomouslogic.everef.url.S3Url;
@@ -17,6 +19,7 @@ import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -66,7 +69,7 @@ public class ScrapeWars implements Command {
 	@Setter
 	private ZonedDateTime scrapeTime;
 
-	private Map<Long, JsonNode> warsMap = new HashMap<>();
+	private Map<Long, JsonNode> warsMap = new ConcurrentHashMap<>();
 
 	private S3Url dataUrl;
 
@@ -143,22 +146,24 @@ public class ScrapeWars implements Command {
 
 				log.debug("Found {} killmails for war {}", killmailList.size(), warId);
 
-				long maxId = lastKillmailId;
+				long maxSuccessfulId = lastKillmailId;
 				for (var km : killmailList) {
 					long kmId = km.getKillmailId();
 					if (kmId > lastKillmailId) {
 						// This is a new killmail, fetch details
 						try {
 							fetchAndStoreKillmailDetail(warId, kmId, km.getKillmailHash());
-							maxId = Math.max(maxId, kmId);
+							// Only update maxSuccessfulId if fetch succeeded
+							maxSuccessfulId = Math.max(maxSuccessfulId, kmId);
 						} catch (Exception e) {
 							log.error("Failed to fetch killmail {} for war {}: {}", kmId, warId, e.getMessage());
+							// Don't advance maxSuccessfulId - this killmail will be retried next run
 						}
 					}
 				}
 
-				if (maxId > lastKillmailId) {
-					maxKillmailIds.put(warId, maxId);
+				if (maxSuccessfulId > lastKillmailId) {
+					maxKillmailIds.put(warId, maxSuccessfulId);
 				}
 			} catch (Exception e) {
 				log.error("Failed to fetch killmails for war {}: {}", warId, e.getMessage());
@@ -168,9 +173,9 @@ public class ScrapeWars implements Command {
 		return maxKillmailIds;
 	}
 
-	private void fetchAndStoreKillmailDetail(long warId, long killmailId, String hash) {
-		// Use killmailFetcher's retry logic
-		killmailFetcher.fetchWithRetry(
+	private void fetchAndStoreKillmailDetail(long warId, long killmailId, String hash) throws ApiException {
+		// Use shared retry logic and fetch the killmail detail
+		EsiRetryUtil.fetchWithRetry(
 				"killmail " + killmailId,
 				() -> {
 					killmailFetcher.fetchKillmailDetail(warId, killmailId, hash);
@@ -187,9 +192,12 @@ public class ScrapeWars implements Command {
 		// Build incremental TAR.BZ2 archive with newly fetched killmails
 		fileBuilder.setWarsMap(warsMap);
 		var incrementalFile = fileBuilder.buildIncrementalExport(killmailFetcher.getAllCachedKillmails());
-		s3Util.uploadLatestAndArchive(incrementalFile, dataUrl, WARS, scrapeTime, "application/x-bzip2", dataS3Client);
-
-		incrementalFile.delete();
+		try {
+			s3Util.uploadLatestAndArchive(
+					incrementalFile, dataUrl, WARS, scrapeTime, "application/x-bzip2", dataS3Client);
+		} finally {
+			incrementalFile.delete();
+		}
 	}
 
 	@SneakyThrows
@@ -198,14 +206,17 @@ public class ScrapeWars implements Command {
 		fileBuilder.setWarsMap(warsMap);
 		var currentWarsFile = fileBuilder.buildCurrentWarsJson();
 
-		var putRequest = s3Util.putPublicObjectRequest(
-				currentWarsFile.length(),
-				dataUrl.resolve("wars/wars-current.json"),
-				"application/json",
-				Configs.DATA_LATEST_CACHE_CONTROL_MAX_AGE.getRequired());
+		try {
+			var putRequest = s3Util.putPublicObjectRequest(
+					currentWarsFile.length(),
+					dataUrl.resolve("wars/wars-current.json"),
+					"application/json",
+					Configs.DATA_LATEST_CACHE_CONTROL_MAX_AGE.getRequired());
 
-		s3Adapter.putObject(putRequest, currentWarsFile, dataS3Client);
-		currentWarsFile.delete();
+			s3Adapter.putObject(putRequest, currentWarsFile, dataS3Client);
+		} finally {
+			currentWarsFile.delete();
+		}
 	}
 
 	private void updateWarKillmailIds(Map<Long, Long> maxKillmailIds) {
