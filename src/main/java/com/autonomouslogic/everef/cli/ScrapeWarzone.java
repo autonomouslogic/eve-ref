@@ -24,8 +24,7 @@ public class ScrapeWarzone implements Command {
 		var scrapeTime = ZonedDateTime.now(ZoneOffset.UTC).truncatedTo(ChronoUnit.SECONDS);
 		log.info("Starting warzone scrape");
 
-		genericHistoryScraper.fetchAndUpload(
-				"https://esi.evetech.net/latest/universe/Incursions/?datasource=tranquility", WARZONE, scrapeTime);
+		genericHistoryScraper.fetchAndUpload("https://www.eveonline.com/api/warzone", WARZONE, scrapeTime);
 
 		log.info("Completed warzone scrape");
 	}
