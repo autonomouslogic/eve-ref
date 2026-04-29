@@ -112,6 +112,7 @@ unrolled.sort((a, b) => a.dates[0].toMillis() - b.dates[0].toMillis());
 const totalWorth = unrolled.reduce((acc, prize) => acc + prize.value * prize.winners, 0);
 
 const pastGiveaways = {
+	"May 2026": 10 * 495.28e6,
 	"April 2026": 8 * 441.95e6,
 	"March 2026": 10 * 441.95e6,
 	"February 2026": 8 * 452.88e6 + 2 * 167.50e6 + 1 * 598.80e6 + 2 * 325.00,
