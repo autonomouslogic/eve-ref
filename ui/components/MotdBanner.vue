@@ -31,19 +31,9 @@ const motdFallbacks: Motd[] = [
 		urlText: "Become a Patreon"
 	} as Motd,
 	{
-		text: "Servers aren't free",
-		url: PATREON_URL,
-		urlText: "Become a Patreon"
-	} as Motd,
-	{
 		text: "Get 1,000,000 skill points",
 		url: EVE_REFERRAL_URL,
 		urlText: "Play EVE Online"
-	} as Motd,
-	{
-		text: "EVE Ref has over 4 TB of historical EVE data",
-		url: DATASETS_DOCS_URL,
-		urlText: "Explore EVE data"
 	} as Motd,
 	{
 		text: "Donate ISK and get your name shown here",
@@ -143,21 +133,10 @@ const motd = computed(() => {
 		} as Motd;
 	}
 
-	// Affiliate.
-	if (dayOfWeek == FRIDAY || dayOfWeek == SATURDAY) {
-		return {
-			text: "Save 3% with code \"everef\" at checkout",
-			url: MARKEE_DRAGON_URL,
-			urlText: "Markee Dragon"
-		} as Motd;
+	if (day % 3 == 0) {
+		return null;
 	}
-
-	return null;
-
-	// if (day % 3 == 0) {
-	// 	return null;
-	// }
-	// return motdFallbacks[hour % motdFallbacks.length];
+	return motdFallbacks[hour % motdFallbacks.length];
 });
 
 </script>
