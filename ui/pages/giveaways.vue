@@ -41,9 +41,9 @@ const weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Satur
 const plexPrice = await getJitaSellPrice(PLEX_TYPE_ID) || 0;
 const fleetPackPrice = (50 + 500 * 12 / 365 * 3) * plexPrice;
 
-const firstFleetPack = DateTime.fromISO("2026-04-03T14:00:00Z");
+const firstFleetPack = DateTime.fromISO("2026-05-01T14:00:00Z");
 const fleetPackDates = [];
-for (let i = 0; i < 4; i++) {
+for (let i = 0; i < 5; i++) {
 	fleetPackDates.push(firstFleetPack.plus({days: i * 7}));
 }
 
@@ -54,12 +54,12 @@ const prizes: Prize[] = [
 		dates: fleetPackDates,
 		winners: 2
 	} as Prize,
-	{
-		name: "Weekend Fleet Pack (50x PLEX, 3 Day Omega)",
-		value: fleetPackPrice,
-		dates: [DateTime.fromISO("2026-03-29T03:34:00+09:00")],
-		winners: 10
-	} as Prize,
+	// {
+	// 	name: "Weekend Fleet Pack (50x PLEX, 3 Day Omega)",
+	// 	value: fleetPackPrice,
+	// 	dates: [DateTime.fromISO("2026-03-29T03:34:00+09:00")],
+	// 	winners: 10
+	// } as Prize,
 	// {
 	// 	name: "Maller Scope Syndication YC122 SKIN",
 	// 	value: await getJitaSellPrice(MALLER_SCOPE_SYNDICATION) || 0,
@@ -186,7 +186,7 @@ const totalPastPrizes = Object.values(pastGiveaways).reduce(
 				<td>
 					<template v-if="prize.dates[0].toMillis() > DateTime.now().toMillis()">
 						<Datetime :millisecond-epoch="prize.dates[0].toMillis()" />
-						<template v-if="prize.dates[0].toUTC().day == DateTime.now().toUTC().day">
+						<template v-if="prize.dates[0].toUTC().toMillis() - DateTime.now().toUTC().toMillis() < DAY">
 							(today)
 						</template>
 						<template v-else-if="prize.dates[0].toMillis() - DateTime.now().toMillis() < 8 * DAY">
