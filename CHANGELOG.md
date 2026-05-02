@@ -1,5 +1,15 @@
 EVE Ref Changelog
 
+## [2.75.2](https://github.com/autonomouslogic/eve-ref/compare/2.75.1...2.75.2) (2026-05-02)
+
+
+### Bug Fixes
+
+* Removed RxJava from base Command class ([#1042](https://github.com/autonomouslogic/eve-ref/issues/1042)) ([badaab1](https://github.com/autonomouslogic/eve-ref/commit/badaab18c3601c9610b8c3bee56d96d2667653d4))
+* **ui:** Added MOTD fallbacks back in ([b7ea02a](https://github.com/autonomouslogic/eve-ref/commit/b7ea02ab3e7fce350816cee4e91f82efdf186c8d))
+* **ui:** April 2026 giveways ([048d211](https://github.com/autonomouslogic/eve-ref/commit/048d2111024c8cb2702870d12da761a1aa7ae97a))
+* **ui:** May 2026 giveways ([3df0e79](https://github.com/autonomouslogic/eve-ref/commit/3df0e79150d7335bd53398d37219d46ad968c020))
+
 ## [2.75.1](https://github.com/autonomouslogic/eve-ref/compare/2.75.0...2.75.1) (2026-04-28)
 
 
