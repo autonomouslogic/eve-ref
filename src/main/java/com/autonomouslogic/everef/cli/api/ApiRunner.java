@@ -12,6 +12,7 @@ import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.service.EsiMarketPriceService;
 import com.autonomouslogic.everef.service.RefDataService;
 import com.autonomouslogic.everef.service.SystemCostIndexService;
+import com.autonomouslogic.everef.util.VirtualThreads;
 import io.helidon.common.concurrency.limits.AimdLimit;
 import io.helidon.webserver.WebServer;
 import io.helidon.webserver.http.HttpRouting;
@@ -57,6 +58,7 @@ public class ApiRunner implements Command {
 	@Override
 	@SneakyThrows
 	public void run() {
+		VirtualThreads.checkThread();
 		startServices();
 		startServer();
 		while (!stopped) {

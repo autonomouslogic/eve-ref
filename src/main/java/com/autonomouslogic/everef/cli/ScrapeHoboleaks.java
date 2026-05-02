@@ -10,6 +10,7 @@ import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.url.UrlParser;
 import com.autonomouslogic.everef.util.CompressUtil;
 import com.autonomouslogic.everef.util.TempFiles;
+import com.autonomouslogic.everef.util.VirtualThreads;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Flowable;
@@ -67,16 +68,20 @@ public class ScrapeHoboleaks implements Command {
 		hoboUrl = (HttpUrl) urlParser.parse(Configs.HOBOLEAKS_SDE_DATA_BASE_URL.getRequired());
 	}
 
-	public Completable runAsync() {
-		return loadMeta().flatMapCompletable(currentMeta -> {
-			return loadArchiveMeta().flatMapCompletable(archiveMeta -> {
-				if (Arrays.equals(currentMeta, archiveMeta)) {
-					log.info("No update needed");
-					return Completable.complete();
-				}
-				return buildArchive(currentMeta).flatMapCompletable(this::uploadFiles);
-			});
-		});
+	@Override
+	public void run() {
+		VirtualThreads.checkThread();
+		loadMeta()
+				.flatMapCompletable(currentMeta -> {
+					return loadArchiveMeta().flatMapCompletable(archiveMeta -> {
+						if (Arrays.equals(currentMeta, archiveMeta)) {
+							log.info("No update needed");
+							return Completable.complete();
+						}
+						return buildArchive(currentMeta).flatMapCompletable(this::uploadFiles);
+					});
+				})
+				.blockingAwait();
 	}
 
 	private Single<byte[]> loadMeta() {

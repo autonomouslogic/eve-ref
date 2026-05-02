@@ -1,6 +1,7 @@
 package com.autonomouslogic.everef.cli.decorator;
 
 import com.autonomouslogic.everef.cli.Command;
+import com.autonomouslogic.everef.util.VirtualThreads;
 import io.reactivex.rxjava3.core.Completable;
 import io.sentry.Sentry;
 import io.sentry.SentryLevel;
@@ -27,11 +28,15 @@ public class SentryDecorator {
 	private class SentryCommand implements Command {
 		private final Command delegate;
 
-		public Completable runAsync() {
-			return Completable.fromAction(delegate::run).onErrorResumeNext(e -> {
-				Sentry.captureException(e, scope -> scope.setLevel(SentryLevel.ERROR));
-				return Completable.error(e);
-			});
+		@Override
+		public void run() {
+			VirtualThreads.checkThread();
+			Completable.fromAction(delegate::run)
+					.onErrorResumeNext(e -> {
+						Sentry.captureException(e, scope -> scope.setLevel(SentryLevel.ERROR));
+						return Completable.error(e);
+					})
+					.blockingAwait();
 		}
 
 		public String getName() {

@@ -136,8 +136,10 @@ public class FetchDonations implements Command {
 		staticUrl = (S3Url) urlParser.parse(Configs.STATIC_PATH.getRequired());
 	}
 
+	@Override
 	@SneakyThrows
 	public void run() {
+		VirtualThreads.checkThread();
 		var accessToken = getAccessToken();
 		var verified = esiAuthHelper.verify(accessToken);
 		var characterId = (int) verified.getCharacterId();

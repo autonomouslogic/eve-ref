@@ -39,6 +39,7 @@ import com.autonomouslogic.everef.util.HashUtil;
 import com.autonomouslogic.everef.util.RefDataUtil;
 import com.autonomouslogic.everef.util.Rx;
 import com.autonomouslogic.everef.util.TempFiles;
+import com.autonomouslogic.everef.util.VirtualThreads;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dagger.Lazy;
@@ -217,8 +218,9 @@ public class BuildRefData implements Command {
 	}
 
 	@Override
-	public Completable runAsync() {
-		return Completable.concatArray(initMvStore(), latestFiles(), checkAndProcess());
+	public void run() {
+		VirtualThreads.checkThread();
+		Completable.concatArray(initMvStore(), latestFiles(), checkAndProcess()).blockingAwait();
 	}
 
 	private Completable latestFiles() {
