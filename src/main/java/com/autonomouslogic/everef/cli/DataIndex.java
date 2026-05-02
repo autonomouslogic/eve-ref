@@ -8,6 +8,7 @@ import com.autonomouslogic.everef.s3.S3Adapter;
 import com.autonomouslogic.everef.s3.S3Util;
 import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.url.UrlParser;
+import com.autonomouslogic.everef.util.VirtualThreads;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Single;
@@ -77,14 +78,16 @@ public class DataIndex implements Command {
 	}
 
 	@Override
-	public Completable runAsync() {
-		return listAndIndex()
+	public void run() {
+		VirtualThreads.checkThread();
+		listAndIndex()
 				.flatMapCompletable(
 						dirIndex -> {
 							return createAndUploadIndexPage(dirIndex.getLeft(), dirIndex.getRight());
 						},
 						false,
-						indexConcurrency);
+						indexConcurrency)
+				.blockingAwait();
 	}
 
 	private Flowable<Pair<String, List<FileEntry>>> listAndIndex() {

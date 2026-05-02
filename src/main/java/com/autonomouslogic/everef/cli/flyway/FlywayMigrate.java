@@ -20,17 +20,16 @@ public class FlywayMigrate implements Command {
 	protected FlywayMigrate() {}
 
 	@Override
-	public Completable runAsync() {
-		return Completable.fromAction(() -> {
-			log.info("Migrating database");
-			VirtualThreads.run(() -> dbAccess.flyway().migrate());
-		});
+	public void run() {
+		VirtualThreads.checkThread();
+		log.info("Migrating database");
+		VirtualThreads.run(() -> dbAccess.flyway().migrate());
 	}
 
 	public Completable autoRun() {
 		return Completable.defer(() -> {
 			if (Configs.FLYWAY_AUTO_MIGRATE.getRequired()) {
-				return runAsync();
+				return Completable.fromAction(this::run);
 			}
 			return Completable.complete();
 		});

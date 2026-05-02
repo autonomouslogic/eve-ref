@@ -11,6 +11,7 @@ import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.url.UrlParser;
 import com.autonomouslogic.everef.util.DataIndexHelper;
 import com.autonomouslogic.everef.util.TempFiles;
+import com.autonomouslogic.everef.util.VirtualThreads;
 import com.google.common.collect.Ordering;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Flowable;
@@ -84,15 +85,17 @@ public class SyncFuzzworkOrdersets implements Command {
 
 	@SneakyThrows
 	@Override
-	public Completable runAsync() {
-		return getFilesToSync()
+	public void run() {
+		VirtualThreads.checkThread();
+		getFilesToSync()
 				.flatMapCompletable(
 						file -> downloadFile(file)
 								.flatMapCompletable(downloaded ->
 										Completable.concatArray(uploadFile(downloaded), deleteFile(downloaded))),
 						false,
 						CONCURRENCY)
-				.andThen(updateDataIndex());
+				.andThen(updateDataIndex())
+				.blockingAwait();
 	}
 
 	@SneakyThrows

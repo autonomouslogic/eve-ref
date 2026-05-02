@@ -5,6 +5,7 @@ import com.autonomouslogic.everef.model.ReferenceEntry;
 import com.autonomouslogic.everef.model.refdata.RefDataConfig;
 import com.autonomouslogic.everef.util.RefDataUtil;
 import com.autonomouslogic.everef.util.TempFiles;
+import com.autonomouslogic.everef.util.VirtualThreads;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
@@ -45,11 +46,13 @@ public class VerifyRefDataModels implements Command {
 
 	@SneakyThrows
 	@Override
-	public Completable runAsync() {
-		return refDataUtil
+	public void run() {
+		VirtualThreads.checkThread();
+		refDataUtil
 				.downloadLatestReferenceData()
 				.flatMapPublisher(file -> refDataUtil.parseReferenceDataArchive(file))
-				.flatMapCompletable(this::verify, false, Runtime.getRuntime().availableProcessors());
+				.flatMapCompletable(this::verify, false, Runtime.getRuntime().availableProcessors())
+				.blockingAwait();
 	}
 
 	private Completable verify(@NonNull ReferenceEntry entry) {

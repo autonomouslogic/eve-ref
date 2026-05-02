@@ -43,6 +43,8 @@ public class DataIndexHelper {
 	}
 
 	private Completable updateIndex(String prefix) {
-		return dataIndexProvider.get().setPrefix(prefix).setRecursive(false).runAsync();
+		return Completable.fromAction(() -> {
+			dataIndexProvider.get().setPrefix(prefix).setRecursive(false).run();
+		});
 	}
 }

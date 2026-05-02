@@ -19,6 +19,7 @@ import com.autonomouslogic.everef.util.DataIndexHelper;
 import com.autonomouslogic.everef.util.ProgressReporter;
 import com.autonomouslogic.everef.util.Rx;
 import com.autonomouslogic.everef.util.TempFiles;
+import com.autonomouslogic.everef.util.VirtualThreads;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -155,6 +156,7 @@ public class ScrapeMarketHistory implements Command {
 	@SneakyThrows
 	@Override
 	public void run() {
+		VirtualThreads.checkThread();
 		Completable.fromAction(() -> {
 					marketHistoryFetcher.setStats(stats);
 					try {
