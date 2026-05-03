@@ -1,5 +1,12 @@
 EVE Ref Changelog
 
+## [2.75.3](https://github.com/autonomouslogic/eve-ref/compare/2.75.2...2.75.3) (2026-05-03)
+
+
+### Bug Fixes
+
+* Report to Sentry when market history is retried ([7912ffb](https://github.com/autonomouslogic/eve-ref/commit/7912ffbf1b760614668081cbb561b2e719489d35))
+
 ## [2.75.2](https://github.com/autonomouslogic/eve-ref/compare/2.75.1...2.75.2) (2026-05-02)
 
 
