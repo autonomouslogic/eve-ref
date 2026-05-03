@@ -26,6 +26,8 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Maybe;
+import io.sentry.Sentry;
+import io.sentry.SentryLevel;
 import java.io.FileOutputStream;
 import java.net.URI;
 import java.time.Duration;
@@ -174,7 +176,9 @@ public class ScrapeMarketHistory implements Command {
 					}
 				})
 				.retry(1, e -> {
-					log.warn("Error scraping market history, retrying from the beginning", e);
+					var msg = "Error scraping market history, retrying from the beginning";
+					log.warn(msg, e);
+					Sentry.captureException(new RuntimeException(msg, e), scope -> scope.setLevel(SentryLevel.WARNING));
 					return true;
 				})
 				.blockingAwait();
