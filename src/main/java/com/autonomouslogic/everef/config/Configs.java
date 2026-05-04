@@ -71,6 +71,17 @@ public class Configs {
 			.build();
 
 	/**
+	 * The interval between periodic healthcheck pings while ApiRunner is running.
+	 * Only used if HEALTH_CHECK_URL is set.
+	 * Defaults to 5 minutes.
+	 */
+	public static final Config<Duration> HEALTH_CHECK_INTERVAL = Config.<Duration>builder()
+			.name("HEALTH_CHECK_INTERVAL")
+			.type(Duration.class)
+			.defaultValue(Duration.ofMinutes(5))
+			.build();
+
+	/**
 	 * The webhook URL for Slack reporting.
 	 * If no URL is supplied, reporting will not occur.
 	 */
