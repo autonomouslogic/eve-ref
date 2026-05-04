@@ -867,8 +867,8 @@ public class Configs {
 	/**
 	 * Concurrency for fetching killmail details
 	 */
-	public static final Config<Integer> KILLMAIL_DETAIL_CONCURRENCY = Config.<Integer>builder()
-			.name("KILLMAIL_DETAIL_CONCURRENCY")
+	public static final Config<Integer> KILLMAIL_CONCURRENCY = Config.<Integer>builder()
+			.name("KILLMAIL_CONCURRENCY")
 			.defaultValue(4)
 			.type(Integer.class)
 			.build();

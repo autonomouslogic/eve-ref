@@ -3,7 +3,7 @@ package com.autonomouslogic.everef.cli.wars;
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.esi.EsiHelper;
 import com.autonomouslogic.everef.esi.EsiRetryUtil;
-import com.autonomouslogic.everef.openapi.esi.api.KillmailsApi;
+import com.autonomouslogic.everef.http.OkHttpWrapper;
 import com.autonomouslogic.everef.openapi.esi.api.WarsApi;
 import com.autonomouslogic.everef.openapi.esi.invoker.ApiException;
 import com.autonomouslogic.everef.util.VirtualThreads;
@@ -33,10 +33,11 @@ public class KillmailFetcher {
 	protected WarsApi warsApi;
 
 	@Inject
-	protected KillmailsApi killmailsApi;
+	protected EsiHelper esiHelper;
 
 	@Inject
-	protected EsiHelper esiHelper;
+	@javax.inject.Named("esi")
+	protected OkHttpWrapper okHttpWrapper;
 
 	@Inject
 	protected ObjectMapper objectMapper;
@@ -84,7 +85,7 @@ public class KillmailFetcher {
 
 			log.debug("Found {} killmails for war {}", killmailList.size(), warId);
 
-			// Process killmail details in parallel (4 at a time)
+			// Process killmail details in parallel
 			var tasks = killmailList.stream()
 					.map(km -> (Callable<Void>) () -> {
 						fetchKillmailDetail(warId, km.getKillmailId(), km.getKillmailHash());
@@ -92,7 +93,7 @@ public class KillmailFetcher {
 					})
 					.toList();
 
-			VirtualThreads.parallel(tasks, Configs.KILLMAIL_DETAIL_CONCURRENCY.getRequired());
+			VirtualThreads.parallel(tasks, Configs.KILLMAIL_CONCURRENCY.getRequired());
 		} catch (Exception e) {
 			if (e instanceof ApiException && ((ApiException) e).getCode() == 404) {
 				log.debug("War {} has no killmails", warId);
@@ -122,19 +123,18 @@ public class KillmailFetcher {
 				"killmail " + killmailId,
 				() -> {
 					try {
-						try {
-							var kmDetail = killmailsApi.getKillmailsKillmailIdKillmailHash(
-									hash, Math.toIntExact(killmailId), null, null);
-							var kmNode = objectMapper.valueToTree(kmDetail);
+						var url = String.format(
+								"%slatest/killmails/%d/%s/", Configs.ESI_BASE_URL.getRequired(), killmailId, hash);
 
-							// Add war_id and hash to the killmail
-							((ObjectNode) kmNode).put("war_id", warId);
-							((ObjectNode) kmNode).put("killmail_hash", hash);
+						try (var response = okHttpWrapper.get(url)) {
+							var code = response.code();
 
-							log.debug("Fetched killmail {} for war {}", killmailId, warId);
-							return kmNode;
-						} catch (ApiException e) {
-							if (e.getCode() == 422) {
+							if (code == 404) {
+								log.debug("Killmail {} not found", killmailId);
+								throw new KillmailNotFoundException(killmailId);
+							}
+
+							if (code == 422) {
 								// Try to correct the hash via Zkillboard
 								var corrected = zkillboardHashCorrector.correctHash(killmailId, hash);
 								if (corrected.isPresent()) {
@@ -146,17 +146,30 @@ public class KillmailFetcher {
 									log.debug("Could not correct hash for killmail {}", killmailId);
 									throw new KillmailHashCorrectionFailedException(killmailId, hash);
 								}
-							} else {
-								throw e;
 							}
+
+							if (code != 200) {
+								throw new RuntimeException("HTTP " + code);
+							}
+
+							var body = response.body();
+							if (body == null) {
+								throw new RuntimeException("Empty response body");
+							}
+
+							var kmNode = objectMapper.readTree(body.string());
+
+							// Add war_id and hash to the killmail
+							((ObjectNode) kmNode).put("war_id", warId);
+							((ObjectNode) kmNode).put("killmail_hash", hash);
+
+							log.debug("Fetched killmail {} for war {}", killmailId, warId);
+							return kmNode;
 						}
-					} catch (ApiException e) {
-						if (e.getCode() == 404) {
-							log.debug("Killmail {} not found", killmailId);
-							throw new KillmailNotFoundException(killmailId);
-						} else {
-							throw new RuntimeException(e);
-						}
+					} catch (KillmailNotFoundException | KillmailHashCorrectionFailedException e) {
+						throw e;
+					} catch (Exception e) {
+						throw new RuntimeException(e);
 					}
 				},
 				12,
