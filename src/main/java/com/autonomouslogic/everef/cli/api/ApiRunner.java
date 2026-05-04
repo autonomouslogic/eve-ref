@@ -10,6 +10,7 @@ import com.autonomouslogic.everef.api.StandardHandlers;
 import com.autonomouslogic.everef.cli.Command;
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.service.EsiMarketPriceService;
+import com.autonomouslogic.everef.service.HealthcheckService;
 import com.autonomouslogic.everef.service.RefDataService;
 import com.autonomouslogic.everef.service.SystemCostIndexService;
 import com.autonomouslogic.everef.util.VirtualThreads;
@@ -49,6 +50,9 @@ public class ApiRunner implements Command {
 	@Inject
 	protected ApiUtil apiUtil;
 
+	@Inject
+	protected HealthcheckService healthcheckService;
+
 	private WebServer server;
 	private volatile boolean stopped = false;
 
@@ -61,6 +65,7 @@ public class ApiRunner implements Command {
 		VirtualThreads.checkThread();
 		startServices();
 		startServer();
+		startPeriodicHealthcheck();
 		while (!stopped) {
 			Thread.sleep(100);
 		}
@@ -90,8 +95,13 @@ public class ApiRunner implements Command {
 		log.info("Server started");
 	}
 
+	private void startPeriodicHealthcheck() {
+		healthcheckService.startPeriodicPing();
+	}
+
 	public void stop() {
 		stopped = true;
+		healthcheckService.stop();
 		server.stop();
 		refDataService.stop();
 		esiMarketPriceService.stop();
