@@ -51,7 +51,7 @@ public class HealthcheckService {
 						log.warn("Periodic healthcheck failed", e);
 					}
 				},
-				healthcheckInterval.toMillis(),
+				0,
 				healthcheckInterval.toMillis(),
 				TimeUnit.MILLISECONDS);
 	}
