@@ -33,7 +33,7 @@ public class WarsFetchScope {
 		var unfinishedCount = unfinishedWars.size();
 
 		// Find unknown wars
-		var unknownWars = findUnknownWars(allWarIds, warsMap, maxWarId);
+		var unknownWars = findUnknownWars(allWarIds, warsMap);
 		var unknownCount = unknownWars.size();
 
 		// Combine both sets
@@ -55,7 +55,19 @@ public class WarsFetchScope {
 		// Wars endpoint uses cursor-based pagination with maxWarId, not page-based
 		// For simplicity, fetch all wars in one call (the list isn't typically large enough to paginate)
 		var warIds = esiHelper.fetchPages(page -> warsApi.getWarsWithHttpInfo(null, null, null));
-		return warIds.stream().map(Long::valueOf).collect(Collectors.toSet());
+		// Convert list items to Long (API may return Integer or Long)
+		return warIds.stream()
+				.map(id -> {
+					Object obj = id;
+					if (obj instanceof Long) {
+						return (Long) obj;
+					} else if (obj instanceof Integer) {
+						return ((Integer) obj).longValue();
+					} else {
+						return ((Number) obj).longValue();
+					}
+				})
+				.collect(Collectors.toSet());
 	}
 
 	private static Set<Long> findUnfinishedWars(Map<Long, JsonNode> warsMap) {
@@ -69,7 +81,7 @@ public class WarsFetchScope {
 		return unfinished;
 	}
 
-	private static Set<Long> findUnknownWars(Set<Long> allWarIds, Map<Long, JsonNode> warsMap, long maxStoredWarId) {
+	private static Set<Long> findUnknownWars(Set<Long> allWarIds, Map<Long, JsonNode> warsMap) {
 		var unknown = new HashSet<Long>();
 		for (var warId : allWarIds) {
 			if (!warsMap.containsKey(warId)) {

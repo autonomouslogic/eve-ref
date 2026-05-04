@@ -5,7 +5,6 @@ import static com.autonomouslogic.everef.util.ArchivePathFactory.WARS;
 import com.autonomouslogic.everef.cli.Command;
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.esi.EsiHelper;
-import com.autonomouslogic.everef.esi.EsiRetryUtil;
 import com.autonomouslogic.everef.openapi.esi.api.WarsApi;
 import com.autonomouslogic.everef.openapi.esi.invoker.ApiException;
 import com.autonomouslogic.everef.s3.S3Adapter;
@@ -81,6 +80,11 @@ public class ScrapeWars implements Command {
 		dataUrl = (S3Url) urlParser.parse(Configs.DATA_PATH.getRequired());
 	}
 
+	private void initHelpers() {
+		warsFetcher.setWarsMap(warsMap);
+		fileBuilder.setWarsMap(warsMap);
+	}
+
 	@SneakyThrows
 	@Override
 	public void run() {
@@ -90,6 +94,7 @@ public class ScrapeWars implements Command {
 
 		// Load state from wars-current.json
 		warsMap = stateLoader.loadState();
+		initHelpers();
 
 		try {
 			var scope = calculateFetchScope();
@@ -121,7 +126,6 @@ public class ScrapeWars implements Command {
 
 	private void fetchWars(WarsFetchScope scope) {
 		log.info("Fetching {} wars", scope.getWarIds().size());
-		warsFetcher.setWarsMap(warsMap);
 		warsFetcher.fetchWars(scope.getWarIds());
 	}
 
@@ -174,15 +178,13 @@ public class ScrapeWars implements Command {
 	}
 
 	private void fetchAndStoreKillmailDetail(long warId, long killmailId, String hash) throws ApiException {
-		// Use shared retry logic and fetch the killmail detail
-		EsiRetryUtil.fetchWithRetry(
-				"killmail " + killmailId,
-				() -> {
-					killmailFetcher.fetchKillmailDetail(warId, killmailId, hash);
-					return null;
-				},
-				12,
-				java.time.Duration.ofSeconds(5));
+		try {
+			killmailFetcher.fetchKillmailDetail(warId, killmailId, hash);
+		} catch (KillmailNotFoundException e) {
+			log.debug("Killmail {} not found, skipping", killmailId);
+		} catch (KillmailHashCorrectionFailedException e) {
+			log.warn("Failed to correct hash for killmail {}, skipping", killmailId);
+		}
 	}
 
 	@SneakyThrows
@@ -190,7 +192,6 @@ public class ScrapeWars implements Command {
 		log.info("Building and uploading exports");
 
 		// Build incremental TAR.BZ2 archive with newly fetched killmails
-		fileBuilder.setWarsMap(warsMap);
 		var incrementalFile = fileBuilder.buildIncrementalExport(killmailFetcher.getAllCachedKillmails());
 		try {
 			s3Util.uploadLatestAndArchive(
@@ -203,7 +204,6 @@ public class ScrapeWars implements Command {
 	@SneakyThrows
 	private void uploadWarsCurrentJson() {
 		log.info("Uploading wars-current.json");
-		fileBuilder.setWarsMap(warsMap);
 		var currentWarsFile = fileBuilder.buildCurrentWarsJson();
 
 		try {

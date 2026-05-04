@@ -102,68 +102,65 @@ public class KillmailFetcher {
 		}
 	}
 
-	public void fetchKillmailDetail(long warId, long killmailId, String hash) {
-		// Use computeIfAbsent for atomic check-and-fetch
-		killmailsCache.computeIfAbsent(killmailId, id -> {
-			try {
-				return fetchKillmailWithRetry(warId, killmailId, hash);
-			} catch (Exception e) {
-				// Return null if fetch fails - entry won't be cached
-				log.debug("Failed to fetch killmail {}: {}", killmailId, e.getMessage());
-				return null;
-			}
-		});
+	/**
+	 * Fetches and caches a killmail detail.
+	 *
+	 * @throws KillmailNotFoundException if killmail doesn't exist (404)
+	 * @throws KillmailHashCorrectionFailedException if hash is invalid and can't be corrected
+	 * @throws ApiException for other ESI errors
+	 */
+	public void fetchKillmailDetail(long warId, long killmailId, String hash) throws ApiException {
+		// Only fetch if not already cached
+		if (!killmailsCache.containsKey(killmailId)) {
+			var killmail = fetchKillmailWithRetry(warId, killmailId, hash);
+			killmailsCache.put(killmailId, killmail);
+		}
 	}
 
-	private JsonNode fetchKillmailWithRetry(long warId, long killmailId, String hash) {
-		try {
-			return EsiRetryUtil.fetchWithRetry(
-					"killmail " + killmailId,
-					() -> {
+	private JsonNode fetchKillmailWithRetry(long warId, long killmailId, String hash) throws ApiException {
+		return EsiRetryUtil.fetchWithRetry(
+				"killmail " + killmailId,
+				() -> {
+					try {
 						try {
-							try {
-								var kmDetail = killmailsApi.getKillmailsKillmailIdKillmailHash(
-										hash, Math.toIntExact(killmailId), null, null);
-								var kmNode = objectMapper.valueToTree(kmDetail);
+							var kmDetail = killmailsApi.getKillmailsKillmailIdKillmailHash(
+									hash, Math.toIntExact(killmailId), null, null);
+							var kmNode = objectMapper.valueToTree(kmDetail);
 
-								// Add war_id and hash to the killmail
-								((ObjectNode) kmNode).put("war_id", warId);
-								((ObjectNode) kmNode).put("killmail_hash", hash);
+							// Add war_id and hash to the killmail
+							((ObjectNode) kmNode).put("war_id", warId);
+							((ObjectNode) kmNode).put("killmail_hash", hash);
 
-								log.debug("Fetched killmail {} for war {}", killmailId, warId);
-								return kmNode;
-							} catch (ApiException e) {
-								if (e.getCode() == 422) {
-									// Try to correct the hash via Zkillboard
-									var corrected = zkillboardHashCorrector.correctHash(killmailId, hash);
-									if (corrected.isPresent()) {
-										var correctedHash = corrected.get();
-										log.debug("Retrying killmail {} with corrected hash", killmailId);
-										// Recursively call to get retry logic for corrected hash
-										return fetchKillmailWithRetry(warId, killmailId, correctedHash);
-									} else {
-										log.debug("Could not correct hash for killmail {}", killmailId);
-										return null;
-									}
-								} else {
-									throw e;
-								}
-							}
+							log.debug("Fetched killmail {} for war {}", killmailId, warId);
+							return kmNode;
 						} catch (ApiException e) {
-							if (e.getCode() == 404) {
-								log.debug("Killmail {} not found", killmailId);
-								return null;
+							if (e.getCode() == 422) {
+								// Try to correct the hash via Zkillboard
+								var corrected = zkillboardHashCorrector.correctHash(killmailId, hash);
+								if (corrected.isPresent()) {
+									var correctedHash = corrected.get();
+									log.debug("Retrying killmail {} with corrected hash", killmailId);
+									// Recursively call to get retry logic for corrected hash
+									return fetchKillmailWithRetry(warId, killmailId, correctedHash);
+								} else {
+									log.debug("Could not correct hash for killmail {}", killmailId);
+									throw new KillmailHashCorrectionFailedException(killmailId, hash);
+								}
 							} else {
-								throw new RuntimeException(e);
+								throw e;
 							}
 						}
-					},
-					12,
-					Duration.ofSeconds(5));
-		} catch (ApiException e) {
-			log.debug("Failed to fetch killmail {} after retries: {}", killmailId, e.getMessage());
-			return null;
-		}
+					} catch (ApiException e) {
+						if (e.getCode() == 404) {
+							log.debug("Killmail {} not found", killmailId);
+							throw new KillmailNotFoundException(killmailId);
+						} else {
+							throw new RuntimeException(e);
+						}
+					}
+				},
+				12,
+				Duration.ofSeconds(5));
 	}
 
 	/**
