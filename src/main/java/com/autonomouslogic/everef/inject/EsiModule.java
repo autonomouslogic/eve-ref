@@ -13,6 +13,7 @@ import com.autonomouslogic.everef.openapi.esi.invoker.ApiClient;
 import dagger.Module;
 import dagger.Provides;
 import javax.inject.Singleton;
+import java.time.Duration;
 
 @Module
 public class EsiModule {
@@ -25,6 +26,8 @@ public class EsiModule {
 		}
 		var api = new ApiClient();
 		api.updateBaseUri(base);
+		api.setConnectTimeout(Duration.ofSeconds(5));
+		api.setReadTimeout(Duration.ofSeconds(5));
 		return api;
 	}
 
