@@ -12,12 +12,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.time.Duration;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import javax.inject.Inject;
+import javax.inject.Named;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -25,9 +27,15 @@ import lombok.extern.log4j.Log4j2;
  */
 @Log4j2
 public class KillmailFetcher {
-	// Early wars that have killmails in the legacy data
-	private static final Set<Long> EARLY_WARS_WITH_KILLMAILS = Set.of(48074L, 138678L, 144630L, 149785L);
-	private static final long EARLY_WARS_CUTOFF = 149786L;
+	/**
+	 * First war with killmails is 48074, with one killmail.
+	 * After that it's 138678, also with one killmail
+	 * After that it's 144630, with two killmails.
+	 * After that it's 149785, with quite a few killmails.
+	 */
+	private static final List<Long> KILLMAIL_INITIAL_WARS = List.of(48074L, 138678L, 144630L, 149785L);
+
+	private static final long KILLMAIL_FULL_CHECK = KILLMAIL_INITIAL_WARS.get(KILLMAIL_INITIAL_WARS.size() - 1) + 1;
 
 	@Inject
 	protected WarsApi warsApi;
@@ -36,7 +44,7 @@ public class KillmailFetcher {
 	protected EsiHelper esiHelper;
 
 	@Inject
-	@javax.inject.Named("esi")
+	@Named("esi")
 	protected OkHttpWrapper okHttpWrapper;
 
 	@Inject
@@ -68,11 +76,11 @@ public class KillmailFetcher {
 
 	private boolean shouldFetchKillmails(long warId) {
 		// Normal wars >= 149786 should have killmails
-		if (warId >= EARLY_WARS_CUTOFF) {
+		if (warId >= KILLMAIL_FULL_CHECK) {
 			return true;
 		}
 		// Only specific early wars have killmails
-		return EARLY_WARS_WITH_KILLMAILS.contains(warId);
+		return KILLMAIL_INITIAL_WARS.contains(warId);
 	}
 
 	private void fetchKillmailsForWar(long warId) {

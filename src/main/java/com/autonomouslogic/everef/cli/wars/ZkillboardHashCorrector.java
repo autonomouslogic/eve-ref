@@ -1,16 +1,15 @@
 package com.autonomouslogic.everef.cli.wars;
 
 import com.autonomouslogic.everef.http.OkHttpWrapper;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import java.time.LocalDate;
-import java.time.ZoneOffset;
-import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import javax.inject.Inject;
 import javax.inject.Named;
+import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -19,104 +18,39 @@ import lombok.extern.log4j.Log4j2;
  */
 @Log4j2
 public class ZkillboardHashCorrector {
-	private static final String ZKILLBOARD_BASE_URL = "https://r2z2.zkillboard.com/history/";
-	private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMdd");
-	private static final int HISTORY_DAYS = 30;
-	private static final String CCP_VERIFIED = "CCP VERIFIED";
-
-	@Inject
-	protected ObjectMapper objectMapper;
+	private static final Pattern ESI_KILL_PATTERN =
+			Pattern.compile("esi\\.evetech\\.net\\/latest\\/killmails\\/[0-9]+\\/[0-9a-f]+\\/");
 
 	@Inject
 	@Named("esi")
 	protected OkHttpWrapper okHttpWrapper;
 
-	private final Map<LocalDate, Map<Long, String>> hashCache = new ConcurrentHashMap<>();
-
 	@Inject
 	protected ZkillboardHashCorrector() {}
 
 	/**
-	 * Attempts to correct a killmail hash by searching Zkillboard history.
+	 * Fetches the killmail hash directly from the zkillboard website.
 	 *
 	 * @param killmailId the killmail ID
 	 * @param originalHash the original hash that failed
 	 * @return the corrected hash, or empty if not found or CCP VERIFIED
 	 */
+	@SneakyThrows
 	public Optional<String> correctHash(long killmailId, String originalHash) {
-		var today = LocalDate.now(ZoneOffset.UTC);
-
-		for (int i = 0; i < HISTORY_DAYS; i++) {
-			var date = today.minusDays(i);
-			try {
-				var hashes = fetchHashesForDate(date);
-
-				if (hashes.containsKey(killmailId)) {
-					var hash = hashes.get(killmailId);
-					if (CCP_VERIFIED.equals(hash)) {
-						log.debug("Killmail {} is CCP VERIFIED, skipping", killmailId);
-						return Optional.empty();
-					}
-					log.debug("Found corrected hash for killmail {} from {}", killmailId, date);
-					return Optional.of(hash);
-				}
-			} catch (Exception e) {
-				log.debug("Failed to fetch hashes from Zkillboard for {}: {}", date, e.getMessage());
-			}
+		var url = String.format("https://zkillboard.com/kill/%s/", killmailId);
+		var response = okHttpWrapper.get(url);
+		if (response.code() != 200) {
+			throw new RuntimeException(String.format("Zkillboard returned status %s for url %s", response.code(), url));
 		}
-
-		log.debug("No corrected hash found for killmail {} in last {} days", killmailId, HISTORY_DAYS);
-		return Optional.empty();
-	}
-
-	/**
-	 * Fetches the killmail hash map for a specific date from Zkillboard.
-	 *
-	 * @param date the date to fetch
-	 * @return a map of killmail ID to hash
-	 */
-	private Map<Long, String> fetchHashesForDate(LocalDate date) {
-		// Check if already cached
-		if (hashCache.containsKey(date)) {
-			return hashCache.get(date);
+		String body = response.body().string();
+		Matcher matcher = ESI_KILL_PATTERN.matcher(body);
+		if (!matcher.find()) {
+			throw new RuntimeException(String.format("No matching killmail URL found on %s", url));
 		}
-
-		try {
-			var dateStr = date.format(DATE_FORMATTER);
-			var url = ZKILLBOARD_BASE_URL + dateStr + ".json";
-
-			try (var response = okHttpWrapper.get(url)) {
-				var body = response.body();
-				if (body == null) {
-					// Don't cache failures - return empty and let next call retry
-					return new HashMap<>();
-				}
-				var json = objectMapper.readTree(body.string());
-
-				Map<Long, String> hashes = new HashMap<>();
-				if (json.isObject()) {
-					var iterator = json.fields();
-					while (iterator.hasNext()) {
-						var entry = iterator.next();
-						try {
-							var killmailId = Long.parseLong(entry.getKey());
-							var hashValue = entry.getValue().asText();
-							hashes.put(killmailId, hashValue);
-						} catch (NumberFormatException e) {
-							log.debug("Skipping non-numeric killmail ID: {}", entry.getKey());
-						}
-					}
-				}
-				// Only cache non-empty results
-				if (!hashes.isEmpty()) {
-					hashCache.put(date, hashes);
-				}
-				return hashes;
-			}
-		} catch (Exception e) {
-			log.debug("Failed to fetch Zkillboard data for {}: {}", date, e.getMessage());
-			// Don't cache failures - return empty and let next call retry
-			return new HashMap<>();
-		}
+		String esiUrl = matcher.group();
+		List<String> parts =
+				Stream.of(esiUrl.split("/")).filter(s -> !s.isEmpty()).collect(Collectors.toList());
+		String hash = parts.get(parts.size() - 1);
+		return Optional.of(hash);
 	}
 }
