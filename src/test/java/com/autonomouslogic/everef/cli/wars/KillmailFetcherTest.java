@@ -5,12 +5,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import com.autonomouslogic.everef.esi.EsiHelper;
 import com.autonomouslogic.everef.openapi.esi.api.KillmailsApi;
 import com.autonomouslogic.everef.openapi.esi.api.WarsApi;
+import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.test.TestDataUtil;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
+import javax.inject.Inject;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import okhttp3.mockwebserver.Dispatcher;
@@ -21,47 +20,41 @@ import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junitpioneer.jupiter.SetEnvironmentVariable;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 /**
  * Integration tests for KillmailFetcher using MockWebServer to simulate ESI responses.
  */
-@ExtendWith(MockitoExtension.class)
 @Log4j2
 @SetEnvironmentVariable(key = "ESI_BASE_URL", value = "http://localhost:" + TestDataUtil.TEST_PORT + "/")
 @SetEnvironmentVariable(key = "ESI_USER_AGENT", value = "test@example.com")
 @SetEnvironmentVariable(key = "KILLMAIL_LIST_CONCURRENCY", value = "2")
 @SetEnvironmentVariable(key = "KILLMAIL_DETAIL_CONCURRENCY", value = "2")
 public class KillmailFetcherTest {
-	private ObjectMapper objectMapper;
-	private WarsApi warsApi;
-	private KillmailsApi killmailsApi;
-	private EsiHelper esiHelper;
-	private KillmailFetcher killmailFetcher;
-	private Map<Long, JsonNode> killmailsMap;
-	private Map<Long, Boolean> pendingKillmailsMap;
+	@Inject
+	protected WarsApi warsApi;
+
+	@Inject
+	protected KillmailsApi killmailsApi;
+
+	@Inject
+	protected EsiHelper esiHelper;
+
+	@Inject
+	protected ObjectMapper objectMapper;
+
+	@Inject
+	protected KillmailFetcher killmailFetcher;
+
+	@Inject
+	protected ZkillboardHashCorrector zkillboardHashCorrector;
+
 	private MockWebServer server;
 
 	@BeforeEach
 	@SneakyThrows
 	void setup() {
-		objectMapper = new com.fasterxml.jackson.databind.ObjectMapper();
-		warsApi = org.mockito.Mockito.mock(WarsApi.class);
-		killmailsApi = org.mockito.Mockito.mock(KillmailsApi.class);
-		esiHelper = org.mockito.Mockito.mock(EsiHelper.class);
-
-		killmailsMap = new HashMap<>();
-		pendingKillmailsMap = new HashMap<>();
-
-		killmailFetcher = new KillmailFetcher();
-		killmailFetcher.objectMapper = objectMapper;
-		killmailFetcher.warsApi = warsApi;
-		killmailFetcher.killmailsApi = killmailsApi;
-		killmailFetcher.esiHelper = esiHelper;
-		killmailFetcher.zkillboardHashCorrector = new ZkillboardHashCorrector();
-		killmailFetcher.zkillboardHashCorrector.objectMapper = objectMapper;
+		DaggerTestComponent.builder().build().inject(this);
 
 		server = new MockWebServer();
 		server.setDispatcher(new TestDispatcher());
@@ -145,14 +138,17 @@ public class KillmailFetcherTest {
 		@Override
 		public MockResponse dispatch(@NotNull RecordedRequest request) throws InterruptedException {
 			var path = request.getRequestUrl().encodedPath();
+			log.debug("Received request: {}", path);
 
 			// Return empty killmail list for wars
-			if (path.matches("/latest/wars/\\d+/killmails/")) {
-				return new MockResponse().setBody("[]");
+			if (path.matches(".*/wars/\\d+/killmails/?.*")) {
+				return new MockResponse()
+						.addHeader("Content-Type", "application/json")
+						.setBody("[]");
 			}
 
 			// Return killmail detail
-			if (path.matches("/latest/killmails/\\d+/\\w+/")) {
+			if (path.matches(".*/killmails/\\d+/\\w+/?.*")) {
 				try {
 					var killmail = objectMapper.createObjectNode();
 					killmail.put("killmail_id", 1000L);
@@ -164,7 +160,9 @@ public class KillmailFetcherTest {
 
 					killmail.set("attackers", objectMapper.createArrayNode());
 
-					return new MockResponse().setBody(objectMapper.writeValueAsString(killmail));
+					return new MockResponse()
+							.addHeader("Content-Type", "application/json")
+							.setBody(objectMapper.writeValueAsString(killmail));
 				} catch (Exception e) {
 					log.error("Error in dispatcher", e);
 					return new MockResponse().setResponseCode(500);

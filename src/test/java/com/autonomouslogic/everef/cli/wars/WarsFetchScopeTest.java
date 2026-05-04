@@ -46,7 +46,7 @@ public class WarsFetchScopeTest {
 		var mockWarsApi = mock(WarsApi.class);
 		var mockEsiHelper = mock(EsiHelper.class);
 
-		var allWarIds = java.util.List.of(1000L, 1001L, 1002L);
+		java.util.List<Integer> allWarIds = java.util.List.of(1000, 1001, 1002);
 		when(mockEsiHelper.fetchPages(org.mockito.ArgumentMatchers.any())).thenReturn((java.util.List) allWarIds);
 
 		var scope = WarsFetchScope.calculate(mockWarsApi, mockEsiHelper, warsMap);
@@ -61,7 +61,7 @@ public class WarsFetchScopeTest {
 		var mockWarsApi = mock(WarsApi.class);
 		var mockEsiHelper = mock(EsiHelper.class);
 
-		var allWarIds = java.util.List.of(1000L, 1001L);
+		java.util.List<Integer> allWarIds = java.util.List.of(1000, 1001);
 		when(mockEsiHelper.fetchPages(org.mockito.ArgumentMatchers.any())).thenReturn((java.util.List) allWarIds);
 
 		// Add unfinished war
@@ -82,7 +82,7 @@ public class WarsFetchScopeTest {
 		var mockWarsApi = mock(WarsApi.class);
 		var mockEsiHelper = mock(EsiHelper.class);
 
-		var allWarIds = java.util.List.of(1000L, 1001L);
+		java.util.List<Integer> allWarIds = java.util.List.of(1000, 1001);
 		when(mockEsiHelper.fetchPages(org.mockito.ArgumentMatchers.any())).thenReturn((java.util.List) allWarIds);
 
 		// Add finished war
@@ -104,7 +104,7 @@ public class WarsFetchScopeTest {
 		var mockWarsApi = mock(WarsApi.class);
 		var mockEsiHelper = mock(EsiHelper.class);
 
-		var allWarIds = java.util.List.of(1000L, 1001L, 1002L);
+		java.util.List<Integer> allWarIds = java.util.List.of(1000, 1001, 1002);
 		when(mockEsiHelper.fetchPages(org.mockito.ArgumentMatchers.any())).thenReturn((java.util.List) allWarIds);
 
 		var scope = WarsFetchScope.calculate(mockWarsApi, mockEsiHelper, warsMap);
@@ -135,7 +135,7 @@ public class WarsFetchScopeTest {
 		var mockWarsApi = mock(WarsApi.class);
 		var mockEsiHelper = mock(EsiHelper.class);
 
-		var allWarIds = java.util.List.of(100L, 2000L, 1500L, 500L);
+		java.util.List<Integer> allWarIds = java.util.List.of(100, 2000, 1500, 500);
 		when(mockEsiHelper.fetchPages(org.mockito.ArgumentMatchers.any())).thenReturn((java.util.List) allWarIds);
 
 		var scope = WarsFetchScope.calculate(mockWarsApi, mockEsiHelper, warsMap);

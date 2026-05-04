@@ -4,12 +4,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.autonomouslogic.everef.openapi.esi.api.WarsApi;
+import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.test.TestDataUtil;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import javax.inject.Inject;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import okhttp3.mockwebserver.Dispatcher;
@@ -20,35 +22,34 @@ import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junitpioneer.jupiter.SetEnvironmentVariable;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 /**
  * Integration tests for WarsFetcher using MockWebServer to simulate ESI responses.
  */
-@ExtendWith(MockitoExtension.class)
 @Log4j2
 @SetEnvironmentVariable(key = "ESI_BASE_URL", value = "http://localhost:" + TestDataUtil.TEST_PORT + "/")
 @SetEnvironmentVariable(key = "ESI_USER_AGENT", value = "test@example.com")
 @SetEnvironmentVariable(key = "WARS_FETCH_CONCURRENCY", value = "2")
 public class WarsFetcherTest {
-	private ObjectMapper objectMapper;
-	private WarsApi warsApi;
-	private WarsFetcher warsFetcher;
+	@Inject
+	protected WarsApi warsApi;
+
+	@Inject
+	protected ObjectMapper objectMapper;
+
+	@Inject
+	protected WarsFetcher warsFetcher;
+
 	private Map<Long, JsonNode> warsMap;
 	private MockWebServer server;
 
 	@BeforeEach
 	@SneakyThrows
 	void setup() {
-		objectMapper = new com.fasterxml.jackson.databind.ObjectMapper();
-		warsApi = org.mockito.Mockito.mock(WarsApi.class);
+		DaggerTestComponent.builder().build().inject(this);
 
 		warsMap = new HashMap<>();
-		warsFetcher = new WarsFetcher();
-		warsFetcher.objectMapper = objectMapper;
-		warsFetcher.warsApi = warsApi;
 		warsFetcher.setWarsMap(warsMap);
 
 		server = new MockWebServer();
@@ -126,10 +127,11 @@ public class WarsFetcherTest {
 		@Override
 		public MockResponse dispatch(@NotNull RecordedRequest request) throws InterruptedException {
 			var path = request.getRequestUrl().encodedPath();
+			log.debug("Received request: {}", path);
 
-			if (path.matches("/latest/wars/\\d+/")) {
+			if (path.matches(".*/wars/\\d+/?.*")) {
 				try {
-					var warIdStr = path.replaceAll("/latest/wars/(\\d+)/", "$1");
+					var warIdStr = path.replaceAll(".*/wars/(\\d+)/?.*", "$1");
 					var warId = Long.parseLong(warIdStr);
 
 					if (warId == 404000L) {
@@ -151,7 +153,9 @@ public class WarsFetcherTest {
 					defender.put("faction_name", "Defender Faction");
 					war.set("defender", defender);
 
-					return new MockResponse().setBody(objectMapper.writeValueAsString(war));
+					return new MockResponse()
+							.addHeader("Content-Type", "application/json")
+							.setBody(objectMapper.writeValueAsString(war));
 				} catch (Exception e) {
 					log.error("Error in dispatcher", e);
 					return new MockResponse().setResponseCode(500);

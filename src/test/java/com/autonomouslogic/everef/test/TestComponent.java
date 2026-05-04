@@ -25,6 +25,9 @@ import com.autonomouslogic.everef.cli.refdata.esi.EsiLoaderTest;
 import com.autonomouslogic.everef.cli.refdata.hoboleaks.HoboleaksLoaderTest;
 import com.autonomouslogic.everef.cli.refdata.sde.SdeLoaderTest;
 import com.autonomouslogic.everef.cli.structures.ScrapeStructuresTest;
+import com.autonomouslogic.everef.cli.wars.KillmailFetcherTest;
+import com.autonomouslogic.everef.cli.wars.WarsFetchScopeTest;
+import com.autonomouslogic.everef.cli.wars.WarsFetcherTest;
 import com.autonomouslogic.everef.db.DbAdapterTest;
 import com.autonomouslogic.everef.db.MarketHistoryDaoTest;
 import com.autonomouslogic.everef.esi.EsiHelperTest;
@@ -143,4 +146,10 @@ public interface TestComponent {
 	void inject(EsiHttpWrapperTest test);
 
 	void inject(EsiModuleTest test);
+
+	void inject(WarsFetcherTest test);
+
+	void inject(KillmailFetcherTest test);
+
+	void inject(WarsFetchScopeTest test);
 }

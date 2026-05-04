@@ -5,10 +5,12 @@ import static com.autonomouslogic.everef.config.Configs.ESI_BASE_URL;
 import com.autonomouslogic.everef.openapi.esi.api.CharacterApi;
 import com.autonomouslogic.everef.openapi.esi.api.CorporationApi;
 import com.autonomouslogic.everef.openapi.esi.api.IndustryApi;
+import com.autonomouslogic.everef.openapi.esi.api.KillmailsApi;
 import com.autonomouslogic.everef.openapi.esi.api.MarketApi;
 import com.autonomouslogic.everef.openapi.esi.api.SovereigntyApi;
 import com.autonomouslogic.everef.openapi.esi.api.UniverseApi;
 import com.autonomouslogic.everef.openapi.esi.api.WalletApi;
+import com.autonomouslogic.everef.openapi.esi.api.WarsApi;
 import com.autonomouslogic.everef.openapi.esi.invoker.ApiClient;
 import dagger.Module;
 import dagger.Provides;
@@ -71,5 +73,17 @@ public class EsiModule {
 	@Singleton
 	public IndustryApi industryApi(ApiClient apiClient) {
 		return new IndustryApi(apiClient);
+	}
+
+	@Provides
+	@Singleton
+	public WarsApi warsApi(ApiClient apiClient) {
+		return new WarsApi(apiClient);
+	}
+
+	@Provides
+	@Singleton
+	public KillmailsApi killmailsApi(ApiClient apiClient) {
+		return new KillmailsApi(apiClient);
 	}
 }
