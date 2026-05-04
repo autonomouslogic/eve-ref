@@ -71,9 +71,7 @@ public class Configs {
 			.build();
 
 	/**
-	 * The interval between periodic healthcheck pings while ApiRunner is running.
-	 * Only used if HEALTH_CHECK_URL is set.
-	 * Defaults to 5 minutes.
+	 * The interval between periodic healthcheck pings.
 	 */
 	public static final Config<Duration> HEALTH_CHECK_INTERVAL = Config.<Duration>builder()
 			.name("HEALTH_CHECK_INTERVAL")
