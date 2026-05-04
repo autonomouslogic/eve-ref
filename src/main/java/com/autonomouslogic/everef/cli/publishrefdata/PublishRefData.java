@@ -131,17 +131,20 @@ public class PublishRefData implements Command {
 
 	@SneakyThrows
 	@Override
-	public Completable runAsync() {
-		return Completable.mergeArray(loadLatestFile(), loadCurrentMeta()).andThen(Completable.defer(() -> {
-			if (!shouldUpdate()) {
-				log.info("No update needed");
-				return Completable.complete();
-			}
-			return listBucketContents().flatMapCompletable(existing -> {
-				return Completable.concatArray(
-						initMvStore(), loadData(), renderFiles(), uploadFiles(existing), closeMvStore());
-			});
-		}));
+	public void run() {
+		VirtualThreads.checkThread();
+		Completable.mergeArray(loadLatestFile(), loadCurrentMeta())
+				.andThen(Completable.defer(() -> {
+					if (!shouldUpdate()) {
+						log.info("No update needed");
+						return Completable.complete();
+					}
+					return listBucketContents().flatMapCompletable(existing -> {
+						return Completable.concatArray(
+								initMvStore(), loadData(), renderFiles(), uploadFiles(existing), closeMvStore());
+					});
+				}))
+				.blockingAwait();
 	}
 
 	private Completable loadLatestFile() {

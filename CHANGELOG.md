@@ -1,5 +1,38 @@
 EVE Ref Changelog
 
+## [2.75.3](https://github.com/autonomouslogic/eve-ref/compare/2.75.2...2.75.3) (2026-05-03)
+
+
+### Bug Fixes
+
+* Report to Sentry when market history is retried ([7912ffb](https://github.com/autonomouslogic/eve-ref/commit/7912ffbf1b760614668081cbb561b2e719489d35))
+
+## [2.75.2](https://github.com/autonomouslogic/eve-ref/compare/2.75.1...2.75.2) (2026-05-02)
+
+
+### Bug Fixes
+
+* Removed RxJava from base Command class ([#1042](https://github.com/autonomouslogic/eve-ref/issues/1042)) ([badaab1](https://github.com/autonomouslogic/eve-ref/commit/badaab18c3601c9610b8c3bee56d96d2667653d4))
+* **ui:** Added MOTD fallbacks back in ([b7ea02a](https://github.com/autonomouslogic/eve-ref/commit/b7ea02ab3e7fce350816cee4e91f82efdf186c8d))
+* **ui:** April 2026 giveways ([048d211](https://github.com/autonomouslogic/eve-ref/commit/048d2111024c8cb2702870d12da761a1aa7ae97a))
+* **ui:** May 2026 giveways ([3df0e79](https://github.com/autonomouslogic/eve-ref/commit/3df0e79150d7335bd53398d37219d46ad968c020))
+
+## [2.75.1](https://github.com/autonomouslogic/eve-ref/compare/2.75.0...2.75.1) (2026-04-28)
+
+
+### Bug Fixes
+
+* Fixed ScrapeWarzoneInsurgency ([c76fd84](https://github.com/autonomouslogic/eve-ref/commit/c76fd845721f3255815b7df7832413cd97b1a538))
+* Fixed warzone scrape ([38f9c86](https://github.com/autonomouslogic/eve-ref/commit/38f9c863d43aeadaeb3c916df1817a535ea490bc))
+* Merged ScrapeFactionWarfareSystems into ScrapeFactionWarfare ([c08ec34](https://github.com/autonomouslogic/eve-ref/commit/c08ec34cf42607257c6d73bc827bb5cb2c726f1c))
+* Removed scrape shadow war arc goals ([0dcb883](https://github.com/autonomouslogic/eve-ref/commit/0dcb88353d993e46d83f6fea36794b73893b70d6))
+
+
+### Miscellaneous Chores
+
+* Added MemoryStatsLogger ([e27df0d](https://github.com/autonomouslogic/eve-ref/commit/e27df0d65c9df5ddb5afc007c637c5be600f5b1f))
+* Merge ([f9f5029](https://github.com/autonomouslogic/eve-ref/commit/f9f502936c8b91144fe68706b2b5ff0a513b148d))
+
 ## [2.75.0](https://github.com/autonomouslogic/eve-ref/compare/2.74.5...2.75.0) (2026-04-27)
 
 

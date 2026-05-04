@@ -10,7 +10,6 @@ import static org.mockito.Mockito.verify;
 import com.autonomouslogic.everef.cli.Command;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.test.TestDataUtil;
-import io.reactivex.rxjava3.core.Completable;
 import javax.inject.Inject;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
@@ -51,7 +50,7 @@ public class HealthcheckDecoratorTest {
 			server.enqueue(new MockResponse().setResponseCode(204));
 		}
 
-		lenient().when(testCommand.runAsync()).thenReturn(Completable.complete());
+		lenient().doNothing().when(testCommand).run();
 	}
 
 	@AfterEach
@@ -128,10 +127,7 @@ public class HealthcheckDecoratorTest {
 				request,
 				"POST",
 				"/log?key=val",
-				s -> assertTrue(
-						s.startsWith("java.lang.RuntimeException: test error message\n"
-								+ "\tat com.autonomouslogic.everef.cli.Command.run"),
-						s));
+				s -> assertTrue(s.contains("java.lang.RuntimeException: test error message"), s));
 		testDataUtil.assertNoMoreRequests(server);
 	}
 

@@ -14,6 +14,7 @@ import com.autonomouslogic.everef.url.UrlParser;
 import com.autonomouslogic.everef.util.MarketGroupHelper;
 import com.autonomouslogic.everef.util.RefDataUtil;
 import com.autonomouslogic.everef.util.TempFiles;
+import com.autonomouslogic.everef.util.VirtualThreads;
 import com.fasterxml.jackson.core.JsonEncoding;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Streams;
@@ -77,14 +78,17 @@ public class BuildSearch implements Command {
 		staticUrl = (S3Url) urlParser.parse(Configs.STATIC_PATH.getRequired());
 	}
 
-	public Completable runAsync() {
-		return refDataUtil
+	@Override
+	public void run() {
+		VirtualThreads.checkThread();
+		refDataUtil
 				.loadLatestRefData()
 				.flatMapPublisher(this::buildSearch)
 				.compose(cleanEntries())
 				// .sorted(Ordering.natural().onResultOf(SearchJsonEntry::getText))
 				.compose(writeToFile())
-				.flatMapCompletable(this::uploadFile);
+				.flatMapCompletable(this::uploadFile)
+				.blockingAwait();
 	}
 
 	private Flowable<SearchJsonEntry> buildSearch(LoadedRefData loadedRefData) {

@@ -192,12 +192,14 @@ public class ImportTestResources implements Command {
 			var sdeFile = mockScrapeBuilder.createTestSde();
 			var esiFile = mockScrapeBuilder.createTestEsiDump();
 			var hoboleaksFile = mockScrapeBuilder.createTestHoboleaksSde();
-			return buildRefData
-					.setSdeFile(sdeFile)
-					.setEsiFile(esiFile)
-					.setHoboleaksFile(hoboleaksFile)
-					.setStopAtUpload(true)
-					.runAsync()
+			return Completable.fromAction(() -> {
+						buildRefData
+								.setSdeFile(sdeFile)
+								.setEsiFile(esiFile)
+								.setHoboleaksFile(hoboleaksFile)
+								.setStopAtUpload(true)
+								.run();
+					})
 					.andThen(Completable.defer(() -> {
 						var storeHandler = buildRefData.getStoreHandler();
 						return Completable.concatArray(

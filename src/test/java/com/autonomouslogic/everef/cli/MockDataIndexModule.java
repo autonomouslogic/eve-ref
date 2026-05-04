@@ -1,11 +1,10 @@
 package com.autonomouslogic.everef.cli;
 
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.doNothing;
 
 import dagger.MembersInjector;
 import dagger.Module;
 import dagger.Provides;
-import io.reactivex.rxjava3.core.Completable;
 import javax.inject.Singleton;
 import lombok.Setter;
 import org.mockito.Mockito;
@@ -29,7 +28,7 @@ public class MockDataIndexModule {
 		}
 		if (defaultMock) {
 			var mock = Mockito.mock(DataIndex.class);
-			when(mock.runAsync()).thenReturn(Completable.complete());
+			doNothing().when(mock).run();
 			return mock;
 		}
 		// Fall back to the real thing.

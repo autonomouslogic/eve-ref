@@ -2,6 +2,7 @@ package com.autonomouslogic.everef.util;
 
 import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -10,7 +11,6 @@ import com.autonomouslogic.everef.url.S3Url;
 import dagger.Component;
 import dagger.Module;
 import dagger.Provides;
-import io.reactivex.rxjava3.core.Completable;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.SneakyThrows;
@@ -27,7 +27,7 @@ public class DataIndexHelperTest {
 			var obj = mock(DataIndex.class);
 			when(obj.setRecursive(anyBoolean())).thenReturn(obj);
 			when(obj.setPrefix(anyString())).thenReturn(obj);
-			when(obj.runAsync()).thenReturn(Completable.complete().subscribeOn(VirtualThreads.SCHEDULER));
+			doNothing().when(obj).run();
 			return obj;
 		}
 	}
@@ -68,23 +68,23 @@ public class DataIndexHelperTest {
 
 		inOrder.verify(dataIndex).setPrefix("market-orders/");
 		inOrder.verify(dataIndex).setRecursive(false);
-		inOrder.verify(dataIndex).runAsync();
+		inOrder.verify(dataIndex).run();
 
 		inOrder.verify(dataIndex).setPrefix("");
 		inOrder.verify(dataIndex).setRecursive(false);
-		inOrder.verify(dataIndex).runAsync();
+		inOrder.verify(dataIndex).run();
 
 		inOrder.verify(dataIndex).setPrefix("market-orders/history/2023/2023-09-11/");
 		inOrder.verify(dataIndex).setRecursive(false);
-		inOrder.verify(dataIndex).runAsync();
+		inOrder.verify(dataIndex).run();
 
 		inOrder.verify(dataIndex).setPrefix("market-orders/history/2023/");
 		inOrder.verify(dataIndex).setRecursive(false);
-		inOrder.verify(dataIndex).runAsync();
+		inOrder.verify(dataIndex).run();
 
 		inOrder.verify(dataIndex).setPrefix("market-orders/history/");
 		inOrder.verify(dataIndex).setRecursive(false);
-		inOrder.verify(dataIndex).runAsync();
+		inOrder.verify(dataIndex).run();
 
 		inOrder.verifyNoMoreInteractions();
 	}

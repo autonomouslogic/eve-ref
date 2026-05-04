@@ -188,24 +188,27 @@ public class ScrapeStructures implements Command {
 		sovereigntyStructureSource.setStructureStore(structureStore);
 	}
 
-	public Completable runAsync() {
-		return Completable.concatArray(
-				initLogin(),
-				initScrapeTime(),
-				initMvStore(),
-				initMarketStructures(),
-				loadPreviousScrape(),
-				clearOldStructures(),
-				prepareStructureIds()
-						.flatMapCompletable(
-								id -> Completable.concatArray(
-										fetchStructure(id),
-										fetchMarket(id),
-										Completable.fromAction(() -> progressReporter.increment())),
-								false,
-								1),
-				populateLocations(),
-				buildOutput().flatMapCompletable(this::uploadFiles));
+	@Override
+	public void run() {
+		VirtualThreads.checkThread();
+		Completable.concatArray(
+						initLogin(),
+						initScrapeTime(),
+						initMvStore(),
+						initMarketStructures(),
+						loadPreviousScrape(),
+						clearOldStructures(),
+						prepareStructureIds()
+								.flatMapCompletable(
+										id -> Completable.concatArray(
+												fetchStructure(id),
+												fetchMarket(id),
+												Completable.fromAction(() -> progressReporter.increment())),
+										false,
+										1),
+						populateLocations(),
+						buildOutput().flatMapCompletable(this::uploadFiles))
+				.blockingAwait();
 	}
 
 	private Completable initLogin() {

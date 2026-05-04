@@ -12,6 +12,7 @@ import com.autonomouslogic.everef.openapi.esi.api.WalletApi;
 import com.autonomouslogic.everef.openapi.esi.invoker.ApiClient;
 import dagger.Module;
 import dagger.Provides;
+import java.time.Duration;
 import javax.inject.Singleton;
 
 @Module
@@ -25,6 +26,8 @@ public class EsiModule {
 		}
 		var api = new ApiClient();
 		api.updateBaseUri(base);
+		api.setConnectTimeout(Duration.ofSeconds(5));
+		api.setReadTimeout(Duration.ofSeconds(60));
 		return api;
 	}
 

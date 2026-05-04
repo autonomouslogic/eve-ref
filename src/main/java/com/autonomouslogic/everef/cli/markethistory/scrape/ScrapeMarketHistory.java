@@ -19,12 +19,15 @@ import com.autonomouslogic.everef.util.DataIndexHelper;
 import com.autonomouslogic.everef.util.ProgressReporter;
 import com.autonomouslogic.everef.util.Rx;
 import com.autonomouslogic.everef.util.TempFiles;
+import com.autonomouslogic.everef.util.VirtualThreads;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Maybe;
+import io.sentry.Sentry;
+import io.sentry.SentryLevel;
 import java.io.FileOutputStream;
 import java.net.URI;
 import java.time.Duration;
@@ -155,6 +158,7 @@ public class ScrapeMarketHistory implements Command {
 	@SneakyThrows
 	@Override
 	public void run() {
+		VirtualThreads.checkThread();
 		Completable.fromAction(() -> {
 					marketHistoryFetcher.setStats(stats);
 					try {
@@ -172,7 +176,9 @@ public class ScrapeMarketHistory implements Command {
 					}
 				})
 				.retry(1, e -> {
-					log.warn("Error scraping market history, retrying from the beginning", e);
+					var msg = "Error scraping market history, retrying from the beginning";
+					log.warn(msg, e);
+					Sentry.captureException(new RuntimeException(msg, e), scope -> scope.setLevel(SentryLevel.WARNING));
 					return true;
 				})
 				.blockingAwait();
