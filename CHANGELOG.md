@@ -1,5 +1,20 @@
 EVE Ref Changelog
 
+## [2.75.4](https://github.com/autonomouslogic/eve-ref/compare/2.75.3...2.75.4) (2026-05-04)
+
+
+### Bug Fixes
+
+* Configured timeouts for ESI client ([ad1b7d6](https://github.com/autonomouslogic/eve-ref/commit/ad1b7d6f9fa61c1ef0f91ada8b9449246ba29499))
+* Increased read timeout on ESI ([4cb6864](https://github.com/autonomouslogic/eve-ref/commit/4cb686480eb0af9c0059a34d5b732a46f2e3807e))
+* Periodic health check on API ([#1048](https://github.com/autonomouslogic/eve-ref/issues/1048)) ([83ac20b](https://github.com/autonomouslogic/eve-ref/commit/83ac20b6ecfd574c04a712570119d063773df259))
+* Removed RxJava from HealthcheckDecorator ([4ceaa31](https://github.com/autonomouslogic/eve-ref/commit/4ceaa3187771165e120ebba21419b3922b3e69ba))
+
+
+### Dependency Updates
+
+* **deps:** update plugin org.flywaydb.flyway to v12.5.0 ([#1045](https://github.com/autonomouslogic/eve-ref/issues/1045)) ([65ad97e](https://github.com/autonomouslogic/eve-ref/commit/65ad97e43f435d4b3df535f0f83c9e89082046e9))
+
 ## [2.75.3](https://github.com/autonomouslogic/eve-ref/compare/2.75.2...2.75.3) (2026-05-03)
 
 
