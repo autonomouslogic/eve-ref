@@ -4,7 +4,6 @@ import com.autonomouslogic.everef.cli.Command;
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.util.VirtualThreads;
 import dagger.Lazy;
-import io.reactivex.rxjava3.core.Completable;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 import javax.inject.Inject;
@@ -50,25 +49,28 @@ public class HealthcheckDecorator {
 		return finishUrl.isPresent() || startUrl.isPresent() || failUrl.isPresent() || logUrl.isPresent();
 	}
 
-	private Completable ping(@NonNull Optional<String> url) {
-		return ping(url, Optional.empty());
+	private void ping(@NonNull Optional<String> url) {
+		ping(url, Optional.empty());
 	}
 
-	private Completable ping(@NonNull Optional<String> url, @NonNull Optional<String> body) {
+	private void ping(@NonNull Optional<String> url, @NonNull Optional<String> body) {
 		if (url.isEmpty()) {
-			return Completable.complete();
+			return;
 		}
-		return Completable.fromAction(() -> {
-					VirtualThreads.run(() -> executeCall(url.get(), body));
-				})
-				.retry(2, e -> {
+		int maxRetries = 2;
+		Exception lastException = null;
+		for (int attempt = 0; attempt <= maxRetries; attempt++) {
+			try {
+				executeCall(url.get(), body);
+				return;
+			} catch (Exception e) {
+				lastException = e;
+				if (attempt < maxRetries) {
 					log.warn(String.format("Healthcheck \"%s\" retrying: %s", url.get(), ExceptionUtils.getMessage(e)));
-					return true;
-				})
-				.onErrorResumeNext(e -> {
-					log.warn(String.format("Healthcheck \"%s\" failed", url.get()), e);
-					return Completable.complete();
-				});
+				}
+			}
+		}
+		log.warn(String.format("Healthcheck \"%s\" failed", url.get()), lastException);
 	}
 
 	@SneakyThrows
@@ -96,11 +98,15 @@ public class HealthcheckDecorator {
 		@Override
 		public void run() {
 			VirtualThreads.checkThread();
-			Completable.concatArray(ping(startUrl), Completable.fromAction(delegate::run), ping(finishUrl))
-					.onErrorResumeNext(e -> Completable.concatArray(
-									ping(logUrl, Optional.of(ExceptionUtils.getStackTrace(e))), ping(failUrl))
-							.andThen(Completable.error(e)))
-					.blockingAwait();
+			ping(startUrl);
+			try {
+				delegate.run();
+				ping(finishUrl);
+			} catch (Exception e) {
+				ping(logUrl, Optional.of(ExceptionUtils.getStackTrace(e)));
+				ping(failUrl);
+				throw e;
+			}
 		}
 
 		public String getName() {
