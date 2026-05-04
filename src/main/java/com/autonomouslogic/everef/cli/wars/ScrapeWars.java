@@ -182,8 +182,6 @@ public class ScrapeWars implements Command {
 			killmailFetcher.fetchKillmailDetail(warId, killmailId, hash);
 		} catch (KillmailNotFoundException e) {
 			log.debug("Killmail {} not found, skipping", killmailId);
-		} catch (KillmailHashCorrectionFailedException e) {
-			log.warn("Failed to correct hash for killmail {}, skipping", killmailId);
 		}
 	}
 

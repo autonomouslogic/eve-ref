@@ -10,6 +10,8 @@ import com.autonomouslogic.everef.util.VirtualThreads;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import io.sentry.Sentry;
+import io.sentry.SentryLevel;
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.List;
@@ -23,7 +25,7 @@ import javax.inject.Named;
 import lombok.extern.log4j.Log4j2;
 
 /**
- * Fetches killmail details from ESI with hash correction via Zkillboard fallback.
+ * Fetches killmail details from ESI.
  */
 @Log4j2
 public class KillmailFetcher {
@@ -49,9 +51,6 @@ public class KillmailFetcher {
 
 	@Inject
 	protected ObjectMapper objectMapper;
-
-	@Inject
-	protected ZkillboardHashCorrector zkillboardHashCorrector;
 
 	private Map<Long, JsonNode> killmailsCache = new ConcurrentHashMap<>();
 
@@ -115,14 +114,14 @@ public class KillmailFetcher {
 	 * Fetches and caches a killmail detail.
 	 *
 	 * @throws KillmailNotFoundException if killmail doesn't exist (404)
-	 * @throws KillmailHashCorrectionFailedException if hash is invalid and can't be corrected
-	 * @throws ApiException for other ESI errors
 	 */
 	public void fetchKillmailDetail(long warId, long killmailId, String hash) throws ApiException {
 		// Only fetch if not already cached
 		if (!killmailsCache.containsKey(killmailId)) {
 			var killmail = fetchKillmailWithRetry(warId, killmailId, hash);
-			killmailsCache.put(killmailId, killmail);
+			if (killmail != null) {
+				killmailsCache.put(killmailId, killmail);
+			}
 		}
 	}
 
@@ -143,17 +142,11 @@ public class KillmailFetcher {
 							}
 
 							if (code == 422) {
-								// Try to correct the hash via Zkillboard
-								var corrected = zkillboardHashCorrector.correctHash(killmailId, hash);
-								if (corrected.isPresent()) {
-									var correctedHash = corrected.get();
-									log.debug("Retrying killmail {} with corrected hash", killmailId);
-									// Recursively call to get retry logic for corrected hash
-									return fetchKillmailWithRetry(warId, killmailId, correctedHash);
-								} else {
-									log.debug("Could not correct hash for killmail {}", killmailId);
-									throw new KillmailHashCorrectionFailedException(killmailId, hash);
-								}
+								var msg = "Killmail " + killmailId + " has invalid hash, unable to fetch";
+								log.warn(msg);
+								Sentry.captureException(
+										new RuntimeException(msg), scope -> scope.setLevel(SentryLevel.WARNING));
+								return null;
 							}
 
 							if (code != 200) {
@@ -174,7 +167,7 @@ public class KillmailFetcher {
 							log.debug("Fetched killmail {} for war {}", killmailId, warId);
 							return kmNode;
 						}
-					} catch (KillmailNotFoundException | KillmailHashCorrectionFailedException e) {
+					} catch (KillmailNotFoundException e) {
 						throw e;
 					} catch (Exception e) {
 						throw new RuntimeException(e);
