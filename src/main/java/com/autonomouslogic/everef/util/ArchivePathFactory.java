@@ -268,9 +268,12 @@ public class ArchivePathFactory {
 			.latestSuffix(".json")
 			.build();
 
-	// Wars (1)
-	public static final ArchivePathFactory WARS =
-			builder().folder("wars").filename("wars").suffix(".tar.bz2").build();
+	public static final ArchivePathFactory WARS = builder()
+			.folder("wars")
+			.filename("wars")
+			.suffix(".tar.bz2")
+			.dateFolder(false)
+			.build();
 
 	@NonNull
 	String folder;
