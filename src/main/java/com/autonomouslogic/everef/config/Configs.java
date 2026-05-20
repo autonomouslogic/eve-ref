@@ -811,6 +811,15 @@ public class Configs {
 			.build();
 
 	/**
+	 * Base URL for CCP's Monthly Economic Reports (MER)
+	 */
+	public static final Config<URI> MER_BASE_URL = Config.<URI>builder()
+			.name("MER_BASE_URL")
+			.type(URI.class)
+			.defaultValue(URI.create("https://web.ccpgamescdn.com/aws/community/"))
+			.build();
+
+	/**
 	 * Rate limit to apply for Fuzzwork requests.
 	 */
 	public static final Config<Double> FUZZWORK_RATE_LIMIT_PER_S = Config.<Double>builder()

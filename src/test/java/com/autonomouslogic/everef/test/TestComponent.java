@@ -6,6 +6,7 @@ import com.autonomouslogic.everef.cli.DataIndexTest;
 import com.autonomouslogic.everef.cli.FetchDonationsTest;
 import com.autonomouslogic.everef.cli.MockDataIndexModule;
 import com.autonomouslogic.everef.cli.ScrapeFreelanceJobsTest;
+import com.autonomouslogic.everef.cli.SyncMerTest;
 import com.autonomouslogic.everef.cli.decorator.HealthcheckDecoratorTest;
 import com.autonomouslogic.everef.cli.decorator.SlackDecoratorTest;
 import com.autonomouslogic.everef.cli.flyway.FlywayMigrateTest;
@@ -118,6 +119,8 @@ public interface TestComponent {
 	void inject(RefDataUtilTest test);
 
 	void inject(ScrapeFreelanceJobsTest test);
+
+	void inject(SyncMerTest test);
 
 	void inject(ScrapeMarketHistoryTest test);
 
