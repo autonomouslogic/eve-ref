@@ -1,5 +1,12 @@
 EVE Ref Changelog
 
+## [2.76.0](https://github.com/autonomouslogic/eve-ref/compare/2.75.5...2.76.0) (2026-05-20)
+
+
+### Features
+
+* Sync job for MER exports ([#1051](https://github.com/autonomouslogic/eve-ref/issues/1051)) ([a1fecdc](https://github.com/autonomouslogic/eve-ref/commit/a1fecdc0f88de1c66da54bc44f9301b358b28420))
+
 ## [2.75.5](https://github.com/autonomouslogic/eve-ref/compare/2.75.4...2.75.5) (2026-05-05)
 
 
