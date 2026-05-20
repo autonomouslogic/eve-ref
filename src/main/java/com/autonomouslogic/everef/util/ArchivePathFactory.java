@@ -268,6 +268,18 @@ public class ArchivePathFactory {
 			.latestSuffix(".json")
 			.build();
 
+	public static final ArchivePathFactory MER = ArchivePathFactory.builder()
+			.folder("ccp/mer")
+			.filename("EVEOnline_MER")
+			.historyFolder(false)
+			.yearFolder(true)
+			.dateFolder(false)
+			.fileDateTimeFormatter(
+					new DateTimeFormatterBuilder().appendPattern("yyyyMM").toFormatter())
+			.dateFormatterSeparator("_")
+			.suffix(".zip")
+			.build();
+
 	@NonNull
 	String folder;
 
@@ -290,6 +302,9 @@ public class ArchivePathFactory {
 
 	@lombok.Builder.Default
 	DateTimeFormatter fileDateTimeFormatter = TIMESTAMP_PATTERN;
+
+	@lombok.Builder.Default
+	String dateFormatterSeparator = "-";
 
 	public String createLatestPath() {
 		return join(List.of(
@@ -325,6 +340,13 @@ public class ArchivePathFactory {
 						.atStartOfDay(ZoneOffset.UTC)
 						.toInstant();
 			}
+			if (parsed.isSupported(ChronoField.YEAR)
+					&& parsed.isSupported(ChronoField.MONTH_OF_YEAR)
+					&& !parsed.isSupported(ChronoField.DAY_OF_MONTH)) {
+				return LocalDate.of(parsed.get(ChronoField.YEAR), parsed.get(ChronoField.MONTH_OF_YEAR), 1)
+						.atStartOfDay(ZoneOffset.UTC)
+						.toInstant();
+			}
 			return LocalDate.from(parsed).atStartOfDay(ZoneOffset.UTC).toInstant();
 		} catch (DateTimeParseException e) {
 			return null;
@@ -345,7 +367,7 @@ public class ArchivePathFactory {
 		}
 		builder.appendLiteral("/").appendLiteral(filename);
 		if (fileDateTimeFormatter != null) {
-			builder.appendLiteral("-").append(fileDateTimeFormatter);
+			builder.appendLiteral(dateFormatterSeparator).append(fileDateTimeFormatter);
 		}
 		builder.appendLiteral(suffix);
 		return builder.toFormatter().withZone(ZoneOffset.UTC);

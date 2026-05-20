@@ -89,6 +89,9 @@ public class CommandRunner {
 	protected Provider<SyncStaticData> updateStaticDataProvider;
 
 	@Inject
+	protected Provider<SyncMer> syncMerProvider;
+
+	@Inject
 	protected Provider<ScrapeFreelanceJobs> scrapeFreelanceJobsProvider;
 
 	@Inject
@@ -197,6 +200,8 @@ public class CommandRunner {
 				return generateKeyPairProvider.get();
 			case "sync-static-data":
 				return updateStaticDataProvider.get();
+			case "sync-mer":
+				return syncMerProvider.get();
 			case "scrape-freelance-jobs":
 				return scrapeFreelanceJobsProvider.get();
 			case "scrape-sovereignty":

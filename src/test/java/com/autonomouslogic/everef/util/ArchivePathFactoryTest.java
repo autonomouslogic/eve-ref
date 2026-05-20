@@ -112,6 +112,12 @@ public class ArchivePathFactoryTest {
 				"structures/structures-latest.v2.json");
 	}
 
+	@Test
+	void shouldGenerateMer() {
+		var factory = ArchivePathFactory.MER;
+		testExpectedPaths(factory, LocalDate.parse("2026-05-01"), "ccp/mer/2026/EVEOnline_MER_202605.zip");
+	}
+
 	private static void testExpectedPaths(
 			ArchivePathFactory factory, Instant timestamp, String expectedTimePath, String expectedLatestPath) {
 		assertEquals(expectedLatestPath, factory.createLatestPath());
