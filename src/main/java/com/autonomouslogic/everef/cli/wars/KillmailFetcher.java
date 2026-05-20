@@ -160,9 +160,11 @@ public class KillmailFetcher {
 
 							var kmNode = objectMapper.readTree(body.string());
 
-							// Add war_id and hash to the killmail
 							((ObjectNode) kmNode).put("war_id", warId);
 							((ObjectNode) kmNode).put("killmail_hash", hash);
+
+							okHttpWrapper.getLastModified(response).ifPresent(date -> ((ObjectNode) kmNode)
+									.put("http_last_modified", date.toInstant().toString()));
 
 							log.debug("Fetched killmail {} for war {}", killmailId, warId);
 							return kmNode;

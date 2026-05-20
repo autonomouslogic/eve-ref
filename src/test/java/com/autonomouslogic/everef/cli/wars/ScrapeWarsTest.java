@@ -9,8 +9,9 @@ import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.test.MockS3Adapter;
 import com.autonomouslogic.everef.test.TestDataUtil;
 import com.autonomouslogic.everef.url.UrlParser;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.time.ZoneOffset;
+import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -78,14 +79,28 @@ public class ScrapeWarsTest {
 		server.setDispatcher(dispatcher);
 		server.start(TestDataUtil.TEST_PORT);
 
-		// Initialize scrape time for consistent test behavior
-		scrapeWars.setScrapeTime(ZonedDateTime.of(2026, 5, 20, 12, 0, 0, 0, ZoneOffset.UTC));
+		scrapeWars.setScrapeTime(ZonedDateTime.parse("2026-05-20T12:00:00Z"));
 	}
 
 	@AfterEach
 	@SneakyThrows
 	void teardown() {
 		server.close();
+	}
+
+	@Test
+	@SneakyThrows
+	void shouldFetchWars() {
+		dispatcher.addWar(1000L, "2026-01-01T00:00:00Z", null);
+
+		scrapeWars.run();
+
+		var root = getWarsCurrent();
+		assertEquals(1, root.size());
+		assertTrue(root.has("1000"));
+		var war = root.get("1000");
+		assertEquals("2026-01-01T00:00:00Z", war.get("declared").asText());
+		assertEquals("2026-05-20T12:00:00Z", war.get("http_last_modified").asText());
 	}
 
 	@Test
@@ -98,10 +113,7 @@ public class ScrapeWarsTest {
 
 		scrapeWars.run();
 
-		var warsCurrentJson = mockS3Adapter.getTestObject(DATA_BUCKET, "wars/wars-current.json", dataClient);
-		assertTrue(warsCurrentJson.isPresent());
-
-		var root = objectMapper.readTree(warsCurrentJson.get());
+		var root = getWarsCurrent();
 		assertTrue(root.has("1000"));
 		assertTrue(root.has("1001"));
 
@@ -148,20 +160,6 @@ public class ScrapeWarsTest {
 		var root = objectMapper.readTree(warsCurrentJson.get());
 
 		assertTrue(root.has("999"));
-		assertTrue(root.has("1000"));
-	}
-
-	@Test
-	@SneakyThrows
-	void shouldHandleNoKillmails() {
-		dispatcher.addWar(1000L, "2026-01-01T00:00:00Z", null);
-
-		scrapeWars.run();
-
-		var warsCurrentJson = mockS3Adapter.getTestObject(DATA_BUCKET, "wars/wars-current.json", dataClient);
-		assertTrue(warsCurrentJson.isPresent());
-
-		var root = objectMapper.readTree(warsCurrentJson.get());
 		assertTrue(root.has("1000"));
 	}
 
@@ -284,7 +282,7 @@ public class ScrapeWarsTest {
 
 					return new MockResponse()
 							.addHeader("Content-Type", "application/json")
-							.addHeader("Last-Modified", "Tue, 20 May 2026 12:00:00 GMT")
+							.addHeader("Last-Modified", "Wed, 20 May 2026 12:00:00 GMT")
 							.setBody(objectMapper.writeValueAsString(war));
 				}
 
@@ -341,7 +339,7 @@ public class ScrapeWarsTest {
 
 					return new MockResponse()
 							.addHeader("Content-Type", "application/json")
-							.addHeader("Last-Modified", "Tue, 20 May 2026 11:00:00 GMT")
+							.addHeader("Last-Modified", "Wed, 20 May 2026 11:00:00 GMT")
 							.setBody(objectMapper.writeValueAsString(killmail));
 				}
 
@@ -371,5 +369,13 @@ public class ScrapeWarsTest {
 				this.hash = hash;
 			}
 		}
+	}
+
+	private JsonNode getWarsCurrent() throws IOException {
+		var warsCurrentJson = mockS3Adapter.getTestObject(DATA_BUCKET, "wars/wars-current.json", dataClient);
+		assertTrue(warsCurrentJson.isPresent());
+
+		var root = objectMapper.readTree(warsCurrentJson.get());
+		return root;
 	}
 }
