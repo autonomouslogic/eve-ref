@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.regex.Pattern;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.SneakyThrows;
@@ -32,7 +31,6 @@ import software.amazon.awssdk.services.s3.S3AsyncClient;
  */
 @Log4j2
 public class SyncMer implements Command {
-	private static final Pattern MER_FILENAME_PATTERN = Pattern.compile("EVEOnline_MER_(\\d{4})(\\d{2})\\.zip");
 	private static final YearMonth MER_FIRST_MONTH = YearMonth.of(2025, 8);
 
 	@Inject
@@ -99,13 +97,10 @@ public class SyncMer implements Command {
 
 		for (var object : objects) {
 			var path = object.getUrl().getPath();
-			var filename = path.substring(path.lastIndexOf('/') + 1);
-
-			var matcher = MER_FILENAME_PATTERN.matcher(filename);
-			if (matcher.matches()) {
-				var year = Integer.parseInt(matcher.group(1));
-				var month = Integer.parseInt(matcher.group(2));
-				existing.add(YearMonth.of(year, month));
+			var instant = MER.parseArchiveTime(path);
+			if (instant != null) {
+				var yearMonth = YearMonth.from(instant.atZone(ZoneOffset.UTC));
+				existing.add(yearMonth);
 			}
 		}
 
