@@ -72,6 +72,22 @@ public class SyncMerTest {
 
 	@Test
 	@SneakyThrows
+	void shouldDownloadInitialMerFiles() {
+		availableMerFiles.put("202512", "content-202501".getBytes());
+		availableMerFiles.put("202601", "content-202601".getBytes());
+
+		syncMer.run();
+
+		var uploaded202512 =
+				mockS3Adapter.getTestObject(BUCKET_NAME, "base/ccp/mer/2026/EVEOnline_MER_202512.zip", dataClient);
+		var uploaded202601 =
+				mockS3Adapter.getTestObject(BUCKET_NAME, "base/ccp/mer/2026/EVEOnline_MER_202601.zip", dataClient);
+		assertEquals("content-202512", new String(uploaded202512.orElseThrow()));
+		assertEquals("content-202601", new String(uploaded202601.orElseThrow()));
+	}
+
+	@Test
+	@SneakyThrows
 	void shouldDownloadMissingMerFiles() {
 		mockS3Adapter.putTestObject(
 				BUCKET_NAME, "base/ccp/mer/2026/EVEOnline_MER_202604.zip", "existing-202604".getBytes(), dataClient);

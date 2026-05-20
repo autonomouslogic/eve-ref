@@ -3,7 +3,6 @@ package com.autonomouslogic.everef.util;
 import com.autonomouslogic.everef.config.Configs;
 import java.time.Instant;
 import java.time.LocalDate;
-import java.time.YearMonth;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -276,15 +275,10 @@ public class ArchivePathFactory {
 			.yearFolder(true)
 			.dateFolder(false)
 			.fileDateTimeFormatter(
-					new DateTimeFormatterBuilder().appendPattern("yyyymm").toFormatter())
+					new DateTimeFormatterBuilder().appendPattern("yyyyMM").toFormatter())
+			.dateFormatterSeparator("_")
 			.suffix(".zip")
 			.build();
-
-	public String createArchivePathMer(YearMonth month) {
-		var year = month.getYear();
-		var yearMonth = String.format("%04d%02d", year, month.getMonthValue());
-		return String.format("%s/%04d/EVEOnline_MER_%s.zip", folder, year, yearMonth);
-	}
 
 	@NonNull
 	String folder;
@@ -308,6 +302,9 @@ public class ArchivePathFactory {
 
 	@lombok.Builder.Default
 	DateTimeFormatter fileDateTimeFormatter = TIMESTAMP_PATTERN;
+
+	@lombok.Builder.Default
+	String dateFormatterSeparator = "-";
 
 	public String createLatestPath() {
 		return join(List.of(
@@ -343,6 +340,13 @@ public class ArchivePathFactory {
 						.atStartOfDay(ZoneOffset.UTC)
 						.toInstant();
 			}
+			if (parsed.isSupported(ChronoField.YEAR)
+					&& parsed.isSupported(ChronoField.MONTH_OF_YEAR)
+					&& !parsed.isSupported(ChronoField.DAY_OF_MONTH)) {
+				return LocalDate.of(parsed.get(ChronoField.YEAR), parsed.get(ChronoField.MONTH_OF_YEAR), 1)
+						.atStartOfDay(ZoneOffset.UTC)
+						.toInstant();
+			}
 			return LocalDate.from(parsed).atStartOfDay(ZoneOffset.UTC).toInstant();
 		} catch (DateTimeParseException e) {
 			return null;
@@ -363,7 +367,7 @@ public class ArchivePathFactory {
 		}
 		builder.appendLiteral("/").appendLiteral(filename);
 		if (fileDateTimeFormatter != null) {
-			builder.appendLiteral("-").append(fileDateTimeFormatter);
+			builder.appendLiteral(dateFormatterSeparator).append(fileDateTimeFormatter);
 		}
 		builder.appendLiteral(suffix);
 		return builder.toFormatter().withZone(ZoneOffset.UTC);

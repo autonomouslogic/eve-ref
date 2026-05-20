@@ -78,7 +78,7 @@ public class SyncMer implements Command {
 		log.info("Found {} existing MER files", existingFiles.size());
 
 		var monthsToCheck = determineMonthsToCheck(existingFiles);
-		log.info("Checking {} months for new MER files", monthsToCheck.size());
+		log.info("Checking {} months for new MER files: {}", monthsToCheck.size(), monthsToCheck);
 
 		var uploadedPaths = new ArrayList<S3Url>();
 		for (var month : monthsToCheck) {
@@ -150,7 +150,9 @@ public class SyncMer implements Command {
 			var discordMsg = String.format("New MER file synced: [%s](%s)", filename, httpUrl);
 			discordNotifier.notifyDiscord(discordMsg);
 		} catch (Exception e) {
-			log.warn("Error syncing MER {}", month, e);
+			log.warn("Error syncing MER for month {}", month, e);
+		} finally {
+			file.delete();
 		}
 	}
 
@@ -169,7 +171,7 @@ public class SyncMer implements Command {
 
 	@SneakyThrows
 	private S3Url uploadMerFile(File file, YearMonth month) {
-		var merPath = MER.createArchivePathMer(month);
+		var merPath = MER.createArchivePath(month.atDay(1).atStartOfDay(ZoneOffset.UTC));
 		var archivePath = dataPath.resolve(merPath);
 
 		var putRequest = s3Util.putPublicObjectRequest(file.length(), archivePath, archiveCacheTime);
