@@ -1,5 +1,6 @@
 package com.autonomouslogic.everef.cli.wars;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -11,12 +12,16 @@ import com.autonomouslogic.everef.test.TestDataUtil;
 import com.autonomouslogic.everef.url.UrlParser;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.SneakyThrows;
@@ -25,6 +30,8 @@ import okhttp3.mockwebserver.Dispatcher;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
+import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
+import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
 import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.AfterEach;
@@ -102,6 +109,10 @@ public class ScrapeWarsTest {
 		var war = root.get("1000");
 		assertEquals("2026-01-01T00:00:00Z", war.get("declared").asText());
 		assertEquals("2026-05-20T12:00:00Z", war.get("http_last_modified").asText());
+
+		var archive = getAndVerifyArchiveUpload();
+
+
 
 		var putKeys = mockS3Adapter.getAllPutKeys(DATA_BUCKET, dataClient);
 		assertTrue(
@@ -386,12 +397,12 @@ public class ScrapeWarsTest {
 	}
 
 	private byte[] extractArchiveContent(byte[] compressedData, String filenameMatcher) throws Exception {
-		try (var bz2In = new BZip2CompressorInputStream(new java.io.ByteArrayInputStream(compressedData));
-				var tarIn = new org.apache.commons.compress.archivers.tar.TarArchiveInputStream(bz2In)) {
+		try (var bz2In = new BZip2CompressorInputStream(new ByteArrayInputStream(compressedData));
+				var tarIn = new TarArchiveInputStream(bz2In)) {
 
-			org.apache.commons.compress.archivers.tar.TarArchiveEntry entry;
+			TarArchiveEntry entry;
 			var filesInArchive = new java.util.ArrayList<String>();
-			while ((entry = (org.apache.commons.compress.archivers.tar.TarArchiveEntry) tarIn.getNextEntry()) != null) {
+			while ((entry = (TarArchiveEntry) tarIn.getNextEntry()) != null) {
 				var name = entry.getName();
 				filesInArchive.add(name);
 				if (name.contains(filenameMatcher)) {
@@ -411,14 +422,25 @@ public class ScrapeWarsTest {
 	}
 
 	private byte[] getAndVerifyArchiveUpload() {
-		var putKeys = mockS3Adapter.getAllPutKeys(DATA_BUCKET, dataClient);
-		var archiveKey = putKeys.stream()
-				.filter(key -> key.matches(".*wars-\\d{4}-\\d{2}-\\d{2}_\\d{2}-\\d{2}-\\d{2}\\.tar\\.bz2"))
-				.findFirst()
-				.orElseThrow(() -> new AssertionError("No wars archive file uploaded"));
+		var latestData = mockS3Adapter.getTestObject(DATA_BUCKET, "wars/wars-latest.tar.bz2", dataClient);
+		var archiveData = mockS3Adapter.getTestObject(DATA_BUCKET, "wars/history/2026/wars-2026-05-20_12-00-00.tar.bz2", dataClient);
+		assertTrue(latestData.isPresent());
+		assertTrue(archiveData.isPresent());
+		assertArrayEquals(archiveData.get(), latestData.get());
 
-		var archiveData = mockS3Adapter.getTestObject(DATA_BUCKET, archiveKey, dataClient);
-		assertTrue(archiveData.isPresent(), "Archive file not found in S3: " + archiveKey);
-		return archiveData.get();
+		return extractArchive(latestData.get());
+	}
+
+	@SneakyThrows
+	private byte[] extractArchive(byte[] compressed) {
+		try (var in = new TarArchiveInputStream(new BZip2CompressorInputStream(new ByteArrayInputStream(compressed)))) {
+			TarArchiveEntry entry;
+			while ((entry = in.getNextEntry()) != null) {
+				var file = entry.getFile();
+				var json = objectMapper.readTree(in);
+				System.out.println(file + ": " + json);
+			}
+		}
+		return null;
 	}
 }
