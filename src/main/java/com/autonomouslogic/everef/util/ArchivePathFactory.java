@@ -3,6 +3,7 @@ package com.autonomouslogic.everef.util;
 import com.autonomouslogic.everef.config.Configs;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -267,6 +268,22 @@ public class ArchivePathFactory {
 			.suffix(".json.bz2")
 			.latestSuffix(".json")
 			.build();
+
+	public static final ArchivePathFactory MER = ArchivePathFactory.builder()
+			.folder("ccp/mer")
+			.filename("EVEOnline_MER")
+			.historyFolder(false)
+			.yearFolder(true)
+			.dateFolder(false)
+			.fileDateTimeFormatter(null) // We'll handle date formatting manually
+			.suffix(".zip")
+			.build();
+
+	public String createArchivePathMer(YearMonth month) {
+		var year = month.getYear();
+		var yearMonth = String.format("%04d%02d", year, month.getMonthValue());
+		return String.format("%s/%04d/EVEOnline_MER_%s.zip", folder, year, yearMonth);
+	}
 
 	@NonNull
 	String folder;

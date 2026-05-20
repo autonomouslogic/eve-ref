@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.time.ZoneOffset;
 import org.junit.jupiter.api.Test;
 
@@ -110,6 +111,13 @@ public class ArchivePathFactoryTest {
 				Instant.parse("2023-03-15T01:02:03Z"),
 				"structures/history/2023/2023-03-15/structures-2023-03-15_01-02-03.v2.json.bz2",
 				"structures/structures-latest.v2.json");
+	}
+
+	@Test
+	void shouldGenerateMerNames() {
+		var factory = ArchivePathFactory.MER;
+		var merPath = factory.createArchivePathMer(YearMonth.of(2026, 5));
+		assertEquals("ccp/mer/2026/EVEOnline_MER_202605.zip", merPath);
 	}
 
 	private static void testExpectedPaths(
