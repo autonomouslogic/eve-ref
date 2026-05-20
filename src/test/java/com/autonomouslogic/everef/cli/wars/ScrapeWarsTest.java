@@ -25,6 +25,7 @@ import okhttp3.mockwebserver.Dispatcher;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
+import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -101,6 +102,11 @@ public class ScrapeWarsTest {
 		var war = root.get("1000");
 		assertEquals("2026-01-01T00:00:00Z", war.get("declared").asText());
 		assertEquals("2026-05-20T12:00:00Z", war.get("http_last_modified").asText());
+
+		var putKeys = mockS3Adapter.getAllPutKeys(DATA_BUCKET, dataClient);
+		assertTrue(
+				putKeys.stream().anyMatch(k -> k.contains(".tar.bz2")),
+				"Expected tar.bz2 archive to be uploaded. Keys: " + putKeys);
 	}
 
 	@Test
@@ -377,5 +383,42 @@ public class ScrapeWarsTest {
 
 		var root = objectMapper.readTree(warsCurrentJson.get());
 		return root;
+	}
+
+	private byte[] extractArchiveContent(byte[] compressedData, String filenameMatcher) throws Exception {
+		try (var bz2In = new BZip2CompressorInputStream(new java.io.ByteArrayInputStream(compressedData));
+				var tarIn = new org.apache.commons.compress.archivers.tar.TarArchiveInputStream(bz2In)) {
+
+			org.apache.commons.compress.archivers.tar.TarArchiveEntry entry;
+			var filesInArchive = new java.util.ArrayList<String>();
+			while ((entry = (org.apache.commons.compress.archivers.tar.TarArchiveEntry) tarIn.getNextEntry()) != null) {
+				var name = entry.getName();
+				filesInArchive.add(name);
+				if (name.contains(filenameMatcher)) {
+					var buffer = new java.io.ByteArrayOutputStream();
+					org.apache.commons.io.IOUtils.copy(tarIn, buffer);
+					return buffer.toByteArray();
+				}
+			}
+			throw new AssertionError(
+					"File not found in archive matching: " + filenameMatcher + ". Archive contains: " + filesInArchive);
+		}
+	}
+
+	private JsonNode getWarFromArchive(byte[] compressedData, long warId) throws Exception {
+		var content = extractArchiveContent(compressedData, warId + ".json");
+		return objectMapper.readTree(content);
+	}
+
+	private byte[] getAndVerifyArchiveUpload() {
+		var putKeys = mockS3Adapter.getAllPutKeys(DATA_BUCKET, dataClient);
+		var archiveKey = putKeys.stream()
+				.filter(key -> key.matches(".*wars-\\d{4}-\\d{2}-\\d{2}_\\d{2}-\\d{2}-\\d{2}\\.tar\\.bz2"))
+				.findFirst()
+				.orElseThrow(() -> new AssertionError("No wars archive file uploaded"));
+
+		var archiveData = mockS3Adapter.getTestObject(DATA_BUCKET, archiveKey, dataClient);
+		assertTrue(archiveData.isPresent(), "Archive file not found in S3: " + archiveKey);
+		return archiveData.get();
 	}
 }
