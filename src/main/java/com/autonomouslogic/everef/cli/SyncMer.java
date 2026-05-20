@@ -141,7 +141,7 @@ public class SyncMer implements Command {
 			uploadedPaths.add(uploadedPath);
 
 			var filename = new File(uploadedPath.getPath()).getName();
-			var httpUrl = URI.create(Configs.DATA_BASE_URL.getRequired() + uploadedPath.getPath());
+			var httpUrl = Configs.DATA_BASE_URL.getRequired().resolve(uploadedPath.getPath());
 			var discordMsg = String.format("New MER file synced: [%s](%s)", filename, httpUrl);
 			discordNotifier.notifyDiscord(discordMsg);
 		} catch (Exception e) {
