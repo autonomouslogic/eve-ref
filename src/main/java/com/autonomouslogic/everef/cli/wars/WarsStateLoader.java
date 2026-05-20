@@ -2,7 +2,6 @@ package com.autonomouslogic.everef.cli.wars;
 
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.http.OkHttpWrapper;
-import com.autonomouslogic.everef.url.DataUrl;
 import com.autonomouslogic.everef.util.TempFiles;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -34,7 +33,11 @@ public class WarsStateLoader {
 	 * @return map of war ID to war data, or empty map if file doesn't exist
 	 */
 	public Map<Long, JsonNode> loadState() {
-		var url = Configs.DATA_BASE_URL.getRequired().resolve("wars").resolve("wars-current.json").toString();
+		var url = Configs.DATA_BASE_URL
+				.getRequired()
+				.resolve("wars")
+				.resolve("wars-current.json")
+				.toString();
 		var file = tempFiles.tempFile("wars-current", ".json").toFile();
 
 		log.info("Downloading wars state from {}", url);
