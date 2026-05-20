@@ -114,7 +114,13 @@ public class ArchivePathFactoryTest {
 	}
 
 	@Test
-	void shouldGenerateMerNames() {
+	void shouldGenerateMer() {
+		var factory = ArchivePathFactory.MER;
+		testExpectedPaths(factory, LocalDate.parse("2026-05-01"), "ccp/mer/2026/EVEOnline_MER_202605.zip");
+	}
+
+	@Test
+	void shouldGenerateMerNamesWrong() {
 		var factory = ArchivePathFactory.MER;
 		var merPath = factory.createArchivePathMer(YearMonth.of(2026, 5));
 		assertEquals("ccp/mer/2026/EVEOnline_MER_202605.zip", merPath);

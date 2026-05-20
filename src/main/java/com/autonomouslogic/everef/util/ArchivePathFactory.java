@@ -275,7 +275,8 @@ public class ArchivePathFactory {
 			.historyFolder(false)
 			.yearFolder(true)
 			.dateFolder(false)
-			.fileDateTimeFormatter(null) // We'll handle date formatting manually
+			.fileDateTimeFormatter(
+					new DateTimeFormatterBuilder().appendPattern("yyyymm").toFormatter())
 			.suffix(".zip")
 			.build();
 

@@ -82,26 +82,7 @@ public class SyncMer implements Command {
 
 		var uploadedPaths = new ArrayList<S3Url>();
 		for (var month : monthsToCheck) {
-			var uri = constructMerUrl(month);
-			var file = tempFiles.tempFile("mer-" + month, ".zip").toFile();
-			try {
-				var response = okHttpWrapper.download(uri.toString(), file);
-				if (response.code() == 404) {
-					log.info("MER file not available yet: {}", month);
-					continue;
-				}
-				if (response.code() != 200) {
-					log.warn("Failed to download MER {}: status {}", month, response.code());
-					continue;
-				}
-
-				var uploadedPath = uploadMerFile(file, month);
-				uploadedPaths.add(uploadedPath);
-				discordNotifier.notifyDiscord(
-						String.format("New MER file synced: EVEOnline_MER_%s.zip (%s)", formatYearMonth(month), month));
-			} catch (Exception e) {
-				log.warn("Error syncing MER {}", month, e);
-			}
+			syncMonth(month, uploadedPaths);
 		}
 
 		if (!uploadedPaths.isEmpty()) {
@@ -148,12 +129,38 @@ public class SyncMer implements Command {
 		return monthsToCheck;
 	}
 
+	private void syncMonth(YearMonth month, ArrayList<S3Url> uploadedPaths) {
+		var uri = constructMerUrl(month);
+		var file = tempFiles.tempFile("mer-" + month, ".zip").toFile();
+		try (var response = okHttpWrapper.download(uri.toString(), file)) {
+			if (response.code() == 404) {
+				log.info("MER file not available yet: {}", month);
+				return;
+			}
+			if (response.code() != 200) {
+				log.warn("Failed to download MER {}: status {}", month, response.code());
+				return;
+			}
+
+			var uploadedPath = uploadMerFile(file, month);
+			uploadedPaths.add(uploadedPath);
+
+			var filename = new File(uploadedPath.getPath()).getName();
+			var httpUrl = URI.create(Configs.DATA_BASE_URL.getRequired() + uploadedPath.getPath());
+			var discordMsg = String.format("New MER file synced: [%s](%s)", filename, httpUrl);
+			discordNotifier.notifyDiscord(discordMsg);
+		} catch (Exception e) {
+			log.warn("Error syncing MER {}", month, e);
+		}
+	}
+
 	private YearMonth getLatestMonth(Set<YearMonth> months) {
 		return months.stream().max(YearMonth::compareTo).orElseThrow();
 	}
 
 	private URI constructMerUrl(YearMonth month) {
-		return merBaseUrl.resolve(String.format("EVEOnline_MER_%s.zip", formatYearMonth(month)));
+		var filename = new File(MER.createArchivePath(month.atDay(1))).getName();
+		return merBaseUrl.resolve(filename);
 	}
 
 	private String formatYearMonth(YearMonth month) {
