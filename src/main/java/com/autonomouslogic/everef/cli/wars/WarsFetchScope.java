@@ -52,22 +52,9 @@ public class WarsFetchScope {
 
 	private static Set<Long> fetchAllWarIds(WarsApi warsApi, EsiHelper esiHelper) {
 		log.info("Fetching all war IDs from ESI");
-		// Wars endpoint uses cursor-based pagination with maxWarId, not page-based
-		// For simplicity, fetch all wars in one call (the list isn't typically large enough to paginate)
+		// Wars endpoint returns all wars up to maxWarId; fetch with null to get all
 		var warIds = esiHelper.fetchPages(page -> warsApi.getWarsWithHttpInfo(null, null, null));
-		// Convert list items to Long (API may return Integer or Long)
-		return warIds.stream()
-				.map(id -> {
-					Object obj = id;
-					if (obj instanceof Long) {
-						return (Long) obj;
-					} else if (obj instanceof Integer) {
-						return ((Integer) obj).longValue();
-					} else {
-						return ((Number) obj).longValue();
-					}
-				})
-				.collect(Collectors.toSet());
+		return warIds.stream().map(Integer::longValue).collect(Collectors.toSet());
 	}
 
 	private static Set<Long> findUnfinishedWars(Map<Long, JsonNode> warsMap) {
