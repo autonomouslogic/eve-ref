@@ -24,7 +24,7 @@ public class WarsFetchScope {
 	int unknownCount;
 
 	public static WarsFetchScope calculate(WarsApi warsApi, EsiHelper esiHelper, Map<Long, JsonNode> warsMap) {
-		// Fetch all war IDs from ESI
+		// Fetch all war IDs from ESI (only unfinished wars)
 		var allWarIds = fetchAllWarIds(warsApi, esiHelper);
 		var maxWarId = allWarIds.stream().mapToLong(Long::longValue).max().orElse(0L);
 
@@ -32,13 +32,16 @@ public class WarsFetchScope {
 		var unfinishedWars = findUnfinishedWars(warsMap);
 		var unfinishedCount = unfinishedWars.size();
 
-		// Find unknown wars
+		// Find unknown wars from API
 		var unknownWars = findUnknownWars(allWarIds, warsMap);
 		var unknownCount = unknownWars.size();
 
-		// Combine both sets
-		var warIds = new HashSet<>(unfinishedWars);
-		warIds.addAll(unknownWars);
+		// Find wars in current state that might have changed (both finished and unfinished)
+		var existingWars = new HashSet<>(warsMap.keySet());
+
+		// Combine: existing wars + unknown wars from API
+		var warIds = new HashSet<>(existingWars);
+		warIds.addAll(allWarIds);
 
 		log.info("Wars fetch scope: {} total, {} unfinished, {} unknown", warIds.size(), unfinishedCount, unknownCount);
 
