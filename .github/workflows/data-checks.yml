@@ -5,6 +5,7 @@ on:
     - cron: "47 12 * * *"
 env:
   DEV_NOTICES_DISCORD_WEBHOOK_URL: ${{ secrets.DEV_NOTICES_DISCORD_WEBHOOK_URL }}
+  DATA_CHECKS_HEALTHCHECK_URL: ${{ secrets.DATA_CHECKS_HEALTHCHECK_URL }}
 jobs:
   test-resources:
     name: Test Resources
@@ -59,3 +60,11 @@ jobs:
 
       - name: Check
         run: ./scripts/verify-ref-data-models.sh $DEV_NOTICES_DISCORD_WEBHOOK_URL
+
+  healthcheck:
+    name: Healthcheck
+    needs: [test-resources, industry-resources, verify-ref-data-models]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Healthcheck
+        run: curl -fsS -m 10 --retry 5 -o /dev/null ${{ env.DATA_CHECKS_HEALTHCHECK_URL }}
