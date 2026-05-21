@@ -324,6 +324,23 @@ public class ScrapeWarsTest {
 		assertTrue(root.has("149786"));
 	}
 
+	@Test
+	@SneakyThrows
+	void shouldIncludeUnknownExtraFields() {
+		dispatcher.addWar(1000, "2026-01-01T00:00:00Z", null);
+		dispatcher.addKillmailForWar(1000, 500001L, "hash1");
+
+		scrapeWars.run();
+
+		var root = getWarsCurrent();
+		var war = root.get("1000");
+		assertEquals("extra", war.get("extra").asText());
+
+		var archive = getAndVerifyArchiveUpload();
+		assertEquals("extra", archive.getWar(1000).get("extra").asText());
+		assertEquals("extra", archive.getKillmail(1000, 500001).get("extra").asText());
+	}
+
 	private class TestDispatcher extends Dispatcher {
 		private final Map<Long, WarData> wars = new HashMap<>();
 		private final Map<Long, List<KillmailData>> killmailsByWar = new HashMap<>();
@@ -402,6 +419,7 @@ public class ScrapeWarsTest {
 					war.put("mutual", false);
 					war.put("open_for_allies", true);
 					war.put("reward", 0L);
+					war.put("extra", "extra");
 
 					return new MockResponse()
 							.addHeader("Content-Type", "application/json")
@@ -443,6 +461,7 @@ public class ScrapeWarsTest {
 					killmail.put("killmail_id", killmailId);
 					killmail.put("killmail_time", "2026-05-20T10:00:00Z");
 					killmail.put("solar_system_id", 30002652L);
+					killmail.put("extra", "extra");
 
 					var victim = objectMapper.createObjectNode();
 					victim.put("character_id", 2012501001L);
@@ -502,31 +521,6 @@ public class ScrapeWarsTest {
 		return root;
 	}
 
-	private byte[] extractArchiveContent(byte[] compressedData, String filenameMatcher) throws Exception {
-		try (var bz2In = new BZip2CompressorInputStream(new ByteArrayInputStream(compressedData));
-				var tarIn = new TarArchiveInputStream(bz2In)) {
-
-			TarArchiveEntry entry;
-			var filesInArchive = new java.util.ArrayList<String>();
-			while ((entry = (TarArchiveEntry) tarIn.getNextEntry()) != null) {
-				var name = entry.getName();
-				filesInArchive.add(name);
-				if (name.contains(filenameMatcher)) {
-					var buffer = new java.io.ByteArrayOutputStream();
-					org.apache.commons.io.IOUtils.copy(tarIn, buffer);
-					return buffer.toByteArray();
-				}
-			}
-			throw new AssertionError(
-					"File not found in archive matching: " + filenameMatcher + ". Archive contains: " + filesInArchive);
-		}
-	}
-
-	private JsonNode getWarFromArchive(byte[] compressedData, long warId) throws Exception {
-		var content = extractArchiveContent(compressedData, warId + ".json");
-		return objectMapper.readTree(content);
-	}
-
 	private TestWarsArchive getAndVerifyArchiveUpload() {
 		var latestData = mockS3Adapter.getTestObject(DATA_BUCKET, "wars/wars-latest.tar.bz2", dataClient);
 		var archiveData = mockS3Adapter.getTestObject(
@@ -543,6 +537,7 @@ public class ScrapeWarsTest {
 		killmail.put("killmail_id", killmailId);
 		killmail.put("killmail_time", "2026-05-20T10:00:00Z");
 		killmail.put("solar_system_id", 30002652L);
+		killmail.put("extra", "extra");
 
 		var victim = objectMapper.createObjectNode();
 		victim.put("character_id", 2012501001L);

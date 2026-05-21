@@ -1,11 +1,8 @@
 package com.autonomouslogic.everef.cli.wars;
 
 import com.autonomouslogic.everef.config.Configs;
-import com.autonomouslogic.everef.esi.EsiHelper;
 import com.autonomouslogic.everef.esi.EsiRetryUtil;
 import com.autonomouslogic.everef.http.OkHttpWrapper;
-import com.autonomouslogic.everef.openapi.esi.api.WarsApi;
-import com.autonomouslogic.everef.openapi.esi.invoker.ApiException;
 import com.autonomouslogic.everef.util.VirtualThreads;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -38,12 +35,6 @@ public class KillmailFetcher {
 	private static final List<Long> KILLMAIL_INITIAL_WARS = List.of(48074L, 138678L, 144630L, 149785L);
 
 	private static final long KILLMAIL_FULL_CHECK = KILLMAIL_INITIAL_WARS.get(KILLMAIL_INITIAL_WARS.size() - 1) + 1;
-
-	@Inject
-	protected WarsApi warsApi;
-
-	@Inject
-	protected EsiHelper esiHelper;
 
 	@Inject
 	@Named("esi")
@@ -86,28 +77,65 @@ public class KillmailFetcher {
 		try {
 			log.debug("Fetching killmail list for war {}", warId);
 
-			// Fetch the list of killmails for this war
-			var killmailList = esiHelper.fetchPages(
-					page -> warsApi.getWarsWarIdKillmailsWithHttpInfo(Math.toIntExact(warId), null, null, page));
+			// Fetch the list of killmails for this war using OkHttp
+			var killmailList = fetchKillmailList(warId);
 
 			log.debug("Found {} killmails for war {}", killmailList.size(), warId);
 
 			// Process killmail details in parallel
 			var tasks = killmailList.stream()
 					.map(km -> (Callable<Void>) () -> {
-						fetchKillmailDetail(warId, km.getKillmailId(), km.getKillmailHash());
+						long kmId = km.get("killmail_id").asLong();
+						String kmHash = km.get("killmail_hash").asText();
+						fetchKillmailDetail(warId, kmId, kmHash);
 						return null;
 					})
 					.toList();
 
 			VirtualThreads.parallel(tasks, Configs.KILLMAIL_CONCURRENCY.getRequired());
 		} catch (Exception e) {
-			if (e instanceof ApiException && ((ApiException) e).getCode() == 404) {
-				log.debug("War {} has no killmails", warId);
-			} else {
-				log.error("Failed to fetch killmails for war {}: {}", warId, e.getMessage());
+			log.error("Failed to fetch killmails for war {}: {}", warId, e.getMessage());
+		}
+	}
+
+	private List<JsonNode> fetchKillmailList(long warId) throws Exception {
+		var killmails = new java.util.ArrayList<JsonNode>();
+		var page = 1;
+		var hasMore = true;
+
+		while (hasMore) {
+			var url = String.format("%swars/%d/killmails/?page=%d", Configs.ESI_BASE_URL.getRequired(), warId, page);
+
+			try (var response = okHttpWrapper.get(url)) {
+				var code = response.code();
+
+				if (code == 404) {
+					log.debug("War {} has no killmails", warId);
+					break;
+				}
+
+				if (code != 200) {
+					throw new RuntimeException("Failed to fetch killmail list for war " + warId + ": HTTP " + code);
+				}
+
+				var body = response.body();
+				if (body == null) {
+					throw new RuntimeException("Empty response body for war " + warId);
+				}
+
+				var json = objectMapper.readValue(body.string(), JsonNode[].class);
+				for (var km : json) {
+					killmails.add(km);
+				}
+
+				var pagesHeader = response.header("X-Pages");
+				var totalPages = pagesHeader != null ? Integer.parseInt(pagesHeader) : 1;
+				hasMore = page < totalPages;
+				page++;
 			}
 		}
+
+		return killmails;
 	}
 
 	/**
@@ -115,7 +143,7 @@ public class KillmailFetcher {
 	 *
 	 * @throws KillmailNotFoundException if killmail doesn't exist (404)
 	 */
-	public void fetchKillmailDetail(long warId, long killmailId, String hash) throws ApiException {
+	public void fetchKillmailDetail(long warId, long killmailId, String hash) throws Exception {
 		// Only fetch if not already cached
 		if (!killmailsCache.containsKey(killmailId)) {
 			var killmail = fetchKillmailWithRetry(warId, killmailId, hash);
@@ -125,7 +153,7 @@ public class KillmailFetcher {
 		}
 	}
 
-	private JsonNode fetchKillmailWithRetry(long warId, long killmailId, String hash) throws ApiException {
+	private JsonNode fetchKillmailWithRetry(long warId, long killmailId, String hash) throws Exception {
 		return EsiRetryUtil.fetchWithRetry(
 				"killmail " + killmailId,
 				() -> {

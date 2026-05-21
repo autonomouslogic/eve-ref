@@ -4,14 +4,13 @@ import static com.autonomouslogic.everef.util.ArchivePathFactory.WARS;
 
 import com.autonomouslogic.everef.cli.Command;
 import com.autonomouslogic.everef.config.Configs;
-import com.autonomouslogic.everef.esi.EsiHelper;
-import com.autonomouslogic.everef.openapi.esi.api.WarsApi;
-import com.autonomouslogic.everef.openapi.esi.invoker.ApiException;
+import com.autonomouslogic.everef.http.OkHttpWrapper;
 import com.autonomouslogic.everef.s3.S3Adapter;
 import com.autonomouslogic.everef.s3.S3Util;
 import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.url.UrlParser;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
@@ -39,9 +38,6 @@ public class ScrapeWars implements Command {
 	protected S3AsyncClient dataS3Client;
 
 	@Inject
-	protected WarsApi warsApi;
-
-	@Inject
 	protected S3Util s3Util;
 
 	@Inject
@@ -60,7 +56,13 @@ public class ScrapeWars implements Command {
 	protected S3Adapter s3Adapter;
 
 	@Inject
-	protected EsiHelper esiHelper;
+	protected WarsFetchScope warsFetchScope;
+
+	@Inject
+	protected OkHttpWrapper okHttpWrapper;
+
+	@Inject
+	protected ObjectMapper objectMapper;
 
 	@Inject
 	protected WarsStateLoader stateLoader;
@@ -117,7 +119,7 @@ public class ScrapeWars implements Command {
 
 	private WarsFetchScope calculateFetchScope() {
 		log.info("Calculating fetch scope");
-		return WarsFetchScope.calculate(warsApi, esiHelper, warsMap);
+		return warsFetchScope.calculate(warsMap);
 	}
 
 	private void fetchWars(WarsFetchScope scope) {
@@ -140,19 +142,19 @@ public class ScrapeWars implements Command {
 					war.has("last_killmail_id") ? war.get("last_killmail_id").asLong(0L) : 0L;
 
 			try {
-				// Fetch killmail list from ESI
-				var killmailList = esiHelper.fetchPages(
-						page -> warsApi.getWarsWarIdKillmailsWithHttpInfo(Math.toIntExact(warId), null, null, page));
+				// Fetch killmail list from ESI using OkHttp
+				var killmailList = fetchKillmailList(warId);
 
 				log.debug("Found {} killmails for war {}", killmailList.size(), warId);
 
 				long maxSuccessfulId = lastKillmailId;
 				for (var km : killmailList) {
-					long kmId = km.getKillmailId();
+					long kmId = km.get("killmail_id").asLong();
+					String kmHash = km.get("killmail_hash").asText();
 					if (kmId > lastKillmailId) {
 						// This is a new killmail, fetch details
 						try {
-							fetchAndStoreKillmailDetail(warId, kmId, km.getKillmailHash());
+							fetchAndStoreKillmailDetail(warId, kmId, kmHash);
 							// Only update maxSuccessfulId if fetch succeeded
 							maxSuccessfulId = Math.max(maxSuccessfulId, kmId);
 						} catch (Exception e) {
@@ -173,7 +175,48 @@ public class ScrapeWars implements Command {
 		return maxKillmailIds;
 	}
 
-	private void fetchAndStoreKillmailDetail(long warId, long killmailId, String hash) throws ApiException {
+	@SneakyThrows
+	private java.util.List<JsonNode> fetchKillmailList(long warId) {
+		var killmails = new java.util.ArrayList<JsonNode>();
+		var page = 1;
+		var hasMore = true;
+
+		while (hasMore) {
+			var url = String.format("%swars/%d/killmails/?page=%d", Configs.ESI_BASE_URL.getRequired(), warId, page);
+
+			try (var response = okHttpWrapper.get(url)) {
+				var code = response.code();
+
+				if (code == 404) {
+					log.debug("War {} has no killmails", warId);
+					break;
+				}
+
+				if (code != 200) {
+					throw new RuntimeException("Failed to fetch killmail list for war " + warId + ": HTTP " + code);
+				}
+
+				var body = response.body();
+				if (body == null) {
+					throw new RuntimeException("Empty response body for war " + warId);
+				}
+
+				var json = objectMapper.readValue(body.string(), JsonNode[].class);
+				for (var km : json) {
+					killmails.add(km);
+				}
+
+				var pagesHeader = response.header("X-Pages");
+				var totalPages = pagesHeader != null ? Integer.parseInt(pagesHeader) : 1;
+				hasMore = page < totalPages;
+				page++;
+			}
+		}
+
+		return killmails;
+	}
+
+	private void fetchAndStoreKillmailDetail(long warId, long killmailId, String hash) throws Exception {
 		try {
 			killmailFetcher.fetchKillmailDetail(warId, killmailId, hash);
 		} catch (KillmailNotFoundException e) {

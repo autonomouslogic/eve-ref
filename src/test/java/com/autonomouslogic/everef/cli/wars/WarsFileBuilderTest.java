@@ -64,7 +64,8 @@ public class WarsFileBuilderTest {
 		var file = fileBuilder.buildIncrementalExport(killmailsMap);
 
 		var entries = extractTarEntries(file);
-		assertTrue(entries.isEmpty()); // No killmails to export
+		assertEquals(1, entries.size()); // War data should be exported
+		assertTrue(entries.contains("wars/1000.json"));
 
 		file.delete();
 	}

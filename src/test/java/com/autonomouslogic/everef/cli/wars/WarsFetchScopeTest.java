@@ -2,12 +2,10 @@ package com.autonomouslogic.everef.cli.wars;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import com.autonomouslogic.everef.esi.EsiHelper;
-import com.autonomouslogic.everef.openapi.esi.api.WarsApi;
+import com.autonomouslogic.everef.http.OkHttpWrapper;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.Instant;
@@ -16,9 +14,12 @@ import java.util.Map;
 import javax.inject.Inject;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
+import okhttp3.MediaType;
+import okhttp3.ResponseBody;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 /**
@@ -26,10 +27,14 @@ import org.mockito.junit.jupiter.MockitoExtension;
  */
 @ExtendWith(MockitoExtension.class)
 @Log4j2
-@SuppressWarnings("unchecked")
 public class WarsFetchScopeTest {
 	private ObjectMapper objectMapper;
 	private Map<Long, JsonNode> warsMap;
+
+	@Mock
+	private OkHttpWrapper mockOkHttpWrapper;
+
+	private WarsFetchScope warsFetchScope;
 
 	@Inject
 	protected WarsFetchScopeTest() {}
@@ -38,18 +43,27 @@ public class WarsFetchScopeTest {
 	void setup() {
 		objectMapper = new com.fasterxml.jackson.databind.ObjectMapper();
 		warsMap = new HashMap<>();
+		warsFetchScope = new WarsFetchScope();
+		// Set injected dependencies using reflection or direct field access
+		try {
+			var field = WarsFetchScope.class.getDeclaredField("okHttpWrapper");
+			field.setAccessible(true);
+			field.set(warsFetchScope, mockOkHttpWrapper);
+
+			field = WarsFetchScope.class.getDeclaredField("objectMapper");
+			field.setAccessible(true);
+			field.set(warsFetchScope, objectMapper);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	@Test
 	@SneakyThrows
 	void shouldFetchAllWarIds() {
-		var mockWarsApi = mock(WarsApi.class);
-		var mockEsiHelper = mock(EsiHelper.class);
+		mockResponse("[1000, 1001, 1002]", "1");
 
-		java.util.List<Integer> allWarIds = java.util.List.of(1000, 1001, 1002);
-		when(mockEsiHelper.fetchPages(org.mockito.ArgumentMatchers.any())).thenReturn((java.util.List) allWarIds);
-
-		var scope = WarsFetchScope.calculate(mockWarsApi, mockEsiHelper, warsMap);
+		var scope = warsFetchScope.calculate(warsMap);
 
 		assertEquals(3, scope.getWarIds().size());
 		assertEquals(1002L, scope.getMaxWarId());
@@ -58,17 +72,13 @@ public class WarsFetchScopeTest {
 	@Test
 	@SneakyThrows
 	void shouldIdentifyUnfinishedWars() {
-		var mockWarsApi = mock(WarsApi.class);
-		var mockEsiHelper = mock(EsiHelper.class);
-
-		java.util.List<Integer> allWarIds = java.util.List.of(1000, 1001);
-		when(mockEsiHelper.fetchPages(org.mockito.ArgumentMatchers.any())).thenReturn((java.util.List) allWarIds);
+		mockResponse("[1000, 1001]", "1");
 
 		// Add unfinished war
 		var unfinishedWar = createMockWar(1000L, null);
 		warsMap.put(1000L, unfinishedWar);
 
-		var scope = WarsFetchScope.calculate(mockWarsApi, mockEsiHelper, warsMap);
+		var scope = warsFetchScope.calculate(warsMap);
 
 		// Both wars should be in scope (1 unfinished + 1 unknown)
 		assertEquals(2, scope.getWarIds().size());
@@ -79,35 +89,29 @@ public class WarsFetchScopeTest {
 	@Test
 	@SneakyThrows
 	void shouldIgnoreFinishedWars() {
-		var mockWarsApi = mock(WarsApi.class);
-		var mockEsiHelper = mock(EsiHelper.class);
-
-		java.util.List<Integer> allWarIds = java.util.List.of(1000, 1001);
-		when(mockEsiHelper.fetchPages(org.mockito.ArgumentMatchers.any())).thenReturn((java.util.List) allWarIds);
+		mockResponse("[1002, 1003]", "1");
 
 		// Add finished war
 		var finishedWar = createMockWar(1000L, Instant.now().toString());
 		warsMap.put(1000L, finishedWar);
 
-		var scope = WarsFetchScope.calculate(mockWarsApi, mockEsiHelper, warsMap);
+		var scope = warsFetchScope.calculate(warsMap);
 
-		// Only unknown war should be in scope
-		assertEquals(1, scope.getWarIds().size());
-		assertTrue(scope.getWarIds().contains(1001L));
+		// Scope includes existing war (1000) + new wars from API (1002, 1003)
+		assertEquals(3, scope.getWarIds().size());
+		assertTrue(scope.getWarIds().contains(1000L));
+		assertTrue(scope.getWarIds().contains(1002L));
+		assertTrue(scope.getWarIds().contains(1003L));
 		assertEquals(0, scope.getUnfinishedCount());
-		assertEquals(1, scope.getUnknownCount());
+		assertEquals(2, scope.getUnknownCount());
 	}
 
 	@Test
 	@SneakyThrows
 	void shouldHandleEmptyWarsMap() {
-		var mockWarsApi = mock(WarsApi.class);
-		var mockEsiHelper = mock(EsiHelper.class);
+		mockResponse("[1000, 1001, 1002]", "1");
 
-		java.util.List<Integer> allWarIds = java.util.List.of(1000, 1001, 1002);
-		when(mockEsiHelper.fetchPages(org.mockito.ArgumentMatchers.any())).thenReturn((java.util.List) allWarIds);
-
-		var scope = WarsFetchScope.calculate(mockWarsApi, mockEsiHelper, warsMap);
+		var scope = warsFetchScope.calculate(warsMap);
 
 		// All wars are unknown
 		assertEquals(3, scope.getWarIds().size());
@@ -118,12 +122,9 @@ public class WarsFetchScopeTest {
 	@Test
 	@SneakyThrows
 	void shouldHandleEmptyWarIdSet() {
-		var mockWarsApi = mock(WarsApi.class);
-		var mockEsiHelper = mock(EsiHelper.class);
+		mockResponse("[]", "1");
 
-		when(mockEsiHelper.fetchPages(any())).thenReturn(java.util.List.of());
-
-		var scope = WarsFetchScope.calculate(mockWarsApi, mockEsiHelper, warsMap);
+		var scope = warsFetchScope.calculate(warsMap);
 
 		assertEquals(0, scope.getWarIds().size());
 		assertEquals(0, scope.getMaxWarId());
@@ -132,15 +133,23 @@ public class WarsFetchScopeTest {
 	@Test
 	@SneakyThrows
 	void shouldCalculateMaxWarId() {
-		var mockWarsApi = mock(WarsApi.class);
-		var mockEsiHelper = mock(EsiHelper.class);
+		mockResponse("[100, 2000, 1500, 500]", "1");
 
-		java.util.List<Integer> allWarIds = java.util.List.of(100, 2000, 1500, 500);
-		when(mockEsiHelper.fetchPages(org.mockito.ArgumentMatchers.any())).thenReturn((java.util.List) allWarIds);
-
-		var scope = WarsFetchScope.calculate(mockWarsApi, mockEsiHelper, warsMap);
+		var scope = warsFetchScope.calculate(warsMap);
 
 		assertEquals(2000L, scope.getMaxWarId());
+	}
+
+	@SneakyThrows
+	private void mockResponse(String body, String pages) {
+		var mockResponse = mock(okhttp3.Response.class);
+		when(mockResponse.code()).thenReturn(200);
+		when(mockResponse.header("X-Pages")).thenReturn(pages);
+
+		var mockResponseBody = ResponseBody.create(body, MediaType.get("application/json"));
+		when(mockResponse.body()).thenReturn(mockResponseBody);
+
+		when(mockOkHttpWrapper.get(org.mockito.ArgumentMatchers.anyString())).thenReturn(mockResponse);
 	}
 
 	/**
