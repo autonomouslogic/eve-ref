@@ -5,6 +5,9 @@ on:
     - cron: "47 12 * * *"
 env:
   DEV_NOTICES_DISCORD_WEBHOOK_URL: ${{ secrets.DEV_NOTICES_DISCORD_WEBHOOK_URL }}
+  DATA_CHECKS_HEALTHCHECK_URL: ${{ secrets.DATA_CHECKS_HEALTHCHECK_URL }}
+permissions:
+  contents: write
 jobs:
   test-resources:
     name: Test Resources
@@ -13,6 +16,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
 
       - name: Setup Java
         uses: actions/setup-java@v5
@@ -22,15 +28,20 @@ jobs:
           cache: gradle
 
       - name: Check
-        run: ./scripts/run-make-and-check-changes.sh import-test-resources $DEV_NOTICES_DISCORD_WEBHOOK_URL
+        run: |
+          ./scripts/run-make-and-check-changes.sh import-test-resources "$DEV_NOTICES_DISCORD_WEBHOOK_URL" "test: Updated test resources"
 
   industry-resources:
     name: Industry Resources
     timeout-minutes: 30
     runs-on: ubuntu-latest
+    needs: test-resources
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
 
       - name: Setup Java
         uses: actions/setup-java@v5
@@ -40,7 +51,8 @@ jobs:
           cache: gradle
 
       - name: Check
-        run: ./scripts/run-make-and-check-changes.sh import-industry-resources $DEV_NOTICES_DISCORD_WEBHOOK_URL
+        run: |
+          ./scripts/run-make-and-check-changes.sh import-industry-resources "$DEV_NOTICES_DISCORD_WEBHOOK_URL" "fix: Imported industry resources"
 
   verify-ref-data-models:
     name: Verify Reference Data Models
@@ -59,3 +71,11 @@ jobs:
 
       - name: Check
         run: ./scripts/verify-ref-data-models.sh $DEV_NOTICES_DISCORD_WEBHOOK_URL
+
+  healthcheck:
+    name: Healthcheck
+    needs: [test-resources, industry-resources, verify-ref-data-models]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Healthcheck
+        run: curl -fsS -m 10 --retry 5 -o /dev/null ${{ env.DATA_CHECKS_HEALTHCHECK_URL }}
