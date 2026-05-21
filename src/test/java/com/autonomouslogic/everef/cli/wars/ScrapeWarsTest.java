@@ -3,6 +3,7 @@ package com.autonomouslogic.everef.cli.wars;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.autonomouslogic.everef.openapi.esi.api.WarsApi;
@@ -433,14 +434,17 @@ public class ScrapeWarsTest {
 
 	@SneakyThrows
 	private byte[] extractArchive(byte[] compressed) {
+		var files = 0;
 		try (var in = new TarArchiveInputStream(new BZip2CompressorInputStream(new ByteArrayInputStream(compressed)))) {
 			TarArchiveEntry entry;
 			while ((entry = in.getNextEntry()) != null) {
 				var file = entry.getFile();
 				var json = objectMapper.readTree(in);
 				System.out.println(file + ": " + json);
+				files++;
 			}
 		}
+		assertNotEquals(0, files, "Archive is empty");
 		return null;
 	}
 }

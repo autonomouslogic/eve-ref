@@ -190,13 +190,6 @@ public class KillmailFetcher {
 	}
 
 	/**
-	 * Clear the killmail cache.
-	 */
-	public void clearCache() {
-		killmailsCache.clear();
-	}
-
-	/**
 	 * Get all cached killmails.
 	 *
 	 * @return map of killmail ID to killmail data

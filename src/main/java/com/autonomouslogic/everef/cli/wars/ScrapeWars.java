@@ -96,27 +96,23 @@ public class ScrapeWars implements Command {
 		warsMap = stateLoader.loadState();
 		initHelpers();
 
-		try {
-			var scope = calculateFetchScope();
-			fetchWars(scope);
+		var scope = calculateFetchScope();
+		fetchWars(scope);
 
-			// Fetch killmails and build export
-			var killmailsByWar = fetchKillmailsForExport(scope.getWarIds());
+		// Fetch killmails and build export
+		var killmailsByWar = fetchKillmailsForExport(scope.getWarIds());
 
-			// Build and upload exports
-			buildAndUploadExports(killmailsByWar);
+		// Build and upload exports
+		buildAndUploadExports(killmailsByWar);
 
-			// Update last_killmail_id for each war
-			updateWarKillmailIds(killmailsByWar);
+		// Update last_killmail_id for each war
+		updateWarKillmailIds(killmailsByWar);
 
-			// Upload updated wars-current.json
-			uploadWarsCurrentJson();
+		// Upload updated wars-current.json
+		uploadWarsCurrentJson();
 
-			// Cleanup old data
-			cleanupOldData();
-		} finally {
-			killmailFetcher.clearCache();
-		}
+		// Cleanup old data
+		cleanupOldData();
 	}
 
 	private WarsFetchScope calculateFetchScope() {
