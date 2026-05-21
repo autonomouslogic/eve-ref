@@ -104,25 +104,23 @@ public class ScrapeWarsTest {
 		scrapeWars.run();
 
 		var root = getWarsCurrent();
-		assertEquals(1, root.size());
 		assertTrue(root.has("1000"));
+		assertEquals(1, root.size());
 		var war = root.get("1000");
 		assertEquals("2026-01-01T00:00:00Z", war.get("declared").asText());
 		assertEquals("2026-05-20T12:00:00Z", war.get("http_last_modified").asText());
 
 		var archive = getAndVerifyArchiveUpload();
+		assertEquals(war, archive.getWar(1000));
 
-		var putKeys = mockS3Adapter.getAllPutKeys(DATA_BUCKET, dataClient);
-		assertTrue(
-				putKeys.stream().anyMatch(k -> k.contains(".tar.bz2")),
-				"Expected tar.bz2 archive to be uploaded. Keys: " + putKeys);
+		assertEquals(1, archive.getWarsCount());
+		assertEquals(0, archive.getKillmailsCount());
 	}
 
 	@Test
 	@SneakyThrows
 	void shouldFetchWarsAndKillmails() {
 		dispatcher.addWar(1000L, "2026-01-01T00:00:00Z", null);
-		dispatcher.addWar(1001L, "2026-02-01T00:00:00Z", null);
 		dispatcher.addKillmailForWar(1000L, 500001L, "hash1");
 		dispatcher.addKillmailForWar(1000L, 500002L, "hash2");
 
@@ -130,12 +128,16 @@ public class ScrapeWarsTest {
 
 		var root = getWarsCurrent();
 		assertTrue(root.has("1000"));
-		assertTrue(root.has("1001"));
+		assertEquals(1, root.size());
 
-		var putKeys = mockS3Adapter.getAllPutKeys(DATA_BUCKET, dataClient);
-		var hasIncrementalExport = putKeys.stream()
-				.anyMatch(key -> key.matches(".*wars-\\d{4}-\\d{2}-\\d{2}_\\d{2}-\\d{2}-\\d{2}\\.tar\\.bz2"));
-		assertTrue(hasIncrementalExport);
+		var archive = getAndVerifyArchiveUpload();
+		assertEquals(root.get("1000"), archive.getWar(1000));
+
+		assertEquals(objectMapper.createObjectNode(), archive.getKillmail(1000, 500001));
+		assertEquals(objectMapper.createObjectNode(), archive.getKillmail(1000, 500002));
+
+		assertEquals(1, archive.getWarsCount());
+		assertEquals(2, archive.getKillmailsCount());
 	}
 
 	@Test
@@ -496,6 +498,14 @@ public class ScrapeWarsTest {
 					Optional.ofNullable(killmailsByWar.get(warId)).flatMap(m -> Optional.ofNullable(m.get(killmailId)));
 			assertTrue(optional.isPresent(), "Killmail " + killmailId + " for war " + warId + " not found in archive");
 			return optional.get();
+		}
+
+		public int getWarsCount() {
+			return wars.size();
+		}
+
+		public int getKillmailsCount() {
+			return killmailsByWar.values().stream().mapToInt(Map::size).sum();
 		}
 	}
 }
