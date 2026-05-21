@@ -108,17 +108,8 @@ public class WarsFileBuilder {
 	}
 
 	private Set<Long> collectWarsToExport(Map<Long, JsonNode> killmailsMap) {
-		var warsToExport = new TreeSet<Long>();
-
-		for (var entry : killmailsMap.entrySet()) {
-			var km = entry.getValue();
-			var warId = km.get("war_id");
-			if (warId != null) {
-				warsToExport.add(warId.asLong());
-			}
-		}
-
-		return warsToExport;
+		// Export all wars from warsMap, not just those with new killmails
+		return new TreeSet<>(warsMap.keySet());
 	}
 
 	private Map<Long, List<Long>> collectKillmailsToExport(Set<Long> warsToExport, Map<Long, JsonNode> killmailsMap) {

@@ -11,18 +11,16 @@ import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.test.MockS3Adapter;
 import com.autonomouslogic.everef.test.TestDataUtil;
 import com.autonomouslogic.everef.url.UrlParser;
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.SneakyThrows;
@@ -112,8 +110,6 @@ public class ScrapeWarsTest {
 		assertEquals("2026-05-20T12:00:00Z", war.get("http_last_modified").asText());
 
 		var archive = getAndVerifyArchiveUpload();
-
-
 
 		var putKeys = mockS3Adapter.getAllPutKeys(DATA_BUCKET, dataClient);
 		assertTrue(
@@ -424,7 +420,8 @@ public class ScrapeWarsTest {
 
 	private byte[] getAndVerifyArchiveUpload() {
 		var latestData = mockS3Adapter.getTestObject(DATA_BUCKET, "wars/wars-latest.tar.bz2", dataClient);
-		var archiveData = mockS3Adapter.getTestObject(DATA_BUCKET, "wars/history/2026/wars-2026-05-20_12-00-00.tar.bz2", dataClient);
+		var archiveData = mockS3Adapter.getTestObject(
+				DATA_BUCKET, "wars/history/2026/wars-2026-05-20_12-00-00.tar.bz2", dataClient);
 		assertTrue(latestData.isPresent());
 		assertTrue(archiveData.isPresent());
 		assertArrayEquals(archiveData.get(), latestData.get());
@@ -435,11 +432,13 @@ public class ScrapeWarsTest {
 	@SneakyThrows
 	private byte[] extractArchive(byte[] compressed) {
 		var files = 0;
+		var mapper = objectMapper.copy().disable(JsonParser.Feature.AUTO_CLOSE_SOURCE);
 		try (var in = new TarArchiveInputStream(new BZip2CompressorInputStream(new ByteArrayInputStream(compressed)))) {
 			TarArchiveEntry entry;
 			while ((entry = in.getNextEntry()) != null) {
+
 				var file = entry.getFile();
-				var json = objectMapper.readTree(in);
+				var json = mapper.readTree(in);
 				System.out.println(file + ": " + json);
 				files++;
 			}
