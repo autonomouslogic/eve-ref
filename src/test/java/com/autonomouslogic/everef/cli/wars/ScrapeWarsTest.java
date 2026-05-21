@@ -11,9 +11,9 @@ import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.test.MockS3Adapter;
 import com.autonomouslogic.everef.test.TestDataUtil;
 import com.autonomouslogic.everef.url.UrlParser;
-import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.time.ZonedDateTime;
@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.SneakyThrows;
@@ -418,7 +419,7 @@ public class ScrapeWarsTest {
 		return objectMapper.readTree(content);
 	}
 
-	private byte[] getAndVerifyArchiveUpload() {
+	private TestWarsArchive getAndVerifyArchiveUpload() {
 		var latestData = mockS3Adapter.getTestObject(DATA_BUCKET, "wars/wars-latest.tar.bz2", dataClient);
 		var archiveData = mockS3Adapter.getTestObject(
 				DATA_BUCKET, "wars/history/2026/wars-2026-05-20_12-00-00.tar.bz2", dataClient);
@@ -430,20 +431,71 @@ public class ScrapeWarsTest {
 	}
 
 	@SneakyThrows
-	private byte[] extractArchive(byte[] compressed) {
-		var files = 0;
-		var mapper = objectMapper.copy().disable(JsonParser.Feature.AUTO_CLOSE_SOURCE);
+	private TestWarsArchive extractArchive(byte[] compressed) {
+		var archive = new TestWarsArchive();
 		try (var in = new TarArchiveInputStream(new BZip2CompressorInputStream(new ByteArrayInputStream(compressed)))) {
 			TarArchiveEntry entry;
 			while ((entry = in.getNextEntry()) != null) {
+				// Read only the bytes for this entry, respecting TAR boundaries
+				byte[] entryBytes = new byte[(int) entry.getSize()];
+				int bytesRead = in.read(entryBytes);
+				if (bytesRead == entry.getSize()) {
+					var json = (ObjectNode) objectMapper.readTree(entryBytes);
+					var path = entry.getName();
 
-				var file = entry.getFile();
-				var json = mapper.readTree(in);
-				System.out.println(file + ": " + json);
-				files++;
+					// Parse path: wars/{warId}.json or wars/{warId}/killmails/{killmailId}.json
+					if (path.startsWith("wars/") && path.endsWith(".json")) {
+						var parts = path.substring(5, path.length() - 5)
+								.split("/"); // Remove "wars/" prefix and ".json" suffix
+						if (parts.length == 1) {
+							// War file: wars/{warId}.json
+							long warId = Long.parseLong(parts[0]);
+							archive.addWar(warId, json);
+						} else if (parts.length == 3 && "killmails".equals(parts[1])) {
+							// Killmail file: wars/{warId}/killmails/{killmailId}.json
+							long warId = Long.parseLong(parts[0]);
+							long killmailId = Long.parseLong(parts[2]);
+							archive.addKillmail(warId, killmailId, json);
+						}
+					}
+				}
 			}
 		}
-		assertNotEquals(0, files, "Archive is empty");
-		return null;
+		assertNotEquals(0, archive.wars.size() + archive.killmailsByWar.size(), "Archive is empty");
+		return archive;
+	}
+
+	private static class TestWarsArchive {
+		private final Map<Long, ObjectNode> wars = new HashMap<>();
+		private final Map<Long, Map<Long, ObjectNode>> killmailsByWar = new HashMap<>();
+
+		public void addWar(long warId, ObjectNode war) {
+			if (wars.containsKey(warId)) {
+				throw new IllegalArgumentException("War " + warId + " already exists in archive");
+			}
+			wars.put(warId, war);
+		}
+
+		public void addKillmail(long warId, long killmailId, ObjectNode killmail) {
+			var warKillmails = killmailsByWar.computeIfAbsent(warId, k -> new HashMap<>());
+			if (warKillmails.containsKey(killmailId)) {
+				throw new IllegalArgumentException(
+						"Killmail " + killmailId + " for war " + warId + " already exists in archive");
+			}
+			warKillmails.put(killmailId, killmail);
+		}
+
+		public ObjectNode getWar(long warId) {
+			var optional = Optional.ofNullable(wars.get(warId));
+			assertTrue(optional.isPresent(), "War " + warId + " not found in archive");
+			return optional.get();
+		}
+
+		public ObjectNode getKillmail(long warId, long killmailId) {
+			var optional =
+					Optional.ofNullable(killmailsByWar.get(warId)).flatMap(m -> Optional.ofNullable(m.get(killmailId)));
+			assertTrue(optional.isPresent(), "Killmail " + killmailId + " for war " + warId + " not found in archive");
+			return optional.get();
+		}
 	}
 }
