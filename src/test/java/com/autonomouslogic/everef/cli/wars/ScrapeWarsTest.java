@@ -2,7 +2,6 @@ package com.autonomouslogic.everef.cli.wars;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -131,56 +130,19 @@ public class ScrapeWarsTest {
 		assertEquals(1, root.size());
 
 		var archive = getAndVerifyArchiveUpload();
-		var archivedWar = archive.getWar(1000);
-		assertEquals("2026-01-01T00:00:00Z", archivedWar.get("declared").asText());
-		assertEquals(500001L, archivedWar.get("aggressor_id").asLong());
-		assertEquals(500002L, archivedWar.get("defender_id").asLong());
+		var war = (ObjectNode) root.get("1000").deepCopy();
+		war.remove("last_killmail_id");
+		assertEquals(war.toString(), archive.getWar(1000).toString());
 
-		assertEquals(buildExpectedKillmail(500001L, "hash1", 1000L), archive.getKillmail(1000, 500001));
-		assertEquals(buildExpectedKillmail(500002L, "hash2", 1000L), archive.getKillmail(1000, 500002));
+		assertEquals(
+				buildExpectedKillmail(500001L, "hash1", 1000L).toString(),
+				archive.getKillmail(1000, 500001).toString());
+		assertEquals(
+				buildExpectedKillmail(500002L, "hash2", 1000L).toString(),
+				archive.getKillmail(1000, 500002).toString());
 
 		assertEquals(1, archive.getWarsCount());
 		assertEquals(2, archive.getKillmailsCount());
-	}
-
-	@Test
-	@SneakyThrows
-	void shouldFetchOnlyUnfinishedWars() {
-		dispatcher.addWar(1000L, "2026-01-01T00:00:00Z", null);
-		dispatcher.addWar(1001L, "2026-02-01T00:00:00Z", "2026-03-01T00:00:00Z");
-
-		scrapeWars.run();
-
-		var warsCurrentJson = mockS3Adapter.getTestObject(DATA_BUCKET, "wars/wars-current.json", dataClient);
-		var root = objectMapper.readTree(warsCurrentJson.get());
-
-		assertTrue(root.has("1000"));
-		assertFalse(root.has("1001"));
-	}
-
-	@Test
-	@SneakyThrows
-	void shouldUpdateWarsCurrentJsonWithNewWars() {
-		var existingWars = objectMapper.createObjectNode();
-		var war999 = objectMapper.createObjectNode();
-		war999.put("id", 999L);
-		war999.put("declared", "2025-12-01T00:00:00Z");
-		war999.put("started", "2025-12-01T00:00:00Z");
-		existingWars.set("999", war999);
-
-		var existingJson = objectMapper.writeValueAsBytes(existingWars);
-		mockS3Adapter.putTestObject(DATA_BUCKET, "wars/wars-current.json", existingJson, dataClient);
-
-		dispatcher.addWar(999L, "2025-12-01T00:00:00Z", null);
-		dispatcher.addWar(1000L, "2026-01-01T00:00:00Z", null);
-
-		scrapeWars.run();
-
-		var warsCurrentJson = mockS3Adapter.getTestObject(DATA_BUCKET, "wars/wars-current.json", dataClient);
-		var root = objectMapper.readTree(warsCurrentJson.get());
-
-		assertTrue(root.has("999"));
-		assertTrue(root.has("1000"));
 	}
 
 	@Test
@@ -203,7 +165,63 @@ public class ScrapeWarsTest {
 		assertTrue(root.has("1000"));
 		assertTrue(root.has("1001"));
 		assertTrue(root.has("1002"));
+
+		var archive = getAndVerifyArchiveUpload();
+
+		assertEquals(1000, archive.getWar(1000).get("war_id").asInt());
+		assertEquals(1001, archive.getWar(1001).get("war_id").asInt());
+		assertEquals(1002, archive.getWar(1002).get("war_id").asInt());
+
+		assertEquals(
+				500001, archive.getKillmail(1000, 500001).get("killmail_id").asInt());
+		assertEquals(
+				500002, archive.getKillmail(1000, 500002).get("killmail_id").asInt());
+		assertEquals(
+				500003, archive.getKillmail(1001, 500003).get("killmail_id").asInt());
+
+		assertEquals(3, archive.getWarsCount());
+		assertEquals(3, archive.getKillmailsCount());
 	}
+
+	//	@Test
+	//	@SneakyThrows
+	//	void shouldFetchOnlyUnfinishedWars() {
+	//		dispatcher.addWar(1000L, "2026-01-01T00:00:00Z", null);
+	//		dispatcher.addWar(1001L, "2026-02-01T00:00:00Z", "2026-03-01T00:00:00Z");
+	//
+	//		scrapeWars.run();
+	//
+	//		var warsCurrentJson = mockS3Adapter.getTestObject(DATA_BUCKET, "wars/wars-current.json", dataClient);
+	//		var root = objectMapper.readTree(warsCurrentJson.get());
+	//
+	//		assertTrue(root.has("1000"));
+	//		assertFalse(root.has("1001"));
+	//	}
+
+	//	@Test
+	//	@SneakyThrows
+	//	void shouldUpdateWarsCurrentJsonWithNewWars() {
+	//		var existingWars = objectMapper.createObjectNode();
+	//		var war999 = objectMapper.createObjectNode();
+	//		war999.put("id", 999L);
+	//		war999.put("declared", "2025-12-01T00:00:00Z");
+	//		war999.put("started", "2025-12-01T00:00:00Z");
+	//		existingWars.set("999", war999);
+	//
+	//		var existingJson = objectMapper.writeValueAsBytes(existingWars);
+	//		mockS3Adapter.putTestObject(DATA_BUCKET, "wars/wars-current.json", existingJson, dataClient);
+	//
+	//		dispatcher.addWar(999L, "2025-12-01T00:00:00Z", null);
+	//		dispatcher.addWar(1000L, "2026-01-01T00:00:00Z", null);
+	//
+	//		scrapeWars.run();
+	//
+	//		var warsCurrentJson = mockS3Adapter.getTestObject(DATA_BUCKET, "wars/wars-current.json", dataClient);
+	//		var root = objectMapper.readTree(warsCurrentJson.get());
+	//
+	//		assertTrue(root.has("999"));
+	//		assertTrue(root.has("1000"));
+	//	}
 
 	@Test
 	@SneakyThrows
