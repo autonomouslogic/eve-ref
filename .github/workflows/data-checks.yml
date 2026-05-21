@@ -11,7 +11,6 @@ jobs:
     name: Test Resources
     timeout-minutes: 30
     runs-on: ubuntu-latest
-    container: autonomouslogic/base-image:latest
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -30,7 +29,6 @@ jobs:
     name: Industry Resources
     timeout-minutes: 30
     runs-on: ubuntu-latest
-    container: autonomouslogic/base-image:latest
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -49,7 +47,6 @@ jobs:
     name: Verify Reference Data Models
     timeout-minutes: 30
     runs-on: ubuntu-latest
-    container: autonomouslogic/base-image:latest
     steps:
       - name: Checkout
         uses: actions/checkout@v6

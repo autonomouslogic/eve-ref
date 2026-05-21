@@ -6,7 +6,7 @@
 COMMAND=$1
 URL=$2
 
-$MAKE="make $COMMAND"
+MAKE="make $COMMAND"
 echo Running $MAKE
 $MAKE
 if [[ `git status --porcelain` ]]; then
