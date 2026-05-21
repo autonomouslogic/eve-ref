@@ -131,7 +131,7 @@ public class KillmailFetcher {
 				() -> {
 					try {
 						var url = String.format(
-								"%slatest/killmails/%d/%s/", Configs.ESI_BASE_URL.getRequired(), killmailId, hash);
+								"%skillmails/%d/%s/", Configs.ESI_BASE_URL.getRequired(), killmailId, hash);
 
 						try (var response = okHttpWrapper.get(url)) {
 							var code = response.code();

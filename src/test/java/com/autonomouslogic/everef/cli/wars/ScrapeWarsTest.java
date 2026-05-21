@@ -131,10 +131,13 @@ public class ScrapeWarsTest {
 		assertEquals(1, root.size());
 
 		var archive = getAndVerifyArchiveUpload();
-		assertEquals(root.get("1000"), archive.getWar(1000));
+		var archivedWar = archive.getWar(1000);
+		assertEquals("2026-01-01T00:00:00Z", archivedWar.get("declared").asText());
+		assertEquals(500001L, archivedWar.get("aggressor_id").asLong());
+		assertEquals(500002L, archivedWar.get("defender_id").asLong());
 
-		assertEquals(objectMapper.createObjectNode(), archive.getKillmail(1000, 500001));
-		assertEquals(objectMapper.createObjectNode(), archive.getKillmail(1000, 500002));
+		assertEquals(buildExpectedKillmail(500001L, "hash1", 1000L), archive.getKillmail(1000, 500001));
+		assertEquals(buildExpectedKillmail(500002L, "hash2", 1000L), archive.getKillmail(1000, 500002));
 
 		assertEquals(1, archive.getWarsCount());
 		assertEquals(2, archive.getKillmailsCount());
@@ -329,8 +332,8 @@ public class ScrapeWarsTest {
 				}
 
 				// Handle /killmails/{killmailId}/{hash}/ endpoint
-				if (path.matches("^/latest/killmails/\\d+/[a-f0-9]+/?$")) {
-					var killmailIdStr = path.replaceAll("^/latest/killmails/(\\d+)/([a-f0-9]+)/?$", "$1");
+				if (path.matches("^/latest/killmails/\\d+/[a-z0-9]+/?$")) {
+					var killmailIdStr = path.replaceAll("^/latest/killmails/(\\d+)/([a-z0-9]+)/?$", "$1");
 					var killmailId = Long.parseLong(killmailIdStr);
 
 					var killmail = objectMapper.createObjectNode();
@@ -430,6 +433,35 @@ public class ScrapeWarsTest {
 		assertArrayEquals(archiveData.get(), latestData.get());
 
 		return extractArchive(latestData.get());
+	}
+
+	private ObjectNode buildExpectedKillmail(long killmailId, String hash, long warId) {
+		var killmail = objectMapper.createObjectNode();
+		killmail.put("killmail_id", killmailId);
+		killmail.put("killmail_time", "2026-05-20T10:00:00Z");
+		killmail.put("solar_system_id", 30002652L);
+
+		var victim = objectMapper.createObjectNode();
+		victim.put("character_id", 2012501001L);
+		victim.put("corporation_id", 98654321L);
+		victim.put("ship_type_id", 587L);
+		victim.put("damage_taken", 15000);
+		killmail.set("victim", victim);
+
+		var attackers = objectMapper.createArrayNode();
+		var attacker = objectMapper.createObjectNode();
+		attacker.put("character_id", 2012501002L);
+		attacker.put("corporation_id", 98654322L);
+		attacker.put("damage_done", 15000L);
+		attacker.put("final_blow", true);
+		attackers.add(attacker);
+		killmail.set("attackers", attackers);
+
+		killmail.put("war_id", warId);
+		killmail.put("killmail_hash", hash);
+		killmail.put("http_last_modified", "2026-05-20T11:00:00Z");
+
+		return killmail;
 	}
 
 	@SneakyThrows
