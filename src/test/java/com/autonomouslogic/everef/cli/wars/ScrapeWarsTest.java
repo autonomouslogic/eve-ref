@@ -110,6 +110,7 @@ public class ScrapeWarsTest {
 		var war = root.get("1000");
 		assertEquals("2026-01-01T00:00:00Z", war.get("declared").asText());
 		assertEquals("2026-05-20T12:00:00Z", war.get("http_last_modified").asText());
+		assertFalse(war.has("last_killmail_id"));
 
 		var archive = getAndVerifyArchiveUpload();
 		assertEquals(war, archive.getWar(1000));
@@ -133,6 +134,8 @@ public class ScrapeWarsTest {
 
 		var archive = getAndVerifyArchiveUpload();
 		var war = (ObjectNode) root.get("1000").deepCopy();
+		assertEquals(500002, war.get("last_killmail_id").asInt());
+
 		war.remove("last_killmail_id");
 		assertEquals(war.toString(), archive.getWar(1000).toString());
 
@@ -221,6 +224,43 @@ public class ScrapeWarsTest {
 		assertNotNull(archive.getKillmail(1001, 500001));
 
 		assertEquals(2, archive.getWarsCount());
+		assertEquals(1, archive.getKillmailsCount());
+	}
+
+	@Test
+	@SneakyThrows
+	void shouldNotFetchOldKillmailsForWars() {
+		var existingJson = ("""
+				{
+					"1000": {
+						"war_id": 1000,
+						"started": "2025-12-01T00:00:00Z",
+						"declared": "2025-12-01T00:00:00Z",
+						"last_killmail_id": 500000
+					}
+				}
+				""").getBytes();
+		dispatcher.setWarsCurrentJson(existingJson);
+
+		dispatcher.addWar(1000L, "2026-01-01T00:00:00Z", null);
+
+		dispatcher.addKillmailForWar(1000, 499999, "hash1");
+		dispatcher.addKillmailForWar(1000, 500000, "hash2");
+		dispatcher.addKillmailForWar(1000, 500001, "hash3");
+
+		scrapeWars.run();
+
+		var warsCurrentJson = mockS3Adapter.getTestObject(DATA_BUCKET, "wars/wars-current.json", dataClient);
+		var root = objectMapper.readTree(warsCurrentJson.get());
+
+		assertTrue(root.has("1000"));
+
+		var archive = getAndVerifyArchiveUpload();
+
+		assertNotNull(archive.getWar(1000));
+		assertNotNull(archive.getKillmail(1000, 500001));
+
+		assertEquals(1, archive.getWarsCount());
 		assertEquals(1, archive.getKillmailsCount());
 	}
 

@@ -91,6 +91,13 @@ public class WarsFetcher {
 						.ifPresent(date -> ((com.fasterxml.jackson.databind.node.ObjectNode) warNode)
 								.put("http_last_modified", date.toInstant().toString()));
 
+				// Preserve last_killmail_id from existing war if present
+				var existingWar = warsMap.get(warId);
+				if (existingWar != null && existingWar.has("last_killmail_id")) {
+					((com.fasterxml.jackson.databind.node.ObjectNode) warNode)
+							.set("last_killmail_id", existingWar.get("last_killmail_id"));
+				}
+
 				warsMap.put(warId, warNode);
 				log.debug("Fetched war {}", warId);
 			}
