@@ -113,4 +113,17 @@ public class EsiUrlTest {
 		var url = EsiUrl.modern().urlPath("/universe/types/").build();
 		assertEquals("https://esi.evetech.net/universe/types/", url.toString());
 	}
+
+	@Test
+	@SetEnvironmentVariable(key = "ESI_BASE_URL", value = "http://localhost:30150/")
+	void shouldIncludeUrlPathWithoutLeadingSlash() {
+		// This test verifies the fix for the bug where urlPath without leading slash
+		// would be lost when basePath was present and baseUrl ended with "/"
+		var url = EsiUrl.builder()
+				.urlPath("wars/1000/")
+				.datasource(null)
+				.language(null)
+				.build();
+		assertEquals("http://localhost:30150/latest/wars/1000/", url.toString());
+	}
 }
