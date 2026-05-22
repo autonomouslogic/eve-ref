@@ -1,7 +1,8 @@
 package com.autonomouslogic.everef.cli.wars;
 
 import com.autonomouslogic.everef.config.Configs;
-import com.autonomouslogic.everef.http.OkHttpWrapper;
+import com.autonomouslogic.everef.esi.EsiHelper;
+import com.autonomouslogic.everef.esi.EsiUrl;
 import com.autonomouslogic.everef.util.VirtualThreads;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -22,7 +23,7 @@ public class WarsFetcher {
 	protected ObjectMapper objectMapper;
 
 	@Inject
-	protected OkHttpWrapper okHttpWrapper;
+	protected EsiHelper esiHelper;
 
 	@Setter
 	private Map<Long, JsonNode> warsMap;
@@ -58,9 +59,13 @@ public class WarsFetcher {
 
 	private void fetchWar(long warId) {
 		try {
-			var url = String.format("%swars/%d/", Configs.ESI_BASE_URL.getRequired(), warId);
+			var esiUrl = EsiUrl.builder()
+					.urlPath("wars/" + warId + "/")
+					.datasource(null)
+					.language(null)
+					.build();
 
-			try (var response = okHttpWrapper.get(url)) {
+			try (var response = esiHelper.fetch(esiUrl)) {
 				var code = response.code();
 
 				if (code == 404 || code == 403 || code == 400) {
@@ -86,10 +91,7 @@ public class WarsFetcher {
 
 				var warNode = objectMapper.readTree(body.string());
 
-				okHttpWrapper
-						.getLastModified(response)
-						.ifPresent(date -> ((com.fasterxml.jackson.databind.node.ObjectNode) warNode)
-								.put("http_last_modified", date.toInstant().toString()));
+				esiHelper.populateLastModified(warNode, response);
 
 				// Preserve last_killmail_id from existing war if present
 				var existingWar = warsMap.get(warId);

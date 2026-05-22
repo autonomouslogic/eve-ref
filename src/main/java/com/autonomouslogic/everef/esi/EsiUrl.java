@@ -53,6 +53,7 @@ public class EsiUrl {
 		String currentUrl = sb.toString();
 		if (!currentUrl.endsWith("/") && !urlPath.startsWith("/")) {
 			sb.append("/");
+			sb.append(urlPath);
 		} else if (currentUrl.endsWith("/") && urlPath.startsWith("/")) {
 			sb.append(urlPath.substring(1));
 		} else {

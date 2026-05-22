@@ -1,8 +1,9 @@
 package com.autonomouslogic.everef.cli.wars;
 
 import com.autonomouslogic.everef.config.Configs;
+import com.autonomouslogic.everef.esi.EsiHelper;
 import com.autonomouslogic.everef.esi.EsiRetryUtil;
-import com.autonomouslogic.everef.http.OkHttpWrapper;
+import com.autonomouslogic.everef.esi.EsiUrl;
 import com.autonomouslogic.everef.util.VirtualThreads;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -18,7 +19,6 @@ import java.util.Set;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import javax.inject.Inject;
-import javax.inject.Named;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -37,8 +37,7 @@ public class KillmailFetcher {
 	private static final long KILLMAIL_FULL_CHECK = KILLMAIL_INITIAL_WARS.get(KILLMAIL_INITIAL_WARS.size() - 1) + 1;
 
 	@Inject
-	@Named("esi")
-	protected OkHttpWrapper okHttpWrapper;
+	protected EsiHelper esiHelper;
 
 	@Inject
 	protected ObjectMapper objectMapper;
@@ -104,9 +103,14 @@ public class KillmailFetcher {
 		var hasMore = true;
 
 		while (hasMore) {
-			var url = String.format("%swars/%d/killmails/?page=%d", Configs.ESI_BASE_URL.getRequired(), warId, page);
+			var esiUrl = EsiUrl.builder()
+					.urlPath("wars/" + warId + "/killmails/")
+					.page(page)
+					.datasource(null)
+					.language(null)
+					.build();
 
-			try (var response = okHttpWrapper.get(url)) {
+			try (var response = esiHelper.fetch(esiUrl)) {
 				var code = response.code();
 
 				if (code == 404) {
@@ -158,10 +162,13 @@ public class KillmailFetcher {
 				"killmail " + killmailId,
 				() -> {
 					try {
-						var url = String.format(
-								"%skillmails/%d/%s/", Configs.ESI_BASE_URL.getRequired(), killmailId, hash);
+						var esiUrl = EsiUrl.builder()
+								.urlPath("killmails/" + killmailId + "/" + hash + "/")
+								.datasource(null)
+								.language(null)
+								.build();
 
-						try (var response = okHttpWrapper.get(url)) {
+						try (var response = esiHelper.fetch(esiUrl)) {
 							var code = response.code();
 
 							if (code == 404) {
@@ -191,8 +198,7 @@ public class KillmailFetcher {
 							((ObjectNode) kmNode).put("war_id", warId);
 							((ObjectNode) kmNode).put("killmail_hash", hash);
 
-							okHttpWrapper.getLastModified(response).ifPresent(date -> ((ObjectNode) kmNode)
-									.put("http_last_modified", date.toInstant().toString()));
+							esiHelper.populateLastModified(kmNode, response);
 
 							log.debug("Fetched killmail {} for war {}", killmailId, warId);
 							return kmNode;
