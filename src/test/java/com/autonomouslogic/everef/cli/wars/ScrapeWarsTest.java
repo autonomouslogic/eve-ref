@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.SneakyThrows;
@@ -38,6 +39,7 @@ import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Timeout;
 import org.junitpioneer.jupiter.SetEnvironmentVariable;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 
@@ -45,7 +47,7 @@ import software.amazon.awssdk.services.s3.S3AsyncClient;
  * Integration tests for ScrapeWars using MockWebServer (ESI) and MockS3Adapter (S3).
  */
 @Log4j2
-@SetEnvironmentVariable(key = "ESI_BASE_URL", value = "http://localhost:" + TestDataUtil.TEST_PORT + "/latest/")
+@SetEnvironmentVariable(key = "ESI_BASE_URL", value = "http://localhost:" + TestDataUtil.TEST_PORT + "/esi/")
 @SetEnvironmentVariable(key = "ESI_USER_AGENT", value = "test@example.com")
 @SetEnvironmentVariable(key = "DATA_PATH", value = "s3://" + ScrapeWarsTest.DATA_BUCKET + "/")
 @SetEnvironmentVariable(key = "DATA_BASE_URL", value = "http://localhost:" + TestDataUtil.TEST_PORT + "/")
@@ -53,6 +55,7 @@ import software.amazon.awssdk.services.s3.S3AsyncClient;
 @SetEnvironmentVariable(key = "WARS_FETCH_CONCURRENCY", value = "2")
 @SetEnvironmentVariable(key = "KILLMAIL_LIST_CONCURRENCY", value = "2")
 @SetEnvironmentVariable(key = "KILLMAIL_CONCURRENCY", value = "2")
+@Timeout(30)
 public class ScrapeWarsTest {
 	static final String DATA_BUCKET = "data-bucket";
 
@@ -94,7 +97,18 @@ public class ScrapeWarsTest {
 	@AfterEach
 	@SneakyThrows
 	void teardown() {
+		assertRemainingRequests();
 		server.close();
+	}
+
+	@SneakyThrows
+	private void assertRemainingRequests() {
+		RecordedRequest req;
+		while ((req = server.takeRequest(1, TimeUnit.MILLISECONDS)) != null) {
+			if (req.getRequestUrl().encodedPath().startsWith("/esi/")) {
+				assertNotNull(req.getHeader("X-Compatibility-Date"));
+			}
+		}
 	}
 
 	@Test
@@ -384,7 +398,7 @@ public class ScrapeWarsTest {
 				}
 
 				// Handle /wars/ endpoint - return list of all war IDs
-				if (path.matches("^/latest/wars/?$")) {
+				if (path.matches("^/esi/wars/?$")) {
 					var warIds = wars.entrySet().stream()
 							.filter(e -> e.getValue().finished == null)
 							.map(Map.Entry::getKey)
@@ -398,8 +412,8 @@ public class ScrapeWarsTest {
 				}
 
 				// Handle /wars/{warId}/ endpoint
-				if (path.matches("^/latest/wars/\\d+/?$")) {
-					var warIdStr = path.replaceAll("^/latest/wars/(\\d+)/?$", "$1");
+				if (path.matches("^/esi/wars/\\d+/?$")) {
+					var warIdStr = path.replaceAll("^/esi/wars/(\\d+)/?$", "$1");
 					var warId = Long.parseLong(warIdStr);
 
 					if (!wars.containsKey(warId)) {
@@ -428,8 +442,8 @@ public class ScrapeWarsTest {
 				}
 
 				// Handle /wars/{warId}/killmails/ endpoint
-				if (path.matches("^/latest/wars/\\d+/killmails/?.*")) {
-					var warIdStr = path.replaceAll("^/latest/wars/(\\d+)/killmails.*", "$1");
+				if (path.matches("^/esi/wars/\\d+/killmails/?.*")) {
+					var warIdStr = path.replaceAll("^/esi/wars/(\\d+)/killmails.*", "$1");
 					var warId = Long.parseLong(warIdStr);
 
 					if (!wars.containsKey(warId)) {
@@ -453,8 +467,8 @@ public class ScrapeWarsTest {
 				}
 
 				// Handle /killmails/{killmailId}/{hash}/ endpoint
-				if (path.matches("^/latest/killmails/\\d+/[a-z0-9]+/?$")) {
-					var killmailIdStr = path.replaceAll("^/latest/killmails/(\\d+)/([a-z0-9]+)/?$", "$1");
+				if (path.matches("^/esi/killmails/\\d+/[a-z0-9]+/?$")) {
+					var killmailIdStr = path.replaceAll("^/esi/killmails/(\\d+)/([a-z0-9]+)/?$", "$1");
 					var killmailId = Long.parseLong(killmailIdStr);
 
 					var killmail = objectMapper.createObjectNode();

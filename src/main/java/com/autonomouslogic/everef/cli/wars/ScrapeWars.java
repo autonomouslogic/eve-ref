@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -177,7 +178,7 @@ public class ScrapeWars implements Command {
 
 	@SneakyThrows
 	private java.util.List<JsonNode> fetchKillmailList(long warId) {
-		var killmails = new java.util.ArrayList<JsonNode>();
+		var killmails = new ArrayList<JsonNode>();
 		var page = 1;
 		var hasMore = true;
 
