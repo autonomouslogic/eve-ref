@@ -28,6 +28,9 @@ public class S3Module {
 	@Setter
 	S3AsyncClient staticClient;
 
+	@Setter
+	S3AsyncClient warsDbClient;
+
 	@Provides
 	@Named("data")
 	@Singleton

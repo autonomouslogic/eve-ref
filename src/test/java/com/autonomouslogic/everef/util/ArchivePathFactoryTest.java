@@ -42,13 +42,20 @@ public class ArchivePathFactoryTest {
 	@Test
 	void shouldGenerateKillmailsNames() {
 		var factory = ArchivePathFactory.KILLMAILS;
-		testExpectedPaths(factory, LocalDate.parse("2016-01-04"), "killmails/2016/killmails-2016-01-04.tar.bz2");
+		testExpectedPath(factory, LocalDate.parse("2016-01-04"), "killmails/2016/killmails-2016-01-04.tar.bz2");
+	}
+
+	@Test
+	void shouldGenerateWarsNames() {
+		var factory = ArchivePathFactory.WARS;
+		testExpectedPath(
+				factory, Instant.parse("2026-01-02T00:13:05Z"), "wars/history/2026/wars-2026-01-02_00-13-05.tar.bz2");
 	}
 
 	@Test
 	void shouldGenerateMarketHistoryNames() {
 		var factory = ArchivePathFactory.MARKET_HISTORY;
-		testExpectedPaths(
+		testExpectedPath(
 				factory, LocalDate.parse("2022-01-08"), "market-history/2022/market-history-2022-01-08.csv.bz2");
 	}
 
@@ -115,20 +122,28 @@ public class ArchivePathFactoryTest {
 	@Test
 	void shouldGenerateMer() {
 		var factory = ArchivePathFactory.MER;
-		testExpectedPaths(factory, LocalDate.parse("2026-05-01"), "ccp/mer/2026/EVEOnline_MER_202605.zip");
+		testExpectedPath(factory, LocalDate.parse("2026-05-01"), "ccp/mer/2026/EVEOnline_MER_202605.zip");
+	}
+
+	private static void testExpectedPath(ArchivePathFactory factory, Instant timestamp, String expectedTimePath) {
+		testExpectedPaths(factory, timestamp, expectedTimePath, null);
 	}
 
 	private static void testExpectedPaths(
 			ArchivePathFactory factory, Instant timestamp, String expectedTimePath, String expectedLatestPath) {
-		assertEquals(expectedLatestPath, factory.createLatestPath());
+		if (expectedLatestPath != null) {
+			assertEquals(expectedLatestPath, factory.createLatestPath());
+		}
 		assertEquals(expectedTimePath, factory.createArchivePath(timestamp));
 
 		assertEquals(timestamp, factory.parseArchiveTime(expectedTimePath));
 		assertEquals(timestamp, factory.parseArchiveTime("/" + expectedTimePath));
-		assertNull(factory.parseArchiveTime(expectedLatestPath));
+		if (expectedLatestPath != null) {
+			assertNull(factory.parseArchiveTime(expectedLatestPath));
+		}
 	}
 
-	private static void testExpectedPaths(ArchivePathFactory factory, LocalDate datestamp, String expectedTimePath) {
+	private static void testExpectedPath(ArchivePathFactory factory, LocalDate datestamp, String expectedTimePath) {
 		assertEquals(expectedTimePath, factory.createArchivePath(datestamp));
 		assertEquals(
 				datestamp,

@@ -846,6 +846,42 @@ public class Configs {
 			.type(Duration.class)
 			.build();
 
+	/**
+	 * How long to retain old wars data
+	 */
+	public static final Config<Duration> WARS_DATA_RETENTION = Config.<Duration>builder()
+			.name("WARS_DATA_RETENTION")
+			.defaultValue(Duration.ofDays(365))
+			.type(Duration.class)
+			.build();
+
+	/**
+	 * Concurrency for fetching wars
+	 */
+	public static final Config<Integer> WARS_FETCH_CONCURRENCY = Config.<Integer>builder()
+			.name("WARS_FETCH_CONCURRENCY")
+			.defaultValue(32)
+			.type(Integer.class)
+			.build();
+
+	/**
+	 * Concurrency for fetching killmail lists
+	 */
+	public static final Config<Integer> KILLMAIL_LIST_CONCURRENCY = Config.<Integer>builder()
+			.name("KILLMAIL_LIST_CONCURRENCY")
+			.defaultValue(2)
+			.type(Integer.class)
+			.build();
+
+	/**
+	 * Concurrency for fetching killmail details
+	 */
+	public static final Config<Integer> KILLMAIL_CONCURRENCY = Config.<Integer>builder()
+			.name("KILLMAIL_CONCURRENCY")
+			.defaultValue(4)
+			.type(Integer.class)
+			.build();
+
 	@SneakyThrows
 	private static URL url(String url) {
 		return new URL(url);

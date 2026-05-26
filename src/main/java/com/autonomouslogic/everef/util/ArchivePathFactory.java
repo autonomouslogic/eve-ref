@@ -280,6 +280,13 @@ public class ArchivePathFactory {
 			.suffix(".zip")
 			.build();
 
+	public static final ArchivePathFactory WARS = builder()
+			.folder("wars")
+			.filename("wars")
+			.suffix(".tar.bz2")
+			.dateFolder(false)
+			.build();
+
 	@NonNull
 	String folder;
 

@@ -1,0 +1,234 @@
+package com.autonomouslogic.everef.cli.wars;
+
+import com.autonomouslogic.everef.config.Configs;
+import com.autonomouslogic.everef.esi.EsiHelper;
+import com.autonomouslogic.everef.esi.EsiRetryUtil;
+import com.autonomouslogic.everef.esi.EsiUrl;
+import com.autonomouslogic.everef.util.VirtualThreads;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import io.sentry.Sentry;
+import io.sentry.SentryLevel;
+import java.time.Duration;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ConcurrentHashMap;
+import javax.inject.Inject;
+import lombok.extern.log4j.Log4j2;
+
+/**
+ * Fetches killmail details from ESI.
+ */
+@Log4j2
+public class KillmailFetcher {
+	/**
+	 * First war with killmails is 48074, with one killmail.
+	 * After that it's 138678, also with one killmail
+	 * After that it's 144630, with two killmails.
+	 * After that it's 149785, with quite a few killmails.
+	 */
+	private static final List<Long> KILLMAIL_INITIAL_WARS = List.of(48074L, 138678L, 144630L, 149785L);
+
+	private static final long KILLMAIL_FULL_CHECK = KILLMAIL_INITIAL_WARS.get(KILLMAIL_INITIAL_WARS.size() - 1) + 1;
+
+	@Inject
+	protected EsiHelper esiHelper;
+
+	@Inject
+	protected ObjectMapper objectMapper;
+
+	private Map<Long, JsonNode> killmailsCache = new ConcurrentHashMap<>();
+
+	@Inject
+	protected KillmailFetcher() {}
+
+	public void fetchKillmails(Set<Long> warIds) {
+		log.info("Fetching killmails for {} wars", warIds.size());
+
+		// Process wars in parallel with lower concurrency (2 wars at a time)
+		var warsToFetch = warIds.stream().filter(this::shouldFetchKillmails).toList();
+
+		var tasks = warsToFetch.stream()
+				.map(warId -> (Callable<Void>) () -> {
+					fetchKillmailsForWar(warId);
+					return null;
+				})
+				.toList();
+
+		VirtualThreads.parallel(tasks, Configs.KILLMAIL_LIST_CONCURRENCY.getRequired());
+	}
+
+	private boolean shouldFetchKillmails(long warId) {
+		// Normal wars >= 149786 should have killmails
+		if (warId >= KILLMAIL_FULL_CHECK) {
+			return true;
+		}
+		// Only specific early wars have killmails
+		return KILLMAIL_INITIAL_WARS.contains(warId);
+	}
+
+	private void fetchKillmailsForWar(long warId) {
+		try {
+			log.debug("Fetching killmail list for war {}", warId);
+
+			// Fetch the list of killmails for this war using OkHttp
+			var killmailList = fetchKillmailList(warId);
+
+			log.debug("Found {} killmails for war {}", killmailList.size(), warId);
+
+			// Process killmail details in parallel
+			var tasks = killmailList.stream()
+					.map(km -> (Callable<Void>) () -> {
+						long kmId = km.get("killmail_id").asLong();
+						String kmHash = km.get("killmail_hash").asText();
+						fetchKillmailDetail(warId, kmId, kmHash);
+						return null;
+					})
+					.toList();
+
+			VirtualThreads.parallel(tasks, Configs.KILLMAIL_CONCURRENCY.getRequired());
+		} catch (Exception e) {
+			log.error("Failed to fetch killmails for war {}: {}", warId, e.getMessage());
+		}
+	}
+
+	private List<JsonNode> fetchKillmailList(long warId) throws Exception {
+		var killmails = new java.util.ArrayList<JsonNode>();
+		var page = 1;
+		var hasMore = true;
+
+		while (hasMore) {
+			var esiUrl = EsiUrl.builder()
+					.urlPath("wars/" + warId + "/killmails/")
+					.page(page)
+					.datasource(null)
+					.language(null)
+					.build();
+
+			try (var response = esiHelper.fetch(esiUrl)) {
+				var code = response.code();
+
+				if (code == 404) {
+					log.debug("War {} has no killmails", warId);
+					break;
+				}
+
+				if (code != 200) {
+					throw new RuntimeException("Failed to fetch killmail list for war " + warId + ": HTTP " + code);
+				}
+
+				var body = response.body();
+				if (body == null) {
+					throw new RuntimeException("Empty response body for war " + warId);
+				}
+
+				var json = objectMapper.readValue(body.string(), JsonNode[].class);
+				for (var km : json) {
+					killmails.add(km);
+				}
+
+				var pagesHeader = response.header("X-Pages");
+				var totalPages = pagesHeader != null ? Integer.parseInt(pagesHeader) : 1;
+				hasMore = page < totalPages;
+				page++;
+			}
+		}
+
+		return killmails;
+	}
+
+	/**
+	 * Fetches and caches a killmail detail.
+	 *
+	 * @throws KillmailNotFoundException if killmail doesn't exist (404)
+	 */
+	public void fetchKillmailDetail(long warId, long killmailId, String hash) throws Exception {
+		// Only fetch if not already cached
+		if (!killmailsCache.containsKey(killmailId)) {
+			var killmail = fetchKillmailWithRetry(warId, killmailId, hash);
+			if (killmail != null) {
+				killmailsCache.put(killmailId, killmail);
+			}
+		}
+	}
+
+	private JsonNode fetchKillmailWithRetry(long warId, long killmailId, String hash) throws Exception {
+		return EsiRetryUtil.fetchWithRetry(
+				"killmail " + killmailId,
+				() -> {
+					try {
+						var esiUrl = EsiUrl.builder()
+								.urlPath("killmails/" + killmailId + "/" + hash + "/")
+								.datasource(null)
+								.language(null)
+								.build();
+
+						try (var response = esiHelper.fetch(esiUrl)) {
+							var code = response.code();
+
+							if (code == 404) {
+								log.debug("Killmail {} not found", killmailId);
+								throw new KillmailNotFoundException(killmailId);
+							}
+
+							if (code == 422) {
+								var msg = "Killmail " + killmailId + " has invalid hash, unable to fetch";
+								log.warn(msg);
+								Sentry.captureException(
+										new RuntimeException(msg), scope -> scope.setLevel(SentryLevel.WARNING));
+								return null;
+							}
+
+							if (code != 200) {
+								throw new RuntimeException("HTTP " + code);
+							}
+
+							var body = response.body();
+							if (body == null) {
+								throw new RuntimeException("Empty response body");
+							}
+
+							var kmNode = objectMapper.readTree(body.string());
+
+							((ObjectNode) kmNode).put("war_id", warId);
+							((ObjectNode) kmNode).put("killmail_hash", hash);
+
+							esiHelper.populateLastModified(kmNode, response);
+
+							log.debug("Fetched killmail {} for war {}", killmailId, warId);
+							return kmNode;
+						}
+					} catch (KillmailNotFoundException e) {
+						throw e;
+					} catch (Exception e) {
+						throw new RuntimeException(e);
+					}
+				},
+				12,
+				Duration.ofSeconds(5));
+	}
+
+	/**
+	 * Get a cached killmail if available.
+	 *
+	 * @param killmailId the killmail ID
+	 * @return the killmail data if cached, empty otherwise
+	 */
+	public Optional<JsonNode> getKillmail(long killmailId) {
+		return Optional.ofNullable(killmailsCache.get(killmailId));
+	}
+
+	/**
+	 * Get all cached killmails.
+	 *
+	 * @return map of killmail ID to killmail data
+	 */
+	public Map<Long, JsonNode> getAllCachedKillmails() {
+		return new HashMap<>(killmailsCache);
+	}
+}
