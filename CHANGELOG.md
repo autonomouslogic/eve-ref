@@ -1,5 +1,27 @@
 EVE Ref Changelog
 
+## [2.76.1](https://github.com/autonomouslogic/eve-ref/compare/2.76.0...2.76.1) (2026-06-01)
+
+
+### Bug Fixes
+
+* **deps:** update flyway monorepo to v12.7.0 ([#1055](https://github.com/autonomouslogic/eve-ref/issues/1055)) ([2a1a3d1](https://github.com/autonomouslogic/eve-ref/commit/2a1a3d1479ffa2e32297364823134e82312827db))
+
+
+### Dependency Updates
+
+* **deps:** update plugin org.flywaydb.flyway to v12.7.0 ([#1054](https://github.com/autonomouslogic/eve-ref/issues/1054)) ([16e3dda](https://github.com/autonomouslogic/eve-ref/commit/16e3dda4eb7485679d78ced51d0edf5369d18ce1))
+
+
+### Tests
+
+* Updated test resources ([db8d9fb](https://github.com/autonomouslogic/eve-ref/commit/db8d9fb87653a443fa9393b1912fb0a2a469c337))
+
+
+### Continuous Integration
+
+* Automatic data checks ([#1053](https://github.com/autonomouslogic/eve-ref/issues/1053)) ([f705d86](https://github.com/autonomouslogic/eve-ref/commit/f705d862df9d587bbc2103e2e0214578c5e6631e))
+
 ## [2.76.0](https://github.com/autonomouslogic/eve-ref/compare/2.75.5...2.76.0) (2026-05-20)
 
 
