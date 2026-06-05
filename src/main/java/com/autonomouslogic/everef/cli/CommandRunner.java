@@ -110,6 +110,9 @@ public class CommandRunner {
 	protected Provider<ScrapeWarzoneInsurgency> scrapeWarzoneInsurgencyProvider;
 
 	@Inject
+	protected Provider<ScrapeWarzoneLeaderboard> scrapeWarzoneLeaderboardProvider;
+
+	@Inject
 	protected Provider<ScrapeInsurance> scrapeInsuranceProvider;
 
 	@Inject
@@ -214,6 +217,8 @@ public class CommandRunner {
 				return scrapeWarzoneProvider.get();
 			case "scrape-warzone-insurgency":
 				return scrapeWarzoneInsurgencyProvider.get();
+			case "scrape-warzone-leaderboard":
+				return scrapeWarzoneLeaderboardProvider.get();
 			case "scrape-insurance":
 				return scrapeInsuranceProvider.get();
 			case "scrape-universe-structures":

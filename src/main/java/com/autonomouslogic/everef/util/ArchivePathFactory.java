@@ -198,6 +198,13 @@ public class ArchivePathFactory {
 			.latestSuffix(".json")
 			.build();
 
+	public static final ArchivePathFactory WARZONE_LEADERBOARD = builder()
+			.folder("warzone-leaderboard")
+			.filename("warzone-leaderboard")
+			.suffix(".json.bz2")
+			.latestSuffix(".json")
+			.build();
+
 	public static final ArchivePathFactory INSURANCE_PRICES = builder()
 			.folder("insurance-prices")
 			.filename("insurance-prices")

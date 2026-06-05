@@ -565,6 +565,15 @@ task scrapeWarzoneInsurgency(type: JavaExec) {
 	mainClass = mainClassName
 }
 
+task scrapeWarzoneLeaderboard(type: JavaExec) {
+	group "application"
+	args "scrape-warzone-leaderboard"
+	environment envProperties
+
+	classpath = sourceSets.main.runtimeClasspath
+	mainClass = mainClassName
+}
+
 task scrapeInsurance(type: JavaExec) {
 	group "application"
 	args "scrape-insurance"
