@@ -1,5 +1,22 @@
 EVE Ref Changelog
 
+## [2.77.0](https://github.com/autonomouslogic/eve-ref/compare/2.76.1...2.77.0) (2026-06-05)
+
+
+### Features
+
+* Warzone leaderboard scrape ([38be28b](https://github.com/autonomouslogic/eve-ref/commit/38be28bff18d8e398d8f09eb8d9ab04801b47fda))
+
+
+### Bug Fixes
+
+* **ui:** June 2026 giveaways ([fd54975](https://github.com/autonomouslogic/eve-ref/commit/fd54975e3f1e797f4a1973d5ca8c542049ef1269))
+
+
+### Documentation
+
+* Added warzone to menu ([bb4fe07](https://github.com/autonomouslogic/eve-ref/commit/bb4fe07149963eff0adca94255807862e2a98c02))
+
 ## [2.76.1](https://github.com/autonomouslogic/eve-ref/compare/2.76.0...2.76.1) (2026-06-01)
 
 
