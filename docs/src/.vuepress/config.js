@@ -74,6 +74,7 @@ module.exports = {
             'datasets/reference-data',
             'datasets/sde',
             'datasets/structures',
+            'datasets/warzone',
           ]
         },
         {
