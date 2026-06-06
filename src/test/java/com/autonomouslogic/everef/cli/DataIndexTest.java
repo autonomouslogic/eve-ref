@@ -260,7 +260,7 @@ public class DataIndexTest {
 	private void verifyMainIndexJson() {
 		var json = getJsonContent("index.json");
 		assertEquals("", json.get("path").asText());
-		verifyJsonFileEntry(json, 0, "data.zip", 16, "1999-07-12T14:26:23.100Z");
+		verifyJsonFileEntry(json, 0, "data.zip", 16, "1999-07-12T14:26:23Z");
 		assertEquals(1, json.get("files").size());
 		verifyJsonDirectory(json, 0, "dir");
 		verifyJsonDirectory(json, 1, "dir2");

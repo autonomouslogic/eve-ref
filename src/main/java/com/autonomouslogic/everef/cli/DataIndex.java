@@ -2,15 +2,18 @@ package com.autonomouslogic.everef.cli;
 
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.data.FileEntry;
+import com.autonomouslogic.everef.data.IndexDirectoryEntry;
+import com.autonomouslogic.everef.data.IndexFileEntry;
+import com.autonomouslogic.everef.data.IndexPageData;
 import com.autonomouslogic.everef.data.VirtualDirectory;
 import com.autonomouslogic.everef.pug.PugHelper;
 import com.autonomouslogic.everef.s3.S3Adapter;
 import com.autonomouslogic.everef.s3.S3Util;
 import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.url.UrlParser;
+import com.autonomouslogic.everef.util.ArchivePathFactory;
 import com.autonomouslogic.everef.util.VirtualThreads;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Single;
@@ -183,33 +186,48 @@ public class DataIndex implements Command {
 
 	@SneakyThrows
 	private byte[] renderJsonIndexPage(@NonNull String prefix, List<FileEntry> entries) {
-		var root = objectMapper.createObjectNode();
-		root.put("path", prefix);
-
-		var filesArray = root.putArray("files");
-		entries.stream()
+		var files = entries.stream()
 				.filter(e -> !e.isDirectory())
-				.forEach(entry -> {
-					var fileObj = filesArray.addObject();
-					fileObj.put("name", entry.getPath().substring(entry.getPath().lastIndexOf('/') + 1));
-					fileObj.put("size", entry.getSize());
-					fileObj.put("lastModified", entry.getLastModified().toString());
-					if (entry.getMd5Hex() != null) {
-						fileObj.put("md5", entry.getMd5Hex());
-					}
-				});
+				.map(entry -> buildFileEntry(entry))
+				.toList();
 
-		var dirsArray = root.putArray("directories");
-		entries.stream()
+		var directories = entries.stream()
 				.filter(FileEntry::isDirectory)
-				.forEach(entry -> {
-					var dirObj = dirsArray.addObject();
-					var dirName = entry.getPath().replaceAll("/$", "").substring(
-							entry.getPath().replaceAll("/$", "").lastIndexOf('/') + 1);
-					dirObj.put("name", dirName);
-				});
+				.map(entry -> buildDirectoryEntry(entry))
+				.toList();
 
-		return objectMapper.writeValueAsBytes(root);
+		var indexPage = IndexPageData.builder()
+				.path(prefix)
+				.files(files)
+				.directories(directories)
+				.build();
+
+		return objectMapper.writeValueAsBytes(indexPage);
+	}
+
+	private IndexFileEntry buildFileEntry(FileEntry entry) {
+		var filename = entry.getPath().substring(entry.getPath().lastIndexOf('/') + 1);
+		var builder = IndexFileEntry.builder()
+				.name(filename)
+				.size(entry.getSize())
+				.lastModified(entry.getLastModified())
+				.md5(entry.getMd5Hex());
+
+		var match = ArchivePathFactory.tryMatch(entry.getPath());
+		if (match.isPresent()) {
+			builder.type(match.get().getType())
+					.date(match.get().getDate());
+		}
+
+		return builder.build();
+	}
+
+	private IndexDirectoryEntry buildDirectoryEntry(FileEntry entry) {
+		var dirName = entry.getPath().replaceAll("/$", "").substring(
+				entry.getPath().replaceAll("/$", "").lastIndexOf('/') + 1);
+		return IndexDirectoryEntry.builder()
+				.name(dirName)
+				.build();
 	}
 
 	@NotNull
