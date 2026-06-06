@@ -9,6 +9,8 @@ import com.autonomouslogic.everef.s3.S3Util;
 import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.url.UrlParser;
 import com.autonomouslogic.everef.util.VirtualThreads;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Single;
@@ -24,6 +26,7 @@ import javax.inject.Named;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
+import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
@@ -51,6 +54,9 @@ public class DataIndex implements Command {
 
 	@Inject
 	protected UrlParser urlParser;
+
+	@Inject
+	protected ObjectMapper objectMapper;
 
 	private S3Url dataUrl;
 	private final String dataDomain = Configs.DATA_DOMAIN.getRequired();
@@ -125,6 +131,7 @@ public class DataIndex implements Command {
 					var objects = s3Adapter.listObjects(url, recursive, s3);
 					var filtered = objects.stream()
 							.filter(obj -> !(obj.getUrl().getPath().endsWith("index.html")))
+							.filter(obj -> !(obj.getUrl().getPath().endsWith("index.json")))
 							.toList();
 					var withLastModified = s3Adapter.headLastModified(filtered, s3);
 					return Flowable.fromIterable(withLastModified)
@@ -147,8 +154,12 @@ public class DataIndex implements Command {
 
 	private Completable createAndUploadIndexPage(String prefix, List<FileEntry> index) {
 		return Completable.defer(() -> {
-			var rendered = renderIndexPage(prefix, index);
-			return uploadIndexPage(prefix, rendered);
+			var htmlRendered = renderIndexPage(prefix, index);
+			var jsonRendered = renderJsonIndexPage(prefix, index);
+			return Completable.mergeArray(
+					uploadIndexPage(prefix, htmlRendered),
+					uploadJsonIndexPage(prefix, jsonRendered)
+			);
 		});
 	}
 
@@ -170,6 +181,37 @@ public class DataIndex implements Command {
 		return rendered;
 	}
 
+	@SneakyThrows
+	private byte[] renderJsonIndexPage(@NonNull String prefix, List<FileEntry> entries) {
+		var root = objectMapper.createObjectNode();
+		root.put("path", prefix);
+
+		var filesArray = root.putArray("files");
+		entries.stream()
+				.filter(e -> !e.isDirectory())
+				.forEach(entry -> {
+					var fileObj = filesArray.addObject();
+					fileObj.put("name", entry.getPath().substring(entry.getPath().lastIndexOf('/') + 1));
+					fileObj.put("size", entry.getSize());
+					fileObj.put("lastModified", entry.getLastModified().toString());
+					if (entry.getMd5Hex() != null) {
+						fileObj.put("md5", entry.getMd5Hex());
+					}
+				});
+
+		var dirsArray = root.putArray("directories");
+		entries.stream()
+				.filter(FileEntry::isDirectory)
+				.forEach(entry -> {
+					var dirObj = dirsArray.addObject();
+					var dirName = entry.getPath().replaceAll("/$", "").substring(
+							entry.getPath().replaceAll("/$", "").lastIndexOf('/') + 1);
+					dirObj.put("name", dirName);
+				});
+
+		return objectMapper.writeValueAsBytes(root);
+	}
+
 	@NotNull
 	private Completable uploadIndexPage(@NotNull String prefix, @NotNull byte[] rendered) {
 		return Completable.fromAction(() -> {
@@ -180,6 +222,20 @@ public class DataIndex implements Command {
 					.build();
 			log.debug(String.format("Uploading index page: %s", target));
 			var putObjectRequest = s3Util.putPublicObjectRequest(rendered.length, target, "text/html", indexCacheTime);
+			s3Adapter.putObject(putObjectRequest, AsyncRequestBody.fromBytes(rendered), s3);
+		});
+	}
+
+	@NotNull
+	private Completable uploadJsonIndexPage(@NotNull String prefix, @NotNull byte[] rendered) {
+		return Completable.fromAction(() -> {
+			// Upload JSON index page.
+			var target = S3Url.builder()
+					.bucket(dataUrl.getBucket())
+					.path((prefix.equals("") ? "" : prefix + "/") + "index.json")
+					.build();
+			log.debug(String.format("Uploading JSON index page: %s", target));
+			var putObjectRequest = s3Util.putPublicObjectRequest(rendered.length, target, "application/json", indexCacheTime);
 			s3Adapter.putObject(putObjectRequest, AsyncRequestBody.fromBytes(rendered), s3);
 		});
 	}

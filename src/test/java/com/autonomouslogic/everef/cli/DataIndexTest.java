@@ -1,6 +1,7 @@
 package com.autonomouslogic.everef.cli;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -9,6 +10,8 @@ import com.autonomouslogic.everef.pug.TimeUtil;
 import com.autonomouslogic.everef.s3.S3Adapter;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.test.MockS3Adapter;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.util.HashMap;
@@ -46,6 +49,9 @@ public class DataIndexTest {
 	@Inject
 	@Named("data")
 	S3AsyncClient s3Data;
+
+	@Inject
+	ObjectMapper objectMapper;
 
 	MockS3Adapter mockS3;
 
@@ -91,8 +97,19 @@ public class DataIndexTest {
 		verifyDir1SubIndex();
 		verifyDir2Index();
 
-		// Assert correct uploaded files.
-		assertEquals(List.of("dir/index.html", "dir/sub/index.html", "dir2/index.html", "index.html"), getAllPutKeys());
+		verifyMainIndexJson();
+		verifyDir1IndexJson();
+		verifyDir1SubIndexJson();
+		verifyDir2IndexJson();
+
+		// Assert correct uploaded files (both HTML and JSON).
+		assertEquals(
+				List.of(
+						"dir/index.html", "dir/index.json",
+						"dir/sub/index.html", "dir/sub/index.json",
+						"dir2/index.html", "dir2/index.json",
+						"index.html", "index.json"),
+				getAllPutKeys());
 	}
 
 	@Test
@@ -101,9 +118,10 @@ public class DataIndexTest {
 		dataIndex.setRecursive(false).run();
 
 		verifyMainIndex();
+		verifyMainIndexJson();
 
 		// Assert correct uploaded files.
-		assertEquals(List.of("index.html"), getAllPutKeys());
+		assertEquals(List.of("index.html", "index.json"), getAllPutKeys());
 	}
 
 	@Test
@@ -114,8 +132,11 @@ public class DataIndexTest {
 		verifyDir1Index();
 		verifyDir1SubIndex();
 
+		verifyDir1IndexJson();
+		verifyDir1SubIndexJson();
+
 		// Assert correct uploaded files.
-		assertEquals(List.of("dir/index.html", "dir/sub/index.html"), getAllPutKeys());
+		assertEquals(List.of("dir/index.html", "dir/index.json", "dir/sub/index.html", "dir/sub/index.json"), getAllPutKeys());
 	}
 
 	@Test
@@ -124,9 +145,29 @@ public class DataIndexTest {
 		dataIndex.setPrefix("dir/").setRecursive(false).run();
 
 		verifyDir1Index();
+		verifyDir1IndexJson();
 
 		// Assert correct uploaded files.
-		assertEquals(List.of("dir/index.html"), getAllPutKeys());
+		assertEquals(List.of("dir/index.html", "dir/index.json"), getAllPutKeys());
+	}
+
+	@Test
+	@SneakyThrows
+	void shouldExcludeExistingIndexJsonFilesFromListing() {
+		// Seed index.json files that should be excluded from listing
+		mockS3.putTestObject(BUCKET_NAME, "index.json", "{}", s3Data, Instant.parse("2000-01-01T00:00:00.100Z"));
+		mockS3.putTestObject(BUCKET_NAME, "dir/index.json", "{}", s3Data, Instant.parse("2000-01-01T00:00:01.100Z"));
+
+		dataIndex.run();
+
+		// Should still generate the same index files (not including the seed ones)
+		assertEquals(
+				List.of(
+						"dir/index.html", "dir/index.json",
+						"dir/sub/index.html", "dir/sub/index.json",
+						"dir2/index.html", "dir2/index.json",
+						"index.html", "index.json"),
+				getAllPutKeys());
 	}
 
 	@NotNull
@@ -214,6 +255,59 @@ public class DataIndexTest {
 		assertEquals(expectedDirectories, directories.text());
 		assertEquals(expectedFiles, files.text());
 		assertEquals(expectedSize, size.text());
+	}
+
+	private void verifyMainIndexJson() {
+		var json = getJsonContent("index.json");
+		assertEquals("", json.get("path").asText());
+		verifyJsonFileEntry(json, 0, "data.zip", 16, "1999-07-12T14:26:23.100Z");
+		assertEquals(1, json.get("files").size());
+		verifyJsonDirectory(json, 0, "dir");
+		verifyJsonDirectory(json, 1, "dir2");
+		assertEquals(2, json.get("directories").size());
+	}
+
+	private void verifyDir1IndexJson() {
+		var json = getJsonContent("dir/index.json");
+		assertEquals("dir", json.get("path").asText());
+		verifyJsonFileEntry(json, 0, "more-data.zip", 25, "2000-01-01T00:00:03.100Z");
+		assertEquals(1, json.get("files").size());
+		verifyJsonDirectory(json, 0, "sub");
+		assertEquals(1, json.get("directories").size());
+	}
+
+	private void verifyDir1SubIndexJson() {
+		var json = getJsonContent("dir/sub/index.json");
+		assertEquals("dir/sub", json.get("path").asText());
+		verifyJsonFileEntry(json, 0, "sub-data.zip", 28, "2000-01-01T00:00:04.100Z");
+		assertEquals(1, json.get("files").size());
+		assertEquals(0, json.get("directories").size());
+	}
+
+	private void verifyDir2IndexJson() {
+		var json = getJsonContent("dir2/index.json");
+		assertEquals("dir2", json.get("path").asText());
+		verifyJsonFileEntry(json, 0, "more-data2.zip", 27, "2000-01-01T00:00:05.100Z");
+		assertEquals(1, json.get("files").size());
+		assertEquals(0, json.get("directories").size());
+	}
+
+	@SneakyThrows
+	private JsonNode getJsonContent(String path) {
+		var content = getPageContent(path);
+		return objectMapper.readTree(content.getBytes());
+	}
+
+	private void verifyJsonFileEntry(JsonNode json, int index, String name, long size, String lastModified) {
+		var file = json.get("files").get(index);
+		assertEquals(name, file.get("name").asText());
+		assertEquals(size, file.get("size").asLong());
+		assertEquals(lastModified, file.get("lastModified").asText());
+	}
+
+	private void verifyJsonDirectory(JsonNode json, int index, String name) {
+		var dir = json.get("directories").get(index);
+		assertEquals(name, dir.get("name").asText());
 	}
 
 	@Value
