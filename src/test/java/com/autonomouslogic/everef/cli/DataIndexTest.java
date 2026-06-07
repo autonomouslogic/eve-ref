@@ -1,7 +1,6 @@
 package com.autonomouslogic.everef.cli;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -136,7 +135,9 @@ public class DataIndexTest {
 		verifyDir1SubIndexJson();
 
 		// Assert correct uploaded files.
-		assertEquals(List.of("dir/index.html", "dir/index.json", "dir/sub/index.html", "dir/sub/index.json"), getAllPutKeys());
+		assertEquals(
+				List.of("dir/index.html", "dir/index.json", "dir/sub/index.html", "dir/sub/index.json"),
+				getAllPutKeys());
 	}
 
 	@Test
@@ -257,57 +258,95 @@ public class DataIndexTest {
 		assertEquals(expectedSize, size.text());
 	}
 
+	@SneakyThrows
 	private void verifyMainIndexJson() {
 		var json = getJsonContent("index.json");
-		assertEquals("", json.get("path").asText());
-		verifyJsonFileEntry(json, 0, "data.zip", 16, "1999-07-12T14:26:23Z");
-		assertEquals(1, json.get("files").size());
-		verifyJsonDirectory(json, 0, "dir");
-		verifyJsonDirectory(json, 1, "dir2");
-		assertEquals(2, json.get("directories").size());
+		var filesArray = objectMapper
+				.createArrayNode()
+				.add(objectMapper
+						.createObjectNode()
+						.put("name", "data.zip")
+						.put("size", 16)
+						.put("last_modified", "1999-07-12T14:26:23Z")
+						.put("md5", json.get("files").get(0).get("md5").asText())
+						.putNull("type")
+						.putNull("date"));
+		var directoriesArray = objectMapper
+				.createArrayNode()
+				.add(objectMapper.createObjectNode().put("name", "dir"))
+				.add(objectMapper.createObjectNode().put("name", "dir2"));
+		var expected = objectMapper.createObjectNode().put("path", "");
+		expected.set("files", filesArray);
+		expected.set("directories", directoriesArray);
+		assertEquals(objectMapper.writeValueAsString(expected), objectMapper.writeValueAsString(json));
 	}
 
+	@SneakyThrows
 	private void verifyDir1IndexJson() {
 		var json = getJsonContent("dir/index.json");
-		assertEquals("dir", json.get("path").asText());
-		verifyJsonFileEntry(json, 0, "more-data.zip", 25, "2000-01-01T00:00:03.100Z");
-		assertEquals(1, json.get("files").size());
-		verifyJsonDirectory(json, 0, "sub");
-		assertEquals(1, json.get("directories").size());
+		var filesArray = objectMapper
+				.createArrayNode()
+				.add(objectMapper
+						.createObjectNode()
+						.put("name", "more-data.zip")
+						.put("size", 25)
+						.put("last_modified", "2000-01-01T00:00:03.100Z")
+						.put("md5", json.get("files").get(0).get("md5").asText())
+						.putNull("type")
+						.putNull("date"));
+		var directoriesArray = objectMapper
+				.createArrayNode()
+				.add(objectMapper.createObjectNode().put("name", "sub"));
+		var expected = objectMapper.createObjectNode().put("path", "dir");
+		expected.set("files", filesArray);
+		expected.set("directories", directoriesArray);
+		assertEquals(objectMapper.writeValueAsString(expected), objectMapper.writeValueAsString(json));
 	}
 
+	@SneakyThrows
 	private void verifyDir1SubIndexJson() {
 		var json = getJsonContent("dir/sub/index.json");
-		assertEquals("dir/sub", json.get("path").asText());
-		verifyJsonFileEntry(json, 0, "sub-data.zip", 28, "2000-01-01T00:00:04.100Z");
-		assertEquals(1, json.get("files").size());
-		assertEquals(0, json.get("directories").size());
+		var filesArray = objectMapper
+				.createArrayNode()
+				.add(objectMapper
+						.createObjectNode()
+						.put("name", "sub-data.zip")
+						.put("size", 28)
+						.put("last_modified", "2000-01-01T00:00:04.100Z")
+						.put("md5", json.get("files").get(0).get("md5").asText())
+						.putNull("type")
+						.putNull("date"));
+		var directoriesArray = objectMapper.createArrayNode();
+		var expected = objectMapper.createObjectNode().put("path", "dir/sub");
+		expected.set("files", filesArray);
+		expected.set("directories", directoriesArray);
+		assertEquals(objectMapper.writeValueAsString(expected), objectMapper.writeValueAsString(json));
 	}
 
+	@SneakyThrows
 	private void verifyDir2IndexJson() {
 		var json = getJsonContent("dir2/index.json");
-		assertEquals("dir2", json.get("path").asText());
-		verifyJsonFileEntry(json, 0, "more-data2.zip", 27, "2000-01-01T00:00:05.100Z");
-		assertEquals(1, json.get("files").size());
-		assertEquals(0, json.get("directories").size());
+		var filesArray = objectMapper
+				.createArrayNode()
+				.add(objectMapper
+						.createObjectNode()
+						.put("name", "more-data2.zip")
+						.put("size", 27)
+						.put("last_modified", "2000-01-01T00:00:05.100Z")
+						.put("md5", json.get("files").get(0).get("md5").asText())
+						.putNull("type")
+						.putNull("date"));
+		var directoriesArray = objectMapper.createArrayNode();
+		var expected = objectMapper.createObjectNode().put("path", "dir2");
+		expected.set("files", filesArray);
+		expected.set("directories", directoriesArray);
+		assertEquals(objectMapper.writeValueAsString(expected), objectMapper.writeValueAsString(json));
 	}
 
 	@SneakyThrows
 	private JsonNode getJsonContent(String path) {
 		var content = getPageContent(path);
 		return objectMapper.readTree(content.getBytes());
-	}
-
-	private void verifyJsonFileEntry(JsonNode json, int index, String name, long size, String lastModified) {
-		var file = json.get("files").get(index);
-		assertEquals(name, file.get("name").asText());
-		assertEquals(size, file.get("size").asLong());
-		assertEquals(lastModified, file.get("lastModified").asText());
-	}
-
-	private void verifyJsonDirectory(JsonNode json, int index, String name) {
-		var dir = json.get("directories").get(index);
-		assertEquals(name, dir.get("name").asText());
 	}
 
 	@Value

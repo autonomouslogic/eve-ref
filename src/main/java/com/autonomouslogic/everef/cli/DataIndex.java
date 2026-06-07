@@ -160,9 +160,7 @@ public class DataIndex implements Command {
 			var htmlRendered = renderIndexPage(prefix, index);
 			var jsonRendered = renderJsonIndexPage(prefix, index);
 			return Completable.mergeArray(
-					uploadIndexPage(prefix, htmlRendered),
-					uploadJsonIndexPage(prefix, jsonRendered)
-			);
+					uploadIndexPage(prefix, htmlRendered), uploadJsonIndexPage(prefix, jsonRendered));
 		});
 	}
 
@@ -215,19 +213,17 @@ public class DataIndex implements Command {
 
 		var match = ArchivePathFactory.tryMatch(entry.getPath());
 		if (match.isPresent()) {
-			builder.type(match.get().getType())
-					.date(match.get().getDate());
+			builder.type(match.get().getType()).date(match.get().getDate());
 		}
 
 		return builder.build();
 	}
 
 	private IndexDirectoryEntry buildDirectoryEntry(FileEntry entry) {
-		var dirName = entry.getPath().replaceAll("/$", "").substring(
-				entry.getPath().replaceAll("/$", "").lastIndexOf('/') + 1);
-		return IndexDirectoryEntry.builder()
-				.name(dirName)
-				.build();
+		var dirName = entry.getPath()
+				.replaceAll("/$", "")
+				.substring(entry.getPath().replaceAll("/$", "").lastIndexOf('/') + 1);
+		return IndexDirectoryEntry.builder().name(dirName).build();
 	}
 
 	@NotNull
@@ -253,7 +249,8 @@ public class DataIndex implements Command {
 					.path((prefix.equals("") ? "" : prefix + "/") + "index.json")
 					.build();
 			log.debug(String.format("Uploading JSON index page: %s", target));
-			var putObjectRequest = s3Util.putPublicObjectRequest(rendered.length, target, "application/json", indexCacheTime);
+			var putObjectRequest =
+					s3Util.putPublicObjectRequest(rendered.length, target, "application/json", indexCacheTime);
 			s3Adapter.putObject(putObjectRequest, AsyncRequestBody.fromBytes(rendered), s3);
 		});
 	}
