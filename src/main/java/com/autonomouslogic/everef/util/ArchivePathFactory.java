@@ -9,6 +9,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoField;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -29,52 +30,54 @@ public class ArchivePathFactory {
 	public static final DateTimeFormatter TIMESTAMP_PATTERN = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss");
 	public static final DateTimeFormatter COMPACT_DATE_PATTERN = DateTimeFormatter.ofPattern("yyyyMMdd");
 
-	public static final ArchivePathFactory REFERENCE_DATA = ArchivePathFactory.builder()
+	private static final List<ArchivePathFactory> allPatterns = new ArrayList<>();
+
+	public static final ArchivePathFactory REFERENCE_DATA = register(ArchivePathFactory.builder()
 			.folder("reference-data")
 			.filename("reference-data")
 			.dateFolder(false)
 			.fileDateTimeFormatter(DATE_PATTERN)
 			.suffix(".tar.xz")
-			.build();
+			.build());
 
-	public static final ArchivePathFactory MARKET_ORDERS = ArchivePathFactory.builder()
+	public static final ArchivePathFactory MARKET_ORDERS = register(ArchivePathFactory.builder()
 			.folder("market-orders")
 			.filename("market-orders")
 			.suffix(".v3.csv.bz2")
-			.build();
+			.build());
 
-	public static final ArchivePathFactory PUBLIC_CONTRACTS = ArchivePathFactory.builder()
+	public static final ArchivePathFactory PUBLIC_CONTRACTS = register(ArchivePathFactory.builder()
 			.folder("public-contracts")
 			.filename("public-contracts")
 			.suffix(".v2.tar.bz2")
-			.build();
+			.build());
 
-	public static final ArchivePathFactory FREELANCE_JOBS = ArchivePathFactory.builder()
+	public static final ArchivePathFactory FREELANCE_JOBS = register(ArchivePathFactory.builder()
 			.folder("freelance-jobs")
 			.filename("freelance-jobs")
 			.suffix(".json.bz2")
 			.latestSuffix(".json.bz2")
-			.build();
+			.build());
 
-	public static final ArchivePathFactory KILLMAILS = ArchivePathFactory.builder()
+	public static final ArchivePathFactory KILLMAILS = register(ArchivePathFactory.builder()
 			.folder("killmails")
 			.filename("killmails")
 			.historyFolder(false)
 			.dateFolder(false)
 			.fileDateTimeFormatter(DATE_PATTERN)
 			.suffix(".tar.bz2")
-			.build();
+			.build());
 
-	public static final ArchivePathFactory MARKET_HISTORY = ArchivePathFactory.builder()
+	public static final ArchivePathFactory MARKET_HISTORY = register(ArchivePathFactory.builder()
 			.folder("market-history")
 			.filename("market-history")
 			.historyFolder(false)
 			.dateFolder(false)
 			.fileDateTimeFormatter(DATE_PATTERN)
 			.suffix(".csv.bz2")
-			.build();
+			.build());
 
-	public static final ArchivePathFactory SDE = ArchivePathFactory.builder()
+	public static final ArchivePathFactory SDE = register(ArchivePathFactory.builder()
 			.folder("ccp/sde")
 			.filename("sde")
 			.historyFolder(false)
@@ -82,9 +85,9 @@ public class ArchivePathFactory {
 			.dateFolder(false)
 			.fileDateTimeFormatter(COMPACT_DATE_PATTERN)
 			.suffix("-TRANQUILITY.zip")
-			.build();
+			.build());
 
-	public static final ArchivePathFactory SDE_V2_JSONL = ArchivePathFactory.builder()
+	public static final ArchivePathFactory SDE_V2_JSONL = register(ArchivePathFactory.builder()
 			.folder("ccp/sde")
 			.historyFolder(false)
 			.yearFolder(true)
@@ -92,9 +95,9 @@ public class ArchivePathFactory {
 			.filename("eve-online-static-data")
 			.fileDateTimeFormatter(null)
 			.suffix("-jsonl.zip")
-			.build();
+			.build());
 
-	public static final ArchivePathFactory SDE_V2_YAML = ArchivePathFactory.builder()
+	public static final ArchivePathFactory SDE_V2_YAML = register(ArchivePathFactory.builder()
 			.folder("ccp/sde")
 			.historyFolder(false)
 			.yearFolder(true)
@@ -102,180 +105,180 @@ public class ArchivePathFactory {
 			.filename("eve-online-static-data")
 			.fileDateTimeFormatter(null)
 			.suffix("-yaml.zip")
-			.build();
+			.build());
 
-	public static final ArchivePathFactory ESI = ArchivePathFactory.builder()
+	public static final ArchivePathFactory ESI = register(ArchivePathFactory.builder()
 			.folder("esi-scrape")
 			.filename("eve-ref-esi-scrape")
 			.dateFolder(false)
 			.fileDateTimeFormatter(DATE_PATTERN)
 			.suffix(".tar.xz")
-			.build();
+			.build());
 
-	public static final ArchivePathFactory HOBOLEAKS = ArchivePathFactory.builder()
+	public static final ArchivePathFactory HOBOLEAKS = register(ArchivePathFactory.builder()
 			.folder("hoboleaks-sde")
 			.filename("hoboleaks-sde")
 			.dateFolder(false)
 			.fileDateTimeFormatter(DATE_PATTERN)
 			.suffix(".tar.xz")
-			.build();
+			.build());
 
-	public static final ArchivePathFactory FUZZWORK_ORDERSET = ArchivePathFactory.builder()
+	public static final ArchivePathFactory FUZZWORK_ORDERSET = register(ArchivePathFactory.builder()
 			.folder("fuzzwork/ordersets")
 			.historyFolder(false)
 			.filename("fuzzwork-orderset-")
 			.suffix(".csv.gz")
-			.build();
+			.build());
 
-	public static final ArchivePathFactory STRUCTURES = ArchivePathFactory.builder()
+	public static final ArchivePathFactory STRUCTURES = register(ArchivePathFactory.builder()
 			.folder("structures")
 			.filename("structures")
 			.suffix(".v2.json.bz2")
 			.latestSuffix(".v2.json")
-			.build();
+			.build());
 
-	public static final ArchivePathFactory SOVEREIGNTY_MAP = builder()
+	public static final ArchivePathFactory SOVEREIGNTY_MAP = register(builder()
 			.folder("sovereignty-map")
 			.filename("sovereignty-map")
 			.suffix(".json.bz2")
 			.latestSuffix(".json")
-			.build();
+			.build());
 
-	public static final ArchivePathFactory SOVEREIGNTY_STRUCTURES = builder()
+	public static final ArchivePathFactory SOVEREIGNTY_STRUCTURES = register(builder()
 			.folder("sovereignty-structures")
 			.filename("sovereignty-structures")
 			.suffix(".json.bz2")
 			.latestSuffix(".json")
-			.build();
+			.build());
 
-	public static final ArchivePathFactory SOVEREIGNTY_CAMPAIGNS = builder()
+	public static final ArchivePathFactory SOVEREIGNTY_CAMPAIGNS = register(builder()
 			.folder("sovereignty-campaigns")
 			.filename("sovereignty-campaigns")
 			.suffix(".json.bz2")
 			.latestSuffix(".json")
-			.build();
+			.build());
 
-	public static final ArchivePathFactory INDUSTRY_SYSTEMS = builder()
+	public static final ArchivePathFactory INDUSTRY_SYSTEMS = register(builder()
 			.folder("industry-systems")
 			.filename("industry-systems")
 			.suffix(".json.bz2")
 			.latestSuffix(".json")
-			.build();
+			.build());
 
-	public static final ArchivePathFactory INDUSTRY_FACILITIES = builder()
+	public static final ArchivePathFactory INDUSTRY_FACILITIES = register(builder()
 			.folder("industry-facilities")
 			.filename("industry-facilities")
 			.suffix(".json.bz2")
 			.latestSuffix(".json")
-			.build();
+			.build());
 
 	// System Stats (2)
-	public static final ArchivePathFactory SYSTEM_JUMPS = builder()
+	public static final ArchivePathFactory SYSTEM_JUMPS = register(builder()
 			.folder("system-jumps")
 			.filename("system-jumps")
 			.suffix(".json.bz2")
 			.latestSuffix(".json")
-			.build();
+			.build());
 
-	public static final ArchivePathFactory SYSTEM_KILLS = builder()
+	public static final ArchivePathFactory SYSTEM_KILLS = register(builder()
 			.folder("system-kills")
 			.filename("system-kills")
 			.suffix(".json.bz2")
 			.latestSuffix(".json")
-			.build();
+			.build());
 
-	public static final ArchivePathFactory WARZONE = builder()
+	public static final ArchivePathFactory WARZONE = register(builder()
 			.folder("warzone")
 			.filename("warzone")
 			.suffix(".json.bz2")
 			.latestSuffix(".json")
-			.build();
+			.build());
 
-	public static final ArchivePathFactory WARZONE_INSURGENCY = builder()
+	public static final ArchivePathFactory WARZONE_INSURGENCY = register(builder()
 			.folder("warzone-insurgency")
 			.filename("warzone-insurgency")
 			.suffix(".json.bz2")
 			.latestSuffix(".json")
-			.build();
+			.build());
 
-	public static final ArchivePathFactory WARZONE_LEADERBOARD = builder()
+	public static final ArchivePathFactory WARZONE_LEADERBOARD = register(builder()
 			.folder("warzone-leaderboard")
 			.filename("warzone-leaderboard")
 			.suffix(".json.bz2")
 			.latestSuffix(".json")
-			.build();
+			.build());
 
-	public static final ArchivePathFactory INSURANCE_PRICES = builder()
+	public static final ArchivePathFactory INSURANCE_PRICES = register(builder()
 			.folder("insurance-prices")
 			.filename("insurance-prices")
 			.suffix(".json.bz2")
 			.latestSuffix(".json")
-			.build();
+			.build());
 
-	public static final ArchivePathFactory UNIVERSE_STRUCTURES = builder()
+	public static final ArchivePathFactory UNIVERSE_STRUCTURES = register(builder()
 			.folder("universe-structures")
 			.filename("universe-structures")
 			.suffix(".json.bz2")
 			.latestSuffix(".json")
-			.build();
+			.build());
 
-	public static final ArchivePathFactory FACTION_WARFARE_STATS = builder()
+	public static final ArchivePathFactory FACTION_WARFARE_STATS = register(builder()
 			.folder("faction-warfare-stats")
 			.filename("faction-warfare-stats")
 			.suffix(".json.bz2")
 			.latestSuffix(".json")
-			.build();
+			.build());
 
-	public static final ArchivePathFactory FACTION_WARFARE_WARS = builder()
+	public static final ArchivePathFactory FACTION_WARFARE_WARS = register(builder()
 			.folder("faction-warfare-wars")
 			.filename("faction-warfare-wars")
 			.suffix(".json.bz2")
 			.latestSuffix(".json")
-			.build();
+			.build());
 
-	public static final ArchivePathFactory FACTION_WARFARE_LEADERBOARDS = builder()
+	public static final ArchivePathFactory FACTION_WARFARE_LEADERBOARDS = register(builder()
 			.folder("faction-warfare-leaderboards")
 			.filename("faction-warfare-leaderboards")
 			.suffix(".json.bz2")
 			.latestSuffix(".json")
-			.build();
+			.build());
 
-	public static final ArchivePathFactory FACTION_WARFARE_LEADERBOARDS_CHARACTERS = builder()
+	public static final ArchivePathFactory FACTION_WARFARE_LEADERBOARDS_CHARACTERS = register(builder()
 			.folder("faction-warfare-leaderboards-characters")
 			.filename("faction-warfare-leaderboards-characters")
 			.suffix(".json.bz2")
 			.latestSuffix(".json")
-			.build();
+			.build());
 
-	public static final ArchivePathFactory FACTION_WARFARE_LEADERBOARDS_CORPORATIONS = builder()
+	public static final ArchivePathFactory FACTION_WARFARE_LEADERBOARDS_CORPORATIONS = register(builder()
 			.folder("faction-warfare-leaderboards-corporations")
 			.filename("faction-warfare-leaderboards-corporations")
 			.suffix(".json.bz2")
 			.latestSuffix(".json")
-			.build();
+			.build());
 
-	public static final ArchivePathFactory FACTION_WARFARE_SYSTEMS = builder()
+	public static final ArchivePathFactory FACTION_WARFARE_SYSTEMS = register(builder()
 			.folder("faction-warfare-systems")
 			.filename("faction-warfare-systems")
 			.suffix(".json.bz2")
 			.latestSuffix(".json")
-			.build();
+			.build());
 
-	public static final ArchivePathFactory INCURSIONS = builder()
+	public static final ArchivePathFactory INCURSIONS = register(builder()
 			.folder("incursions")
 			.filename("incursions")
 			.suffix(".json.bz2")
 			.latestSuffix(".json")
-			.build();
+			.build());
 
-	public static final ArchivePathFactory MARKETS_PRICES = builder()
+	public static final ArchivePathFactory MARKETS_PRICES = register(builder()
 			.folder("markets-prices")
 			.filename("markets-prices")
 			.suffix(".json.bz2")
 			.latestSuffix(".json")
-			.build();
+			.build());
 
-	public static final ArchivePathFactory MER = ArchivePathFactory.builder()
+	public static final ArchivePathFactory MER = register(ArchivePathFactory.builder()
 			.folder("ccp/mer")
 			.filename("EVEOnline_MER")
 			.historyFolder(false)
@@ -285,7 +288,12 @@ public class ArchivePathFactory {
 					new DateTimeFormatterBuilder().appendPattern("yyyyMM").toFormatter())
 			.dateFormatterSeparator("_")
 			.suffix(".zip")
-			.build();
+			.build());
+
+	private static ArchivePathFactory register(ArchivePathFactory pattern) {
+		allPatterns.add(pattern);
+		return pattern;
+	}
 
 	@NonNull
 	String folder;
@@ -389,42 +397,6 @@ public class ArchivePathFactory {
 	}
 
 	public static Optional<ArchiveMatch> tryMatch(String path) {
-		var allPatterns = List.of(
-				REFERENCE_DATA,
-				MARKET_ORDERS,
-				PUBLIC_CONTRACTS,
-				FREELANCE_JOBS,
-				KILLMAILS,
-				MARKET_HISTORY,
-				SDE,
-				SDE_V2_JSONL,
-				SDE_V2_YAML,
-				ESI,
-				HOBOLEAKS,
-				FUZZWORK_ORDERSET,
-				STRUCTURES,
-				SOVEREIGNTY_MAP,
-				SOVEREIGNTY_STRUCTURES,
-				SOVEREIGNTY_CAMPAIGNS,
-				INDUSTRY_SYSTEMS,
-				INDUSTRY_FACILITIES,
-				SYSTEM_JUMPS,
-				SYSTEM_KILLS,
-				WARZONE,
-				WARZONE_INSURGENCY,
-				WARZONE_LEADERBOARD,
-				INSURANCE_PRICES,
-				UNIVERSE_STRUCTURES,
-				FACTION_WARFARE_STATS,
-				FACTION_WARFARE_WARS,
-				FACTION_WARFARE_LEADERBOARDS,
-				FACTION_WARFARE_LEADERBOARDS_CHARACTERS,
-				FACTION_WARFARE_LEADERBOARDS_CORPORATIONS,
-				FACTION_WARFARE_SYSTEMS,
-				INCURSIONS,
-				MARKETS_PRICES,
-				MER);
-
 		for (var pattern : allPatterns) {
 			if (path.startsWith(pattern.folder + "/") || path.startsWith(pattern.folder)) {
 				var timestamp = pattern.parseArchiveTime(path);
