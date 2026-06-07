@@ -171,6 +171,40 @@ public class DataIndexTest {
 				getAllPutKeys());
 	}
 
+	@Test
+	@SneakyThrows
+	void shouldParseMarketOrdersArchivePath() {
+		// Add a market orders archive file with timestamp-based path
+		// Path follows ArchivePathFactory.MARKET_ORDERS pattern:
+		// market-orders/history/YYYY/YYYY-MM-DD/market-orders-YYYY-MM-DD_HH-mm-ss.v3.csv.bz2
+		var marketOrdersPath = "market-orders/history/2025/2025-12-07/market-orders-2025-12-07_12-30-45.v3.csv.bz2";
+		mockS3.putTestObject(BUCKET_NAME, marketOrdersPath, "market orders data", s3Data, Instant.parse("2025-12-07T12:30:45Z"));
+
+		dataIndex.run();
+
+		// Verify market-orders directory index JSON was created and parsed correctly
+		var json = getJsonContent("market-orders/index.json");
+
+		// Build expected JSON structure
+		var filesArray = objectMapper
+				.createArrayNode()
+				.add(objectMapper
+						.createObjectNode()
+						.put("name", "market-orders-2025-12-07_12-30-45.v3.csv.bz2")
+						.put("size", 18)
+						.put("last_modified", "2025-12-07T12:30:45Z")
+						.put("md5", json.get("files").get(0).get("md5").asText())
+						.put("type", "market-orders")
+						.put("date", "2025-12-07T12:30:45Z"));
+		var directoriesArray = objectMapper.createArrayNode();
+		var expected = objectMapper.createObjectNode().put("path", "market-orders");
+		expected.set("files", filesArray);
+		expected.set("directories", directoriesArray);
+
+		// Verify entire JSON object matches expected structure
+		assertEquals(objectMapper.writeValueAsString(expected), objectMapper.writeValueAsString(json));
+	}
+
 	@NotNull
 	private List<String> getAllPutKeys() {
 		return mockS3.getAllPutKeys(BUCKET_NAME, s3Data).stream().sorted().toList();
