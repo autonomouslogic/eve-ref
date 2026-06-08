@@ -19,6 +19,12 @@ public class IndexFileEntry {
 	String name;
 
 	@JsonProperty
+	String path;
+
+	@JsonProperty
+	String url;
+
+	@JsonProperty
 	long size;
 
 	@JsonProperty

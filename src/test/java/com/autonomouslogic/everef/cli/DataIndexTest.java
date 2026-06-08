@@ -199,6 +199,8 @@ public class DataIndexTest {
 				.add(objectMapper
 						.createObjectNode()
 						.put("name", "market-orders-latest.v3.csv.bz2")
+						.put("path", "market-orders/market-orders-latest.v3.csv.bz2")
+						.put("url", "https://data.everef.net/market-orders/market-orders-latest.v3.csv.bz2")
 						.put("size", 20)
 						.put("last_modified", "2026-06-08T05:50:42Z")
 						.put("etag", Hex.encodeHexString(HashUtil.md5("market orders latest")))
@@ -215,6 +217,12 @@ public class DataIndexTest {
 				.add(objectMapper
 						.createObjectNode()
 						.put("name", "market-orders-2026-06-01_15-15-07.v3.csv.bz2")
+						.put(
+								"path",
+								"market-orders/history/2026/2026-06-01/market-orders-2026-06-01_15-15-07.v3.csv.bz2")
+						.put(
+								"url",
+								"https://data.everef.net/market-orders/history/2026/2026-06-01/market-orders-2026-06-01_15-15-07.v3.csv.bz2")
 						.put("size", 18)
 						.put("last_modified", "2026-06-01T15:20:41Z")
 						.put("etag", Hex.encodeHexString(HashUtil.md5("market orders data")))
@@ -322,6 +330,8 @@ public class DataIndexTest {
 				.add(objectMapper
 						.createObjectNode()
 						.put("name", "data.zip")
+						.put("path", "data.zip")
+						.put("url", "https://data.everef.net/data.zip")
 						.put("size", 16)
 						.put("last_modified", "1999-07-12T14:26:23Z")
 						.put("etag", Hex.encodeHexString(HashUtil.md5("content data.zip"))));
@@ -343,6 +353,8 @@ public class DataIndexTest {
 				.add(objectMapper
 						.createObjectNode()
 						.put("name", "more-data.zip")
+						.put("path", "dir/more-data.zip")
+						.put("url", "https://data.everef.net/dir/more-data.zip")
 						.put("size", 25)
 						.put("last_modified", "2000-01-01T00:00:03.100Z")
 						.put("etag", Hex.encodeHexString(HashUtil.md5("content dir/more-data.zip"))));
@@ -363,6 +375,8 @@ public class DataIndexTest {
 				.add(objectMapper
 						.createObjectNode()
 						.put("name", "sub-data.zip")
+						.put("path", "dir/sub/sub-data.zip")
+						.put("url", "https://data.everef.net/dir/sub/sub-data.zip")
 						.put("size", 28)
 						.put("last_modified", "2000-01-01T00:00:04.100Z")
 						.put("etag", Hex.encodeHexString(HashUtil.md5("content dir/sub/sub-data.zip"))));
@@ -379,6 +393,8 @@ public class DataIndexTest {
 				.add(objectMapper
 						.createObjectNode()
 						.put("name", "more-data2.zip")
+						.put("path", "dir2/more-data2.zip")
+						.put("url", "https://data.everef.net/dir2/more-data2.zip")
 						.put("size", 27)
 						.put("last_modified", "2000-01-01T00:00:05.100Z")
 						.put("etag", Hex.encodeHexString(HashUtil.md5("content dir2/more-data2.zip"))));

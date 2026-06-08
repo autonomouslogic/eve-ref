@@ -208,6 +208,8 @@ public class DataIndex implements Command {
 		var filename = entry.getPath().substring(entry.getPath().lastIndexOf('/') + 1);
 		var builder = IndexFileEntry.builder()
 				.name(filename)
+				.path(entry.getPath())
+				.url("https://" + dataDomain + "/" + entry.getPath())
 				.size(entry.getSize())
 				.lastModified(entry.getLastModified())
 				.etag(entry.getEtag());
