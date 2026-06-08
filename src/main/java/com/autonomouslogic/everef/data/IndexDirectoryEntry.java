@@ -1,19 +1,19 @@
 package com.autonomouslogic.everef.data;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.Value;
+import lombok.extern.jackson.Jacksonized;
 
-@Getter
-@ToString
+@Value
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
+@Jacksonized
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class IndexDirectoryEntry {
-	private String name;
+	@JsonProperty
+	String name;
 }

@@ -1,25 +1,35 @@
 package com.autonomouslogic.everef.data;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import java.time.Instant;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.Value;
+import lombok.extern.jackson.Jacksonized;
 
-@Getter
-@ToString
+@Value
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
+@Jacksonized
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class IndexFileEntry {
-	private String name;
-	private long size;
-	private Instant lastModified;
-	private String md5;
-	private String type;
-	private Instant date;
+	@JsonProperty
+	String name;
+
+	@JsonProperty
+	long size;
+
+	@JsonProperty
+	Instant lastModified;
+
+	@JsonProperty
+	String md5;
+
+	@JsonProperty
+	String type;
+
+	@JsonProperty
+	Instant date;
 }

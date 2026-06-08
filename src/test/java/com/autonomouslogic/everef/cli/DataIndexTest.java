@@ -9,6 +9,7 @@ import com.autonomouslogic.everef.pug.TimeUtil;
 import com.autonomouslogic.everef.s3.S3Adapter;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.test.MockS3Adapter;
+import com.autonomouslogic.everef.util.HashUtil;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.Instant;
@@ -21,6 +22,7 @@ import javax.inject.Named;
 import lombok.SneakyThrows;
 import lombok.Value;
 import lombok.extern.log4j.Log4j2;
+import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.jsoup.Jsoup;
@@ -178,7 +180,8 @@ public class DataIndexTest {
 		// Path follows ArchivePathFactory.MARKET_ORDERS pattern:
 		// market-orders/history/YYYY/YYYY-MM-DD/market-orders-YYYY-MM-DD_HH-mm-ss.v3.csv.bz2
 		var marketOrdersPath = "market-orders/history/2025/2025-12-07/market-orders-2025-12-07_12-30-45.v3.csv.bz2";
-		mockS3.putTestObject(BUCKET_NAME, marketOrdersPath, "market orders data", s3Data, Instant.parse("2025-12-07T12:30:45Z"));
+		mockS3.putTestObject(
+				BUCKET_NAME, marketOrdersPath, "market orders data", s3Data, Instant.parse("2025-12-07T12:30:45Z"));
 
 		dataIndex.run();
 
@@ -193,7 +196,7 @@ public class DataIndexTest {
 						.put("name", "market-orders-2025-12-07_12-30-45.v3.csv.bz2")
 						.put("size", 18)
 						.put("last_modified", "2025-12-07T12:30:45Z")
-						.put("md5", json.get("files").get(0).get("md5").asText())
+						.put("md5", Hex.encodeHexString(HashUtil.md5("market orders data")))
 						.put("type", "market-orders")
 						.put("date", "2025-12-07T12:30:45Z"));
 		var directoriesArray = objectMapper.createArrayNode();
@@ -302,14 +305,12 @@ public class DataIndexTest {
 						.put("name", "data.zip")
 						.put("size", 16)
 						.put("last_modified", "1999-07-12T14:26:23Z")
-						.put("md5", json.get("files").get(0).get("md5").asText())
-						.putNull("type")
-						.putNull("date"));
+						.put("md5", Hex.encodeHexString(HashUtil.md5("content data.zip"))));
 		var directoriesArray = objectMapper
 				.createArrayNode()
 				.add(objectMapper.createObjectNode().put("name", "dir"))
 				.add(objectMapper.createObjectNode().put("name", "dir2"));
-		var expected = objectMapper.createObjectNode().put("path", "");
+		var expected = objectMapper.createObjectNode();
 		expected.set("files", filesArray);
 		expected.set("directories", directoriesArray);
 		assertEquals(objectMapper.writeValueAsString(expected), objectMapper.writeValueAsString(json));
@@ -325,9 +326,7 @@ public class DataIndexTest {
 						.put("name", "more-data.zip")
 						.put("size", 25)
 						.put("last_modified", "2000-01-01T00:00:03.100Z")
-						.put("md5", json.get("files").get(0).get("md5").asText())
-						.putNull("type")
-						.putNull("date"));
+						.put("md5", Hex.encodeHexString(HashUtil.md5("content dir/more-data.zip"))));
 		var directoriesArray = objectMapper
 				.createArrayNode()
 				.add(objectMapper.createObjectNode().put("name", "sub"));
@@ -347,13 +346,9 @@ public class DataIndexTest {
 						.put("name", "sub-data.zip")
 						.put("size", 28)
 						.put("last_modified", "2000-01-01T00:00:04.100Z")
-						.put("md5", json.get("files").get(0).get("md5").asText())
-						.putNull("type")
-						.putNull("date"));
-		var directoriesArray = objectMapper.createArrayNode();
+						.put("md5", Hex.encodeHexString(HashUtil.md5("content dir/sub/sub-data.zip"))));
 		var expected = objectMapper.createObjectNode().put("path", "dir/sub");
 		expected.set("files", filesArray);
-		expected.set("directories", directoriesArray);
 		assertEquals(objectMapper.writeValueAsString(expected), objectMapper.writeValueAsString(json));
 	}
 
@@ -367,13 +362,9 @@ public class DataIndexTest {
 						.put("name", "more-data2.zip")
 						.put("size", 27)
 						.put("last_modified", "2000-01-01T00:00:05.100Z")
-						.put("md5", json.get("files").get(0).get("md5").asText())
-						.putNull("type")
-						.putNull("date"));
-		var directoriesArray = objectMapper.createArrayNode();
+						.put("md5", Hex.encodeHexString(HashUtil.md5("content dir2/more-data2.zip"))));
 		var expected = objectMapper.createObjectNode().put("path", "dir2");
 		expected.set("files", filesArray);
-		expected.set("directories", directoriesArray);
 		assertEquals(objectMapper.writeValueAsString(expected), objectMapper.writeValueAsString(json));
 	}
 
