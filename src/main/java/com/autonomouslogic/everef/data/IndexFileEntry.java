@@ -25,7 +25,7 @@ public class IndexFileEntry {
 	Instant lastModified;
 
 	@JsonProperty
-	String md5;
+	String etag;
 
 	@JsonProperty
 	String type;

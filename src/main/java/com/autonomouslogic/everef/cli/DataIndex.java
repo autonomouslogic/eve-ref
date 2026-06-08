@@ -210,7 +210,7 @@ public class DataIndex implements Command {
 				.name(filename)
 				.size(entry.getSize())
 				.lastModified(entry.getLastModified())
-				.md5(entry.getMd5Hex());
+				.etag(entry.getMd5Hex());
 
 		var match = ArchivePathFactory.tryMatch(entry.getPath());
 		if (match.isPresent()) {
