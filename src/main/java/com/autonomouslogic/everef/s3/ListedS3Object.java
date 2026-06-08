@@ -21,7 +21,7 @@ public class ListedS3Object {
 
 	Instant lastModified;
 
-	String md5Hex;
+	String etag;
 
 	S3Object s3Object;
 
@@ -37,12 +37,12 @@ public class ListedS3Object {
 	}
 
 	public static ListedS3Object create(S3Object obj, String bucket) {
-		var md5Hex = Optional.ofNullable(obj.eTag())
+		var etag = Optional.ofNullable(obj.eTag())
 				.map(e -> StringUtils.remove(e, "\""))
 				.orElse(null);
 		return ListedS3Object.builder()
 				.url(S3Url.builder().bucket(bucket).path(obj.key()).build())
-				.md5Hex(md5Hex)
+				.etag(etag)
 				.size(obj.size())
 				.lastModified(obj.lastModified())
 				.s3Object(obj)

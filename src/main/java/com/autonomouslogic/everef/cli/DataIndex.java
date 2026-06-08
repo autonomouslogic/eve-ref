@@ -146,7 +146,7 @@ public class DataIndex implements Command {
 											obj.getUrl().getPath(),
 											obj.getSize(),
 											obj.getLastModified(),
-											obj.getMd5Hex()));
+											obj.getEtag()));
 								}
 							})
 							.ignoreElements()
@@ -210,12 +210,13 @@ public class DataIndex implements Command {
 				.name(filename)
 				.size(entry.getSize())
 				.lastModified(entry.getLastModified())
-				.etag(entry.getMd5Hex());
+				.etag(entry.getEtag());
 
 		var match = ArchivePathFactory.tryMatch(entry.getPath());
-		if (match.isPresent()) {
-			builder.type(match.get().getType()).date(match.get().getDate());
-		}
+		match.ifPresent(archiveMatch -> {
+			builder.type(archiveMatch.getType());
+			archiveMatch.getDate().ifPresent(date -> builder.date(date));
+		});
 
 		return builder.build();
 	}

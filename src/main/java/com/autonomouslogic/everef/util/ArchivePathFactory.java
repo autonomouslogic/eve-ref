@@ -78,6 +78,7 @@ public class ArchivePathFactory {
 			.build());
 
 	public static final ArchivePathFactory SDE = register(ArchivePathFactory.builder()
+			.name("sde")
 			.folder("ccp/sde")
 			.filename("sde")
 			.historyFolder(false)
@@ -88,6 +89,7 @@ public class ArchivePathFactory {
 			.build());
 
 	public static final ArchivePathFactory SDE_V2_JSONL = register(ArchivePathFactory.builder()
+			.name("sde-v2-jsonl")
 			.folder("ccp/sde")
 			.historyFolder(false)
 			.yearFolder(true)
@@ -98,6 +100,7 @@ public class ArchivePathFactory {
 			.build());
 
 	public static final ArchivePathFactory SDE_V2_YAML = register(ArchivePathFactory.builder()
+			.name("sde-v2-yaml")
 			.folder("ccp/sde")
 			.historyFolder(false)
 			.yearFolder(true)
@@ -124,6 +127,7 @@ public class ArchivePathFactory {
 			.build());
 
 	public static final ArchivePathFactory FUZZWORK_ORDERSET = register(ArchivePathFactory.builder()
+			.name("fuzzwork-ordersets")
 			.folder("fuzzwork/ordersets")
 			.historyFolder(false)
 			.filename("fuzzwork-orderset-")
@@ -279,6 +283,7 @@ public class ArchivePathFactory {
 			.build());
 
 	public static final ArchivePathFactory MER = register(ArchivePathFactory.builder()
+			.name("mer")
 			.folder("ccp/mer")
 			.filename("EVEOnline_MER")
 			.historyFolder(false)
@@ -294,6 +299,8 @@ public class ArchivePathFactory {
 		allPatterns.add(pattern);
 		return pattern;
 	}
+
+	String name;
 
 	@NonNull
 	String folder;
@@ -399,9 +406,17 @@ public class ArchivePathFactory {
 	public static Optional<ArchiveMatch> tryMatch(String path) {
 		for (var pattern : allPatterns) {
 			if (path.startsWith(pattern.folder + "/") || path.startsWith(pattern.folder)) {
+				var name = pattern.name;
+				if (name == null) {
+					name = pattern.folder;
+				}
+				var latest = pattern.createLatestPath();
+				if (latest.equals(path)) {
+					return Optional.of(new ArchiveMatch(name, Optional.empty()));
+				}
 				var timestamp = pattern.parseArchiveTime(path);
 				if (timestamp != null) {
-					return Optional.of(new ArchiveMatch(pattern.folder, timestamp));
+					return Optional.of(new ArchiveMatch(name, Optional.of(timestamp)));
 				}
 			}
 		}
@@ -411,6 +426,6 @@ public class ArchivePathFactory {
 	@Value
 	public static class ArchiveMatch {
 		String type;
-		Instant date;
+		Optional<Instant> date;
 	}
 }
