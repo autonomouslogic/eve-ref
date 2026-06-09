@@ -295,6 +295,45 @@ public class ArchivePathFactory {
 			.suffix(".zip")
 			.build());
 
+	public static final ArchivePathFactory MER_OLD_1 = register(ArchivePathFactory.builder()
+			.name("mer")
+			.folder("ccp/mer")
+			.filename("EVEOnline_MER")
+			.historyFolder(false)
+			.yearFolder(true)
+			.dateFolder(false)
+			.fileDateTimeFormatter(
+					new DateTimeFormatterBuilder().appendPattern("MMMyyyy").toFormatter())
+			.dateFormatterSeparator("_")
+			.suffix(".zip")
+			.build());
+
+	public static final ArchivePathFactory MER_OLD_1_UPDATED = register(ArchivePathFactory.builder()
+			.name("mer")
+			.folder("ccp/mer")
+			.filename("EVEOnline_MER")
+			.historyFolder(false)
+			.yearFolder(true)
+			.dateFolder(false)
+			.fileDateTimeFormatter(
+					new DateTimeFormatterBuilder().appendPattern("MMMyyyy").toFormatter())
+			.dateFormatterSeparator("_")
+			.suffix(".zip")
+			.build());
+
+	public static final ArchivePathFactory MER_OLD_2 = register(ArchivePathFactory.builder()
+			.name("mer")
+			.folder("ccp/mer")
+			.filename("EVEOnline_MER")
+			.historyFolder(false)
+			.yearFolder(true)
+			.dateFolder(false)
+			.fileDateTimeFormatter(
+					new DateTimeFormatterBuilder().appendPattern("MMMyyyy").toFormatter())
+			.dateFormatterSeparator("_")
+			.suffix(".zip")
+			.build());
+
 	private static ArchivePathFactory register(ArchivePathFactory pattern) {
 		allPatterns.add(pattern);
 		return pattern;

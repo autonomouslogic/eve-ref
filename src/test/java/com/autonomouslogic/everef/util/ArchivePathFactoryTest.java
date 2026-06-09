@@ -118,6 +118,24 @@ public class ArchivePathFactoryTest {
 		testExpectedPaths(factory, LocalDate.parse("2026-05-01"), "ccp/mer/2026/EVEOnline_MER_202605.zip");
 	}
 
+	@Test
+	void shouldGenerateMerOld1() {
+		var factory = ArchivePathFactory.MER_OLD_1;
+		testExpectedPaths(factory, LocalDate.parse("2025-04-01"), "ccp/mer/2025/EVEOnline_MER_Apr2025.zip");
+	}
+
+	@Test
+	void shouldGenerateMerOld1_updated() {
+		var factory = ArchivePathFactory.MER_OLD_1_UPDATED;
+		testExpectedPaths(factory, LocalDate.parse("2022-10-01"), "ccp/mer/2022/EVEOnline_MER_Oct2022-updated.zip");
+	}
+
+	@Test
+	void shouldGenerateMerOld2() {
+		var factory = ArchivePathFactory.MER_OLD_2;
+		testExpectedPaths(factory, LocalDate.parse("2022-01-01"), "ccp/mer/2022/January_2022_MER.zip");
+	}
+
 	private static void testExpectedPaths(
 			ArchivePathFactory factory, Instant timestamp, String expectedTimePath, String expectedLatestPath) {
 		assertEquals(expectedLatestPath, factory.createLatestPath());
