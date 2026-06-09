@@ -1,6 +1,6 @@
 package com.autonomouslogic.everef.cli;
 
-import static com.autonomouslogic.everef.util.ArchivePathFactory.HOBOLEAKS;
+import static com.autonomouslogic.everef.util.archive.ArchivePathFactories.HOBOLEAKS;
 
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.http.OkHttpWrapper;

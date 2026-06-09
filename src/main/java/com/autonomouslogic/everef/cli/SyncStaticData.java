@@ -7,10 +7,11 @@ import com.autonomouslogic.everef.s3.S3Adapter;
 import com.autonomouslogic.everef.s3.S3Util;
 import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.url.UrlParser;
-import com.autonomouslogic.everef.util.ArchivePathFactory;
 import com.autonomouslogic.everef.util.DataIndexHelper;
 import com.autonomouslogic.everef.util.DiscordNotifier;
 import com.autonomouslogic.everef.util.TempFiles;
+import com.autonomouslogic.everef.util.archive.ArchivePathFactories;
+import com.autonomouslogic.everef.util.archive.ArchivePathFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.IOException;
@@ -81,8 +82,8 @@ public class SyncStaticData implements Command {
 	public void run() {
 		var latest = loadLatestFiles();
 		var newFile = false;
-		newFile |= syncFile(latest, ArchivePathFactory.SDE_V2_JSONL, "jsonl");
-		newFile |= syncFile(latest, ArchivePathFactory.SDE_V2_YAML, "yaml");
+		newFile |= syncFile(latest, ArchivePathFactories.SDE_V2_JSONL, "jsonl");
+		newFile |= syncFile(latest, ArchivePathFactories.SDE_V2_YAML, "yaml");
 		if (newFile) {
 			discordNotifier.notifyDiscord(String.format("New SDE released: %s", latest.getBuildNumber()));
 		}
@@ -164,7 +165,7 @@ public class SyncStaticData implements Command {
 				throw new RuntimeException("Failed to download " + schemaUrl + ": " + response.code());
 			}
 			var name = FilenameUtils.getName(schemaUrl.getPath());
-			var folder = ArchivePathFactory.SDE_V2_JSONL.getFolder();
+			var folder = ArchivePathFactories.SDE_V2_JSONL.getFolder();
 			var s3Url = dataPath.resolve(folder + "/" + name);
 			var latestPut = s3Util.putPublicObjectRequest(file.length(), s3Url, latestCacheTime);
 			s3Adapter.putObject(latestPut, file, s3Client);

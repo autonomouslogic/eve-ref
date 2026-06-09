@@ -1,17 +1,18 @@
 package com.autonomouslogic.everef.util;
 
-import static com.autonomouslogic.everef.util.ArchivePathFactory.ESI;
-import static com.autonomouslogic.everef.util.ArchivePathFactory.HOBOLEAKS;
-import static com.autonomouslogic.everef.util.ArchivePathFactory.MARKET_ORDERS;
-import static com.autonomouslogic.everef.util.ArchivePathFactory.PUBLIC_CONTRACTS;
-import static com.autonomouslogic.everef.util.ArchivePathFactory.SDE_V2_YAML;
-import static com.autonomouslogic.everef.util.ArchivePathFactory.STRUCTURES;
+import static com.autonomouslogic.everef.util.archive.ArchivePathFactories.ESI;
+import static com.autonomouslogic.everef.util.archive.ArchivePathFactories.HOBOLEAKS;
+import static com.autonomouslogic.everef.util.archive.ArchivePathFactories.MARKET_ORDERS;
+import static com.autonomouslogic.everef.util.archive.ArchivePathFactories.PUBLIC_CONTRACTS;
+import static com.autonomouslogic.everef.util.archive.ArchivePathFactories.SDE_V2_YAML;
+import static com.autonomouslogic.everef.util.archive.ArchivePathFactories.STRUCTURES;
 
 import com.autonomouslogic.commons.ResourceUtil;
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.http.DataCrawler;
 import com.autonomouslogic.everef.http.OkHttpWrapper;
 import com.autonomouslogic.everef.model.Structure;
+import com.autonomouslogic.everef.util.archive.ArchivePathFactory;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.reactivex.rxjava3.core.Single;

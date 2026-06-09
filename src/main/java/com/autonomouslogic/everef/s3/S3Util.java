@@ -2,8 +2,8 @@ package com.autonomouslogic.everef.s3;
 
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.url.S3Url;
-import com.autonomouslogic.everef.util.ArchivePathFactory;
 import com.autonomouslogic.everef.util.DataIndexHelper;
+import com.autonomouslogic.everef.util.archive.ArchivePathFactory;
 import java.io.File;
 import java.time.Duration;
 import java.time.ZonedDateTime;

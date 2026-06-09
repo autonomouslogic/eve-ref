@@ -1,7 +1,7 @@
 package com.autonomouslogic.everef.cli.structures;
 
-import static com.autonomouslogic.everef.util.ArchivePathFactory.STRUCTURES;
 import static com.autonomouslogic.everef.util.EveConstants.STANDARD_MARKET_HUB_I_TYPE_ID;
+import static com.autonomouslogic.everef.util.archive.ArchivePathFactories.STRUCTURES;
 
 import com.autonomouslogic.everef.cli.Command;
 import com.autonomouslogic.everef.cli.structures.source.Adam4EveBackfillStructureSource;

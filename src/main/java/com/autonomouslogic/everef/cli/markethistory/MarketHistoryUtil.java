@@ -1,6 +1,6 @@
 package com.autonomouslogic.everef.cli.markethistory;
 
-import static com.autonomouslogic.everef.util.ArchivePathFactory.MARKET_HISTORY;
+import static com.autonomouslogic.everef.util.archive.ArchivePathFactories.MARKET_HISTORY;
 import static java.time.ZoneOffset.UTC;
 
 import com.autonomouslogic.everef.config.Configs;
@@ -8,8 +8,8 @@ import com.autonomouslogic.everef.http.DataCrawler;
 import com.autonomouslogic.everef.http.OkHttpWrapper;
 import com.autonomouslogic.everef.url.HttpUrl;
 import com.autonomouslogic.everef.url.UrlParser;
-import com.autonomouslogic.everef.util.ArchivePathFactory;
 import com.autonomouslogic.everef.util.TempFiles;
+import com.autonomouslogic.everef.util.archive.ArchivePathFactories;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Single;
@@ -81,11 +81,11 @@ public class MarketHistoryUtil {
 	public Flowable<Pair<LocalDate, HttpUrl>> crawlAvailableFiles() {
 		return Flowable.fromIterable(dataCrawlerProvider
 						.get()
-						.setPrefix(ArchivePathFactory.MARKET_HISTORY.getFolder())
+						.setPrefix(ArchivePathFactories.MARKET_HISTORY.getFolder())
 						.crawl())
 				.flatMap(url -> {
 					var path = url.getPath();
-					var datestamp = ArchivePathFactory.MARKET_HISTORY.parseArchiveTime(path);
+					var datestamp = ArchivePathFactories.MARKET_HISTORY.parseArchiveTime(path);
 					if (datestamp != null) {
 						var date = datestamp.atZone(UTC).toLocalDate();
 						log.trace("Found market history file for {}: {}", datestamp, url);

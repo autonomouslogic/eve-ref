@@ -1,6 +1,6 @@
 package com.autonomouslogic.everef.cli.publiccontracts;
 
-import static com.autonomouslogic.everef.util.ArchivePathFactory.PUBLIC_CONTRACTS;
+import static com.autonomouslogic.everef.util.archive.ArchivePathFactories.PUBLIC_CONTRACTS;
 
 import com.autonomouslogic.everef.cli.Command;
 import com.autonomouslogic.everef.config.Configs;

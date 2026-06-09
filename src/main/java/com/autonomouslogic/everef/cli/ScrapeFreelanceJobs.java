@@ -1,6 +1,6 @@
 package com.autonomouslogic.everef.cli;
 
-import static com.autonomouslogic.everef.util.ArchivePathFactory.FREELANCE_JOBS;
+import static com.autonomouslogic.everef.util.archive.ArchivePathFactories.FREELANCE_JOBS;
 
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.esi.EsiHelper;

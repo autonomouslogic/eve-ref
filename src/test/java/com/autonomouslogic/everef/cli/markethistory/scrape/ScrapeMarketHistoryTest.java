@@ -12,9 +12,9 @@ import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.test.MockS3Adapter;
 import com.autonomouslogic.everef.test.TestDataUtil;
 import com.autonomouslogic.everef.url.S3Url;
-import com.autonomouslogic.everef.util.ArchivePathFactory;
 import com.autonomouslogic.everef.util.DataIndexHelper;
 import com.autonomouslogic.everef.util.EveConstants;
+import com.autonomouslogic.everef.util.archive.ArchivePathFactories;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.ByteArrayInputStream;
@@ -119,8 +119,8 @@ public class ScrapeMarketHistoryTest {
 
 		assertEquals(
 				List.of(
-						"data/" + ArchivePathFactory.MARKET_HISTORY.createArchivePath(LocalDate.parse("2023-01-02")),
-						"data/" + ArchivePathFactory.MARKET_HISTORY.createArchivePath(LocalDate.parse("2023-01-03")),
+						"data/" + ArchivePathFactories.MARKET_HISTORY.createArchivePath(LocalDate.parse("2023-01-02")),
+						"data/" + ArchivePathFactories.MARKET_HISTORY.createArchivePath(LocalDate.parse("2023-01-03")),
 						"data/market-history/totals.json"),
 				mockS3Adapter.getAllPutKeys(BUCKET_NAME, dataClient).stream()
 						.sorted()
@@ -233,7 +233,7 @@ public class ScrapeMarketHistoryTest {
 					var regionId = segments.get(3);
 					return mockHistory(regionId, typeId);
 				}
-				var refdataPath = "/data/" + ArchivePathFactory.REFERENCE_DATA.createLatestPath();
+				var refdataPath = "/data/" + ArchivePathFactories.REFERENCE_DATA.createLatestPath();
 				if (path.equals(refdataPath)) {
 					return mockRefdata();
 				}
@@ -363,7 +363,7 @@ public class ScrapeMarketHistoryTest {
 	private String loadUploadedArchive(LocalDate date) {
 		var bytes = mockS3Adapter
 				.getTestObject(
-						BUCKET_NAME, "data/" + ArchivePathFactory.MARKET_HISTORY.createArchivePath(date), dataClient)
+						BUCKET_NAME, "data/" + ArchivePathFactories.MARKET_HISTORY.createArchivePath(date), dataClient)
 				.orElseThrow(() -> new RuntimeException(date.toString()));
 		return IOUtils.toString(new BZip2CompressorInputStream(new ByteArrayInputStream(bytes)), StandardCharsets.UTF_8)
 				.replaceAll("\r\n", "\n");

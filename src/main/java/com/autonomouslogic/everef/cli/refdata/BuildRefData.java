@@ -1,6 +1,6 @@
 package com.autonomouslogic.everef.cli.refdata;
 
-import static com.autonomouslogic.everef.util.ArchivePathFactory.REFERENCE_DATA;
+import static com.autonomouslogic.everef.util.archive.ArchivePathFactories.REFERENCE_DATA;
 
 import com.autonomouslogic.everef.cli.Command;
 import com.autonomouslogic.everef.cli.refdata.esi.EsiLoader;

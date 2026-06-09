@@ -1,4 +1,4 @@
-package com.autonomouslogic.everef.util;
+package com.autonomouslogic.everef.util.archive;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -8,10 +8,10 @@ import java.time.LocalDate;
 import java.time.ZoneOffset;
 import org.junit.jupiter.api.Test;
 
-public class ArchivePathFactoryTest {
+public class ArchivePathFactoriesTest {
 	@Test
 	void shouldGenerateReferenceDataNames() {
-		var factory = ArchivePathFactory.REFERENCE_DATA;
+		var factory = ArchivePathFactories.REFERENCE_DATA;
 		testExpectedPaths(
 				factory,
 				Instant.parse("2022-01-05T00:00:00Z"),
@@ -21,7 +21,7 @@ public class ArchivePathFactoryTest {
 
 	@Test
 	void shouldGenerateMarketOrderNames() {
-		var factory = ArchivePathFactory.MARKET_ORDERS;
+		var factory = ArchivePathFactories.MARKET_ORDERS;
 		testExpectedPaths(
 				factory,
 				Instant.parse("2022-01-05T04:45:02Z"),
@@ -31,7 +31,7 @@ public class ArchivePathFactoryTest {
 
 	@Test
 	void shouldGeneratePublicContractNames() {
-		var factory = ArchivePathFactory.PUBLIC_CONTRACTS;
+		var factory = ArchivePathFactories.PUBLIC_CONTRACTS;
 		testExpectedPaths(
 				factory,
 				Instant.parse("2021-06-20T03:15:02Z"),
@@ -41,20 +41,20 @@ public class ArchivePathFactoryTest {
 
 	@Test
 	void shouldGenerateKillmailsNames() {
-		var factory = ArchivePathFactory.KILLMAILS;
+		var factory = ArchivePathFactories.KILLMAILS;
 		testExpectedPaths(factory, LocalDate.parse("2016-01-04"), "killmails/2016/killmails-2016-01-04.tar.bz2");
 	}
 
 	@Test
 	void shouldGenerateMarketHistoryNames() {
-		var factory = ArchivePathFactory.MARKET_HISTORY;
+		var factory = ArchivePathFactories.MARKET_HISTORY;
 		testExpectedPaths(
 				factory, LocalDate.parse("2022-01-08"), "market-history/2022/market-history-2022-01-08.csv.bz2");
 	}
 
 	@Test
 	void shouldGenerateSdeNames() {
-		var factory = ArchivePathFactory.SDE;
+		var factory = ArchivePathFactories.SDE;
 		testExpectedPaths(
 				factory,
 				Instant.parse("2023-03-15T00:00:00Z"),
@@ -64,7 +64,7 @@ public class ArchivePathFactoryTest {
 
 	@Test
 	void shouldGenerateStaticDataJsonlNames() {
-		var factory = ArchivePathFactory.SDE_V2_JSONL;
+		var factory = ArchivePathFactories.SDE_V2_JSONL;
 		testExpectedPaths(
 				factory,
 				Instant.parse("2023-01-01T00:00:00Z"),
@@ -74,7 +74,7 @@ public class ArchivePathFactoryTest {
 
 	@Test
 	void shouldGenerateStaticDataYamlNames() {
-		var factory = ArchivePathFactory.SDE_V2_YAML;
+		var factory = ArchivePathFactories.SDE_V2_YAML;
 		testExpectedPaths(
 				factory,
 				Instant.parse("2023-01-01T00:00:00Z"),
@@ -84,7 +84,7 @@ public class ArchivePathFactoryTest {
 
 	@Test
 	void shouldGenerateEsiNames() {
-		var factory = ArchivePathFactory.ESI;
+		var factory = ArchivePathFactories.ESI;
 		testExpectedPaths(
 				factory,
 				Instant.parse("2023-03-15T00:00:00Z"),
@@ -94,7 +94,7 @@ public class ArchivePathFactoryTest {
 
 	@Test
 	void shouldGenerateHoboleaksSdeNames() {
-		var factory = ArchivePathFactory.HOBOLEAKS;
+		var factory = ArchivePathFactories.HOBOLEAKS;
 		testExpectedPaths(
 				factory,
 				Instant.parse("2023-03-15T00:00:00Z"),
@@ -104,7 +104,7 @@ public class ArchivePathFactoryTest {
 
 	@Test
 	void shouldGenerateStructuresNames() {
-		var factory = ArchivePathFactory.STRUCTURES;
+		var factory = ArchivePathFactories.STRUCTURES;
 		testExpectedPaths(
 				factory,
 				Instant.parse("2023-03-15T01:02:03Z"),
@@ -114,39 +114,44 @@ public class ArchivePathFactoryTest {
 
 	@Test
 	void shouldGenerateMer() {
-		var factory = ArchivePathFactory.MER;
+		var factory = ArchivePathFactories.MER;
 		testExpectedPaths(factory, LocalDate.parse("2026-05-01"), "ccp/mer/2026/EVEOnline_MER_202605.zip");
 	}
 
 	@Test
 	void shouldGenerateMerOld1() {
-		var factory = ArchivePathFactory.MER_OLD_1;
-		testExpectedPaths(factory, LocalDate.parse("2025-04-01"), "ccp/mer/2025/EVEOnline_MER_Apr2025.zip");
+		var factory = ArchivePathFactories.MER_OLD_1;
+		testParsePaths(factory, LocalDate.parse("2025-04-01"), "ccp/mer/2025/EVEOnline_MER_Apr2025.zip");
 	}
 
 	@Test
 	void shouldGenerateMerOld1_updated() {
-		var factory = ArchivePathFactory.MER_OLD_1_UPDATED;
-		testExpectedPaths(factory, LocalDate.parse("2022-10-01"), "ccp/mer/2022/EVEOnline_MER_Oct2022-updated.zip");
-		testExpectedPaths(factory, LocalDate.parse("2022-09-01"), "ccp/mer/2022/EVEOnline_MER_Sep2022-Updated.zip");
-		testExpectedPaths(factory, LocalDate.parse("2021-12-01"), "ccp/mer/2021/EVEOnline_MER_Dec2021_Updated.zip");
-		testExpectedPaths(factory, LocalDate.parse("2019-12-01"), "ccp/mer/2019/EVEOnline_MER_Dec2019b.zip");
-		testExpectedPaths(factory, LocalDate.parse("2016-12-01"), "ccp/mer/2016/EVEOnline_MER_Dec2016_v1.1.zip");
-		testExpectedPaths(factory, LocalDate.parse("2024-07-01"), "ccp/mer/2024/EVEOnline_MER_Jul2024v2.zip");
+		var factory = ArchivePathFactories.MER_OLD_1_UPDATED;
+		testParsePaths(factory, LocalDate.parse("2022-10-01"), "ccp/mer/2022/EVEOnline_MER_Oct2022-updated.zip");
+		testParsePaths(factory, LocalDate.parse("2022-09-01"), "ccp/mer/2022/EVEOnline_MER_Sep2022-Updated.zip");
+		testParsePaths(factory, LocalDate.parse("2021-12-01"), "ccp/mer/2021/EVEOnline_MER_Dec2021_Updated.zip");
+		testParsePaths(factory, LocalDate.parse("2019-12-01"), "ccp/mer/2019/EVEOnline_MER_Dec2019b.zip");
+		testParsePaths(factory, LocalDate.parse("2016-12-01"), "ccp/mer/2016/EVEOnline_MER_Dec2016_v1.1.zip");
+		testParsePaths(factory, LocalDate.parse("2024-07-01"), "ccp/mer/2024/EVEOnline_MER_Jul2024v2.zip");
 	}
 
 	@Test
 	void shouldGenerateMerOld2() {
-		var factory = ArchivePathFactory.MER_OLD_2;
-		testExpectedPaths(factory, LocalDate.parse("2022-01-01"), "ccp/mer/2022/January_2022_MER.zip");
+		var factory = ArchivePathFactories.MER_OLD_2;
+		testParsePaths(factory, LocalDate.parse("2022-01-01"), "ccp/mer/2022/January_2022_MER.zip");
 	}
 
 	@Test
 	void shouldGenerateMerOld3() {
-		var factory = ArchivePathFactory.MER_OLD_3;
-		testExpectedPaths(factory, LocalDate.parse("2021-09-01"), "ccp/mer/2021/EVEOnline_MER_Sept2021.zip");
-		testExpectedPaths(factory, LocalDate.parse("2021-09-01"), "ccp/mer/2016/EVEOnline_MER_July2016.zip");
-		testExpectedPaths(factory, LocalDate.parse("2021-09-01"), "ccp/mer/2016/EVEOnline_MER_June2016.zip");
+		var factory = ArchivePathFactories.MER_OLD_3;
+		testParsePaths(factory, LocalDate.parse("2021-09-01"), "ccp/mer/2021/EVEOnline_MER_Sep2021.zip");
+	}
+
+	@Test
+	void shouldGenerateMerOld3FullMonth() {
+		var factory = ArchivePathFactories.MER_OLD_3_FULL_MONTH;
+		testParsePaths(factory, LocalDate.parse("2016-07-01"), "ccp/mer/2016/EVEOnline_MER_July2016.zip");
+		testParsePaths(factory, LocalDate.parse("2016-06-01"), "ccp/mer/2016/EVEOnline_MER_June2016.zip");
 	}
 
 	private static void testExpectedPaths(
@@ -161,6 +166,10 @@ public class ArchivePathFactoryTest {
 
 	private static void testExpectedPaths(ArchivePathFactory factory, LocalDate datestamp, String expectedTimePath) {
 		assertEquals(expectedTimePath, factory.createArchivePath(datestamp));
+		testParsePaths(factory, datestamp, expectedTimePath);
+	}
+
+	private static void testParsePaths(ArchivePathFactory factory, LocalDate datestamp, String expectedTimePath) {
 		assertEquals(
 				datestamp,
 				factory.parseArchiveTime(expectedTimePath)

@@ -1,6 +1,6 @@
 package com.autonomouslogic.everef.util;
 
-import static com.autonomouslogic.everef.util.ArchivePathFactory.REFERENCE_DATA;
+import static com.autonomouslogic.everef.util.archive.ArchivePathFactories.REFERENCE_DATA;
 
 import com.autonomouslogic.commons.ResourceUtil;
 import com.autonomouslogic.everef.config.Configs;

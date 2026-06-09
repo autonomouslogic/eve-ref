@@ -12,7 +12,7 @@ import com.autonomouslogic.everef.refdata.InventoryType;
 import com.autonomouslogic.everef.refdata.Region;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.test.TestDataUtil;
-import com.autonomouslogic.everef.util.ArchivePathFactory;
+import com.autonomouslogic.everef.util.archive.ArchivePathFactories;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -220,7 +220,7 @@ public class ExplorerRegionTypeSourceTest {
 		public MockResponse dispatch(@NotNull RecordedRequest request) throws InterruptedException {
 			try {
 				var path = request.getRequestUrl().encodedPath();
-				var refdataPath = "/data/" + ArchivePathFactory.REFERENCE_DATA.createLatestPath();
+				var refdataPath = "/data/" + ArchivePathFactories.REFERENCE_DATA.createLatestPath();
 				if (path.equals(refdataPath)) {
 					return testDataUtil.mockResponse(refdataBytes);
 				}

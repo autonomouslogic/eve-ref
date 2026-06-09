@@ -1,10 +1,10 @@
 package com.autonomouslogic.everef.cli;
 
-import static com.autonomouslogic.everef.util.ArchivePathFactory.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
-import com.autonomouslogic.everef.util.ArchivePathFactory;
+import com.autonomouslogic.everef.util.archive.ArchivePathFactories;
+import com.autonomouslogic.everef.util.archive.ArchivePathFactory;
 import java.time.ZonedDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,17 +38,17 @@ class ScrapeSovereigntyTest {
 		verify(genericHistoryScraper)
 				.fetchAndUpload(
 						eq("https://esi.evetech.net/latest/sovereignty/map/?datasource=tranquility"),
-						eq(SOVEREIGNTY_MAP),
+						eq(ArchivePathFactories.SOVEREIGNTY_MAP),
 						any(ZonedDateTime.class));
 		verify(genericHistoryScraper)
 				.fetchAndUpload(
 						eq("https://esi.evetech.net/latest/sovereignty/structures/?datasource=tranquility"),
-						eq(SOVEREIGNTY_STRUCTURES),
+						eq(ArchivePathFactories.SOVEREIGNTY_STRUCTURES),
 						any(ZonedDateTime.class));
 		verify(genericHistoryScraper)
 				.fetchAndUpload(
 						eq("https://esi.evetech.net/latest/sovereignty/campaigns/?datasource=tranquility"),
-						eq(SOVEREIGNTY_CAMPAIGNS),
+						eq(ArchivePathFactories.SOVEREIGNTY_CAMPAIGNS),
 						any(ZonedDateTime.class));
 	}
 }

@@ -1,10 +1,10 @@
 package com.autonomouslogic.everef.cli;
 
-import static com.autonomouslogic.everef.util.ArchivePathFactory.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
-import com.autonomouslogic.everef.util.ArchivePathFactory;
+import com.autonomouslogic.everef.util.archive.ArchivePathFactories;
+import com.autonomouslogic.everef.util.archive.ArchivePathFactory;
 import java.time.ZonedDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,12 +38,12 @@ class ScrapeIndustryTest {
 		verify(genericHistoryScraper)
 				.fetchAndUpload(
 						eq("https://esi.evetech.net/latest/industry/systems/?datasource=tranquility"),
-						eq(INDUSTRY_SYSTEMS),
+						eq(ArchivePathFactories.INDUSTRY_SYSTEMS),
 						any(ZonedDateTime.class));
 		verify(genericHistoryScraper)
 				.fetchAndUpload(
 						eq("https://esi.evetech.net/latest/industry/facilities/?datasource=tranquility"),
-						eq(INDUSTRY_FACILITIES),
+						eq(ArchivePathFactories.INDUSTRY_FACILITIES),
 						any(ZonedDateTime.class));
 	}
 }

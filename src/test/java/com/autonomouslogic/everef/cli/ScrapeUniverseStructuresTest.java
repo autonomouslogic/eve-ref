@@ -3,7 +3,7 @@ package com.autonomouslogic.everef.cli;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
-import com.autonomouslogic.everef.util.ArchivePathFactory;
+import com.autonomouslogic.everef.util.archive.ArchivePathFactory;
 import java.time.ZonedDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

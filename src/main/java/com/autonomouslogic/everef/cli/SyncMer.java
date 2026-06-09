@@ -1,6 +1,6 @@
 package com.autonomouslogic.everef.cli;
 
-import static com.autonomouslogic.everef.util.ArchivePathFactory.MER;
+import static com.autonomouslogic.everef.util.archive.ArchivePathFactories.MER;
 
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.http.OkHttpWrapper;

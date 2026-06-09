@@ -1,10 +1,10 @@
 package com.autonomouslogic.everef.cli;
 
-import static com.autonomouslogic.everef.util.ArchivePathFactory.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
-import com.autonomouslogic.everef.util.ArchivePathFactory;
+import com.autonomouslogic.everef.util.archive.ArchivePathFactories;
+import com.autonomouslogic.everef.util.archive.ArchivePathFactory;
 import java.time.ZonedDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,12 +38,12 @@ class ScrapeSystemStatsTest {
 		verify(genericHistoryScraper)
 				.fetchAndUpload(
 						eq("https://esi.evetech.net/latest/universe/system_jumps/?datasource=tranquility"),
-						eq(SYSTEM_JUMPS),
+						eq(ArchivePathFactories.SYSTEM_JUMPS),
 						any(ZonedDateTime.class));
 		verify(genericHistoryScraper)
 				.fetchAndUpload(
 						eq("https://esi.evetech.net/latest/universe/system_kills/?datasource=tranquility"),
-						eq(SYSTEM_KILLS),
+						eq(ArchivePathFactories.SYSTEM_KILLS),
 						any(ZonedDateTime.class));
 	}
 }

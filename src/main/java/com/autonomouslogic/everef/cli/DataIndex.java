@@ -11,8 +11,8 @@ import com.autonomouslogic.everef.s3.S3Adapter;
 import com.autonomouslogic.everef.s3.S3Util;
 import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.url.UrlParser;
-import com.autonomouslogic.everef.util.ArchivePathFactory;
 import com.autonomouslogic.everef.util.VirtualThreads;
+import com.autonomouslogic.everef.util.archive.ArchivePathFactories;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Flowable;
@@ -212,7 +212,7 @@ public class DataIndex implements Command {
 				.lastModified(entry.getLastModified())
 				.etag(entry.getEtag());
 
-		var match = ArchivePathFactory.tryMatch(entry.getPath());
+		var match = ArchivePathFactories.tryMatch(entry.getPath());
 		match.ifPresent(archiveMatch -> {
 			builder.type(archiveMatch.getType());
 			archiveMatch.getDate().ifPresent(date -> builder.fileTime(date));

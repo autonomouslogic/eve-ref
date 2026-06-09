@@ -1,6 +1,6 @@
 package com.autonomouslogic.everef.cli.marketorders;
 
-import static com.autonomouslogic.everef.util.ArchivePathFactory.MARKET_ORDERS;
+import static com.autonomouslogic.everef.util.archive.ArchivePathFactories.MARKET_ORDERS;
 
 import com.autonomouslogic.everef.cli.Command;
 import com.autonomouslogic.everef.config.Configs;
