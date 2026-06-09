@@ -1,5 +1,17 @@
 EVE Ref Changelog
 
+## [2.78.0](https://github.com/autonomouslogic/eve-ref/compare/2.77.0...2.78.0) (2026-06-09)
+
+
+### Features
+
+* Index JSON files ([#1057](https://github.com/autonomouslogic/eve-ref/issues/1057)) ([b5dad4c](https://github.com/autonomouslogic/eve-ref/commit/b5dad4cf6b4f1dd74ee0bb0d6737fdd533edf19e))
+
+
+### Tests
+
+* Updated test resources ([ae08f5b](https://github.com/autonomouslogic/eve-ref/commit/ae08f5b207a01592c450f8776921b4a104512104))
+
 ## [2.77.0](https://github.com/autonomouslogic/eve-ref/compare/2.76.1...2.77.0) (2026-06-05)
 
 
