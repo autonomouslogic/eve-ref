@@ -9,6 +9,9 @@ import com.autonomouslogic.everef.pug.TimeUtil;
 import com.autonomouslogic.everef.s3.S3Adapter;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.test.MockS3Adapter;
+import com.autonomouslogic.everef.util.HashUtil;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.util.HashMap;
@@ -19,6 +22,7 @@ import javax.inject.Named;
 import lombok.SneakyThrows;
 import lombok.Value;
 import lombok.extern.log4j.Log4j2;
+import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 import org.jsoup.Jsoup;
@@ -46,6 +50,9 @@ public class DataIndexTest {
 	@Inject
 	@Named("data")
 	S3AsyncClient s3Data;
+
+	@Inject
+	ObjectMapper objectMapper;
 
 	MockS3Adapter mockS3;
 
@@ -91,8 +98,19 @@ public class DataIndexTest {
 		verifyDir1SubIndex();
 		verifyDir2Index();
 
-		// Assert correct uploaded files.
-		assertEquals(List.of("dir/index.html", "dir/sub/index.html", "dir2/index.html", "index.html"), getAllPutKeys());
+		verifyMainIndexJson();
+		verifyDir1IndexJson();
+		verifyDir1SubIndexJson();
+		verifyDir2IndexJson();
+
+		// Assert correct uploaded files (both HTML and JSON).
+		assertEquals(
+				List.of(
+						"dir/index.html", "dir/index.json",
+						"dir/sub/index.html", "dir/sub/index.json",
+						"dir2/index.html", "dir2/index.json",
+						"index.html", "index.json"),
+				getAllPutKeys());
 	}
 
 	@Test
@@ -101,9 +119,10 @@ public class DataIndexTest {
 		dataIndex.setRecursive(false).run();
 
 		verifyMainIndex();
+		verifyMainIndexJson();
 
 		// Assert correct uploaded files.
-		assertEquals(List.of("index.html"), getAllPutKeys());
+		assertEquals(List.of("index.html", "index.json"), getAllPutKeys());
 	}
 
 	@Test
@@ -114,8 +133,13 @@ public class DataIndexTest {
 		verifyDir1Index();
 		verifyDir1SubIndex();
 
+		verifyDir1IndexJson();
+		verifyDir1SubIndexJson();
+
 		// Assert correct uploaded files.
-		assertEquals(List.of("dir/index.html", "dir/sub/index.html"), getAllPutKeys());
+		assertEquals(
+				List.of("dir/index.html", "dir/index.json", "dir/sub/index.html", "dir/sub/index.json"),
+				getAllPutKeys());
 	}
 
 	@Test
@@ -124,9 +148,149 @@ public class DataIndexTest {
 		dataIndex.setPrefix("dir/").setRecursive(false).run();
 
 		verifyDir1Index();
+		verifyDir1IndexJson();
 
 		// Assert correct uploaded files.
-		assertEquals(List.of("dir/index.html"), getAllPutKeys());
+		assertEquals(List.of("dir/index.html", "dir/index.json"), getAllPutKeys());
+	}
+
+	@Test
+	@SneakyThrows
+	void shouldExcludeExistingIndexJsonFilesFromListing() {
+		// Seed index.json files that should be excluded from listing
+		mockS3.putTestObject(BUCKET_NAME, "index.json", "{}", s3Data, Instant.parse("2000-01-01T00:00:00.100Z"));
+		mockS3.putTestObject(BUCKET_NAME, "dir/index.json", "{}", s3Data, Instant.parse("2000-01-01T00:00:01.100Z"));
+
+		dataIndex.run();
+
+		// Should still generate the same index files (not including the seed ones)
+		assertEquals(
+				List.of(
+						"dir/index.html", "dir/index.json",
+						"dir/sub/index.html", "dir/sub/index.json",
+						"dir2/index.html", "dir2/index.json",
+						"index.html", "index.json"),
+				getAllPutKeys());
+	}
+
+	@Test
+	@SneakyThrows
+	void shouldParseMarketOrdersArchivePath() {
+		mockS3.putTestObject(
+				BUCKET_NAME,
+				"market-orders/market-orders-latest.v3.csv.bz2",
+				"market orders latest",
+				s3Data,
+				Instant.parse("2026-06-08T05:50:42Z"));
+		mockS3.putTestObject(
+				BUCKET_NAME,
+				"market-orders/history/2026/2026-06-01/market-orders-2026-06-01_15-15-07.v3.csv.bz2",
+				"market orders data",
+				s3Data,
+				Instant.parse("2026-06-01T15:20:41Z"));
+
+		dataIndex.run();
+
+		var latestJson = getJsonContent("market-orders/index.json");
+		var archiveJson = getJsonContent("market-orders/history/2026/2026-06-01/index.json");
+
+		var latestExpectedJson = """
+				{
+					"path": "market-orders",
+					"files": [
+						{
+							"name": "market-orders-latest.v3.csv.bz2",
+							"url": "https://data.everef.net/market-orders/market-orders-latest.v3.csv.bz2",
+							"size": 20,
+							"last_modified": "2026-06-08T05:50:42Z",
+							"etag": "%s",
+							"type": "market-orders"
+						}
+					],
+					"directories": [
+						{
+							"name": "history",
+							"index_url": "https://data.everef.net/market-orders/history/index.json"
+						}
+					]
+				}
+				""".formatted(Hex.encodeHexString(HashUtil.md5("market orders latest")));
+		var latestExpected = objectMapper.readTree(latestExpectedJson);
+
+		var archiveExpectedJson = """
+				{
+					"path": "market-orders/history/2026/2026-06-01",
+					"files": [
+						{
+							"name": "market-orders-2026-06-01_15-15-07.v3.csv.bz2",
+							"url": "https://data.everef.net/market-orders/history/2026/2026-06-01/market-orders-2026-06-01_15-15-07.v3.csv.bz2",
+							"size": 18,
+							"last_modified": "2026-06-01T15:20:41Z",
+							"etag": "%s",
+							"type": "market-orders",
+							"file_time": "2026-06-01T15:15:07Z"
+						}
+					]
+				}
+				""".formatted(Hex.encodeHexString(HashUtil.md5("market orders data")));
+		var archiveExpected = objectMapper.readTree(archiveExpectedJson);
+
+		assertEquals(latestExpected, latestJson);
+		assertEquals(archiveExpected, archiveJson);
+	}
+
+	@Test
+	@SneakyThrows
+	void shouldParseMarketHistoryArchivePath() {
+		mockS3.putTestObject(
+				BUCKET_NAME,
+				"market-history/2015/market-history-2015-01-04.csv.bz2",
+				"data",
+				s3Data,
+				Instant.parse("2018-03-09T00:00:00Z"));
+
+		dataIndex.run();
+
+		var archiveJson = getJsonContent("market-history/2015/index.json");
+		var file = archiveJson.get("files").get(0);
+		assertEquals("market-history", file.get("type").textValue());
+		assertEquals("2015-01-04T00:00:00Z", file.get("file_time").textValue());
+	}
+
+	@Test
+	@SneakyThrows
+	void shouldParseReferenceDataArchivePath() {
+		mockS3.putTestObject(
+				BUCKET_NAME,
+				"reference-data/history/2026/reference-data-2026-01-05.tar.xz",
+				"data",
+				s3Data,
+				Instant.parse("2026-01-05T12:15:57Z"));
+
+		dataIndex.run();
+
+		var archiveJson = getJsonContent("reference-data/history/2026/index.json");
+		var file = archiveJson.get("files").get(0);
+		assertEquals("reference-data", file.get("type").textValue());
+		assertEquals("2026-01-05T00:00:00Z", file.get("file_time").textValue());
+	}
+
+	@Test
+	@SneakyThrows
+	void shouldParseMerPath() {
+		mockS3.putTestObject(
+				BUCKET_NAME,
+				"ccp/mer/2026/EVEOnline_MER_202601.zip",
+				"data",
+				s3Data,
+				Instant.parse("2026-02-10T14:51:39Z"));
+
+		dataIndex.run();
+
+		var archiveJson = getJsonContent("ccp/mer/2026/index.json");
+		var file = archiveJson.get("files").get(0);
+		assertEquals("mer", file.get("type").textValue());
+		assertEquals("2026-01-01T00:00:00Z", file.get("file_time").textValue());
 	}
 
 	@NotNull
@@ -214,6 +378,111 @@ public class DataIndexTest {
 		assertEquals(expectedDirectories, directories.text());
 		assertEquals(expectedFiles, files.text());
 		assertEquals(expectedSize, size.text());
+	}
+
+	@SneakyThrows
+	private void verifyMainIndexJson() {
+		var json = getJsonContent("index.json");
+		var expectedJson = """
+				{
+					"files": [
+						{
+							"name": "data.zip",
+							"url": "https://data.everef.net/data.zip",
+							"size": 16,
+							"last_modified": "1999-07-12T14:26:23Z",
+							"etag": "%s"
+						}
+					],
+					"directories": [
+						{
+							"name": "dir",
+							"index_url": "https://data.everef.net/dir/index.json"
+						},
+						{
+							"name": "dir2",
+							"index_url": "https://data.everef.net/dir2/index.json"
+						}
+					]
+				}
+				""".formatted(Hex.encodeHexString(HashUtil.md5("content data.zip")));
+		var expected = objectMapper.readTree(expectedJson);
+		assertEquals(expected, json);
+	}
+
+	@SneakyThrows
+	private void verifyDir1IndexJson() {
+		var json = getJsonContent("dir/index.json");
+		var expectedJson = """
+				{
+					"path": "dir",
+					"files": [
+						{
+							"name": "more-data.zip",
+							"url": "https://data.everef.net/dir/more-data.zip",
+							"size": 25,
+							"last_modified": "2000-01-01T00:00:03.100Z",
+							"etag": "%s"
+						}
+					],
+					"directories": [
+						{
+							"name": "sub",
+							"index_url": "https://data.everef.net/dir/sub/index.json"
+						}
+					]
+				}
+				""".formatted(Hex.encodeHexString(HashUtil.md5("content dir/more-data.zip")));
+		var expected = objectMapper.readTree(expectedJson);
+		assertEquals(expected, json);
+	}
+
+	@SneakyThrows
+	private void verifyDir1SubIndexJson() {
+		var json = getJsonContent("dir/sub/index.json");
+		var expectedJson = """
+				{
+					"path": "dir/sub",
+					"files": [
+						{
+							"name": "sub-data.zip",
+							"url": "https://data.everef.net/dir/sub/sub-data.zip",
+							"size": 28,
+							"last_modified": "2000-01-01T00:00:04.100Z",
+							"etag": "%s"
+						}
+					]
+				}
+				""".formatted(Hex.encodeHexString(HashUtil.md5("content dir/sub/sub-data.zip")));
+		var expected = objectMapper.readTree(expectedJson);
+		assertEquals(expected, json);
+	}
+
+	@SneakyThrows
+	private void verifyDir2IndexJson() {
+		var json = getJsonContent("dir2/index.json");
+		var expectedJson = """
+				{
+					"path": "dir2",
+					"files": [
+						{
+							"name": "more-data2.zip",
+							"url": "https://data.everef.net/dir2/more-data2.zip",
+							"size": 27,
+							"last_modified": "2000-01-01T00:00:05.100Z",
+							"etag": "%s"
+						}
+					]
+				}
+				""".formatted(Hex.encodeHexString(HashUtil.md5("content dir2/more-data2.zip")));
+		var expected = objectMapper.readTree(expectedJson);
+		assertEquals(expected, json);
+	}
+
+	@SneakyThrows
+	private JsonNode getJsonContent(String path) {
+		var content = getPageContent(path);
+		return objectMapper.readTree(content.getBytes());
 	}
 
 	@Value

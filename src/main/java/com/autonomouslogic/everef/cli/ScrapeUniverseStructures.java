@@ -1,7 +1,6 @@
 package com.autonomouslogic.everef.cli;
 
-import static com.autonomouslogic.everef.util.ArchivePathFactory.*;
-
+import com.autonomouslogic.everef.util.archive.ArchivePathFactories;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
@@ -26,7 +25,7 @@ public class ScrapeUniverseStructures implements Command {
 
 		genericHistoryScraper.fetchAndUpload(
 				"https://esi.evetech.net/latest/universe/structures/?datasource=tranquility",
-				UNIVERSE_STRUCTURES,
+				ArchivePathFactories.UNIVERSE_STRUCTURES,
 				scrapeTime);
 
 		log.info("Completed universe structures scrape");

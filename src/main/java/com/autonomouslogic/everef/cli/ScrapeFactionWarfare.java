@@ -1,7 +1,6 @@
 package com.autonomouslogic.everef.cli;
 
-import static com.autonomouslogic.everef.util.ArchivePathFactory.*;
-
+import com.autonomouslogic.everef.util.archive.ArchivePathFactories;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
@@ -25,24 +24,28 @@ public class ScrapeFactionWarfare implements Command {
 		log.info("Starting faction warfare scrape");
 
 		genericHistoryScraper.fetchAndUpload(
-				"https://esi.evetech.net/latest/fw/stats/?datasource=tranquility", FACTION_WARFARE_STATS, scrapeTime);
+				"https://esi.evetech.net/latest/fw/stats/?datasource=tranquility",
+				ArchivePathFactories.FACTION_WARFARE_STATS,
+				scrapeTime);
 		genericHistoryScraper.fetchAndUpload(
-				"https://esi.evetech.net/latest/fw/wars/?datasource=tranquility", FACTION_WARFARE_WARS, scrapeTime);
+				"https://esi.evetech.net/latest/fw/wars/?datasource=tranquility",
+				ArchivePathFactories.FACTION_WARFARE_WARS,
+				scrapeTime);
 		genericHistoryScraper.fetchAndUpload(
 				"https://esi.evetech.net/latest/fw/leaderboards/?datasource=tranquility",
-				FACTION_WARFARE_LEADERBOARDS,
+				ArchivePathFactories.FACTION_WARFARE_LEADERBOARDS,
 				scrapeTime);
 		genericHistoryScraper.fetchAndUpload(
 				"https://esi.evetech.net/latest/fw/leaderboards/characters/?datasource=tranquility",
-				FACTION_WARFARE_LEADERBOARDS_CHARACTERS,
+				ArchivePathFactories.FACTION_WARFARE_LEADERBOARDS_CHARACTERS,
 				scrapeTime);
 		genericHistoryScraper.fetchAndUpload(
 				"https://esi.evetech.net/latest/fw/leaderboards/corporations/?datasource=tranquility",
-				FACTION_WARFARE_LEADERBOARDS_CORPORATIONS,
+				ArchivePathFactories.FACTION_WARFARE_LEADERBOARDS_CORPORATIONS,
 				scrapeTime);
 		genericHistoryScraper.fetchAndUpload(
 				"https://esi.evetech.net/latest/fw/systems/?datasource=tranquility",
-				FACTION_WARFARE_SYSTEMS,
+				ArchivePathFactories.FACTION_WARFARE_SYSTEMS,
 				scrapeTime);
 
 		log.info("Completed faction warfare scrape");

@@ -1,6 +1,6 @@
 package com.autonomouslogic.everef.cli.markethistory.scrape;
 
-import static com.autonomouslogic.everef.util.ArchivePathFactory.MARKET_HISTORY;
+import static com.autonomouslogic.everef.util.archive.ArchivePathFactories.MARKET_HISTORY;
 
 import com.autonomouslogic.everef.cli.Command;
 import com.autonomouslogic.everef.cli.markethistory.MarketHistoryUtil;

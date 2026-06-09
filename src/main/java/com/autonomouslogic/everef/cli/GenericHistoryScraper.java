@@ -5,9 +5,9 @@ import com.autonomouslogic.everef.http.OkHttpWrapper;
 import com.autonomouslogic.everef.s3.S3Util;
 import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.url.UrlParser;
-import com.autonomouslogic.everef.util.ArchivePathFactory;
 import com.autonomouslogic.everef.util.CompressUtil;
 import com.autonomouslogic.everef.util.TempFiles;
+import com.autonomouslogic.everef.util.archive.StandardArchivePathFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.ZonedDateTime;
 import javax.inject.Inject;
@@ -65,7 +65,7 @@ public class GenericHistoryScraper {
 	 */
 	@SneakyThrows
 	public void fetchAndUpload(
-			@NonNull String url, @NonNull ArchivePathFactory pathFactory, @NonNull ZonedDateTime scrapeTime) {
+			@NonNull String url, @NonNull StandardArchivePathFactory pathFactory, @NonNull ZonedDateTime scrapeTime) {
 		log.debug("Fetching JSON from {}", url);
 
 		// Download JSON to temporary file

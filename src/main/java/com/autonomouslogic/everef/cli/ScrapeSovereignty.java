@@ -1,7 +1,6 @@
 package com.autonomouslogic.everef.cli;
 
-import static com.autonomouslogic.everef.util.ArchivePathFactory.*;
-
+import com.autonomouslogic.everef.util.archive.ArchivePathFactories;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
@@ -25,14 +24,16 @@ public class ScrapeSovereignty implements Command {
 		log.info("Starting sovereignty scrape");
 
 		genericHistoryScraper.fetchAndUpload(
-				"https://esi.evetech.net/latest/sovereignty/map/?datasource=tranquility", SOVEREIGNTY_MAP, scrapeTime);
+				"https://esi.evetech.net/latest/sovereignty/map/?datasource=tranquility",
+				ArchivePathFactories.SOVEREIGNTY_MAP,
+				scrapeTime);
 		genericHistoryScraper.fetchAndUpload(
 				"https://esi.evetech.net/latest/sovereignty/structures/?datasource=tranquility",
-				SOVEREIGNTY_STRUCTURES,
+				ArchivePathFactories.SOVEREIGNTY_STRUCTURES,
 				scrapeTime);
 		genericHistoryScraper.fetchAndUpload(
 				"https://esi.evetech.net/latest/sovereignty/campaigns/?datasource=tranquility",
-				SOVEREIGNTY_CAMPAIGNS,
+				ArchivePathFactories.SOVEREIGNTY_CAMPAIGNS,
 				scrapeTime);
 
 		log.info("Completed sovereignty scrape");

@@ -1,7 +1,6 @@
 package com.autonomouslogic.everef.cli;
 
-import static com.autonomouslogic.everef.util.ArchivePathFactory.*;
-
+import com.autonomouslogic.everef.util.archive.ArchivePathFactories;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
@@ -26,7 +25,7 @@ public class ScrapeInsurance implements Command {
 
 		genericHistoryScraper.fetchAndUpload(
 				"https://esi.evetech.net/latest/insurance/prices/?datasource=tranquility",
-				INSURANCE_PRICES,
+				ArchivePathFactories.INSURANCE_PRICES,
 				scrapeTime);
 
 		log.info("Completed insurance scrape");

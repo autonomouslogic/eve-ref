@@ -1,7 +1,6 @@
 package com.autonomouslogic.everef.cli;
 
-import static com.autonomouslogic.everef.util.ArchivePathFactory.*;
-
+import com.autonomouslogic.everef.util.archive.ArchivePathFactories;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
@@ -26,11 +25,11 @@ public class ScrapeSystemStats implements Command {
 
 		genericHistoryScraper.fetchAndUpload(
 				"https://esi.evetech.net/latest/universe/system_jumps/?datasource=tranquility",
-				SYSTEM_JUMPS,
+				ArchivePathFactories.SYSTEM_JUMPS,
 				scrapeTime);
 		genericHistoryScraper.fetchAndUpload(
 				"https://esi.evetech.net/latest/universe/system_kills/?datasource=tranquility",
-				SYSTEM_KILLS,
+				ArchivePathFactories.SYSTEM_KILLS,
 				scrapeTime);
 
 		log.info("Completed system stats scrape");

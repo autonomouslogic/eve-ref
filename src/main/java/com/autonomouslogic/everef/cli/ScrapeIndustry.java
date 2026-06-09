@@ -1,7 +1,6 @@
 package com.autonomouslogic.everef.cli;
 
-import static com.autonomouslogic.everef.util.ArchivePathFactory.*;
-
+import com.autonomouslogic.everef.util.archive.ArchivePathFactories;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
@@ -26,11 +25,11 @@ public class ScrapeIndustry implements Command {
 
 		genericHistoryScraper.fetchAndUpload(
 				"https://esi.evetech.net/latest/industry/systems/?datasource=tranquility",
-				INDUSTRY_SYSTEMS,
+				ArchivePathFactories.INDUSTRY_SYSTEMS,
 				scrapeTime);
 		genericHistoryScraper.fetchAndUpload(
 				"https://esi.evetech.net/latest/industry/facilities/?datasource=tranquility",
-				INDUSTRY_FACILITIES,
+				ArchivePathFactories.INDUSTRY_FACILITIES,
 				scrapeTime);
 
 		log.info("Completed industry scrape");

@@ -302,7 +302,7 @@ public class PublishRefData implements Command {
 			@NonNull Map<String, ListedS3Object> existing,
 			@NonNull ReferenceEntry entry) {
 		var existingHash =
-				Optional.ofNullable(existing.get(entry.getPath())).flatMap(e -> Optional.ofNullable(e.getMd5Hex()));
+				Optional.ofNullable(existing.get(entry.getPath())).flatMap(e -> Optional.ofNullable(e.getEtag()));
 		existing.remove(entry.getPath());
 		if (existingHash.isPresent() && existingHash.get().equals(entry.getMd5Hex())) {
 			skipped.incrementAndGet();

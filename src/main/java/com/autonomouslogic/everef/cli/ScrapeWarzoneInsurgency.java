@@ -1,7 +1,6 @@
 package com.autonomouslogic.everef.cli;
 
-import static com.autonomouslogic.everef.util.ArchivePathFactory.*;
-
+import com.autonomouslogic.everef.util.archive.ArchivePathFactories;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
@@ -25,7 +24,9 @@ public class ScrapeWarzoneInsurgency implements Command {
 		log.info("Starting warzone insurgency scrape");
 
 		genericHistoryScraper.fetchAndUpload(
-				"https://www.eveonline.com/api/warzone/insurgency", WARZONE_INSURGENCY, scrapeTime);
+				"https://www.eveonline.com/api/warzone/insurgency",
+				ArchivePathFactories.WARZONE_INSURGENCY,
+				scrapeTime);
 
 		log.info("Completed warzone insurgency scrape");
 	}

@@ -2,6 +2,9 @@ package com.autonomouslogic.everef.cli;
 
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.data.FileEntry;
+import com.autonomouslogic.everef.data.IndexDirectoryEntry;
+import com.autonomouslogic.everef.data.IndexFileEntry;
+import com.autonomouslogic.everef.data.IndexPageData;
 import com.autonomouslogic.everef.data.VirtualDirectory;
 import com.autonomouslogic.everef.pug.PugHelper;
 import com.autonomouslogic.everef.s3.S3Adapter;
@@ -9,6 +12,8 @@ import com.autonomouslogic.everef.s3.S3Util;
 import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.url.UrlParser;
 import com.autonomouslogic.everef.util.VirtualThreads;
+import com.autonomouslogic.everef.util.archive.ArchivePathFactories;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Single;
@@ -24,6 +29,7 @@ import javax.inject.Named;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
+import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
@@ -51,6 +57,9 @@ public class DataIndex implements Command {
 
 	@Inject
 	protected UrlParser urlParser;
+
+	@Inject
+	protected ObjectMapper objectMapper;
 
 	private S3Url dataUrl;
 	private final String dataDomain = Configs.DATA_DOMAIN.getRequired();
@@ -125,6 +134,7 @@ public class DataIndex implements Command {
 					var objects = s3Adapter.listObjects(url, recursive, s3);
 					var filtered = objects.stream()
 							.filter(obj -> !(obj.getUrl().getPath().endsWith("index.html")))
+							.filter(obj -> !(obj.getUrl().getPath().endsWith("index.json")))
 							.toList();
 					var withLastModified = s3Adapter.headLastModified(filtered, s3);
 					return Flowable.fromIterable(withLastModified)
@@ -136,7 +146,7 @@ public class DataIndex implements Command {
 											obj.getUrl().getPath(),
 											obj.getSize(),
 											obj.getLastModified(),
-											obj.getMd5Hex()));
+											obj.getEtag()));
 								}
 							})
 							.ignoreElements()
@@ -147,8 +157,10 @@ public class DataIndex implements Command {
 
 	private Completable createAndUploadIndexPage(String prefix, List<FileEntry> index) {
 		return Completable.defer(() -> {
-			var rendered = renderIndexPage(prefix, index);
-			return uploadIndexPage(prefix, rendered);
+			var htmlRendered = renderIndexPage(prefix, index);
+			var jsonRendered = renderJsonIndexPage(prefix, index);
+			return Completable.mergeArray(
+					uploadIndexPage(prefix, htmlRendered), uploadJsonIndexPage(prefix, jsonRendered));
 		});
 	}
 
@@ -170,6 +182,55 @@ public class DataIndex implements Command {
 		return rendered;
 	}
 
+	@SneakyThrows
+	private byte[] renderJsonIndexPage(@NonNull String prefix, List<FileEntry> entries) {
+		var files = entries.stream()
+				.filter(e -> !e.isDirectory())
+				.map(entry -> buildFileEntry(entry))
+				.toList();
+
+		var directories = entries.stream()
+				.filter(FileEntry::isDirectory)
+				.map(entry -> buildDirectoryEntry(entry))
+				.toList();
+
+		var indexPage = IndexPageData.builder()
+				.path(prefix)
+				.files(files)
+				.directories(directories)
+				.build();
+
+		return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsBytes(indexPage);
+	}
+
+	private IndexFileEntry buildFileEntry(FileEntry entry) {
+		var filename = entry.getPath().substring(entry.getPath().lastIndexOf('/') + 1);
+		var builder = IndexFileEntry.builder()
+				.name(filename)
+				.url("https://" + dataDomain + "/" + entry.getPath())
+				.size(entry.getSize())
+				.lastModified(entry.getLastModified())
+				.etag(entry.getEtag());
+
+		var match = ArchivePathFactories.tryMatch(entry.getPath());
+		match.ifPresent(archiveMatch -> {
+			builder.type(archiveMatch.getType());
+			archiveMatch.getDate().ifPresent(date -> builder.fileTime(date));
+		});
+
+		return builder.build();
+	}
+
+	private IndexDirectoryEntry buildDirectoryEntry(FileEntry entry) {
+		var dirName = entry.getPath()
+				.replaceAll("/$", "")
+				.substring(entry.getPath().replaceAll("/$", "").lastIndexOf('/') + 1);
+		return IndexDirectoryEntry.builder()
+				.name(dirName)
+				.indexUrl("https://" + dataDomain + "/" + entry.getPath() + "/index.json")
+				.build();
+	}
+
 	@NotNull
 	private Completable uploadIndexPage(@NotNull String prefix, @NotNull byte[] rendered) {
 		return Completable.fromAction(() -> {
@@ -180,6 +241,21 @@ public class DataIndex implements Command {
 					.build();
 			log.debug(String.format("Uploading index page: %s", target));
 			var putObjectRequest = s3Util.putPublicObjectRequest(rendered.length, target, "text/html", indexCacheTime);
+			s3Adapter.putObject(putObjectRequest, AsyncRequestBody.fromBytes(rendered), s3);
+		});
+	}
+
+	@NotNull
+	private Completable uploadJsonIndexPage(@NotNull String prefix, @NotNull byte[] rendered) {
+		return Completable.fromAction(() -> {
+			// Upload JSON index page.
+			var target = S3Url.builder()
+					.bucket(dataUrl.getBucket())
+					.path((prefix.equals("") ? "" : prefix + "/") + "index.json")
+					.build();
+			log.debug(String.format("Uploading JSON index page: %s", target));
+			var putObjectRequest =
+					s3Util.putPublicObjectRequest(rendered.length, target, "application/json", indexCacheTime);
 			s3Adapter.putObject(putObjectRequest, AsyncRequestBody.fromBytes(rendered), s3);
 		});
 	}

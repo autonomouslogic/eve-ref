@@ -1,7 +1,6 @@
 package com.autonomouslogic.everef.cli;
 
-import static com.autonomouslogic.everef.util.ArchivePathFactory.*;
-
+import com.autonomouslogic.everef.util.archive.ArchivePathFactories;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
@@ -25,7 +24,9 @@ public class ScrapeMarketsPrices implements Command {
 		log.info("Starting markets prices scrape");
 
 		genericHistoryScraper.fetchAndUpload(
-				"https://esi.evetech.net/latest/markets/prices/?datasource=tranquility", MARKETS_PRICES, scrapeTime);
+				"https://esi.evetech.net/latest/markets/prices/?datasource=tranquility",
+				ArchivePathFactories.MARKETS_PRICES,
+				scrapeTime);
 
 		log.info("Completed markets prices scrape");
 	}

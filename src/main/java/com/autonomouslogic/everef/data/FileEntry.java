@@ -11,14 +11,14 @@ public class FileEntry {
 	boolean directory;
 	long size;
 	Instant lastModified;
-	String md5Hex;
+	String etag;
 
 	public static FileEntry file(String path) {
 		return new FileEntry(path, false, -1, null, null);
 	}
 
-	public static FileEntry file(String path, long size, Instant lastModified, String md5Hex) {
-		return new FileEntry(path, false, size, lastModified, md5Hex);
+	public static FileEntry file(String path, long size, Instant lastModified, String etag) {
+		return new FileEntry(path, false, size, lastModified, etag);
 	}
 
 	public static FileEntry directory(String path) {

@@ -5,10 +5,10 @@ import com.autonomouslogic.everef.http.DataCrawler;
 import com.autonomouslogic.everef.http.OkHttpWrapper;
 import com.autonomouslogic.everef.model.RegionTypePair;
 import com.autonomouslogic.everef.url.DataUrl;
-import com.autonomouslogic.everef.util.ArchivePathFactory;
 import com.autonomouslogic.everef.util.CompressUtil;
 import com.autonomouslogic.everef.util.TempFiles;
 import com.autonomouslogic.everef.util.VirtualThreads;
+import com.autonomouslogic.everef.util.archive.ArchivePathFactories;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.MappingIterator;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
@@ -81,11 +81,11 @@ class HistoricalOrdersRegionTypeSource implements RegionTypeSource {
 			days.add(t);
 		}
 		return Flowable.fromIterable(days).flatMap(day -> {
-			var prefix = ArchivePathFactory.MARKET_ORDERS.createArchivePath(day);
+			var prefix = ArchivePathFactories.MARKET_ORDERS.createArchivePath(day);
 			var dateFolder = new File(prefix).getParent();
 			return Flowable.fromIterable(dataCrawler.get().setPrefix(dateFolder).crawl())
 					.flatMap(url -> {
-						var time = ArchivePathFactory.MARKET_ORDERS.parseArchiveTime(url.getPath());
+						var time = ArchivePathFactories.MARKET_ORDERS.parseArchiveTime(url.getPath());
 						if (time == null || time.isBefore(minTime)) {
 							return Flowable.empty();
 						}
@@ -115,7 +115,7 @@ class HistoricalOrdersRegionTypeSource implements RegionTypeSource {
 	private Maybe<File> downloadFile(DataUrl url) {
 		return Maybe.defer(() -> {
 					var file = tempFiles
-							.tempFile("market-orders", ArchivePathFactory.MARKET_ORDERS.getSuffix())
+							.tempFile("market-orders", ArchivePathFactories.MARKET_ORDERS.getSuffix())
 							.toFile();
 					try (var response = okHttpWrapper.download(url.toString(), file)) {
 						if (response.code() != 200) {

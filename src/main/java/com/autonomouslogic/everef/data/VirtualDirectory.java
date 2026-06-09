@@ -93,7 +93,7 @@ public class VirtualDirectory {
 	public Stream<FileEntry> list(@NonNull String path, boolean recursive) {
 		var dir = traverse(path, false);
 		if (dir == null) {
-			return null;
+			return Stream.empty();
 		}
 		return list(dir, recursive);
 	}

@@ -3,6 +3,7 @@ package com.autonomouslogic.everef.util;
 import com.google.common.hash.Hashing;
 import java.io.File;
 import java.io.FileInputStream;
+import java.nio.charset.StandardCharsets;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
@@ -13,6 +14,10 @@ import org.apache.commons.io.IOUtils;
 public class HashUtil {
 	public static byte[] md5(byte[] in) {
 		return Hashing.md5().hashBytes(in).asBytes();
+	}
+
+	public static byte[] md5(String in) {
+		return md5(in.getBytes(StandardCharsets.UTF_8));
 	}
 
 	@SneakyThrows

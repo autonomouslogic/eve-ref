@@ -41,3 +41,57 @@ See [Downloading Datasets](downloading-datasets.md) for instructions on how to d
 | [`warzone/`](https://data.everef.net/warzone/)                                                                     | [Warzone](warzone.md)                                                                                           |
 | [`warzone-insurgency/`](https://data.everef.net/warzone-insurgency/)                                               | [Warzone](warzone.md)                                                                                           |
 | [`warzone-leaderboard/`](https://data.everef.net/warzone-leaderboard/)                                             | [Warzone](warzone.md)                                                                                           |
+
+## JSON Index Format
+
+Each directory on [data.everef.net](https://data.everef.net/) includes an `index.json` file that provides structured
+metadata about the directory's contents.
+This enables programmatic discovery and navigation of the available datasets.
+
+### Index Structure
+
+Each `index.json` file contains a JSON object with the following schema:
+
+```json
+{
+  "path": "directory/path",
+  "files": [
+    {
+      "name": "filename.ext",
+      "url": "https://data.everef.net/directory/path/filename.ext",
+      "size": 1024,
+      "last_modified": "2026-06-08T05:50:42Z",
+      "etag": "abc123def456...",
+      "type": "optional-archive-type",
+      "file_time": "2026-06-01T15:15:07Z"
+    }
+  ],
+  "directories": [
+    {
+      "name": "subdirectory",
+      "index_url": "https://data.everef.net/directory/path/subdirectory/index.json"
+    }
+  ]
+}
+```
+
+**Root object:**
+
+* `path`: The relative path to this directory within data.everef.net
+* `files`: Array of files in this directory
+* `directories`: Array of subdirectories
+
+**File entry:**
+
+* `name`: Filename
+* `url`: URL to the file
+* `size`: File size in bytes
+* `last_modified`: ISO 8601 timestamp of the file's last modification
+* `etag`: HTTP ETag describing the file
+* `type`: Optional archive type detected from the filename (e.g., `market-orders`, `market-history`)
+* `file_time`: Optional date parsed from the archive filename
+
+**Directory entry:**
+
+* `name`: Directory name
+* `index_url`: URL to the subdirectory's index file

@@ -1,6 +1,6 @@
 package com.autonomouslogic.everef.cli;
 
-import static com.autonomouslogic.everef.util.ArchivePathFactory.WARZONE_LEADERBOARD;
+import static com.autonomouslogic.everef.util.archive.ArchivePathFactories.WARZONE_LEADERBOARD;
 
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
