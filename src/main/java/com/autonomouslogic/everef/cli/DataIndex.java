@@ -199,9 +199,8 @@ public class DataIndex implements Command {
 				.files(files)
 				.directories(directories)
 				.build();
-		var json = objectMapper.writeValueAsString(indexPage);
 
-		return objectMapper.writeValueAsBytes(indexPage);
+		return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsBytes(indexPage);
 	}
 
 	private IndexFileEntry buildFileEntry(FileEntry entry) {
