@@ -128,12 +128,25 @@ public class ArchivePathFactoryTest {
 	void shouldGenerateMerOld1_updated() {
 		var factory = ArchivePathFactory.MER_OLD_1_UPDATED;
 		testExpectedPaths(factory, LocalDate.parse("2022-10-01"), "ccp/mer/2022/EVEOnline_MER_Oct2022-updated.zip");
+		testExpectedPaths(factory, LocalDate.parse("2022-09-01"), "ccp/mer/2022/EVEOnline_MER_Sep2022-Updated.zip");
+		testExpectedPaths(factory, LocalDate.parse("2021-12-01"), "ccp/mer/2021/EVEOnline_MER_Dec2021_Updated.zip");
+		testExpectedPaths(factory, LocalDate.parse("2019-12-01"), "ccp/mer/2019/EVEOnline_MER_Dec2019b.zip");
+		testExpectedPaths(factory, LocalDate.parse("2016-12-01"), "ccp/mer/2016/EVEOnline_MER_Dec2016_v1.1.zip");
+		testExpectedPaths(factory, LocalDate.parse("2024-07-01"), "ccp/mer/2024/EVEOnline_MER_Jul2024v2.zip");
 	}
 
 	@Test
 	void shouldGenerateMerOld2() {
 		var factory = ArchivePathFactory.MER_OLD_2;
 		testExpectedPaths(factory, LocalDate.parse("2022-01-01"), "ccp/mer/2022/January_2022_MER.zip");
+	}
+
+	@Test
+	void shouldGenerateMerOld3() {
+		var factory = ArchivePathFactory.MER_OLD_3;
+		testExpectedPaths(factory, LocalDate.parse("2021-09-01"), "ccp/mer/2021/EVEOnline_MER_Sept2021.zip");
+		testExpectedPaths(factory, LocalDate.parse("2021-09-01"), "ccp/mer/2016/EVEOnline_MER_July2016.zip");
+		testExpectedPaths(factory, LocalDate.parse("2021-09-01"), "ccp/mer/2016/EVEOnline_MER_June2016.zip");
 	}
 
 	private static void testExpectedPaths(

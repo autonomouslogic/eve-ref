@@ -318,19 +318,19 @@ public class ArchivePathFactory {
 			.fileDateTimeFormatter(
 					new DateTimeFormatterBuilder().appendPattern("MMMyyyy").toFormatter())
 			.dateFormatterSeparator("_")
-			.suffix(".zip")
+			.suffix("-updated.zip")
 			.build());
 
 	public static final ArchivePathFactory MER_OLD_2 = register(ArchivePathFactory.builder()
 			.name("mer")
 			.folder("ccp/mer")
-			.filename("EVEOnline_MER")
+			.filename("")
 			.historyFolder(false)
 			.yearFolder(true)
 			.dateFolder(false)
 			.fileDateTimeFormatter(
-					new DateTimeFormatterBuilder().appendPattern("MMMyyyy").toFormatter())
-			.dateFormatterSeparator("_")
+					new DateTimeFormatterBuilder().appendPattern("MMMM_yyyy'_MER'").toFormatter())
+			.dateFormatterSeparator("")
 			.suffix(".zip")
 			.build());
 
