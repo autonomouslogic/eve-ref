@@ -34,5 +34,5 @@ public class IndexFileEntry {
 	String type;
 
 	@JsonProperty
-	Instant date;
+	Instant fileTime;
 }

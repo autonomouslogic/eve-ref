@@ -228,7 +228,7 @@ public class DataIndexTest {
 							"last_modified": "2026-06-01T15:20:41Z",
 							"etag": "%s",
 							"type": "market-orders",
-							"date": "2026-06-01T15:15:07Z"
+							"file_time": "2026-06-01T15:15:07Z"
 						}
 					]
 				}
@@ -237,6 +237,60 @@ public class DataIndexTest {
 
 		assertEquals(latestExpected, latestJson);
 		assertEquals(archiveExpected, archiveJson);
+	}
+
+	@Test
+	@SneakyThrows
+	void shouldParseMarketHistoryArchivePath() {
+		mockS3.putTestObject(
+				BUCKET_NAME,
+				"market-history/2015/market-history-2015-01-04.csv.bz2",
+				"data",
+				s3Data,
+				Instant.parse("2018-03-09T00:00:00Z"));
+
+		dataIndex.run();
+
+		var archiveJson = getJsonContent("market-history/2015/index.json");
+		var file = archiveJson.get("files").get(0);
+		assertEquals("market-history", file.get("type").textValue());
+		assertEquals("2015-01-04T00:00:00Z", file.get("file_time").textValue());
+	}
+
+	@Test
+	@SneakyThrows
+	void shouldParseReferenceDataArchivePath() {
+		mockS3.putTestObject(
+				BUCKET_NAME,
+				"reference-data/history/2026/reference-data-2026-01-05.tar.xz",
+				"data",
+				s3Data,
+				Instant.parse("2026-01-05T12:15:57Z"));
+
+		dataIndex.run();
+
+		var archiveJson = getJsonContent("reference-data/history/2026/index.json");
+		var file = archiveJson.get("files").get(0);
+		assertEquals("reference-data", file.get("type").textValue());
+		assertEquals("2026-01-05T00:00:00Z", file.get("file_time").textValue());
+	}
+
+	@Test
+	@SneakyThrows
+	void shouldParseMerPath() {
+		mockS3.putTestObject(
+				BUCKET_NAME,
+				"ccp/mer/2026/EVEOnline_MER_202601.zip",
+				"data",
+				s3Data,
+				Instant.parse("2026-02-10T14:51:39Z"));
+
+		dataIndex.run();
+
+		var archiveJson = getJsonContent("ccp/mer/2026/index.json");
+		var file = archiveJson.get("files").get(0);
+		assertEquals("mer", file.get("type").textValue());
+		assertEquals("2026-01-01T00:00:00Z", file.get("file_time").textValue());
 	}
 
 	@NotNull

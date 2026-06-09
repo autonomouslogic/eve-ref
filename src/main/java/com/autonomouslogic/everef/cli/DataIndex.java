@@ -216,7 +216,7 @@ public class DataIndex implements Command {
 		var match = ArchivePathFactory.tryMatch(entry.getPath());
 		match.ifPresent(archiveMatch -> {
 			builder.type(archiveMatch.getType());
-			archiveMatch.getDate().ifPresent(date -> builder.date(date));
+			archiveMatch.getDate().ifPresent(date -> builder.fileTime(date));
 		});
 
 		return builder.build();
