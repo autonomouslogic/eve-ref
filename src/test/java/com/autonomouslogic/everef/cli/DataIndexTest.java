@@ -194,44 +194,49 @@ public class DataIndexTest {
 		var latestJson = getJsonContent("market-orders/index.json");
 		var archiveJson = getJsonContent("market-orders/history/2026/2026-06-01/index.json");
 
-		var latestFilesArray = objectMapper
-				.createArrayNode()
-				.add(objectMapper
-						.createObjectNode()
-						.put("name", "market-orders-latest.v3.csv.bz2")
-						.put("url", "https://data.everef.net/market-orders/market-orders-latest.v3.csv.bz2")
-						.put("size", 20)
-						.put("last_modified", "2026-06-08T05:50:42Z")
-						.put("etag", Hex.encodeHexString(HashUtil.md5("market orders latest")))
-						.put("type", "market-orders"));
-		var latestDirectoriesArray = objectMapper
-				.createArrayNode()
-				.add(objectMapper
-						.createObjectNode()
-						.put("name", "history")
-						.put("index_url", "https://data.everef.net/market-orders/history/index.json"));
-		var latestExpected = objectMapper.createObjectNode().put("path", "market-orders");
-		latestExpected.set("files", latestFilesArray);
-		latestExpected.set("directories", latestDirectoriesArray);
+		var latestExpectedJson = """
+				{
+					"path": "market-orders",
+					"files": [
+						{
+							"name": "market-orders-latest.v3.csv.bz2",
+							"url": "https://data.everef.net/market-orders/market-orders-latest.v3.csv.bz2",
+							"size": 20,
+							"last_modified": "2026-06-08T05:50:42Z",
+							"etag": "%s",
+							"type": "market-orders"
+						}
+					],
+					"directories": [
+						{
+							"name": "history",
+							"index_url": "https://data.everef.net/market-orders/history/index.json"
+						}
+					]
+				}
+				""".formatted(Hex.encodeHexString(HashUtil.md5("market orders latest")));
+		var latestExpected = objectMapper.readTree(latestExpectedJson);
 
-		var archiveFilesArray = objectMapper
-				.createArrayNode()
-				.add(objectMapper
-						.createObjectNode()
-						.put("name", "market-orders-2026-06-01_15-15-07.v3.csv.bz2")
-						.put(
-								"url",
-								"https://data.everef.net/market-orders/history/2026/2026-06-01/market-orders-2026-06-01_15-15-07.v3.csv.bz2")
-						.put("size", 18)
-						.put("last_modified", "2026-06-01T15:20:41Z")
-						.put("etag", Hex.encodeHexString(HashUtil.md5("market orders data")))
-						.put("type", "market-orders")
-						.put("date", "2026-06-01T15:15:07Z"));
-		var archiveExpected = objectMapper.createObjectNode().put("path", "market-orders/history/2026/2026-06-01");
-		archiveExpected.set("files", archiveFilesArray);
+		var archiveExpectedJson = """
+				{
+					"path": "market-orders/history/2026/2026-06-01",
+					"files": [
+						{
+							"name": "market-orders-2026-06-01_15-15-07.v3.csv.bz2",
+							"url": "https://data.everef.net/market-orders/history/2026/2026-06-01/market-orders-2026-06-01_15-15-07.v3.csv.bz2",
+							"size": 18,
+							"last_modified": "2026-06-01T15:20:41Z",
+							"etag": "%s",
+							"type": "market-orders",
+							"date": "2026-06-01T15:15:07Z"
+						}
+					]
+				}
+				""".formatted(Hex.encodeHexString(HashUtil.md5("market orders data")));
+		var archiveExpected = objectMapper.readTree(archiveExpectedJson);
 
-		assertEquals(objectMapper.writeValueAsString(latestExpected), objectMapper.writeValueAsString(latestJson));
-		assertEquals(objectMapper.writeValueAsString(archiveExpected), objectMapper.writeValueAsString(archiveJson));
+		assertEquals(latestExpected, latestJson);
+		assertEquals(archiveExpected, archiveJson);
 	}
 
 	@NotNull
@@ -324,87 +329,100 @@ public class DataIndexTest {
 	@SneakyThrows
 	private void verifyMainIndexJson() {
 		var json = getJsonContent("index.json");
-		var filesArray = objectMapper
-				.createArrayNode()
-				.add(objectMapper
-						.createObjectNode()
-						.put("name", "data.zip")
-						.put("url", "https://data.everef.net/data.zip")
-						.put("size", 16)
-						.put("last_modified", "1999-07-12T14:26:23Z")
-						.put("etag", Hex.encodeHexString(HashUtil.md5("content data.zip"))));
-		var directoriesArray = objectMapper
-				.createArrayNode()
-				.add(objectMapper
-						.createObjectNode()
-						.put("name", "dir")
-						.put("index_url", "https://data.everef.net/dir/index.json"))
-				.add(objectMapper
-						.createObjectNode()
-						.put("name", "dir2")
-						.put("index_url", "https://data.everef.net/dir2/index.json"));
-		var expected = objectMapper.createObjectNode();
-		expected.set("files", filesArray);
-		expected.set("directories", directoriesArray);
-		assertEquals(objectMapper.writeValueAsString(expected), objectMapper.writeValueAsString(json));
+		var expectedJson = """
+				{
+					"files": [
+						{
+							"name": "data.zip",
+							"url": "https://data.everef.net/data.zip",
+							"size": 16,
+							"last_modified": "1999-07-12T14:26:23Z",
+							"etag": "%s"
+						}
+					],
+					"directories": [
+						{
+							"name": "dir",
+							"index_url": "https://data.everef.net/dir/index.json"
+						},
+						{
+							"name": "dir2",
+							"index_url": "https://data.everef.net/dir2/index.json"
+						}
+					]
+				}
+				""".formatted(Hex.encodeHexString(HashUtil.md5("content data.zip")));
+		var expected = objectMapper.readTree(expectedJson);
+		assertEquals(expected, json);
 	}
 
 	@SneakyThrows
 	private void verifyDir1IndexJson() {
 		var json = getJsonContent("dir/index.json");
-		var filesArray = objectMapper
-				.createArrayNode()
-				.add(objectMapper
-						.createObjectNode()
-						.put("name", "more-data.zip")
-						.put("url", "https://data.everef.net/dir/more-data.zip")
-						.put("size", 25)
-						.put("last_modified", "2000-01-01T00:00:03.100Z")
-						.put("etag", Hex.encodeHexString(HashUtil.md5("content dir/more-data.zip"))));
-		var directoriesArray = objectMapper
-				.createArrayNode()
-				.add(objectMapper
-						.createObjectNode()
-						.put("name", "sub")
-						.put("index_url", "https://data.everef.net/dir/sub/index.json"));
-		var expected = objectMapper.createObjectNode().put("path", "dir");
-		expected.set("files", filesArray);
-		expected.set("directories", directoriesArray);
-		assertEquals(objectMapper.writeValueAsString(expected), objectMapper.writeValueAsString(json));
+		var expectedJson = """
+				{
+					"path": "dir",
+					"files": [
+						{
+							"name": "more-data.zip",
+							"url": "https://data.everef.net/dir/more-data.zip",
+							"size": 25,
+							"last_modified": "2000-01-01T00:00:03.100Z",
+							"etag": "%s"
+						}
+					],
+					"directories": [
+						{
+							"name": "sub",
+							"index_url": "https://data.everef.net/dir/sub/index.json"
+						}
+					]
+				}
+				""".formatted(Hex.encodeHexString(HashUtil.md5("content dir/more-data.zip")));
+		var expected = objectMapper.readTree(expectedJson);
+		assertEquals(expected, json);
 	}
 
 	@SneakyThrows
 	private void verifyDir1SubIndexJson() {
 		var json = getJsonContent("dir/sub/index.json");
-		var filesArray = objectMapper
-				.createArrayNode()
-				.add(objectMapper
-						.createObjectNode()
-						.put("name", "sub-data.zip")
-						.put("url", "https://data.everef.net/dir/sub/sub-data.zip")
-						.put("size", 28)
-						.put("last_modified", "2000-01-01T00:00:04.100Z")
-						.put("etag", Hex.encodeHexString(HashUtil.md5("content dir/sub/sub-data.zip"))));
-		var expected = objectMapper.createObjectNode().put("path", "dir/sub");
-		expected.set("files", filesArray);
-		assertEquals(objectMapper.writeValueAsString(expected), objectMapper.writeValueAsString(json));
+		var expectedJson = """
+				{
+					"path": "dir/sub",
+					"files": [
+						{
+							"name": "sub-data.zip",
+							"url": "https://data.everef.net/dir/sub/sub-data.zip",
+							"size": 28,
+							"last_modified": "2000-01-01T00:00:04.100Z",
+							"etag": "%s"
+						}
+					]
+				}
+				""".formatted(Hex.encodeHexString(HashUtil.md5("content dir/sub/sub-data.zip")));
+		var expected = objectMapper.readTree(expectedJson);
+		assertEquals(expected, json);
 	}
 
 	@SneakyThrows
 	private void verifyDir2IndexJson() {
 		var json = getJsonContent("dir2/index.json");
-		var filesArray = objectMapper
-				.createArrayNode()
-				.add(objectMapper
-						.createObjectNode()
-						.put("name", "more-data2.zip")
-						.put("url", "https://data.everef.net/dir2/more-data2.zip")
-						.put("size", 27)
-						.put("last_modified", "2000-01-01T00:00:05.100Z")
-						.put("etag", Hex.encodeHexString(HashUtil.md5("content dir2/more-data2.zip"))));
-		var expected = objectMapper.createObjectNode().put("path", "dir2");
-		expected.set("files", filesArray);
-		assertEquals(objectMapper.writeValueAsString(expected), objectMapper.writeValueAsString(json));
+		var expectedJson = """
+				{
+					"path": "dir2",
+					"files": [
+						{
+							"name": "more-data2.zip",
+							"url": "https://data.everef.net/dir2/more-data2.zip",
+							"size": 27,
+							"last_modified": "2000-01-01T00:00:05.100Z",
+							"etag": "%s"
+						}
+					]
+				}
+				""".formatted(Hex.encodeHexString(HashUtil.md5("content dir2/more-data2.zip")));
+		var expected = objectMapper.readTree(expectedJson);
+		assertEquals(expected, json);
 	}
 
 	@SneakyThrows
