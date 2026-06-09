@@ -16,4 +16,7 @@ import lombok.extern.jackson.Jacksonized;
 public class IndexDirectoryEntry {
 	@JsonProperty
 	String name;
+
+	@JsonProperty
+	String indexUrl;
 }

@@ -208,7 +208,6 @@ public class DataIndex implements Command {
 		var filename = entry.getPath().substring(entry.getPath().lastIndexOf('/') + 1);
 		var builder = IndexFileEntry.builder()
 				.name(filename)
-				.path(entry.getPath())
 				.url("https://" + dataDomain + "/" + entry.getPath())
 				.size(entry.getSize())
 				.lastModified(entry.getLastModified())
@@ -227,7 +226,10 @@ public class DataIndex implements Command {
 		var dirName = entry.getPath()
 				.replaceAll("/$", "")
 				.substring(entry.getPath().replaceAll("/$", "").lastIndexOf('/') + 1);
-		return IndexDirectoryEntry.builder().name(dirName).build();
+		return IndexDirectoryEntry.builder()
+				.name(dirName)
+				.indexUrl("https://" + dataDomain + "/" + entry.getPath() + "/index.json")
+				.build();
 	}
 
 	@NotNull

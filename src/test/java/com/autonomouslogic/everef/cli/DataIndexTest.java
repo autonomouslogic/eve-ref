@@ -199,7 +199,6 @@ public class DataIndexTest {
 				.add(objectMapper
 						.createObjectNode()
 						.put("name", "market-orders-latest.v3.csv.bz2")
-						.put("path", "market-orders/market-orders-latest.v3.csv.bz2")
 						.put("url", "https://data.everef.net/market-orders/market-orders-latest.v3.csv.bz2")
 						.put("size", 20)
 						.put("last_modified", "2026-06-08T05:50:42Z")
@@ -207,7 +206,10 @@ public class DataIndexTest {
 						.put("type", "market-orders"));
 		var latestDirectoriesArray = objectMapper
 				.createArrayNode()
-				.add(objectMapper.createObjectNode().put("name", "history"));
+				.add(objectMapper
+						.createObjectNode()
+						.put("name", "history")
+						.put("index_url", "https://data.everef.net/market-orders/history/index.json"));
 		var latestExpected = objectMapper.createObjectNode().put("path", "market-orders");
 		latestExpected.set("files", latestFilesArray);
 		latestExpected.set("directories", latestDirectoriesArray);
@@ -217,9 +219,6 @@ public class DataIndexTest {
 				.add(objectMapper
 						.createObjectNode()
 						.put("name", "market-orders-2026-06-01_15-15-07.v3.csv.bz2")
-						.put(
-								"path",
-								"market-orders/history/2026/2026-06-01/market-orders-2026-06-01_15-15-07.v3.csv.bz2")
 						.put(
 								"url",
 								"https://data.everef.net/market-orders/history/2026/2026-06-01/market-orders-2026-06-01_15-15-07.v3.csv.bz2")
@@ -330,15 +329,20 @@ public class DataIndexTest {
 				.add(objectMapper
 						.createObjectNode()
 						.put("name", "data.zip")
-						.put("path", "data.zip")
 						.put("url", "https://data.everef.net/data.zip")
 						.put("size", 16)
 						.put("last_modified", "1999-07-12T14:26:23Z")
 						.put("etag", Hex.encodeHexString(HashUtil.md5("content data.zip"))));
 		var directoriesArray = objectMapper
 				.createArrayNode()
-				.add(objectMapper.createObjectNode().put("name", "dir"))
-				.add(objectMapper.createObjectNode().put("name", "dir2"));
+				.add(objectMapper
+						.createObjectNode()
+						.put("name", "dir")
+						.put("index_url", "https://data.everef.net/dir/index.json"))
+				.add(objectMapper
+						.createObjectNode()
+						.put("name", "dir2")
+						.put("index_url", "https://data.everef.net/dir2/index.json"));
 		var expected = objectMapper.createObjectNode();
 		expected.set("files", filesArray);
 		expected.set("directories", directoriesArray);
@@ -353,14 +357,16 @@ public class DataIndexTest {
 				.add(objectMapper
 						.createObjectNode()
 						.put("name", "more-data.zip")
-						.put("path", "dir/more-data.zip")
 						.put("url", "https://data.everef.net/dir/more-data.zip")
 						.put("size", 25)
 						.put("last_modified", "2000-01-01T00:00:03.100Z")
 						.put("etag", Hex.encodeHexString(HashUtil.md5("content dir/more-data.zip"))));
 		var directoriesArray = objectMapper
 				.createArrayNode()
-				.add(objectMapper.createObjectNode().put("name", "sub"));
+				.add(objectMapper
+						.createObjectNode()
+						.put("name", "sub")
+						.put("index_url", "https://data.everef.net/dir/sub/index.json"));
 		var expected = objectMapper.createObjectNode().put("path", "dir");
 		expected.set("files", filesArray);
 		expected.set("directories", directoriesArray);
@@ -375,7 +381,6 @@ public class DataIndexTest {
 				.add(objectMapper
 						.createObjectNode()
 						.put("name", "sub-data.zip")
-						.put("path", "dir/sub/sub-data.zip")
 						.put("url", "https://data.everef.net/dir/sub/sub-data.zip")
 						.put("size", 28)
 						.put("last_modified", "2000-01-01T00:00:04.100Z")
@@ -393,7 +398,6 @@ public class DataIndexTest {
 				.add(objectMapper
 						.createObjectNode()
 						.put("name", "more-data2.zip")
-						.put("path", "dir2/more-data2.zip")
 						.put("url", "https://data.everef.net/dir2/more-data2.zip")
 						.put("size", 27)
 						.put("last_modified", "2000-01-01T00:00:05.100Z")
