@@ -4,7 +4,7 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 import com.autonomouslogic.everef.util.archive.ArchivePathFactories;
-import com.autonomouslogic.everef.util.archive.ArchivePathFactory;
+import com.autonomouslogic.everef.util.archive.StandardArchivePathFactory;
 import java.time.ZonedDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,7 +33,7 @@ class ScrapeSystemStatsTest {
 		command.run();
 
 		verify(genericHistoryScraper, times(2))
-				.fetchAndUpload(anyString(), any(ArchivePathFactory.class), any(ZonedDateTime.class));
+				.fetchAndUpload(anyString(), any(StandardArchivePathFactory.class), any(ZonedDateTime.class));
 
 		verify(genericHistoryScraper)
 				.fetchAndUpload(
