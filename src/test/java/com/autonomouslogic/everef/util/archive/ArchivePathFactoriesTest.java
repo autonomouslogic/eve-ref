@@ -127,6 +127,7 @@ public class ArchivePathFactoriesTest {
 		testParsePaths(factory, LocalDate.parse("2021-09-01"), "ccp/mer/2021/EVEOnline_MER_Sep2021.zip");
 		testParsePaths(factory, LocalDate.parse("2016-07-01"), "ccp/mer/2016/EVEOnline_MER_July2016.zip");
 		testParsePaths(factory, LocalDate.parse("2016-06-01"), "ccp/mer/2016/EVEOnline_MER_June2016.zip");
+		testParsePaths(factory, LocalDate.parse("2021-09-01"), "ccp/mer/2021/EVEOnline_MER_Sept2021.zip");
 	}
 
 	private static void testExpectedPaths(
