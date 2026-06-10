@@ -1,5 +1,12 @@
 EVE Ref Changelog
 
+## [2.78.1](https://github.com/autonomouslogic/eve-ref/compare/2.78.0...2.78.1) (2026-06-10)
+
+
+### Bug Fixes
+
+* Updated industry resources ([b4e63d8](https://github.com/autonomouslogic/eve-ref/commit/b4e63d860e47a4493c4fd682f5569bcb20f3d4f1))
+
 ## [2.78.0](https://github.com/autonomouslogic/eve-ref/compare/2.77.0...2.78.0) (2026-06-09)
 
 
