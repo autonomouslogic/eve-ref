@@ -2,6 +2,7 @@ package com.autonomouslogic.everef.s3;
 
 import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.util.TempFiles;
+import com.autonomouslogic.everef.util.VirtualThreads;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -10,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.Callable;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicReference;
 import javax.inject.Inject;
@@ -217,23 +219,22 @@ public class S3Adapter {
 
 	@SneakyThrows
 	public List<ListedS3Object> headLastModified(@NonNull List<ListedS3Object> objects, @NonNull S3AsyncClient client) {
-		var result = new ArrayList<ListedS3Object>();
+		var tasks = objects.stream()
+				.map(obj -> (Callable<ListedS3Object>) () -> {
+					if (obj.isDirectory()) {
+						return obj;
+					}
 
-		for (var obj : objects) {
-			if (obj.isDirectory()) {
-				result.add(obj);
-				continue;
-			}
+					var lastModified = getObjectLastModified(obj, client);
+					if (lastModified.isPresent()) {
+						return obj.toBuilder().lastModified(lastModified.get()).build();
+					} else {
+						return obj;
+					}
+				})
+				.toList();
 
-			var lastModified = getObjectLastModified(obj, client);
-			if (lastModified.isPresent()) {
-				result.add(obj.toBuilder().lastModified(lastModified.get()).build());
-			} else {
-				result.add(obj);
-			}
-		}
-
-		return result;
+		return VirtualThreads.parallel(tasks, 10);
 	}
 
 	@SneakyThrows
