@@ -94,6 +94,9 @@ public class SyncFuzzworkOrdersets implements Command {
 										Completable.concatArray(uploadFile(downloaded), deleteFile(downloaded))),
 						false,
 						CONCURRENCY)
+				.andThen(Completable.fromAction(() -> {
+					log.info("File sync completed, running data index");
+				}))
 				.andThen(updateDataIndex())
 				.blockingAwait();
 	}

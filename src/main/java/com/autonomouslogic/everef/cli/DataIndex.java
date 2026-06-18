@@ -89,6 +89,7 @@ public class DataIndex implements Command {
 	@Override
 	public void run() {
 		VirtualThreads.checkThread();
+		log.info("Starting data index for: {}", dataUrl);
 		listAndIndex()
 				.flatMapCompletable(
 						dirIndex -> {

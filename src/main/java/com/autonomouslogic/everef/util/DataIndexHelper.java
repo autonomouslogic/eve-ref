@@ -9,10 +9,12 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import javax.inject.Singleton;
+import lombok.extern.log4j.Log4j2;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 
 @Singleton
+@Log4j2
 public class DataIndexHelper {
 	@Inject
 	protected Provider<DataIndex> dataIndexProvider;
@@ -25,6 +27,7 @@ public class DataIndexHelper {
 	}
 
 	public Completable updateIndex(List<S3Url> urls) {
+		log.debug("Updating data index for {} S3 URLs", urls.size());
 		return resolvePrefixes(urls).flatMapCompletable(this::updateIndex, false, 1);
 	}
 
