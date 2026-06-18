@@ -1,5 +1,12 @@
 EVE Ref Changelog
 
+## [2.78.2](https://github.com/autonomouslogic/eve-ref/compare/2.78.1...2.78.2) (2026-06-18)
+
+
+### Bug Fixes
+
+* Extra logging for Fuzzwork orders and data indexing ([55a29b4](https://github.com/autonomouslogic/eve-ref/commit/55a29b4afe53bb1407c6d3dd5a78d21bc399f567))
+
 ## [2.78.1](https://github.com/autonomouslogic/eve-ref/compare/2.78.0...2.78.1) (2026-06-10)
 
 
