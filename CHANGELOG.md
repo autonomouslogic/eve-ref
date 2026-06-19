@@ -1,5 +1,13 @@
 EVE Ref Changelog
 
+## [2.78.3](https://github.com/autonomouslogic/eve-ref/compare/2.78.2...2.78.3) (2026-06-19)
+
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([#1044](https://github.com/autonomouslogic/eve-ref/issues/1044)) ([e2c404d](https://github.com/autonomouslogic/eve-ref/commit/e2c404d1a46d7d23897e953b6fe00745e610dd45))
+* Parallel S3Adapter headLastModified ([#1060](https://github.com/autonomouslogic/eve-ref/issues/1060)) ([f076e83](https://github.com/autonomouslogic/eve-ref/commit/f076e83de09829c5f3e0c223b484052320408977))
+
 ## [2.78.2](https://github.com/autonomouslogic/eve-ref/compare/2.78.1...2.78.2) (2026-06-18)
 
 
