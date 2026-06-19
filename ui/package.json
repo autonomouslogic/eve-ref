@@ -28,7 +28,7 @@
     "eslint-plugin-vue": "9.33.0",
     "luxon": "3.7.2",
     "nuxt": "3.21.8",
-    "typescript": "5.9.3",
+    "typescript": "6.0.3",
     "vitest": "3.2.6",
     "vue-tsc": "3.3.5",
     "@nuxtjs/google-adsense": "3.0.3"
