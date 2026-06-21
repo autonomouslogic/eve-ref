@@ -130,6 +130,22 @@ public class ArchivePathFactoriesTest {
 		testParsePaths(factory, LocalDate.parse("2021-09-01"), "ccp/mer/2021/EVEOnline_MER_Sept2021.zip");
 	}
 
+	@Test
+	void shouldGenerateFuzzworkOrderset() {
+		var factory = ArchivePathFactories.FUZZWORK_ORDERSET;
+		testExpectedPathsWithSequence(factory, 113849L, Instant.parse("2023-02-22T05:37:19Z"),
+				"fuzzwork/ordersets/2023/2023-02-22/fuzzwork-orderset-113849-2023-02-22_05-37-19.csv.gz");
+		testExpectedPathsWithSequence(factory, 12345L, Instant.parse("2024-07-01T12:00:00Z"),
+				"fuzzwork/ordersets/2024/2024-07-01/fuzzwork-orderset-12345-2024-07-01_12-00-00.csv.gz");
+	}
+
+	private static void testExpectedPathsWithSequence(
+			ArchivePathFactory factory, long sequenceNumber, Instant timestamp, String expectedPath) {
+		assertEquals(expectedPath, factory.createArchivePath(sequenceNumber, timestamp));
+		assertEquals(timestamp, factory.parseArchiveTime(expectedPath));
+		assertEquals(sequenceNumber, (long) factory.parseSequenceNumber(expectedPath));
+	}
+
 	private static void testExpectedPaths(
 			ArchivePathFactory factory, Instant timestamp, String expectedTimePath, String expectedLatestPath) {
 		assertEquals(expectedLatestPath, factory.createLatestPath());

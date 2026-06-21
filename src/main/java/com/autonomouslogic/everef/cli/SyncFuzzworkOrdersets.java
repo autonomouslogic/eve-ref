@@ -32,8 +32,6 @@ import lombok.Builder;
 import lombok.SneakyThrows;
 import lombok.Value;
 import lombok.extern.log4j.Log4j2;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jsoup.Jsoup;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
@@ -134,15 +132,10 @@ public class SyncFuzzworkOrdersets implements Command {
 			log.trace("Scanning existing files");
 			var stream = dataCrawlerProvider.get().setPrefix(FUZZWORK_ORDERSET.getFolder() + "/").crawl().stream()
 					.flatMap(url -> {
-						var path = url.getPath();
-						var basename = FilenameUtils.getBaseName(path);
-						if (!basename.startsWith(FUZZWORK_ORDERSET.getFilename())
-								|| !path.endsWith(FUZZWORK_ORDERSET.getSuffix())) {
+						var id = FUZZWORK_ORDERSET.parseSequenceNumber(url.getPath());
+						if (id == null) {
 							return Stream.<Long>empty();
 						}
-						var removed = StringUtils.removeStart(basename, FUZZWORK_ORDERSET.getFilename());
-						removed = removed.substring(0, removed.indexOf('-'));
-						var id = Long.parseLong(removed);
 						return Stream.of(id);
 					});
 			return Flowable.fromStream(stream);
@@ -190,10 +183,7 @@ public class SyncFuzzworkOrdersets implements Command {
 
 	private Completable uploadFile(FuzzworkFile fuzz) {
 		return Completable.fromAction(() -> {
-			var relativePath = FUZZWORK_ORDERSET.toBuilder()
-					.filename(FUZZWORK_ORDERSET.getFilename() + fuzz.getId())
-					.build()
-					.createArchivePath(fuzz.getLastModified());
+			var relativePath = FUZZWORK_ORDERSET.createArchivePath(fuzz.getId(), fuzz.getLastModified());
 			var archivePath = dataPath.resolve(relativePath);
 			var archivePut = s3Util.putPublicObjectRequest(fuzz.getFile().length(), archivePath, archiveCacheTime);
 			log.info("Uploading orderset {} from {} to {}", fuzz.getId(), fuzz.getFile(), archivePath);

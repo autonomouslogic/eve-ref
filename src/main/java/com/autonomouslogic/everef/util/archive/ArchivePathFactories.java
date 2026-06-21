@@ -106,13 +106,8 @@ public class ArchivePathFactories {
 			.suffix("-yaml.zip")
 			.build());
 
-	public static final StandardArchivePathFactory FUZZWORK_ORDERSET = register(StandardArchivePathFactory.builder()
-			.name("fuzzwork-ordersets")
-			.folder("fuzzwork/ordersets")
-			.historyFolder(false)
-			.filename("fuzzwork-orderset-")
-			.suffix(".csv.gz")
-			.build());
+	public static final FuzzworkOrdersetArchivePathFactory FUZZWORK_ORDERSET =
+			register(new FuzzworkOrdersetArchivePathFactory());
 
 	public static final StandardArchivePathFactory STRUCTURES = register(StandardArchivePathFactory.builder()
 			.folder("structures")
