@@ -35,4 +35,7 @@ public class IndexFileEntry {
 
 	@JsonProperty
 	Instant fileTime;
+
+	@JsonProperty
+	Long sequenceNumber;
 }

@@ -283,7 +283,8 @@ public class ArchivePathFactories {
 			}
 			var timestamp = pattern.parseArchiveTime(path);
 			if (timestamp != null) {
-				return Optional.of(new ArchiveMatch(name, Optional.of(timestamp)));
+				var sequence = pattern.parseSequenceNumber(path);
+				return Optional.of(new ArchiveMatch(name, Optional.of(timestamp), Optional.ofNullable(sequence)));
 			}
 		}
 		return Optional.empty();

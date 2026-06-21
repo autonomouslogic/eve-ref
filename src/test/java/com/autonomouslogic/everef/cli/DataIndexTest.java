@@ -293,6 +293,44 @@ public class DataIndexTest {
 		assertEquals("2026-01-01T00:00:00Z", file.get("file_time").textValue());
 	}
 
+	@Test
+	@SneakyThrows
+	void shouldParseFuzzworkOrdersetPath() {
+		mockS3.putTestObject(
+				BUCKET_NAME,
+				"fuzzwork/ordersets/2024/2024-07-21/fuzzwork-orderset-113849-2024-07-21_14-30-45.csv.gz",
+				"orderset data",
+				s3Data,
+				Instant.parse("2024-07-21T14:35:00Z"));
+
+		dataIndex.run();
+
+		var archiveJson = getJsonContent("fuzzwork/ordersets/2024/2024-07-21/index.json");
+		var file = archiveJson.get("files").get(0);
+		assertEquals("fuzzwork-ordersets", file.get("type").textValue());
+		assertEquals("2024-07-21T14:30:45Z", file.get("file_time").textValue());
+		assertEquals(113849L, file.get("sequence_number").longValue());
+	}
+
+	@Test
+	@SneakyThrows
+	void shouldParseFuzzworkOrdersetDataIndexPath() {
+		mockS3.putTestObject(
+				BUCKET_NAME,
+				"fuzzwork/ordersets/2024/2024-07-21/fuzzwork-orderset-2024-07-21_14-30-45.csv.gz",
+				"data index file",
+				s3Data,
+				Instant.parse("2024-07-21T14:35:00Z"));
+
+		dataIndex.run();
+
+		var archiveJson = getJsonContent("fuzzwork/ordersets/2024/2024-07-21/index.json");
+		var file = archiveJson.get("files").get(0);
+		assertEquals("fuzzwork-ordersets", file.get("type").textValue());
+		assertEquals("2024-07-21T14:30:45Z", file.get("file_time").textValue());
+		assertTrue(!file.has("sequence_number"), "Sequence number should not be present for data index pattern");
+	}
+
 	@NotNull
 	private List<String> getAllPutKeys() {
 		return mockS3.getAllPutKeys(BUCKET_NAME, s3Data).stream().sorted().toList();
