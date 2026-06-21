@@ -18,8 +18,17 @@ public class FuzzworkOrdersetArchivePathFactory implements ArchivePathFactory {
 			.suffix(".csv.gz")
 			.build();
 
-	private static final Pattern ORDERSET_PATTERN = Pattern.compile(
+	// Pattern with sequence number: fuzzwork-orderset-{ID}-YYYY-MM-DD_HH-MM-SS.csv.gz
+	private static final Pattern ORDERSET_WITH_SEQUENCE = Pattern.compile(
 			"fuzzwork/ordersets/(\\d{4})/(\\d{4}-\\d{2}-\\d{2})/fuzzwork-orderset-(\\d+)-(\\d{4}-\\d{2}-\\d{2})_(\\d{2}-\\d{2}-\\d{2})\\.csv\\.gz");
+
+	// Pattern without sequence number: fuzzwork-orderset-YYYY-MM-DD_HH-MM-SS.csv.gz (used by data index)
+	private static final Pattern ORDERSET_WITHOUT_SEQUENCE = Pattern.compile(
+			"fuzzwork/ordersets/(\\d{4})/(\\d{4}-\\d{2}-\\d{2})/fuzzwork-orderset-(\\d{4}-\\d{2}-\\d{2})_(\\d{2}-\\d{2}-\\d{2})\\.csv\\.gz");
+
+	// Pattern for backfill/historical data: orderset-{ID}.csv.gz (no timestamp)
+	private static final Pattern ORDERSET_BACKFILL = Pattern.compile(
+			"fuzzwork/ordersets/backfills/.*/orderset-(\\d+)\\.csv\\.gz");
 
 	@Override
 	public String getName() {
@@ -43,12 +52,18 @@ public class FuzzworkOrdersetArchivePathFactory implements ArchivePathFactory {
 
 	@Override
 	public String createArchivePath(Instant timestamp) {
-		return STANDARD.createArchivePath(timestamp);
+		return createArchivePath(timestamp.atZone(ZoneOffset.UTC));
 	}
 
 	@Override
 	public String createArchivePath(ZonedDateTime archiveTime) {
-		return STANDARD.createArchivePath(archiveTime);
+		// For non-sequence pattern, build path manually to avoid double dash
+		archiveTime = archiveTime.withZoneSameInstant(ZoneOffset.UTC);
+		return String.format(
+				"fuzzwork/ordersets/%s/%s/fuzzwork-orderset-%s.csv.gz",
+				ArchivePathFactories.YEAR_PATTERN.format(archiveTime),
+				ArchivePathFactories.DATE_PATTERN.format(archiveTime),
+				ArchivePathFactories.TIMESTAMP_PATTERN.format(archiveTime));
 	}
 
 	@Override
@@ -76,13 +91,26 @@ public class FuzzworkOrdersetArchivePathFactory implements ArchivePathFactory {
 	public Instant parseArchiveTime(String path) {
 		String cleanPath = stripBaseUrl(path);
 
-		var matcher = ORDERSET_PATTERN.matcher(cleanPath);
-		if (!matcher.matches()) {
-			return null;
+		// Try pattern with sequence number first
+		var matcher = ORDERSET_WITH_SEQUENCE.matcher(cleanPath);
+		if (matcher.matches()) {
+			String dateStr = matcher.group(4);
+			String timeStr = matcher.group(5);
+			return parseTimestamp(dateStr, timeStr);
 		}
 
-		String dateStr = matcher.group(4);
-		String timeStr = matcher.group(5);
+		// Try pattern without sequence number (data index pattern)
+		matcher = ORDERSET_WITHOUT_SEQUENCE.matcher(cleanPath);
+		if (matcher.matches()) {
+			String dateStr = matcher.group(3);
+			String timeStr = matcher.group(4);
+			return parseTimestamp(dateStr, timeStr);
+		}
+
+		return null;
+	}
+
+	private static Instant parseTimestamp(String dateStr, String timeStr) {
 		String timestampStr = dateStr + "_" + timeStr;
 		try {
 			var formatter = ArchivePathFactories.TIMESTAMP_PATTERN.withZone(ZoneOffset.UTC);
@@ -97,16 +125,28 @@ public class FuzzworkOrdersetArchivePathFactory implements ArchivePathFactory {
 	public Long parseSequenceNumber(String path) {
 		String cleanPath = stripBaseUrl(path);
 
-		var matcher = ORDERSET_PATTERN.matcher(cleanPath);
-		if (!matcher.matches()) {
-			return null;
+		// Try pattern with sequence number (main archive)
+		var matcher = ORDERSET_WITH_SEQUENCE.matcher(cleanPath);
+		if (matcher.matches()) {
+			try {
+				return Long.parseLong(matcher.group(3));
+			} catch (Exception e) {
+				return null;
+			}
 		}
 
-		try {
-			return Long.parseLong(matcher.group(3));
-		} catch (Exception e) {
-			return null;
+		// Try backfill pattern
+		matcher = ORDERSET_BACKFILL.matcher(cleanPath);
+		if (matcher.matches()) {
+			try {
+				return Long.parseLong(matcher.group(1));
+			} catch (Exception e) {
+				return null;
+			}
 		}
+
+		// Pattern without sequence number returns null
+		return null;
 	}
 
 	private static String stripBaseUrl(String path) {
