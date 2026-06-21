@@ -1,12 +1,12 @@
 package com.autonomouslogic.everef.cli.publiccontracts;
 
-import com.autonomouslogic.commons.concurrent.VirtualThreads;
 import com.autonomouslogic.everef.esi.EsiHelper;
 import com.autonomouslogic.everef.esi.EsiUrl;
 import com.autonomouslogic.everef.esi.LocationPopulator;
 import com.autonomouslogic.everef.esi.UniverseEsi;
 import com.autonomouslogic.everef.http.OkHttpWrapper;
 import com.autonomouslogic.everef.openapi.esi.model.GetUniverseRegionsRegionIdOk;
+import com.autonomouslogic.everef.util.VirtualThreads;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -80,7 +80,7 @@ public class ContractFetcher {
 				.map(region -> (Callable<List<Long>>) () -> fetchContractsForRegion(region))
 				.toList();
 
-		var allContractIds = VirtualThreads.callAll(tasks, 3);
+		var allContractIds = VirtualThreads.parallel(tasks, 3);
 
 		// Flatten the list of lists
 		return allContractIds.stream().flatMap(List::stream).toList();
@@ -113,7 +113,7 @@ public class ContractFetcher {
 				})
 				.toList();
 
-		var contractIds = VirtualThreads.callAll(tasks, 32);
+		var contractIds = VirtualThreads.parallel(tasks, 32);
 
 		log.info("Fetched {} public contracts from {}", count.get(), region.getName());
 		return contractIds;

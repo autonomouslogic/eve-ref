@@ -1,6 +1,5 @@
 package com.autonomouslogic.everef.cli.api;
 
-import com.autonomouslogic.commons.concurrent.VirtualThreads;
 import com.autonomouslogic.everef.api.ApiUtil;
 import com.autonomouslogic.everef.api.ClientErrorHandler;
 import com.autonomouslogic.everef.api.ClientException;
@@ -14,6 +13,7 @@ import com.autonomouslogic.everef.service.EsiMarketPriceService;
 import com.autonomouslogic.everef.service.HealthcheckService;
 import com.autonomouslogic.everef.service.RefDataService;
 import com.autonomouslogic.everef.service.SystemCostIndexService;
+import com.autonomouslogic.everef.util.VirtualThreads;
 import io.helidon.common.concurrency.limits.AimdLimit;
 import io.helidon.webserver.WebServer;
 import io.helidon.webserver.http.HttpRouting;

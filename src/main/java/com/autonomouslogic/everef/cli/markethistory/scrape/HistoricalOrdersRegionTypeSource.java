@@ -1,6 +1,5 @@
 package com.autonomouslogic.everef.cli.markethistory.scrape;
 
-import com.autonomouslogic.commons.concurrent.VirtualThreads;
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.http.DataCrawler;
 import com.autonomouslogic.everef.http.OkHttpWrapper;
@@ -8,6 +7,7 @@ import com.autonomouslogic.everef.model.RegionTypePair;
 import com.autonomouslogic.everef.url.DataUrl;
 import com.autonomouslogic.everef.util.CompressUtil;
 import com.autonomouslogic.everef.util.TempFiles;
+import com.autonomouslogic.everef.util.VirtualThreads;
 import com.autonomouslogic.everef.util.archive.ArchivePathFactories;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.MappingIterator;

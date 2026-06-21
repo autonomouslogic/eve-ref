@@ -1,6 +1,5 @@
 package com.autonomouslogic.everef.cli;
 
-import com.autonomouslogic.commons.concurrent.VirtualThreads;
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.esi.EsiAuthHelper;
 import com.autonomouslogic.everef.esi.EsiConstants;
@@ -18,6 +17,7 @@ import com.autonomouslogic.everef.s3.S3Util;
 import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.url.UrlParser;
 import com.autonomouslogic.everef.util.DiscordNotifier;
+import com.autonomouslogic.everef.util.VirtualThreads;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;

@@ -1,9 +1,9 @@
 package com.autonomouslogic.everef.cli.flyway;
 
-import com.autonomouslogic.commons.concurrent.VirtualThreads;
 import com.autonomouslogic.everef.cli.Command;
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.db.DbAccess;
+import com.autonomouslogic.everef.util.VirtualThreads;
 import io.reactivex.rxjava3.core.Completable;
 import javax.inject.Inject;
 import lombok.extern.log4j.Log4j2;

@@ -1,6 +1,5 @@
 package com.autonomouslogic.everef.cli.markethistory.imports;
 
-import com.autonomouslogic.commons.concurrent.VirtualThreads;
 import com.autonomouslogic.everef.cli.Command;
 import com.autonomouslogic.everef.cli.flyway.FlywayMigrate;
 import com.autonomouslogic.everef.cli.markethistory.MarketHistoryLoader;
@@ -8,6 +7,7 @@ import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.db.MarketHistoryDao;
 import com.autonomouslogic.everef.model.MarketHistoryEntry;
 import com.autonomouslogic.everef.url.HttpUrl;
+import com.autonomouslogic.everef.util.VirtualThreads;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Ordering;
@@ -69,11 +69,11 @@ public class ImportMarketHistory implements Command {
 
 	private void runImport() {
 		resolveFilesToDownload()
-				.callAll(loadConcurrency)
+				.parallel(loadConcurrency)
 				.runOn(VirtualThreads.SCHEDULER)
 				.flatMap(this::downloadFile)
 				.sequential()
-				.callAll(insertConcurrency)
+				.parallel(insertConcurrency)
 				.runOn(VirtualThreads.SCHEDULER, 1)
 				.flatMap(file -> parseFile(file).flatMap(pair -> Completable.fromAction(() -> insertDayEntries(pair))
 						.toFlowable()))

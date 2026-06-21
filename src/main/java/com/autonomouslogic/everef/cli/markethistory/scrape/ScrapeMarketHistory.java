@@ -2,7 +2,6 @@ package com.autonomouslogic.everef.cli.markethistory.scrape;
 
 import static com.autonomouslogic.everef.util.archive.ArchivePathFactories.MARKET_HISTORY;
 
-import com.autonomouslogic.commons.concurrent.VirtualThreads;
 import com.autonomouslogic.everef.cli.Command;
 import com.autonomouslogic.everef.cli.markethistory.MarketHistoryUtil;
 import com.autonomouslogic.everef.config.Configs;
@@ -20,6 +19,7 @@ import com.autonomouslogic.everef.util.DataIndexHelper;
 import com.autonomouslogic.everef.util.ProgressReporter;
 import com.autonomouslogic.everef.util.Rx;
 import com.autonomouslogic.everef.util.TempFiles;
+import com.autonomouslogic.everef.util.VirtualThreads;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;

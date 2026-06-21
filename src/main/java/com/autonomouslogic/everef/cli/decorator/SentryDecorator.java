@@ -1,7 +1,7 @@
 package com.autonomouslogic.everef.cli.decorator;
 
-import com.autonomouslogic.commons.concurrent.VirtualThreads;
 import com.autonomouslogic.everef.cli.Command;
+import com.autonomouslogic.everef.util.VirtualThreads;
 import io.reactivex.rxjava3.core.Completable;
 import io.sentry.Sentry;
 import io.sentry.SentryLevel;

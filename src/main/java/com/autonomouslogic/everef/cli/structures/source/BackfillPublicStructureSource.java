@@ -3,9 +3,9 @@ package com.autonomouslogic.everef.cli.structures.source;
 import static com.autonomouslogic.everef.cli.structures.ScrapeStructures.LAST_SEEN_PUBLIC_STRUCTURE;
 import static com.autonomouslogic.everef.cli.structures.ScrapeStructures.LAST_STRUCTURE_GET;
 
-import com.autonomouslogic.commons.concurrent.VirtualThreads;
 import com.autonomouslogic.everef.cli.structures.StructureStore;
 import com.autonomouslogic.everef.util.Rx;
+import com.autonomouslogic.everef.util.VirtualThreads;
 import io.reactivex.rxjava3.core.Flowable;
 import java.io.FileInputStream;
 import java.time.Instant;

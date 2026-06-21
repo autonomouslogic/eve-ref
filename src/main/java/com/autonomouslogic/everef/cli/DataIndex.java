@@ -1,6 +1,5 @@
 package com.autonomouslogic.everef.cli;
 
-import com.autonomouslogic.commons.concurrent.VirtualThreads;
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.data.FileEntry;
 import com.autonomouslogic.everef.data.IndexDirectoryEntry;
@@ -12,6 +11,7 @@ import com.autonomouslogic.everef.s3.S3Adapter;
 import com.autonomouslogic.everef.s3.S3Util;
 import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.url.UrlParser;
+import com.autonomouslogic.everef.util.VirtualThreads;
 import com.autonomouslogic.everef.util.archive.ArchivePathFactories;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.reactivex.rxjava3.core.Completable;

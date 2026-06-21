@@ -2,7 +2,6 @@ package com.autonomouslogic.everef.cli.refdata;
 
 import static com.autonomouslogic.everef.util.archive.ArchivePathFactories.REFERENCE_DATA;
 
-import com.autonomouslogic.commons.concurrent.VirtualThreads;
 import com.autonomouslogic.everef.cli.Command;
 import com.autonomouslogic.everef.cli.refdata.esi.EsiLoader;
 import com.autonomouslogic.everef.cli.refdata.hoboleaks.HoboleaksLoader;
@@ -40,6 +39,7 @@ import com.autonomouslogic.everef.util.HashUtil;
 import com.autonomouslogic.everef.util.RefDataUtil;
 import com.autonomouslogic.everef.util.Rx;
 import com.autonomouslogic.everef.util.TempFiles;
+import com.autonomouslogic.everef.util.VirtualThreads;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dagger.Lazy;
