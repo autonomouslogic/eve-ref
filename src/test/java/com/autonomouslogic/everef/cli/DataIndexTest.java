@@ -1,6 +1,7 @@
 package com.autonomouslogic.everef.cli;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -314,21 +315,22 @@ public class DataIndexTest {
 
 	@Test
 	@SneakyThrows
-	void shouldParseFuzzworkOrdersetDataIndexPath() {
+	void shouldParseFuzzworkOrdersetArchivePath() {
 		mockS3.putTestObject(
 				BUCKET_NAME,
-				"fuzzwork/ordersets/2024/2024-07-21/fuzzwork-orderset-2024-07-21_14-30-45.csv.gz",
-				"data index file",
+				"fuzzwork/ordersets/backfills/caden-hunter-fuzzwork-ordersets/orderset-27053.csv.gz",
+				"orderset data",
 				s3Data,
-				Instant.parse("2024-07-21T14:35:00Z"));
+				Instant.parse("2018-02-24T01:37:13Z"));
 
 		dataIndex.run();
 
-		var archiveJson = getJsonContent("fuzzwork/ordersets/2024/2024-07-21/index.json");
+		var archiveJson = getJsonContent("fuzzwork/ordersets/backfills/caden-hunter-fuzzwork-ordersets/index.json");
 		var file = archiveJson.get("files").get(0);
+		assertEquals("2018-02-24T01:37:13Z", file.get("last_modified").textValue());
 		assertEquals("fuzzwork-ordersets", file.get("type").textValue());
-		assertEquals("2024-07-21T14:30:45Z", file.get("file_time").textValue());
-		assertTrue(!file.has("sequence_number"), "Sequence number should not be present for data index pattern");
+		assertEquals(27053L, file.get("sequence_number").longValue());
+		assertFalse(file.has("file_time"));
 	}
 
 	@NotNull
