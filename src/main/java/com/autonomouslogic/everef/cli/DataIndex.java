@@ -217,6 +217,7 @@ public class DataIndex implements Command {
 		match.ifPresent(archiveMatch -> {
 			builder.type(archiveMatch.getType());
 			archiveMatch.getDate().ifPresent(date -> builder.fileTime(date));
+			archiveMatch.getSequence().ifPresent(seq -> builder.sequenceNumber(seq));
 		});
 
 		return builder.build();

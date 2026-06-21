@@ -106,13 +106,8 @@ public class ArchivePathFactories {
 			.suffix("-yaml.zip")
 			.build());
 
-	public static final StandardArchivePathFactory FUZZWORK_ORDERSET = register(StandardArchivePathFactory.builder()
-			.name("fuzzwork-ordersets")
-			.folder("fuzzwork/ordersets")
-			.historyFolder(false)
-			.filename("fuzzwork-orderset-")
-			.suffix(".csv.gz")
-			.build());
+	public static final FuzzworkOrdersetArchivePathFactory FUZZWORK_ORDERSET =
+			register(new FuzzworkOrdersetArchivePathFactory());
 
 	public static final StandardArchivePathFactory STRUCTURES = register(StandardArchivePathFactory.builder()
 			.folder("structures")
@@ -288,7 +283,13 @@ public class ArchivePathFactories {
 			}
 			var timestamp = pattern.parseArchiveTime(path);
 			if (timestamp != null) {
-				return Optional.of(new ArchiveMatch(name, Optional.of(timestamp)));
+				var sequence = pattern.parseSequenceNumber(path);
+				return Optional.of(new ArchiveMatch(name, Optional.of(timestamp), Optional.ofNullable(sequence)));
+			}
+			// Also check for patterns that have sequence but no timestamp (e.g., backfill data)
+			var sequence = pattern.parseSequenceNumber(path);
+			if (sequence != null) {
+				return Optional.of(new ArchiveMatch(name, Optional.empty(), Optional.of(sequence)));
 			}
 		}
 		return Optional.empty();

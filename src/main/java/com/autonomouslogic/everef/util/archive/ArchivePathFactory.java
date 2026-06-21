@@ -18,4 +18,20 @@ public interface ArchivePathFactory {
 	String createArchivePath(Instant timestamp);
 
 	String createArchivePath(ZonedDateTime archiveTime);
+
+	default String createArchivePath(long sequenceNumber, LocalDate datestamp) {
+		return createArchivePath(datestamp);
+	}
+
+	default String createArchivePath(long sequenceNumber, Instant timestamp) {
+		return createArchivePath(timestamp);
+	}
+
+	default String createArchivePath(long sequenceNumber, ZonedDateTime archiveTime) {
+		return createArchivePath(archiveTime);
+	}
+
+	default Long parseSequenceNumber(String path) {
+		return null;
+	}
 }
