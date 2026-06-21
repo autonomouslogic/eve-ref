@@ -1,5 +1,13 @@
 EVE Ref Changelog
 
+## [2.78.4](https://github.com/autonomouslogic/eve-ref/compare/2.78.3...2.78.4) (2026-06-21)
+
+
+### Bug Fixes
+
+* Replaced VirtualThreads.parallel with commons-java callAll ([#1061](https://github.com/autonomouslogic/eve-ref/issues/1061)) ([5291001](https://github.com/autonomouslogic/eve-ref/commit/5291001e1a234e90c0daea0ec66e20302a1bd1d2))
+* Reworked Fuzzwork orderset path handling and added sequence numbers ([#1062](https://github.com/autonomouslogic/eve-ref/issues/1062)) ([d492e67](https://github.com/autonomouslogic/eve-ref/commit/d492e67d113aada6a241bbad1fe566ae2411de85))
+
 ## [2.78.3](https://github.com/autonomouslogic/eve-ref/compare/2.78.2...2.78.3) (2026-06-19)
 
 
