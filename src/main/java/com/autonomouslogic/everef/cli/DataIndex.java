@@ -72,8 +72,6 @@ public class DataIndex implements Command {
 
 	@Setter
 	@Getter
-//	private String prefix = Configs.DATA_INDEX_PREFIX.get().orElse("fuzzwork/ordersets/2025/2025-01-01/");
-//	private String prefix = Configs.DATA_INDEX_PREFIX.get().orElse("fuzzwork/ordersets/backfills");
 	private String prefix = Configs.DATA_INDEX_PREFIX.get().orElse(null);
 
 	@Inject

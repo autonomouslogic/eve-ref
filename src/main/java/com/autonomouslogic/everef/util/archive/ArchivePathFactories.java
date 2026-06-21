@@ -286,6 +286,11 @@ public class ArchivePathFactories {
 				var sequence = pattern.parseSequenceNumber(path);
 				return Optional.of(new ArchiveMatch(name, Optional.of(timestamp), Optional.ofNullable(sequence)));
 			}
+			// Also check for patterns that have sequence but no timestamp (e.g., backfill data)
+			var sequence = pattern.parseSequenceNumber(path);
+			if (sequence != null) {
+				return Optional.of(new ArchiveMatch(name, Optional.empty(), Optional.of(sequence)));
+			}
 		}
 		return Optional.empty();
 	}
