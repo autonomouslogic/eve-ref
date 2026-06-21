@@ -5,7 +5,6 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.regex.Pattern;
 import org.apache.commons.lang3.StringUtils;
 
@@ -27,8 +26,8 @@ public class FuzzworkOrdersetArchivePathFactory implements ArchivePathFactory {
 			"fuzzwork/ordersets/(\\d{4})/(\\d{4}-\\d{2}-\\d{2})/fuzzwork-orderset-(\\d{4}-\\d{2}-\\d{2})_(\\d{2}-\\d{2}-\\d{2})\\.csv\\.gz");
 
 	// Pattern for backfill/historical data: orderset-{ID}.csv.gz (no timestamp)
-	private static final Pattern ORDERSET_BACKFILL = Pattern.compile(
-			"fuzzwork/ordersets/backfills/.*/orderset-(\\d+)\\.csv\\.gz");
+	private static final Pattern ORDERSET_BACKFILL =
+			Pattern.compile("fuzzwork/ordersets/backfills/.*/orderset-(\\d+)\\.csv\\.gz");
 
 	@Override
 	public String getName() {

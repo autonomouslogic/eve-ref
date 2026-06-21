@@ -134,18 +134,28 @@ public class ArchivePathFactoriesTest {
 	void shouldGenerateFuzzworkOrderset() {
 		var factory = ArchivePathFactories.FUZZWORK_ORDERSET;
 		// Test pattern with sequence number and timestamp (main archive pattern)
-		testExpectedPathsWithSequence(factory, 113849L, Instant.parse("2023-02-22T05:37:19Z"),
+		testExpectedPathsWithSequence(
+				factory,
+				113849L,
+				Instant.parse("2023-02-22T05:37:19Z"),
 				"fuzzwork/ordersets/2023/2023-02-22/fuzzwork-orderset-113849-2023-02-22_05-37-19.csv.gz");
-		testExpectedPathsWithSequence(factory, 12345L, Instant.parse("2024-07-01T12:00:00Z"),
+		testExpectedPathsWithSequence(
+				factory,
+				12345L,
+				Instant.parse("2024-07-01T12:00:00Z"),
 				"fuzzwork/ordersets/2024/2024-07-01/fuzzwork-orderset-12345-2024-07-01_12-00-00.csv.gz");
 		// Test pattern with timestamp only, no sequence (data index pattern)
-		testExpectedPathsWithoutSequence(factory, Instant.parse("2024-07-21T14:30:45Z"),
+		testExpectedPathsWithoutSequence(
+				factory,
+				Instant.parse("2024-07-21T14:30:45Z"),
 				"fuzzwork/ordersets/2024/2024-07-21/fuzzwork-orderset-2024-07-21_14-30-45.csv.gz");
-		testExpectedPathsWithoutSequence(factory, Instant.parse("2023-06-15T08:15:30Z"),
+		testExpectedPathsWithoutSequence(
+				factory,
+				Instant.parse("2023-06-15T08:15:30Z"),
 				"fuzzwork/ordersets/2023/2023-06-15/fuzzwork-orderset-2023-06-15_08-15-30.csv.gz");
 		// Test pattern with sequence only, no timestamp (backfill pattern)
-		testParseSequenceOnly(factory, 27053L,
-				"/fuzzwork/ordersets/backfills/caden-hunter-fuzzwork-ordersets/orderset-27053.csv.gz");
+		testParseSequenceOnly(
+				factory, 27053L, "/fuzzwork/ordersets/backfills/caden-hunter-fuzzwork-ordersets/orderset-27053.csv.gz");
 	}
 
 	private static void testExpectedPathsWithSequence(
@@ -155,7 +165,8 @@ public class ArchivePathFactoriesTest {
 		assertEquals(sequenceNumber, (long) factory.parseSequenceNumber(expectedPath));
 	}
 
-	private static void testExpectedPathsWithoutSequence(ArchivePathFactory factory, Instant timestamp, String expectedPath) {
+	private static void testExpectedPathsWithoutSequence(
+			ArchivePathFactory factory, Instant timestamp, String expectedPath) {
 		assertEquals(expectedPath, factory.createArchivePath(timestamp));
 		assertEquals(timestamp, factory.parseArchiveTime(expectedPath));
 		assertNull(factory.parseSequenceNumber(expectedPath));
