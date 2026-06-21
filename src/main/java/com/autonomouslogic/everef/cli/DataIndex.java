@@ -72,7 +72,7 @@ public class DataIndex implements Command {
 
 	@Setter
 	@Getter
-	private String prefix = Configs.DATA_INDEX_PREFIX.get().orElse(null);
+	private String prefix = Configs.DATA_INDEX_PREFIX.get().orElse("fuzzwork");
 
 	@Inject
 	protected DataIndex() {}
@@ -93,7 +93,8 @@ public class DataIndex implements Command {
 		listAndIndex()
 				.flatMapCompletable(
 						dirIndex -> {
-							return createAndUploadIndexPage(dirIndex.getLeft(), dirIndex.getRight());
+							return createAndUploadIndexPage(dirIndex.getLeft(), dirIndex.getRight())
+									.subscribeOn(VirtualThreads.SCHEDULER);
 						},
 						false,
 						indexConcurrency)

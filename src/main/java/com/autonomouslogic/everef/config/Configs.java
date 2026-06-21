@@ -232,7 +232,16 @@ public class Configs {
 	 */
 	public static final Config<Integer> DATA_INDEX_CONCURRENCY = Config.<Integer>builder()
 			.name("DATA_INDEX_CONCURRENCY")
-			.defaultValue(50)
+			.defaultValue(32)
+			.type(Integer.class)
+			.build();
+
+	/**
+	 * Number of index pages to build and upload concurrently.
+	 */
+	public static final Config<Integer> S3_HEAD_CONCURRENCY = Config.<Integer>builder()
+			.name("S3_HEAD_CONCURRENCY")
+			.defaultValue(32)
 			.type(Integer.class)
 			.build();
 

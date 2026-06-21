@@ -1,5 +1,6 @@
 package com.autonomouslogic.everef.s3;
 
+import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.util.TempFiles;
 import com.autonomouslogic.everef.util.VirtualThreads;
@@ -39,6 +40,8 @@ import software.amazon.awssdk.services.s3.model.PutObjectResponse;
 public class S3Adapter {
 	@Inject
 	protected TempFiles tempFiles;
+
+	private final int headConcurrency = Configs.S3_HEAD_CONCURRENCY.getRequired();
 
 	@Inject
 	protected S3Adapter() {}
@@ -234,7 +237,7 @@ public class S3Adapter {
 				})
 				.toList();
 
-		return VirtualThreads.parallel(tasks, 10);
+		return VirtualThreads.parallel(tasks, headConcurrency);
 	}
 
 	@SneakyThrows
