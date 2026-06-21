@@ -1,10 +1,10 @@
 package com.autonomouslogic.everef.cli.markethistory.scrape;
 
+import com.autonomouslogic.commons.concurrent.VirtualThreads;
 import com.autonomouslogic.everef.cli.markethistory.MarketHistoryLoader;
 import com.autonomouslogic.everef.cli.markethistory.MarketHistoryUtil;
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.url.DataUrl;
-import com.autonomouslogic.everef.util.VirtualThreads;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.google.common.collect.Ordering;
 import io.reactivex.rxjava3.core.Flowable;
@@ -59,7 +59,7 @@ class ScrapeMarketHistoryBatchLoader {
 		}
 		return f.sorted(Ordering.natural().onResultOf(Pair::getLeft))
 				.switchIfEmpty(Flowable.error(new RuntimeException("No market history files found.")))
-				//				.parallel(downloadConcurrency)
+				//				.callAll(downloadConcurrency)
 				//				.runOn(VirtualThreads.SCHEDULER)
 				.flatMap(
 						p -> {

@@ -1,8 +1,8 @@
 package com.autonomouslogic.everef.s3;
 
+import com.autonomouslogic.commons.concurrent.VirtualThreads;
 import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.util.TempFiles;
-import com.autonomouslogic.everef.util.VirtualThreads;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -234,7 +234,7 @@ public class S3Adapter {
 				})
 				.toList();
 
-		return VirtualThreads.parallel(tasks, 10);
+		return VirtualThreads.callAll(tasks, 10);
 	}
 
 	@SneakyThrows

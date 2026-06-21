@@ -2,6 +2,7 @@ package com.autonomouslogic.everef.esi;
 
 import static com.autonomouslogic.everef.util.EveConstants.NPC_STATION_MAX_ID;
 
+import com.autonomouslogic.commons.concurrent.VirtualThreads;
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.openapi.esi.api.UniverseApi;
 import com.autonomouslogic.everef.openapi.esi.model.GetUniverseConstellationsConstellationIdOk;
@@ -9,7 +10,6 @@ import com.autonomouslogic.everef.openapi.esi.model.GetUniverseRegionsRegionIdOk
 import com.autonomouslogic.everef.openapi.esi.model.GetUniverseStationsStationIdOk;
 import com.autonomouslogic.everef.openapi.esi.model.GetUniverseSystemsSystemIdOk;
 import com.autonomouslogic.everef.openapi.esi.model.GetUniverseTypesTypeIdOk;
-import com.autonomouslogic.everef.util.VirtualThreads;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -62,7 +62,7 @@ public class UniverseEsi {
 	}
 
 	public List<GetUniverseRegionsRegionIdOk> getAllRegions() {
-		return VirtualThreads.parallel(
+		return VirtualThreads.callAll(
 						getRegionIds().stream()
 								.map(id -> (Callable<Optional<GetUniverseRegionsRegionIdOk>>) () -> getRegion(id))
 								.toList(),

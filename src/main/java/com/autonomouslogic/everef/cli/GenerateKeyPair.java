@@ -1,7 +1,7 @@
 package com.autonomouslogic.everef.cli;
 
+import com.autonomouslogic.commons.concurrent.VirtualThreads;
 import com.autonomouslogic.everef.crypto.EcKeyGenerator;
-import com.autonomouslogic.everef.util.VirtualThreads;
 import javax.inject.Inject;
 import lombok.extern.log4j.Log4j2;
 

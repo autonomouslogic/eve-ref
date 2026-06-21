@@ -2,6 +2,7 @@ package com.autonomouslogic.everef.cli.marketorders;
 
 import static com.autonomouslogic.everef.util.EveConstants.NPC_STATION_MAX_ID;
 
+import com.autonomouslogic.commons.concurrent.VirtualThreads;
 import com.autonomouslogic.commons.rxjava3.Rx3Util;
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.esi.EsiAuthHelper;
@@ -12,7 +13,6 @@ import com.autonomouslogic.everef.esi.LocationPopulator;
 import com.autonomouslogic.everef.esi.UniverseEsi;
 import com.autonomouslogic.everef.util.DataUtil;
 import com.autonomouslogic.everef.util.JsonUtil;
-import com.autonomouslogic.everef.util.VirtualThreads;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.reactivex.rxjava3.core.Completable;
@@ -54,7 +54,7 @@ public class MarketOrderFetcher {
 
 	public void fetchMarketOrders() {
 		Flowable.concatArray(fetchPublicOrders(), fetchStructureOrders())
-				.parallel(32)
+				.callAll(32)
 				.runOn(VirtualThreads.SCHEDULER)
 				.flatMap(order ->
 						locationPopulator.populate(order, "location_id").andThen(Flowable.just(order)))
@@ -68,7 +68,7 @@ public class MarketOrderFetcher {
 	private Flowable<ObjectNode> fetchPublicOrders() {
 		var regions = universeEsi.getAllRegions();
 		return Flowable.fromIterable(regions)
-				.parallel(4)
+				.callAll(4)
 				.runOn(VirtualThreads.SCHEDULER)
 				.flatMap(region -> {
 					return fetchOrders(
@@ -90,7 +90,7 @@ public class MarketOrderFetcher {
 		return dataUtil.downloadLatestStructures().flatMapPublisher(structures -> {
 			return Flowable.fromIterable(structures.values())
 					.filter(s -> s.isMarketStructure())
-					.parallel(4)
+					.callAll(4)
 					.runOn(VirtualThreads.SCHEDULER)
 					.flatMap(structure -> {
 						return fetchOrders(

@@ -1,6 +1,6 @@
 package com.autonomouslogic.everef.cli;
 
-import com.autonomouslogic.everef.util.VirtualThreads;
+import com.autonomouslogic.commons.concurrent.VirtualThreads;
 import io.reactivex.rxjava3.core.Completable;
 import javax.inject.Inject;
 import lombok.extern.log4j.Log4j2;
