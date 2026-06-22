@@ -447,7 +447,7 @@ public class PublishRefDataTest {
 	@SneakyThrows
 	void shouldNotPublishRefDataIfThereNoUpdate() {
 		refDataFile = mockScrapeBuilder.createTestRefdata(meta);
-		publishRefData.run();
+		VirtualThreads.onVirtualThread(() -> publishRefData.run());
 
 		var putKeys = mockS3Adapter.getAllPutKeys(BUCKET_NAME, s3);
 		var deleteKeys = mockS3Adapter.getAllDeleteKeys(BUCKET_NAME, s3);

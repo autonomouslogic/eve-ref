@@ -74,7 +74,7 @@ public class ImportMarketHistory implements Command {
 				.flatMap(this::downloadFile)
 				.sequential()
 				.parallel(insertConcurrency)
-				.runOn(Rx.VIRTUAL)
+				.runOn(Rx.VIRTUAL, 1)
 				.flatMap(file -> parseFile(file).flatMap(pair -> Completable.fromAction(() -> insertDayEntries(pair))
 						.toFlowable()))
 				.sequential()

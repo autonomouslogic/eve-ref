@@ -106,6 +106,7 @@ public class FetchDonationsTest {
 	}
 
 	@Test
+	@SneakyThrows
 	void shouldNotDoAnythingWithNoDonations() {
 		// No prior donations
 		// No current donations
@@ -120,6 +121,7 @@ public class FetchDonationsTest {
 	}
 
 	@Test
+	@SneakyThrows
 	void shouldUpdateWithFirstDonations() {
 		// No prior donations
 		// New donations
@@ -149,6 +151,7 @@ public class FetchDonationsTest {
 	}
 
 	@Test
+	@SneakyThrows
 	void shouldUpdateWithSameDonations() {
 		// Existing prior donations
 		existingDonations.add(DonationEntry.builder()
@@ -189,6 +192,7 @@ public class FetchDonationsTest {
 	}
 
 	@Test
+	@SneakyThrows
 	void shouldUpdateWithNewDonations() {
 		// Existing prior donations
 		existingDonations.add(DonationEntry.builder()
@@ -246,6 +250,7 @@ public class FetchDonationsTest {
 	}
 
 	@Test
+	@SneakyThrows
 	void shouldKeepOldDonations() {
 		// Existing prior donations
 		existingDonations.add(DonationEntry.builder()
@@ -302,6 +307,7 @@ public class FetchDonationsTest {
 	}
 
 	@Test
+	@SneakyThrows
 	void shouldKeepOldDonationsWhenNoDonations() {
 		// Existing prior donations
 		existingDonations.add(DonationEntry.builder()
@@ -341,6 +347,7 @@ public class FetchDonationsTest {
 	}
 
 	@Test
+	@SneakyThrows
 	void shouldSummariseMultipleDonationsFromTheSameEntity() {
 		// Existing prior donations from the same person
 		existingDonations.add(DonationEntry.builder()
@@ -372,6 +379,7 @@ public class FetchDonationsTest {
 	}
 
 	@Test
+	@SneakyThrows
 	void shouldSummariseMultipleDonationsFromDifferentEntities() {
 		// No prior donations
 		// Multiple new donations from different people
@@ -401,6 +409,7 @@ public class FetchDonationsTest {
 	}
 
 	@Test
+	@SneakyThrows
 	void shouldNotSummariseOldDonations() {
 		// Existing prior donations
 		existingDonations.add(DonationEntry.builder()
@@ -451,6 +460,7 @@ public class FetchDonationsTest {
 	}
 
 	@Test
+	@SneakyThrows
 	void shouldNotIncludeSmallDonationsInRecent() {
 		// Existing prior donations
 		existingDonations.add(DonationEntry.builder()
@@ -479,6 +489,7 @@ public class FetchDonationsTest {
 	}
 
 	@Test
+	@SneakyThrows
 	void shouldReplaceWeirdCharactersInDonorNames() {
 		addCharacterTransaction(1, TEST_DONOR_CHARACTER_ID_3, 200, donationTime);
 		VirtualThreads.onVirtualThread(() -> {
@@ -488,6 +499,7 @@ public class FetchDonationsTest {
 	}
 
 	@Test
+	@SneakyThrows
 	void shouldShortenLargeAmountsOfMoney() {
 		addCharacterTransaction(1, TEST_DONOR_CHARACTER_ID_1, 12345678912L, donationTime);
 		VirtualThreads.onVirtualThread(() -> {
@@ -497,6 +509,7 @@ public class FetchDonationsTest {
 	}
 
 	@Test
+	@SneakyThrows
 	void shouldIncludeAllRelevantTransactions() {
 		addCharacterTransaction(
 				1,
@@ -532,6 +545,7 @@ public class FetchDonationsTest {
 	}
 
 	@Test
+	@SneakyThrows
 	void shouldNotIncludeIrrelevantTransactions() {
 		addCharacterTransaction(
 				1,
@@ -554,6 +568,7 @@ public class FetchDonationsTest {
 	}
 
 	@Test
+	@SneakyThrows
 	void shouldNotIncludeTransactionsFromSelf() {
 		addCharacterTransaction(
 				1,

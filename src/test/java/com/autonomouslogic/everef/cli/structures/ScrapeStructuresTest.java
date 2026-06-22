@@ -363,9 +363,9 @@ public class ScrapeStructuresTest {
 	@Test
 	void shouldExecuteDataIndex() throws InterruptedException {
 		publicStructures.put(1000000000001L, Map.of("name", "Test Structure 1"));
-		scrapeStructures
+		VirtualThreads.onVirtualThread(() -> scrapeStructures
 				.setScrapeTime(ZonedDateTime.parse("2020-01-02T03:04:05Z"))
-				.run();
+				.run());
 		Mockito.verify(dataIndexHelper)
 				.updateIndex(
 						S3Url.builder()
