@@ -72,7 +72,7 @@ public class DataIndex implements Command {
 
 	@Setter
 	@Getter
-	private String prefix = Configs.DATA_INDEX_PREFIX.get().orElse("fuzzwork");
+	private String prefix = Configs.DATA_INDEX_PREFIX.get().orElse(null);
 
 	@Inject
 	protected DataIndex() {}
