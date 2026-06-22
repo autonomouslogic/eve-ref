@@ -100,7 +100,8 @@ public class EsiHelper {
 				.toList();
 
 		VirtualThreads.checkIsVirtual();
-		var remainingPages = VirtualThreads.callAll(tasks.iterator(), tasks.size());
+		var remainingPages =
+				VirtualThreads.callAll(tasks.iterator(), Runtime.getRuntime().availableProcessors());
 
 		allResponses.addAll(remainingPages);
 
@@ -166,9 +167,12 @@ public class EsiHelper {
 					.toList();
 
 			VirtualThreads.checkIsVirtual();
-			var remainingPages = VirtualThreads.callAll(tasks.iterator(), tasks.size()).stream()
-					.flatMap(List::stream)
-					.toList();
+			var remainingPages =
+					VirtualThreads.callAll(
+									tasks.iterator(), Runtime.getRuntime().availableProcessors())
+							.stream()
+							.flatMap(List::stream)
+							.toList();
 
 			result.addAll(remainingPages);
 		}
