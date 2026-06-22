@@ -63,7 +63,8 @@ public class HealthcheckDecoratorTest {
 	@Test
 	@SneakyThrows
 	void shouldCallDelegateWhenDisabled() {
-		VirtualThreads.onVirtualThread(() -> healthcheckDecorator.decorate(testCommand).run());
+		VirtualThreads.onVirtualThread(
+				() -> healthcheckDecorator.decorate(testCommand).run());
 		verify(testCommand).run();
 		testDataUtil.assertNoMoreRequests(server);
 	}
@@ -74,7 +75,8 @@ public class HealthcheckDecoratorTest {
 			key = "HEALTH_CHECK_URL",
 			value = "http://localhost:" + TestDataUtil.TEST_PORT + "/finish?key=val")
 	void shouldCallFinishUrl() {
-		VirtualThreads.onVirtualThread(() -> healthcheckDecorator.decorate(testCommand).run());
+		VirtualThreads.onVirtualThread(
+				() -> healthcheckDecorator.decorate(testCommand).run());
 		verify(testCommand).run();
 		var request = server.takeRequest();
 		testDataUtil.assertRequest(request, "POST", "/finish?key=val", null);
@@ -87,7 +89,8 @@ public class HealthcheckDecoratorTest {
 			key = "HEALTH_CHECK_START_URL",
 			value = "http://localhost:" + TestDataUtil.TEST_PORT + "/start?key=val")
 	void shouldCallStartUrl() {
-		VirtualThreads.onVirtualThread(() -> healthcheckDecorator.decorate(testCommand).run());
+		VirtualThreads.onVirtualThread(
+				() -> healthcheckDecorator.decorate(testCommand).run());
 		verify(testCommand).run();
 		var request = server.takeRequest();
 		testDataUtil.assertRequest(request, "POST", "/start?key=val", null);
@@ -103,7 +106,8 @@ public class HealthcheckDecoratorTest {
 		doThrow(new RuntimeException("test error message")).when(testCommand).run();
 		var error = assertThrows(
 				RuntimeException.class,
-				() -> VirtualThreads.onVirtualThread(() -> healthcheckDecorator.decorate(testCommand).run()));
+				() -> VirtualThreads.onVirtualThread(
+						() -> healthcheckDecorator.decorate(testCommand).run()));
 		assertEquals("test error message", error.getMessage());
 		verify(testCommand).run();
 		var request = server.takeRequest();
@@ -120,7 +124,8 @@ public class HealthcheckDecoratorTest {
 		doThrow(new RuntimeException("test error message")).when(testCommand).run();
 		var error = assertThrows(
 				RuntimeException.class,
-				() -> VirtualThreads.onVirtualThread(() -> healthcheckDecorator.decorate(testCommand).run()));
+				() -> VirtualThreads.onVirtualThread(
+						() -> healthcheckDecorator.decorate(testCommand).run()));
 		assertEquals("test error message", error.getMessage());
 		verify(testCommand).run();
 		var request = server.takeRequest();
@@ -147,7 +152,8 @@ public class HealthcheckDecoratorTest {
 			key = "HEALTH_CHECK_LOG_URL",
 			value = "http://localhost:" + TestDataUtil.TEST_PORT + "/log?key=val")
 	void shouldCallSequenceOnSuccess() {
-		VirtualThreads.onVirtualThread(() -> healthcheckDecorator.decorate(testCommand).run());
+		VirtualThreads.onVirtualThread(
+				() -> healthcheckDecorator.decorate(testCommand).run());
 		verify(testCommand).run();
 		var start = server.takeRequest();
 		testDataUtil.assertRequest(start, "POST", "/start?key=val", null);

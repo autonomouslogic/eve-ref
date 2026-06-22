@@ -174,7 +174,8 @@ public class BuildRefDataTest {
 	@SneakyThrows
 	void shouldNotBuildRefDataIfHashesMatch() {
 		refDataFile = mockScrapeBuilder.createTestRefdata(refDataMeta);
-		VirtualThreads.onVirtualThread(() -> buildRefData.setBuildTime(buildTime).run());
+		VirtualThreads.onVirtualThread(
+				() -> buildRefData.setBuildTime(buildTime).run());
 		var archiveFile = "base/reference-data/history/2022/reference-data-2022-01-05.tar.xz";
 		var obj = mockS3Adapter.getTestObject(BUCKET_NAME, archiveFile, dataClient);
 		assertFalse(obj.isPresent());
