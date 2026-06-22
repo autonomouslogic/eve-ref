@@ -11,8 +11,10 @@ import java.util.Objects;
 public class NumberFormats {
 	private static final String[] SUFFIXES = new String[] {"", "k", "m", "b", "t"};
 	private static final String[] ROMAN = new String[] {"I", "II", "III", "IV", "V"};
-	public static final DecimalFormat INTEGER = new DecimalFormat("###,##0");
-	public static final DecimalFormat DECIMAL2 = new DecimalFormat("###,##0.00");
+	private static final ThreadLocal<DecimalFormat> INTEGER =
+			ThreadLocal.withInitial(() -> new DecimalFormat("###,##0"));
+	private static final ThreadLocal<DecimalFormat> DECIMAL2 =
+			ThreadLocal.withInitial(() -> new DecimalFormat("###,##0.00"));
 	private static final String[] SIZES = new String[] {"bytes", "KiB", "MiB", "GiB", "TiB"};
 
 	public static String formatMoney(double v) {
@@ -21,7 +23,7 @@ public class NumberFormats {
 			v /= 1e3;
 			suffix++;
 		}
-		return DECIMAL2.format(v) + SUFFIXES[suffix];
+		return DECIMAL2.get().format(v) + SUFFIXES[suffix];
 	}
 
 	public static String formatFileSize(long v) {
@@ -32,9 +34,9 @@ public class NumberFormats {
 			suffix++;
 		}
 		if (suffix == 0) {
-			return INTEGER.format(v) + " " + SIZES[suffix];
+			return INTEGER.get().format(v) + " " + SIZES[suffix];
 		} else {
-			return DECIMAL2.format(d) + " " + SIZES[suffix];
+			return DECIMAL2.get().format(d) + " " + SIZES[suffix];
 		}
 	}
 
@@ -47,27 +49,27 @@ public class NumberFormats {
 	}
 
 	public String integer(double v) {
-		return INTEGER.format(v);
+		return INTEGER.get().format(v);
 	}
 
 	public String integer(BigInteger v) {
-		return INTEGER.format(v);
+		return INTEGER.get().format(v);
 	}
 
 	public String integer(BigDecimal v) {
-		return INTEGER.format(v);
+		return INTEGER.get().format(v);
 	}
 
 	public String decimal2(double v) {
-		return DECIMAL2.format(v);
+		return DECIMAL2.get().format(v);
 	}
 
 	public String decimal2(BigInteger v) {
-		return DECIMAL2.format(v);
+		return DECIMAL2.get().format(v);
 	}
 
 	public String decimal2(BigDecimal v) {
-		return DECIMAL2.format(v);
+		return DECIMAL2.get().format(v);
 	}
 
 	public String roman(int v) {
