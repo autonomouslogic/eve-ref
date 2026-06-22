@@ -1,5 +1,6 @@
 package com.autonomouslogic.everef.cli;
 
+import com.autonomouslogic.commons.concurrent.VirtualThreads;
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.data.LoadedRefData;
 import com.autonomouslogic.everef.model.SearchJsonEntry;
@@ -14,7 +15,6 @@ import com.autonomouslogic.everef.url.UrlParser;
 import com.autonomouslogic.everef.util.MarketGroupHelper;
 import com.autonomouslogic.everef.util.RefDataUtil;
 import com.autonomouslogic.everef.util.TempFiles;
-import com.autonomouslogic.everef.util.VirtualThreads;
 import com.fasterxml.jackson.core.JsonEncoding;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Streams;
@@ -80,7 +80,7 @@ public class BuildSearch implements Command {
 
 	@Override
 	public void run() {
-		VirtualThreads.checkThread();
+		VirtualThreads.checkIsVirtual();
 		refDataUtil
 				.loadLatestRefData()
 				.flatMapPublisher(this::buildSearch)

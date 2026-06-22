@@ -7,7 +7,6 @@ import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.db.MarketHistoryDao;
 import com.autonomouslogic.everef.model.MarketHistoryEntry;
 import com.autonomouslogic.everef.url.HttpUrl;
-import com.autonomouslogic.everef.util.VirtualThreads;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Ordering;
@@ -70,11 +69,9 @@ public class ImportMarketHistory implements Command {
 	private void runImport() {
 		resolveFilesToDownload()
 				.parallel(loadConcurrency)
-				.runOn(VirtualThreads.SCHEDULER)
 				.flatMap(this::downloadFile)
 				.sequential()
 				.parallel(insertConcurrency)
-				.runOn(VirtualThreads.SCHEDULER, 1)
 				.flatMap(file -> parseFile(file).flatMap(pair -> Completable.fromAction(() -> insertDayEntries(pair))
 						.toFlowable()))
 				.sequential()

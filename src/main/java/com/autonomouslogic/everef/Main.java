@@ -1,16 +1,17 @@
 package com.autonomouslogic.everef;
 
+import com.autonomouslogic.commons.concurrent.VirtualThreads;
 import com.autonomouslogic.everef.cli.CommandRunner;
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.inject.MainComponent;
 import com.autonomouslogic.everef.util.MemoryStatsLogger;
-import com.autonomouslogic.everef.util.VirtualThreads;
 import io.reactivex.rxjava3.plugins.RxJavaPlugins;
 import io.sentry.Sentry;
 import io.sentry.SentryLevel;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.inject.Inject;
+import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import okhttp3.OkHttpClient;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -23,8 +24,11 @@ public class Main {
 	@Inject
 	protected Main() {}
 
+	@SneakyThrows
 	public void start(String[] args) {
-		commandRunner.runCommand(args);
+		VirtualThreads.onVirtualThread(() -> {
+			commandRunner.runCommand(args);
+		});
 	}
 
 	public static void main(String[] args) {
@@ -49,7 +53,7 @@ public class Main {
 		});
 		try {
 			var main = MainComponent.create().createMain();
-			VirtualThreads.EXECUTOR.submit(() -> main.start(args)).get();
+			main.start(args);
 		} catch (Throwable e) {
 			log.fatal("Root error, exiting", e);
 			Sentry.captureException(e, scope -> scope.setLevel(SentryLevel.FATAL));

@@ -1,5 +1,6 @@
 package com.autonomouslogic.everef.cli.markethistory.scrape;
 
+import com.autonomouslogic.commons.concurrent.VirtualThreads;
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.http.DataCrawler;
 import com.autonomouslogic.everef.http.OkHttpWrapper;
@@ -7,7 +8,6 @@ import com.autonomouslogic.everef.model.RegionTypePair;
 import com.autonomouslogic.everef.url.DataUrl;
 import com.autonomouslogic.everef.util.CompressUtil;
 import com.autonomouslogic.everef.util.TempFiles;
-import com.autonomouslogic.everef.util.VirtualThreads;
 import com.autonomouslogic.everef.util.archive.ArchivePathFactories;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.MappingIterator;
@@ -29,6 +29,7 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 import lombok.NonNull;
 import lombok.Setter;
+import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
@@ -114,22 +115,22 @@ class HistoricalOrdersRegionTypeSource implements RegionTypeSource {
 
 	private Maybe<File> downloadFile(DataUrl url) {
 		return Maybe.defer(() -> {
-					var file = tempFiles
-							.tempFile("market-orders", ArchivePathFactories.MARKET_ORDERS.getSuffix())
-							.toFile();
-					try (var response = okHttpWrapper.download(url.toString(), file)) {
-						if (response.code() != 200) {
-							return Maybe.error(new RuntimeException(
-									"Failed to download " + url + " with code " + response.code()));
-						}
-						return Maybe.just(file);
-					}
-				})
-				.observeOn(VirtualThreads.SCHEDULER);
+			var file = tempFiles
+					.tempFile("market-orders", ArchivePathFactories.MARKET_ORDERS.getSuffix())
+					.toFile();
+			try (var response = okHttpWrapper.download(url.toString(), file)) {
+				if (response.code() != 200) {
+					return Maybe.error(
+							new RuntimeException("Failed to download " + url + " with code " + response.code()));
+				}
+				return Maybe.just(file);
+			}
+		});
 	}
 
+	@SneakyThrows
 	private Flowable<RegionTypePair> parseFile(File file) {
-		return Flowable.fromIterable(VirtualThreads.run(() -> {
+		return Flowable.fromIterable(VirtualThreads.onVirtualThread(() -> {
 			log.trace("Reading market order file {}", file);
 			var in = CompressUtil.uncompress(file);
 			var schema = csvMapper

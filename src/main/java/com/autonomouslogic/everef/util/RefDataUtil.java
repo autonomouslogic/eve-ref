@@ -3,6 +3,7 @@ package com.autonomouslogic.everef.util;
 import static com.autonomouslogic.everef.util.archive.ArchivePathFactories.REFERENCE_DATA;
 
 import com.autonomouslogic.commons.ResourceUtil;
+import com.autonomouslogic.commons.concurrent.VirtualThreads;
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.data.LoadedRefData;
 import com.autonomouslogic.everef.http.OkHttpWrapper;
@@ -230,7 +231,7 @@ public class RefDataUtil {
 	@SneakyThrows
 	public Flowable<Long> getAllTypeIdsForMarketGroup(long marketGroupId) {
 		return Flowable.defer(() -> {
-					var marketGroup = VirtualThreads.run(() -> refdataApi.getMarketGroup(marketGroupId));
+					var marketGroup = VirtualThreads.onVirtualThread(() -> refdataApi.getMarketGroup(marketGroupId));
 					var types = Optional.ofNullable(marketGroup.getTypeIds()).orElse(List.of());
 					var children = Optional.ofNullable(marketGroup.getChildMarketGroupIds())
 							.orElse(List.of());

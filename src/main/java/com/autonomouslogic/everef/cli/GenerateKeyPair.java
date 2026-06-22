@@ -1,7 +1,7 @@
 package com.autonomouslogic.everef.cli;
 
+import com.autonomouslogic.commons.concurrent.VirtualThreads;
 import com.autonomouslogic.everef.crypto.EcKeyGenerator;
-import com.autonomouslogic.everef.util.VirtualThreads;
 import javax.inject.Inject;
 import lombok.extern.log4j.Log4j2;
 
@@ -18,7 +18,7 @@ public class GenerateKeyPair implements Command {
 
 	@Override
 	public void run() {
-		VirtualThreads.checkThread();
+		VirtualThreads.checkIsVirtual();
 		var privateKey = keyGenerator.generatePrivateKey();
 		var publicKey = keyGenerator.generatePublicKey(privateKey);
 		var publicKeyHash = keyGenerator.createKeyHash(publicKey);
