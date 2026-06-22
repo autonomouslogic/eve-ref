@@ -93,10 +93,7 @@ public class DataIndex implements Command {
 		log.info("Starting data index for: {}", dataUrl);
 		listAndIndex()
 				.flatMapCompletable(
-						dirIndex -> {
-							return createAndUploadIndexPage(dirIndex.getLeft(), dirIndex.getRight())
-									.subscribeOn(Rx.VIRTUAL);
-						},
+						dirIndex -> createAndUploadIndexPage(dirIndex.getLeft(), dirIndex.getRight()),
 						false,
 						indexConcurrency)
 				.blockingAwait();
@@ -166,7 +163,8 @@ public class DataIndex implements Command {
 			var htmlRendered = renderIndexPage(prefix, index);
 			var jsonRendered = renderJsonIndexPage(prefix, index);
 			return Completable.mergeArray(
-					uploadIndexPage(prefix, htmlRendered), uploadJsonIndexPage(prefix, jsonRendered));
+					uploadIndexPage(prefix, htmlRendered).subscribeOn(Rx.VIRTUAL),
+					uploadJsonIndexPage(prefix, jsonRendered).subscribeOn(Rx.VIRTUAL));
 		});
 	}
 
