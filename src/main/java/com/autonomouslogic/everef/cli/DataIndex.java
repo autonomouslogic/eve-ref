@@ -93,7 +93,8 @@ public class DataIndex implements Command {
 		log.info("Starting data index for: {}", dataUrl);
 		listAndIndex()
 				.flatMapCompletable(
-						dirIndex -> createAndUploadIndexPage(dirIndex.getLeft(), dirIndex.getRight()),
+						dirIndex -> createAndUploadIndexPage(dirIndex.getLeft(), dirIndex.getRight())
+								.subscribeOn(Rx.VIRTUAL),
 						false,
 						indexConcurrency)
 				.blockingAwait();

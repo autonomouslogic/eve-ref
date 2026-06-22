@@ -26,9 +26,7 @@ public class Main {
 
 	@SneakyThrows
 	public void start(String[] args) {
-		VirtualThreads.onVirtualThread(() -> {
-			commandRunner.runCommand(args);
-		});
+		commandRunner.runCommand(args);
 	}
 
 	public static void main(String[] args) {
@@ -53,7 +51,7 @@ public class Main {
 		});
 		try {
 			var main = MainComponent.create().createMain();
-			main.start(args);
+			VirtualThreads.onVirtualThread(() -> main.start(args));
 		} catch (Throwable e) {
 			log.fatal("Root error, exiting", e);
 			Sentry.captureException(e, scope -> scope.setLevel(SentryLevel.FATAL));

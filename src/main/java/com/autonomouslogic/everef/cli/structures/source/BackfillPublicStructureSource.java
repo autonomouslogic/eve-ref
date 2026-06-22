@@ -42,7 +42,7 @@ public class BackfillPublicStructureSource implements StructureSource {
 								.toList();
 					}
 					log.debug("Found {} public structure ids from backfill", ids.size());
-					return Flowable.fromIterable(ids).doOnNext(id -> {
+					return Flowable.fromIterable(ids).observeOn(Rx.VIRTUAL).doOnNext(id -> {
 						structureStore.getOrInitStructure(id);
 						structureStore.updateTimestamp(id, LAST_STRUCTURE_GET, Instant.EPOCH);
 						structureStore.updateTimestamp(id, LAST_SEEN_PUBLIC_STRUCTURE, Instant.EPOCH);

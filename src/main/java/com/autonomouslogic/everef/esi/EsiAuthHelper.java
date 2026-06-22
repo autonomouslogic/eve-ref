@@ -141,6 +141,7 @@ public class EsiAuthHelper {
 	@SneakyThrows
 	public Completable putCharacterLogin(CharacterLogin characterLogin) {
 		return Completable.defer(() -> Rx.toSingle(dynamoAsyncMapper.putItemFromKeyObject(characterLogin))
+				.observeOn(Rx.VIRTUAL)
 				.ignoreElement());
 	}
 

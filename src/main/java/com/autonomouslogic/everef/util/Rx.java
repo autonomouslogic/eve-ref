@@ -22,22 +22,22 @@ public class Rx {
 
 	@Deprecated
 	public static <T> FlowableTransformer<T, T> offloadFlowable() {
-		return upstream -> upstream.subscribeOn(Schedulers.io());
+		return upstream -> upstream.subscribeOn(Schedulers.io()).observeOn(Rx.VIRTUAL);
 	}
 
 	@Deprecated
 	public static <T> MaybeTransformer<T, T> offloadMaybe() {
-		return upstream -> upstream.subscribeOn(Schedulers.io());
+		return upstream -> upstream.subscribeOn(Schedulers.io()).observeOn(Rx.VIRTUAL);
 	}
 
 	@Deprecated
 	public static <T> SingleTransformer<T, T> offloadSingle() {
-		return upstream -> upstream.subscribeOn(Schedulers.io());
+		return upstream -> upstream.subscribeOn(Schedulers.io()).observeOn(Rx.VIRTUAL);
 	}
 
 	@Deprecated
 	public static CompletableTransformer offloadCompletable() {
-		return upstream -> upstream.subscribeOn(Schedulers.io());
+		return upstream -> upstream.subscribeOn(Schedulers.io()).observeOn(Rx.VIRTUAL);
 	}
 
 	@Deprecated

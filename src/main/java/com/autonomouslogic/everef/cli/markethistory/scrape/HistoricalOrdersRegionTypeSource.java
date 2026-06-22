@@ -7,6 +7,7 @@ import com.autonomouslogic.everef.http.OkHttpWrapper;
 import com.autonomouslogic.everef.model.RegionTypePair;
 import com.autonomouslogic.everef.url.DataUrl;
 import com.autonomouslogic.everef.util.CompressUtil;
+import com.autonomouslogic.everef.util.Rx;
 import com.autonomouslogic.everef.util.TempFiles;
 import com.autonomouslogic.everef.util.archive.ArchivePathFactories;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -115,17 +116,18 @@ class HistoricalOrdersRegionTypeSource implements RegionTypeSource {
 
 	private Maybe<File> downloadFile(DataUrl url) {
 		return Maybe.defer(() -> {
-			var file = tempFiles
-					.tempFile("market-orders", ArchivePathFactories.MARKET_ORDERS.getSuffix())
-					.toFile();
-			try (var response = okHttpWrapper.download(url.toString(), file)) {
-				if (response.code() != 200) {
-					return Maybe.error(
-							new RuntimeException("Failed to download " + url + " with code " + response.code()));
-				}
-				return Maybe.just(file);
-			}
-		});
+					var file = tempFiles
+							.tempFile("market-orders", ArchivePathFactories.MARKET_ORDERS.getSuffix())
+							.toFile();
+					try (var response = okHttpWrapper.download(url.toString(), file)) {
+						if (response.code() != 200) {
+							return Maybe.error(new RuntimeException(
+									"Failed to download " + url + " with code " + response.code()));
+						}
+						return Maybe.just(file);
+					}
+				})
+				.observeOn(Rx.VIRTUAL);
 	}
 
 	@SneakyThrows

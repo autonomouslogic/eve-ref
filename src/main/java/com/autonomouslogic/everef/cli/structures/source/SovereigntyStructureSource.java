@@ -8,6 +8,7 @@ import com.autonomouslogic.everef.cli.structures.StructureScrapeHelper;
 import com.autonomouslogic.everef.cli.structures.StructureStore;
 import com.autonomouslogic.everef.esi.EsiConstants;
 import com.autonomouslogic.everef.openapi.esi.api.SovereigntyApi;
+import com.autonomouslogic.everef.util.Rx;
 import io.reactivex.rxjava3.core.Flowable;
 import java.time.Instant;
 import javax.inject.Inject;
@@ -46,7 +47,7 @@ public class SovereigntyStructureSource implements StructureSource {
 			var structures = response.getData().stream().distinct().toList();
 			var lastModified = structureScrapeHelper.getLastModified(response).orElse(timestamp);
 			log.debug("Fetched {} sovereignty structure ids", structures.size());
-			return Flowable.fromIterable(structures).map(structure -> {
+			return Flowable.fromIterable(structures).observeOn(Rx.VIRTUAL).map(structure -> {
 				var id = structure.getStructureId();
 				var type = structure.getStructureTypeId();
 				var system = structure.getSolarSystemId();
