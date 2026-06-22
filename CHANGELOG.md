@@ -1,5 +1,14 @@
 EVE Ref Changelog
 
+## [2.78.5](https://github.com/autonomouslogic/eve-ref/compare/2.78.4...2.78.5) (2026-06-22)
+
+
+### Bug Fixes
+
+* Fixed data index upload concurrency ([72e06ce](https://github.com/autonomouslogic/eve-ref/commit/72e06ce1ca7e643d85414e8b56a55ea37b5fe840))
+* Minor revert ([1e66f64](https://github.com/autonomouslogic/eve-ref/commit/1e66f64475ab9e1f643dd3a25b571a55b3cc7f26))
+* Thread-safety for DecimalFormat ([8aa8d89](https://github.com/autonomouslogic/eve-ref/commit/8aa8d8957f8828b5b6b5dc30497687861e53f72e))
+
 ## [2.78.4](https://github.com/autonomouslogic/eve-ref/compare/2.78.3...2.78.4) (2026-06-21)
 
 
