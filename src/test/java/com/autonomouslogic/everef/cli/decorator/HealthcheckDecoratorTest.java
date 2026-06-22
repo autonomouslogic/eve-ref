@@ -180,7 +180,8 @@ public class HealthcheckDecoratorTest {
 		doThrow(new RuntimeException("test error message")).when(testCommand).run();
 		var error = assertThrows(
 				RuntimeException.class,
-				() -> healthcheckDecorator.decorate(testCommand).run());
+				() -> VirtualThreads.onVirtualThread(
+						() -> healthcheckDecorator.decorate(testCommand).run()));
 		assertEquals("test error message", error.getMessage());
 		verify(testCommand).run();
 		var start = server.takeRequest();
