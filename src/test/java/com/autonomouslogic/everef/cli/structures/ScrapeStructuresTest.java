@@ -3,6 +3,7 @@ package com.autonomouslogic.everef.cli.structures;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
+import com.autonomouslogic.commons.concurrent.VirtualThreads;
 import com.autonomouslogic.everef.cli.publiccontracts.ContractsFileBuilder;
 import com.autonomouslogic.everef.cli.publiccontracts.ContractsScrapeMeta;
 import com.autonomouslogic.everef.esi.LocationPopulator;
@@ -137,18 +138,18 @@ public class ScrapeStructuresTest {
 	}
 
 	@Test
-	void shouldScrapePublicStructures() {
+	void shouldScrapePublicStructures() throws InterruptedException {
 		publicStructures.put(1000000000001L, Map.of("name", "Test Structure 1"));
-		scrapeStructures.run();
+		VirtualThreads.onVirtualThread(scrapeStructures::run);
 		verifyScrape(container(publicStructure()));
 	}
 
 	@Test
-	void shouldUpdatePublicStructures() {
+	void shouldUpdatePublicStructures() throws InterruptedException {
 		loadPreviousScrape(container(publicStructure()));
 		publicStructures.put(1000000000001L, Map.of("name", "Test Structure 1 Updated"));
 		time = time.plusDays(1);
-		scrapeStructures.run();
+		VirtualThreads.onVirtualThread(scrapeStructures::run);
 		verifyScrape(container(publicStructure()
 				.put("name", "Test Structure 1 Updated")
 				.put("last_seen_public_structure", "2021-01-02T00:00:00Z")
@@ -156,19 +157,19 @@ public class ScrapeStructuresTest {
 	}
 
 	@Test
-	void shouldNotPreserveExtraDataFromPreviousScrapes() {
+	void shouldNotPreserveExtraDataFromPreviousScrapes() throws InterruptedException {
 		loadPreviousScrape(container(publicStructure().put("some_key", "some_value")));
 		publicStructures.put(1000000000001L, Map.of("name", "Test Structure 1"));
-		scrapeStructures.run();
+		VirtualThreads.onVirtualThread(scrapeStructures::run);
 		verifyScrape(container(publicStructure()));
 	}
 
 	@Test
-	void shouldRescrapePreviousStructures() {
+	void shouldRescrapePreviousStructures() throws InterruptedException {
 		loadPreviousScrape(container(publicStructure()));
 		nonPublicStructures.put(1000000000001L, Map.of("name", "Test Structure 1 Updated"));
 		time = time.plusDays(1);
-		scrapeStructures.run();
+		VirtualThreads.onVirtualThread(scrapeStructures::run);
 		verifyScrape(container(publicStructure()
 				.put("name", "Test Structure 1 Updated")
 				.put("is_public_structure", false)
@@ -176,20 +177,20 @@ public class ScrapeStructuresTest {
 	}
 
 	@Test
-	void shouldPreserveStructures() {
+	void shouldPreserveStructures() throws InterruptedException {
 		loadPreviousScrape(container(publicStructure()));
 		time = time.plusDays(1);
-		scrapeStructures.run();
+		VirtualThreads.onVirtualThread(scrapeStructures::run);
 		verifyScrape(
 				container(publicStructure().put("is_public_structure", false).put("is_gettable_structure", false)));
 	}
 
 	@Test
-	void shouldCheckMarkets() {
+	void shouldCheckMarkets() throws InterruptedException {
 		publicStructures.put(
 				1000000000001L, Map.of("name", "Test Structure 1", "type_id", EveConstants.KEEPSTAR_TYPE_ID));
 		marketStructures.add(1000000000001L);
-		scrapeStructures.run();
+		VirtualThreads.onVirtualThread(scrapeStructures::run);
 		verifyScrape(container(publicStructure()
 				.put("type_id", EveConstants.KEEPSTAR_TYPE_ID)
 				.put("is_market_structure", true)
@@ -197,28 +198,28 @@ public class ScrapeStructuresTest {
 	}
 
 	@Test
-	void shouldOnlyTryMarketsForStructureTypesWhereMarketModulesCanBeApplied() {
+	void shouldOnlyTryMarketsForStructureTypesWhereMarketModulesCanBeApplied() throws InterruptedException {
 		publicStructures.put(
 				1000000000001L, Map.of("name", "Test Structure 1", "type_id", EveConstants.ASTRAHUS_HUB_TYPE_ID));
 		marketStructures.add(1000000000001L); // Will never be called.
-		scrapeStructures.run();
+		VirtualThreads.onVirtualThread(scrapeStructures::run);
 		verifyScrape(container(publicStructure().put("type_id", EveConstants.ASTRAHUS_HUB_TYPE_ID)));
 	}
 
 	@ParameterizedTest
 	@ValueSource(strings = {"location_id", "station_id"})
-	void shouldScrapeStructuresFromMarketOrders(String prop) {
+	void shouldScrapeStructuresFromMarketOrders(String prop) throws InterruptedException {
 		marketOrders.add(objectMapper.createObjectNode().put(prop, 1000000000001L));
 		marketOrders.add(objectMapper.createObjectNode().put(prop, 60000001L));
 		nonPublicStructures.put(1000000000001L, Map.of("name", "Test Structure 1"));
 		nonPublicStructures.put(60000001L, Map.of("name", "Should not be scraped"));
-		scrapeStructures.run();
+		VirtualThreads.onVirtualThread(scrapeStructures::run);
 		verifyScrape(container(nonPublicStructure()));
 	}
 
 	@ParameterizedTest
 	@ValueSource(strings = {"location_id", "station_id"})
-	void shouldPreserveLocationOnHiddenStructuresFromMarketOrders(String prop) {
+	void shouldPreserveLocationOnHiddenStructuresFromMarketOrders(String prop) throws InterruptedException {
 		marketOrders.add(objectMapper
 				.createObjectNode()
 				.put(prop, 1000000000001L)
@@ -231,25 +232,25 @@ public class ScrapeStructuresTest {
 				.put("region_id", 10000002)
 				.put("constellation_id", 20000002)
 				.put("system_id", 30000002));
-		scrapeStructures.run();
+		VirtualThreads.onVirtualThread(scrapeStructures::run);
 		verifyScrape(container(hiddenStructureWithLocation()));
 	}
 
 	@ParameterizedTest
 	@ValueSource(strings = {"start_location_id", "end_location_id"})
-	void shouldScrapeStructuresFromPublicContracts(String prop) {
+	void shouldScrapeStructuresFromPublicContracts(String prop) throws InterruptedException {
 		publicContracts.add(
 				objectMapper.createObjectNode().put(prop, 1000000000001L).put("contract_id", 1));
 		publicContracts.add(objectMapper.createObjectNode().put(prop, 60000001L).put("contract_id", 2));
 		nonPublicStructures.put(1000000000001L, Map.of("name", "Test Structure 1"));
 		nonPublicStructures.put(60000001L, Map.of("name", "Should not be scraped"));
-		scrapeStructures.run();
+		VirtualThreads.onVirtualThread(scrapeStructures::run);
 		verifyScrape(container(nonPublicStructure()));
 	}
 
 	@ParameterizedTest
 	@ValueSource(strings = {"start_location_id", "station_id"})
-	void shouldPreserveLocationOnHiddenStructuresFromPublicContracts(String prop) {
+	void shouldPreserveLocationOnHiddenStructuresFromPublicContracts(String prop) throws InterruptedException {
 		publicContracts.add(objectMapper
 				.createObjectNode()
 				.put(prop, 1000000000001L)
@@ -264,12 +265,12 @@ public class ScrapeStructuresTest {
 				.put("region_id", 10000002)
 				.put("constellation_id", 20000002)
 				.put("system_id", 30000002));
-		scrapeStructures.run();
+		VirtualThreads.onVirtualThread(scrapeStructures::run);
 		verifyScrape(container(hiddenStructureWithLocation()));
 	}
 
 	@Test
-	void shouldNotPreserveEndLocationOnHiddenStructuresFromPublicContracts() {
+	void shouldNotPreserveEndLocationOnHiddenStructuresFromPublicContracts() throws InterruptedException {
 		publicContracts.add(objectMapper
 				.createObjectNode()
 				.put("end_location_id", 1000000000001L)
@@ -279,7 +280,7 @@ public class ScrapeStructuresTest {
 				.put("system_id", 30000001));
 		publicContracts.add(
 				objectMapper.createObjectNode().put("end_location", 60000001L).put("contract_id", 2));
-		scrapeStructures.run();
+		VirtualThreads.onVirtualThread(scrapeStructures::run);
 		verifyScrape(container(objectMapper
 				.createObjectNode()
 				.put("structure_id", 1000000000001L)
@@ -290,7 +291,7 @@ public class ScrapeStructuresTest {
 	}
 
 	@Test
-	void shouldNotScrapeSovereigntyStructures() {
+	void shouldNotScrapeSovereigntyStructures() throws InterruptedException {
 		sovereigntyStructures.put(
 				1000000000001L,
 				Map.of(
@@ -299,33 +300,33 @@ public class ScrapeStructuresTest {
 						"alliance_id", 1300000001,
 						"solar_system_id", 300000001));
 		nonPublicStructures.put(1000000000001L, Map.of("name", "Should not scrape"));
-		scrapeStructures.run();
+		VirtualThreads.onVirtualThread(scrapeStructures::run);
 		verifyScrape(noStructures());
 	}
 
 	@Test
-	void shouldRemoveOldStructures() {
+	void shouldRemoveOldStructures() throws InterruptedException {
 		loadPreviousScrape(container(oldStructure()));
 		nonPublicStructures.put(1000000000001L, Map.of("name", "Should not scrape"));
-		scrapeStructures.run();
+		VirtualThreads.onVirtualThread(scrapeStructures::run);
 		verifyScrape(noStructures());
 	}
 
 	@Test
-	void shouldPreserveLocationsOnOldStructures() {
+	void shouldPreserveLocationsOnOldStructures() throws InterruptedException {
 		var structure = publicStructure()
 				.put("region_id", 10000001)
 				.put("constellation_id", 20000001)
 				.put("system_id", 30000001);
 		loadPreviousScrape(container(structure));
-		scrapeStructures.run();
+		VirtualThreads.onVirtualThread(scrapeStructures::run);
 		verifyScrape(container(structure.put("is_gettable_structure", false).put("is_public_structure", false)));
 	}
 
 	@Test
-	void shouldPopulateLocations() {
+	void shouldPopulateLocations() throws InterruptedException {
 		publicStructures.put(1000000000001L, Map.of("name", "Test Structure 1", "system_id", 30000001));
-		scrapeStructures.run();
+		VirtualThreads.onVirtualThread(scrapeStructures::run);
 		verifyScrape(container(publicStructure()
 				.put("region_id", 10000001)
 				.put("constellation_id", 20000001)
@@ -333,34 +334,34 @@ public class ScrapeStructuresTest {
 	}
 
 	@Test
-	void shouldSetFirstSeenOnNewStructures() {
+	void shouldSetFirstSeenOnNewStructures() throws InterruptedException {
 		publicStructures.put(1000000000001L, Map.of("name", "Test Structure 1"));
-		scrapeStructures.run();
+		VirtualThreads.onVirtualThread(scrapeStructures::run);
 		verifyScrape(container(publicStructure()));
 	}
 
 	@Test
-	void shouldNotPopulateFirstSeenOnExistingStructures() {
+	void shouldNotPopulateFirstSeenOnExistingStructures() throws InterruptedException {
 		loadPreviousScrape(container(publicStructure()));
 		previousScrape.withObject("1000000000001").remove("first_seen");
 		publicStructures.put(1000000000001L, Map.of("name", "Test Structure 1"));
-		scrapeStructures.run();
+		VirtualThreads.onVirtualThread(scrapeStructures::run);
 		assertNull(loadScrape().get("1000000000001").get("first_seen"));
 	}
 
 	@Test
-	void shouldNotUpdatePopulateFirstSeenOnExistingStructures() {
+	void shouldNotUpdatePopulateFirstSeenOnExistingStructures() throws InterruptedException {
 		loadPreviousScrape(container(publicStructure()));
 		previousScrape.withObject("1000000000001").put("first_seen", "2000-01-01T00:00:00Z");
 		publicStructures.put(1000000000001L, Map.of("name", "Test Structure 1"));
-		scrapeStructures.run();
+		VirtualThreads.onVirtualThread(scrapeStructures::run);
 		assertEquals(
 				"2000-01-01T00:00:00Z",
 				loadScrape().get("1000000000001").get("first_seen").textValue());
 	}
 
 	@Test
-	void shouldExecuteDataIndex() {
+	void shouldExecuteDataIndex() throws InterruptedException {
 		publicStructures.put(1000000000001L, Map.of("name", "Test Structure 1"));
 		scrapeStructures
 				.setScrapeTime(ZonedDateTime.parse("2020-01-02T03:04:05Z"))

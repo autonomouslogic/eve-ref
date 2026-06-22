@@ -3,6 +3,7 @@ package com.autonomouslogic.everef.cli;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
+import com.autonomouslogic.commons.concurrent.VirtualThreads;
 import com.autonomouslogic.everef.util.archive.StandardArchivePathFactory;
 import java.time.ZonedDateTime;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,8 +26,8 @@ class ScrapeMarketsPricesTest {
 	}
 
 	@Test
-	void shouldCallGenericScraperForAllDatasets() {
-		command.run();
+	void shouldCallGenericScraperForAllDatasets() throws InterruptedException {
+		VirtualThreads.onVirtualThread(command::run);
 		verify(genericHistoryScraper, times(1))
 				.fetchAndUpload(anyString(), any(StandardArchivePathFactory.class), any(ZonedDateTime.class));
 	}

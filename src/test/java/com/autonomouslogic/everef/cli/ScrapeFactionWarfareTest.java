@@ -3,8 +3,10 @@ package com.autonomouslogic.everef.cli;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
+import com.autonomouslogic.commons.concurrent.VirtualThreads;
 import com.autonomouslogic.everef.util.archive.StandardArchivePathFactory;
 import java.time.ZonedDateTime;
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,8 +27,9 @@ class ScrapeFactionWarfareTest {
 	}
 
 	@Test
+	@SneakyThrows
 	void shouldCallGenericScraperForAllDatasets() {
-		command.run();
+		VirtualThreads.onVirtualThread(command::run);
 		verify(genericHistoryScraper, times(6))
 				.fetchAndUpload(anyString(), any(StandardArchivePathFactory.class), any(ZonedDateTime.class));
 	}

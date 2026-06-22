@@ -9,6 +9,7 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.verify;
 
+import com.autonomouslogic.commons.concurrent.VirtualThreads;
 import com.autonomouslogic.everef.cli.Command;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.test.TestDataUtil;
@@ -82,7 +83,7 @@ public class SlackDecoratorTest {
 	@Test
 	@SneakyThrows
 	void shouldCallDelegateWhenDisabled() {
-		slackDecorator.decorate(testCommand).run();
+		VirtualThreads.onVirtualThread(() -> slackDecorator.decorate(testCommand).run());
 		verify(testCommand).run();
 		testDataUtil.assertNoMoreRequests(server);
 	}
@@ -93,7 +94,7 @@ public class SlackDecoratorTest {
 			key = "SLACK_WEBHOOK_URL",
 			value = "http://localhost:" + TestDataUtil.TEST_PORT + "/webhook?key=val")
 	void shouldReportSuccess() {
-		slackDecorator.decorate(testCommand).run();
+		VirtualThreads.onVirtualThread(() -> slackDecorator.decorate(testCommand).run());
 		verify(testCommand).run();
 		var request = server.takeRequest();
 		testDataUtil.assertRequest(request, "POST", "/webhook?key=val", body -> {
@@ -123,7 +124,7 @@ public class SlackDecoratorTest {
 				.run();
 		var error = assertThrows(
 				RuntimeException.class,
-				() -> slackDecorator.decorate(testCommand).run());
+				() -> VirtualThreads.onVirtualThread(() -> slackDecorator.decorate(testCommand).run()));
 		error.printStackTrace();
 		assertEquals("test error message", error.getMessage());
 		verify(testCommand).run();
@@ -153,7 +154,7 @@ public class SlackDecoratorTest {
 			value = "http://localhost:" + TestDataUtil.TEST_PORT + "/webhook?key=val")
 	@SetEnvironmentVariable(key = "SLACK_REPORT_SUCCESS", value = "false")
 	void shouldNotReportSuccessWhenConfiguredNotTo() {
-		slackDecorator.decorate(testCommand).run();
+		VirtualThreads.onVirtualThread(() -> slackDecorator.decorate(testCommand).run());
 		verify(testCommand).run();
 		testDataUtil.assertNoMoreRequests(server);
 	}
@@ -168,7 +169,7 @@ public class SlackDecoratorTest {
 		doThrow(new RuntimeException("test error message")).when(testCommand).run();
 		var error = assertThrows(
 				RuntimeException.class,
-				() -> slackDecorator.decorate(testCommand).run());
+				() -> VirtualThreads.onVirtualThread(() -> slackDecorator.decorate(testCommand).run()));
 		assertEquals("test error message", error.getMessage());
 		verify(testCommand).run();
 		testDataUtil.assertNoMoreRequests(server);
@@ -184,7 +185,7 @@ public class SlackDecoratorTest {
 		doThrow(new RuntimeException("test error message")).when(testCommand).run();
 		var error = assertThrows(
 				RuntimeException.class,
-				() -> slackDecorator.decorate(testCommand).run());
+				() -> VirtualThreads.onVirtualThread(() -> slackDecorator.decorate(testCommand).run()));
 		assertEquals("test error message", error.getMessage());
 		verify(testCommand).run();
 		var request = server.takeRequest();

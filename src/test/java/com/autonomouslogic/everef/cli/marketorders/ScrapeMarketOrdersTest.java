@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 import com.autonomouslogic.commons.ListUtil;
 import com.autonomouslogic.commons.ResourceUtil;
+import com.autonomouslogic.commons.concurrent.VirtualThreads;
 import com.autonomouslogic.everef.esi.LocationPopulator;
 import com.autonomouslogic.everef.openapi.esi.model.GetUniverseSystemsSystemIdOk;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
@@ -156,11 +157,11 @@ public class ScrapeMarketOrdersTest {
 
 	@Test
 	@SneakyThrows
-	void shouldScrapeMarketOrders() {
+	void shouldScrapeMarketOrders() throws InterruptedException {
 		// Run.
-		scrapeMarketOrders
+		VirtualThreads.onVirtualThread(() -> scrapeMarketOrders
 				.setScrapeTime(ZonedDateTime.parse("2020-01-02T03:04:05Z"))
-				.run();
+				.run());
 		// Get saved file.
 		var archiveFile = "base/market-orders/history/2020/2020-01-02/market-orders-2020-01-02_03-04-05.v3.csv.bz2";
 		var latestFile = "base/market-orders/market-orders-latest.v3.csv.bz2";
