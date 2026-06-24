@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.verify;
 
+import com.autonomouslogic.commons.concurrent.VirtualThreads;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.test.MockS3Adapter;
 import com.autonomouslogic.everef.test.TestDataUtil;
@@ -107,7 +108,7 @@ public class ScrapeFreelanceJobsTest {
 	@Test
 	@SneakyThrows
 	void shouldFetchEmptyJobs() {
-		scrapeFreelanceJobs.run();
+		VirtualThreads.onVirtualThread(scrapeFreelanceJobs::run);
 
 		var latestRequest = server.takeRequest();
 		assertEquals(
@@ -124,7 +125,7 @@ public class ScrapeFreelanceJobsTest {
 		createFreelanceJob(1, Instant.now());
 		createFreelanceJob(2, Instant.now());
 
-		scrapeFreelanceJobs.run();
+		VirtualThreads.onVirtualThread(scrapeFreelanceJobs::run);
 
 		var latestRequest = server.takeRequest();
 		assertEquals(
@@ -149,7 +150,7 @@ public class ScrapeFreelanceJobsTest {
 
 		var time = ZonedDateTime.parse("2020-01-02T03:04:05Z");
 		scrapeFreelanceJobs.setScrapeTime(time);
-		scrapeFreelanceJobs.run();
+		VirtualThreads.onVirtualThread(scrapeFreelanceJobs::run);
 
 		server.takeRequest(); // latest file download (404)
 		server.takeRequest(); // index
@@ -213,7 +214,7 @@ public class ScrapeFreelanceJobsTest {
 		var job2 = createFreelanceJob(2, Instant.now());
 		var job3 = createFreelanceJob(3, Instant.now());
 
-		scrapeFreelanceJobs.run();
+		VirtualThreads.onVirtualThread(scrapeFreelanceJobs::run);
 
 		server.takeRequest(); // latest file download (200)
 		server.takeRequest(); // index
@@ -251,7 +252,7 @@ public class ScrapeFreelanceJobsTest {
 		createFreelanceJob(1, lastModified);
 		createFreelanceJob(2, Instant.parse("2020-01-02T00:00:00Z"));
 
-		scrapeFreelanceJobs.run();
+		VirtualThreads.onVirtualThread(scrapeFreelanceJobs::run);
 
 		server.takeRequest(); // latest file download (200)
 		server.takeRequest(); // index
@@ -299,7 +300,7 @@ public class ScrapeFreelanceJobsTest {
 		var secondJob = firstJob.job().deepCopy().put("last_modified", secondModified.toString());
 		jobsIndex.add(secondJob);
 
-		scrapeFreelanceJobs.run();
+		VirtualThreads.onVirtualThread(scrapeFreelanceJobs::run);
 
 		server.takeRequest(); // latest file download (200)
 		server.takeRequest(); // index

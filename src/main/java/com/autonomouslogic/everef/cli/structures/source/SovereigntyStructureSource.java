@@ -3,11 +3,12 @@ package com.autonomouslogic.everef.cli.structures.source;
 import static com.autonomouslogic.everef.cli.structures.ScrapeStructures.IS_SOVEREIGNTY_STRUCTURE;
 import static com.autonomouslogic.everef.cli.structures.ScrapeStructures.LAST_SEEN_SOVEREIGNTY_STRUCTURE;
 
+import com.autonomouslogic.commons.concurrent.VirtualThreads;
 import com.autonomouslogic.everef.cli.structures.StructureScrapeHelper;
 import com.autonomouslogic.everef.cli.structures.StructureStore;
 import com.autonomouslogic.everef.esi.EsiConstants;
 import com.autonomouslogic.everef.openapi.esi.api.SovereigntyApi;
-import com.autonomouslogic.everef.util.VirtualThreads;
+import com.autonomouslogic.everef.util.Rx;
 import io.reactivex.rxjava3.core.Flowable;
 import java.time.Instant;
 import javax.inject.Inject;
@@ -37,7 +38,7 @@ public class SovereigntyStructureSource implements StructureSource {
 	@Override
 	public Flowable<Long> getStructures() {
 		return Flowable.defer(() -> {
-			var response = VirtualThreads.run(() -> sovereigntyApi.getSovereigntyStructuresWithHttpInfo(
+			var response = VirtualThreads.onVirtualThread(() -> sovereigntyApi.getSovereigntyStructuresWithHttpInfo(
 					EsiConstants.Datasource.tranquility.toString(), null));
 			if (response.getStatusCode() != 200) {
 				return Flowable.error(new RuntimeException(
@@ -46,24 +47,22 @@ public class SovereigntyStructureSource implements StructureSource {
 			var structures = response.getData().stream().distinct().toList();
 			var lastModified = structureScrapeHelper.getLastModified(response).orElse(timestamp);
 			log.debug("Fetched {} sovereignty structure ids", structures.size());
-			return Flowable.fromIterable(structures)
-					.observeOn(VirtualThreads.SCHEDULER)
-					.map(structure -> {
-						var id = structure.getStructureId();
-						var type = structure.getStructureTypeId();
-						var system = structure.getSolarSystemId();
-						var node = structureStore.getOrInitStructure(id);
-						node.put(IS_SOVEREIGNTY_STRUCTURE, true);
-						node.put(LAST_SEEN_SOVEREIGNTY_STRUCTURE, lastModified.toString());
-						if (!node.has("type_id")) {
-							node.put("type_id", type);
-						}
-						if (!node.has("solar_system_id")) {
-							node.put("solar_system_id", system);
-						}
-						structureStore.put(node);
-						return id;
-					});
+			return Flowable.fromIterable(structures).observeOn(Rx.VIRTUAL).map(structure -> {
+				var id = structure.getStructureId();
+				var type = structure.getStructureTypeId();
+				var system = structure.getSolarSystemId();
+				var node = structureStore.getOrInitStructure(id);
+				node.put(IS_SOVEREIGNTY_STRUCTURE, true);
+				node.put(LAST_SEEN_SOVEREIGNTY_STRUCTURE, lastModified.toString());
+				if (!node.has("type_id")) {
+					node.put("type_id", type);
+				}
+				if (!node.has("solar_system_id")) {
+					node.put("solar_system_id", system);
+				}
+				structureStore.put(node);
+				return id;
+			});
 		});
 	}
 }

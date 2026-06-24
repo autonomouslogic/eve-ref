@@ -3,6 +3,7 @@ package com.autonomouslogic.everef.cli.structures;
 import static com.autonomouslogic.everef.util.EveConstants.STANDARD_MARKET_HUB_I_TYPE_ID;
 import static com.autonomouslogic.everef.util.archive.ArchivePathFactories.STRUCTURES;
 
+import com.autonomouslogic.commons.concurrent.VirtualThreads;
 import com.autonomouslogic.everef.cli.Command;
 import com.autonomouslogic.everef.cli.structures.source.Adam4EveBackfillStructureSource;
 import com.autonomouslogic.everef.cli.structures.source.BackfillPublicStructureSource;
@@ -28,7 +29,6 @@ import com.autonomouslogic.everef.util.CompressUtil;
 import com.autonomouslogic.everef.util.JsonUtil;
 import com.autonomouslogic.everef.util.ProgressReporter;
 import com.autonomouslogic.everef.util.TempFiles;
-import com.autonomouslogic.everef.util.VirtualThreads;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -190,7 +190,7 @@ public class ScrapeStructures implements Command {
 
 	@Override
 	public void run() {
-		VirtualThreads.checkThread();
+		VirtualThreads.checkIsVirtual();
 		Completable.concatArray(
 						initLogin(),
 						initScrapeTime(),
@@ -242,7 +242,7 @@ public class ScrapeStructures implements Command {
 	@SneakyThrows
 	private Completable initMarketStructures() {
 		return Completable.fromAction(() -> {
-			var marketHub = VirtualThreads.run(() -> refdataApi.getType(STANDARD_MARKET_HUB_I_TYPE_ID));
+			var marketHub = VirtualThreads.onVirtualThread(() -> refdataApi.getType(STANDARD_MARKET_HUB_I_TYPE_ID));
 			marketStructureTypeIds = marketHub.getCanFitTypes();
 			log.info("Prepared {} market structure type IDs", marketStructureTypeIds.size());
 		});

@@ -1,8 +1,8 @@
 package com.autonomouslogic.everef.esi;
 
+import com.autonomouslogic.commons.concurrent.VirtualThreads;
 import com.autonomouslogic.everef.http.OkHttpWrapper;
 import com.autonomouslogic.everef.openapi.esi.invoker.ApiResponse;
-import com.autonomouslogic.everef.util.VirtualThreads;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.NullNode;
@@ -99,7 +99,9 @@ public class EsiHelper {
 				})
 				.toList();
 
-		var remainingPages = VirtualThreads.onVirtual(() -> VirtualThreads.parallel(tasks));
+		VirtualThreads.checkIsVirtual();
+		var remainingPages =
+				VirtualThreads.callAll(tasks.iterator(), Runtime.getRuntime().availableProcessors());
 
 		allResponses.addAll(remainingPages);
 
@@ -164,9 +166,13 @@ public class EsiHelper {
 					.map(page -> (Callable<List<T>>) () -> decodeResponse(fetchWithRetry(fetcher, page)))
 					.toList();
 
-			var remainingPages = VirtualThreads.onVirtual(() -> VirtualThreads.parallel(tasks)).stream()
-					.flatMap(List::stream)
-					.toList();
+			VirtualThreads.checkIsVirtual();
+			var remainingPages =
+					VirtualThreads.callAll(
+									tasks.iterator(), Runtime.getRuntime().availableProcessors())
+							.stream()
+							.flatMap(List::stream)
+							.toList();
 
 			result.addAll(remainingPages);
 		}

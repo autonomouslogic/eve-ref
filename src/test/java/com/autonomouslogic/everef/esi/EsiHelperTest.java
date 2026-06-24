@@ -3,6 +3,7 @@ package com.autonomouslogic.everef.esi;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import com.autonomouslogic.commons.concurrent.VirtualThreads;
 import com.autonomouslogic.everef.cli.MockDataIndexModule;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.test.TestDataUtil;
@@ -82,7 +83,8 @@ public class EsiHelperTest {
 		server.enqueue(new MockResponse().setResponseCode(200).setBody("page-1").addHeader("X-Pages", "3"));
 		server.enqueue(new MockResponse().setResponseCode(200).setBody("page-2").addHeader("X-Pages", "3"));
 		server.enqueue(new MockResponse().setResponseCode(200).setBody("page-3").addHeader("X-Pages", "3"));
-		var responses = esiHelper.fetchPages(EsiUrl.builder().urlPath("/pages").build());
+		var responses = VirtualThreads.onVirtualThread(
+				() -> esiHelper.fetchPages(EsiUrl.builder().urlPath("/pages").build()));
 		var bodies = getBodies(responses);
 		assertEquals(Set.of("page-1", "page-2", "page-3"), new HashSet<>(bodies));
 		var paths = new HashSet<String>();
