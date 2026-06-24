@@ -103,6 +103,7 @@
   published: true
   raceID: 8
   radius: 250
+  shipTreeGroupID: 26
   soundID: 20072
   volume: 454500
 "3336":
@@ -844,6 +845,7 @@
   published: true
   raceID: 8
   radius: 250
+  shipTreeGroupID: 27
   soundID: 20072
   variationParentTypeID: 645
   volume: 454500
@@ -4515,6 +4517,7 @@
   published: true
   raceID: 8
   radius: 250
+  shipTreeGroupID: 47
   soundID: 20072
   variationParentTypeID: 645
   volume: 454500

@@ -435,6 +435,7 @@
   "meta_group_id" : 1,
   "meta_level" : 0,
   "race_id" : 8,
+  "ship_tree_group_id" : 26,
   "sound_id" : 20072,
   "type_materials" : {
     "34" : {
