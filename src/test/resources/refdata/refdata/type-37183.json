@@ -167,6 +167,7 @@
   "type_id" : 37183,
   "volume" : 40,
   "meta_group_id" : 54,
+  "tech_level" : 1,
   "engineering_rig_global_activities" : [ "research_material", "research_time", "invention", "copying" ],
   "required_skills" : {
     "26252" : 1

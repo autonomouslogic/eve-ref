@@ -30,6 +30,7 @@
   "portion_size" : 100,
   "published" : true,
   "radius" : 300,
+  "tech_level" : 1,
   "volume" : 0.05,
   "type_id" : 202
 }

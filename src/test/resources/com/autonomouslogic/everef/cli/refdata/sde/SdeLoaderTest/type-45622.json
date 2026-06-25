@@ -29,6 +29,7 @@
   "portion_size" : 1,
   "published" : true,
   "race_id" : 4,
+  "tech_level" : 3,
   "variation_parent_type_id" : 45623,
   "volume" : 40,
   "type_id" : 45622,

@@ -27,6 +27,7 @@
   "portion_size" : 1,
   "published" : true,
   "radius" : 100,
+  "tech_level" : 1,
   "volume" : 40,
   "type_id" : 45548
 }

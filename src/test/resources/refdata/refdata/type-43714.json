@@ -139,6 +139,7 @@
   "type_id" : 43714,
   "volume" : 20,
   "meta_group_id" : 54,
+  "tech_level" : 1,
   "engineering_rig_affected_group_ids" : {
     "manufacturing" : [ 25, 31, 420 ]
   },

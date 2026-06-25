@@ -46,6 +46,7 @@
     zh: "贫铀弹 M"
   portionSize: 100
   published: true
+  techLevel: 1
   volume: 0.0125
 "645":
   basePrice: 153900000
@@ -105,6 +106,7 @@
   radius: 250
   shipTreeGroupID: 26
   soundID: 20072
+  techLevel: 1
   volume: 454500
 "3336":
   basePrice: 7500000
@@ -390,6 +392,7 @@
     zh: "怀璧的损伤控制突变质体"
   portionSize: 1
   published: true
+  techLevel: 1
   volume: 1
 "52227":
   description:
@@ -434,6 +437,7 @@
     zh: "深渊损伤控制"
   portionSize: 1
   published: true
+  techLevel: 1
   volume: 5
 "2046":
   description:
@@ -482,6 +486,7 @@
     zh: "损伤控制 I"
   portionSize: 1
   published: true
+  techLevel: 1
   volume: 5
 "2048":
   description:
@@ -530,6 +535,7 @@
     zh: "损伤控制 II"
   portionSize: 1
   published: true
+  techLevel: 2
   variationParentTypeID: 2046
   volume: 5
 "45623":
@@ -613,6 +619,7 @@
   portionSize: 1
   published: true
   raceID: 4
+  techLevel: 3
   volume: 40
 "45622":
   description:
@@ -672,6 +679,7 @@
   portionSize: 1
   published: true
   raceID: 4
+  techLevel: 3
   variationParentTypeID: 45623
   volume: 40
 "45624":
@@ -755,6 +763,7 @@
   portionSize: 1
   published: true
   raceID: 4
+  techLevel: 3
   variationParentTypeID: 45623
   volume: 40
 "22430":
@@ -847,6 +856,7 @@
   radius: 250
   shipTreeGroupID: 27
   soundID: 20072
+  techLevel: 2
   variationParentTypeID: 645
   volume: 454500
 "999":
@@ -881,6 +891,7 @@
     zh: "罪恶级蓝图"
   portionSize: 1
   published: true
+  techLevel: 2
   volume: 0.01
 "1230":
   basePrice: 2000
@@ -2771,6 +2782,7 @@
   portionSize: 1
   published: true
   radius: 100
+  techLevel: 1
   volume: 10
 "37150":
   description:
@@ -2857,6 +2869,7 @@
   portionSize: 1
   published: true
   radius: 100
+  techLevel: 1
   volume: 10
 "43880":
   description:
@@ -2939,6 +2952,7 @@
   portionSize: 1
   published: true
   radius: 100
+  techLevel: 1
   volume: 10
 "43879":
   description:
@@ -3022,6 +3036,7 @@
   portionSize: 1
   published: true
   radius: 100
+  techLevel: 1
   volume: 10
 "43729":
   description:
@@ -3105,6 +3120,7 @@
   portionSize: 1
   published: true
   radius: 100
+  techLevel: 1
   volume: 20
 "43891":
   description:
@@ -3188,6 +3204,7 @@
   portionSize: 1
   published: true
   radius: 100
+  techLevel: 1
   volume: 10
 "43714":
   description:
@@ -3277,6 +3294,7 @@
   portionSize: 1
   published: true
   radius: 100
+  techLevel: 1
   volume: 20
 "37152":
   description:
@@ -3367,6 +3385,7 @@
   portionSize: 1
   published: true
   radius: 100
+  techLevel: 2
   variationParentTypeID: 43732
   volume: 10
 "43704":
@@ -3460,6 +3479,7 @@
   portionSize: 1
   published: true
   radius: 100
+  techLevel: 1
   volume: 40
 "42832":
   basePrice: 1000
@@ -3558,6 +3578,7 @@
   portionSize: 100
   published: true
   radius: 300
+  techLevel: 1
   volume: 0.05
 "24535":
   basePrice: 837360
@@ -3617,6 +3638,7 @@
   portionSize: 5000
   published: true
   radius: 300
+  techLevel: 2
   variationParentTypeID: 202
   volume: 0.05
 "803":
@@ -3655,6 +3677,7 @@
     zh: "雷神愤怒巡航导弹蓝图"
   portionSize: 1
   published: true
+  techLevel: 2
   volume: 0.01
 "45548":
   description:
@@ -3807,6 +3830,7 @@
   portionSize: 1
   published: true
   radius: 100
+  techLevel: 1
   volume: 40
 "37180":
   description:
@@ -3892,6 +3916,7 @@
   portionSize: 1
   published: true
   radius: 100
+  techLevel: 1
   volume: 40
 "37183":
   description:
@@ -3978,6 +4003,7 @@
   portionSize: 1
   published: true
   radius: 100
+  techLevel: 1
   volume: 40
 "35827":
   description:
@@ -4194,6 +4220,7 @@
   portionSize: 1
   published: true
   radius: 100
+  techLevel: 2
   variationParentTypeID: 46490
   volume: 10
 "46158":
@@ -4302,6 +4329,7 @@
   portionSize: 1
   published: true
   radius: 100
+  techLevel: 1
   volume: 10
 "30303":
   description:
@@ -4398,6 +4426,7 @@
   raceID: 1
   radius: 33
   soundID: 20070
+  techLevel: 2
   volume: 18000
 "33674":
   basePrice: 287500
@@ -4450,6 +4479,7 @@
     zh: "奥秘蓝图 L"
   portionSize: 1
   published: true
+  techLevel: 2
   volume: 0.01
 "32307":
   basePrice: 219800000
@@ -4519,6 +4549,7 @@
   radius: 250
   shipTreeGroupID: 47
   soundID: 20072
+  techLevel: 1
   variationParentTypeID: 645
   volume: 454500
 "32308":
@@ -4793,6 +4824,7 @@
     zh: "碳纤维反应配方"
   portionSize: 1
   published: true
+  techLevel: 1
   volume: 0.01
 "57453":
   basePrice: 100000

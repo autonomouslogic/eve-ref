@@ -26,5 +26,6 @@
   "volume" : 0.01,
   "base_price" : 10000000,
   "meta_group_id" : 1,
+  "tech_level" : 1,
   "is_blueprint" : true
 }

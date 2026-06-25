@@ -50,6 +50,7 @@
   "type_id" : 22431,
   "volume" : 0.01,
   "meta_group_id" : 2,
+  "tech_level" : 2,
   "produced_by_blueprints" : {
     "999" : {
       "blueprint_type_id" : 999,

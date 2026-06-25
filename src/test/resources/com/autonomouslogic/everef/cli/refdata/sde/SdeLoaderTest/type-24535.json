@@ -30,6 +30,7 @@
   "portion_size" : 5000,
   "published" : true,
   "radius" : 300,
+  "tech_level" : 2,
   "variation_parent_type_id" : 202,
   "volume" : 0.05,
   "type_id" : 24535

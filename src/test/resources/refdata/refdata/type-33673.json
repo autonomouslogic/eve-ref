@@ -520,6 +520,7 @@
   "meta_level" : 5,
   "race_id" : 1,
   "sound_id" : 20070,
+  "tech_level" : 2,
   "traits" : {
     "role_bonuses" : {
       "5" : {

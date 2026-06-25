@@ -75,6 +75,7 @@
   "volume" : 5,
   "meta_group_id" : 15,
   "meta_level" : 10,
+  "tech_level" : 1,
   "required_skills" : {
     "3394" : 4
   },

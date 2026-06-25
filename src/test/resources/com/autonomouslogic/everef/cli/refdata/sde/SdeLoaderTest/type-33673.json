@@ -33,6 +33,7 @@
   "race_id" : 1,
   "radius" : 33,
   "sound_id" : 20070,
+  "tech_level" : 2,
   "volume" : 18000,
   "type_id" : 33673,
   "traits" : {

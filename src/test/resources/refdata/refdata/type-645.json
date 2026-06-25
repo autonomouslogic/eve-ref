@@ -437,6 +437,7 @@
   "race_id" : 8,
   "ship_tree_group_id" : 26,
   "sound_id" : 20072,
+  "tech_level" : 1,
   "type_materials" : {
     "34" : {
       "material_type_id" : 34,

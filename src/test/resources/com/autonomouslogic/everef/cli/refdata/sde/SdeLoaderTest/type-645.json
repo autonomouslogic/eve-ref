@@ -34,6 +34,7 @@
   "radius" : 250,
   "ship_tree_group_id" : 26,
   "sound_id" : 20072,
+  "tech_level" : 1,
   "volume" : 454500,
   "type_id" : 645,
   "type_materials" : {
