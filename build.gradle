@@ -30,7 +30,7 @@ ext {
 	if (file("local.env").exists()) {
 		file("local.env").withInputStream { envProperties.load(it) }
 	}
-	micronautVersion = "4.10.16"
+	micronautVersion = "5.0.3"
 }
 
 repositories {
