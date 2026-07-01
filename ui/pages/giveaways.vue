@@ -18,6 +18,7 @@ interface Giveaway {
 	value: number,
 	winners: number,
 	endTime: DateTime,
+	started: boolean,
 	i: number
 }
 
@@ -42,15 +43,21 @@ const giveawayRegistry: Record<string, GiveawayCalculator> = {
 
 const weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
-// Fetch upcoming giveaways from API
-const response = await fetch("https://api.prizepixie.fun/v1/guilds/1074946548208783400/channels/1316251424073453568/upcoming-giveaways");
-const apiGiveaways = await response.json();
+// Fetch giveaways from API (both current and upcoming)
+const [upcomingResponse, currentResponse] = await Promise.all([
+	fetch("https://api.prizepixie.fun/v1/guilds/1074946548208783400/channels/1316251424073453568/upcoming-giveaways"),
+	fetch("https://api.prizepixie.fun/v1/guilds/1074946548208783400/channels/1316251424073453568/current-giveaways")
+]);
+
+const upcomingGiveaways = await upcomingResponse.json();
+const currentGiveaways = await currentResponse.json();
+const allApiGiveaways = [...currentGiveaways, ...upcomingGiveaways];
 
 // Convert API response to giveaway objects with calculated values
 const unrolled: Giveaway[] = [];
 let giveawayIndex = 0;
 
-for (const apiGiveaway of apiGiveaways) {
+for (const apiGiveaway of allApiGiveaways) {
 	// Skip cancelled or failed giveaways
 	if (apiGiveaway.cancelled || apiGiveaway.failed) continue;
 
@@ -63,6 +70,7 @@ for (const apiGiveaway of apiGiveaways) {
 		value,
 		winners: apiGiveaway.winners,
 		endTime: DateTime.fromISO(apiGiveaway.endTime),
+		started: apiGiveaway.started,
 		i: giveawayIndex++
 	});
 }
@@ -70,7 +78,7 @@ for (const apiGiveaway of apiGiveaways) {
 unrolled.sort((a, b) => a.endTime.toMillis() - b.endTime.toMillis());
 
 const pastGiveaways = {
-	"July 2026": 8 * 478.70e6,
+	"July 2026": 10 * 478.70e6,
 	"June 2026": 8 * 472.44e6,
 	"May 2026": 10 * 495.28e6,
 	"April 2026": 8 * 441.95e6,
@@ -126,7 +134,10 @@ const totalPastPrizes = Object.values(pastGiveaways).reduce(
 		</thead>
 		<tbody>
 			<tr v-for="giveaway in unrolled" :key="giveaway.i">
-				<td>{{giveaway.name}}</td>
+				<td>
+					{{giveaway.name}}
+					<span v-if="giveaway.started" class="badge">Started</span>
+				</td>
 
 				<td class="text-right">
 					<Money :value="giveaway.value" />
@@ -177,5 +188,9 @@ const totalPastPrizes = Object.values(pastGiveaways).reduce(
 <style scoped>
 p {
   @apply my-4;
+}
+
+.badge {
+  @apply ml-2 px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800;
 }
 </style>
