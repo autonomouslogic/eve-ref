@@ -1246,7 +1246,13 @@ components:
           description: The skills required for this type. The key is the skill type
             ID and the value is the level. This is added by EVE Ref and derived from
             dogma attributes.
+        ship_tree_group_id:
+          type: integer
+          format: int64
         sound_id:
+          type: integer
+          format: int64
+        tech_level:
           type: integer
           format: int64
         traits:

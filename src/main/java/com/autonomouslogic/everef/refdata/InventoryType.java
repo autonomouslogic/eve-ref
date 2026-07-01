@@ -165,6 +165,12 @@ public class InventoryType {
 	Map<Long, TypeMaterial> typeMaterials;
 
 	@JsonProperty
+	Long techLevel;
+
+	@JsonProperty
+	Long shipTreeGroupId;
+
+	@JsonProperty
 	Map<Long, RandomizedTypeMaterial> randomizedTypeMaterials;
 
 	@JsonProperty

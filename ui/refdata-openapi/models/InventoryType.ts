@@ -325,7 +325,19 @@ export interface InventoryType {
      * @type {number}
      * @memberof InventoryType
      */
+    shipTreeGroupId?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof InventoryType
+     */
     soundId?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof InventoryType
+     */
+    techLevel?: number;
     /**
      * 
      * @type {InventoryTypeTraits}
@@ -437,7 +449,9 @@ export function InventoryTypeFromJSONTyped(json: any, ignoreDiscriminator: boole
         'radius': !exists(json, 'radius') ? undefined : json['radius'],
         'randomizedTypeMaterials': !exists(json, 'randomized_type_materials') ? undefined : (mapValues(json['randomized_type_materials'], RandomizedTypeMaterialFromJSON)),
         'requiredSkills': !exists(json, 'required_skills') ? undefined : json['required_skills'],
+        'shipTreeGroupId': !exists(json, 'ship_tree_group_id') ? undefined : json['ship_tree_group_id'],
         'soundId': !exists(json, 'sound_id') ? undefined : json['sound_id'],
+        'techLevel': !exists(json, 'tech_level') ? undefined : json['tech_level'],
         'traits': !exists(json, 'traits') ? undefined : InventoryTypeTraitsFromJSON(json['traits']),
         'typeId': !exists(json, 'type_id') ? undefined : json['type_id'],
         'typeMaterials': !exists(json, 'type_materials') ? undefined : (mapValues(json['type_materials'], TypeMaterialFromJSON)),
@@ -500,7 +514,9 @@ export function InventoryTypeToJSON(value?: InventoryType | null): any {
         'radius': value.radius,
         'randomized_type_materials': value.randomizedTypeMaterials === undefined ? undefined : (mapValues(value.randomizedTypeMaterials, RandomizedTypeMaterialToJSON)),
         'required_skills': value.requiredSkills,
+        'ship_tree_group_id': value.shipTreeGroupId,
         'sound_id': value.soundId,
+        'tech_level': value.techLevel,
         'traits': InventoryTypeTraitsToJSON(value.traits),
         'type_id': value.typeId,
         'type_materials': value.typeMaterials === undefined ? undefined : (mapValues(value.typeMaterials, TypeMaterialToJSON)),
