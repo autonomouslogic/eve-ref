@@ -1,5 +1,24 @@
 EVE Ref Changelog
 
+## [2.78.6](https://github.com/autonomouslogic/eve-ref/compare/2.78.5...2.78.6) (2026-07-01)
+
+
+### Bug Fixes
+
+* Added ship_tree_group_id and tech_level to reference data spec ([98bdb99](https://github.com/autonomouslogic/eve-ref/commit/98bdb99f0422022f3a7c71aae45cf65d9b20bd5b))
+* **ui:** Load giveaways from Prize Pixie API ([#1064](https://github.com/autonomouslogic/eve-ref/issues/1064)) ([0d82a06](https://github.com/autonomouslogic/eve-ref/commit/0d82a06c9c9f86406f5db8bd5fc171f4947b5454))
+
+
+### Miscellaneous Chores
+
+* Minor revert ([2fa6dc4](https://github.com/autonomouslogic/eve-ref/commit/2fa6dc4641ae4cc616ec367fea982dc87160d832))
+
+
+### Tests
+
+* Updated test resources ([8c1c055](https://github.com/autonomouslogic/eve-ref/commit/8c1c055ba2054358969482d6db8fe37f91cc9a70))
+* Updated test resources ([e08ee46](https://github.com/autonomouslogic/eve-ref/commit/e08ee46d5e62078dc1eba435a1566d6563165f8f))
+
 ## [2.78.5](https://github.com/autonomouslogic/eve-ref/compare/2.78.4...2.78.5) (2026-06-22)
 
 
