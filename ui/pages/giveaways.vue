@@ -4,7 +4,6 @@ import {DISCORD_URL} from "~/lib/urls";
 import {getJitaSellPrice} from "~/lib/marketUtils";
 import {PLEX_TYPE_ID} from "~/lib/typeConstants";
 import {DateTime} from "luxon";
-import TypeLink from "~/components/helpers/TypeLink.vue";
 import Money from "~/components/dogma/units/Money.vue";
 import Datetime from "~/components/dogma/units/Datetime.vue";
 import InternalLink from "~/components/helpers/InternalLink.vue";
@@ -14,104 +13,72 @@ useHead({
 	title: "🎉 Giveaways"
 });
 
-interface Prize {
+interface Giveaway {
 	name: string,
-	typeId: number,
-	quantity: number,
-	winners: number,
 	value: number,
-	jitaSpace: boolean,
-	dates: DateTime[],
+	winners: number,
+	endTime: DateTime,
+	started: boolean,
 	i: number
 }
 
-const ASTERO_SCOPE_SYNDICATION = 56880;
-const VEXOR_SCOPE_SYNDICATION = 56882;
-const LESHAK_SCOPE_SYNDICATION = 61182;
-const RUPTURE_SCOPE_SYNDICATION = 56883;
-const STRATIOS_SCOPE_SYNDICATION = 61186;
-const MALLER_SCOPE_SYNDICATION = 56884;
-const OBELISK_SCOPE_SYNDICATION = 61188;
-const FEDERATION_NAVY_COMET_MEDIA_MIASMA = 84115;
-const NIGHTMARE_MEDIA_MIASMA = 84131;
-const VEDMAK_SCOPE_SYNDICATION_YC122_SKIN = 56890;
+// Giveaway registry - add new giveaway types here as needed
+interface GiveawayCalculator {
+	calculateValue: () => Promise<number>;
+}
+
+const giveawayRegistry: Record<string, GiveawayCalculator> = {
+	"Weekend Fleet Pack (50x PLEX, 3 Day Omega)": {
+		calculateValue: async () => {
+			const plexPrice = await getJitaSellPrice(PLEX_TYPE_ID) || 0;
+			return (50 + 500 * 12 / 365 * 3) * plexPrice;
+		}
+	},
+	// Add more giveaway types here: each name maps to a calculator function
+	// Example:
+	// "Maller Scope Syndication YC122 SKIN": {
+	// 	calculateValue: async () => getJitaSellPrice(56884) || 0
+	// }
+};
 
 const weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
-const plexPrice = await getJitaSellPrice(PLEX_TYPE_ID) || 0;
-const fleetPackPrice = (50 + 500 * 12 / 365 * 3) * plexPrice;
+// Fetch giveaways from API (both current and upcoming)
+const [upcomingResponse, currentResponse] = await Promise.all([
+	fetch("https://api.prizepixie.fun/v1/guilds/1074946548208783400/channels/1316251424073453568/upcoming-giveaways"),
+	fetch("https://api.prizepixie.fun/v1/guilds/1074946548208783400/channels/1316251424073453568/current-giveaways")
+]);
 
-const firstFleetPack = DateTime.fromISO("2026-06-05T14:00:00Z");
-const fleetPackDates = [];
-for (let i = 0; i < 4; i++) {
-	fleetPackDates.push(firstFleetPack.plus({days: i * 7}));
-}
+const upcomingGiveaways = await upcomingResponse.json();
+const currentGiveaways = await currentResponse.json();
+const allApiGiveaways = [...currentGiveaways, ...upcomingGiveaways];
 
-const prizes: Prize[] = [
-	{
-		name: "Weekend Fleet Pack (50x PLEX, 3 Day Omega)",
-		value: fleetPackPrice,
-		dates: fleetPackDates,
-		winners: 2
-	} as Prize,
-	// {
-	// 	name: "Weekend Fleet Pack (50x PLEX, 3 Day Omega)",
-	// 	value: fleetPackPrice,
-	// 	dates: [DateTime.fromISO("2026-03-29T03:34:00+09:00")],
-	// 	winners: 10
-	// } as Prize,
-	// {
-	// 	name: "Maller Scope Syndication YC122 SKIN",
-	// 	value: await getJitaSellPrice(MALLER_SCOPE_SYNDICATION) || 0,
-	// 	dates: [DateTime.fromISO("2026-02-07T10:05:00+09:00")],
-	// 	winners: 3
-	// } as Prize,
-	// {
-	// 	name: "Obelisk Scope Syndication YC122 SKIN",
-	// 	value: await getJitaSellPrice(OBELISK_SCOPE_SYNDICATION) || 0,
-	// 	dates: [DateTime.fromISO("2026-02-07T12:07:00+09:00")],
-	// 	winners: 1
-	// } as Prize,
-	// {
-	// 	name: "Vedmak Scope Syndication YC122 SKIN",
-	// 	value: await getJitaSellPrice(VEDMAK_SCOPE_SYNDICATION_YC122_SKIN) || 0,
-	// 	dates: [DateTime.fromISO("2026-02-07T14:08:00+09:00")],
-	// 	winners: 2
-	// } as Prize,
-];
+// Convert API response to giveaway objects with calculated values
+const unrolled: Giveaway[] = [];
+let giveawayIndex = 0;
 
-var i = 0;
-for (let prize of prizes) {
-	if (prize.quantity == undefined) {
-		prize.quantity = 1;
-	}
-	if (prize.winners == undefined) {
-		prize.winners = 1;
-	}
-	if (prize.value == undefined && prize.typeId != undefined) {
-		const price = await getJitaSellPrice(prize.typeId) || 0;
-		prize.value = price * prize.quantity;
-	}
-}
+for (const apiGiveaway of allApiGiveaways) {
+	// Skip cancelled or failed giveaways
+	if (apiGiveaway.cancelled || apiGiveaway.failed) continue;
 
-const unrolled = prizes.flatMap(prize => prize.dates.map(date => {
-	return ({
-		name: prize.name,
-		typeId: prize.typeId,
-		quantity: prize.quantity,
-		value: prize.value,
-		winners: prize.winners,
-		jitaSpace: prize.jitaSpace,
-		dates: [date],
-		i : i++
+	// Look up calculator for this giveaway name, calculate value
+	const calculator = giveawayRegistry[apiGiveaway.name];
+	const value = calculator ? await calculator.calculateValue() : 0;
+
+	unrolled.push({
+		name: apiGiveaway.name,
+		value,
+		winners: apiGiveaway.winners,
+		endTime: DateTime.fromISO(apiGiveaway.endTime),
+		started: apiGiveaway.started,
+		i: giveawayIndex++
 	});
-}));
+}
 
-unrolled.sort((a, b) => a.dates[0].toMillis() - b.dates[0].toMillis());
-
-const totalWorth = unrolled.reduce((acc, prize) => acc + prize.value * prize.winners, 0);
+unrolled.sort((a, b) => a.endTime.toMillis() - b.endTime.toMillis());
 
 const pastGiveaways = {
+	"July 2026": 10 * 478.70e6,
 	"June 2026": 8 * 472.44e6,
 	"May 2026": 10 * 495.28e6,
 	"April 2026": 8 * 441.95e6,
@@ -166,40 +133,34 @@ const totalPastPrizes = Object.values(pastGiveaways).reduce(
 			</tr>
 		</thead>
 		<tbody>
-			<tr v-for="prize in unrolled" :key="prize.i">
-
-				<td v-if="prize.name">{{prize.name}}</td>
-				<td v-else-if="prize.typeId">
-					<template v-if="prize.quantity > 1">{{prize.quantity}}x&nbsp;</template>
-					<TypeLink :type-id="prize.typeId" />
-					<template v-if="prize.jitaSpace">
-						- sponsored by <ExternalLink url="https://jita.space" title="Jita Space">Jita.space</ExternalLink>
-					</template>
+			<tr v-for="giveaway in unrolled" :key="giveaway.i">
+				<td>
+					{{giveaway.name}}
+					<span v-if="giveaway.started" class="badge">Started</span>
 				</td>
 
 				<td class="text-right">
-					<Money :value="prize.value" />
+					<Money :value="giveaway.value" />
 				</td>
 
 				<td class="text-right">
-					{{prize.winners}}
+					{{giveaway.winners}}
 				</td>
 
 				<td>
-					<template v-if="prize.dates[0].toMillis() > DateTime.now().toMillis()">
-						<Datetime :millisecond-epoch="prize.dates[0].toMillis()" />
-						<template v-if="prize.dates[0].toUTC().toMillis() - DateTime.now().toUTC().toMillis() < DAY">
+					<template v-if="giveaway.endTime.toMillis() > DateTime.now().toMillis()">
+						<Datetime :millisecond-epoch="giveaway.endTime.toMillis()" />
+						<template v-if="giveaway.endTime.toUTC().toMillis() - DateTime.now().toUTC().toMillis() < DAY">
 							(today)
 						</template>
-						<template v-else-if="prize.dates[0].toMillis() - DateTime.now().toMillis() < 8 * DAY">
-							(next {{weekdays[prize.dates[0].toUTC().weekday - 1]}})
+						<template v-else-if="giveaway.endTime.toMillis() - DateTime.now().toMillis() < 8 * DAY">
+							(next {{weekdays[giveaway.endTime.toUTC().weekday - 1]}})
 						</template>
 					</template>
 					<template v-else>
 						Ended
 					</template>
 				</td>
-
 			</tr>
 		</tbody>
 	</table>
@@ -227,5 +188,9 @@ const totalPastPrizes = Object.values(pastGiveaways).reduce(
 <style scoped>
 p {
   @apply my-4;
+}
+
+.badge {
+  @apply ml-2 px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800;
 }
 </style>

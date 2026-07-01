@@ -26,7 +26,7 @@ dev-ui: specs
 		-u $(shell id -u):$(shell id -g) \
 		-v ./ui:/app \
 		-w /app \
-		-p 3000:3000 \
+		-p 3001:3000 \
 		node:24 \
 		bash -c "npm run dev"
 
