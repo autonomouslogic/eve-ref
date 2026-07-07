@@ -1,5 +1,14 @@
 EVE Ref Changelog
 
+## [2.78.8](https://github.com/autonomouslogic/eve-ref/compare/2.78.7...2.78.8) (2026-07-07)
+
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([#1069](https://github.com/autonomouslogic/eve-ref/issues/1069)) ([a96b239](https://github.com/autonomouslogic/eve-ref/commit/a96b2398eb52957c7de195fbb4b8e20c0d1a285b))
+* **deps:** update flyway monorepo to v12.10.0 ([#1067](https://github.com/autonomouslogic/eve-ref/issues/1067)) ([0c96732](https://github.com/autonomouslogic/eve-ref/commit/0c96732ed69fad792781d3b4aa487a05392ec0d4))
+* **deps:** update font awesome ([#1068](https://github.com/autonomouslogic/eve-ref/issues/1068)) ([301b55c](https://github.com/autonomouslogic/eve-ref/commit/301b55c8a57b600a09e3974ae5f0624ff5050274))
+
 ## [2.78.7](https://github.com/autonomouslogic/eve-ref/compare/2.78.6...2.78.7) (2026-07-06)
 
 
