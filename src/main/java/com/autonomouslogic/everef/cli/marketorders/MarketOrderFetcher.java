@@ -12,7 +12,7 @@ import com.autonomouslogic.everef.esi.LocationPopulator;
 import com.autonomouslogic.everef.esi.UniverseEsi;
 import com.autonomouslogic.everef.util.DataUtil;
 import com.autonomouslogic.everef.util.JsonUtil;
-import com.autonomouslogic.everef.util.VirtualThreads;
+import com.autonomouslogic.everef.util.Rx;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.reactivex.rxjava3.core.Completable;
@@ -55,7 +55,7 @@ public class MarketOrderFetcher {
 	public void fetchMarketOrders() {
 		Flowable.concatArray(fetchPublicOrders(), fetchStructureOrders())
 				.parallel(32)
-				.runOn(VirtualThreads.SCHEDULER)
+				.runOn(Rx.VIRTUAL)
 				.flatMap(order ->
 						locationPopulator.populate(order, "location_id").andThen(Flowable.just(order)))
 				.doOnNext(this::verifyOrderLocation)
@@ -69,7 +69,7 @@ public class MarketOrderFetcher {
 		var regions = universeEsi.getAllRegions();
 		return Flowable.fromIterable(regions)
 				.parallel(4)
-				.runOn(VirtualThreads.SCHEDULER)
+				.runOn(Rx.VIRTUAL)
 				.flatMap(region -> {
 					return fetchOrders(
 									String.format("/markets/%s/orders?order_type=all", region.getRegionId()),
@@ -91,7 +91,7 @@ public class MarketOrderFetcher {
 			return Flowable.fromIterable(structures.values())
 					.filter(s -> s.isMarketStructure())
 					.parallel(4)
-					.runOn(VirtualThreads.SCHEDULER)
+					.runOn(Rx.VIRTUAL)
 					.flatMap(structure -> {
 						return fetchOrders(
 										String.format("/markets/structures/%s/", structure.getStructureId()),

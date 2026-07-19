@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import com.autonomouslogic.commons.ResourceUtil;
+import com.autonomouslogic.commons.concurrent.VirtualThreads;
 import com.autonomouslogic.everef.db.DbAccess;
 import com.autonomouslogic.everef.db.MarketHistoryDao;
 import com.autonomouslogic.everef.db.schema.Tables;
@@ -119,7 +120,7 @@ public class ImportMarketHistoryTest {
 	@SneakyThrows
 	@SetEnvironmentVariable(key = "IMPORT_MARKET_HISTORY_MIN_DATE", value = "2018-01-01")
 	void shouldImportMarketHistory() {
-		importMarketHistory.run();
+		VirtualThreads.onVirtualThread(importMarketHistory::run);
 		assertDailyImports();
 		// assertYearlyImports();
 	}

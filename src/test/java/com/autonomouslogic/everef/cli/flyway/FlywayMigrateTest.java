@@ -2,6 +2,7 @@ package com.autonomouslogic.everef.cli.flyway;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import com.autonomouslogic.commons.concurrent.VirtualThreads;
 import com.autonomouslogic.everef.db.DbAccess;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
 import javax.inject.Inject;
@@ -29,8 +30,8 @@ public class FlywayMigrateTest {
 	}
 
 	@Test
-	void shouldMigrate() {
-		flywayMigrate.run();
+	void shouldMigrate() throws InterruptedException {
+		VirtualThreads.onVirtualThread(flywayMigrate::run);
 
 		dbAccess.flyway().validate();
 		assertEquals("1", dbAccess.flyway().info().current().getVersion().getVersion());

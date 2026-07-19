@@ -1,5 +1,6 @@
 package com.autonomouslogic.everef.cli;
 
+import com.autonomouslogic.commons.concurrent.VirtualThreads;
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.esi.EsiAuthHelper;
 import com.autonomouslogic.everef.esi.EsiConstants;
@@ -17,7 +18,6 @@ import com.autonomouslogic.everef.s3.S3Util;
 import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.url.UrlParser;
 import com.autonomouslogic.everef.util.DiscordNotifier;
-import com.autonomouslogic.everef.util.VirtualThreads;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -139,7 +139,7 @@ public class FetchDonations implements Command {
 	@Override
 	@SneakyThrows
 	public void run() {
-		VirtualThreads.checkThread();
+		VirtualThreads.checkIsVirtual();
 		var accessToken = getAccessToken();
 		var verified = esiAuthHelper.verify(accessToken);
 		var characterId = (int) verified.getCharacterId();
@@ -193,8 +193,8 @@ public class FetchDonations implements Command {
 
 	@SneakyThrows
 	private List<DonationEntry> getCharacterDonations(int characterId, String accessToken) {
-		var entries = esiHelper.fetchPages(
-				page -> VirtualThreads.run(() -> walletApi.getCharactersCharacterIdWalletJournalWithHttpInfo(
+		var entries = esiHelper.fetchPages(page ->
+				VirtualThreads.onVirtualThread(() -> walletApi.getCharactersCharacterIdWalletJournalWithHttpInfo(
 						characterId, EsiConstants.Datasource.tranquility.toString(), null, page, accessToken)));
 		return entries.stream()
 				.peek(e -> log.debug("Character journal: {}", e))
@@ -211,8 +211,8 @@ public class FetchDonations implements Command {
 
 	@SneakyThrows
 	private List<DonationEntry> getCorporationDonations(int corporationId, String accessToken) {
-		var entries = esiHelper.fetchPages(page ->
-				VirtualThreads.run(() -> walletApi.getCorporationsCorporationIdWalletsDivisionJournalWithHttpInfo(
+		var entries = esiHelper.fetchPages(page -> VirtualThreads.onVirtualThread(
+				() -> walletApi.getCorporationsCorporationIdWalletsDivisionJournalWithHttpInfo(
 						corporationId, 1, EsiConstants.Datasource.tranquility.toString(), null, page, accessToken)));
 		return entries.stream()
 				.peek(e -> log.debug("Corporation journal: {}", e))
@@ -266,13 +266,13 @@ public class FetchDonations implements Command {
 
 	@SneakyThrows
 	private @NotNull GetCorporationsCorporationIdOk getCorporation(int corporationId) throws ApiException {
-		return VirtualThreads.run(() -> corporationApi.getCorporationsCorporationId(
+		return VirtualThreads.onVirtualThread(() -> corporationApi.getCorporationsCorporationId(
 				corporationId, EsiConstants.Datasource.tranquility.toString(), null));
 	}
 
 	@SneakyThrows
 	private @NotNull GetCharactersCharacterIdOk getCharacter(int characterId) throws ApiException {
-		return VirtualThreads.run(() -> characterApi.getCharactersCharacterId(
+		return VirtualThreads.onVirtualThread(() -> characterApi.getCharactersCharacterId(
 				characterId, EsiConstants.Datasource.tranquility.toString(), null));
 	}
 

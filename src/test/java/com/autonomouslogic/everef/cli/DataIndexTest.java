@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
+import com.autonomouslogic.commons.concurrent.VirtualThreads;
 import com.autonomouslogic.everef.pug.TimeUtil;
 import com.autonomouslogic.everef.s3.S3Adapter;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
@@ -92,7 +93,9 @@ public class DataIndexTest {
 	@Test
 	@SneakyThrows
 	void shouldGenerateRecursiveIndexPagesFromRoot() {
-		dataIndex.run();
+		VirtualThreads.onVirtualThread(() -> {
+			dataIndex.run();
+		});
 
 		verifyMainIndex();
 		verifyDir1Index();
@@ -117,7 +120,9 @@ public class DataIndexTest {
 	@Test
 	@SneakyThrows
 	void shouldGenerateNonRecursiveIndexPageAtRoot() {
-		dataIndex.setRecursive(false).run();
+		VirtualThreads.onVirtualThread(() -> {
+			dataIndex.setRecursive(false).run();
+		});
 
 		verifyMainIndex();
 		verifyMainIndexJson();
@@ -129,7 +134,9 @@ public class DataIndexTest {
 	@Test
 	@SneakyThrows
 	void shouldGenerateRecursiveIndexPagesFromPrefix() {
-		dataIndex.setPrefix("dir/").run();
+		VirtualThreads.onVirtualThread(() -> {
+			dataIndex.setPrefix("dir/").run();
+		});
 
 		verifyDir1Index();
 		verifyDir1SubIndex();
@@ -146,7 +153,9 @@ public class DataIndexTest {
 	@Test
 	@SneakyThrows
 	void shouldGenerateNonRecursiveIndexPageAtPrefix() {
-		dataIndex.setPrefix("dir/").setRecursive(false).run();
+		VirtualThreads.onVirtualThread(() -> {
+			dataIndex.setPrefix("dir/").setRecursive(false).run();
+		});
 
 		verifyDir1Index();
 		verifyDir1IndexJson();
@@ -162,7 +171,9 @@ public class DataIndexTest {
 		mockS3.putTestObject(BUCKET_NAME, "index.json", "{}", s3Data, Instant.parse("2000-01-01T00:00:00.100Z"));
 		mockS3.putTestObject(BUCKET_NAME, "dir/index.json", "{}", s3Data, Instant.parse("2000-01-01T00:00:01.100Z"));
 
-		dataIndex.run();
+		VirtualThreads.onVirtualThread(() -> {
+			dataIndex.run();
+		});
 
 		// Should still generate the same index files (not including the seed ones)
 		assertEquals(
@@ -190,7 +201,9 @@ public class DataIndexTest {
 				s3Data,
 				Instant.parse("2026-06-01T15:20:41Z"));
 
-		dataIndex.run();
+		VirtualThreads.onVirtualThread(() -> {
+			dataIndex.run();
+		});
 
 		var latestJson = getJsonContent("market-orders/index.json");
 		var archiveJson = getJsonContent("market-orders/history/2026/2026-06-01/index.json");
@@ -250,7 +263,9 @@ public class DataIndexTest {
 				s3Data,
 				Instant.parse("2018-03-09T00:00:00Z"));
 
-		dataIndex.run();
+		VirtualThreads.onVirtualThread(() -> {
+			dataIndex.run();
+		});
 
 		var archiveJson = getJsonContent("market-history/2015/index.json");
 		var file = archiveJson.get("files").get(0);
@@ -268,7 +283,9 @@ public class DataIndexTest {
 				s3Data,
 				Instant.parse("2026-01-05T12:15:57Z"));
 
-		dataIndex.run();
+		VirtualThreads.onVirtualThread(() -> {
+			dataIndex.run();
+		});
 
 		var archiveJson = getJsonContent("reference-data/history/2026/index.json");
 		var file = archiveJson.get("files").get(0);
@@ -286,7 +303,9 @@ public class DataIndexTest {
 				s3Data,
 				Instant.parse("2026-02-10T14:51:39Z"));
 
-		dataIndex.run();
+		VirtualThreads.onVirtualThread(() -> {
+			dataIndex.run();
+		});
 
 		var archiveJson = getJsonContent("ccp/mer/2026/index.json");
 		var file = archiveJson.get("files").get(0);
@@ -304,7 +323,9 @@ public class DataIndexTest {
 				s3Data,
 				Instant.parse("2024-07-21T14:35:00Z"));
 
-		dataIndex.run();
+		VirtualThreads.onVirtualThread(() -> {
+			dataIndex.run();
+		});
 
 		var archiveJson = getJsonContent("fuzzwork/ordersets/2024/2024-07-21/index.json");
 		var file = archiveJson.get("files").get(0);
@@ -323,7 +344,9 @@ public class DataIndexTest {
 				s3Data,
 				Instant.parse("2018-02-24T01:37:13Z"));
 
-		dataIndex.run();
+		VirtualThreads.onVirtualThread(() -> {
+			dataIndex.run();
+		});
 
 		var archiveJson = getJsonContent("fuzzwork/ordersets/backfills/caden-hunter-fuzzwork-ordersets/index.json");
 		var file = archiveJson.get("files").get(0);

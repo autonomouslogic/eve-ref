@@ -4,7 +4,7 @@ import com.autonomouslogic.everef.cli.markethistory.MarketHistoryLoader;
 import com.autonomouslogic.everef.cli.markethistory.MarketHistoryUtil;
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.url.DataUrl;
-import com.autonomouslogic.everef.util.VirtualThreads;
+import com.autonomouslogic.everef.util.Rx;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.google.common.collect.Ordering;
 import io.reactivex.rxjava3.core.Flowable;
@@ -65,7 +65,7 @@ class ScrapeMarketHistoryBatchLoader {
 						p -> {
 							return marketHistoryLoader
 									.loadDailyFile(p.getRight(), p.getLeft())
-									.subscribeOn(VirtualThreads.SCHEDULER)
+									.subscribeOn(Rx.VIRTUAL)
 									.flatMap(entry -> Flowable.fromIterable(entry.getRight()))
 									.map(entry -> {
 										totalEntries.incrementAndGet();

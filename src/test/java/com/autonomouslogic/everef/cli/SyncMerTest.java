@@ -2,6 +2,7 @@ package com.autonomouslogic.everef.cli;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import com.autonomouslogic.commons.concurrent.VirtualThreads;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.test.MockS3Adapter;
 import com.autonomouslogic.everef.test.TestDataUtil;
@@ -72,11 +73,11 @@ public class SyncMerTest {
 
 	@Test
 	@SneakyThrows
-	void shouldDownloadInitialMerFiles() {
+	void shouldDownloadInitialMerFiles() throws InterruptedException {
 		availableMerFiles.put("202512", "content-202512".getBytes());
 		availableMerFiles.put("202601", "content-202601".getBytes());
 
-		syncMer.run();
+		VirtualThreads.onVirtualThread(syncMer::run);
 
 		var uploaded202512 =
 				mockS3Adapter.getTestObject(BUCKET_NAME, "base/ccp/mer/2025/EVEOnline_MER_202512.zip", dataClient);
@@ -94,7 +95,7 @@ public class SyncMerTest {
 
 		availableMerFiles.put("202605", "content-202605".getBytes());
 
-		syncMer.run();
+		VirtualThreads.onVirtualThread(syncMer::run);
 
 		var uploaded202605 =
 				mockS3Adapter.getTestObject(BUCKET_NAME, "base/ccp/mer/2026/EVEOnline_MER_202605.zip", dataClient);
@@ -110,7 +111,7 @@ public class SyncMerTest {
 		availableMerFiles.put("202602", "content-202602".getBytes());
 		availableMerFiles.put("202603", "content-202603".getBytes());
 
-		syncMer.run();
+		VirtualThreads.onVirtualThread(syncMer::run);
 
 		var uploaded202602 =
 				mockS3Adapter.getTestObject(BUCKET_NAME, "base/ccp/mer/2026/EVEOnline_MER_202602.zip", dataClient);
@@ -129,7 +130,7 @@ public class SyncMerTest {
 
 		// Latest files not available in the mock server - will return 404
 
-		syncMer.run();
+		VirtualThreads.onVirtualThread(syncMer::run);
 
 		var notFound =
 				mockS3Adapter.getTestObject(BUCKET_NAME, "base/ccp/mer/2026/EVEOnline_MER_202605.zip", dataClient);
@@ -148,7 +149,7 @@ public class SyncMerTest {
 		availableMerFiles.put("202604", "content-202604".getBytes());
 		availableMerFiles.put("202605", "content-202605".getBytes());
 
-		syncMer.run();
+		VirtualThreads.onVirtualThread(syncMer::run);
 
 		var uploaded202603 =
 				mockS3Adapter.getTestObject(BUCKET_NAME, "base/ccp/mer/2026/EVEOnline_MER_202603.zip", dataClient);
@@ -171,7 +172,7 @@ public class SyncMerTest {
 
 		availableMerFiles.put("202605", "content-202605".getBytes());
 
-		syncMer.run();
+		VirtualThreads.onVirtualThread(syncMer::run);
 
 		// Verify file was uploaded
 		var uploaded202605 =
