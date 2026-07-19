@@ -29,7 +29,7 @@
     "luxon": "3.7.2",
     "nuxt": "3.21.8",
     "typescript": "5.9.3",
-    "vitest": "3.2.7",
+    "vitest": "4.1.10",
     "vue-tsc": "3.3.6",
     "@nuxtjs/google-adsense": "3.0.3"
   },
