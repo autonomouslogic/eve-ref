@@ -84,6 +84,8 @@ public class IndustryCalculator {
 		} else {
 			return calculateFromBlueprint();
 		}
+
+		calculateSum();
 	}
 
 	private IndustryCost calculateFromProduct() {
@@ -307,5 +309,9 @@ public class IndustryCalculator {
 		if (copyingCost != null) {
 			cost.copying(String.valueOf(copyingCost.getProductId()), copyingCost);
 		}
+	}
+
+	private void calculateSum() {
+
 	}
 }
