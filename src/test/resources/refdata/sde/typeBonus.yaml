@@ -536,7 +536,7 @@
       ko: "하이 시큐리티 지역에 신규 소티요 구조물을 위치 고정할 수 없음"
       ru: "Новые «Сотийо» нельзя ставить на якорь в\_системах с\_высоким ур.\_безо\
         пасности"
-      zh: "New Sotiyos may not be anchored within highsec space"
+      zh: "新的索迪约不能锚定在高安空间内"
     importance: 7
   - bonusText:
       de: "Damit das Verankern abgeschlossen werden kann, muss in dieser Struktur\
