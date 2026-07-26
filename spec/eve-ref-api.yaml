@@ -23,8 +23,16 @@ paths:
       - explode: true
         in: query
         name: input
+        required: true
         schema:
           $ref: "#/components/schemas/IndustryCostInput"
+        style: form
+      - explode: true
+        in: query
+        name: prices
+        schema:
+          $ref: "#/components/schemas/IndustryPrices"
+        style: deepObject
       responses:
         "200":
           content:
@@ -604,6 +612,9 @@ components:
             character
           maximum: 5
           minimum: 0
+    IndustryPrices:
+      type: object
+      additionalProperties: true
     InventionCost:
       type: object
       properties:

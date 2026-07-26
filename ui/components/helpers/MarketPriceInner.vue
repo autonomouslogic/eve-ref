@@ -3,6 +3,7 @@ import {GetMarketsRegionIdOrdersOrderTypeEnum,} from "~/esi-openapi";
 import UnitValue from "~/components/dogma/UnitValue.vue";
 import {getOrders, HUB_STATIONS} from "~/lib/marketUtils";
 import {MONEY} from "~/lib/unitConstants";
+import {IndustryApi} from "~/api-openapi";
 
 interface Props {
 	typeId: number,
@@ -37,6 +38,12 @@ const price = !stationOrders ? undefined : stationOrders
 	.map(e => e.price)
 	.sort(comparator)
 	[0];
+
+var api = new IndustryApi();
+const cost = await api.industryCost(
+	{ product_id: 645 }
+);
+
 </script>
 
 <template>
