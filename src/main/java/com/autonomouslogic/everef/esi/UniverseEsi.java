@@ -2,6 +2,7 @@ package com.autonomouslogic.everef.esi;
 
 import static com.autonomouslogic.everef.util.EveConstants.NPC_STATION_MAX_ID;
 
+import com.autonomouslogic.commons.concurrent.VirtualThreads;
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.openapi.esi.api.UniverseApi;
 import com.autonomouslogic.everef.openapi.esi.model.GetUniverseConstellationsConstellationIdOk;
@@ -9,7 +10,6 @@ import com.autonomouslogic.everef.openapi.esi.model.GetUniverseRegionsRegionIdOk
 import com.autonomouslogic.everef.openapi.esi.model.GetUniverseStationsStationIdOk;
 import com.autonomouslogic.everef.openapi.esi.model.GetUniverseSystemsSystemIdOk;
 import com.autonomouslogic.everef.openapi.esi.model.GetUniverseTypesTypeIdOk;
-import com.autonomouslogic.everef.util.VirtualThreads;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -19,6 +19,7 @@ import java.util.concurrent.Semaphore;
 import java.util.function.Supplier;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.jetbrains.annotations.NotNull;
@@ -45,27 +46,35 @@ public class UniverseEsi {
 	@Inject
 	protected UniverseEsi() {}
 
+	@SneakyThrows
 	public List<Integer> getRegionIds() {
 		if (regionIds != null) {
 			return regionIds;
 		}
 		log.trace("Fetching region ids");
-		regionIds = VirtualThreads.run(() -> universeApi.getUniverseRegions(datasource.toString(), null));
+		regionIds = VirtualThreads.onVirtualThread(() -> universeApi.getUniverseRegions(datasource.toString(), null));
 		return regionIds;
 	}
 
+	@SneakyThrows
 	public Optional<GetUniverseRegionsRegionIdOk> getRegion(int regionId) {
 		return getFromCacheOrFetch("region", GetUniverseRegionsRegionIdOk.class, regions, regionId, () -> {
-			return VirtualThreads.run(
-					() -> universeApi.getUniverseRegionsRegionId(regionId, null, datasource.toString(), null, null));
+			try {
+				return VirtualThreads.onVirtualThread(() ->
+						universeApi.getUniverseRegionsRegionId(regionId, null, datasource.toString(), null, null));
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
 		});
 	}
 
+	@SneakyThrows
 	public List<GetUniverseRegionsRegionIdOk> getAllRegions() {
-		return VirtualThreads.parallel(
+		VirtualThreads.checkIsVirtual();
+		return VirtualThreads.callAll(
 						getRegionIds().stream()
 								.map(id -> (Callable<Optional<GetUniverseRegionsRegionIdOk>>) () -> getRegion(id))
-								.toList(),
+								.iterator(),
 						8)
 				.stream()
 				.filter(Optional::isPresent)
@@ -73,6 +82,7 @@ public class UniverseEsi {
 				.toList();
 	}
 
+	@SneakyThrows
 	public Optional<GetUniverseConstellationsConstellationIdOk> getConstellation(int constellationId) {
 		return getFromCacheOrFetch(
 				"constellation",
@@ -80,18 +90,29 @@ public class UniverseEsi {
 				constellations,
 				constellationId,
 				() -> {
-					return VirtualThreads.run(() -> universeApi.getUniverseConstellationsConstellationId(
-							constellationId, null, datasource.toString(), null, null));
+					try {
+						return VirtualThreads.onVirtualThread(
+								() -> universeApi.getUniverseConstellationsConstellationId(
+										constellationId, null, datasource.toString(), null, null));
+					} catch (Exception e) {
+						throw new RuntimeException(e);
+					}
 				});
 	}
 
+	@SneakyThrows
 	public Optional<GetUniverseSystemsSystemIdOk> getSystem(int systemId) {
 		return getFromCacheOrFetch("system", GetUniverseSystemsSystemIdOk.class, systems, systemId, () -> {
-			return VirtualThreads.run(
-					() -> universeApi.getUniverseSystemsSystemId(systemId, null, datasource.toString(), null, null));
+			try {
+				return VirtualThreads.onVirtualThread(() ->
+						universeApi.getUniverseSystemsSystemId(systemId, null, datasource.toString(), null, null));
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
 		});
 	}
 
+	@SneakyThrows
 	public Optional<GetUniverseStationsStationIdOk> getNpcStation(long stationId) {
 		if (stationId > NPC_STATION_MAX_ID) {
 			log.trace(String.format("Ignoring request for non-NPC station %s", stationId));
@@ -99,19 +120,29 @@ public class UniverseEsi {
 		}
 		var intId = (int) stationId;
 		return getFromCacheOrFetch("station", GetUniverseStationsStationIdOk.class, stations, intId, () -> {
-			return VirtualThreads.run(
-					() -> universeApi.getUniverseStationsStationId(intId, datasource.toString(), null));
+			try {
+				return VirtualThreads.onVirtualThread(
+						() -> universeApi.getUniverseStationsStationId(intId, datasource.toString(), null));
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
 		});
 	}
 
+	@SneakyThrows
 	public Optional<GetUniverseTypesTypeIdOk> getType(int typeId) {
 		return getFromCacheOrFetch("type", GetUniverseTypesTypeIdOk.class, types, typeId, () -> {
-			return VirtualThreads.run(
-					() -> universeApi.getUniverseTypesTypeId(typeId, null, datasource.toString(), null, null));
+			try {
+				return VirtualThreads.onVirtualThread(
+						() -> universeApi.getUniverseTypesTypeId(typeId, null, datasource.toString(), null, null));
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
 		});
 	}
 
 	@NotNull
+	@SneakyThrows
 	private <T> Optional<T> getFromCacheOrFetch(
 			String name, Class<T> type, Map<Integer, Optional<T>> cache, int id, Supplier<T> fetcher) {
 		if (cache.containsKey(id)) {
@@ -120,6 +151,7 @@ public class UniverseEsi {
 		return fetchWithRetry(name, id, fetcher, cache);
 	}
 
+	@SneakyThrows
 	private <T> Optional<T> fetchWithRetry(
 			String name, int id, Supplier<T> fetcher, final Map<Integer, Optional<T>> cache) {
 		int maxRetries = 2;

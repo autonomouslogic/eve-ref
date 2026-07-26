@@ -1,8 +1,8 @@
 package com.autonomouslogic.everef.cli.basiclogin;
 
+import com.autonomouslogic.commons.concurrent.VirtualThreads;
 import com.autonomouslogic.everef.cli.Command;
 import com.autonomouslogic.everef.config.Configs;
-import com.autonomouslogic.everef.util.VirtualThreads;
 import io.micronaut.runtime.Micronaut;
 import javax.inject.Inject;
 import lombok.extern.log4j.Log4j2;
@@ -19,7 +19,7 @@ public class BasicLogin implements Command {
 
 	@Override
 	public void run() {
-		VirtualThreads.checkThread();
+		VirtualThreads.checkIsVirtual();
 		//			System.getenv().forEach((k, v) -> log.info(k + " = " + v));
 		Configs.EVE_OAUTH_CLIENT_ID.getRequired();
 		Configs.EVE_OAUTH_SECRET_KEY.getRequired();

@@ -7,6 +7,7 @@ import static org.mockito.Mockito.when;
 
 import com.autonomouslogic.commons.ListUtil;
 import com.autonomouslogic.commons.ResourceUtil;
+import com.autonomouslogic.commons.concurrent.VirtualThreads;
 import com.autonomouslogic.everef.esi.LocationPopulator;
 import com.autonomouslogic.everef.esi.MockLocationPopulatorModule;
 import com.autonomouslogic.everef.openapi.esi.model.GetUniverseTypesTypeIdOk;
@@ -137,10 +138,10 @@ public class ScrapePublicContractsTest {
 
 	@Test
 	@SneakyThrows
-	void shouldScrapePublicContracts() {
-		scrapePublicContracts
+	void shouldScrapePublicContracts() throws InterruptedException {
+		VirtualThreads.onVirtualThread(() -> scrapePublicContracts
 				.setScrapeTime(ZonedDateTime.parse("2020-02-03T04:05:06.89Z"))
-				.run();
+				.run());
 
 		// Get saved file.
 		var archiveFile =

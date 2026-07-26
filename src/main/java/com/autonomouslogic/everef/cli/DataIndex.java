@@ -1,5 +1,6 @@
 package com.autonomouslogic.everef.cli;
 
+import com.autonomouslogic.commons.concurrent.VirtualThreads;
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.data.FileEntry;
 import com.autonomouslogic.everef.data.IndexDirectoryEntry;
@@ -11,7 +12,7 @@ import com.autonomouslogic.everef.s3.S3Adapter;
 import com.autonomouslogic.everef.s3.S3Util;
 import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.url.UrlParser;
-import com.autonomouslogic.everef.util.VirtualThreads;
+import com.autonomouslogic.everef.util.Rx;
 import com.autonomouslogic.everef.util.archive.ArchivePathFactories;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.reactivex.rxjava3.core.Completable;
@@ -88,14 +89,12 @@ public class DataIndex implements Command {
 
 	@Override
 	public void run() {
-		VirtualThreads.checkThread();
+		VirtualThreads.checkIsVirtual();
 		log.info("Starting data index for: {}", dataUrl);
 		listAndIndex()
 				.flatMapCompletable(
-						dirIndex -> {
-							return createAndUploadIndexPage(dirIndex.getLeft(), dirIndex.getRight())
-									.subscribeOn(VirtualThreads.SCHEDULER);
-						},
+						dirIndex -> createAndUploadIndexPage(dirIndex.getLeft(), dirIndex.getRight())
+								.subscribeOn(Rx.VIRTUAL),
 						false,
 						indexConcurrency)
 				.blockingAwait();
@@ -103,24 +102,25 @@ public class DataIndex implements Command {
 
 	private Flowable<Pair<String, List<FileEntry>>> listAndIndex() {
 		return listBucketContents().flatMapPublisher(dir -> {
+			log.debug("Building indexes");
 			var path = Optional.ofNullable(prefix).orElse("");
-			var indexes = Flowable.fromStream(dir.list(path, recursive))
-					.filter(d -> d.isDirectory())
-					.map(d -> {
-						var contents = dir.list(d.getPath(), false)
-								.filter(entry -> entry != d)
-								.toList();
-						return Pair.of(d.getPath(), contents);
-					});
+			var indexes = dir.list(path, recursive).filter(d -> d.isDirectory()).map(d -> {
+				var contents =
+						dir.list(d.getPath(), false).filter(entry -> entry != d).toList();
+				return Pair.of(d.getPath(), contents);
+			});
 			if (!recursive) {
-				indexes = indexes.take(1);
+				indexes = indexes.limit(1);
 			}
-			return indexes;
+			var indexList = indexes.toList();
+			log.debug("Indexing complete");
+			return Flowable.fromIterable(indexList);
 		});
 	}
 
 	private Single<VirtualDirectory> listBucketContents() {
 		return Single.defer(() -> {
+					VirtualThreads.checkIsVirtual();
 					if (!dataUrl.getPath().equals("")) {
 						throw new RuntimeException("Data index must be run at the root of the bucket");
 					}
@@ -138,7 +138,9 @@ public class DataIndex implements Command {
 							.filter(obj -> !(obj.getUrl().getPath().endsWith("index.html")))
 							.filter(obj -> !(obj.getUrl().getPath().endsWith("index.json")))
 							.toList();
+					log.debug("Listing complete");
 					var withLastModified = s3Adapter.headLastModified(filtered, s3);
+					log.debug("Heading complete");
 					return Flowable.fromIterable(withLastModified)
 							.doOnNext(obj -> {
 								if (obj.isDirectory()) {
@@ -154,7 +156,7 @@ public class DataIndex implements Command {
 							.ignoreElements()
 							.andThen(Single.just(dir));
 				})
-				.doAfterSuccess(ignore -> log.debug("Listing complete"));
+				.doOnSuccess(ignore -> log.debug("Virtual directory complete"));
 	}
 
 	private Completable createAndUploadIndexPage(String prefix, List<FileEntry> index) {
@@ -162,7 +164,8 @@ public class DataIndex implements Command {
 			var htmlRendered = renderIndexPage(prefix, index);
 			var jsonRendered = renderJsonIndexPage(prefix, index);
 			return Completable.mergeArray(
-					uploadIndexPage(prefix, htmlRendered), uploadJsonIndexPage(prefix, jsonRendered));
+					uploadIndexPage(prefix, htmlRendered).subscribeOn(Rx.VIRTUAL),
+					uploadJsonIndexPage(prefix, jsonRendered).subscribeOn(Rx.VIRTUAL));
 		});
 	}
 

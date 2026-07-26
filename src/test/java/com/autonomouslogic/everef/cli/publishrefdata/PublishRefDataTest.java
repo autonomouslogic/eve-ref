@@ -3,6 +3,7 @@ package com.autonomouslogic.everef.cli.publishrefdata;
 import static com.autonomouslogic.everef.test.TestDataUtil.TEST_PORT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import com.autonomouslogic.commons.concurrent.VirtualThreads;
 import com.autonomouslogic.everef.model.refdata.RefDataConfig;
 import com.autonomouslogic.everef.model.refdata.RefTestConfig;
 import com.autonomouslogic.everef.refdata.RefDataMeta;
@@ -121,8 +122,8 @@ public class PublishRefDataTest {
 
 	@Test
 	@SneakyThrows
-	void shouldPublishRefData() {
-		publishRefData.run();
+	void shouldPublishRefData() throws InterruptedException {
+		VirtualThreads.onVirtualThread(publishRefData::run);
 
 		var putKeys = mockS3Adapter.getAllPutKeys(BUCKET_NAME, s3);
 
@@ -446,7 +447,7 @@ public class PublishRefDataTest {
 	@SneakyThrows
 	void shouldNotPublishRefDataIfThereNoUpdate() {
 		refDataFile = mockScrapeBuilder.createTestRefdata(meta);
-		publishRefData.run();
+		VirtualThreads.onVirtualThread(() -> publishRefData.run());
 
 		var putKeys = mockS3Adapter.getAllPutKeys(BUCKET_NAME, s3);
 		var deleteKeys = mockS3Adapter.getAllDeleteKeys(BUCKET_NAME, s3);
