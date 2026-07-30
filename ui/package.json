@@ -25,7 +25,7 @@
     "@typescript-eslint/eslint-plugin": "8.63.0",
     "@typescript-eslint/parser": "8.63.0",
     "eslint": "8.57.1",
-    "eslint-plugin-vue": "9.33.0",
+    "eslint-plugin-vue": "10.10.0",
     "luxon": "3.7.2",
     "nuxt": "3.21.8",
     "typescript": "5.9.3",
