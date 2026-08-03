@@ -1,5 +1,24 @@
 EVE Ref Changelog
 
+## [2.78.9](https://github.com/autonomouslogic/eve-ref/compare/2.78.8...2.78.9) (2026-08-03)
+
+
+### Bug Fixes
+
+* **deps:** update font awesome ([#1074](https://github.com/autonomouslogic/eve-ref/issues/1074)) ([33109c4](https://github.com/autonomouslogic/eve-ref/commit/33109c46bb751fe171678491dcba49a10adec2a5))
+* **ui:** August 2026 giveaways ([a0c0822](https://github.com/autonomouslogic/eve-ref/commit/a0c0822ee7b96397d23382afcbc82fd0dedee963))
+
+
+### Dependency Updates
+
+* **deps:** update plugin org.flywaydb.flyway to v12.11.0 ([#1075](https://github.com/autonomouslogic/eve-ref/issues/1075)) ([4beb798](https://github.com/autonomouslogic/eve-ref/commit/4beb79879b3a5bd213a0e43e87a285838748c6ef))
+
+
+### Tests
+
+* Updated test resources ([2631b52](https://github.com/autonomouslogic/eve-ref/commit/2631b528f245b623341c91171745b2d0a7302174))
+* Updated test resources ([592b969](https://github.com/autonomouslogic/eve-ref/commit/592b969d1fb42ff36a5e0875cccfc103fc8a2f02))
+
 ## [2.78.8](https://github.com/autonomouslogic/eve-ref/compare/2.78.7...2.78.8) (2026-07-07)
 
 
