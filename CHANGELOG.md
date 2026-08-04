@@ -1,5 +1,12 @@
 EVE Ref Changelog
 
+## [2.78.10](https://github.com/autonomouslogic/eve-ref/compare/2.78.9...2.78.10) (2026-08-04)
+
+
+### Bug Fixes
+
+* **deps:** update flyway monorepo to v12.11.0 ([#1077](https://github.com/autonomouslogic/eve-ref/issues/1077)) ([c8f2efa](https://github.com/autonomouslogic/eve-ref/commit/c8f2efaaa5bda80e36c6604dca9813897ff69520))
+
 ## [2.78.9](https://github.com/autonomouslogic/eve-ref/compare/2.78.8...2.78.9) (2026-08-03)
 
 
