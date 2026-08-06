@@ -1,5 +1,17 @@
 EVE Ref Changelog
 
+## [2.79.0](https://github.com/autonomouslogic/eve-ref/compare/2.78.10...2.79.0) (2026-08-06)
+
+
+### Features
+
+* Military campaigns scrape ([2264001](https://github.com/autonomouslogic/eve-ref/commit/2264001ac7b3f6e6b5a12508da9e5febecd5f03b))
+
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([#1076](https://github.com/autonomouslogic/eve-ref/issues/1076)) ([299f325](https://github.com/autonomouslogic/eve-ref/commit/299f325a9f63c13acae018c5800658020faa7274))
+
 ## [2.78.10](https://github.com/autonomouslogic/eve-ref/compare/2.78.9...2.78.10) (2026-08-04)
 
 
