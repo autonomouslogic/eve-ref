@@ -125,6 +125,9 @@ public class CommandRunner {
 	protected Provider<ScrapeIncursions> scrapeIncursionsProvider;
 
 	@Inject
+	protected Provider<ScrapeMilitaryCampaigns> scrapeMilitaryCampaignsProvider;
+
+	@Inject
 	protected Provider<ScrapeMarketsPrices> scrapeMarketsPricesProvider;
 
 	@Inject
@@ -227,6 +230,8 @@ public class CommandRunner {
 				return scrapeFactionWarfareProvider.get();
 			case "scrape-incursions":
 				return scrapeIncursionsProvider.get();
+			case "scrape-military-campaigns":
+				return scrapeMilitaryCampaignsProvider.get();
 			case "scrape-markets-prices":
 				return scrapeMarketsPricesProvider.get();
 			case "api":

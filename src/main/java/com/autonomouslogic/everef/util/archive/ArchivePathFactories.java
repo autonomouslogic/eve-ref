@@ -247,6 +247,13 @@ public class ArchivePathFactories {
 					.latestSuffix(".json")
 					.build());
 
+	public static final StandardArchivePathFactory MILITARY_CAMPAIGNS = register(StandardArchivePathFactory.builder()
+			.folder("military-campaigns")
+			.filename("military-campaigns")
+			.suffix(".json.bz2")
+			.latestSuffix(".json")
+			.build());
+
 	public static final StandardArchivePathFactory INCURSIONS = register(StandardArchivePathFactory.builder()
 			.folder("incursions")
 			.filename("incursions")

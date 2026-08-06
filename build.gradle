@@ -628,6 +628,15 @@ task scrapeIncursions(type: JavaExec) {
 	mainClass = mainClassName
 }
 
+task scrapeMilitaryCampaigns(type: JavaExec) {
+	group "application"
+	args "scrape-military-campaigns"
+	environment envProperties
+
+	classpath = sourceSets.main.runtimeClasspath
+	mainClass = mainClassName
+}
+
 task scrapeMarketsPrices(type: JavaExec) {
 	group "application"
 	args "scrape-markets-prices"
