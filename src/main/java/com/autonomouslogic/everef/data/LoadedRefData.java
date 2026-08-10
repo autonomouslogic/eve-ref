@@ -20,6 +20,7 @@ import jakarta.inject.Inject;
 import java.io.File;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.function.Function;
 import java.util.stream.Stream;
 import lombok.SneakyThrows;
@@ -33,6 +34,8 @@ public class LoadedRefData {
 	protected ObjectMapper objectMapper;
 
 	private final MVStore mvStore;
+	private final ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
+	private volatile boolean closed = false;
 
 	private final Map<Long, byte[]> categories;
 	private final Map<Long, byte[]> groups;
@@ -51,9 +54,12 @@ public class LoadedRefData {
 
 	@Inject
 	protected LoadedRefData(MVStoreUtil mvStoreUtil) {
-		mvStore = mvStoreUtil.createTempStore("ref-data");
+		this(mvStoreUtil.createTempStore("ref-data"));
 		mvStore.setCacheSize(8 * 1024 * 1024);
+	}
 
+	LoadedRefData(MVStore mvStore) {
+		this.mvStore = mvStore;
 		categories = mvStore.openMap("categories");
 		groups = mvStore.openMap("groups");
 		marketGroups = mvStore.openMap("marketGroups");
@@ -73,9 +79,15 @@ public class LoadedRefData {
 	// === wrapper
 
 	private <T> T get(long id, Map<Long, byte[]> map, Class<T> clazz) {
-		return Optional.ofNullable(map.get(id))
-				.map(bytes -> parse(bytes, clazz))
-				.orElse(null);
+		lock.readLock().lock();
+		try {
+			if (closed) return null;
+			return Optional.ofNullable(map.get(id))
+					.map(bytes -> parse(bytes, clazz))
+					.orElse(null);
+		} finally {
+			lock.readLock().unlock();
+		}
 	}
 
 	@SneakyThrows
@@ -269,16 +281,22 @@ public class LoadedRefData {
 	}
 
 	public void close() {
-		var filename = mvStore.getFileStore().getFileName();
+		lock.writeLock().lock();
 		try {
-			mvStore.closeImmediately();
-		} catch (Exception e) {
-			log.warn("Failed closing MVStore, ignoring", e);
-		}
-		try {
-			new File(filename).delete();
-		} catch (Exception e) {
-			log.warn("Failed deleting MVStore file, ignoring", e);
+			closed = true;
+			var filename = mvStore.getFileStore().getFileName();
+			try {
+				mvStore.closeImmediately();
+			} catch (Exception e) {
+				log.warn("Failed closing MVStore, ignoring", e);
+			}
+			try {
+				new File(filename).delete();
+			} catch (Exception e) {
+				log.warn("Failed deleting MVStore file, ignoring", e);
+			}
+		} finally {
+			lock.writeLock().unlock();
 		}
 	}
 
