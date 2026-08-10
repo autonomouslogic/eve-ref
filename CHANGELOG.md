@@ -1,5 +1,20 @@
 EVE Ref Changelog
 
+## [2.79.1](https://github.com/autonomouslogic/eve-ref/compare/2.79.0...2.79.1) (2026-08-10)
+
+
+### Bug Fixes
+
+* **deps:** update flyway monorepo to v13 ([#1073](https://github.com/autonomouslogic/eve-ref/issues/1073)) ([c0c1d4a](https://github.com/autonomouslogic/eve-ref/commit/c0c1d4a487ec8553a365b73eaad9a3377fcd151e))
+* Updated MER base path ([48938bd](https://github.com/autonomouslogic/eve-ref/commit/48938bdf1bc684634582f039c8284f83611ab6a6))
+
+
+### Dependency Updates
+
+* **deps:** update actions/checkout action to v7 ([#1059](https://github.com/autonomouslogic/eve-ref/issues/1059)) ([a213cbe](https://github.com/autonomouslogic/eve-ref/commit/a213cbeeda9fb6f4c42f5b7da622d3e609080664))
+* **deps:** update actions/setup-node action to v7 ([#1071](https://github.com/autonomouslogic/eve-ref/issues/1071)) ([fa84c0b](https://github.com/autonomouslogic/eve-ref/commit/fa84c0b32b005ed29fd6f9e3262d204e46f72fc4))
+* **deps:** update plugin org.flywaydb.flyway to v13 ([#1072](https://github.com/autonomouslogic/eve-ref/issues/1072)) ([12ac47d](https://github.com/autonomouslogic/eve-ref/commit/12ac47d5a804ff0cf53f703862a1702dbb117583))
+
 ## [2.79.0](https://github.com/autonomouslogic/eve-ref/compare/2.78.10...2.79.0) (2026-08-06)
 
 
