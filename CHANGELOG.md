@@ -1,5 +1,22 @@
 EVE Ref Changelog
 
+## [2.79.2](https://github.com/autonomouslogic/eve-ref/compare/2.79.1...2.79.2) (2026-08-11)
+
+
+### Bug Fixes
+
+* Lock LoadedRefData ([72a619f](https://github.com/autonomouslogic/eve-ref/commit/72a619fb6a93d0870a53e875b408a69eee789b2e))
+
+
+### Dependency Updates
+
+* **deps:** update codecov/codecov-action action to v7 ([#1056](https://github.com/autonomouslogic/eve-ref/issues/1056)) ([0f3ebfe](https://github.com/autonomouslogic/eve-ref/commit/0f3ebfe29806c57907d4d75822b61cf880fdf726))
+
+
+### Tests
+
+* Updated test resources ([32d6c0c](https://github.com/autonomouslogic/eve-ref/commit/32d6c0c0d38fb469937995bcef985fbd4f430347))
+
 ## [2.79.1](https://github.com/autonomouslogic/eve-ref/compare/2.79.0...2.79.1) (2026-08-10)
 
 
