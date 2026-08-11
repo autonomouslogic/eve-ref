@@ -13,6 +13,7 @@
     "ru" : "Astrahus Blueprint",
     "zh" : "空堡蓝图"
   },
+  "packaged_volume" : 0.01,
   "portion_size" : 1,
   "published" : true,
   "volume" : 0.01,

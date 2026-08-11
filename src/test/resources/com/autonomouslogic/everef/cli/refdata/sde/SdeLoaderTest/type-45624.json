@@ -26,6 +26,7 @@
     "ru" : "Legion Core - Energy Parasitic Complex",
     "zh" : "圣卒核心 - 能量寄取集成体"
   },
+  "packaged_volume" : 40,
   "portion_size" : 1,
   "published" : true,
   "race_id" : 4,

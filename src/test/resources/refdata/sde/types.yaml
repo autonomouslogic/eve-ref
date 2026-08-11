@@ -44,6 +44,7 @@
     ko: "열화 우라늄탄 M"
     ru: "Depleted Uranium M"
     zh: "贫铀弹 M"
+  packagedVolume: 0.0125
   portionSize: 100
   published: true
   techLevel: 1
@@ -100,6 +101,7 @@
     ko: "도미닉스"
     ru: "Dominix"
     zh: "多米尼克斯级"
+  packagedVolume: 50000
   portionSize: 1
   published: true
   raceID: 8
@@ -132,6 +134,7 @@
     ko: "갈란테 배틀쉽"
     ru: "Галлентские линкоры"
     zh: "盖伦特战列舰操作"
+  packagedVolume: 0.01
   portionSize: 1
   published: true
   raceID: 8
@@ -164,6 +167,7 @@
     ko: "함선 운용"
     ru: "Допуски к управлению кораблями"
     zh: "飞船操控学"
+  packagedVolume: 0.01
   portionSize: 1
   published: true
   volume: 0.01
@@ -192,6 +196,7 @@
     ko: "갈란테 배틀크루저"
     ru: "Галлентские линейные крейсеры"
     zh: "盖伦特战列巡洋舰操作"
+  packagedVolume: 0.01
   portionSize: 1
   published: true
   raceID: 8
@@ -220,6 +225,7 @@
     ko: "갈란테 크루저"
     ru: "Галлентские крейсеры"
     zh: "盖伦特巡洋舰操作"
+  packagedVolume: 0.01
   portionSize: 1
   published: true
   raceID: 8
@@ -248,6 +254,7 @@
     ko: "갈란테 디스트로이어"
     ru: "Галлентские эсминцы"
     zh: "盖伦特驱逐舰操作"
+  packagedVolume: 0.01
   portionSize: 1
   published: true
   raceID: 8
@@ -276,6 +283,7 @@
     ko: "갈란테 프리깃"
     ru: "Галлентские фрегаты"
     zh: "盖伦特护卫舰操作"
+  packagedVolume: 0.01
   portionSize: 1
   published: true
   raceID: 8
@@ -390,6 +398,7 @@
     ko: "충만한 데미지 컨트롤 뮤타플라즈미드"
     ru: "Gravid Damage Control Mutaplasmid"
     zh: "怀璧的损伤控制突变质体"
+  packagedVolume: 1
   portionSize: 1
   published: true
   techLevel: 1
@@ -435,6 +444,7 @@
     ko: "어비설 데미지 컨트롤"
     ru: "Abyssal Damage Control"
     zh: "深渊损伤控制"
+  packagedVolume: 5
   portionSize: 1
   published: true
   techLevel: 1
@@ -484,6 +494,7 @@
     ko: "데미지 컨트롤 I"
     ru: "Damage Control I"
     zh: "损伤控制 I"
+  packagedVolume: 5
   portionSize: 1
   published: true
   techLevel: 1
@@ -533,6 +544,7 @@
     ko: "데미지 컨트롤 II"
     ru: "Damage Control II"
     zh: "损伤控制 II"
+  packagedVolume: 5
   portionSize: 1
   published: true
   techLevel: 2
@@ -616,6 +628,7 @@
     ko: "레기온 코어 시스템 - 강화 반물질 반응로"
     ru: "Legion Core - Augmented Antimatter Reactor"
     zh: "圣卒核心 - 增强反物质反应堆"
+  packagedVolume: 40
   portionSize: 1
   published: true
   raceID: 4
@@ -676,6 +689,7 @@
     ko: "레기온 코어 시스템 - 센서 시퀀서"
     ru: "Legion Core - Dissolution Sequencer"
     zh: "圣卒核心 - 散解程控装置"
+  packagedVolume: 40
   portionSize: 1
   published: true
   raceID: 4
@@ -760,6 +774,7 @@
     ko: "레기온 코어 시스템 - 에너지 패러사이트 컴플렉스"
     ru: "Legion Core - Energy Parasitic Complex"
     zh: "圣卒核心 - 能量寄取集成体"
+  packagedVolume: 40
   portionSize: 1
   published: true
   raceID: 4
@@ -850,6 +865,7 @@
     ko: "씬"
     ru: "Sin"
     zh: "罪恶级"
+  packagedVolume: 50000
   portionSize: 1
   published: true
   raceID: 8
@@ -873,6 +889,7 @@
     ko: "도미닉스 블루프린트"
     ru: "Dominix Blueprint"
     zh: "多米尼克斯级蓝图"
+  packagedVolume: 0.01
   portionSize: 1
   published: true
   volume: 0.01
@@ -889,6 +906,7 @@
     ko: "씬 블루프린트"
     ru: "Sin Blueprint"
     zh: "罪恶级蓝图"
+  packagedVolume: 0.01
   portionSize: 1
   published: true
   techLevel: 2
@@ -937,6 +955,7 @@
     ko: "벨드스파"
     ru: "Veldspar"
     zh: "凡晶石"
+  packagedVolume: 0.1
   portionSize: 100
   published: true
   volume: 0.1
@@ -998,6 +1017,7 @@
     ko: "2급 벨드스파"
     ru: "Veldspar II-Grade"
     zh: "凡晶石（2级）"
+  packagedVolume: 0.1
   portionSize: 100
   published: true
   volume: 0.1
@@ -1059,6 +1079,7 @@
     ko: "3급 벨드스파"
     ru: "Veldspar III-Grade"
     zh: "凡晶石（3级）"
+  packagedVolume: 0.1
   portionSize: 100
   published: true
   volume: 0.1
@@ -1148,6 +1169,7 @@
     ko: "스탠드업 거래소 허브 I"
     ru: "Standup Market Hub I"
     zh: "屹立市场中心 I"
+  packagedVolume: 32000
   portionSize: 1
   published: true
   volume: 32000
@@ -1257,6 +1279,7 @@
     ko: "포티자"
     ru: "Fortizar"
     zh: "铁壁"
+  packagedVolume: 80000
   portionSize: 1
   published: true
   radius: 85000
@@ -1298,6 +1321,7 @@
     ko: "초전도체"
     ru: "Superconductors"
     zh: "超导体"
+  packagedVolume: 0.75
   portionSize: 1
   published: true
   volume: 0.75
@@ -1350,6 +1374,7 @@
     ko: "플라즈모이드"
     ru: "Plasmoids"
     zh: "等离子体团"
+  packagedVolume: 0.19
   portionSize: 1
   published: true
   volume: 0.19
@@ -1386,6 +1411,7 @@
     ko: "물"
     ru: "Water"
     zh: "水"
+  packagedVolume: 0.19
   portionSize: 1
   published: true
   volume: 0.19
@@ -1441,6 +1467,7 @@
     ko: "수성 액체"
     ru: "Aqueous Liquids"
     zh: "水基液体"
+  packagedVolume: 0.005
   portionSize: 1
   published: true
   volume: 0.005
@@ -1657,6 +1684,7 @@
     ko: "사막 행성"
     ru: "Planet (Barren)"
     zh: "行星（贫瘠）"
+  packagedVolume: 1
   portionSize: 1
   published: false
   radius: 10000
@@ -1722,6 +1750,7 @@
     ko: "온대 행성"
     ru: "Planet (Temperate)"
     zh: "行星（温和）"
+  packagedVolume: 1
   portionSize: 1
   published: false
   radius: 10000
@@ -1915,6 +1944,7 @@
     ko: "기초 광물 정제"
     ru: "Simple Ore Processing"
     zh: "普通矿石处理技术"
+  packagedVolume: 0.01
   portionSize: 1
   published: true
   volume: 0.01
@@ -2024,6 +2054,7 @@
     ko: "트리타늄"
     ru: "Tritanium"
     zh: "三钛合金"
+  packagedVolume: 0.01
   portionSize: 1
   published: true
   volume: 0.01
@@ -2158,6 +2189,7 @@
     ko: "파이어라이트"
     ru: "Pyerite"
     zh: "类晶体胶矿"
+  packagedVolume: 0.01
   portionSize: 1
   published: true
   volume: 0.01
@@ -2275,6 +2307,7 @@
     ko: "멕살론"
     ru: "Mexallon"
     zh: "类银超金属"
+  packagedVolume: 0.01
   portionSize: 1
   published: true
   volume: 0.01
@@ -2405,6 +2438,7 @@
     ko: "이소젠"
     ru: "Isogen"
     zh: "同位聚合体"
+  packagedVolume: 0.01
   portionSize: 1
   published: true
   volume: 0.01
@@ -2490,6 +2524,7 @@
     ko: "녹시움"
     ru: "Nocxium"
     zh: "超新星诺克石"
+  packagedVolume: 0.01
   portionSize: 1
   published: true
   volume: 0.01
@@ -2592,6 +2627,7 @@
     ko: "자이드라인"
     ru: "Zydrine"
     zh: "晶状石英核岩"
+  packagedVolume: 0.01
   portionSize: 1
   published: true
   volume: 0.01
@@ -2695,6 +2731,7 @@
     ko: "메가사이트"
     ru: "Megacyte"
     zh: "超噬矿"
+  packagedVolume: 0.01
   portionSize: 1
   published: true
   volume: 0.01
@@ -2779,6 +2816,7 @@
     ko: "스탠드업 M-Set 탄약 제조 자원효율성 장치 I"
     ru: "Standup M-Set Ammunition Manufacturing Material Efficiency I"
     zh: "屹立中型弹药制造材料效率 I"
+  packagedVolume: 10
   portionSize: 1
   published: true
   radius: 100
@@ -2866,6 +2904,7 @@
     ko: "스탠드업 M-Set 탄약 제조 시간효율성 장치 I"
     ru: "Standup M-Set Ammunition Manufacturing Time Efficiency I"
     zh: "屹立中型弹药制造时间效率 I"
+  packagedVolume: 10
   portionSize: 1
   published: true
   radius: 100
@@ -2949,6 +2988,7 @@
     ko: "스탠드업 M-Set 인벤션 가속 장치 I"
     ru: "Standup M-Set Invention Accelerator I"
     zh: "屹立中型发明加速 I"
+  packagedVolume: 10
   portionSize: 1
   published: true
   radius: 100
@@ -3033,6 +3073,7 @@
     ko: "스탠드업 M-Set 인벤션 비용 최적화 장치 I"
     ru: "Standup M-Set Invention Cost Optimization I"
     zh: "屹立中型发明成本优化 I"
+  packagedVolume: 10
   portionSize: 1
   published: true
   radius: 100
@@ -3117,6 +3158,7 @@
     ko: "스탠드업 L-Set 블루프린트 복제 최적화 I"
     ru: "Standup L-Set Blueprint Copy Optimization I"
     zh: "屹立大型蓝图拷贝优化 I"
+  packagedVolume: 20
   portionSize: 1
   published: true
   radius: 100
@@ -3201,6 +3243,7 @@
     ko: "스탠드업 M-Set 블루프린트 복제 비용 최적화 장치 I"
     ru: "Standup M-Set Blueprint Copy Cost Optimization I"
     zh: "屹立中型蓝图拷贝成本优化 I"
+  packagedVolume: 10
   portionSize: 1
   published: true
   radius: 100
@@ -3291,6 +3334,7 @@
     ko: "스탠드업 L-Set 기본 소형 함선 제작 효율성 장치 I"
     ru: "Standup L-Set Basic Small Ship Manufacturing Efficiency I"
     zh: "屹立大型基础小型舰船制造效率 I"
+  packagedVolume: 20
   portionSize: 1
   published: true
   radius: 100
@@ -3382,6 +3426,7 @@
     ko: "스탠드업 M-Set 기본 대형 함선 제작 자원효율성 장치 II"
     ru: "Standup M-Set Basic Large Ship Manufacturing Material Efficiency II"
     zh: "屹立中型基础大型舰船制造材料效率 II"
+  packagedVolume: 10
   portionSize: 1
   published: true
   radius: 100
@@ -3476,6 +3521,7 @@
     ko: "스탠드업 XL-Set 구조물 및 부품 제조 효율성 장치 I"
     ru: "Standup XL-Set Structure and Component Manufacturing Efficiency I"
     zh: "屹立超大型建筑和组件制造效率 I"
+  packagedVolume: 40
   portionSize: 1
   published: true
   radius: 100
@@ -3519,6 +3565,7 @@
     ko: "장갑 에너자이징 차지"
     ru: "Armor Energizing Charge"
     zh: "装甲电压强化弹药"
+  packagedVolume: 0.01
   portionSize: 500
   published: true
   volume: 0.01
@@ -3536,6 +3583,7 @@
     ko: "장갑 에너자이징 차지 블루프린트"
     ru: "Armor Energizing Charge Blueprint"
     zh: "装甲电压强化弹药蓝图"
+  packagedVolume: 0.01
   portionSize: 1
   published: true
   volume: 0.01
@@ -3575,6 +3623,7 @@
     ko: "묠니르 크루즈 미사일"
     ru: "Mjolnir Cruise Missile"
     zh: "雷神巡航导弹"
+  packagedVolume: 0.05
   portionSize: 100
   published: true
   radius: 300
@@ -3635,6 +3684,7 @@
     ko: "묠니르 퓨리 크루즈 미사일"
     ru: "Mjolnir Fury Cruise Missile"
     zh: "雷神愤怒巡航导弹"
+  packagedVolume: 0.05
   portionSize: 5000
   published: true
   radius: 300
@@ -3656,6 +3706,7 @@
     ko: "묠니르 크루즈 미사일 블루프린트"
     ru: "Mjolnir Cruise Missile Blueprint"
     zh: "雷神巡航导弹蓝图"
+  packagedVolume: 0.01
   portionSize: 1
   published: true
   volume: 0.01
@@ -3675,6 +3726,7 @@
     ko: "묠니르 퓨리 크루즈 미사일 블루프린트"
     ru: "Mjolnir Fury Cruise Missile Blueprint"
     zh: "雷神愤怒巡航导弹蓝图"
+  packagedVolume: 0.01
   portionSize: 1
   published: true
   techLevel: 2
@@ -3827,6 +3879,7 @@
     ko: "스탠드업 XL-Set 터커 구조물 및 부품 제조 효율성 장치"
     ru: "Standup XL-Set Thukker Structure and Component Manufacturing Efficiency"
     zh: "屹立超大型图克尔建筑和组件制造效率"
+  packagedVolume: 40
   portionSize: 1
   published: true
   radius: 100
@@ -3913,6 +3966,7 @@
     ko: "스탠드업 XL-Set 함선 제작 효율성 장치 I"
     ru: "Standup XL-Set Ship Manufacturing Efficiency I"
     zh: "屹立超大型舰船制造效率 I"
+  packagedVolume: 40
   portionSize: 1
   published: true
   radius: 100
@@ -4000,6 +4054,7 @@
     ko: "스탠드업 XL-Set 연구실 강화 장치 I"
     ru: "Standup XL-Set Laboratory Optimization I"
     zh: "屹立超大型实验室优化 I"
+  packagedVolume: 40
   portionSize: 1
   published: true
   radius: 100
@@ -4132,6 +4187,7 @@
     ko: "소티요"
     ru: "Sotiyo"
     zh: "索迪约"
+  packagedVolume: 800000
   portionSize: 1
   published: true
   radius: 150000
@@ -4217,6 +4273,7 @@
     ko: "스탠드업 M-Set 하이브리드 반응로 자원효율성 장치 II"
     ru: "Standup M-Set Hybrid Reactor Material Efficiency II"
     zh: "屹立中型混合反应堆材料效率 II"
+  packagedVolume: 10
   portionSize: 1
   published: true
   radius: 100
@@ -4237,6 +4294,7 @@
     ko: "플레로페로센 반응식"
     ru: "Fulleroferrocene Reaction Formula"
     zh: "富勒二茂铁反应配方"
+  packagedVolume: 0.01
   portionSize: 1
   published: true
   volume: 0.01
@@ -4326,6 +4384,7 @@
     ko: "스탠드업 M-Set 기본 대형 함선 제작 시간효율성 장치 I"
     ru: "Standup M-Set Basic Large Ship Manufacturing Time Efficiency I"
     zh: "屹立中型基础大型舰船制造时间效率 I"
+  packagedVolume: 10
   portionSize: 1
   published: true
   radius: 100
@@ -4372,6 +4431,7 @@
     ko: "플레로페로센"
     ru: "Fulleroferrocene"
     zh: "富勒二茂铁"
+  packagedVolume: 0.1
   portionSize: 1
   published: true
   volume: 0.1
@@ -4421,6 +4481,7 @@
     ko: "윕테일"
     ru: "Whiptail"
     zh: "长尾蜥级"
+  packagedVolume: 2500
   portionSize: 1
   published: true
   raceID: 1
@@ -4442,6 +4503,7 @@
     ko: "윕테일 블루프린트"
     ru: "Whiptail Blueprint"
     zh: "长尾蜥级蓝图"
+  packagedVolume: 0.01
   portionSize: 1
   published: true
   volume: 0.01
@@ -4459,6 +4521,7 @@
     ko: "메손 엑조틱 플라즈마 L 블루프린트"
     ru: "Meson Exotic Plasma L Blueprint"
     zh: "介子异种等离子弹蓝图 L"
+  packagedVolume: 0.01
   portionSize: 1
   published: true
   volume: 0.01
@@ -4477,6 +4540,7 @@
     ko: "미스틱 L 블루프린트"
     ru: "Mystic L Blueprint"
     zh: "奥秘蓝图 L"
+  packagedVolume: 0.01
   portionSize: 1
   published: true
   techLevel: 2
@@ -4543,6 +4607,7 @@
     ko: "도미닉스 해군 에디션"
     ru: "Dominix Navy Issue"
     zh: "多米尼克斯级海军型"
+  packagedVolume: 50000
   portionSize: 1
   published: true
   raceID: 8
@@ -4566,6 +4631,7 @@
     ko: "도미닉스 해군 에디션 블루프린트"
     ru: "Dominix Navy Issue Blueprint"
     zh: "多米尼克斯级海军型蓝图"
+  packagedVolume: 0.01
   portionSize: 1
   published: true
   volume: 0.01
@@ -4649,6 +4715,7 @@
     ko: "코어 온도제어장치"
     ru: "Core Temperature Regulator"
     zh: "核心温度调节器"
+  packagedVolume: 180
   portionSize: 1
   published: true
   volume: 180
@@ -4701,6 +4768,7 @@
     ko: "보조 생명유지 장치"
     ru: "Life Support Backup Unit"
     zh: "生命保障备份装置"
+  packagedVolume: 45
   portionSize: 1
   published: true
   volume: 45
@@ -4804,6 +4872,7 @@
     ko: "자동복구 장치"
     ru: "Auto-Integrity Preservation Seal"
     zh: "自动修复储藏装置密封"
+  packagedVolume: 16
   portionSize: 1
   published: true
   volume: 16
@@ -4822,6 +4891,7 @@
     ko: "탄소 섬유 반응식"
     ru: "Carbon Fiber Reaction Formula"
     zh: "碳纤维反应配方"
+  packagedVolume: 0.01
   portionSize: 1
   published: true
   techLevel: 1
@@ -4864,6 +4934,7 @@
     ko: "탄소 섬유"
     ru: "Carbon Fiber"
     zh: "碳纤维"
+  packagedVolume: 0.2
   portionSize: 1
   published: true
   volume: 0.2
@@ -4953,6 +5024,7 @@
     ko: "아스트라허스"
     ru: "Astrahus"
     zh: "空堡"
+  packagedVolume: 8000
   portionSize: 1
   published: true
   radius: 45000
@@ -4972,6 +5044,7 @@
     ko: "아스트라허스 블루프린트"
     ru: "Astrahus Blueprint"
     zh: "空堡蓝图"
+  packagedVolume: 0.01
   portionSize: 1
   published: true
   volume: 0.01
@@ -5008,6 +5081,7 @@
     ko: "구조물 건축 부품"
     ru: "Structure Construction Parts"
     zh: "建筑建造组件"
+  packagedVolume: 3000
   portionSize: 1
   published: true
   volume: 3000
@@ -5040,6 +5114,7 @@
     ko: "구조물 공용창고 시설"
     ru: "Structure Hangar Array"
     zh: "建筑机库阵列"
+  packagedVolume: 3000
   portionSize: 1
   published: true
   volume: 3000
@@ -5072,6 +5147,7 @@
     ko: "구조물 저장고"
     ru: "Structure Storage Bay"
     zh: "建筑贮藏舱"
+  packagedVolume: 3000
   portionSize: 1
   published: true
   volume: 3000
@@ -5106,6 +5182,7 @@
     ko: "구조물 수리시설"
     ru: "Structure Repair Facility"
     zh: "建筑维修设施"
+  packagedVolume: 3000
   portionSize: 1
   published: true
   volume: 3000
@@ -5137,6 +5214,7 @@
     ko: "구조물 도킹 베이"
     ru: "Structure Docking Bay"
     zh: "建筑停泊港"
+  packagedVolume: 3000
   portionSize: 1
   published: true
   volume: 3000
@@ -5169,6 +5247,7 @@
     ko: "구조물 의료 시설"
     ru: "Structure Medical Center"
     zh: "建筑医疗中心"
+  packagedVolume: 3000
   portionSize: 1
   published: true
   volume: 3000
@@ -5201,6 +5280,7 @@
     ko: "구조물 사무 센터"
     ru: "Structure Office Center"
     zh: "建筑办公室中心"
+  packagedVolume: 3000
   portionSize: 1
   published: true
   volume: 3000
@@ -5233,6 +5313,7 @@
     ko: "구조물 거래소 네트워크 시설"
     ru: "Structure Market Network"
     zh: "建筑市场网络"
+  packagedVolume: 3000
   portionSize: 1
   published: true
   volume: 3000
@@ -5289,6 +5370,7 @@
     ko: "프리즈마티사이트"
     ru: "Prismaticite"
     zh: "棱柱石"
+  packagedVolume: 40
   portionSize: 100
   published: true
   raceID: 4

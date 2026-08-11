@@ -25,6 +25,7 @@
     "ru" : "Gravid Damage Control Mutaplasmid",
     "zh" : "怀璧的损伤控制突变质体"
   },
+  "packaged_volume" : 1,
   "portion_size" : 1,
   "published" : true,
   "tech_level" : 1,

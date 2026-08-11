@@ -24,6 +24,7 @@
     "ru" : "Standup M-Set Invention Cost Optimization I",
     "zh" : "屹立中型发明成本优化 I"
   },
+  "packaged_volume" : 10,
   "portion_size" : 1,
   "published" : true,
   "radius" : 100,

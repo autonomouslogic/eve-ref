@@ -23,6 +23,7 @@
     "ru" : "Sotiyo",
     "zh" : "索迪约"
   },
+  "packaged_volume" : 800000,
   "portion_size" : 1,
   "published" : true,
   "radius" : 150000,

@@ -23,6 +23,7 @@
     "ru" : "Planet (Barren)",
     "zh" : "行星（贫瘠）"
   },
+  "packaged_volume" : 1,
   "portion_size" : 1,
   "published" : false,
   "radius" : 10000,

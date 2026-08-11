@@ -24,6 +24,7 @@
     "ru" : "Standup M-Set Basic Large Ship Manufacturing Time Efficiency I",
     "zh" : "屹立中型基础大型舰船制造时间效率 I"
   },
+  "packaged_volume" : 10,
   "portion_size" : 1,
   "published" : true,
   "radius" : 100,

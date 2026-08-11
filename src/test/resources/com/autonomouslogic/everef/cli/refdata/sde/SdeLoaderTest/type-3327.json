@@ -23,6 +23,7 @@
     "ru" : "Допуски к управлению кораблями",
     "zh" : "飞船操控学"
   },
+  "packaged_volume" : 0.01,
   "portion_size" : 1,
   "published" : true,
   "volume" : 0.01,

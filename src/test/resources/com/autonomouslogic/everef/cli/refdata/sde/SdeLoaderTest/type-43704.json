@@ -24,6 +24,7 @@
     "ru" : "Standup XL-Set Structure and Component Manufacturing Efficiency I",
     "zh" : "屹立超大型建筑和组件制造效率 I"
   },
+  "packaged_volume" : 40,
   "portion_size" : 1,
   "published" : true,
   "radius" : 100,

@@ -13,6 +13,7 @@
     "ru" : "Fulleroferrocene Reaction Formula",
     "zh" : "富勒二茂铁反应配方"
   },
+  "packaged_volume" : 0.01,
   "portion_size" : 1,
   "published" : true,
   "volume" : 0.01,

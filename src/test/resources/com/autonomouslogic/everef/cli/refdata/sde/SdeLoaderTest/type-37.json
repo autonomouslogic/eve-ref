@@ -23,6 +23,7 @@
     "ru" : "Isogen",
     "zh" : "同位聚合体"
   },
+  "packaged_volume" : 0.01,
   "portion_size" : 1,
   "published" : true,
   "volume" : 0.01,

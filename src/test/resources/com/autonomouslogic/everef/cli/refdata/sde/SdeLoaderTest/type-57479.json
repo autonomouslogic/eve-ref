@@ -24,6 +24,7 @@
     "ru" : "Core Temperature Regulator",
     "zh" : "核心温度调节器"
   },
+  "packaged_volume" : 180,
   "portion_size" : 1,
   "published" : true,
   "volume" : 180,

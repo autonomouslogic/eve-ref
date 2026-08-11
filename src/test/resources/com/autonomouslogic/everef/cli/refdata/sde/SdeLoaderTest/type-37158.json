@@ -24,6 +24,7 @@
     "ru" : "Standup M-Set Ammunition Manufacturing Material Efficiency I",
     "zh" : "屹立中型弹药制造材料效率 I"
   },
+  "packaged_volume" : 10,
   "portion_size" : 1,
   "published" : true,
   "radius" : 100,

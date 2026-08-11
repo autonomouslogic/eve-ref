@@ -24,6 +24,7 @@
     "ru" : "Structure Medical Center",
     "zh" : "建筑医疗中心"
   },
+  "packaged_volume" : 3000,
   "portion_size" : 1,
   "published" : true,
   "volume" : 3000,

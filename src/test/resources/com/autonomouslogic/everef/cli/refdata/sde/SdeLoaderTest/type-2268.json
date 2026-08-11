@@ -22,6 +22,7 @@
     "ru" : "Aqueous Liquids",
     "zh" : "水基液体"
   },
+  "packaged_volume" : 0.005,
   "portion_size" : 1,
   "published" : true,
   "volume" : 0.005,

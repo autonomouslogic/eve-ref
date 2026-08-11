@@ -24,6 +24,7 @@
     "ru" : "Standup XL-Set Laboratory Optimization I",
     "zh" : "屹立超大型实验室优化 I"
   },
+  "packaged_volume" : 40,
   "portion_size" : 1,
   "published" : true,
   "radius" : 100,

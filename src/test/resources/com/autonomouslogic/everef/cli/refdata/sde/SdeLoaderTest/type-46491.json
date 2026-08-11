@@ -24,6 +24,7 @@
     "ru" : "Standup M-Set Hybrid Reactor Material Efficiency II",
     "zh" : "屹立中型混合反应堆材料效率 II"
   },
+  "packaged_volume" : 10,
   "portion_size" : 1,
   "published" : true,
   "radius" : 100,

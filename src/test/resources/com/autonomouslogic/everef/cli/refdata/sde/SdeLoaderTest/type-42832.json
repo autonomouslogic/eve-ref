@@ -24,6 +24,7 @@
     "ru" : "Armor Energizing Charge",
     "zh" : "装甲电压强化弹药"
   },
+  "packaged_volume" : 0.01,
   "portion_size" : 500,
   "published" : true,
   "volume" : 0.01,

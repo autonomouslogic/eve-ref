@@ -26,6 +26,7 @@
     "ru" : "Legion Core - Dissolution Sequencer",
     "zh" : "圣卒核心 - 散解程控装置"
   },
+  "packaged_volume" : 40,
   "portion_size" : 1,
   "published" : true,
   "race_id" : 4,

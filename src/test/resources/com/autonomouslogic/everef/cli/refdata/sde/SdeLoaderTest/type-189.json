@@ -26,6 +26,7 @@
     "ru" : "Depleted Uranium M",
     "zh" : "贫铀弹 M"
   },
+  "packaged_volume" : 0.0125,
   "portion_size" : 100,
   "published" : true,
   "tech_level" : 1,

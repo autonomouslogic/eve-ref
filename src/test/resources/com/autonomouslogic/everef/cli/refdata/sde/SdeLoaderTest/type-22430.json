@@ -28,6 +28,7 @@
     "ru" : "Sin",
     "zh" : "罪恶级"
   },
+  "packaged_volume" : 50000,
   "portion_size" : 1,
   "published" : true,
   "race_id" : 8,

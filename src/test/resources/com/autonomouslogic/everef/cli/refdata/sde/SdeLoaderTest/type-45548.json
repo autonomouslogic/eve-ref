@@ -24,6 +24,7 @@
     "ru" : "Standup XL-Set Thukker Structure and Component Manufacturing Efficiency",
     "zh" : "屹立超大型图克尔建筑和组件制造效率"
   },
+  "packaged_volume" : 40,
   "portion_size" : 1,
   "published" : true,
   "radius" : 100,

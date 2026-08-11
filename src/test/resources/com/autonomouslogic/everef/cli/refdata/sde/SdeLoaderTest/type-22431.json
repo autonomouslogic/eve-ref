@@ -12,6 +12,7 @@
     "ru" : "Sin Blueprint",
     "zh" : "罪恶级蓝图"
   },
+  "packaged_volume" : 0.01,
   "portion_size" : 1,
   "published" : true,
   "tech_level" : 2,

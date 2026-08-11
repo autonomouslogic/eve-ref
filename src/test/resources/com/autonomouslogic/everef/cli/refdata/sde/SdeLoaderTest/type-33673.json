@@ -28,6 +28,7 @@
     "ru" : "Whiptail",
     "zh" : "长尾蜥级"
   },
+  "packaged_volume" : 2500,
   "portion_size" : 1,
   "published" : true,
   "race_id" : 1,

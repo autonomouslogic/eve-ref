@@ -24,6 +24,7 @@
     "ru" : "Fortizar",
     "zh" : "铁壁"
   },
+  "packaged_volume" : 80000,
   "portion_size" : 1,
   "published" : true,
   "radius" : 85000,
