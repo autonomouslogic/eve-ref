@@ -12,6 +12,7 @@
   "graphic_id" : 21511,
   "group_id" : 958,
   "icon_id" : 3636,
+  "is_repackable" : true,
   "market_group_id" : 1122,
   "mass" : 1200000,
   "meta_group_id" : 14,

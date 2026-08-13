@@ -146,6 +146,7 @@
   "radius" : 1,
   "type_id" : 2048,
   "volume" : 5,
+  "is_repackable" : true,
   "meta_group_id" : 2,
   "meta_level" : 5,
   "tech_level" : 2,

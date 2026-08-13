@@ -11,6 +11,7 @@
   },
   "group_id" : 60,
   "icon_id" : 77,
+  "is_repackable" : true,
   "market_group_id" : 615,
   "mass" : 5000,
   "meta_group_id" : 2,

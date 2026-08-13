@@ -374,6 +374,7 @@
   "radius" : 45000,
   "type_id" : 35832,
   "volume" : 8000,
+  "is_repackable" : true,
   "sound_id" : 20231,
   "produced_by_blueprints" : {
     "36966" : {

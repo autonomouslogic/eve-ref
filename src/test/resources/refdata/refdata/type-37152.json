@@ -142,6 +142,7 @@
   "radius" : 100,
   "type_id" : 37152,
   "volume" : 10,
+  "is_repackable" : true,
   "meta_group_id" : 53,
   "tech_level" : 2,
   "variation_parent_type_id" : 43732,

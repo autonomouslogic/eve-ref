@@ -14,6 +14,7 @@
   "faction_id" : 500004,
   "graphic_id" : 318,
   "group_id" : 27,
+  "is_repackable" : true,
   "market_group_id" : 81,
   "mass" : 100250000,
   "meta_group_id" : 1,

@@ -88,6 +88,7 @@
   factionID: 500004
   graphicID: 318
   groupID: 27
+  isRepackable: true
   marketGroupID: 81
   mass: 100250000
   metaGroupID: 1
@@ -433,6 +434,7 @@
       控制。"
   groupID: 60
   iconID: 77
+  isDynamicType: true
   metaGroupID: 15
   metaLevel: 10
   name:
@@ -481,6 +483,7 @@
       控制。"
   groupID: 60
   iconID: 77
+  isRepackable: true
   marketGroupID: 615
   mass: 5000
   metaGroupID: 1
@@ -531,6 +534,7 @@
       控制。"
   groupID: 60
   iconID: 77
+  isRepackable: true
   marketGroupID: 615
   mass: 5000
   metaGroupID: 2
@@ -615,6 +619,7 @@
   graphicID: 21511
   groupID: 958
   iconID: 3636
+  isRepackable: true
   marketGroupID: 1122
   mass: 1200000
   metaGroupID: 14
@@ -676,6 +681,7 @@
   graphicID: 21510
   groupID: 958
   iconID: 3636
+  isRepackable: true
   marketGroupID: 1122
   mass: 1200000
   metaGroupID: 14
@@ -761,6 +767,7 @@
   graphicID: 21509
   groupID: 958
   iconID: 3636
+  isRepackable: true
   marketGroupID: 1122
   mass: 1200000
   metaGroupID: 14
@@ -852,6 +859,7 @@
   factionID: 500004
   graphicID: 3350
   groupID: 898
+  isRepackable: true
   marketGroupID: 1078
   mass: 141700000
   metaGroupID: 2
@@ -1157,6 +1165,7 @@
       件、纳米装配阵列和许多纳米块体构成。安装在采用昇威科技建造的建筑上的专门槽位中可以制造各种服务装备、建筑装备和建筑改装件。"
   groupID: 1321
   iconID: 21595
+  isRepackable: true
   marketGroupID: 2232
   mass: 4000
   metaGroupID: 54
@@ -1267,6 +1276,7 @@
       在低安星系的防御能力有了很大提升。铁壁可以使用昇威的屹立专用服务和建筑装备，以满足建筑使用者的需求。将屹立大型改装件安装在铁壁上可以进一步细化它的职能。"
   graphicID: 21138
   groupID: 1657
+  isRepackable: true
   marketGroupID: 2201
   mass: 10000000000
   metaGroupID: 1
@@ -2804,6 +2814,7 @@
       \n注：只能同时在一个建筑上装配一件相同类型的改装件，包括衍生型号在内。"
   groupID: 1820
   iconID: 21729
+  isRepackable: true
   marketGroupID: 2347
   mass: 200
   metaGroupID: 54
@@ -2892,6 +2903,7 @@
       \n注：只能同时在一个建筑上装配一件相同类型的改装件，包括衍生型号在内。"
   groupID: 1821
   iconID: 21729
+  isRepackable: true
   marketGroupID: 2347
   mass: 200
   metaGroupID: 54
@@ -2976,6 +2988,7 @@
       同时在一个建筑上装配一件相同类型的改装件，包括衍生型号在内。"
   groupID: 1843
   iconID: 21729
+  isRepackable: true
   marketGroupID: 2347
   mass: 200
   metaGroupID: 54
@@ -3061,6 +3074,7 @@
       只能同时在一个建筑上装配一件相同类型的改装件，包括衍生型号在内。"
   groupID: 1842
   iconID: 21729
+  isRepackable: true
   marketGroupID: 2347
   mass: 200
   metaGroupID: 54
@@ -3146,6 +3160,7 @@
       注：只能同时在一个建筑上装配一件相同类型的改装件，包括衍生型号在内。"
   groupID: 1866
   iconID: 21729
+  isRepackable: true
   marketGroupID: 2348
   mass: 200
   metaGroupID: 54
@@ -3231,6 +3246,7 @@
       注：只能同时在一个建筑上装配一件相同类型的改装件，包括衍生型号在内。"
   groupID: 1848
   iconID: 21729
+  isRepackable: true
   marketGroupID: 2347
   mass: 200
   metaGroupID: 54
@@ -3321,6 +3337,7 @@
       建筑改装件。\n\n\n\n注：只能同时在一个建筑上装配一件相同类型的改装件，包括衍生型号在内。"
   groupID: 1853
   iconID: 21729
+  isRepackable: true
   marketGroupID: 2348
   mass: 200
   metaGroupID: 54
@@ -3412,6 +3429,7 @@
       和建筑改装件。\n\n\n\n注：只能同时在一个建筑上装配一件相同类型的改装件，包括衍生型号在内。"
   groupID: 1828
   iconID: 21729
+  isRepackable: true
   marketGroupID: 2347
   mass: 200
   metaGroupID: 53
@@ -3508,6 +3526,7 @@
       、建筑装备和建筑改装件。\n\n注：只能同时在一个建筑上装配一件相同类型的改装件，包括衍生型号在内。"
   groupID: 1869
   iconID: 21729
+  isRepackable: true
   marketGroupID: 2349
   mass: 200
   metaGroupID: 54
@@ -3865,6 +3884,7 @@
       衍生型号在内。"
   groupID: 1869
   iconID: 21729
+  isRepackable: true
   marketGroupID: 2349
   mass: 200
   metaGroupID: 52
@@ -3954,6 +3974,7 @@
       同时在一个建筑上装配一件相同类型的改装件，包括衍生型号在内。"
   groupID: 1868
   iconID: 21729
+  isRepackable: true
   marketGroupID: 2349
   mass: 200
   metaGroupID: 54
@@ -4042,6 +4063,7 @@
       同时在一个建筑上装配一件相同类型的改装件，包括衍生型号在内。"
   groupID: 1870
   iconID: 21729
+  isRepackable: true
   marketGroupID: 2349
   mass: 200
   metaGroupID: 54
@@ -4176,6 +4198,7 @@
       锚定任何超大型建筑。在此日期之前已锚定的超大型建筑除非解锚，否则不受此规定影响。"
   graphicID: 21406
   groupID: 1404
+  isRepackable: true
   marketGroupID: 2324
   mass: 50000000000
   name:
@@ -4261,6 +4284,7 @@
       装件。\n\n\n\n注：只能同时在一个建筑上装配一件相同类型的改装件，包括衍生型号在内。"
   groupID: 1936
   iconID: 21788
+  isRepackable: true
   marketGroupID: 2341
   mass: 200
   metaGroupID: 53
@@ -4284,6 +4308,7 @@
   basePrice: 15000000
   groupID: 1889
   iconID: 3739
+  isRepackable: true
   marketGroupID: 2404
   name:
     de: "Fulleroferrocene Reaction Formula"
@@ -4370,6 +4395,7 @@
       建筑改装件。\n\n\n\n注：只能同时在一个建筑上装配一件相同类型的改装件，包括衍生型号在内。"
   groupID: 1829
   iconID: 21729
+  isRepackable: true
   marketGroupID: 2347
   mass: 200
   metaGroupID: 54
@@ -4468,6 +4494,7 @@
   factionID: 500010
   graphicID: 20605
   groupID: 831
+  isRepackable: true
   marketGroupID: 1932
   mass: 1000000
   metaGroupID: 2
@@ -4594,6 +4621,7 @@
   factionID: 500004
   graphicID: 2138
   groupID: 27
+  isRepackable: true
   marketGroupID: 1379
   mass: 97100000
   metaGroupID: 4
@@ -4880,6 +4908,7 @@
   basePrice: 10000000
   groupID: 1888
   iconID: 2664
+  isRepackable: true
   marketGroupID: 2403
   metaGroupID: 1
   name:
@@ -5013,6 +5042,7 @@
       筑使用者的需求。将屹立中型改装件安装在空堡上可以进一步细化它的职能。"
   graphicID: 21137
   groupID: 1657
+  isRepackable: true
   marketGroupID: 2201
   mass: 3000000000
   name:

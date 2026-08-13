@@ -2,6 +2,7 @@
   "base_price" : 15000000,
   "group_id" : 1889,
   "icon_id" : 3739,
+  "is_repackable" : true,
   "market_group_id" : 2404,
   "name" : {
     "de" : "Fulleroferrocene Reaction Formula",

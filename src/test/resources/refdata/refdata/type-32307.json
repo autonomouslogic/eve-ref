@@ -444,6 +444,7 @@
   "volume" : 454500,
   "base_price" : 219800000,
   "faction_id" : 500004,
+  "is_repackable" : true,
   "meta_group_id" : 4,
   "meta_level" : 7,
   "race_id" : 8,

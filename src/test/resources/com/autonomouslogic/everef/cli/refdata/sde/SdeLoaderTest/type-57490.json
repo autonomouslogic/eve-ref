@@ -2,6 +2,7 @@
   "base_price" : 10000000,
   "group_id" : 1888,
   "icon_id" : 2664,
+  "is_repackable" : true,
   "market_group_id" : 2403,
   "meta_group_id" : 1,
   "name" : {

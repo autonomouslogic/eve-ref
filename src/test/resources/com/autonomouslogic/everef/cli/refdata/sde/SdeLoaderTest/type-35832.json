@@ -11,6 +11,7 @@
   },
   "graphic_id" : 21137,
   "group_id" : 1657,
+  "is_repackable" : true,
   "market_group_id" : 2201,
   "mass" : 3000000000,
   "name" : {

@@ -11,6 +11,7 @@
   },
   "group_id" : 60,
   "icon_id" : 77,
+  "is_dynamic_type" : true,
   "meta_group_id" : 15,
   "meta_level" : 10,
   "name" : {
