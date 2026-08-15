@@ -13,8 +13,7 @@ import org.junit.jupiter.api.Test;
 
 public class LoadedRefDataTest {
 
-	private static final ObjectMapper OBJECT_MAPPER =
-			new ObjectMapper().registerModule(new JavaTimeModule());
+	private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper().registerModule(new JavaTimeModule());
 
 	@Test
 	@SneakyThrows

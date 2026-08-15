@@ -174,6 +174,12 @@ public class InventoryType {
 	Map<Long, RandomizedTypeMaterial> randomizedTypeMaterials;
 
 	@JsonProperty
+	Boolean isRepackable;
+
+	@JsonProperty
+	Boolean isDynamicType;
+
+	@JsonProperty
 	@Schema(description = "Types this can be fitted to. This is added by EVE Ref.")
 	List<Long> canFitTypes;
 
