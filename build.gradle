@@ -12,7 +12,6 @@ plugins {
 	id "io.swagger.core.v3.swagger-gradle-plugin" version "2.2.53"
 	id "org.flywaydb.flyway" version "13.2.0" apply false
 	id "nu.studer.jooq" version "10.2.1" apply false
-	id "io.micronaut.application" version "4.6.2"
 }
 
 group "com.autonomouslogic.everef"
@@ -30,7 +29,6 @@ ext {
 	if (file("local.env").exists()) {
 		file("local.env").withInputStream { envProperties.load(it) }
 	}
-	micronautVersion = "4.10.17"
 }
 
 repositories {
@@ -101,13 +99,6 @@ dependencies {
 	implementation "org.flywaydb:flyway-database-postgresql:13.2.0"
 	implementation "com.h2database:h2:2.4.240"
 	implementation "org.postgresql:postgresql:42.7.13"
-
-	// Micronaut
-	annotationProcessor "io.micronaut.jaxrs:micronaut-jaxrs-processor"
-	implementation "io.micronaut.platform:micronaut-parent:$micronautVersion"
-	implementation "io.micronaut:micronaut-jackson-databind"
-	implementation "io.micronaut.jaxrs:micronaut-jaxrs-server"
-	implementation "io.micronaut:micronaut-management"
 
 	// Helidon
 	implementation "io.helidon.webserver:helidon-webserver:4.5.2"
@@ -318,12 +309,6 @@ spotless {
 
 gitSemVer {
 	buildMetadataSeparator.set("-")
-}
-
-micronaut {
-	version "$micronautVersion"
-	runtime("netty")
-	testRuntime("junit5")
 }
 
 application {
