@@ -18,8 +18,6 @@ import com.autonomouslogic.everef.refdata.InventoryType;
 import com.autonomouslogic.everef.service.RefDataService;
 import com.autonomouslogic.everef.service.SystemCostIndexService;
 import com.autonomouslogic.everef.util.MathUtil;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.helidon.http.Status;
 import io.helidon.webserver.http.Handler;
 import io.helidon.webserver.http.HttpRules;
@@ -48,13 +46,15 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import tools.jackson.databind.DeserializationFeature;
+import tools.jackson.databind.json.JsonMapper;
 
 @Tag(name = "industry")
 @Path("/v1/industry/cost")
 @Log4j2
 public class IndustryCostHandler implements HttpService, Handler {
 	@Inject
-	protected ObjectMapper objectMapper;
+	protected JsonMapper jsonMapper;
 
 	@Inject
 	protected RefDataService refDataService;
@@ -80,11 +80,14 @@ public class IndustryCostHandler implements HttpService, Handler {
 	@Inject
 	protected ApiUtil apiUtil;
 
-	private final ObjectMapper queryStringMapper;
+	private final JsonMapper queryStringMapper;
 
 	@Inject
-	protected IndustryCostHandler(ObjectMapper objectMapper) {
-		queryStringMapper = objectMapper.copy().enable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+	protected IndustryCostHandler(JsonMapper jsonMapper) {
+		queryStringMapper = jsonMapper
+				.rebuild()
+				.enable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+				.build();
 	}
 
 	@GET
@@ -131,7 +134,7 @@ public class IndustryCostHandler implements HttpService, Handler {
 		input = handleDefaults(input);
 		validateInput(input);
 		var result = industryCost(input);
-		var json = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(result) + "\n";
+		var json = jsonMapper.writerWithDefaultPrettyPrinter().writeValueAsString(result) + "\n";
 		res.status(Status.OK_200);
 		apiUtil.setStandardHeaders(res, Duration.ofMinutes(10), "https://docs.everef.net/api/industry-cost.html");
 		res.send(json);

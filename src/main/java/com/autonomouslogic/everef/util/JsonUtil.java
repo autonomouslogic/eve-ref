@@ -1,9 +1,5 @@
 package com.autonomouslogic.everef.util;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.LongNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.Streams;
 import java.util.Collection;
 import java.util.List;
@@ -11,6 +7,10 @@ import java.util.Optional;
 import java.util.stream.Stream;
 import lombok.NonNull;
 import org.apache.commons.lang3.StringUtils;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.node.ArrayNode;
+import tools.jackson.databind.node.LongNode;
+import tools.jackson.databind.node.ObjectNode;
 
 public class JsonUtil {
 	public static boolean isNull(JsonNode node) {
@@ -48,7 +48,7 @@ public class JsonUtil {
 	}
 
 	public static boolean objectHasValue(@NonNull ObjectNode obj, @NonNull String val) {
-		return Streams.stream(obj.fields())
+		return obj.properties().stream()
 				.map(entry -> entry.getValue())
 				.filter(v -> !v.isNull())
 				.anyMatch(v -> v.asText().equals(val));

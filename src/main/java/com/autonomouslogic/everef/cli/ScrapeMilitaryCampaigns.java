@@ -11,9 +11,6 @@ import com.autonomouslogic.everef.url.UrlParser;
 import com.autonomouslogic.everef.util.CompressUtil;
 import com.autonomouslogic.everef.util.TempFiles;
 import com.autonomouslogic.everef.util.VirtualThreads;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
@@ -25,6 +22,9 @@ import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.node.ObjectNode;
 
 /**
  * Scrapes military campaigns data from the ESI API.
@@ -35,7 +35,7 @@ public class ScrapeMilitaryCampaigns implements Command {
 	protected EsiHelper esiHelper;
 
 	@Inject
-	protected ObjectMapper objectMapper;
+	protected JsonMapper jsonMapper;
 
 	@Inject
 	protected TempFiles tempFiles;
@@ -84,7 +84,7 @@ public class ScrapeMilitaryCampaigns implements Command {
 							.urlPath("/military-campaigns/" + id + "/objectives")
 							.build())) {
 						var node = esiHelper.decodeResponse(resp);
-						var objectivesById = objectMapper.createObjectNode();
+						var objectivesById = jsonMapper.createObjectNode();
 						node.get("objectives")
 								.forEach(obj -> objectivesById.set(obj.get("id").asText(), obj));
 						entry.getValue().set("objectives", objectivesById);
@@ -98,7 +98,7 @@ public class ScrapeMilitaryCampaigns implements Command {
 
 		// Write plain JSON, compress, upload latest (plain JSON) and archive (bz2)
 		var jsonFile = tempFiles.tempFile("military-campaigns", ".json").toFile();
-		objectMapper.writeValue(jsonFile, campaigns);
+		jsonMapper.writeValue(jsonFile, campaigns);
 		var compressedFile = CompressUtil.compressBzip2(jsonFile);
 		s3Util.uploadLatestAndArchive(
 				jsonFile,

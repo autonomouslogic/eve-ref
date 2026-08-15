@@ -13,7 +13,6 @@ import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.url.UrlParser;
 import com.autonomouslogic.everef.util.VirtualThreads;
 import com.autonomouslogic.everef.util.archive.ArchivePathFactories;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Single;
@@ -36,6 +35,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
 import software.amazon.awssdk.core.async.AsyncRequestBody;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
+import tools.jackson.databind.json.JsonMapper;
 
 /**
  * Builds index pages for <code>data.everef.net</code>.
@@ -59,7 +59,7 @@ public class DataIndex implements Command {
 	protected UrlParser urlParser;
 
 	@Inject
-	protected ObjectMapper objectMapper;
+	protected JsonMapper jsonMapper;
 
 	private S3Url dataUrl;
 	private final String dataDomain = Configs.DATA_DOMAIN.getRequired();
@@ -202,7 +202,7 @@ public class DataIndex implements Command {
 				.directories(directories)
 				.build();
 
-		return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsBytes(indexPage);
+		return jsonMapper.writerWithDefaultPrettyPrinter().writeValueAsBytes(indexPage);
 	}
 
 	private IndexFileEntry buildFileEntry(FileEntry entry) {

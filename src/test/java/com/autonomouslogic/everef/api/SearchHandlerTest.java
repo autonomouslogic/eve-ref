@@ -16,7 +16,6 @@ import com.autonomouslogic.everef.openapi.api.model.SearchEntryUrls;
 import com.autonomouslogic.everef.service.RefDataService;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.util.MockScrapeBuilder;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.FileInputStream;
 import javax.inject.Inject;
@@ -35,6 +34,7 @@ import org.junit.jupiter.api.Timeout;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junitpioneer.jupiter.SetEnvironmentVariable;
 import org.mockito.junit.jupiter.MockitoExtension;
+import tools.jackson.databind.json.JsonMapper;
 
 @ExtendWith(MockitoExtension.class)
 @SetEnvironmentVariable(key = "DATA_BASE_URL", value = "http://localhost:" + TEST_PORT)
@@ -55,7 +55,7 @@ public class SearchHandlerTest {
 	RefDataService refDataService;
 
 	@Inject
-	ObjectMapper objectMapper;
+	JsonMapper jsonMapper;
 
 	SearchApi searchApi;
 	MockWebServer server;
@@ -91,7 +91,7 @@ public class SearchHandlerTest {
 	@SneakyThrows
 	void shouldSearchForInventoryTypes() {
 		var result = searchApi.search("Tritanium");
-		log.info("Result: {}", objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(result));
+		log.info("Result: {}", jsonMapper.writerWithDefaultPrettyPrinter().writeValueAsString(result));
 		var entries = result.getEntries();
 		assertEquals(1, entries.size(), entries.toString());
 		assertEquals(
@@ -111,7 +111,7 @@ public class SearchHandlerTest {
 	@SneakyThrows
 	void shouldSearchForMarketGroups() {
 		var result = searchApi.search("Battleships");
-		log.info("Result: {}", objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(result));
+		log.info("Result: {}", jsonMapper.writerWithDefaultPrettyPrinter().writeValueAsString(result));
 		var entries = result.getEntries();
 		assertTrue(result.getEntries().size() > 0);
 		assertEquals(
@@ -131,7 +131,7 @@ public class SearchHandlerTest {
 	@SneakyThrows
 	void shouldSearchForCategories() {
 		var result = searchApi.search("Starbase");
-		log.info("Result: {}", objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(result));
+		log.info("Result: {}", jsonMapper.writerWithDefaultPrettyPrinter().writeValueAsString(result));
 		var entries = result.getEntries();
 		assertEquals(1, entries.size(), entries.toString());
 		assertEquals(
@@ -151,7 +151,7 @@ public class SearchHandlerTest {
 	@SneakyThrows
 	void shouldSearchForInventoryGroups() {
 		var result = searchApi.search("Battleship");
-		log.info("Result: {}", objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(result));
+		log.info("Result: {}", jsonMapper.writerWithDefaultPrettyPrinter().writeValueAsString(result));
 		var entries = result.getEntries();
 		assertTrue(result.getEntries().size() > 0);
 		assertEquals(
@@ -171,7 +171,7 @@ public class SearchHandlerTest {
 	@SneakyThrows
 	void shouldSearchByPartialName() {
 		var result = searchApi.search("Trit");
-		log.info("Result: {}", objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(result));
+		log.info("Result: {}", jsonMapper.writerWithDefaultPrettyPrinter().writeValueAsString(result));
 		assertTrue(result.getEntries().size() > 0);
 		assertEquals(
 				new SearchEntry()

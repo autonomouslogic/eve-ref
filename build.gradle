@@ -63,13 +63,23 @@ dependencies {
 	implementation "software.amazon.awssdk:dynamodb:2.51.1"
 	implementation "software.amazon.awssdk:netty-nio-client:2.51.1"
 	implementation "com.autonomouslogic.dynamomapper:dynamo-mapper:2.1.35"
+	// Jackson 3 - primary Jackson dependency for this project's own code.
+	// Jackson 3 uses different packages (tools.jackson.*) from Jackson 2 (com.fasterxml.jackson.*),
+	// so both versions can coexist on the classpath without conflicts.
+	// jackson-annotations stays at com.fasterxml.jackson.core (Jackson 3 databind still depends on it).
 	implementation "com.fasterxml.jackson.core:jackson-annotations:2.22"
-	implementation "com.fasterxml.jackson.core:jackson-core:2.22.1"
-	implementation "com.fasterxml.jackson.core:jackson-databind:2.22.1"
-	implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.22.1"
-	implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-csv:2.22.1"
-	implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.22.1"
-	implementation "com.fasterxml.jackson.module:jackson-module-kotlin:2.22.1"
+	implementation "tools.jackson.core:jackson-databind:3.2.2"
+	implementation "tools.jackson.dataformat:jackson-dataformat-yaml:3.2.2"
+	implementation "tools.jackson.dataformat:jackson-dataformat-csv:3.2.2"
+	implementation "tools.jackson.module:jackson-module-kotlin:3.2.2"
+	// jackson-datatype-jsr310 is now embedded in Jackson 3 - no separate dependency needed.
+	// Jackson 2 remains on the classpath transitively via the following:
+	// - swagger-core (io.swagger.core.v3:swagger-core) has no Jackson 3 release, kept for OpenAPI spec generation.
+	// - dynamo-mapper (com.autonomouslogic.dynamomapper:dynamo-mapper) uses Jackson 2 internally.
+	// - jackson-databind-nullable is only used in OpenAPI generated code which uses Jackson 2.
+	// These Jackson 2 artifacts come in transitively; explicit declarations below document the intent.
+	implementation "com.fasterxml.jackson.core:jackson-core:2.22.1" // kept for swagger-core and dynamo-mapper
+	implementation "com.fasterxml.jackson.core:jackson-databind:2.22.1" // kept for swagger-core and dynamo-mapper
 	implementation "org.apache.commons:commons-pool2:2.13.1"
 	implementation "org.apache.commons:commons-compress:1.28.0"
 	implementation "org.tukaani:xz:1.12"

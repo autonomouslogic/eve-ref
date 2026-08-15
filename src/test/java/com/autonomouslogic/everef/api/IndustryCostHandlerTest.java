@@ -30,10 +30,6 @@ import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.test.TestDataUtil;
 import com.autonomouslogic.everef.util.MockScrapeBuilder;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.common.base.CaseFormat;
 import java.io.File;
 import java.io.FileInputStream;
@@ -73,6 +69,9 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.junitpioneer.jupiter.SetEnvironmentVariable;
 import org.mockito.junit.jupiter.MockitoExtension;
+import tools.jackson.core.json.JsonReadFeature;
+import tools.jackson.databind.DeserializationFeature;
+import tools.jackson.databind.json.JsonMapper;
 
 /**
  * Full test of all products against the API:
@@ -109,7 +108,7 @@ public class IndustryCostHandlerTest {
 	ApiRunner apiRunner;
 
 	@Inject
-	ObjectMapper objectMapper;
+	JsonMapper jsonMapper;
 
 	@Inject
 	MockScrapeBuilder mockScrapeBuilder;
@@ -178,20 +177,20 @@ public class IndustryCostHandlerTest {
 				res.getHeaders().get("X-OpenAPI").getFirst());
 		var actual = res.getData();
 
-		System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(actual));
+		System.out.println(jsonMapper.writerWithDefaultPrettyPrinter().writeValueAsString(actual));
 
 		if (!expected.equals(actual)) {
 			assertEquals(
-					objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(expected),
-					objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(actual));
+					jsonMapper.writerWithDefaultPrettyPrinter().writeValueAsString(expected),
+					jsonMapper.writerWithDefaultPrettyPrinter().writeValueAsString(actual));
 		}
 	}
 
 	static Stream<Arguments> costTests() {
-		var mapper = new ObjectMapper()
+		var mapper = JsonMapper.builder()
 				.enable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
-				.enable(JsonParser.Feature.ALLOW_COMMENTS)
-				.registerModule(new JavaTimeModule());
+				.enable(JsonReadFeature.ALLOW_JAVA_COMMENTS)
+				.build();
 		return TEST_NAMES.stream().map(name -> {
 			try {
 				var input = mapper.readValue(openTestFile(name, "input"), IndustryCostInput.class);
@@ -234,7 +233,7 @@ public class IndustryCostHandlerTest {
 		var res = httpClient.send(req, HttpResponse.BodyHandlers.ofString());
 		log.info("Body: {}", res.body());
 		assertEquals(200, res.statusCode());
-		var output = objectMapper.readValue(res.body(), IndustryCost.class);
+		var output = jsonMapper.readValue(res.body(), IndustryCost.class);
 		assertNull(output.getInput().getStructureTypeId());
 		assertNull(output.getInput().getRigId());
 	}
@@ -484,10 +483,10 @@ public class IndustryCostHandlerTest {
 							.build());
 		}
 
-		esiMarketPrices = objectMapper.writeValueAsString(esiPrices);
+		esiMarketPrices = jsonMapper.writeValueAsString(esiPrices);
 		esiMarketPriceService.init();
 
-		this.fuzzworkPrices = objectMapper.writeValueAsString(fuzzworkPrices);
+		this.fuzzworkPrices = jsonMapper.writeValueAsString(fuzzworkPrices);
 	}
 
 	class TestDispatcher extends Dispatcher {

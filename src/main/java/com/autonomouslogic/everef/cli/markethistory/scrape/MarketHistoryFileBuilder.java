@@ -3,7 +3,6 @@ package com.autonomouslogic.everef.cli.markethistory.scrape;
 import com.autonomouslogic.everef.util.CompressUtil;
 import com.autonomouslogic.everef.util.JsonNodeCsvWriter;
 import com.autonomouslogic.everef.util.TempFiles;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.google.common.collect.Ordering;
 import java.io.File;
 import java.util.ArrayList;
@@ -12,6 +11,7 @@ import java.util.Collection;
 import javax.inject.Inject;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
+import tools.jackson.databind.JsonNode;
 
 @Log4j2
 class MarketHistoryFileBuilder {

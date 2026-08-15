@@ -9,13 +9,13 @@ import com.autonomouslogic.everef.esi.EsiConstants;
 import com.autonomouslogic.everef.esi.EsiHelper;
 import com.autonomouslogic.everef.openapi.esi.api.UniverseApi;
 import com.autonomouslogic.everef.util.VirtualThreads;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.reactivex.rxjava3.core.Flowable;
 import java.time.Instant;
 import javax.inject.Inject;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import lombok.extern.log4j.Log4j2;
+import tools.jackson.databind.json.JsonMapper;
 
 @Log4j2
 public class PublicStructureSource implements StructureSource {
@@ -23,7 +23,7 @@ public class PublicStructureSource implements StructureSource {
 	protected UniverseApi universeApi;
 
 	@Inject
-	protected ObjectMapper objectMapper;
+	protected JsonMapper jsonMapper;
 
 	@Inject
 	protected StructureScrapeHelper structureScrapeHelper;

@@ -5,7 +5,6 @@ import com.autonomouslogic.everef.cli.markethistory.MarketHistoryUtil;
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.url.DataUrl;
 import com.autonomouslogic.everef.util.VirtualThreads;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.google.common.collect.Ordering;
 import io.reactivex.rxjava3.core.Flowable;
 import java.time.LocalDate;
@@ -18,6 +17,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.tuple.Pair;
+import tools.jackson.databind.JsonNode;
 
 /**
  * Loads the batch market history needed for the scrape.

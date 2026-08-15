@@ -13,10 +13,6 @@ import com.autonomouslogic.everef.test.TestDataUtil;
 import com.autonomouslogic.everef.util.DataUtil;
 import com.autonomouslogic.everef.util.MockScrapeBuilder;
 import com.autonomouslogic.everef.util.RefDataUtil;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
 import java.io.File;
 import java.io.FileInputStream;
@@ -47,6 +43,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junitpioneer.jupiter.SetEnvironmentVariable;
 import org.mockito.junit.jupiter.MockitoExtension;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.node.ObjectNode;
 
 @ExtendWith(MockitoExtension.class)
 @Log4j2
@@ -73,7 +72,7 @@ public class PublishRefDataTest {
 	TestDataUtil testDataUtil;
 
 	@Inject
-	ObjectMapper objectMapper;
+	JsonMapper jsonMapper;
 
 	@Inject
 	RefDataUtil refDataUtil;
@@ -164,10 +163,10 @@ public class PublishRefDataTest {
 	@SneakyThrows
 	private void assertIndex(RefDataConfig config, RefTestConfig testConfig, Set<String> expectedKeys) {
 		var expectedIndex =
-				objectMapper.valueToTree(testConfig.getIds().stream().sorted().toList());
+				jsonMapper.valueToTree(testConfig.getIds().stream().sorted().toList());
 		var path = "base/" + config.getOutputFile();
 		expectedKeys.add(path);
-		var actualIndex = objectMapper.readTree(mockS3Adapter
+		var actualIndex = jsonMapper.readTree(mockS3Adapter
 				.getTestObject(BUCKET_NAME, path, s3)
 				.orElseThrow(() -> new RuntimeException("Missing path: " + path)));
 		assertEquals(expectedIndex.toString(), actualIndex.toString());
@@ -179,7 +178,7 @@ public class PublishRefDataTest {
 		expectedKeys.add(path);
 		var expectedItem =
 				dataUtil.loadJsonResource(String.format("/refdata/refdata/%s-%s.json", testConfig.getFilePrefix(), id));
-		var actualItem = objectMapper.readTree(mockS3Adapter
+		var actualItem = jsonMapper.readTree(mockS3Adapter
 				.getTestObject(BUCKET_NAME, path, s3)
 				.orElseThrow(() -> new RuntimeException("Missing path: " + path)));
 		assertEquals(expectedItem, actualItem);
@@ -309,7 +308,7 @@ public class PublishRefDataTest {
 	private void assertBundle(ExpectedBundleIds expectedBundleIds, String path) {
 		var expectedBundle = buildTestBundle(expectedBundleIds);
 
-		var actualItem = objectMapper.readTree(mockS3Adapter
+		var actualItem = jsonMapper.readTree(mockS3Adapter
 				.getTestObject(BUCKET_NAME, path, s3)
 				.orElseThrow(() -> new RuntimeException("Missing path: " + path)));
 
@@ -323,7 +322,7 @@ public class PublishRefDataTest {
 				"categories",
 				"groups",
 				"meta_groups");
-		var unknownFields = Lists.newArrayList(actualItem.fieldNames()).stream()
+		var unknownFields = Lists.newArrayList(actualItem.propertyNames()).stream()
 				.filter(o -> !knownBundleFields.contains(o))
 				.toList();
 		assertEquals(List.of(), unknownFields);
@@ -346,8 +345,8 @@ public class PublishRefDataTest {
 				.sorted()
 				.toList();
 		var supplied = Lists.newArrayList(Optional.ofNullable(bundle.get(rootField))
-						.map(JsonNode::fieldNames)
-						.orElse(Iterators.forArray()))
+						.map(JsonNode::propertyNames)
+						.orElse(java.util.Collections.emptySet()))
 				.stream()
 				.map(e -> Long.parseLong(e))
 				.sorted()
@@ -366,7 +365,7 @@ public class PublishRefDataTest {
 		var groupIds = expectedBundleIds.getGroupIds();
 		var metaGroupIds = expectedBundleIds.getMetaGroupIds();
 
-		var bundle = objectMapper.createObjectNode();
+		var bundle = jsonMapper.createObjectNode();
 		if (typeIds != null && !typeIds.isEmpty()) {
 			var container = bundle.putObject("types");
 			for (long id : typeIds) {
@@ -461,7 +460,7 @@ public class PublishRefDataTest {
 				.findFirst()
 				.orElseThrow();
 		var ids = types.getTest().getIds().stream().sorted().toList();
-		var json = objectMapper.writeValueAsString(ids);
+		var json = jsonMapper.writeValueAsString(ids);
 		return json;
 	}
 
@@ -480,7 +479,7 @@ public class PublishRefDataTest {
 					case "/meta":
 						return new MockResponse()
 								.setResponseCode(200)
-								.setBody(new Buffer().write(objectMapper.writeValueAsBytes(meta)));
+								.setBody(new Buffer().write(jsonMapper.writeValueAsBytes(meta)));
 				}
 				return new MockResponse().setResponseCode(404);
 			} catch (Exception e) {

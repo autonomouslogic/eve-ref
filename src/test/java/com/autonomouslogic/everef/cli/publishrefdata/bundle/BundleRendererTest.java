@@ -5,8 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import com.autonomouslogic.everef.refdata.InventoryType;
 import com.autonomouslogic.everef.refdata.InventoryTypeTraits;
 import com.autonomouslogic.everef.refdata.TraitBonus;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.reactivex.rxjava3.core.Flowable;
 import java.util.List;
 import java.util.Map;
@@ -17,9 +15,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.json.JsonMapper;
 
 public class BundleRendererTest {
-	ObjectMapper objectMapper = new ObjectMapper();
+	JsonMapper jsonMapper = new JsonMapper();
 	TestBundleRenderer renderer;
 
 	@BeforeEach
@@ -31,9 +31,9 @@ public class BundleRendererTest {
 	@MethodSource("showInfoLinkTests")
 	void shouldHandleShowInfoLinks(String text, List<Long> expectedTypes) {
 		renderer.typesMap = Map.of(
-				11396L, objectMapper.createObjectNode(),
-				645L, objectMapper.createObjectNode());
-		var typesJson = objectMapper.createObjectNode();
+				11396L, jsonMapper.createObjectNode(),
+				645L, jsonMapper.createObjectNode());
+		var typesJson = jsonMapper.createObjectNode();
 		renderer.bundleShowInfo(text, typesJson);
 		for (var id : expectedTypes) {
 			assertTrue(typesJson.has(Long.toString(id)), "ID: " + id);
@@ -54,9 +54,9 @@ public class BundleRendererTest {
 	@Test
 	void shouldBundleShowinfoFromTraits() {
 		renderer.typesMap = Map.of(
-				11396L, objectMapper.createObjectNode(),
-				645L, objectMapper.createObjectNode(),
-				644L, objectMapper.createObjectNode());
+				11396L, jsonMapper.createObjectNode(),
+				645L, jsonMapper.createObjectNode(),
+				644L, jsonMapper.createObjectNode());
 		var type = InventoryType.builder()
 				.traits(InventoryTypeTraits.builder()
 						.miscBonuses(Map.of(
@@ -79,7 +79,7 @@ public class BundleRendererTest {
 												.build())))
 						.build())
 				.build();
-		var typesJson = objectMapper.createObjectNode();
+		var typesJson = jsonMapper.createObjectNode();
 		renderer.bundleTraits(type, typesJson);
 		assertTrue(typesJson.has("11396"));
 		assertTrue(typesJson.has("645"));
@@ -89,14 +89,14 @@ public class BundleRendererTest {
 	@Test
 	void shouldBundleShowinfoFromDescriptions() {
 		renderer.typesMap = Map.of(
-				11396L, objectMapper.createObjectNode(),
-				645L, objectMapper.createObjectNode());
+				11396L, jsonMapper.createObjectNode(),
+				645L, jsonMapper.createObjectNode());
 		var type = InventoryType.builder()
 				.description(Map.of(
 						"en", "Input <a href=showinfo:11396>Mercoxit</a> string",
 						"de", "Input <a href=showinfo:645>Dominix</a> string"))
 				.build();
-		var typesJson = objectMapper.createObjectNode();
+		var typesJson = jsonMapper.createObjectNode();
 		renderer.bundleDescription(type, typesJson);
 		assertTrue(typesJson.has("11396"));
 		assertTrue(typesJson.has("645"));

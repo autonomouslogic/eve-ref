@@ -20,9 +20,6 @@ import com.autonomouslogic.everef.util.ProgressReporter;
 import com.autonomouslogic.everef.util.Rx;
 import com.autonomouslogic.everef.util.TempFiles;
 import com.autonomouslogic.everef.util.VirtualThreads;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Maybe;
@@ -45,6 +42,9 @@ import okhttp3.OkHttpClient;
 import org.h2.mvstore.MVStore;
 import org.jetbrains.annotations.NotNull;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.node.ObjectNode;
 
 /**
  * Scrapes market history and stores it in daily files.
@@ -74,7 +74,7 @@ public class ScrapeMarketHistory implements Command {
 	protected UrlParser urlParser;
 
 	@Inject
-	protected ObjectMapper objectMapper;
+	protected JsonMapper jsonMapper;
 
 	@Inject
 	protected TempFiles tempFiles;
@@ -238,7 +238,7 @@ public class ScrapeMarketHistory implements Command {
 					var entry = p.getRight();
 					var id = RegionTypePair.fromHistory(entry).toString();
 					mapSet.put(p.getLeft().toString(), id, entry);
-					regionTypeSource.addHistory(objectMapper.treeToValue(entry, MarketHistoryEntry.class));
+					regionTypeSource.addHistory(jsonMapper.treeToValue(entry, MarketHistoryEntry.class));
 				})
 				.ignoreElements()
 				.andThen(Completable.fromAction(() -> {
@@ -296,9 +296,9 @@ public class ScrapeMarketHistory implements Command {
 					}
 					var previous = (ObjectNode) mapSet.get(date.toString(), id);
 					if (previous != null) {
-						var entryToText = objectMapper.createObjectNode();
-						entry.fieldNames()
-								.forEachRemaining(name ->
+						var entryToText = jsonMapper.createObjectNode();
+						entry.propertyNames()
+								.forEach(name ->
 										entryToText.put(name, entry.get(name).asText()));
 						previous.set("http_last_modified", entryToText.get("http_last_modified"));
 						if (previous.equals(entryToText)) {
@@ -358,7 +358,7 @@ public class ScrapeMarketHistory implements Command {
 					var file =
 							tempFiles.tempFile("market-history-pairs", ".json").toFile();
 					try (var out = new FileOutputStream(file)) {
-						objectMapper.writeValue(out, totals);
+						jsonMapper.writeValue(out, totals);
 					}
 					var archivePath =
 							dataUrl.resolve(MARKET_HISTORY.getFolder() + "/").resolve("totals.json");

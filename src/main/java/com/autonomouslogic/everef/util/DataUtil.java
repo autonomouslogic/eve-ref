@@ -13,8 +13,6 @@ import com.autonomouslogic.everef.http.DataCrawler;
 import com.autonomouslogic.everef.http.OkHttpWrapper;
 import com.autonomouslogic.everef.model.Structure;
 import com.autonomouslogic.everef.util.archive.StandardArchivePathFactory;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.reactivex.rxjava3.core.Single;
 import java.io.File;
 import java.net.URI;
@@ -25,12 +23,14 @@ import javax.inject.Provider;
 import javax.inject.Singleton;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.json.JsonMapper;
 
 @Singleton
 @Log4j2
 public class DataUtil {
 	@Inject
-	protected ObjectMapper objectMapper;
+	protected JsonMapper jsonMapper;
 
 	@Inject
 	protected Provider<DataCrawler> dataCrawlerProvider;
@@ -73,9 +73,8 @@ public class DataUtil {
 
 	public Single<Map<String, Structure>> downloadLatestStructures() {
 		return download(STRUCTURES, "structures", ".json").map(file -> {
-			var type =
-					objectMapper.getTypeFactory().constructMapType(LinkedHashMap.class, String.class, Structure.class);
-			Map<String, Structure> parsed = objectMapper.readValue(file, type);
+			var type = jsonMapper.getTypeFactory().constructMapType(LinkedHashMap.class, String.class, Structure.class);
+			Map<String, Structure> parsed = jsonMapper.readValue(file, type);
 			return parsed;
 		});
 	}
@@ -96,6 +95,6 @@ public class DataUtil {
 
 	@SneakyThrows
 	public JsonNode loadJsonResource(String path) {
-		return objectMapper.readTree(ResourceUtil.loadResource(path));
+		return jsonMapper.readTree(ResourceUtil.loadResource(path));
 	}
 }

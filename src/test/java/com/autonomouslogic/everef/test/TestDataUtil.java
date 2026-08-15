@@ -4,8 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 import com.autonomouslogic.everef.util.RefDataUtil;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.reactivex.rxjava3.functions.Consumer;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -37,6 +35,8 @@ import org.apache.commons.compress.compressors.xz.XZCompressorInputStream;
 import org.apache.commons.compress.compressors.xz.XZCompressorOutputStream;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.io.IOUtils;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.json.JsonMapper;
 
 @Singleton
 @Log4j2
@@ -44,7 +44,7 @@ public class TestDataUtil {
 	public static final int TEST_PORT = 30150;
 
 	@Inject
-	ObjectMapper objectMapper;
+	JsonMapper jsonMapper;
 
 	@Inject
 	RefDataUtil refDataUtil;
@@ -135,10 +135,10 @@ public class TestDataUtil {
 	@SneakyThrows
 	public List<Map<String, String>> readMapsFromJson(InputStream in) {
 		// @todo maybe replace with JsonNodeCsvReader
-		var typeFactory = objectMapper.getTypeFactory();
+		var typeFactory = jsonMapper.getTypeFactory();
 		var map = typeFactory.constructMapType(LinkedHashMap.class, String.class, String.class);
 		var list = typeFactory.constructCollectionType(List.class, map);
-		return objectMapper.readValue(in, list);
+		return jsonMapper.readValue(in, list);
 	}
 
 	@SneakyThrows
@@ -233,7 +233,7 @@ public class TestDataUtil {
 
 	@SneakyThrows
 	public void assertJsonStrictEquals(JsonNode expected, JsonNode actual) {
-		var prettyWriter = objectMapper.writerWithDefaultPrettyPrinter();
+		var prettyWriter = jsonMapper.writerWithDefaultPrettyPrinter();
 		assertEquals(prettyWriter.writeValueAsString(expected), prettyWriter.writeValueAsString(actual));
 	}
 

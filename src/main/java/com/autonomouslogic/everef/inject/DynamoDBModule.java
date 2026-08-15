@@ -1,7 +1,6 @@
 package com.autonomouslogic.everef.inject;
 
 import com.autonomouslogic.dynamomapper.DynamoAsyncMapper;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import dagger.Module;
 import dagger.Provides;
 import java.util.Optional;
@@ -24,8 +23,10 @@ public class DynamoDBModule {
 
 	@Provides
 	@Singleton
-	public DynamoAsyncMapper dynamoAsyncMapper(DynamoDbAsyncClient client, ObjectMapper objectMapper) {
-
+	public DynamoAsyncMapper dynamoAsyncMapper(DynamoDbAsyncClient client) {
+		// dynamo-mapper requires Jackson 2 ObjectMapper (com.fasterxml.jackson.databind.ObjectMapper),
+		// not Jackson 3 JsonMapper (tools.jackson.databind.json.JsonMapper).
+		var objectMapper = new com.fasterxml.jackson.databind.ObjectMapper();
 		return DynamoAsyncMapper.builder()
 				.client(client)
 				.objectMapper(objectMapper)

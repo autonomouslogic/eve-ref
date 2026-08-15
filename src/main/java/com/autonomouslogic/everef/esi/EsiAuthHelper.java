@@ -6,7 +6,6 @@ import com.autonomouslogic.everef.http.OkHttpWrapper;
 import com.autonomouslogic.everef.model.CharacterLogin;
 import com.autonomouslogic.everef.util.Rx;
 import com.autonomouslogic.everef.util.VirtualThreads;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.scribejava.core.builder.ServiceBuilder;
 import com.github.scribejava.core.model.OAuth2AccessToken;
 import com.github.scribejava.core.oauth.OAuth20Service;
@@ -27,6 +26,7 @@ import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.lang3.tuple.Pair;
+import tools.jackson.databind.json.JsonMapper;
 
 /**
  * @link <a href="https://www.pac4j.org/docs/clients/openid-connect.html">pac4j OpenID Connect</a>
@@ -50,7 +50,7 @@ public class EsiAuthHelper {
 	protected OkHttpWrapper esiHttpWrapper;
 
 	@Inject
-	protected ObjectMapper objectMapper;
+	protected JsonMapper jsonMapper;
 
 	@Inject
 	protected DynamoAsyncMapper dynamoAsyncMapper;
@@ -134,7 +134,7 @@ public class EsiAuthHelper {
 			}
 
 			// Only parse JSON for successful responses
-			var verify = objectMapper.readValue(body, EsiVerifyResponse.class);
+			var verify = jsonMapper.readValue(body, EsiVerifyResponse.class);
 			return verify;
 		}
 	}

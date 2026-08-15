@@ -11,9 +11,6 @@ import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.url.UrlParser;
 import com.autonomouslogic.everef.util.CompressUtil;
 import com.autonomouslogic.everef.util.TempFiles;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.io.File;
 import java.io.FileInputStream;
 import java.net.URI;
@@ -32,6 +29,9 @@ import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.node.ObjectNode;
 
 /**
  * Scrapes freelance jobs from the ESI API.
@@ -42,7 +42,7 @@ public class ScrapeFreelanceJobs implements Command {
 	protected EsiHelper esiHelper;
 
 	@Inject
-	protected ObjectMapper objectMapper;
+	protected JsonMapper jsonMapper;
 
 	@Inject
 	protected UrlParser urlParser;
@@ -176,7 +176,7 @@ public class ScrapeFreelanceJobs implements Command {
 	private File buildOutput(Map<String, ObjectNode> jobs) {
 		var file = tempFiles.tempFile("freelance-jobs", ".json").toFile();
 		log.debug("Writing output file to {}", file);
-		objectMapper.writeValue(file, jobs);
+		jsonMapper.writeValue(file, jobs);
 		return file;
 	}
 
@@ -212,9 +212,9 @@ public class ScrapeFreelanceJobs implements Command {
 
 			// Decompress and parse the bz2 file
 			try (var in = new BZip2CompressorInputStream(new FileInputStream(file))) {
-				return objectMapper.readValue(
+				return jsonMapper.readValue(
 						in,
-						objectMapper.getTypeFactory().constructMapType(HashMap.class, String.class, ObjectNode.class));
+						jsonMapper.getTypeFactory().constructMapType(HashMap.class, String.class, ObjectNode.class));
 			} finally {
 				file.delete();
 			}
