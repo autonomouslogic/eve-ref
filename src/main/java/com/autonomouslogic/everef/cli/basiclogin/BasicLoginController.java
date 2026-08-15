@@ -2,46 +2,52 @@ package com.autonomouslogic.everef.cli.basiclogin;
 
 import com.autonomouslogic.everef.esi.EsiAuthHelper;
 import com.autonomouslogic.everef.model.CharacterLogin;
-import io.micronaut.http.HttpResponse;
-import io.micronaut.http.annotation.Controller;
-import io.micronaut.http.annotation.Produces;
+import io.helidon.http.HeaderNames;
+import io.helidon.http.Status;
+import io.helidon.webserver.http.HttpRules;
+import io.helidon.webserver.http.HttpService;
+import io.helidon.webserver.http.ServerRequest;
+import io.helidon.webserver.http.ServerResponse;
 import jakarta.inject.Inject;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.QueryParam;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 
-@Controller
-@Path("/")
 @Log4j2
-public class BasicLoginController {
+public class BasicLoginController implements HttpService {
 	@Inject
 	protected EsiAuthHelper esiAuthHelper;
 
-	@GET
-	@Produces("text/html")
-	@SneakyThrows
-	public String index() {
-		return """
+	@Inject
+	protected BasicLoginController() {}
+
+	@Override
+	public void routing(HttpRules rules) {
+		rules.get("/", this::index);
+		rules.get("/basic-login", this::loginRedirect);
+		rules.get("/basic-login-callback", this::callback);
+	}
+
+	private void index(ServerRequest req, ServerResponse res) {
+		res.status(Status.OK_200);
+		res.headers().set(HeaderNames.CONTENT_TYPE, "text/html");
+		res.send("""
 			<h1>EVE Ref Login</h1>
 			<a href="/basic-login">Login</a>
-			""";
+			""");
 	}
 
-	@GET
-	@Path("/basic-login")
 	@SneakyThrows
-	public HttpResponse<String> loginRedirect() {
+	private void loginRedirect(ServerRequest req, ServerResponse res) {
 		var redirect = esiAuthHelper.getLoginUri();
 		log.debug("Redirecting to {}", redirect);
-		return HttpResponse.temporaryRedirect(redirect);
+		res.status(Status.TEMPORARY_REDIRECT_307);
+		res.headers().set(HeaderNames.LOCATION, redirect.toString());
+		res.send();
 	}
 
-	@GET
-	@Path("/basic-login-callback")
-	@Produces("text/html")
-	public String callback(@QueryParam("code") String code, @QueryParam("state") String state) {
+	private void callback(ServerRequest req, ServerResponse res) {
+		var code = req.query().first("code").orElseThrow(() -> new IllegalArgumentException("Missing code"));
+		var state = req.query().first("state").orElse(null);
 		log.debug("Callback code: {}, state: {}", code, state);
 		var token = esiAuthHelper.getAccessToken(code);
 		var verify = esiAuthHelper.verify(token.getAccessToken());
@@ -55,7 +61,9 @@ public class BasicLoginController {
 				.build();
 		esiAuthHelper.putCharacterLogin(characterLogin).blockingAwait();
 
-		return String.format(
+		res.status(Status.OK_200);
+		res.headers().set(HeaderNames.CONTENT_TYPE, "text/html");
+		res.send(String.format(
 				"""
 				<h1>EVE Ref Login</h1>
 				<h2>OAuth2</h2>
@@ -84,6 +92,6 @@ public class BasicLoginController {
 				verify.getCharacterName(),
 				verify.getCharacterOwnerHash(),
 				verify.getExpiresOn(),
-				verify.getScopes());
+				verify.getScopes()));
 	}
 }
