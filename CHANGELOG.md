@@ -1,5 +1,18 @@
 EVE Ref Changelog
 
+## [2.79.3](https://github.com/autonomouslogic/eve-ref/compare/2.79.2...2.79.3) (2026-08-15)
+
+
+### Bug Fixes
+
+* Converted BasicLogin to Helidon and removed Micronaut ([#1079](https://github.com/autonomouslogic/eve-ref/issues/1079)) ([9fe9eef](https://github.com/autonomouslogic/eve-ref/commit/9fe9eefc5d4779f35296a35293a9c5c05edb2266))
+* Updated reference data models ([58dafd2](https://github.com/autonomouslogic/eve-ref/commit/58dafd29ea55ad78fd62cbf820460cb79eb66202))
+
+
+### Tests
+
+* Updated test resources ([f2e6d26](https://github.com/autonomouslogic/eve-ref/commit/f2e6d2607c310781df80a12e18a56a36430dfa9b))
+
 ## [2.79.2](https://github.com/autonomouslogic/eve-ref/compare/2.79.1...2.79.2) (2026-08-11)
 
 
