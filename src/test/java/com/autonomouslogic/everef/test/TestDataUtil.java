@@ -234,7 +234,8 @@ public class TestDataUtil {
 	@SneakyThrows
 	public void assertJsonStrictEquals(JsonNode expected, JsonNode actual) {
 		var prettyWriter = jsonMapper.writerWithDefaultPrettyPrinter();
-		assertEquals(prettyWriter.writeValueAsString(sortKeys(expected)), prettyWriter.writeValueAsString(sortKeys(actual)));
+		assertEquals(
+				prettyWriter.writeValueAsString(sortKeys(expected)), prettyWriter.writeValueAsString(sortKeys(actual)));
 	}
 
 	private JsonNode sortKeys(JsonNode node) {

@@ -145,8 +145,11 @@ public class IndustryCostHandlerTest {
 		// Set snake_case globally so model classes using @JsonNaming(SnakeCaseStrategy) are deserialized correctly.
 		var apiClientMapper = ApiClient.createDefaultObjectMapper();
 		apiClientMapper.setPropertyNamingStrategy(com.fasterxml.jackson.databind.PropertyNamingStrategies.SNAKE_CASE);
-		industryApi = new IndustryApi(
-				new ApiClient().setScheme("http").setHost("localhost").setPort(API_TEST_PORT).setObjectMapper(apiClientMapper));
+		industryApi = new IndustryApi(new ApiClient()
+				.setScheme("http")
+				.setHost("localhost")
+				.setPort(API_TEST_PORT)
+				.setObjectMapper(apiClientMapper));
 
 		refDataService.init();
 		systemCostIndexService.init();
