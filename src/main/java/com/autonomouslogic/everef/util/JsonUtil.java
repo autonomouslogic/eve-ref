@@ -22,7 +22,11 @@ public class JsonUtil {
 	}
 
 	public static boolean toBoolean(JsonNode node) {
-		return !isNull(node) && node.asBoolean();
+		if (isNull(node)) return false;
+		if (node.isBoolean()) return node.booleanValue();
+		if (node.isNumber()) return node.longValue() != 0;
+		if (node.isTextual()) return Boolean.parseBoolean(node.textValue());
+		return false;
 	}
 
 	public static int compareLongs(JsonNode a, long b) {

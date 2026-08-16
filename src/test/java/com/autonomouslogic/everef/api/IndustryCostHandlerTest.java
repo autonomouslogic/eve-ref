@@ -141,8 +141,12 @@ public class IndustryCostHandlerTest {
 		server.start(TEST_PORT);
 
 		apiRunner.startServer();
+		// The generated client uses Jackson 2 which doesn't understand tools.jackson.databind.annotation.JsonNaming.
+		// Set snake_case globally so model classes using @JsonNaming(SnakeCaseStrategy) are deserialized correctly.
+		var apiClientMapper = ApiClient.createDefaultObjectMapper();
+		apiClientMapper.setPropertyNamingStrategy(com.fasterxml.jackson.databind.PropertyNamingStrategies.SNAKE_CASE);
 		industryApi = new IndustryApi(
-				new ApiClient().setScheme("http").setHost("localhost").setPort(API_TEST_PORT));
+				new ApiClient().setScheme("http").setHost("localhost").setPort(API_TEST_PORT).setObjectMapper(apiClientMapper));
 
 		refDataService.init();
 		systemCostIndexService.init();

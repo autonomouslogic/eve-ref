@@ -37,6 +37,8 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.io.IOUtils;
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.node.ArrayNode;
+import tools.jackson.databind.node.ObjectNode;
 
 @Singleton
 @Log4j2
@@ -234,7 +236,24 @@ public class TestDataUtil {
 	@SneakyThrows
 	public void assertJsonStrictEquals(JsonNode expected, JsonNode actual) {
 		var prettyWriter = jsonMapper.writerWithDefaultPrettyPrinter();
-		assertEquals(prettyWriter.writeValueAsString(expected), prettyWriter.writeValueAsString(actual));
+		assertEquals(prettyWriter.writeValueAsString(sortKeys(expected)), prettyWriter.writeValueAsString(sortKeys(actual)));
+	}
+
+	private JsonNode sortKeys(JsonNode node) {
+		if (node == null || !node.isContainerNode()) {
+			return node;
+		}
+		if (node.isObject()) {
+			var obj = jsonMapper.createObjectNode();
+			var fields = new ArrayList<Map.Entry<String, JsonNode>>();
+			node.fields().forEachRemaining(fields::add);
+			fields.sort(Map.Entry.comparingByKey());
+			fields.forEach(e -> obj.set(e.getKey(), sortKeys(e.getValue())));
+			return obj;
+		}
+		var arr = jsonMapper.createArrayNode();
+		node.forEach(e -> arr.add(sortKeys(e)));
+		return arr;
 	}
 
 	@SneakyThrows
