@@ -62,7 +62,7 @@ dependencies {
 	implementation "software.amazon.awssdk:s3:2.51.1"
 	implementation "software.amazon.awssdk:dynamodb:2.51.1"
 	implementation "software.amazon.awssdk:netty-nio-client:2.51.1"
-	implementation "com.autonomouslogic.dynamomapper:dynamo-mapper:2.1.35"
+	implementation "com.autonomouslogic.dynamomapper:dynamo-mapper:3.0.0"
 	implementation "com.fasterxml.jackson.core:jackson-annotations:2.22"
 	implementation "com.fasterxml.jackson.core:jackson-core:2.22.1"
 	implementation "com.fasterxml.jackson.core:jackson-databind:2.22.1"
