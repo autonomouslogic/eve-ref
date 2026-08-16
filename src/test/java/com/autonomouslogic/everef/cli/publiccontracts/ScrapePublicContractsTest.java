@@ -451,6 +451,8 @@ public class ScrapePublicContractsTest {
 					m.put("http_last_modified", lastModifiedInstant.toString());
 					m.computeIfAbsent("buyout", k -> "");
 					m.computeIfAbsent("collateral", k -> "");
+					// CSV cannot represent null; convert null JSON values to empty string to match CSV output.
+					m.replaceAll((k, v) -> v == null ? "" : v);
 					return m;
 				})
 				.toList();

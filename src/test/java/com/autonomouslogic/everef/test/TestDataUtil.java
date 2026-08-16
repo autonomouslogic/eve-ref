@@ -37,8 +37,6 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.io.IOUtils;
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.json.JsonMapper;
-import tools.jackson.databind.node.ArrayNode;
-import tools.jackson.databind.node.ObjectNode;
 
 @Singleton
 @Log4j2
@@ -240,13 +238,12 @@ public class TestDataUtil {
 	}
 
 	private JsonNode sortKeys(JsonNode node) {
-		if (node == null || !node.isContainerNode()) {
+		if (node == null || (!node.isObject() && !node.isArray())) {
 			return node;
 		}
 		if (node.isObject()) {
 			var obj = jsonMapper.createObjectNode();
-			var fields = new ArrayList<Map.Entry<String, JsonNode>>();
-			node.fields().forEachRemaining(fields::add);
+			var fields = new ArrayList<>(node.properties());
 			fields.sort(Map.Entry.comparingByKey());
 			fields.forEach(e -> obj.set(e.getKey(), sortKeys(e.getValue())));
 			return obj;
