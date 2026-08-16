@@ -137,6 +137,7 @@ task refDataSpec(type: io.swagger.v3.plugins.gradle.tasks.ResolveTask) {
 	resourcePackages = ["com.autonomouslogic.everef.refdata"]
 	outputDir = file("spec")
 	outputFileName = "reference-data"
+	objectMapperProcessorClass = "com.autonomouslogic.everef.openapi.SnakeCaseObjectMapperProcessor"
 
 	classpath = sourceSets.main.runtimeClasspath
 	buildClasspath = classpath
@@ -239,6 +240,7 @@ task apiSpec(type: io.swagger.v3.plugins.gradle.tasks.ResolveTask) {
 	resourcePackages = ["com.autonomouslogic.everef.api"]
 	outputDir = file("spec")
 	outputFileName = "eve-ref-api"
+	objectMapperProcessorClass = "com.autonomouslogic.everef.openapi.SnakeCaseObjectMapperProcessor"
 
 	classpath = sourceSets.main.runtimeClasspath
 	buildClasspath = classpath
