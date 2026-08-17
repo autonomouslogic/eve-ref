@@ -9,6 +9,7 @@ import javax.inject.Singleton;
 import software.amazon.awssdk.auth.credentials.AwsCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient;
+import tools.jackson.databind.json.JsonMapper;
 
 @Module
 public class DynamoDBModule {
@@ -23,13 +24,7 @@ public class DynamoDBModule {
 
 	@Provides
 	@Singleton
-	public DynamoAsyncMapper dynamoAsyncMapper(DynamoDbAsyncClient client) {
-		// dynamo-mapper requires Jackson 2 ObjectMapper (com.fasterxml.jackson.databind.ObjectMapper),
-		// not Jackson 3 JsonMapper (tools.jackson.databind.json.JsonMapper).
-		var objectMapper = new com.fasterxml.jackson.databind.ObjectMapper();
-		return DynamoAsyncMapper.builder()
-				.client(client)
-				.objectMapper(objectMapper)
-				.build();
+	public DynamoAsyncMapper dynamoAsyncMapper(DynamoDbAsyncClient client, JsonMapper jsonMapper) {
+		return DynamoAsyncMapper.builder().client(client).jsonMapper(jsonMapper).build();
 	}
 }
