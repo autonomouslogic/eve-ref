@@ -7,10 +7,6 @@ import com.autonomouslogic.everef.http.OkHttpWrapper;
 import com.autonomouslogic.everef.openapi.refdata.api.RefdataApi;
 import com.autonomouslogic.everef.openapi.refdata.invoker.ApiException;
 import com.autonomouslogic.everef.util.JsonUtil;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Single;
@@ -21,6 +17,10 @@ import java.util.Map;
 import javax.inject.Inject;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.node.ArrayNode;
+import tools.jackson.databind.node.ObjectNode;
 
 /**
  * Fetches Abyssal traits for items.
@@ -30,7 +30,7 @@ public class ContractAbyssalFetcher {
 	private static final long ABYSSAL_META_GROUP = 15;
 
 	@Inject
-	protected ObjectMapper objectMapper;
+	protected JsonMapper jsonMapper;
 
 	@Inject
 	protected EsiHelper esiHelper;
@@ -125,7 +125,7 @@ public class ContractAbyssalFetcher {
 				.flatMapCompletable(response -> Completable.fromAction(() -> {
 					int statusCode = response.code();
 					if (statusCode == 520) {
-						var nonDynamicItem = objectMapper
+						var nonDynamicItem = jsonMapper
 								.createObjectNode()
 								.put("item_id", itemId)
 								.put("type_id", typeId)

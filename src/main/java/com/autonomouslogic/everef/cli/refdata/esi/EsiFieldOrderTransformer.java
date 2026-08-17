@@ -2,10 +2,10 @@ package com.autonomouslogic.everef.cli.refdata.esi;
 
 import com.autonomouslogic.everef.cli.refdata.SimpleTransformer;
 import com.autonomouslogic.everef.cli.refdata.TransformUtil;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.util.Optional;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import tools.jackson.databind.node.ObjectNode;
 
 /**
  * Orders the <code>name</code> and <code>description</code> fields in the JSON.

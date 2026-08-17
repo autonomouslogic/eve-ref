@@ -2,12 +2,12 @@ package com.autonomouslogic.everef.cli.publishrefdata.bundle;
 
 import com.autonomouslogic.everef.refdata.InventoryGroup;
 import com.autonomouslogic.everef.refdata.InventoryType;
-import com.fasterxml.jackson.databind.JsonNode;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Maybe;
 import javax.inject.Inject;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.tuple.Pair;
+import tools.jackson.databind.JsonNode;
 
 /**
  * Renders the basic objects in the reference data collections.
@@ -24,24 +24,24 @@ public class GroupBundleRenderer extends BundleRenderer {
 
 	private Maybe<Pair<String, JsonNode>> createGroupBundle(long groupId) {
 		var groupJson = getGroupsMap().get(groupId);
-		var group = objectMapper.convertValue(groupJson, InventoryGroup.class);
+		var group = jsonMapper.convertValue(groupJson, InventoryGroup.class);
 		var typeIds = group.getTypeIds();
 
-		var bundleJson = objectMapper.createObjectNode();
-		bundleJson.withObject("groups").put(Long.toString(groupId), groupJson);
+		var bundleJson = jsonMapper.createObjectNode();
+		bundleJson.withObject("groups").set(Long.toString(groupId), groupJson);
 
-		var typesJson = objectMapper.createObjectNode();
-		var attributesJson = objectMapper.createObjectNode();
-		var unitsJson = objectMapper.createObjectNode();
-		var iconsJson = objectMapper.createObjectNode();
-		var metaGroupsJson = objectMapper.createObjectNode();
+		var typesJson = jsonMapper.createObjectNode();
+		var attributesJson = jsonMapper.createObjectNode();
+		var unitsJson = jsonMapper.createObjectNode();
+		var iconsJson = jsonMapper.createObjectNode();
+		var metaGroupsJson = jsonMapper.createObjectNode();
 
 		unitsJson.set("133", unitsMap.get(133L)); // ISK for the market price display.
 
 		if (typeIds != null) {
 			for (long typeId : typeIds) {
 				var typeJson = getTypesMap().get(typeId);
-				var type = objectMapper.convertValue(typeJson, InventoryType.class);
+				var type = jsonMapper.convertValue(typeJson, InventoryType.class);
 				if (typeJson != null) {
 					typesJson.set(Long.toString(typeId), typeJson);
 					bundleDogmaAttributes(type, attributesJson);

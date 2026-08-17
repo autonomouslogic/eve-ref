@@ -1,7 +1,6 @@
 package com.autonomouslogic.everef.inject;
 
 import com.autonomouslogic.dynamomapper.DynamoAsyncMapper;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import dagger.Module;
 import dagger.Provides;
 import java.util.Optional;
@@ -10,6 +9,7 @@ import javax.inject.Singleton;
 import software.amazon.awssdk.auth.credentials.AwsCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.dynamodb.DynamoDbAsyncClient;
+import tools.jackson.databind.json.JsonMapper;
 
 @Module
 public class DynamoDBModule {
@@ -24,11 +24,7 @@ public class DynamoDBModule {
 
 	@Provides
 	@Singleton
-	public DynamoAsyncMapper dynamoAsyncMapper(DynamoDbAsyncClient client, ObjectMapper objectMapper) {
-
-		return DynamoAsyncMapper.builder()
-				.client(client)
-				.objectMapper(objectMapper)
-				.build();
+	public DynamoAsyncMapper dynamoAsyncMapper(DynamoDbAsyncClient client, JsonMapper jsonMapper) {
+		return DynamoAsyncMapper.builder().client(client).jsonMapper(jsonMapper).build();
 	}
 }

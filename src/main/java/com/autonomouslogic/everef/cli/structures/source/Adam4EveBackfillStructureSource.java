@@ -9,7 +9,6 @@ import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.http.OkHttpWrapper;
 import com.autonomouslogic.everef.util.Rx;
 import com.autonomouslogic.everef.util.TempFiles;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Single;
 import java.io.File;
@@ -27,6 +26,7 @@ import lombok.experimental.Accessors;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
+import tools.jackson.databind.json.JsonMapper;
 
 /**
  * Backfill importer for a list of public structure IDs.
@@ -43,7 +43,7 @@ public class Adam4EveBackfillStructureSource implements StructureSource {
 	protected TempFiles tempFiles;
 
 	@Inject
-	protected ObjectMapper objectMapper;
+	protected JsonMapper jsonMapper;
 
 	@Setter
 	@Accessors(chain = false)

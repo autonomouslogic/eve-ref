@@ -1,13 +1,13 @@
 package com.autonomouslogic.everef.industry;
 
 import com.autonomouslogic.commons.ResourceUtil;
-import com.fasterxml.jackson.databind.MappingIterator;
-import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Stream;
 import lombok.SneakyThrows;
+import tools.jackson.databind.MappingIterator;
+import tools.jackson.dataformat.csv.CsvMapper;
 
 public abstract class AbstractIndustryService<T> {
 	private final Map<Long, T> entries;

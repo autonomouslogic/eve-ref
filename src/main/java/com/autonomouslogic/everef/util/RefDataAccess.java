@@ -2,7 +2,6 @@ package com.autonomouslogic.everef.util;
 
 import com.autonomouslogic.everef.refdata.InventoryType;
 import com.autonomouslogic.everef.refdata.Region;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.reactivex.rxjava3.core.Flowable;
 import java.io.File;
 import java.util.LinkedHashMap;
@@ -11,6 +10,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.NonNull;
 import org.apache.commons.io.FilenameUtils;
+import tools.jackson.databind.json.JsonMapper;
 
 @Singleton
 public class RefDataAccess {
@@ -18,7 +18,7 @@ public class RefDataAccess {
 	protected RefDataUtil refDataUtil;
 
 	@Inject
-	protected ObjectMapper objectMapper;
+	protected JsonMapper jsonMapper;
 
 	@Inject
 	protected RefDataAccess() {}
@@ -38,8 +38,8 @@ public class RefDataAccess {
 			if (!type.equals(FilenameUtils.getBaseName(filename))) {
 				return Flowable.empty();
 			}
-			var mapType = objectMapper.getTypeFactory().constructMapType(LinkedHashMap.class, String.class, model);
-			Map<String, T> map = objectMapper.readValue(pair.getRight(), mapType);
+			var mapType = jsonMapper.getTypeFactory().constructMapType(LinkedHashMap.class, String.class, model);
+			Map<String, T> map = jsonMapper.readValue(pair.getRight(), mapType);
 			return Flowable.fromIterable(map.values());
 		});
 	}

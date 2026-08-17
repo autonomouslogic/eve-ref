@@ -1,10 +1,5 @@
 package com.autonomouslogic.everef.cli.refdata;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.google.common.collect.Streams;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.stream.Collectors;
@@ -12,6 +7,10 @@ import java.util.stream.Stream;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.extern.log4j.Log4j2;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.node.ArrayNode;
+import tools.jackson.databind.node.ObjectNode;
 
 /**
  * Merges Ref Data objects from SDE, ESI, and Hoboleaks together into the final dataset.
@@ -20,7 +19,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class ObjectMerger {
 	@Inject
-	protected ObjectMapper objectMapper;
+	protected JsonMapper jsonMapper;
 
 	@Inject
 	protected ObjectMerger() {}
@@ -52,9 +51,9 @@ public class ObjectMerger {
 			return objects[0];
 		}
 		var fields = Stream.of(objects)
-				.flatMap(o -> Streams.stream(o.fields()))
+				.flatMap(o -> o.properties().stream())
 				.collect(Collectors.groupingBy(e -> e.getKey(), LinkedHashMap::new, Collectors.toList()));
-		var merged = objectMapper.createObjectNode();
+		var merged = jsonMapper.createObjectNode();
 		fields.forEach((key, entries) -> {
 			var nodes = entries.stream().map(e -> e.getValue()).toArray(JsonNode[]::new);
 			var mergedEntry = merge(nodes);
@@ -73,7 +72,7 @@ public class ObjectMerger {
 				merged.add(node);
 			}
 		}
-		return objectMapper.valueToTree(merged);
+		return jsonMapper.valueToTree(merged);
 	}
 
 	private ObjectNode[] castToObjects(JsonNode[] nodes) {

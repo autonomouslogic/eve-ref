@@ -12,7 +12,6 @@ import com.autonomouslogic.everef.test.MockS3Adapter;
 import com.autonomouslogic.everef.test.TestDataUtil;
 import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.util.DataIndexHelper;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Ordering;
 import java.io.InputStream;
 import java.time.ZonedDateTime;
@@ -42,6 +41,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
+import tools.jackson.databind.json.JsonMapper;
 
 @ExtendWith(MockitoExtension.class)
 @Timeout(30)
@@ -71,7 +71,7 @@ public class ScrapeMarketOrdersTest {
 	DataIndexHelper dataIndexHelper;
 
 	@Inject
-	ObjectMapper objectMapper;
+	JsonMapper jsonMapper;
 
 	@Mock
 	LocationPopulator locationPopulator;
@@ -96,7 +96,7 @@ public class ScrapeMarketOrdersTest {
 							"/latest/universe/systems/30000001/?datasource=tranquility" ->
 						new MockResponse()
 								.setResponseCode(200)
-								.setBody(objectMapper.writeValueAsString(new GetUniverseSystemsSystemIdOk()
+								.setBody(jsonMapper.writeValueAsString(new GetUniverseSystemsSystemIdOk()
 										.name("test")
 										.systemId(30000001)
 										.constellationId(20000001)));
@@ -269,41 +269,41 @@ public class ScrapeMarketOrdersTest {
 
 	@SneakyThrows
 	private MockResponse mockStructures() {
-		var obj = objectMapper.createObjectNode();
-		obj.put(
+		var obj = jsonMapper.createObjectNode();
+		obj.set(
 				"1000000000001",
-				objectMapper
+				jsonMapper
 						.createObjectNode()
 						.put("structure_id", 1000000000001L)
 						.put("is_market_structure", true)
 						.put("solar_system_id", 30000001)
 						.put("constellation_id", 20000001)
 						.put("region_id", 10000010));
-		obj.put(
+		obj.set(
 				"1000000000002",
-				objectMapper
+				jsonMapper
 						.createObjectNode()
 						.put("structure_id", 1000000000002L)
 						.put("is_market_structure", false)
 						.put("solar_system_id", 30000001)
 						.put("constellation_id", 20000001)
 						.put("region_id", 10000010));
-		obj.put(
+		obj.set(
 				"1000000000003",
-				objectMapper
+				jsonMapper
 						.createObjectNode()
 						.put("structure_id", 1000000000003L)
 						.put("is_market_structure", true)
 						.put("solar_system_id", 30000001)
 						.put("constellation_id", 20000001)
 						.put("region_id", 10000010));
-		obj.put(
+		obj.set(
 				"1000000000004",
-				objectMapper
+				jsonMapper
 						.createObjectNode()
 						.put("structure_id", 1000000000004L)
 						.put("is_market_structure", true));
-		return new MockResponse().setResponseCode(200).setBody(objectMapper.writeValueAsString(obj));
+		return new MockResponse().setResponseCode(200).setBody(jsonMapper.writeValueAsString(obj));
 	}
 
 	@SneakyThrows

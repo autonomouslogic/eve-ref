@@ -3,9 +3,6 @@ package com.autonomouslogic.everef.cli.refdata.post;
 import com.autonomouslogic.everef.cli.refdata.StoreDataHelper;
 import com.autonomouslogic.everef.refdata.DogmaAttribute;
 import com.autonomouslogic.everef.refdata.InventoryType;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.reactivex.rxjava3.core.Completable;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,6 +12,9 @@ import java.util.TreeSet;
 import javax.inject.Inject;
 import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.node.ObjectNode;
 
 /**
  * Populates ore variations on types.
@@ -22,7 +22,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class OreVariationsDecorator extends PostDecorator {
 	@Inject
-	protected ObjectMapper objectMapper;
+	protected JsonMapper jsonMapper;
 
 	private Map<Long, JsonNode> types;
 	private StoreDataHelper helper;
@@ -35,7 +35,7 @@ public class OreVariationsDecorator extends PostDecorator {
 	public Completable create() {
 		return Completable.fromAction(() -> {
 			log.info("Populates ore variations");
-			helper = new StoreDataHelper(storeHandler, objectMapper);
+			helper = new StoreDataHelper(storeHandler, jsonMapper);
 			types = storeHandler.getRefStore("types");
 			oreBasicType = helper.getDogmaAttributeByName("oreBasicType").orElseThrow();
 			asteroidMetaLevel =
@@ -48,7 +48,7 @@ public class OreVariationsDecorator extends PostDecorator {
 
 	private void resolveTypeVariations(@NonNull Map<Long, Map<Integer, Set<Long>>> variations) {
 		for (var typeJson : types.values()) {
-			var type = objectMapper.convertValue(typeJson, InventoryType.class);
+			var type = jsonMapper.convertValue(typeJson, InventoryType.class);
 			var oreType = helper.getDogmaFromType(type, oreBasicType.getAttributeId());
 			var metaLevel = helper.getDogmaFromType(type, asteroidMetaLevel.getAttributeId());
 			if (oreType.isEmpty() || metaLevel.isEmpty()) {
@@ -70,7 +70,7 @@ public class OreVariationsDecorator extends PostDecorator {
 
 	private void populateVariations(@NonNull Map<Long, Map<Integer, Set<Long>>> variations) {
 		variations.forEach((baseOreTypeId, typeVariations) -> {
-			var typeVariationsJson = objectMapper.valueToTree(typeVariations);
+			var typeVariationsJson = jsonMapper.valueToTree(typeVariations);
 			typeVariations.forEach((metaLevel, metaVariations) -> {
 				for (long typeId : metaVariations) {
 					populateTypeVariations(typeId, typeVariationsJson);

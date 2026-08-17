@@ -3,8 +3,6 @@ package com.autonomouslogic.everef.cli.publishrefdata.bundle;
 import com.autonomouslogic.everef.cli.publishrefdata.RootMarketGroupIndexRenderer;
 import com.autonomouslogic.everef.refdata.InventoryType;
 import com.autonomouslogic.everef.refdata.MarketGroup;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.Lists;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Maybe;
@@ -14,6 +12,8 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.tuple.Pair;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.node.ObjectNode;
 
 /**
  * Renders the basic objects in the reference data collections.
@@ -39,7 +39,7 @@ public class MarketGroupBundleRenderer extends BundleRenderer {
 				.setDataStore(getDataStore())
 				.render()
 				.map(Pair::getRight)
-				.flatMap(json -> Flowable.fromIterable(Lists.newArrayList(json.elements())))
+				.flatMap(json -> Flowable.fromIterable(Lists.newArrayList(json.values())))
 				.map(JsonNode::asLong)
 				.toList()
 				.blockingGet();
@@ -59,7 +59,7 @@ public class MarketGroupBundleRenderer extends BundleRenderer {
 			log.warn("Market group {} not found", groupId);
 			return Maybe.empty();
 		}
-		var group = objectMapper.convertValue(groupJson, MarketGroup.class);
+		var group = jsonMapper.convertValue(groupJson, MarketGroup.class);
 		var typeIds = group.getTypeIds();
 		var childGroupIds = group.getChildMarketGroupIds();
 		if ((typeIds == null || typeIds.isEmpty()) && (childGroupIds == null || childGroupIds.isEmpty())) {
@@ -69,7 +69,7 @@ public class MarketGroupBundleRenderer extends BundleRenderer {
 		var bundleJson = generateBundle(childGroupIds, typeIds);
 
 		if (bundleJson.isPresent()) {
-			bundleJson.get().withObject("market_groups").put(Long.toString(groupId), groupJson);
+			bundleJson.get().withObject("market_groups").set(Long.toString(groupId), groupJson);
 			var path = refDataUtil.subPath("market_groups", group.getMarketGroupId()) + "/bundle";
 			return Maybe.just(Pair.of(path, bundleJson.get()));
 		}
@@ -77,20 +77,20 @@ public class MarketGroupBundleRenderer extends BundleRenderer {
 	}
 
 	private Optional<ObjectNode> generateBundle(List<Long> childGroupIds, List<Long> typeIds) {
-		var bundleJson = objectMapper.createObjectNode();
-		var typesJson = objectMapper.createObjectNode();
-		var marketGroupsJson = objectMapper.createObjectNode();
-		var attributesJson = objectMapper.createObjectNode();
-		var unitsJson = objectMapper.createObjectNode();
-		var iconsJson = objectMapper.createObjectNode();
-		var metaGroupsJson = objectMapper.createObjectNode();
+		var bundleJson = jsonMapper.createObjectNode();
+		var typesJson = jsonMapper.createObjectNode();
+		var marketGroupsJson = jsonMapper.createObjectNode();
+		var attributesJson = jsonMapper.createObjectNode();
+		var unitsJson = jsonMapper.createObjectNode();
+		var iconsJson = jsonMapper.createObjectNode();
+		var metaGroupsJson = jsonMapper.createObjectNode();
 
 		unitsJson.set("133", unitsMap.get(133L)); // ISK for the market price display.
 
 		if (typeIds != null) {
 			for (long typeId : typeIds) {
 				var typeJson = getTypesMap().get(typeId);
-				var type = objectMapper.convertValue(typeJson, InventoryType.class);
+				var type = jsonMapper.convertValue(typeJson, InventoryType.class);
 				if (typeJson != null) {
 					typesJson.set(Long.toString(typeId), typeJson);
 					bundleDogmaAttributes(type, attributesJson);

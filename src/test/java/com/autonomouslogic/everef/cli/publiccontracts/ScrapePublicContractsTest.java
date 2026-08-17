@@ -16,8 +16,6 @@ import com.autonomouslogic.everef.test.TestDataUtil;
 import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.util.DataIndexHelper;
 import com.autonomouslogic.everef.util.FormatUtil;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.base.Function;
 import com.google.common.collect.Ordering;
 import java.io.ByteArrayInputStream;
@@ -59,6 +57,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.node.ObjectNode;
 
 /**
  * Special cases for testing:
@@ -100,7 +100,7 @@ public class ScrapePublicContractsTest {
 	TestDataUtil testDataUtil;
 
 	@Inject
-	ObjectMapper objectMapper;
+	JsonMapper jsonMapper;
 
 	@Inject
 	DataIndexHelper dataIndexHelper;
@@ -229,7 +229,7 @@ public class ScrapePublicContractsTest {
 				if (!entry.getName().equals("meta.json")) {
 					continue;
 				}
-				meta = (ObjectNode) objectMapper.readTree(tar);
+				meta = (ObjectNode) jsonMapper.readTree(tar);
 				break;
 			}
 		}
@@ -376,7 +376,7 @@ public class ScrapePublicContractsTest {
 					return mockResponse(loadRegionContracts(contractId, page)).addHeader("x-pages", "2");
 				}
 				if (path.startsWith("/universe/types/") || path.startsWith("/latest/universe/types/")) {
-					return mockResponse(objectMapper.writeValueAsString(type));
+					return mockResponse(jsonMapper.writeValueAsString(type));
 				}
 				if (path.startsWith("/dogma/dynamic/items/") || path.startsWith("/latest/dogma/dynamic/items/")) {
 					var segmentIndex = segments.contains("latest") ? 4 : 3;
@@ -451,6 +451,8 @@ public class ScrapePublicContractsTest {
 					m.put("http_last_modified", lastModifiedInstant.toString());
 					m.computeIfAbsent("buyout", k -> "");
 					m.computeIfAbsent("collateral", k -> "");
+					// CSV cannot represent null; convert null JSON values to empty string to match CSV output.
+					m.replaceAll((k, v) -> v == null ? "" : v);
 					return m;
 				})
 				.toList();
@@ -483,11 +485,10 @@ public class ScrapePublicContractsTest {
 
 	@SneakyThrows
 	private List<Map<String, String>> loadDynamicItemsMap(int typeId, long itemId, int contractId) {
-		var json = objectMapper.readTree(loadDynamicItems(typeId, itemId));
+		var json = jsonMapper.readTree(loadDynamicItems(typeId, itemId));
 		((ObjectNode) json).remove("dogma_attributes");
 		((ObjectNode) json).remove("dogma_effects");
-		var bytes =
-				objectMapper.writeValueAsBytes(objectMapper.createArrayNode().add(json));
+		var bytes = jsonMapper.writeValueAsBytes(jsonMapper.createArrayNode().add(json));
 		return testDataUtil.readMapsFromJson(new ByteArrayInputStream(bytes)).stream()
 				.map(m -> {
 					m.put("item_id", String.valueOf(itemId));
@@ -500,9 +501,9 @@ public class ScrapePublicContractsTest {
 
 	@SneakyThrows
 	private List<Map<String, String>> loadDogmaAttributesMap(int typeId, long itemId, int contractId) {
-		var json = objectMapper.readTree(loadDynamicItems(typeId, itemId));
+		var json = jsonMapper.readTree(loadDynamicItems(typeId, itemId));
 		var attrs = json.get("dogma_attributes");
-		var bytes = objectMapper.writeValueAsBytes(attrs);
+		var bytes = jsonMapper.writeValueAsBytes(attrs);
 		return testDataUtil.readMapsFromJson(new ByteArrayInputStream(bytes)).stream()
 				.map(m -> {
 					m.put("item_id", String.valueOf(itemId));
@@ -515,9 +516,9 @@ public class ScrapePublicContractsTest {
 
 	@SneakyThrows
 	private List<Map<String, String>> loadDogmaEffectsMap(int typeId, long itemId, int contractId) {
-		var json = objectMapper.readTree(loadDynamicItems(typeId, itemId));
+		var json = jsonMapper.readTree(loadDynamicItems(typeId, itemId));
 		var effects = json.get("dogma_effects");
-		var bytes = objectMapper.writeValueAsBytes(effects);
+		var bytes = jsonMapper.writeValueAsBytes(effects);
 		return testDataUtil.readMapsFromJson(new ByteArrayInputStream(bytes)).stream()
 				.map(m -> {
 					m.put("item_id", String.valueOf(itemId));

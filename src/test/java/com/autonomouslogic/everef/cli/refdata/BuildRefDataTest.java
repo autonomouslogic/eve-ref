@@ -18,7 +18,6 @@ import com.autonomouslogic.everef.util.DataIndexHelper;
 import com.autonomouslogic.everef.util.HashUtil;
 import com.autonomouslogic.everef.util.MockScrapeBuilder;
 import com.autonomouslogic.everef.util.RefDataUtil;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.FileInputStream;
 import java.time.ZonedDateTime;
@@ -43,6 +42,7 @@ import org.junitpioneer.jupiter.SetEnvironmentVariable;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
+import tools.jackson.databind.json.JsonMapper;
 
 @ExtendWith(MockitoExtension.class)
 @Log4j2
@@ -65,7 +65,7 @@ public class BuildRefDataTest {
 	TestDataUtil testDataUtil;
 
 	@Inject
-	ObjectMapper objectMapper;
+	JsonMapper jsonMapper;
 
 	@Inject
 	UrlParser urlParser;
@@ -179,10 +179,10 @@ public class BuildRefDataTest {
 
 	@SneakyThrows
 	private void assertOutput(@NonNull RefDataConfig config, @NonNull byte[] jsonBytes) {
-		var json = objectMapper.readTree(jsonBytes);
+		var json = jsonMapper.readTree(jsonBytes);
 		var testConfig = config.getTest();
 		for (Long id : testConfig.getIds()) {
-			var expected = objectMapper.readTree(
+			var expected = jsonMapper.readTree(
 					ResourceUtil.loadResource("/refdata/refdata/" + testConfig.getFilePrefix() + "-" + id + ".json"));
 			var actual = json.get(id.toString());
 			log.info("Asserting {} {}", config.getId(), id);
@@ -197,7 +197,7 @@ public class BuildRefDataTest {
 
 	@SneakyThrows
 	private void assertMeta(@NonNull byte[] json) {
-		var supplied = objectMapper.readValue(json, RefDataMeta.class);
+		var supplied = jsonMapper.readValue(json, RefDataMeta.class);
 		assertEquals(refDataMeta, supplied);
 	}
 

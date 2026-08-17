@@ -4,9 +4,6 @@ import com.autonomouslogic.everef.util.CompressUtil;
 import com.autonomouslogic.everef.util.FormatUtil;
 import com.autonomouslogic.everef.util.JsonNodeCsvWriter;
 import com.autonomouslogic.everef.util.TempFiles;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -27,6 +24,9 @@ import lombok.extern.log4j.Log4j2;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
 import org.apache.commons.io.IOUtils;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.SerializationFeature;
+import tools.jackson.databind.json.JsonMapper;
 
 /**
  * Builds the public contract distribution files.
@@ -62,7 +62,7 @@ public class ContractsFileBuilder {
 	@Inject
 	protected TempFiles tempFiles;
 
-	private final ObjectMapper objectMapper;
+	private final JsonMapper jsonMapper;
 
 	private final long modTime = System.currentTimeMillis();
 
@@ -101,8 +101,11 @@ public class ContractsFileBuilder {
 	private TarArchiveOutputStream tar;
 
 	@Inject
-	protected ContractsFileBuilder(ObjectMapper objectMapper) {
-		this.objectMapper = objectMapper.copy().disable(SerializationFeature.CLOSE_CLOSEABLE);
+	protected ContractsFileBuilder(JsonMapper jsonMapper) {
+		this.jsonMapper = jsonMapper
+				.rebuild()
+				.disable(SerializationFeature.CLOSE_CLOSEABLE)
+				.build();
 	}
 
 	/**
@@ -139,7 +142,7 @@ public class ContractsFileBuilder {
 	@SneakyThrows
 	private void writeMeta(ContractsScrapeMeta meta) {
 		log.debug("Writing meta");
-		writeEntry(META_JSON, objectMapper.writeValueAsBytes(meta));
+		writeEntry(META_JSON, jsonMapper.writeValueAsBytes(meta));
 	}
 
 	@SneakyThrows
