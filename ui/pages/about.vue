@@ -55,7 +55,7 @@ useHead({
 				<ExternalLink :url="EVE_REFERRAL_URL">Join New Eden</ExternalLink> and get 1,000,000 free skill points.
 			</p>
 			<p>
-				<ExternalLink :url="HETZNER_REFERAL_URL">Use Hetzner</ExternalLink> and €20 free credits.
+				<ExternalLink :url="HETZNER_REFERAL_URL">Use Hetzner</ExternalLink> and get €20 free credits.
 			</p>
 		</span>
 		<span>
@@ -67,7 +67,7 @@ useHead({
 				Donations made to
 				<ExternalLink :url="EVE_REF_CHAR">EVE Ref</ExternalLink> or
 				<ExternalLink :url="EVE_REF_CORP">EVE Ref Holdings</ExternalLink> [EVREF]
-				will be show-cased on the front-page and on Discord.
+				will be show-cased in the site-wide banner and on the front-page and on Discord.
 				They will be used for promotions and giveaways in the future.
 			</p>
 			<p>
