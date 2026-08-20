@@ -83,6 +83,10 @@ import software.amazon.awssdk.services.s3.S3AsyncClient;
  *         Contract 9000 is no longer present on ESI (expired), so everything for that contract would normally be
  *         cleared. The item and dogma SHOULD still be fetched and present in the new snapshot to backfill the
  *         missing roll data, even though the contract itself is not included.</li>
+ *     <li>Contract ID 10000 (item exchange) is in the latest file with an abyssal item (item_id 10000, type_id 47804),
+ *         but the dogma call failed last run so item 10000 is absent from both dynamic and non-dynamic stores.
+ *         Contract 10000 is no longer present on ESI (expired). The dogma call for item 10000 fails again.
+ *         The item should NOT be included in the new snapshot since dogma data cannot be resolved.</li>
  * </ul>
  */
 @ExtendWith(MockitoExtension.class)
@@ -207,6 +211,7 @@ public class ScrapePublicContractsTest {
 						"/latest/dogma/dynamic/items/47804/2000/?datasource=tranquility&language=en",
 						"/latest/dogma/dynamic/items/47804/8000/?datasource=tranquility&language=en",
 						"/latest/dogma/dynamic/items/47804/9000/?datasource=tranquility&language=en",
+						"/latest/dogma/dynamic/items/47804/10000/?datasource=tranquility&language=en",
 						"/latest/dogma/dynamic/items/49734/1040731418725/?datasource=tranquility&language=en",
 						"/meta_groups/15",
 						"/public-contracts/public-contracts-latest.v2.tar.bz2",
@@ -397,6 +402,9 @@ public class ScrapePublicContractsTest {
 					var itemId = Long.parseLong(segments.get(segmentIndex + 1));
 					if (itemId == 2000L) {
 						return new MockResponse().setResponseCode(520);
+					}
+					if (itemId == 10000L) {
+						return new MockResponse().setResponseCode(404);
 					}
 					return mockResponse(loadDynamicItems(typeId, itemId));
 				}
