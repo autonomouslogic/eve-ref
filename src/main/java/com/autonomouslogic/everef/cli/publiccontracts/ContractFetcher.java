@@ -12,6 +12,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.reactivex.rxjava3.core.Flowable;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -67,6 +68,7 @@ public class ContractFetcher {
 	private Map<Long, JsonNode> bidsStore;
 
 	private final Set<Long> contractsWithItems = Collections.newSetFromMap(new ConcurrentHashMap<>());
+	private final Map<Long, List<ObjectNode>> contractItemsCache = new ConcurrentHashMap<>();
 
 	@Inject
 	protected ContractFetcher() {}
@@ -154,10 +156,12 @@ public class ContractFetcher {
 	}
 
 	private void fetchContractItems(long contractId) {
+		List<ObjectNode> items;
 		if (contractsWithItems.contains(contractId)) {
-			return;
+			items = contractItemsCache.getOrDefault(contractId, List.of());
+		} else {
+			items = fetchContractSub("items", ContractsFileBuilder.ITEM_ID, itemsStore, contractId);
 		}
-		var items = fetchContractSub("items", ContractsFileBuilder.ITEM_ID, itemsStore, contractId);
 		contractAbyssalFetcher.apply(contractId, Flowable.fromIterable(items)).blockingAwait();
 	}
 
@@ -195,9 +199,13 @@ public class ContractFetcher {
 	 */
 	private void buildKnownItemIndex() {
 		log.debug("Building item contract index.");
-		itemsStore
-				.values()
-				.forEach(item -> contractsWithItems.add(item.get("contract_id").asLong()));
+		itemsStore.values().forEach(item -> {
+			long contractId = item.get("contract_id").asLong();
+			contractsWithItems.add(contractId);
+			contractItemsCache
+					.computeIfAbsent(contractId, k -> new ArrayList<>())
+					.add((ObjectNode) item);
+		});
 		log.debug("Built list of {} known contracts with items.", contractsWithItems.size());
 	}
 

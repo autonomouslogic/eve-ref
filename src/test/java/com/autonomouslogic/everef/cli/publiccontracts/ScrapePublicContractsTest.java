@@ -18,7 +18,6 @@ import com.autonomouslogic.everef.util.DataIndexHelper;
 import com.autonomouslogic.everef.util.FormatUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.google.common.base.Function;
 import com.google.common.collect.Ordering;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -213,11 +212,11 @@ public class ScrapePublicContractsTest {
 						"/latest/contracts/public/items/190753200?datasource=tranquility&language=en&page=1",
 						"/latest/contracts/public/items/3000?datasource=tranquility&language=en&page=1",
 						"/latest/contracts/public/items/6000?datasource=tranquility&language=en&page=1",
+						"/latest/dogma/dynamic/items/47804/10000/?datasource=tranquility&language=en",
 						"/latest/dogma/dynamic/items/47804/1027826381003/?datasource=tranquility&language=en",
 						"/latest/dogma/dynamic/items/47804/2000/?datasource=tranquility&language=en",
 						"/latest/dogma/dynamic/items/47804/8000/?datasource=tranquility&language=en",
 						"/latest/dogma/dynamic/items/47804/9000/?datasource=tranquility&language=en",
-						"/latest/dogma/dynamic/items/47804/10000/?datasource=tranquility&language=en",
 						"/latest/dogma/dynamic/items/49734/1040731418725/?datasource=tranquility&language=en",
 						"/meta_groups/15",
 						"/public-contracts/public-contracts-latest.v2.tar.bz2",
@@ -339,9 +338,9 @@ public class ScrapePublicContractsTest {
 		dogmaAttributes.addAll(loadDogmaAttributesMap(47801, 6000L, 6000));
 		dogmaAttributes.addAll(loadDogmaAttributesMap(47804, 8000L, 8000));
 		dogmaAttributes.addAll(loadDogmaAttributesMap(47804, 9000L, 9000));
-		dogmaAttributes.sort(Comparator.comparing((Map<String, String> m) ->
-				FormatUtil.toHexString(Long.parseLong(m.get("item_id"))) + "-"
-						+ FormatUtil.toHexString(Long.parseLong(m.get("attribute_id")))));
+		dogmaAttributes.sort(
+				Comparator.comparing((Map<String, String> m) -> FormatUtil.toHexString(Long.parseLong(m.get("item_id")))
+						+ "-" + FormatUtil.toHexString(Long.parseLong(m.get("attribute_id")))));
 		assertEquals(concat(dogmaAttributes), concat(records));
 	}
 
@@ -352,9 +351,9 @@ public class ScrapePublicContractsTest {
 		dogmaEffects.addAll(loadDogmaEffectsMap(47801, 6000L, 6000));
 		dogmaEffects.addAll(loadDogmaEffectsMap(47804, 8000L, 8000));
 		dogmaEffects.addAll(loadDogmaEffectsMap(47804, 9000L, 9000));
-		dogmaEffects.sort(Comparator.comparing((Map<String, String> m) ->
-				FormatUtil.toHexString(Long.parseLong(m.get("item_id"))) + "-"
-						+ FormatUtil.toHexString(Long.parseLong(m.get("effect_id")))));
+		dogmaEffects.sort(
+				Comparator.comparing((Map<String, String> m) -> FormatUtil.toHexString(Long.parseLong(m.get("item_id")))
+						+ "-" + FormatUtil.toHexString(Long.parseLong(m.get("effect_id")))));
 		assertEquals(concat(dogmaEffects), concat(records));
 	}
 
