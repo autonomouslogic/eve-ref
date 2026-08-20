@@ -87,6 +87,9 @@ import software.amazon.awssdk.services.s3.S3AsyncClient;
  *         but the dogma call failed last run so item 10000 is absent from both dynamic and non-dynamic stores.
  *         Contract 10000 is no longer present on ESI (expired). The dogma call for item 10000 fails again.
  *         The item should NOT be included in the new snapshot since dogma data cannot be resolved.</li>
+ *     <li>Contract ID 11000 has a dangling item (item_id 11000) and dogma entries in the latest file, but no
+ *         corresponding contract record. Contract 11000 is not present on ESI. Both the item and dogma entries
+ *         should be cleared from the new snapshot.</li>
  * </ul>
  */
 @ExtendWith(MockitoExtension.class)
