@@ -90,6 +90,9 @@ import software.amazon.awssdk.services.s3.S3AsyncClient;
  *     <li>Contract ID 11000 has a dangling item (item_id 11000) and dogma entries in the latest file, but no
  *         corresponding contract record. Contract 11000 is not present on ESI. Both the item and dogma entries
  *         should be cleared from the new snapshot.</li>
+ *     <li>Contract ID 12000 has a dangling item (item_id 12000) in the latest file with no dogma entries and no
+ *         corresponding contract record. Contract 12000 is not present on ESI. The item should be cleared from
+ *         the new snapshot.</li>
  * </ul>
  */
 @ExtendWith(MockitoExtension.class)
