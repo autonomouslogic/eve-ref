@@ -27,6 +27,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -74,6 +75,9 @@ import software.amazon.awssdk.services.s3.S3AsyncClient;
  *     <li>Item ID 6000 has dogma in the latest file, so should not be fetched again. Item 6000 is deliberately
  *         missing from the latest items in order to check if existing dynamic items are skipped properly.</li>
  *     <li>Contract ID 7000 has previous items and bids, but bids request return a 404. Old data should be used.</li>
+ *     <li>Contract ID 8000 (item exchange) is in the latest file with an abyssal item (item_id 8000, type_id 47804),
+ *         but the dogma call failed last run so item 8000 is absent from both dynamic and non-dynamic stores.
+ *         Items should NOT be re-fetched from ESI, but the dogma endpoint SHOULD be called to resolve the roll.</li>
  * </ul>
  */
 @ExtendWith(MockitoExtension.class)
@@ -196,6 +200,7 @@ public class ScrapePublicContractsTest {
 						"/latest/contracts/public/items/6000?datasource=tranquility&language=en&page=1",
 						"/latest/dogma/dynamic/items/47804/1027826381003/?datasource=tranquility&language=en",
 						"/latest/dogma/dynamic/items/47804/2000/?datasource=tranquility&language=en",
+						"/latest/dogma/dynamic/items/47804/8000/?datasource=tranquility&language=en",
 						"/latest/dogma/dynamic/items/49734/1040731418725/?datasource=tranquility&language=en",
 						"/meta_groups/15",
 						"/public-contracts/public-contracts-latest.v2.tar.bz2",
@@ -276,7 +281,8 @@ public class ScrapePublicContractsTest {
 						loadContractItemsMap(4000),
 						loadContractItemsMap(5000),
 						loadContractItemsMap(6000),
-						loadContractItemsMap(7000))
+						loadContractItemsMap(7000),
+						loadContractItemsMap(8000))
 				.stream()
 				.sorted(Ordering.natural().onResultOf(m -> Long.parseLong(m.get("record_id"))))
 				.toList();
@@ -284,13 +290,12 @@ public class ScrapePublicContractsTest {
 	}
 
 	private void assertDynamicItems(List<Map<String, String>> records) {
-		var dynamicItems = ListUtil.concat(
-						loadDynamicItemsMap(47804, 1027826381003L, 190124106),
-						loadDynamicItemsMap(49734, 1040731418725L, 190160355),
-						loadDynamicItemsMap(47801, 6000L, 6000))
-				.stream()
-				.sorted(Ordering.natural().onResultOf(m -> Long.parseLong(m.get("item_id"))))
-				.toList();
+		var dynamicItems = new ArrayList<Map<String, String>>();
+		dynamicItems.addAll(loadDynamicItemsMap(47804, 1027826381003L, 190124106));
+		dynamicItems.addAll(loadDynamicItemsMap(49734, 1040731418725L, 190160355));
+		dynamicItems.addAll(loadDynamicItemsMap(47801, 6000L, 6000));
+		dynamicItems.addAll(loadDynamicItemsMap(47804, 8000L, 8000));
+		dynamicItems.sort(Comparator.comparingLong(m -> Long.parseLong(m.get("item_id"))));
 		assertEquals(concat(dynamicItems), concat(records));
 	}
 
@@ -309,28 +314,26 @@ public class ScrapePublicContractsTest {
 	}
 
 	private void assertDogmaAttributes(List<Map<String, String>> records) {
-		var dogmaAttributes = ListUtil.concat(
-						loadDogmaAttributesMap(47804, 1027826381003L, 190124106),
-						loadDogmaAttributesMap(49734, 1040731418725L, 190160355),
-						loadDogmaAttributesMap(47801, 6000L, 6000))
-				.stream()
-				.sorted(Ordering.natural().onResultOf((Function<Map<String, String>, String>)
-						m -> FormatUtil.toHexString(Long.parseLong(m.get("item_id"))) + "-"
-								+ FormatUtil.toHexString(Long.parseLong(m.get("attribute_id")))))
-				.toList();
+		var dogmaAttributes = new ArrayList<Map<String, String>>();
+		dogmaAttributes.addAll(loadDogmaAttributesMap(47804, 1027826381003L, 190124106));
+		dogmaAttributes.addAll(loadDogmaAttributesMap(49734, 1040731418725L, 190160355));
+		dogmaAttributes.addAll(loadDogmaAttributesMap(47801, 6000L, 6000));
+		dogmaAttributes.addAll(loadDogmaAttributesMap(47804, 8000L, 8000));
+		dogmaAttributes.sort(Comparator.comparing((Map<String, String> m) ->
+				FormatUtil.toHexString(Long.parseLong(m.get("item_id"))) + "-"
+						+ FormatUtil.toHexString(Long.parseLong(m.get("attribute_id")))));
 		assertEquals(concat(dogmaAttributes), concat(records));
 	}
 
 	private void assertDogmaEffects(List<Map<String, String>> records) {
-		var dogmaEffects = ListUtil.concat(
-						loadDogmaEffectsMap(47804, 1027826381003L, 190124106),
-						loadDogmaEffectsMap(49734, 1040731418725L, 190160355),
-						loadDogmaEffectsMap(47801, 6000L, 6000))
-				.stream()
-				.sorted(Ordering.natural().onResultOf((Function<Map<String, String>, String>)
-						m -> FormatUtil.toHexString(Long.parseLong(m.get("item_id"))) + "-"
-								+ FormatUtil.toHexString(Long.parseLong(m.get("effect_id")))))
-				.toList();
+		var dogmaEffects = new ArrayList<Map<String, String>>();
+		dogmaEffects.addAll(loadDogmaEffectsMap(47804, 1027826381003L, 190124106));
+		dogmaEffects.addAll(loadDogmaEffectsMap(49734, 1040731418725L, 190160355));
+		dogmaEffects.addAll(loadDogmaEffectsMap(47801, 6000L, 6000));
+		dogmaEffects.addAll(loadDogmaEffectsMap(47804, 8000L, 8000));
+		dogmaEffects.sort(Comparator.comparing((Map<String, String> m) ->
+				FormatUtil.toHexString(Long.parseLong(m.get("item_id"))) + "-"
+						+ FormatUtil.toHexString(Long.parseLong(m.get("effect_id")))));
 		assertEquals(concat(dogmaEffects), concat(records));
 	}
 
