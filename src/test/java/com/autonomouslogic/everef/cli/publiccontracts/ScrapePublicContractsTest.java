@@ -78,6 +78,11 @@ import software.amazon.awssdk.services.s3.S3AsyncClient;
  *     <li>Contract ID 8000 (item exchange) is in the latest file with an abyssal item (item_id 8000, type_id 47804),
  *         but the dogma call failed last run so item 8000 is absent from both dynamic and non-dynamic stores.
  *         Items should NOT be re-fetched from ESI, but the dogma endpoint SHOULD be called to resolve the roll.</li>
+ *     <li>Contract ID 9000 (item exchange) is in the latest file with an abyssal item (item_id 9000, type_id 47804),
+ *         but the dogma call failed last run so item 9000 is absent from both dynamic and non-dynamic stores.
+ *         Contract 9000 is no longer present on ESI (expired), so everything for that contract would normally be
+ *         cleared. The item and dogma SHOULD still be fetched and present in the new snapshot to backfill the
+ *         missing roll data, even though the contract itself is not included.</li>
  * </ul>
  */
 @ExtendWith(MockitoExtension.class)
@@ -201,6 +206,7 @@ public class ScrapePublicContractsTest {
 						"/latest/dogma/dynamic/items/47804/1027826381003/?datasource=tranquility&language=en",
 						"/latest/dogma/dynamic/items/47804/2000/?datasource=tranquility&language=en",
 						"/latest/dogma/dynamic/items/47804/8000/?datasource=tranquility&language=en",
+						"/latest/dogma/dynamic/items/47804/9000/?datasource=tranquility&language=en",
 						"/latest/dogma/dynamic/items/49734/1040731418725/?datasource=tranquility&language=en",
 						"/meta_groups/15",
 						"/public-contracts/public-contracts-latest.v2.tar.bz2",
@@ -282,7 +288,8 @@ public class ScrapePublicContractsTest {
 						loadContractItemsMap(5000),
 						loadContractItemsMap(6000),
 						loadContractItemsMap(7000),
-						loadContractItemsMap(8000))
+						loadContractItemsMap(8000),
+						loadContractItemsMap(9000))
 				.stream()
 				.sorted(Ordering.natural().onResultOf(m -> Long.parseLong(m.get("record_id"))))
 				.toList();
@@ -295,6 +302,7 @@ public class ScrapePublicContractsTest {
 		dynamicItems.addAll(loadDynamicItemsMap(49734, 1040731418725L, 190160355));
 		dynamicItems.addAll(loadDynamicItemsMap(47801, 6000L, 6000));
 		dynamicItems.addAll(loadDynamicItemsMap(47804, 8000L, 8000));
+		dynamicItems.addAll(loadDynamicItemsMap(47804, 9000L, 9000));
 		dynamicItems.sort(Comparator.comparingLong(m -> Long.parseLong(m.get("item_id"))));
 		assertEquals(concat(dynamicItems), concat(records));
 	}
@@ -319,6 +327,7 @@ public class ScrapePublicContractsTest {
 		dogmaAttributes.addAll(loadDogmaAttributesMap(49734, 1040731418725L, 190160355));
 		dogmaAttributes.addAll(loadDogmaAttributesMap(47801, 6000L, 6000));
 		dogmaAttributes.addAll(loadDogmaAttributesMap(47804, 8000L, 8000));
+		dogmaAttributes.addAll(loadDogmaAttributesMap(47804, 9000L, 9000));
 		dogmaAttributes.sort(Comparator.comparing((Map<String, String> m) ->
 				FormatUtil.toHexString(Long.parseLong(m.get("item_id"))) + "-"
 						+ FormatUtil.toHexString(Long.parseLong(m.get("attribute_id")))));
@@ -331,6 +340,7 @@ public class ScrapePublicContractsTest {
 		dogmaEffects.addAll(loadDogmaEffectsMap(49734, 1040731418725L, 190160355));
 		dogmaEffects.addAll(loadDogmaEffectsMap(47801, 6000L, 6000));
 		dogmaEffects.addAll(loadDogmaEffectsMap(47804, 8000L, 8000));
+		dogmaEffects.addAll(loadDogmaEffectsMap(47804, 9000L, 9000));
 		dogmaEffects.sort(Comparator.comparing((Map<String, String> m) ->
 				FormatUtil.toHexString(Long.parseLong(m.get("item_id"))) + "-"
 						+ FormatUtil.toHexString(Long.parseLong(m.get("effect_id")))));
