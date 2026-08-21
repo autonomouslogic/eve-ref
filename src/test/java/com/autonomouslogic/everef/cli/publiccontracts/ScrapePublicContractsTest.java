@@ -44,12 +44,12 @@ import software.amazon.awssdk.services.s3.S3AsyncClient;
  */
 @ExtendWith(MockitoExtension.class)
 @Log4j2
-@SetEnvironmentVariable(key = "DATA_PATH", value = "s3://" + PublicContractsScrapeTest.BUCKET_NAME + "/base/")
+@SetEnvironmentVariable(key = "DATA_PATH", value = "s3://" + ScrapePublicContractsTest.BUCKET_NAME + "/base/")
 @SetEnvironmentVariable(key = "DATA_BASE_URL", value = "http://localhost:" + TestDataUtil.TEST_PORT)
 @SetEnvironmentVariable(key = "ESI_USER_AGENT", value = "user-agent")
 @SetEnvironmentVariable(key = "ESI_BASE_URL", value = "http://localhost:" + TestDataUtil.TEST_PORT)
 @SetEnvironmentVariable(key = "REF_DATA_BASE_URL", value = "http://localhost:" + TestDataUtil.TEST_PORT)
-public class PublicContractsScrapeTest {
+public class ScrapePublicContractsTest {
     static final String BUCKET_NAME = "data-bucket";
 
     @Inject
