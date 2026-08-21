@@ -52,7 +52,6 @@ import org.apache.commons.io.IOUtils;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junitpioneer.jupiter.SetEnvironmentVariable;
@@ -433,7 +432,8 @@ public class ScrapePublicContractsTest_old {
 
 	@SneakyThrows
 	private InputStream loadContractBids(long contractId) {
-		return ResourceUtil.loadContextual(ScrapePublicContractsTest_old.class, String.format("/bids-%s.json", contractId));
+		return ResourceUtil.loadContextual(
+				ScrapePublicContractsTest_old.class, String.format("/bids-%s.json", contractId));
 	}
 
 	@SneakyThrows
