@@ -39,6 +39,8 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.junitpioneer.jupiter.SetEnvironmentVariable;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -58,6 +60,9 @@ import software.amazon.awssdk.services.s3.S3AsyncClient;
 @SetEnvironmentVariable(key = "REF_DATA_BASE_URL", value = "http://localhost:" + TestDataUtil.TEST_PORT)
 public class ScrapePublicContractsTest {
 	static final String BUCKET_NAME = "data-bucket";
+
+	/** Minimal meta-group 15 (Abyssal) response with no type IDs, sufficient for non-abyssal item tests. */
+	private static final String NON_ABYSSAL_META_GROUPS_JSON = "{\"meta_group_id\":15,\"type_ids\":[]}";
 
 	private static final String ARCHIVE_FILE =
 			"base/public-contracts/history/2020/2020-02-03/public-contracts-2020-02-03_04-05-06.v2.tar.bz2";
@@ -273,6 +278,48 @@ public class ScrapePublicContractsTest {
 		assertDataIndex();
 	}
 
+	/**
+	 * No previous archive. One non-abyssal item on a single contract. Both item_exchange and
+	 * auction contracts fetch items; auction additionally fetches bids (none configured here).
+	 */
+	@ParameterizedTest
+	@ValueSource(strings = {"item_exchange", "auction"})
+	@SneakyThrows
+	void singleItemNoExistingArchive(String contractType) {
+		var item = item(700001, 34);
+		var contract = contract(700).put("type", contractType);
+		server.setDispatcher(dispatcher()
+				.withRegion(10000001)
+				.withContracts(10000001, contractsJson(List.of(contract)))
+				.withItems(700, itemsJson(List.of(item)))
+				.withMetaGroups(NON_ABYSSAL_META_GROUPS_JSON));
+		run();
+
+		assertEquals(expectedContracts(List.of(contract), 10000001), records.get("contracts.csv"));
+		assertEquals(expectedItems(700, List.of(item)), records.get("contract_items.csv"));
+		assertNoSubDataExceptItems();
+		assertLatestFileMatches();
+		if ("auction".equals(contractType)) {
+			assertRequestPaths(
+					"/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
+					"/latest/contracts/public/bids/700?datasource=tranquility&language=en&page=1",
+					"/latest/contracts/public/items/700?datasource=tranquility&language=en&page=1",
+					"/meta_groups/15",
+					"/public-contracts/public-contracts-latest.v2.tar.bz2",
+					"/universe/regions/10000001/?datasource=tranquility",
+					"/universe/regions/?datasource=tranquility");
+		} else {
+			assertRequestPaths(
+					"/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
+					"/latest/contracts/public/items/700?datasource=tranquility&language=en&page=1",
+					"/meta_groups/15",
+					"/public-contracts/public-contracts-latest.v2.tar.bz2",
+					"/universe/regions/10000001/?datasource=tranquility",
+					"/universe/regions/?datasource=tranquility");
+		}
+		assertDataIndex();
+	}
+
 	// --- Run and capture ---
 
 	@SneakyThrows
@@ -296,6 +343,14 @@ public class ScrapePublicContractsTest {
 	private void assertNoSubData() {
 		assertEquals(List.of(), records.get("contract_bids.csv"));
 		assertEquals(List.of(), records.get("contract_items.csv"));
+		assertEquals(List.of(), records.get("contract_dynamic_items.csv"));
+		assertEquals(List.of(), records.get("contract_non_dynamic_items.csv"));
+		assertEquals(List.of(), records.get("contract_dynamic_items_dogma_attributes.csv"));
+		assertEquals(List.of(), records.get("contract_dynamic_items_dogma_effects.csv"));
+	}
+
+	private void assertNoSubDataExceptItems() {
+		assertEquals(List.of(), records.get("contract_bids.csv"));
 		assertEquals(List.of(), records.get("contract_dynamic_items.csv"));
 		assertEquals(List.of(), records.get("contract_non_dynamic_items.csv"));
 		assertEquals(List.of(), records.get("contract_dynamic_items_dogma_attributes.csv"));
@@ -379,6 +434,35 @@ public class ScrapePublicContractsTest {
 				.put("issuer_id", 2000001L)
 				.put("start_location_id", 60012547L)
 				.put("title", "");
+	}
+
+	private ObjectNode item(long recordId, int typeId) {
+		return objectMapper
+				.createObjectNode()
+				.put("is_included", true)
+				.put("quantity", 1)
+				.put("record_id", recordId)
+				.put("type_id", typeId);
+	}
+
+	@SneakyThrows
+	private String itemsJson(List<ObjectNode> items) {
+		var array = objectMapper.createArrayNode();
+		items.forEach(array::add);
+		return objectMapper.writeValueAsString(array);
+	}
+
+	@SneakyThrows
+	private List<Map<String, String>> expectedItems(long contractId, List<ObjectNode> items) {
+		var array = objectMapper.createArrayNode();
+		items.forEach(array::add);
+		var maps = testDataUtil.readMapsFromJson(new ByteArrayInputStream(objectMapper.writeValueAsBytes(array)));
+		maps.forEach(m -> {
+			m.put("contract_id", String.valueOf(contractId));
+			m.put("http_last_modified", lastModifiedInstant.toString());
+		});
+		maps.sort(Comparator.comparingLong(m -> Long.parseLong(m.get("record_id"))));
+		return maps;
 	}
 
 	@SneakyThrows
