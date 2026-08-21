@@ -243,6 +243,36 @@ public class ScrapePublicContractsTest {
 		assertDataIndex();
 	}
 
+	/**
+	 * An existing archive has two courier contracts. The ESI returns only one of them. The new archive
+	 * should contain only the contract returned by the ESI; the other should be dropped.
+	 */
+	@Test
+	@SneakyThrows
+	void missingContractRemovedFromArchive() {
+		var kept = contract(600);
+		var dropped = contract(601);
+
+		var existingContracts = expectedContracts(List.of(kept, dropped), 10000001);
+		var existingArchive = createExistingArchive(existingContracts);
+
+		server.setDispatcher(dispatcher()
+				.withRegion(10000001)
+				.withContracts(10000001, contractsJson(List.of(kept)))
+				.withLatestArchive(existingArchive));
+		run();
+
+		assertEquals(expectedContracts(List.of(kept), 10000001), records.get("contracts.csv"));
+		assertNoSubData();
+		assertLatestFileMatches();
+		assertRequestPaths(
+				"/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
+				"/public-contracts/public-contracts-latest.v2.tar.bz2",
+				"/universe/regions/10000001/?datasource=tranquility",
+				"/universe/regions/?datasource=tranquility");
+		assertDataIndex();
+	}
+
 	// --- Run and capture ---
 
 	@SneakyThrows
