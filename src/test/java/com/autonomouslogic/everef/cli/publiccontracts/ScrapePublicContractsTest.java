@@ -1007,9 +1007,8 @@ public class ScrapePublicContractsTest {
 	@SneakyThrows
 	void contractItems404ResultsInNoItemsSaved(String contractType) {
 		var contract = contract(2100).put("type", contractType);
-		server.setDispatcher(dispatcher()
-				.withRegion(10000001)
-				.withContracts(10000001, contractsJson(List.of(contract))));
+		server.setDispatcher(
+				dispatcher().withRegion(10000001).withContracts(10000001, contractsJson(List.of(contract))));
 		run();
 
 		assertEquals(expectedContracts(List.of(contract), 10000001), records.get("contracts.csv"));
