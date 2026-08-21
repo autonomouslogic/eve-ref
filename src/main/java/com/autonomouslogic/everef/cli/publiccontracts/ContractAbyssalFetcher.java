@@ -70,8 +70,8 @@ public class ContractAbyssalFetcher {
 					.filter(item -> isItemNotSeen(item))
 					.flatMapCompletable(
 							item -> {
-								long itemId = item.get("item_id").longValue();
-								long typeId = item.get("type_id").longValue();
+								long itemId = item.get("item_id").asLong();
+								long typeId = item.get("type_id").asLong();
 								return resolveDynamicItem(contractId, typeId, itemId);
 							},
 							false,
