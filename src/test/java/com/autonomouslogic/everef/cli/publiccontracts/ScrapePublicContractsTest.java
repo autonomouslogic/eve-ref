@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-import com.autonomouslogic.commons.ResourceUtil;
 import com.autonomouslogic.everef.esi.LocationPopulator;
 import com.autonomouslogic.everef.esi.MockLocationPopulatorModule;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
@@ -12,7 +11,9 @@ import com.autonomouslogic.everef.test.MockS3Adapter;
 import com.autonomouslogic.everef.test.TestDataUtil;
 import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.util.DataIndexHelper;
-import java.nio.charset.StandardCharsets;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import java.io.ByteArrayInputStream;
 import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -31,7 +32,6 @@ import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 import okio.Buffer;
-import org.apache.commons.io.IOUtils;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -77,6 +77,9 @@ public class ScrapePublicContractsTest {
     @Inject
     DataIndexHelper dataIndexHelper;
 
+    @Inject
+    ObjectMapper objectMapper;
+
     @Mock
     LocationPopulator locationPopulator;
 
@@ -114,11 +117,12 @@ public class ScrapePublicContractsTest {
     @Test
     @SneakyThrows
     void singleCourierContractNoExistingArchive() {
+        var contracts = List.of(contract(100));
         server.setDispatcher(dispatcher()
                 .withRegion(10000001)
-                .withContracts(10000001, "/contracts-10000001-1.json"));
+                .withContracts(10000001, contractsJson(contracts)));
         run();
-        assertEquals(expectedContracts("/contracts-10000001-1.json", 10000001), records.get("contracts.csv"));
+        assertEquals(expectedContracts(contracts, 10000001), records.get("contracts.csv"));
         assertNoSubData();
         assertLatestFileMatches();
         assertRequestPaths(
@@ -136,13 +140,12 @@ public class ScrapePublicContractsTest {
     @Test
     @SneakyThrows
     void twoCourierContractsNoExistingArchive() {
+        var contracts = List.of(contract(200), contract(201));
         server.setDispatcher(dispatcher()
                 .withRegion(10000001)
-                .withContracts(10000001, "/contracts-two-couriers-10000001-1.json"));
+                .withContracts(10000001, contractsJson(contracts)));
         run();
-        assertEquals(
-                expectedContracts("/contracts-two-couriers-10000001-1.json", 10000001),
-                records.get("contracts.csv"));
+        assertEquals(expectedContracts(contracts, 10000001), records.get("contracts.csv"));
         assertNoSubData();
         assertLatestFileMatches();
         assertRequestPaths(
@@ -194,20 +197,53 @@ public class ScrapePublicContractsTest {
                         S3Url.builder().bucket(BUCKET_NAME).path(ARCHIVE_FILE).build());
     }
 
-    // --- Expected data builders ---
+    // --- Contract builders ---
+
+    /**
+     * Creates a default courier contract ObjectNode with the given contract ID.
+     * Callers can override individual fields via {@link ObjectNode#put} before use.
+     */
+    private ObjectNode contract(long contractId) {
+        return objectMapper
+                .createObjectNode()
+                .put("contract_id", contractId)
+                .put("type", "courier")
+                .put("collateral", 500000000)
+                .put("price", 0)
+                .put("reward", 1000000)
+                .put("volume", 100.5)
+                .put("date_issued", "2023-04-03T05:48:04Z")
+                .put("date_expired", "2023-05-01T05:48:04Z")
+                .put("days_to_complete", 3)
+                .put("end_location_id", 60003760L)
+                .put("issuer_corporation_id", 1000001)
+                .put("issuer_id", 2000001L)
+                .put("start_location_id", 60012547L)
+                .put("title", "");
+    }
 
     @SneakyThrows
-    private List<Map<String, String>> expectedContracts(String fixturePath, long regionId) {
-        var contracts = testDataUtil.readMapsFromJson(ResourceUtil.loadContextual(getClass(), fixturePath));
-        contracts.forEach(m -> {
+    private String contractsJson(List<ObjectNode> contracts) {
+        var array = objectMapper.createArrayNode();
+        contracts.forEach(array::add);
+        return objectMapper.writeValueAsString(array);
+    }
+
+    @SneakyThrows
+    private List<Map<String, String>> expectedContracts(List<ObjectNode> contracts, long regionId) {
+        var array = objectMapper.createArrayNode();
+        contracts.forEach(array::add);
+        var maps = testDataUtil.readMapsFromJson(
+                new ByteArrayInputStream(objectMapper.writeValueAsBytes(array)));
+        maps.forEach(m -> {
             m.put("region_id", String.valueOf(regionId));
             m.put("constellation_id", "999");
             m.put("system_id", "999");
             m.put("station_id", "999");
             m.put("http_last_modified", lastModifiedInstant.toString());
         });
-        contracts.sort(Comparator.comparingLong(m -> Long.parseLong(m.get("contract_id"))));
-        return contracts;
+        maps.sort(Comparator.comparingLong(m -> Long.parseLong(m.get("contract_id"))));
+        return maps;
     }
 
     // --- Dispatcher builder ---
@@ -221,13 +257,13 @@ public class ScrapePublicContractsTest {
                 Map.of(10000001L, "Derelik", 10000002L, "The Forge");
 
         private final List<Long> regionIds = new ArrayList<>();
-        // key: regionId, value: map of page -> fixturePath (-1 = wildcard for all pages)
+        // key: regionId, value: map of page -> JSON body (-1 = wildcard for all pages)
         private final Map<Long, Map<Integer, String>> contractsByRegionPage = new HashMap<>();
         private final Map<Long, String> itemsByContract = new HashMap<>();
         private final Map<Long, String> bidsByContract = new HashMap<>();
         // key: "typeId-itemId"
         private final Map<String, String> dynamicItemsByKey = new HashMap<>();
-        private String metaGroupsFixture;
+        private String metaGroupsBody;
         private Supplier<MockResponse> latestArchiveSupplier = () -> new MockResponse().setResponseCode(404);
 
         TestDispatcher withRegion(long id) {
@@ -235,33 +271,33 @@ public class ScrapePublicContractsTest {
             return this;
         }
 
-        TestDispatcher withContracts(long regionId, String fixturePath) {
-            contractsByRegionPage.computeIfAbsent(regionId, k -> new HashMap<>()).put(-1, fixturePath);
+        TestDispatcher withContracts(long regionId, String jsonBody) {
+            contractsByRegionPage.computeIfAbsent(regionId, k -> new HashMap<>()).put(-1, jsonBody);
             return this;
         }
 
-        TestDispatcher withContracts(long regionId, int page, String fixturePath) {
-            contractsByRegionPage.computeIfAbsent(regionId, k -> new HashMap<>()).put(page, fixturePath);
+        TestDispatcher withContracts(long regionId, int page, String jsonBody) {
+            contractsByRegionPage.computeIfAbsent(regionId, k -> new HashMap<>()).put(page, jsonBody);
             return this;
         }
 
-        TestDispatcher withItems(long contractId, String fixturePath) {
-            itemsByContract.put(contractId, fixturePath);
+        TestDispatcher withItems(long contractId, String jsonBody) {
+            itemsByContract.put(contractId, jsonBody);
             return this;
         }
 
-        TestDispatcher withBids(long contractId, String fixturePath) {
-            bidsByContract.put(contractId, fixturePath);
+        TestDispatcher withBids(long contractId, String jsonBody) {
+            bidsByContract.put(contractId, jsonBody);
             return this;
         }
 
-        TestDispatcher withDynamicItems(long typeId, long itemId, String fixturePath) {
-            dynamicItemsByKey.put(typeId + "-" + itemId, fixturePath);
+        TestDispatcher withDynamicItems(long typeId, long itemId, String jsonBody) {
+            dynamicItemsByKey.put(typeId + "-" + itemId, jsonBody);
             return this;
         }
 
-        TestDispatcher withMetaGroups(String fixturePath) {
-            metaGroupsFixture = fixturePath;
+        TestDispatcher withMetaGroups(String jsonBody) {
+            metaGroupsBody = jsonBody;
             return this;
         }
 
@@ -287,11 +323,10 @@ public class ScrapePublicContractsTest {
                     case "/public-contracts/public-contracts-latest.v2.tar.bz2":
                         return latestArchiveSupplier.get();
                     case "/meta_groups/15":
-                        return metaGroupsFixture != null
-                                ? mockJson(loadResource(metaGroupsFixture))
+                        return metaGroupsBody != null
+                                ? mockJson(metaGroupsBody)
                                 : new MockResponse().setResponseCode(404);
                 }
-
                 if (path.startsWith("/universe/regions/") || path.startsWith("/latest/universe/regions/")) {
                     var segmentIndex = segments.contains("latest") ? 3 : 2;
                     var regionId = Long.parseLong(segments.get(segmentIndex));
@@ -302,37 +337,31 @@ public class ScrapePublicContractsTest {
                 if (path.startsWith("/contracts/public/items/") || path.startsWith("/latest/contracts/public/items/")) {
                     var segmentIndex = segments.contains("latest") ? 4 : 3;
                     var contractId = Long.parseLong(segments.get(segmentIndex));
-                    var fixture = itemsByContract.get(contractId);
-                    return fixture != null
-                            ? mockJson(loadResource(fixture))
-                            : new MockResponse().setResponseCode(404);
+                    var body = itemsByContract.get(contractId);
+                    return body != null ? mockJson(body) : new MockResponse().setResponseCode(404);
                 }
                 if (path.startsWith("/contracts/public/bids/") || path.startsWith("/latest/contracts/public/bids/")) {
                     var segmentIndex = segments.contains("latest") ? 4 : 3;
                     var contractId = Long.parseLong(segments.get(segmentIndex));
-                    var fixture = bidsByContract.get(contractId);
-                    return fixture != null
-                            ? mockJson(loadResource(fixture))
-                            : new MockResponse().setResponseCode(404);
+                    var body = bidsByContract.get(contractId);
+                    return body != null ? mockJson(body) : new MockResponse().setResponseCode(404);
                 }
                 if (path.startsWith("/contracts/public/") || path.startsWith("/latest/contracts/public/")) {
                     var segmentIndex = segments.contains("latest") ? 3 : 2;
                     var regionId = Long.parseLong(segments.get(segmentIndex));
                     var pages = contractsByRegionPage.get(regionId);
                     if (pages == null) return new MockResponse().setResponseCode(404);
-                    var fixture = pages.containsKey(pageNum) ? pages.get(pageNum) : pages.get(-1);
-                    if (fixture == null) return new MockResponse().setResponseCode(404);
+                    var body = pages.containsKey(pageNum) ? pages.get(pageNum) : pages.get(-1);
+                    if (body == null) return new MockResponse().setResponseCode(404);
                     var totalPages = pages.containsKey(-1) ? 1 : pages.size();
-                    return mockJson(loadResource(fixture)).addHeader("x-pages", String.valueOf(totalPages));
+                    return mockJson(body).addHeader("x-pages", String.valueOf(totalPages));
                 }
                 if (path.startsWith("/dogma/dynamic/items/") || path.startsWith("/latest/dogma/dynamic/items/")) {
                     var segmentIndex = segments.contains("latest") ? 4 : 3;
                     var typeId = Long.parseLong(segments.get(segmentIndex));
                     var itemId = Long.parseLong(segments.get(segmentIndex + 1));
-                    var fixture = dynamicItemsByKey.get(typeId + "-" + itemId);
-                    return fixture != null
-                            ? mockJson(loadResource(fixture))
-                            : new MockResponse().setResponseCode(404);
+                    var body = dynamicItemsByKey.get(typeId + "-" + itemId);
+                    return body != null ? mockJson(body) : new MockResponse().setResponseCode(404);
                 }
 
                 log.error("Unaccounted URL: {}", path);
@@ -352,12 +381,5 @@ public class ScrapePublicContractsTest {
                 .setResponseCode(200)
                 .setBody(body)
                 .addHeader("last-modified", lastModified);
-    }
-
-    @SneakyThrows
-    private String loadResource(String path) {
-        try (var in = ResourceUtil.loadContextual(getClass(), path)) {
-            return IOUtils.toString(in, StandardCharsets.UTF_8);
-        }
     }
 }
