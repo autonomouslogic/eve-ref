@@ -803,6 +803,197 @@ public class ScrapePublicContractsTest {
 		assertDataIndex();
 	}
 
+	/**
+	 * No previous archive. One contract with one abyssal item where the ESI returns 520. The item
+	 * should be stored in contract_non_dynamic_items.csv and not in contract_dynamic_items.csv.
+	 */
+	@ParameterizedTest
+	@ValueSource(strings = {"item_exchange", "auction"})
+	@SneakyThrows
+	void abyssalItemEsi520StoredAsNonDynamic(String contractType) {
+		var typeId = 47804;
+		var item = abyssalItem(1700001, 1700001, typeId);
+		var contract = contract(1700).put("type", contractType);
+		var metaGroupsJson = "{\"meta_group_id\":15,\"type_ids\":[" + typeId + "]}";
+
+		var d = dispatcher()
+				.withRegion(10000001)
+				.withContracts(10000001, contractsJson(List.of(contract)))
+				.withItems(1700, itemsJson(List.of(item)))
+				.withDynamicItem520(typeId, 1700001)
+				.withType(typeId)
+				.withMetaGroups(metaGroupsJson);
+		if ("auction".equals(contractType)) {
+			d.withBids(1700, bidsJson(List.of()));
+		}
+		server.setDispatcher(d);
+		run();
+
+		assertEquals(expectedContracts(List.of(contract), 10000001), records.get("contracts.csv"));
+		assertEquals(expectedItems(1700, List.of(item)), records.get("contract_items.csv"));
+		assertEquals(List.of(), records.get("contract_dynamic_items.csv"));
+		assertEquals(List.of(), records.get("contract_dynamic_items_dogma_attributes.csv"));
+		assertEquals(List.of(), records.get("contract_dynamic_items_dogma_effects.csv"));
+		assertEquals(List.of(nonDynamicItem(1700, 1700001, typeId)), records.get("contract_non_dynamic_items.csv"));
+		assertEquals(List.of(), records.get("contract_bids.csv"));
+		assertLatestFileMatches();
+		if ("auction".equals(contractType)) {
+			assertRequestPaths(
+					"/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
+					"/latest/contracts/public/bids/1700?datasource=tranquility&language=en&page=1",
+					"/latest/contracts/public/items/1700?datasource=tranquility&language=en&page=1",
+					"/latest/dogma/dynamic/items/47804/1700001/?datasource=tranquility&language=en",
+					"/meta_groups/15",
+					"/public-contracts/public-contracts-latest.v2.tar.bz2",
+					"/universe/regions/10000001/?datasource=tranquility",
+					"/universe/regions/?datasource=tranquility",
+					"/universe/types/47804/?datasource=tranquility");
+		} else {
+			assertRequestPaths(
+					"/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
+					"/latest/contracts/public/items/1700?datasource=tranquility&language=en&page=1",
+					"/latest/dogma/dynamic/items/47804/1700001/?datasource=tranquility&language=en",
+					"/meta_groups/15",
+					"/public-contracts/public-contracts-latest.v2.tar.bz2",
+					"/universe/regions/10000001/?datasource=tranquility",
+					"/universe/regions/?datasource=tranquility",
+					"/universe/types/47804/?datasource=tranquility");
+		}
+		assertDataIndex();
+	}
+
+	/**
+	 * Existing archive has a non-dynamic entry for an item (from a previous 520). The contract's
+	 * items are not in the archive, so items are re-fetched. When the abyssal item appears in the
+	 * re-fetched items, the non-dynamic store prevents a new dynamic fetch.
+	 */
+	@Test
+	@SneakyThrows
+	void existingNonDynamicItemNotRefetched() {
+		var typeId = 47804;
+		var item = abyssalItem(1800001, 1800001, typeId);
+		var contract = contract(1800).put("type", "item_exchange");
+		var metaGroupsJson = "{\"meta_group_id\":15,\"type_ids\":[" + typeId + "]}";
+
+		var existingContracts = expectedContracts(List.of(contract), 10000001);
+		var existingNonDynamic = List.of(nonDynamicItem(1800, 1800001, typeId));
+		var existingArchive = createExistingArchive(
+				existingContracts, List.of(), List.of(), List.of(), List.of(), List.of(), existingNonDynamic);
+
+		server.setDispatcher(dispatcher()
+				.withRegion(10000001)
+				.withContracts(10000001, contractsJson(List.of(contract)))
+				.withItems(1800, itemsJson(List.of(item)))
+				.withType(typeId)
+				.withLatestArchive(existingArchive)
+				.withMetaGroups(metaGroupsJson));
+		run();
+
+		assertEquals(expectedContracts(List.of(contract), 10000001), records.get("contracts.csv"));
+		assertEquals(expectedItems(1800, List.of(item)), records.get("contract_items.csv"));
+		assertEquals(List.of(), records.get("contract_dynamic_items.csv"));
+		assertEquals(List.of(), records.get("contract_dynamic_items_dogma_attributes.csv"));
+		assertEquals(List.of(), records.get("contract_dynamic_items_dogma_effects.csv"));
+		assertEquals(List.of(nonDynamicItem(1800, 1800001, typeId)), records.get("contract_non_dynamic_items.csv"));
+		assertEquals(List.of(), records.get("contract_bids.csv"));
+		assertLatestFileMatches();
+		assertRequestPaths(
+				"/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
+				"/latest/contracts/public/items/1800?datasource=tranquility&language=en&page=1",
+				"/meta_groups/15",
+				"/public-contracts/public-contracts-latest.v2.tar.bz2",
+				"/universe/regions/10000001/?datasource=tranquility",
+				"/universe/regions/?datasource=tranquility",
+				"/universe/types/47804/?datasource=tranquility");
+		assertDataIndex();
+	}
+
+	/**
+	 * Existing archive has dynamic data for an item, but the contract's items are absent from the
+	 * archive. Items are re-fetched. When the abyssal item appears, the dynamic store prevents a
+	 * new fetch.
+	 */
+	@Test
+	@SneakyThrows
+	void existingDynamicItemNotRefetchedWhenContractItemsMissing() {
+		var typeId = 47804;
+		var item = abyssalItem(1900001, 1900001, typeId);
+		var contract = contract(1900).put("type", "item_exchange");
+		var metaGroupsJson = "{\"meta_group_id\":15,\"type_ids\":[" + typeId + "]}";
+
+		var existingContracts = expectedContracts(List.of(contract), 10000001);
+		var existingDynamic = expectedDynamicItems(1900, 1900001);
+		var existingAttributes = expectedDynamicAttributes(1900, 1900001);
+		var existingEffects = expectedDynamicEffects(1900, 1900001);
+		var existingArchive = createExistingArchive(
+				existingContracts, List.of(), List.of(), existingDynamic, existingAttributes, existingEffects);
+
+		server.setDispatcher(dispatcher()
+				.withRegion(10000001)
+				.withContracts(10000001, contractsJson(List.of(contract)))
+				.withItems(1900, itemsJson(List.of(item)))
+				.withType(typeId)
+				.withLatestArchive(existingArchive)
+				.withMetaGroups(metaGroupsJson));
+		run();
+
+		assertEquals(expectedContracts(List.of(contract), 10000001), records.get("contracts.csv"));
+		assertEquals(expectedItems(1900, List.of(item)), records.get("contract_items.csv"));
+		assertEquals(expectedDynamicItems(1900, 1900001), records.get("contract_dynamic_items.csv"));
+		assertEquals(
+				expectedDynamicAttributes(1900, 1900001), records.get("contract_dynamic_items_dogma_attributes.csv"));
+		assertEquals(expectedDynamicEffects(1900, 1900001), records.get("contract_dynamic_items_dogma_effects.csv"));
+		assertEquals(List.of(), records.get("contract_non_dynamic_items.csv"));
+		assertEquals(List.of(), records.get("contract_bids.csv"));
+		assertLatestFileMatches();
+		assertRequestPaths(
+				"/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
+				"/latest/contracts/public/items/1900?datasource=tranquility&language=en&page=1",
+				"/meta_groups/15",
+				"/public-contracts/public-contracts-latest.v2.tar.bz2",
+				"/universe/regions/10000001/?datasource=tranquility",
+				"/universe/regions/?datasource=tranquility",
+				"/universe/types/47804/?datasource=tranquility");
+		assertDataIndex();
+	}
+
+	/**
+	 * Existing archive has an auction contract with items and bids. The ESI returns the same
+	 * contract; items are not re-fetched. The bids endpoint returns 404. The old bids from the
+	 * archive should be preserved in the new archive.
+	 */
+	@Test
+	@SneakyThrows
+	void auctionBids404FallsBackToArchiveBids() {
+		var item = item(2000001, 34);
+		var bid = bid(2000901);
+		var contract = contract(2000).put("type", "auction");
+
+		var existingContracts = expectedContracts(List.of(contract), 10000001);
+		var existingItems = expectedItems(2000, List.of(item));
+		var existingBids = expectedBids(2000, List.of(bid));
+		var existingArchive = createExistingArchive(existingContracts, existingItems, existingBids);
+
+		server.setDispatcher(dispatcher()
+				.withRegion(10000001)
+				.withContracts(10000001, contractsJson(List.of(contract)))
+				.withLatestArchive(existingArchive));
+		run();
+
+		assertEquals(expectedContracts(List.of(contract), 10000001), records.get("contracts.csv"));
+		assertEquals(expectedItems(2000, List.of(item)), records.get("contract_items.csv"));
+		assertEquals(expectedBids(2000, List.of(bid)), records.get("contract_bids.csv"));
+		assertNoSubDataExceptItemsAndBids();
+		assertLatestFileMatches();
+		assertRequestPaths(
+				"/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
+				"/latest/contracts/public/bids/2000?datasource=tranquility&language=en&page=1",
+				"/public-contracts/public-contracts-latest.v2.tar.bz2",
+				"/universe/regions/10000001/?datasource=tranquility",
+				"/universe/regions/?datasource=tranquility");
+		assertDataIndex();
+	}
+
 	// --- Run and capture ---
 
 	@SneakyThrows
@@ -888,6 +1079,18 @@ public class ScrapePublicContractsTest {
 			List<Map<String, String>> dynamicItems,
 			List<Map<String, String>> dogmaAttributes,
 			List<Map<String, String>> dogmaEffects) {
+		return createExistingArchive(contracts, items, bids, dynamicItems, dogmaAttributes, dogmaEffects, List.of());
+	}
+
+	@SneakyThrows
+	private byte[] createExistingArchive(
+			List<Map<String, String>> contracts,
+			List<Map<String, String>> items,
+			List<Map<String, String>> bids,
+			List<Map<String, String>> dynamicItems,
+			List<Map<String, String>> dogmaAttributes,
+			List<Map<String, String>> dogmaEffects,
+			List<Map<String, String>> nonDynamicItems) {
 		var meta = new ContractsScrapeMeta();
 		meta.setDatasource("tranquility");
 		meta.setScrapeStart(Instant.parse("2020-01-01T00:00:00Z"));
@@ -902,7 +1105,7 @@ public class ScrapePublicContractsTest {
 				"contract_dynamic_items.csv",
 				writeCsv(dynamicItems),
 				"contract_non_dynamic_items.csv",
-				new byte[0],
+				writeCsv(nonDynamicItems),
 				"contract_dynamic_items_dogma_attributes.csv",
 				writeCsv(dogmaAttributes),
 				"contract_dynamic_items_dogma_effects.csv",
@@ -1119,6 +1322,14 @@ public class ScrapePublicContractsTest {
 		return List.of(map);
 	}
 
+	private Map<String, String> nonDynamicItem(long contractId, long itemId, int typeId) {
+		var map = new HashMap<String, String>();
+		map.put("item_id", String.valueOf(itemId));
+		map.put("type_id", String.valueOf(typeId));
+		map.put("contract_id", String.valueOf(contractId));
+		return map;
+	}
+
 	private List<Map<String, String>> expectedDynamicEffects(long contractId, long itemId) {
 		var map = new HashMap<String, String>();
 		map.put("effect_id", "16");
@@ -1145,6 +1356,7 @@ public class ScrapePublicContractsTest {
 		private final Map<Long, Map<Integer, String>> bidsByContractPage = new HashMap<>();
 		// key: "typeId-itemId"
 		private final Map<String, String> dynamicItemsByKey = new HashMap<>();
+		private final Set<String> dynamicItem520Keys = new HashSet<>();
 		private final Set<Integer> knownTypeIds = new HashSet<>();
 		private String metaGroupsBody;
 		private Supplier<MockResponse> latestArchiveSupplier = () -> new MockResponse().setResponseCode(404);
@@ -1194,6 +1406,11 @@ public class ScrapePublicContractsTest {
 
 		TestDispatcher withDynamicItems(long typeId, long itemId, String jsonBody) {
 			dynamicItemsByKey.put(typeId + "-" + itemId, jsonBody);
+			return this;
+		}
+
+		TestDispatcher withDynamicItem520(long typeId, long itemId) {
+			dynamicItem520Keys.add(typeId + "-" + itemId);
 			return this;
 		}
 
@@ -1272,7 +1489,9 @@ public class ScrapePublicContractsTest {
 					var segmentIndex = segments.contains("latest") ? 4 : 3;
 					var typeId = Long.parseLong(segments.get(segmentIndex));
 					var itemId = Long.parseLong(segments.get(segmentIndex + 1));
-					var body = dynamicItemsByKey.get(typeId + "-" + itemId);
+					var key = typeId + "-" + itemId;
+					if (dynamicItem520Keys.contains(key)) return new MockResponse().setResponseCode(520);
+					var body = dynamicItemsByKey.get(key);
 					return body != null ? mockJson(body) : new MockResponse().setResponseCode(404);
 				}
 				if (path.startsWith("/universe/types/")) {
