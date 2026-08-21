@@ -20,8 +20,10 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 import javax.inject.Inject;
@@ -594,6 +596,48 @@ public class ScrapePublicContractsTest {
 		assertDataIndex();
 	}
 
+	/**
+	 * No previous archive. One item_exchange contract with one abyssal (dynamic) item.
+	 * The contract, item, dynamic item attributes, and effects should all appear in the archive.
+	 */
+	@Test
+	@SneakyThrows
+	void singleDynamicItemNoExistingArchive() {
+		var typeId = 47804;
+		var item = abyssalItem(1400001, 1400001, typeId);
+		var contract = contract(1400).put("type", "item_exchange");
+		var metaGroupsJson = "{\"meta_group_id\":15,\"type_ids\":[" + typeId + "]}";
+
+		server.setDispatcher(dispatcher()
+				.withRegion(10000001)
+				.withContracts(10000001, contractsJson(List.of(contract)))
+				.withItems(1400, itemsJson(List.of(item)))
+				.withDynamicItems(typeId, 1400001, dynamicItemJson())
+				.withType(typeId)
+				.withMetaGroups(metaGroupsJson));
+		run();
+
+		assertEquals(expectedContracts(List.of(contract), 10000001), records.get("contracts.csv"));
+		assertEquals(expectedItems(1400, List.of(item)), records.get("contract_items.csv"));
+		assertEquals(expectedDynamicItems(1400, 1400001), records.get("contract_dynamic_items.csv"));
+		assertEquals(
+				expectedDynamicAttributes(1400, 1400001), records.get("contract_dynamic_items_dogma_attributes.csv"));
+		assertEquals(expectedDynamicEffects(1400, 1400001), records.get("contract_dynamic_items_dogma_effects.csv"));
+		assertEquals(List.of(), records.get("contract_non_dynamic_items.csv"));
+		assertEquals(List.of(), records.get("contract_bids.csv"));
+		assertLatestFileMatches();
+		assertRequestPaths(
+				"/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
+				"/latest/contracts/public/items/1400?datasource=tranquility&language=en&page=1",
+				"/latest/dogma/dynamic/items/47804/1400001/?datasource=tranquility&language=en",
+				"/meta_groups/15",
+				"/public-contracts/public-contracts-latest.v2.tar.bz2",
+				"/universe/regions/10000001/?datasource=tranquility",
+				"/universe/regions/?datasource=tranquility",
+				"/universe/types/47804/?datasource=tranquility");
+		assertDataIndex();
+	}
+
 	// --- Run and capture ---
 
 	@SneakyThrows
@@ -840,6 +884,67 @@ public class ScrapePublicContractsTest {
 		return maps;
 	}
 
+	private ObjectNode abyssalItem(long recordId, long itemId, int typeId) {
+		return item(recordId, typeId).put("item_id", itemId);
+	}
+
+	@SneakyThrows
+	private String dynamicItemJson() {
+		var node = objectMapper
+				.createObjectNode()
+				.put("created_by", 203457312)
+				.put("mutator_type_id", 47801)
+				.put("source_type_id", 31928);
+		node.set(
+				"dogma_attributes",
+				objectMapper
+						.createArrayNode()
+						.add(objectMapper
+								.createObjectNode()
+								.put("attribute_id", 277)
+								.put("value", 1)));
+		node.set(
+				"dogma_effects",
+				objectMapper
+						.createArrayNode()
+						.add(objectMapper
+								.createObjectNode()
+								.put("effect_id", 16)
+								.put("is_default", false)));
+		return objectMapper.writeValueAsString(node);
+	}
+
+	private List<Map<String, String>> expectedDynamicItems(long contractId, long itemId) {
+		var map = new HashMap<String, String>();
+		map.put("created_by", "203457312");
+		map.put("mutator_type_id", "47801");
+		map.put("source_type_id", "31928");
+		map.put("item_id", String.valueOf(itemId));
+		map.put("contract_id", String.valueOf(contractId));
+		map.put("http_last_modified", lastModifiedInstant.toString());
+		return List.of(map);
+	}
+
+	private List<Map<String, String>> expectedDynamicAttributes(long contractId, long itemId) {
+		var map = new HashMap<String, String>();
+		map.put("attribute_id", "277");
+		map.put("value", "1");
+		map.put("contract_id", String.valueOf(contractId));
+		map.put("item_id", String.valueOf(itemId));
+		map.put("http_last_modified", lastModifiedInstant.toString());
+		return List.of(map);
+	}
+
+	private List<Map<String, String>> expectedDynamicEffects(long contractId, long itemId) {
+		var map = new HashMap<String, String>();
+		map.put("effect_id", "16");
+		map.put("is_default", "false");
+		map.put("contract_id", String.valueOf(contractId));
+		map.put("item_id", String.valueOf(itemId));
+		map.put("http_last_modified", lastModifiedInstant.toString());
+		return List.of(map);
+	}
+
 	// --- Dispatcher builder ---
 
 	private TestDispatcher dispatcher() {
@@ -856,6 +961,7 @@ public class ScrapePublicContractsTest {
 		private final Map<Long, Map<Integer, String>> bidsByContractPage = new HashMap<>();
 		// key: "typeId-itemId"
 		private final Map<String, String> dynamicItemsByKey = new HashMap<>();
+		private final Set<Integer> knownTypeIds = new HashSet<>();
 		private String metaGroupsBody;
 		private Supplier<MockResponse> latestArchiveSupplier = () -> new MockResponse().setResponseCode(404);
 
@@ -904,6 +1010,11 @@ public class ScrapePublicContractsTest {
 
 		TestDispatcher withDynamicItems(long typeId, long itemId, String jsonBody) {
 			dynamicItemsByKey.put(typeId + "-" + itemId, jsonBody);
+			return this;
+		}
+
+		TestDispatcher withType(int typeId) {
+			knownTypeIds.add(typeId);
 			return this;
 		}
 
@@ -979,6 +1090,15 @@ public class ScrapePublicContractsTest {
 					var itemId = Long.parseLong(segments.get(segmentIndex + 1));
 					var body = dynamicItemsByKey.get(typeId + "-" + itemId);
 					return body != null ? mockJson(body) : new MockResponse().setResponseCode(404);
+				}
+				if (path.startsWith("/universe/types/")) {
+					var typeId = Integer.parseInt(segments.get(2));
+					if (knownTypeIds.contains(typeId)) {
+						return mockJson("{\"type_id\":" + typeId
+								+ ",\"name\":\"Type " + typeId
+								+ "\",\"description\":\"\",\"group_id\":1,\"published\":true}");
+					}
+					return new MockResponse().setResponseCode(404);
 				}
 
 				log.error("Unaccounted URL: {}", path);
