@@ -1035,6 +1035,57 @@ public class ScrapePublicContractsTest {
 		assertDataIndex();
 	}
 
+	/**
+	 * Existing archive has a contract with no items. The ESI returns the same contract. Items should
+	 * be re-fetched since the archive has no items for that contract.
+	 */
+	@ParameterizedTest
+	@ValueSource(strings = {"item_exchange", "auction"})
+	@SneakyThrows
+	void missingItemsInArchiveRetried(String contractType) {
+		var item = item(2200001, 34);
+		var contract = contract(2200).put("type", contractType);
+
+		var existingContracts = expectedContracts(List.of(contract), 10000001);
+		var existingArchive = createExistingArchive(existingContracts);
+
+		var d = dispatcher()
+				.withRegion(10000001)
+				.withContracts(10000001, contractsJson(List.of(contract)))
+				.withItems(2200, itemsJson(List.of(item)))
+				.withLatestArchive(existingArchive)
+				.withMetaGroups(NON_ABYSSAL_META_GROUPS_JSON);
+		if ("auction".equals(contractType)) {
+			d.withBids(2200, bidsJson(List.of()));
+		}
+		server.setDispatcher(d);
+		run();
+
+		assertEquals(expectedContracts(List.of(contract), 10000001), records.get("contracts.csv"));
+		assertEquals(expectedItems(2200, List.of(item)), records.get("contract_items.csv"));
+		assertNoSubDataExceptItems();
+		assertLatestFileMatches();
+		if ("auction".equals(contractType)) {
+			assertRequestPaths(
+					"/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
+					"/latest/contracts/public/bids/2200?datasource=tranquility&language=en&page=1",
+					"/latest/contracts/public/items/2200?datasource=tranquility&language=en&page=1",
+					"/meta_groups/15",
+					"/public-contracts/public-contracts-latest.v2.tar.bz2",
+					"/universe/regions/10000001/?datasource=tranquility",
+					"/universe/regions/?datasource=tranquility");
+		} else {
+			assertRequestPaths(
+					"/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
+					"/latest/contracts/public/items/2200?datasource=tranquility&language=en&page=1",
+					"/meta_groups/15",
+					"/public-contracts/public-contracts-latest.v2.tar.bz2",
+					"/universe/regions/10000001/?datasource=tranquility",
+					"/universe/regions/?datasource=tranquility");
+		}
+		assertDataIndex();
+	}
+
 	// --- Run and capture ---
 
 	@SneakyThrows
