@@ -435,17 +435,17 @@ public class ScrapePublicContractsTest {
 	}
 
 	/**
-	 * Existing archive has two contracts, each with items. The ESI only returns one of them. The
-	 * contract not returned by the ESI should be removed from the new archive, along with its items.
+	 * Existing archive has two item_exchange contracts, each with items. The ESI only returns one of
+	 * them. The missing item_exchange contract should be removed from the new archive along with its
+	 * items.
 	 */
-	@ParameterizedTest
-	@ValueSource(strings = {"item_exchange", "auction"})
+	@Test
 	@SneakyThrows
-	void missingContractItemsRemovedFromArchive(String contractType) {
+	void missingItemExchangeContractItemsRemovedFromArchive() {
 		var itemA = item(1000001, 34);
 		var itemB = item(1001001, 35);
-		var contractA = contract(1000).put("type", contractType);
-		var contractB = contract(1001).put("type", contractType);
+		var contractA = contract(1000).put("type", "item_exchange");
+		var contractB = contract(1001).put("type", "item_exchange");
 
 		var existingContracts = sortedByContractId(
 				expectedContracts(List.of(contractA), 10000001), expectedContracts(List.of(contractB), 10000001));
@@ -462,36 +462,26 @@ public class ScrapePublicContractsTest {
 		assertEquals(expectedItems(1000, List.of(itemA)), records.get("contract_items.csv"));
 		assertNoSubDataExceptItems();
 		assertLatestFileMatches();
-		if ("auction".equals(contractType)) {
-			assertRequestPaths(
-					"/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
-					"/latest/contracts/public/bids/1000?datasource=tranquility&language=en&page=1",
-					"/public-contracts/public-contracts-latest.v2.tar.bz2",
-					"/universe/regions/10000001/?datasource=tranquility",
-					"/universe/regions/?datasource=tranquility");
-		} else {
-			assertRequestPaths(
-					"/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
-					"/public-contracts/public-contracts-latest.v2.tar.bz2",
-					"/universe/regions/10000001/?datasource=tranquility",
-					"/universe/regions/?datasource=tranquility");
-		}
+		assertRequestPaths(
+				"/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
+				"/public-contracts/public-contracts-latest.v2.tar.bz2",
+				"/universe/regions/10000001/?datasource=tranquility",
+				"/universe/regions/?datasource=tranquility");
 		assertDataIndex();
 	}
 
 	/**
-	 * Existing archive has a contract with items. The ESI returns that same contract plus a new one.
-	 * Items for the existing contract should not be re-fetched; items for the new contract should be
-	 * fetched.
+	 * Existing archive has an item_exchange contract with items. The ESI returns that same contract
+	 * plus a new item_exchange contract. Items for the existing contract should not be re-fetched;
+	 * items for the new contract should be fetched.
 	 */
-	@ParameterizedTest
-	@ValueSource(strings = {"item_exchange", "auction"})
+	@Test
 	@SneakyThrows
-	void existingItemsNotRefetched(String contractType) {
+	void existingItemExchangeItemsNotRefetched() {
 		var itemA = item(1100001, 34);
-		var itemB = item(1102001, 36);
-		var contractA = contract(1100).put("type", contractType);
-		var contractB = contract(1102).put("type", contractType);
+		var itemC = item(1102001, 36);
+		var contractA = contract(1100).put("type", "item_exchange");
+		var contractC = contract(1102).put("type", "item_exchange");
 
 		var existingContracts = expectedContracts(List.of(contractA), 10000001);
 		var existingItems = expectedItems(1100, List.of(itemA));
@@ -499,8 +489,8 @@ public class ScrapePublicContractsTest {
 
 		server.setDispatcher(dispatcher()
 				.withRegion(10000001)
-				.withContracts(10000001, contractsJson(List.of(contractA, contractB)))
-				.withItems(1102, itemsJson(List.of(itemB)))
+				.withContracts(10000001, contractsJson(List.of(contractA, contractC)))
+				.withItems(1102, itemsJson(List.of(itemC)))
 				.withLatestArchive(existingArchive)
 				.withMetaGroups(NON_ABYSSAL_META_GROUPS_JSON));
 		run();
@@ -508,32 +498,99 @@ public class ScrapePublicContractsTest {
 		assertEquals(
 				sortedByContractId(
 						expectedContracts(List.of(contractA), 10000001),
-						expectedContracts(List.of(contractB), 10000001)),
+						expectedContracts(List.of(contractC), 10000001)),
 				records.get("contracts.csv"));
 		assertEquals(
-				sortedByRecordId(expectedItems(1100, List.of(itemA)), expectedItems(1102, List.of(itemB))),
+				sortedByRecordId(expectedItems(1100, List.of(itemA)), expectedItems(1102, List.of(itemC))),
 				records.get("contract_items.csv"));
 		assertNoSubDataExceptItems();
 		assertLatestFileMatches();
-		if ("auction".equals(contractType)) {
-			assertRequestPaths(
-					"/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
-					"/latest/contracts/public/bids/1100?datasource=tranquility&language=en&page=1",
-					"/latest/contracts/public/bids/1102?datasource=tranquility&language=en&page=1",
-					"/latest/contracts/public/items/1102?datasource=tranquility&language=en&page=1",
-					"/meta_groups/15",
-					"/public-contracts/public-contracts-latest.v2.tar.bz2",
-					"/universe/regions/10000001/?datasource=tranquility",
-					"/universe/regions/?datasource=tranquility");
-		} else {
-			assertRequestPaths(
-					"/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
-					"/latest/contracts/public/items/1102?datasource=tranquility&language=en&page=1",
-					"/meta_groups/15",
-					"/public-contracts/public-contracts-latest.v2.tar.bz2",
-					"/universe/regions/10000001/?datasource=tranquility",
-					"/universe/regions/?datasource=tranquility");
-		}
+		assertRequestPaths(
+				"/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
+				"/latest/contracts/public/items/1102?datasource=tranquility&language=en&page=1",
+				"/meta_groups/15",
+				"/public-contracts/public-contracts-latest.v2.tar.bz2",
+				"/universe/regions/10000001/?datasource=tranquility",
+				"/universe/regions/?datasource=tranquility");
+		assertDataIndex();
+	}
+
+	/**
+	 * Existing archive has two auction contracts, each with items and bids. The ESI only returns one
+	 * of them. The missing auction contract should be removed along with both its items and bids.
+	 */
+	@Test
+	@SneakyThrows
+	void missingAuctionContractItemsAndBidsRemovedFromArchive() {
+		var itemA = item(1200001, 34);
+		var itemB = item(1201001, 35);
+		var bidA = bid(1200901);
+		var bidB = bid(1201901);
+		var contractA = contract(1200).put("type", "auction");
+		var contractB = contract(1201).put("type", "auction");
+
+		var existingContracts = sortedByContractId(
+				expectedContracts(List.of(contractA), 10000001), expectedContracts(List.of(contractB), 10000001));
+		var existingItems = sortedByRecordId(expectedItems(1200, List.of(itemA)), expectedItems(1201, List.of(itemB)));
+		var existingBids = sortedByBidId(expectedBids(1200, List.of(bidA)), expectedBids(1201, List.of(bidB)));
+		var existingArchive = createExistingArchive(existingContracts, existingItems, existingBids);
+
+		server.setDispatcher(dispatcher()
+				.withRegion(10000001)
+				.withContracts(10000001, contractsJson(List.of(contractA)))
+				.withBids(1200, bidsJson(List.of(bidA)))
+				.withLatestArchive(existingArchive));
+		run();
+
+		assertEquals(expectedContracts(List.of(contractA), 10000001), records.get("contracts.csv"));
+		assertEquals(expectedItems(1200, List.of(itemA)), records.get("contract_items.csv"));
+		assertEquals(expectedBids(1200, List.of(bidA)), records.get("contract_bids.csv"));
+		assertNoSubDataExceptItemsAndBids();
+		assertLatestFileMatches();
+		assertRequestPaths(
+				"/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
+				"/latest/contracts/public/bids/1200?datasource=tranquility&language=en&page=1",
+				"/public-contracts/public-contracts-latest.v2.tar.bz2",
+				"/universe/regions/10000001/?datasource=tranquility",
+				"/universe/regions/?datasource=tranquility");
+		assertDataIndex();
+	}
+
+	/**
+	 * Existing archive has an auction contract with items and a bid. The ESI returns that same
+	 * contract. Bids are always re-fetched from the ESI (unlike items, which are skipped when the
+	 * contract already has known items in the archive).
+	 */
+	@Test
+	@SneakyThrows
+	void existingAuctionBidsRefetchedItemsNotRefetched() {
+		var itemA = item(1300001, 34);
+		var bidA = bid(1300901);
+		var contractA = contract(1300).put("type", "auction");
+
+		var existingContracts = expectedContracts(List.of(contractA), 10000001);
+		var existingItems = expectedItems(1300, List.of(itemA));
+		var existingBids = expectedBids(1300, List.of(bidA));
+		var existingArchive = createExistingArchive(existingContracts, existingItems, existingBids);
+
+		server.setDispatcher(dispatcher()
+				.withRegion(10000001)
+				.withContracts(10000001, contractsJson(List.of(contractA)))
+				.withBids(1300, bidsJson(List.of(bidA)))
+				.withLatestArchive(existingArchive));
+		run();
+
+		assertEquals(expectedContracts(List.of(contractA), 10000001), records.get("contracts.csv"));
+		assertEquals(expectedItems(1300, List.of(itemA)), records.get("contract_items.csv"));
+		assertEquals(expectedBids(1300, List.of(bidA)), records.get("contract_bids.csv"));
+		assertNoSubDataExceptItemsAndBids();
+		assertLatestFileMatches();
+		assertRequestPaths(
+				"/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
+				"/latest/contracts/public/bids/1300?datasource=tranquility&language=en&page=1",
+				"/public-contracts/public-contracts-latest.v2.tar.bz2",
+				"/universe/regions/10000001/?datasource=tranquility",
+				"/universe/regions/?datasource=tranquility");
 		assertDataIndex();
 	}
 
@@ -605,19 +662,33 @@ public class ScrapePublicContractsTest {
 
 	@SneakyThrows
 	private byte[] createExistingArchive(List<Map<String, String>> contracts, List<Map<String, String>> items) {
+		return createExistingArchive(contracts, items, List.of());
+	}
+
+	@SneakyThrows
+	private byte[] createExistingArchive(
+			List<Map<String, String>> contracts, List<Map<String, String>> items, List<Map<String, String>> bids) {
 		var meta = new ContractsScrapeMeta();
 		meta.setDatasource("tranquility");
 		meta.setScrapeStart(Instant.parse("2020-01-01T00:00:00Z"));
 		meta.setScrapeEnd(Instant.parse("2020-01-01T00:01:00Z"));
 		return testDataUtil.createBz2Tar(Map.of(
-				"contracts.csv", writeCsv(contracts),
-				"contract_bids.csv", new byte[0],
-				"contract_items.csv", writeCsv(items),
-				"contract_dynamic_items.csv", new byte[0],
-				"contract_non_dynamic_items.csv", new byte[0],
-				"contract_dynamic_items_dogma_attributes.csv", new byte[0],
-				"contract_dynamic_items_dogma_effects.csv", new byte[0],
-				"meta.json", objectMapper.writeValueAsBytes(meta)));
+				"contracts.csv",
+				writeCsv(contracts),
+				"contract_bids.csv",
+				writeCsv(bids),
+				"contract_items.csv",
+				writeCsv(items),
+				"contract_dynamic_items.csv",
+				new byte[0],
+				"contract_non_dynamic_items.csv",
+				new byte[0],
+				"contract_dynamic_items_dogma_attributes.csv",
+				new byte[0],
+				"contract_dynamic_items_dogma_effects.csv",
+				new byte[0],
+				"meta.json",
+				objectMapper.writeValueAsBytes(meta)));
 	}
 
 	private byte[] writeCsv(List<Map<String, String>> rows) {
@@ -742,6 +813,14 @@ public class ScrapePublicContractsTest {
 		var result = new ArrayList<Map<String, String>>();
 		for (var list : lists) result.addAll(list);
 		result.sort(Comparator.comparingLong(m -> Long.parseLong(m.get("record_id"))));
+		return result;
+	}
+
+	@SafeVarargs
+	private List<Map<String, String>> sortedByBidId(List<Map<String, String>>... lists) {
+		var result = new ArrayList<Map<String, String>>();
+		for (var list : lists) result.addAll(list);
+		result.sort(Comparator.comparingLong(m -> Long.parseLong(m.get("bid_id"))));
 		return result;
 	}
 
