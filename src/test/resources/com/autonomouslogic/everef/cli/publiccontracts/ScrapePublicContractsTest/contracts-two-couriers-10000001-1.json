@@ -1,0 +1,34 @@
+[
+  {
+    "collateral": 100000000,
+    "contract_id": 200,
+    "date_expired": "2023-05-01T05:48:04Z",
+    "date_issued": "2023-04-03T05:48:04Z",
+    "days_to_complete": 3,
+    "end_location_id": 60003760,
+    "issuer_corporation_id": 1000001,
+    "issuer_id": 2000001,
+    "price": 0,
+    "reward": 500000,
+    "start_location_id": 60012547,
+    "title": "",
+    "type": "courier",
+    "volume": 50.5
+  },
+  {
+    "collateral": 200000000,
+    "contract_id": 201,
+    "date_expired": "2023-05-02T05:48:04Z",
+    "date_issued": "2023-04-04T05:48:04Z",
+    "days_to_complete": 5,
+    "end_location_id": 60003760,
+    "issuer_corporation_id": 1000002,
+    "issuer_id": 2000002,
+    "price": 0,
+    "reward": 750000,
+    "start_location_id": 60012547,
+    "title": "",
+    "type": "courier",
+    "volume": 75.25
+  }
+]

@@ -13,6 +13,7 @@ import com.autonomouslogic.everef.test.TestDataUtil;
 import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.util.DataIndexHelper;
 import java.nio.charset.StandardCharsets;
+import java.util.Comparator;
 import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -152,6 +153,108 @@ public class ScrapePublicContractsTest {
             m.put("station_id", "999");
             m.put("http_last_modified", lastModifiedInstant.toString());
         });
+        assertEquals(expectedContracts, records.get("contracts.csv"));
+
+        // No bids, items, or dynamic data.
+        assertEquals(List.of(), records.get("contract_bids.csv"));
+        assertEquals(List.of(), records.get("contract_items.csv"));
+        assertEquals(List.of(), records.get("contract_dynamic_items.csv"));
+        assertEquals(List.of(), records.get("contract_non_dynamic_items.csv"));
+        assertEquals(List.of(), records.get("contract_dynamic_items_dogma_attributes.csv"));
+        assertEquals(List.of(), records.get("contract_dynamic_items_dogma_effects.csv"));
+
+        // Archive and latest files are identical.
+        mockS3Adapter.assertSameContent(BUCKET_NAME, archiveFile, latestFile, dataClient);
+
+        // ESI requests made.
+        var requests = new ArrayList<RecordedRequest>();
+        RecordedRequest request;
+        while ((request = server.takeRequest(1, TimeUnit.MILLISECONDS)) != null) {
+            requests.add(request);
+        }
+        var requestPaths = requests.stream()
+                .map(RecordedRequest::getPath)
+                .sorted()
+                .distinct()
+                .toList();
+        assertEquals(
+                List.of(
+                        "/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
+                        "/public-contracts/public-contracts-latest.v2.tar.bz2",
+                        "/universe/regions/10000001/?datasource=tranquility",
+                        "/universe/regions/?datasource=tranquility"),
+                requestPaths);
+
+        // Data index updated.
+        Mockito.verify(dataIndexHelper)
+                .updateIndex(
+                        S3Url.builder()
+                                .bucket("data-bucket")
+                                .path("base/public-contracts/public-contracts-latest.v2.tar.bz2")
+                                .build(),
+                        S3Url.builder()
+                                .bucket("data-bucket")
+                                .path(
+                                        "base/public-contracts/history/2020/2020-02-03/public-contracts-2020-02-03_04-05-06.v2.tar.bz2")
+                                .build());
+    }
+
+    /**
+     * No previous archive on S3. Two courier contracts in one region, one page. Both should appear
+     * in the archive with no items or bids.
+     */
+    @Test
+    @SneakyThrows
+    void twoCourierContractsNoExistingArchive() {
+        server.setDispatcher(new Dispatcher() {
+            @NotNull
+            @Override
+            public MockResponse dispatch(@NotNull RecordedRequest request) {
+                try {
+                    var path = request.getRequestUrl().encodedPath();
+                    switch (path) {
+                        case "/universe/regions/", "/latest/universe/regions/":
+                            return mockJson("[10000001]");
+                        case "/universe/regions/10000001/", "/latest/universe/regions/10000001/":
+                            return mockJson(
+                                    "{\"region_id\":10000001,\"name\":\"Derelik\",\"constellations\":[]}");
+                        case "/public-contracts/public-contracts-latest.v2.tar.bz2":
+                            return new MockResponse().setResponseCode(404);
+                    }
+                    if (path.startsWith("/contracts/public/") || path.startsWith("/latest/contracts/public/")) {
+                        return mockJson(loadResource("/contracts-two-couriers-10000001-1.json"))
+                                .addHeader("x-pages", "1");
+                    }
+                    log.error("Unaccounted URL: {}", path);
+                    return new MockResponse().setResponseCode(404);
+                } catch (Exception e) {
+                    log.error("Error in dispatcher", e);
+                    return new MockResponse().setResponseCode(500);
+                }
+            }
+        });
+
+        scrapePublicContracts
+                .setScrapeTime(ZonedDateTime.parse("2020-02-03T04:05:06.89Z"))
+                .run();
+
+        var archiveFile =
+                "base/public-contracts/history/2020/2020-02-03/public-contracts-2020-02-03_04-05-06.v2.tar.bz2";
+        var latestFile = "base/public-contracts/public-contracts-latest.v2.tar.bz2";
+        var content = mockS3Adapter.getTestObject(BUCKET_NAME, archiveFile, dataClient).orElseThrow();
+        var records = testDataUtil.readFileMapsFromBz2TarCsv(content);
+
+        // Both contracts present, sorted by contract_id.
+        var expectedContracts = testDataUtil.readMapsFromJson(
+                ResourceUtil.loadContextual(getClass(), "/contracts-two-couriers-10000001-1.json"));
+        expectedContracts.forEach(m -> {
+            m.put("region_id", "10000001");
+            m.put("constellation_id", "999");
+            m.put("system_id", "999");
+            m.put("station_id", "999");
+            m.put("http_last_modified", lastModifiedInstant.toString());
+        });
+        expectedContracts.sort(Comparator.comparingLong(m -> Long.parseLong(m.get("contract_id"))));
         assertEquals(expectedContracts, records.get("contracts.csv"));
 
         // No bids, items, or dynamic data.
