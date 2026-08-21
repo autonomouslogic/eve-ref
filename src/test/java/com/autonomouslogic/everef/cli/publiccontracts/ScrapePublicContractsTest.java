@@ -184,6 +184,37 @@ public class ScrapePublicContractsTest {
         assertDataIndex();
     }
 
+    /**
+     * No previous archive on S3. One contract in each of two regions. Both should appear in the
+     * archive, verifying that all regions are scraped.
+     */
+    @Test
+    @SneakyThrows
+    void contractsInTwoRegionsNoExistingArchive() {
+        var region1Contracts = List.of(contract(400));
+        var region2Contracts = List.of(contract(401));
+        server.setDispatcher(dispatcher()
+                .withRegion(10000001)
+                .withRegion(10000002)
+                .withContracts(10000001, contractsJson(region1Contracts))
+                .withContracts(10000002, contractsJson(region2Contracts)));
+        run();
+        var expected = new ArrayList<>(expectedContracts(region1Contracts, 10000001));
+        expected.addAll(expectedContracts(region2Contracts, 10000002));
+        expected.sort(Comparator.comparingLong(m -> Long.parseLong(m.get("contract_id"))));
+        assertEquals(expected, records.get("contracts.csv"));
+        assertNoSubData();
+        assertLatestFileMatches();
+        assertRequestPaths(
+                "/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
+                "/latest/contracts/public/10000002?datasource=tranquility&language=en&page=1",
+                "/public-contracts/public-contracts-latest.v2.tar.bz2",
+                "/universe/regions/10000001/?datasource=tranquility",
+                "/universe/regions/10000002/?datasource=tranquility",
+                "/universe/regions/?datasource=tranquility");
+        assertDataIndex();
+    }
+
     // --- Run and capture ---
 
     @SneakyThrows
