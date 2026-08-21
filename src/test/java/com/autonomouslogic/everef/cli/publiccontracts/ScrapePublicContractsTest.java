@@ -638,6 +638,72 @@ public class ScrapePublicContractsTest {
 		assertDataIndex();
 	}
 
+	/**
+	 * Existing archive has an item_exchange contract with an abyssal item. ESI returns that contract
+	 * plus a new item_exchange contract with another abyssal item. The existing dynamic item should
+	 * not be re-fetched from the ESI; only the new contract's dynamic item requires a fetch.
+	 */
+	@Test
+	@SneakyThrows
+	void existingDynamicItemNotRefetched() {
+		var typeId = 47804;
+		var itemA = abyssalItem(1500001, 1500001, typeId);
+		var itemB = abyssalItem(1502001, 1502001, typeId);
+		var contractA = contract(1500).put("type", "item_exchange");
+		var contractB = contract(1502).put("type", "item_exchange");
+		var metaGroupsJson = "{\"meta_group_id\":15,\"type_ids\":[" + typeId + "]}";
+
+		var existingContracts = expectedContracts(List.of(contractA), 10000001);
+		var existingItems = expectedItems(1500, List.of(itemA));
+		var existingDynamic = expectedDynamicItems(1500, 1500001);
+		var existingAttributes = expectedDynamicAttributes(1500, 1500001);
+		var existingEffects = expectedDynamicEffects(1500, 1500001);
+		var existingArchive = createExistingArchive(
+				existingContracts, existingItems, List.of(), existingDynamic, existingAttributes, existingEffects);
+
+		server.setDispatcher(dispatcher()
+				.withRegion(10000001)
+				.withContracts(10000001, contractsJson(List.of(contractA, contractB)))
+				.withItems(1502, itemsJson(List.of(itemB)))
+				.withDynamicItems(typeId, 1502001, dynamicItemJson())
+				.withType(typeId)
+				.withLatestArchive(existingArchive)
+				.withMetaGroups(metaGroupsJson));
+		run();
+
+		assertEquals(
+				sortedByContractId(
+						expectedContracts(List.of(contractA), 10000001),
+						expectedContracts(List.of(contractB), 10000001)),
+				records.get("contracts.csv"));
+		assertEquals(
+				sortedByRecordId(expectedItems(1500, List.of(itemA)), expectedItems(1502, List.of(itemB))),
+				records.get("contract_items.csv"));
+		assertEquals(
+				sortedByItemId(expectedDynamicItems(1500, 1500001), expectedDynamicItems(1502, 1502001)),
+				records.get("contract_dynamic_items.csv"));
+		assertEquals(
+				sortedByItemId(
+						expectedDynamicAttributes(1500, 1500001), expectedDynamicAttributes(1502, 1502001)),
+				records.get("contract_dynamic_items_dogma_attributes.csv"));
+		assertEquals(
+				sortedByItemId(expectedDynamicEffects(1500, 1500001), expectedDynamicEffects(1502, 1502001)),
+				records.get("contract_dynamic_items_dogma_effects.csv"));
+		assertEquals(List.of(), records.get("contract_non_dynamic_items.csv"));
+		assertEquals(List.of(), records.get("contract_bids.csv"));
+		assertLatestFileMatches();
+		assertRequestPaths(
+				"/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
+				"/latest/contracts/public/items/1502?datasource=tranquility&language=en&page=1",
+				"/latest/dogma/dynamic/items/47804/1502001/?datasource=tranquility&language=en",
+				"/meta_groups/15",
+				"/public-contracts/public-contracts-latest.v2.tar.bz2",
+				"/universe/regions/10000001/?datasource=tranquility",
+				"/universe/regions/?datasource=tranquility",
+				"/universe/types/47804/?datasource=tranquility");
+		assertDataIndex();
+	}
+
 	// --- Run and capture ---
 
 	@SneakyThrows
@@ -712,6 +778,17 @@ public class ScrapePublicContractsTest {
 	@SneakyThrows
 	private byte[] createExistingArchive(
 			List<Map<String, String>> contracts, List<Map<String, String>> items, List<Map<String, String>> bids) {
+		return createExistingArchive(contracts, items, bids, List.of(), List.of(), List.of());
+	}
+
+	@SneakyThrows
+	private byte[] createExistingArchive(
+			List<Map<String, String>> contracts,
+			List<Map<String, String>> items,
+			List<Map<String, String>> bids,
+			List<Map<String, String>> dynamicItems,
+			List<Map<String, String>> dogmaAttributes,
+			List<Map<String, String>> dogmaEffects) {
 		var meta = new ContractsScrapeMeta();
 		meta.setDatasource("tranquility");
 		meta.setScrapeStart(Instant.parse("2020-01-01T00:00:00Z"));
@@ -724,13 +801,13 @@ public class ScrapePublicContractsTest {
 				"contract_items.csv",
 				writeCsv(items),
 				"contract_dynamic_items.csv",
-				new byte[0],
+				writeCsv(dynamicItems),
 				"contract_non_dynamic_items.csv",
 				new byte[0],
 				"contract_dynamic_items_dogma_attributes.csv",
-				new byte[0],
+				writeCsv(dogmaAttributes),
 				"contract_dynamic_items_dogma_effects.csv",
-				new byte[0],
+				writeCsv(dogmaEffects),
 				"meta.json",
 				objectMapper.writeValueAsBytes(meta)));
 	}
@@ -865,6 +942,14 @@ public class ScrapePublicContractsTest {
 		var result = new ArrayList<Map<String, String>>();
 		for (var list : lists) result.addAll(list);
 		result.sort(Comparator.comparingLong(m -> Long.parseLong(m.get("bid_id"))));
+		return result;
+	}
+
+	@SafeVarargs
+	private List<Map<String, String>> sortedByItemId(List<Map<String, String>>... lists) {
+		var result = new ArrayList<Map<String, String>>();
+		for (var list : lists) result.addAll(list);
+		result.sort(Comparator.comparingLong(m -> Long.parseLong(m.get("item_id"))));
 		return result;
 	}
 
