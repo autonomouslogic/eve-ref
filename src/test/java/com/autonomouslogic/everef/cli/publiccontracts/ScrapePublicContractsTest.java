@@ -434,6 +434,109 @@ public class ScrapePublicContractsTest {
 		assertDataIndex();
 	}
 
+	/**
+	 * Existing archive has two contracts, each with items. The ESI only returns one of them. The
+	 * contract not returned by the ESI should be removed from the new archive, along with its items.
+	 */
+	@ParameterizedTest
+	@ValueSource(strings = {"item_exchange", "auction"})
+	@SneakyThrows
+	void missingContractItemsRemovedFromArchive(String contractType) {
+		var itemA = item(1000001, 34);
+		var itemB = item(1001001, 35);
+		var contractA = contract(1000).put("type", contractType);
+		var contractB = contract(1001).put("type", contractType);
+
+		var existingContracts = sortedByContractId(
+				expectedContracts(List.of(contractA), 10000001), expectedContracts(List.of(contractB), 10000001));
+		var existingItems = sortedByRecordId(expectedItems(1000, List.of(itemA)), expectedItems(1001, List.of(itemB)));
+		var existingArchive = createExistingArchive(existingContracts, existingItems);
+
+		server.setDispatcher(dispatcher()
+				.withRegion(10000001)
+				.withContracts(10000001, contractsJson(List.of(contractA)))
+				.withLatestArchive(existingArchive));
+		run();
+
+		assertEquals(expectedContracts(List.of(contractA), 10000001), records.get("contracts.csv"));
+		assertEquals(expectedItems(1000, List.of(itemA)), records.get("contract_items.csv"));
+		assertNoSubDataExceptItems();
+		assertLatestFileMatches();
+		if ("auction".equals(contractType)) {
+			assertRequestPaths(
+					"/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
+					"/latest/contracts/public/bids/1000?datasource=tranquility&language=en&page=1",
+					"/public-contracts/public-contracts-latest.v2.tar.bz2",
+					"/universe/regions/10000001/?datasource=tranquility",
+					"/universe/regions/?datasource=tranquility");
+		} else {
+			assertRequestPaths(
+					"/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
+					"/public-contracts/public-contracts-latest.v2.tar.bz2",
+					"/universe/regions/10000001/?datasource=tranquility",
+					"/universe/regions/?datasource=tranquility");
+		}
+		assertDataIndex();
+	}
+
+	/**
+	 * Existing archive has a contract with items. The ESI returns that same contract plus a new one.
+	 * Items for the existing contract should not be re-fetched; items for the new contract should be
+	 * fetched.
+	 */
+	@ParameterizedTest
+	@ValueSource(strings = {"item_exchange", "auction"})
+	@SneakyThrows
+	void existingItemsNotRefetched(String contractType) {
+		var itemA = item(1100001, 34);
+		var itemB = item(1102001, 36);
+		var contractA = contract(1100).put("type", contractType);
+		var contractB = contract(1102).put("type", contractType);
+
+		var existingContracts = expectedContracts(List.of(contractA), 10000001);
+		var existingItems = expectedItems(1100, List.of(itemA));
+		var existingArchive = createExistingArchive(existingContracts, existingItems);
+
+		server.setDispatcher(dispatcher()
+				.withRegion(10000001)
+				.withContracts(10000001, contractsJson(List.of(contractA, contractB)))
+				.withItems(1102, itemsJson(List.of(itemB)))
+				.withLatestArchive(existingArchive)
+				.withMetaGroups(NON_ABYSSAL_META_GROUPS_JSON));
+		run();
+
+		assertEquals(
+				sortedByContractId(
+						expectedContracts(List.of(contractA), 10000001),
+						expectedContracts(List.of(contractB), 10000001)),
+				records.get("contracts.csv"));
+		assertEquals(
+				sortedByRecordId(expectedItems(1100, List.of(itemA)), expectedItems(1102, List.of(itemB))),
+				records.get("contract_items.csv"));
+		assertNoSubDataExceptItems();
+		assertLatestFileMatches();
+		if ("auction".equals(contractType)) {
+			assertRequestPaths(
+					"/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
+					"/latest/contracts/public/bids/1100?datasource=tranquility&language=en&page=1",
+					"/latest/contracts/public/bids/1102?datasource=tranquility&language=en&page=1",
+					"/latest/contracts/public/items/1102?datasource=tranquility&language=en&page=1",
+					"/meta_groups/15",
+					"/public-contracts/public-contracts-latest.v2.tar.bz2",
+					"/universe/regions/10000001/?datasource=tranquility",
+					"/universe/regions/?datasource=tranquility");
+		} else {
+			assertRequestPaths(
+					"/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
+					"/latest/contracts/public/items/1102?datasource=tranquility&language=en&page=1",
+					"/meta_groups/15",
+					"/public-contracts/public-contracts-latest.v2.tar.bz2",
+					"/universe/regions/10000001/?datasource=tranquility",
+					"/universe/regions/?datasource=tranquility");
+		}
+		assertDataIndex();
+	}
+
 	// --- Run and capture ---
 
 	@SneakyThrows
@@ -497,6 +600,11 @@ public class ScrapePublicContractsTest {
 
 	@SneakyThrows
 	private byte[] createExistingArchive(List<Map<String, String>> contracts) {
+		return createExistingArchive(contracts, List.of());
+	}
+
+	@SneakyThrows
+	private byte[] createExistingArchive(List<Map<String, String>> contracts, List<Map<String, String>> items) {
 		var meta = new ContractsScrapeMeta();
 		meta.setDatasource("tranquility");
 		meta.setScrapeStart(Instant.parse("2020-01-01T00:00:00Z"));
@@ -504,7 +612,7 @@ public class ScrapePublicContractsTest {
 		return testDataUtil.createBz2Tar(Map.of(
 				"contracts.csv", writeCsv(contracts),
 				"contract_bids.csv", new byte[0],
-				"contract_items.csv", new byte[0],
+				"contract_items.csv", writeCsv(items),
 				"contract_dynamic_items.csv", new byte[0],
 				"contract_non_dynamic_items.csv", new byte[0],
 				"contract_dynamic_items_dogma_attributes.csv", new byte[0],
@@ -626,6 +734,14 @@ public class ScrapePublicContractsTest {
 		var result = new ArrayList<Map<String, String>>();
 		for (var list : lists) result.addAll(list);
 		result.sort(Comparator.comparingLong(m -> Long.parseLong(m.get("contract_id"))));
+		return result;
+	}
+
+	@SafeVarargs
+	private List<Map<String, String>> sortedByRecordId(List<Map<String, String>>... lists) {
+		var result = new ArrayList<Map<String, String>>();
+		for (var list : lists) result.addAll(list);
+		result.sort(Comparator.comparingLong(m -> Long.parseLong(m.get("record_id"))));
 		return result;
 	}
 
