@@ -704,6 +704,55 @@ public class ScrapePublicContractsTest {
 		assertDataIndex();
 	}
 
+	/**
+	 * Existing archive has two item_exchange contracts, each with an abyssal item. ESI returns only
+	 * one contract. The missing contract's dynamic item, attributes, and effects should be removed
+	 * from the new archive.
+	 */
+	@Test
+	@SneakyThrows
+	void missingDynamicItemRemovedFromArchive() {
+		var typeId = 47804;
+		var itemA = abyssalItem(1600001, 1600001, typeId);
+		var itemB = abyssalItem(1601001, 1601001, typeId);
+		var contractA = contract(1600).put("type", "item_exchange");
+		var contractB = contract(1601).put("type", "item_exchange");
+
+		var existingContracts = sortedByContractId(
+				expectedContracts(List.of(contractA), 10000001), expectedContracts(List.of(contractB), 10000001));
+		var existingItems = sortedByRecordId(expectedItems(1600, List.of(itemA)), expectedItems(1601, List.of(itemB)));
+		var existingDynamic =
+				sortedByItemId(expectedDynamicItems(1600, 1600001), expectedDynamicItems(1601, 1601001));
+		var existingAttributes = sortedByItemId(
+				expectedDynamicAttributes(1600, 1600001), expectedDynamicAttributes(1601, 1601001));
+		var existingEffects =
+				sortedByItemId(expectedDynamicEffects(1600, 1600001), expectedDynamicEffects(1601, 1601001));
+		var existingArchive = createExistingArchive(
+				existingContracts, existingItems, List.of(), existingDynamic, existingAttributes, existingEffects);
+
+		server.setDispatcher(dispatcher()
+				.withRegion(10000001)
+				.withContracts(10000001, contractsJson(List.of(contractA)))
+				.withLatestArchive(existingArchive));
+		run();
+
+		assertEquals(expectedContracts(List.of(contractA), 10000001), records.get("contracts.csv"));
+		assertEquals(expectedItems(1600, List.of(itemA)), records.get("contract_items.csv"));
+		assertEquals(expectedDynamicItems(1600, 1600001), records.get("contract_dynamic_items.csv"));
+		assertEquals(
+				expectedDynamicAttributes(1600, 1600001), records.get("contract_dynamic_items_dogma_attributes.csv"));
+		assertEquals(expectedDynamicEffects(1600, 1600001), records.get("contract_dynamic_items_dogma_effects.csv"));
+		assertEquals(List.of(), records.get("contract_non_dynamic_items.csv"));
+		assertEquals(List.of(), records.get("contract_bids.csv"));
+		assertLatestFileMatches();
+		assertRequestPaths(
+				"/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
+				"/public-contracts/public-contracts-latest.v2.tar.bz2",
+				"/universe/regions/10000001/?datasource=tranquility",
+				"/universe/regions/?datasource=tranquility");
+		assertDataIndex();
+	}
+
 	// --- Run and capture ---
 
 	@SneakyThrows
