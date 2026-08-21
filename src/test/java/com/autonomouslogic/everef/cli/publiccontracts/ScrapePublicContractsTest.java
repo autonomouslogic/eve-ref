@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-import com.autonomouslogic.everef.cli.publiccontracts.ContractsScrapeMeta;
 import com.autonomouslogic.everef.esi.LocationPopulator;
 import com.autonomouslogic.everef.esi.MockLocationPopulatorModule;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
@@ -685,12 +684,16 @@ public class ScrapePublicContractsTest {
 		}
 
 		TestDispatcher withItems(long contractId, String jsonBody) {
-			itemsByContractPage.computeIfAbsent(contractId, k -> new HashMap<>()).put(-1, jsonBody);
+			itemsByContractPage
+					.computeIfAbsent(contractId, k -> new HashMap<>())
+					.put(-1, jsonBody);
 			return this;
 		}
 
 		TestDispatcher withItems(long contractId, int page, String jsonBody) {
-			itemsByContractPage.computeIfAbsent(contractId, k -> new HashMap<>()).put(page, jsonBody);
+			itemsByContractPage
+					.computeIfAbsent(contractId, k -> new HashMap<>())
+					.put(page, jsonBody);
 			return this;
 		}
 
