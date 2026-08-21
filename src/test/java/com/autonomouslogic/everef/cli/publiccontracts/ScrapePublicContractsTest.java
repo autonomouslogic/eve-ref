@@ -199,10 +199,11 @@ public class ScrapePublicContractsTest {
                 .withContracts(10000001, contractsJson(region1Contracts))
                 .withContracts(10000002, contractsJson(region2Contracts)));
         run();
-        var expected = new ArrayList<>(expectedContracts(region1Contracts, 10000001));
-        expected.addAll(expectedContracts(region2Contracts, 10000002));
-        expected.sort(Comparator.comparingLong(m -> Long.parseLong(m.get("contract_id"))));
-        assertEquals(expected, records.get("contracts.csv"));
+        assertEquals(
+                sortedByContractId(
+                        expectedContracts(region1Contracts, 10000001),
+                        expectedContracts(region2Contracts, 10000002)),
+                records.get("contracts.csv"));
         assertNoSubData();
         assertLatestFileMatches();
         assertRequestPaths(
@@ -286,6 +287,14 @@ public class ScrapePublicContractsTest {
         var array = objectMapper.createArrayNode();
         contracts.forEach(array::add);
         return objectMapper.writeValueAsString(array);
+    }
+
+    @SafeVarargs
+    private List<Map<String, String>> sortedByContractId(List<Map<String, String>>... lists) {
+        var result = new ArrayList<Map<String, String>>();
+        for (var list : lists) result.addAll(list);
+        result.sort(Comparator.comparingLong(m -> Long.parseLong(m.get("contract_id"))));
+        return result;
     }
 
     @SneakyThrows
