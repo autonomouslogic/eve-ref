@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
+import com.autonomouslogic.everef.cli.publiccontracts.ContractsScrapeMeta;
 import com.autonomouslogic.everef.esi.LocationPopulator;
 import com.autonomouslogic.everef.esi.MockLocationPopulatorModule;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
@@ -14,6 +15,7 @@ import com.autonomouslogic.everef.util.DataIndexHelper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.io.ByteArrayInputStream;
+import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -211,6 +213,36 @@ public class ScrapePublicContractsTest {
 		assertDataIndex();
 	}
 
+	/**
+	 * An existing archive contains a courier contract. The same contract is returned by the ESI.
+	 * The contract should still be in the new archive, but http_last_modified should be updated.
+	 */
+	@Test
+	@SneakyThrows
+	void existingCourierContractUpdates() {
+		var contract = contract(500);
+		var oldLastModifiedInstant = Instant.parse("2023-03-01T00:00:00Z");
+
+		var existingContracts = expectedContracts(List.of(contract), 10000001);
+		existingContracts.forEach(m -> m.put("http_last_modified", oldLastModifiedInstant.toString()));
+		var existingArchive = createExistingArchive(existingContracts);
+
+		server.setDispatcher(dispatcher()
+				.withRegion(10000001)
+				.withContracts(10000001, contractsJson(List.of(contract)))
+				.withLatestArchive(existingArchive));
+		run();
+		assertEquals(expectedContracts(List.of(contract), 10000001), records.get("contracts.csv"));
+		assertNoSubData();
+		assertLatestFileMatches();
+		assertRequestPaths(
+				"/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
+				"/public-contracts/public-contracts-latest.v2.tar.bz2",
+				"/universe/regions/10000001/?datasource=tranquility",
+				"/universe/regions/?datasource=tranquility");
+		assertDataIndex();
+	}
+
 	// --- Run and capture ---
 
 	@SneakyThrows
@@ -253,6 +285,45 @@ public class ScrapePublicContractsTest {
 				.updateIndex(
 						S3Url.builder().bucket(BUCKET_NAME).path(LATEST_FILE).build(),
 						S3Url.builder().bucket(BUCKET_NAME).path(ARCHIVE_FILE).build());
+	}
+
+	// --- Archive builders ---
+
+	@SneakyThrows
+	private byte[] createExistingArchive(List<Map<String, String>> contracts) {
+		var meta = new ContractsScrapeMeta();
+		meta.setDatasource("tranquility");
+		meta.setScrapeStart(Instant.parse("2020-01-01T00:00:00Z"));
+		meta.setScrapeEnd(Instant.parse("2020-01-01T00:01:00Z"));
+		return testDataUtil.createBz2Tar(Map.of(
+				"contracts.csv", writeCsv(contracts),
+				"contract_bids.csv", new byte[0],
+				"contract_items.csv", new byte[0],
+				"contract_dynamic_items.csv", new byte[0],
+				"contract_non_dynamic_items.csv", new byte[0],
+				"contract_dynamic_items_dogma_attributes.csv", new byte[0],
+				"contract_dynamic_items_dogma_effects.csv", new byte[0],
+				"meta.json", objectMapper.writeValueAsBytes(meta)));
+	}
+
+	private byte[] writeCsv(List<Map<String, String>> rows) {
+		if (rows.isEmpty()) return new byte[0];
+		var headers = new ArrayList<>(rows.get(0).keySet());
+		var sb = new StringBuilder();
+		sb.append(String.join(",", headers)).append("\r\n");
+		for (var row : rows) {
+			var values = headers.stream()
+					.map(h -> {
+						var v = row.getOrDefault(h, "");
+						if (v.contains(",") || v.contains("\"") || v.contains("\r") || v.contains("\n")) {
+							v = "\"" + v.replace("\"", "\"\"") + "\"";
+						}
+						return v;
+					})
+					.toList();
+			sb.append(String.join(",", values)).append("\r\n");
+		}
+		return sb.toString().getBytes(StandardCharsets.UTF_8);
 	}
 
 	// --- Contract builders ---
