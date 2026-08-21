@@ -79,12 +79,12 @@ import software.amazon.awssdk.services.s3.S3AsyncClient;
  */
 @ExtendWith(MockitoExtension.class)
 @Log4j2
-@SetEnvironmentVariable(key = "DATA_PATH", value = "s3://" + ScrapePublicContractsTest.BUCKET_NAME + "/base/")
+@SetEnvironmentVariable(key = "DATA_PATH", value = "s3://" + ScrapePublicContractsTest_old.BUCKET_NAME + "/base/")
 @SetEnvironmentVariable(key = "DATA_BASE_URL", value = "http://localhost:" + TestDataUtil.TEST_PORT)
 @SetEnvironmentVariable(key = "ESI_USER_AGENT", value = "user-agent")
 @SetEnvironmentVariable(key = "ESI_BASE_URL", value = "http://localhost:" + TestDataUtil.TEST_PORT)
 @SetEnvironmentVariable(key = "REF_DATA_BASE_URL", value = "http://localhost:" + TestDataUtil.TEST_PORT)
-public class ScrapePublicContractsTest {
+public class ScrapePublicContractsTest_old {
 	static final String BUCKET_NAME = "data-bucket";
 
 	@Inject
@@ -414,7 +414,7 @@ public class ScrapePublicContractsTest {
 	@SneakyThrows
 	MockResponse metaGroup15() {
 		var json = IOUtils.toString(
-				ResourceUtil.loadContextual(ScrapePublicContractsTest.class, "/meta-groups-15.json"),
+				ResourceUtil.loadContextual(ScrapePublicContractsTest_old.class, "/meta-groups-15.json"),
 				StandardCharsets.UTF_8);
 		return mockResponse(json);
 	}
@@ -422,24 +422,24 @@ public class ScrapePublicContractsTest {
 	@SneakyThrows
 	private InputStream loadRegionContracts(long regionId, int page) {
 		return ResourceUtil.loadContextual(
-				ScrapePublicContractsTest.class, String.format("/contracts-%s-%s.json", regionId, page));
+				ScrapePublicContractsTest_old.class, String.format("/contracts-%s-%s.json", regionId, page));
 	}
 
 	@SneakyThrows
 	private InputStream loadContractItems(long contractId) {
 		return ResourceUtil.loadContextual(
-				ScrapePublicContractsTest.class, String.format("/items-%s.json", contractId));
+				ScrapePublicContractsTest_old.class, String.format("/items-%s.json", contractId));
 	}
 
 	@SneakyThrows
 	private InputStream loadContractBids(long contractId) {
-		return ResourceUtil.loadContextual(ScrapePublicContractsTest.class, String.format("/bids-%s.json", contractId));
+		return ResourceUtil.loadContextual(ScrapePublicContractsTest_old.class, String.format("/bids-%s.json", contractId));
 	}
 
 	@SneakyThrows
 	private InputStream loadDynamicItems(long typeId, long itemId) {
 		return ResourceUtil.loadContextual(
-				ScrapePublicContractsTest.class, String.format("/dynamic-items-%s-%s.json", typeId, itemId));
+				ScrapePublicContractsTest_old.class, String.format("/dynamic-items-%s-%s.json", typeId, itemId));
 	}
 
 	private List<Map<String, String>> loadRegionContractMaps(int regionId, int page) {
@@ -561,7 +561,7 @@ public class ScrapePublicContractsTest {
 	private void writeLatestEntry(TarArchiveOutputStream tar, String file) {
 		var entry = new TarArchiveEntry(file);
 		byte[] bytes;
-		try (var in = ResourceUtil.loadContextual(ScrapePublicContractsTest.class, "/latest/" + file)) {
+		try (var in = ResourceUtil.loadContextual(ScrapePublicContractsTest_old.class, "/latest/" + file)) {
 			bytes = IOUtils.toByteArray(in);
 		}
 		entry.setSize(bytes.length);

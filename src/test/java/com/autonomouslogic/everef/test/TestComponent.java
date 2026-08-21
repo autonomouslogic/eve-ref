@@ -18,7 +18,7 @@ import com.autonomouslogic.everef.cli.markethistory.scrape.ScrapeMarketHistoryTe
 import com.autonomouslogic.everef.cli.markethistory.scrape.TopTradedRegionTypeSourceTest;
 import com.autonomouslogic.everef.cli.marketorders.ScrapeMarketOrdersTest;
 import com.autonomouslogic.everef.cli.publiccontracts.PublicContractsScrapeTest;
-import com.autonomouslogic.everef.cli.publiccontracts.ScrapePublicContractsTest;
+import com.autonomouslogic.everef.cli.publiccontracts.ScrapePublicContractsTest_old;
 import com.autonomouslogic.everef.cli.publishrefdata.PublishRefDataTest;
 import com.autonomouslogic.everef.cli.refdata.BuildRefDataTest;
 import com.autonomouslogic.everef.cli.refdata.FieldRenamerTest;
@@ -129,7 +129,7 @@ public interface TestComponent {
 
 	void inject(PublicContractsScrapeTest test);
 
-	void inject(ScrapePublicContractsTest test);
+	void inject(ScrapePublicContractsTest_old test);
 
 	void inject(ScrapeStructuresTest test);
 
