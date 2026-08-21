@@ -13,12 +13,15 @@ import com.autonomouslogic.everef.test.TestDataUtil;
 import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.util.DataIndexHelper;
 import java.nio.charset.StandardCharsets;
-import java.util.Comparator;
 import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Supplier;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.SneakyThrows;
@@ -27,6 +30,7 @@ import okhttp3.mockwebserver.Dispatcher;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
+import okio.Buffer;
 import org.apache.commons.io.IOUtils;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.AfterEach;
@@ -53,6 +57,10 @@ import software.amazon.awssdk.services.s3.S3AsyncClient;
 public class ScrapePublicContractsTest {
     static final String BUCKET_NAME = "data-bucket";
 
+    private static final String ARCHIVE_FILE =
+            "base/public-contracts/history/2020/2020-02-03/public-contracts-2020-02-03_04-05-06.v2.tar.bz2";
+    private static final String LATEST_FILE = "base/public-contracts/public-contracts-latest.v2.tar.bz2";
+
     @Inject
     ScrapePublicContracts scrapePublicContracts;
 
@@ -76,6 +84,10 @@ public class ScrapePublicContractsTest {
     final Instant lastModifiedInstant = Instant.parse("2023-04-03T03:47:30Z");
 
     MockWebServer server;
+
+    private Map<String, List<Map<String, String>>> records;
+    private List<String> requestPaths;
+    private byte[] content;
 
     @BeforeEach
     @SneakyThrows
@@ -102,101 +114,19 @@ public class ScrapePublicContractsTest {
     @Test
     @SneakyThrows
     void singleCourierContractNoExistingArchive() {
-        server.setDispatcher(new Dispatcher() {
-            @NotNull
-            @Override
-            public MockResponse dispatch(@NotNull RecordedRequest request) {
-                try {
-                    var path = request.getRequestUrl().encodedPath();
-                    var segments = request.getRequestUrl().pathSegments();
-                    switch (path) {
-                        case "/universe/regions/", "/latest/universe/regions/":
-                            return mockJson("[10000001]");
-                        case "/universe/regions/10000001/", "/latest/universe/regions/10000001/":
-                            return mockJson(
-                                    "{\"region_id\":10000001,\"name\":\"Derelik\",\"constellations\":[]}");
-                        case "/public-contracts/public-contracts-latest.v2.tar.bz2":
-                            return new MockResponse().setResponseCode(404);
-                    }
-                    if (path.startsWith("/contracts/public/") || path.startsWith("/latest/contracts/public/")) {
-                        var segmentIndex = segments.contains("latest") ? 3 : 2;
-                        var regionId = segments.get(segmentIndex);
-                        return mockJson(loadResource("/contracts-" + regionId + "-1.json"))
-                                .addHeader("x-pages", "1");
-                    }
-                    log.error("Unaccounted URL: {}", path);
-                    return new MockResponse().setResponseCode(404);
-                } catch (Exception e) {
-                    log.error("Error in dispatcher", e);
-                    return new MockResponse().setResponseCode(500);
-                }
-            }
-        });
-
-        scrapePublicContracts
-                .setScrapeTime(ZonedDateTime.parse("2020-02-03T04:05:06.89Z"))
-                .run();
-
-        var archiveFile =
-                "base/public-contracts/history/2020/2020-02-03/public-contracts-2020-02-03_04-05-06.v2.tar.bz2";
-        var latestFile = "base/public-contracts/public-contracts-latest.v2.tar.bz2";
-        var content = mockS3Adapter.getTestObject(BUCKET_NAME, archiveFile, dataClient).orElseThrow();
-        var records = testDataUtil.readFileMapsFromBz2TarCsv(content);
-
-        // Contracts.
-        var expectedContracts = testDataUtil.readMapsFromJson(
-                ResourceUtil.loadContextual(getClass(), "/contracts-10000001-1.json"));
-        expectedContracts.forEach(m -> {
-            m.put("region_id", "10000001");
-            m.put("constellation_id", "999");
-            m.put("system_id", "999");
-            m.put("station_id", "999");
-            m.put("http_last_modified", lastModifiedInstant.toString());
-        });
-        assertEquals(expectedContracts, records.get("contracts.csv"));
-
-        // No bids, items, or dynamic data.
-        assertEquals(List.of(), records.get("contract_bids.csv"));
-        assertEquals(List.of(), records.get("contract_items.csv"));
-        assertEquals(List.of(), records.get("contract_dynamic_items.csv"));
-        assertEquals(List.of(), records.get("contract_non_dynamic_items.csv"));
-        assertEquals(List.of(), records.get("contract_dynamic_items_dogma_attributes.csv"));
-        assertEquals(List.of(), records.get("contract_dynamic_items_dogma_effects.csv"));
-
-        // Archive and latest files are identical.
-        mockS3Adapter.assertSameContent(BUCKET_NAME, archiveFile, latestFile, dataClient);
-
-        // ESI requests made.
-        var requests = new ArrayList<RecordedRequest>();
-        RecordedRequest request;
-        while ((request = server.takeRequest(1, TimeUnit.MILLISECONDS)) != null) {
-            requests.add(request);
-        }
-        var requestPaths = requests.stream()
-                .map(RecordedRequest::getPath)
-                .sorted()
-                .distinct()
-                .toList();
-        assertEquals(
-                List.of(
-                        "/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
-                        "/public-contracts/public-contracts-latest.v2.tar.bz2",
-                        "/universe/regions/10000001/?datasource=tranquility",
-                        "/universe/regions/?datasource=tranquility"),
-                requestPaths);
-
-        // Data index updated.
-        Mockito.verify(dataIndexHelper)
-                .updateIndex(
-                        S3Url.builder()
-                                .bucket("data-bucket")
-                                .path("base/public-contracts/public-contracts-latest.v2.tar.bz2")
-                                .build(),
-                        S3Url.builder()
-                                .bucket("data-bucket")
-                                .path(
-                                        "base/public-contracts/history/2020/2020-02-03/public-contracts-2020-02-03_04-05-06.v2.tar.bz2")
-                                .build());
+        server.setDispatcher(dispatcher()
+                .withRegion(10000001)
+                .withContracts(10000001, "/contracts-10000001-1.json"));
+        run();
+        assertEquals(expectedContracts("/contracts-10000001-1.json", 10000001), records.get("contracts.csv"));
+        assertNoSubData();
+        assertLatestFileMatches();
+        assertRequestPaths(
+                "/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
+                "/public-contracts/public-contracts-latest.v2.tar.bz2",
+                "/universe/regions/10000001/?datasource=tranquility",
+                "/universe/regions/?datasource=tranquility");
+        assertDataIndex();
     }
 
     /**
@@ -206,100 +136,215 @@ public class ScrapePublicContractsTest {
     @Test
     @SneakyThrows
     void twoCourierContractsNoExistingArchive() {
-        server.setDispatcher(new Dispatcher() {
-            @NotNull
-            @Override
-            public MockResponse dispatch(@NotNull RecordedRequest request) {
-                try {
-                    var path = request.getRequestUrl().encodedPath();
-                    switch (path) {
-                        case "/universe/regions/", "/latest/universe/regions/":
-                            return mockJson("[10000001]");
-                        case "/universe/regions/10000001/", "/latest/universe/regions/10000001/":
-                            return mockJson(
-                                    "{\"region_id\":10000001,\"name\":\"Derelik\",\"constellations\":[]}");
-                        case "/public-contracts/public-contracts-latest.v2.tar.bz2":
-                            return new MockResponse().setResponseCode(404);
-                    }
-                    if (path.startsWith("/contracts/public/") || path.startsWith("/latest/contracts/public/")) {
-                        return mockJson(loadResource("/contracts-two-couriers-10000001-1.json"))
-                                .addHeader("x-pages", "1");
-                    }
-                    log.error("Unaccounted URL: {}", path);
-                    return new MockResponse().setResponseCode(404);
-                } catch (Exception e) {
-                    log.error("Error in dispatcher", e);
-                    return new MockResponse().setResponseCode(500);
-                }
-            }
-        });
+        server.setDispatcher(dispatcher()
+                .withRegion(10000001)
+                .withContracts(10000001, "/contracts-two-couriers-10000001-1.json"));
+        run();
+        assertEquals(
+                expectedContracts("/contracts-two-couriers-10000001-1.json", 10000001),
+                records.get("contracts.csv"));
+        assertNoSubData();
+        assertLatestFileMatches();
+        assertRequestPaths(
+                "/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
+                "/public-contracts/public-contracts-latest.v2.tar.bz2",
+                "/universe/regions/10000001/?datasource=tranquility",
+                "/universe/regions/?datasource=tranquility");
+        assertDataIndex();
+    }
 
+    // --- Run and capture ---
+
+    @SneakyThrows
+    private void run() {
         scrapePublicContracts
                 .setScrapeTime(ZonedDateTime.parse("2020-02-03T04:05:06.89Z"))
                 .run();
+        content = mockS3Adapter.getTestObject(BUCKET_NAME, ARCHIVE_FILE, dataClient).orElseThrow();
+        records = testDataUtil.readFileMapsFromBz2TarCsv(content);
+        var raw = new ArrayList<RecordedRequest>();
+        RecordedRequest req;
+        while ((req = server.takeRequest(1, TimeUnit.MILLISECONDS)) != null) raw.add(req);
+        requestPaths = raw.stream().map(RecordedRequest::getPath).sorted().distinct().toList();
+    }
 
-        var archiveFile =
-                "base/public-contracts/history/2020/2020-02-03/public-contracts-2020-02-03_04-05-06.v2.tar.bz2";
-        var latestFile = "base/public-contracts/public-contracts-latest.v2.tar.bz2";
-        var content = mockS3Adapter.getTestObject(BUCKET_NAME, archiveFile, dataClient).orElseThrow();
-        var records = testDataUtil.readFileMapsFromBz2TarCsv(content);
+    // --- Assertion helpers ---
 
-        // Both contracts present, sorted by contract_id.
-        var expectedContracts = testDataUtil.readMapsFromJson(
-                ResourceUtil.loadContextual(getClass(), "/contracts-two-couriers-10000001-1.json"));
-        expectedContracts.forEach(m -> {
-            m.put("region_id", "10000001");
-            m.put("constellation_id", "999");
-            m.put("system_id", "999");
-            m.put("station_id", "999");
-            m.put("http_last_modified", lastModifiedInstant.toString());
-        });
-        expectedContracts.sort(Comparator.comparingLong(m -> Long.parseLong(m.get("contract_id"))));
-        assertEquals(expectedContracts, records.get("contracts.csv"));
-
-        // No bids, items, or dynamic data.
+    private void assertNoSubData() {
         assertEquals(List.of(), records.get("contract_bids.csv"));
         assertEquals(List.of(), records.get("contract_items.csv"));
         assertEquals(List.of(), records.get("contract_dynamic_items.csv"));
         assertEquals(List.of(), records.get("contract_non_dynamic_items.csv"));
         assertEquals(List.of(), records.get("contract_dynamic_items_dogma_attributes.csv"));
         assertEquals(List.of(), records.get("contract_dynamic_items_dogma_effects.csv"));
+    }
 
-        // Archive and latest files are identical.
-        mockS3Adapter.assertSameContent(BUCKET_NAME, archiveFile, latestFile, dataClient);
+    private void assertLatestFileMatches() {
+        mockS3Adapter.assertSameContent(BUCKET_NAME, ARCHIVE_FILE, LATEST_FILE, dataClient);
+    }
 
-        // ESI requests made.
-        var requests = new ArrayList<RecordedRequest>();
-        RecordedRequest request;
-        while ((request = server.takeRequest(1, TimeUnit.MILLISECONDS)) != null) {
-            requests.add(request);
-        }
-        var requestPaths = requests.stream()
-                .map(RecordedRequest::getPath)
-                .sorted()
-                .distinct()
-                .toList();
-        assertEquals(
-                List.of(
-                        "/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
-                        "/public-contracts/public-contracts-latest.v2.tar.bz2",
-                        "/universe/regions/10000001/?datasource=tranquility",
-                        "/universe/regions/?datasource=tranquility"),
-                requestPaths);
+    private void assertRequestPaths(String... paths) {
+        assertEquals(List.of(paths), requestPaths);
+    }
 
-        // Data index updated.
+    private void assertDataIndex() {
         Mockito.verify(dataIndexHelper)
                 .updateIndex(
-                        S3Url.builder()
-                                .bucket("data-bucket")
-                                .path("base/public-contracts/public-contracts-latest.v2.tar.bz2")
-                                .build(),
-                        S3Url.builder()
-                                .bucket("data-bucket")
-                                .path(
-                                        "base/public-contracts/history/2020/2020-02-03/public-contracts-2020-02-03_04-05-06.v2.tar.bz2")
-                                .build());
+                        S3Url.builder().bucket(BUCKET_NAME).path(LATEST_FILE).build(),
+                        S3Url.builder().bucket(BUCKET_NAME).path(ARCHIVE_FILE).build());
     }
+
+    // --- Expected data builders ---
+
+    @SneakyThrows
+    private List<Map<String, String>> expectedContracts(String fixturePath, long regionId) {
+        var contracts = testDataUtil.readMapsFromJson(ResourceUtil.loadContextual(getClass(), fixturePath));
+        contracts.forEach(m -> {
+            m.put("region_id", String.valueOf(regionId));
+            m.put("constellation_id", "999");
+            m.put("system_id", "999");
+            m.put("station_id", "999");
+            m.put("http_last_modified", lastModifiedInstant.toString());
+        });
+        contracts.sort(Comparator.comparingLong(m -> Long.parseLong(m.get("contract_id"))));
+        return contracts;
+    }
+
+    // --- Dispatcher builder ---
+
+    private TestDispatcher dispatcher() {
+        return new TestDispatcher();
+    }
+
+    class TestDispatcher extends Dispatcher {
+        private static final Map<Long, String> REGION_NAMES =
+                Map.of(10000001L, "Derelik", 10000002L, "The Forge");
+
+        private final List<Long> regionIds = new ArrayList<>();
+        // key: regionId, value: map of page -> fixturePath (-1 = wildcard for all pages)
+        private final Map<Long, Map<Integer, String>> contractsByRegionPage = new HashMap<>();
+        private final Map<Long, String> itemsByContract = new HashMap<>();
+        private final Map<Long, String> bidsByContract = new HashMap<>();
+        // key: "typeId-itemId"
+        private final Map<String, String> dynamicItemsByKey = new HashMap<>();
+        private String metaGroupsFixture;
+        private Supplier<MockResponse> latestArchiveSupplier = () -> new MockResponse().setResponseCode(404);
+
+        TestDispatcher withRegion(long id) {
+            regionIds.add(id);
+            return this;
+        }
+
+        TestDispatcher withContracts(long regionId, String fixturePath) {
+            contractsByRegionPage.computeIfAbsent(regionId, k -> new HashMap<>()).put(-1, fixturePath);
+            return this;
+        }
+
+        TestDispatcher withContracts(long regionId, int page, String fixturePath) {
+            contractsByRegionPage.computeIfAbsent(regionId, k -> new HashMap<>()).put(page, fixturePath);
+            return this;
+        }
+
+        TestDispatcher withItems(long contractId, String fixturePath) {
+            itemsByContract.put(contractId, fixturePath);
+            return this;
+        }
+
+        TestDispatcher withBids(long contractId, String fixturePath) {
+            bidsByContract.put(contractId, fixturePath);
+            return this;
+        }
+
+        TestDispatcher withDynamicItems(long typeId, long itemId, String fixturePath) {
+            dynamicItemsByKey.put(typeId + "-" + itemId, fixturePath);
+            return this;
+        }
+
+        TestDispatcher withMetaGroups(String fixturePath) {
+            metaGroupsFixture = fixturePath;
+            return this;
+        }
+
+        TestDispatcher withLatestArchive(byte[] data) {
+            latestArchiveSupplier = () -> new MockResponse()
+                    .setResponseCode(200)
+                    .setBody(new Buffer().write(data));
+            return this;
+        }
+
+        @NotNull
+        @Override
+        public MockResponse dispatch(@NotNull RecordedRequest request) {
+            try {
+                var path = request.getRequestUrl().encodedPath();
+                var segments = request.getRequestUrl().pathSegments();
+                var page = request.getRequestUrl().queryParameter("page");
+                var pageNum = page != null ? Integer.parseInt(page) : 1;
+
+                switch (path) {
+                    case "/universe/regions/", "/latest/universe/regions/":
+                        return mockJson(regionIds.toString());
+                    case "/public-contracts/public-contracts-latest.v2.tar.bz2":
+                        return latestArchiveSupplier.get();
+                    case "/meta_groups/15":
+                        return metaGroupsFixture != null
+                                ? mockJson(loadResource(metaGroupsFixture))
+                                : new MockResponse().setResponseCode(404);
+                }
+
+                if (path.startsWith("/universe/regions/") || path.startsWith("/latest/universe/regions/")) {
+                    var segmentIndex = segments.contains("latest") ? 3 : 2;
+                    var regionId = Long.parseLong(segments.get(segmentIndex));
+                    var name = REGION_NAMES.getOrDefault(regionId, "Region " + regionId);
+                    return mockJson(
+                            "{\"region_id\":" + regionId + ",\"name\":\"" + name + "\",\"constellations\":[]}");
+                }
+                if (path.startsWith("/contracts/public/items/") || path.startsWith("/latest/contracts/public/items/")) {
+                    var segmentIndex = segments.contains("latest") ? 4 : 3;
+                    var contractId = Long.parseLong(segments.get(segmentIndex));
+                    var fixture = itemsByContract.get(contractId);
+                    return fixture != null
+                            ? mockJson(loadResource(fixture))
+                            : new MockResponse().setResponseCode(404);
+                }
+                if (path.startsWith("/contracts/public/bids/") || path.startsWith("/latest/contracts/public/bids/")) {
+                    var segmentIndex = segments.contains("latest") ? 4 : 3;
+                    var contractId = Long.parseLong(segments.get(segmentIndex));
+                    var fixture = bidsByContract.get(contractId);
+                    return fixture != null
+                            ? mockJson(loadResource(fixture))
+                            : new MockResponse().setResponseCode(404);
+                }
+                if (path.startsWith("/contracts/public/") || path.startsWith("/latest/contracts/public/")) {
+                    var segmentIndex = segments.contains("latest") ? 3 : 2;
+                    var regionId = Long.parseLong(segments.get(segmentIndex));
+                    var pages = contractsByRegionPage.get(regionId);
+                    if (pages == null) return new MockResponse().setResponseCode(404);
+                    var fixture = pages.containsKey(pageNum) ? pages.get(pageNum) : pages.get(-1);
+                    if (fixture == null) return new MockResponse().setResponseCode(404);
+                    var totalPages = pages.containsKey(-1) ? 1 : pages.size();
+                    return mockJson(loadResource(fixture)).addHeader("x-pages", String.valueOf(totalPages));
+                }
+                if (path.startsWith("/dogma/dynamic/items/") || path.startsWith("/latest/dogma/dynamic/items/")) {
+                    var segmentIndex = segments.contains("latest") ? 4 : 3;
+                    var typeId = Long.parseLong(segments.get(segmentIndex));
+                    var itemId = Long.parseLong(segments.get(segmentIndex + 1));
+                    var fixture = dynamicItemsByKey.get(typeId + "-" + itemId);
+                    return fixture != null
+                            ? mockJson(loadResource(fixture))
+                            : new MockResponse().setResponseCode(404);
+                }
+
+                log.error("Unaccounted URL: {}", path);
+                return new MockResponse().setResponseCode(404);
+            } catch (Exception e) {
+                log.error("Error in dispatcher", e);
+                return new MockResponse().setResponseCode(500);
+            }
+        }
+    }
+
+    // --- HTTP helpers ---
 
     @NotNull
     private MockResponse mockJson(String body) {
