@@ -399,6 +399,42 @@ public class ScrapePublicContractsTest {
 		assertDataIndex();
 	}
 
+	/**
+	 * No previous archive. Single auction contract with two bids on two separate pages. Both pages
+	 * should be fetched and both bids should appear in the archive.
+	 */
+	@Test
+	@SneakyThrows
+	void paginatedBidsNoExistingArchive() {
+		var bid1 = bid(950001);
+		var bid2 = bid(950002);
+		var contract = contract(950).put("type", "auction");
+		server.setDispatcher(dispatcher()
+				.withRegion(10000001)
+				.withContracts(10000001, contractsJson(List.of(contract)))
+				.withItems(950, itemsJson(List.of()))
+				.withBids(950, 1, bidsJson(List.of(bid1)))
+				.withBids(950, 2, bidsJson(List.of(bid2)))
+				.withMetaGroups(NON_ABYSSAL_META_GROUPS_JSON));
+		run();
+
+		assertEquals(expectedContracts(List.of(contract), 10000001), records.get("contracts.csv"));
+		assertEquals(List.of(), records.get("contract_items.csv"));
+		assertEquals(expectedBids(950, List.of(bid1, bid2)), records.get("contract_bids.csv"));
+		assertNoSubDataExceptItemsAndBids();
+		assertLatestFileMatches();
+		assertRequestPaths(
+				"/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
+				"/latest/contracts/public/bids/950?datasource=tranquility&language=en&page=1",
+				"/latest/contracts/public/bids/950?datasource=tranquility&language=en&page=2",
+				"/latest/contracts/public/items/950?datasource=tranquility&language=en&page=1",
+				"/meta_groups/15",
+				"/public-contracts/public-contracts-latest.v2.tar.bz2",
+				"/universe/regions/10000001/?datasource=tranquility",
+				"/universe/regions/?datasource=tranquility");
+		assertDataIndex();
+	}
+
 	// --- Run and capture ---
 
 	@SneakyThrows
@@ -623,7 +659,7 @@ public class ScrapePublicContractsTest {
 		// key: regionId/contractId, value: map of page -> JSON body (-1 = wildcard for all pages)
 		private final Map<Long, Map<Integer, String>> contractsByRegionPage = new HashMap<>();
 		private final Map<Long, Map<Integer, String>> itemsByContractPage = new HashMap<>();
-		private final Map<Long, String> bidsByContract = new HashMap<>();
+		private final Map<Long, Map<Integer, String>> bidsByContractPage = new HashMap<>();
 		// key: "typeId-itemId"
 		private final Map<String, String> dynamicItemsByKey = new HashMap<>();
 		private String metaGroupsBody;
@@ -659,7 +695,12 @@ public class ScrapePublicContractsTest {
 		}
 
 		TestDispatcher withBids(long contractId, String jsonBody) {
-			bidsByContract.put(contractId, jsonBody);
+			bidsByContractPage.computeIfAbsent(contractId, k -> new HashMap<>()).put(-1, jsonBody);
+			return this;
+		}
+
+		TestDispatcher withBids(long contractId, int page, String jsonBody) {
+			bidsByContractPage.computeIfAbsent(contractId, k -> new HashMap<>()).put(page, jsonBody);
 			return this;
 		}
 
@@ -717,8 +758,12 @@ public class ScrapePublicContractsTest {
 				if (path.startsWith("/contracts/public/bids/") || path.startsWith("/latest/contracts/public/bids/")) {
 					var segmentIndex = segments.contains("latest") ? 4 : 3;
 					var contractId = Long.parseLong(segments.get(segmentIndex));
-					var body = bidsByContract.get(contractId);
-					return body != null ? mockJson(body) : new MockResponse().setResponseCode(404);
+					var pages = bidsByContractPage.get(contractId);
+					if (pages == null) return new MockResponse().setResponseCode(404);
+					var body = pages.containsKey(pageNum) ? pages.get(pageNum) : pages.get(-1);
+					if (body == null) return new MockResponse().setResponseCode(404);
+					var totalPages = pages.containsKey(-1) ? 1 : pages.size();
+					return mockJson(body).addHeader("x-pages", String.valueOf(totalPages));
 				}
 				if (path.startsWith("/contracts/public/") || path.startsWith("/latest/contracts/public/")) {
 					var segmentIndex = segments.contains("latest") ? 3 : 2;
