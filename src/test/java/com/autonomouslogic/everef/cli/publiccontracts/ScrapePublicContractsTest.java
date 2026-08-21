@@ -366,6 +366,39 @@ public class ScrapePublicContractsTest {
 		assertDataIndex();
 	}
 
+	/**
+	 * No previous archive. Single auction contract with one bid. Both the contract and the bid
+	 * should appear in the archive.
+	 */
+	@Test
+	@SneakyThrows
+	void singleBidNoExistingArchive() {
+		var bid = bid(900001);
+		var contract = contract(900).put("type", "auction");
+		server.setDispatcher(dispatcher()
+				.withRegion(10000001)
+				.withContracts(10000001, contractsJson(List.of(contract)))
+				.withItems(900, itemsJson(List.of()))
+				.withBids(900, bidsJson(List.of(bid)))
+				.withMetaGroups(NON_ABYSSAL_META_GROUPS_JSON));
+		run();
+
+		assertEquals(expectedContracts(List.of(contract), 10000001), records.get("contracts.csv"));
+		assertEquals(List.of(), records.get("contract_items.csv"));
+		assertEquals(expectedBids(900, List.of(bid)), records.get("contract_bids.csv"));
+		assertNoSubDataExceptItemsAndBids();
+		assertLatestFileMatches();
+		assertRequestPaths(
+				"/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
+				"/latest/contracts/public/bids/900?datasource=tranquility&language=en&page=1",
+				"/latest/contracts/public/items/900?datasource=tranquility&language=en&page=1",
+				"/meta_groups/15",
+				"/public-contracts/public-contracts-latest.v2.tar.bz2",
+				"/universe/regions/10000001/?datasource=tranquility",
+				"/universe/regions/?datasource=tranquility");
+		assertDataIndex();
+	}
+
 	// --- Run and capture ---
 
 	@SneakyThrows
@@ -397,6 +430,13 @@ public class ScrapePublicContractsTest {
 
 	private void assertNoSubDataExceptItems() {
 		assertEquals(List.of(), records.get("contract_bids.csv"));
+		assertEquals(List.of(), records.get("contract_dynamic_items.csv"));
+		assertEquals(List.of(), records.get("contract_non_dynamic_items.csv"));
+		assertEquals(List.of(), records.get("contract_dynamic_items_dogma_attributes.csv"));
+		assertEquals(List.of(), records.get("contract_dynamic_items_dogma_effects.csv"));
+	}
+
+	private void assertNoSubDataExceptItemsAndBids() {
 		assertEquals(List.of(), records.get("contract_dynamic_items.csv"));
 		assertEquals(List.of(), records.get("contract_non_dynamic_items.csv"));
 		assertEquals(List.of(), records.get("contract_dynamic_items_dogma_attributes.csv"));
@@ -489,6 +529,34 @@ public class ScrapePublicContractsTest {
 				.put("quantity", 1)
 				.put("record_id", recordId)
 				.put("type_id", typeId);
+	}
+
+	private ObjectNode bid(long bidId) {
+		return objectMapper
+				.createObjectNode()
+				.put("amount", 1000000)
+				.put("bid_id", bidId)
+				.put("date_bid", "2023-04-03T05:48:04Z");
+	}
+
+	@SneakyThrows
+	private String bidsJson(List<ObjectNode> bids) {
+		var array = objectMapper.createArrayNode();
+		bids.forEach(array::add);
+		return objectMapper.writeValueAsString(array);
+	}
+
+	@SneakyThrows
+	private List<Map<String, String>> expectedBids(long contractId, List<ObjectNode> bids) {
+		var array = objectMapper.createArrayNode();
+		bids.forEach(array::add);
+		var maps = testDataUtil.readMapsFromJson(new ByteArrayInputStream(objectMapper.writeValueAsBytes(array)));
+		maps.forEach(m -> {
+			m.put("contract_id", String.valueOf(contractId));
+			m.put("http_last_modified", lastModifiedInstant.toString());
+		});
+		maps.sort(Comparator.comparingLong(m -> Long.parseLong(m.get("bid_id"))));
+		return maps;
 	}
 
 	@SneakyThrows
