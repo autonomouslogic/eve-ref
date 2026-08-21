@@ -156,6 +156,34 @@ public class ScrapePublicContractsTest {
         assertDataIndex();
     }
 
+    /**
+     * No previous archive on S3. One contract on each of two pages for the same region. Both should
+     * appear in the archive, verifying that pagination fetches all pages.
+     */
+    @Test
+    @SneakyThrows
+    void paginatedCourierContractsNoExistingArchive() {
+        var page1 = List.of(contract(300));
+        var page2 = List.of(contract(301));
+        server.setDispatcher(dispatcher()
+                .withRegion(10000001)
+                .withContracts(10000001, 1, contractsJson(page1))
+                .withContracts(10000001, 2, contractsJson(page2)));
+        run();
+        var allContracts = new ArrayList<>(page1);
+        allContracts.addAll(page2);
+        assertEquals(expectedContracts(allContracts, 10000001), records.get("contracts.csv"));
+        assertNoSubData();
+        assertLatestFileMatches();
+        assertRequestPaths(
+                "/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
+                "/latest/contracts/public/10000001?datasource=tranquility&language=en&page=2",
+                "/public-contracts/public-contracts-latest.v2.tar.bz2",
+                "/universe/regions/10000001/?datasource=tranquility",
+                "/universe/regions/?datasource=tranquility");
+        assertDataIndex();
+    }
+
     // --- Run and capture ---
 
     @SneakyThrows
