@@ -597,24 +597,30 @@ public class ScrapePublicContractsTest {
 	}
 
 	/**
-	 * No previous archive. One item_exchange contract with one abyssal (dynamic) item.
-	 * The contract, item, dynamic item attributes, and effects should all appear in the archive.
+	 * No previous archive. One contract with one abyssal (dynamic) item. Both item_exchange and
+	 * auction contracts fetch items; auction additionally fetches bids. The contract, item, dynamic
+	 * item attributes, and effects should all appear in the archive.
 	 */
-	@Test
+	@ParameterizedTest
+	@ValueSource(strings = {"item_exchange", "auction"})
 	@SneakyThrows
-	void singleDynamicItemNoExistingArchive() {
+	void singleDynamicItemNoExistingArchive(String contractType) {
 		var typeId = 47804;
 		var item = abyssalItem(1400001, 1400001, typeId);
-		var contract = contract(1400).put("type", "item_exchange");
+		var contract = contract(1400).put("type", contractType);
 		var metaGroupsJson = "{\"meta_group_id\":15,\"type_ids\":[" + typeId + "]}";
 
-		server.setDispatcher(dispatcher()
+		var d = dispatcher()
 				.withRegion(10000001)
 				.withContracts(10000001, contractsJson(List.of(contract)))
 				.withItems(1400, itemsJson(List.of(item)))
 				.withDynamicItems(typeId, 1400001, dynamicItemJson())
 				.withType(typeId)
-				.withMetaGroups(metaGroupsJson));
+				.withMetaGroups(metaGroupsJson);
+		if ("auction".equals(contractType)) {
+			d.withBids(1400, bidsJson(List.of()));
+		}
+		server.setDispatcher(d);
 		run();
 
 		assertEquals(expectedContracts(List.of(contract), 10000001), records.get("contracts.csv"));
@@ -626,31 +632,45 @@ public class ScrapePublicContractsTest {
 		assertEquals(List.of(), records.get("contract_non_dynamic_items.csv"));
 		assertEquals(List.of(), records.get("contract_bids.csv"));
 		assertLatestFileMatches();
-		assertRequestPaths(
-				"/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
-				"/latest/contracts/public/items/1400?datasource=tranquility&language=en&page=1",
-				"/latest/dogma/dynamic/items/47804/1400001/?datasource=tranquility&language=en",
-				"/meta_groups/15",
-				"/public-contracts/public-contracts-latest.v2.tar.bz2",
-				"/universe/regions/10000001/?datasource=tranquility",
-				"/universe/regions/?datasource=tranquility",
-				"/universe/types/47804/?datasource=tranquility");
+		if ("auction".equals(contractType)) {
+			assertRequestPaths(
+					"/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
+					"/latest/contracts/public/bids/1400?datasource=tranquility&language=en&page=1",
+					"/latest/contracts/public/items/1400?datasource=tranquility&language=en&page=1",
+					"/latest/dogma/dynamic/items/47804/1400001/?datasource=tranquility&language=en",
+					"/meta_groups/15",
+					"/public-contracts/public-contracts-latest.v2.tar.bz2",
+					"/universe/regions/10000001/?datasource=tranquility",
+					"/universe/regions/?datasource=tranquility",
+					"/universe/types/47804/?datasource=tranquility");
+		} else {
+			assertRequestPaths(
+					"/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
+					"/latest/contracts/public/items/1400?datasource=tranquility&language=en&page=1",
+					"/latest/dogma/dynamic/items/47804/1400001/?datasource=tranquility&language=en",
+					"/meta_groups/15",
+					"/public-contracts/public-contracts-latest.v2.tar.bz2",
+					"/universe/regions/10000001/?datasource=tranquility",
+					"/universe/regions/?datasource=tranquility",
+					"/universe/types/47804/?datasource=tranquility");
+		}
 		assertDataIndex();
 	}
 
 	/**
-	 * Existing archive has an item_exchange contract with an abyssal item. ESI returns that contract
-	 * plus a new item_exchange contract with another abyssal item. The existing dynamic item should
-	 * not be re-fetched from the ESI; only the new contract's dynamic item requires a fetch.
+	 * Existing archive has one contract with an abyssal item. ESI returns that contract plus a new
+	 * one with another abyssal item. The existing dynamic item should not be re-fetched from the ESI;
+	 * only the new contract's dynamic item requires a fetch. Auction contracts always re-fetch bids.
 	 */
-	@Test
+	@ParameterizedTest
+	@ValueSource(strings = {"item_exchange", "auction"})
 	@SneakyThrows
-	void existingDynamicItemNotRefetched() {
+	void existingDynamicItemNotRefetched(String contractType) {
 		var typeId = 47804;
 		var itemA = abyssalItem(1500001, 1500001, typeId);
 		var itemB = abyssalItem(1502001, 1502001, typeId);
-		var contractA = contract(1500).put("type", "item_exchange");
-		var contractB = contract(1502).put("type", "item_exchange");
+		var contractA = contract(1500).put("type", contractType);
+		var contractB = contract(1502).put("type", contractType);
 		var metaGroupsJson = "{\"meta_group_id\":15,\"type_ids\":[" + typeId + "]}";
 
 		var existingContracts = expectedContracts(List.of(contractA), 10000001);
@@ -661,14 +681,18 @@ public class ScrapePublicContractsTest {
 		var existingArchive = createExistingArchive(
 				existingContracts, existingItems, List.of(), existingDynamic, existingAttributes, existingEffects);
 
-		server.setDispatcher(dispatcher()
+		var d = dispatcher()
 				.withRegion(10000001)
 				.withContracts(10000001, contractsJson(List.of(contractA, contractB)))
 				.withItems(1502, itemsJson(List.of(itemB)))
 				.withDynamicItems(typeId, 1502001, dynamicItemJson())
 				.withType(typeId)
 				.withLatestArchive(existingArchive)
-				.withMetaGroups(metaGroupsJson));
+				.withMetaGroups(metaGroupsJson);
+		if ("auction".equals(contractType)) {
+			d.withBids(1500, bidsJson(List.of())).withBids(1502, bidsJson(List.of()));
+		}
+		server.setDispatcher(d);
 		run();
 
 		assertEquals(
@@ -683,8 +707,7 @@ public class ScrapePublicContractsTest {
 				sortedByItemId(expectedDynamicItems(1500, 1500001), expectedDynamicItems(1502, 1502001)),
 				records.get("contract_dynamic_items.csv"));
 		assertEquals(
-				sortedByItemId(
-						expectedDynamicAttributes(1500, 1500001), expectedDynamicAttributes(1502, 1502001)),
+				sortedByItemId(expectedDynamicAttributes(1500, 1500001), expectedDynamicAttributes(1502, 1502001)),
 				records.get("contract_dynamic_items_dogma_attributes.csv"));
 		assertEquals(
 				sortedByItemId(expectedDynamicEffects(1500, 1500001), expectedDynamicEffects(1502, 1502001)),
@@ -692,48 +715,66 @@ public class ScrapePublicContractsTest {
 		assertEquals(List.of(), records.get("contract_non_dynamic_items.csv"));
 		assertEquals(List.of(), records.get("contract_bids.csv"));
 		assertLatestFileMatches();
-		assertRequestPaths(
-				"/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
-				"/latest/contracts/public/items/1502?datasource=tranquility&language=en&page=1",
-				"/latest/dogma/dynamic/items/47804/1502001/?datasource=tranquility&language=en",
-				"/meta_groups/15",
-				"/public-contracts/public-contracts-latest.v2.tar.bz2",
-				"/universe/regions/10000001/?datasource=tranquility",
-				"/universe/regions/?datasource=tranquility",
-				"/universe/types/47804/?datasource=tranquility");
+		if ("auction".equals(contractType)) {
+			assertRequestPaths(
+					"/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
+					"/latest/contracts/public/bids/1500?datasource=tranquility&language=en&page=1",
+					"/latest/contracts/public/bids/1502?datasource=tranquility&language=en&page=1",
+					"/latest/contracts/public/items/1502?datasource=tranquility&language=en&page=1",
+					"/latest/dogma/dynamic/items/47804/1502001/?datasource=tranquility&language=en",
+					"/meta_groups/15",
+					"/public-contracts/public-contracts-latest.v2.tar.bz2",
+					"/universe/regions/10000001/?datasource=tranquility",
+					"/universe/regions/?datasource=tranquility",
+					"/universe/types/47804/?datasource=tranquility");
+		} else {
+			assertRequestPaths(
+					"/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
+					"/latest/contracts/public/items/1502?datasource=tranquility&language=en&page=1",
+					"/latest/dogma/dynamic/items/47804/1502001/?datasource=tranquility&language=en",
+					"/meta_groups/15",
+					"/public-contracts/public-contracts-latest.v2.tar.bz2",
+					"/universe/regions/10000001/?datasource=tranquility",
+					"/universe/regions/?datasource=tranquility",
+					"/universe/types/47804/?datasource=tranquility");
+		}
 		assertDataIndex();
 	}
 
 	/**
-	 * Existing archive has two item_exchange contracts, each with an abyssal item. ESI returns only
-	 * one contract. The missing contract's dynamic item, attributes, and effects should be removed
-	 * from the new archive.
+	 * Existing archive has two contracts, each with an abyssal item. ESI returns only one contract.
+	 * The missing contract's dynamic item, attributes, and effects should be removed from the new
+	 * archive. Auction contracts always re-fetch bids for retained contracts.
 	 */
-	@Test
+	@ParameterizedTest
+	@ValueSource(strings = {"item_exchange", "auction"})
 	@SneakyThrows
-	void missingDynamicItemRemovedFromArchive() {
+	void missingDynamicItemRemovedFromArchive(String contractType) {
 		var typeId = 47804;
 		var itemA = abyssalItem(1600001, 1600001, typeId);
 		var itemB = abyssalItem(1601001, 1601001, typeId);
-		var contractA = contract(1600).put("type", "item_exchange");
-		var contractB = contract(1601).put("type", "item_exchange");
+		var contractA = contract(1600).put("type", contractType);
+		var contractB = contract(1601).put("type", contractType);
 
 		var existingContracts = sortedByContractId(
 				expectedContracts(List.of(contractA), 10000001), expectedContracts(List.of(contractB), 10000001));
 		var existingItems = sortedByRecordId(expectedItems(1600, List.of(itemA)), expectedItems(1601, List.of(itemB)));
-		var existingDynamic =
-				sortedByItemId(expectedDynamicItems(1600, 1600001), expectedDynamicItems(1601, 1601001));
-		var existingAttributes = sortedByItemId(
-				expectedDynamicAttributes(1600, 1600001), expectedDynamicAttributes(1601, 1601001));
+		var existingDynamic = sortedByItemId(expectedDynamicItems(1600, 1600001), expectedDynamicItems(1601, 1601001));
+		var existingAttributes =
+				sortedByItemId(expectedDynamicAttributes(1600, 1600001), expectedDynamicAttributes(1601, 1601001));
 		var existingEffects =
 				sortedByItemId(expectedDynamicEffects(1600, 1600001), expectedDynamicEffects(1601, 1601001));
 		var existingArchive = createExistingArchive(
 				existingContracts, existingItems, List.of(), existingDynamic, existingAttributes, existingEffects);
 
-		server.setDispatcher(dispatcher()
+		var d = dispatcher()
 				.withRegion(10000001)
 				.withContracts(10000001, contractsJson(List.of(contractA)))
-				.withLatestArchive(existingArchive));
+				.withLatestArchive(existingArchive);
+		if ("auction".equals(contractType)) {
+			d.withBids(1600, bidsJson(List.of()));
+		}
+		server.setDispatcher(d);
 		run();
 
 		assertEquals(expectedContracts(List.of(contractA), 10000001), records.get("contracts.csv"));
@@ -745,11 +786,20 @@ public class ScrapePublicContractsTest {
 		assertEquals(List.of(), records.get("contract_non_dynamic_items.csv"));
 		assertEquals(List.of(), records.get("contract_bids.csv"));
 		assertLatestFileMatches();
-		assertRequestPaths(
-				"/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
-				"/public-contracts/public-contracts-latest.v2.tar.bz2",
-				"/universe/regions/10000001/?datasource=tranquility",
-				"/universe/regions/?datasource=tranquility");
+		if ("auction".equals(contractType)) {
+			assertRequestPaths(
+					"/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
+					"/latest/contracts/public/bids/1600?datasource=tranquility&language=en&page=1",
+					"/public-contracts/public-contracts-latest.v2.tar.bz2",
+					"/universe/regions/10000001/?datasource=tranquility",
+					"/universe/regions/?datasource=tranquility");
+		} else {
+			assertRequestPaths(
+					"/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
+					"/public-contracts/public-contracts-latest.v2.tar.bz2",
+					"/universe/regions/10000001/?datasource=tranquility",
+					"/universe/regions/?datasource=tranquility");
+		}
 		assertDataIndex();
 	}
 
