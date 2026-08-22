@@ -1,7 +1,7 @@
 package com.autonomouslogic.everef.cli;
 
-import static com.autonomouslogic.everef.util.archive.ArchivePathFactories.SKINR_LISTINGS;
 import static com.autonomouslogic.everef.util.archive.ArchivePathFactories.SKINR_DETAILS;
+import static com.autonomouslogic.everef.util.archive.ArchivePathFactories.SKINR_LISTINGS;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.verify;
@@ -17,11 +17,13 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.SneakyThrows;
@@ -42,14 +44,22 @@ import software.amazon.awssdk.services.s3.S3AsyncClient;
 
 /**
  * End-to-end tests for {@link ScrapeSkinr}. Each test is self-contained: it configures the ESI mock,
- * runs the scrape, and asserts the resulting S3 files.
+ * runs the scrape, and asserts the resulting S3 files and ESI request paths.
  *
  * <p>The scraper has two output files:
  * <ul>
- *   <li><b>Listings</b> ({@code paragon-hub-skinr/}): a snapshot of active Paragon Hub listings,
+ *   <li><b>Listings</b> ({@code skinr-listings/}): a snapshot of active Paragon Hub listings,
  *       merged incrementally via cursor-based pagination.
  *   <li><b>Details</b> ({@code skinr-details/}): accumulated SKINR cosmetic detail records, keyed
  *       by skinr_id, never re-fetched once cached.
+ * </ul>
+ *
+ * <p>First-run vs subsequent-run behaviour differs:
+ * <ul>
+ *   <li><b>First run</b> (no previous file): a single call to {@code /paragon-hub/skinr?limit=100}
+ *       returns all listings; stored as-is with no merging or purging.
+ *   <li><b>Subsequent run</b>: cursor-based incremental fetch; pages merged into the previous
+ *       listings map; non-"listed" entries purged after merge.
  * </ul>
  */
 @ExtendWith(MockitoExtension.class)
@@ -86,6 +96,7 @@ public class ScrapeSkinrTest {
 
 	MockWebServer server;
 	TestDispatcher dispatcher;
+	List<String> requestPaths;
 
 	@Inject
 	protected ScrapeSkinrTest() {}
@@ -107,6 +118,8 @@ public class ScrapeSkinrTest {
 		server.close();
 	}
 
+	// --- First-run tests ---
+
 	/**
 	 * First run with no previous files. A single ESI call fetches all listings; they are stored
 	 * as-is. Details are fetched for every skinr_id in the returned listings.
@@ -119,11 +132,17 @@ public class ScrapeSkinrTest {
 				.withFirstPageResponse(listingsPage(List.of(listing), "cursor-1", null))
 				.withDetail(101, detail(101, "Wrathful Gaze Alpha"));
 
-		scrapeSkinr.run();
+		run();
 
 		var listings = readLatestListings();
 		assertEquals(List.of(listing), listingsArray(listings));
 		assertEquals("cursor-1", listings.get("cursor").get("after").asText());
+
+		assertRequestPaths(
+				"/cosmetics/skinr/101",
+				"/paragon-hub/skinr?limit=100",
+				"/skinr-details/skinr-details-latest.json",
+				"/skinr-listings/skinr-listings-latest.json");
 	}
 
 	/**
@@ -140,10 +159,17 @@ public class ScrapeSkinrTest {
 				.withDetail(101, detail(101, "Alpha"))
 				.withDetail(102, detail(102, "Beta"));
 
-		scrapeSkinr.run();
+		run();
 
 		var listings = readLatestListings();
 		assertEquals(Set.of(1L, 2L), listingIds(listings));
+
+		assertRequestPaths(
+				"/cosmetics/skinr/101",
+				"/cosmetics/skinr/102",
+				"/paragon-hub/skinr?limit=100",
+				"/skinr-details/skinr-details-latest.json",
+				"/skinr-listings/skinr-listings-latest.json");
 	}
 
 	/**
@@ -153,19 +179,26 @@ public class ScrapeSkinrTest {
 	@Test
 	@SneakyThrows
 	void firstRunFetchesDetailForEachSkinrId() {
-		var listings = List.of(
-				listing(1, "listed", 101), listing(2, "listed", 102), listing(3, "listed", 103));
+		var listings = List.of(listing(1, "listed", 101), listing(2, "listed", 102), listing(3, "listed", 103));
 		dispatcher
 				.withFirstPageResponse(listingsPage(listings, "cursor-1", null))
 				.withDetail(101, detail(101, "Alpha"))
 				.withDetail(102, detail(102, "Beta"))
 				.withDetail(103, detail(103, "Gamma"));
 
-		scrapeSkinr.run();
+		run();
 
 		var details = readLatestDetails();
 		assertEquals(Set.of("101", "102", "103"), details.keySet());
 		assertEquals("Alpha", details.get("101").get("name").asText());
+
+		assertRequestPaths(
+				"/cosmetics/skinr/101",
+				"/cosmetics/skinr/102",
+				"/cosmetics/skinr/103",
+				"/paragon-hub/skinr?limit=100",
+				"/skinr-details/skinr-details-latest.json",
+				"/skinr-listings/skinr-listings-latest.json");
 	}
 
 	/**
@@ -180,11 +213,17 @@ public class ScrapeSkinrTest {
 				.withFirstPageResponse(listingsPage(listings, "cursor-1", null))
 				.withDetailOnce(101, detail(101, "Alpha"));
 
-		scrapeSkinr.run();
+		run();
 
 		var details = readLatestDetails();
 		assertEquals(1, details.size());
 		assertTrue(details.containsKey("101"));
+
+		assertRequestPaths(
+				"/cosmetics/skinr/101",
+				"/paragon-hub/skinr?limit=100",
+				"/skinr-details/skinr-details-latest.json",
+				"/skinr-listings/skinr-listings-latest.json");
 	}
 
 	// --- Subsequent-run tests (cursor-based incremental fetch) ---
@@ -202,11 +241,16 @@ public class ScrapeSkinrTest {
 				.withExistingDetails(detailsJson(Map.of("101", detail(101, "Alpha"))))
 				.withIncrementalPage("cursor-0", listingsPage(List.of(), "cursor-1", "cursor-0"));
 
-		scrapeSkinr.run();
+		run();
 
 		var listings = readLatestListings();
 		assertEquals(Set.of(1L), listingIds(listings));
 		assertEquals("cursor-0", listings.get("cursor").get("after").asText());
+
+		assertRequestPaths(
+				"/paragon-hub/skinr?limit=100&after=cursor-0",
+				"/skinr-details/skinr-details-latest.json",
+				"/skinr-listings/skinr-listings-latest.json");
 	}
 
 	/**
@@ -225,11 +269,18 @@ public class ScrapeSkinrTest {
 				.withIncrementalPage("cursor-1", listingsPage(List.of(), "cursor-2", "cursor-1"))
 				.withDetail(102, detail(102, "Beta"));
 
-		scrapeSkinr.run();
+		run();
 
 		var listings = readLatestListings();
 		assertEquals(Set.of(1L, 2L), listingIds(listings));
 		assertEquals("cursor-1", listings.get("cursor").get("after").asText());
+
+		assertRequestPaths(
+				"/cosmetics/skinr/102",
+				"/paragon-hub/skinr?limit=100&after=cursor-0",
+				"/paragon-hub/skinr?limit=100&after=cursor-1",
+				"/skinr-details/skinr-details-latest.json",
+				"/skinr-listings/skinr-listings-latest.json");
 	}
 
 	/**
@@ -251,11 +302,20 @@ public class ScrapeSkinrTest {
 				.withDetail(102, detail(102, "Beta"))
 				.withDetail(103, detail(103, "Gamma"));
 
-		scrapeSkinr.run();
+		run();
 
 		var listings = readLatestListings();
 		assertEquals(Set.of(1L, 2L, 3L), listingIds(listings));
 		assertEquals("cursor-2", listings.get("cursor").get("after").asText());
+
+		assertRequestPaths(
+				"/cosmetics/skinr/102",
+				"/cosmetics/skinr/103",
+				"/paragon-hub/skinr?limit=100&after=cursor-0",
+				"/paragon-hub/skinr?limit=100&after=cursor-1",
+				"/paragon-hub/skinr?limit=100&after=cursor-2",
+				"/skinr-details/skinr-details-latest.json",
+				"/skinr-listings/skinr-listings-latest.json");
 	}
 
 	/**
@@ -273,12 +333,18 @@ public class ScrapeSkinrTest {
 				.withIncrementalPage("cursor-0", listingsPage(List.of(updatedVersion), "cursor-1", "cursor-0"))
 				.withIncrementalPage("cursor-1", listingsPage(List.of(), "cursor-2", "cursor-1"));
 
-		scrapeSkinr.run();
+		run();
 
 		var listings = readLatestListings();
 		var mergedList = listingsArray(listings);
 		assertEquals(1, mergedList.size());
 		assertEquals(99, mergedList.get(0).get("quantity").asInt());
+
+		assertRequestPaths(
+				"/paragon-hub/skinr?limit=100&after=cursor-0",
+				"/paragon-hub/skinr?limit=100&after=cursor-1",
+				"/skinr-details/skinr-details-latest.json",
+				"/skinr-listings/skinr-listings-latest.json");
 	}
 
 	// --- Purge tests ---
@@ -303,10 +369,15 @@ public class ScrapeSkinrTest {
 						"104", detail(104, "D"))))
 				.withIncrementalPage("cursor-0", listingsPage(List.of(), "cursor-1", "cursor-0"));
 
-		scrapeSkinr.run();
+		run();
 
 		var listings = readLatestListings();
 		assertEquals(Set.of(1L), listingIds(listings));
+
+		assertRequestPaths(
+				"/paragon-hub/skinr?limit=100&after=cursor-0",
+				"/skinr-details/skinr-details-latest.json",
+				"/skinr-listings/skinr-listings-latest.json");
 	}
 
 	/**
@@ -324,10 +395,16 @@ public class ScrapeSkinrTest {
 				.withIncrementalPage("cursor-0", listingsPage(List.of(soldOut), "cursor-1", "cursor-0"))
 				.withIncrementalPage("cursor-1", listingsPage(List.of(), "cursor-2", "cursor-1"));
 
-		scrapeSkinr.run();
+		run();
 
 		var listings = readLatestListings();
 		assertEquals(Set.of(), listingIds(listings));
+
+		assertRequestPaths(
+				"/paragon-hub/skinr?limit=100&after=cursor-0",
+				"/paragon-hub/skinr?limit=100&after=cursor-1",
+				"/skinr-details/skinr-details-latest.json",
+				"/skinr-listings/skinr-listings-latest.json");
 	}
 
 	// --- Details accumulation tests ---
@@ -350,10 +427,17 @@ public class ScrapeSkinrTest {
 				.withDetail(102, detail(102, "Beta"));
 		// skinr_id 101 is NOT registered — a fetch would return 404 causing an error
 
-		scrapeSkinr.run();
+		run();
 
 		var details = readLatestDetails();
 		assertEquals(Set.of("101", "102"), details.keySet());
+
+		assertRequestPaths(
+				"/cosmetics/skinr/102",
+				"/paragon-hub/skinr?limit=100&after=cursor-0",
+				"/paragon-hub/skinr?limit=100&after=cursor-1",
+				"/skinr-details/skinr-details-latest.json",
+				"/skinr-listings/skinr-listings-latest.json");
 	}
 
 	/**
@@ -372,11 +456,18 @@ public class ScrapeSkinrTest {
 				.withIncrementalPage("cursor-1", listingsPage(List.of(), "cursor-2", "cursor-1"))
 				.withDetail(102, detail(102, "Beta"));
 
-		scrapeSkinr.run();
+		run();
 
 		var details = readLatestDetails();
 		assertEquals("Alpha", details.get("101").get("name").asText());
 		assertEquals("Beta", details.get("102").get("name").asText());
+
+		assertRequestPaths(
+				"/cosmetics/skinr/102",
+				"/paragon-hub/skinr?limit=100&after=cursor-0",
+				"/paragon-hub/skinr?limit=100&after=cursor-1",
+				"/skinr-details/skinr-details-latest.json",
+				"/skinr-listings/skinr-listings-latest.json");
 	}
 
 	// --- S3 upload / data index tests ---
@@ -391,12 +482,26 @@ public class ScrapeSkinrTest {
 				.withFirstPageResponse(listingsPage(List.of(listing(1, "listed", 101)), "cursor-1", null))
 				.withDetail(101, detail(101, "Alpha"));
 
-		scrapeSkinr.run();
+		run();
 
-		assertTrue(mockS3Adapter.getTestObject(BUCKET_NAME, LATEST_LISTINGS_FILE, dataClient).isPresent());
-		assertTrue(mockS3Adapter.getTestObject(BUCKET_NAME, ARCHIVE_LISTINGS_FILE, dataClient).isPresent());
-		assertTrue(mockS3Adapter.getTestObject(BUCKET_NAME, LATEST_DETAILS_FILE, dataClient).isPresent());
-		assertTrue(mockS3Adapter.getTestObject(BUCKET_NAME, ARCHIVE_DETAILS_FILE, dataClient).isPresent());
+		assertTrue(mockS3Adapter
+				.getTestObject(BUCKET_NAME, LATEST_LISTINGS_FILE, dataClient)
+				.isPresent());
+		assertTrue(mockS3Adapter
+				.getTestObject(BUCKET_NAME, ARCHIVE_LISTINGS_FILE, dataClient)
+				.isPresent());
+		assertTrue(mockS3Adapter
+				.getTestObject(BUCKET_NAME, LATEST_DETAILS_FILE, dataClient)
+				.isPresent());
+		assertTrue(mockS3Adapter
+				.getTestObject(BUCKET_NAME, ARCHIVE_DETAILS_FILE, dataClient)
+				.isPresent());
+
+		assertRequestPaths(
+				"/cosmetics/skinr/101",
+				"/paragon-hub/skinr?limit=100",
+				"/skinr-details/skinr-details-latest.json",
+				"/skinr-listings/skinr-listings-latest.json");
 	}
 
 	/**
@@ -409,16 +514,48 @@ public class ScrapeSkinrTest {
 				.withFirstPageResponse(listingsPage(List.of(listing(1, "listed", 101)), "cursor-1", null))
 				.withDetail(101, detail(101, "Alpha"));
 
-		scrapeSkinr.run();
+		run();
 
 		verify(dataIndexHelper)
 				.updateIndex(
-						S3Url.builder().bucket(BUCKET_NAME).path(LATEST_LISTINGS_FILE).build(),
-						S3Url.builder().bucket(BUCKET_NAME).path(ARCHIVE_LISTINGS_FILE).build());
+						S3Url.builder()
+								.bucket(BUCKET_NAME)
+								.path(LATEST_LISTINGS_FILE)
+								.build(),
+						S3Url.builder()
+								.bucket(BUCKET_NAME)
+								.path(ARCHIVE_LISTINGS_FILE)
+								.build());
 		verify(dataIndexHelper)
 				.updateIndex(
-						S3Url.builder().bucket(BUCKET_NAME).path(LATEST_DETAILS_FILE).build(),
-						S3Url.builder().bucket(BUCKET_NAME).path(ARCHIVE_DETAILS_FILE).build());
+						S3Url.builder()
+								.bucket(BUCKET_NAME)
+								.path(LATEST_DETAILS_FILE)
+								.build(),
+						S3Url.builder()
+								.bucket(BUCKET_NAME)
+								.path(ARCHIVE_DETAILS_FILE)
+								.build());
+
+		assertRequestPaths(
+				"/cosmetics/skinr/101",
+				"/paragon-hub/skinr?limit=100",
+				"/skinr-details/skinr-details-latest.json",
+				"/skinr-listings/skinr-listings-latest.json");
+	}
+
+	// --- Run helper ---
+
+	@SneakyThrows
+	private void run() {
+		scrapeSkinr.run();
+		var raw = new ArrayList<RecordedRequest>();
+		RecordedRequest req;
+		while ((req = server.takeRequest(1, TimeUnit.MILLISECONDS)) != null) {
+			raw.add(req);
+		}
+		requestPaths =
+				raw.stream().map(RecordedRequest::getPath).sorted().distinct().toList();
 	}
 
 	// --- Output readers ---
@@ -441,6 +578,10 @@ public class ScrapeSkinrTest {
 
 	// --- Assertion helpers ---
 
+	private void assertRequestPaths(String... paths) {
+		assertEquals(List.of(paths), requestPaths);
+	}
+
 	private List<ObjectNode> listingsArray(ObjectNode listingsResponse) {
 		var arr = (ArrayNode) listingsResponse.get("listings");
 		var result = new ArrayList<ObjectNode>();
@@ -462,24 +603,27 @@ public class ScrapeSkinrTest {
 				.createObjectNode()
 				.put("id", id)
 				.put("state", state)
+			.put("last_modified", "2024-01-01T00:00:00Z")
+			.put("seller_id", 1_000_000L + id)
 				.put("skinr_id", skinrId)
-				.put("seller_id", 1_000_000L + id)
 				.put("created", "2024-01-01T00:00:00Z")
 				.put("expires", "2024-02-01T00:00:00Z")
 				.put("quantity", 1)
-				.put("price", 100_000_000L);
+				.set("price", objectMapper.createObjectNode().put("isk", 425000000));
 	}
 
 	private ObjectNode detail(int id, String name) {
-		return objectMapper
+		var obj = objectMapper
 				.createObjectNode()
 				.put("id", id)
 				.put("name", name)
 				.put("creator_id", 2_000_000 + id)
 				.put("ship_type_id", 587)
-				.put("tier", 1)
-				.put("line", "Wrathful Gaze")
-				.put("layout", "standard");
+				.put("line", "Wrathful Gaze");
+		obj.set("layout", objectMapper.createObjectNode()
+					.put("pattern_blend_mode",  "normal"));
+		obj.set("tier", objectMapper.createObjectNode().put("level", 6));
+		return obj;
 	}
 
 	@SneakyThrows
@@ -513,9 +657,9 @@ public class ScrapeSkinrTest {
 		private final Map<String, String> incrementalPages = new HashMap<>();
 		// key: skinr_id; value: response JSON
 		private final Map<Integer, String> detailResponses = new HashMap<>();
-		// skinr_ids that should only be served once (404 on second call)
+		// skinr_ids served only once; 404 on any second call
 		private final Set<Integer> onceOnlyIds = new HashSet<>();
-		private final Set<Integer> servedOnceIds = java.util.Collections.synchronizedSet(new HashSet<>());
+		private final Set<Integer> servedOnceIds = Collections.synchronizedSet(new HashSet<>());
 		private String existingListings = null;
 		private String existingDetails = null;
 
@@ -598,7 +742,6 @@ public class ScrapeSkinrTest {
 				if (path.startsWith("/cosmetics/skinr/")) {
 					var skinrId = Integer.parseInt(path.substring("/cosmetics/skinr/".length()));
 					if (onceOnlyIds.contains(skinrId)) {
-						// Serve once; return 404 on any subsequent call
 						if (servedOnceIds.add(skinrId)) {
 							return mockJson(detailResponses.get(skinrId));
 						}
