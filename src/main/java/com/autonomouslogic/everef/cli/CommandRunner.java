@@ -95,6 +95,9 @@ public class CommandRunner {
 	protected Provider<ScrapeFreelanceJobs> scrapeFreelanceJobsProvider;
 
 	@Inject
+	protected Provider<ScrapeSkinr> scrapeSkinrProvider;
+
+	@Inject
 	protected Provider<ScrapeSovereignty> scrapeSovereigntyProvider;
 
 	@Inject
@@ -210,6 +213,8 @@ public class CommandRunner {
 				return syncMerProvider.get();
 			case "scrape-freelance-jobs":
 				return scrapeFreelanceJobsProvider.get();
+			case "scrape-skinr":
+				return scrapeSkinrProvider.get();
 			case "scrape-sovereignty":
 				return scrapeSovereigntyProvider.get();
 			case "scrape-industry":
