@@ -444,22 +444,22 @@ public class ScrapeSkinrTest {
 		var detail101 = detail(101, "Alpha");
 		var detail102 = detail(102, "Beta");
 		dispatcher
-			.withExistingListings(fullListingsJson(List.of(original), "cursor-0"))
-			.withExistingDetails(detailsJson(Map.of("101", detail101)))
-			.withIncrementalPage("cursor-0", listingsPage(List.of(soldOut), "cursor-1"))
-			.withIncrementalPage("cursor-1", emptyListingsPage())
-			.withDetail(102, detail102);
+				.withExistingListings(fullListingsJson(List.of(original), "cursor-0"))
+				.withExistingDetails(detailsJson(Map.of("101", detail101)))
+				.withIncrementalPage("cursor-0", listingsPage(List.of(soldOut), "cursor-1"))
+				.withIncrementalPage("cursor-1", emptyListingsPage())
+				.withDetail(102, detail102);
 
 		run();
 
 		assertEquals(Map.of("101", detail101, "102", detail102), readLatestDetails());
 
 		assertRequestPaths(
-			"/cosmetics/skinr/102",
-			"/paragon-hub/skinr?limit=100&after=cursor-0",
-			"/paragon-hub/skinr?limit=100&after=cursor-1",
-			"/skinr-details/skinr-details-latest.json",
-			"/skinr-listings/skinr-listings-latest.json");
+				"/cosmetics/skinr/102",
+				"/paragon-hub/skinr?limit=100&after=cursor-0",
+				"/paragon-hub/skinr?limit=100&after=cursor-1",
+				"/skinr-details/skinr-details-latest.json",
+				"/skinr-listings/skinr-listings-latest.json");
 	}
 
 	/**
@@ -477,22 +477,22 @@ public class ScrapeSkinrTest {
 		var detail103 = detail(101, "Gamma");
 		var detail104 = detail(102, "Delta");
 		dispatcher
-			.withExistingListings(fullListingsJson(List.of(active, soldOut, expired, removed), "cursor-0"))
-			.withExistingDetails(detailsJson(Map.of(
-				"101", detail101,
-				"102", detail102,
-				"103", detail103,
-				"104", detail104)))
-			.withIncrementalPage("cursor-0", emptyListingsPage());
+				.withExistingListings(fullListingsJson(List.of(active, soldOut, expired, removed), "cursor-0"))
+				.withExistingDetails(detailsJson(Map.of(
+						"101", detail101,
+						"102", detail102,
+						"103", detail103,
+						"104", detail104)))
+				.withIncrementalPage("cursor-0", emptyListingsPage());
 
 		run();
 
 		assertEquals(Map.of("101", detail101), readLatestDetails());
 
 		assertRequestPaths(
-			"/paragon-hub/skinr?limit=100&after=cursor-0",
-			"/skinr-details/skinr-details-latest.json",
-			"/skinr-listings/skinr-listings-latest.json");
+				"/paragon-hub/skinr?limit=100&after=cursor-0",
+				"/skinr-details/skinr-details-latest.json",
+				"/skinr-listings/skinr-listings-latest.json");
 	}
 
 	// --- S3 upload / data index tests ---

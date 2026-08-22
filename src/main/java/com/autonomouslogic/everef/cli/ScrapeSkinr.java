@@ -17,7 +17,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.net.URI;
-import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
@@ -37,7 +36,6 @@ import software.amazon.awssdk.services.s3.S3AsyncClient;
 
 @Log4j2
 public class ScrapeSkinr implements Command {
-	private static final String COMPATIBILITY_DATE_HEADER = "X-Compatibility-Date";
 	private static final int LIMIT = 100;
 
 	@Inject
@@ -206,8 +204,7 @@ public class ScrapeSkinr implements Command {
 	@SneakyThrows
 	private byte[] downloadExistingFile(String path) {
 		var url = dataBaseUrl.resolve(path).toString();
-		var response = okHttpWrapper.get(
-				url, r -> r.addHeader(COMPATIBILITY_DATE_HEADER, LocalDate.now(ZoneOffset.ofHours(-11)).toString()));
+		var response = okHttpWrapper.get(url);
 		try (response) {
 			if (response.code() == 404) {
 				return null;
