@@ -129,7 +129,7 @@ public class ScrapeSkinrTest {
 	void firstRunStoresListingsAsIs() {
 		var listing = listing(1, "listed", 101);
 		dispatcher
-				.withFirstPageResponse(listingsPage(List.of(listing), "cursor-1", null))
+				.withFirstPageResponse(listingsPage(List.of(listing), "cursor-1"))
 				.withDetail(101, detail(101, "Wrathful Gaze Alpha"));
 
 		run();
@@ -155,7 +155,7 @@ public class ScrapeSkinrTest {
 		var active = listing(1, "listed", 101);
 		var soldOut = listing(2, "sold_out", 102);
 		dispatcher
-				.withFirstPageResponse(listingsPage(List.of(active, soldOut), "cursor-1", null))
+				.withFirstPageResponse(listingsPage(List.of(active, soldOut), "cursor-1"))
 				.withDetail(101, detail(101, "Alpha"))
 				.withDetail(102, detail(102, "Beta"));
 
@@ -184,7 +184,7 @@ public class ScrapeSkinrTest {
 		var detail102 = detail(102, "Beta");
 		var detail103 = detail(103, "Gamma");
 		dispatcher
-				.withFirstPageResponse(listingsPage(listings, "cursor-1", null))
+				.withFirstPageResponse(listingsPage(listings, "cursor-1"))
 				.withDetail(101, detail101)
 				.withDetail(102, detail102)
 				.withDetail(103, detail103);
@@ -211,9 +211,7 @@ public class ScrapeSkinrTest {
 	void firstRunFetchesEachSkinrDetailOnlyOnce() {
 		var listings = List.of(listing(1, "listed", 101), listing(2, "listed", 101));
 		var detail101 = detail(101, "Alpha");
-		dispatcher
-				.withFirstPageResponse(listingsPage(listings, "cursor-1", null))
-				.withDetailOnce(101, detail101);
+		dispatcher.withFirstPageResponse(listingsPage(listings, "cursor-1")).withDetailOnce(101, detail101);
 
 		run();
 
@@ -237,9 +235,9 @@ public class ScrapeSkinrTest {
 	void subsequentRunPreservesListingsWhenNoNewData() {
 		var existing = listing(1, "listed", 101);
 		dispatcher
-				.withExistingListings(fullListingsJson(List.of(existing), "cursor-0", null))
+				.withExistingListings(fullListingsJson(List.of(existing), "cursor-0"))
 				.withExistingDetails(detailsJson(Map.of("101", detail(101, "Alpha"))))
-				.withIncrementalPage("cursor-0", listingsPage(List.of(), "cursor-1", "cursor-0"));
+				.withIncrementalPage("cursor-0", emptyListingsPage());
 
 		run();
 
@@ -263,10 +261,10 @@ public class ScrapeSkinrTest {
 		var existing = listing(1, "listed", 101);
 		var incoming = listing(2, "listed", 102);
 		dispatcher
-				.withExistingListings(fullListingsJson(List.of(existing), "cursor-0", null))
+				.withExistingListings(fullListingsJson(List.of(existing), "cursor-0"))
 				.withExistingDetails(detailsJson(Map.of("101", detail(101, "Alpha"))))
-				.withIncrementalPage("cursor-0", listingsPage(List.of(incoming), "cursor-1", "cursor-0"))
-				.withIncrementalPage("cursor-1", listingsPage(List.of(), "cursor-2", "cursor-1"))
+				.withIncrementalPage("cursor-0", listingsPage(List.of(incoming), "cursor-1"))
+				.withIncrementalPage("cursor-1", emptyListingsPage())
 				.withDetail(102, detail(102, "Beta"));
 
 		run();
@@ -294,11 +292,11 @@ public class ScrapeSkinrTest {
 		var page1 = listing(2, "listed", 102);
 		var page2 = listing(3, "listed", 103);
 		dispatcher
-				.withExistingListings(fullListingsJson(List.of(existing), "cursor-0", null))
+				.withExistingListings(fullListingsJson(List.of(existing), "cursor-0"))
 				.withExistingDetails(detailsJson(Map.of("101", detail(101, "Alpha"))))
-				.withIncrementalPage("cursor-0", listingsPage(List.of(page1), "cursor-1", "cursor-0"))
-				.withIncrementalPage("cursor-1", listingsPage(List.of(page2), "cursor-2", "cursor-1"))
-				.withIncrementalPage("cursor-2", listingsPage(List.of(), "cursor-3", "cursor-2"))
+				.withIncrementalPage("cursor-0", listingsPage(List.of(page1), "cursor-1"))
+				.withIncrementalPage("cursor-1", listingsPage(List.of(page2), "cursor-2"))
+				.withIncrementalPage("cursor-2", emptyListingsPage())
 				.withDetail(102, detail(102, "Beta"))
 				.withDetail(103, detail(103, "Gamma"));
 
@@ -328,10 +326,10 @@ public class ScrapeSkinrTest {
 		var existingVersion = listing(1, "listed", 101).put("quantity", 1);
 		var updatedVersion = listing(1, "listed", 101).put("quantity", 99);
 		dispatcher
-				.withExistingListings(fullListingsJson(List.of(existingVersion), "cursor-0", null))
+				.withExistingListings(fullListingsJson(List.of(existingVersion), "cursor-0"))
 				.withExistingDetails(detailsJson(Map.of("101", detail(101, "Alpha"))))
-				.withIncrementalPage("cursor-0", listingsPage(List.of(updatedVersion), "cursor-1", "cursor-0"))
-				.withIncrementalPage("cursor-1", listingsPage(List.of(), "cursor-2", "cursor-1"));
+				.withIncrementalPage("cursor-0", listingsPage(List.of(updatedVersion), "cursor-1"))
+				.withIncrementalPage("cursor-1", emptyListingsPage());
 
 		run();
 
@@ -359,13 +357,13 @@ public class ScrapeSkinrTest {
 		var expired = listing(3, "expired", 103);
 		var removed = listing(4, "removed", 104);
 		dispatcher
-				.withExistingListings(fullListingsJson(List.of(active, soldOut, expired, removed), "cursor-0", null))
+				.withExistingListings(fullListingsJson(List.of(active, soldOut, expired, removed), "cursor-0"))
 				.withExistingDetails(detailsJson(Map.of(
 						"101", detail(101, "A"),
 						"102", detail(102, "B"),
 						"103", detail(103, "C"),
 						"104", detail(104, "D"))))
-				.withIncrementalPage("cursor-0", listingsPage(List.of(), "cursor-1", "cursor-0"));
+				.withIncrementalPage("cursor-0", emptyListingsPage());
 
 		run();
 
@@ -388,10 +386,10 @@ public class ScrapeSkinrTest {
 		var original = listing(1, "listed", 101);
 		var soldOut = listing(1, "sold_out", 101);
 		dispatcher
-				.withExistingListings(fullListingsJson(List.of(original), "cursor-0", null))
+				.withExistingListings(fullListingsJson(List.of(original), "cursor-0"))
 				.withExistingDetails(detailsJson(Map.of("101", detail(101, "Alpha"))))
-				.withIncrementalPage("cursor-0", listingsPage(List.of(soldOut), "cursor-1", "cursor-0"))
-				.withIncrementalPage("cursor-1", listingsPage(List.of(), "cursor-2", "cursor-1"));
+				.withIncrementalPage("cursor-0", listingsPage(List.of(soldOut), "cursor-1"))
+				.withIncrementalPage("cursor-1", emptyListingsPage());
 
 		run();
 
@@ -420,10 +418,10 @@ public class ScrapeSkinrTest {
 		var detail101 = detail(101, "Alpha");
 		var detail102 = detail(102, "Beta");
 		dispatcher
-				.withExistingListings(fullListingsJson(List.of(existing), "cursor-0", null))
+				.withExistingListings(fullListingsJson(List.of(existing), "cursor-0"))
 				.withExistingDetails(detailsJson(Map.of("101", detail101)))
-				.withIncrementalPage("cursor-0", listingsPage(List.of(incoming), "cursor-1", "cursor-0"))
-				.withIncrementalPage("cursor-1", listingsPage(List.of(), "cursor-2", "cursor-1"))
+				.withIncrementalPage("cursor-0", listingsPage(List.of(incoming), "cursor-1"))
+				.withIncrementalPage("cursor-1", emptyListingsPage())
 				.withDetail(102, detail102);
 		// skinr_id 101 is NOT registered — a fetch would return 404 causing an error
 
@@ -451,10 +449,10 @@ public class ScrapeSkinrTest {
 		var detail101 = detail(101, "Alpha");
 		var detail102 = detail(102, "Beta");
 		dispatcher
-				.withExistingListings(fullListingsJson(List.of(existing), "cursor-0", null))
+				.withExistingListings(fullListingsJson(List.of(existing), "cursor-0"))
 				.withExistingDetails(detailsJson(Map.of("101", detail101)))
-				.withIncrementalPage("cursor-0", listingsPage(List.of(incoming), "cursor-1", "cursor-0"))
-				.withIncrementalPage("cursor-1", listingsPage(List.of(), "cursor-2", "cursor-1"))
+				.withIncrementalPage("cursor-0", listingsPage(List.of(incoming), "cursor-1"))
+				.withIncrementalPage("cursor-1", emptyListingsPage())
 				.withDetail(102, detail102);
 
 		run();
@@ -478,7 +476,7 @@ public class ScrapeSkinrTest {
 	@SneakyThrows
 	void bothFilesUploadedToS3() {
 		dispatcher
-				.withFirstPageResponse(listingsPage(List.of(listing(1, "listed", 101)), "cursor-1", null))
+				.withFirstPageResponse(listingsPage(List.of(listing(1, "listed", 101)), "cursor-1"))
 				.withDetail(101, detail(101, "Alpha"));
 
 		run();
@@ -510,7 +508,7 @@ public class ScrapeSkinrTest {
 	@SneakyThrows
 	void dataIndexUpdatedForBothFiles() {
 		dispatcher
-				.withFirstPageResponse(listingsPage(List.of(listing(1, "listed", 101)), "cursor-1", null))
+				.withFirstPageResponse(listingsPage(List.of(listing(1, "listed", 101)), "cursor-1"))
 				.withDetail(101, detail(101, "Alpha"));
 
 		run();
@@ -619,21 +617,27 @@ public class ScrapeSkinrTest {
 	}
 
 	@SneakyThrows
-	private String listingsPage(List<ObjectNode> listings, String afterCursor, String beforeCursor) {
+	private String emptyListingsPage() {
+		return listingsPage(List.of(), null);
+	}
+
+	@SneakyThrows
+	private String listingsPage(List<ObjectNode> listings, String afterCursor) {
 		var array = objectMapper.createArrayNode();
 		listings.forEach(array::add);
-		var cursor = objectMapper.createObjectNode();
-		if (afterCursor != null) cursor.put("after", afterCursor);
-		if (beforeCursor != null) cursor.put("before", beforeCursor);
 		var root = objectMapper.createObjectNode();
 		root.set("listings", array);
-		root.set("cursor", cursor);
+		if (afterCursor != null) {
+			var cursor = objectMapper.createObjectNode();
+			cursor.put("after", afterCursor);
+			root.set("cursor", cursor);
+		}
 		return objectMapper.writeValueAsString(root);
 	}
 
 	@SneakyThrows
-	private String fullListingsJson(List<ObjectNode> listings, String afterCursor, String beforeCursor) {
-		return listingsPage(listings, afterCursor, beforeCursor);
+	private String fullListingsJson(List<ObjectNode> listings, String afterCursor) {
+		return listingsPage(listings, afterCursor);
 	}
 
 	@SneakyThrows
