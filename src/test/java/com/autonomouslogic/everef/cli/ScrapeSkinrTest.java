@@ -180,17 +180,18 @@ public class ScrapeSkinrTest {
 	@SneakyThrows
 	void firstRunFetchesDetailForEachSkinrId() {
 		var listings = List.of(listing(1, "listed", 101), listing(2, "listed", 102), listing(3, "listed", 103));
+		var detail101 = detail(101, "Alpha");
+		var detail102 = detail(102, "Beta");
+		var detail103 = detail(103, "Gamma");
 		dispatcher
 				.withFirstPageResponse(listingsPage(listings, "cursor-1", null))
-				.withDetail(101, detail(101, "Alpha"))
-				.withDetail(102, detail(102, "Beta"))
-				.withDetail(103, detail(103, "Gamma"));
+				.withDetail(101, detail101)
+				.withDetail(102, detail102)
+				.withDetail(103, detail103);
 
 		run();
 
-		var details = readLatestDetails();
-		assertEquals(Set.of("101", "102", "103"), details.keySet());
-		assertEquals("Alpha", details.get("101").get("name").asText());
+		assertEquals(Map.of("101", detail101, "102", detail102, "103", detail103), readLatestDetails());
 
 		assertRequestPaths(
 				"/cosmetics/skinr/101",
@@ -209,15 +210,14 @@ public class ScrapeSkinrTest {
 	@SneakyThrows
 	void firstRunFetchesEachSkinrDetailOnlyOnce() {
 		var listings = List.of(listing(1, "listed", 101), listing(2, "listed", 101));
+		var detail101 = detail(101, "Alpha");
 		dispatcher
 				.withFirstPageResponse(listingsPage(listings, "cursor-1", null))
-				.withDetailOnce(101, detail(101, "Alpha"));
+				.withDetailOnce(101, detail101);
 
 		run();
 
-		var details = readLatestDetails();
-		assertEquals(1, details.size());
-		assertTrue(details.containsKey("101"));
+		assertEquals(Map.of("101", detail101), readLatestDetails());
 
 		assertRequestPaths(
 				"/cosmetics/skinr/101",
@@ -417,18 +417,19 @@ public class ScrapeSkinrTest {
 	void subsequentRunSkipsAlreadyKnownSkinrDetails() {
 		var existing = listing(1, "listed", 101);
 		var incoming = listing(2, "listed", 102);
+		var detail101 = detail(101, "Alpha");
+		var detail102 = detail(102, "Beta");
 		dispatcher
 				.withExistingListings(fullListingsJson(List.of(existing), "cursor-0", null))
-				.withExistingDetails(detailsJson(Map.of("101", detail(101, "Alpha"))))
+				.withExistingDetails(detailsJson(Map.of("101", detail101)))
 				.withIncrementalPage("cursor-0", listingsPage(List.of(incoming), "cursor-1", "cursor-0"))
 				.withIncrementalPage("cursor-1", listingsPage(List.of(), "cursor-2", "cursor-1"))
-				.withDetail(102, detail(102, "Beta"));
+				.withDetail(102, detail102);
 		// skinr_id 101 is NOT registered — a fetch would return 404 causing an error
 
 		run();
 
-		var details = readLatestDetails();
-		assertEquals(Set.of("101", "102"), details.keySet());
+		assertEquals(Map.of("101", detail101, "102", detail102), readLatestDetails());
 
 		assertRequestPaths(
 				"/cosmetics/skinr/102",
@@ -447,18 +448,18 @@ public class ScrapeSkinrTest {
 	void subsequentRunMergesOldAndNewDetails() {
 		var existing = listing(1, "listed", 101);
 		var incoming = listing(2, "listed", 102);
+		var detail101 = detail(101, "Alpha");
+		var detail102 = detail(102, "Beta");
 		dispatcher
 				.withExistingListings(fullListingsJson(List.of(existing), "cursor-0", null))
-				.withExistingDetails(detailsJson(Map.of("101", detail(101, "Alpha"))))
+				.withExistingDetails(detailsJson(Map.of("101", detail101)))
 				.withIncrementalPage("cursor-0", listingsPage(List.of(incoming), "cursor-1", "cursor-0"))
 				.withIncrementalPage("cursor-1", listingsPage(List.of(), "cursor-2", "cursor-1"))
-				.withDetail(102, detail(102, "Beta"));
+				.withDetail(102, detail102);
 
 		run();
 
-		var details = readLatestDetails();
-		assertEquals("Alpha", details.get("101").get("name").asText());
-		assertEquals("Beta", details.get("102").get("name").asText());
+		assertEquals(Map.of("101", detail101, "102", detail102), readLatestDetails());
 
 		assertRequestPaths(
 				"/cosmetics/skinr/102",
@@ -595,8 +596,8 @@ public class ScrapeSkinrTest {
 				.createObjectNode()
 				.put("id", id)
 				.put("state", state)
-			.put("last_modified", "2024-01-01T00:00:00Z")
-			.put("seller_id", 1_000_000L + id)
+				.put("last_modified", "2024-01-01T00:00:00Z")
+				.put("seller_id", 1_000_000L + id)
 				.put("skinr_id", skinrId)
 				.put("created", "2024-01-01T00:00:00Z")
 				.put("expires", "2024-02-01T00:00:00Z")
@@ -612,8 +613,7 @@ public class ScrapeSkinrTest {
 				.put("creator_id", 2_000_000 + id)
 				.put("ship_type_id", 587)
 				.put("line", "Wrathful Gaze");
-		obj.set("layout", objectMapper.createObjectNode()
-					.put("pattern_blend_mode",  "normal"));
+		obj.set("layout", objectMapper.createObjectNode().put("pattern_blend_mode", "normal"));
 		obj.set("tier", objectMapper.createObjectNode().put("level", 6));
 		return obj;
 	}
