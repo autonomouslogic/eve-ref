@@ -162,7 +162,7 @@ public class ScrapeSkinrTest {
 		run();
 
 		var listings = readLatestListings();
-		assertEquals(Set.of(1L, 2L), listingIds(listings));
+		assertEquals(List.of(active, soldOut), listingsArray(listings));
 
 		assertRequestPaths(
 				"/cosmetics/skinr/101",
@@ -244,7 +244,7 @@ public class ScrapeSkinrTest {
 		run();
 
 		var listings = readLatestListings();
-		assertEquals(Set.of(1L), listingIds(listings));
+		assertEquals(List.of(existing), listingsArray(listings));
 		assertEquals("cursor-0", listings.get("cursor").get("after").asText());
 
 		assertRequestPaths(
@@ -272,7 +272,7 @@ public class ScrapeSkinrTest {
 		run();
 
 		var listings = readLatestListings();
-		assertEquals(Set.of(1L, 2L), listingIds(listings));
+		assertEquals(List.of(existing, incoming), listingsArray(listings));
 		assertEquals("cursor-1", listings.get("cursor").get("after").asText());
 
 		assertRequestPaths(
@@ -305,7 +305,7 @@ public class ScrapeSkinrTest {
 		run();
 
 		var listings = readLatestListings();
-		assertEquals(Set.of(1L, 2L, 3L), listingIds(listings));
+		assertEquals(List.of(existing, page1, page2), listingsArray(listings));
 		assertEquals("cursor-2", listings.get("cursor").get("after").asText());
 
 		assertRequestPaths(
@@ -336,9 +336,7 @@ public class ScrapeSkinrTest {
 		run();
 
 		var listings = readLatestListings();
-		var mergedList = listingsArray(listings);
-		assertEquals(1, mergedList.size());
-		assertEquals(99, mergedList.get(0).get("quantity").asInt());
+		assertEquals(List.of(updatedVersion), listingsArray(listings));
 
 		assertRequestPaths(
 				"/paragon-hub/skinr?limit=100&after=cursor-0",
@@ -372,7 +370,7 @@ public class ScrapeSkinrTest {
 		run();
 
 		var listings = readLatestListings();
-		assertEquals(Set.of(1L), listingIds(listings));
+		assertEquals(List.of(active), listingsArray(listings));
 
 		assertRequestPaths(
 				"/paragon-hub/skinr?limit=100&after=cursor-0",
@@ -398,7 +396,7 @@ public class ScrapeSkinrTest {
 		run();
 
 		var listings = readLatestListings();
-		assertEquals(Set.of(), listingIds(listings));
+		assertEquals(List.of(), listingsArray(listings));
 
 		assertRequestPaths(
 				"/paragon-hub/skinr?limit=100&after=cursor-0",
@@ -588,12 +586,6 @@ public class ScrapeSkinrTest {
 		arr.forEach(n -> result.add((ObjectNode) n));
 		result.sort((a, b) -> Long.compare(a.get("id").asLong(), b.get("id").asLong()));
 		return result;
-	}
-
-	private Set<Long> listingIds(ObjectNode listingsResponse) {
-		var ids = new HashSet<Long>();
-		listingsResponse.get("listings").forEach(n -> ids.add(n.get("id").asLong()));
-		return ids;
 	}
 
 	// --- Data builders ---
