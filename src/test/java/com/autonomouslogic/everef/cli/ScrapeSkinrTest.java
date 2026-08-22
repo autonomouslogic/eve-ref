@@ -334,7 +334,7 @@ public class ScrapeSkinrTest {
 		run();
 
 		var listings = readLatestListings();
-		assertEquals(List.of(updated), listingsArray(listings));
+		assertEquals(List.of(updated).toString(), listingsArray(listings).toString());
 
 		assertRequestPaths(
 				"/paragon-hub/skinr?limit=100&after=cursor-0",
