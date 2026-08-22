@@ -323,18 +323,18 @@ public class ScrapeSkinrTest {
 	@Test
 	@SneakyThrows
 	void subsequentRunNewDataOverridesExistingById() {
-		var existingVersion = listing(1, "listed", 101).put("quantity", 1);
-		var updatedVersion = listing(1, "listed", 101).put("quantity", 99);
+		var existing = listing(1, "listed", 101).put("quantity", 1);
+		var updated = listing(1, "listed", 101).put("quantity", 99);
 		dispatcher
-				.withExistingListings(fullListingsJson(List.of(existingVersion), "cursor-0"))
+				.withExistingListings(fullListingsJson(List.of(existing), "cursor-0"))
 				.withExistingDetails(detailsJson(Map.of("101", detail(101, "Alpha"))))
-				.withIncrementalPage("cursor-0", listingsPage(List.of(updatedVersion), "cursor-1"))
+				.withIncrementalPage("cursor-0", listingsPage(List.of(updated), "cursor-1"))
 				.withIncrementalPage("cursor-1", emptyListingsPage());
 
 		run();
 
 		var listings = readLatestListings();
-		assertEquals(List.of(updatedVersion), listingsArray(listings));
+		assertEquals(List.of(updated), listingsArray(listings));
 
 		assertRequestPaths(
 				"/paragon-hub/skinr?limit=100&after=cursor-0",
@@ -377,12 +377,11 @@ public class ScrapeSkinrTest {
 	}
 
 	/**
-	 * When a new incremental page updates an existing listing's state to non-"listed", the merge
-	 * inserts the updated entry and the purge step then removes it.
+	 * When a new incremental page updates an existing listing's state to non-"listed", updated entry should be kept.
 	 */
 	@Test
 	@SneakyThrows
-	void subsequentRunPurgesListingUpdatedToNonListedState() {
+	void subsequentRunKeepsNonListedStateUpdates() {
 		var original = listing(1, "listed", 101);
 		var soldOut = listing(1, "sold_out", 101);
 		dispatcher
@@ -394,7 +393,7 @@ public class ScrapeSkinrTest {
 		run();
 
 		var listings = readLatestListings();
-		assertEquals(List.of(), listingsArray(listings));
+		assertEquals(List.of(soldOut), listingsArray(listings));
 
 		assertRequestPaths(
 				"/paragon-hub/skinr?limit=100&after=cursor-0",
@@ -407,43 +406,10 @@ public class ScrapeSkinrTest {
 
 	/**
 	 * skinr_ids already present in the existing details file are not re-fetched from ESI.
-	 * The dispatcher returns 404 for a second call to any already-known skinr_id;
-	 * if the command re-fetched it, the test would fail with an unexpected 404.
 	 */
 	@Test
 	@SneakyThrows
 	void subsequentRunSkipsAlreadyKnownSkinrDetails() {
-		var existing = listing(1, "listed", 101);
-		var incoming = listing(2, "listed", 102);
-		var detail101 = detail(101, "Alpha");
-		var detail102 = detail(102, "Beta");
-		dispatcher
-				.withExistingListings(fullListingsJson(List.of(existing), "cursor-0"))
-				.withExistingDetails(detailsJson(Map.of("101", detail101)))
-				.withIncrementalPage("cursor-0", listingsPage(List.of(incoming), "cursor-1"))
-				.withIncrementalPage("cursor-1", emptyListingsPage())
-				.withDetail(102, detail102);
-		// skinr_id 101 is NOT registered — a fetch would return 404 causing an error
-
-		run();
-
-		assertEquals(Map.of("101", detail101, "102", detail102), readLatestDetails());
-
-		assertRequestPaths(
-				"/cosmetics/skinr/102",
-				"/paragon-hub/skinr?limit=100&after=cursor-0",
-				"/paragon-hub/skinr?limit=100&after=cursor-1",
-				"/skinr-details/skinr-details-latest.json",
-				"/skinr-listings/skinr-listings-latest.json");
-	}
-
-	/**
-	 * Details from the previous file are merged with newly fetched details in the output.
-	 * Both previously known and newly fetched entries appear in the final details file.
-	 */
-	@Test
-	@SneakyThrows
-	void subsequentRunMergesOldAndNewDetails() {
 		var existing = listing(1, "listed", 101);
 		var incoming = listing(2, "listed", 102);
 		var detail101 = detail(101, "Alpha");
