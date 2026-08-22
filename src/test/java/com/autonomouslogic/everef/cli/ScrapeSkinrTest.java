@@ -618,7 +618,7 @@ public class ScrapeSkinrTest {
 	// --- Data builders ---
 
 	private ObjectNode listing(long id, String state, int skinrId) {
-		return objectMapper
+		return reparse(objectMapper
 				.createObjectNode()
 				.put("id", id)
 				.put("state", state)
@@ -628,7 +628,7 @@ public class ScrapeSkinrTest {
 				.put("created", "2024-01-01T00:00:00Z")
 				.put("expires", "2024-02-01T00:00:00Z")
 				.put("quantity", 1)
-				.set("price", objectMapper.createObjectNode().put("isk", 425000000));
+				.set("price", objectMapper.createObjectNode().put("isk", 425000000)));
 	}
 
 	private ObjectNode detail(int id, String name) {
@@ -641,7 +641,7 @@ public class ScrapeSkinrTest {
 				.put("line", "Wrathful Gaze");
 		obj.set("layout", objectMapper.createObjectNode().put("pattern_blend_mode", "normal"));
 		obj.set("tier", objectMapper.createObjectNode().put("level", 6));
-		return obj;
+		return reparse(obj);
 	}
 
 	@SneakyThrows
@@ -797,5 +797,10 @@ public class ScrapeSkinrTest {
 					.addHeader("Content-Type", "application/json")
 					.setBody(json);
 		}
+	}
+
+	@SneakyThrows
+	private ObjectNode reparse(ObjectNode obj) {
+		return (ObjectNode) objectMapper.readTree(obj.toString());
 	}
 }
