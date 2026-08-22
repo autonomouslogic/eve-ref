@@ -711,6 +711,12 @@ public class ScrapeSkinrTest {
 				var url = request.getRequestUrl();
 				var path = url.encodedPath();
 
+				var compatibilityDate = request.getHeader("X-Compatibility-Date");
+				if (compatibilityDate == null || compatibilityDate.isBlank()) {
+					log.error("Missing X-Compatibility-Date header on request: {}", path);
+					return new MockResponse().setResponseCode(404);
+				}
+
 				// Existing-file downloads (DATA_BASE_URL)
 				if (path.equals("/" + SKINR_LISTINGS.createLatestPath())) {
 					return existingListings != null
