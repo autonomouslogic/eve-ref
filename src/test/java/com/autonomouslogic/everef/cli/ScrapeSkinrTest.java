@@ -735,13 +735,7 @@ public class ScrapeSkinrTest {
 				var url = request.getRequestUrl();
 				var path = url.encodedPath();
 
-				var compatibilityDate = request.getHeader("X-Compatibility-Date");
-				if (compatibilityDate == null || compatibilityDate.isBlank()) {
-					log.error("Missing X-Compatibility-Date header on request: {}", path);
-					return new MockResponse().setResponseCode(404);
-				}
-
-				// Existing-file downloads (DATA_BASE_URL)
+				// Existing-file downloads (DATA_BASE_URL) — no ESI header required
 				if (path.equals("/" + SKINR_LISTINGS.createLatestPath())) {
 					return existingListings != null
 							? mockJson(existingListings)
@@ -751,6 +745,13 @@ public class ScrapeSkinrTest {
 					return existingDetails != null
 							? mockJson(existingDetails)
 							: new MockResponse().setResponseCode(404);
+				}
+
+				// ESI endpoints require X-Compatibility-Date header
+				var compatibilityDate = request.getHeader("X-Compatibility-Date");
+				if (compatibilityDate == null || compatibilityDate.isBlank()) {
+					log.error("Missing X-Compatibility-Date header on request: {}", path);
+					return new MockResponse().setResponseCode(404);
 				}
 
 				// Paragon Hub listings endpoint
