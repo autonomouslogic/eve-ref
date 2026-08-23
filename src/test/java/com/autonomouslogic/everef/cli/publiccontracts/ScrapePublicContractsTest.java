@@ -2,7 +2,7 @@ package com.autonomouslogic.everef.cli.publiccontracts;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.lenient;
 
 import com.autonomouslogic.everef.esi.LocationPopulator;
 import com.autonomouslogic.everef.esi.MockLocationPopulatorModule;
@@ -111,7 +111,7 @@ public class ScrapePublicContractsTest {
 				.mockLocationPopulatorModule(new MockLocationPopulatorModule().setLocationPopulator(locationPopulator))
 				.build()
 				.inject(this);
-		when(locationPopulator.populate(any(), any())).thenAnswer(MockLocationPopulatorModule.mockPopulate());
+		lenient().when(locationPopulator.populate(any(), any())).thenAnswer(MockLocationPopulatorModule.mockPopulate());
 		server = new MockWebServer();
 		server.start(TestDataUtil.TEST_PORT);
 	}
@@ -660,12 +660,16 @@ public class ScrapePublicContractsTest {
 	}
 
 	/**
-	 * Existing archive has two auction contracts, each with bids. The ESI only returns one of them.
-	 * The missing auction contract should be removed along with its bids.
+	 * Existing archive has two auction contracts, each with items and bids. The ESI only returns one
+	 * of them. The missing auction contract should be removed along with its bids. Items are present in
+	 * the archive so that item re-fetching is suppressed (auction contracts with no archive items
+	 * trigger a fresh ESI item fetch).
 	 */
 	@Test
 	@SneakyThrows
 	void missingAuctionBidsRemovedFromArchive() {
+		var itemA = item(1200001, 34);
+		var itemB = item(1201001, 35);
 		var bidA = bid(1200901);
 		var bidB = bid(1201901);
 		var contractA = contract(1200).put("type", "auction");
@@ -673,13 +677,13 @@ public class ScrapePublicContractsTest {
 
 		var existingContracts = sortedByContractId(
 				expectedContracts(List.of(contractA), 10000001), expectedContracts(List.of(contractB), 10000001));
+		var existingItems = sortedByRecordId(expectedItems(1200, List.of(itemA)), expectedItems(1201, List.of(itemB)));
 		var existingBids = sortedByBidId(expectedBids(1200, List.of(bidA)), expectedBids(1201, List.of(bidB)));
-		var existingArchive = createExistingArchive(existingContracts, List.of(), existingBids);
+		var existingArchive = createExistingArchive(existingContracts, existingItems, existingBids);
 
 		server.setDispatcher(dispatcher()
 				.withRegion(10000001)
 				.withContracts(10000001, contractsJson(List.of(contractA)))
-				.withItems(1200, itemsJson(List.of()))
 				.withBids(1200, bidsJson(List.of(bidA)))
 				.withLatestArchive(existingArchive));
 		run();
@@ -691,7 +695,6 @@ public class ScrapePublicContractsTest {
 		assertRequestPaths(
 				"/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
 				"/latest/contracts/public/bids/1200?datasource=tranquility&language=en&page=1",
-				"/latest/contracts/public/items/1200?datasource=tranquility&language=en&page=1",
 				"/public-contracts/public-contracts-latest.v2.tar.bz2",
 				"/universe/regions/10000001/?datasource=tranquility",
 				"/universe/regions/?datasource=tranquility");
@@ -1247,24 +1250,29 @@ public class ScrapePublicContractsTest {
 	 * must not be re-fetched from ESI, but the dogma endpoint must be called to resolve the missing
 	 * roll. The item should appear in the dynamic store in the new archive.
 	 */
-	@Test
+	@ParameterizedTest
+	@ValueSource(strings = {"item_exchange", "auction"})
 	@SneakyThrows
-	void cachedDynamicItemWithMissingDynamicDataFetchesDogma() {
+	void cachedDynamicItemWithMissingDynamicDataFetchesDogma(String contractType) {
 		var typeId = 47804;
 		var item = abyssalItem(2500001, 2500001, typeId);
-		var contract = contract(2500).put("type", "item_exchange");
+		var contract = contract(2500).put("type", contractType);
 		var metaGroupsJson = "{\"meta_group_id\":15,\"type_ids\":[" + typeId + "]}";
 
 		var existingContracts = expectedContracts(List.of(contract), 10000001);
 		var existingItems = expectedItems(2500, List.of(item));
 		var existingArchive = createExistingArchive(existingContracts, existingItems);
 
-		server.setDispatcher(dispatcher()
+		var d = dispatcher()
 				.withRegion(10000001)
 				.withContracts(10000001, contractsJson(List.of(contract)))
 				.withDynamicItems(typeId, 2500001, dynamicItemJson())
 				.withLatestArchive(existingArchive)
-				.withMetaGroups(metaGroupsJson));
+				.withMetaGroups(metaGroupsJson);
+		if ("auction".equals(contractType)) {
+			d.withBids(2500, bidsJson(List.of()));
+		}
+		server.setDispatcher(d);
 		run();
 
 		assertEquals(expectedContracts(List.of(contract), 10000001), records.get("contracts.csv"));
@@ -1276,13 +1284,24 @@ public class ScrapePublicContractsTest {
 		assertEquals(List.of(), records.get("contract_non_dynamic_items.csv"));
 		assertEquals(List.of(), records.get("contract_bids.csv"));
 		assertLatestFileMatches();
-		assertRequestPaths(
-				"/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
-				"/latest/dogma/dynamic/items/47804/2500001/?datasource=tranquility&language=en",
-				"/meta_groups/15",
-				"/public-contracts/public-contracts-latest.v2.tar.bz2",
-				"/universe/regions/10000001/?datasource=tranquility",
-				"/universe/regions/?datasource=tranquility");
+		if ("auction".equals(contractType)) {
+			assertRequestPaths(
+					"/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
+					"/latest/contracts/public/bids/2500?datasource=tranquility&language=en&page=1",
+					"/latest/dogma/dynamic/items/47804/2500001/?datasource=tranquility&language=en",
+					"/meta_groups/15",
+					"/public-contracts/public-contracts-latest.v2.tar.bz2",
+					"/universe/regions/10000001/?datasource=tranquility",
+					"/universe/regions/?datasource=tranquility");
+		} else {
+			assertRequestPaths(
+					"/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
+					"/latest/dogma/dynamic/items/47804/2500001/?datasource=tranquility&language=en",
+					"/meta_groups/15",
+					"/public-contracts/public-contracts-latest.v2.tar.bz2",
+					"/universe/regions/10000001/?datasource=tranquility",
+					"/universe/regions/?datasource=tranquility");
+		}
 		assertDataIndex();
 	}
 
