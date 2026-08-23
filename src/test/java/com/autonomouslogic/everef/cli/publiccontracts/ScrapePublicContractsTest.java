@@ -986,6 +986,44 @@ public class ScrapePublicContractsTest {
 	}
 
 	/**
+	 * Existing archive has one contract with an abyssal item, dynamic data, attributes, and effects.
+	 * The contract is no longer returned by the ESI (expired or finalized). All dynamic items,
+	 * attributes, and effects belonging to that contract must be cleared from the new archive.
+	 */
+	@ParameterizedTest
+	@ValueSource(strings = {"item_exchange", "auction"})
+	@SneakyThrows
+	void expiredContractDynamicDataCleared(String contractType) {
+		var typeId = 47804;
+		var item = abyssalItem(3000001, 3000001, typeId);
+		var contract = contract(3000).put("type", contractType);
+
+		var existingContracts = expectedContracts(List.of(contract), 10000001);
+		var existingItems = expectedItems(3000, List.of(item));
+		var existingDynamic = expectedDynamicItems(3000, 3000001);
+		var existingAttributes = expectedDynamicAttributes(3000, 3000001);
+		var existingEffects = expectedDynamicEffects(3000, 3000001);
+		var existingArchive = createExistingArchive(
+				existingContracts, existingItems, List.of(), existingDynamic, existingAttributes, existingEffects);
+
+		server.setDispatcher(dispatcher()
+				.withRegion(10000001)
+				.withContracts(10000001, contractsJson(List.of()))
+				.withLatestArchive(existingArchive));
+		run();
+
+		assertEquals(List.of(), records.get("contracts.csv"));
+		assertNoSubData();
+		assertLatestFileMatches();
+		assertRequestPaths(
+				"/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
+				"/public-contracts/public-contracts-latest.v2.tar.bz2",
+				"/universe/regions/10000001/?datasource=tranquility",
+				"/universe/regions/?datasource=tranquility");
+		assertDataIndex();
+	}
+
+	/**
 	 * No previous archive. One contract with one abyssal item where the ESI returns 520. The item
 	 * should be stored in contract_non_dynamic_items.csv and not in contract_dynamic_items.csv.
 	 */
