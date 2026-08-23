@@ -155,6 +155,11 @@ public class ContractFetcher {
 
 	private void fetchContractItems(long contractId) {
 		if (contractsWithItems.contains(contractId)) {
+			var cachedItems = itemsStore.values().stream()
+					.filter(item -> item.get("contract_id").asLong() == contractId)
+					.map(item -> (ObjectNode) item)
+					.toList();
+			contractAbyssalFetcher.retryMissingDogmaForCachedItems(contractId, cachedItems);
 			return;
 		}
 		var items = fetchContractSub("items", ContractsFileBuilder.ITEM_ID, itemsStore, contractId);
