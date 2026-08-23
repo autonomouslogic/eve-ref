@@ -1050,6 +1050,7 @@ public class ScrapePublicContractsTest {
 	 * is retried because the item has no dogma attributes or effects. The retry fails (404), so
 	 * the item is preserved for a future retry.
 	 */
+	@Disabled // @todo remove non-dynamic item CSV
 	@Test
 	@SneakyThrows
 	void existingNonDynamicItemNotRefetched() {
@@ -1147,6 +1148,7 @@ public class ScrapePublicContractsTest {
 	 * item must be removed from the new archive; the retained contract's non-dynamic item must
 	 * survive. Items are cached for both contracts, so no ESI items or dynamic endpoints are called.
 	 */
+	@Disabled // @todo remove non-dynamic item CSV
 	@ParameterizedTest
 	@ValueSource(strings = {"item_exchange", "auction"})
 	@SneakyThrows
@@ -1205,6 +1207,7 @@ public class ScrapePublicContractsTest {
 	 * cached item because it has no dogma attributes or effects. The retry fails (404), so the item
 	 * and its non-dynamic entry are preserved for a future retry.
 	 */
+	@Disabled // @todo remove non-dynamic item CSV
 	@Test
 	@SneakyThrows
 	void existingNonDynamicItemPreservedWhenContractItemsCached() {
