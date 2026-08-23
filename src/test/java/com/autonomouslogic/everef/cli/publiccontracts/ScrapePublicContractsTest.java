@@ -66,7 +66,8 @@ public class ScrapePublicContractsTest {
 	static final String BUCKET_NAME = "data-bucket";
 
 	/** Minimal meta-group 15 (Abyssal) response with no type IDs, sufficient for non-abyssal item tests. */
-	private static final String NON_ABYSSAL_META_GROUPS_JSON = "{\"meta_group_id\":15,\"type_ids\":[]}";
+	private static final String NON_ABYSSAL_META_GROUPS_JSON = """
+		{"meta_group_id":15,"type_ids":[]}""";
 
 	private static final String ARCHIVE_FILE =
 			"base/public-contracts/history/2020/2020-02-03/public-contracts-2020-02-03_04-05-06.v2.tar.bz2";
@@ -120,6 +121,8 @@ public class ScrapePublicContractsTest {
 	void after() {
 		server.close();
 	}
+
+	// ############ Contracts
 
 	/**
 	 * No previous archive on S3. A single courier contract in one region. Courier contracts have no
@@ -282,9 +285,11 @@ public class ScrapePublicContractsTest {
 		assertDataIndex();
 	}
 
+	// ############ Items
+
 	/**
 	 * No previous archive. One non-abyssal item on a single contract. Both item_exchange and
-	 * auction contracts fetch items; auction additionally fetches bids (none configured here).
+	 * auction contracts fetch items.
 	 */
 	@ParameterizedTest
 	@ValueSource(strings = {"item_exchange", "auction"})
@@ -371,6 +376,175 @@ public class ScrapePublicContractsTest {
 	}
 
 	/**
+	 * Existing archive has two item_exchange contracts, each with items. The ESI only returns one of
+	 * them. The missing item_exchange contract should be removed from the new archive along with its
+	 * items.
+	 */
+	@Test
+	@SneakyThrows
+	void missingItemExchangeContractItemsRemovedFromArchive() {
+		var itemA = item(1000001, 34);
+		var itemB = item(1001001, 35);
+		var contractA = contract(1000).put("type", "item_exchange");
+		var contractB = contract(1001).put("type", "item_exchange");
+
+		var existingContracts = sortedByContractId(
+				expectedContracts(List.of(contractA), 10000001), expectedContracts(List.of(contractB), 10000001));
+		var existingItems = sortedByRecordId(expectedItems(1000, List.of(itemA)), expectedItems(1001, List.of(itemB)));
+		var existingArchive = createExistingArchive(existingContracts, existingItems);
+
+		server.setDispatcher(dispatcher()
+				.withRegion(10000001)
+				.withContracts(10000001, contractsJson(List.of(contractA)))
+				.withLatestArchive(existingArchive));
+		run();
+
+		assertEquals(expectedContracts(List.of(contractA), 10000001), records.get("contracts.csv"));
+		assertEquals(expectedItems(1000, List.of(itemA)), records.get("contract_items.csv"));
+		assertNoSubDataExceptItems();
+		assertLatestFileMatches();
+		assertRequestPaths(
+				"/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
+				"/public-contracts/public-contracts-latest.v2.tar.bz2",
+				"/universe/regions/10000001/?datasource=tranquility",
+				"/universe/regions/?datasource=tranquility");
+		assertDataIndex();
+	}
+	/**
+	 * Existing archive has an item_exchange contract with items. The ESI returns that same contract
+	 * plus a new item_exchange contract. Items for the existing contract should not be re-fetched;
+	 * items for the new contract should be fetched.
+	 */
+	@Test
+	@SneakyThrows
+	void existingItemExchangeItemsNotRefetched() {
+		var itemA = item(1100001, 34);
+		var itemC = item(1102001, 36);
+		var contractA = contract(1100).put("type", "item_exchange");
+		var contractC = contract(1102).put("type", "item_exchange");
+
+		var existingContracts = expectedContracts(List.of(contractA), 10000001);
+		var existingItems = expectedItems(1100, List.of(itemA));
+		var existingArchive = createExistingArchive(existingContracts, existingItems);
+
+		server.setDispatcher(dispatcher()
+				.withRegion(10000001)
+				.withContracts(10000001, contractsJson(List.of(contractA, contractC)))
+				.withItems(1102, itemsJson(List.of(itemC)))
+				.withLatestArchive(existingArchive)
+				.withMetaGroups(NON_ABYSSAL_META_GROUPS_JSON));
+		run();
+
+		assertEquals(
+				sortedByContractId(
+						expectedContracts(List.of(contractA), 10000001),
+						expectedContracts(List.of(contractC), 10000001)),
+				records.get("contracts.csv"));
+		assertEquals(
+				sortedByRecordId(expectedItems(1100, List.of(itemA)), expectedItems(1102, List.of(itemC))),
+				records.get("contract_items.csv"));
+		assertNoSubDataExceptItems();
+		assertLatestFileMatches();
+		assertRequestPaths(
+				"/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
+				"/latest/contracts/public/items/1102?datasource=tranquility&language=en&page=1",
+				"/meta_groups/15",
+				"/public-contracts/public-contracts-latest.v2.tar.bz2",
+				"/universe/regions/10000001/?datasource=tranquility",
+				"/universe/regions/?datasource=tranquility");
+		assertDataIndex();
+	}
+	/**
+	 * No previous archive. Contract items endpoint returns 404. The contract should appear in the
+	 * archive with no items saved for it.
+	 */
+	@Disabled // @TODO causes a timeout
+	@ParameterizedTest
+	@ValueSource(strings = {"item_exchange", "auction"})
+	@SneakyThrows
+	void contractItems404ResultsInNoItemsSaved(String contractType) {
+		var contract = contract(2100).put("type", contractType);
+		server.setDispatcher(
+				dispatcher().withRegion(10000001).withContracts(10000001, contractsJson(List.of(contract))));
+		run();
+
+		assertEquals(expectedContracts(List.of(contract), 10000001), records.get("contracts.csv"));
+		assertEquals(List.of(), records.get("contract_items.csv"));
+		assertNoSubDataExceptItems();
+		assertLatestFileMatches();
+		if ("auction".equals(contractType)) {
+			assertRequestPaths(
+					"/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
+					"/latest/contracts/public/bids/2100?datasource=tranquility&language=en&page=1",
+					"/latest/contracts/public/items/2100?datasource=tranquility&language=en&page=1",
+					"/public-contracts/public-contracts-latest.v2.tar.bz2",
+					"/universe/regions/10000001/?datasource=tranquility",
+					"/universe/regions/?datasource=tranquility");
+		} else {
+			assertRequestPaths(
+					"/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
+					"/latest/contracts/public/items/2100?datasource=tranquility&language=en&page=1",
+					"/public-contracts/public-contracts-latest.v2.tar.bz2",
+					"/universe/regions/10000001/?datasource=tranquility",
+					"/universe/regions/?datasource=tranquility");
+		}
+		assertDataIndex();
+	}
+
+	/**
+	 * Existing archive has a contract with no items. The ESI returns the same contract. Items should
+	 * be re-fetched since the archive has no items for that contract.
+	 */
+	@ParameterizedTest
+	@ValueSource(strings = {"item_exchange", "auction"})
+	@SneakyThrows
+	void missingItemsInArchiveRetried(String contractType) {
+		var item = item(2200001, 34);
+		var contract = contract(2200).put("type", contractType);
+
+		var existingContracts = expectedContracts(List.of(contract), 10000001);
+		var existingArchive = createExistingArchive(existingContracts);
+
+		var d = dispatcher()
+				.withRegion(10000001)
+				.withContracts(10000001, contractsJson(List.of(contract)))
+				.withItems(2200, itemsJson(List.of(item)))
+				.withLatestArchive(existingArchive)
+				.withMetaGroups(NON_ABYSSAL_META_GROUPS_JSON);
+		if ("auction".equals(contractType)) {
+			d.withBids(2200, bidsJson(List.of()));
+		}
+		server.setDispatcher(d);
+		run();
+
+		assertEquals(expectedContracts(List.of(contract), 10000001), records.get("contracts.csv"));
+		assertEquals(expectedItems(2200, List.of(item)), records.get("contract_items.csv"));
+		assertNoSubDataExceptItems();
+		assertLatestFileMatches();
+		if ("auction".equals(contractType)) {
+			assertRequestPaths(
+					"/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
+					"/latest/contracts/public/bids/2200?datasource=tranquility&language=en&page=1",
+					"/latest/contracts/public/items/2200?datasource=tranquility&language=en&page=1",
+					"/meta_groups/15",
+					"/public-contracts/public-contracts-latest.v2.tar.bz2",
+					"/universe/regions/10000001/?datasource=tranquility",
+					"/universe/regions/?datasource=tranquility");
+		} else {
+			assertRequestPaths(
+					"/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
+					"/latest/contracts/public/items/2200?datasource=tranquility&language=en&page=1",
+					"/meta_groups/15",
+					"/public-contracts/public-contracts-latest.v2.tar.bz2",
+					"/universe/regions/10000001/?datasource=tranquility",
+					"/universe/regions/?datasource=tranquility");
+		}
+		assertDataIndex();
+	}
+
+	// ############ Bids
+
+	/**
 	 * No previous archive. Single auction contract with one bid. Both the contract and the bid
 	 * should appear in the archive.
 	 */
@@ -432,87 +606,6 @@ public class ScrapePublicContractsTest {
 				"/latest/contracts/public/bids/950?datasource=tranquility&language=en&page=1",
 				"/latest/contracts/public/bids/950?datasource=tranquility&language=en&page=2",
 				"/latest/contracts/public/items/950?datasource=tranquility&language=en&page=1",
-				"/meta_groups/15",
-				"/public-contracts/public-contracts-latest.v2.tar.bz2",
-				"/universe/regions/10000001/?datasource=tranquility",
-				"/universe/regions/?datasource=tranquility");
-		assertDataIndex();
-	}
-
-	/**
-	 * Existing archive has two item_exchange contracts, each with items. The ESI only returns one of
-	 * them. The missing item_exchange contract should be removed from the new archive along with its
-	 * items.
-	 */
-	@Test
-	@SneakyThrows
-	void missingItemExchangeContractItemsRemovedFromArchive() {
-		var itemA = item(1000001, 34);
-		var itemB = item(1001001, 35);
-		var contractA = contract(1000).put("type", "item_exchange");
-		var contractB = contract(1001).put("type", "item_exchange");
-
-		var existingContracts = sortedByContractId(
-				expectedContracts(List.of(contractA), 10000001), expectedContracts(List.of(contractB), 10000001));
-		var existingItems = sortedByRecordId(expectedItems(1000, List.of(itemA)), expectedItems(1001, List.of(itemB)));
-		var existingArchive = createExistingArchive(existingContracts, existingItems);
-
-		server.setDispatcher(dispatcher()
-				.withRegion(10000001)
-				.withContracts(10000001, contractsJson(List.of(contractA)))
-				.withLatestArchive(existingArchive));
-		run();
-
-		assertEquals(expectedContracts(List.of(contractA), 10000001), records.get("contracts.csv"));
-		assertEquals(expectedItems(1000, List.of(itemA)), records.get("contract_items.csv"));
-		assertNoSubDataExceptItems();
-		assertLatestFileMatches();
-		assertRequestPaths(
-				"/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
-				"/public-contracts/public-contracts-latest.v2.tar.bz2",
-				"/universe/regions/10000001/?datasource=tranquility",
-				"/universe/regions/?datasource=tranquility");
-		assertDataIndex();
-	}
-
-	/**
-	 * Existing archive has an item_exchange contract with items. The ESI returns that same contract
-	 * plus a new item_exchange contract. Items for the existing contract should not be re-fetched;
-	 * items for the new contract should be fetched.
-	 */
-	@Test
-	@SneakyThrows
-	void existingItemExchangeItemsNotRefetched() {
-		var itemA = item(1100001, 34);
-		var itemC = item(1102001, 36);
-		var contractA = contract(1100).put("type", "item_exchange");
-		var contractC = contract(1102).put("type", "item_exchange");
-
-		var existingContracts = expectedContracts(List.of(contractA), 10000001);
-		var existingItems = expectedItems(1100, List.of(itemA));
-		var existingArchive = createExistingArchive(existingContracts, existingItems);
-
-		server.setDispatcher(dispatcher()
-				.withRegion(10000001)
-				.withContracts(10000001, contractsJson(List.of(contractA, contractC)))
-				.withItems(1102, itemsJson(List.of(itemC)))
-				.withLatestArchive(existingArchive)
-				.withMetaGroups(NON_ABYSSAL_META_GROUPS_JSON));
-		run();
-
-		assertEquals(
-				sortedByContractId(
-						expectedContracts(List.of(contractA), 10000001),
-						expectedContracts(List.of(contractC), 10000001)),
-				records.get("contracts.csv"));
-		assertEquals(
-				sortedByRecordId(expectedItems(1100, List.of(itemA)), expectedItems(1102, List.of(itemC))),
-				records.get("contract_items.csv"));
-		assertNoSubDataExceptItems();
-		assertLatestFileMatches();
-		assertRequestPaths(
-				"/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
-				"/latest/contracts/public/items/1102?datasource=tranquility&language=en&page=1",
 				"/meta_groups/15",
 				"/public-contracts/public-contracts-latest.v2.tar.bz2",
 				"/universe/regions/10000001/?datasource=tranquility",
@@ -600,8 +693,47 @@ public class ScrapePublicContractsTest {
 	}
 
 	/**
+	 * Existing archive has an auction contract with items and bids. The ESI returns the same
+	 * contract; items are not re-fetched. The bids endpoint returns 404. The old bids from the
+	 * archive should be preserved in the new archive.
+	 */
+	@Test
+	@SneakyThrows
+	void auctionBids404FallsBackToArchiveBids() {
+		var item = item(2000001, 34);
+		var bid = bid(2000901);
+		var contract = contract(2000).put("type", "auction");
+
+		var existingContracts = expectedContracts(List.of(contract), 10000001);
+		var existingItems = expectedItems(2000, List.of(item));
+		var existingBids = expectedBids(2000, List.of(bid));
+		var existingArchive = createExistingArchive(existingContracts, existingItems, existingBids);
+
+		server.setDispatcher(dispatcher()
+				.withRegion(10000001)
+				.withContracts(10000001, contractsJson(List.of(contract)))
+				.withLatestArchive(existingArchive));
+		run();
+
+		assertEquals(expectedContracts(List.of(contract), 10000001), records.get("contracts.csv"));
+		assertEquals(expectedItems(2000, List.of(item)), records.get("contract_items.csv"));
+		assertEquals(expectedBids(2000, List.of(bid)), records.get("contract_bids.csv"));
+		assertNoSubDataExceptItemsAndBids();
+		assertLatestFileMatches();
+		assertRequestPaths(
+				"/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
+				"/latest/contracts/public/bids/2000?datasource=tranquility&language=en&page=1",
+				"/public-contracts/public-contracts-latest.v2.tar.bz2",
+				"/universe/regions/10000001/?datasource=tranquility",
+				"/universe/regions/?datasource=tranquility");
+		assertDataIndex();
+	}
+
+	// ############ Dynamic items
+
+	/**
 	 * No previous archive. One contract with one abyssal (dynamic) item. Both item_exchange and
-	 * auction contracts fetch items; auction additionally fetches bids. The contract, item, dynamic
+	 * auction contracts fetch items. The contract, item, dynamic
 	 * item attributes, and effects should all appear in the archive.
 	 */
 	@ParameterizedTest
@@ -663,7 +795,7 @@ public class ScrapePublicContractsTest {
 	/**
 	 * Existing archive has one contract with an abyssal item. ESI returns that contract plus a new
 	 * one with another abyssal item. The existing dynamic item should not be re-fetched from the ESI;
-	 * only the new contract's dynamic item requires a fetch. Auction contracts always re-fetch bids.
+	 * only the new contract's dynamic item requires a fetch.
 	 */
 	@ParameterizedTest
 	@ValueSource(strings = {"item_exchange", "auction"})
@@ -957,131 +1089,6 @@ public class ScrapePublicContractsTest {
 				"/universe/regions/10000001/?datasource=tranquility",
 				"/universe/regions/?datasource=tranquility",
 				"/universe/types/47804/?datasource=tranquility");
-		assertDataIndex();
-	}
-
-	/**
-	 * Existing archive has an auction contract with items and bids. The ESI returns the same
-	 * contract; items are not re-fetched. The bids endpoint returns 404. The old bids from the
-	 * archive should be preserved in the new archive.
-	 */
-	@Test
-	@SneakyThrows
-	void auctionBids404FallsBackToArchiveBids() {
-		var item = item(2000001, 34);
-		var bid = bid(2000901);
-		var contract = contract(2000).put("type", "auction");
-
-		var existingContracts = expectedContracts(List.of(contract), 10000001);
-		var existingItems = expectedItems(2000, List.of(item));
-		var existingBids = expectedBids(2000, List.of(bid));
-		var existingArchive = createExistingArchive(existingContracts, existingItems, existingBids);
-
-		server.setDispatcher(dispatcher()
-				.withRegion(10000001)
-				.withContracts(10000001, contractsJson(List.of(contract)))
-				.withLatestArchive(existingArchive));
-		run();
-
-		assertEquals(expectedContracts(List.of(contract), 10000001), records.get("contracts.csv"));
-		assertEquals(expectedItems(2000, List.of(item)), records.get("contract_items.csv"));
-		assertEquals(expectedBids(2000, List.of(bid)), records.get("contract_bids.csv"));
-		assertNoSubDataExceptItemsAndBids();
-		assertLatestFileMatches();
-		assertRequestPaths(
-				"/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
-				"/latest/contracts/public/bids/2000?datasource=tranquility&language=en&page=1",
-				"/public-contracts/public-contracts-latest.v2.tar.bz2",
-				"/universe/regions/10000001/?datasource=tranquility",
-				"/universe/regions/?datasource=tranquility");
-		assertDataIndex();
-	}
-
-	/**
-	 * No previous archive. Contract items endpoint returns 404. The contract should appear in the
-	 * archive with no items saved for it.
-	 */
-	@Disabled // @TODO causes a timeout
-	@ParameterizedTest
-	@ValueSource(strings = {"item_exchange", "auction"})
-	@SneakyThrows
-	void contractItems404ResultsInNoItemsSaved(String contractType) {
-		var contract = contract(2100).put("type", contractType);
-		server.setDispatcher(
-				dispatcher().withRegion(10000001).withContracts(10000001, contractsJson(List.of(contract))));
-		run();
-
-		assertEquals(expectedContracts(List.of(contract), 10000001), records.get("contracts.csv"));
-		assertEquals(List.of(), records.get("contract_items.csv"));
-		assertNoSubDataExceptItems();
-		assertLatestFileMatches();
-		if ("auction".equals(contractType)) {
-			assertRequestPaths(
-					"/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
-					"/latest/contracts/public/bids/2100?datasource=tranquility&language=en&page=1",
-					"/latest/contracts/public/items/2100?datasource=tranquility&language=en&page=1",
-					"/public-contracts/public-contracts-latest.v2.tar.bz2",
-					"/universe/regions/10000001/?datasource=tranquility",
-					"/universe/regions/?datasource=tranquility");
-		} else {
-			assertRequestPaths(
-					"/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
-					"/latest/contracts/public/items/2100?datasource=tranquility&language=en&page=1",
-					"/public-contracts/public-contracts-latest.v2.tar.bz2",
-					"/universe/regions/10000001/?datasource=tranquility",
-					"/universe/regions/?datasource=tranquility");
-		}
-		assertDataIndex();
-	}
-
-	/**
-	 * Existing archive has a contract with no items. The ESI returns the same contract. Items should
-	 * be re-fetched since the archive has no items for that contract.
-	 */
-	@ParameterizedTest
-	@ValueSource(strings = {"item_exchange", "auction"})
-	@SneakyThrows
-	void missingItemsInArchiveRetried(String contractType) {
-		var item = item(2200001, 34);
-		var contract = contract(2200).put("type", contractType);
-
-		var existingContracts = expectedContracts(List.of(contract), 10000001);
-		var existingArchive = createExistingArchive(existingContracts);
-
-		var d = dispatcher()
-				.withRegion(10000001)
-				.withContracts(10000001, contractsJson(List.of(contract)))
-				.withItems(2200, itemsJson(List.of(item)))
-				.withLatestArchive(existingArchive)
-				.withMetaGroups(NON_ABYSSAL_META_GROUPS_JSON);
-		if ("auction".equals(contractType)) {
-			d.withBids(2200, bidsJson(List.of()));
-		}
-		server.setDispatcher(d);
-		run();
-
-		assertEquals(expectedContracts(List.of(contract), 10000001), records.get("contracts.csv"));
-		assertEquals(expectedItems(2200, List.of(item)), records.get("contract_items.csv"));
-		assertNoSubDataExceptItems();
-		assertLatestFileMatches();
-		if ("auction".equals(contractType)) {
-			assertRequestPaths(
-					"/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
-					"/latest/contracts/public/bids/2200?datasource=tranquility&language=en&page=1",
-					"/latest/contracts/public/items/2200?datasource=tranquility&language=en&page=1",
-					"/meta_groups/15",
-					"/public-contracts/public-contracts-latest.v2.tar.bz2",
-					"/universe/regions/10000001/?datasource=tranquility",
-					"/universe/regions/?datasource=tranquility");
-		} else {
-			assertRequestPaths(
-					"/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
-					"/latest/contracts/public/items/2200?datasource=tranquility&language=en&page=1",
-					"/meta_groups/15",
-					"/public-contracts/public-contracts-latest.v2.tar.bz2",
-					"/universe/regions/10000001/?datasource=tranquility",
-					"/universe/regions/?datasource=tranquility");
-		}
 		assertDataIndex();
 	}
 
