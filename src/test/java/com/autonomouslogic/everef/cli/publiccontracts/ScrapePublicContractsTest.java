@@ -1184,6 +1184,199 @@ public class ScrapePublicContractsTest {
 		assertDataIndex();
 	}
 
+	/**
+	 * Existing archive has a contract with cached items that include an abyssal item, but the dynamic
+	 * data is absent (dogma call failed on a prior run). The contract is still active on ESI. Items
+	 * must not be re-fetched from ESI, but the dogma endpoint must be called to resolve the missing
+	 * roll. The item should appear in the dynamic store in the new archive.
+	 */
+	@Test
+	@SneakyThrows
+	void cachedAbyssalItemWithMissingDynamicDataFetchesDogma() {
+		var typeId = 47804;
+		var item = abyssalItem(2500001, 2500001, typeId);
+		var contract = contract(2500).put("type", "item_exchange");
+		var metaGroupsJson = "{\"meta_group_id\":15,\"type_ids\":[" + typeId + "]}";
+
+		var existingContracts = expectedContracts(List.of(contract), 10000001);
+		var existingItems = expectedItems(2500, List.of(item));
+		var existingArchive = createExistingArchive(existingContracts, existingItems);
+
+		server.setDispatcher(dispatcher()
+				.withRegion(10000001)
+				.withContracts(10000001, contractsJson(List.of(contract)))
+				.withDynamicItems(typeId, 2500001, dynamicItemJson())
+				.withLatestArchive(existingArchive)
+				.withMetaGroups(metaGroupsJson));
+		run();
+
+		assertEquals(expectedContracts(List.of(contract), 10000001), records.get("contracts.csv"));
+		assertEquals(expectedItems(2500, List.of(item)), records.get("contract_items.csv"));
+		assertEquals(expectedDynamicItems(2500, 2500001), records.get("contract_dynamic_items.csv"));
+		assertEquals(
+				expectedDynamicAttributes(2500, 2500001),
+				records.get("contract_dynamic_items_dogma_attributes.csv"));
+		assertEquals(expectedDynamicEffects(2500, 2500001), records.get("contract_dynamic_items_dogma_effects.csv"));
+		assertEquals(List.of(), records.get("contract_non_dynamic_items.csv"));
+		assertEquals(List.of(), records.get("contract_bids.csv"));
+		assertLatestFileMatches();
+		assertRequestPaths(
+				"/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
+				"/latest/dogma/dynamic/items/47804/2500001/?datasource=tranquility&language=en",
+				"/meta_groups/15",
+				"/public-contracts/public-contracts-latest.v2.tar.bz2",
+				"/universe/regions/10000001/?datasource=tranquility",
+				"/universe/regions/?datasource=tranquility");
+		assertDataIndex();
+	}
+
+	/**
+	 * Existing archive has a contract with cached items that include an abyssal item, but the dynamic
+	 * data is absent (dogma call failed on a prior run). The contract is no longer present on ESI
+	 * (expired). The item and its dynamic data should still be fetched and included in the new
+	 * snapshot to backfill the missing roll, even though the contract itself is not in the new archive.
+	 */
+	@Test
+	@SneakyThrows
+	void expiredContractCachedAbyssalItemDogmaBackfilled() {
+		var typeId = 47804;
+		var item = abyssalItem(2600001, 2600001, typeId);
+		var contract = contract(2600).put("type", "item_exchange");
+		var metaGroupsJson = "{\"meta_group_id\":15,\"type_ids\":[" + typeId + "]}";
+
+		var existingContracts = expectedContracts(List.of(contract), 10000001);
+		var existingItems = expectedItems(2600, List.of(item));
+		var existingArchive = createExistingArchive(existingContracts, existingItems);
+
+		server.setDispatcher(dispatcher()
+				.withRegion(10000001)
+				.withContracts(10000001, contractsJson(List.of()))
+				.withDynamicItems(typeId, 2600001, dynamicItemJson())
+				.withLatestArchive(existingArchive)
+				.withMetaGroups(metaGroupsJson));
+		run();
+
+		assertEquals(List.of(), records.get("contracts.csv"));
+		assertEquals(expectedItems(2600, List.of(item)), records.get("contract_items.csv"));
+		assertEquals(expectedDynamicItems(2600, 2600001), records.get("contract_dynamic_items.csv"));
+		assertEquals(
+				expectedDynamicAttributes(2600, 2600001),
+				records.get("contract_dynamic_items_dogma_attributes.csv"));
+		assertEquals(expectedDynamicEffects(2600, 2600001), records.get("contract_dynamic_items_dogma_effects.csv"));
+		assertEquals(List.of(), records.get("contract_non_dynamic_items.csv"));
+		assertEquals(List.of(), records.get("contract_bids.csv"));
+		assertLatestFileMatches();
+		assertRequestPaths(
+				"/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
+				"/latest/dogma/dynamic/items/47804/2600001/?datasource=tranquility&language=en",
+				"/meta_groups/15",
+				"/public-contracts/public-contracts-latest.v2.tar.bz2",
+				"/universe/regions/10000001/?datasource=tranquility",
+				"/universe/regions/?datasource=tranquility");
+		assertDataIndex();
+	}
+
+	/**
+	 * Existing archive has a contract with cached items that include an abyssal item, but the dynamic
+	 * data is absent (dogma call failed on a prior run). The contract is no longer present on ESI
+	 * (expired). The dogma endpoint is called for a retry but fails again. The item must not be
+	 * included in the new snapshot since the roll data cannot be resolved.
+	 */
+	@Test
+	@SneakyThrows
+	void expiredContractCachedAbyssalItemDogmaRetryFailsItemDropped() {
+		var typeId = 47804;
+		var item = abyssalItem(2700001, 2700001, typeId);
+		var contract = contract(2700).put("type", "item_exchange");
+		var metaGroupsJson = "{\"meta_group_id\":15,\"type_ids\":[" + typeId + "]}";
+
+		var existingContracts = expectedContracts(List.of(contract), 10000001);
+		var existingItems = expectedItems(2700, List.of(item));
+		var existingArchive = createExistingArchive(existingContracts, existingItems);
+
+		server.setDispatcher(dispatcher()
+				.withRegion(10000001)
+				.withContracts(10000001, contractsJson(List.of()))
+				.withLatestArchive(existingArchive)
+				.withMetaGroups(metaGroupsJson));
+		run();
+
+		assertEquals(List.of(), records.get("contracts.csv"));
+		assertNoSubData();
+		assertLatestFileMatches();
+		assertRequestPaths(
+				"/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
+				"/latest/dogma/dynamic/items/47804/2700001/?datasource=tranquility&language=en",
+				"/meta_groups/15",
+				"/public-contracts/public-contracts-latest.v2.tar.bz2",
+				"/universe/regions/10000001/?datasource=tranquility",
+				"/universe/regions/?datasource=tranquility");
+		assertDataIndex();
+	}
+
+	/**
+	 * Existing archive has an abyssal item with its dynamic data, but no corresponding contract
+	 * record (the contract was never in the archive). The contract is also absent from ESI. Both the
+	 * item and its dynamic data are dangling and must be cleared from the new snapshot.
+	 */
+	@Test
+	@SneakyThrows
+	void danglingDynamicItemWithNoContractIsCleared() {
+		var typeId = 47804;
+		var item = abyssalItem(2800001, 2800001, typeId);
+		var danglingItems = expectedItems(2800, List.of(item));
+		var danglingDynamic = expectedDynamicItems(2800, 2800001);
+		var danglingAttributes = expectedDynamicAttributes(2800, 2800001);
+		var danglingEffects = expectedDynamicEffects(2800, 2800001);
+		var existingArchive = createExistingArchive(
+				List.of(), danglingItems, List.of(), danglingDynamic, danglingAttributes, danglingEffects);
+
+		server.setDispatcher(dispatcher()
+				.withRegion(10000001)
+				.withContracts(10000001, contractsJson(List.of()))
+				.withLatestArchive(existingArchive));
+		run();
+
+		assertEquals(List.of(), records.get("contracts.csv"));
+		assertNoSubData();
+		assertLatestFileMatches();
+		assertRequestPaths(
+				"/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
+				"/public-contracts/public-contracts-latest.v2.tar.bz2",
+				"/universe/regions/10000001/?datasource=tranquility",
+				"/universe/regions/?datasource=tranquility");
+		assertDataIndex();
+	}
+
+	/**
+	 * Existing archive has a non-abyssal item but no corresponding contract record (the contract was
+	 * never in the archive). The contract is also absent from ESI. The dangling item must be cleared
+	 * from the new snapshot.
+	 */
+	@Test
+	@SneakyThrows
+	void danglingItemWithNoContractIsCleared() {
+		var item = item(2900001, 34);
+		var danglingItems = expectedItems(2900, List.of(item));
+		var existingArchive = createExistingArchive(List.of(), danglingItems);
+
+		server.setDispatcher(dispatcher()
+				.withRegion(10000001)
+				.withContracts(10000001, contractsJson(List.of()))
+				.withLatestArchive(existingArchive));
+		run();
+
+		assertEquals(List.of(), records.get("contracts.csv"));
+		assertNoSubData();
+		assertLatestFileMatches();
+		assertRequestPaths(
+				"/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
+				"/public-contracts/public-contracts-latest.v2.tar.bz2",
+				"/universe/regions/10000001/?datasource=tranquility",
+				"/universe/regions/?datasource=tranquility");
+		assertDataIndex();
+	}
+
 	// --- Run and capture ---
 
 	@SneakyThrows
