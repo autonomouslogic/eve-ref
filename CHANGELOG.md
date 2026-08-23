@@ -1,5 +1,38 @@
 EVE Ref Changelog
 
+## [2.80.0](https://github.com/autonomouslogic/eve-ref/compare/2.79.3...2.80.0) (2026-08-23)
+
+
+### Features
+
+* Scrape SKINR listings and details ([#1084](https://github.com/autonomouslogic/eve-ref/issues/1084)) ([1b514c6](https://github.com/autonomouslogic/eve-ref/commit/1b514c603c086138dd3ef4ea9a69b3d999fac49f))
+
+
+### Bug Fixes
+
+* **ui:** Patreon FAB ([2f072be](https://github.com/autonomouslogic/eve-ref/commit/2f072be675829d9bfdd4c0273fa5ed31832a0a1d))
+
+
+### Documentation
+
+* Update README.md ([4cde34a](https://github.com/autonomouslogic/eve-ref/commit/4cde34aea1961cabe5018f5ca4c61027eda769ee))
+* Updated badges [skip ci] ([e2de716](https://github.com/autonomouslogic/eve-ref/commit/e2de716e1e7e5254cbee80c2f03047587fb92657))
+
+
+### Miscellaneous Chores
+
+* Added qlty.toml ([02747ff](https://github.com/autonomouslogic/eve-ref/commit/02747fffb298e2cedb25339ca50e1e4efb9a8f74))
+* Added qlty.toml ([98ffb45](https://github.com/autonomouslogic/eve-ref/commit/98ffb45db3159b1f11dddd52b5c762d2f87782cb))
+
+
+### Tests
+
+* EsiAuthHelperTest ([06480ee](https://github.com/autonomouslogic/eve-ref/commit/06480ee2532605ee95713d02560bcad19ec7a783))
+* More refactor of ScrapePublicContractsTest ([f085a6b](https://github.com/autonomouslogic/eve-ref/commit/f085a6b0002268f8e102acf2eff98c32c1076d05))
+* More ScrapePublicContracts testing ([8d43db2](https://github.com/autonomouslogic/eve-ref/commit/8d43db232e51bcce656edd649958ece5b762cbe2))
+* Public contracts test refactor ([#1083](https://github.com/autonomouslogic/eve-ref/issues/1083)) ([13531ab](https://github.com/autonomouslogic/eve-ref/commit/13531ab978b6dea49c1e80891340e02205668f7a))
+* Reorganize ScrapePublicContractsTest ([fc43cdc](https://github.com/autonomouslogic/eve-ref/commit/fc43cdc4842e83ea8e89af32fec4f9d20a6911d2))
+
 ## [2.79.3](https://github.com/autonomouslogic/eve-ref/compare/2.79.2...2.79.3) (2026-08-15)
 
 
