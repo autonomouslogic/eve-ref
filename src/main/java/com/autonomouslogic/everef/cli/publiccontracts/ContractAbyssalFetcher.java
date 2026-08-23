@@ -8,7 +8,6 @@ import com.autonomouslogic.everef.openapi.refdata.api.RefdataApi;
 import com.autonomouslogic.everef.openapi.refdata.invoker.ApiException;
 import com.autonomouslogic.everef.util.JsonUtil;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.reactivex.rxjava3.core.Completable;
@@ -30,9 +29,6 @@ public class ContractAbyssalFetcher {
 	private static final long ABYSSAL_META_GROUP = 15;
 
 	@Inject
-	protected ObjectMapper objectMapper;
-
-	@Inject
 	protected EsiHelper esiHelper;
 
 	@Inject
@@ -46,9 +42,6 @@ public class ContractAbyssalFetcher {
 
 	@Setter
 	private Map<Long, JsonNode> dynamicItemsStore;
-
-	@Setter
-	private Map<Long, JsonNode> nonDynamicItemsStore;
 
 	@Setter
 	private Map<String, JsonNode> dogmaEffectsStore;
@@ -83,7 +76,10 @@ public class ContractAbyssalFetcher {
 		try {
 			initAbyssalTypes();
 		} catch (ApiException e) {
-			log.warn("Failed to load abyssal type IDs, skipping dogma retry for contract {}: {}", contractId, e.getMessage());
+			log.warn(
+					"Failed to load abyssal type IDs, skipping dogma retry for contract {}: {}",
+					contractId,
+					e.getMessage());
 			return;
 		}
 		Flowable.fromIterable(candidates)
@@ -146,11 +142,7 @@ public class ContractAbyssalFetcher {
 
 	private boolean isItemNotSeen(ObjectNode item) {
 		long dynamicId = ContractsFileBuilder.DYNAMIC_ITEM_ID.apply(item);
-		if (dynamicItemsStore.containsKey(dynamicId)) {
-			return false;
-		}
-		long nonDynamicId = ContractsFileBuilder.NON_DYNAMIC_ITEM_ID.apply(item);
-		return !nonDynamicItemsStore.containsKey(nonDynamicId);
+		return !dynamicItemsStore.containsKey(dynamicId);
 	}
 
 	private Completable resolveDynamicItem(long contractId, long typeId, long itemId) {
@@ -163,13 +155,11 @@ public class ContractAbyssalFetcher {
 				.flatMapCompletable(response -> Completable.fromAction(() -> {
 					int statusCode = response.code();
 					if (statusCode == 520) {
-						var nonDynamicItem = objectMapper
-								.createObjectNode()
-								.put("item_id", itemId)
-								.put("type_id", typeId)
-								.put("contract_id", contractId);
-						nonDynamicItemsStore.put(
-								ContractsFileBuilder.NON_DYNAMIC_ITEM_ID.apply(nonDynamicItem), nonDynamicItem);
+						log.debug(
+								"Dogma data not yet available (520) for contract {} item {} type {}, will retry next run",
+								contractId,
+								itemId,
+								typeId);
 						return;
 					}
 					if (statusCode == 200) {

@@ -811,7 +811,6 @@ public class ScrapePublicContractsTest {
 		assertEquals(
 				expectedDynamicAttributes(1400, 1400001), records.get("contract_dynamic_items_dogma_attributes.csv"));
 		assertEquals(expectedDynamicEffects(1400, 1400001), records.get("contract_dynamic_items_dogma_effects.csv"));
-		assertEquals(List.of(), records.get("contract_non_dynamic_items.csv"));
 		assertEquals(List.of(), records.get("contract_bids.csv"));
 		assertLatestFileMatches();
 		if ("auction".equals(contractType)) {
@@ -894,7 +893,6 @@ public class ScrapePublicContractsTest {
 		assertEquals(
 				sortedByItemId(expectedDynamicEffects(1500, 1500001), expectedDynamicEffects(1502, 1502001)),
 				records.get("contract_dynamic_items_dogma_effects.csv"));
-		assertEquals(List.of(), records.get("contract_non_dynamic_items.csv"));
 		assertEquals(List.of(), records.get("contract_bids.csv"));
 		assertLatestFileMatches();
 		if ("auction".equals(contractType)) {
@@ -965,7 +963,6 @@ public class ScrapePublicContractsTest {
 		assertEquals(
 				expectedDynamicAttributes(1600, 1600001), records.get("contract_dynamic_items_dogma_attributes.csv"));
 		assertEquals(expectedDynamicEffects(1600, 1600001), records.get("contract_dynamic_items_dogma_effects.csv"));
-		assertEquals(List.of(), records.get("contract_non_dynamic_items.csv"));
 		assertEquals(List.of(), records.get("contract_bids.csv"));
 		assertLatestFileMatches();
 		if ("auction".equals(contractType)) {
@@ -1025,7 +1022,7 @@ public class ScrapePublicContractsTest {
 
 	/**
 	 * No previous archive. One contract with one abyssal item where the ESI returns 520. The item
-	 * should be stored in contract_non_dynamic_items.csv and not in contract_dynamic_items.csv.
+	 * should not appear in contract_dynamic_items.csv; it will be retried on the next run.
 	 */
 	@ParameterizedTest
 	@ValueSource(strings = {"item_exchange", "auction"})
@@ -1054,7 +1051,6 @@ public class ScrapePublicContractsTest {
 		assertEquals(List.of(), records.get("contract_dynamic_items.csv"));
 		assertEquals(List.of(), records.get("contract_dynamic_items_dogma_attributes.csv"));
 		assertEquals(List.of(), records.get("contract_dynamic_items_dogma_effects.csv"));
-		assertEquals(List.of(nonDynamicItem(1700, 1700001, typeId)), records.get("contract_non_dynamic_items.csv"));
 		assertEquals(List.of(), records.get("contract_bids.csv"));
 		assertLatestFileMatches();
 		if ("auction".equals(contractType)) {
@@ -1079,55 +1075,6 @@ public class ScrapePublicContractsTest {
 					"/universe/regions/?datasource=tranquility",
 					"/universe/types/47804/?datasource=tranquility");
 		}
-		assertDataIndex();
-	}
-
-	/**
-	 * Existing archive has a non-dynamic entry for an item (from a previous 520). The contract's
-	 * items are not in the archive, so items are re-fetched. When the abyssal item appears, dogma
-	 * is retried because the item has no dogma attributes or effects. The retry fails (404), so
-	 * the item is preserved for a future retry.
-	 */
-	@Disabled // @todo remove non-dynamic item CSV
-	@Test
-	@SneakyThrows
-	void existingNonDynamicItemNotRefetched() {
-		var typeId = 47804;
-		var item = abyssalItem(1800001, 1800001, typeId);
-		var contract = contract(1800).put("type", "item_exchange");
-		var metaGroupsJson = "{\"meta_group_id\":15,\"type_ids\":[" + typeId + "]}";
-
-		var existingContracts = expectedContracts(List.of(contract), 10000001);
-		var existingNonDynamic = List.of(nonDynamicItem(1800, 1800001, typeId));
-		var existingArchive = createExistingArchive(
-				existingContracts, List.of(), List.of(), List.of(), List.of(), List.of(), existingNonDynamic);
-
-		server.setDispatcher(dispatcher()
-				.withRegion(10000001)
-				.withContracts(10000001, contractsJson(List.of(contract)))
-				.withItems(1800, itemsJson(List.of(item)))
-				.withType(typeId)
-				.withLatestArchive(existingArchive)
-				.withMetaGroups(metaGroupsJson));
-		run();
-
-		assertEquals(expectedContracts(List.of(contract), 10000001), records.get("contracts.csv"));
-		assertEquals(expectedItems(1800, List.of(item)), records.get("contract_items.csv"));
-		assertEquals(List.of(), records.get("contract_dynamic_items.csv"));
-		assertEquals(List.of(), records.get("contract_dynamic_items_dogma_attributes.csv"));
-		assertEquals(List.of(), records.get("contract_dynamic_items_dogma_effects.csv"));
-		assertEquals(List.of(nonDynamicItem(1800, 1800001, typeId)), records.get("contract_non_dynamic_items.csv"));
-		assertEquals(List.of(), records.get("contract_bids.csv"));
-		assertLatestFileMatches();
-		assertRequestPaths(
-				"/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
-				"/latest/contracts/public/items/1800?datasource=tranquility&language=en&page=1",
-				"/latest/dogma/dynamic/items/47804/1800001/?datasource=tranquility&language=en",
-				"/meta_groups/15",
-				"/public-contracts/public-contracts-latest.v2.tar.bz2",
-				"/universe/regions/10000001/?datasource=tranquility",
-				"/universe/regions/?datasource=tranquility",
-				"/universe/types/47804/?datasource=tranquility");
 		assertDataIndex();
 	}
 
@@ -1166,7 +1113,6 @@ public class ScrapePublicContractsTest {
 		assertEquals(
 				expectedDynamicAttributes(1900, 1900001), records.get("contract_dynamic_items_dogma_attributes.csv"));
 		assertEquals(expectedDynamicEffects(1900, 1900001), records.get("contract_dynamic_items_dogma_effects.csv"));
-		assertEquals(List.of(), records.get("contract_non_dynamic_items.csv"));
 		assertEquals(List.of(), records.get("contract_bids.csv"));
 		assertLatestFileMatches();
 		assertRequestPaths(
@@ -1177,111 +1123,6 @@ public class ScrapePublicContractsTest {
 				"/universe/regions/10000001/?datasource=tranquility",
 				"/universe/regions/?datasource=tranquility",
 				"/universe/types/47804/?datasource=tranquility");
-		assertDataIndex();
-	}
-
-	/**
-	 * Existing archive has two contracts, each with a non-dynamic item (abyssal item where ESI
-	 * previously returned 520). ESI returns only one contract. The missing contract's non-dynamic
-	 * item must be removed from the new archive; the retained contract's non-dynamic item must
-	 * survive. Items are cached for both contracts, so no ESI items or dynamic endpoints are called.
-	 */
-	@Disabled // @todo remove non-dynamic item CSV
-	@ParameterizedTest
-	@ValueSource(strings = {"item_exchange", "auction"})
-	@SneakyThrows
-	void missingNonDynamicItemRemovedFromArchive(String contractType) {
-		var typeId = 47804;
-		var itemA = abyssalItem(2300001, 2300001, typeId);
-		var itemB = abyssalItem(2301001, 2301001, typeId);
-		var contractA = contract(2300).put("type", contractType);
-		var contractB = contract(2301).put("type", contractType);
-
-		var existingContracts = sortedByContractId(
-				expectedContracts(List.of(contractA), 10000001), expectedContracts(List.of(contractB), 10000001));
-		var existingItems = sortedByRecordId(expectedItems(2300, List.of(itemA)), expectedItems(2301, List.of(itemB)));
-		var existingNonDynamic = List.of(nonDynamicItem(2300, 2300001, typeId), nonDynamicItem(2301, 2301001, typeId));
-		var existingArchive = createExistingArchive(
-				existingContracts, existingItems, List.of(), List.of(), List.of(), List.of(), existingNonDynamic);
-
-		var d = dispatcher()
-				.withRegion(10000001)
-				.withContracts(10000001, contractsJson(List.of(contractA)))
-				.withLatestArchive(existingArchive);
-		if ("auction".equals(contractType)) {
-			d.withBids(2300, bidsJson(List.of()));
-		}
-		server.setDispatcher(d);
-		run();
-
-		assertEquals(expectedContracts(List.of(contractA), 10000001), records.get("contracts.csv"));
-		assertEquals(expectedItems(2300, List.of(itemA)), records.get("contract_items.csv"));
-		assertEquals(List.of(), records.get("contract_dynamic_items.csv"));
-		assertEquals(List.of(), records.get("contract_dynamic_items_dogma_attributes.csv"));
-		assertEquals(List.of(), records.get("contract_dynamic_items_dogma_effects.csv"));
-		assertEquals(List.of(nonDynamicItem(2300, 2300001, typeId)), records.get("contract_non_dynamic_items.csv"));
-		assertEquals(List.of(), records.get("contract_bids.csv"));
-		assertLatestFileMatches();
-		if ("auction".equals(contractType)) {
-			assertRequestPaths(
-					"/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
-					"/latest/contracts/public/bids/2300?datasource=tranquility&language=en&page=1",
-					"/public-contracts/public-contracts-latest.v2.tar.bz2",
-					"/universe/regions/10000001/?datasource=tranquility",
-					"/universe/regions/?datasource=tranquility");
-		} else {
-			assertRequestPaths(
-					"/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
-					"/public-contracts/public-contracts-latest.v2.tar.bz2",
-					"/universe/regions/10000001/?datasource=tranquility",
-					"/universe/regions/?datasource=tranquility");
-		}
-		assertDataIndex();
-	}
-
-	/**
-	 * Existing archive has a contract with its items cached and a non-dynamic item (abyssal item
-	 * where ESI previously returned 520). ESI returns the same contract. Dogma is retried for the
-	 * cached item because it has no dogma attributes or effects. The retry fails (404), so the item
-	 * and its non-dynamic entry are preserved for a future retry.
-	 */
-	@Disabled // @todo remove non-dynamic item CSV
-	@Test
-	@SneakyThrows
-	void existingNonDynamicItemPreservedWhenContractItemsCached() {
-		var typeId = 47804;
-		var item = abyssalItem(2400001, 2400001, typeId);
-		var contract = contract(2400).put("type", "item_exchange");
-		var metaGroupsJson = "{\"meta_group_id\":15,\"type_ids\":[" + typeId + "]}";
-
-		var existingContracts = expectedContracts(List.of(contract), 10000001);
-		var existingItems = expectedItems(2400, List.of(item));
-		var existingNonDynamic = List.of(nonDynamicItem(2400, 2400001, typeId));
-		var existingArchive = createExistingArchive(
-				existingContracts, existingItems, List.of(), List.of(), List.of(), List.of(), existingNonDynamic);
-
-		server.setDispatcher(dispatcher()
-				.withRegion(10000001)
-				.withContracts(10000001, contractsJson(List.of(contract)))
-				.withLatestArchive(existingArchive)
-				.withMetaGroups(metaGroupsJson));
-		run();
-
-		assertEquals(expectedContracts(List.of(contract), 10000001), records.get("contracts.csv"));
-		assertEquals(expectedItems(2400, List.of(item)), records.get("contract_items.csv"));
-		assertEquals(List.of(), records.get("contract_dynamic_items.csv"));
-		assertEquals(List.of(), records.get("contract_dynamic_items_dogma_attributes.csv"));
-		assertEquals(List.of(), records.get("contract_dynamic_items_dogma_effects.csv"));
-		assertEquals(List.of(nonDynamicItem(2400, 2400001, typeId)), records.get("contract_non_dynamic_items.csv"));
-		assertEquals(List.of(), records.get("contract_bids.csv"));
-		assertLatestFileMatches();
-		assertRequestPaths(
-				"/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
-				"/latest/dogma/dynamic/items/47804/2400001/?datasource=tranquility&language=en",
-				"/meta_groups/15",
-				"/public-contracts/public-contracts-latest.v2.tar.bz2",
-				"/universe/regions/10000001/?datasource=tranquility",
-				"/universe/regions/?datasource=tranquility");
 		assertDataIndex();
 	}
 
@@ -1322,7 +1163,6 @@ public class ScrapePublicContractsTest {
 		assertEquals(
 				expectedDynamicAttributes(2500, 2500001), records.get("contract_dynamic_items_dogma_attributes.csv"));
 		assertEquals(expectedDynamicEffects(2500, 2500001), records.get("contract_dynamic_items_dogma_effects.csv"));
-		assertEquals(List.of(), records.get("contract_non_dynamic_items.csv"));
 		assertEquals(List.of(), records.get("contract_bids.csv"));
 		assertLatestFileMatches();
 		if ("auction".equals(contractType)) {
@@ -1437,7 +1277,6 @@ public class ScrapePublicContractsTest {
 		assertEquals(List.of(), records.get("contract_bids.csv"));
 		assertEquals(List.of(), records.get("contract_items.csv"));
 		assertEquals(List.of(), records.get("contract_dynamic_items.csv"));
-		assertEquals(List.of(), records.get("contract_non_dynamic_items.csv"));
 		assertEquals(List.of(), records.get("contract_dynamic_items_dogma_attributes.csv"));
 		assertEquals(List.of(), records.get("contract_dynamic_items_dogma_effects.csv"));
 	}
@@ -1445,14 +1284,12 @@ public class ScrapePublicContractsTest {
 	private void assertNoSubDataExceptItems() {
 		assertEquals(List.of(), records.get("contract_bids.csv"));
 		assertEquals(List.of(), records.get("contract_dynamic_items.csv"));
-		assertEquals(List.of(), records.get("contract_non_dynamic_items.csv"));
 		assertEquals(List.of(), records.get("contract_dynamic_items_dogma_attributes.csv"));
 		assertEquals(List.of(), records.get("contract_dynamic_items_dogma_effects.csv"));
 	}
 
 	private void assertNoSubDataExceptItemsAndBids() {
 		assertEquals(List.of(), records.get("contract_dynamic_items.csv"));
-		assertEquals(List.of(), records.get("contract_non_dynamic_items.csv"));
 		assertEquals(List.of(), records.get("contract_dynamic_items_dogma_attributes.csv"));
 		assertEquals(List.of(), records.get("contract_dynamic_items_dogma_effects.csv"));
 	}
@@ -1498,18 +1335,6 @@ public class ScrapePublicContractsTest {
 			List<Map<String, String>> dynamicItems,
 			List<Map<String, String>> dogmaAttributes,
 			List<Map<String, String>> dogmaEffects) {
-		return createExistingArchive(contracts, items, bids, dynamicItems, dogmaAttributes, dogmaEffects, List.of());
-	}
-
-	@SneakyThrows
-	private byte[] createExistingArchive(
-			List<Map<String, String>> contracts,
-			List<Map<String, String>> items,
-			List<Map<String, String>> bids,
-			List<Map<String, String>> dynamicItems,
-			List<Map<String, String>> dogmaAttributes,
-			List<Map<String, String>> dogmaEffects,
-			List<Map<String, String>> nonDynamicItems) {
 		var meta = new ContractsScrapeMeta();
 		meta.setDatasource("tranquility");
 		meta.setScrapeStart(Instant.parse("2020-01-01T00:00:00Z"));
@@ -1523,8 +1348,6 @@ public class ScrapePublicContractsTest {
 				writeCsv(items),
 				"contract_dynamic_items.csv",
 				writeCsv(dynamicItems),
-				"contract_non_dynamic_items.csv",
-				writeCsv(nonDynamicItems),
 				"contract_dynamic_items_dogma_attributes.csv",
 				writeCsv(dogmaAttributes),
 				"contract_dynamic_items_dogma_effects.csv",
@@ -1739,14 +1562,6 @@ public class ScrapePublicContractsTest {
 		map.put("item_id", String.valueOf(itemId));
 		map.put("http_last_modified", lastModifiedInstant.toString());
 		return List.of(map);
-	}
-
-	private Map<String, String> nonDynamicItem(long contractId, long itemId, int typeId) {
-		var map = new HashMap<String, String>();
-		map.put("item_id", String.valueOf(itemId));
-		map.put("type_id", String.valueOf(typeId));
-		map.put("contract_id", String.valueOf(contractId));
-		return map;
 	}
 
 	private List<Map<String, String>> expectedDynamicEffects(long contractId, long itemId) {
