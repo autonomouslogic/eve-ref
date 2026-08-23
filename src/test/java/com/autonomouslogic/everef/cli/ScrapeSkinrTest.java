@@ -2,8 +2,8 @@ package com.autonomouslogic.everef.cli;
 
 import static com.autonomouslogic.everef.util.archive.ArchivePathFactories.SKINR_DETAILS;
 import static com.autonomouslogic.everef.util.archive.ArchivePathFactories.SKINR_LISTINGS;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.verify;
 
 import com.autonomouslogic.everef.test.DaggerTestComponent;
@@ -15,6 +15,8 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -32,6 +34,7 @@ import okhttp3.mockwebserver.Dispatcher;
 import okhttp3.mockwebserver.MockResponse;
 import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
+import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -138,6 +141,8 @@ public class ScrapeSkinrTest {
 		assertEquals(List.of(listing), listingsArray(listings));
 		assertEquals("cursor-1", listings.get("cursor").get("after").asText());
 
+		assertDataIndex();
+		assertArchives();
 		assertRequestPaths(
 				"/cosmetics/skinr/101",
 				"/paragon-hub/skinr?limit=100",
@@ -164,6 +169,8 @@ public class ScrapeSkinrTest {
 		var listings = readLatestListings();
 		assertEquals(List.of(active, soldOut), listingsArray(listings));
 
+		assertDataIndex();
+		assertArchives();
 		assertRequestPaths(
 				"/cosmetics/skinr/101",
 				"/cosmetics/skinr/102",
@@ -193,6 +200,8 @@ public class ScrapeSkinrTest {
 
 		assertEquals(Map.of("101", detail101, "102", detail102, "103", detail103), readLatestDetails());
 
+		assertDataIndex();
+		assertArchives();
 		assertRequestPaths(
 				"/cosmetics/skinr/101",
 				"/cosmetics/skinr/102",
@@ -217,6 +226,8 @@ public class ScrapeSkinrTest {
 
 		assertEquals(Map.of("101", detail101), readLatestDetails());
 
+		assertDataIndex();
+		assertArchives();
 		assertRequestPaths(
 				"/cosmetics/skinr/101",
 				"/paragon-hub/skinr?limit=100",
@@ -245,6 +256,8 @@ public class ScrapeSkinrTest {
 		assertEquals(List.of(existing), listingsArray(listings));
 		assertEquals("cursor-0", listings.get("cursor").get("after").asText());
 
+		assertDataIndex();
+		assertArchives();
 		assertRequestPaths(
 				"/paragon-hub/skinr?limit=100&after=cursor-0",
 				"/skinr-details/skinr-details-latest.json",
@@ -273,6 +286,8 @@ public class ScrapeSkinrTest {
 		assertEquals(List.of(existing, incoming), listingsArray(listings));
 		assertEquals("cursor-1", listings.get("cursor").get("after").asText());
 
+		assertDataIndex();
+		assertArchives();
 		assertRequestPaths(
 				"/cosmetics/skinr/102",
 				"/paragon-hub/skinr?limit=100&after=cursor-0",
@@ -306,6 +321,8 @@ public class ScrapeSkinrTest {
 		assertEquals(List.of(existing, page1, page2), listingsArray(listings));
 		assertEquals("cursor-2", listings.get("cursor").get("after").asText());
 
+		assertDataIndex();
+		assertArchives();
 		assertRequestPaths(
 				"/cosmetics/skinr/102",
 				"/cosmetics/skinr/103",
@@ -336,6 +353,8 @@ public class ScrapeSkinrTest {
 		var listings = readLatestListings();
 		assertEquals(List.of(updated).toString(), listingsArray(listings).toString());
 
+		assertDataIndex();
+		assertArchives();
 		assertRequestPaths(
 				"/paragon-hub/skinr?limit=100&after=cursor-0",
 				"/paragon-hub/skinr?limit=100&after=cursor-1",
@@ -370,6 +389,8 @@ public class ScrapeSkinrTest {
 		var listings = readLatestListings();
 		assertEquals(List.of(active), listingsArray(listings));
 
+		assertDataIndex();
+		assertArchives();
 		assertRequestPaths(
 				"/paragon-hub/skinr?limit=100&after=cursor-0",
 				"/skinr-details/skinr-details-latest.json",
@@ -395,6 +416,8 @@ public class ScrapeSkinrTest {
 		var listings = readLatestListings();
 		assertEquals(List.of(soldOut), listingsArray(listings));
 
+		assertDataIndex();
+		assertArchives();
 		assertRequestPaths(
 				"/paragon-hub/skinr?limit=100&after=cursor-0",
 				"/paragon-hub/skinr?limit=100&after=cursor-1",
@@ -425,6 +448,8 @@ public class ScrapeSkinrTest {
 
 		assertEquals(Map.of("101", detail101, "102", detail102), readLatestDetails());
 
+		assertDataIndex();
+		assertArchives();
 		assertRequestPaths(
 				"/cosmetics/skinr/102",
 				"/paragon-hub/skinr?limit=100&after=cursor-0",
@@ -454,6 +479,8 @@ public class ScrapeSkinrTest {
 
 		assertEquals(Map.of("101", detail101, "102", detail102), readLatestDetails());
 
+		assertDataIndex();
+		assertArchives();
 		assertRequestPaths(
 				"/cosmetics/skinr/102",
 				"/paragon-hub/skinr?limit=100&after=cursor-0",
@@ -489,82 +516,10 @@ public class ScrapeSkinrTest {
 
 		assertEquals(Map.of("101", detail101), readLatestDetails());
 
+		assertDataIndex();
+		assertArchives();
 		assertRequestPaths(
 				"/paragon-hub/skinr?limit=100&after=cursor-0",
-				"/skinr-details/skinr-details-latest.json",
-				"/skinr-listings/skinr-listings-latest.json");
-	}
-
-	// --- S3 upload / data index tests ---
-
-	/**
-	 * Both latest and archive files are written to S3 for listings and details after a successful run.
-	 */
-	@Test
-	@SneakyThrows
-	void bothFilesUploadedToS3() {
-		dispatcher
-				.withFirstPageResponse(listingsPage(List.of(listing(1, "listed", 101)), "cursor-1"))
-				.withDetail(101, detail(101, "Alpha"));
-
-		run();
-
-		assertTrue(mockS3Adapter
-				.getTestObject(BUCKET_NAME, LATEST_LISTINGS_FILE, dataClient)
-				.isPresent());
-		assertTrue(mockS3Adapter
-				.getTestObject(BUCKET_NAME, ARCHIVE_LISTINGS_FILE, dataClient)
-				.isPresent());
-		assertTrue(mockS3Adapter
-				.getTestObject(BUCKET_NAME, LATEST_DETAILS_FILE, dataClient)
-				.isPresent());
-		assertTrue(mockS3Adapter
-				.getTestObject(BUCKET_NAME, ARCHIVE_DETAILS_FILE, dataClient)
-				.isPresent());
-
-		assertRequestPaths(
-				"/cosmetics/skinr/101",
-				"/paragon-hub/skinr?limit=100",
-				"/skinr-details/skinr-details-latest.json",
-				"/skinr-listings/skinr-listings-latest.json");
-	}
-
-	/**
-	 * Data index is updated for both the listings file and the details file after each run.
-	 */
-	@Test
-	@SneakyThrows
-	void dataIndexUpdatedForBothFiles() {
-		dispatcher
-				.withFirstPageResponse(listingsPage(List.of(listing(1, "listed", 101)), "cursor-1"))
-				.withDetail(101, detail(101, "Alpha"));
-
-		run();
-
-		verify(dataIndexHelper)
-				.updateIndex(
-						S3Url.builder()
-								.bucket(BUCKET_NAME)
-								.path(LATEST_LISTINGS_FILE)
-								.build(),
-						S3Url.builder()
-								.bucket(BUCKET_NAME)
-								.path(ARCHIVE_LISTINGS_FILE)
-								.build());
-		verify(dataIndexHelper)
-				.updateIndex(
-						S3Url.builder()
-								.bucket(BUCKET_NAME)
-								.path(LATEST_DETAILS_FILE)
-								.build(),
-						S3Url.builder()
-								.bucket(BUCKET_NAME)
-								.path(ARCHIVE_DETAILS_FILE)
-								.build());
-
-		assertRequestPaths(
-				"/cosmetics/skinr/101",
-				"/paragon-hub/skinr?limit=100",
 				"/skinr-details/skinr-details-latest.json",
 				"/skinr-listings/skinr-listings-latest.json");
 	}
@@ -603,8 +558,59 @@ public class ScrapeSkinrTest {
 
 	// --- Assertion helpers ---
 
+	private void assertDataIndex() {
+		verify(dataIndexHelper)
+				.updateIndex(
+						S3Url.builder()
+								.bucket(BUCKET_NAME)
+								.path(LATEST_LISTINGS_FILE)
+								.build(),
+						S3Url.builder()
+								.bucket(BUCKET_NAME)
+								.path(ARCHIVE_LISTINGS_FILE)
+								.build());
+		verify(dataIndexHelper)
+				.updateIndex(
+						S3Url.builder()
+								.bucket(BUCKET_NAME)
+								.path(LATEST_DETAILS_FILE)
+								.build(),
+						S3Url.builder()
+								.bucket(BUCKET_NAME)
+								.path(ARCHIVE_DETAILS_FILE)
+								.build());
+	}
+
+	@SneakyThrows
+	private void assertArchives() {
+		var latestListingsBytes = mockS3Adapter
+				.getTestObject(BUCKET_NAME, LATEST_LISTINGS_FILE, dataClient)
+				.orElseThrow();
+		var archiveListingsBytes = mockS3Adapter
+				.getTestObject(BUCKET_NAME, ARCHIVE_LISTINGS_FILE, dataClient)
+				.orElseThrow();
+		assertArrayEquals(latestListingsBytes, decompressBzip2(archiveListingsBytes));
+
+		var latestDetailsBytes = mockS3Adapter
+				.getTestObject(BUCKET_NAME, LATEST_DETAILS_FILE, dataClient)
+				.orElseThrow();
+		var archiveDetailsBytes = mockS3Adapter
+				.getTestObject(BUCKET_NAME, ARCHIVE_DETAILS_FILE, dataClient)
+				.orElseThrow();
+		assertArrayEquals(latestDetailsBytes, decompressBzip2(archiveDetailsBytes));
+	}
+
 	private void assertRequestPaths(String... paths) {
 		assertEquals(List.of(paths), requestPaths);
+	}
+
+	// --- Compression helpers ---
+
+	@SneakyThrows
+	private byte[] decompressBzip2(byte[] compressed) throws IOException {
+		try (var in = new BZip2CompressorInputStream(new ByteArrayInputStream(compressed))) {
+			return in.readAllBytes();
+		}
 	}
 
 	private List<ObjectNode> listingsArray(ObjectNode listingsResponse) {
