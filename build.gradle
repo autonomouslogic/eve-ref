@@ -631,6 +631,15 @@ task scrapeMarketsPrices(type: JavaExec) {
 	mainClass = mainClassName
 }
 
+task scrapeSkinr(type: JavaExec) {
+	group "application"
+	args "scrape-skinr"
+	environment envProperties
+
+	classpath = sourceSets.main.runtimeClasspath
+	mainClass = mainClassName
+}
+
 task generateKeyPair(type: JavaExec) {
 	group "application"
 	args "generate-key-pair"
