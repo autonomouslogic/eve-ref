@@ -66,7 +66,8 @@ public class ScrapePublicContractsTest {
 	static final String BUCKET_NAME = "data-bucket";
 
 	/** Minimal meta-group 15 (Abyssal) response with no type IDs, sufficient for non-abyssal item tests. */
-	private static final String NON_ABYSSAL_META_GROUPS_JSON = "{\"meta_group_id\":15,\"type_ids\":[]}";
+	private static final String NON_ABYSSAL_META_GROUPS_JSON = """
+		{"meta_group_id":15,"type_ids":[]}""";
 
 	private static final String ARCHIVE_FILE =
 			"base/public-contracts/history/2020/2020-02-03/public-contracts-2020-02-03_04-05-06.v2.tar.bz2";
@@ -284,7 +285,7 @@ public class ScrapePublicContractsTest {
 
 	/**
 	 * No previous archive. One non-abyssal item on a single contract. Both item_exchange and
-	 * auction contracts fetch items; auction additionally fetches bids (none configured here).
+	 * auction contracts fetch items.
 	 */
 	@ParameterizedTest
 	@ValueSource(strings = {"item_exchange", "auction"})
@@ -601,7 +602,7 @@ public class ScrapePublicContractsTest {
 
 	/**
 	 * No previous archive. One contract with one abyssal (dynamic) item. Both item_exchange and
-	 * auction contracts fetch items; auction additionally fetches bids. The contract, item, dynamic
+	 * auction contracts fetch items. The contract, item, dynamic
 	 * item attributes, and effects should all appear in the archive.
 	 */
 	@ParameterizedTest
@@ -663,7 +664,7 @@ public class ScrapePublicContractsTest {
 	/**
 	 * Existing archive has one contract with an abyssal item. ESI returns that contract plus a new
 	 * one with another abyssal item. The existing dynamic item should not be re-fetched from the ESI;
-	 * only the new contract's dynamic item requires a fetch. Auction contracts always re-fetch bids.
+	 * only the new contract's dynamic item requires a fetch.
 	 */
 	@ParameterizedTest
 	@ValueSource(strings = {"item_exchange", "auction"})
