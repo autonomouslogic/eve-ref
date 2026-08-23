@@ -144,7 +144,7 @@ public class ScrapeSkinrTest {
 		assertDataIndex();
 		assertArchives();
 		assertRequestPaths(
-				"/cosmetics/skinr/101",
+				"/cosmetics/skinr/" + skinrId(101),
 				"/paragon-hub/skinr?limit=100",
 				"/skinr-details/skinr-details-latest.json",
 				"/skinr-listings/skinr-listings-latest.json");
@@ -172,8 +172,8 @@ public class ScrapeSkinrTest {
 		assertDataIndex();
 		assertArchives();
 		assertRequestPaths(
-				"/cosmetics/skinr/101",
-				"/cosmetics/skinr/102",
+				"/cosmetics/skinr/" + skinrId(101),
+				"/cosmetics/skinr/" + skinrId(102),
 				"/paragon-hub/skinr?limit=100",
 				"/skinr-details/skinr-details-latest.json",
 				"/skinr-listings/skinr-listings-latest.json");
@@ -198,14 +198,15 @@ public class ScrapeSkinrTest {
 
 		run();
 
-		assertEquals(Map.of("101", detail101, "102", detail102, "103", detail103), readLatestDetails());
+		assertEquals(
+				Map.of(skinrId(101), detail101, skinrId(102), detail102, skinrId(103), detail103), readLatestDetails());
 
 		assertDataIndex();
 		assertArchives();
 		assertRequestPaths(
-				"/cosmetics/skinr/101",
-				"/cosmetics/skinr/102",
-				"/cosmetics/skinr/103",
+				"/cosmetics/skinr/" + skinrId(101),
+				"/cosmetics/skinr/" + skinrId(102),
+				"/cosmetics/skinr/" + skinrId(103),
 				"/paragon-hub/skinr?limit=100",
 				"/skinr-details/skinr-details-latest.json",
 				"/skinr-listings/skinr-listings-latest.json");
@@ -224,12 +225,12 @@ public class ScrapeSkinrTest {
 
 		run();
 
-		assertEquals(Map.of("101", detail101), readLatestDetails());
+		assertEquals(Map.of(skinrId(101), detail101), readLatestDetails());
 
 		assertDataIndex();
 		assertArchives();
 		assertRequestPaths(
-				"/cosmetics/skinr/101",
+				"/cosmetics/skinr/" + skinrId(101),
 				"/paragon-hub/skinr?limit=100",
 				"/skinr-details/skinr-details-latest.json",
 				"/skinr-listings/skinr-listings-latest.json");
@@ -247,7 +248,7 @@ public class ScrapeSkinrTest {
 		var existing = listing(1, "listed", 101);
 		dispatcher
 				.withExistingListings(fullListingsJson(List.of(existing), "cursor-0"))
-				.withExistingDetails(detailsJson(Map.of("101", detail(101, "Alpha"))))
+				.withExistingDetails(detailsJson(Map.of(skinrId(101), detail(101, "Alpha"))))
 				.withIncrementalPage("cursor-0", emptyListingsPage());
 
 		run();
@@ -275,7 +276,7 @@ public class ScrapeSkinrTest {
 		var incoming = listing(2, "listed", 102);
 		dispatcher
 				.withExistingListings(fullListingsJson(List.of(existing), "cursor-0"))
-				.withExistingDetails(detailsJson(Map.of("101", detail(101, "Alpha"))))
+				.withExistingDetails(detailsJson(Map.of(skinrId(101), detail(101, "Alpha"))))
 				.withIncrementalPage("cursor-0", listingsPage(List.of(incoming), "cursor-1"))
 				.withIncrementalPage("cursor-1", emptyListingsPage())
 				.withDetail(102, detail(102, "Beta"));
@@ -289,7 +290,7 @@ public class ScrapeSkinrTest {
 		assertDataIndex();
 		assertArchives();
 		assertRequestPaths(
-				"/cosmetics/skinr/102",
+				"/cosmetics/skinr/" + skinrId(102),
 				"/paragon-hub/skinr?limit=100&after=cursor-0",
 				"/paragon-hub/skinr?limit=100&after=cursor-1",
 				"/skinr-details/skinr-details-latest.json",
@@ -308,7 +309,7 @@ public class ScrapeSkinrTest {
 		var page2 = listing(3, "listed", 103);
 		dispatcher
 				.withExistingListings(fullListingsJson(List.of(existing), "cursor-0"))
-				.withExistingDetails(detailsJson(Map.of("101", detail(101, "Alpha"))))
+				.withExistingDetails(detailsJson(Map.of(skinrId(101), detail(101, "Alpha"))))
 				.withIncrementalPage("cursor-0", listingsPage(List.of(page1), "cursor-1"))
 				.withIncrementalPage("cursor-1", listingsPage(List.of(page2), "cursor-2"))
 				.withIncrementalPage("cursor-2", emptyListingsPage())
@@ -324,8 +325,8 @@ public class ScrapeSkinrTest {
 		assertDataIndex();
 		assertArchives();
 		assertRequestPaths(
-				"/cosmetics/skinr/102",
-				"/cosmetics/skinr/103",
+				"/cosmetics/skinr/" + skinrId(102),
+				"/cosmetics/skinr/" + skinrId(103),
 				"/paragon-hub/skinr?limit=100&after=cursor-0",
 				"/paragon-hub/skinr?limit=100&after=cursor-1",
 				"/paragon-hub/skinr?limit=100&after=cursor-2",
@@ -344,7 +345,7 @@ public class ScrapeSkinrTest {
 		var updated = listing(1, "listed", 101).put("quantity", 99);
 		dispatcher
 				.withExistingListings(fullListingsJson(List.of(existing), "cursor-0"))
-				.withExistingDetails(detailsJson(Map.of("101", detail(101, "Alpha"))))
+				.withExistingDetails(detailsJson(Map.of(skinrId(101), detail(101, "Alpha"))))
 				.withIncrementalPage("cursor-0", listingsPage(List.of(updated), "cursor-1"))
 				.withIncrementalPage("cursor-1", emptyListingsPage());
 
@@ -378,10 +379,10 @@ public class ScrapeSkinrTest {
 		dispatcher
 				.withExistingListings(fullListingsJson(List.of(active, soldOut, expired, removed), "cursor-0"))
 				.withExistingDetails(detailsJson(Map.of(
-						"101", detail(101, "A"),
-						"102", detail(102, "B"),
-						"103", detail(103, "C"),
-						"104", detail(104, "D"))))
+						skinrId(101), detail(101, "A"),
+						skinrId(102), detail(102, "B"),
+						skinrId(103), detail(103, "C"),
+						skinrId(104), detail(104, "D"))))
 				.withIncrementalPage("cursor-0", emptyListingsPage());
 
 		run();
@@ -407,7 +408,7 @@ public class ScrapeSkinrTest {
 		var soldOut = listing(1, "sold_out", 101);
 		dispatcher
 				.withExistingListings(fullListingsJson(List.of(original), "cursor-0"))
-				.withExistingDetails(detailsJson(Map.of("101", detail(101, "Alpha"))))
+				.withExistingDetails(detailsJson(Map.of(skinrId(101), detail(101, "Alpha"))))
 				.withIncrementalPage("cursor-0", listingsPage(List.of(soldOut), "cursor-1"))
 				.withIncrementalPage("cursor-1", emptyListingsPage());
 
@@ -439,19 +440,19 @@ public class ScrapeSkinrTest {
 		var detail102 = detail(102, "Beta");
 		dispatcher
 				.withExistingListings(fullListingsJson(List.of(existing), "cursor-0"))
-				.withExistingDetails(detailsJson(Map.of("101", detail101)))
+				.withExistingDetails(detailsJson(Map.of(skinrId(101), detail101)))
 				.withIncrementalPage("cursor-0", listingsPage(List.of(incoming), "cursor-1"))
 				.withIncrementalPage("cursor-1", emptyListingsPage())
 				.withDetail(102, detail102);
 
 		run();
 
-		assertEquals(Map.of("101", detail101, "102", detail102), readLatestDetails());
+		assertEquals(Map.of(skinrId(101), detail101, skinrId(102), detail102), readLatestDetails());
 
 		assertDataIndex();
 		assertArchives();
 		assertRequestPaths(
-				"/cosmetics/skinr/102",
+				"/cosmetics/skinr/" + skinrId(102),
 				"/paragon-hub/skinr?limit=100&after=cursor-0",
 				"/paragon-hub/skinr?limit=100&after=cursor-1",
 				"/skinr-details/skinr-details-latest.json",
@@ -470,19 +471,19 @@ public class ScrapeSkinrTest {
 		var detail102 = detail(102, "Beta");
 		dispatcher
 				.withExistingListings(fullListingsJson(List.of(original), "cursor-0"))
-				.withExistingDetails(detailsJson(Map.of("101", detail101)))
+				.withExistingDetails(detailsJson(Map.of(skinrId(101), detail101)))
 				.withIncrementalPage("cursor-0", listingsPage(List.of(soldOut), "cursor-1"))
 				.withIncrementalPage("cursor-1", emptyListingsPage())
 				.withDetail(102, detail102);
 
 		run();
 
-		assertEquals(Map.of("101", detail101, "102", detail102), readLatestDetails());
+		assertEquals(Map.of(skinrId(101), detail101, skinrId(102), detail102), readLatestDetails());
 
 		assertDataIndex();
 		assertArchives();
 		assertRequestPaths(
-				"/cosmetics/skinr/102",
+				"/cosmetics/skinr/" + skinrId(102),
 				"/paragon-hub/skinr?limit=100&after=cursor-0",
 				"/paragon-hub/skinr?limit=100&after=cursor-1",
 				"/skinr-details/skinr-details-latest.json",
@@ -506,15 +507,15 @@ public class ScrapeSkinrTest {
 		dispatcher
 				.withExistingListings(fullListingsJson(List.of(active, soldOut, expired, removed), "cursor-0"))
 				.withExistingDetails(detailsJson(Map.of(
-						"101", detail101,
-						"102", detail102,
-						"103", detail103,
-						"104", detail104)))
+						skinrId(101), detail101,
+						skinrId(102), detail102,
+						skinrId(103), detail103,
+						skinrId(104), detail104)))
 				.withIncrementalPage("cursor-0", emptyListingsPage());
 
 		run();
 
-		assertEquals(Map.of("101", detail101), readLatestDetails());
+		assertEquals(Map.of(skinrId(101), detail101), readLatestDetails());
 
 		assertDataIndex();
 		assertArchives();
@@ -617,32 +618,43 @@ public class ScrapeSkinrTest {
 		var arr = (ArrayNode) listingsResponse.get("listings");
 		var result = new ArrayList<ObjectNode>();
 		arr.forEach(n -> result.add((ObjectNode) n));
-		result.sort((a, b) -> Long.compare(a.get("id").asLong(), b.get("id").asLong()));
+		result.sort((a, b) -> a.get("id").asText().compareTo(b.get("id").asText()));
 		return result;
+	}
+
+	// --- ID helpers ---
+
+	private String listingId(long seq) {
+		return String.format("4fa%05x", seq);
+	}
+
+	private String skinrId(int seq) {
+		return String.format("abc%05x", seq);
 	}
 
 	// --- Data builders ---
 
-	private ObjectNode listing(long id, String state, int skinrId) {
+	private ObjectNode listing(long seq, String state, int skinrSeq) {
 		return reparse(objectMapper
 				.createObjectNode()
-				.put("id", id)
+				.put("id", listingId(seq))
 				.put("state", state)
 				.put("last_modified", "2024-01-01T00:00:00Z")
-				.put("seller_id", 1_000_000L + id)
-				.put("skinr_id", skinrId)
+				.put("seller_id", 1_000_000L + seq)
+				.put("skinr_id", skinrId(skinrSeq))
 				.put("created", "2024-01-01T00:00:00Z")
 				.put("expires", "2024-02-01T00:00:00Z")
 				.put("quantity", 1)
 				.set("price", objectMapper.createObjectNode().put("isk", 425000000)));
 	}
 
-	private ObjectNode detail(int id, String name) {
+	private ObjectNode detail(int seq, String name) {
+		var id = skinrId(seq);
 		var obj = objectMapper
 				.createObjectNode()
 				.put("id", id)
 				.put("name", name)
-				.put("creator_id", 2_000_000 + id)
+				.put("creator_id", 2_000_000 + seq)
 				.put("ship_type_id", 587)
 				.put("line", "Wrathful Gaze");
 		obj.set("layout", objectMapper.createObjectNode().put("pattern_blend_mode", "normal"));
@@ -686,10 +698,10 @@ public class ScrapeSkinrTest {
 		// key: after-cursor value; value: response JSON
 		private final Map<String, String> incrementalPages = new HashMap<>();
 		// key: skinr_id; value: response JSON
-		private final Map<Integer, String> detailResponses = new HashMap<>();
+		private final Map<String, String> detailResponses = new HashMap<>();
 		// skinr_ids served only once; 404 on any second call
-		private final Set<Integer> onceOnlyIds = new HashSet<>();
-		private final Set<Integer> servedOnceIds = Collections.synchronizedSet(new HashSet<>());
+		private final Set<String> onceOnlyIds = new HashSet<>();
+		private final Set<String> servedOnceIds = Collections.synchronizedSet(new HashSet<>());
 		private String existingListings = null;
 		private String existingDetails = null;
 
@@ -704,9 +716,9 @@ public class ScrapeSkinrTest {
 		}
 
 		/** Detail returned every time the endpoint is called. */
-		TestDispatcher withDetail(int skinrId, ObjectNode detail) {
+		TestDispatcher withDetail(int skinrSeq, ObjectNode detail) {
 			try {
-				detailResponses.put(skinrId, objectMapper.writeValueAsString(detail));
+				detailResponses.put(skinrId(skinrSeq), objectMapper.writeValueAsString(detail));
 			} catch (Exception e) {
 				throw new RuntimeException(e);
 			}
@@ -714,10 +726,11 @@ public class ScrapeSkinrTest {
 		}
 
 		/** Detail returned only on the first call; subsequent calls get 404. */
-		TestDispatcher withDetailOnce(int skinrId, ObjectNode detail) {
+		TestDispatcher withDetailOnce(int skinrSeq, ObjectNode detail) {
 			try {
-				detailResponses.put(skinrId, objectMapper.writeValueAsString(detail));
-				onceOnlyIds.add(skinrId);
+				var id = skinrId(skinrSeq);
+				detailResponses.put(id, objectMapper.writeValueAsString(detail));
+				onceOnlyIds.add(id);
 			} catch (Exception e) {
 				throw new RuntimeException(e);
 			}
@@ -777,15 +790,15 @@ public class ScrapeSkinrTest {
 
 				// SKINR detail endpoint
 				if (path.startsWith("/cosmetics/skinr/")) {
-					var skinrId = Integer.parseInt(path.substring("/cosmetics/skinr/".length()));
-					if (onceOnlyIds.contains(skinrId)) {
-						if (servedOnceIds.add(skinrId)) {
-							return mockJson(detailResponses.get(skinrId));
+					var id = path.substring("/cosmetics/skinr/".length());
+					if (onceOnlyIds.contains(id)) {
+						if (servedOnceIds.add(id)) {
+							return mockJson(detailResponses.get(id));
 						}
 						return new MockResponse().setResponseCode(404);
 					}
-					if (detailResponses.containsKey(skinrId)) {
-						return mockJson(detailResponses.get(skinrId));
+					if (detailResponses.containsKey(id)) {
+						return mockJson(detailResponses.get(id));
 					}
 					return new MockResponse().setResponseCode(404);
 				}

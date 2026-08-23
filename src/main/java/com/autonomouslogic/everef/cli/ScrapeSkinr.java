@@ -88,8 +88,8 @@ public class ScrapeSkinr implements Command {
 		var existingDetailsBytes = downloadExistingFile(SKINR_DETAILS.createLatestPath());
 
 		var details = loadExistingDetails(existingDetailsBytes);
-		var listingsMap = new LinkedHashMap<Long, ObjectNode>();
-		Set<Integer> purgedSkinrIds;
+		var listingsMap = new LinkedHashMap<String, ObjectNode>();
+		Set<String> purgedSkinrIds;
 		String outputCursor;
 
 		if (existingListingsBytes == null) {
@@ -119,24 +119,24 @@ public class ScrapeSkinr implements Command {
 		return objectMapper.readValue(bytes, new TypeReference<Map<String, ObjectNode>>() {});
 	}
 
-	private void loadListingsIntoMap(ObjectNode existingJson, Map<Long, ObjectNode> listingsMap) {
+	private void loadListingsIntoMap(ObjectNode existingJson, Map<String, ObjectNode> listingsMap) {
 		var arr = existingJson.get("listings");
 		if (arr != null && arr.isArray()) {
 			arr.forEach(n -> {
 				var obj = (ObjectNode) n;
-				listingsMap.put(obj.get("id").asLong(), obj);
+				listingsMap.put(obj.get("id").asText(), obj);
 			});
 		}
 	}
 
-	private void addListingsToMap(Map<Long, ObjectNode> listingsMap, List<ObjectNode> listings) {
-		listings.forEach(l -> listingsMap.put(l.get("id").asLong(), l));
+	private void addListingsToMap(Map<String, ObjectNode> listingsMap, List<ObjectNode> listings) {
+		listings.forEach(l -> listingsMap.put(l.get("id").asText(), l));
 	}
 
 	// --- Incremental fetch ---
 
 	@SneakyThrows
-	private String fetchIncrementalListings(String startCursor, Map<Long, ObjectNode> listingsMap) {
+	private String fetchIncrementalListings(String startCursor, Map<String, ObjectNode> listingsMap) {
 		String outputCursor = startCursor;
 		String currentCursor = startCursor;
 		while (true) {
@@ -157,33 +157,32 @@ public class ScrapeSkinr implements Command {
 
 	// --- Purging ---
 
-	private Set<Integer> purgeNonListedEntries(Map<Long, ObjectNode> listingsMap) {
-		var purged = new HashSet<Integer>();
+	private Set<String> purgeNonListedEntries(Map<String, ObjectNode> listingsMap) {
+		var purged = new HashSet<String>();
 		var iter = listingsMap.entrySet().iterator();
 		while (iter.hasNext()) {
 			var entry = iter.next();
 			if (!"listed".equals(entry.getValue().get("state").asText())) {
-				purged.add(entry.getValue().get("skinr_id").asInt());
+				purged.add(entry.getValue().get("skinr_id").asText());
 				iter.remove();
 			}
 		}
 		return purged;
 	}
 
-	private void purgeOrphanedDetails(Set<Integer> purgedSkinrIds, Map<String, ObjectNode> details) {
-		purgedSkinrIds.forEach(id -> details.remove(String.valueOf(id)));
+	private void purgeOrphanedDetails(Set<String> purgedSkinrIds, Map<String, ObjectNode> details) {
+		purgedSkinrIds.forEach(details::remove);
 	}
 
 	// --- Detail fetching ---
 
-	private void fetchMissingDetails(Map<Long, ObjectNode> listingsMap, Map<String, ObjectNode> details) {
+	private void fetchMissingDetails(Map<String, ObjectNode> listingsMap, Map<String, ObjectNode> details) {
 		for (var listing : listingsMap.values()) {
-			var skinrId = listing.get("skinr_id").asInt();
-			var key = String.valueOf(skinrId);
-			if (!details.containsKey(key)) {
+			var skinrId = listing.get("skinr_id").asText();
+			if (!details.containsKey(skinrId)) {
 				var detail = fetchDetail(skinrId);
 				if (detail != null) {
-					details.put(key, detail);
+					details.put(skinrId, detail);
 				}
 			}
 		}
@@ -191,7 +190,7 @@ public class ScrapeSkinr implements Command {
 
 	// --- Output building ---
 
-	private ObjectNode buildListingsOutput(Map<Long, ObjectNode> listingsMap, String cursor) {
+	private ObjectNode buildListingsOutput(Map<String, ObjectNode> listingsMap, String cursor) {
 		var output = objectMapper.createObjectNode();
 		var arr = objectMapper.createArrayNode();
 		listingsMap.values().forEach(arr::add);
@@ -248,7 +247,7 @@ public class ScrapeSkinr implements Command {
 	}
 
 	@SneakyThrows
-	private ObjectNode fetchDetail(int skinrId) {
+	private ObjectNode fetchDetail(String skinrId) {
 		var url = EsiUrl.modern().urlPath("/cosmetics/skinr/" + skinrId).build();
 		var node = esiHelper.decodeResponse(esiHelper.fetch(url));
 		if (node == null || node.isNull()) {
