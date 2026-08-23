@@ -171,6 +171,7 @@ public class ScrapeSkinr implements Command {
 	}
 
 	private void purgeOrphanedDetails(Set<String> purgedSkinrIds, Map<String, ObjectNode> details) {
+		log.trace("Purging {} orphaned listings", purgedSkinrIds.size());
 		purgedSkinrIds.forEach(details::remove);
 	}
 
@@ -180,9 +181,12 @@ public class ScrapeSkinr implements Command {
 		for (var listing : listingsMap.values()) {
 			var skinrId = listing.get("skinr_id").asText();
 			if (!details.containsKey(skinrId)) {
+				log.trace("Fetching SKINR ID " + skinrId);
 				var detail = fetchDetail(skinrId);
 				if (detail != null) {
 					details.put(skinrId, detail);
+				} else {
+					log.warn("SKINR ID " + skinrId + " not found");
 				}
 			}
 		}
