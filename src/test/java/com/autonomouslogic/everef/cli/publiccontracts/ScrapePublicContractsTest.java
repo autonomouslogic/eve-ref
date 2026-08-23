@@ -1214,8 +1214,7 @@ public class ScrapePublicContractsTest {
 		assertEquals(expectedItems(2500, List.of(item)), records.get("contract_items.csv"));
 		assertEquals(expectedDynamicItems(2500, 2500001), records.get("contract_dynamic_items.csv"));
 		assertEquals(
-				expectedDynamicAttributes(2500, 2500001),
-				records.get("contract_dynamic_items_dogma_attributes.csv"));
+				expectedDynamicAttributes(2500, 2500001), records.get("contract_dynamic_items_dogma_attributes.csv"));
 		assertEquals(expectedDynamicEffects(2500, 2500001), records.get("contract_dynamic_items_dogma_effects.csv"));
 		assertEquals(List.of(), records.get("contract_non_dynamic_items.csv"));
 		assertEquals(List.of(), records.get("contract_bids.csv"));
@@ -1260,8 +1259,7 @@ public class ScrapePublicContractsTest {
 		assertEquals(expectedItems(2600, List.of(item)), records.get("contract_items.csv"));
 		assertEquals(expectedDynamicItems(2600, 2600001), records.get("contract_dynamic_items.csv"));
 		assertEquals(
-				expectedDynamicAttributes(2600, 2600001),
-				records.get("contract_dynamic_items_dogma_attributes.csv"));
+				expectedDynamicAttributes(2600, 2600001), records.get("contract_dynamic_items_dogma_attributes.csv"));
 		assertEquals(expectedDynamicEffects(2600, 2600001), records.get("contract_dynamic_items_dogma_effects.csv"));
 		assertEquals(List.of(), records.get("contract_non_dynamic_items.csv"));
 		assertEquals(List.of(), records.get("contract_bids.csv"));

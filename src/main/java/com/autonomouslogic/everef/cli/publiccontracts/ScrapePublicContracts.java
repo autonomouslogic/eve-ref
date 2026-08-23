@@ -12,8 +12,6 @@ import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.url.UrlParser;
 import com.autonomouslogic.everef.util.TempFiles;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import io.reactivex.rxjava3.core.Flowable;
 import java.io.File;
 import java.time.Duration;
 import java.time.Instant;
@@ -21,11 +19,9 @@ import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collectors;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Provider;
@@ -82,9 +78,7 @@ public class ScrapePublicContracts implements Command {
 	private Map<String, JsonNode> dogmaEffectsStore;
 
 	private ContractsScrapeMeta contractsScrapeMeta;
-	private ContractAbyssalFetcher contractAbyssalFetcher;
 	private final Set<Long> seenContractIds = Collections.newSetFromMap(new ConcurrentHashMap<>());
-	private final Set<Long> backfilledContractIds = Collections.newSetFromMap(new ConcurrentHashMap<>());
 
 	@Inject
 	protected ScrapePublicContracts() {}
@@ -101,7 +95,6 @@ public class ScrapePublicContracts implements Command {
 			initMeta();
 			loadLatestContracts();
 			fetchAndStoreContracts();
-			retryAbyssalDogmaForExpiredContracts();
 			deleteOldContracts();
 			var file = buildFile();
 			uploadFiles(file);
@@ -182,8 +175,8 @@ public class ScrapePublicContracts implements Command {
 				.setContractsStore(contractsStore)
 				.setItemsStore(itemsStore)
 				.setBidsStore(bidsStore);
-		contractAbyssalFetcher = contractFetcher.getContractAbyssalFetcher();
-		contractAbyssalFetcher
+		var abyssalFetcher = contractFetcher.getContractAbyssalFetcher();
+		abyssalFetcher
 				.setDynamicItemsStore(dynamicItemsStore)
 				.setNonDynamicItemsStore(nonDynamicItemsStore)
 				.setDogmaAttributesStore(dogmaAttributesStore)
@@ -196,43 +189,6 @@ public class ScrapePublicContracts implements Command {
 		log.info(String.format(
 				"Fetched %s contracts in %s",
 				seenContractIds.size(), Duration.between(start, Instant.now()).truncatedTo(ChronoUnit.MILLIS)));
-	}
-
-	/**
-	 * For items from expired contracts that existed in the previous scrape, attempts to backfill
-	 * missing abyssal dogma. If dogma is successfully fetched, the contract ID is added to
-	 * backfilledContractIds so those items survive deleteOldContracts().
-	 */
-	private void retryAbyssalDogmaForExpiredContracts() {
-		log.info("Retrying abyssal dogma for expired contracts");
-		var byContract = itemsStore.values().stream()
-				.filter(item -> {
-					long cid = item.get("contract_id").asLong();
-					return contractsStore.containsKey(cid) && !seenContractIds.contains(cid);
-				})
-				.map(item -> (ObjectNode) item)
-				.collect(Collectors.groupingBy(item -> item.get("contract_id").asLong()));
-		if (byContract.isEmpty()) {
-			return;
-		}
-		log.debug("Retrying dogma for {} expired contracts", byContract.size());
-		for (var entry : byContract.entrySet()) {
-			long contractId = entry.getKey();
-			List<ObjectNode> items = entry.getValue();
-			contractAbyssalFetcher
-					.apply(contractId, Flowable.fromIterable(items))
-					.blockingAwait();
-			boolean anyStored = items.stream()
-					.filter(item -> item.hasNonNull("item_id"))
-					.anyMatch(item -> {
-						long itemId = item.get("item_id").asLong();
-						return dynamicItemsStore.containsKey(itemId) || nonDynamicItemsStore.containsKey(itemId);
-					});
-			if (anyStored) {
-				log.info("Backfilled dogma for expired contract {}", contractId);
-				backfilledContractIds.add(contractId);
-			}
-		}
 	}
 
 	/**
@@ -257,7 +213,7 @@ public class ScrapePublicContracts implements Command {
 		var removed = new MapRemover<>(map)
 				.removeIf((id, contract) -> {
 					long contractId = contract.get("contract_id").asLong();
-					return !seenContractIds.contains(contractId) && !backfilledContractIds.contains(contractId);
+					return !seenContractIds.contains(contractId);
 				})
 				.getEntriesRemoved();
 		log.debug(String.format("Deleted %s old contract %s", removed, name));
