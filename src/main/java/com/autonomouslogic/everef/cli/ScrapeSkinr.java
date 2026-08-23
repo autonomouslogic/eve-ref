@@ -12,6 +12,7 @@ import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.url.UrlParser;
 import com.autonomouslogic.everef.util.CompressUtil;
 import com.autonomouslogic.everef.util.TempFiles;
+import com.autonomouslogic.everef.util.archive.ArchivePathFactory;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -86,63 +87,96 @@ public class ScrapeSkinr implements Command {
 		var existingListingsBytes = downloadExistingFile(SKINR_LISTINGS.createLatestPath());
 		var existingDetailsBytes = downloadExistingFile(SKINR_DETAILS.createLatestPath());
 
-		Map<String, ObjectNode> details = new HashMap<>();
-		if (existingDetailsBytes != null) {
-			details = objectMapper.readValue(existingDetailsBytes, new TypeReference<Map<String, ObjectNode>>() {});
-		}
-
-		Map<Long, ObjectNode> listingsMap = new LinkedHashMap<>();
+		var details = loadExistingDetails(existingDetailsBytes);
+		var listingsMap = new LinkedHashMap<Long, ObjectNode>();
+		Set<Integer> purgedSkinrIds;
 		String outputCursor;
-		Set<Integer> purgedSkinrIds = new HashSet<>();
 
 		if (existingListingsBytes == null) {
 			var page = fetchListingsPage(null);
-			for (var listing : extractListings(page)) {
-				listingsMap.put(listing.get("id").asLong(), listing);
-			}
+			addListingsToMap(listingsMap, extractListings(page));
 			outputCursor = extractCursorAfter(page);
+			purgedSkinrIds = Set.of();
 		} else {
 			var existingJson = (ObjectNode) objectMapper.readTree(existingListingsBytes);
-			String existingCursor = extractCursorAfter(existingJson);
-
-			var existingArr = existingJson.get("listings");
-			if (existingArr != null && existingArr.isArray()) {
-				existingArr.forEach(n -> {
-					var obj = (ObjectNode) n;
-					listingsMap.put(obj.get("id").asLong(), obj);
-				});
-			}
-
-			var iter = listingsMap.entrySet().iterator();
-			while (iter.hasNext()) {
-				var entry = iter.next();
-				if (!"listed".equals(entry.getValue().get("state").asText())) {
-					purgedSkinrIds.add(entry.getValue().get("skinr_id").asInt());
-					iter.remove();
-				}
-			}
-
-			outputCursor = existingCursor;
-			String currentCursor = existingCursor;
-			while (true) {
-				var page = fetchListingsPage(currentCursor);
-				var newListings = extractListings(page);
-				if (newListings.isEmpty()) {
-					break;
-				}
-				for (var listing : newListings) {
-					listingsMap.put(listing.get("id").asLong(), listing);
-				}
-				var pageCursor = extractCursorAfter(page);
-				if (pageCursor != null) {
-					outputCursor = pageCursor;
-					currentCursor = pageCursor;
-				} else {
-					break;
-				}
-			}
+			loadListingsIntoMap(existingJson, listingsMap);
+			purgedSkinrIds = purgeNonListedEntries(listingsMap);
+			outputCursor = fetchIncrementalListings(extractCursorAfter(existingJson), listingsMap);
 		}
 
+		fetchMissingDetails(listingsMap, details);
+		purgeOrphanedDetails(purgedSkinrIds, details);
+
+		uploadFiles(buildListingsOutput(listingsMap, outputCursor), details);
+		log.info("SKINR scrape complete");
+	}
+
+	// --- Listings loading ---
+
+	@SneakyThrows
+	private Map<String, ObjectNode> loadExistingDetails(byte[] bytes) {
+		if (bytes == null) return new HashMap<>();
+		return objectMapper.readValue(bytes, new TypeReference<Map<String, ObjectNode>>() {});
+	}
+
+	private void loadListingsIntoMap(ObjectNode existingJson, Map<Long, ObjectNode> listingsMap) {
+		var arr = existingJson.get("listings");
+		if (arr != null && arr.isArray()) {
+			arr.forEach(n -> {
+				var obj = (ObjectNode) n;
+				listingsMap.put(obj.get("id").asLong(), obj);
+			});
+		}
+	}
+
+	private void addListingsToMap(Map<Long, ObjectNode> listingsMap, List<ObjectNode> listings) {
+		listings.forEach(l -> listingsMap.put(l.get("id").asLong(), l));
+	}
+
+	// --- Incremental fetch ---
+
+	@SneakyThrows
+	private String fetchIncrementalListings(String startCursor, Map<Long, ObjectNode> listingsMap) {
+		String outputCursor = startCursor;
+		String currentCursor = startCursor;
+		while (true) {
+			var page = fetchListingsPage(currentCursor);
+			var newListings = extractListings(page);
+			if (newListings.isEmpty()) break;
+			addListingsToMap(listingsMap, newListings);
+			var pageCursor = extractCursorAfter(page);
+			if (pageCursor != null) {
+				outputCursor = pageCursor;
+				currentCursor = pageCursor;
+			} else {
+				break;
+			}
+		}
+		return outputCursor;
+	}
+
+	// --- Purging ---
+
+	private Set<Integer> purgeNonListedEntries(Map<Long, ObjectNode> listingsMap) {
+		var purged = new HashSet<Integer>();
+		var iter = listingsMap.entrySet().iterator();
+		while (iter.hasNext()) {
+			var entry = iter.next();
+			if (!"listed".equals(entry.getValue().get("state").asText())) {
+				purged.add(entry.getValue().get("skinr_id").asInt());
+				iter.remove();
+			}
+		}
+		return purged;
+	}
+
+	private void purgeOrphanedDetails(Set<Integer> purgedSkinrIds, Map<String, ObjectNode> details) {
+		purgedSkinrIds.forEach(id -> details.remove(String.valueOf(id)));
+	}
+
+	// --- Detail fetching ---
+
+	private void fetchMissingDetails(Map<Long, ObjectNode> listingsMap, Map<String, ObjectNode> details) {
 		for (var listing : listingsMap.values()) {
 			var skinrId = listing.get("skinr_id").asInt();
 			var key = String.valueOf(skinrId);
@@ -153,53 +187,41 @@ public class ScrapeSkinr implements Command {
 				}
 			}
 		}
-
-		for (var skinrId : purgedSkinrIds) {
-			details.remove(String.valueOf(skinrId));
-		}
-
-		var listingsOutput = objectMapper.createObjectNode();
-		var listingsArr = objectMapper.createArrayNode();
-		listingsMap.values().forEach(listingsArr::add);
-		listingsOutput.set("listings", listingsArr);
-		if (outputCursor != null) {
-			var cursorNode = objectMapper.createObjectNode();
-			cursorNode.put("after", outputCursor);
-			listingsOutput.set("cursor", cursorNode);
-		}
-
-		uploadFiles(listingsOutput, details);
-		log.info("SKINR scrape complete");
 	}
+
+	// --- Output building ---
+
+	private ObjectNode buildListingsOutput(Map<Long, ObjectNode> listingsMap, String cursor) {
+		var output = objectMapper.createObjectNode();
+		var arr = objectMapper.createArrayNode();
+		listingsMap.values().forEach(arr::add);
+		output.set("listings", arr);
+		if (cursor != null) {
+			var cursorNode = objectMapper.createObjectNode();
+			cursorNode.put("after", cursor);
+			output.set("cursor", cursorNode);
+		}
+		return output;
+	}
+
+	// --- Upload ---
 
 	@SneakyThrows
 	private void uploadFiles(ObjectNode listings, Map<String, ObjectNode> details) {
-		var listingsJson = tempFiles.tempFile("skinr-listings", ".json").toFile();
-		objectMapper.writeValue(listingsJson, listings);
-		var listingsArchive = CompressUtil.compressBzip2(listingsJson);
-		s3Util.uploadLatestAndArchive(
-				listingsJson,
-				listingsArchive,
-				dataPath,
-				SKINR_LISTINGS,
-				scrapeTime,
-				"application/json",
-				"application/x-bzip2",
-				s3Client);
-
-		var detailsJson = tempFiles.tempFile("skinr-details", ".json").toFile();
-		objectMapper.writeValue(detailsJson, details);
-		var detailsArchive = CompressUtil.compressBzip2(detailsJson);
-		s3Util.uploadLatestAndArchive(
-				detailsJson,
-				detailsArchive,
-				dataPath,
-				SKINR_DETAILS,
-				scrapeTime,
-				"application/json",
-				"application/x-bzip2",
-				s3Client);
+		uploadFile("skinr-listings", listings, SKINR_LISTINGS);
+		uploadFile("skinr-details", details, SKINR_DETAILS);
 	}
+
+	@SneakyThrows
+	private void uploadFile(String prefix, Object data, ArchivePathFactory factory) {
+		var json = tempFiles.tempFile(prefix, ".json").toFile();
+		objectMapper.writeValue(json, data);
+		var archive = CompressUtil.compressBzip2(json);
+		s3Util.uploadLatestAndArchive(
+				json, archive, dataPath, factory, scrapeTime, "application/json", "application/x-bzip2", s3Client);
+	}
+
+	// --- ESI fetch helpers ---
 
 	@SneakyThrows
 	private byte[] downloadExistingFile(String path) {
