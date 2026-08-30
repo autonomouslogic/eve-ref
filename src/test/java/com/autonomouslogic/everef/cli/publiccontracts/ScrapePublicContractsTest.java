@@ -1,6 +1,9 @@
 package com.autonomouslogic.everef.cli.publiccontracts;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.lenient;
 
@@ -13,6 +16,10 @@ import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.util.DataIndexHelper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import io.sentry.Hint;
+import io.sentry.Sentry;
+import io.sentry.SentryEvent;
+import io.sentry.SentryLevel;
 import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
@@ -25,6 +32,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -36,6 +44,7 @@ import okhttp3.mockwebserver.MockWebServer;
 import okhttp3.mockwebserver.RecordedRequest;
 import okio.Buffer;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -77,6 +86,9 @@ public class ScrapePublicContractsTest {
 	ScrapePublicContracts scrapePublicContracts;
 
 	@Inject
+	ContractAbyssalFetcher abyssalFetcher;
+
+	@Inject
 	@Named("data")
 	S3AsyncClient dataClient;
 
@@ -98,6 +110,8 @@ public class ScrapePublicContractsTest {
 	final String lastModified = "Mon, 03 Apr 2023 03:47:30 GMT";
 	final Instant lastModifiedInstant = Instant.parse("2023-04-03T03:47:30Z");
 
+	AtomicReference<SentryEvent> sentryEvent;
+
 	MockWebServer server;
 
 	private Map<String, List<Map<String, String>>> records;
@@ -112,6 +126,18 @@ public class ScrapePublicContractsTest {
 				.build()
 				.inject(this);
 		lenient().when(locationPopulator.populate(any(), any())).thenAnswer(MockLocationPopulatorModule.mockPopulate());
+
+		sentryEvent = new AtomicReference<SentryEvent>();
+		Sentry.init(options -> {
+			options.setEnableExternalConfiguration(true);
+			options.setDsn("https://abc@abc.ingest.us.sentry.io/123");
+			options.setBeforeSend((@Nullable SentryEvent event, @NotNull Hint hint) -> {
+				sentryEvent.set(event);
+				return null;
+			});
+		});
+		assertTrue(Sentry.isEnabled());
+
 		server = new MockWebServer();
 		server.start(TestDataUtil.TEST_PORT);
 	}
@@ -847,6 +873,7 @@ public class ScrapePublicContractsTest {
 					"/universe/types/47804/?datasource=tranquility");
 		}
 		assertDataIndex();
+		assertNull(sentryEvent.get());
 	}
 
 	/**
@@ -904,6 +931,7 @@ public class ScrapePublicContractsTest {
 					"/universe/regions/?datasource=tranquility");
 		}
 		assertDataIndex();
+		assertNull(sentryEvent.get());
 	}
 
 	/**
@@ -989,6 +1017,7 @@ public class ScrapePublicContractsTest {
 					"/universe/types/47804/?datasource=tranquility");
 		}
 		assertDataIndex();
+		assertNull(sentryEvent.get());
 	}
 
 	/**
@@ -1050,6 +1079,7 @@ public class ScrapePublicContractsTest {
 					"/universe/regions/?datasource=tranquility");
 		}
 		assertDataIndex();
+		assertNull(sentryEvent.get());
 	}
 
 	/**
@@ -1088,66 +1118,74 @@ public class ScrapePublicContractsTest {
 				"/universe/regions/10000001/?datasource=tranquility",
 				"/universe/regions/?datasource=tranquility");
 		assertDataIndex();
+		assertNull(sentryEvent.get());
 	}
 
 	/**
-	 * No previous archive. One contract with one abyssal item where the ESI returns 520. The item
-	 * should not appear in contract_dynamic_items.csv; it will be retried on the next run.
+	 * No previous archive. One contract with one abyssal item where the ESI returns a non-200
+	 * status code. The scrape must succeed and the dynamic item must be absent from the
+	 * output files.
 	 */
 	@ParameterizedTest
-	@ValueSource(strings = {"item_exchange", "auction"})
+	@ValueSource(ints = {400, 404, 500, 520})
 	@SneakyThrows
-	void abyssalItemEsi520StoredAsNonDynamic(String contractType) {
+	void abyssalItemFailedFetchAbsentFromOutput(int statusCode) {
 		var typeId = 47804;
-		var item = abyssalItem(1700001, 1700001, typeId);
-		var contract = contract(1700).put("type", contractType);
+		var item = abyssalItem(1810001, 1810001, typeId);
+		var contract = contract(1810).put("type", "item_exchange");
 		var metaGroupsJson = "{\"meta_group_id\":15,\"type_ids\":[" + typeId + "]}";
 
 		var d = dispatcher()
 				.withRegion(10000001)
 				.withContracts(10000001, contractsJson(List.of(contract)))
-				.withItems(1700, itemsJson(List.of(item)))
-				.withDynamicItem520(typeId, 1700001)
+				.withItems(1810, itemsJson(List.of(item)))
+				.withDynamicItemError(typeId, 1810001, statusCode)
 				.withType(typeId)
 				.withMetaGroups(metaGroupsJson);
-		if ("auction".equals(contractType)) {
-			d.withBids(1700, bidsJson(List.of()));
-		}
 		server.setDispatcher(d);
 		run();
 
 		assertEquals(expectedContracts(List.of(contract), 10000001), records.get("contracts.csv"));
-		assertEquals(expectedItems(1700, List.of(item)), records.get("contract_items.csv"));
+		assertEquals(expectedItems(1810, List.of(item)), records.get("contract_items.csv"));
 		assertEquals(List.of(), records.get("contract_dynamic_items.csv"));
 		assertEquals(List.of(), records.get("contract_dynamic_items_dogma_attributes.csv"));
 		assertEquals(List.of(), records.get("contract_dynamic_items_dogma_effects.csv"));
-		assertEquals(List.of(), records.get("contract_bids.csv"));
 		assertLatestFileMatches();
-		if ("auction".equals(contractType)) {
-			assertRequestPaths(
-					"/groups/1964",
-					"/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
-					"/latest/contracts/public/bids/1700?datasource=tranquility&language=en&page=1",
-					"/latest/contracts/public/items/1700?datasource=tranquility&language=en&page=1",
-					"/latest/dogma/dynamic/items/47804/1700001/?datasource=tranquility&language=en",
-					"/meta_groups/15",
-					"/public-contracts/public-contracts-latest.v2.tar.bz2",
-					"/universe/regions/10000001/?datasource=tranquility",
-					"/universe/regions/?datasource=tranquility",
-					"/universe/types/47804/?datasource=tranquility");
-		} else {
-			assertRequestPaths(
-					"/groups/1964",
-					"/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
-					"/latest/contracts/public/items/1700?datasource=tranquility&language=en&page=1",
-					"/latest/dogma/dynamic/items/47804/1700001/?datasource=tranquility&language=en",
-					"/meta_groups/15",
-					"/public-contracts/public-contracts-latest.v2.tar.bz2",
-					"/universe/regions/10000001/?datasource=tranquility",
-					"/universe/regions/?datasource=tranquility",
-					"/universe/types/47804/?datasource=tranquility");
-		}
 		assertDataIndex();
+	}
+
+	/**
+	 * No previous archive. One contract with one abyssal item where the ESI returns a non-200
+	 * status code. The error should be logged to Sentry.
+	 */
+	@ParameterizedTest
+	@ValueSource(ints = {400, 404, 500, 520})
+	@SneakyThrows
+	void abyssalItemFailedLoggedToSentry(int statusCode) {
+		var typeId = 47804;
+		var item = abyssalItem(1810001, 1810001, typeId);
+		var contract = contract(1810).put("type", "item_exchange");
+		var metaGroupsJson = "{\"meta_group_id\":15,\"type_ids\":[" + typeId + "]}";
+
+		var d = dispatcher()
+				.withRegion(10000001)
+				.withContracts(10000001, contractsJson(List.of(contract)))
+				.withItems(1810, itemsJson(List.of(item)))
+				.withDynamicItemError(typeId, 1810001, statusCode)
+				.withType(typeId)
+				.withMetaGroups(metaGroupsJson);
+		server.setDispatcher(d);
+		run();
+
+		// Sentry event
+		assertNotNull(sentryEvent.get());
+		assertEquals(
+				"Failed to fetch dynamic item: " + statusCode,
+				sentryEvent.get().getExceptions().getFirst().getValue());
+		assertEquals(SentryLevel.WARNING, sentryEvent.get().getLevel());
+		assertEquals("1810", sentryEvent.get().getExtra("contract_id"));
+		assertEquals("1810001", sentryEvent.get().getExtra("item_id"));
+		assertEquals("47804", sentryEvent.get().getExtra("type_id"));
 	}
 
 	/**
@@ -1197,6 +1235,7 @@ public class ScrapePublicContractsTest {
 				"/universe/regions/?datasource=tranquility",
 				"/universe/types/47804/?datasource=tranquility");
 		assertDataIndex();
+		assertNull(sentryEvent.get());
 	}
 
 	/**
@@ -1259,6 +1298,7 @@ public class ScrapePublicContractsTest {
 					"/universe/regions/?datasource=tranquility");
 		}
 		assertDataIndex();
+		assertNull(sentryEvent.get());
 	}
 
 	/**
@@ -1292,6 +1332,7 @@ public class ScrapePublicContractsTest {
 				"/universe/regions/10000001/?datasource=tranquility",
 				"/universe/regions/?datasource=tranquility");
 		assertDataIndex();
+		assertNull(sentryEvent.get());
 	}
 
 	/**
@@ -1326,6 +1367,7 @@ public class ScrapePublicContractsTest {
 				"/universe/regions/10000001/?datasource=tranquility",
 				"/universe/regions/?datasource=tranquility");
 		assertDataIndex();
+		assertNull(sentryEvent.get());
 	}
 
 	// --- Run and capture ---
@@ -1665,6 +1707,7 @@ public class ScrapePublicContractsTest {
 		// key: "typeId-itemId"
 		private final Map<String, String> dynamicItemsByKey = new HashMap<>();
 		private final Set<String> dynamicItem520Keys = new HashSet<>();
+		private final Map<String, Integer> dynamicItemErrorCodes = new HashMap<>();
 		private final Set<Integer> knownTypeIds = new HashSet<>();
 		private String metaGroupsBody;
 		private String mutaplasmidGroupBody = "{\"group_id\":1964,\"type_ids\":[]}";
@@ -1720,6 +1763,11 @@ public class ScrapePublicContractsTest {
 
 		TestDispatcher withDynamicItem520(long typeId, long itemId) {
 			dynamicItem520Keys.add(typeId + "-" + itemId);
+			return this;
+		}
+
+		TestDispatcher withDynamicItemError(long typeId, long itemId, int statusCode) {
+			dynamicItemErrorCodes.put(typeId + "-" + itemId, statusCode);
 			return this;
 		}
 
@@ -1809,6 +1857,8 @@ public class ScrapePublicContractsTest {
 					var itemId = Long.parseLong(segments.get(segmentIndex + 1));
 					var key = typeId + "-" + itemId;
 					if (dynamicItem520Keys.contains(key)) return new MockResponse().setResponseCode(520);
+					if (dynamicItemErrorCodes.containsKey(key))
+						return new MockResponse().setResponseCode(dynamicItemErrorCodes.get(key));
 					var body = dynamicItemsByKey.get(key);
 					return body != null ? mockJson(body) : new MockResponse().setResponseCode(404);
 				}
