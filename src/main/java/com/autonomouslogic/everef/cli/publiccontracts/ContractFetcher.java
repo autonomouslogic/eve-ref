@@ -104,7 +104,9 @@ public class ContractFetcher {
 		// Process contracts in parallel (32 at a time)
 		var tasks = contracts.stream()
 				.map(contract -> (Callable<Long>) () -> {
-					var contractId = populateLocation(region, contract);
+					var contractId = contract.get("contract_id").asLong();
+					populateLocation(region, contract);
+					resolveItemsAndBids(contract);
 					var n = count.incrementAndGet();
 					if (n % 1_000 == 0) {
 						log.debug("Fetched {} public contracts from {}", n, region.getName());
@@ -130,15 +132,10 @@ public class ContractFetcher {
 				.blockingGet();
 	}
 
-	private Long populateLocation(GetUniverseRegionsRegionIdOk region, ObjectNode entry) {
-		var contractId = entry.get("contract_id").asLong();
+	private void populateLocation(GetUniverseRegionsRegionIdOk region, ObjectNode entry) {
 		entry.put("region_id", region.getRegionId());
-
 		locationPopulator.populate(entry, "start_location_id").blockingAwait();
 		contractsStore.put(ContractsFileBuilder.CONTRACT_ID.apply(entry), entry);
-		resolveItemsAndBids(entry);
-
-		return contractId;
 	}
 
 	private void resolveItemsAndBids(ObjectNode contract) {
