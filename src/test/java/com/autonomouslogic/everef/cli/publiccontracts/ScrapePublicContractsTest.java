@@ -318,6 +318,7 @@ public class ScrapePublicContractsTest {
 		assertLatestFileMatches();
 		if ("auction".equals(contractType)) {
 			assertRequestPaths(
+					"/groups/1964",
 					"/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
 					"/latest/contracts/public/bids/700?datasource=tranquility&language=en&page=1",
 					"/latest/contracts/public/items/700?datasource=tranquility&language=en&page=1",
@@ -327,6 +328,7 @@ public class ScrapePublicContractsTest {
 					"/universe/regions/?datasource=tranquility");
 		} else {
 			assertRequestPaths(
+					"/groups/1964",
 					"/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
 					"/latest/contracts/public/items/700?datasource=tranquility&language=en&page=1",
 					"/meta_groups/15",
@@ -362,6 +364,7 @@ public class ScrapePublicContractsTest {
 		assertLatestFileMatches();
 		if ("auction".equals(contractType)) {
 			assertRequestPaths(
+					"/groups/1964",
 					"/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
 					"/latest/contracts/public/bids/800?datasource=tranquility&language=en&page=1",
 					"/latest/contracts/public/items/800?datasource=tranquility&language=en&page=1",
@@ -372,6 +375,7 @@ public class ScrapePublicContractsTest {
 					"/universe/regions/?datasource=tranquility");
 		} else {
 			assertRequestPaths(
+					"/groups/1964",
 					"/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
 					"/latest/contracts/public/items/800?datasource=tranquility&language=en&page=1",
 					"/latest/contracts/public/items/800?datasource=tranquility&language=en&page=2",
@@ -471,6 +475,7 @@ public class ScrapePublicContractsTest {
 		assertNoSubDataExceptItems();
 		assertLatestFileMatches();
 		assertRequestPaths(
+				"/groups/1964",
 				"/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
 				"/latest/contracts/public/items/1102?datasource=tranquility&language=en&page=1",
 				"/meta_groups/15",
@@ -548,6 +553,7 @@ public class ScrapePublicContractsTest {
 		assertLatestFileMatches();
 		if ("auction".equals(contractType)) {
 			assertRequestPaths(
+					"/groups/1964",
 					"/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
 					"/latest/contracts/public/bids/2200?datasource=tranquility&language=en&page=1",
 					"/latest/contracts/public/items/2200?datasource=tranquility&language=en&page=1",
@@ -557,6 +563,7 @@ public class ScrapePublicContractsTest {
 					"/universe/regions/?datasource=tranquility");
 		} else {
 			assertRequestPaths(
+					"/groups/1964",
 					"/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
 					"/latest/contracts/public/items/2200?datasource=tranquility&language=en&page=1",
 					"/meta_groups/15",
@@ -621,6 +628,7 @@ public class ScrapePublicContractsTest {
 		assertNoSubDataExceptItemsAndBids();
 		assertLatestFileMatches();
 		assertRequestPaths(
+				"/groups/1964",
 				"/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
 				"/latest/contracts/public/bids/900?datasource=tranquility&language=en&page=1",
 				"/latest/contracts/public/items/900?datasource=tranquility&language=en&page=1",
@@ -656,6 +664,7 @@ public class ScrapePublicContractsTest {
 		assertNoSubDataExceptItemsAndBids();
 		assertLatestFileMatches();
 		assertRequestPaths(
+				"/groups/1964",
 				"/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
 				"/latest/contracts/public/bids/950?datasource=tranquility&language=en&page=1",
 				"/latest/contracts/public/bids/950?datasource=tranquility&language=en&page=2",
@@ -823,6 +832,7 @@ public class ScrapePublicContractsTest {
 		assertLatestFileMatches();
 		if ("auction".equals(contractType)) {
 			assertRequestPaths(
+					"/groups/1964",
 					"/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
 					"/latest/contracts/public/bids/1400?datasource=tranquility&language=en&page=1",
 					"/latest/contracts/public/items/1400?datasource=tranquility&language=en&page=1",
@@ -834,6 +844,7 @@ public class ScrapePublicContractsTest {
 					"/universe/types/47804/?datasource=tranquility");
 		} else {
 			assertRequestPaths(
+					"/groups/1964",
 					"/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
 					"/latest/contracts/public/items/1400?datasource=tranquility&language=en&page=1",
 					"/latest/dogma/dynamic/items/47804/1400001/?datasource=tranquility&language=en",
@@ -842,6 +853,63 @@ public class ScrapePublicContractsTest {
 					"/universe/regions/10000001/?datasource=tranquility",
 					"/universe/regions/?datasource=tranquility",
 					"/universe/types/47804/?datasource=tranquility");
+		}
+		assertDataIndex();
+	}
+
+	/**
+	 * Mutaplasmids (group 1964) are in the Abyssal meta group but must not trigger dogma fetches.
+	 * Even if the type appears in meta group 15, the dogma endpoint must not be called.
+	 */
+	@ParameterizedTest
+	@ValueSource(strings = {"item_exchange", "auction"})
+	@SneakyThrows
+	void mutaplasmidItemNotFetchedForDogma(String contractType) {
+		var mutaplasmidTypeId = 85438;
+		var item = abyssalItem(1450001, 1450001, mutaplasmidTypeId);
+		var contract = contract(1450).put("type", contractType);
+		// Mutaplasmid type appears in meta group 15 but also in group 1964 — must be excluded
+		var metaGroupsJson = "{\"meta_group_id\":15,\"type_ids\":[" + mutaplasmidTypeId + "]}";
+		var mutaplasmidGroupJson = "{\"group_id\":1964,\"type_ids\":[" + mutaplasmidTypeId + "]}";
+
+		var d = dispatcher()
+				.withRegion(10000001)
+				.withContracts(10000001, contractsJson(List.of(contract)))
+				.withItems(1450, itemsJson(List.of(item)))
+				.withMetaGroups(metaGroupsJson)
+				.withMutaplasmidGroup(mutaplasmidGroupJson);
+		if ("auction".equals(contractType)) {
+			d.withBids(1450, bidsJson(List.of()));
+		}
+		server.setDispatcher(d);
+		run();
+
+		assertEquals(expectedContracts(List.of(contract), 10000001), records.get("contracts.csv"));
+		assertEquals(expectedItems(1450, List.of(item)), records.get("contract_items.csv"));
+		// No dynamic data — mutaplasmid was excluded from dogma fetching
+		assertEquals(List.of(), records.get("contract_dynamic_items.csv"));
+		assertEquals(List.of(), records.get("contract_dynamic_items_dogma_attributes.csv"));
+		assertEquals(List.of(), records.get("contract_dynamic_items_dogma_effects.csv"));
+		assertLatestFileMatches();
+		if ("auction".equals(contractType)) {
+			assertRequestPaths(
+					"/groups/1964",
+					"/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
+					"/latest/contracts/public/bids/1450?datasource=tranquility&language=en&page=1",
+					"/latest/contracts/public/items/1450?datasource=tranquility&language=en&page=1",
+					"/meta_groups/15",
+					"/public-contracts/public-contracts-latest.v2.tar.bz2",
+					"/universe/regions/10000001/?datasource=tranquility",
+					"/universe/regions/?datasource=tranquility");
+		} else {
+			assertRequestPaths(
+					"/groups/1964",
+					"/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
+					"/latest/contracts/public/items/1450?datasource=tranquility&language=en&page=1",
+					"/meta_groups/15",
+					"/public-contracts/public-contracts-latest.v2.tar.bz2",
+					"/universe/regions/10000001/?datasource=tranquility",
+					"/universe/regions/?datasource=tranquility");
 		}
 		assertDataIndex();
 	}
@@ -905,6 +973,7 @@ public class ScrapePublicContractsTest {
 		assertLatestFileMatches();
 		if ("auction".equals(contractType)) {
 			assertRequestPaths(
+					"/groups/1964",
 					"/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
 					"/latest/contracts/public/bids/1500?datasource=tranquility&language=en&page=1",
 					"/latest/contracts/public/bids/1502?datasource=tranquility&language=en&page=1",
@@ -917,6 +986,7 @@ public class ScrapePublicContractsTest {
 					"/universe/types/47804/?datasource=tranquility");
 		} else {
 			assertRequestPaths(
+					"/groups/1964",
 					"/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
 					"/latest/contracts/public/items/1502?datasource=tranquility&language=en&page=1",
 					"/latest/dogma/dynamic/items/47804/1502001/?datasource=tranquility&language=en",
@@ -1063,6 +1133,7 @@ public class ScrapePublicContractsTest {
 		assertLatestFileMatches();
 		if ("auction".equals(contractType)) {
 			assertRequestPaths(
+					"/groups/1964",
 					"/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
 					"/latest/contracts/public/bids/1700?datasource=tranquility&language=en&page=1",
 					"/latest/contracts/public/items/1700?datasource=tranquility&language=en&page=1",
@@ -1074,6 +1145,7 @@ public class ScrapePublicContractsTest {
 					"/universe/types/47804/?datasource=tranquility");
 		} else {
 			assertRequestPaths(
+					"/groups/1964",
 					"/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
 					"/latest/contracts/public/items/1700?datasource=tranquility&language=en&page=1",
 					"/latest/dogma/dynamic/items/47804/1700001/?datasource=tranquility&language=en",
@@ -1224,6 +1296,7 @@ public class ScrapePublicContractsTest {
 		assertEquals(List.of(), records.get("contract_bids.csv"));
 		assertLatestFileMatches();
 		assertRequestPaths(
+				"/groups/1964",
 				"/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
 				"/latest/contracts/public/items/1900?datasource=tranquility&language=en&page=1",
 				"/meta_groups/15",
@@ -1275,6 +1348,7 @@ public class ScrapePublicContractsTest {
 		assertLatestFileMatches();
 		if ("auction".equals(contractType)) {
 			assertRequestPaths(
+					"/groups/1964",
 					"/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
 					"/latest/contracts/public/bids/2500?datasource=tranquility&language=en&page=1",
 					"/latest/dogma/dynamic/items/47804/2500001/?datasource=tranquility&language=en",
@@ -1284,6 +1358,7 @@ public class ScrapePublicContractsTest {
 					"/universe/regions/?datasource=tranquility");
 		} else {
 			assertRequestPaths(
+					"/groups/1964",
 					"/latest/contracts/public/10000001?datasource=tranquility&language=en&page=1",
 					"/latest/dogma/dynamic/items/47804/2500001/?datasource=tranquility&language=en",
 					"/meta_groups/15",
@@ -1701,6 +1776,7 @@ public class ScrapePublicContractsTest {
 		private final Map<String, Integer> dynamicItemErrorCodes = new HashMap<>();
 		private final Set<Integer> knownTypeIds = new HashSet<>();
 		private String metaGroupsBody;
+		private String mutaplasmidGroupBody = "{\"group_id\":1964,\"type_ids\":[]}";
 		private Supplier<MockResponse> latestArchiveSupplier = () -> new MockResponse().setResponseCode(404);
 
 		TestDispatcher withRegion(long id) {
@@ -1771,6 +1847,11 @@ public class ScrapePublicContractsTest {
 			return this;
 		}
 
+		TestDispatcher withMutaplasmidGroup(String jsonBody) {
+			mutaplasmidGroupBody = jsonBody;
+			return this;
+		}
+
 		TestDispatcher withLatestArchive(byte[] data) {
 			latestArchiveSupplier =
 					() -> new MockResponse().setResponseCode(200).setBody(new Buffer().write(data));
@@ -1794,6 +1875,10 @@ public class ScrapePublicContractsTest {
 					case "/meta_groups/15":
 						return metaGroupsBody != null
 								? mockJson(metaGroupsBody)
+								: new MockResponse().setResponseCode(404);
+					case "/groups/1964":
+						return mutaplasmidGroupBody != null
+								? mockJson(mutaplasmidGroupBody)
 								: new MockResponse().setResponseCode(404);
 				}
 				if (path.startsWith("/universe/regions/") || path.startsWith("/latest/universe/regions/")) {

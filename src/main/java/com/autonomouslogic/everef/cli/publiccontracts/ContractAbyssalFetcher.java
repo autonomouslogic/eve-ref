@@ -29,6 +29,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class ContractAbyssalFetcher {
 	private static final long ABYSSAL_META_GROUP = 15;
+	private static final long MUTAPLASMID_GROUP = 1964;
 
 	@Inject
 	protected EsiHelper esiHelper;
@@ -224,7 +225,14 @@ public class ContractAbyssalFetcher {
 		if (abyssalTypeIds != null) {
 			return;
 		}
-		abyssalTypeIds = refdataApi.getMetaGroup(ABYSSAL_META_GROUP).getTypeIds();
-		log.trace("Loaded {} abyssal type IDs", abyssalTypeIds.size());
+		var allAbyssalTypeIds = refdataApi.getMetaGroup(ABYSSAL_META_GROUP).getTypeIds();
+		var mutaplasmidTypeIds = refdataApi.getGroup(MUTAPLASMID_GROUP).getTypeIds();
+		abyssalTypeIds = allAbyssalTypeIds.stream()
+				.filter(id -> !mutaplasmidTypeIds.contains(id))
+				.toList();
+		log.trace(
+				"Loaded {} abyssal type IDs ({} mutaplasmids excluded)",
+				abyssalTypeIds.size(),
+				mutaplasmidTypeIds.size());
 	}
 }
