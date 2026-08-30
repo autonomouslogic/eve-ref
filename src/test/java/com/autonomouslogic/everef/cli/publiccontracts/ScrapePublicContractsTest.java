@@ -1,8 +1,13 @@
 package com.autonomouslogic.everef.cli.publiccontracts;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.lenient;
+
+import io.reactivex.rxjava3.core.Flowable;
+import io.sentry.Sentry;
 
 import com.autonomouslogic.everef.esi.LocationPopulator;
 import com.autonomouslogic.everef.esi.MockLocationPopulatorModule;
@@ -75,6 +80,9 @@ public class ScrapePublicContractsTest {
 
 	@Inject
 	ScrapePublicContracts scrapePublicContracts;
+
+	@Inject
+	ContractAbyssalFetcher abyssalFetcher;
 
 	@Inject
 	@Named("data")
@@ -1109,6 +1117,74 @@ public class ScrapePublicContractsTest {
 		assertEquals(List.of(), records.get("contract_dynamic_items_dogma_effects.csv"));
 		assertLatestFileMatches();
 		assertDataIndex();
+	}
+
+	/**
+	 * When the dogma/dynamic ESI endpoint returns a failed status code, the failure is reported to
+	 * Sentry at WARNING level with the status code in the message and contract_id, item_id, type_id
+	 * as extras. Tests call {@link ContractAbyssalFetcher#apply} directly on the test thread so
+	 * that Mockito's static mocking intercepts the call (mockStatic is ThreadLocal and does not
+	 * propagate to virtual threads).
+	 */
+	@ParameterizedTest
+	@ValueSource(ints = {400, 404, 500, 520})
+	@SneakyThrows
+	void abyssalItemFailedFetchReportedToSentry(int statusCode) {
+		var typeId = 47804;
+		var itemId = 1820001L;
+		var contractId = 1820L;
+		var metaGroupsJson = "{\"meta_group_id\":15,\"type_ids\":[" + typeId + "]}";
+
+		server.setDispatcher(dispatcher()
+				.withType(typeId)
+				.withMetaGroups(metaGroupsJson)
+				.withDynamicItemError(typeId, itemId, statusCode));
+		abyssalFetcher.setDynamicItemsStore(new HashMap<>());
+		abyssalFetcher.setDogmaAttributesStore(new HashMap<>());
+		abyssalFetcher.setDogmaEffectsStore(new HashMap<>());
+
+		try (var sentryMock = Mockito.mockStatic(Sentry.class)) {
+			abyssalFetcher
+					.apply(contractId, Flowable.just(abyssalItem(itemId, itemId, typeId)))
+					.blockingAwait();
+
+			sentryMock.verify(() -> Sentry.captureException(
+					argThat(e -> e instanceof RuntimeException
+							&& e.getMessage().contains(String.valueOf(statusCode))),
+					any(io.sentry.ScopeCallback.class)));
+		}
+	}
+
+	/**
+	 * Successful 200 response saves the dynamic item and does not report to Sentry. Tests call
+	 * {@link ContractAbyssalFetcher#apply} directly on the test thread for the same reason as
+	 * {@link #abyssalItemFailedFetchReportedToSentry}.
+	 */
+	@Test
+	@SneakyThrows
+	void abyssalItemSuccessfulFetchDoesNotReportToSentry() {
+		var typeId = 47804;
+		var itemId = 1830001L;
+		var contractId = 1830L;
+		var metaGroupsJson = "{\"meta_group_id\":15,\"type_ids\":[" + typeId + "]}";
+
+		server.setDispatcher(dispatcher()
+				.withType(typeId)
+				.withMetaGroups(metaGroupsJson)
+				.withDynamicItems(typeId, itemId, dynamicItemJson()));
+		var dynamicItemsStore = new HashMap<Long, com.fasterxml.jackson.databind.JsonNode>();
+		abyssalFetcher.setDynamicItemsStore(dynamicItemsStore);
+		abyssalFetcher.setDogmaAttributesStore(new HashMap<>());
+		abyssalFetcher.setDogmaEffectsStore(new HashMap<>());
+
+		try (var sentryMock = Mockito.mockStatic(Sentry.class)) {
+			abyssalFetcher
+					.apply(contractId, Flowable.just(abyssalItem(itemId, itemId, typeId)))
+					.blockingAwait();
+
+			sentryMock.verifyNoInteractions();
+			assertFalse(dynamicItemsStore.isEmpty(), "Dynamic item must be saved on successful fetch");
+		}
 	}
 
 	/**
