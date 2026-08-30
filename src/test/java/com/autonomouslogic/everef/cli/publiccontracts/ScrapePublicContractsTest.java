@@ -1267,8 +1267,7 @@ public class ScrapePublicContractsTest {
 		var raw = new ArrayList<RecordedRequest>();
 		RecordedRequest req;
 		while ((req = server.takeRequest(1, TimeUnit.MILLISECONDS)) != null) raw.add(req);
-		requestPaths =
-				raw.stream().map(RecordedRequest::getPath).sorted().distinct().toList();
+		requestPaths = raw.stream().map(RecordedRequest::getPath).sorted().toList();
 	}
 
 	// --- Assertion helpers ---
