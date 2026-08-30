@@ -21,7 +21,7 @@ public class BasicLogin implements Command {
 	@Override
 	@SneakyThrows
 	public void run() {
-		VirtualThreads.checkThread();
+		VirtualThreads.checkIsVirtual();
 		Configs.EVE_OAUTH_CLIENT_ID.getRequired();
 		Configs.EVE_OAUTH_SECRET_KEY.getRequired();
 

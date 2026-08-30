@@ -10,7 +10,7 @@ import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.url.UrlParser;
 import com.autonomouslogic.everef.util.CompressUtil;
 import com.autonomouslogic.everef.util.TempFiles;
-import com.autonomouslogic.everef.util.VirtualThreads;
+import com.autonomouslogic.commons.concurrent.VirtualThreads;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -92,7 +92,9 @@ public class ScrapeMilitaryCampaigns implements Command {
 					return null;
 				})
 				.toList();
-		VirtualThreads.onVirtual(() -> VirtualThreads.parallel(tasks));
+		if (!tasks.isEmpty()) {
+			VirtualThreads.callAll(tasks, tasks.size());
+		}
 
 		log.info("Fetched {} campaigns", campaigns.size());
 
