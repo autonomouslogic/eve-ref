@@ -481,7 +481,6 @@ public class ScrapeStructuresTest {
 							.setItemsStore(Map.of())
 							.setBidsStore(Map.of())
 							.setDynamicItemsStore(Map.of())
-							.setNonDynamicItemsStore(Map.of())
 							.setDogmaAttributesStore(Map.of())
 							.setDogmaEffectsStore(Map.of())
 							.buildFile();

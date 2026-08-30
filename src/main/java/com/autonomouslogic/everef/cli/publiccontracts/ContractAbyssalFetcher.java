@@ -8,7 +8,6 @@ import com.autonomouslogic.everef.openapi.refdata.api.RefdataApi;
 import com.autonomouslogic.everef.openapi.refdata.invoker.ApiException;
 import com.autonomouslogic.everef.util.JsonUtil;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.reactivex.rxjava3.core.Completable;
@@ -30,9 +29,6 @@ public class ContractAbyssalFetcher {
 	private static final long ABYSSAL_META_GROUP = 15;
 
 	@Inject
-	protected ObjectMapper objectMapper;
-
-	@Inject
 	protected EsiHelper esiHelper;
 
 	@Inject
@@ -48,9 +44,6 @@ public class ContractAbyssalFetcher {
 	private Map<Long, JsonNode> dynamicItemsStore;
 
 	@Setter
-	private Map<Long, JsonNode> nonDynamicItemsStore;
-
-	@Setter
 	private Map<String, JsonNode> dogmaEffectsStore;
 
 	@Setter
@@ -60,6 +53,47 @@ public class ContractAbyssalFetcher {
 
 	@Inject
 	protected ContractAbyssalFetcher() {}
+
+	/**
+	 * For cached contracts where items are already known, retry fetching dogma for abyssal items
+	 * that are missing dynamic data (e.g., a prior dogma call failed). Skips verifyType since the
+	 * item was already stored in the archive and its type is known to be valid. Does nothing if no
+	 * candidates are found, avoiding the meta groups API call entirely for non-abyssal contracts.
+	 */
+	public void retryMissingDogmaForCachedItems(long contractId, List<ObjectNode> cachedItems) {
+		// Regular items never have item_id set; abyssal items always do. This filters non-abyssal
+		// items without needing to call initAbyssalTypes() (which requires a network request).
+		var candidates = cachedItems.stream()
+				.filter(item -> !JsonUtil.isNull(item.get("item_id")))
+				.filter(item -> !JsonUtil.isNullOrEmpty(item.get("type_id")))
+				.filter(item -> JsonUtil.toBoolean(item.get("is_included")))
+				.filter(item -> JsonUtil.compareLongs(item.get("quantity"), 1) <= 0)
+				.filter(this::isItemNotSeen)
+				.toList();
+		if (candidates.isEmpty()) {
+			return;
+		}
+		try {
+			initAbyssalTypes();
+		} catch (ApiException e) {
+			log.warn(
+					"Failed to load abyssal type IDs, skipping dogma retry for contract {}: {}",
+					contractId,
+					e.getMessage());
+			return;
+		}
+		Flowable.fromIterable(candidates)
+				.filter(item -> abyssalTypeIds.contains(item.get("type_id").asLong()))
+				.flatMapCompletable(
+						item -> {
+							long itemId = item.get("item_id").asLong();
+							long typeId = item.get("type_id").asLong();
+							return resolveDynamicItem(contractId, typeId, itemId);
+						},
+						false,
+						1)
+				.blockingAwait();
+	}
 
 	public Completable apply(long contractId, Flowable<ObjectNode> in) {
 		return Completable.defer(() -> {
@@ -108,11 +142,7 @@ public class ContractAbyssalFetcher {
 
 	private boolean isItemNotSeen(ObjectNode item) {
 		long dynamicId = ContractsFileBuilder.DYNAMIC_ITEM_ID.apply(item);
-		if (dynamicItemsStore.containsKey(dynamicId)) {
-			return false;
-		}
-		long nonDynamicId = ContractsFileBuilder.NON_DYNAMIC_ITEM_ID.apply(item);
-		return !nonDynamicItemsStore.containsKey(nonDynamicId);
+		return !dynamicItemsStore.containsKey(dynamicId);
 	}
 
 	private Completable resolveDynamicItem(long contractId, long typeId, long itemId) {
@@ -125,13 +155,11 @@ public class ContractAbyssalFetcher {
 				.flatMapCompletable(response -> Completable.fromAction(() -> {
 					int statusCode = response.code();
 					if (statusCode == 520) {
-						var nonDynamicItem = objectMapper
-								.createObjectNode()
-								.put("item_id", itemId)
-								.put("type_id", typeId)
-								.put("contract_id", contractId);
-						nonDynamicItemsStore.put(
-								ContractsFileBuilder.NON_DYNAMIC_ITEM_ID.apply(nonDynamicItem), nonDynamicItem);
+						log.debug(
+								"Dogma data not yet available (520) for contract {} item {} type {}, will retry next run",
+								contractId,
+								itemId,
+								typeId);
 						return;
 					}
 					if (statusCode == 200) {
