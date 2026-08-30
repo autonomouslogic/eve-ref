@@ -58,14 +58,18 @@ public class MarketOrdersWriter {
 		return ids;
 	}
 
-	private Ordering<Long> ordering(String field) {
+	private Ordering<Long> ordering(String fieldName) {
 		return Ordering.natural().nullsLast().onResultOf(id -> {
 			var node = marketOrdersStore.get(id);
 			try {
-				return node.has(field) ? node.get(field).asLong() : null;
+				var field = node.has(fieldName) ? node.get(fieldName) : null;
+				if (field.isBoolean()) {
+					return field.asBoolean() ? 1 : 0;
+				}
+				return field.asLong();
 			} catch (Exception e) {
 				throw new IllegalStateException(
-						String.format("Failed ordering by field '%s' on order %s: %s", field, id, node), e);
+						String.format("Failed ordering by field '%s' on order %s: %s", fieldName, id, node), e);
 			}
 		});
 	}
