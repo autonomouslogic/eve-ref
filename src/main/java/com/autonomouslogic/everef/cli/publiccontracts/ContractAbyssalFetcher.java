@@ -7,9 +7,6 @@ import com.autonomouslogic.everef.http.OkHttpWrapper;
 import com.autonomouslogic.everef.openapi.refdata.api.RefdataApi;
 import com.autonomouslogic.everef.openapi.refdata.invoker.ApiException;
 import com.autonomouslogic.everef.util.JsonUtil;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Single;
@@ -22,6 +19,9 @@ import java.util.Map;
 import javax.inject.Inject;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.node.ArrayNode;
+import tools.jackson.databind.node.ObjectNode;
 
 /**
  * Fetches Abyssal traits for items.

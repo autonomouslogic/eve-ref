@@ -15,9 +15,6 @@ import com.autonomouslogic.everef.openapi.esi.model.GetCorporationsCorporationId
 import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.test.MockS3Adapter;
 import com.autonomouslogic.everef.test.TestDataUtil;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import java.io.IOException;
 import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.time.temporal.ChronoUnit;
@@ -40,6 +37,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junitpioneer.jupiter.SetEnvironmentVariable;
 import org.mockito.junit.jupiter.MockitoExtension;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.node.ObjectNode;
 
 @ExtendWith(MockitoExtension.class)
 @Log4j2
@@ -69,7 +68,7 @@ public class FetchDonationsTest {
 	MockS3Adapter mockS3Adapter;
 
 	@Inject
-	ObjectMapper objectMapper;
+	JsonMapper jsonMapper;
 
 	MockWebServer server;
 
@@ -612,10 +611,9 @@ public class FetchDonationsTest {
 				.getTestObject("static", FetchDonations.DONATIONS_LIST_FILE, s3Client)
 				.map(b -> {
 					try {
-						var type =
-								objectMapper.getTypeFactory().constructCollectionType(List.class, DonationEntry.class);
-						return (List<DonationEntry>) objectMapper.readValue(b, type);
-					} catch (IOException e) {
+						var type = jsonMapper.getTypeFactory().constructCollectionType(List.class, DonationEntry.class);
+						return (List<DonationEntry>) jsonMapper.readValue(b, type);
+					} catch (Exception e) {
 						throw new RuntimeException(e);
 					}
 				})
@@ -629,8 +627,8 @@ public class FetchDonationsTest {
 				.getTestObject("static", FetchDonations.DONATIONS_SUMMARY_FILE, s3Client)
 				.map(b -> {
 					try {
-						return objectMapper.readValue(b, SummaryFile.class);
-					} catch (IOException e) {
+						return jsonMapper.readValue(b, SummaryFile.class);
+					} catch (Exception e) {
 						throw new RuntimeException(e);
 					}
 				})
@@ -696,7 +694,7 @@ public class FetchDonationsTest {
 		mockS3Adapter.putTestObject(
 				"static",
 				FetchDonations.DONATIONS_LIST_FILE,
-				objectMapper.writeValueAsString(existingDonations),
+				jsonMapper.writeValueAsString(existingDonations),
 				s3Client);
 	}
 
@@ -710,64 +708,64 @@ public class FetchDonationsTest {
 
 				if (path.equals("/characters/" + TEST_CHARACTER_ID + "/")) {
 					return new MockResponse()
-							.setBody(objectMapper.writeValueAsString(new GetCharactersCharacterIdOk()
+							.setBody(jsonMapper.writeValueAsString(new GetCharactersCharacterIdOk()
 									.corporationId(TEST_CORPORATION_ID)
 									.name("Test Character")));
 				}
 
 				if (path.equals("/corporations/" + TEST_CORPORATION_ID + "/")) {
 					return new MockResponse()
-							.setBody(objectMapper.writeValueAsString(
+							.setBody(jsonMapper.writeValueAsString(
 									new GetCorporationsCorporationIdOk().name("Test Corporation")));
 				}
 
 				if (path.equals("/characters/" + TEST_DONOR_CHARACTER_ID_1 + "/")) {
 					return new MockResponse()
-							.setBody(objectMapper.writeValueAsString(
+							.setBody(jsonMapper.writeValueAsString(
 									new GetCharactersCharacterIdOk().name("Donor Character 1")));
 				}
 
 				if (path.equals("/characters/" + TEST_DONOR_CHARACTER_ID_2 + "/")) {
 					return new MockResponse()
-							.setBody(objectMapper.writeValueAsString(
+							.setBody(jsonMapper.writeValueAsString(
 									new GetCharactersCharacterIdOk().name("Donor Character 2")));
 				}
 
 				if (path.equals("/characters/" + TEST_DONOR_CHARACTER_ID_3 + "/")) {
 					return new MockResponse()
-							.setBody(objectMapper.writeValueAsString(
+							.setBody(jsonMapper.writeValueAsString(
 									new GetCharactersCharacterIdOk().name("Weird name!+_&\\")));
 				}
 
 				if (path.equals("/corporations/" + TEST_DONOR_CORPORATION_ID_1 + "/")) {
 					return new MockResponse()
-							.setBody(objectMapper.writeValueAsString(
+							.setBody(jsonMapper.writeValueAsString(
 									new GetCorporationsCorporationIdOk().name("Donor Corporation 1")));
 				}
 
 				if (path.equals("/corporations/" + TEST_DONOR_CORPORATION_ID_2 + "/")) {
 					return new MockResponse()
-							.setBody(objectMapper.writeValueAsString(
+							.setBody(jsonMapper.writeValueAsString(
 									new GetCorporationsCorporationIdOk().name("Donor Corporation 2")));
 				}
 
 				if (path.equals("/corporations/" + TEST_DONOR_CORPORATION_ID_3 + "/")) {
 					return new MockResponse()
-							.setBody(objectMapper.writeValueAsString(
+							.setBody(jsonMapper.writeValueAsString(
 									new GetCorporationsCorporationIdOk().name("Weird name!+_&\\")));
 				}
 
 				if (path.equals("/characters/" + TEST_CHARACTER_ID + "/wallet/journal/")) {
-					return new MockResponse().setBody(objectMapper.writeValueAsString(characterJournal));
+					return new MockResponse().setBody(jsonMapper.writeValueAsString(characterJournal));
 				}
 
 				if (path.equals("/corporations/" + TEST_CORPORATION_ID + "/wallets/1/journal/")) {
-					return new MockResponse().setBody(objectMapper.writeValueAsString(corporationJournal));
+					return new MockResponse().setBody(jsonMapper.writeValueAsString(corporationJournal));
 				}
 
 				if (path.equals("/discord")) {
 					discordCall =
-							(ObjectNode) objectMapper.readTree(request.getBody().readUtf8());
+							(ObjectNode) jsonMapper.readTree(request.getBody().readUtf8());
 					return new MockResponse();
 				}
 

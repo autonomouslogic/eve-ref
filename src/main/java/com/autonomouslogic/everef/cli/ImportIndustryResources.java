@@ -14,7 +14,6 @@ import com.autonomouslogic.everef.refdata.DogmaAttribute;
 import com.autonomouslogic.everef.refdata.IndustryModifierActivities;
 import com.autonomouslogic.everef.refdata.InventoryType;
 import com.autonomouslogic.everef.util.RefDataUtil;
-import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.google.common.collect.Ordering;
 import java.io.File;
 import java.util.List;
@@ -26,6 +25,7 @@ import javax.inject.Inject;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.StringUtils;
+import tools.jackson.dataformat.csv.CsvMapper;
 
 /**
  * Loads and stores various industry-related constants into CSV files.

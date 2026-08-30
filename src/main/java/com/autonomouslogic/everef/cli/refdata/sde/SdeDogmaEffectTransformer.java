@@ -2,12 +2,12 @@ package com.autonomouslogic.everef.cli.refdata.sde;
 
 import com.autonomouslogic.everef.cli.refdata.SimpleTransformer;
 import com.autonomouslogic.everef.cli.refdata.TransformUtil;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.extern.log4j.Log4j2;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.node.ArrayNode;
+import tools.jackson.databind.node.ObjectNode;
 
 @Log4j2
 @Singleton

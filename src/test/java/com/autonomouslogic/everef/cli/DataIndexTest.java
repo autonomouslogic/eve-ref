@@ -12,8 +12,6 @@ import com.autonomouslogic.everef.s3.S3Adapter;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.test.MockS3Adapter;
 import com.autonomouslogic.everef.util.HashUtil;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.util.HashMap;
@@ -36,6 +34,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 import software.amazon.awssdk.services.s3.model.HeadObjectRequest;
 import software.amazon.awssdk.services.s3.model.HeadObjectResponse;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.json.JsonMapper;
 
 @ExtendWith(MockitoExtension.class)
 @Log4j2
@@ -54,7 +54,7 @@ public class DataIndexTest {
 	S3AsyncClient s3Data;
 
 	@Inject
-	ObjectMapper objectMapper;
+	JsonMapper jsonMapper;
 
 	MockS3Adapter mockS3;
 
@@ -229,7 +229,7 @@ public class DataIndexTest {
 					]
 				}
 				""".formatted(Hex.encodeHexString(HashUtil.md5("market orders latest")));
-		var latestExpected = objectMapper.readTree(latestExpectedJson);
+		var latestExpected = jsonMapper.readTree(latestExpectedJson);
 
 		var archiveExpectedJson = """
 				{
@@ -247,7 +247,7 @@ public class DataIndexTest {
 					]
 				}
 				""".formatted(Hex.encodeHexString(HashUtil.md5("market orders data")));
-		var archiveExpected = objectMapper.readTree(archiveExpectedJson);
+		var archiveExpected = jsonMapper.readTree(archiveExpectedJson);
 
 		assertEquals(latestExpected, latestJson);
 		assertEquals(archiveExpected, archiveJson);
@@ -469,7 +469,7 @@ public class DataIndexTest {
 					]
 				}
 				""".formatted(Hex.encodeHexString(HashUtil.md5("content data.zip")));
-		var expected = objectMapper.readTree(expectedJson);
+		var expected = jsonMapper.readTree(expectedJson);
 		assertEquals(expected, json);
 	}
 
@@ -496,7 +496,7 @@ public class DataIndexTest {
 					]
 				}
 				""".formatted(Hex.encodeHexString(HashUtil.md5("content dir/more-data.zip")));
-		var expected = objectMapper.readTree(expectedJson);
+		var expected = jsonMapper.readTree(expectedJson);
 		assertEquals(expected, json);
 	}
 
@@ -517,7 +517,7 @@ public class DataIndexTest {
 					]
 				}
 				""".formatted(Hex.encodeHexString(HashUtil.md5("content dir/sub/sub-data.zip")));
-		var expected = objectMapper.readTree(expectedJson);
+		var expected = jsonMapper.readTree(expectedJson);
 		assertEquals(expected, json);
 	}
 
@@ -538,14 +538,14 @@ public class DataIndexTest {
 					]
 				}
 				""".formatted(Hex.encodeHexString(HashUtil.md5("content dir2/more-data2.zip")));
-		var expected = objectMapper.readTree(expectedJson);
+		var expected = jsonMapper.readTree(expectedJson);
 		assertEquals(expected, json);
 	}
 
 	@SneakyThrows
 	private JsonNode getJsonContent(String path) {
 		var content = getPageContent(path);
-		return objectMapper.readTree(content.getBytes());
+		return jsonMapper.readTree(content.getBytes());
 	}
 
 	@Value

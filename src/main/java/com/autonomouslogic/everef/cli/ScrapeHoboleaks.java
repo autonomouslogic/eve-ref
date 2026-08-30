@@ -29,6 +29,7 @@ import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
+import tools.jackson.databind.json.JsonMapper;
 
 /**
  * Fetches and stores all public contracts.
@@ -39,7 +40,7 @@ public class ScrapeHoboleaks implements Command {
 	protected UrlParser urlParser;
 
 	@Inject
-	protected ObjectMapper objectMapper;
+	protected JsonMapper jsonMapper;
 
 	@Inject
 	protected S3Util s3Util;
@@ -109,7 +110,7 @@ public class ScrapeHoboleaks implements Command {
 
 	private Single<File> buildArchive(byte[] metaBytes) {
 		return Single.defer(() -> {
-			var meta = objectMapper.readTree(metaBytes);
+			var meta = jsonMapper.readTree(metaBytes);
 			var archive = tempFiles.tempFile("hoboleaks-scrape", ".tar").toFile();
 			var out = new TarArchiveOutputStream(new FileOutputStream(archive));
 			var metaEntry = new TarArchiveEntry("meta.json");
@@ -118,7 +119,7 @@ public class ScrapeHoboleaks implements Command {
 			out.write(metaBytes);
 			out.closeArchiveEntry();
 			return Completable.defer(() -> {
-						return Flowable.fromIterable(() -> meta.get("files").fields())
+						return Flowable.fromIterable(meta.get("files").properties())
 								.flatMap(entry -> {
 									var filename = entry.getKey();
 									return download(hoboUrl.resolve(filename))

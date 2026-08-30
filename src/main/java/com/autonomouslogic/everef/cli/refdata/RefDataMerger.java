@@ -1,12 +1,12 @@
 package com.autonomouslogic.everef.cli.refdata;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import io.reactivex.rxjava3.core.Completable;
 import java.util.LinkedHashSet;
 import javax.inject.Inject;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
+import tools.jackson.databind.JsonNode;
 
 @Log4j2
 public class RefDataMerger {

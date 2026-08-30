@@ -3,8 +3,6 @@ package com.autonomouslogic.everef.model;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.autonomouslogic.everef.test.DaggerTestComponent;
-import com.fasterxml.jackson.databind.MappingIterator;
-import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -12,6 +10,8 @@ import javax.inject.Inject;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import tools.jackson.databind.MappingIterator;
+import tools.jackson.dataformat.csv.CsvMapper;
 
 public class MarketHistoryEntryTest {
 	@Inject

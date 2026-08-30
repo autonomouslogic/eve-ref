@@ -3,12 +3,12 @@ package com.autonomouslogic.everef.cli.refdata.post;
 import com.autonomouslogic.everef.cli.refdata.StoreDataHelper;
 import com.autonomouslogic.everef.refdata.DogmaAttribute;
 import com.autonomouslogic.everef.refdata.InventoryType;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.reactivex.rxjava3.core.Completable;
 import java.util.Map;
 import javax.inject.Inject;
 import lombok.extern.log4j.Log4j2;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.json.JsonMapper;
 
 /**
  * Populates which types can be reprocessed using what skills.
@@ -17,7 +17,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class ReprocessableTypesDecorator extends PostDecorator {
 	@Inject
-	protected ObjectMapper objectMapper;
+	protected JsonMapper jsonMapper;
 
 	private Map<Long, JsonNode> types;
 	private Map<Long, JsonNode> skills;
@@ -30,7 +30,7 @@ public class ReprocessableTypesDecorator extends PostDecorator {
 	public Completable create() {
 		return Completable.fromAction(() -> {
 			log.info("Populates reprocessable types");
-			helper = new StoreDataHelper(storeHandler, objectMapper);
+			helper = new StoreDataHelper(storeHandler, jsonMapper);
 			types = storeHandler.getRefStore("types");
 			skills = storeHandler.getRefStore("skills");
 			reprocessingSkillType =
@@ -41,7 +41,7 @@ public class ReprocessableTypesDecorator extends PostDecorator {
 
 	private void crossReferenceTypes() {
 		for (var typeJson : types.values()) {
-			var type = objectMapper.convertValue(typeJson, InventoryType.class);
+			var type = jsonMapper.convertValue(typeJson, InventoryType.class);
 			var dogmaValue = helper.getDogmaFromType(type, reprocessingSkillType.getAttributeId());
 			if (dogmaValue.isEmpty()) {
 				continue;

@@ -56,6 +56,9 @@ import lombok.extern.log4j.Log4j2;
 import org.h2.mvstore.MVStore;
 import org.jetbrains.annotations.NotNull;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.node.ObjectNode;
 
 /**
  * Scrapes structure information.
@@ -99,7 +102,7 @@ public class ScrapeStructures implements Command {
 	protected UrlParser urlParser;
 
 	@Inject
-	protected ObjectMapper objectMapper;
+	protected JsonMapper jsonMapper;
 
 	@Inject
 	protected S3Util s3Util;
@@ -263,10 +266,10 @@ public class ScrapeStructures implements Command {
 					}
 				})
 				.flatMapCompletable(file -> {
-					var type = objectMapper
+					var type = jsonMapper
 							.getTypeFactory()
 							.constructMapType(LinkedHashMap.class, String.class, ObjectNode.class);
-					Map<String, ObjectNode> map = objectMapper.readValue(file, type);
+					Map<String, ObjectNode> map = jsonMapper.readValue(file, type);
 					log.info("Loaded {} structures from previous scrape", map.size());
 					map.forEach((key, value) -> {
 						structureStore.put(value);
@@ -345,8 +348,7 @@ public class ScrapeStructures implements Command {
 				if (status == 200) {
 					var lastModified =
 							structureScrapeHelper.getLastModified(response).orElse(scrapeTime.toInstant());
-					var json =
-							(ObjectNode) objectMapper.readTree(response.body().bytes());
+					var json = (ObjectNode) jsonMapper.readTree(response.body().bytes());
 					structureStore.updateStructure(structureId, json, lastModified);
 					structureStore.updateBoolean(structureId, IS_GETTABLE_STRUCTURE, true);
 				} else {
@@ -431,14 +433,14 @@ public class ScrapeStructures implements Command {
 		return Single.defer(() -> {
 			var file = tempFiles.tempFile("structures", ".json").toFile();
 			log.info("Writing output file to {}", file);
-			var all = objectMapper.createObjectNode();
+			var all = jsonMapper.createObjectNode();
 			return structureStore
 					.allStructures()
 					.flatMapCompletable(pair -> Completable.fromAction(() -> {
-						all.put(Long.toString(pair.getKey()), pair.getValue());
+						all.set(Long.toString(pair.getKey()), pair.getValue());
 					}))
 					.andThen(Single.fromCallable(() -> {
-						objectMapper.writeValue(file, all);
+						jsonMapper.writeValue(file, all);
 						return file;
 					}));
 		});

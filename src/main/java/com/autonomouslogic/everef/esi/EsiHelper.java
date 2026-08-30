@@ -24,6 +24,10 @@ import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import okhttp3.Response;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.node.NullNode;
+import tools.jackson.databind.node.ObjectNode;
 
 @Singleton
 @Log4j2
@@ -36,7 +40,7 @@ public class EsiHelper {
 	protected OkHttpWrapper okHttpWrapper;
 
 	@Inject
-	protected ObjectMapper objectMapper;
+	protected JsonMapper jsonMapper;
 
 	@Inject
 	protected EsiHelper() {}
@@ -262,7 +266,7 @@ public class EsiHelper {
 			if (response.code() != 200) {
 				throw new RuntimeException(String.format("Cannot decode non-200 response: %s", response.code()));
 			}
-			return objectMapper.readTree(response.peekBody(Long.MAX_VALUE).byteStream());
+			return jsonMapper.readTree(response.peekBody(Long.MAX_VALUE).byteStream());
 		}
 	}
 

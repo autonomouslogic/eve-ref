@@ -2,20 +2,20 @@ package com.autonomouslogic.everef.cli.refdata.post;
 
 import com.autonomouslogic.everef.cli.refdata.StoreDataHelper;
 import com.autonomouslogic.everef.refdata.Blueprint;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.reactivex.rxjava3.core.Completable;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import javax.inject.Inject;
 import lombok.extern.log4j.Log4j2;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.node.ObjectNode;
 
 @Log4j2
 public class BlueprintDecorator extends PostDecorator {
 	@Inject
-	protected ObjectMapper objectMapper;
+	protected JsonMapper jsonMapper;
 
 	private StoreDataHelper helper;
 	private Map<Long, JsonNode> types;
@@ -27,14 +27,14 @@ public class BlueprintDecorator extends PostDecorator {
 	public Completable create() {
 		return Completable.fromAction(() -> {
 			log.info("Decorating blueprints");
-			helper = new StoreDataHelper(storeHandler, objectMapper);
+			helper = new StoreDataHelper(storeHandler, jsonMapper);
 			types = storeHandler.getRefStore("types");
 			blueprints = storeHandler.getRefStore("blueprints");
 			for (var blueprintsEntry : blueprints.entrySet()) {
 				long blueprintTypeId = blueprintsEntry.getKey();
 				setIsBlueprint(blueprintTypeId);
 				var blueprintJson = (ObjectNode) blueprintsEntry.getValue();
-				var blueprint = objectMapper.convertValue(blueprintJson, Blueprint.class);
+				var blueprint = jsonMapper.convertValue(blueprintJson, Blueprint.class);
 				for (var activitiesEntry : blueprint.getActivities().entrySet()) {
 					var products = Optional.ofNullable(
 									activitiesEntry.getValue().getProducts())
@@ -68,9 +68,9 @@ public class BlueprintDecorator extends PostDecorator {
 			return;
 		}
 		var obj = productType.withObject("/produced_by_blueprints");
-		obj.put(
+		obj.set(
 				Long.toString(blueprintTypeId),
-				objectMapper
+				jsonMapper
 						.createObjectNode()
 						.put("blueprint_type_id", blueprintTypeId)
 						.put("blueprint_activity", activity));

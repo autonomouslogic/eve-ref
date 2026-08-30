@@ -69,6 +69,8 @@ import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream;
 import org.apache.commons.io.IOUtils;
 import org.h2.mvstore.MVStore;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.json.JsonMapper;
 
 @Log4j2
 public class BuildRefData implements Command {
@@ -89,7 +91,7 @@ public class BuildRefData implements Command {
 	protected MVStoreUtil mvStoreUtil;
 
 	@Inject
-	protected ObjectMapper objectMapper;
+	protected JsonMapper jsonMapper;
 
 	@Inject
 	protected TempFiles tempFiles;
@@ -351,7 +353,7 @@ public class BuildRefData implements Command {
 
 	@SneakyThrows
 	private void writeMeta(TarArchiveOutputStream tar) {
-		var meta = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsBytes(currentRefDataMeta);
+		var meta = jsonMapper.writerWithDefaultPrettyPrinter().writeValueAsBytes(currentRefDataMeta);
 		var archiveEntry = new TarArchiveEntry("meta.json");
 		archiveEntry.setSize(meta.length);
 		tar.putArchiveEntry(archiveEntry);
@@ -364,11 +366,11 @@ public class BuildRefData implements Command {
 	@SneakyThrows
 	private void writeEntries(String name, Map<Long, JsonNode> store, TarArchiveOutputStream tar) {
 		var file = tempFiles.tempFile("ref-data" + name, ".json").toFile();
-		var printer = objectMapper.writerWithDefaultPrettyPrinter();
+		var printer = jsonMapper.writerWithDefaultPrettyPrinter();
 		try (var generator = printer.createGenerator(new FileOutputStream(file))) {
 			generator.writeStartObject();
 			for (var entry : store.entrySet()) {
-				generator.writeFieldName(entry.getKey().toString());
+				generator.writeName(entry.getKey().toString());
 				var json = entry.getValue();
 				var bytes = json.toString().length();
 				if (bytes > 64 * 1024) {
@@ -438,7 +440,7 @@ public class BuildRefData implements Command {
 	private Single<RefDataMeta> latestRefDataMeta() {
 		return latestRefData().flatMap(file -> CompressUtil.loadArchive(file)
 				.filter(e -> e.getKey().getName().equals("meta.json"))
-				.map(e -> objectMapper.readValue(e.getValue(), RefDataMeta.class))
+				.map(e -> jsonMapper.readValue(e.getValue(), RefDataMeta.class))
 				.first(RefDataMeta.builder().build())
 				.doOnSuccess(meta -> latestRefDataMeta = meta));
 	}

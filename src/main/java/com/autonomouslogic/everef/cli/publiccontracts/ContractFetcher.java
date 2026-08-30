@@ -30,6 +30,9 @@ import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.node.ObjectNode;
 
 /**
  * Fetches all the public contracts for all the regions.
@@ -37,7 +40,7 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 @Slf4j
 public class ContractFetcher {
 	@Inject
-	protected ObjectMapper objectMapper;
+	protected JsonMapper jsonMapper;
 
 	@Inject
 	protected LocationPopulator locationPopulator;

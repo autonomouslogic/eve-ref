@@ -8,8 +8,6 @@ import com.autonomouslogic.everef.cli.refdata.TransformerBuilder;
 import com.autonomouslogic.everef.cli.refdata.transformer.BlueprintTransformer;
 import com.autonomouslogic.everef.util.CompressUtil;
 import com.autonomouslogic.everef.util.RefDataUtil;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.reactivex.rxjava3.core.Completable;
 import java.io.File;
 import javax.inject.Inject;
@@ -17,6 +15,8 @@ import javax.inject.Provider;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.node.ObjectNode;
 
 /**
  * Loads entries from the SDE dumps and prepares them for Ref Data.
@@ -33,7 +33,7 @@ public class HoboleaksLoader {
 	protected TransformerBuilder transformerBuilder;
 
 	@Inject
-	protected ObjectMapper objectMapper;
+	protected JsonMapper jsonMapper;
 
 	@Inject
 	protected Provider<SimpleStoreLoader> simpleLoaderProvider;
@@ -64,10 +64,10 @@ public class HoboleaksLoader {
 							var bytes = pair.getRight();
 							switch (filename) {
 								case "industrymodifiersources.json":
-									modifierSourcesLoader.setModifierSources((ObjectNode) objectMapper.readTree(bytes));
+									modifierSourcesLoader.setModifierSources((ObjectNode) jsonMapper.readTree(bytes));
 									return modifierSourcesLoader.load();
 								case "industrytargetfilters.json":
-									modifierSourcesLoader.setTargetFilters((ObjectNode) objectMapper.readTree(bytes));
+									modifierSourcesLoader.setTargetFilters((ObjectNode) jsonMapper.readTree(bytes));
 									return modifierSourcesLoader.load();
 							}
 							var config = refDataUtil.getHoboleaksConfigForFilename(filename);

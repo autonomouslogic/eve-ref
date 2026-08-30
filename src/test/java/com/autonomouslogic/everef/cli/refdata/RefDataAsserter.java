@@ -5,13 +5,13 @@ import com.autonomouslogic.everef.model.refdata.RefDataConfig;
 import com.autonomouslogic.everef.model.refdata.RefTypeConfig;
 import com.autonomouslogic.everef.test.TestDataUtil;
 import com.autonomouslogic.everef.util.RefDataUtil;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.Function;
 import javax.inject.Inject;
 import lombok.SneakyThrows;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.json.JsonMapper;
 
 public class RefDataAsserter {
 	@Inject
@@ -21,7 +21,7 @@ public class RefDataAsserter {
 	protected ObjectMerger objectMerger;
 
 	@Inject
-	protected ObjectMapper objectMapper;
+	protected JsonMapper jsonMapper;
 
 	@Inject
 	protected TestDataUtil testDataUtil;
@@ -56,7 +56,7 @@ public class RefDataAsserter {
 			for (Map.Entry<Long, JsonNode> valueEntry : actualValues.entrySet()) {
 				var id = valueEntry.getKey();
 				var actual = valueEntry.getValue();
-				var expected = objectMapper.readTree(
+				var expected = jsonMapper.readTree(
 						ResourceUtil.loadContextual(testClass, "/" + filePrefix + "-" + id + ".json"));
 				testDataUtil.assertJsonStrictEquals(expected, actual);
 			}

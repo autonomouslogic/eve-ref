@@ -15,8 +15,6 @@ import com.autonomouslogic.everef.test.MockS3Adapter;
 import com.autonomouslogic.everef.test.TestDataUtil;
 import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.util.DataIndexHelper;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.sentry.Hint;
 import io.sentry.Sentry;
 import io.sentry.SentryEvent;
@@ -59,6 +57,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.node.ObjectNode;
 
 /**
  * End-to-end tests for {@link ScrapePublicContracts}. Each test method is self-contained: it sets
@@ -103,7 +103,7 @@ public class ScrapePublicContractsTest {
 	DataIndexHelper dataIndexHelper;
 
 	@Inject
-	ObjectMapper objectMapper;
+	JsonMapper objectMapper;
 
 	@Mock
 	LocationPopulator locationPopulator;

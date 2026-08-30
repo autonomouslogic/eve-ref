@@ -18,9 +18,6 @@ import com.autonomouslogic.everef.util.DataIndexHelper;
 import com.autonomouslogic.everef.util.EveConstants;
 import com.autonomouslogic.everef.util.JsonNodeCsvWriter;
 import com.autonomouslogic.everef.util.TempFiles;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.io.FileInputStream;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -56,6 +53,9 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 @SetEnvironmentVariable(key = "SCRAPE_CHARACTER_OWNER_HASH", value = "scrape-owner-hash")
 @SetEnvironmentVariable(key = "ESI_USER_AGENT", value = "user-agent")

@@ -3,7 +3,6 @@ package com.autonomouslogic.everef.cli.marketorders;
 import com.autonomouslogic.everef.util.CompressUtil;
 import com.autonomouslogic.everef.util.JsonNodeCsvWriter;
 import com.autonomouslogic.everef.util.TempFiles;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Ordering;
 import java.io.File;
@@ -15,6 +14,7 @@ import java.util.Map;
 import javax.inject.Inject;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import tools.jackson.databind.JsonNode;
 
 @Slf4j
 public class MarketOrdersWriter {

@@ -6,9 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.autonomouslogic.everef.test.DaggerTestComponent;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.HashSet;
@@ -21,13 +18,16 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.h2.mvstore.MVStore;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.node.ObjectNode;
 
 public class MVStoreTest {
 	@Inject
 	MVStoreUtil mvStoreUtil;
 
 	@Inject
-	ObjectMapper objectMapper;
+	JsonMapper jsonMapper;
 
 	MVStore store;
 	Map<String, JsonNode> map;
@@ -41,8 +41,8 @@ public class MVStoreTest {
 
 	@Test
 	void shouldHandleValues() {
-		var obj1 = objectMapper.createObjectNode().put("v", "1");
-		var obj2 = objectMapper.createObjectNode().put("v", "2");
+		var obj1 = jsonMapper.createObjectNode().put("v", "1");
+		var obj2 = jsonMapper.createObjectNode().put("v", "2");
 		map.put("a", obj1);
 		map.put("b", obj2);
 		assertEquals(obj1, map.get("a"));
@@ -64,7 +64,7 @@ public class MVStoreTest {
 		var rng = new Random();
 		var items = 1000;
 		for (int i = 0; i < items; i++) {
-			var json = objectMapper.createObjectNode().put("v", i);
+			var json = jsonMapper.createObjectNode().put("v", i);
 			map.put(Integer.toString(i), json);
 		}
 		var start = Instant.now();

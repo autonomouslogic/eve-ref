@@ -45,6 +45,8 @@ import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.tuple.Pair;
 import org.h2.mvstore.MVStore;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.json.JsonMapper;
 
 /**
  * Publishes the reference data.
@@ -73,7 +75,7 @@ public class PublishRefData implements Command {
 	protected TempFiles tempFiles;
 
 	@Inject
-	protected ObjectMapper objectMapper;
+	protected JsonMapper jsonMapper;
 
 	@Inject
 	protected RefDataUtil refDataUtil;
@@ -212,14 +214,14 @@ public class PublishRefData implements Command {
 					} else {
 						mvStoreUtil
 								.openJsonMap(dataStore, entry.getType(), Long.class)
-								.put(entry.getId(), objectMapper.readTree(entry.getContent()));
+								.put(entry.getId(), jsonMapper.readTree(entry.getContent()));
 					}
 				}));
 	}
 
 	private Completable renderFiles() {
 		return Completable.defer(() -> Flowable.concatArray(
-						Flowable.just(Pair.of(metaEntry.getPath(), objectMapper.readTree(metaEntry.getContent()))),
+						Flowable.just(Pair.of(metaEntry.getPath(), jsonMapper.readTree(metaEntry.getContent()))),
 						indexRendererProvider.get().setDataStore(dataStore).render(),
 						basicFileRendererProvider.get().setDataStore(dataStore).render(),
 						rootMarketGroupIndexRendererProvider
@@ -258,7 +260,7 @@ public class PublishRefData implements Command {
 			return Flowable.fromIterable(fileMap.entrySet())
 					.doOnNext(entry -> reporter.increment())
 					.map(entry -> refDataUtil.createEntryForPath(
-							entry.getKey(), objectMapper.writeValueAsBytes(entry.getValue())))
+							entry.getKey(), jsonMapper.writeValueAsBytes(entry.getValue())))
 					.filter(entry -> filterExisting(skipped, existing, entry))
 					.flatMapCompletable(
 							entry -> {

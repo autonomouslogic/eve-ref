@@ -8,8 +8,6 @@ import com.autonomouslogic.everef.openapi.esi.model.GetUniverseStationsStationId
 import com.autonomouslogic.everef.openapi.esi.model.GetUniverseSystemsSystemIdOk;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.test.TestDataUtil;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import javax.inject.Inject;
 import lombok.SneakyThrows;
 import okhttp3.mockwebserver.Dispatcher;
@@ -21,6 +19,8 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junitpioneer.jupiter.SetEnvironmentVariable;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.node.ObjectNode;
 
 @SetEnvironmentVariable(key = "ESI_USER_AGENT", value = "user-agent")
 @SetEnvironmentVariable(key = "ESI_BASE_URL", value = "http://localhost:" + TestDataUtil.TEST_PORT)
@@ -32,7 +32,7 @@ public class LocationPopulatorTest {
 	TestDataUtil testDataUtil;
 
 	@Inject
-	ObjectMapper objectMapper;
+	JsonMapper jsonMapper;
 
 	MockWebServer server;
 	String region;
@@ -47,17 +47,17 @@ public class LocationPopulatorTest {
 
 		server = new MockWebServer();
 
-		region = objectMapper.writeValueAsString(
+		region = jsonMapper.writeValueAsString(
 				new GetUniverseRegionsRegionIdOk().regionId(100).name("Region"));
-		constellation = objectMapper.writeValueAsString(new GetUniverseConstellationsConstellationIdOk()
+		constellation = jsonMapper.writeValueAsString(new GetUniverseConstellationsConstellationIdOk()
 				.constellationId(200)
 				.regionId(100)
 				.name("Constellation"));
-		system = objectMapper.writeValueAsString(new GetUniverseSystemsSystemIdOk()
+		system = jsonMapper.writeValueAsString(new GetUniverseSystemsSystemIdOk()
 				.constellationId(200)
 				.systemId(300)
 				.name("System"));
-		station = objectMapper.writeValueAsString(new GetUniverseStationsStationIdOk()
+		station = jsonMapper.writeValueAsString(new GetUniverseStationsStationIdOk()
 				.stationId(400)
 				.systemId(300)
 				.name("Station"));
@@ -90,7 +90,7 @@ public class LocationPopulatorTest {
 	}
 
 	private ObjectNode baseRecord() {
-		return objectMapper
+		return jsonMapper
 				.createObjectNode()
 				.put("region_id", 100)
 				.put("constellation_id", 200)
@@ -143,7 +143,7 @@ public class LocationPopulatorTest {
 
 	@Test
 	void shouldLeavePopulatedLocations() {
-		var record = objectMapper
+		var record = jsonMapper
 				.createObjectNode()
 				.put("region_id", 999)
 				.put("constellation_id", 999)
@@ -156,7 +156,7 @@ public class LocationPopulatorTest {
 
 	@Test
 	void shouldLeaveEmptyRecords() {
-		var record = objectMapper.createObjectNode();
+		var record = jsonMapper.createObjectNode();
 		var original = record.deepCopy();
 		locationPopulator.populate(record).blockingAwait();
 		assertEquals(original, record);

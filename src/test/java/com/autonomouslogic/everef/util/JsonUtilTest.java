@@ -4,19 +4,19 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.fasterxml.jackson.databind.node.BooleanNode;
-import com.fasterxml.jackson.databind.node.LongNode;
-import com.fasterxml.jackson.databind.node.NullNode;
-import com.fasterxml.jackson.databind.node.TextNode;
 import org.junit.jupiter.api.Test;
+import tools.jackson.databind.node.BooleanNode;
+import tools.jackson.databind.node.LongNode;
+import tools.jackson.databind.node.NullNode;
+import tools.jackson.databind.node.StringNode;
 
 class JsonUtilTest {
 	@Test
 	void shouldCheckNulls() {
 		assertTrue(JsonUtil.isNull(NullNode.getInstance()));
 		assertTrue(JsonUtil.isNull(null));
-		assertFalse(JsonUtil.isNull(TextNode.valueOf("")));
-		assertFalse(JsonUtil.isNull(TextNode.valueOf("null")));
+		assertFalse(JsonUtil.isNull(StringNode.valueOf("")));
+		assertFalse(JsonUtil.isNull(StringNode.valueOf("null")));
 		assertFalse(JsonUtil.isNull(BooleanNode.getFalse()));
 		assertFalse(JsonUtil.isNull(LongNode.valueOf(0)));
 	}
@@ -25,8 +25,8 @@ class JsonUtilTest {
 	void shouldCheckEmpty() {
 		assertTrue(JsonUtil.isNullOrEmpty(NullNode.getInstance()));
 		assertTrue(JsonUtil.isNullOrEmpty(null));
-		assertTrue(JsonUtil.isNullOrEmpty(TextNode.valueOf("")));
-		assertFalse(JsonUtil.isNullOrEmpty(TextNode.valueOf("null")));
+		assertTrue(JsonUtil.isNullOrEmpty(StringNode.valueOf("")));
+		assertFalse(JsonUtil.isNullOrEmpty(StringNode.valueOf("null")));
 		assertFalse(JsonUtil.isNullOrEmpty(BooleanNode.getFalse()));
 		assertFalse(JsonUtil.isNullOrEmpty(LongNode.valueOf(0)));
 	}
@@ -35,15 +35,15 @@ class JsonUtilTest {
 	void shouldConvertToBooleans() {
 		assertFalse(JsonUtil.toBoolean(BooleanNode.getFalse()));
 		assertTrue(JsonUtil.toBoolean(BooleanNode.getTrue()));
-		assertFalse(JsonUtil.toBoolean(TextNode.valueOf("false")));
-		assertTrue(JsonUtil.toBoolean(TextNode.valueOf("true")));
+		assertFalse(JsonUtil.toBoolean(StringNode.valueOf("false")));
+		assertTrue(JsonUtil.toBoolean(StringNode.valueOf("true")));
 		assertFalse(JsonUtil.toBoolean(NullNode.getInstance()));
 		assertFalse(JsonUtil.toBoolean(null));
-		assertFalse(JsonUtil.toBoolean(TextNode.valueOf("")));
-		assertFalse(JsonUtil.toBoolean(TextNode.valueOf("null")));
+		assertFalse(JsonUtil.toBoolean(StringNode.valueOf("")));
+		assertFalse(JsonUtil.toBoolean(StringNode.valueOf("null")));
 		assertFalse(JsonUtil.toBoolean(LongNode.valueOf(0)));
 		assertTrue(JsonUtil.toBoolean(LongNode.valueOf(1)));
-		assertFalse(JsonUtil.toBoolean(TextNode.valueOf("other")));
+		assertFalse(JsonUtil.toBoolean(StringNode.valueOf("other")));
 	}
 
 	@Test

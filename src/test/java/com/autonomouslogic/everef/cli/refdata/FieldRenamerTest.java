@@ -4,17 +4,17 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.test.TestDataUtil;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import javax.inject.Inject;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
+import tools.jackson.databind.json.JsonMapper;
 
 public class FieldRenamerTest {
 	@Inject
-	ObjectMapper objectMapper;
+	JsonMapper jsonMapper;
 
 	@Inject
 	TestDataUtil testDataUtil;
@@ -48,7 +48,7 @@ public class FieldRenamerTest {
 				"another_var": 2
 			}""";
 		testDataUtil.assertJsonStrictEquals(
-				objectMapper.readTree(expected), fieldRenamer.fieldRenameFromSde(objectMapper.readTree(input)));
+				jsonMapper.readTree(expected), fieldRenamer.fieldRenameFromSde(jsonMapper.readTree(input)));
 	}
 
 	@Test
@@ -73,7 +73,7 @@ public class FieldRenamerTest {
 				}
 			}""";
 		testDataUtil.assertJsonStrictEquals(
-				objectMapper.readTree(expected), fieldRenamer.fieldRenameFromSde(objectMapper.readTree(input)));
+				jsonMapper.readTree(expected), fieldRenamer.fieldRenameFromSde(jsonMapper.readTree(input)));
 	}
 
 	@Test
@@ -96,6 +96,6 @@ public class FieldRenamerTest {
 				"another_var": 4
 			}]""";
 		testDataUtil.assertJsonStrictEquals(
-				objectMapper.readTree(expected), fieldRenamer.fieldRenameFromSde(objectMapper.readTree(input)));
+				jsonMapper.readTree(expected), fieldRenamer.fieldRenameFromSde(jsonMapper.readTree(input)));
 	}
 }
