@@ -35,7 +35,7 @@
   "group_id" : 536,
   "icon_id" : 2874,
   "market_group_id" : 1865,
-  "mass" : 10000,
+  "mass" : 10000.0,
   "name" : {
     "en" : "Structure Office Center",
     "fr" : "Site des bureaux de la structure",
@@ -46,13 +46,13 @@
     "ru" : "Structure Office Center",
     "zh" : "建筑办公室中心"
   },
-  "packaged_volume" : 3000,
+  "packaged_volume" : 3000.0,
   "portion_size" : 1,
   "published" : true,
   "radius" : 1,
   "type_id" : 21967,
-  "volume" : 3000,
-  "base_price" : 88750000,
+  "volume" : 3000.0,
+  "base_price" : 88750000.0,
   "used_in_blueprints" : {
     "36966" : {
       "manufacturing" : {

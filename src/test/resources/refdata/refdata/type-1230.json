@@ -59,7 +59,7 @@
   "group_id" : 462,
   "icon_id" : 232,
   "market_group_id" : 518,
-  "mass" : 4000,
+  "mass" : 4000.0,
   "name" : {
     "en" : "Veldspar",
     "fr" : "Veldspar",
@@ -76,7 +76,7 @@
   "radius" : 1,
   "type_id" : 1230,
   "volume" : 0.1,
-  "base_price" : 2000,
+  "base_price" : 2000.0,
   "required_skills" : {
     "3386" : 1
   },

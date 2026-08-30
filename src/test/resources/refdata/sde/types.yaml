@@ -1,6 +1,6 @@
 ---
 "189":
-  basePrice: 2050
+  basePrice: 2050.0
   description:
     de: "Mittelgroße Projektilmunition. Diese von Minmatar-Piloten häufig verwendete\
       \ Munition hat einen Brandsatz und eine sehr gute Durchschlagsleistung. Sie\
@@ -33,7 +33,7 @@
   groupID: 83
   iconID: 1293
   marketGroupID: 112
-  mass: 1
+  mass: 1.0
   metaGroupID: 1
   name:
     de: "Depleted Uranium M"
@@ -50,8 +50,8 @@
   techLevel: 1
   volume: 0.0125
 "645":
-  basePrice: 153900000
-  capacity: 750
+  basePrice: 153900000.0
+  capacity: 750.0
   description:
     de: "Die Dominix ist eines der alten Schlachtrösser, die noch aus der Zeit des\
       \ Kriegs zwischen Gallente und Caldari stammen. Sie wird zwar nicht mehr als\
@@ -90,7 +90,7 @@
   groupID: 27
   isRepackable: true
   marketGroupID: 81
-  mass: 100250000
+  mass: 100250000.0
   metaGroupID: 1
   metaLevel: 0
   name:
@@ -102,17 +102,17 @@
     ko: "도미닉스"
     ru: "Dominix"
     zh: "多米尼克斯级"
-  packagedVolume: 50000
+  packagedVolume: 50000.0
   portionSize: 1
   published: true
   raceID: 8
-  radius: 250
+  radius: 250.0
   shipTreeGroupID: 26
   soundID: 20072
   techLevel: 1
-  volume: 454500
+  volume: 454500.0
 "3336":
-  basePrice: 7500000
+  basePrice: 7500000.0
   description:
     de: "Skill zur Bedienung von Gallente-Schlachtschiffen."
     en: "Skill at operating Gallente battleships."
@@ -141,7 +141,7 @@
   raceID: 8
   volume: 0.01
 "3327":
-  basePrice: 30000
+  basePrice: 30000.0
   description:
     de: "Die grundsätzliche Fertigkeit, ein Raumschiff zu bedienen.\n\n2% Bonus auf\
       \ die Wendigkeit eines Schiffes je Skillstufe."
@@ -173,7 +173,7 @@
   published: true
   volume: 0.01
 "33097":
-  basePrice: 2500000
+  basePrice: 2500000.0
   description:
     de: "Skill zur Bedienung von Gallente-Schlachtkreuzern."
     en: "Skill at operating Gallente battlecruisers."
@@ -203,7 +203,7 @@
   raceID: 8
   volume: 0.01
 "3332":
-  basePrice: 1000000
+  basePrice: 1000000.0
   description:
     de: "Fertigkeit, Kreuzer der Gallente zu bedienen."
     en: "Skill at operating Gallente cruisers."
@@ -232,7 +232,7 @@
   raceID: 8
   volume: 0.01
 "33093":
-  basePrice: 100000
+  basePrice: 100000.0
   description:
     de: "Fertigkeit, Zerstörer der Gallente zu bedienen."
     en: "Skill at operating Gallente destroyers."
@@ -261,7 +261,7 @@
   raceID: 8
   volume: 0.01
 "3328":
-  basePrice: 50000
+  basePrice: 50000.0
   description:
     de: "Fertigkeit, Fregatten der Gallente zu bedienen."
     en: "Skill at operating Gallente frigates."
@@ -290,7 +290,7 @@
   raceID: 8
   volume: 0.01
 "52225":
-  basePrice: 1000
+  basePrice: 1000.0
   description:
     de: "Dieses bioadaptive Mutaplasmidwerkzeug wurde dazu entwickelt, um sich mit\
       \ Geräten zu verbinden, die die Auswirkungen kritischer Systemschäden abschwä\
@@ -388,7 +388,7 @@
   groupID: 1964
   iconID: 24131
   marketGroupID: 2533
-  mass: 1
+  mass: 1.0
   metaLevel: 0
   name:
     de: "Gravid Damage Control Mutaplasmid"
@@ -399,11 +399,11 @@
     ko: "충만한 데미지 컨트롤 뮤타플라즈미드"
     ru: "Gravid Damage Control Mutaplasmid"
     zh: "怀璧的损伤控制突变质体"
-  packagedVolume: 1
+  packagedVolume: 1.0
   portionSize: 1
   published: true
   techLevel: 1
-  volume: 1
+  volume: 1.0
 "52227":
   description:
     de: "Verwendet eine Kombination aus Dämpfungsfeldemittern und Redundanzsystemen,\
@@ -446,11 +446,11 @@
     ko: "어비설 데미지 컨트롤"
     ru: "Abyssal Damage Control"
     zh: "深渊损伤控制"
-  packagedVolume: 5
+  packagedVolume: 5.0
   portionSize: 1
   published: true
   techLevel: 1
-  volume: 5
+  volume: 5.0
 "2046":
   description:
     de: "Verwendet eine Kombination aus Dämpfungsfeldemittern und Redundanzystemen\
@@ -485,7 +485,7 @@
   iconID: 77
   isRepackable: true
   marketGroupID: 615
-  mass: 5000
+  mass: 5000.0
   metaGroupID: 1
   metaLevel: 0
   name:
@@ -497,11 +497,11 @@
     ko: "데미지 컨트롤 I"
     ru: "Damage Control I"
     zh: "损伤控制 I"
-  packagedVolume: 5
+  packagedVolume: 5.0
   portionSize: 1
   published: true
   techLevel: 1
-  volume: 5
+  volume: 5.0
 "2048":
   description:
     de: "Verwendet eine Kombination aus Dämpfungsfeldemittern und Redundanzystemen\
@@ -536,7 +536,7 @@
   iconID: 77
   isRepackable: true
   marketGroupID: 615
-  mass: 5000
+  mass: 5000.0
   metaGroupID: 2
   metaLevel: 5
   name:
@@ -548,12 +548,12 @@
     ko: "데미지 컨트롤 II"
     ru: "Damage Control II"
     zh: "损伤控制 II"
-  packagedVolume: 5
+  packagedVolume: 5.0
   portionSize: 1
   published: true
   techLevel: 2
   variationParentTypeID: 2046
-  volume: 5
+  volume: 5.0
 "45623":
   description:
     de: "Dieses Kern-Subsystem besteht aus unzähligen Nanomaschinen, die den Energiefluss\
@@ -621,7 +621,7 @@
   iconID: 3636
   isRepackable: true
   marketGroupID: 1122
-  mass: 1200000
+  mass: 1200000.0
   metaGroupID: 14
   metaLevel: 1
   name:
@@ -633,12 +633,12 @@
     ko: "레기온 코어 시스템 - 강화 반물질 반응로"
     ru: "Legion Core - Augmented Antimatter Reactor"
     zh: "圣卒核心 - 增强反物质反应堆"
-  packagedVolume: 40
+  packagedVolume: 40.0
   portionSize: 1
   published: true
   raceID: 4
   techLevel: 3
-  volume: 40
+  volume: 40.0
 "45622":
   description:
     de: "Dieses Subsystem nutzt ein nano-elektromechanisches Zerstreuungsfeld und\
@@ -683,7 +683,7 @@
   iconID: 3636
   isRepackable: true
   marketGroupID: 1122
-  mass: 1200000
+  mass: 1200000.0
   metaGroupID: 14
   metaLevel: 1
   name:
@@ -695,13 +695,13 @@
     ko: "레기온 코어 시스템 - 센서 시퀀서"
     ru: "Legion Core - Dissolution Sequencer"
     zh: "圣卒核心 - 散解程控装置"
-  packagedVolume: 40
+  packagedVolume: 40.0
   portionSize: 1
   published: true
   raceID: 4
   techLevel: 3
   variationParentTypeID: 45623
-  volume: 40
+  volume: 40.0
 "45624":
   description:
     de: "Während einer der ersten Konflikte mit ihnen bemerkten Amarr-Ingenieure eine\
@@ -769,7 +769,7 @@
   iconID: 3636
   isRepackable: true
   marketGroupID: 1122
-  mass: 1200000
+  mass: 1200000.0
   metaGroupID: 14
   metaLevel: 1
   name:
@@ -781,16 +781,16 @@
     ko: "레기온 코어 시스템 - 에너지 패러사이트 컴플렉스"
     ru: "Legion Core - Energy Parasitic Complex"
     zh: "圣卒核心 - 能量寄取集成体"
-  packagedVolume: 40
+  packagedVolume: 40.0
   portionSize: 1
   published: true
   raceID: 4
   techLevel: 3
   variationParentTypeID: 45623
-  volume: 40
+  volume: 40.0
 "22430":
-  basePrice: 623500000
-  capacity: 800
+  basePrice: 623500000.0
+  capacity: 800.0
   description:
     de: "Black Ops-Schlachtschiffe wurden für die Unterwanderung und Spionage hinter\
       \ den feindlichen Linien entworfen. Mit ihrem Sprungantrieb und einem Portalgenerator\
@@ -861,7 +861,7 @@
   groupID: 898
   isRepackable: true
   marketGroupID: 1078
-  mass: 141700000
+  mass: 141700000.0
   metaGroupID: 2
   metaLevel: 5
   name:
@@ -873,18 +873,18 @@
     ko: "씬"
     ru: "Sin"
     zh: "罪恶级"
-  packagedVolume: 50000
+  packagedVolume: 50000.0
   portionSize: 1
   published: true
   raceID: 8
-  radius: 250
+  radius: 250.0
   shipTreeGroupID: 27
   soundID: 20072
   techLevel: 2
   variationParentTypeID: 645
-  volume: 454500
+  volume: 454500.0
 "999":
-  basePrice: 1660000000
+  basePrice: 1660000000.0
   graphicID: 318
   groupID: 107
   marketGroupID: 281
@@ -920,7 +920,7 @@
   techLevel: 2
   volume: 0.01
 "1230":
-  basePrice: 2000
+  basePrice: 2000.0
   description:
     de: "Veldspar ist die am häufigsten vorkommende Erzart in den zentralen Regionen\
       \ des bekannten Universums. Da Veldspar eine große Menge des häufig gebrauchten\
@@ -953,7 +953,7 @@
   groupID: 462
   iconID: 232
   marketGroupID: 518
-  mass: 4000
+  mass: 4000.0
   name:
     de: "Veldspar"
     en: "Veldspar"
@@ -968,7 +968,7 @@
   published: true
   volume: 0.1
 "17470":
-  basePrice: 2100
+  basePrice: 2100.0
   description:
     de: "Anhäufungen von Veldspar mit einer 5\_% höheren Ausbeute, auch II.-Grad-Veldsar\
       \ oder konzentriertes Veldspar genannt, werden häufig in Regionen gefunden,\
@@ -1015,7 +1015,7 @@
   groupID: 462
   iconID: 232
   marketGroupID: 518
-  mass: 4000
+  mass: 4000.0
   name:
     de: "Veldspar II-Grade"
     en: "Veldspar II-Grade"
@@ -1030,7 +1030,7 @@
   published: true
   volume: 0.1
 "17471":
-  basePrice: 2200
+  basePrice: 2200.0
   description:
     de: "In Asteroiden von überdurchschnittlicher Größe kann der immense Druck normales\
       \ Veldspar in sogenanntes dichtes oder III.-Grad-Veldspar umwandeln und dabei\
@@ -1077,7 +1077,7 @@
   groupID: 462
   iconID: 232
   marketGroupID: 518
-  mass: 4000
+  mass: 4000.0
   name:
     de: "Veldspar III-Grade"
     en: "Veldspar III-Grade"
@@ -1167,7 +1167,7 @@
   iconID: 21595
   isRepackable: true
   marketGroupID: 2232
-  mass: 4000
+  mass: 4000.0
   metaGroupID: 54
   name:
     de: "Standup Market Hub I"
@@ -1178,10 +1178,10 @@
     ko: "스탠드업 거래소 허브 I"
     ru: "Standup Market Hub I"
     zh: "屹立市场中心 I"
-  packagedVolume: 32000
+  packagedVolume: 32000.0
   portionSize: 1
   published: true
-  volume: 32000
+  volume: 32000.0
 "35833":
   description:
     de: "Als gutes Mittel zwischen Preis und Leistung in der Zitadellen-Reihe der\
@@ -1278,7 +1278,7 @@
   groupID: 1657
   isRepackable: true
   marketGroupID: 2201
-  mass: 10000000000
+  mass: 10000000000.0
   metaGroupID: 1
   name:
     de: "Fortizar"
@@ -1289,14 +1289,14 @@
     ko: "포티자"
     ru: "Fortizar"
     zh: "铁壁"
-  packagedVolume: 80000
+  packagedVolume: 80000.0
   portionSize: 1
   published: true
-  radius: 85000
+  radius: 85000.0
   soundID: 20232
-  volume: 80000
+  volume: 80000.0
 "9838":
-  basePrice: 850
+  basePrice: 850.0
   description:
     de: "Für eine Vielzahl fortschrittlicher Technologien benötigt, die zu zahlreich\
       \ sind, um sie hier aufzulisten, werden diese Verbindungen aus speziell gekü\
@@ -1336,7 +1336,7 @@
   published: true
   volume: 0.75
 "2389":
-  basePrice: 1
+  basePrice: 1.0
   description:
     de: "In den Anfangstagen, als sich die Menschheit wieder dem Raumflug widmete,\
       \ entdeckten die Wissenschaftler Planto und Ginch in Zusammenarbeit eine selbstversorgende\
@@ -1389,7 +1389,7 @@
   published: true
   volume: 0.19
 "3645":
-  basePrice: 35
+  basePrice: 35.0
   description:
     de: "Wasser ist eine der Grundvoraussetzungen für menschliches Überleben. Auf\
       \ den meisten Welten ist diese Ressource knapp, so dass man dort auf Schiffsladungen\
@@ -1482,7 +1482,7 @@
   published: true
   volume: 0.005
 "2409":
-  basePrice: 45000
+  basePrice: 45000.0
   description:
     de: "Die gewünschten Flüssigkeiten auf feindseligen Welten zu finden kann fast\
       \ genauso herausfordernd sein, wie diese aus der gnadenlosen Umwelt zu extrahieren,\
@@ -1554,7 +1554,7 @@
   portionSize: 1
   published: true
 "2412":
-  basePrice: 45000
+  basePrice: 45000.0
   description:
     de: "Die gewünschten Flüssigkeiten auf feindseligen Welten zu finden kann fast\
       \ genauso herausfordernd sein, wie diese aus der gnadenlosen Umwelt zu extrahieren,\
@@ -1694,11 +1694,11 @@
     ko: "사막 행성"
     ru: "Planet (Barren)"
     zh: "行星（贫瘠）"
-  packagedVolume: 1
+  packagedVolume: 1.0
   portionSize: 1
   published: false
-  radius: 10000
-  volume: 1
+  radius: 10000.0
+  volume: 1.0
 "11":
   description:
     de: "Lebenspendende Welten sind häufig unter dem Namen \"Gemäßigte Planeten\"\
@@ -1760,13 +1760,13 @@
     ko: "온대 행성"
     ru: "Planet (Temperate)"
     zh: "行星（温和）"
-  packagedVolume: 1
+  packagedVolume: 1.0
   portionSize: 1
   published: false
-  radius: 10000
-  volume: 1
+  radius: 10000.0
+  volume: 1.0
 "2470":
-  basePrice: 250000
+  basePrice: 250000.0
   description:
     de: "Anstatt die in dieser industriellen Einrichtung vorhandene Hitze, Interferenz\
       \ und den vernichtenden Druck zur Abschirmung der Fertigungsanlage gegen Umwelteinflü\
@@ -1843,7 +1843,7 @@
   portionSize: 1
   published: true
 "2480":
-  basePrice: 250000
+  basePrice: 250000.0
   description:
     de: "Beinahe komplett durch Roboter-Arbeitskräfte besetzt, zeichnen sich Massenproduktionseinrichtungen\
       \ durch die Fertigung von Artikeln in großen Mengen bei minimaler Aufsicht und\
@@ -1911,7 +1911,7 @@
   portionSize: 1
   published: true
 "60377":
-  basePrice: 300000
+  basePrice: 300000.0
   description:
     de: "Spezialisiert auf die Aufbereitung von einfachen Erzen. Ermöglicht es einer\
       \ sachkundigen Person, Aufbereitungsanlagen mit wesentlich höherer Effizienz\
@@ -1959,7 +1959,7 @@
   published: true
   volume: 0.01
 "34":
-  basePrice: 2
+  basePrice: 2.0
   description:
     de: "Der Hauptbaustein aller Strukturen im All. Ein sehr hartes, aber dennoch\
       \ biegbares Metall. Kann nicht zum Bau von Unterkünften verwendet werden, da\
@@ -2069,7 +2069,7 @@
   published: true
   volume: 0.01
 "35":
-  basePrice: 8
+  basePrice: 8.0
   description:
     de: "Ein weiches, kristallähnliches Mineral, das in einem charakteristischen Orange\
       \ glüht, als würde es brennen. Es wird als Halbleiter und in der biochemischen\
@@ -2204,7 +2204,7 @@
   published: true
   volume: 0.01
 "36":
-  basePrice: 32
+  basePrice: 32.0
   description:
     de: "Ein sehr vielseitiges, metallisches Mineral, das matt bis hell silbrig-grü\
       n gefärbt ist. Es kann zusammen mit <a href=showinfo:34>Tritanium</a> zu extrem\
@@ -2322,7 +2322,7 @@
   published: true
   volume: 0.01
 "37":
-  basePrice: 128
+  basePrice: 128.0
   description:
     de: "Ein hellbläulicher Kristall, der durch den intensiven Druck im tiefen Inneren\
       \ von großen Asteroiden und Monden geformt wurde. Wird bei der Produktion von\
@@ -2453,7 +2453,7 @@
   published: true
   volume: 0.01
 "38":
-  basePrice: 512
+  basePrice: 512.0
   description:
     de: "Ein hoch flüchtiges Mineral, das nur während einer Supernova gebildet wird,\
       \ wodurch das Ausmaß seiner Verbreitung stark einschränkt wird. Ein unverzichtbarer\
@@ -2539,7 +2539,7 @@
   published: true
   volume: 0.01
 "39":
-  basePrice: 2048
+  basePrice: 2048.0
   description:
     de: "Nur in riesigen Geoden zu finden; Felsen an der Außenseite mit kristallä\
       hnlichem Quarz im Inneren. Die seltensten und kostbarsten dieser Geoden sind\
@@ -2642,7 +2642,7 @@
   published: true
   volume: 0.01
 "40":
-  basePrice: 8192
+  basePrice: 8192.0
   description:
     de: "Ein äußerst seltenes Mineral, das in Kometen gefunden wird und gelegentlich\
       \ auf Asteroiden, die durch Gaswolken geflogen sind. Hat einzigartige, hochexplosive\
@@ -2816,7 +2816,7 @@
   iconID: 21729
   isRepackable: true
   marketGroupID: 2347
-  mass: 200
+  mass: 200.0
   metaGroupID: 54
   name:
     de: "Standup M-Set Ammunition Manufacturing Material Efficiency I"
@@ -2827,12 +2827,12 @@
     ko: "스탠드업 M-Set 탄약 제조 자원효율성 장치 I"
     ru: "Standup M-Set Ammunition Manufacturing Material Efficiency I"
     zh: "屹立中型弹药制造材料效率 I"
-  packagedVolume: 10
+  packagedVolume: 10.0
   portionSize: 1
   published: true
-  radius: 100
+  radius: 100.0
   techLevel: 1
-  volume: 10
+  volume: 10.0
 "37150":
   description:
     de: "Die Standup-M-Set-Modifikation Zeiteffizienz für die Herstellung von Munition\
@@ -2905,7 +2905,7 @@
   iconID: 21729
   isRepackable: true
   marketGroupID: 2347
-  mass: 200
+  mass: 200.0
   metaGroupID: 54
   name:
     de: "Standup M-Set Ammunition Manufacturing Time Efficiency I"
@@ -2916,12 +2916,12 @@
     ko: "스탠드업 M-Set 탄약 제조 시간효율성 장치 I"
     ru: "Standup M-Set Ammunition Manufacturing Time Efficiency I"
     zh: "屹立中型弹药制造时间效率 I"
-  packagedVolume: 10
+  packagedVolume: 10.0
   portionSize: 1
   published: true
-  radius: 100
+  radius: 100.0
   techLevel: 1
-  volume: 10
+  volume: 10.0
 "43880":
   description:
     de: "Die Standup-M-Set-Erfindungsbeschleuniger-Modifikation I bietet Strukturadministratoren\
@@ -2990,7 +2990,7 @@
   iconID: 21729
   isRepackable: true
   marketGroupID: 2347
-  mass: 200
+  mass: 200.0
   metaGroupID: 54
   name:
     de: "Standup M-Set Invention Accelerator I"
@@ -3001,12 +3001,12 @@
     ko: "스탠드업 M-Set 인벤션 가속 장치 I"
     ru: "Standup M-Set Invention Accelerator I"
     zh: "屹立中型发明加速 I"
-  packagedVolume: 10
+  packagedVolume: 10.0
   portionSize: 1
   published: true
-  radius: 100
+  radius: 100.0
   techLevel: 1
-  volume: 10
+  volume: 10.0
 "43879":
   description:
     de: "Die Standup-M-Set-Modifikation Kostenoptimierung von Erfindungen I bietet\
@@ -3076,7 +3076,7 @@
   iconID: 21729
   isRepackable: true
   marketGroupID: 2347
-  mass: 200
+  mass: 200.0
   metaGroupID: 54
   name:
     de: "Standup M-Set Invention Cost Optimization I"
@@ -3087,12 +3087,12 @@
     ko: "스탠드업 M-Set 인벤션 비용 최적화 장치 I"
     ru: "Standup M-Set Invention Cost Optimization I"
     zh: "屹立中型发明成本优化 I"
-  packagedVolume: 10
+  packagedVolume: 10.0
   portionSize: 1
   published: true
-  radius: 100
+  radius: 100.0
   techLevel: 1
-  volume: 10
+  volume: 10.0
 "43729":
   description:
     de: "Die Standup-L-Set-Modifikation Optimierung von Blaupausenkopien II bietet\
@@ -3162,7 +3162,7 @@
   iconID: 21729
   isRepackable: true
   marketGroupID: 2348
-  mass: 200
+  mass: 200.0
   metaGroupID: 54
   name:
     de: "Standup L-Set Blueprint Copy Optimization I"
@@ -3173,12 +3173,12 @@
     ko: "스탠드업 L-Set 블루프린트 복제 최적화 I"
     ru: "Standup L-Set Blueprint Copy Optimization I"
     zh: "屹立大型蓝图拷贝优化 I"
-  packagedVolume: 20
+  packagedVolume: 20.0
   portionSize: 1
   published: true
-  radius: 100
+  radius: 100.0
   techLevel: 1
-  volume: 20
+  volume: 20.0
 "43891":
   description:
     de: "Die Standup-M-Set-Modifikation Kostenoptimierung für Blaupausenkopien I bietet\
@@ -3248,7 +3248,7 @@
   iconID: 21729
   isRepackable: true
   marketGroupID: 2347
-  mass: 200
+  mass: 200.0
   metaGroupID: 54
   name:
     de: "Standup M-Set Blueprint Copy Cost Optimization I"
@@ -3259,12 +3259,12 @@
     ko: "스탠드업 M-Set 블루프린트 복제 비용 최적화 장치 I"
     ru: "Standup M-Set Blueprint Copy Cost Optimization I"
     zh: "屹立中型蓝图拷贝成本优化 I"
-  packagedVolume: 10
+  packagedVolume: 10.0
   portionSize: 1
   published: true
-  radius: 100
+  radius: 100.0
   techLevel: 1
-  volume: 10
+  volume: 10.0
 "43714":
   description:
     de: "Die Standup-L-Set-Modifikation Herstellungseffizienz für gewöhnliche kleine\
@@ -3339,7 +3339,7 @@
   iconID: 21729
   isRepackable: true
   marketGroupID: 2348
-  mass: 200
+  mass: 200.0
   metaGroupID: 54
   name:
     de: "Standup L-Set Basic Small Ship Manufacturing Efficiency I"
@@ -3351,12 +3351,12 @@
     ko: "스탠드업 L-Set 기본 소형 함선 제작 효율성 장치 I"
     ru: "Standup L-Set Basic Small Ship Manufacturing Efficiency I"
     zh: "屹立大型基础小型舰船制造效率 I"
-  packagedVolume: 20
+  packagedVolume: 20.0
   portionSize: 1
   published: true
-  radius: 100
+  radius: 100.0
   techLevel: 1
-  volume: 20
+  volume: 20.0
 "37152":
   description:
     de: "Die Standup-M-Set-Modifikation Materialeffizienz für die Herstellung von\
@@ -3431,7 +3431,7 @@
   iconID: 21729
   isRepackable: true
   marketGroupID: 2347
-  mass: 200
+  mass: 200.0
   metaGroupID: 53
   name:
     de: "Standup M-Set Basic Large Ship Manufacturing Material Efficiency II"
@@ -3444,13 +3444,13 @@
     ko: "스탠드업 M-Set 기본 대형 함선 제작 자원효율성 장치 II"
     ru: "Standup M-Set Basic Large Ship Manufacturing Material Efficiency II"
     zh: "屹立中型基础大型舰船制造材料效率 II"
-  packagedVolume: 10
+  packagedVolume: 10.0
   portionSize: 1
   published: true
-  radius: 100
+  radius: 100.0
   techLevel: 2
   variationParentTypeID: 43732
-  volume: 10
+  volume: 10.0
 "43704":
   description:
     de: "Die Standup-XL-Set-Modifikation Herstellungseffizienz für Strukturen und\
@@ -3528,7 +3528,7 @@
   iconID: 21729
   isRepackable: true
   marketGroupID: 2349
-  mass: 200
+  mass: 200.0
   metaGroupID: 54
   name:
     de: "Standup XL-Set Structure and Component Manufacturing Efficiency I"
@@ -3540,14 +3540,14 @@
     ko: "스탠드업 XL-Set 구조물 및 부품 제조 효율성 장치 I"
     ru: "Standup XL-Set Structure and Component Manufacturing Efficiency I"
     zh: "屹立超大型建筑和组件制造效率 I"
-  packagedVolume: 40
+  packagedVolume: 40.0
   portionSize: 1
   published: true
-  radius: 100
+  radius: 100.0
   techLevel: 1
-  volume: 40
+  volume: 40.0
 "42832":
-  basePrice: 1000
+  basePrice: 1000.0
   description:
     de: "Dieses kompakte Bündel aktiver Naniten kann in ein <a href=showinfo:42526>Panzerungskommandostrahlen</a>-Modul\
       \ geladen und an verbündete Schiffe verteilt werden, um die Widerstandsfähigkeit\
@@ -3589,7 +3589,7 @@
   published: true
   volume: 0.01
 "42874":
-  basePrice: 10000000
+  basePrice: 10000000.0
   groupID: 1810
   iconID: 21690
   marketGroupID: 2291
@@ -3607,7 +3607,7 @@
   published: true
   volume: 0.01
 "202":
-  basePrice: 15000
+  basePrice: 15000.0
   description:
     de: "Die Mjolnir Cruise Missile – die \"Mutter aller Raketen\" – befördert eine\
       \ enorme Sprengladung, die dafür sorgt, dass ihre Opfer auf schnelle aber schmerzvolle\
@@ -3630,7 +3630,7 @@
   groupID: 386
   iconID: 182
   marketGroupID: 921
-  mass: 1250
+  mass: 1250.0
   metaGroupID: 1
   metaLevel: 0
   name:
@@ -3645,11 +3645,11 @@
   packagedVolume: 0.05
   portionSize: 100
   published: true
-  radius: 300
+  radius: 300.0
   techLevel: 1
   volume: 0.05
 "24535":
-  basePrice: 837360
+  basePrice: 837360.0
   description:
     de: "Die Mjolnir Cruise Missile – die \"Mutter aller Lenkwaffen\" – befördert\
       \ eine enorme Sprengladung, die dafür sorgt, dass ihre Opfer auf schnelle, aber\
@@ -3691,7 +3691,7 @@
   groupID: 656
   iconID: 182
   marketGroupID: 925
-  mass: 1250
+  mass: 1250.0
   metaGroupID: 2
   metaLevel: 5
   name:
@@ -3706,16 +3706,16 @@
   packagedVolume: 0.05
   portionSize: 5000
   published: true
-  radius: 300
+  radius: 300.0
   techLevel: 2
   variationParentTypeID: 202
   volume: 0.05
 "803":
-  basePrice: 5000000
+  basePrice: 5000000.0
   groupID: 166
   iconID: 182
   marketGroupID: 1526
-  mass: 1
+  mass: 1.0
   name:
     de: "Mjolnir Cruise Missile Blueprint"
     en: "Mjolnir Cruise Missile Blueprint"
@@ -3730,11 +3730,11 @@
   published: true
   volume: 0.01
 "24536":
-  basePrice: 10000000000
+  basePrice: 10000000000.0
   graphicID: 20041
   groupID: 166
   iconID: 182
-  mass: 1
+  mass: 1.0
   metaGroupID: 2
   name:
     de: "Mjolnir Fury Cruise Missile Blueprint"
@@ -3886,7 +3886,7 @@
   iconID: 21729
   isRepackable: true
   marketGroupID: 2349
-  mass: 200
+  mass: 200.0
   metaGroupID: 52
   name:
     de: "Standup XL-Set Thukker Structure and Component Manufacturing Efficiency"
@@ -3899,12 +3899,12 @@
     ko: "스탠드업 XL-Set 터커 구조물 및 부품 제조 효율성 장치"
     ru: "Standup XL-Set Thukker Structure and Component Manufacturing Efficiency"
     zh: "屹立超大型图克尔建筑和组件制造效率"
-  packagedVolume: 40
+  packagedVolume: 40.0
   portionSize: 1
   published: true
-  radius: 100
+  radius: 100.0
   techLevel: 1
-  volume: 40
+  volume: 40.0
 "37180":
   description:
     de: "Die Standup-XL-Set-Modifikation Herstellungseffizienz für Schiffe I bietet\
@@ -3976,7 +3976,7 @@
   iconID: 21729
   isRepackable: true
   marketGroupID: 2349
-  mass: 200
+  mass: 200.0
   metaGroupID: 54
   name:
     de: "Standup XL-Set Ship Manufacturing Efficiency I"
@@ -3987,12 +3987,12 @@
     ko: "스탠드업 XL-Set 함선 제작 효율성 장치 I"
     ru: "Standup XL-Set Ship Manufacturing Efficiency I"
     zh: "屹立超大型舰船制造效率 I"
-  packagedVolume: 40
+  packagedVolume: 40.0
   portionSize: 1
   published: true
-  radius: 100
+  radius: 100.0
   techLevel: 1
-  volume: 40
+  volume: 40.0
 "37183":
   description:
     de: "Die Standup-XL-Set-Laboroptimierungs-Modifikation I bietet Strukturadministratoren\
@@ -4065,7 +4065,7 @@
   iconID: 21729
   isRepackable: true
   marketGroupID: 2349
-  mass: 200
+  mass: 200.0
   metaGroupID: 54
   name:
     de: "Standup XL-Set Laboratory Optimization I"
@@ -4076,12 +4076,12 @@
     ko: "스탠드업 XL-Set 연구실 강화 장치 I"
     ru: "Standup XL-Set Laboratory Optimization I"
     zh: "屹立超大型实验室优化 I"
-  packagedVolume: 40
+  packagedVolume: 40.0
   portionSize: 1
   published: true
-  radius: 100
+  radius: 100.0
   techLevel: 1
-  volume: 40
+  volume: 40.0
 "35827":
   description:
     de: "Die nach einem der Entwickler des ersten Caldari-Warpantriebs, dem Sotiyo-Urbaata-Antrieb,\
@@ -4200,7 +4200,7 @@
   groupID: 1404
   isRepackable: true
   marketGroupID: 2324
-  mass: 50000000000
+  mass: 50000000000.0
   name:
     de: "Sotiyo"
     en: "Sotiyo"
@@ -4210,12 +4210,12 @@
     ko: "소티요"
     ru: "Sotiyo"
     zh: "索迪约"
-  packagedVolume: 800000
+  packagedVolume: 800000.0
   portionSize: 1
   published: true
-  radius: 150000
+  radius: 150000.0
   soundID: 20244
-  volume: 800000
+  volume: 800000.0
 "46491":
   description:
     de: "Die Standup-M-Set-Modifikation Materialeffizienz für die Hybrid-Reaktoren\
@@ -4286,7 +4286,7 @@
   iconID: 21788
   isRepackable: true
   marketGroupID: 2341
-  mass: 200
+  mass: 200.0
   metaGroupID: 53
   name:
     de: "Standup M-Set Hybrid Reactor Material Efficiency II"
@@ -4297,15 +4297,15 @@
     ko: "스탠드업 M-Set 하이브리드 반응로 자원효율성 장치 II"
     ru: "Standup M-Set Hybrid Reactor Material Efficiency II"
     zh: "屹立中型混合反应堆材料效率 II"
-  packagedVolume: 10
+  packagedVolume: 10.0
   portionSize: 1
   published: true
-  radius: 100
+  radius: 100.0
   techLevel: 2
   variationParentTypeID: 46490
-  volume: 10
+  volume: 10.0
 "46158":
-  basePrice: 15000000
+  basePrice: 15000000.0
   groupID: 1889
   iconID: 3739
   isRepackable: true
@@ -4397,7 +4397,7 @@
   iconID: 21729
   isRepackable: true
   marketGroupID: 2347
-  mass: 200
+  mass: 200.0
   metaGroupID: 54
   name:
     de: "Standup M-Set Basic Large Ship Manufacturing Time Efficiency I"
@@ -4410,12 +4410,12 @@
     ko: "스탠드업 M-Set 기본 대형 함선 제작 시간효율성 장치 I"
     ru: "Standup M-Set Basic Large Ship Manufacturing Time Efficiency I"
     zh: "屹立中型基础大型舰船制造时间效率 I"
-  packagedVolume: 10
+  packagedVolume: 10.0
   portionSize: 1
   published: true
-  radius: 100
+  radius: 100.0
   techLevel: 1
-  volume: 10
+  volume: 10.0
 "30303":
   description:
     de: "Fulleroferrocene ist eine seltene organisch-metallische Verbindung, mit der\
@@ -4462,8 +4462,8 @@
   published: true
   volume: 0.1
 "33673":
-  basePrice: 12500000
-  capacity: 150
+  basePrice: 12500000.0
+  capacity: 150.0
   description:
     de: "Als die Scope Ende YC 115 eine Schlagzeile mit der Frage \"<i>Hat Kaalakiota\
       \ den perfekten Abfangjäger gebaut?</i>\" veröffentlichte, sahen sie die meisten\
@@ -4496,7 +4496,7 @@
   groupID: 831
   isRepackable: true
   marketGroupID: 1932
-  mass: 1000000
+  mass: 1000000.0
   metaGroupID: 2
   metaLevel: 5
   name:
@@ -4508,16 +4508,16 @@
     ko: "윕테일"
     ru: "Whiptail"
     zh: "长尾蜥级"
-  packagedVolume: 2500
+  packagedVolume: 2500.0
   portionSize: 1
   published: true
   raceID: 1
-  radius: 33
+  radius: 33.0
   soundID: 20070
   techLevel: 2
-  volume: 18000
+  volume: 18000.0
 "33674":
-  basePrice: 287500
+  basePrice: 287500.0
   graphicID: 20605
   groupID: 105
   metaGroupID: 2
@@ -4535,7 +4535,7 @@
   published: true
   volume: 0.01
 "48109":
-  basePrice: 400000
+  basePrice: 400000.0
   graphicID: 1142
   groupID: 1993
   iconID: 21916
@@ -4553,7 +4553,7 @@
   published: true
   volume: 0.01
 "48111":
-  basePrice: 10000000000
+  basePrice: 10000000000.0
   graphicID: 1141
   groupID: 1994
   iconID: 21919
@@ -4573,8 +4573,8 @@
   techLevel: 2
   volume: 0.01
 "32307":
-  basePrice: 219800000
-  capacity: 845
+  basePrice: 219800000.0
+  capacity: 845.0
   description:
     de: "Die Geschichte der Dominix Navy Issue ist von historischer Bedeutung, da\
       \ dieses Schiff vor zwei Jahrhunderten zusammen mit dem Orbitalbomber der Dracofeu-Klasse\
@@ -4623,7 +4623,7 @@
   groupID: 27
   isRepackable: true
   marketGroupID: 1379
-  mass: 97100000
+  mass: 97100000.0
   metaGroupID: 4
   metaLevel: 7
   name:
@@ -4635,18 +4635,18 @@
     ko: "도미닉스 해군 에디션"
     ru: "Dominix Navy Issue"
     zh: "多米尼克斯级海军型"
-  packagedVolume: 50000
+  packagedVolume: 50000.0
   portionSize: 1
   published: true
   raceID: 8
-  radius: 250
+  radius: 250.0
   shipTreeGroupID: 47
   soundID: 20072
   techLevel: 1
   variationParentTypeID: 645
-  volume: 454500
+  volume: 454500.0
 "32308":
-  basePrice: 625000000
+  basePrice: 625000000.0
   graphicID: 2138
   groupID: 107
   metaGroupID: 4
@@ -4664,7 +4664,7 @@
   published: true
   volume: 0.01
 "57479":
-  basePrice: 500000
+  basePrice: 500000.0
   description:
     de: "Kerntemperatur-Regulatoren sind standardisierte Zusatzsysteme zur Regelung,\
       \ Reduzierung und Wiederverwertung überschüssiger Wärmeenergie, die von den\
@@ -4743,12 +4743,12 @@
     ko: "코어 온도제어장치"
     ru: "Core Temperature Regulator"
     zh: "核心温度调节器"
-  packagedVolume: 180
+  packagedVolume: 180.0
   portionSize: 1
   published: true
-  volume: 180
+  volume: 180.0
 "57486":
-  basePrice: 10000
+  basePrice: 10000.0
   description:
     de: "Die Triglavia-Invasionen forderten viele Opfer unter den Raumschiffbesatzungen\
       \ und dem militärischen Personal. Die Verluste drohten ohne zusätzliche Überlebensmaß\
@@ -4796,12 +4796,12 @@
     ko: "보조 생명유지 장치"
     ru: "Life Support Backup Unit"
     zh: "生命保障备份装置"
-  packagedVolume: 45
+  packagedVolume: 45.0
   portionSize: 1
   published: true
-  volume: 45
+  volume: 45.0
 "57478":
-  basePrice: 10000
+  basePrice: 10000.0
   description:
     de: "Auto-Integritäts-Erhaltungssiegel sind spezielle Komponenten, die zur automatischen\
       \ Schadenskontrolle in den wichtigsten Schiffbereichen, in denen sich die Besatzung\
@@ -4900,12 +4900,12 @@
     ko: "자동복구 장치"
     ru: "Auto-Integrity Preservation Seal"
     zh: "自动修复储藏装置密封"
-  packagedVolume: 16
+  packagedVolume: 16.0
   portionSize: 1
   published: true
-  volume: 16
+  volume: 16.0
 "57490":
-  basePrice: 10000000
+  basePrice: 10000000.0
   groupID: 1888
   iconID: 2664
   isRepackable: true
@@ -4926,7 +4926,7 @@
   techLevel: 1
   volume: 0.01
 "57453":
-  basePrice: 100000
+  basePrice: 100000.0
   description:
     de: "Basiskohlefasern sind kostengünstig und können aus reichlich vorhandenen\
       \ Ressourcen hergestellt werden. Ihre Einsatzmöglichkeiten sind nahezu unbegrenzt.\
@@ -5044,7 +5044,7 @@
   groupID: 1657
   isRepackable: true
   marketGroupID: 2201
-  mass: 3000000000
+  mass: 3000000000.0
   name:
     de: "Astrahus"
     en: "Astrahus"
@@ -5054,14 +5054,14 @@
     ko: "아스트라허스"
     ru: "Astrahus"
     zh: "空堡"
-  packagedVolume: 8000
+  packagedVolume: 8000.0
   portionSize: 1
   published: true
-  radius: 45000
+  radius: 45000.0
   soundID: 20231
-  volume: 8000
+  volume: 8000.0
 "36966":
-  basePrice: 6000000000
+  basePrice: 6000000000.0
   graphicID: 21137
   groupID: 1462
   marketGroupID: 2156
@@ -5079,7 +5079,7 @@
   published: true
   volume: 0.01
 "21947":
-  basePrice: 22500000
+  basePrice: 22500000.0
   description:
     de: "Ein Sortiment aus Metallteilen, Textilien, Verbundstoffen und verschiedenen\
       \ Maschinen. Dies sind die grundlegenden Bestandteile für den Zusammenbau und\
@@ -5101,7 +5101,7 @@
   groupID: 536
   iconID: 2875
   marketGroupID: 1865
-  mass: 10000
+  mass: 10000.0
   name:
     de: "Structure Construction Parts"
     en: "Structure Construction Parts"
@@ -5111,12 +5111,12 @@
     ko: "구조물 건축 부품"
     ru: "Structure Construction Parts"
     zh: "建筑建造组件"
-  packagedVolume: 3000
+  packagedVolume: 3000.0
   portionSize: 1
   published: true
-  volume: 3000
+  volume: 3000.0
 "21949":
-  basePrice: 39375000
+  basePrice: 39375000.0
   description:
     de: "Bestandteile für den Bau von individuellen Schiffs- und Modulhangars für\
       \ Außenposten im All."
@@ -5134,7 +5134,7 @@
   groupID: 536
   iconID: 2876
   marketGroupID: 1865
-  mass: 10000
+  mass: 10000.0
   name:
     de: "Structure Hangar Array"
     en: "Structure Hangar Array"
@@ -5144,12 +5144,12 @@
     ko: "구조물 공용창고 시설"
     ru: "Structure Hangar Array"
     zh: "建筑机库阵列"
-  packagedVolume: 3000
+  packagedVolume: 3000.0
   portionSize: 1
   published: true
-  volume: 3000
+  volume: 3000.0
 "21951":
-  basePrice: 22500000
+  basePrice: 22500000.0
   description:
     de: "Eines von unzähligen Bauteilen, die für den Bau eines Außenpostens im All\
       \ erforderlich sind."
@@ -5167,7 +5167,7 @@
   groupID: 536
   iconID: 2877
   marketGroupID: 1865
-  mass: 10000
+  mass: 10000.0
   name:
     de: "Structure Storage Bay"
     en: "Structure Storage Bay"
@@ -5177,12 +5177,12 @@
     ko: "구조물 저장고"
     ru: "Structure Storage Bay"
     zh: "建筑贮藏舱"
-  packagedVolume: 3000
+  packagedVolume: 3000.0
   portionSize: 1
   published: true
-  volume: 3000
+  volume: 3000.0
 "21957":
-  basePrice: 95625000
+  basePrice: 95625000.0
   description:
     de: "Holzplanken, Schleifmaschinen, Nietgeräte, Haspeln und verschiedene andere\
       \ Maschinenteile, die für den Betrieb einer Werkstattseinrichtung auf einem\
@@ -5202,7 +5202,7 @@
   groupID: 536
   iconID: 2880
   marketGroupID: 1865
-  mass: 10000
+  mass: 10000.0
   name:
     de: "Structure Repair Facility"
     en: "Structure Repair Facility"
@@ -5212,12 +5212,12 @@
     ko: "구조물 수리시설"
     ru: "Structure Repair Facility"
     zh: "建筑维修设施"
-  packagedVolume: 3000
+  packagedVolume: 3000.0
   portionSize: 1
   published: true
-  volume: 3000
+  volume: 3000.0
 "21961":
-  basePrice: 84375000
+  basePrice: 84375000.0
   description:
     de: "Mechanische Bauteile, die für den Bau einer Andockbucht eines Außenpostens\
       \ erforderlich sind."
@@ -5234,7 +5234,7 @@
   groupID: 536
   iconID: 2882
   marketGroupID: 1865
-  mass: 10000
+  mass: 10000.0
   name:
     de: "Structure Docking Bay"
     en: "Structure Docking Bay"
@@ -5244,12 +5244,12 @@
     ko: "구조물 도킹 베이"
     ru: "Structure Docking Bay"
     zh: "建筑停泊港"
-  packagedVolume: 3000
+  packagedVolume: 3000.0
   portionSize: 1
   published: true
-  volume: 3000
+  volume: 3000.0
 "21965":
-  basePrice: 56250000
+  basePrice: 56250000.0
   description:
     de: "Medizin, Narkosemittel, chirurgische Nachschubmaterialien und komplette Kloningstationen\
       \ für Außenposten im All."
@@ -5267,7 +5267,7 @@
   groupID: 536
   iconID: 2884
   marketGroupID: 1865
-  mass: 10000
+  mass: 10000.0
   name:
     de: "Structure Medical Center"
     en: "Structure Medical Center"
@@ -5277,12 +5277,12 @@
     ko: "구조물 의료 시설"
     ru: "Structure Medical Center"
     zh: "建筑医疗中心"
-  packagedVolume: 3000
+  packagedVolume: 3000.0
   portionSize: 1
   published: true
-  volume: 3000
+  volume: 3000.0
 "21967":
-  basePrice: 88750000
+  basePrice: 88750000.0
   description:
     de: "Materialien für die Konstruktion Dutzender Büros, sowie Computersysteme und\
       \ die Hilfsstoffe, die für den tagtäglichen Betrieb erforderlich sind."
@@ -5300,7 +5300,7 @@
   groupID: 536
   iconID: 2874
   marketGroupID: 1865
-  mass: 10000
+  mass: 10000.0
   name:
     de: "Structure Office Center"
     en: "Structure Office Center"
@@ -5310,12 +5310,12 @@
     ko: "구조물 사무 센터"
     ru: "Structure Office Center"
     zh: "建筑办公室中心"
-  packagedVolume: 3000
+  packagedVolume: 3000.0
   portionSize: 1
   published: true
-  volume: 3000
+  volume: 3000.0
 "21963":
-  basePrice: 142500000
+  basePrice: 142500000.0
   description:
     de: "Elektronische Marktzugangsausrüstung und gesicherte Lagerraum-Einrichtungen\
       \ von marktgängigen Waren für Außenposten im All."
@@ -5333,7 +5333,7 @@
   groupID: 536
   iconID: 2883
   marketGroupID: 1865
-  mass: 10000
+  mass: 10000.0
   name:
     de: "Structure Market Network"
     en: "Structure Market Network"
@@ -5343,12 +5343,12 @@
     ko: "구조물 거래소 네트워크 시설"
     ru: "Structure Market Network"
     zh: "建筑市场网络"
-  packagedVolume: 3000
+  packagedVolume: 3000.0
   portionSize: 1
   published: true
-  volume: 3000
+  volume: 3000.0
 "90041":
-  basePrice: 1000
+  basePrice: 1000.0
   description:
     de: "Prismatizit ist ein unberechenbares erratisches Erz. Sobald es aufbereitet\
       \ wurde, wird es in <b>eins von verschiedenen Mineralien</b> zerfallen. Prismatizit\
@@ -5400,8 +5400,8 @@
     ko: "프리즈마티사이트"
     ru: "Prismaticite"
     zh: "棱柱石"
-  packagedVolume: 40
+  packagedVolume: 40.0
   portionSize: 100
   published: true
   raceID: 4
-  volume: 40
+  volume: 40.0

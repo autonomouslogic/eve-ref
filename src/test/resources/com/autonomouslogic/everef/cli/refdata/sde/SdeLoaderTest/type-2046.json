@@ -13,7 +13,7 @@
   "icon_id" : 77,
   "is_repackable" : true,
   "market_group_id" : 615,
-  "mass" : 5000,
+  "mass" : 5000.0,
   "meta_group_id" : 1,
   "meta_level" : 0,
   "name" : {
@@ -26,10 +26,10 @@
     "ru" : "Damage Control I",
     "zh" : "损伤控制 I"
   },
-  "packaged_volume" : 5,
+  "packaged_volume" : 5.0,
   "portion_size" : 1,
   "published" : true,
   "tech_level" : 1,
-  "volume" : 5,
+  "volume" : 5.0,
   "type_id" : 2046
 }

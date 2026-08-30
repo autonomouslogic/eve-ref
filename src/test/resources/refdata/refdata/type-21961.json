@@ -35,7 +35,7 @@
   "group_id" : 536,
   "icon_id" : 2882,
   "market_group_id" : 1865,
-  "mass" : 10000,
+  "mass" : 10000.0,
   "name" : {
     "en" : "Structure Docking Bay",
     "fr" : "Baie d'amarrage de la structure",
@@ -46,13 +46,13 @@
     "ru" : "Structure Docking Bay",
     "zh" : "建筑停泊港"
   },
-  "packaged_volume" : 3000,
+  "packaged_volume" : 3000.0,
   "portion_size" : 1,
   "published" : true,
   "radius" : 1,
   "type_id" : 21961,
-  "volume" : 3000,
-  "base_price" : 84375000,
+  "volume" : 3000.0,
+  "base_price" : 84375000.0,
   "used_in_blueprints" : {
     "36966" : {
       "manufacturing" : {

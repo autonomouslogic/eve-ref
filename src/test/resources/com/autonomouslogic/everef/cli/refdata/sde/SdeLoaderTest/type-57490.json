@@ -1,5 +1,5 @@
 {
-  "base_price" : 10000000,
+  "base_price" : 10000000.0,
   "group_id" : 1888,
   "icon_id" : 2664,
   "is_repackable" : true,

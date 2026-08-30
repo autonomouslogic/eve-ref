@@ -79,5 +79,5 @@
   "radius" : 1,
   "type_id" : 2412,
   "volume" : 0,
-  "base_price" : 45000
+  "base_price" : 45000.0
 }

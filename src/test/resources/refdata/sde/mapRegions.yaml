@@ -218,7 +218,7 @@
     zh: "GPMR-01"
   nebulaID: 11806
   position:
-    x: 1
-    "y": 1
-    z: 1
+    x: 1.0
+    "y": 1.0
+    z: 1.0
   wormholeClassID: 7

@@ -1,6 +1,6 @@
 {
   "attribute_id" : 790,
-  "default_value" : 0,
+  "default_value" : 0.0,
   "description" : {
     "en" : "The skill required to reprocess this ore type."
   },

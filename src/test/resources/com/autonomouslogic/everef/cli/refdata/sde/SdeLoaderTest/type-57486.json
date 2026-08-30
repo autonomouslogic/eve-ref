@@ -1,5 +1,5 @@
 {
-  "base_price" : 10000,
+  "base_price" : 10000.0,
   "description" : {
     "de" : "Die Triglavia-Invasionen forderten viele Opfer unter den Raumschiffbesatzungen und dem militärischen Personal. Die Verluste drohten ohne zusätzliche Überlebensmaßnahmen untragbar zu werden. Um die Überlebenschancen der Besatzung und des Personals nach einem Kampfeinsatz zu verbessern, wurden Sicherungs-Lebenserhaltungseinheiten in den für das Überleben wichtigsten Bereichen installiert.",
     "en" : "The pressure of the Triglavian Invasions on spaceship crew numbers and other military personnel risked becoming unsustainable without additional survival measures to reduce losses. Life Support Backup Units are placed in key survival zones to enhance the survival prospects of crew and other personnel in the aftermath of combat.",
@@ -24,9 +24,9 @@
     "ru" : "Life Support Backup Unit",
     "zh" : "生命保障备份装置"
   },
-  "packaged_volume" : 45,
+  "packaged_volume" : 45.0,
   "portion_size" : 1,
   "published" : true,
-  "volume" : 45,
+  "volume" : 45.0,
   "type_id" : 57486
 }

@@ -1,5 +1,5 @@
 {
-  "base_price" : 22500000,
+  "base_price" : 22500000.0,
   "description" : {
     "de" : "Ein Sortiment aus Metallteilen, Textilien, Verbundstoffen und verschiedenen Maschinen. Dies sind die grundlegenden Bestandteile für den Zusammenbau und den Betrieb eines Außenpostens im All.",
     "en" : "Assorted parts of metal, textiles, composite fabrics and miscellaneous machinery - the basic building blocks for the assembly and operation of a space outpost.",
@@ -13,7 +13,7 @@
   "group_id" : 536,
   "icon_id" : 2875,
   "market_group_id" : 1865,
-  "mass" : 10000,
+  "mass" : 10000.0,
   "name" : {
     "de" : "Structure Construction Parts",
     "en" : "Structure Construction Parts",
@@ -24,9 +24,9 @@
     "ru" : "Structure Construction Parts",
     "zh" : "建筑建造组件"
   },
-  "packaged_volume" : 3000,
+  "packaged_volume" : 3000.0,
   "portion_size" : 1,
   "published" : true,
-  "volume" : 3000,
+  "volume" : 3000.0,
   "type_id" : 21947
 }

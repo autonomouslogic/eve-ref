@@ -24,7 +24,7 @@
   "radius" : 1,
   "type_id" : 46158,
   "volume" : 0.01,
-  "base_price" : 15000000,
+  "base_price" : 15000000.0,
   "is_repackable" : true,
   "is_blueprint" : true
 }

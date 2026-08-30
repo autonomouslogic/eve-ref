@@ -1,6 +1,6 @@
 {
   "data_type" : 4,
-  "default_value" : 0,
+  "default_value" : 0.0,
   "description" : {
     "en" : "The intelligence of a character."
   },

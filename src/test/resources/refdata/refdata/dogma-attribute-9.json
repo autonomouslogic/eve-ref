@@ -1,6 +1,6 @@
 {
   "attribute_id" : 9,
-  "default_value" : 0,
+  "default_value" : 0.0,
   "description" : {
     "en" : "The maximum hitpoints of an object."
   },

@@ -1,5 +1,5 @@
 {
-  "base_price" : 837360,
+  "base_price" : 837360.0,
   "description" : {
     "de" : "Die Mjolnir Cruise Missile – die \"Mutter aller Lenkwaffen\" – befördert eine enorme Sprengladung, die dafür sorgt, dass ihre Opfer auf schnelle, aber schmerzvolle Weise vor ihren Schöpfer treten.\n\n\n\nEine modifizierte Version der Mjolnir Cruise. Verursacht größeren Schaden als die Vorgängermunition. Die Unberechenbarkeit des Sprengkopfs und das leistungsstarke Abschirmsystem verringern jedoch sowohl Flugzeit als auch Genauigkeit.",
     "en" : "The mother of all missiles, the Mjolnir cruise missile delivers a tremendous payload, guaranteed to get its victims acquainted with their personal god in a quick, but painful manner.\n\nA modified version of the Mjolnir cruise. Does more damage than its predecessor but the volatile nature of the warhead, and its powerful containment system, reduce both flight time and precision.",
@@ -14,7 +14,7 @@
   "group_id" : 656,
   "icon_id" : 182,
   "market_group_id" : 925,
-  "mass" : 1250,
+  "mass" : 1250.0,
   "meta_group_id" : 2,
   "meta_level" : 5,
   "name" : {
@@ -30,7 +30,7 @@
   "packaged_volume" : 0.05,
   "portion_size" : 5000,
   "published" : true,
-  "radius" : 300,
+  "radius" : 300.0,
   "tech_level" : 2,
   "variation_parent_type_id" : 202,
   "volume" : 0.05,

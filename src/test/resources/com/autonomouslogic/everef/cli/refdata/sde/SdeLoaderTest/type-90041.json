@@ -1,5 +1,5 @@
 {
-  "base_price" : 1000,
+  "base_price" : 1000.0,
   "description" : {
     "de" : "Prismatizit ist ein unberechenbares erratisches Erz. Sobald es aufbereitet wurde, wird es in <b>eins von verschiedenen Mineralien</b> zerfallen. Prismatizit muss in Form von <a href=showinfo:90307>komprimiertem Prismatizit</a> verdichtet werden, um in Reaktionen verwendet zu werden. Die einzigartigen Eigenschaften dieses Erzes sind das Ergebnis seiner fundamentalen dimensionalen Instabilität. Es wurde in einer unbegreiflichen höherdimensionalen Umgebung geformt.",
     "en" : "Prismaticite is an Erratic Ore. Once reprocessed, it will collapse into <b>one of a number of different minerals</b>.\n\nPrismaticite must be compressed in the form of <a href=showinfo:90307>Compressed Prismaticite</a> to be used in reactions.\n\nThe unique properties of this ore are a result of its fundamental dimensional instability. It was shaped in an unknowable higher-dimensional environment.",
@@ -23,11 +23,11 @@
     "ru" : "Prismaticite",
     "zh" : "棱柱石"
   },
-  "packaged_volume" : 40,
+  "packaged_volume" : 40.0,
   "portion_size" : 100,
   "published" : true,
   "race_id" : 4,
-  "volume" : 40,
+  "volume" : 40.0,
   "type_id" : 90041,
   "randomized_type_materials" : {
     "34" : {

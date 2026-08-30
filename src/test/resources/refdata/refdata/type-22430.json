@@ -1,5 +1,5 @@
 {
-  "capacity" : 800,
+  "capacity" : 800.0,
   "description" : {
     "en" : "Black Ops battleships are designed for infiltration and espionage behind enemy lines. With the use of a jump drive and portal generator, they are capable of making a special type of jump portal usable only by covert ops vessels. This enables them to stealthily plant reconnaissance and espionage forces in enemy territory. For the final word in clandestine maneuvers, look no further.\n\nAs the largest drone developer and manufacturer in space, CreoDron has a vested interest in drone carriers. While sacrificing relatively little in the way of defensive capability, the Sin can chew its way through surprisingly strong opponents - provided, of course, that the pilot uses top-of-the-line CreoDron drones.",
     "fr" : "Les cuirassés des forces spéciales sont conçus pour les missions d'infiltration et d'espionnage derrière les lignes ennemies. Grâce à l'utilisation d'un propulseur interstellaire et d'un générateur de portail, ils peuvent créer un portail interstellaire particulier, utilisable uniquement par les vaisseaux des opérations secrètes. Cela leur permet par exemple d'envoyer furtivement des unités de reconnaissance et d'espionnage en territoire ennemi. Autrement dit, le plan idéal pour les manœuvres clandestines. Plus grand concepteur et fabricant de drones de tout l'espace, CreoDron investit tout logiquement dans les porte-drones. Tout en sacrifiant relativement peu de choses à ses capacités défensives, le Sin se fraye habilement un chemin parmi ses adversaires, à condition, bien entendu, que le pilote utilise des drones CreoDron ultra-perfectionnés.",
@@ -537,7 +537,7 @@
   "graphic_id" : 3350,
   "group_id" : 898,
   "market_group_id" : 1078,
-  "mass" : 141700000,
+  "mass" : 141700000.0,
   "name" : {
     "en" : "Sin",
     "fr" : "Sin",
@@ -548,13 +548,13 @@
     "ru" : "Sin",
     "zh" : "罪恶级"
   },
-  "packaged_volume" : 50000,
+  "packaged_volume" : 50000.0,
   "portion_size" : 1,
   "published" : true,
-  "radius" : 250,
+  "radius" : 250.0,
   "type_id" : 22430,
-  "volume" : 454500,
-  "base_price" : 623500000,
+  "volume" : 454500.0,
+  "base_price" : 623500000.0,
   "faction_id" : 500004,
   "is_repackable" : true,
   "meta_group_id" : 2,
@@ -606,7 +606,7 @@
         "importance" : 3
       },
       "4" : {
-        "bonus" : 75,
+        "bonus" : 75.0,
         "bonus_text" : {
           "de" : "Reduktion der effektiv zurückgelegten Distanz für die Sprungerschöpfung",
           "en" : "reduction to effective distance traveled for jump fatigue",
@@ -621,7 +621,7 @@
         "unit_id" : 105
       },
       "5" : {
-        "bonus" : 50,
+        "bonus" : 50.0,
         "bonus_text" : {
           "de" : "Reduktion der Dauer von <a href=showinfo:21096>Anziehungsfeldgeneratoren</a> und <a href=showinfo:28646>getarnten Anziehungsfeldgeneratoren</a>",
           "en" : "reduction in <a href=showinfo:21096>Cynosural Field Generator</a> and <a href=showinfo:28646>Covert Cynosural Field Generator</a> duration",
@@ -636,7 +636,7 @@
         "unit_id" : 105
       },
       "6" : {
-        "bonus" : 650,
+        "bonus" : 650.0,
         "bonus_text" : {
           "de" : "Bonus auf die maximale Geschwindigkeit des Schiffs beim Einsatz von <a href=showinfo:11579>Tarnvorrichtungen</a>",
           "en" : "bonus to ship max velocity when using <a href=showinfo:11579>Cloaking Devices</a>",
@@ -651,7 +651,7 @@
         "unit_id" : 105
       },
       "7" : {
-        "bonus" : 5,
+        "bonus" : 5.0,
         "bonus_text" : {
           "de" : "zusätzlicher Bonus auf HP der <a href=showinfo:3394>Verstärkten Schottwand</a>",
           "en" : "additional bonus to <a href=showinfo:3394>Reinforced Bulkhead</a> hitpoints",
@@ -682,7 +682,7 @@
     "types" : {
       "3336" : {
         "1" : {
-          "bonus" : 20,
+          "bonus" : 20.0,
           "bonus_text" : {
             "de" : "Bonus auf den Schaden von <a href=showinfo:3307>großen Hybridgeschütztürmen</a>",
             "en" : "bonus to <a href=showinfo:3307>Large Hybrid Turret</a> damage",
@@ -697,7 +697,7 @@
           "unit_id" : 105
         },
         "2" : {
-          "bonus" : 10,
+          "bonus" : 10.0,
           "bonus_text" : {
             "de" : "Bonus auf die HP und den Schaden von <a href=showinfo:3436>Drohnen</a>",
             "en" : "bonus to <a href=showinfo:3436>Drone</a> hitpoints and damage",
@@ -714,7 +714,7 @@
       },
       "28656" : {
         "1" : {
-          "bonus" : 10,
+          "bonus" : 10.0,
           "bonus_text" : {
             "de" : "Bonus auf die Reichweite von <a href=showinfo:447>Warpunterbrechern</a>",
             "en" : "bonus to <a href=showinfo:447>Warp Scrambler</a> range",
@@ -744,7 +744,7 @@
           "unit_id" : 105
         },
         "3" : {
-          "bonus" : 1,
+          "bonus" : 1.0,
           "bonus_text" : {
             "de" : "Unterbrechungsstärke für alle <a href=showinfo:447>Warpunterbrecher</a>",
             "en" : "scramble strength to all <a href=showinfo:447>Warp Scramblers</a>",

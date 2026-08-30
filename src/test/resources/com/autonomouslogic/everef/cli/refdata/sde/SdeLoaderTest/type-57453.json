@@ -1,5 +1,5 @@
 {
-  "base_price" : 100000,
+  "base_price" : 100000.0,
   "description" : {
     "de" : "Basiskohlefasern sind kostengünstig und können aus reichlich vorhandenen Ressourcen hergestellt werden. Ihre Einsatzmöglichkeiten sind nahezu unbegrenzt. Sie eignen sich besonders für die Raumfahrtindustrie, wenn sie zusätzlich mit Polymeren verstärkt werden.",
     "en" : "Cheap and formed from abundant resources, basic carbon fiber is a material with almost unlimited applications. It is particularly useful in the space industries when reinforced with additional polymers.",

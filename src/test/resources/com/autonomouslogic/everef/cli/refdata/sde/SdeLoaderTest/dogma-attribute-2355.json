@@ -1,6 +1,6 @@
 {
   "data_type" : 5,
-  "default_value" : 1,
+  "default_value" : 1.0,
   "description" : {
     "en" : ""
   },

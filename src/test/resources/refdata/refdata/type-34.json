@@ -30,7 +30,7 @@
   "radius" : 1,
   "type_id" : 34,
   "volume" : 0.01,
-  "base_price" : 2,
+  "base_price" : 2.0,
   "used_in_blueprints" : {
     "803" : {
       "manufacturing" : {

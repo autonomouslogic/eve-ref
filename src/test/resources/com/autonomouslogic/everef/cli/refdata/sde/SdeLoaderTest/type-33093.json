@@ -1,5 +1,5 @@
 {
-  "base_price" : 100000,
+  "base_price" : 100000.0,
   "description" : {
     "de" : "Fertigkeit, Zerstörer der Gallente zu bedienen.",
     "en" : "Skill at operating Gallente destroyers.",

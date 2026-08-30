@@ -1,6 +1,6 @@
 {
   "data_type" : 11,
-  "default_value" : 0,
+  "default_value" : 0.0,
   "description" : {
     "en" : "Reference for grouping ores in visual displays. All variants of one ore should have the same BasicType ID"
   },

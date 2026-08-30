@@ -24,6 +24,6 @@
   "radius" : 1,
   "type_id" : 48109,
   "volume" : 0.01,
-  "base_price" : 400000,
+  "base_price" : 400000.0,
   "is_blueprint" : true
 }

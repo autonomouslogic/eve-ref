@@ -1,5 +1,5 @@
 {
-  "capacity" : 845,
+  "capacity" : 845.0,
   "description" : {
     "en" : "The Dominix Navy Issue's past is prominently interwoven with history, as it is known to have directly participated in the blockade and bombardment of Caldari Prime along with the Dracofeu orbital-class bomber two centuries ago. Engineered for capsule compliance, and refitted to serve more traditional combat roles, the Dominix Navy Issue today remains an extremely effective vessel and an invaluable asset in close- to mid-range battle situations.",
     "fr" : "Le Dominix modèle Navy fait largement partie de l'histoire, puisqu'il est connu pour avoir directement participé au blocus et au bombardement de Caldari Prime aux côtés du bombardier de classe orbitale Dracofeu il y a deux siècles de cela. Conçu pour s'adapter aux capsules et équipé pour remplir des rôles de combat plus traditionnels, le Dominix modèle Navy reste aujourd'hui un modèle d'efficacité et un atout indéniable pour les combats à courte et moyenne portée.",
@@ -425,7 +425,7 @@
   "graphic_id" : 2138,
   "group_id" : 27,
   "market_group_id" : 1379,
-  "mass" : 97100000,
+  "mass" : 97100000.0,
   "name" : {
     "en" : "Dominix Navy Issue",
     "fr" : "Dominix modèle Navy",
@@ -436,13 +436,13 @@
     "ru" : "Dominix Navy Issue",
     "zh" : "多米尼克斯级海军型"
   },
-  "packaged_volume" : 50000,
+  "packaged_volume" : 50000.0,
   "portion_size" : 1,
   "published" : true,
-  "radius" : 250,
+  "radius" : 250.0,
   "type_id" : 32307,
-  "volume" : 454500,
-  "base_price" : 219800000,
+  "volume" : 454500.0,
+  "base_price" : 219800000.0,
   "faction_id" : 500004,
   "is_repackable" : true,
   "meta_group_id" : 4,
@@ -455,7 +455,7 @@
   "traits" : {
     "role_bonuses" : {
       "3" : {
-        "bonus" : 5,
+        "bonus" : 5.0,
         "bonus_text" : {
           "de" : "zusätzlicher Bonus auf HP der <a href=showinfo:3394>Verstärkten Schottwand</a>",
           "en" : "additional bonus to <a href=showinfo:3394>Reinforced Bulkhead</a> hitpoints",
@@ -470,7 +470,7 @@
         "unit_id" : 105
       },
       "2" : {
-        "bonus" : 50,
+        "bonus" : 50.0,
         "bonus_text" : {
           "de" : "Bonus auf die HP der <a href=showinfo:3394>Panzerplatte</a>",
           "en" : "bonus to <a href=showinfo:3394>Armor Plate</a> hitpoints",
@@ -485,7 +485,7 @@
         "unit_id" : 105
       },
       "1" : {
-        "bonus" : 100,
+        "bonus" : 100.0,
         "bonus_text" : {
           "de" : "Bonus auf die HP der <a href=showinfo:3425>Schilderweiterung</a>",
           "en" : "bonus to <a href=showinfo:3425>Shield Extender</a> hitpoints",
@@ -533,7 +533,7 @@
           "unit_id" : 105
         },
         "1" : {
-          "bonus" : 10,
+          "bonus" : 10.0,
           "bonus_text" : {
             "de" : "Bonus auf HP, Schaden und Nachführung von <a href=showinfo:3436>Drohnen</a>",
             "en" : "bonus to <a href=showinfo:3436>Drone</a> hitpoints, damage and tracking",

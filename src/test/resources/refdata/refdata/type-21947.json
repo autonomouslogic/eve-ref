@@ -35,7 +35,7 @@
   "group_id" : 536,
   "icon_id" : 2875,
   "market_group_id" : 1865,
-  "mass" : 10000,
+  "mass" : 10000.0,
   "name" : {
     "en" : "Structure Construction Parts",
     "fr" : "Pièces de construction de structure",
@@ -46,13 +46,13 @@
     "ru" : "Structure Construction Parts",
     "zh" : "建筑建造组件"
   },
-  "packaged_volume" : 3000,
+  "packaged_volume" : 3000.0,
   "portion_size" : 1,
   "published" : true,
   "radius" : 1,
   "type_id" : 21947,
-  "volume" : 3000,
-  "base_price" : 22500000,
+  "volume" : 3000.0,
+  "base_price" : 22500000.0,
   "used_in_blueprints" : {
     "36966" : {
       "manufacturing" : {

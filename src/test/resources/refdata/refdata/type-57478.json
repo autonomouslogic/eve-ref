@@ -24,13 +24,13 @@
     "ru" : "Auto-Integrity Preservation Seal",
     "zh" : "自动修复储藏装置密封"
   },
-  "packaged_volume" : 16,
+  "packaged_volume" : 16.0,
   "portion_size" : 1,
   "published" : true,
   "radius" : 1,
   "type_id" : 57478,
-  "volume" : 16,
-  "base_price" : 10000,
+  "volume" : 16.0,
+  "base_price" : 10000.0,
   "used_in_blueprints" : {
     "999" : {
       "manufacturing" : {

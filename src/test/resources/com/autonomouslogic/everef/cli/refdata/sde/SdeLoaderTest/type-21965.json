@@ -1,5 +1,5 @@
 {
-  "base_price" : 56250000,
+  "base_price" : 56250000.0,
   "description" : {
     "de" : "Medizin, Narkosemittel, chirurgische Nachschubmaterialien und komplette Kloningstationen für Außenposten im All.",
     "en" : "Medicine, anaesthetics, surgical supplies and complete cloning facilities for space outposts.",
@@ -13,7 +13,7 @@
   "group_id" : 536,
   "icon_id" : 2884,
   "market_group_id" : 1865,
-  "mass" : 10000,
+  "mass" : 10000.0,
   "name" : {
     "de" : "Structure Medical Center",
     "en" : "Structure Medical Center",
@@ -24,9 +24,9 @@
     "ru" : "Structure Medical Center",
     "zh" : "建筑医疗中心"
   },
-  "packaged_volume" : 3000,
+  "packaged_volume" : 3000.0,
   "portion_size" : 1,
   "published" : true,
-  "volume" : 3000,
+  "volume" : 3000.0,
   "type_id" : 21965
 }

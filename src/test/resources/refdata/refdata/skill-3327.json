@@ -1,9 +1,9 @@
 {
-  "type_id" : 3327,
-  "primary_dogma_attribute_id" : 167,
-  "secondary_dogma_attribute_id" : 168,
+  "can_not_be_trained_on_trial" : false,
   "primary_character_attribute_id" : 3,
+  "primary_dogma_attribute_id" : 167,
   "secondary_character_attribute_id" : 5,
+  "secondary_dogma_attribute_id" : 168,
   "training_time_multiplier" : 1,
-  "can_not_be_trained_on_trial" : false
+  "type_id" : 3327
 }

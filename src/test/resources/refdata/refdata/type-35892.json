@@ -125,7 +125,7 @@
   "group_id" : 1321,
   "icon_id" : 21595,
   "market_group_id" : 2232,
-  "mass" : 4000,
+  "mass" : 4000.0,
   "name" : {
     "en" : "Standup Market Hub I",
     "fr" : "Centre d'affaires 'Standup' I",
@@ -136,12 +136,12 @@
     "ru" : "Standup Market Hub I",
     "zh" : "屹立市场中心 I"
   },
-  "packaged_volume" : 32000,
+  "packaged_volume" : 32000.0,
   "portion_size" : 1,
   "published" : true,
   "radius" : 1,
   "type_id" : 35892,
-  "volume" : 32000,
+  "volume" : 32000.0,
   "is_repackable" : true,
   "meta_group_id" : 54,
   "can_fit_types" : [ 35833, 35826 ]

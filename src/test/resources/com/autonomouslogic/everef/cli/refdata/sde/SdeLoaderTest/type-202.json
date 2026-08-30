@@ -1,5 +1,5 @@
 {
-  "base_price" : 15000,
+  "base_price" : 15000.0,
   "description" : {
     "de" : "Die Mjolnir Cruise Missile – die \"Mutter aller Raketen\" – befördert eine enorme Sprengladung, die dafür sorgt, dass ihre Opfer auf schnelle aber schmerzvolle Weise vor ihren Schöpfer treten.",
     "en" : "The mother of all missiles, the Mjolnir cruise missile delivers a tremendous payload, guaranteed to get its victims acquainted with their personal god in a quick, but painful manner.",
@@ -14,7 +14,7 @@
   "group_id" : 386,
   "icon_id" : 182,
   "market_group_id" : 921,
-  "mass" : 1250,
+  "mass" : 1250.0,
   "meta_group_id" : 1,
   "meta_level" : 0,
   "name" : {
@@ -30,7 +30,7 @@
   "packaged_volume" : 0.05,
   "portion_size" : 100,
   "published" : true,
-  "radius" : 300,
+  "radius" : 300.0,
   "tech_level" : 1,
   "volume" : 0.05,
   "type_id" : 202

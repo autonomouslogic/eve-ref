@@ -56,6 +56,6 @@
   "radius" : 1,
   "type_id" : 3645,
   "volume" : 0.19,
-  "base_price" : 35,
+  "base_price" : 35.0,
   "used_by_schematic_ids" : [ 65 ]
 }

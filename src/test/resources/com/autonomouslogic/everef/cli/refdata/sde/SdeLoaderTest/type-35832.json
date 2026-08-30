@@ -13,7 +13,7 @@
   "group_id" : 1657,
   "is_repackable" : true,
   "market_group_id" : 2201,
-  "mass" : 3000000000,
+  "mass" : 3000000000.0,
   "name" : {
     "de" : "Astrahus",
     "en" : "Astrahus",
@@ -24,11 +24,11 @@
     "ru" : "Astrahus",
     "zh" : "空堡"
   },
-  "packaged_volume" : 8000,
+  "packaged_volume" : 8000.0,
   "portion_size" : 1,
   "published" : true,
-  "radius" : 45000,
+  "radius" : 45000.0,
   "sound_id" : 20231,
-  "volume" : 8000,
+  "volume" : 8000.0,
   "type_id" : 35832
 }

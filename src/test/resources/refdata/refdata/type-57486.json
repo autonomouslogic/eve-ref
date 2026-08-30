@@ -24,13 +24,13 @@
     "ru" : "Life Support Backup Unit",
     "zh" : "生命保障备份装置"
   },
-  "packaged_volume" : 45,
+  "packaged_volume" : 45.0,
   "portion_size" : 1,
   "published" : true,
   "radius" : 1,
   "type_id" : 57486,
-  "volume" : 45,
-  "base_price" : 10000,
+  "volume" : 45.0,
+  "base_price" : 10000.0,
   "used_in_blueprints" : {
     "999" : {
       "manufacturing" : {

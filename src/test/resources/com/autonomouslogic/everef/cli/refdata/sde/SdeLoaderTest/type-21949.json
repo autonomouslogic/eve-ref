@@ -1,5 +1,5 @@
 {
-  "base_price" : 39375000,
+  "base_price" : 39375000.0,
   "description" : {
     "de" : "Bestandteile für den Bau von individuellen Schiffs- und Modulhangars für Außenposten im All.",
     "en" : "Components for the construction of individualized ship and module hangars in space outposts.",
@@ -13,7 +13,7 @@
   "group_id" : 536,
   "icon_id" : 2876,
   "market_group_id" : 1865,
-  "mass" : 10000,
+  "mass" : 10000.0,
   "name" : {
     "de" : "Structure Hangar Array",
     "en" : "Structure Hangar Array",
@@ -24,9 +24,9 @@
     "ru" : "Structure Hangar Array",
     "zh" : "建筑机库阵列"
   },
-  "packaged_volume" : 3000,
+  "packaged_volume" : 3000.0,
   "portion_size" : 1,
   "published" : true,
-  "volume" : 3000,
+  "volume" : 3000.0,
   "type_id" : 21949
 }

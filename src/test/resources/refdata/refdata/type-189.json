@@ -13,7 +13,7 @@
   "dogma_attributes" : {
     "128" : {
       "attribute_id" : 128,
-      "value" : 2
+      "value" : 2.0
     },
     "161" : {
       "attribute_id" : 161,
@@ -33,35 +33,35 @@
     },
     "422" : {
       "attribute_id" : 422,
-      "value" : 1
+      "value" : 1.0
     },
     "137" : {
       "attribute_id" : 137,
-      "value" : 55
+      "value" : 55.0
     },
     "779" : {
       "attribute_id" : 779,
-      "value" : 1
+      "value" : 1.0
     },
     "114" : {
       "attribute_id" : 114,
-      "value" : 0
+      "value" : 0.0
     },
     "116" : {
       "attribute_id" : 116,
-      "value" : 6
+      "value" : 6.0
     },
     "117" : {
       "attribute_id" : 117,
-      "value" : 4
+      "value" : 4.0
     },
     "118" : {
       "attribute_id" : 118,
-      "value" : 6
+      "value" : 6.0
     },
     "120" : {
       "attribute_id" : 120,
-      "value" : 1
+      "value" : 1.0
     },
     "244" : {
       "attribute_id" : 244,
@@ -69,7 +69,7 @@
     },
     "124" : {
       "attribute_id" : 124,
-      "value" : 4612441
+      "value" : 4612441.0
     }
   },
   "dogma_effects" : {
@@ -90,7 +90,7 @@
   "group_id" : 83,
   "icon_id" : 1293,
   "market_group_id" : 112,
-  "mass" : 1,
+  "mass" : 1.0,
   "name" : {
     "en" : "Depleted Uranium M",
     "fr" : "Uranium appauvri M",
@@ -107,7 +107,7 @@
   "radius" : 1,
   "type_id" : 189,
   "volume" : 0.0125,
-  "base_price" : 2050,
+  "base_price" : 2050.0,
   "meta_group_id" : 1,
   "tech_level" : 1
 }

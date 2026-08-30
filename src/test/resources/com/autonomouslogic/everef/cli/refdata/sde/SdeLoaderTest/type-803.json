@@ -1,9 +1,9 @@
 {
-  "base_price" : 5000000,
+  "base_price" : 5000000.0,
   "group_id" : 166,
   "icon_id" : 182,
   "market_group_id" : 1526,
-  "mass" : 1,
+  "mass" : 1.0,
   "name" : {
     "de" : "Mjolnir Cruise Missile Blueprint",
     "en" : "Mjolnir Cruise Missile Blueprint",

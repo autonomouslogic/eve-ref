@@ -1,5 +1,5 @@
 {
-  "base_price" : 50000,
+  "base_price" : 50000.0,
   "description" : {
     "de" : "Fertigkeit, Fregatten der Gallente zu bedienen.",
     "en" : "Skill at operating Gallente frigates.",

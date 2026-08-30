@@ -86,7 +86,7 @@
   "radius" : 1,
   "type_id" : 3327,
   "volume" : 0.01,
-  "base_price" : 30000,
+  "base_price" : 30000.0,
   "category_id" : 16,
   "is_skill" : true
 }

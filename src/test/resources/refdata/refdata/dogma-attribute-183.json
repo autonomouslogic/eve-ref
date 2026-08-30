@@ -1,6 +1,6 @@
 {
   "attribute_id" : 183,
-  "default_value" : 0,
+  "default_value" : 0.0,
   "description" : {
     "en" : "The type ID of the skill that is required."
   },

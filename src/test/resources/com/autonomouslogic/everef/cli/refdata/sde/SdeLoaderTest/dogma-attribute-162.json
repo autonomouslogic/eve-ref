@@ -1,6 +1,6 @@
 {
   "data_type" : 9,
-  "default_value" : 0,
+  "default_value" : 0.0,
   "description" : {
     "en" : "Radius of an object in meters"
   },
