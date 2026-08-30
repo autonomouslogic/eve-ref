@@ -1079,6 +1079,39 @@ public class ScrapePublicContractsTest {
 	}
 
 	/**
+	 * No previous archive. One contract with one abyssal item where the ESI returns a non-200,
+	 * non-520 status code. The scrape must succeed and the dynamic item must be absent from the
+	 * output files.
+	 */
+	@ParameterizedTest
+	@ValueSource(ints = {400, 404, 500, 520})
+	@SneakyThrows
+	void abyssalItemFailedFetchAbsentFromOutput(int statusCode) {
+		var typeId = 47804;
+		var item = abyssalItem(1810001, 1810001, typeId);
+		var contract = contract(1810).put("type", "item_exchange");
+		var metaGroupsJson = "{\"meta_group_id\":15,\"type_ids\":[" + typeId + "]}";
+
+		var d = dispatcher()
+				.withRegion(10000001)
+				.withContracts(10000001, contractsJson(List.of(contract)))
+				.withItems(1810, itemsJson(List.of(item)))
+				.withDynamicItemError(typeId, 1810001, statusCode)
+				.withType(typeId)
+				.withMetaGroups(metaGroupsJson);
+		server.setDispatcher(d);
+		run();
+
+		assertEquals(expectedContracts(List.of(contract), 10000001), records.get("contracts.csv"));
+		assertEquals(expectedItems(1810, List.of(item)), records.get("contract_items.csv"));
+		assertEquals(List.of(), records.get("contract_dynamic_items.csv"));
+		assertEquals(List.of(), records.get("contract_dynamic_items_dogma_attributes.csv"));
+		assertEquals(List.of(), records.get("contract_dynamic_items_dogma_effects.csv"));
+		assertLatestFileMatches();
+		assertDataIndex();
+	}
+
+	/**
 	 * Existing archive has dynamic data for an item, but the contract's items are absent from the
 	 * archive. Items are re-fetched. When the abyssal item appears, the dynamic store prevents a
 	 * new fetch.
@@ -1590,6 +1623,7 @@ public class ScrapePublicContractsTest {
 		// key: "typeId-itemId"
 		private final Map<String, String> dynamicItemsByKey = new HashMap<>();
 		private final Set<String> dynamicItem520Keys = new HashSet<>();
+		private final Map<String, Integer> dynamicItemErrorCodes = new HashMap<>();
 		private final Set<Integer> knownTypeIds = new HashSet<>();
 		private String metaGroupsBody;
 		private Supplier<MockResponse> latestArchiveSupplier = () -> new MockResponse().setResponseCode(404);
@@ -1644,6 +1678,11 @@ public class ScrapePublicContractsTest {
 
 		TestDispatcher withDynamicItem520(long typeId, long itemId) {
 			dynamicItem520Keys.add(typeId + "-" + itemId);
+			return this;
+		}
+
+		TestDispatcher withDynamicItemError(long typeId, long itemId, int statusCode) {
+			dynamicItemErrorCodes.put(typeId + "-" + itemId, statusCode);
 			return this;
 		}
 
@@ -1724,6 +1763,8 @@ public class ScrapePublicContractsTest {
 					var itemId = Long.parseLong(segments.get(segmentIndex + 1));
 					var key = typeId + "-" + itemId;
 					if (dynamicItem520Keys.contains(key)) return new MockResponse().setResponseCode(520);
+					if (dynamicItemErrorCodes.containsKey(key))
+						return new MockResponse().setResponseCode(dynamicItemErrorCodes.get(key));
 					var body = dynamicItemsByKey.get(key);
 					return body != null ? mockJson(body) : new MockResponse().setResponseCode(404);
 				}

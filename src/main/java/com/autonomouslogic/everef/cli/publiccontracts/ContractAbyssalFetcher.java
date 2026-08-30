@@ -13,6 +13,8 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Single;
+import io.sentry.Sentry;
+import io.sentry.SentryLevel;
 import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.util.List;
@@ -150,34 +152,38 @@ public class ContractAbyssalFetcher {
 				.urlPath(String.format("/dogma/dynamic/items/%s/%s/", typeId, itemId))
 				.build();
 		var r = esiHelper.fetch(esiUrl);
-		return Flowable.just(r)
-				.compose(esiHelper.standardErrorHandling(esiUrl))
-				.flatMapCompletable(response -> Completable.fromAction(() -> {
-					int statusCode = response.code();
-					if (statusCode == 520) {
-						log.debug(
-								"Dogma data not yet available (520) for contract {} item {} type {}, will retry next run",
-								contractId,
-								itemId,
-								typeId);
-						return;
-					}
+		return Completable.fromAction(() -> {
+					int statusCode = r.code();
 					if (statusCode == 200) {
-						var dynamicItem = (ObjectNode) esiHelper.decodeResponse(response);
+						var dynamicItem = (ObjectNode) esiHelper.decodeResponse(r);
 						var lastModified = okHttpWrapper
-								.getLastModified(response)
+								.getLastModified(r)
 								.map(ZonedDateTime::toInstant)
 								.orElse(null);
 						saveDynamicItem(contractId, itemId, dynamicItem, lastModified);
 					} else {
+						var msg = String.format("Failed to fetch dynamic item: %d", statusCode);
 						log.warn(
-								"Unknown status code seen for contract {} item {} type {}: {}",
+								"Failed to fetch dynamic item for contract {} item {} type {}: {}",
 								contractId,
 								itemId,
 								typeId,
 								statusCode);
+						if (statusCode == 520) {
+							log.debug(
+									"Dogma data not yet available (520) for contract {} item {} type {}, will retry next run",
+									contractId,
+									itemId,
+									typeId);
+						}
+						Sentry.captureException(new RuntimeException(msg), (io.sentry.ScopeCallback) scope -> {
+							scope.setLevel(SentryLevel.WARNING);
+							scope.setExtra("contract_id", String.valueOf(contractId));
+							scope.setExtra("item_id", String.valueOf(itemId));
+							scope.setExtra("type_id", String.valueOf(typeId));
+						});
 					}
-				}))
+				})
 				.doFinally(() -> r.close());
 	}
 
