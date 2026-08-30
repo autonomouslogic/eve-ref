@@ -6,9 +6,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.lenient;
 
-import io.reactivex.rxjava3.core.Flowable;
-import io.sentry.Sentry;
-
 import com.autonomouslogic.everef.esi.LocationPopulator;
 import com.autonomouslogic.everef.esi.MockLocationPopulatorModule;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
@@ -16,8 +13,11 @@ import com.autonomouslogic.everef.test.MockS3Adapter;
 import com.autonomouslogic.everef.test.TestDataUtil;
 import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.util.DataIndexHelper;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import io.reactivex.rxjava3.core.Flowable;
+import io.sentry.Sentry;
 import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
@@ -1087,8 +1087,8 @@ public class ScrapePublicContractsTest {
 	}
 
 	/**
-	 * No previous archive. One contract with one abyssal item where the ESI returns a non-200,
-	 * non-520 status code. The scrape must succeed and the dynamic item must be absent from the
+	 * No previous archive. One contract with one abyssal item where the ESI returns a non-200
+	 * status code. The scrape must succeed and the dynamic item must be absent from the
 	 * output files.
 	 */
 	@ParameterizedTest
@@ -1149,8 +1149,7 @@ public class ScrapePublicContractsTest {
 					.blockingAwait();
 
 			sentryMock.verify(() -> Sentry.captureException(
-					argThat(e -> e instanceof RuntimeException
-							&& e.getMessage().contains(String.valueOf(statusCode))),
+					argThat(e -> e instanceof RuntimeException && e.getMessage().contains(String.valueOf(statusCode))),
 					any(io.sentry.ScopeCallback.class)));
 		}
 	}
@@ -1172,7 +1171,7 @@ public class ScrapePublicContractsTest {
 				.withType(typeId)
 				.withMetaGroups(metaGroupsJson)
 				.withDynamicItems(typeId, itemId, dynamicItemJson()));
-		var dynamicItemsStore = new HashMap<Long, com.fasterxml.jackson.databind.JsonNode>();
+		var dynamicItemsStore = new HashMap<Long, JsonNode>();
 		abyssalFetcher.setDynamicItemsStore(dynamicItemsStore);
 		abyssalFetcher.setDogmaAttributesStore(new HashMap<>());
 		abyssalFetcher.setDogmaEffectsStore(new HashMap<>());
