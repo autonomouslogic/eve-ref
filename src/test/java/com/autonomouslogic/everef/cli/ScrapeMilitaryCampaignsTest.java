@@ -11,10 +11,6 @@ import com.autonomouslogic.everef.test.MockS3Adapter;
 import com.autonomouslogic.everef.test.TestDataUtil;
 import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.util.DataIndexHelper;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.time.ZonedDateTime;
@@ -41,6 +37,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junitpioneer.jupiter.SetEnvironmentVariable;
 import org.mockito.junit.jupiter.MockitoExtension;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.node.ArrayNode;
+import tools.jackson.databind.node.ObjectNode;
 
 @ExtendWith(MockitoExtension.class)
 @Log4j2
@@ -54,7 +54,7 @@ public class ScrapeMilitaryCampaignsTest {
 	ScrapeMilitaryCampaigns scrapeMilitaryCampaigns;
 
 	@Inject
-	ObjectMapper objectMapper;
+	JsonMapper jsonMapper;
 
 	@Inject
 	MockS3Adapter mockS3Adapter;
@@ -159,7 +159,7 @@ public class ScrapeMilitaryCampaignsTest {
 				.getTestObject(BUCKET_NAME, "base/military-campaigns/military-campaigns-latest.json", dataClient)
 				.orElseThrow();
 		// Must parse as plain JSON without decompression
-		var result = objectMapper.readTree(latestBytes);
+		var result = jsonMapper.readTree(latestBytes);
 		assertTrue(result.isObject());
 		assertNotNull(result.get("campaign-id-1"));
 	}
@@ -212,17 +212,14 @@ public class ScrapeMilitaryCampaignsTest {
 	}
 
 	private void createCampaign(String id, String state, int progress) {
-		campaignsList.add(objectMapper
-				.createObjectNode()
-				.put("id", id)
-				.put("state", state)
-				.put("progress", progress));
+		campaignsList.add(
+				jsonMapper.createObjectNode().put("id", id).put("state", state).put("progress", progress));
 	}
 
 	private void addObjective(String campaignId, String objectiveId, String state, int progress) {
 		objectivesByCampaign
-				.computeIfAbsent(campaignId, k -> objectMapper.createArrayNode())
-				.add(objectMapper
+				.computeIfAbsent(campaignId, k -> jsonMapper.createArrayNode())
+				.add(jsonMapper
 						.createObjectNode()
 						.put("id", objectiveId)
 						.put("state", state)
@@ -231,30 +228,30 @@ public class ScrapeMilitaryCampaignsTest {
 
 	@SneakyThrows
 	private String buildCampaignsResponse() {
-		var campaignsArray = objectMapper.createArrayNode();
+		var campaignsArray = jsonMapper.createArrayNode();
 		campaignsList.forEach(campaignsArray::add);
-		return objectMapper.writeValueAsString(objectMapper.createObjectNode().set("campaigns", campaignsArray));
+		return jsonMapper.writeValueAsString(jsonMapper.createObjectNode().set("campaigns", campaignsArray));
 	}
 
 	@SneakyThrows
 	private String buildObjectivesResponse(String campaignId) {
-		var objectivesArray = objectivesByCampaign.getOrDefault(campaignId, objectMapper.createArrayNode());
-		var response = objectMapper.createObjectNode();
-		response.set("cursor", objectMapper.createObjectNode().put("after", "next-cursor-token"));
+		var objectivesArray = objectivesByCampaign.getOrDefault(campaignId, jsonMapper.createArrayNode());
+		var response = jsonMapper.createObjectNode();
+		response.set("cursor", jsonMapper.createObjectNode().put("after", "next-cursor-token"));
 		response.set("objectives", objectivesArray);
-		return objectMapper.writeValueAsString(response);
+		return jsonMapper.writeValueAsString(response);
 	}
 
 	private JsonNode readLatest() throws IOException {
 		var latestBytes = mockS3Adapter
 				.getTestObject(BUCKET_NAME, "base/military-campaigns/military-campaigns-latest.json", dataClient)
 				.orElseThrow();
-		return objectMapper.readTree(latestBytes);
+		return jsonMapper.readTree(latestBytes);
 	}
 
 	private JsonNode decompress(byte[] bytes) throws IOException {
 		try (var in = new BZip2CompressorInputStream(new ByteArrayInputStream(bytes))) {
-			return objectMapper.readTree(in);
+			return jsonMapper.readTree(in);
 		}
 	}
 

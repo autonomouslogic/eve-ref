@@ -1,7 +1,5 @@
 package com.autonomouslogic.everef.util;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -17,6 +15,8 @@ import lombok.SneakyThrows;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.jetbrains.annotations.NotNull;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.node.ObjectNode;
 
 /**
  * Utility class for taking a list of JsonNode objects and converting them into a CSV file.
@@ -84,7 +84,7 @@ public class JsonNodeCsvWriter {
 		var headers = new LinkedHashSet<String>();
 		for (var entry : entries) {
 			if (entry instanceof ObjectNode) {
-				entry.fieldNames().forEachRemaining(headers::add);
+				entry.propertyNames().forEach(headers::add);
 			}
 		}
 		return new ArrayList<>(headers);

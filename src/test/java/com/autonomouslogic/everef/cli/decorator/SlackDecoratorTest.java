@@ -12,8 +12,6 @@ import static org.mockito.Mockito.verify;
 import com.autonomouslogic.everef.cli.Command;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.test.TestDataUtil;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
@@ -31,6 +29,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junitpioneer.jupiter.SetEnvironmentVariable;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.node.ObjectNode;
 
 @ExtendWith(MockitoExtension.class)
 @Log4j2
@@ -45,7 +45,7 @@ public class SlackDecoratorTest {
 	SlackDecorator slackDecorator;
 
 	@Inject
-	ObjectMapper objectMapper;
+	JsonMapper jsonMapper;
 
 	@Inject
 	TestDataUtil testDataUtil;
@@ -209,7 +209,7 @@ public class SlackDecoratorTest {
 			payload = payload.substring(8);
 		}
 		payload = URLDecoder.decode(payload, StandardCharsets.UTF_8);
-		return (ObjectNode) objectMapper.readTree(payload);
+		return (ObjectNode) jsonMapper.readTree(payload);
 	}
 
 	private static void assertDuration(String message) {

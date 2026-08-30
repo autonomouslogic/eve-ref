@@ -1,6 +1,5 @@
 package com.autonomouslogic.everef.mvstore;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import io.reactivex.rxjava3.functions.BiConsumer;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -13,6 +12,7 @@ import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import org.h2.mvstore.MVStore;
+import tools.jackson.databind.JsonNode;
 
 @Log4j2
 public class StoreMapSet {

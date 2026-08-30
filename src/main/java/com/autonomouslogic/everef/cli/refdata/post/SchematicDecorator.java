@@ -3,16 +3,16 @@ package com.autonomouslogic.everef.cli.refdata.post;
 import com.autonomouslogic.everef.cli.refdata.StoreDataHelper;
 import com.autonomouslogic.everef.refdata.InventoryType;
 import com.autonomouslogic.everef.refdata.Schematic;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.reactivex.rxjava3.core.Completable;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import javax.inject.Inject;
 import lombok.extern.log4j.Log4j2;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.node.ArrayNode;
+import tools.jackson.databind.node.ObjectNode;
 
 @Log4j2
 public class SchematicDecorator extends PostDecorator {
@@ -20,7 +20,7 @@ public class SchematicDecorator extends PostDecorator {
 	private static final int PLANET_TYPE_RESTRICTION_DOGMA_ATTRIBUTE_ID = 1632;
 
 	@Inject
-	protected ObjectMapper objectMapper;
+	protected JsonMapper jsonMapper;
 
 	private StoreDataHelper helper;
 	private Map<Long, JsonNode> types;
@@ -31,20 +31,20 @@ public class SchematicDecorator extends PostDecorator {
 
 	public Completable create() {
 		return Completable.fromAction(() -> {
-			helper = new StoreDataHelper(storeHandler, objectMapper);
+			helper = new StoreDataHelper(storeHandler, jsonMapper);
 			log.info("Decorating schematics");
-			helper = new StoreDataHelper(storeHandler, objectMapper);
+			helper = new StoreDataHelper(storeHandler, jsonMapper);
 			types = storeHandler.getRefStore("types");
 			schematics = storeHandler.getRefStore("schematics");
 			for (var schematicEntry : schematics.entrySet()) {
 				var schematicJson = (ObjectNode) schematicEntry.getValue();
-				var schematic = objectMapper.convertValue(schematicJson, Schematic.class);
+				var schematic = jsonMapper.convertValue(schematicJson, Schematic.class);
 				handleMaterials(schematic);
 				handleProducts(schematic);
 				handleInstallableSchematics(schematic);
 			}
 			for (Map.Entry<Long, JsonNode> typeEntry : types.entrySet()) {
-				var type = objectMapper.convertValue(typeEntry.getValue(), InventoryType.class);
+				var type = jsonMapper.convertValue(typeEntry.getValue(), InventoryType.class);
 				handleHarvestedBy(type);
 				handleBuildableOnPlanets(type);
 			}

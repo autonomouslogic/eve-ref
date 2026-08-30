@@ -6,9 +6,6 @@ import com.autonomouslogic.everef.model.refdata.RefDataConfig;
 import com.autonomouslogic.everef.util.RefDataUtil;
 import com.autonomouslogic.everef.util.TempFiles;
 import com.autonomouslogic.everef.util.VirtualThreads;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.type.CollectionType;
 import io.reactivex.rxjava3.core.Completable;
 import java.util.List;
 import java.util.Objects;
@@ -17,6 +14,9 @@ import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import okhttp3.OkHttpClient;
+import tools.jackson.databind.DeserializationFeature;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.type.CollectionType;
 
 /**
  * Loads the reference data archive and verifies all entries can be parsed using the models.
@@ -35,13 +35,16 @@ public class VerifyRefDataModels implements Command {
 	@Inject
 	protected RefDataUtil refDataUtil;
 
-	private final ObjectMapper objectMapper;
+	private final JsonMapper jsonMapper;
 	private final CollectionType listOfInts;
 
 	@Inject
-	protected VerifyRefDataModels(ObjectMapper objectMapper) {
-		this.objectMapper = objectMapper.copy().enable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-		listOfInts = this.objectMapper.getTypeFactory().constructCollectionType(List.class, Integer.class);
+	protected VerifyRefDataModels(JsonMapper jsonMapper) {
+		this.jsonMapper = jsonMapper
+				.rebuild()
+				.enable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+				.build();
+		listOfInts = this.jsonMapper.getTypeFactory().constructCollectionType(List.class, Integer.class);
 	}
 
 	@SneakyThrows
@@ -76,7 +79,7 @@ public class VerifyRefDataModels implements Command {
 	@SneakyThrows
 	private void verifyType(@NonNull ReferenceEntry entry, @NonNull RefDataConfig config) {
 		var modelName = "com.autonomouslogic.everef.refdata." + config.getModel();
-		var modelClass = objectMapper.getTypeFactory().findClass(modelName);
-		Objects.requireNonNull(objectMapper.readValue(entry.getContent(), modelClass));
+		var modelClass = jsonMapper.getTypeFactory().findClass(modelName);
+		Objects.requireNonNull(jsonMapper.readValue(entry.getContent(), modelClass));
 	}
 }

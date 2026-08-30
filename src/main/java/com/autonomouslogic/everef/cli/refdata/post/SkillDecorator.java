@@ -4,9 +4,6 @@ import com.autonomouslogic.everef.cli.refdata.StoreDataHelper;
 import com.autonomouslogic.everef.refdata.DogmaAttribute;
 import com.autonomouslogic.everef.refdata.InventoryType;
 import com.autonomouslogic.everef.refdata.Skill;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.reactivex.rxjava3.core.Completable;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -19,6 +16,9 @@ import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.node.ObjectNode;
 
 @Log4j2
 public class SkillDecorator extends PostDecorator {
@@ -27,7 +27,7 @@ public class SkillDecorator extends PostDecorator {
 			Map.of("intelligence", 1L, "charisma", 2L, "perception", 3L, "memory", 4L, "willpower", 5L);
 
 	@Inject
-	protected ObjectMapper objectMapper;
+	protected JsonMapper jsonMapper;
 
 	private StoreDataHelper helper;
 	private Map<Long, JsonNode> types;
@@ -44,7 +44,7 @@ public class SkillDecorator extends PostDecorator {
 	public Completable create() {
 		return Completable.fromAction(() -> {
 			log.info("Creating skills");
-			helper = new StoreDataHelper(storeHandler, objectMapper);
+			helper = new StoreDataHelper(storeHandler, jsonMapper);
 			types = storeHandler.getRefStore("types");
 			skills = storeHandler.getRefStore("skills");
 			dogmaAttributes = storeHandler.getRefStore("dogmaAttributes");
@@ -63,7 +63,7 @@ public class SkillDecorator extends PostDecorator {
 				long typeId = entry.getKey();
 				var save = false;
 				var typeJson = (ObjectNode) entry.getValue();
-				var type = objectMapper.convertValue(typeJson, InventoryType.class);
+				var type = jsonMapper.convertValue(typeJson, InventoryType.class);
 				var isSkill = isSkill(typeId, helper);
 				if (isSkill) {
 					typeJson.put("is_skill", true);
@@ -71,7 +71,7 @@ public class SkillDecorator extends PostDecorator {
 				}
 				var requiredSkills = createRequiredSkills(type, requiredSkillDogma, helper);
 				if (requiredSkills != null) {
-					typeJson.put("required_skills", objectMapper.valueToTree(requiredSkills));
+					typeJson.set("required_skills", jsonMapper.valueToTree(requiredSkills));
 					save = true;
 				}
 				if (save) {
@@ -148,8 +148,8 @@ public class SkillDecorator extends PostDecorator {
 		var primaryDogmaId = primaryTypeDogma.get().getValue().longValue();
 		var secondaryDogmaId = secondaryTypeDogma.get().getValue().longValue();
 
-		var primaryDogma = objectMapper.convertValue(dogmaAttributes.get(primaryDogmaId), DogmaAttribute.class);
-		var secondaryDogma = objectMapper.convertValue(dogmaAttributes.get(secondaryDogmaId), DogmaAttribute.class);
+		var primaryDogma = jsonMapper.convertValue(dogmaAttributes.get(primaryDogmaId), DogmaAttribute.class);
+		var secondaryDogma = jsonMapper.convertValue(dogmaAttributes.get(secondaryDogmaId), DogmaAttribute.class);
 
 		var primaryCharacterAttributeId = ATTRIBUTE_ID_MAP.get(primaryDogma.getName());
 		var secondaryCharacterAttributeId = ATTRIBUTE_ID_MAP.get(secondaryDogma.getName());
@@ -177,6 +177,6 @@ public class SkillDecorator extends PostDecorator {
 				.canNotBeTrainedOnTrial(canNotBeTrainedOnTrial)
 				.requiredSkills(requiredSkills);
 		log.trace("Created skill: {}", typeId);
-		skills.put(typeId, objectMapper.valueToTree(skill.build()));
+		skills.put(typeId, jsonMapper.valueToTree(skill.build()));
 	}
 }
