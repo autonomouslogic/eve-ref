@@ -170,14 +170,7 @@ public class ContractAbyssalFetcher {
 								itemId,
 								typeId,
 								statusCode);
-						if (statusCode == 520) {
-							log.debug(
-									"Dogma data not yet available (520) for contract {} item {} type {}, will retry next run",
-									contractId,
-									itemId,
-									typeId);
-						}
-						Sentry.captureException(new RuntimeException(msg), (io.sentry.ScopeCallback) scope -> {
+						Sentry.captureException(new RuntimeException(msg), scope -> {
 							scope.setLevel(SentryLevel.WARNING);
 							scope.setExtra("contract_id", String.valueOf(contractId));
 							scope.setExtra("item_id", String.valueOf(itemId));
