@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import com.autonomouslogic.commons.ResourceUtil;
+import com.autonomouslogic.commons.concurrent.VirtualThreads;
 import com.autonomouslogic.everef.model.RegionTypePair;
 import com.autonomouslogic.everef.refdata.InventoryType;
 import com.autonomouslogic.everef.refdata.Region;
@@ -111,11 +112,11 @@ public class ScrapeMarketHistoryTest {
 
 	@RetryingTest(3)
 	@SneakyThrows
-	void shouldScrapeMarketHistory() {
-		scrapeMarketHistory
+	void shouldScrapeMarketHistory() throws InterruptedException {
+		VirtualThreads.onVirtualThread(() -> scrapeMarketHistory
 				.setMinDate(LocalDate.parse("2023-01-01"))
 				.setToday(LocalDate.parse("2023-01-04"))
-				.run();
+				.run());
 
 		assertEquals(
 				List.of(

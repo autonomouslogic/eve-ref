@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
+import com.autonomouslogic.commons.concurrent.VirtualThreads;
 import com.autonomouslogic.everef.cli.FetchDonations.DonationEntry;
 import com.autonomouslogic.everef.cli.FetchDonations.SummaryEntry;
 import com.autonomouslogic.everef.cli.FetchDonations.SummaryFile;
@@ -104,11 +105,14 @@ public class FetchDonationsTest {
 	}
 
 	@Test
+	@SneakyThrows
 	void shouldNotDoAnythingWithNoDonations() {
 		// No prior donations
 		// No current donations
 
-		fetchDonations.run();
+		VirtualThreads.onVirtualThread(() -> {
+			fetchDonations.run();
+		});
 
 		assertDonationsFile(List.of());
 		assertSummaryFile(SummaryFile.builder().top(List.of()).recent(List.of()).build());
@@ -116,12 +120,15 @@ public class FetchDonationsTest {
 	}
 
 	@Test
+	@SneakyThrows
 	void shouldUpdateWithFirstDonations() {
 		// No prior donations
 		// New donations
 		addCharacterTransaction(1, TEST_DONOR_CHARACTER_ID_1, 100_000_000, donationTime);
 
-		fetchDonations.run();
+		VirtualThreads.onVirtualThread(() -> {
+			fetchDonations.run();
+		});
 
 		assertDonationsFile(List.of(DonationEntry.builder()
 				.id(1)
@@ -143,6 +150,7 @@ public class FetchDonationsTest {
 	}
 
 	@Test
+	@SneakyThrows
 	void shouldUpdateWithSameDonations() {
 		// Existing prior donations
 		existingDonations.add(DonationEntry.builder()
@@ -158,7 +166,9 @@ public class FetchDonationsTest {
 		addCharacterTransaction(1, TEST_DONOR_CHARACTER_ID_1, 100_000_000, donationTime);
 
 		putDonationsFile();
-		fetchDonations.run();
+		VirtualThreads.onVirtualThread(() -> {
+			fetchDonations.run();
+		});
 
 		assertDonationsFile(List.of(DonationEntry.builder()
 				.id(1)
@@ -181,6 +191,7 @@ public class FetchDonationsTest {
 	}
 
 	@Test
+	@SneakyThrows
 	void shouldUpdateWithNewDonations() {
 		// Existing prior donations
 		existingDonations.add(DonationEntry.builder()
@@ -197,7 +208,9 @@ public class FetchDonationsTest {
 		addCharacterTransaction(2, TEST_DONOR_CHARACTER_ID_2, 200_000_000, donationTime.plusMinutes(1));
 
 		putDonationsFile();
-		fetchDonations.run();
+		VirtualThreads.onVirtualThread(() -> {
+			fetchDonations.run();
+		});
 
 		assertDonationsFile(List.of(
 				DonationEntry.builder()
@@ -236,6 +249,7 @@ public class FetchDonationsTest {
 	}
 
 	@Test
+	@SneakyThrows
 	void shouldKeepOldDonations() {
 		// Existing prior donations
 		existingDonations.add(DonationEntry.builder()
@@ -251,7 +265,9 @@ public class FetchDonationsTest {
 		addCharacterTransaction(2, TEST_DONOR_CHARACTER_ID_2, 200_000_000, donationTime);
 
 		putDonationsFile();
-		fetchDonations.run();
+		VirtualThreads.onVirtualThread(() -> {
+			fetchDonations.run();
+		});
 
 		assertDonationsFile(List.of(
 				DonationEntry.builder()
@@ -290,6 +306,7 @@ public class FetchDonationsTest {
 	}
 
 	@Test
+	@SneakyThrows
 	void shouldKeepOldDonationsWhenNoDonations() {
 		// Existing prior donations
 		existingDonations.add(DonationEntry.builder()
@@ -304,7 +321,9 @@ public class FetchDonationsTest {
 		// No donations on ESI
 
 		putDonationsFile();
-		fetchDonations.run();
+		VirtualThreads.onVirtualThread(() -> {
+			fetchDonations.run();
+		});
 
 		assertDonationsFile(List.of(DonationEntry.builder()
 				.id(1)
@@ -327,6 +346,7 @@ public class FetchDonationsTest {
 	}
 
 	@Test
+	@SneakyThrows
 	void shouldSummariseMultipleDonationsFromTheSameEntity() {
 		// Existing prior donations from the same person
 		existingDonations.add(DonationEntry.builder()
@@ -343,7 +363,9 @@ public class FetchDonationsTest {
 		addCharacterTransaction(3, TEST_DONOR_CHARACTER_ID_1, 300_000_000, donationTime);
 
 		putDonationsFile();
-		fetchDonations.run();
+		VirtualThreads.onVirtualThread(() -> {
+			fetchDonations.run();
+		});
 
 		var entries = List.of(SummaryEntry.builder()
 				.donorName("Donor Character 1")
@@ -356,6 +378,7 @@ public class FetchDonationsTest {
 	}
 
 	@Test
+	@SneakyThrows
 	void shouldSummariseMultipleDonationsFromDifferentEntities() {
 		// No prior donations
 		// Multiple new donations from different people
@@ -363,7 +386,9 @@ public class FetchDonationsTest {
 		addCharacterTransaction(2, TEST_DONOR_CHARACTER_ID_2, 300_000_000, donationTime);
 
 		putDonationsFile();
-		fetchDonations.run();
+		VirtualThreads.onVirtualThread(() -> {
+			fetchDonations.run();
+		});
 
 		var entries = List.of(
 				SummaryEntry.builder()
@@ -383,6 +408,7 @@ public class FetchDonationsTest {
 	}
 
 	@Test
+	@SneakyThrows
 	void shouldNotSummariseOldDonations() {
 		// Existing prior donations
 		existingDonations.add(DonationEntry.builder()
@@ -414,7 +440,9 @@ public class FetchDonationsTest {
 				.build());
 
 		putDonationsFile();
-		fetchDonations.run();
+		VirtualThreads.onVirtualThread(() -> {
+			fetchDonations.run();
+		});
 
 		assertSummaryFile(SummaryFile.builder()
 				.top(List.of(SummaryEntry.builder()
@@ -431,6 +459,7 @@ public class FetchDonationsTest {
 	}
 
 	@Test
+	@SneakyThrows
 	void shouldNotIncludeSmallDonationsInRecent() {
 		// Existing prior donations
 		existingDonations.add(DonationEntry.builder()
@@ -444,7 +473,9 @@ public class FetchDonationsTest {
 				.build());
 
 		putDonationsFile();
-		fetchDonations.run();
+		VirtualThreads.onVirtualThread(() -> {
+			fetchDonations.run();
+		});
 
 		assertSummaryFile(SummaryFile.builder()
 				.top(List.of(SummaryEntry.builder()
@@ -457,20 +488,27 @@ public class FetchDonationsTest {
 	}
 
 	@Test
+	@SneakyThrows
 	void shouldReplaceWeirdCharactersInDonorNames() {
 		addCharacterTransaction(1, TEST_DONOR_CHARACTER_ID_3, 200, donationTime);
-		fetchDonations.run();
+		VirtualThreads.onVirtualThread(() -> {
+			fetchDonations.run();
+		});
 		assertDiscordUpdate("**Weird name??_??** donated 200.00 ISK :sunglasses:");
 	}
 
 	@Test
+	@SneakyThrows
 	void shouldShortenLargeAmountsOfMoney() {
 		addCharacterTransaction(1, TEST_DONOR_CHARACTER_ID_1, 12345678912L, donationTime);
-		fetchDonations.run();
+		VirtualThreads.onVirtualThread(() -> {
+			fetchDonations.run();
+		});
 		assertDiscordUpdate("**Donor Character 1** donated 12.35b ISK :money_mouth:");
 	}
 
 	@Test
+	@SneakyThrows
 	void shouldIncludeAllRelevantTransactions() {
 		addCharacterTransaction(
 				1,
@@ -496,7 +534,9 @@ public class FetchDonationsTest {
 				1000,
 				donationTime,
 				GetCorporationsCorporationIdWalletsDivisionJournal200Ok.RefTypeEnum.CORPORATION_ACCOUNT_WITHDRAWAL);
-		fetchDonations.run();
+		VirtualThreads.onVirtualThread(() -> {
+			fetchDonations.run();
+		});
 		assertDiscordUpdate("**Donor Corporation 2** donated 1,000.00 ISK :partying_face:\n"
 				+ "**Donor Character 2** donated 100.00 ISK :thumbsup:\n"
 				+ "**Donor Corporation 1** donated 10.00 ISK :money_mouth:\n"
@@ -504,6 +544,7 @@ public class FetchDonationsTest {
 	}
 
 	@Test
+	@SneakyThrows
 	void shouldNotIncludeIrrelevantTransactions() {
 		addCharacterTransaction(
 				1,
@@ -517,13 +558,16 @@ public class FetchDonationsTest {
 				100,
 				donationTime,
 				GetCorporationsCorporationIdWalletsDivisionJournal200Ok.RefTypeEnum.ACCELERATION_GATE_FEE);
-		fetchDonations.run();
+		VirtualThreads.onVirtualThread(() -> {
+			fetchDonations.run();
+		});
 		assertDonationsFile(List.of());
 		assertSummaryFile(SummaryFile.builder().top(List.of()).recent(List.of()).build());
 		assertNoDiscordUpdate();
 	}
 
 	@Test
+	@SneakyThrows
 	void shouldNotIncludeTransactionsFromSelf() {
 		addCharacterTransaction(
 				1,
@@ -549,7 +593,9 @@ public class FetchDonationsTest {
 				1000,
 				donationTime,
 				GetCorporationsCorporationIdWalletsDivisionJournal200Ok.RefTypeEnum.CORPORATION_ACCOUNT_WITHDRAWAL);
-		fetchDonations.run();
+		VirtualThreads.onVirtualThread(() -> {
+			fetchDonations.run();
+		});
 		assertDonationsFile(List.of());
 		assertSummaryFile(SummaryFile.builder().top(List.of()).recent(List.of()).build());
 		assertNoDiscordUpdate();

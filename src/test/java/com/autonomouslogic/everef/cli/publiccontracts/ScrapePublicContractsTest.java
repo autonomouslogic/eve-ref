@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.lenient;
 
+import com.autonomouslogic.commons.concurrent.VirtualThreads;
 import com.autonomouslogic.everef.esi.LocationPopulator;
 import com.autonomouslogic.everef.esi.MockLocationPopulatorModule;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
@@ -1374,9 +1375,9 @@ public class ScrapePublicContractsTest {
 
 	@SneakyThrows
 	private void run() {
-		scrapePublicContracts
+		VirtualThreads.onVirtualThread(() -> scrapePublicContracts
 				.setScrapeTime(ZonedDateTime.parse("2020-02-03T04:05:06.89Z"))
-				.run();
+				.run());
 		content = mockS3Adapter
 				.getTestObject(BUCKET_NAME, ARCHIVE_FILE, dataClient)
 				.orElseThrow();

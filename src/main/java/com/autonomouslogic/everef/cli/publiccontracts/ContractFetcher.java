@@ -1,12 +1,12 @@
 package com.autonomouslogic.everef.cli.publiccontracts;
 
+import com.autonomouslogic.commons.concurrent.VirtualThreads;
 import com.autonomouslogic.everef.esi.EsiHelper;
 import com.autonomouslogic.everef.esi.EsiUrl;
 import com.autonomouslogic.everef.esi.LocationPopulator;
 import com.autonomouslogic.everef.esi.UniverseEsi;
 import com.autonomouslogic.everef.http.OkHttpWrapper;
 import com.autonomouslogic.everef.openapi.esi.model.GetUniverseRegionsRegionIdOk;
-import com.autonomouslogic.everef.util.VirtualThreads;
 import io.reactivex.rxjava3.core.Flowable;
 import java.time.Duration;
 import java.util.ArrayList;
@@ -24,6 +24,7 @@ import javax.inject.Named;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import tools.jackson.databind.JsonNode;
@@ -73,6 +74,7 @@ public class ContractFetcher {
 	@Inject
 	protected ContractFetcher() {}
 
+	@SneakyThrows
 	public List<Long> fetchPublicContracts() {
 		buildKnownItemIndex();
 		var regions = universeEsi.getAllRegions();
@@ -82,7 +84,8 @@ public class ContractFetcher {
 				.map(region -> (Callable<List<Long>>) () -> fetchContractsForRegion(region))
 				.toList();
 
-		var allContractIds = VirtualThreads.parallel(tasks, 3);
+		VirtualThreads.checkIsVirtual();
+		var allContractIds = VirtualThreads.callAll(tasks.iterator(), 3);
 
 		// Flatten the list of lists
 		return allContractIds.stream().flatMap(List::stream).toList();
@@ -96,6 +99,7 @@ public class ContractFetcher {
 				Duration.ofSeconds(5));
 	}
 
+	@SneakyThrows
 	private List<Long> fetchContractsForRegionInner(GetUniverseRegionsRegionIdOk region) {
 		var count = new AtomicInteger();
 		log.info("Fetching public contracts from {}", region.getName());
@@ -117,7 +121,8 @@ public class ContractFetcher {
 				})
 				.toList();
 
-		var contractIds = VirtualThreads.parallel(tasks, 32);
+		VirtualThreads.checkIsVirtual();
+		var contractIds = VirtualThreads.callAll(tasks.iterator(), 32);
 
 		log.info("Fetched {} public contracts from {}", count.get(), region.getName());
 		return contractIds;

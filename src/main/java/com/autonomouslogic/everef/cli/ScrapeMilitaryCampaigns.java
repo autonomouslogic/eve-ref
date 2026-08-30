@@ -2,6 +2,7 @@ package com.autonomouslogic.everef.cli;
 
 import static com.autonomouslogic.everef.util.archive.ArchivePathFactories.MILITARY_CAMPAIGNS;
 
+import com.autonomouslogic.commons.concurrent.VirtualThreads;
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.esi.EsiHelper;
 import com.autonomouslogic.everef.esi.EsiUrl;
@@ -10,7 +11,6 @@ import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.url.UrlParser;
 import com.autonomouslogic.everef.util.CompressUtil;
 import com.autonomouslogic.everef.util.TempFiles;
-import com.autonomouslogic.everef.util.VirtualThreads;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
@@ -92,7 +92,9 @@ public class ScrapeMilitaryCampaigns implements Command {
 					return null;
 				})
 				.toList();
-		VirtualThreads.onVirtual(() -> VirtualThreads.parallel(tasks));
+		if (!tasks.isEmpty()) {
+			VirtualThreads.callAll(tasks, tasks.size());
+		}
 
 		log.info("Fetched {} campaigns", campaigns.size());
 

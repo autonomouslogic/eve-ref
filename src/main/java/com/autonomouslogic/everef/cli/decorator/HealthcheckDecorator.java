@@ -1,9 +1,9 @@
 package com.autonomouslogic.everef.cli.decorator;
 
+import com.autonomouslogic.commons.concurrent.VirtualThreads;
 import com.autonomouslogic.everef.cli.Command;
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.service.HealthcheckService;
-import com.autonomouslogic.everef.util.VirtualThreads;
 import java.util.Optional;
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -48,7 +48,7 @@ public class HealthcheckDecorator {
 
 		@Override
 		public void run() {
-			VirtualThreads.checkThread();
+			VirtualThreads.checkIsVirtual();
 			healthcheckService.ping(startUrl);
 			try {
 				delegate.run();

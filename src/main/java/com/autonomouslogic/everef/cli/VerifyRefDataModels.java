@@ -1,11 +1,11 @@
 package com.autonomouslogic.everef.cli;
 
+import com.autonomouslogic.commons.concurrent.VirtualThreads;
 import com.autonomouslogic.everef.http.OkHttpWrapper;
 import com.autonomouslogic.everef.model.ReferenceEntry;
 import com.autonomouslogic.everef.model.refdata.RefDataConfig;
 import com.autonomouslogic.everef.util.RefDataUtil;
 import com.autonomouslogic.everef.util.TempFiles;
-import com.autonomouslogic.everef.util.VirtualThreads;
 import io.reactivex.rxjava3.core.Completable;
 import java.util.List;
 import java.util.Objects;
@@ -50,7 +50,7 @@ public class VerifyRefDataModels implements Command {
 	@SneakyThrows
 	@Override
 	public void run() {
-		VirtualThreads.checkThread();
+		VirtualThreads.checkIsVirtual();
 		refDataUtil
 				.downloadLatestReferenceData()
 				.flatMapPublisher(file -> refDataUtil.parseReferenceDataArchive(file))

@@ -1,8 +1,8 @@
 package com.autonomouslogic.everef.cli.basiclogin;
 
+import com.autonomouslogic.commons.concurrent.VirtualThreads;
 import com.autonomouslogic.everef.cli.Command;
 import com.autonomouslogic.everef.config.Configs;
-import com.autonomouslogic.everef.util.VirtualThreads;
 import io.helidon.webserver.WebServer;
 import jakarta.inject.Inject;
 import lombok.SneakyThrows;
@@ -21,7 +21,7 @@ public class BasicLogin implements Command {
 	@Override
 	@SneakyThrows
 	public void run() {
-		VirtualThreads.checkThread();
+		VirtualThreads.checkIsVirtual();
 		Configs.EVE_OAUTH_CLIENT_ID.getRequired();
 		Configs.EVE_OAUTH_SECRET_KEY.getRequired();
 
