@@ -554,10 +554,7 @@ public class ScrapeMarketOrdersTest {
 	}
 
 	private ObjectNode marketStructureNoLocation(long structureId) {
-		return objectMapper
-				.createObjectNode()
-				.put("structure_id", structureId)
-				.put("is_market_structure", true);
+		return objectMapper.createObjectNode().put("structure_id", structureId).put("is_market_structure", true);
 	}
 
 	private ObjectNode nonMarketStructure(long structureId, long systemId, long constellationId, long regionId) {
