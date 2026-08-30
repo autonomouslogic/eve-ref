@@ -1,5 +1,28 @@
 EVE Ref Changelog
 
+## [2.80.1](https://github.com/autonomouslogic/eve-ref/compare/2.80.0...2.80.1) (2026-08-30)
+
+
+### Bug Fixes
+
+* **deps:** Upgraded to Jackson 3 ([#1080](https://github.com/autonomouslogic/eve-ref/issues/1080)) ([75b17f5](https://github.com/autonomouslogic/eve-ref/commit/75b17f51e8880b474e44236049b50198a58d0332))
+* Fixed market order sorting and refactored ScrapeMarketOrdersTest ([#1092](https://github.com/autonomouslogic/eve-ref/issues/1092)) ([1c3c21b](https://github.com/autonomouslogic/eve-ref/commit/1c3c21b2646f5b70682969ebc049f065f3a08435))
+* Full virtualthreads ([#1063](https://github.com/autonomouslogic/eve-ref/issues/1063)) ([788a31f](https://github.com/autonomouslogic/eve-ref/commit/788a31fe19f21db2b1dbca36f34a17fb12caa050))
+* Public contracts dynamic items should not fetch dogma for mutaplasmids ([#1088](https://github.com/autonomouslogic/eve-ref/issues/1088)) ([18f2030](https://github.com/autonomouslogic/eve-ref/commit/18f20305ad67bccb9425882020e695103f3b2ae6))
+* Report failed dynamic item on public contracts to Sentry ([#1090](https://github.com/autonomouslogic/eve-ref/issues/1090)) ([67117f5](https://github.com/autonomouslogic/eve-ref/commit/67117f5cb1c6e298ceb54e6a7f96c83758d203ef))
+* Retry failed dynamic items and removed contract_non_dynamic_items.csv from public contracts scrape ([#1082](https://github.com/autonomouslogic/eve-ref/issues/1082)) ([ce34e92](https://github.com/autonomouslogic/eve-ref/commit/ce34e925ed900e589c1ec3817ee4ca7bb2242ca1))
+* **ui:** September 2026 giveaways ([9659192](https://github.com/autonomouslogic/eve-ref/commit/96591927bc3f1abdbaf271899bf52618911a2a4b))
+
+
+### Miscellaneous Chores
+
+* claude.md ([bd8e95e](https://github.com/autonomouslogic/eve-ref/commit/bd8e95e08abf8fc8970396753a70abed13e280e4))
+
+
+### Tests
+
+* Updated test resources ([d548922](https://github.com/autonomouslogic/eve-ref/commit/d54892297fb467bae8d04d56879aa513f8b29f0d))
+
 ## [2.80.0](https://github.com/autonomouslogic/eve-ref/compare/2.79.3...2.80.0) (2026-08-23)
 
 
