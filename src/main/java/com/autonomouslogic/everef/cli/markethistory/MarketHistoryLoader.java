@@ -6,11 +6,6 @@ import com.autonomouslogic.everef.model.MarketHistoryEntry;
 import com.autonomouslogic.everef.url.DataUrl;
 import com.autonomouslogic.everef.util.CompressUtil;
 import com.autonomouslogic.everef.util.TempFiles;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.MappingIterator;
-import com.fasterxml.jackson.dataformat.csv.CsvMapper;
-import com.fasterxml.jackson.dataformat.csv.CsvParser;
-import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Single;
 import java.io.File;
@@ -25,6 +20,11 @@ import lombok.extern.log4j.Log4j2;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.NotNull;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.MappingIterator;
+import tools.jackson.dataformat.csv.CsvMapper;
+import tools.jackson.dataformat.csv.CsvReadFeature;
+import tools.jackson.dataformat.csv.CsvSchema;
 
 /**
  * Loads and parses files from the data site.
@@ -43,7 +43,10 @@ public class MarketHistoryLoader {
 
 	@Inject
 	protected MarketHistoryLoader(CsvMapper csvMapper) {
-		this.csvMapper = csvMapper.copy().configure(CsvParser.Feature.FAIL_ON_MISSING_HEADER_COLUMNS, false);
+		this.csvMapper = csvMapper
+				.rebuild()
+				.disable(CsvReadFeature.FAIL_ON_MISSING_HEADER_COLUMNS)
+				.build();
 		schema = this.csvMapper
 				.schemaFor(MarketHistoryEntry.class)
 				.withHeader()

@@ -15,8 +15,6 @@ import com.autonomouslogic.everef.util.MarketGroupHelper;
 import com.autonomouslogic.everef.util.RefDataUtil;
 import com.autonomouslogic.everef.util.TempFiles;
 import com.autonomouslogic.everef.util.VirtualThreads;
-import com.fasterxml.jackson.core.JsonEncoding;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Streams;
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.Completable;
@@ -34,6 +32,8 @@ import javax.inject.Named;
 import lombok.extern.log4j.Log4j2;
 import org.reactivestreams.Publisher;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
+import tools.jackson.core.JsonEncoding;
+import tools.jackson.databind.json.JsonMapper;
 
 /**
  * Builds the JSON for UI search.
@@ -45,7 +45,7 @@ public class BuildSearch implements Command {
 	protected RefDataUtil refDataUtil;
 
 	@Inject
-	protected ObjectMapper objectMapper;
+	protected JsonMapper jsonMapper;
 
 	@Inject
 	protected S3Util s3Util;
@@ -187,12 +187,11 @@ public class BuildSearch implements Command {
 				return Flowable.defer(() -> {
 					var file = tempFiles.tempFile("search", ".json").toFile();
 					log.debug("Preparing to output to {}", file);
-					var generator =
-							objectMapper.writer().createGenerator(new FileOutputStream(file), JsonEncoding.UTF8);
+					var generator = jsonMapper.writer().createGenerator(new FileOutputStream(file), JsonEncoding.UTF8);
 					var counter = new AtomicInteger();
 					generator.writeStartArray();
 					return upstream.doOnNext(entry -> {
-								generator.writeObject(entry);
+								generator.writePOJO(entry);
 								counter.incrementAndGet();
 							})
 							.doOnComplete(() -> {

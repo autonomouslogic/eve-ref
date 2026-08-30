@@ -3,15 +3,15 @@ package com.autonomouslogic.everef.cli.refdata;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.autonomouslogic.everef.test.DaggerTestComponent;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import javax.inject.Inject;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import tools.jackson.databind.json.JsonMapper;
 
 public class TransformUtilTest {
 	@Inject
-	ObjectMapper objectMapper;
+	JsonMapper jsonMapper;
 
 	@Inject
 	TransformUtil transformUtil;
@@ -25,14 +25,14 @@ public class TransformUtilTest {
 	@Test
 	void shouldOrderKeys() {
 		assertEquals(
-				objectMapper
+				jsonMapper
 						.createObjectNode()
 						.put("a", 1)
 						.put("b", 1)
 						.put("c", 1)
 						.toPrettyString(),
 				transformUtil
-						.orderKeys(objectMapper
+						.orderKeys(jsonMapper
 								.createObjectNode()
 								.put("b", 1)
 								.put("c", 1)

@@ -13,8 +13,6 @@ import com.autonomouslogic.everef.esi.UniverseEsi;
 import com.autonomouslogic.everef.util.DataUtil;
 import com.autonomouslogic.everef.util.JsonUtil;
 import com.autonomouslogic.everef.util.VirtualThreads;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Flowable;
 import java.time.Duration;
@@ -26,6 +24,8 @@ import lombok.NonNull;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.node.ObjectNode;
 
 @Slf4j
 public class MarketOrderFetcher {
@@ -77,7 +77,7 @@ public class MarketOrderFetcher {
 									false)
 							.map(order -> {
 								if (!order.has("station_id")) {
-									order.put("station_id", order.get("location_id"));
+									order.set("station_id", order.get("location_id"));
 								}
 								order.put("region_id", region.getRegionId());
 								return order;

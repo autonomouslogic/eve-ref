@@ -3,7 +3,6 @@ package com.autonomouslogic.everef.cli.markethistory.scrape;
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.model.RegionTypePair;
 import com.autonomouslogic.everef.util.RefDataAccess;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.hash.Hashing;
 import io.reactivex.rxjava3.core.Flowable;
 import java.time.LocalDate;
@@ -12,6 +11,7 @@ import javax.inject.Inject;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
+import tools.jackson.databind.json.JsonMapper;
 
 /**
  * Randomly explores all valid region-type pairs.
@@ -26,7 +26,7 @@ class ExplorerRegionTypeSource implements RegionTypeSource {
 	protected RefDataAccess refDataAccess;
 
 	@Inject
-	protected ObjectMapper objectMapper;
+	protected JsonMapper jsonMapper;
 
 	private final int groups = Configs.ESI_MARKET_HISTORY_EXPLORATION_GROUPS.getRequired();
 

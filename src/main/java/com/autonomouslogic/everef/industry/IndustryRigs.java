@@ -5,12 +5,12 @@ import static com.autonomouslogic.everef.cli.ImportIndustryResources.RIGS_CONFIG
 import com.autonomouslogic.everef.model.IndustryRig;
 import com.autonomouslogic.everef.model.api.SystemSecurity;
 import com.autonomouslogic.everef.refdata.InventoryType;
-import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import java.util.List;
 import java.util.function.Function;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.extern.log4j.Log4j2;
+import tools.jackson.dataformat.csv.CsvMapper;
 
 @Singleton
 @Log4j2

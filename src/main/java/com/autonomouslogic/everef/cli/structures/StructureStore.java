@@ -6,9 +6,6 @@ import static com.autonomouslogic.everef.cli.structures.ScrapeStructures.FIRST_S
 import static com.autonomouslogic.everef.cli.structures.ScrapeStructures.LAST_STRUCTURE_GET;
 import static com.autonomouslogic.everef.cli.structures.ScrapeStructures.STRUCTURE_ID;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.reactivex.rxjava3.core.Flowable;
 import java.time.Instant;
 import java.time.ZonedDateTime;
@@ -21,10 +18,13 @@ import javax.inject.Inject;
 import lombok.NonNull;
 import lombok.Setter;
 import org.apache.commons.lang3.tuple.Pair;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.node.ObjectNode;
 
 public class StructureStore {
 	@Inject
-	protected ObjectMapper objectMapper;
+	protected JsonMapper jsonMapper;
 
 	@Setter
 	@NonNull
@@ -43,7 +43,7 @@ public class StructureStore {
 	public ObjectNode getOrInitStructure(long structureId) {
 		var node = (ObjectNode) store.get(structureId);
 		if (node == null) {
-			node = objectMapper.createObjectNode();
+			node = jsonMapper.createObjectNode();
 			node.put(STRUCTURE_ID, structureId);
 			node.put(FIRST_SEEN, scrapeTime.toInstant().toString());
 			for (var prop : ALL_BOOLEANS) {

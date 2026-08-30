@@ -2,10 +2,6 @@ package com.autonomouslogic.everef.cli.refdata.hoboleaks;
 
 import com.autonomouslogic.everef.cli.refdata.StoreHandler;
 import com.autonomouslogic.everef.util.JsonUtil;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.Streams;
 import io.reactivex.rxjava3.core.Completable;
 import java.util.Map;
@@ -14,6 +10,10 @@ import lombok.NonNull;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.node.ArrayNode;
+import tools.jackson.databind.node.ObjectNode;
 
 /**
  * Reads the Hoboleaks industry modifier sources to create entries on the rig types for affected types.
@@ -21,7 +21,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class HoboleaksIndustryModifierSourcesLoader {
 	@Inject
-	protected ObjectMapper objectMapper;
+	protected JsonMapper jsonMapper;
 
 	@Setter
 	@NonNull
@@ -45,7 +45,7 @@ public class HoboleaksIndustryModifierSourcesLoader {
 		}
 		log.info("Loading Hoboleaks industry modifier sources");
 		var types = storeHandler.getHoboleaksStore("types");
-		modifierSources.fields().forEachRemaining(entry -> {
+		modifierSources.properties().forEach(entry -> {
 			var typeId = Long.parseLong(entry.getKey());
 			var activities = entry.getValue();
 			processTypeActivities(typeId, activities);
@@ -84,14 +84,14 @@ public class HoboleaksIndustryModifierSourcesLoader {
 		var types = storeHandler.getHoboleaksStore("types");
 		var type = types.get(typeId);
 		if (type == null) {
-			type = objectMapper.createObjectNode().put("type_id", typeId);
+			type = jsonMapper.createObjectNode().put("type_id", typeId);
 		}
 		var filter = targetFilters.get(Long.toString(filterId));
 		if (filter == null) {
 			log.warn("No filter found for filter ID {}", filterId);
 		}
 		if (filter.has("categoryIDs")) {
-			var categoryIds = Streams.stream(filter.get("categoryIDs").elements())
+			var categoryIds = Streams.stream(filter.get("categoryIDs").values())
 					.map(e -> e.asLong())
 					.toList();
 			if (!categoryIds.isEmpty()) {
@@ -101,7 +101,7 @@ public class HoboleaksIndustryModifierSourcesLoader {
 			}
 		}
 		if (filter.has("groupIDs")) {
-			var groupIds = Streams.stream(filter.get("groupIDs").elements())
+			var groupIds = Streams.stream(filter.get("groupIDs").values())
 					.map(e -> e.asLong())
 					.toList();
 			if (!groupIds.isEmpty()) {
@@ -117,7 +117,7 @@ public class HoboleaksIndustryModifierSourcesLoader {
 		var types = storeHandler.getHoboleaksStore("types");
 		var type = types.get(typeId);
 		if (type == null) {
-			type = objectMapper.createObjectNode().put("type_id", typeId);
+			type = jsonMapper.createObjectNode().put("type_id", typeId);
 		}
 		type.withArrayProperty("engineering_rig_global_activities").add(activity);
 		types.put(typeId, type);

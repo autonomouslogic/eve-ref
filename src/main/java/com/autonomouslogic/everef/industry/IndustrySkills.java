@@ -5,12 +5,12 @@ import static com.autonomouslogic.everef.cli.ImportIndustryResources.SKILLS_CONF
 import com.autonomouslogic.everef.model.IndustrySkill;
 import com.autonomouslogic.everef.model.api.IndustryCostInput;
 import com.autonomouslogic.everef.refdata.BlueprintActivity;
-import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import java.util.List;
 import java.util.function.Function;
 import javax.inject.Inject;
 import lombok.Value;
 import org.apache.commons.lang3.tuple.Pair;
+import tools.jackson.dataformat.csv.CsvMapper;
 
 public class IndustrySkills extends AbstractIndustryService<IndustrySkill> {
 	@Value

@@ -2,9 +2,6 @@ package com.autonomouslogic.everef.cli.refdata.post;
 
 import com.autonomouslogic.everef.refdata.InventoryType;
 import com.autonomouslogic.everef.refdata.Mutaplasmid;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.reactivex.rxjava3.core.Completable;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,6 +12,9 @@ import java.util.TreeSet;
 import javax.inject.Inject;
 import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.node.ObjectNode;
 
 /**
  * Populates variations on types.
@@ -26,7 +26,7 @@ public class VariationsDecorator extends PostDecorator {
 	private static final int ABYSSAL_META_GROUP = 15;
 
 	@Inject
-	protected ObjectMapper objectMapper;
+	protected JsonMapper jsonMapper;
 
 	private Map<Long, JsonNode> types;
 	private Map<Long, JsonNode> mutaplasmids;
@@ -49,7 +49,7 @@ public class VariationsDecorator extends PostDecorator {
 
 	private void resolveTypeVariations(@NonNull Map<Long, Map<Long, Set<Long>>> variations) {
 		for (var typeJson : types.values()) {
-			var type = objectMapper.convertValue(typeJson, InventoryType.class);
+			var type = jsonMapper.convertValue(typeJson, InventoryType.class);
 
 			var parentTypeId = type.getVariationParentTypeId();
 			if (parentTypeId == null) {
@@ -68,17 +68,17 @@ public class VariationsDecorator extends PostDecorator {
 
 	private void resolveDynamicVariations(@NonNull Map<Long, Map<Long, Set<Long>>> variations) {
 		for (var json : mutaplasmids.values()) {
-			var mutaplasmid = objectMapper.convertValue(json, Mutaplasmid.class);
+			var mutaplasmid = jsonMapper.convertValue(json, Mutaplasmid.class);
 			for (var typeMapping : mutaplasmid.getTypeMappings().values()) {
 				var resultingTypeId = typeMapping.getResultingTypeId();
 				for (var applicableTypeId : typeMapping.getApplicableTypeIds()) {
-					var applicableType = objectMapper.convertValue(types.get(applicableTypeId), InventoryType.class);
+					var applicableType = jsonMapper.convertValue(types.get(applicableTypeId), InventoryType.class);
 					if (applicableType == null) {
 						continue;
 					}
 					var parentType = applicableType.getVariationParentTypeId() == null
 							? applicableType
-							: objectMapper.convertValue(
+							: jsonMapper.convertValue(
 									types.get(applicableType.getVariationParentTypeId()), InventoryType.class);
 					var parentMetaGroupId = getTypeMetaGroup(parentType.getTypeId());
 					addMetaGroupVariation(
@@ -98,7 +98,7 @@ public class VariationsDecorator extends PostDecorator {
 
 	private void populateVariations(@NonNull Map<Long, Map<Long, Set<Long>>> variations) {
 		variations.forEach((parentTypeId, typeVariations) -> {
-			var typeVariationsJson = objectMapper.valueToTree(typeVariations);
+			var typeVariationsJson = jsonMapper.valueToTree(typeVariations);
 			populateTypeVariations(parentTypeId, typeVariationsJson);
 			typeVariations.forEach((metaGroupId, metaGroupVariations) -> {
 				for (long typeId : metaGroupVariations) {
@@ -113,7 +113,7 @@ public class VariationsDecorator extends PostDecorator {
 		if (type == null) {
 			throw new RuntimeException(String.format("Unable to populate variations for type %s - not found", typeId));
 		}
-		type.put("type_variations", typeVariationsJson);
+		type.set("type_variations", typeVariationsJson);
 		types.put(typeId, type);
 	}
 

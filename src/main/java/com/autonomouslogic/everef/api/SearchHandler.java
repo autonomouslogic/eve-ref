@@ -3,7 +3,6 @@ package com.autonomouslogic.everef.api;
 import com.autonomouslogic.everef.model.api.ApiError;
 import com.autonomouslogic.everef.model.api.search.SearchResult;
 import com.autonomouslogic.everef.service.search.SearchService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.helidon.http.Status;
 import io.helidon.webserver.http.Handler;
 import io.helidon.webserver.http.HttpRules;
@@ -25,13 +24,14 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
+import tools.jackson.databind.json.JsonMapper;
 
 @Tag(name = "search")
 @Path("/v1/search")
 @Log4j2
 public class SearchHandler implements HttpService, Handler {
 	@Inject
-	protected ObjectMapper objectMapper;
+	protected JsonMapper jsonMapper;
 
 	@Inject
 	protected SearchService searchService;
@@ -85,7 +85,7 @@ public class SearchHandler implements HttpService, Handler {
 		} catch (IllegalArgumentException e) {
 			throw new ClientException(e.getMessage());
 		}
-		var json = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(result) + "\n";
+		var json = jsonMapper.writerWithDefaultPrettyPrinter().writeValueAsString(result) + "\n";
 		res.status(Status.OK_200);
 		apiUtil.setStandardHeaders(res, Duration.ofMinutes(10));
 		res.send(json);

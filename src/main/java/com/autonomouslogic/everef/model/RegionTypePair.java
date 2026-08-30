@@ -1,7 +1,7 @@
 package com.autonomouslogic.everef.model;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import lombok.Value;
+import tools.jackson.databind.JsonNode;
 
 @Value
 public class RegionTypePair {

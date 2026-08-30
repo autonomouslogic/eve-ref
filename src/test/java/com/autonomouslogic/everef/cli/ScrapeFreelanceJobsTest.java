@@ -10,8 +10,6 @@ import com.autonomouslogic.everef.test.MockS3Adapter;
 import com.autonomouslogic.everef.test.TestDataUtil;
 import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.util.DataIndexHelper;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -45,6 +43,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junitpioneer.jupiter.SetEnvironmentVariable;
 import org.mockito.junit.jupiter.MockitoExtension;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.node.ObjectNode;
 
 @ExtendWith(MockitoExtension.class)
 @Log4j2
@@ -59,7 +59,7 @@ public class ScrapeFreelanceJobsTest {
 	ScrapeFreelanceJobs scrapeFreelanceJobs;
 
 	@Inject
-	ObjectMapper objectMapper;
+	JsonMapper jsonMapper;
 
 	@Inject
 	MockS3Adapter mockS3Adapter;
@@ -165,9 +165,9 @@ public class ScrapeFreelanceJobsTest {
 		var latestBytes =
 				mockS3Adapter.getTestObject(BUCKET_NAME, latestFile, dataClient).orElseThrow();
 
-		var expected = objectMapper.createObjectNode();
-		expected.put(job1.job().get("id").asText(), job1.detail());
-		expected.put(job2.job().get("id").asText(), job2.detail());
+		var expected = jsonMapper.createObjectNode();
+		expected.set(job1.job().get("id").asText(), job1.detail());
+		expected.set(job2.job().get("id").asText(), job2.detail());
 
 		var archiveJson = decompressArchive(archiveBytes);
 		assertEquals(expected, archiveJson);
@@ -206,7 +206,7 @@ public class ScrapeFreelanceJobsTest {
 	@SneakyThrows
 	void shouldRemoveOldExistingJobs() {
 		var job1 = createFreelanceJob(1, Instant.parse("2020-01-01T00:00:00Z"), false);
-		var existingJobs = objectMapper.createObjectNode();
+		var existingJobs = jsonMapper.createObjectNode();
 		existingJobs.set(job1.job().get("id").asText(), job1.detail());
 		createExistingJobs(existingJobs);
 
@@ -222,7 +222,7 @@ public class ScrapeFreelanceJobsTest {
 		var job3Request = server.takeRequest();
 		assertEquals("/freelance-jobs/id-3", job3Request.getRequestUrl().encodedPath());
 
-		var expected = objectMapper.createObjectNode();
+		var expected = jsonMapper.createObjectNode();
 		expected.set(job2.job().get("id").asText(), job2.detail());
 		expected.set(job3.job().get("id").asText(), job3.detail());
 
@@ -238,10 +238,10 @@ public class ScrapeFreelanceJobsTest {
 	void shouldSkipUnmodifiedJobs() {
 		var lastModified = Instant.parse("2020-01-01T00:00:00Z");
 
-		var existingJobs = objectMapper.createObjectNode();
+		var existingJobs = jsonMapper.createObjectNode();
 		existingJobs.set(
 				"id-1",
-				objectMapper
+				jsonMapper
 						.createObjectNode()
 						.put("id", "id-1")
 						.put("name", "Existing Job")
@@ -282,10 +282,10 @@ public class ScrapeFreelanceJobsTest {
 		var firstModified = existingModified.plus(Duration.ofDays(1));
 		var secondModified = existingModified.minus(Duration.ofDays(1));
 
-		var existingJobs = objectMapper.createObjectNode();
+		var existingJobs = jsonMapper.createObjectNode();
 		existingJobs.set(
 				"id-1",
-				objectMapper
+				jsonMapper
 						.createObjectNode()
 						.put("id", "id-1")
 						.put("name", "Existing Job")
@@ -316,7 +316,7 @@ public class ScrapeFreelanceJobsTest {
 	private JobJson createFreelanceJob(int id, @NonNull Instant lastModified, boolean add) {
 		var jobId = "id-" + id;
 
-		var job = objectMapper
+		var job = jsonMapper
 				.createObjectNode()
 				.put("id", jobId)
 				.put("name", "name-" + id)
@@ -325,7 +325,7 @@ public class ScrapeFreelanceJobsTest {
 						"last_modified",
 						lastModified.truncatedTo(ChronoUnit.SECONDS).toString());
 
-		var progress = objectMapper.createObjectNode().put("current", "979900").put("desired", "999999999999999999");
+		var progress = jsonMapper.createObjectNode().put("current", "979900").put("desired", "999999999999999999");
 		job.set("progress", progress);
 
 		if (add) {
@@ -333,7 +333,7 @@ public class ScrapeFreelanceJobsTest {
 		}
 
 		var detail = job.deepCopy();
-		detail.put("details", objectMapper.createObjectNode().put("description", "System Mining Boost"));
+		detail.set("details", jsonMapper.createObjectNode().put("description", "System Mining Boost"));
 
 		if (add) {
 			jobsDetail.put(jobId, detail);
@@ -344,23 +344,23 @@ public class ScrapeFreelanceJobsTest {
 
 	@SneakyThrows
 	private String buildJobsIndexResponse() {
-		var response = objectMapper.createObjectNode();
+		var response = jsonMapper.createObjectNode();
 
-		var cursor = objectMapper.createObjectNode();
+		var cursor = jsonMapper.createObjectNode();
 		cursor.put("after", "7RWpqiyrSw");
 		response.set("cursor", cursor);
 
-		var jobsArray = objectMapper.createArrayNode();
+		var jobsArray = jsonMapper.createArrayNode();
 		for (var job : jobsIndex) {
 			jobsArray.add(job);
 		}
 		response.set("freelance_jobs", jobsArray);
 
-		return objectMapper.writeValueAsString(response);
+		return jsonMapper.writeValueAsString(response);
 	}
 
 	private void createExistingJobs(@NonNull ObjectNode existingJobs) throws IOException {
-		var uncompressed = objectMapper.writeValueAsBytes(existingJobs);
+		var uncompressed = jsonMapper.writeValueAsBytes(existingJobs);
 		var compressed = new ByteArrayOutputStream();
 		try (var out = new BZip2CompressorOutputStream(compressed)) {
 			IOUtils.write(uncompressed, out);
@@ -370,7 +370,7 @@ public class ScrapeFreelanceJobsTest {
 
 	private ObjectNode decompressArchive(byte[] archiveBytes) throws IOException {
 		try (var decompressed = new BZip2CompressorInputStream(new ByteArrayInputStream(archiveBytes))) {
-			return (ObjectNode) objectMapper.readTree(decompressed);
+			return (ObjectNode) jsonMapper.readTree(decompressed);
 		}
 	}
 
@@ -396,7 +396,7 @@ public class ScrapeFreelanceJobsTest {
 					var jobId = path.substring("/freelance-jobs/".length());
 					var job = jobsDetail.get(jobId);
 					if (job != null) {
-						return new MockResponse().setBody(objectMapper.writeValueAsString(job));
+						return new MockResponse().setBody(jsonMapper.writeValueAsString(job));
 					}
 					return new MockResponse().setResponseCode(404);
 				}
