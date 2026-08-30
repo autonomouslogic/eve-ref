@@ -54,7 +54,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 import tools.jackson.databind.JsonNode;
-import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 import tools.jackson.databind.node.ObjectNode;
 
 @SetEnvironmentVariable(key = "SCRAPE_CHARACTER_OWNER_HASH", value = "scrape-owner-hash")
@@ -76,7 +76,7 @@ public class ScrapeStructuresTest {
 	LocationPopulator locationPopulator;
 
 	@Inject
-	ObjectMapper objectMapper;
+	JsonMapper jsonMapper;
 
 	@Inject
 	MockS3Adapter mockS3Adapter;
@@ -209,8 +209,8 @@ public class ScrapeStructuresTest {
 	@ParameterizedTest
 	@ValueSource(strings = {"location_id", "station_id"})
 	void shouldScrapeStructuresFromMarketOrders(String prop) throws InterruptedException {
-		marketOrders.add(objectMapper.createObjectNode().put(prop, 1000000000001L));
-		marketOrders.add(objectMapper.createObjectNode().put(prop, 60000001L));
+		marketOrders.add(jsonMapper.createObjectNode().put(prop, 1000000000001L));
+		marketOrders.add(jsonMapper.createObjectNode().put(prop, 60000001L));
 		nonPublicStructures.put(1000000000001L, Map.of("name", "Test Structure 1"));
 		nonPublicStructures.put(60000001L, Map.of("name", "Should not be scraped"));
 		VirtualThreads.onVirtualThread(scrapeStructures::run);
@@ -220,13 +220,13 @@ public class ScrapeStructuresTest {
 	@ParameterizedTest
 	@ValueSource(strings = {"location_id", "station_id"})
 	void shouldPreserveLocationOnHiddenStructuresFromMarketOrders(String prop) throws InterruptedException {
-		marketOrders.add(objectMapper
+		marketOrders.add(jsonMapper
 				.createObjectNode()
 				.put(prop, 1000000000001L)
 				.put("region_id", 10000001)
 				.put("constellation_id", 20000001)
 				.put("system_id", 30000001));
-		marketOrders.add(objectMapper
+		marketOrders.add(jsonMapper
 				.createObjectNode()
 				.put(prop, 60000001L)
 				.put("region_id", 10000002)
@@ -240,8 +240,8 @@ public class ScrapeStructuresTest {
 	@ValueSource(strings = {"start_location_id", "end_location_id"})
 	void shouldScrapeStructuresFromPublicContracts(String prop) throws InterruptedException {
 		publicContracts.add(
-				objectMapper.createObjectNode().put(prop, 1000000000001L).put("contract_id", 1));
-		publicContracts.add(objectMapper.createObjectNode().put(prop, 60000001L).put("contract_id", 2));
+				jsonMapper.createObjectNode().put(prop, 1000000000001L).put("contract_id", 1));
+		publicContracts.add(jsonMapper.createObjectNode().put(prop, 60000001L).put("contract_id", 2));
 		nonPublicStructures.put(1000000000001L, Map.of("name", "Test Structure 1"));
 		nonPublicStructures.put(60000001L, Map.of("name", "Should not be scraped"));
 		VirtualThreads.onVirtualThread(scrapeStructures::run);
@@ -251,14 +251,14 @@ public class ScrapeStructuresTest {
 	@ParameterizedTest
 	@ValueSource(strings = {"start_location_id", "station_id"})
 	void shouldPreserveLocationOnHiddenStructuresFromPublicContracts(String prop) throws InterruptedException {
-		publicContracts.add(objectMapper
+		publicContracts.add(jsonMapper
 				.createObjectNode()
 				.put(prop, 1000000000001L)
 				.put("contract_id", 1)
 				.put("region_id", 10000001)
 				.put("constellation_id", 20000001)
 				.put("system_id", 30000001));
-		publicContracts.add(objectMapper
+		publicContracts.add(jsonMapper
 				.createObjectNode()
 				.put(prop, 60000001L)
 				.put("contract_id", 2)
@@ -271,7 +271,7 @@ public class ScrapeStructuresTest {
 
 	@Test
 	void shouldNotPreserveEndLocationOnHiddenStructuresFromPublicContracts() throws InterruptedException {
-		publicContracts.add(objectMapper
+		publicContracts.add(jsonMapper
 				.createObjectNode()
 				.put("end_location_id", 1000000000001L)
 				.put("contract_id", 1)
@@ -279,9 +279,9 @@ public class ScrapeStructuresTest {
 				.put("constellation_id", 20000001)
 				.put("system_id", 30000001));
 		publicContracts.add(
-				objectMapper.createObjectNode().put("end_location", 60000001L).put("contract_id", 2));
+				jsonMapper.createObjectNode().put("end_location", 60000001L).put("contract_id", 2));
 		VirtualThreads.onVirtualThread(scrapeStructures::run);
-		verifyScrape(container(objectMapper
+		verifyScrape(container(jsonMapper
 				.createObjectNode()
 				.put("structure_id", 1000000000001L)
 				.put("is_gettable_structure", false)
@@ -390,13 +390,13 @@ public class ScrapeStructuresTest {
 		var content = mockS3Adapter
 				.getTestObject(BUCKET_NAME, archiveFile, dataClient)
 				.orElseThrow();
-		return (ObjectNode) objectMapper.readTree(content);
+		return (ObjectNode) jsonMapper.readTree(content);
 	}
 
 	@SneakyThrows
 	private void verifyScrape(@NonNull JsonNode container) {
-		var json = objectMapper.writeValueAsString(container);
-		var expected = objectMapper.readTree(json);
+		var json = jsonMapper.writeValueAsString(container);
+		var expected = jsonMapper.readTree(json);
 		var supplied = loadScrape();
 		assertEquals(expected, supplied);
 	}
@@ -414,14 +414,14 @@ public class ScrapeStructuresTest {
 					if (previousScrape == null) {
 						return new MockResponse().setResponseCode(404);
 					} else {
-						return new MockResponse().setBody(objectMapper.writeValueAsString(previousScrape));
+						return new MockResponse().setBody(jsonMapper.writeValueAsString(previousScrape));
 					}
 				}
 
 				// Handle both /universe/structures/ and /latest/universe/structures/
 				if (path.equals("/universe/structures/") || path.equals("/latest/universe/structures/")) {
 					return new MockResponse()
-							.setBody(objectMapper.writeValueAsString(publicStructures.keySet()))
+							.setBody(jsonMapper.writeValueAsString(publicStructures.keySet()))
 							.addHeader("Last-Modified", lastModified);
 				}
 
@@ -436,7 +436,7 @@ public class ScrapeStructuresTest {
 						return new MockResponse().setResponseCode(401);
 					} else {
 						return new MockResponse()
-								.setBody(objectMapper.writeValueAsString(structure))
+								.setBody(jsonMapper.writeValueAsString(structure))
 								.addHeader("Last-Modified", lastModified);
 					}
 				}
@@ -453,7 +453,7 @@ public class ScrapeStructuresTest {
 
 				if (path.equals("/sovereignty/structures/") || path.equals("/latest/sovereignty/structures/")) {
 					return new MockResponse()
-							.setBody(objectMapper.writeValueAsString(sovereigntyStructures.values()))
+							.setBody(jsonMapper.writeValueAsString(sovereigntyStructures.values()))
 							.addHeader("Last-Modified", lastModified);
 				}
 
@@ -490,9 +490,9 @@ public class ScrapeStructuresTest {
 				}
 
 				if (path.equals("/types/35892")) {
-					var obj = objectMapper.createObjectNode();
+					var obj = jsonMapper.createObjectNode();
 					obj.withArray("can_fit_types").add(EveConstants.KEEPSTAR_TYPE_ID);
-					return new MockResponse().setBody(objectMapper.writeValueAsString(obj));
+					return new MockResponse().setBody(jsonMapper.writeValueAsString(obj));
 				}
 
 				if (path.equals("/universe/systems/30000001/")) {
@@ -500,7 +500,7 @@ public class ScrapeStructuresTest {
 							.systemId(30000001)
 							.constellationId(20000001)
 							.name("System");
-					return new MockResponse().setBody(objectMapper.writeValueAsString(obj));
+					return new MockResponse().setBody(jsonMapper.writeValueAsString(obj));
 				}
 
 				if (path.equals("/universe/constellations/20000001/")) {
@@ -508,7 +508,7 @@ public class ScrapeStructuresTest {
 							.constellationId(20000001)
 							.name("Constellation")
 							.regionId(10000001);
-					return new MockResponse().setBody(objectMapper.writeValueAsString(obj));
+					return new MockResponse().setBody(jsonMapper.writeValueAsString(obj));
 				}
 
 				log.error(String.format("Unaccounted for URL: %s", path));
@@ -521,7 +521,7 @@ public class ScrapeStructuresTest {
 	}
 
 	private ObjectNode container(ObjectNode... structures) {
-		var container = objectMapper.createObjectNode();
+		var container = jsonMapper.createObjectNode();
 		for (ObjectNode structure : structures) {
 			var id = Objects.requireNonNull(structure.get("structure_id")).asText();
 			container.set(id, structure);
@@ -534,7 +534,7 @@ public class ScrapeStructuresTest {
 	}
 
 	private ObjectNode publicStructure() {
-		return objectMapper
+		return jsonMapper
 				.createObjectNode()
 				.put("name", "Test Structure 1")
 				.put("structure_id", 1000000000001L)
@@ -554,7 +554,7 @@ public class ScrapeStructuresTest {
 	}
 
 	private ObjectNode nonPublicStructure() {
-		return objectMapper
+		return jsonMapper
 				.createObjectNode()
 				.put("name", "Test Structure 1")
 				.put("structure_id", 1000000000001L)
@@ -566,7 +566,7 @@ public class ScrapeStructuresTest {
 	}
 
 	private ObjectNode hiddenStructure() {
-		return objectMapper
+		return jsonMapper
 				.createObjectNode()
 				.put("structure_id", 1000000000001L)
 				.put("is_public_structure", false)
