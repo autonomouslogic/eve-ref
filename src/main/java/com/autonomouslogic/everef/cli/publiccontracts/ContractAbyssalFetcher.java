@@ -20,7 +20,6 @@ import javax.inject.Inject;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 import tools.jackson.databind.JsonNode;
-import tools.jackson.databind.json.JsonMapper;
 import tools.jackson.databind.node.ArrayNode;
 import tools.jackson.databind.node.ObjectNode;
 

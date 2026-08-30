@@ -1888,4 +1888,3 @@ public class ScrapePublicContractsTest {
 		return new MockResponse().setResponseCode(200).setBody(body).addHeader("last-modified", lastModified);
 	}
 }
-
