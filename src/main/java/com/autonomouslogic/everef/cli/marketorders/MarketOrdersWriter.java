@@ -65,7 +65,6 @@ public class MarketOrdersWriter {
 				return null;
 			}
 			var value = node.get(field);
-			// Jackson 3's BooleanNode does not coerce to long, so map booleans explicitly.
 			if (value.isBoolean()) {
 				return value.asBoolean() ? 1L : 0L;
 			}

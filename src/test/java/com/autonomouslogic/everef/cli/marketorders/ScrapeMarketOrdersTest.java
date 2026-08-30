@@ -114,8 +114,7 @@ public class ScrapeMarketOrdersTest {
 	// ############ Region orders
 
 	/**
-	 * A single region with one order on one page. Only that order should appear in the archive and
-	 * region market orders are fetched without authentication.
+	 * A single region with one order on one page. Only that order should appear in the archive.
 	 */
 	@Test
 	@SneakyThrows
