@@ -13,8 +13,6 @@ import com.autonomouslogic.everef.esi.UniverseEsi;
 import com.autonomouslogic.everef.util.DataUtil;
 import com.autonomouslogic.everef.util.JsonUtil;
 import com.autonomouslogic.everef.util.Rx;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Flowable;
 import java.time.Duration;

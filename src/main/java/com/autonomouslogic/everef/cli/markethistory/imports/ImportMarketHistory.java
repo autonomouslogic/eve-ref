@@ -8,7 +8,6 @@ import com.autonomouslogic.everef.db.MarketHistoryDao;
 import com.autonomouslogic.everef.model.MarketHistoryEntry;
 import com.autonomouslogic.everef.url.HttpUrl;
 import com.autonomouslogic.everef.util.Rx;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.google.common.collect.Ordering;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Flowable;

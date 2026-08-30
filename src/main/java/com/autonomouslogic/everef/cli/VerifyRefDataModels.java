@@ -6,8 +6,6 @@ import com.autonomouslogic.everef.model.ReferenceEntry;
 import com.autonomouslogic.everef.model.refdata.RefDataConfig;
 import com.autonomouslogic.everef.util.RefDataUtil;
 import com.autonomouslogic.everef.util.TempFiles;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.type.CollectionType;
 import io.reactivex.rxjava3.core.Completable;
 import java.util.List;
 import java.util.Objects;

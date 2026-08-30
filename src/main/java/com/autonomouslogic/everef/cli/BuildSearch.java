@@ -15,7 +15,6 @@ import com.autonomouslogic.everef.url.UrlParser;
 import com.autonomouslogic.everef.util.MarketGroupHelper;
 import com.autonomouslogic.everef.util.RefDataUtil;
 import com.autonomouslogic.everef.util.TempFiles;
-import com.fasterxml.jackson.core.JsonEncoding;
 import com.google.common.collect.Streams;
 import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.Completable;

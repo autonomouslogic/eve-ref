@@ -10,7 +10,6 @@ import com.autonomouslogic.everef.esi.EsiConstants;
 import com.autonomouslogic.everef.esi.EsiHelper;
 import com.autonomouslogic.everef.openapi.esi.api.UniverseApi;
 import com.autonomouslogic.everef.util.Rx;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.reactivex.rxjava3.core.Flowable;
 import java.time.Instant;
 import javax.inject.Inject;
@@ -22,9 +21,6 @@ import lombok.extern.log4j.Log4j2;
 public class PublicStructureSource implements StructureSource {
 	@Inject
 	protected UniverseApi universeApi;
-
-	@Inject
-	protected ObjectMapper objectMapper;
 
 	@Inject
 	protected StructureScrapeHelper structureScrapeHelper;
