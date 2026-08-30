@@ -207,6 +207,12 @@ export interface InventoryType {
      */
     isDynamicItem?: boolean;
     /**
+     * 
+     * @type {boolean}
+     * @memberof InventoryType
+     */
+    isDynamicType?: boolean;
+    /**
      * Whether this type is a mutaplasmid or not. This is added by EVE Ref.
      * @type {boolean}
      * @memberof InventoryType
@@ -218,6 +224,12 @@ export interface InventoryType {
      * @memberof InventoryType
      */
     isOre?: boolean;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof InventoryType
+     */
+    isRepackable?: boolean;
     /**
      * Whether this type is a skill or not. This is added by EVE Ref.
      * @type {boolean}
@@ -325,7 +337,19 @@ export interface InventoryType {
      * @type {number}
      * @memberof InventoryType
      */
+    shipTreeGroupId?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof InventoryType
+     */
     soundId?: number;
+    /**
+     * 
+     * @type {number}
+     * @memberof InventoryType
+     */
+    techLevel?: number;
     /**
      * 
      * @type {InventoryTypeTraits}
@@ -418,8 +442,10 @@ export function InventoryTypeFromJSONTyped(json: any, ignoreDiscriminator: boole
         'installableSchematicIds': !exists(json, 'installable_schematic_ids') ? undefined : json['installable_schematic_ids'],
         'isBlueprint': !exists(json, 'is_blueprint') ? undefined : json['is_blueprint'],
         'isDynamicItem': !exists(json, 'is_dynamic_item') ? undefined : json['is_dynamic_item'],
+        'isDynamicType': !exists(json, 'is_dynamic_type') ? undefined : json['is_dynamic_type'],
         'isMutaplasmid': !exists(json, 'is_mutaplasmid') ? undefined : json['is_mutaplasmid'],
         'isOre': !exists(json, 'is_ore') ? undefined : json['is_ore'],
+        'isRepackable': !exists(json, 'is_repackable') ? undefined : json['is_repackable'],
         'isSkill': !exists(json, 'is_skill') ? undefined : json['is_skill'],
         'marketGroupId': !exists(json, 'market_group_id') ? undefined : json['market_group_id'],
         'mass': !exists(json, 'mass') ? undefined : json['mass'],
@@ -437,7 +463,9 @@ export function InventoryTypeFromJSONTyped(json: any, ignoreDiscriminator: boole
         'radius': !exists(json, 'radius') ? undefined : json['radius'],
         'randomizedTypeMaterials': !exists(json, 'randomized_type_materials') ? undefined : (mapValues(json['randomized_type_materials'], RandomizedTypeMaterialFromJSON)),
         'requiredSkills': !exists(json, 'required_skills') ? undefined : json['required_skills'],
+        'shipTreeGroupId': !exists(json, 'ship_tree_group_id') ? undefined : json['ship_tree_group_id'],
         'soundId': !exists(json, 'sound_id') ? undefined : json['sound_id'],
+        'techLevel': !exists(json, 'tech_level') ? undefined : json['tech_level'],
         'traits': !exists(json, 'traits') ? undefined : InventoryTypeTraitsFromJSON(json['traits']),
         'typeId': !exists(json, 'type_id') ? undefined : json['type_id'],
         'typeMaterials': !exists(json, 'type_materials') ? undefined : (mapValues(json['type_materials'], TypeMaterialFromJSON)),
@@ -481,8 +509,10 @@ export function InventoryTypeToJSON(value?: InventoryType | null): any {
         'installable_schematic_ids': value.installableSchematicIds,
         'is_blueprint': value.isBlueprint,
         'is_dynamic_item': value.isDynamicItem,
+        'is_dynamic_type': value.isDynamicType,
         'is_mutaplasmid': value.isMutaplasmid,
         'is_ore': value.isOre,
+        'is_repackable': value.isRepackable,
         'is_skill': value.isSkill,
         'market_group_id': value.marketGroupId,
         'mass': value.mass,
@@ -500,7 +530,9 @@ export function InventoryTypeToJSON(value?: InventoryType | null): any {
         'radius': value.radius,
         'randomized_type_materials': value.randomizedTypeMaterials === undefined ? undefined : (mapValues(value.randomizedTypeMaterials, RandomizedTypeMaterialToJSON)),
         'required_skills': value.requiredSkills,
+        'ship_tree_group_id': value.shipTreeGroupId,
         'sound_id': value.soundId,
+        'tech_level': value.techLevel,
         'traits': InventoryTypeTraitsToJSON(value.traits),
         'type_id': value.typeId,
         'type_materials': value.typeMaterials === undefined ? undefined : (mapValues(value.typeMaterials, TypeMaterialToJSON)),

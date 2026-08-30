@@ -14,6 +14,7 @@
   "faction_id" : 500010,
   "graphic_id" : 20605,
   "group_id" : 831,
+  "is_repackable" : true,
   "market_group_id" : 1932,
   "mass" : 1000000,
   "meta_group_id" : 2,
@@ -28,11 +29,13 @@
     "ru" : "Whiptail",
     "zh" : "长尾蜥级"
   },
+  "packaged_volume" : 2500,
   "portion_size" : 1,
   "published" : true,
   "race_id" : 1,
   "radius" : 33,
   "sound_id" : 20070,
+  "tech_level" : 2,
   "volume" : 18000,
   "type_id" : 33673,
   "traits" : {

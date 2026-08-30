@@ -1152,6 +1152,8 @@ components:
           default: false
           description: Whether this type is a dynamic item created by a mutaplasmid
             or not. This is added by EVE Ref.
+        is_dynamic_type:
+          type: boolean
         is_mutaplasmid:
           type: boolean
           default: false
@@ -1160,6 +1162,8 @@ components:
         is_ore:
           type: boolean
           description: Whether this is an ore or not. This is added by EVE Ref.
+        is_repackable:
+          type: boolean
         is_skill:
           type: boolean
           default: false
@@ -1246,7 +1250,13 @@ components:
           description: The skills required for this type. The key is the skill type
             ID and the value is the level. This is added by EVE Ref and derived from
             dogma attributes.
+        ship_tree_group_id:
+          type: integer
+          format: int64
         sound_id:
+          type: integer
+          format: int64
+        tech_level:
           type: integer
           format: int64
         traits:

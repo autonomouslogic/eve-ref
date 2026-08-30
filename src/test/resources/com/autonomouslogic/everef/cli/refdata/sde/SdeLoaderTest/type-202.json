@@ -27,9 +27,11 @@
     "ru" : "Mjolnir Cruise Missile",
     "zh" : "雷神巡航导弹"
   },
+  "packaged_volume" : 0.05,
   "portion_size" : 100,
   "published" : true,
   "radius" : 300,
+  "tech_level" : 1,
   "volume" : 0.05,
   "type_id" : 202
 }

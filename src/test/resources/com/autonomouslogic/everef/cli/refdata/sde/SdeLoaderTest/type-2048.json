@@ -11,6 +11,7 @@
   },
   "group_id" : 60,
   "icon_id" : 77,
+  "is_repackable" : true,
   "market_group_id" : 615,
   "mass" : 5000,
   "meta_group_id" : 2,
@@ -25,8 +26,10 @@
     "ru" : "Damage Control II",
     "zh" : "损伤控制 II"
   },
+  "packaged_volume" : 5,
   "portion_size" : 1,
   "published" : true,
+  "tech_level" : 2,
   "variation_parent_type_id" : 2046,
   "volume" : 5,
   "type_id" : 2048

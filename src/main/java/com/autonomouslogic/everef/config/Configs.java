@@ -825,7 +825,7 @@ public class Configs {
 	public static final Config<URI> MER_BASE_URL = Config.<URI>builder()
 			.name("MER_BASE_URL")
 			.type(URI.class)
-			.defaultValue(URI.create("https://web.ccpgamescdn.com/aws/community/"))
+			.defaultValue(URI.create("https://monthly-economic-report.s3.eu-west-1.amazonaws.com/"))
 			.build();
 
 	/**

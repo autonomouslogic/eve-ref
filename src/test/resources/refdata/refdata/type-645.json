@@ -432,10 +432,13 @@
   "volume" : 454500,
   "base_price" : 153900000,
   "faction_id" : 500004,
+  "is_repackable" : true,
   "meta_group_id" : 1,
   "meta_level" : 0,
   "race_id" : 8,
+  "ship_tree_group_id" : 26,
   "sound_id" : 20072,
+  "tech_level" : 1,
   "type_materials" : {
     "34" : {
       "material_type_id" : 34,

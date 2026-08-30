@@ -11,6 +11,7 @@
   },
   "group_id" : 60,
   "icon_id" : 77,
+  "is_dynamic_type" : true,
   "meta_group_id" : 15,
   "meta_level" : 10,
   "name" : {
@@ -23,8 +24,10 @@
     "ru" : "Abyssal Damage Control",
     "zh" : "深渊损伤控制"
   },
+  "packaged_volume" : 5,
   "portion_size" : 1,
   "published" : true,
+  "tech_level" : 1,
   "volume" : 5,
   "type_id" : 52227
 }

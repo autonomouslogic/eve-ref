@@ -14,6 +14,7 @@
   "faction_id" : 500004,
   "graphic_id" : 318,
   "group_id" : 27,
+  "is_repackable" : true,
   "market_group_id" : 81,
   "mass" : 100250000,
   "meta_group_id" : 1,
@@ -28,11 +29,14 @@
     "ru" : "Dominix",
     "zh" : "多米尼克斯级"
   },
+  "packaged_volume" : 50000,
   "portion_size" : 1,
   "published" : true,
   "race_id" : 8,
   "radius" : 250,
+  "ship_tree_group_id" : 26,
   "sound_id" : 20072,
+  "tech_level" : 1,
   "volume" : 454500,
   "type_id" : 645,
   "type_materials" : {

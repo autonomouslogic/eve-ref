@@ -23,6 +23,7 @@
     "ru" : "Plasmoids",
     "zh" : "等离子体团"
   },
+  "packaged_volume" : 0.19,
   "portion_size" : 1,
   "published" : true,
   "volume" : 0.19,

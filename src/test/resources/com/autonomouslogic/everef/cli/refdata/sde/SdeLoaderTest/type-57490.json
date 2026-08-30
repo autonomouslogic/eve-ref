@@ -2,6 +2,7 @@
   "base_price" : 10000000,
   "group_id" : 1888,
   "icon_id" : 2664,
+  "is_repackable" : true,
   "market_group_id" : 2403,
   "meta_group_id" : 1,
   "name" : {
@@ -14,8 +15,10 @@
     "ru" : "Carbon Fiber Reaction Formula",
     "zh" : "碳纤维反应配方"
   },
+  "packaged_volume" : 0.01,
   "portion_size" : 1,
   "published" : true,
+  "tech_level" : 1,
   "volume" : 0.01,
   "type_id" : 57490
 }

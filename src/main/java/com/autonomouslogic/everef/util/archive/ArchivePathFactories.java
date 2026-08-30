@@ -84,6 +84,21 @@ public class ArchivePathFactories {
 			.suffix(".json.bz2")
 			.latestSuffix(".json.bz2")
 			.build());
+
+	public static final StandardArchivePathFactory SKINR_LISTINGS = register(StandardArchivePathFactory.builder()
+			.folder("skinr-listings")
+			.filename("skinr-listings")
+			.suffix(".json.bz2")
+			.latestSuffix(".json")
+			.build());
+
+	public static final StandardArchivePathFactory SKINR_DETAILS = register(StandardArchivePathFactory.builder()
+			.folder("skinr-details")
+			.filename("skinr-details")
+			.suffix(".json.bz2")
+			.latestSuffix(".json")
+			.build());
+
 	public static final StandardArchivePathFactory SDE_V2_JSONL = register(StandardArchivePathFactory.builder()
 			.name("sde-v2-jsonl")
 			.folder("ccp/sde")
@@ -246,6 +261,13 @@ public class ArchivePathFactories {
 					.suffix(".json.bz2")
 					.latestSuffix(".json")
 					.build());
+
+	public static final StandardArchivePathFactory MILITARY_CAMPAIGNS = register(StandardArchivePathFactory.builder()
+			.folder("military-campaigns")
+			.filename("military-campaigns")
+			.suffix(".json.bz2")
+			.latestSuffix(".json")
+			.build());
 
 	public static final StandardArchivePathFactory INCURSIONS = register(StandardArchivePathFactory.builder()
 			.folder("incursions")

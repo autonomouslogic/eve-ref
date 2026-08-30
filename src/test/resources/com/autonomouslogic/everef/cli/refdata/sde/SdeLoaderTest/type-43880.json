@@ -11,6 +11,7 @@
   },
   "group_id" : 1843,
   "icon_id" : 21729,
+  "is_repackable" : true,
   "market_group_id" : 2347,
   "mass" : 200,
   "meta_group_id" : 54,
@@ -24,9 +25,11 @@
     "ru" : "Standup M-Set Invention Accelerator I",
     "zh" : "屹立中型发明加速 I"
   },
+  "packaged_volume" : 10,
   "portion_size" : 1,
   "published" : true,
   "radius" : 100,
+  "tech_level" : 1,
   "volume" : 10,
   "type_id" : 43880
 }

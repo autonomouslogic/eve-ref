@@ -12,6 +12,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.reactivex.rxjava3.core.Flowable;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -68,6 +69,7 @@ public class ContractFetcher {
 	private Map<Long, JsonNode> bidsStore;
 
 	private final Set<Long> contractsWithItems = Collections.newSetFromMap(new ConcurrentHashMap<>());
+	private final Map<Long, List<Long>> contractItemsIndex = new ConcurrentHashMap<>();
 
 	@Inject
 	protected ContractFetcher() {}
@@ -108,7 +110,9 @@ public class ContractFetcher {
 		// Process contracts in parallel (32 at a time)
 		var tasks = contracts.stream()
 				.map(contract -> (Callable<Long>) () -> {
-					var contractId = populateLocation(region, contract);
+					var contractId = contract.get("contract_id").asLong();
+					populateLocation(region, contract);
+					resolveItemsAndBids(contract);
 					var n = count.incrementAndGet();
 					if (n % 1_000 == 0) {
 						log.debug("Fetched {} public contracts from {}", n, region.getName());
@@ -135,15 +139,10 @@ public class ContractFetcher {
 				.blockingGet();
 	}
 
-	private Long populateLocation(GetUniverseRegionsRegionIdOk region, ObjectNode entry) {
-		var contractId = entry.get("contract_id").asLong();
+	private void populateLocation(GetUniverseRegionsRegionIdOk region, ObjectNode entry) {
 		entry.put("region_id", region.getRegionId());
-
 		locationPopulator.populate(entry, "start_location_id").blockingAwait();
 		contractsStore.put(ContractsFileBuilder.CONTRACT_ID.apply(entry), entry);
-		resolveItemsAndBids(entry);
-
-		return contractId;
 	}
 
 	private void resolveItemsAndBids(ObjectNode contract) {
@@ -160,6 +159,12 @@ public class ContractFetcher {
 
 	private void fetchContractItems(long contractId) {
 		if (contractsWithItems.contains(contractId)) {
+			var itemIds = contractItemsIndex.getOrDefault(contractId, List.of());
+			var cachedItems = itemIds.stream()
+					.map(itemId -> (ObjectNode) itemsStore.get(itemId))
+					.filter(item -> item != null)
+					.toList();
+			contractAbyssalFetcher.retryMissingDogmaForCachedItems(contractId, cachedItems);
 			return;
 		}
 		var items = fetchContractSub("items", ContractsFileBuilder.ITEM_ID, itemsStore, contractId);
@@ -200,9 +205,14 @@ public class ContractFetcher {
 	 */
 	private void buildKnownItemIndex() {
 		log.debug("Building item contract index.");
-		itemsStore
-				.values()
-				.forEach(item -> contractsWithItems.add(item.get("contract_id").asLong()));
+		itemsStore.entrySet().forEach(entry -> {
+			long itemId = entry.getKey();
+			long contractId = entry.getValue().get("contract_id").asLong();
+			contractsWithItems.add(contractId);
+			contractItemsIndex
+					.computeIfAbsent(contractId, k -> new ArrayList<>())
+					.add(itemId);
+		});
 		log.debug("Built list of {} known contracts with items.", contractsWithItems.size());
 	}
 

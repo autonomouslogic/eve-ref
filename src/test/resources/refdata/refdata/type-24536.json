@@ -52,6 +52,7 @@
   "volume" : 0.01,
   "base_price" : 10000000000,
   "meta_group_id" : 2,
+  "tech_level" : 2,
   "produced_by_blueprints" : {
     "803" : {
       "blueprint_type_id" : 803,

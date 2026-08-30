@@ -23,6 +23,7 @@
     "ru" : "Галлентские фрегаты",
     "zh" : "盖伦特护卫舰操作"
   },
+  "packaged_volume" : 0.01,
   "portion_size" : 1,
   "published" : true,
   "race_id" : 8,

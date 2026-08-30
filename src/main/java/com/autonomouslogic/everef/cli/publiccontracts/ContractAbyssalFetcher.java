@@ -8,12 +8,13 @@ import com.autonomouslogic.everef.openapi.refdata.api.RefdataApi;
 import com.autonomouslogic.everef.openapi.refdata.invoker.ApiException;
 import com.autonomouslogic.everef.util.JsonUtil;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Single;
+import io.sentry.Sentry;
+import io.sentry.SentryLevel;
 import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.util.List;
@@ -28,9 +29,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class ContractAbyssalFetcher {
 	private static final long ABYSSAL_META_GROUP = 15;
-
-	@Inject
-	protected ObjectMapper objectMapper;
+	private static final long MUTAPLASMID_GROUP = 1964;
 
 	@Inject
 	protected EsiHelper esiHelper;
@@ -48,9 +47,6 @@ public class ContractAbyssalFetcher {
 	private Map<Long, JsonNode> dynamicItemsStore;
 
 	@Setter
-	private Map<Long, JsonNode> nonDynamicItemsStore;
-
-	@Setter
 	private Map<String, JsonNode> dogmaEffectsStore;
 
 	@Setter
@@ -60,6 +56,47 @@ public class ContractAbyssalFetcher {
 
 	@Inject
 	protected ContractAbyssalFetcher() {}
+
+	/**
+	 * For cached contracts where items are already known, retry fetching dogma for abyssal items
+	 * that are missing dynamic data (e.g., a prior dogma call failed). Skips verifyType since the
+	 * item was already stored in the archive and its type is known to be valid. Does nothing if no
+	 * candidates are found, avoiding the meta groups API call entirely for non-abyssal contracts.
+	 */
+	public void retryMissingDogmaForCachedItems(long contractId, List<ObjectNode> cachedItems) {
+		// Regular items never have item_id set; abyssal items always do. This filters non-abyssal
+		// items without needing to call initAbyssalTypes() (which requires a network request).
+		var candidates = cachedItems.stream()
+				.filter(item -> !JsonUtil.isNull(item.get("item_id")))
+				.filter(item -> !JsonUtil.isNullOrEmpty(item.get("type_id")))
+				.filter(item -> JsonUtil.toBoolean(item.get("is_included")))
+				.filter(item -> JsonUtil.compareLongs(item.get("quantity"), 1) <= 0)
+				.filter(this::isItemNotSeen)
+				.toList();
+		if (candidates.isEmpty()) {
+			return;
+		}
+		try {
+			initAbyssalTypes();
+		} catch (ApiException e) {
+			log.warn(
+					"Failed to load abyssal type IDs, skipping dogma retry for contract {}: {}",
+					contractId,
+					e.getMessage());
+			return;
+		}
+		Flowable.fromIterable(candidates)
+				.filter(item -> abyssalTypeIds.contains(item.get("type_id").asLong()))
+				.flatMapCompletable(
+						item -> {
+							long itemId = item.get("item_id").asLong();
+							long typeId = item.get("type_id").asLong();
+							return resolveDynamicItem(contractId, typeId, itemId);
+						},
+						false,
+						1)
+				.blockingAwait();
+	}
 
 	public Completable apply(long contractId, Flowable<ObjectNode> in) {
 		return Completable.defer(() -> {
@@ -108,11 +145,7 @@ public class ContractAbyssalFetcher {
 
 	private boolean isItemNotSeen(ObjectNode item) {
 		long dynamicId = ContractsFileBuilder.DYNAMIC_ITEM_ID.apply(item);
-		if (dynamicItemsStore.containsKey(dynamicId)) {
-			return false;
-		}
-		long nonDynamicId = ContractsFileBuilder.NON_DYNAMIC_ITEM_ID.apply(item);
-		return !nonDynamicItemsStore.containsKey(nonDynamicId);
+		return !dynamicItemsStore.containsKey(dynamicId);
 	}
 
 	private Completable resolveDynamicItem(long contractId, long typeId, long itemId) {
@@ -120,36 +153,31 @@ public class ContractAbyssalFetcher {
 				.urlPath(String.format("/dogma/dynamic/items/%s/%s/", typeId, itemId))
 				.build();
 		var r = esiHelper.fetch(esiUrl);
-		return Flowable.just(r)
-				.compose(esiHelper.standardErrorHandling(esiUrl))
-				.flatMapCompletable(response -> Completable.fromAction(() -> {
-					int statusCode = response.code();
-					if (statusCode == 520) {
-						var nonDynamicItem = objectMapper
-								.createObjectNode()
-								.put("item_id", itemId)
-								.put("type_id", typeId)
-								.put("contract_id", contractId);
-						nonDynamicItemsStore.put(
-								ContractsFileBuilder.NON_DYNAMIC_ITEM_ID.apply(nonDynamicItem), nonDynamicItem);
-						return;
-					}
+		return Completable.fromAction(() -> {
+					int statusCode = r.code();
 					if (statusCode == 200) {
-						var dynamicItem = (ObjectNode) esiHelper.decodeResponse(response);
+						var dynamicItem = (ObjectNode) esiHelper.decodeResponse(r);
 						var lastModified = okHttpWrapper
-								.getLastModified(response)
+								.getLastModified(r)
 								.map(ZonedDateTime::toInstant)
 								.orElse(null);
 						saveDynamicItem(contractId, itemId, dynamicItem, lastModified);
 					} else {
+						var msg = String.format("Failed to fetch dynamic item: %d", statusCode);
 						log.warn(
-								"Unknown status code seen for contract {} item {} type {}: {}",
+								"Failed to fetch dynamic item for contract {} item {} type {}: {}",
 								contractId,
 								itemId,
 								typeId,
 								statusCode);
+						Sentry.captureException(new RuntimeException(msg), scope -> {
+							scope.setLevel(SentryLevel.WARNING);
+							scope.setExtra("contract_id", String.valueOf(contractId));
+							scope.setExtra("item_id", String.valueOf(itemId));
+							scope.setExtra("type_id", String.valueOf(typeId));
+						});
 					}
-				}))
+				})
 				.doFinally(() -> r.close());
 	}
 
@@ -190,7 +218,14 @@ public class ContractAbyssalFetcher {
 		if (abyssalTypeIds != null) {
 			return;
 		}
-		abyssalTypeIds = refdataApi.getMetaGroup(ABYSSAL_META_GROUP).getTypeIds();
-		log.trace("Loaded {} abyssal type IDs", abyssalTypeIds.size());
+		var allAbyssalTypeIds = refdataApi.getMetaGroup(ABYSSAL_META_GROUP).getTypeIds();
+		var mutaplasmidTypeIds = refdataApi.getGroup(MUTAPLASMID_GROUP).getTypeIds();
+		abyssalTypeIds = allAbyssalTypeIds.stream()
+				.filter(id -> !mutaplasmidTypeIds.contains(id))
+				.toList();
+		log.trace(
+				"Loaded {} abyssal type IDs ({} mutaplasmids excluded)",
+				abyssalTypeIds.size(),
+				mutaplasmidTypeIds.size());
 	}
 }

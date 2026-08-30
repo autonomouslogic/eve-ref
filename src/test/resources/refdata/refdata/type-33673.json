@@ -516,10 +516,12 @@
   "volume" : 18000,
   "base_price" : 12500000,
   "faction_id" : 500010,
+  "is_repackable" : true,
   "meta_group_id" : 2,
   "meta_level" : 5,
   "race_id" : 1,
   "sound_id" : 20070,
+  "tech_level" : 2,
   "traits" : {
     "role_bonuses" : {
       "5" : {

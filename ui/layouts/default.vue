@@ -34,6 +34,8 @@
 			<Footer/>
 		</footer>
 
+		<PatreonFab />
+
 	</div>
 
 </template>

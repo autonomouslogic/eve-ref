@@ -14,8 +14,10 @@
     "ru" : "Mystic L Blueprint",
     "zh" : "奥秘蓝图 L"
   },
+  "packaged_volume" : 0.01,
   "portion_size" : 1,
   "published" : true,
+  "tech_level" : 2,
   "volume" : 0.01,
   "type_id" : 48111
 }

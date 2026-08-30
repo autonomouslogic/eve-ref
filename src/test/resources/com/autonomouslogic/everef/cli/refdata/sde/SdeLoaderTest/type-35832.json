@@ -11,6 +11,7 @@
   },
   "graphic_id" : 21137,
   "group_id" : 1657,
+  "is_repackable" : true,
   "market_group_id" : 2201,
   "mass" : 3000000000,
   "name" : {
@@ -23,6 +24,7 @@
     "ru" : "Astrahus",
     "zh" : "空堡"
   },
+  "packaged_volume" : 8000,
   "portion_size" : 1,
   "published" : true,
   "radius" : 45000,

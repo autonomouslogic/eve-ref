@@ -108,5 +108,6 @@
   "type_id" : 189,
   "volume" : 0.0125,
   "base_price" : 2050,
-  "meta_group_id" : 1
+  "meta_group_id" : 1,
+  "tech_level" : 1
 }

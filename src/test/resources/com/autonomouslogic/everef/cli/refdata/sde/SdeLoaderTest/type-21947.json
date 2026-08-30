@@ -24,6 +24,7 @@
     "ru" : "Structure Construction Parts",
     "zh" : "建筑建造组件"
   },
+  "packaged_volume" : 3000,
   "portion_size" : 1,
   "published" : true,
   "volume" : 3000,

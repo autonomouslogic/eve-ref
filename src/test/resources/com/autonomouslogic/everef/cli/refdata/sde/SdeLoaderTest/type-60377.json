@@ -23,6 +23,7 @@
     "ru" : "Simple Ore Processing",
     "zh" : "普通矿石处理技术"
   },
+  "packaged_volume" : 0.01,
   "portion_size" : 1,
   "published" : true,
   "volume" : 0.01,

@@ -23,6 +23,7 @@
     "ru" : "Tritanium",
     "zh" : "三钛合金"
   },
+  "packaged_volume" : 0.01,
   "portion_size" : 1,
   "published" : true,
   "volume" : 0.01,

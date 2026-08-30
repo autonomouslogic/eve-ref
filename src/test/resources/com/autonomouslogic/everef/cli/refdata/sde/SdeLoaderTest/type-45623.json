@@ -12,6 +12,7 @@
   "graphic_id" : 21511,
   "group_id" : 958,
   "icon_id" : 3636,
+  "is_repackable" : true,
   "market_group_id" : 1122,
   "mass" : 1200000,
   "meta_group_id" : 14,
@@ -26,9 +27,11 @@
     "ru" : "Legion Core - Augmented Antimatter Reactor",
     "zh" : "圣卒核心 - 增强反物质反应堆"
   },
+  "packaged_volume" : 40,
   "portion_size" : 1,
   "published" : true,
   "race_id" : 4,
+  "tech_level" : 3,
   "volume" : 40,
   "type_id" : 45623,
   "traits" : {

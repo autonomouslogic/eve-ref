@@ -165,7 +165,19 @@ public class InventoryType {
 	Map<Long, TypeMaterial> typeMaterials;
 
 	@JsonProperty
+	Long techLevel;
+
+	@JsonProperty
+	Long shipTreeGroupId;
+
+	@JsonProperty
 	Map<Long, RandomizedTypeMaterial> randomizedTypeMaterials;
+
+	@JsonProperty
+	Boolean isRepackable;
+
+	@JsonProperty
+	Boolean isDynamicType;
 
 	@JsonProperty
 	@Schema(description = "Types this can be fitted to. This is added by EVE Ref.")

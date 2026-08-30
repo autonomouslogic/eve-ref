@@ -24,6 +24,7 @@
     "ru" : "Veldspar",
     "zh" : "凡晶石"
   },
+  "packaged_volume" : 0.1,
   "portion_size" : 100,
   "published" : true,
   "volume" : 0.1,

@@ -44,8 +44,10 @@
     ko: "열화 우라늄탄 M"
     ru: "Depleted Uranium M"
     zh: "贫铀弹 M"
+  packagedVolume: 0.0125
   portionSize: 100
   published: true
+  techLevel: 1
   volume: 0.0125
 "645":
   basePrice: 153900000
@@ -86,6 +88,7 @@
   factionID: 500004
   graphicID: 318
   groupID: 27
+  isRepackable: true
   marketGroupID: 81
   mass: 100250000
   metaGroupID: 1
@@ -99,11 +102,14 @@
     ko: "도미닉스"
     ru: "Dominix"
     zh: "多米尼克斯级"
+  packagedVolume: 50000
   portionSize: 1
   published: true
   raceID: 8
   radius: 250
+  shipTreeGroupID: 26
   soundID: 20072
+  techLevel: 1
   volume: 454500
 "3336":
   basePrice: 7500000
@@ -129,6 +135,7 @@
     ko: "갈란테 배틀쉽"
     ru: "Галлентские линкоры"
     zh: "盖伦特战列舰操作"
+  packagedVolume: 0.01
   portionSize: 1
   published: true
   raceID: 8
@@ -161,6 +168,7 @@
     ko: "함선 운용"
     ru: "Допуски к управлению кораблями"
     zh: "飞船操控学"
+  packagedVolume: 0.01
   portionSize: 1
   published: true
   volume: 0.01
@@ -189,6 +197,7 @@
     ko: "갈란테 배틀크루저"
     ru: "Галлентские линейные крейсеры"
     zh: "盖伦特战列巡洋舰操作"
+  packagedVolume: 0.01
   portionSize: 1
   published: true
   raceID: 8
@@ -217,6 +226,7 @@
     ko: "갈란테 크루저"
     ru: "Галлентские крейсеры"
     zh: "盖伦特巡洋舰操作"
+  packagedVolume: 0.01
   portionSize: 1
   published: true
   raceID: 8
@@ -245,6 +255,7 @@
     ko: "갈란테 디스트로이어"
     ru: "Галлентские эсминцы"
     zh: "盖伦特驱逐舰操作"
+  packagedVolume: 0.01
   portionSize: 1
   published: true
   raceID: 8
@@ -273,6 +284,7 @@
     ko: "갈란테 프리깃"
     ru: "Галлентские фрегаты"
     zh: "盖伦特护卫舰操作"
+  packagedVolume: 0.01
   portionSize: 1
   published: true
   raceID: 8
@@ -387,8 +399,10 @@
     ko: "충만한 데미지 컨트롤 뮤타플라즈미드"
     ru: "Gravid Damage Control Mutaplasmid"
     zh: "怀璧的损伤控制突变质体"
+  packagedVolume: 1
   portionSize: 1
   published: true
+  techLevel: 1
   volume: 1
 "52227":
   description:
@@ -420,6 +434,7 @@
       控制。"
   groupID: 60
   iconID: 77
+  isDynamicType: true
   metaGroupID: 15
   metaLevel: 10
   name:
@@ -431,8 +446,10 @@
     ko: "어비설 데미지 컨트롤"
     ru: "Abyssal Damage Control"
     zh: "深渊损伤控制"
+  packagedVolume: 5
   portionSize: 1
   published: true
+  techLevel: 1
   volume: 5
 "2046":
   description:
@@ -466,6 +483,7 @@
       控制。"
   groupID: 60
   iconID: 77
+  isRepackable: true
   marketGroupID: 615
   mass: 5000
   metaGroupID: 1
@@ -479,8 +497,10 @@
     ko: "데미지 컨트롤 I"
     ru: "Damage Control I"
     zh: "损伤控制 I"
+  packagedVolume: 5
   portionSize: 1
   published: true
+  techLevel: 1
   volume: 5
 "2048":
   description:
@@ -514,6 +534,7 @@
       控制。"
   groupID: 60
   iconID: 77
+  isRepackable: true
   marketGroupID: 615
   mass: 5000
   metaGroupID: 2
@@ -527,8 +548,10 @@
     ko: "데미지 컨트롤 II"
     ru: "Damage Control II"
     zh: "损伤控制 II"
+  packagedVolume: 5
   portionSize: 1
   published: true
+  techLevel: 2
   variationParentTypeID: 2046
   volume: 5
 "45623":
@@ -596,6 +619,7 @@
   graphicID: 21511
   groupID: 958
   iconID: 3636
+  isRepackable: true
   marketGroupID: 1122
   mass: 1200000
   metaGroupID: 14
@@ -609,9 +633,11 @@
     ko: "레기온 코어 시스템 - 강화 반물질 반응로"
     ru: "Legion Core - Augmented Antimatter Reactor"
     zh: "圣卒核心 - 增强反物质反应堆"
+  packagedVolume: 40
   portionSize: 1
   published: true
   raceID: 4
+  techLevel: 3
   volume: 40
 "45622":
   description:
@@ -655,6 +681,7 @@
   graphicID: 21510
   groupID: 958
   iconID: 3636
+  isRepackable: true
   marketGroupID: 1122
   mass: 1200000
   metaGroupID: 14
@@ -668,9 +695,11 @@
     ko: "레기온 코어 시스템 - 센서 시퀀서"
     ru: "Legion Core - Dissolution Sequencer"
     zh: "圣卒核心 - 散解程控装置"
+  packagedVolume: 40
   portionSize: 1
   published: true
   raceID: 4
+  techLevel: 3
   variationParentTypeID: 45623
   volume: 40
 "45624":
@@ -738,6 +767,7 @@
   graphicID: 21509
   groupID: 958
   iconID: 3636
+  isRepackable: true
   marketGroupID: 1122
   mass: 1200000
   metaGroupID: 14
@@ -751,9 +781,11 @@
     ko: "레기온 코어 시스템 - 에너지 패러사이트 컴플렉스"
     ru: "Legion Core - Energy Parasitic Complex"
     zh: "圣卒核心 - 能量寄取集成体"
+  packagedVolume: 40
   portionSize: 1
   published: true
   raceID: 4
+  techLevel: 3
   variationParentTypeID: 45623
   volume: 40
 "22430":
@@ -827,6 +859,7 @@
   factionID: 500004
   graphicID: 3350
   groupID: 898
+  isRepackable: true
   marketGroupID: 1078
   mass: 141700000
   metaGroupID: 2
@@ -840,11 +873,14 @@
     ko: "씬"
     ru: "Sin"
     zh: "罪恶级"
+  packagedVolume: 50000
   portionSize: 1
   published: true
   raceID: 8
   radius: 250
+  shipTreeGroupID: 27
   soundID: 20072
+  techLevel: 2
   variationParentTypeID: 645
   volume: 454500
 "999":
@@ -861,6 +897,7 @@
     ko: "도미닉스 블루프린트"
     ru: "Dominix Blueprint"
     zh: "多米尼克斯级蓝图"
+  packagedVolume: 0.01
   portionSize: 1
   published: true
   volume: 0.01
@@ -877,8 +914,10 @@
     ko: "씬 블루프린트"
     ru: "Sin Blueprint"
     zh: "罪恶级蓝图"
+  packagedVolume: 0.01
   portionSize: 1
   published: true
+  techLevel: 2
   volume: 0.01
 "1230":
   basePrice: 2000
@@ -924,6 +963,7 @@
     ko: "벨드스파"
     ru: "Veldspar"
     zh: "凡晶石"
+  packagedVolume: 0.1
   portionSize: 100
   published: true
   volume: 0.1
@@ -985,6 +1025,7 @@
     ko: "2급 벨드스파"
     ru: "Veldspar II-Grade"
     zh: "凡晶石（2级）"
+  packagedVolume: 0.1
   portionSize: 100
   published: true
   volume: 0.1
@@ -1046,6 +1087,7 @@
     ko: "3급 벨드스파"
     ru: "Veldspar III-Grade"
     zh: "凡晶石（3级）"
+  packagedVolume: 0.1
   portionSize: 100
   published: true
   volume: 0.1
@@ -1123,6 +1165,7 @@
       件、纳米装配阵列和许多纳米块体构成。安装在采用昇威科技建造的建筑上的专门槽位中可以制造各种服务装备、建筑装备和建筑改装件。"
   groupID: 1321
   iconID: 21595
+  isRepackable: true
   marketGroupID: 2232
   mass: 4000
   metaGroupID: 54
@@ -1135,6 +1178,7 @@
     ko: "스탠드업 거래소 허브 I"
     ru: "Standup Market Hub I"
     zh: "屹立市场中心 I"
+  packagedVolume: 32000
   portionSize: 1
   published: true
   volume: 32000
@@ -1232,6 +1276,7 @@
       在低安星系的防御能力有了很大提升。铁壁可以使用昇威的屹立专用服务和建筑装备，以满足建筑使用者的需求。将屹立大型改装件安装在铁壁上可以进一步细化它的职能。"
   graphicID: 21138
   groupID: 1657
+  isRepackable: true
   marketGroupID: 2201
   mass: 10000000000
   metaGroupID: 1
@@ -1244,6 +1289,7 @@
     ko: "포티자"
     ru: "Fortizar"
     zh: "铁壁"
+  packagedVolume: 80000
   portionSize: 1
   published: true
   radius: 85000
@@ -1285,6 +1331,7 @@
     ko: "초전도체"
     ru: "Superconductors"
     zh: "超导体"
+  packagedVolume: 0.75
   portionSize: 1
   published: true
   volume: 0.75
@@ -1337,6 +1384,7 @@
     ko: "플라즈모이드"
     ru: "Plasmoids"
     zh: "等离子体团"
+  packagedVolume: 0.19
   portionSize: 1
   published: true
   volume: 0.19
@@ -1373,6 +1421,7 @@
     ko: "물"
     ru: "Water"
     zh: "水"
+  packagedVolume: 0.19
   portionSize: 1
   published: true
   volume: 0.19
@@ -1428,6 +1477,7 @@
     ko: "수성 액체"
     ru: "Aqueous Liquids"
     zh: "水基液体"
+  packagedVolume: 0.005
   portionSize: 1
   published: true
   volume: 0.005
@@ -1644,6 +1694,7 @@
     ko: "사막 행성"
     ru: "Planet (Barren)"
     zh: "行星（贫瘠）"
+  packagedVolume: 1
   portionSize: 1
   published: false
   radius: 10000
@@ -1709,6 +1760,7 @@
     ko: "온대 행성"
     ru: "Planet (Temperate)"
     zh: "行星（温和）"
+  packagedVolume: 1
   portionSize: 1
   published: false
   radius: 10000
@@ -1902,6 +1954,7 @@
     ko: "기초 광물 정제"
     ru: "Simple Ore Processing"
     zh: "普通矿石处理技术"
+  packagedVolume: 0.01
   portionSize: 1
   published: true
   volume: 0.01
@@ -2011,6 +2064,7 @@
     ko: "트리타늄"
     ru: "Tritanium"
     zh: "三钛合金"
+  packagedVolume: 0.01
   portionSize: 1
   published: true
   volume: 0.01
@@ -2145,6 +2199,7 @@
     ko: "파이어라이트"
     ru: "Pyerite"
     zh: "类晶体胶矿"
+  packagedVolume: 0.01
   portionSize: 1
   published: true
   volume: 0.01
@@ -2262,6 +2317,7 @@
     ko: "멕살론"
     ru: "Mexallon"
     zh: "类银超金属"
+  packagedVolume: 0.01
   portionSize: 1
   published: true
   volume: 0.01
@@ -2392,6 +2448,7 @@
     ko: "이소젠"
     ru: "Isogen"
     zh: "同位聚合体"
+  packagedVolume: 0.01
   portionSize: 1
   published: true
   volume: 0.01
@@ -2477,6 +2534,7 @@
     ko: "녹시움"
     ru: "Nocxium"
     zh: "超新星诺克石"
+  packagedVolume: 0.01
   portionSize: 1
   published: true
   volume: 0.01
@@ -2579,6 +2637,7 @@
     ko: "자이드라인"
     ru: "Zydrine"
     zh: "晶状石英核岩"
+  packagedVolume: 0.01
   portionSize: 1
   published: true
   volume: 0.01
@@ -2682,6 +2741,7 @@
     ko: "메가사이트"
     ru: "Megacyte"
     zh: "超噬矿"
+  packagedVolume: 0.01
   portionSize: 1
   published: true
   volume: 0.01
@@ -2754,6 +2814,7 @@
       \n注：只能同时在一个建筑上装配一件相同类型的改装件，包括衍生型号在内。"
   groupID: 1820
   iconID: 21729
+  isRepackable: true
   marketGroupID: 2347
   mass: 200
   metaGroupID: 54
@@ -2766,9 +2827,11 @@
     ko: "스탠드업 M-Set 탄약 제조 자원효율성 장치 I"
     ru: "Standup M-Set Ammunition Manufacturing Material Efficiency I"
     zh: "屹立中型弹药制造材料效率 I"
+  packagedVolume: 10
   portionSize: 1
   published: true
   radius: 100
+  techLevel: 1
   volume: 10
 "37150":
   description:
@@ -2840,6 +2903,7 @@
       \n注：只能同时在一个建筑上装配一件相同类型的改装件，包括衍生型号在内。"
   groupID: 1821
   iconID: 21729
+  isRepackable: true
   marketGroupID: 2347
   mass: 200
   metaGroupID: 54
@@ -2852,9 +2916,11 @@
     ko: "스탠드업 M-Set 탄약 제조 시간효율성 장치 I"
     ru: "Standup M-Set Ammunition Manufacturing Time Efficiency I"
     zh: "屹立中型弹药制造时间效率 I"
+  packagedVolume: 10
   portionSize: 1
   published: true
   radius: 100
+  techLevel: 1
   volume: 10
 "43880":
   description:
@@ -2922,6 +2988,7 @@
       同时在一个建筑上装配一件相同类型的改装件，包括衍生型号在内。"
   groupID: 1843
   iconID: 21729
+  isRepackable: true
   marketGroupID: 2347
   mass: 200
   metaGroupID: 54
@@ -2934,9 +3001,11 @@
     ko: "스탠드업 M-Set 인벤션 가속 장치 I"
     ru: "Standup M-Set Invention Accelerator I"
     zh: "屹立中型发明加速 I"
+  packagedVolume: 10
   portionSize: 1
   published: true
   radius: 100
+  techLevel: 1
   volume: 10
 "43879":
   description:
@@ -3005,6 +3074,7 @@
       只能同时在一个建筑上装配一件相同类型的改装件，包括衍生型号在内。"
   groupID: 1842
   iconID: 21729
+  isRepackable: true
   marketGroupID: 2347
   mass: 200
   metaGroupID: 54
@@ -3017,9 +3087,11 @@
     ko: "스탠드업 M-Set 인벤션 비용 최적화 장치 I"
     ru: "Standup M-Set Invention Cost Optimization I"
     zh: "屹立中型发明成本优化 I"
+  packagedVolume: 10
   portionSize: 1
   published: true
   radius: 100
+  techLevel: 1
   volume: 10
 "43729":
   description:
@@ -3088,6 +3160,7 @@
       注：只能同时在一个建筑上装配一件相同类型的改装件，包括衍生型号在内。"
   groupID: 1866
   iconID: 21729
+  isRepackable: true
   marketGroupID: 2348
   mass: 200
   metaGroupID: 54
@@ -3100,9 +3173,11 @@
     ko: "스탠드업 L-Set 블루프린트 복제 최적화 I"
     ru: "Standup L-Set Blueprint Copy Optimization I"
     zh: "屹立大型蓝图拷贝优化 I"
+  packagedVolume: 20
   portionSize: 1
   published: true
   radius: 100
+  techLevel: 1
   volume: 20
 "43891":
   description:
@@ -3171,6 +3246,7 @@
       注：只能同时在一个建筑上装配一件相同类型的改装件，包括衍生型号在内。"
   groupID: 1848
   iconID: 21729
+  isRepackable: true
   marketGroupID: 2347
   mass: 200
   metaGroupID: 54
@@ -3183,9 +3259,11 @@
     ko: "스탠드업 M-Set 블루프린트 복제 비용 최적화 장치 I"
     ru: "Standup M-Set Blueprint Copy Cost Optimization I"
     zh: "屹立中型蓝图拷贝成本优化 I"
+  packagedVolume: 10
   portionSize: 1
   published: true
   radius: 100
+  techLevel: 1
   volume: 10
 "43714":
   description:
@@ -3259,6 +3337,7 @@
       建筑改装件。\n\n\n\n注：只能同时在一个建筑上装配一件相同类型的改装件，包括衍生型号在内。"
   groupID: 1853
   iconID: 21729
+  isRepackable: true
   marketGroupID: 2348
   mass: 200
   metaGroupID: 54
@@ -3272,9 +3351,11 @@
     ko: "스탠드업 L-Set 기본 소형 함선 제작 효율성 장치 I"
     ru: "Standup L-Set Basic Small Ship Manufacturing Efficiency I"
     zh: "屹立大型基础小型舰船制造效率 I"
+  packagedVolume: 20
   portionSize: 1
   published: true
   radius: 100
+  techLevel: 1
   volume: 20
 "37152":
   description:
@@ -3348,6 +3429,7 @@
       和建筑改装件。\n\n\n\n注：只能同时在一个建筑上装配一件相同类型的改装件，包括衍生型号在内。"
   groupID: 1828
   iconID: 21729
+  isRepackable: true
   marketGroupID: 2347
   mass: 200
   metaGroupID: 53
@@ -3362,9 +3444,11 @@
     ko: "스탠드업 M-Set 기본 대형 함선 제작 자원효율성 장치 II"
     ru: "Standup M-Set Basic Large Ship Manufacturing Material Efficiency II"
     zh: "屹立中型基础大型舰船制造材料效率 II"
+  packagedVolume: 10
   portionSize: 1
   published: true
   radius: 100
+  techLevel: 2
   variationParentTypeID: 43732
   volume: 10
 "43704":
@@ -3442,6 +3526,7 @@
       、建筑装备和建筑改装件。\n\n注：只能同时在一个建筑上装配一件相同类型的改装件，包括衍生型号在内。"
   groupID: 1869
   iconID: 21729
+  isRepackable: true
   marketGroupID: 2349
   mass: 200
   metaGroupID: 54
@@ -3455,9 +3540,11 @@
     ko: "스탠드업 XL-Set 구조물 및 부품 제조 효율성 장치 I"
     ru: "Standup XL-Set Structure and Component Manufacturing Efficiency I"
     zh: "屹立超大型建筑和组件制造效率 I"
+  packagedVolume: 40
   portionSize: 1
   published: true
   radius: 100
+  techLevel: 1
   volume: 40
 "42832":
   basePrice: 1000
@@ -3497,6 +3584,7 @@
     ko: "장갑 에너자이징 차지"
     ru: "Armor Energizing Charge"
     zh: "装甲电压强化弹药"
+  packagedVolume: 0.01
   portionSize: 500
   published: true
   volume: 0.01
@@ -3514,6 +3602,7 @@
     ko: "장갑 에너자이징 차지 블루프린트"
     ru: "Armor Energizing Charge Blueprint"
     zh: "装甲电压强化弹药蓝图"
+  packagedVolume: 0.01
   portionSize: 1
   published: true
   volume: 0.01
@@ -3553,9 +3642,11 @@
     ko: "묠니르 크루즈 미사일"
     ru: "Mjolnir Cruise Missile"
     zh: "雷神巡航导弹"
+  packagedVolume: 0.05
   portionSize: 100
   published: true
   radius: 300
+  techLevel: 1
   volume: 0.05
 "24535":
   basePrice: 837360
@@ -3612,9 +3703,11 @@
     ko: "묠니르 퓨리 크루즈 미사일"
     ru: "Mjolnir Fury Cruise Missile"
     zh: "雷神愤怒巡航导弹"
+  packagedVolume: 0.05
   portionSize: 5000
   published: true
   radius: 300
+  techLevel: 2
   variationParentTypeID: 202
   volume: 0.05
 "803":
@@ -3632,6 +3725,7 @@
     ko: "묠니르 크루즈 미사일 블루프린트"
     ru: "Mjolnir Cruise Missile Blueprint"
     zh: "雷神巡航导弹蓝图"
+  packagedVolume: 0.01
   portionSize: 1
   published: true
   volume: 0.01
@@ -3651,8 +3745,10 @@
     ko: "묠니르 퓨리 크루즈 미사일 블루프린트"
     ru: "Mjolnir Fury Cruise Missile Blueprint"
     zh: "雷神愤怒巡航导弹蓝图"
+  packagedVolume: 0.01
   portionSize: 1
   published: true
+  techLevel: 2
   volume: 0.01
 "45548":
   description:
@@ -3788,6 +3884,7 @@
       衍生型号在内。"
   groupID: 1869
   iconID: 21729
+  isRepackable: true
   marketGroupID: 2349
   mass: 200
   metaGroupID: 52
@@ -3802,9 +3899,11 @@
     ko: "스탠드업 XL-Set 터커 구조물 및 부품 제조 효율성 장치"
     ru: "Standup XL-Set Thukker Structure and Component Manufacturing Efficiency"
     zh: "屹立超大型图克尔建筑和组件制造效率"
+  packagedVolume: 40
   portionSize: 1
   published: true
   radius: 100
+  techLevel: 1
   volume: 40
 "37180":
   description:
@@ -3875,6 +3974,7 @@
       同时在一个建筑上装配一件相同类型的改装件，包括衍生型号在内。"
   groupID: 1868
   iconID: 21729
+  isRepackable: true
   marketGroupID: 2349
   mass: 200
   metaGroupID: 54
@@ -3887,9 +3987,11 @@
     ko: "스탠드업 XL-Set 함선 제작 효율성 장치 I"
     ru: "Standup XL-Set Ship Manufacturing Efficiency I"
     zh: "屹立超大型舰船制造效率 I"
+  packagedVolume: 40
   portionSize: 1
   published: true
   radius: 100
+  techLevel: 1
   volume: 40
 "37183":
   description:
@@ -3961,6 +4063,7 @@
       同时在一个建筑上装配一件相同类型的改装件，包括衍生型号在内。"
   groupID: 1870
   iconID: 21729
+  isRepackable: true
   marketGroupID: 2349
   mass: 200
   metaGroupID: 54
@@ -3973,9 +4076,11 @@
     ko: "스탠드업 XL-Set 연구실 강화 장치 I"
     ru: "Standup XL-Set Laboratory Optimization I"
     zh: "屹立超大型实验室优化 I"
+  packagedVolume: 40
   portionSize: 1
   published: true
   radius: 100
+  techLevel: 1
   volume: 40
 "35827":
   description:
@@ -4093,6 +4198,7 @@
       锚定任何超大型建筑。在此日期之前已锚定的超大型建筑除非解锚，否则不受此规定影响。"
   graphicID: 21406
   groupID: 1404
+  isRepackable: true
   marketGroupID: 2324
   mass: 50000000000
   name:
@@ -4104,6 +4210,7 @@
     ko: "소티요"
     ru: "Sotiyo"
     zh: "索迪约"
+  packagedVolume: 800000
   portionSize: 1
   published: true
   radius: 150000
@@ -4177,6 +4284,7 @@
       装件。\n\n\n\n注：只能同时在一个建筑上装配一件相同类型的改装件，包括衍生型号在内。"
   groupID: 1936
   iconID: 21788
+  isRepackable: true
   marketGroupID: 2341
   mass: 200
   metaGroupID: 53
@@ -4189,15 +4297,18 @@
     ko: "스탠드업 M-Set 하이브리드 반응로 자원효율성 장치 II"
     ru: "Standup M-Set Hybrid Reactor Material Efficiency II"
     zh: "屹立中型混合反应堆材料效率 II"
+  packagedVolume: 10
   portionSize: 1
   published: true
   radius: 100
+  techLevel: 2
   variationParentTypeID: 46490
   volume: 10
 "46158":
   basePrice: 15000000
   groupID: 1889
   iconID: 3739
+  isRepackable: true
   marketGroupID: 2404
   name:
     de: "Fulleroferrocene Reaction Formula"
@@ -4208,6 +4319,7 @@
     ko: "플레로페로센 반응식"
     ru: "Fulleroferrocene Reaction Formula"
     zh: "富勒二茂铁反应配方"
+  packagedVolume: 0.01
   portionSize: 1
   published: true
   volume: 0.01
@@ -4283,6 +4395,7 @@
       建筑改装件。\n\n\n\n注：只能同时在一个建筑上装配一件相同类型的改装件，包括衍生型号在内。"
   groupID: 1829
   iconID: 21729
+  isRepackable: true
   marketGroupID: 2347
   mass: 200
   metaGroupID: 54
@@ -4297,9 +4410,11 @@
     ko: "스탠드업 M-Set 기본 대형 함선 제작 시간효율성 장치 I"
     ru: "Standup M-Set Basic Large Ship Manufacturing Time Efficiency I"
     zh: "屹立中型基础大型舰船制造时间效率 I"
+  packagedVolume: 10
   portionSize: 1
   published: true
   radius: 100
+  techLevel: 1
   volume: 10
 "30303":
   description:
@@ -4342,6 +4457,7 @@
     ko: "플레로페로센"
     ru: "Fulleroferrocene"
     zh: "富勒二茂铁"
+  packagedVolume: 0.1
   portionSize: 1
   published: true
   volume: 0.1
@@ -4378,6 +4494,7 @@
   factionID: 500010
   graphicID: 20605
   groupID: 831
+  isRepackable: true
   marketGroupID: 1932
   mass: 1000000
   metaGroupID: 2
@@ -4391,11 +4508,13 @@
     ko: "윕테일"
     ru: "Whiptail"
     zh: "长尾蜥级"
+  packagedVolume: 2500
   portionSize: 1
   published: true
   raceID: 1
   radius: 33
   soundID: 20070
+  techLevel: 2
   volume: 18000
 "33674":
   basePrice: 287500
@@ -4411,6 +4530,7 @@
     ko: "윕테일 블루프린트"
     ru: "Whiptail Blueprint"
     zh: "长尾蜥级蓝图"
+  packagedVolume: 0.01
   portionSize: 1
   published: true
   volume: 0.01
@@ -4428,6 +4548,7 @@
     ko: "메손 엑조틱 플라즈마 L 블루프린트"
     ru: "Meson Exotic Plasma L Blueprint"
     zh: "介子异种等离子弹蓝图 L"
+  packagedVolume: 0.01
   portionSize: 1
   published: true
   volume: 0.01
@@ -4446,8 +4567,10 @@
     ko: "미스틱 L 블루프린트"
     ru: "Mystic L Blueprint"
     zh: "奥秘蓝图 L"
+  packagedVolume: 0.01
   portionSize: 1
   published: true
+  techLevel: 2
   volume: 0.01
 "32307":
   basePrice: 219800000
@@ -4498,6 +4621,7 @@
   factionID: 500004
   graphicID: 2138
   groupID: 27
+  isRepackable: true
   marketGroupID: 1379
   mass: 97100000
   metaGroupID: 4
@@ -4511,11 +4635,14 @@
     ko: "도미닉스 해군 에디션"
     ru: "Dominix Navy Issue"
     zh: "多米尼克斯级海军型"
+  packagedVolume: 50000
   portionSize: 1
   published: true
   raceID: 8
   radius: 250
+  shipTreeGroupID: 47
   soundID: 20072
+  techLevel: 1
   variationParentTypeID: 645
   volume: 454500
 "32308":
@@ -4532,6 +4659,7 @@
     ko: "도미닉스 해군 에디션 블루프린트"
     ru: "Dominix Navy Issue Blueprint"
     zh: "多米尼克斯级海军型蓝图"
+  packagedVolume: 0.01
   portionSize: 1
   published: true
   volume: 0.01
@@ -4615,6 +4743,7 @@
     ko: "코어 온도제어장치"
     ru: "Core Temperature Regulator"
     zh: "核心温度调节器"
+  packagedVolume: 180
   portionSize: 1
   published: true
   volume: 180
@@ -4667,6 +4796,7 @@
     ko: "보조 생명유지 장치"
     ru: "Life Support Backup Unit"
     zh: "生命保障备份装置"
+  packagedVolume: 45
   portionSize: 1
   published: true
   volume: 45
@@ -4770,6 +4900,7 @@
     ko: "자동복구 장치"
     ru: "Auto-Integrity Preservation Seal"
     zh: "自动修复储藏装置密封"
+  packagedVolume: 16
   portionSize: 1
   published: true
   volume: 16
@@ -4777,6 +4908,7 @@
   basePrice: 10000000
   groupID: 1888
   iconID: 2664
+  isRepackable: true
   marketGroupID: 2403
   metaGroupID: 1
   name:
@@ -4788,8 +4920,10 @@
     ko: "탄소 섬유 반응식"
     ru: "Carbon Fiber Reaction Formula"
     zh: "碳纤维反应配方"
+  packagedVolume: 0.01
   portionSize: 1
   published: true
+  techLevel: 1
   volume: 0.01
 "57453":
   basePrice: 100000
@@ -4829,6 +4963,7 @@
     ko: "탄소 섬유"
     ru: "Carbon Fiber"
     zh: "碳纤维"
+  packagedVolume: 0.2
   portionSize: 1
   published: true
   volume: 0.2
@@ -4907,6 +5042,7 @@
       筑使用者的需求。将屹立中型改装件安装在空堡上可以进一步细化它的职能。"
   graphicID: 21137
   groupID: 1657
+  isRepackable: true
   marketGroupID: 2201
   mass: 3000000000
   name:
@@ -4918,6 +5054,7 @@
     ko: "아스트라허스"
     ru: "Astrahus"
     zh: "空堡"
+  packagedVolume: 8000
   portionSize: 1
   published: true
   radius: 45000
@@ -4937,6 +5074,7 @@
     ko: "아스트라허스 블루프린트"
     ru: "Astrahus Blueprint"
     zh: "空堡蓝图"
+  packagedVolume: 0.01
   portionSize: 1
   published: true
   volume: 0.01
@@ -4973,6 +5111,7 @@
     ko: "구조물 건축 부품"
     ru: "Structure Construction Parts"
     zh: "建筑建造组件"
+  packagedVolume: 3000
   portionSize: 1
   published: true
   volume: 3000
@@ -5005,6 +5144,7 @@
     ko: "구조물 공용창고 시설"
     ru: "Structure Hangar Array"
     zh: "建筑机库阵列"
+  packagedVolume: 3000
   portionSize: 1
   published: true
   volume: 3000
@@ -5037,6 +5177,7 @@
     ko: "구조물 저장고"
     ru: "Structure Storage Bay"
     zh: "建筑贮藏舱"
+  packagedVolume: 3000
   portionSize: 1
   published: true
   volume: 3000
@@ -5071,6 +5212,7 @@
     ko: "구조물 수리시설"
     ru: "Structure Repair Facility"
     zh: "建筑维修设施"
+  packagedVolume: 3000
   portionSize: 1
   published: true
   volume: 3000
@@ -5102,6 +5244,7 @@
     ko: "구조물 도킹 베이"
     ru: "Structure Docking Bay"
     zh: "建筑停泊港"
+  packagedVolume: 3000
   portionSize: 1
   published: true
   volume: 3000
@@ -5134,6 +5277,7 @@
     ko: "구조물 의료 시설"
     ru: "Structure Medical Center"
     zh: "建筑医疗中心"
+  packagedVolume: 3000
   portionSize: 1
   published: true
   volume: 3000
@@ -5166,6 +5310,7 @@
     ko: "구조물 사무 센터"
     ru: "Structure Office Center"
     zh: "建筑办公室中心"
+  packagedVolume: 3000
   portionSize: 1
   published: true
   volume: 3000
@@ -5198,6 +5343,7 @@
     ko: "구조물 거래소 네트워크 시설"
     ru: "Structure Market Network"
     zh: "建筑市场网络"
+  packagedVolume: 3000
   portionSize: 1
   published: true
   volume: 3000
@@ -5254,6 +5400,7 @@
     ko: "프리즈마티사이트"
     ru: "Prismaticite"
     zh: "棱柱石"
+  packagedVolume: 40
   portionSize: 100
   published: true
   raceID: 4

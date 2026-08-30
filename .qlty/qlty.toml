@@ -1,0 +1,6 @@
+config_version = "0"
+
+exclude_patterns = [
+    "ui/esi-openapi/**",
+    "ui/refdata-openapi/**",
+]

@@ -1,5 +1,170 @@
 EVE Ref Changelog
 
+## [2.80.0](https://github.com/autonomouslogic/eve-ref/compare/2.79.3...2.80.0) (2026-08-23)
+
+
+### Features
+
+* Scrape SKINR listings and details ([#1084](https://github.com/autonomouslogic/eve-ref/issues/1084)) ([1b514c6](https://github.com/autonomouslogic/eve-ref/commit/1b514c603c086138dd3ef4ea9a69b3d999fac49f))
+
+
+### Bug Fixes
+
+* **ui:** Patreon FAB ([2f072be](https://github.com/autonomouslogic/eve-ref/commit/2f072be675829d9bfdd4c0273fa5ed31832a0a1d))
+
+
+### Documentation
+
+* Update README.md ([4cde34a](https://github.com/autonomouslogic/eve-ref/commit/4cde34aea1961cabe5018f5ca4c61027eda769ee))
+* Updated badges [skip ci] ([e2de716](https://github.com/autonomouslogic/eve-ref/commit/e2de716e1e7e5254cbee80c2f03047587fb92657))
+
+
+### Miscellaneous Chores
+
+* Added qlty.toml ([02747ff](https://github.com/autonomouslogic/eve-ref/commit/02747fffb298e2cedb25339ca50e1e4efb9a8f74))
+* Added qlty.toml ([98ffb45](https://github.com/autonomouslogic/eve-ref/commit/98ffb45db3159b1f11dddd52b5c762d2f87782cb))
+
+
+### Tests
+
+* EsiAuthHelperTest ([06480ee](https://github.com/autonomouslogic/eve-ref/commit/06480ee2532605ee95713d02560bcad19ec7a783))
+* More refactor of ScrapePublicContractsTest ([f085a6b](https://github.com/autonomouslogic/eve-ref/commit/f085a6b0002268f8e102acf2eff98c32c1076d05))
+* More ScrapePublicContracts testing ([8d43db2](https://github.com/autonomouslogic/eve-ref/commit/8d43db232e51bcce656edd649958ece5b762cbe2))
+* Public contracts test refactor ([#1083](https://github.com/autonomouslogic/eve-ref/issues/1083)) ([13531ab](https://github.com/autonomouslogic/eve-ref/commit/13531ab978b6dea49c1e80891340e02205668f7a))
+* Reorganize ScrapePublicContractsTest ([fc43cdc](https://github.com/autonomouslogic/eve-ref/commit/fc43cdc4842e83ea8e89af32fec4f9d20a6911d2))
+
+## [2.79.3](https://github.com/autonomouslogic/eve-ref/compare/2.79.2...2.79.3) (2026-08-15)
+
+
+### Bug Fixes
+
+* Converted BasicLogin to Helidon and removed Micronaut ([#1079](https://github.com/autonomouslogic/eve-ref/issues/1079)) ([9fe9eef](https://github.com/autonomouslogic/eve-ref/commit/9fe9eefc5d4779f35296a35293a9c5c05edb2266))
+* Updated reference data models ([58dafd2](https://github.com/autonomouslogic/eve-ref/commit/58dafd29ea55ad78fd62cbf820460cb79eb66202))
+
+
+### Tests
+
+* Updated test resources ([f2e6d26](https://github.com/autonomouslogic/eve-ref/commit/f2e6d2607c310781df80a12e18a56a36430dfa9b))
+
+## [2.79.2](https://github.com/autonomouslogic/eve-ref/compare/2.79.1...2.79.2) (2026-08-11)
+
+
+### Bug Fixes
+
+* Lock LoadedRefData ([72a619f](https://github.com/autonomouslogic/eve-ref/commit/72a619fb6a93d0870a53e875b408a69eee789b2e))
+
+
+### Dependency Updates
+
+* **deps:** update codecov/codecov-action action to v7 ([#1056](https://github.com/autonomouslogic/eve-ref/issues/1056)) ([0f3ebfe](https://github.com/autonomouslogic/eve-ref/commit/0f3ebfe29806c57907d4d75822b61cf880fdf726))
+
+
+### Tests
+
+* Updated test resources ([32d6c0c](https://github.com/autonomouslogic/eve-ref/commit/32d6c0c0d38fb469937995bcef985fbd4f430347))
+
+## [2.79.1](https://github.com/autonomouslogic/eve-ref/compare/2.79.0...2.79.1) (2026-08-10)
+
+
+### Bug Fixes
+
+* **deps:** update flyway monorepo to v13 ([#1073](https://github.com/autonomouslogic/eve-ref/issues/1073)) ([c0c1d4a](https://github.com/autonomouslogic/eve-ref/commit/c0c1d4a487ec8553a365b73eaad9a3377fcd151e))
+* Updated MER base path ([48938bd](https://github.com/autonomouslogic/eve-ref/commit/48938bdf1bc684634582f039c8284f83611ab6a6))
+
+
+### Dependency Updates
+
+* **deps:** update actions/checkout action to v7 ([#1059](https://github.com/autonomouslogic/eve-ref/issues/1059)) ([a213cbe](https://github.com/autonomouslogic/eve-ref/commit/a213cbeeda9fb6f4c42f5b7da622d3e609080664))
+* **deps:** update actions/setup-node action to v7 ([#1071](https://github.com/autonomouslogic/eve-ref/issues/1071)) ([fa84c0b](https://github.com/autonomouslogic/eve-ref/commit/fa84c0b32b005ed29fd6f9e3262d204e46f72fc4))
+* **deps:** update plugin org.flywaydb.flyway to v13 ([#1072](https://github.com/autonomouslogic/eve-ref/issues/1072)) ([12ac47d](https://github.com/autonomouslogic/eve-ref/commit/12ac47d5a804ff0cf53f703862a1702dbb117583))
+
+## [2.79.0](https://github.com/autonomouslogic/eve-ref/compare/2.78.10...2.79.0) (2026-08-06)
+
+
+### Features
+
+* Military campaigns scrape ([2264001](https://github.com/autonomouslogic/eve-ref/commit/2264001ac7b3f6e6b5a12508da9e5febecd5f03b))
+
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([#1076](https://github.com/autonomouslogic/eve-ref/issues/1076)) ([299f325](https://github.com/autonomouslogic/eve-ref/commit/299f325a9f63c13acae018c5800658020faa7274))
+
+## [2.78.10](https://github.com/autonomouslogic/eve-ref/compare/2.78.9...2.78.10) (2026-08-04)
+
+
+### Bug Fixes
+
+* **deps:** update flyway monorepo to v12.11.0 ([#1077](https://github.com/autonomouslogic/eve-ref/issues/1077)) ([c8f2efa](https://github.com/autonomouslogic/eve-ref/commit/c8f2efaaa5bda80e36c6604dca9813897ff69520))
+
+## [2.78.9](https://github.com/autonomouslogic/eve-ref/compare/2.78.8...2.78.9) (2026-08-03)
+
+
+### Bug Fixes
+
+* **deps:** update font awesome ([#1074](https://github.com/autonomouslogic/eve-ref/issues/1074)) ([33109c4](https://github.com/autonomouslogic/eve-ref/commit/33109c46bb751fe171678491dcba49a10adec2a5))
+* **ui:** August 2026 giveaways ([a0c0822](https://github.com/autonomouslogic/eve-ref/commit/a0c0822ee7b96397d23382afcbc82fd0dedee963))
+
+
+### Dependency Updates
+
+* **deps:** update plugin org.flywaydb.flyway to v12.11.0 ([#1075](https://github.com/autonomouslogic/eve-ref/issues/1075)) ([4beb798](https://github.com/autonomouslogic/eve-ref/commit/4beb79879b3a5bd213a0e43e87a285838748c6ef))
+
+
+### Tests
+
+* Updated test resources ([2631b52](https://github.com/autonomouslogic/eve-ref/commit/2631b528f245b623341c91171745b2d0a7302174))
+* Updated test resources ([592b969](https://github.com/autonomouslogic/eve-ref/commit/592b969d1fb42ff36a5e0875cccfc103fc8a2f02))
+
+## [2.78.8](https://github.com/autonomouslogic/eve-ref/compare/2.78.7...2.78.8) (2026-07-07)
+
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([#1069](https://github.com/autonomouslogic/eve-ref/issues/1069)) ([a96b239](https://github.com/autonomouslogic/eve-ref/commit/a96b2398eb52957c7de195fbb4b8e20c0d1a285b))
+* **deps:** update flyway monorepo to v12.10.0 ([#1067](https://github.com/autonomouslogic/eve-ref/issues/1067)) ([0c96732](https://github.com/autonomouslogic/eve-ref/commit/0c96732ed69fad792781d3b4aa487a05392ec0d4))
+* **deps:** update font awesome ([#1068](https://github.com/autonomouslogic/eve-ref/issues/1068)) ([301b55c](https://github.com/autonomouslogic/eve-ref/commit/301b55c8a57b600a09e3974ae5f0624ff5050274))
+
+## [2.78.7](https://github.com/autonomouslogic/eve-ref/compare/2.78.6...2.78.7) (2026-07-06)
+
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([#1066](https://github.com/autonomouslogic/eve-ref/issues/1066)) ([c396fac](https://github.com/autonomouslogic/eve-ref/commit/c396fac5629e4d0dc4db91f2d39ce1146faa2ff4))
+
+
+### Dependency Updates
+
+* **deps:** update plugin org.flywaydb.flyway to v12.10.0 ([#1065](https://github.com/autonomouslogic/eve-ref/issues/1065)) ([1e6f76a](https://github.com/autonomouslogic/eve-ref/commit/1e6f76a2a6c072979f22ea66d004a968f2ff57a2))
+
+## [2.78.6](https://github.com/autonomouslogic/eve-ref/compare/2.78.5...2.78.6) (2026-07-01)
+
+
+### Bug Fixes
+
+* Added ship_tree_group_id and tech_level to reference data spec ([98bdb99](https://github.com/autonomouslogic/eve-ref/commit/98bdb99f0422022f3a7c71aae45cf65d9b20bd5b))
+* **ui:** Load giveaways from Prize Pixie API ([#1064](https://github.com/autonomouslogic/eve-ref/issues/1064)) ([0d82a06](https://github.com/autonomouslogic/eve-ref/commit/0d82a06c9c9f86406f5db8bd5fc171f4947b5454))
+
+
+### Miscellaneous Chores
+
+* Minor revert ([2fa6dc4](https://github.com/autonomouslogic/eve-ref/commit/2fa6dc4641ae4cc616ec367fea982dc87160d832))
+
+
+### Tests
+
+* Updated test resources ([8c1c055](https://github.com/autonomouslogic/eve-ref/commit/8c1c055ba2054358969482d6db8fe37f91cc9a70))
+* Updated test resources ([e08ee46](https://github.com/autonomouslogic/eve-ref/commit/e08ee46d5e62078dc1eba435a1566d6563165f8f))
+
+## [2.78.5](https://github.com/autonomouslogic/eve-ref/compare/2.78.4...2.78.5) (2026-06-22)
+
+
+### Bug Fixes
+
+* Fixed data index upload concurrency ([72e06ce](https://github.com/autonomouslogic/eve-ref/commit/72e06ce1ca7e643d85414e8b56a55ea37b5fe840))
+* Minor revert ([1e66f64](https://github.com/autonomouslogic/eve-ref/commit/1e66f64475ab9e1f643dd3a25b571a55b3cc7f26))
+* Thread-safety for DecimalFormat ([8aa8d89](https://github.com/autonomouslogic/eve-ref/commit/8aa8d8957f8828b5b6b5dc30497687861e53f72e))
+
 ## [2.78.4](https://github.com/autonomouslogic/eve-ref/compare/2.78.3...2.78.4) (2026-06-21)
 
 

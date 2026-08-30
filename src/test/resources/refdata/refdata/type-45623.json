@@ -131,9 +131,11 @@
   "radius" : 1,
   "type_id" : 45623,
   "volume" : 40,
+  "is_repackable" : true,
   "meta_group_id" : 14,
   "meta_level" : 1,
   "race_id" : 4,
+  "tech_level" : 3,
   "traits" : {
     "role_bonuses" : {
       "2" : {

@@ -23,6 +23,7 @@
     "ru" : "Superconductors",
     "zh" : "超导体"
   },
+  "packaged_volume" : 0.75,
   "portion_size" : 1,
   "published" : true,
   "volume" : 0.75,

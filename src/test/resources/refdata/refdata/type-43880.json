@@ -134,7 +134,9 @@
   "radius" : 100,
   "type_id" : 43880,
   "volume" : 10,
+  "is_repackable" : true,
   "meta_group_id" : 54,
+  "tech_level" : 1,
   "engineering_rig_global_activities" : [ "invention" ],
   "required_skills" : {
     "26252" : 1

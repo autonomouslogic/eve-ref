@@ -11,6 +11,7 @@
   },
   "group_id" : 1321,
   "icon_id" : 21595,
+  "is_repackable" : true,
   "market_group_id" : 2232,
   "mass" : 4000,
   "meta_group_id" : 54,
@@ -24,6 +25,7 @@
     "ru" : "Standup Market Hub I",
     "zh" : "屹立市场中心 I"
   },
+  "packaged_volume" : 32000,
   "portion_size" : 1,
   "published" : true,
   "volume" : 32000,

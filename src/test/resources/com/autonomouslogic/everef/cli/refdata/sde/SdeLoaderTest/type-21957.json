@@ -24,6 +24,7 @@
     "ru" : "Structure Repair Facility",
     "zh" : "建筑维修设施"
   },
+  "packaged_volume" : 3000,
   "portion_size" : 1,
   "published" : true,
   "volume" : 3000,

@@ -60,10 +60,6 @@ public class ContractsFileLoader {
 
 	@Setter
 	@NonNull
-	private Map<Long, JsonNode> nonDynamicItemsStore;
-
-	@Setter
-	@NonNull
 	private Map<String, JsonNode> dogmaEffectsStore;
 
 	@Setter
@@ -140,9 +136,6 @@ public class ContractsFileLoader {
 				case ContractsFileBuilder.DYNAMIC_ITEMS_CSV:
 					loadDynamicItems(tar);
 					break;
-				case ContractsFileBuilder.NON_DYNAMIC_ITEMS_CSV:
-					loadNonDynamicItems(tar);
-					break;
 				case ContractsFileBuilder.DOGMA_ATTRIBUTES_CSV:
 					loadDogmaAttributes(tar);
 					break;
@@ -188,12 +181,6 @@ public class ContractsFileLoader {
 	public void loadDynamicItems(@NonNull InputStream in) {
 		log.debug("Reading dynamic items");
 		loadEntries("dynamic items", in, dynamicItemsStore, ContractsFileBuilder.DYNAMIC_ITEM_ID);
-	}
-
-	@SneakyThrows
-	public void loadNonDynamicItems(@NonNull InputStream in) {
-		log.debug("Reading non-dynamic items");
-		loadEntries("non-dynamic items", in, nonDynamicItemsStore, ContractsFileBuilder.NON_DYNAMIC_ITEM_ID);
 	}
 
 	@SneakyThrows
