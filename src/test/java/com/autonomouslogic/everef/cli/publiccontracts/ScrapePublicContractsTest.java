@@ -857,7 +857,7 @@ public class ScrapePublicContractsTest {
 	@ValueSource(strings = {"item_exchange", "auction"})
 	@SneakyThrows
 	void mutaplasmidItemNotFetchedForDogma(String contractType) {
-		var mutaplasmidTypeId = 47820;
+		var mutaplasmidTypeId = 85438;
 		var item = abyssalItem(1450001, 1450001, mutaplasmidTypeId);
 		var contract = contract(1450).put("type", contractType);
 		// Mutaplasmid type appears in meta group 15 but also in group 1964 — must be excluded
