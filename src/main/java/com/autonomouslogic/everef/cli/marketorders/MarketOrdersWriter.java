@@ -61,7 +61,12 @@ public class MarketOrdersWriter {
 	private Ordering<Long> ordering(String field) {
 		return Ordering.natural().nullsLast().onResultOf(id -> {
 			var node = marketOrdersStore.get(id);
-			return node.has(field) ? node.get(field).asLong() : null;
+			try {
+				return node.has(field) ? node.get(field).asLong() : null;
+			} catch (Exception e) {
+				throw new IllegalStateException(
+						String.format("Failed ordering by field '%s' on order %s: %s", field, id, node), e);
+			}
 		});
 	}
 }
