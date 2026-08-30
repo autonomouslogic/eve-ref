@@ -38,7 +38,6 @@ public class ContractsFileBuilder {
 	public static final String ITEMS_CSV = "contract_items.csv";
 	public static final String BIDS_CSV = "contract_bids.csv";
 	public static final String DYNAMIC_ITEMS_CSV = "contract_dynamic_items.csv";
-	public static final String NON_DYNAMIC_ITEMS_CSV = "contract_non_dynamic_items.csv";
 	public static final String DOGMA_ATTRIBUTES_CSV = "contract_dynamic_items_dogma_attributes.csv";
 	public static final String DOGMA_EFFECTS_CSV = "contract_dynamic_items_dogma_effects.csv";
 
@@ -49,8 +48,6 @@ public class ContractsFileBuilder {
 	public static final Function<JsonNode, Long> BID_ID =
 			node -> node.get("bid_id").asLong();
 	public static final Function<JsonNode, Long> DYNAMIC_ITEM_ID =
-			node -> node.get("item_id").asLong();
-	public static final Function<JsonNode, Long> NON_DYNAMIC_ITEM_ID =
 			node -> node.get("item_id").asLong();
 	public static final Function<JsonNode, String> DOGMA_ATTRIBUTE_ID =
 			node -> FormatUtil.toHexString(node.get("item_id").asLong()) + "-"
@@ -88,10 +85,6 @@ public class ContractsFileBuilder {
 
 	@Setter
 	@NonNull
-	private Map<Long, JsonNode> nonDynamicItemsStore;
-
-	@Setter
-	@NonNull
 	private Map<String, JsonNode> dogmaEffectsStore;
 
 	@Setter
@@ -122,7 +115,6 @@ public class ContractsFileBuilder {
 		writeItems(itemsStore.values());
 		writeBids(bidsStore.values());
 		writeDynamicItems(dynamicItemsStore.values());
-		writeNonDynamicItems(nonDynamicItemsStore.values());
 		writeDogmaAttributes(dogmaAttributesStore.values());
 		writeDogmaEffects(dogmaEffectsStore.values());
 		close();
@@ -167,12 +159,6 @@ public class ContractsFileBuilder {
 	private void writeDynamicItems(Collection<JsonNode> dynamicItems) {
 		log.debug(String.format("Writing %s dynamicItems", dynamicItems.size()));
 		writeEntries(dynamicItems, DYNAMIC_ITEMS_CSV);
-	}
-
-	@SneakyThrows
-	private void writeNonDynamicItems(Collection<JsonNode> nonDynamicItems) {
-		log.debug(String.format("Writing %s nonDynamicItems", nonDynamicItems.size()));
-		writeEntries(nonDynamicItems, NON_DYNAMIC_ITEMS_CSV);
 	}
 
 	@SneakyThrows

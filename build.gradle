@@ -364,6 +364,11 @@ task scrapePublicContracts(type: JavaExec) {
 	environment envProperties
 	classpath = sourceSets.main.runtimeClasspath
 	mainClass = mainClassName
+
+	// https://github.com/async-profiler/async-profiler/blob/master/docs/GettingStarted.md
+//	jvmArgs "-XX:+UnlockDiagnosticVMOptions",
+//			"-XX:+DebugNonSafepoints",
+//			"-agentpath:/tmp/async-profiler-4.5-linux-x64/lib/libasyncProfiler.so=start,event=cpu,file=profile.html"
 }
 
 task buildRefData(type: JavaExec) {
@@ -637,6 +642,15 @@ task scrapeMilitaryCampaigns(type: JavaExec) {
 task scrapeMarketsPrices(type: JavaExec) {
 	group "application"
 	args "scrape-markets-prices"
+	environment envProperties
+
+	classpath = sourceSets.main.runtimeClasspath
+	mainClass = mainClassName
+}
+
+task scrapeSkinr(type: JavaExec) {
+	group "application"
+	args "scrape-skinr"
 	environment envProperties
 
 	classpath = sourceSets.main.runtimeClasspath

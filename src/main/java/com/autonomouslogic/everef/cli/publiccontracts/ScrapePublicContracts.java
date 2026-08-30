@@ -73,7 +73,6 @@ public class ScrapePublicContracts implements Command {
 	private Map<Long, JsonNode> itemsStore;
 	private Map<Long, JsonNode> bidsStore;
 	private Map<Long, JsonNode> dynamicItemsStore;
-	private Map<Long, JsonNode> nonDynamicItemsStore;
 	private Map<String, JsonNode> dogmaAttributesStore;
 	private Map<String, JsonNode> dogmaEffectsStore;
 
@@ -118,7 +117,6 @@ public class ScrapePublicContracts implements Command {
 		itemsStore = mvStoreUtil.openJsonMap(mvStore, "items", Long.class);
 		bidsStore = mvStoreUtil.openJsonMap(mvStore, "bids", Long.class);
 		dynamicItemsStore = mvStoreUtil.openJsonMap(mvStore, "dynamic_items", Long.class);
-		nonDynamicItemsStore = mvStoreUtil.openJsonMap(mvStore, "non_dynamic_items", Long.class);
 		dogmaAttributesStore = mvStoreUtil.openJsonMap(mvStore, "dogma_attributes", String.class);
 		dogmaEffectsStore = mvStoreUtil.openJsonMap(mvStore, "dogma_effects", String.class);
 		log.debug("MVStore initialised");
@@ -150,7 +148,6 @@ public class ScrapePublicContracts implements Command {
 					.setItemsStore(itemsStore)
 					.setBidsStore(bidsStore)
 					.setDynamicItemsStore(dynamicItemsStore)
-					.setNonDynamicItemsStore(nonDynamicItemsStore)
 					.setDogmaAttributesStore(dogmaAttributesStore)
 					.setDogmaEffectsStore(dogmaEffectsStore)
 					.downloadAndLoad();
@@ -178,7 +175,6 @@ public class ScrapePublicContracts implements Command {
 		var abyssalFetcher = contractFetcher.getContractAbyssalFetcher();
 		abyssalFetcher
 				.setDynamicItemsStore(dynamicItemsStore)
-				.setNonDynamicItemsStore(nonDynamicItemsStore)
 				.setDogmaAttributesStore(dogmaAttributesStore)
 				.setDogmaEffectsStore(dogmaEffectsStore);
 
@@ -204,7 +200,6 @@ public class ScrapePublicContracts implements Command {
 		deleteContractSub("items", itemsStore);
 		deleteContractSub("bids", bidsStore);
 		deleteContractSub("dynamic items", dynamicItemsStore);
-		deleteContractSub("non dynamic items", nonDynamicItemsStore);
 		deleteContractSub("dogma attributes", dogmaAttributesStore);
 		deleteContractSub("dogma effects", dogmaEffectsStore);
 	}
@@ -230,7 +225,6 @@ public class ScrapePublicContracts implements Command {
 				.setItemsStore(itemsStore)
 				.setBidsStore(bidsStore)
 				.setDynamicItemsStore(dynamicItemsStore)
-				.setNonDynamicItemsStore(nonDynamicItemsStore)
 				.setDogmaAttributesStore(dogmaAttributesStore)
 				.setDogmaEffectsStore(dogmaEffectsStore)
 				.buildFile();
