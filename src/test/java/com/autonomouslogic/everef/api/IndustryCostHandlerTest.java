@@ -480,6 +480,20 @@ public class IndustryCostHandlerTest {
 		assertTrue(res.body().contains("manufacturing_cost_index"), res.body());
 	}
 
+	@Test
+	@SneakyThrows
+	void shouldReturn400ForInvalidEnumValue() {
+		setupBasicPrices();
+		var uri = URI.create("http://localhost:" + API_TEST_PORT + "/v1/industry/cost?product_id=645&security=highsec");
+		var req = HttpRequest.newBuilder().GET().uri(uri).build();
+		var res = httpClient.send(req, HttpResponse.BodyHandlers.ofString());
+		assertEquals(400, res.statusCode());
+		assertTrue(res.body().contains("Cannot deserialize"), res.body());
+		assertTrue(res.body().contains("SystemSecurity"), res.body());
+		assertTrue(res.body().contains("highsec"), res.body());
+		assertTrue(res.body().contains("HIGH_SEC"), res.body());
+	}
+
 	// ===========
 
 	@SneakyThrows
