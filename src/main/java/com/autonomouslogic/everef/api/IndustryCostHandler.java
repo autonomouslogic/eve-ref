@@ -46,6 +46,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import tools.jackson.databind.DatabindException;
 import tools.jackson.databind.DeserializationFeature;
 import tools.jackson.databind.json.JsonMapper;
 
@@ -155,7 +156,7 @@ public class IndustryCostHandler implements HttpService, Handler {
 		}
 		try {
 			return queryStringMapper.convertValue(input, IndustryCostInput.class);
-		} catch (IllegalArgumentException e) {
+		} catch (IllegalArgumentException | DatabindException e) {
 			throw new ClientException(ExceptionUtils.getMessage(e));
 		}
 	}
