@@ -467,6 +467,19 @@ public class IndustryCostHandlerTest {
 		assertEquals(Set.of("999"), cost.getCopying().keySet());
 	}
 
+	@Test
+	@SneakyThrows
+	void shouldReturn400ForUnknownQueryParameters() {
+		setupBasicPrices();
+		var uri = URI.create(
+				"http://localhost:" + API_TEST_PORT + "/v1/industry/cost?product_id=645&manufacturing_cost_index=0.05");
+		var req = HttpRequest.newBuilder().GET().uri(uri).build();
+		var res = httpClient.send(req, HttpResponse.BodyHandlers.ofString());
+		assertEquals(400, res.statusCode());
+		assertTrue(res.body().contains("Unrecognized property"), res.body());
+		assertTrue(res.body().contains("manufacturing_cost_index"), res.body());
+	}
+
 	// ===========
 
 	@SneakyThrows
