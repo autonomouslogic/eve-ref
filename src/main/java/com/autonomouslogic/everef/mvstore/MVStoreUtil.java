@@ -44,7 +44,6 @@ public class MVStoreUtil {
 				.compress()
 				.autoCompactFillRate(50);
 		var store = builder.open();
-		store.setVersionsToKeep(0);
 		return store;
 	}
 
