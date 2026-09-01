@@ -1,5 +1,17 @@
 EVE Ref Changelog
 
+## [2.80.2](https://github.com/autonomouslogic/eve-ref/compare/2.80.1...2.80.2) (2026-09-01)
+
+
+### Bug Fixes
+
+* **api:** HTTP 400 Bad Request on unknown api query string fields ([#1093](https://github.com/autonomouslogic/eve-ref/issues/1093)) ([75dddb7](https://github.com/autonomouslogic/eve-ref/commit/75dddb79d907b77a5a4152b0d1032ce7d44d0dbb))
+
+
+### Tests
+
+* Test for 400 Bad Request response on invalid enum values ([#1094](https://github.com/autonomouslogic/eve-ref/issues/1094)) ([03115b7](https://github.com/autonomouslogic/eve-ref/commit/03115b71cbb7f0f1800073d12a1355a7979aa5ea))
+
 ## [2.80.1](https://github.com/autonomouslogic/eve-ref/compare/2.80.0...2.80.1) (2026-08-30)
 
 
