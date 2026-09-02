@@ -1,5 +1,12 @@
 EVE Ref Changelog
 
+## [2.80.3](https://github.com/autonomouslogic/eve-ref/compare/2.80.2...2.80.3) (2026-09-02)
+
+
+### Bug Fixes
+
+* Revert MVStore to default settings ([#1096](https://github.com/autonomouslogic/eve-ref/issues/1096)) ([8f62896](https://github.com/autonomouslogic/eve-ref/commit/8f628967900212b6dba88a0a5670b3e9ffb43b4b))
+
 ## [2.80.2](https://github.com/autonomouslogic/eve-ref/compare/2.80.1...2.80.2) (2026-09-01)
 
 
