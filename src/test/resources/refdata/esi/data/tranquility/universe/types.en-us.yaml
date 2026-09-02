@@ -5026,3 +5026,164 @@
   radius: 1
   type_id: 90041
   volume: 40
+"37316":
+  capacity: 0
+  description: ""
+  dogma_attributes:
+  - attribute_id: 161
+    value: 0.01
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 4
+    value: 0
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 422
+    value: 2
+  group_id: 1708
+  mass: 0
+  name: "Medium Tech I Large Ship Manufacturing II Blueprint"
+  packaged_volume: 0.01
+  portion_size: 1
+  published: false
+  radius: 1
+  type_id: 37316
+  volume: 0.01
+"37318":
+  capacity: 0
+  description: ""
+  dogma_attributes:
+  - attribute_id: 161
+    value: 0.01
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 4
+    value: 0
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 422
+    value: 2
+  group_id: 1708
+  mass: 0
+  name: "Medium Tech II Small Ship Manufacturing II Blueprint"
+  packaged_volume: 0.01
+  portion_size: 1
+  published: false
+  radius: 1
+  type_id: 37318
+  volume: 0.01
+"37325":
+  capacity: 0
+  description: ""
+  group_id: 1709
+  mass: 0
+  name: "Medium Consumable Manufacturing I Blueprint"
+  packaged_volume: 0.01
+  portion_size: 1
+  published: false
+  radius: 1
+  type_id: 37325
+  volume: 0.01
+"37326":
+  capacity: 0
+  description: ""
+  dogma_attributes:
+  - attribute_id: 161
+    value: 0.01
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 4
+    value: 0
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 422
+    value: 2
+  group_id: 1709
+  icon_id: 21729
+  mass: 0
+  name: "Medium Consumable Manufacturing II Blueprint"
+  packaged_volume: 0.01
+  portion_size: 1
+  published: false
+  radius: 1
+  type_id: 37326
+  volume: 0.01
+"37161":
+  capacity: 0
+  description: "The Standup M-Set Equipment Manufacturing Time Efficiency II rig provides\
+    \ a means for structure operators to decrease time requirements manufacturing\
+    \ ship modules, ship rigs, personal deployables, implants and cargo containers\
+    \ in their Upwell structures.\n\nStandup is a proprietary system that uses a Structure\
+    \ Autonomous Nanoassembly Device (Upwell) containing integrated template software,\
+    \ a nanoassembler array and sufficient nanomass to enable the construction of\
+    \ a variety of service modules, structure modules and structure rigs when inserted\
+    \ into the appropriate slots on a structure built with Upwell technology.\n\n\
+    Note: Only one rig of the same type, counting both tech variations, may be fitted\
+    \ at the same time on a structure."
+  dogma_attributes:
+  - attribute_id: 1153
+    value: 150
+  - attribute_id: 4
+    value: 200
+  - attribute_id: 1544
+    value: 1
+  - attribute_id: 9
+    value: 40
+  - attribute_id: 1547
+    value: 2
+  - attribute_id: 1298
+    value: 1657
+  - attribute_id: 1299
+    value: 1404
+  - attribute_id: 1300
+    value: 1406
+  - attribute_id: 277
+    value: 1
+  - attribute_id: 2334
+    value: 1
+  - attribute_id: 2593
+    value: -24
+  - attribute_id: 2594
+    value: 0
+  - attribute_id: 2595
+    value: 0
+  - attribute_id: 422
+    value: 2
+  - attribute_id: 2095
+    value: 40
+  - attribute_id: 2096
+    value: 4
+  - attribute_id: 2355
+    value: 1
+  - attribute_id: 2356
+    value: 1.9
+  - attribute_id: 2357
+    value: 2.1
+  - attribute_id: 2358
+    value: 1
+  - attribute_id: 182
+    value: 26252
+  - attribute_id: 161
+    value: 10
+  - attribute_id: 162
+    value: 100
+  - attribute_id: 38
+    value: 0
+  dogma_effects:
+  - effect_id: 2663
+    is_default: true
+  - effect_id: 6806
+    is_default: false
+  - effect_id: 6842
+    is_default: false
+  group_id: 1819
+  icon_id: 21729
+  market_group_id: 2347
+  mass: 200
+  name: "Standup M-Set Equipment Manufacturing Time Efficiency II"
+  packaged_volume: 10
+  portion_size: 1
+  published: true
+  radius: 100
+  type_id: 37161
+  volume: 10

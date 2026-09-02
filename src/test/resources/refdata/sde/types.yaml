@@ -5405,3 +5405,169 @@
   published: true
   raceID: 4
   volume: 40.0
+"37316":
+  basePrice: 100000000.0
+  groupID: 1708
+  metaGroupID: 2
+  name:
+    de: "Medium Tech I Large Ship Manufacturing II Blueprint"
+    en: "Medium Tech I Large Ship Manufacturing II Blueprint"
+    es: "Plano de fabricación mediana de naves grandes T1\_II"
+    fr: "Plan de construction Module de fabrication intermédiaire de vaisseaux II"
+    ja: "中型Tech 1大型艦船製造2のブループリント"
+    ko: "중형 테크 I 대형 함선 제작 리그 II 블루프린트"
+    ru: "Medium Tech I Large Ship Manufacturing II Blueprint"
+    zh: "中型一级科技大型舰船制造蓝图 II"
+  packagedVolume: 0.01
+  portionSize: 1
+  published: false
+  techLevel: 2
+  volume: 0.01
+"37318":
+  basePrice: 100000000.0
+  groupID: 1708
+  metaGroupID: 2
+  name:
+    de: "Medium Tech II Small Ship Manufacturing II Blueprint"
+    en: "Medium Tech II Small Ship Manufacturing II Blueprint"
+    es: "Plano de fabricación mediana de naves pequeñas T2\_II"
+    fr: "Plan de construction Module de fabrication intermédiaire de petits vaisseaux\
+      \ de Tech II - II"
+    ja: "中型Tech 2小型艦船製造2のブループリント"
+    ko: "중형 테크 II 소형 함선 제작 리그 II 블루프린트"
+    ru: "Medium Tech II Small Ship Manufacturing II Blueprint"
+    zh: "中型二级科技小型舰船制造蓝图 II"
+  packagedVolume: 0.01
+  portionSize: 1
+  published: false
+  techLevel: 2
+  volume: 0.01
+"37325":
+  basePrice: 100000000.0
+  groupID: 1709
+  name:
+    de: "Medium Consumable Manufacturing I Blueprint"
+    en: "Medium Consumable Manufacturing I Blueprint"
+    es: "Plano de fabricación de consumibles mediana\_I"
+    fr: "Plan de construction Module intermédiaire de fabrication de produits de consommation\
+      \ I"
+    ja: "中型消耗品製造1のブループリント"
+    ko: "중형 소모품 생산 I 블루프린트"
+    ru: "Medium Consumable Manufacturing I Blueprint"
+    zh: "中型消费品制造蓝图 I"
+  packagedVolume: 0.01
+  portionSize: 1
+  published: false
+  volume: 0.01
+"37326":
+  basePrice: 100000000.0
+  groupID: 1709
+  iconID: 21729
+  metaGroupID: 53
+  name:
+    de: "Medium Consumable Manufacturing II Blueprint"
+    en: "Medium Consumable Manufacturing II Blueprint"
+    es: "Plano de fabricación de consumibles mediana\_II"
+    fr: "Plan de construction Module intermédiaire de fabrication de produits de consommation\_\
+      II"
+    ja: "中型消耗品製造2のブループリント"
+    ko: "중형 소모품 생산 II 블루프린트"
+    ru: "Medium Consumable Manufacturing II Blueprint"
+    zh: "中型消费品制造蓝图 II"
+  packagedVolume: 0.01
+  portionSize: 1
+  published: false
+  techLevel: 2
+  volume: 0.01
+"37161":
+  description:
+    de: "Die Standup-M-Set-Modifikation Zeiteffizienz für die Herstellung von Ausrü\
+      stung II bietet Strukturadministratoren die Möglichkeit, in ihren Upwell-Strukturen\
+      \ die Zeitanforderungen für die Herstellung von Schiffsmodulen und -modifikationen,\
+      \ persönlichen Strukturen, Implantaten und Frachtcontainern zu verringern.\n\
+      \nStandup ist ein gesetzlich geschütztes System, welches eine Strukturautonome\
+      \ Nanofertigungseinheit (Upwell) nutzt, das eine integrierte Vorlagensoftware,\
+      \ eine Nanofertigungsanlage und ausreichend Nanomasse enthält, um die Fertigung\
+      \ einer Vielzahl an Dienstmodulen, Strukturmodulen und Strukturmodifikationen\
+      \ zu ermöglichen, wenn es in entsprechende Slots in einer Struktur mit Upwell-Technologie\
+      \ eingebaut wird.\n\nHinweis: Nur eine Modifikation desselben Typs, inkl. beider\
+      \ Tech-Varianten, kann in eine Struktur eingebaut sein."
+    en: "The Standup M-Set Equipment Manufacturing Time Efficiency II rig provides\
+      \ a means for structure operators to decrease time requirements manufacturing\
+      \ ship modules, ship rigs, personal deployables, implants and cargo containers\
+      \ in their Upwell structures.\n\nStandup is a proprietary system that uses a\
+      \ Structure Autonomous Nanoassembly Device (Upwell) containing integrated template\
+      \ software, a nanoassembler array and sufficient nanomass to enable the construction\
+      \ of a variety of service modules, structure modules and structure rigs when\
+      \ inserted into the appropriate slots on a structure built with Upwell technology.\n\
+      \nNote: Only one rig of the same type, counting both tech variations, may be\
+      \ fitted at the same time on a structure."
+    es: "El complemento Standup mediano de eficiencia temporal en la fabricación de\
+      \ equipo\_II permite a los administradores de estructuras reducir el tiempo\
+      \ requerido para fabricar módulos y complementos para naves, desplegables personales,\
+      \ implantes y contenedores de carga en sus estructuras de Upwell.\n\nStandup\
+      \ es un sistema patentado que utiliza un dispositivo de nanoensamblaje autó\
+      nomo estructural (de Upwell) que contiene una plantilla integrada de software,\
+      \ una matriz de nanoensambladores y suficiente nanomasa como para construir\
+      \ una serie de módulos de servicio, de estructura y complementos de estructura\
+      \ cuando se insertan en las ranuras apropiadas en una estructura construida\
+      \ con la tecnología de Upwell.\n\nAviso: Solo se puede equipar un complemento\
+      \ del mismo tipo en una estructura, contando ambas variaciones tecnológicas."
+    fr: "L'optimisation de productivité horaire de la production d'équipements 'Standup'\
+      \ II M permet aux opérateurs de structure d'améliorer la productivité horaire\
+      \ des lignes de production de modules de vaisseau, d'optimisations de vaisseau,\
+      \ d'unités mobiles privées, d'implants et de conteneurs de fret. La technologie\
+      \ brevetée 'Standup' exploite un dispositif autonome de nano-assemblage pour\
+      \ structure Upwell, alliant un logiciel de modélisation intégré, une baie de\
+      \ nano-assemblage et une réserve de nanomasse. Une fois insérés dans les emplacements\
+      \ dédiés sur les structures Upwell, les dispositifs 'Standup' lancent directement\
+      \ l'assemblage moléculaire de divers modules de services, modules de structure\
+      \ et optimisations de structure. Remarque : une structure ne peut équiper qu'une\
+      \ seule optimisation du même type, déclinaisons de tech comprises."
+    ja: "スタンドアップ中型装備製造時間効率IIリグにより、ストラクチャオペレーターは、アップウェルストラクチャリグでの艦船モジュール、艦船リグ、個人用展開\
+      装置、インプラント、カーゴコンテナの製造に必要な時間の要件を削減する手段を提供する。\n\n「スタンドアップ」は、自律式ナノ集合体ストラクチャデバイス（\
+      アップウェル）を利用した独自システムである。アップウェルの技術を利用して建設されたストラクチャの適切なスロットに挿入すると、統合テンプレートソフトウェア\
+      、ナノアセンブラー施設、ナノ物質を使い、様々なサービスモジュール、ストラクチャモジュール、ストラクチャリグを作り出すことができる。\n\n注：異なる技術\
+      であっても、1つのストラクチャに同じタイプのリグを同時に複数装備させることはできない。"
+    ko: "스탠드업 리그를 장착하면 업웰 구조물에서 제작되는 함선 모듈, 함선 리그, 개인용 전개 장치, 임플란트, 화물 컨테이너의 제조 시간\
+      이 감소합니다. <br><br>스탠드업은 자율구조형 나노어셈블러 장치(업웰)를 사용하는 시스템으로 템플릿 소프트웨어가 내장되어 있으며 나\
+      노어셈블리 배열, 충분한 양의 나노물질이 탑재돼있습니다. 업웰 기반 구조물에 장착 시 다양한 종류의 서비스 모듈, 구조물 모듈, 구조물\
+      \ 장착형 리그를 제조할 수 있습니다. 참고: 테크 레벨과 상관없이 동일한 종류의 리그는 한 개 이상 장착할 수 없습니다."
+    ru: "Эта средняя стационар-надстройка второго техноуровня (Standup M-Set Equipment\
+      \ Manufacturing Time Efficiency II) позволяет снизить расход времени на прои\
+      зводство корабельных модулей и надстроек, имплантов, грузовых контейнеров и\
+      \ полевых блоков, если сооружение, где ведётся соответствующий проект, разра\
+      ботано консорциумом «Апвелл» и оснащено этим модулем.\n\nСТАЦИОНАР — это про\
+      приетарная система, использующая стационарный автономный наносборщик произво\
+      дства «Апвелл», который и лёг в основу её названия. Он содержит встроенное П\
+      О для создания шаблонов, линию наносборщиков и достаточное количество нанома\
+      ссы для сборки различных модулей технического обслуживания, а также модулей\
+      \ и надстроек для сооружений, сконструированных по проектам консорциума «Апв\
+      елл», которые устанавливаются в соответствующие разъёмы.\n\nВнимание: одновр\
+      еменно сооружение можно оснастить только одним модификатором этого типа, нез\
+      ависимо от вариаций техкатегории."
+    zh: "屹立中型设备制造时间效率 II 改装件让建筑操作员能够降低在昇威建筑中制造舰船装备、舰船改装件、个人可部署装置、植入体和货柜的时间要求。\n\n屹\
+      立专用系统采用了昇威建筑分控纳米装配装置，由集成模版软件、纳米装配阵列和许多纳米块体构成。安装在采用昇威科技建造的建筑上的专门槽位中可以制造各种服务装备\
+      、建筑装备和建筑改装件。\n\n注：只能同时在一个建筑上装配一件相同类型的改装件，包括衍生型号在内。"
+  groupID: 1819
+  iconID: 21729
+  isRepackable: true
+  marketGroupID: 2347
+  mass: 200.0
+  metaGroupID: 53
+  name:
+    de: "Standup M-Set Equipment Manufacturing Time Efficiency II"
+    en: "Standup M-Set Equipment Manufacturing Time Efficiency II"
+    es: "Eficiencia temporal en la fabricación de equipo Standup\_II (M)"
+    fr: "Productivité horaire de la production d'équipements 'Standup' II M"
+    ja: "スタンドアップ中型機材製造時間効率II"
+    ko: "스탠드업 M-Set 장비 제조 시간효율성 장치 II"
+    ru: "Standup M-Set Equipment Manufacturing Time Efficiency II"
+    zh: "屹立中型设备制造时间效率 II"
+  packagedVolume: 10.0
+  portionSize: 1
+  published: true
+  radius: 100.0
+  techLevel: 2
+  variationParentTypeID: 37160
+  volume: 10.0

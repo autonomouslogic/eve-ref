@@ -1,0 +1,41 @@
+{
+  "capacity" : 0,
+  "description" : {
+    "en" : "",
+    "fr" : ""
+  },
+  "dogma_attributes" : {
+    "161" : {
+      "attribute_id" : 161,
+      "value" : 0.01
+    },
+    "162" : {
+      "attribute_id" : 162,
+      "value" : 1
+    },
+    "4" : {
+      "attribute_id" : 4,
+      "value" : 0
+    },
+    "38" : {
+      "attribute_id" : 38,
+      "value" : 0
+    },
+    "422" : {
+      "attribute_id" : 422,
+      "value" : 2
+    }
+  },
+  "group_id" : 1708,
+  "mass" : 0,
+  "name" : {
+    "en" : "Medium Tech II Small Ship Manufacturing II Blueprint",
+    "fr" : "Plan de construction Module de fabrication intermédiaire de petits vaisseaux de Tech II - II"
+  },
+  "packaged_volume" : 0.01,
+  "portion_size" : 1,
+  "published" : false,
+  "radius" : 1,
+  "type_id" : 37318,
+  "volume" : 0.01
+}

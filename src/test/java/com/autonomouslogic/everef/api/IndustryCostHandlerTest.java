@@ -31,6 +31,9 @@ import com.autonomouslogic.everef.test.TestDataUtil;
 import com.autonomouslogic.everef.util.MockScrapeBuilder;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.CaseFormat;
+import io.sentry.Hint;
+import io.sentry.Sentry;
+import io.sentry.SentryEvent;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -47,6 +50,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Stream;
 import javax.inject.Inject;
 import lombok.SneakyThrows;
@@ -58,6 +62,7 @@ import okhttp3.mockwebserver.RecordedRequest;
 import okio.Buffer;
 import org.apache.commons.io.IOUtils;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -128,11 +133,21 @@ public class IndustryCostHandlerTest {
 	String esiMarketPrices;
 	HttpClient httpClient;
 	String fuzzworkPrices;
+	AtomicReference<SentryEvent> sentryEvent;
 
 	@BeforeEach
 	@SneakyThrows
 	void setup() {
 		DaggerTestComponent.builder().build().inject(this);
+
+		sentryEvent = new AtomicReference<>();
+		Sentry.init(options -> {
+			options.setDsn("https://abc@abc.ingest.us.sentry.io/123");
+			options.setBeforeSend((@Nullable SentryEvent event, @NotNull Hint hint) -> {
+				sentryEvent.set(event);
+				return null;
+			});
+		});
 
 		refDataFile = mockScrapeBuilder.createTestRefdata();
 
@@ -492,6 +507,46 @@ public class IndustryCostHandlerTest {
 		assertTrue(res.body().contains("SystemSecurity"), res.body());
 		assertTrue(res.body().contains("highsec"), res.body());
 		assertTrue(res.body().contains("HIGH_SEC"), res.body());
+	}
+
+	@Test
+	@SneakyThrows
+	void shouldSkipManufacturingWhenBlueprintHasNoManufacturingProduct() {
+		setupBasicPrices();
+		// https://ref-data.everef.net/blueprints/37325
+		var input = IndustryCostInput.builder().blueprintId(37325L).build();
+		var cost = industryApi.industryCost(input);
+		assertEquals(Map.of(), cost.getManufacturing());
+		assertNotEquals(Map.of(), cost.getInvention()); // BP has invention and that T2 BP has product
+		assertNotEquals(Map.of(), cost.getCopying());
+		assertNull(sentryEvent.get());
+	}
+
+	@Test
+	@SneakyThrows
+	void shouldSkipInventionWhenT2BlueprintHasNoManufacturingProduct() {
+		setupBasicPrices();
+		// https://ref-data.everef.net/blueprints/37315
+		// https://ref-data.everef.net/blueprints/37316
+		var input = IndustryCostInput.builder().blueprintId(37315L).build();
+		var cost = industryApi.industryCost(input);
+		assertEquals(Map.of(), cost.getInvention());
+		assertNotEquals(Map.of(), cost.getCopying());
+		assertNull(sentryEvent.get());
+	}
+
+	@Test
+	@SneakyThrows
+	void shouldSkipMostThingsWhenBlueprintIsBasicallyEmpty() {
+		setupBasicPrices();
+		// https://ref-data.everef.net/blueprints/33084
+		var input = IndustryCostInput.builder().blueprintId(33084L).build();
+		var cost = industryApi.industryCost(input);
+		assertEquals(Map.of(), cost.getManufacturing());
+		assertEquals(Map.of(), cost.getReaction());
+		assertEquals(Map.of(), cost.getInvention());
+		assertEquals(Map.of(), cost.getCopying());
+		assertNull(sentryEvent.get());
 	}
 
 	// ===========

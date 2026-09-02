@@ -1,0 +1,15 @@
+{
+  "activities" : {
+    "research_material" : {
+      "time" : 2100
+    },
+    "research_time" : {
+      "time" : 2100
+    },
+    "copying" : {
+      "time" : 4800
+    }
+  },
+  "blueprint_type_id" : 33084,
+  "max_production_limit" : 30
+}

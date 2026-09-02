@@ -1,0 +1,57 @@
+{
+  "capacity" : 0,
+  "description" : {
+    "en" : "",
+    "fr" : ""
+  },
+  "dogma_attributes" : {
+    "161" : {
+      "attribute_id" : 161,
+      "value" : 0.01
+    },
+    "162" : {
+      "attribute_id" : 162,
+      "value" : 1
+    },
+    "4" : {
+      "attribute_id" : 4,
+      "value" : 0
+    },
+    "38" : {
+      "attribute_id" : 38,
+      "value" : 0
+    },
+    "422" : {
+      "attribute_id" : 422,
+      "value" : 2
+    }
+  },
+  "group_id" : 1708,
+  "mass" : 0,
+  "name" : {
+    "en" : "Medium Tech I Large Ship Manufacturing II Blueprint",
+    "fr" : "Plan de construction Module de fabrication intermédiaire de vaisseaux II",
+    "de" : "Medium Tech I Large Ship Manufacturing II Blueprint",
+    "es" : "Plano de fabricación mediana de naves grandes T1 II",
+    "ja" : "中型Tech 1大型艦船製造2のブループリント",
+    "ko" : "중형 테크 I 대형 함선 제작 리그 II 블루프린트",
+    "ru" : "Medium Tech I Large Ship Manufacturing II Blueprint",
+    "zh" : "中型一级科技大型舰船制造蓝图 II"
+  },
+  "packaged_volume" : 0.01,
+  "portion_size" : 1,
+  "published" : false,
+  "radius" : 1,
+  "type_id" : 37316,
+  "volume" : 0.01,
+  "base_price" : 100000000.0,
+  "meta_group_id" : 2,
+  "tech_level" : 2,
+  "produced_by_blueprints" : {
+    "37315" : {
+      "blueprint_type_id" : 37315,
+      "blueprint_activity" : "invention"
+    }
+  },
+  "is_blueprint" : true
+}

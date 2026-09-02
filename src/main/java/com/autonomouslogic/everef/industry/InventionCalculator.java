@@ -1,6 +1,5 @@
 package com.autonomouslogic.everef.industry;
 
-import com.autonomouslogic.everef.api.ClientException;
 import com.autonomouslogic.everef.data.LoadedRefData;
 import com.autonomouslogic.everef.model.IndustryDecryptor;
 import com.autonomouslogic.everef.model.IndustryRig;
@@ -91,6 +90,9 @@ public class InventionCalculator {
 		var te =
 				decryptorOpt.map(d -> industryDecryptors.getBlueprintTe(d)).orElse(IndustryConstants.INVENTION_BASE_TE);
 		var manufacturing = inventionBlueprintProductActivity(productType);
+		if (manufacturing.getProducts() == null || manufacturing.getProducts().isEmpty()) {
+			return null;
+		}
 		var time = inventionTime(invention);
 		var eiv = industryMath.eiv(manufacturing, runs);
 		var jcb = industryMath.jobCostBase(eiv);
@@ -103,8 +105,7 @@ public class InventionCalculator {
 				+ decryptorOpt.map(IndustryDecryptor::getRunModifier).orElse(0);
 		var unitsPerRun = manufacturing.getProducts().values().stream()
 				.findFirst()
-				.orElseThrow(() -> new ClientException(
-						String.format("Blueprint %d has no product", blueprint.getBlueprintTypeId())))
+				.orElseThrow()
 				.getQuantity()
 				.intValue();
 		var productVolume = industryMath.typeVolume(productType, runs);
