@@ -20,6 +20,7 @@ import jakarta.inject.Inject;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
+import java.util.Optional;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import lombok.SneakyThrows;
@@ -78,13 +79,16 @@ public class SearchHandler implements HttpService, Handler {
 		log.info(
 				"Received request: {}",
 				URLEncoder.encode(req.requestedUri().toUri().toString(), StandardCharsets.UTF_8));
-		var q = req.query().getAllRaw("q");
-		if (q == null || q.size() != 1) {
+		var q = Optional.ofNullable(req.query())
+				.filter(v -> !v.isEmpty())
+				.map(v -> v.getAllRaw("q"))
+				.filter(v -> !v.isEmpty());
+		if (q.isEmpty() || q.get().size() != 1) {
 			throw new ClientException("Exactly one q parameter expected");
 		}
 		SearchResult result;
 		try {
-			result = search(q.getFirst());
+			result = search(q.get().getFirst());
 		} catch (IllegalArgumentException e) {
 			throw new ClientException(e.getMessage());
 		}
