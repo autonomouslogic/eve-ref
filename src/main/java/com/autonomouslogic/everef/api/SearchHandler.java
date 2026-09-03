@@ -78,10 +78,13 @@ public class SearchHandler implements HttpService, Handler {
 		log.info(
 				"Received request: {}",
 				URLEncoder.encode(req.requestedUri().toUri().toString(), StandardCharsets.UTF_8));
-		var q = req.query().first("q").orElse("");
+		var q = req.query().getAllRaw("q");
+		if (q == null || q.size() != 1) {
+			throw new ClientException("Exactly one q parameter expected");
+		}
 		SearchResult result;
 		try {
-			result = search(q);
+			result = search(q.getFirst());
 		} catch (IllegalArgumentException e) {
 			throw new ClientException(e.getMessage());
 		}
