@@ -1,5 +1,18 @@
 EVE Ref Changelog
 
+## [2.80.4](https://github.com/autonomouslogic/eve-ref/compare/2.80.3...2.80.4) (2026-09-03)
+
+
+### Bug Fixes
+
+* **api:** Handle blueprints with missing products and activities ([#1097](https://github.com/autonomouslogic/eve-ref/issues/1097)) ([b5c4921](https://github.com/autonomouslogic/eve-ref/commit/b5c49210df4ac1a294883aee284a8db0226791bc))
+* **api:** Handle industry blueprints where the product type doesn't exist ([#1098](https://github.com/autonomouslogic/eve-ref/issues/1098)) ([ac66302](https://github.com/autonomouslogic/eve-ref/commit/ac6630205f41404c7635f9efcfd8d6646e45370f))
+
+
+### Tests
+
+* Updated test resources ([aa213b8](https://github.com/autonomouslogic/eve-ref/commit/aa213b8cdb16011e92f7260166d849da3d396699))
+
 ## [2.80.3](https://github.com/autonomouslogic/eve-ref/compare/2.80.2...2.80.3) (2026-09-02)
 
 
