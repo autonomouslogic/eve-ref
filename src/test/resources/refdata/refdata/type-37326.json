@@ -1,0 +1,58 @@
+{
+  "capacity" : 0,
+  "description" : {
+    "en" : "",
+    "fr" : ""
+  },
+  "dogma_attributes" : {
+    "161" : {
+      "attribute_id" : 161,
+      "value" : 0.01
+    },
+    "162" : {
+      "attribute_id" : 162,
+      "value" : 1
+    },
+    "4" : {
+      "attribute_id" : 4,
+      "value" : 0
+    },
+    "38" : {
+      "attribute_id" : 38,
+      "value" : 0
+    },
+    "422" : {
+      "attribute_id" : 422,
+      "value" : 2
+    }
+  },
+  "group_id" : 1709,
+  "icon_id" : 21729,
+  "mass" : 0,
+  "name" : {
+    "en" : "Medium Consumable Manufacturing II Blueprint",
+    "fr" : "Plan de construction Module intermédiaire de fabrication de produits de consommation II",
+    "de" : "Medium Consumable Manufacturing II Blueprint",
+    "es" : "Plano de fabricación de consumibles mediana II",
+    "ja" : "中型消耗品製造2のブループリント",
+    "ko" : "중형 소모품 생산 II 블루프린트",
+    "ru" : "Medium Consumable Manufacturing II Blueprint",
+    "zh" : "中型消费品制造蓝图 II"
+  },
+  "packaged_volume" : 0.01,
+  "portion_size" : 1,
+  "published" : false,
+  "radius" : 1,
+  "type_id" : 37326,
+  "volume" : 0.01,
+  "base_price" : 100000000.0,
+  "meta_group_id" : 53,
+  "tech_level" : 2,
+  "produced_by_blueprints" : {
+    "37325" : {
+      "blueprint_type_id" : 37325,
+      "blueprint_activity" : "invention"
+    }
+  },
+  "is_blueprint" : true
+}
