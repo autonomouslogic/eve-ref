@@ -18,6 +18,10 @@ import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.util.MockScrapeBuilder;
 import java.io.File;
 import java.io.FileInputStream;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import javax.inject.Inject;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
@@ -258,21 +262,55 @@ public class SearchHandlerTest {
 	}
 
 	@Test
-	void shouldThrowForNull() {
-		var ex = assertThrows(ApiException.class, () -> searchApi.search(null));
-		assertEquals(400, ex.getCode());
+	@SneakyThrows
+	void shouldReturn400ForMissingQuery() {
+		var response = HttpClient.newHttpClient()
+				.send(
+						HttpRequest.newBuilder()
+								.uri(new URI("http://localhost:" + API_TEST_PORT + "/v1/search"))
+								.GET()
+								.build(),
+						HttpResponse.BodyHandlers.ofString());
+		assertEquals(400, response.statusCode());
 	}
 
 	@Test
-	void shouldThrowForEmpty() {
-		var ex = assertThrows(ApiException.class, () -> searchApi.search(""));
-		assertEquals(400, ex.getCode());
+	@SneakyThrows
+	void shouldReturn400ForEmptyQuery() {
+		var response = HttpClient.newHttpClient()
+				.send(
+						HttpRequest.newBuilder()
+								.uri(new URI("http://localhost:" + API_TEST_PORT + "/v1/search?q="))
+								.GET()
+								.build(),
+						HttpResponse.BodyHandlers.ofString());
+		assertEquals(400, response.statusCode());
 	}
 
 	@Test
-	void shouldThrowForWhitespace() {
-		var ex = assertThrows(ApiException.class, () -> searchApi.search("   "));
-		assertEquals(400, ex.getCode());
+	@SneakyThrows
+	void shouldReturn400ForWhitespaceQuery() {
+		var response = HttpClient.newHttpClient()
+				.send(
+						HttpRequest.newBuilder()
+								.uri(new URI("http://localhost:" + API_TEST_PORT + "/v1/search?q=+++"))
+								.GET()
+								.build(),
+						HttpResponse.BodyHandlers.ofString());
+		assertEquals(400, response.statusCode());
+	}
+
+	@Test
+	@SneakyThrows
+	void shouldReturn400ForMultipleQueryParams() {
+		var response = HttpClient.newHttpClient()
+				.send(
+						HttpRequest.newBuilder()
+								.uri(new URI("http://localhost:" + API_TEST_PORT + "/v1/search?q=Tritanium&q=Pyerite"))
+								.GET()
+								.build(),
+						HttpResponse.BodyHandlers.ofString());
+		assertEquals(400, response.statusCode());
 	}
 
 	@Test

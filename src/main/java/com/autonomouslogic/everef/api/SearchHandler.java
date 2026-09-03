@@ -78,7 +78,7 @@ public class SearchHandler implements HttpService, Handler {
 		log.info(
 				"Received request: {}",
 				URLEncoder.encode(req.requestedUri().toUri().toString(), StandardCharsets.UTF_8));
-		var q = req.query().first("q").orElse(null);
+		var q = req.query().first("q").orElse("");
 		SearchResult result;
 		try {
 			result = search(q);
