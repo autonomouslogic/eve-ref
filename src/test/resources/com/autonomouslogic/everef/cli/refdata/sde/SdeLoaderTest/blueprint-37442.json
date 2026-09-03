@@ -1,0 +1,128 @@
+{
+  "activities" : {
+    "copying" : {
+      "materials" : {
+        "11462" : {
+          "quantity" : 1,
+          "type_id" : 11462
+        },
+        "3812" : {
+          "quantity" : 50,
+          "type_id" : 3812
+        }
+      },
+      "time" : 48000,
+      "required_skills" : {
+        "11443" : 1,
+        "11452" : 1,
+        "3409" : 5
+      }
+    },
+    "manufacturing" : {
+      "materials" : {
+        "11485" : {
+          "quantity" : 1,
+          "type_id" : 11485
+        },
+        "25608" : {
+          "quantity" : 1200,
+          "type_id" : 25608
+        },
+        "25614" : {
+          "quantity" : 1200,
+          "type_id" : 25614
+        },
+        "25625" : {
+          "quantity" : 1200,
+          "type_id" : 25625
+        },
+        "25610" : {
+          "quantity" : 30000,
+          "type_id" : 25610
+        },
+        "25613" : {
+          "quantity" : 30000,
+          "type_id" : 25613
+        },
+        "25621" : {
+          "quantity" : 30000,
+          "type_id" : 25621
+        },
+        "25623" : {
+          "quantity" : 30000,
+          "type_id" : 25623
+        },
+        "25607" : {
+          "quantity" : 225000,
+          "type_id" : 25607
+        },
+        "25615" : {
+          "quantity" : 225000,
+          "type_id" : 25615
+        },
+        "25616" : {
+          "quantity" : 225000,
+          "type_id" : 25616
+        }
+      },
+      "products" : {
+        "37279" : {
+          "quantity" : 1,
+          "type_id" : 37279
+        }
+      },
+      "time" : 60000,
+      "required_skills" : {
+        "11443" : 1,
+        "11452" : 1,
+        "3380" : 5
+      }
+    },
+    "research_material" : {
+      "materials" : {
+        "11462" : {
+          "quantity" : 1,
+          "type_id" : 11462
+        },
+        "9836" : {
+          "quantity" : 8,
+          "type_id" : 9836
+        },
+        "3814" : {
+          "quantity" : 16,
+          "type_id" : 3814
+        }
+      },
+      "time" : 21000,
+      "required_skills" : {
+        "11443" : 1,
+        "11452" : 1,
+        "3409" : 5
+      }
+    },
+    "research_time" : {
+      "materials" : {
+        "11462" : {
+          "quantity" : 1,
+          "type_id" : 11462
+        },
+        "9836" : {
+          "quantity" : 8,
+          "type_id" : 9836
+        },
+        "3814" : {
+          "quantity" : 16,
+          "type_id" : 3814
+        }
+      },
+      "time" : 21000,
+      "required_skills" : {
+        "11443" : 1,
+        "11452" : 1,
+        "3403" : 5
+      }
+    }
+  },
+  "blueprint_type_id" : 37442,
+  "max_production_limit" : 1
+}
