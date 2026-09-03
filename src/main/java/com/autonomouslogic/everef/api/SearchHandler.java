@@ -20,7 +20,6 @@ import jakarta.inject.Inject;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
-import java.util.Optional;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import lombok.SneakyThrows;
@@ -31,6 +30,8 @@ import tools.jackson.databind.json.JsonMapper;
 @Path("/v1/search")
 @Log4j2
 public class SearchHandler implements HttpService, Handler {
+	private static final String Q = "q";
+
 	@Inject
 	protected JsonMapper jsonMapper;
 
@@ -60,7 +61,7 @@ public class SearchHandler implements HttpService, Handler {
 	public SearchResult search(
 			@Parameter(
 							in = ParameterIn.QUERY,
-							name = "q",
+							name = Q,
 							description = "Search query (minimum 3 characters)",
 							required = true,
 							schema = @Schema(type = "string"))
@@ -79,16 +80,10 @@ public class SearchHandler implements HttpService, Handler {
 		log.info(
 				"Received request: {}",
 				URLEncoder.encode(req.requestedUri().toUri().toString(), StandardCharsets.UTF_8));
-		var q = Optional.ofNullable(req.query())
-				.filter(v -> !v.isEmpty())
-				.map(v -> v.getAllRaw("q"))
-				.filter(v -> !v.isEmpty());
-		if (q.isEmpty() || q.get().size() != 1) {
-			throw new ClientException("Exactly one q parameter expected");
-		}
+		var q = extractQ(req);
 		SearchResult result;
 		try {
-			result = search(q.get().getFirst());
+			result = search(q);
 		} catch (IllegalArgumentException e) {
 			throw new ClientException(e.getMessage());
 		}
@@ -96,5 +91,21 @@ public class SearchHandler implements HttpService, Handler {
 		res.status(Status.OK_200);
 		apiUtil.setStandardHeaders(res, Duration.ofMinutes(10));
 		res.send(json);
+	}
+
+	private String extractQ(ServerRequest req) {
+		var uriQuery = req.query();
+		if (uriQuery == null || uriQuery.isEmpty()) {
+			throwExactlyOneQ();
+		}
+		var rawValues = uriQuery.getAllRaw(Q);
+		if (rawValues.isEmpty() || rawValues.size() != 1) {
+			throwExactlyOneQ();
+		}
+		return uriQuery.first(Q).get();
+	}
+
+	private static void throwExactlyOneQ() {
+		throw new ClientException("Exactly one " + Q + " parameter expected");
 	}
 }
