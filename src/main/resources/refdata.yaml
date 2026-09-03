@@ -413,6 +413,8 @@ blueprints:
       - 37318
       - 37325
       - 37326
+      - 37441
+      - 37442
 
 icons:
   idField: icon_id

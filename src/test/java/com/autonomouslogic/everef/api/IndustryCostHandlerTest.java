@@ -549,6 +549,20 @@ public class IndustryCostHandlerTest {
 		assertNull(sentryEvent.get());
 	}
 
+	@Test
+	@SneakyThrows
+	void shouldSkipManufacturingWhenProductTypeNotInRefData() {
+		setupBasicPrices();
+		// https://ref-data.everef.net/blueprints/37441 - product type 37278 absent from test ref data
+		var input = IndustryCostInput.builder().blueprintId(37441L).build();
+		var cost = industryApi.industryCost(input);
+		assertEquals(Map.of(), cost.getManufacturing());
+		assertEquals(
+				Map.of(), cost.getInvention()); // the product type (37279) for the T2 BP (37442) doesn't exist either
+		assertNotEquals(Map.of(), cost.getCopying());
+		assertNull(sentryEvent.get());
+	}
+
 	// ===========
 
 	@SneakyThrows

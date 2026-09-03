@@ -1,0 +1,94 @@
+{
+  "activities" : {
+    "copying" : {
+      "time" : 4800
+    },
+    "invention" : {
+      "materials" : {
+        "20171" : {
+          "quantity" : 4,
+          "type_id" : 20171
+        },
+        "20424" : {
+          "quantity" : 4,
+          "type_id" : 20424
+        }
+      },
+      "products" : {
+        "37442" : {
+          "probability" : 0.34,
+          "quantity" : 1,
+          "type_id" : 37442
+        }
+      },
+      "time" : 30900,
+      "required_skills" : {
+        "11443" : 1,
+        "11452" : 1,
+        "21791" : 1
+      }
+    },
+    "manufacturing" : {
+      "materials" : {
+        "25606" : {
+          "quantity" : 6000,
+          "type_id" : 25606
+        },
+        "25595" : {
+          "quantity" : 19500,
+          "type_id" : 25595
+        },
+        "25588" : {
+          "quantity" : 90000,
+          "type_id" : 25588
+        },
+        "25589" : {
+          "quantity" : 90000,
+          "type_id" : 25589
+        },
+        "25591" : {
+          "quantity" : 90000,
+          "type_id" : 25591
+        },
+        "25594" : {
+          "quantity" : 90000,
+          "type_id" : 25594
+        },
+        "25596" : {
+          "quantity" : 90000,
+          "type_id" : 25596
+        },
+        "25597" : {
+          "quantity" : 90000,
+          "type_id" : 25597
+        },
+        "25602" : {
+          "quantity" : 90000,
+          "type_id" : 25602
+        },
+        "25604" : {
+          "quantity" : 90000,
+          "type_id" : 25604
+        }
+      },
+      "products" : {
+        "37278" : {
+          "quantity" : 1,
+          "type_id" : 37278
+        }
+      },
+      "time" : 6000,
+      "required_skills" : {
+        "3380" : 5
+      }
+    },
+    "research_material" : {
+      "time" : 2100
+    },
+    "research_time" : {
+      "time" : 2100
+    }
+  },
+  "blueprint_type_id" : 37441,
+  "max_production_limit" : 30
+}

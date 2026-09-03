@@ -127,6 +127,13 @@ public class IndustryCalculator {
 			for (Map.Entry<Long, BlueprintMaterial> entry :
 					manufacturing.getProducts().entrySet()) {
 				var productType = refData.getType(entry.getValue().getTypeId());
+				if (productType == null) {
+					log.warn(
+							"Blueprint {} manufacturing product type {} not found in ref data, skipping",
+							blueprint.getBlueprintTypeId(),
+							entry.getValue().getTypeId());
+					continue;
+				}
 				var manufacturingCost = calculateManufacturing(
 						productType,
 						blueprint,
@@ -142,6 +149,13 @@ public class IndustryCalculator {
 			for (Map.Entry<Long, BlueprintMaterial> entry :
 					reaction.getProducts().entrySet()) {
 				var productType = refData.getType(entry.getValue().getTypeId());
+				if (productType == null) {
+					log.warn(
+							"Blueprint {} reaction product type {} not found in ref data, skipping",
+							blueprint.getBlueprintTypeId(),
+							entry.getValue().getTypeId());
+					continue;
+				}
 				var manufacturingCost = calculateReaction(productType, blueprint, industryCostInput.getRuns());
 				addReaction(manufacturingCost);
 			}
@@ -152,6 +166,13 @@ public class IndustryCalculator {
 			for (Map.Entry<Long, BlueprintMaterial> entry :
 					invention.getProducts().entrySet()) {
 				var productType = refData.getType(entry.getValue().getTypeId());
+				if (productType == null) {
+					log.warn(
+							"Blueprint {} invention product type {} not found in ref data, skipping",
+							blueprint.getBlueprintTypeId(),
+							entry.getValue().getTypeId());
+					continue;
+				}
 				var inventionCost = calculateInvention(productType, blueprint, industryCostInput.getRuns());
 				if (inventionCost != null) {
 					addInvention(inventionCost);
