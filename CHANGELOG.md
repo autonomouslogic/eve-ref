@@ -1,5 +1,12 @@
 EVE Ref Changelog
 
+## [2.80.5](https://github.com/autonomouslogic/eve-ref/compare/2.80.4...2.80.5) (2026-09-04)
+
+
+### Bug Fixes
+
+* **api:** fixed handling of null search queries ([#1099](https://github.com/autonomouslogic/eve-ref/issues/1099)) ([d130d82](https://github.com/autonomouslogic/eve-ref/commit/d130d826395cd9315d6a3f77b764f220f05382af))
+
 ## [2.80.4](https://github.com/autonomouslogic/eve-ref/compare/2.80.3...2.80.4) (2026-09-03)
 
 
