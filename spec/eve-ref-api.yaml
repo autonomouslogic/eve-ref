@@ -794,20 +794,29 @@ components:
           description: Total number of item produced
     SearchEntry:
       type: object
+      description: A single search result entry.
       properties:
         id:
           type: integer
           format: int64
+          description: "Numeric ID of the entity. Interpretation depends on type:\
+            \ type ID for inventory_type, market group ID for market_group, category\
+            \ ID for category, and group ID for group."
         language:
           type: string
+          description: Language of the title field. Currently always "en".
         relevance:
           type: integer
           format: int64
           description: Relevance score of the search result. Lower is better.
         title:
           type: string
+          description: Display name of the entity. For market groups the full ancestry
+            is shown joined with " > " (e.g. "Ships > Battleships"). For all other
+            types this is the plain English name.
         type:
           type: string
+          description: Entity type discriminator for a search result entry.
           enum:
           - inventory_type
           - market_group
@@ -815,19 +824,30 @@ components:
           - group
         type_name:
           type: string
+          description: "Human-readable label for the entity type. For inventory_type\
+            \ entries this is the name of the root market group (e.g. \"Manufacture\
+            \ & Research\"), or \"Inventory type\" when no market group exists. For\
+            \ market_group entries this is always \"Market group\". For category entries\
+            \ this is always \"Inventory category\". For group entries this is always\
+            \ \"Inventory group\"."
         urls:
           $ref: "#/components/schemas/SearchEntryUrls"
     SearchEntryUrls:
       type: object
+      description: Links to the entity on EVE Ref and in the reference data API.
       properties:
         everef:
           type: string
+          description: URL to the entity page on everef.net.
         reference_data:
           type: string
+          description: URL to the entity in the EVE Ref reference data API (ref-data.everef.net).
     SearchResult:
       type: object
+      description: Search results returned by the search endpoint.
       properties:
         entries:
           type: array
+          description: "List of matching entities, sorted by relevance ascending."
           items:
             $ref: "#/components/schemas/SearchEntry"

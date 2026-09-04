@@ -89,7 +89,7 @@ public class SearchHandler implements HttpService, Handler {
 		}
 		var json = jsonMapper.writerWithDefaultPrettyPrinter().writeValueAsString(result) + "\n";
 		res.status(Status.OK_200);
-		apiUtil.setStandardHeaders(res, Duration.ofMinutes(10));
+		apiUtil.setStandardHeaders(res, Duration.ofMinutes(10), "https://docs.everef.net/api/search.html");
 		res.send(json);
 	}
 

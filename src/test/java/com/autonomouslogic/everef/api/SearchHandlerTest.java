@@ -325,6 +325,9 @@ public class SearchHandlerTest {
 		assertEquals(
 				"https://github.com/autonomouslogic/eve-ref/blob/main/spec/eve-ref-api.yaml",
 				res.getHeaders().get("X-OpenAPI").getFirst());
+		assertEquals(
+				"https://docs.everef.net/api/search.html",
+				res.getHeaders().get("X-Docs").getFirst());
 	}
 
 	class TestDispatcher extends Dispatcher {

@@ -13,8 +13,9 @@ import tools.jackson.databind.annotation.JsonNaming;
 @Builder(toBuilder = true)
 @Jacksonized
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@Schema
+@Schema(description = "Search results returned by the search endpoint.")
 public class SearchResult {
 	@JsonProperty
+	@Schema(description = "List of matching entities, sorted by relevance ascending.")
 	List<SearchEntry> entries;
 }
