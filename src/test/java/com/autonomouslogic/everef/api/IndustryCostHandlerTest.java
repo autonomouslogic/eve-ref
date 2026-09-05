@@ -34,6 +34,7 @@ import com.google.common.base.CaseFormat;
 import io.sentry.Hint;
 import io.sentry.Sentry;
 import io.sentry.SentryEvent;
+import io.sentry.SentryLevel;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -384,9 +385,12 @@ public class IndustryCostHandlerTest {
 	@SneakyThrows
 	void shouldNotFailIfEivPricesCantBeResolved() {
 		esiMarketPrices = "[]";
+		esiMarketPriceService.init();
 		var input = IndustryCostInput.builder().productId(645L).build();
 		var cost = industryApi.industryCost(input);
 		assertEquals(BigDecimal.ZERO, cost.getManufacturing().get("645").getEstimatedItemValue());
+		assertNotNull(sentryEvent.get());
+		assertEquals(SentryLevel.WARNING, sentryEvent.get().getLevel());
 	}
 
 	@Test
