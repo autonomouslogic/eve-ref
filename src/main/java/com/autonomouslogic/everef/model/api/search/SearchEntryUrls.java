@@ -12,11 +12,13 @@ import tools.jackson.databind.annotation.JsonNaming;
 @Builder(toBuilder = true)
 @Jacksonized
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@Schema
+@Schema(description = "Links to the entity on EVE Ref and in the reference data API.")
 public class SearchEntryUrls {
 	@JsonProperty
+	@Schema(description = "URL to the entity page on everef.net.")
 	String everef;
 
 	@JsonProperty
+	@Schema(description = "URL to the entity in the EVE Ref reference data API (ref-data.everef.net).")
 	String referenceData;
 }
