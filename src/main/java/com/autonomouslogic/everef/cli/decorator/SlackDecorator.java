@@ -3,7 +3,6 @@ package com.autonomouslogic.everef.cli.decorator;
 import com.autonomouslogic.commons.concurrent.VirtualThreads;
 import com.autonomouslogic.everef.cli.Command;
 import com.autonomouslogic.everef.config.Configs;
-import io.reactivex.rxjava3.core.Completable;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -47,47 +46,46 @@ public class SlackDecorator {
 		return new SlackCommand(command);
 	}
 
-	private Completable report(@NonNull SlackMessage message) {
-		return Completable.fromAction(() -> {
-					if (url.isEmpty()) {
-						log.trace("Slack disabled, not reporting");
-						return;
-					}
-					log.trace("Sending Slack message");
-					VirtualThreads.onVirtualThread(() -> new SlackApi(url.get()).call(message));
-				})
-				.retry(2, e -> {
+	private void report(@NonNull SlackMessage message) {
+		if (url.isEmpty()) {
+			log.trace("Slack disabled, not reporting");
+			return;
+		}
+		log.trace("Sending Slack message");
+		int maxRetries = 2;
+		Exception lastException = null;
+		for (int attempt = 0; attempt <= maxRetries; attempt++) {
+			try {
+				VirtualThreads.onVirtualThread(() -> new SlackApi(url.get()).call(message));
+				return;
+			} catch (Exception e) {
+				lastException = e;
+				if (attempt < maxRetries) {
 					log.warn(String.format("Slack \"%s\" retrying: %s", url.get(), ExceptionUtils.getMessage(e)));
-					return true;
-				})
-				.onErrorResumeNext(e -> {
-					log.warn(String.format("Slack \"%s\" failed", url.get()), e);
-					return Completable.complete();
-				});
+				}
+			}
+		}
+		log.warn(String.format("Slack \"%s\" failed", url.get()), lastException);
 	}
 
-	private Completable reportSuccess(@NonNull String commandName, @NonNull Instant start) {
-		return Completable.defer(() -> {
-			if (!reportSuccess) {
-				return Completable.complete();
-			}
-			return report(successMessage(String.format(
-					"%s completed in %s",
-					commandName, Duration.between(start, Instant.now()).truncatedTo(ChronoUnit.MILLIS))));
-		});
+	private void reportSuccess(@NonNull String commandName, @NonNull Instant start) {
+		if (!reportSuccess) {
+			return;
+		}
+		report(successMessage(String.format(
+				"%s completed in %s",
+				commandName, Duration.between(start, Instant.now()).truncatedTo(ChronoUnit.MILLIS))));
 	}
 
-	private Completable reportFailure(@NonNull String commandName, @NonNull Instant start, Throwable error) {
-		return Completable.defer(() -> {
-			if (!reportFailure) {
-				return Completable.complete();
-			}
-			return report(errorMessage(
-					String.format(
-							"%s failed after %s",
-							commandName, Duration.between(start, Instant.now()).truncatedTo(ChronoUnit.MILLIS)),
-					error));
-		});
+	private void reportFailure(@NonNull String commandName, @NonNull Instant start, Throwable error) {
+		if (!reportFailure) {
+			return;
+		}
+		report(errorMessage(
+				String.format(
+						"%s failed after %s",
+						commandName, Duration.between(start, Instant.now()).truncatedTo(ChronoUnit.MILLIS)),
+				error));
 	}
 
 	private SlackMessage createMessage() {
@@ -121,16 +119,14 @@ public class SlackDecorator {
 		@Override
 		public void run() {
 			VirtualThreads.checkIsVirtual();
-			Completable.defer(() -> {
-						var start = Instant.now();
-						return Completable.concatArray(
-										Completable.fromAction(delegate::run), reportSuccess(delegate.getName(), start))
-								.onErrorResumeNext(e -> {
-									return reportFailure(delegate.getName(), start, e)
-											.andThen(Completable.error(e));
-								});
-					})
-					.blockingAwait();
+			var start = Instant.now();
+			try {
+				delegate.run();
+				reportSuccess(delegate.getName(), start);
+			} catch (Throwable e) {
+				reportFailure(delegate.getName(), start, e);
+				throw e;
+			}
 		}
 
 		public String getName() {
