@@ -22,7 +22,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * Retries with exponential backoff (5s, 10s, 20s):
  * - InterruptedIOException containing "timeout" (call timeout exceeded)
- * - IOException "Canceled" caused by timeout
+ * - IOException "Canceled" (OkHttp call timeout; cause chain not yet populated at interceptor time)
  *
  * Does NOT retry:
  * - Thread interruptions (preserves interrupt status for graceful shutdown)
@@ -138,23 +138,11 @@ public class SocketErrorRetryInterceptor implements Interceptor {
 	}
 
 	private boolean isCanceledFromTimeout(IOException e) {
-		if (e.getMessage() == null || !e.getMessage().equals("Canceled")) {
-			return false;
-		}
-
-		// Traverse cause chain looking for timeout
-		Throwable cause = e.getCause();
-		while (cause != null) {
-			if (cause instanceof InterruptedIOException) {
-				String msg = cause.getMessage();
-				if (msg != null && msg.toLowerCase().contains("timeout")) {
-					return true;
-				}
-			}
-			cause = cause.getCause();
-		}
-
-		return false;
+		// OkHttp throws IOException("Canceled") when a call timeout fires — the timeout cause is only
+		// added to the exception AFTER the interceptor chain exits (in RealCall.timeoutExit), so the
+		// cause chain is empty here. We never cancel calls explicitly, so all "Canceled" exceptions
+		// are timeout-triggered and safe to retry.
+		return "Canceled".equals(e.getMessage());
 	}
 
 	private long calculateTimeoutRetryDelay(int retryCount) {
