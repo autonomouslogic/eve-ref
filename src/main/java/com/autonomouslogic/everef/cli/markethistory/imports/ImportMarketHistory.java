@@ -63,7 +63,7 @@ public class ImportMarketHistory implements Command {
 
 	@Override
 	public void run() {
-		flywayMigrate.autoRun().blockingAwait();
+		flywayMigrate.autoRun();
 		runImport();
 	}
 
