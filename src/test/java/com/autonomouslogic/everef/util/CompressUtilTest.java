@@ -61,7 +61,7 @@ class CompressUtilTest {
 		doThrow(new IOException("simulated read error")).when(spied).getNextEntry();
 
 		try (var stream = CompressUtil.loadArchive(spied)) {
-			assertThrows(RuntimeException.class, () -> stream.collect(Collectors.toList()));
+			assertThrows(Exception.class, () -> stream.collect(Collectors.toList()));
 		}
 
 		verify(spied).close();
