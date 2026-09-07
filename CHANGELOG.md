@@ -1,5 +1,35 @@
 EVE Ref Changelog
 
+## [2.80.6](https://github.com/autonomouslogic/eve-ref/compare/2.80.5...2.80.6) (2026-09-07)
+
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([#1103](https://github.com/autonomouslogic/eve-ref/issues/1103)) ([7520f1a](https://github.com/autonomouslogic/eve-ref/commit/7520f1a803929d9d94f045bf1012110f15984972))
+* **deps:** update flyway monorepo to v13.5.0 ([#1104](https://github.com/autonomouslogic/eve-ref/issues/1104)) ([5242369](https://github.com/autonomouslogic/eve-ref/commit/5242369ccdf59f75728b75b5a15a472ff6511530))
+* Retry OkHttp Canceled exceptions from call timeouts ([#1105](https://github.com/autonomouslogic/eve-ref/issues/1105)) ([f616ead](https://github.com/autonomouslogic/eve-ref/commit/f616eadf7f3c9e0b871ade5dc3b36658d502f87e))
+
+
+### Documentation
+
+* **api:** Documented search API ([#1100](https://github.com/autonomouslogic/eve-ref/issues/1100)) ([c3e1d9c](https://github.com/autonomouslogic/eve-ref/commit/c3e1d9c3ce41b7f6be905ca1e560348c7a2ac71b))
+
+
+### Dependency Updates
+
+* **deps:** update plugin org.flywaydb.flyway to v13.5.0 ([#1102](https://github.com/autonomouslogic/eve-ref/issues/1102)) ([bb7d1d1](https://github.com/autonomouslogic/eve-ref/commit/bb7d1d116a5bc0293de310eaed8c60bbd43caaba))
+
+
+### Code Refactoring
+
+* Removed RxJava from FlywayMigrate ([#1107](https://github.com/autonomouslogic/eve-ref/issues/1107)) ([573e9e9](https://github.com/autonomouslogic/eve-ref/commit/573e9e9103433d6cf52b4f28a88b528b90569951))
+* Removed RxJava from SlackDecorator ([#1106](https://github.com/autonomouslogic/eve-ref/issues/1106)) ([92abb1c](https://github.com/autonomouslogic/eve-ref/commit/92abb1c63a17554da0e6e4ecfa590f9aa4f1370c))
+
+
+### Tests
+
+* **api:** Test Sentry is warned about prices not found ([#1101](https://github.com/autonomouslogic/eve-ref/issues/1101)) ([3e7d714](https://github.com/autonomouslogic/eve-ref/commit/3e7d7144f2b1fa5b2dcebecd5e2b5437518a95bd))
+
 ## [2.80.5](https://github.com/autonomouslogic/eve-ref/compare/2.80.4...2.80.5) (2026-09-04)
 
 
