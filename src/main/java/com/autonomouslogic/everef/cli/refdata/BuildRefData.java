@@ -42,6 +42,7 @@ import com.autonomouslogic.everef.util.Rx;
 import com.autonomouslogic.everef.util.TempFiles;
 import dagger.Lazy;
 import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Single;
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -436,7 +437,7 @@ public class BuildRefData implements Command {
 	}
 
 	private Single<RefDataMeta> latestRefDataMeta() {
-		return latestRefData().flatMap(file -> CompressUtil.loadArchive(file)
+		return latestRefData().flatMap(file -> Flowable.fromStream(CompressUtil.loadArchive(file))
 				.filter(e -> e.getKey().getName().equals("meta.json"))
 				.map(e -> jsonMapper.readValue(e.getValue(), RefDataMeta.class))
 				.first(RefDataMeta.builder().build())

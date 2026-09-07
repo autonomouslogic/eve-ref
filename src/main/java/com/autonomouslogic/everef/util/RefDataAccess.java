@@ -30,7 +30,7 @@ public class RefDataAccess {
 	}
 
 	public <T> Flowable<T> loadReferenceDataArchive(@NonNull File file, @NonNull String type, @NonNull Class<T> model) {
-		return CompressUtil.loadArchive(file).flatMap(pair -> {
+		return Flowable.fromStream(CompressUtil.loadArchive(file)).flatMap(pair -> {
 			var filename = pair.getKey().getName();
 			if (!filename.endsWith(".json")) {
 				return Flowable.empty();

@@ -101,14 +101,14 @@ public class RefDataUtil {
 	}
 
 	public Single<RefDataMeta> getMetaFromRefDataFile(File file) {
-		return CompressUtil.loadArchive(file)
+		return Flowable.fromStream(CompressUtil.loadArchive(file))
 				.filter(e -> e.getKey().getName().equals("meta.json"))
 				.map(e -> jsonMapper.readValue(e.getRight(), RefDataMeta.class))
 				.firstOrError();
 	}
 
 	public Flowable<ReferenceEntry> parseReferenceDataArchive(@NonNull File file) {
-		return CompressUtil.loadArchive(file)
+		return Flowable.fromStream(CompressUtil.loadArchive(file))
 				.flatMap(pair -> {
 					var filename = pair.getKey().getName();
 					var type = FilenameUtils.getBaseName(filename);
