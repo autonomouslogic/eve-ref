@@ -6,6 +6,7 @@ import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import okhttp3.Interceptor;
 import okhttp3.Response;
@@ -28,16 +29,20 @@ import org.jetbrains.annotations.NotNull;
  * - Intentional request cancellations
  * - Other IOExceptions
  */
+@RequiredArgsConstructor
 @Singleton
 @Log4j2
 public class SocketErrorRetryInterceptor implements Interceptor {
 	private static final int MAX_RETRIES = 3;
-	private static final long RETRY_DELAY_MS = 1000;
-	private static final long TIMEOUT_RETRY_INITIAL_DELAY_MS = 5000;
-	private static final double TIMEOUT_RETRY_BACKOFF_MULTIPLIER = 2.0;
+
+	private final long retryDelayMs;
+	private final long timeoutRetryInitialDelayMs;
+	private final double timeoutRetryBackoffMultiplier;
 
 	@Inject
-	protected SocketErrorRetryInterceptor() {}
+	protected SocketErrorRetryInterceptor() {
+		this(1000, 5000, 2.0);
+	}
 
 	@NotNull
 	@Override
@@ -54,8 +59,8 @@ public class SocketErrorRetryInterceptor implements Interceptor {
 				if (retryCount < MAX_RETRIES) {
 					log.debug(String.format(
 							"%s, retrying (attempt %d/%d) after %dms",
-							e.getClass().getSimpleName(), retryCount, MAX_RETRIES, RETRY_DELAY_MS));
-					sleep(RETRY_DELAY_MS);
+							e.getClass().getSimpleName(), retryCount, MAX_RETRIES, retryDelayMs));
+					sleep(retryDelayMs);
 				}
 			} catch (InterruptedIOException e) {
 				// Check for explicit thread interruption (should NOT retry)
@@ -153,6 +158,6 @@ public class SocketErrorRetryInterceptor implements Interceptor {
 	}
 
 	private long calculateTimeoutRetryDelay(int retryCount) {
-		return (long) (TIMEOUT_RETRY_INITIAL_DELAY_MS * Math.pow(TIMEOUT_RETRY_BACKOFF_MULTIPLIER, retryCount - 1));
+		return (long) (timeoutRetryInitialDelayMs * Math.pow(timeoutRetryBackoffMultiplier, retryCount - 1));
 	}
 }
