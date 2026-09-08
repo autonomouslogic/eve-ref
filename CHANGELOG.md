@@ -1,5 +1,18 @@
 EVE Ref Changelog
 
+## [2.80.7](https://github.com/autonomouslogic/eve-ref/compare/2.80.6...2.80.7) (2026-09-08)
+
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([#1108](https://github.com/autonomouslogic/eve-ref/issues/1108)) ([2ef9fa9](https://github.com/autonomouslogic/eve-ref/commit/2ef9fa924a93c45fb4b3a84154a51afd31aca34f))
+
+
+### Code Refactoring
+
+* Removed RxJava from CompressUtil ([#1109](https://github.com/autonomouslogic/eve-ref/issues/1109)) ([17948f6](https://github.com/autonomouslogic/eve-ref/commit/17948f63ad35b3417ad888a72f6d4fcc49e2b72d))
+* Removed RxJava from Placeholder ([51cca18](https://github.com/autonomouslogic/eve-ref/commit/51cca181d277df2f92baa242e7a4b3cfeed3d905))
+
 ## [2.80.6](https://github.com/autonomouslogic/eve-ref/compare/2.80.5...2.80.6) (2026-09-07)
 
 
