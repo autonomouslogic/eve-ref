@@ -99,7 +99,7 @@ public class ScrapeHoboleaks implements Command {
 				if (response.code() != 200) {
 					return Single.error(new RuntimeException("Failed to download " + url + ": " + response.code()));
 				}
-				return CompressUtil.loadArchive(file)
+				return Flowable.fromStream(CompressUtil.loadArchive(file))
 						.filter(entry -> entry.getLeft().getName().equals("meta.json"))
 						.map(Pair::getRight)
 						.first(new byte[0]);

@@ -12,6 +12,7 @@ import com.autonomouslogic.everef.util.DataUtil;
 import com.autonomouslogic.everef.util.MockScrapeBuilder;
 import com.autonomouslogic.everef.util.RefDataUtil;
 import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.Flowable;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.HashMap;
@@ -91,7 +92,7 @@ public class ImportTestResources implements Command {
 	}
 
 	private Completable loadSdeResources(File file) {
-		return CompressUtil.loadArchive(file).flatMapCompletable(pair -> {
+		return Flowable.fromStream(CompressUtil.loadArchive(file)).flatMapCompletable(pair -> {
 			var entry = pair.getLeft();
 			var config = refDataUtil.getSdeConfigForFilename(entry.getName());
 			if (config == null || config.getSde() == null) {
@@ -125,7 +126,7 @@ public class ImportTestResources implements Command {
 	}
 
 	private Completable loadHoboleaksResources(File file) {
-		return CompressUtil.loadArchive(file).flatMapCompletable(pair -> {
+		return Flowable.fromStream(CompressUtil.loadArchive(file)).flatMapCompletable(pair -> {
 			var prettyPrinter = jsonMapper.writerWithDefaultPrettyPrinter();
 			var entry = pair.getLeft();
 			var config = refDataUtil.getHoboleaksConfigForFilename(entry.getName());
@@ -149,7 +150,7 @@ public class ImportTestResources implements Command {
 	}
 
 	private Completable loadEsiResources(File file) {
-		return CompressUtil.loadArchive(file).flatMapCompletable(pair -> {
+		return Flowable.fromStream(CompressUtil.loadArchive(file)).flatMapCompletable(pair -> {
 			var entry = pair.getLeft();
 			var fileType = esiLoader.resolveFileType(entry.getName());
 			if (fileType == null) {
