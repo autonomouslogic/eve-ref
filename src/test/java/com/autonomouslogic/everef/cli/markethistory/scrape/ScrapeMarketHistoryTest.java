@@ -112,6 +112,39 @@ public class ScrapeMarketHistoryTest {
 
 	@RetryingTest(3)
 	@SneakyThrows
+	void shouldSkipEntriesWithDatesBeforeMinDate() throws InterruptedException {
+		// Region 10000001 returns type 22, which has a history entry dated 2022-12-31 — before minDate 2023-01-01.
+		// The command should complete without throwing "No map for date 2022-12-31".
+		server.close();
+		server = new MockWebServer();
+		server.setDispatcher(new TestDispatcherWithOutOfRangeType("[22]"));
+		server.start(TEST_PORT);
+
+		VirtualThreads.onVirtualThread(() -> scrapeMarketHistory
+				.setMinDate(LocalDate.parse("2023-01-01"))
+				.setToday(LocalDate.parse("2023-01-04"))
+				.run());
+	}
+
+	@RetryingTest(3)
+	@SneakyThrows
+	void shouldSkipEntriesWithDatesAfterToday() throws InterruptedException {
+		// Simulates a long-running job: today=2023-01-04 at init, but ESI returns type 23 which has an
+		// entry dated 2023-01-05 — after today. No map exists for that date.
+		// The command should complete without throwing "No map for date 2023-01-05".
+		server.close();
+		server = new MockWebServer();
+		server.setDispatcher(new TestDispatcherWithOutOfRangeType("[23]"));
+		server.start(TEST_PORT);
+
+		VirtualThreads.onVirtualThread(() -> scrapeMarketHistory
+				.setMinDate(LocalDate.parse("2023-01-01"))
+				.setToday(LocalDate.parse("2023-01-04"))
+				.run());
+	}
+
+	@RetryingTest(3)
+	@SneakyThrows
 	void shouldScrapeMarketHistory() throws InterruptedException {
 		VirtualThreads.onVirtualThread(() -> scrapeMarketHistory
 				.setMinDate(LocalDate.parse("2023-01-01"))
@@ -368,6 +401,30 @@ public class ScrapeMarketHistoryTest {
 				.orElseThrow(() -> new RuntimeException(date.toString()));
 		return IOUtils.toString(new BZip2CompressorInputStream(new ByteArrayInputStream(bytes)), StandardCharsets.UTF_8)
 				.replaceAll("\r\n", "\n");
+	}
+
+	class TestDispatcherWithOutOfRangeType extends Dispatcher {
+		private final String activeTypesJson;
+
+		TestDispatcherWithOutOfRangeType(String activeTypesJson) {
+			this.activeTypesJson = activeTypesJson;
+		}
+
+		@NotNull
+		@Override
+		public MockResponse dispatch(@NotNull RecordedRequest request) throws InterruptedException {
+			var path = request.getRequestUrl().encodedPath();
+			var segments = request.getRequestUrl().pathSegments();
+			if (path.equals("/esi/markets/10000001/types/")) {
+				return mockResponse(activeTypesJson);
+			}
+			if (path.startsWith("/esi/latest/markets/") && segments.get(4).equals("history")) {
+				var regionId = segments.get(3);
+				var typeId = request.getRequestUrl().queryParameter("type_id");
+				return mockHistory(regionId, typeId);
+			}
+			return new TestDispatcher().dispatch(request);
+		}
 	}
 
 	@NotNull
