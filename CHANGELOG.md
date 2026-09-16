@@ -1,5 +1,14 @@
 EVE Ref Changelog
 
+## [2.80.8](https://github.com/autonomouslogic/eve-ref/compare/2.80.7...2.80.8) (2026-09-16)
+
+
+### Dependency Updates
+
+* **deps:** update dependency java-jdk to v25 ([#1111](https://github.com/autonomouslogic/eve-ref/issues/1111)) ([7839157](https://github.com/autonomouslogic/eve-ref/commit/7839157d201d13662c3793996161d17a7e8b5faa))
+* **deps:** update eclipse-temurin docker tag to v25 ([#1112](https://github.com/autonomouslogic/eve-ref/issues/1112)) ([a1de3d0](https://github.com/autonomouslogic/eve-ref/commit/a1de3d0f849f1677dfdcfcd6f0a7964d35b0162f))
+* **deps:** update ubuntu docker tag to v26 ([#1039](https://github.com/autonomouslogic/eve-ref/issues/1039)) ([165bb4d](https://github.com/autonomouslogic/eve-ref/commit/165bb4dfd9ee1855922da88f71f5d7135c1c4af8))
+
 ## [2.80.7](https://github.com/autonomouslogic/eve-ref/compare/2.80.6...2.80.7) (2026-09-08)
 
 
