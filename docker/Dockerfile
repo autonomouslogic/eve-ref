@@ -1,4 +1,4 @@
-FROM ubuntu:24.04 as build
+FROM ubuntu:26.04 as build
 ARG EVE_REF_VERSION
 RUN apt-get update && apt-get install -y zip
 COPY build/distributions/eve-ref-${EVE_REF_VERSION}.tar /eve-ref.tar
