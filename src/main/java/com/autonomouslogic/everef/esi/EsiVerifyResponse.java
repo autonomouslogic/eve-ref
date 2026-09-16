@@ -1,13 +1,6 @@
 package com.autonomouslogic.everef.esi;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.fasterxml.jackson.databind.PropertyNamingStrategies;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import java.io.IOException;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -16,6 +9,12 @@ import lombok.Builder;
 import lombok.Value;
 import lombok.extern.jackson.Jacksonized;
 import org.apache.commons.lang3.StringUtils;
+import tools.jackson.core.JsonParser;
+import tools.jackson.databind.DeserializationContext;
+import tools.jackson.databind.PropertyNamingStrategies;
+import tools.jackson.databind.ValueDeserializer;
+import tools.jackson.databind.annotation.JsonDeserialize;
+import tools.jackson.databind.annotation.JsonNaming;
 
 @Value
 @Builder
@@ -39,16 +38,16 @@ public class EsiVerifyResponse {
 	@JsonDeserialize(using = ScopesDeserializer.class)
 	List<String> scopes;
 
-	public static final class ExpiresOnDeserializer extends JsonDeserializer<Instant> {
+	public static final class ExpiresOnDeserializer extends ValueDeserializer<Instant> {
 		@Override
-		public Instant deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
+		public Instant deserialize(JsonParser p, DeserializationContext ctxt) {
 			return LocalDateTime.parse(p.getText()).atZone(ZoneOffset.UTC).toInstant();
 		}
 	}
 
-	public static final class ScopesDeserializer extends JsonDeserializer<List<String>> {
+	public static final class ScopesDeserializer extends ValueDeserializer<List<String>> {
 		@Override
-		public List<String> deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
+		public List<String> deserialize(JsonParser p, DeserializationContext ctxt) {
 			var test = p.getText();
 			if (StringUtils.isEmpty(test)) {
 				return List.of();

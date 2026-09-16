@@ -1,5 +1,5 @@
 {
-  "base_price" : 35,
+  "base_price" : 35.0,
   "description" : {
     "de" : "Wasser ist eine der Grundvoraussetzungen für menschliches Überleben. Auf den meisten Welten ist diese Ressource knapp, so dass man dort auf Schiffsladungen angewiesen ist.",
     "en" : "Water is one of the basic conditional elements of human survival. Most worlds have this compound in relative short supply and hence must rely on starship freight.",

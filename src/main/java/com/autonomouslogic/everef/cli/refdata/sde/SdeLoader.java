@@ -9,6 +9,7 @@ import com.autonomouslogic.everef.cli.refdata.transformer.BlueprintTransformer;
 import com.autonomouslogic.everef.util.CompressUtil;
 import com.autonomouslogic.everef.util.RefDataUtil;
 import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.Flowable;
 import java.io.File;
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -56,7 +57,7 @@ public class SdeLoader {
 	protected SdeLoader() {}
 
 	public Completable load(@NonNull File file) {
-		return CompressUtil.loadArchive(file)
+		return Flowable.fromStream(CompressUtil.loadArchive(file))
 				.flatMapCompletable(
 						pair -> {
 							var config = refDataUtil.getSdeConfigForFilename(

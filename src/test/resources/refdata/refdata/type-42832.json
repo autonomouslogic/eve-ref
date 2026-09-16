@@ -106,7 +106,7 @@
   "radius" : 1,
   "type_id" : 42832,
   "volume" : 0.01,
-  "base_price" : 1000,
+  "base_price" : 1000.0,
   "category_id" : 8,
   "required_skills" : {
     "20494" : 1,

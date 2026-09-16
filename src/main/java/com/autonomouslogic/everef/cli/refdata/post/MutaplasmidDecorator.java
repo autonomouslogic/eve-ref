@@ -3,15 +3,15 @@ package com.autonomouslogic.everef.cli.refdata.post;
 import com.autonomouslogic.everef.cli.refdata.StoreDataHelper;
 import com.autonomouslogic.everef.cli.refdata.StoreHandler;
 import com.autonomouslogic.everef.refdata.Mutaplasmid;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.reactivex.rxjava3.core.Completable;
 import java.util.Map;
 import javax.inject.Inject;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.node.ObjectNode;
 
 /**
  * <ul>
@@ -24,7 +24,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class MutaplasmidDecorator extends PostDecorator {
 	@Inject
-	protected ObjectMapper objectMapper;
+	protected JsonMapper jsonMapper;
 
 	@Setter
 	@NonNull
@@ -42,9 +42,9 @@ public class MutaplasmidDecorator extends PostDecorator {
 			log.info("Decorating mutaplasmids");
 			types = storeHandler.getRefStore("types");
 			mutaplasmids = storeHandler.getRefStore("mutaplasmids");
-			helper = new StoreDataHelper(storeHandler, objectMapper);
+			helper = new StoreDataHelper(storeHandler, jsonMapper);
 			for (Map.Entry<Long, JsonNode> entry : mutaplasmids.entrySet()) {
-				var mutaplasmid = objectMapper.convertValue(entry.getValue(), Mutaplasmid.class);
+				var mutaplasmid = jsonMapper.convertValue(entry.getValue(), Mutaplasmid.class);
 				setIsMutaplasmid(mutaplasmid.getTypeId());
 				for (var mapping : mutaplasmid.getTypeMappings().values()) {
 					addCreatingMutaplasmid(mapping.getResultingTypeId(), mutaplasmid.getTypeId());

@@ -1,11 +1,11 @@
 package com.autonomouslogic.everef.cli.refdata;
 
 import com.autonomouslogic.everef.mvstore.MVStoreUtil;
-import com.fasterxml.jackson.databind.JsonNode;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import lombok.RequiredArgsConstructor;
 import org.h2.mvstore.MVStore;
+import tools.jackson.databind.JsonNode;
 
 @RequiredArgsConstructor
 public class StoreHandler {

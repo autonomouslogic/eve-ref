@@ -5097,3 +5097,168 @@
   radius: 1
   type_id: 90041
   volume: 40
+"37316":
+  capacity: 0
+  description: ""
+  dogma_attributes:
+  - attribute_id: 161
+    value: 0.01
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 4
+    value: 0
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 422
+    value: 2
+  group_id: 1708
+  mass: 0
+  name: "Plan de construction Module de fabrication intermédiaire de vaisseaux II"
+  packaged_volume: 0.01
+  portion_size: 1
+  published: false
+  radius: 1
+  type_id: 37316
+  volume: 0.01
+"37318":
+  capacity: 0
+  description: ""
+  dogma_attributes:
+  - attribute_id: 161
+    value: 0.01
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 4
+    value: 0
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 422
+    value: 2
+  group_id: 1708
+  mass: 0
+  name: "Plan de construction Module de fabrication intermédiaire de petits vaisseaux\
+    \ de Tech II - II"
+  packaged_volume: 0.01
+  portion_size: 1
+  published: false
+  radius: 1
+  type_id: 37318
+  volume: 0.01
+"37325":
+  capacity: 0
+  description: ""
+  group_id: 1709
+  mass: 0
+  name: "Plan de construction Module intermédiaire de fabrication de produits de consommation\
+    \ I"
+  packaged_volume: 0.01
+  portion_size: 1
+  published: false
+  radius: 1
+  type_id: 37325
+  volume: 0.01
+"37326":
+  capacity: 0
+  description: ""
+  dogma_attributes:
+  - attribute_id: 161
+    value: 0.01
+  - attribute_id: 162
+    value: 1
+  - attribute_id: 4
+    value: 0
+  - attribute_id: 38
+    value: 0
+  - attribute_id: 422
+    value: 2
+  group_id: 1709
+  icon_id: 21729
+  mass: 0
+  name: "Plan de construction Module intermédiaire de fabrication de produits de consommation\_\
+    II"
+  packaged_volume: 0.01
+  portion_size: 1
+  published: false
+  radius: 1
+  type_id: 37326
+  volume: 0.01
+"37161":
+  capacity: 0
+  description: "L'optimisation de productivité horaire de la production d'équipements\
+    \ 'Standup' II M permet aux opérateurs de structure d'améliorer la productivité\
+    \ horaire des lignes de production de modules de vaisseau, d'optimisations de\
+    \ vaisseau, d'unités mobiles privées, d'implants et de conteneurs de fret. La\
+    \ technologie brevetée 'Standup' exploite un dispositif autonome de nano-assemblage\
+    \ pour structure Upwell, alliant un logiciel de modélisation intégré, une baie\
+    \ de nano-assemblage et une réserve de nanomasse. Une fois insérés dans les emplacements\
+    \ dédiés sur les structures Upwell, les dispositifs 'Standup' lancent directement\
+    \ l'assemblage moléculaire de divers modules de services, modules de structure\
+    \ et optimisations de structure. Remarque : une structure ne peut équiper qu'une\
+    \ seule optimisation du même type, déclinaisons de tech comprises."
+  dogma_attributes:
+  - attribute_id: 1153
+    value: 150
+  - attribute_id: 4
+    value: 200
+  - attribute_id: 1544
+    value: 1
+  - attribute_id: 9
+    value: 40
+  - attribute_id: 1547
+    value: 2
+  - attribute_id: 1298
+    value: 1657
+  - attribute_id: 1299
+    value: 1404
+  - attribute_id: 1300
+    value: 1406
+  - attribute_id: 277
+    value: 1
+  - attribute_id: 2334
+    value: 1
+  - attribute_id: 2593
+    value: -24
+  - attribute_id: 2594
+    value: 0
+  - attribute_id: 2595
+    value: 0
+  - attribute_id: 422
+    value: 2
+  - attribute_id: 2095
+    value: 40
+  - attribute_id: 2096
+    value: 4
+  - attribute_id: 2355
+    value: 1
+  - attribute_id: 2356
+    value: 1.9
+  - attribute_id: 2357
+    value: 2.1
+  - attribute_id: 2358
+    value: 1
+  - attribute_id: 182
+    value: 26252
+  - attribute_id: 161
+    value: 10
+  - attribute_id: 162
+    value: 100
+  - attribute_id: 38
+    value: 0
+  dogma_effects:
+  - effect_id: 2663
+    is_default: true
+  - effect_id: 6806
+    is_default: false
+  - effect_id: 6842
+    is_default: false
+  group_id: 1819
+  icon_id: 21729
+  market_group_id: 2347
+  mass: 200
+  name: "Productivité horaire de la production d'équipements 'Standup' II M"
+  packaged_volume: 10
+  portion_size: 1
+  published: true
+  radius: 100
+  type_id: 37161
+  volume: 10

@@ -15,7 +15,6 @@ import com.autonomouslogic.everef.refdata.Region;
 import com.autonomouslogic.everef.refdata.Schematic;
 import com.autonomouslogic.everef.refdata.Skill;
 import com.autonomouslogic.everef.refdata.Unit;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.inject.Inject;
 import java.io.File;
 import java.util.Map;
@@ -27,11 +26,12 @@ import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.tuple.Pair;
 import org.h2.mvstore.MVStore;
+import tools.jackson.databind.json.JsonMapper;
 
 @Log4j2
 public class LoadedRefData {
 	@Inject
-	protected ObjectMapper objectMapper;
+	protected JsonMapper jsonMapper;
 
 	private final MVStore mvStore;
 	private final ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
@@ -92,7 +92,7 @@ public class LoadedRefData {
 
 	@SneakyThrows
 	private void put(long id, Object item, Map<Long, byte[]> map) {
-		map.put(id, objectMapper.writeValueAsBytes(item));
+		map.put(id, jsonMapper.writeValueAsBytes(item));
 	}
 
 	private <T> Stream<Pair<Long, T>> stream(Map<Long, byte[]> map, Function<Long, T> getter) {
@@ -277,7 +277,7 @@ public class LoadedRefData {
 
 	@SneakyThrows
 	private <T> T parse(byte[] bytes, Class<T> clazz) {
-		return objectMapper.readValue(bytes, clazz);
+		return jsonMapper.readValue(bytes, clazz);
 	}
 
 	public void close() {

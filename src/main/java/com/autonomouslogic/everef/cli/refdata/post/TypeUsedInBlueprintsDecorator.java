@@ -3,15 +3,15 @@ package com.autonomouslogic.everef.cli.refdata.post;
 import com.autonomouslogic.everef.refdata.Blueprint;
 import com.autonomouslogic.everef.refdata.BlueprintMaterial;
 import com.autonomouslogic.everef.refdata.UsedInBlueprint;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.reactivex.rxjava3.core.Completable;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import javax.inject.Inject;
 import lombok.extern.log4j.Log4j2;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.node.ObjectNode;
 
 /**
  * Populates on inventory types which blueprints they're used in.
@@ -19,7 +19,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class TypeUsedInBlueprintsDecorator extends PostDecorator {
 	@Inject
-	protected ObjectMapper objectMapper;
+	protected JsonMapper jsonMapper;
 
 	private Map<Long, JsonNode> types;
 	private Map<Long, JsonNode> blueprints;
@@ -34,7 +34,7 @@ public class TypeUsedInBlueprintsDecorator extends PostDecorator {
 			blueprints = storeHandler.getRefStore("blueprints");
 			for (var entry : blueprints.entrySet()) {
 				var blueprintJson = (ObjectNode) entry.getValue();
-				var blueprint = objectMapper.convertValue(blueprintJson, Blueprint.class);
+				var blueprint = jsonMapper.convertValue(blueprintJson, Blueprint.class);
 				handleBlueprint(blueprint);
 			}
 		});
@@ -59,14 +59,14 @@ public class TypeUsedInBlueprintsDecorator extends PostDecorator {
 			return;
 		}
 		var blueprintTypeId = blueprint.getBlueprintTypeId();
-		var usedInJson = objectMapper.valueToTree(UsedInBlueprint.builder()
+		var usedInJson = jsonMapper.valueToTree(UsedInBlueprint.builder()
 				.materialTypeId(typeId)
 				.quantity(material.getQuantity())
 				.activity(activity)
 				.build());
 		typeJson.withObject("used_in_blueprints")
 				.withObject(Long.toString(blueprintTypeId))
-				.put(activity, usedInJson);
+				.set(activity, usedInJson);
 		types.put(typeId, typeJson);
 	}
 }

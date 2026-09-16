@@ -1,12 +1,12 @@
 package com.autonomouslogic.everef.cli.publishrefdata.bundle;
 
 import com.autonomouslogic.everef.refdata.InventoryType;
-import com.fasterxml.jackson.databind.JsonNode;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Maybe;
 import javax.inject.Inject;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.tuple.Pair;
+import tools.jackson.databind.JsonNode;
 
 /**
  * Renders the basic objects in the reference data collections.
@@ -24,18 +24,18 @@ public class TypeBundleRenderer extends BundleRenderer {
 
 	private Maybe<Pair<String, JsonNode>> createTypeBundle(long typeId) {
 		var typeJson = getTypesMap().get(typeId);
-		var type = objectMapper.convertValue(typeJson, InventoryType.class);
+		var type = jsonMapper.convertValue(typeJson, InventoryType.class);
 
-		var bundleJson = objectMapper.createObjectNode();
+		var bundleJson = jsonMapper.createObjectNode();
 		var typesJson = bundleJson.putObject("types");
-		var attributesJson = objectMapper.createObjectNode();
-		var skillsJson = objectMapper.createObjectNode();
-		var unitsJson = objectMapper.createObjectNode();
-		var iconsJson = objectMapper.createObjectNode();
-		var marketGroupsJson = objectMapper.createObjectNode();
-		var categoriesJson = objectMapper.createObjectNode();
-		var groupsJson = objectMapper.createObjectNode();
-		var metaGroupsJson = objectMapper.createObjectNode();
+		var attributesJson = jsonMapper.createObjectNode();
+		var skillsJson = jsonMapper.createObjectNode();
+		var unitsJson = jsonMapper.createObjectNode();
+		var iconsJson = jsonMapper.createObjectNode();
+		var marketGroupsJson = jsonMapper.createObjectNode();
+		var categoriesJson = jsonMapper.createObjectNode();
+		var groupsJson = jsonMapper.createObjectNode();
+		var metaGroupsJson = jsonMapper.createObjectNode();
 
 		typesJson.set(Long.toString(typeId), typeJson);
 		bundleDogmaAttributes(type, attributesJson);

@@ -54,6 +54,7 @@ module.exports = {
           collapsable: false,
           children: [
             'api/',
+            'api/search',
             'api/industry-cost',
           ]
         },

@@ -1,5 +1,6 @@
 package com.autonomouslogic.everef.cli;
 
+import com.autonomouslogic.commons.concurrent.VirtualThreads;
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.esi.EsiAuthHelper;
 import com.autonomouslogic.everef.esi.EsiConstants;
@@ -17,12 +18,8 @@ import com.autonomouslogic.everef.s3.S3Util;
 import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.url.UrlParser;
 import com.autonomouslogic.everef.util.DiscordNotifier;
-import com.autonomouslogic.everef.util.VirtualThreads;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.PropertyNamingStrategies;
-import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.google.common.collect.Ordering;
 import com.google.common.hash.Hashing;
 import java.io.FileInputStream;
@@ -51,6 +48,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 import software.amazon.awssdk.services.s3.model.NoSuchKeyException;
+import tools.jackson.databind.PropertyNamingStrategies;
+import tools.jackson.databind.annotation.JsonNaming;
+import tools.jackson.databind.json.JsonMapper;
 
 /**
  * Fetches donations to EVE Ref from the ESI.
@@ -101,7 +101,7 @@ public class FetchDonations implements Command {
 	protected CorporationApi corporationApi;
 
 	@Inject
-	protected ObjectMapper objectMapper;
+	protected JsonMapper jsonMapper;
 
 	@Inject
 	protected UrlParser urlParser;
@@ -139,7 +139,7 @@ public class FetchDonations implements Command {
 	@Override
 	@SneakyThrows
 	public void run() {
-		VirtualThreads.checkThread();
+		VirtualThreads.checkIsVirtual();
 		var accessToken = getAccessToken();
 		var verified = esiAuthHelper.verify(accessToken);
 		var characterId = (int) verified.getCharacterId();
@@ -165,10 +165,10 @@ public class FetchDonations implements Command {
 		var allDonations = Stream.concat(previous.stream(), newDonations.stream())
 				.collect(Collectors.toMap(
 						DonationEntry::getId, donationEntry -> donationEntry, (a, b) -> b, TreeMap::new));
-		uploadFile(objectMapper.writeValueAsBytes(allDonations.values()), DONATIONS_LIST_FILE);
+		uploadFile(jsonMapper.writeValueAsBytes(allDonations.values()), DONATIONS_LIST_FILE);
 
 		var summary = buildSummary(allDonations.values());
-		uploadFile(objectMapper.writeValueAsBytes(summary), DONATIONS_SUMMARY_FILE);
+		uploadFile(jsonMapper.writeValueAsBytes(summary), DONATIONS_SUMMARY_FILE);
 
 		notifyDiscord(newDonations);
 	}
@@ -193,8 +193,8 @@ public class FetchDonations implements Command {
 
 	@SneakyThrows
 	private List<DonationEntry> getCharacterDonations(int characterId, String accessToken) {
-		var entries = esiHelper.fetchPages(
-				page -> VirtualThreads.run(() -> walletApi.getCharactersCharacterIdWalletJournalWithHttpInfo(
+		var entries = esiHelper.fetchPages(page ->
+				VirtualThreads.onVirtualThread(() -> walletApi.getCharactersCharacterIdWalletJournalWithHttpInfo(
 						characterId, EsiConstants.Datasource.tranquility.toString(), null, page, accessToken)));
 		return entries.stream()
 				.peek(e -> log.debug("Character journal: {}", e))
@@ -211,8 +211,8 @@ public class FetchDonations implements Command {
 
 	@SneakyThrows
 	private List<DonationEntry> getCorporationDonations(int corporationId, String accessToken) {
-		var entries = esiHelper.fetchPages(page ->
-				VirtualThreads.run(() -> walletApi.getCorporationsCorporationIdWalletsDivisionJournalWithHttpInfo(
+		var entries = esiHelper.fetchPages(page -> VirtualThreads.onVirtualThread(
+				() -> walletApi.getCorporationsCorporationIdWalletsDivisionJournalWithHttpInfo(
 						corporationId, 1, EsiConstants.Datasource.tranquility.toString(), null, page, accessToken)));
 		return entries.stream()
 				.peek(e -> log.debug("Corporation journal: {}", e))
@@ -253,8 +253,8 @@ public class FetchDonations implements Command {
 	@SneakyThrows
 	private <T> List<T> downloadFileJsonList(String name, Class<T> clazz) {
 		try {
-			return objectMapper.readValue(
-					downloadFile(name), objectMapper.getTypeFactory().constructCollectionType(ArrayList.class, clazz));
+			return jsonMapper.readValue(
+					downloadFile(name), jsonMapper.getTypeFactory().constructCollectionType(ArrayList.class, clazz));
 		} catch (CompletionException e) {
 			if (e.getCause() instanceof NoSuchKeyException) {
 				log.warn("Error downloading {}", name);
@@ -266,13 +266,13 @@ public class FetchDonations implements Command {
 
 	@SneakyThrows
 	private @NotNull GetCorporationsCorporationIdOk getCorporation(int corporationId) throws ApiException {
-		return VirtualThreads.run(() -> corporationApi.getCorporationsCorporationId(
+		return VirtualThreads.onVirtualThread(() -> corporationApi.getCorporationsCorporationId(
 				corporationId, EsiConstants.Datasource.tranquility.toString(), null));
 	}
 
 	@SneakyThrows
 	private @NotNull GetCharactersCharacterIdOk getCharacter(int characterId) throws ApiException {
-		return VirtualThreads.run(() -> characterApi.getCharactersCharacterId(
+		return VirtualThreads.onVirtualThread(() -> characterApi.getCharactersCharacterId(
 				characterId, EsiConstants.Datasource.tranquility.toString(), null));
 	}
 

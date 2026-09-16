@@ -1,12 +1,12 @@
 package com.autonomouslogic.everef.cli.refdata.post;
 
 import com.autonomouslogic.everef.refdata.MarketGroup;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
 import io.reactivex.rxjava3.core.Completable;
 import javax.inject.Inject;
 import lombok.extern.log4j.Log4j2;
 import org.jetbrains.annotations.NotNull;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.node.ArrayNode;
 
 /**
  * References market groups and types on other market groups.
@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
 @Log4j2
 public class MarketGroupsDecorator extends PostDecorator {
 	@Inject
-	protected ObjectMapper objectMapper;
+	protected JsonMapper jsonMapper;
 
 	@Inject
 	protected MarketGroupsDecorator() {}
@@ -29,7 +29,7 @@ public class MarketGroupsDecorator extends PostDecorator {
 			log.info("Referencing market groups");
 			var groups = storeHandler.getRefStore("marketGroups");
 			for (var groupJson : groups.values()) {
-				var group = objectMapper.convertValue(groupJson, MarketGroup.class);
+				var group = jsonMapper.convertValue(groupJson, MarketGroup.class);
 				var groupId = group.getMarketGroupId();
 				var parentId = group.getParentGroupId();
 				if (parentId == null) {

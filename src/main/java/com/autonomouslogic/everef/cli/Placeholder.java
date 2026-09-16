@@ -1,7 +1,6 @@
 package com.autonomouslogic.everef.cli;
 
-import com.autonomouslogic.everef.util.VirtualThreads;
-import io.reactivex.rxjava3.core.Completable;
+import com.autonomouslogic.commons.concurrent.VirtualThreads;
 import javax.inject.Inject;
 import lombok.extern.log4j.Log4j2;
 
@@ -12,10 +11,7 @@ public class Placeholder implements Command {
 
 	@Override
 	public void run() {
-		VirtualThreads.checkThread();
-		Completable.fromAction(() -> {
-					log.info("Placeholder command");
-				})
-				.blockingAwait();
+		VirtualThreads.checkIsVirtual();
+		log.info("Placeholder command");
 	}
 }

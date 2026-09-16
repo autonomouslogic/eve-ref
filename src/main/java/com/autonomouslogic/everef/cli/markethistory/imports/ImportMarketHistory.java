@@ -7,9 +7,7 @@ import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.db.MarketHistoryDao;
 import com.autonomouslogic.everef.model.MarketHistoryEntry;
 import com.autonomouslogic.everef.url.HttpUrl;
-import com.autonomouslogic.everef.util.VirtualThreads;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.autonomouslogic.everef.util.Rx;
 import com.google.common.collect.Ordering;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Flowable;
@@ -23,6 +21,8 @@ import java.util.Optional;
 import javax.inject.Inject;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.tuple.Pair;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.json.JsonMapper;
 
 @Log4j2
 public class ImportMarketHistory implements Command {
@@ -43,7 +43,7 @@ public class ImportMarketHistory implements Command {
 	protected MarketHistoryFileResolver fileResolver;
 
 	@Inject
-	protected ObjectMapper objectMapper;
+	protected JsonMapper jsonMapper;
 
 	private final Optional<LocalDate> minDate = Configs.IMPORT_MARKET_HISTORY_MIN_DATE.get();
 
@@ -63,18 +63,18 @@ public class ImportMarketHistory implements Command {
 
 	@Override
 	public void run() {
-		flywayMigrate.autoRun().blockingAwait();
+		flywayMigrate.autoRun();
 		runImport();
 	}
 
 	private void runImport() {
 		resolveFilesToDownload()
 				.parallel(loadConcurrency)
-				.runOn(VirtualThreads.SCHEDULER)
+				.runOn(Rx.VIRTUAL)
 				.flatMap(this::downloadFile)
 				.sequential()
 				.parallel(insertConcurrency)
-				.runOn(VirtualThreads.SCHEDULER, 1)
+				.runOn(Rx.VIRTUAL, 1)
 				.flatMap(file -> parseFile(file).flatMap(pair -> Completable.fromAction(() -> insertDayEntries(pair))
 						.toFlowable()))
 				.sequential()
@@ -98,7 +98,7 @@ public class ImportMarketHistory implements Command {
 		var nodes = dateList.getRight();
 		log.info("Inserting {} entries for {}", nodes.size(), date);
 		var entries = dateList.getRight().stream()
-				.map(node -> objectMapper.convertValue(node, MarketHistoryEntry.class))
+				.map(node -> jsonMapper.convertValue(node, MarketHistoryEntry.class))
 				.toList();
 		marketHistoryDao.insert(entries);
 		log.debug("Completed {}", date);

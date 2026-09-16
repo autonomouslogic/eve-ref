@@ -3,6 +3,7 @@ package com.autonomouslogic.everef.cli.structures;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
+import com.autonomouslogic.commons.concurrent.VirtualThreads;
 import com.autonomouslogic.everef.cli.publiccontracts.ContractsFileBuilder;
 import com.autonomouslogic.everef.cli.publiccontracts.ContractsScrapeMeta;
 import com.autonomouslogic.everef.esi.LocationPopulator;
@@ -17,9 +18,6 @@ import com.autonomouslogic.everef.util.DataIndexHelper;
 import com.autonomouslogic.everef.util.EveConstants;
 import com.autonomouslogic.everef.util.JsonNodeCsvWriter;
 import com.autonomouslogic.everef.util.TempFiles;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.io.FileInputStream;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -55,6 +53,9 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.node.ObjectNode;
 
 @SetEnvironmentVariable(key = "SCRAPE_CHARACTER_OWNER_HASH", value = "scrape-owner-hash")
 @SetEnvironmentVariable(key = "ESI_USER_AGENT", value = "user-agent")
@@ -75,7 +76,7 @@ public class ScrapeStructuresTest {
 	LocationPopulator locationPopulator;
 
 	@Inject
-	ObjectMapper objectMapper;
+	JsonMapper jsonMapper;
 
 	@Inject
 	MockS3Adapter mockS3Adapter;
@@ -137,18 +138,18 @@ public class ScrapeStructuresTest {
 	}
 
 	@Test
-	void shouldScrapePublicStructures() {
+	void shouldScrapePublicStructures() throws InterruptedException {
 		publicStructures.put(1000000000001L, Map.of("name", "Test Structure 1"));
-		scrapeStructures.run();
+		VirtualThreads.onVirtualThread(scrapeStructures::run);
 		verifyScrape(container(publicStructure()));
 	}
 
 	@Test
-	void shouldUpdatePublicStructures() {
+	void shouldUpdatePublicStructures() throws InterruptedException {
 		loadPreviousScrape(container(publicStructure()));
 		publicStructures.put(1000000000001L, Map.of("name", "Test Structure 1 Updated"));
 		time = time.plusDays(1);
-		scrapeStructures.run();
+		VirtualThreads.onVirtualThread(scrapeStructures::run);
 		verifyScrape(container(publicStructure()
 				.put("name", "Test Structure 1 Updated")
 				.put("last_seen_public_structure", "2021-01-02T00:00:00Z")
@@ -156,19 +157,19 @@ public class ScrapeStructuresTest {
 	}
 
 	@Test
-	void shouldNotPreserveExtraDataFromPreviousScrapes() {
+	void shouldNotPreserveExtraDataFromPreviousScrapes() throws InterruptedException {
 		loadPreviousScrape(container(publicStructure().put("some_key", "some_value")));
 		publicStructures.put(1000000000001L, Map.of("name", "Test Structure 1"));
-		scrapeStructures.run();
+		VirtualThreads.onVirtualThread(scrapeStructures::run);
 		verifyScrape(container(publicStructure()));
 	}
 
 	@Test
-	void shouldRescrapePreviousStructures() {
+	void shouldRescrapePreviousStructures() throws InterruptedException {
 		loadPreviousScrape(container(publicStructure()));
 		nonPublicStructures.put(1000000000001L, Map.of("name", "Test Structure 1 Updated"));
 		time = time.plusDays(1);
-		scrapeStructures.run();
+		VirtualThreads.onVirtualThread(scrapeStructures::run);
 		verifyScrape(container(publicStructure()
 				.put("name", "Test Structure 1 Updated")
 				.put("is_public_structure", false)
@@ -176,20 +177,20 @@ public class ScrapeStructuresTest {
 	}
 
 	@Test
-	void shouldPreserveStructures() {
+	void shouldPreserveStructures() throws InterruptedException {
 		loadPreviousScrape(container(publicStructure()));
 		time = time.plusDays(1);
-		scrapeStructures.run();
+		VirtualThreads.onVirtualThread(scrapeStructures::run);
 		verifyScrape(
 				container(publicStructure().put("is_public_structure", false).put("is_gettable_structure", false)));
 	}
 
 	@Test
-	void shouldCheckMarkets() {
+	void shouldCheckMarkets() throws InterruptedException {
 		publicStructures.put(
 				1000000000001L, Map.of("name", "Test Structure 1", "type_id", EveConstants.KEEPSTAR_TYPE_ID));
 		marketStructures.add(1000000000001L);
-		scrapeStructures.run();
+		VirtualThreads.onVirtualThread(scrapeStructures::run);
 		verifyScrape(container(publicStructure()
 				.put("type_id", EveConstants.KEEPSTAR_TYPE_ID)
 				.put("is_market_structure", true)
@@ -197,80 +198,80 @@ public class ScrapeStructuresTest {
 	}
 
 	@Test
-	void shouldOnlyTryMarketsForStructureTypesWhereMarketModulesCanBeApplied() {
+	void shouldOnlyTryMarketsForStructureTypesWhereMarketModulesCanBeApplied() throws InterruptedException {
 		publicStructures.put(
 				1000000000001L, Map.of("name", "Test Structure 1", "type_id", EveConstants.ASTRAHUS_HUB_TYPE_ID));
 		marketStructures.add(1000000000001L); // Will never be called.
-		scrapeStructures.run();
+		VirtualThreads.onVirtualThread(scrapeStructures::run);
 		verifyScrape(container(publicStructure().put("type_id", EveConstants.ASTRAHUS_HUB_TYPE_ID)));
 	}
 
 	@ParameterizedTest
 	@ValueSource(strings = {"location_id", "station_id"})
-	void shouldScrapeStructuresFromMarketOrders(String prop) {
-		marketOrders.add(objectMapper.createObjectNode().put(prop, 1000000000001L));
-		marketOrders.add(objectMapper.createObjectNode().put(prop, 60000001L));
+	void shouldScrapeStructuresFromMarketOrders(String prop) throws InterruptedException {
+		marketOrders.add(jsonMapper.createObjectNode().put(prop, 1000000000001L));
+		marketOrders.add(jsonMapper.createObjectNode().put(prop, 60000001L));
 		nonPublicStructures.put(1000000000001L, Map.of("name", "Test Structure 1"));
 		nonPublicStructures.put(60000001L, Map.of("name", "Should not be scraped"));
-		scrapeStructures.run();
+		VirtualThreads.onVirtualThread(scrapeStructures::run);
 		verifyScrape(container(nonPublicStructure()));
 	}
 
 	@ParameterizedTest
 	@ValueSource(strings = {"location_id", "station_id"})
-	void shouldPreserveLocationOnHiddenStructuresFromMarketOrders(String prop) {
-		marketOrders.add(objectMapper
+	void shouldPreserveLocationOnHiddenStructuresFromMarketOrders(String prop) throws InterruptedException {
+		marketOrders.add(jsonMapper
 				.createObjectNode()
 				.put(prop, 1000000000001L)
 				.put("region_id", 10000001)
 				.put("constellation_id", 20000001)
 				.put("system_id", 30000001));
-		marketOrders.add(objectMapper
+		marketOrders.add(jsonMapper
 				.createObjectNode()
 				.put(prop, 60000001L)
 				.put("region_id", 10000002)
 				.put("constellation_id", 20000002)
 				.put("system_id", 30000002));
-		scrapeStructures.run();
+		VirtualThreads.onVirtualThread(scrapeStructures::run);
 		verifyScrape(container(hiddenStructureWithLocation()));
 	}
 
 	@ParameterizedTest
 	@ValueSource(strings = {"start_location_id", "end_location_id"})
-	void shouldScrapeStructuresFromPublicContracts(String prop) {
+	void shouldScrapeStructuresFromPublicContracts(String prop) throws InterruptedException {
 		publicContracts.add(
-				objectMapper.createObjectNode().put(prop, 1000000000001L).put("contract_id", 1));
-		publicContracts.add(objectMapper.createObjectNode().put(prop, 60000001L).put("contract_id", 2));
+				jsonMapper.createObjectNode().put(prop, 1000000000001L).put("contract_id", 1));
+		publicContracts.add(jsonMapper.createObjectNode().put(prop, 60000001L).put("contract_id", 2));
 		nonPublicStructures.put(1000000000001L, Map.of("name", "Test Structure 1"));
 		nonPublicStructures.put(60000001L, Map.of("name", "Should not be scraped"));
-		scrapeStructures.run();
+		VirtualThreads.onVirtualThread(scrapeStructures::run);
 		verifyScrape(container(nonPublicStructure()));
 	}
 
 	@ParameterizedTest
 	@ValueSource(strings = {"start_location_id", "station_id"})
-	void shouldPreserveLocationOnHiddenStructuresFromPublicContracts(String prop) {
-		publicContracts.add(objectMapper
+	void shouldPreserveLocationOnHiddenStructuresFromPublicContracts(String prop) throws InterruptedException {
+		publicContracts.add(jsonMapper
 				.createObjectNode()
 				.put(prop, 1000000000001L)
 				.put("contract_id", 1)
 				.put("region_id", 10000001)
 				.put("constellation_id", 20000001)
 				.put("system_id", 30000001));
-		publicContracts.add(objectMapper
+		publicContracts.add(jsonMapper
 				.createObjectNode()
 				.put(prop, 60000001L)
 				.put("contract_id", 2)
 				.put("region_id", 10000002)
 				.put("constellation_id", 20000002)
 				.put("system_id", 30000002));
-		scrapeStructures.run();
+		VirtualThreads.onVirtualThread(scrapeStructures::run);
 		verifyScrape(container(hiddenStructureWithLocation()));
 	}
 
 	@Test
-	void shouldNotPreserveEndLocationOnHiddenStructuresFromPublicContracts() {
-		publicContracts.add(objectMapper
+	void shouldNotPreserveEndLocationOnHiddenStructuresFromPublicContracts() throws InterruptedException {
+		publicContracts.add(jsonMapper
 				.createObjectNode()
 				.put("end_location_id", 1000000000001L)
 				.put("contract_id", 1)
@@ -278,9 +279,9 @@ public class ScrapeStructuresTest {
 				.put("constellation_id", 20000001)
 				.put("system_id", 30000001));
 		publicContracts.add(
-				objectMapper.createObjectNode().put("end_location", 60000001L).put("contract_id", 2));
-		scrapeStructures.run();
-		verifyScrape(container(objectMapper
+				jsonMapper.createObjectNode().put("end_location", 60000001L).put("contract_id", 2));
+		VirtualThreads.onVirtualThread(scrapeStructures::run);
+		verifyScrape(container(jsonMapper
 				.createObjectNode()
 				.put("structure_id", 1000000000001L)
 				.put("is_gettable_structure", false)
@@ -290,7 +291,7 @@ public class ScrapeStructuresTest {
 	}
 
 	@Test
-	void shouldNotScrapeSovereigntyStructures() {
+	void shouldNotScrapeSovereigntyStructures() throws InterruptedException {
 		sovereigntyStructures.put(
 				1000000000001L,
 				Map.of(
@@ -299,33 +300,33 @@ public class ScrapeStructuresTest {
 						"alliance_id", 1300000001,
 						"solar_system_id", 300000001));
 		nonPublicStructures.put(1000000000001L, Map.of("name", "Should not scrape"));
-		scrapeStructures.run();
+		VirtualThreads.onVirtualThread(scrapeStructures::run);
 		verifyScrape(noStructures());
 	}
 
 	@Test
-	void shouldRemoveOldStructures() {
+	void shouldRemoveOldStructures() throws InterruptedException {
 		loadPreviousScrape(container(oldStructure()));
 		nonPublicStructures.put(1000000000001L, Map.of("name", "Should not scrape"));
-		scrapeStructures.run();
+		VirtualThreads.onVirtualThread(scrapeStructures::run);
 		verifyScrape(noStructures());
 	}
 
 	@Test
-	void shouldPreserveLocationsOnOldStructures() {
+	void shouldPreserveLocationsOnOldStructures() throws InterruptedException {
 		var structure = publicStructure()
 				.put("region_id", 10000001)
 				.put("constellation_id", 20000001)
 				.put("system_id", 30000001);
 		loadPreviousScrape(container(structure));
-		scrapeStructures.run();
+		VirtualThreads.onVirtualThread(scrapeStructures::run);
 		verifyScrape(container(structure.put("is_gettable_structure", false).put("is_public_structure", false)));
 	}
 
 	@Test
-	void shouldPopulateLocations() {
+	void shouldPopulateLocations() throws InterruptedException {
 		publicStructures.put(1000000000001L, Map.of("name", "Test Structure 1", "system_id", 30000001));
-		scrapeStructures.run();
+		VirtualThreads.onVirtualThread(scrapeStructures::run);
 		verifyScrape(container(publicStructure()
 				.put("region_id", 10000001)
 				.put("constellation_id", 20000001)
@@ -333,38 +334,38 @@ public class ScrapeStructuresTest {
 	}
 
 	@Test
-	void shouldSetFirstSeenOnNewStructures() {
+	void shouldSetFirstSeenOnNewStructures() throws InterruptedException {
 		publicStructures.put(1000000000001L, Map.of("name", "Test Structure 1"));
-		scrapeStructures.run();
+		VirtualThreads.onVirtualThread(scrapeStructures::run);
 		verifyScrape(container(publicStructure()));
 	}
 
 	@Test
-	void shouldNotPopulateFirstSeenOnExistingStructures() {
+	void shouldNotPopulateFirstSeenOnExistingStructures() throws InterruptedException {
 		loadPreviousScrape(container(publicStructure()));
 		previousScrape.withObject("1000000000001").remove("first_seen");
 		publicStructures.put(1000000000001L, Map.of("name", "Test Structure 1"));
-		scrapeStructures.run();
+		VirtualThreads.onVirtualThread(scrapeStructures::run);
 		assertNull(loadScrape().get("1000000000001").get("first_seen"));
 	}
 
 	@Test
-	void shouldNotUpdatePopulateFirstSeenOnExistingStructures() {
+	void shouldNotUpdatePopulateFirstSeenOnExistingStructures() throws InterruptedException {
 		loadPreviousScrape(container(publicStructure()));
 		previousScrape.withObject("1000000000001").put("first_seen", "2000-01-01T00:00:00Z");
 		publicStructures.put(1000000000001L, Map.of("name", "Test Structure 1"));
-		scrapeStructures.run();
+		VirtualThreads.onVirtualThread(scrapeStructures::run);
 		assertEquals(
 				"2000-01-01T00:00:00Z",
 				loadScrape().get("1000000000001").get("first_seen").textValue());
 	}
 
 	@Test
-	void shouldExecuteDataIndex() {
+	void shouldExecuteDataIndex() throws InterruptedException {
 		publicStructures.put(1000000000001L, Map.of("name", "Test Structure 1"));
-		scrapeStructures
+		VirtualThreads.onVirtualThread(() -> scrapeStructures
 				.setScrapeTime(ZonedDateTime.parse("2020-01-02T03:04:05Z"))
-				.run();
+				.run());
 		Mockito.verify(dataIndexHelper)
 				.updateIndex(
 						S3Url.builder()
@@ -389,13 +390,13 @@ public class ScrapeStructuresTest {
 		var content = mockS3Adapter
 				.getTestObject(BUCKET_NAME, archiveFile, dataClient)
 				.orElseThrow();
-		return (ObjectNode) objectMapper.readTree(content);
+		return (ObjectNode) jsonMapper.readTree(content);
 	}
 
 	@SneakyThrows
 	private void verifyScrape(@NonNull JsonNode container) {
-		var json = objectMapper.writeValueAsString(container);
-		var expected = objectMapper.readTree(json);
+		var json = jsonMapper.writeValueAsString(container);
+		var expected = jsonMapper.readTree(json);
 		var supplied = loadScrape();
 		assertEquals(expected, supplied);
 	}
@@ -413,14 +414,14 @@ public class ScrapeStructuresTest {
 					if (previousScrape == null) {
 						return new MockResponse().setResponseCode(404);
 					} else {
-						return new MockResponse().setBody(objectMapper.writeValueAsString(previousScrape));
+						return new MockResponse().setBody(jsonMapper.writeValueAsString(previousScrape));
 					}
 				}
 
 				// Handle both /universe/structures/ and /latest/universe/structures/
 				if (path.equals("/universe/structures/") || path.equals("/latest/universe/structures/")) {
 					return new MockResponse()
-							.setBody(objectMapper.writeValueAsString(publicStructures.keySet()))
+							.setBody(jsonMapper.writeValueAsString(publicStructures.keySet()))
 							.addHeader("Last-Modified", lastModified);
 				}
 
@@ -435,7 +436,7 @@ public class ScrapeStructuresTest {
 						return new MockResponse().setResponseCode(401);
 					} else {
 						return new MockResponse()
-								.setBody(objectMapper.writeValueAsString(structure))
+								.setBody(jsonMapper.writeValueAsString(structure))
 								.addHeader("Last-Modified", lastModified);
 					}
 				}
@@ -452,7 +453,7 @@ public class ScrapeStructuresTest {
 
 				if (path.equals("/sovereignty/structures/") || path.equals("/latest/sovereignty/structures/")) {
 					return new MockResponse()
-							.setBody(objectMapper.writeValueAsString(sovereigntyStructures.values()))
+							.setBody(jsonMapper.writeValueAsString(sovereigntyStructures.values()))
 							.addHeader("Last-Modified", lastModified);
 				}
 
@@ -481,7 +482,6 @@ public class ScrapeStructuresTest {
 							.setItemsStore(Map.of())
 							.setBidsStore(Map.of())
 							.setDynamicItemsStore(Map.of())
-							.setNonDynamicItemsStore(Map.of())
 							.setDogmaAttributesStore(Map.of())
 							.setDogmaEffectsStore(Map.of())
 							.buildFile();
@@ -490,9 +490,9 @@ public class ScrapeStructuresTest {
 				}
 
 				if (path.equals("/types/35892")) {
-					var obj = objectMapper.createObjectNode();
+					var obj = jsonMapper.createObjectNode();
 					obj.withArray("can_fit_types").add(EveConstants.KEEPSTAR_TYPE_ID);
-					return new MockResponse().setBody(objectMapper.writeValueAsString(obj));
+					return new MockResponse().setBody(jsonMapper.writeValueAsString(obj));
 				}
 
 				if (path.equals("/universe/systems/30000001/")) {
@@ -500,7 +500,7 @@ public class ScrapeStructuresTest {
 							.systemId(30000001)
 							.constellationId(20000001)
 							.name("System");
-					return new MockResponse().setBody(objectMapper.writeValueAsString(obj));
+					return new MockResponse().setBody(jsonMapper.writeValueAsString(obj));
 				}
 
 				if (path.equals("/universe/constellations/20000001/")) {
@@ -508,7 +508,7 @@ public class ScrapeStructuresTest {
 							.constellationId(20000001)
 							.name("Constellation")
 							.regionId(10000001);
-					return new MockResponse().setBody(objectMapper.writeValueAsString(obj));
+					return new MockResponse().setBody(jsonMapper.writeValueAsString(obj));
 				}
 
 				log.error(String.format("Unaccounted for URL: %s", path));
@@ -521,7 +521,7 @@ public class ScrapeStructuresTest {
 	}
 
 	private ObjectNode container(ObjectNode... structures) {
-		var container = objectMapper.createObjectNode();
+		var container = jsonMapper.createObjectNode();
 		for (ObjectNode structure : structures) {
 			var id = Objects.requireNonNull(structure.get("structure_id")).asText();
 			container.set(id, structure);
@@ -534,7 +534,7 @@ public class ScrapeStructuresTest {
 	}
 
 	private ObjectNode publicStructure() {
-		return objectMapper
+		return jsonMapper
 				.createObjectNode()
 				.put("name", "Test Structure 1")
 				.put("structure_id", 1000000000001L)
@@ -554,7 +554,7 @@ public class ScrapeStructuresTest {
 	}
 
 	private ObjectNode nonPublicStructure() {
-		return objectMapper
+		return jsonMapper
 				.createObjectNode()
 				.put("name", "Test Structure 1")
 				.put("structure_id", 1000000000001L)
@@ -566,7 +566,7 @@ public class ScrapeStructuresTest {
 	}
 
 	private ObjectNode hiddenStructure() {
-		return objectMapper
+		return jsonMapper
 				.createObjectNode()
 				.put("structure_id", 1000000000001L)
 				.put("is_public_structure", false)

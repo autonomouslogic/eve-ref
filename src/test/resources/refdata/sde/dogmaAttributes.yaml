@@ -2,7 +2,7 @@
 "9":
   attributeCategoryID: 4
   dataType: 4
-  defaultValue: 0
+  defaultValue: 0.0
   description: "The maximum hitpoints of an object."
   displayName:
     de: "HP der Struktur"
@@ -46,7 +46,7 @@
 "182":
   attributeCategoryID: 8
   dataType: 11
-  defaultValue: 0
+  defaultValue: 0.0
   description: "The type ID of the skill that is required."
   displayName:
     de: "Primärer Skill benötigt"
@@ -67,7 +67,7 @@
 "277":
   attributeCategoryID: 8
   dataType: 4
-  defaultValue: 0
+  defaultValue: 0.0
   description: "Required skill level for skill 1"
   displayWhenZero: false
   highIsGood: true
@@ -77,7 +77,7 @@
 "183":
   attributeCategoryID: 8
   dataType: 11
-  defaultValue: 0
+  defaultValue: 0.0
   description: "The type ID of the skill that is required."
   displayName:
     de: "Sekundärer Skill benötigt"
@@ -98,7 +98,7 @@
 "278":
   attributeCategoryID: 8
   dataType: 4
-  defaultValue: 0
+  defaultValue: 0.0
   description: "Required skill level for skill 2"
   displayWhenZero: false
   highIsGood: true
@@ -108,7 +108,7 @@
 "184":
   attributeCategoryID: 8
   dataType: 11
-  defaultValue: 0
+  defaultValue: 0.0
   description: "The type ID of the skill that is required."
   displayName:
     de: "Tertiärer Skill benötigt"
@@ -129,7 +129,7 @@
 "279":
   attributeCategoryID: 8
   dataType: 4
-  defaultValue: 0
+  defaultValue: 0.0
   description: "Required skill level for skill 3"
   displayWhenZero: false
   highIsGood: true
@@ -139,7 +139,7 @@
 "1285":
   attributeCategoryID: 8
   dataType: 11
-  defaultValue: 0
+  defaultValue: 0.0
   description: "The type ID of the skill that is required."
   displayName:
     de: "Quaternary-Skill benötigt"
@@ -160,7 +160,7 @@
 "1286":
   attributeCategoryID: 8
   dataType: 4
-  defaultValue: 0
+  defaultValue: 0.0
   description: "Required skill level for skill 4"
   displayName:
     de: "Benötigter Skill 5 Level"
@@ -180,7 +180,7 @@
 "1289":
   attributeCategoryID: 8
   dataType: 11
-  defaultValue: 0
+  defaultValue: 0.0
   description: "The type ID of the skill that is required."
   displayName:
     de: "Quinary-Skill benötigt"
@@ -201,7 +201,7 @@
 "1287":
   attributeCategoryID: 8
   dataType: 4
-  defaultValue: 0
+  defaultValue: 0.0
   description: "Required skill level for skill 5"
   displayWhenZero: false
   highIsGood: true
@@ -212,7 +212,7 @@
 "1290":
   attributeCategoryID: 8
   dataType: 11
-  defaultValue: 0
+  defaultValue: 0.0
   description: "The type ID of the skill that is required."
   displayName:
     de: "Senary-Skill benötigt"
@@ -233,7 +233,7 @@
 "1288":
   attributeCategoryID: 8
   dataType: 4
-  defaultValue: 0
+  defaultValue: 0.0
   description: "Required skill level for skill 6"
   displayWhenZero: false
   highIsGood: true
@@ -244,7 +244,7 @@
 "180":
   attributeCategoryID: 7
   dataType: 10
-  defaultValue: 0
+  defaultValue: 0.0
   description: "Only refers to another dogma attribute."
   displayName:
     de: "Primäres Attribut"
@@ -264,7 +264,7 @@
 "181":
   attributeCategoryID: 7
   dataType: 10
-  defaultValue: 0
+  defaultValue: 0.0
   description: "Only refers to another dogma attribute."
   displayName:
     de: "Sekundäres Attribut"
@@ -284,7 +284,7 @@
 "275":
   attributeCategoryID: 7
   dataType: 5
-  defaultValue: 0
+  defaultValue: 0.0
   description: "This attribute is a multiplier to the number of skill points required\
     \ to train. Skill points required to train a skill = 250 * skillTimeConstant *\
     \ sqrt(32)^(skillLevel - 1)"
@@ -307,7 +307,7 @@
 "164":
   attributeCategoryID: 7
   dataType: 4
-  defaultValue: 0
+  defaultValue: 0.0
   description: "The charisma of a character."
   displayName:
     de: "Ausstrahlung"
@@ -328,7 +328,7 @@
 "165":
   attributeCategoryID: 7
   dataType: 4
-  defaultValue: 0
+  defaultValue: 0.0
   description: "The intelligence of a character."
   displayName:
     de: "Intelligenz"
@@ -349,7 +349,7 @@
 "166":
   attributeCategoryID: 7
   dataType: 4
-  defaultValue: 0
+  defaultValue: 0.0
   description: "The memory of a character."
   displayName:
     de: "Gedächtnis"
@@ -370,7 +370,7 @@
 "167":
   attributeCategoryID: 9
   dataType: 4
-  defaultValue: 0
+  defaultValue: 0.0
   description: "The perception of a character."
   displayName:
     de: "Auffassungsgabe"
@@ -391,7 +391,7 @@
 "168":
   attributeCategoryID: 7
   dataType: 4
-  defaultValue: 0
+  defaultValue: 0.0
   description: "The willpower of a character."
   displayName:
     de: "Willenskraft"
@@ -412,7 +412,7 @@
 "1047":
   attributeCategoryID: 9
   dataType: 3
-  defaultValue: 1
+  defaultValue: 1.0
   description: "If set to 1 then this skill can not be trained on accounts that are\
     \ marked as Alpha Clone. Any other value (although you should probably use 0)\
     \ will result in all accounts being able to train this skill."
@@ -425,7 +425,7 @@
 "2699":
   attributeCategoryID: 7
   dataType: 5
-  defaultValue: 0
+  defaultValue: 0.0
   description: "0: Mission/NPE Ore\r\n1: Standard Ore/Ice\r\n2: +5% Ore\r\n3: +10%\
     \ Ore\r\n4: High Quality Ice or Extracted Ore\r\n5: Jackpot Moon Ore"
   displayWhenZero: false
@@ -436,7 +436,7 @@
 "2711":
   attributeCategoryID: 7
   dataType: 11
-  defaultValue: 0
+  defaultValue: 0.0
   description: "Reference for grouping ores in visual displays. All variants of one\
     \ ore should have the same BasicType ID"
   displayWhenZero: false
@@ -448,7 +448,7 @@
 "162":
   attributeCategoryID: 9
   dataType: 9
-  defaultValue: 0
+  defaultValue: 0.0
   description: "Radius of an object in meters"
   displayWhenZero: false
   highIsGood: true
@@ -459,7 +459,7 @@
 "1302":
   attributeCategoryID: 1
   dataType: 11
-  defaultValue: 0
+  defaultValue: 0.0
   description: ""
   displayName:
     de: "Kann nur eingebaut werden"
@@ -480,7 +480,7 @@
 "1303":
   attributeCategoryID: 1
   dataType: 11
-  defaultValue: 0
+  defaultValue: 0.0
   description: ""
   displayName:
     de: "Kann eingebaut werden in"
@@ -501,7 +501,7 @@
 "1304":
   attributeCategoryID: 1
   dataType: 11
-  defaultValue: 0
+  defaultValue: 0.0
   description: ""
   displayName:
     de: "Kann eingebaut werden in"
@@ -522,7 +522,7 @@
 "1305":
   attributeCategoryID: 1
   dataType: 11
-  defaultValue: 0
+  defaultValue: 0.0
   description: ""
   displayName:
     de: "Kann eingebaut werden in"
@@ -543,7 +543,7 @@
 "790":
   attributeCategoryID: 7
   dataType: 11
-  defaultValue: 0
+  defaultValue: 0.0
   description: "The skill required to reprocess this ore type."
   displayName:
     de: "Aufbereitung-Skill"
@@ -564,7 +564,7 @@
 "2355":
   attributeCategoryID: 37
   dataType: 5
-  defaultValue: 1
+  defaultValue: 1.0
   description: ""
   displayName:
     de: "Hochsicherheits-Bonusmultiplikator"

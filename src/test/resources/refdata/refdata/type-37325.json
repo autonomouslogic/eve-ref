@@ -1,0 +1,27 @@
+{
+  "capacity" : 0,
+  "description" : {
+    "en" : "",
+    "fr" : ""
+  },
+  "group_id" : 1709,
+  "mass" : 0,
+  "name" : {
+    "en" : "Medium Consumable Manufacturing I Blueprint",
+    "fr" : "Plan de construction Module intermédiaire de fabrication de produits de consommation I",
+    "de" : "Medium Consumable Manufacturing I Blueprint",
+    "es" : "Plano de fabricación de consumibles mediana I",
+    "ja" : "中型消耗品製造1のブループリント",
+    "ko" : "중형 소모품 생산 I 블루프린트",
+    "ru" : "Medium Consumable Manufacturing I Blueprint",
+    "zh" : "中型消费品制造蓝图 I"
+  },
+  "packaged_volume" : 0.01,
+  "portion_size" : 1,
+  "published" : false,
+  "radius" : 1,
+  "type_id" : 37325,
+  "volume" : 0.01,
+  "base_price" : 100000000.0,
+  "is_blueprint" : true
+}

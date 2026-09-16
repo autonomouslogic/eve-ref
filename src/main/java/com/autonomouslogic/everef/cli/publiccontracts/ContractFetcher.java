@@ -1,17 +1,15 @@
 package com.autonomouslogic.everef.cli.publiccontracts;
 
+import com.autonomouslogic.commons.concurrent.VirtualThreads;
 import com.autonomouslogic.everef.esi.EsiHelper;
 import com.autonomouslogic.everef.esi.EsiUrl;
 import com.autonomouslogic.everef.esi.LocationPopulator;
 import com.autonomouslogic.everef.esi.UniverseEsi;
 import com.autonomouslogic.everef.http.OkHttpWrapper;
 import com.autonomouslogic.everef.openapi.esi.model.GetUniverseRegionsRegionIdOk;
-import com.autonomouslogic.everef.util.VirtualThreads;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.reactivex.rxjava3.core.Flowable;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -26,8 +24,12 @@ import javax.inject.Named;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.node.ObjectNode;
 
 /**
  * Fetches all the public contracts for all the regions.
@@ -35,7 +37,7 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 @Slf4j
 public class ContractFetcher {
 	@Inject
-	protected ObjectMapper objectMapper;
+	protected JsonMapper jsonMapper;
 
 	@Inject
 	protected LocationPopulator locationPopulator;
@@ -67,10 +69,12 @@ public class ContractFetcher {
 	private Map<Long, JsonNode> bidsStore;
 
 	private final Set<Long> contractsWithItems = Collections.newSetFromMap(new ConcurrentHashMap<>());
+	private final Map<Long, List<Long>> contractItemsIndex = new ConcurrentHashMap<>();
 
 	@Inject
 	protected ContractFetcher() {}
 
+	@SneakyThrows
 	public List<Long> fetchPublicContracts() {
 		buildKnownItemIndex();
 		var regions = universeEsi.getAllRegions();
@@ -80,7 +84,8 @@ public class ContractFetcher {
 				.map(region -> (Callable<List<Long>>) () -> fetchContractsForRegion(region))
 				.toList();
 
-		var allContractIds = VirtualThreads.parallel(tasks, 3);
+		VirtualThreads.checkIsVirtual();
+		var allContractIds = VirtualThreads.callAll(tasks.iterator(), 3);
 
 		// Flatten the list of lists
 		return allContractIds.stream().flatMap(List::stream).toList();
@@ -94,6 +99,7 @@ public class ContractFetcher {
 				Duration.ofSeconds(5));
 	}
 
+	@SneakyThrows
 	private List<Long> fetchContractsForRegionInner(GetUniverseRegionsRegionIdOk region) {
 		var count = new AtomicInteger();
 		log.info("Fetching public contracts from {}", region.getName());
@@ -104,7 +110,9 @@ public class ContractFetcher {
 		// Process contracts in parallel (32 at a time)
 		var tasks = contracts.stream()
 				.map(contract -> (Callable<Long>) () -> {
-					var contractId = populateLocation(region, contract);
+					var contractId = contract.get("contract_id").asLong();
+					populateLocation(region, contract);
+					resolveItemsAndBids(contract);
 					var n = count.incrementAndGet();
 					if (n % 1_000 == 0) {
 						log.debug("Fetched {} public contracts from {}", n, region.getName());
@@ -113,7 +121,8 @@ public class ContractFetcher {
 				})
 				.toList();
 
-		var contractIds = VirtualThreads.parallel(tasks, 32);
+		VirtualThreads.checkIsVirtual();
+		var contractIds = VirtualThreads.callAll(tasks.iterator(), 32);
 
 		log.info("Fetched {} public contracts from {}", count.get(), region.getName());
 		return contractIds;
@@ -130,15 +139,10 @@ public class ContractFetcher {
 				.blockingGet();
 	}
 
-	private Long populateLocation(GetUniverseRegionsRegionIdOk region, ObjectNode entry) {
-		var contractId = entry.get("contract_id").asLong();
+	private void populateLocation(GetUniverseRegionsRegionIdOk region, ObjectNode entry) {
 		entry.put("region_id", region.getRegionId());
-
 		locationPopulator.populate(entry, "start_location_id").blockingAwait();
 		contractsStore.put(ContractsFileBuilder.CONTRACT_ID.apply(entry), entry);
-		resolveItemsAndBids(entry);
-
-		return contractId;
 	}
 
 	private void resolveItemsAndBids(ObjectNode contract) {
@@ -155,6 +159,12 @@ public class ContractFetcher {
 
 	private void fetchContractItems(long contractId) {
 		if (contractsWithItems.contains(contractId)) {
+			var itemIds = contractItemsIndex.getOrDefault(contractId, List.of());
+			var cachedItems = itemIds.stream()
+					.map(itemId -> (ObjectNode) itemsStore.get(itemId))
+					.filter(item -> item != null)
+					.toList();
+			contractAbyssalFetcher.retryMissingDogmaForCachedItems(contractId, cachedItems);
 			return;
 		}
 		var items = fetchContractSub("items", ContractsFileBuilder.ITEM_ID, itemsStore, contractId);
@@ -195,9 +205,14 @@ public class ContractFetcher {
 	 */
 	private void buildKnownItemIndex() {
 		log.debug("Building item contract index.");
-		itemsStore
-				.values()
-				.forEach(item -> contractsWithItems.add(item.get("contract_id").asLong()));
+		itemsStore.entrySet().forEach(entry -> {
+			long itemId = entry.getKey();
+			long contractId = entry.getValue().get("contract_id").asLong();
+			contractsWithItems.add(contractId);
+			contractItemsIndex
+					.computeIfAbsent(contractId, k -> new ArrayList<>())
+					.add(itemId);
+		});
 		log.debug("Built list of {} known contracts with items.", contractsWithItems.size());
 	}
 

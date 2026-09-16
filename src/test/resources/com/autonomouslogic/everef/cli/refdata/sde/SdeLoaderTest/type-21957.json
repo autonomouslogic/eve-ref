@@ -1,5 +1,5 @@
 {
-  "base_price" : 95625000,
+  "base_price" : 95625000.0,
   "description" : {
     "de" : "Holzplanken, Schleifmaschinen, Nietgeräte, Haspeln und verschiedene andere Maschinenteile, die für den Betrieb einer Werkstattseinrichtung auf einem Außenposten erforderlich sind.",
     "en" : "Lathes, grinders, riveting machines, uncoilers, and various other pieces of machinery required for the operation of an outpost repair facility.",
@@ -13,7 +13,7 @@
   "group_id" : 536,
   "icon_id" : 2880,
   "market_group_id" : 1865,
-  "mass" : 10000,
+  "mass" : 10000.0,
   "name" : {
     "de" : "Structure Repair Facility",
     "en" : "Structure Repair Facility",
@@ -24,9 +24,9 @@
     "ru" : "Structure Repair Facility",
     "zh" : "建筑维修设施"
   },
-  "packaged_volume" : 3000,
+  "packaged_volume" : 3000.0,
   "portion_size" : 1,
   "published" : true,
-  "volume" : 3000,
+  "volume" : 3000.0,
   "type_id" : 21957
 }

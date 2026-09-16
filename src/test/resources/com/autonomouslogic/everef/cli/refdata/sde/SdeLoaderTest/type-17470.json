@@ -1,5 +1,5 @@
 {
-  "base_price" : 2100,
+  "base_price" : 2100.0,
   "description" : {
     "de" : "Anhäufungen von Veldspar mit einer 5 % höheren Ausbeute, auch II.-Grad-Veldsar oder konzentriertes Veldspar genannt, werden häufig in Regionen gefunden, in denen es normales Veldspar bereits im Überfluss gibt. Veldspar ist die am häufigsten vorkommende Erzart in den zentralen Regionen des bekannten Universums. Da Veldspar eine große Menge des häufig gebrauchten Minerals <a href=showinfo:34>Tritanium</a> enthält, besteht noch immer eine ständige Nachfrage. Vorwiegend verfügbar in Sonnensystemen des Hochsicherheitsraums.",
     "en" : "Clusters of veldspar with 5% higher yield, called II-Grade or concentrated veldspar, are sometimes found in areas where normal veldspar is already in abundance.\n\nVeldspar is the most common ore type in the central regions of known universe. It is still in constant demand as it holds a large portion of the much-used <a href=showinfo:34>Tritanium</a> mineral.\n\nAvailable primarily in high security status star systems.",
@@ -13,7 +13,7 @@
   "group_id" : 462,
   "icon_id" : 232,
   "market_group_id" : 518,
-  "mass" : 4000,
+  "mass" : 4000.0,
   "name" : {
     "de" : "Veldspar II-Grade",
     "en" : "Veldspar II-Grade",

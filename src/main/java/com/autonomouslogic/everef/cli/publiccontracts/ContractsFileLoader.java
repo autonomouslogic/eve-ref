@@ -4,9 +4,6 @@ import com.autonomouslogic.everef.http.OkHttpWrapper;
 import com.autonomouslogic.everef.util.DataUtil;
 import com.autonomouslogic.everef.util.JsonNodeCsvReader;
 import com.autonomouslogic.everef.util.TempFiles;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -21,6 +18,9 @@ import lombok.extern.log4j.Log4j2;
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
 import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream;
+import tools.jackson.core.StreamReadFeature;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.json.JsonMapper;
 
 /**
  * Loads a public contracts archive.
@@ -31,7 +31,7 @@ public class ContractsFileLoader {
 	protected JsonNodeCsvReader jsonNodeCsvReader;
 
 	@Inject
-	protected ObjectMapper objectMapper;
+	protected JsonMapper jsonMapper;
 
 	@Inject
 	protected TempFiles tempFiles;
@@ -57,10 +57,6 @@ public class ContractsFileLoader {
 	@Setter
 	@NonNull
 	private Map<Long, JsonNode> dynamicItemsStore;
-
-	@Setter
-	@NonNull
-	private Map<Long, JsonNode> nonDynamicItemsStore;
 
 	@Setter
 	@NonNull
@@ -140,9 +136,6 @@ public class ContractsFileLoader {
 				case ContractsFileBuilder.DYNAMIC_ITEMS_CSV:
 					loadDynamicItems(tar);
 					break;
-				case ContractsFileBuilder.NON_DYNAMIC_ITEMS_CSV:
-					loadNonDynamicItems(tar);
-					break;
 				case ContractsFileBuilder.DOGMA_ATTRIBUTES_CSV:
 					loadDogmaAttributes(tar);
 					break;
@@ -160,9 +153,10 @@ public class ContractsFileLoader {
 	@SneakyThrows
 	public ContractsScrapeMeta loadMeta(@NonNull InputStream in) {
 		log.debug("Reading meta");
-		return objectMapper
-				.copy()
-				.disable(JsonParser.Feature.AUTO_CLOSE_SOURCE)
+		return jsonMapper
+				.rebuild()
+				.disable(StreamReadFeature.AUTO_CLOSE_SOURCE)
+				.build()
 				.readValue(in, ContractsScrapeMeta.class);
 	}
 
@@ -188,12 +182,6 @@ public class ContractsFileLoader {
 	public void loadDynamicItems(@NonNull InputStream in) {
 		log.debug("Reading dynamic items");
 		loadEntries("dynamic items", in, dynamicItemsStore, ContractsFileBuilder.DYNAMIC_ITEM_ID);
-	}
-
-	@SneakyThrows
-	public void loadNonDynamicItems(@NonNull InputStream in) {
-		log.debug("Reading non-dynamic items");
-		loadEntries("non-dynamic items", in, nonDynamicItemsStore, ContractsFileBuilder.NON_DYNAMIC_ITEM_ID);
 	}
 
 	@SneakyThrows

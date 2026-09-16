@@ -6,6 +6,7 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import com.autonomouslogic.commons.concurrent.VirtualThreads;
 import com.autonomouslogic.everef.cli.DataIndex;
 import com.autonomouslogic.everef.url.S3Url;
 import dagger.Component;
@@ -51,8 +52,8 @@ public class DataIndexHelperTest {
 	}
 
 	@Test
-	void shouldUpdateIndexes() {
-		dataIndexHelper
+	void shouldUpdateIndexes() throws InterruptedException {
+		VirtualThreads.onVirtualThread(() -> dataIndexHelper
 				.updateIndex(
 						S3Url.builder()
 								.bucket("bucket")
@@ -63,7 +64,7 @@ public class DataIndexHelperTest {
 								.path(
 										"market-orders/history/2023/2023-09-11/market-orders-2023-09-11_05-47-09.v3.csv.bz2")
 								.build())
-				.blockingAwait();
+				.blockingAwait());
 		var inOrder = Mockito.inOrder(dataIndex);
 
 		inOrder.verify(dataIndex).setPrefix("market-orders/");

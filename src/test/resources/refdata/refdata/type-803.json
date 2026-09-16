@@ -29,7 +29,7 @@
   "group_id" : 166,
   "icon_id" : 182,
   "market_group_id" : 1526,
-  "mass" : 1,
+  "mass" : 1.0,
   "name" : {
     "en" : "Mjolnir Cruise Missile Blueprint",
     "fr" : "Plan de construction Missile de croisière Mjolnir",
@@ -46,6 +46,6 @@
   "radius" : 1,
   "type_id" : 803,
   "volume" : 0.01,
-  "base_price" : 5000000,
+  "base_price" : 5000000.0,
   "is_blueprint" : true
 }

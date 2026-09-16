@@ -13,7 +13,7 @@
   "icon_id" : 21729,
   "is_repackable" : true,
   "market_group_id" : 2347,
-  "mass" : 200,
+  "mass" : 200.0,
   "meta_group_id" : 54,
   "name" : {
     "de" : "Standup M-Set Blueprint Copy Cost Optimization I",
@@ -25,11 +25,11 @@
     "ru" : "Standup M-Set Blueprint Copy Cost Optimization I",
     "zh" : "屹立中型蓝图拷贝成本优化 I"
   },
-  "packaged_volume" : 10,
+  "packaged_volume" : 10.0,
   "portion_size" : 1,
   "published" : true,
-  "radius" : 100,
+  "radius" : 100.0,
   "tech_level" : 1,
-  "volume" : 10,
+  "volume" : 10.0,
   "type_id" : 43891
 }

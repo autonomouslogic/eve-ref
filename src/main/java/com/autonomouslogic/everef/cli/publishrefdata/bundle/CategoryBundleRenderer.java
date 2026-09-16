@@ -1,12 +1,12 @@
 package com.autonomouslogic.everef.cli.publishrefdata.bundle;
 
 import com.autonomouslogic.everef.refdata.InventoryCategory;
-import com.fasterxml.jackson.databind.JsonNode;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Maybe;
 import javax.inject.Inject;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.tuple.Pair;
+import tools.jackson.databind.JsonNode;
 
 /**
  * Renders the basic objects in the reference data collections.
@@ -23,12 +23,12 @@ public class CategoryBundleRenderer extends BundleRenderer {
 
 	private Maybe<Pair<String, JsonNode>> createCategoryBundle(long categoryId) {
 		var categoryJson = getCategoriesMap().get(categoryId);
-		var category = objectMapper.convertValue(categoryJson, InventoryCategory.class);
+		var category = jsonMapper.convertValue(categoryJson, InventoryCategory.class);
 		var groupIds = category.getGroupIds();
 
-		var bundleJson = objectMapper.createObjectNode();
-		bundleJson.withObject("categories").put(Long.toString(categoryId), categoryJson);
-		var groupsJson = objectMapper.createObjectNode();
+		var bundleJson = jsonMapper.createObjectNode();
+		bundleJson.withObject("categories").set(Long.toString(categoryId), categoryJson);
+		var groupsJson = jsonMapper.createObjectNode();
 
 		if (groupIds != null) {
 			for (long groupId : groupIds) {
@@ -40,7 +40,7 @@ public class CategoryBundleRenderer extends BundleRenderer {
 		}
 
 		if (!groupsJson.isEmpty()) {
-			bundleJson.put("groups", groupsJson);
+			bundleJson.set("groups", groupsJson);
 		}
 
 		var path = refDataUtil.subPath("categories", category.getCategoryId()) + "/bundle";

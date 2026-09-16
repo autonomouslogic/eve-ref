@@ -5,12 +5,12 @@ plugins {
 	id "idea"
 	id "application"
 	id "jacoco"
-	id "org.danilopianini.git-sensitive-semantic-versioning-gradle-plugin" version "7.0.23"
+	id "org.danilopianini.git-sensitive-semantic-versioning-gradle-plugin" version "7.0.24"
 	id "io.freefair.lombok" version "9.5.0"
-	id "com.diffplug.spotless" version "8.9.0"
-	id "org.openapi.generator" version "7.24.0"
-	id "io.swagger.core.v3.swagger-gradle-plugin" version "2.2.53"
-	id "org.flywaydb.flyway" version "13.2.0" apply false
+	id "com.diffplug.spotless" version "8.10.2"
+	id "org.openapi.generator" version "7.25.0"
+	id "io.swagger.core.v3.swagger-gradle-plugin" version "2.2.55"
+	id "org.flywaydb.flyway" version "13.5.0" apply false
 	id "nu.studer.jooq" version "10.2.1" apply false
 }
 
@@ -45,13 +45,13 @@ dependencies {
 	annotationProcessor "com.google.dagger:dagger-compiler:2.60.1"
 	implementation project(":database")
 	implementation "com.google.dagger:dagger:2.60.1"
-	implementation "com.google.guava:guava:33.6.0-jre"
+	implementation "com.google.guava:guava:33.7.1-jre"
 	implementation "org.apache.logging.log4j:log4j-api:2.26.1"
 	implementation "org.apache.logging.log4j:log4j-core:2.26.1"
 	implementation "org.apache.logging.log4j:log4j-layout-template-json:2.26.1"
 	implementation "org.apache.logging.log4j:log4j-slf4j2-impl:2.26.1"
 	implementation "io.reactivex.rxjava3:rxjava:3.1.12"
-	implementation "com.autonomouslogic.commons:commons-java:1.11.1"
+	implementation "com.autonomouslogic.commons:commons-java:1.11.2"
 	implementation("de.neuland-bfi:pug4j:2.4.1") {
 		exclude group: "org.graalvm.js"
 		exclude group: "org.graalvm.sdk"
@@ -59,58 +59,68 @@ dependencies {
 		exclude group: "org.graalvm.tools"
 		exclude group: "com.vladsch.flexmark"
 	}
-	implementation "software.amazon.awssdk:s3:2.51.1"
-	implementation "software.amazon.awssdk:dynamodb:2.51.1"
-	implementation "software.amazon.awssdk:netty-nio-client:2.51.1"
-	implementation "com.autonomouslogic.dynamomapper:dynamo-mapper:2.1.35"
+	implementation "software.amazon.awssdk:s3:2.54.13"
+	implementation "software.amazon.awssdk:dynamodb:2.54.13"
+	implementation "software.amazon.awssdk:netty-nio-client:2.54.13"
+	implementation "com.autonomouslogic.dynamomapper:dynamo-mapper:3.0.1"
+	// Jackson 3 - primary Jackson dependency for this project's own code.
+	// Jackson 3 uses different packages (tools.jackson.*) from Jackson 2 (com.fasterxml.jackson.*),
+	// so both versions can coexist on the classpath without conflicts.
+	// jackson-annotations stays at com.fasterxml.jackson.core (Jackson 3 databind still depends on it).
 	implementation "com.fasterxml.jackson.core:jackson-annotations:2.22"
-	implementation "com.fasterxml.jackson.core:jackson-core:2.22.1"
-	implementation "com.fasterxml.jackson.core:jackson-databind:2.22.1"
-	implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.22.1"
-	implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-csv:2.22.1"
-	implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.22.1"
-	implementation "com.fasterxml.jackson.module:jackson-module-kotlin:2.22.1"
+	implementation "tools.jackson.core:jackson-databind:3.2.2"
+	implementation "tools.jackson.dataformat:jackson-dataformat-yaml:3.2.2"
+	implementation "tools.jackson.dataformat:jackson-dataformat-csv:3.2.2"
+	implementation "tools.jackson.module:jackson-module-kotlin:3.2.2"
+	// jackson-datatype-jsr310 is now embedded in Jackson 3 - no separate dependency needed.
+	// Jackson 2 remains on the classpath transitively via the following:
+	// - swagger-core (io.swagger.core.v3:swagger-core) has no Jackson 3 release, kept for OpenAPI spec generation.
+	// - dynamo-mapper (com.autonomouslogic.dynamomapper:dynamo-mapper) uses Jackson 2 internally.
+	// - jackson-databind-nullable is only used in OpenAPI generated code which uses Jackson 2.
+	// These Jackson 2 artifacts come in transitively; explicit declarations below document the intent.
+	implementation "com.fasterxml.jackson.core:jackson-core:2.22.2" // kept for swagger-core and dynamo-mapper
+	implementation "com.fasterxml.jackson.core:jackson-databind:2.22.2" // kept for swagger-core and dynamo-mapper
 	implementation "org.apache.commons:commons-pool2:2.13.1"
 	implementation "org.apache.commons:commons-compress:1.28.0"
 	implementation "org.tukaani:xz:1.12"
-	implementation "com.h2database:h2-mvstore:2.4.240"
-	implementation "com.squareup.okhttp3:okhttp:5.4.0"
+	implementation "com.h2database:h2-mvstore:2.5.250"
+	implementation "com.squareup.okhttp3:okhttp:5.5.0"
 	implementation "org.apache.commons:commons-csv:1.14.1"
 	implementation "net.gpedro.integrations.slack:slack-webhook:1.4.0"
-	implementation "org.jsoup:jsoup:1.23.1"
+	implementation "org.jsoup:jsoup:1.23.2"
 	implementation "commons-codec:commons-codec:1.22.1"
-	implementation "io.dropwizard.metrics:metrics-core:4.2.39"
+	implementation "io.dropwizard.metrics:metrics-core:4.2.40"
 	implementation "com.autonomouslogic.customspecfilter:custom-spec-filter:1.2.3"
-	implementation "io.swagger.core.v3:swagger-core:2.2.53"
-	implementation "io.swagger.core.v3:swagger-jaxrs2:2.2.53"
+	implementation "io.swagger.core.v3:swagger-core:2.2.55"
+	implementation "io.swagger.core.v3:swagger-jaxrs2:2.2.55"
 	implementation "javax.ws.rs:javax.ws.rs-api:2.1.1"
 	implementation "javax.annotation:javax.annotation-api:1.3.2"
 	implementation "org.openapitools:jackson-databind-nullable:0.2.11"
 	implementation "org.apache.commons:commons-rng-simple:1.7"
-	implementation "org.bouncycastle:bcprov-jdk18on:1.85"
-	implementation "io.sentry:sentry:8.52.0"
+	implementation "org.bouncycastle:bcprov-jdk18on:1.85.2"
+	implementation "io.sentry:sentry:8.55.0"
 	implementation "com.github.scribejava:scribejava-core:8.3.3"
 	implementation "org.apache.commons:commons-lang3:3.20.0"
 	implementation "com.google.code.findbugs:jsr305:3.0.2"
 
 	// Jooq, Flyway, H2, Postgresql
-	implementation "org.jooq:jooq:3.21.7"
-	implementation "org.flywaydb:flyway-core:13.2.0"
-	implementation "org.flywaydb:flyway-database-postgresql:13.2.0"
-	implementation "com.h2database:h2:2.4.240"
+	implementation "org.jooq:jooq:3.21.8"
+	implementation "org.flywaydb:flyway-core:13.5.0"
+	implementation "org.flywaydb:flyway-database-postgresql:13.5.0"
+	implementation "com.h2database:h2:2.5.250"
 	implementation "org.postgresql:postgresql:42.7.13"
 
 	// Helidon
-	implementation "io.helidon.webserver:helidon-webserver:4.5.2"
-	implementation "io.helidon.logging:helidon-logging-slf4j:4.5.2"
+	implementation "io.helidon.webserver:helidon-webserver:4.5.4"
+	implementation "io.helidon.logging:helidon-logging-slf4j:4.5.4"
 
 	testAnnotationProcessor "com.google.dagger:dagger-compiler:2.60.1"
 	testImplementation "com.google.dagger:dagger:2.60.1"
-	testImplementation "org.junit.jupiter:junit-jupiter:6.1.2"
-	testImplementation "org.junit.jupiter:junit-jupiter-params:6.1.2"
+	testImplementation "org.junit.jupiter:junit-jupiter:6.1.3"
+	testImplementation "org.junit.jupiter:junit-jupiter-params:6.1.3"
 	testImplementation "org.junit-pioneer:junit-pioneer:2.3.0"
 	testImplementation "org.mockito:mockito-junit-jupiter:5.23.0"
-	testImplementation "com.squareup.okhttp3:mockwebserver:5.4.0"
+	testImplementation "com.squareup.okhttp3:mockwebserver:5.5.0"
 }
 
 task refDataSpec(type: io.swagger.v3.plugins.gradle.tasks.ResolveTask) {
@@ -127,6 +137,7 @@ task refDataSpec(type: io.swagger.v3.plugins.gradle.tasks.ResolveTask) {
 	resourcePackages = ["com.autonomouslogic.everef.refdata"]
 	outputDir = file("spec")
 	outputFileName = "reference-data"
+	objectMapperProcessorClass = "com.autonomouslogic.everef.openapi.SnakeCaseObjectMapperProcessor"
 
 	classpath = sourceSets.main.runtimeClasspath
 	buildClasspath = classpath
@@ -229,6 +240,7 @@ task apiSpec(type: io.swagger.v3.plugins.gradle.tasks.ResolveTask) {
 	resourcePackages = ["com.autonomouslogic.everef.api"]
 	outputDir = file("spec")
 	outputFileName = "eve-ref-api"
+	objectMapperProcessorClass = "com.autonomouslogic.everef.openapi.SnakeCaseObjectMapperProcessor"
 
 	classpath = sourceSets.main.runtimeClasspath
 	buildClasspath = classpath
@@ -352,6 +364,11 @@ task scrapePublicContracts(type: JavaExec) {
 	environment envProperties
 	classpath = sourceSets.main.runtimeClasspath
 	mainClass = mainClassName
+
+	// https://github.com/async-profiler/async-profiler/blob/master/docs/GettingStarted.md
+//	jvmArgs "-XX:+UnlockDiagnosticVMOptions",
+//			"-XX:+DebugNonSafepoints",
+//			"-agentpath:/tmp/async-profiler-4.5-linux-x64/lib/libasyncProfiler.so=start,event=cpu,file=profile.html"
 }
 
 task buildRefData(type: JavaExec) {

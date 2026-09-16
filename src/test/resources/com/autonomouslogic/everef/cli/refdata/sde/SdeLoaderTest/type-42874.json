@@ -1,5 +1,5 @@
 {
-  "base_price" : 10000000,
+  "base_price" : 10000000.0,
   "group_id" : 1810,
   "icon_id" : 21690,
   "market_group_id" : 2291,

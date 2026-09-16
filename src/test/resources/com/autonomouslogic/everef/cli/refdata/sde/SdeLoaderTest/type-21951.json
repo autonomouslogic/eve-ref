@@ -1,5 +1,5 @@
 {
-  "base_price" : 22500000,
+  "base_price" : 22500000.0,
   "description" : {
     "de" : "Eines von unzähligen Bauteilen, die für den Bau eines Außenpostens im All erforderlich sind.",
     "en" : "One of the myriad construction components required for the building of space outposts.",
@@ -13,7 +13,7 @@
   "group_id" : 536,
   "icon_id" : 2877,
   "market_group_id" : 1865,
-  "mass" : 10000,
+  "mass" : 10000.0,
   "name" : {
     "de" : "Structure Storage Bay",
     "en" : "Structure Storage Bay",
@@ -24,9 +24,9 @@
     "ru" : "Structure Storage Bay",
     "zh" : "建筑贮藏舱"
   },
-  "packaged_volume" : 3000,
+  "packaged_volume" : 3000.0,
   "portion_size" : 1,
   "published" : true,
-  "volume" : 3000,
+  "volume" : 3000.0,
   "type_id" : 21951
 }

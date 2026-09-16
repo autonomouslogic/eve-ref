@@ -1,11 +1,11 @@
 package com.autonomouslogic.everef.cli.refdata.post;
 
 import com.autonomouslogic.everef.refdata.InventoryGroup;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
 import io.reactivex.rxjava3.core.Completable;
 import javax.inject.Inject;
 import lombok.extern.log4j.Log4j2;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.node.ArrayNode;
 
 /**
  * References inventory groups on inventory categories.
@@ -13,7 +13,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class GroupsDecorator extends PostDecorator {
 	@Inject
-	protected ObjectMapper objectMapper;
+	protected JsonMapper jsonMapper;
 
 	@Inject
 	protected GroupsDecorator() {}
@@ -24,7 +24,7 @@ public class GroupsDecorator extends PostDecorator {
 			var groups = storeHandler.getRefStore("groups");
 			var categories = storeHandler.getRefStore("categories");
 			for (var groupJson : groups.values()) {
-				var group = objectMapper.convertValue(groupJson, InventoryGroup.class);
+				var group = jsonMapper.convertValue(groupJson, InventoryGroup.class);
 				var categoryId = group.getCategoryId();
 				var categoryJson = categories.get(categoryId);
 				if (categoryJson == null) {

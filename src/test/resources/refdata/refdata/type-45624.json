@@ -126,7 +126,7 @@
   "group_id" : 958,
   "icon_id" : 3636,
   "market_group_id" : 1122,
-  "mass" : 1200000,
+  "mass" : 1200000.0,
   "name" : {
     "en" : "Legion Core - Energy Parasitic Complex",
     "fr" : "Legion Nucléus – Complexe énergétique parasite",
@@ -137,12 +137,12 @@
     "ru" : "Legion Core - Energy Parasitic Complex",
     "zh" : "圣卒核心 - 能量寄取集成体"
   },
-  "packaged_volume" : 40,
+  "packaged_volume" : 40.0,
   "portion_size" : 1,
   "published" : true,
   "radius" : 1,
   "type_id" : 45624,
-  "volume" : 40,
+  "volume" : 40.0,
   "is_repackable" : true,
   "meta_group_id" : 14,
   "meta_level" : 1,

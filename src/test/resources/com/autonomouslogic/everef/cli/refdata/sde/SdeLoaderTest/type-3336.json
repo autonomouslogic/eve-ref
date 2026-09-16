@@ -1,5 +1,5 @@
 {
-  "base_price" : 7500000,
+  "base_price" : 7500000.0,
   "description" : {
     "de" : "Skill zur Bedienung von Gallente-Schlachtschiffen.",
     "en" : "Skill at operating Gallente battleships.",

@@ -10,7 +10,6 @@ import com.autonomouslogic.everef.url.HttpUrl;
 import com.autonomouslogic.everef.url.UrlParser;
 import com.autonomouslogic.everef.util.TempFiles;
 import com.autonomouslogic.everef.util.archive.ArchivePathFactories;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Single;
 import java.net.URI;
@@ -22,6 +21,7 @@ import javax.inject.Provider;
 import javax.inject.Singleton;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.tuple.Pair;
+import tools.jackson.databind.json.JsonMapper;
 
 @Singleton
 @Log4j2
@@ -33,7 +33,7 @@ public class MarketHistoryUtil {
 	protected OkHttpWrapper okHttpWrapper;
 
 	@Inject
-	protected ObjectMapper objectMapper;
+	protected JsonMapper jsonMapper;
 
 	@Inject
 	protected UrlParser urlParser;
@@ -64,9 +64,8 @@ public class MarketHistoryUtil {
 				if (response.code() != 200) {
 					return Single.error(new RuntimeException("Failed downloading pairs file"));
 				}
-				var type =
-						objectMapper.getTypeFactory().constructMapType(TreeMap.class, LocalDate.class, Integer.class);
-				Map<LocalDate, Integer> totals = objectMapper.readValue(file, type);
+				var type = jsonMapper.getTypeFactory().constructMapType(TreeMap.class, LocalDate.class, Integer.class);
+				Map<LocalDate, Integer> totals = jsonMapper.readValue(file, type);
 				log.info("Pairs file loaded");
 				file.delete();
 				return Single.just(totals);

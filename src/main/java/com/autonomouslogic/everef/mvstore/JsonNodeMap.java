@@ -1,7 +1,5 @@
 package com.autonomouslogic.everef.mvstore;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.AbstractMap;
 import java.util.AbstractSet;
 import java.util.Iterator;
@@ -11,12 +9,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.h2.mvstore.MVMap;
 import org.jetbrains.annotations.NotNull;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.json.JsonMapper;
 
 @RequiredArgsConstructor
 public class JsonNodeMap<K> extends AbstractMap<K, JsonNode> {
 	private final MVMap<K, byte[]> delegate;
 
-	private final ObjectMapper objectMapper;
+	private final JsonMapper jsonMapper;
 
 	@Override
 	public int size() {
@@ -42,29 +42,29 @@ public class JsonNodeMap<K> extends AbstractMap<K, JsonNode> {
 	@SneakyThrows
 	public JsonNode get(Object o) {
 		var bytes = delegate.get(o);
-		return bytes == null ? null : objectMapper.readTree(bytes);
+		return bytes == null ? null : jsonMapper.readTree(bytes);
 	}
 
 	@Override
 	@SneakyThrows
 	public JsonNode put(K key, JsonNode jsonNode) {
-		var bytes = objectMapper.writeValueAsBytes(jsonNode);
+		var bytes = jsonMapper.writeValueAsBytes(jsonNode);
 		var r = delegate.put(key, bytes);
-		return r == null ? null : objectMapper.readTree(r);
+		return r == null ? null : jsonMapper.readTree(r);
 	}
 
 	@Override
 	@SneakyThrows
 	public JsonNode remove(Object o) {
 		var bytes = delegate.remove(o);
-		return bytes == null ? null : objectMapper.readTree(bytes);
+		return bytes == null ? null : jsonMapper.readTree(bytes);
 	}
 
 	@Override
 	@SneakyThrows
 	public void putAll(@NotNull Map<? extends K, ? extends JsonNode> map) {
 		for (var entry : map.entrySet()) {
-			var bytes = objectMapper.writeValueAsBytes(entry.getValue());
+			var bytes = jsonMapper.writeValueAsBytes(entry.getValue());
 			delegate.put(entry.getKey(), bytes);
 		}
 	}
@@ -92,7 +92,7 @@ public class JsonNodeMap<K> extends AbstractMap<K, JsonNode> {
 					@SneakyThrows
 					public Entry<K, JsonNode> next() {
 						var next = delegate.next();
-						return new SimpleEntry<>(next.getKey(), objectMapper.readTree(next.getValue()));
+						return new SimpleEntry<>(next.getKey(), jsonMapper.readTree(next.getValue()));
 					}
 				};
 			}

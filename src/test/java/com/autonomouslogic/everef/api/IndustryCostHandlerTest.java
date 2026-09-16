@@ -30,11 +30,11 @@ import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.test.TestDataUtil;
 import com.autonomouslogic.everef.util.MockScrapeBuilder;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.common.base.CaseFormat;
+import io.sentry.Hint;
+import io.sentry.Sentry;
+import io.sentry.SentryEvent;
+import io.sentry.SentryLevel;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -51,6 +51,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Stream;
 import javax.inject.Inject;
 import lombok.SneakyThrows;
@@ -62,6 +63,7 @@ import okhttp3.mockwebserver.RecordedRequest;
 import okio.Buffer;
 import org.apache.commons.io.IOUtils;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -73,6 +75,9 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.junitpioneer.jupiter.SetEnvironmentVariable;
 import org.mockito.junit.jupiter.MockitoExtension;
+import tools.jackson.core.json.JsonReadFeature;
+import tools.jackson.databind.DeserializationFeature;
+import tools.jackson.databind.json.JsonMapper;
 
 /**
  * Full test of all products against the API:
@@ -109,7 +114,7 @@ public class IndustryCostHandlerTest {
 	ApiRunner apiRunner;
 
 	@Inject
-	ObjectMapper objectMapper;
+	JsonMapper jsonMapper;
 
 	@Inject
 	MockScrapeBuilder mockScrapeBuilder;
@@ -129,11 +134,21 @@ public class IndustryCostHandlerTest {
 	String esiMarketPrices;
 	HttpClient httpClient;
 	String fuzzworkPrices;
+	AtomicReference<SentryEvent> sentryEvent;
 
 	@BeforeEach
 	@SneakyThrows
 	void setup() {
 		DaggerTestComponent.builder().build().inject(this);
+
+		sentryEvent = new AtomicReference<>();
+		Sentry.init(options -> {
+			options.setDsn("https://abc@abc.ingest.us.sentry.io/123");
+			options.setBeforeSend((@Nullable SentryEvent event, @NotNull Hint hint) -> {
+				sentryEvent.set(event);
+				return null;
+			});
+		});
 
 		refDataFile = mockScrapeBuilder.createTestRefdata();
 
@@ -142,8 +157,15 @@ public class IndustryCostHandlerTest {
 		server.start(TEST_PORT);
 
 		apiRunner.startServer();
-		industryApi = new IndustryApi(
-				new ApiClient().setScheme("http").setHost("localhost").setPort(API_TEST_PORT));
+		// The generated client uses Jackson 2 which doesn't understand tools.jackson.databind.annotation.JsonNaming.
+		// Set snake_case globally so model classes using @JsonNaming(SnakeCaseStrategy) are deserialized correctly.
+		var apiClientMapper = ApiClient.createDefaultObjectMapper();
+		apiClientMapper.setPropertyNamingStrategy(com.fasterxml.jackson.databind.PropertyNamingStrategies.SNAKE_CASE);
+		industryApi = new IndustryApi(new ApiClient()
+				.setScheme("http")
+				.setHost("localhost")
+				.setPort(API_TEST_PORT)
+				.setObjectMapper(apiClientMapper));
 
 		refDataService.init();
 		systemCostIndexService.init();
@@ -178,20 +200,20 @@ public class IndustryCostHandlerTest {
 				res.getHeaders().get("X-OpenAPI").getFirst());
 		var actual = res.getData();
 
-		System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(actual));
+		System.out.println(jsonMapper.writerWithDefaultPrettyPrinter().writeValueAsString(actual));
 
 		if (!expected.equals(actual)) {
 			assertEquals(
-					objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(expected),
-					objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(actual));
+					jsonMapper.writerWithDefaultPrettyPrinter().writeValueAsString(expected),
+					jsonMapper.writerWithDefaultPrettyPrinter().writeValueAsString(actual));
 		}
 	}
 
 	static Stream<Arguments> costTests() {
-		var mapper = new ObjectMapper()
+		var mapper = JsonMapper.builder()
 				.enable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
-				.enable(JsonParser.Feature.ALLOW_COMMENTS)
-				.registerModule(new JavaTimeModule());
+				.enable(JsonReadFeature.ALLOW_JAVA_COMMENTS)
+				.build();
 		return TEST_NAMES.stream().map(name -> {
 			try {
 				var input = mapper.readValue(openTestFile(name, "input"), IndustryCostInput.class);
@@ -234,7 +256,7 @@ public class IndustryCostHandlerTest {
 		var res = httpClient.send(req, HttpResponse.BodyHandlers.ofString());
 		log.info("Body: {}", res.body());
 		assertEquals(200, res.statusCode());
-		var output = objectMapper.readValue(res.body(), IndustryCost.class);
+		var output = jsonMapper.readValue(res.body(), IndustryCost.class);
 		assertNull(output.getInput().getStructureTypeId());
 		assertNull(output.getInput().getRigId());
 	}
@@ -363,9 +385,12 @@ public class IndustryCostHandlerTest {
 	@SneakyThrows
 	void shouldNotFailIfEivPricesCantBeResolved() {
 		esiMarketPrices = "[]";
+		esiMarketPriceService.init();
 		var input = IndustryCostInput.builder().productId(645L).build();
 		var cost = industryApi.industryCost(input);
 		assertEquals(BigDecimal.ZERO, cost.getManufacturing().get("645").getEstimatedItemValue());
+		assertNotNull(sentryEvent.get());
+		assertEquals(SentryLevel.WARNING, sentryEvent.get().getLevel());
 	}
 
 	@Test
@@ -461,6 +486,87 @@ public class IndustryCostHandlerTest {
 		assertEquals(Set.of("999"), cost.getCopying().keySet());
 	}
 
+	@Test
+	@SneakyThrows
+	void shouldReturn400ForUnknownQueryParameters() {
+		setupBasicPrices();
+		var uri = URI.create(
+				"http://localhost:" + API_TEST_PORT + "/v1/industry/cost?product_id=645&manufacturing_cost_index=0.05");
+		var req = HttpRequest.newBuilder().GET().uri(uri).build();
+		var res = httpClient.send(req, HttpResponse.BodyHandlers.ofString());
+		assertEquals(400, res.statusCode());
+		assertTrue(res.body().contains("Unrecognized property"), res.body());
+		assertTrue(res.body().contains("manufacturing_cost_index"), res.body());
+	}
+
+	@Test
+	@SneakyThrows
+	void shouldReturn400ForInvalidEnumValue() {
+		setupBasicPrices();
+		var uri = URI.create("http://localhost:" + API_TEST_PORT + "/v1/industry/cost?product_id=645&security=highsec");
+		var req = HttpRequest.newBuilder().GET().uri(uri).build();
+		var res = httpClient.send(req, HttpResponse.BodyHandlers.ofString());
+		assertEquals(400, res.statusCode());
+		assertTrue(res.body().contains("Cannot deserialize"), res.body());
+		assertTrue(res.body().contains("SystemSecurity"), res.body());
+		assertTrue(res.body().contains("highsec"), res.body());
+		assertTrue(res.body().contains("HIGH_SEC"), res.body());
+	}
+
+	@Test
+	@SneakyThrows
+	void shouldSkipManufacturingWhenBlueprintHasNoManufacturingProduct() {
+		setupBasicPrices();
+		// https://ref-data.everef.net/blueprints/37325
+		var input = IndustryCostInput.builder().blueprintId(37325L).build();
+		var cost = industryApi.industryCost(input);
+		assertEquals(Map.of(), cost.getManufacturing());
+		assertNotEquals(Map.of(), cost.getInvention()); // BP has invention and that T2 BP has product
+		assertNotEquals(Map.of(), cost.getCopying());
+		assertNull(sentryEvent.get());
+	}
+
+	@Test
+	@SneakyThrows
+	void shouldSkipInventionWhenT2BlueprintHasNoManufacturingProduct() {
+		setupBasicPrices();
+		// https://ref-data.everef.net/blueprints/37315
+		// https://ref-data.everef.net/blueprints/37316
+		var input = IndustryCostInput.builder().blueprintId(37315L).build();
+		var cost = industryApi.industryCost(input);
+		assertEquals(Map.of(), cost.getInvention());
+		assertNotEquals(Map.of(), cost.getCopying());
+		assertNull(sentryEvent.get());
+	}
+
+	@Test
+	@SneakyThrows
+	void shouldSkipMostThingsWhenBlueprintIsBasicallyEmpty() {
+		setupBasicPrices();
+		// https://ref-data.everef.net/blueprints/33084
+		var input = IndustryCostInput.builder().blueprintId(33084L).build();
+		var cost = industryApi.industryCost(input);
+		assertEquals(Map.of(), cost.getManufacturing());
+		assertEquals(Map.of(), cost.getReaction());
+		assertEquals(Map.of(), cost.getInvention());
+		assertEquals(Map.of(), cost.getCopying());
+		assertNull(sentryEvent.get());
+	}
+
+	@Test
+	@SneakyThrows
+	void shouldSkipManufacturingWhenProductTypeNotInRefData() {
+		setupBasicPrices();
+		// https://ref-data.everef.net/blueprints/37441 - product type 37278 absent from test ref data
+		var input = IndustryCostInput.builder().blueprintId(37441L).build();
+		var cost = industryApi.industryCost(input);
+		assertEquals(Map.of(), cost.getManufacturing());
+		assertEquals(
+				Map.of(), cost.getInvention()); // the product type (37279) for the T2 BP (37442) doesn't exist either
+		assertNotEquals(Map.of(), cost.getCopying());
+		assertNull(sentryEvent.get());
+	}
+
 	// ===========
 
 	@SneakyThrows
@@ -484,10 +590,10 @@ public class IndustryCostHandlerTest {
 							.build());
 		}
 
-		esiMarketPrices = objectMapper.writeValueAsString(esiPrices);
+		esiMarketPrices = jsonMapper.writeValueAsString(esiPrices);
 		esiMarketPriceService.init();
 
-		this.fuzzworkPrices = objectMapper.writeValueAsString(fuzzworkPrices);
+		this.fuzzworkPrices = jsonMapper.writeValueAsString(fuzzworkPrices);
 	}
 
 	class TestDispatcher extends Dispatcher {

@@ -3,8 +3,6 @@ package com.autonomouslogic.everef.service;
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.http.OkHttpWrapper;
 import com.autonomouslogic.everef.model.fuzzwork.FuzzworkAggregatedMarketType;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.type.MapType;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.util.concurrent.RateLimiter;
@@ -22,6 +20,8 @@ import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import okhttp3.OkHttpClient;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.type.MapType;
 
 @Singleton
 @Log4j2
@@ -33,7 +33,7 @@ public class FuzzworkMarketService {
 	protected OkHttpWrapper httpWrapper;
 
 	@Inject
-	protected ObjectMapper objectMapper;
+	protected JsonMapper jsonMapper;
 
 	private final URI basePath = Configs.FUZZWORK_MARKET_BASE_PATH.getRequired();
 	private final RateLimiter rateLimiter = RateLimiter.create(Configs.FUZZWORK_RATE_LIMIT_PER_S.getRequired());
@@ -44,8 +44,8 @@ public class FuzzworkMarketService {
 			.build();
 
 	@Inject
-	protected FuzzworkMarketService(ObjectMapper objectMapper) {
-		responseType = objectMapper
+	protected FuzzworkMarketService(JsonMapper jsonMapper) {
+		responseType = jsonMapper
 				.getTypeFactory()
 				.constructMapType(HashMap.class, String.class, FuzzworkAggregatedMarketType.class);
 	}
@@ -88,7 +88,7 @@ public class FuzzworkMarketService {
 		log.debug(String.format("Fetching (waited %.1fs) %s", waitTime, url));
 		try (var response = httpWrapper.get(url)) {
 			try (var in = response.body().byteStream()) {
-				return objectMapper.readValue(in, responseType);
+				return jsonMapper.readValue(in, responseType);
 			}
 		}
 	}

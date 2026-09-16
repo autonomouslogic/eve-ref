@@ -7,8 +7,6 @@ import com.autonomouslogic.everef.util.CompressUtil;
 import com.autonomouslogic.everef.util.DataUtil;
 import com.autonomouslogic.everef.util.JsonNodeCsvReader;
 import com.autonomouslogic.everef.util.JsonUtil;
-import com.autonomouslogic.everef.util.Rx;
-import com.fasterxml.jackson.databind.JsonNode;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Maybe;
 import java.io.File;
@@ -20,6 +18,7 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 import lombok.extern.log4j.Log4j2;
 import org.jetbrains.annotations.NotNull;
+import tools.jackson.databind.JsonNode;
 
 @Log4j2
 public class PublicContractsStructureSource implements StructureSource {
@@ -54,8 +53,7 @@ public class PublicContractsStructureSource implements StructureSource {
 	}
 
 	private Flowable<Long> process(@NonNull File file) {
-		return Flowable.defer(() -> CompressUtil.loadArchive(file)
-						.compose(Rx.offloadFlowable())
+		return Flowable.defer(() -> Flowable.fromStream(CompressUtil.loadArchive(file))
 						.filter(entry -> entry.getKey().getName().equals("contracts.csv"))
 						.flatMap(entry -> Flowable.fromStream(
 								jsonNodeCsvReaderProvider.get().readAll(entry.getValue())))

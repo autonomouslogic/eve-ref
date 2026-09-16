@@ -2,18 +2,18 @@ package com.autonomouslogic.everef.cli.refdata.transformer;
 
 import com.autonomouslogic.everef.cli.refdata.SimpleTransformer;
 import com.autonomouslogic.everef.cli.refdata.TransformUtil;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import javax.inject.Inject;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.node.ArrayNode;
+import tools.jackson.databind.node.ObjectNode;
 
 public class BlueprintTransformer implements SimpleTransformer {
 	@Inject
 	protected TransformUtil transformUtil;
 
 	@Inject
-	protected ObjectMapper objectMapper;
+	protected JsonMapper jsonMapper;
 
 	@Inject
 	protected BlueprintTransformer() {}
@@ -21,7 +21,7 @@ public class BlueprintTransformer implements SimpleTransformer {
 	@Override
 	public ObjectNode transformJson(ObjectNode json, String language) throws Throwable {
 		var activities = (ObjectNode) json.get("activities");
-		activities.fields().forEachRemaining(entry -> transformBlueprintActivity((ObjectNode) entry.getValue()));
+		activities.properties().forEach(entry -> transformBlueprintActivity((ObjectNode) entry.getValue()));
 		return json;
 	}
 
@@ -39,7 +39,7 @@ public class BlueprintTransformer implements SimpleTransformer {
 	}
 
 	private ObjectNode transformRequiredSkills(ArrayNode skills) {
-		var requiredSkills = objectMapper.createObjectNode();
+		var requiredSkills = jsonMapper.createObjectNode();
 		for (JsonNode skill : skills) {
 			requiredSkills.put(skill.get("type_id").asText(), skill.get("level").asInt());
 		}

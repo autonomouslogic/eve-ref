@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.autonomouslogic.commons.ResourceUtil;
+import com.autonomouslogic.commons.concurrent.VirtualThreads;
 import com.autonomouslogic.everef.model.refdata.RefDataConfig;
 import com.autonomouslogic.everef.refdata.RefDataMeta;
 import com.autonomouslogic.everef.refdata.RefDataMetaFileInfo;
@@ -18,7 +19,6 @@ import com.autonomouslogic.everef.util.DataIndexHelper;
 import com.autonomouslogic.everef.util.HashUtil;
 import com.autonomouslogic.everef.util.MockScrapeBuilder;
 import com.autonomouslogic.everef.util.RefDataUtil;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.FileInputStream;
 import java.time.ZonedDateTime;
@@ -43,6 +43,7 @@ import org.junitpioneer.jupiter.SetEnvironmentVariable;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
+import tools.jackson.databind.json.JsonMapper;
 
 @ExtendWith(MockitoExtension.class)
 @Log4j2
@@ -65,7 +66,7 @@ public class BuildRefDataTest {
 	TestDataUtil testDataUtil;
 
 	@Inject
-	ObjectMapper objectMapper;
+	JsonMapper jsonMapper;
 
 	@Inject
 	UrlParser urlParser;
@@ -125,10 +126,11 @@ public class BuildRefDataTest {
 	}
 
 	@Test
+	@SneakyThrows
 	void shouldBuildRefData() {
-		buildRefData
+		VirtualThreads.onVirtualThread(() -> buildRefData
 				.setBuildTime(ZonedDateTime.parse("2022-01-05T04:05:06.89Z"))
-				.run();
+				.run());
 
 		// Get saved file.
 		var archiveFile = "base/reference-data/history/2022/reference-data-2022-01-05.tar.xz";
@@ -169,9 +171,11 @@ public class BuildRefDataTest {
 	}
 
 	@Test
+	@SneakyThrows
 	void shouldNotBuildRefDataIfHashesMatch() {
 		refDataFile = mockScrapeBuilder.createTestRefdata(refDataMeta);
-		buildRefData.setBuildTime(buildTime).run();
+		VirtualThreads.onVirtualThread(
+				() -> buildRefData.setBuildTime(buildTime).run());
 		var archiveFile = "base/reference-data/history/2022/reference-data-2022-01-05.tar.xz";
 		var obj = mockS3Adapter.getTestObject(BUCKET_NAME, archiveFile, dataClient);
 		assertFalse(obj.isPresent());
@@ -179,10 +183,10 @@ public class BuildRefDataTest {
 
 	@SneakyThrows
 	private void assertOutput(@NonNull RefDataConfig config, @NonNull byte[] jsonBytes) {
-		var json = objectMapper.readTree(jsonBytes);
+		var json = jsonMapper.readTree(jsonBytes);
 		var testConfig = config.getTest();
 		for (Long id : testConfig.getIds()) {
-			var expected = objectMapper.readTree(
+			var expected = jsonMapper.readTree(
 					ResourceUtil.loadResource("/refdata/refdata/" + testConfig.getFilePrefix() + "-" + id + ".json"));
 			var actual = json.get(id.toString());
 			log.info("Asserting {} {}", config.getId(), id);
@@ -197,7 +201,7 @@ public class BuildRefDataTest {
 
 	@SneakyThrows
 	private void assertMeta(@NonNull byte[] json) {
-		var supplied = objectMapper.readValue(json, RefDataMeta.class);
+		var supplied = jsonMapper.readValue(json, RefDataMeta.class);
 		assertEquals(refDataMeta, supplied);
 	}
 

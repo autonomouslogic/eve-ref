@@ -53,8 +53,7 @@ public class CopyingCalculator {
 			return null;
 		}
 		if (manufacturing == null) {
-			throw new RuntimeException(String.format(
-					"Blueprint %s doesn't have a manufacturing activity", blueprint.getBlueprintTypeId()));
+			return null;
 		}
 		var eiv = industryMath.eiv(manufacturing, runs);
 		var jcb = industryMath.jobCostBase(eiv);

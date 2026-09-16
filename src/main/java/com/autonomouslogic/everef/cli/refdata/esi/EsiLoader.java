@@ -7,6 +7,7 @@ import com.autonomouslogic.everef.model.refdata.RefDataConfig;
 import com.autonomouslogic.everef.util.CompressUtil;
 import com.autonomouslogic.everef.util.RefDataUtil;
 import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.Flowable;
 import java.io.File;
 import java.util.regex.Pattern;
 import javax.inject.Inject;
@@ -44,7 +45,7 @@ public class EsiLoader {
 	protected EsiLoader() {}
 
 	public Completable load(@NonNull File file) {
-		return CompressUtil.loadArchive(file)
+		return Flowable.fromStream(CompressUtil.loadArchive(file))
 				.flatMapCompletable(
 						pair -> {
 							var fileType = resolveFileType(pair.getLeft().getName());

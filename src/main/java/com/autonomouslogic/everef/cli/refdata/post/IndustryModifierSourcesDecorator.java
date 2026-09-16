@@ -4,9 +4,6 @@ import com.autonomouslogic.everef.refdata.IndustryModifierActivities;
 import com.autonomouslogic.everef.refdata.InventoryCategory;
 import com.autonomouslogic.everef.refdata.InventoryGroup;
 import com.autonomouslogic.everef.refdata.InventoryType;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.reactivex.rxjava3.core.Completable;
 import java.util.Collection;
 import java.util.HashMap;
@@ -18,6 +15,9 @@ import java.util.stream.Stream;
 import javax.inject.Inject;
 import lombok.extern.log4j.Log4j2;
 import org.jetbrains.annotations.NotNull;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.node.ObjectNode;
 
 /**
  * Populates which standup rigs modifies individual types.
@@ -25,7 +25,7 @@ import org.jetbrains.annotations.NotNull;
 @Log4j2
 public class IndustryModifierSourcesDecorator extends PostDecorator {
 	@Inject
-	protected ObjectMapper objectMapper;
+	protected JsonMapper jsonMapper;
 
 	private Map<Long, JsonNode> categories;
 	private Map<Long, JsonNode> groups;
@@ -43,7 +43,7 @@ public class IndustryModifierSourcesDecorator extends PostDecorator {
 
 			var typeActivites = new HashMap<Long, IndustryModifierActivities.Builder>();
 			types.forEach((rigTypeId, rigTypeJson) -> {
-				var rig = objectMapper.convertValue(rigTypeJson, InventoryType.class);
+				var rig = jsonMapper.convertValue(rigTypeJson, InventoryType.class);
 				var affectedCategories = Optional.ofNullable(rig.getEngineeringRigAffectedCategoryIds());
 				var affectedgroups = Optional.ofNullable(rig.getEngineeringRigAffectedGroupIds());
 				setRigOnTypes(
@@ -103,7 +103,7 @@ public class IndustryModifierSourcesDecorator extends PostDecorator {
 						.clearCopying()
 						.copying(sortList(activities.getCopying()))
 						.build();
-				var activitiesJson = objectMapper.convertValue(activities, ObjectNode.class);
+				var activitiesJson = jsonMapper.convertValue(activities, ObjectNode.class);
 				((ObjectNode) typeJson).set("engineering_rig_source_type_ids", activitiesJson);
 				types.put(typeId, typeJson);
 			});
@@ -133,7 +133,7 @@ public class IndustryModifierSourcesDecorator extends PostDecorator {
 		if (categoryJson == null) {
 			return Stream.empty();
 		}
-		var category = objectMapper.convertValue(categoryJson, InventoryCategory.class);
+		var category = jsonMapper.convertValue(categoryJson, InventoryCategory.class);
 		return Optional.ofNullable(category.getGroupIds()).stream().flatMap(Collection::stream);
 	}
 
@@ -142,7 +142,7 @@ public class IndustryModifierSourcesDecorator extends PostDecorator {
 		if (groupJson == null) {
 			return Stream.empty();
 		}
-		var group = objectMapper.convertValue(groupJson, InventoryGroup.class);
+		var group = jsonMapper.convertValue(groupJson, InventoryGroup.class);
 		return Optional.ofNullable(group.getTypeIds()).stream().flatMap(Collection::stream);
 	}
 

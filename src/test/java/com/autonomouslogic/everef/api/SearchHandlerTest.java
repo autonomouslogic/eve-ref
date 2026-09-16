@@ -16,9 +16,12 @@ import com.autonomouslogic.everef.openapi.api.model.SearchEntryUrls;
 import com.autonomouslogic.everef.service.RefDataService;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.util.MockScrapeBuilder;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.FileInputStream;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import javax.inject.Inject;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
@@ -35,6 +38,7 @@ import org.junit.jupiter.api.Timeout;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junitpioneer.jupiter.SetEnvironmentVariable;
 import org.mockito.junit.jupiter.MockitoExtension;
+import tools.jackson.databind.json.JsonMapper;
 
 @ExtendWith(MockitoExtension.class)
 @SetEnvironmentVariable(key = "DATA_BASE_URL", value = "http://localhost:" + TEST_PORT)
@@ -55,7 +59,7 @@ public class SearchHandlerTest {
 	RefDataService refDataService;
 
 	@Inject
-	ObjectMapper objectMapper;
+	JsonMapper jsonMapper;
 
 	SearchApi searchApi;
 	MockWebServer server;
@@ -91,7 +95,7 @@ public class SearchHandlerTest {
 	@SneakyThrows
 	void shouldSearchForInventoryTypes() {
 		var result = searchApi.search("Tritanium");
-		log.info("Result: {}", objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(result));
+		log.info("Result: {}", jsonMapper.writerWithDefaultPrettyPrinter().writeValueAsString(result));
 		var entries = result.getEntries();
 		assertEquals(1, entries.size(), entries.toString());
 		assertEquals(
@@ -111,7 +115,7 @@ public class SearchHandlerTest {
 	@SneakyThrows
 	void shouldSearchForMarketGroups() {
 		var result = searchApi.search("Battleships");
-		log.info("Result: {}", objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(result));
+		log.info("Result: {}", jsonMapper.writerWithDefaultPrettyPrinter().writeValueAsString(result));
 		var entries = result.getEntries();
 		assertTrue(result.getEntries().size() > 0);
 		assertEquals(
@@ -131,7 +135,7 @@ public class SearchHandlerTest {
 	@SneakyThrows
 	void shouldSearchForCategories() {
 		var result = searchApi.search("Starbase");
-		log.info("Result: {}", objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(result));
+		log.info("Result: {}", jsonMapper.writerWithDefaultPrettyPrinter().writeValueAsString(result));
 		var entries = result.getEntries();
 		assertEquals(1, entries.size(), entries.toString());
 		assertEquals(
@@ -151,7 +155,7 @@ public class SearchHandlerTest {
 	@SneakyThrows
 	void shouldSearchForInventoryGroups() {
 		var result = searchApi.search("Battleship");
-		log.info("Result: {}", objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(result));
+		log.info("Result: {}", jsonMapper.writerWithDefaultPrettyPrinter().writeValueAsString(result));
 		var entries = result.getEntries();
 		assertTrue(result.getEntries().size() > 0);
 		assertEquals(
@@ -171,7 +175,7 @@ public class SearchHandlerTest {
 	@SneakyThrows
 	void shouldSearchByPartialName() {
 		var result = searchApi.search("Trit");
-		log.info("Result: {}", objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(result));
+		log.info("Result: {}", jsonMapper.writerWithDefaultPrettyPrinter().writeValueAsString(result));
 		assertTrue(result.getEntries().size() > 0);
 		assertEquals(
 				new SearchEntry()
@@ -258,21 +262,55 @@ public class SearchHandlerTest {
 	}
 
 	@Test
-	void shouldThrowForNull() {
-		var ex = assertThrows(ApiException.class, () -> searchApi.search(null));
-		assertEquals(400, ex.getCode());
+	@SneakyThrows
+	void shouldReturn400ForMissingQuery() {
+		var response = HttpClient.newHttpClient()
+				.send(
+						HttpRequest.newBuilder()
+								.uri(new URI("http://localhost:" + API_TEST_PORT + "/v1/search"))
+								.GET()
+								.build(),
+						HttpResponse.BodyHandlers.ofString());
+		assertEquals(400, response.statusCode());
 	}
 
 	@Test
-	void shouldThrowForEmpty() {
-		var ex = assertThrows(ApiException.class, () -> searchApi.search(""));
-		assertEquals(400, ex.getCode());
+	@SneakyThrows
+	void shouldReturn400ForEmptyQuery() {
+		var response = HttpClient.newHttpClient()
+				.send(
+						HttpRequest.newBuilder()
+								.uri(new URI("http://localhost:" + API_TEST_PORT + "/v1/search?q="))
+								.GET()
+								.build(),
+						HttpResponse.BodyHandlers.ofString());
+		assertEquals(400, response.statusCode());
 	}
 
 	@Test
-	void shouldThrowForWhitespace() {
-		var ex = assertThrows(ApiException.class, () -> searchApi.search("   "));
-		assertEquals(400, ex.getCode());
+	@SneakyThrows
+	void shouldReturn400ForWhitespaceQuery() {
+		var response = HttpClient.newHttpClient()
+				.send(
+						HttpRequest.newBuilder()
+								.uri(new URI("http://localhost:" + API_TEST_PORT + "/v1/search?q=+++"))
+								.GET()
+								.build(),
+						HttpResponse.BodyHandlers.ofString());
+		assertEquals(400, response.statusCode());
+	}
+
+	@Test
+	@SneakyThrows
+	void shouldReturn400ForMultipleQueryParams() {
+		var response = HttpClient.newHttpClient()
+				.send(
+						HttpRequest.newBuilder()
+								.uri(new URI("http://localhost:" + API_TEST_PORT + "/v1/search?q=Tritanium&q=Pyerite"))
+								.GET()
+								.build(),
+						HttpResponse.BodyHandlers.ofString());
+		assertEquals(400, response.statusCode());
 	}
 
 	@Test
@@ -287,6 +325,9 @@ public class SearchHandlerTest {
 		assertEquals(
 				"https://github.com/autonomouslogic/eve-ref/blob/main/spec/eve-ref-api.yaml",
 				res.getHeaders().get("X-OpenAPI").getFirst());
+		assertEquals(
+				"https://docs.everef.net/api/search.html",
+				res.getHeaders().get("X-Docs").getFirst());
 	}
 
 	class TestDispatcher extends Dispatcher {

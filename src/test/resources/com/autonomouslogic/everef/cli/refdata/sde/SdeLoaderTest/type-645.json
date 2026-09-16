@@ -1,6 +1,6 @@
 {
-  "base_price" : 153900000,
-  "capacity" : 750,
+  "base_price" : 153900000.0,
+  "capacity" : 750.0,
   "description" : {
     "de" : "Die Dominix ist eines der alten Schlachtrösser, die noch aus der Zeit des Kriegs zwischen Gallente und Caldari stammen. Sie wird zwar nicht mehr als eines der besten Schlachtschiffe angesehen, aber das heißt nicht, dass sie überflüssig wäre. Mit ihrem robusten Rumpf und dem starken Drohnenarsenal können sich nur die neuesten und größten Schlachtschiffe mit ihr messen.",
     "en" : "The Dominix is one of the old warhorses dating back to the Gallente-Caldari War. While no longer regarded as the king of the hill, it is by no means obsolete. Its formidable hulk and powerful drone arsenal means that anyone not in the largest and latest battleships will regret ever locking horns with it.",
@@ -16,7 +16,7 @@
   "group_id" : 27,
   "is_repackable" : true,
   "market_group_id" : 81,
-  "mass" : 100250000,
+  "mass" : 100250000.0,
   "meta_group_id" : 1,
   "meta_level" : 0,
   "name" : {
@@ -29,15 +29,15 @@
     "ru" : "Dominix",
     "zh" : "多米尼克斯级"
   },
-  "packaged_volume" : 50000,
+  "packaged_volume" : 50000.0,
   "portion_size" : 1,
   "published" : true,
   "race_id" : 8,
-  "radius" : 250,
+  "radius" : 250.0,
   "ship_tree_group_id" : 26,
   "sound_id" : 20072,
   "tech_level" : 1,
-  "volume" : 454500,
+  "volume" : 454500.0,
   "type_id" : 645,
   "type_materials" : {
     "34" : {
@@ -72,7 +72,7 @@
   "traits" : {
     "role_bonuses" : {
       "3" : {
-        "bonus" : 5,
+        "bonus" : 5.0,
         "bonus_text" : {
           "de" : "zusätzlicher Bonus auf HP der <a href=showinfo:3394>Verstärkten Schottwand</a>",
           "en" : "additional bonus to <a href=showinfo:3394>Reinforced Bulkhead</a> hitpoints",
@@ -87,7 +87,7 @@
         "unit_id" : 105
       },
       "2" : {
-        "bonus" : 50,
+        "bonus" : 50.0,
         "bonus_text" : {
           "de" : "Bonus auf die HP der <a href=showinfo:3394>Panzerplatte</a>",
           "en" : "bonus to <a href=showinfo:3394>Armor Plate</a> hitpoints",
@@ -102,7 +102,7 @@
         "unit_id" : 105
       },
       "1" : {
-        "bonus" : 100,
+        "bonus" : 100.0,
         "bonus_text" : {
           "de" : "Bonus auf die HP der <a href=showinfo:3425>Schilderweiterung</a>",
           "en" : "bonus to <a href=showinfo:3425>Shield Extender</a> hitpoints",
@@ -135,7 +135,7 @@
           "unit_id" : 105
         },
         "1" : {
-          "bonus" : 10,
+          "bonus" : 10.0,
           "bonus_text" : {
             "de" : "Bonus auf die HP und den Schaden von <a href=showinfo:3436>Drohnen</a>",
             "en" : "bonus to <a href=showinfo:3436>Drone</a> hitpoints and damage",
@@ -162,55 +162,55 @@
   "dogma_attributes" : {
     "3" : {
       "attribute_id" : 3,
-      "value" : 0
+      "value" : 0.0
     },
     "9" : {
       "attribute_id" : 9,
-      "value" : 9350
+      "value" : 9350.0
     },
     "11" : {
       "attribute_id" : 11,
-      "value" : 10000
+      "value" : 10000.0
     },
     "12" : {
       "attribute_id" : 12,
-      "value" : 7
+      "value" : 7.0
     },
     "13" : {
       "attribute_id" : 13,
-      "value" : 5
+      "value" : 5.0
     },
     "14" : {
       "attribute_id" : 14,
-      "value" : 6
+      "value" : 6.0
     },
     "15" : {
       "attribute_id" : 15,
-      "value" : 0
+      "value" : 0.0
     },
     "19" : {
       "attribute_id" : 19,
-      "value" : 1
+      "value" : 1.0
     },
     "21" : {
       "attribute_id" : 21,
-      "value" : 0
+      "value" : 0.0
     },
     "37" : {
       "attribute_id" : 37,
-      "value" : 109
+      "value" : 109.0
     },
     "48" : {
       "attribute_id" : 48,
-      "value" : 600
+      "value" : 600.0
     },
     "49" : {
       "attribute_id" : 49,
-      "value" : 0
+      "value" : 0.0
     },
     "55" : {
       "attribute_id" : 55,
-      "value" : 1100000
+      "value" : 1100000.0
     },
     "70" : {
       "attribute_id" : 70,
@@ -218,19 +218,19 @@
     },
     "76" : {
       "attribute_id" : 76,
-      "value" : 84000
+      "value" : 84000.0
     },
     "79" : {
       "attribute_id" : 79,
-      "value" : 8250
+      "value" : 8250.0
     },
     "101" : {
       "attribute_id" : 101,
-      "value" : 0
+      "value" : 0.0
     },
     "102" : {
       "attribute_id" : 102,
-      "value" : 6
+      "value" : 6.0
     },
     "109" : {
       "attribute_id" : 109,
@@ -250,15 +250,15 @@
     },
     "124" : {
       "attribute_id" : 124,
-      "value" : 16777215
+      "value" : 16777215.0
     },
     "129" : {
       "attribute_id" : 129,
-      "value" : 1000
+      "value" : 1000.0
     },
     "136" : {
       "attribute_id" : 136,
-      "value" : 1
+      "value" : 1.0
     },
     "153" : {
       "attribute_id" : 153,
@@ -266,47 +266,47 @@
     },
     "182" : {
       "attribute_id" : 182,
-      "value" : 3336
+      "value" : 3336.0
     },
     "188" : {
       "attribute_id" : 188,
-      "value" : 0
+      "value" : 0.0
     },
     "192" : {
       "attribute_id" : 192,
-      "value" : 7
+      "value" : 7.0
     },
     "208" : {
       "attribute_id" : 208,
-      "value" : 0
+      "value" : 0.0
     },
     "209" : {
       "attribute_id" : 209,
-      "value" : 0
+      "value" : 0.0
     },
     "210" : {
       "attribute_id" : 210,
-      "value" : 22
+      "value" : 22.0
     },
     "211" : {
       "attribute_id" : 211,
-      "value" : 0
+      "value" : 0.0
     },
     "217" : {
       "attribute_id" : 217,
-      "value" : 395
+      "value" : 395.0
     },
     "246" : {
       "attribute_id" : 246,
-      "value" : 395
+      "value" : 395.0
     },
     "263" : {
       "attribute_id" : 263,
-      "value" : 7920
+      "value" : 7920.0
     },
     "265" : {
       "attribute_id" : 265,
-      "value" : 8800
+      "value" : 8800.0
     },
     "267" : {
       "attribute_id" : 267,
@@ -326,7 +326,7 @@
     },
     "271" : {
       "attribute_id" : 271,
-      "value" : 1
+      "value" : 1.0
     },
     "272" : {
       "attribute_id" : 272,
@@ -342,23 +342,23 @@
     },
     "277" : {
       "attribute_id" : 277,
-      "value" : 1
+      "value" : 1.0
     },
     "283" : {
       "attribute_id" : 283,
-      "value" : 375
+      "value" : 375.0
     },
     "422" : {
       "attribute_id" : 422,
-      "value" : 1
+      "value" : 1.0
     },
     "479" : {
       "attribute_id" : 479,
-      "value" : 2500000
+      "value" : 2500000.0
     },
     "482" : {
       "attribute_id" : 482,
-      "value" : 6000
+      "value" : 6000.0
     },
     "484" : {
       "attribute_id" : 484,
@@ -374,31 +374,31 @@
     },
     "525" : {
       "attribute_id" : 525,
-      "value" : 1
+      "value" : 1.0
     },
     "552" : {
       "attribute_id" : 552,
-      "value" : 465
+      "value" : 465.0
     },
     "561" : {
       "attribute_id" : 561,
-      "value" : 10
+      "value" : 10.0
     },
     "564" : {
       "attribute_id" : 564,
-      "value" : 117
+      "value" : 117.0
     },
     "600" : {
       "attribute_id" : 600,
-      "value" : 3
+      "value" : 3.0
     },
     "633" : {
       "attribute_id" : 633,
-      "value" : 0
+      "value" : 0.0
     },
     "661" : {
       "attribute_id" : 661,
-      "value" : 1000
+      "value" : 1000.0
     },
     "662" : {
       "attribute_id" : 662,
@@ -406,19 +406,19 @@
     },
     "1132" : {
       "attribute_id" : 1132,
-      "value" : 400
+      "value" : 400.0
     },
     "1137" : {
       "attribute_id" : 1137,
-      "value" : 3
+      "value" : 3.0
     },
     "1154" : {
       "attribute_id" : 1154,
-      "value" : 3
+      "value" : 3.0
     },
     "1178" : {
       "attribute_id" : 1178,
-      "value" : 100
+      "value" : 100.0
     },
     "1179" : {
       "attribute_id" : 1179,
@@ -434,11 +434,11 @@
     },
     "1199" : {
       "attribute_id" : 1199,
-      "value" : 100
+      "value" : 100.0
     },
     "1200" : {
       "attribute_id" : 1200,
-      "value" : 100
+      "value" : 100.0
     },
     "1224" : {
       "attribute_id" : 1224,
@@ -458,51 +458,51 @@
     },
     "1271" : {
       "attribute_id" : 1271,
-      "value" : 125
+      "value" : 125.0
     },
     "1281" : {
       "attribute_id" : 1281,
-      "value" : 1
+      "value" : 1.0
     },
     "1547" : {
       "attribute_id" : 1547,
-      "value" : 3
+      "value" : 3.0
     },
     "1555" : {
       "attribute_id" : 1555,
-      "value" : 500
+      "value" : 500.0
     },
     "1768" : {
       "attribute_id" : 1768,
-      "value" : 11331
+      "value" : 11331.0
     },
     "2045" : {
       "attribute_id" : 2045,
-      "value" : 1
+      "value" : 1.0
     },
     "2112" : {
       "attribute_id" : 2112,
-      "value" : 1
+      "value" : 1.0
     },
     "2113" : {
       "attribute_id" : 2113,
-      "value" : 1
+      "value" : 1.0
     },
     "2115" : {
       "attribute_id" : 2115,
-      "value" : 1
+      "value" : 1.0
     },
     "3020" : {
       "attribute_id" : 3020,
-      "value" : 1
+      "value" : 1.0
     },
     "3266" : {
       "attribute_id" : 3266,
-      "value" : 50
+      "value" : 50.0
     },
     "3267" : {
       "attribute_id" : 3267,
-      "value" : 100
+      "value" : 100.0
     },
     "3268" : {
       "attribute_id" : 3268,
@@ -510,7 +510,7 @@
     },
     "5796" : {
       "attribute_id" : 5796,
-      "value" : 2147483647000
+      "value" : 2147483647000.0
     }
   },
   "dogma_effects" : {

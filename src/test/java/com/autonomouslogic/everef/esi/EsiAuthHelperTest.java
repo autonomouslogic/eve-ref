@@ -46,10 +46,10 @@ public class EsiAuthHelperTest {
 	@SneakyThrows
 	void setup() {
 		dynamoClient = Mockito.mock(DynamoDbAsyncClient.class);
-		var objectMapper = new JacksonModule().objectMapper();
+		var objectMapper = new JacksonModule().jsonMapper();
 		var dynamoAsyncMapper = DynamoAsyncMapper.builder()
 				.client(dynamoClient)
-				.objectMapper(objectMapper)
+				.jsonMapper(objectMapper)
 				.build();
 		esiAuthHelper = new EsiAuthHelper();
 		var field = EsiAuthHelper.class.getDeclaredField("dynamoAsyncMapper");

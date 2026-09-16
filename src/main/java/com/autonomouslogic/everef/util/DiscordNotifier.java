@@ -2,12 +2,12 @@ package com.autonomouslogic.everef.util;
 
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.http.OkHttpWrapper;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.inject.Inject;
 import java.net.URI;
 import java.util.Optional;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
+import tools.jackson.databind.json.JsonMapper;
 
 @Log4j2
 public class DiscordNotifier {
@@ -15,7 +15,7 @@ public class DiscordNotifier {
 	protected OkHttpWrapper okHttpWrapper;
 
 	@Inject
-	protected ObjectMapper objectMapper;
+	protected JsonMapper jsonMapper;
 
 	private final Optional<URI> discordUrl = Configs.DISCORD_WEBHOOK_URL.get();
 
@@ -29,12 +29,12 @@ public class DiscordNotifier {
 			return;
 		}
 		log.debug("Notifying Discord");
-		var body = objectMapper.createObjectNode();
+		var body = jsonMapper.createObjectNode();
 		body.put("content", message);
 		log.trace("Discord notification: {}", body);
 		try (var response = okHttpWrapper.post(
 				discordUrl.get().toString(),
-				objectMapper.writeValueAsBytes(body),
+				jsonMapper.writeValueAsBytes(body),
 				r -> r.header("Content-Type", "application/json"))) {
 			if (response.code() < 200 || response.code() >= 300) {
 				log.warn("Error notifying Discord: {}", response);

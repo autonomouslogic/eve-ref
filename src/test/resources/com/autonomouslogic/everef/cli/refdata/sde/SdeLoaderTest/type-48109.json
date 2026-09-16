@@ -1,5 +1,5 @@
 {
-  "base_price" : 400000,
+  "base_price" : 400000.0,
   "graphic_id" : 1142,
   "group_id" : 1993,
   "icon_id" : 21916,

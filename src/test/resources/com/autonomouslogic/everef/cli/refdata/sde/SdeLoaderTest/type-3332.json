@@ -1,5 +1,5 @@
 {
-  "base_price" : 1000000,
+  "base_price" : 1000000.0,
   "description" : {
     "de" : "Fertigkeit, Kreuzer der Gallente zu bedienen.",
     "en" : "Skill at operating Gallente cruisers.",

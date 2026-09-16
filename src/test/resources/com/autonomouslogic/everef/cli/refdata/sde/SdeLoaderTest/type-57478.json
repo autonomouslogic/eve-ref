@@ -1,5 +1,5 @@
 {
-  "base_price" : 10000,
+  "base_price" : 10000.0,
   "description" : {
     "de" : "Auto-Integritäts-Erhaltungssiegel sind spezielle Komponenten, die zur automatischen Schadenskontrolle in den wichtigsten Schiffbereichen, in denen sich die Besatzung und anderes Personal befindet, eingesetzt werden. Obwohl die meisten Schiffe über eine Vielzahl von internen Kraftfeldern, Trennwänden, Luftschleusen und ähnlichen Systemen verfügen, können während eines hektischen Kampfes Schäden aller Art auftreten. Um kleine, aber potenziell gefährliche Schäden zu beheben, wurden in der Vergangenheit häufig temporäre Kraftfelder, intelligente Materialien und Nanotechnologie eingesetzt, die jedoch energieintensiv sein können oder wertvolle Ressourcen wie Nanobot-Reparaturpaste benötigen. Die neue Auto-Integritäts-Technologie nimmt sich ein Beispiel am Triglavia-Kollektiv und nutzt die Mutaplasmid-Technologie als Inspiration für kostengünstigere Standardkomponenten, die Biotech-Nanobots freisetzen, um Mikrofrakturen und andere Defekte, die die Integrität der physischen Abteile bedrohen, zu suchen und zu reparieren.",
     "en" : "Auto-Integrity Preservation Seals are specialized components used for automatic damage control in key space vessel zones where crew and other personnel aboard ship are operating. While most ships have a variety of internal forcefields, bulkhead dividers, air-locks and similar systems built into the basic design, breaches of all kinds can occur in the heat of space combat.\n\nTo address small but potentially dangerous breaches, temporary force-fields, smart materials and nanotechnology have often been used but can be energy intensive or use otherwise valuable resources such as nanite paste.\n\nThe new auto-integrity technology takes a leaf out of the Triglavian Collective's book and uses mutaplasmid technology as the inspiration for cheaper, standard components that release biotech nanobes tailored to seek and repair microfractures and other defects threatening physical compartment integrity.",
@@ -24,9 +24,9 @@
     "ru" : "Auto-Integrity Preservation Seal",
     "zh" : "自动修复储藏装置密封"
   },
-  "packaged_volume" : 16,
+  "packaged_volume" : 16.0,
   "portion_size" : 1,
   "published" : true,
-  "volume" : 16,
+  "volume" : 16.0,
   "type_id" : 57478
 }

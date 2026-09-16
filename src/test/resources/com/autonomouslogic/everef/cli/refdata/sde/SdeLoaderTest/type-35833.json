@@ -13,7 +13,7 @@
   "group_id" : 1657,
   "is_repackable" : true,
   "market_group_id" : 2201,
-  "mass" : 10000000000,
+  "mass" : 10000000000.0,
   "meta_group_id" : 1,
   "name" : {
     "de" : "Fortizar",
@@ -25,12 +25,12 @@
     "ru" : "Fortizar",
     "zh" : "铁壁"
   },
-  "packaged_volume" : 80000,
+  "packaged_volume" : 80000.0,
   "portion_size" : 1,
   "published" : true,
-  "radius" : 85000,
+  "radius" : 85000.0,
   "sound_id" : 20232,
-  "volume" : 80000,
+  "volume" : 80000.0,
   "type_id" : 35833,
   "traits" : {
     "role_bonuses" : {
@@ -61,7 +61,7 @@
         "importance" : 5
       },
       "3" : {
-        "bonus" : 20,
+        "bonus" : 20.0,
         "bonus_text" : {
           "de" : "Bonus auf die Feuerrate und den Energiespeicherverbrauch von Standup-Pulsprojektoren und Lenkbombenwerfern",
           "en" : "bonus to the rate of fire and capacitor consumption of Standup Burst Projectors and Guided Bomb Launchers",
@@ -76,7 +76,7 @@
         "unit_id" : 105
       },
       "1" : {
-        "bonus" : 25,
+        "bonus" : 25.0,
         "bonus_text" : {
           "de" : "Bonus auf alle Effekte von Struktur-Kampfmodifikationen",
           "en" : "bonus to all structure combat rig effects",
@@ -91,7 +91,7 @@
         "unit_id" : 105
       },
       "2" : {
-        "bonus" : 25,
+        "bonus" : 25.0,
         "bonus_text" : {
           "de" : "Reduzierter Treibstoffverbrauch von Zitadellen-Dienstmodulen",
           "en" : "reduction in citadel service module fuel consumption",

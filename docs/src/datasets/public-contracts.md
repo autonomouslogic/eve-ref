@@ -44,7 +44,7 @@ EVE Ref adds the following columns:
 * `constellation_id`
 
 ### `contract_non_dynamic_items.csv`
-_Not used._
+_Removed 2026-08-30. Previously not used._
 
 ### `contract_items.csv`
 All the item entries from [/contracts/public/items/{contract_id}/](https://esi.evetech.net/ui/#/operations/Contracts/get_contracts_public_items_contract_id):

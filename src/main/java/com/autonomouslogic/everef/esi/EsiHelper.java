@@ -1,12 +1,8 @@
 package com.autonomouslogic.everef.esi;
 
+import com.autonomouslogic.commons.concurrent.VirtualThreads;
 import com.autonomouslogic.everef.http.OkHttpWrapper;
 import com.autonomouslogic.everef.openapi.esi.invoker.ApiResponse;
-import com.autonomouslogic.everef.util.VirtualThreads;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.NullNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.functions.BiFunction;
 import io.reactivex.rxjava3.functions.Function;
@@ -24,6 +20,10 @@ import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import okhttp3.Response;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.node.NullNode;
+import tools.jackson.databind.node.ObjectNode;
 
 @Singleton
 @Log4j2
@@ -36,7 +36,7 @@ public class EsiHelper {
 	protected OkHttpWrapper okHttpWrapper;
 
 	@Inject
-	protected ObjectMapper objectMapper;
+	protected JsonMapper jsonMapper;
 
 	@Inject
 	protected EsiHelper() {}
@@ -99,7 +99,9 @@ public class EsiHelper {
 				})
 				.toList();
 
-		var remainingPages = VirtualThreads.onVirtual(() -> VirtualThreads.parallel(tasks));
+		VirtualThreads.checkIsVirtual();
+		var remainingPages =
+				VirtualThreads.callAll(tasks.iterator(), Runtime.getRuntime().availableProcessors());
 
 		allResponses.addAll(remainingPages);
 
@@ -164,9 +166,13 @@ public class EsiHelper {
 					.map(page -> (Callable<List<T>>) () -> decodeResponse(fetchWithRetry(fetcher, page)))
 					.toList();
 
-			var remainingPages = VirtualThreads.onVirtual(() -> VirtualThreads.parallel(tasks)).stream()
-					.flatMap(List::stream)
-					.toList();
+			VirtualThreads.checkIsVirtual();
+			var remainingPages =
+					VirtualThreads.callAll(
+									tasks.iterator(), Runtime.getRuntime().availableProcessors())
+							.stream()
+							.flatMap(List::stream)
+							.toList();
 
 			result.addAll(remainingPages);
 		}
@@ -256,7 +262,7 @@ public class EsiHelper {
 			if (response.code() != 200) {
 				throw new RuntimeException(String.format("Cannot decode non-200 response: %s", response.code()));
 			}
-			return objectMapper.readTree(response.peekBody(Long.MAX_VALUE).byteStream());
+			return jsonMapper.readTree(response.peekBody(Long.MAX_VALUE).byteStream());
 		}
 	}
 

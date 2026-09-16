@@ -123,10 +123,17 @@ public class IndustryCalculator {
 
 	private IndustryCost calculateFromBlueprint() {
 		var manufacturing = blueprint.getActivities().get("manufacturing");
-		if (manufacturing != null) {
+		if (manufacturing != null && manufacturing.getProducts() != null) {
 			for (Map.Entry<Long, BlueprintMaterial> entry :
 					manufacturing.getProducts().entrySet()) {
 				var productType = refData.getType(entry.getValue().getTypeId());
+				if (productType == null) {
+					log.warn(
+							"Blueprint {} manufacturing product type {} not found in ref data, skipping",
+							blueprint.getBlueprintTypeId(),
+							entry.getValue().getTypeId());
+					continue;
+				}
 				var manufacturingCost = calculateManufacturing(
 						productType,
 						blueprint,
@@ -138,22 +145,38 @@ public class IndustryCalculator {
 		}
 
 		var reaction = blueprint.getActivities().get("reaction");
-		if (reaction != null) {
+		if (reaction != null && reaction.getProducts() != null) {
 			for (Map.Entry<Long, BlueprintMaterial> entry :
 					reaction.getProducts().entrySet()) {
 				var productType = refData.getType(entry.getValue().getTypeId());
+				if (productType == null) {
+					log.warn(
+							"Blueprint {} reaction product type {} not found in ref data, skipping",
+							blueprint.getBlueprintTypeId(),
+							entry.getValue().getTypeId());
+					continue;
+				}
 				var manufacturingCost = calculateReaction(productType, blueprint, industryCostInput.getRuns());
 				addReaction(manufacturingCost);
 			}
 		}
 
 		var invention = blueprint.getActivities().get("invention");
-		if (invention != null) {
+		if (invention != null && invention.getProducts() != null) {
 			for (Map.Entry<Long, BlueprintMaterial> entry :
 					invention.getProducts().entrySet()) {
 				var productType = refData.getType(entry.getValue().getTypeId());
+				if (productType == null) {
+					log.warn(
+							"Blueprint {} invention product type {} not found in ref data, skipping",
+							blueprint.getBlueprintTypeId(),
+							entry.getValue().getTypeId());
+					continue;
+				}
 				var inventionCost = calculateInvention(productType, blueprint, industryCostInput.getRuns());
-				addInvention(inventionCost);
+				if (inventionCost != null) {
+					addInvention(inventionCost);
+				}
 			}
 		}
 

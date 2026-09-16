@@ -1,20 +1,20 @@
 package com.autonomouslogic.everef.cli.refdata;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.util.ArrayList;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.node.ArrayNode;
+import tools.jackson.databind.node.ObjectNode;
 
 @Singleton
 @Log4j2
 public class TransformUtil {
 	@Inject
-	protected ObjectMapper objectMapper;
+	protected JsonMapper jsonMapper;
 
 	@Inject
 	protected TransformUtil() {}
@@ -28,7 +28,7 @@ public class TransformUtil {
 					"%s is not an array: %s", field, root.get(field).getNodeType()));
 		}
 		var array = (ArrayNode) root.get(field);
-		var obj = objectMapper.createObjectNode();
+		var obj = jsonMapper.createObjectNode();
 		for (JsonNode entry : array) {
 			var key = entry.get(keyField).asText();
 			obj.set(key, entry);
@@ -43,7 +43,7 @@ public class TransformUtil {
 		} else {
 			JsonNode stepNode = root.get(step);
 			if (stepNode == null || !stepNode.isObject()) {
-				stepNode = objectMapper.createObjectNode();
+				stepNode = jsonMapper.createObjectNode();
 				root.set(step, stepNode);
 			}
 			String[] subPath = new String[path.length - 1];
@@ -74,9 +74,9 @@ public class TransformUtil {
 
 	public ObjectNode orderKeys(ObjectNode json) {
 		var fields = new ArrayList<String>(json.size());
-		json.fieldNames().forEachRemaining(fields::add);
+		json.propertyNames().forEach(fields::add);
 		fields.sort(String::compareTo);
-		var newJson = objectMapper.createObjectNode();
+		var newJson = jsonMapper.createObjectNode();
 		for (var field : fields) {
 			newJson.set(field, json.get(field));
 		}
@@ -100,7 +100,7 @@ public class TransformUtil {
 		if (list.size() != 3) {
 			throw new IllegalArgumentException("List must have exactly two elements: " + list);
 		}
-		var obj = objectMapper.createObjectNode();
+		var obj = jsonMapper.createObjectNode();
 		obj.set("x", list.get(0));
 		obj.set("y", list.get(1));
 		obj.set("z", list.get(2));

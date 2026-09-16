@@ -1,7 +1,5 @@
 package com.autonomouslogic.everef.util;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.reactivex.rxjava3.core.Flowable;
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -12,13 +10,15 @@ import java.util.stream.Stream;
 import javax.inject.Inject;
 import lombok.SneakyThrows;
 import org.apache.commons.csv.CSVFormat;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.json.JsonMapper;
 
 /**
  * Utility class for reading a CSV file into JsonNodes.
  */
 public class JsonNodeCsvReader {
 	@Inject
-	protected ObjectMapper objectMapper;
+	protected JsonMapper jsonMapper;
 
 	@Inject
 	protected JsonNodeCsvReader() {}
@@ -33,7 +33,7 @@ public class JsonNodeCsvReader {
 				.parse(new InputStreamReader(in, StandardCharsets.UTF_8))
 				.stream()
 				.map(r -> {
-					var json = objectMapper.createObjectNode();
+					var json = jsonMapper.createObjectNode();
 					r.toMap().forEach(json::put);
 					return json;
 				});

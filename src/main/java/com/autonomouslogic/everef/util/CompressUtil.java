@@ -1,16 +1,18 @@
 package com.autonomouslogic.everef.util;
 
-import io.reactivex.rxjava3.core.Emitter;
-import io.reactivex.rxjava3.core.Flowable;
-import io.reactivex.rxjava3.functions.BiConsumer;
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.Spliterator;
+import java.util.Spliterators;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 import java.util.zip.GZIPInputStream;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
@@ -67,22 +69,19 @@ public class CompressUtil {
 		throw new IllegalArgumentException("Unknown file type: " + name);
 	}
 
-	public static Flowable<Pair<ArchiveEntry, byte[]>> loadArchive(File file) {
-		return Flowable.generate(
-						() -> CompressUtil.uncompressArchive(file),
-						(BiConsumer<ArchiveInputStream, Emitter<Pair<ArchiveEntry, byte[]>>>) (stream, emitter) -> {
-							var entry = stream.getNextEntry();
-							if (entry == null) {
-								log.trace("Finished reading: {}", file.getPath());
-								emitter.onComplete();
-							} else {
-								log.trace("Reading entry {}#{}", file.getPath(), entry.getName());
-								var bytes = IOUtils.toByteArray(stream);
-								emitter.onNext(Pair.of(entry, bytes));
-							}
-						},
-						stream -> stream.close())
-				.compose(Rx.offloadFlowable());
+	public static Stream<Pair<ArchiveEntry, byte[]>> loadArchive(File file) {
+		return loadArchive(uncompressArchive(file));
+	}
+
+	static Stream<Pair<ArchiveEntry, byte[]>> loadArchive(ArchiveInputStream archive) {
+		var spliterator = Spliterators.spliteratorUnknownSize(new ArchiveEntryIterator(archive), Spliterator.ORDERED);
+		return StreamSupport.stream(spliterator, false).onClose(() -> {
+			try {
+				archive.close();
+			} catch (IOException e) {
+				log.warn("Failed to close archive stream", e);
+			}
+		});
 	}
 
 	@SneakyThrows

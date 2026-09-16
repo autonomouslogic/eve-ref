@@ -24,6 +24,7 @@ public class CompoundSearchEntryFactory implements SearchEntryFactory {
 
 	@Override
 	public Stream<SearchEntry> createEntries() {
+		// NOTE: New entries should also be documented in `docs/src/api/search.md`
 		return Stream.of(
 						inventoryTypes.createEntries(),
 						marketGroups.createEntries(),

@@ -13,7 +13,7 @@
   "icon_id" : 21729,
   "is_repackable" : true,
   "market_group_id" : 2348,
-  "mass" : 200,
+  "mass" : 200.0,
   "meta_group_id" : 54,
   "name" : {
     "de" : "Standup L-Set Blueprint Copy Optimization I",
@@ -25,11 +25,11 @@
     "ru" : "Standup L-Set Blueprint Copy Optimization I",
     "zh" : "屹立大型蓝图拷贝优化 I"
   },
-  "packaged_volume" : 20,
+  "packaged_volume" : 20.0,
   "portion_size" : 1,
   "published" : true,
-  "radius" : 100,
+  "radius" : 100.0,
   "tech_level" : 1,
-  "volume" : 20,
+  "volume" : 20.0,
   "type_id" : 43729
 }

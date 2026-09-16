@@ -1,10 +1,10 @@
 package com.autonomouslogic.everef.cli.publiccontracts;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.PropertyNamingStrategies;
-import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import java.time.Instant;
 import lombok.Data;
+import tools.jackson.databind.PropertyNamingStrategies;
+import tools.jackson.databind.annotation.JsonNaming;
 
 @Data
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)

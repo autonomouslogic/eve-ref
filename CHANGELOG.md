@@ -1,5 +1,110 @@
 EVE Ref Changelog
 
+## [2.80.7](https://github.com/autonomouslogic/eve-ref/compare/2.80.6...2.80.7) (2026-09-08)
+
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([#1108](https://github.com/autonomouslogic/eve-ref/issues/1108)) ([2ef9fa9](https://github.com/autonomouslogic/eve-ref/commit/2ef9fa924a93c45fb4b3a84154a51afd31aca34f))
+
+
+### Code Refactoring
+
+* Removed RxJava from CompressUtil ([#1109](https://github.com/autonomouslogic/eve-ref/issues/1109)) ([17948f6](https://github.com/autonomouslogic/eve-ref/commit/17948f63ad35b3417ad888a72f6d4fcc49e2b72d))
+* Removed RxJava from Placeholder ([51cca18](https://github.com/autonomouslogic/eve-ref/commit/51cca181d277df2f92baa242e7a4b3cfeed3d905))
+
+## [2.80.6](https://github.com/autonomouslogic/eve-ref/compare/2.80.5...2.80.6) (2026-09-07)
+
+
+### Bug Fixes
+
+* **deps:** update all non-major dependencies ([#1103](https://github.com/autonomouslogic/eve-ref/issues/1103)) ([7520f1a](https://github.com/autonomouslogic/eve-ref/commit/7520f1a803929d9d94f045bf1012110f15984972))
+* **deps:** update flyway monorepo to v13.5.0 ([#1104](https://github.com/autonomouslogic/eve-ref/issues/1104)) ([5242369](https://github.com/autonomouslogic/eve-ref/commit/5242369ccdf59f75728b75b5a15a472ff6511530))
+* Retry OkHttp Canceled exceptions from call timeouts ([#1105](https://github.com/autonomouslogic/eve-ref/issues/1105)) ([f616ead](https://github.com/autonomouslogic/eve-ref/commit/f616eadf7f3c9e0b871ade5dc3b36658d502f87e))
+
+
+### Documentation
+
+* **api:** Documented search API ([#1100](https://github.com/autonomouslogic/eve-ref/issues/1100)) ([c3e1d9c](https://github.com/autonomouslogic/eve-ref/commit/c3e1d9c3ce41b7f6be905ca1e560348c7a2ac71b))
+
+
+### Dependency Updates
+
+* **deps:** update plugin org.flywaydb.flyway to v13.5.0 ([#1102](https://github.com/autonomouslogic/eve-ref/issues/1102)) ([bb7d1d1](https://github.com/autonomouslogic/eve-ref/commit/bb7d1d116a5bc0293de310eaed8c60bbd43caaba))
+
+
+### Code Refactoring
+
+* Removed RxJava from FlywayMigrate ([#1107](https://github.com/autonomouslogic/eve-ref/issues/1107)) ([573e9e9](https://github.com/autonomouslogic/eve-ref/commit/573e9e9103433d6cf52b4f28a88b528b90569951))
+* Removed RxJava from SlackDecorator ([#1106](https://github.com/autonomouslogic/eve-ref/issues/1106)) ([92abb1c](https://github.com/autonomouslogic/eve-ref/commit/92abb1c63a17554da0e6e4ecfa590f9aa4f1370c))
+
+
+### Tests
+
+* **api:** Test Sentry is warned about prices not found ([#1101](https://github.com/autonomouslogic/eve-ref/issues/1101)) ([3e7d714](https://github.com/autonomouslogic/eve-ref/commit/3e7d7144f2b1fa5b2dcebecd5e2b5437518a95bd))
+
+## [2.80.5](https://github.com/autonomouslogic/eve-ref/compare/2.80.4...2.80.5) (2026-09-04)
+
+
+### Bug Fixes
+
+* **api:** fixed handling of null search queries ([#1099](https://github.com/autonomouslogic/eve-ref/issues/1099)) ([d130d82](https://github.com/autonomouslogic/eve-ref/commit/d130d826395cd9315d6a3f77b764f220f05382af))
+
+## [2.80.4](https://github.com/autonomouslogic/eve-ref/compare/2.80.3...2.80.4) (2026-09-03)
+
+
+### Bug Fixes
+
+* **api:** Handle blueprints with missing products and activities ([#1097](https://github.com/autonomouslogic/eve-ref/issues/1097)) ([b5c4921](https://github.com/autonomouslogic/eve-ref/commit/b5c49210df4ac1a294883aee284a8db0226791bc))
+* **api:** Handle industry blueprints where the product type doesn't exist ([#1098](https://github.com/autonomouslogic/eve-ref/issues/1098)) ([ac66302](https://github.com/autonomouslogic/eve-ref/commit/ac6630205f41404c7635f9efcfd8d6646e45370f))
+
+
+### Tests
+
+* Updated test resources ([aa213b8](https://github.com/autonomouslogic/eve-ref/commit/aa213b8cdb16011e92f7260166d849da3d396699))
+
+## [2.80.3](https://github.com/autonomouslogic/eve-ref/compare/2.80.2...2.80.3) (2026-09-02)
+
+
+### Bug Fixes
+
+* Revert MVStore to default settings ([#1096](https://github.com/autonomouslogic/eve-ref/issues/1096)) ([8f62896](https://github.com/autonomouslogic/eve-ref/commit/8f628967900212b6dba88a0a5670b3e9ffb43b4b))
+
+## [2.80.2](https://github.com/autonomouslogic/eve-ref/compare/2.80.1...2.80.2) (2026-09-01)
+
+
+### Bug Fixes
+
+* **api:** HTTP 400 Bad Request on unknown api query string fields ([#1093](https://github.com/autonomouslogic/eve-ref/issues/1093)) ([75dddb7](https://github.com/autonomouslogic/eve-ref/commit/75dddb79d907b77a5a4152b0d1032ce7d44d0dbb))
+
+
+### Tests
+
+* Test for 400 Bad Request response on invalid enum values ([#1094](https://github.com/autonomouslogic/eve-ref/issues/1094)) ([03115b7](https://github.com/autonomouslogic/eve-ref/commit/03115b71cbb7f0f1800073d12a1355a7979aa5ea))
+
+## [2.80.1](https://github.com/autonomouslogic/eve-ref/compare/2.80.0...2.80.1) (2026-08-30)
+
+
+### Bug Fixes
+
+* **deps:** Upgraded to Jackson 3 ([#1080](https://github.com/autonomouslogic/eve-ref/issues/1080)) ([75b17f5](https://github.com/autonomouslogic/eve-ref/commit/75b17f51e8880b474e44236049b50198a58d0332))
+* Fixed market order sorting and refactored ScrapeMarketOrdersTest ([#1092](https://github.com/autonomouslogic/eve-ref/issues/1092)) ([1c3c21b](https://github.com/autonomouslogic/eve-ref/commit/1c3c21b2646f5b70682969ebc049f065f3a08435))
+* Full virtualthreads ([#1063](https://github.com/autonomouslogic/eve-ref/issues/1063)) ([788a31f](https://github.com/autonomouslogic/eve-ref/commit/788a31fe19f21db2b1dbca36f34a17fb12caa050))
+* Public contracts dynamic items should not fetch dogma for mutaplasmids ([#1088](https://github.com/autonomouslogic/eve-ref/issues/1088)) ([18f2030](https://github.com/autonomouslogic/eve-ref/commit/18f20305ad67bccb9425882020e695103f3b2ae6))
+* Report failed dynamic item on public contracts to Sentry ([#1090](https://github.com/autonomouslogic/eve-ref/issues/1090)) ([67117f5](https://github.com/autonomouslogic/eve-ref/commit/67117f5cb1c6e298ceb54e6a7f96c83758d203ef))
+* Retry failed dynamic items and removed contract_non_dynamic_items.csv from public contracts scrape ([#1082](https://github.com/autonomouslogic/eve-ref/issues/1082)) ([ce34e92](https://github.com/autonomouslogic/eve-ref/commit/ce34e925ed900e589c1ec3817ee4ca7bb2242ca1))
+* **ui:** September 2026 giveaways ([9659192](https://github.com/autonomouslogic/eve-ref/commit/96591927bc3f1abdbaf271899bf52618911a2a4b))
+
+
+### Miscellaneous Chores
+
+* claude.md ([bd8e95e](https://github.com/autonomouslogic/eve-ref/commit/bd8e95e08abf8fc8970396753a70abed13e280e4))
+
+
+### Tests
+
+* Updated test resources ([d548922](https://github.com/autonomouslogic/eve-ref/commit/d54892297fb467bae8d04d56879aa513f8b29f0d))
+
 ## [2.80.0](https://github.com/autonomouslogic/eve-ref/compare/2.79.3...2.80.0) (2026-08-23)
 
 

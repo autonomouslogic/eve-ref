@@ -2,7 +2,6 @@ package com.autonomouslogic.everef.util;
 
 import com.autonomouslogic.commons.ResourceUtil;
 import com.autonomouslogic.everef.refdata.RefDataMeta;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -22,13 +21,14 @@ import org.apache.commons.compress.compressors.xz.XZCompressorOutputStream;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import tools.jackson.databind.json.JsonMapper;
 
 @Singleton
 public class MockScrapeBuilder {
 	private static final String REFDATA_RESOURCES = "src/test/resources/refdata/";
 
 	@Inject
-	protected ObjectMapper objectMapper;
+	protected JsonMapper jsonMapper;
 
 	@Inject
 	protected RefDataUtil refDataUtil;
@@ -99,15 +99,15 @@ public class MockScrapeBuilder {
 	@SneakyThrows
 	public File createTestRefdata(RefDataMeta meta) {
 		var entries = new ArrayList<Map.Entry<String, byte[]>>();
-		entries.add(Map.entry("meta.json", objectMapper.writeValueAsBytes(meta)));
+		entries.add(Map.entry("meta.json", jsonMapper.writeValueAsBytes(meta)));
 		for (var config : refDataUtil.loadReferenceDataConfig()) {
 			var testConfig = config.getTest();
-			var json = objectMapper.createObjectNode();
+			var json = jsonMapper.createObjectNode();
 			for (var id : testConfig.getIds()) {
 				var resourceFile = String.format("/refdata/refdata/%s-%s.json", testConfig.getFilePrefix(), id);
 				json.set(id.toString(), dataUtil.loadJsonResource(resourceFile));
 			}
-			entries.add(Map.entry(config.getOutputFile() + ".json", objectMapper.writeValueAsBytes(json)));
+			entries.add(Map.entry(config.getOutputFile() + ".json", jsonMapper.writeValueAsBytes(json)));
 		}
 		return createTarXzFile(Map.ofEntries(entries.toArray(new Map.Entry[0])));
 	}

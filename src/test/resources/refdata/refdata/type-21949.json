@@ -35,7 +35,7 @@
   "group_id" : 536,
   "icon_id" : 2876,
   "market_group_id" : 1865,
-  "mass" : 10000,
+  "mass" : 10000.0,
   "name" : {
     "en" : "Structure Hangar Array",
     "fr" : "Module de hangar de la structure",
@@ -46,13 +46,13 @@
     "ru" : "Structure Hangar Array",
     "zh" : "建筑机库阵列"
   },
-  "packaged_volume" : 3000,
+  "packaged_volume" : 3000.0,
   "portion_size" : 1,
   "published" : true,
   "radius" : 1,
   "type_id" : 21949,
-  "volume" : 3000,
-  "base_price" : 39375000,
+  "volume" : 3000.0,
+  "base_price" : 39375000.0,
   "used_in_blueprints" : {
     "36966" : {
       "manufacturing" : {

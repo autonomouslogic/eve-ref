@@ -8,7 +8,6 @@ import com.autonomouslogic.everef.esi.EsiAuthHelper;
 import com.autonomouslogic.everef.s3.S3Util;
 import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.url.UrlParser;
-import com.fasterxml.jackson.databind.JsonNode;
 import java.io.File;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
@@ -20,6 +19,7 @@ import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
+import tools.jackson.databind.JsonNode;
 
 /**
  * Scraps all public market orders and uploads them.

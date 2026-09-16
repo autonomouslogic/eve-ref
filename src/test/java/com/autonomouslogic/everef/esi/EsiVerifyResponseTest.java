@@ -3,7 +3,6 @@ package com.autonomouslogic.everef.esi;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.autonomouslogic.everef.test.DaggerTestComponent;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.Instant;
 import java.util.List;
 import javax.inject.Inject;
@@ -11,11 +10,12 @@ import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import tools.jackson.databind.json.JsonMapper;
 
 @Log4j2
 public class EsiVerifyResponseTest {
 	@Inject
-	ObjectMapper objectMapper;
+	JsonMapper jsonMapper;
 
 	@BeforeEach
 	@SneakyThrows
@@ -26,7 +26,7 @@ public class EsiVerifyResponseTest {
 	@Test
 	@SneakyThrows
 	public void shouldDeserialise() {
-		var json = objectMapper
+		var json = jsonMapper
 				.createObjectNode()
 				.put("CharacterID", 2113778331)
 				.put("CharacterName", "EVE Ref")
@@ -34,7 +34,7 @@ public class EsiVerifyResponseTest {
 				.put("Scopes", "esi-markets.structure_markets.v1 esi-universe.read_structures.v1")
 				.put("CharacterOwnerHash", "random-hash")
 				.toString();
-		var parsed = objectMapper.readValue(json, EsiVerifyResponse.class);
+		var parsed = jsonMapper.readValue(json, EsiVerifyResponse.class);
 		log.info(json);
 		log.info(parsed);
 		assertEquals(2113778331, parsed.getCharacterId());

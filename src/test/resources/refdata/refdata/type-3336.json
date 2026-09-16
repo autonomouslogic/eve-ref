@@ -102,7 +102,7 @@
   "radius" : 1,
   "type_id" : 3336,
   "volume" : 0.01,
-  "base_price" : 7500000,
+  "base_price" : 7500000.0,
   "race_id" : 8,
   "category_id" : 16,
   "is_skill" : true,

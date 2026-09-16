@@ -1,0 +1,19 @@
+{
+  "capacity" : 0,
+  "description" : {
+    "en" : "",
+    "fr" : ""
+  },
+  "group_id" : 1709,
+  "mass" : 0,
+  "name" : {
+    "en" : "Medium Consumable Manufacturing I Blueprint",
+    "fr" : "Plan de construction Module intermédiaire de fabrication de produits de consommation I"
+  },
+  "packaged_volume" : 0.01,
+  "portion_size" : 1,
+  "published" : false,
+  "radius" : 1,
+  "type_id" : 37325,
+  "volume" : 0.01
+}

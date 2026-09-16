@@ -13,7 +13,6 @@ import com.autonomouslogic.everef.refdata.Region;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.test.TestDataUtil;
 import com.autonomouslogic.everef.util.archive.ArchivePathFactories;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -32,6 +31,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junitpioneer.jupiter.SetEnvironmentVariable;
+import tools.jackson.databind.json.JsonMapper;
 
 @SetEnvironmentVariable(key = "ESI_MARKET_HISTORY_EXPLORATION_GROUPS", value = "50")
 @SetEnvironmentVariable(key = "DATA_BASE_URL", value = "http://localhost:" + TestDataUtil.TEST_PORT + "/data/")
@@ -44,7 +44,7 @@ public class ExplorerRegionTypeSourceTest {
 	TestDataUtil testDataUtil;
 
 	@Inject
-	ObjectMapper objectMapper;
+	JsonMapper jsonMapper;
 
 	MockWebServer server;
 
@@ -236,7 +236,7 @@ public class ExplorerRegionTypeSourceTest {
 	@SneakyThrows
 	private byte[] createRefDataFile() {
 		return testDataUtil.createXzTar(Map.of(
-				"regions.json", objectMapper.writeValueAsBytes(allRegions),
-				"types.json", objectMapper.writeValueAsBytes(allTypes)));
+				"regions.json", jsonMapper.writeValueAsBytes(allRegions),
+				"types.json", jsonMapper.writeValueAsBytes(allTypes)));
 	}
 }

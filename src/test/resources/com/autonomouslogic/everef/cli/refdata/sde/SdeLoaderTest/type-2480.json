@@ -1,5 +1,5 @@
 {
-  "base_price" : 250000,
+  "base_price" : 250000.0,
   "description" : {
     "de" : "Beinahe komplett durch Roboter-Arbeitskräfte besetzt, zeichnen sich Massenproduktionseinrichtungen durch die Fertigung von Artikeln in großen Mengen bei minimaler Aufsicht und Instandhaltung aus. Sie können sogar so unabhängig sein, dass man munkelt, es gäbe Fabriken der Gallente, die vollständig von Androiden betrieben und von einer Notmannschaft von Drohnen gelenkt werden. (Kritiker dieser Methode merken gerne an, dass die Einrichtungen von Sansha auf sehr ähnliche Art funktionieren.) So oder so - die Ergebnisse sind unwiderlegbar: Rohmaterialien und Bauteile werden auf der einen Seite zugeführt und auf der anderen Seite erscheinen die glänzenden Güter.",
     "en" : "Populated almost entirely by robotic laborers, mass production facilities excel at creating products in bulk with minimal supervision and maintenance. They can be so self-sufficient that rumors abound of Gallente factories operated entirely by androids and governed by a skeleton crew of drones. (Detractors of this method like to note that Sansha facilities work in much the same fashion.) Either way, the results are irrefutable: Raw materials and components go in one end, and polished commodities come out the other side.",

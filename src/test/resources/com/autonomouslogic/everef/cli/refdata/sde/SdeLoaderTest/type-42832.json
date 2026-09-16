@@ -1,5 +1,5 @@
 {
-  "base_price" : 1000,
+  "base_price" : 1000.0,
   "description" : {
     "de" : "Dieses kompakte Bündel aktiver Naniten kann in ein <a href=showinfo:42526>Panzerungskommandostrahlen</a>-Modul geladen und an verbündete Schiffe verteilt werden, um die Widerstandsfähigkeit der Panzerung zu erhöhen.",
     "en" : "This compact bundle of active nanites can be loaded into an <a href=showinfo:42526>Armor Command Burst</a> module and dispersed across allied ships to provide increased armor resistances.",

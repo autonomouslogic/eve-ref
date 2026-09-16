@@ -3,6 +3,7 @@ package com.autonomouslogic.everef.util;
 import static com.autonomouslogic.everef.util.archive.ArchivePathFactories.REFERENCE_DATA;
 
 import com.autonomouslogic.commons.ResourceUtil;
+import com.autonomouslogic.commons.concurrent.VirtualThreads;
 import com.autonomouslogic.everef.config.Configs;
 import com.autonomouslogic.everef.data.LoadedRefData;
 import com.autonomouslogic.everef.http.OkHttpWrapper;
@@ -27,9 +28,6 @@ import com.autonomouslogic.everef.refdata.Skill;
 import com.autonomouslogic.everef.refdata.Unit;
 import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.url.UrlParser;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.base.CaseFormat;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Flowable;
@@ -53,6 +51,10 @@ import lombok.extern.log4j.Log4j2;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.io.FilenameUtils;
+import tools.jackson.databind.DeserializationFeature;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.node.ObjectNode;
 
 @Singleton
 @Log4j2
@@ -64,7 +66,7 @@ public class RefDataUtil {
 	protected TempFiles tempFiles;
 
 	@Inject
-	protected ObjectMapper objectMapper;
+	protected JsonMapper jsonMapper;
 
 	@Inject
 	@Named("yaml")
@@ -99,14 +101,14 @@ public class RefDataUtil {
 	}
 
 	public Single<RefDataMeta> getMetaFromRefDataFile(File file) {
-		return CompressUtil.loadArchive(file)
+		return Flowable.fromStream(CompressUtil.loadArchive(file))
 				.filter(e -> e.getKey().getName().equals("meta.json"))
-				.map(e -> objectMapper.readValue(e.getRight(), RefDataMeta.class))
+				.map(e -> jsonMapper.readValue(e.getRight(), RefDataMeta.class))
 				.firstOrError();
 	}
 
 	public Flowable<ReferenceEntry> parseReferenceDataArchive(@NonNull File file) {
-		return CompressUtil.loadArchive(file)
+		return Flowable.fromStream(CompressUtil.loadArchive(file))
 				.flatMap(pair -> {
 					var filename = pair.getKey().getName();
 					var type = FilenameUtils.getBaseName(filename);
@@ -118,13 +120,13 @@ public class RefDataUtil {
 					if (filename.equals("meta.json")) {
 						return Flowable.just(createEntry(type, pair.getRight()));
 					}
-					var json = (ObjectNode) objectMapper.readTree(pair.getRight());
+					var json = (ObjectNode) jsonMapper.readTree(pair.getRight());
 					var index = new ArrayList<Long>();
-					var fileEntries = Flowable.fromIterable(() -> json.fields())
+					var fileEntries = Flowable.fromIterable(json.properties())
 							.map(entry -> {
 								var id = Long.parseLong(entry.getKey());
 								index.add(id);
-								var content = objectMapper.writeValueAsBytes(entry.getValue());
+								var content = jsonMapper.writeValueAsBytes(entry.getValue());
 								return createEntry(type, id, content);
 							})
 							.doOnComplete(() -> log.debug("Finished parsing {}", filename));
@@ -174,7 +176,10 @@ public class RefDataUtil {
 
 	@SneakyThrows
 	private List<RefDataConfig> loadReferenceDataConfigInternal() {
-		var mapper = yamlMapper.copy().enable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+		var mapper = yamlMapper
+				.rebuild()
+				.enable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+				.build();
 		var type = mapper.getTypeFactory().constructMapType(LinkedHashMap.class, String.class, RefDataConfig.class);
 		try (var in = ResourceUtil.loadResource("/refdata.yaml")) {
 			Map<String, RefDataConfig> map = yamlMapper.readValue(in, type);
@@ -230,7 +235,7 @@ public class RefDataUtil {
 	@SneakyThrows
 	public Flowable<Long> getAllTypeIdsForMarketGroup(long marketGroupId) {
 		return Flowable.defer(() -> {
-					var marketGroup = VirtualThreads.run(() -> refdataApi.getMarketGroup(marketGroupId));
+					var marketGroup = VirtualThreads.onVirtualThread(() -> refdataApi.getMarketGroup(marketGroupId));
 					var types = Optional.ofNullable(marketGroup.getTypeIds()).orElse(List.of());
 					var children = Optional.ofNullable(marketGroup.getChildMarketGroupIds())
 							.orElse(List.of());
@@ -308,7 +313,7 @@ public class RefDataUtil {
 
 	@SneakyThrows
 	private <T> void putToLoadedRefData(ReferenceEntry refEntry, Class<T> clazz, BiConsumer<Long, T> putter) {
-		T item = objectMapper.readValue(refEntry.getContent(), clazz);
+		T item = jsonMapper.readValue(refEntry.getContent(), clazz);
 		putter.accept(refEntry.getId(), item);
 	}
 

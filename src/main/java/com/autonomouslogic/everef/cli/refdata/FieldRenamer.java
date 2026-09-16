@@ -1,12 +1,12 @@
 package com.autonomouslogic.everef.cli.refdata;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.base.CaseFormat;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.node.ArrayNode;
+import tools.jackson.databind.node.ObjectNode;
 
 /**
  * Utility for merging and renaming of JSON objects in the Ref Data build.
@@ -14,7 +14,7 @@ import javax.inject.Singleton;
 @Singleton
 public class FieldRenamer implements SimpleTransformer {
 	@Inject
-	protected ObjectMapper objectMapper;
+	protected JsonMapper jsonMapper;
 
 	@Inject
 	protected FieldRenamer() {}
@@ -41,8 +41,8 @@ public class FieldRenamer implements SimpleTransformer {
 	public JsonNode fieldRenameFromSde(JsonNode node) {
 		if (node.isObject()) {
 			var obj = (ObjectNode) node;
-			var newObj = objectMapper.createObjectNode();
-			obj.fields().forEachRemaining(entry -> {
+			var newObj = jsonMapper.createObjectNode();
+			obj.properties().forEach(entry -> {
 				var newField = fieldRenameFromSde(entry.getKey());
 				var newNode = fieldRenameFromSde(entry.getValue());
 				newObj.set(newField, newNode);

@@ -1,9 +1,6 @@
 package com.autonomouslogic.everef.cli.refdata;
 
 import com.autonomouslogic.everef.model.refdata.RefTypeConfig;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.reactivex.rxjava3.core.Completable;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -14,6 +11,10 @@ import lombok.NonNull;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.node.ObjectNode;
 
 /**
  * Reads big objects from a YAML file, transforms and converts them and stores them in the target map.
@@ -25,7 +26,7 @@ public class SimpleStoreLoader {
 	protected ObjectMapper yamlMapper;
 
 	@Inject
-	protected ObjectMapper objectMapper;
+	protected JsonMapper jsonMapper;
 
 	@Inject
 	protected ObjectMerger objectMerger;
@@ -65,7 +66,7 @@ public class SimpleStoreLoader {
 				var id = transformed.get(idFieldName).asLong();
 				writeEntry(transformed, id);
 			} else {
-				container.fields().forEachRemaining(entry -> {
+				container.properties().forEach(entry -> {
 					var id = Long.parseLong(entry.getKey());
 					var val = entry.getValue();
 					if (val == null || val.isNull()) {
@@ -97,7 +98,7 @@ public class SimpleStoreLoader {
 		if (format.equals("yaml")) {
 			mapper = yamlMapper;
 		} else if (format.equals("json")) {
-			mapper = objectMapper;
+			mapper = jsonMapper;
 		} else {
 			throw new RuntimeException(format);
 		}

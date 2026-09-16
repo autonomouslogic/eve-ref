@@ -1,7 +1,7 @@
 ---
 "645":
   roleBonuses:
-  - bonus: 5
+  - bonus: 5.0
     bonusText:
       de: "zusätzlicher Bonus auf HP der <a href=showinfo:3394>Verstärkten Schottwand</a>"
       en: "additional bonus to <a href=showinfo:3394>Reinforced Bulkhead</a> hitpoints"
@@ -16,7 +16,7 @@
       zh: "<a href=showinfo:3394>强化舱隔壁</a>结构值加成"
     importance: 3
     unitID: 105
-  - bonus: 50
+  - bonus: 50.0
     bonusText:
       de: "Bonus auf die HP der <a href=showinfo:3394>Panzerplatte</a>"
       en: "bonus to <a href=showinfo:3394>Armor Plate</a> hitpoints"
@@ -29,7 +29,7 @@
       zh: "<a href=showinfo:3394>装甲附甲板</a>装甲值加成"
     importance: 2
     unitID: 105
-  - bonus: 100
+  - bonus: 100.0
     bonusText:
       de: "Bonus auf die HP der <a href=showinfo:3425>Schilderweiterung</a>"
       en: "bonus to <a href=showinfo:3425>Shield Extender</a> hitpoints"
@@ -59,7 +59,7 @@
         zh: "<a href=\"showinfo:3436\">无人机</a>最佳射程和跟踪速度加成"
       importance: 2
       unitID: 105
-    - bonus: 10
+    - bonus: 10.0
       bonusText:
         de: "Bonus auf die HP und den Schaden von <a href=showinfo:3436>Drohnen</a>"
         en: "bonus to <a href=showinfo:3436>Drone</a> hitpoints and damage"
@@ -126,7 +126,7 @@
         </a> сокращена до 5 секунд"
       zh: "<a href=\"showinfo:11579\">隐形装置</a>重启延时降到5秒"
     importance: 3
-  - bonus: 75
+  - bonus: 75.0
     bonusText:
       de: "Reduktion der effektiv zurückgelegten Distanz für die Sprungerschöpfung"
       en: "reduction to effective distance traveled for jump fatigue"
@@ -138,7 +138,7 @@
       zh: "减少跳跃距离对产生跳跃疲劳的影响"
     importance: 4
     unitID: 105
-  - bonus: 50
+  - bonus: 50.0
     bonusText:
       de: "Reduktion der Dauer von <a href=showinfo:21096>Anziehungsfeldgeneratoren</a>\
         \ und <a href=showinfo:28646>getarnten Anziehungsfeldgeneratoren</a>"
@@ -159,7 +159,7 @@
         持续时间缩短"
     importance: 5
     unitID: 105
-  - bonus: 650
+  - bonus: 650.0
     bonusText:
       de: "Bonus auf die maximale Geschwindigkeit des Schiffs beim Einsatz von <a\
         \ href=showinfo:11579>Tarnvorrichtungen</a>"
@@ -175,7 +175,7 @@
       zh: "使用<a href=showinfo:11579>隐形装置</a>时舰船的最大速度加成"
     importance: 6
     unitID: 105
-  - bonus: 5
+  - bonus: 5.0
     bonusText:
       de: "zusätzlicher Bonus auf HP der <a href=showinfo:3394>Verstärkten Schottwand</a>"
       en: "additional bonus to <a href=showinfo:3394>Reinforced Bulkhead</a> hitpoints"
@@ -204,7 +204,7 @@
     importance: 8
   types:
     "3336":
-    - bonus: 20
+    - bonus: 20.0
       bonusText:
         de: "Bonus auf den Schaden von <a href=showinfo:3307>großen Hybridgeschütztü\
           rmen</a>"
@@ -218,7 +218,7 @@
         zh: "<a href=\"showinfo:3307\">大型混合炮台</a>伤害加成"
       importance: 1
       unitID: 105
-    - bonus: 10
+    - bonus: 10.0
       bonusText:
         de: "Bonus auf die HP und den Schaden von <a href=showinfo:3436>Drohnen</a>"
         en: "bonus to <a href=showinfo:3436>Drone</a> hitpoints and damage"
@@ -232,7 +232,7 @@
       importance: 2
       unitID: 105
     "28656":
-    - bonus: 10
+    - bonus: 10.0
       bonusText:
         de: "Bonus auf die Reichweite von <a href=showinfo:447>Warpunterbrechern</a>"
         en: "bonus to <a href=showinfo:447>Warp Scrambler</a> range"
@@ -259,7 +259,7 @@
         zh: "<a href=showinfo:3436>无人机</a>跟踪速度和最佳射程加成"
       importance: 2
       unitID: 105
-    - bonus: 1
+    - bonus: 1.0
       bonusText:
         de: "Unterbrechungsstärke für alle <a href=showinfo:447>Warpunterbrecher</a>"
         en: "scramble strength to all <a href=showinfo:447>Warp Scramblers</a>"
@@ -276,7 +276,7 @@
       unitID: 139
 "32307":
   roleBonuses:
-  - bonus: 5
+  - bonus: 5.0
     bonusText:
       de: "zusätzlicher Bonus auf HP der <a href=showinfo:3394>Verstärkten Schottwand</a>"
       en: "additional bonus to <a href=showinfo:3394>Reinforced Bulkhead</a> hitpoints"
@@ -291,7 +291,7 @@
       zh: "<a href=showinfo:3394>强化舱隔壁</a>结构值加成"
     importance: 3
     unitID: 105
-  - bonus: 50
+  - bonus: 50.0
     bonusText:
       de: "Bonus auf die HP der <a href=showinfo:3394>Panzerplatte</a>"
       en: "bonus to <a href=showinfo:3394>Armor Plate</a> hitpoints"
@@ -304,7 +304,7 @@
       zh: "<a href=showinfo:3394>装甲附甲板</a>装甲值加成"
     importance: 2
     unitID: 105
-  - bonus: 100
+  - bonus: 100.0
     bonusText:
       de: "Bonus auf die HP der <a href=showinfo:3425>Schilderweiterung</a>"
       en: "bonus to <a href=showinfo:3425>Shield Extender</a> hitpoints"
@@ -348,7 +348,7 @@
         zh: "<a href=showinfo:3393>装甲维修器</a>维修量加成"
       importance: 3
       unitID: 105
-    - bonus: 10
+    - bonus: 10.0
       bonusText:
         de: "Bonus auf HP, Schaden und Nachführung von <a href=showinfo:3436>Drohnen</a>"
         en: "bonus to <a href=showinfo:3436>Drone</a> hitpoints, damage and tracking"
@@ -363,7 +363,7 @@
       unitID: 105
 "33673":
   roleBonuses:
-  - bonus: 60
+  - bonus: 60.0
     bonusText:
       de: "Bonus auf die Warpgeschwindigkeit und Warpbeschleunigung"
       en: "bonus to warp speed and warp acceleration"
@@ -375,7 +375,7 @@
       zh: "跃迁速度和跃迁加速加成"
     importance: 5
     unitID: 105
-  - bonus: 80
+  - bonus: 80.0
     bonusText:
       de: "Reduktion der Aktivierungskosten von <a href=showinfo:3435>Antriebsblockern</a>"
       en: "reduction in <a href=showinfo:3435>Propulsion Jamming</a> systems activation\
@@ -391,7 +391,7 @@
       zh: "<a href=showinfo:3435>推进抑制</a>系统启动消耗加成"
     importance: 2
     unitID: 105
-  - bonus: 80
+  - bonus: 80.0
     bonusText:
       de: "Reduktion in der Reaktivierungsverzögerung des <a href=showinfo:58919>Anti-Unterbrechers</a>\
         \ und max. Erfassungsreichweitenabzug"
@@ -409,7 +409,7 @@
       zh: "<a href=showinfo:58919>拦截失效装置</a>重启延迟和最大锁定距离惩罚降低"
     importance: 3
     unitID: 105
-  - bonus: 100
+  - bonus: 100.0
     bonusText:
       de: "Bonus auf die Dauer des <a href=showinfo:58919>Anti-Unterbrechers</a>"
       en: "bonus to <a href=showinfo:58919>Interdiction Nullifier</a> duration"
@@ -423,7 +423,7 @@
       zh: "<a href=showinfo:58919>拦截失效装置</a>持续时间加成"
     importance: 4
     unitID: 105
-  - bonus: 375
+  - bonus: 375.0
     bonusText:
       de: "Bonus auf die HP und den Schaden von <a href=showinfo:24241>Leichten Kampfdrohnen</a>"
       en: "bonus to <a href=showinfo:24241>Light Combat Drone</a> damage and hitpoints"
@@ -440,7 +440,7 @@
     unitID: 105
   types:
     "3328":
-    - bonus: 10
+    - bonus: 10.0
       bonusText:
         de: "Bonus auf den Kinetik- und Thermalschaden von Lenkwaffen"
         en: "bonus to kinetic and thermal missile damage"
@@ -453,7 +453,7 @@
       importance: 1
       unitID: 105
     "3330":
-    - bonus: 4
+    - bonus: 4.0
       bonusText:
         de: "Bonus auf alle Schildresistenzen"
         en: "bonus to all shield resistances"
@@ -466,7 +466,7 @@
       importance: 1
       unitID: 105
     "12092":
-    - bonus: 5
+    - bonus: 5.0
       bonusText:
         de: "Bonus auf die optimale Reichweite von <a href=showinfo:447>Warpunterbrechern</a>\
           \ und <a href=showinfo:3242>Warpstörern</a>"
@@ -485,7 +485,7 @@
         zh: "<a href=showinfo:447>跃迁扰频器</a>和<a href=showinfo:3242>跃迁扰断器</a>有效距离加成"
       importance: 2
       unitID: 105
-    - bonus: 15
+    - bonus: 15.0
       bonusText:
         de: "Reduktion des <a href=showinfo:3454>Mikrowarpantrieb</a>-Signaturradius"
         en: "reduction in <a href=showinfo:3454>Microwarpdrive</a> signature radius\
@@ -555,7 +555,7 @@
         лл»</a>."
       zh: "这座建筑需要安装一个<a href=showinfo:56208>索迪约昇威量子芯</a>才能完成锚定。"
     importance: 8
-  - bonus: 1
+  - bonus: 1.0
     bonusText:
       de: "Reduzierte Materialanforderungen für Fertigungsaufträge"
       en: "reduction in material requirements for manufacturing jobs"
@@ -569,7 +569,7 @@
       zh: "生产项目的材料需求降低"
     importance: 1
     unitID: 105
-  - bonus: 5
+  - bonus: 5.0
     bonusText:
       de: "Reduzierte ISK-Anforderungen für Fertigungs- und Forschungsaufträge"
       en: "reduction in ISK requirements for manufacturing and science jobs"
@@ -582,7 +582,7 @@
       zh: "生产和科研项目的星币需求降低"
     importance: 3
     unitID: 105
-  - bonus: 25
+  - bonus: 25.0
     bonusText:
       de: "Reduzierter Treibstoffverbrauch von Industriedienstmodulen"
       en: "reduction in Engineering Service Module fuel consumption"
@@ -596,7 +596,7 @@
       zh: "工程服务装备的燃料消耗降低"
     importance: 4
     unitID: 105
-  - bonus: 30
+  - bonus: 30.0
     bonusText:
       de: "Reduzierte Zeitanforderungen für Fertigungs- und Forschungsaufträge"
       en: "reduction in time requirements for manufacturing and science jobs"
@@ -608,7 +608,7 @@
       zh: "生产和科研项目的时间需求降低"
     importance: 2
     unitID: 105
-  - bonus: 30
+  - bonus: 30.0
     bonusText:
       de: "Bonus auf die Feuerrate und den Energiespeicherverbrauch von Standup-Pulsprojektoren\
         \ und Lenkbombenwerfern"
@@ -667,7 +667,7 @@
         велл»</a>."
       zh: "这座建筑需要安装一个<a href=showinfo:56204>铁壁昇威量子芯</a>才能完成锚定。"
     importance: 5
-  - bonus: 20
+  - bonus: 20.0
     bonusText:
       de: "Bonus auf die Feuerrate und den Energiespeicherverbrauch von Standup-Pulsprojektoren\
         \ und Lenkbombenwerfern"
@@ -684,7 +684,7 @@
       zh: "屹立脉冲波投射器和制导炸弹发射器的射速和电容消耗加成"
     importance: 3
     unitID: 105
-  - bonus: 25
+  - bonus: 25.0
     bonusText:
       de: "Bonus auf alle Effekte von Struktur-Kampfmodifikationen"
       en: "bonus to all structure combat rig effects"
@@ -696,7 +696,7 @@
       zh: "所有建筑战斗改装件效果加成"
     importance: 1
     unitID: 105
-  - bonus: 25
+  - bonus: 25.0
     bonusText:
       de: "Reduzierter Treibstoffverbrauch von Zitadellen-Dienstmodulen"
       en: "reduction in citadel service module fuel consumption"

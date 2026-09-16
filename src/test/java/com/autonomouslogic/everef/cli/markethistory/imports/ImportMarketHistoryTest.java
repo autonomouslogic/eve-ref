@@ -5,13 +5,13 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import com.autonomouslogic.commons.ResourceUtil;
+import com.autonomouslogic.commons.concurrent.VirtualThreads;
 import com.autonomouslogic.everef.db.DbAccess;
 import com.autonomouslogic.everef.db.MarketHistoryDao;
 import com.autonomouslogic.everef.db.schema.Tables;
 import com.autonomouslogic.everef.model.MarketHistoryEntry;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.test.TestDataUtil;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
@@ -39,6 +39,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junitpioneer.jupiter.ClearEnvironmentVariable;
 import org.junitpioneer.jupiter.SetEnvironmentVariable;
 import org.mockito.junit.jupiter.MockitoExtension;
+import tools.jackson.databind.json.JsonMapper;
 
 /**
  * <ul>
@@ -68,7 +69,7 @@ public class ImportMarketHistoryTest {
 	ImportMarketHistory importMarketHistory;
 
 	@Inject
-	ObjectMapper objectMapper;
+	JsonMapper jsonMapper;
 
 	@Inject
 	MarketHistoryDao marketHistoryDao;
@@ -119,7 +120,7 @@ public class ImportMarketHistoryTest {
 	@SneakyThrows
 	@SetEnvironmentVariable(key = "IMPORT_MARKET_HISTORY_MIN_DATE", value = "2018-01-01")
 	void shouldImportMarketHistory() {
-		importMarketHistory.run();
+		VirtualThreads.onVirtualThread(importMarketHistory::run);
 		assertDailyImports();
 		// assertYearlyImports();
 	}
@@ -220,7 +221,7 @@ public class ImportMarketHistoryTest {
 					return mockResponse(ResourceUtil.loadContextual(ImportMarketHistoryTest.class, "/data.html"));
 				}
 				if (path.equals("/data/market-history/totals.json")) {
-					return mockResponse(objectMapper.writeValueAsBytes(Map.of(
+					return mockResponse(jsonMapper.writeValueAsBytes(Map.of(
 							"2019-01-03", 2,
 							"2019-01-04", 2,
 							"2019-01-05", 2)));

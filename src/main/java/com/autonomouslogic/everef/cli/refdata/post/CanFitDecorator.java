@@ -4,9 +4,6 @@ import com.autonomouslogic.everef.cli.refdata.StoreDataHelper;
 import com.autonomouslogic.everef.cli.refdata.StoreHandler;
 import com.autonomouslogic.everef.refdata.DogmaAttribute;
 import com.autonomouslogic.everef.refdata.InventoryType;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.reactivex.rxjava3.core.Completable;
 import java.util.Map;
 import java.util.Optional;
@@ -14,6 +11,9 @@ import javax.inject.Inject;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.node.ObjectNode;
 
 /**
  * <ul>
@@ -23,7 +23,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class CanFitDecorator extends PostDecorator {
 	@Inject
-	protected ObjectMapper objectMapper;
+	protected JsonMapper jsonMapper;
 
 	@Setter
 	@NonNull
@@ -39,12 +39,12 @@ public class CanFitDecorator extends PostDecorator {
 	public Completable create() {
 		return Completable.fromAction(() -> {
 			log.info("Decorating canFit");
-			helper = new StoreDataHelper(storeHandler, objectMapper);
+			helper = new StoreDataHelper(storeHandler, jsonMapper);
 			dogmaAttributes = storeHandler.getRefStore("dogmaAttributes");
 			types = storeHandler.getRefStore("types");
 
 			var canFitAttributes = dogmaAttributes.values().stream()
-					.map(n -> objectMapper.convertValue(n, DogmaAttribute.class))
+					.map(n -> jsonMapper.convertValue(n, DogmaAttribute.class))
 					.filter(dogma -> dogma.getName().startsWith("canFitShipType"))
 					.map(dogma -> dogma.getAttributeId())
 					.toList();
@@ -59,8 +59,8 @@ public class CanFitDecorator extends PostDecorator {
 		for (var module : modules) {
 			var dogma = helper.getDogmaFromType(module, attributeId).orElseThrow();
 			var targetId = dogma.getValue().longValue();
-			var target = Optional.ofNullable(types.get(targetId))
-					.map(n -> objectMapper.convertValue(n, InventoryType.class));
+			var target =
+					Optional.ofNullable(types.get(targetId)).map(n -> jsonMapper.convertValue(n, InventoryType.class));
 			if (target.isEmpty()) {
 				log.warn(
 						"CanFitShipType[{}] target not found for module {} and attribute {}",

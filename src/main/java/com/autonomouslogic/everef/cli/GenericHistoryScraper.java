@@ -8,7 +8,6 @@ import com.autonomouslogic.everef.url.UrlParser;
 import com.autonomouslogic.everef.util.CompressUtil;
 import com.autonomouslogic.everef.util.TempFiles;
 import com.autonomouslogic.everef.util.archive.StandardArchivePathFactory;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.ZonedDateTime;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -17,6 +16,7 @@ import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
+import tools.jackson.databind.json.JsonMapper;
 
 /**
  * Generic scraper for fetching JSON from a URL, validating it, compressing to .bz2,
@@ -35,7 +35,7 @@ public class GenericHistoryScraper {
 	protected S3Util s3Util;
 
 	@Inject
-	protected ObjectMapper objectMapper;
+	protected JsonMapper jsonMapper;
 
 	@Inject
 	protected UrlParser urlParser;
@@ -82,7 +82,7 @@ public class GenericHistoryScraper {
 
 		// Validate JSON is parseable
 		try {
-			objectMapper.readTree(jsonFile);
+			jsonMapper.readTree(jsonFile);
 		} catch (Exception e) {
 			jsonFile.delete();
 			throw new RuntimeException(String.format("Invalid JSON from %s: %s", url, e.getMessage()), e);

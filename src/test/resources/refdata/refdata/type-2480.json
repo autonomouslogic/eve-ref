@@ -59,6 +59,6 @@
   "radius" : 1,
   "type_id" : 2480,
   "volume" : 0,
-  "base_price" : 250000,
+  "base_price" : 250000.0,
   "installable_schematic_ids" : [ 65 ]
 }

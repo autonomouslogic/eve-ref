@@ -1,6 +1,5 @@
 package com.autonomouslogic.everef.esi;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import dagger.MembersInjector;
 import dagger.Module;
 import dagger.Provides;
@@ -8,6 +7,7 @@ import io.reactivex.rxjava3.core.Completable;
 import javax.inject.Singleton;
 import lombok.Setter;
 import org.mockito.stubbing.Answer;
+import tools.jackson.databind.node.ObjectNode;
 
 /**
  * Specifically for overriding DataIndex, when needed.

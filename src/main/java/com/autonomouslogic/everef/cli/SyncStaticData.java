@@ -12,7 +12,6 @@ import com.autonomouslogic.everef.util.DiscordNotifier;
 import com.autonomouslogic.everef.util.TempFiles;
 import com.autonomouslogic.everef.util.archive.ArchivePathFactories;
 import com.autonomouslogic.everef.util.archive.StandardArchivePathFactory;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
@@ -26,6 +25,7 @@ import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.io.FilenameUtils;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
+import tools.jackson.databind.json.JsonMapper;
 
 /**
  * Fetches and stores all public contracts.
@@ -36,7 +36,7 @@ public class SyncStaticData implements Command {
 	protected UrlParser urlParser;
 
 	@Inject
-	protected ObjectMapper objectMapper;
+	protected JsonMapper jsonMapper;
 
 	@Inject
 	protected S3Adapter s3Adapter;
@@ -96,7 +96,7 @@ public class SyncStaticData implements Command {
 			if (response.code() != 200) {
 				throw new RuntimeException("Failed to fetch " + staticDataUrl + ": " + response.code());
 			}
-			var latest = objectMapper.readValue(response.body().byteStream(), StaticDataMeta.class);
+			var latest = jsonMapper.readValue(response.body().byteStream(), StaticDataMeta.class);
 			if (latest == null || latest.getKey() == null || !latest.getKey().equals("sde")) {
 				throw new RuntimeException("Unable to find latest static-data file");
 			}

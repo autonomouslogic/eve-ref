@@ -24,10 +24,10 @@
     "ru" : "Abyssal Damage Control",
     "zh" : "深渊损伤控制"
   },
-  "packaged_volume" : 5,
+  "packaged_volume" : 5.0,
   "portion_size" : 1,
   "published" : true,
   "tech_level" : 1,
-  "volume" : 5,
+  "volume" : 5.0,
   "type_id" : 52227
 }

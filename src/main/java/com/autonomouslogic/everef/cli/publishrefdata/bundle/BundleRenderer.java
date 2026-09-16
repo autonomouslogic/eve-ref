@@ -12,9 +12,6 @@ import com.autonomouslogic.everef.refdata.Skill;
 import com.autonomouslogic.everef.refdata.TraitBonus;
 import com.autonomouslogic.everef.util.RefDataUtil;
 import com.autonomouslogic.everef.util.StreamUtil;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.reactivex.rxjava3.core.Flowable;
 import java.util.Collection;
 import java.util.Map;
@@ -28,13 +25,16 @@ import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.lang3.tuple.Pair;
 import org.h2.mvstore.MVStore;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.node.ObjectNode;
 
 @Log4j2
 public abstract class BundleRenderer implements RefDataRenderer {
 	private static final Pattern showinfoPattern = Pattern.compile("showinfo:([0-9]+)");
 
 	@Inject
-	protected ObjectMapper objectMapper;
+	protected JsonMapper jsonMapper;
 
 	@Inject
 	protected MVStoreUtil mvStoreUtil;
@@ -113,7 +113,7 @@ public abstract class BundleRenderer implements RefDataRenderer {
 					var json = typesMap.get(typeId);
 					if (json != null) {
 						addTypeToBundle(typeId, typesJson);
-						bundleDogmaAttributes(objectMapper.convertValue(json, InventoryType.class), attributesJson);
+						bundleDogmaAttributes(jsonMapper.convertValue(json, InventoryType.class), attributesJson);
 					}
 				});
 	}
@@ -131,7 +131,7 @@ public abstract class BundleRenderer implements RefDataRenderer {
 			return;
 		}
 		skillsJson.set(Long.toString(skillId), skillJson);
-		var skill = objectMapper.convertValue(skillJson, Skill.class);
+		var skill = jsonMapper.convertValue(skillJson, Skill.class);
 		Optional.ofNullable(getTypesMap().get(skill.getTypeId()))
 				.ifPresent(typeJson -> typesJson.set(Long.toString(skill.getTypeId()), typeJson));
 		Optional.ofNullable(skill.getRequiredSkills()).stream()
@@ -146,8 +146,8 @@ public abstract class BundleRenderer implements RefDataRenderer {
 		if (attributesJson.isEmpty()) {
 			return;
 		}
-		attributesJson.fields().forEachRemaining(entry -> {
-			var dogma = objectMapper.convertValue(entry.getValue(), DogmaAttribute.class);
+		attributesJson.properties().forEach(entry -> {
+			var dogma = jsonMapper.convertValue(entry.getValue(), DogmaAttribute.class);
 			var unitId = dogma.getUnitId();
 			var unitJson = getUnitsMap().get(unitId);
 			if (unitJson == null) {
@@ -161,8 +161,8 @@ public abstract class BundleRenderer implements RefDataRenderer {
 		if (attributesJson.isEmpty()) {
 			return;
 		}
-		attributesJson.fields().forEachRemaining(entry -> {
-			var dogma = objectMapper.convertValue(entry.getValue(), DogmaAttribute.class);
+		attributesJson.properties().forEach(entry -> {
+			var dogma = jsonMapper.convertValue(entry.getValue(), DogmaAttribute.class);
 			var iconId = dogma.getIconId();
 			if (iconId == null) {
 				return;
@@ -241,7 +241,7 @@ public abstract class BundleRenderer implements RefDataRenderer {
 		var json = getMarketGroupsMap().get(id);
 		if (json != null) {
 			marketGroupsJson.set(Long.toString(id), json);
-			var group = objectMapper.convertValue(json, MarketGroup.class);
+			var group = jsonMapper.convertValue(json, MarketGroup.class);
 			if (group.getParentGroupId() != null) {
 				bundleMarketGroup(group.getParentGroupId(), marketGroupsJson);
 			}
@@ -259,7 +259,7 @@ public abstract class BundleRenderer implements RefDataRenderer {
 		var json = groupsMap.get(groupId);
 		if (json != null) {
 			groupsJson.set(Long.toString(groupId), json);
-			var group = objectMapper.convertValue(json, InventoryGroup.class);
+			var group = jsonMapper.convertValue(json, InventoryGroup.class);
 			if (categoriesJson != null) {
 				bundleInventoryCategory(group.getCategoryId(), categoriesJson);
 			}
@@ -270,8 +270,8 @@ public abstract class BundleRenderer implements RefDataRenderer {
 		if (typesJson.isEmpty()) {
 			return;
 		}
-		typesJson.fields().forEachRemaining(entry -> {
-			var type = objectMapper.convertValue(entry.getValue(), InventoryType.class);
+		typesJson.properties().forEach(entry -> {
+			var type = jsonMapper.convertValue(entry.getValue(), InventoryType.class);
 			var groupId = type.getMetaGroupId();
 			if (groupId == null) {
 				return;

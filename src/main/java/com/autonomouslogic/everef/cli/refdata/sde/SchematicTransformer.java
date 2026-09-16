@@ -2,11 +2,11 @@ package com.autonomouslogic.everef.cli.refdata.sde;
 
 import com.autonomouslogic.everef.cli.refdata.SimpleTransformer;
 import com.autonomouslogic.everef.cli.refdata.TransformUtil;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.util.Map;
 import javax.inject.Inject;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.node.ObjectNode;
 
 /**
  * Transforms the schematics from the SDE into a more blueprint-friendly format.
@@ -16,7 +16,7 @@ public class SchematicTransformer implements SimpleTransformer {
 	protected TransformUtil transformUtil;
 
 	@Inject
-	protected ObjectMapper objectMapper;
+	protected JsonMapper jsonMapper;
 
 	@Inject
 	protected SchematicTransformer() {}
@@ -37,7 +37,7 @@ public class SchematicTransformer implements SimpleTransformer {
 		var types = (ObjectNode) json.get("types");
 		var materials = json.withObject("materials");
 		var products = json.withObject("products");
-		types.fields().forEachRemaining(entry -> {
+		types.properties().forEach(entry -> {
 			transformTypeEntry(entry, materials, products);
 		});
 		transformUtil.remove(json, "types");

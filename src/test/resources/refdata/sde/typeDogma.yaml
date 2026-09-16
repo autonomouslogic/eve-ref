@@ -2,27 +2,27 @@
 "189":
   dogmaAttributes:
   - attributeID: 114
-    value: 0
+    value: 0.0
   - attributeID: 116
-    value: 6
+    value: 6.0
   - attributeID: 117
-    value: 4
+    value: 4.0
   - attributeID: 118
-    value: 6
+    value: 6.0
   - attributeID: 120
-    value: 1
+    value: 1.0
   - attributeID: 124
-    value: 4612441
+    value: 4612441.0
   - attributeID: 128
-    value: 2
+    value: 2.0
   - attributeID: 137
-    value: 55
+    value: 55.0
   - attributeID: 244
     value: 1.2
   - attributeID: 422
-    value: 1
+    value: 1.0
   - attributeID: 779
-    value: 1
+    value: 1.0
   dogmaEffects:
   - effectID: 596
     isDefault: false
@@ -33,41 +33,41 @@
 "645":
   dogmaAttributes:
   - attributeID: 3
-    value: 0
+    value: 0.0
   - attributeID: 9
-    value: 9350
+    value: 9350.0
   - attributeID: 11
-    value: 10000
+    value: 10000.0
   - attributeID: 12
-    value: 7
+    value: 7.0
   - attributeID: 13
-    value: 5
+    value: 5.0
   - attributeID: 14
-    value: 6
+    value: 6.0
   - attributeID: 15
-    value: 0
+    value: 0.0
   - attributeID: 19
-    value: 1
+    value: 1.0
   - attributeID: 21
-    value: 0
+    value: 0.0
   - attributeID: 37
-    value: 109
+    value: 109.0
   - attributeID: 48
-    value: 600
+    value: 600.0
   - attributeID: 49
-    value: 0
+    value: 0.0
   - attributeID: 55
-    value: 1100000
+    value: 1100000.0
   - attributeID: 70
     value: 0.1254
   - attributeID: 76
-    value: 84000
+    value: 84000.0
   - attributeID: 79
-    value: 8250
+    value: 8250.0
   - attributeID: 101
-    value: 0
+    value: 0.0
   - attributeID: 102
-    value: 6
+    value: 6.0
   - attributeID: 109
     value: 0.67
   - attributeID: 110
@@ -77,35 +77,35 @@
   - attributeID: 113
     value: 0.67
   - attributeID: 124
-    value: 16777215
+    value: 16777215.0
   - attributeID: 129
-    value: 1000
+    value: 1000.0
   - attributeID: 136
-    value: 1
+    value: 1.0
   - attributeID: 153
     value: 0.000000138
   - attributeID: 182
-    value: 3336
+    value: 3336.0
   - attributeID: 188
-    value: 0
+    value: 0.0
   - attributeID: 192
-    value: 7
+    value: 7.0
   - attributeID: 208
-    value: 0
+    value: 0.0
   - attributeID: 209
-    value: 0
+    value: 0.0
   - attributeID: 210
-    value: 22
+    value: 22.0
   - attributeID: 211
-    value: 0
+    value: 0.0
   - attributeID: 217
-    value: 395
+    value: 395.0
   - attributeID: 246
-    value: 395
+    value: 395.0
   - attributeID: 263
-    value: 7920
+    value: 7920.0
   - attributeID: 265
-    value: 8800
+    value: 8800.0
   - attributeID: 267
     value: 0.5
   - attributeID: 268
@@ -115,7 +115,7 @@
   - attributeID: 270
     value: 0.65
   - attributeID: 271
-    value: 1
+    value: 1.0
   - attributeID: 272
     value: 0.5
   - attributeID: 273
@@ -123,15 +123,15 @@
   - attributeID: 274
     value: 0.8
   - attributeID: 277
-    value: 1
+    value: 1.0
   - attributeID: 283
-    value: 375
+    value: 375.0
   - attributeID: 422
-    value: 1
+    value: 1.0
   - attributeID: 479
-    value: 2500000
+    value: 2500000.0
   - attributeID: 482
-    value: 6000
+    value: 6000.0
   - attributeID: 484
     value: 0.75
   - attributeID: 500
@@ -139,29 +139,29 @@
   - attributeID: 524
     value: 0.75
   - attributeID: 525
-    value: 1
+    value: 1.0
   - attributeID: 552
-    value: 465
+    value: 465.0
   - attributeID: 561
-    value: 10
+    value: 10.0
   - attributeID: 564
-    value: 117
+    value: 117.0
   - attributeID: 600
-    value: 3
+    value: 3.0
   - attributeID: 633
-    value: 0
+    value: 0.0
   - attributeID: 661
-    value: 1000
+    value: 1000.0
   - attributeID: 662
     value: 0.5
   - attributeID: 1132
-    value: 400
+    value: 400.0
   - attributeID: 1137
-    value: 3
+    value: 3.0
   - attributeID: 1154
-    value: 3
+    value: 3.0
   - attributeID: 1178
-    value: 100
+    value: 100.0
   - attributeID: 1179
     value: 0.01
   - attributeID: 1196
@@ -169,9 +169,9 @@
   - attributeID: 1198
     value: 0.01
   - attributeID: 1199
-    value: 100
+    value: 100.0
   - attributeID: 1200
-    value: 100
+    value: 100.0
   - attributeID: 1224
     value: 0.5
   - attributeID: 1259
@@ -181,33 +181,33 @@
   - attributeID: 1262
     value: 0.79
   - attributeID: 1271
-    value: 125
+    value: 125.0
   - attributeID: 1281
-    value: 1
+    value: 1.0
   - attributeID: 1547
-    value: 3
+    value: 3.0
   - attributeID: 1555
-    value: 500
+    value: 500.0
   - attributeID: 1768
-    value: 11331
+    value: 11331.0
   - attributeID: 2045
-    value: 1
+    value: 1.0
   - attributeID: 2112
-    value: 1
+    value: 1.0
   - attributeID: 2113
-    value: 1
+    value: 1.0
   - attributeID: 2115
-    value: 1
+    value: 1.0
   - attributeID: 3020
-    value: 1
+    value: 1.0
   - attributeID: 3266
-    value: 50
+    value: 50.0
   - attributeID: 3267
-    value: 100
+    value: 100.0
   - attributeID: 3268
     value: 0.05
   - attributeID: 5796
-    value: 2147483647000
+    value: 2147483647000.0
   dogmaEffects:
   - effectID: 2186
     isDefault: false

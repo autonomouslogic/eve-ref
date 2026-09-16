@@ -361,7 +361,7 @@
   "graphic_id" : 21406,
   "group_id" : 1404,
   "market_group_id" : 2324,
-  "mass" : 50000000000,
+  "mass" : 50000000000.0,
   "name" : {
     "en" : "Sotiyo",
     "fr" : "Sotiyo",
@@ -372,12 +372,12 @@
     "ru" : "Sotiyo",
     "zh" : "索迪约"
   },
-  "packaged_volume" : 800000,
+  "packaged_volume" : 800000.0,
   "portion_size" : 1,
   "published" : true,
-  "radius" : 150000,
+  "radius" : 150000.0,
   "type_id" : 35827,
-  "volume" : 800000,
+  "volume" : 800000.0,
   "is_repackable" : true,
   "sound_id" : 20244,
   "engineering_rig_global_activities" : [ "research_material", "research_time", "manufacturing", "invention", "copying" ],
@@ -423,7 +423,7 @@
         "importance" : 8
       },
       "1" : {
-        "bonus" : 1,
+        "bonus" : 1.0,
         "bonus_text" : {
           "de" : "Reduzierte Materialanforderungen für Fertigungsaufträge",
           "en" : "reduction in material requirements for manufacturing jobs",
@@ -438,7 +438,7 @@
         "unit_id" : 105
       },
       "3" : {
-        "bonus" : 5,
+        "bonus" : 5.0,
         "bonus_text" : {
           "de" : "Reduzierte ISK-Anforderungen für Fertigungs- und Forschungsaufträge",
           "en" : "reduction in ISK requirements for manufacturing and science jobs",
@@ -453,7 +453,7 @@
         "unit_id" : 105
       },
       "4" : {
-        "bonus" : 25,
+        "bonus" : 25.0,
         "bonus_text" : {
           "de" : "Reduzierter Treibstoffverbrauch von Industriedienstmodulen",
           "en" : "reduction in Engineering Service Module fuel consumption",
@@ -468,7 +468,7 @@
         "unit_id" : 105
       },
       "2" : {
-        "bonus" : 30,
+        "bonus" : 30.0,
         "bonus_text" : {
           "de" : "Reduzierte Zeitanforderungen für Fertigungs- und Forschungsaufträge",
           "en" : "reduction in time requirements for manufacturing and science jobs",
@@ -483,7 +483,7 @@
         "unit_id" : 105
       },
       "5" : {
-        "bonus" : 30,
+        "bonus" : 30.0,
         "bonus_text" : {
           "de" : "Bonus auf die Feuerrate und den Energiespeicherverbrauch von Standup-Pulsprojektoren und Lenkbombenwerfern",
           "en" : "bonus to the rate of fire and capacitor consumption of Standup Burst Projectors and Guided Bomb Launchers",

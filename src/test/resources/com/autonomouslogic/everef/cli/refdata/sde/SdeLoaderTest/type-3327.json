@@ -1,5 +1,5 @@
 {
-  "base_price" : 30000,
+  "base_price" : 30000.0,
   "description" : {
     "de" : "Die grundsätzliche Fertigkeit, ein Raumschiff zu bedienen.\n\n2% Bonus auf die Wendigkeit eines Schiffes je Skillstufe.",
     "en" : "The basic operation of spaceships. 2% improved ship agility for all ships per skill level.",

@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import com.autonomouslogic.commons.ResourceUtil;
+import com.autonomouslogic.commons.concurrent.VirtualThreads;
 import com.autonomouslogic.everef.model.RegionTypePair;
 import com.autonomouslogic.everef.refdata.InventoryType;
 import com.autonomouslogic.everef.refdata.Region;
@@ -15,8 +16,6 @@ import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.util.DataIndexHelper;
 import com.autonomouslogic.everef.util.EveConstants;
 import com.autonomouslogic.everef.util.archive.ArchivePathFactories;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
@@ -46,6 +45,8 @@ import org.junitpioneer.jupiter.SetEnvironmentVariable;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.json.JsonMapper;
 
 /**
  * <ul>
@@ -84,7 +85,7 @@ public class ScrapeMarketHistoryTest {
 	TestDataUtil testDataUtil;
 
 	@Inject
-	ObjectMapper objectMapper;
+	JsonMapper jsonMapper;
 
 	@Inject
 	DataIndexHelper dataIndexHelper;
@@ -111,11 +112,11 @@ public class ScrapeMarketHistoryTest {
 
 	@RetryingTest(3)
 	@SneakyThrows
-	void shouldScrapeMarketHistory() {
-		scrapeMarketHistory
+	void shouldScrapeMarketHistory() throws InterruptedException {
+		VirtualThreads.onVirtualThread(() -> scrapeMarketHistory
 				.setMinDate(LocalDate.parse("2023-01-01"))
 				.setToday(LocalDate.parse("2023-01-04"))
-				.run();
+				.run());
 
 		assertEquals(
 				List.of(
@@ -317,10 +318,10 @@ public class ScrapeMarketHistoryTest {
 		}
 	}
 
-	private MockResponse mockRefdata() throws JsonProcessingException {
+	private MockResponse mockRefdata() throws JacksonException {
 		return testDataUtil.mockResponse(testDataUtil.createXzTar(Map.of(
 				"regions.json",
-						objectMapper.writeValueAsBytes(Map.of(
+						jsonMapper.writeValueAsBytes(Map.of(
 								10000001,
 								Region.builder()
 										.regionId(10000001L)
@@ -342,7 +343,7 @@ public class ScrapeMarketHistoryTest {
 										.universeId("hidden")
 										.build())),
 				"types.json",
-						objectMapper.writeValueAsBytes(Map.of(
+						jsonMapper.writeValueAsBytes(Map.of(
 								999,
 								InventoryType.builder()
 										.typeId(999L)

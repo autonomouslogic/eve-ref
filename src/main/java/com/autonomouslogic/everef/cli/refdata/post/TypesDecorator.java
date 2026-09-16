@@ -1,13 +1,13 @@
 package com.autonomouslogic.everef.cli.refdata.post;
 
 import com.autonomouslogic.everef.refdata.InventoryType;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
 import io.reactivex.rxjava3.core.Completable;
 import java.util.Map;
 import javax.inject.Inject;
 import lombok.extern.log4j.Log4j2;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.node.ArrayNode;
 
 /**
  * References inventory types on inventory groups.
@@ -15,7 +15,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class TypesDecorator extends PostDecorator {
 	@Inject
-	protected ObjectMapper objectMapper;
+	protected JsonMapper jsonMapper;
 
 	@Inject
 	protected TypesDecorator() {}
@@ -28,7 +28,7 @@ public class TypesDecorator extends PostDecorator {
 			var marketGroups = storeHandler.getRefStore("marketGroups");
 			var metaGroups = storeHandler.getRefStore("metaGroups");
 			for (var typeJson : types.values()) {
-				var type = objectMapper.convertValue(typeJson, InventoryType.class);
+				var type = jsonMapper.convertValue(typeJson, InventoryType.class);
 				addTypeToGroup(type, groups, type.getGroupId());
 				addTypeToGroup(type, marketGroups, type.getMarketGroupId());
 				addTypeToGroup(type, metaGroups, type.getMetaGroupId());

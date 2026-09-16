@@ -11,10 +11,8 @@ import com.autonomouslogic.everef.util.CompressUtil;
 import com.autonomouslogic.everef.util.DataUtil;
 import com.autonomouslogic.everef.util.MockScrapeBuilder;
 import com.autonomouslogic.everef.util.RefDataUtil;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.reactivex.rxjava3.core.Completable;
+import io.reactivex.rxjava3.core.Flowable;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.HashMap;
@@ -25,6 +23,10 @@ import javax.inject.Named;
 import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.io.IOUtils;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.node.ObjectNode;
 
 /**
  * Loads the resources configured in <code>refdata.yaml</code> and imports those resources fro the SDE and ESI.
@@ -42,7 +44,7 @@ public class ImportTestResources implements Command {
 	protected UrlParser urlParser;
 
 	@Inject
-	protected ObjectMapper objectMapper;
+	protected JsonMapper jsonMapper;
 
 	@Inject
 	@Named("yaml")
@@ -90,7 +92,7 @@ public class ImportTestResources implements Command {
 	}
 
 	private Completable loadSdeResources(File file) {
-		return CompressUtil.loadArchive(file).flatMapCompletable(pair -> {
+		return Flowable.fromStream(CompressUtil.loadArchive(file)).flatMapCompletable(pair -> {
 			var entry = pair.getLeft();
 			var config = refDataUtil.getSdeConfigForFilename(entry.getName());
 			if (config == null || config.getSde() == null) {
@@ -109,7 +111,7 @@ public class ImportTestResources implements Command {
 				var newContent = yamlMapper.createObjectNode();
 				for (Long id : config.getTest().getIds()) {
 					var stringId = id.toString();
-					newContent.put(stringId, content.get(stringId));
+					newContent.set(stringId, content.get(stringId));
 				}
 				output = yamlMapper.writeValueAsBytes(newContent);
 			}
@@ -124,8 +126,8 @@ public class ImportTestResources implements Command {
 	}
 
 	private Completable loadHoboleaksResources(File file) {
-		return CompressUtil.loadArchive(file).flatMapCompletable(pair -> {
-			var prettyPrinter = objectMapper.writerWithDefaultPrettyPrinter();
+		return Flowable.fromStream(CompressUtil.loadArchive(file)).flatMapCompletable(pair -> {
+			var prettyPrinter = jsonMapper.writerWithDefaultPrettyPrinter();
 			var entry = pair.getLeft();
 			var config = refDataUtil.getHoboleaksConfigForFilename(entry.getName());
 			if (config == null || config.getHoboleaks() == null) {
@@ -134,11 +136,11 @@ public class ImportTestResources implements Command {
 			if (config.getHoboleaks().isIndividualFiles()) {
 				throw new IllegalArgumentException("Individual files not supported for Hoboleaks.");
 			}
-			var content = (ObjectNode) objectMapper.readTree(pair.getRight());
-			var newContent = objectMapper.createObjectNode();
+			var content = (ObjectNode) jsonMapper.readTree(pair.getRight());
+			var newContent = jsonMapper.createObjectNode();
 			for (Long id : config.getTest().getIds()) {
 				var stringId = id.toString();
-				newContent.put(stringId, content.get(stringId));
+				newContent.set(stringId, content.get(stringId));
 			}
 			var outputFile = new File(HOBOLEAKS_RESOURCES + "/" + entry.getName());
 			log.info("Writing {}", outputFile);
@@ -148,7 +150,7 @@ public class ImportTestResources implements Command {
 	}
 
 	private Completable loadEsiResources(File file) {
-		return CompressUtil.loadArchive(file).flatMapCompletable(pair -> {
+		return Flowable.fromStream(CompressUtil.loadArchive(file)).flatMapCompletable(pair -> {
 			var entry = pair.getLeft();
 			var fileType = esiLoader.resolveFileType(entry.getName());
 			if (fileType == null) {
@@ -175,7 +177,7 @@ public class ImportTestResources implements Command {
 			var newContent = yamlMapper.createObjectNode();
 			for (Long id : config.getTest().getIds()) {
 				var stringId = id.toString();
-				newContent.put(stringId, content.get(stringId));
+				newContent.set(stringId, content.get(stringId));
 			}
 			var fileName = entry.getName();
 			fileName = fileName.replace("eve-ref-esi-scrape", "esi");
@@ -237,7 +239,7 @@ public class ImportTestResources implements Command {
 	private Completable exportResources(
 			@NonNull String path, @NonNull Function<String, Map<Long, JsonNode>> storeProvider) {
 		return Completable.fromAction(() -> {
-			var prettyPrinter = objectMapper.writerWithDefaultPrettyPrinter();
+			var prettyPrinter = jsonMapper.writerWithDefaultPrettyPrinter();
 			Map<String, JsonNode> fileNodes = new HashMap<>();
 			for (RefDataConfig config : refDataUtil.loadReferenceDataConfig()) {
 				var store = storeProvider.apply(config.getId());

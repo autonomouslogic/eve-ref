@@ -24,11 +24,11 @@
     "ru" : "Planet (Temperate)",
     "zh" : "行星（温和）"
   },
-  "packaged_volume" : 1,
+  "packaged_volume" : 1.0,
   "portion_size" : 1,
   "published" : false,
-  "radius" : 10000,
+  "radius" : 10000.0,
   "type_id" : 11,
-  "volume" : 1,
+  "volume" : 1.0,
   "buildable_pin_type_ids" : [ 2412, 2480 ]
 }

@@ -2,14 +2,14 @@ package com.autonomouslogic.everef.cli.refdata.post;
 
 import com.autonomouslogic.everef.cli.refdata.StoreDataHelper;
 import com.autonomouslogic.everef.refdata.DogmaAttribute;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.reactivex.rxjava3.core.Completable;
 import java.util.Map;
 import java.util.Objects;
 import javax.inject.Inject;
 import lombok.extern.log4j.Log4j2;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.node.ObjectNode;
 
 /**
  * There are some dogma attribute which do not have a unit referenced on them.
@@ -22,7 +22,7 @@ public class MissingDogmaUnitsDecorator extends PostDecorator {
 			162, 1);
 
 	@Inject
-	protected ObjectMapper objectMapper;
+	protected JsonMapper jsonMapper;
 
 	private StoreDataHelper helper;
 	private Map<Long, JsonNode> dogmaAttributes;
@@ -33,7 +33,7 @@ public class MissingDogmaUnitsDecorator extends PostDecorator {
 	public Completable create() {
 		return Completable.fromAction(() -> {
 			log.info("Decorating blueprints");
-			helper = new StoreDataHelper(storeHandler, objectMapper);
+			helper = new StoreDataHelper(storeHandler, jsonMapper);
 			dogmaAttributes = storeHandler.getRefStore("dogmaAttributes");
 			dogmaUnits.forEach(this::populateUnit);
 		});
@@ -42,7 +42,7 @@ public class MissingDogmaUnitsDecorator extends PostDecorator {
 	private void populateUnit(long attributeId, Integer unitId) {
 		var json = (ObjectNode) dogmaAttributes.get(attributeId);
 		Objects.requireNonNull(json, "Missing dogma attribute: " + attributeId);
-		var attr = objectMapper.convertValue(json, DogmaAttribute.class);
+		var attr = jsonMapper.convertValue(json, DogmaAttribute.class);
 		if (attr.getUnitId() != null) {
 			if (attr.getUnitId().equals(unitId)) {
 				log.debug(

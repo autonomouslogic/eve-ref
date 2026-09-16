@@ -3,17 +3,17 @@ package com.autonomouslogic.everef.cli.refdata;
 import com.autonomouslogic.everef.refdata.DogmaAttribute;
 import com.autonomouslogic.everef.refdata.DogmaTypeAttribute;
 import com.autonomouslogic.everef.refdata.InventoryType;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.node.ObjectNode;
 
 @RequiredArgsConstructor
 public class StoreDataHelper {
 	private final StoreHandler storeHandler;
-	private final ObjectMapper objectMapper;
+	private final JsonMapper jsonMapper;
 
 	public Optional<Long> getCategoryForType(long typeId) {
 		var types = storeHandler.getRefStore("types");
@@ -36,7 +36,7 @@ public class StoreDataHelper {
 				})
 				.map(json -> (ObjectNode) json)
 				.findFirst()
-				.map(json -> objectMapper.convertValue(json, DogmaAttribute.class));
+				.map(json -> jsonMapper.convertValue(json, DogmaAttribute.class));
 	}
 
 	public Optional<DogmaTypeAttribute> getDogmaFromType(InventoryType type, long attributeId) {
@@ -50,7 +50,7 @@ public class StoreDataHelper {
 	public List<InventoryType> getTypesWithDogmaAttribute(long attributeId) {
 		var attributeIdString = Long.toString(attributeId);
 		return storeHandler.getRefStore("types").values().stream()
-				.map(n -> objectMapper.convertValue(n, InventoryType.class))
+				.map(n -> jsonMapper.convertValue(n, InventoryType.class))
 				.filter(type -> {
 					return Optional.ofNullable(type.getDogmaAttributes())
 							.map(attrs -> attrs.containsKey(attributeIdString))
