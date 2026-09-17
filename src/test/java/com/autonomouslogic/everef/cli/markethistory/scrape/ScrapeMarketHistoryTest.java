@@ -1,6 +1,7 @@
 package com.autonomouslogic.everef.cli.markethistory.scrape;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -39,6 +40,7 @@ import org.apache.commons.io.IOUtils;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junitpioneer.jupiter.RetryingTest;
 import org.junitpioneer.jupiter.SetEnvironmentVariable;
@@ -112,39 +114,6 @@ public class ScrapeMarketHistoryTest {
 
 	@RetryingTest(3)
 	@SneakyThrows
-	void shouldSkipEntriesWithDatesBeforeMinDate() throws InterruptedException {
-		// Region 10000001 returns type 22, which has a history entry dated 2022-12-31 — before minDate 2023-01-01.
-		// The command should complete without throwing "No map for date 2022-12-31".
-		server.close();
-		server = new MockWebServer();
-		server.setDispatcher(new TestDispatcherWithOutOfRangeType("[22]"));
-		server.start(TEST_PORT);
-
-		VirtualThreads.onVirtualThread(() -> scrapeMarketHistory
-				.setMinDate(LocalDate.parse("2023-01-01"))
-				.setToday(LocalDate.parse("2023-01-04"))
-				.run());
-	}
-
-	@RetryingTest(3)
-	@SneakyThrows
-	void shouldSkipEntriesWithDatesAfterToday() throws InterruptedException {
-		// Simulates a long-running job: today=2023-01-04 at init, but ESI returns type 23 which has an
-		// entry dated 2023-01-05 — after today. No map exists for that date.
-		// The command should complete without throwing "No map for date 2023-01-05".
-		server.close();
-		server = new MockWebServer();
-		server.setDispatcher(new TestDispatcherWithOutOfRangeType("[23]"));
-		server.start(TEST_PORT);
-
-		VirtualThreads.onVirtualThread(() -> scrapeMarketHistory
-				.setMinDate(LocalDate.parse("2023-01-01"))
-				.setToday(LocalDate.parse("2023-01-04"))
-				.run());
-	}
-
-	@RetryingTest(3)
-	@SneakyThrows
 	void shouldScrapeMarketHistory() throws InterruptedException {
 		VirtualThreads.onVirtualThread(() -> scrapeMarketHistory
 				.setMinDate(LocalDate.parse("2023-01-01"))
@@ -213,6 +182,48 @@ public class ScrapeMarketHistoryTest {
 								.bucket("data-bucket")
 								.path("data/market-history/2023/market-history-2023-01-03.csv.bz2")
 								.build()));
+	}
+
+	@Test
+	@SneakyThrows
+	void shouldThrowForEntriesWithDatesBeforeMinDate() throws InterruptedException {
+		// ESI returns type 22 with an entry dated 2022-12-31 — before minDate 2023-01-01.
+		// This indicates bad job parameters; an exception should be thrown.
+		server.close();
+		server = new MockWebServer();
+		server.setDispatcher(new TestDispatcherWithOutOfRangeType("[22]"));
+		server.start(TEST_PORT);
+
+		assertThrows(RuntimeException.class, () -> VirtualThreads.onVirtualThread(() -> scrapeMarketHistory
+			.setMinDate(LocalDate.parse("2023-01-01"))
+			.setToday(LocalDate.parse("2023-01-04"))
+			.run()));
+	}
+
+	@Test
+	@SneakyThrows
+	void shouldCreateNewMapForEntriesAfterToday() throws InterruptedException {
+		// Simulates a long-running job: today=2023-01-04 at init, but ESI returns type 23 with an
+		// entry dated 2023-01-05 — the job ran past midnight and new data is available.
+		// A new map should be created for 2023-01-05 and the entry saved there.
+		server.close();
+		server = new MockWebServer();
+		server.setDispatcher(new TestDispatcherWithOutOfRangeType("[23]"));
+		server.start(TEST_PORT);
+
+		VirtualThreads.onVirtualThread(() -> scrapeMarketHistory
+			.setMinDate(LocalDate.parse("2023-01-01"))
+			.setToday(LocalDate.parse("2023-01-04"))
+			.run());
+
+		assertTrue(
+				mockS3Adapter.getAllPutKeys(BUCKET_NAME, dataClient).stream()
+						.anyMatch(k -> k.equals("data/"
+								+ ArchivePathFactories.MARKET_HISTORY.createArchivePath(LocalDate.parse("2023-01-05")))),
+				"archive for rollover date 2023-01-05 should have been uploaded");
+		assertEquals(
+				loadExpectedArchive(LocalDate.parse("2023-01-05")),
+				loadUploadedArchive(LocalDate.parse("2023-01-05")));
 	}
 
 	class TestDispatcher extends Dispatcher {
