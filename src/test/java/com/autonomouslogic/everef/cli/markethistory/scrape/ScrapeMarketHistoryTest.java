@@ -194,10 +194,12 @@ public class ScrapeMarketHistoryTest {
 		server.setDispatcher(new TestDispatcherWithOutOfRangeType("[22]"));
 		server.start(TEST_PORT);
 
-		assertThrows(RuntimeException.class, () -> VirtualThreads.onVirtualThread(() -> scrapeMarketHistory
-			.setMinDate(LocalDate.parse("2023-01-01"))
-			.setToday(LocalDate.parse("2023-01-04"))
-			.run()));
+		assertThrows(
+				RuntimeException.class,
+				() -> VirtualThreads.onVirtualThread(() -> scrapeMarketHistory
+						.setMinDate(LocalDate.parse("2023-01-01"))
+						.setToday(LocalDate.parse("2023-01-04"))
+						.run()));
 	}
 
 	@Test
@@ -212,18 +214,18 @@ public class ScrapeMarketHistoryTest {
 		server.start(TEST_PORT);
 
 		VirtualThreads.onVirtualThread(() -> scrapeMarketHistory
-			.setMinDate(LocalDate.parse("2023-01-01"))
-			.setToday(LocalDate.parse("2023-01-04"))
-			.run());
+				.setMinDate(LocalDate.parse("2023-01-01"))
+				.setToday(LocalDate.parse("2023-01-04"))
+				.run());
 
 		assertTrue(
 				mockS3Adapter.getAllPutKeys(BUCKET_NAME, dataClient).stream()
 						.anyMatch(k -> k.equals("data/"
-								+ ArchivePathFactories.MARKET_HISTORY.createArchivePath(LocalDate.parse("2023-01-05")))),
+								+ ArchivePathFactories.MARKET_HISTORY.createArchivePath(
+										LocalDate.parse("2023-01-05")))),
 				"archive for rollover date 2023-01-05 should have been uploaded");
 		assertEquals(
-				loadExpectedArchive(LocalDate.parse("2023-01-05")),
-				loadUploadedArchive(LocalDate.parse("2023-01-05")));
+				loadExpectedArchive(LocalDate.parse("2023-01-05")), loadUploadedArchive(LocalDate.parse("2023-01-05")));
 	}
 
 	class TestDispatcher extends Dispatcher {

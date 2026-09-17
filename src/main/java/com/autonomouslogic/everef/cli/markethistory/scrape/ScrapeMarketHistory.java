@@ -297,7 +297,8 @@ public class ScrapeMarketHistory implements Command {
 								date, minDate));
 					}
 					if (date.isAfter(today)) {
-						log.info("Received entry for {} past today {}, creating new map for rollover date", date, today);
+						log.info(
+								"Received entry for {} past today {}, creating new map for rollover date", date, today);
 						mapSet.getOrCreateMap(date.toString());
 						totals.putIfAbsent(date, 0);
 					}
