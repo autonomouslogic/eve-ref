@@ -1,6 +1,7 @@
 package com.autonomouslogic.everef.cli.markethistory.scrape;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -39,6 +40,7 @@ import org.apache.commons.io.IOUtils;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junitpioneer.jupiter.RetryingTest;
 import org.junitpioneer.jupiter.SetEnvironmentVariable;
@@ -180,6 +182,50 @@ public class ScrapeMarketHistoryTest {
 								.bucket("data-bucket")
 								.path("data/market-history/2023/market-history-2023-01-03.csv.bz2")
 								.build()));
+	}
+
+	@Test
+	@SneakyThrows
+	void shouldThrowForEntriesWithDatesBeforeMinDate() throws InterruptedException {
+		// ESI returns type 22 with an entry dated 2022-12-31 — before minDate 2023-01-01.
+		// This indicates bad job parameters; an exception should be thrown.
+		server.close();
+		server = new MockWebServer();
+		server.setDispatcher(new TestDispatcherWithOutOfRangeType("[22]"));
+		server.start(TEST_PORT);
+
+		assertThrows(
+				RuntimeException.class,
+				() -> VirtualThreads.onVirtualThread(() -> scrapeMarketHistory
+						.setMinDate(LocalDate.parse("2023-01-01"))
+						.setToday(LocalDate.parse("2023-01-04"))
+						.run()));
+	}
+
+	@Test
+	@SneakyThrows
+	void shouldCreateNewMapForEntriesAfterToday() throws InterruptedException {
+		// Simulates a long-running job: today=2023-01-04 at init, but ESI returns type 23 with an
+		// entry dated 2023-01-05 — the job ran past midnight and new data is available.
+		// A new map should be created for 2023-01-05 and the entry saved there.
+		server.close();
+		server = new MockWebServer();
+		server.setDispatcher(new TestDispatcherWithOutOfRangeType("[23]"));
+		server.start(TEST_PORT);
+
+		VirtualThreads.onVirtualThread(() -> scrapeMarketHistory
+				.setMinDate(LocalDate.parse("2023-01-01"))
+				.setToday(LocalDate.parse("2023-01-04"))
+				.run());
+
+		assertTrue(
+				mockS3Adapter.getAllPutKeys(BUCKET_NAME, dataClient).stream()
+						.anyMatch(k -> k.equals("data/"
+								+ ArchivePathFactories.MARKET_HISTORY.createArchivePath(
+										LocalDate.parse("2023-01-05")))),
+				"archive for rollover date 2023-01-05 should have been uploaded");
+		assertEquals(
+				loadExpectedArchive(LocalDate.parse("2023-01-05")), loadUploadedArchive(LocalDate.parse("2023-01-05")));
 	}
 
 	class TestDispatcher extends Dispatcher {
@@ -368,6 +414,30 @@ public class ScrapeMarketHistoryTest {
 				.orElseThrow(() -> new RuntimeException(date.toString()));
 		return IOUtils.toString(new BZip2CompressorInputStream(new ByteArrayInputStream(bytes)), StandardCharsets.UTF_8)
 				.replaceAll("\r\n", "\n");
+	}
+
+	class TestDispatcherWithOutOfRangeType extends Dispatcher {
+		private final String activeTypesJson;
+
+		TestDispatcherWithOutOfRangeType(String activeTypesJson) {
+			this.activeTypesJson = activeTypesJson;
+		}
+
+		@NotNull
+		@Override
+		public MockResponse dispatch(@NotNull RecordedRequest request) throws InterruptedException {
+			var path = request.getRequestUrl().encodedPath();
+			var segments = request.getRequestUrl().pathSegments();
+			if (path.equals("/esi/markets/10000001/types/")) {
+				return mockResponse(activeTypesJson);
+			}
+			if (path.startsWith("/esi/latest/markets/") && segments.get(4).equals("history")) {
+				var regionId = segments.get(3);
+				var typeId = request.getRequestUrl().queryParameter("type_id");
+				return mockHistory(regionId, typeId);
+			}
+			return new TestDispatcher().dispatch(request);
+		}
 	}
 
 	@NotNull

@@ -1,0 +1,18 @@
+[
+  {
+    "average": 231,
+    "date": "2023-01-03",
+    "highest": 232,
+    "lowest": 230,
+    "order_count": 1,
+    "volume": 1
+  },
+  {
+    "average": 232,
+    "date": "2023-01-05",
+    "highest": 233,
+    "lowest": 231,
+    "order_count": 2,
+    "volume": 2
+  }
+]

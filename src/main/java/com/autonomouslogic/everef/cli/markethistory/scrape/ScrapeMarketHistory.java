@@ -291,8 +291,16 @@ public class ScrapeMarketHistory implements Command {
 					var pair = RegionTypePair.fromHistory(entry);
 					var date = LocalDate.parse(entry.get("date").asText());
 					var id = pair.toString();
-					if (!mapSet.hasMap(date.toString())) {
-						return Completable.error(new RuntimeException(String.format("No map for date %s", date)));
+					if (date.isBefore(minDate)) {
+						throw new RuntimeException(String.format(
+								"Received entry for %s which is before minDate %s - job parameters need updating",
+								date, minDate));
+					}
+					if (date.isAfter(today)) {
+						log.info(
+								"Received entry for {} past today {}, creating new map for rollover date", date, today);
+						mapSet.getOrCreateMap(date.toString());
+						totals.putIfAbsent(date, 0);
 					}
 					var previous = (ObjectNode) mapSet.get(date.toString(), id);
 					if (previous != null) {
