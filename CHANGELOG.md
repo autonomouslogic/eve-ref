@@ -1,5 +1,12 @@
 EVE Ref Changelog
 
+## [2.80.9](https://github.com/autonomouslogic/eve-ref/compare/2.80.8...2.80.9) (2026-09-17)
+
+
+### Bug Fixes
+
+* handle out-of-range dates in long-running market history scrape ([#1113](https://github.com/autonomouslogic/eve-ref/issues/1113)) ([e618ab4](https://github.com/autonomouslogic/eve-ref/commit/e618ab414a4b649970cd39081e58d752166fc900))
+
 ## [2.80.8](https://github.com/autonomouslogic/eve-ref/compare/2.80.7...2.80.8) (2026-09-16)
 
 
