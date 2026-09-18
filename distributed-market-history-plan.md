@@ -298,7 +298,10 @@ Config: `MARKET_HISTORY_DAEMON_UPLOAD_INTERVAL` — default `PT30M`.
      rollover** (see below).
    - Archive uploader (every `UPLOAD_INTERVAL`, calls `ArchiveUploader.uploadAll()`)
 5. Starts `DaemonHttpServer`.
-6. Blocks forever (or until interrupted — handles SIGTERM gracefully by completing in-flight uploads).
+6. Blocks forever. **No graceful drain on SIGTERM — terminate immediately.** In-flight uploads and
+   in-flight worker submits are simply abandoned; the next daemon start reloads state from S3 (see
+   step 2) and the daily cycle re-scrapes, so nothing is lost. No shutdown hook needed beyond
+   whatever the JVM does by default.
 
 **Date rollover (was open question #4 — now a requirement).** The daemon runs continuously across
 midnight/downtime, so `today`/`minDate` must advance and stale dates must be pruned from the MVStore.
@@ -332,6 +335,8 @@ Local FIFO queue for one worker. Thread-safe.
   pairs to back of local queue. If response `cycleState` is DRAINING or REPLENISHING, backs off
   and retries after a short sleep rather than spinning.
 - `poll()` — returns next pair; triggers async top-up if below low-water mark.
+- `reset()` — clears the local queue (used by the worker reset on daemon loss). Dropped pairs are
+  still `inFlight` on the daemon and recover via lease timeout; the worker does not try to return them.
 
 Config:
 - `MARKET_HISTORY_WORKER_LOW_WATER_MARK` — default `50`
@@ -372,11 +377,34 @@ OkHttp-based client. Wraps the daemon HTTP API.
   verbatim ESI body to `/submit/{regionId}/{typeId}`, forwarding `Last-Modified`; returns `accepted`.
   No lease ID.
 - Adds `X-Api-Key` header to all requests.
-- Retry on network errors (3 attempts, 5s backoff).
+
+**Retry policy (daemon-facing errors only — distinct from the ESI-facing interceptors above).**
+Both `lease()` and `submit()` retry on:
+- **Connection errors** — `IOException` (connect refused/reset, read timeout, daemon down/restarting).
+- **HTTP 500** — e.g. the `/lease` rollback path, or a transient daemon `/submit` failure.
+
+Retry with a bounded wait between attempts:
+- Up to `MARKET_HISTORY_WORKER_DAEMON_RETRIES` attempts (default `10` — daemon restarts/rollovers can
+  be down for a bit; the worker should keep trying, not give up and idle).
+- Wait `MARKET_HISTORY_WORKER_DAEMON_RETRY_WAIT` between attempts (default `PT5S`), with light
+  jitter to avoid all workers hammering in lockstep. (Simple fixed wait + jitter; exponential backoff
+  optional, not required.)
+- **Not retried:** `401` (bad API key — fail fast, misconfiguration) and other `4xx`. `2xx` returns
+  normally.
+- After exhausting retries the call throws. Handling differs by call:
+  - **`submit` exhausted** — treated as "daemon unavailable." The worker performs a **full reset**
+    (see *Worker reset on daemon loss* below): it does not just skip one pair.
+  - **`lease` exhausted** — `WorkerQueueManager` backs off and retries the top-up (also part of the
+    reset/recovery loop below).
+
+Reuse `Rx3Util.retryWithDelay*` / the existing retry helper pattern rather than hand-rolling a loop
+where practical.
 
 Config:
 - `MARKET_HISTORY_WORKER_DAEMON_URL` — required
 - `MARKET_HISTORY_WORKER_API_KEY` — required
+- `MARKET_HISTORY_WORKER_DAEMON_RETRIES` — default `10`
+- `MARKET_HISTORY_WORKER_DAEMON_RETRY_WAIT` — default `PT5S`
 
 ---
 
@@ -386,9 +414,28 @@ Config:
    are available or the daemon signals an empty queue).
 2. Starts `EsiFetchLoop` across `ESI_MARKET_HISTORY_CONCURRENCY` virtual threads.
 3. Runs forever; top-ups happen automatically via `WorkerQueueManager`.
-4. Handles graceful shutdown on interrupt: finishes in-progress ESI calls and their per-pair
-   submits, then exits. Unstarted leases are not returned early — they recover via daemon timeout
-   (lease release = timeout only).
+4. **No graceful shutdown — terminate immediately on SIGTERM.** In-flight ESI calls and unsent
+   submits are abandoned; those leases recover via daemon timeout (lease release = timeout only).
+
+**Worker reset on daemon loss.** A `submit` that exhausts all daemon retries means the daemon is
+down or unreachable — not a single bad pair. The worker must not keep burning ESI calls (and leases)
+against a daemon that can't accept results. On this signal it resets to its initial state:
+
+1. **Stop fetching** — signal `EsiFetchLoop` to pause: stop polling new pairs; let in-flight ESI
+   calls finish (their submits will also fail and are dropped — the pairs will time out daemon-side).
+2. **Drop local state** — `WorkerQueueManager.reset()` clears the local queue. All those pairs are
+   still `inFlight` on the daemon and recover via lease timeout; the worker abandons them cleanly
+   rather than holding stale work.
+3. **Wait for the daemon** — continuously call `lease()` in a loop (using the same
+   connection/500 retry+wait policy, so each attempt already waits `RETRY_WAIT`). Keep polling until
+   a `lease()` succeeds — DRAINING/REPLENISHING responses also count as "daemon reachable," handled
+   with the normal cycle-state backoff. This is the "wait for the daemon to become available" state;
+   the worker idles here as long as needed.
+4. **Resume** — once `lease()` returns pairs, refill the local queue and un-pause `EsiFetchLoop`.
+   Back to normal operation (step 3 above).
+
+This reset is idempotent and re-entrant: if a submit fails again during recovery, the worker simply
+stays in / re-enters the wait loop.
 
 ---
 
@@ -429,6 +476,8 @@ All daemon threads use Java virtual threads. `ScheduledExecutorService` for peri
 | `MARKET_HISTORY_WORKER_DAEMON_URL` | URI | required | Daemon base URL |
 | `MARKET_HISTORY_WORKER_API_KEY` | String | required | Must match daemon key |
 | `MARKET_HISTORY_WORKER_LOW_WATER_MARK` | int | `50` | Top-up trigger threshold |
+| `MARKET_HISTORY_WORKER_DAEMON_RETRIES` | int | `10` | Daemon call retry attempts (conn errors + HTTP 500) |
+| `MARKET_HISTORY_WORKER_DAEMON_RETRY_WAIT` | Duration | `PT5S` | Wait between daemon call retries |
 
 ---
 
@@ -463,10 +512,10 @@ via environment variable on both daemon and each worker.
 | `RecordReceiver` | `RecordReceiverTest` | writes entries to mock MVStore, handles duplicate entry (same logic as current `saveMarketHistory`) |
 | `ArchiveUploader` | `ArchiveUploaderTest` | skips unchanged dates, uploads changed dates, concurrent write during upload does not corrupt |
 | `DaemonApiKeyAuth` | `DaemonApiKeyAuthTest` | rejects missing key, rejects wrong key, passes correct key |
-| `WorkerQueueManager` | `WorkerQueueManagerTest` | low-water trigger, blocks when empty, top-up fills queue |
-| `EsiFetchLoop` | `EsiFetchLoopTest` | fetches pairs, rate limit respected, submits raw body per pair, empty `[]` still submitted, non-200 skips submit |
+| `WorkerQueueManager` | `WorkerQueueManagerTest` | low-water trigger, blocks when empty, top-up fills queue, `reset()` clears local queue |
+| `EsiFetchLoop` | `EsiFetchLoopTest` | fetches pairs, rate limit respected, submits raw body per pair, empty `[]` still submitted, non-200 skips submit, **submit-exhaustion triggers full reset: pauses fetching, resets queue, polls lease until daemon returns, then resumes** |
 | `RecordReceiver` | (see above) | injects region/type from path, applies http_last_modified from header, empty body accepted (0 written), dedup skip on http_last_modified-only change |
-| `WorkerHttpClient` | `WorkerHttpClientTest` | posts to `/submit/{regionId}/{typeId}` with verbatim body + Last-Modified, retry on network error, auth header present |
+| `WorkerHttpClient` | `WorkerHttpClientTest` | posts to `/submit/{regionId}/{typeId}` with verbatim body + Last-Modified, auth header present, **retries connection errors and HTTP 500 with wait between attempts, succeeds after N failures, gives up after max retries, does NOT retry 401/4xx** |
 
 ### Integration Test: `DistributedMarketHistoryIntegrationTest`
 
@@ -534,10 +583,12 @@ Runs inside a single JVM with real HTTP connections on localhost.
    bounded by `LEASE_TIMEOUT`.
 4. **Date rollover**: driven by the daily replenish task (see *MarketHistoryDaemon* rollover note).
 
+## Resolved Decisions (shutdown)
+
+- **SIGTERM: terminate immediately, no graceful drain.** Applies to both daemon and worker. Restart
+  reloads state from S3; the daily cycle re-scrapes anything abandoned mid-flight.
+
 ## Remaining Open Questions
 
-1. **Graceful drain on SIGTERM for daemon**: should in-progress leases be allowed to complete their
-   submit window (e.g. wait up to `LEASE_TIMEOUT`) before the process exits, or hard-stop after
-   finishing any in-flight upload?
-2. **Daemon metrics**: should the `/stats` endpoint also expose per-worker stats (last seen, pairs
+1. **Daemon metrics**: should the `/stats` endpoint also expose per-worker stats (last seen, pairs
    fetched), or is aggregate-only acceptable?
