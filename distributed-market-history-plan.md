@@ -445,14 +445,23 @@ Runs inside a single JVM with real HTTP connections on localhost.
 
 ---
 
-## Open Questions / Decisions to Confirm
+## Resolved Decisions
+
+1. **Reuse strategy**: promote the reused `...scrape` classes to `public` (see *Relationship to
+   Existing Code*). New code lives in `...markethistory.distributed`.
+2. **Startup/restart consistency**: preload existing daily archives into MVStore on startup via
+   `ScrapeMarketHistoryBatchLoader` (see *MarketHistoryDaemon* step 2). Mandatory — prevents the
+   "entries have shrunk" crash.
+3. **Lease release**: **timeout only.** No `/release` endpoint. Both clean worker shutdown and
+   worker crashes are recovered by the reaper after `LEASE_TIMEOUT`. Workers still flush their submit
+   buffer on clean shutdown, but do not return unstarted leases early. Simpler; recovery latency is
+   bounded by `LEASE_TIMEOUT`.
+4. **Date rollover**: driven by the daily replenish task (see *MarketHistoryDaemon* rollover note).
+
+## Remaining Open Questions
 
 1. **Graceful drain on SIGTERM for daemon**: should in-progress leases be allowed to complete their
-   submit window (e.g. wait up to `LEASE_TIMEOUT`) before the process exits, or hard-stop?
-2. **Worker lease release on crash**: currently if a worker crashes it just times out. Is that acceptable
-   or should workers send an explicit `/release` call on clean shutdown?
-3. **Daemon metrics**: should the `/stats` endpoint also expose per-worker stats (last seen, pairs
+   submit window (e.g. wait up to `LEASE_TIMEOUT`) before the process exits, or hard-stop after
+   finishing any in-flight upload?
+2. **Daemon metrics**: should the `/stats` endpoint also expose per-worker stats (last seen, pairs
    fetched), or is aggregate-only acceptable?
-4. **Multi-day operation**: the daemon is designed to run continuously across midnight. When `today`
-   rolls over, new date maps need to be created in MVStore and `minDate` needs updating. Define the
-   rollover trigger (wall clock? configurable?).
