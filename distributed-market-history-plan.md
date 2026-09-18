@@ -196,8 +196,10 @@ GET /api/v1/queue/stats
   Response: { "pending": N, "inFlight": N, "done": N, "cycleState": "...", "uploadedDates": N }
 ```
 
-Authentication: `DaemonApiKeyAuth` is a Helidon `HttpFilter` that checks `X-Api-Key` header against
-`MARKET_HISTORY_DAEMON_API_KEY`. Returns `401` on mismatch.
+Authentication: `DaemonApiKeyAuth` is a Helidon SE `io.helidon.webserver.http.Filter`
+(registered via `HttpRouting.Builder.addFilter(...)` — Helidon 4.5.4 has no `HttpFilter`) that
+checks the `X-Api-Key` header against `MARKET_HISTORY_DAEMON_API_KEY` using a **constant-time
+compare** (`MessageDigest.isEqual`). Returns `401` on mismatch.
 
 ---
 
@@ -234,16 +236,32 @@ Config: `MARKET_HISTORY_DAEMON_UPLOAD_INTERVAL` — default `PT30M`.
 ### MarketHistoryDaemon (Command)
 
 1. Builds Dagger subgraph (or uses `@Named` providers) for daemon components.
-2. If current UTC time ≥ `REPLENISH_TIME`, calls `QueueReplenisher.replenishNow()` (blocking) so
+2. **Loads existing state into MVStore before accepting work** (mirrors `ScrapeMarketHistory.run()`):
+   - `downloadTotalPairs()` → `totals` map from remote `totals.json`.
+   - **`loadMarketHistory()` via `ScrapeMarketHistoryBatchLoader`** → downloads existing daily
+     archives into the (empty temp) MVStore. **This is mandatory**, not optional: the MVStore is a
+     fresh `createTempStore` on every start, but `totals` is loaded from remote. Without preloading
+     the archives, `ArchiveUploader.uploadArchive()` sees `entries.size() < existingCount` and
+     throws `IllegalStateException` ("entries have shrunk") on the first upload after any restart.
+3. If current UTC time ≥ `REPLENISH_TIME`, calls `QueueReplenisher.replenishNow()` (blocking) so
    the queue is populated before accepting connections. Otherwise queue starts in DRAINING state
    (empty, no leases) until the scheduled clear+replenish fires.
-3. Starts background threads (all virtual threads or a `ScheduledExecutorService`):
-   - Lease reaper (every 60s, calls `QueueManager.reapExpiredLeases()`)
+4. Starts background threads (all virtual threads or a `ScheduledExecutorService`):
+   - Lease reaper (every 60s, calls `QueueManager.reapExpiredPairs()`)
    - Daily clear task (fires at next `CLEAR_TIME` UTC, then every 24h)
-   - Daily replenish task (fires at next `REPLENISH_TIME` UTC, then every 24h)
+   - Daily replenish task (fires at next `REPLENISH_TIME` UTC, then every 24h). **Also performs date
+     rollover** (see below).
    - Archive uploader (every `UPLOAD_INTERVAL`, calls `ArchiveUploader.uploadAll()`)
-4. Starts `DaemonHttpServer`.
-5. Blocks forever (or until interrupted — handles SIGTERM gracefully by completing in-flight uploads).
+5. Starts `DaemonHttpServer`.
+6. Blocks forever (or until interrupted — handles SIGTERM gracefully by completing in-flight uploads).
+
+**Date rollover (was open question #4 — now a requirement).** The daemon runs continuously across
+midnight/downtime, so `today`/`minDate` must advance. The daily replenish task is the rollover
+trigger: on each fire it recomputes `today = LocalDate.now(UTC)` and
+`minDate = today - 1 - ESI_MARKET_HISTORY_LOOKBACK`, calls `mapSet.getOrCreateMap()` for any new
+date(s), and `totals.putIfAbsent(date, 0)`. Maps/totals older than `minDate` may be dropped.
+`RecordReceiver` keeps the same guard as `ScrapeMarketHistory.saveMarketHistory()`: reject entries
+before `minDate`, and create a rollover map for entries past `today`.
 
 ---
 
@@ -359,9 +377,10 @@ All daemon threads use Java virtual threads. `ScheduledExecutorService` for peri
 
 ## Authentication
 
-HTTP header `X-Api-Key: <key>`. `DaemonApiKeyAuth` is a Helidon `HttpFilter` applied globally.
-Returns `401 Unauthorized` (JSON body `{"error": "unauthorized"}`) on missing or wrong key. API key
-is a shared secret configured via environment variable on both daemon and each worker.
+HTTP header `X-Api-Key: <key>`. `DaemonApiKeyAuth` is a Helidon SE `Filter` applied globally.
+Returns `401 Unauthorized` (JSON body `{"error": "unauthorized"}`) on missing or wrong key,
+comparing keys with `MessageDigest.isEqual` (constant-time). API key is a shared secret configured
+via environment variable on both daemon and each worker.
 
 ---
 
@@ -410,10 +429,19 @@ Runs inside a single JVM with real HTTP connections on localhost.
 - `ScrapeMarketHistory` is **not removed**. It remains as a single-machine fallback and for
   environments without multiple IPs.
 - `MarketHistoryFetcher`, `MarketHistoryFileBuilder`, `ScrapeMarketHistoryBatchLoader`,
-  all `RegionTypeSource` implementations, and `MarketHistoryUtil` are **reused as-is**.
+  `MarketHistorySourceStats`, `CompoundRegionTypeSource`, and all `RegionTypeSource`
+  implementations are reused — **but they are currently package-private (`class`, not
+  `public class`) in `...markethistory.scrape`.** The new `...markethistory.distributed` package
+  cannot see them. **Resolution: promote these classes to `public`** so they can be injected/used
+  from the distributed package. `MarketHistoryUtil` is already accessible.
+- **RxJava boundary:** `MarketHistoryFetcher.fetchMarketHistory()` returns `Flowable<JsonNode>` and
+  the sources return `Flowable<RegionTypePair>`. These stay RxJava. New code (`EsiFetchLoop`,
+  `QueueReplenisher`) bridges to synchronous virtual-thread code with `.blocking*()` at the call
+  boundary — consistent with the codebase's mid-migration state (`run()` sync, `blockingAwait()`
+  at chain ends). No new RxJava chains beyond these reuse boundaries.
 - `StoreMapSet`, `MVStoreUtil`, `DataIndexHelper`, `S3Util`, `S3Adapter` are reused.
-- `DaemonHttpServer` follows the same Helidon SE pattern as `ApiRunner` and `BasicLogin` but is a
-  fresh, isolated server with no shared `Routing`.
+- `DaemonHttpServer` follows the same Helidon SE pattern as `ApiRunner` (`io.helidon.webserver.WebServer`
+  + `HttpRouting`) but is a fresh, isolated server with no shared routing.
 
 ---
 
