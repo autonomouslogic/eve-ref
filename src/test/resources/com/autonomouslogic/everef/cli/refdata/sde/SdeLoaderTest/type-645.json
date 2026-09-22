@@ -511,6 +511,10 @@
     "5796" : {
       "attribute_id" : 5796,
       "value" : 2147483647000.0
+    },
+    "6364" : {
+      "attribute_id" : 6364,
+      "value" : 16500.0
     }
   },
   "dogma_effects" : {

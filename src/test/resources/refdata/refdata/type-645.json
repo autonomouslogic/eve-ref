@@ -386,6 +386,10 @@
     "2045" : {
       "attribute_id" : 2045,
       "value" : 1.0
+    },
+    "6364" : {
+      "attribute_id" : 6364,
+      "value" : 16500.0
     }
   },
   "dogma_effects" : {
