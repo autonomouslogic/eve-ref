@@ -3,11 +3,9 @@ package com.autonomouslogic.everef.http;
 import java.io.IOException;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import okhttp3.Interceptor;
@@ -21,8 +19,6 @@ import org.jetbrains.annotations.NotNull;
 @Singleton
 @Log4j2
 public class EsiLimitExceededInterceptor implements Interceptor {
-	public static final String ESI_420_TEXT = "This software has exceeded the error limit for ESI.";
-	public static final String RESET_TIME_HEADER = "X-Esi-Error-Limit-Reset";
 
 	private static final AtomicBoolean globalStop = new AtomicBoolean();
 
@@ -47,11 +43,11 @@ public class EsiLimitExceededInterceptor implements Interceptor {
 						.body(ResponseBody.create(response.body().contentType(), body))
 						.build();
 			}
-			if (response.code() == 420 || body.contains(ESI_420_TEXT)) {
+			if (response.code() == 420 || body.contains(EsiErrorLimitHeaders.ESI_420_TEXT)) {
 				// @todo there's a race condition here on concurrent requests, though it might not matter in practice.
 				globalStop.set(true);
-				var resetTime = parseResetTime(
-						Optional.ofNullable(response.header(RESET_TIME_HEADER)).orElse("10"));
+				var resetTime = EsiErrorLimitHeaders.parseReset(response.header(EsiErrorLimitHeaders.RESET_TIME_HEADER))
+						.orElse(Duration.ofSeconds(10));
 				log.warn(String.format("ESI 420, waiting for %s", resetTime));
 				Thread.sleep(resetTime.plusSeconds(1).toMillis());
 				globalStop.set(false);
@@ -69,9 +65,5 @@ public class EsiLimitExceededInterceptor implements Interceptor {
 			log.debug(String.format("Waiting for ESI 420: %s", Duration.between(start, Instant.now())));
 			Thread.sleep(1000);
 		}
-	}
-
-	private Duration parseResetTime(@NonNull String resetTime) {
-		return Duration.ofSeconds(Long.parseLong(resetTime));
 	}
 }

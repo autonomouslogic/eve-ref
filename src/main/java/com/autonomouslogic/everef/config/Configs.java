@@ -855,6 +855,15 @@ public class Configs {
 			.type(Duration.class)
 			.build();
 
+	/**
+	 * Minimum value of {@code X-Esi-Error-Limit-Remain} before ESI requests are paused until the error
+	 * limit window resets. Must be between 0 and 99. If not set, the error limit budget interceptor is disabled.
+	 */
+	public static final Config<Integer> ESI_ERROR_LIMIT_MIN_REMAIN = Config.<Integer>builder()
+			.name("ESI_ERROR_LIMIT_MIN_REMAIN")
+			.type(Integer.class)
+			.build();
+
 	@SneakyThrows
 	private static URL url(String url) {
 		return new URL(url);

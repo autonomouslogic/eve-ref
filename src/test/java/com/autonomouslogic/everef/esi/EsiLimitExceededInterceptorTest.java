@@ -3,7 +3,7 @@ package com.autonomouslogic.everef.esi;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
-import com.autonomouslogic.everef.http.EsiLimitExceededInterceptor;
+import com.autonomouslogic.everef.http.EsiErrorLimitHeaders;
 import com.autonomouslogic.everef.test.DaggerTestComponent;
 import com.autonomouslogic.everef.test.TestDataUtil;
 import java.time.Duration;
@@ -63,7 +63,7 @@ public class EsiLimitExceededInterceptorTest {
 					}
 					if (limitResetTime != null) {
 						response.setHeader(
-								EsiLimitExceededInterceptor.RESET_TIME_HEADER,
+								EsiErrorLimitHeaders.RESET_TIME_HEADER,
 								Duration.between(Instant.now(), limitResetTime)
 										.truncatedTo(ChronoUnit.SECONDS)
 										.toSeconds());
@@ -123,7 +123,7 @@ public class EsiLimitExceededInterceptorTest {
 					break;
 				case "text":
 					limitStatus = 200;
-					limitBody = EsiLimitExceededInterceptor.ESI_420_TEXT;
+					limitBody = EsiErrorLimitHeaders.ESI_420_TEXT;
 					break;
 			}
 			isLimited = true;

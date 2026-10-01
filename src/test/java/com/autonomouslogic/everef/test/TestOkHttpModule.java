@@ -1,5 +1,6 @@
 package com.autonomouslogic.everef.test;
 
+import com.autonomouslogic.everef.http.EsiErrorLimitBudgetInterceptor;
 import com.autonomouslogic.everef.http.EsiLimitExceededInterceptor;
 import com.autonomouslogic.everef.http.EsiMarketHistoryRateLimitExceededInterceptor;
 import com.autonomouslogic.everef.http.EsiRateLimitInterceptor;
@@ -12,6 +13,7 @@ import com.autonomouslogic.everef.inject.OkHttpModule;
 import dagger.Module;
 import dagger.Provides;
 import javax.inject.Named;
+import javax.inject.Provider;
 import javax.inject.Singleton;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
@@ -26,7 +28,8 @@ public class TestOkHttpModule {
 			EsiRateLimitInterceptor rateLimitInterceptor,
 			SocketErrorRetryInterceptor socketErrorRetryInterceptor,
 			EsiLimitExceededInterceptor limitExceededInterceptor,
-			LoggingInterceptor loggingInterceptor) {
+			LoggingInterceptor loggingInterceptor,
+			Provider<EsiErrorLimitBudgetInterceptor> errorLimitBudgetInterceptorProvider) {
 		return new OkHttpModule()
 				.esiHttpClient(
 						null,
@@ -34,7 +37,8 @@ public class TestOkHttpModule {
 						rateLimitInterceptor,
 						socketErrorRetryInterceptor,
 						limitExceededInterceptor,
-						loggingInterceptor)
+						loggingInterceptor,
+						errorLimitBudgetInterceptorProvider)
 				.newBuilder()
 				.addInterceptor(new NonLocalhostBlockingInterceptor())
 				.build();

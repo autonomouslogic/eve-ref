@@ -30,6 +30,7 @@ import com.autonomouslogic.everef.cli.refdata.sde.SdeLoaderTest;
 import com.autonomouslogic.everef.cli.structures.ScrapeStructuresTest;
 import com.autonomouslogic.everef.db.DbAdapterTest;
 import com.autonomouslogic.everef.db.MarketHistoryDaoTest;
+import com.autonomouslogic.everef.esi.EsiErrorLimitBudgetIntegrationTest;
 import com.autonomouslogic.everef.esi.EsiHelperTest;
 import com.autonomouslogic.everef.esi.EsiLimitExceededInterceptorTest;
 import com.autonomouslogic.everef.esi.EsiModuleTest;
@@ -82,6 +83,8 @@ public interface TestComponent {
 	void inject(EsiLoaderTest test);
 
 	void inject(EsiLimitExceededInterceptorTest test);
+
+	void inject(EsiErrorLimitBudgetIntegrationTest test);
 
 	void inject(EsiRateLimitInterceptorTest test);
 

@@ -1,6 +1,7 @@
 package com.autonomouslogic.everef.inject;
 
 import com.autonomouslogic.everef.config.Configs;
+import com.autonomouslogic.everef.http.EsiErrorLimitBudgetInterceptor;
 import com.autonomouslogic.everef.http.EsiLimitExceededInterceptor;
 import com.autonomouslogic.everef.http.EsiMarketHistoryRateLimitExceededInterceptor;
 import com.autonomouslogic.everef.http.EsiRateLimitInterceptor;
@@ -14,6 +15,7 @@ import dagger.Provides;
 import java.io.File;
 import java.time.Duration;
 import javax.inject.Named;
+import javax.inject.Provider;
 import javax.inject.Singleton;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
@@ -62,13 +64,16 @@ public class OkHttpModule {
 			EsiRateLimitInterceptor rateLimitInterceptor,
 			SocketErrorRetryInterceptor socketErrorRetryInterceptor,
 			EsiLimitExceededInterceptor limitExceededInterceptor,
-			LoggingInterceptor loggingInterceptor) {
+			LoggingInterceptor loggingInterceptor,
+			Provider<EsiErrorLimitBudgetInterceptor> errorLimitBudgetInterceptorProvider) {
 		var builder = new OkHttpClient.Builder()
 				.addInterceptor(userAgentInterceptor)
 				.addInterceptor(socketErrorRetryInterceptor)
-				.addInterceptor(limitExceededInterceptor)
-				.addInterceptor(loggingInterceptor)
-				.addNetworkInterceptor(rateLimitInterceptor);
+				.addInterceptor(limitExceededInterceptor);
+		if (Configs.ESI_ERROR_LIMIT_MIN_REMAIN.get().isPresent()) {
+			builder.addInterceptor(errorLimitBudgetInterceptorProvider.get());
+		}
+		builder.addInterceptor(loggingInterceptor).addNetworkInterceptor(rateLimitInterceptor);
 		builder = configure(builder, cache);
 		return builder.build();
 	}
