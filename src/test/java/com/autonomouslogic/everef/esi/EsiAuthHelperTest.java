@@ -207,6 +207,25 @@ public class EsiAuthHelperTest {
 
 	@Test
 	@SneakyThrows
+	void refreshAccessTokenRetriesOnServerError() {
+		server.enqueue(new MockResponse().setResponseCode(504).setBody("""
+						<html><head><title>504 Gateway Time-out</title></head><body><center><h1>504 Gateway Time-out</h1></center></body></html>
+						"""));
+		server.enqueue(new MockResponse()
+				.setResponseCode(200)
+				.addHeader("Content-Type", "application/json")
+				.setBody("""
+						{"access_token":"new-access-token","token_type":"Bearer","expires_in":1200,"refresh_token":"new-refresh-token"}
+						"""));
+
+		var token = esiAuthHelper.refreshAccessToken("my-refresh-token");
+
+		assertEquals("new-access-token", token.getAccessToken());
+		assertEquals(2, server.getRequestCount());
+	}
+
+	@Test
+	@SneakyThrows
 	void getTokenForOwnerHashReturnsEmptyWhenLoginNotFound() {
 		when(dynamoClient.getItem(any(GetItemRequest.class)))
 				.thenReturn(CompletableFuture.completedFuture(
