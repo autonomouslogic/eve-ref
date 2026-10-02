@@ -17,12 +17,14 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.Callable;
 import javax.inject.Inject;
 import javax.inject.Named;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.codec.binary.Hex;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import tools.jackson.databind.json.JsonMapper;
 
@@ -85,9 +87,27 @@ public class EsiAuthHelper {
 		return accessToken;
 	}
 
-	@SneakyThrows
 	public OAuth2AccessToken refreshAccessToken(@NonNull String refreshToken) {
-		return service.refreshAccessTokenAsync(refreshToken).get();
+		return withRetries(() -> service.refreshAccessTokenAsync(refreshToken).get());
+	}
+
+	@SneakyThrows
+	private <T> T withRetries(Callable<T> action) {
+		int maxRetries = 2;
+		Duration retryDelay = Duration.ofSeconds(1);
+		Exception lastException = null;
+		for (int attempt = 0; attempt <= maxRetries; attempt++) {
+			try {
+				return action.call();
+			} catch (Exception e) {
+				lastException = e;
+				if (attempt < maxRetries) {
+					log.warn(String.format("Retrying after failure: %s", ExceptionUtils.getMessage(e)));
+					Thread.sleep(retryDelay);
+				}
+			}
+		}
+		throw lastException;
 	}
 
 	@SneakyThrows

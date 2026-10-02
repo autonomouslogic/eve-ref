@@ -198,11 +198,14 @@ public class EsiAuthHelperTest {
 	@Test
 	@SneakyThrows
 	void refreshAccessTokenThrowsOnServerError() {
-		server.enqueue(new MockResponse().setResponseCode(504).setBody("""
-						<html><head><title>504 Gateway Time-out</title></head><body><center><h1>504 Gateway Time-out</h1></center></body></html>
-						"""));
+		for (int i = 0; i < 3; i++) {
+			server.enqueue(new MockResponse().setResponseCode(504).setBody("""
+							<html><head><title>504 Gateway Time-out</title></head><body><center><h1>504 Gateway Time-out</h1></center></body></html>
+							"""));
+		}
 
 		assertThrows(ExecutionException.class, () -> esiAuthHelper.refreshAccessToken("my-refresh-token"));
+		assertEquals(3, server.getRequestCount());
 	}
 
 	@Test
