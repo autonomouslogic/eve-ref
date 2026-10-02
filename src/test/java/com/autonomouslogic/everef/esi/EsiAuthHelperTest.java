@@ -271,4 +271,39 @@ public class EsiAuthHelperTest {
 		verify(dynamoClient).getItem(any(GetItemRequest.class));
 		assertEquals(1, server.getRequestCount());
 	}
+
+	@Test
+	@SneakyThrows
+	void getTokenForOwnerHashRefreshesWhenCacheExpired() {
+		var item = Map.of(
+				"character_owner_hash", AttributeValue.fromS("test-owner-hash"),
+				"character_id", AttributeValue.fromN("12345"),
+				"character_name", AttributeValue.fromS("Test Character"),
+				"refresh_token", AttributeValue.fromS("my-refresh-token"),
+				"scopes", AttributeValue.fromL(List.of(AttributeValue.fromS("esi-universe.read_structures.v1"))));
+		when(dynamoClient.getItem(any(GetItemRequest.class)))
+				.thenReturn(CompletableFuture.completedFuture(
+						GetItemResponse.builder().item(item).build()));
+		// expires_in shorter than EXPIRATION_BUFFER (1 minute), so the cached entry is already expired.
+		server.enqueue(new MockResponse()
+				.setResponseCode(200)
+				.addHeader("Content-Type", "application/json")
+				.setBody("""
+						{"access_token":"first-access-token","token_type":"Bearer","expires_in":30,"refresh_token":"my-refresh-token"}
+						"""));
+		server.enqueue(new MockResponse()
+				.setResponseCode(200)
+				.addHeader("Content-Type", "application/json")
+				.setBody("""
+						{"access_token":"second-access-token","token_type":"Bearer","expires_in":1200,"refresh_token":"my-refresh-token"}
+						"""));
+
+		var first = esiAuthHelper.getTokenForOwnerHash("test-owner-hash");
+		var second = esiAuthHelper.getTokenForOwnerHash("test-owner-hash");
+
+		assertEquals("first-access-token", first.get().getAccessToken());
+		assertEquals("second-access-token", second.get().getAccessToken());
+		verify(dynamoClient, Mockito.times(2)).getItem(any(GetItemRequest.class));
+		assertEquals(2, server.getRequestCount());
+	}
 }
