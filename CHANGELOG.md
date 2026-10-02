@@ -1,5 +1,24 @@
 EVE Ref Changelog
 
+## [2.80.10](https://github.com/autonomouslogic/eve-ref/compare/2.80.9...2.80.10) (2026-10-02)
+
+
+### Bug Fixes
+
+* Refresh token retry ([#1118](https://github.com/autonomouslogic/eve-ref/issues/1118)) ([1c20dfc](https://github.com/autonomouslogic/eve-ref/commit/1c20dfcdb01ae76b79f46bb34c2cf5ca99d422bd))
+* **ui:** October 2026 giveaways ([a355bcb](https://github.com/autonomouslogic/eve-ref/commit/a355bcb55c3b2114da5c4f2a937441046824aa22))
+
+
+### Miscellaneous Chores
+
+* AGENTS.md ([4b0c827](https://github.com/autonomouslogic/eve-ref/commit/4b0c8270a23a42e36fdf9d592db742dde16f2c70))
+
+
+### Tests
+
+* Updated test resources ([4dcf3cb](https://github.com/autonomouslogic/eve-ref/commit/4dcf3cb216acf924226b15361cc69cd4e4045f2e))
+* Updated test resources ([83ffd87](https://github.com/autonomouslogic/eve-ref/commit/83ffd87529c356949c2db7f063190805cb88e233))
+
 ## [2.80.9](https://github.com/autonomouslogic/eve-ref/compare/2.80.8...2.80.9) (2026-09-17)
 
 
