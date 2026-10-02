@@ -78,6 +78,7 @@ for (const apiGiveaway of allApiGiveaways) {
 unrolled.sort((a, b) => a.endTime.toMillis() - b.endTime.toMillis());
 
 const pastGiveaways = {
+	"October 2026": 10 * 473.63e6,
 	"September 2026": 8 * 480.98e6,
 	"August 2026": 8 * 464.50e6,
 	"July 2026": 10 * 478.70e6,
