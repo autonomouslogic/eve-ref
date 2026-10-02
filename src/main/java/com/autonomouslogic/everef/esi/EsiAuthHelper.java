@@ -12,7 +12,6 @@ import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import io.reactivex.rxjava3.core.Completable;
 import java.net.URI;
-import java.net.URL;
 import java.security.SecureRandom;
 import java.time.Duration;
 import java.time.Instant;
@@ -39,7 +38,7 @@ public class EsiAuthHelper {
 			"esi-wallet.read_character_wallet.v1",
 			"esi-wallet.read_corporation_wallet.v1",
 			"esi-wallet.read_corporation_wallets.v1");
-	private static final URL CALLBACK_URL = Configs.OAUTH_CALLBACK_URL.getRequired();
+	private static final URI CALLBACK_URL = Configs.OAUTH_CALLBACK_URL.getRequired();
 
 	@Inject
 	protected EsiHelper esiHelper;
