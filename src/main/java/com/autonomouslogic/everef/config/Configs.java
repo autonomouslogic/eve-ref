@@ -3,12 +3,10 @@ package com.autonomouslogic.everef.config;
 import com.autonomouslogic.commons.config.Config;
 import com.autonomouslogic.everef.refdata.ReferenceDataSpec;
 import java.net.URI;
-import java.net.URL;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.Optional;
-import lombok.SneakyThrows;
 
 public class Configs {
 	/**
@@ -690,37 +688,37 @@ public class Configs {
 	/**
 	 * Authorization URL for OAuth2 against EVE Online.
 	 */
-	public static final Config<URL> EVE_OAUTH_AUTHORIZATION_URL = Config.<URL>builder()
+	public static final Config<URI> EVE_OAUTH_AUTHORIZATION_URL = Config.<URI>builder()
 			.name("EVE_OAUTH_AUTHORIZATION_URL")
-			.defaultValue(url("https://login.eveonline.com/v2/oauth/authorize"))
-			.type(URL.class)
+			.defaultValue(URI.create("https://login.eveonline.com/v2/oauth/authorize"))
+			.type(URI.class)
 			.build();
 
 	/**
 	 * Token URL for OAuth2 against EVE Online.
 	 */
-	public static final Config<URL> EVE_OAUTH_TOKEN_URL = Config.<URL>builder()
+	public static final Config<URI> EVE_OAUTH_TOKEN_URL = Config.<URI>builder()
 			.name("EVE_OAUTH_TOKEN_URL")
-			.defaultValue(url("https://login.eveonline.com/v2/oauth/token"))
-			.type(URL.class)
+			.defaultValue(URI.create("https://login.eveonline.com/v2/oauth/token"))
+			.type(URI.class)
 			.build();
 
 	/**
 	 * Verify URL for OAuth2 against EVE Online.
 	 */
-	public static final Config<URL> EVE_OAUTH_VERIFY_URL = Config.<URL>builder()
+	public static final Config<URI> EVE_OAUTH_VERIFY_URL = Config.<URI>builder()
 			.name("EVE_OAUTH_VERIFY_URL")
-			.defaultValue(url("https://login.eveonline.com/v2/oauth/verify"))
-			.type(URL.class)
+			.defaultValue(URI.create("https://login.eveonline.com/v2/oauth/verify"))
+			.type(URI.class)
 			.build();
 
 	/**
 	 * Token URL for OAuth2 against EVE Online.
 	 */
-	public static final Config<URL> OAUTH_CALLBACK_URL = Config.<URL>builder()
+	public static final Config<URI> OAUTH_CALLBACK_URL = Config.<URI>builder()
 			.name("OAUTH_CALLBACK_URL")
-			.defaultValue(url("http://localhost:8080/basic-login-callback"))
-			.type(URL.class)
+			.defaultValue(URI.create("http://localhost:8080/basic-login-callback"))
+			.type(URI.class)
 			.build();
 
 	/**
@@ -854,9 +852,4 @@ public class Configs {
 			.name("MEMORY_STATS_INTERVAL")
 			.type(Duration.class)
 			.build();
-
-	@SneakyThrows
-	private static URL url(String url) {
-		return new URL(url);
-	}
 }
