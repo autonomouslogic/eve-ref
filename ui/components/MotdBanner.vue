@@ -56,9 +56,9 @@ const motd = computed(() => {
 	const hour = Math.floor(time / HOUR);
 
 	// Sale.
-	if (time < new Date("2025-12-03T10:50:00Z").getTime()) {
+	if (time < new Date("2026-10-04T23:59:00Z").getTime()) {
 		return {
-			text: "Black Friday 25% off - extra 3% with code \"everef\" at checkout",
+			text: "48% off PLEX! Extra 3% with code \"everef\" at checkout",
 			url: MARKEE_DRAGON_URL,
 			urlText: "Markee Dragon"
 		} as Motd;
