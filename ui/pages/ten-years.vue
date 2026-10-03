@@ -16,28 +16,30 @@ useHead({
 const ANNIVERSARY_DATE = DateTime.fromISO("2027-10-08T00:55:32Z", {zone: "utc"});
 const START_DATE = DateTime.fromISO("2027-10-01T00:00:00Z", {zone: "utc"});
 
-const donatedSoFar = 69_772_012_505;
-const donationGoal = 300e9;
 
 const topDonors = [
-	{name: "Arkovas Ulrathis", amount: 2_500_000_000},
-	{name: "Jita Junkie", amount: 1_750_000_000},
-	{name: "Queen of Trading", amount: 1_250_000_000},
-	{name: "Riffter Hero", amount: 850_000_000},
-	{name: "Void Nomad", amount: 720_000_000},
-	{name: "Capsuleer Alpha", amount: 610_000_000},
-	{name: "Dread Pirate Bob", amount: 500_000_000},
-	{name: "ISK Printer", amount: 450_000_000},
-	{name: "Market Mogul", amount: 420_000_000},
-	{name: "Nova Starfall", amount: 400_000_000},
+	{name: "Kuokkaa Anki", amount: 69e9},
+	{name: "Arnsterik Fror", amount: 30e9},
+	{name: "Goggert Innolf", amount: 20e9},
+	{name: "Benencel Crielere", amount: 19e9},
+	{name: "Skiadore Kerane", amount: 1.5e9},
+	{name: "Maro Yama", amount: 900e6},
+	{name: "Asly Tarmas", amount: 500e6},
+	{name: "Shahshin Bourz", amount: 500e6},
+	{name: "Aikelwalo Sodalrat", amount: 150e6},
+	{name: "Kezti Sundara", amount: 42e6},
 ];
 
+
+
+const donatedSoFar = topDonors.reduce((sum, donor) => sum + donor.amount, 0);
+const donationGoal = 300e9;
+
 const prizes = [
-	{name: "Grand Prize", description: "1x Alliance Tournament Ship SKIN (Winner's Choice)", winners: "1 Winner"},
-	{name: "Second Prize", description: "1x PLEX x 12", winners: "2 Winners"},
-	{name: "Third Prize", description: "1x PLEX x 6", winners: "5 Winners"},
-	{name: "Runner-Up", description: "1x PLEX x 3", winners: "10 Winners"},
-	{name: "Consolation Prizes", description: "Various SKINs, Boosters, and more!", winners: "Many Winners"},
+	{name: "Ten Years of Omega", description: "One month Omega time each", winners: "120 winners"},
+	{name: "Grand Prize", description: "10 billion ISK", winners: "1 winner"},
+	{name: "Second Prize", description: "1 billion ISK", winners: "10 winners"},
+	{name: "Third Prize", description: "100 million ISK", winners: "50 winners"},
 ];
 
 const now = ref(DateTime.utc());
@@ -52,7 +54,7 @@ onUnmounted(() => {
 });
 
 const remaining = computed(() => {
-	const diff = ANNIVERSARY_DATE.diff(now.value, ["days", "hours", "minutes", "seconds"]);
+	const diff = START_DATE.diff(now.value, ["days", "hours", "minutes", "seconds"]);
 	return {
 		days: Math.max(0, Math.floor(diff.days)),
 		hours: Math.max(0, Math.floor(diff.hours)),
@@ -71,48 +73,51 @@ const donationMarks = computed(() => [0, donationGoal / 3, donationGoal * 2 / 3,
 			<h1 class="anniversary-title">10 Years</h1>
 			<h2 class="of-eve-ref">of EVE Ref</h2>
 			<p class="tagline mt-4 max-w-xl mx-auto">
+				Win <b>ten years</b> of Omega!
+			</p>
+			<p class="tagline mt-4 max-w-xl mx-auto">
 				A decade of data, dedication, and the EVE community.<br/>
 				Thank you for being part of the journey!
 			</p>
-			<div class="date-badge inline-block mt-4 px-4 py-2 rounded border">
+			<div class="date-badge inline-block mt-4 px-4 py-2 border">
 				📅 {{ANNIVERSARY_DATE.toFormat("yyyy-MM-dd HH:mm:ss")}} UTC
 			</div>
 		</section>
 
 		<section class="card flex flex-col md:flex-row gap-8 justify-between mb-8">
-      <div class="flex-1 text-center">
-        <div class="text-sm tracking-wide text-gray-400 mb-1">DONATED SO FAR</div>
-        <div class="donated-amount accent text-4xl font-bold">
-          <FormattedNumber :number="donatedSoFar" /> ISK
-        </div>
-        <ProgressBar :progress="donationProgress" color="#e8567e" class="my-4 h-4 rounded">
-          <span></span>
-        </ProgressBar>
-        <div class="flex justify-between text-xs text-gray-400">
-          <span v-for="mark in donationMarks" :key="mark"><Money :value="mark" /></span>
-        </div>
-        <p class="text-xs text-gray-400 mt-3">
-          All donations are made in-game to "EVE Ref" and are 100% used for giveaways!
-          <InternalLink to="/about">Read more.</InternalLink>
-        </p>
-      </div>
+			<div class="flex-1 text-center">
+				<div class="text-sm tracking-wide text-gray-400 mb-1">DONATED SO FAR</div>
+				<div class="donated-amount accent text-4xl font-bold">
+					<FormattedNumber :number="donatedSoFar" /> ISK
+				</div>
+				<ProgressBar :progress="donationProgress" color="#e8567e" class="my-4 h-4 rounded">
+					<span></span>
+				</ProgressBar>
+				<div class="flex justify-between text-xs text-gray-400">
+					<span v-for="mark in donationMarks" :key="mark"><Money :value="mark" /></span>
+				</div>
+				<p class="text-xs text-gray-400 mt-3">
+					All donations are made in-game to "EVE Ref" and are 100% used for giveaways!
+					<InternalLink to="/about">Read more.</InternalLink>
+				</p>
+			</div>
 			<div class="flex-1">
 				<h3 class="accent">Support EVE Ref and win amazing prizes!</h3>
 				<p class="my-3">
-          For the past ten years, EVE Ref has been the reference database for EVE Online.
-          EVE Ref also collects and archives game data 24/7 and makes 5.7 TB of data available to anyone for free.
-          Join <ExternalLink :url="PATREON_URL"><span><font-awesome-icon icon="fa-brands fa-patreon" /></span> Patreon</ExternalLink>
-          and help me keep it online and updated for another ten years!
-          Your donations keep the servers running and the data flowing.
-        </p>
+					For the past ten years, EVE Ref has been the reference database for EVE Online.
+					EVE Ref also collects and archives game data 24/7 and makes 5.7 TB of data available to anyone for free.
+					Join <ExternalLink :url="PATREON_URL"><span><font-awesome-icon icon="fa-brands fa-patreon" /></span> Patreon</ExternalLink>
+					and help me keep it online and updated for another ten years!
+					Your donations keep the servers running and the data flowing.
+				</p>
 			</div>
 		</section>
 
 		<section class="card text-center mb-8">
 			<h3>Countdown to 10-Year Anniversary</h3>
 			<p class="text-gray-400 mb-4">
-				Mark your calendars! The celebration starts on:
-				📅 {{ANNIVERSARY_DATE.toFormat("yyyy-MM-dd HH:mm:ss")}} EVE Time
+				The celebration starts on:
+				📅 {{START_DATE.toFormat("yyyy-MM-dd HH:mm:ss")}} EVE Time
 			</p>
 			<div class="countdown flex justify-center gap-8 md:gap-16">
 				<div>
@@ -136,7 +141,7 @@ const donationMarks = computed(() => [0, donationGoal / 3, donationGoal * 2 / 3,
 
 		<section class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
 			<div class="card">
-				<h3 class="accent">🏆 Top Donors (Event)</h3>
+				<h3 class="accent">🏆 Top Donors</h3>
 				<p class="text-gray-400 mb-3">Thank you to our incredible supporters!</p>
 				<table class="standard-table">
 					<tbody>
@@ -148,7 +153,7 @@ const donationMarks = computed(() => [0, donationGoal / 3, donationGoal * 2 / 3,
 					</tbody>
 				</table>
 				<p class="text-right mt-3">
-					<InternalLink to="/data" class="accent">View all donors ›</InternalLink>
+					<InternalLink to="#" class="accent">View all donors ›</InternalLink>
 				</p>
 			</div>
 
@@ -167,22 +172,9 @@ const donationMarks = computed(() => [0, donationGoal / 3, donationGoal * 2 / 3,
 					</tbody>
 				</table>
 				<p class="text-right mt-3">
-					<InternalLink to="/data" class="accent">View all prizes ›</InternalLink>
+					<InternalLink to="/giveaways" class="accent">View all prizes ›</InternalLink>
 				</p>
 			</div>
-		</section>
-
-		<section class="card flex flex-col md:flex-row items-center justify-between gap-4">
-			<div>
-				<h3 class="accent">🎉 Let's celebrate together!</h3>
-				<p class="text-gray-400">
-					The entire month of October will be filled with giveaways, community events, and special surprises.
-					Stay tuned on our Discord and socials for updates!
-				</p>
-			</div>
-			<ExternalLink url="https://discord.gg/fZYPAxFyXG" class="discord-button px-5 py-3 rounded font-bold whitespace-nowrap">
-				Join our Discord<br><span class="text-sm font-normal">everef.net/discord</span>
-			</ExternalLink>
 		</section>
 	</div>
 </template>
@@ -212,7 +204,7 @@ const donationMarks = computed(() => [0, donationGoal / 3, donationGoal * 2 / 3,
 
 .card {
 	background-color: var(--card-background-color);
-	@apply rounded-lg p-6;
+	@apply p-6;
 }
 
 .donate-button {
