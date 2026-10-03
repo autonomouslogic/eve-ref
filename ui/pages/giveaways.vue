@@ -34,6 +34,11 @@ const giveawayRegistry: Record<string, GiveawayCalculator> = {
 			return (50 + 500 * 12 / 365 * 3) * plexPrice;
 		}
 	},
+	"Vexor Scope Syndication YC122 SKIN": {
+		calculateValue: async () => {
+			return await getJitaSellPrice(56882) || 0;
+		}
+	},
 	// Add more giveaway types here: each name maps to a calculator function
 	// Example:
 	// "Maller Scope Syndication YC122 SKIN": {
@@ -61,8 +66,9 @@ for (const apiGiveaway of allApiGiveaways) {
 	// Skip cancelled or failed giveaways
 	if (apiGiveaway.cancelled || apiGiveaway.failed) continue;
 
-	// Look up calculator for this giveaway name, calculate value
-	const calculator = giveawayRegistry[apiGiveaway.name];
+	// Look up calculator for this giveaway name using a partial match, calculate value
+	const calculatorEntry = Object.entries(giveawayRegistry).find(([key]) => apiGiveaway.name.includes(key));
+	const calculator = calculatorEntry?.[1];
 	const value = calculator ? await calculator.calculateValue() : 0;
 
 	unrolled.push({
@@ -78,7 +84,7 @@ for (const apiGiveaway of allApiGiveaways) {
 unrolled.sort((a, b) => a.endTime.toMillis() - b.endTime.toMillis());
 
 const pastGiveaways = {
-	"October 2026": 10 * 473.63e6,
+	"October 2026 (9-year anniversary)": 10 * 473.63e6 + 222.00e6 * 10,
 	"September 2026": 8 * 480.98e6,
 	"August 2026": 8 * 464.50e6,
 	"July 2026": 10 * 478.70e6,
