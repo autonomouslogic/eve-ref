@@ -49,20 +49,12 @@ const {status: donorsStatus, data: donors} = await useLazyFetch<DonationsFile>("
 const motd = computed(() => {
 	const date = new Date();
 	// const date = DateTime.fromISO("2025-12-04T14:00:00Z").toJSDate();
+	const monthOfYear = date.getUTCMonth() + 1;
 	const dayOfWeek = date.getUTCDay();
 	const hourOfDay = date.getUTCHours();
 	const time = date.getTime();
 	const day = Math.floor(time / DAY);
 	const hour = Math.floor(time / HOUR);
-
-	// Sale.
-	if (time < new Date("2026-10-04T23:59:00Z").getTime()) {
-		return {
-			text: "48% off PLEX! Extra 3% with code \"everef\" at checkout",
-			url: MARKEE_DRAGON_URL,
-			urlText: "Markee Dragon"
-		} as Motd;
-	}
 
 	// Recent donors.
 	if (donorsStatus.value == "success" && donors?.value?.recent?.length && donors.value.recent.length > 0) {
@@ -75,6 +67,25 @@ const motd = computed(() => {
 			urlText: "Donate ISK"
 		} as Motd;
 	}
+
+  // Sale.
+  if (time < new Date("2026-10-04T23:59:00Z").getTime()) {
+    return {
+      text: "48% off PLEX! Extra 3% with code \"everef\" at checkout",
+      url: MARKEE_DRAGON_URL,
+      urlText: "Markee Dragon"
+    } as Motd;
+  }
+
+  // Anniversary.
+  if (monthOfYear == 10) {
+    const years = date.getUTCFullYear() - 2017;
+    return {
+      text: `EVE Ref is celebrating ${years} years this month!`,
+      url: PATREON_URL,
+      urlText: "Support EVE Ref"
+    } as Motd;
+  }
 
 	// CSM.
 	const csmEnds = new Date("2025-11-10T11:00:00Z");
