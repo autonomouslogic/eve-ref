@@ -7,6 +7,9 @@ import {DISCORD_URL, EVE_REFERRAL_URL, EVE_STORE_URL, MARKEE_DRAGON_URL, PATREON
 import FormattedNumber from "~/components/helpers/FormattedNumber.vue";
 import ProgressBar from "~/components/helpers/ProgressBar.vue";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
+import {getJitaSellPrice} from "~/lib/marketUtils";
+import {PLEX_TYPE_ID} from "~/lib/typeConstants";
+import {formatMoney} from "~/lib/money";
 
 useHead({
 	title: "🎉 10 Years of EVE Ref"
@@ -16,6 +19,9 @@ useHead({
 const ANNIVERSARY_DATE = DateTime.fromISO("2027-10-08T00:55:32Z", {zone: "utc"});
 const START_DATE = DateTime.fromISO("2027-10-01T00:00:00Z", {zone: "utc"});
 
+const plexPrice = await getJitaSellPrice(PLEX_TYPE_ID) || 0;
+const oneMonthValue = 500 * plexPrice;
+const sixMonthsValue = 6 * oneMonthValue;
 
 const topDonors = [
 	{name: "Kuokkaa Anki", amount: 69e9},
@@ -30,8 +36,6 @@ const topDonors = [
 	{name: "Kezti Sundara", amount: 42e6},
 ];
 
-
-
 const donatedSoFar = topDonors.reduce((sum, donor) => sum + donor.amount, 0);
 const donationGoal = 300e9;
 
@@ -45,11 +49,14 @@ moneyPool -= oneBill * 1e9;
 const fiveHundredMill = Math.floor(moneyPool / 500e6);
 
 const prizes = [
-	{name: "Ten Years of Omega", description: "5x 1-year Omega codes + 60x 1-month Omega codes", winners: "65 winners"},
-	{name: "Grand Prize", description: "5 billion ISK", winners: "1 winner"},
-	{name: "Second Prizes", description: "2 billion ISK", winners: `${twoBill} winners`},
-	{name: "Third Prizes", description: "1 billion ISK", winners: `${oneBill} winners`},
-	{name: "Runner Ups", description: "500 million ISK", winners: `${fiveHundredMill} winners`},
+	{name: "Ten Years of Omega", description: [
+    `10x 6-month Omega codes, value ${formatMoney(sixMonthsValue, 1)} each`,
+    `60x 1-month Omega codes, value ${formatMoney(oneMonthValue, 1)} each`],
+    winners: "65 winners"},
+	{name: "Grand Prize", description: ["5 billion ISK"], winners: "1 winner"},
+	{name: "Second Prizes", description: ["2 billion ISK"], winners: `${twoBill} winners`},
+	{name: "Third Prizes", description: ["1 billion ISK"], winners: `${oneBill} winners`},
+	{name: "Runner Ups", description: ["500 million ISK"], winners: `${fiveHundredMill} winners`},
 ];
 
 const now = ref(DateTime.utc());
@@ -107,7 +114,7 @@ const donationMarks = computed(() => [0, donationGoal / 3, donationGoal * 2 / 3,
 					<span v-for="mark in donationMarks" :key="mark"><Money :value="mark" :decimals="0" /></span>
 				</div>
 				<p class="text-xs text-gray-400 mt-3">
-					All donations are made in-game to "EVE Ref" and are 100% used for giveaways!
+					All donations are made in-game to "EVE Ref" and 100% will be used for giveaways!
 					<InternalLink to="/about">Read more.</InternalLink>
 				</p>
 			</div>
@@ -163,7 +170,7 @@ const donationMarks = computed(() => [0, donationGoal / 3, donationGoal * 2 / 3,
 					</tbody>
 				</table>
 				<p class="text-right mt-3">
-					<InternalLink to="#" class="accent">View all donors ›</InternalLink>
+					<InternalLink to="#" class="accent">View all donors &raquo;</InternalLink>
 				</p>
 			</div>
 
@@ -175,14 +182,14 @@ const donationMarks = computed(() => [0, donationGoal / 3, donationGoal * 2 / 3,
 						<tr v-for="prize in prizes" :key="prize.name">
 							<td>
 								<div class="accent font-bold">{{prize.name}}</div>
-								<div class="text-sm text-gray-400">{{prize.description}}</div>
+								<div v-for="(d, i) in prize.description" :key="i" class="text-sm text-gray-400">{{d}}</div>
 							</td>
 							<td class="text-right whitespace-nowrap">{{prize.winners}}</td>
 						</tr>
 					</tbody>
 				</table>
 				<p class="text-right mt-3">
-					<InternalLink to="/giveaways" class="accent">View all prizes ›</InternalLink>
+					<InternalLink to="/giveaways" class="accent">Giveaway Schedule &raquo;</InternalLink>
 				</p>
 			</div>
 		</section>
