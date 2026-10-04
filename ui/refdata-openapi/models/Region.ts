@@ -118,7 +118,7 @@ export function RegionFromJSONTyped(json: any, ignoreDiscriminator: boolean): Re
         return json;
     }
     return {
-
+        
         'constellationIds': !exists(json, 'constellation_ids') ? undefined : json['constellation_ids'],
         'description': !exists(json, 'description') ? undefined : json['description'],
         'descriptionId': !exists(json, 'description_id') ? undefined : json['description_id'],
@@ -142,7 +142,7 @@ export function RegionToJSON(value?: Region | null): any {
         return null;
     }
     return {
-
+        
         'constellation_ids': value.constellationIds,
         'description': value.description,
         'description_id': value.descriptionId,
