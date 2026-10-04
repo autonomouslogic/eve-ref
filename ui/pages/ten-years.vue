@@ -10,6 +10,7 @@ import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 import {getJitaSellPrice} from "~/lib/marketUtils";
 import {PLEX_TYPE_ID} from "~/lib/typeConstants";
 import {formatMoney} from "~/lib/money";
+import {formatNumber} from "~/lib/number";
 
 useHead({
 	title: "🎉 10 Years of EVE Ref"
@@ -39,24 +40,31 @@ const topDonors = [
 const donatedSoFar = topDonors.reduce((sum, donor) => sum + donor.amount, 0);
 const donationGoal = 300e9;
 
-let moneyPool = 150e9;
-const fiveBill = 1;
-moneyPool -= fiveBill * 5e9;
-const twoBill = Math.floor(moneyPool / 2 / 2e9);
-moneyPool -= twoBill * 2e9;
-const oneBill = Math.floor(moneyPool / 2 / 1e9);
-moneyPool -= oneBill * 1e9;
-const fiveHundredMill = Math.floor(moneyPool / 500e6);
+let prizeMoneyPool = 100e9;
+const prizeMoneyLevels: {value: number, winners?: number}[] = [
+	{value: 10e9},
+	{value: 5e9},
+	{value: 2.5e9},
+	{value: 1e9}
+];
 
+prizeMoneyLevels.forEach((level, i) => {
+	const isLast = i === prizeMoneyLevels.length - 1;
+	if (level.winners === undefined) {
+		level.winners = Math.floor(prizeMoneyPool / (isLast ? 1 : 3) / level.value);
+	}
+	prizeMoneyPool -= level.winners * level.value;
+});
 const prizes = [
 	{name: "Ten Years of Omega", description: [
-    `10x 6-month Omega codes, value ${formatMoney(sixMonthsValue, 1)} each`,
-    `60x 1-month Omega codes, value ${formatMoney(oneMonthValue, 1)} each`],
-    winners: "65 winners"},
-	{name: "Grand Prize", description: ["5 billion ISK"], winners: "1 winner"},
-	{name: "Second Prizes", description: ["2 billion ISK"], winners: `${twoBill} winners`},
-	{name: "Third Prizes", description: ["1 billion ISK"], winners: `${oneBill} winners`},
-	{name: "Runner Ups", description: ["500 million ISK"], winners: `${fiveHundredMill} winners`},
+		`10x 6-month Omega codes, value ${formatMoney(sixMonthsValue, 1)} each`,
+		`60x 1-month Omega codes, value ${formatMoney(oneMonthValue, 1)} each`],
+	winners: "65 winners"},
+	...prizeMoneyLevels.map((level) => ({
+		name: `${formatNumber(level.value, 0)} ISK`,
+		description: [""],
+		winners: `${level.winners} winner${level.winners === 1 ? "" : "s"}`,
+	})),
 ];
 
 const now = ref(DateTime.utc());
@@ -121,11 +129,14 @@ const donationMarks = computed(() => [0, donationGoal / 3, donationGoal * 2 / 3,
 			<div class="flex-1">
 				<h3 class="accent">Support EVE Ref and win amazing prizes!</h3>
 				<p class="my-3">
-					For the past ten years, EVE Ref has been the reference database for EVE Online.
+					For the past ten years, EVE Ref has been <i>the</i> reference database for EVE Online.
 					EVE Ref also collects and archives game data 24/7 and makes 5.7 TB of data available to anyone for free.
 					Join <ExternalLink :url="PATREON_URL"><span><font-awesome-icon icon="fa-brands fa-patreon" /></span> Patreon</ExternalLink>
 					and help me keep it online and updated for another ten years!
 					Your donations keep the servers running and the data flowing.
+				</p>
+				<p class="my-3">
+					Thank you for all your support over the years!<br/>
 				</p>
 			</div>
 		</section>
@@ -158,7 +169,7 @@ const donationMarks = computed(() => [0, donationGoal / 3, donationGoal * 2 / 3,
 
 		<section class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
 			<div class="card">
-				<h3 class="accent">🏆 Top Donors</h3>
+				<h3 class="accent">🏆 Top Donors (2027)</h3>
 				<p class="text-gray-400 mb-3">Thank you to our incredible supporters!</p>
 				<table class="standard-table">
 					<tbody>
