@@ -23,111 +23,83 @@ import {
 /**
  * 
  * @export
- * @interface Region
+ * @interface Constellation
  */
-export interface Region {
-    /**
-     * The key is the language code.
-     * @type {{ [key: string]: string; }}
-     * @memberof Region
-     */
-    description?: { [key: string]: string; };
+export interface Constellation {
     /**
      * 
      * @type {number}
-     * @memberof Region
+     * @memberof Constellation
      */
-    descriptionId?: number;
+    constellationId?: number;
     /**
      * 
      * @type {number}
-     * @memberof Region
+     * @memberof Constellation
      */
     factionId?: number;
     /**
      * The key is the language code.
      * @type {{ [key: string]: string; }}
-     * @memberof Region
+     * @memberof Constellation
      */
     name?: { [key: string]: string; };
     /**
      * 
-     * @type {number}
-     * @memberof Region
-     */
-    nameId?: number;
-    /**
-     * 
-     * @type {number}
-     * @memberof Region
-     */
-    nebulaId?: number;
-    /**
-     * 
      * @type {Coordinate}
-     * @memberof Region
+     * @memberof Constellation
      */
     position?: Coordinate;
     /**
      * 
      * @type {number}
-     * @memberof Region
+     * @memberof Constellation
      */
     regionId?: number;
     /**
-     * Computed from the solar systems in this region.
+     * Computed from the solar systems in this constellation.
      * @type {Array<number>}
-     * @memberof Region
+     * @memberof Constellation
      */
     solarSystemIds?: Array<number>;
     /**
      * 
-     * @type {string}
-     * @memberof Region
-     */
-    universeId?: string;
-    /**
-     * 
      * @type {number}
-     * @memberof Region
+     * @memberof Constellation
      */
     wormholeClassId?: number;
 }
 
 /**
- * Check if a given object implements the Region interface.
+ * Check if a given object implements the Constellation interface.
  */
-export function instanceOfRegion(value: object): boolean {
+export function instanceOfConstellation(value: object): boolean {
     let isInstance = true;
 
     return isInstance;
 }
 
-export function RegionFromJSON(json: any): Region {
-    return RegionFromJSONTyped(json, false);
+export function ConstellationFromJSON(json: any): Constellation {
+    return ConstellationFromJSONTyped(json, false);
 }
 
-export function RegionFromJSONTyped(json: any, ignoreDiscriminator: boolean): Region {
+export function ConstellationFromJSONTyped(json: any, ignoreDiscriminator: boolean): Constellation {
     if ((json === undefined) || (json === null)) {
         return json;
     }
     return {
         
-        'description': !exists(json, 'description') ? undefined : json['description'],
-        'descriptionId': !exists(json, 'description_id') ? undefined : json['description_id'],
+        'constellationId': !exists(json, 'constellation_id') ? undefined : json['constellation_id'],
         'factionId': !exists(json, 'faction_id') ? undefined : json['faction_id'],
         'name': !exists(json, 'name') ? undefined : json['name'],
-        'nameId': !exists(json, 'name_id') ? undefined : json['name_id'],
-        'nebulaId': !exists(json, 'nebula_id') ? undefined : json['nebula_id'],
         'position': !exists(json, 'position') ? undefined : CoordinateFromJSON(json['position']),
         'regionId': !exists(json, 'region_id') ? undefined : json['region_id'],
         'solarSystemIds': !exists(json, 'solar_system_ids') ? undefined : json['solar_system_ids'],
-        'universeId': !exists(json, 'universe_id') ? undefined : json['universe_id'],
         'wormholeClassId': !exists(json, 'wormhole_class_id') ? undefined : json['wormhole_class_id'],
     };
 }
 
-export function RegionToJSON(value?: Region | null): any {
+export function ConstellationToJSON(value?: Constellation | null): any {
     if (value === undefined) {
         return undefined;
     }
@@ -136,16 +108,12 @@ export function RegionToJSON(value?: Region | null): any {
     }
     return {
         
-        'description': value.description,
-        'description_id': value.descriptionId,
+        'constellation_id': value.constellationId,
         'faction_id': value.factionId,
         'name': value.name,
-        'name_id': value.nameId,
-        'nebula_id': value.nebulaId,
         'position': CoordinateToJSON(value.position),
         'region_id': value.regionId,
         'solar_system_ids': value.solarSystemIds,
-        'universe_id': value.universeId,
         'wormhole_class_id': value.wormholeClassId,
     };
 }

@@ -6,7 +6,9 @@ models/BlueprintActivity.ts
 models/BlueprintMaterial.ts
 models/Bundle.ts
 models/Color.ts
+models/Constellation.ts
 models/Coordinate.ts
+models/Coordinate2D.ts
 models/DogmaAttribute.ts
 models/DogmaEffect.ts
 models/DogmaTypeAttribute.ts
@@ -23,6 +25,9 @@ models/ModifierInfo.ts
 models/Mutaplasmid.ts
 models/MutaplasmidDogmaModifications.ts
 models/MutaplasmidTypeMapping.ts
+models/Planet.ts
+models/PlanetAttributes.ts
+models/PlanetStatistics.ts
 models/ProducingBlueprint.ts
 models/RandomizedTypeMaterial.ts
 models/RefDataMeta.ts
@@ -30,6 +35,7 @@ models/RefDataMetaFileInfo.ts
 models/Region.ts
 models/Schematic.ts
 models/Skill.ts
+models/SolarSystem.ts
 models/TraitBonus.ts
 models/TypeMaterial.ts
 models/Unit.ts

@@ -17,6 +17,7 @@ import * as runtime from '../runtime';
 import type {
   Blueprint,
   Bundle,
+  Constellation,
   DogmaAttribute,
   DogmaEffect,
   Icon,
@@ -26,10 +27,12 @@ import type {
   MarketGroup,
   MetaGroup,
   Mutaplasmid,
+  Planet,
   RefDataMeta,
   Region,
   Schematic,
   Skill,
+  SolarSystem,
   Unit,
 } from '../models';
 import {
@@ -37,6 +40,8 @@ import {
     BlueprintToJSON,
     BundleFromJSON,
     BundleToJSON,
+    ConstellationFromJSON,
+    ConstellationToJSON,
     DogmaAttributeFromJSON,
     DogmaAttributeToJSON,
     DogmaEffectFromJSON,
@@ -55,6 +60,8 @@ import {
     MetaGroupToJSON,
     MutaplasmidFromJSON,
     MutaplasmidToJSON,
+    PlanetFromJSON,
+    PlanetToJSON,
     RefDataMetaFromJSON,
     RefDataMetaToJSON,
     RegionFromJSON,
@@ -63,6 +70,8 @@ import {
     SchematicToJSON,
     SkillFromJSON,
     SkillToJSON,
+    SolarSystemFromJSON,
+    SolarSystemToJSON,
     UnitFromJSON,
     UnitToJSON,
 } from '../models';
@@ -77,6 +86,10 @@ export interface GetCategoryRequest {
 
 export interface GetCategoryBundleRequest {
     categoryId: number;
+}
+
+export interface GetConstellationRequest {
+    constellationId: number;
 }
 
 export interface GetDogmaAttributeRequest {
@@ -115,6 +128,10 @@ export interface GetMutaplasmidRequest {
     mutaplasmidTypeId: number;
 }
 
+export interface GetPlanetRequest {
+    planetId: number;
+}
+
 export interface GetRegionRequest {
     regionId: number;
 }
@@ -125,6 +142,10 @@ export interface GetSchematicRequest {
 
 export interface GetSkillRequest {
     skillTypeId: number;
+}
+
+export interface GetSolarSystemRequest {
+    solarSystemId: number;
 }
 
 export interface GetTypeRequest {
@@ -193,6 +214,32 @@ export class RefdataApi extends runtime.BaseAPI {
      */
     async getAllCategories(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<number>> {
         const response = await this.getAllCategoriesRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Get all constellation IDs.
+     */
+    async getAllConstellationsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<number>>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/constellations`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse<any>(response);
+    }
+
+    /**
+     * Get all constellation IDs.
+     */
+    async getAllConstellations(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<number>> {
+        const response = await this.getAllConstellationsRaw(initOverrides);
         return await response.value();
     }
 
@@ -379,6 +426,32 @@ export class RefdataApi extends runtime.BaseAPI {
     }
 
     /**
+     * Get all planet IDs.
+     */
+    async getAllPlanetsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<number>>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/planets`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse<any>(response);
+    }
+
+    /**
+     * Get all planet IDs.
+     */
+    async getAllPlanets(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<number>> {
+        const response = await this.getAllPlanetsRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Get all region IDs.
      */
     async getAllRegionsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<number>>> {
@@ -453,6 +526,32 @@ export class RefdataApi extends runtime.BaseAPI {
      */
     async getAllSkills(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<number>> {
         const response = await this.getAllSkillsRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Get all solar system IDs.
+     */
+    async getAllSolarSystemsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<number>>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/solar_systems`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse<any>(response);
+    }
+
+    /**
+     * Get all solar system IDs.
+     */
+    async getAllSolarSystems(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<number>> {
+        const response = await this.getAllSolarSystemsRaw(initOverrides);
         return await response.value();
     }
 
@@ -613,6 +712,36 @@ export class RefdataApi extends runtime.BaseAPI {
      */
     async getCategoryBundle(requestParameters: GetCategoryBundleRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Bundle> {
         const response = await this.getCategoryBundleRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Get a constellation.
+     */
+    async getConstellationRaw(requestParameters: GetConstellationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Constellation>> {
+        if (requestParameters.constellationId === null || requestParameters.constellationId === undefined) {
+            throw new runtime.RequiredError('constellationId','Required parameter requestParameters.constellationId was null or undefined when calling getConstellation.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/constellations/{constellation_id}`.replace(`{${"constellation_id"}}`, encodeURIComponent(String(requestParameters.constellationId))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => ConstellationFromJSON(jsonValue));
+    }
+
+    /**
+     * Get a constellation.
+     */
+    async getConstellation(requestParameters: GetConstellationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Constellation> {
+        const response = await this.getConstellationRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -895,6 +1024,36 @@ export class RefdataApi extends runtime.BaseAPI {
     }
 
     /**
+     * Get a planet.
+     */
+    async getPlanetRaw(requestParameters: GetPlanetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Planet>> {
+        if (requestParameters.planetId === null || requestParameters.planetId === undefined) {
+            throw new runtime.RequiredError('planetId','Required parameter requestParameters.planetId was null or undefined when calling getPlanet.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/planets/{planet_id}`.replace(`{${"planet_id"}}`, encodeURIComponent(String(requestParameters.planetId))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => PlanetFromJSON(jsonValue));
+    }
+
+    /**
+     * Get a planet.
+     */
+    async getPlanet(requestParameters: GetPlanetRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Planet> {
+        const response = await this.getPlanetRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Get a region.
      */
     async getRegionRaw(requestParameters: GetRegionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Region>> {
@@ -1029,6 +1188,36 @@ export class RefdataApi extends runtime.BaseAPI {
      */
     async getSkill(requestParameters: GetSkillRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Skill> {
         const response = await this.getSkillRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Get a solar system.
+     */
+    async getSolarSystemRaw(requestParameters: GetSolarSystemRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<SolarSystem>> {
+        if (requestParameters.solarSystemId === null || requestParameters.solarSystemId === undefined) {
+            throw new runtime.RequiredError('solarSystemId','Required parameter requestParameters.solarSystemId was null or undefined when calling getSolarSystem.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/solar_systems/{solar_system_id}`.replace(`{${"solar_system_id"}}`, encodeURIComponent(String(requestParameters.solarSystemId))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => SolarSystemFromJSON(jsonValue));
+    }
+
+    /**
+     * Get a solar system.
+     */
+    async getSolarSystem(requestParameters: GetSolarSystemRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SolarSystem> {
+        const response = await this.getSolarSystemRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
