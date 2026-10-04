@@ -1,0 +1,22 @@
+{
+  "constellation_id" : 20000001,
+  "name" : {
+    "en" : "San Matar",
+    "ja" : "サンマター",
+    "de" : "San Matar",
+    "es" : "San Matar",
+    "fr" : "San Matar",
+    "ko" : "산마타르",
+    "ru" : "San Matar",
+    "zh" : "姗玛塔尔"
+  },
+  "position" : {
+    "x" : -94046559700991340,
+    "y" : 49520153153798850,
+    "z" : -42738731818401970
+  },
+  "region_id" : 10000001,
+  "faction_id" : 500007,
+  "wormhole_class_id" : 7,
+  "solar_system_ids" : [ 30000001 ]
+}

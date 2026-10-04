@@ -494,4 +494,64 @@ public interface ReferenceDataSpec {
 			useReturnTypeSchema = true,
 			content = @Content(mediaType = "application/json"))
 	Agent getAgent(@PathParam("agent_id") long agentId);
+
+	@GET
+	@Path("/constellations")
+	@Operation(description = "Get all constellation IDs.")
+	@ApiResponse(
+			responseCode = "200",
+			description = "Constellation IDs.",
+			useReturnTypeSchema = true,
+			content = @Content(mediaType = "application/json"))
+	List<Integer> getAllConstellations();
+
+	@GET
+	@Path("/constellations/{constellation_id}")
+	@Operation(description = "Get a constellation.")
+	@ApiResponse(
+			responseCode = "200",
+			description = "The constellation.",
+			useReturnTypeSchema = true,
+			content = @Content(mediaType = "application/json"))
+	Constellation getConstellation(@PathParam("constellation_id") long constellationId);
+
+	@GET
+	@Path("/solar_systems")
+	@Operation(description = "Get all solar system IDs.")
+	@ApiResponse(
+			responseCode = "200",
+			description = "Solar system IDs.",
+			useReturnTypeSchema = true,
+			content = @Content(mediaType = "application/json"))
+	List<Integer> getAllSolarSystems();
+
+	@GET
+	@Path("/solar_systems/{solar_system_id}")
+	@Operation(description = "Get a solar system.")
+	@ApiResponse(
+			responseCode = "200",
+			description = "The solar system.",
+			useReturnTypeSchema = true,
+			content = @Content(mediaType = "application/json"))
+	SolarSystem getSolarSystem(@PathParam("solar_system_id") long solarSystemId);
+
+	@GET
+	@Path("/planets")
+	@Operation(description = "Get all planet IDs.")
+	@ApiResponse(
+			responseCode = "200",
+			description = "Planet IDs.",
+			useReturnTypeSchema = true,
+			content = @Content(mediaType = "application/json"))
+	List<Integer> getAllPlanets();
+
+	@GET
+	@Path("/planets/{planet_id}")
+	@Operation(description = "Get a planet.")
+	@ApiResponse(
+			responseCode = "200",
+			description = "The planet.",
+			useReturnTypeSchema = true,
+			content = @Content(mediaType = "application/json"))
+	Planet getPlanet(@PathParam("planet_id") long planetId);
 }

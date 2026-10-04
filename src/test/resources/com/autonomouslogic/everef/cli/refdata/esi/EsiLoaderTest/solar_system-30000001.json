@@ -1,0 +1,17 @@
+{
+  "constellation_id" : 20000001,
+  "name" : {
+    "en" : "Tanoo",
+    "ja" : "タヌー"
+  },
+  "position" : {
+    "x" : -88510792599980580,
+    "y" : 42369443966878880,
+    "z" : -44513525346479660
+  },
+  "security_class" : "B",
+  "security_status" : 0.8583240509033203,
+  "star_id" : 40000001,
+  "solar_system_id" : 30000001,
+  "station_ids" : [ 60012526, 60014437 ]
+}

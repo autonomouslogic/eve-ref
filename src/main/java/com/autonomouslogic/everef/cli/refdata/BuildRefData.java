@@ -10,6 +10,7 @@ import com.autonomouslogic.everef.cli.refdata.post.AgentDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.BlueprintDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.CanFitDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.CategoryIdDecorator;
+import com.autonomouslogic.everef.cli.refdata.post.ConstellationSolarSystemIdsDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.GroupsDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.IndustryModifierSourcesDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.MarketGroupsDecorator;
@@ -17,6 +18,8 @@ import com.autonomouslogic.everef.cli.refdata.post.MissingDogmaUnitsDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.MutaplasmidDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.OreVariationsDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.PostDecorator;
+import com.autonomouslogic.everef.cli.refdata.post.RegionConstellationIdsDecorator;
+import com.autonomouslogic.everef.cli.refdata.post.RegionSolarSystemIdsDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.ReprocessableTypesDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.SchematicDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.SkillDecorator;
@@ -168,6 +171,15 @@ public class BuildRefData implements Command {
 	@Inject
 	protected AgentDecorator agentDecorator;
 
+	@Inject
+	protected ConstellationSolarSystemIdsDecorator constellationSolarSystemIdsDecorator;
+
+	@Inject
+	protected RegionSolarSystemIdsDecorator regionSolarSystemIdsDecorator;
+
+	@Inject
+	protected RegionConstellationIdsDecorator regionConstellationIdsDecorator;
+
 	@Setter
 	@NonNull
 	private ZonedDateTime buildTime = ZonedDateTime.now(ZoneOffset.UTC).truncatedTo(ChronoUnit.SECONDS);
@@ -220,7 +232,10 @@ public class BuildRefData implements Command {
 				typeUsedInBlueprintsDecorator,
 				industryModifierSourcesDecorator,
 				universeIdDecorator,
-				agentDecorator);
+				agentDecorator,
+				constellationSolarSystemIdsDecorator,
+				regionSolarSystemIdsDecorator,
+				regionConstellationIdsDecorator);
 	}
 
 	@Override

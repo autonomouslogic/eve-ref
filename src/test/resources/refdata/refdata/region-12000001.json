@@ -21,5 +21,7 @@
     "z" : -8324663071957517000
   },
   "wormhole_class_id" : 19,
-  "universe_id" : "abyssal"
+  "universe_id" : "abyssal",
+  "solar_system_ids" : [ ],
+  "constellation_ids" : [ ]
 }

@@ -189,6 +189,42 @@ paths:
           description: The category bundle.
       tags:
       - refdata
+  /constellations:
+    get:
+      description: Get all constellation IDs.
+      operationId: getAllConstellations
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: integer
+                  format: int32
+          description: Constellation IDs.
+      tags:
+      - refdata
+  /constellations/{constellation_id}:
+    get:
+      description: Get a constellation.
+      operationId: getConstellation
+      parameters:
+      - in: path
+        name: constellation_id
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Constellation"
+          description: The constellation.
+      tags:
+      - refdata
   /dogma_attributes:
     get:
       description: Get all dogma attribute IDs.
@@ -622,6 +658,42 @@ paths:
           description: The NPC corporation.
       tags:
       - refdata
+  /planets:
+    get:
+      description: Get all planet IDs.
+      operationId: getAllPlanets
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: integer
+                  format: int32
+          description: Planet IDs.
+      tags:
+      - refdata
+  /planets/{planet_id}:
+    get:
+      description: Get a planet.
+      operationId: getPlanet
+      parameters:
+      - in: path
+        name: planet_id
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Planet"
+          description: The planet.
+      tags:
+      - refdata
   /regions:
     get:
       description: Get all region IDs.
@@ -726,6 +798,42 @@ paths:
               schema:
                 $ref: "#/components/schemas/Skill"
           description: The skill.
+      tags:
+      - refdata
+  /solar_systems:
+    get:
+      description: Get all solar system IDs.
+      operationId: getAllSolarSystems
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: integer
+                  format: int32
+          description: Solar system IDs.
+      tags:
+      - refdata
+  /solar_systems/{solar_system_id}:
+    get:
+      description: Get a solar system.
+      operationId: getSolarSystem
+      parameters:
+      - in: path
+        name: solar_system_id
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SolarSystem"
+          description: The solar system.
       tags:
       - refdata
   /types:
@@ -994,6 +1102,36 @@ components:
         r:
           type: number
           format: double
+    Constellation:
+      type: object
+      properties:
+        constellation_id:
+          type: integer
+          format: int64
+        faction_id:
+          type: integer
+          format: int64
+        name:
+          type: object
+          additionalProperties:
+            type: string
+            description: The key is the language code.
+          description: The key is the language code.
+        position:
+          $ref: "#/components/schemas/Coordinate"
+        region_id:
+          type: integer
+          format: int64
+        solar_system_ids:
+          type: array
+          description: Computed from the solar systems in this constellation.
+          items:
+            type: integer
+            format: int64
+            description: Computed from the solar systems in this constellation.
+        wormhole_class_id:
+          type: integer
+          format: int64
     Coordinate:
       type: object
       properties:
@@ -1002,6 +1140,13 @@ components:
         "y":
           type: number
         z:
+          type: number
+    Coordinate2D:
+      type: object
+      properties:
+        x:
+          type: number
+        "y":
           type: number
     DogmaAttribute:
       type: object
@@ -1913,6 +2058,98 @@ components:
         size:
           type: integer
           format: int64
+    Planet:
+      type: object
+      properties:
+        asteroid_belt_ids:
+          type: array
+          items:
+            type: integer
+            format: int64
+        attributes:
+          $ref: "#/components/schemas/PlanetAttributes"
+        celestial_index:
+          type: integer
+          format: int64
+        moon_ids:
+          type: array
+          items:
+            type: integer
+            format: int64
+        npc_station_ids:
+          type: array
+          items:
+            type: integer
+            format: int64
+        orbit_id:
+          type: integer
+          format: int64
+        planet_id:
+          type: integer
+          format: int64
+        position:
+          $ref: "#/components/schemas/Coordinate"
+        radius:
+          type: number
+        solar_system_id:
+          type: integer
+          format: int64
+        statistics:
+          $ref: "#/components/schemas/PlanetStatistics"
+        type_id:
+          type: integer
+          format: int64
+        unique_name:
+          type: object
+          additionalProperties:
+            type: string
+            description: "The key is the language code. Only present on planets with\
+              \ a renamed, unique name."
+          description: "The key is the language code. Only present on planets with\
+            \ a renamed, unique name."
+    PlanetAttributes:
+      type: object
+      properties:
+        height_map1:
+          type: integer
+          format: int64
+        height_map2:
+          type: integer
+          format: int64
+        population:
+          type: boolean
+        shader_preset:
+          type: integer
+          format: int64
+    PlanetStatistics:
+      type: object
+      properties:
+        density:
+          type: number
+        eccentricity:
+          type: number
+        escape_velocity:
+          type: number
+        locked:
+          type: boolean
+        mass_dust:
+          type: number
+        mass_gas:
+          type: number
+        orbit_period:
+          type: number
+        orbit_radius:
+          type: number
+        pressure:
+          type: number
+        rotation_rate:
+          type: number
+        spectral_class:
+          type: string
+        surface_gravity:
+          type: number
+        temperature:
+          type: number
     ProducingBlueprint:
       type: object
       description: The blueprints producing this type. The key is the blueprint type
@@ -1955,6 +2192,13 @@ components:
     Region:
       type: object
       properties:
+        constellation_ids:
+          type: array
+          description: Computed from the constellations in this region.
+          items:
+            type: integer
+            format: int64
+            description: Computed from the constellations in this region.
         description:
           type: object
           additionalProperties:
@@ -1984,6 +2228,13 @@ components:
         region_id:
           type: integer
           format: int64
+        solar_system_ids:
+          type: array
+          description: Computed from the solar systems in this region.
+          items:
+            type: integer
+            format: int64
+            description: Computed from the solar systems in this region.
         universe_id:
           type: string
         wormhole_class_id:
@@ -2063,6 +2314,79 @@ components:
           type: integer
           format: int32
         type_id:
+          type: integer
+          format: int64
+    SolarSystem:
+      type: object
+      properties:
+        border:
+          type: boolean
+        constellation_id:
+          type: integer
+          format: int64
+        corridor:
+          type: boolean
+        disallowed_anchor_categories:
+          type: array
+          items:
+            type: integer
+            format: int64
+        disallowed_anchor_groups:
+          type: array
+          items:
+            type: integer
+            format: int64
+        faction_id:
+          type: integer
+          format: int64
+        fringe:
+          type: boolean
+        hub:
+          type: boolean
+        international:
+          type: boolean
+        luminosity:
+          type: number
+        name:
+          type: object
+          additionalProperties:
+            type: string
+            description: The key is the language code.
+          description: The key is the language code.
+        position:
+          $ref: "#/components/schemas/Coordinate"
+        position2_d:
+          $ref: "#/components/schemas/Coordinate2D"
+        radius:
+          type: number
+        region_id:
+          type: integer
+          format: int64
+        regional:
+          type: boolean
+        security_class:
+          type: string
+        security_status:
+          type: number
+        solar_system_id:
+          type: integer
+          format: int64
+        star_id:
+          type: integer
+          format: int64
+        stargate_ids:
+          type: array
+          items:
+            type: integer
+            format: int64
+        station_ids:
+          type: array
+          items:
+            type: integer
+            format: int64
+        visual_effect:
+          type: string
+        wormhole_class_id:
           type: integer
           format: int64
     TraitBonus:

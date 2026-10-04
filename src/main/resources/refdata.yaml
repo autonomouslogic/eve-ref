@@ -456,6 +456,65 @@ regions:
       - en-us
       - ja
 
+constellations:
+  idField: constellation_id
+  model: Constellation
+  esi:
+    file: universe/constellations
+    languageAttributes:
+      - name
+    removes:
+      - systems
+  sde:
+    file: mapConstellations.yaml
+    removes:
+      - solar_system_ids
+  test:
+    filePrefix: constellation
+    ids:
+      - 20000001
+      - 21000311
+    languages:
+      - en-us
+      - ja
+
+solarSystems:
+  idField: solar_system_id
+  model: SolarSystem
+  esi:
+    file: universe/systems
+    languageAttributes:
+      - name
+    renames:
+      system_id: solar_system_id
+      stations: station_ids
+    removes:
+      - planets
+      - stargates
+  sde:
+    file: mapSolarSystems.yaml
+    removes:
+      - planet_ids
+  test:
+    filePrefix: solar_system
+    ids:
+      - 30000001
+      - 31000007
+    languages:
+      - en-us
+      - ja
+
+planets:
+  idField: planet_id
+  model: Planet
+  sde:
+    file: mapPlanets.yaml
+  test:
+    filePrefix: planet
+    ids:
+      - 40000002
+      - 40009253
+
 schematics:
   idField: schematic_id
   model: Schematic

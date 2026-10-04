@@ -21,5 +21,7 @@
     "z" : -9497611206336487000
   },
   "wormhole_class_id" : 1,
-  "universe_id" : "wormhole"
+  "universe_id" : "wormhole",
+  "solar_system_ids" : [ 31000007 ],
+  "constellation_ids" : [ 21000311 ]
 }
