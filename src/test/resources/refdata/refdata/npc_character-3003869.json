@@ -15,8 +15,12 @@
     "zh" : "帕莫·梅尼利"
   },
   "race_id" : 4,
+  "skills" : [ {
+    "type_id" : 3363
+  }, {
+    "type_id" : 3368
+  } ],
   "start_date" : "2003-03-27 13:27:00",
   "unique_name" : true,
-  "skill_type_ids" : [ 3363, 3368 ],
   "character_id" : 3003869
 }

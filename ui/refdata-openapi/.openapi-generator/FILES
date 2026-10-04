@@ -28,6 +28,7 @@ models/MutaplasmidDogmaModifications.ts
 models/MutaplasmidTypeMapping.ts
 models/NpcCharacter.ts
 models/NpcCharacterAgentInfo.ts
+models/NpcCharacterSkill.ts
 models/NpcCorporation.ts
 models/NpcCorporationDivision.ts
 models/NpcCorporationDivisionAssignment.ts

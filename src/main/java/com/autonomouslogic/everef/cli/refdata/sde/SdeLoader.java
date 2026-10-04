@@ -49,9 +49,6 @@ public class SdeLoader {
 	@Inject
 	protected Provider<MasteriesSdeTransformer> masteriesSdeTransformerProvider;
 
-	@Inject
-	protected Provider<NpcCharacterSkillsTransformer> npcCharacterSkillsTransformerProvider;
-
 	@Setter
 	@NonNull
 	private StoreHandler storeHandler;
@@ -91,10 +88,6 @@ public class SdeLoader {
 								case "masteries":
 									transformer =
 											TransformUtil.concat(transformer, masteriesSdeTransformerProvider.get());
-									break;
-								case "npcCharacters":
-									transformer = TransformUtil.concat(
-											transformer, npcCharacterSkillsTransformerProvider.get());
 									break;
 							}
 							storeLoader.setTransformer(TransformUtil.concat(fieldRenamer, transformer));

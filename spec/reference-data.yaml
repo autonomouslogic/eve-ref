@@ -1813,11 +1813,10 @@ components:
         school_id:
           type: integer
           format: int64
-        skill_type_ids:
+        skills:
           type: array
           items:
-            type: integer
-            format: int64
+            $ref: "#/components/schemas/NpcCharacterSkill"
         speciality_id:
           type: integer
           format: int64
@@ -1838,6 +1837,12 @@ components:
         is_locator:
           type: boolean
         level:
+          type: integer
+          format: int64
+    NpcCharacterSkill:
+      type: object
+      properties:
+        type_id:
           type: integer
           format: int64
     NpcCorporation:

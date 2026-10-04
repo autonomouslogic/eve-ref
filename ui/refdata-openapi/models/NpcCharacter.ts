@@ -19,6 +19,12 @@ import {
     NpcCharacterAgentInfoFromJSONTyped,
     NpcCharacterAgentInfoToJSON,
 } from './NpcCharacterAgentInfo';
+import type { NpcCharacterSkill } from './NpcCharacterSkill';
+import {
+    NpcCharacterSkillFromJSON,
+    NpcCharacterSkillFromJSONTyped,
+    NpcCharacterSkillToJSON,
+} from './NpcCharacterSkill';
 
 /**
  * 
@@ -106,10 +112,10 @@ export interface NpcCharacter {
     schoolId?: number;
     /**
      * 
-     * @type {Array<number>}
+     * @type {Array<NpcCharacterSkill>}
      * @memberof NpcCharacter
      */
-    skillTypeIds?: Array<number>;
+    skills?: Array<NpcCharacterSkill>;
     /**
      * 
      * @type {number}
@@ -162,7 +168,7 @@ export function NpcCharacterFromJSONTyped(json: any, ignoreDiscriminator: boolea
         'name': !exists(json, 'name') ? undefined : json['name'],
         'raceId': !exists(json, 'race_id') ? undefined : json['race_id'],
         'schoolId': !exists(json, 'school_id') ? undefined : json['school_id'],
-        'skillTypeIds': !exists(json, 'skill_type_ids') ? undefined : json['skill_type_ids'],
+        'skills': !exists(json, 'skills') ? undefined : ((json['skills'] as Array<any>).map(NpcCharacterSkillFromJSON)),
         'specialityId': !exists(json, 'speciality_id') ? undefined : json['speciality_id'],
         'startDate': !exists(json, 'start_date') ? undefined : json['start_date'],
         'uniqueName': !exists(json, 'unique_name') ? undefined : json['unique_name'],
@@ -191,7 +197,7 @@ export function NpcCharacterToJSON(value?: NpcCharacter | null): any {
         'name': value.name,
         'race_id': value.raceId,
         'school_id': value.schoolId,
-        'skill_type_ids': value.skillTypeIds,
+        'skills': value.skills === undefined ? undefined : ((value.skills as Array<any>).map(NpcCharacterSkillToJSON)),
         'speciality_id': value.specialityId,
         'start_date': value.startDate,
         'unique_name': value.uniqueName,

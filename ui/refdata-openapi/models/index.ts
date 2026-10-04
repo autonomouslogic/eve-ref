@@ -27,6 +27,7 @@ export * from './MutaplasmidDogmaModifications';
 export * from './MutaplasmidTypeMapping';
 export * from './NpcCharacter';
 export * from './NpcCharacterAgentInfo';
+export * from './NpcCharacterSkill';
 export * from './NpcCorporation';
 export * from './NpcCorporationDivision';
 export * from './NpcCorporationDivisionAssignment';

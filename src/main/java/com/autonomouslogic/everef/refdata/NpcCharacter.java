@@ -54,7 +54,7 @@ public class NpcCharacter {
 	String startDate;
 
 	@JsonProperty
-	List<Long> skillTypeIds;
+	List<NpcCharacterSkill> skills;
 
 	@JsonProperty
 	Boolean ceo;
