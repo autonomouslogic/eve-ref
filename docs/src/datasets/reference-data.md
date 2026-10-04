@@ -60,22 +60,27 @@ This table show the available data and where to get it.
 
 | Data                          | Reference data      | SDE                                        | ESI                            | Hoboleaks                           |
 |-------------------------------|---------------------|--------------------------------------------|--------------------------------|-------------------------------------|
-| Accounting entry types        |                     |                                            |                                | `accountingentrytypes.json`         |
+| Accounting entry types        |                     | `accountingEntryTypes.yaml`                |                                | `accountingentrytypes.json`         |
 | Agent                         |                     | `npcCharacters.yaml`                       |                                |                                     |
 | Agent in space                |                     | `agentsInSpace.yaml`                       |                                |                                     |
 | Agent types                   |                     | `agentTypes.yaml`                          |                                | `agenttypes.json`                   |
 | Ancestors                     |                     | `ancestries.yaml`                          | `universe/ancestries.yaml`     |                                     |
+| Applied proximity effects     |                     | `appliedProximityEffects.yaml`             |                                |                                     |
+| Archetypes                    |                     | `archetypes.yaml`                          |                                |                                     |
 | Asteroid belts                |                     | `mapAsteroidBelts.yaml`                    | `universe/asteroid_belts.yaml` |                                     |
 | Bloodlines                    |                     | `bloodlines.yaml`                          | `universe/bloodlines.yaml`     |                                     |
 | Blueprints                    | `/blueprints`       | `blueprints.yaml`                          |                                | `blueprints.json`                   |
 | Certificates                  |                     | `certificates.yaml`                        |                                |                                     |
 | Character attributes          |                     | `characterAttributes.yaml`                 |                                |                                     |
-| Clone states                  |                     |                                            |                                | `clonestates.json`                  |
-| Compressible types            |                     |                                            |                                | `compressibletypes.json`            |
+| Character titles              |                     | `characterTitles.yaml`                     |                                |                                     |
+| Clone grades                  |                     | `cloneGrades.yaml`                         |                                | `clonestates.json`                  |
+| Compressible types            |                     | `compressibleTypes.yaml`                   |                                | `compressibletypes.json`            |
 | Constellations                |                     | `mapConstellations.yaml`                   | `universe/constellations.yaml` |                                     |
 | Contraband types              |                     | `contrabandTypes.yaml`                     |                                |                                     |
 | Control tower resources       |                     | `controlTowerResources.yaml`               |                                |                                     |
 | Corporation activities        |                     | `corporationActivities.yaml`               |                                |                                     |
+| Corporation role groups       |                     | `corporationRoleGroups.yaml`               |                                |                                     |
+| Corporation roles             |                     | `corporationRoles.yaml`                    |                                |                                     |
 | Dbuffs                        |                     | `dbuffCollections.yaml`                    |                                | `dbuffs.json`                       |
 | Dogma attributes              | `/dogma_attributes` | `dogmaAttributes.yaml`                     | `dogma/attributes.yaml`        | `localization_dgmattributes.json`   |
 | Dogma attributes categories   |                     | `dogmaAttributeCategories.yaml`            |                                |                                     |
@@ -86,17 +91,22 @@ This table show the available data and where to get it.
 |                               |                     |                                            |                                | `dogmaeffectcategories.json`        |
 |                               |                     |                                            |                                | `attributeorders.json`              |
 | Dogma units                   |                     | `dogmaUnits.yaml`                          |                                | `dogmaunits.json`                   |
-| Dynamic attributes            | `/mutaplasmids`     |                                            |                                | `dynamicitemattributes.json`        |
-| Expert systems                |                     |                                            |                                | `expertsystems.json`                |
+| Dungeons                      |                     | `dungeons.yaml`                            |                                |                                     |
+| Dynamic attributes            | `/mutaplasmids`     | `dynamicItemAttributes.yaml`               |                                | `dynamicitemattributes.json`        |
+| Epic arcs                     |                     | `epicArcs.yaml`                            |                                |                                     |
+| Expert systems                |                     | `expertSystems.yaml`                       |                                | `expertsystems.json`                |
 | Factions                      |                     | `factions.yaml`                            | `universe/factions.yaml`       |                                     |
-| Graphic material sets         |                     |                                            |                                | `graphicmaterialsets.json`          |
+| Fighter abilities             |                     | `fighterAbilities.yaml`                    |                                |                                     |
+| Fighter abilities by type     |                     | `fighterAbilitiesByType.yaml`              |                                |                                     |
+| Freelance job schemas         |                     | `freelanceJobSchemas.yaml`                 |                                |                                     |
+| Graphic material sets         |                     | `graphicMaterialSets.yaml`                 |                                | `graphicmaterialsets.json`          |
 | Graphics                      |                     | `graphics.yaml`                            | `universe/graphics.yaml`       |                                     |
-| Icons                         |                     | `icons.yaml`                               |                                |                                     |
-| Industry activities           |                     |                                            |                                | `industryactivities.json`           |
-| Industry assembly lines       |                     |                                            |                                | `industryassemblylines.json`        |
-| Industry installation types   |                     |                                            |                                | `industryinstallationtypes.json`    |
-| Industry modifier sources     |                     |                                            |                                | `industrymodifiersources.json`      |
-| Industry target filters       |                     |                                            |                                | `industrytargetfilters.json`        |
+| Icons                         | `/icons`            | `icons.yaml`                               |                                |                                     |
+| Industry activities           |                     | `industryActivities.yaml`                  |                                | `industryactivities.json`           |
+| Industry assembly lines       |                     | `industryAssemblyLines.yaml`               |                                | `industryassemblylines.json`        |
+| Industry installation types   |                     | `industryInstallationTypes.yaml`           |                                | `industryinstallationtypes.json`    |
+| Industry modifier sources     |                     | `industryModifierSources.yaml`             |                                | `industrymodifiersources.json`      |
+| Industry target filters       |                     | `industryTargetFilters.yaml`               |                                | `industrytargetfilters.json`        |
 | Inventory categories          | `/categories`       | `categories.yaml`                          | `universe/categories.yaml`     |                                     |
 | Inventory flags               |                     | `bsd/invFlags.yaml` in old files           |                                |                                     |
 | Inventory groups              | `/groups`           | `groups.yaml`                              | `universe/groups.yaml`         |                                     |
@@ -108,10 +118,17 @@ This table show the available data and where to get it.
 | Inventory unique names        |                     | `bsd/invUniqueNames.yaml` in old files     |                                |                                     |
 | Landmarks                     |                     | `landmarks.yaml`                           |                                |                                     |
 | Languages                     |                     | `translationLanguages.yaml`                | _Yes, indirectly_              | `localization_languages.json`       |
+| Link with ship                |                     | `linkWithShip.yaml`                        |                                |                                     |
 | Loyalty offers                |                     |                                            | Yes                            |                                     |
 | Market groups                 | `/market_groups`    | `marketGroups.yaml`                        | `market/groups.yaml`           |                                     |
+| Mercenary tactical operations |                     | `mercenaryTacticalOperations.yaml`         |                                |                                     |
 | Meta groups                   | `/meta_groups`      | `metaGroups.yaml`                          |                                |                                     |
+| Metenox moon drill            |                     | `metenoxMoonDrill.yaml`                    |                                |                                     |
+| Military campaign objectives  |                     | `militaryCampaignObjectives.yaml`          |                                |                                     |
+| Military campaigns            |                     | `militaryCampaigns.yaml`                   |                                |                                     |
+| Missions                      |                     | `missions.yaml`                            |                                |                                     |
 | Moons                         |                     | `mapMoons.yaml`                            | `universe/moons.yaml`          |                                     |
+| Notification types            |                     | `notificationTypes.yaml`                   |                                |                                     |
 | NPC corporation               |                     | `npcCorporations.yaml`                     |                                |                                     |
 | NPC corporation divisions     |                     | `npcCorporationDivisions.yaml`             |                                |                                     |
 | Opportunity groups            |                     |                                            | `opportunities/groups.yaml`    |                                     |
@@ -119,26 +136,45 @@ This table show the available data and where to get it.
 | Planet resources              |                     | `planetResources.yaml`                     |                                |                                     |
 | Planetary schematics          | `/schematics`       | `planetSchematics.yaml`                    | `universe/schematics.yaml`     |                                     |
 | Planets                       |                     | `mapPlanets.yaml`                          | `universe/planets.yaml`        |                                     |
+| Proximity traps               |                     | `proximityTrap.yaml`                       |                                |                                     |
 | Races                         |                     | `races.yaml`                               | `universe/races.yaml`          |                                     |
 | Regions                       | `/regions`          | `mapRegions.yaml`                          | `universe/regions.yaml`        |                                     |
 | Reprocessing                  | `/types`            | `typeMaterials.yaml`                       |                                | `typematerials.json`                |
-| School map                    |                     |                                            |                                | `schoolmap.json`                    |
-| Schools                       |                     |                                            |                                | `schools.json`                      |
-| Skill plans                   |                     |                                            |                                | `skillplans.json`                   |
+| School map                    |                     | `schoolMap.yaml`                           |                                | `schoolmap.json`                    |
+| Schools                       |                     | `schools.yaml`                             |                                | `schools.json`                      |
+| Secondary suns                |                     | `mapSecondarySuns.yaml`                    |                                |                                     |
+| Ship tree elements            |                     | `shipTreeElements.yaml`                    |                                |                                     |
+| Ship tree factions            |                     | `shipTreeFactions.yaml`                    |                                |                                     |
+| Ship tree groups              |                     | `shipTreeGroups.yaml`                      |                                |                                     |
+| Skill plans                   |                     | `skillPlans.yaml`                          |                                | `skillplans.json`                   |
 | Skills                        | `/skills `          | _types and dogma_                          | _types and dogma_              |                                     |
 | Skin licenses                 |                     | `skinLicenses.yaml`                        |                                |                                     |
 | Skin material names           |                     |                                            |                                | `skinmaterialnames.json`            |
 | Skin materials                |                     | `skinMaterials.yaml`                       |                                | `skinmaterials.json`                |
+| Skinr component categories    |                     | `skinrComponentCategories.yaml`            |                                |                                     |
+| Skinr component point values  |                     | `skinrComponentPointValues.yaml`           |                                |                                     |
+| Skinr component rarities      |                     | `skinrComponentRarities.yaml`              |                                |                                     |
+| Skinr components              |                     | `skinrComponents.yaml`                     |                                |                                     |
+| Skinr slot categories         |                     | `skinrSlotCategories.yaml`                 |                                |                                     |
+| Skinr slot configurations     |                     | `skinrSlotConfigurations.yaml`             |                                |                                     |
+| Skinr slot names              |                     | `skinrSlotNames.yaml`                      |                                |                                     |
+| Skinr slots                   |                     | `skinrSlots.yaml`                          |                                |                                     |
+| Skinr slots to materials      |                     | `skinrSlotsToMaterials.yaml`               |                                |                                     |
+| Skinr tier thresholds         |                     | `skinrTierThresholds.yaml`                 |                                |                                     |
 | Skins                         |                     | `skins.yaml`                               |                                | `skins.json`                        |
 | Sovereignty upgrades          |                     | `sovereigntyUpgrades.yaml`                 |                                |                                     |
 | Stargate                      |                     | `mapStargates.yaml`                        | `universe/stargates.yaml`      |                                     |
 | Stars                         |                     | `mapStars.yaml`                            | `universe/stars.yaml`          |                                     |
 | Station operation             |                     | `stationOperations.yaml`                   |                                |                                     |
 | Station services              |                     | `stationServices.yaml`                     |                                |                                     |
-| Station standing restrictions |                     |                                            |                                | `stationstandingsrestrictions.json` |
-| Stations                      |                     | `pcStations.yaml`                          | `universe/stations.yaml`       |                                     |
+| Station standing restrictions |                     | `stationStandingsRestrictions.yaml`        |                                | `stationstandingsrestrictions.json` |
+| Stations                      |                     | `npcStations.yaml`                         | `universe/stations.yaml`       |                                     |
+| System dbuff emitters         |                     | `systemDbuffEmitters.yaml`                 |                                |                                     |
+| System wide effects           |                     | `systemWideEffects.yaml`                   |                                |                                     |
 | Systems                       |                     | `mapSolarSystems.yaml`                     | `universe/systems.yaml`        |                                     |
 | Tournament rule sets          |                     | `fsd/tournamentRuleSets.yaml` in old files |                                |                                     |
+| Type elements                 |                     | `typeElements.yaml`                        |                                |                                     |
+| Type lists                    |                     | `typeLists.yaml`                           |                                |                                     |
 
 * _The ESI filenames refer to the names in the ESI scrape, minus the language suffix._
 
