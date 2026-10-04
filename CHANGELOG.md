@@ -1,5 +1,32 @@
 EVE Ref Changelog
 
+## [2.81.0](https://github.com/autonomouslogic/eve-ref/compare/2.80.10...2.81.0) (2026-10-04)
+
+
+### Features
+
+* Add agent types, NPC characters, and NPC corporations to reference data ([#1121](https://github.com/autonomouslogic/eve-ref/issues/1121)) ([db8465c](https://github.com/autonomouslogic/eve-ref/commit/db8465ccbc72e4397c9489983a1300f73c4ebd04))
+* Add constellations, solar systems, and planets to reference data ([#1120](https://github.com/autonomouslogic/eve-ref/issues/1120)) ([5b143ad](https://github.com/autonomouslogic/eve-ref/commit/5b143ad1c01c1848763cc13d3e1afa02ab4d7d5b))
+* Added asteroidBelts, moons, stars, stargates, npcStations, stationOperations, and stationServices to reference data ([#1123](https://github.com/autonomouslogic/eve-ref/issues/1123)) ([c8f3bb8](https://github.com/autonomouslogic/eve-ref/commit/c8f3bb80758a6711efeff36098f7f5a9cbf1df19))
+
+
+### Bug Fixes
+
+* **ui:** Anniversary MOTD ([550944b](https://github.com/autonomouslogic/eve-ref/commit/550944b284007bed8482780a437654db400df52d))
+* **ui:** EVE Ref 9-year Anniversary giveaways ([b75975c](https://github.com/autonomouslogic/eve-ref/commit/b75975c4a5f950df600951417a496c967fee4af2))
+* **ui:** More 9-year anniversary giveaways ([3b068a2](https://github.com/autonomouslogic/eve-ref/commit/3b068a2d4f2d8a1dded64e5ddc3e7cc159c4d290))
+* **ui:** PLEX sale MOTD ([d506dec](https://github.com/autonomouslogic/eve-ref/commit/d506decbc9b0cac2208eaf6bcd72d8d20f0b38d4))
+
+
+### Documentation
+
+* Updated ref data docs ([#1122](https://github.com/autonomouslogic/eve-ref/issues/1122)) ([446f75d](https://github.com/autonomouslogic/eve-ref/commit/446f75df9bb18978d854f78e3753f749566bccd6))
+
+
+### Miscellaneous Chores
+
+* **ui:** Format ([a7b2668](https://github.com/autonomouslogic/eve-ref/commit/a7b2668af36dd49f227fe4f28d0e0ce4b6163e26))
+
 ## [2.80.10](https://github.com/autonomouslogic/eve-ref/compare/2.80.9...2.80.10) (2026-10-02)
 
 
