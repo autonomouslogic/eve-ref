@@ -15,40 +15,27 @@ import tools.jackson.databind.annotation.JsonNaming;
 @Jacksonized
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @Schema
-public class Region {
+public class Constellation {
+	@JsonProperty
+	Long constellationId;
+
 	@JsonProperty
 	Long regionId;
 
 	@JsonProperty
-	String universeId;
+	Long factionId;
 
 	@JsonProperty
 	Long wormholeClassId;
-
-	@JsonProperty
-	Long nebulaId;
-
-	@JsonProperty
-	Long nameId;
-
-	@JsonProperty
-	Long descriptionId;
-
-	@JsonProperty
-	Long factionId;
 
 	@JsonProperty
 	@Schema(description = "The key is the language code.")
 	Map<String, String> name;
 
 	@JsonProperty
-	@Schema(description = "The key is the language code.")
-	Map<String, String> description;
-
-	@JsonProperty
 	Coordinate position;
 
 	@JsonProperty
-	@Schema(description = "Computed from the solar systems in this region.")
+	@Schema(description = "Computed from the solar systems in this constellation.")
 	List<Long> solarSystemIds;
 }

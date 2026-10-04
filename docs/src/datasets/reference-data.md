@@ -20,6 +20,8 @@ Some example paths:
 * <https://ref-data.everef.net/blueprints/999>
 * <https://ref-data.everef.net/categories>
 * <https://ref-data.everef.net/categories/4>
+* <https://ref-data.everef.net/constellations>
+* <https://ref-data.everef.net/constellations/20000001>
 * <https://ref-data.everef.net/dogma_attributes>
 * <https://ref-data.everef.net/dogma_attributes/37>
 * <https://ref-data.everef.net/dogma_effects>
@@ -34,12 +36,16 @@ Some example paths:
 * <https://ref-data.everef.net/meta_groups/6>
 * <https://ref-data.everef.net/mutaplasmids>
 * <https://ref-data.everef.net/mutaplasmids/52225>
+* <https://ref-data.everef.net/planets>
+* <https://ref-data.everef.net/planets/40000002>
 * <https://ref-data.everef.net/regions>
 * <https://ref-data.everef.net/regions/10000002>
 * <https://ref-data.everef.net/schematics>
 * <https://ref-data.everef.net/schematics/65>
 * <https://ref-data.everef.net/skills>
 * <https://ref-data.everef.net/skills/3336>
+* <https://ref-data.everef.net/solar_systems>
+* <https://ref-data.everef.net/solar_systems/30000001>
 * <https://ref-data.everef.net/types>
 * <https://ref-data.everef.net/types/645>
 * <https://ref-data.everef.net/units>
@@ -72,7 +78,7 @@ This table show the available data and where to get it.
 | Character attributes          |                     | `characterAttributes.yaml`                 |                                |                                     |
 | Clone states                  |                     |                                            |                                | `clonestates.json`                  |
 | Compressible types            |                     |                                            |                                | `compressibletypes.json`            |
-| Constellations                |                     | `mapConstellations.yaml`                   | `universe/constellations.yaml` |                                     |
+| Constellations                | `/constellations`   | `mapConstellations.yaml`                   | `universe/constellations.yaml` |                                     |
 | Contraband types              |                     | `contrabandTypes.yaml`                     |                                |                                     |
 | Control tower resources       |                     | `controlTowerResources.yaml`               |                                |                                     |
 | Corporation activities        |                     | `corporationActivities.yaml`               |                                |                                     |
@@ -118,7 +124,7 @@ This table show the available data and where to get it.
 | Opportunity tasks             |                     |                                            | `opportunities/tasks.yaml`     |                                     |
 | Planet resources              |                     | `planetResources.yaml`                     |                                |                                     |
 | Planetary schematics          | `/schematics`       | `planetSchematics.yaml`                    | `universe/schematics.yaml`     |                                     |
-| Planets                       |                     | `mapPlanets.yaml`                          | `universe/planets.yaml`        |                                     |
+| Planets                       | `/planets`          | `mapPlanets.yaml`                          | `universe/planets.yaml` \*\*    |                                     |
 | Races                         |                     | `races.yaml`                               | `universe/races.yaml`          |                                     |
 | Regions                       | `/regions`          | `mapRegions.yaml`                          | `universe/regions.yaml`        |                                     |
 | Reprocessing                  | `/types`            | `typeMaterials.yaml`                       |                                | `typematerials.json`                |
@@ -137,10 +143,11 @@ This table show the available data and where to get it.
 | Station services              |                     | `stationServices.yaml`                     |                                |                                     |
 | Station standing restrictions |                     |                                            |                                | `stationstandingsrestrictions.json` |
 | Stations                      |                     | `pcStations.yaml`                          | `universe/stations.yaml`       |                                     |
-| Systems                       |                     | `mapSolarSystems.yaml`                     | `universe/systems.yaml`        |                                     |
+| Systems                       | `/solar_systems`    | `mapSolarSystems.yaml`                     | `universe/systems.yaml`        |                                     |
 | Tournament rule sets          |                     | `fsd/tournamentRuleSets.yaml` in old files |                                |                                     |
 
 * _The ESI filenames refer to the names in the ESI scrape, minus the language suffix._
+* _\*\* ESI only exposes planets individually (`/universe/planets/{planet_id}/`), with no bulk list endpoint, so the Reference Data planets are sourced from the SDE only._
 
 ## Data structure
 

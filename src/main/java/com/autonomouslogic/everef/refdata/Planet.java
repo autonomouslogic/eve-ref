@@ -2,6 +2,7 @@ package com.autonomouslogic.everef.refdata;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import lombok.Builder;
@@ -15,40 +16,44 @@ import tools.jackson.databind.annotation.JsonNaming;
 @Jacksonized
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @Schema
-public class Region {
+public class Planet {
 	@JsonProperty
-	Long regionId;
+	Long planetId;
 
 	@JsonProperty
-	String universeId;
+	Long solarSystemId;
 
 	@JsonProperty
-	Long wormholeClassId;
+	Long typeId;
 
 	@JsonProperty
-	Long nebulaId;
+	Long orbitId;
 
 	@JsonProperty
-	Long nameId;
+	Long celestialIndex;
 
 	@JsonProperty
-	Long descriptionId;
-
-	@JsonProperty
-	Long factionId;
-
-	@JsonProperty
-	@Schema(description = "The key is the language code.")
-	Map<String, String> name;
-
-	@JsonProperty
-	@Schema(description = "The key is the language code.")
-	Map<String, String> description;
+	@Schema(description = "The key is the language code. Only present on planets with a renamed, unique name.")
+	Map<String, String> uniqueName;
 
 	@JsonProperty
 	Coordinate position;
 
 	@JsonProperty
-	@Schema(description = "Computed from the solar systems in this region.")
-	List<Long> solarSystemIds;
+	BigDecimal radius;
+
+	@JsonProperty
+	List<Long> asteroidBeltIds;
+
+	@JsonProperty
+	List<Long> moonIds;
+
+	@JsonProperty
+	List<Long> npcStationIds;
+
+	@JsonProperty
+	PlanetAttributes attributes;
+
+	@JsonProperty
+	PlanetStatistics statistics;
 }

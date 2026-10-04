@@ -1,0 +1,34 @@
+{
+  "border" : true,
+  "constellation_id" : 20000001,
+  "hub" : true,
+  "international" : true,
+  "luminosity" : 0.01575,
+  "name" : {
+    "de" : "Tanoo",
+    "en" : "Tanoo",
+    "es" : "Tanoo",
+    "fr" : "Tanoo",
+    "ja" : "タヌー",
+    "ko" : "타누",
+    "ru" : "Tanoo",
+    "zh" : "坦欧"
+  },
+  "position" : {
+    "x" : -88510792599980580,
+    "y" : 42369443966878880,
+    "z" : -44513525346479660
+  },
+  "position2_d" : {
+    "x" : 69851821507953890,
+    "y" : -71906286846423120
+  },
+  "radius" : 1323338301440.0,
+  "region_id" : 10000001,
+  "regional" : true,
+  "security_class" : "B",
+  "security_status" : 0.858324,
+  "star_id" : 40000001,
+  "stargate_ids" : [ 50000056, 50000057, 50000058 ],
+  "solar_system_id" : 30000001
+}

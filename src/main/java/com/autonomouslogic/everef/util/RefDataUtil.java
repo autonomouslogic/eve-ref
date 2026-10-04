@@ -12,6 +12,7 @@ import com.autonomouslogic.everef.model.refdata.RefDataConfig;
 import com.autonomouslogic.everef.model.refdata.RefTypeConfig;
 import com.autonomouslogic.everef.openapi.refdata.api.RefdataApi;
 import com.autonomouslogic.everef.refdata.Blueprint;
+import com.autonomouslogic.everef.refdata.Constellation;
 import com.autonomouslogic.everef.refdata.DogmaAttribute;
 import com.autonomouslogic.everef.refdata.DogmaEffect;
 import com.autonomouslogic.everef.refdata.Icon;
@@ -21,10 +22,12 @@ import com.autonomouslogic.everef.refdata.InventoryType;
 import com.autonomouslogic.everef.refdata.MarketGroup;
 import com.autonomouslogic.everef.refdata.MetaGroup;
 import com.autonomouslogic.everef.refdata.Mutaplasmid;
+import com.autonomouslogic.everef.refdata.Planet;
 import com.autonomouslogic.everef.refdata.RefDataMeta;
 import com.autonomouslogic.everef.refdata.Region;
 import com.autonomouslogic.everef.refdata.Schematic;
 import com.autonomouslogic.everef.refdata.Skill;
+import com.autonomouslogic.everef.refdata.SolarSystem;
 import com.autonomouslogic.everef.refdata.Unit;
 import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.url.UrlParser;
@@ -291,6 +294,15 @@ public class RefDataUtil {
 									break;
 								case "regions":
 									putToLoadedRefData(refEntry, Region.class, loaded::putRegion);
+									break;
+								case "constellations":
+									putToLoadedRefData(refEntry, Constellation.class, loaded::putConstellation);
+									break;
+								case "solar_systems":
+									putToLoadedRefData(refEntry, SolarSystem.class, loaded::putSolarSystem);
+									break;
+								case "planets":
+									putToLoadedRefData(refEntry, Planet.class, loaded::putPlanet);
 									break;
 								case "schematics":
 									putToLoadedRefData(refEntry, Schematic.class, loaded::putSchematic);

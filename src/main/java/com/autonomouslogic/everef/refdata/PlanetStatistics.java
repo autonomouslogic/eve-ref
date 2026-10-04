@@ -2,8 +2,7 @@ package com.autonomouslogic.everef.refdata;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
-import java.util.List;
-import java.util.Map;
+import java.math.BigDecimal;
 import lombok.Builder;
 import lombok.Value;
 import lombok.extern.jackson.Jacksonized;
@@ -15,40 +14,43 @@ import tools.jackson.databind.annotation.JsonNaming;
 @Jacksonized
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @Schema
-public class Region {
+public class PlanetStatistics {
 	@JsonProperty
-	Long regionId;
+	BigDecimal density;
 
 	@JsonProperty
-	String universeId;
+	BigDecimal eccentricity;
 
 	@JsonProperty
-	Long wormholeClassId;
+	BigDecimal escapeVelocity;
 
 	@JsonProperty
-	Long nebulaId;
+	Boolean locked;
 
 	@JsonProperty
-	Long nameId;
+	BigDecimal massDust;
 
 	@JsonProperty
-	Long descriptionId;
+	BigDecimal massGas;
 
 	@JsonProperty
-	Long factionId;
+	BigDecimal orbitPeriod;
 
 	@JsonProperty
-	@Schema(description = "The key is the language code.")
-	Map<String, String> name;
+	BigDecimal orbitRadius;
 
 	@JsonProperty
-	@Schema(description = "The key is the language code.")
-	Map<String, String> description;
+	BigDecimal pressure;
 
 	@JsonProperty
-	Coordinate position;
+	BigDecimal rotationRate;
 
 	@JsonProperty
-	@Schema(description = "Computed from the solar systems in this region.")
-	List<Long> solarSystemIds;
+	String spectralClass;
+
+	@JsonProperty
+	BigDecimal surfaceGravity;
+
+	@JsonProperty
+	BigDecimal temperature;
 }

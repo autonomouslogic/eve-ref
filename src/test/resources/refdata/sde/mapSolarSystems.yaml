@@ -1,0 +1,67 @@
+---
+"30000001":
+  border: true
+  constellationID: 20000001
+  hub: true
+  international: true
+  luminosity: 0.01575
+  name:
+    de: "Tanoo"
+    en: "Tanoo"
+    es: "Tanoo"
+    fr: "Tanoo"
+    ja: "タヌー"
+    ko: "타누"
+    ru: "Tanoo"
+    zh: "坦欧"
+  planetIDs:
+  - 40000002
+  - 40000005
+  - 40000007
+  - 40000008
+  - 40000011
+  - 40000017
+  position:
+    x: -88510792599980580
+    "y": 42369443966878880
+    z: -44513525346479660
+  position2D:
+    x: 69851821507953890
+    "y": -71906286846423120
+  radius: 1323338301440.0
+  regionID: 10000001
+  regional: true
+  securityClass: "B"
+  securityStatus: 0.858324
+  starID: 40000001
+  stargateIDs:
+  - 50000056
+  - 50000057
+  - 50000058
+"31000007":
+  constellationID: 21000311
+  name:
+    de: "J105443"
+    en: "J105443"
+    es: "J105443"
+    fr: "J105443"
+    ja: "J105443"
+    ko: "J105443"
+    ru: "J105443"
+    zh: "J105443"
+  planetIDs:
+  - 40350752
+  - 40350753
+  - 40350754
+  - 40350756
+  - 40350764
+  - 40350779
+  - 40350799
+  position:
+    x: 7644843937233082000
+    "y": -5747794381266184.0
+    z: -9482937421590790000
+  radius: 3658837393408.0
+  regionID: 11000001
+  securityStatus: -0.99
+  starID: 40350751
