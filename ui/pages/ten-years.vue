@@ -35,11 +35,21 @@ const topDonors = [
 const donatedSoFar = topDonors.reduce((sum, donor) => sum + donor.amount, 0);
 const donationGoal = 300e9;
 
+let moneyPool = 150e9;
+const fiveBill = 1;
+moneyPool -= fiveBill * 5e9;
+const twoBill = Math.floor(moneyPool / 2 / 2e9);
+moneyPool -= twoBill * 2e9;
+const oneBill = Math.floor(moneyPool / 2 / 1e9);
+moneyPool -= oneBill * 1e9;
+const fiveHundredMill = Math.floor(moneyPool / 500e6);
+
 const prizes = [
-	{name: "Ten Years of Omega", description: "One month Omega time each", winners: "120 winners"},
-	{name: "Grand Prize", description: "10 billion ISK", winners: "1 winner"},
-	{name: "Second Prize", description: "1 billion ISK", winners: "10 winners"},
-	{name: "Third Prize", description: "100 million ISK", winners: "50 winners"},
+	{name: "Ten Years of Omega", description: "5x 1-year Omega codes + 60x 1-month Omega codes", winners: "65 winners"},
+	{name: "Grand Prize", description: "5 billion ISK", winners: "1 winner"},
+	{name: "Second Prizes", description: "2 billion ISK", winners: `${twoBill} winners`},
+	{name: "Third Prizes", description: "1 billion ISK", winners: `${oneBill} winners`},
+	{name: "Runner Ups", description: "500 million ISK", winners: `${fiveHundredMill} winners`},
 ];
 
 const now = ref(DateTime.utc());
@@ -205,24 +215,6 @@ const donationMarks = computed(() => [0, donationGoal / 3, donationGoal * 2 / 3,
 .card {
 	background-color: var(--card-background-color);
 	@apply p-6;
-}
-
-.donate-button {
-	background-color: #e8567e;
-	color: white;
-}
-
-.donate-button:hover {
-	background-color: #d6456d;
-}
-
-.discord-button {
-	background-color: #5865f2;
-	color: white;
-}
-
-.discord-button:hover {
-	background-color: #4752c4;
 }
 
 .rank-badge {
