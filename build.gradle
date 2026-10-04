@@ -161,7 +161,6 @@ task referenceDataClientGenerate(type: org.openapitools.generator.gradle.plugin.
 			supportUrlQuery: "false"
 	]
 	schemaMappings = [
-			"Agent": "com.autonomouslogic.everef.refdata.Agent",
 			"AgentType": "com.autonomouslogic.everef.refdata.AgentType",
 			"Bundle": "com.autonomouslogic.everef.refdata.Bundle",
 			"Blueprint": "com.autonomouslogic.everef.refdata.Blueprint",

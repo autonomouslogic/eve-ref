@@ -1,7 +1,6 @@
 apis/RefdataApi.ts
 apis/index.ts
 index.ts
-models/Agent.ts
 models/AgentType.ts
 models/Blueprint.ts
 models/BlueprintActivity.ts

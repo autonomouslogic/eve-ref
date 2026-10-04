@@ -52,42 +52,6 @@ paths:
           description: The agent type.
       tags:
       - refdata
-  /agents:
-    get:
-      description: Get all agent IDs.
-      operationId: getAllAgents
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: integer
-                  format: int32
-          description: Agent IDs.
-      tags:
-      - refdata
-  /agents/{agent_id}:
-    get:
-      description: Get an agent.
-      operationId: getAgent
-      parameters:
-      - in: path
-        name: agent_id
-        required: true
-        schema:
-          type: integer
-          format: int64
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Agent"
-          description: The agent.
-      tags:
-      - refdata
   /blueprints:
     get:
       description: Get all blueprint IDs.
@@ -927,63 +891,6 @@ paths:
       - refdata
 components:
   schemas:
-    Agent:
-      type: object
-      properties:
-        agent_id:
-          type: integer
-          format: int64
-          description: "Same ID as the underlying NPC character, see /npc_characters."
-        agent_type_id:
-          type: integer
-          format: int64
-        ancestry_id:
-          type: integer
-          format: int64
-        bloodline_id:
-          type: integer
-          format: int64
-        career_id:
-          type: integer
-          format: int64
-        corporation_id:
-          type: integer
-          format: int64
-        description:
-          type: string
-        division_id:
-          type: integer
-          format: int64
-        is_locator:
-          type: boolean
-        level:
-          type: integer
-          format: int64
-        location_id:
-          type: integer
-          format: int64
-        name:
-          type: object
-          additionalProperties:
-            type: string
-            description: The key is the language code.
-          description: The key is the language code.
-        race_id:
-          type: integer
-          format: int64
-        school_id:
-          type: integer
-          format: int64
-        skill_type_ids:
-          type: array
-          items:
-            type: integer
-            format: int64
-        speciality_id:
-          type: integer
-          format: int64
-        start_date:
-          type: string
     AgentType:
       type: object
       properties:
@@ -1920,8 +1827,7 @@ components:
           type: boolean
     NpcCharacterAgentInfo:
       type: object
-      description: Only present if this character is also an agent. See /agents for
-        a flattened view.
+      description: Only present if this character is also an agent.
       properties:
         agent_type_id:
           type: integer

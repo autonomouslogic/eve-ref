@@ -15,7 +15,6 @@
 
 import * as runtime from '../runtime';
 import type {
-  Agent,
   AgentType,
   Blueprint,
   Bundle,
@@ -41,8 +40,6 @@ import type {
   Unit,
 } from '../models';
 import {
-    AgentFromJSON,
-    AgentToJSON,
     AgentTypeFromJSON,
     AgentTypeToJSON,
     BlueprintFromJSON,
@@ -90,10 +87,6 @@ import {
     UnitFromJSON,
     UnitToJSON,
 } from '../models';
-
-export interface GetAgentRequest {
-    agentId: number;
-}
 
 export interface GetAgentTypeRequest {
     agentTypeId: number;
@@ -201,36 +194,6 @@ export interface GetUnitRequest {
 export class RefdataApi extends runtime.BaseAPI {
 
     /**
-     * Get an agent.
-     */
-    async getAgentRaw(requestParameters: GetAgentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Agent>> {
-        if (requestParameters.agentId === null || requestParameters.agentId === undefined) {
-            throw new runtime.RequiredError('agentId','Required parameter requestParameters.agentId was null or undefined when calling getAgent.');
-        }
-
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        const response = await this.request({
-            path: `/agents/{agent_id}`.replace(`{${"agent_id"}}`, encodeURIComponent(String(requestParameters.agentId))),
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse(response, (jsonValue) => AgentFromJSON(jsonValue));
-    }
-
-    /**
-     * Get an agent.
-     */
-    async getAgent(requestParameters: GetAgentRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Agent> {
-        const response = await this.getAgentRaw(requestParameters, initOverrides);
-        return await response.value();
-    }
-
-    /**
      * Get an agent type.
      */
     async getAgentTypeRaw(requestParameters: GetAgentTypeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AgentType>> {
@@ -283,32 +246,6 @@ export class RefdataApi extends runtime.BaseAPI {
      */
     async getAllAgentTypes(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<number>> {
         const response = await this.getAllAgentTypesRaw(initOverrides);
-        return await response.value();
-    }
-
-    /**
-     * Get all agent IDs.
-     */
-    async getAllAgentsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<number>>> {
-        const queryParameters: any = {};
-
-        const headerParameters: runtime.HTTPHeaders = {};
-
-        const response = await this.request({
-            path: `/agents`,
-            method: 'GET',
-            headers: headerParameters,
-            query: queryParameters,
-        }, initOverrides);
-
-        return new runtime.JSONApiResponse<any>(response);
-    }
-
-    /**
-     * Get all agent IDs.
-     */
-    async getAllAgents(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<number>> {
-        const response = await this.getAllAgentsRaw(initOverrides);
         return await response.value();
     }
 

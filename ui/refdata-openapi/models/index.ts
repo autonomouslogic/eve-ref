@@ -1,6 +1,5 @@
 /* tslint:disable */
 /* eslint-disable */
-export * from './Agent';
 export * from './AgentType';
 export * from './Blueprint';
 export * from './BlueprintActivity';

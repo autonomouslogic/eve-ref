@@ -11,7 +11,6 @@ import com.autonomouslogic.everef.model.ReferenceEntry;
 import com.autonomouslogic.everef.model.refdata.RefDataConfig;
 import com.autonomouslogic.everef.model.refdata.RefTypeConfig;
 import com.autonomouslogic.everef.openapi.refdata.api.RefdataApi;
-import com.autonomouslogic.everef.refdata.Agent;
 import com.autonomouslogic.everef.refdata.AgentType;
 import com.autonomouslogic.everef.refdata.Blueprint;
 import com.autonomouslogic.everef.refdata.Constellation;
@@ -324,9 +323,6 @@ public class RefDataUtil {
 									break;
 								case "npc_characters":
 									putToLoadedRefData(refEntry, NpcCharacter.class, loaded::putNpcCharacter);
-									break;
-								case "agents":
-									putToLoadedRefData(refEntry, Agent.class, loaded::putAgent);
 									break;
 								case "meta":
 								case "type_materials":

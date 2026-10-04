@@ -14,7 +14,7 @@
 
 import { exists, mapValues } from '../runtime';
 /**
- * Only present if this character is also an agent. See /agents for a flattened view.
+ * Only present if this character is also an agent.
  * @export
  * @interface NpcCharacterAgentInfo
  */

@@ -1,7 +1,6 @@
 package com.autonomouslogic.everef.data;
 
 import com.autonomouslogic.everef.mvstore.MVStoreUtil;
-import com.autonomouslogic.everef.refdata.Agent;
 import com.autonomouslogic.everef.refdata.AgentType;
 import com.autonomouslogic.everef.refdata.Blueprint;
 import com.autonomouslogic.everef.refdata.Constellation;
@@ -66,7 +65,6 @@ public class LoadedRefData {
 	private final Map<Long, byte[]> npcCorporationDivisions;
 	private final Map<Long, byte[]> npcCorporations;
 	private final Map<Long, byte[]> npcCharacters;
-	private final Map<Long, byte[]> agents;
 
 	@Inject
 	protected LoadedRefData(MVStoreUtil mvStoreUtil) {
@@ -97,7 +95,6 @@ public class LoadedRefData {
 		npcCorporationDivisions = mvStore.openMap("npcCorporationDivisions");
 		npcCorporations = mvStore.openMap("npcCorporations");
 		npcCharacters = mvStore.openMap("npcCharacters");
-		agents = mvStore.openMap("agents");
 	}
 
 	// === wrapper
@@ -209,10 +206,6 @@ public class LoadedRefData {
 		return get(id, npcCharacters, NpcCharacter.class);
 	}
 
-	public Agent getAgent(long id) {
-		return get(id, agents, Agent.class);
-	}
-
 	// === puts
 
 	public void putCategory(long id, InventoryCategory item) {
@@ -299,10 +292,6 @@ public class LoadedRefData {
 		put(id, item, npcCharacters);
 	}
 
-	public void putAgent(long id, Agent item) {
-		put(id, item, agents);
-	}
-
 	// === streams
 
 	public Stream<Pair<Long, InventoryCategory>> getAllCategories() {
@@ -387,10 +376,6 @@ public class LoadedRefData {
 
 	public Stream<Pair<Long, NpcCharacter>> getAllNpcCharacters() {
 		return stream(npcCharacters, this::getNpcCharacter);
-	}
-
-	public Stream<Pair<Long, Agent>> getAllAgents() {
-		return stream(agents, this::getAgent);
 	}
 
 	// === util

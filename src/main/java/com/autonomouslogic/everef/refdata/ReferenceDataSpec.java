@@ -476,26 +476,6 @@ public interface ReferenceDataSpec {
 	NpcCharacter getNpcCharacter(@PathParam("character_id") long characterId);
 
 	@GET
-	@Path("/agents")
-	@Operation(description = "Get all agent IDs.")
-	@ApiResponse(
-			responseCode = "200",
-			description = "Agent IDs.",
-			useReturnTypeSchema = true,
-			content = @Content(mediaType = "application/json"))
-	List<Integer> getAllAgents();
-
-	@GET
-	@Path("/agents/{agent_id}")
-	@Operation(description = "Get an agent.")
-	@ApiResponse(
-			responseCode = "200",
-			description = "The agent.",
-			useReturnTypeSchema = true,
-			content = @Content(mediaType = "application/json"))
-	Agent getAgent(@PathParam("agent_id") long agentId);
-
-	@GET
 	@Path("/constellations")
 	@Operation(description = "Get all constellation IDs.")
 	@ApiResponse(

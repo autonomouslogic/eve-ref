@@ -66,6 +66,6 @@ public class NpcCharacter {
 	Boolean uniqueName;
 
 	@JsonProperty
-	@Schema(description = "Only present if this character is also an agent. See /agents for a flattened view.")
+	@Schema(description = "Only present if this character is also an agent.")
 	NpcCharacterAgentInfo agent;
 }

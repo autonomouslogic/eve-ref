@@ -579,11 +579,3 @@ npcCharacters:
     ids:
       - 3008416
       - 3003869
-
-agents:
-  idField: agent_id
-  model: Agent
-  test:
-    filePrefix: agent
-    ids:
-      - 3008416

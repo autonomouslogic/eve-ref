@@ -6,7 +6,6 @@ import com.autonomouslogic.commons.concurrent.VirtualThreads;
 import com.autonomouslogic.everef.cli.Command;
 import com.autonomouslogic.everef.cli.refdata.esi.EsiLoader;
 import com.autonomouslogic.everef.cli.refdata.hoboleaks.HoboleaksLoader;
-import com.autonomouslogic.everef.cli.refdata.post.AgentDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.BlueprintDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.CanFitDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.CategoryIdDecorator;
@@ -169,9 +168,6 @@ public class BuildRefData implements Command {
 	protected UniverseIdDecorator universeIdDecorator;
 
 	@Inject
-	protected AgentDecorator agentDecorator;
-
-	@Inject
 	protected ConstellationSolarSystemIdsDecorator constellationSolarSystemIdsDecorator;
 
 	@Inject
@@ -232,7 +228,6 @@ public class BuildRefData implements Command {
 				typeUsedInBlueprintsDecorator,
 				industryModifierSourcesDecorator,
 				universeIdDecorator,
-				agentDecorator,
 				constellationSolarSystemIdsDecorator,
 				regionSolarSystemIdsDecorator,
 				regionConstellationIdsDecorator);
