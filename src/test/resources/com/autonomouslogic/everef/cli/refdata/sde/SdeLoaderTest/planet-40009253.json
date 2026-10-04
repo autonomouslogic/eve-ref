@@ -1,0 +1,46 @@
+{
+  "attributes" : {
+    "height_map1" : 3841,
+    "height_map2" : 3842,
+    "population" : false,
+    "shader_preset" : 4295
+  },
+  "celestial_index" : 1,
+  "moon_ids" : [ 40009254 ],
+  "npc_station_ids" : [ 60000688 ],
+  "orbit_id" : 40009252,
+  "position" : {
+    "x" : 75151448541.0,
+    "y" : -2168650545.0,
+    "z" : 79239940043.0
+  },
+  "radius" : 2980000,
+  "solar_system_id" : 30000145,
+  "statistics" : {
+    "density" : 5629.770996,
+    "eccentricity" : 0.005016,
+    "escape_velocity" : 5287.168457,
+    "locked" : false,
+    "mass_dust" : 624062575385631000000000,
+    "mass_gas" : 2475730013257728.0,
+    "orbit_period" : 173032000.0,
+    "orbit_radius" : 109230997504.0,
+    "pressure" : 0.005072,
+    "rotation_rate" : 113872.0,
+    "spectral_class" : "0.0",
+    "surface_gravity" : 4.690294,
+    "temperature" : 354.09668
+  },
+  "type_id" : 2014,
+  "unique_name" : {
+    "de" : "New Caldari I (Matigu)",
+    "en" : "New Caldari I (Matigu)",
+    "es" : "New Caldari I (Matigu)",
+    "fr" : "New Caldari I (Matigu)",
+    "ja" : "ニューカルダリI（マティグ）",
+    "ko" : "뉴 칼다리 I (마티구)",
+    "ru" : "New Caldari I (Matigu)",
+    "zh" : "新加达里 I (玛提古)"
+  },
+  "planet_id" : 40009253
+}

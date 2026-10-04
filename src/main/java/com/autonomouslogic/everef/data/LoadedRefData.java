@@ -2,6 +2,7 @@ package com.autonomouslogic.everef.data;
 
 import com.autonomouslogic.everef.mvstore.MVStoreUtil;
 import com.autonomouslogic.everef.refdata.Blueprint;
+import com.autonomouslogic.everef.refdata.Constellation;
 import com.autonomouslogic.everef.refdata.DogmaAttribute;
 import com.autonomouslogic.everef.refdata.DogmaEffect;
 import com.autonomouslogic.everef.refdata.Icon;
@@ -11,9 +12,11 @@ import com.autonomouslogic.everef.refdata.InventoryType;
 import com.autonomouslogic.everef.refdata.MarketGroup;
 import com.autonomouslogic.everef.refdata.MetaGroup;
 import com.autonomouslogic.everef.refdata.Mutaplasmid;
+import com.autonomouslogic.everef.refdata.Planet;
 import com.autonomouslogic.everef.refdata.Region;
 import com.autonomouslogic.everef.refdata.Schematic;
 import com.autonomouslogic.everef.refdata.Skill;
+import com.autonomouslogic.everef.refdata.SolarSystem;
 import com.autonomouslogic.everef.refdata.Unit;
 import jakarta.inject.Inject;
 import java.io.File;
@@ -50,6 +53,9 @@ public class LoadedRefData {
 	private final Map<Long, byte[]> blueprints;
 	private final Map<Long, byte[]> icons;
 	private final Map<Long, byte[]> regions;
+	private final Map<Long, byte[]> constellations;
+	private final Map<Long, byte[]> solarSystems;
+	private final Map<Long, byte[]> planets;
 	private final Map<Long, byte[]> schematics;
 
 	@Inject
@@ -73,6 +79,9 @@ public class LoadedRefData {
 		blueprints = mvStore.openMap("blueprints");
 		icons = mvStore.openMap("icons");
 		regions = mvStore.openMap("regions");
+		constellations = mvStore.openMap("constellations");
+		solarSystems = mvStore.openMap("solarSystems");
+		planets = mvStore.openMap("planets");
 		schematics = mvStore.openMap("schematics");
 	}
 
@@ -153,6 +162,18 @@ public class LoadedRefData {
 		return get(id, regions, Region.class);
 	}
 
+	public Constellation getConstellation(long id) {
+		return get(id, constellations, Constellation.class);
+	}
+
+	public SolarSystem getSolarSystem(long id) {
+		return get(id, solarSystems, SolarSystem.class);
+	}
+
+	public Planet getPlanet(long id) {
+		return get(id, planets, Planet.class);
+	}
+
 	public Schematic getSchematic(long id) {
 		return get(id, schematics, Schematic.class);
 	}
@@ -211,6 +232,18 @@ public class LoadedRefData {
 		put(id, item, regions);
 	}
 
+	public void putConstellation(long id, Constellation item) {
+		put(id, item, constellations);
+	}
+
+	public void putSolarSystem(long id, SolarSystem item) {
+		put(id, item, solarSystems);
+	}
+
+	public void putPlanet(long id, Planet item) {
+		put(id, item, planets);
+	}
+
 	public void putSchematic(long id, Schematic item) {
 		put(id, item, schematics);
 	}
@@ -267,6 +300,18 @@ public class LoadedRefData {
 
 	public Stream<Pair<Long, Region>> getAllRegions() {
 		return stream(regions, this::getRegion);
+	}
+
+	public Stream<Pair<Long, Constellation>> getAllConstellations() {
+		return stream(constellations, this::getConstellation);
+	}
+
+	public Stream<Pair<Long, SolarSystem>> getAllSolarSystems() {
+		return stream(solarSystems, this::getSolarSystem);
+	}
+
+	public Stream<Pair<Long, Planet>> getAllPlanets() {
+		return stream(planets, this::getPlanet);
 	}
 
 	public Stream<Pair<Long, Schematic>> getAllSchematics() {

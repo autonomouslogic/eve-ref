@@ -1,0 +1,36 @@
+{
+  "asteroid_belt_ids" : [ 40000003 ],
+  "attributes" : {
+    "height_map1" : 3842,
+    "height_map2" : 3843,
+    "population" : false,
+    "shader_preset" : 4461
+  },
+  "celestial_index" : 1,
+  "moon_ids" : [ 40000004 ],
+  "orbit_id" : 40000001,
+  "position" : {
+    "x" : 161891117336.0,
+    "y" : 21288951986.0,
+    "z" : -73529712226.0
+  },
+  "radius" : 5060000,
+  "solar_system_id" : 30000001,
+  "statistics" : {
+    "density" : 5930.4375,
+    "eccentricity" : 0.063542,
+    "escape_velocity" : 9214.152344,
+    "locked" : false,
+    "mass_dust" : 3218302846138828500000000,
+    "mass_gas" : 175049999262941200,
+    "orbit_period" : 348324992.0,
+    "orbit_radius" : 179077005312.0,
+    "pressure" : 0.201226,
+    "rotation_rate" : 89532.5,
+    "spectral_class" : "0.0",
+    "surface_gravity" : 8.389388,
+    "temperature" : 289.362122
+  },
+  "type_id" : 11,
+  "planet_id" : 40000002
+}

@@ -1,0 +1,21 @@
+{
+  "faction_id" : 500007,
+  "name" : {
+    "de" : "San Matar",
+    "en" : "San Matar",
+    "es" : "San Matar",
+    "fr" : "San Matar",
+    "ja" : "サンマター",
+    "ko" : "산마타르",
+    "ru" : "San Matar",
+    "zh" : "姗玛塔尔"
+  },
+  "position" : {
+    "x" : -94046559700991340,
+    "y" : 49520153153798850,
+    "z" : -42738731818401970
+  },
+  "region_id" : 10000001,
+  "wormhole_class_id" : 7,
+  "constellation_id" : 20000001
+}

@@ -1,0 +1,76 @@
+---
+"40000002":
+  asteroidBeltIDs:
+  - 40000003
+  attributes:
+    heightMap1: 3842
+    heightMap2: 3843
+    population: false
+    shaderPreset: 4461
+  celestialIndex: 1
+  moonIDs:
+  - 40000004
+  orbitID: 40000001
+  position:
+    x: 161891117336.0
+    "y": 21288951986.0
+    z: -73529712226.0
+  radius: 5060000
+  solarSystemID: 30000001
+  statistics:
+    density: 5930.4375
+    eccentricity: 0.063542
+    escapeVelocity: 9214.152344
+    locked: false
+    massDust: 3218302846138828500000000
+    massGas: 175049999262941200
+    orbitPeriod: 348324992.0
+    orbitRadius: 179077005312.0
+    pressure: 0.201226
+    rotationRate: 89532.5
+    spectralClass: "0.0"
+    surfaceGravity: 8.389388
+    temperature: 289.362122
+  typeID: 11
+"40009253":
+  attributes:
+    heightMap1: 3841
+    heightMap2: 3842
+    population: false
+    shaderPreset: 4295
+  celestialIndex: 1
+  moonIDs:
+  - 40009254
+  npcStationIDs:
+  - 60000688
+  orbitID: 40009252
+  position:
+    x: 75151448541.0
+    "y": -2168650545.0
+    z: 79239940043.0
+  radius: 2980000
+  solarSystemID: 30000145
+  statistics:
+    density: 5629.770996
+    eccentricity: 0.005016
+    escapeVelocity: 5287.168457
+    locked: false
+    massDust: 624062575385631000000000
+    massGas: 2475730013257728.0
+    orbitPeriod: 173032000.0
+    orbitRadius: 109230997504.0
+    pressure: 0.005072
+    rotationRate: 113872.0
+    spectralClass: "0.0"
+    surfaceGravity: 4.690294
+    temperature: 354.09668
+  typeID: 2014
+  uniqueName:
+    de: "New Caldari I (Matigu)"
+    en: "New Caldari I (Matigu)"
+    es: "New Caldari I (Matigu)"
+    fr: "New Caldari\_I (Matigu)"
+    ja: "ニューカルダリI（マティグ）"
+    ko: "뉴 칼다리 I (마티구)"
+    ru: "New Caldari I (Matigu)"
+    zh: "新加达里 I (玛提古)"

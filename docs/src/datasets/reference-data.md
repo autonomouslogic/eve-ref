@@ -20,6 +20,8 @@ Some example paths:
 * <https://ref-data.everef.net/blueprints/999>
 * <https://ref-data.everef.net/categories>
 * <https://ref-data.everef.net/categories/4>
+* <https://ref-data.everef.net/constellations>
+* <https://ref-data.everef.net/constellations/20000001>
 * <https://ref-data.everef.net/dogma_attributes>
 * <https://ref-data.everef.net/dogma_attributes/37>
 * <https://ref-data.everef.net/dogma_effects>
@@ -34,12 +36,16 @@ Some example paths:
 * <https://ref-data.everef.net/meta_groups/6>
 * <https://ref-data.everef.net/mutaplasmids>
 * <https://ref-data.everef.net/mutaplasmids/52225>
+* <https://ref-data.everef.net/planets>
+* <https://ref-data.everef.net/planets/40000002>
 * <https://ref-data.everef.net/regions>
 * <https://ref-data.everef.net/regions/10000002>
 * <https://ref-data.everef.net/schematics>
 * <https://ref-data.everef.net/schematics/65>
 * <https://ref-data.everef.net/skills>
 * <https://ref-data.everef.net/skills/3336>
+* <https://ref-data.everef.net/solar_systems>
+* <https://ref-data.everef.net/solar_systems/30000001>
 * <https://ref-data.everef.net/types>
 * <https://ref-data.everef.net/types/645>
 * <https://ref-data.everef.net/units>
@@ -75,7 +81,7 @@ This table show the available data and where to get it.
 | Character titles              |                     | `characterTitles.jsonl`                     |                                |                                     |
 | Clone grades                  |                     | `cloneGrades.jsonl`                         |                                | `clonestates.json`                  |
 | Compressible types            |                     | `compressibleTypes.jsonl`                   |                                | `compressibletypes.json`            |
-| Constellations                |                     | `mapConstellations.jsonl`                   | `universe/constellations.yaml` |                                     |
+| Constellations                | `/constellations`   | `mapConstellations.jsonl`                   | `universe/constellations.yaml` |                                     |
 | Contraband types              |                     | `contrabandTypes.jsonl`                     |                                |                                     |
 | Control tower resources       |                     | `controlTowerResources.jsonl`               |                                |                                     |
 | Corporation activities        |                     | `corporationActivities.jsonl`               |                                |                                     |
@@ -135,7 +141,7 @@ This table show the available data and where to get it.
 | Opportunity tasks             |                     |                                             | `opportunities/tasks.yaml`     |                                     |
 | Planet resources              |                     | `planetResources.jsonl`                     |                                |                                     |
 | Planetary schematics          | `/schematics`       | `planetSchematics.jsonl`                    | `universe/schematics.yaml`     |                                     |
-| Planets                       |                     | `mapPlanets.jsonl`                          | `universe/planets.yaml`        |                                     |
+| Planets                       | `/planets`          | `mapPlanets.jsonl`                          | `universe/planets.yaml`        |                                     |
 | Proximity traps               |                     | `proximityTrap.jsonl`                       |                                |                                     |
 | Races                         |                     | `races.jsonl`                               | `universe/races.yaml`          |                                     |
 | Regions                       | `/regions`          | `mapRegions.jsonl`                          | `universe/regions.yaml`        |                                     |
@@ -171,12 +177,13 @@ This table show the available data and where to get it.
 | Stations                      |                     | `npcStations.jsonl`                         | `universe/stations.yaml`       |                                     |
 | System dbuff emitters         |                     | `systemDbuffEmitters.jsonl`                 |                                |                                     |
 | System wide effects           |                     | `systemWideEffects.jsonl`                   |                                |                                     |
-| Systems                       |                     | `mapSolarSystems.jsonl`                     | `universe/systems.yaml`        |                                     |
+| Systems                       | `/solar_systems`    | `mapSolarSystems.jsonl`                     | `universe/systems.yaml`        |                                     |
 | Tournament rule sets          |                     | `fsd/tournamentRuleSets.jsonl` in old files |                                |                                     |
 | Type elements                 |                     | `typeElements.jsonl`                        |                                |                                     |
 | Type lists                    |                     | `typeLists.jsonl`                           |                                |                                     |
 
 * _The ESI filenames refer to the names in the ESI scrape, minus the language suffix._
+* _\*\* ESI only exposes planets individually (`/universe/planets/{planet_id}/`), with no bulk list endpoint, so the Reference Data planets are sourced from the SDE only._
 
 ## Data structure
 
