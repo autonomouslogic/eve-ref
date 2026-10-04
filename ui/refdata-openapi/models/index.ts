@@ -1,5 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
+export * from './Agent';
+export * from './AgentType';
 export * from './Blueprint';
 export * from './BlueprintActivity';
 export * from './BlueprintMaterial';
@@ -24,6 +26,11 @@ export * from './ModifierInfo';
 export * from './Mutaplasmid';
 export * from './MutaplasmidDogmaModifications';
 export * from './MutaplasmidTypeMapping';
+export * from './NpcCharacter';
+export * from './NpcCharacterAgentInfo';
+export * from './NpcCorporation';
+export * from './NpcCorporationDivision';
+export * from './NpcCorporationDivisionAssignment';
 export * from './Planet';
 export * from './PlanetAttributes';
 export * from './PlanetStatistics';

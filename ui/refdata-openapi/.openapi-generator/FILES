@@ -1,6 +1,8 @@
 apis/RefdataApi.ts
 apis/index.ts
 index.ts
+models/Agent.ts
+models/AgentType.ts
 models/Blueprint.ts
 models/BlueprintActivity.ts
 models/BlueprintMaterial.ts
@@ -25,6 +27,11 @@ models/ModifierInfo.ts
 models/Mutaplasmid.ts
 models/MutaplasmidDogmaModifications.ts
 models/MutaplasmidTypeMapping.ts
+models/NpcCharacter.ts
+models/NpcCharacterAgentInfo.ts
+models/NpcCorporation.ts
+models/NpcCorporationDivision.ts
+models/NpcCorporationDivisionAssignment.ts
 models/Planet.ts
 models/PlanetAttributes.ts
 models/PlanetStatistics.ts
