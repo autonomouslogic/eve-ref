@@ -141,7 +141,7 @@ This table show the available data and where to get it.
 | Opportunity tasks             |                     |                                             | `opportunities/tasks.yaml`     |                                     |
 | Planet resources              |                     | `planetResources.jsonl`                     |                                |                                     |
 | Planetary schematics          | `/schematics`       | `planetSchematics.jsonl`                    | `universe/schematics.yaml`     |                                     |
-| Planets                       | `/planets`          | `mapPlanets.jsonl`                          | `universe/planets.yaml` \*\*    |                                     |
+| Planets                       | `/planets`          | `mapPlanets.jsonl`                          | `universe/planets.yaml`        |                                     |
 | Proximity traps               |                     | `proximityTrap.jsonl`                       |                                |                                     |
 | Races                         |                     | `races.jsonl`                               | `universe/races.yaml`          |                                     |
 | Regions                       | `/regions`          | `mapRegions.jsonl`                          | `universe/regions.yaml`        |                                     |

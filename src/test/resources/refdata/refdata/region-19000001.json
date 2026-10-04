@@ -22,5 +22,6 @@
   },
   "wormhole_class_id" : 7,
   "universe_id" : "hidden",
-  "solar_system_ids" : [ ]
+  "solar_system_ids" : [ ],
+  "constellation_ids" : [ ]
 }

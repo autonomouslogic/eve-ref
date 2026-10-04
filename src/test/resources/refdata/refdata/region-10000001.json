@@ -29,5 +29,6 @@
   },
   "wormhole_class_id" : 7,
   "universe_id" : "eve",
-  "solar_system_ids" : [ 30000001 ]
+  "solar_system_ids" : [ 30000001 ],
+  "constellation_ids" : [ 20000001 ]
 }

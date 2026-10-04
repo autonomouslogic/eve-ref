@@ -1754,6 +1754,13 @@ components:
     Region:
       type: object
       properties:
+        constellation_ids:
+          type: array
+          description: Computed from the constellations in this region.
+          items:
+            type: integer
+            format: int64
+            description: Computed from the constellations in this region.
         description:
           type: object
           additionalProperties:

@@ -51,4 +51,8 @@ public class Region {
 	@JsonProperty
 	@Schema(description = "Computed from the solar systems in this region.")
 	List<Long> solarSystemIds;
+
+	@JsonProperty
+	@Schema(description = "Computed from the constellations in this region.")
+	List<Long> constellationIds;
 }

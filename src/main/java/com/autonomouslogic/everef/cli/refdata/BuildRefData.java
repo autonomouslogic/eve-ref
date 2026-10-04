@@ -17,6 +17,7 @@ import com.autonomouslogic.everef.cli.refdata.post.MissingDogmaUnitsDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.MutaplasmidDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.OreVariationsDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.PostDecorator;
+import com.autonomouslogic.everef.cli.refdata.post.RegionConstellationIdsDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.RegionSolarSystemIdsDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.ReprocessableTypesDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.SchematicDecorator;
@@ -172,6 +173,9 @@ public class BuildRefData implements Command {
 	@Inject
 	protected RegionSolarSystemIdsDecorator regionSolarSystemIdsDecorator;
 
+	@Inject
+	protected RegionConstellationIdsDecorator regionConstellationIdsDecorator;
+
 	@Setter
 	@NonNull
 	private ZonedDateTime buildTime = ZonedDateTime.now(ZoneOffset.UTC).truncatedTo(ChronoUnit.SECONDS);
@@ -225,7 +229,8 @@ public class BuildRefData implements Command {
 				industryModifierSourcesDecorator,
 				universeIdDecorator,
 				constellationSolarSystemIdsDecorator,
-				regionSolarSystemIdsDecorator);
+				regionSolarSystemIdsDecorator,
+				regionConstellationIdsDecorator);
 	}
 
 	@Override
