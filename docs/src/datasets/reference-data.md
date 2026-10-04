@@ -16,6 +16,10 @@ While changes should be minimal, they may occur at any time.
 The full OpenAPI spec is [available on Github](https://github.com/autonomouslogic/eve-ref/blob/main/spec/reference-data.yaml).
 
 Some example paths:
+* <https://ref-data.everef.net/agents>
+* <https://ref-data.everef.net/agents/3008416>
+* <https://ref-data.everef.net/agent_types>
+* <https://ref-data.everef.net/agent_types/2>
 * <https://ref-data.everef.net/blueprints>
 * <https://ref-data.everef.net/blueprints/999>
 * <https://ref-data.everef.net/categories>
@@ -34,6 +38,12 @@ Some example paths:
 * <https://ref-data.everef.net/meta_groups/6>
 * <https://ref-data.everef.net/mutaplasmids>
 * <https://ref-data.everef.net/mutaplasmids/52225>
+* <https://ref-data.everef.net/npc_characters>
+* <https://ref-data.everef.net/npc_characters/3008416>
+* <https://ref-data.everef.net/npc_corporations>
+* <https://ref-data.everef.net/npc_corporations/1000002>
+* <https://ref-data.everef.net/npc_corporation_divisions>
+* <https://ref-data.everef.net/npc_corporation_divisions/18>
 * <https://ref-data.everef.net/regions>
 * <https://ref-data.everef.net/regions/10000002>
 * <https://ref-data.everef.net/schematics>
@@ -61,9 +71,9 @@ This table show the available data and where to get it.
 | Data                          | Reference data      | SDE                                        | ESI                            | Hoboleaks                           |
 |-------------------------------|---------------------|--------------------------------------------|--------------------------------|-------------------------------------|
 | Accounting entry types        |                     |                                            |                                | `accountingentrytypes.json`         |
-| Agent                         |                     | `npcCharacters.yaml`                       |                                |                                     |
+| Agent                         | `/agents`           | `npcCharacters.yaml` \*\*\*                |                                |                                     |
 | Agent in space                |                     | `agentsInSpace.yaml`                       |                                |                                     |
-| Agent types                   |                     | `agentTypes.yaml`                          |                                | `agenttypes.json`                   |
+| Agent types                   | `/agent_types`      | `agentTypes.yaml`                          |                                | `agenttypes.json`                   |
 | Ancestors                     |                     | `ancestries.yaml`                          | `universe/ancestries.yaml`     |                                     |
 | Asteroid belts                |                     | `mapAsteroidBelts.yaml`                    | `universe/asteroid_belts.yaml` |                                     |
 | Bloodlines                    |                     | `bloodlines.yaml`                          | `universe/bloodlines.yaml`     |                                     |
@@ -112,8 +122,9 @@ This table show the available data and where to get it.
 | Market groups                 | `/market_groups`    | `marketGroups.yaml`                        | `market/groups.yaml`           |                                     |
 | Meta groups                   | `/meta_groups`      | `metaGroups.yaml`                          |                                |                                     |
 | Moons                         |                     | `mapMoons.yaml`                            | `universe/moons.yaml`          |                                     |
-| NPC corporation               |                     | `npcCorporations.yaml`                     |                                |                                     |
-| NPC corporation divisions     |                     | `npcCorporationDivisions.yaml`             |                                |                                     |
+| NPC characters                | `/npc_characters`   | `npcCharacters.yaml`                       |                                |                                     |
+| NPC corporation               | `/npc_corporations` | `npcCorporations.yaml` \*\*\*\*            |                                |                                     |
+| NPC corporation divisions     | `/npc_corporation_divisions` | `npcCorporationDivisions.yaml`    |                                |                                     |
 | Opportunity groups            |                     |                                            | `opportunities/groups.yaml`    |                                     |
 | Opportunity tasks             |                     |                                            | `opportunities/tasks.yaml`     |                                     |
 | Planet resources              |                     | `planetResources.yaml`                     |                                |                                     |
@@ -141,6 +152,10 @@ This table show the available data and where to get it.
 | Tournament rule sets          |                     | `fsd/tournamentRuleSets.yaml` in old files |                                |                                     |
 
 * _The ESI filenames refer to the names in the ESI scrape, minus the language suffix._
+* _\*\*\* Agents are derived from `/npc_characters`, filtered to characters with an `agent` block, with that block
+  flattened onto the row. See `/npc_characters` for the full, unfiltered NPC character records._
+* _\*\*\*\* NPC corporations omit the SDE's `corporationTrades`, `exchangeRates`, `investors`, and `lpOfferTables`
+  fields, which are bulk economic-simulation data not relevant to agent/corporation lookups._
 
 ## Data structure
 

@@ -11,6 +11,8 @@ import com.autonomouslogic.everef.model.ReferenceEntry;
 import com.autonomouslogic.everef.model.refdata.RefDataConfig;
 import com.autonomouslogic.everef.model.refdata.RefTypeConfig;
 import com.autonomouslogic.everef.openapi.refdata.api.RefdataApi;
+import com.autonomouslogic.everef.refdata.Agent;
+import com.autonomouslogic.everef.refdata.AgentType;
 import com.autonomouslogic.everef.refdata.Blueprint;
 import com.autonomouslogic.everef.refdata.DogmaAttribute;
 import com.autonomouslogic.everef.refdata.DogmaEffect;
@@ -21,6 +23,9 @@ import com.autonomouslogic.everef.refdata.InventoryType;
 import com.autonomouslogic.everef.refdata.MarketGroup;
 import com.autonomouslogic.everef.refdata.MetaGroup;
 import com.autonomouslogic.everef.refdata.Mutaplasmid;
+import com.autonomouslogic.everef.refdata.NpcCharacter;
+import com.autonomouslogic.everef.refdata.NpcCorporation;
+import com.autonomouslogic.everef.refdata.NpcCorporationDivision;
 import com.autonomouslogic.everef.refdata.RefDataMeta;
 import com.autonomouslogic.everef.refdata.Region;
 import com.autonomouslogic.everef.refdata.Schematic;
@@ -294,6 +299,22 @@ public class RefDataUtil {
 									break;
 								case "schematics":
 									putToLoadedRefData(refEntry, Schematic.class, loaded::putSchematic);
+									break;
+								case "agent_types":
+									putToLoadedRefData(refEntry, AgentType.class, loaded::putAgentType);
+									break;
+								case "npc_corporation_divisions":
+									putToLoadedRefData(
+											refEntry, NpcCorporationDivision.class, loaded::putNpcCorporationDivision);
+									break;
+								case "npc_corporations":
+									putToLoadedRefData(refEntry, NpcCorporation.class, loaded::putNpcCorporation);
+									break;
+								case "npc_characters":
+									putToLoadedRefData(refEntry, NpcCharacter.class, loaded::putNpcCharacter);
+									break;
+								case "agents":
+									putToLoadedRefData(refEntry, Agent.class, loaded::putAgent);
 									break;
 								case "meta":
 								case "type_materials":

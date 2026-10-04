@@ -1,0 +1,49 @@
+---
+"3008416":
+  agent:
+    agentTypeID: 2
+    divisionID: 22
+    isLocator: false
+    level: 1
+  ancestryID: 11
+  bloodlineID: 1
+  careerID: 14
+  ceo: false
+  corporationID: 1000002
+  gender: false
+  locationID: 60000004
+  name:
+    de: "Antaken Kamola"
+    en: "Antaken Kamola"
+    es: "Antaken Kamola"
+    fr: "Antaken Kamola"
+    ja: "アンタケン・カモラ"
+    ko: "안타켄 카몰라"
+    ru: "Antaken Kamola"
+    zh: "安塔肯·卡莫拉"
+  raceID: 1
+  schoolID: 18
+  specialityID: 15
+  startDate: "2003-05-04 00:32:00"
+  uniqueName: true
+"3003869":
+  bloodlineID: 5
+  ceo: true
+  corporationID: 1000073
+  gender: false
+  locationID: 60007183
+  name:
+    de: "Pamoo Meninri"
+    en: "Pamoo Meninri"
+    es: "Pamoo Meninri"
+    fr: "Pamoo Meninri"
+    ja: "パムー・メニンリ"
+    ko: "파무 메닌리"
+    ru: "Pamoo Meninri"
+    zh: "帕莫·梅尼利"
+  raceID: 4
+  skills:
+  - typeID: 3363
+  - typeID: 3368
+  startDate: "2003-03-27 13:27:00"
+  uniqueName: true

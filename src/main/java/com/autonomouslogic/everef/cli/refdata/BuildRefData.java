@@ -6,6 +6,7 @@ import com.autonomouslogic.commons.concurrent.VirtualThreads;
 import com.autonomouslogic.everef.cli.Command;
 import com.autonomouslogic.everef.cli.refdata.esi.EsiLoader;
 import com.autonomouslogic.everef.cli.refdata.hoboleaks.HoboleaksLoader;
+import com.autonomouslogic.everef.cli.refdata.post.AgentDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.BlueprintDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.CanFitDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.CategoryIdDecorator;
@@ -164,6 +165,9 @@ public class BuildRefData implements Command {
 	@Inject
 	protected UniverseIdDecorator universeIdDecorator;
 
+	@Inject
+	protected AgentDecorator agentDecorator;
+
 	@Setter
 	@NonNull
 	private ZonedDateTime buildTime = ZonedDateTime.now(ZoneOffset.UTC).truncatedTo(ChronoUnit.SECONDS);
@@ -215,7 +219,8 @@ public class BuildRefData implements Command {
 				reprocessableTypesDecorator,
 				typeUsedInBlueprintsDecorator,
 				industryModifierSourcesDecorator,
-				universeIdDecorator);
+				universeIdDecorator,
+				agentDecorator);
 	}
 
 	@Override

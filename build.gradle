@@ -161,6 +161,8 @@ task referenceDataClientGenerate(type: org.openapitools.generator.gradle.plugin.
 			supportUrlQuery: "false"
 	]
 	schemaMappings = [
+			"Agent": "com.autonomouslogic.everef.refdata.Agent",
+			"AgentType": "com.autonomouslogic.everef.refdata.AgentType",
 			"Bundle": "com.autonomouslogic.everef.refdata.Bundle",
 			"Blueprint": "com.autonomouslogic.everef.refdata.Blueprint",
 			"BlueprintActivity": "com.autonomouslogic.everef.refdata.BlueprintActivity",
@@ -183,6 +185,11 @@ task referenceDataClientGenerate(type: org.openapitools.generator.gradle.plugin.
 			"Mutaplasmid": "com.autonomouslogic.everef.refdata.Mutaplasmid",
 			"MutaplasmidDogmaModifications": "com.autonomouslogic.everef.refdata.MutaplasmidDogmaModifications",
 			"MutaplasmidTypeMapping": "com.autonomouslogic.everef.refdata.MutaplasmidTypeMapping",
+			"NpcCharacter": "com.autonomouslogic.everef.refdata.NpcCharacter",
+			"NpcCharacterAgentInfo": "com.autonomouslogic.everef.refdata.NpcCharacterAgentInfo",
+			"NpcCorporation": "com.autonomouslogic.everef.refdata.NpcCorporation",
+			"NpcCorporationDivision": "com.autonomouslogic.everef.refdata.NpcCorporationDivision",
+			"NpcCorporationDivisionAssignment": "com.autonomouslogic.everef.refdata.NpcCorporationDivisionAssignment",
 			"ProducingBlueprint": "com.autonomouslogic.everef.refdata.ProducingBlueprint",
 			"RefDataMeta": "com.autonomouslogic.everef.refdata.RefDataMeta",
 			"RefDataMetaFileInfo": "com.autonomouslogic.everef.refdata.RefDataMetaFileInfo",

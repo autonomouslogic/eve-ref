@@ -1,0 +1,38 @@
+{
+  "ceo_id" : 3000001,
+  "deleted" : false,
+  "description" : {
+    "de" : "Die interne Corporation, die für Charaktere, die sich auf dem Friedhof befinden, verwendet wird.",
+    "en" : "The internal corporation used for characters in graveyard.",
+    "es" : "La corporación interna usada para los personajes en el cementerio.",
+    "fr" : "Corporation interne utilisée pour les personnages envoyés au cimetière.",
+    "ja" : "墓場送りになったキャラクター用の内部コーポレーション。",
+    "ko" : "무덤에 있는 캐릭터를 위해 사용되는 내부 코퍼레이션입니다.",
+    "ru" : "Внутренняя корпорация, которая используется для персонажей на кладбище.",
+    "zh" : "供长眠于地下的人物所使用的内部军团。"
+  },
+  "extent" : "L",
+  "has_player_personnel_manager" : false,
+  "initial_price" : 0,
+  "member_limit" : -1,
+  "min_security" : 0.0,
+  "minimum_join_standing" : 1,
+  "name" : {
+    "de" : "Doomheim",
+    "en" : "Doomheim",
+    "es" : "Doomheim",
+    "fr" : "Doomheim",
+    "ja" : "ドゥームヘイム",
+    "ko" : "둠헤임",
+    "ru" : "Doomheim",
+    "zh" : "Doomheim"
+  },
+  "send_char_termination_message" : true,
+  "shares" : 1,
+  "size" : "T",
+  "station_id" : 60000001,
+  "tax_rate" : 0.0,
+  "ticker_name" : "666",
+  "unique_name" : false,
+  "corporation_id" : 1000001
+}

@@ -1,0 +1,25 @@
+{
+  "display_name" : "Research and development division",
+  "internal_name" : "R&D",
+  "leader_type_name" : {
+    "de" : "Leitender Forscher",
+    "en" : "Chief Researcher",
+    "es" : "Investigador jefe",
+    "fr" : "Directeur de la recherche",
+    "ja" : "研究主任",
+    "ko" : "최고 연구원",
+    "ru" : "Главный исследователь",
+    "zh" : "首席研究员"
+  },
+  "name" : {
+    "de" : "Forschung und Entwicklung",
+    "en" : "R&D",
+    "es" : "I+D",
+    "fr" : "R & D",
+    "ja" : "R&D",
+    "ko" : "연구개발",
+    "ru" : "Научно-исследовательский отдел",
+    "zh" : "研发"
+  },
+  "division_id" : 18
+}

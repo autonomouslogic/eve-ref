@@ -1,6 +1,8 @@
 package com.autonomouslogic.everef.data;
 
 import com.autonomouslogic.everef.mvstore.MVStoreUtil;
+import com.autonomouslogic.everef.refdata.Agent;
+import com.autonomouslogic.everef.refdata.AgentType;
 import com.autonomouslogic.everef.refdata.Blueprint;
 import com.autonomouslogic.everef.refdata.DogmaAttribute;
 import com.autonomouslogic.everef.refdata.DogmaEffect;
@@ -11,6 +13,9 @@ import com.autonomouslogic.everef.refdata.InventoryType;
 import com.autonomouslogic.everef.refdata.MarketGroup;
 import com.autonomouslogic.everef.refdata.MetaGroup;
 import com.autonomouslogic.everef.refdata.Mutaplasmid;
+import com.autonomouslogic.everef.refdata.NpcCharacter;
+import com.autonomouslogic.everef.refdata.NpcCorporation;
+import com.autonomouslogic.everef.refdata.NpcCorporationDivision;
 import com.autonomouslogic.everef.refdata.Region;
 import com.autonomouslogic.everef.refdata.Schematic;
 import com.autonomouslogic.everef.refdata.Skill;
@@ -51,6 +56,11 @@ public class LoadedRefData {
 	private final Map<Long, byte[]> icons;
 	private final Map<Long, byte[]> regions;
 	private final Map<Long, byte[]> schematics;
+	private final Map<Long, byte[]> agentTypes;
+	private final Map<Long, byte[]> npcCorporationDivisions;
+	private final Map<Long, byte[]> npcCorporations;
+	private final Map<Long, byte[]> npcCharacters;
+	private final Map<Long, byte[]> agents;
 
 	@Inject
 	protected LoadedRefData(MVStoreUtil mvStoreUtil) {
@@ -74,6 +84,11 @@ public class LoadedRefData {
 		icons = mvStore.openMap("icons");
 		regions = mvStore.openMap("regions");
 		schematics = mvStore.openMap("schematics");
+		agentTypes = mvStore.openMap("agentTypes");
+		npcCorporationDivisions = mvStore.openMap("npcCorporationDivisions");
+		npcCorporations = mvStore.openMap("npcCorporations");
+		npcCharacters = mvStore.openMap("npcCharacters");
+		agents = mvStore.openMap("agents");
 	}
 
 	// === wrapper
@@ -157,6 +172,26 @@ public class LoadedRefData {
 		return get(id, schematics, Schematic.class);
 	}
 
+	public AgentType getAgentType(long id) {
+		return get(id, agentTypes, AgentType.class);
+	}
+
+	public NpcCorporationDivision getNpcCorporationDivision(long id) {
+		return get(id, npcCorporationDivisions, NpcCorporationDivision.class);
+	}
+
+	public NpcCorporation getNpcCorporation(long id) {
+		return get(id, npcCorporations, NpcCorporation.class);
+	}
+
+	public NpcCharacter getNpcCharacter(long id) {
+		return get(id, npcCharacters, NpcCharacter.class);
+	}
+
+	public Agent getAgent(long id) {
+		return get(id, agents, Agent.class);
+	}
+
 	// === puts
 
 	public void putCategory(long id, InventoryCategory item) {
@@ -215,6 +250,26 @@ public class LoadedRefData {
 		put(id, item, schematics);
 	}
 
+	public void putAgentType(long id, AgentType item) {
+		put(id, item, agentTypes);
+	}
+
+	public void putNpcCorporationDivision(long id, NpcCorporationDivision item) {
+		put(id, item, npcCorporationDivisions);
+	}
+
+	public void putNpcCorporation(long id, NpcCorporation item) {
+		put(id, item, npcCorporations);
+	}
+
+	public void putNpcCharacter(long id, NpcCharacter item) {
+		put(id, item, npcCharacters);
+	}
+
+	public void putAgent(long id, Agent item) {
+		put(id, item, agents);
+	}
+
 	// === streams
 
 	public Stream<Pair<Long, InventoryCategory>> getAllCategories() {
@@ -271,6 +326,26 @@ public class LoadedRefData {
 
 	public Stream<Pair<Long, Schematic>> getAllSchematics() {
 		return stream(schematics, this::getSchematic);
+	}
+
+	public Stream<Pair<Long, AgentType>> getAllAgentTypes() {
+		return stream(agentTypes, this::getAgentType);
+	}
+
+	public Stream<Pair<Long, NpcCorporationDivision>> getAllNpcCorporationDivisions() {
+		return stream(npcCorporationDivisions, this::getNpcCorporationDivision);
+	}
+
+	public Stream<Pair<Long, NpcCorporation>> getAllNpcCorporations() {
+		return stream(npcCorporations, this::getNpcCorporation);
+	}
+
+	public Stream<Pair<Long, NpcCharacter>> getAllNpcCharacters() {
+		return stream(npcCharacters, this::getNpcCharacter);
+	}
+
+	public Stream<Pair<Long, Agent>> getAllAgents() {
+		return stream(agents, this::getAgent);
 	}
 
 	// === util
