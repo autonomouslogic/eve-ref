@@ -1,0 +1,21 @@
+---
+"50000056":
+  destination:
+    solarSystemID: 30000003
+    stargateID: 50000342
+  position:
+    x: 331516354560.0
+    "y": 43597455360.0
+    z: -586353991680.0
+  solarSystemID: 30000001
+  typeID: 29624
+"50000342":
+  destination:
+    solarSystemID: 30000001
+    stargateID: 50000056
+  position:
+    x: -101092761600.0
+    "y": 5279539200.0
+    z: 1550503403520.0
+  solarSystemID: 30000003
+  typeID: 29624

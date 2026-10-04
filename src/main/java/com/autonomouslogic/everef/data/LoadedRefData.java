@@ -2,6 +2,7 @@ package com.autonomouslogic.everef.data;
 
 import com.autonomouslogic.everef.mvstore.MVStoreUtil;
 import com.autonomouslogic.everef.refdata.AgentType;
+import com.autonomouslogic.everef.refdata.AsteroidBelt;
 import com.autonomouslogic.everef.refdata.Blueprint;
 import com.autonomouslogic.everef.refdata.Constellation;
 import com.autonomouslogic.everef.refdata.DogmaAttribute;
@@ -12,15 +13,21 @@ import com.autonomouslogic.everef.refdata.InventoryGroup;
 import com.autonomouslogic.everef.refdata.InventoryType;
 import com.autonomouslogic.everef.refdata.MarketGroup;
 import com.autonomouslogic.everef.refdata.MetaGroup;
+import com.autonomouslogic.everef.refdata.Moon;
 import com.autonomouslogic.everef.refdata.Mutaplasmid;
 import com.autonomouslogic.everef.refdata.NpcCharacter;
 import com.autonomouslogic.everef.refdata.NpcCorporation;
 import com.autonomouslogic.everef.refdata.NpcCorporationDivision;
+import com.autonomouslogic.everef.refdata.NpcStation;
 import com.autonomouslogic.everef.refdata.Planet;
 import com.autonomouslogic.everef.refdata.Region;
 import com.autonomouslogic.everef.refdata.Schematic;
 import com.autonomouslogic.everef.refdata.Skill;
 import com.autonomouslogic.everef.refdata.SolarSystem;
+import com.autonomouslogic.everef.refdata.Star;
+import com.autonomouslogic.everef.refdata.Stargate;
+import com.autonomouslogic.everef.refdata.StationOperation;
+import com.autonomouslogic.everef.refdata.StationService;
 import com.autonomouslogic.everef.refdata.Unit;
 import jakarta.inject.Inject;
 import java.io.File;
@@ -65,6 +72,13 @@ public class LoadedRefData {
 	private final Map<Long, byte[]> npcCorporationDivisions;
 	private final Map<Long, byte[]> npcCorporations;
 	private final Map<Long, byte[]> npcCharacters;
+	private final Map<Long, byte[]> asteroidBelts;
+	private final Map<Long, byte[]> moons;
+	private final Map<Long, byte[]> stars;
+	private final Map<Long, byte[]> stargates;
+	private final Map<Long, byte[]> npcStations;
+	private final Map<Long, byte[]> stationOperations;
+	private final Map<Long, byte[]> stationServices;
 
 	@Inject
 	protected LoadedRefData(MVStoreUtil mvStoreUtil) {
@@ -95,6 +109,13 @@ public class LoadedRefData {
 		npcCorporationDivisions = mvStore.openMap("npcCorporationDivisions");
 		npcCorporations = mvStore.openMap("npcCorporations");
 		npcCharacters = mvStore.openMap("npcCharacters");
+		asteroidBelts = mvStore.openMap("asteroidBelts");
+		moons = mvStore.openMap("moons");
+		stars = mvStore.openMap("stars");
+		stargates = mvStore.openMap("stargates");
+		npcStations = mvStore.openMap("npcStations");
+		stationOperations = mvStore.openMap("stationOperations");
+		stationServices = mvStore.openMap("stationServices");
 	}
 
 	// === wrapper
@@ -206,6 +227,34 @@ public class LoadedRefData {
 		return get(id, npcCharacters, NpcCharacter.class);
 	}
 
+	public AsteroidBelt getAsteroidBelt(long id) {
+		return get(id, asteroidBelts, AsteroidBelt.class);
+	}
+
+	public Moon getMoon(long id) {
+		return get(id, moons, Moon.class);
+	}
+
+	public Star getStar(long id) {
+		return get(id, stars, Star.class);
+	}
+
+	public Stargate getStargate(long id) {
+		return get(id, stargates, Stargate.class);
+	}
+
+	public NpcStation getNpcStation(long id) {
+		return get(id, npcStations, NpcStation.class);
+	}
+
+	public StationOperation getStationOperation(long id) {
+		return get(id, stationOperations, StationOperation.class);
+	}
+
+	public StationService getStationService(long id) {
+		return get(id, stationServices, StationService.class);
+	}
+
 	// === puts
 
 	public void putCategory(long id, InventoryCategory item) {
@@ -292,6 +341,34 @@ public class LoadedRefData {
 		put(id, item, npcCharacters);
 	}
 
+	public void putAsteroidBelt(long id, AsteroidBelt item) {
+		put(id, item, asteroidBelts);
+	}
+
+	public void putMoon(long id, Moon item) {
+		put(id, item, moons);
+	}
+
+	public void putStar(long id, Star item) {
+		put(id, item, stars);
+	}
+
+	public void putStargate(long id, Stargate item) {
+		put(id, item, stargates);
+	}
+
+	public void putNpcStation(long id, NpcStation item) {
+		put(id, item, npcStations);
+	}
+
+	public void putStationOperation(long id, StationOperation item) {
+		put(id, item, stationOperations);
+	}
+
+	public void putStationService(long id, StationService item) {
+		put(id, item, stationServices);
+	}
+
 	// === streams
 
 	public Stream<Pair<Long, InventoryCategory>> getAllCategories() {
@@ -376,6 +453,34 @@ public class LoadedRefData {
 
 	public Stream<Pair<Long, NpcCharacter>> getAllNpcCharacters() {
 		return stream(npcCharacters, this::getNpcCharacter);
+	}
+
+	public Stream<Pair<Long, AsteroidBelt>> getAllAsteroidBelts() {
+		return stream(asteroidBelts, this::getAsteroidBelt);
+	}
+
+	public Stream<Pair<Long, Moon>> getAllMoons() {
+		return stream(moons, this::getMoon);
+	}
+
+	public Stream<Pair<Long, Star>> getAllStars() {
+		return stream(stars, this::getStar);
+	}
+
+	public Stream<Pair<Long, Stargate>> getAllStargates() {
+		return stream(stargates, this::getStargate);
+	}
+
+	public Stream<Pair<Long, NpcStation>> getAllNpcStations() {
+		return stream(npcStations, this::getNpcStation);
+	}
+
+	public Stream<Pair<Long, StationOperation>> getAllStationOperations() {
+		return stream(stationOperations, this::getStationOperation);
+	}
+
+	public Stream<Pair<Long, StationService>> getAllStationServices() {
+		return stream(stationServices, this::getStationService);
 	}
 
 	// === util

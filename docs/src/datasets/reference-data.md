@@ -18,6 +18,8 @@ The full OpenAPI spec is [available on Github](https://github.com/autonomouslogi
 Some example paths:
 * <https://ref-data.everef.net/agent_types>
 * <https://ref-data.everef.net/agent_types/2>
+* <https://ref-data.everef.net/asteroid_belts>
+* <https://ref-data.everef.net/asteroid_belts/40000003>
 * <https://ref-data.everef.net/blueprints>
 * <https://ref-data.everef.net/blueprints/999>
 * <https://ref-data.everef.net/categories>
@@ -36,6 +38,8 @@ Some example paths:
 * <https://ref-data.everef.net/market_groups/1857>
 * <https://ref-data.everef.net/meta_groups>
 * <https://ref-data.everef.net/meta_groups/6>
+* <https://ref-data.everef.net/moons>
+* <https://ref-data.everef.net/moons/40000004>
 * <https://ref-data.everef.net/mutaplasmids>
 * <https://ref-data.everef.net/mutaplasmids/52225>
 * <https://ref-data.everef.net/npc_characters>
@@ -44,6 +48,8 @@ Some example paths:
 * <https://ref-data.everef.net/npc_corporations/1000002>
 * <https://ref-data.everef.net/npc_corporation_divisions>
 * <https://ref-data.everef.net/npc_corporation_divisions/18>
+* <https://ref-data.everef.net/npc_stations>
+* <https://ref-data.everef.net/npc_stations/60012526>
 * <https://ref-data.everef.net/planets>
 * <https://ref-data.everef.net/planets/40000002>
 * <https://ref-data.everef.net/regions>
@@ -54,6 +60,14 @@ Some example paths:
 * <https://ref-data.everef.net/skills/3336>
 * <https://ref-data.everef.net/solar_systems>
 * <https://ref-data.everef.net/solar_systems/30000001>
+* <https://ref-data.everef.net/stargates>
+* <https://ref-data.everef.net/stargates/50000056>
+* <https://ref-data.everef.net/stars>
+* <https://ref-data.everef.net/stars/40000001>
+* <https://ref-data.everef.net/station_operations>
+* <https://ref-data.everef.net/station_operations/33>
+* <https://ref-data.everef.net/station_services>
+* <https://ref-data.everef.net/station_services/1>
 * <https://ref-data.everef.net/types>
 * <https://ref-data.everef.net/types/645>
 * <https://ref-data.everef.net/units>
@@ -80,7 +94,7 @@ This table show the available data and where to get it.
 | Ancestors                     |                              | `ancestries.jsonl`                          | `universe/ancestries.yaml`     |                                     |
 | Applied proximity effects     |                              | `appliedProximityEffects.jsonl`             |                                |                                     |
 | Archetypes                    |                              | `archetypes.jsonl`                          |                                |                                     |
-| Asteroid belts                |                              | `mapAsteroidBelts.jsonl`                    | `universe/asteroid_belts.yaml` |                                     |
+| Asteroid belts                | `/asteroid_belts`            | `mapAsteroidBelts.jsonl`                    | `universe/asteroid_belts.yaml` |                                     |
 | Bloodlines                    |                              | `bloodlines.jsonl`                          | `universe/bloodlines.yaml`     |                                     |
 | Blueprints                    | `/blueprints`                | `blueprints.jsonl`                          |                                | `blueprints.json`                   |
 | Certificates                  |                              | `certificates.jsonl`                        |                                |                                     |
@@ -140,7 +154,7 @@ This table show the available data and where to get it.
 | Military campaign objectives  |                              | `militaryCampaignObjectives.jsonl`          |                                |                                     |
 | Military campaigns            |                              | `militaryCampaigns.jsonl`                   |                                |                                     |
 | Missions                      |                              | `missions.jsonl`                            |                                |                                     |
-| Moons                         |                              | `mapMoons.jsonl`                            | `universe/moons.yaml`          |                                     |
+| Moons                         | `/moons`                     | `mapMoons.jsonl`                            | `universe/moons.yaml`          |                                     |
 | Notification types            |                              | `notificationTypes.jsonl`                   |                                |                                     |
 | NPC characters                | `/npc_characters`            | `npcCharacters.jsonl`                       |                                |                                     |
 | NPC corporation               | `/npc_corporations`          | `npcCorporations.jsonl`                     |                                |                                     |
@@ -177,12 +191,12 @@ This table show the available data and where to get it.
 | Skinr tier thresholds         |                              | `skinrTierThresholds.jsonl`                 |                                |                                     |
 | Skins                         |                              | `skins.jsonl`                               |                                | `skins.json`                        |
 | Sovereignty upgrades          |                              | `sovereigntyUpgrades.jsonl`                 |                                |                                     |
-| Stargate                      |                              | `mapStargates.jsonl`                        | `universe/stargates.yaml`      |                                     |
-| Stars                         |                              | `mapStars.jsonl`                            | `universe/stars.yaml`          |                                     |
-| Station operation             |                              | `stationOperations.jsonl`                   |                                |                                     |
-| Station services              |                              | `stationServices.jsonl`                     |                                |                                     |
+| Stargate                      | `/stargates`                 | `mapStargates.jsonl`                        | `universe/stargates.yaml`      |                                     |
+| Stars                         | `/stars`                     | `mapStars.jsonl`                            | `universe/stars.yaml`          |                                     |
+| Station operation             | `/station_operations`        | `stationOperations.jsonl`                   |                                |                                     |
+| Station services              | `/station_services`          | `stationServices.jsonl`                     |                                |                                     |
 | Station standing restrictions |                              | `stationStandingsRestrictions.jsonl`        |                                | `stationstandingsrestrictions.json` |
-| Stations                      |                              | `npcStations.jsonl`                         | `universe/stations.yaml`       |                                     |
+| Stations                      | `/npc_stations`              | `npcStations.jsonl`                         | `universe/stations.yaml`       |                                     |
 | System dbuff emitters         |                              | `systemDbuffEmitters.jsonl`                 |                                |                                     |
 | System wide effects           |                              | `systemWideEffects.jsonl`                   |                                |                                     |
 | Systems                       | `/solar_systems`             | `mapSolarSystems.jsonl`                     | `universe/systems.yaml`        |                                     |

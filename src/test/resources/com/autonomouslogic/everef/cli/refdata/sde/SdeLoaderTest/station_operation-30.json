@@ -1,0 +1,39 @@
+{
+  "activity_id" : 12,
+  "border" : 0.5,
+  "corridor" : 0.15,
+  "description" : {
+    "de" : "Verkauft Waren der Produktions-Corporations.",
+    "en" : "Sells wares received from production corps.",
+    "es" : "Vende mercancías que recibe de las corporaciones de producción.",
+    "fr" : "Vend les marchandises reçues des corporations de production.",
+    "ja" : "加工会社から受け取った衣服を販売する。",
+    "ko" : "생산업체에서 받은 물품을 판매합니다.",
+    "ru" : "Продает товары, полученные от производственных корпораций.",
+    "zh" : "销售从生产工厂送来的陶器。"
+  },
+  "fringe" : 0.0,
+  "hub" : 0.35,
+  "manufacturing_factor" : 0.98,
+  "operation_name" : {
+    "de" : "Handelsposten",
+    "en" : "Trading Post",
+    "es" : "Puesto comercial",
+    "fr" : "Poste de commerce",
+    "ja" : "トレーディングポスト",
+    "ko" : "무역 초소",
+    "ru" : "Торговая база",
+    "zh" : "贸易站"
+  },
+  "ratio" : 0.5,
+  "research_factor" : 0.98,
+  "services" : [ 1, 3, 5, 7, 10, 11, 13, 17, 19, 21, 22, 23, 25, 26 ],
+  "station_types" : {
+    "1" : 1531,
+    "2" : 2502,
+    "4" : 1932,
+    "8" : 3868,
+    "16" : 3865
+  },
+  "operation_id" : 30
+}

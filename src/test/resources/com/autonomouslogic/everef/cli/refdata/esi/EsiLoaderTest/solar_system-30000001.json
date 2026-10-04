@@ -12,6 +12,5 @@
   "security_class" : "B",
   "security_status" : 0.8583240509033203,
   "star_id" : 40000001,
-  "solar_system_id" : 30000001,
-  "station_ids" : [ 60012526, 60014437 ]
+  "solar_system_id" : 30000001
 }

@@ -1,0 +1,13 @@
+{
+  "radius" : 155250000,
+  "solar_system_id" : 31000007,
+  "statistics" : {
+    "age" : 58470001140563970,
+    "life" : 257199993352355840,
+    "luminosity" : 0.2775,
+    "spectral_class" : "G0 V",
+    "temperature" : 5977.0
+  },
+  "type_id" : 45038,
+  "star_id" : 40350751
+}

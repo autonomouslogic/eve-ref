@@ -2,6 +2,7 @@ apis/RefdataApi.ts
 apis/index.ts
 index.ts
 models/AgentType.ts
+models/AsteroidBelt.ts
 models/Blueprint.ts
 models/BlueprintActivity.ts
 models/BlueprintMaterial.ts
@@ -23,6 +24,7 @@ models/InventoryTypeTraits.ts
 models/MarketGroup.ts
 models/MetaGroup.ts
 models/ModifierInfo.ts
+models/Moon.ts
 models/Mutaplasmid.ts
 models/MutaplasmidDogmaModifications.ts
 models/MutaplasmidTypeMapping.ts
@@ -32,6 +34,7 @@ models/NpcCharacterSkill.ts
 models/NpcCorporation.ts
 models/NpcCorporationDivision.ts
 models/NpcCorporationDivisionAssignment.ts
+models/NpcStation.ts
 models/Planet.ts
 models/PlanetAttributes.ts
 models/PlanetStatistics.ts
@@ -43,6 +46,12 @@ models/Region.ts
 models/Schematic.ts
 models/Skill.ts
 models/SolarSystem.ts
+models/Star.ts
+models/StarStatistics.ts
+models/Stargate.ts
+models/StargateDestination.ts
+models/StationOperation.ts
+models/StationService.ts
 models/TraitBonus.ts
 models/TypeMaterial.ts
 models/Unit.ts

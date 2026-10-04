@@ -40,6 +40,13 @@ public class SolarSystem {
 	List<Long> stargateIds;
 
 	@JsonProperty
+	@Schema(description = "The solar system IDs this system is connected to via its stargates.")
+	List<Long> stargatesToSystemIds;
+
+	@JsonProperty
+	List<Long> planetIds;
+
+	@JsonProperty
 	List<Long> stationIds;
 
 	@JsonProperty

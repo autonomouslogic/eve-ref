@@ -1,0 +1,21 @@
+---
+"1":
+  serviceName:
+    de: "Kopfgeld-Missionen"
+    en: "Bounty Missions"
+    es: "Misiones de recompensa"
+    fr: "Missions de chasseur de primes"
+    ja: "バウンティミッション"
+    ko: "현상금 미션"
+    ru: "Офис охотников за головами"
+    zh: "荣誉追击任务"
+"3":
+  serviceName:
+    de: "Kuriermissionen"
+    en: "Courier Missions"
+    es: "Misiones de reparto"
+    fr: "Missions de courrier"
+    ja: "輸送ミッション"
+    ko: "운반 미션"
+    ru: "Курьерские задания"
+    zh: "快递任务"

@@ -487,10 +487,10 @@ solarSystems:
       - name
     renames:
       system_id: solar_system_id
-      stations: station_ids
     removes:
       - planets
       - stargates
+      - stations
   sde:
     file: mapSolarSystems.yaml
     removes:
@@ -579,3 +579,78 @@ npcCharacters:
     ids:
       - 3008416
       - 3003869
+
+asteroidBelts:
+  idField: asteroid_belt_id
+  model: AsteroidBelt
+  sde:
+    file: mapAsteroidBelts.yaml
+  test:
+    filePrefix: asteroid_belt
+    ids:
+      - 40000003
+
+moons:
+  idField: moon_id
+  model: Moon
+  sde:
+    file: mapMoons.yaml
+  test:
+    filePrefix: moon
+    ids:
+      - 40000004
+
+stars:
+  idField: star_id
+  model: Star
+  sde:
+    file: mapStars.yaml
+  test:
+    filePrefix: star
+    ids:
+      - 40000001
+      - 40350751
+
+stargates:
+  idField: stargate_id
+  model: Stargate
+  sde:
+    file: mapStargates.yaml
+  test:
+    filePrefix: stargate
+    ids:
+      - 50000056
+      - 50000342
+
+npcStations:
+  idField: station_id
+  model: NpcStation
+  sde:
+    file: npcStations.yaml
+  test:
+    filePrefix: npc_station
+    ids:
+      - 60012526
+      - 60014437
+
+stationOperations:
+  idField: operation_id
+  model: StationOperation
+  sde:
+    file: stationOperations.yaml
+  test:
+    filePrefix: station_operation
+    ids:
+      - 30
+      - 33
+
+stationServices:
+  idField: service_id
+  model: StationService
+  sde:
+    file: stationServices.yaml
+  test:
+    filePrefix: station_service
+    ids:
+      - 1
+      - 3

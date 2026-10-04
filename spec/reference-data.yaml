@@ -52,6 +52,42 @@ paths:
           description: The agent type.
       tags:
       - refdata
+  /asteroid_belts:
+    get:
+      description: Get all asteroid belt IDs.
+      operationId: getAllAsteroidBelts
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: integer
+                  format: int32
+          description: Asteroid belt IDs.
+      tags:
+      - refdata
+  /asteroid_belts/{asteroid_belt_id}:
+    get:
+      description: Get an asteroid belt.
+      operationId: getAsteroidBelt
+      parameters:
+      - in: path
+        name: asteroid_belt_id
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AsteroidBelt"
+          description: The asteroid belt.
+      tags:
+      - refdata
   /blueprints:
     get:
       description: Get all blueprint IDs.
@@ -479,6 +515,42 @@ paths:
           description: The meta group.
       tags:
       - refdata
+  /moons:
+    get:
+      description: Get all moon IDs.
+      operationId: getAllMoons
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: integer
+                  format: int32
+          description: Moon IDs.
+      tags:
+      - refdata
+  /moons/{moon_id}:
+    get:
+      description: Get a moon.
+      operationId: getMoon
+      parameters:
+      - in: path
+        name: moon_id
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Moon"
+          description: The moon.
+      tags:
+      - refdata
   /mutaplasmids:
     get:
       description: Get all mutaplasmid IDs.
@@ -620,6 +692,42 @@ paths:
               schema:
                 $ref: "#/components/schemas/NpcCorporation"
           description: The NPC corporation.
+      tags:
+      - refdata
+  /npc_stations:
+    get:
+      description: Get all NPC station IDs.
+      operationId: getAllNpcStations
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: integer
+                  format: int32
+          description: NPC station IDs.
+      tags:
+      - refdata
+  /npc_stations/{station_id}:
+    get:
+      description: Get an NPC station.
+      operationId: getNpcStation
+      parameters:
+      - in: path
+        name: station_id
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NpcStation"
+          description: The NPC station.
       tags:
       - refdata
   /planets:
@@ -800,6 +908,150 @@ paths:
           description: The solar system.
       tags:
       - refdata
+  /stargates:
+    get:
+      description: Get all stargate IDs.
+      operationId: getAllStargates
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: integer
+                  format: int32
+          description: Stargate IDs.
+      tags:
+      - refdata
+  /stargates/{stargate_id}:
+    get:
+      description: Get a stargate.
+      operationId: getStargate
+      parameters:
+      - in: path
+        name: stargate_id
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Stargate"
+          description: The stargate.
+      tags:
+      - refdata
+  /stars:
+    get:
+      description: Get all star IDs.
+      operationId: getAllStars
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: integer
+                  format: int32
+          description: Star IDs.
+      tags:
+      - refdata
+  /stars/{star_id}:
+    get:
+      description: Get a star.
+      operationId: getStar
+      parameters:
+      - in: path
+        name: star_id
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Star"
+          description: The star.
+      tags:
+      - refdata
+  /station_operations:
+    get:
+      description: Get all station operation IDs.
+      operationId: getAllStationOperations
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: integer
+                  format: int32
+          description: Station operation IDs.
+      tags:
+      - refdata
+  /station_operations/{operation_id}:
+    get:
+      description: Get a station operation.
+      operationId: getStationOperation
+      parameters:
+      - in: path
+        name: operation_id
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StationOperation"
+          description: The station operation.
+      tags:
+      - refdata
+  /station_services:
+    get:
+      description: Get all station service IDs.
+      operationId: getAllStationServices
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: integer
+                  format: int32
+          description: Station service IDs.
+      tags:
+      - refdata
+  /station_services/{service_id}:
+    get:
+      description: Get a station service.
+      operationId: getStationService
+      parameters:
+      - in: path
+        name: service_id
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StationService"
+          description: The station service.
+      tags:
+      - refdata
   /types:
     get:
       description: Get all type IDs.
@@ -899,6 +1151,41 @@ components:
           format: int64
         name:
           type: string
+    AsteroidBelt:
+      type: object
+      properties:
+        asteroid_belt_id:
+          type: integer
+          format: int64
+        celestial_index:
+          type: integer
+          format: int64
+        orbit_id:
+          type: integer
+          format: int64
+        orbit_index:
+          type: integer
+          format: int64
+        position:
+          $ref: "#/components/schemas/Coordinate"
+        radius:
+          type: number
+        solar_system_id:
+          type: integer
+          format: int64
+        statistics:
+          $ref: "#/components/schemas/PlanetStatistics"
+        type_id:
+          type: integer
+          format: int64
+        unique_name:
+          type: object
+          additionalProperties:
+            type: string
+            description: "The key is the language code. Only present on asteroid belts\
+              \ with a renamed, unique name."
+          description: "The key is the language code. Only present on asteroid belts\
+            \ with a renamed, unique name."
     Blueprint:
       type: object
       description: A map of blueprints. The key is the blueprint type ID.
@@ -1728,6 +2015,48 @@ components:
         skill_type_id:
           type: integer
           format: int64
+    Moon:
+      type: object
+      properties:
+        attributes:
+          $ref: "#/components/schemas/PlanetAttributes"
+        celestial_index:
+          type: integer
+          format: int64
+        moon_id:
+          type: integer
+          format: int64
+        npc_station_ids:
+          type: array
+          items:
+            type: integer
+            format: int64
+        orbit_id:
+          type: integer
+          format: int64
+        orbit_index:
+          type: integer
+          format: int64
+        position:
+          $ref: "#/components/schemas/Coordinate"
+        radius:
+          type: number
+        solar_system_id:
+          type: integer
+          format: int64
+        statistics:
+          $ref: "#/components/schemas/PlanetStatistics"
+        type_id:
+          type: integer
+          format: int64
+        unique_name:
+          type: object
+          additionalProperties:
+            type: string
+            description: "The key is the language code. Only present on moons with\
+              \ a renamed, unique name."
+          description: "The key is the language code. Only present on moons with a\
+            \ renamed, unique name."
     Mutaplasmid:
       type: object
       description: Details about a mutaplasmid. These are created by EVE Ref and derived
@@ -1969,6 +2298,44 @@ components:
         size:
           type: integer
           format: int64
+    NpcStation:
+      type: object
+      properties:
+        celestial_index:
+          type: integer
+          format: int64
+        operation_id:
+          type: integer
+          format: int64
+        orbit_id:
+          type: integer
+          format: int64
+        orbit_index:
+          type: integer
+          format: int64
+        owner_id:
+          type: integer
+          format: int64
+        position:
+          $ref: "#/components/schemas/Coordinate"
+        reprocessing_efficiency:
+          type: number
+        reprocessing_hangar_flag:
+          type: integer
+          format: int64
+        reprocessing_stations_take:
+          type: number
+        solar_system_id:
+          type: integer
+          format: int64
+        station_id:
+          type: integer
+          format: int64
+        type_id:
+          type: integer
+          format: int64
+        use_operation_name:
+          type: boolean
     Planet:
       type: object
       properties:
@@ -2264,6 +2631,11 @@ components:
             type: string
             description: The key is the language code.
           description: The key is the language code.
+        planet_ids:
+          type: array
+          items:
+            type: integer
+            format: int64
         position:
           $ref: "#/components/schemas/Coordinate"
         position2_d:
@@ -2290,6 +2662,14 @@ components:
           items:
             type: integer
             format: int64
+        stargates_to_system_ids:
+          type: array
+          description: The solar system IDs this system is connected to via its stargates.
+          items:
+            type: integer
+            format: int64
+            description: The solar system IDs this system is connected to via its
+              stargates.
         station_ids:
           type: array
           items:
@@ -2300,6 +2680,113 @@ components:
         wormhole_class_id:
           type: integer
           format: int64
+    Star:
+      type: object
+      properties:
+        radius:
+          type: number
+        solar_system_id:
+          type: integer
+          format: int64
+        star_id:
+          type: integer
+          format: int64
+        statistics:
+          $ref: "#/components/schemas/StarStatistics"
+        type_id:
+          type: integer
+          format: int64
+    StarStatistics:
+      type: object
+      properties:
+        age:
+          type: number
+        life:
+          type: number
+        luminosity:
+          type: number
+        spectral_class:
+          type: string
+        temperature:
+          type: number
+    Stargate:
+      type: object
+      properties:
+        destination:
+          $ref: "#/components/schemas/StargateDestination"
+        position:
+          $ref: "#/components/schemas/Coordinate"
+        solar_system_id:
+          type: integer
+          format: int64
+        stargate_id:
+          type: integer
+          format: int64
+        type_id:
+          type: integer
+          format: int64
+    StargateDestination:
+      type: object
+      properties:
+        solar_system_id:
+          type: integer
+          format: int64
+        stargate_id:
+          type: integer
+          format: int64
+    StationOperation:
+      type: object
+      properties:
+        activity_id:
+          type: integer
+          format: int64
+        border:
+          type: number
+        corridor:
+          type: number
+        description:
+          type: object
+          additionalProperties:
+            type: string
+        fringe:
+          type: number
+        hub:
+          type: number
+        manufacturing_factor:
+          type: number
+        operation_id:
+          type: integer
+          format: int64
+        operation_name:
+          type: object
+          additionalProperties:
+            type: string
+        ratio:
+          type: number
+        research_factor:
+          type: number
+        services:
+          type: array
+          items:
+            type: integer
+            format: int64
+        station_types:
+          type: object
+          additionalProperties:
+            type: integer
+            format: int64
+            description: The key is the race ID.
+          description: The key is the race ID.
+    StationService:
+      type: object
+      properties:
+        service_id:
+          type: integer
+          format: int64
+        service_name:
+          type: object
+          additionalProperties:
+            type: string
     TraitBonus:
       type: object
       description: "Type traits. First key is type ID granting the bonus. Second key\

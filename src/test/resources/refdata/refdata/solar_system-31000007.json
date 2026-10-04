@@ -19,5 +19,8 @@
   "star_id" : 40350751,
   "solar_system_id" : 31000007,
   "radius" : 3658837393408.0,
-  "region_id" : 11000001
+  "region_id" : 11000001,
+  "stargates_to_system_ids" : [ ],
+  "planet_ids" : [ ],
+  "station_ids" : [ ]
 }

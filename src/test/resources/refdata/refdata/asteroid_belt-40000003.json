@@ -1,0 +1,28 @@
+{
+  "celestial_index" : 1,
+  "orbit_id" : 40000002,
+  "orbit_index" : 1,
+  "position" : {
+    "x" : 161967513600.0,
+    "y" : 21288837120.0,
+    "z" : -73505464320.0
+  },
+  "radius" : 27043.400391,
+  "solar_system_id" : 30000001,
+  "statistics" : {
+    "density" : 277.882996,
+    "eccentricity" : 0.0,
+    "escape_velocity" : 10.6728,
+    "locked" : true,
+    "mass_dust" : 23083200800620544,
+    "mass_gas" : 7.16671,
+    "orbit_period" : 468161.0,
+    "orbit_radius" : 80831296.0,
+    "rotation_rate" : 468161.0,
+    "spectral_class" : "0.0",
+    "surface_gravity" : 0.0021,
+    "temperature" : 90.7537
+  },
+  "type_id" : 15,
+  "asteroid_belt_id" : 40000003
+}

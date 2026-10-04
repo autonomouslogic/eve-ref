@@ -1,0 +1,13 @@
+{
+  "service_name" : {
+    "de" : "Kopfgeld-Missionen",
+    "en" : "Bounty Missions",
+    "es" : "Misiones de recompensa",
+    "fr" : "Missions de chasseur de primes",
+    "ja" : "バウンティミッション",
+    "ko" : "현상금 미션",
+    "ru" : "Офис охотников за головами",
+    "zh" : "荣誉追击任务"
+  },
+  "service_id" : 1
+}

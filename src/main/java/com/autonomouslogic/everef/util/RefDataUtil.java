@@ -12,6 +12,7 @@ import com.autonomouslogic.everef.model.refdata.RefDataConfig;
 import com.autonomouslogic.everef.model.refdata.RefTypeConfig;
 import com.autonomouslogic.everef.openapi.refdata.api.RefdataApi;
 import com.autonomouslogic.everef.refdata.AgentType;
+import com.autonomouslogic.everef.refdata.AsteroidBelt;
 import com.autonomouslogic.everef.refdata.Blueprint;
 import com.autonomouslogic.everef.refdata.Constellation;
 import com.autonomouslogic.everef.refdata.DogmaAttribute;
@@ -22,16 +23,22 @@ import com.autonomouslogic.everef.refdata.InventoryGroup;
 import com.autonomouslogic.everef.refdata.InventoryType;
 import com.autonomouslogic.everef.refdata.MarketGroup;
 import com.autonomouslogic.everef.refdata.MetaGroup;
+import com.autonomouslogic.everef.refdata.Moon;
 import com.autonomouslogic.everef.refdata.Mutaplasmid;
 import com.autonomouslogic.everef.refdata.NpcCharacter;
 import com.autonomouslogic.everef.refdata.NpcCorporation;
 import com.autonomouslogic.everef.refdata.NpcCorporationDivision;
+import com.autonomouslogic.everef.refdata.NpcStation;
 import com.autonomouslogic.everef.refdata.Planet;
 import com.autonomouslogic.everef.refdata.RefDataMeta;
 import com.autonomouslogic.everef.refdata.Region;
 import com.autonomouslogic.everef.refdata.Schematic;
 import com.autonomouslogic.everef.refdata.Skill;
 import com.autonomouslogic.everef.refdata.SolarSystem;
+import com.autonomouslogic.everef.refdata.Star;
+import com.autonomouslogic.everef.refdata.Stargate;
+import com.autonomouslogic.everef.refdata.StationOperation;
+import com.autonomouslogic.everef.refdata.StationService;
 import com.autonomouslogic.everef.refdata.Unit;
 import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.url.UrlParser;
@@ -323,6 +330,27 @@ public class RefDataUtil {
 									break;
 								case "npc_characters":
 									putToLoadedRefData(refEntry, NpcCharacter.class, loaded::putNpcCharacter);
+									break;
+								case "asteroid_belts":
+									putToLoadedRefData(refEntry, AsteroidBelt.class, loaded::putAsteroidBelt);
+									break;
+								case "moons":
+									putToLoadedRefData(refEntry, Moon.class, loaded::putMoon);
+									break;
+								case "stars":
+									putToLoadedRefData(refEntry, Star.class, loaded::putStar);
+									break;
+								case "stargates":
+									putToLoadedRefData(refEntry, Stargate.class, loaded::putStargate);
+									break;
+								case "npc_stations":
+									putToLoadedRefData(refEntry, NpcStation.class, loaded::putNpcStation);
+									break;
+								case "station_operations":
+									putToLoadedRefData(refEntry, StationOperation.class, loaded::putStationOperation);
+									break;
+								case "station_services":
+									putToLoadedRefData(refEntry, StationService.class, loaded::putStationService);
 									break;
 								case "meta":
 								case "type_materials":

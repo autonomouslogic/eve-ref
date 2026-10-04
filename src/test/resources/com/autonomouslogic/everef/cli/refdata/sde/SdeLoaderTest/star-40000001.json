@@ -1,0 +1,13 @@
+{
+  "radius" : 63350000,
+  "solar_system_id" : 30000001,
+  "statistics" : {
+    "age" : 450099996956557300,
+    "life" : 694900007408500700,
+    "luminosity" : 0.01575,
+    "spectral_class" : "K2 V",
+    "temperature" : 4567.0
+  },
+  "type_id" : 45041,
+  "star_id" : 40000001
+}

@@ -1,0 +1,25 @@
+---
+"40000003":
+  celestialIndex: 1
+  orbitID: 40000002
+  orbitIndex: 1
+  position:
+    x: 161967513600.0
+    "y": 21288837120.0
+    z: -73505464320.0
+  radius: 27043.400391
+  solarSystemID: 30000001
+  statistics:
+    density: 277.882996
+    eccentricity: 0.0
+    escapeVelocity: 10.6728
+    locked: true
+    massDust: 23083200800620544
+    massGas: 7.16671
+    orbitPeriod: 468161.0
+    orbitRadius: 80831296.0
+    rotationRate: 468161.0
+    spectralClass: "0.0"
+    surfaceGravity: 0.0021
+    temperature: 90.7537
+  typeID: 15

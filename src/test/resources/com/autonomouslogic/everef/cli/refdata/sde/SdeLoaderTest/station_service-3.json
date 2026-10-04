@@ -1,0 +1,13 @@
+{
+  "service_name" : {
+    "de" : "Kuriermissionen",
+    "en" : "Courier Missions",
+    "es" : "Misiones de reparto",
+    "fr" : "Missions de courrier",
+    "ja" : "輸送ミッション",
+    "ko" : "운반 미션",
+    "ru" : "Курьерские задания",
+    "zh" : "快递任务"
+  },
+  "service_id" : 3
+}
