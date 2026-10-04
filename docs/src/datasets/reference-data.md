@@ -87,7 +87,7 @@ This table show the available data and where to get it.
 | Dogma effects                 | `/dogma_effects`    | `dogmaEffects.jsonl`                        | `dogma/effects.yaml`           |                                     |
 | Dogma expressions             |                     |                                             |                                |                                     |
 | Dogma type attributes         | `/types`            | `typeDogma.jsonl`                           | `universe/types.yaml`          |                                     |
-| Dogma type effects            |                     | `dogmaEffects.jsonl`                        | `universe/types.yaml`          |                                     |
+| Dogma type effects            |                     |                                             | `universe/types.yaml`          |                                     |
 |                               |                     |                                             |                                | `dogmaeffectcategories.json`        |
 |                               |                     |                                             |                                | `attributeorders.json`              |
 | Dogma units                   |                     | `dogmaUnits.jsonl`                          |                                | `dogmaunits.json`                   |
