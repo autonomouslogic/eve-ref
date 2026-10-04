@@ -56,10 +56,14 @@ prizeMoneyLevels.forEach((level, i) => {
 	prizeMoneyPool -= level.winners * level.value;
 });
 const prizes = [
-	{name: "Ten Years of Omega", description: [
-		`10x 6-month Omega codes, value ${formatMoney(sixMonthsValue, 1)} each`,
-		`60x 1-month Omega codes, value ${formatMoney(oneMonthValue, 1)} each`],
-	winners: "65 winners"},
+	{
+		name: "Ten Years of Omega",
+		description: [
+			`10x 6-month Omega codes, value ${formatMoney(sixMonthsValue, 1)} each`,
+			`60x 1-month Omega codes, value ${formatMoney(oneMonthValue, 1)} each`,
+		],
+		winners: "65 winners",
+	},
 	...prizeMoneyLevels.map((level) => ({
 		name: `${formatNumber(level.value, 0)} ISK`,
 		description: [""],
