@@ -16,6 +16,42 @@ externalDocs:
 servers:
 - url: https://ref-data.everef.net
 paths:
+  /agent_types:
+    get:
+      description: Get all agent type IDs.
+      operationId: getAllAgentTypes
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: integer
+                  format: int32
+          description: Agent type IDs.
+      tags:
+      - refdata
+  /agent_types/{agent_type_id}:
+    get:
+      description: Get an agent type.
+      operationId: getAgentType
+      parameters:
+      - in: path
+        name: agent_type_id
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AgentType"
+          description: The agent type.
+      tags:
+      - refdata
   /blueprints:
     get:
       description: Get all blueprint IDs.
@@ -478,6 +514,114 @@ paths:
           description: The mutaplasmid.
       tags:
       - refdata
+  /npc_characters:
+    get:
+      description: Get all NPC character IDs.
+      operationId: getAllNpcCharacters
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: integer
+                  format: int32
+          description: NPC character IDs.
+      tags:
+      - refdata
+  /npc_characters/{character_id}:
+    get:
+      description: Get an NPC character.
+      operationId: getNpcCharacter
+      parameters:
+      - in: path
+        name: character_id
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NpcCharacter"
+          description: The NPC character.
+      tags:
+      - refdata
+  /npc_corporation_divisions:
+    get:
+      description: Get all NPC corporation division IDs.
+      operationId: getAllNpcCorporationDivisions
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: integer
+                  format: int32
+          description: NPC corporation division IDs.
+      tags:
+      - refdata
+  /npc_corporation_divisions/{division_id}:
+    get:
+      description: Get an NPC corporation division.
+      operationId: getNpcCorporationDivision
+      parameters:
+      - in: path
+        name: division_id
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NpcCorporationDivision"
+          description: The NPC corporation division.
+      tags:
+      - refdata
+  /npc_corporations:
+    get:
+      description: Get all NPC corporation IDs.
+      operationId: getAllNpcCorporations
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: integer
+                  format: int32
+          description: NPC corporation IDs.
+      tags:
+      - refdata
+  /npc_corporations/{corporation_id}:
+    get:
+      description: Get an NPC corporation.
+      operationId: getNpcCorporation
+      parameters:
+      - in: path
+        name: corporation_id
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NpcCorporation"
+          description: The NPC corporation.
+      tags:
+      - refdata
   /planets:
     get:
       description: Get all planet IDs.
@@ -747,6 +891,14 @@ paths:
       - refdata
 components:
   schemas:
+    AgentType:
+      type: object
+      properties:
+        agent_type_id:
+          type: integer
+          format: int64
+        name:
+          type: string
     Blueprint:
       type: object
       description: A map of blueprints. The key is the blueprint type ID.
@@ -1618,6 +1770,203 @@ components:
             type: integer
             format: int64
         resulting_type_id:
+          type: integer
+          format: int64
+    NpcCharacter:
+      type: object
+      properties:
+        agent:
+          $ref: "#/components/schemas/NpcCharacterAgentInfo"
+        ancestry_id:
+          type: integer
+          format: int64
+        bloodline_id:
+          type: integer
+          format: int64
+        career_id:
+          type: integer
+          format: int64
+        ceo:
+          type: boolean
+        character_id:
+          type: integer
+          format: int64
+        corporation_id:
+          type: integer
+          format: int64
+        description:
+          type: string
+        gender:
+          type: boolean
+        location_id:
+          type: integer
+          format: int64
+        name:
+          type: object
+          additionalProperties:
+            type: string
+            description: The key is the language code.
+          description: The key is the language code.
+        race_id:
+          type: integer
+          format: int64
+        school_id:
+          type: integer
+          format: int64
+        skills:
+          type: array
+          items:
+            $ref: "#/components/schemas/NpcCharacterSkill"
+        speciality_id:
+          type: integer
+          format: int64
+        start_date:
+          type: string
+        unique_name:
+          type: boolean
+    NpcCharacterAgentInfo:
+      type: object
+      description: Only present if this character is also an agent.
+      properties:
+        agent_type_id:
+          type: integer
+          format: int64
+        division_id:
+          type: integer
+          format: int64
+        is_locator:
+          type: boolean
+        level:
+          type: integer
+          format: int64
+    NpcCharacterSkill:
+      type: object
+      properties:
+        type_id:
+          type: integer
+          format: int64
+    NpcCorporation:
+      type: object
+      properties:
+        allowed_member_races:
+          type: array
+          items:
+            type: integer
+            format: int64
+        ceo_id:
+          type: integer
+          format: int64
+        corporation_id:
+          type: integer
+          format: int64
+        deleted:
+          type: boolean
+        description:
+          type: object
+          additionalProperties:
+            type: string
+            description: The key is the language code.
+          description: The key is the language code.
+        divisions:
+          type: object
+          additionalProperties:
+            $ref: "#/components/schemas/NpcCorporationDivisionAssignment"
+          description: "The key is the division ID, referencing npc_corporation_divisions."
+        enemy_id:
+          type: integer
+          format: int64
+        extent:
+          type: string
+        faction_id:
+          type: integer
+          format: int64
+        friend_id:
+          type: integer
+          format: int64
+        has_player_personnel_manager:
+          type: boolean
+        icon_id:
+          type: integer
+          format: int64
+        initial_price:
+          type: number
+        main_activity_id:
+          type: integer
+          format: int64
+        member_limit:
+          type: integer
+          format: int64
+        min_security:
+          type: number
+        minimum_join_standing:
+          type: integer
+          format: int64
+        name:
+          type: object
+          additionalProperties:
+            type: string
+            description: The key is the language code.
+          description: The key is the language code.
+        race_id:
+          type: integer
+          format: int64
+        secondary_activity_id:
+          type: integer
+          format: int64
+        send_char_termination_message:
+          type: boolean
+        shares:
+          type: integer
+          format: int64
+        size:
+          type: string
+        size_factor:
+          type: number
+        solar_system_id:
+          type: integer
+          format: int64
+        station_id:
+          type: integer
+          format: int64
+        tax_rate:
+          type: number
+        ticker_name:
+          type: string
+        unique_name:
+          type: boolean
+    NpcCorporationDivision:
+      type: object
+      properties:
+        display_name:
+          type: string
+        division_id:
+          type: integer
+          format: int64
+        internal_name:
+          type: string
+        leader_type_name:
+          type: object
+          additionalProperties:
+            type: string
+            description: The key is the language code.
+          description: The key is the language code.
+        name:
+          type: object
+          additionalProperties:
+            type: string
+            description: The key is the language code.
+          description: The key is the language code.
+    NpcCorporationDivisionAssignment:
+      type: object
+      description: "The key is the division ID, referencing npc_corporation_divisions."
+      properties:
+        division_number:
+          type: integer
+          format: int64
+        leader_id:
+          type: integer
+          format: int64
+        size:
           type: integer
           format: int64
     Planet:

@@ -1,0 +1,25 @@
+{
+  "display_name" : "New distribution division",
+  "internal_name" : "Distribution",
+  "leader_type_name" : {
+    "de" : "Vertriebsleiter",
+    "en" : "Distribution Manager",
+    "es" : "Gerente de reparto",
+    "fr" : "Responsable de la distribution",
+    "ja" : "流通管理者",
+    "ko" : "보급 관리자",
+    "ru" : "Начальник отдела сбыта",
+    "zh" : "分销经理"
+  },
+  "name" : {
+    "de" : "Vertrieb",
+    "en" : "Distribution",
+    "es" : "Distribución",
+    "fr" : "Distribution",
+    "ja" : "流通",
+    "ko" : "보급",
+    "ru" : "Отдел сбыта",
+    "zh" : "物流"
+  },
+  "division_id" : 22
+}

@@ -15,6 +15,7 @@
 
 import * as runtime from '../runtime';
 import type {
+  AgentType,
   Blueprint,
   Bundle,
   Constellation,
@@ -27,6 +28,9 @@ import type {
   MarketGroup,
   MetaGroup,
   Mutaplasmid,
+  NpcCharacter,
+  NpcCorporation,
+  NpcCorporationDivision,
   Planet,
   RefDataMeta,
   Region,
@@ -36,6 +40,8 @@ import type {
   Unit,
 } from '../models';
 import {
+    AgentTypeFromJSON,
+    AgentTypeToJSON,
     BlueprintFromJSON,
     BlueprintToJSON,
     BundleFromJSON,
@@ -60,6 +66,12 @@ import {
     MetaGroupToJSON,
     MutaplasmidFromJSON,
     MutaplasmidToJSON,
+    NpcCharacterFromJSON,
+    NpcCharacterToJSON,
+    NpcCorporationFromJSON,
+    NpcCorporationToJSON,
+    NpcCorporationDivisionFromJSON,
+    NpcCorporationDivisionToJSON,
     PlanetFromJSON,
     PlanetToJSON,
     RefDataMetaFromJSON,
@@ -75,6 +87,10 @@ import {
     UnitFromJSON,
     UnitToJSON,
 } from '../models';
+
+export interface GetAgentTypeRequest {
+    agentTypeId: number;
+}
 
 export interface GetBlueprintRequest {
     blueprintTypeId: number;
@@ -128,6 +144,18 @@ export interface GetMutaplasmidRequest {
     mutaplasmidTypeId: number;
 }
 
+export interface GetNpcCharacterRequest {
+    characterId: number;
+}
+
+export interface GetNpcCorporationRequest {
+    corporationId: number;
+}
+
+export interface GetNpcCorporationDivisionRequest {
+    divisionId: number;
+}
+
 export interface GetPlanetRequest {
     planetId: number;
 }
@@ -164,6 +192,62 @@ export interface GetUnitRequest {
  * 
  */
 export class RefdataApi extends runtime.BaseAPI {
+
+    /**
+     * Get an agent type.
+     */
+    async getAgentTypeRaw(requestParameters: GetAgentTypeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AgentType>> {
+        if (requestParameters.agentTypeId === null || requestParameters.agentTypeId === undefined) {
+            throw new runtime.RequiredError('agentTypeId','Required parameter requestParameters.agentTypeId was null or undefined when calling getAgentType.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/agent_types/{agent_type_id}`.replace(`{${"agent_type_id"}}`, encodeURIComponent(String(requestParameters.agentTypeId))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => AgentTypeFromJSON(jsonValue));
+    }
+
+    /**
+     * Get an agent type.
+     */
+    async getAgentType(requestParameters: GetAgentTypeRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AgentType> {
+        const response = await this.getAgentTypeRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Get all agent type IDs.
+     */
+    async getAllAgentTypesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<number>>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/agent_types`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse<any>(response);
+    }
+
+    /**
+     * Get all agent type IDs.
+     */
+    async getAllAgentTypes(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<number>> {
+        const response = await this.getAllAgentTypesRaw(initOverrides);
+        return await response.value();
+    }
 
     /**
      * Get all blueprint IDs.
@@ -422,6 +506,84 @@ export class RefdataApi extends runtime.BaseAPI {
      */
     async getAllMutaplasmids(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<number>> {
         const response = await this.getAllMutaplasmidsRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Get all NPC character IDs.
+     */
+    async getAllNpcCharactersRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<number>>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/npc_characters`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse<any>(response);
+    }
+
+    /**
+     * Get all NPC character IDs.
+     */
+    async getAllNpcCharacters(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<number>> {
+        const response = await this.getAllNpcCharactersRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Get all NPC corporation division IDs.
+     */
+    async getAllNpcCorporationDivisionsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<number>>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/npc_corporation_divisions`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse<any>(response);
+    }
+
+    /**
+     * Get all NPC corporation division IDs.
+     */
+    async getAllNpcCorporationDivisions(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<number>> {
+        const response = await this.getAllNpcCorporationDivisionsRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Get all NPC corporation IDs.
+     */
+    async getAllNpcCorporationsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<number>>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/npc_corporations`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse<any>(response);
+    }
+
+    /**
+     * Get all NPC corporation IDs.
+     */
+    async getAllNpcCorporations(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<number>> {
+        const response = await this.getAllNpcCorporationsRaw(initOverrides);
         return await response.value();
     }
 
@@ -1020,6 +1182,96 @@ export class RefdataApi extends runtime.BaseAPI {
      */
     async getMutaplasmid(requestParameters: GetMutaplasmidRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Mutaplasmid> {
         const response = await this.getMutaplasmidRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Get an NPC character.
+     */
+    async getNpcCharacterRaw(requestParameters: GetNpcCharacterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<NpcCharacter>> {
+        if (requestParameters.characterId === null || requestParameters.characterId === undefined) {
+            throw new runtime.RequiredError('characterId','Required parameter requestParameters.characterId was null or undefined when calling getNpcCharacter.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/npc_characters/{character_id}`.replace(`{${"character_id"}}`, encodeURIComponent(String(requestParameters.characterId))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => NpcCharacterFromJSON(jsonValue));
+    }
+
+    /**
+     * Get an NPC character.
+     */
+    async getNpcCharacter(requestParameters: GetNpcCharacterRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<NpcCharacter> {
+        const response = await this.getNpcCharacterRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Get an NPC corporation.
+     */
+    async getNpcCorporationRaw(requestParameters: GetNpcCorporationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<NpcCorporation>> {
+        if (requestParameters.corporationId === null || requestParameters.corporationId === undefined) {
+            throw new runtime.RequiredError('corporationId','Required parameter requestParameters.corporationId was null or undefined when calling getNpcCorporation.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/npc_corporations/{corporation_id}`.replace(`{${"corporation_id"}}`, encodeURIComponent(String(requestParameters.corporationId))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => NpcCorporationFromJSON(jsonValue));
+    }
+
+    /**
+     * Get an NPC corporation.
+     */
+    async getNpcCorporation(requestParameters: GetNpcCorporationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<NpcCorporation> {
+        const response = await this.getNpcCorporationRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Get an NPC corporation division.
+     */
+    async getNpcCorporationDivisionRaw(requestParameters: GetNpcCorporationDivisionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<NpcCorporationDivision>> {
+        if (requestParameters.divisionId === null || requestParameters.divisionId === undefined) {
+            throw new runtime.RequiredError('divisionId','Required parameter requestParameters.divisionId was null or undefined when calling getNpcCorporationDivision.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/npc_corporation_divisions/{division_id}`.replace(`{${"division_id"}}`, encodeURIComponent(String(requestParameters.divisionId))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => NpcCorporationDivisionFromJSON(jsonValue));
+    }
+
+    /**
+     * Get an NPC corporation division.
+     */
+    async getNpcCorporationDivision(requestParameters: GetNpcCorporationDivisionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<NpcCorporationDivision> {
+        const response = await this.getNpcCorporationDivisionRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

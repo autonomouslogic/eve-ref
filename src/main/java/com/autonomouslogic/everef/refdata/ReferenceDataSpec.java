@@ -396,6 +396,86 @@ public interface ReferenceDataSpec {
 	Region getRegion(@PathParam("region_id") long regionId);
 
 	@GET
+	@Path("/agent_types")
+	@Operation(description = "Get all agent type IDs.")
+	@ApiResponse(
+			responseCode = "200",
+			description = "Agent type IDs.",
+			useReturnTypeSchema = true,
+			content = @Content(mediaType = "application/json"))
+	List<Integer> getAllAgentTypes();
+
+	@GET
+	@Path("/agent_types/{agent_type_id}")
+	@Operation(description = "Get an agent type.")
+	@ApiResponse(
+			responseCode = "200",
+			description = "The agent type.",
+			useReturnTypeSchema = true,
+			content = @Content(mediaType = "application/json"))
+	AgentType getAgentType(@PathParam("agent_type_id") long agentTypeId);
+
+	@GET
+	@Path("/npc_corporation_divisions")
+	@Operation(description = "Get all NPC corporation division IDs.")
+	@ApiResponse(
+			responseCode = "200",
+			description = "NPC corporation division IDs.",
+			useReturnTypeSchema = true,
+			content = @Content(mediaType = "application/json"))
+	List<Integer> getAllNpcCorporationDivisions();
+
+	@GET
+	@Path("/npc_corporation_divisions/{division_id}")
+	@Operation(description = "Get an NPC corporation division.")
+	@ApiResponse(
+			responseCode = "200",
+			description = "The NPC corporation division.",
+			useReturnTypeSchema = true,
+			content = @Content(mediaType = "application/json"))
+	NpcCorporationDivision getNpcCorporationDivision(@PathParam("division_id") long divisionId);
+
+	@GET
+	@Path("/npc_corporations")
+	@Operation(description = "Get all NPC corporation IDs.")
+	@ApiResponse(
+			responseCode = "200",
+			description = "NPC corporation IDs.",
+			useReturnTypeSchema = true,
+			content = @Content(mediaType = "application/json"))
+	List<Integer> getAllNpcCorporations();
+
+	@GET
+	@Path("/npc_corporations/{corporation_id}")
+	@Operation(description = "Get an NPC corporation.")
+	@ApiResponse(
+			responseCode = "200",
+			description = "The NPC corporation.",
+			useReturnTypeSchema = true,
+			content = @Content(mediaType = "application/json"))
+	NpcCorporation getNpcCorporation(@PathParam("corporation_id") long corporationId);
+
+	@GET
+	@Path("/npc_characters")
+	@Operation(description = "Get all NPC character IDs.")
+	@ApiResponse(
+			responseCode = "200",
+			description = "NPC character IDs.",
+			useReturnTypeSchema = true,
+			content = @Content(mediaType = "application/json"))
+	List<Integer> getAllNpcCharacters();
+
+	@GET
+	@Path("/npc_characters/{character_id}")
+	@Operation(description = "Get an NPC character.")
+	@ApiResponse(
+			responseCode = "200",
+			description = "The NPC character.",
+			useReturnTypeSchema = true,
+			content = @Content(mediaType = "application/json"))
+	NpcCharacter getNpcCharacter(@PathParam("character_id") long characterId);
+
+	@GET
 	@Path("/constellations")
 	@Operation(description = "Get all constellation IDs.")
 	@ApiResponse(

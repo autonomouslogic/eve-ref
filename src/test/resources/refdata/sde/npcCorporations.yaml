@@ -1,0 +1,233 @@
+---
+"1000001":
+  ceoID: 3000001
+  deleted: false
+  description:
+    de: "Die interne Corporation, die für Charaktere, die sich auf dem Friedhof befinden,\
+      \ verwendet wird."
+    en: "The internal corporation used for characters in graveyard."
+    es: "La corporación interna usada para los personajes en el cementerio."
+    fr: "Corporation interne utilisée pour les personnages envoyés au cimetière."
+    ja: "墓場送りになったキャラクター用の内部コーポレーション。"
+    ko: "무덤에 있는 캐릭터를 위해 사용되는 내부 코퍼레이션입니다."
+    ru: "Внутренняя корпорация, которая используется для персонажей на кладбище."
+    zh: "供长眠于地下的人物所使用的内部军团。"
+  extent: "L"
+  hasPlayerPersonnelManager: false
+  initialPrice: 0
+  memberLimit: -1
+  minSecurity: 0.0
+  minimumJoinStanding: 1
+  name:
+    de: "Doomheim"
+    en: "Doomheim"
+    es: "Doomheim"
+    fr: "Doomheim"
+    ja: "ドゥームヘイム"
+    ko: "둠헤임"
+    ru: "Doomheim"
+    zh: "Doomheim"
+  sendCharTerminationMessage: true
+  shares: 1
+  size: "T"
+  stationID: 60000001
+  taxRate: 0.0
+  tickerName: "666"
+  uniqueName: false
+"1000002":
+  allowedMemberRaces:
+  - 1
+  ceoID: 3004049
+  corporationTrades:
+    "41": 0.42430165130978287
+    "43": -0.6711405041493873
+    "421": 0.3001143158045617
+    "518": 0.7750082325370861
+    "672": 0.06973519798742064
+    "786": 0.19450615755504702
+    "967": 0.06973519798742064
+    "1010": 0.20371426538579657
+    "1026": 0.2504333660021425
+    "1032": 0.14536715845718692
+    "1072": 0.36695257178772417
+    "1102": 0.2664506270619553
+    "1105": 0.3125794840163827
+    "1109": 0.28253382213032663
+    "1116": 0.26322857313878767
+    "1130": 0.10864660032282167
+    "1133": 0.15312595540578258
+    "2368": -0.199849958742
+    "2369": -0.199849958742
+    "2371": -0.199849958742
+    "2373": -0.199849958742
+    "2374": -0.199849958742
+    "2375": -0.199849958742
+    "2376": -0.199849958742
+    "2377": -0.199849958742
+    "3243": 0.5054881981664892
+    "3567": 0.28196743128698226
+    "3699": -0.2791412243437901
+    "9852": 0.5663904297633726
+    "11562": 0.14536715845718692
+    "11614": 0.33467169912357686
+    "12057": 0.36695257178772417
+    "12067": 0.36695257178772417
+    "12266": 0.166666
+    "12270": 0.166666
+    "16279": 0.1998499587415616
+    "17483": 0.1998499587415616
+    "22543": 0.1998499587415616
+    "22577": 0.1998499587415616
+    "22779": 0.166666
+    "22783": 0.5054881981664892
+    "27915": 0.1263720495416223
+    "28368": 0.1998499587415616
+    "28386": 0.1998499587415616
+    "28448": 0.1998499587415616
+    "28449": 0.1998499587415616
+    "28450": 0.1998499587415616
+    "28451": 0.1998499587415616
+    "28452": 0.1998499587415616
+    "28453": 0.1998499587415616
+    "28454": 0.1998499587415616
+    "28455": 0.1998499587415616
+    "28456": 0.1998499587415616
+    "28457": 0.1998499587415616
+    "28458": 0.1998499587415616
+    "28459": 0.1998499587415616
+    "28460": 0.1998499587415616
+    "28461": 0.1998499587415616
+    "28462": 0.1998499587415616
+    "28463": 0.1998499587415616
+    "28464": 0.1998499587415616
+    "28465": 0.1998499587415616
+    "28466": 0.1998499587415616
+    "28467": 0.1998499587415616
+    "28468": 0.1998499587415616
+    "28469": 0.1998499587415616
+    "28470": 0.1998499587415616
+    "28471": 0.1998499587415616
+    "28472": 0.1998499587415616
+    "28473": 0.1998499587415616
+    "28474": 0.1998499587415616
+    "28475": 0.1998499587415616
+    "28476": 0.1998499587415616
+    "28477": 0.1998499587415616
+    "28478": 0.1998499587415616
+    "28479": 0.1998499587415616
+    "28480": 0.1998499587415616
+    "28481": 0.1998499587415616
+    "28482": 0.1998499587415616
+    "28483": 0.1998499587415616
+    "28484": 0.1998499587415616
+    "28485": 0.1998499587415616
+    "28486": 0.1998499587415616
+    "28487": 0.1998499587415616
+    "28488": 0.1998499587415616
+    "28489": 0.1998499587415616
+    "28490": 0.1998499587415616
+    "28491": 0.1998499587415616
+    "28492": 0.1998499587415616
+    "28493": 0.1998499587415616
+    "28494": 0.1998499587415616
+    "28495": 0.1998499587415616
+    "28496": 0.1998499587415616
+    "28497": 0.1998499587415616
+    "28498": 0.1998499587415616
+    "28499": 0.1998499587415616
+    "28500": 0.1998499587415616
+    "28501": 0.1998499587415616
+    "28502": 0.1998499587415616
+    "28503": 0.1998499587415616
+    "28504": 0.1998499587415616
+    "28505": 0.1998499587415616
+    "28655": 0.5054881981664892
+    "32839": 0.2
+    "32854": 0.2
+    "32855": 0.2
+    "38660": 0.199849958742
+    "40338": 0.334671699124
+    "40672": 0.166666
+    "40740": 0.505488198166
+    "40741": 0.505488198166
+    "41221": 0.366952571788
+    "41242": 0.366952571788
+    "41243": 1.0
+    "49100": 0.505488198166
+    "56749": 0.166666
+    "60338": 0.2
+    "72258": -1.0
+    "73248": -1.0
+  deleted: false
+  description:
+    de: "Die CBD Corporation ist eine der größten Export/Import-Firmen im Hoheitsgebiet\
+      \ der Caldari. Die Corporation verfügt über Handelsverbindungen weit und breit\
+      \ und hat ständig eine riesige Warenmenge im Umlauf."
+    en: "The CBD Corporation is one of the biggest exporters/importers in Caldari\
+      \ space. The corporation has established trade links far and wide, with a huge\
+      \ amount of goods in constant fluctuation."
+    es: "La Corporación CBD es uno de los mayores exportadores e importadores en el\
+      \ espacio Caldari. Ha establecido vínculos comerciales en todos los confines\
+      \ del espacio y tiene una gran cantidad de bienes en constante movimiento."
+    fr: "La CBD Corporation est l'une des plus grosses sociétés d'import-export de\
+      \ l'espace caldari. Elle a établi des partenariats commerciaux un peu partout\
+      \ et génère d'énormes flux de marchandises en circulation permanente."
+    ja: "CBDコーポレーションはカルダリ領屈指の大手貿易会社だ。広大な貿易網を確立し、莫大な商品を絶えず流通させている。"
+    ko: "CBD 코퍼레이션은 칼다리 지역에서 가장 규모가 큰 수출입 코퍼레이션 중 하나입니다. 이 코퍼레이션은 방대하고 포괄적인 무역 관계를\
+      \ 유지하며 어마어마한 양의 물품들을 끊임없이 순환시키고 있습니다."
+    ru: "Корпорация CBD является одной из крупнейших компаний по экспорту и импорт\
+      у в пространстве Калдари. Корпорация установила широчайшие торговые связи, и\
+      \ в еe постоянном обороте находится огромное количество товаров."
+    zh: "CBD社团是加达里空间最大的出口/进口商。该社团广泛建立贸易联系，始终维持大量货物的流通。"
+  divisions:
+    "22":
+      divisionNumber: 1
+      leaderID: 3008500
+      size: 37
+    "23":
+      divisionNumber: 2
+      leaderID: 3008486
+      size: 41
+    "24":
+      divisionNumber: 3
+      leaderID: 3008463
+      size: 20
+  enemyID: 1000005
+  extent: "G"
+  factionID: 500001
+  friendID: 1000006
+  hasPlayerPersonnelManager: false
+  iconID: 1465
+  initialPrice: 47
+  investors:
+    "1000002": 42
+    "1000006": 9
+    "1000013": 14
+  lpOfferTables:
+  - 6
+  - 9
+  - 58
+  - 62
+  mainActivityID: 10
+  memberLimit: -1
+  minSecurity: 0.0
+  minimumJoinStanding: 1
+  name:
+    de: "CBD Corporation"
+    en: "CBD Corporation"
+    es: "Corporación CBD"
+    fr: "CBD Corporation"
+    ja: "CBDコーポレーション"
+    ko: "CBD 코퍼레이션"
+    ru: "CBD Corporation"
+    zh: "CBD社团"
+  raceID: 1
+  sendCharTerminationMessage: false
+  shares: 30515077373
+  size: "H"
+  sizeFactor: 1.75
+  solarSystemID: 30002780
+  stationID: 60000004
+  taxRate: 0.0
+  tickerName: "CBDC"
+  uniqueName: true

@@ -530,3 +530,52 @@ schematics:
     filePrefix: schematic
     ids:
       - 65
+
+agentTypes:
+  idField: agent_type_id
+  model: AgentType
+  sde:
+    file: agentTypes.yaml
+  test:
+    filePrefix: agent_type
+    ids:
+      - 2
+      - 4
+
+npcCorporationDivisions:
+  idField: division_id
+  model: NpcCorporationDivision
+  sde:
+    file: npcCorporationDivisions.yaml
+  test:
+    filePrefix: npc_corporation_division
+    ids:
+      - 18
+      - 22
+
+npcCorporations:
+  idField: corporation_id
+  model: NpcCorporation
+  sde:
+    file: npcCorporations.yaml
+    removes:
+      - corporation_trades
+      - exchange_rates
+      - investors
+      - lp_offer_tables
+  test:
+    filePrefix: npc_corporation
+    ids:
+      - 1000001
+      - 1000002
+
+npcCharacters:
+  idField: character_id
+  model: NpcCharacter
+  sde:
+    file: npcCharacters.yaml
+  test:
+    filePrefix: npc_character
+    ids:
+      - 3008416
+      - 3003869

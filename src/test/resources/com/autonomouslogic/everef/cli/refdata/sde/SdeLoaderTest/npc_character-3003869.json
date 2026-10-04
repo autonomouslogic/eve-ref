@@ -1,0 +1,26 @@
+{
+  "bloodline_id" : 5,
+  "ceo" : true,
+  "corporation_id" : 1000073,
+  "gender" : false,
+  "location_id" : 60007183,
+  "name" : {
+    "de" : "Pamoo Meninri",
+    "en" : "Pamoo Meninri",
+    "es" : "Pamoo Meninri",
+    "fr" : "Pamoo Meninri",
+    "ja" : "パムー・メニンリ",
+    "ko" : "파무 메닌리",
+    "ru" : "Pamoo Meninri",
+    "zh" : "帕莫·梅尼利"
+  },
+  "race_id" : 4,
+  "skills" : [ {
+    "type_id" : 3363
+  }, {
+    "type_id" : 3368
+  } ],
+  "start_date" : "2003-03-27 13:27:00",
+  "unique_name" : true,
+  "character_id" : 3003869
+}

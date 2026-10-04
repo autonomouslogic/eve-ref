@@ -1,0 +1,43 @@
+---
+"18":
+  displayName: "Research and development division"
+  internalName: "R&D"
+  leaderTypeName:
+    de: "Leitender Forscher"
+    en: "Chief Researcher"
+    es: "Investigador jefe"
+    fr: "Directeur de la recherche"
+    ja: "研究主任"
+    ko: "최고 연구원"
+    ru: "Главный исследователь"
+    zh: "首席研究员"
+  name:
+    de: "Forschung und Entwicklung"
+    en: "R&D"
+    es: "I+D"
+    fr: "R & D"
+    ja: "R&D"
+    ko: "연구개발"
+    ru: "Научно-исследовательский отдел"
+    zh: "研发"
+"22":
+  displayName: "New distribution division"
+  internalName: "Distribution"
+  leaderTypeName:
+    de: "Vertriebsleiter"
+    en: "Distribution Manager"
+    es: "Gerente de reparto"
+    fr: "Responsable de la distribution"
+    ja: "流通管理者"
+    ko: "보급 관리자"
+    ru: "Начальник отдела сбыта"
+    zh: "分销经理"
+  name:
+    de: "Vertrieb"
+    en: "Distribution"
+    es: "Distribución"
+    fr: "Distribution"
+    ja: "流通"
+    ko: "보급"
+    ru: "Отдел сбыта"
+    zh: "物流"
