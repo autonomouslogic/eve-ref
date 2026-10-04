@@ -104,7 +104,7 @@ const donationMarks = computed(() => [0, donationGoal / 3, donationGoal * 2 / 3,
 					<span></span>
 				</ProgressBar>
 				<div class="flex justify-between text-xs text-gray-400">
-					<span v-for="mark in donationMarks" :key="mark"><Money :value="mark" /></span>
+					<span v-for="mark in donationMarks" :key="mark"><Money :value="mark" :decimals="0" /></span>
 				</div>
 				<p class="text-xs text-gray-400 mt-3">
 					All donations are made in-game to "EVE Ref" and are 100% used for giveaways!
