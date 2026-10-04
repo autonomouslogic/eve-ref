@@ -1,6 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 export * from './AgentType';
+export * from './AsteroidBelt';
 export * from './Blueprint';
 export * from './BlueprintActivity';
 export * from './BlueprintMaterial';
@@ -22,6 +23,7 @@ export * from './InventoryTypeTraits';
 export * from './MarketGroup';
 export * from './MetaGroup';
 export * from './ModifierInfo';
+export * from './Moon';
 export * from './Mutaplasmid';
 export * from './MutaplasmidDogmaModifications';
 export * from './MutaplasmidTypeMapping';
@@ -31,6 +33,7 @@ export * from './NpcCharacterSkill';
 export * from './NpcCorporation';
 export * from './NpcCorporationDivision';
 export * from './NpcCorporationDivisionAssignment';
+export * from './NpcStation';
 export * from './Planet';
 export * from './PlanetAttributes';
 export * from './PlanetStatistics';
@@ -42,6 +45,12 @@ export * from './Region';
 export * from './Schematic';
 export * from './Skill';
 export * from './SolarSystem';
+export * from './Star';
+export * from './StarStatistics';
+export * from './Stargate';
+export * from './StargateDestination';
+export * from './StationOperation';
+export * from './StationService';
 export * from './TraitBonus';
 export * from './TypeMaterial';
 export * from './Unit';

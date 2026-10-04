@@ -1,0 +1,30 @@
+---
+"40000004":
+  attributes:
+    heightMap1: 3903
+    heightMap2: 3907
+    shaderPreset: 4228
+  celestialIndex: 1
+  orbitID: 40000002
+  orbitIndex: 1
+  position:
+    x: 162088094286.0
+    "y": 21314854783.0
+    z: -73598621491.0
+  radius: 270000.0
+  solarSystemID: 30000001
+  statistics:
+    density: 750.484009
+    eccentricity: 0.0
+    escapeVelocity: 178.158005
+    locked: true
+    massDust: 65333601047007986000
+    massGas: 366808000.0
+    orbitPeriod: 1964420.0
+    orbitRadius: 210284000.0
+    pressure: 0.0
+    rotationRate: 1964420.0
+    spectralClass: "0.0"
+    surfaceGravity: 0.05762
+    temperature: 90.7537
+  typeID: 14

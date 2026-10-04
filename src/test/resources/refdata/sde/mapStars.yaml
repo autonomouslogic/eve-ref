@@ -1,0 +1,21 @@
+---
+"40000001":
+  radius: 63350000
+  solarSystemID: 30000001
+  statistics:
+    age: 450099996956557300
+    life: 694900007408500700
+    luminosity: 0.01575
+    spectralClass: "K2 V"
+    temperature: 4567.0
+  typeID: 45041
+"40350751":
+  radius: 155250000
+  solarSystemID: 31000007
+  statistics:
+    age: 58470001140563970
+    life: 257199993352355840
+    luminosity: 0.2775
+    spectralClass: "G0 V"
+    temperature: 5977.0
+  typeID: 45038

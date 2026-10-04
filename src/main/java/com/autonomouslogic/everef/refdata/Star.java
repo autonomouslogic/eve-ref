@@ -1,0 +1,32 @@
+package com.autonomouslogic.everef.refdata;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+import java.math.BigDecimal;
+import lombok.Builder;
+import lombok.Value;
+import lombok.extern.jackson.Jacksonized;
+import tools.jackson.databind.PropertyNamingStrategies;
+import tools.jackson.databind.annotation.JsonNaming;
+
+@Value
+@Builder
+@Jacksonized
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
+@Schema
+public class Star {
+	@JsonProperty
+	Long starId;
+
+	@JsonProperty
+	Long solarSystemId;
+
+	@JsonProperty
+	Long typeId;
+
+	@JsonProperty
+	BigDecimal radius;
+
+	@JsonProperty
+	StarStatistics statistics;
+}

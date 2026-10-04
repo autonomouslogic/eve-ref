@@ -19,7 +19,6 @@
   "security_status" : 0.858324,
   "star_id" : 40000001,
   "solar_system_id" : 30000001,
-  "station_ids" : [ 60012526, 60014437 ],
   "border" : true,
   "hub" : true,
   "international" : true,
@@ -31,5 +30,8 @@
   "radius" : 1323338301440.0,
   "region_id" : 10000001,
   "regional" : true,
-  "stargate_ids" : [ 50000056, 50000057, 50000058 ]
+  "stargate_ids" : [ 50000056, 50000057, 50000058 ],
+  "stargates_to_system_ids" : [ 30000003 ],
+  "planet_ids" : [ 40000002 ],
+  "station_ids" : [ 60012526, 60014437 ]
 }

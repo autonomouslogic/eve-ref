@@ -1,0 +1,19 @@
+{
+  "celestial_index" : 5,
+  "operation_id" : 33,
+  "orbit_id" : 40000012,
+  "orbit_index" : 1,
+  "owner_id" : 1000126,
+  "position" : {
+    "x" : -1106145239040.0,
+    "y" : -145460060160.0,
+    "z" : 182618726400.0
+  },
+  "reprocessing_efficiency" : 0.5,
+  "reprocessing_hangar_flag" : 4,
+  "reprocessing_stations_take" : 0.05,
+  "solar_system_id" : 30000001,
+  "type_id" : 2502,
+  "use_operation_name" : true,
+  "station_id" : 60012526
+}

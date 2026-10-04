@@ -534,4 +534,144 @@ public interface ReferenceDataSpec {
 			useReturnTypeSchema = true,
 			content = @Content(mediaType = "application/json"))
 	Planet getPlanet(@PathParam("planet_id") long planetId);
+
+	@GET
+	@Path("/asteroid_belts")
+	@Operation(description = "Get all asteroid belt IDs.")
+	@ApiResponse(
+			responseCode = "200",
+			description = "Asteroid belt IDs.",
+			useReturnTypeSchema = true,
+			content = @Content(mediaType = "application/json"))
+	List<Integer> getAllAsteroidBelts();
+
+	@GET
+	@Path("/asteroid_belts/{asteroid_belt_id}")
+	@Operation(description = "Get an asteroid belt.")
+	@ApiResponse(
+			responseCode = "200",
+			description = "The asteroid belt.",
+			useReturnTypeSchema = true,
+			content = @Content(mediaType = "application/json"))
+	AsteroidBelt getAsteroidBelt(@PathParam("asteroid_belt_id") long asteroidBeltId);
+
+	@GET
+	@Path("/moons")
+	@Operation(description = "Get all moon IDs.")
+	@ApiResponse(
+			responseCode = "200",
+			description = "Moon IDs.",
+			useReturnTypeSchema = true,
+			content = @Content(mediaType = "application/json"))
+	List<Integer> getAllMoons();
+
+	@GET
+	@Path("/moons/{moon_id}")
+	@Operation(description = "Get a moon.")
+	@ApiResponse(
+			responseCode = "200",
+			description = "The moon.",
+			useReturnTypeSchema = true,
+			content = @Content(mediaType = "application/json"))
+	Moon getMoon(@PathParam("moon_id") long moonId);
+
+	@GET
+	@Path("/stars")
+	@Operation(description = "Get all star IDs.")
+	@ApiResponse(
+			responseCode = "200",
+			description = "Star IDs.",
+			useReturnTypeSchema = true,
+			content = @Content(mediaType = "application/json"))
+	List<Integer> getAllStars();
+
+	@GET
+	@Path("/stars/{star_id}")
+	@Operation(description = "Get a star.")
+	@ApiResponse(
+			responseCode = "200",
+			description = "The star.",
+			useReturnTypeSchema = true,
+			content = @Content(mediaType = "application/json"))
+	Star getStar(@PathParam("star_id") long starId);
+
+	@GET
+	@Path("/stargates")
+	@Operation(description = "Get all stargate IDs.")
+	@ApiResponse(
+			responseCode = "200",
+			description = "Stargate IDs.",
+			useReturnTypeSchema = true,
+			content = @Content(mediaType = "application/json"))
+	List<Integer> getAllStargates();
+
+	@GET
+	@Path("/stargates/{stargate_id}")
+	@Operation(description = "Get a stargate.")
+	@ApiResponse(
+			responseCode = "200",
+			description = "The stargate.",
+			useReturnTypeSchema = true,
+			content = @Content(mediaType = "application/json"))
+	Stargate getStargate(@PathParam("stargate_id") long stargateId);
+
+	@GET
+	@Path("/npc_stations")
+	@Operation(description = "Get all NPC station IDs.")
+	@ApiResponse(
+			responseCode = "200",
+			description = "NPC station IDs.",
+			useReturnTypeSchema = true,
+			content = @Content(mediaType = "application/json"))
+	List<Integer> getAllNpcStations();
+
+	@GET
+	@Path("/npc_stations/{station_id}")
+	@Operation(description = "Get an NPC station.")
+	@ApiResponse(
+			responseCode = "200",
+			description = "The NPC station.",
+			useReturnTypeSchema = true,
+			content = @Content(mediaType = "application/json"))
+	NpcStation getNpcStation(@PathParam("station_id") long stationId);
+
+	@GET
+	@Path("/station_operations")
+	@Operation(description = "Get all station operation IDs.")
+	@ApiResponse(
+			responseCode = "200",
+			description = "Station operation IDs.",
+			useReturnTypeSchema = true,
+			content = @Content(mediaType = "application/json"))
+	List<Integer> getAllStationOperations();
+
+	@GET
+	@Path("/station_operations/{operation_id}")
+	@Operation(description = "Get a station operation.")
+	@ApiResponse(
+			responseCode = "200",
+			description = "The station operation.",
+			useReturnTypeSchema = true,
+			content = @Content(mediaType = "application/json"))
+	StationOperation getStationOperation(@PathParam("operation_id") long operationId);
+
+	@GET
+	@Path("/station_services")
+	@Operation(description = "Get all station service IDs.")
+	@ApiResponse(
+			responseCode = "200",
+			description = "Station service IDs.",
+			useReturnTypeSchema = true,
+			content = @Content(mediaType = "application/json"))
+	List<Integer> getAllStationServices();
+
+	@GET
+	@Path("/station_services/{service_id}")
+	@Operation(description = "Get a station service.")
+	@ApiResponse(
+			responseCode = "200",
+			description = "The station service.",
+			useReturnTypeSchema = true,
+			content = @Content(mediaType = "application/json"))
+	StationService getStationService(@PathParam("service_id") long serviceId);
 }

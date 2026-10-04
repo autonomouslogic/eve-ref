@@ -16,12 +16,15 @@ import com.autonomouslogic.everef.cli.refdata.post.MarketGroupsDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.MissingDogmaUnitsDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.MutaplasmidDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.OreVariationsDecorator;
+import com.autonomouslogic.everef.cli.refdata.post.PlanetIdsOnSolarSystemsDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.PostDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.RegionConstellationIdsDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.RegionSolarSystemIdsDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.ReprocessableTypesDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.SchematicDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.SkillDecorator;
+import com.autonomouslogic.everef.cli.refdata.post.StargatesToSystemIdsDecorator;
+import com.autonomouslogic.everef.cli.refdata.post.StationIdsOnSolarSystemsDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.TypeUsedInBlueprintsDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.TypesDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.UniverseIdDecorator;
@@ -176,6 +179,15 @@ public class BuildRefData implements Command {
 	@Inject
 	protected RegionConstellationIdsDecorator regionConstellationIdsDecorator;
 
+	@Inject
+	protected StargatesToSystemIdsDecorator stargatesToSystemIdsDecorator;
+
+	@Inject
+	protected PlanetIdsOnSolarSystemsDecorator planetIdsOnSolarSystemsDecorator;
+
+	@Inject
+	protected StationIdsOnSolarSystemsDecorator stationIdsOnSolarSystemsDecorator;
+
 	@Setter
 	@NonNull
 	private ZonedDateTime buildTime = ZonedDateTime.now(ZoneOffset.UTC).truncatedTo(ChronoUnit.SECONDS);
@@ -230,7 +242,10 @@ public class BuildRefData implements Command {
 				universeIdDecorator,
 				constellationSolarSystemIdsDecorator,
 				regionSolarSystemIdsDecorator,
-				regionConstellationIdsDecorator);
+				regionConstellationIdsDecorator,
+				stargatesToSystemIdsDecorator,
+				planetIdsOnSolarSystemsDecorator,
+				stationIdsOnSolarSystemsDecorator);
 	}
 
 	@Override

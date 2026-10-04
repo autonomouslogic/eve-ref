@@ -1,0 +1,14 @@
+{
+  "destination" : {
+    "solar_system_id" : 30000001,
+    "stargate_id" : 50000056
+  },
+  "position" : {
+    "x" : -101092761600.0,
+    "y" : 5279539200.0,
+    "z" : 1550503403520.0
+  },
+  "solar_system_id" : 30000003,
+  "type_id" : 29624,
+  "stargate_id" : 50000342
+}

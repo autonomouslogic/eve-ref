@@ -16,6 +16,7 @@
 import * as runtime from '../runtime';
 import type {
   AgentType,
+  AsteroidBelt,
   Blueprint,
   Bundle,
   Constellation,
@@ -27,21 +28,29 @@ import type {
   InventoryType,
   MarketGroup,
   MetaGroup,
+  Moon,
   Mutaplasmid,
   NpcCharacter,
   NpcCorporation,
   NpcCorporationDivision,
+  NpcStation,
   Planet,
   RefDataMeta,
   Region,
   Schematic,
   Skill,
   SolarSystem,
+  Star,
+  Stargate,
+  StationOperation,
+  StationService,
   Unit,
 } from '../models';
 import {
     AgentTypeFromJSON,
     AgentTypeToJSON,
+    AsteroidBeltFromJSON,
+    AsteroidBeltToJSON,
     BlueprintFromJSON,
     BlueprintToJSON,
     BundleFromJSON,
@@ -64,6 +73,8 @@ import {
     MarketGroupToJSON,
     MetaGroupFromJSON,
     MetaGroupToJSON,
+    MoonFromJSON,
+    MoonToJSON,
     MutaplasmidFromJSON,
     MutaplasmidToJSON,
     NpcCharacterFromJSON,
@@ -72,6 +83,8 @@ import {
     NpcCorporationToJSON,
     NpcCorporationDivisionFromJSON,
     NpcCorporationDivisionToJSON,
+    NpcStationFromJSON,
+    NpcStationToJSON,
     PlanetFromJSON,
     PlanetToJSON,
     RefDataMetaFromJSON,
@@ -84,12 +97,24 @@ import {
     SkillToJSON,
     SolarSystemFromJSON,
     SolarSystemToJSON,
+    StarFromJSON,
+    StarToJSON,
+    StargateFromJSON,
+    StargateToJSON,
+    StationOperationFromJSON,
+    StationOperationToJSON,
+    StationServiceFromJSON,
+    StationServiceToJSON,
     UnitFromJSON,
     UnitToJSON,
 } from '../models';
 
 export interface GetAgentTypeRequest {
     agentTypeId: number;
+}
+
+export interface GetAsteroidBeltRequest {
+    asteroidBeltId: number;
 }
 
 export interface GetBlueprintRequest {
@@ -140,6 +165,10 @@ export interface GetMetaGroupRequest {
     metaGroupId: number;
 }
 
+export interface GetMoonRequest {
+    moonId: number;
+}
+
 export interface GetMutaplasmidRequest {
     mutaplasmidTypeId: number;
 }
@@ -154,6 +183,10 @@ export interface GetNpcCorporationRequest {
 
 export interface GetNpcCorporationDivisionRequest {
     divisionId: number;
+}
+
+export interface GetNpcStationRequest {
+    stationId: number;
 }
 
 export interface GetPlanetRequest {
@@ -174,6 +207,22 @@ export interface GetSkillRequest {
 
 export interface GetSolarSystemRequest {
     solarSystemId: number;
+}
+
+export interface GetStarRequest {
+    starId: number;
+}
+
+export interface GetStargateRequest {
+    stargateId: number;
+}
+
+export interface GetStationOperationRequest {
+    operationId: number;
+}
+
+export interface GetStationServiceRequest {
+    serviceId: number;
 }
 
 export interface GetTypeRequest {
@@ -246,6 +295,32 @@ export class RefdataApi extends runtime.BaseAPI {
      */
     async getAllAgentTypes(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<number>> {
         const response = await this.getAllAgentTypesRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Get all asteroid belt IDs.
+     */
+    async getAllAsteroidBeltsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<number>>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/asteroid_belts`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse<any>(response);
+    }
+
+    /**
+     * Get all asteroid belt IDs.
+     */
+    async getAllAsteroidBelts(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<number>> {
+        const response = await this.getAllAsteroidBeltsRaw(initOverrides);
         return await response.value();
     }
 
@@ -484,6 +559,32 @@ export class RefdataApi extends runtime.BaseAPI {
     }
 
     /**
+     * Get all moon IDs.
+     */
+    async getAllMoonsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<number>>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/moons`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse<any>(response);
+    }
+
+    /**
+     * Get all moon IDs.
+     */
+    async getAllMoons(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<number>> {
+        const response = await this.getAllMoonsRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Get all mutaplasmid IDs.
      */
     async getAllMutaplasmidsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<number>>> {
@@ -584,6 +685,32 @@ export class RefdataApi extends runtime.BaseAPI {
      */
     async getAllNpcCorporations(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<number>> {
         const response = await this.getAllNpcCorporationsRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Get all NPC station IDs.
+     */
+    async getAllNpcStationsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<number>>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/npc_stations`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse<any>(response);
+    }
+
+    /**
+     * Get all NPC station IDs.
+     */
+    async getAllNpcStations(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<number>> {
+        const response = await this.getAllNpcStationsRaw(initOverrides);
         return await response.value();
     }
 
@@ -718,6 +845,110 @@ export class RefdataApi extends runtime.BaseAPI {
     }
 
     /**
+     * Get all stargate IDs.
+     */
+    async getAllStargatesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<number>>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/stargates`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse<any>(response);
+    }
+
+    /**
+     * Get all stargate IDs.
+     */
+    async getAllStargates(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<number>> {
+        const response = await this.getAllStargatesRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Get all star IDs.
+     */
+    async getAllStarsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<number>>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/stars`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse<any>(response);
+    }
+
+    /**
+     * Get all star IDs.
+     */
+    async getAllStars(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<number>> {
+        const response = await this.getAllStarsRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Get all station operation IDs.
+     */
+    async getAllStationOperationsRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<number>>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/station_operations`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse<any>(response);
+    }
+
+    /**
+     * Get all station operation IDs.
+     */
+    async getAllStationOperations(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<number>> {
+        const response = await this.getAllStationOperationsRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Get all station service IDs.
+     */
+    async getAllStationServicesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<number>>> {
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/station_services`,
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse<any>(response);
+    }
+
+    /**
+     * Get all station service IDs.
+     */
+    async getAllStationServices(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<number>> {
+        const response = await this.getAllStationServicesRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
      * Get all type IDs.
      */
     async getAllTypesRaw(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Array<number>>> {
@@ -766,6 +997,36 @@ export class RefdataApi extends runtime.BaseAPI {
      */
     async getAllUnits(initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Array<number>> {
         const response = await this.getAllUnitsRaw(initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Get an asteroid belt.
+     */
+    async getAsteroidBeltRaw(requestParameters: GetAsteroidBeltRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<AsteroidBelt>> {
+        if (requestParameters.asteroidBeltId === null || requestParameters.asteroidBeltId === undefined) {
+            throw new runtime.RequiredError('asteroidBeltId','Required parameter requestParameters.asteroidBeltId was null or undefined when calling getAsteroidBelt.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/asteroid_belts/{asteroid_belt_id}`.replace(`{${"asteroid_belt_id"}}`, encodeURIComponent(String(requestParameters.asteroidBeltId))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => AsteroidBeltFromJSON(jsonValue));
+    }
+
+    /**
+     * Get an asteroid belt.
+     */
+    async getAsteroidBelt(requestParameters: GetAsteroidBeltRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<AsteroidBelt> {
+        const response = await this.getAsteroidBeltRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -1158,6 +1419,36 @@ export class RefdataApi extends runtime.BaseAPI {
     }
 
     /**
+     * Get a moon.
+     */
+    async getMoonRaw(requestParameters: GetMoonRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Moon>> {
+        if (requestParameters.moonId === null || requestParameters.moonId === undefined) {
+            throw new runtime.RequiredError('moonId','Required parameter requestParameters.moonId was null or undefined when calling getMoon.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/moons/{moon_id}`.replace(`{${"moon_id"}}`, encodeURIComponent(String(requestParameters.moonId))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => MoonFromJSON(jsonValue));
+    }
+
+    /**
+     * Get a moon.
+     */
+    async getMoon(requestParameters: GetMoonRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Moon> {
+        const response = await this.getMoonRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
      */
     async getMutaplasmidRaw(requestParameters: GetMutaplasmidRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Mutaplasmid>> {
         if (requestParameters.mutaplasmidTypeId === null || requestParameters.mutaplasmidTypeId === undefined) {
@@ -1272,6 +1563,36 @@ export class RefdataApi extends runtime.BaseAPI {
      */
     async getNpcCorporationDivision(requestParameters: GetNpcCorporationDivisionRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<NpcCorporationDivision> {
         const response = await this.getNpcCorporationDivisionRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Get an NPC station.
+     */
+    async getNpcStationRaw(requestParameters: GetNpcStationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<NpcStation>> {
+        if (requestParameters.stationId === null || requestParameters.stationId === undefined) {
+            throw new runtime.RequiredError('stationId','Required parameter requestParameters.stationId was null or undefined when calling getNpcStation.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/npc_stations/{station_id}`.replace(`{${"station_id"}}`, encodeURIComponent(String(requestParameters.stationId))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => NpcStationFromJSON(jsonValue));
+    }
+
+    /**
+     * Get an NPC station.
+     */
+    async getNpcStation(requestParameters: GetNpcStationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<NpcStation> {
+        const response = await this.getNpcStationRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
@@ -1470,6 +1791,126 @@ export class RefdataApi extends runtime.BaseAPI {
      */
     async getSolarSystem(requestParameters: GetSolarSystemRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<SolarSystem> {
         const response = await this.getSolarSystemRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Get a star.
+     */
+    async getStarRaw(requestParameters: GetStarRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Star>> {
+        if (requestParameters.starId === null || requestParameters.starId === undefined) {
+            throw new runtime.RequiredError('starId','Required parameter requestParameters.starId was null or undefined when calling getStar.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/stars/{star_id}`.replace(`{${"star_id"}}`, encodeURIComponent(String(requestParameters.starId))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => StarFromJSON(jsonValue));
+    }
+
+    /**
+     * Get a star.
+     */
+    async getStar(requestParameters: GetStarRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Star> {
+        const response = await this.getStarRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Get a stargate.
+     */
+    async getStargateRaw(requestParameters: GetStargateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<Stargate>> {
+        if (requestParameters.stargateId === null || requestParameters.stargateId === undefined) {
+            throw new runtime.RequiredError('stargateId','Required parameter requestParameters.stargateId was null or undefined when calling getStargate.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/stargates/{stargate_id}`.replace(`{${"stargate_id"}}`, encodeURIComponent(String(requestParameters.stargateId))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => StargateFromJSON(jsonValue));
+    }
+
+    /**
+     * Get a stargate.
+     */
+    async getStargate(requestParameters: GetStargateRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<Stargate> {
+        const response = await this.getStargateRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Get a station operation.
+     */
+    async getStationOperationRaw(requestParameters: GetStationOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StationOperation>> {
+        if (requestParameters.operationId === null || requestParameters.operationId === undefined) {
+            throw new runtime.RequiredError('operationId','Required parameter requestParameters.operationId was null or undefined when calling getStationOperation.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/station_operations/{operation_id}`.replace(`{${"operation_id"}}`, encodeURIComponent(String(requestParameters.operationId))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => StationOperationFromJSON(jsonValue));
+    }
+
+    /**
+     * Get a station operation.
+     */
+    async getStationOperation(requestParameters: GetStationOperationRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StationOperation> {
+        const response = await this.getStationOperationRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     * Get a station service.
+     */
+    async getStationServiceRaw(requestParameters: GetStationServiceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<StationService>> {
+        if (requestParameters.serviceId === null || requestParameters.serviceId === undefined) {
+            throw new runtime.RequiredError('serviceId','Required parameter requestParameters.serviceId was null or undefined when calling getStationService.');
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        const response = await this.request({
+            path: `/station_services/{service_id}`.replace(`{${"service_id"}}`, encodeURIComponent(String(requestParameters.serviceId))),
+            method: 'GET',
+            headers: headerParameters,
+            query: queryParameters,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => StationServiceFromJSON(jsonValue));
+    }
+
+    /**
+     * Get a station service.
+     */
+    async getStationService(requestParameters: GetStationServiceRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<StationService> {
+        const response = await this.getStationServiceRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

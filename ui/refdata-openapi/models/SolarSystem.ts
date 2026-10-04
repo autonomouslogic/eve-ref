@@ -100,6 +100,12 @@ export interface SolarSystem {
     name?: { [key: string]: string; };
     /**
      * 
+     * @type {Array<number>}
+     * @memberof SolarSystem
+     */
+    planetIds?: Array<number>;
+    /**
+     * 
      * @type {Coordinate}
      * @memberof SolarSystem
      */
@@ -159,6 +165,12 @@ export interface SolarSystem {
      */
     stargateIds?: Array<number>;
     /**
+     * The solar system IDs this system is connected to via its stargates.
+     * @type {Array<number>}
+     * @memberof SolarSystem
+     */
+    stargatesToSystemIds?: Array<number>;
+    /**
      * 
      * @type {Array<number>}
      * @memberof SolarSystem
@@ -208,6 +220,7 @@ export function SolarSystemFromJSONTyped(json: any, ignoreDiscriminator: boolean
         'international': !exists(json, 'international') ? undefined : json['international'],
         'luminosity': !exists(json, 'luminosity') ? undefined : json['luminosity'],
         'name': !exists(json, 'name') ? undefined : json['name'],
+        'planetIds': !exists(json, 'planet_ids') ? undefined : json['planet_ids'],
         'position': !exists(json, 'position') ? undefined : CoordinateFromJSON(json['position']),
         'position2D': !exists(json, 'position2_d') ? undefined : Coordinate2DFromJSON(json['position2_d']),
         'radius': !exists(json, 'radius') ? undefined : json['radius'],
@@ -218,6 +231,7 @@ export function SolarSystemFromJSONTyped(json: any, ignoreDiscriminator: boolean
         'solarSystemId': !exists(json, 'solar_system_id') ? undefined : json['solar_system_id'],
         'starId': !exists(json, 'star_id') ? undefined : json['star_id'],
         'stargateIds': !exists(json, 'stargate_ids') ? undefined : json['stargate_ids'],
+        'stargatesToSystemIds': !exists(json, 'stargates_to_system_ids') ? undefined : json['stargates_to_system_ids'],
         'stationIds': !exists(json, 'station_ids') ? undefined : json['station_ids'],
         'visualEffect': !exists(json, 'visual_effect') ? undefined : json['visual_effect'],
         'wormholeClassId': !exists(json, 'wormhole_class_id') ? undefined : json['wormhole_class_id'],
@@ -244,6 +258,7 @@ export function SolarSystemToJSON(value?: SolarSystem | null): any {
         'international': value.international,
         'luminosity': value.luminosity,
         'name': value.name,
+        'planet_ids': value.planetIds,
         'position': CoordinateToJSON(value.position),
         'position2_d': Coordinate2DToJSON(value.position2D),
         'radius': value.radius,
@@ -254,6 +269,7 @@ export function SolarSystemToJSON(value?: SolarSystem | null): any {
         'solar_system_id': value.solarSystemId,
         'star_id': value.starId,
         'stargate_ids': value.stargateIds,
+        'stargates_to_system_ids': value.stargatesToSystemIds,
         'station_ids': value.stationIds,
         'visual_effect': value.visualEffect,
         'wormhole_class_id': value.wormholeClassId,
