@@ -86,6 +86,7 @@ public class MockScrapeBuilder {
 		}
 		entries.add(createEntry("/refdata/hoboleaks/", "industrymodifiersources.json"));
 		entries.add(createEntry("/refdata/hoboleaks/", "industrytargetfilters.json"));
+		entries.add(createEntry("/refdata/hoboleaks/", "meta.json"));
 		return createTarXzFile(Map.ofEntries(entries.toArray(new Map.Entry[0])));
 	}
 
