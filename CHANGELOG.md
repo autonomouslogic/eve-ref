@@ -1,5 +1,21 @@
 EVE Ref Changelog
 
+## [2.82.0](https://github.com/autonomouslogic/eve-ref/compare/2.81.0...2.82.0) (2026-10-05)
+
+
+### Features
+
+* Stargates to region IDs ([#1125](https://github.com/autonomouslogic/eve-ref/issues/1125)) ([303f2e1](https://github.com/autonomouslogic/eve-ref/commit/303f2e1ab714649b110844a09b1f7fa8fec7de38))
+
+
+### Bug Fixes
+
+* Guard against null dogma attribute in AttibuteId component ([91b586c](https://github.com/autonomouslogic/eve-ref/commit/91b586cd82b52d06377896d78247aca02c453850))
+* Reference data meta ([#1132](https://github.com/autonomouslogic/eve-ref/issues/1132)) ([8bb57f4](https://github.com/autonomouslogic/eve-ref/commit/8bb57f40939387638f814151d9329dc46d0aea0d))
+* Stream JSON for reference data ([#1130](https://github.com/autonomouslogic/eve-ref/issues/1130)) ([8194eb3](https://github.com/autonomouslogic/eve-ref/commit/8194eb3586e4b3bc3de33d25d8d09e809c3f3b7b))
+* Upload and delete ref data files with real concurrency via virtual threads ([#1131](https://github.com/autonomouslogic/eve-ref/issues/1131)) ([038b70f](https://github.com/autonomouslogic/eve-ref/commit/038b70fdbf5ad51d1c386abbb4880f2c0bfb1944))
+* Upload ref data meta file last so a failed publish retries on rerun ([#1129](https://github.com/autonomouslogic/eve-ref/issues/1129)) ([449cb23](https://github.com/autonomouslogic/eve-ref/commit/449cb2316a4740b6f316fbf29bd940802fc6981d))
+
 ## [2.81.0](https://github.com/autonomouslogic/eve-ref/compare/2.80.10...2.81.0) (2026-10-04)
 
 
