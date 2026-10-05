@@ -256,6 +256,7 @@ public class PublishRefData implements Command {
 			var skipped = new AtomicInteger();
 			var uploaded = new AtomicInteger();
 			return Flowable.fromIterable(fileMap.entrySet())
+					.filter(entry -> !entry.getKey().equals(metaEntry.getPath()))
 					.doOnNext(entry -> reporter.increment())
 					.map(entry -> refDataUtil.createEntryForPath(
 							entry.getKey(), jsonMapper.writeValueAsBytes(entry.getValue())))
@@ -271,7 +272,24 @@ public class PublishRefData implements Command {
 						log.info("Uploaded {} entries", uploaded.get());
 						log.info("Skipped {} entries", skipped.get());
 					})
-					.andThen(Completable.defer(() -> deleteRemaining(new ArrayList<>(existing.keySet()))));
+					.andThen(Completable.defer(() -> {
+						existing.remove(metaEntry.getPath());
+						return deleteRemaining(new ArrayList<>(existing.keySet()));
+					}))
+					.andThen(Completable.defer(() -> uploadMetaFile(existing)));
+		});
+	}
+
+	private Completable uploadMetaFile(Map<String, ListedS3Object> existing) {
+		return Completable.defer(() -> {
+			var entry = refDataUtil.createEntryForPath(
+					metaEntry.getPath(), jsonMapper.writeValueAsBytes(fileMap.get(metaEntry.getPath())));
+			if (!filterExisting(new AtomicInteger(), existing, entry)) {
+				log.info("Meta file unchanged, skipping upload");
+				return Completable.complete();
+			}
+			log.info("Uploading meta file");
+			return uploadFile(entry);
 		});
 	}
 
