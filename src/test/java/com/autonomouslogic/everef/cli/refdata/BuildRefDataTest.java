@@ -114,6 +114,8 @@ public class BuildRefDataTest {
 						.build())
 				.hoboleaks(RefDataMetaFileInfo.builder()
 						.sha256(HashUtil.sha256Hex(hoboleaksFile))
+						.buildNumber(7654321L)
+						.releaseDate(Instant.parse("2022-02-01T12:00:00Z"))
 						.build())
 				.build();
 

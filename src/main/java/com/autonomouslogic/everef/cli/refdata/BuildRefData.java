@@ -57,6 +57,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.time.Duration;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
@@ -276,6 +277,7 @@ public class BuildRefData implements Command {
 	@SneakyThrows
 	private void generateRefDataMeta() {
 		var sdeInfo = readSdeInfo();
+		var hoboleaksInfo = readHoboleaksInfo();
 		currentRefDataMeta = RefDataMeta.builder()
 				.buildTime(buildTime.toInstant())
 				.sde(RefDataMetaFileInfo.builder()
@@ -288,6 +290,11 @@ public class BuildRefData implements Command {
 						.build())
 				.hoboleaks(RefDataMetaFileInfo.builder()
 						.sha256(HashUtil.sha256Hex(hoboleaksFile))
+						.buildNumber(hoboleaksInfo.get("revision").asLong())
+						.releaseDate(LocalDateTime.parse(
+										hoboleaksInfo.get("timestamp").asText())
+								.atZone(ZoneOffset.UTC)
+								.toInstant())
 						.build())
 				.build();
 	}
@@ -299,6 +306,16 @@ public class BuildRefData implements Command {
 					.findFirst()
 					.orElseThrow(() -> new IllegalStateException("_sde.yaml not found in SDE archive"));
 			return yamlMapper.readTree(entry.getRight()).get("sde");
+		}
+	}
+
+	@SneakyThrows
+	private JsonNode readHoboleaksInfo() {
+		try (var entries = CompressUtil.loadArchive(hoboleaksFile)) {
+			var entry = entries.filter(pair -> pair.getLeft().getName().equals("meta.json"))
+					.findFirst()
+					.orElseThrow(() -> new IllegalStateException("meta.json not found in Hoboleaks archive"));
+			return jsonMapper.readTree(entry.getRight());
 		}
 	}
 
