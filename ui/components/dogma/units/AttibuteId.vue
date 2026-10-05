@@ -12,6 +12,6 @@ const characterAttribute = await refdataApi.getDogmaAttribute({attributeId: prop
 </script>
 
 <template>
-	<span v-if="characterAttribute.displayName">{{ tr(characterAttribute.displayName, locale) }}</span>
+	<span v-if="characterAttribute?.displayName">{{ tr(characterAttribute.displayName, locale) }}</span>
 	<span v-else>(Unknown character attribute ID {{value}})</span>
 </template>
