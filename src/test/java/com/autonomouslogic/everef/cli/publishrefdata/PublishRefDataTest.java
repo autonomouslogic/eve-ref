@@ -2,6 +2,10 @@ package com.autonomouslogic.everef.cli.publishrefdata;
 
 import static com.autonomouslogic.everef.test.TestDataUtil.TEST_PORT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.argThat;
+import static org.mockito.ArgumentMatchers.eq;
 
 import com.autonomouslogic.commons.concurrent.VirtualThreads;
 import com.autonomouslogic.everef.model.refdata.RefDataConfig;
@@ -42,6 +46,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junitpioneer.jupiter.SetEnvironmentVariable;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 import tools.jackson.databind.JsonNode;
@@ -452,6 +457,30 @@ public class PublishRefDataTest {
 		var deleteKeys = mockS3Adapter.getAllDeleteKeys(BUCKET_NAME, s3);
 		assertEquals(List.of(), putKeys);
 		assertEquals(List.of(), deleteKeys);
+	}
+
+	@Test
+	@SneakyThrows
+	void shouldRetryAllFilesIfPreviousRunFailedPartway() {
+		var failingPath = "base/types/645";
+		var spyAdapter = Mockito.spy(mockS3Adapter);
+		Mockito.doThrow(new RuntimeException("Simulated upload failure"))
+				.when(spyAdapter)
+				.putObject(argThat(req -> req != null && failingPath.equals(req.key())), any(byte[].class), eq(s3));
+		publishRefData.s3Adapter = spyAdapter;
+
+		assertThrows(Exception.class, () -> VirtualThreads.onVirtualThread(publishRefData::run));
+
+		assertEquals(Optional.empty(), mockS3Adapter.getTestObject(BUCKET_NAME, "base/meta", s3));
+		var putKeysAfterFailure = mockS3Adapter.getAllPutKeys(BUCKET_NAME, s3);
+		assertEquals(false, putKeysAfterFailure.contains(failingPath));
+
+		publishRefData.s3Adapter = mockS3Adapter;
+		VirtualThreads.onVirtualThread(() -> publishRefData.run());
+
+		var putKeysAfterRetry = mockS3Adapter.getAllPutKeys(BUCKET_NAME, s3);
+		assertEquals(true, putKeysAfterRetry.contains("base/meta"));
+		assertEquals(true, putKeysAfterRetry.contains(failingPath));
 	}
 
 	@SneakyThrows
