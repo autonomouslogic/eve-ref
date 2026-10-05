@@ -47,7 +47,6 @@ import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Single;
 import java.io.File;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -64,11 +63,13 @@ import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.Hex;
+import org.apache.commons.compress.archivers.ArchiveEntry;
+import org.apache.commons.compress.archivers.ArchiveInputStream;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
 import tools.jackson.databind.DeserializationFeature;
 import tools.jackson.databind.ObjectMapper;
 import tools.jackson.databind.json.JsonMapper;
-import tools.jackson.databind.node.ObjectNode;
 
 @Singleton
 @Log4j2
@@ -122,31 +123,40 @@ public class RefDataUtil {
 	}
 
 	public Flowable<ReferenceEntry> parseReferenceDataArchive(@NonNull File file) {
-		return Flowable.fromStream(CompressUtil.loadArchive(file))
-				.flatMap(pair -> {
-					var filename = pair.getKey().getName();
-					var type = FilenameUtils.getBaseName(filename);
-					if (!filename.endsWith(".json")) {
-						log.debug("Skipping non-JSON file {}", filename);
-						return Flowable.empty();
-					}
-					log.debug("Parsing {}", filename);
-					if (filename.equals("meta.json")) {
-						return Flowable.just(createEntry(type, pair.getRight()));
-					}
-					var json = (ObjectNode) jsonMapper.readTree(pair.getRight());
-					var index = new ArrayList<Long>();
-					var fileEntries = Flowable.fromIterable(json.properties())
-							.map(entry -> {
-								var id = Long.parseLong(entry.getKey());
-								index.add(id);
-								var content = jsonMapper.writeValueAsBytes(entry.getValue());
-								return createEntry(type, id, content);
-							})
-							.doOnComplete(() -> log.debug("Finished parsing {}", filename));
-					return fileEntries;
-				})
-				.doFinally(() -> file.delete());
+		return Flowable.using(
+						() -> CompressUtil.uncompressArchive(file),
+						archive -> Flowable.<ArchiveEntry>generate(emitter -> {
+									var entry = archive.getNextEntry();
+									if (entry == null) {
+										emitter.onComplete();
+									} else {
+										emitter.onNext(entry);
+									}
+								})
+								// concatMap, not flatMap: entries share one ArchiveInputStream, so the
+								// next entry must not be requested until the current one is fully drained.
+								.concatMap(entry -> parseArchiveEntry(archive, entry)),
+						ArchiveInputStream::close,
+						true)
+				.doFinally(file::delete);
+	}
+
+	@SneakyThrows
+	private Flowable<ReferenceEntry> parseArchiveEntry(ArchiveInputStream archive, ArchiveEntry entry) {
+		var filename = entry.getName();
+		var type = FilenameUtils.getBaseName(filename);
+		if (!filename.endsWith(".json")) {
+			log.debug("Skipping non-JSON file {}", filename);
+			return Flowable.empty();
+		}
+		log.debug("Parsing {}", filename);
+		if (filename.equals("meta.json")) {
+			return Flowable.just(createEntry(type, IOUtils.toByteArray(archive)));
+		}
+		return Flowable.fromStream(JsonStreamUtil.streamObjectEntries(jsonMapper, archive))
+				.map(pair -> createEntry(
+						type, Long.parseLong(pair.getLeft()), jsonMapper.writeValueAsBytes(pair.getRight())))
+				.doOnComplete(() -> log.debug("Finished parsing {}", filename));
 	}
 
 	public ReferenceEntry createEntry(@NonNull String type, @NonNull Long id, @NonNull byte[] content) {
