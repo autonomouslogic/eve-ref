@@ -2467,6 +2467,12 @@ components:
       properties:
         sha256:
           type: string
+        timestamp:
+          type: string
+          format: date-time
+        version:
+          type: integer
+          format: int64
     Region:
       type: object
       properties:
