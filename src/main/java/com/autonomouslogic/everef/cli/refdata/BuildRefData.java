@@ -23,6 +23,7 @@ import com.autonomouslogic.everef.cli.refdata.post.RegionSolarSystemIdsDecorator
 import com.autonomouslogic.everef.cli.refdata.post.ReprocessableTypesDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.SchematicDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.SkillDecorator;
+import com.autonomouslogic.everef.cli.refdata.post.StargatesToRegionIdsDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.StargatesToSystemIdsDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.StationIdsOnSolarSystemsDecorator;
 import com.autonomouslogic.everef.cli.refdata.post.TypeUsedInBlueprintsDecorator;
@@ -183,6 +184,9 @@ public class BuildRefData implements Command {
 	protected StargatesToSystemIdsDecorator stargatesToSystemIdsDecorator;
 
 	@Inject
+	protected StargatesToRegionIdsDecorator stargatesToRegionIdsDecorator;
+
+	@Inject
 	protected PlanetIdsOnSolarSystemsDecorator planetIdsOnSolarSystemsDecorator;
 
 	@Inject
@@ -244,6 +248,7 @@ public class BuildRefData implements Command {
 				regionSolarSystemIdsDecorator,
 				regionConstellationIdsDecorator,
 				stargatesToSystemIdsDecorator,
+				stargatesToRegionIdsDecorator,
 				planetIdsOnSolarSystemsDecorator,
 				stationIdsOnSolarSystemsDecorator);
 	}

@@ -23,5 +23,6 @@
   "wormhole_class_id" : 1,
   "universe_id" : "wormhole",
   "solar_system_ids" : [ 31000007 ],
-  "constellation_ids" : [ 21000311 ]
+  "constellation_ids" : [ 21000311 ],
+  "stargates_to_region_ids" : [ ]
 }
