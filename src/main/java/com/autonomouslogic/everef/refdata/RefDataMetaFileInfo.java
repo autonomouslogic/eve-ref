@@ -19,8 +19,8 @@ public class RefDataMetaFileInfo {
 	String sha256;
 
 	@JsonProperty
-	Long buildNumber;
+	Long version;
 
 	@JsonProperty
-	Instant releaseDate;
+	Instant timestamp;
 }
