@@ -83,7 +83,7 @@ public class LoadedRefData {
 	@Inject
 	protected LoadedRefData(MVStoreUtil mvStoreUtil) {
 		this(mvStoreUtil.createTempStore("ref-data"));
-		mvStore.setCacheSize(8 * 1024 * 1024);
+		mvStore.setCacheSize(8 * 1024);
 	}
 
 	LoadedRefData(MVStore mvStore) {
