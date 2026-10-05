@@ -21,6 +21,7 @@ import com.autonomouslogic.everef.util.MockScrapeBuilder;
 import com.autonomouslogic.everef.util.RefDataUtil;
 import java.io.File;
 import java.io.FileInputStream;
+import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.util.LinkedHashSet;
 import javax.inject.Inject;
@@ -105,6 +106,8 @@ public class BuildRefDataTest {
 				.buildTime(buildTime.toInstant())
 				.sde(RefDataMetaFileInfo.builder()
 						.sha256(HashUtil.sha256Hex(sdeFile))
+						.buildNumber(123456L)
+						.releaseDate(Instant.parse("2022-01-01T00:00:00Z"))
 						.build())
 				.esi(RefDataMetaFileInfo.builder()
 						.sha256(HashUtil.sha256Hex(esiFile))

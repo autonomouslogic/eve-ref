@@ -76,6 +76,7 @@ import org.apache.commons.io.IOUtils;
 import org.h2.mvstore.MVStore;
 import software.amazon.awssdk.services.s3.S3AsyncClient;
 import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
 import tools.jackson.databind.json.JsonMapper;
 
 @Log4j2
@@ -98,6 +99,10 @@ public class BuildRefData implements Command {
 
 	@Inject
 	protected JsonMapper jsonMapper;
+
+	@Inject
+	@Named("yaml")
+	protected ObjectMapper yamlMapper;
 
 	@Inject
 	protected TempFiles tempFiles;
@@ -270,10 +275,13 @@ public class BuildRefData implements Command {
 
 	@SneakyThrows
 	private void generateRefDataMeta() {
+		var sdeInfo = readSdeInfo();
 		currentRefDataMeta = RefDataMeta.builder()
 				.buildTime(buildTime.toInstant())
 				.sde(RefDataMetaFileInfo.builder()
 						.sha256(HashUtil.sha256Hex(sdeFile))
+						.buildNumber(sdeInfo.get("buildNumber").asLong())
+						.releaseDate(Instant.parse(sdeInfo.get("releaseDate").asText()))
 						.build())
 				.esi(RefDataMetaFileInfo.builder()
 						.sha256(HashUtil.sha256Hex(esiFile))
@@ -282,6 +290,16 @@ public class BuildRefData implements Command {
 						.sha256(HashUtil.sha256Hex(hoboleaksFile))
 						.build())
 				.build();
+	}
+
+	@SneakyThrows
+	private JsonNode readSdeInfo() {
+		try (var entries = CompressUtil.loadArchive(sdeFile)) {
+			var entry = entries.filter(pair -> pair.getLeft().getName().equals("_sde.yaml"))
+					.findFirst()
+					.orElseThrow(() -> new IllegalStateException("_sde.yaml not found in SDE archive"));
+			return yamlMapper.readTree(entry.getRight()).get("sde");
+		}
 	}
 
 	private Completable checkAndProcess() {

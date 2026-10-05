@@ -2,6 +2,7 @@ package com.autonomouslogic.everef.refdata;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.time.Instant;
 import lombok.Builder;
 import lombok.Value;
 import lombok.extern.jackson.Jacksonized;
@@ -16,4 +17,10 @@ import tools.jackson.databind.annotation.JsonNaming;
 public class RefDataMetaFileInfo {
 	@JsonProperty
 	String sha256;
+
+	@JsonProperty
+	Long buildNumber;
+
+	@JsonProperty
+	Instant releaseDate;
 }
