@@ -4,6 +4,7 @@ import com.autonomouslogic.everef.api.IndustryCostHandlerTest;
 import com.autonomouslogic.everef.api.SearchHandlerTest;
 import com.autonomouslogic.everef.cli.DataIndexTest;
 import com.autonomouslogic.everef.cli.FetchDonationsTest;
+import com.autonomouslogic.everef.cli.GenerateMapDataTest;
 import com.autonomouslogic.everef.cli.MockDataIndexModule;
 import com.autonomouslogic.everef.cli.ScrapeFreelanceJobsTest;
 import com.autonomouslogic.everef.cli.ScrapeMilitaryCampaignsTest;
@@ -90,6 +91,8 @@ public interface TestComponent {
 	void inject(ExplorerRegionTypeSourceTest test);
 
 	void inject(FetchDonationsTest test);
+
+	void inject(GenerateMapDataTest test);
 
 	void inject(FlywayMigrateTest test);
 

@@ -508,6 +508,15 @@ task fetchDonations(type: JavaExec) {
 	mainClass = mainClassName
 }
 
+task generateMapData(type: JavaExec) {
+	group "application"
+	args "generate-map-data"
+	environment envProperties
+
+	classpath = sourceSets.main.runtimeClasspath
+	mainClass = mainClassName
+}
+
 task syncStaticData(type: JavaExec) {
 	group "application"
 	args "sync-static-data"
