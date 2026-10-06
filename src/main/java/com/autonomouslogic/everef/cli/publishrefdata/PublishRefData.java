@@ -18,6 +18,7 @@ import com.autonomouslogic.everef.s3.S3Adapter;
 import com.autonomouslogic.everef.s3.S3Util;
 import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.url.UrlParser;
+import com.autonomouslogic.everef.util.DiscordNotifier;
 import com.autonomouslogic.everef.util.ProgressReporter;
 import com.autonomouslogic.everef.util.RefDataUtil;
 import com.autonomouslogic.everef.util.TempFiles;
@@ -108,6 +109,9 @@ public class PublishRefData implements Command {
 	@Inject
 	protected Provider<MarketGroupBundleRenderer> marketGroupBundleRendererProvider;
 
+	@Inject
+	protected DiscordNotifier discordNotifier;
+
 	private S3Url refDataUrl;
 	private URI dataBaseUrl = Configs.DATA_BASE_URL.getRequired();
 	private AtomicInteger uploadCounter = new AtomicInteger();
@@ -141,7 +145,12 @@ public class PublishRefData implements Command {
 					}
 					return listBucketContents().flatMapCompletable(existing -> {
 						return Completable.concatArray(
-								initMvStore(), loadData(), renderFiles(), uploadFiles(existing), closeMvStore());
+								initMvStore(),
+								loadData(),
+								renderFiles(),
+								uploadFiles(existing),
+								closeMvStore(),
+								notifyDiscord());
 					});
 				}))
 				.blockingAwait();
@@ -328,6 +337,14 @@ public class PublishRefData implements Command {
 			return false;
 		}
 		return true;
+	}
+
+	private Completable notifyDiscord() {
+		return Completable.fromAction(() -> {
+			discordNotifier.notifyDiscord(String.format(
+					"Reference data published - SDE: %s, Hoboleaks: %s)",
+					latestMeta.getSde().getVersion(), latestMeta.getHoboleaks().getVersion()));
+		});
 	}
 
 	public Completable deleteRemaining(@NonNull List<String> remaining) {
