@@ -2467,6 +2467,12 @@ components:
       properties:
         sha256:
           type: string
+        timestamp:
+          type: string
+          format: date-time
+        version:
+          type: integer
+          format: int64
     Region:
       type: object
       properties:
@@ -2513,6 +2519,15 @@ components:
             type: integer
             format: int64
             description: Computed from the solar systems in this region.
+        stargates_to_region_ids:
+          type: array
+          description: The region IDs this region is connected to via stargates in
+            its solar systems.
+          items:
+            type: integer
+            format: int64
+            description: The region IDs this region is connected to via stargates
+              in its solar systems.
         universe_id:
           type: string
         wormhole_class_id:

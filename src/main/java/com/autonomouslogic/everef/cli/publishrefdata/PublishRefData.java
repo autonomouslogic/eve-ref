@@ -18,6 +18,7 @@ import com.autonomouslogic.everef.s3.S3Adapter;
 import com.autonomouslogic.everef.s3.S3Util;
 import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.url.UrlParser;
+import com.autonomouslogic.everef.util.DiscordNotifier;
 import com.autonomouslogic.everef.util.ProgressReporter;
 import com.autonomouslogic.everef.util.RefDataUtil;
 import com.autonomouslogic.everef.util.TempFiles;
@@ -108,6 +109,9 @@ public class PublishRefData implements Command {
 	@Inject
 	protected Provider<MarketGroupBundleRenderer> marketGroupBundleRendererProvider;
 
+	@Inject
+	protected DiscordNotifier discordNotifier;
+
 	private S3Url refDataUrl;
 	private URI dataBaseUrl = Configs.DATA_BASE_URL.getRequired();
 	private AtomicInteger uploadCounter = new AtomicInteger();
@@ -141,7 +145,12 @@ public class PublishRefData implements Command {
 					}
 					return listBucketContents().flatMapCompletable(existing -> {
 						return Completable.concatArray(
-								initMvStore(), loadData(), renderFiles(), uploadFiles(existing), closeMvStore());
+								initMvStore(),
+								loadData(),
+								renderFiles(),
+								uploadFiles(existing),
+								closeMvStore(),
+								notifyDiscord());
 					});
 				}))
 				.blockingAwait();
@@ -249,29 +258,48 @@ public class PublishRefData implements Command {
 	}
 
 	private Completable uploadFiles(Map<String, ListedS3Object> existing) {
-		return Completable.defer(() -> {
-			log.info("Evaluating {} files for upload", fileMap.size());
-			var reporter = new ProgressReporter(getName(), fileMap.size(), Duration.ofMinutes(1));
-			reporter.start();
-			var skipped = new AtomicInteger();
-			var uploaded = new AtomicInteger();
-			return Flowable.fromIterable(fileMap.entrySet())
-					.doOnNext(entry -> reporter.increment())
-					.map(entry -> refDataUtil.createEntryForPath(
-							entry.getKey(), jsonMapper.writeValueAsBytes(entry.getValue())))
-					.filter(entry -> filterExisting(skipped, existing, entry))
-					.flatMapCompletable(
+		return Completable.fromAction(() -> {
+					log.info("Evaluating {} files for upload", fileMap.size());
+					var reporter = new ProgressReporter(getName(), fileMap.size(), Duration.ofMinutes(1));
+					reporter.start();
+					var skipped = new AtomicInteger();
+					var uploaded = new AtomicInteger();
+					var entries = fileMap.entrySet().stream()
+							.filter(entry -> !entry.getKey().equals(metaEntry.getPath()))
+							.peek(entry -> reporter.increment())
+							.map(entry -> refDataUtil.createEntryForPath(
+									entry.getKey(), jsonMapper.writeValueAsBytes(entry.getValue())))
+							.filter(entry -> filterExisting(skipped, existing, entry))
+							.toList();
+					VirtualThreads.checkIsVirtual();
+					VirtualThreads.callAll(
+							entries.iterator(),
 							entry -> {
 								uploaded.incrementAndGet();
-								return uploadFile(entry);
+								uploadFile(entry).blockingAwait();
+								return null;
 							},
-							false,
-							UPLOAD_CONCURRENCY)
-					.doOnComplete(() -> {
-						log.info("Uploaded {} entries", uploaded.get());
-						log.info("Skipped {} entries", skipped.get());
-					})
-					.andThen(Completable.defer(() -> deleteRemaining(new ArrayList<>(existing.keySet()))));
+							UPLOAD_CONCURRENCY);
+					log.info("Uploaded {} entries", uploaded.get());
+					log.info("Skipped {} entries", skipped.get());
+				})
+				.andThen(Completable.defer(() -> {
+					existing.remove(metaEntry.getPath());
+					return deleteRemaining(new ArrayList<>(existing.keySet()));
+				}))
+				.andThen(Completable.defer(() -> uploadMetaFile(existing)));
+	}
+
+	private Completable uploadMetaFile(Map<String, ListedS3Object> existing) {
+		return Completable.defer(() -> {
+			var entry = refDataUtil.createEntryForPath(
+					metaEntry.getPath(), jsonMapper.writeValueAsBytes(fileMap.get(metaEntry.getPath())));
+			if (!filterExisting(new AtomicInteger(), existing, entry)) {
+				log.info("Meta file unchanged, skipping upload");
+				return Completable.complete();
+			}
+			log.info("Uploading meta file");
+			return uploadFile(entry);
 		});
 	}
 
@@ -311,20 +339,28 @@ public class PublishRefData implements Command {
 		return true;
 	}
 
+	private Completable notifyDiscord() {
+		return Completable.fromAction(() -> {
+			discordNotifier.notifyDiscord(String.format(
+					"Reference data published - SDE: %s, Hoboleaks: %s)",
+					latestMeta.getSde().getVersion(), latestMeta.getHoboleaks().getVersion()));
+		});
+	}
+
 	public Completable deleteRemaining(@NonNull List<String> remaining) {
-		return Completable.defer(() -> {
-					log.info("Deleting {} entries", remaining.size());
-					return Flowable.fromIterable(remaining)
-							.flatMapCompletable(
-									entry -> {
-										var delete = s3Util.deleteObjectRequest(refDataUrl.toBuilder()
-												.path(entry)
-												.build());
-										return Completable.fromAction(() -> s3Adapter.deleteObject(delete, s3Client));
-									},
-									false,
-									UPLOAD_CONCURRENCY);
-				})
-				.doOnComplete(() -> log.info("Deleted {} entries", remaining.size()));
+		return Completable.fromAction(() -> {
+			log.info("Deleting {} entries", remaining.size());
+			VirtualThreads.checkIsVirtual();
+			VirtualThreads.callAll(
+					remaining.iterator(),
+					entry -> {
+						var delete = s3Util.deleteObjectRequest(
+								refDataUrl.toBuilder().path(entry).build());
+						s3Adapter.deleteObject(delete, s3Client);
+						return null;
+					},
+					UPLOAD_CONCURRENCY);
+			log.info("Deleted {} entries", remaining.size());
+		});
 	}
 }

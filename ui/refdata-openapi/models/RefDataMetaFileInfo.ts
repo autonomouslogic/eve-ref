@@ -25,6 +25,18 @@ export interface RefDataMetaFileInfo {
      * @memberof RefDataMetaFileInfo
      */
     sha256?: string;
+    /**
+     * 
+     * @type {Date}
+     * @memberof RefDataMetaFileInfo
+     */
+    timestamp?: Date;
+    /**
+     * 
+     * @type {number}
+     * @memberof RefDataMetaFileInfo
+     */
+    version?: number;
 }
 
 /**
@@ -47,6 +59,8 @@ export function RefDataMetaFileInfoFromJSONTyped(json: any, ignoreDiscriminator:
     return {
         
         'sha256': !exists(json, 'sha256') ? undefined : json['sha256'],
+        'timestamp': !exists(json, 'timestamp') ? undefined : (new Date(json['timestamp'])),
+        'version': !exists(json, 'version') ? undefined : json['version'],
     };
 }
 
@@ -60,6 +74,8 @@ export function RefDataMetaFileInfoToJSON(value?: RefDataMetaFileInfo | null): a
     return {
         
         'sha256': value.sha256,
+        'timestamp': value.timestamp === undefined ? undefined : (value.timestamp.toISOString()),
+        'version': value.version,
     };
 }
 

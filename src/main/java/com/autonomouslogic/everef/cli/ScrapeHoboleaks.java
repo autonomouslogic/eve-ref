@@ -10,6 +10,7 @@ import com.autonomouslogic.everef.url.HttpUrl;
 import com.autonomouslogic.everef.url.S3Url;
 import com.autonomouslogic.everef.url.UrlParser;
 import com.autonomouslogic.everef.util.CompressUtil;
+import com.autonomouslogic.everef.util.DiscordNotifier;
 import com.autonomouslogic.everef.util.TempFiles;
 import io.reactivex.rxjava3.core.Completable;
 import io.reactivex.rxjava3.core.Flowable;
@@ -54,6 +55,9 @@ public class ScrapeHoboleaks implements Command {
 	@Inject
 	protected TempFiles tempFiles;
 
+	@Inject
+	protected DiscordNotifier discordNotifier;
+
 	private S3Url dataPath;
 	private HttpUrl dataUrl;
 	private HttpUrl hoboUrl;
@@ -78,7 +82,9 @@ public class ScrapeHoboleaks implements Command {
 							log.info("No update needed");
 							return Completable.complete();
 						}
-						return buildArchive(currentMeta).flatMapCompletable(this::uploadFiles);
+						return buildArchive(currentMeta)
+								.flatMapCompletable(this::uploadFiles)
+								.andThen(notifyDiscord(currentMeta));
 					});
 				})
 				.blockingAwait();
@@ -141,6 +147,13 @@ public class ScrapeHoboleaks implements Command {
 						var compressed = CompressUtil.compressXz(archive);
 						return compressed;
 					}));
+		});
+	}
+
+	private Completable notifyDiscord(byte[] metaBytes) {
+		return Completable.fromAction(() -> {
+			var version = jsonMapper.readTree(metaBytes).get("revision").asLong();
+			discordNotifier.notifyDiscord(String.format("Hoboleaks uploaded: %s", version));
 		});
 	}
 

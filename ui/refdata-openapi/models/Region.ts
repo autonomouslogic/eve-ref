@@ -87,6 +87,12 @@ export interface Region {
      */
     solarSystemIds?: Array<number>;
     /**
+     * The region IDs this region is connected to via stargates in its solar systems.
+     * @type {Array<number>}
+     * @memberof Region
+     */
+    stargatesToRegionIds?: Array<number>;
+    /**
      * 
      * @type {string}
      * @memberof Region
@@ -129,6 +135,7 @@ export function RegionFromJSONTyped(json: any, ignoreDiscriminator: boolean): Re
         'position': !exists(json, 'position') ? undefined : CoordinateFromJSON(json['position']),
         'regionId': !exists(json, 'region_id') ? undefined : json['region_id'],
         'solarSystemIds': !exists(json, 'solar_system_ids') ? undefined : json['solar_system_ids'],
+        'stargatesToRegionIds': !exists(json, 'stargates_to_region_ids') ? undefined : json['stargates_to_region_ids'],
         'universeId': !exists(json, 'universe_id') ? undefined : json['universe_id'],
         'wormholeClassId': !exists(json, 'wormhole_class_id') ? undefined : json['wormhole_class_id'],
     };
@@ -153,6 +160,7 @@ export function RegionToJSON(value?: Region | null): any {
         'position': CoordinateToJSON(value.position),
         'region_id': value.regionId,
         'solar_system_ids': value.solarSystemIds,
+        'stargates_to_region_ids': value.stargatesToRegionIds,
         'universe_id': value.universeId,
         'wormhole_class_id': value.wormholeClassId,
     };
